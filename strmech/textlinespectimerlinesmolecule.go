@@ -413,7 +413,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 	var timeDurationStrs []string
 
 	timeDurationStrs,
-		err = textLineSpecTimerLinesElectron{}.ptr().
+		err = new(textLineSpecTimerLinesElectron).
 		computeTimeDuration(
 			txtTimerLines.startTime,
 			txtTimerLines.endTime,

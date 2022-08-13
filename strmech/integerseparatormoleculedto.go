@@ -23,14 +23,15 @@ type integerSeparatorDtoMolecule struct {
 //
 // In the United States, the standard integer digits separator is
 // the single comma character (',').
-//    United States Example:  1,000,000,000
 //
-//  In many European countries, a single period ('.') is used as
-//  the integer separator character.
-//    European Example: 1.000.000.000
+//	  United States Example:  1,000,000,000
 //
-//  Other countries and cultures use spaces, apostrophes or
-//  multiple characters to separate integers.
+//	In many European countries, a single period ('.') is used as
+//	the integer separator character.
+//	  European Example: 1.000.000.000
+//
+//	Other countries and cultures use spaces, apostrophes or
+//	multiple characters to separate integers.
 //
 // This method receives an array of runes which consists
 // entirely of integer digit characters '0' (0x30) to '9' (0x39)
@@ -42,10 +43,11 @@ type integerSeparatorDtoMolecule struct {
 // separators.
 //
 // Example:
-//  pureNumRunes = 123456789012345
-//  integer separator character = ','
-//  integer grouping for thousands = 3
-//  result = 123,456,789,012,345
+//
+//	pureNumRunes = 123456789012345
+//	integer separator character = ','
+//	integer grouping for thousands = 3
+//	result = 123,456,789,012,345
 //
 // The complexity inherent in the IntegerSeparatorDto type, used as
 // an input parameter, is necessary in order to provide support for
@@ -58,91 +60,88 @@ type integerSeparatorDtoMolecule struct {
 // sign value (positive or negative) of the returned numeric value
 // (result) must be tracked externally.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  nStrIntSeparator           *IntegerSeparatorDto
-//     - A pointer to an IntegerSeparatorDto object which contains
-//       the integer separation format parameters which will be
-//       used to insert integer separators.
+//	nStrIntSeparator           *IntegerSeparatorDto
+//	   - A pointer to an IntegerSeparatorDto object which contains
+//	     the integer separation format parameters which will be
+//	     used to insert integer separators.
 //
-//       Integer separators consist of a character, or series of
-//       characters, used to separate integer digits in a number
-//       string. These characters are commonly known as the
-//       'thousands separator'. A 'thousands separator' is used to
-//       separate groups of integer digits to the left of the
-//       decimal separator (a.k.a. decimal point). In the United
-//       States, the standard integer digits separator is the
-//       single comma character (',').
-//             United States Example:  1,000,000,000
+//	     Integer separators consist of a character, or series of
+//	     characters, used to separate integer digits in a number
+//	     string. These characters are commonly known as the
+//	     'thousands separator'. A 'thousands separator' is used to
+//	     separate groups of integer digits to the left of the
+//	     decimal separator (a.k.a. decimal point). In the United
+//	     States, the standard integer digits separator is the
+//	     single comma character (',').
+//	           United States Example:  1,000,000,000
 //
-//       In many European countries, a single period ('.') is used
-//       as the integer separator character.
-//             European Example: 1.000.000.000
+//	     In many European countries, a single period ('.') is used
+//	     as the integer separator character.
+//	           European Example: 1.000.000.000
 //
-//       Other countries and cultures use spaces, apostrophes or
-//       multiple characters to separate integers.
+//	     Other countries and cultures use spaces, apostrophes or
+//	     multiple characters to separate integers.
 //
-//       The complexity inherent in the IntegerSeparatorDto type is
-//       necessary in order to provide support for multinational
-//       and multicultural integer separation algorithms. For
-//       additional details, reference the source code
-//       documentation for type  IntegerSeparatorDto.
+//	     The complexity inherent in the IntegerSeparatorDto type is
+//	     necessary in order to provide support for multinational
+//	     and multicultural integer separation algorithms. For
+//	     additional details, reference the source code
+//	     documentation for type  IntegerSeparatorDto.
 //
-//       If 'nStrIntSeparator' is invalid, this method will return
-//       an error.
-//
-//
-//  pureNumRunes               []rune
-//     - An array of runes consisting entirely of integer digit
-//       characters from '0' (0x30) to '9' (0x39) inclusive. If any
-//       character within this array is NOT an integer digit, this
-//       method will return an error.
+//	     If 'nStrIntSeparator' is invalid, this method will return
+//	     an error.
 //
 //
-//  errPrefDto                 *ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the names of the calling method or methods.
+//	pureNumRunes               []rune
+//	   - An array of runes consisting entirely of integer digit
+//	     characters from '0' (0x30) to '9' (0x39) inclusive. If any
+//	     character within this array is NOT an integer digit, this
+//	     method will return an error.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
 //
+//	errPrefDto                 *ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the names of the calling method or methods.
+//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // -----------------------------------------------------------------
 //
 // Return Values
 //
-//  numStrWithIntSeps          []rune
-//     - If this method completes successfully, an array of runes
-//       will be returned containing the integer digits supplied by
-//       input parameter 'pureNumRunes' properly formatted with
-//       integer digit separators (a.k.a. thousands separators).
-//       Example:
-//         pureNumRunes = 123456789012345
-//         integer separator character = ','
-//         integer grouping for thousands = 3
-//         numStrWithIntSeps = 123,456,789,012,345
+//	numStrWithIntSeps          []rune
+//	   - If this method completes successfully, an array of runes
+//	     will be returned containing the integer digits supplied by
+//	     input parameter 'pureNumRunes' properly formatted with
+//	     integer digit separators (a.k.a. thousands separators).
+//	     Example:
+//	       pureNumRunes = 123456789012345
+//	       integer separator character = ','
+//	       integer grouping for thousands = 3
+//	       numStrWithIntSeps = 123,456,789,012,345
 //
-//       Be advised - This method will never return a number sign
-//       for the formatted integer separated numeric value. The
-//       numeric sign value (positive or negative) of this numeric
-//       value must be tracked externally.
+//	     Be advised - This method will never return a number sign
+//	     for the formatted integer separated numeric value. The
+//	     numeric sign value (positive or negative) of this numeric
+//	     value must be tracked externally.
 //
 //
-//  err                        error
-//     - If this method completes successfully, the returned error
-//       Type is set equal to 'nil'.
+//	err                        error
+//	   - If this method completes successfully, the returned error
+//	     Type is set equal to 'nil'.
 //
-//       If errors are encountered during processing, the returned
-//       error Type will encapsulate an error message. This
-//       returned error message will incorporate the method chain
-//       and text passed by input parameter, 'errPrefDto'. The
-//       'errPrefDto' text will be attached to the beginning of the
-//       error message.
-//
+//	     If errors are encountered during processing, the returned
+//	     error Type will encapsulate an error message. This
+//	     returned error message will incorporate the method chain
+//	     and text passed by input parameter, 'errPrefDto'. The
+//	     'errPrefDto' text will be attached to the beginning of the
+//	     error message.
 func (nStrIntSepMolecule *integerSeparatorDtoMolecule) applyIntSeparators(
 	nStrIntSeparator *IntegerSeparatorDto,
 	pureNumRunes []rune,
@@ -183,7 +182,7 @@ func (nStrIntSepMolecule *integerSeparatorDtoMolecule) applyIntSeparators(
 	}
 
 	_,
-		err = strMechPreon{}.ptr().
+		err = new(strMechPreon).
 		testValidityOfRuneIntArray(
 			pureNumRunes,
 			ePrefix.XCpy(
@@ -198,7 +197,7 @@ func (nStrIntSepMolecule *integerSeparatorDtoMolecule) applyIntSeparators(
 	lenPureNumRunes := len(pureNumRunes)
 
 	_,
-		err = integerSeparatorDtoQuark{}.ptr().
+		err = new(integerSeparatorDtoQuark).
 		testValidityOfNumStrIntSeparator(
 			nStrIntSeparator,
 			ePrefix.XCpy("nStrIntSeparator->"))
@@ -342,7 +341,6 @@ func (nStrIntSepMolecule *integerSeparatorDtoMolecule) applyIntSeparators(
 //
 // If input parameter 'incomingNStrIntSeparator' is judged
 // to be invalid, this method will return an error.
-//
 func (nStrIntSepMolecule *integerSeparatorDtoMolecule) copyIn(
 	targetNStrIntSeparator *IntegerSeparatorDto,
 	incomingNStrIntSeparator *IntegerSeparatorDto,
@@ -437,7 +435,6 @@ func (nStrIntSepMolecule *integerSeparatorDtoMolecule) copyIn(
 //
 // If input parameter 'numStrIntSeparator' is judged to be
 // invalid, this method will return an error.
-//
 func (nStrIntSepMolecule *integerSeparatorDtoMolecule) copyOut(
 	numStrIntSeparator *IntegerSeparatorDto,
 	errPrefDto *ePref.ErrPrefixDto) (
@@ -538,59 +535,56 @@ func (nStrIntSepMolecule *integerSeparatorDtoMolecule) copyOut(
 // determine whether all data elements in the first object are
 // equal to corresponding data elements in the second object.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  nStrIntSepOne       *IntegerSeparatorDto
-//     - A pointer to the first IntegerSeparatorDto object. This
-//       method will compare all data elements in this object to
-//       corresponding data elements in the second
-//       IntegerSeparatorDto object in order determine equivalency.
+//	nStrIntSepOne       *IntegerSeparatorDto
+//	   - A pointer to the first IntegerSeparatorDto object. This
+//	     method will compare all data elements in this object to
+//	     corresponding data elements in the second
+//	     IntegerSeparatorDto object in order determine equivalency.
 //
 //
-//  nStrIntSepTwo       *IntegerSeparatorDto
-//     - A pointer to the second IntegerSeparatorDto object. This
-//       method will compare all data elements in the first
-//       IntegerSeparatorDto object to corresponding data elements in
-//       this second IntegerSeparatorDto object in order determine
-//       equivalency.
+//	nStrIntSepTwo       *IntegerSeparatorDto
+//	   - A pointer to the second IntegerSeparatorDto object. This
+//	     method will compare all data elements in the first
+//	     IntegerSeparatorDto object to corresponding data elements in
+//	     this second IntegerSeparatorDto object in order determine
+//	     equivalency.
 //
 //
-//  errPrefDto          *ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the names of the calling method or methods.
+//	errPrefDto          *ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the names of the calling method or methods.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
-//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  isEqual             bool
-//     - If all the data elements in 'nStrIntSepOne' are equal to
-//       all the corresponding data elements in 'nStrIntSepTwo',
-//       this return parameter will be set to 'true'. If all the
-//       data elements are NOT equal, this return parameter will be
-//       set to 'false'.
+//	isEqual             bool
+//	   - If all the data elements in 'nStrIntSepOne' are equal to
+//	     all the corresponding data elements in 'nStrIntSepTwo',
+//	     this return parameter will be set to 'true'. If all the
+//	     data elements are NOT equal, this return parameter will be
+//	     set to 'false'.
 //
 //
-//  err                 error
-//     - If all the data elements in 'nStrIntSepOne' are equal to
-//       all the corresponding data elements in 'nStrIntSepTwo',
-//       this return parameter will be set to 'nil'.
+//	err                 error
+//	   - If all the data elements in 'nStrIntSepOne' are equal to
+//	     all the corresponding data elements in 'nStrIntSepTwo',
+//	     this return parameter will be set to 'nil'.
 //
-//       If the corresponding data elements are not equal, a
-//       detailed error message identifying the unequal elements
-//       will be returned.
-//
+//	     If the corresponding data elements are not equal, a
+//	     detailed error message identifying the unequal elements
+//	     will be returned.
 func (nStrIntSepMolecule *integerSeparatorDtoMolecule) equal(
 	nStrIntSepOne *IntegerSeparatorDto,
 	nStrIntSepTwo *IntegerSeparatorDto,
