@@ -7,13 +7,13 @@ import (
 	"testing"
 )
 
-func IntegerSeparatorTypeTestSetup0010(
+func IntegerGroupingTypeTestSetup0010(
 	errorPrefix interface{}) (
 	ucNames []string,
 	lcNames []string,
 
 	intValues []int,
-	enumValues []IntegerSeparatorType,
+	enumValues []IntegerGroupingType,
 	err error) {
 
 	var ePrefix *ePref.ErrPrefixDto
@@ -21,7 +21,7 @@ func IntegerSeparatorTypeTestSetup0010(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"IntegerSeparatorTypeTestSetup0010()",
+		"IntegerGroupingTypeTestSetup0010()",
 		"Initial Setup")
 
 	if err != nil {
@@ -47,28 +47,28 @@ func IntegerSeparatorTypeTestSetup0010(
 	}
 
 	enumValues =
-		append(enumValues, IntegerSeparatorType(0).None())
+		append(enumValues, IntegerGroupingType(0).None())
 
 	enumValues =
-		append(enumValues, IntegerSeparatorType(0).Thousands())
+		append(enumValues, IntegerGroupingType(0).Thousands())
 
 	enumValues =
-		append(enumValues, IntegerSeparatorType(0).IndiaNumbering())
+		append(enumValues, IntegerGroupingType(0).IndiaNumbering())
 
 	enumValues =
-		append(enumValues, IntegerSeparatorType(0).ChineseNumbering())
+		append(enumValues, IntegerGroupingType(0).ChineseNumbering())
 
 	intValues =
-		append(intValues, IntSeparatorType.None().XValueInt())
+		append(intValues, IntGroupingType.None().XValueInt())
 
 	intValues =
-		append(intValues, IntSeparatorType.Thousands().XValueInt())
+		append(intValues, IntGroupingType.Thousands().XValueInt())
 
 	intValues =
-		append(intValues, IntSeparatorType.IndiaNumbering().XValueInt())
+		append(intValues, IntGroupingType.IndiaNumbering().XValueInt())
 
 	intValues =
-		append(intValues, IntSeparatorType.ChineseNumbering().XValueInt())
+		append(intValues, IntGroupingType.ChineseNumbering().XValueInt())
 
 	if lenUcNames != len(intValues) {
 		err = fmt.Errorf("%v\n"+
@@ -121,10 +121,10 @@ func IntegerSeparatorTypeTestSetup0010(
 	return ucNames, lcNames, intValues, enumValues, err
 }
 
-func TestIntegerSeparatorType_XValueInt_000100(t *testing.T) {
+func TestIntegerGroupingType_XValueInt_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestIntegerSeparatorType_XValueInt_000100()",
+		"TestIntegerGroupingType_XValueInt_000100()",
 		"")
 
 	ucNames,
@@ -132,7 +132,7 @@ func TestIntegerSeparatorType_XValueInt_000100(t *testing.T) {
 		intValues,
 		enumValues,
 		err :=
-		IntegerSeparatorTypeTestSetup0010(
+		IntegerGroupingTypeTestSetup0010(
 			ePrefix)
 
 	if err != nil {
@@ -143,94 +143,94 @@ func TestIntegerSeparatorType_XValueInt_000100(t *testing.T) {
 	}
 
 	var isValid bool
-	var integerSepType1, integerSepType2,
-		integerSepType3, integerSepType4,
-		integerSepType5, integerSepType6 IntegerSeparatorType
+	var integerGroupType1, integerGroupType2,
+		integerGroupType3, integerGroupType4,
+		integerGroupType5, integerGroupType6 IntegerGroupingType
 
 	lenUcNames := len(ucNames)
 
 	for i := 0; i < lenUcNames; i++ {
 
-		integerSepType1 = enumValues[i]
+		integerGroupType1 = enumValues[i]
 
-		isValid = integerSepType1.XIsValid()
+		isValid = integerGroupType1.XIsValid()
 
 		if isValid == false {
 
 			t.Errorf("%v\n"+
 				"Error: Valid value classified as invalid!\n"+
-				"integerSepType1 string value  = '%v'\n"+
-				"integerSepType1 integer value = '%v'\n"+
+				"integerGroupType1 string value  = '%v'\n"+
+				"integerGroupType1 integer value = '%v'\n"+
 				"This should be a valid value! It is NOT!\n",
 				ePrefix.String(),
-				integerSepType1.String(),
-				integerSepType1.XValueInt())
+				integerGroupType1.String(),
+				integerGroupType1.XValueInt())
 
 			return
 
 		}
 
-		integerSepType2,
-			err = integerSepType1.XParseString(
+		integerGroupType2,
+			err = integerGroupType1.XParseString(
 			ucNames[i],
 			true)
 
 		if err != nil {
 
 			t.Errorf("%v\n"+
-				"Error returned from  integerSepType1."+
+				"Error returned from  integerGroupType1."+
 				"XParseString(ucNames[%v]\n"+
 				"ucName = %v\n"+
-				"integerSepType1 string value = '%v'\n"+
+				"integerGroupType1 string value = '%v'\n"+
 				"Error:\n%v\n",
 				ePrefix.String(),
 				i,
 				ucNames[i],
-				integerSepType1.String(),
+				integerGroupType1.String(),
 				err.Error())
 
 			return
 		}
 
-		if integerSepType2.String() != ucNames[i] {
+		if integerGroupType2.String() != ucNames[i] {
 			t.Errorf("%v\n"+
-				"integerSepType2.String() != ucNames[%v]\n"+
+				"integerGroupType2.String() != ucNames[%v]\n"+
 				"ucName = '%v'\n"+
-				"integerSepType2 string value  = '%v'\n"+
-				"integerSepType2 integer value = '%v'\n",
+				"integerGroupType2 string value  = '%v'\n"+
+				"integerGroupType2 integer value = '%v'\n",
 				ePrefix.String(),
 				i,
 				ucNames[i],
-				integerSepType2.String(),
-				integerSepType2.XValueInt())
+				integerGroupType2.String(),
+				integerGroupType2.XValueInt())
 
 			return
 		}
 
-		integerSepType3 = enumValues[i]
+		integerGroupType3 = enumValues[i]
 
-		if integerSepType3.XValueInt() != intValues[i] {
+		if integerGroupType3.XValueInt() != intValues[i] {
 			t.Errorf("%v\n"+
-				"Error: integerSepType3.XValueInt() != intValues[%v]\n"+
-				"integerSepType3.XValueInt() = '%v'\n"+
+				"Error: integerGroupType3.XValueInt() != intValues[%v]\n"+
+				"integerGroupType3.XValueInt() = '%v'\n"+
 				"             intValues[%v] = '%v'\n",
 				ePrefix.String(),
 				i,
-				integerSepType3.XValueInt(),
+				integerGroupType3.XValueInt(),
 				i,
 				intValues[i])
 
 			return
 		}
 
-		integerSepType4,
-			err = integerSepType3.XParseString(
+		integerGroupType4,
+			err = integerGroupType3.XParseString(
 			lcNames[i],
 			false)
 
 		if err != nil {
 			t.Errorf("%v\n"+
-				"Error returned by integerSepType3.XParseString("+
+				"Error returned by integerGroupType3.XParseString("+
 				"lcNames[%v])\n"+
 				"Error:\n%v\n",
 				ePrefix.String(),
@@ -240,20 +240,20 @@ func TestIntegerSeparatorType_XValueInt_000100(t *testing.T) {
 			return
 		}
 
-		if integerSepType4 != enumValues[i] {
+		if integerGroupType4 != enumValues[i] {
 			t.Errorf("%v\n"+
-				"Error: integerSepType4 != enumValues[%v]\n"+
+				"Error: integerGroupType4 != enumValues[%v]\n"+
 				"                 lcNames[%v] = '%v'\n"+
-				"integerSepType4 string value  = '%v'\n"+
-				"integerSepType4 integer value = '%v'\n"+
+				"integerGroupType4 string value  = '%v'\n"+
+				"integerGroupType4 integer value = '%v'\n"+
 				"enumValues[%v] string value  = '%v'\n"+
 				"enumValues[%v] integer value = '%v'\n",
 				ePrefix.String(),
 				i,
 				i,
 				lcNames[i],
-				integerSepType4.String(),
-				integerSepType4.XValueInt(),
+				integerGroupType4.String(),
+				integerGroupType4.XValueInt(),
 				i,
 				enumValues[i].String(),
 				i,
@@ -262,82 +262,82 @@ func TestIntegerSeparatorType_XValueInt_000100(t *testing.T) {
 			return
 		}
 
-		integerSepType5 = integerSepType1.XValue()
+		integerGroupType5 = integerGroupType1.XValue()
 
-		integerSepType6 = integerSepType2.XValue()
+		integerGroupType6 = integerGroupType2.XValue()
 
-		if integerSepType5 != integerSepType6 {
+		if integerGroupType5 != integerGroupType6 {
 			t.Errorf("%v\n"+
-				"Error: integerSepType5 != integerSepType6\n"+
-				"integerSepType5 = integerSepType1.XValue()\n"+
-				"integerSepType6 = integerSepType2.XValue()\n"+
-				"integerSepType5 string value  = '%v'\n"+
-				"integerSepType5 integer value = '%v'\n"+
-				"integerSepType6 string value  = '%v'\n"+
-				"integerSepType6 integer value = '%v'\n",
+				"Error: integerGroupType5 != integerGroupType6\n"+
+				"integerGroupType5 = integerGroupType1.XValue()\n"+
+				"integerGroupType6 = integerGroupType2.XValue()\n"+
+				"integerGroupType5 string value  = '%v'\n"+
+				"integerGroupType5 integer value = '%v'\n"+
+				"integerGroupType6 string value  = '%v'\n"+
+				"integerGroupType6 integer value = '%v'\n",
 				ePrefix.String(),
-				integerSepType5.String(),
-				integerSepType5.XValueInt(),
-				integerSepType6.String(),
-				integerSepType6.XValueInt())
+				integerGroupType5.String(),
+				integerGroupType5.XValueInt(),
+				integerGroupType6.String(),
+				integerGroupType6.XValueInt())
 
 			return
 		}
 
 		_,
-			err = integerSepType6.XParseString(
+			err = integerGroupType6.XParseString(
 			"How Now Brown Cow",
 			true)
 
 		if err == nil {
 			t.Errorf("\n%v\n"+
-				"Expected an error return from integerSepType6.XParseString()\n"+
+				"Expected an error return from integerGroupType6.XParseString()\n"+
 				"because value string = 'How Now Brown Cow'\n"+
 				"HOWEVER, NO ERROR WAS RETURNED!\n"+
 				"i = '%v'\n"+
-				"integerSepType6 string value = '%v'\n",
+				"integerGroupType6 string value = '%v'\n",
 				ePrefix.String(),
 				i,
-				integerSepType6.String())
+				integerGroupType6.String())
 
 			return
 		}
 
 		_,
-			err = integerSepType6.XParseString(
+			err = integerGroupType6.XParseString(
 			"how now brown cow",
 			false)
 
 		if err == nil {
 			t.Errorf("\n%v\n"+
-				"Expected an error return from integerSepType6.XParseString()\n"+
+				"Expected an error return from integerGroupType6.XParseString()\n"+
 				"because value string = 'now now brown cow'\n"+
 				"HOWEVER, NO ERROR WAS RETURNED!\n"+
 				"i = '%v'\n"+
-				"integerSepType6 string value = '%v'\n",
+				"integerGroupType6 string value = '%v'\n",
 				ePrefix.String(),
 				i,
-				integerSepType6.String())
+				integerGroupType6.String())
 
 			return
 		}
 
 		_,
-			err = integerSepType6.XParseString(
+			err = integerGroupType6.XParseString(
 			"X",
 			true)
 
 		if err == nil {
 			t.Errorf("\n%v\n"+
-				"Expected an error return from integerSepType6.XParseString()\n"+
+				"Expected an error return from integerGroupType6.XParseString()\n"+
 				"because value string = 'X' is less than the\n"+
 				"minimum required length.\n"+
 				"HOWEVER, NO ERROR WAS RETURNED!\n"+
 				"i = '%v'\n"+
-				"integerSepType6 string value = '%v'\n",
+				"integerGroupType6 string value = '%v'\n",
 				ePrefix.String(),
 				i,
-				integerSepType6.String())
+				integerGroupType6.String())
 
 			return
 		}
@@ -347,22 +347,22 @@ func TestIntegerSeparatorType_XValueInt_000100(t *testing.T) {
 	return
 }
 
-func TestIntegerSeparatorType_XReturnNoneIfInvalid_000200(t *testing.T) {
+func TestIntegerGroupingType_XReturnNoneIfInvalid_000200(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestIntegerSeparatorType_XReturnNoneIfInvalid_000200()",
+		"TestIntegerGroupingType_XReturnNoneIfInvalid_000200()",
 		"")
 
-	integerSepType := IntegerSeparatorType(-972)
+	integerGroupType := IntegerGroupingType(-972)
 
-	valueNone := integerSepType.XReturnNoneIfInvalid()
+	valueNone := integerGroupType.XReturnNoneIfInvalid()
 
 	if valueNone.String() != "None" {
 
 		t.Errorf("%v\n"+
-			"Error: Expected IntegerSeparatorType(-972)\n"+
+			"Error: Expected IntegerGroupingType(-972)\n"+
 			"would return name of 'None' from \n"+
-			"integerSepType.XReturnNoneIfInvalid().\n"+
+			"integerGroupType.XReturnNoneIfInvalid().\n"+
 			"It DID NOT!\n"+
 			"valueNone string value = '%v'\n"+
 			"   valueNone int value = '%v'\n",
@@ -374,14 +374,14 @@ func TestIntegerSeparatorType_XReturnNoneIfInvalid_000200(t *testing.T) {
 
 	}
 
-	strIntegerSeparatorType := integerSepType.String()
+	strIntegerGroupingType := integerGroupType.String()
 
-	strIntegerSeparatorType = strings.ToLower(strIntegerSeparatorType)
+	strIntegerGroupingType = strings.ToLower(strIntegerGroupingType)
 
-	if !strings.Contains(strIntegerSeparatorType, "error") {
+	if !strings.Contains(strIntegerGroupingType, "error") {
 
 		t.Errorf("%v\n"+
-			"Error: Expected IntegerSeparatorType(-972).String()\n"+
+			"Error: Expected IntegerGroupingType(-972).String()\n"+
 			"would return an error because it is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.String())
@@ -395,7 +395,7 @@ func TestIntegerSeparatorType_XReturnNoneIfInvalid_000200(t *testing.T) {
 		_,
 		enumValues,
 		err :=
-		IntegerSeparatorTypeTestSetup0010(
+		IntegerGroupingTypeTestSetup0010(
 			ePrefix)
 
 	if err != nil {
@@ -405,47 +405,47 @@ func TestIntegerSeparatorType_XReturnNoneIfInvalid_000200(t *testing.T) {
 		return
 	}
 
-	var integerSepType2 IntegerSeparatorType
+	var integerGroupType2 IntegerGroupingType
 
-	integerSepType2 = enumValues[1].XReturnNoneIfInvalid()
+	integerGroupType2 = enumValues[1].XReturnNoneIfInvalid()
 
-	if integerSepType2 != enumValues[1] {
+	if integerGroupType2 != enumValues[1] {
 		t.Errorf("%v\n"+
-			"Error: integerSepType2 != enumValues[1].XReturnNoneIfInvalid()\n"+
+			"Error: integerGroupType2 != enumValues[1].XReturnNoneIfInvalid()\n"+
 			"enumValues[1]  string value  = '%v'\n"+
 			"enumValues[1]  integer value = '%v'\n"+
-			"integerSepType2 string value  = '%v'\n"+
-			"integerSepType2 integer value = '%v'\n",
+			"integerGroupType2 string value  = '%v'\n"+
+			"integerGroupType2 integer value = '%v'\n",
 			ePrefix.String(),
 			enumValues[1].String(),
 			enumValues[1].XValueInt(),
-			integerSepType2.String(),
-			integerSepType2.XValueInt())
+			integerGroupType2.String(),
+			integerGroupType2.XValueInt())
 		return
 	}
 
 	return
 }
 
-func TestIntegerSeparatorType_XValueInt_000300(t *testing.T) {
+func TestIntegerGroupingType_XValueInt_000300(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestIntegerSeparatorType_XValueInt_000300()",
+		"TestIntegerGroupingType_XValueInt_000300()",
 		"")
 
 	expectedIntValue := -972
 
-	integerSepType := IntegerSeparatorType(expectedIntValue)
+	integerGroupType := IntegerGroupingType(expectedIntValue)
 
-	actualIntValue := integerSepType.XValueInt()
+	actualIntValue := integerGroupType.XValueInt()
 
 	if expectedIntValue != actualIntValue {
 
 		t.Errorf("%v\n"+
-			"Error: Expected integerSepType integer value\n"+
+			"Error: Expected integerGroupType integer value\n"+
 			" NOT equal to actual integer value\n"+
-			"Expected integerSepType integer value = '%v'\n"+
-			"Actual integerSepType integer value   = '%v'\n",
+			"Expected integerGroupType integer value = '%v'\n"+
+			"Actual integerGroupType integer value   = '%v'\n",
 			ePrefix.String(),
 			expectedIntValue,
 			actualIntValue)
@@ -454,14 +454,14 @@ func TestIntegerSeparatorType_XValueInt_000300(t *testing.T) {
 
 	}
 
-	strName := integerSepType.XReturnNoneIfInvalid()
+	strName := integerGroupType.XReturnNoneIfInvalid()
 
 	if strName.String() != "None" {
 
 		t.Errorf("%v\n"+
-			"Error: Expected IntegerSeparatorType(-972)\n"+
+			"Error: Expected IntegerGroupingType(-972)\n"+
 			"would return name of 'None' from \n"+
-			"integerSepType.XReturnNoneIfInvalid().\n"+
+			"integerGroupType.XReturnNoneIfInvalid().\n"+
 			"It DID NOT!\n"+
 			"strName string value = '%v'\n"+
 			"   strName int value = '%v'\n",

@@ -7,40 +7,46 @@ import (
 )
 
 // Do NOT access these maps without first getting
-// the lock on 'lockIntegerSeparatorTypeCode'.
+// the lock on 'lockIntegerGroupingTypeCode'.
 
-var mIntegerSeparatorTypeCodeToString = map[IntegerSeparatorType]string{
-	IntegerSeparatorType(0): "None",
-	IntegerSeparatorType(1): "Thousands",
-	IntegerSeparatorType(2): "IndiaNumbering",
-	IntegerSeparatorType(3): "ChineseNumbering",
+var mIntegerGroupingTypeCodeToString = map[IntegerGroupingType]string{
+	IntegerGroupingType(0): "None",
+	IntegerGroupingType(1): "Thousands",
+	IntegerGroupingType(2): "IndiaNumbering",
+	IntegerGroupingType(3): "ChineseNumbering",
 }
 
-var mIntegerSeparatorTypeStringToCode = map[string]IntegerSeparatorType{
-	"None":             IntegerSeparatorType(0),
-	"Thousands":        IntegerSeparatorType(1),
-	"IndiaNumbering":   IntegerSeparatorType(2),
-	"ChineseNumbering": IntegerSeparatorType(3),
+var mIntegerGroupingTypeStringToCode = map[string]IntegerGroupingType{
+	"None":             IntegerGroupingType(0),
+	"Thousands":        IntegerGroupingType(1),
+	"IndiaNumbering":   IntegerGroupingType(2),
+	"ChineseNumbering": IntegerGroupingType(3),
 }
 
-var mIntegerSeparatorTypeLwrCaseStringToCode = map[string]IntegerSeparatorType{
-	"none":             IntegerSeparatorType(0),
-	"thousands":        IntegerSeparatorType(1),
-	"indianumbering":   IntegerSeparatorType(2),
-	"chinesenumbering": IntegerSeparatorType(3),
+var mIntegerGroupingTypeLwrCaseStringToCode = map[string]IntegerGroupingType{
+	"none":             IntegerGroupingType(0),
+	"thousands":        IntegerGroupingType(1),
+	"indianumbering":   IntegerGroupingType(2),
+	"chinesenumbering": IntegerGroupingType(3),
 }
 
-// IntegerSeparatorType - The Integer Separator Type enumeration
-// is used to specify the type of integer separation in creating
-// groups of integer digits for number string displays.
+// IntegerGroupingType - The Integer Grouping Type enumeration
+// is used to specify the type of integer digit grouping when
+// creating formatting integer digits number string text
+// displays.
 //
-// The most common type of integer separation is the 'thousands'
+// The most common type of integer grouping is the 'thousands'
 // separation.
 //
 //	Example: 1,000,000,000
 //
-// In this example, integer numeric digits are separated by commas
-// into groups of three digits or thousands.
+// In this example, integer numeric digits are separated by
+// commas into groups of three digits ('thousands'). The
+// integer separator character in this example is the comma
+// (','). However, this character separator will vary among
+// different countries and cultures. This enumeration focuses
+// strictly on specifying the manner and type of integer
+// grouping.
 //
 // In most western countries, integer digits to the left of
 // the decimal separator (a.k.a. decimal point) are separated
@@ -54,15 +60,15 @@ var mIntegerSeparatorTypeLwrCaseStringToCode = map[string]IntegerSeparatorType{
 // Chinese Numerals have an integer grouping value of four
 // and are formatted like this: '12,3456,7890,2345'.
 //
-// The 'IntegerSeparatorType' designates the type of integer
+// The 'IntegerGroupingType' designates the type of integer
 // separation to be used when displaying number strings.
 //
 // Since the Go Programming Language does not directly support
-// enumerations, the 'IntegerSeparatorType' type has been
+// enumerations, the 'IntegerGroupingType' type has been
 // adapted to function in a manner similar to classic
 // enumerations.
 //
-// 'IntegerSeparatorType' is declared as a type 'int'. The
+// 'IntegerGroupingType' is declared as a type 'int'. The
 // method names effectively represent an enumeration of
 // integer separation display specifications. These methods
 // are listed as follows:
@@ -98,24 +104,24 @@ var mIntegerSeparatorTypeLwrCaseStringToCode = map[string]IntegerSeparatorType{
 // ----------------------------------------------------------------
 //
 // For easy access to these enumeration values, use the global
-// constant 'IntSeparatorType'.
+// constant 'IntGroupingType'.
 //
-//	Example: IntSeparatorType.Thousands()
+//	Example: IntGroupingType.Thousands()
 //
 // Otherwise you will need to use the formal syntax.
 //
-//	Example: IntegerSeparatorType(0).Thousands()
+//	Example: IntegerGroupingType(0).Thousands()
 //
 // Depending on your editor, intellisense (a.k.a. intelligent
-// code completion) may not list the IntegerSeparatorType
+// code completion) may not list the IntegerGroupingType
 // methods in alphabetical order.
 //
-// Be advised that all 'IntegerSeparatorType' methods beginning
+// Be advised that all 'IntegerGroupingType' methods beginning
 // with 'X', as well as the method 'String()', are utility
 // methods and not part of the enumeration.
-type IntegerSeparatorType int
+type IntegerGroupingType int
 
-var lockIntegerSeparatorTypeCode sync.Mutex
+var lockIntegerGroupingTypeCode sync.Mutex
 
 // None - Signals that Integer Separation is undefined and will
 // not be applied to the text presentation of a number string.
@@ -125,13 +131,13 @@ var lockIntegerSeparatorTypeCode sync.Mutex
 // None is considered a valid choice for integer separation.
 //
 // This method is part of the standard enumeration.
-func (intSeparatorType IntegerSeparatorType) None() IntegerSeparatorType {
+func (intGroupingType IntegerGroupingType) None() IntegerGroupingType {
 
-	lockIntegerSeparatorTypeCode.Lock()
+	lockIntegerGroupingTypeCode.Lock()
 
-	defer lockIntegerSeparatorTypeCode.Unlock()
+	defer lockIntegerGroupingTypeCode.Unlock()
 
-	return IntegerSeparatorType(0)
+	return IntegerGroupingType(0)
 }
 
 // Thousands - Signals that Integer Separation will be applied.
@@ -140,13 +146,13 @@ func (intSeparatorType IntegerSeparatorType) None() IntegerSeparatorType {
 //	Example: 6,789,000,000,000,000
 //
 // This method is part of the standard enumeration.
-func (intSeparatorType IntegerSeparatorType) Thousands() IntegerSeparatorType {
+func (intGroupingType IntegerGroupingType) Thousands() IntegerGroupingType {
 
-	lockIntegerSeparatorTypeCode.Lock()
+	lockIntegerGroupingTypeCode.Lock()
 
-	defer lockIntegerSeparatorTypeCode.Unlock()
+	defer lockIntegerGroupingTypeCode.Unlock()
 
-	return IntegerSeparatorType(1)
+	return IntegerGroupingType(1)
 }
 
 // IndiaNumbering - Signals that India Number integer separation
@@ -156,13 +162,13 @@ func (intSeparatorType IntegerSeparatorType) Thousands() IntegerSeparatorType {
 //	Example: 6,78,90,00,00,00,00,000
 //
 // This method is part of the standard enumeration.
-func (intSeparatorType IntegerSeparatorType) IndiaNumbering() IntegerSeparatorType {
+func (intGroupingType IntegerGroupingType) IndiaNumbering() IntegerGroupingType {
 
-	lockIntegerSeparatorTypeCode.Lock()
+	lockIntegerGroupingTypeCode.Lock()
 
-	defer lockIntegerSeparatorTypeCode.Unlock()
+	defer lockIntegerGroupingTypeCode.Unlock()
 
-	return IntegerSeparatorType(2)
+	return IntegerGroupingType(2)
 }
 
 // ChineseNumbering - Signals that Chinese Number integer
@@ -172,18 +178,18 @@ func (intSeparatorType IntegerSeparatorType) IndiaNumbering() IntegerSeparatorTy
 //	Example: 6789,0000,0000,0000
 //
 // This method is part of the standard enumeration.
-func (intSeparatorType IntegerSeparatorType) ChineseNumbering() IntegerSeparatorType {
+func (intGroupingType IntegerGroupingType) ChineseNumbering() IntegerGroupingType {
 
-	lockIntegerSeparatorTypeCode.Lock()
+	lockIntegerGroupingTypeCode.Lock()
 
-	defer lockIntegerSeparatorTypeCode.Unlock()
+	defer lockIntegerGroupingTypeCode.Unlock()
 
-	return IntegerSeparatorType(3)
+	return IntegerGroupingType(3)
 }
 
 // String - Returns a string with the name of the enumeration
 // associated with this current instance of
-// 'IntegerSeparatorType'.
+// 'IntegerGroupingType'.
 //
 // This is a standard utility method and is NOT part of the valid
 // enumerations for this type.
@@ -192,21 +198,21 @@ func (intSeparatorType IntegerSeparatorType) ChineseNumbering() IntegerSeparator
 //
 // # Usage
 //
-// t:= IntegerSeparatorType(0).Thousands()
+// t:= IntegerGroupingType(0).Thousands()
 // str := t.String()
 //
 //	str is now equal to 'Thousands'
-func (intSeparatorType IntegerSeparatorType) String() string {
+func (intGroupingType IntegerGroupingType) String() string {
 
-	lockIntegerSeparatorTypeCode.Lock()
+	lockIntegerGroupingTypeCode.Lock()
 
-	defer lockIntegerSeparatorTypeCode.Unlock()
+	defer lockIntegerGroupingTypeCode.Unlock()
 
 	result, ok :=
-		mIntegerSeparatorTypeCodeToString[intSeparatorType]
+		mIntegerGroupingTypeCodeToString[intGroupingType]
 
 	if !ok {
-		return "Error: Integer Separator Type INVALID!"
+		return "Error: Integer Grouping Type INVALID!"
 
 	}
 
@@ -214,7 +220,7 @@ func (intSeparatorType IntegerSeparatorType) String() string {
 }
 
 // XIsValid - Returns a boolean value signaling whether the current
-// IntegerSeparatorType value is valid.
+// IntegerGroupingType value is valid.
 //
 // Be advised, the enumeration value "None" is considered NOT
 // VALID. "None" represents an error condition.
@@ -227,26 +233,26 @@ func (intSeparatorType IntegerSeparatorType) String() string {
 // Usage
 //
 //	 intSepType :=
-//				IntegerSeparatorType(0).Thousands()
+//				IntegerGroupingType(0).Thousands()
 //
 //	 isValid := intSepType.XIsValid() // isValid == true
 //
-//	 intSepType = IntegerSeparatorType(-99)
+//	 intSepType = IntegerGroupingType(-99)
 //
 //	 isValid = intSepType.XIsValid() // isValid == false
-func (intSeparatorType IntegerSeparatorType) XIsValid() bool {
+func (intGroupingType IntegerGroupingType) XIsValid() bool {
 
-	lockIntegerSeparatorTypeCode.Lock()
+	lockIntegerGroupingTypeCode.Lock()
 
-	defer lockIntegerSeparatorTypeCode.Unlock()
+	defer lockIntegerGroupingTypeCode.Unlock()
 
-	return new(integerSeparatorTypeNanobot).
-		isValidIntegerSeparatorType(intSeparatorType)
+	return new(integerGroupingTypeNanobot).
+		isValidIntegerGroupingType(intGroupingType)
 }
 
 // XParseString - Receives a string and attempts to match it with
 // the string value of a supported enumeration. If successful, a
-// new instance of IntegerSeparatorType is returned set to the value
+// new instance of IntegerGroupingType is returned set to the value
 // of the associated enumeration.
 //
 // This is a standard utility method and is NOT part of the valid
@@ -291,9 +297,9 @@ func (intSeparatorType IntegerSeparatorType) XIsValid() bool {
 //
 // Return Values
 //
-//	IntegerSeparatorType
+//	IntegerGroupingType
 //	   - Upon successful completion, this method will return a new
-//	     instance of IntegerSeparatorType set to the value of the
+//	     instance of IntegerGroupingType set to the value of the
 //	     enumeration matched by the string search performed on
 //	     input parameter, 'valueString'.
 //
@@ -307,172 +313,172 @@ func (intSeparatorType IntegerSeparatorType) XIsValid() bool {
 //
 // Usage
 //
-//	t, err := IntegerSeparatorType(0).
+//	t, err := IntegerGroupingType(0).
 //	             XParseString("Thousands", true)
 //
-//	t is now equal to IntegerSeparatorType(0).Thousands()
-func (intSeparatorType IntegerSeparatorType) XParseString(
+//	t is now equal to IntegerGroupingType(0).Thousands()
+func (intGroupingType IntegerGroupingType) XParseString(
 	valueString string,
 	caseSensitive bool) (
-	IntegerSeparatorType,
+	IntegerGroupingType,
 	error) {
 
-	lockIntegerSeparatorTypeCode.Lock()
+	lockIntegerGroupingTypeCode.Lock()
 
-	defer lockIntegerSeparatorTypeCode.Unlock()
+	defer lockIntegerGroupingTypeCode.Unlock()
 
-	ePrefix := "IntegerSeparatorType.XParseString() "
+	ePrefix := "IntegerGroupingType.XParseString() "
 
 	var ok bool
-	var integerSeparatorType IntegerSeparatorType
+	var integerGroupingType IntegerGroupingType
 
 	if caseSensitive {
 
-		integerSeparatorType, ok = mIntegerSeparatorTypeStringToCode[valueString]
+		integerGroupingType, ok = mIntegerGroupingTypeStringToCode[valueString]
 
 		if !ok {
-			return IntegerSeparatorType(0),
+			return IntegerGroupingType(0),
 				fmt.Errorf(ePrefix+
-					"\n'valueString' did NOT MATCH a valid IntegerSeparatorType Specification.\n"+
+					"\n'valueString' did NOT MATCH a valid IntegerGroupingType Specification.\n"+
 					"valueString='%v'\n", valueString)
 		}
 
 	} else {
 
-		integerSeparatorType, ok = mIntegerSeparatorTypeLwrCaseStringToCode[strings.ToLower(valueString)]
+		integerGroupingType, ok = mIntegerGroupingTypeLwrCaseStringToCode[strings.ToLower(valueString)]
 
 		if !ok {
-			return IntegerSeparatorType(0),
+			return IntegerGroupingType(0),
 				fmt.Errorf(ePrefix+
-					"\n'valueString' did NOT MATCH a valid IntegerSeparatorType Specification.\n"+
+					"\n'valueString' did NOT MATCH a valid IntegerGroupingType Specification.\n"+
 					"valueString='%v'\n", valueString)
 		}
 	}
 
-	return integerSeparatorType, nil
+	return integerGroupingType, nil
 }
 
 // XReturnNoneIfInvalid - Provides a standardized value for invalid
-// instances of enumeration IntegerSeparatorType.
+// instances of enumeration IntegerGroupingType.
 //
-// If the current instance of IntegerSeparatorType is invalid, this
+// If the current instance of IntegerGroupingType is invalid, this
 // method will always return a value of
-// IntegerSeparatorType(0).None().
+// IntegerGroupingType(0).None().
 //
 // # Background
 //
-// Enumeration IntegerSeparatorType has an underlying type of
+// Enumeration IntegerGroupingType has an underlying type of
 // integer (int). This means the type could conceivably be set
 // to any integer value. This method ensures that all invalid
-// IntegerSeparatorType instances are consistently classified
-// as 'None' (IntegerSeparatorType(0).None()). Remember that
+// IntegerGroupingType instances are consistently classified
+// as 'None' (IntegerGroupingType(0).None()). Remember that
 // 'None' is considered a valid value.
 //
-// For example, assume that IntegerSeparatorType was set to an
+// For example, assume that IntegerGroupingType was set to an
 // invalid integer value of -848972. Calling this method on a
-// IntegerSeparatorType with this invalid integer value will
+// IntegerGroupingType with this invalid integer value will
 // return an integer value of zero (0) or the equivalent of
-// IntegerSeparatorType(0).None(). This conversion is useful in
+// IntegerGroupingType(0).None(). This conversion is useful in
 // generating text strings for meaningful informational and error
 // messages.
 //
 // This is a standard utility method and is not part of the valid
 // enumerations for this type.
-func (intSeparatorType IntegerSeparatorType) XReturnNoneIfInvalid() IntegerSeparatorType {
+func (intGroupingType IntegerGroupingType) XReturnNoneIfInvalid() IntegerGroupingType {
 
-	lockIntegerSeparatorTypeCode.Lock()
+	lockIntegerGroupingTypeCode.Lock()
 
-	defer lockIntegerSeparatorTypeCode.Unlock()
+	defer lockIntegerGroupingTypeCode.Unlock()
 
-	isValid := new(integerSeparatorTypeNanobot).
-		isValidIntegerSeparatorType(intSeparatorType)
+	isValid := new(integerGroupingTypeNanobot).
+		isValidIntegerGroupingType(intGroupingType)
 
 	if !isValid {
-		return IntegerSeparatorType(0)
+		return IntegerGroupingType(0)
 	}
 
-	return intSeparatorType
+	return intGroupingType
 }
 
 // XValue - This method returns the enumeration value of the
-// current IntegerSeparatorType instance.
+// current IntegerGroupingType instance.
 //
 // This is a standard utility method and is NOT part of the
 // valid enumerations for this type.
-func (intSeparatorType IntegerSeparatorType) XValue() IntegerSeparatorType {
+func (intGroupingType IntegerGroupingType) XValue() IntegerGroupingType {
 
-	lockIntegerSeparatorTypeCode.Lock()
+	lockIntegerGroupingTypeCode.Lock()
 
-	defer lockIntegerSeparatorTypeCode.Unlock()
+	defer lockIntegerGroupingTypeCode.Unlock()
 
-	return intSeparatorType
+	return intGroupingType
 }
 
 // XValueInt - This method returns the integer value of the
-// current IntegerSeparatorType instance.
+// current IntegerGroupingType instance.
 //
 // This is a standard utility method and is NOT part of the valid
 // enumerations for this type.
-func (intSeparatorType IntegerSeparatorType) XValueInt() int {
+func (intGroupingType IntegerGroupingType) XValueInt() int {
 
-	lockIntegerSeparatorTypeCode.Lock()
+	lockIntegerGroupingTypeCode.Lock()
 
-	defer lockIntegerSeparatorTypeCode.Unlock()
+	defer lockIntegerGroupingTypeCode.Unlock()
 
-	return int(intSeparatorType)
+	return int(intGroupingType)
 }
 
-// IntSeparatorType - public global constant of type
-// IntegerSeparatorType.
+// IntGroupingType - public global constant of type
+// IntegerGroupingType.
 //
 // This variable serves as an easier, shorthand technique for
-// accessing IntegerSeparatorType values.
+// accessing IntegerGroupingType values.
 //
 // For easy access to these enumeration values, use the global
-// variable IntSeparatorType.
+// variable IntGroupingType.
 //
-//	Example: IntSeparatorType.Thousands()
+//	Example: IntGroupingType.Thousands()
 //
 // Otherwise you will need to use the formal syntax.
 //
-//	Example: IntegerSeparatorType(0).Thousands()
+//	Example: IntegerGroupingType(0).Thousands()
 //
 // Usage:
 //
-//	IntSeparatorType.None(),
-//	IntSeparatorType.Thousands(),
-//	IntSeparatorType.IndiaNumbering(),
-//	IntSeparatorType.ChineseNumbering(),
-const IntSeparatorType = IntegerSeparatorType(0)
+//	IntGroupingType.None(),
+//	IntGroupingType.Thousands(),
+//	IntGroupingType.IndiaNumbering(),
+//	IntGroupingType.ChineseNumbering(),
+const IntGroupingType = IntegerGroupingType(0)
 
-// integerSeparatorTypeNanobot - Provides helper methods for
-// enumeration IntegerSeparatorType.
-type integerSeparatorTypeNanobot struct {
+// integerGroupingTypeNanobot - Provides helper methods for
+// enumeration IntegerGroupingType.
+type integerGroupingTypeNanobot struct {
 	lock *sync.Mutex
 }
 
-// isValidIntegerSeparatorType - Receives an instance of
-// IntegerSeparatorType and returns a boolean value signaling
-// whether that IntegerSeparatorType instance is valid.
+// isValidIntegerGroupingType - Receives an instance of
+// IntegerGroupingType and returns a boolean value signaling
+// whether that IntegerGroupingType instance is valid.
 //
-// If the passed instance of IntegerSeparatorType is valid, this method
+// If the passed instance of IntegerGroupingType is valid, this method
 // returns 'true'.
 //
 // Be advised, the enumeration value "None" is considered NOT
 // VALID. "None" represents an error condition.
 //
 // This is a standard utility method and is not part of the valid
-// IntegerSeparatorType enumeration.
-func (intSepTypeNanobot *integerSeparatorTypeNanobot) isValidIntegerSeparatorType(
-	enumNumericValType IntegerSeparatorType) bool {
+// IntegerGroupingType enumeration.
+func (intGroupingTypeNanobot *integerGroupingTypeNanobot) isValidIntegerGroupingType(
+	enumNumericValType IntegerGroupingType) bool {
 
-	if intSepTypeNanobot.lock == nil {
-		intSepTypeNanobot.lock = new(sync.Mutex)
+	if intGroupingTypeNanobot.lock == nil {
+		intGroupingTypeNanobot.lock = new(sync.Mutex)
 	}
 
-	intSepTypeNanobot.lock.Lock()
+	intGroupingTypeNanobot.lock.Lock()
 
-	defer intSepTypeNanobot.lock.Unlock()
+	defer intGroupingTypeNanobot.lock.Unlock()
 
 	if enumNumericValType < 0 ||
 		enumNumericValType > 3 {
