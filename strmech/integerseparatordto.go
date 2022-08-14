@@ -2779,20 +2779,21 @@ func (nStrIntSep *IntegerSeparatorDto) SetDetailRunes(
 // The input parameter 'intSeparatorChars' is a string containing
 // the integer separator character or characters.
 //
-// The integer digit grouping is defaulted to a value of four (4).
-// Example: '6,7890,000,0000,0000'
+// The integer digit grouping is defaulted to a value of four
+// (4). This means that integer digits will be separated using
+// the Chinese Numbering System. The Chinese Numbering System
+// separates integer digits into groups of four (4) digits.
+//
+//	Example: '6,7890,000,0000,0000'
+//
+// With this method, users have the option of specifying one or
+// more integer separator characters passed through input
+// parameter 'intSeparatorChars'. However, the commonly used
+// integer separator for the Chinese Numbering system is the
+// comma (",").
 //
 // The 'integer separator repetitions' value is defaulted to zero
 // (0) signaling unlimited repetitions.
-//
-// This means that integer digits will be separated using the
-// Chinese Numbering System (Example: '6,7890,000,0000,0000').
-// The Chinese Numbering System separates integer digits into
-// groups of four (4) digits. With this method, users have the
-// option of specifying one or more integer separator characters
-// through input parameter 'intSeparatorChars'. However, the
-// commonly used integer separator for the Chinese Numbering
-// system is the comma (",").
 //
 // # Reference:
 //
@@ -2923,20 +2924,21 @@ func (nStrIntSep *IntegerSeparatorDto) SetChineseNumbering(
 // The input parameter 'intSeparatorChars' is an array of runes
 // containing the integer separator character or characters.
 //
-// The integer digit grouping is defaulted to a value of four (4).
-// Example: '6,7890,000,0000,0000'
+// The integer digit grouping is defaulted to a value of four
+// (4). This means that integer digits will be separated using
+// the Chinese Numbering System. The Chinese Numbering System
+// separates integer digits into groups of four (4) digits.
+//
+//	Example: '6,7890,000,0000,0000'
+//
+// With this method, users have the option of specifying one or
+// more integer separator characters passed through input
+// parameter 'intSeparatorChars'. However, the commonly used
+// integer separator for the Chinese Numbering system is the
+// comma ([]rune{','}).
 //
 // The 'integer separator repetitions' value is defaulted to zero
 // (0) signaling unlimited repetitions.
-//
-// This means that integer digits will be separated using the
-// Chinese Numbering System (Example: '6,7890,000,0000,0000').
-// The Chinese Numbering System separates integer digits into
-// groups of four (4) digits. With this method, users have the
-// option of specifying one or more integer separator characters
-// through input parameter 'intSeparatorChars'. However, the
-// commonly used integer separator for the Chinese Numbering
-// system is the comma ([]rune{,}).
 //
 // # Reference:
 //
@@ -3159,7 +3161,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetChineseNumberingRunes(
 //
 // # Return Values
 //
-//	err                        error
+//	error
 //	   - If this method completes successfully, the returned error
 //	     Type is set equal to 'nil'.
 //
@@ -3199,6 +3201,136 @@ func (nStrIntSep *IntegerSeparatorDto) SetIndiaNumbering(
 		setIndiaNumberingRunes(
 			nStrIntSep,
 			[]rune(intSeparatorChars),
+			ePrefix.XCpy(
+				"nStrIntSep<-"))
+}
+
+// SetIndiaNumberingDefault - Deletes and overwrites all the
+// member variable data values for the current instance of
+// IntegerSeparatorDto.
+//
+// This method will configure the current instance of
+// IntegerSeparatorDto with India Numbering System integer
+// grouping.
+//
+// The integer separator character will be defaulted to a
+// comma (',').
+//
+// In conformance with the India Numbering System, the integer
+// digit grouping is defaulted to values of three (3) and two
+// (2).
+//
+// This means that the first integer group will consist of
+// three digits and all the remaining groups will consist of
+// two digits.
+//
+//	Example: '6,78,90,00,00,00,00,000'
+//
+// The 'integer separator repetitions' value is defaulted to zero
+// (0) signaling unlimited repetitions.
+//
+// # Reference:
+//
+//	https://en.wikipedia.org/wiki/Indian_numbering_system
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+// This method will delete and overwrite all pre-existing data
+// values in the current instance of IntegerSeparatorDto.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
+//
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
+//
+//	     This empty interface must be convertible to one of the
+//	     following types:
+//
+//	     1. nil - A nil value is valid and generates an empty
+//	        collection of error prefix and error context
+//	        information.
+//
+//	     2. string - A string containing error prefix information.
+//
+//	     3. []string A one-dimensional slice of strings containing
+//	        error prefix information
+//
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
+//
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	        from this object will be copied for use in error and
+//	        informational messages.
+//
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	        Information from this object will be copied for use in
+//	        error and informational messages.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	        a two-dimensional slice of strings containing error
+//	        prefix and error context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
+//
+// -----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//	   - If this method completes successfully, the returned error
+//	     Type is set equal to 'nil'.
+//
+//	     If errors are encountered during processing, the returned
+//	     error Type will encapsulate an error message. This
+//	     returned error message will incorporate the method chain
+//	     and text passed by input parameter, 'errorPrefix'. The
+//	     'errorPrefix' text will be attached to the beginning of
+//	     the error message.
+func (nStrIntSep *IntegerSeparatorDto) SetIndiaNumberingDefault(
+	errorPrefix interface{}) error {
+
+	if nStrIntSep.lock == nil {
+		nStrIntSep.lock = new(sync.Mutex)
+	}
+
+	nStrIntSep.lock.Lock()
+
+	defer nStrIntSep.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"IntegerSeparatorDto."+
+			"SetIndiaNumbering()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	return new(integerSeparatorDtoUtility).
+		setIndiaNumberingRunes(
+			nStrIntSep,
+			[]rune{','},
 			ePrefix.XCpy(
 				"nStrIntSep<-"))
 }
