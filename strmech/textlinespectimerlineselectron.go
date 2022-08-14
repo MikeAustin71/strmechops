@@ -23,7 +23,7 @@ type textLineSpecTimerLinesElectron struct {
 //
 // ------------------------------------------------------------------------
 //
-// Important
+// # Important
 //
 // Be advised that the Summary Elapsed Time Break Out will be
 // displayed over multiple text lines. This method will apply the
@@ -31,86 +31,82 @@ type textLineSpecTimerLinesElectron struct {
 // 'summaryTextLineLeftMargin'. In applying these line breaks, this
 // method will assume a maximum line length of 78-characters.
 //
-//
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  startTime                  time.Time
-//     - The starting time for the time duration event.
+//	startTime                  time.Time
+//	   - The starting time for the time duration event.
 //
-//  endTime                    time.Time
-//     - The ending time for the time duration event.
+//	endTime                    time.Time
+//	   - The ending time for the time duration event.
 //
-//  summaryTextLineLeftMargin  int
-//     - The left margin to be used in outputting the summary text
-//       line strings for text display or printing. The length of
-//       the returned time duration strings ('timeDurationStrs')
-//       will be computed and adjusted using this left margin value
-//       so that no time duration result string will exceed a
-//       length of 78-characters.
+//	summaryTextLineLeftMargin  int
+//	   - The left margin to be used in outputting the summary text
+//	     line strings for text display or printing. The length of
+//	     the returned time duration strings ('timeDurationStrs')
+//	     will be computed and adjusted using this left margin value
+//	     so that no time duration result string will exceed a
+//	     length of 78-characters.
 //
-//       If 'summaryTextLineLeftMargin' is less than zero (0) or
-//       greater than fifty-five (55) characters, this method will
-//       return an error.
+//	     If 'summaryTextLineLeftMargin' is less than zero (0) or
+//	     greater than fifty-five (55) characters, this method will
+//	     return an error.
 //
 //
-//  errPrefDto                 *ePref.ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//	errPrefDto                 *ePref.ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods listed
+//	     as a function chain.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
-//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  timeDurationStrs           []string
-//     - An array of text strings presenting the results of the time
-//       duration computation.
+//	timeDurationStrs           []string
+//	   - An array of text strings presenting the results of the time
+//	     duration computation.
 //
-//       Example Output:
-//       timeDurationStrs[0] 211 Days
-//       timeDurationStrs[1]  23 Hours
-//       timeDurationStrs[2]  32 Minutes
-//       timeDurationStrs[3]  16 Seconds
-//       timeDurationStrs[4]   0 Milliseconds
-//       timeDurationStrs[5]   9 Microseconds
-//       timeDurationStrs[6]   0 Nanoseconds
-//       timeDurationStrs[7]   Total Elapsed Nanoseconds: 18,315,136,000,009,000
+//	     Example Output:
+//	     timeDurationStrs[0] 211 Days
+//	     timeDurationStrs[1]  23 Hours
+//	     timeDurationStrs[2]  32 Minutes
+//	     timeDurationStrs[3]  16 Seconds
+//	     timeDurationStrs[4]   0 Milliseconds
+//	     timeDurationStrs[5]   9 Microseconds
+//	     timeDurationStrs[6]   0 Nanoseconds
+//	     timeDurationStrs[7]   Total Elapsed Nanoseconds: 18,315,136,000,009,000
 //
 //
-//  error
-//     - If this method completes successfully, this returned error
-//       Type is set equal to 'nil'. If errors are encountered during
-//       processing, the returned error Type will encapsulate an error
-//       message.
+//	error
+//	   - If this method completes successfully, this returned error
+//	     Type is set equal to 'nil'. If errors are encountered during
+//	     processing, the returned error Type will encapsulate an error
+//	     message.
 //
-//       If an error message is returned, the text value for input
-//       parameter 'errPrefDto' (error prefix) will be prefixed or
-//       attached at the beginning of the error message.
-//
+//	     If an error message is returned, the text value for input
+//	     parameter 'errPrefDto' (error prefix) will be prefixed or
+//	     attached at the beginning of the error message.
 //
 // ------------------------------------------------------------------------
 //
 // Example Output:
-//       timeDurationStrs[0] 211 Days
-//       timeDurationStrs[1]  23 Hours
-//       timeDurationStrs[2]  32 Minutes
-//       timeDurationStrs[3]  16 Seconds
-//       timeDurationStrs[4]   0 Milliseconds
-//       timeDurationStrs[5]   9 Microseconds
-//       timeDurationStrs[6]   0 Nanoseconds
-//       timeDurationStrs[7]   Total Elapsed Nanoseconds: 18,315,136,000,009,000
 //
-//
+//	timeDurationStrs[0] 211 Days
+//	timeDurationStrs[1]  23 Hours
+//	timeDurationStrs[2]  32 Minutes
+//	timeDurationStrs[3]  16 Seconds
+//	timeDurationStrs[4]   0 Milliseconds
+//	timeDurationStrs[5]   9 Microseconds
+//	timeDurationStrs[6]   0 Nanoseconds
+//	timeDurationStrs[7]   Total Elapsed Nanoseconds: 18,315,136,000,009,000
 func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) computeTimeDuration(
 	startTime time.Time,
 	endTime time.Time,
@@ -270,7 +266,7 @@ func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) computeTimeDuration
 	var nStrIntSeparator IntegerSeparatorDto
 
 	nStrIntSeparator,
-		err = IntegerSeparatorDto{}.
+		err = new(IntegerSeparatorDto).
 		NewUnitedStatesDefaults(
 			ePrefix.XCtxEmpty())
 
@@ -551,14 +547,12 @@ func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) computeTimeDuration
 // TextLineSpecTimerLines and proceeds to set all the internal
 // member variables to their uninitialized or zero states.
 //
-//
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // The data values of all member variables contained in input
 // parameter 'txtTimerLines' will be overwritten and deleted.
-//
 func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) empty(
 	txtTimerLines *TextLineSpecTimerLines) {
 
@@ -600,7 +594,6 @@ func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) empty(
 // getDefaultEndTimeLabel - Returns an array of runes containing
 // the default End Time Label for instances of
 // TextLineSpecTimerLines.
-//
 func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) getDefaultEndTimeLabel() []rune {
 
 	if txtTimerLinesElectron.lock == nil {
@@ -617,7 +610,6 @@ func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) getDefaultEndTimeLa
 // getDefaultLabelRightMarginChars - Returns an array of
 // runes containing the default Label Output Separation Characters
 // Label for instances of TextLineSpecTimerLines.
-//
 func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) getDefaultLabelRightMarginChars() []rune {
 
 	if txtTimerLinesElectron.lock == nil {
@@ -634,7 +626,6 @@ func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) getDefaultLabelRigh
 // getDefaultStartTimeLabel - Returns an array of runes containing
 // the default Start Time Label for instances of
 // TextLineSpecTimerLines.
-//
 func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) getDefaultStartTimeLabel() []rune {
 
 	if txtTimerLinesElectron.lock == nil {
@@ -651,7 +642,6 @@ func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) getDefaultStartTime
 // getDefaultTimeDurationLabel - Returns an array of runes containing
 // the default Time Duration or Elapsed Time Label for instances of
 // TextLineSpecTimerLines.
-//
 func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) getDefaultTimeDurationLabel() []rune {
 
 	if txtTimerLinesElectron.lock == nil {
@@ -669,7 +659,6 @@ func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) getDefaultTimeDurat
 // TextLineSpecTimerLines objects.
 //
 // The default time is July 4, 1776 09:30AM UTC
-//
 func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) getDefaultTime() time.Time {
 
 	if txtTimerLinesElectron.lock == nil {
@@ -703,41 +692,37 @@ func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) getDefaultTime() ti
 // Namely, these are 'startTimeLabel', 'endTimeLabel', and
 // 'timeDurationLabel'.
 //
-//
 // ------------------------------------------------------------------------
 //
-// Input Parameters
+// # Input Parameters
+//
+//	startTimeLabel             []rune
+//	   - An array of runes containing the text characters
+//	     constituting the starting time text label.
 //
 //
-//  startTimeLabel             []rune
-//     - An array of runes containing the text characters
-//       constituting the starting time text label.
+//	endTimeLabel               []rune
+//	   - An array of runes containing the text characters
+//	     constituting the ending time text label.
 //
 //
-//  endTimeLabel               []rune
-//     - An array of runes containing the text characters
-//       constituting the ending time text label.
-//
-//
-//  timeDurationLabel          []rune
-//     - The text label used to describe the time duration or
-//       elapsed time computed from the 'startTime' and 'endTime'
-//       parameters.
-//
+//	timeDurationLabel          []rune
+//	   - The text label used to describe the time duration or
+//	     elapsed time computed from the 'startTime' and 'endTime'
+//	     parameters.
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  int
-//     - An integer value identifying the length in runes of the
-//       longest text label for an instance of
-//       TextLineSpecTimerLines. All instances of
-//       TextLineSpecTimerLines encapsulate three text labels,
-//       'startTimeLabel', 'endTimeLabel', and 'timeDurationLabel'.
-//       This return parameter holds the length of the longest
-//       of these three text labels.
-//
+//	int
+//	   - An integer value identifying the length in runes of the
+//	     longest text label for an instance of
+//	     TextLineSpecTimerLines. All instances of
+//	     TextLineSpecTimerLines encapsulate three text labels,
+//	     'startTimeLabel', 'endTimeLabel', and 'timeDurationLabel'.
+//	     This return parameter holds the length of the longest
+//	     of these three text labels.
 func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) getLengthOfLongestLabel(
 	startTimeLabel []rune,
 	endTimeLabel []rune,
@@ -776,7 +761,6 @@ func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) getLengthOfLongestL
 // length of the longest text label, it is used to determine the
 // length of text label strings. Otherwise, the length of the
 // longest text label is used.
-//
 func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) getTotalLabelLength(
 	labelLeftMarginChars []rune,
 	startTimeLabel []rune,
@@ -819,7 +803,6 @@ func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) getTotalLabelLength
 
 // ptr - Returns a pointer to a new instance of
 // textLineSpecTimerLinesElectron.
-//
 func (txtTimerLinesElectron textLineSpecTimerLinesElectron) ptr() *textLineSpecTimerLinesElectron {
 
 	if txtTimerLinesElectron.lock == nil {

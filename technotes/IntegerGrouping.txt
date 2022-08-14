@@ -2,4 +2,5 @@ Notes On Integer Grouping
 
 ## Inserts Integer Separators into Number Runes Array
 integerSeparatorDtoMolecule applyIntSeparators
-integerseparatormoleculedto.go
+
+File: 'integerseparatormoleculedto.go'

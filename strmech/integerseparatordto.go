@@ -925,7 +925,7 @@ func (nStrIntSep *IntegerSeparatorDto) IsValidInstanceError(
 //	     and text passed by input parameter, 'errorPrefix'. The
 //	     'errorPrefix' text will be attached to the beginning of
 //	     the error message.
-func (nStrIntSep IntegerSeparatorDto) NewFromIntGroupEnum(
+func (nStrIntSep *IntegerSeparatorDto) NewFromIntGroupEnum(
 	intGroupingType IntegerGroupingType,
 	intSeparatorChars string,
 	errorPrefix interface{}) (
@@ -1085,7 +1085,7 @@ func (nStrIntSep IntegerSeparatorDto) NewFromIntGroupEnum(
 //	     and text passed by input parameter, 'errorPrefix'. The
 //	     'errorPrefix' text will be attached to the beginning of
 //	     the error message.
-func (nStrIntSep IntegerSeparatorDto) NewFromIntGroupEnumRunes(
+func (nStrIntSep *IntegerSeparatorDto) NewFromIntGroupEnumRunes(
 	intGroupingType IntegerGroupingType,
 	intSeparatorChars []rune,
 	errorPrefix interface{}) (
@@ -1272,7 +1272,7 @@ func (nStrIntSep IntegerSeparatorDto) NewFromIntGroupEnumRunes(
 //	     and text passed by input parameter, 'errorPrefix'. The
 //	     'errorPrefix' text will be attached to the beginning of
 //	     the error message.
-func (nStrIntSep IntegerSeparatorDto) NewDetail(
+func (nStrIntSep *IntegerSeparatorDto) NewDetail(
 	intSeparatorChars string,
 	intSeparatorGrouping []uint,
 	restartIntGroupingSequence bool,
@@ -1465,7 +1465,7 @@ func (nStrIntSep IntegerSeparatorDto) NewDetail(
 //	     and text passed by input parameter, 'errorPrefix'. The
 //	     'errorPrefix' text will be attached to the beginning of
 //	     the error message.
-func (nStrIntSep IntegerSeparatorDto) NewDetailRunes(
+func (nStrIntSep *IntegerSeparatorDto) NewDetailRunes(
 	intSeparatorChars []rune,
 	intSeparatorGrouping []uint,
 	restartIntGroupingSequence bool,
@@ -1625,7 +1625,7 @@ func (nStrIntSep IntegerSeparatorDto) NewDetailRunes(
 //	     and text passed by input parameter, 'errorPrefix'. The
 //	     'errorPrefix' text will be attached to the beginning of
 //	     the error message.
-func (nStrIntSep IntegerSeparatorDto) NewChineseNumbering(
+func (nStrIntSep *IntegerSeparatorDto) NewChineseNumbering(
 	intSeparatorChars string,
 	errorPrefix interface{}) (
 	IntegerSeparatorDto,
@@ -1758,7 +1758,7 @@ func (nStrIntSep IntegerSeparatorDto) NewChineseNumbering(
 //	     and text passed by input parameter, 'errorPrefix'. The
 //	     'errorPrefix' text will be attached to the beginning of
 //	     the error message.
-func (nStrIntSep IntegerSeparatorDto) NewChineseNumberingDefault(
+func (nStrIntSep *IntegerSeparatorDto) NewChineseNumberingDefault(
 	errorPrefix interface{}) (
 	IntegerSeparatorDto,
 	error) {
@@ -1908,7 +1908,7 @@ func (nStrIntSep IntegerSeparatorDto) NewChineseNumberingDefault(
 //	     and text passed by input parameter, 'errorPrefix'. The
 //	     'errorPrefix' text will be attached to the beginning of
 //	     the error message.
-func (nStrIntSep IntegerSeparatorDto) NewChineseNumberingRunes(
+func (nStrIntSep *IntegerSeparatorDto) NewChineseNumberingRunes(
 	intSeparatorChars []rune,
 	errorPrefix interface{}) (
 	IntegerSeparatorDto,
@@ -2060,7 +2060,7 @@ func (nStrIntSep IntegerSeparatorDto) NewChineseNumberingRunes(
 //	     and text passed by input parameter, 'errorPrefix'. The
 //	     'errorPrefix' text will be attached to the beginning of
 //	     the error message.
-func (nStrIntSep IntegerSeparatorDto) NewIndiaNumbering(
+func (nStrIntSep *IntegerSeparatorDto) NewIndiaNumbering(
 	intSeparatorChars string,
 	errorPrefix interface{}) (
 	IntegerSeparatorDto,
@@ -2192,7 +2192,7 @@ func (nStrIntSep IntegerSeparatorDto) NewIndiaNumbering(
 //	     and text passed by input parameter, 'errorPrefix'. The
 //	     'errorPrefix' text will be attached to the beginning of
 //	     the error message.
-func (nStrIntSep IntegerSeparatorDto) NewIndiaNumberingDefault(
+func (nStrIntSep *IntegerSeparatorDto) NewIndiaNumberingDefault(
 	errorPrefix interface{}) (
 	IntegerSeparatorDto,
 	error) {
@@ -2343,7 +2343,7 @@ func (nStrIntSep IntegerSeparatorDto) NewIndiaNumberingDefault(
 //	     and text passed by input parameter, 'errorPrefix'. The
 //	     'errorPrefix' text will be attached to the beginning of
 //	     the error message.
-func (nStrIntSep IntegerSeparatorDto) NewIndiaNumberingRunes(
+func (nStrIntSep *IntegerSeparatorDto) NewIndiaNumberingRunes(
 	intSeparatorChars []rune,
 	errorPrefix interface{}) (
 	IntegerSeparatorDto,
@@ -2489,7 +2489,7 @@ func (nStrIntSep IntegerSeparatorDto) NewIndiaNumberingRunes(
 //	     and text passed by input parameter, 'errorPrefix'. The
 //	     'errorPrefix' text will be attached to the beginning of
 //	     the error message.
-func (nStrIntSep IntegerSeparatorDto) NewThousands(
+func (nStrIntSep *IntegerSeparatorDto) NewThousands(
 	intSeparatorChars string,
 	errorPrefix interface{}) (
 	IntegerSeparatorDto,
@@ -2643,7 +2643,7 @@ func (nStrIntSep IntegerSeparatorDto) NewThousands(
 //	     and text passed by input parameter, 'errorPrefix'. The
 //	     'errorPrefix' text will be attached to the beginning of
 //	     the error message.
-func (nStrIntSep IntegerSeparatorDto) NewThousandsRunes(
+func (nStrIntSep *IntegerSeparatorDto) NewThousandsRunes(
 	intSeparatorChars []rune,
 	errorPrefix interface{}) (
 	IntegerSeparatorDto,
@@ -2757,7 +2757,7 @@ func (nStrIntSep IntegerSeparatorDto) NewThousandsRunes(
 //	     and text passed by input parameter, 'errorPrefix'. The
 //	     'errorPrefix' text will be attached to the beginning of
 //	     the error message.
-func (nStrIntSep IntegerSeparatorDto) NewUnitedStatesDefaults(
+func (nStrIntSep *IntegerSeparatorDto) NewUnitedStatesDefaults(
 	errorPrefix interface{}) (
 	IntegerSeparatorDto,
 	error) {
@@ -2937,7 +2937,7 @@ func (nStrIntSep IntegerSeparatorDto) NewUnitedStatesDefaults(
 //	     and text passed by input parameter, 'errorPrefix'. The
 //	     'errorPrefix' text will be attached to the beginning of
 //	     the error message.
-func (nStrIntSep IntegerSeparatorDto) NewWithComponents(
+func (nStrIntSep *IntegerSeparatorDto) NewWithComponents(
 	intSeparatorChars []rune,
 	intSeparatorGrouping []uint,
 	restartIntGroupingSequence bool,
