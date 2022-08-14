@@ -184,52 +184,49 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) CopyIn(
 //
 // Input Parameters
 //
-//	 errorPrefix                interface{}
-//	    - This object encapsulates error prefix text which is
-//	      included in all returned error messages. Usually, it
-//	      contains the name of the calling method or methods
-//	      listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//	      If no error prefix information is needed, set this
-//	      parameter to 'nil'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//	      This empty interface must be convertible to one of the
-//	      following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
+//	    1. nil - A nil value is valid and generates an empty
+//	       collection of error prefix and error context
+//	       information.
 //
-//	      1. nil - A nil value is valid and generates an empty
-//	               collection of error prefix and error context
-//	               information.
+//	    2. string - A string containing error prefix information.
 //
-//	      2. string - A string containing error prefix information.
+//	    3. []string A one-dimensional slice of strings containing
+//	       error prefix information
 //
-//	      3. []string A one-dimensional slice of strings containing
-//	                  error prefix information
+//	    4. [][2]string A two-dimensional slice of strings
+//	       containing error prefix and error context information.
 //
-//	      4. [][2]string A two-dimensional slice of strings
-//	         containing error prefix and error context information.
+//	    5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	       from this object will be copied for use in error and
+//	       informational messages.
 //
-//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//		                       from this object will be copied for use
-//		                       in error and informational messages.
+//	    6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	       Information from this object will be copied for use in
+//	       error and informational messages.
 //
-//		     6. *ErrPrefixDto - A pointer to an instance of
-//		                        ErrPrefixDto. Information from this
-//		                        object will be copied for use in error
-//		                        and informational messages.
+//	    7. IBasicErrorPrefix - An interface to a method generating
+//	       a two-dimensional slice of strings containing error
+//	       prefix and error context information.
 //
-//	      7. IBasicErrorPrefix - An interface to a method generating
-//	                             a two-dimensional slice of strings
-//	                             containing error prefix and error
-//	                             context information.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//	      If parameter 'errorPrefix' is NOT convertible to one of
-//	      the valid types listed above, it will be considered
-//	      invalid and trigger the return of an error.
-//
-//	      Types ErrPrefixDto and IBasicErrorPrefix are included in
-//	      the 'errpref' software package,
-//	      "github.com/MikeAustin71/errpref".
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
@@ -298,52 +295,49 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) CopyOut(
 //
 // Input Parameters
 //
-//	 errorPrefix                interface{}
-//	    - This object encapsulates error prefix text which is
-//	      included in all returned error messages. Usually, it
-//	      contains the name of the calling method or methods
-//	      listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//	      If no error prefix information is needed, set this
-//	      parameter to 'nil'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//	      This empty interface must be convertible to one of the
-//	      following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
+//	     1. nil - A nil value is valid and generates an empty
+//	        collection of error prefix and error context
+//	        information.
 //
-//	      1. nil - A nil value is valid and generates an empty
-//	               collection of error prefix and error context
-//	               information.
+//	     2. string - A string containing error prefix information.
 //
-//	      2. string - A string containing error prefix information.
+//	     3. []string A one-dimensional slice of strings containing
+//	        error prefix information
 //
-//	      3. []string A one-dimensional slice of strings containing
-//	                  error prefix information
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//	      4. [][2]string A two-dimensional slice of strings
-//	         containing error prefix and error context information.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	        from this object will be copied for use in error and
+//	        informational messages.
 //
-//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//		                       from this object will be copied for use
-//		                       in error and informational messages.
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	        Information from this object will be copied for use in
+//	        error and informational messages.
 //
-//		     6. *ErrPrefixDto - A pointer to an instance of
-//		                        ErrPrefixDto. Information from this
-//		                        object will be copied for use in error
-//		                        and informational messages.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	        a two-dimensional slice of strings containing error
+//	        prefix and error context information.
 //
-//	      7. IBasicErrorPrefix - An interface to a method generating
-//	                             a two-dimensional slice of strings
-//	                             containing error prefix and error
-//	                             context information.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//	      If parameter 'errorPrefix' is NOT convertible to one of
-//	      the valid types listed above, it will be considered
-//	      invalid and trigger the return of an error.
-//
-//	      Types ErrPrefixDto and IBasicErrorPrefix are included in
-//	      the 'errpref' software package,
-//	      "github.com/MikeAustin71/errpref".
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
@@ -412,52 +406,49 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) CopyOutITextLine(
 //
 // Input Parameters
 //
-//	 errorPrefix                interface{}
-//	    - This object encapsulates error prefix text which is
-//	      included in all returned error messages. Usually, it
-//	      contains the name of the calling method or methods
-//	      listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//	      If no error prefix information is needed, set this
-//	      parameter to 'nil'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//	      This empty interface must be convertible to one of the
-//	      following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
+//	     1. nil - A nil value is valid and generates an empty
+//	        collection of error prefix and error context
+//	        information.
 //
-//	      1. nil - A nil value is valid and generates an empty
-//	               collection of error prefix and error context
-//	               information.
+//	     2. string - A string containing error prefix information.
 //
-//	      2. string - A string containing error prefix information.
+//	     3. []string A one-dimensional slice of strings containing
+//	        error prefix information
 //
-//	      3. []string A one-dimensional slice of strings containing
-//	                  error prefix information
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//	      4. [][2]string A two-dimensional slice of strings
-//	         containing error prefix and error context information.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	        from this object will be copied for use in error and
+//	        informational messages.
 //
-//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//		                       from this object will be copied for use
-//		                       in error and informational messages.
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	        Information from this object will be copied for use in
+//	        error and informational messages.
 //
-//		     6. *ErrPrefixDto - A pointer to an instance of
-//		                        ErrPrefixDto. Information from this
-//		                        object will be copied for use in error
-//		                        and informational messages.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	        a two-dimensional slice of strings containing error
+//	        prefix and error context information.
 //
-//	      7. IBasicErrorPrefix - An interface to a method generating
-//	                             a two-dimensional slice of strings
-//	                             containing error prefix and error
-//	                             context information.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//	      If parameter 'errorPrefix' is NOT convertible to one of
-//	      the valid types listed above, it will be considered
-//	      invalid and trigger the return of an error.
-//
-//	      Types ErrPrefixDto and IBasicErrorPrefix are included in
-//	      the 'errpref' software package,
-//	      "github.com/MikeAustin71/errpref".
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
@@ -635,53 +626,49 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) EqualITextLine(
 //
 // Input Parameters
 //
-//	 errorPrefix                interface{}
-//	    - This object encapsulates error prefix text which is
-//	      included in all returned error messages. Usually, it
-//	      contains the name of the calling method or methods
-//	      listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//	      If no error prefix information is needed, set this
-//	      parameter to 'nil'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//	      This empty interface must be convertible to one of the
-//	      following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
+//	     1. nil - A nil value is valid and generates an empty
+//	        collection of error prefix and error context
+//	        information.
 //
-//	      1. nil - A nil value is valid and generates an empty
-//	               collection of error prefix and error context
-//	               information.
+//	     2. string - A string containing error prefix information.
 //
-//	      2. string - A string containing error prefix information.
+//	     3. []string A one-dimensional slice of strings containing
+//	        error prefix information
 //
-//	      3. []string A one-dimensional slice of strings containing
-//	                  error prefix information
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//	      4. [][2]string A two-dimensional slice of strings
-//	                     containing error prefix and error context
-//	                     information.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	        from this object will be copied for use in error and
+//	        informational messages.
 //
-//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//		                       from this object will be copied for use
-//		                       in error and informational messages.
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	        Information from this object will be copied for use in
+//	        error and informational messages.
 //
-//		     6. *ErrPrefixDto - A pointer to an instance of
-//		                        ErrPrefixDto. Information from this
-//		                        object will be copied for use in error
-//		                        and informational messages.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	        a two-dimensional slice of strings containing error
+//	        prefix and error context information.
 //
-//	      7. IBasicErrorPrefix - An interface to a method generating
-//	                             a two-dimensional slice of strings
-//	                             containing error prefix and error
-//	                             context information.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//	      If parameter 'errorPrefix' is NOT convertible to one of
-//	      the valid types listed above, it will be considered
-//	      invalid and trigger the return of an error.
-//
-//	      Types ErrPrefixDto and IBasicErrorPrefix are included in
-//	      the 'errpref' software package,
-//	      "github.com/MikeAustin71/errpref".
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
@@ -1070,51 +1057,49 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) IsValidInstance() bool {
 //
 // Input Parameters
 //
-//	 errorPrefix         interface{}
-//	    - This object encapsulates error prefix text which is
-//	      included in all returned error messages. Usually, it
-//	      contains the name of the calling method or methods
-//	      listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//	      If no error prefix information is needed, set this parameter
-//	      to 'nil'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//	      This empty interface must be convertible to one of the
-//	      following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
+//	     1. nil - A nil value is valid and generates an empty
+//	        collection of error prefix and error context
+//	        information.
 //
-//	      1. nil - A nil value is valid and generates an empty
-//	               collection of error prefix and error context
-//	               information.
+//	     2. string - A string containing error prefix information.
 //
-//	      2. string - A string containing error prefix information.
+//	     3. []string A one-dimensional slice of strings containing
+//	        error prefix information
 //
-//	      3. []string A one-dimensional slice of strings containing
-//	                  error prefix information
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//	      4. [][2]string A two-dimensional slice of strings containing
-//	                     error prefix and error context information.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	        from this object will be copied for use in error and
+//	        informational messages.
 //
-//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//		                       from this object will be copied for use
-//		                       int error and informational messages.
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	        Information from this object will be copied for use in
+//	        error and informational messages.
 //
-//		     6. *ErrPrefixDto - A pointer to an instance of
-//		                        ErrPrefixDto. Information from this
-//		                        object will be copied for use in error
-//		                        and informational messages.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	        a two-dimensional slice of strings containing error
+//	        prefix and error context information.
 //
-//	      7. IBasicErrorPrefix - An interface to a method generating
-//	                             a two-dimensional slice of strings
-//	                             containing error prefix and error
-//	                             context information.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//	      If parameter 'errorPrefix' is NOT convertible to one of
-//	      the valid types listed above, it will be considered
-//	      invalid and trigger the return of an error.
-//
-//	      Types ErrPrefixDto and IBasicErrorPrefix are included in
-//	      the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
@@ -1247,51 +1232,49 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) IsValidInstanceError(
 //	        Solid line = "*****"
 //
 //
-//	 errorPrefix                interface{}
-//	    - This object encapsulates error prefix text which is
-//	      included in all returned error messages. Usually, it
-//	      contains the name of the calling method or methods
-//	      listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//	      If no error prefix information is needed, set this parameter
-//	      to 'nil'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//	      This empty interface must be convertible to one of the
-//	      following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
+//	     1. nil - A nil value is valid and generates an empty
+//	        collection of error prefix and error context
+//	        information.
 //
-//	      1. nil - A nil value is valid and generates an empty
-//	               collection of error prefix and error context
-//	               information.
+//	     2. string - A string containing error prefix information.
 //
-//	      2. string - A string containing error prefix information.
+//	     3. []string A one-dimensional slice of strings containing
+//	        error prefix information
 //
-//	      3. []string A one-dimensional slice of strings containing
-//	                  error prefix information
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//	      4. [][2]string A two-dimensional slice of strings containing
-//	                     error prefix and error context information.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	        from this object will be copied for use in error and
+//	        informational messages.
 //
-//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//		                       from this object will be copied for use
-//		                       in error and informational messages.
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	        Information from this object will be copied for use in
+//	        error and informational messages.
 //
-//		     6. *ErrPrefixDto - A pointer to an instance of
-//		                        ErrPrefixDto. Information from this
-//		                        object will be copied for use in error
-//		                        and informational messages.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	        a two-dimensional slice of strings containing error
+//	        prefix and error context information.
 //
-//	      7. IBasicErrorPrefix - An interface to a method generating
-//	                             a two-dimensional slice of strings
-//	                             containing error prefix and error
-//	                             context information.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//	      If parameter 'errorPrefix' is NOT convertible to one of
-//	      the valid types listed above, it will be considered
-//	      invalid and trigger the return of an error.
-//
-//	      Types ErrPrefixDto and IBasicErrorPrefix are included in
-//	      the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
@@ -1468,51 +1451,49 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewDefaultSolidLine(
 //	      be set to the default new line character ('\n').
 //
 //
-//	 errorPrefix                interface{}
-//	    - This object encapsulates error prefix text which is
-//	      included in all returned error messages. Usually, it
-//	      contains the name of the calling method or methods
-//	      listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//	      If no error prefix information is needed, set this parameter
-//	      to 'nil'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//	      This empty interface must be convertible to one of the
-//	      following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
+//	     1. nil - A nil value is valid and generates an empty
+//	        collection of error prefix and error context
+//	        information.
 //
-//	      1. nil - A nil value is valid and generates an empty
-//	               collection of error prefix and error context
-//	               information.
+//	     2. string - A string containing error prefix information.
 //
-//	      2. string - A string containing error prefix information.
+//	     3. []string A one-dimensional slice of strings containing
+//	        error prefix information
 //
-//	      3. []string A one-dimensional slice of strings containing
-//	                  error prefix information
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//	      4. [][2]string A two-dimensional slice of strings containing
-//	                     error prefix and error context information.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	        from this object will be copied for use in error and
+//	        informational messages.
 //
-//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//		                       from this object will be copied for use
-//		                       in error and informational messages.
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	        Information from this object will be copied for use in
+//	        error and informational messages.
 //
-//		     6. *ErrPrefixDto - A pointer to an instance of
-//		                        ErrPrefixDto. Information from this
-//		                        object will be copied for use in error
-//		                        and informational messages.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	        a two-dimensional slice of strings containing error
+//	        prefix and error context information.
 //
-//	      7. IBasicErrorPrefix - An interface to a method generating
-//	                             a two-dimensional slice of strings
-//	                             containing error prefix and error
-//	                             context information.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//	      If parameter 'errorPrefix' is NOT convertible to one of
-//	      the valid types listed above, it will be considered
-//	      invalid and trigger the return of an error.
-//
-//	      Types ErrPrefixDto and IBasicErrorPrefix are included in
-//	      the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
@@ -1703,51 +1684,49 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewFullSolidLineConfig(
 //	      be set to the default new line character ('\n').
 //
 //
-//	 errorPrefix                interface{}
-//	    - This object encapsulates error prefix text which is
-//	      included in all returned error messages. Usually, it
-//	      contains the name of the calling method or methods
-//	      listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//	      If no error prefix information is needed, set this parameter
-//	      to 'nil'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//	      This empty interface must be convertible to one of the
-//	      following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
+//	     1. nil - A nil value is valid and generates an empty
+//	        collection of error prefix and error context
+//	        information.
 //
-//	      1. nil - A nil value is valid and generates an empty
-//	               collection of error prefix and error context
-//	               information.
+//	     2. string - A string containing error prefix information.
 //
-//	      2. string - A string containing error prefix information.
+//	     3. []string A one-dimensional slice of strings containing
+//	        error prefix information
 //
-//	      3. []string A one-dimensional slice of strings containing
-//	                  error prefix information
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//	      4. [][2]string A two-dimensional slice of strings containing
-//	                     error prefix and error context information.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	        from this object will be copied for use in error and
+//	        informational messages.
 //
-//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//		                       from this object will be copied for use
-//		                       in error and informational messages.
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	        Information from this object will be copied for use in
+//	        error and informational messages.
 //
-//		     6. *ErrPrefixDto - A pointer to an instance of
-//		                        ErrPrefixDto. Information from this
-//		                        object will be copied for use in error
-//		                        and informational messages.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	        a two-dimensional slice of strings containing error
+//	        prefix and error context information.
 //
-//	      7. IBasicErrorPrefix - An interface to a method generating
-//	                             a two-dimensional slice of strings
-//	                             containing error prefix and error
-//	                             context information.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//	      If parameter 'errorPrefix' is NOT convertible to one of
-//	      the valid types listed above, it will be considered
-//	      invalid and trigger the return of an error.
-//
-//	      Types ErrPrefixDto and IBasicErrorPrefix are included in
-//	      the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
@@ -1919,51 +1898,49 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewFullSolidLineRunesConfig(
 //	        Solid line = "*****"
 //
 //
-//	 errorPrefix                interface{}
-//	    - This object encapsulates error prefix text which is
-//	      included in all returned error messages. Usually, it
-//	      contains the name of the calling method or methods
-//	      listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//	      If no error prefix information is needed, set this parameter
-//	      to 'nil'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//	      This empty interface must be convertible to one of the
-//	      following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
+//	     1. nil - A nil value is valid and generates an empty
+//	        collection of error prefix and error context
+//	        information.
 //
-//	      1. nil - A nil value is valid and generates an empty
-//	               collection of error prefix and error context
-//	               information.
+//	     2. string - A string containing error prefix information.
 //
-//	      2. string - A string containing error prefix information.
+//	     3. []string A one-dimensional slice of strings containing
+//	        error prefix information
 //
-//	      3. []string A one-dimensional slice of strings containing
-//	                  error prefix information
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//	      4. [][2]string A two-dimensional slice of strings containing
-//	                     error prefix and error context information.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	        from this object will be copied for use in error and
+//	        informational messages.
 //
-//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//		                       from this object will be copied for use
-//		                       in error and informational messages.
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	        Information from this object will be copied for use in
+//	        error and informational messages.
 //
-//		     6. *ErrPrefixDto - A pointer to an instance of
-//		                        ErrPrefixDto. Information from this
-//		                        object will be copied for use in error
-//		                        and informational messages.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	        a two-dimensional slice of strings containing error
+//	        prefix and error context information.
 //
-//	      7. IBasicErrorPrefix - An interface to a method generating
-//	                             a two-dimensional slice of strings
-//	                             containing error prefix and error
-//	                             context information.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//	      If parameter 'errorPrefix' is NOT convertible to one of
-//	      the valid types listed above, it will be considered
-//	      invalid and trigger the return of an error.
-//
-//	      Types ErrPrefixDto and IBasicErrorPrefix are included in
-//	      the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
@@ -2155,51 +2132,49 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewSolidLine(
 //	      TextLineSpecSolidLine.
 //
 //
-//	 errorPrefix                  interface{}
-//	    - This object encapsulates error prefix text which is
-//	      included in all returned error messages. Usually, it
-//	      contains the name of the calling method or methods
-//	      listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//	      If no error prefix information is needed, set this parameter
-//	      to 'nil'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//	      This empty interface must be convertible to one of the
-//	      following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
+//	     1. nil - A nil value is valid and generates an empty
+//	        collection of error prefix and error context
+//	        information.
 //
-//	      1. nil - A nil value is valid and generates an empty
-//	               collection of error prefix and error context
-//	               information.
+//	     2. string - A string containing error prefix information.
 //
-//	      2. string - A string containing error prefix information.
+//	     3. []string A one-dimensional slice of strings containing
+//	        error prefix information
 //
-//	      3. []string A one-dimensional slice of strings containing
-//	                  error prefix information
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//	      4. [][2]string A two-dimensional slice of strings containing
-//	                     error prefix and error context information.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	        from this object will be copied for use in error and
+//	        informational messages.
 //
-//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//		                       from this object will be copied for use
-//		                       in error and informational messages.
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	        Information from this object will be copied for use in
+//	        error and informational messages.
 //
-//		     6. *ErrPrefixDto - A pointer to an instance of
-//		                        ErrPrefixDto. Information from this
-//		                        object will be copied for use in error
-//		                        and informational messages.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	        a two-dimensional slice of strings containing error
+//	        prefix and error context information.
 //
-//	      7. IBasicErrorPrefix - An interface to a method generating
-//	                             a two-dimensional slice of strings
-//	                             containing error prefix and error
-//	                             context information.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//	      If parameter 'errorPrefix' is NOT convertible to one of
-//	      the valid types listed above, it will be considered
-//	      invalid and trigger the return of an error.
-//
-//	      Types ErrPrefixDto and IBasicErrorPrefix are included in
-//	      the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
@@ -2357,51 +2332,49 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewSolidLineAllParms(
 //	        Solid line = "*****"
 //
 //
-//	 errorPrefix                interface{}
-//	    - This object encapsulates error prefix text which is
-//	      included in all returned error messages. Usually, it
-//	      contains the name of the calling method or methods
-//	      listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//	      If no error prefix information is needed, set this parameter
-//	      to 'nil'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//	      This empty interface must be convertible to one of the
-//	      following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
+//	     1. nil - A nil value is valid and generates an empty
+//	        collection of error prefix and error context
+//	        information.
 //
-//	      1. nil - A nil value is valid and generates an empty
-//	               collection of error prefix and error context
-//	               information.
+//	     2. string - A string containing error prefix information.
 //
-//	      2. string - A string containing error prefix information.
+//	     3. []string A one-dimensional slice of strings containing
+//	        error prefix information
 //
-//	      3. []string A one-dimensional slice of strings containing
-//	                  error prefix information
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//	      4. [][2]string A two-dimensional slice of strings containing
-//	                     error prefix and error context information.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	        from this object will be copied for use in error and
+//	        informational messages.
 //
-//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//		                       from this object will be copied for use
-//		                       in error and informational messages.
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	        Information from this object will be copied for use in
+//	        error and informational messages.
 //
-//		     6. *ErrPrefixDto - A pointer to an instance of
-//		                        ErrPrefixDto. Information from this
-//		                        object will be copied for use in error
-//		                        and informational messages.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	        a two-dimensional slice of strings containing error
+//	        prefix and error context information.
 //
-//	      7. IBasicErrorPrefix - An interface to a method generating
-//	                             a two-dimensional slice of strings
-//	                             containing error prefix and error
-//	                             context information.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//	      If parameter 'errorPrefix' is NOT convertible to one of
-//	      the valid types listed above, it will be considered
-//	      invalid and trigger the return of an error.
-//
-//	      Types ErrPrefixDto and IBasicErrorPrefix are included in
-//	      the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
@@ -2581,51 +2554,49 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewPtrDefaultSolidLine(
 //	      be set to the default new line character ('\n').
 //
 //
-//	 errorPrefix                interface{}
-//	    - This object encapsulates error prefix text which is
-//	      included in all returned error messages. Usually, it
-//	      contains the name of the calling method or methods
-//	      listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//	      If no error prefix information is needed, set this parameter
-//	      to 'nil'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//	      This empty interface must be convertible to one of the
-//	      following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
+//	     1. nil - A nil value is valid and generates an empty
+//	        collection of error prefix and error context
+//	        information.
 //
-//	      1. nil - A nil value is valid and generates an empty
-//	               collection of error prefix and error context
-//	               information.
+//	     2. string - A string containing error prefix information.
 //
-//	      2. string - A string containing error prefix information.
+//	     3. []string A one-dimensional slice of strings containing
+//	        error prefix information
 //
-//	      3. []string A one-dimensional slice of strings containing
-//	                  error prefix information
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//	      4. [][2]string A two-dimensional slice of strings containing
-//	                     error prefix and error context information.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	        from this object will be copied for use in error and
+//	        informational messages.
 //
-//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//		                       from this object will be copied for use
-//		                       in error and informational messages.
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	        Information from this object will be copied for use in
+//	        error and informational messages.
 //
-//		     6. *ErrPrefixDto - A pointer to an instance of
-//		                        ErrPrefixDto. Information from this
-//		                        object will be copied for use in error
-//		                        and informational messages.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	        a two-dimensional slice of strings containing error
+//	        prefix and error context information.
 //
-//	      7. IBasicErrorPrefix - An interface to a method generating
-//	                             a two-dimensional slice of strings
-//	                             containing error prefix and error
-//	                             context information.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//	      If parameter 'errorPrefix' is NOT convertible to one of
-//	      the valid types listed above, it will be considered
-//	      invalid and trigger the return of an error.
-//
-//	      Types ErrPrefixDto and IBasicErrorPrefix are included in
-//	      the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
@@ -2822,51 +2793,49 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewPtrFullSolidLineConfig(
 //	      be set to the default new line character ('\n').
 //
 //
-//	 errorPrefix                interface{}
-//	    - This object encapsulates error prefix text which is
-//	      included in all returned error messages. Usually, it
-//	      contains the name of the calling method or methods
-//	      listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//	      If no error prefix information is needed, set this parameter
-//	      to 'nil'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//	      This empty interface must be convertible to one of the
-//	      following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
+//	     1. nil - A nil value is valid and generates an empty
+//	        collection of error prefix and error context
+//	        information.
 //
-//	      1. nil - A nil value is valid and generates an empty
-//	               collection of error prefix and error context
-//	               information.
+//	     2. string - A string containing error prefix information.
 //
-//	      2. string - A string containing error prefix information.
+//	     3. []string A one-dimensional slice of strings containing
+//	        error prefix information
 //
-//	      3. []string A one-dimensional slice of strings containing
-//	                  error prefix information
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//	      4. [][2]string A two-dimensional slice of strings containing
-//	                     error prefix and error context information.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	        from this object will be copied for use in error and
+//	        informational messages.
 //
-//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//		                       from this object will be copied for use
-//		                       in error and informational messages.
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	        Information from this object will be copied for use in
+//	        error and informational messages.
 //
-//		     6. *ErrPrefixDto - A pointer to an instance of
-//		                        ErrPrefixDto. Information from this
-//		                        object will be copied for use in error
-//		                        and informational messages.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	        a two-dimensional slice of strings containing error
+//	        prefix and error context information.
 //
-//	      7. IBasicErrorPrefix - An interface to a method generating
-//	                             a two-dimensional slice of strings
-//	                             containing error prefix and error
-//	                             context information.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//	      If parameter 'errorPrefix' is NOT convertible to one of
-//	      the valid types listed above, it will be considered
-//	      invalid and trigger the return of an error.
-//
-//	      Types ErrPrefixDto and IBasicErrorPrefix are included in
-//	      the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
@@ -3042,51 +3011,49 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewPtrFullSolidLineRunesConfig(
 //	        Solid line = "*****"
 //
 //
-//	 errorPrefix                interface{}
-//	    - This object encapsulates error prefix text which is
-//	      included in all returned error messages. Usually, it
-//	      contains the name of the calling method or methods
-//	      listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//	      If no error prefix information is needed, set this parameter
-//	      to 'nil'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//	      This empty interface must be convertible to one of the
-//	      following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
+//	     1. nil - A nil value is valid and generates an empty
+//	        collection of error prefix and error context
+//	        information.
 //
-//	      1. nil - A nil value is valid and generates an empty
-//	               collection of error prefix and error context
-//	               information.
+//	     2. string - A string containing error prefix information.
 //
-//	      2. string - A string containing error prefix information.
+//	     3. []string A one-dimensional slice of strings containing
+//	        error prefix information
 //
-//	      3. []string A one-dimensional slice of strings containing
-//	                  error prefix information
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//	      4. [][2]string A two-dimensional slice of strings containing
-//	                     error prefix and error context information.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	        from this object will be copied for use in error and
+//	        informational messages.
 //
-//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//		                       from this object will be copied for use
-//		                       in error and informational messages.
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	        Information from this object will be copied for use in
+//	        error and informational messages.
 //
-//		     6. *ErrPrefixDto - A pointer to an instance of
-//		                        ErrPrefixDto. Information from this
-//		                        object will be copied for use in error
-//		                        and informational messages.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	        a two-dimensional slice of strings containing error
+//	        prefix and error context information.
 //
-//	      7. IBasicErrorPrefix - An interface to a method generating
-//	                             a two-dimensional slice of strings
-//	                             containing error prefix and error
-//	                             context information.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//	      If parameter 'errorPrefix' is NOT convertible to one of
-//	      the valid types listed above, it will be considered
-//	      invalid and trigger the return of an error.
-//
-//	      Types ErrPrefixDto and IBasicErrorPrefix are included in
-//	      the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
@@ -3284,51 +3251,49 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewPtrSolidLine(
 //	      TextLineSpecSolidLine.
 //
 //
-//	 errorPrefix                  interface{}
-//	    - This object encapsulates error prefix text which is
-//	      included in all returned error messages. Usually, it
-//	      contains the name of the calling method or methods
-//	      listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//	      If no error prefix information is needed, set this parameter
-//	      to 'nil'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//	      This empty interface must be convertible to one of the
-//	      following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
+//	     1. nil - A nil value is valid and generates an empty
+//	        collection of error prefix and error context
+//	        information.
 //
-//	      1. nil - A nil value is valid and generates an empty
-//	               collection of error prefix and error context
-//	               information.
+//	     2. string - A string containing error prefix information.
 //
-//	      2. string - A string containing error prefix information.
+//	     3. []string A one-dimensional slice of strings containing
+//	        error prefix information
 //
-//	      3. []string A one-dimensional slice of strings containing
-//	                  error prefix information
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//	      4. [][2]string A two-dimensional slice of strings containing
-//	                     error prefix and error context information.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	        from this object will be copied for use in error and
+//	        informational messages.
 //
-//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//		                       from this object will be copied for use
-//		                       in error and informational messages.
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	        Information from this object will be copied for use in
+//	        error and informational messages.
 //
-//		     6. *ErrPrefixDto - A pointer to an instance of
-//		                        ErrPrefixDto. Information from this
-//		                        object will be copied for use in error
-//		                        and informational messages.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	        a two-dimensional slice of strings containing error
+//	        prefix and error context information.
 //
-//	      7. IBasicErrorPrefix - An interface to a method generating
-//	                             a two-dimensional slice of strings
-//	                             containing error prefix and error
-//	                             context information.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//	      If parameter 'errorPrefix' is NOT convertible to one of
-//	      the valid types listed above, it will be considered
-//	      invalid and trigger the return of an error.
-//
-//	      Types ErrPrefixDto and IBasicErrorPrefix are included in
-//	      the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
@@ -3764,51 +3729,49 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) ReaderInitialize() {
 //	      it will be set to the default new line character ('\n').
 //
 //
-//	 errorPrefix                interface{}
-//	    - This object encapsulates error prefix text which is
-//	      included in all returned error messages. Usually, it
-//	      contains the name of the calling method or methods
-//	      listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//	      If no error prefix information is needed, set this parameter
-//	      to 'nil'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//	      This empty interface must be convertible to one of the
-//	      following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
+//	     1. nil - A nil value is valid and generates an empty
+//	        collection of error prefix and error context
+//	        information.
 //
-//	      1. nil - A nil value is valid and generates an empty
-//	               collection of error prefix and error context
-//	               information.
+//	     2. string - A string containing error prefix information.
 //
-//	      2. string - A string containing error prefix information.
+//	     3. []string A one-dimensional slice of strings containing
+//	        error prefix information
 //
-//	      3. []string A one-dimensional slice of strings containing
-//	                  error prefix information
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//	      4. [][2]string A two-dimensional slice of strings containing
-//	                     error prefix and error context information.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	        from this object will be copied for use in error and
+//	        informational messages.
 //
-//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//		                       from this object will be copied for use
-//		                       in error and informational messages.
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	        Information from this object will be copied for use in
+//	        error and informational messages.
 //
-//		     6. *ErrPrefixDto - A pointer to an instance of
-//		                        ErrPrefixDto. Information from this
-//		                        object will be copied for use in error
-//		                        and informational messages.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	        a two-dimensional slice of strings containing error
+//	        prefix and error context information.
 //
-//	      7. IBasicErrorPrefix - An interface to a method generating
-//	                             a two-dimensional slice of strings
-//	                             containing error prefix and error
-//	                             context information.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//	      If parameter 'errorPrefix' is NOT convertible to one of
-//	      the valid types listed above, it will be considered
-//	      invalid and trigger the return of an error.
-//
-//	      Types ErrPrefixDto and IBasicErrorPrefix are included in
-//	      the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
@@ -3983,51 +3946,49 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) SetFullSolidLineConfig(
 //	      line character ('\n').
 //
 //
-//	 errorPrefix                interface{}
-//	    - This object encapsulates error prefix text which is
-//	      included in all returned error messages. Usually, it
-//	      contains the name of the calling method or methods
-//	      listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//	      If no error prefix information is needed, set this parameter
-//	      to 'nil'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//	      This empty interface must be convertible to one of the
-//	      following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
+//	     1. nil - A nil value is valid and generates an empty
+//	        collection of error prefix and error context
+//	        information.
 //
-//	      1. nil - A nil value is valid and generates an empty
-//	               collection of error prefix and error context
-//	               information.
+//	     2. string - A string containing error prefix information.
 //
-//	      2. string - A string containing error prefix information.
+//	     3. []string A one-dimensional slice of strings containing
+//	        error prefix information
 //
-//	      3. []string A one-dimensional slice of strings containing
-//	                  error prefix information
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//	      4. [][2]string A two-dimensional slice of strings containing
-//	                     error prefix and error context information.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	        from this object will be copied for use in error and
+//	        informational messages.
 //
-//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//		                       from this object will be copied for use
-//		                       in error and informational messages.
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	        Information from this object will be copied for use in
+//	        error and informational messages.
 //
-//		     6. *ErrPrefixDto - A pointer to an instance of
-//		                        ErrPrefixDto. Information from this
-//		                        object will be copied for use in error
-//		                        and informational messages.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	        a two-dimensional slice of strings containing error
+//	        prefix and error context information.
 //
-//	      7. IBasicErrorPrefix - An interface to a method generating
-//	                             a two-dimensional slice of strings
-//	                             containing error prefix and error
-//	                             context information.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//	      If parameter 'errorPrefix' is NOT convertible to one of
-//	      the valid types listed above, it will be considered
-//	      invalid and trigger the return of an error.
-//
-//	      Types ErrPrefixDto and IBasicErrorPrefix are included in
-//	      the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
@@ -4122,51 +4083,49 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) SetFullSolidLineRunesConfig(
 //	      one-million (1,000,000), an error will be returned.
 //
 //
-//	 errorPrefix                interface{}
-//	    - This object encapsulates error prefix text which is
-//	      included in all returned error messages. Usually, it
-//	      contains the name of the calling method or methods
-//	      listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//	      If no error prefix information is needed, set this parameter
-//	      to 'nil'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//	      This empty interface must be convertible to one of the
-//	      following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
+//	     1. nil - A nil value is valid and generates an empty
+//	        collection of error prefix and error context
+//	        information.
 //
-//	      1. nil - A nil value is valid and generates an empty
-//	               collection of error prefix and error context
-//	               information.
+//	     2. string - A string containing error prefix information.
 //
-//	      2. string - A string containing error prefix information.
+//	     3. []string A one-dimensional slice of strings containing
+//	        error prefix information
 //
-//	      3. []string A one-dimensional slice of strings containing
-//	                  error prefix information
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//	      4. [][2]string A two-dimensional slice of strings containing
-//	                     error prefix and error context information.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	        from this object will be copied for use in error and
+//	        informational messages.
 //
-//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//		                       from this object will be copied for use
-//		                       in error and informational messages.
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	        Information from this object will be copied for use in
+//	        error and informational messages.
 //
-//		     6. *ErrPrefixDto - A pointer to an instance of
-//		                        ErrPrefixDto. Information from this
-//		                        object will be copied for use in error
-//		                        and informational messages.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	        a two-dimensional slice of strings containing error
+//	        prefix and error context information.
 //
-//	      7. IBasicErrorPrefix - An interface to a method generating
-//	                             a two-dimensional slice of strings
-//	                             containing error prefix and error
-//	                             context information.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//	      If parameter 'errorPrefix' is NOT convertible to one of
-//	      the valid types listed above, it will be considered
-//	      invalid and trigger the return of an error.
-//
-//	      Types ErrPrefixDto and IBasicErrorPrefix are included in
-//	      the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
@@ -4293,51 +4252,49 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) SetLeftMargin(
 //	      than one-million (1,000,000), an error will be returned.
 //
 //
-//	 errorPrefix                interface{}
-//	    - This object encapsulates error prefix text which is
-//	      included in all returned error messages. Usually, it
-//	      contains the name of the calling method or methods
-//	      listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//	      If no error prefix information is needed, set this parameter
-//	      to 'nil'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//	      This empty interface must be convertible to one of the
-//	      following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
+//	     1. nil - A nil value is valid and generates an empty
+//	        collection of error prefix and error context
+//	        information.
 //
-//	      1. nil - A nil value is valid and generates an empty
-//	               collection of error prefix and error context
-//	               information.
+//	     2. string - A string containing error prefix information.
 //
-//	      2. string - A string containing error prefix information.
+//	     3. []string A one-dimensional slice of strings containing
+//	        error prefix information
 //
-//	      3. []string A one-dimensional slice of strings containing
-//	                  error prefix information
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//	      4. [][2]string A two-dimensional slice of strings containing
-//	                     error prefix and error context information.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	        from this object will be copied for use in error and
+//	        informational messages.
 //
-//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//		                       from this object will be copied for use
-//		                       in error and informational messages.
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	        Information from this object will be copied for use in
+//	        error and informational messages.
 //
-//		     6. *ErrPrefixDto - A pointer to an instance of
-//		                        ErrPrefixDto. Information from this
-//		                        object will be copied for use in error
-//		                        and informational messages.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	        a two-dimensional slice of strings containing error
+//	        prefix and error context information.
 //
-//	      7. IBasicErrorPrefix - An interface to a method generating
-//	                             a two-dimensional slice of strings
-//	                             containing error prefix and error
-//	                             context information.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//	      If parameter 'errorPrefix' is NOT convertible to one of
-//	      the valid types listed above, it will be considered
-//	      invalid and trigger the return of an error.
-//
-//	      Types ErrPrefixDto and IBasicErrorPrefix are included in
-//	      the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
@@ -4647,51 +4604,49 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) SetNewLineRunes(
 //	      TextLineSpecSolidLine.
 //
 //
-//	 errorPrefix                interface{}
-//	    - This object encapsulates error prefix text which is
-//	      included in all returned error messages. Usually, it
-//	      contains the name of the calling method or methods
-//	      listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//	      If no error prefix information is needed, set this parameter
-//	      to 'nil'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//	      This empty interface must be convertible to one of the
-//	      following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
+//	     1. nil - A nil value is valid and generates an empty
+//	        collection of error prefix and error context
+//	        information.
 //
-//	      1. nil - A nil value is valid and generates an empty
-//	               collection of error prefix and error context
-//	               information.
+//	     2. string - A string containing error prefix information.
 //
-//	      2. string - A string containing error prefix information.
+//	     3. []string A one-dimensional slice of strings containing
+//	        error prefix information
 //
-//	      3. []string A one-dimensional slice of strings containing
-//	                  error prefix information
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//	      4. [][2]string A two-dimensional slice of strings containing
-//	                     error prefix and error context information.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	        from this object will be copied for use in error and
+//	        informational messages.
 //
-//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//		                       from this object will be copied for use
-//		                       in error and informational messages.
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	        Information from this object will be copied for use in
+//	        error and informational messages.
 //
-//		     6. *ErrPrefixDto - A pointer to an instance of
-//		                        ErrPrefixDto. Information from this
-//		                        object will be copied for use in error
-//		                        and informational messages.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	        a two-dimensional slice of strings containing error
+//	        prefix and error context information.
 //
-//	      7. IBasicErrorPrefix - An interface to a method generating
-//	                             a two-dimensional slice of strings
-//	                             containing error prefix and error
-//	                             context information.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//	      If parameter 'errorPrefix' is NOT convertible to one of
-//	      the valid types listed above, it will be considered
-//	      invalid and trigger the return of an error.
-//
-//	      Types ErrPrefixDto and IBasicErrorPrefix are included in
-//	      the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
@@ -4800,48 +4755,49 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) SetSolidLineAllParms(
 //	        Solid line = "*****"
 //
 //
-//	 errorPrefix                interface{}
-//	    - This object encapsulates error prefix text which is
-//	      included in all returned error messages. Usually, it
-//	      contains the name of the calling method or methods
-//	      listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//	      If no error prefix information is needed, set this parameter
-//	      to 'nil'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//	      This empty interface must be convertible to one of the
-//	      following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
+//	     1. nil - A nil value is valid and generates an empty
+//	        collection of error prefix and error context
+//	        information.
 //
-//	      1. nil - A nil value is valid and generates an empty
-//	               collection of error prefix and error context
-//	               information.
+//	     2. string - A string containing error prefix information.
 //
-//	      2. string - A string containing error prefix information.
+//	     3. []string A one-dimensional slice of strings containing
+//	        error prefix information
 //
-//	      3. []string A one-dimensional slice of strings containing
-//	                  error prefix information
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//		                       from this object will be copied for use
-//		                       in error and informational messages.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	        from this object will be copied for use in error and
+//	        informational messages.
 //
-//		     6. *ErrPrefixDto - A pointer to an instance of
-//		                        ErrPrefixDto. Information from this
-//		                        object will be copied for use in error
-//		                        and informational messages.
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	        Information from this object will be copied for use in
+//	        error and informational messages.
 //
-//	      7. IBasicErrorPrefix - An interface to a method generating
-//	                             a two-dimensional slice of strings
-//	                             containing error prefix and error
-//	                             context information.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	        a two-dimensional slice of strings containing error
+//	        prefix and error context information.
 //
-//	      If parameter 'errorPrefix' is NOT convertible to one of
-//	      the valid types listed above, it will be considered
-//	      invalid and trigger the return of an error.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//	      Types ErrPrefixDto and IBasicErrorPrefix are included in
-//	      the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
@@ -4946,51 +4902,49 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) SetSolidLineCharsRepeatCount(
 //	      one-million (1,000,000), an error will be returned.
 //
 //
-//	 errorPrefix                interface{}
-//	    - This object encapsulates error prefix text which is
-//	      included in all returned error messages. Usually, it
-//	      contains the name of the calling method or methods
-//	      listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//	      If no error prefix information is needed, set this parameter
-//	      to 'nil'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//	      This empty interface must be convertible to one of the
-//	      following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
+//	     1. nil - A nil value is valid and generates an empty
+//	        collection of error prefix and error context
+//	        information.
 //
-//	      1. nil - A nil value is valid and generates an empty
-//	               collection of error prefix and error context
-//	               information.
+//	     2. string - A string containing error prefix information.
 //
-//	      2. string - A string containing error prefix information.
+//	     3. []string A one-dimensional slice of strings containing
+//	        error prefix information
 //
-//	      3. []string A one-dimensional slice of strings containing
-//	                  error prefix information
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//	      4. [][2]string A two-dimensional slice of strings containing
-//	                     error prefix and error context information.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	        from this object will be copied for use in error and
+//	        informational messages.
 //
-//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//		                       from this object will be copied for use
-//		                       in error and informational messages.
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	        Information from this object will be copied for use in
+//	        error and informational messages.
 //
-//		     6. *ErrPrefixDto - A pointer to an instance of
-//		                        ErrPrefixDto. Information from this
-//		                        object will be copied for use in error
-//		                        and informational messages.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	        a two-dimensional slice of strings containing error
+//	        prefix and error context information.
 //
-//	      7. IBasicErrorPrefix - An interface to a method generating
-//	                             a two-dimensional slice of strings
-//	                             containing error prefix and error
-//	                             context information.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//	      If parameter 'errorPrefix' is NOT convertible to one of
-//	      the valid types listed above, it will be considered
-//	      invalid and trigger the return of an error.
-//
-//	      Types ErrPrefixDto and IBasicErrorPrefix are included in
-//	      the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
@@ -5190,51 +5144,49 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) SetRightMargin(
 //	        Solid line = "*****"
 //
 //
-//	 errorPrefix                interface{}
-//	    - This object encapsulates error prefix text which is
-//	      included in all returned error messages. Usually, it
-//	      contains the name of the calling method or methods
-//	      listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//	      If no error prefix information is needed, set this parameter
-//	      to 'nil'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//	      This empty interface must be convertible to one of the
-//	      following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
+//	     1. nil - A nil value is valid and generates an empty
+//	        collection of error prefix and error context
+//	        information.
 //
-//	      1. nil - A nil value is valid and generates an empty
-//	               collection of error prefix and error context
-//	               information.
+//	     2. string - A string containing error prefix information.
 //
-//	      2. string - A string containing error prefix information.
+//	     3. []string A one-dimensional slice of strings containing
+//	        error prefix information
 //
-//	      3. []string A one-dimensional slice of strings containing
-//	                  error prefix information
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//	      4. [][2]string A two-dimensional slice of strings containing
-//	                     error prefix and error context information.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	        from this object will be copied for use in error and
+//	        informational messages.
 //
-//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//		                       from this object will be copied for use
-//		                       in error and informational messages.
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	        Information from this object will be copied for use in
+//	        error and informational messages.
 //
-//		     6. *ErrPrefixDto - A pointer to an instance of
-//		                        ErrPrefixDto. Information from this
-//		                        object will be copied for use in error
-//		                        and informational messages.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	        a two-dimensional slice of strings containing error
+//	        prefix and error context information.
 //
-//	      7. IBasicErrorPrefix - An interface to a method generating
-//	                             a two-dimensional slice of strings
-//	                             containing error prefix and error
-//	                             context information.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//	      If parameter 'errorPrefix' is NOT convertible to one of
-//	      the valid types listed above, it will be considered
-//	      invalid and trigger the return of an error.
-//
-//	      Types ErrPrefixDto and IBasicErrorPrefix are included in
-//	      the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
@@ -5357,51 +5309,49 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) SetSolidLine(
 //	        Solid line = "*****"
 //
 //
-//	 errorPrefix                interface{}
-//	    - This object encapsulates error prefix text which is
-//	      included in all returned error messages. Usually, it
-//	      contains the name of the calling method or methods
-//	      listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//	      If no error prefix information is needed, set this parameter
-//	      to 'nil'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//	      This empty interface must be convertible to one of the
-//	      following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
+//	     1. nil - A nil value is valid and generates an empty
+//	        collection of error prefix and error context
+//	        information.
 //
-//	      1. nil - A nil value is valid and generates an empty
-//	               collection of error prefix and error context
-//	               information.
+//	     2. string - A string containing error prefix information.
 //
-//	      2. string - A string containing error prefix information.
+//	     3. []string A one-dimensional slice of strings containing
+//	        error prefix information
 //
-//	      3. []string A one-dimensional slice of strings containing
-//	                  error prefix information
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//	      4. [][2]string A two-dimensional slice of strings containing
-//	                     error prefix and error context information.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	        from this object will be copied for use in error and
+//	        informational messages.
 //
-//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//		                       from this object will be copied for use
-//		                       in error and informational messages.
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	        Information from this object will be copied for use in
+//	        error and informational messages.
 //
-//		     6. *ErrPrefixDto - A pointer to an instance of
-//		                        ErrPrefixDto. Information from this
-//		                        object will be copied for use in error
-//		                        and informational messages.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	        a two-dimensional slice of strings containing error
+//	        prefix and error context information.
 //
-//	      7. IBasicErrorPrefix - An interface to a method generating
-//	                             a two-dimensional slice of strings
-//	                             containing error prefix and error
-//	                             context information.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//	      If parameter 'errorPrefix' is NOT convertible to one of
-//	      the valid types listed above, it will be considered
-//	      invalid and trigger the return of an error.
-//
-//	      Types ErrPrefixDto and IBasicErrorPrefix are included in
-//	      the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
@@ -5584,51 +5534,49 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) SetSolidLineStrChars(
 //	        Solid line = "*****"
 //
 //
-//	 errorPrefix                interface{}
-//	    - This object encapsulates error prefix text which is
-//	      included in all returned error messages. Usually, it
-//	      contains the name of the calling method or methods
-//	      listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//	      If no error prefix information is needed, set this parameter
-//	      to 'nil'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//	      This empty interface must be convertible to one of the
-//	      following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
+//	     1. nil - A nil value is valid and generates an empty
+//	        collection of error prefix and error context
+//	        information.
 //
-//	      1. nil - A nil value is valid and generates an empty
-//	               collection of error prefix and error context
-//	               information.
+//	     2. string - A string containing error prefix information.
 //
-//	      2. string - A string containing error prefix information.
+//	     3. []string A one-dimensional slice of strings containing
+//	        error prefix information
 //
-//	      3. []string A one-dimensional slice of strings containing
-//	                  error prefix information
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//	      4. [][2]string A two-dimensional slice of strings containing
-//	                     error prefix and error context information.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	        from this object will be copied for use in error and
+//	        informational messages.
 //
-//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//		                       from this object will be copied for use
-//		                       in error and informational messages.
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	        Information from this object will be copied for use in
+//	        error and informational messages.
 //
-//		     6. *ErrPrefixDto - A pointer to an instance of
-//		                        ErrPrefixDto. Information from this
-//		                        object will be copied for use in error
-//		                        and informational messages.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	        a two-dimensional slice of strings containing error
+//	        prefix and error context information.
 //
-//	      7. IBasicErrorPrefix - An interface to a method generating
-//	                             a two-dimensional slice of strings
-//	                             containing error prefix and error
-//	                             context information.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//	      If parameter 'errorPrefix' is NOT convertible to one of
-//	      the valid types listed above, it will be considered
-//	      invalid and trigger the return of an error.
-//
-//	      Types ErrPrefixDto and IBasicErrorPrefix are included in
-//	      the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
@@ -5830,50 +5778,49 @@ func (txtSpecSolidLine TextLineSpecSolidLine) String() string {
 //	      written to this instance of strings.Builder.
 //
 //
-//	 errorPrefix                interface{}
-//	    - This object encapsulates error prefix text which is
-//	      included in all returned error messages. Usually, it
-//	      contains the name of the calling method or methods
-//	      listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//	      If no error prefix information is needed, set this parameter
-//	      to 'nil'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//	      This empty interface must be convertible to one of the
-//	      following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
-//	      1. nil - A nil value is valid and generates an empty
-//	               collection of error prefix and error context
-//	               information.
+//	     1. nil - A nil value is valid and generates an empty
+//	        collection of error prefix and error context
+//	        information.
 //
-//	      2. string - A string containing error prefix information.
+//	     2. string - A string containing error prefix information.
 //
-//	      3. []string A one-dimensional slice of strings containing
-//	                  error prefix information
+//	     3. []string A one-dimensional slice of strings containing
+//	        error prefix information
 //
-//	      4. [][2]string A two-dimensional slice of strings containing
-//	                     error prefix and error context information.
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//		                       from this object will be copied for use
-//		                       in error and informational messages.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	        from this object will be copied for use in error and
+//	        informational messages.
 //
-//		     6. *ErrPrefixDto - A pointer to an instance of
-//		                        ErrPrefixDto. Information from this
-//		                        object will be copied for use in error
-//		                        and informational messages.
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	        Information from this object will be copied for use in
+//	        error and informational messages.
 //
-//	      7. IBasicErrorPrefix - An interface to a method generating
-//	                             a two-dimensional slice of strings
-//	                             containing error prefix and error
-//	                             context information.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	        a two-dimensional slice of strings containing error
+//	        prefix and error context information.
 //
-//	      If parameter 'errorPrefix' is NOT convertible to one of
-//	      the valid types listed above, it will be considered
-//	      invalid and trigger the return of an error.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//	      Types ErrPrefixDto and IBasicErrorPrefix are included in
-//	      the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //

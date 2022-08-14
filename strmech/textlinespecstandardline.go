@@ -1338,32 +1338,29 @@ func (stdLine *TextLineSpecStandardLine) AddTextFieldLabel(
 //	     This empty interface must be convertible to one of the
 //	     following types:
 //
-//
 //	     1. nil - A nil value is valid and generates an empty
-//	              collection of error prefix and error context
-//	              information.
+//	        collection of error prefix and error context
+//	        information.
 //
 //	     2. string - A string containing error prefix information.
 //
 //	     3. []string A one-dimensional slice of strings containing
-//	                 error prefix information
+//	        error prefix information
 //
 //	     4. [][2]string A two-dimensional slice of strings
 //	        containing error prefix and error context information.
 //
 //	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//	                       from this object will be copied for use
-//	                       in error and informational messages.
+//	        from this object will be copied for use in error and
+//	        informational messages.
 //
-//	     6. *ErrPrefixDto - A pointer to an instance of
-//	                        ErrPrefixDto. Information from this
-//	                        object will be copied for use in error
-//	                        and informational messages.
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	        Information from this object will be copied for use in
+//	        error and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
-//	                            a two-dimensional slice of strings
-//	                            containing error prefix and error
-//	                            context information.
+//	        a two-dimensional slice of strings containing error
+//	        prefix and error context information.
 //
 //	     If parameter 'errorPrefix' is NOT convertible to one of
 //	     the valid types listed above, it will be considered
@@ -1483,32 +1480,29 @@ func (stdLine *TextLineSpecStandardLine) AddTextFieldSpacer(
 //	     This empty interface must be convertible to one of the
 //	     following types:
 //
-//
 //	     1. nil - A nil value is valid and generates an empty
-//	              collection of error prefix and error context
-//	              information.
+//	        collection of error prefix and error context
+//	        information.
 //
 //	     2. string - A string containing error prefix information.
 //
 //	     3. []string A one-dimensional slice of strings containing
-//	                 error prefix information
+//	        error prefix information
 //
 //	     4. [][2]string A two-dimensional slice of strings
 //	        containing error prefix and error context information.
 //
 //	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//	                       from this object will be copied for use
-//	                       in error and informational messages.
+//	        from this object will be copied for use in error and
+//	        informational messages.
 //
-//	     6. *ErrPrefixDto - A pointer to an instance of
-//	                        ErrPrefixDto. Information from this
-//	                        object will be copied for use in error
-//	                        and informational messages.
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	        Information from this object will be copied for use in
+//	        error and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
-//	                            a two-dimensional slice of strings
-//	                            containing error prefix and error
-//	                            context information.
+//	        a two-dimensional slice of strings containing error
+//	        prefix and error context information.
 //
 //	     If parameter 'errorPrefix' is NOT convertible to one of
 //	     the valid types listed above, it will be considered
@@ -1587,32 +1581,29 @@ func (stdLine *TextLineSpecStandardLine) CopyIn(
 //	     This empty interface must be convertible to one of the
 //	     following types:
 //
-//
 //	     1. nil - A nil value is valid and generates an empty
-//	              collection of error prefix and error context
-//	              information.
+//	        collection of error prefix and error context
+//	        information.
 //
 //	     2. string - A string containing error prefix information.
 //
 //	     3. []string A one-dimensional slice of strings containing
-//	                 error prefix information
+//	        error prefix information
 //
 //	     4. [][2]string A two-dimensional slice of strings
 //	        containing error prefix and error context information.
 //
 //	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//	                       from this object will be copied for use
-//	                       in error and informational messages.
+//	        from this object will be copied for use in error and
+//	        informational messages.
 //
-//	     6. *ErrPrefixDto - A pointer to an instance of
-//	                        ErrPrefixDto. Information from this
-//	                        object will be copied for use in error
-//	                        and informational messages.
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	        Information from this object will be copied for use in
+//	        error and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
-//	                            a two-dimensional slice of strings
-//	                            containing error prefix and error
-//	                            context information.
+//	        a two-dimensional slice of strings containing error
+//	        prefix and error context information.
 //
 //	     If parameter 'errorPrefix' is NOT convertible to one of
 //	     the valid types listed above, it will be considered
@@ -1701,32 +1692,29 @@ func (stdLine *TextLineSpecStandardLine) CopyOut(
 //	     This empty interface must be convertible to one of the
 //	     following types:
 //
-//
 //	     1. nil - A nil value is valid and generates an empty
-//	              collection of error prefix and error context
-//	              information.
+//	        collection of error prefix and error context
+//	        information.
 //
 //	     2. string - A string containing error prefix information.
 //
 //	     3. []string A one-dimensional slice of strings containing
-//	                 error prefix information
+//	        error prefix information
 //
 //	     4. [][2]string A two-dimensional slice of strings
 //	        containing error prefix and error context information.
 //
 //	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//	                       from this object will be copied for use
-//	                       in error and informational messages.
+//	        from this object will be copied for use in error and
+//	        informational messages.
 //
-//	     6. *ErrPrefixDto - A pointer to an instance of
-//	                        ErrPrefixDto. Information from this
-//	                        object will be copied for use in error
-//	                        and informational messages.
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	        Information from this object will be copied for use in
+//	        error and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
-//	                            a two-dimensional slice of strings
-//	                            containing error prefix and error
-//	                            context information.
+//	        a two-dimensional slice of strings containing error
+//	        prefix and error context information.
 //
 //	     If parameter 'errorPrefix' is NOT convertible to one of
 //	     the valid types listed above, it will be considered
@@ -1815,32 +1803,29 @@ func (stdLine *TextLineSpecStandardLine) CopyOutITextLine(
 //	     This empty interface must be convertible to one of the
 //	     following types:
 //
-//
 //	     1. nil - A nil value is valid and generates an empty
-//	              collection of error prefix and error context
-//	              information.
+//	        collection of error prefix and error context
+//	        information.
 //
 //	     2. string - A string containing error prefix information.
 //
 //	     3. []string A one-dimensional slice of strings containing
-//	                 error prefix information
+//	        error prefix information
 //
 //	     4. [][2]string A two-dimensional slice of strings
 //	        containing error prefix and error context information.
 //
 //	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//	                       from this object will be copied for use
-//	                       in error and informational messages.
+//	        from this object will be copied for use in error and
+//	        informational messages.
 //
-//	     6. *ErrPrefixDto - A pointer to an instance of
-//	                        ErrPrefixDto. Information from this
-//	                        object will be copied for use in error
-//	                        and informational messages.
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	        Information from this object will be copied for use in
+//	        error and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
-//	                            a two-dimensional slice of strings
-//	                            containing error prefix and error
-//	                            context information.
+//	        a two-dimensional slice of strings containing error
+//	        prefix and error context information.
 //
 //	     If parameter 'errorPrefix' is NOT convertible to one of
 //	     the valid types listed above, it will be considered
@@ -1937,32 +1922,29 @@ func (stdLine *TextLineSpecStandardLine) CopyOutPtr(
 //	     This empty interface must be convertible to one of the
 //	     following types:
 //
-//
 //	     1. nil - A nil value is valid and generates an empty
-//	              collection of error prefix and error context
-//	              information.
+//	        collection of error prefix and error context
+//	        information.
 //
 //	     2. string - A string containing error prefix information.
 //
 //	     3. []string A one-dimensional slice of strings containing
-//	                 error prefix information
+//	        error prefix information
 //
 //	     4. [][2]string A two-dimensional slice of strings
 //	        containing error prefix and error context information.
 //
 //	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//	                       from this object will be copied for use
-//	                       in error and informational messages.
+//	        from this object will be copied for use in error and
+//	        informational messages.
 //
-//	     6. *ErrPrefixDto - A pointer to an instance of
-//	                        ErrPrefixDto. Information from this
-//	                        object will be copied for use in error
-//	                        and informational messages.
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	        Information from this object will be copied for use in
+//	        error and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
-//	                            a two-dimensional slice of strings
-//	                            containing error prefix and error
-//	                            context information.
+//	        a two-dimensional slice of strings containing error
+//	        prefix and error context information.
 //
 //	     If parameter 'errorPrefix' is NOT convertible to one of
 //	     the valid types listed above, it will be considered
@@ -2238,32 +2220,29 @@ func (stdLine *TextLineSpecStandardLine) EqualITextLine(
 //	     This empty interface must be convertible to one of the
 //	     following types:
 //
-//
 //	     1. nil - A nil value is valid and generates an empty
-//	              collection of error prefix and error context
-//	              information.
+//	        collection of error prefix and error context
+//	        information.
 //
 //	     2. string - A string containing error prefix information.
 //
 //	     3. []string A one-dimensional slice of strings containing
-//	                 error prefix information
+//	        error prefix information
 //
 //	     4. [][2]string A two-dimensional slice of strings
 //	        containing error prefix and error context information.
 //
 //	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//	                       from this object will be copied for use
-//	                       in error and informational messages.
+//	        from this object will be copied for use in error and
+//	        informational messages.
 //
-//	     6. *ErrPrefixDto - A pointer to an instance of
-//	                        ErrPrefixDto. Information from this
-//	                        object will be copied for use in error
-//	                        and informational messages.
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	        Information from this object will be copied for use in
+//	        error and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
-//	                            a two-dimensional slice of strings
-//	                            containing error prefix and error
-//	                            context information.
+//	        a two-dimensional slice of strings containing error
+//	        prefix and error context information.
 //
 //	     If parameter 'errorPrefix' is NOT convertible to one of
 //	     the valid types listed above, it will be considered
@@ -2571,33 +2550,29 @@ func (stdLine *TextLineSpecStandardLine) GetSingleLineLength() int {
 //	     This empty interface must be convertible to one of the
 //	     following types:
 //
-//
 //	     1. nil - A nil value is valid and generates an empty
-//	              collection of error prefix and error context
-//	              information.
+//	        collection of error prefix and error context
+//	        information.
 //
 //	     2. string - A string containing error prefix information.
 //
 //	     3. []string A one-dimensional slice of strings containing
-//	                 error prefix information
+//	        error prefix information
 //
 //	     4. [][2]string A two-dimensional slice of strings
-//	                    containing error prefix and error context
-//	                    information.
+//	        containing error prefix and error context information.
 //
 //	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//	                       from this object will be copied for use
-//	                       in error and informational messages.
+//	        from this object will be copied for use in error and
+//	        informational messages.
 //
-//	     6. *ErrPrefixDto - A pointer to an instance of
-//	                        ErrPrefixDto. Information from this
-//	                        object will be copied for use in error
-//	                        and informational messages.
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	        Information from this object will be copied for use in
+//	        error and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
-//	                            a two-dimensional slice of strings
-//	                            containing error prefix and error
-//	                            context information.
+//	        a two-dimensional slice of strings containing error
+//	        prefix and error context information.
 //
 //	     If parameter 'errorPrefix' is NOT convertible to one of
 //	     the valid types listed above, it will be considered
@@ -2746,33 +2721,29 @@ func (stdLine *TextLineSpecStandardLine) GetTextField(
 //	     This empty interface must be convertible to one of the
 //	     following types:
 //
-//
 //	     1. nil - A nil value is valid and generates an empty
-//	              collection of error prefix and error context
-//	              information.
+//	        collection of error prefix and error context
+//	        information.
 //
 //	     2. string - A string containing error prefix information.
 //
 //	     3. []string A one-dimensional slice of strings containing
-//	                 error prefix information
+//	        error prefix information
 //
 //	     4. [][2]string A two-dimensional slice of strings
-//	                    containing error prefix and error context
-//	                    information.
+//	        containing error prefix and error context information.
 //
 //	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//	                       from this object will be copied for use
-//	                       in error and informational messages.
+//	        from this object will be copied for use in error and
+//	        informational messages.
 //
-//	     6. *ErrPrefixDto - A pointer to an instance of
-//	                        ErrPrefixDto. Information from this
-//	                        object will be copied for use in error
-//	                        and informational messages.
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	        Information from this object will be copied for use in
+//	        error and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
-//	                            a two-dimensional slice of strings
-//	                            containing error prefix and error
-//	                            context information.
+//	        a two-dimensional slice of strings containing error
+//	        prefix and error context information.
 //
 //	     If parameter 'errorPrefix' is NOT convertible to one of
 //	     the valid types listed above, it will be considered
@@ -3031,40 +3002,37 @@ func (stdLine *TextLineSpecStandardLine) GetTurnLineTerminatorOff() bool {
 //	     This empty interface must be convertible to one of the
 //	     following types:
 //
-//
 //	     1. nil - A nil value is valid and generates an empty
-//	              collection of error prefix and error context
-//	              information.
+//	        collection of error prefix and error context
+//	        information.
 //
 //	     2. string - A string containing error prefix information.
 //
 //	     3. []string A one-dimensional slice of strings containing
-//	                 error prefix information
+//	        error prefix information
 //
 //	     4. [][2]string A two-dimensional slice of strings
 //	        containing error prefix and error context information.
 //
 //	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//	                       from this object will be copied for use
-//	                       in error and informational messages.
+//	        from this object will be copied for use in error and
+//	        informational messages.
 //
-//	     6. *ErrPrefixDto - A pointer to an instance of
-//	                        ErrPrefixDto. Information from this
-//	                        object will be copied for use in error
-//	                        and informational messages.
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	        Information from this object will be copied for use in
+//	        error and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
-//	                            a two-dimensional slice of strings
-//	                            containing error prefix and error
-//	                            context information.
+//	        a two-dimensional slice of strings containing error
+//	        prefix and error context information.
+
+//	If parameter 'errorPrefix' is NOT convertible to one of
+//	the valid types listed above, it will be considered
+//	invalid and trigger the return of an error.
 //
-//	     If parameter 'errorPrefix' is NOT convertible to one of
-//	     the valid types listed above, it will be considered
-//	     invalid and trigger the return of an error.
-//
-//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
-//	     the 'errpref' software package,
-//	     "github.com/MikeAustin71/errpref".
+//	Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	the 'errpref' software package,
+//	"github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
@@ -3214,32 +3182,29 @@ func (stdLine *TextLineSpecStandardLine) IsValidInstance() (
 //	     This empty interface must be convertible to one of the
 //	     following types:
 //
-//
 //	     1. nil - A nil value is valid and generates an empty
-//	              collection of error prefix and error context
-//	              information.
+//	        collection of error prefix and error context
+//	        information.
 //
 //	     2. string - A string containing error prefix information.
 //
 //	     3. []string A one-dimensional slice of strings containing
-//	                 error prefix information
+//	        error prefix information
 //
 //	     4. [][2]string A two-dimensional slice of strings
 //	        containing error prefix and error context information.
 //
 //	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//	                       from this object will be copied for use
-//	                       in error and informational messages.
+//	        from this object will be copied for use in error and
+//	        informational messages.
 //
-//	     6. *ErrPrefixDto - A pointer to an instance of
-//	                        ErrPrefixDto. Information from this
-//	                        object will be copied for use in error
-//	                        and informational messages.
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	        Information from this object will be copied for use in
+//	        error and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
-//	                            a two-dimensional slice of strings
-//	                            containing error prefix and error
-//	                            context information.
+//	        a two-dimensional slice of strings containing error
+//	        prefix and error context information.
 //
 //	     If parameter 'errorPrefix' is NOT convertible to one of
 //	     the valid types listed above, it will be considered
@@ -3644,32 +3609,29 @@ func (stdLine TextLineSpecStandardLine) NewPtr() *TextLineSpecStandardLine {
 //	     This empty interface must be convertible to one of the
 //	     following types:
 //
-//
 //	     1. nil - A nil value is valid and generates an empty
-//	              collection of error prefix and error context
-//	              information.
+//	        collection of error prefix and error context
+//	        information.
 //
 //	     2. string - A string containing error prefix information.
 //
 //	     3. []string A one-dimensional slice of strings containing
-//	                 error prefix information
+//	        error prefix information
 //
 //	     4. [][2]string A two-dimensional slice of strings
 //	        containing error prefix and error context information.
 //
 //	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//	                       from this object will be copied for use
-//	                       in error and informational messages.
+//	        from this object will be copied for use in error and
+//	        informational messages.
 //
-//	     6. *ErrPrefixDto - A pointer to an instance of
-//	                        ErrPrefixDto. Information from this
-//	                        object will be copied for use in error
-//	                        and informational messages.
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	        Information from this object will be copied for use in
+//	        error and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
-//	                            a two-dimensional slice of strings
-//	                            containing error prefix and error
-//	                            context information.
+//	        a two-dimensional slice of strings containing error
+//	        prefix and error context information.
 //
 //	     If parameter 'errorPrefix' is NOT convertible to one of
 //	     the valid types listed above, it will be considered
@@ -3917,32 +3879,29 @@ func (stdLine TextLineSpecStandardLine) NewStandardLine(
 //	     This empty interface must be convertible to one of the
 //	     following types:
 //
-//
 //	     1. nil - A nil value is valid and generates an empty
-//	              collection of error prefix and error context
-//	              information.
+//	        collection of error prefix and error context
+//	        information.
 //
 //	     2. string - A string containing error prefix information.
 //
 //	     3. []string A one-dimensional slice of strings containing
-//	                 error prefix information
+//	        error prefix information
 //
 //	     4. [][2]string A two-dimensional slice of strings
 //	        containing error prefix and error context information.
 //
 //	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//	                       from this object will be copied for use
-//	                       in error and informational messages.
+//	        from this object will be copied for use in error and
+//	        informational messages.
 //
-//	     6. *ErrPrefixDto - A pointer to an instance of
-//	                        ErrPrefixDto. Information from this
-//	                        object will be copied for use in error
-//	                        and informational messages.
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	        Information from this object will be copied for use in
+//	        error and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
-//	                            a two-dimensional slice of strings
-//	                            containing error prefix and error
-//	                            context information.
+//	        a two-dimensional slice of strings containing error
+//	        prefix and error context information.
 //
 //	     If parameter 'errorPrefix' is NOT convertible to one of
 //	     the valid types listed above, it will be considered
@@ -4188,32 +4147,29 @@ func (stdLine TextLineSpecStandardLine) NewPtrStandardLine(
 //	     This empty interface must be convertible to one of the
 //	     following types:
 //
-//
 //	     1. nil - A nil value is valid and generates an empty
-//	              collection of error prefix and error context
-//	              information.
+//	        collection of error prefix and error context
+//	        information.
 //
 //	     2. string - A string containing error prefix information.
 //
 //	     3. []string A one-dimensional slice of strings containing
-//	                 error prefix information
+//	        error prefix information
 //
 //	     4. [][2]string A two-dimensional slice of strings
 //	        containing error prefix and error context information.
 //
 //	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//	                       from this object will be copied for use
-//	                       in error and informational messages.
+//	        from this object will be copied for use in error and
+//	        informational messages.
 //
-//	     6. *ErrPrefixDto - A pointer to an instance of
-//	                        ErrPrefixDto. Information from this
-//	                        object will be copied for use in error
-//	                        and informational messages.
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	        Information from this object will be copied for use in
+//	        error and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
-//	                            a two-dimensional slice of strings
-//	                            containing error prefix and error
-//	                            context information.
+//	        a two-dimensional slice of strings containing error
+//	        prefix and error context information.
 //
 //	     If parameter 'errorPrefix' is NOT convertible to one of
 //	     the valid types listed above, it will be considered
@@ -4457,32 +4413,29 @@ func (stdLine TextLineSpecStandardLine) NewStandardLineAllParms(
 //	     This empty interface must be convertible to one of the
 //	     following types:
 //
-//
 //	     1. nil - A nil value is valid and generates an empty
-//	              collection of error prefix and error context
-//	              information.
+//	        collection of error prefix and error context
+//	        information.
 //
 //	     2. string - A string containing error prefix information.
 //
 //	     3. []string A one-dimensional slice of strings containing
-//	                 error prefix information
+//	        error prefix information
 //
 //	     4. [][2]string A two-dimensional slice of strings
 //	        containing error prefix and error context information.
 //
 //	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//	                       from this object will be copied for use
-//	                       in error and informational messages.
+//	        from this object will be copied for use in error and
+//	        informational messages.
 //
-//	     6. *ErrPrefixDto - A pointer to an instance of
-//	                        ErrPrefixDto. Information from this
-//	                        object will be copied for use in error
-//	                        and informational messages.
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	        Information from this object will be copied for use in
+//	        error and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
-//	                            a two-dimensional slice of strings
-//	                            containing error prefix and error
-//	                            context information.
+//	        a two-dimensional slice of strings containing error
+//	        prefix and error context information.
 //
 //	     If parameter 'errorPrefix' is NOT convertible to one of
 //	     the valid types listed above, it will be considered
@@ -4614,32 +4567,29 @@ func (stdLine TextLineSpecStandardLine) NewPtrStandardLineAllParms(
 //	     This empty interface must be convertible to one of the
 //	     following types:
 //
-//
 //	     1. nil - A nil value is valid and generates an empty
-//	              collection of error prefix and error context
-//	              information.
+//	        collection of error prefix and error context
+//	        information.
 //
 //	     2. string - A string containing error prefix information.
 //
 //	     3. []string A one-dimensional slice of strings containing
-//	                 error prefix information
+//	        error prefix information
 //
 //	     4. [][2]string A two-dimensional slice of strings
 //	        containing error prefix and error context information.
 //
 //	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//	                       from this object will be copied for use
-//	                       in error and informational messages.
+//	        from this object will be copied for use in error and
+//	        informational messages.
 //
-//	     6. *ErrPrefixDto - A pointer to an instance of
-//	                        ErrPrefixDto. Information from this
-//	                        object will be copied for use in error
-//	                        and informational messages.
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	        Information from this object will be copied for use in
+//	        error and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
-//	                            a two-dimensional slice of strings
-//	                            containing error prefix and error
-//	                            context information.
+//	        a two-dimensional slice of strings containing error
+//	        prefix and error context information.
 //
 //	     If parameter 'errorPrefix' is NOT convertible to one of
 //	     the valid types listed above, it will be considered
@@ -4782,32 +4732,29 @@ func (stdLine *TextLineSpecStandardLine) PeekAtFirstTextField(
 //	     This empty interface must be convertible to one of the
 //	     following types:
 //
-//
 //	     1. nil - A nil value is valid and generates an empty
-//	              collection of error prefix and error context
-//	              information.
+//	        collection of error prefix and error context
+//	        information.
 //
 //	     2. string - A string containing error prefix information.
 //
 //	     3. []string A one-dimensional slice of strings containing
-//	                 error prefix information
+//	        error prefix information
 //
 //	     4. [][2]string A two-dimensional slice of strings
 //	        containing error prefix and error context information.
 //
 //	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//	                       from this object will be copied for use
-//	                       in error and informational messages.
+//	        from this object will be copied for use in error and
+//	        informational messages.
 //
-//	     6. *ErrPrefixDto - A pointer to an instance of
-//	                        ErrPrefixDto. Information from this
-//	                        object will be copied for use in error
-//	                        and informational messages.
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	        Information from this object will be copied for use in
+//	        error and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
-//	                            a two-dimensional slice of strings
-//	                            containing error prefix and error
-//	                            context information.
+//	        a two-dimensional slice of strings containing error
+//	        prefix and error context information.
 //
 //	     If parameter 'errorPrefix' is NOT convertible to one of
 //	     the valid types listed above, it will be considered
@@ -4983,32 +4930,29 @@ func (stdLine *TextLineSpecStandardLine) PeekAtLastTextField(
 //	     This empty interface must be convertible to one of the
 //	     following types:
 //
-//
 //	     1. nil - A nil value is valid and generates an empty
-//	              collection of error prefix and error context
-//	              information.
+//	        collection of error prefix and error context
+//	        information.
 //
 //	     2. string - A string containing error prefix information.
 //
 //	     3. []string A one-dimensional slice of strings containing
-//	                 error prefix information
+//	        error prefix information
 //
 //	     4. [][2]string A two-dimensional slice of strings
 //	        containing error prefix and error context information.
 //
 //	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//	                       from this object will be copied for use
-//	                       in error and informational messages.
+//	        from this object will be copied for use in error and
+//	        informational messages.
 //
-//	     6. *ErrPrefixDto - A pointer to an instance of
-//	                        ErrPrefixDto. Information from this
-//	                        object will be copied for use in error
-//	                        and informational messages.
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	        Information from this object will be copied for use in
+//	        error and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
-//	                            a two-dimensional slice of strings
-//	                            containing error prefix and error
-//	                            context information.
+//	        a two-dimensional slice of strings containing error
+//	        prefix and error context information.
 //
 //	     If parameter 'errorPrefix' is NOT convertible to one of
 //	     the valid types listed above, it will be considered
@@ -5163,32 +5107,29 @@ func (stdLine *TextLineSpecStandardLine) PeekAtTextField(
 //	     This empty interface must be convertible to one of the
 //	     following types:
 //
-//
 //	     1. nil - A nil value is valid and generates an empty
-//	              collection of error prefix and error context
-//	              information.
+//	        collection of error prefix and error context
+//	        information.
 //
 //	     2. string - A string containing error prefix information.
 //
 //	     3. []string A one-dimensional slice of strings containing
-//	                 error prefix information
+//	        error prefix information
 //
 //	     4. [][2]string A two-dimensional slice of strings
 //	        containing error prefix and error context information.
 //
 //	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//	                       from this object will be copied for use
-//	                       in error and informational messages.
+//	        from this object will be copied for use in error and
+//	        informational messages.
 //
-//	     6. *ErrPrefixDto - A pointer to an instance of
-//	                        ErrPrefixDto. Information from this
-//	                        object will be copied for use in error
-//	                        and informational messages.
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	        Information from this object will be copied for use in
+//	        error and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
-//	                            a two-dimensional slice of strings
-//	                            containing error prefix and error
-//	                            context information.
+//	        a two-dimensional slice of strings containing error
+//	        prefix and error context information.
 //
 //	     If parameter 'errorPrefix' is NOT convertible to one of
 //	     the valid types listed above, it will be considered
@@ -5352,32 +5293,29 @@ func (stdLine *TextLineSpecStandardLine) PopFirstTextField(
 //	     This empty interface must be convertible to one of the
 //	     following types:
 //
-//
 //	     1. nil - A nil value is valid and generates an empty
-//	              collection of error prefix and error context
-//	              information.
+//	        collection of error prefix and error context
+//	        information.
 //
 //	     2. string - A string containing error prefix information.
 //
 //	     3. []string A one-dimensional slice of strings containing
-//	                 error prefix information
+//	        error prefix information
 //
 //	     4. [][2]string A two-dimensional slice of strings
 //	        containing error prefix and error context information.
 //
 //	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//	                       from this object will be copied for use
-//	                       in error and informational messages.
+//	        from this object will be copied for use in error and
+//	        informational messages.
 //
-//	     6. *ErrPrefixDto - A pointer to an instance of
-//	                        ErrPrefixDto. Information from this
-//	                        object will be copied for use in error
-//	                        and informational messages.
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	        Information from this object will be copied for use in
+//	        error and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
-//	                            a two-dimensional slice of strings
-//	                            containing error prefix and error
-//	                            context information.
+//	        a two-dimensional slice of strings containing error
+//	        prefix and error context information.
 //
 //	     If parameter 'errorPrefix' is NOT convertible to one of
 //	     the valid types listed above, it will be considered
@@ -5565,32 +5503,29 @@ func (stdLine *TextLineSpecStandardLine) PopLastTextField(
 //	     This empty interface must be convertible to one of the
 //	     following types:
 //
-//
 //	     1. nil - A nil value is valid and generates an empty
-//	              collection of error prefix and error context
-//	              information.
+//	        collection of error prefix and error context
+//	        information.
 //
 //	     2. string - A string containing error prefix information.
 //
 //	     3. []string A one-dimensional slice of strings containing
-//	                 error prefix information
+//	        error prefix information
 //
 //	     4. [][2]string A two-dimensional slice of strings
 //	        containing error prefix and error context information.
 //
 //	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//	                       from this object will be copied for use
-//	                       in error and informational messages.
+//	        from this object will be copied for use in error and
+//	        informational messages.
 //
-//	     6. *ErrPrefixDto - A pointer to an instance of
-//	                        ErrPrefixDto. Information from this
-//	                        object will be copied for use in error
-//	                        and informational messages.
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	        Information from this object will be copied for use in
+//	        error and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
-//	                            a two-dimensional slice of strings
-//	                            containing error prefix and error
-//	                            context information.
+//	        a two-dimensional slice of strings containing error
+//	        prefix and error context information.
 //
 //	     If parameter 'errorPrefix' is NOT convertible to one of
 //	     the valid types listed above, it will be considered
@@ -6032,32 +5967,29 @@ func (stdLine *TextLineSpecStandardLine) ReaderInitialize() {
 //	     This empty interface must be convertible to one of the
 //	     following types:
 //
-//
 //	     1. nil - A nil value is valid and generates an empty
-//	              collection of error prefix and error context
-//	              information.
+//	        collection of error prefix and error context
+//	        information.
 //
 //	     2. string - A string containing error prefix information.
 //
 //	     3. []string A one-dimensional slice of strings containing
-//	                 error prefix information
+//	        error prefix information
 //
 //	     4. [][2]string A two-dimensional slice of strings
 //	        containing error prefix and error context information.
 //
 //	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//	                       from this object will be copied for use
-//	                       in error and informational messages.
+//	        from this object will be copied for use in error and
+//	        informational messages.
 //
-//	     6. *ErrPrefixDto - A pointer to an instance of
-//	                        ErrPrefixDto. Information from this
-//	                        object will be copied for use in error
-//	                        and informational messages.
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	        Information from this object will be copied for use in
+//	        error and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
-//	                            a two-dimensional slice of strings
-//	                            containing error prefix and error
-//	                            context information.
+//	        a two-dimensional slice of strings containing error
+//	        prefix and error context information.
 //
 //	     If parameter 'errorPrefix' is NOT convertible to one of
 //	     the valid types listed above, it will be considered
@@ -6281,32 +6213,29 @@ func (stdLine *TextLineSpecStandardLine) SetNumOfStdLines(
 //	     This empty interface must be convertible to one of the
 //	     following types:
 //
-//
 //	     1. nil - A nil value is valid and generates an empty
-//	              collection of error prefix and error context
-//	              information.
+//	        collection of error prefix and error context
+//	        information.
 //
 //	     2. string - A string containing error prefix information.
 //
 //	     3. []string A one-dimensional slice of strings containing
-//	                 error prefix information
+//	        error prefix information
 //
 //	     4. [][2]string A two-dimensional slice of strings
 //	        containing error prefix and error context information.
 //
 //	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//	                       from this object will be copied for use
-//	                       in error and informational messages.
+//	        from this object will be copied for use in error and
+//	        informational messages.
 //
-//	     6. *ErrPrefixDto - A pointer to an instance of
-//	                        ErrPrefixDto. Information from this
-//	                        object will be copied for use in error
-//	                        and informational messages.
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	        Information from this object will be copied for use in
+//	        error and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
-//	                            a two-dimensional slice of strings
-//	                            containing error prefix and error
-//	                            context information.
+//	        a two-dimensional slice of strings containing error
+//	        prefix and error context information.
 //
 //	     If parameter 'errorPrefix' is NOT convertible to one of
 //	     the valid types listed above, it will be considered
@@ -6430,32 +6359,29 @@ func (stdLine *TextLineSpecStandardLine) SetNewLineChars(
 //	     This empty interface must be convertible to one of the
 //	     following types:
 //
-//
 //	     1. nil - A nil value is valid and generates an empty
-//	              collection of error prefix and error context
-//	              information.
+//	        collection of error prefix and error context
+//	        information.
 //
 //	     2. string - A string containing error prefix information.
 //
 //	     3. []string A one-dimensional slice of strings containing
-//	                 error prefix information
+//	        error prefix information
 //
 //	     4. [][2]string A two-dimensional slice of strings
 //	        containing error prefix and error context information.
 //
 //	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//	                       from this object will be copied for use
-//	                       in error and informational messages.
+//	        from this object will be copied for use in error and
+//	        informational messages.
 //
-//	     6. *ErrPrefixDto - A pointer to an instance of
-//	                        ErrPrefixDto. Information from this
-//	                        object will be copied for use in error
-//	                        and informational messages.
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	        Information from this object will be copied for use in
+//	        error and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
-//	                            a two-dimensional slice of strings
-//	                            containing error prefix and error
-//	                            context information.
+//	        a two-dimensional slice of strings containing error
+//	        prefix and error context information.
 //
 //	     If parameter 'errorPrefix' is NOT convertible to one of
 //	     the valid types listed above, it will be considered
@@ -6658,32 +6584,29 @@ func (stdLine *TextLineSpecStandardLine) SetNewLineRunes(
 //	     This empty interface must be convertible to one of the
 //	     following types:
 //
-//
 //	     1. nil - A nil value is valid and generates an empty
-//	              collection of error prefix and error context
-//	              information.
+//	        collection of error prefix and error context
+//	        information.
 //
 //	     2. string - A string containing error prefix information.
 //
 //	     3. []string A one-dimensional slice of strings containing
-//	                 error prefix information
+//	        error prefix information
 //
 //	     4. [][2]string A two-dimensional slice of strings
 //	        containing error prefix and error context information.
 //
 //	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//	                       from this object will be copied for use
-//	                       in error and informational messages.
+//	        from this object will be copied for use in error and
+//	        informational messages.
 //
-//	     6. *ErrPrefixDto - A pointer to an instance of
-//	                        ErrPrefixDto. Information from this
-//	                        object will be copied for use in error
-//	                        and informational messages.
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	        Information from this object will be copied for use in
+//	        error and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
-//	                            a two-dimensional slice of strings
-//	                            containing error prefix and error
-//	                            context information.
+//	        a two-dimensional slice of strings containing error
+//	        prefix and error context information.
 //
 //	     If parameter 'errorPrefix' is NOT convertible to one of
 //	     the valid types listed above, it will be considered
@@ -6897,32 +6820,29 @@ func (stdLine *TextLineSpecStandardLine) SetStandardLine(
 //	     This empty interface must be convertible to one of the
 //	     following types:
 //
-//
 //	     1. nil - A nil value is valid and generates an empty
-//	              collection of error prefix and error context
-//	              information.
+//	        collection of error prefix and error context
+//	        information.
 //
 //	     2. string - A string containing error prefix information.
 //
 //	     3. []string A one-dimensional slice of strings containing
-//	                 error prefix information
+//	        error prefix information
 //
 //	     4. [][2]string A two-dimensional slice of strings
 //	        containing error prefix and error context information.
 //
 //	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//	                       from this object will be copied for use
-//	                       in error and informational messages.
+//	        from this object will be copied for use in error and
+//	        informational messages.
 //
-//	     6. *ErrPrefixDto - A pointer to an instance of
-//	                        ErrPrefixDto. Information from this
-//	                        object will be copied for use in error
-//	                        and informational messages.
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	        Information from this object will be copied for use in
+//	        error and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
-//	                            a two-dimensional slice of strings
-//	                            containing error prefix and error
-//	                            context information.
+//	        a two-dimensional slice of strings containing error
+//	        prefix and error context information.
 //
 //	     If parameter 'errorPrefix' is NOT convertible to one of
 //	     the valid types listed above, it will be considered
@@ -7073,32 +6993,29 @@ func (stdLine *TextLineSpecStandardLine) SetStandardLineAllParms(
 //	     This empty interface must be convertible to one of the
 //	     following types:
 //
-//
 //	     1. nil - A nil value is valid and generates an empty
-//	              collection of error prefix and error context
-//	              information.
+//	        collection of error prefix and error context
+//	        information.
 //
 //	     2. string - A string containing error prefix information.
 //
 //	     3. []string A one-dimensional slice of strings containing
-//	                 error prefix information
+//	        error prefix information
 //
 //	     4. [][2]string A two-dimensional slice of strings
 //	        containing error prefix and error context information.
 //
 //	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//	                       from this object will be copied for use
-//	                       in error and informational messages.
+//	        from this object will be copied for use in error and
+//	        informational messages.
 //
-//	     6. *ErrPrefixDto - A pointer to an instance of
-//	                        ErrPrefixDto. Information from this
-//	                        object will be copied for use in error
-//	                        and informational messages.
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	        Information from this object will be copied for use in
+//	        error and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
-//	                            a two-dimensional slice of strings
-//	                            containing error prefix and error
-//	                            context information.
+//	        a two-dimensional slice of strings containing error
+//	        prefix and error context information.
 //
 //	     If parameter 'errorPrefix' is NOT convertible to one of
 //	     the valid types listed above, it will be considered
@@ -7283,32 +7200,29 @@ func (stdLine TextLineSpecStandardLine) String() string {
 //	     This empty interface must be convertible to one of the
 //	     following types:
 //
-//
 //	     1. nil - A nil value is valid and generates an empty
-//	              collection of error prefix and error context
-//	              information.
+//	        collection of error prefix and error context
+//	        information.
 //
 //	     2. string - A string containing error prefix information.
 //
 //	     3. []string A one-dimensional slice of strings containing
-//	                 error prefix information
+//	        error prefix information
 //
 //	     4. [][2]string A two-dimensional slice of strings
 //	        containing error prefix and error context information.
 //
 //	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//	                       from this object will be copied for use
-//	                       in error and informational messages.
+//	        from this object will be copied for use in error and
+//	        informational messages.
 //
-//	     6. *ErrPrefixDto - A pointer to an instance of
-//	                        ErrPrefixDto. Information from this
-//	                        object will be copied for use in error
-//	                        and informational messages.
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	        Information from this object will be copied for use in
+//	        error and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
-//	                            a two-dimensional slice of strings
-//	                            containing error prefix and error
-//	                            context information.
+//	        a two-dimensional slice of strings containing error
+//	        prefix and error context information.
 //
 //	     If parameter 'errorPrefix' is NOT convertible to one of
 //	     the valid types listed above, it will be considered
