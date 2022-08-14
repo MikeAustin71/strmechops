@@ -1666,6 +1666,138 @@ func (nStrIntSep IntegerSeparatorDto) NewChineseNumbering(
 	return newIntSep, err
 }
 
+// NewChineseNumberingDefault - Returns a new instance
+// of IntegerSeparatorDto configured for the Chinese
+// Numbering System integer digit grouping.
+//
+// The integer separator character will be defaulted to
+// the comma (',') character.
+//
+// In conformance with the Chinese Numbering System, the
+// integer digit grouping is defaulted to a value of four
+// (4).
+//
+// This means that integer digit grouping will consist of
+// groups of four (4) integer digits.
+//
+//	Example: '6,7890,000,0000,0000'
+//
+// The 'integer separator repetitions' value is defaulted to zero
+// (0) signaling unlimited repetitions.
+//
+// # Reference:
+//
+//	https://en.wikipedia.org/wiki/Chinese_numerals
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
+//
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
+//
+//	     This empty interface must be convertible to one of the
+//	     following types:
+//
+//	     1. nil - A nil value is valid and generates an empty
+//	        collection of error prefix and error context
+//	        information.
+//
+//	     2. string - A string containing error prefix information.
+//
+//	     3. []string A one-dimensional slice of strings containing
+//	        error prefix information
+//
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
+//
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	        from this object will be copied for use in error and
+//	        informational messages.
+//
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	        Information from this object will be copied for use in
+//	        error and informational messages.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	        a two-dimensional slice of strings containing error
+//	        prefix and error context information.
+//
+//	If parameter 'errorPrefix' is NOT convertible to one of
+//	the valid types listed above, it will be considered
+//	invalid and trigger the return of an error.
+//
+//	Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	the 'errpref' software package,
+//	"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//		IntegerSeparatorDto
+//		   - If this method completes successfully, a new instance of
+//		     IntegerSeparatorDto, configured with Chinese Numbering
+//		     System integer grouping will be created and returned.
+//	      The integer separator character will be defaulted to the
+//	      comma (',') character.
+//
+//		error
+//		   - If this method completes successfully, the returned error
+//		     Type is set equal to 'nil'.
+//
+//		     If errors are encountered during processing, the returned
+//		     error Type will encapsulate an error message. This
+//		     returned error message will incorporate the method chain
+//		     and text passed by input parameter, 'errorPrefix'. The
+//		     'errorPrefix' text will be attached to the beginning of
+//		     the error message.
+func (nStrIntSep IntegerSeparatorDto) NewChineseNumberingDefault(
+	errorPrefix interface{}) (
+	IntegerSeparatorDto,
+	error) {
+
+	if nStrIntSep.lock == nil {
+		nStrIntSep.lock = new(sync.Mutex)
+	}
+
+	nStrIntSep.lock.Lock()
+
+	defer nStrIntSep.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	newIntSep := IntegerSeparatorDto{}
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"IntegerSeparatorDto."+
+			"NewChineseNumberingDefault()",
+		"")
+
+	if err != nil {
+		return newIntSep, err
+	}
+
+	err =
+		new(integerSeparatorDtoUtility).
+			setChineseNumberingRunes(
+				&newIntSep,
+				[]rune{','},
+				ePrefix.XCpy(
+					"newIntSep"))
+
+	return newIntSep, err
+}
+
 // NewThousands - Creates and returns a new instance of
 // IntegerSeparatorDto. The returned IntegerSeparatorDto instance
 // represents a basic or simple integer separator object using
