@@ -211,7 +211,7 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) CopyIn(
 //
 //		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
 //		                       from this object will be copied for use
-//		                       int error and informational messages.
+//		                       in error and informational messages.
 //
 //		     6. *ErrPrefixDto - A pointer to an instance of
 //		                        ErrPrefixDto. Information from this
@@ -325,7 +325,7 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) CopyOut(
 //
 //		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
 //		                       from this object will be copied for use
-//		                       int error and informational messages.
+//		                       in error and informational messages.
 //
 //		     6. *ErrPrefixDto - A pointer to an instance of
 //		                        ErrPrefixDto. Information from this
@@ -439,7 +439,7 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) CopyOutITextLine(
 //
 //		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
 //		                       from this object will be copied for use
-//		                       int error and informational messages.
+//		                       in error and informational messages.
 //
 //		     6. *ErrPrefixDto - A pointer to an instance of
 //		                        ErrPrefixDto. Information from this
@@ -663,7 +663,7 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) EqualITextLine(
 //
 //		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
 //		                       from this object will be copied for use
-//		                       int error and informational messages.
+//		                       in error and informational messages.
 //
 //		     6. *ErrPrefixDto - A pointer to an instance of
 //		                        ErrPrefixDto. Information from this
@@ -1274,7 +1274,7 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) IsValidInstanceError(
 //
 //		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
 //		                       from this object will be copied for use
-//		                       int error and informational messages.
+//		                       in error and informational messages.
 //
 //		     6. *ErrPrefixDto - A pointer to an instance of
 //		                        ErrPrefixDto. Information from this
@@ -1495,7 +1495,7 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewDefaultSolidLine(
 //
 //		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
 //		                       from this object will be copied for use
-//		                       int error and informational messages.
+//		                       in error and informational messages.
 //
 //		     6. *ErrPrefixDto - A pointer to an instance of
 //		                        ErrPrefixDto. Information from this
@@ -1730,7 +1730,7 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewFullSolidLineConfig(
 //
 //		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
 //		                       from this object will be copied for use
-//		                       int error and informational messages.
+//		                       in error and informational messages.
 //
 //		     6. *ErrPrefixDto - A pointer to an instance of
 //		                        ErrPrefixDto. Information from this
@@ -1946,7 +1946,7 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewFullSolidLineRunesConfig(
 //
 //		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
 //		                       from this object will be copied for use
-//		                       int error and informational messages.
+//		                       in error and informational messages.
 //
 //		     6. *ErrPrefixDto - A pointer to an instance of
 //		                        ErrPrefixDto. Information from this
@@ -2182,7 +2182,7 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewSolidLine(
 //
 //		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
 //		                       from this object will be copied for use
-//		                       int error and informational messages.
+//		                       in error and informational messages.
 //
 //		     6. *ErrPrefixDto - A pointer to an instance of
 //		                        ErrPrefixDto. Information from this
@@ -2384,7 +2384,7 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewSolidLineAllParms(
 //
 //		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
 //		                       from this object will be copied for use
-//		                       int error and informational messages.
+//		                       in error and informational messages.
 //
 //		     6. *ErrPrefixDto - A pointer to an instance of
 //		                        ErrPrefixDto. Information from this
@@ -2608,7 +2608,7 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewPtrDefaultSolidLine(
 //
 //		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
 //		                       from this object will be copied for use
-//		                       int error and informational messages.
+//		                       in error and informational messages.
 //
 //		     6. *ErrPrefixDto - A pointer to an instance of
 //		                        ErrPrefixDto. Information from this
@@ -2849,7 +2849,7 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewPtrFullSolidLineConfig(
 //
 //		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
 //		                       from this object will be copied for use
-//		                       int error and informational messages.
+//		                       in error and informational messages.
 //
 //		     6. *ErrPrefixDto - A pointer to an instance of
 //		                        ErrPrefixDto. Information from this
@@ -3069,7 +3069,7 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewPtrFullSolidLineRunesConfig(
 //
 //		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
 //		                       from this object will be copied for use
-//		                       int error and informational messages.
+//		                       in error and informational messages.
 //
 //		     6. *ErrPrefixDto - A pointer to an instance of
 //		                        ErrPrefixDto. Information from this
@@ -3311,7 +3311,7 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewPtrSolidLine(
 //
 //		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
 //		                       from this object will be copied for use
-//		                       int error and informational messages.
+//		                       in error and informational messages.
 //
 //		     6. *ErrPrefixDto - A pointer to an instance of
 //		                        ErrPrefixDto. Information from this
@@ -3791,7 +3791,7 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) ReaderInitialize() {
 //
 //		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
 //		                       from this object will be copied for use
-//		                       int error and informational messages.
+//		                       in error and informational messages.
 //
 //		     6. *ErrPrefixDto - A pointer to an instance of
 //		                        ErrPrefixDto. Information from this
@@ -4010,7 +4010,7 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) SetFullSolidLineConfig(
 //
 //		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
 //		                       from this object will be copied for use
-//		                       int error and informational messages.
+//		                       in error and informational messages.
 //
 //		     6. *ErrPrefixDto - A pointer to an instance of
 //		                        ErrPrefixDto. Information from this
@@ -4149,7 +4149,7 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) SetFullSolidLineRunesConfig(
 //
 //		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
 //		                       from this object will be copied for use
-//		                       int error and informational messages.
+//		                       in error and informational messages.
 //
 //		     6. *ErrPrefixDto - A pointer to an instance of
 //		                        ErrPrefixDto. Information from this
@@ -4320,7 +4320,7 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) SetLeftMargin(
 //
 //		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
 //		                       from this object will be copied for use
-//		                       int error and informational messages.
+//		                       in error and informational messages.
 //
 //		     6. *ErrPrefixDto - A pointer to an instance of
 //		                        ErrPrefixDto. Information from this
@@ -4674,7 +4674,7 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) SetNewLineRunes(
 //
 //		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
 //		                       from this object will be copied for use
-//		                       int error and informational messages.
+//		                       in error and informational messages.
 //
 //		     6. *ErrPrefixDto - A pointer to an instance of
 //		                        ErrPrefixDto. Information from this
@@ -4824,7 +4824,7 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) SetSolidLineAllParms(
 //
 //		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
 //		                       from this object will be copied for use
-//		                       int error and informational messages.
+//		                       in error and informational messages.
 //
 //		     6. *ErrPrefixDto - A pointer to an instance of
 //		                        ErrPrefixDto. Information from this
@@ -4973,7 +4973,7 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) SetSolidLineCharsRepeatCount(
 //
 //		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
 //		                       from this object will be copied for use
-//		                       int error and informational messages.
+//		                       in error and informational messages.
 //
 //		     6. *ErrPrefixDto - A pointer to an instance of
 //		                        ErrPrefixDto. Information from this
@@ -5217,7 +5217,7 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) SetRightMargin(
 //
 //		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
 //		                       from this object will be copied for use
-//		                       int error and informational messages.
+//		                       in error and informational messages.
 //
 //		     6. *ErrPrefixDto - A pointer to an instance of
 //		                        ErrPrefixDto. Information from this
@@ -5384,7 +5384,7 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) SetSolidLine(
 //
 //		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
 //		                       from this object will be copied for use
-//		                       int error and informational messages.
+//		                       in error and informational messages.
 //
 //		     6. *ErrPrefixDto - A pointer to an instance of
 //		                        ErrPrefixDto. Information from this
@@ -5611,7 +5611,7 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) SetSolidLineStrChars(
 //
 //		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
 //		                       from this object will be copied for use
-//		                       int error and informational messages.
+//		                       in error and informational messages.
 //
 //		     6. *ErrPrefixDto - A pointer to an instance of
 //		                        ErrPrefixDto. Information from this
@@ -5856,7 +5856,7 @@ func (txtSpecSolidLine TextLineSpecSolidLine) String() string {
 //
 //		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
 //		                       from this object will be copied for use
-//		                       int error and informational messages.
+//		                       in error and informational messages.
 //
 //		     6. *ErrPrefixDto - A pointer to an instance of
 //		                        ErrPrefixDto. Information from this

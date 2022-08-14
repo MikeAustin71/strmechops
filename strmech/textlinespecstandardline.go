@@ -222,13 +222,14 @@ type TextLineSpecStandardLine struct {
 //	     4. [][2]string A two-dimensional slice of strings
 //	        containing error prefix and error context information.
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//	                       ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	                       from this object will be copied for use
+//	                       in error and informational messages.
 //
 //	     6. *ErrPrefixDto - A pointer to an instance of
-//	                        ErrPrefixDto. ErrorPrefixInfo from this
-//	                        object will be copied to 'errPrefDto'.
+//	                        ErrPrefixDto. Information from this
+//	                        object will be copied for use in error
+//	                        and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
 //	                            a two-dimensional slice of strings
@@ -378,13 +379,14 @@ func (stdLine *TextLineSpecStandardLine) AddStandardLine(
 //	     4. [][2]string A two-dimensional slice of strings
 //	        containing error prefix and error context information.
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//	                       ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	                       from this object will be copied for use
+//	                       in error and informational messages.
 //
 //	     6. *ErrPrefixDto - A pointer to an instance of
-//	                        ErrPrefixDto. ErrorPrefixInfo from this
-//	                        object will be copied to 'errPrefDto'.
+//	                        ErrPrefixDto. Information from this
+//	                        object will be copied for use in error
+//	                        and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
 //	                            a two-dimensional slice of strings
@@ -551,13 +553,14 @@ func (stdLine *TextLineSpecStandardLine) AddTextField(
 //	     4. [][2]string A two-dimensional slice of strings
 //	        containing error prefix and error context information.
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//	                       ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	                       from this object will be copied for use
+//	                       in error and informational messages.
 //
 //	     6. *ErrPrefixDto - A pointer to an instance of
-//	                        ErrPrefixDto. ErrorPrefixInfo from this
-//	                        object will be copied to 'errPrefDto'.
+//	                        ErrPrefixDto. Information from this
+//	                        object will be copied for use in error
+//	                        and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
 //	                            a two-dimensional slice of strings
@@ -785,13 +788,14 @@ func (stdLine *TextLineSpecStandardLine) AddTextFields(
 //	     4. [][2]string A two-dimensional slice of strings
 //	        containing error prefix and error context information.
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//	                       ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	                       from this object will be copied for use
+//	                       in error and informational messages.
 //
 //	     6. *ErrPrefixDto - A pointer to an instance of
-//	                        ErrPrefixDto. ErrorPrefixInfo from this
-//	                        object will be copied to 'errPrefDto'.
+//	                        ErrPrefixDto. Information from this
+//	                        object will be copied for use in error
+//	                        and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
 //	                            a two-dimensional slice of strings
@@ -976,13 +980,14 @@ func (stdLine *TextLineSpecStandardLine) AddTextFieldDateTime(
 //	     4. [][2]string A two-dimensional slice of strings
 //	        containing error prefix and error context information.
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//	                       ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	                       from this object will be copied for use
+//	                       in error and informational messages.
 //
 //	     6. *ErrPrefixDto - A pointer to an instance of
-//	                        ErrPrefixDto. ErrorPrefixInfo from this
-//	                        object will be copied to 'errPrefDto'.
+//	                        ErrPrefixDto. Information from this
+//	                        object will be copied for use in error
+//	                        and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
 //	                            a two-dimensional slice of strings
@@ -1175,13 +1180,14 @@ func (stdLine *TextLineSpecStandardLine) AddTextFieldFiller(
 //	     4. [][2]string A two-dimensional slice of strings
 //	        containing error prefix and error context information.
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//	                       ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	                       from this object will be copied for use
+//	                       in error and informational messages.
 //
 //	     6. *ErrPrefixDto - A pointer to an instance of
-//	                        ErrPrefixDto. ErrorPrefixInfo from this
-//	                        object will be copied to 'errPrefDto'.
+//	                        ErrPrefixDto. Information from this
+//	                        object will be copied for use in error
+//	                        and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
 //	                            a two-dimensional slice of strings
@@ -1345,13 +1351,14 @@ func (stdLine *TextLineSpecStandardLine) AddTextFieldLabel(
 //	     4. [][2]string A two-dimensional slice of strings
 //	        containing error prefix and error context information.
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//	                       ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	                       from this object will be copied for use
+//	                       in error and informational messages.
 //
 //	     6. *ErrPrefixDto - A pointer to an instance of
-//	                        ErrPrefixDto. ErrorPrefixInfo from this
-//	                        object will be copied to 'errPrefDto'.
+//	                        ErrPrefixDto. Information from this
+//	                        object will be copied for use in error
+//	                        and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
 //	                            a two-dimensional slice of strings
@@ -1489,13 +1496,14 @@ func (stdLine *TextLineSpecStandardLine) AddTextFieldSpacer(
 //	     4. [][2]string A two-dimensional slice of strings
 //	        containing error prefix and error context information.
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//	                       ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	                       from this object will be copied for use
+//	                       in error and informational messages.
 //
 //	     6. *ErrPrefixDto - A pointer to an instance of
-//	                        ErrPrefixDto. ErrorPrefixInfo from this
-//	                        object will be copied to 'errPrefDto'.
+//	                        ErrPrefixDto. Information from this
+//	                        object will be copied for use in error
+//	                        and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
 //	                            a two-dimensional slice of strings
@@ -1592,13 +1600,14 @@ func (stdLine *TextLineSpecStandardLine) CopyIn(
 //	     4. [][2]string A two-dimensional slice of strings
 //	        containing error prefix and error context information.
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//	                       ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	                       from this object will be copied for use
+//	                       in error and informational messages.
 //
 //	     6. *ErrPrefixDto - A pointer to an instance of
-//	                        ErrPrefixDto. ErrorPrefixInfo from this
-//	                        object will be copied to 'errPrefDto'.
+//	                        ErrPrefixDto. Information from this
+//	                        object will be copied for use in error
+//	                        and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
 //	                            a two-dimensional slice of strings
@@ -1705,13 +1714,14 @@ func (stdLine *TextLineSpecStandardLine) CopyOut(
 //	     4. [][2]string A two-dimensional slice of strings
 //	        containing error prefix and error context information.
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//	                       ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	                       from this object will be copied for use
+//	                       in error and informational messages.
 //
 //	     6. *ErrPrefixDto - A pointer to an instance of
-//	                        ErrPrefixDto. ErrorPrefixInfo from this
-//	                        object will be copied to 'errPrefDto'.
+//	                        ErrPrefixDto. Information from this
+//	                        object will be copied for use in error
+//	                        and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
 //	                            a two-dimensional slice of strings
@@ -1818,13 +1828,14 @@ func (stdLine *TextLineSpecStandardLine) CopyOutITextLine(
 //	     4. [][2]string A two-dimensional slice of strings
 //	        containing error prefix and error context information.
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//	                       ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	                       from this object will be copied for use
+//	                       in error and informational messages.
 //
 //	     6. *ErrPrefixDto - A pointer to an instance of
-//	                        ErrPrefixDto. ErrorPrefixInfo from this
-//	                        object will be copied to 'errPrefDto'.
+//	                        ErrPrefixDto. Information from this
+//	                        object will be copied for use in error
+//	                        and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
 //	                            a two-dimensional slice of strings
@@ -1939,13 +1950,14 @@ func (stdLine *TextLineSpecStandardLine) CopyOutPtr(
 //	     4. [][2]string A two-dimensional slice of strings
 //	        containing error prefix and error context information.
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//	                       ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	                       from this object will be copied for use
+//	                       in error and informational messages.
 //
 //	     6. *ErrPrefixDto - A pointer to an instance of
-//	                        ErrPrefixDto. ErrorPrefixInfo from this
-//	                        object will be copied to 'errPrefDto'.
+//	                        ErrPrefixDto. Information from this
+//	                        object will be copied for use in error
+//	                        and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
 //	                            a two-dimensional slice of strings
@@ -2239,13 +2251,14 @@ func (stdLine *TextLineSpecStandardLine) EqualITextLine(
 //	     4. [][2]string A two-dimensional slice of strings
 //	        containing error prefix and error context information.
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//	                       ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	                       from this object will be copied for use
+//	                       in error and informational messages.
 //
 //	     6. *ErrPrefixDto - A pointer to an instance of
-//	                        ErrPrefixDto. ErrorPrefixInfo from this
-//	                        object will be copied to 'errPrefDto'.
+//	                        ErrPrefixDto. Information from this
+//	                        object will be copied for use in error
+//	                        and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
 //	                            a two-dimensional slice of strings
@@ -2572,13 +2585,14 @@ func (stdLine *TextLineSpecStandardLine) GetSingleLineLength() int {
 //	                    containing error prefix and error context
 //	                    information.
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//	                       ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	                       from this object will be copied for use
+//	                       in error and informational messages.
 //
-//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//	                        ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. Information from this
+//	                        object will be copied for use in error
+//	                        and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
 //	                            a two-dimensional slice of strings
@@ -2746,13 +2760,14 @@ func (stdLine *TextLineSpecStandardLine) GetTextField(
 //	                    containing error prefix and error context
 //	                    information.
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//	                       ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	                       from this object will be copied for use
+//	                       in error and informational messages.
 //
-//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//	                        ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. Information from this
+//	                        object will be copied for use in error
+//	                        and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
 //	                            a two-dimensional slice of strings
@@ -3029,13 +3044,14 @@ func (stdLine *TextLineSpecStandardLine) GetTurnLineTerminatorOff() bool {
 //	     4. [][2]string A two-dimensional slice of strings
 //	        containing error prefix and error context information.
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//	                       ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	                       from this object will be copied for use
+//	                       in error and informational messages.
 //
 //	     6. *ErrPrefixDto - A pointer to an instance of
-//	                        ErrPrefixDto. ErrorPrefixInfo from this
-//	                        object will be copied to 'errPrefDto'.
+//	                        ErrPrefixDto. Information from this
+//	                        object will be copied for use in error
+//	                        and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
 //	                            a two-dimensional slice of strings
@@ -3211,13 +3227,14 @@ func (stdLine *TextLineSpecStandardLine) IsValidInstance() (
 //	     4. [][2]string A two-dimensional slice of strings
 //	        containing error prefix and error context information.
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//	                       ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	                       from this object will be copied for use
+//	                       in error and informational messages.
 //
 //	     6. *ErrPrefixDto - A pointer to an instance of
-//	                        ErrPrefixDto. ErrorPrefixInfo from this
-//	                        object will be copied to 'errPrefDto'.
+//	                        ErrPrefixDto. Information from this
+//	                        object will be copied for use in error
+//	                        and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
 //	                            a two-dimensional slice of strings
@@ -3640,13 +3657,14 @@ func (stdLine TextLineSpecStandardLine) NewPtr() *TextLineSpecStandardLine {
 //	     4. [][2]string A two-dimensional slice of strings
 //	        containing error prefix and error context information.
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//	                       ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	                       from this object will be copied for use
+//	                       in error and informational messages.
 //
 //	     6. *ErrPrefixDto - A pointer to an instance of
-//	                        ErrPrefixDto. ErrorPrefixInfo from this
-//	                        object will be copied to 'errPrefDto'.
+//	                        ErrPrefixDto. Information from this
+//	                        object will be copied for use in error
+//	                        and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
 //	                            a two-dimensional slice of strings
@@ -3912,13 +3930,14 @@ func (stdLine TextLineSpecStandardLine) NewStandardLine(
 //	     4. [][2]string A two-dimensional slice of strings
 //	        containing error prefix and error context information.
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//	                       ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	                       from this object will be copied for use
+//	                       in error and informational messages.
 //
 //	     6. *ErrPrefixDto - A pointer to an instance of
-//	                        ErrPrefixDto. ErrorPrefixInfo from this
-//	                        object will be copied to 'errPrefDto'.
+//	                        ErrPrefixDto. Information from this
+//	                        object will be copied for use in error
+//	                        and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
 //	                            a two-dimensional slice of strings
@@ -4182,13 +4201,14 @@ func (stdLine TextLineSpecStandardLine) NewPtrStandardLine(
 //	     4. [][2]string A two-dimensional slice of strings
 //	        containing error prefix and error context information.
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//	                       ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	                       from this object will be copied for use
+//	                       in error and informational messages.
 //
 //	     6. *ErrPrefixDto - A pointer to an instance of
-//	                        ErrPrefixDto. ErrorPrefixInfo from this
-//	                        object will be copied to 'errPrefDto'.
+//	                        ErrPrefixDto. Information from this
+//	                        object will be copied for use in error
+//	                        and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
 //	                            a two-dimensional slice of strings
@@ -4450,13 +4470,14 @@ func (stdLine TextLineSpecStandardLine) NewStandardLineAllParms(
 //	     4. [][2]string A two-dimensional slice of strings
 //	        containing error prefix and error context information.
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//	                       ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	                       from this object will be copied for use
+//	                       in error and informational messages.
 //
 //	     6. *ErrPrefixDto - A pointer to an instance of
-//	                        ErrPrefixDto. ErrorPrefixInfo from this
-//	                        object will be copied to 'errPrefDto'.
+//	                        ErrPrefixDto. Information from this
+//	                        object will be copied for use in error
+//	                        and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
 //	                            a two-dimensional slice of strings
@@ -4606,13 +4627,14 @@ func (stdLine TextLineSpecStandardLine) NewPtrStandardLineAllParms(
 //	     4. [][2]string A two-dimensional slice of strings
 //	        containing error prefix and error context information.
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//	                       ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	                       from this object will be copied for use
+//	                       in error and informational messages.
 //
 //	     6. *ErrPrefixDto - A pointer to an instance of
-//	                        ErrPrefixDto. ErrorPrefixInfo from this
-//	                        object will be copied to 'errPrefDto'.
+//	                        ErrPrefixDto. Information from this
+//	                        object will be copied for use in error
+//	                        and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
 //	                            a two-dimensional slice of strings
@@ -4773,13 +4795,14 @@ func (stdLine *TextLineSpecStandardLine) PeekAtFirstTextField(
 //	     4. [][2]string A two-dimensional slice of strings
 //	        containing error prefix and error context information.
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//	                       ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	                       from this object will be copied for use
+//	                       in error and informational messages.
 //
 //	     6. *ErrPrefixDto - A pointer to an instance of
-//	                        ErrPrefixDto. ErrorPrefixInfo from this
-//	                        object will be copied to 'errPrefDto'.
+//	                        ErrPrefixDto. Information from this
+//	                        object will be copied for use in error
+//	                        and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
 //	                            a two-dimensional slice of strings
@@ -4973,13 +4996,14 @@ func (stdLine *TextLineSpecStandardLine) PeekAtLastTextField(
 //	     4. [][2]string A two-dimensional slice of strings
 //	        containing error prefix and error context information.
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//	                       ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	                       from this object will be copied for use
+//	                       in error and informational messages.
 //
 //	     6. *ErrPrefixDto - A pointer to an instance of
-//	                        ErrPrefixDto. ErrorPrefixInfo from this
-//	                        object will be copied to 'errPrefDto'.
+//	                        ErrPrefixDto. Information from this
+//	                        object will be copied for use in error
+//	                        and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
 //	                            a two-dimensional slice of strings
@@ -5152,13 +5176,14 @@ func (stdLine *TextLineSpecStandardLine) PeekAtTextField(
 //	     4. [][2]string A two-dimensional slice of strings
 //	        containing error prefix and error context information.
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//	                       ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	                       from this object will be copied for use
+//	                       in error and informational messages.
 //
 //	     6. *ErrPrefixDto - A pointer to an instance of
-//	                        ErrPrefixDto. ErrorPrefixInfo from this
-//	                        object will be copied to 'errPrefDto'.
+//	                        ErrPrefixDto. Information from this
+//	                        object will be copied for use in error
+//	                        and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
 //	                            a two-dimensional slice of strings
@@ -5340,13 +5365,14 @@ func (stdLine *TextLineSpecStandardLine) PopFirstTextField(
 //	     4. [][2]string A two-dimensional slice of strings
 //	        containing error prefix and error context information.
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//	                       ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	                       from this object will be copied for use
+//	                       in error and informational messages.
 //
 //	     6. *ErrPrefixDto - A pointer to an instance of
-//	                        ErrPrefixDto. ErrorPrefixInfo from this
-//	                        object will be copied to 'errPrefDto'.
+//	                        ErrPrefixDto. Information from this
+//	                        object will be copied for use in error
+//	                        and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
 //	                            a two-dimensional slice of strings
@@ -5552,13 +5578,14 @@ func (stdLine *TextLineSpecStandardLine) PopLastTextField(
 //	     4. [][2]string A two-dimensional slice of strings
 //	        containing error prefix and error context information.
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//	                       ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	                       from this object will be copied for use
+//	                       in error and informational messages.
 //
 //	     6. *ErrPrefixDto - A pointer to an instance of
-//	                        ErrPrefixDto. ErrorPrefixInfo from this
-//	                        object will be copied to 'errPrefDto'.
+//	                        ErrPrefixDto. Information from this
+//	                        object will be copied for use in error
+//	                        and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
 //	                            a two-dimensional slice of strings
@@ -6018,13 +6045,14 @@ func (stdLine *TextLineSpecStandardLine) ReaderInitialize() {
 //	     4. [][2]string A two-dimensional slice of strings
 //	        containing error prefix and error context information.
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//	                       ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	                       from this object will be copied for use
+//	                       in error and informational messages.
 //
 //	     6. *ErrPrefixDto - A pointer to an instance of
-//	                        ErrPrefixDto. ErrorPrefixInfo from this
-//	                        object will be copied to 'errPrefDto'.
+//	                        ErrPrefixDto. Information from this
+//	                        object will be copied for use in error
+//	                        and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
 //	                            a two-dimensional slice of strings
@@ -6266,13 +6294,14 @@ func (stdLine *TextLineSpecStandardLine) SetNumOfStdLines(
 //	     4. [][2]string A two-dimensional slice of strings
 //	        containing error prefix and error context information.
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//	                       ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	                       from this object will be copied for use
+//	                       in error and informational messages.
 //
 //	     6. *ErrPrefixDto - A pointer to an instance of
-//	                        ErrPrefixDto. ErrorPrefixInfo from this
-//	                        object will be copied to 'errPrefDto'.
+//	                        ErrPrefixDto. Information from this
+//	                        object will be copied for use in error
+//	                        and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
 //	                            a two-dimensional slice of strings
@@ -6414,13 +6443,14 @@ func (stdLine *TextLineSpecStandardLine) SetNewLineChars(
 //	     4. [][2]string A two-dimensional slice of strings
 //	        containing error prefix and error context information.
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//	                       ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	                       from this object will be copied for use
+//	                       in error and informational messages.
 //
 //	     6. *ErrPrefixDto - A pointer to an instance of
-//	                        ErrPrefixDto. ErrorPrefixInfo from this
-//	                        object will be copied to 'errPrefDto'.
+//	                        ErrPrefixDto. Information from this
+//	                        object will be copied for use in error
+//	                        and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
 //	                            a two-dimensional slice of strings
@@ -6641,13 +6671,14 @@ func (stdLine *TextLineSpecStandardLine) SetNewLineRunes(
 //	     4. [][2]string A two-dimensional slice of strings
 //	        containing error prefix and error context information.
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//	                       ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	                       from this object will be copied for use
+//	                       in error and informational messages.
 //
 //	     6. *ErrPrefixDto - A pointer to an instance of
-//	                        ErrPrefixDto. ErrorPrefixInfo from this
-//	                        object will be copied to 'errPrefDto'.
+//	                        ErrPrefixDto. Information from this
+//	                        object will be copied for use in error
+//	                        and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
 //	                            a two-dimensional slice of strings
@@ -6879,13 +6910,14 @@ func (stdLine *TextLineSpecStandardLine) SetStandardLine(
 //	     4. [][2]string A two-dimensional slice of strings
 //	        containing error prefix and error context information.
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//	                       ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	                       from this object will be copied for use
+//	                       in error and informational messages.
 //
 //	     6. *ErrPrefixDto - A pointer to an instance of
-//	                        ErrPrefixDto. ErrorPrefixInfo from this
-//	                        object will be copied to 'errPrefDto'.
+//	                        ErrPrefixDto. Information from this
+//	                        object will be copied for use in error
+//	                        and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
 //	                            a two-dimensional slice of strings
@@ -7054,13 +7086,14 @@ func (stdLine *TextLineSpecStandardLine) SetStandardLineAllParms(
 //	     4. [][2]string A two-dimensional slice of strings
 //	        containing error prefix and error context information.
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//	                       ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	                       from this object will be copied for use
+//	                       in error and informational messages.
 //
 //	     6. *ErrPrefixDto - A pointer to an instance of
-//	                        ErrPrefixDto. ErrorPrefixInfo from this
-//	                        object will be copied to 'errPrefDto'.
+//	                        ErrPrefixDto. Information from this
+//	                        object will be copied for use in error
+//	                        and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
 //	                            a two-dimensional slice of strings
@@ -7263,13 +7296,14 @@ func (stdLine TextLineSpecStandardLine) String() string {
 //	     4. [][2]string A two-dimensional slice of strings
 //	        containing error prefix and error context information.
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//	                       ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	                       from this object will be copied for use
+//	                       in error and informational messages.
 //
 //	     6. *ErrPrefixDto - A pointer to an instance of
-//	                        ErrPrefixDto. ErrorPrefixInfo from this
-//	                        object will be copied to 'errPrefDto'.
+//	                        ErrPrefixDto. Information from this
+//	                        object will be copied for use in error
+//	                        and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
 //	                            a two-dimensional slice of strings
