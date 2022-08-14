@@ -101,10 +101,17 @@ import (
 //	     For the vast majority of integer separation scenarios, set
 //	     this parameter should be set to 'false'.
 type IntegerSeparatorDto struct {
-	intSeparatorChars          []rune // A series of runes used to separate integer digits.
-	intGroupingSequence        []uint // Number of integer digits in each group
-	restartIntGroupingSequence bool   // If true, the entire grouping sequence is repeated
-	//                              //  beginning at array index zero.
+	intSeparatorChars []rune
+	// A series of runes used to separate
+	// integer digits.
+
+	intGroupingSequence []uint
+	// Number of integer digits in each group
+
+	restartIntGroupingSequence bool
+	// If 'true', the entire grouping sequence is
+	// repeated beginning at array index zero.
+
 	lock *sync.Mutex
 }
 

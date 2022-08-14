@@ -174,10 +174,8 @@ func (nStrSignedNumNanobot numStrSignedNumNanobot) formatSignedNumStr(
 		return numStr, err
 	}
 
-	numFracDigits := numStrKernel.GetNumberOfFractionalDigits()
-
 	if numStrKernel.GetNumberOfIntegerDigits() == 0 &&
-		numFracDigits == 0 {
+		numStrKernel.GetNumberOfFractionalDigits() == 0 {
 		numStr = "0"
 
 		return numStr, err
@@ -205,9 +203,7 @@ func (nStrSignedNumNanobot numStrSignedNumNanobot) formatSignedNumStr(
 		return numStr, err
 	}
 
-	numFracDigits = newNumStrKernel.GetNumberOfFractionalDigits()
-
-	if numFracDigits > 0 &&
+	if newNumStrKernel.GetNumberOfFractionalDigits() > 0 &&
 		signedNumFormatSpec.DecSeparator.GetNumberOfSeparatorChars() == 0 {
 
 		err = fmt.Errorf("%v\n"+

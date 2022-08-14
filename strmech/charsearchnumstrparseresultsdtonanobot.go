@@ -23,7 +23,7 @@ type charSearchNumStrParseResultsDtoNanobot struct {
 // ----------------------------------------------------------------
 //
 // Be advised that the data fields in
-// 'destinationNumStrParseResults' will be overwritten.
+// 'destinationNumStrParseResults' will be deleted and overwritten.
 //
 // Also, NO data validation is performed on
 // 'sourceNumStrParseResults'.

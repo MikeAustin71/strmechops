@@ -22,6 +22,8 @@ type SignedNumberFormatSpec struct {
 	//	IntGroupingType.IndiaNumbering()
 	//	IntGroupingType.ChineseNumbering()
 
+	IntGroupingChar string
+
 	RoundingSpec NumStrRoundingSpec
 	// Controls the rounding algorithm applied to
 	// floating point numbers.

@@ -10,8 +10,8 @@ type charSearchNumStrParseResultsDtoAtom struct {
 
 // empty - Receives a pointer to an instance of
 // CharSearchNumStrParseResultsDto and proceeds to reset the
-// data values for member variables to their initial or zero
-// values.
+// data values for all member variables to their initial or
+// zero values.
 //
 // ----------------------------------------------------------------
 //
@@ -149,6 +149,11 @@ func (searchNumStrParseResultsAtom *charSearchNumStrParseResultsDtoAtom) equal(
 	searchNumStrParseResultsAtom.lock.Lock()
 
 	defer searchNumStrParseResultsAtom.lock.Unlock()
+
+	if numStrParseResults1 == nil ||
+		numStrParseResults2 == nil {
+		return false
+	}
 
 	if numStrParseResults1.SearchResultsName !=
 		numStrParseResults2.SearchResultsName {
