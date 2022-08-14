@@ -1610,21 +1610,21 @@ func (nStrIntSep IntegerSeparatorDto) NewDetailRunes(
 //
 // Return Values
 //
-//	IntegerSeparatorDto
-//	   - If this method completes successfully, a new instance of
-//	     IntegerSeparatorDto, configured with Chinese Numbering
-//	     System integer grouping will be created and returned.
+//		IntegerSeparatorDto
+//	    - If this method completes successfully, a new instance of
+//	      IntegerSeparatorDto, configured with Chinese Numbering
+//	      System integer grouping, will be created and returned.
 //
-//	error
-//	   - If this method completes successfully, the returned error
-//	     Type is set equal to 'nil'.
+//		error
+//		   - If this method completes successfully, the returned error
+//		     Type is set equal to 'nil'.
 //
-//	     If errors are encountered during processing, the returned
-//	     error Type will encapsulate an error message. This
-//	     returned error message will incorporate the method chain
-//	     and text passed by input parameter, 'errorPrefix'. The
-//	     'errorPrefix' text will be attached to the beginning of
-//	     the error message.
+//		     If errors are encountered during processing, the returned
+//		     error Type will encapsulate an error message. This
+//		     returned error message will incorporate the method chain
+//		     and text passed by input parameter, 'errorPrefix'. The
+//		     'errorPrefix' text will be attached to the beginning of
+//		     the error message.
 func (nStrIntSep IntegerSeparatorDto) NewChineseNumbering(
 	intSeparatorChars string,
 	errorPrefix interface{}) (
@@ -1744,9 +1744,9 @@ func (nStrIntSep IntegerSeparatorDto) NewChineseNumbering(
 //		IntegerSeparatorDto
 //		   - If this method completes successfully, a new instance of
 //		     IntegerSeparatorDto, configured with Chinese Numbering
-//		     System integer grouping will be created and returned.
-//	      The integer separator character will be defaulted to the
-//	      comma (',') character.
+//		     System integer grouping, will be created and returned.
+//	         The integer separator character for the new returned
+//	         instance will be defaulted to the comma (',') character.
 //
 //		error
 //		   - If this method completes successfully, the returned error
@@ -1792,6 +1792,157 @@ func (nStrIntSep IntegerSeparatorDto) NewChineseNumberingDefault(
 			setChineseNumberingRunes(
 				&newIntSep,
 				[]rune{','},
+				ePrefix.XCpy(
+					"newIntSep"))
+
+	return newIntSep, err
+}
+
+// NewChineseNumberingRunes - Returns a new instance of
+// IntegerSeparatorDto configured for the Chinese
+// Numbering System integer digit grouping.
+//
+// The input parameter 'intSeparatorChars' is an array of
+// runes containing the integer separator character or
+// characters used to separate the integer digit groups.
+//
+// In conformance with the Chinese Numbering System, the
+// integer digit grouping is defaulted to a value of four
+// (4).
+//
+// This means that integer digit grouping will consist of
+// groups of four (4) integer digits.
+//
+//	Example: '6,7890,000,0000,0000'
+//
+// Although, users have the option of specifying one or more
+// custom integer separator characters passed through input
+// parameter 'intSeparatorChars', be advised that the commonly
+// used integer separator for the Chinese Numbering system is
+// the comma ([]rune{','}) character.
+//
+// The 'integer separator repetitions' value is defaulted to zero
+// (0) signaling unlimited repetitions.
+//
+// # Reference:
+//
+//	https://en.wikipedia.org/wiki/Chinese_numerals
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//	intSeparatorChars          []rune
+//	   - One or more characters used to separate groups of
+//	     integers. These characters are used to separate groups
+//	     of integer digits to the left of the decimal separator
+//	     (a.k.a. decimal point). The most common integer separator
+//	     used in conjunction with the Chinese Numbering System is
+//	     the comma ([]rune{,}).
+//	       Example:  6,7890,000,0000,0000
+//
+//	     If this input parameter contains a zero length array, an
+//	     error will be returned.
+//
+//
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
+//
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
+//
+//	     This empty interface must be convertible to one of the
+//	     following types:
+//
+//	     1. nil - A nil value is valid and generates an empty
+//	        collection of error prefix and error context
+//	        information.
+//
+//	     2. string - A string containing error prefix information.
+//
+//	     3. []string A one-dimensional slice of strings containing
+//	        error prefix information
+//
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
+//
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	        from this object will be copied for use in error and
+//	        informational messages.
+//
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	        Information from this object will be copied for use in
+//	        error and informational messages.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	        a two-dimensional slice of strings containing error
+//	        prefix and error context information.
+//
+//	If parameter 'errorPrefix' is NOT convertible to one of
+//	the valid types listed above, it will be considered
+//	invalid and trigger the return of an error.
+//
+//	Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	the 'errpref' software package,
+//	"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//	IntegerSeparatorDto
+//	   - If this method completes successfully, a new instance of
+//	     IntegerSeparatorDto, configured with Chinese Numbering
+//	     System integer grouping, will be created and returned.
+//
+//	error
+//	   - If this method completes successfully, the returned error
+//	     Type is set equal to 'nil'.
+//
+//	     If errors are encountered during processing, the returned
+//	     error Type will encapsulate an error message. This
+//	     returned error message will incorporate the method chain
+//	     and text passed by input parameter, 'errorPrefix'. The
+//	     'errorPrefix' text will be attached to the beginning of
+//	     the error message.
+func (nStrIntSep IntegerSeparatorDto) NewChineseNumberingRunes(
+	intSeparatorChars []rune,
+	errorPrefix interface{}) (
+	IntegerSeparatorDto,
+	error) {
+
+	if nStrIntSep.lock == nil {
+		nStrIntSep.lock = new(sync.Mutex)
+	}
+
+	nStrIntSep.lock.Lock()
+
+	defer nStrIntSep.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	newIntSep := IntegerSeparatorDto{}
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"IntegerSeparatorDto."+
+			"NewChineseNumberingRunes()",
+		"")
+
+	if err != nil {
+		return newIntSep, err
+	}
+
+	err =
+		new(integerSeparatorDtoUtility).
+			setChineseNumberingRunes(
+				&newIntSep,
+				intSeparatorChars,
 				ePrefix.XCpy(
 					"newIntSep"))
 
