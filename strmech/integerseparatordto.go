@@ -1127,305 +1127,6 @@ func (nStrIntSep IntegerSeparatorDto) NewFromIntGroupEnumRunes(
 	return newIntSepDto, err
 }
 
-// NewThousands - Creates and returns a new instance of
-// IntegerSeparatorDto. The returned IntegerSeparatorDto instance
-// represents a basic or simple integer separator object using
-// default values and a minimum number of input parameters.
-//
-// The input parameter 'intSeparatorChars' is string
-// containing the integer separator characters. The integer digit
-// grouping is defaulted to a value of three (3). The 'separator
-// repetitions' value is defaulted to zero (0) signaling unlimited
-// repetitions.
-//
-// This means that integer digits will be separated into 'thousands'
-// with each group containing three digits each (Example:
-// 1,000,000,000). Users have the option of specifying integer
-// separator characters through input parameter
-// 'intSeparatorChars'.
-//
-// ----------------------------------------------------------------
-//
-// Input Parameters
-//
-//	intSeparatorChars          string
-//	   - One or more characters used to separate groups of
-//	     integers. This separator is also known as the 'thousands'
-//	     separator. It is used to separate groups of integer digits
-//	     to the left of the decimal separator
-//	     (a.k.a. decimal point). In the United States, the standard
-//	     integer digits separator is the comma (",").
-//	           United States Example:  1,000,000,000
-//
-//	     In many European countries, a single period ('.') is used
-//	     as the integer separator character.
-//	           European Example: 1.000.000.000
-//
-//	     Other countries and cultures use spaces, apostrophes or
-//	     multiple characters to separate integers.
-//
-//	     If this input parameter contains a zero length string, an
-//	     error will be returned.
-//
-//
-//	errorPrefix                interface{}
-//	   - This object encapsulates error prefix text which is
-//	     included in all returned error messages. Usually, it
-//	     contains the name of the calling method or methods
-//	     listed as a method or function chain of execution.
-//
-//	     If no error prefix information is needed, set this
-//	     parameter to 'nil'.
-//
-//	     This empty interface must be convertible to one of the
-//	     following types:
-//
-//	     1. nil - A nil value is valid and generates an empty
-//	        collection of error prefix and error context
-//	        information.
-//
-//	     2. string - A string containing error prefix information.
-//
-//	     3. []string A one-dimensional slice of strings containing
-//	        error prefix information
-//
-//	     4. [][2]string A two-dimensional slice of strings
-//	        containing error prefix and error context information.
-//
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//	        from this object will be copied for use in error and
-//	        informational messages.
-//
-//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//	        Information from this object will be copied for use in
-//	        error and informational messages.
-//
-//	     7. IBasicErrorPrefix - An interface to a method generating
-//	        a two-dimensional slice of strings containing error
-//	        prefix and error context information.
-//
-//	     If parameter 'errorPrefix' is NOT convertible to one of
-//	     the valid types listed above, it will be considered
-//	     invalid and trigger the return of an error.
-//
-//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
-//	     the 'errpref' software package,
-//	     "github.com/MikeAustin71/errpref".
-//
-// -----------------------------------------------------------------
-//
-// Return Values
-//
-//	IntegerSeparatorDto
-//	   - If this method completes successfully, a new instance of
-//	     IntegerSeparatorDto will be created and returned. The
-//	     'integer digits grouping sequence' will be automatically
-//	     set to a default value of 3-digits.
-//
-//	error
-//	   - If this method completes successfully, the returned error
-//	     Type is set equal to 'nil'.
-//
-//	     If errors are encountered during processing, the returned
-//	     error Type will encapsulate an error message. This
-//	     returned error message will incorporate the method chain
-//	     and text passed by input parameter, 'errorPrefix'. The
-//	     'errorPrefix' text will be attached to the beginning of
-//	     the error message.
-func (nStrIntSep IntegerSeparatorDto) NewThousands(
-	intSeparatorChars string,
-	errorPrefix interface{}) (
-	IntegerSeparatorDto,
-	error) {
-
-	if nStrIntSep.lock == nil {
-		nStrIntSep.lock = new(sync.Mutex)
-	}
-
-	nStrIntSep.lock.Lock()
-
-	defer nStrIntSep.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-	var err error
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
-		"IntegerSeparatorDto.NewThousands()",
-		"")
-
-	if err != nil {
-		return IntegerSeparatorDto{}, err
-	}
-
-	ePrefix.SetEPref(
-		"IntegerSeparatorDto.NewThousands()")
-
-	newIntSep := IntegerSeparatorDto{}
-
-	err =
-		new(integerSeparatorDtoUtility).
-			setThousandsRunes(
-				&newIntSep,
-				[]rune(intSeparatorChars),
-				ePrefix.XCpy(
-					"newIntSep"))
-
-	return newIntSep, err
-}
-
-// NewThousandsRunes - Creates and returns a new instance of
-// IntegerSeparatorDto. The returned IntegerSeparatorDto instance
-// represents a basic or simple integer separator object using
-// default values and a minimum number of input parameters.
-//
-// This method is an alternative to method
-// IntegerSeparatorDto.NewThousands() in that this method accepts
-// integer separator characters as an array of runes instead
-// of a string.
-//
-// The input parameter 'intSeparatorChars' is an array of
-// runes containing the integer separator characters. The integer
-// digit grouping is defaulted to a value of three (3). The
-// 'separator repetitions' value is defaulted to zero (0) signaling
-// unlimited repetitions. The 'restartIntGroupingSequence' flag
-// will be defaulted to 'false'.
-//
-// This means that integer digits will be separated into 'thousands'
-// with each group containing three digits each (Example:
-// 1,000,000,000). Users have the option of specifying integer
-// separator characters through input parameter
-// 'intSeparatorChars'.
-//
-// ----------------------------------------------------------------
-//
-// Input Parameters
-//
-//	intSeparatorChars          []rune
-//	   - One or more characters used to separate groups of
-//	     integers. This separator is also known as the 'thousands'
-//	     separator. It is used to separate groups of integer digits
-//	     to the left of the decimal separator (a.k.a. decimal
-//	     point). In the United States, the standard integer digits
-//	     separator is the comma (',').
-//	           United States Example:  1,000,000,000
-//
-//	     In many European countries, a single period ('.') is used
-//	     as the integer separator character.
-//	           European Example: 1.000.000.000
-//
-//	     Other countries and cultures use spaces, apostrophes or
-//	     multiple characters to separate integers.
-//
-//	     If this input parameter contains a zero length array, an
-//	     error will be returned.
-//
-//
-//	errorPrefix                interface{}
-//	   - This object encapsulates error prefix text which is
-//	     included in all returned error messages. Usually, it
-//	     contains the name of the calling method or methods
-//	     listed as a method or function chain of execution.
-//
-//	     If no error prefix information is needed, set this
-//	     parameter to 'nil'.
-//
-//	     This empty interface must be convertible to one of the
-//	     following types:
-//
-//	     1. nil - A nil value is valid and generates an empty
-//	        collection of error prefix and error context
-//	        information.
-//
-//	     2. string - A string containing error prefix information.
-//
-//	     3. []string A one-dimensional slice of strings containing
-//	        error prefix information
-//
-//	     4. [][2]string A two-dimensional slice of strings
-//	        containing error prefix and error context information.
-//
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//	        from this object will be copied for use in error and
-//	        informational messages.
-//
-//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//	        Information from this object will be copied for use in
-//	        error and informational messages.
-//
-//	     7. IBasicErrorPrefix - An interface to a method generating
-//	        a two-dimensional slice of strings containing error
-//	        prefix and error context information.
-
-//	If parameter 'errorPrefix' is NOT convertible to one of
-//	the valid types listed above, it will be considered
-//	invalid and trigger the return of an error.
-//
-//	Types ErrPrefixDto and IBasicErrorPrefix are included in
-//	the 'errpref' software package,
-//	"github.com/MikeAustin71/errpref".
-//
-// ----------------------------------------------------------------
-//
-// Return Values
-//
-//	IntegerSeparatorDto
-//	   - If this method completes successfully, a new instance of
-//	     IntegerSeparatorDto will be created and returned. The
-//	     'integer digits grouping sequence' will be automatically
-//	     set to a default value of 3-digits.
-//
-//	error
-//	   - If this method completes successfully, the returned error
-//	     Type is set equal to 'nil'.
-//
-//	     If errors are encountered during processing, the returned
-//	     error Type will encapsulate an error message. This
-//	     returned error message will incorporate the method chain
-//	     and text passed by input parameter, 'errorPrefix'. The
-//	     'errorPrefix' text will be attached to the beginning of
-//	     the error message.
-func (nStrIntSep IntegerSeparatorDto) NewThousandsRunes(
-	intSeparatorChars []rune,
-	errorPrefix interface{}) (
-	IntegerSeparatorDto,
-	error) {
-
-	if nStrIntSep.lock == nil {
-		nStrIntSep.lock = new(sync.Mutex)
-	}
-
-	nStrIntSep.lock.Lock()
-
-	defer nStrIntSep.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-	var err error
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
-		"IntegerSeparatorDto.NewThousandsRunes()",
-		"")
-
-	if err != nil {
-		return IntegerSeparatorDto{}, err
-	}
-
-	newIntSep := IntegerSeparatorDto{}
-
-	err =
-		new(integerSeparatorDtoUtility).
-			setThousandsRunes(
-				&newIntSep,
-				intSeparatorChars,
-				ePrefix.XCpy(
-					"newIntSep"))
-
-	return newIntSep, err
-}
-
 // NewDetail - Creates and returns a new instance of
 // IntegerSeparatorDto. The new instance is generated based on
 // component elements passed as input parameters.
@@ -1809,6 +1510,457 @@ func (nStrIntSep IntegerSeparatorDto) NewDetailRunes(
 				intSeparatorGrouping,
 				restartIntGroupingSequence,
 				ePrefix.XCpy("newIntSep"))
+
+	return newIntSep, err
+}
+
+// NewChineseNumbering - Returns a new instance of
+// IntegerSeparatorDto configured for the Chinese
+// Numbering System integer digit grouping.
+//
+// The input parameter 'intSeparatorChars' is a string
+// containing the integer separator character or
+// characters which will separate the integer digit
+// groups.
+//
+// In conformance with the Chinese Numbering System, the
+// integer digit grouping is defaulted to a value of four
+// (4).
+//
+// This means that integer digit grouping will consist of
+// groups of four (4) integer digits.
+//
+//	Example: '6,7890,000,0000,0000'
+//
+// Although, users have the option of specifying one or more
+// custom integer separator characters passed through input
+// parameter 'intSeparatorChars', be advised that the commonly
+// used integer separator for the Chinese Numbering system is
+// the comma (",") character.
+//
+// The 'integer separator repetitions' value is defaulted to zero
+// (0) signaling unlimited repetitions.
+//
+// # Reference:
+//
+//	https://en.wikipedia.org/wiki/Chinese_numerals
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//	intSeparatorChars          string
+//	   - One or more characters used to separate groups of
+//	     integers. These characters are used to separate groups
+//	     of integer digits to the left of the decimal separator
+//	     (a.k.a. decimal point). The most common integer separator
+//	     used in conjunction with the Chinese Numbering System is
+//	     the comma (",").
+//	       Example:  6,7890,000,0000,0000
+//
+//	     If this input parameter contains a zero length string, an
+//	     error will be returned.
+//
+//
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
+//
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
+//
+//	     This empty interface must be convertible to one of the
+//	     following types:
+//
+//	     1. nil - A nil value is valid and generates an empty
+//	        collection of error prefix and error context
+//	        information.
+//
+//	     2. string - A string containing error prefix information.
+//
+//	     3. []string A one-dimensional slice of strings containing
+//	        error prefix information
+//
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
+//
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	        from this object will be copied for use in error and
+//	        informational messages.
+//
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	        Information from this object will be copied for use in
+//	        error and informational messages.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	        a two-dimensional slice of strings containing error
+//	        prefix and error context information.
+//
+//	If parameter 'errorPrefix' is NOT convertible to one of
+//	the valid types listed above, it will be considered
+//	invalid and trigger the return of an error.
+//
+//	Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	the 'errpref' software package,
+//	"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//	IntegerSeparatorDto
+//	   - If this method completes successfully, a new instance of
+//	     IntegerSeparatorDto, configured with Chinese Numbering
+//	     System integer grouping will be created and returned.
+//
+//	error
+//	   - If this method completes successfully, the returned error
+//	     Type is set equal to 'nil'.
+//
+//	     If errors are encountered during processing, the returned
+//	     error Type will encapsulate an error message. This
+//	     returned error message will incorporate the method chain
+//	     and text passed by input parameter, 'errorPrefix'. The
+//	     'errorPrefix' text will be attached to the beginning of
+//	     the error message.
+func (nStrIntSep IntegerSeparatorDto) NewChineseNumbering(
+	intSeparatorChars string,
+	errorPrefix interface{}) (
+	IntegerSeparatorDto,
+	error) {
+
+	if nStrIntSep.lock == nil {
+		nStrIntSep.lock = new(sync.Mutex)
+	}
+
+	nStrIntSep.lock.Lock()
+
+	defer nStrIntSep.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	newIntSep := IntegerSeparatorDto{}
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"IntegerSeparatorDto."+
+			"NewChineseNumbering()",
+		"")
+
+	if err != nil {
+		return newIntSep, err
+	}
+
+	err =
+		new(integerSeparatorDtoUtility).
+			setChineseNumberingRunes(
+				&newIntSep,
+				[]rune(intSeparatorChars),
+				ePrefix.XCpy(
+					"newIntSep"))
+
+	return newIntSep, err
+}
+
+// NewThousands - Creates and returns a new instance of
+// IntegerSeparatorDto. The returned IntegerSeparatorDto instance
+// represents a basic or simple integer separator object using
+// default values and a minimum number of input parameters.
+//
+// The input parameter 'intSeparatorChars' is string
+// containing the integer separator characters. The integer digit
+// grouping is defaulted to a value of three (3). The 'separator
+// repetitions' value is defaulted to zero (0) signaling unlimited
+// repetitions.
+//
+// This means that integer digits will be separated into 'thousands'
+// with each group containing three digits each (Example:
+// 1,000,000,000). Users have the option of specifying integer
+// separator characters through input parameter
+// 'intSeparatorChars'.
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//	intSeparatorChars          string
+//	   - One or more characters used to separate groups of
+//	     integers. This separator is also known as the 'thousands'
+//	     separator. It is used to separate groups of integer digits
+//	     to the left of the decimal separator
+//	     (a.k.a. decimal point). In the United States, the standard
+//	     integer digits separator is the comma (",").
+//	           United States Example:  1,000,000,000
+//
+//	     In many European countries, a single period ('.') is used
+//	     as the integer separator character.
+//	           European Example: 1.000.000.000
+//
+//	     Other countries and cultures use spaces, apostrophes or
+//	     multiple characters to separate integers.
+//
+//	     If this input parameter contains a zero length string, an
+//	     error will be returned.
+//
+//
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
+//
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
+//
+//	     This empty interface must be convertible to one of the
+//	     following types:
+//
+//	     1. nil - A nil value is valid and generates an empty
+//	        collection of error prefix and error context
+//	        information.
+//
+//	     2. string - A string containing error prefix information.
+//
+//	     3. []string A one-dimensional slice of strings containing
+//	        error prefix information
+//
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
+//
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	        from this object will be copied for use in error and
+//	        informational messages.
+//
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	        Information from this object will be copied for use in
+//	        error and informational messages.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	        a two-dimensional slice of strings containing error
+//	        prefix and error context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//	IntegerSeparatorDto
+//	   - If this method completes successfully, a new instance of
+//	     IntegerSeparatorDto will be created and returned. The
+//	     'integer digits grouping sequence' will be automatically
+//	     set to a default value of 3-digits.
+//
+//	error
+//	   - If this method completes successfully, the returned error
+//	     Type is set equal to 'nil'.
+//
+//	     If errors are encountered during processing, the returned
+//	     error Type will encapsulate an error message. This
+//	     returned error message will incorporate the method chain
+//	     and text passed by input parameter, 'errorPrefix'. The
+//	     'errorPrefix' text will be attached to the beginning of
+//	     the error message.
+func (nStrIntSep IntegerSeparatorDto) NewThousands(
+	intSeparatorChars string,
+	errorPrefix interface{}) (
+	IntegerSeparatorDto,
+	error) {
+
+	if nStrIntSep.lock == nil {
+		nStrIntSep.lock = new(sync.Mutex)
+	}
+
+	nStrIntSep.lock.Lock()
+
+	defer nStrIntSep.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"IntegerSeparatorDto.NewThousands()",
+		"")
+
+	if err != nil {
+		return IntegerSeparatorDto{}, err
+	}
+
+	ePrefix.SetEPref(
+		"IntegerSeparatorDto.NewThousands()")
+
+	newIntSep := IntegerSeparatorDto{}
+
+	err =
+		new(integerSeparatorDtoUtility).
+			setThousandsRunes(
+				&newIntSep,
+				[]rune(intSeparatorChars),
+				ePrefix.XCpy(
+					"newIntSep"))
+
+	return newIntSep, err
+}
+
+// NewThousandsRunes - Creates and returns a new instance of
+// IntegerSeparatorDto. The returned IntegerSeparatorDto instance
+// represents a basic or simple integer separator object using
+// default values and a minimum number of input parameters.
+//
+// This method is an alternative to method
+// IntegerSeparatorDto.NewThousands() in that this method accepts
+// integer separator characters as an array of runes instead
+// of a string.
+//
+// The input parameter 'intSeparatorChars' is an array of
+// runes containing the integer separator characters. The integer
+// digit grouping is defaulted to a value of three (3). The
+// 'separator repetitions' value is defaulted to zero (0) signaling
+// unlimited repetitions. The 'restartIntGroupingSequence' flag
+// will be defaulted to 'false'.
+//
+// This means that integer digits will be separated into 'thousands'
+// with each group containing three digits each (Example:
+// 1,000,000,000). Users have the option of specifying integer
+// separator characters through input parameter
+// 'intSeparatorChars'.
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//	intSeparatorChars          []rune
+//	   - One or more characters used to separate groups of
+//	     integers. This separator is also known as the 'thousands'
+//	     separator. It is used to separate groups of integer digits
+//	     to the left of the decimal separator (a.k.a. decimal
+//	     point). In the United States, the standard integer digits
+//	     separator is the comma (',').
+//	           United States Example:  1,000,000,000
+//
+//	     In many European countries, a single period ('.') is used
+//	     as the integer separator character.
+//	           European Example: 1.000.000.000
+//
+//	     Other countries and cultures use spaces, apostrophes or
+//	     multiple characters to separate integers.
+//
+//	     If this input parameter contains a zero length array, an
+//	     error will be returned.
+//
+//
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
+//
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
+//
+//	     This empty interface must be convertible to one of the
+//	     following types:
+//
+//	     1. nil - A nil value is valid and generates an empty
+//	        collection of error prefix and error context
+//	        information.
+//
+//	     2. string - A string containing error prefix information.
+//
+//	     3. []string A one-dimensional slice of strings containing
+//	        error prefix information
+//
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
+//
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	        from this object will be copied for use in error and
+//	        informational messages.
+//
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	        Information from this object will be copied for use in
+//	        error and informational messages.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	        a two-dimensional slice of strings containing error
+//	        prefix and error context information.
+//
+//	If parameter 'errorPrefix' is NOT convertible to one of
+//	the valid types listed above, it will be considered
+//	invalid and trigger the return of an error.
+//
+//	Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	the 'errpref' software package,
+//	"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//	IntegerSeparatorDto
+//	   - If this method completes successfully, a new instance of
+//	     IntegerSeparatorDto will be created and returned. The
+//	     'integer digits grouping sequence' will be automatically
+//	     set to a default value of 3-digits.
+//
+//	error
+//	   - If this method completes successfully, the returned error
+//	     Type is set equal to 'nil'.
+//
+//	     If errors are encountered during processing, the returned
+//	     error Type will encapsulate an error message. This
+//	     returned error message will incorporate the method chain
+//	     and text passed by input parameter, 'errorPrefix'. The
+//	     'errorPrefix' text will be attached to the beginning of
+//	     the error message.
+func (nStrIntSep IntegerSeparatorDto) NewThousandsRunes(
+	intSeparatorChars []rune,
+	errorPrefix interface{}) (
+	IntegerSeparatorDto,
+	error) {
+
+	if nStrIntSep.lock == nil {
+		nStrIntSep.lock = new(sync.Mutex)
+	}
+
+	nStrIntSep.lock.Lock()
+
+	defer nStrIntSep.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"IntegerSeparatorDto.NewThousandsRunes()",
+		"")
+
+	if err != nil {
+		return IntegerSeparatorDto{}, err
+	}
+
+	newIntSep := IntegerSeparatorDto{}
+
+	err =
+		new(integerSeparatorDtoUtility).
+			setThousandsRunes(
+				&newIntSep,
+				intSeparatorChars,
+				ePrefix.XCpy(
+					"newIntSep"))
 
 	return newIntSep, err
 }
@@ -2482,7 +2634,8 @@ func (nStrIntSep *IntegerSeparatorDto) SetDetailRunes(
 // grouping.
 //
 // The input parameter 'intSeparatorChars' is a string
-// containing the integer separator character or characters.
+// containing the integer separator character or characters
+// which will separate the integer digit groups.
 //
 // In conformance with the Chinese Numbering System, the integer
 // digit grouping is defaulted to a value of four (4).
