@@ -345,10 +345,10 @@ func TestStrMech_ExtractDataField_01(t *testing.T) {
 			new(StrMech).ConvertNonPrintableChars([]rune(datDto.DataFieldTrailingDelimiter), true))
 	}
 
-	if expectedDataFieldTrailingDelimiterType != datDto.DataFieldTrailingDelimiterType {
+	if expectedDataFieldTrailingDelimiterType != datDto.DataFieldTrailingDelimType {
 		t.Errorf("ERROR: Expected datDto.DataFieldTrailingDelimiterType='%v'.\n"+
 			"Instead, datDto.DataFieldTrailingDelimiterType='%v'.\n",
-			expectedDataFieldTrailingDelimiterType.String(), datDto.DataFieldTrailingDelimiterType.String())
+			expectedDataFieldTrailingDelimiterType.String(), datDto.DataFieldTrailingDelimType.String())
 	}
 
 	if expectedLastGoodIdx != datDto.TargetStrLastGoodIndex {
@@ -532,10 +532,10 @@ func TestStrMech_ExtractDataField_02(t *testing.T) {
 			expectedDataFieldTrailingDelimiter, datDto.DataFieldTrailingDelimiter)
 	}
 
-	if expectedDataFieldTrailingDelimiterType != datDto.DataFieldTrailingDelimiterType {
+	if expectedDataFieldTrailingDelimiterType != datDto.DataFieldTrailingDelimType {
 		t.Errorf("ERROR: Expected datDto.DataFieldTrailingDelimiterType='%v'.\n"+
 			"Instead, datDto.DataFieldTrailingDelimiterType='%v'.\n",
-			expectedDataFieldTrailingDelimiterType.String(), datDto.DataFieldTrailingDelimiterType.String())
+			expectedDataFieldTrailingDelimiterType.String(), datDto.DataFieldTrailingDelimType.String())
 	}
 
 	if expectedLastGoodIdx != datDto.TargetStrLastGoodIndex {
@@ -688,10 +688,10 @@ func TestStrMech_ExtractDataField_03(t *testing.T) {
 			expectedDataFieldTrailingDelimiter, datDto.DataFieldTrailingDelimiter)
 	}
 
-	if expectedDataFieldTrailingDelimiterType != datDto.DataFieldTrailingDelimiterType {
+	if expectedDataFieldTrailingDelimiterType != datDto.DataFieldTrailingDelimType {
 		t.Errorf("ERROR: Expected datDto.DataFieldTrailingDelimiterType='%v'.\n"+
 			"Instead, datDto.DataFieldTrailingDelimiterType='%v'.\n",
-			expectedDataFieldTrailingDelimiterType.String(), datDto.DataFieldTrailingDelimiterType.String())
+			expectedDataFieldTrailingDelimiterType.String(), datDto.DataFieldTrailingDelimType.String())
 	}
 
 	if expectedLastGoodIdx != datDto.TargetStrLastGoodIndex {
@@ -851,10 +851,10 @@ func TestStrMech_ExtractDataField_04(t *testing.T) {
 			expectedDataFieldTrailingDelimiter, datDto.DataFieldTrailingDelimiter)
 	}
 
-	if expectedDataFieldTrailingDelimiterType != datDto.DataFieldTrailingDelimiterType {
+	if expectedDataFieldTrailingDelimiterType != datDto.DataFieldTrailingDelimType {
 		t.Errorf("ERROR: Expected datDto.DataFieldTrailingDelimiterType='%v'.\n"+
 			"Instead, datDto.DataFieldTrailingDelimiterType='%v'.\n",
-			expectedDataFieldTrailingDelimiterType.String(), datDto.DataFieldTrailingDelimiterType.String())
+			expectedDataFieldTrailingDelimiterType.String(), datDto.DataFieldTrailingDelimType.String())
 	}
 
 	if expectedLastGoodIdx != datDto.TargetStrLastGoodIndex {
@@ -1009,10 +1009,10 @@ func TestStrMech_ExtractDataField_05(t *testing.T) {
 			expectedDataFieldTrailingDelimiter, datDto.DataFieldTrailingDelimiter)
 	}
 
-	if expectedDataFieldTrailingDelimiterType != datDto.DataFieldTrailingDelimiterType {
+	if expectedDataFieldTrailingDelimiterType != datDto.DataFieldTrailingDelimType {
 		t.Errorf("ERROR: Expected datDto.DataFieldTrailingDelimiterType='%v'.\n"+
 			"Instead, datDto.DataFieldTrailingDelimiterType='%v'.\n",
-			expectedDataFieldTrailingDelimiterType.String(), datDto.DataFieldTrailingDelimiterType.String())
+			expectedDataFieldTrailingDelimiterType.String(), datDto.DataFieldTrailingDelimType.String())
 	}
 
 	if expectedLastGoodIdx != datDto.TargetStrLastGoodIndex {
@@ -1165,10 +1165,10 @@ func TestStrMech_ExtractDataField_06(t *testing.T) {
 			expectedDataFieldTrailingDelimiter, datDto.DataFieldTrailingDelimiter)
 	}
 
-	if expectedDataFieldTrailingDelimiterType != datDto.DataFieldTrailingDelimiterType {
+	if expectedDataFieldTrailingDelimiterType != datDto.DataFieldTrailingDelimType {
 		t.Errorf("ERROR: Expected datDto.DataFieldTrailingDelimiterType='%v'.\n"+
 			"Instead, datDto.DataFieldTrailingDelimiterType='%v'.\n",
-			expectedDataFieldTrailingDelimiterType.String(), datDto.DataFieldTrailingDelimiterType.String())
+			expectedDataFieldTrailingDelimiterType.String(), datDto.DataFieldTrailingDelimType.String())
 	}
 
 	if expectedLastGoodIdx != datDto.TargetStrLastGoodIndex {
@@ -1335,10 +1335,10 @@ func TestStrMech_ExtractDataField_07(t *testing.T) {
 			expectedDataFieldTrailingDelimiter, datDto.DataFieldTrailingDelimiter)
 	}
 
-	if expectedDataFieldTrailingDelimiterType != datDto.DataFieldTrailingDelimiterType {
+	if expectedDataFieldTrailingDelimiterType != datDto.DataFieldTrailingDelimType {
 		t.Errorf("ERROR: Expected datDto.DataFieldTrailingDelimiterType='%v'.\n"+
 			"Instead, datDto.DataFieldTrailingDelimiterType='%v'.\n",
-			expectedDataFieldTrailingDelimiterType.String(), datDto.DataFieldTrailingDelimiterType.String())
+			expectedDataFieldTrailingDelimiterType.String(), datDto.DataFieldTrailingDelimType.String())
 	}
 
 	if expectedLastGoodIdx != datDto.TargetStrLastGoodIndex {
@@ -1495,10 +1495,10 @@ func TestStrMech_ExtractDataField_08(t *testing.T) {
 			expectedDataFieldTrailingDelimiter, datDto.DataFieldTrailingDelimiter)
 	}
 
-	if expectedDataFieldTrailingDelimiterType != datDto.DataFieldTrailingDelimiterType {
+	if expectedDataFieldTrailingDelimiterType != datDto.DataFieldTrailingDelimType {
 		t.Errorf("ERROR: Expected datDto.DataFieldTrailingDelimiterType='%v'.\n"+
 			"Instead, datDto.DataFieldTrailingDelimiterType='%v'.\n",
-			expectedDataFieldTrailingDelimiterType.String(), datDto.DataFieldTrailingDelimiterType.String())
+			expectedDataFieldTrailingDelimiterType.String(), datDto.DataFieldTrailingDelimType.String())
 	}
 
 	if expectedLastGoodIdx != datDto.TargetStrLastGoodIndex {
@@ -1854,10 +1854,10 @@ func TestStrMech_ExtractDataField_14(t *testing.T) {
 			new(StrMech).ConvertNonPrintableChars([]rune(datDto.DataFieldTrailingDelimiter), true))
 	}
 
-	if expectedDataFieldTrailingDelimiterType != datDto.DataFieldTrailingDelimiterType {
+	if expectedDataFieldTrailingDelimiterType != datDto.DataFieldTrailingDelimType {
 		t.Errorf("ERROR: Expected datDto.DataFieldTrailingDelimiterType='%v'.\n"+
 			"Instead, datDto.DataFieldTrailingDelimiterType='%v'.\n",
-			expectedDataFieldTrailingDelimiterType.String(), datDto.DataFieldTrailingDelimiterType.String())
+			expectedDataFieldTrailingDelimiterType.String(), datDto.DataFieldTrailingDelimType.String())
 	}
 
 	if expectedLastGoodIdx != datDto.TargetStrLastGoodIndex {

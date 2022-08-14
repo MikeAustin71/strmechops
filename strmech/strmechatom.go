@@ -498,7 +498,7 @@ func (sMechAtom *strMechAtom) copyOut(
 //	     DataFieldIndex                 int    //  The index in 'TargetStr' where the data field begins.
 //	     DataFieldLength                int    //  The length of the extracted data field string.
 //	     DataFieldTrailingDelimiter     string //  The trailing character which marked the end of the data field. A zero value indicates end of string encountered.
-//	     DataFieldTrailingDelimiterType DataFieldTrailingDelimiterType // A constant or enumeration type used to describe the type of delimiter used to mark the end of a data field.
+//	     DataFieldTrailingDelimType     DataFieldTrailingDelimiterType // A constant or enumeration type used to describe the type of delimiter used to mark the end of a data field.
 //	     NextTargetStrIndex             int    //  The index in 'TargetStr' immediately following the extracted data field.
 //	     CommentDelimiter               string //  If a Comment Delimiter is detected it is stored here.
 //	     CommentDelimiterIndex          int    //  If a Comment Delimiter is detected, the string index in 'TargetStr' showing its location is stored here.
@@ -742,7 +742,7 @@ func (sMechAtom *strMechAtom) extractDataField(
 			if delimiterIdx < lastGoodTargetStrIdx {
 				// End-Of-Line Index is less than or equal to 'lastGoodTargetStrIds'
 				newDataDto.DataFieldTrailingDelimiter = delimiterValue
-				newDataDto.DataFieldTrailingDelimiterType = DfTrailDelimiter.EndOfLine()
+				newDataDto.DataFieldTrailingDelimType = DfTrailDelimiter.EndOfLine()
 				lastGoodTargetStrIdx = delimiterIdx
 			}
 		} // End of if delimiterIdx > -1 {
@@ -806,7 +806,7 @@ func (sMechAtom *strMechAtom) extractDataField(
 
 				// Comment Index is less than or equal to 'lastGoodTargetStrIds'
 				newDataDto.DataFieldTrailingDelimiter = delimiterValue
-				newDataDto.DataFieldTrailingDelimiterType = DfTrailDelimiter.Comment()
+				newDataDto.DataFieldTrailingDelimType = DfTrailDelimiter.Comment()
 				lastGoodTargetStrIdx = delimiterIdx
 			}
 		}
@@ -926,7 +926,7 @@ func (sMechAtom *strMechAtom) extractDataField(
 
 				newDataDto.DataFieldTrailingDelimiter = trailingFieldSeparators[k]
 
-				newDataDto.DataFieldTrailingDelimiterType = DfTrailDelimiter.EndOfField()
+				newDataDto.DataFieldTrailingDelimType = DfTrailDelimiter.EndOfField()
 
 				goto exitMainTargetLoop
 			}
@@ -950,8 +950,8 @@ exitMainTargetLoop:
 		return newDataDto, nil
 	}
 
-	if newDataDto.DataFieldTrailingDelimiterType == DfTrailDelimiter.None() {
-		newDataDto.DataFieldTrailingDelimiterType = DfTrailDelimiter.EndOfString()
+	if newDataDto.DataFieldTrailingDelimType == DfTrailDelimiter.None() {
+		newDataDto.DataFieldTrailingDelimType = DfTrailDelimiter.EndOfString()
 	}
 
 	newDataDto.DataFieldStr = string(fieldDataRunes)

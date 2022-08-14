@@ -3,22 +3,22 @@ package strmech
 // DataFieldProfileDto - This type is used to encapsulate information
 // related to an extracted data field string.
 type DataFieldProfileDto struct {
-	TargetStr                      string                         //  The string from which the data field  is extracted.
-	TargetStrLength                int                            //  Length of 'TargetStr'.
-	TargetStrStartIndex            int                            //  The index with in 'TargetStr' from which the search for a data field was initiated.
-	TargetStrLastGoodIndex         int                            //  Last valid index in target string which is less than the target string length and is NOT an 'End Of Field' or 'End Of Line' Delimiter.
-	LeadingKeyWordDelimiter        string                         //  The Leading Key Word Delimiter which is used to identify the beginning of the field search.
-	LeadingKeyWordDelimiterIndex   int                            //  Index of the found Leading Key Word Delimiter
-	DataFieldStr                   string                         //  The extracted data field string
-	DataFieldIndex                 int                            //  The index in 'TargetStr' where the data field begins.
-	DataFieldLength                int                            //  The length of the extracted data field string.
-	DataFieldTrailingDelimiter     string                         //  The trailing character which marked the end of the data field. A zero value indicates end of string encountered.
-	DataFieldTrailingDelimiterType DataFieldTrailingDelimiterType //  A constant or enumeration type used to describe the type of delimiter used to mark the end of a data field.
-	NextTargetStrIndex             int                            //  The index in 'TargetStr' immediately following the extracted data field.
-	CommentDelimiter               string                         //  If a Comment Delimiter is detected it is stored here.
-	CommentDelimiterIndex          int                            //  If a Comment Delimiter is detected, the string index in 'TargetStr' showing its location is stored here.
-	EndOfLineDelimiter             string                         //  If an End-Of-Line Delimiter is detected it is captured and stored here.
-	EndOfLineDelimiterIndex        int                            //  If an End-Of-Line Delimiter is detected, the string index in 'TargetStr' showing its location is stored here.
+	TargetStr                    string                         //  The string from which the data field  is extracted.
+	TargetStrLength              int                            //  Length of 'TargetStr'.
+	TargetStrStartIndex          int                            //  The index with in 'TargetStr' from which the search for a data field was initiated.
+	TargetStrLastGoodIndex       int                            //  Last valid index in target string which is less than the target string length and is NOT an 'End Of Field' or 'End Of Line' Delimiter.
+	LeadingKeyWordDelimiter      string                         //  The Leading Key Word Delimiter which is used to identify the beginning of the field search.
+	LeadingKeyWordDelimiterIndex int                            //  Index of the found Leading Key Word Delimiter
+	DataFieldStr                 string                         //  The extracted data field string
+	DataFieldIndex               int                            //  The index in 'TargetStr' where the data field begins.
+	DataFieldLength              int                            //  The length of the extracted data field string.
+	DataFieldTrailingDelimiter   string                         //  The trailing character which marked the end of the data field. A zero value indicates end of string encountered.
+	DataFieldTrailingDelimType   DataFieldTrailingDelimiterType //  A constant or enumeration type used to describe the type of delimiter used to mark the end of a data field.
+	NextTargetStrIndex           int                            //  The index in 'TargetStr' immediately following the extracted data field.
+	CommentDelimiter             string                         //  If a Comment Delimiter is detected it is stored here.
+	CommentDelimiterIndex        int                            //  If a Comment Delimiter is detected, the string index in 'TargetStr' showing its location is stored here.
+	EndOfLineDelimiter           string                         //  If an End-Of-Line Delimiter is detected it is captured and stored here.
+	EndOfLineDelimiterIndex      int                            //  If an End-Of-Line Delimiter is detected, the string index in 'TargetStr' showing its location is stored here.
 }
 
 // ConvertToErrorState - Prepares the current DataFieldProfileDto instance
@@ -46,7 +46,7 @@ func (dfProfile DataFieldProfileDto) New() DataFieldProfileDto {
 	newDataDto.DataFieldIndex = -1
 	newDataDto.DataFieldLength = 0
 	newDataDto.DataFieldTrailingDelimiter = ""
-	newDataDto.DataFieldTrailingDelimiterType = DfTrailDelimiter.None()
+	newDataDto.DataFieldTrailingDelimType = DfTrailDelimiter.None()
 	newDataDto.NextTargetStrIndex = -1
 	newDataDto.CommentDelimiter = ""
 	newDataDto.CommentDelimiterIndex = -1

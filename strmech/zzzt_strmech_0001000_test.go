@@ -10,7 +10,7 @@ func TestDataFieldProfileDto_ConvertToErrorState_01(t *testing.T) {
 	dfProfile := DataFieldProfileDto{}
 
 	dfProfile.DataFieldStr = "Hello World"
-	dfProfile.DataFieldTrailingDelimiterType = DfTrailDelimiter.EndOfLine()
+	dfProfile.DataFieldTrailingDelimType = DfTrailDelimiter.EndOfLine()
 	dfProfile.DataFieldTrailingDelimiter = "\n"
 	dfProfile.DataFieldIndex = 99
 	dfProfile.DataFieldLength = len(dfProfile.DataFieldStr)

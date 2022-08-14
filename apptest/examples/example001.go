@@ -2930,10 +2930,10 @@ func (mt MainTest) ExampleExtractDataField01() {
 		isError = true
 	}
 
-	if expectedDataFieldTrailingDelimiterType != datDto.DataFieldTrailingDelimiterType {
+	if expectedDataFieldTrailingDelimiterType != datDto.DataFieldTrailingDelimType {
 		fmt.Printf("ERROR: Expected datDto.DataFieldTrailingDelimiterType='%v'.\n"+
 			"Instead, datDto.DataFieldTrailingDelimiterType='%v'.\n",
-			expectedDataFieldTrailingDelimiterType.String(), datDto.DataFieldTrailingDelimiterType.String())
+			expectedDataFieldTrailingDelimiterType.String(), datDto.DataFieldTrailingDelimType.String())
 		isError = true
 	}
 
@@ -2988,7 +2988,7 @@ func (mt MainTest) ExampleExtractDataField01() {
 	fmt.Println("              Field Str Length: ", datDto.DataFieldLength)
 	fmt.Println("                   Field Index: ", datDto.DataFieldIndex)
 	fmt.Println("      Field Trailing Delimiter: ", datDto.DataFieldTrailingDelimiter)
-	fmt.Println(" Field Trailing Delimiter Type: ", datDto.DataFieldTrailingDelimiterType.String())
+	fmt.Println(" Field Trailing Delimiter Type: ", datDto.DataFieldTrailingDelimType.String())
 	fmt.Println("             Comment Delimiter: ", datDto.CommentDelimiter)
 	fmt.Println("       Comment Delimiter Index: ", datDto.CommentDelimiterIndex)
 	fmt.Println("         End Of Line Delimiter: ", datDto.EndOfLineDelimiter)
@@ -3135,10 +3135,10 @@ func (mt MainTest) ExampleExtractDataField02() {
 		isError = true
 	}
 
-	if expectedDataFieldTrailingDelimiterType != datDto.DataFieldTrailingDelimiterType {
+	if expectedDataFieldTrailingDelimiterType != datDto.DataFieldTrailingDelimType {
 		fmt.Printf("ERROR: Expected datDto.DataFieldTrailingDelimiterType='%v'.\n"+
 			"Instead, datDto.DataFieldTrailingDelimiterType='%v'.\n",
-			expectedDataFieldTrailingDelimiterType.String(), datDto.DataFieldTrailingDelimiterType.String())
+			expectedDataFieldTrailingDelimiterType.String(), datDto.DataFieldTrailingDelimType.String())
 		isError = true
 	}
 
@@ -3194,7 +3194,7 @@ func (mt MainTest) ExampleExtractDataField02() {
 	fmt.Println("                   Field Index: ", datDto.DataFieldIndex)
 	fmt.Println("      Field Trailing Delimiter: ",
 		sMech.ConvertNonPrintableChars([]rune(datDto.DataFieldTrailingDelimiter), false))
-	fmt.Println(" Field Trailing Delimiter Type: ", datDto.DataFieldTrailingDelimiterType.String())
+	fmt.Println(" Field Trailing Delimiter Type: ", datDto.DataFieldTrailingDelimType.String())
 	fmt.Println("             Comment Delimiter: ",
 		sMech.ConvertNonPrintableChars([]rune(datDto.CommentDelimiter), false))
 	fmt.Println("       Comment Delimiter Index: ", datDto.CommentDelimiterIndex)
@@ -3330,10 +3330,10 @@ func (mt MainTest) ExampleExtractDataField03() {
 		isError = true
 	}
 
-	if expectedDataFieldTrailingDelimiterType != datDto.DataFieldTrailingDelimiterType {
+	if expectedDataFieldTrailingDelimiterType != datDto.DataFieldTrailingDelimType {
 		fmt.Printf("ERROR: Expected datDto.DataFieldTrailingDelimiterType='%v'.\n"+
 			"Instead, datDto.DataFieldTrailingDelimiterType='%v'.\n",
-			expectedDataFieldTrailingDelimiterType.String(), datDto.DataFieldTrailingDelimiterType.String())
+			expectedDataFieldTrailingDelimiterType.String(), datDto.DataFieldTrailingDelimType.String())
 		isError = true
 	}
 
@@ -3388,7 +3388,7 @@ func (mt MainTest) ExampleExtractDataField03() {
 	fmt.Println("              Field Str Length: ", datDto.DataFieldLength)
 	fmt.Println("                   Field Index: ", datDto.DataFieldIndex)
 	fmt.Println("      Field Trailing Delimiter: ", datDto.DataFieldTrailingDelimiter)
-	fmt.Println(" Field Trailing Delimiter Type: ", datDto.DataFieldTrailingDelimiterType.String())
+	fmt.Println(" Field Trailing Delimiter Type: ", datDto.DataFieldTrailingDelimType.String())
 	fmt.Println("             Next Target Index: ", datDto.NextTargetStrIndex)
 	fmt.Println("                 Target String: ", datDto.TargetStr)
 	fmt.Println("             Target Str Length: ", datDto.TargetStrLength)
