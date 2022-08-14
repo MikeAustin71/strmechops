@@ -387,7 +387,7 @@ func (nStrIntSepMolecule *integerSeparatorDtoMolecule) copyIn(
 
 	_,
 		err =
-		integerSeparatorDtoQuark{}.ptr().
+		new(integerSeparatorDtoQuark).
 			testValidityOfNumStrIntSeparator(
 				incomingNStrIntSeparator,
 				ePrefix.XCpy(
@@ -473,7 +473,7 @@ func (nStrIntSepMolecule *integerSeparatorDtoMolecule) copyOut(
 
 	_,
 		err =
-		integerSeparatorDtoQuark{}.ptr().
+		new(integerSeparatorDtoQuark).
 			testValidityOfNumStrIntSeparator(
 				numStrIntSeparator,
 				ePrefix.XCpy(
@@ -697,23 +697,4 @@ func (nStrIntSepMolecule *integerSeparatorDtoMolecule) equal(
 	isEqual = true
 
 	return isEqual, err
-}
-
-// ptr - Returns a pointer to a new instance of
-// integerSeparatorDtoMolecule.
-func (nStrIntSepMolecule integerSeparatorDtoMolecule) ptr() *integerSeparatorDtoMolecule {
-
-	if nStrIntSepMolecule.lock == nil {
-		nStrIntSepMolecule.lock = new(sync.Mutex)
-	}
-
-	nStrIntSepMolecule.lock.Lock()
-
-	defer nStrIntSepMolecule.lock.Unlock()
-
-	newIntSepMolecule := new(integerSeparatorDtoMolecule)
-
-	newIntSepMolecule.lock = new(sync.Mutex)
-
-	return newIntSepMolecule
 }

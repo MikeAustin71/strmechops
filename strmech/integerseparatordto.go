@@ -974,52 +974,13 @@ func (nStrIntSep IntegerSeparatorDto) NewFromIntGroupEnum(
 		return newIntSepDto, err
 	}
 
-	if intGroupingType.XReturnNoneIfInvalid() ==
-		IntGroupingType.None() {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input Paramter 'intGroupingType' is invalid!\n"+
-			"'intGroupingType' is equal to IntGroupingType.None()\n",
-			ePrefix.String())
-
-		return newIntSepDto, err
-	}
-
-	intSeparatorUtil := integerSeparatorDtoUtility{}
-
-	switch intGroupingType {
-	case IntGroupingType.Thousands():
-
-		err = intSeparatorUtil.setThousandsRunes(
+	err = new(integerSeparatorDtoHelper).
+		setFromIntGroupEnum(
 			&newIntSepDto,
+			intGroupingType,
 			[]rune(intSeparatorChars),
 			ePrefix.XCpy(
 				"newIntSepDto<-"))
-
-	case intGroupingType.ChineseNumbering():
-		err = intSeparatorUtil.setChineseNumberingRunes(
-			&newIntSepDto,
-			[]rune(intSeparatorChars),
-			ePrefix.XCpy(
-				"newIntSepDto<-"))
-
-	case intGroupingType.IndiaNumbering():
-		err = intSeparatorUtil.setIndiaNumberingRunes(
-			&newIntSepDto,
-			[]rune(intSeparatorChars),
-			ePrefix.XCpy(
-				"newIntSepDto<-"))
-
-	default:
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'intGroupingType' is invalid!\n"+
-			"'intGroupingType' contains an unknown value.\n"+
-			"'intGroupingType' string  value = '%v'\n"+
-			"'intGroupingType' integer value = '%v'\n",
-			ePrefix.String(),
-			intGroupingType.String(),
-			intGroupingType.XValueInt())
-	}
 
 	return newIntSepDto, err
 }
@@ -1175,52 +1136,13 @@ func (nStrIntSep IntegerSeparatorDto) NewFromIntGroupEnumRunes(
 		return newIntSepDto, err
 	}
 
-	if intGroupingType.XReturnNoneIfInvalid() ==
-		IntGroupingType.None() {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input Paramter 'intGroupingType' is invalid!\n"+
-			"'intGroupingType' is equal to IntGroupingType.None()\n",
-			ePrefix.String())
-
-		return newIntSepDto, err
-	}
-
-	intSeparatorUtil := integerSeparatorDtoUtility{}
-
-	switch intGroupingType {
-	case IntGroupingType.Thousands():
-
-		err = intSeparatorUtil.setThousandsRunes(
+	err = new(integerSeparatorDtoHelper).
+		setFromIntGroupEnum(
 			&newIntSepDto,
+			intGroupingType,
 			intSeparatorChars,
 			ePrefix.XCpy(
 				"newIntSepDto<-"))
-
-	case intGroupingType.ChineseNumbering():
-		err = intSeparatorUtil.setChineseNumberingRunes(
-			&newIntSepDto,
-			intSeparatorChars,
-			ePrefix.XCpy(
-				"newIntSepDto<-"))
-
-	case intGroupingType.IndiaNumbering():
-		err = intSeparatorUtil.setIndiaNumberingRunes(
-			&newIntSepDto,
-			intSeparatorChars,
-			ePrefix.XCpy(
-				"newIntSepDto<-"))
-
-	default:
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'intGroupingType' is invalid!\n"+
-			"'intGroupingType' contains an unknown value.\n"+
-			"'intGroupingType' string  value = '%v'\n"+
-			"'intGroupingType' integer value = '%v'\n",
-			ePrefix.String(),
-			intGroupingType.String(),
-			intGroupingType.XValueInt())
-	}
 
 	return newIntSepDto, err
 }

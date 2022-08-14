@@ -13,7 +13,6 @@ type integerSeparatorDtoQuark struct {
 // empty - Deletes and resets the data values for all member
 // variables within a IntegerSeparatorDto instance to their
 // 'zero' values.
-//
 func (nStrIntSepQuark *integerSeparatorDtoQuark) empty(
 	nStrIntSep *IntegerSeparatorDto,
 	errPrefDto *ePref.ErrPrefixDto) (
@@ -62,7 +61,6 @@ func (nStrIntSepQuark *integerSeparatorDtoQuark) empty(
 //
 // If the IntegerSeparatorDto instance is judged invalid, this
 // method will return an error and set 'isValid' to false.
-//
 func (nStrIntSepQuark *integerSeparatorDtoQuark) testValidityOfNumStrIntSeparator(
 	nStrIntSep *IntegerSeparatorDto,
 	errPrefDto *ePref.ErrPrefixDto) (
@@ -148,23 +146,4 @@ func (nStrIntSepQuark *integerSeparatorDtoQuark) testValidityOfNumStrIntSeparato
 	isValid = true
 
 	return isValid, err
-}
-
-// ptr - Returns a pointer to a new instance of
-// integerSeparatorDtoQuark
-func (nStrIntSepQuark integerSeparatorDtoQuark) ptr() *integerSeparatorDtoQuark {
-
-	if nStrIntSepQuark.lock == nil {
-		nStrIntSepQuark.lock = new(sync.Mutex)
-	}
-
-	nStrIntSepQuark.lock.Lock()
-
-	defer nStrIntSepQuark.lock.Unlock()
-
-	newIntSepQuark := new(integerSeparatorDtoQuark)
-
-	newIntSepQuark.lock = new(sync.Mutex)
-
-	return newIntSepQuark
 }
