@@ -18,6 +18,234 @@ type NumStrIntegerGroupingSpec struct {
 	lock *sync.Mutex
 }
 
+// CopyIn - Copies the data fields from an incoming instance of
+// NumStrIntegerGroupingSpec ('incomingIntGroupSpec') to the data
+// fields of the current NumStrIntegerGroupingSpec instance
+// ('nStrIntGroupSpec').
+//
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+// All the data fields in current NumStrIntegerGroupingSpec
+// instance ('nStrIntGroupSpec') will be deleted and overwritten.
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//	 incomingIntGroupSpec   *NumStrIntegerGroupingSpec
+//	    - A pointer to an instance of NumStrIntegerGroupingSpec.
+//	      This method will NOT change the values of internal member
+//	      variables contained in this instance.
+//
+//	      All data values in this NumStrIntegerGroupingSpec instance
+//	      will be copied to current NumStrIntegerGroupingSpec
+//	      instance ('nStrIntGroupSpec').
+//
+//	      If parameter 'incomingIntGroupSpec' is determined to
+//	      be invalid, an error will be returned.
+//
+//
+//	 errorPrefix                interface{}
+//		   - This object encapsulates error prefix text which is
+//		     included in all returned error messages. Usually, it
+//		     contains the name of the calling method or methods
+//		     listed as a method or function chain of execution.
+//
+//		     If no error prefix information is needed, set this
+//		     parameter to 'nil'.
+//
+//		     This empty interface must be convertible to one of the
+//		     following types:
+//
+//		     1. nil - A nil value is valid and generates an empty
+//		        collection of error prefix and error context
+//		        information.
+//
+//		     2. string - A string containing error prefix information.
+//
+//		     3. []string A one-dimensional slice of strings containing
+//		        error prefix information
+//
+//		     4. [][2]string A two-dimensional slice of strings
+//		        containing error prefix and error context information.
+//
+//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		        from this object will be copied for use in error and
+//		        informational messages.
+//
+//		     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		        Information from this object will be copied for use in
+//		        error and informational messages.
+//
+//		     7. IBasicErrorPrefix - An interface to a method generating
+//		        a two-dimensional slice of strings containing error
+//		        prefix and error context information.
+//
+//		     If parameter 'errorPrefix' is NOT convertible to one of
+//		     the valid types listed above, it will be considered
+//		     invalid and trigger the return of an error.
+//
+//		     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		     the 'errpref' software package,
+//		     "github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//	error
+//	   - If this method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
+//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
+func (nStrIntGroupSpec *NumStrIntegerGroupingSpec) CopyIn(
+	incomingIntGroupSpec *NumStrIntegerGroupingSpec,
+	errorPrefix interface{}) error {
+
+	if nStrIntGroupSpec.lock == nil {
+		nStrIntGroupSpec.lock = new(sync.Mutex)
+	}
+
+	nStrIntGroupSpec.lock.Lock()
+
+	defer nStrIntGroupSpec.lock.Unlock()
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumStrIntegerGroupingSpec."+
+			"CopyIn()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	return new(numStrIntGroupingSpecNanobot).
+		copyNStrIntGroupSpec(
+			nStrIntGroupSpec,
+			incomingIntGroupSpec,
+			ePrefix.XCpy(
+				"nStrIntGroupSpec<-"+
+					"incomingIntGroupSpec"))
+}
+
+// CopyOut - Returns a deep copy of the current
+// NumStrIntegerGroupingSpec instance.
+//
+// If the current NumStrIntegerGroupingSpec instance contains
+// invalid member variables, this method will return an error.
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//	 errorPrefix                interface{}
+//		   - This object encapsulates error prefix text which is
+//		     included in all returned error messages. Usually, it
+//		     contains the name of the calling method or methods
+//		     listed as a method or function chain of execution.
+//
+//		     If no error prefix information is needed, set this parameter
+//		     to 'nil'.
+//
+//		     This empty interface must be convertible to one of the
+//		     following types:
+//
+//		     1. nil - A nil value is valid and generates an empty
+//		        collection of error prefix and error context
+//		        information.
+//
+//		     2. string - A string containing error prefix information.
+//
+//		     3. []string A one-dimensional slice of strings containing
+//		        error prefix information
+//
+//		     4. [][2]string A two-dimensional slice of strings
+//		        containing error prefix and error context information.
+//
+//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		        from this object will be copied for use in error and
+//		        informational messages.
+//
+//		     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		        Information from this object will be copied for use in
+//		        error and informational messages.
+//
+//		     7. IBasicErrorPrefix - An interface to a method generating
+//		        a two-dimensional slice of strings containing error
+//		        prefix and error context information.
+//
+//		     If parameter 'errorPrefix' is NOT convertible to one of
+//		     the valid types listed above, it will be considered
+//		     invalid and trigger the return of an error.
+//
+//		     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		     the 'errpref' software package,
+//		     "github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//	deepCopyNStrIntGroupSpec   NumStrIntegerGroupingSpec
+//	   - If this method completes successfully and no errors are
+//	     encountered, this parameter will return a deep copy of the
+//	     current NumStrIntegerGroupingSpec instance.
+//
+//
+//	err                        error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
+//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
+func (nStrIntGroupSpec *NumStrIntegerGroupingSpec) CopyOut(
+	errorPrefix interface{}) (
+	deepCopyNStrIntGroupSpec NumStrIntegerGroupingSpec,
+	err error) {
+
+	if nStrIntGroupSpec.lock == nil {
+		nStrIntGroupSpec.lock = new(sync.Mutex)
+	}
+
+	nStrIntGroupSpec.lock.Lock()
+
+	defer nStrIntGroupSpec.lock.Unlock()
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumStrIntegerGroupingSpec."+
+			"CopyOut()",
+		"")
+
+	if err != nil {
+		return deepCopyNStrIntGroupSpec, err
+	}
+
+	err = new(numStrIntGroupingSpecNanobot).
+		copyNStrIntGroupSpec(
+			&deepCopyNStrIntGroupSpec,
+			nStrIntGroupSpec,
+			ePrefix.XCpy(
+				"deepCopyNStrIntGroupSpec<-"+
+					"nStrIntGroupSpec"))
+
+	return deepCopyNStrIntGroupSpec, err
+}
+
 // NewRunes - Creates and returns a new and fully populated
 // instance of NumStrIntegerGroupingSpec.
 //
@@ -167,125 +395,6 @@ func (nStrIntGroupSpec *NumStrIntegerGroupingSpec) NewRunes(
 	return newNStrIntGroupSpec, err
 }
 
-// CopyIn - Copies the data fields from an incoming instance of
-// NumStrIntegerGroupingSpec ('incomingIntGroupSpec') to the data
-// fields of the current NumStrIntegerGroupingSpec instance
-// ('nStrIntGroupSpec').
-//
-// ----------------------------------------------------------------
-//
-// IMPORTANT
-// All the data fields in current NumStrIntegerGroupingSpec
-// instance ('nStrIntGroupSpec') will be deleted and overwritten.
-//
-// ----------------------------------------------------------------
-//
-// Input Parameters
-//
-//		incomingIntGroupSpec   *NumStrIntegerGroupingSpec
-//		   - A pointer to an instance of NumStrIntegerGroupingSpec. This
-//		     method will NOT change the values of internal member
-//		     variables contained in this instance.
-//
-//		     All data values in this NumStrIntegerGroupingSpec instance
-//		     will be copied to current NumStrIntegerGroupingSpec
-//		     instance ('nStrIntGroupSpec').
-//
-//		     If parameter 'incomingIntGroupSpec' is determined to
-//		     be invalid, an error will be returned.
-//
-//
-//	 errorPrefix                interface{}
-//		   - This object encapsulates error prefix text which is
-//		     included in all returned error messages. Usually, it
-//		     contains the name of the calling method or methods
-//		     listed as a method or function chain of execution.
-//
-//		     If no error prefix information is needed, set this parameter
-//		     to 'nil'.
-//
-//		     This empty interface must be convertible to one of the
-//		     following types:
-//
-//		     1. nil - A nil value is valid and generates an empty
-//		        collection of error prefix and error context
-//		        information.
-//
-//		     2. string - A string containing error prefix information.
-//
-//		     3. []string A one-dimensional slice of strings containing
-//		        error prefix information
-//
-//		     4. [][2]string A two-dimensional slice of strings
-//		        containing error prefix and error context information.
-//
-//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//		        from this object will be copied for use in error and
-//		        informational messages.
-//
-//		     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//		        Information from this object will be copied for use in
-//		        error and informational messages.
-//
-//		     7. IBasicErrorPrefix - An interface to a method generating
-//		        a two-dimensional slice of strings containing error
-//		        prefix and error context information.
-//
-//		     If parameter 'errorPrefix' is NOT convertible to one of
-//		     the valid types listed above, it will be considered
-//		     invalid and trigger the return of an error.
-//
-//		     Types ErrPrefixDto and IBasicErrorPrefix are included in
-//		     the 'errpref' software package,
-//		     "github.com/MikeAustin71/errpref".
-//
-// ------------------------------------------------------------------------
-//
-// Return Values
-//
-//	error
-//	   - If this method completes successfully and no errors are
-//	     encountered this return value is set to 'nil'. Otherwise,
-//	     if errors are encountered, this return value will contain
-//	     an appropriate error message.
-//
-//	     If an error message is returned, the text value of input
-//	     parameter 'errorPrefix' will be inserted or prefixed at
-//	     the beginning of the error message.
-func (nStrIntGroupSpec *NumStrIntegerGroupingSpec) CopyIn(
-	incomingIntGroupSpec *NumStrIntegerGroupingSpec,
-	errorPrefix interface{}) error {
-
-	if nStrIntGroupSpec.lock == nil {
-		nStrIntGroupSpec.lock = new(sync.Mutex)
-	}
-
-	nStrIntGroupSpec.lock.Lock()
-
-	defer nStrIntGroupSpec.lock.Unlock()
-	var ePrefix *ePref.ErrPrefixDto
-	var err error
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
-		"NumStrIntegerGroupingSpec."+
-			"NewStr()",
-		"")
-
-	if err != nil {
-		return err
-	}
-
-	return new(numStrIntGroupingSpecNanobot).
-		copyNStrIntGroupSpec(
-			nStrIntGroupSpec,
-			incomingIntGroupSpec,
-			ePrefix.XCpy(
-				"nStrIntGroupSpec<-"+
-					"incomingIntGroupSpec"))
-}
-
 // NewStr - Creates and returns a new and fully populated
 // instance of NumStrIntegerGroupingSpec.
 //
@@ -298,83 +407,80 @@ func (nStrIntGroupSpec *NumStrIntegerGroupingSpec) CopyIn(
 //
 // ----------------------------------------------------------------
 //
-// # Input Parameters
+// Input Parameters
 //
-// intGroupingType             IntegerGroupingType
+//	intGroupingType             IntegerGroupingType
+//	 - This instance of IntegerGroupingType defines the type
+//	   of IntegerSeparatorDto which will be returned. The
+//	   enumeration IntegerGroupingType must be set to one
+//	   of the following values:
+//	   IntGroupingType.None()
+//	   IntGroupingType.Thousands()
+//	   IntGroupingType.IndiaNumbering()
+//	   IntGroupingType.ChineseNumbering()
 //
-//   - This instance of IntegerGroupingType defines the type
-//     of IntegerSeparatorDto which will be returned. The
-//     enumeration IntegerGroupingType must be set to one
-//     of the following values:
-//     IntGroupingType.None()
-//     IntGroupingType.Thousands()
-//     IntGroupingType.IndiaNumbering()
-//     IntGroupingType.ChineseNumbering()
+//	intSeparatorChars          string
+//	 - One or more characters used to separate groups of
+//	   integers. This separator is also known as the 'thousands'
+//	   separator. It is used to separate groups of integer digits
+//	   to the left of the decimal separator
+//	   (a.k.a. decimal point). In the United States, the standard
+//	   integer digits separator is the comma (",").
+//	   United States Example:  1,000,000,000
 //
-//     intSeparatorChars          string
+//	   In many European countries, a single period ('.') is used
+//	   as the integer separator character.
+//	   European Example: 1.000.000.000
 //
-//   - One or more characters used to separate groups of
-//     integers. This separator is also known as the 'thousands'
-//     separator. It is used to separate groups of integer digits
-//     to the left of the decimal separator
-//     (a.k.a. decimal point). In the United States, the standard
-//     integer digits separator is the comma (",").
-//     United States Example:  1,000,000,000
+//	   Other countries and cultures use spaces, apostrophes or
+//	   multiple characters to separate integers.
 //
-//     In many European countries, a single period ('.') is used
-//     as the integer separator character.
-//     European Example: 1.000.000.000
+//	   If this input parameter contains a zero length string, an
+//	   error will be returned.
 //
-//     Other countries and cultures use spaces, apostrophes or
-//     multiple characters to separate integers.
+//	errorPrefix                interface{}
+//	 - This object encapsulates error prefix text which is
+//	   included in all returned error messages. Usually, it
+//	   contains the name of the calling method or methods
+//	   listed as a method or function chain of execution.
 //
-//     If this input parameter contains a zero length string, an
-//     error will be returned.
+//	   If no error prefix information is needed, set this parameter
+//	   to 'nil'.
 //
-//     errorPrefix                interface{}
+//	   This empty interface must be convertible to one of the
+//	   following types:
 //
-//   - This object encapsulates error prefix text which is
-//     included in all returned error messages. Usually, it
-//     contains the name of the calling method or methods
-//     listed as a method or function chain of execution.
+//	   1. nil - A nil value is valid and generates an empty
+//	   collection of error prefix and error context
+//	   information.
 //
-//     If no error prefix information is needed, set this parameter
-//     to 'nil'.
+//	   2. string - A string containing error prefix information.
 //
-//     This empty interface must be convertible to one of the
-//     following types:
+//	   3. []string A one-dimensional slice of strings containing
+//	   error prefix information
 //
-//     1. nil - A nil value is valid and generates an empty
-//     collection of error prefix and error context
-//     information.
+//	   4. [][2]string A two-dimensional slice of strings
+//	   containing error prefix and error context information.
 //
-//     2. string - A string containing error prefix information.
+//	   5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	   from this object will be copied for use in error and
+//	   informational messages.
 //
-//     3. []string A one-dimensional slice of strings containing
-//     error prefix information
+//	   6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	   Information from this object will be copied for use in
+//	   error and informational messages.
 //
-//     4. [][2]string A two-dimensional slice of strings
-//     containing error prefix and error context information.
+//	   7. IBasicErrorPrefix - An interface to a method generating
+//	   a two-dimensional slice of strings containing error
+//	   prefix and error context information.
 //
-//     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//     from this object will be copied for use in error and
-//     informational messages.
+//	   If parameter 'errorPrefix' is NOT convertible to one of
+//	   the valid types listed above, it will be considered
+//	   invalid and trigger the return of an error.
 //
-//     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//     Information from this object will be copied for use in
-//     error and informational messages.
-//
-//     7. IBasicErrorPrefix - An interface to a method generating
-//     a two-dimensional slice of strings containing error
-//     prefix and error context information.
-//
-//     If parameter 'errorPrefix' is NOT convertible to one of
-//     the valid types listed above, it will be considered
-//     invalid and trigger the return of an error.
-//
-//     Types ErrPrefixDto and IBasicErrorPrefix are included in
-//     the 'errpref' software package,
-//     "github.com/MikeAustin71/errpref".
+//	   Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	   the 'errpref' software package,
+//	   "github.com/MikeAustin71/errpref".
 //
 // -----------------------------------------------------------------
 //
