@@ -366,7 +366,6 @@ func (charsArrayDto *RuneArrayDto) CopyOut(
 //
 // This method will delete all pre-existing internal member
 // variable data values in the current instance of RuneArrayDto.
-// /
 //
 // ------------------------------------------------------------------------
 //

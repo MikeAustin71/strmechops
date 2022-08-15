@@ -332,7 +332,7 @@ func (nStrIntSepMolecule *integerSeparatorDtoMolecule) applyIntSeparators(
 	return numStrWithIntSeps, err
 }
 
-// copyIn - Copies the data fields from input parameter
+// copyIntSepDto - Copies the data fields from input parameter
 // 'incomingNStrIntSeparator' to input parameter
 // 'targetNStrIntSeparator'.
 //
@@ -341,9 +341,61 @@ func (nStrIntSepMolecule *integerSeparatorDtoMolecule) applyIntSeparators(
 //
 // If input parameter 'incomingNStrIntSeparator' is judged
 // to be invalid, this method will return an error.
-func (nStrIntSepMolecule *integerSeparatorDtoMolecule) copyIn(
-	targetNStrIntSeparator *IntegerSeparatorDto,
-	incomingNStrIntSeparator *IntegerSeparatorDto,
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//		destinationNStrIntSeparator     *IntegerSeparatorDto
+//		   - A pointer to a IntegerSeparatorDto instance. All the
+//		     member variable data fields in this object will be
+//		     replaced by data values copied from input parameter
+//		     'sourceNStrIntSeparator'.
+//
+//		     'destinationPosNumSignSpec' is the destination for this
+//		     copy operation.
+//
+//
+//		sourceNStrIntSeparator          *IntegerSeparatorDto
+//		   - A pointer to another IntegerSeparatorDto instance. All
+//		     the member variable data values from this object will
+//		     be copied to corresponding member variables in
+//		     'destinationNStrIntSeparator'.
+//
+//		     'sourceNStrIntSeparator' is the source for this copy
+//		     operation.
+//
+//	      If 'sourceNStrIntSeparator' is found to be invalid,
+//	      an error will be returned.
+//
+//
+//		errPrefDto          *ErrPrefixDto
+//		   - This object encapsulates an error prefix string which is
+//		     included in all returned error messages. Usually, it
+//		     contains the names of the calling method or methods.
+//
+//		     If no error prefix information is needed, set this parameter
+//		     to 'nil'.
+//
+//		     Type ErrPrefixDto is included in the 'errpref' software
+//		     package, "github.com/MikeAustin71/errpref".
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//	err                 error
+//	   - If this method completes successfully, this returned error
+//	     Type is set equal to 'nil'. If errors are encountered during
+//	     processing, the returned error Type will encapsulate an error
+//	     message.
+//
+//	     If an error message is returned, the text value for input
+//	     parameter 'errPrefDto' (error prefix) will be prefixed or
+//	     attached at the beginning of the error message.
+func (nStrIntSepMolecule *integerSeparatorDtoMolecule) copyIntSepDto(
+	destinationNStrIntSeparator *IntegerSeparatorDto,
+	sourceNStrIntSeparator *IntegerSeparatorDto,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
 
@@ -368,18 +420,18 @@ func (nStrIntSepMolecule *integerSeparatorDtoMolecule) copyIn(
 		return err
 	}
 
-	if targetNStrIntSeparator == nil {
+	if destinationNStrIntSeparator == nil {
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'targetNStrIntSeparator' is"+
+			"Error: Input parameter 'destinationNStrIntSeparator' is"+
 			" a 'nil' pointer!\n",
 			ePrefix.String())
 
 		return err
 	}
 
-	if incomingNStrIntSeparator == nil {
+	if sourceNStrIntSeparator == nil {
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'incomingNStrIntSeparator' is"+
+			"Error: Input parameter 'sourceNStrIntSeparator' is"+
 			" a 'nil' pointer!\n",
 			ePrefix.String())
 		return err
@@ -389,9 +441,9 @@ func (nStrIntSepMolecule *integerSeparatorDtoMolecule) copyIn(
 		err =
 		new(integerSeparatorDtoQuark).
 			testValidityOfNumStrIntSeparator(
-				incomingNStrIntSeparator,
+				sourceNStrIntSeparator,
 				ePrefix.XCpy(
-					"Testing validity of 'incomingNStrIntSeparator'."))
+					"Testing validity of 'sourceNStrIntSeparator'."))
 
 	if err != nil {
 		return err
@@ -400,135 +452,33 @@ func (nStrIntSepMolecule *integerSeparatorDtoMolecule) copyIn(
 	sMechPreon := strMechPreon{}
 
 	err = sMechPreon.copyRuneArrays(
-		&targetNStrIntSeparator.intSeparatorChars,
-		&incomingNStrIntSeparator.intSeparatorChars,
+		&destinationNStrIntSeparator.intSeparatorChars,
+		&sourceNStrIntSeparator.intSeparatorChars,
 		true,
 		ePrefix.XCpy(
-			"incomingNStrIntSeparator.intSeparatorChars->"+
-				"targetNStrIntSeparator.intSeparatorChars"))
+			"sourceNStrIntSeparator.intSeparatorChars->"+
+				"destinationNStrIntSeparator.intSeparatorChars"))
 
 	if err != nil {
 		return err
 	}
 
 	err = sMechPreon.copyUnsignedIntArrays(
-		&targetNStrIntSeparator.intGroupingSequence,
-		&incomingNStrIntSeparator.intGroupingSequence,
+		&destinationNStrIntSeparator.intGroupingSequence,
+		&sourceNStrIntSeparator.intGroupingSequence,
 		true,
 		ePrefix.XCpy(
-			"incomingNStrIntSeparator.intGroupingSequence->"+
-				"targetNStrIntSeparator.intGroupingSequence"))
+			"sourceNStrIntSeparator.intGroupingSequence->"+
+				"destinationNStrIntSeparator.intGroupingSequence"))
 
 	if err != nil {
 		return err
 	}
 
-	targetNStrIntSeparator.restartIntGroupingSequence =
-		incomingNStrIntSeparator.restartIntGroupingSequence
+	destinationNStrIntSeparator.restartIntGroupingSequence =
+		sourceNStrIntSeparator.restartIntGroupingSequence
 
 	return err
-}
-
-// copyOut - Returns a deep copy of input parameter
-// 'numStrIntSeparator' styled as a new instance
-// of IntegerSeparatorDto.
-//
-// If input parameter 'numStrIntSeparator' is judged to be
-// invalid, this method will return an error.
-func (nStrIntSepMolecule *integerSeparatorDtoMolecule) copyOut(
-	numStrIntSeparator *IntegerSeparatorDto,
-	errPrefDto *ePref.ErrPrefixDto) (
-	newNumSrIntSeparator IntegerSeparatorDto,
-	err error) {
-
-	if nStrIntSepMolecule.lock == nil {
-		nStrIntSepMolecule.lock = new(sync.Mutex)
-	}
-
-	nStrIntSepMolecule.lock.Lock()
-
-	defer nStrIntSepMolecule.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
-		errPrefDto,
-		"integerSeparatorDtoMolecule."+
-			"copyOut()",
-		"")
-
-	if err != nil {
-		return newNumSrIntSeparator, err
-	}
-
-	if numStrIntSeparator == nil {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'numStrIntSeparator' is"+
-			" a 'nil' pointer!\n",
-			ePrefix.String())
-
-		return newNumSrIntSeparator, err
-	}
-
-	_,
-		err =
-		new(integerSeparatorDtoQuark).
-			testValidityOfNumStrIntSeparator(
-				numStrIntSeparator,
-				ePrefix.XCpy(
-					"Testing validity of 'numStrIntSeparator'."))
-
-	if err != nil {
-		return newNumSrIntSeparator, err
-	}
-
-	lIntSepChars :=
-		len(numStrIntSeparator.intSeparatorChars)
-
-	if lIntSepChars == 0 {
-		err = fmt.Errorf("%v\n"+
-			"Error: 'numStrIntSeparator.intSeparatorChars' "+
-			"is invalid!\n"+
-			"'numStrIntSeparator.intSeparatorChars' is a zero "+
-			"length array.\n",
-			ePrefix.String())
-
-		return newNumSrIntSeparator, err
-	}
-
-	sMechPreon := strMechPreon{}
-
-	err = sMechPreon.copyRuneArrays(
-		&newNumSrIntSeparator.intSeparatorChars,
-		&numStrIntSeparator.intSeparatorChars,
-		true,
-		ePrefix.XCpy(
-			"numStrIntSeparator.intSeparatorChars->"+
-				"newNumSrIntSeparator.intSeparatorChars"))
-
-	if err != nil {
-		return newNumSrIntSeparator, err
-	}
-
-	err = sMechPreon.copyUnsignedIntArrays(
-		&newNumSrIntSeparator.intGroupingSequence,
-		&numStrIntSeparator.intGroupingSequence,
-		true,
-		ePrefix.XCpy(
-			"numStrIntSeparator.intGroupingSequence->"+
-				"newNumSrIntSeparator.intGroupingSequence"))
-
-	if err != nil {
-		return newNumSrIntSeparator, err
-	}
-
-	newNumSrIntSeparator.restartIntGroupingSequence =
-		numStrIntSeparator.restartIntGroupingSequence
-
-	newNumSrIntSeparator.lock = new(sync.Mutex)
-
-	return newNumSrIntSeparator, err
 }
 
 // equal - Receives two IntegerSeparatorDto objects and proceeds to

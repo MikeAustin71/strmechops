@@ -48,18 +48,14 @@ type NumStrNegativeNumberSignSpec struct {
 //
 // Input Parameters
 //
-//	 incomingNStrNegNumSignSpec *NumStrNegativeNumberSignSpec
-//	    - A pointer to an instance of NumStrNegativeNumberSignSpec.
-//	      This method will NOT change the values of internal member
-//	      variables contained in this instance.
+//		incomingNStrNegNumSignSpec *NumStrNegativeNumberSignSpec
+//		   - A pointer to an instance of NumStrNegativeNumberSignSpec.
+//		     This method will NOT change the values of internal member
+//		     variables contained in this instance.
 //
-//	      All data values in this NumStrNegativeNumberSignSpec instance
-//	      will be copied to current NumStrNegativeNumberSignSpec
-//	      instance ('nStrNegNumSignSpec').
-//
-//	      If parameter 'incomingNStrNegNumSignSpec' is determined to
-//	      be invalid, an error will be returned.
-//
+//		     All data values in this NumStrNegativeNumberSignSpec instance
+//		     will be copied to current NumStrNegativeNumberSignSpec
+//		     instance ('nStrNegNumSignSpec').
 //
 //	 errorPrefix                interface{}
 //		   - This object encapsulates error prefix text which is
@@ -154,9 +150,6 @@ func (nStrNegNumSignSpec *NumStrNegativeNumberSignSpec) CopyIn(
 
 // CopyOut - Returns a deep copy of the current
 // NumStrNegativeNumberSignSpec instance.
-//
-// If the current NumStrNegativeNumberSignSpec instance contains
-// invalid member variables, this method will return an error.
 //
 // ----------------------------------------------------------------
 //

@@ -70,9 +70,6 @@ type NumStrPositiveNumberSignSpec struct {
 //	      will be copied to current NumStrPositiveNumberSignSpec
 //	      instance ('nStrPosNumSignSpec').
 //
-//	      If parameter 'incomingNStrPosNumSignSpec' is determined to
-//	      be invalid, an error will be returned.
-//
 //
 //	 errorPrefix                interface{}
 //		   - This object encapsulates error prefix text which is
@@ -167,9 +164,6 @@ func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) CopyIn(
 
 // CopyOut - Returns a deep copy of the current
 // NumStrPositiveNumberSignSpec instance.
-//
-// If the current NumStrPositiveNumberSignSpec instance contains
-// invalid member variables, this method will return an error.
 //
 // ----------------------------------------------------------------
 //

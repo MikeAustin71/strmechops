@@ -222,7 +222,7 @@ func (nStrIntSep *IntegerSeparatorDto) CopyIn(
 	}
 
 	return new(integerSeparatorDtoMolecule).
-		copyIn(
+		copyIntSepDto(
 			nStrIntSep,
 			incomingNStrIntSeparator,
 			ePrefix)
@@ -305,8 +305,8 @@ func (nStrIntSep *IntegerSeparatorDto) CopyIn(
 //	     the error message.
 func (nStrIntSep *IntegerSeparatorDto) CopyOut(
 	errorPrefix interface{}) (
-	IntegerSeparatorDto,
-	error) {
+	deepCopyIntSepDto IntegerSeparatorDto,
+	err error) {
 
 	if nStrIntSep.lock == nil {
 		nStrIntSep.lock = new(sync.Mutex)
@@ -317,7 +317,6 @@ func (nStrIntSep *IntegerSeparatorDto) CopyOut(
 	defer nStrIntSep.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
-	var err error
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
@@ -326,13 +325,17 @@ func (nStrIntSep *IntegerSeparatorDto) CopyOut(
 		"")
 
 	if err != nil {
-		return IntegerSeparatorDto{}, err
+		return deepCopyIntSepDto, err
 	}
 
-	return new(integerSeparatorDtoMolecule).
-		copyOut(
+	err = new(integerSeparatorDtoMolecule).
+		copyIntSepDto(
+			&deepCopyIntSepDto,
 			nStrIntSep,
-			ePrefix)
+			ePrefix.XCpy(
+				"deepCopyIntSepDto<-nStrIntSep"))
+
+	return deepCopyIntSepDto, err
 }
 
 // Empty - Resets all internal member variables for the current
