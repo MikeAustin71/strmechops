@@ -335,9 +335,32 @@ func (nStrIntSep *IntegerSeparatorDto) CopyOut(
 			ePrefix)
 }
 
-// Empty - Deletes and resets the data values for all member
-// variables within the current IntegerSeparatorDto instance to
-// their 'zero' values.
+// Empty - Resets all internal member variables for the current
+// instance of IntegerSeparatorDto to their zero or uninitialized
+// states. This method will leave the current instance of
+// IntegerSeparatorDto in an invalid state and unavailable for
+// immediate reuse.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+// This method will delete all member variable data values in the
+// current instance of IntegerSeparatorDto. All member variable
+// data values will be reset to their zero or uninitialized
+// states.
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//	NONE
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//	NONE
 func (nStrIntSep *IntegerSeparatorDto) Empty() {
 	if nStrIntSep.lock == nil {
 		nStrIntSep.lock = new(sync.Mutex)

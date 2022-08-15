@@ -274,6 +274,126 @@ func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) CopyOut(
 	return deepCopyNStrPosNumSignSpec, err
 }
 
+// Empty - Resets all internal member variables for the current
+// instance of NumStrPositiveNumberSignSpec to their zero or
+// uninitialized states. This method will leave the current
+// instance of NumStrPositiveNumberSignSpec in an invalid state
+// and unavailable for immediate reuse.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+// This method will delete all member variable data values in the
+// current instance of NumStrPositiveNumberSignSpec. All member
+// variable data values will be reset to their zero or
+// uninitialized states.
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//	NONE
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//	NONE
+func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) Empty() {
+
+	if nStrPosNumSignSpec.lock == nil {
+		nStrPosNumSignSpec.lock = new(sync.Mutex)
+	}
+
+	nStrPosNumSignSpec.lock.Lock()
+
+	new(numStrPosNumSignSpecAtom).empty(
+		nStrPosNumSignSpec)
+
+	nStrPosNumSignSpec.lock.Unlock()
+
+	nStrPosNumSignSpec.lock = nil
+}
+
+// EmptyLeadingPosNumSign - Resets the member variable data for
+// the leading positive number sign contained in the current
+// instance of NumStrPositiveNumberSignSpec to an initial or
+// zero value.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+// All the member variable data for the leading positive
+// number sign contained in the current instance of
+// NumStrPositiveNumberSignSpec will be deleted and reset
+// to an empty or zero value.
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//	NONE
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//	NONE
+func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) EmptyLeadingPosNumSign() {
+
+	if nStrPosNumSignSpec.lock == nil {
+		nStrPosNumSignSpec.lock = new(sync.Mutex)
+	}
+
+	nStrPosNumSignSpec.lock.Lock()
+
+	defer nStrPosNumSignSpec.lock.Unlock()
+
+	new(numStrPosNumSignSpecAtom).emptyLeadingPosNumSign(
+		nStrPosNumSignSpec)
+}
+
+// EmptyTrailingPosNumSign - Resets the member variable data for
+// the trailing positive number sign contained in the current
+// instance of NumStrPositiveNumberSignSpec to an initial or
+// zero value.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+// All the member variable data for the trailing positive
+// number sign contained in the current instance of
+// NumStrPositiveNumberSignSpec will be deleted and reset
+// to an empty or zero value.
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//	NONE
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//	NONE
+func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) EmptyTrailingPosNumSign() {
+
+	if nStrPosNumSignSpec.lock == nil {
+		nStrPosNumSignSpec.lock = new(sync.Mutex)
+	}
+
+	nStrPosNumSignSpec.lock.Lock()
+
+	defer nStrPosNumSignSpec.lock.Unlock()
+
+	new(numStrPosNumSignSpecAtom).emptyTrailingPosNumSign(
+		nStrPosNumSignSpec)
+}
+
 // numStrPosNumSignSpecNanobot - This type provides
 // helper methods for NumStrPositiveNumberSignSpec
 type numStrPosNumSignSpecNanobot struct {
