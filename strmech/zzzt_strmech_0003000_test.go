@@ -1413,7 +1413,7 @@ func TestStrMech_ExtractNumberRunes_01(t *testing.T) {
 	var decSeparator DecimalSeparatorSpec
 
 	decSeparator,
-		err = DecimalSeparatorSpec{}.New(
+		err = new(DecimalSeparatorSpec).NewStr(
 		".",
 		ePrefix.XCpy("decSeparator<-"))
 
@@ -1542,7 +1542,7 @@ func TestStrMech_ExtractNumberRunes_02(t *testing.T) {
 	var decSeparator DecimalSeparatorSpec
 
 	decSeparator,
-		err = DecimalSeparatorSpec{}.New(
+		err = new(DecimalSeparatorSpec).NewStr(
 		".",
 		ePrefix.XCpy("decSeparator<-"))
 
@@ -1673,7 +1673,7 @@ func TestStrMech_ExtractNumberRunes_03(t *testing.T) {
 	var decSeparator DecimalSeparatorSpec
 
 	decSeparator,
-		err = DecimalSeparatorSpec{}.New(
+		err = new(DecimalSeparatorSpec).NewStr(
 		".",
 		ePrefix.XCpy("decSeparator<-"))
 

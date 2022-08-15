@@ -12,8 +12,19 @@ import (
 // string.
 type NumStrIntegerGroupingSpec struct {
 	integerSeparatorChars RuneArrayDto
+	// Contains the integer separator characters
+	// which will be used to separate integer groups
+	// within a formatted number string.
 
 	intGroupingType IntegerGroupingType
+	// Specifies the type of integer grouping
+	// algorithm which will be applied to
+	// integer digit grouping in a formatted
+	// number string. Possible values are:
+	//	IntGroupingType.None()
+	//	IntGroupingType.Thousands()
+	//	IntGroupingType.IndiaNumbering()
+	//	IntGroupingType.ChineseNumbering()
 
 	lock *sync.Mutex
 }

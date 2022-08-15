@@ -11,18 +11,11 @@ type SignedNumberFormatSpec struct {
 	// characters which will separate integer and
 	// fractional digits in a floating point number
 
-	IntGroupingType IntegerGroupingType
-	// This enumeration specifies the type of inter
-	// grouping which will be applied to the integer
-	// digits displayed in the number string.
-	//
-	// Possible Valid Values are:
-	//	IntGroupingType.None()
-	//	IntGroupingType.Thousands()
-	//	IntGroupingType.IndiaNumbering()
-	//	IntGroupingType.ChineseNumbering()
-
-	IntGroupingChar string
+	IntGroupingType NumStrIntegerGroupingSpec
+	// This parameter specifies the type of integer
+	// grouping and integer separator characters
+	// which will be applied to the number string
+	// formatting operation.
 
 	RoundingSpec NumStrRoundingSpec
 	// Controls the rounding algorithm applied to
