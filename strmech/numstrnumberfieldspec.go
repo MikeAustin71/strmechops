@@ -336,6 +336,37 @@ func (nStrNumberFieldSpec *NumStrNumberFieldSpec) Equal(
 		incomingNStrNumFieldSpec)
 }
 
+// GetNumFieldLength - Returns the field length value contained in
+// the current instance of NumStrNumberFieldSpec.
+func (nStrNumberFieldSpec *NumStrNumberFieldSpec) GetNumFieldLength() int {
+
+	if nStrNumberFieldSpec.lock == nil {
+		nStrNumberFieldSpec.lock = new(sync.Mutex)
+	}
+
+	nStrNumberFieldSpec.lock.Lock()
+
+	defer nStrNumberFieldSpec.lock.Unlock()
+
+	return nStrNumberFieldSpec.fieldLength
+}
+
+// GetNumFieldJustification - Returns the text justification
+// specification for the current instance of
+// NumStrNumberFieldSpec.
+func (nStrNumberFieldSpec *NumStrNumberFieldSpec) GetNumFieldJustification() TextJustify {
+
+	if nStrNumberFieldSpec.lock == nil {
+		nStrNumberFieldSpec.lock = new(sync.Mutex)
+	}
+
+	nStrNumberFieldSpec.lock.Lock()
+
+	defer nStrNumberFieldSpec.lock.Unlock()
+
+	return nStrNumberFieldSpec.fieldJustification
+}
+
 // NewFieldSpec - Creates and returns new instance of
 // NumStrNumberFieldSpec.
 //
@@ -500,7 +531,7 @@ func (nStrNumberFieldSpec *NumStrNumberFieldSpec) NewFieldSpec(
 //
 // ----------------------------------------------------------------
 //
-// Input Parameters
+// # Input Parameters
 //
 //			fieldLength                int
 //			   - This parameter defines the length of the text field in
@@ -592,7 +623,7 @@ func (nStrNumberFieldSpec *NumStrNumberFieldSpec) NewFieldSpec(
 //
 // -----------------------------------------------------------------
 //
-// Return Values
+// # Return Values
 //
 //	error
 //	   - If this method completes successfully, the returned error
