@@ -380,20 +380,20 @@ func (nStrIntSep *IntegerSeparatorDto) Empty() {
 	return
 }
 
-// Equal - Receives an IntegerSeparatorDto object and proceeds to
-// determine whether all data elements in this object are equal to
-// all corresponding data elements in the current instance of
-// IntegerSeparatorDto.
+// Equal - Receives a pointer to an IntegerSeparatorDto object
+// and proceeds to determine whether all data elements in this
+// object are equal to all corresponding data elements in the
+// current instance of IntegerSeparatorDto.
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//		nStrIntSepTwo       IntegerSeparatorDto
-//		   - This method will compare all data elements in the current
-//		     IntegerSeparatorDto object to corresponding data elements
-//		     in this second IntegerSeparatorDto object in order
-//		     determine equivalency.
+//		nStrIntSepDto              *IntegerSeparatorDto
+//	    - This method will compare all data elements in the
+//	      current IntegerSeparatorDto object to corresponding
+//	      data elements in this second IntegerSeparatorDto
+//	      object in order to determine equivalency.
 //
 //
 //	 errorPrefix                interface{}
@@ -402,8 +402,8 @@ func (nStrIntSep *IntegerSeparatorDto) Empty() {
 //		     contains the name of the calling method or methods
 //		     listed as a method or function chain of execution.
 //
-//		     If no error prefix information is needed, set this parameter
-//		     to 'nil'.
+//		     If no error prefix information is needed, set this
+//	      parameter to 'nil'.
 //
 //		     This empty interface must be convertible to one of the
 //		     following types:
@@ -447,7 +447,7 @@ func (nStrIntSep *IntegerSeparatorDto) Empty() {
 //	bool
 //	   - If all the data elements in the current IntegerSeparatorDto
 //	     instance are equal to all the corresponding data elements
-//	     in 'nStrIntSepTwo', this return parameter will be set to
+//	     in 'nStrIntSepDto', this return parameter will be set to
 //	     'true'. If all the data elements are NOT equal, this
 //	     return parameter will be set to 'false'.
 //
@@ -455,7 +455,7 @@ func (nStrIntSep *IntegerSeparatorDto) Empty() {
 //	error
 //	   - If all the data elements in the current IntegerSeparatorDto
 //	     are equal to all the corresponding data elements in
-//	     'nStrIntSepTwo', this return parameter will be set to
+//	     'nStrIntSepDto', this return parameter will be set to
 //	     'nil'.
 //
 //	     If the corresponding data elements are not equal, a
@@ -468,7 +468,7 @@ func (nStrIntSep *IntegerSeparatorDto) Empty() {
 //	     'errorPrefix' text will be attached to the beginning of
 //	     the error message.
 func (nStrIntSep *IntegerSeparatorDto) Equal(
-	nStrIntSepTwo IntegerSeparatorDto,
+	nStrIntSepDto *IntegerSeparatorDto,
 	errorPrefix interface{}) (
 	bool,
 	error) {
@@ -497,9 +497,9 @@ func (nStrIntSep *IntegerSeparatorDto) Equal(
 	return new(integerSeparatorDtoMolecule).
 		equal(
 			nStrIntSep,
-			&nStrIntSepTwo,
+			nStrIntSepDto,
 			ePrefix.XCpy(
-				"nStrIntSep vs nStrIntSepTwo"))
+				"nStrIntSep vs nStrIntSepDto"))
 }
 
 // GetIntSeparatorChars - Returns the integer digit separator
@@ -1584,17 +1584,16 @@ func (nStrIntSep *IntegerSeparatorDto) NewDetailRunes(
 // Input Parameters
 //
 //		intSeparatorChars          string
-//		   - One or more characters used to separate groups of
-//		     integers. These characters are used to separate groups
-//		     of integer digits to the left of the decimal separator
-//		     (a.k.a. decimal point). The most common integer separator
-//		     used in conjunction with the Chinese Numbering System is
-//		     the comma (",").
-//		       Example:  6,7890,000,0000,0000
+//	    - One or more characters used to separate groups of
+//	      integers. These characters are used to separate groups
+//	      of integer digits to the left of the decimal separator
+//	      (a.k.a. decimal point). The most common integer separator
+//	      used in conjunction with the Chinese Numbering System is
+//	      the comma (",").
+//	        Example:  6,7890,000,0000,0000
 //
-//		     If this input parameter contains a zero length string, an
-//		     error will be returned.
-//
+//	      If this input parameter contains a zero length string, an
+//	      error will be returned.
 //
 //	 errorPrefix                interface{}
 //		   - This object encapsulates error prefix text which is
@@ -1602,8 +1601,8 @@ func (nStrIntSep *IntegerSeparatorDto) NewDetailRunes(
 //		     contains the name of the calling method or methods
 //		     listed as a method or function chain of execution.
 //
-//		     If no error prefix information is needed, set this parameter
-//		     to 'nil'.
+//		     If no error prefix information is needed, set this
+//	      parameter to 'nil'.
 //
 //		     This empty interface must be convertible to one of the
 //		     following types:

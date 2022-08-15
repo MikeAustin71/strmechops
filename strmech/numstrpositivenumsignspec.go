@@ -394,6 +394,208 @@ func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) EmptyTrailingPosNumSign(
 		nStrPosNumSignSpec)
 }
 
+// Equal - Receives a pointer to an NumStrPositiveNumberSignSpec
+// object and proceeds to determine whether all data elements in
+// this object are equal to all corresponding data elements in
+// the current instance of NumStrPositiveNumberSignSpec.
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//		incomingNStrPosNumSignSpec *NumStrPositiveNumberSignSpec
+//	    - This method will compare all data elements in the
+//	      current NumStrPositiveNumberSignSpec object to
+//	      corresponding data elements in this second
+//	      NumStrPositiveNumberSignSpec object in order
+//	      to determine equivalency.
+//
+//
+//	 errorPrefix                interface{}
+//		   - This object encapsulates error prefix text which is
+//		     included in all returned error messages. Usually, it
+//		     contains the name of the calling method or methods
+//		     listed as a method or function chain of execution.
+//
+//		     If no error prefix information is needed, set this
+//	      parameter to 'nil'.
+//
+//		     This empty interface must be convertible to one of the
+//		     following types:
+//
+//		     1. nil - A nil value is valid and generates an empty
+//		        collection of error prefix and error context
+//		        information.
+//
+//		     2. string - A string containing error prefix information.
+//
+//		     3. []string A one-dimensional slice of strings containing
+//		        error prefix information
+//
+//		     4. [][2]string A two-dimensional slice of strings
+//		        containing error prefix and error context information.
+//
+//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		        from this object will be copied for use in error and
+//		        informational messages.
+//
+//		     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		        Information from this object will be copied for use in
+//		        error and informational messages.
+//
+//		     7. IBasicErrorPrefix - An interface to a method generating
+//		        a two-dimensional slice of strings containing error
+//		        prefix and error context information.
+//
+//		     If parameter 'errorPrefix' is NOT convertible to one of
+//		     the valid types listed above, it will be considered
+//		     invalid and trigger the return of an error.
+//
+//		     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		     the 'errpref' software package,
+//		     "github.com/MikeAustin71/errpref".
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//	bool
+//	   - If all the data elements in the current
+//	     NumStrPositiveNumberSignSpec instance are equal to all the
+//	     corresponding data elements in 'incomingNStrPosNumSignSpec',
+//	     this return parameter will be set to 'true'. If all the data
+//	     elements are NOT equal, this return parameter will be set to
+//	     'false'.
+func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) Equal(
+	incomingNStrPosNumSignSpec *NumStrPositiveNumberSignSpec) bool {
+
+	if nStrPosNumSignSpec.lock == nil {
+		nStrPosNumSignSpec.lock = new(sync.Mutex)
+	}
+
+	nStrPosNumSignSpec.lock.Lock()
+
+	defer nStrPosNumSignSpec.lock.Unlock()
+
+	return new(numStrPosNumSignSpecAtom).equal(
+		nStrPosNumSignSpec,
+		incomingNStrPosNumSignSpec)
+}
+
+// NewLeadingPosNumberSign - Creates and returns a new instance
+// of NumStrPositiveNumberSignSpec configured with a leading
+// positive number sign character or characters.
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//		leadingPositiveNumSign     string
+//	    - A string containing the leading positive number sign
+//	      character or characters used to configure the returned
+//	      instance of NewLeadingPosNumberSign.
+//
+//	 errorPrefix                interface{}
+//		   - This object encapsulates error prefix text which is
+//		     included in all returned error messages. Usually, it
+//		     contains the name of the calling method or methods
+//		     listed as a method or function chain of execution.
+//
+//		     If no error prefix information is needed, set this
+//	      parameter to 'nil'.
+//
+//		     This empty interface must be convertible to one of the
+//		     following types:
+//
+//		     1. nil - A nil value is valid and generates an empty
+//		        collection of error prefix and error context
+//		        information.
+//
+//		     2. string - A string containing error prefix information.
+//
+//		     3. []string A one-dimensional slice of strings containing
+//		        error prefix information
+//
+//		     4. [][2]string A two-dimensional slice of strings
+//		        containing error prefix and error context information.
+//
+//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		        from this object will be copied for use in error and
+//		        informational messages.
+//
+//		     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		        Information from this object will be copied for use in
+//		        error and informational messages.
+//
+//		     7. IBasicErrorPrefix - An interface to a method generating
+//		        a two-dimensional slice of strings containing error
+//		        prefix and error context information.
+//
+//		     If parameter 'errorPrefix' is NOT convertible to one of
+//		     the valid types listed above, it will be considered
+//		     invalid and trigger the return of an error.
+//
+//		     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		     the 'errpref' software package,
+//		     "github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//		NumStrPositiveNumberSignSpec
+//		   - If this method completes successfully, a new instance of
+//		     NumStrPositiveNumberSignSpec, configured with a leading
+//		     positive number sign symbol will be returned through this
+//	      parameter.
+//
+//		error
+//		   - If this method completes successfully, the returned error
+//		     Type is set equal to 'nil'.
+//
+//		     If errors are encountered during processing, the returned
+//		     error Type will encapsulate an error message. This
+//		     returned error message will incorporate the method chain
+//		     and text passed by input parameter, 'errorPrefix'. The
+//		     'errorPrefix' text will be attached to the beginning of
+//		     the error message.
+func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) NewLeadingPosNumberSign(
+	leadingPositiveNumSign string,
+	errorPrefix interface{}) (
+	newNStrPosNumSign NumStrPositiveNumberSignSpec,
+	err error) {
+
+	if nStrPosNumSignSpec.lock == nil {
+		nStrPosNumSignSpec.lock = new(sync.Mutex)
+	}
+
+	nStrPosNumSignSpec.lock.Lock()
+
+	defer nStrPosNumSignSpec.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumStrPositiveNumberSignSpec."+
+			"NewLeadingPosNumberSign()",
+		"")
+
+	if err != nil {
+		return newNStrPosNumSign, err
+	}
+
+	err = new(numStrPosNumSignSpecNanobot).setLeadingNStrPosNumSignSpec(
+		&newNStrPosNumSign,
+		[]rune(leadingPositiveNumSign),
+		ePrefix.XCpy(
+			"newNStrPosNumSign<-"+
+				"leadingPositiveNumSign"))
+
+	return newNStrPosNumSign, err
+}
+
 // numStrPosNumSignSpecNanobot - This type provides
 // helper methods for NumStrPositiveNumberSignSpec
 type numStrPosNumSignSpecNanobot struct {
