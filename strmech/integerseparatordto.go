@@ -863,82 +863,82 @@ func (nStrIntSep *IntegerSeparatorDto) IsValidInstanceError(
 //
 // ----------------------------------------------------------------
 //
-// # Input Parameters
+// Input Parameters
 //
-// intGroupingType             IntegerGroupingType
+//	intGroupingType             IntegerGroupingType
 //
-//   - This instance of IntegerGroupingType defines the type
-//     of IntegerSeparatorDto which will be returned. The
-//     enumeration IntegerGroupingType must be set to one
-//     of three values.
-//     IntGroupingType.Thousands()
-//     IntGroupingType.IndiaNumbering()
-//     IntGroupingType.ChineseNumbering()
+//	 - This instance of IntegerGroupingType defines the type
+//	   of IntegerSeparatorDto which will be returned. The
+//	   enumeration IntegerGroupingType must be set to one
+//	   of three values.
+//	   IntGroupingType.Thousands()
+//	   IntGroupingType.IndiaNumbering()
+//	   IntGroupingType.ChineseNumbering()
 //
-//     intSeparatorChars          string
+//	intSeparatorChars          string
 //
-//   - One or more characters used to separate groups of
-//     integers. This separator is also known as the 'thousands'
-//     separator. It is used to separate groups of integer digits
-//     to the left of the decimal separator
-//     (a.k.a. decimal point). In the United States, the standard
-//     integer digits separator is the comma (",").
-//     United States Example:  1,000,000,000
+//	 - One or more characters used to separate groups of
+//	   integers. This separator is also known as the 'thousands'
+//	   separator. It is used to separate groups of integer digits
+//	   to the left of the decimal separator
+//	   (a.k.a. decimal point). In the United States, the standard
+//	   integer digits separator is the comma (",").
+//	   United States Example:  1,000,000,000
 //
-//     In many European countries, a single period ('.') is used
-//     as the integer separator character.
-//     European Example: 1.000.000.000
+//	   In many European countries, a single period ('.') is used
+//	   as the integer separator character.
+//	   European Example: 1.000.000.000
 //
-//     Other countries and cultures use spaces, apostrophes or
-//     multiple characters to separate integers.
+//	   Other countries and cultures use spaces, apostrophes or
+//	   multiple characters to separate integers.
 //
-//     If this input parameter contains a zero length string, an
-//     error will be returned.
+//	   If this input parameter contains a zero length string, an
+//	   error will be returned.
 //
-//     errorPrefix                interface{}
+//	errorPrefix                interface{}
 //
-//   - This object encapsulates error prefix text which is
-//     included in all returned error messages. Usually, it
-//     contains the name of the calling method or methods
-//     listed as a method or function chain of execution.
+//	 - This object encapsulates error prefix text which is
+//	   included in all returned error messages. Usually, it
+//	   contains the name of the calling method or methods
+//	   listed as a method or function chain of execution.
 //
-//     If no error prefix information is needed, set this parameter
-//     to 'nil'.
+//	   If no error prefix information is needed, set this parameter
+//	   to 'nil'.
 //
-//     This empty interface must be convertible to one of the
-//     following types:
+//	   This empty interface must be convertible to one of the
+//	   following types:
 //
-//     1. nil - A nil value is valid and generates an empty
-//     collection of error prefix and error context
-//     information.
+//	   1. nil - A nil value is valid and generates an empty
+//	   collection of error prefix and error context
+//	   information.
 //
-//     2. string - A string containing error prefix information.
+//	   2. string - A string containing error prefix information.
 //
-//     3. []string A one-dimensional slice of strings containing
-//     error prefix information
+//	   3. []string A one-dimensional slice of strings containing
+//	   error prefix information
 //
-//     4. [][2]string A two-dimensional slice of strings
-//     containing error prefix and error context information.
+//	   4. [][2]string A two-dimensional slice of strings
+//	   containing error prefix and error context information.
 //
-//     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//     from this object will be copied for use in error and
-//     informational messages.
+//	   5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	   from this object will be copied for use in error and
+//	   informational messages.
 //
-//     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//     Information from this object will be copied for use in
-//     error and informational messages.
+//	   6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	   Information from this object will be copied for use in
+//	   error and informational messages.
 //
-//     7. IBasicErrorPrefix - An interface to a method generating
-//     a two-dimensional slice of strings containing error
-//     prefix and error context information.
+//	   7. IBasicErrorPrefix - An interface to a method generating
+//	   a two-dimensional slice of strings containing error
+//	   prefix and error context information.
 //
-//     If parameter 'errorPrefix' is NOT convertible to one of
-//     the valid types listed above, it will be considered
-//     invalid and trigger the return of an error.
+//	   If parameter 'errorPrefix' is NOT convertible to one of
+//	   the valid types listed above, it will be considered
+//	   invalid and trigger the return of an error.
 //
-//     Types ErrPrefixDto and IBasicErrorPrefix are included in
-//     the 'errpref' software package,
-//     "github.com/MikeAustin71/errpref".
+//	   Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	   the 'errpref' software package,
+//	   "github.com/MikeAustin71/errpref".
 //
 // -----------------------------------------------------------------
 //

@@ -454,7 +454,7 @@ func (charsArrayDto *RuneArrayDto) EmptyCharsArray() {
 //	     RuneArrayDto. The results of this comparison will
 //	     be returned to the calling function as a boolean value.
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
 // Return Values
 //
