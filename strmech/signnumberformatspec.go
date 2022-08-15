@@ -21,33 +21,19 @@ type SignedNumberFormatSpec struct {
 	// Controls the rounding algorithm applied to
 	// floating point numbers.
 
-	LeadingPositiveNumberSign string
+	PositiveNumberSign NumStrPositiveNumberSignSpec
 	// Positive number signs are commonly implied and
 	// not specified. However, the user as the option
-	// to specify a leading positive number sign
-	// character or characters for positive numeric
-	// values.
+	// to specify a positive number sign character or
+	// characters for positive numeric values using a
+	// Number String Positive Number Sign
+	// Specification.
 
-	TrailingPositiveNumberSign string
-	// Positive number signs are commonly implied and
-	// not specified. However, the user as the option
-	// to specify a trailing positive number sign
-	// character or characters for positive numeric
-	// values.
-
-	LeadingNegativeNumberSign string
-	// The leading negative number sign character or
-	// characters applied to negative numeric values.
-	// Users have the option to configure both leading
-	// and trailing negative number signs for negative
-	// numeric values.
-
-	TrailingNegativeNumberSign string
-	// The trailing negative number sign character or
-	// characters applied to negative numeric values.
-	// Users have the option to configure both leading
-	// and trailing negative number signs for negative
-	// numeric values.
+	NegativeNumberSign NumStrNegativeNumberSignSpec
+	// The Number String Negative Number Sign
+	// Specification is used to configure negative
+	// number sign symbols for negative numeric values
+	// formatted and displayed in number stings.
 
 	SignedNumberFieldLength int
 	// The length of the text field in which the Signed Number will
