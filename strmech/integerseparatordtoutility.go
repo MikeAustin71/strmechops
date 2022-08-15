@@ -38,6 +38,8 @@ type integerSeparatorDtoUtility struct {
 //
 // # Reference:
 //
+//	https://en.wikipedia.org/wiki/Chinese_numerals
+//
 // ----------------------------------------------------------------
 //
 // # IMPORTANT
@@ -79,7 +81,7 @@ type integerSeparatorDtoUtility struct {
 //
 // -----------------------------------------------------------------
 //
-// # Return Values
+// Return Values
 //
 //	err                        error
 //	   - If this method completes successfully, the returned error
@@ -91,8 +93,6 @@ type integerSeparatorDtoUtility struct {
 //	     and text passed by input parameter, 'errPrefDto'. The
 //	     'errPrefDto' text will be attached to the beginning of the
 //	     error message.
-//
-// [Wikipedia Chinese Numbering System]: https://en.wikipedia.org/wiki/Chinese_numerals
 func (intSeparatorUtil *integerSeparatorDtoUtility) setChineseNumberingRunes(
 	intSep *IntegerSeparatorDto,
 	intSeparatorChars []rune,

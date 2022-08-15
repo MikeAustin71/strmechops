@@ -381,8 +381,9 @@ func (nStrIntGroupSpec *NumStrIntegerGroupingSpec) Equal(
 //     Other countries and cultures use spaces, apostrophes or
 //     multiple characters to separate integers.
 //
-//     If this input parameter contains a zero length array, an
-//     error will be returned.
+//     If this input parameter contains a zero length array
+//     and 'intGroupingType' is NOT equal to
+//     'IntGroupingType.None()', an error will be returned.
 //
 //     errorPrefix                interface{}
 //
@@ -528,8 +529,9 @@ func (nStrIntGroupSpec *NumStrIntegerGroupingSpec) NewRunes(
 //	   Other countries and cultures use spaces, apostrophes or
 //	   multiple characters to separate integers.
 //
-//	   If this input parameter contains a zero length string, an
-//	   error will be returned.
+//	   If this input parameter contains a zero length string
+//	   and 'intGroupingType' is NOT equal to
+//	   'IntGroupingType.None()', an error will be returned.
 //
 //	errorPrefix                interface{}
 //	 - This object encapsulates error prefix text which is
@@ -611,6 +613,7 @@ func (nStrIntGroupSpec *NumStrIntegerGroupingSpec) NewStr(
 	nStrIntGroupSpec.lock.Lock()
 
 	defer nStrIntGroupSpec.lock.Unlock()
+
 	var ePrefix *ePref.ErrPrefixDto
 
 	ePrefix,
@@ -632,6 +635,276 @@ func (nStrIntGroupSpec *NumStrIntegerGroupingSpec) NewStr(
 			"newNStrIntGroupSpec"))
 
 	return newNStrIntGroupSpec, err
+}
+
+// SetRunes - Deletes and resets all member variable data values
+// in the current instance of NumStrIntegerGroupingSpec.
+//
+// The input parameter 'intSeparatorChars' is a string
+// containing one or more integer separator characters used
+// to separate integer digit groups.
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//		intGroupingType             IntegerGroupingType
+//		 - This instance of IntegerGroupingType defines the type
+//		   of IntegerSeparatorDto which will be returned. The
+//		   enumeration IntegerGroupingType must be set to one
+//		   of the following values:
+//		   IntGroupingType.None()
+//		   IntGroupingType.Thousands()
+//		   IntGroupingType.IndiaNumbering()
+//		   IntGroupingType.ChineseNumbering()
+//
+//	 intSeparatorChars       []rune
+//	  - One or more characters used to separate groups of
+//	    integer digits. This separator is also known as the
+//	    'thousands' separator. It is used to separate groups of
+//	    integer digits to the left of the decimal separator
+//	    (a.k.a. decimal point). In the United States, the
+//	    standard integer digits separator is the comma (",").
+//	    United States Example:  1,000,000,000
+//
+//	    In many European countries, a single period ('.') is used
+//	    as the integer separator character.
+//	    European Example: 1.000.000.000
+//
+//	    Other countries and cultures use spaces, apostrophes or
+//	    multiple characters to separate integers.
+//
+//		   If this input parameter contains a zero length array
+//		   and 'intGroupingType' is NOT equal to
+//		   'IntGroupingType.None()', an error will be returned.
+//
+//		errorPrefix                interface{}
+//		 - This object encapsulates error prefix text which is
+//		   included in all returned error messages. Usually, it
+//		   contains the name of the calling method or methods
+//		   listed as a method or function chain of execution.
+//
+//		   If no error prefix information is needed, set this parameter
+//		   to 'nil'.
+//
+//		   This empty interface must be convertible to one of the
+//		   following types:
+//
+//		   1. nil - A nil value is valid and generates an empty
+//		   collection of error prefix and error context
+//		   information.
+//
+//		   2. string - A string containing error prefix information.
+//
+//		   3. []string A one-dimensional slice of strings containing
+//		   error prefix information
+//
+//		   4. [][2]string A two-dimensional slice of strings
+//		   containing error prefix and error context information.
+//
+//		   5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		   from this object will be copied for use in error and
+//		   informational messages.
+//
+//		   6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		   Information from this object will be copied for use in
+//		   error and informational messages.
+//
+//		   7. IBasicErrorPrefix - An interface to a method generating
+//		   a two-dimensional slice of strings containing error
+//		   prefix and error context information.
+//
+//		   If parameter 'errorPrefix' is NOT convertible to one of
+//		   the valid types listed above, it will be considered
+//		   invalid and trigger the return of an error.
+//
+//		   Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		   the 'errpref' software package,
+//		   "github.com/MikeAustin71/errpref".
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//	error
+//	   - If this method completes successfully, the returned error
+//	     Type is set equal to 'nil'.
+//
+//	     If errors are encountered during processing, the returned
+//	     error Type will encapsulate an error message. This
+//	     returned error message will incorporate the method chain
+//	     and text passed by input parameter, 'errorPrefix'. The
+//	     'errorPrefix' text will be attached to the beginning of
+//	     the error message.
+func (nStrIntGroupSpec *NumStrIntegerGroupingSpec) SetRunes(
+	intSeparatorChars []rune,
+	intGroupingType IntegerGroupingType,
+	errorPrefix interface{}) error {
+
+	if nStrIntGroupSpec.lock == nil {
+		nStrIntGroupSpec.lock = new(sync.Mutex)
+	}
+
+	nStrIntGroupSpec.lock.Lock()
+
+	defer nStrIntGroupSpec.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumStrIntegerGroupingSpec."+
+			"SetRunes()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	return new(numStrIntGroupingSpecNanobot).setNStrIntGroupSpec(
+		nStrIntGroupSpec,
+		intSeparatorChars,
+		intGroupingType,
+		ePrefix.XCpy(
+			"newNStrIntGroupSpec"))
+
+}
+
+// SetStr - Deletes and resets all member variable data values
+// in the current instance of NumStrIntegerGroupingSpec.
+//
+// The input parameter 'intSeparatorChars' is a string
+// containing one or more integer separator characters used
+// to separate integer digit groups.
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//	intGroupingType             IntegerGroupingType
+//	 - This instance of IntegerGroupingType defines the type
+//	   of IntegerSeparatorDto which will be returned. The
+//	   enumeration IntegerGroupingType must be set to one
+//	   of the following values:
+//	   IntGroupingType.None()
+//	   IntGroupingType.Thousands()
+//	   IntGroupingType.IndiaNumbering()
+//	   IntGroupingType.ChineseNumbering()
+//
+//	intSeparatorChars          string
+//	 - One or more characters used to separate groups of
+//	   integers. This separator is also known as the 'thousands'
+//	   separator. It is used to separate groups of integer digits
+//	   to the left of the decimal separator
+//	   (a.k.a. decimal point). In the United States, the standard
+//	   integer digits separator is the comma (",").
+//	   United States Example:  1,000,000,000
+//
+//	   In many European countries, a single period ('.') is used
+//	   as the integer separator character.
+//	   European Example: 1.000.000.000
+//
+//	   Other countries and cultures use spaces, apostrophes or
+//	   multiple characters to separate integers.
+//
+//	   If this input parameter contains a zero length string
+//	   and 'intGroupingType' is NOT equal to
+//	   IntGroupingType.None(), an error will be returned.
+//
+//	errorPrefix                interface{}
+//	 - This object encapsulates error prefix text which is
+//	   included in all returned error messages. Usually, it
+//	   contains the name of the calling method or methods
+//	   listed as a method or function chain of execution.
+//
+//	   If no error prefix information is needed, set this parameter
+//	   to 'nil'.
+//
+//	   This empty interface must be convertible to one of the
+//	   following types:
+//
+//	   1. nil - A nil value is valid and generates an empty
+//	   collection of error prefix and error context
+//	   information.
+//
+//	   2. string - A string containing error prefix information.
+//
+//	   3. []string A one-dimensional slice of strings containing
+//	   error prefix information
+//
+//	   4. [][2]string A two-dimensional slice of strings
+//	   containing error prefix and error context information.
+//
+//	   5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	   from this object will be copied for use in error and
+//	   informational messages.
+//
+//	   6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	   Information from this object will be copied for use in
+//	   error and informational messages.
+//
+//	   7. IBasicErrorPrefix - An interface to a method generating
+//	   a two-dimensional slice of strings containing error
+//	   prefix and error context information.
+//
+//	   If parameter 'errorPrefix' is NOT convertible to one of
+//	   the valid types listed above, it will be considered
+//	   invalid and trigger the return of an error.
+//
+//	   Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	   the 'errpref' software package,
+//	   "github.com/MikeAustin71/errpref".
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//	error
+//	   - If this method completes successfully, the returned error
+//	     Type is set equal to 'nil'.
+//
+//	     If errors are encountered during processing, the returned
+//	     error Type will encapsulate an error message. This
+//	     returned error message will incorporate the method chain
+//	     and text passed by input parameter, 'errorPrefix'. The
+//	     'errorPrefix' text will be attached to the beginning of
+//	     the error message.
+func (nStrIntGroupSpec *NumStrIntegerGroupingSpec) SetStr(
+	intSeparatorChars string,
+	intGroupingType IntegerGroupingType,
+	errorPrefix interface{}) error {
+
+	if nStrIntGroupSpec.lock == nil {
+		nStrIntGroupSpec.lock = new(sync.Mutex)
+	}
+
+	nStrIntGroupSpec.lock.Lock()
+
+	defer nStrIntGroupSpec.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumStrIntegerGroupingSpec."+
+			"SetStr()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	return new(numStrIntGroupingSpecNanobot).setNStrIntGroupSpec(
+		nStrIntGroupSpec,
+		[]rune(intSeparatorChars),
+		intGroupingType,
+		ePrefix.XCpy(
+			"newNStrIntGroupSpec"))
+
 }
 
 // numStrIntGroupingSpecNanobot - This type provides
@@ -770,6 +1043,67 @@ func (nStrIntGroupSpecNanobot *numStrIntGroupingSpecNanobot) copyNStrIntGroupSpe
 	return err
 }
 
+// setNStrIntGroupSpec - Deletes and resets all member variable
+// data values in the NumStrIntegerGroupingSpec instance passed
+// as input parameter 'nIntGroupSpec'.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+// This method will overwrite all pre-existing data values in the
+// input parameter 'nIntGroupSpec'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+// intGroupingType             IntegerGroupingType
+//
+//   - This instance of IntegerGroupingType defines the type
+//     of IntegerSeparatorDto which will be returned. The
+//     enumeration IntegerGroupingType must be set to one
+//     of the following values:
+//     IntGroupingType.None()
+//     IntGroupingType.Thousands()
+//     IntGroupingType.IndiaNumbering()
+//     IntGroupingType.ChineseNumbering()
+//
+//     intSeparatorChars       []rune
+//
+//   - One or more characters used to separate groups of
+//     integer digits. This separator is also known as the
+//     'thousands' separator. It is used to separate groups of
+//     integer digits to the left of the decimal separator
+//     (a.k.a. decimal point).
+//
+//     If this input parameter contains a zero length array
+//     and 'intGroupingType' is NOT equal to
+//     'IntGroupingType.None()', an error will be returned.
+//
+//     errPrefDto                 *ErrPrefixDto
+//
+//   - This object encapsulates an error prefix string which is
+//     included in all returned error messages. Usually, it
+//     contains the names of the calling method or methods.
+//
+//     Type ErrPrefixDto is included in the 'errpref' software
+//     package, "github.com/MikeAustin71/errpref".
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//	err                        error
+//	   - If this method completes successfully, the returned error
+//	     Type is set equal to 'nil'.
+//
+//	     If errors are encountered during processing, the returned
+//	     error Type will encapsulate an error message. This
+//	     returned error message will incorporate the method chain
+//	     and text passed by input parameter, 'errPrefDto'. The
+//	     'errPrefDto' text will be attached to the beginning of the
+//	     error message.
 func (nStrIntGroupSpecNanobot *numStrIntGroupingSpecNanobot) setNStrIntGroupSpec(
 	nIntGroupSpec *NumStrIntegerGroupingSpec,
 	intSeparatorChars []rune,
@@ -820,17 +1154,34 @@ func (nStrIntGroupSpecNanobot *numStrIntGroupingSpecNanobot) setNStrIntGroupSpec
 		return err
 	}
 
+	if intGroupingType != IntGroupingType.None() &&
+		len(intSeparatorChars) == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'intSeparatorChars' is invalid!\n"+
+			"'intGroupingType' is equal to IntGroupingType.None() and\n"+
+			"'intSeparatorChars' has a length of zero.\n",
+			ePrefix.String())
+
+		return err
+
+	}
+
 	new(numStrIntGroupingSpecAtom).empty(
 		nIntGroupSpec)
 
-	err = nIntGroupSpec.integerSeparatorChars.
-		SetRuneArray(
-			intSeparatorChars,
-			ePrefix.XCpy(
-				"nIntGroupSpec<-intSeparatorChars"))
+	if len(intSeparatorChars) > 0 {
 
-	if err != nil {
-		return err
+		err = nIntGroupSpec.integerSeparatorChars.
+			SetRuneArray(
+				intSeparatorChars,
+				ePrefix.XCpy(
+					"nIntGroupSpec<-intSeparatorChars"))
+
+		if err != nil {
+			return err
+		}
+
 	}
 
 	nIntGroupSpec.intGroupingType = intGroupingType
@@ -890,6 +1241,46 @@ func (nStrIntGroupSpecAtom *numStrIntGroupingSpecAtom) empty(
 	nStrIntGroupSpec.intGroupingType = IntGroupingType.None()
 }
 
+// equal - Receives a pointer to two instances of
+// NumStrIntegerGroupingSpec and proceeds to compare their
+// member variables in order to determine if they are
+// equivalent.
+//
+// A boolean flag showing the result of this comparison is
+// returned. If the member variables for both instances are
+// equal in all respects, this flag is set to 'true'. Otherwise,
+// this method returns 'false'.
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//	nStrIntGroupSpec1    *NumStrIntegerGroupingSpec
+//	   - An instance of NumStrIntegerGroupingSpec.
+//	     Internal member variables from 'nStrIntGroupSpec1'
+//	     will be compared to those of 'nStrIntGroupSpec2' to
+//	     determine if both instances are equivalent.
+//
+//
+//	nStrIntGroupSpec2    *NumStrIntegerGroupingSpec
+//	   - An instance of NumStrIntegerGroupingSpec.
+//	     Internal member variables from 'nStrIntGroupSpec2'
+//	     will be compared to those of 'nStrIntGroupSpec1' to
+//	     determine if both instances are equivalent.
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//	bool
+//	   - If the comparison of 'nStrIntGroupSpec1' and
+//	     'nStrIntGroupSpec2' shows that all internal member
+//	     variables are equivalent, this method will return a
+//	     boolean value of 'true'.
+//
+//	     If the two instances are NOT equal, this method will
+//	     return a boolean value of 'false' to the calling
+//	     function.
 func (nStrIntGroupSpecAtom *numStrIntGroupingSpecAtom) equal(
 	nStrIntGroupSpec1 *NumStrIntegerGroupingSpec,
 	nStrIntGroupSpec2 *NumStrIntegerGroupingSpec) bool {
