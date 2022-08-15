@@ -21,20 +21,19 @@ import (
 // used as the components or building blocks for single lines of
 // text.
 //
-// Member Variables
+// # Member Variables
 //
 // ----------------------------------------------------------------
 //
-//  fieldLen                   int
-//     - An integer value greater than zero and less than 1,000,001
-//       which is used to specify the number of white space
-//       characters in the 'spacer' text field.
+//	fieldLen                   int
+//	   - An integer value greater than zero and less than 1,000,001
+//	     which is used to specify the number of white space
+//	     characters in the 'spacer' text field.
 //
-//       Examples:
-//          fieldLen = 1 produces text field " "
-//          fieldLen = 2 produces text field "  "
-//          fieldLen = 5 produces text field "     "
-//
+//	     Examples:
+//	        fieldLen = 1 produces text field " "
+//	        fieldLen = 2 produces text field "  "
+//	        fieldLen = 5 produces text field "     "
 type TextFieldSpecSpacer struct {
 	fieldLen       int
 	textLineReader *strings.Reader
@@ -49,84 +48,80 @@ type TextFieldSpecSpacer struct {
 // All the data fields in current TextFieldSpecSpacer instance
 // ('txtFieldSpacer') will be overwritten and modified.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  incomingTxtFieldSpacer     *TextFieldSpecSpacer
-//     - A pointer to an instance of TextFieldSpecSpacer. This
-//       method will NOT change the values of internal member
-//       variables contained in this instance.
+//	 incomingTxtFieldSpacer     *TextFieldSpecSpacer
+//	    - A pointer to an instance of TextFieldSpecSpacer. This
+//	      method will NOT change the values of internal member
+//	      variables contained in this instance.
 //
-//       All data values in this TextFieldSpecSpacer instance
-//       will be copied to current TextFieldSpecSpacer
-//       instance ('txtFieldSpacer').
+//	      All data values in this TextFieldSpecSpacer instance
+//	      will be copied to current TextFieldSpecSpacer
+//	      instance ('txtFieldSpacer').
 //
-//       If parameter 'incomingTxtFieldSpacer' is determined to be
-//       invalid, an error will be returned.
-//
-//
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
-//
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
-//
-//       This empty interface must be convertible to one of the
-//       following types:
+//	      If parameter 'incomingTxtFieldSpacer' is determined to be
+//	      invalid, an error will be returned.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	 errorPrefix                interface{}
+//		   - This object encapsulates error prefix text which is
+//		     included in all returned error messages. Usually, it
+//		     contains the name of the calling method or methods
+//		     listed as a method or function chain of execution.
 //
-//       2. string - A string containing error prefix information.
+//		     If no error prefix information is needed, set this parameter
+//		     to 'nil'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//		     This empty interface must be convertible to one of the
+//		     following types:
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//		     1. nil - A nil value is valid and generates an empty
+//		        collection of error prefix and error context
+//		        information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//		     2. string - A string containing error prefix information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//		     3. []string A one-dimensional slice of strings containing
+//		        error prefix information
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//		     4. [][2]string A two-dimensional slice of strings
+//		        containing error prefix and error context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		        from this object will be copied for use in error and
+//		        informational messages.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//		     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		        Information from this object will be copied for use in
+//		        error and informational messages.
 //
+//		     7. IBasicErrorPrefix - An interface to a method generating
+//		        a two-dimensional slice of strings containing error
+//		        prefix and error context information.
+//
+//		     If parameter 'errorPrefix' is NOT convertible to one of
+//		     the valid types listed above, it will be considered
+//		     invalid and trigger the return of an error.
+//
+//		     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		     the 'errpref' software package,
+//		     "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If this method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If this method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (txtFieldSpacer *TextFieldSpecSpacer) CopyIn(
 	incomingTxtFieldSpacer *TextFieldSpecSpacer,
 	errorPrefix interface{}) error {
@@ -167,77 +162,73 @@ func (txtFieldSpacer *TextFieldSpecSpacer) CopyIn(
 // If the current TextFieldSpecSpacer instance is invalid, an error
 // will be returned.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	 errorPrefix                interface{}
+//		   - This object encapsulates error prefix text which is
+//		     included in all returned error messages. Usually, it
+//		     contains the name of the calling method or methods
+//		     listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//		     If no error prefix information is needed, set this parameter
+//		     to 'nil'.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//		     This empty interface must be convertible to one of the
+//		     following types:
 //
+//		     1. nil - A nil value is valid and generates an empty
+//		        collection of error prefix and error context
+//		        information.
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//		     2. string - A string containing error prefix information.
 //
-//       2. string - A string containing error prefix information.
+//		     3. []string A one-dimensional slice of strings containing
+//		        error prefix information
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//		     4. [][2]string A two-dimensional slice of strings
+//		        containing error prefix and error context information.
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		        from this object will be copied for use in error and
+//		        informational messages.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//		     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		        Information from this object will be copied for use in
+//		        error and informational messages.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//		     7. IBasicErrorPrefix - An interface to a method generating
+//		        a two-dimensional slice of strings containing error
+//		        prefix and error context information.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//		     If parameter 'errorPrefix' is NOT convertible to one of
+//		     the valid types listed above, it will be considered
+//		     invalid and trigger the return of an error.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
-//
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
-//
+//		     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		     the 'errpref' software package,
+//		     "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  TextFieldSpecSpacer
-//     - If this method completes successfully and no errors are
-//       encountered, this parameter will return a deep copy of the
-//       current TextFieldSpecSpacer instance.
+//	TextFieldSpecSpacer
+//	   - If this method completes successfully and no errors are
+//	     encountered, this parameter will return a deep copy of the
+//	     current TextFieldSpecSpacer instance.
 //
 //
-//  error
-//     - If this method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If this method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (txtFieldSpacer *TextFieldSpecSpacer) CopyOut(
 	errorPrefix interface{}) (
 	TextFieldSpecSpacer,
@@ -280,78 +271,74 @@ func (txtFieldSpacer *TextFieldSpecSpacer) CopyOut(
 // This method is required by the ITextFieldSpecification
 // interface.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	 errorPrefix                interface{}
+//		   - This object encapsulates error prefix text which is
+//		     included in all returned error messages. Usually, it
+//		     contains the name of the calling method or methods
+//		     listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//		     If no error prefix information is needed, set this parameter
+//		     to 'nil'.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//		     This empty interface must be convertible to one of the
+//		     following types:
 //
+//		     1. nil - A nil value is valid and generates an empty
+//		        collection of error prefix and error context
+//		        information.
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//		     2. string - A string containing error prefix information.
 //
-//       2. string - A string containing error prefix information.
+//		     3. []string A one-dimensional slice of strings containing
+//		        error prefix information
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//		     4. [][2]string A two-dimensional slice of strings
+//		        containing error prefix and error context information.
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		        from this object will be copied for use in error and
+//		        informational messages.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//		     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		        Information from this object will be copied for use in
+//		        error and informational messages.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//		     7. IBasicErrorPrefix - An interface to a method generating
+//		        a two-dimensional slice of strings containing error
+//		        prefix and error context information.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//		     If parameter 'errorPrefix' is NOT convertible to one of
+//		     the valid types listed above, it will be considered
+//		     invalid and trigger the return of an error.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
-//
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
-//
+//		     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		     the 'errpref' software package,
+//		     "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  ITextFieldSpecification
-//     - If this method completes successfully and no errors are
-//       encountered, this parameter will return a deep copy of
-//       the current TextFieldSpecSpacer instance cast as an
-//       ITextFieldSpecification object.
+//	ITextFieldSpecification
+//	   - If this method completes successfully and no errors are
+//	     encountered, this parameter will return a deep copy of
+//	     the current TextFieldSpecSpacer instance cast as an
+//	     ITextFieldSpecification object.
 //
 //
-//  error
-//     - If this method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If this method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (txtFieldSpacer *TextFieldSpecSpacer) CopyOutITextField(
 	errorPrefix interface{}) (
 	ITextFieldSpecification,
@@ -401,77 +388,73 @@ func (txtFieldSpacer *TextFieldSpecSpacer) CopyOutITextField(
 // CopyOutPtr - Returns a pointer to a deep copy of the current
 // TextFieldSpecSpacer instance.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	 errorPrefix                interface{}
+//		   - This object encapsulates error prefix text which is
+//		     included in all returned error messages. Usually, it
+//		     contains the name of the calling method or methods
+//		     listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//		     If no error prefix information is needed, set this parameter
+//		     to 'nil'.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//		     This empty interface must be convertible to one of the
+//		     following types:
 //
+//		     1. nil - A nil value is valid and generates an empty
+//		        collection of error prefix and error context
+//		        information.
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//		     2. string - A string containing error prefix information.
 //
-//       2. string - A string containing error prefix information.
+//		     3. []string A one-dimensional slice of strings containing
+//		        error prefix information
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//		     4. [][2]string A two-dimensional slice of strings
+//		        containing error prefix and error context information.
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		        from this object will be copied for use in error and
+//		        informational messages.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//		     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		        Information from this object will be copied for use in
+//		        error and informational messages.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//		     7. IBasicErrorPrefix - An interface to a method generating
+//		        a two-dimensional slice of strings containing error
+//		        prefix and error context information.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//		     If parameter 'errorPrefix' is NOT convertible to one of
+//		     the valid types listed above, it will be considered
+//		     invalid and trigger the return of an error.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
-//
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
-//
+//		     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		     the 'errpref' software package,
+//		     "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  *TextFieldSpecSpacer
-//     - If this method completes successfully and no errors are
-//       encountered, this parameter will return a pointer to a
-//       deep copy of the current TextFieldSpecSpacer instance.
+//	*TextFieldSpecSpacer
+//	   - If this method completes successfully and no errors are
+//	     encountered, this parameter will return a pointer to a
+//	     deep copy of the current TextFieldSpecSpacer instance.
 //
 //
-//  error
-//     - If this method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If this method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (txtFieldSpacer *TextFieldSpecSpacer) CopyOutPtr(
 	errorPrefix interface{}) (
 	*TextFieldSpecSpacer,
@@ -511,7 +494,6 @@ func (txtFieldSpacer *TextFieldSpecSpacer) CopyOutPtr(
 
 // Empty - Resets all internal member variables for the current
 // instance of TextFieldSpecSpacer to their initial or zero states.
-//
 func (txtFieldSpacer *TextFieldSpecSpacer) Empty() {
 
 	if txtFieldSpacer.lock == nil {
@@ -539,7 +521,6 @@ func (txtFieldSpacer *TextFieldSpecSpacer) Empty() {
 // returned. If the member variables are equal in all respects,
 // this flag is set to 'true'. Otherwise, this method returns
 // 'false'.
-//
 func (txtFieldSpacer *TextFieldSpecSpacer) Equal(
 	incomingTxtFieldSpacer *TextFieldSpecSpacer) bool {
 
@@ -567,7 +548,6 @@ func (txtFieldSpacer *TextFieldSpecSpacer) Equal(
 // returned. If the member variables from both instances are equal
 // in all respects, this flag is set to 'true'. Otherwise, this method returns
 // 'false'.
-//
 func (txtFieldSpacer *TextFieldSpecSpacer) EqualITextField(
 	iTextField ITextFieldSpecification) bool {
 
@@ -604,11 +584,10 @@ func (txtFieldSpacer *TextFieldSpecSpacer) EqualITextField(
 // number of white space characters in the string is determined by
 // the field length parameter. (See examples below)
 //
-//       Examples:
-//          fieldLen = 1 produces text field " "
-//          fieldLen = 2 produces text field "  "
-//          fieldLen = 5 produces text field "     "
-//
+//	Examples:
+//	   fieldLen = 1 produces text field " "
+//	   fieldLen = 2 produces text field "  "
+//	   fieldLen = 5 produces text field "     "
 func (txtFieldSpacer *TextFieldSpecSpacer) GetFieldLength() int {
 
 	if txtFieldSpacer.lock == nil {
@@ -626,12 +605,12 @@ func (txtFieldSpacer *TextFieldSpecSpacer) GetFieldLength() int {
 // formatted text generated by the current instance of
 // TextFieldSpecSpacer. Effectively, this is the length of the
 // strings returned by methods:
-//   TextFieldSpecSpacer.GetFormattedText()
-//   TextFieldSpecSpacer.String()
+//
+//	TextFieldSpecSpacer.GetFormattedText()
+//	TextFieldSpecSpacer.String()
 //
 // If an error is encountered, this method returns a value of minus
 // one (-1).
-//
 func (txtFieldSpacer *TextFieldSpecSpacer) GetFormattedStrLength() int {
 
 	if txtFieldSpacer.lock == nil {
@@ -676,93 +655,87 @@ func (txtFieldSpacer *TextFieldSpecSpacer) GetFormattedStrLength() int {
 // ITextFieldSpecification interface.
 //
 // Methods which return formatted text are listed as follows:
-//  TextFieldSpecSpacer.String()
-//  TextFieldSpecSpacer.GetFormattedText()
-//  TextFieldSpecSpacer.TextBuilder()
 //
+//	TextFieldSpecSpacer.String()
+//	TextFieldSpecSpacer.GetFormattedText()
+//	TextFieldSpecSpacer.TextBuilder()
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	 errorPrefix                interface{}
+//		   - This object encapsulates error prefix text which is
+//		     included in all returned error messages. Usually, it
+//		     contains the name of the calling method or methods
+//		     listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//		     If no error prefix information is needed, set this parameter
+//		     to 'nil'.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//		     This empty interface must be convertible to one of the
+//		     following types:
 //
+//		     1. nil - A nil value is valid and generates an empty
+//		        collection of error prefix and error context
+//		        information.
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//		     2. string - A string containing error prefix information.
 //
-//       2. string - A string containing error prefix information.
+//		     3. []string A one-dimensional slice of strings containing
+//		        error prefix information
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//		     4. [][2]string A two-dimensional slice of strings
+//		        containing error prefix and error context information.
 //
-//       4. [][2]string A two-dimensional slice of strings
-//                      containing error prefix and error context
-//                      information.
+//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		        from this object will be copied for use in error and
+//		        informational messages.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//		     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		        Information from this object will be copied for use in
+//		        error and informational messages.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//		     7. IBasicErrorPrefix - An interface to a method generating
+//		        a two-dimensional slice of strings containing error
+//		        prefix and error context information.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//		     If parameter 'errorPrefix' is NOT convertible to one of
+//		     the valid types listed above, it will be considered
+//		     invalid and trigger the return of an error.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
-//
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
-//
+//		     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		     the 'errpref' software package,
+//		     "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  string
-//     - This method will return a string of white space characters
-//       generated by the current instance of TextFieldSpecSpacer.
-//       The number of white space characters in this returned
-//       text string is controlled by the field length parameter.
+//	string
+//	   - This method will return a string of white space characters
+//	     generated by the current instance of TextFieldSpecSpacer.
+//	     The number of white space characters in this returned
+//	     text string is controlled by the field length parameter.
 //
 //
-//  error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 //
 // ------------------------------------------------------------------------
 //
 // Example Usage
 //
-//  fieldLen = 1 produces formatted text string " "
-//  fieldLen = 2 produces formatted text string "  "
-//  fieldLen = 5 produces formatted text string "     "
-//
+//	fieldLen = 1 produces formatted text string " "
+//	fieldLen = 2 produces formatted text string "  "
+//	fieldLen = 5 produces formatted text string "     "
 func (txtFieldSpacer *TextFieldSpecSpacer) GetFormattedText(
 	errorPrefix interface{}) (
 	string,
@@ -804,24 +777,21 @@ func (txtFieldSpacer *TextFieldSpecSpacer) GetFormattedText(
 // 'true'. If any data element is invalid, this method returns
 // 'false'.
 //
-//
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  --- NONE ---
-//
+//	--- NONE ---
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  isValid             bool
-//     - If all data elements encapsulated by the current instance
-//       of TextFieldSpecSpacer are valid, this returned boolean
-//       value is set to 'true'. If any data values are invalid,
-//       this return parameter is set to 'false'.
-//
+//	isValid             bool
+//	   - If all data elements encapsulated by the current instance
+//	     of TextFieldSpecSpacer are valid, this returned boolean
+//	     value is set to 'true'. If any data values are invalid,
+//	     this return parameter is set to 'false'.
 func (txtFieldSpacer *TextFieldSpecSpacer) IsValidInstance() (
 	isValid bool) {
 
@@ -849,70 +819,66 @@ func (txtFieldSpacer *TextFieldSpecSpacer) IsValidInstance() (
 // If any data element evaluates as invalid, this method will
 // return an error.
 //
-//
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  errorPrefix         interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	 errorPrefix                interface{}
+//		   - This object encapsulates error prefix text which is
+//		     included in all returned error messages. Usually, it
+//		     contains the name of the calling method or methods
+//		     listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//		     If no error prefix information is needed, set this parameter
+//		     to 'nil'.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//		     This empty interface must be convertible to one of the
+//		     following types:
 //
+//		     1. nil - A nil value is valid and generates an empty
+//		        collection of error prefix and error context
+//		        information.
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//		     2. string - A string containing error prefix information.
 //
-//       2. string - A string containing error prefix information.
+//		     3. []string A one-dimensional slice of strings containing
+//		        error prefix information
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//		     4. [][2]string A two-dimensional slice of strings
+//		        containing error prefix and error context information.
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		        from this object will be copied for use in error and
+//		        informational messages.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//		     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		        Information from this object will be copied for use in
+//		        error and informational messages.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//		     7. IBasicErrorPrefix - An interface to a method generating
+//		        a two-dimensional slice of strings containing error
+//		        prefix and error context information.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//		     If parameter 'errorPrefix' is NOT convertible to one of
+//		     the valid types listed above, it will be considered
+//		     invalid and trigger the return of an error.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
-//
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
-//
+//		     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		     the 'errpref' software package,
+//		     "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If any of the internal member data variables contained in
-//       the current instance of TextFieldSpecSpacer are found to be
-//       invalid, this method will return an error.
+//	error
+//	   - If any of the internal member data variables contained in
+//	     the current instance of TextFieldSpecSpacer are found to be
+//	     invalid, this method will return an error.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' (error prefix) will be inserted or
-//       prefixed at the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' (error prefix) will be inserted or
+//	     prefixed at the beginning of the error message.
 func (txtFieldSpacer *TextFieldSpecSpacer) IsValidInstanceError(
 	errorPrefix interface{}) error {
 
@@ -959,23 +925,20 @@ func (txtFieldSpacer *TextFieldSpecSpacer) IsValidInstanceError(
 // in order to configure valid and meaningful member variable data
 // values.
 //
-//
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  --- NONE ---
-//
+//	--- NONE ---
 //
 // -----------------------------------------------------------------
 //
 // Return Values
 //
-//  TextFieldSpecSpacer
-//     - This parameter returns a new and empty concrete instance
-//       of TextFieldSpecSpacer. Member variable data values are
-//       set to their initial or zero values.
-//
+//	TextFieldSpecSpacer
+//	   - This parameter returns a new and empty concrete instance
+//	     of TextFieldSpecSpacer. Member variable data values are
+//	     set to their initial or zero values.
 func (txtFieldSpacer TextFieldSpecSpacer) New() TextFieldSpecSpacer {
 
 	if txtFieldSpacer.lock == nil {
@@ -1003,24 +966,21 @@ func (txtFieldSpacer TextFieldSpecSpacer) New() TextFieldSpecSpacer {
 // users must later call the setter methods on this type in order
 // to configure valid and meaningful member variable data values.
 //
-//
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  --- NONE ---
-//
+//	--- NONE ---
 //
 // -----------------------------------------------------------------
 //
 // Return Values
 //
-//  *TextFieldSpecSpacer
-//     - This parameter returns a pointer to a new, empty instance
-//       of TextFieldSpecSpacer. Member variable data values are
-//       set to their initial or zero values. The returned Text
-//       Field Spacer Specification is therefore invalid.
-//
+//	*TextFieldSpecSpacer
+//	   - This parameter returns a pointer to a new, empty instance
+//	     of TextFieldSpecSpacer. Member variable data values are
+//	     set to their initial or zero values. The returned Text
+//	     Field Spacer Specification is therefore invalid.
 func (txtFieldSpacer TextFieldSpecSpacer) NewPtr() *TextFieldSpecSpacer {
 
 	if txtFieldSpacer.lock == nil {
@@ -1046,93 +1006,89 @@ func (txtFieldSpacer TextFieldSpecSpacer) NewPtr() *TextFieldSpecSpacer {
 // number of white space characters in the string is determined by
 // the field length parameter. (See examples below)
 //
-//
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  fieldLen                   int
-//     - An integer value which specifies the number of white space
-//       characters to be included in the spacer text field.
+//	 fieldLen                   int
+//	    - An integer value which specifies the number of white space
+//	      characters to be included in the spacer text field.
 //
-//       Examples:
-//          fieldLen = 1 produces text field " "
-//          fieldLen = 2 produces text field "  "
-//          fieldLen = 5 produces text field "     "
+//	      Examples:
+//	         fieldLen = 1 produces text field " "
+//	         fieldLen = 2 produces text field "  "
+//	         fieldLen = 5 produces text field "     "
 //
-//       If 'fieldLen' is less than one (+1), an error will be
-//       returned.
+//	      If 'fieldLen' is less than one (+1), an error will be
+//	      returned.
 //
-//       If 'fieldLen' is greater than one-million (+1,000,000), an
-//       error will be returned.
-//
-//
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
-//
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
-//
-//       This empty interface must be convertible to one of the
-//       following types:
+//	      If 'fieldLen' is greater than one-million (+1,000,000), an
+//	      error will be returned.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	 errorPrefix                interface{}
+//		   - This object encapsulates error prefix text which is
+//		     included in all returned error messages. Usually, it
+//		     contains the name of the calling method or methods
+//		     listed as a method or function chain of execution.
 //
-//       2. string - A string containing error prefix information.
+//		     If no error prefix information is needed, set this parameter
+//		     to 'nil'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//		     This empty interface must be convertible to one of the
+//		     following types:
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//		     1. nil - A nil value is valid and generates an empty
+//		        collection of error prefix and error context
+//		        information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//		     2. string - A string containing error prefix information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//		     3. []string A one-dimensional slice of strings containing
+//		        error prefix information
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//		     4. [][2]string A two-dimensional slice of strings
+//		        containing error prefix and error context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		        from this object will be copied for use in error and
+//		        informational messages.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//		     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		        Information from this object will be copied for use in
+//		        error and informational messages.
 //
+//		     7. IBasicErrorPrefix - An interface to a method generating
+//		        a two-dimensional slice of strings containing error
+//		        prefix and error context information.
+//
+//		     If parameter 'errorPrefix' is NOT convertible to one of
+//		     the valid types listed above, it will be considered
+//		     invalid and trigger the return of an error.
+//
+//		     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		     the 'errpref' software package,
+//		     "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  *TextFieldSpecSpacer
-//     - This method will return a pointer to a new instance of
-//       TextFieldSpecSpacer constructed from information provided
-//       by the input parameter, 'fieldLen'.
+//	*TextFieldSpecSpacer
+//	   - This method will return a pointer to a new instance of
+//	     TextFieldSpecSpacer constructed from information provided
+//	     by the input parameter, 'fieldLen'.
 //
 //
-//  error
-//     - If this method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If this method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (txtFieldSpacer TextFieldSpecSpacer) NewPtrSpacer(
 	fieldLen int,
 	errorPrefix interface{}) (*TextFieldSpecSpacer, error) {
@@ -1182,93 +1138,89 @@ func (txtFieldSpacer TextFieldSpecSpacer) NewPtrSpacer(
 // number of white space characters in the string is determined by
 // the field length parameter. (See examples below)
 //
-//
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  fieldLen                   int
-//     - An integer value which specifies the number of white space
-//       characters to be included in the spacer text field.
+//	 fieldLen                   int
+//	    - An integer value which specifies the number of white space
+//	      characters to be included in the spacer text field.
 //
-//       Examples:
-//          fieldLen = 1 produces text field " "
-//          fieldLen = 2 produces text field "  "
-//          fieldLen = 5 produces text field "     "
+//	      Examples:
+//	         fieldLen = 1 produces text field " "
+//	         fieldLen = 2 produces text field "  "
+//	         fieldLen = 5 produces text field "     "
 //
-//       If 'fieldLen' is less than one (+1), an error will be
-//       returned.
+//	      If 'fieldLen' is less than one (+1), an error will be
+//	      returned.
 //
-//       If 'fieldLen' is greater than one-million (+1,000,000), an
-//       error will be returned.
-//
-//
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
-//
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
-//
-//       This empty interface must be convertible to one of the
-//       following types:
+//	      If 'fieldLen' is greater than one-million (+1,000,000), an
+//	      error will be returned.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	 errorPrefix                interface{}
+//		   - This object encapsulates error prefix text which is
+//		     included in all returned error messages. Usually, it
+//		     contains the name of the calling method or methods
+//		     listed as a method or function chain of execution.
 //
-//       2. string - A string containing error prefix information.
+//		     If no error prefix information is needed, set this parameter
+//		     to 'nil'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//		     This empty interface must be convertible to one of the
+//		     following types:
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//		     1. nil - A nil value is valid and generates an empty
+//		        collection of error prefix and error context
+//		        information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//		     2. string - A string containing error prefix information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//		     3. []string A one-dimensional slice of strings containing
+//		        error prefix information
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//		     4. [][2]string A two-dimensional slice of strings
+//		        containing error prefix and error context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		        from this object will be copied for use in error and
+//		        informational messages.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//		     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		        Information from this object will be copied for use in
+//		        error and informational messages.
 //
+//		     7. IBasicErrorPrefix - An interface to a method generating
+//		        a two-dimensional slice of strings containing error
+//		        prefix and error context information.
+//
+//		     If parameter 'errorPrefix' is NOT convertible to one of
+//		     the valid types listed above, it will be considered
+//		     invalid and trigger the return of an error.
+//
+//		     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		     the 'errpref' software package,
+//		     "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  TextFieldSpecSpacer
-//     - This method will return a new, concrete instance of
-//       TextFieldSpecSpacer constructed from information provided
-//       by the input parameter, 'fieldLen'.
+//	TextFieldSpecSpacer
+//	   - This method will return a new, concrete instance of
+//	     TextFieldSpecSpacer constructed from information provided
+//	     by the input parameter, 'fieldLen'.
 //
 //
-//  error
-//     - If this method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If this method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (txtFieldSpacer TextFieldSpecSpacer) NewSpacer(
 	fieldLen int,
 	errorPrefix interface{}) (
@@ -1346,121 +1298,117 @@ func (txtFieldSpacer TextFieldSpecSpacer) NewSpacer(
 // This method fulfills the requirements of the
 // ITextFieldSpecification interface.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  p                          []byte
-//     - The byte buffer into which the formatted text string
-//       generated by the current txtFillerField instance will be
-//       written.
-//
+//	p                          []byte
+//	   - The byte buffer into which the formatted text string
+//	     generated by the current txtFillerField instance will be
+//	     written.
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  n                          int
-//     - The number of bytes written to byte buffer 'p'.
+//	n                          int
+//	   - The number of bytes written to byte buffer 'p'.
 //
-//       Read() reads up to len(p) bytes into p. It returns
-//       the number of bytes read (0 <= n <= len(p)) and any error
-//       encountered. Even if Read() returns n < len(p), it may use
-//       all of 'p' as scratch space during the call. If some
-//       data is available but not len(p) bytes, Read()
-//       conventionally returns what is available instead of
-//       waiting for more.
+//	     Read() reads up to len(p) bytes into p. It returns
+//	     the number of bytes read (0 <= n <= len(p)) and any error
+//	     encountered. Even if Read() returns n < len(p), it may use
+//	     all of 'p' as scratch space during the call. If some
+//	     data is available but not len(p) bytes, Read()
+//	     conventionally returns what is available instead of
+//	     waiting for more.
 //
 //
-//  err                        error
-//     - If this method completes successfully, this returned error
-//       Type is set equal to 'nil'. If errors are encountered
-//       during processing, the returned error Type will
-//       encapsulate an error message.
+//	err                        error
+//	   - If this method completes successfully, this returned error
+//	     Type is set equal to 'nil'. If errors are encountered
+//	     during processing, the returned error Type will
+//	     encapsulate an error message.
 //
-//       When Read() encounters an error or end-of-file condition
-//       after successfully reading n > 0 bytes, it returns the
-//       number of bytes read. It may return the (non-nil) error
-//       from the same call or return the error (and n == 0) from
-//       a subsequent call. An instance of this general case is
-//       that a Reader returning a non-zero number of bytes at the
-//       end of the input stream may return either err == EOF or
-//       err == nil. The next read operation should return 0, EOF.
-//
+//	     When Read() encounters an error or end-of-file condition
+//	     after successfully reading n > 0 bytes, it returns the
+//	     number of bytes read. It may return the (non-nil) error
+//	     from the same call or return the error (and n == 0) from
+//	     a subsequent call. An instance of this general case is
+//	     that a Reader returning a non-zero number of bytes at the
+//	     end of the input stream may return either err == EOF or
+//	     err == nil. The next read operation should return 0, EOF.
 //
 // ------------------------------------------------------------------------
 //
 // Usage Examples:
 //
-//  Example # 1
+//	Example # 1
 //
-//  p := make([]byte, 50)
+//	p := make([]byte, 50)
 //
-//  var n, readBytesCnt int
-//  sb := strings.Builder{}
+//	var n, readBytesCnt int
+//	sb := strings.Builder{}
 //
-//  for {
+//	for {
 //
-//    n,
-//    err = txtFieldSpacer01.Read(p)
+//	  n,
+//	  err = txtFieldSpacer01.Read(p)
 //
-//    if n == 0 {
-//      break
-//    }
+//	  if n == 0 {
+//	    break
+//	  }
 //
-//    sb.Write(p[:n])
-//    readBytesCnt += n
-//  }
+//	  sb.Write(p[:n])
+//	  readBytesCnt += n
+//	}
 //
-//  if err != nil &&
-//    err != io.EOF {
-//     return fmt.Errorf(
-//      "Error Returned From txtFieldSpacer01.Read(p)\n"+
-//      "Error = \n%v\n",
-//       err.Error())
-//  }
+//	if err != nil &&
+//	  err != io.EOF {
+//	   return fmt.Errorf(
+//	    "Error Returned From txtFieldSpacer01.Read(p)\n"+
+//	    "Error = \n%v\n",
+//	     err.Error())
+//	}
 //
-//  fmt.Printf("Text Line String: %s\n",
-//                sb.String())
+//	fmt.Printf("Text Line String: %s\n",
+//	              sb.String())
 //
-//  fmt.Printf("Number of bytes Read: %v\n",
-//                readBytesCnt)
+//	fmt.Printf("Number of bytes Read: %v\n",
+//	              readBytesCnt)
 //
-//  Example # 2
+//	Example # 2
 //
-//  p := make([]byte, 50)
+//	p := make([]byte, 50)
 //
-//  var n, readBytesCnt int
-//  var actualStr string
+//	var n, readBytesCnt int
+//	var actualStr string
 //
-//  for {
+//	for {
 //
-//    n,
-//    err = txtFieldSpacer01.Read(p)
+//	  n,
+//	  err = txtFieldSpacer01.Read(p)
 //
-//    if n == 0 {
-//      break
-//    }
+//	  if n == 0 {
+//	    break
+//	  }
 //
-//    actualStr += string(p[:n])
-//    readBytesCnt += n
-//  }
+//	  actualStr += string(p[:n])
+//	  readBytesCnt += n
+//	}
 //
-//  if err != nil &&
-//    err != io.EOF {
-//     return fmt.Errorf(
-//      "Error Returned From txtFieldSpacer01.Read(p)\n"+
-//      "Error = \n%v\n",
-//       err.Error())
-//  }
+//	if err != nil &&
+//	  err != io.EOF {
+//	   return fmt.Errorf(
+//	    "Error Returned From txtFieldSpacer01.Read(p)\n"+
+//	    "Error = \n%v\n",
+//	     err.Error())
+//	}
 //
-//  fmt.Printf("Text Line String: %v\n",
-//                actualStr)
+//	fmt.Printf("Text Line String: %v\n",
+//	              actualStr)
 //
-//  fmt.Printf("Number of bytes Read: %v\n",
-//                readBytesCnt)
-//
+//	fmt.Printf("Number of bytes Read: %v\n",
+//	              readBytesCnt)
 func (txtFieldSpacer *TextFieldSpecSpacer) Read(
 	p []byte) (
 	n int,
@@ -1545,7 +1493,6 @@ func (txtFieldSpacer *TextFieldSpecSpacer) Read(
 //
 // This method fulfills the requirements of the
 // ITextFieldSpecification interface.
-//
 func (txtFieldSpacer *TextFieldSpecSpacer) ReaderInitialize() {
 
 	if txtFieldSpacer.lock == nil {
@@ -1569,87 +1516,83 @@ func (txtFieldSpacer *TextFieldSpecSpacer) ReaderInitialize() {
 // number of white space characters in the string is determined by
 // the field length parameter. (See examples below)
 //
-//
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  fieldLen                   int
-//     - An integer value which specifies the number of white space
-//       characters to be included in the spacer text field.
+//	 fieldLen                   int
+//	    - An integer value which specifies the number of white space
+//	      characters to be included in the spacer text field.
 //
-//       Examples:
-//          fieldLen = 1 produces text field " "
-//          fieldLen = 2 produces text field "  "
-//          fieldLen = 5 produces text field "     "
+//	      Examples:
+//	         fieldLen = 1 produces text field " "
+//	         fieldLen = 2 produces text field "  "
+//	         fieldLen = 5 produces text field "     "
 //
-//       If 'fieldLen' is less than one (+1), an error will be
-//       returned.
+//	      If 'fieldLen' is less than one (+1), an error will be
+//	      returned.
 //
-//       If 'fieldLen' is greater than one-million (+1,000,000), an
-//       error will be returned.
-//
-//
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
-//
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
-//
-//       This empty interface must be convertible to one of the
-//       following types:
+//	      If 'fieldLen' is greater than one-million (+1,000,000), an
+//	      error will be returned.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	 errorPrefix                interface{}
+//		   - This object encapsulates error prefix text which is
+//		     included in all returned error messages. Usually, it
+//		     contains the name of the calling method or methods
+//		     listed as a method or function chain of execution.
 //
-//       2. string - A string containing error prefix information.
+//		     If no error prefix information is needed, set this parameter
+//		     to 'nil'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//		     This empty interface must be convertible to one of the
+//		     following types:
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//		     1. nil - A nil value is valid and generates an empty
+//		        collection of error prefix and error context
+//		        information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//		     2. string - A string containing error prefix information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//		     3. []string A one-dimensional slice of strings containing
+//		        error prefix information
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//		     4. [][2]string A two-dimensional slice of strings
+//		        containing error prefix and error context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		        from this object will be copied for use in error and
+//		        informational messages.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//		     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		        Information from this object will be copied for use in
+//		        error and informational messages.
 //
+//		     7. IBasicErrorPrefix - An interface to a method generating
+//		        a two-dimensional slice of strings containing error
+//		        prefix and error context information.
+//
+//		     If parameter 'errorPrefix' is NOT convertible to one of
+//		     the valid types listed above, it will be considered
+//		     invalid and trigger the return of an error.
+//
+//		     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		     the 'errpref' software package,
+//		     "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If this method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If this method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (txtFieldSpacer *TextFieldSpecSpacer) SetFieldLen(
 	fieldLen int,
 	errorPrefix interface{}) (
@@ -1700,40 +1643,38 @@ func (txtFieldSpacer *TextFieldSpecSpacer) SetFieldLen(
 //
 // This method also fulfills the requirements of the 'Stringer'
 // interface defined in the Golang package 'fmt'. Reference:
-//   https://pkg.go.dev/fmt#Stringer
+//
+//	https://pkg.go.dev/fmt#Stringer
 //
 // Methods which return formatted text are listed as follows:
-//  TextFieldSpecSpacer.String()
-//  TextFieldSpecSpacer.GetFormattedText()
-//  TextFieldSpecSpacer.TextBuilder()
 //
+//	TextFieldSpecSpacer.String()
+//	TextFieldSpecSpacer.GetFormattedText()
+//	TextFieldSpecSpacer.TextBuilder()
 //
 // ------------------------------------------------------------------------
 //
 // Example Usage
 //
-//  fieldLen = 1 produces text field " "
-//  fieldLen = 2 produces text field "  "
-//  fieldLen = 5 produces text field "     "
-//
+//	fieldLen = 1 produces text field " "
+//	fieldLen = 2 produces text field "  "
+//	fieldLen = 5 produces text field "     "
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  --- NONE ---
-//
+//	--- NONE ---
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  string
-//     - This method will return a string of white space characters
-//       generated by the current instance of TextFieldSpecSpacer.
-//       The number of white space characters in this returned
-//       text string is controlled by the field length parameter.
-//
+//	string
+//	   - This method will return a string of white space characters
+//	     generated by the current instance of TextFieldSpecSpacer.
+//	     The number of white space characters in this returned
+//	     text string is controlled by the field length parameter.
 func (txtFieldSpacer *TextFieldSpecSpacer) String() string {
 
 	if txtFieldSpacer.lock == nil {
@@ -1770,81 +1711,79 @@ func (txtFieldSpacer *TextFieldSpecSpacer) String() string {
 // ITextFieldSpecification interface.
 //
 // Methods which return formatted text are listed as follows:
-//  TextFieldSpecSpacer.String()
-//  TextFieldSpecSpacer.GetFormattedText()
-//  TextFieldSpecSpacer.TextBuilder()
 //
+//	TextFieldSpecSpacer.String()
+//	TextFieldSpecSpacer.GetFormattedText()
+//	TextFieldSpecSpacer.TextBuilder()
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	 errorPrefix                interface{}
+//		   - This object encapsulates error prefix text which is
+//		     included in all returned error messages. Usually, it
+//		     contains the name of the calling method or methods
+//		     listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//		     If no error prefix information is needed, set this parameter
+//		     to 'nil'.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//		     This empty interface must be convertible to one of the
+//		     following types:
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//		     1. nil - A nil value is valid and generates an empty
+//		        collection of error prefix and error context
+//		        information.
 //
-//       2. string - A string containing error prefix information.
+//		     2. string - A string containing error prefix information.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//		     3. []string A one-dimensional slice of strings containing
+//		        error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//		     4. [][2]string A two-dimensional slice of strings
+//		        containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		        from this object will be copied for use in error and
+//		        informational messages.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//		     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		        Information from this object will be copied for use in
+//		        error and informational messages.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//		     7. IBasicErrorPrefix - An interface to a method generating
+//		        a two-dimensional slice of strings containing error
+//		        prefix and error context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//		     If parameter 'errorPrefix' is NOT convertible to one of
+//		     the valid types listed above, it will be considered
+//		     invalid and trigger the return of an error.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
-//
+//		     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		     the 'errpref' software package,
+//		     "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  strings.Builder
-//    - If the method completes successfully, an instance of
-//      strings.Builder will be returned containing the line of
-//      formatted text produced by the current instance of
-//      TextFieldSpecSpacer.
+//	strings.Builder
+//	  - If the method completes successfully, an instance of
+//	    strings.Builder will be returned containing the line of
+//	    formatted text produced by the current instance of
+//	    TextFieldSpecSpacer.
 //
 //
-//  error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (txtFieldSpacer *TextFieldSpecSpacer) TextBuilder(
 	strBuilder *strings.Builder,
 	errorPrefix interface{}) error {
@@ -1928,7 +1867,6 @@ func (txtFieldSpacer *TextFieldSpecSpacer) TextBuilder(
 //
 // This method fulfills the requirements of the
 // ITextFieldSpecification interface.
-//
 func (txtFieldSpacer *TextFieldSpecSpacer) TextFieldName() string {
 
 	if txtFieldSpacer.lock == nil {
@@ -1947,7 +1885,6 @@ func (txtFieldSpacer *TextFieldSpecSpacer) TextFieldName() string {
 //
 // This method fulfills the requirements of the ITextSpecification
 // interface.
-//
 func (txtFieldSpacer *TextFieldSpecSpacer) TextTypeName() string {
 
 	if txtFieldSpacer.lock == nil {

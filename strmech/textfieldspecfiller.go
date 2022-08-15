@@ -30,15 +30,15 @@ import (
 // characters are repeated one or more times in order to construct
 // the complete filler field as shown in the following examples:
 //
-//  Example 1:
-//   Filler Characters = "-"
-//   Filler Characters Repeat Count = 3
-//   Formatted Text = "---"
+//	Example 1:
+//	 Filler Characters = "-"
+//	 Filler Characters Repeat Count = 3
+//	 Formatted Text = "---"
 //
-//  Example 2:
-//   Filler Characters = "-*"
-//   Filler Characters Repeat Count = 3
-//   Formatted Text = "-*-*-*"
+//	Example 2:
+//	 Filler Characters = "-*"
+//	 Filler Characters Repeat Count = 3
+//	 Formatted Text = "-*-*-*"
 //
 // The 'fillerCharsRepeatCount' integer value is the number times
 // that 'fillerCharacters' is repeated in order to construct the
@@ -47,43 +47,42 @@ import (
 // 'fillerCharsRepeatCount' values less than or equal to zero
 // constitute an error condition.
 //
-// Member Variables
+// # Member Variables
 //
 // ----------------------------------------------------------------
 //
-//  fillerCharacters           []rune
-//     - A rune array containing the text characters which will be
-//       included in the Text Filler Field. The final Text Filler
-//       Field will be constructed from ths filler characters
-//       repeated one or more times as specified by the
-//       'fillerCharsRepeatCount' parameter.
+//	fillerCharacters           []rune
+//	   - A rune array containing the text characters which will be
+//	     included in the Text Filler Field. The final Text Filler
+//	     Field will be constructed from ths filler characters
+//	     repeated one or more times as specified by the
+//	     'fillerCharsRepeatCount' parameter.
 //
-//       The Text Field Filler final formatted text is equal to:
-//          fillerCharacters X fillerCharsRepeatCount
-//          Example: fillerCharacters = []rune{'-','*'}
-//                   fillerRepeatCount = 3
-//                   Final Text Filler Field = "-*-*-*"
+//	     The Text Field Filler final formatted text is equal to:
+//	        fillerCharacters X fillerCharsRepeatCount
+//	        Example: fillerCharacters = []rune{'-','*'}
+//	                 fillerRepeatCount = 3
+//	                 Final Text Filler Field = "-*-*-*"
 //
 //
-//  fillerCharsRepeatCount     int
-//     - Controls the number of times 'fillerCharacters' is
-//       repeated when constructing the final Text Filler Field
-//       returned by this method. The actual length of the string
-//       which will populated the completed Text Filler Field is
-//       equal to the length of 'fillerCharacters' times the value
-//       of 'fillerCharsRepeatCount'.
+//	fillerCharsRepeatCount     int
+//	   - Controls the number of times 'fillerCharacters' is
+//	     repeated when constructing the final Text Filler Field
+//	     returned by this method. The actual length of the string
+//	     which will populated the completed Text Filler Field is
+//	     equal to the length of 'fillerCharacters' times the value
+//	     of 'fillerCharsRepeatCount'.
 //
-//        Text Field Filler Length =
-//          Length of fillerCharacters X fillerCharsRepeatCount
+//	      Text Field Filler Length =
+//	        Length of fillerCharacters X fillerCharsRepeatCount
 //
-//          Example #1: fillerCharacters = []rune{'-','*'}
-//                      fillerRepeatCount = 3
-//                      Final Text Filler Field = "-*-*-*"
+//	        Example #1: fillerCharacters = []rune{'-','*'}
+//	                    fillerRepeatCount = 3
+//	                    Final Text Filler Field = "-*-*-*"
 //
-//          Example #2: fillerCharacters = []rune{'-'}
-//                      fillerRepeatCount = 3
-//                      Final Text Filler Field = "---"
-//
+//	        Example #2: fillerCharacters = []rune{'-'}
+//	                    fillerRepeatCount = 3
+//	                    Final Text Filler Field = "---"
 type TextFieldSpecFiller struct {
 	fillerCharacters []rune // The base characters which comprise the text filler
 	//                                  //   field. See 'fillerCharsRepeatCount'.
@@ -101,84 +100,80 @@ type TextFieldSpecFiller struct {
 // All the data fields in current TextFieldSpecFiller instance
 // ('txtFillerField') will be modified and overwritten.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  incomingTxtFieldFiller     *TextFieldSpecFiller
-//     - A pointer to an instance of TextFieldSpecFiller. This
-//       method will NOT change the values of internal member
-//       variables contained in this instance.
+//	 incomingTxtFieldFiller     *TextFieldSpecFiller
+//	    - A pointer to an instance of TextFieldSpecFiller. This
+//	      method will NOT change the values of internal member
+//	      variables contained in this instance.
 //
-//       All data values in this TextFieldSpecFiller instance
-//       will be copied to current TextFieldSpecFiller
-//       instance ('txtFillerField').
+//	      All data values in this TextFieldSpecFiller instance
+//	      will be copied to current TextFieldSpecFiller
+//	      instance ('txtFillerField').
 //
-//       If parameter 'incomingTxtFieldFiller' is determined to be
-//       invalid, an error will be returned.
-//
-//
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
-//
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
-//
-//       This empty interface must be convertible to one of the
-//       following types:
+//	      If parameter 'incomingTxtFieldFiller' is determined to be
+//	      invalid, an error will be returned.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	 errorPrefix                interface{}
+//		   - This object encapsulates error prefix text which is
+//		     included in all returned error messages. Usually, it
+//		     contains the name of the calling method or methods
+//		     listed as a method or function chain of execution.
 //
-//       2. string - A string containing error prefix information.
+//		     If no error prefix information is needed, set this parameter
+//		     to 'nil'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//		     This empty interface must be convertible to one of the
+//		     following types:
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//		     1. nil - A nil value is valid and generates an empty
+//		        collection of error prefix and error context
+//		        information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//		     2. string - A string containing error prefix information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//		     3. []string A one-dimensional slice of strings containing
+//		        error prefix information
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//		     4. [][2]string A two-dimensional slice of strings
+//		        containing error prefix and error context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		        from this object will be copied for use in error and
+//		        informational messages.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//		     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		        Information from this object will be copied for use in
+//		        error and informational messages.
 //
+//		     7. IBasicErrorPrefix - An interface to a method generating
+//		        a two-dimensional slice of strings containing error
+//		        prefix and error context information.
+//
+//		     If parameter 'errorPrefix' is NOT convertible to one of
+//		     the valid types listed above, it will be considered
+//		     invalid and trigger the return of an error.
+//
+//		     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		     the 'errpref' software package,
+//		     "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If this method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If this method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (txtFillerField *TextFieldSpecFiller) CopyIn(
 	incomingTxtFieldFiller *TextFieldSpecFiller,
 	errorPrefix interface{}) error {
@@ -217,77 +212,73 @@ func (txtFillerField *TextFieldSpecFiller) CopyIn(
 // If the current TextFieldSpecFiller instance is invalid, an error
 // is returned.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	 errorPrefix                interface{}
+//		   - This object encapsulates error prefix text which is
+//		     included in all returned error messages. Usually, it
+//		     contains the name of the calling method or methods
+//		     listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//		     If no error prefix information is needed, set this parameter
+//		     to 'nil'.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//		     This empty interface must be convertible to one of the
+//		     following types:
 //
+//		     1. nil - A nil value is valid and generates an empty
+//		        collection of error prefix and error context
+//		        information.
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//		     2. string - A string containing error prefix information.
 //
-//       2. string - A string containing error prefix information.
+//		     3. []string A one-dimensional slice of strings containing
+//		        error prefix information
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//		     4. [][2]string A two-dimensional slice of strings
+//		        containing error prefix and error context information.
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		        from this object will be copied for use in error and
+//		        informational messages.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//		     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		        Information from this object will be copied for use in
+//		        error and informational messages.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//		     7. IBasicErrorPrefix - An interface to a method generating
+//		        a two-dimensional slice of strings containing error
+//		        prefix and error context information.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//		     If parameter 'errorPrefix' is NOT convertible to one of
+//		     the valid types listed above, it will be considered
+//		     invalid and trigger the return of an error.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
-//
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
-//
+//		     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		     the 'errpref' software package,
+//		     "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  TextFieldSpecFiller
-//     - If this method completes successfully and no errors are
-//       encountered, this parameter will return a deep copy of the
-//       current TextFieldSpecFiller instance.
+//	TextFieldSpecFiller
+//	   - If this method completes successfully and no errors are
+//	     encountered, this parameter will return a deep copy of the
+//	     current TextFieldSpecFiller instance.
 //
 //
-//  error
-//     - If this method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If this method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (txtFillerField *TextFieldSpecFiller) CopyOut(
 	errorPrefix interface{}) (
 	TextFieldSpecFiller,
@@ -330,78 +321,74 @@ func (txtFillerField *TextFieldSpecFiller) CopyOut(
 // This method is required by the ITextFieldSpecification
 // interface.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	 errorPrefix                interface{}
+//		   - This object encapsulates error prefix text which is
+//		     included in all returned error messages. Usually, it
+//		     contains the name of the calling method or methods
+//		     listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//		     If no error prefix information is needed, set this parameter
+//		     to 'nil'.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//		     This empty interface must be convertible to one of the
+//		     following types:
 //
+//		     1. nil - A nil value is valid and generates an empty
+//		        collection of error prefix and error context
+//		        information.
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//		     2. string - A string containing error prefix information.
 //
-//       2. string - A string containing error prefix information.
+//		     3. []string A one-dimensional slice of strings containing
+//		        error prefix information
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//		     4. [][2]string A two-dimensional slice of strings
+//		        containing error prefix and error context information.
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		        from this object will be copied for use in error and
+//		        informational messages.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//		     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		        Information from this object will be copied for use in
+//		        error and informational messages.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//		     7. IBasicErrorPrefix - An interface to a method generating
+//		        a two-dimensional slice of strings containing error
+//		        prefix and error context information.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//		     If parameter 'errorPrefix' is NOT convertible to one of
+//		     the valid types listed above, it will be considered
+//		     invalid and trigger the return of an error.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
-//
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
-//
+//		     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		     the 'errpref' software package,
+//		     "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  ITextFieldSpecification
-//     - If this method completes successfully and no errors are
-//       encountered, this parameter will return a deep copy of
-//       the current TextFieldSpecFiller instance cast as an
-//       ITextFieldSpecification object.
+//	ITextFieldSpecification
+//	   - If this method completes successfully and no errors are
+//	     encountered, this parameter will return a deep copy of
+//	     the current TextFieldSpecFiller instance cast as an
+//	     ITextFieldSpecification object.
 //
 //
-//  error
-//     - If this method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If this method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (txtFillerField *TextFieldSpecFiller) CopyOutITextField(
 	errorPrefix interface{}) (
 	ITextFieldSpecification,
@@ -454,77 +441,73 @@ func (txtFillerField *TextFieldSpecFiller) CopyOutITextField(
 // If the current TextFieldSpecFiller instance is invalid, an error
 // is returned.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	 errorPrefix                interface{}
+//		   - This object encapsulates error prefix text which is
+//		     included in all returned error messages. Usually, it
+//		     contains the name of the calling method or methods
+//		     listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//		     If no error prefix information is needed, set this parameter
+//		     to 'nil'.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//		     This empty interface must be convertible to one of the
+//		     following types:
 //
+//		     1. nil - A nil value is valid and generates an empty
+//		        collection of error prefix and error context
+//		        information.
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//		     2. string - A string containing error prefix information.
 //
-//       2. string - A string containing error prefix information.
+//		     3. []string A one-dimensional slice of strings containing
+//		        error prefix information
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//		     4. [][2]string A two-dimensional slice of strings
+//		        containing error prefix and error context information.
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		        from this object will be copied for use in error and
+//		        informational messages.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//		     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		        Information from this object will be copied for use in
+//		        error and informational messages.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//		     7. IBasicErrorPrefix - An interface to a method generating
+//		        a two-dimensional slice of strings containing error
+//		        prefix and error context information.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//		     If parameter 'errorPrefix' is NOT convertible to one of
+//		     the valid types listed above, it will be considered
+//		     invalid and trigger the return of an error.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
-//
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
-//
+//		     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		     the 'errpref' software package,
+//		     "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  *TextFieldSpecFiller
-//     - If this method completes successfully and no errors are
-//       encountered, this parameter will return a pointer to a
-//       deep copy of the current TextFieldSpecFiller instance.
+//	*TextFieldSpecFiller
+//	   - If this method completes successfully and no errors are
+//	     encountered, this parameter will return a pointer to a
+//	     deep copy of the current TextFieldSpecFiller instance.
 //
 //
-//  error
-//     - If this method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If this method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (txtFillerField *TextFieldSpecFiller) CopyOutPtr(
 	errorPrefix interface{}) (
 	*TextFieldSpecFiller,
@@ -565,7 +548,6 @@ func (txtFillerField *TextFieldSpecFiller) CopyOutPtr(
 
 // Empty - Resets all internal member variables to their initial
 // or zero states.
-//
 func (txtFillerField *TextFieldSpecFiller) Empty() {
 
 	if txtFillerField.lock == nil {
@@ -591,7 +573,6 @@ func (txtFillerField *TextFieldSpecFiller) Empty() {
 // returned. If the member variables are equal in all respects,
 // this flag is set to 'true'. Otherwise, this method returns
 // 'false'.
-//
 func (txtFillerField *TextFieldSpecFiller) Equal(
 	incomingTxtFieldFiller *TextFieldSpecFiller) bool {
 
@@ -618,7 +599,6 @@ func (txtFillerField *TextFieldSpecFiller) Equal(
 // returned. If the member variables from both instances are equal
 // in all respects, this flag is set to 'true'. Otherwise, this method returns
 // 'false'.
-//
 func (txtFillerField *TextFieldSpecFiller) EqualITextField(
 	iTextField ITextFieldSpecification) bool {
 
@@ -660,20 +640,20 @@ func (txtFillerField *TextFieldSpecFiller) EqualITextField(
 // times as specified by the 'fillerCharsRepeatCount' parameter.
 //
 // The Text Field Filler final formatted text is equal to:
-//          fillerCharacters X fillerCharsRepeatCount
 //
-//  Example 1:
-//   Filler Characters Array = "-"
-//   Filler Characters Repeat Count = 3
-//   Formatted Text = "---"
+//	        fillerCharacters X fillerCharsRepeatCount
 //
-//  Example 2:
-//   Filler Characters Array = "-*"
-//   Filler Characters Repeat Count = 3
-//   Formatted Text = "-*-*-*"
+//	Example 1:
+//	 Filler Characters Array = "-"
+//	 Filler Characters Repeat Count = 3
+//	 Formatted Text = "---"
+//
+//	Example 2:
+//	 Filler Characters Array = "-*"
+//	 Filler Characters Repeat Count = 3
+//	 Formatted Text = "-*-*-*"
 //
 // This method returns a string containing the Filler Characters.
-//
 func (txtFillerField *TextFieldSpecFiller) GetFillerChars() string {
 
 	if txtFillerField.lock == nil {
@@ -705,19 +685,19 @@ func (txtFillerField *TextFieldSpecFiller) GetFillerChars() string {
 // times as specified by the 'fillerCharsRepeatCount' parameter.
 //
 // The Text Field Filler final formatted text is equal to:
-//          fillerCharacters X fillerCharsRepeatCount
 //
-//  Example #1: fillerCharacters = []rune{'-','*'}
-//              fillerRepeatCount = 3
-//              Final Text Filler Field = "-*-*-*"
+//	        fillerCharacters X fillerCharsRepeatCount
 //
-//  Example #2: fillerCharacters = []rune{'-'}
-//              fillerRepeatCount = 3
-//              Final Text Filler Field = "---"
+//	Example #1: fillerCharacters = []rune{'-','*'}
+//	            fillerRepeatCount = 3
+//	            Final Text Filler Field = "-*-*-*"
+//
+//	Example #2: fillerCharacters = []rune{'-'}
+//	            fillerRepeatCount = 3
+//	            Final Text Filler Field = "---"
 //
 // This method returns an array of runes containing the Filler
 // Characters.
-//
 func (txtFillerField *TextFieldSpecFiller) GetFillerRunes() []rune {
 
 	if txtFillerField.lock == nil {
@@ -747,18 +727,19 @@ func (txtFillerField *TextFieldSpecFiller) GetFillerRunes() []rune {
 
 // GetFillerCharsRepeatCount - This method returns the integer
 // value of the internal member variable:
-//     TextFieldSpecFiller.fillerCharsRepeatCount
+//
+//	TextFieldSpecFiller.fillerCharsRepeatCount
 //
 // The Filler Characters Repeat Count is the number of times that
 // the Filler Characters are repeated when constructing the Text
 // Filler Field formatted text. The final formatted text is equal
 // to:  Filler Characters  X  Filler Characters Repeat Count
-//          Example: fillerCharacters = "-*"
-//                   fillerRepeatCount = 3
-//                   Final Text Filler Field = "-*-*-*"
+//
+//	Example: fillerCharacters = "-*"
+//	         fillerRepeatCount = 3
+//	         Final Text Filler Field = "-*-*-*"
 //
 // This method returns the Filler Characters Repeat Count.
-//
 func (txtFillerField *TextFieldSpecFiller) GetFillerCharsRepeatCount() int {
 
 	if txtFillerField.lock == nil {
@@ -776,12 +757,12 @@ func (txtFillerField *TextFieldSpecFiller) GetFillerCharsRepeatCount() int {
 // formatted text generated by the current instance of
 // TextFieldSpecFiller. Effectively, this is the length of the
 // strings returned by methods:
-//   TextFieldSpecFiller.GetFormattedText()
-//   TextFieldSpecFiller.String()
+//
+//	TextFieldSpecFiller.GetFormattedText()
+//	TextFieldSpecFiller.String()
 //
 // If an error is encountered, this method returns a value of minus
 // one (-1).
-//
 func (txtFillerField *TextFieldSpecFiller) GetFormattedStrLength() int {
 
 	if txtFillerField.lock == nil {
@@ -824,8 +805,8 @@ func (txtFillerField *TextFieldSpecFiller) GetFormattedStrLength() int {
 //
 // The length of the final formatted text string is the product of:
 //
-//  Filler Characters Array Length  X
-//               Filler Characters Repeat Count
+//	Filler Characters Array Length  X
+//	             Filler Characters Repeat Count
 //
 // This method is similar to method TextFieldSpecFiller.String()
 // with the exception that this method returns an error.
@@ -834,96 +815,91 @@ func (txtFillerField *TextFieldSpecFiller) GetFormattedStrLength() int {
 // ITextFieldSpecification interface.
 //
 // Methods which return formatted text are listed as follows:
-//  TextFieldSpecFiller.String()
-//  TextFieldSpecFiller.GetFormattedText()
-//  TextFieldSpecFiller.TextBuilder()
 //
+//	TextFieldSpecFiller.String()
+//	TextFieldSpecFiller.GetFormattedText()
+//	TextFieldSpecFiller.TextBuilder()
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	 errorPrefix                interface{}
+//		   - This object encapsulates error prefix text which is
+//		     included in all returned error messages. Usually, it
+//		     contains the name of the calling method or methods
+//		     listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//		     If no error prefix information is needed, set this parameter
+//		     to 'nil'.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//		     This empty interface must be convertible to one of the
+//		     following types:
 //
+//		     1. nil - A nil value is valid and generates an empty
+//		        collection of error prefix and error context
+//		        information.
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//		     2. string - A string containing error prefix information.
 //
-//       2. string - A string containing error prefix information.
+//		     3. []string A one-dimensional slice of strings containing
+//		        error prefix information
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//		     4. [][2]string A two-dimensional slice of strings
+//		        containing error prefix and error context information.
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
+//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		        from this object will be copied for use in error and
+//		        informational messages.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//		     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		        Information from this object will be copied for use in
+//		        error and informational messages.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//		     7. IBasicErrorPrefix - An interface to a method generating
+//		        a two-dimensional slice of strings containing error
+//		        prefix and error context information.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//		     If parameter 'errorPrefix' is NOT convertible to one of
+//		     the valid types listed above, it will be considered
+//		     invalid and trigger the return of an error.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
-//
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
-//
+//		     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		     the 'errpref' software package,
+//		     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  string
-//     - The formatted text string generated by the current
-//       instance of TextFieldSpecFiller.
+//	string
+//	   - The formatted text string generated by the current
+//	     instance of TextFieldSpecFiller.
 //
 //
-//  error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 //
 // ----------------------------------------------------------------
 //
 // Example Usage
 //
-//  Example 1:
-//   Filler Characters Array = []rune{'-'}
-//   Filler Characters Repeat Count = 3
-//   Formatted Text = "---"
+//	Example 1:
+//	 Filler Characters Array = []rune{'-'}
+//	 Filler Characters Repeat Count = 3
+//	 Formatted Text = "---"
 //
-//  Example 2:
-//   Filler Characters Array = []rune{'-','*'}
-//   Filler Characters Repeat Count = 3
-//   Formatted Text = "-*-*-*"
-//
+//	Example 2:
+//	 Filler Characters Array = []rune{'-','*'}
+//	 Filler Characters Repeat Count = 3
+//	 Formatted Text = "-*-*-*"
 func (txtFillerField *TextFieldSpecFiller) GetFormattedText(
 	errorPrefix interface{}) (
 	string,
@@ -965,24 +941,21 @@ func (txtFillerField *TextFieldSpecFiller) GetFormattedText(
 // 'true'. If any data element is invalid, this method returns
 // 'false'.
 //
-//
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  --- NONE ---
-//
+//	--- NONE ---
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  isValid             bool
-//     - If all data elements encapsulated by the current instance
-//       of TextFieldSpecFiller are valid, this returned boolean
-//       value is set to 'true'. If any data values are invalid,
-//       this return parameter is set to 'false'.
-//
+//	isValid             bool
+//	   - If all data elements encapsulated by the current instance
+//	     of TextFieldSpecFiller are valid, this returned boolean
+//	     value is set to 'true'. If any data values are invalid,
+//	     this return parameter is set to 'false'.
 func (txtFillerField *TextFieldSpecFiller) IsValidInstance() (
 	isValid bool) {
 
@@ -1010,72 +983,67 @@ func (txtFillerField *TextFieldSpecFiller) IsValidInstance() (
 // If any data element evaluates as invalid, this method will
 // return an error.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	 errorPrefix                interface{}
+//		   - This object encapsulates error prefix text which is
+//		     included in all returned error messages. Usually, it
+//		     contains the name of the calling method or methods
+//		     listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//		     If no error prefix information is needed, set this parameter
+//		     to 'nil'.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//		     This empty interface must be convertible to one of the
+//		     following types:
 //
+//		     1. nil - A nil value is valid and generates an empty
+//		        collection of error prefix and error context
+//		        information.
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//		     2. string - A string containing error prefix information.
 //
-//       2. string - A string containing error prefix information.
+//		     3. []string A one-dimensional slice of strings containing
+//		        error prefix information
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//		     4. [][2]string A two-dimensional slice of strings
+//		        containing error prefix and error context information.
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
+//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		        from this object will be copied for use in error and
+//		        informational messages.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//		     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		        Information from this object will be copied for use in
+//		        error and informational messages.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//		     7. IBasicErrorPrefix - An interface to a method generating
+//		        a two-dimensional slice of strings containing error
+//		        prefix and error context information.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//		     If parameter 'errorPrefix' is NOT convertible to one of
+//		     the valid types listed above, it will be considered
+//		     invalid and trigger the return of an error.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
-//
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
-//
+//		     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		     the 'errpref' software package,
+//		     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If any of the internal member data variables contained in
-//       the current instance of TextFieldSpecFiller are found to be
-//       invalid, this method will return an error  along with an
-//       appropriate error message.
+//	error
+//	   - If any of the internal member data variables contained in
+//	     the current instance of TextFieldSpecFiller are found to be
+//	     invalid, this method will return an error  along with an
+//	     appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' (error prefix) will be inserted or
-//       prefixed at the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' (error prefix) will be inserted or
+//	     prefixed at the beginning of the error message.
 func (txtFillerField *TextFieldSpecFiller) IsValidInstanceError(
 	errorPrefix interface{}) error {
 
@@ -1125,23 +1093,20 @@ func (txtFillerField *TextFieldSpecFiller) IsValidInstanceError(
 // users must later call the setter methods on this type in order
 // to configure valid and meaningful member variable data values.
 //
-//
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  --- NONE ---
-//
+//	--- NONE ---
 //
 // -----------------------------------------------------------------
 //
 // Return Values
 //
-//  TextFieldSpecFiller
-//     - This parameter returns a new and empty concrete instance
-//       of TextFieldSpecFiller. Member variable data values are
-//       set to their initial or zero values.
-//
+//	TextFieldSpecFiller
+//	   - This parameter returns a new and empty concrete instance
+//	     of TextFieldSpecFiller. Member variable data values are
+//	     set to their initial or zero values.
 func (txtFillerField TextFieldSpecFiller) New() TextFieldSpecFiller {
 
 	if txtFillerField.lock == nil {
@@ -1172,23 +1137,20 @@ func (txtFillerField TextFieldSpecFiller) New() TextFieldSpecFiller {
 // users must later call the setter methods on this type in order
 // to configure valid and meaningful member variable data values.
 //
-//
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  --- NONE ---
-//
+//	--- NONE ---
 //
 // -----------------------------------------------------------------
 //
 // Return Values
 //
-//  *TextFieldSpecFiller
-//     - This parameter returns a pointer to a new, empty instance
-//       of TextFieldSpecFiller. Member variable data values are
-//       set to their initial or zero values.
-//
+//	*TextFieldSpecFiller
+//	   - This parameter returns a pointer to a new, empty instance
+//	     of TextFieldSpecFiller. Member variable data values are
+//	     set to their initial or zero values.
 func (txtFillerField TextFieldSpecFiller) NewPtr() *TextFieldSpecFiller {
 
 	if txtFillerField.lock == nil {
@@ -1222,129 +1184,124 @@ func (txtFillerField TextFieldSpecFiller) NewPtr() *TextFieldSpecFiller {
 //
 // Input Parameters
 //
-//  fillerCharacters           string
-//     - A string containing the text characters which will be
-//       included in the Text Filler Field. The final Text Filler
-//       Field will be constructed from the filler characters
-//       repeated one or more times as specified by the
-//       'fillerCharsRepeatCount' parameter.
+//	 fillerCharacters           string
+//	    - A string containing the text characters which will be
+//	      included in the Text Filler Field. The final Text Filler
+//	      Field will be constructed from the filler characters
+//	      repeated one or more times as specified by the
+//	      'fillerCharsRepeatCount' parameter.
 //
-//       The Text Field Filler final formatted text is equal to:
-//          fillerCharacter X fillerCharsRepeatCount
-//          Example: fillerCharacters = "-*"
-//                   fillerRepeatCount = 3
-//                   Final Text Filler Field = "-*-*-*"
+//	      The Text Field Filler final formatted text is equal to:
+//	         fillerCharacter X fillerCharsRepeatCount
+//	         Example: fillerCharacters = "-*"
+//	                  fillerRepeatCount = 3
+//	                  Final Text Filler Field = "-*-*-*"
 //
-//       If 'fillerCharacters' is submitted as an empty or zero
-//       length string, this method will return an error.
-//
-//
-//  fillerCharsRepeatCount     int
-//     - Controls the number of times 'fillerCharacters' is
-//       repeated when constructing the final Text Filler Field
-//       returned by this method. The actual length of the string
-//       which will populated the completed Text Filler Field is
-//       equal to the length of 'fillerCharacters' times the value
-//       of 'fillerCharsRepeatCount'.
-//
-//        Text Field Filler Length =
-//          Length of fillerCharacters X fillerCharsRepeatCount
-//
-//          Example #1: fillerCharacters = "-*"
-//                      fillerRepeatCount = 3
-//                      Final Text Filler Field = "-*-*-*"
-//
-//          Example #2: fillerCharacters = "-"
-//                      fillerRepeatCount = 3
-//                      Final Text Filler Field = "---"
-//
-//       If 'fillerCharsRepeatCount' has a value less than one (1) or
-//       greater than one-million (1,000,000), an error will be
-//       returned.
+//	      If 'fillerCharacters' is submitted as an empty or zero
+//	      length string, this method will return an error.
 //
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	 fillerCharsRepeatCount     int
+//	    - Controls the number of times 'fillerCharacters' is
+//	      repeated when constructing the final Text Filler Field
+//	      returned by this method. The actual length of the string
+//	      which will populated the completed Text Filler Field is
+//	      equal to the length of 'fillerCharacters' times the value
+//	      of 'fillerCharsRepeatCount'.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	       Text Field Filler Length =
+//	         Length of fillerCharacters X fillerCharsRepeatCount
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	         Example #1: fillerCharacters = "-*"
+//	                     fillerRepeatCount = 3
+//	                     Final Text Filler Field = "-*-*-*"
+//
+//	         Example #2: fillerCharacters = "-"
+//	                     fillerRepeatCount = 3
+//	                     Final Text Filler Field = "---"
+//
+//	      If 'fillerCharsRepeatCount' has a value less than one (1) or
+//	      greater than one-million (1,000,000), an error will be
+//	      returned.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	 errorPrefix                interface{}
+//		   - This object encapsulates error prefix text which is
+//		     included in all returned error messages. Usually, it
+//		     contains the name of the calling method or methods
+//		     listed as a method or function chain of execution.
 //
-//       2. string - A string containing error prefix information.
+//		     If no error prefix information is needed, set this parameter
+//		     to 'nil'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//		     This empty interface must be convertible to one of the
+//		     following types:
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
+//		     1. nil - A nil value is valid and generates an empty
+//		        collection of error prefix and error context
+//		        information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//		     2. string - A string containing error prefix information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//		     3. []string A one-dimensional slice of strings containing
+//		        error prefix information
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//		     4. [][2]string A two-dimensional slice of strings
+//		        containing error prefix and error context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		        from this object will be copied for use in error and
+//		        informational messages.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
+//		     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		        Information from this object will be copied for use in
+//		        error and informational messages.
 //
+//		     7. IBasicErrorPrefix - An interface to a method generating
+//		        a two-dimensional slice of strings containing error
+//		        prefix and error context information.
+//
+//		     If parameter 'errorPrefix' is NOT convertible to one of
+//		     the valid types listed above, it will be considered
+//		     invalid and trigger the return of an error.
+//
+//		     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		     the 'errpref' software package,
+//		     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  *TextFieldSpecFiller
-//     - If this method completes successfully, this parameter will
-//       return a pointer to a valid and fully populated Text Filler
-//       Field object.
+//	*TextFieldSpecFiller
+//	   - If this method completes successfully, this parameter will
+//	     return a pointer to a valid and fully populated Text Filler
+//	     Field object.
 //
 //
-//  error
-//     - If this method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If this method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 //
 // ------------------------------------------------------------------------
 //
 // Example Usage
 //
-//  Example 1:
-//   Filler Characters = "-"
-//   Filler Characters Repeat Count = 3
-//   Formatted Text = "---"
+//	Example 1:
+//	 Filler Characters = "-"
+//	 Filler Characters Repeat Count = 3
+//	 Formatted Text = "---"
 //
-//  Example 2:
-//   Filler Characters = "-*"
-//   Filler Characters Repeat Count = 3
-//   Formatted Text = "-*-*-*"
-//
+//	Example 2:
+//	 Filler Characters = "-*"
+//	 Filler Characters Repeat Count = 3
+//	 Formatted Text = "-*-*-*"
 func (txtFillerField TextFieldSpecFiller) NewPtrTextFiller(
 	fillerCharacters string,
 	fillerCharsRepeatCount int,
@@ -1400,129 +1357,123 @@ func (txtFillerField TextFieldSpecFiller) NewPtrTextFiller(
 // TextFieldSpecFiller and TextFieldSpecFiller.NewTextFillerRune()
 // returns a concrete instance of TextFieldSpecFiller.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  fillerCharacter            rune
-//     - A rune containing the text character which will be
-//       included in the Text Filler Field. The final Text Filler
-//       Field will be constructed from ths filler character
-//       repeated one or more times as specified by the
-//       'fillerCharsRepeatCount' parameter.
+//	 fillerCharacter            rune
+//	    - A rune containing the text character which will be
+//	      included in the Text Filler Field. The final Text Filler
+//	      Field will be constructed from ths filler character
+//	      repeated one or more times as specified by the
+//	      'fillerCharsRepeatCount' parameter.
 //
-//       The Text Field Filler final formatted text is equal to:
-//           fillerCharacter X fillerCharsRepeatCount
-//           Example: fillerCharacter = '-'
-//                    fillerRepeatCount = 3
-//                    Final Text Filler Field = "---"
+//	      The Text Field Filler final formatted text is equal to:
+//	          fillerCharacter X fillerCharsRepeatCount
+//	          Example: fillerCharacter = '-'
+//	                   fillerRepeatCount = 3
+//	                   Final Text Filler Field = "---"
 //
-//       If 'fillerCharacter' is submitted with a zero value,
-//       this method will return an error.
-//
-//
-//  fillerCharsRepeatCount     int
-//     - Controls the number of times 'fillerCharacter' is
-//       repeated when constructing the final Text Filler Field
-//       returned by this method. The actual length of the string
-//       which will populated the completed Text Filler Field is
-//       equal to the length of 'fillerCharacter' (1) times the
-//       value of 'fillerCharsRepeatCount'.
-//
-//         Text Field Filler Length =
-//           Length of fillerCharacter (1) X fillerCharsRepeatCount
-//           Example: fillerCharacter = '-'
-//                    fillerRepeatCount = 3
-//                    Final Text Filler Field = "---"
-//
-//       If 'fillerCharsRepeatCount' has a value less than one (1) or
-//       greater than one-million (1,000,000), an error will be
-//       returned.
+//	      If 'fillerCharacter' is submitted with a zero value,
+//	      this method will return an error.
 //
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	 fillerCharsRepeatCount     int
+//	    - Controls the number of times 'fillerCharacter' is
+//	      repeated when constructing the final Text Filler Field
+//	      returned by this method. The actual length of the string
+//	      which will populated the completed Text Filler Field is
+//	      equal to the length of 'fillerCharacter' (1) times the
+//	      value of 'fillerCharsRepeatCount'.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	        Text Field Filler Length =
+//	          Length of fillerCharacter (1) X fillerCharsRepeatCount
+//	          Example: fillerCharacter = '-'
+//	                   fillerRepeatCount = 3
+//	                   Final Text Filler Field = "---"
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	      If 'fillerCharsRepeatCount' has a value less than one (1) or
+//	      greater than one-million (1,000,000), an error will be
+//	      returned.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	 errorPrefix                interface{}
+//		   - This object encapsulates error prefix text which is
+//		     included in all returned error messages. Usually, it
+//		     contains the name of the calling method or methods
+//		     listed as a method or function chain of execution.
 //
-//       2. string - A string containing error prefix information.
+//		     If no error prefix information is needed, set this parameter
+//		     to 'nil'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//		     This empty interface must be convertible to one of the
+//		     following types:
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
+//		     1. nil - A nil value is valid and generates an empty
+//		        collection of error prefix and error context
+//		        information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//		     2. string - A string containing error prefix information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//		     3. []string A one-dimensional slice of strings containing
+//		        error prefix information
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//		     4. [][2]string A two-dimensional slice of strings
+//		        containing error prefix and error context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		        from this object will be copied for use in error and
+//		        informational messages.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
+//		     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		        Information from this object will be copied for use in
+//		        error and informational messages.
 //
+//		     7. IBasicErrorPrefix - An interface to a method generating
+//		        a two-dimensional slice of strings containing error
+//		        prefix and error context information.
+//
+//		     If parameter 'errorPrefix' is NOT convertible to one of
+//		     the valid types listed above, it will be considered
+//		     invalid and trigger the return of an error.
+//
+//		     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		     the 'errpref' software package,
+//		     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  *TextFieldSpecFiller
-//     - If this method completes successfully, this parameter will
-//       return a pointer to a new, valid and fully populated Text
-//       Filler Field.
+//	*TextFieldSpecFiller
+//	   - If this method completes successfully, this parameter will
+//	     return a pointer to a new, valid and fully populated Text
+//	     Filler Field.
 //
 //
-//  error
-//     - If this method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If this method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 //
 // ------------------------------------------------------------------------
 //
 // Example Usage
 //
-//  Example 1:
-//   Filler Character = '-'
-//   Filler Characters Repeat Count = 3
-//   Formatted Text = "---"
+//	Example 1:
+//	 Filler Character = '-'
+//	 Filler Characters Repeat Count = 3
+//	 Formatted Text = "---"
 //
-//  Example 2:
-//   Filler Character = '*'
-//   Filler Characters Repeat Count = 3
-//   Formatted Text = "***"
-//
+//	Example 2:
+//	 Filler Character = '*'
+//	 Filler Characters Repeat Count = 3
+//	 Formatted Text = "***"
 func (txtFillerField TextFieldSpecFiller) NewPtrTextFillerRune(
 	fillerCharacter rune,
 	fillerCharsRepeatCount int,
@@ -1579,134 +1530,128 @@ func (txtFillerField TextFieldSpecFiller) NewPtrTextFillerRune(
 // TextFieldSpecFiller.NewTextFillerRuneArray() returns a concrete
 // instance of TextFieldSpecFiller.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  fillerCharacters           []rune
-//     - A rune array containing the text characters which will be
-//       included in the Text Filler Field. The final Text Filler
-//       Field will be constructed from ths filler characters
-//       repeated one or more times as specified by the
-//       'fillerCharsRepeatCount' parameter.
+//	 fillerCharacters           []rune
+//	    - A rune array containing the text characters which will be
+//	      included in the Text Filler Field. The final Text Filler
+//	      Field will be constructed from ths filler characters
+//	      repeated one or more times as specified by the
+//	      'fillerCharsRepeatCount' parameter.
 //
-//       The Text Field Filler final formatted text is equal to:
-//          fillerCharacters X fillerCharsRepeatCount
-//          Example: fillerCharacters = []rune{'-','*'}
-//                   fillerRepeatCount = 3
-//                   Final Text Filler Field = "-*-*-*"
+//	      The Text Field Filler final formatted text is equal to:
+//	         fillerCharacters X fillerCharsRepeatCount
+//	         Example: fillerCharacters = []rune{'-','*'}
+//	                  fillerRepeatCount = 3
+//	                  Final Text Filler Field = "-*-*-*"
 //
-//       If 'fillerCharacters' is submitted with a zero length rune
-//       array, this method will return an error.
-//
-//
-//  fillerCharsRepeatCount     int
-//     - Controls the number of times 'fillerCharacters' is
-//       repeated when constructing the final Text Filler Field
-//       returned by this method. The actual length of the string
-//       which will populated the completed Text Filler Field is
-//       equal to the length of 'fillerCharacters' times the value
-//       of 'fillerCharsRepeatCount'.
-//
-//        Text Field Filler Length =
-//          Length of fillerCharacters X fillerCharsRepeatCount
-//
-//          Example #1: fillerCharacters = []rune{'-','*'}
-//                      fillerRepeatCount = 3
-//                      Final Text Filler Field = "-*-*-*"
-//
-//          Example #2: fillerCharacters = []rune{'-'}
-//                      fillerRepeatCount = 3
-//                      Final Text Filler Field = "---"
-//
-//       If 'fillerCharsRepeatCount' has a value less than one (1) or
-//       greater than one-million (1,000,000), an error will be
-//       returned.
+//	      If 'fillerCharacters' is submitted with a zero length rune
+//	      array, this method will return an error.
 //
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	 fillerCharsRepeatCount     int
+//	    - Controls the number of times 'fillerCharacters' is
+//	      repeated when constructing the final Text Filler Field
+//	      returned by this method. The actual length of the string
+//	      which will populated the completed Text Filler Field is
+//	      equal to the length of 'fillerCharacters' times the value
+//	      of 'fillerCharsRepeatCount'.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	       Text Field Filler Length =
+//	         Length of fillerCharacters X fillerCharsRepeatCount
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	         Example #1: fillerCharacters = []rune{'-','*'}
+//	                     fillerRepeatCount = 3
+//	                     Final Text Filler Field = "-*-*-*"
+//
+//	         Example #2: fillerCharacters = []rune{'-'}
+//	                     fillerRepeatCount = 3
+//	                     Final Text Filler Field = "---"
+//
+//	      If 'fillerCharsRepeatCount' has a value less than one (1) or
+//	      greater than one-million (1,000,000), an error will be
+//	      returned.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	 errorPrefix                interface{}
+//		   - This object encapsulates error prefix text which is
+//		     included in all returned error messages. Usually, it
+//		     contains the name of the calling method or methods
+//		     listed as a method or function chain of execution.
 //
-//       2. string - A string containing error prefix information.
+//		     If no error prefix information is needed, set this parameter
+//		     to 'nil'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//		     This empty interface must be convertible to one of the
+//		     following types:
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
+//		     1. nil - A nil value is valid and generates an empty
+//		        collection of error prefix and error context
+//		        information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//		     2. string - A string containing error prefix information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//		     3. []string A one-dimensional slice of strings containing
+//		        error prefix information
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//		     4. [][2]string A two-dimensional slice of strings
+//		        containing error prefix and error context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		        from this object will be copied for use in error and
+//		        informational messages.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
+//		     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		        Information from this object will be copied for use in
+//		        error and informational messages.
 //
+//		     7. IBasicErrorPrefix - An interface to a method generating
+//		        a two-dimensional slice of strings containing error
+//		        prefix and error context information.
+//
+//		     If parameter 'errorPrefix' is NOT convertible to one of
+//		     the valid types listed above, it will be considered
+//		     invalid and trigger the return of an error.
+//
+//		     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		     the 'errpref' software package,
+//		     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  *TextFieldSpecFiller
-//     - If this method completes successfully, this parameter will
-//       return a pointer to a new, valid and fully populated Text
-//       Filler Field.
+//	*TextFieldSpecFiller
+//	   - If this method completes successfully, this parameter will
+//	     return a pointer to a new, valid and fully populated Text
+//	     Filler Field.
 //
 //
-//  error
-//     - If this method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If this method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 //
 // ------------------------------------------------------------------------
 //
 // Example Usage
 //
-//  Example 1:
-//   Filler Characters Array = []rune{'-'}
-//   Filler Characters Repeat Count = 3
-//   Formatted Text = "---"
+//	Example 1:
+//	 Filler Characters Array = []rune{'-'}
+//	 Filler Characters Repeat Count = 3
+//	 Formatted Text = "---"
 //
-//  Example 2:
-//   Filler Characters Array = []rune{'-','*'}
-//   Filler Characters Repeat Count = 3
-//   Formatted Text = "-*-*-*"
-//
+//	Example 2:
+//	 Filler Characters Array = []rune{'-','*'}
+//	 Filler Characters Repeat Count = 3
+//	 Formatted Text = "-*-*-*"
 func (txtFillerField TextFieldSpecFiller) NewPtrTextFillerRuneArray(
 	fillerCharacters []rune,
 	fillerCharsRepeatCount int,
@@ -1761,138 +1706,132 @@ func (txtFillerField TextFieldSpecFiller) NewPtrTextFillerRuneArray(
 // TextFieldSpecFiller and TextFieldSpecFiller.NewPtrTextFiller()
 // returns a pointer to a TextFieldSpecLabel instance.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  fillerCharacters           string
-//     - A string containing the text characters which will be
-//       included in the Text Filler Field. The final Text Filler
-//       Field will be constructed from the filler characters
-//       repeated one or more times as specified by the
-//       'fillerCharsRepeatCount' parameter.
+//	 fillerCharacters           string
+//	    - A string containing the text characters which will be
+//	      included in the Text Filler Field. The final Text Filler
+//	      Field will be constructed from the filler characters
+//	      repeated one or more times as specified by the
+//	      'fillerCharsRepeatCount' parameter.
 //
-//        Text Field Filler Length =
-//          Length of fillerCharacters X fillerCharsRepeatCount
+//	       Text Field Filler Length =
+//	         Length of fillerCharacters X fillerCharsRepeatCount
 //
-//          Example #1: fillerCharacters = "-*"
-//                      fillerRepeatCount = 3
-//                      Final Text Filler Field = "-*-*-*"
+//	         Example #1: fillerCharacters = "-*"
+//	                     fillerRepeatCount = 3
+//	                     Final Text Filler Field = "-*-*-*"
 //
-//          Example #2: fillerCharacters = "-"
-//                      fillerRepeatCount = 3
-//                      Final Text Filler Field = "---"
+//	         Example #2: fillerCharacters = "-"
+//	                     fillerRepeatCount = 3
+//	                     Final Text Filler Field = "---"
 //
-//       If 'fillerCharacters' is submitted as an empty or zero
-//       length string, this method will return an error.
-//
-//
-//  fillerCharsRepeatCount     int
-//     - Controls the number of times 'fillerCharacters' is
-//       repeated when constructing the final Text Filler Field
-//       returned by this method. The actual length of the string
-//       which will populated the completed Text Filler Field is
-//       equal to the length of 'fillerCharacters' times the value
-//       of 'fillerCharsRepeatCount'.
-//
-//        Text Field Filler Length =
-//          Length of fillerCharacters X fillerCharsRepeatCount
-//
-//          Example #1: fillerCharacters = "-*"
-//                      fillerRepeatCount = 3
-//                      Final Text Filler Field = "-*-*-*"
-//
-//          Example #2: fillerCharacters = "-"
-//                      fillerRepeatCount = 3
-//                      Final Text Filler Field = "---"
-//
-//       If 'fillerCharsRepeatCount' has a value less than one (1) or
-//       greater than one-million (1,000,000), an error will be
-//       returned.
+//	      If 'fillerCharacters' is submitted as an empty or zero
+//	      length string, this method will return an error.
 //
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	 fillerCharsRepeatCount     int
+//	    - Controls the number of times 'fillerCharacters' is
+//	      repeated when constructing the final Text Filler Field
+//	      returned by this method. The actual length of the string
+//	      which will populated the completed Text Filler Field is
+//	      equal to the length of 'fillerCharacters' times the value
+//	      of 'fillerCharsRepeatCount'.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	       Text Field Filler Length =
+//	         Length of fillerCharacters X fillerCharsRepeatCount
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	         Example #1: fillerCharacters = "-*"
+//	                     fillerRepeatCount = 3
+//	                     Final Text Filler Field = "-*-*-*"
+//
+//	         Example #2: fillerCharacters = "-"
+//	                     fillerRepeatCount = 3
+//	                     Final Text Filler Field = "---"
+//
+//	      If 'fillerCharsRepeatCount' has a value less than one (1) or
+//	      greater than one-million (1,000,000), an error will be
+//	      returned.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	 errorPrefix                interface{}
+//		   - This object encapsulates error prefix text which is
+//		     included in all returned error messages. Usually, it
+//		     contains the name of the calling method or methods
+//		     listed as a method or function chain of execution.
 //
-//       2. string - A string containing error prefix information.
+//		     If no error prefix information is needed, set this parameter
+//		     to 'nil'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//		     This empty interface must be convertible to one of the
+//		     following types:
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
+//		     1. nil - A nil value is valid and generates an empty
+//		        collection of error prefix and error context
+//		        information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//		     2. string - A string containing error prefix information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//		     3. []string A one-dimensional slice of strings containing
+//		        error prefix information
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//		     4. [][2]string A two-dimensional slice of strings
+//		        containing error prefix and error context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		        from this object will be copied for use in error and
+//		        informational messages.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
+//		     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		        Information from this object will be copied for use in
+//		        error and informational messages.
 //
+//		     7. IBasicErrorPrefix - An interface to a method generating
+//		        a two-dimensional slice of strings containing error
+//		        prefix and error context information.
+//
+//		     If parameter 'errorPrefix' is NOT convertible to one of
+//		     the valid types listed above, it will be considered
+//		     invalid and trigger the return of an error.
+//
+//		     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		     the 'errpref' software package,
+//		     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  TextFieldSpecFiller
-//     - If this method completes successfully, this parameter will
-//       return a new concrete Text Filler Field object.
+//	TextFieldSpecFiller
+//	   - If this method completes successfully, this parameter will
+//	     return a new concrete Text Filler Field object.
 //
 //
-//  error
-//     - If this method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If this method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 //
 // ------------------------------------------------------------------------
 //
 // Example Usage
 //
-//  Example 1:
-//   Filler Characters = "-"
-//   Filler Characters Repeat Count = 3
-//   Formatted Text = "---"
+//	Example 1:
+//	 Filler Characters = "-"
+//	 Filler Characters Repeat Count = 3
+//	 Formatted Text = "---"
 //
-//  Example 2:
-//   Filler Characters = "-*"
-//   Filler Characters Repeat Count = 3
-//   Formatted Text = "-*-*-*"
-//
+//	Example 2:
+//	 Filler Characters = "-*"
+//	 Filler Characters Repeat Count = 3
+//	 Formatted Text = "-*-*-*"
 func (txtFillerField TextFieldSpecFiller) NewTextFiller(
 	fillerCharacters string,
 	fillerCharsRepeatCount int,
@@ -1948,128 +1887,122 @@ func (txtFillerField TextFieldSpecFiller) NewTextFiller(
 // TextFieldSpecFiller and TextFieldSpecFiller.NewPtrTextFillerRune()
 // returns a pointer to a TextFieldSpecFiller instance.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  fillerCharacter            rune
-//     - A rune containing the text character which will be
-//       included in the Text Filler Field. The final Text Filler
-//       Field will be constructed from ths filler character
-//       repeated one or more times as specified by the
-//       'fillerCharsRepeatCount' parameter.
+//	 fillerCharacter            rune
+//	    - A rune containing the text character which will be
+//	      included in the Text Filler Field. The final Text Filler
+//	      Field will be constructed from ths filler character
+//	      repeated one or more times as specified by the
+//	      'fillerCharsRepeatCount' parameter.
 //
-//       The Text Field Filler final formatted text is equal to:
-//           fillerCharacter X fillerCharsRepeatCount
-//           Example: fillerCharacter = '-'
-//                    fillerRepeatCount = 3
-//                    Final Text Filler Field = "---"
+//	      The Text Field Filler final formatted text is equal to:
+//	          fillerCharacter X fillerCharsRepeatCount
+//	          Example: fillerCharacter = '-'
+//	                   fillerRepeatCount = 3
+//	                   Final Text Filler Field = "---"
 //
-//       If 'fillerCharacter' is submitted with a zero value,
-//       this method will return an error.
-//
-//
-//  fillerCharsRepeatCount     int
-//     - Controls the number of times 'fillerCharacter' is
-//       repeated when constructing the final Text Filler Field
-//       returned by this method. The actual length of the string
-//       which will populated the completed Text Filler Field is
-//       equal to the length of 'fillerCharacter' (1) times the
-//       value of 'fillerCharsRepeatCount'.
-//
-//         Text Field Filler Length =
-//           Length of fillerCharacter (1) X fillerCharsRepeatCount
-//           Example: fillerCharacter = '-'
-//                    fillerRepeatCount = 3
-//                    Final Text Filler Field = "---"
-//
-//       If 'fillerCharsRepeatCount' has a value less than one (1)
-//       or greater than one-million (1,000,000), an error will be
-//       returned.
+//	      If 'fillerCharacter' is submitted with a zero value,
+//	      this method will return an error.
 //
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	 fillerCharsRepeatCount     int
+//	    - Controls the number of times 'fillerCharacter' is
+//	      repeated when constructing the final Text Filler Field
+//	      returned by this method. The actual length of the string
+//	      which will populated the completed Text Filler Field is
+//	      equal to the length of 'fillerCharacter' (1) times the
+//	      value of 'fillerCharsRepeatCount'.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	        Text Field Filler Length =
+//	          Length of fillerCharacter (1) X fillerCharsRepeatCount
+//	          Example: fillerCharacter = '-'
+//	                   fillerRepeatCount = 3
+//	                   Final Text Filler Field = "---"
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	      If 'fillerCharsRepeatCount' has a value less than one (1)
+//	      or greater than one-million (1,000,000), an error will be
+//	      returned.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	 errorPrefix                interface{}
+//		   - This object encapsulates error prefix text which is
+//		     included in all returned error messages. Usually, it
+//		     contains the name of the calling method or methods
+//		     listed as a method or function chain of execution.
 //
-//       2. string - A string containing error prefix information.
+//		     If no error prefix information is needed, set this parameter
+//		     to 'nil'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//		     This empty interface must be convertible to one of the
+//		     following types:
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
+//		     1. nil - A nil value is valid and generates an empty
+//		        collection of error prefix and error context
+//		        information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//		     2. string - A string containing error prefix information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//		     3. []string A one-dimensional slice of strings containing
+//		        error prefix information
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//		     4. [][2]string A two-dimensional slice of strings
+//		        containing error prefix and error context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		        from this object will be copied for use in error and
+//		        informational messages.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
+//		     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		        Information from this object will be copied for use in
+//		        error and informational messages.
 //
+//		     7. IBasicErrorPrefix - An interface to a method generating
+//		        a two-dimensional slice of strings containing error
+//		        prefix and error context information.
+//
+//		     If parameter 'errorPrefix' is NOT convertible to one of
+//		     the valid types listed above, it will be considered
+//		     invalid and trigger the return of an error.
+//
+//		     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		     the 'errpref' software package,
+//		     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  TextFieldSpecFiller
-//     - If this method completes successfully, this parameter will
-//       return a new, concrete instance of TextFieldSpecFiller.
+//	TextFieldSpecFiller
+//	   - If this method completes successfully, this parameter will
+//	     return a new, concrete instance of TextFieldSpecFiller.
 //
 //
-//  error
-//     - If this method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If this method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 //
 // ------------------------------------------------------------------------
 //
 // Example Usage
 //
-//  Example 1:
-//   Filler Characters Array = '-'
-//   Filler Characters Repeat Count = 3
-//   Formatted Text = "---"
+//	Example 1:
+//	 Filler Characters Array = '-'
+//	 Filler Characters Repeat Count = 3
+//	 Formatted Text = "---"
 //
-//  Example 2:
-//   Filler Characters Array = '*'
-//   Filler Characters Repeat Count = 3
-//   Formatted Text = "***"
-//
+//	Example 2:
+//	 Filler Characters Array = '*'
+//	 Filler Characters Repeat Count = 3
+//	 Formatted Text = "***"
 func (txtFillerField TextFieldSpecFiller) NewTextFillerRune(
 	fillerCharacter rune,
 	fillerCharsRepeatCount int,
@@ -2126,133 +2059,127 @@ func (txtFillerField TextFieldSpecFiller) NewTextFillerRune(
 // TextFieldSpecFiller.NewPtrTextFillerRuneArray() returns a pointer
 // to an instance of TextFieldSpecFiller.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  fillerCharacters           []rune
-//     - A rune array containing the text characters which will be
-//       included in the Text Filler Field. The final Text Filler
-//       Field will be constructed from these filler characters
-//       repeated one or more times as specified by the
-//       'fillerCharsRepeatCount' parameter.
+//	 fillerCharacters           []rune
+//	    - A rune array containing the text characters which will be
+//	      included in the Text Filler Field. The final Text Filler
+//	      Field will be constructed from these filler characters
+//	      repeated one or more times as specified by the
+//	      'fillerCharsRepeatCount' parameter.
 //
-//       The Text Field Filler final formatted text is equal to:
-//          fillerCharacters X fillerCharsRepeatCount
-//          Example: fillerCharacters = []rune{'-','*'}
-//                   fillerRepeatCount = 3
-//                   Final Text Filler Field = "-*-*-*"
+//	      The Text Field Filler final formatted text is equal to:
+//	         fillerCharacters X fillerCharsRepeatCount
+//	         Example: fillerCharacters = []rune{'-','*'}
+//	                  fillerRepeatCount = 3
+//	                  Final Text Filler Field = "-*-*-*"
 //
-//       If 'fillerCharacters' is submitted with a zero length rune
-//       array, this method will return an error.
-//
-//
-//  fillerCharsRepeatCount     int
-//     - Controls the number of times 'fillerCharacters' is
-//       repeated when constructing the final Text Filler Field
-//       returned by this method. The actual length of the string
-//       which will populated the completed Text Filler Field is
-//       equal to the length of 'fillerCharacters' times the value
-//       of 'fillerCharsRepeatCount'.
-//
-//        Text Field Filler Length =
-//          Length of fillerCharacters X fillerCharsRepeatCount
-//
-//          Example #1: fillerCharacters = []rune{'-','*'}
-//                      fillerRepeatCount = 3
-//                      Final Text Filler Field = "-*-*-*"
-//
-//          Example #2: fillerCharacters = []rune{'-'}
-//                      fillerRepeatCount = 3
-//                      Final Text Filler Field = "---"
-//
-//       If 'fillerCharsRepeatCount' has a value less than one (1) or
-//       greater than one-million (1,000,000), an error will be
-//       returned.
+//	      If 'fillerCharacters' is submitted with a zero length rune
+//	      array, this method will return an error.
 //
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	 fillerCharsRepeatCount     int
+//	    - Controls the number of times 'fillerCharacters' is
+//	      repeated when constructing the final Text Filler Field
+//	      returned by this method. The actual length of the string
+//	      which will populated the completed Text Filler Field is
+//	      equal to the length of 'fillerCharacters' times the value
+//	      of 'fillerCharsRepeatCount'.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	       Text Field Filler Length =
+//	         Length of fillerCharacters X fillerCharsRepeatCount
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	         Example #1: fillerCharacters = []rune{'-','*'}
+//	                     fillerRepeatCount = 3
+//	                     Final Text Filler Field = "-*-*-*"
+//
+//	         Example #2: fillerCharacters = []rune{'-'}
+//	                     fillerRepeatCount = 3
+//	                     Final Text Filler Field = "---"
+//
+//	      If 'fillerCharsRepeatCount' has a value less than one (1) or
+//	      greater than one-million (1,000,000), an error will be
+//	      returned.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	 errorPrefix                interface{}
+//		   - This object encapsulates error prefix text which is
+//		     included in all returned error messages. Usually, it
+//		     contains the name of the calling method or methods
+//		     listed as a method or function chain of execution.
 //
-//       2. string - A string containing error prefix information.
+//		     If no error prefix information is needed, set this parameter
+//		     to 'nil'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//		     This empty interface must be convertible to one of the
+//		     following types:
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
+//		     1. nil - A nil value is valid and generates an empty
+//		        collection of error prefix and error context
+//		        information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//		     2. string - A string containing error prefix information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//		     3. []string A one-dimensional slice of strings containing
+//		        error prefix information
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//		     4. [][2]string A two-dimensional slice of strings
+//		        containing error prefix and error context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		        from this object will be copied for use in error and
+//		        informational messages.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
+//		     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		        Information from this object will be copied for use in
+//		        error and informational messages.
 //
+//		     7. IBasicErrorPrefix - An interface to a method generating
+//		        a two-dimensional slice of strings containing error
+//		        prefix and error context information.
+//
+//		     If parameter 'errorPrefix' is NOT convertible to one of
+//		     the valid types listed above, it will be considered
+//		     invalid and trigger the return of an error.
+//
+//		     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		     the 'errpref' software package,
+//		     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  TextFieldSpecFiller
-//     - If this method completes successfully, this parameter will
-//       return a new concrete instance of TextFieldSpecFiller.
+//	TextFieldSpecFiller
+//	   - If this method completes successfully, this parameter will
+//	     return a new concrete instance of TextFieldSpecFiller.
 //
 //
-//  error
-//     - If this method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If this method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 //
 // ------------------------------------------------------------------------
 //
 // Example Usage
 //
-//  Example 1:
-//   Filler Characters Array = []rune{'-'}
-//   Filler Characters Repeat Count = 3
-//   Formatted Text = "---"
+//	Example 1:
+//	 Filler Characters Array = []rune{'-'}
+//	 Filler Characters Repeat Count = 3
+//	 Formatted Text = "---"
 //
-//  Example 2:
-//   Filler Characters Array = []rune{'-','*'}
-//   Filler Characters Repeat Count = 3
-//   Formatted Text = "-*-*-*"
-//
+//	Example 2:
+//	 Filler Characters Array = []rune{'-','*'}
+//	 Filler Characters Repeat Count = 3
+//	 Formatted Text = "-*-*-*"
 func (txtFillerField TextFieldSpecFiller) NewTextFillerRuneArray(
 	fillerCharacters []rune,
 	fillerCharsRepeatCount int,
@@ -2334,121 +2261,117 @@ func (txtFillerField TextFieldSpecFiller) NewTextFillerRuneArray(
 // This method fulfills the requirements of the
 // ITextFieldSpecification interface.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  p                          []byte
-//     - The byte buffer into which the formatted text string
-//       generated by the current txtFillerField instance will be
-//       written.
-//
+//	p                          []byte
+//	   - The byte buffer into which the formatted text string
+//	     generated by the current txtFillerField instance will be
+//	     written.
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  n                          int
-//     - The number of bytes written to byte buffer 'p'.
+//	n                          int
+//	   - The number of bytes written to byte buffer 'p'.
 //
-//       Read() reads up to len(p) bytes into p. It returns
-//       the number of bytes read (0 <= n <= len(p)) and any error
-//       encountered. Even if Read() returns n < len(p), it may use
-//       all of 'p' as scratch space during the call. If some
-//       data is available but not len(p) bytes, Read()
-//       conventionally returns what is available instead of
-//       waiting for more.
+//	     Read() reads up to len(p) bytes into p. It returns
+//	     the number of bytes read (0 <= n <= len(p)) and any error
+//	     encountered. Even if Read() returns n < len(p), it may use
+//	     all of 'p' as scratch space during the call. If some
+//	     data is available but not len(p) bytes, Read()
+//	     conventionally returns what is available instead of
+//	     waiting for more.
 //
 //
-//  err                        error
-//     - If this method completes successfully, this returned error
-//       Type is set equal to 'nil'. If errors are encountered
-//       during processing, the returned error Type will
-//       encapsulate an error message.
+//	err                        error
+//	   - If this method completes successfully, this returned error
+//	     Type is set equal to 'nil'. If errors are encountered
+//	     during processing, the returned error Type will
+//	     encapsulate an error message.
 //
-//       When Read() encounters an error or end-of-file condition
-//       after successfully reading n > 0 bytes, it returns the
-//       number of bytes read. It may return the (non-nil) error
-//       from the same call or return the error (and n == 0) from
-//       a subsequent call. An instance of this general case is
-//       that a Reader returning a non-zero number of bytes at the
-//       end of the input stream may return either err == EOF or
-//       err == nil. The next read operation should return 0, EOF.
-//
+//	     When Read() encounters an error or end-of-file condition
+//	     after successfully reading n > 0 bytes, it returns the
+//	     number of bytes read. It may return the (non-nil) error
+//	     from the same call or return the error (and n == 0) from
+//	     a subsequent call. An instance of this general case is
+//	     that a Reader returning a non-zero number of bytes at the
+//	     end of the input stream may return either err == EOF or
+//	     err == nil. The next read operation should return 0, EOF.
 //
 // ------------------------------------------------------------------------
 //
 // Usage Examples:
 //
-//  Example # 1
+//	Example # 1
 //
-//  p := make([]byte, 50)
+//	p := make([]byte, 50)
 //
-//  var n, readBytesCnt int
-//  sb := strings.Builder{}
+//	var n, readBytesCnt int
+//	sb := strings.Builder{}
 //
-//  for {
+//	for {
 //
-//    n,
-//    err = txtFillerField01.Read(p)
+//	  n,
+//	  err = txtFillerField01.Read(p)
 //
-//    if n == 0 {
-//      break
-//    }
+//	  if n == 0 {
+//	    break
+//	  }
 //
-//    sb.Write(p[:n])
-//    readBytesCnt += n
-//  }
+//	  sb.Write(p[:n])
+//	  readBytesCnt += n
+//	}
 //
-//  if err != nil &&
-//    err != io.EOF {
-//     return fmt.Errorf(
-//      "Error Returned From txtFillerField01.Read(p)\n"+
-//      "Error = \n%v\n",
-//       err.Error())
-//  }
+//	if err != nil &&
+//	  err != io.EOF {
+//	   return fmt.Errorf(
+//	    "Error Returned From txtFillerField01.Read(p)\n"+
+//	    "Error = \n%v\n",
+//	     err.Error())
+//	}
 //
-//  fmt.Printf("Text Line String: %s\n",
-//                sb.String())
+//	fmt.Printf("Text Line String: %s\n",
+//	              sb.String())
 //
-//  fmt.Printf("Number of bytes Read: %v\n",
-//                readBytesCnt)
+//	fmt.Printf("Number of bytes Read: %v\n",
+//	              readBytesCnt)
 //
-//  Example # 2
+//	Example # 2
 //
-//  p := make([]byte, 50)
+//	p := make([]byte, 50)
 //
-//  var n, readBytesCnt int
-//  var actualStr string
+//	var n, readBytesCnt int
+//	var actualStr string
 //
-//  for {
+//	for {
 //
-//    n,
-//    err = txtFillerField01.Read(p)
+//	  n,
+//	  err = txtFillerField01.Read(p)
 //
-//    if n == 0 {
-//      break
-//    }
+//	  if n == 0 {
+//	    break
+//	  }
 //
-//    actualStr += string(p[:n])
-//    readBytesCnt += n
-//  }
+//	  actualStr += string(p[:n])
+//	  readBytesCnt += n
+//	}
 //
-//  if err != nil &&
-//    err != io.EOF {
-//     return fmt.Errorf(
-//      "Error Returned From txtFillerField01.Read(p)\n"+
-//      "Error = \n%v\n",
-//       err.Error())
-//  }
+//	if err != nil &&
+//	  err != io.EOF {
+//	   return fmt.Errorf(
+//	    "Error Returned From txtFillerField01.Read(p)\n"+
+//	    "Error = \n%v\n",
+//	     err.Error())
+//	}
 //
-//  fmt.Printf("Text Line String: %v\n",
-//                actualStr)
+//	fmt.Printf("Text Line String: %v\n",
+//	              actualStr)
 //
-//  fmt.Printf("Number of bytes Read: %v\n",
-//                readBytesCnt)
-//
+//	fmt.Printf("Number of bytes Read: %v\n",
+//	              readBytesCnt)
 func (txtFillerField *TextFieldSpecFiller) Read(
 	p []byte) (
 	n int,
@@ -2532,7 +2455,6 @@ func (txtFillerField *TextFieldSpecFiller) Read(
 //
 // This method fulfills the requirements of the
 // ITextFieldSpecification interface.
-//
 func (txtFillerField *TextFieldSpecFiller) ReaderInitialize() {
 
 	if txtFillerField.lock == nil {
@@ -2565,15 +2487,15 @@ func (txtFillerField *TextFieldSpecFiller) ReaderInitialize() {
 // repeated one or more times in order to construct the complete
 // filler field as shown in the following examples:
 //
-//  Example 1:
-//   Filler Characters = "-"
-//   Filler Characters Repeat Count = 3
-//   Formatted Text = "---"
+//	Example 1:
+//	 Filler Characters = "-"
+//	 Filler Characters Repeat Count = 3
+//	 Formatted Text = "---"
 //
-//  Example 2:
-//   Filler Characters = "-*"
-//   Filler Characters Repeat Count = 3
-//   Formatted Text = "-*-*-*"
+//	Example 2:
+//	 Filler Characters = "-*"
+//	 Filler Characters Repeat Count = 3
+//	 Formatted Text = "-*-*-*"
 //
 // The 'fillerCharsRepeatCount' integer value is the number times
 // that 'fillerCharacters' is repeated in order to construct the
@@ -2582,96 +2504,91 @@ func (txtFillerField *TextFieldSpecFiller) ReaderInitialize() {
 // 'fillerCharsRepeatCount' values less than or equal to zero
 // will trigger an error.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  fillerCharsRepeatCount     int
-//     - Controls the number of times 'fillerCharacters' is
-//       repeated when constructing the final Text Filler Field
-//       returned by this method. The actual length of the string
-//       which will populated the completed Text Filler Field is
-//       equal to the length of 'fillerCharacters' times the value
-//       of 'fillerCharsRepeatCount'.
+//	 fillerCharsRepeatCount     int
+//	    - Controls the number of times 'fillerCharacters' is
+//	      repeated when constructing the final Text Filler Field
+//	      returned by this method. The actual length of the string
+//	      which will populated the completed Text Filler Field is
+//	      equal to the length of 'fillerCharacters' times the value
+//	      of 'fillerCharsRepeatCount'.
 //
-//        Text Field Filler Length =
-//          Length of fillerCharacters X fillerCharsRepeatCount
+//	       Text Field Filler Length =
+//	         Length of fillerCharacters X fillerCharsRepeatCount
 //
-//          Example #1: fillerCharacters = "-*"
-//                      fillerRepeatCount = 3
-//                      Final Text Filler Field = "-*-*-*"
+//	         Example #1: fillerCharacters = "-*"
+//	                     fillerRepeatCount = 3
+//	                     Final Text Filler Field = "-*-*-*"
 //
-//          Example #2: fillerCharacters = "-"
-//                      fillerRepeatCount = 3
-//                      Final Text Filler Field = "---"
+//	         Example #2: fillerCharacters = "-"
+//	                     fillerRepeatCount = 3
+//	                     Final Text Filler Field = "---"
 //
-//       If 'fillerCharsRepeatCount' has a value less than one (1) or
-//       greater than one-million (1,000,000), an error will be
-//       returned.
-//
-//
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
-//
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
-//
-//       This empty interface must be convertible to one of the
-//       following types:
+//	      If 'fillerCharsRepeatCount' has a value less than one (1) or
+//	      greater than one-million (1,000,000), an error will be
+//	      returned.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	 errorPrefix                interface{}
+//		   - This object encapsulates error prefix text which is
+//		     included in all returned error messages. Usually, it
+//		     contains the name of the calling method or methods
+//		     listed as a method or function chain of execution.
 //
-//       2. string - A string containing error prefix information.
+//		     If no error prefix information is needed, set this parameter
+//		     to 'nil'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//		     This empty interface must be convertible to one of the
+//		     following types:
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
+//		     1. nil - A nil value is valid and generates an empty
+//		        collection of error prefix and error context
+//		        information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//		     2. string - A string containing error prefix information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//		     3. []string A one-dimensional slice of strings containing
+//		        error prefix information
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//		     4. [][2]string A two-dimensional slice of strings
+//		        containing error prefix and error context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		        from this object will be copied for use in error and
+//		        informational messages.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
+//		     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		        Information from this object will be copied for use in
+//		        error and informational messages.
 //
+//		     7. IBasicErrorPrefix - An interface to a method generating
+//		        a two-dimensional slice of strings containing error
+//		        prefix and error context information.
+//
+//		     If parameter 'errorPrefix' is NOT convertible to one of
+//		     the valid types listed above, it will be considered
+//		     invalid and trigger the return of an error.
+//
+//		     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		     the 'errpref' software package,
+//		     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If this method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If this method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (txtFillerField *TextFieldSpecFiller) SetFillerCharsRepeatCount(
 	fillerCharsRepeatCount int,
 	errorPrefix interface{}) error {
@@ -2717,133 +2634,127 @@ func (txtFillerField *TextFieldSpecFiller) SetFillerCharsRepeatCount(
 // current instance of TextFieldSpecFiller. The new data values are
 // generated from the input parameters.
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // This method will overwrite and delete the existing data values
 // for the current TextFieldSpecFiller instance (txtFillerField).
-//
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  fillerCharacters           string
-//     - A string containing the text characters which will be
-//       included in the Text Filler Field. The final Text Filler
-//       Field will be constructed from the filler characters
-//       repeated one or more times as specified by the
-//       'fillerCharsRepeatCount' parameter.
+//	 fillerCharacters           string
+//	    - A string containing the text characters which will be
+//	      included in the Text Filler Field. The final Text Filler
+//	      Field will be constructed from the filler characters
+//	      repeated one or more times as specified by the
+//	      'fillerCharsRepeatCount' parameter.
 //
-//       The Text Field Filler final formatted text is equal to:
-//          fillerCharacter X fillerCharsRepeatCount
-//          Example: fillerCharacters = "-*"
-//                   fillerRepeatCount = 3
-//                   Final Text Filler Field = "-*-*-*"
+//	      The Text Field Filler final formatted text is equal to:
+//	         fillerCharacter X fillerCharsRepeatCount
+//	         Example: fillerCharacters = "-*"
+//	                  fillerRepeatCount = 3
+//	                  Final Text Filler Field = "-*-*-*"
 //
-//       If 'fillerCharacters' is submitted as an empty or zero
-//       length string, this method will return an error.
-//
-//
-//  fillerCharsRepeatCount     int
-//     - Controls the number of times 'fillerCharacters' is
-//       repeated when constructing the final Text Filler Field
-//       returned by this method. The actual length of the string
-//       which will populated the completed Text Filler Field is
-//       equal to the length of 'fillerCharacters' times the value
-//       of 'fillerCharsRepeatCount'.
-//
-//        Text Field Filler Length =
-//          Length of fillerCharacters X fillerCharsRepeatCount
-//
-//          Example #1: fillerCharacters = "-*"
-//                      fillerRepeatCount = 3
-//                      Final Text Filler Field = "-*-*-*"
-//
-//          Example #2: fillerCharacters = "-"
-//                      fillerRepeatCount = 3
-//                      Final Text Filler Field = "---"
-//
-//       If 'fillerCharsRepeatCount' has a value less than one (1)
-//       or greater than one-million (1,000,000), an error will be
-//       returned.
+//	      If 'fillerCharacters' is submitted as an empty or zero
+//	      length string, this method will return an error.
 //
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	 fillerCharsRepeatCount     int
+//	    - Controls the number of times 'fillerCharacters' is
+//	      repeated when constructing the final Text Filler Field
+//	      returned by this method. The actual length of the string
+//	      which will populated the completed Text Filler Field is
+//	      equal to the length of 'fillerCharacters' times the value
+//	      of 'fillerCharsRepeatCount'.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	       Text Field Filler Length =
+//	         Length of fillerCharacters X fillerCharsRepeatCount
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	         Example #1: fillerCharacters = "-*"
+//	                     fillerRepeatCount = 3
+//	                     Final Text Filler Field = "-*-*-*"
+//
+//	         Example #2: fillerCharacters = "-"
+//	                     fillerRepeatCount = 3
+//	                     Final Text Filler Field = "---"
+//
+//	      If 'fillerCharsRepeatCount' has a value less than one (1)
+//	      or greater than one-million (1,000,000), an error will be
+//	      returned.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	 errorPrefix                interface{}
+//		   - This object encapsulates error prefix text which is
+//		     included in all returned error messages. Usually, it
+//		     contains the name of the calling method or methods
+//		     listed as a method or function chain of execution.
 //
-//       2. string - A string containing error prefix information.
+//		     If no error prefix information is needed, set this parameter
+//		     to 'nil'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//		     This empty interface must be convertible to one of the
+//		     following types:
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
+//		     1. nil - A nil value is valid and generates an empty
+//		        collection of error prefix and error context
+//		        information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//		     2. string - A string containing error prefix information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//		     3. []string A one-dimensional slice of strings containing
+//		        error prefix information
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//		     4. [][2]string A two-dimensional slice of strings
+//		        containing error prefix and error context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		        from this object will be copied for use in error and
+//		        informational messages.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
+//		     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		        Information from this object will be copied for use in
+//		        error and informational messages.
 //
+//		     7. IBasicErrorPrefix - An interface to a method generating
+//		        a two-dimensional slice of strings containing error
+//		        prefix and error context information.
+//
+//		     If parameter 'errorPrefix' is NOT convertible to one of
+//		     the valid types listed above, it will be considered
+//		     invalid and trigger the return of an error.
+//
+//		     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		     the 'errpref' software package,
+//		     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If this method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If this method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 //
 // ----------------------------------------------------------------
 //
 // Example Usage
 //
-//  Example 1:
-//   Filler Characters Array = "-"
-//   Filler Characters Repeat Count = 3
-//   Formatted Text = "---"
+//	Example 1:
+//	 Filler Characters Array = "-"
+//	 Filler Characters Repeat Count = 3
+//	 Formatted Text = "---"
 //
-//  Example 2:
-//   Filler Characters Array = "-*"
-//   Filler Characters Repeat Count = 3
-//   Formatted Text = "-*-*-*"
-//
+//	Example 2:
+//	 Filler Characters Array = "-*"
+//	 Filler Characters Repeat Count = 3
+//	 Formatted Text = "-*-*-*"
 func (txtFillerField *TextFieldSpecFiller) SetTextFiller(
 	fillerCharacters string,
 	fillerCharsRepeatCount int,
@@ -2889,129 +2800,122 @@ func (txtFillerField *TextFieldSpecFiller) SetTextFiller(
 // This method differs from TextFieldSpecFiller.SetTextFiller() in
 // that this method accepts a single rune as the Filler Character.
 //
-//
-// IMPORTANT
+// # IMPORTANT
 //
 // This method will overwrite and delete the existing data values
 // for the current TextFieldSpecFiller instance (txtFillerField).
-//
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  fillerCharacter            rune
-//     - A rune containing the text character which will be
-//       included in the Text Filler Field. The final Text Filler
-//       Field will be constructed from ths filler character
-//       repeated one or more times as specified by the
-//       'fillerCharsRepeatCount' parameter.
+//	 fillerCharacter            rune
+//	    - A rune containing the text character which will be
+//	      included in the Text Filler Field. The final Text Filler
+//	      Field will be constructed from ths filler character
+//	      repeated one or more times as specified by the
+//	      'fillerCharsRepeatCount' parameter.
 //
-//       The Text Field Filler final formatted text is equal to:
-//           fillerCharacter X fillerCharsRepeatCount
-//           Example: fillerCharacter = '-'
-//                    fillerRepeatCount = 3
-//                    Final Text Filler Field = "---"
+//	      The Text Field Filler final formatted text is equal to:
+//	          fillerCharacter X fillerCharsRepeatCount
+//	          Example: fillerCharacter = '-'
+//	                   fillerRepeatCount = 3
+//	                   Final Text Filler Field = "---"
 //
-//       If 'fillerCharacter' is submitted with a zero value,
-//       this method will return an error.
-//
-//
-//  fillerCharsRepeatCount     int
-//     - Controls the number of times 'fillerCharacter' is
-//       repeated when constructing the final Text Filler Field
-//       returned by this method. The actual length of the string
-//       which will populated the completed Text Filler Field is
-//       equal to the length of 'fillerCharacter' (1) times the
-//       value of 'fillerCharsRepeatCount'.
-//
-//         Text Field Filler Length =
-//           Length of fillerCharacter (1) X fillerCharsRepeatCount
-//           Example: fillerCharacter = '-'
-//                    fillerRepeatCount = 3
-//                    Final Text Filler Field = "---"
-//
-//       If 'fillerCharsRepeatCount' has a value less than one (1) or
-//       greater than one-million (1,000,000), an error will be
-//       returned.
+//	      If 'fillerCharacter' is submitted with a zero value,
+//	      this method will return an error.
 //
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	 fillerCharsRepeatCount     int
+//	    - Controls the number of times 'fillerCharacter' is
+//	      repeated when constructing the final Text Filler Field
+//	      returned by this method. The actual length of the string
+//	      which will populated the completed Text Filler Field is
+//	      equal to the length of 'fillerCharacter' (1) times the
+//	      value of 'fillerCharsRepeatCount'.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	        Text Field Filler Length =
+//	          Length of fillerCharacter (1) X fillerCharsRepeatCount
+//	          Example: fillerCharacter = '-'
+//	                   fillerRepeatCount = 3
+//	                   Final Text Filler Field = "---"
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	      If 'fillerCharsRepeatCount' has a value less than one (1) or
+//	      greater than one-million (1,000,000), an error will be
+//	      returned.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	 errorPrefix                interface{}
+//		   - This object encapsulates error prefix text which is
+//		     included in all returned error messages. Usually, it
+//		     contains the name of the calling method or methods
+//		     listed as a method or function chain of execution.
 //
-//       2. string - A string containing error prefix information.
+//		     If no error prefix information is needed, set this parameter
+//		     to 'nil'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//		     This empty interface must be convertible to one of the
+//		     following types:
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
+//		     1. nil - A nil value is valid and generates an empty
+//		        collection of error prefix and error context
+//		        information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//		     2. string - A string containing error prefix information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//		     3. []string A one-dimensional slice of strings containing
+//		        error prefix information
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//		     4. [][2]string A two-dimensional slice of strings
+//		        containing error prefix and error context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		        from this object will be copied for use in error and
+//		        informational messages.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
+//		     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		        Information from this object will be copied for use in
+//		        error and informational messages.
 //
+//		     7. IBasicErrorPrefix - An interface to a method generating
+//		        a two-dimensional slice of strings containing error
+//		        prefix and error context information.
+//
+//		     If parameter 'errorPrefix' is NOT convertible to one of
+//		     the valid types listed above, it will be considered
+//		     invalid and trigger the return of an error.
+//
+//		     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		     the 'errpref' software package,
+//		     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If this method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If this method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 //
 // ----------------------------------------------------------------
 //
 // Example Usage
 //
-//  Example 1:
-//   Filler Characters Array = '-'
-//   Filler Characters Repeat Count = 3
-//   Formatted Text = "---"
+//	Example 1:
+//	 Filler Characters Array = '-'
+//	 Filler Characters Repeat Count = 3
+//	 Formatted Text = "---"
 //
-//  Example 2:
-//   Filler Characters Array = '*'
-//   Filler Characters Repeat Count = 3
-//   Formatted Text = "***"
-//
+//	Example 2:
+//	 Filler Characters Array = '*'
+//	 Filler Characters Repeat Count = 3
+//	 Formatted Text = "***"
 func (txtFillerField *TextFieldSpecFiller) SetTextFillerRune(
 	fillerCharacter rune,
 	fillerCharsRepeatCount int,
@@ -3058,134 +2962,127 @@ func (txtFillerField *TextFieldSpecFiller) SetTextFillerRune(
 // that this method accepts an array of runes as the Filler
 // Characters.
 //
-//
-// IMPORTANT
+// # IMPORTANT
 //
 // This method will overwrite and delete the existing data values
 // for the current TextFieldSpecFiller instance (txtFillerField).
-//
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  fillerCharacters           []rune
-//     - A rune array containing the text characters which will be
-//       included in the Text Filler Field. The final Text Filler
-//       Field will be constructed from ths filler characters
-//       repeated one or more times as specified by the
-//       'fillerCharsRepeatCount' parameter.
+//	 fillerCharacters           []rune
+//	    - A rune array containing the text characters which will be
+//	      included in the Text Filler Field. The final Text Filler
+//	      Field will be constructed from ths filler characters
+//	      repeated one or more times as specified by the
+//	      'fillerCharsRepeatCount' parameter.
 //
-//       The Text Field Filler final formatted text is equal to:
-//          fillerCharacters X fillerCharsRepeatCount
-//          Example: fillerCharacters = []rune{'-','*'}
-//                   fillerRepeatCount = 3
-//                   Final Text Filler Field = "-*-*-*"
+//	      The Text Field Filler final formatted text is equal to:
+//	         fillerCharacters X fillerCharsRepeatCount
+//	         Example: fillerCharacters = []rune{'-','*'}
+//	                  fillerRepeatCount = 3
+//	                  Final Text Filler Field = "-*-*-*"
 //
-//       If 'fillerCharacters' is submitted with a zero length rune
-//       array, this method will return an error.
-//
-//
-//  fillerCharsRepeatCount     int
-//     - Controls the number of times 'fillerCharacters' is
-//       repeated when constructing the final Text Filler Field
-//       returned by this method. The actual length of the string
-//       which will populated the completed Text Filler Field is
-//       equal to the length of 'fillerCharacters' times the value
-//       of 'fillerCharsRepeatCount'.
-//
-//        Text Field Filler Length =
-//          Length of fillerCharacters X fillerCharsRepeatCount
-//
-//          Example #1: fillerCharacters = []rune{'-','*'}
-//                      fillerRepeatCount = 3
-//                      Final Text Filler Field = "-*-*-*"
-//
-//          Example #2: fillerCharacters = []rune{'-'}
-//                      fillerRepeatCount = 3
-//                      Final Text Filler Field = "---"
-//
-//       If 'fillerCharsRepeatCount' has a value less than one (1) or
-//       greater than one-million (1,000,000), an error will be
-//       returned.
+//	      If 'fillerCharacters' is submitted with a zero length rune
+//	      array, this method will return an error.
 //
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	 fillerCharsRepeatCount     int
+//	    - Controls the number of times 'fillerCharacters' is
+//	      repeated when constructing the final Text Filler Field
+//	      returned by this method. The actual length of the string
+//	      which will populated the completed Text Filler Field is
+//	      equal to the length of 'fillerCharacters' times the value
+//	      of 'fillerCharsRepeatCount'.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	       Text Field Filler Length =
+//	         Length of fillerCharacters X fillerCharsRepeatCount
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	         Example #1: fillerCharacters = []rune{'-','*'}
+//	                     fillerRepeatCount = 3
+//	                     Final Text Filler Field = "-*-*-*"
+//
+//	         Example #2: fillerCharacters = []rune{'-'}
+//	                     fillerRepeatCount = 3
+//	                     Final Text Filler Field = "---"
+//
+//	      If 'fillerCharsRepeatCount' has a value less than one (1) or
+//	      greater than one-million (1,000,000), an error will be
+//	      returned.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	 errorPrefix                interface{}
+//		   - This object encapsulates error prefix text which is
+//		     included in all returned error messages. Usually, it
+//		     contains the name of the calling method or methods
+//		     listed as a method or function chain of execution.
 //
-//       2. string - A string containing error prefix information.
+//		     If no error prefix information is needed, set this parameter
+//		     to 'nil'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//		     This empty interface must be convertible to one of the
+//		     following types:
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
+//		     1. nil - A nil value is valid and generates an empty
+//		        collection of error prefix and error context
+//		        information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//		     2. string - A string containing error prefix information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//		     3. []string A one-dimensional slice of strings containing
+//		        error prefix information
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//		     4. [][2]string A two-dimensional slice of strings
+//		        containing error prefix and error context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		        from this object will be copied for use in error and
+//		        informational messages.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
+//		     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		        Information from this object will be copied for use in
+//		        error and informational messages.
 //
+//		     7. IBasicErrorPrefix - An interface to a method generating
+//		        a two-dimensional slice of strings containing error
+//		        prefix and error context information.
+//
+//		     If parameter 'errorPrefix' is NOT convertible to one of
+//		     the valid types listed above, it will be considered
+//		     invalid and trigger the return of an error.
+//
+//		     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		     the 'errpref' software package,
+//		     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If this method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If this method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 //
 // ----------------------------------------------------------------
 //
 // Example Usage
 //
-//  Example 1:
-//   Filler Characters Array = []rune{'-'}
-//   Filler Characters Repeat Count = 3
-//   Formatted Text = "---"
+//	Example 1:
+//	 Filler Characters Array = []rune{'-'}
+//	 Filler Characters Repeat Count = 3
+//	 Formatted Text = "---"
 //
-//  Example 2:
-//   Filler Characters Array = []rune{'-','*'}
-//   Filler Characters Repeat Count = 3
-//   Formatted Text = "-*-*-*"
-//
+//	Example 2:
+//	 Filler Characters Array = []rune{'-','*'}
+//	 Filler Characters Repeat Count = 3
+//	 Formatted Text = "-*-*-*"
 func (txtFillerField *TextFieldSpecFiller) SetTextFillerRuneArray(
 	fillerCharacters []rune,
 	fillerCharsRepeatCount int,
@@ -3236,8 +3133,8 @@ func (txtFillerField *TextFieldSpecFiller) SetTextFillerRuneArray(
 //
 // The length of the final formatted text string is the product of:
 //
-//  Filler Characters Array Length  X
-//               Filler Characters Repeat Count
+//	Filler Characters Array Length  X
+//	             Filler Characters Repeat Count
 //
 // This method is similar to method
 // TextFieldSpecFiller.GetFormattedText() with the exception that
@@ -3248,28 +3145,28 @@ func (txtFillerField *TextFieldSpecFiller) SetTextFillerRuneArray(
 //
 // This method also fulfills the requirements of the 'Stringer'
 // interface defined in the Golang package 'fmt'. Reference:
-//   https://pkg.go.dev/fmt#Stringer
+//
+//	https://pkg.go.dev/fmt#Stringer
 //
 // Methods which return formatted text are listed as follows:
-//  TextFieldSpecFiller.String()
-//  TextFieldSpecFiller.GetFormattedText()
-//  TextFieldSpecFiller.TextBuilder()
 //
+//	TextFieldSpecFiller.String()
+//	TextFieldSpecFiller.GetFormattedText()
+//	TextFieldSpecFiller.TextBuilder()
 //
 // ------------------------------------------------------------------------
 //
 // Example Usage
 //
-//  Example 1:
-//   Filler Characters Array = []rune{'-'}
-//   Filler Characters Repeat Count = 3
-//   Formatted Text = "---"
+//	Example 1:
+//	 Filler Characters Array = []rune{'-'}
+//	 Filler Characters Repeat Count = 3
+//	 Formatted Text = "---"
 //
-//  Example 2:
-//   Filler Characters Array = []rune{'-','*'}
-//   Filler Characters Repeat Count = 3
-//   Formatted Text = "-*-*-*"
-//
+//	Example 2:
+//	 Filler Characters Array = []rune{'-','*'}
+//	 Filler Characters Repeat Count = 3
+//	 Formatted Text = "-*-*-*"
 func (txtFillerField TextFieldSpecFiller) String() string {
 
 	if txtFillerField.lock == nil {
@@ -3306,82 +3203,78 @@ func (txtFillerField TextFieldSpecFiller) String() string {
 // ITextFieldSpecification interface.
 //
 // Methods which return formatted text are listed as follows:
-//  TextFieldSpecFiller.String()
-//  TextFieldSpecFiller.GetFormattedText()
-//  TextFieldSpecFiller.TextBuilder()
 //
+//	TextFieldSpecFiller.String()
+//	TextFieldSpecFiller.GetFormattedText()
+//	TextFieldSpecFiller.TextBuilder()
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  strBuilder                 *strings.Builder
-//     - A pointer to an instance of *strings.Builder. The
-//       formatted text characters produced by this method will be
-//       written to this instance of strings.Builder.
+//	 strBuilder                 *strings.Builder
+//	    - A pointer to an instance of *strings.Builder. The
+//	      formatted text characters produced by this method will be
+//	      written to this instance of strings.Builder.
 //
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	 errorPrefix                interface{}
+//		   - This object encapsulates error prefix text which is
+//		     included in all returned error messages. Usually, it
+//		     contains the name of the calling method or methods
+//		     listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//		     If no error prefix information is needed, set this parameter
+//		     to 'nil'.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//		     This empty interface must be convertible to one of the
+//		     following types:
 //
+//		     1. nil - A nil value is valid and generates an empty
+//		        collection of error prefix and error context
+//		        information.
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//		     2. string - A string containing error prefix information.
 //
-//       2. string - A string containing error prefix information.
+//		     3. []string A one-dimensional slice of strings containing
+//		        error prefix information
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//		     4. [][2]string A two-dimensional slice of strings
+//		        containing error prefix and error context information.
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
+//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		        from this object will be copied for use in error and
+//		        informational messages.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//		     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		        Information from this object will be copied for use in
+//		        error and informational messages.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//		     7. IBasicErrorPrefix - An interface to a method generating
+//		        a two-dimensional slice of strings containing error
+//		        prefix and error context information.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//		     If parameter 'errorPrefix' is NOT convertible to one of
+//		     the valid types listed above, it will be considered
+//		     invalid and trigger the return of an error.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
-//
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
-//
+//		     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		     the 'errpref' software package,
+//		     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (txtFillerField *TextFieldSpecFiller) TextBuilder(
 	strBuilder *strings.Builder,
 	errorPrefix interface{}) error {
@@ -3463,7 +3356,6 @@ func (txtFillerField *TextFieldSpecFiller) TextBuilder(
 // TextFieldName - returns a string specifying the name
 // of the Text Field specification. This method fulfills
 // the requirements of the ITextFieldSpecification interface.
-//
 func (txtFillerField *TextFieldSpecFiller) TextFieldName() string {
 
 	if txtFillerField.lock == nil {
@@ -3480,7 +3372,6 @@ func (txtFillerField *TextFieldSpecFiller) TextFieldName() string {
 // TextTypeName - returns a string specifying the type
 // of Text Field specification. This method fulfills
 // the requirements of the ITextSpecification interface.
-//
 func (txtFillerField *TextFieldSpecFiller) TextTypeName() string {
 
 	if txtFillerField.lock == nil {

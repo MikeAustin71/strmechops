@@ -129,57 +129,58 @@ type IntegerSeparatorDto struct {
 //
 // Input Parameters
 //
-//	incomingNStrIntSeparator     *IntegerSeparatorDto
-//	   - A pointer to an instance of IntegerSeparatorDto.
-//	     The data values in this object will be copied to the
-//	     current IntegerSeparatorDto instance.
+//		incomingNStrIntSeparator     *IntegerSeparatorDto
+//		   - A pointer to an instance of IntegerSeparatorDto.
+//		     The data values in this object will be copied to the
+//		     current IntegerSeparatorDto instance.
 //
-//	     If input parameter 'incomingNStrIntSeparator' is judged
-//	     to be invalid, this method will return an error.
+//		     If input parameter 'incomingNStrIntSeparator' is judged
+//		     to be invalid, this method will return an error.
 //
 //
-//	errorPrefix                interface{}
-//	   - This object encapsulates error prefix text which is
-//	     included in all returned error messages. Usually, it
-//	     contains the name of the calling method or methods
-//	     listed as a method or function chain of execution.
+//	 errorPrefix                interface{}
+//		   - This object encapsulates error prefix text which is
+//		     included in all returned error messages. Usually, it
+//		     contains the name of the calling method or methods
+//		     listed as a method or function chain of execution.
 //
-//	     If no error prefix information is needed, set this parameter
-//	     to 'nil'.
+//		     If no error prefix information is needed, set this parameter
+//		     to 'nil'.
 //
-//	     This empty interface must be convertible to one of the
-//	     following types:
+//		     This empty interface must be convertible to one of the
+//		     following types:
 //
-//	     1. nil - A nil value is valid and generates an empty
-//	        collection of error prefix and error context
-//	        information.
+//		     1. nil - A nil value is valid and generates an empty
+//		        collection of error prefix and error context
+//		        information.
 //
-//	     2. string - A string containing error prefix information.
+//		     2. string - A string containing error prefix information.
 //
-//	     3. []string A one-dimensional slice of strings containing
-//	        error prefix information
+//		     3. []string A one-dimensional slice of strings containing
+//		        error prefix information
 //
-//	     4. [][2]string A two-dimensional slice of strings
-//	        containing error prefix and error context information.
+//		     4. [][2]string A two-dimensional slice of strings
+//		        containing error prefix and error context information.
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//	        from this object will be copied for use in error and
-//	        informational messages.
+//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		        from this object will be copied for use in error and
+//		        informational messages.
 //
-//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//	        Information from this object will be copied for use in
-//	        error and informational messages.
+//		     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		        Information from this object will be copied for use in
+//		        error and informational messages.
 //
-//	     7. IBasicErrorPrefix - An interface to a method generating
-//	        a two-dimensional slice of strings containing error
-//	        prefix and error context information.
+//		     7. IBasicErrorPrefix - An interface to a method generating
+//		        a two-dimensional slice of strings containing error
+//		        prefix and error context information.
 //
-//	     If parameter 'errorPrefix' is NOT convertible to one of
-//	     the valid types listed above, it will be considered
-//	     invalid and trigger the return of an error.
+//		     If parameter 'errorPrefix' is NOT convertible to one of
+//		     the valid types listed above, it will be considered
+//		     invalid and trigger the return of an error.
 //
-//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
-//	     the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//		     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		     the 'errpref' software package,
+//		     "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
@@ -237,48 +238,49 @@ func (nStrIntSep *IntegerSeparatorDto) CopyIn(
 //
 // Input Parameters
 //
-//	errorPrefix                interface{}
-//	   - This object encapsulates error prefix text which is
-//	     included in all returned error messages. Usually, it
-//	     contains the name of the calling method or methods
-//	     listed as a method or function chain of execution.
+//	 errorPrefix                interface{}
+//		   - This object encapsulates error prefix text which is
+//		     included in all returned error messages. Usually, it
+//		     contains the name of the calling method or methods
+//		     listed as a method or function chain of execution.
 //
-//	     If no error prefix information is needed, set this parameter
-//	     to 'nil'.
+//		     If no error prefix information is needed, set this parameter
+//		     to 'nil'.
 //
-//	     This empty interface must be convertible to one of the
-//	     following types:
+//		     This empty interface must be convertible to one of the
+//		     following types:
 //
-//	     1. nil - A nil value is valid and generates an empty
-//	        collection of error prefix and error context
-//	        information.
+//		     1. nil - A nil value is valid and generates an empty
+//		        collection of error prefix and error context
+//		        information.
 //
-//	     2. string - A string containing error prefix information.
+//		     2. string - A string containing error prefix information.
 //
-//	     3. []string A one-dimensional slice of strings containing
-//	        error prefix information
+//		     3. []string A one-dimensional slice of strings containing
+//		        error prefix information
 //
-//	     4. [][2]string A two-dimensional slice of strings
-//	        containing error prefix and error context information.
+//		     4. [][2]string A two-dimensional slice of strings
+//		        containing error prefix and error context information.
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//	        from this object will be copied for use in error and
-//	        informational messages.
+//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		        from this object will be copied for use in error and
+//		        informational messages.
 //
-//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//	        Information from this object will be copied for use in
-//	        error and informational messages.
+//		     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		        Information from this object will be copied for use in
+//		        error and informational messages.
 //
-//	     7. IBasicErrorPrefix - An interface to a method generating
-//	        a two-dimensional slice of strings containing error
-//	        prefix and error context information.
+//		     7. IBasicErrorPrefix - An interface to a method generating
+//		        a two-dimensional slice of strings containing error
+//		        prefix and error context information.
 //
-//	     If parameter 'errorPrefix' is NOT convertible to one of
-//	     the valid types listed above, it will be considered
-//	     invalid and trigger the return of an error.
+//		     If parameter 'errorPrefix' is NOT convertible to one of
+//		     the valid types listed above, it will be considered
+//		     invalid and trigger the return of an error.
 //
-//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
-//	     the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//		     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		     the 'errpref' software package,
+//		     "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
@@ -364,55 +366,56 @@ func (nStrIntSep *IntegerSeparatorDto) Empty() {
 //
 // Input Parameters
 //
-//	nStrIntSepTwo       IntegerSeparatorDto
-//	   - This method will compare all data elements in the current
-//	     IntegerSeparatorDto object to corresponding data elements
-//	     in this second IntegerSeparatorDto object in order
-//	     determine equivalency.
+//		nStrIntSepTwo       IntegerSeparatorDto
+//		   - This method will compare all data elements in the current
+//		     IntegerSeparatorDto object to corresponding data elements
+//		     in this second IntegerSeparatorDto object in order
+//		     determine equivalency.
 //
 //
-//	errorPrefix                interface{}
-//	   - This object encapsulates error prefix text which is
-//	     included in all returned error messages. Usually, it
-//	     contains the name of the calling method or methods
-//	     listed as a method or function chain of execution.
+//	 errorPrefix                interface{}
+//		   - This object encapsulates error prefix text which is
+//		     included in all returned error messages. Usually, it
+//		     contains the name of the calling method or methods
+//		     listed as a method or function chain of execution.
 //
-//	     If no error prefix information is needed, set this parameter
-//	     to 'nil'.
+//		     If no error prefix information is needed, set this parameter
+//		     to 'nil'.
 //
-//	     This empty interface must be convertible to one of the
-//	     following types:
+//		     This empty interface must be convertible to one of the
+//		     following types:
 //
-//	     1. nil - A nil value is valid and generates an empty
-//	        collection of error prefix and error context
-//	        information.
+//		     1. nil - A nil value is valid and generates an empty
+//		        collection of error prefix and error context
+//		        information.
 //
-//	     2. string - A string containing error prefix information.
+//		     2. string - A string containing error prefix information.
 //
-//	     3. []string A one-dimensional slice of strings containing
-//	        error prefix information
+//		     3. []string A one-dimensional slice of strings containing
+//		        error prefix information
 //
-//	     4. [][2]string A two-dimensional slice of strings
-//	        containing error prefix and error context information.
+//		     4. [][2]string A two-dimensional slice of strings
+//		        containing error prefix and error context information.
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//	        from this object will be copied for use in error and
-//	        informational messages.
+//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		        from this object will be copied for use in error and
+//		        informational messages.
 //
-//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//	        Information from this object will be copied for use in
-//	        error and informational messages.
+//		     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		        Information from this object will be copied for use in
+//		        error and informational messages.
 //
-//	     7. IBasicErrorPrefix - An interface to a method generating
-//	        a two-dimensional slice of strings containing error
-//	        prefix and error context information.
+//		     7. IBasicErrorPrefix - An interface to a method generating
+//		        a two-dimensional slice of strings containing error
+//		        prefix and error context information.
 //
-//	     If parameter 'errorPrefix' is NOT convertible to one of
-//	     the valid types listed above, it will be considered
-//	     invalid and trigger the return of an error.
+//		     If parameter 'errorPrefix' is NOT convertible to one of
+//		     the valid types listed above, it will be considered
+//		     invalid and trigger the return of an error.
 //
-//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
-//	     the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//		     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		     the 'errpref' software package,
+//		     "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
@@ -486,48 +489,49 @@ func (nStrIntSep *IntegerSeparatorDto) Equal(
 //
 // Input Parameters
 //
-//	errorPrefix                interface{}
-//	   - This object encapsulates error prefix text which is
-//	     included in all returned error messages. Usually, it
-//	     contains the name of the calling method or methods
-//	     listed as a method or function chain of execution.
+//	 errorPrefix                interface{}
+//		   - This object encapsulates error prefix text which is
+//		     included in all returned error messages. Usually, it
+//		     contains the name of the calling method or methods
+//		     listed as a method or function chain of execution.
 //
-//	     If no error prefix information is needed, set this parameter
-//	     to 'nil'.
+//		     If no error prefix information is needed, set this parameter
+//		     to 'nil'.
 //
-//	     This empty interface must be convertible to one of the
-//	     following types:
+//		     This empty interface must be convertible to one of the
+//		     following types:
 //
-//	     1. nil - A nil value is valid and generates an empty
-//	        collection of error prefix and error context
-//	        information.
+//		     1. nil - A nil value is valid and generates an empty
+//		        collection of error prefix and error context
+//		        information.
 //
-//	     2. string - A string containing error prefix information.
+//		     2. string - A string containing error prefix information.
 //
-//	     3. []string A one-dimensional slice of strings containing
-//	        error prefix information
+//		     3. []string A one-dimensional slice of strings containing
+//		        error prefix information
 //
-//	     4. [][2]string A two-dimensional slice of strings
-//	        containing error prefix and error context information.
+//		     4. [][2]string A two-dimensional slice of strings
+//		        containing error prefix and error context information.
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//	        from this object will be copied for use in error and
-//	        informational messages.
+//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		        from this object will be copied for use in error and
+//		        informational messages.
 //
-//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//	        Information from this object will be copied for use in
-//	        error and informational messages.
+//		     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		        Information from this object will be copied for use in
+//		        error and informational messages.
 //
-//	     7. IBasicErrorPrefix - An interface to a method generating
-//	        a two-dimensional slice of strings containing error
-//	        prefix and error context information.
+//		     7. IBasicErrorPrefix - An interface to a method generating
+//		        a two-dimensional slice of strings containing error
+//		        prefix and error context information.
 //
-//	     If parameter 'errorPrefix' is NOT convertible to one of
-//	     the valid types listed above, it will be considered
-//	     invalid and trigger the return of an error.
+//		     If parameter 'errorPrefix' is NOT convertible to one of
+//		     the valid types listed above, it will be considered
+//		     invalid and trigger the return of an error.
 //
-//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
-//	     the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//		     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		     the 'errpref' software package,
+//		     "github.com/MikeAustin71/errpref".
 //
 // -----------------------------------------------------------------
 //
@@ -872,8 +876,8 @@ func (nStrIntSep *IntegerSeparatorDto) IsValidInstanceError(
 //     contains the name of the calling method or methods
 //     listed as a method or function chain of execution.
 //
-//     If no error prefix information is needed, set this
-//     parameter to 'nil'.
+//     If no error prefix information is needed, set this parameter
+//     to 'nil'.
 //
 //     This empty interface must be convertible to one of the
 //     following types:
@@ -1032,8 +1036,8 @@ func (nStrIntSep *IntegerSeparatorDto) NewFromIntGroupEnum(
 //     contains the name of the calling method or methods
 //     listed as a method or function chain of execution.
 //
-//     If no error prefix information is needed, set this
-//     parameter to 'nil'.
+//     If no error prefix information is needed, set this parameter
+//     to 'nil'.
 //
 //     This empty interface must be convertible to one of the
 //     following types:
@@ -1556,62 +1560,62 @@ func (nStrIntSep *IntegerSeparatorDto) NewDetailRunes(
 //
 // Input Parameters
 //
-//	intSeparatorChars          string
-//	   - One or more characters used to separate groups of
-//	     integers. These characters are used to separate groups
-//	     of integer digits to the left of the decimal separator
-//	     (a.k.a. decimal point). The most common integer separator
-//	     used in conjunction with the Chinese Numbering System is
-//	     the comma (",").
-//	       Example:  6,7890,000,0000,0000
+//		intSeparatorChars          string
+//		   - One or more characters used to separate groups of
+//		     integers. These characters are used to separate groups
+//		     of integer digits to the left of the decimal separator
+//		     (a.k.a. decimal point). The most common integer separator
+//		     used in conjunction with the Chinese Numbering System is
+//		     the comma (",").
+//		       Example:  6,7890,000,0000,0000
 //
-//	     If this input parameter contains a zero length string, an
-//	     error will be returned.
+//		     If this input parameter contains a zero length string, an
+//		     error will be returned.
 //
 //
-//	errorPrefix                interface{}
-//	   - This object encapsulates error prefix text which is
-//	     included in all returned error messages. Usually, it
-//	     contains the name of the calling method or methods
-//	     listed as a method or function chain of execution.
+//	 errorPrefix                interface{}
+//		   - This object encapsulates error prefix text which is
+//		     included in all returned error messages. Usually, it
+//		     contains the name of the calling method or methods
+//		     listed as a method or function chain of execution.
 //
-//	     If no error prefix information is needed, set this
-//	     parameter to 'nil'.
+//		     If no error prefix information is needed, set this parameter
+//		     to 'nil'.
 //
-//	     This empty interface must be convertible to one of the
-//	     following types:
+//		     This empty interface must be convertible to one of the
+//		     following types:
 //
-//	     1. nil - A nil value is valid and generates an empty
-//	        collection of error prefix and error context
-//	        information.
+//		     1. nil - A nil value is valid and generates an empty
+//		        collection of error prefix and error context
+//		        information.
 //
-//	     2. string - A string containing error prefix information.
+//		     2. string - A string containing error prefix information.
 //
-//	     3. []string A one-dimensional slice of strings containing
-//	        error prefix information
+//		     3. []string A one-dimensional slice of strings containing
+//		        error prefix information
 //
-//	     4. [][2]string A two-dimensional slice of strings
-//	        containing error prefix and error context information.
+//		     4. [][2]string A two-dimensional slice of strings
+//		        containing error prefix and error context information.
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//	        from this object will be copied for use in error and
-//	        informational messages.
+//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		        from this object will be copied for use in error and
+//		        informational messages.
 //
-//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//	        Information from this object will be copied for use in
-//	        error and informational messages.
+//		     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		        Information from this object will be copied for use in
+//		        error and informational messages.
 //
-//	     7. IBasicErrorPrefix - An interface to a method generating
-//	        a two-dimensional slice of strings containing error
-//	        prefix and error context information.
+//		     7. IBasicErrorPrefix - An interface to a method generating
+//		        a two-dimensional slice of strings containing error
+//		        prefix and error context information.
 //
-//	If parameter 'errorPrefix' is NOT convertible to one of
-//	the valid types listed above, it will be considered
-//	invalid and trigger the return of an error.
+//		     If parameter 'errorPrefix' is NOT convertible to one of
+//		     the valid types listed above, it will be considered
+//		     invalid and trigger the return of an error.
 //
-//	Types ErrPrefixDto and IBasicErrorPrefix are included in
-//	the 'errpref' software package,
-//	"github.com/MikeAustin71/errpref".
+//		     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		     the 'errpref' software package,
+//		     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
@@ -1700,49 +1704,49 @@ func (nStrIntSep *IntegerSeparatorDto) NewChineseNumbering(
 //
 // Input Parameters
 //
-//	errorPrefix                interface{}
-//	   - This object encapsulates error prefix text which is
-//	     included in all returned error messages. Usually, it
-//	     contains the name of the calling method or methods
-//	     listed as a method or function chain of execution.
+//	 errorPrefix                interface{}
+//		   - This object encapsulates error prefix text which is
+//		     included in all returned error messages. Usually, it
+//		     contains the name of the calling method or methods
+//		     listed as a method or function chain of execution.
 //
-//	     If no error prefix information is needed, set this
-//	     parameter to 'nil'.
+//		     If no error prefix information is needed, set this parameter
+//		     to 'nil'.
 //
-//	     This empty interface must be convertible to one of the
-//	     following types:
+//		     This empty interface must be convertible to one of the
+//		     following types:
 //
-//	     1. nil - A nil value is valid and generates an empty
-//	        collection of error prefix and error context
-//	        information.
+//		     1. nil - A nil value is valid and generates an empty
+//		        collection of error prefix and error context
+//		        information.
 //
-//	     2. string - A string containing error prefix information.
+//		     2. string - A string containing error prefix information.
 //
-//	     3. []string A one-dimensional slice of strings containing
-//	        error prefix information
+//		     3. []string A one-dimensional slice of strings containing
+//		        error prefix information
 //
-//	     4. [][2]string A two-dimensional slice of strings
-//	        containing error prefix and error context information.
+//		     4. [][2]string A two-dimensional slice of strings
+//		        containing error prefix and error context information.
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//	        from this object will be copied for use in error and
-//	        informational messages.
+//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		        from this object will be copied for use in error and
+//		        informational messages.
 //
-//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//	        Information from this object will be copied for use in
-//	        error and informational messages.
+//		     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		        Information from this object will be copied for use in
+//		        error and informational messages.
 //
-//	     7. IBasicErrorPrefix - An interface to a method generating
-//	        a two-dimensional slice of strings containing error
-//	        prefix and error context information.
+//		     7. IBasicErrorPrefix - An interface to a method generating
+//		        a two-dimensional slice of strings containing error
+//		        prefix and error context information.
 //
-//	If parameter 'errorPrefix' is NOT convertible to one of
-//	the valid types listed above, it will be considered
-//	invalid and trigger the return of an error.
+//		     If parameter 'errorPrefix' is NOT convertible to one of
+//		     the valid types listed above, it will be considered
+//		     invalid and trigger the return of an error.
 //
-//	Types ErrPrefixDto and IBasicErrorPrefix are included in
-//	the 'errpref' software package,
-//	"github.com/MikeAustin71/errpref".
+//		     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		     the 'errpref' software package,
+//		     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
@@ -1839,62 +1843,62 @@ func (nStrIntSep *IntegerSeparatorDto) NewChineseNumberingDefault(
 //
 // Input Parameters
 //
-//	intSeparatorChars          []rune
-//	   - One or more characters used to separate groups of
-//	     integers. These characters are used to separate groups
-//	     of integer digits to the left of the decimal separator
-//	     (a.k.a. decimal point). The most common integer separator
-//	     used in conjunction with the Chinese Numbering System is
-//	     the comma ([]rune{,}).
-//	       Example:  6,7890,000,0000,0000
+//		intSeparatorChars          []rune
+//		   - One or more characters used to separate groups of
+//		     integers. These characters are used to separate groups
+//		     of integer digits to the left of the decimal separator
+//		     (a.k.a. decimal point). The most common integer separator
+//		     used in conjunction with the Chinese Numbering System is
+//		     the comma ([]rune{,}).
+//		       Example:  6,7890,000,0000,0000
 //
-//	     If this input parameter contains a zero length array, an
-//	     error will be returned.
+//		     If this input parameter contains a zero length array, an
+//		     error will be returned.
 //
 //
-//	errorPrefix                interface{}
-//	   - This object encapsulates error prefix text which is
-//	     included in all returned error messages. Usually, it
-//	     contains the name of the calling method or methods
-//	     listed as a method or function chain of execution.
+//	 errorPrefix                interface{}
+//		   - This object encapsulates error prefix text which is
+//		     included in all returned error messages. Usually, it
+//		     contains the name of the calling method or methods
+//		     listed as a method or function chain of execution.
 //
-//	     If no error prefix information is needed, set this
-//	     parameter to 'nil'.
+//		     If no error prefix information is needed, set this parameter
+//		     to 'nil'.
 //
-//	     This empty interface must be convertible to one of the
-//	     following types:
+//		     This empty interface must be convertible to one of the
+//		     following types:
 //
-//	     1. nil - A nil value is valid and generates an empty
-//	        collection of error prefix and error context
-//	        information.
+//		     1. nil - A nil value is valid and generates an empty
+//		        collection of error prefix and error context
+//		        information.
 //
-//	     2. string - A string containing error prefix information.
+//		     2. string - A string containing error prefix information.
 //
-//	     3. []string A one-dimensional slice of strings containing
-//	        error prefix information
+//		     3. []string A one-dimensional slice of strings containing
+//		        error prefix information
 //
-//	     4. [][2]string A two-dimensional slice of strings
-//	        containing error prefix and error context information.
+//		     4. [][2]string A two-dimensional slice of strings
+//		        containing error prefix and error context information.
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//	        from this object will be copied for use in error and
-//	        informational messages.
+//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		        from this object will be copied for use in error and
+//		        informational messages.
 //
-//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//	        Information from this object will be copied for use in
-//	        error and informational messages.
+//		     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		        Information from this object will be copied for use in
+//		        error and informational messages.
 //
-//	     7. IBasicErrorPrefix - An interface to a method generating
-//	        a two-dimensional slice of strings containing error
-//	        prefix and error context information.
+//		     7. IBasicErrorPrefix - An interface to a method generating
+//		        a two-dimensional slice of strings containing error
+//		        prefix and error context information.
 //
-//	If parameter 'errorPrefix' is NOT convertible to one of
-//	the valid types listed above, it will be considered
-//	invalid and trigger the return of an error.
+//		     If parameter 'errorPrefix' is NOT convertible to one of
+//		     the valid types listed above, it will be considered
+//		     invalid and trigger the return of an error.
 //
-//	Types ErrPrefixDto and IBasicErrorPrefix are included in
-//	the 'errpref' software package,
-//	"github.com/MikeAustin71/errpref".
+//		     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		     the 'errpref' software package,
+//		     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
@@ -1991,62 +1995,62 @@ func (nStrIntSep *IntegerSeparatorDto) NewChineseNumberingRunes(
 //
 // Input Parameters
 //
-//	intSeparatorChars          string
-//	   - One or more characters used to separate groups of
-//	     integers. These characters are used to separate groups
-//	     of integer digits to the left of the decimal separator
-//	     (a.k.a. decimal point). The most common integer separator
-//	     used in conjunction with the India Numbering System is
-//	     the comma (",").
-//	       Example:  6,78,90,00,00,00,00,000
+//		intSeparatorChars          string
+//		   - One or more characters used to separate groups of
+//		     integers. These characters are used to separate groups
+//		     of integer digits to the left of the decimal separator
+//		     (a.k.a. decimal point). The most common integer separator
+//		     used in conjunction with the India Numbering System is
+//		     the comma (",").
+//		       Example:  6,78,90,00,00,00,00,000
 //
-//	     If this input parameter contains a zero length string, an
-//	     error will be returned.
+//		     If this input parameter contains a zero length string, an
+//		     error will be returned.
 //
 //
-//	errorPrefix                interface{}
-//	   - This object encapsulates error prefix text which is
-//	     included in all returned error messages. Usually, it
-//	     contains the name of the calling method or methods
-//	     listed as a method or function chain of execution.
+//	 errorPrefix                interface{}
+//		   - This object encapsulates error prefix text which is
+//		     included in all returned error messages. Usually, it
+//		     contains the name of the calling method or methods
+//		     listed as a method or function chain of execution.
 //
-//	     If no error prefix information is needed, set this
-//	     parameter to 'nil'.
+//		     If no error prefix information is needed, set this parameter
+//		     to 'nil'.
 //
-//	     This empty interface must be convertible to one of the
-//	     following types:
+//		     This empty interface must be convertible to one of the
+//		     following types:
 //
-//	     1. nil - A nil value is valid and generates an empty
-//	        collection of error prefix and error context
-//	        information.
+//		     1. nil - A nil value is valid and generates an empty
+//		        collection of error prefix and error context
+//		        information.
 //
-//	     2. string - A string containing error prefix information.
+//		     2. string - A string containing error prefix information.
 //
-//	     3. []string A one-dimensional slice of strings containing
-//	        error prefix information
+//		     3. []string A one-dimensional slice of strings containing
+//		        error prefix information
 //
-//	     4. [][2]string A two-dimensional slice of strings
-//	        containing error prefix and error context information.
+//		     4. [][2]string A two-dimensional slice of strings
+//		        containing error prefix and error context information.
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//	        from this object will be copied for use in error and
-//	        informational messages.
+//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		        from this object will be copied for use in error and
+//		        informational messages.
 //
-//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//	        Information from this object will be copied for use in
-//	        error and informational messages.
+//		     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		        Information from this object will be copied for use in
+//		        error and informational messages.
 //
-//	     7. IBasicErrorPrefix - An interface to a method generating
-//	        a two-dimensional slice of strings containing error
-//	        prefix and error context information.
+//		     7. IBasicErrorPrefix - An interface to a method generating
+//		        a two-dimensional slice of strings containing error
+//		        prefix and error context information.
 //
-//	If parameter 'errorPrefix' is NOT convertible to one of
-//	the valid types listed above, it will be considered
-//	invalid and trigger the return of an error.
+//		     If parameter 'errorPrefix' is NOT convertible to one of
+//		     the valid types listed above, it will be considered
+//		     invalid and trigger the return of an error.
 //
-//	Types ErrPrefixDto and IBasicErrorPrefix are included in
-//	the 'errpref' software package,
-//	"github.com/MikeAustin71/errpref".
+//		     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		     the 'errpref' software package,
+//		     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
@@ -2136,49 +2140,49 @@ func (nStrIntSep *IntegerSeparatorDto) NewIndiaNumbering(
 //
 // Input Parameters
 //
-//	errorPrefix                interface{}
-//	   - This object encapsulates error prefix text which is
-//	     included in all returned error messages. Usually, it
-//	     contains the name of the calling method or methods
-//	     listed as a method or function chain of execution.
+//	 errorPrefix                interface{}
+//		   - This object encapsulates error prefix text which is
+//		     included in all returned error messages. Usually, it
+//		     contains the name of the calling method or methods
+//		     listed as a method or function chain of execution.
 //
-//	     If no error prefix information is needed, set this
-//	     parameter to 'nil'.
+//		     If no error prefix information is needed, set this parameter
+//		     to 'nil'.
 //
-//	     This empty interface must be convertible to one of the
-//	     following types:
+//		     This empty interface must be convertible to one of the
+//		     following types:
 //
-//	     1. nil - A nil value is valid and generates an empty
-//	        collection of error prefix and error context
-//	        information.
+//		     1. nil - A nil value is valid and generates an empty
+//		        collection of error prefix and error context
+//		        information.
 //
-//	     2. string - A string containing error prefix information.
+//		     2. string - A string containing error prefix information.
 //
-//	     3. []string A one-dimensional slice of strings containing
-//	        error prefix information
+//		     3. []string A one-dimensional slice of strings containing
+//		        error prefix information
 //
-//	     4. [][2]string A two-dimensional slice of strings
-//	        containing error prefix and error context information.
+//		     4. [][2]string A two-dimensional slice of strings
+//		        containing error prefix and error context information.
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//	        from this object will be copied for use in error and
-//	        informational messages.
+//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		        from this object will be copied for use in error and
+//		        informational messages.
 //
-//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//	        Information from this object will be copied for use in
-//	        error and informational messages.
+//		     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		        Information from this object will be copied for use in
+//		        error and informational messages.
 //
-//	     7. IBasicErrorPrefix - An interface to a method generating
-//	        a two-dimensional slice of strings containing error
-//	        prefix and error context information.
+//		     7. IBasicErrorPrefix - An interface to a method generating
+//		        a two-dimensional slice of strings containing error
+//		        prefix and error context information.
 //
-//	If parameter 'errorPrefix' is NOT convertible to one of
-//	the valid types listed above, it will be considered
-//	invalid and trigger the return of an error.
+//		     If parameter 'errorPrefix' is NOT convertible to one of
+//		     the valid types listed above, it will be considered
+//		     invalid and trigger the return of an error.
 //
-//	Types ErrPrefixDto and IBasicErrorPrefix are included in
-//	the 'errpref' software package,
-//	"github.com/MikeAustin71/errpref".
+//		     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		     the 'errpref' software package,
+//		     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
@@ -2274,62 +2278,62 @@ func (nStrIntSep *IntegerSeparatorDto) NewIndiaNumberingDefault(
 //
 // Input Parameters
 //
-//	intSeparatorChars          []rune
-//	   - One or more characters used to separate groups of
-//	     integers. This string is used to separate groups of
-//	     integer digits to the left of the decimal separator
-//	     (a.k.a. decimal point). The most common integer separator
-//	     character used in conjunction with the India Numbering
-//	     System is the comma  ([]rune{','}).
-//	       Example:  6,78,90,00,00,00,00,000
+//		intSeparatorChars          []rune
+//		   - One or more characters used to separate groups of
+//		     integers. This string is used to separate groups of
+//		     integer digits to the left of the decimal separator
+//		     (a.k.a. decimal point). The most common integer separator
+//		     character used in conjunction with the India Numbering
+//		     System is the comma  ([]rune{','}).
+//		       Example:  6,78,90,00,00,00,00,000
 //
-//	     If this input parameter contains a zero length array,
-//	     an error will be returned.
+//		     If this input parameter contains a zero length array,
+//		     an error will be returned.
 //
 //
-//	errorPrefix                interface{}
-//	   - This object encapsulates error prefix text which is
-//	     included in all returned error messages. Usually, it
-//	     contains the name of the calling method or methods
-//	     listed as a method or function chain of execution.
+//	 errorPrefix                interface{}
+//		   - This object encapsulates error prefix text which is
+//		     included in all returned error messages. Usually, it
+//		     contains the name of the calling method or methods
+//		     listed as a method or function chain of execution.
 //
-//	     If no error prefix information is needed, set this
-//	     parameter to 'nil'.
+//		     If no error prefix information is needed, set this parameter
+//		     to 'nil'.
 //
-//	     This empty interface must be convertible to one of the
-//	     following types:
+//		     This empty interface must be convertible to one of the
+//		     following types:
 //
-//	     1. nil - A nil value is valid and generates an empty
-//	        collection of error prefix and error context
-//	        information.
+//		     1. nil - A nil value is valid and generates an empty
+//		        collection of error prefix and error context
+//		        information.
 //
-//	     2. string - A string containing error prefix information.
+//		     2. string - A string containing error prefix information.
 //
-//	     3. []string A one-dimensional slice of strings containing
-//	        error prefix information
+//		     3. []string A one-dimensional slice of strings containing
+//		        error prefix information
 //
-//	     4. [][2]string A two-dimensional slice of strings
-//	        containing error prefix and error context information.
+//		     4. [][2]string A two-dimensional slice of strings
+//		        containing error prefix and error context information.
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//	        from this object will be copied for use in error and
-//	        informational messages.
+//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		        from this object will be copied for use in error and
+//		        informational messages.
 //
-//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//	        Information from this object will be copied for use in
-//	        error and informational messages.
+//		     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		        Information from this object will be copied for use in
+//		        error and informational messages.
 //
-//	     7. IBasicErrorPrefix - An interface to a method generating
-//	        a two-dimensional slice of strings containing error
-//	        prefix and error context information.
+//		     7. IBasicErrorPrefix - An interface to a method generating
+//		        a two-dimensional slice of strings containing error
+//		        prefix and error context information.
 //
-//	If parameter 'errorPrefix' is NOT convertible to one of
-//	the valid types listed above, it will be considered
-//	invalid and trigger the return of an error.
+//		     If parameter 'errorPrefix' is NOT convertible to one of
+//		     the valid types listed above, it will be considered
+//		     invalid and trigger the return of an error.
 //
-//	Types ErrPrefixDto and IBasicErrorPrefix are included in
-//	the 'errpref' software package,
-//	"github.com/MikeAustin71/errpref".
+//		     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		     the 'errpref' software package,
+//		     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
@@ -2566,69 +2570,69 @@ func (nStrIntSep *IntegerSeparatorDto) NewThousands(
 //
 // Input Parameters
 //
-//	intSeparatorChars          []rune
-//	   - One or more characters used to separate groups of
-//	     integers. This separator is also known as the 'thousands'
-//	     separator. It is used to separate groups of integer digits
-//	     to the left of the decimal separator (a.k.a. decimal
-//	     point). In the United States, the standard integer digits
-//	     separator is the comma (',').
-//	           United States Example:  1,000,000,000
+//		intSeparatorChars          []rune
+//		   - One or more characters used to separate groups of
+//		     integers. This separator is also known as the 'thousands'
+//		     separator. It is used to separate groups of integer digits
+//		     to the left of the decimal separator (a.k.a. decimal
+//		     point). In the United States, the standard integer digits
+//		     separator is the comma (',').
+//		           United States Example:  1,000,000,000
 //
-//	     In many European countries, a single period ('.') is used
-//	     as the integer separator character.
-//	           European Example: 1.000.000.000
+//		     In many European countries, a single period ('.') is used
+//		     as the integer separator character.
+//		           European Example: 1.000.000.000
 //
-//	     Other countries and cultures use spaces, apostrophes or
-//	     multiple characters to separate integers.
+//		     Other countries and cultures use spaces, apostrophes or
+//		     multiple characters to separate integers.
 //
-//	     If this input parameter contains a zero length array, an
-//	     error will be returned.
+//		     If this input parameter contains a zero length array, an
+//		     error will be returned.
 //
 //
-//	errorPrefix                interface{}
-//	   - This object encapsulates error prefix text which is
-//	     included in all returned error messages. Usually, it
-//	     contains the name of the calling method or methods
-//	     listed as a method or function chain of execution.
+//	 errorPrefix                interface{}
+//		   - This object encapsulates error prefix text which is
+//		     included in all returned error messages. Usually, it
+//		     contains the name of the calling method or methods
+//		     listed as a method or function chain of execution.
 //
-//	     If no error prefix information is needed, set this
-//	     parameter to 'nil'.
+//		     If no error prefix information is needed, set this parameter
+//		     to 'nil'.
 //
-//	     This empty interface must be convertible to one of the
-//	     following types:
+//		     This empty interface must be convertible to one of the
+//		     following types:
 //
-//	     1. nil - A nil value is valid and generates an empty
-//	        collection of error prefix and error context
-//	        information.
+//		     1. nil - A nil value is valid and generates an empty
+//		        collection of error prefix and error context
+//		        information.
 //
-//	     2. string - A string containing error prefix information.
+//		     2. string - A string containing error prefix information.
 //
-//	     3. []string A one-dimensional slice of strings containing
-//	        error prefix information
+//		     3. []string A one-dimensional slice of strings containing
+//		        error prefix information
 //
-//	     4. [][2]string A two-dimensional slice of strings
-//	        containing error prefix and error context information.
+//		     4. [][2]string A two-dimensional slice of strings
+//		        containing error prefix and error context information.
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//	        from this object will be copied for use in error and
-//	        informational messages.
+//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		        from this object will be copied for use in error and
+//		        informational messages.
 //
-//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//	        Information from this object will be copied for use in
-//	        error and informational messages.
+//		     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		        Information from this object will be copied for use in
+//		        error and informational messages.
 //
-//	     7. IBasicErrorPrefix - An interface to a method generating
-//	        a two-dimensional slice of strings containing error
-//	        prefix and error context information.
+//		     7. IBasicErrorPrefix - An interface to a method generating
+//		        a two-dimensional slice of strings containing error
+//		        prefix and error context information.
 //
-//	If parameter 'errorPrefix' is NOT convertible to one of
-//	the valid types listed above, it will be considered
-//	invalid and trigger the return of an error.
+//		     If parameter 'errorPrefix' is NOT convertible to one of
+//		     the valid types listed above, it will be considered
+//		     invalid and trigger the return of an error.
 //
-//	Types ErrPrefixDto and IBasicErrorPrefix are included in
-//	the 'errpref' software package,
-//	"github.com/MikeAustin71/errpref".
+//		     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		     the 'errpref' software package,
+//		     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
@@ -3394,61 +3398,62 @@ func (nStrIntSep *IntegerSeparatorDto) SetDetailRunes(
 //
 // # Input Parameters
 //
-//	intSeparatorChars          string
-//	   - One or more characters used to separate groups of
-//	     integers. These characters are used to separate groups
-//	     of integer digits to the left of the decimal separator
-//	     (a.k.a. decimal point). The most common integer separator
-//	     used in conjunction with the Chinese Numbering System is
-//	     the comma (",").
-//	       Example:  6,7890,000,0000,0000
+//			intSeparatorChars          string
+//			   - One or more characters used to separate groups of
+//			     integers. These characters are used to separate groups
+//			     of integer digits to the left of the decimal separator
+//			     (a.k.a. decimal point). The most common integer separator
+//			     used in conjunction with the Chinese Numbering System is
+//			     the comma (",").
+//			       Example:  6,7890,000,0000,0000
 //
-//	     If this input parameter contains a zero length string, an
-//	     error will be returned.
+//			     If this input parameter contains a zero length string, an
+//			     error will be returned.
 //
 //
-//	errorPrefix                interface{}
-//	   - This object encapsulates error prefix text which is
-//	     included in all returned error messages. Usually, it
-//	     contains the name of the calling method or methods
-//	     listed as a method or function chain of execution.
+//	 errorPrefix                interface{}
+//			   - This object encapsulates error prefix text which is
+//			     included in all returned error messages. Usually, it
+//			     contains the name of the calling method or methods
+//			     listed as a method or function chain of execution.
 //
-//	     If no error prefix information is needed, set this parameter
-//	     to 'nil'.
+//			     If no error prefix information is needed, set this parameter
+//			     to 'nil'.
 //
-//	     This empty interface must be convertible to one of the
-//	     following types:
+//			     This empty interface must be convertible to one of the
+//			     following types:
 //
-//	     1. nil - A nil value is valid and generates an empty
-//	        collection of error prefix and error context
-//	        information.
+//			     1. nil - A nil value is valid and generates an empty
+//			        collection of error prefix and error context
+//			        information.
 //
-//	     2. string - A string containing error prefix information.
+//			     2. string - A string containing error prefix information.
 //
-//	     3. []string A one-dimensional slice of strings containing
-//	        error prefix information
+//			     3. []string A one-dimensional slice of strings containing
+//			        error prefix information
 //
-//	     4. [][2]string A two-dimensional slice of strings
-//	        containing error prefix and error context information.
+//			     4. [][2]string A two-dimensional slice of strings
+//			        containing error prefix and error context information.
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//	        from this object will be copied for use in error and
-//	        informational messages.
+//			     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//			        from this object will be copied for use in error and
+//			        informational messages.
 //
-//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//	        Information from this object will be copied for use in
-//	        error and informational messages.
+//			     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//			        Information from this object will be copied for use in
+//			        error and informational messages.
 //
-//	     7. IBasicErrorPrefix - An interface to a method generating
-//	        a two-dimensional slice of strings containing error
-//	        prefix and error context information.
+//			     7. IBasicErrorPrefix - An interface to a method generating
+//			        a two-dimensional slice of strings containing error
+//			        prefix and error context information.
 //
-//	     If parameter 'errorPrefix' is NOT convertible to one of
-//	     the valid types listed above, it will be considered
-//	     invalid and trigger the return of an error.
+//			     If parameter 'errorPrefix' is NOT convertible to one of
+//			     the valid types listed above, it will be considered
+//			     invalid and trigger the return of an error.
 //
-//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
-//	     the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//			     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//			     the 'errpref' software package,
+//			     "github.com/MikeAustin71/errpref".
 //
 // -----------------------------------------------------------------
 //
@@ -3535,48 +3540,49 @@ func (nStrIntSep *IntegerSeparatorDto) SetChineseNumbering(
 //
 // # Input Parameters
 //
-//	errorPrefix                interface{}
-//	   - This object encapsulates error prefix text which is
-//	     included in all returned error messages. Usually, it
-//	     contains the name of the calling method or methods
-//	     listed as a method or function chain of execution.
+//	 errorPrefix                interface{}
+//		   - This object encapsulates error prefix text which is
+//		     included in all returned error messages. Usually, it
+//		     contains the name of the calling method or methods
+//		     listed as a method or function chain of execution.
 //
-//	     If no error prefix information is needed, set this parameter
-//	     to 'nil'.
+//		     If no error prefix information is needed, set this parameter
+//		     to 'nil'.
 //
-//	     This empty interface must be convertible to one of the
-//	     following types:
+//		     This empty interface must be convertible to one of the
+//		     following types:
 //
-//	     1. nil - A nil value is valid and generates an empty
-//	        collection of error prefix and error context
-//	        information.
+//		     1. nil - A nil value is valid and generates an empty
+//		        collection of error prefix and error context
+//		        information.
 //
-//	     2. string - A string containing error prefix information.
+//		     2. string - A string containing error prefix information.
 //
-//	     3. []string A one-dimensional slice of strings containing
-//	        error prefix information
+//		     3. []string A one-dimensional slice of strings containing
+//		        error prefix information
 //
-//	     4. [][2]string A two-dimensional slice of strings
-//	        containing error prefix and error context information.
+//		     4. [][2]string A two-dimensional slice of strings
+//		        containing error prefix and error context information.
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//	        from this object will be copied for use in error and
-//	        informational messages.
+//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		        from this object will be copied for use in error and
+//		        informational messages.
 //
-//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//	        Information from this object will be copied for use in
-//	        error and informational messages.
+//		     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		        Information from this object will be copied for use in
+//		        error and informational messages.
 //
-//	     7. IBasicErrorPrefix - An interface to a method generating
-//	        a two-dimensional slice of strings containing error
-//	        prefix and error context information.
+//		     7. IBasicErrorPrefix - An interface to a method generating
+//		        a two-dimensional slice of strings containing error
+//		        prefix and error context information.
 //
-//	     If parameter 'errorPrefix' is NOT convertible to one of
-//	     the valid types listed above, it will be considered
-//	     invalid and trigger the return of an error.
+//		     If parameter 'errorPrefix' is NOT convertible to one of
+//		     the valid types listed above, it will be considered
+//		     invalid and trigger the return of an error.
 //
-//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
-//	     the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//		     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		     the 'errpref' software package,
+//		     "github.com/MikeAustin71/errpref".
 //
 // -----------------------------------------------------------------
 //
@@ -4358,75 +4364,76 @@ func (nStrIntSep *IntegerSeparatorDto) SetIntSeparatorChars(
 //
 // Input Parameters
 //
-//	intGroupingSequence        []uint
-//	   - This unsigned integer array specifies the number of
-//	     integer digits within a series of groups. This value is
-//	     used to group integers within a number string.
+//		intGroupingSequence        []uint
+//		   - This unsigned integer array specifies the number of
+//		     integer digits within a series of groups. This value is
+//		     used to group integers within a number string.
 //
-//	     In most western countries, integer digits to the left of
-//	     the decimal separator (a.k.a. decimal point) are separated
-//	     into groups of three digits representing a grouping of
-//	     'thousands' like this: '1,000,000,000'. In this case the
-//	     'intGroupingSequence' value would be set to three
-//	     (uint[]{3}).
+//		     In most western countries, integer digits to the left of
+//		     the decimal separator (a.k.a. decimal point) are separated
+//		     into groups of three digits representing a grouping of
+//		     'thousands' like this: '1,000,000,000'. In this case the
+//		     'intGroupingSequence' value would be set to three
+//		     (uint[]{3}).
 //
-//	     In some countries and cultures other integer groupings are
-//	     used. In India, for example, a number might be formatted
-//	     like this: '6,78,90,00,00,00,00,000'. In this case the
-//	     'intGroupingSequence' value would be set to uint[]{3,2}.
+//		     In some countries and cultures other integer groupings are
+//		     used. In India, for example, a number might be formatted
+//		     like this: '6,78,90,00,00,00,00,000'. In this case the
+//		     'intGroupingSequence' value would be set to uint[]{3,2}.
 //
-//	     Chinese Numerals have an integer grouping value of four
-//	     and are formatted like this: '12,3456,7890,2345'. In this
-//	     case the 'intGroupingSequence' value would be set to four
-//	     uint[]{4}.
+//		     Chinese Numerals have an integer grouping value of four
+//		     and are formatted like this: '12,3456,7890,2345'. In this
+//		     case the 'intGroupingSequence' value would be set to four
+//		     uint[]{4}.
 //
-//	     If this input parameter is submitted as a zero length
-//	     array or is otherwise invalid, this method will take no
-//	     action and exit.
+//		     If this input parameter is submitted as a zero length
+//		     array or is otherwise invalid, this method will take no
+//		     action and exit.
 //
 //
-//	errorPrefix                interface{}
-//	   - This object encapsulates error prefix text which is
-//	     included in all returned error messages. Usually, it
-//	     contains the name of the calling method or methods
-//	     listed as a method or function chain of execution.
+//	 errorPrefix                interface{}
+//		   - This object encapsulates error prefix text which is
+//		     included in all returned error messages. Usually, it
+//		     contains the name of the calling method or methods
+//		     listed as a method or function chain of execution.
 //
-//	     If no error prefix information is needed, set this parameter
-//	     to 'nil'.
+//		     If no error prefix information is needed, set this parameter
+//		     to 'nil'.
 //
-//	     This empty interface must be convertible to one of the
-//	     following types:
+//		     This empty interface must be convertible to one of the
+//		     following types:
 //
-//	     1. nil - A nil value is valid and generates an empty
-//	        collection of error prefix and error context
-//	        information.
+//		     1. nil - A nil value is valid and generates an empty
+//		        collection of error prefix and error context
+//		        information.
 //
-//	     2. string - A string containing error prefix information.
+//		     2. string - A string containing error prefix information.
 //
-//	     3. []string A one-dimensional slice of strings containing
-//	        error prefix information
+//		     3. []string A one-dimensional slice of strings containing
+//		        error prefix information
 //
-//	     4. [][2]string A two-dimensional slice of strings
-//	        containing error prefix and error context information.
+//		     4. [][2]string A two-dimensional slice of strings
+//		        containing error prefix and error context information.
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//	        from this object will be copied for use in error and
-//	        informational messages.
+//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		        from this object will be copied for use in error and
+//		        informational messages.
 //
-//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//	        Information from this object will be copied for use in
-//	        error and informational messages.
+//		     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		        Information from this object will be copied for use in
+//		        error and informational messages.
 //
-//	     7. IBasicErrorPrefix - An interface to a method generating
-//	        a two-dimensional slice of strings containing error
-//	        prefix and error context information.
+//		     7. IBasicErrorPrefix - An interface to a method generating
+//		        a two-dimensional slice of strings containing error
+//		        prefix and error context information.
 //
-//	     If parameter 'errorPrefix' is NOT convertible to one of
-//	     the valid types listed above, it will be considered
-//	     invalid and trigger the return of an error.
+//		     If parameter 'errorPrefix' is NOT convertible to one of
+//		     the valid types listed above, it will be considered
+//		     invalid and trigger the return of an error.
 //
-//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
-//	     the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//		     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		     the 'errpref' software package,
+//		     "github.com/MikeAustin71/errpref".
 //
 // -----------------------------------------------------------------
 //
@@ -4759,70 +4766,70 @@ func (nStrIntSep *IntegerSeparatorDto) SetThousands(
 //
 // Input Parameters
 //
-//	intSeparatorChars          []rune
-//	   - A character, or series of characters, used to separate
-//	     integer digits in a number string. These characters are
-//	     commonly known as the 'thousands separator'. A 'thousands
-//	     separator' is used to separate groups of integer digits to
-//	     the left of the decimal separator (a.k.a. decimal point).
-//	     In the United States, the standard integer digits
-//	     separator is the single comma character (',').
-//	           United States Example:  1,000,000,000
+//		intSeparatorChars          []rune
+//		   - A character, or series of characters, used to separate
+//		     integer digits in a number string. These characters are
+//		     commonly known as the 'thousands separator'. A 'thousands
+//		     separator' is used to separate groups of integer digits to
+//		     the left of the decimal separator (a.k.a. decimal point).
+//		     In the United States, the standard integer digits
+//		     separator is the single comma character (',').
+//		           United States Example:  1,000,000,000
 //
-//	     In many European countries, a single period ('.') is used
-//	     as the integer separator character.
-//	           European Example: 1.000.000.000
+//		     In many European countries, a single period ('.') is used
+//		     as the integer separator character.
+//		           European Example: 1.000.000.000
 //
-//	     Other countries and cultures use spaces, apostrophes or
-//	     multiple characters to separate integers.
+//		     Other countries and cultures use spaces, apostrophes or
+//		     multiple characters to separate integers.
 //
-//	     If this parameter is submitted as a zero length array, an
-//	     error will be returned.
+//		     If this parameter is submitted as a zero length array, an
+//		     error will be returned.
 //
 //
-//	errorPrefix                interface{}
-//	   - This object encapsulates error prefix text which is
-//	     included in all returned error messages. Usually, it
-//	     contains the name of the calling method or methods
-//	     listed as a method or function chain of execution.
+//	 errorPrefix                interface{}
+//		   - This object encapsulates error prefix text which is
+//		     included in all returned error messages. Usually, it
+//		     contains the name of the calling method or methods
+//		     listed as a method or function chain of execution.
 //
-//	     If no error prefix information is needed, set this
-//	     parameter to 'nil'.
+//		     If no error prefix information is needed, set this parameter
+//		     to 'nil'.
 //
-//	     This empty interface must be convertible to one of the
-//	     following types:
+//		     This empty interface must be convertible to one of the
+//		     following types:
 //
-//	     1. nil - A nil value is valid and generates an empty
-//	        collection of error prefix and error context
-//	        information.
+//		     1. nil - A nil value is valid and generates an empty
+//		        collection of error prefix and error context
+//		        information.
 //
-//	     2. string - A string containing error prefix information.
+//		     2. string - A string containing error prefix information.
 //
-//	     3. []string A one-dimensional slice of strings containing
-//	        error prefix information
+//		     3. []string A one-dimensional slice of strings containing
+//		        error prefix information
 //
-//	     4. [][2]string A two-dimensional slice of strings
-//	        containing error prefix and error context information.
+//		     4. [][2]string A two-dimensional slice of strings
+//		        containing error prefix and error context information.
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//	        from this object will be copied for use in error and
-//	        informational messages.
+//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		        from this object will be copied for use in error and
+//		        informational messages.
 //
-//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//	        Information from this object will be copied for use in
-//	        error and informational messages.
+//		     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		        Information from this object will be copied for use in
+//		        error and informational messages.
 //
-//	     7. IBasicErrorPrefix - An interface to a method generating
-//	        a two-dimensional slice of strings containing error
-//	        prefix and error context information.
-
-//	If parameter 'errorPrefix' is NOT convertible to one of
-//	the valid types listed above, it will be considered
-//	invalid and trigger the return of an error.
+//		     7. IBasicErrorPrefix - An interface to a method generating
+//		        a two-dimensional slice of strings containing error
+//		        prefix and error context information.
 //
-//	Types ErrPrefixDto and IBasicErrorPrefix are included in
-//	the 'errpref' software package,
-//	"github.com/MikeAustin71/errpref".
+//		     If parameter 'errorPrefix' is NOT convertible to one of
+//		     the valid types listed above, it will be considered
+//		     invalid and trigger the return of an error.
+//
+//		     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		     the 'errpref' software package,
+//		     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
@@ -5145,117 +5152,118 @@ func (nStrIntSep *IntegerSeparatorDto) String() string {
 //
 // Input Parameters
 //
-//	intSeparatorChars          []rune
-//	   - A character, or series of characters, used to separate
-//	     integer digits in a number string. These characters are
-//	     commonly known as the 'thousands separator'. A 'thousands
-//	     separator' is used to separate groups of integer digits to
-//	     the left of the decimal separator (a.k.a. decimal point).
-//	     In the United States, the standard integer digits
-//	     separator is the single comma character (',').
-//	           United States Example:  1,000,000,000
+//		intSeparatorChars          []rune
+//		   - A character, or series of characters, used to separate
+//		     integer digits in a number string. These characters are
+//		     commonly known as the 'thousands separator'. A 'thousands
+//		     separator' is used to separate groups of integer digits to
+//		     the left of the decimal separator (a.k.a. decimal point).
+//		     In the United States, the standard integer digits
+//		     separator is the single comma character (',').
+//		           United States Example:  1,000,000,000
 //
-//	     In many European countries, a single period ('.') is used
-//	     as the integer separator character.
-//	           European Example: 1.000.000.000
+//		     In many European countries, a single period ('.') is used
+//		     as the integer separator character.
+//		           European Example: 1.000.000.000
 //
-//	     Other countries and cultures use spaces, apostrophes or
-//	     multiple characters to separate integers.
+//		     Other countries and cultures use spaces, apostrophes or
+//		     multiple characters to separate integers.
 //
-//	     If this parameter is submitted as a zero length array, an
-//	     error will be returned.
-//
-//
-//	intGroupingSequence        []uint
-//	   - This unsigned integer array specifies the number of
-//	     integer digits within a series of groups. This value is
-//	     used to group integers within a number string.
-//
-//	     In most western countries, integer digits to the left of
-//	     the decimal separator (a.k.a. decimal point) are separated
-//	     into groups of three digits representing a grouping of
-//	     'thousands' like this: '1,000,000,000'. In this case the
-//	     'intGroupingSequence' value would be set to three
-//	     (uint[]{3}).
-//
-//	     In some countries and cultures other integer groupings are
-//	     used. In India, for example, a number might be formatted
-//	     like this: '6,78,90,00,00,00,00,000'. In this case the
-//	     'intGroupingSequence' value would be set to uint[]{3,2}.
-//
-//	     Chinese Numerals have an integer grouping value of four
-//	     and are formatted like this: '12,3456,7890,2345'. In this
-//	     case the 'intGroupingSequence' value would be set to four
-//	     uint[]{4}.
+//		     If this parameter is submitted as a zero length array, an
+//		     error will be returned.
 //
 //
-//	restartIntGroupingSequence bool
-//	   - If this flag is set to 'true', the grouping sequence
-//	     will be restarted at the beginning of the
-//	     'intGroupingSequence' array after completion of the last
-//	      group in the 'intGroupingSequence' array.
-//	      Example:
-//	        restartIntGroupingSequence = 'true'
-//	        intGroupingSequence = uint{3,2}
-//	        integer = 1234567890123456
-//	        result  = 1,23,456,78,901,23,456
+//		intGroupingSequence        []uint
+//		   - This unsigned integer array specifies the number of
+//		     integer digits within a series of groups. This value is
+//		     used to group integers within a number string.
 //
-//	     If this flag is set to 'false', the last element or
-//	     grouping in the 'intGroupingSequence' array will simply be
-//	     repeated for all the remaining integer digits.
-//	      Example:
-//	        restartIntGroupingSequence = 'false'
-//	        intGroupingSequence = uint{3,2}
-//	        integer = 1234567890123456
-//	        result  = 1,23,45,67,89,01,23,456
+//		     In most western countries, integer digits to the left of
+//		     the decimal separator (a.k.a. decimal point) are separated
+//		     into groups of three digits representing a grouping of
+//		     'thousands' like this: '1,000,000,000'. In this case the
+//		     'intGroupingSequence' value would be set to three
+//		     (uint[]{3}).
 //
-//	     The need to set this value to 'true' is exceedingly rare.
-//	     For the vast majority of integer separation scenarios, set
-//	     this parameter should be set to 'false'.
+//		     In some countries and cultures other integer groupings are
+//		     used. In India, for example, a number might be formatted
+//		     like this: '6,78,90,00,00,00,00,000'. In this case the
+//		     'intGroupingSequence' value would be set to uint[]{3,2}.
+//
+//		     Chinese Numerals have an integer grouping value of four
+//		     and are formatted like this: '12,3456,7890,2345'. In this
+//		     case the 'intGroupingSequence' value would be set to four
+//		     uint[]{4}.
 //
 //
-//	errorPrefix                interface{}
-//	   - This object encapsulates error prefix text which is
-//	     included in all returned error messages. Usually, it
-//	     contains the name of the calling method or methods
-//	     listed as a method or function chain of execution.
+//		restartIntGroupingSequence bool
+//		   - If this flag is set to 'true', the grouping sequence
+//		     will be restarted at the beginning of the
+//		     'intGroupingSequence' array after completion of the last
+//		      group in the 'intGroupingSequence' array.
+//		      Example:
+//		        restartIntGroupingSequence = 'true'
+//		        intGroupingSequence = uint{3,2}
+//		        integer = 1234567890123456
+//		        result  = 1,23,456,78,901,23,456
 //
-//	     If no error prefix information is needed, set this parameter
-//	     to 'nil'.
+//		     If this flag is set to 'false', the last element or
+//		     grouping in the 'intGroupingSequence' array will simply be
+//		     repeated for all the remaining integer digits.
+//		      Example:
+//		        restartIntGroupingSequence = 'false'
+//		        intGroupingSequence = uint{3,2}
+//		        integer = 1234567890123456
+//		        result  = 1,23,45,67,89,01,23,456
 //
-//	     This empty interface must be convertible to one of the
-//	     following types:
+//		     The need to set this value to 'true' is exceedingly rare.
+//		     For the vast majority of integer separation scenarios, set
+//		     this parameter should be set to 'false'.
 //
-//	     1. nil - A nil value is valid and generates an empty
-//	        collection of error prefix and error context
-//	        information.
 //
-//	     2. string - A string containing error prefix information.
+//	 errorPrefix                interface{}
+//		   - This object encapsulates error prefix text which is
+//		     included in all returned error messages. Usually, it
+//		     contains the name of the calling method or methods
+//		     listed as a method or function chain of execution.
 //
-//	     3. []string A one-dimensional slice of strings containing
-//	        error prefix information
+//		     If no error prefix information is needed, set this parameter
+//		     to 'nil'.
 //
-//	     4. [][2]string A two-dimensional slice of strings
-//	        containing error prefix and error context information.
+//		     This empty interface must be convertible to one of the
+//		     following types:
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//	        from this object will be copied for use in error and
-//	        informational messages.
+//		     1. nil - A nil value is valid and generates an empty
+//		        collection of error prefix and error context
+//		        information.
 //
-//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//	        Information from this object will be copied for use in
-//	        error and informational messages.
+//		     2. string - A string containing error prefix information.
 //
-//	     7. IBasicErrorPrefix - An interface to a method generating
-//	        a two-dimensional slice of strings containing error
-//	        prefix and error context information.
+//		     3. []string A one-dimensional slice of strings containing
+//		        error prefix information
 //
-//	     If parameter 'errorPrefix' is NOT convertible to one of
-//	     the valid types listed above, it will be considered
-//	     invalid and trigger the return of an error.
+//		     4. [][2]string A two-dimensional slice of strings
+//		        containing error prefix and error context information.
 //
-//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
-//	     the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		        from this object will be copied for use in error and
+//		        informational messages.
+//
+//		     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		        Information from this object will be copied for use in
+//		        error and informational messages.
+//
+//		     7. IBasicErrorPrefix - An interface to a method generating
+//		        a two-dimensional slice of strings containing error
+//		        prefix and error context information.
+//
+//		     If parameter 'errorPrefix' is NOT convertible to one of
+//		     the valid types listed above, it will be considered
+//		     invalid and trigger the return of an error.
+//
+//		     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		     the 'errpref' software package,
+//		     "github.com/MikeAustin71/errpref".
 //
 // -----------------------------------------------------------------
 //
