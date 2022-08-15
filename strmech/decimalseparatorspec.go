@@ -280,7 +280,7 @@ func (decSeparatorSpec *DecimalSeparatorSpec) CopyOut(
 }
 
 // Empty - Resets all internal member variables for the current
-// instance of NegativeNumberSearchSpec to their initial or zero
+// instance of DecimalSeparatorSpec to their initial or zero
 // states.
 //
 // ----------------------------------------------------------------

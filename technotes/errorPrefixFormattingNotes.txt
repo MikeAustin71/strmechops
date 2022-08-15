@@ -1,6 +1,7 @@
 
 
 'textformattercollection.go'
+
 //  errorPrefix                interface{}
 //	   - This object encapsulates error prefix text which is
 //	     included in all returned error messages. Usually, it

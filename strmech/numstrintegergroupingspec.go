@@ -114,6 +114,7 @@ func (nStrIntGroupSpec *NumStrIntegerGroupingSpec) CopyIn(
 	nStrIntGroupSpec.lock.Lock()
 
 	defer nStrIntGroupSpec.lock.Unlock()
+
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
 
@@ -222,6 +223,7 @@ func (nStrIntGroupSpec *NumStrIntegerGroupingSpec) CopyOut(
 	nStrIntGroupSpec.lock.Lock()
 
 	defer nStrIntGroupSpec.lock.Unlock()
+
 	var ePrefix *ePref.ErrPrefixDto
 
 	ePrefix,
@@ -244,6 +246,43 @@ func (nStrIntGroupSpec *NumStrIntegerGroupingSpec) CopyOut(
 					"nStrIntGroupSpec"))
 
 	return deepCopyNStrIntGroupSpec, err
+}
+
+// Empty - Resets all internal member variables for the current
+// instance of NumStrIntegerGroupingSpec to their initial or
+// zero states.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+// This method will delete all pre-existing internal member
+// variable data values in the current instance of
+// NumStrIntegerGroupingSpec.
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//	NONE
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//	NONE
+func (nStrIntGroupSpec *NumStrIntegerGroupingSpec) Empty() {
+
+	if nStrIntGroupSpec.lock == nil {
+		nStrIntGroupSpec.lock = new(sync.Mutex)
+	}
+
+	nStrIntGroupSpec.lock.Lock()
+
+	defer nStrIntGroupSpec.lock.Unlock()
+
+	new(numStrIntGroupingSpecAtom).empty(
+		nStrIntGroupSpec)
 }
 
 // NewRunes - Creates and returns a new and fully populated
