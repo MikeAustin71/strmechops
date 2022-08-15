@@ -279,10 +279,64 @@ func (nStrIntGroupSpec *NumStrIntegerGroupingSpec) Empty() {
 
 	nStrIntGroupSpec.lock.Lock()
 
-	defer nStrIntGroupSpec.lock.Unlock()
-
 	new(numStrIntGroupingSpecAtom).empty(
 		nStrIntGroupSpec)
+
+	nStrIntGroupSpec.lock.Unlock()
+
+	nStrIntGroupSpec.lock = nil
+}
+
+// Equal - Receives a pointer to another instance of
+// NumStrIntegerGroupingSpec and proceeds to compare its
+// internal member variables to those of the current
+// NumStrIntegerGroupingSpec instance in order to determine
+// if they are equivalent.
+//
+// A boolean flag showing the result of this comparison is
+// returned. If the member variables for both instances are
+// equal in all respects, this flag is set to 'true'. Otherwise,
+// this method returns 'false'.
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//	incomingNStrIntGroupSpec   *NumStrIntegerGroupingSpec
+//	   - A pointer to an instance of NumStrIntegerGroupingSpec.
+//	     The internal member variable data values in this instance
+//	     will be compared to those in the current instance of
+//	     NumStrIntegerGroupingSpec. The results of this comparison
+//	     will be returned to the calling function as a boolean
+//	     value.
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//	bool
+//	   - If the internal member variable data values contained in
+//	     input parameter 'incomingNStrIntGroupSpec' are equivalent
+//	     in all respects to those contained in the current instance
+//	     of NumStrIntegerGroupingSpec, this return value will be
+//	     set to 'true'.
+//
+//	     Otherwise, this method will return 'false'.
+func (nStrIntGroupSpec *NumStrIntegerGroupingSpec) Equal(
+	incomingNStrIntGroupSpec *NumStrIntegerGroupingSpec) bool {
+
+	if nStrIntGroupSpec.lock == nil {
+		nStrIntGroupSpec.lock = new(sync.Mutex)
+	}
+
+	nStrIntGroupSpec.lock.Lock()
+
+	defer nStrIntGroupSpec.lock.Unlock()
+
+	return new(numStrIntGroupingSpecAtom).equal(
+		nStrIntGroupSpec,
+		incomingNStrIntGroupSpec)
+
 }
 
 // NewRunes - Creates and returns a new and fully populated
