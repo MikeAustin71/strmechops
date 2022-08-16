@@ -316,7 +316,7 @@ func (nStrNumberFieldSpec *NumStrNumberFieldSpec) Empty() {
 //	   - If the internal member variable data values contained in
 //	     input parameter 'incomingNStrNumFieldSpec' are equivalent
 //	     in all respects to those contained in the current
-//	     instance of incomingNStrNumFieldSpec, this return value
+//	     instance of 'incomingNStrNumFieldSpec', this return value
 //	     will be set to 'true'.
 //
 //	     Otherwise, this method will return 'false'.
@@ -519,7 +519,7 @@ func (nStrNumberFieldSpec *NumStrNumberFieldSpec) NewFieldSpec(
 	return newNStrNumFieldSpec, err
 }
 
-// SetFieldSpec - Deletes and overwrites all the member variable
+// SetFieldSpec - Deletes and overwrites all member variable
 // data values in the current instance of NumStrNumberFieldSpec.
 //
 // ----------------------------------------------------------------
@@ -671,6 +671,270 @@ func (nStrNumberFieldSpec *NumStrNumberFieldSpec) SetFieldSpec(
 				"nStrNumberFieldSpec"))
 }
 
+// SetFieldLength - Deletes and resets the member variable
+// data value for 'NumStrNumberFieldSpec.fieldLength' in
+// the current instance of NumStrNumberFieldSpec.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+// This method will delete and reset the pre-existing data
+// value for the 'NumStrNumberFieldSpec.fieldLength'
+// member variable contained in the current instance of
+// NumStrNumberFieldSpec.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	 fieldLength                int
+//	    - This parameter defines the length of the text field in
+//	      which the numeric value will be displayed within a
+//	      number string.
+//
+//	      If 'fieldLength' is less than the length of the numeric
+//	      value string, it will be automatically set equal to the
+//	      length of that numeric value string.
+//
+//	      To automatically set the value of fieldLength to the string
+//	      length of the numeric value, set this parameter to a value
+//	      of minus one (-1).
+//
+//	      If this parameter is submitted with a value less than minus
+//	      one (-1) or greater than 1-million (1,000,000), an error will
+//	      be returned.
+//
+//	 errorPrefix                interface{}
+//		   - This object encapsulates error prefix text which is
+//		     included in all returned error messages. Usually, it
+//		     contains the name of the calling method or methods
+//		     listed as a method or function chain of execution.
+//
+//		     If no error prefix information is needed, set this
+//	      parameter to 'nil'.
+//
+//		     This empty interface must be convertible to one of the
+//		     following types:
+//
+//		     1. nil - A nil value is valid and generates an empty
+//		        collection of error prefix and error context
+//		        information.
+//
+//		     2. string - A string containing error prefix information.
+//
+//		     3. []string A one-dimensional slice of strings containing
+//		        error prefix information
+//
+//		     4. [][2]string A two-dimensional slice of strings
+//		        containing error prefix and error context information.
+//
+//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		        from this object will be copied for use in error and
+//		        informational messages.
+//
+//		     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		        Information from this object will be copied for use in
+//		        error and informational messages.
+//
+//		     7. IBasicErrorPrefix - An interface to a method generating
+//		        a two-dimensional slice of strings containing error
+//		        prefix and error context information.
+//
+//		     If parameter 'errorPrefix' is NOT convertible to one of
+//		     the valid types listed above, it will be considered
+//		     invalid and trigger the return of an error.
+//
+//		     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		     the 'errpref' software package,
+//		     "github.com/MikeAustin71/errpref".
+//
+// -----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//	   - If this method completes successfully, the returned error
+//	     Type is set equal to 'nil'.
+//
+//	     If errors are encountered during processing, the returned
+//	     error Type will encapsulate an error message. This
+//	     returned error message will incorporate the method chain
+//	     and text passed by input parameter, 'errorPrefix'. The
+//	     'errorPrefix' text will be attached to the beginning of
+//	     the error message.
+func (nStrNumberFieldSpec *NumStrNumberFieldSpec) SetFieldLength(
+	fieldLength int,
+	errorPrefix interface{}) error {
+
+	if nStrNumberFieldSpec.lock == nil {
+		nStrNumberFieldSpec.lock = new(sync.Mutex)
+	}
+
+	nStrNumberFieldSpec.lock.Lock()
+
+	defer nStrNumberFieldSpec.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumStrNumberFieldSpec."+
+			"SetFieldLength()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	return new(numStrNumberFieldSpecAtom).
+		setNStrNumberFieldLength(
+			nStrNumberFieldSpec,
+			fieldLength,
+			ePrefix.XCpy(
+				"nStrNumberFieldSpec.fieldLength"+
+					"<-fieldLength"))
+}
+
+// SetFieldJustification - Deletes and resets the member variable
+// data value for 'NumStrNumberFieldSpec.fieldJustification' in
+// the current instance of NumStrNumberFieldSpec.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+// This method will delete and reset the pre-existing data
+// value for the 'NumStrNumberFieldSpec.fieldJustification'
+// member variable contained in the current instance of
+// NumStrNumberFieldSpec.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//		 fieldJustification         TextJustify
+//		    - An enumeration which specifies the justification of the
+//		      numeric value string within the number field length specified
+//		      by input parameter 'fieldLength'.
+//
+//		      Text justification can only be evaluated in the context of
+//		      a number string, field length and a 'textJustification'
+//		      object of type TextJustify. This is because number strings
+//		      with a field length equal to or less than the length of the
+//		      numeric value string never use text justification. In these
+//		      cases, text justification is completely ignored.
+//
+//		      If the field length parameter ('fieldLength') is greater
+//		      than the length of the numeric value string, text
+//		      justification must be equal to one of these
+//		      three valid values:
+//		                TextJustify(0).Left()
+//		                TextJustify(0).Right()
+//		                TextJustify(0).Center()
+//
+//		      You can also use the abbreviated text justification
+//		      enumeration syntax as follows:
+//
+//		                TxtJustify.Left()
+//		                TxtJustify.Right()
+//		                TxtJustify.Center()
+//
+//	 errorPrefix                interface{}
+//		   - This object encapsulates error prefix text which is
+//		     included in all returned error messages. Usually, it
+//		     contains the name of the calling method or methods
+//		     listed as a method or function chain of execution.
+//
+//		     If no error prefix information is needed, set this
+//	      parameter to 'nil'.
+//
+//		     This empty interface must be convertible to one of the
+//		     following types:
+//
+//		     1. nil - A nil value is valid and generates an empty
+//		        collection of error prefix and error context
+//		        information.
+//
+//		     2. string - A string containing error prefix information.
+//
+//		     3. []string A one-dimensional slice of strings containing
+//		        error prefix information
+//
+//		     4. [][2]string A two-dimensional slice of strings
+//		        containing error prefix and error context information.
+//
+//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		        from this object will be copied for use in error and
+//		        informational messages.
+//
+//		     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		        Information from this object will be copied for use in
+//		        error and informational messages.
+//
+//		     7. IBasicErrorPrefix - An interface to a method generating
+//		        a two-dimensional slice of strings containing error
+//		        prefix and error context information.
+//
+//		     If parameter 'errorPrefix' is NOT convertible to one of
+//		     the valid types listed above, it will be considered
+//		     invalid and trigger the return of an error.
+//
+//		     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		     the 'errpref' software package,
+//		     "github.com/MikeAustin71/errpref".
+//
+// -----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//	   - If this method completes successfully, the returned error
+//	     Type is set equal to 'nil'.
+//
+//	     If errors are encountered during processing, the returned
+//	     error Type will encapsulate an error message. This
+//	     returned error message will incorporate the method chain
+//	     and text passed by input parameter, 'errorPrefix'. The
+//	     'errorPrefix' text will be attached to the beginning of
+//	     the error message.
+func (nStrNumberFieldSpec *NumStrNumberFieldSpec) SetFieldJustification(
+	fieldJustification TextJustify,
+	errorPrefix interface{}) error {
+
+	if nStrNumberFieldSpec.lock == nil {
+		nStrNumberFieldSpec.lock = new(sync.Mutex)
+	}
+
+	nStrNumberFieldSpec.lock.Lock()
+
+	defer nStrNumberFieldSpec.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumStrNumberFieldSpec."+
+			"SetFieldJustification()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	return new(numStrNumberFieldSpecAtom).
+		setNStrNumberFieldJustification(
+			nStrNumberFieldSpec,
+			fieldJustification,
+			ePrefix.XCpy(
+				"nStrNumberFieldSpec.fieldJustification"+
+					"<-fieldJustification"))
+}
+
 // numStrNumberFieldSpecNanobot - This type provides
 // helper methods for NumStrNumberFieldSpec
 type numStrNumberFieldSpecNanobot struct {
@@ -799,15 +1063,15 @@ func (nStrNumberFieldSpecNanobot *numStrNumberFieldSpecNanobot) copyNStrNumberFi
 	return err
 }
 
-// setLeadingNStrNumberFieldSpec - Deletes and resets all
-// member variable data values contained in the instance
-// of NumStrNumberFieldSpec passed as an input parameter.
+// setNStrNumberFieldSpec - Deletes and resets all member
+// variable data values contained in the instance of
+// NumStrNumberFieldSpec passed as an input parameter.
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//		nStrNumFieldSpec           *NumStrNumberFieldSpec
+//	nStrNumFieldSpec           *NumStrNumberFieldSpec
 //	    - A pointer to an instance of NumStrNumberFieldSpec.
 //	      All the member variable data values in this instance
 //	      will be deleted and reset according to the data
@@ -911,43 +1175,32 @@ func (nStrNumberFieldSpecNanobot *numStrNumberFieldSpecNanobot) setNStrNumberFie
 		return err
 	}
 
-	if nStrNumFieldSpec == nil {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'nStrNumFieldSpec' is invalid!\n"+
-			"'nStrNumFieldSpec' is a 'nil' pointer.\n",
-			ePrefix.String())
-
-		return err
-	}
-
-	if fieldLength < -1 {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'fieldLength' is invalid!\n"+
-			"'fieldLength' has a value less than minus one (-1).\n"+
-			"fieldLength = '%v'\n",
-			ePrefix.String(),
-			fieldLength)
-
-		return err
-	}
-
-	if fieldLength > 1000000 {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'fieldLength' is invalid!\n"+
-			"'fieldLength' has a value greater than one-million (1,000,000).\n"+
-			"fieldLength = '%v'\n",
-			ePrefix.String(),
-			fieldLength)
-
-		return err
-	}
-
 	new(numStrNumberFieldSpecAtom).empty(
 		nStrNumFieldSpec)
 
-	nStrNumFieldSpec.fieldLength = fieldLength
+	nStrNumFieldSpecAtom := numStrNumberFieldSpecAtom{}
 
-	nStrNumFieldSpec.fieldJustification = fieldJustification
+	err = nStrNumFieldSpecAtom.setNStrNumberFieldLength(
+		nStrNumFieldSpec,
+		fieldLength,
+		ePrefix.XCpy(
+			"nStrNumFieldSpec.fieldLength<-"+
+				"fieldLength"))
+
+	if err != nil {
+		return err
+	}
+
+	err = nStrNumFieldSpecAtom.setNStrNumberFieldJustification(
+		nStrNumFieldSpec,
+		fieldJustification,
+		ePrefix.XCpy(
+			"nStrNumFieldSpec.fieldJustification<-"+
+				"fieldJustification"))
+
+	if err != nil {
+		return err
+	}
 
 	return err
 }
@@ -1074,4 +1327,269 @@ func (nStrNumFieldSpecAtom *numStrNumberFieldSpecAtom) equal(
 	}
 
 	return true
+}
+
+// setNStrNumberFieldLength - Deletes and resets the member
+// variable data value for 'NumStrNumberFieldSpec.fieldLength'
+// contained in the instance of NumStrNumberFieldSpec passed
+// as an input parameter.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+// This method will delete and reset the pre-existing data
+// value for the 'NumStrNumberFieldSpec.fieldLength'
+// member variable contained in the instance of
+// NumStrNumberFieldSpec passed as an input parameter.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	nStrNumFieldSpec           *NumStrNumberFieldSpec
+//	    - A pointer to an instance of NumStrNumberFieldSpec.
+//	      The 'NumStrNumberFieldSpec.fieldLength' member
+//	      variable data values in this instance
+//	      will be deleted and reset to the value
+//	      provided by input parameter, 'fieldLength'.
+//
+//	 fieldLength                int
+//	    - This parameter defines the length of the text field in
+//	      which the numeric value will be displayed within a
+//	      number string.
+//
+//	      If 'fieldLength' is less than the length of the numeric
+//	      value string, it will be automatically set equal to the
+//	      length of that numeric value string.
+//
+//	      To automatically set the value of fieldLength to the string
+//	      length of the numeric value, set this parameter to a value
+//	      of minus one (-1).
+//
+//	      If this parameter is submitted with a value less than minus
+//	      one (-1) or greater than 1-million (1,000,000), an error will
+//	      be returned.
+//
+//	 errPrefDto                 *ePref.ErrPrefixDto
+//	    - This object encapsulates an error prefix string which is
+//	      included in all returned error messages. Usually, it
+//	      contains the name of the calling method or methods listed
+//	      as a function chain.
+//
+//	      If no error prefix information is needed, set this
+//	      parameter to 'nil'.
+//
+//	      Type ErrPrefixDto is included in the 'errpref' software
+//	      package, "github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	err                        error
+//	   - If this method completes successfully, this returned error
+//	     Type is set equal to 'nil'. If errors are encountered during
+//	     processing, the returned error Type will encapsulate an error
+//	     message.
+//
+//	     If an error message is returned, the text value for input
+//	     parameter 'errPrefDto' (error prefix) will be prefixed or
+//	     attached at the beginning of the error message.
+func (nStrNumFieldSpecAtom *numStrNumberFieldSpecAtom) setNStrNumberFieldLength(
+	nStrNumFieldSpec *NumStrNumberFieldSpec,
+	fieldLength int,
+	errPrefDto *ePref.ErrPrefixDto) (
+	err error) {
+
+	if nStrNumFieldSpecAtom.lock == nil {
+		nStrNumFieldSpecAtom.lock = new(sync.Mutex)
+	}
+
+	nStrNumFieldSpecAtom.lock.Lock()
+
+	defer nStrNumFieldSpecAtom.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"numStrNumberFieldSpecNanobot."+
+			"setNStrNumberFieldLength()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if nStrNumFieldSpec == nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'nStrNumFieldSpec' is invalid!\n"+
+			"'nStrNumFieldSpec' is a 'nil' pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if fieldLength < -1 {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'fieldLength' is invalid!\n"+
+			"'fieldLength' has a value less than minus one (-1).\n"+
+			"fieldLength = '%v'\n",
+			ePrefix.String(),
+			fieldLength)
+
+		return err
+	}
+
+	if fieldLength > 1000000 {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'fieldLength' is invalid!\n"+
+			"'fieldLength' has a value greater than one-million (1,000,000).\n"+
+			"fieldLength = '%v'\n",
+			ePrefix.String(),
+			fieldLength)
+
+		return err
+	}
+
+	nStrNumFieldSpec.fieldLength = fieldLength
+
+	return err
+}
+
+// setNStrNumberFieldJustification - Deletes and resets the
+// member variable data value for
+// 'NumStrNumberFieldSpec.fieldJustification' contained in
+// the instance of NumStrNumberFieldSpec passed as an input
+// parameter.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+// This method will delete and overwrite the pre-existing data
+// value for the 'NumStrNumberFieldSpec.fieldJustification'
+// member variable contained in the instance of
+// NumStrNumberFieldSpec passed as an input parameter.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//		nStrNumFieldSpec           *NumStrNumberFieldSpec
+//	    - A pointer to an instance of NumStrNumberFieldSpec.
+//	      The 'NumStrNumberFieldSpec.fieldLength' member
+//	      variable data values in this instance
+//	      will be deleted and reset to the value
+//	      provided by input parameter, 'fieldLength'.
+//
+//		 fieldJustification         TextJustify
+//		    - An enumeration which specifies the justification of the
+//		      numeric value string within the number field length specified
+//		      by input parameter 'fieldLength'.
+//
+//		      Text justification can only be evaluated in the context of
+//		      a number string, field length and a 'textJustification'
+//		      object of type TextJustify. This is because number strings
+//		      with a field length equal to or less than the length of the
+//		      numeric value string never use text justification. In these
+//		      cases, text justification is completely ignored.
+//
+//		      If the field length parameter ('fieldLength') is greater
+//		      than the length of the numeric value string, text
+//		      justification must be equal to one of these
+//		      three valid values:
+//		                TextJustify(0).Left()
+//		                TextJustify(0).Right()
+//		                TextJustify(0).Center()
+//
+//		      You can also use the abbreviated text justification
+//		      enumeration syntax as follows:
+//
+//		                TxtJustify.Left()
+//		                TxtJustify.Right()
+//		                TxtJustify.Center()
+//
+//			 errPrefDto                 *ePref.ErrPrefixDto
+//			    - This object encapsulates an error prefix string which is
+//			      included in all returned error messages. Usually, it
+//			      contains the name of the calling method or methods listed
+//			      as a function chain.
+//
+//			      If no error prefix information is needed, set this
+//			      parameter to 'nil'.
+//
+//			      Type ErrPrefixDto is included in the 'errpref' software
+//			      package, "github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	err                        error
+//	   - If this method completes successfully, this returned error
+//	     Type is set equal to 'nil'. If errors are encountered during
+//	     processing, the returned error Type will encapsulate an error
+//	     message.
+//
+//	     If an error message is returned, the text value for input
+//	     parameter 'errPrefDto' (error prefix) will be prefixed or
+//	     attached at the beginning of the error message.
+func (nStrNumFieldSpecAtom *numStrNumberFieldSpecAtom) setNStrNumberFieldJustification(
+	nStrNumFieldSpec *NumStrNumberFieldSpec,
+	fieldJustification TextJustify,
+	errPrefDto *ePref.ErrPrefixDto) (
+	err error) {
+
+	if nStrNumFieldSpecAtom.lock == nil {
+		nStrNumFieldSpecAtom.lock = new(sync.Mutex)
+	}
+
+	nStrNumFieldSpecAtom.lock.Lock()
+
+	defer nStrNumFieldSpecAtom.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"numStrNumberFieldSpecNanobot."+
+			"setNStrNumberFieldJustification()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if nStrNumFieldSpec == nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'nStrNumFieldSpec' is invalid!\n"+
+			"'nStrNumFieldSpec' is a 'nil' pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if !fieldJustification.XIsValid() &&
+		fieldJustification != TxtJustify.None() {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'fieldJustification' is invalid!\n"+
+			"'fieldJustification' string value  = '%v'\n"+
+			"'fieldJustification' integer value = '%v'\n",
+			ePrefix.String(),
+			fieldJustification.String(),
+			fieldJustification.XValueInt())
+
+		return err
+
+	}
+
+	nStrNumFieldSpec.fieldJustification =
+		fieldJustification
+
+	return err
 }

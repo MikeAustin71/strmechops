@@ -204,23 +204,7 @@ func TestNumberRoundingType_XValueInt_000100(t *testing.T) {
 
 		isValid = numberRoundingType1.XIsValid()
 
-		if i == 0 {
-			if isValid {
-
-				t.Errorf("%v\n"+
-					"Error: NumberRoundingType1.None()\n"+
-					"evaluates as 'Valid'. This is actually an\n"+
-					"invalid value!\n"+
-					"NumberRoundingType1 string value  = '%v'\n"+
-					"NumberRoundingType1 integer value = '%v'\n",
-					ePrefix.String(),
-					numberRoundingType1.String(),
-					numberRoundingType1.XValueInt())
-
-				return
-			}
-
-		} else if isValid == false {
+		if isValid == false {
 
 			t.Errorf("%v\n"+
 				"Error: Valid value classified as invalid!\n"+

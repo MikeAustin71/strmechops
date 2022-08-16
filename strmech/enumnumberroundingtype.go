@@ -178,7 +178,8 @@ var mNumberRoundingTypeLwrCaseStringToCode = map[string]NumberRoundingType{
 //
 // # Enumeration Methods
 //
-// The NumberRoundingType enumeration methods are described below:
+// The NumberRoundingType enumeration methods are described
+// below:
 //
 // Method                   Integer
 //
@@ -187,8 +188,9 @@ var mNumberRoundingTypeLwrCaseStringToCode = map[string]NumberRoundingType{
 // ------                   -------
 //
 // None                     Zero (0)
-//   - Signals that the Number Rounding Type is empty and not
-//     initialized. This is an invalid or error condition.
+//   - Signals that no rounding operation will be performed.
+//     initialized. This is a valid selection for
+//     'NumberRoundingType'.
 //
 // HalfUpWithNegNums            1
 //
@@ -414,8 +416,10 @@ type NumberRoundingType int
 
 var lockNumberRoundingType sync.Mutex
 
-// None - Signals that the NumberRoundingType specification is
-// empty or uninitialized. This is an invalid or error condition.
+// None - Signals that the no rounding operation will be
+// performed.
+//
+// 'None' is a valid selection for 'NumberRoundingType'.
 //
 // This method is part of the standard enumeration.
 func (numRoundingType NumberRoundingType) None() NumberRoundingType {
@@ -750,8 +754,8 @@ func (numRoundingType NumberRoundingType) XGetDefaultRoundingType() NumberRoundi
 // XIsValid - Returns a boolean value signaling whether the current
 // NumberRoundingType value is valid.
 //
-// Be advised, the enumeration value "None" is considered NOT
-// VALID. "None" represents an error condition.
+// Be advised, the enumeration value "None" is considered a VALID
+// selection for 'NumberRoundingType'.
 //
 // This is a standard utility method and is not part of the valid
 // enumerations for this type.
@@ -765,7 +769,7 @@ func (numRoundingType NumberRoundingType) XGetDefaultRoundingType() NumberRoundi
 //
 //	 isValid := roundingType.XIsValid() // isValid == true
 //
-//	 roundingType = NumberRoundingType(0).None()
+//	 roundingType = NumberRoundingType(-999)
 //
 //	 isValid = roundingType.XIsValid() // isValid == false
 func (numRoundingType NumberRoundingType) XIsValid() bool {
@@ -923,7 +927,7 @@ func (numRoundingType NumberRoundingType) XParseString(
 // integer value. This method ensures that all invalid
 // NumberRoundingType instances are consistently classified as
 // 'None' (NumberRoundingType(0).None()). Remember that 'None' is
-// considered an invalid value.
+// considered a valid selection for 'NumberRoundingType'.
 //
 // For example, assume that NumberRoundingType was set to an
 // integer value of -848972. Calling this method on a
@@ -1022,8 +1026,8 @@ type numberRoundingTypeNanobot struct {
 // If the passed instance of NumberRoundingType is valid, this
 // method returns 'true'.
 //
-// Be advised, the enumeration value "None" is considered NOT
-// VALID. "None" represents an error condition.
+// Be advised, the enumeration value "None" is considered a
+// VALID selection for 'NumberRoundingType'.
 //
 // This is a standard utility method and is not part of the valid
 // TextFieldType enumeration.
@@ -1038,7 +1042,7 @@ func (numRoundTypeNanobot *numberRoundingTypeNanobot) isValidNumRoundType(
 
 	defer numRoundTypeNanobot.lock.Unlock()
 
-	if numberRoundingType < 1 ||
+	if numberRoundingType < 0 ||
 		numberRoundingType > 10 {
 
 		return false

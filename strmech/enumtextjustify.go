@@ -44,47 +44,45 @@ var mStrOpsTextJustifyLwrCaseStringToCode = map[string]TextJustify{
 // effectively represent an enumeration of text justification
 // formats. These methods are listed as follows:
 //
-// None            (0) - Signals that 'TextJustify' value has NOT
+// None            (0)
+//   - Signals that 'TextJustify' value has NOT
+//     been initialized. This is an error condition.
 //
-//	been initialized. This is an error condition.
+// Left            (1)
+//   - Signals that the text justification format is
+//     set to 'Left-Justify'. Strings within text
+//     fields will be flush with the left margin.
+//     Example: "TextString      "
 //
-// Left            (1) - Signals that the text justification format is
+// Right           (2)
+//   - Signals that the text justification format is
+//     set to 'Right-Justify'. Strings within text
+//     fields will terminate at the right margin.
+//     Example: "      TextString"
 //
-//	set to 'Left-Justify'. Strings within text
-//	fields will be flush with the left margin.
+// Center          (3)
+//   - Signals that the text justification format is
+//     set to 'Centered'. Strings will be positioned
+//     in the center of the text field equidistant
+//     from the left and right margins.
+//     Example: "   TextString   "
 //
-//	    Example: "TextString      "
-//
-// Right           (2) - Signals that the text justification format is
-//
-//	set to 'Right-Justify'. Strings within text
-//	fields will terminate at the right margin.
-//
-//	    Example: "      TextString"
-//
-// Center          (3) - Signals that the text justification format is
-//
-//	set to 'Centered'. Strings will be positioned
-//	in the center of the text field equidistant
-//	from the left and right margins.
-//
-//	    Example: "   TextString   "
-//
-// For easy access to these enumeration values, use the global variable
-// 'TxtJustify'. Example: TxtJustify.Right()
+// For easy access to these enumeration values, use the global
+// variable 'TxtJustify'. Example: TxtJustify.Right()
 //
 // Otherwise you will need to use the formal syntax.
 // Example: TextJustify(0).Right()
 //
-// Depending on your editor, intellisense (a.k.a. intelligent code completion) may not
-// list the TextJustify methods in alphabetical order. Be advised that all 'TextJustify'
-// methods beginning with 'X', as well as the method 'String()', are utility methods and
-// not part of the enumeration values.
+// Depending on your editor, intellisense (a.k.a. intelligent
+// code completion) may not list the TextJustify methods in
+// alphabetical order. Be advised that all 'TextJustify' methods
+// beginning with 'X', as well as the method 'String()', are
+// utility methods and not part of the enumeration values.
 type TextJustify int
 
 var lockEnumTextJustify sync.Mutex
 
-// None - Signals that 'SOpsTextJustify' value has NOT been initialized.
+// None - Signals that the 'TextJustify' value has NOT been initialized.
 // This is an error condition.
 //
 // The 'None' TextJustify integer value is zero (0).
