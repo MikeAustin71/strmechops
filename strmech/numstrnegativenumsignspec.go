@@ -48,72 +48,72 @@ type NumStrNegativeNumberSignSpec struct {
 //
 // Input Parameters
 //
-//		incomingNStrNegNumSignSpec *NumStrNegativeNumberSignSpec
-//		   - A pointer to an instance of NumStrNegativeNumberSignSpec.
-//		     This method will NOT change the values of internal member
-//		     variables contained in this instance.
+//	incomingNStrNegNumSignSpec	*NumStrNegativeNumberSignSpec
+//		A pointer to an instance of NumStrNegativeNumberSignSpec.
+//		This method will NOT change the values of internal member
+//		variables contained in this instance.
 //
-//		     All data values in this NumStrNegativeNumberSignSpec instance
-//		     will be copied to current NumStrNegativeNumberSignSpec
-//		     instance ('nStrNegNumSignSpec').
+//		All data values in this NumStrNegativeNumberSignSpec instance
+//		will be copied to current NumStrNegativeNumberSignSpec
+//		instance ('nStrNegNumSignSpec').
 //
-//	 errorPrefix                interface{}
-//		   - This object encapsulates error prefix text which is
-//		     included in all returned error messages. Usually, it
-//		     contains the name of the calling method or methods
-//		     listed as a method or function chain of execution.
+//	errorPrefix					interface{}
+//		This object encapsulates error prefix text which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods
+//		listed as a method or function chain of execution.
 //
-//		     If no error prefix information is needed, set this
-//	      parameter to 'nil'.
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
 //
-//		     This empty interface must be convertible to one of the
-//		     following types:
+//		This empty interface must be convertible to one of the
+//		following types:
 //
-//		     1. nil - A nil value is valid and generates an empty
-//		        collection of error prefix and error context
-//		        information.
+//		1. nil - A nil value is valid and generates an empty
+//		   collection of error prefix and error context
+//		   information.
 //
-//		     2. string - A string containing error prefix information.
+//		2. string - A string containing error prefix information.
 //
-//		     3. []string A one-dimensional slice of strings containing
-//		        error prefix information
+//		3. []string A one-dimensional slice of strings containing
+//		   error prefix information
 //
-//		     4. [][2]string A two-dimensional slice of strings
-//		        containing error prefix and error context information.
+//		4. [][2]string A two-dimensional slice of strings
+//		   containing error prefix and error context information.
 //
-//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//		        from this object will be copied for use in error and
-//		        informational messages.
+//		5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		   from this object will be copied for use in error and
+//		   informational messages.
 //
-//		     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//		        Information from this object will be copied for use in
-//		        error and informational messages.
+//		6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		   Information from this object will be copied for use in
+//		   error and informational messages.
 //
-//		     7. IBasicErrorPrefix - An interface to a method generating
-//		        a two-dimensional slice of strings containing error
-//		        prefix and error context information.
+//		7. IBasicErrorPrefix - An interface to a method generating
+//		   a two-dimensional slice of strings containing error
+//		   prefix and error context information.
 //
-//		     If parameter 'errorPrefix' is NOT convertible to one of
-//		     the valid types listed above, it will be considered
-//		     invalid and trigger the return of an error.
+//		If parameter 'errorPrefix' is NOT convertible to one of
+//		the valid types listed above, it will be considered
+//		invalid and trigger the return of an error.
 //
-//		     Types ErrPrefixDto and IBasicErrorPrefix are included in
-//		     the 'errpref' software package,
-//		     "github.com/MikeAustin71/errpref".
+//		Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		the 'errpref' software package,
+//		"github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
 //	error
-//	   - If this method completes successfully and no errors are
-//	     encountered this return value is set to 'nil'. Otherwise,
-//	     if errors are encountered, this return value will contain
-//	     an appropriate error message.
+//		If this method completes successfully and no errors are
+//		encountered this return value is set to 'nil'. Otherwise,
+//		if errors are encountered, this return value will contain
+//		an appropriate error message.
 //
-//	     If an error message is returned, the text value of input
-//	     parameter 'errorPrefix' will be inserted or prefixed at
-//	     the beginning of the error message.
+//		If an error message is returned, the text value of input
+//		parameter 'errorPrefix' will be inserted or prefixed at
+//		the beginning of the error message.
 func (nStrNegNumSignSpec *NumStrNegativeNumberSignSpec) CopyIn(
 	incomingNStrNegNumSignSpec *NumStrNegativeNumberSignSpec,
 	errorPrefix interface{}) error {
@@ -722,6 +722,120 @@ func (nStrNegNumSignSpec *NumStrNegativeNumberSignSpec) NewLeadingNegNumberSignR
 	return newNStrNegNumSign, err
 }
 
+// NewTrailingNegNumberSign - Creates and returns a new
+// instance of NumStrNegativeNumberSignSpec configured with a
+// trailing negative number sign character or characters.
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//	trailingNegativeNumSign		string
+//		A string containing the trailing negative number
+//		sign character or characters used to configure the
+//		returned instance of NumStrNegativeNumberSignSpec.
+//
+//	errorPrefix					interface{}
+//		This object encapsulates error prefix text which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods
+//		listed as a method or function chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of the
+//		following types:
+//
+//		1. nil - A nil value is valid and generates an empty
+//		   collection of error prefix and error context
+//		   information.
+//
+//		2. string - A string containing error prefix information.
+//
+//		3. []string A one-dimensional slice of strings containing
+//		   error prefix information
+//
+//		4. [][2]string A two-dimensional slice of strings
+//		   containing error prefix and error context information.
+//
+//		5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		   from this object will be copied for use in error and
+//		   informational messages.
+//
+//		6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		   Information from this object will be copied for use in
+//		   error and informational messages.
+//
+//		7. IBasicErrorPrefix - An interface to a method generating
+//		   a two-dimensional slice of strings containing error
+//		   prefix and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible to one of
+//		the valid types listed above, it will be considered
+//		invalid and trigger the return of an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		the 'errpref' software package,
+//		"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//	newNStrNegNumSign		NumStrNegativeNumberSignSpec
+//		If this method completes successfully, a new instance of
+//		NumStrNegativeNumberSignSpec, configured with a trailing
+//		negative number sign symbol, will be returned through this
+//		parameter.
+//
+//	err							error
+//		If this method completes successfully and no errors are
+//		encountered this return value is set to 'nil'. Otherwise,
+//		if errors are encountered, this return value will contain
+//		an appropriate error message.
+//
+//		If an error message is returned, the text value of input
+//		parameter 'errorPrefix' will be inserted or prefixed at
+//		the beginning of the error message.
+func (nStrNegNumSignSpec *NumStrNegativeNumberSignSpec) NewTrailingNegNumberSign(
+	trailingNegativeNumSign string,
+	errorPrefix interface{}) (
+	newNStrNegNumSign NumStrNegativeNumberSignSpec,
+	err error) {
+
+	if nStrNegNumSignSpec.lock == nil {
+		nStrNegNumSignSpec.lock = new(sync.Mutex)
+	}
+
+	nStrNegNumSignSpec.lock.Lock()
+
+	defer nStrNegNumSignSpec.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumStrNegativeNumberSignSpec."+
+			"NewTrailingNegNumberSign()",
+		"")
+
+	if err != nil {
+		return newNStrNegNumSign, err
+	}
+
+	err = new(numStrNegNumSignSpecNanobot).
+		setTrailingNStrNegNumSignSpec(
+			&newNStrNegNumSign,
+			[]rune(trailingNegativeNumSign),
+			ePrefix.XCpy(
+				"newNStrNegNumSign<-"+
+					"trailingNegativeNumSign"))
+
+	return newNStrNegNumSign, err
+}
+
 // NewTrailingNegNumberSignRunes - Creates and returns a new
 // instance of NumStrNegativeNumberSignSpec configured with a
 // trailing negative number sign character or characters.
@@ -821,6 +935,140 @@ func (nStrNegNumSignSpec *NumStrNegativeNumberSignSpec) NewTrailingNegNumberSign
 		"NumStrNegativeNumberSignSpec."+
 			"NewTrailingNegNumberSignRunes()",
 		"")
+
+	if err != nil {
+		return newNStrNegNumSign, err
+	}
+
+	err = new(numStrNegNumSignSpecNanobot).
+		setTrailingNStrNegNumSignSpec(
+			&newNStrNegNumSign,
+			trailingNegativeNumSign,
+			ePrefix.XCpy(
+				"newNStrNegNumSign<-"+
+					"trailingNegativeNumSign"))
+
+	return newNStrNegNumSign, err
+}
+
+// NewLeadingTrailingNegNumberSignRunes - Creates and returns a
+// new instance of NumStrNegativeNumberSignSpec configured with
+// both leading and trailing negative number sign symbols.
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//	leadingNegativeNumSign		[]rune
+//		An array of runes containing the leading negative
+//		number sign character or characters used to
+//		configure the returned instance of
+//		NumStrNegativeNumberSignSpec.
+//
+//	trailingNegativeNumSign		[]rune
+//		An array of runes containing the trailing negative
+//		number sign character or characters used to
+//		configure the returned instance of
+//		NumStrNegativeNumberSignSpec.
+//
+//	errorPrefix					interface{}
+//		This object encapsulates error prefix text which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods
+//		listed as a method or function chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of the
+//		following types:
+//
+//		1. nil - A nil value is valid and generates an empty
+//		   collection of error prefix and error context
+//		   information.
+//
+//		2. string - A string containing error prefix information.
+//
+//		3. []string A one-dimensional slice of strings containing
+//		   error prefix information
+//
+//		4. [][2]string A two-dimensional slice of strings
+//		   containing error prefix and error context information.
+//
+//		5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		   from this object will be copied for use in error and
+//		   informational messages.
+//
+//		6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		   Information from this object will be copied for use in
+//		   error and informational messages.
+//
+//		7. IBasicErrorPrefix - An interface to a method generating
+//		   a two-dimensional slice of strings containing error
+//		   prefix and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible to one of
+//		the valid types listed above, it will be considered
+//		invalid and trigger the return of an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		the 'errpref' software package,
+//		"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//	newNStrNegNumSignNumStr		NegativeNumberSignSpec
+//		If this method completes successfully, a new instance
+//		of NumStrNegativeNumberSignSpec, configured with both
+//		leading and trailing negative number sign symbols,
+//		will be returned through this parameter.
+//
+//	err							error
+//		If this method completes successfully and no errors are
+//		encountered this return value is set to 'nil'. Otherwise,
+//		if errors are encountered, this return value will contain
+//		an appropriate error message.
+//
+//		If an error message is returned, the text value of input
+//		parameter 'errorPrefix' will be inserted or prefixed at
+//		the beginning of the error message.
+func (nStrNegNumSignSpec *NumStrNegativeNumberSignSpec) NewLeadingTrailingNegNumberSignRunes(
+	leadingNegativeNumSign []rune,
+	trailingNegativeNumSign []rune,
+	errorPrefix interface{}) (
+	newNStrNegNumSign NumStrNegativeNumberSignSpec,
+	err error) {
+
+	if nStrNegNumSignSpec.lock == nil {
+		nStrNegNumSignSpec.lock = new(sync.Mutex)
+	}
+
+	nStrNegNumSignSpec.lock.Lock()
+
+	defer nStrNegNumSignSpec.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumStrNegativeNumberSignSpec."+
+			"NewTrailingNegNumberSignRunes()",
+		"")
+
+	if err != nil {
+		return newNStrNegNumSign, err
+	}
+
+	err = new(numStrNegNumSignSpecNanobot).
+		setLeadingNStrNegNumSignSpec(
+			&newNStrNegNumSign,
+			leadingNegativeNumSign,
+			ePrefix.XCpy(
+				"newNStrNegNumSign<-"+
+					"leadingNegativeNumSign"))
 
 	if err != nil {
 		return newNStrNegNumSign, err
@@ -1462,7 +1710,7 @@ func (nStrNegNumSignSpecNanobot *numStrNegNumSignSpecNanobot) copyNStrNegNumSign
 //
 // Input Parameters
 //
-//		posNumSignSpec             *NumStrNegativeNumberSignSpec
+//		negNumSignSpec             *NumStrNegativeNumberSignSpec
 //		   - A pointer to a NumStrNegativeNumberSignSpec instance.
 //		     The Leading Negative Number Sign contained in this
 //	      instance will be deleted and reset to the value
@@ -1473,7 +1721,7 @@ func (nStrNegNumSignSpecNanobot *numStrNegNumSignSpecNanobot) copyNStrNegNumSign
 //		   - An array of runes specifying the character or
 //		     characters which will be copied to the Leading
 //		     Negative Number Sign contained in input parameter,
-//	      'posNumSignSpec'.
+//	      'negNumSignSpec'.
 //
 //
 //		errPrefDto                 *ePref.ErrPrefixDto
@@ -1502,7 +1750,7 @@ func (nStrNegNumSignSpecNanobot *numStrNegNumSignSpecNanobot) copyNStrNegNumSign
 //	     parameter 'errPrefDto' (error prefix) will be prefixed or
 //	     attached at the beginning of the error message.
 func (nStrNegNumSignSpecNanobot *numStrNegNumSignSpecNanobot) setLeadingNStrNegNumSignSpec(
-	posNumSignSpec *NumStrNegativeNumberSignSpec,
+	negNumSignSpec *NumStrNegativeNumberSignSpec,
 	leadingNegNumSign []rune,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
@@ -1528,26 +1776,35 @@ func (nStrNegNumSignSpecNanobot *numStrNegNumSignSpecNanobot) setLeadingNStrNegN
 		return err
 	}
 
-	if posNumSignSpec == nil {
+	if negNumSignSpec == nil {
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'posNumSignSpec' is invalid!\n"+
-			"'posNumSignSpec' is a 'nil' pointer.\n",
+			"Error: Input parameter 'negNumSignSpec' is invalid!\n"+
+			"'negNumSignSpec' is a 'nil' pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if len(leadingNegNumSign) == 0 {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'leadingNegNumSign' is invalid!\n"+
+			"'leadingNegNumSign' is is empty and has a length of zero.\n",
 			ePrefix.String())
 
 		return err
 	}
 
 	new(numStrNegNumSignSpecAtom).emptyLeadingNegNumSign(
-		posNumSignSpec)
+		negNumSignSpec)
 
 	if len(leadingNegNumSign) == 0 {
 		return err
 	}
 
-	err = posNumSignSpec.leadingNegNumSign.SetRuneArray(
+	err = negNumSignSpec.leadingNegNumSign.SetRuneArray(
 		leadingNegNumSign,
 		ePrefix.XCpy(
-			"posNumSignSpec.leadingNegNumSign"+
+			"negNumSignSpec.leadingNegNumSign"+
 				"<-leadingNegNumSign"))
 
 	return err
@@ -1562,7 +1819,7 @@ func (nStrNegNumSignSpecNanobot *numStrNegNumSignSpecNanobot) setLeadingNStrNegN
 //
 // Input Parameters
 //
-//		posNumSignSpec             *NumStrNegativeNumberSignSpec
+//		negNumSignSpec             *NumStrNegativeNumberSignSpec
 //		   - A pointer to a NumStrNegativeNumberSignSpec instance.
 //		     The Trailing Negative Number Sign contained in this
 //	      instance will be deleted and reset to the value
@@ -1573,7 +1830,7 @@ func (nStrNegNumSignSpecNanobot *numStrNegNumSignSpecNanobot) setLeadingNStrNegN
 //		   - An array of runes specifying the character or
 //		     characters which will be copied to the Trailing
 //		     Negative Number Sign contained in input parameter,
-//	      'posNumSignSpec'.
+//	      'negNumSignSpec'.
 //
 //
 //		errPrefDto                 *ePref.ErrPrefixDto
@@ -1602,7 +1859,7 @@ func (nStrNegNumSignSpecNanobot *numStrNegNumSignSpecNanobot) setLeadingNStrNegN
 //	     parameter 'errPrefDto' (error prefix) will be prefixed or
 //	     attached at the beginning of the error message.
 func (nStrNegNumSignSpecNanobot *numStrNegNumSignSpecNanobot) setTrailingNStrNegNumSignSpec(
-	posNumSignSpec *NumStrNegativeNumberSignSpec,
+	negNumSignSpec *NumStrNegativeNumberSignSpec,
 	trailingNegNumSign []rune,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
@@ -1628,26 +1885,35 @@ func (nStrNegNumSignSpecNanobot *numStrNegNumSignSpecNanobot) setTrailingNStrNeg
 		return err
 	}
 
-	if posNumSignSpec == nil {
+	if negNumSignSpec == nil {
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'posNumSignSpec' is invalid!\n"+
-			"'posNumSignSpec' is a 'nil' pointer.\n",
+			"Error: Input parameter 'negNumSignSpec' is invalid!\n"+
+			"'negNumSignSpec' is a 'nil' pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if len(trailingNegNumSign) == 0 {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'trailingNegNumSign' is invalid!\n"+
+			"'trailingNegNumSign' is is empty and has a length of zero.\n",
 			ePrefix.String())
 
 		return err
 	}
 
 	new(numStrNegNumSignSpecAtom).emptyTrailingNegNumSign(
-		posNumSignSpec)
+		negNumSignSpec)
 
 	if len(trailingNegNumSign) == 0 {
 		return err
 	}
 
-	err = posNumSignSpec.trailingNegNumSign.SetRuneArray(
+	err = negNumSignSpec.trailingNegNumSign.SetRuneArray(
 		trailingNegNumSign,
 		ePrefix.XCpy(
-			"posNumSignSpec.trailingNegNumSign"+
+			"negNumSignSpec.trailingNegNumSign"+
 				"<-trailingNegNumSign"))
 
 	return err
