@@ -42,7 +42,7 @@ type SignedNumberFormatSpec struct {
 	// number sign symbols for negative numeric values
 	// formatted and displayed in number stings.
 
-	numberField NumStrNumberFieldSpec
+	numberFieldSpec NumStrNumberFieldSpec
 	// This Number String Number Field Specification
 	// contains the field length and text justification
 	// parameter necessary to display a numeric value
@@ -341,10 +341,10 @@ func (nStrNumberFieldSpecNanobot *signedNumFmtSpecNanobot) copySignedNumberForma
 		return err
 	}
 
-	err = destinationSignedNumFmtSpec.numberField.CopyIn(
-		&sourceSignedNumFmtSpec.numberField,
+	err = destinationSignedNumFmtSpec.numberFieldSpec.CopyIn(
+		&sourceSignedNumFmtSpec.numberFieldSpec,
 		ePrefix.XCpy(
-			"destinationSignedNumFmtSpec.numberField"+
+			"destinationSignedNumFmtSpec.numberFieldSpec"+
 				"<-sourceSignedNumFmtSpec"))
 
 	return err
@@ -407,7 +407,7 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) empty(
 
 	signedNumFmtSpec.negativeNumberSign.Empty()
 
-	signedNumFmtSpec.numberField.Empty()
+	signedNumFmtSpec.numberFieldSpec.Empty()
 
 }
 
@@ -498,8 +498,8 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) equal(
 		return false
 	}
 
-	if !signedNumFmtSpec1.numberField.Equal(
-		&signedNumFmtSpec2.numberField) {
+	if !signedNumFmtSpec1.numberFieldSpec.Equal(
+		&signedNumFmtSpec2.numberFieldSpec) {
 
 		return false
 	}
@@ -816,6 +816,262 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setIntegerGroupingSpec(
 	return err
 }
 
+// setNegativeNumberSign - Deletes and resets the member variable
+// data value for 'SignedNumberFormatSpec.negativeNumberSign'
+// contained in the instance of SignedNumberFormatSpec passed as
+// an input parameter.
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//	signedNumFmt				*SignedNumberFormatSpec
+//		A pointer to an instance of SignedNumberFormatSpec.
+//		The member variable 'signedNumFmt.roundingSpec'
+//		will be reset to the values provided by the
+//		following input parameters.
+//
+//	leadingNegNumSign			[]rune
+//		An array of runes containing the character or
+//		characters which will be formatted and displayed
+//		in front of a negative numeric value in a number
+//		string.
+//
+//	trailingNegNumSign			[]rune
+//		An array of runes containing the character or
+//		characters which will be formatted and displayed
+//		after a negative numeric value in a number
+//		string.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//		This object encapsulates an error prefix string which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods listed
+//		as a function chain.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref' software
+//		package, "github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//	err							error
+//		If this method completes successfully, this returned error
+//		Type is set equal to 'nil'. If errors are encountered
+//		during processing, the returned error Type will encapsulate
+//		an error message.
+//
+//		If an error message is returned, the text value for input
+//		parameter 'errPrefDto' (error prefix) will be prefixed or
+//		attached at the beginning of the error message.
+func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setNegativeNumberSign(
+	signedNumFmt *SignedNumberFormatSpec,
+	leadingNegNumSign []rune,
+	trailingNegNumSign []rune,
+	errPrefDto *ePref.ErrPrefixDto) (
+	err error) {
+
+	if signedNumFmtSpecAtom.lock == nil {
+		signedNumFmtSpecAtom.lock = new(sync.Mutex)
+	}
+
+	signedNumFmtSpecAtom.lock.Lock()
+
+	defer signedNumFmtSpecAtom.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"signedNumberFormatSpecAtom."+
+			"setNegativeNumberSign()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if signedNumFmt == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'signedNumFmt' is invalid!\n"+
+			"'signedNumFmt' is a 'nil' pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	signedNumFmt.negativeNumberSign.Empty()
+
+	if len(leadingNegNumSign) > 0 {
+
+		err = signedNumFmt.negativeNumberSign.
+			SetLeadingNegNumberSignRunes(
+				leadingNegNumSign,
+				ePrefix.XCpy(
+					"signedNumFmt.negativeNumberSign"+
+						"<-leadingNegNumSign"))
+
+		if err != nil {
+			return err
+		}
+	}
+
+	if len(trailingNegNumSign) > 0 {
+
+		err = signedNumFmt.negativeNumberSign.
+			SetTrailingNegNumberSignRunes(
+				trailingNegNumSign,
+				ePrefix.XCpy(
+					"signedNumFmt.negativeNumberSign<-"+
+						"trailingNegNumSign"))
+
+		if err != nil {
+			return err
+		}
+	}
+
+	return err
+}
+
+// setNumberFieldSpec - Deletes and resets the member variable data
+// value for 'SignedNumberFormatSpec.numberFieldSpec'
+// contained in the instance of SignedNumberFormatSpec passed as
+// an input parameter.
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//	signedNumFmt				*SignedNumberFormatSpec
+//		A pointer to an instance of SignedNumberFormatSpec.
+//		The member variable 'signedNumFmt.numberFieldSpec'
+//		will be reset to the values provided by the
+//		following input parameters.
+//
+//	fieldLength					int
+//		This parameter defines the length of the text field in
+//		which the numeric value will be displayed within a
+//		number string.
+//
+//		If 'fieldLength' is less than the length of the numeric
+//		value string, it will be automatically set equal to the
+//		length of that numeric value string.
+//
+//		To automatically set the value of fieldLength to the string
+//		length of the numeric value, set this parameter to a value
+//		of minus one (-1).
+//
+//		If this parameter is submitted with a value less than minus
+//		one (-1) or greater than 1-million (1,000,000), an error will
+//		be returned.
+//
+//	fieldJustification			TextJustify
+//		An enumeration which specifies the justification of the
+//		numeric value string within the number field length specified
+//		by input parameter 'fieldLength'.
+//
+//		Text justification can only be evaluated in the context of
+//		a number string, field length and a 'textJustification'
+//		object of type TextJustify. This is because number strings
+//		with a field length equal to or less than the length of the
+//		numeric value string never use text justification. In these
+//		cases, text justification is completely ignored.
+//
+//		If the field length parameter ('fieldLength') is greater
+//		than the length of the numeric value string, text
+//		justification must be equal to one of these
+//		three valid values:
+//		          TextJustify(0).Left()
+//		          TextJustify(0).Right()
+//		          TextJustify(0).Center()
+//
+//		You can also use the abbreviated text justification
+//		enumeration syntax as follows:
+//
+//		          TxtJustify.Left()
+//		          TxtJustify.Right()
+//		          TxtJustify.Center()
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//		This object encapsulates an error prefix string which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods listed
+//		as a function chain.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref' software
+//		package, "github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//	err							error
+//		If this method completes successfully, this returned error
+//		Type is set equal to 'nil'. If errors are encountered
+//		during processing, the returned error Type will encapsulate
+//		an error message.
+//
+//		If an error message is returned, the text value for input
+//		parameter 'errPrefDto' (error prefix) will be prefixed or
+//		attached at the beginning of the error message.
+func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setNumberFieldSpec(
+	signedNumFmt *SignedNumberFormatSpec,
+	fieldLength int,
+	fieldJustification TextJustify,
+	errPrefDto *ePref.ErrPrefixDto) (
+	err error) {
+
+	if signedNumFmtSpecAtom.lock == nil {
+		signedNumFmtSpecAtom.lock = new(sync.Mutex)
+	}
+
+	signedNumFmtSpecAtom.lock.Lock()
+
+	defer signedNumFmtSpecAtom.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"signedNumFmtSpecNanobot."+
+			"setNumberFieldSpec()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if signedNumFmt == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'signedNumFmt' is invalid!\n"+
+			"'signedNumFmt' is a 'nil' pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	signedNumFmt.numberFieldSpec.Empty()
+
+	err = signedNumFmt.numberFieldSpec.SetFieldSpec(
+		fieldLength,
+		fieldJustification,
+		ePrefix.XCpy(
+			"signedNumFmt.numberFieldSpec<-"))
+
+	return err
+}
+
 // setRoundingSpec - Deletes and resets the member variable data
 // value for 'SignedNumberFormatSpec.intGroupingSpec'
 // contained in the instance of SignedNumberFormatSpec passed as
@@ -1044,129 +1300,6 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setPositiveNumberSign(
 				ePrefix.XCpy(
 					"signedNumFmt.positiveNumberSign<-"+
 						"trailingPosNumSign"))
-
-		if err != nil {
-			return err
-		}
-	}
-
-	return err
-}
-
-// setNegativeNumberSign - Deletes and resets the member variable
-// data value for 'SignedNumberFormatSpec.negativeNumberSign'
-// contained in the instance of SignedNumberFormatSpec passed as
-// an input parameter.
-//
-// ----------------------------------------------------------------
-//
-// Input Parameters
-//
-//	signedNumFmt				*SignedNumberFormatSpec
-//		A pointer to an instance of SignedNumberFormatSpec.
-//		The member variable 'signedNumFmt.roundingSpec'
-//		will be reset to the values provided by the
-//		following input parameters.
-//
-//	leadingNegNumSign			[]rune
-//		An array of runes containing the character or
-//		characters which will be formatted and displayed
-//		in front of a negative numeric value in a number
-//		string.
-//
-//	trailingNegNumSign			[]rune
-//		An array of runes containing the character or
-//		characters which will be formatted and displayed
-//		after a negative numeric value in a number
-//		string.
-//
-//	errPrefDto					*ePref.ErrPrefixDto
-//		This object encapsulates an error prefix string which is
-//		included in all returned error messages. Usually, it
-//		contains the name of the calling method or methods listed
-//		as a function chain.
-//
-//		If no error prefix information is needed, set this
-//		parameter to 'nil'.
-//
-//		Type ErrPrefixDto is included in the 'errpref' software
-//		package, "github.com/MikeAustin71/errpref".
-//
-// ----------------------------------------------------------------
-//
-// Return Values
-//
-//	err							error
-//		If this method completes successfully, this returned error
-//		Type is set equal to 'nil'. If errors are encountered
-//		during processing, the returned error Type will encapsulate
-//		an error message.
-//
-//		If an error message is returned, the text value for input
-//		parameter 'errPrefDto' (error prefix) will be prefixed or
-//		attached at the beginning of the error message.
-func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setNegativeNumberSign(
-	signedNumFmt *SignedNumberFormatSpec,
-	leadingNegNumSign []rune,
-	trailingNegNumSign []rune,
-	errPrefDto *ePref.ErrPrefixDto) (
-	err error) {
-
-	if signedNumFmtSpecAtom.lock == nil {
-		signedNumFmtSpecAtom.lock = new(sync.Mutex)
-	}
-
-	signedNumFmtSpecAtom.lock.Lock()
-
-	defer signedNumFmtSpecAtom.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
-		errPrefDto,
-		"signedNumberFormatSpecAtom."+
-			"setNegativeNumberSign()",
-		"")
-
-	if err != nil {
-		return err
-	}
-
-	if signedNumFmt == nil {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'signedNumFmt' is invalid!\n"+
-			"'signedNumFmt' is a 'nil' pointer.\n",
-			ePrefix.String())
-
-		return err
-	}
-
-	signedNumFmt.negativeNumberSign.Empty()
-
-	if len(leadingNegNumSign) > 0 {
-
-		err = signedNumFmt.negativeNumberSign.
-			SetLeadingNegNumberSignRunes(
-				leadingNegNumSign,
-				ePrefix.XCpy(
-					"signedNumFmt.negativeNumberSign"+
-						"<-leadingNegNumSign"))
-
-		if err != nil {
-			return err
-		}
-	}
-
-	if len(trailingNegNumSign) > 0 {
-
-		err = signedNumFmt.negativeNumberSign.
-			SetTrailingNegNumberSignRunes(
-				trailingNegNumSign,
-				ePrefix.XCpy(
-					"signedNumFmt.negativeNumberSign<-"+
-						"trailingNegNumSign"))
 
 		if err != nil {
 			return err
