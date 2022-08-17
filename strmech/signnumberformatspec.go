@@ -795,6 +795,18 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setIntegerGroupingSpec(
 		return err
 	}
 
+	if signedNumFmt == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'signedNumFmt' is invalid!\n"+
+			"'signedNumFmt' is a 'nil' pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	signedNumFmt.intGroupingSpec.Empty()
+
 	err = signedNumFmt.intGroupingSpec.SetRunes(
 		intGroupingChars,
 		intGroupingType,
@@ -822,7 +834,7 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setIntegerGroupingSpec(
 //	roundingType				NumberRoundingType
 //		This enumeration parameter is used to specify the type
 //		of rounding algorithm that will be applied for the
-//		rounding of fractonal digits in a number string.
+//		rounding of fractional digits in a number string.
 //
 //		Possible values are listed as follows:
 //			NumRoundType.None(),
@@ -889,12 +901,24 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setRoundingSpec(
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
 		"signedNumFmtSpecNanobot."+
-			"setIntegerGroupingSpec()",
+			"setRoundingSpec()",
 		"")
 
 	if err != nil {
 		return err
 	}
+
+	if signedNumFmt == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'signedNumFmt' is invalid!\n"+
+			"'signedNumFmt' is a 'nil' pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	signedNumFmt.roundingSpec.Empty()
 
 	err = signedNumFmt.roundingSpec.SetRoundingSpec(
 		roundingType,
@@ -904,4 +928,74 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setRoundingSpec(
 
 	return err
 
+}
+func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setPositiveNumberSign(
+	signedNumFmt *SignedNumberFormatSpec,
+	leadingPosNumSign []rune,
+	trailingPosNumSign []rune,
+	errPrefDto *ePref.ErrPrefixDto) (
+	err error) {
+
+	if signedNumFmtSpecAtom.lock == nil {
+		signedNumFmtSpecAtom.lock = new(sync.Mutex)
+	}
+
+	signedNumFmtSpecAtom.lock.Lock()
+
+	defer signedNumFmtSpecAtom.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"signedNumberFormatSpecAtom."+
+			"setPositiveNumberSign()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if signedNumFmt == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'signedNumFmt' is invalid!\n"+
+			"'signedNumFmt' is a 'nil' pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	signedNumFmt.positiveNumberSign.Empty()
+
+	if len(leadingPosNumSign) > 0 {
+
+		err = signedNumFmt.positiveNumberSign.
+			SetLeadingPosNumberSignRunes(
+				leadingPosNumSign,
+				ePrefix.XCpy(
+					"signedNumFmt.positiveNumberSign"+
+						"<-leadingPosNumSign"))
+
+		if err != nil {
+			return err
+		}
+	}
+
+	if len(trailingPosNumSign) > 0 {
+
+		err = signedNumFmt.positiveNumberSign.
+			SetTrailingPosNumberSignRunes(
+				trailingPosNumSign,
+				ePrefix.XCpy(
+					"signedNumFmt.positiveNumberSign<-"+
+						"trailingPosNumSign"))
+
+		if err != nil {
+			return err
+		}
+	}
+
+	return err
 }

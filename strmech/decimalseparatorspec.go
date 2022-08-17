@@ -1357,9 +1357,9 @@ func (decSeparatorSpec *DecimalSeparatorSpec) SearchForDecimalSeparator(
 //	          Specification.
 //
 //	          If 'decSeparator' is submitted as an empty or nil
-//	          array, it will be accepted, the curent instance of
-//	          DecimalSeparatorSpec will be configured with empty
-//	          decimal separator character array and no error will
+//	          array, it will be accepted, the current instance of
+//	          DecimalSeparatorSpec will be configured with an empty
+//	          decimal separator character array, and no error will
 //	          be returned.
 //
 //
@@ -1540,9 +1540,9 @@ func (decSeparatorSpec *DecimalSeparatorSpec) SetDecimalSeparatorRunes(
 //			     Specification.
 //
 //	          If 'decSeparator' is submitted as an empty string,
-//	          it will be accepted, the curent instance of
-//	          DecimalSeparatorSpec will be configured with empty
-//	          an decimal separator character array and no error will
+//	          it will be accepted, the current instance of
+//	          DecimalSeparatorSpec will be configured with an empty
+//	          decimal separator character array, and no error will
 //	          be returned.
 //
 //

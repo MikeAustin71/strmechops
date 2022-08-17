@@ -506,6 +506,43 @@ func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) GetTrailingPosNumSignStr
 	return nStrPosNumSignSpec.trailingPosNumSign.GetCharacterString()
 }
 
+// IsNOP - Stands for 'Is No Operation'. This method returns a
+// boolean value signaling whether this instance of
+// NumStrPositiveNumberSignSpec is engaged, valid and
+// operational with respect to the application of a positive
+// number sign symbol.
+//
+// If 'IsNOP' is set to 'true', it signals that this Positive
+// Number Sign Specification is simply an empty placeholder
+// and performs no active role in, and is completely ignored by,
+// the number string algorithms. With 'IsNOP' set to 'true',
+// no positive number sign symbol will be inserted or formatted
+// as part of a number sign text presentation.
+//
+// If this method returns 'false', it signals that the current
+// instance of 'NumStrPositiveNumberSignSpec' is fully populated,
+// valid and functional. Number strings formatting operations
+// will therefore include a positive number sign symbol in
+// formatted number strings.
+func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) IsNOP() bool {
+
+	if nStrPosNumSignSpec.lock == nil {
+		nStrPosNumSignSpec.lock = new(sync.Mutex)
+	}
+
+	nStrPosNumSignSpec.lock.Lock()
+
+	defer nStrPosNumSignSpec.lock.Unlock()
+
+	if nStrPosNumSignSpec.leadingPosNumSign.GetRuneArrayLength() == 0 &&
+		nStrPosNumSignSpec.trailingPosNumSign.GetRuneArrayLength() == 0 {
+
+		return true
+	}
+
+	return false
+}
+
 // NewLeadingPosNumberSign - Creates and returns a new instance
 // of NumStrPositiveNumberSignSpec configured with a leading
 // positive number sign character or characters.
