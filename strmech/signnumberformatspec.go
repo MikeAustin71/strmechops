@@ -349,111 +349,6 @@ func (nStrNumberFieldSpecNanobot *signedNumFmtSpecNanobot) copySignedNumberForma
 	return err
 }
 
-// setDecimalSeparator - Deletes and resets the member
-// variable data value for 'SignedNumberFormatSpec.decSeparator'
-// contained in the instance of SignedNumberFormatSpec passed as
-// an input parameter.
-//
-// ----------------------------------------------------------------
-//
-// Input Parameters
-//
-//		signedNumFmt               *SignedNumberFormatSpec
-//		    - A pointer to an instance of SignedNumberFormatSpec.
-//		      All the member variable data values in this instance
-//		      will be deleted and reset according to the data
-//		      extracted from the following input parameters.
-//
-//		 decSeparator              []rune
-//		    - This rune array contains the decimal separator
-//	       character or characters used to separate integer
-//	       digits from fractional digits in floating point
-//		      number strings.
-//
-//	       In the United States, the decimal separator is
-//	       referred to as the decimal point.
-//
-//		 errPrefDto                 *ePref.ErrPrefixDto
-//		    - This object encapsulates an error prefix string which is
-//		      included in all returned error messages. Usually, it
-//		      contains the name of the calling method or methods listed
-//		      as a function chain.
-//
-//		      If no error prefix information is needed, set this
-//		      parameter to 'nil'.
-//
-//		      Type ErrPrefixDto is included in the 'errpref' software
-//		      package, "github.com/MikeAustin71/errpref".
-//
-// ----------------------------------------------------------------
-//
-// Return Values
-//
-//	err                        error
-//	   - If this method completes successfully, this returned error
-//	     Type is set equal to 'nil'. If errors are encountered during
-//	     processing, the returned error Type will encapsulate an error
-//	     message.
-//
-//	     If an error message is returned, the text value for input
-//	     parameter 'errPrefDto' (error prefix) will be prefixed or
-//	     attached at the beginning of the error message.
-func (nStrNumberFieldSpecNanobot *signedNumFmtSpecNanobot) setDecimalSeparator(
-	signedNumFmt *SignedNumberFormatSpec,
-	decSeparator []rune,
-	errPrefDto *ePref.ErrPrefixDto) (
-	err error) {
-
-	if nStrNumberFieldSpecNanobot.lock == nil {
-		nStrNumberFieldSpecNanobot.lock = new(sync.Mutex)
-	}
-
-	nStrNumberFieldSpecNanobot.lock.Lock()
-
-	defer nStrNumberFieldSpecNanobot.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
-		errPrefDto,
-		"signedNumFmtSpecNanobot."+
-			"setDecimalSeparator()",
-		"")
-
-	if err != nil {
-		return err
-	}
-
-	if signedNumFmt == nil {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'signedNumFmt' is invalid!\n"+
-			"'signedNumFmt' is a 'nil' pointer.\n",
-			ePrefix.String())
-
-		return err
-	}
-
-	if len(decSeparator) == 0 {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'decSeparator' is invalid!\n"+
-			"'decSeparator' is empty and has a zero (0) length.\n",
-			ePrefix.String())
-
-		return err
-	}
-
-	signedNumFmt.decSeparator.Empty()
-
-	err = signedNumFmt.decSeparator.SetDecimalSeparatorRunes(
-		decSeparator,
-		ePrefix.XCpy(
-			"signedNumFmt.decSeparator<-"+
-				"decSeparator"))
-
-	return err
-}
-
 // signedNumberFormatSpecAtom - This type provides
 // helper methods for SignedNumberFormatSpec
 type signedNumberFormatSpecAtom struct {
@@ -609,4 +504,200 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) equal(
 	}
 
 	return true
+}
+
+// setDecimalSeparator - Deletes and resets the member
+// variable data value for 'SignedNumberFormatSpec.decSeparator'
+// contained in the instance of SignedNumberFormatSpec passed as
+// an input parameter.
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//		signedNumFmt               *SignedNumberFormatSpec
+//		    - A pointer to an instance of SignedNumberFormatSpec.
+//		      All the member variable data values in this instance
+//		      will be deleted and reset according to the data
+//		      extracted from the following input parameters.
+//
+//		 decSeparator              []rune
+//		    - This rune array contains the decimal separator
+//	       character or characters used to separate integer
+//	       digits from fractional digits in floating point
+//		      number strings.
+//
+//	       In the United States, the decimal separator is
+//	       referred to as the decimal point.
+//
+//		 errPrefDto                 *ePref.ErrPrefixDto
+//		    - This object encapsulates an error prefix string which is
+//		      included in all returned error messages. Usually, it
+//		      contains the name of the calling method or methods listed
+//		      as a function chain.
+//
+//		      If no error prefix information is needed, set this
+//		      parameter to 'nil'.
+//
+//		      Type ErrPrefixDto is included in the 'errpref' software
+//		      package, "github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//	err                        error
+//	   - If this method completes successfully, this returned error
+//	     Type is set equal to 'nil'. If errors are encountered during
+//	     processing, the returned error Type will encapsulate an error
+//	     message.
+//
+//	     If an error message is returned, the text value for input
+//	     parameter 'errPrefDto' (error prefix) will be prefixed or
+//	     attached at the beginning of the error message.
+func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setDecimalSeparator(
+	signedNumFmt *SignedNumberFormatSpec,
+	decSeparator []rune,
+	errPrefDto *ePref.ErrPrefixDto) (
+	err error) {
+
+	if signedNumFmtSpecAtom.lock == nil {
+		signedNumFmtSpecAtom.lock = new(sync.Mutex)
+	}
+
+	signedNumFmtSpecAtom.lock.Lock()
+
+	defer signedNumFmtSpecAtom.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"signedNumFmtSpecNanobot."+
+			"setDecimalSeparator()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if signedNumFmt == nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'signedNumFmt' is invalid!\n"+
+			"'signedNumFmt' is a 'nil' pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	signedNumFmt.decSeparator.Empty()
+
+	err = signedNumFmt.decSeparator.SetDecimalSeparatorRunes(
+		decSeparator,
+		ePrefix.XCpy(
+			"signedNumFmt.decSeparator<-"+
+				"decSeparator"))
+
+	return err
+}
+
+// setDecimalSeparatorSpec - Deletes and resets the member
+// variable data value for 'SignedNumberFormatSpec.decSeparator'
+// contained in the instance of SignedNumberFormatSpec passed as
+// an input parameter.
+//
+// This method receives an instance of 'DecimalSeparatorSpec' and
+// copies the member variable data values to
+// 'signedNumFmt.decSeparator'.
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//			signedNumFmt               *SignedNumberFormatSpec
+//			    - A pointer to an instance of SignedNumberFormatSpec.
+//			      All the member variable data values in this instance
+//			      will be deleted and reset according to the data
+//			      extracted from the following input parameters.
+//
+//			 decSeparator              *DecimalSeparatorSpec
+//			    - An instance of DecimalSeparatorSpec. The member
+//	           variable data values contained in this instance
+//	           will be copied to:
+//	              'signedNumFmt.decSeparator'.
+//
+//		       	  In the United States, the decimal separator is
+//		          referred to as the decimal point.
+//
+//			 errPrefDto                 *ePref.ErrPrefixDto
+//			    - This object encapsulates an error prefix string which is
+//			      included in all returned error messages. Usually, it
+//			      contains the name of the calling method or methods listed
+//			      as a function chain.
+//
+//			      If no error prefix information is needed, set this
+//			      parameter to 'nil'.
+//
+//			      Type ErrPrefixDto is included in the 'errpref' software
+//			      package, "github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//	err                        error
+//	   - If this method completes successfully, this returned error
+//	     Type is set equal to 'nil'. If errors are encountered during
+//	     processing, the returned error Type will encapsulate an error
+//	     message.
+//
+//	     If an error message is returned, the text value for input
+//	     parameter 'errPrefDto' (error prefix) will be prefixed or
+//	     attached at the beginning of the error message.
+func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setDecimalSeparatorSpec(
+	signedNumFmt *SignedNumberFormatSpec,
+	decSeparator *DecimalSeparatorSpec,
+	errPrefDto *ePref.ErrPrefixDto) (
+	err error) {
+
+	if signedNumFmtSpecAtom.lock == nil {
+		signedNumFmtSpecAtom.lock = new(sync.Mutex)
+	}
+
+	signedNumFmtSpecAtom.lock.Lock()
+
+	defer signedNumFmtSpecAtom.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"signedNumFmtSpecNanobot."+
+			"setDecimalSeparatorSpec()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if signedNumFmt == nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'signedNumFmt' is invalid!\n"+
+			"'signedNumFmt' is a 'nil' pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	signedNumFmt.decSeparator.Empty()
+
+	err = signedNumFmt.decSeparator.CopyIn(
+		decSeparator,
+		ePrefix.XCpy(
+			"signedNumFmt.decSeparator<-"+
+				"decSeparator"))
+
+	return err
 }

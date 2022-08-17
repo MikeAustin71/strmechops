@@ -160,8 +160,8 @@ func (decSeparatorSpec *DecimalSeparatorSpec) CopyIn(
 		return err
 	}
 
-	err = decimalSepSpecNanobot{}.ptr().
-		copyIn(
+	err = new(decimalSepSpecNanobot).
+		copyDecimalSeparator(
 			decSeparatorSpec,
 			incomingDecSepSpec,
 			ePrefix.XCpy(
@@ -269,9 +269,9 @@ func (decSeparatorSpec *DecimalSeparatorSpec) CopyOut(
 		return copyOfDecSepSpec, err
 	}
 
-	copyOfDecSepSpec,
-		err = decimalSepSpecNanobot{}.ptr().
-		copyOut(
+	err = new(decimalSepSpecNanobot).
+		copyDecimalSeparator(
+			&copyOfDecSepSpec,
 			decSeparatorSpec,
 			ePrefix.XCpy(
 				"copyOfDecSepSpec<-decSeparatorSpec"))
@@ -310,7 +310,7 @@ func (decSeparatorSpec *DecimalSeparatorSpec) Empty() {
 
 	decSeparatorSpec.lock.Lock()
 
-	decimalSeparatorSpecAtom{}.ptr().
+	new(decimalSeparatorSpecAtom).
 		empty(
 			decSeparatorSpec)
 
@@ -363,7 +363,7 @@ func (decSeparatorSpec *DecimalSeparatorSpec) Equal(
 
 	defer decSeparatorSpec.lock.Unlock()
 
-	return decimalSepSpecElectron{}.ptr().
+	return new(decimalSepSpecElectron).
 		equal(
 			decSeparatorSpec,
 			incomingDepSepSpec)
@@ -568,7 +568,7 @@ func (decSeparatorSpec *DecimalSeparatorSpec) IsValidInstance() bool {
 	defer decSeparatorSpec.lock.Unlock()
 
 	isValid,
-		_ := decimalSeparatorSpecAtom{}.ptr().
+		_ := new(decimalSeparatorSpecAtom).
 		testValidityOfDecSepSearchSpec(
 			decSeparatorSpec,
 			nil)
@@ -669,7 +669,7 @@ func (decSeparatorSpec *DecimalSeparatorSpec) IsValidInstanceError(
 	}
 
 	_,
-		err = decimalSeparatorSpecAtom{}.ptr().
+		err = new(decimalSeparatorSpecAtom).
 		testValidityOfDecSepSearchSpec(
 			decSeparatorSpec,
 			ePrefix.XCpy(
@@ -1162,7 +1162,7 @@ func (decSeparatorSpec *DecimalSeparatorSpec) SearchForDecimalSeparator(
 
 	var err2 error
 	_,
-		err2 = decimalSeparatorSpecAtom{}.ptr().
+		err2 = new(decimalSeparatorSpecAtom).
 		testValidityOfDecSepSearchSpec(
 			decSeparatorSpec,
 			ePrefix.XCpy(
@@ -1349,56 +1349,63 @@ func (decSeparatorSpec *DecimalSeparatorSpec) SearchForDecimalSeparator(
 //
 // Input Parameters
 //
-//		decSeparator               string
-//		   - This string contains the character or characters which
-//		     will be configured as the Decimal Separator Symbol or
-//		     Symbols for the current instance of DecimalSeparatorSpec,
-//		     the Decimal Separator Specification.
+//		decSeparator               []rune
+//			   - This array of runes contains the character or
+//	          characters which will be configured as the Decimal
+//	          Separator Symbol for the current instance of
+//	          DecimalSeparatorSpec, the Decimal Separator
+//	          Specification.
+//
+//	          If 'decSeparator' is submitted as an empty or nil
+//	          array, it will be accepted, the curent instance of
+//	          DecimalSeparatorSpec will be configured with empty
+//	          decimal separator character array and no error will
+//	          be returned.
 //
 //
-//	 errorPrefix                interface{}
-//		   - This object encapsulates error prefix text which is
-//		     included in all returned error messages. Usually, it
-//		     contains the name of the calling method or methods
-//		     listed as a method or function chain of execution.
+//		 errorPrefix                interface{}
+//			   - This object encapsulates error prefix text which is
+//			     included in all returned error messages. Usually, it
+//			     contains the name of the calling method or methods
+//			     listed as a method or function chain of execution.
 //
-//		     If no error prefix information is needed, set this parameter
-//		     to 'nil'.
+//			     If no error prefix information is needed, set this parameter
+//			     to 'nil'.
 //
-//		     This empty interface must be convertible to one of the
-//		     following types:
+//			     This empty interface must be convertible to one of the
+//			     following types:
 //
-//		     1. nil - A nil value is valid and generates an empty
-//		        collection of error prefix and error context
-//		        information.
+//			     1. nil - A nil value is valid and generates an empty
+//			        collection of error prefix and error context
+//			        information.
 //
-//		     2. string - A string containing error prefix information.
+//			     2. string - A string containing error prefix information.
 //
-//		     3. []string A one-dimensional slice of strings containing
-//		        error prefix information
+//			     3. []string A one-dimensional slice of strings containing
+//			        error prefix information
 //
-//		     4. [][2]string A two-dimensional slice of strings
-//		        containing error prefix and error context information.
+//			     4. [][2]string A two-dimensional slice of strings
+//			        containing error prefix and error context information.
 //
-//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//		        from this object will be copied for use in error and
-//		        informational messages.
+//			     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//			        from this object will be copied for use in error and
+//			        informational messages.
 //
-//		     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//		        Information from this object will be copied for use in
-//		        error and informational messages.
+//			     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//			        Information from this object will be copied for use in
+//			        error and informational messages.
 //
-//		     7. IBasicErrorPrefix - An interface to a method generating
-//		        a two-dimensional slice of strings containing error
-//		        prefix and error context information.
+//			     7. IBasicErrorPrefix - An interface to a method generating
+//			        a two-dimensional slice of strings containing error
+//			        prefix and error context information.
 //
-//		     If parameter 'errorPrefix' is NOT convertible to one of
-//		     the valid types listed above, it will be considered
-//		     invalid and trigger the return of an error.
+//			     If parameter 'errorPrefix' is NOT convertible to one of
+//			     the valid types listed above, it will be considered
+//			     invalid and trigger the return of an error.
 //
-//		     Types ErrPrefixDto and IBasicErrorPrefix are included in
-//		     the 'errpref' software package,
-//		     "github.com/MikeAustin71/errpref".
+//			     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//			     the 'errpref' software package,
+//			     "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
@@ -1432,7 +1439,7 @@ func (decSeparatorSpec *DecimalSeparatorSpec) SetDecimalSeparatorRunes(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"DecimalSeparatorSpec."+
-			"SetDecimalSeparatorStr()",
+			"SetDecimalSeparatorRunes()",
 		"")
 
 	if err != nil {
@@ -1443,10 +1450,7 @@ func (decSeparatorSpec *DecimalSeparatorSpec) SetDecimalSeparatorRunes(
 
 	if lenDecSepRunes == 0 {
 
-		err = fmt.Errorf("%v\n"+
-			"ERROR: Input parameter 'decSeparator' is invalid!"+
-			"'decSeparator' is an empty array with a length of zero.\n",
-			ePrefix.String())
+		decSeparatorSpec.decimalSeparatorChars.Empty()
 
 		return err
 
@@ -1529,55 +1533,62 @@ func (decSeparatorSpec *DecimalSeparatorSpec) SetDecimalSeparatorRunes(
 // Input Parameters
 //
 //		decSeparator               string
-//		   - This string contains the character or characters which
-//		     will be configured as the Decimal Separator Symbol or
-//		     Symbols for the current instance of DecimalSeparatorSpec,
-//		     the Decimal Separator Specification.
+//			   - This string contains the character or characters which
+//			     will be configured as the Decimal Separator Symbol or
+//			     Symbols for the current instance of
+//			     DecimalSeparatorSpec, the Decimal Separator
+//			     Specification.
+//
+//	          If 'decSeparator' is submitted as an empty string,
+//	          it will be accepted, the curent instance of
+//	          DecimalSeparatorSpec will be configured with empty
+//	          an decimal separator character array and no error will
+//	          be returned.
 //
 //
-//	 errorPrefix                interface{}
-//		   - This object encapsulates error prefix text which is
-//		     included in all returned error messages. Usually, it
-//		     contains the name of the calling method or methods
-//		     listed as a method or function chain of execution.
+//		 errorPrefix                interface{}
+//			   - This object encapsulates error prefix text which is
+//			     included in all returned error messages. Usually, it
+//			     contains the name of the calling method or methods
+//			     listed as a method or function chain of execution.
 //
-//		     If no error prefix information is needed, set this parameter
-//		     to 'nil'.
+//			     If no error prefix information is needed, set this parameter
+//			     to 'nil'.
 //
-//		     This empty interface must be convertible to one of the
-//		     following types:
+//			     This empty interface must be convertible to one of the
+//			     following types:
 //
-//		     1. nil - A nil value is valid and generates an empty
-//		        collection of error prefix and error context
-//		        information.
+//			     1. nil - A nil value is valid and generates an empty
+//			        collection of error prefix and error context
+//			        information.
 //
-//		     2. string - A string containing error prefix information.
+//			     2. string - A string containing error prefix information.
 //
-//		     3. []string A one-dimensional slice of strings containing
-//		        error prefix information
+//			     3. []string A one-dimensional slice of strings containing
+//			        error prefix information
 //
-//		     4. [][2]string A two-dimensional slice of strings
-//		        containing error prefix and error context information.
+//			     4. [][2]string A two-dimensional slice of strings
+//			        containing error prefix and error context information.
 //
-//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//		        from this object will be copied for use in error and
-//		        informational messages.
+//			     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//			        from this object will be copied for use in error and
+//			        informational messages.
 //
-//		     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//		        Information from this object will be copied for use in
-//		        error and informational messages.
+//			     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//			        Information from this object will be copied for use in
+//			        error and informational messages.
 //
-//		     7. IBasicErrorPrefix - An interface to a method generating
-//		        a two-dimensional slice of strings containing error
-//		        prefix and error context information.
+//			     7. IBasicErrorPrefix - An interface to a method generating
+//			        a two-dimensional slice of strings containing error
+//			        prefix and error context information.
 //
-//		     If parameter 'errorPrefix' is NOT convertible to one of
-//		     the valid types listed above, it will be considered
-//		     invalid and trigger the return of an error.
+//			     If parameter 'errorPrefix' is NOT convertible to one of
+//			     the valid types listed above, it will be considered
+//			     invalid and trigger the return of an error.
 //
-//		     Types ErrPrefixDto and IBasicErrorPrefix are included in
-//		     the 'errpref' software package,
-//		     "github.com/MikeAustin71/errpref".
+//			     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//			     the 'errpref' software package,
+//			     "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
@@ -1618,20 +1629,15 @@ func (decSeparatorSpec *DecimalSeparatorSpec) SetDecimalSeparatorStr(
 		return err
 	}
 
-	decSepRunes := []rune(decSeparator)
+	if len(decSeparator) == 0 {
 
-	lenDecSepRunes := len(decSepRunes)
-
-	if lenDecSepRunes == 0 {
-
-		err = fmt.Errorf("%v\n"+
-			"ERROR: Input parameter 'decSeparator' is invalid!"+
-			"'decSeparator' is an empty string with a length of zero.\n",
-			ePrefix.String())
+		decSeparatorSpec.decimalSeparatorChars.Empty()
 
 		return err
 
 	}
+
+	decSepRunes := []rune(decSeparator)
 
 	new(decimalSeparatorSpecAtom).
 		empty(decSeparatorSpec)
