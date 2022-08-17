@@ -9,8 +9,8 @@ import (
 type NumStrRoundingSpec struct {
 	roundingType NumberRoundingType
 	// This enumeration parameter is used to specify the type
-	// of rounding algorithm that will be applied in the
-	// rounding operation.
+	// of rounding algorithm that will be applied for the
+	// rounding of fractional digits in a number string.
 	//
 	// Possible values are listed as follows:
 	//	NumRoundType.None(),

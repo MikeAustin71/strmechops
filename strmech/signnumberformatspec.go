@@ -516,46 +516,48 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) equal(
 //
 // Input Parameters
 //
-//		signedNumFmt               *SignedNumberFormatSpec
-//		    - A pointer to an instance of SignedNumberFormatSpec.
-//		      All the member variable data values in this instance
-//		      will be deleted and reset according to the data
-//		      extracted from the following input parameters.
+//	signedNumFmt				*SignedNumberFormatSpec
+//		A pointer to an instance of SignedNumberFormatSpec.
+//		This instance contains the member variable
+//		'signedNumFmt.decSeparator' which will be reset
+//		to the value of the decimal separator specified
+//		by input parameter, 'decSeparator'.
 //
-//		 decSeparator              []rune
-//		    - This rune array contains the decimal separator
-//	       character or characters used to separate integer
-//	       digits from fractional digits in floating point
-//		      number strings.
 //
-//	       In the United States, the decimal separator is
-//	       referred to as the decimal point.
+//	decSeparator				[]rune
+//		This rune array contains the decimal separator
+//		character or characters used to separate integer
+//		digits from fractional digits in floating point
+//		number strings.
 //
-//		 errPrefDto                 *ePref.ErrPrefixDto
-//		    - This object encapsulates an error prefix string which is
-//		      included in all returned error messages. Usually, it
-//		      contains the name of the calling method or methods listed
-//		      as a function chain.
+//		In the United States, the decimal separator is
+//		referred to as the decimal point.
 //
-//		      If no error prefix information is needed, set this
-//		      parameter to 'nil'.
+//	errPrefDto					*ePref.ErrPrefixDto
+//		This object encapsulates an error prefix string which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods listed
+//		as a function chain.
 //
-//		      Type ErrPrefixDto is included in the 'errpref' software
-//		      package, "github.com/MikeAustin71/errpref".
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref' software
+//		package, "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//	err                        error
-//	   - If this method completes successfully, this returned error
-//	     Type is set equal to 'nil'. If errors are encountered during
-//	     processing, the returned error Type will encapsulate an error
-//	     message.
+//	err							error
+//		If this method completes successfully, this returned error
+//		Type is set equal to 'nil'. If errors are encountered during
+//		processing, the returned error Type will encapsulate an error
+//		message.
 //
-//	     If an error message is returned, the text value for input
-//	     parameter 'errPrefDto' (error prefix) will be prefixed or
-//	     attached at the beginning of the error message.
+//		If an error message is returned, the text value for input
+//		parameter 'errPrefDto' (error prefix) will be prefixed or
+//		attached at the beginning of the error message.
 func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setDecimalSeparator(
 	signedNumFmt *SignedNumberFormatSpec,
 	decSeparator []rune,
@@ -616,46 +618,48 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setDecimalSeparator(
 //
 // Input Parameters
 //
-//	signedNumFmt               *SignedNumberFormatSpec
-//	   - A pointer to an instance of SignedNumberFormatSpec.
-//	     All the member variable data values in this instance
-//	     will be deleted and reset according to the data
-//	     extracted from the following input parameters.
+//	signedNumFmt				*SignedNumberFormatSpec
+//		A pointer to an instance of SignedNumberFormatSpec.
+//		All the member variable data values in this instance
+//		will be deleted and reset to the values contained
+//		in the decimal separator specification supplied by
+//		input parameter, 'decSeparator'.
 //
-//	decSeparator              *DecimalSeparatorSpec
-//	   - An instance of DecimalSeparatorSpec. The member
-//	     variable data values contained in this instance
-//	     will be copied to:
-//	       'signedNumFmt.decSeparator'.
 //
-//	     In the United States, the decimal separator is
-//	     referred to as the decimal point.
+//	decSeparator				*DecimalSeparatorSpec
+//		An instance of DecimalSeparatorSpec. The member
+//		variable data values contained in this instance
+//		will be copied to:
+//			'signedNumFmt.decSeparator'.
 //
-//	errPrefDto                 *ePref.ErrPrefixDto
-//	   - This object encapsulates an error prefix string which is
-//	     included in all returned error messages. Usually, it
-//	     contains the name of the calling method or methods listed
-//	     as a function chain.
+//		In the United States, the decimal separator is
+//		referred to as the decimal point.
 //
-//	     If no error prefix information is needed, set this
-//	     parameter to 'nil'.
+//	errPrefDto					*ePref.ErrPrefixDto
+//		This object encapsulates an error prefix string which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods listed
+//		as a function chain.
 //
-//	     Type ErrPrefixDto is included in the 'errpref' software
-//	     package, "github.com/MikeAustin71/errpref".
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref' software
+//		package, "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//	err                        error
-//	   - If this method completes successfully, this returned error
-//	     Type is set equal to 'nil'. If errors are encountered during
-//	     processing, the returned error Type will encapsulate an error
-//	     message.
+//	err							error
+//		If this method completes successfully, this returned error
+//		Type is set equal to 'nil'. If errors are encountered
+//		during processing, the returned error Type will encapsulate
+//		an error message.
 //
-//	     If an error message is returned, the text value for input
-//	     parameter 'errPrefDto' (error prefix) will be prefixed or
-//	     attached at the beginning of the error message.
+//		If an error message is returned, the text value for input
+//		parameter 'errPrefDto' (error prefix) will be prefixed or
+//		attached at the beginning of the error message.
 func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setDecimalSeparatorSpec(
 	signedNumFmt *SignedNumberFormatSpec,
 	decSeparator *DecimalSeparatorSpec,
@@ -714,9 +718,9 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setDecimalSeparatorSpec(
 //
 //	signedNumFmt				*SignedNumberFormatSpec
 //		A pointer to an instance of SignedNumberFormatSpec.
-//		All the member variable data values in this instance
-//		will be deleted and reset according to the data
-//		extracted from the following input parameters.
+//		The member variable 'signedNumFmt.intGroupingSpec'
+//		will be reset to the values provided by the
+//		following input parameters.
 //
 //	intGroupingChars			[]rune
 //		One or more characters used to separate groups of
@@ -798,4 +802,106 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setIntegerGroupingSpec(
 			"signedNumFmt.intGroupingSpec<-"))
 
 	return err
+}
+
+// setRoundingSpec - Deletes and resets the member variable data
+// value for 'SignedNumberFormatSpec.intGroupingSpec'
+// contained in the instance of SignedNumberFormatSpec passed as
+// an input parameter.
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//	signedNumFmt				*SignedNumberFormatSpec
+//		A pointer to an instance of SignedNumberFormatSpec.
+//		The member variable 'signedNumFmt.roundingSpec'
+//		will be reset to the values provided by the
+//		following input parameters.
+//
+//	roundingType				NumberRoundingType
+//		This enumeration parameter is used to specify the type
+//		of rounding algorithm that will be applied for the
+//		rounding of fractonal digits in a number string.
+//
+//		Possible values are listed as follows:
+//			NumRoundType.None(),
+//			NumRoundType.HalfUpWithNegNums(),
+//			NumRoundType.HalfDownWithNegNums(),
+//			NumRoundType.HalfAwayFromZero(),
+//			NumRoundType.HalfTowardsZero(),
+//			NumRoundType.HalfToEven(),
+//			NumRoundType.HalfToOdd(),
+//			NumRoundType.Randomly(),
+//			NumRoundType.Floor(),
+//			NumRoundType.Ceiling(),
+//			NumRoundType.Truncate(),
+//
+//	roundToFractionalDigits		int
+//		When set to a positive integer value, this parameter
+//		controls the number of digits to the right of the decimal
+//	 	separator (a.k.a. decimal point) which will remain after
+//		completion of the number rounding operation.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//		This object encapsulates an error prefix string which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods listed
+//		as a function chain.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref' software
+//		package, "github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//	err							error
+//		If this method completes successfully, this returned error
+//		Type is set equal to 'nil'. If errors are encountered
+//		during processing, the returned error Type will encapsulate
+//		an error message.
+//
+//		If an error message is returned, the text value for input
+//		parameter 'errPrefDto' (error prefix) will be prefixed or
+//		attached at the beginning of the error message.
+func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setRoundingSpec(
+	signedNumFmt *SignedNumberFormatSpec,
+	roundingType NumberRoundingType,
+	roundToFractionalDigits int,
+	errPrefDto *ePref.ErrPrefixDto) (
+	err error) {
+
+	if signedNumFmtSpecAtom.lock == nil {
+		signedNumFmtSpecAtom.lock = new(sync.Mutex)
+	}
+
+	signedNumFmtSpecAtom.lock.Lock()
+
+	defer signedNumFmtSpecAtom.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"signedNumFmtSpecNanobot."+
+			"setIntegerGroupingSpec()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	err = signedNumFmt.roundingSpec.SetRoundingSpec(
+		roundingType,
+		roundToFractionalDigits,
+		ePrefix.XCpy(
+			"signedNumFmt.roundingSpec<-"))
+
+	return err
+
 }
