@@ -12,7 +12,7 @@ type integerSeparatorDtoHelper struct {
 
 // setFromIntGroupEnum - Configures an instance of
 // IntegerSeparatorDto based on an enumeration value
-// ('intGroupingType') passed as an input parameter.
+// ('intGroupingSpec') passed as an input parameter.
 //
 // ----------------------------------------------------------------
 //
@@ -31,11 +31,11 @@ type integerSeparatorDtoHelper struct {
 //	     using the input parameters listed below and default
 //	     values.
 //
-// intGroupingType             IntegerGroupingType
+// intGroupingSpec             IntegerGroupingType
 //
 //   - This instance of IntegerGroupingType enumeration defines
 //     how 'intSep' will be configured for integer grouping.
-//     The enumeration value 'intGroupingType' must be set to one
+//     The enumeration value 'intGroupingSpec' must be set to one
 //     of three values:
 //     IntGroupingType.Thousands()
 //     IntGroupingType.IndiaNumbering()

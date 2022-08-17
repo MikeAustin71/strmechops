@@ -845,9 +845,9 @@ func (nStrIntSep *IntegerSeparatorDto) IsValidInstanceError(
 
 // NewFromIntGroupEnum - Creates a new instance of
 // IntegerSeparatorDto based on an enumeration value passed
-// through input parameter 'intGroupingType'.
+// through input parameter 'intGroupingSpec'.
 //
-// 'intGroupingType' is a type of IntegerGroupingType and
+// 'intGroupingSpec' is a type of IntegerGroupingType and
 // must be set to one of the following valid values:
 //
 //	IntGroupingType.Thousands()
@@ -865,7 +865,7 @@ func (nStrIntSep *IntegerSeparatorDto) IsValidInstanceError(
 //
 // Input Parameters
 //
-//	intGroupingType             IntegerGroupingType
+//	intGroupingSpec             IntegerGroupingType
 //
 //	 - This instance of IntegerGroupingType defines the type
 //	   of IntegerSeparatorDto which will be returned. The
@@ -950,7 +950,7 @@ func (nStrIntSep *IntegerSeparatorDto) IsValidInstanceError(
 //	     IntegerSeparatorDto will be configured to 'Thousands',
 //	     'India Numbering System' or 'Chinese Numbering' depending
 //	     on the specification provided by input parameter,
-//	     'intGroupingType'.
+//	     'intGroupingSpec'.
 //
 //	error
 //	   - If this method completes successfully, the returned error
@@ -1006,9 +1006,9 @@ func (nStrIntSep *IntegerSeparatorDto) NewFromIntGroupEnum(
 
 // NewFromIntGroupEnumRunes - Creates a new instance of
 // IntegerSeparatorDto based on an enumeration value passed
-// through input parameter 'intGroupingType'.
+// through input parameter 'intGroupingSpec'.
 //
-// 'intGroupingType' is a type of IntegerGroupingType and
+// 'intGroupingSpec' is a type of IntegerGroupingType and
 // must be set to one of the following valid values:
 //
 //	IntGroupingType.Thousands()
@@ -1026,7 +1026,7 @@ func (nStrIntSep *IntegerSeparatorDto) NewFromIntGroupEnum(
 //
 // # Input Parameters
 //
-// intGroupingType             IntegerGroupingType
+// intGroupingSpec             IntegerGroupingType
 //
 //   - This instance of IntegerGroupingType defines the type
 //     of IntegerSeparatorDto which will be returned. The
@@ -1110,7 +1110,7 @@ func (nStrIntSep *IntegerSeparatorDto) NewFromIntGroupEnum(
 //	     IntegerSeparatorDto will be configured to 'Thousands',
 //	     'India Numbering System' or 'Chinese Numbering' depending
 //	     on the specification provided by input parameter,
-//	     'intGroupingType'.
+//	     'intGroupingSpec'.
 //
 //	error
 //	   - If this method completes successfully, the returned error

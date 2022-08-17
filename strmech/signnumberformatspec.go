@@ -17,11 +17,12 @@ type SignedNumberFormatSpec struct {
 	// characters which will separate integer and
 	// fractional digits in a floating point number
 
-	intGroupingType NumStrIntegerGroupingSpec
-	// This parameter specifies the type of integer
-	// grouping and integer separator characters
-	// which will be applied to the number string
-	// formatting operation.
+	intGroupingSpec NumStrIntegerGroupingSpec
+	// Integer Grouping Specification. This parameter
+	// specifies the type of integer grouping and
+	// integer separator characters which will be
+	// applied to the number string formatting
+	// operations.
 
 	roundingSpec NumStrRoundingSpec
 	// Controls the rounding algorithm applied to
@@ -300,10 +301,10 @@ func (nStrNumberFieldSpecNanobot *signedNumFmtSpecNanobot) copySignedNumberForma
 		return err
 	}
 
-	err = destinationSignedNumFmtSpec.intGroupingType.CopyIn(
-		&sourceSignedNumFmtSpec.intGroupingType,
+	err = destinationSignedNumFmtSpec.intGroupingSpec.CopyIn(
+		&sourceSignedNumFmtSpec.intGroupingSpec,
 		ePrefix.XCpy(
-			"destinationSignedNumFmtSpec.intGroupingType"+
+			"destinationSignedNumFmtSpec.intGroupingSpec"+
 				"<-sourceSignedNumFmtSpec"))
 
 	if err != nil {
@@ -398,7 +399,7 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) empty(
 
 	signedNumFmtSpec.decSeparator.Empty()
 
-	signedNumFmtSpec.intGroupingType.Empty()
+	signedNumFmtSpec.intGroupingSpec.Empty()
 
 	signedNumFmtSpec.roundingSpec.Empty()
 
@@ -473,8 +474,8 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) equal(
 		return false
 	}
 
-	if !signedNumFmtSpec1.intGroupingType.Equal(
-		&signedNumFmtSpec2.intGroupingType) {
+	if !signedNumFmtSpec1.intGroupingSpec.Equal(
+		&signedNumFmtSpec2.intGroupingSpec) {
 
 		return false
 	}
@@ -615,32 +616,32 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setDecimalSeparator(
 //
 // Input Parameters
 //
-//			signedNumFmt               *SignedNumberFormatSpec
-//			    - A pointer to an instance of SignedNumberFormatSpec.
-//			      All the member variable data values in this instance
-//			      will be deleted and reset according to the data
-//			      extracted from the following input parameters.
+//	signedNumFmt               *SignedNumberFormatSpec
+//	   - A pointer to an instance of SignedNumberFormatSpec.
+//	     All the member variable data values in this instance
+//	     will be deleted and reset according to the data
+//	     extracted from the following input parameters.
 //
-//			 decSeparator              *DecimalSeparatorSpec
-//			    - An instance of DecimalSeparatorSpec. The member
-//	           variable data values contained in this instance
-//	           will be copied to:
-//	              'signedNumFmt.decSeparator'.
+//	decSeparator              *DecimalSeparatorSpec
+//	   - An instance of DecimalSeparatorSpec. The member
+//	     variable data values contained in this instance
+//	     will be copied to:
+//	       'signedNumFmt.decSeparator'.
 //
-//		       	  In the United States, the decimal separator is
-//		          referred to as the decimal point.
+//	     In the United States, the decimal separator is
+//	     referred to as the decimal point.
 //
-//			 errPrefDto                 *ePref.ErrPrefixDto
-//			    - This object encapsulates an error prefix string which is
-//			      included in all returned error messages. Usually, it
-//			      contains the name of the calling method or methods listed
-//			      as a function chain.
+//	errPrefDto                 *ePref.ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods listed
+//	     as a function chain.
 //
-//			      If no error prefix information is needed, set this
-//			      parameter to 'nil'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//			      Type ErrPrefixDto is included in the 'errpref' software
-//			      package, "github.com/MikeAustin71/errpref".
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
@@ -698,6 +699,103 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setDecimalSeparatorSpec(
 		ePrefix.XCpy(
 			"signedNumFmt.decSeparator<-"+
 				"decSeparator"))
+
+	return err
+}
+
+// setIntegerGroupingSpec - Deletes and resets the member
+// variable data value for 'SignedNumberFormatSpec.intGroupingSpec'
+// contained in the instance of SignedNumberFormatSpec passed as
+// an input parameter.
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//	signedNumFmt				*SignedNumberFormatSpec
+//		A pointer to an instance of SignedNumberFormatSpec.
+//		All the member variable data values in this instance
+//		will be deleted and reset according to the data
+//		extracted from the following input parameters.
+//
+//	intGroupingChars			[]rune
+//		One or more characters used to separate groups of
+//		integer digits. This separator is also known as the
+//		'thousands' separator. It is used to separate groups of
+//		integer digits to the left of the decimal separator
+//		(a.k.a. decimal point). In the United States, the
+//		standard integer digits separator is the comma (",").
+//		United States Example:  1,000,000,000
+//
+//		In many European countries, a single period ('.') is used
+//		as the integer separator character.
+//		European Example: 1.000.000.000
+//
+//		Other countries and cultures use spaces, apostrophes or
+//		multiple characters to separate integers.
+//
+//		If this input parameter contains a zero length array
+//		and 'intGroupingSpec' is NOT equal to
+//		'IntGroupingType.None()', an error will be returned.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//		This object encapsulates an error prefix string which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods listed
+//		as a function chain.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref' software
+//		package, "github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//	err							error
+//		If this method completes successfully, this returned error
+//		Type is set equal to 'nil'. If errors are encountered
+//		during processing, the returned error Type will encapsulate
+//		an error message.
+//
+//		If an error message is returned, the text value for input
+//		parameter 'errPrefDto' (error prefix) will be prefixed or
+//		attached at the beginning of the error message.
+func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setIntegerGroupingSpec(
+	signedNumFmt *SignedNumberFormatSpec,
+	intGroupingChars []rune,
+	intGroupingType IntegerGroupingType,
+	errPrefDto *ePref.ErrPrefixDto) (
+	err error) {
+
+	if signedNumFmtSpecAtom.lock == nil {
+		signedNumFmtSpecAtom.lock = new(sync.Mutex)
+	}
+
+	signedNumFmtSpecAtom.lock.Lock()
+
+	defer signedNumFmtSpecAtom.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"signedNumFmtSpecNanobot."+
+			"setIntegerGroupingSpec()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	err = signedNumFmt.intGroupingSpec.SetRunes(
+		intGroupingChars,
+		intGroupingType,
+		ePrefix.XCpy(
+			"signedNumFmt.intGroupingSpec<-"))
 
 	return err
 }
