@@ -364,105 +364,104 @@ func (nStrIntGroupSpec *NumStrIntegerGroupingSpec) Equal(
 //
 // # Input Parameters
 //
-// intGroupingSpec             IntegerGroupingType
+//	intGroupingType			IntegerGroupingType
 //
-//   - This instance of IntegerGroupingType defines the type
-//     of IntegerSeparatorDto which will be returned. The
-//     enumeration IntegerGroupingType must be set to one
-//     of the following values:
-//     IntGroupingType.None()
-//     IntGroupingType.Thousands()
-//     IntGroupingType.IndiaNumbering()
-//     IntGroupingType.ChineseNumbering()
+//		This instance of IntegerGroupingType defines the type
+//		of IntegerSeparatorDto which will be returned. The
+//		enumeration IntegerGroupingType must be set to one
+//		of the following values:
+//		IntGroupingType.None()
+//		IntGroupingType.Thousands()
+//		IntGroupingType.IndiaNumbering()
+//		IntGroupingType.ChineseNumbering()
 //
-//     intSeparatorChars       []rune
+//	intSeparatorChars		[]rune
 //
-//   - One or more characters used to separate groups of
-//     integer digits. This separator is also known as the
-//     'thousands' separator. It is used to separate groups of
-//     integer digits to the left of the decimal separator
-//     (a.k.a. decimal point). In the United States, the
-//     standard integer digits separator is the comma (",").
-//     United States Example:  1,000,000,000
+//		One or more characters used to separate groups of
+//		integer digits. This separator is also known as the
+//		'thousands' separator. It is used to separate groups of
+//		integer digits to the left of the decimal separator
+//		(a.k.a. decimal point). In the United States, the
+//		standard integer digits separator is the comma (",").
+//		United States Example:  1,000,000,000
 //
-//     In many European countries, a single period ('.') is used
-//     as the integer separator character.
-//     European Example: 1.000.000.000
+//		In many European countries, a single period ('.') is used
+//		as the integer separator character.
+//		European Example: 1.000.000.000
 //
-//     Other countries and cultures use spaces, apostrophes or
-//     multiple characters to separate integers.
+//		Other countries and cultures use spaces, apostrophes or
+//		multiple characters to separate integers.
 //
-//     If this input parameter contains a zero length array
-//     and 'intGroupingSpec' is NOT equal to
-//     'IntGroupingType.None()', an error will be returned.
+//		If this input parameter contains a zero length array
+//		and 'intGroupingSpec' is NOT equal to
+//		'IntGroupingType.None()', an error will be returned.
 //
-//     errorPrefix                interface{}
+//	errorPrefix					interface{}
+//		This object encapsulates error prefix text which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods
+//		listed as a method or function chain of execution.
 //
-//   - This object encapsulates error prefix text which is
-//     included in all returned error messages. Usually, it
-//     contains the name of the calling method or methods
-//     listed as a method or function chain of execution.
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
 //
-//     If no error prefix information is needed, set this parameter
-//     to 'nil'.
+//		This empty interface must be convertible to one of the
+//		following types:
 //
-//     This empty interface must be convertible to one of the
-//     following types:
+//		1. nil - A nil value is valid and generates an empty
+//		   collection of error prefix and error context
+//		   information.
 //
-//     1. nil - A nil value is valid and generates an empty
-//     collection of error prefix and error context
-//     information.
+//		2. string - A string containing error prefix information.
 //
-//     2. string - A string containing error prefix information.
+//		3. []string A one-dimensional slice of strings containing
+//		   error prefix information
 //
-//     3. []string A one-dimensional slice of strings containing
-//     error prefix information
+//		4. [][2]string A two-dimensional slice of strings
+//		   containing error prefix and error context information.
 //
-//     4. [][2]string A two-dimensional slice of strings
-//     containing error prefix and error context information.
+//		5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		   from this object will be copied for use in error and
+//		   informational messages.
 //
-//     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//     from this object will be copied for use in error and
-//     informational messages.
+//		6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		   Information from this object will be copied for use in
+//		   error and informational messages.
 //
-//     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//     Information from this object will be copied for use in
-//     error and informational messages.
+//		7. IBasicErrorPrefix - An interface to a method generating
+//		   a two-dimensional slice of strings containing error
+//		   prefix and error context information.
 //
-//     7. IBasicErrorPrefix - An interface to a method generating
-//     a two-dimensional slice of strings containing error
-//     prefix and error context information.
+//		If parameter 'errorPrefix' is NOT convertible to one of
+//		the valid types listed above, it will be considered
+//		invalid and trigger the return of an error.
 //
-//     If parameter 'errorPrefix' is NOT convertible to one of
-//     the valid types listed above, it will be considered
-//     invalid and trigger the return of an error.
-//
-//     Types ErrPrefixDto and IBasicErrorPrefix are included in
-//     the 'errpref' software package,
-//     "github.com/MikeAustin71/errpref".
+//		Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		the 'errpref' software package,
+//		"github.com/MikeAustin71/errpref".
 //
 // -----------------------------------------------------------------
 //
-// Return Values
+// # Return Values
 //
-//	newNStrIntGroupSpec        NumStrIntegerGroupingSpec
-//	   - If this method completes successfully, a new instance of
-//	     NumStrIntegerGroupingSpec will be created and returned.
-//	     This integer grouping specification will be configured to
-//	     'Thousands', 'India Numbering System' or 'Chinese
-//	     Numbering' depending on the specification provided by
-//	     input parameter, 'intGroupingSpec'.
+//	newNStrIntGroupSpec		NumStrIntegerGroupingSpec
+//		If this method completes successfully, a new instance of
+//		NumStrIntegerGroupingSpec will be created and returned.
+//		This integer grouping specification will be configured to
+//		'Thousands', 'India Numbering System' or 'Chinese
+//		Numbering' depending on the specification provided by
+//		input parameter, 'intGroupingSpec'.
 //
-//	err                        error
-//	   - If this method completes successfully, the returned error
-//	     Type is set equal to 'nil'.
+//	err						error
+//		If this method completes successfully, the returned error
+//		Type is set equal to 'nil'.
 //
-//	     If errors are encountered during processing, the returned
-//	     error Type will encapsulate an error message. This
-//	     returned error message will incorporate the method chain
-//	     and text passed by input parameter, 'errorPrefix'. The
-//	     'errorPrefix' text will be attached to the beginning of
-//	     the error message.
+//		If errors are encountered during processing, the returned
+//		error Type will encapsulate an error message. This
+//		returned error message will incorporate the method chain
+//		and text passed by input parameter, 'errorPrefix'. The
+//		'errorPrefix' text will be attached to the beginning of
+//		the error message.
 func (nStrIntGroupSpec *NumStrIntegerGroupingSpec) NewRunes(
 	intGroupingType IntegerGroupingType,
 	intSeparatorChars []rune,
@@ -514,105 +513,105 @@ func (nStrIntGroupSpec *NumStrIntegerGroupingSpec) NewRunes(
 //
 // Input Parameters
 //
-//	intGroupingSpec             IntegerGroupingType
-//	 - This instance of IntegerGroupingType defines the type
-//	   of IntegerSeparatorDto which will be returned. The
-//	   enumeration IntegerGroupingType must be set to one
-//	   of the following values:
-//	   IntGroupingType.None()
-//	   IntGroupingType.Thousands()
-//	   IntGroupingType.IndiaNumbering()
-//	   IntGroupingType.ChineseNumbering()
+//	intGroupingType			IntegerGroupingType
+//		This instance of IntegerGroupingType defines the type
+//		of IntegerSeparatorDto which will be returned. The
+//		enumeration IntegerGroupingType must be set to one
+//		of the following values:
+//		IntGroupingType.None()
+//		IntGroupingType.Thousands()
+//		IntGroupingType.IndiaNumbering()
+//		IntGroupingType.ChineseNumbering()
 //
-//	intSeparatorChars          string
-//	 - One or more characters used to separate groups of
-//	   integers. This separator is also known as the 'thousands'
-//	   separator. It is used to separate groups of integer digits
-//	   to the left of the decimal separator
-//	   (a.k.a. decimal point). In the United States, the standard
-//	   integer digits separator is the comma (",").
-//	   United States Example:  1,000,000,000
+//	intSeparatorChars		string
+//		One or more characters used to separate groups of
+//		integers. This separator is also known as the 'thousands'
+//		separator. It is used to separate groups of integer digits
+//		to the left of the decimal separator
+//		(a.k.a. decimal point). In the United States, the standard
+//		integer digits separator is the comma (",").
+//		United States Example:  1,000,000,000
 //
-//	   In many European countries, a single period ('.') is used
-//	   as the integer separator character.
-//	   European Example: 1.000.000.000
+//		In many European countries, a single period ('.') is used
+//		as the integer separator character.
+//		European Example: 1.000.000.000
 //
-//	   Other countries and cultures use spaces, apostrophes or
-//	   multiple characters to separate integers.
+//		Other countries and cultures use spaces, apostrophes or
+//		multiple characters to separate integers.
 //
-//	   If this input parameter contains a zero length string
-//	   and 'intGroupingSpec' is NOT equal to
-//	   'IntGroupingType.None()', an error will be returned.
+//		If this input parameter contains a zero length string
+//		and 'intGroupingSpec' is NOT equal to
+//		'IntGroupingType.None()', an error will be returned.
 //
-//	errorPrefix                interface{}
-//	 - This object encapsulates error prefix text which is
-//	   included in all returned error messages. Usually, it
-//	   contains the name of the calling method or methods
-//	   listed as a method or function chain of execution.
+//	errorPrefix				interface{}
+//		This object encapsulates error prefix text which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods
+//		listed as a method or function chain of execution.
 //
-//	   If no error prefix information is needed, set this parameter
-//	   to 'nil'.
+//		If no error prefix information is needed, set this parameter
+//		to 'nil'.
 //
-//	   This empty interface must be convertible to one of the
-//	   following types:
+//		This empty interface must be convertible to one of the
+//		following types:
 //
-//	   1. nil - A nil value is valid and generates an empty
-//	   collection of error prefix and error context
-//	   information.
+//		1. nil - A nil value is valid and generates an empty
+//		collection of error prefix and error context
+//		information.
 //
-//	   2. string - A string containing error prefix information.
+//		2. string - A string containing error prefix information.
 //
-//	   3. []string A one-dimensional slice of strings containing
-//	   error prefix information
+//		3. []string A one-dimensional slice of strings containing
+//		error prefix information
 //
-//	   4. [][2]string A two-dimensional slice of strings
-//	   containing error prefix and error context information.
+//		4. [][2]string A two-dimensional slice of strings
+//		containing error prefix and error context information.
 //
-//	   5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//	   from this object will be copied for use in error and
-//	   informational messages.
+//		5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		from this object will be copied for use in error and
+//		informational messages.
 //
-//	   6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//	   Information from this object will be copied for use in
-//	   error and informational messages.
+//		6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		Information from this object will be copied for use in
+//		error and informational messages.
 //
-//	   7. IBasicErrorPrefix - An interface to a method generating
-//	   a two-dimensional slice of strings containing error
-//	   prefix and error context information.
+//		7. IBasicErrorPrefix - An interface to a method generating
+//		a two-dimensional slice of strings containing error
+//		prefix and error context information.
 //
-//	   If parameter 'errorPrefix' is NOT convertible to one of
-//	   the valid types listed above, it will be considered
-//	   invalid and trigger the return of an error.
+//		If parameter 'errorPrefix' is NOT convertible to one of
+//		the valid types listed above, it will be considered
+//		invalid and trigger the return of an error.
 //
-//	   Types ErrPrefixDto and IBasicErrorPrefix are included in
-//	   the 'errpref' software package,
-//	   "github.com/MikeAustin71/errpref".
+//		Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		the 'errpref' software package,
+//		"github.com/MikeAustin71/errpref".
 //
 // -----------------------------------------------------------------
 //
 // Return Values
 //
-//	newNStrIntGroupSpec        NumStrIntegerGroupingSpec
-//	   - If this method completes successfully, a new instance of
-//	     NumStrIntegerGroupingSpec will be created and returned.
-//	     This integer grouping specification will be configured to
-//	     'Thousands', 'India Numbering System' or 'Chinese
-//	     Numbering' depending on the specification provided by
-//	     input parameter, 'intGroupingSpec'.
+//	newNStrIntGroupSpec		NumStrIntegerGroupingSpec
+//		If this method completes successfully, a new instance of
+//		NumStrIntegerGroupingSpec will be created and returned.
+//		This integer grouping specification will be configured to
+//		'Thousands', 'India Numbering System' or 'Chinese
+//		Numbering' depending on the specification provided by
+//		input parameter, 'intGroupingSpec'.
 //
-//	err                        error
-//	   - If this method completes successfully, the returned error
-//	     Type is set equal to 'nil'.
+//	err						error
+//		If this method completes successfully, the returned error
+//		Type is set equal to 'nil'.
 //
-//	     If errors are encountered during processing, the returned
-//	     error Type will encapsulate an error message. This
-//	     returned error message will incorporate the method chain
-//	     and text passed by input parameter, 'errorPrefix'. The
-//	     'errorPrefix' text will be attached to the beginning of
-//	     the error message.
+//		If errors are encountered during processing, the returned
+//		error Type will encapsulate an error message. This
+//		returned error message will incorporate the method chain
+//		and text passed by input parameter, 'errorPrefix'. The
+//		'errorPrefix' text will be attached to the beginning of
+//		the error message.
 func (nStrIntGroupSpec *NumStrIntegerGroupingSpec) NewStr(
-	intSeparatorChars string,
 	intGroupingType IntegerGroupingType,
+	intSeparatorChars string,
 	errorPrefix interface{}) (
 	newNStrIntGroupSpec NumStrIntegerGroupingSpec,
 	err error) {
@@ -657,99 +656,101 @@ func (nStrIntGroupSpec *NumStrIntegerGroupingSpec) NewStr(
 //
 // ----------------------------------------------------------------
 //
-// Input Parameters
+// # Input Parameters
 //
-//		intSeparatorChars          []rune
-//		   - One or more characters used to separate groups of
-//		     integer digits. This separator is also known as the
-//		     'thousands' separator. It is used to separate groups of
-//		     integer digits to the left of the decimal separator
-//		     (a.k.a. decimal point). In the United States, the
-//		     standard integer digits separator is the comma (",").
-//		     United States Example:  1,000,000,000
+//	intGroupingType			IntegerGroupingType
 //
-//		     In many European countries, a single period ('.') is used
-//		     as the integer separator character.
-//		     European Example: 1.000.000.000
+//		This instance of IntegerGroupingType defines the type
+//		of IntegerSeparatorDto which will be returned. The
+//		enumeration IntegerGroupingType must be set to one
+//		of the following values:
+//		IntGroupingType.None()
+//		IntGroupingType.Thousands()
+//		IntGroupingType.IndiaNumbering()
+//		IntGroupingType.ChineseNumbering()
 //
-//		     Other countries and cultures use spaces, apostrophes or
-//		     multiple characters to separate integers.
+//	intSeparatorChars		[]rune
 //
-//	      If this input parameter contains a zero length array
-//	      and 'intGroupingSpec' is NOT equal to
-//	      'IntGroupingType.None()', an error will be returned.
+//		One or more characters used to separate groups of
+//		integer digits. This separator is also known as the
+//		'thousands' separator. It is used to separate groups of
+//		integer digits to the left of the decimal separator
+//		(a.k.a. decimal point). In the United States, the
+//		standard integer digits separator is the comma (",").
+//		United States Example:  1,000,000,000
 //
-//		intGroupingType            IntegerGroupingType
-//	    - This instance of IntegerGroupingType defines the type
-//	      of IntegerSeparatorDto which will be returned. The
-//	      enumeration IntegerGroupingType must be set to one
-//	      of the following values:
-//	         IntGroupingType.None()
-//	         IntGroupingType.Thousands()
-//	         IntGroupingType.IndiaNumbering()
-//	         IntGroupingType.ChineseNumbering()
+//		In many European countries, a single period ('.') is used
+//		as the integer separator character.
+//		European Example: 1.000.000.000
 //
-//		errorPrefix                interface{}
-//			 - This object encapsulates error prefix text which is
-//			   included in all returned error messages. Usually, it
-//			   contains the name of the calling method or methods
-//			   listed as a method or function chain of execution.
+//		Other countries and cultures use spaces, apostrophes or
+//		multiple characters to separate integers.
 //
-//			   If no error prefix information is needed, set this parameter
-//			   to 'nil'.
+//		If this input parameter contains a zero length array
+//		and 'intGroupingSpec' is NOT equal to
+//		'IntGroupingType.None()', an error will be returned.
 //
-//			   This empty interface must be convertible to one of the
-//			   following types:
+//	errorPrefix					interface{}
+//		This object encapsulates error prefix text which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods
+//		listed as a method or function chain of execution.
 //
-//			   1. nil - A nil value is valid and generates an empty
-//			   collection of error prefix and error context
-//			   information.
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
 //
-//			   2. string - A string containing error prefix information.
+//		This empty interface must be convertible to one of the
+//		following types:
 //
-//			   3. []string A one-dimensional slice of strings containing
-//			   error prefix information
+//		1. nil - A nil value is valid and generates an empty
+//		   collection of error prefix and error context
+//		   information.
 //
-//			   4. [][2]string A two-dimensional slice of strings
-//			   containing error prefix and error context information.
+//		2. string - A string containing error prefix information.
 //
-//			   5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//			   from this object will be copied for use in error and
-//			   informational messages.
+//		3. []string A one-dimensional slice of strings containing
+//		   error prefix information
 //
-//			   6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//			   Information from this object will be copied for use in
-//			   error and informational messages.
+//		4. [][2]string A two-dimensional slice of strings
+//		   containing error prefix and error context information.
 //
-//			   7. IBasicErrorPrefix - An interface to a method generating
-//			   a two-dimensional slice of strings containing error
-//			   prefix and error context information.
+//		5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		   from this object will be copied for use in error and
+//		   informational messages.
 //
-//			   If parameter 'errorPrefix' is NOT convertible to one of
-//			   the valid types listed above, it will be considered
-//			   invalid and trigger the return of an error.
+//		6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		   Information from this object will be copied for use in
+//		   error and informational messages.
 //
-//			   Types ErrPrefixDto and IBasicErrorPrefix are included in
-//			   the 'errpref' software package,
-//			   "github.com/MikeAustin71/errpref".
+//		7. IBasicErrorPrefix - An interface to a method generating
+//		   a two-dimensional slice of strings containing error
+//		   prefix and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible to one of
+//		the valid types listed above, it will be considered
+//		invalid and trigger the return of an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		the 'errpref' software package,
+//		"github.com/MikeAustin71/errpref".
 //
 // -----------------------------------------------------------------
 //
-// Return Values
+// # Return Values
 //
-//	error
-//	   - If this method completes successfully, the returned error
-//	     Type is set equal to 'nil'.
+//	err						error
+//		If this method completes successfully, the returned error
+//		Type is set equal to 'nil'.
 //
-//	     If errors are encountered during processing, the returned
-//	     error Type will encapsulate an error message. This
-//	     returned error message will incorporate the method chain
-//	     and text passed by input parameter, 'errorPrefix'. The
-//	     'errorPrefix' text will be attached to the beginning of
-//	     the error message.
+//		If errors are encountered during processing, the returned
+//		error Type will encapsulate an error message. This
+//		returned error message will incorporate the method chain
+//		and text passed by input parameter, 'errorPrefix'. The
+//		'errorPrefix' text will be attached to the beginning of
+//		the error message.
 func (nStrIntGroupSpec *NumStrIntegerGroupingSpec) SetRunes(
-	intSeparatorChars []rune,
 	intGroupingType IntegerGroupingType,
+	intSeparatorChars []rune,
 	errorPrefix interface{}) error {
 
 	if nStrIntGroupSpec.lock == nil {
@@ -794,97 +795,97 @@ func (nStrIntGroupSpec *NumStrIntegerGroupingSpec) SetRunes(
 //
 // Input Parameters
 //
-//	intGroupingSpec             IntegerGroupingType
-//	 - This instance of IntegerGroupingType defines the type
-//	   of IntegerSeparatorDto which will be returned. The
-//	   enumeration IntegerGroupingType must be set to one
-//	   of the following values:
-//	   IntGroupingType.None()
-//	   IntGroupingType.Thousands()
-//	   IntGroupingType.IndiaNumbering()
-//	   IntGroupingType.ChineseNumbering()
+//	intGroupingType			IntegerGroupingType
+//		This instance of IntegerGroupingType defines the type
+//		of IntegerSeparatorDto which will be returned. The
+//		enumeration IntegerGroupingType must be set to one
+//		of the following values:
+//		IntGroupingType.None()
+//		IntGroupingType.Thousands()
+//		IntGroupingType.IndiaNumbering()
+//		IntGroupingType.ChineseNumbering()
 //
-//	intSeparatorChars          string
-//	 - One or more characters used to separate groups of
-//	   integers. This separator is also known as the 'thousands'
-//	   separator. It is used to separate groups of integer digits
-//	   to the left of the decimal separator
-//	   (a.k.a. decimal point). In the United States, the standard
-//	   integer digits separator is the comma (",").
-//	   United States Example:  1,000,000,000
+//	intSeparatorChars		string
+//		One or more characters used to separate groups of
+//		integers. This separator is also known as the 'thousands'
+//		separator. It is used to separate groups of integer digits
+//		to the left of the decimal separator
+//		(a.k.a. decimal point). In the United States, the standard
+//		integer digits separator is the comma (",").
+//		United States Example:  1,000,000,000
 //
-//	   In many European countries, a single period ('.') is used
-//	   as the integer separator character.
-//	   European Example: 1.000.000.000
+//		In many European countries, a single period ('.') is used
+//		as the integer separator character.
+//		European Example: 1.000.000.000
 //
-//	   Other countries and cultures use spaces, apostrophes or
-//	   multiple characters to separate integers.
+//		Other countries and cultures use spaces, apostrophes or
+//		multiple characters to separate integers.
 //
-//	   If this input parameter contains a zero length string
-//	   and 'intGroupingSpec' is NOT equal to
-//	   IntGroupingType.None(), an error will be returned.
+//		If this input parameter contains a zero length string
+//		and 'intGroupingSpec' is NOT equal to
+//		'IntGroupingType.None()', an error will be returned.
 //
-//	errorPrefix                interface{}
-//	 - This object encapsulates error prefix text which is
-//	   included in all returned error messages. Usually, it
-//	   contains the name of the calling method or methods
-//	   listed as a method or function chain of execution.
+//	errorPrefix				interface{}
+//		This object encapsulates error prefix text which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods
+//		listed as a method or function chain of execution.
 //
-//	   If no error prefix information is needed, set this parameter
-//	   to 'nil'.
+//		If no error prefix information is needed, set this parameter
+//		to 'nil'.
 //
-//	   This empty interface must be convertible to one of the
-//	   following types:
+//		This empty interface must be convertible to one of the
+//		following types:
 //
-//	   1. nil - A nil value is valid and generates an empty
-//	   collection of error prefix and error context
-//	   information.
+//		1. nil - A nil value is valid and generates an empty
+//		collection of error prefix and error context
+//		information.
 //
-//	   2. string - A string containing error prefix information.
+//		2. string - A string containing error prefix information.
 //
-//	   3. []string A one-dimensional slice of strings containing
-//	   error prefix information
+//		3. []string A one-dimensional slice of strings containing
+//		error prefix information
 //
-//	   4. [][2]string A two-dimensional slice of strings
-//	   containing error prefix and error context information.
+//		4. [][2]string A two-dimensional slice of strings
+//		containing error prefix and error context information.
 //
-//	   5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//	   from this object will be copied for use in error and
-//	   informational messages.
+//		5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		from this object will be copied for use in error and
+//		informational messages.
 //
-//	   6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//	   Information from this object will be copied for use in
-//	   error and informational messages.
+//		6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		Information from this object will be copied for use in
+//		error and informational messages.
 //
-//	   7. IBasicErrorPrefix - An interface to a method generating
-//	   a two-dimensional slice of strings containing error
-//	   prefix and error context information.
+//		7. IBasicErrorPrefix - An interface to a method generating
+//		a two-dimensional slice of strings containing error
+//		prefix and error context information.
 //
-//	   If parameter 'errorPrefix' is NOT convertible to one of
-//	   the valid types listed above, it will be considered
-//	   invalid and trigger the return of an error.
+//		If parameter 'errorPrefix' is NOT convertible to one of
+//		the valid types listed above, it will be considered
+//		invalid and trigger the return of an error.
 //
-//	   Types ErrPrefixDto and IBasicErrorPrefix are included in
-//	   the 'errpref' software package,
-//	   "github.com/MikeAustin71/errpref".
+//		Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		the 'errpref' software package,
+//		"github.com/MikeAustin71/errpref".
 //
 // -----------------------------------------------------------------
 //
 // Return Values
 //
-//	error
-//	   - If this method completes successfully, the returned error
-//	     Type is set equal to 'nil'.
+//	err						error
+//		If this method completes successfully, the returned error
+//		Type is set equal to 'nil'.
 //
-//	     If errors are encountered during processing, the returned
-//	     error Type will encapsulate an error message. This
-//	     returned error message will incorporate the method chain
-//	     and text passed by input parameter, 'errorPrefix'. The
-//	     'errorPrefix' text will be attached to the beginning of
-//	     the error message.
+//		If errors are encountered during processing, the returned
+//		error Type will encapsulate an error message. This
+//		returned error message will incorporate the method chain
+//		and text passed by input parameter, 'errorPrefix'. The
+//		'errorPrefix' text will be attached to the beginning of
+//		the error message.
 func (nStrIntGroupSpec *NumStrIntegerGroupingSpec) SetStr(
-	intSeparatorChars string,
 	intGroupingType IntegerGroupingType,
+	intSeparatorChars string,
 	errorPrefix interface{}) error {
 
 	if nStrIntGroupSpec.lock == nil {
