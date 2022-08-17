@@ -31,16 +31,14 @@ import (
 // symbols.
 type NumStrPositiveNumberSignSpec struct {
 	leadingPosNumSign RuneArrayDto
-	// Contains the character or character which
+	// Contains the character or characters which
 	// will be formatted and displayed in front of
-	// a positive numeric value displayed in a
-	// number string.
+	// a positive numeric value in a number string.
 
 	trailingPosNumSign RuneArrayDto
-	// Contains the character or character which
+	// Contains the character or characters which
 	// will be formatted and displayed after a
-	// positive numeric value displayed in a
-	// number string.
+	// positive numeric value in a number string.
 
 	lock *sync.Mutex
 }

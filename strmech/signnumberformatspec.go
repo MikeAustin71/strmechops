@@ -929,6 +929,59 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setRoundingSpec(
 	return err
 
 }
+
+// setPositiveNumberSign - Deletes and resets the member variable
+// data value for 'SignedNumberFormatSpec.positiveNumberSign'
+// contained in the instance of SignedNumberFormatSpec passed as
+// an input parameter.
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//	signedNumFmt				*SignedNumberFormatSpec
+//		A pointer to an instance of SignedNumberFormatSpec.
+//		The member variable 'signedNumFmt.roundingSpec'
+//		will be reset to the values provided by the
+//		following input parameters.
+//
+//	leadingPosNumSign			[]rune
+//		An array of runes containing the character or
+//		characters which will be formatted and displayed
+//		in front of a positive numeric value in a number
+//		string.
+//
+//	trailingPosNumSign			[]rune
+//		An array of runes containing the character or
+//		characters which will be formatted and displayed
+//		after a positive numeric value in a number
+//		string.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//		This object encapsulates an error prefix string which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods listed
+//		as a function chain.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref' software
+//		package, "github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//	err							error
+//		If this method completes successfully, this returned error
+//		Type is set equal to 'nil'. If errors are encountered
+//		during processing, the returned error Type will encapsulate
+//		an error message.
+//
+//		If an error message is returned, the text value for input
+//		parameter 'errPrefDto' (error prefix) will be prefixed or
+//		attached at the beginning of the error message.
 func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setPositiveNumberSign(
 	signedNumFmt *SignedNumberFormatSpec,
 	leadingPosNumSign []rune,
@@ -991,6 +1044,129 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setPositiveNumberSign(
 				ePrefix.XCpy(
 					"signedNumFmt.positiveNumberSign<-"+
 						"trailingPosNumSign"))
+
+		if err != nil {
+			return err
+		}
+	}
+
+	return err
+}
+
+// setNegativeNumberSign - Deletes and resets the member variable
+// data value for 'SignedNumberFormatSpec.negativeNumberSign'
+// contained in the instance of SignedNumberFormatSpec passed as
+// an input parameter.
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//	signedNumFmt				*SignedNumberFormatSpec
+//		A pointer to an instance of SignedNumberFormatSpec.
+//		The member variable 'signedNumFmt.roundingSpec'
+//		will be reset to the values provided by the
+//		following input parameters.
+//
+//	leadingNegNumSign			[]rune
+//		An array of runes containing the character or
+//		characters which will be formatted and displayed
+//		in front of a negative numeric value in a number
+//		string.
+//
+//	trailingNegNumSign			[]rune
+//		An array of runes containing the character or
+//		characters which will be formatted and displayed
+//		after a negative numeric value in a number
+//		string.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//		This object encapsulates an error prefix string which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods listed
+//		as a function chain.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref' software
+//		package, "github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//	err							error
+//		If this method completes successfully, this returned error
+//		Type is set equal to 'nil'. If errors are encountered
+//		during processing, the returned error Type will encapsulate
+//		an error message.
+//
+//		If an error message is returned, the text value for input
+//		parameter 'errPrefDto' (error prefix) will be prefixed or
+//		attached at the beginning of the error message.
+func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setNegativeNumberSign(
+	signedNumFmt *SignedNumberFormatSpec,
+	leadingNegNumSign []rune,
+	trailingNegNumSign []rune,
+	errPrefDto *ePref.ErrPrefixDto) (
+	err error) {
+
+	if signedNumFmtSpecAtom.lock == nil {
+		signedNumFmtSpecAtom.lock = new(sync.Mutex)
+	}
+
+	signedNumFmtSpecAtom.lock.Lock()
+
+	defer signedNumFmtSpecAtom.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"signedNumberFormatSpecAtom."+
+			"setNegativeNumberSign()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if signedNumFmt == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'signedNumFmt' is invalid!\n"+
+			"'signedNumFmt' is a 'nil' pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	signedNumFmt.negativeNumberSign.Empty()
+
+	if len(leadingNegNumSign) > 0 {
+
+		err = signedNumFmt.negativeNumberSign.
+			SetLeadingNegNumberSignRunes(
+				leadingNegNumSign,
+				ePrefix.XCpy(
+					"signedNumFmt.negativeNumberSign"+
+						"<-leadingNegNumSign"))
+
+		if err != nil {
+			return err
+		}
+	}
+
+	if len(trailingNegNumSign) > 0 {
+
+		err = signedNumFmt.negativeNumberSign.
+			SetTrailingNegNumberSignRunes(
+				trailingNegNumSign,
+				ePrefix.XCpy(
+					"signedNumFmt.negativeNumberSign<-"+
+						"trailingNegNumSign"))
 
 		if err != nil {
 			return err
