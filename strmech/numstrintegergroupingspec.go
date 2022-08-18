@@ -313,26 +313,26 @@ func (nStrIntGroupSpec *NumStrIntegerGroupingSpec) Empty() {
 //
 // Input Parameters
 //
-//	incomingNStrIntGroupSpec   *NumStrIntegerGroupingSpec
-//	   - A pointer to an instance of NumStrIntegerGroupingSpec.
-//	     The internal member variable data values in this instance
-//	     will be compared to those in the current instance of
-//	     NumStrIntegerGroupingSpec. The results of this comparison
-//	     will be returned to the calling function as a boolean
-//	     value.
+//	incomingNStrIntGroupSpec	*NumStrIntegerGroupingSpec
+//		A pointer to an instance of NumStrIntegerGroupingSpec.
+//		The internal member variable data values in this instance
+//		will be compared to those in the current instance of
+//		NumStrIntegerGroupingSpec. The results of this comparison
+//		will be returned to the calling function as a boolean
+//		value.
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
 //	bool
-//	   - If the internal member variable data values contained in
-//	     input parameter 'incomingNStrIntGroupSpec' are equivalent
-//	     in all respects to those contained in the current instance
-//	     of NumStrIntegerGroupingSpec, this return value will be
-//	     set to 'true'.
+//		If the internal member variable data values contained in
+//		input parameter 'incomingNStrIntGroupSpec' are equivalent
+//		in all respects to those contained in the current instance
+//		of NumStrIntegerGroupingSpec, this return value will be
+//		set to 'true'.
 //
-//	     Otherwise, this method will return 'false'.
+//		Otherwise, this method will return 'false'.
 func (nStrIntGroupSpec *NumStrIntegerGroupingSpec) Equal(
 	incomingNStrIntGroupSpec *NumStrIntegerGroupingSpec) bool {
 
@@ -348,6 +348,104 @@ func (nStrIntGroupSpec *NumStrIntegerGroupingSpec) Equal(
 		nStrIntGroupSpec,
 		incomingNStrIntGroupSpec)
 
+}
+
+// GetIntegerSeparatorChars - Returns a string containing the
+// integer separator character or characters configured for the
+// current instance of NumStrIntegerGroupingSpec.
+//
+// Integer Separator Characters consist of one or more text
+// characters used to separate groups of integers. This
+// separator is also known as the 'thousands' separator in
+// the United States. It is used to separate groups of integer
+// digits to the left of the decimal separator (a.k.a. decimal
+// point). In the United States, the standard integer digits
+// separator is the comma (",").
+//
+//	United States Example:  1,000,000,000
+//
+// In many European countries, a single period ('.') is used
+// as the integer separator character.
+//
+//	European Example: 1.000.000.000
+//
+// Other countries and cultures use spaces, apostrophes or
+// multiple characters to separate integers.
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//	NONE
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//		string
+//			This method will return a string containing the Integer
+//	     Separator Symbol configured for the current instance of
+//	     NumStrIntegerGroupingSpec.
+func (nStrIntGroupSpec *NumStrIntegerGroupingSpec) GetIntegerSeparatorChars() string {
+
+	if nStrIntGroupSpec.lock == nil {
+		nStrIntGroupSpec.lock = new(sync.Mutex)
+	}
+
+	nStrIntGroupSpec.lock.Lock()
+
+	defer nStrIntGroupSpec.lock.Unlock()
+
+	return nStrIntGroupSpec.integerSeparatorChars.GetCharacterString()
+}
+
+// GetIntegerSeparatorRunes - Returns a rune array containing
+// the integer separator character or characters configured for
+// the current instance of NumStrIntegerGroupingSpec.
+//
+// Integer Separator Characters consist of one or more text
+// characters used to separate groups of integers. This
+// separator is also known as the 'thousands' separator in
+// the United States. It is used to separate groups of integer
+// digits to the left of the decimal separator (a.k.a. decimal
+// point). In the United States, the standard integer digits
+// separator is the comma (",").
+//
+//	United States Example:  1,000,000,000
+//
+// In many European countries, a single period ('.') is used
+// as the integer separator character.
+//
+//	European Example: 1.000.000.000
+//
+// Other countries and cultures use spaces, apostrophes or
+// multiple characters to separate integers.
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//	NONE
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//	[]rune
+//		This method will return an array of runes  containing the
+//		Integer Separator character or characters configured for
+//	 	the current instance of NumStrIntegerGroupingSpec.
+func (nStrIntGroupSpec *NumStrIntegerGroupingSpec) GetIntegerSeparatorRunes() []rune {
+
+	if nStrIntGroupSpec.lock == nil {
+		nStrIntGroupSpec.lock = new(sync.Mutex)
+	}
+
+	nStrIntGroupSpec.lock.Lock()
+
+	defer nStrIntGroupSpec.lock.Unlock()
+
+	return nStrIntGroupSpec.integerSeparatorChars.GetRuneArray()
 }
 
 // NewRunes - Creates and returns a new and fully populated

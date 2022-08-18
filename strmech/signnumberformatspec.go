@@ -644,6 +644,20 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) GetIntGroupingSpec(
 			"<-signedNumFmtSpec.intGroupingSpec"))
 }
 
+// GetIntSeparatorChars
+func (signedNumFmtSpec *SignedNumberFormatSpec) GetIntSeparatorChars() string {
+
+	if signedNumFmtSpec.lock == nil {
+		signedNumFmtSpec.lock = new(sync.Mutex)
+	}
+
+	signedNumFmtSpec.lock.Lock()
+
+	defer signedNumFmtSpec.lock.Unlock()
+
+	return ""
+}
+
 // NewSignedNumFmtSpec - Creates and returns a new instance of
 // SignedNumberFormatSpec.
 //
@@ -1278,7 +1292,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetDecimalSeparatorSpec(
 //		intGroupingSpec				*NumStrIntegerGroupingSpec
 //			An instance of NumStrIntegerGroupingSpec. The member
 //			variable data values contained in this instance
-//			will be copied to the current instanc of
+//			will be copied to the current instance of
 //		 	SignedNumberFormatSpec :
 //				'SignedNumberFormatSpec.intGroupingSpec'.
 //
