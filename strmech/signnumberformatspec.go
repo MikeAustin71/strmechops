@@ -2869,7 +2869,7 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setDecimalSeparatorParam
 }
 
 // setDecimalSeparatorSpec - Deletes and resets the member
-// variable data value for 'SignedNumberFormatSpec.decSeparator'
+// variable data value for 'signedNumFmt.decSeparator'
 // contained in the instance of SignedNumberFormatSpec passed as
 // an input parameter.
 //
@@ -2883,10 +2883,9 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setDecimalSeparatorParam
 //
 //	signedNumFmt				*SignedNumberFormatSpec
 //		A pointer to an instance of SignedNumberFormatSpec.
-//		All the member variable data values in this instance
-//		will be deleted and reset to the values contained
-//		in the decimal separator specification supplied by
-//		input parameter, 'decSeparator'.
+//		The member variable 'signedNumFmt.decSeparator'
+//		will be reset to the values provided by the
+//		following input parameters.
 //
 //
 //	decSeparatorSpec			*DecimalSeparatorSpec
@@ -3088,49 +3087,49 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setIntegerGroupingParams
 	return err
 }
 
-// setDecimalSeparatorSpec - Deletes and resets the member
-// variable data value for 'SignedNumberFormatSpec.decSeparator'
-// contained in the instance of SignedNumberFormatSpec passed as
-// an input parameter.
+// setIntegerGroupingSpec - Deletes and resets the member
+// variable data value for 'signedNumFmt.intGroupingSpec'
+// contained in the instance of SignedNumberFormatSpec
+// passed as an input parameter.
 //
-// This method receives an instance of 'DecimalSeparatorSpec' and
-// copies the member variable data values to
-// 'signedNumFmt.decSeparator'.
+// This method receives an instance of
+// 'NumStrIntegerGroupingSpec' and copies the member variable
+// data values to 'signedNumFmt.intGroupingSpec'.
 //
 // ----------------------------------------------------------------
 //
 // # Input Parameters
 //
-//		signedNumFmt				*SignedNumberFormatSpec
-//			A pointer to an instance of SignedNumberFormatSpec.
-//			All the member variable data values in this instance
-//			will be deleted and reset to the values contained
-//			in the Integer Grouping Specification supplied by
-//			input parameter, 'intGroupingSpec'.
+//	signedNumFmt				*SignedNumberFormatSpec
+//		A pointer to an instance of SignedNumberFormatSpec.
+//		All the member variable data values in this instance
+//		will be deleted and reset to the values contained
+//		in the Integer Grouping Specification supplied by
+//		input parameter, 'intGroupingSpec'.
 //
 //
-//		intGroupingSpec			*NumStrIntegerGroupingSpec
-//			An instance of NumStrIntegerGroupingSpec. The member
-//			variable data values contained in this instance
-//			will be copied to:
-//				'signedNumFmt.intGroupingSpec'.
+//	intGroupingSpec				*NumStrIntegerGroupingSpec
+//		An instance of NumStrIntegerGroupingSpec. The member
+//		variable data values contained in this instance
+//		will be copied to:
+//			'signedNumFmt.intGroupingSpec'.
 //
-//			In the United States, the Integer Group Specification
-//			character is a comma (',') and integer grouped in
-//	     thousands.
-//				United States Example: 1,000,000,000
+//		In the United States, the Integer Group Specification
+//		character is a comma (',') and integer grouped in
+//		thousands.
+//			United States Example: 1,000,000,000
 //
-//		errPrefDto					*ePref.ErrPrefixDto
-//			This object encapsulates an error prefix string which is
-//			included in all returned error messages. Usually, it
-//			contains the name of the calling method or methods listed
-//			as a function chain.
+//	errPrefDto					*ePref.ErrPrefixDto
+//		This object encapsulates an error prefix string which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods listed
+//		as a function chain.
 //
-//			If no error prefix information is needed, set this
-//			parameter to 'nil'.
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
 //
-//			Type ErrPrefixDto is included in the 'errpref' software
-//			package, "github.com/MikeAustin71/errpref".
+//		Type ErrPrefixDto is included in the 'errpref' software
+//		package, "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
@@ -3692,4 +3691,110 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setRoundingParams(
 
 	return err
 
+}
+
+// setRoundingSpec - Deletes and resets the member variable
+// data value for 'signedNumFmt.roundingSpec'
+// contained in the instance of SignedNumberFormatSpec passed
+// as an input parameter.
+//
+// This method receives an instance of 'NumStrRoundingSpec'
+// and copies the member variable data values to
+// 'signedNumFmt.roundingSpec'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	signedNumFmt				*SignedNumberFormatSpec
+//		A pointer to an instance of SignedNumberFormatSpec.
+//		The member variable 'signedNumFmt.roundingSpec'
+//		will be reset to the values provided by the
+//		following input parameters.
+//
+//	roundingSpec				*NumStrRoundingSpec
+//		An instance of NumStrRoundingSpec. The member
+//		variable data values contained in this instance
+//		will be copied to:
+//			'signedNumFmt.roundingSpec'.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//		This object encapsulates an error prefix string which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods listed
+//		as a function chain.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref' software
+//		package, "github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	err							error
+//		If this method completes successfully, this returned error
+//		Type is set equal to 'nil'. If errors are encountered
+//		during processing, the returned error Type will encapsulate
+//		an error message.
+//
+//		If an error message is returned, the text value for input
+//		parameter 'errPrefDto' (error prefix) will be prefixed or
+//		attached at the beginning of the error message.
+func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setRoundingSpec(
+	signedNumFmt *SignedNumberFormatSpec,
+	roundingSpec *NumStrRoundingSpec,
+	errPrefDto *ePref.ErrPrefixDto) (
+	err error) {
+
+	if signedNumFmtSpecAtom.lock == nil {
+		signedNumFmtSpecAtom.lock = new(sync.Mutex)
+	}
+
+	signedNumFmtSpecAtom.lock.Lock()
+
+	defer signedNumFmtSpecAtom.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"signedNumFmtSpecNanobot."+
+			"setRoundingParams()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if signedNumFmt == nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'signedNumFmt' is invalid!\n"+
+			"'signedNumFmt' is a 'nil' pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if roundingSpec == nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'roundingSpec' is invalid!\n"+
+			"'roundingSpec' is a 'nil' pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	signedNumFmt.roundingSpec.Empty()
+
+	err = signedNumFmt.roundingSpec.CopyIn(
+		roundingSpec,
+		ePrefix.XCpy(
+			"signedNumFmt.roundingSpec<-"+
+				"roundingSpec"))
+
+	return err
 }
