@@ -53,90 +53,90 @@ type SignedNumberFormatSpec struct {
 }
 
 // CopyIn - Copies the data fields from an incoming instance of
-// NumStrNumberFieldSpec ('incomingNStrNumFieldSpec')
-// to the data fields of the current NumStrNumberFieldSpec
-// instance ('nStrNumberFieldSpec').
+// SignedNumberFormatSpec ('incomingSignedNumFmt')
+// to the data fields of the current SignedNumberFormatSpec
+// instance ('signedNumFmtSpec').
 //
 // ----------------------------------------------------------------
 //
 // IMPORTANT
-// All the data fields in current NumStrNumberFieldSpec
-// instance ('nStrNumberFieldSpec') will be deleted and
-// overwritten.
+// All the member varialbe data values in the current
+// SignedNumberFormatSpec instance ('signedNumFmtSpec') will
+// be deleted and replaced.
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//			 incomingNStrNumFieldSpec *NumStrNumberFieldSpec
-//			   - A pointer to an instance of NumStrNumberFieldSpec.
-//			     This method will NOT change the values of internal member
-//			     variables contained in this instance.
+//	incomingSignedNumFmt		*SignedNumberFormatSpec
+//		A pointer to an instance of SignedNumberFormatSpec.
+//		This method will NOT change the values of internal
+//		member variables contained in this instance.
 //
-//			     All data values in this NumStrNumberFieldSpec instance
-//			     will be copied to current NumStrNumberFieldSpec
-//			     instance ('nStrNumberFieldSpec').
+//		All data values in this SignedNumberFormatSpec instance
+//		will be copied to current SignedNumberFormatSpec
+//		instance ('signedNumFmtSpec').
 //
-//			     If parameter 'incomingNStrNumFieldSpec' is determined to
-//			     be invalid, an error will be returned.
+//		If parameter 'incomingSignedNumFmt' is determined to
+//		be invalid, an error will be returned.
 //
 //	 errorPrefix                interface{}
-//		   - This object encapsulates error prefix text which is
-//		     included in all returned error messages. Usually, it
-//		     contains the name of the calling method or methods
-//		     listed as a method or function chain of execution.
+//		This object encapsulates error prefix text which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods
+//		listed as a method or function chain of execution.
 //
-//		     If no error prefix information is needed, set this
-//	      parameter to 'nil'.
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
 //
-//		     This empty interface must be convertible to one of the
-//		     following types:
+//		This empty interface must be convertible to one of the
+//		following types:
 //
-//		     1. nil - A nil value is valid and generates an empty
-//		        collection of error prefix and error context
-//		        information.
+//		1. nil - A nil value is valid and generates an empty
+//		   collection of error prefix and error context
+//		   information.
 //
-//		     2. string - A string containing error prefix information.
+//		2. string - A string containing error prefix information.
 //
-//		     3. []string A one-dimensional slice of strings containing
-//		        error prefix information
+//		3. []string A one-dimensional slice of strings containing
+//		   error prefix information
 //
-//		     4. [][2]string A two-dimensional slice of strings
-//		        containing error prefix and error context information.
+//		4. [][2]string A two-dimensional slice of strings
+//		   containing error prefix and error context information.
 //
-//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//		        from this object will be copied for use in error and
-//		        informational messages.
+//		5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		   from this object will be copied for use in error and
+//		   informational messages.
 //
-//		     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//		        Information from this object will be copied for use in
-//		        error and informational messages.
+//		6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		   Information from this object will be copied for use in
+//		   error and informational messages.
 //
-//		     7. IBasicErrorPrefix - An interface to a method generating
-//		        a two-dimensional slice of strings containing error
-//		        prefix and error context information.
+//		7. IBasicErrorPrefix - An interface to a method generating
+//		   a two-dimensional slice of strings containing error
+//		   prefix and error context information.
 //
-//		     If parameter 'errorPrefix' is NOT convertible to one of
-//		     the valid types listed above, it will be considered
-//		     invalid and trigger the return of an error.
+//		If parameter 'errorPrefix' is NOT convertible to one of
+//		the valid types listed above, it will be considered
+//		invalid and trigger the return of an error.
 //
-//		     Types ErrPrefixDto and IBasicErrorPrefix are included in
-//		     the 'errpref' software package,
-//		     "github.com/MikeAustin71/errpref".
+//		Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		the 'errpref' software package,
+//		"github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
 //	error
-//	   - If this method completes successfully and no errors are
-//	     encountered this return value is set to 'nil'. Otherwise,
-//	     if errors are encountered, this return value will contain
-//	     an appropriate error message.
+//		If this method completes successfully and no errors are
+//		encountered this return value is set to 'nil'. Otherwise,
+//		if errors are encountered, this return value will contain
+//		an appropriate error message.
 //
-//	     If an error message is returned, the text value of input
-//	     parameter 'errorPrefix' will be inserted or prefixed at
-//	     the beginning of the error message.
+//		If an error message is returned, the text value of input
+//		parameter 'errorPrefix' will be inserted or prefixed at
+//		the beginning of the error message.
 func (signedNumFmtSpec *SignedNumberFormatSpec) CopyIn(
 	incomingSignedNumFmt *SignedNumberFormatSpec,
 	errorPrefix interface{}) error {
@@ -170,6 +170,113 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) CopyIn(
 			ePrefix.XCpy(
 				"signedNumFmtSpec<-"+
 					"incomingSignedNumFmt"))
+}
+
+// CopyOut - Returns a deep copy of the current
+// SignedNumberFormatSpec instance.
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//	 errorPrefix                interface{}
+//		This object encapsulates error prefix text which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods
+//		listed as a method or function chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of the
+//		following types:
+//
+//		1. nil - A nil value is valid and generates an empty
+//		   collection of error prefix and error context
+//		   information.
+//
+//		2. string - A string containing error prefix information.
+//
+//		3. []string A one-dimensional slice of strings containing
+//		   error prefix information
+//
+//		4. [][2]string A two-dimensional slice of strings
+//		   containing error prefix and error context information.
+//
+//		5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		   from this object will be copied for use in error and
+//		   informational messages.
+//
+//		6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		   Information from this object will be copied for use in
+//		   error and informational messages.
+//
+//		7. IBasicErrorPrefix - An interface to a method generating
+//		   a two-dimensional slice of strings containing error
+//		   prefix and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible to one of
+//		the valid types listed above, it will be considered
+//		invalid and trigger the return of an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		the 'errpref' software package,
+//		"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//	deepCopySignedNumFmtSpec	SignedNumberFormatSpec
+//		If this method completes successfully and no errors are
+//		encountered, this parameter will return a deep copy of
+//		the current SignedNumberFormatSpec instance.
+//
+//
+//	err							error
+//		If the method completes successfully and no errors are
+//		encountered this return value is set to 'nil'. Otherwise,
+//		if errors are encountered, this return value will contain
+//		an appropriate error message.
+//
+//		If an error message is returned, the text value of input
+//		parameter 'errorPrefix' will be inserted or prefixed at
+//		the beginning of the error message.
+func (signedNumFmtSpec *SignedNumberFormatSpec) CopyOut(
+	errorPrefix interface{}) (
+	deepCopySignedNumFmtSpec SignedNumberFormatSpec,
+	err error) {
+
+	if signedNumFmtSpec.lock == nil {
+		signedNumFmtSpec.lock = new(sync.Mutex)
+	}
+
+	signedNumFmtSpec.lock.Lock()
+
+	defer signedNumFmtSpec.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"SignedNumberFormatSpec."+
+			"CopyOut()",
+		"")
+
+	if err != nil {
+		return deepCopySignedNumFmtSpec, err
+	}
+
+	err = new(signedNumFmtSpecNanobot).
+		copySignedNumberFormatSpec(
+			&deepCopySignedNumFmtSpec,
+			signedNumFmtSpec,
+			ePrefix.XCpy(
+				"deepCopySignedNumFmtSpec<-"+
+					"signedNumFmtSpec"))
+
+	return deepCopySignedNumFmtSpec, err
 }
 
 // NewSignedNumFmtSpec - Creates and returns a new instance of
