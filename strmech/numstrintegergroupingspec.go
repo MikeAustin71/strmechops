@@ -501,8 +501,9 @@ func (nStrIntGroupSpec *NumStrIntegerGroupingSpec) GetIntegerSeparatorChars() st
 // # Return Values
 //
 //	IntegerSeparatorDto
-//		If this method completes successfully, a fully populated
-//		instance of IntegerSeparatorDto will be returned.
+//		If this method completes successfully, a new fully
+//		populated instance of IntegerSeparatorDto will be
+//		returned.
 //
 //	error
 //		If this method completes successfully and no errors are

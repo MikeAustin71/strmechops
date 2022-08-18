@@ -693,6 +693,113 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) GetIntSeparatorChars() string {
 	return signedNumFmtSpec.intGroupingSpec.GetIntegerSeparatorChars()
 }
 
+// GetIntegerSeparatorDto - Returns an instance of
+// IntegerSeparatorDto based on the configuration parameters
+// contained within the current instance of
+// SignedNumberFormatSpec.
+//
+// IntegerSeparatorDto is used by low level number string
+// formatting functions to complete the number string generation
+// operation.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	 errorPrefix                interface{}
+//		   - This object encapsulates error prefix text which is
+//		     included in all returned error messages. Usually, it
+//		     contains the name of the calling method or methods
+//		     listed as a method or function chain of execution.
+//
+//		     If no error prefix information is needed, set this
+//		     parameter to 'nil'.
+//
+//		     This empty interface must be convertible to one of the
+//		     following types:
+//
+//		     1. nil - A nil value is valid and generates an empty
+//		        collection of error prefix and error context
+//		        information.
+//
+//		     2. string - A string containing error prefix information.
+//
+//		     3. []string A one-dimensional slice of strings containing
+//		        error prefix information
+//
+//		     4. [][2]string A two-dimensional slice of strings
+//		        containing error prefix and error context information.
+//
+//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		        from this object will be copied for use in error and
+//		        informational messages.
+//
+//		     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		        Information from this object will be copied for use in
+//		        error and informational messages.
+//
+//		     7. IBasicErrorPrefix - An interface to a method generating
+//		        a two-dimensional slice of strings containing error
+//		        prefix and error context information.
+//
+//		     If parameter 'errorPrefix' is NOT convertible to one of
+//		     the valid types listed above, it will be considered
+//		     invalid and trigger the return of an error.
+//
+//		     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		     the 'errpref' software package,
+//		     "github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	IntegerSeparatorDto
+//		If this method completes successfully, a new, fully
+//		populated instance of IntegerSeparatorDto will be
+//		returned.
+//
+//	error
+//		If this method completes successfully and no errors are
+//		encountered this return value is set to 'nil'. Otherwise,
+//		if errors are encountered, this return value will contain
+//		an appropriate error message.
+//
+//		If an error message is returned, the text value of input
+//		parameter 'errorPrefix' will be inserted or prefixed at
+//		the beginning of the error message.
+func (signedNumFmtSpec *SignedNumberFormatSpec) GetIntegerSeparatorDto(
+	errorPrefix interface{}) (
+	IntegerSeparatorDto,
+	error) {
+
+	if signedNumFmtSpec.lock == nil {
+		signedNumFmtSpec.lock = new(sync.Mutex)
+	}
+
+	signedNumFmtSpec.lock.Lock()
+
+	defer signedNumFmtSpec.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"SignedNumberFormatSpec."+
+			"GetIntegerSeparatorDto()",
+		"")
+
+	if err != nil {
+		return IntegerSeparatorDto{}, err
+	}
+
+	return signedNumFmtSpec.intGroupingSpec.GetIntegerSeparatorDto(
+		ePrefix.XCpy(
+			"<-signedNumFmtSpec.intGroupingSpec"))
+}
+
 // GetIntSeparatorRunes - Returns a rune array containing the
 // Integer Separator character or characters configured for the
 // current instance of SignedNumberFormatSpec.
