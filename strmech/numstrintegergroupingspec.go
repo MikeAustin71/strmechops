@@ -18,9 +18,10 @@ type NumStrIntegerGroupingSpec struct {
 
 	intGroupingType IntegerGroupingType
 	// Specifies the type of integer grouping
-	// algorithm which will be applied to
-	// integer digit grouping in a formatted
-	// number string. Possible values are:
+	// algorithm or grouping sequence which will
+	// be applied to integer digit grouping in a
+	// formatted number string. Possible values
+	// are:
 	//	IntGroupingType.None()
 	//	IntGroupingType.Thousands()
 	//	IntGroupingType.IndiaNumbering()
@@ -348,6 +349,51 @@ func (nStrIntGroupSpec *NumStrIntegerGroupingSpec) Equal(
 		nStrIntGroupSpec,
 		incomingNStrIntGroupSpec)
 
+}
+
+// GetIntegerGroupingType - Returns the Integer Grouping Type
+// configured for the current instance of NumStrIntegerGroupingSpec.
+//
+// Integer Grouping Type is an enumeration specifying the type of
+// integer grouping algorithm or grouping sequence which will be
+// applied to integer digit grouping in a formatted number string.
+// Possible values are listed as follows:
+//
+//	IntGroupingType.None()
+//
+//	IntGroupingType.Thousands()
+//		Example: 1,000,000,000
+//
+//	IntGroupingType.IndiaNumbering()
+//		Example: 6,78,90,00,00,00,00,000
+//
+//	IntGroupingType.ChineseNumbering()
+//		Example: 12,3456,7890,2345
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//	NONE
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//	IntegerGroupingType
+//		This method will the Integer Grouping Type configured for
+//		the current instance of NumStrIntegerGroupingSpec.
+func (nStrIntGroupSpec *NumStrIntegerGroupingSpec) GetIntegerGroupingType() IntegerGroupingType {
+
+	if nStrIntGroupSpec.lock == nil {
+		nStrIntGroupSpec.lock = new(sync.Mutex)
+	}
+
+	nStrIntGroupSpec.lock.Lock()
+
+	defer nStrIntGroupSpec.lock.Unlock()
+
+	return nStrIntGroupSpec.intGroupingType.XReturnNoneIfInvalid()
 }
 
 // GetIntegerSeparatorChars - Returns a string containing the
