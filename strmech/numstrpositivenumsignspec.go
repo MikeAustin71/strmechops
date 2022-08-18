@@ -34,6 +34,38 @@ import (
 // users have the flexibility to specify either
 // leading, trailing or both leading and trailing
 // positive number symbols.
+//
+// # Usage
+//
+// Example-1: Leading Positive Number Symbols
+//
+//	Leading Symbols: "+ "
+//	Number String:   "+ 123.456"
+//
+// Example-2: Leading Positive Number Symbols
+//
+//	Leading Symbols: "$+"
+//	Number String:   "$+123.456"
+//
+// Example-3: Leading Positive Number Symbols
+//
+//	Leading Symbols: "$"
+//	Number String:   "$123.456"
+//
+// Example-4: Trailing Positive Number Symbols
+//
+//	Trailing Symbols: " +"
+//	Number String:   "123.456 +"
+//
+// Example-5: Trailing Positive Number Symbols
+//
+//	Trailing Symbols: "+$"
+//	Number String:   "123.456+$"
+//
+// Example-6: Trailing Positive Number Symbols
+//
+//	Trailing Symbols: "$"
+//	Number String:   "123.456$"
 type NumStrPositiveNumberSymbolsSpec struct {
 	leadingPosNumSymbols RuneArrayDto
 	// Contains the character or characters which
