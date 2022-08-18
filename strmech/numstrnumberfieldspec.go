@@ -340,26 +340,26 @@ func (nStrNumberFieldSpec *NumStrNumberFieldSpec) Empty() {
 //
 // Input Parameters
 //
-//	incomingNStrNumFieldSpec   *NumStrNumberFieldSpec
-//	   - A pointer to an external instance of
-//	     NumStrNumberFieldSpec. The internal member variable
-//	     data values in this instance will be compared to those
-//	     in the current instance of NumStrNumberFieldSpec. The
-//	     results of this comparison will be returned to the
-//	     calling function as a boolean value.
+//	incomingNStrNumFieldSpec	*NumStrNumberFieldSpec
+//		A pointer to an external instance of
+//		NumStrNumberFieldSpec. The internal member variable
+//		data values in this instance will be compared to those
+//		in the current instance of NumStrNumberFieldSpec. The
+//		results of this comparison will be returned to the
+//		calling function as a boolean value.
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
 //	bool
-//	   - If the internal member variable data values contained in
-//	     input parameter 'incomingNStrNumFieldSpec' are equivalent
-//	     in all respects to those contained in the current
-//	     instance of 'incomingNStrNumFieldSpec', this return value
-//	     will be set to 'true'.
+//		If the internal member variable data values contained in
+//		input parameter 'incomingNStrNumFieldSpec' are equivalent
+//		in all respects to those contained in the current
+//		instance of 'NumStrNumberFieldSpec', this return value
+//		will be set to 'true'.
 //
-//	     Otherwise, this method will return 'false'.
+//		Otherwise, this method will return 'false'.
 func (nStrNumberFieldSpec *NumStrNumberFieldSpec) Equal(
 	incomingNStrNumFieldSpec *NumStrNumberFieldSpec) bool {
 
