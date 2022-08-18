@@ -414,112 +414,112 @@ func (nStrNumberFieldSpec *NumStrNumberFieldSpec) GetNumFieldJustification() Tex
 //
 // Input Parameters
 //
-//			fieldLength                int
-//			   - This parameter defines the length of the text field in
-//			     which the numeric value will be displayed within a
-//			     number string.
+//	fieldLength					int
+//		This parameter defines the length of the text field in
+//		which the numeric value will be displayed within a
+//		number string.
 //
-//			     If 'fieldLength' is less than the length of the numeric
-//			     value string, it will be automatically set equal to the
-//			     length of that numeric value string.
+//		If 'fieldLength' is less than the length of the numeric
+//		value string, it will be automatically set equal to the
+//		length of that numeric value string.
 //
-//			     To automatically set the value of fieldLength to the string
-//			     length of the numeric value, set this parameter to a value
-//			     of minus one (-1).
+//		To automatically set the value of fieldLength to the string
+//		length of the numeric value, set this parameter to a value
+//		of minus one (-1).
 //
-//			     If this parameter is submitted with a value less than minus
-//			     one (-1) or greater than 1-million (1,000,000), an error will
-//			     be returned.
+//		If this parameter is submitted with a value less than minus
+//		one (-1) or greater than 1-million (1,000,000), an error will
+//		be returned.
 //
-//			fieldJustification         TextJustify
-//			   - An enumeration which specifies the justification of the
-//			     numeric value string within the number field length specified
-//			     by input parameter 'fieldLength'.
+//	fieldJustification			TextJustify
+//		An enumeration which specifies the justification of the
+//		numeric value string within the number field length specified
+//		by input parameter 'fieldLength'.
 //
-//			     Text justification can only be evaluated in the context of
-//			     a number string, field length and a 'textJustification'
-//			     object of type TextJustify. This is because number strings
-//			     with a field length equal to or less than the length of the
-//			     numeric value string never use text justification. In these
-//			     cases, text justification is completely ignored.
+//		Text justification can only be evaluated in the context of
+//		a number string, field length and a 'textJustification'
+//		object of type TextJustify. This is because number strings
+//		with a field length equal to or less than the length of the
+//		numeric value string never use text justification. In these
+//		cases, text justification is completely ignored.
 //
-//			     If the field length parameter ('fieldLength') is greater
-//			     than the length of the numeric value string, text
-//			     justification must be equal to one of these
-//			     three valid values:
-//			               TextJustify(0).Left()
-//			               TextJustify(0).Right()
-//			               TextJustify(0).Center()
+//		If the field length parameter ('fieldLength') is greater
+//		than the length of the numeric value string, text
+//		justification must be equal to one of these
+//		three valid values:
+//			TextJustify(0).Left()
+//			TextJustify(0).Right()
+//			TextJustify(0).Center()
 //
-//			     You can also use the abbreviated text justification
-//			     enumeration syntax as follows:
+//		You can also use the abbreviated text justification
+//		enumeration syntax as follows:
 //
-//			               TxtJustify.Left()
-//			               TxtJustify.Right()
-//			               TxtJustify.Center()
+//			TxtJustify.Left()
+//			TxtJustify.Right()
+//			TxtJustify.Center()
 //
-//		 errorPrefix                interface{}
-//			   - This object encapsulates error prefix text which is
-//			     included in all returned error messages. Usually, it
-//			     contains the name of the calling method or methods
-//			     listed as a method or function chain of execution.
+//	errorPrefix					interface{}
+//		This object encapsulates error prefix text which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods
+//		listed as a method or function chain of execution.
 //
-//			     If no error prefix information is needed, set this
-//	       parameter to 'nil'.
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
 //
-//			     This empty interface must be convertible to one of the
-//			     following types:
+//		This empty interface must be convertible to one of the
+//		following types:
 //
-//			     1. nil - A nil value is valid and generates an empty
-//			        collection of error prefix and error context
-//			        information.
+//		1. nil - A nil value is valid and generates an empty
+//		   collection of error prefix and error context
+//		   information.
 //
-//			     2. string - A string containing error prefix information.
+//		2. string - A string containing error prefix information.
 //
-//			     3. []string A one-dimensional slice of strings containing
-//			        error prefix information
+//		3. []string A one-dimensional slice of strings containing
+//		   error prefix information
 //
-//			     4. [][2]string A two-dimensional slice of strings
-//			        containing error prefix and error context information.
+//		4. [][2]string A two-dimensional slice of strings
+//		   containing error prefix and error context information.
 //
-//			     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//			        from this object will be copied for use in error and
-//			        informational messages.
+//		5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		   from this object will be copied for use in error and
+//		   informational messages.
 //
-//			     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//			        Information from this object will be copied for use in
-//			        error and informational messages.
+//		6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		   Information from this object will be copied for use in
+//		   error and informational messages.
 //
-//			     7. IBasicErrorPrefix - An interface to a method generating
-//			        a two-dimensional slice of strings containing error
-//			        prefix and error context information.
+//		7. IBasicErrorPrefix - An interface to a method generating
+//		   a two-dimensional slice of strings containing error
+//		   prefix and error context information.
 //
-//			     If parameter 'errorPrefix' is NOT convertible to one of
-//			     the valid types listed above, it will be considered
-//			     invalid and trigger the return of an error.
+//		If parameter 'errorPrefix' is NOT convertible to one of
+//		the valid types listed above, it will be considered
+//		invalid and trigger the return of an error.
 //
-//			     Types ErrPrefixDto and IBasicErrorPrefix are included in
-//			     the 'errpref' software package,
-//			     "github.com/MikeAustin71/errpref".
+//		Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		the 'errpref' software package,
+//		"github.com/MikeAustin71/errpref".
 //
 // -----------------------------------------------------------------
 //
 // Return Values
 //
-//	newNStrNumFieldSpec        NumStrNumberFieldSpec
-//	   - If this method completes successfully, a new instance of
-//	     NumStrNumberFieldSpec will be created and returned.
+//	newNStrNumFieldSpec			NumStrNumberFieldSpec
+//		If this method completes successfully, a new instance of
+//		NumStrNumberFieldSpec will be created and returned.
 //
-//	err                        error
-//	   - If this method completes successfully, the returned error
-//	     Type is set equal to 'nil'.
+//	err							error
+//		If this method completes successfully, the returned error
+//		Type is set equal to 'nil'.
 //
-//	     If errors are encountered during processing, the returned
-//	     error Type will encapsulate an error message. This
-//	     returned error message will incorporate the method chain
-//	     and text passed by input parameter, 'errorPrefix'. The
-//	     'errorPrefix' text will be attached to the beginning of
-//	     the error message.
+//		If errors are encountered during processing, the returned
+//		error Type will encapsulate an error message. This
+//		returned error message will incorporate the method chain
+//		and text passed by input parameter, 'errorPrefix'. The
+//		'errorPrefix' text will be attached to the beginning of
+//		the error message.
 func (nStrNumberFieldSpec *NumStrNumberFieldSpec) NewFieldSpec(
 	fieldLength int,
 	fieldJustification TextJustify,
@@ -573,108 +573,107 @@ func (nStrNumberFieldSpec *NumStrNumberFieldSpec) NewFieldSpec(
 //
 // # Input Parameters
 //
-//			fieldLength                int
-//			   - This parameter defines the length of the text field in
-//			     which the numeric value will be displayed within a
-//			     number string.
+//	fieldLength					int
+//		This parameter defines the length of the text field in
+//		which the numeric value will be displayed within a
+//		number string.
 //
-//			     If 'fieldLength' is less than the length of the numeric
-//			     value string, it will be automatically set equal to the
-//			     length of that numeric value string.
+//		If 'fieldLength' is less than the length of the numeric
+//		value string, it will be automatically set equal to the
+//		length of that numeric value string.
 //
-//			     To automatically set the value of fieldLength to the string
-//			     length of the numeric value, set this parameter to a value
-//			     of minus one (-1).
+//		To automatically set the value of fieldLength to the string
+//		length of the numeric value, set this parameter to a value
+//		of minus one (-1).
 //
-//			     If this parameter is submitted with a value less than minus
-//			     one (-1) or greater than 1-million (1,000,000), an error will
-//			     be returned.
+//		If this parameter is submitted with a value less than minus
+//		one (-1) or greater than 1-million (1,000,000), an error will
+//		be returned.
 //
-//			fieldJustification         TextJustify
-//			   - An enumeration which specifies the justification of the
-//			     numeric value string within the number field length specified
-//			     by input parameter 'fieldLength'.
+//	fieldJustification			TextJustify
+//		An enumeration which specifies the justification of the
+//		numeric value within the number field length specified
+//		by input parameter 'fieldLength'.
 //
-//			     Text justification can only be evaluated in the context of
-//			     a number string, field length and a 'textJustification'
-//			     object of type TextJustify. This is because number strings
-//			     with a field length equal to or less than the length of the
-//			     numeric value string never use text justification. In these
-//			     cases, text justification is completely ignored.
+//		Text justification can only be evaluated in the context of
+//		a number string, field length and a 'textJustification'
+//		object of type TextJustify. This is because number strings
+//		with a field length equal to or less than the length of the
+//		numeric value string never use text justification. In these
+//		cases, text justification is completely ignored.
 //
-//			     If the field length parameter ('fieldLength') is greater
-//			     than the length of the numeric value string, text
-//			     justification must be equal to one of these
-//			     three valid values:
-//			               TextJustify(0).Left()
-//			               TextJustify(0).Right()
-//			               TextJustify(0).Center()
+//		If the field length parameter ('fieldLength') is greater
+//		than the length of the numeric value string, text
+//		justification must be equal to one of these
+//		three valid values:
+//			TextJustify(0).Left()
+//			TextJustify(0).Right()
+//			TextJustify(0).Center()
 //
-//			     You can also use the abbreviated text justification
-//			     enumeration syntax as follows:
+//		You can also use the abbreviated text justification
+//		enumeration syntax as follows:
+//			TxtJustify.Left()
+//			TxtJustify.Right()
+//			TxtJustify.Center()
 //
-//			               TxtJustify.Left()
-//			               TxtJustify.Right()
-//			               TxtJustify.Center()
+//	errorPrefix					interface{}
+//		This object encapsulates error prefix text which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods
+//		listed as a method or function chain of execution.
 //
-//		 errorPrefix                interface{}
-//			   - This object encapsulates error prefix text which is
-//			     included in all returned error messages. Usually, it
-//			     contains the name of the calling method or methods
-//			     listed as a method or function chain of execution.
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
 //
-//			     If no error prefix information is needed, set this
-//	       parameter to 'nil'.
+//		This empty interface must be convertible to one of the
+//		following types:
 //
-//			     This empty interface must be convertible to one of the
-//			     following types:
+//		1. nil - A nil value is valid and generates an empty
+//		   collection of error prefix and error context
+//		   information.
 //
-//			     1. nil - A nil value is valid and generates an empty
-//			        collection of error prefix and error context
-//			        information.
+//		2. string - A string containing error prefix information.
 //
-//			     2. string - A string containing error prefix information.
+//		3. []string A one-dimensional slice of strings containing
+//		   error prefix information
 //
-//			     3. []string A one-dimensional slice of strings containing
-//			        error prefix information
+//		4. [][2]string A two-dimensional slice of strings
+//		   containing error prefix and error context information.
 //
-//			     4. [][2]string A two-dimensional slice of strings
-//			        containing error prefix and error context information.
+//		5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		   from this object will be copied for use in error and
+//		   informational messages.
 //
-//			     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//			        from this object will be copied for use in error and
-//			        informational messages.
+//		6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		   Information from this object will be copied for use in
+//		   error and informational messages.
 //
-//			     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//			        Information from this object will be copied for use in
-//			        error and informational messages.
+//		7. IBasicErrorPrefix - An interface to a method generating
+//		   a two-dimensional slice of strings containing error
+//		   prefix and error context information.
 //
-//			     7. IBasicErrorPrefix - An interface to a method generating
-//			        a two-dimensional slice of strings containing error
-//			        prefix and error context information.
+//		If parameter 'errorPrefix' is NOT convertible to one of
+//		the valid types listed above, it will be considered
+//		invalid and trigger the return of an error.
 //
-//			     If parameter 'errorPrefix' is NOT convertible to one of
-//			     the valid types listed above, it will be considered
-//			     invalid and trigger the return of an error.
-//
-//			     Types ErrPrefixDto and IBasicErrorPrefix are included in
-//			     the 'errpref' software package,
-//			     "github.com/MikeAustin71/errpref".
+//		Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		the 'errpref' software package,
+//		"github.com/MikeAustin71/errpref".
 //
 // -----------------------------------------------------------------
 //
 // # Return Values
 //
 //	error
-//	   - If this method completes successfully, the returned error
-//	     Type is set equal to 'nil'.
+//		If this method completes successfully, the returned error
+//		Type is set equal to 'nil'.
 //
-//	     If errors are encountered during processing, the returned
-//	     error Type will encapsulate an error message. This
-//	     returned error message will incorporate the method chain
-//	     and text passed by input parameter, 'errorPrefix'. The
-//	     'errorPrefix' text will be attached to the beginning of
-//	     the error message.
+//		If errors are encountered during processing, the returned
+//		error Type will encapsulate an error message. This
+//		returned error message will incorporate the method chain
+//		and text passed by input parameter, 'errorPrefix'. The
+//		'errorPrefix' text will be attached to the beginning of
+//		the error message.
 func (nStrNumberFieldSpec *NumStrNumberFieldSpec) SetFieldSpec(
 	fieldLength int,
 	fieldJustification TextJustify,
@@ -728,81 +727,81 @@ func (nStrNumberFieldSpec *NumStrNumberFieldSpec) SetFieldSpec(
 //
 // # Input Parameters
 //
-//	 fieldLength                int
-//	    - This parameter defines the length of the text field in
-//	      which the numeric value will be displayed within a
-//	      number string.
+//	fieldLength					int
+//		This parameter defines the length of the text field in
+//		which the numeric value will be displayed within a
+//		number string.
 //
-//	      If 'fieldLength' is less than the length of the numeric
-//	      value string, it will be automatically set equal to the
-//	      length of that numeric value string.
+//		If 'fieldLength' is less than the length of the numeric
+//		value string, it will be automatically set equal to the
+//		length of that numeric value string.
 //
-//	      To automatically set the value of fieldLength to the string
-//	      length of the numeric value, set this parameter to a value
-//	      of minus one (-1).
+//		To automatically set the value of fieldLength to the string
+//		length of the numeric value, set this parameter to a value
+//		of minus one (-1).
 //
-//	      If this parameter is submitted with a value less than minus
-//	      one (-1) or greater than 1-million (1,000,000), an error will
-//	      be returned.
+//		If this parameter is submitted with a value less than minus
+//		one (-1) or greater than 1-million (1,000,000), an error will
+//		be returned.
 //
 //	 errorPrefix                interface{}
-//		   - This object encapsulates error prefix text which is
-//		     included in all returned error messages. Usually, it
-//		     contains the name of the calling method or methods
-//		     listed as a method or function chain of execution.
+//		This object encapsulates error prefix text which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods
+//		listed as a method or function chain of execution.
 //
-//		     If no error prefix information is needed, set this
-//	      parameter to 'nil'.
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
 //
-//		     This empty interface must be convertible to one of the
-//		     following types:
+//		This empty interface must be convertible to one of the
+//		following types:
 //
-//		     1. nil - A nil value is valid and generates an empty
-//		        collection of error prefix and error context
-//		        information.
+//		1. nil - A nil value is valid and generates an empty
+//		   collection of error prefix and error context
+//		   information.
 //
-//		     2. string - A string containing error prefix information.
+//		2. string - A string containing error prefix information.
 //
-//		     3. []string A one-dimensional slice of strings containing
-//		        error prefix information
+//		3. []string A one-dimensional slice of strings containing
+//		   error prefix information
 //
-//		     4. [][2]string A two-dimensional slice of strings
-//		        containing error prefix and error context information.
+//		4. [][2]string A two-dimensional slice of strings
+//		   containing error prefix and error context information.
 //
-//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//		        from this object will be copied for use in error and
-//		        informational messages.
+//		5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		   from this object will be copied for use in error and
+//		   informational messages.
 //
-//		     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//		        Information from this object will be copied for use in
-//		        error and informational messages.
+//		6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		   Information from this object will be copied for use in
+//		   error and informational messages.
 //
-//		     7. IBasicErrorPrefix - An interface to a method generating
-//		        a two-dimensional slice of strings containing error
-//		        prefix and error context information.
+//		7. IBasicErrorPrefix - An interface to a method generating
+//		   a two-dimensional slice of strings containing error
+//		   prefix and error context information.
 //
-//		     If parameter 'errorPrefix' is NOT convertible to one of
-//		     the valid types listed above, it will be considered
-//		     invalid and trigger the return of an error.
+//		If parameter 'errorPrefix' is NOT convertible to one of
+//		the valid types listed above, it will be considered
+//		invalid and trigger the return of an error.
 //
-//		     Types ErrPrefixDto and IBasicErrorPrefix are included in
-//		     the 'errpref' software package,
-//		     "github.com/MikeAustin71/errpref".
+//		Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		the 'errpref' software package,
+//		"github.com/MikeAustin71/errpref".
 //
 // -----------------------------------------------------------------
 //
 // # Return Values
 //
 //	error
-//	   - If this method completes successfully, the returned error
-//	     Type is set equal to 'nil'.
+//		If this method completes successfully, the returned error
+//		Type is set equal to 'nil'.
 //
-//	     If errors are encountered during processing, the returned
-//	     error Type will encapsulate an error message. This
-//	     returned error message will incorporate the method chain
-//	     and text passed by input parameter, 'errorPrefix'. The
-//	     'errorPrefix' text will be attached to the beginning of
-//	     the error message.
+//		If errors are encountered during processing, the returned
+//		error Type will encapsulate an error message. This
+//		returned error message will incorporate the method chain
+//		and text passed by input parameter, 'errorPrefix'. The
+//		'errorPrefix' text will be attached to the beginning of
+//		the error message.
 func (nStrNumberFieldSpec *NumStrNumberFieldSpec) SetFieldLength(
 	fieldLength int,
 	errorPrefix interface{}) error {
@@ -855,91 +854,90 @@ func (nStrNumberFieldSpec *NumStrNumberFieldSpec) SetFieldLength(
 //
 // # Input Parameters
 //
-//		 fieldJustification         TextJustify
-//		    - An enumeration which specifies the justification of the
-//		      numeric value string within the number field length specified
-//		      by input parameter 'fieldLength'.
+//	fieldJustification			TextJustify
+//		An enumeration which specifies the justification of the
+//		numeric value string within the number field length specified
+//		by input parameter 'fieldLength'.
 //
-//		      Text justification can only be evaluated in the context of
-//		      a number string, field length and a 'textJustification'
-//		      object of type TextJustify. This is because number strings
-//		      with a field length equal to or less than the length of the
-//		      numeric value string never use text justification. In these
-//		      cases, text justification is completely ignored.
+//		Text justification can only be evaluated in the context of
+//		a number string, field length and a 'textJustification'
+//		object of type TextJustify. This is because number strings
+//		with a field length equal to or less than the length of the
+//		numeric value string never use text justification. In these
+//		cases, text justification is completely ignored.
 //
-//		      If the field length parameter ('fieldLength') is greater
-//		      than the length of the numeric value string, text
-//		      justification must be equal to one of these
-//		      three valid values:
-//		                TextJustify(0).Left()
-//		                TextJustify(0).Right()
-//		                TextJustify(0).Center()
+//		If the field length parameter ('fieldLength') is greater
+//		than the length of the numeric value string, text
+//		justification must be equal to one of these
+//		three valid values:
+//			TextJustify(0).Left()
+//			TextJustify(0).Right()
+//			TextJustify(0).Center()
 //
-//		      You can also use the abbreviated text justification
-//		      enumeration syntax as follows:
-//
-//		                TxtJustify.Left()
-//		                TxtJustify.Right()
-//		                TxtJustify.Center()
+//		You can also use the abbreviated text justification
+//		enumeration syntax as follows:
+//			TxtJustify.Left()
+//			TxtJustify.Right()
+//			TxtJustify.Center()
 //
 //	 errorPrefix                interface{}
-//		   - This object encapsulates error prefix text which is
-//		     included in all returned error messages. Usually, it
-//		     contains the name of the calling method or methods
-//		     listed as a method or function chain of execution.
+//		This object encapsulates error prefix text which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods
+//		listed as a method or function chain of execution.
 //
-//		     If no error prefix information is needed, set this
-//	      parameter to 'nil'.
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
 //
-//		     This empty interface must be convertible to one of the
-//		     following types:
+//		This empty interface must be convertible to one of the
+//		following types:
 //
-//		     1. nil - A nil value is valid and generates an empty
-//		        collection of error prefix and error context
-//		        information.
+//		1. nil - A nil value is valid and generates an empty
+//		   collection of error prefix and error context
+//		   information.
 //
-//		     2. string - A string containing error prefix information.
+//		2. string - A string containing error prefix information.
 //
-//		     3. []string A one-dimensional slice of strings containing
-//		        error prefix information
+//		3. []string A one-dimensional slice of strings containing
+//		   error prefix information
 //
-//		     4. [][2]string A two-dimensional slice of strings
-//		        containing error prefix and error context information.
+//		4. [][2]string A two-dimensional slice of strings
+//		   containing error prefix and error context information.
 //
-//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//		        from this object will be copied for use in error and
-//		        informational messages.
+//		5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		   from this object will be copied for use in error and
+//		   informational messages.
 //
-//		     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//		        Information from this object will be copied for use in
-//		        error and informational messages.
+//		6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		   Information from this object will be copied for use in
+//		   error and informational messages.
 //
-//		     7. IBasicErrorPrefix - An interface to a method generating
-//		        a two-dimensional slice of strings containing error
-//		        prefix and error context information.
+//		7. IBasicErrorPrefix - An interface to a method generating
+//		   a two-dimensional slice of strings containing error
+//		   prefix and error context information.
 //
-//		     If parameter 'errorPrefix' is NOT convertible to one of
-//		     the valid types listed above, it will be considered
-//		     invalid and trigger the return of an error.
+//		If parameter 'errorPrefix' is NOT convertible to one of
+//		the valid types listed above, it will be considered
+//		invalid and trigger the return of an error.
 //
-//		     Types ErrPrefixDto and IBasicErrorPrefix are included in
-//		     the 'errpref' software package,
-//		     "github.com/MikeAustin71/errpref".
+//		Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		the 'errpref' software package,
+//		"github.com/MikeAustin71/errpref".
 //
 // -----------------------------------------------------------------
 //
 // # Return Values
 //
 //	error
-//	   - If this method completes successfully, the returned error
-//	     Type is set equal to 'nil'.
+//		If this method completes successfully, the returned error
+//		Type is set equal to 'nil'.
 //
-//	     If errors are encountered during processing, the returned
-//	     error Type will encapsulate an error message. This
-//	     returned error message will incorporate the method chain
-//	     and text passed by input parameter, 'errorPrefix'. The
-//	     'errorPrefix' text will be attached to the beginning of
-//	     the error message.
+//		If errors are encountered during processing, the returned
+//		error Type will encapsulate an error message. This
+//		returned error message will incorporate the method chain
+//		and text passed by input parameter, 'errorPrefix'. The
+//		'errorPrefix' text will be attached to the beginning of
+//		the error message.
 func (nStrNumberFieldSpec *NumStrNumberFieldSpec) SetFieldJustification(
 	fieldJustification TextJustify,
 	errorPrefix interface{}) error {
