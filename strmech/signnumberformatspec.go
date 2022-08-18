@@ -370,6 +370,40 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) Equal(
 		incomingSignedNumFmt)
 }
 
+// GetDecSeparatorRunes - Returns an array of runes containing the
+// Decimal Separator character or characters configured for the
+// current instance of SignedNumberFormatSpec.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	NONE
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	[]rune
+//		An array of runes containing the Decimal Separator character
+//		or characters configured for the current instance of
+//		SignedNumberFormatSpec.
+//
+//		If Decimal Separator character(s) have not yet been
+//		configured, this method will return 'nil'.
+func (signedNumFmtSpec *SignedNumberFormatSpec) GetDecSeparatorRunes() []rune {
+
+	if signedNumFmtSpec.lock == nil {
+		signedNumFmtSpec.lock = new(sync.Mutex)
+	}
+
+	signedNumFmtSpec.lock.Lock()
+
+	defer signedNumFmtSpec.lock.Unlock()
+
+	return signedNumFmtSpec.decSeparator.GetDecimalSeparatorRunes()
+}
+
 // GetDecSeparatorSpec - Returns a deep copy of the Decimal
 // Separator Specification configured for the current instance
 // of SignedNumberFormatSpec.

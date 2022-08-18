@@ -394,21 +394,21 @@ func (decSeparatorSpec *DecimalSeparatorSpec) Equal(
 //
 // ----------------------------------------------------------------
 //
-// Input Parameters
+// # Input Parameters
 //
 //	NONE
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
-// Return Values
+// # Return Values
 //
 //	[]rune
-//	   - An array of runes containing the text character or
-//	     characters configured for the current instance of
-//	     DecimalSeparatorSpec.
+//		An array of runes containing the text character or
+//		characters configured for the current instance of
+//		DecimalSeparatorSpec.
 //
-//	     If Decimal Separator character(s) have not yet been
-//	     configured, this method will return 'nil'.
+//		If Decimal Separator character(s) have not yet been
+//		configured, this method will return 'nil'.
 func (decSeparatorSpec *DecimalSeparatorSpec) GetDecimalSeparatorRunes() []rune {
 
 	if decSeparatorSpec.lock == nil {
