@@ -179,14 +179,14 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) CopyIn(
 //
 // # Input Parameters
 //
-//	decSeparator			string
+//	decSeparator				string
 //		This string contains the character or characters
 //		which will be configured as the Decimal Separator
 //		Symbol or Symbols for the returned instance of
 //		DecimalSeparatorSpec, the Decimal Separator
 //		Specification.
 //
-//	intSeparatorChars		string
+//	intSeparatorChars			string
 //		One or more characters used to separate groups of
 //		integers. This separator is also known as the 'thousands'
 //		separator. It is used to separate groups of integer digits
@@ -206,7 +206,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) CopyIn(
 //		and 'intGroupingSpec' is NOT equal to
 //		'IntGroupingType.None()', an error will be returned.
 //
-//	intGroupingType			IntegerGroupingType
+//	intGroupingType				IntegerGroupingType
 //		This instance of IntegerGroupingType defines the type
 //		of IntegerSeparatorDto which will be returned. The
 //		enumeration IntegerGroupingType must be set to one
@@ -429,6 +429,785 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) NewSignedNumFmtSpec(
 	return newSignedNumFmtSpec, err
 }
 
+// NewSignedNumFmtSpecRunes - Creates and returns a new instance of
+// SignedNumberFormatSpec.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	decSeparator				[]rune
+//		This rune array contains the character or characters
+//		which will be configured as the Decimal Separator
+//		Symbol or Symbols for the returned instance of
+//		DecimalSeparatorSpec, the Decimal Separator
+//		Specification.
+//
+//	intSeparatorChars			[]rune
+//		A rune array containing one or more characters used to
+//		separate groups of integers. This separator is also known
+//	 	as the 'thousands' separator in the United States. It is
+//	 	used to separate groups of integer digits to the left of
+//	  	the decimal separator (a.k.a. decimal point). In the
+//	  	United States, the standard	integer digits separator is
+//	  	the comma (",").
+//			United States Example:  1,000,000,000
+//
+//		In many European countries, a single period ('.') is used
+//		as the integer separator character.
+//			European Example: 1.000.000.000
+//
+//		Other countries and cultures use spaces, apostrophes or
+//		multiple characters to separate integers.
+//
+//		If this input parameter contains a zero length rune
+//		array and 'intGroupingSpec' is NOT equal to
+//		'IntGroupingType.None()', an error will be returned.
+//
+//	intGroupingType				IntegerGroupingType
+//		This instance of IntegerGroupingType defines the type
+//		of IntegerSeparatorDto which will be returned. The
+//		enumeration IntegerGroupingType must be set to one
+//		of the following values:
+//		IntGroupingType.None()
+//		IntGroupingType.Thousands()
+//		IntGroupingType.IndiaNumbering()
+//		IntGroupingType.ChineseNumbering()
+//
+//	roundingType				NumberRoundingType
+//		This parameter will populate the
+//		'NumStrRoundingSpec.roundingType' member variable
+//		data value contained in returned instance of
+//		NumStrRoundingSpec.
+//
+//		NumberRoundingType is an enumeration specifying the
+//		rounding algorithm to be applied in the fractional
+//		digit rounding operation. Valid values are listed
+//		as follows:
+//
+//		 NumRoundType.None(),
+//		 NumRoundType.HalfUpWithNegNums(),
+//		 NumRoundType.HalfDownWithNegNums(),
+//		 NumRoundType.HalfAwayFromZero(),
+//		 NumRoundType.HalfTowardsZero(),
+//		 NumRoundType.HalfToEven(),
+//		 NumRoundType.HalfToOdd(),
+//		 NumRoundType.Randomly(),
+//		 NumRoundType.Floor(),
+//		 NumRoundType.Ceiling(),
+//		 NumRoundType.Truncate(),
+//
+//	roundToFractionalDigits		int
+//		When set to a positive integer value, this parameter
+//		controls the number of digits to the right of the
+//		decimal separator (a.k.a. decimal point) which will
+//		remain after completion of the number rounding
+//		operation.
+//
+//	leadingPositiveNumSign		[]rune
+//		A rune array containing the leading positive number
+//		sign character or characters used to configure a
+//	 	Positive Number Sign Symbol in a number string.
+//
+//	trailingPositiveNumSign     []rune
+//		A rune array containing the trailing positive number
+//	 	sign character or characters used to configure a
+//	  	Positive Number Sign Symbol in a number string.
+//
+//	leadingNegativeNumSign		[]rune
+//		A rune array containing the leading negative number
+//		sign character or characters used to configure a
+//		Negative Number Sign Symbol in a number string.
+//
+//	trailingNegativeNumSign		[]rune
+//		A rune array containing the trailing negative
+//		number sign character or characters used to configure
+//		a Negative Number Sign Symbol in a number string.
+//
+//	fieldLength					int
+//		This parameter defines the length of the text field in
+//		which the numeric value will be displayed within a
+//		number string.
+//
+//		If 'fieldLength' is less than the length of the numeric
+//		value string, it will be automatically set equal to the
+//		length of that numeric value string.
+//
+//		To automatically set the value of fieldLength to the string
+//		length of the numeric value, set this parameter to a value
+//		of minus one (-1).
+//
+//		If this parameter is submitted with a value less than minus
+//		one (-1) or greater than 1-million (1,000,000), an error will
+//		be returned.
+//
+//	fieldJustification			TextJustify
+//		An enumeration which specifies the justification of the
+//		numeric value within the number field length specified
+//		by input parameter 'fieldLength'.
+//
+//		Text justification can only be evaluated in the context of
+//		a number string, field length and a 'textJustification'
+//		object of type TextJustify. This is because number strings
+//		with a field length equal to or less than the length of the
+//		numeric value string never use text justification. In these
+//		cases, text justification is completely ignored.
+//
+//		If the field length parameter ('fieldLength') is greater
+//		than the length of the numeric value string, text
+//		justification must be equal to one of these
+//		three valid values:
+//			TextJustify(0).Left()
+//			TextJustify(0).Right()
+//			TextJustify(0).Center()
+//
+//		You can also use the abbreviated text justification
+//		enumeration syntax as follows:
+//			TxtJustify.Left()
+//			TxtJustify.Right()
+//			TxtJustify.Center()
+//
+//	errorPrefix					interface{}
+//		This object encapsulates error prefix text which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods
+//		listed as a method or function chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of the
+//		following types:
+//
+//		1. nil - A nil value is valid and generates an empty
+//		   collection of error prefix and error context
+//		   information.
+//
+//		2. string - A string containing error prefix information.
+//
+//		3. []string A one-dimensional slice of strings containing
+//		   error prefix information
+//
+//		4. [][2]string A two-dimensional slice of strings
+//		   containing error prefix and error context information.
+//
+//		5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		   from this object will be copied for use in error and
+//		   informational messages.
+//
+//		6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		   Information from this object will be copied for use in
+//		   error and informational messages.
+//
+//		7. IBasicErrorPrefix - An interface to a method generating
+//		   a two-dimensional slice of strings containing error
+//		   prefix and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible to one of
+//		the valid types listed above, it will be considered
+//		invalid and trigger the return of an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		the 'errpref' software package,
+//		"github.com/MikeAustin71/errpref".
+//
+// -----------------------------------------------------------------
+//
+// # Return Values
+//
+//	newSignedNumFmtSpec			SignedNumberFormatSpec
+//		If this method completes successfully, this parameter
+//		will return a new, fully populated instance of
+//		SignedNumberFormatSpec.
+//
+//	err							error
+//		If this method completes successfully, the returned error
+//		Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the returned
+//		error Type will encapsulate an error message. This
+//		returned error message will incorporate the method chain
+//		and text passed by input parameter, 'errorPrefix'. The
+//		'errorPrefix' text will be attached to the beginning of
+//		the error message.
+func (signedNumFmtSpec *SignedNumberFormatSpec) NewSignedNumFmtSpecRunes(
+	decSeparatorChars []rune,
+	intGroupingChars []rune,
+	intGroupingType IntegerGroupingType,
+	roundingType NumberRoundingType,
+	roundToFractionalDigits int,
+	leadingPosNumSign []rune,
+	trailingPosNumSign []rune,
+	leadingNegNumSign []rune,
+	trailingNegNumSign []rune,
+	numFieldLength int,
+	numFieldJustification TextJustify,
+	errorPrefix interface{}) (
+	newSignedNumFmtSpec SignedNumberFormatSpec,
+	err error) {
+
+	if signedNumFmtSpec.lock == nil {
+		signedNumFmtSpec.lock = new(sync.Mutex)
+	}
+
+	signedNumFmtSpec.lock.Lock()
+
+	defer signedNumFmtSpec.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"SignedNumberFormatSpec."+
+			"NewSignedNumFmtSpecRunes()",
+		"")
+
+	if err != nil {
+		return newSignedNumFmtSpec, err
+	}
+
+	err = new(signedNumFmtSpecNanobot).
+		setNStrNumberFieldSpec(
+			&newSignedNumFmtSpec,
+			decSeparatorChars,
+			intGroupingChars,
+			intGroupingType,
+			roundingType,
+			roundToFractionalDigits,
+			leadingPosNumSign,
+			trailingPosNumSign,
+			leadingNegNumSign,
+			trailingNegNumSign,
+			numFieldLength,
+			numFieldJustification,
+			ePrefix.XCpy(
+				"newSignedNumFmtSpec<-"))
+
+	return newSignedNumFmtSpec, err
+}
+
+// SetSignedNumFmtSpec - Deletes and resets all the member variable
+// data values stored in the current instance of
+// SignedNumberFormatSpec.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+// Be advised that the data fields contained in the current
+// instance of  will be deleted and replaced by values
+// generated from the listed input parameters.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	decSeparator				string
+//		This string contains the character or characters
+//		which will be configured as the Decimal Separator
+//		Symbol or Symbols for the returned instance of
+//		DecimalSeparatorSpec, the Decimal Separator
+//		Specification.
+//
+//	intSeparatorChars			string
+//		One or more characters used to separate groups of
+//		integers. This separator is also known as the 'thousands'
+//		separator. It is used to separate groups of integer digits
+//		to the left of the decimal separator
+//		(a.k.a. decimal point). In the United States, the standard
+//		integer digits separator is the comma (",").
+//		United States Example:  1,000,000,000
+//
+//		In many European countries, a single period ('.') is used
+//		as the integer separator character.
+//		European Example: 1.000.000.000
+//
+//		Other countries and cultures use spaces, apostrophes or
+//		multiple characters to separate integers.
+//
+//		If this input parameter contains a zero length string
+//		and 'intGroupingSpec' is NOT equal to
+//		'IntGroupingType.None()', an error will be returned.
+//
+//	intGroupingType				IntegerGroupingType
+//		This instance of IntegerGroupingType defines the type
+//		of IntegerSeparatorDto which will be returned. The
+//		enumeration IntegerGroupingType must be set to one
+//		of the following values:
+//		IntGroupingType.None()
+//		IntGroupingType.Thousands()
+//		IntGroupingType.IndiaNumbering()
+//		IntGroupingType.ChineseNumbering()
+//
+//	roundingType				NumberRoundingType
+//		This parameter will populate the
+//		'NumStrRoundingSpec.roundingType' member variable
+//		data value contained in returned instance of
+//		NumStrRoundingSpec.
+//
+//		NumberRoundingType is an enumeration specifying the
+//		rounding algorithm to be applied in the fractional
+//		digit rounding operation. Valid values are listed
+//		as follows:
+//
+//		 NumRoundType.None(),
+//		 NumRoundType.HalfUpWithNegNums(),
+//		 NumRoundType.HalfDownWithNegNums(),
+//		 NumRoundType.HalfAwayFromZero(),
+//		 NumRoundType.HalfTowardsZero(),
+//		 NumRoundType.HalfToEven(),
+//		 NumRoundType.HalfToOdd(),
+//		 NumRoundType.Randomly(),
+//		 NumRoundType.Floor(),
+//		 NumRoundType.Ceiling(),
+//		 NumRoundType.Truncate(),
+//
+//	roundToFractionalDigits		int
+//		When set to a positive integer value, this parameter
+//		controls the number of digits to the right of the
+//		decimal separator (a.k.a. decimal point) which will
+//		remain after completion of the number rounding
+//		operation.
+//
+//	leadingPositiveNumSign		string
+//		A string containing the leading positive number sign
+//		character or characters used to configure a Positive
+//		Number Sign Symbol in a number string.
+//
+//	trailingPositiveNumSign     string
+//		A string containing the trailing positive number sign
+//		character or characters used to configure a Positive
+//		Number Sign Symbol in a number string.
+//
+//	leadingNegativeNumSign		string
+//		A string containing the leading negative number sign
+//		character or characters used to configure a Negative
+//		Number Sign Symbol in a number string.
+//
+//	trailingNegativeNumSign		string
+//		A string containing the trailing negative number
+//		sign character or characters used to configure a
+//		Negative Number Sign Symbol in a number string.
+//
+//	fieldLength					int
+//		This parameter defines the length of the text field in
+//		which the numeric value will be displayed within a
+//		number string.
+//
+//		If 'fieldLength' is less than the length of the numeric
+//		value string, it will be automatically set equal to the
+//		length of that numeric value string.
+//
+//		To automatically set the value of fieldLength to the string
+//		length of the numeric value, set this parameter to a value
+//		of minus one (-1).
+//
+//		If this parameter is submitted with a value less than minus
+//		one (-1) or greater than 1-million (1,000,000), an error will
+//		be returned.
+//
+//	fieldJustification			TextJustify
+//		An enumeration which specifies the justification of the
+//		numeric value within the number field length specified
+//		by input parameter 'fieldLength'.
+//
+//		Text justification can only be evaluated in the context of
+//		a number string, field length and a 'textJustification'
+//		object of type TextJustify. This is because number strings
+//		with a field length equal to or less than the length of the
+//		numeric value string never use text justification. In these
+//		cases, text justification is completely ignored.
+//
+//		If the field length parameter ('fieldLength') is greater
+//		than the length of the numeric value string, text
+//		justification must be equal to one of these
+//		three valid values:
+//			TextJustify(0).Left()
+//			TextJustify(0).Right()
+//			TextJustify(0).Center()
+//
+//		You can also use the abbreviated text justification
+//		enumeration syntax as follows:
+//			TxtJustify.Left()
+//			TxtJustify.Right()
+//			TxtJustify.Center()
+//
+//	errorPrefix					interface{}
+//		This object encapsulates error prefix text which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods
+//		listed as a method or function chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of the
+//		following types:
+//
+//		1. nil - A nil value is valid and generates an empty
+//		   collection of error prefix and error context
+//		   information.
+//
+//		2. string - A string containing error prefix information.
+//
+//		3. []string A one-dimensional slice of strings containing
+//		   error prefix information
+//
+//		4. [][2]string A two-dimensional slice of strings
+//		   containing error prefix and error context information.
+//
+//		5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		   from this object will be copied for use in error and
+//		   informational messages.
+//
+//		6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		   Information from this object will be copied for use in
+//		   error and informational messages.
+//
+//		7. IBasicErrorPrefix - An interface to a method generating
+//		   a two-dimensional slice of strings containing error
+//		   prefix and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible to one of
+//		the valid types listed above, it will be considered
+//		invalid and trigger the return of an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		the 'errpref' software package,
+//		"github.com/MikeAustin71/errpref".
+//
+// -----------------------------------------------------------------
+//
+// # Return Values
+//
+//	err							error
+//		If this method completes successfully, the returned error
+//		Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the returned
+//		error Type will encapsulate an error message. This
+//		returned error message will incorporate the method chain
+//		and text passed by input parameter, 'errorPrefix'. The
+//		'errorPrefix' text will be attached to the beginning of
+//		the error message.
+func (signedNumFmtSpec *SignedNumberFormatSpec) SetSignedNumFmtSpec(
+	decSeparatorChars string,
+	intGroupingChars string,
+	intGroupingType IntegerGroupingType,
+	roundingType NumberRoundingType,
+	roundToFractionalDigits int,
+	leadingPosNumSign string,
+	trailingPosNumSign string,
+	leadingNegNumSign string,
+	trailingNegNumSign string,
+	numFieldLength int,
+	numFieldJustification TextJustify,
+	errorPrefix interface{}) (
+	err error) {
+
+	if signedNumFmtSpec.lock == nil {
+		signedNumFmtSpec.lock = new(sync.Mutex)
+	}
+
+	signedNumFmtSpec.lock.Lock()
+
+	defer signedNumFmtSpec.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"SignedNumberFormatSpec."+
+			"SetSignedNumFmtSpec()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	err = new(signedNumFmtSpecNanobot).
+		setNStrNumberFieldSpec(
+			signedNumFmtSpec,
+			[]rune(decSeparatorChars),
+			[]rune(intGroupingChars),
+			intGroupingType,
+			roundingType,
+			roundToFractionalDigits,
+			[]rune(leadingPosNumSign),
+			[]rune(trailingPosNumSign),
+			[]rune(leadingNegNumSign),
+			[]rune(trailingNegNumSign),
+			numFieldLength,
+			numFieldJustification,
+			ePrefix.XCpy(
+				"newSignedNumFmtSpec<-"))
+
+	return err
+}
+
+// SetSignedNumFmtSpecRunes - Deletes and resets all the member variable
+// data values stored in the current instance of
+// SignedNumberFormatSpec.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+// Be advised that the data fields contained in the current
+// instance of  will be deleted and replaced by values
+// generated from the listed input parameters.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	decSeparator				[]rune
+//		This rune array contains the character or characters
+//		which will be configured as the Decimal Separator
+//		Symbol or Symbols for the returned instance of
+//		DecimalSeparatorSpec, the Decimal Separator
+//		Specification.
+//
+//	intSeparatorChars			[]rune
+//		A rune array containing one or more characters used to
+//		separate groups of integers. This separator is also known
+//	 	as the 'thousands' separator in the United States. It is
+//	 	used to separate groups of integer digits to the left of
+//	  	the decimal separator (a.k.a. decimal point). In the
+//	  	United States, the standard	integer digits separator is
+//	  	the comma (",").
+//			United States Example:  1,000,000,000
+//
+//		In many European countries, a single period ('.') is used
+//		as the integer separator character.
+//			European Example: 1.000.000.000
+//
+//		Other countries and cultures use spaces, apostrophes or
+//		multiple characters to separate integers.
+//
+//		If this input parameter contains a zero length rune
+//		array and 'intGroupingType' is NOT equal to
+//		'IntGroupingType.None()', an error will be returned.
+//
+//	intGroupingType				IntegerGroupingType
+//		This instance of IntegerGroupingType defines the type
+//		of IntegerSeparatorDto which will be returned. The
+//		enumeration IntegerGroupingType must be set to one
+//		of the following values:
+//		IntGroupingType.None()
+//		IntGroupingType.Thousands()
+//		IntGroupingType.IndiaNumbering()
+//		IntGroupingType.ChineseNumbering()
+//
+//	roundingType				NumberRoundingType
+//		This parameter will populate the
+//		'NumStrRoundingSpec.roundingType' member variable
+//		data value contained in returned instance of
+//		NumStrRoundingSpec.
+//
+//		NumberRoundingType is an enumeration specifying the
+//		rounding algorithm to be applied in the fractional
+//		digit rounding operation. Valid values are listed
+//		as follows:
+//
+//		 NumRoundType.None(),
+//		 NumRoundType.HalfUpWithNegNums(),
+//		 NumRoundType.HalfDownWithNegNums(),
+//		 NumRoundType.HalfAwayFromZero(),
+//		 NumRoundType.HalfTowardsZero(),
+//		 NumRoundType.HalfToEven(),
+//		 NumRoundType.HalfToOdd(),
+//		 NumRoundType.Randomly(),
+//		 NumRoundType.Floor(),
+//		 NumRoundType.Ceiling(),
+//		 NumRoundType.Truncate(),
+//
+//	roundToFractionalDigits		int
+//		When set to a positive integer value, this parameter
+//		controls the number of digits to the right of the
+//		decimal separator (a.k.a. decimal point) which will
+//		remain after completion of the number rounding
+//		operation.
+//
+//	leadingPositiveNumSign		[]rune
+//		A rune array containing the leading positive number
+//		sign character or characters used to configure a
+//	 	Positive Number Sign Symbol in a number string.
+//
+//	trailingPositiveNumSign     []rune
+//		A rune array containing the trailing positive number
+//	 	sign character or characters used to configure a
+//	  	Positive Number Sign Symbol in a number string.
+//
+//	leadingNegativeNumSign		[]rune
+//		A rune array containing the leading negative number
+//		sign character or characters used to configure a
+//		Negative Number Sign Symbol in a number string.
+//
+//	trailingNegativeNumSign		[]rune
+//		A rune array containing the trailing negative
+//		number sign character or characters used to configure
+//		a Negative Number Sign Symbol in a number string.
+//
+//	fieldLength					int
+//		This parameter defines the length of the text field in
+//		which the numeric value will be displayed within a
+//		number string.
+//
+//		If 'fieldLength' is less than the length of the numeric
+//		value string, it will be automatically set equal to the
+//		length of that numeric value string.
+//
+//		To automatically set the value of fieldLength to the string
+//		length of the numeric value, set this parameter to a value
+//		of minus one (-1).
+//
+//		If this parameter is submitted with a value less than minus
+//		one (-1) or greater than 1-million (1,000,000), an error will
+//		be returned.
+//
+//	fieldJustification			TextJustify
+//		An enumeration which specifies the justification of the
+//		numeric value within the number field length specified
+//		by input parameter 'fieldLength'.
+//
+//		Text justification can only be evaluated in the context of
+//		a number string, field length and a 'textJustification'
+//		object of type TextJustify. This is because number strings
+//		with a field length equal to or less than the length of the
+//		numeric value string never use text justification. In these
+//		cases, text justification is completely ignored.
+//
+//		If the field length parameter ('fieldLength') is greater
+//		than the length of the numeric value string, text
+//		justification must be equal to one of these
+//		three valid values:
+//			TextJustify(0).Left()
+//			TextJustify(0).Right()
+//			TextJustify(0).Center()
+//
+//		You can also use the abbreviated text justification
+//		enumeration syntax as follows:
+//			TxtJustify.Left()
+//			TxtJustify.Right()
+//			TxtJustify.Center()
+//
+//	errorPrefix					interface{}
+//		This object encapsulates error prefix text which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods
+//		listed as a method or function chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of the
+//		following types:
+//
+//		1. nil - A nil value is valid and generates an empty
+//		   collection of error prefix and error context
+//		   information.
+//
+//		2. string - A string containing error prefix information.
+//
+//		3. []string A one-dimensional slice of strings containing
+//		   error prefix information
+//
+//		4. [][2]string A two-dimensional slice of strings
+//		   containing error prefix and error context information.
+//
+//		5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		   from this object will be copied for use in error and
+//		   informational messages.
+//
+//		6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		   Information from this object will be copied for use in
+//		   error and informational messages.
+//
+//		7. IBasicErrorPrefix - An interface to a method generating
+//		   a two-dimensional slice of strings containing error
+//		   prefix and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible to one of
+//		the valid types listed above, it will be considered
+//		invalid and trigger the return of an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		the 'errpref' software package,
+//		"github.com/MikeAustin71/errpref".
+//
+// -----------------------------------------------------------------
+//
+// # Return Values
+//
+//	err							error
+//		If this method completes successfully, the returned error
+//		Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the returned
+//		error Type will encapsulate an error message. This
+//		returned error message will incorporate the method chain
+//		and text passed by input parameter, 'errorPrefix'. The
+//		'errorPrefix' text will be attached to the beginning of
+//		the error message.
+func (signedNumFmtSpec *SignedNumberFormatSpec) SetSignedNumFmtSpecRunes(
+	decSeparatorChars []rune,
+	intGroupingChars []rune,
+	intGroupingType IntegerGroupingType,
+	roundingType NumberRoundingType,
+	roundToFractionalDigits int,
+	leadingPosNumSign []rune,
+	trailingPosNumSign []rune,
+	leadingNegNumSign []rune,
+	trailingNegNumSign []rune,
+	numFieldLength int,
+	numFieldJustification TextJustify,
+	errorPrefix interface{}) (
+	err error) {
+
+	if signedNumFmtSpec.lock == nil {
+		signedNumFmtSpec.lock = new(sync.Mutex)
+	}
+
+	signedNumFmtSpec.lock.Lock()
+
+	defer signedNumFmtSpec.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"SignedNumberFormatSpec."+
+			"SetSignedNumFmtSpecRunes()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	err = new(signedNumFmtSpecNanobot).
+		setNStrNumberFieldSpec(
+			signedNumFmtSpec,
+			decSeparatorChars,
+			intGroupingChars,
+			intGroupingType,
+			roundingType,
+			roundToFractionalDigits,
+			leadingPosNumSign,
+			trailingPosNumSign,
+			leadingNegNumSign,
+			trailingNegNumSign,
+			numFieldLength,
+			numFieldJustification,
+			ePrefix.XCpy(
+				"newSignedNumFmtSpec<-"))
+
+	return err
+}
+
 // signedNumFmtSpecNanobot - This type provides
 // helper methods for SignedNumberFormatSpec
 type signedNumFmtSpecNanobot struct {
@@ -630,34 +1409,36 @@ func (nStrNumberFieldSpecNanobot *signedNumFmtSpecNanobot) copySignedNumberForma
 //		'destinationSignedNumFmtSpec' is the destination for this
 //		copy operation.
 //
-//	 decSeparator               	string
-//		This string contains the character or characters
+//
+//	decSeparator				[]rune
+//		This rune array contains the character or characters
 //		which will be configured as the Decimal Separator
 //		Symbol or Symbols for the returned instance of
 //		DecimalSeparatorSpec, the Decimal Separator
 //		Specification.
 //
-//	intSeparatorChars				string
-//		One or more characters used to separate groups of
-//		integers. This separator is also known as the 'thousands'
-//		separator. It is used to separate groups of integer digits
-//		to the left of the decimal separator
-//		(a.k.a. decimal point). In the United States, the standard
-//		integer digits separator is the comma (",").
-//		United States Example:  1,000,000,000
+//	intSeparatorChars			[]rune
+//		A rune array containing one or more characters used to
+//		separate groups of integers. This separator is also known
+//	 	as the 'thousands' separator in the United States. It is
+//	 	used to separate groups of integer digits to the left of
+//	  	the decimal separator (a.k.a. decimal point). In the
+//	  	United States, the standard	integer digits separator is
+//	  	the comma (",").
+//			United States Example:  1,000,000,000
 //
 //		In many European countries, a single period ('.') is used
 //		as the integer separator character.
-//		European Example: 1.000.000.000
+//			European Example: 1.000.000.000
 //
 //		Other countries and cultures use spaces, apostrophes or
 //		multiple characters to separate integers.
 //
-//		If this input parameter contains a zero length string
-//		and 'intGroupingSpec' is NOT equal to
+//		If this input parameter contains a zero length rune
+//		array and 'intGroupingSpec' is NOT equal to
 //		'IntGroupingType.None()', an error will be returned.
 //
-//	intGroupingType					IntegerGroupingType
+//	intGroupingType				IntegerGroupingType
 //		This instance of IntegerGroupingType defines the type
 //		of IntegerSeparatorDto which will be returned. The
 //		enumeration IntegerGroupingType must be set to one
@@ -697,25 +1478,25 @@ func (nStrNumberFieldSpecNanobot *signedNumFmtSpecNanobot) copySignedNumberForma
 //		remain after completion of the number rounding
 //		operation.
 //
-//	leadingPositiveNumSign			string
-//		A string containing the leading positive number sign
-//		character or characters used to configure a Positive
-//		Number Sign Symbol in a number string.
+//	leadingPositiveNumSign		[]rune
+//		A rune array containing the leading positive number
+//		sign character or characters used to configure a
+//	 	Positive Number Sign Symbol in a number string.
 //
-//	trailingPositiveNumSign     	string
-//		A string containing the trailing positive number sign
-//		character or characters used to configure a Positive
-//		Number Sign Symbol in a number string.
+//	trailingPositiveNumSign     []rune
+//		A rune array containing the trailing positive number
+//	 	sign character or characters used to configure a
+//	  	Positive Number Sign Symbol in a number string.
 //
-//	leadingNegativeNumSign			string
-//		A string containing the leading negative number sign
-//		character or characters used to configure a Negative
-//		Number Sign Symbol in a number string.
-//
-//	trailingNegativeNumSign			string
-//		A string containing the trailing negative number
+//	leadingNegativeNumSign		[]rune
+//		A rune array containing the leading negative number
 //		sign character or characters used to configure a
 //		Negative Number Sign Symbol in a number string.
+//
+//	trailingNegativeNumSign		[]rune
+//		A rune array containing the trailing negative
+//		number sign character or characters used to configure
+//		a Negative Number Sign Symbol in a number string.
 //
 //	fieldLength						int
 //		This parameter defines the length of the text field in
@@ -862,6 +1643,9 @@ func (nStrNumberFieldSpecNanobot *signedNumFmtSpecNanobot) setNStrNumberFieldSpe
 	}
 
 	signedNumFmtSpecAtom := signedNumberFormatSpecAtom{}
+
+	signedNumFmtSpecAtom.empty(
+		signedNumFmtSpec)
 
 	err = signedNumFmtSpecAtom.setDecimalSeparatorParams(
 		signedNumFmtSpec,
