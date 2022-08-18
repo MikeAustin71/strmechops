@@ -43,78 +43,77 @@ type NumStrIntegerGroupingSpec struct {
 //
 // ----------------------------------------------------------------
 //
-// Input Parameters
+// # Input Parameters
 //
-//	 incomingIntGroupSpec   *NumStrIntegerGroupingSpec
-//	    - A pointer to an instance of NumStrIntegerGroupingSpec.
-//	      This method will NOT change the values of internal member
-//	      variables contained in this instance.
+//	incomingIntGroupSpec		*NumStrIntegerGroupingSpec
+//		A pointer to an instance of NumStrIntegerGroupingSpec.
+//		This method will NOT change the values of internal member
+//		variables contained in this instance.
 //
-//	      All data values in this NumStrIntegerGroupingSpec instance
-//	      will be copied to current NumStrIntegerGroupingSpec
-//	      instance ('nStrIntGroupSpec').
+//		All data values in this NumStrIntegerGroupingSpec instance
+//		will be copied to current NumStrIntegerGroupingSpec
+//		instance ('nStrIntGroupSpec').
 //
-//	      If parameter 'incomingIntGroupSpec' is determined to
-//	      be invalid, an error will be returned.
+//		If parameter 'incomingIntGroupSpec' is determined to
+//		be invalid, an error will be returned.
 //
+//	errorPrefix					interface{}
+//		This object encapsulates error prefix text which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods
+//		listed as a method or function chain of execution.
 //
-//	 errorPrefix                interface{}
-//		   - This object encapsulates error prefix text which is
-//		     included in all returned error messages. Usually, it
-//		     contains the name of the calling method or methods
-//		     listed as a method or function chain of execution.
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
 //
-//		     If no error prefix information is needed, set this
-//		     parameter to 'nil'.
+//		This empty interface must be convertible to one of the
+//		following types:
 //
-//		     This empty interface must be convertible to one of the
-//		     following types:
+//		1. nil - A nil value is valid and generates an empty
+//		   collection of error prefix and error context
+//		   information.
 //
-//		     1. nil - A nil value is valid and generates an empty
-//		        collection of error prefix and error context
-//		        information.
+//		2. string - A string containing error prefix information.
 //
-//		     2. string - A string containing error prefix information.
+//		3. []string A one-dimensional slice of strings containing
+//		   error prefix information
 //
-//		     3. []string A one-dimensional slice of strings containing
-//		        error prefix information
+//		4. [][2]string A two-dimensional slice of strings
+//		   containing error prefix and error context information.
 //
-//		     4. [][2]string A two-dimensional slice of strings
-//		        containing error prefix and error context information.
+//		5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		   from this object will be copied for use in error and
+//		   informational messages.
 //
-//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//		        from this object will be copied for use in error and
-//		        informational messages.
+//		6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		   Information from this object will be copied for use in
+//		   error and informational messages.
 //
-//		     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//		        Information from this object will be copied for use in
-//		        error and informational messages.
+//		7. IBasicErrorPrefix - An interface to a method generating
+//		   a two-dimensional slice of strings containing error
+//		   prefix and error context information.
 //
-//		     7. IBasicErrorPrefix - An interface to a method generating
-//		        a two-dimensional slice of strings containing error
-//		        prefix and error context information.
+//		If parameter 'errorPrefix' is NOT convertible to one of
+//		the valid types listed above, it will be considered
+//		invalid and trigger the return of an error.
 //
-//		     If parameter 'errorPrefix' is NOT convertible to one of
-//		     the valid types listed above, it will be considered
-//		     invalid and trigger the return of an error.
-//
-//		     Types ErrPrefixDto and IBasicErrorPrefix are included in
-//		     the 'errpref' software package,
-//		     "github.com/MikeAustin71/errpref".
+//		Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		the 'errpref' software package,
+//		"github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
-// Return Values
+// # Return Values
 //
 //	error
-//	   - If this method completes successfully and no errors are
-//	     encountered this return value is set to 'nil'. Otherwise,
-//	     if errors are encountered, this return value will contain
-//	     an appropriate error message.
+//		If this method completes successfully and no errors are
+//		encountered this return value is set to 'nil'. Otherwise,
+//		if errors are encountered, this return value will contain
+//		an appropriate error message.
 //
-//	     If an error message is returned, the text value of input
-//	     parameter 'errorPrefix' will be inserted or prefixed at
-//	     the beginning of the error message.
+//		If an error message is returned, the text value of input
+//		parameter 'errorPrefix' will be inserted or prefixed at
+//		the beginning of the error message.
 func (nStrIntGroupSpec *NumStrIntegerGroupingSpec) CopyIn(
 	incomingIntGroupSpec *NumStrIntegerGroupingSpec,
 	errorPrefix interface{}) error {
@@ -443,6 +442,109 @@ func (nStrIntGroupSpec *NumStrIntegerGroupingSpec) GetIntegerSeparatorChars() st
 	defer nStrIntGroupSpec.lock.Unlock()
 
 	return nStrIntGroupSpec.integerSeparatorChars.GetCharacterString()
+}
+
+// GetIntegerSeparatorDto - Returns an instance of
+// IntegerSeparatorDto based on the configuration parameters
+// contained within the current instance of IntegerSeparatorDto.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	 errorPrefix                interface{}
+//		   - This object encapsulates error prefix text which is
+//		     included in all returned error messages. Usually, it
+//		     contains the name of the calling method or methods
+//		     listed as a method or function chain of execution.
+//
+//		     If no error prefix information is needed, set this
+//		     parameter to 'nil'.
+//
+//		     This empty interface must be convertible to one of the
+//		     following types:
+//
+//		     1. nil - A nil value is valid and generates an empty
+//		        collection of error prefix and error context
+//		        information.
+//
+//		     2. string - A string containing error prefix information.
+//
+//		     3. []string A one-dimensional slice of strings containing
+//		        error prefix information
+//
+//		     4. [][2]string A two-dimensional slice of strings
+//		        containing error prefix and error context information.
+//
+//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		        from this object will be copied for use in error and
+//		        informational messages.
+//
+//		     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		        Information from this object will be copied for use in
+//		        error and informational messages.
+//
+//		     7. IBasicErrorPrefix - An interface to a method generating
+//		        a two-dimensional slice of strings containing error
+//		        prefix and error context information.
+//
+//		     If parameter 'errorPrefix' is NOT convertible to one of
+//		     the valid types listed above, it will be considered
+//		     invalid and trigger the return of an error.
+//
+//		     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		     the 'errpref' software package,
+//		     "github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	IntegerSeparatorDto
+//		If this method completes successfully, a fully populated
+//		instance of IntegerSeparatorDto will be returned.
+//
+//	error
+//		If this method completes successfully and no errors are
+//		encountered this return value is set to 'nil'. Otherwise,
+//		if errors are encountered, this return value will contain
+//		an appropriate error message.
+//
+//		If an error message is returned, the text value of input
+//		parameter 'errorPrefix' will be inserted or prefixed at
+//		the beginning of the error message.
+func (nStrIntGroupSpec *NumStrIntegerGroupingSpec) GetIntegerSeparatorDto(
+	errorPrefix interface{}) (
+	IntegerSeparatorDto,
+	error) {
+
+	if nStrIntGroupSpec.lock == nil {
+		nStrIntGroupSpec.lock = new(sync.Mutex)
+	}
+
+	nStrIntGroupSpec.lock.Lock()
+
+	defer nStrIntGroupSpec.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumStrIntegerGroupingSpec."+
+			"GetIntegerSeparatorDto()",
+		"")
+
+	if err != nil {
+		return IntegerSeparatorDto{}, err
+	}
+
+	return new(IntegerSeparatorDto).NewFromIntGroupEnumRunes(
+		nStrIntGroupSpec.intGroupingType,
+		nStrIntGroupSpec.integerSeparatorChars.GetRuneArray(),
+		ePrefix.XCpy(
+			"<-nStrIntGroupSpec"))
 }
 
 // GetIntegerSeparatorRunes - Returns a rune array containing
