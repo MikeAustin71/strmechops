@@ -1267,6 +1267,117 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetDecimalSeparatorSpec(
 			"signedNumFmtSpec<-decSeparatorSpec"))
 }
 
+// SetIntegerGroupingSpec - Deletes and replaces the Integer
+// Grouping Specification for the current instance of
+// SignedNumberFormatSpec.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//		intGroupingSpec				*NumStrIntegerGroupingSpec
+//			An instance of NumStrIntegerGroupingSpec. The member
+//			variable data values contained in this instance
+//			will be copied to the current instanc of
+//		 	SignedNumberFormatSpec :
+//				'SignedNumberFormatSpec.intGroupingSpec'.
+//
+//			In the United States, the Integer Group Specification
+//			character is a comma (',') and integer grouped in
+//	     thousands.
+//				United States Example: 1,000,000,000
+//
+//		errorPrefix					interface{}
+//			This object encapsulates error prefix text which is
+//			included in all returned error messages. Usually, it
+//			contains the name of the calling method or methods
+//			listed as a method or function chain of execution.
+//
+//			If no error prefix information is needed, set this
+//			parameter to 'nil'.
+//
+//			This empty interface must be convertible to one of the
+//			following types:
+//
+//			1. nil - A nil value is valid and generates an empty
+//			   collection of error prefix and error context
+//			   information.
+//
+//			2. string - A string containing error prefix information.
+//
+//			3. []string A one-dimensional slice of strings containing
+//			   error prefix information
+//
+//			4. [][2]string A two-dimensional slice of strings
+//			   containing error prefix and error context information.
+//
+//			5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//			   from this object will be copied for use in error and
+//			   informational messages.
+//
+//			6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//			   Information from this object will be copied for use in
+//			   error and informational messages.
+//
+//			7. IBasicErrorPrefix - An interface to a method generating
+//			   a two-dimensional slice of strings containing error
+//			   prefix and error context information.
+//
+//			If parameter 'errorPrefix' is NOT convertible to one of
+//			the valid types listed above, it will be considered
+//			invalid and trigger the return of an error.
+//
+//			Types ErrPrefixDto and IBasicErrorPrefix are included in
+//			the 'errpref' software package,
+//			"github.com/MikeAustin71/errpref".
+//
+// -----------------------------------------------------------------
+//
+// # Return Values
+//
+//	err							error
+//		If this method completes successfully, the returned error
+//		Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the returned
+//		error Type will encapsulate an error message. This
+//		returned error message will incorporate the method chain
+//		and text passed by input parameter, 'errorPrefix'. The
+//		'errorPrefix' text will be attached to the beginning of
+//		the error message.
+func (signedNumFmtSpec *SignedNumberFormatSpec) SetIntegerGroupingSpec(
+	intGroupingSpec NumStrIntegerGroupingSpec,
+	errorPrefix interface{}) error {
+
+	if signedNumFmtSpec.lock == nil {
+		signedNumFmtSpec.lock = new(sync.Mutex)
+	}
+
+	signedNumFmtSpec.lock.Lock()
+
+	defer signedNumFmtSpec.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"SignedNumberFormatSpec."+
+			"SetIntegerGroupingSpec()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	return new(signedNumberFormatSpecAtom).setIntegerGroupingSpec(
+		signedNumFmtSpec,
+		&intGroupingSpec,
+		ePrefix.XCpy(
+			"signedNumFmtSpec<-intGroupingSpec"))
+}
+
 // SetSignedNumFmtSpec - Deletes and resets all the member variable
 // data values stored in the current instance of
 // SignedNumberFormatSpec.
@@ -2768,6 +2879,119 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setIntegerGroupingParams
 		intGroupingChars,
 		ePrefix.XCpy(
 			"signedNumFmt.intGroupingSpec<-"))
+
+	return err
+}
+
+// setDecimalSeparatorSpec - Deletes and resets the member
+// variable data value for 'SignedNumberFormatSpec.decSeparator'
+// contained in the instance of SignedNumberFormatSpec passed as
+// an input parameter.
+//
+// This method receives an instance of 'DecimalSeparatorSpec' and
+// copies the member variable data values to
+// 'signedNumFmt.decSeparator'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//		signedNumFmt				*SignedNumberFormatSpec
+//			A pointer to an instance of SignedNumberFormatSpec.
+//			All the member variable data values in this instance
+//			will be deleted and reset to the values contained
+//			in the Integer Grouping Specification supplied by
+//			input parameter, 'intGroupingSpec'.
+//
+//
+//		intGroupingSpec			*NumStrIntegerGroupingSpec
+//			An instance of NumStrIntegerGroupingSpec. The member
+//			variable data values contained in this instance
+//			will be copied to:
+//				'signedNumFmt.intGroupingSpec'.
+//
+//			In the United States, the Integer Group Specification
+//			character is a comma (',') and integer grouped in
+//	     thousands.
+//				United States Example: 1,000,000,000
+//
+//		errPrefDto					*ePref.ErrPrefixDto
+//			This object encapsulates an error prefix string which is
+//			included in all returned error messages. Usually, it
+//			contains the name of the calling method or methods listed
+//			as a function chain.
+//
+//			If no error prefix information is needed, set this
+//			parameter to 'nil'.
+//
+//			Type ErrPrefixDto is included in the 'errpref' software
+//			package, "github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	err							error
+//		If this method completes successfully, this returned error
+//		Type is set equal to 'nil'. If errors are encountered
+//		during processing, the returned error Type will encapsulate
+//		an error message.
+//
+//		If an error message is returned, the text value for input
+//		parameter 'errPrefDto' (error prefix) will be prefixed or
+//		attached at the beginning of the error message.
+func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setIntegerGroupingSpec(
+	signedNumFmt *SignedNumberFormatSpec,
+	intGroupingSpec *NumStrIntegerGroupingSpec,
+	errPrefDto *ePref.ErrPrefixDto) (
+	err error) {
+
+	if signedNumFmtSpecAtom.lock == nil {
+		signedNumFmtSpecAtom.lock = new(sync.Mutex)
+	}
+
+	signedNumFmtSpecAtom.lock.Lock()
+
+	defer signedNumFmtSpecAtom.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"signedNumFmtSpecNanobot."+
+			"setIntegerGroupingSpec()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if signedNumFmt == nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'signedNumFmt' is invalid!\n"+
+			"'signedNumFmt' is a 'nil' pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if intGroupingSpec == nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'intGroupingSpec' is invalid!\n"+
+			"'intGroupingSpec' is a 'nil' pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	signedNumFmt.intGroupingSpec.Empty()
+
+	err = signedNumFmt.intGroupingSpec.CopyIn(
+		intGroupingSpec,
+		ePrefix.XCpy(
+			"signedNumFmt.intGroupingSpec<-"+
+				"intGroupingSpec"))
 
 	return err
 }
