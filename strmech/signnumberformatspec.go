@@ -644,7 +644,42 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) GetIntGroupingSpec(
 			"<-signedNumFmtSpec.intGroupingSpec"))
 }
 
-// GetIntSeparatorChars
+// GetIntSeparatorChars - Returns a string containing the Integer
+// Separator character or characters configured for the current
+// instance of SignedNumberFormatSpec.
+//
+// Integer Separator Characters consist of one or more text
+// characters used to separate groups of integers. This
+// separator is also known as the 'thousands' separator in
+// the United States. It is used to separate groups of integer
+// digits to the left of the decimal separator (a.k.a. decimal
+// point). In the United States, the standard integer digits
+// separator is the comma (",").
+//
+//	United States Example:  1,000,000,000
+//
+// In many European countries, a single period (".") is used
+// as the integer separator character.
+//
+//	European Example: 1.000.000.000
+//
+// Other countries and cultures use spaces, apostrophes or
+// multiple characters to separate integers.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	NONE
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//		This method will return a string containing the Integer
+//		Separator character or characters configured for the
+//	 	current instance of SignedNumberFormatSpec.
 func (signedNumFmtSpec *SignedNumberFormatSpec) GetIntSeparatorChars() string {
 
 	if signedNumFmtSpec.lock == nil {
@@ -655,7 +690,56 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) GetIntSeparatorChars() string {
 
 	defer signedNumFmtSpec.lock.Unlock()
 
-	return ""
+	return signedNumFmtSpec.intGroupingSpec.GetIntegerSeparatorChars()
+}
+
+// GetIntSeparatorRunes - Returns a rune array containing the
+// Integer Separator character or characters configured for the
+// current instance of SignedNumberFormatSpec.
+//
+// Integer Separator Characters consist of one or more text
+// characters used to separate groups of integers. This
+// separator is also known as the 'thousands' separator in
+// the United States. It is used to separate groups of integer
+// digits to the left of the decimal separator (a.k.a. decimal
+// point). In the United States, the standard integer digits
+// separator is the comma (',').
+//
+//	United States Example:  1,000,000,000
+//
+// In many European countries, a single period ('.') is used
+// as the integer separator character.
+//
+//	European Example: 1.000.000.000
+//
+// Other countries and cultures use spaces, apostrophes or
+// multiple characters to separate integers.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	NONE
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	[]rune
+//		This method will return a rune array containing the
+//	 	Integer Separator character or characters configured
+//	  	for the	current instance of SignedNumberFormatSpec.
+func (signedNumFmtSpec *SignedNumberFormatSpec) GetIntSeparatorRunes() []rune {
+
+	if signedNumFmtSpec.lock == nil {
+		signedNumFmtSpec.lock = new(sync.Mutex)
+	}
+
+	signedNumFmtSpec.lock.Lock()
+
+	defer signedNumFmtSpec.lock.Unlock()
+
+	return signedNumFmtSpec.intGroupingSpec.GetIntegerSeparatorRunes()
 }
 
 // NewSignedNumFmtSpec - Creates and returns a new instance of

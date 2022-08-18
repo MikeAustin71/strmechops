@@ -417,20 +417,20 @@ func (nStrIntGroupSpec *NumStrIntegerGroupingSpec) GetIntegerGroupingType() Inte
 // Other countries and cultures use spaces, apostrophes or
 // multiple characters to separate integers.
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
-// Input Parameters
+// # Input Parameters
 //
 //	NONE
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
-// Return Values
+// # Return Values
 //
-//		string
-//			This method will return a string containing the Integer
-//	     Separator Symbol configured for the current instance of
-//	     NumStrIntegerGroupingSpec.
+//	string
+//		This method will return a string containing the Integer
+//		Separator character or characters configured for the
+//	 	current instance of NumStrIntegerGroupingSpec.
 func (nStrIntGroupSpec *NumStrIntegerGroupingSpec) GetIntegerSeparatorChars() string {
 
 	if nStrIntGroupSpec.lock == nil {
@@ -580,7 +580,7 @@ func (nStrIntGroupSpec *NumStrIntegerGroupingSpec) GetIntegerSeparatorDto(
 // Return Values
 //
 //	[]rune
-//		This method will return an array of runes  containing the
+//		This method will return an array of runes containing the
 //		Integer Separator character or characters configured for
 //	 	the current instance of NumStrIntegerGroupingSpec.
 func (nStrIntGroupSpec *NumStrIntegerGroupingSpec) GetIntegerSeparatorRunes() []rune {
