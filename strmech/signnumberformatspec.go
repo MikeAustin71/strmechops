@@ -404,40 +404,6 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) GetDecSeparatorRunes() []rune {
 	return signedNumFmtSpec.decSeparator.GetDecimalSeparatorRunes()
 }
 
-// GetDecSeparatorStr - Returns a string containing the Decimal
-// Separator character or characters configured for the current
-// instance of SignedNumberFormatSpec.
-//
-// ----------------------------------------------------------------
-//
-// # Input Parameters
-//
-//	NONE
-//
-// ----------------------------------------------------------------
-//
-// # Return Values
-//
-//	string
-//		A string containing the Decimal Separator character or
-//	 	characters configured for the current instance of
-//	 	SignedNumberFormatSpec.
-//
-//		If Decimal Separator character(s) have not yet been
-//		configured, this method will return an empty string.
-func (signedNumFmtSpec *SignedNumberFormatSpec) GetDecSeparatorStr() string {
-
-	if signedNumFmtSpec.lock == nil {
-		signedNumFmtSpec.lock = new(sync.Mutex)
-	}
-
-	signedNumFmtSpec.lock.Lock()
-
-	defer signedNumFmtSpec.lock.Unlock()
-
-	return signedNumFmtSpec.decSeparator.GetDecimalSeparatorStr()
-}
-
 // GetDecSeparatorSpec - Returns a deep copy of the Decimal
 // Separator Specification configured for the current instance
 // of SignedNumberFormatSpec.
@@ -539,7 +505,143 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) GetDecSeparatorSpec(
 	return signedNumFmtSpec.decSeparator.CopyOut(
 		ePrefix.XCpy(
 			"<-signedNumFmtSpec.decSeparator"))
+}
 
+// GetDecSeparatorStr - Returns a string containing the Decimal
+// Separator character or characters configured for the current
+// instance of SignedNumberFormatSpec.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	NONE
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//		A string containing the Decimal Separator character or
+//	 	characters configured for the current instance of
+//	 	SignedNumberFormatSpec.
+//
+//		If Decimal Separator character(s) have not yet been
+//		configured, this method will return an empty string.
+func (signedNumFmtSpec *SignedNumberFormatSpec) GetDecSeparatorStr() string {
+
+	if signedNumFmtSpec.lock == nil {
+		signedNumFmtSpec.lock = new(sync.Mutex)
+	}
+
+	signedNumFmtSpec.lock.Lock()
+
+	defer signedNumFmtSpec.lock.Unlock()
+
+	return signedNumFmtSpec.decSeparator.GetDecimalSeparatorStr()
+}
+
+// GetIntGroupingSpec - Returns a deep copy of the Integer
+// Grouping Specification configured for the current instance
+// of SignedNumberFormatSpec.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	 errorPrefix                interface{}
+//		This object encapsulates error prefix text which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods
+//		listed as a method or function chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of the
+//		following types:
+//
+//		1. nil - A nil value is valid and generates an empty
+//		   collection of error prefix and error context
+//		   information.
+//
+//		2. string - A string containing error prefix information.
+//
+//		3. []string A one-dimensional slice of strings containing
+//		   error prefix information
+//
+//		4. [][2]string A two-dimensional slice of strings
+//		   containing error prefix and error context information.
+//
+//		5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		   from this object will be copied for use in error and
+//		   informational messages.
+//
+//		6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		   Information from this object will be copied for use in
+//		   error and informational messages.
+//
+//		7. IBasicErrorPrefix - An interface to a method generating
+//		   a two-dimensional slice of strings containing error
+//		   prefix and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible to one of
+//		the valid types listed above, it will be considered
+//		invalid and trigger the return of an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		the 'errpref' software package,
+//		"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	NumStrIntegerGroupingSpec
+//		If this method completes successfully, a deep copy of
+//		the Integer Grouping Specification configured for the
+//		current instance of SignedNumberFormatSpec will be
+//		returned.
+//
+//	error
+//		If this method completes successfully and no errors are
+//		encountered this return value is set to 'nil'. Otherwise,
+//		if errors are encountered, this return value will contain
+//		an appropriate error message.
+//
+//		If an error message is returned, the text value of input
+//		parameter 'errorPrefix' will be inserted or prefixed at
+//		the beginning of the error message.
+func (signedNumFmtSpec *SignedNumberFormatSpec) GetIntGroupingSpec(
+	errorPrefix interface{}) (
+	NumStrIntegerGroupingSpec,
+	error) {
+
+	if signedNumFmtSpec.lock == nil {
+		signedNumFmtSpec.lock = new(sync.Mutex)
+	}
+
+	signedNumFmtSpec.lock.Lock()
+
+	defer signedNumFmtSpec.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"SignedNumberFormatSpec."+
+			"GetIntGroupingSpec()",
+		"")
+
+	if err != nil {
+		return NumStrIntegerGroupingSpec{}, err
+	}
+
+	return signedNumFmtSpec.intGroupingSpec.CopyOut(
+		ePrefix.XCpy(
+			"<-signedNumFmtSpec.intGroupingSpec"))
 }
 
 // NewSignedNumFmtSpec - Creates and returns a new instance of
