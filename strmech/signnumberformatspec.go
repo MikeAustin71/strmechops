@@ -60,7 +60,7 @@ type SignedNumberFormatSpec struct {
 // ----------------------------------------------------------------
 //
 // IMPORTANT
-// All the member varialbe data values in the current
+// All the member variable data values in the current
 // SignedNumberFormatSpec instance ('signedNumFmtSpec') will
 // be deleted and replaced.
 //
@@ -277,6 +277,46 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) CopyOut(
 					"signedNumFmtSpec"))
 
 	return deepCopySignedNumFmtSpec, err
+}
+
+// Empty - Resets all internal member variables for the current
+// instance of SignedNumberFormatSpec to their initial or zero
+// values.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+// This method will delete all pre-existing internal member
+// variable data values in the current instance of
+// SignedNumberFormatSpec.
+//
+// ------------------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	NONE
+//
+// ------------------------------------------------------------------------
+//
+// # Return Values
+//
+//	NONE
+func (signedNumFmtSpec *SignedNumberFormatSpec) Empty() {
+
+	if signedNumFmtSpec.lock == nil {
+		signedNumFmtSpec.lock = new(sync.Mutex)
+	}
+
+	signedNumFmtSpec.lock.Lock()
+
+	new(signedNumberFormatSpecAtom).empty(
+		signedNumFmtSpec)
+
+	signedNumFmtSpec.lock.Unlock()
+
+	signedNumFmtSpec.lock = nil
+
 }
 
 // NewSignedNumFmtSpec - Creates and returns a new instance of

@@ -299,13 +299,13 @@ func (nStrNumberFieldSpec *NumStrNumberFieldSpec) CopyOut(
 //
 // ------------------------------------------------------------------------
 //
-// Input Parameters
+// # Input Parameters
 //
 //	NONE
 //
 // ------------------------------------------------------------------------
 //
-// Return Values
+// # Return Values
 //
 //	NONE
 func (nStrNumberFieldSpec *NumStrNumberFieldSpec) Empty() {
