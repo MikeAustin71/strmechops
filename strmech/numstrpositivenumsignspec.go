@@ -6,36 +6,41 @@ import (
 	"sync"
 )
 
-// NumStrPositiveNumberSignSpec - Contains all the necessary
-// parameters to insert and display a positive number sign
-// or symbol for a positive numeric value formatted as a
-// number string.
+// NumStrPositiveNumberSymbolsSpec - Contains one or
+// more characters to be inserted and displayed in a
+// number string with a positive numeric value.
 //
-// Typically, positive number sigh symbols like the plus
+// Positive Number Symbols includes specifications for
+// both leading and trailing characters. As such, Positive
+// Number Symbols can include plus signs ('+') as well as
+// currency ('$') and other symbols.
+//
+// Typically, positive number sign symbols like the plus
 // sign ('+') are not displayed in number strings. Rather,
 // the absence of a positive number sign symbol and the
-// absence of a negative number sign symbol implies that
-// the numeric value is positive.
+// absence of a negative number sign symbol in a number
+// string implies that the numeric value is positive.
 //
 // However, the user has the option to customize this
 // behavior by configuring leading or trailing number
-// sign symbols.
+// characters.
 //
 // Different countries and cultures apply different
-// definitions for positive number sign symbols. Typically,
-// when a positive number sign symbol is specified, it
-// is positioned either in front of the numeric value
-// or after the numeric value. Again, users have the
-// flexibility to specify either leading, trailing or
-// both leading and trailing positive number sign
-// symbols.
-type NumStrPositiveNumberSignSpec struct {
-	leadingPosNumSign RuneArrayDto
+// definitions for positive number sign symbols.
+//
+// Generally, when a positive number sign symbol is
+// specified, it is positioned either in front of the
+// numeric value or after the numeric value. Again,
+// users have the flexibility to specify either
+// leading, trailing or both leading and trailing
+// positive number symbols.
+type NumStrPositiveNumberSymbolsSpec struct {
+	leadingPosNumSymbols RuneArrayDto
 	// Contains the character or characters which
 	// will be formatted and displayed in front of
 	// a positive numeric value in a number string.
 
-	trailingPosNumSign RuneArrayDto
+	trailingPosNumSymbols RuneArrayDto
 	// Contains the character or characters which
 	// will be formatted and displayed after a
 	// positive numeric value in a number string.
@@ -44,14 +49,14 @@ type NumStrPositiveNumberSignSpec struct {
 }
 
 // CopyIn - Copies the data fields from an incoming instance of
-// NumStrPositiveNumberSignSpec ('incomingNStrPosNumSignSpec')
-// to the data fields of the current NumStrPositiveNumberSignSpec
+// NumStrPositiveNumberSymbolsSpec ('incomingNStrPosNumSignSpec')
+// to the data fields of the current NumStrPositiveNumberSymbolsSpec
 // instance ('nStrPosNumSignSpec').
 //
 // ----------------------------------------------------------------
 //
 // IMPORTANT
-// All the data fields in current NumStrPositiveNumberSignSpec
+// All the data fields in current NumStrPositiveNumberSymbolsSpec
 // instance ('nStrPosNumSignSpec') will be deleted and
 // overwritten.
 //
@@ -59,13 +64,13 @@ type NumStrPositiveNumberSignSpec struct {
 //
 // Input Parameters
 //
-//	 incomingNStrPosNumSignSpec *NumStrPositiveNumberSignSpec
-//	    - A pointer to an instance of NumStrPositiveNumberSignSpec.
+//	 incomingNStrPosNumSignSpec *NumStrPositiveNumberSymbolsSpec
+//	    - A pointer to an instance of NumStrPositiveNumberSymbolsSpec.
 //	      This method will NOT change the values of internal member
 //	      variables contained in this instance.
 //
-//	      All data values in this NumStrPositiveNumberSignSpec instance
-//	      will be copied to current NumStrPositiveNumberSignSpec
+//	      All data values in this NumStrPositiveNumberSymbolsSpec instance
+//	      will be copied to current NumStrPositiveNumberSymbolsSpec
 //	      instance ('nStrPosNumSignSpec').
 //
 //
@@ -126,8 +131,8 @@ type NumStrPositiveNumberSignSpec struct {
 //	     If an error message is returned, the text value of input
 //	     parameter 'errorPrefix' will be inserted or prefixed at
 //	     the beginning of the error message.
-func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) CopyIn(
-	incomingNStrPosNumSignSpec *NumStrPositiveNumberSignSpec,
+func (nStrPosNumSignSpec *NumStrPositiveNumberSymbolsSpec) CopyIn(
+	incomingNStrPosNumSignSpec *NumStrPositiveNumberSymbolsSpec,
 	errorPrefix interface{}) error {
 
 	if nStrPosNumSignSpec.lock == nil {
@@ -144,7 +149,7 @@ func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) CopyIn(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"NumStrPositiveNumberSignSpec."+
+		"NumStrPositiveNumberSymbolsSpec."+
 			"CopyIn()",
 		"")
 
@@ -161,7 +166,7 @@ func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) CopyIn(
 }
 
 // CopyOut - Returns a deep copy of the current
-// NumStrPositiveNumberSignSpec instance.
+// NumStrPositiveNumberSymbolsSpec instance.
 //
 // ----------------------------------------------------------------
 //
@@ -215,10 +220,10 @@ func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) CopyIn(
 //
 // Return Values
 //
-//	deepCopyNStrPosNumSignSpec NumStrPositiveNumberSignSpec
+//	deepCopyNStrPosNumSignSpec NumStrPositiveNumberSymbolsSpec
 //	   - If this method completes successfully and no errors are
 //	     encountered, this parameter will return a deep copy of the
-//	     current NumStrPositiveNumberSignSpec instance.
+//	     current NumStrPositiveNumberSymbolsSpec instance.
 //
 //
 //	err                        error
@@ -230,9 +235,9 @@ func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) CopyIn(
 //	     If an error message is returned, the text value of input
 //	     parameter 'errorPrefix' will be inserted or prefixed at
 //	     the beginning of the error message.
-func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) CopyOut(
+func (nStrPosNumSignSpec *NumStrPositiveNumberSymbolsSpec) CopyOut(
 	errorPrefix interface{}) (
-	deepCopyNStrPosNumSignSpec *NumStrPositiveNumberSignSpec,
+	deepCopyNStrPosNumSignSpec *NumStrPositiveNumberSymbolsSpec,
 	err error) {
 
 	if nStrPosNumSignSpec.lock == nil {
@@ -248,7 +253,7 @@ func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) CopyOut(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"NumStrPositiveNumberSignSpec."+
+		"NumStrPositiveNumberSymbolsSpec."+
 			"CopyOut()",
 		"")
 
@@ -267,9 +272,9 @@ func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) CopyOut(
 }
 
 // Empty - Resets all internal member variables for the current
-// instance of NumStrPositiveNumberSignSpec to their zero or
+// instance of NumStrPositiveNumberSymbolsSpec to their zero or
 // uninitialized states. This method will leave the current
-// instance of NumStrPositiveNumberSignSpec in an invalid state
+// instance of NumStrPositiveNumberSymbolsSpec in an invalid state
 // and unavailable for immediate reuse.
 //
 // ----------------------------------------------------------------
@@ -277,7 +282,7 @@ func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) CopyOut(
 // # IMPORTANT
 //
 // This method will delete all member variable data values in the
-// current instance of NumStrPositiveNumberSignSpec. All member
+// current instance of NumStrPositiveNumberSymbolsSpec. All member
 // variable data values will be reset to their zero or
 // uninitialized states.
 //
@@ -292,7 +297,7 @@ func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) CopyOut(
 // Return Values
 //
 //	NONE
-func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) Empty() {
+func (nStrPosNumSignSpec *NumStrPositiveNumberSymbolsSpec) Empty() {
 
 	if nStrPosNumSignSpec.lock == nil {
 		nStrPosNumSignSpec.lock = new(sync.Mutex)
@@ -310,7 +315,7 @@ func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) Empty() {
 
 // EmptyLeadingPosNumSign - Resets the member variable data for
 // the leading positive number sign contained in the current
-// instance of NumStrPositiveNumberSignSpec to an initial or
+// instance of NumStrPositiveNumberSymbolsSpec to an initial or
 // zero value.
 //
 // ----------------------------------------------------------------
@@ -319,7 +324,7 @@ func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) Empty() {
 //
 // All the member variable data for the leading positive
 // number sign contained in the current instance of
-// NumStrPositiveNumberSignSpec will be deleted and reset
+// NumStrPositiveNumberSymbolsSpec will be deleted and reset
 // to an empty or zero value.
 //
 // ----------------------------------------------------------------
@@ -333,7 +338,7 @@ func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) Empty() {
 // Return Values
 //
 //	NONE
-func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) EmptyLeadingPosNumSign() {
+func (nStrPosNumSignSpec *NumStrPositiveNumberSymbolsSpec) EmptyLeadingPosNumSign() {
 
 	if nStrPosNumSignSpec.lock == nil {
 		nStrPosNumSignSpec.lock = new(sync.Mutex)
@@ -349,7 +354,7 @@ func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) EmptyLeadingPosNumSign()
 
 // EmptyTrailingPosNumSign - Resets the member variable data for
 // the trailing positive number sign contained in the current
-// instance of NumStrPositiveNumberSignSpec to an initial or
+// instance of NumStrPositiveNumberSymbolsSpec to an initial or
 // zero value.
 //
 // ----------------------------------------------------------------
@@ -358,7 +363,7 @@ func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) EmptyLeadingPosNumSign()
 //
 // All the member variable data for the trailing positive
 // number sign contained in the current instance of
-// NumStrPositiveNumberSignSpec will be deleted and reset
+// NumStrPositiveNumberSymbolsSpec will be deleted and reset
 // to an empty or zero value.
 //
 // ----------------------------------------------------------------
@@ -372,7 +377,7 @@ func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) EmptyLeadingPosNumSign()
 // Return Values
 //
 //	NONE
-func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) EmptyTrailingPosNumSign() {
+func (nStrPosNumSignSpec *NumStrPositiveNumberSymbolsSpec) EmptyTrailingPosNumSign() {
 
 	if nStrPosNumSignSpec.lock == nil {
 		nStrPosNumSignSpec.lock = new(sync.Mutex)
@@ -386,20 +391,20 @@ func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) EmptyTrailingPosNumSign(
 		nStrPosNumSignSpec)
 }
 
-// Equal - Receives a pointer to an NumStrPositiveNumberSignSpec
+// Equal - Receives a pointer to an NumStrPositiveNumberSymbolsSpec
 // object and proceeds to determine whether all data elements in
 // this object are equal to all corresponding data elements in
-// the current instance of NumStrPositiveNumberSignSpec.
+// the current instance of NumStrPositiveNumberSymbolsSpec.
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//		incomingNStrPosNumSignSpec *NumStrPositiveNumberSignSpec
+//		incomingNStrPosNumSignSpec *NumStrPositiveNumberSymbolsSpec
 //	    - This method will compare all data elements in the
-//	      current NumStrPositiveNumberSignSpec object to
+//	      current NumStrPositiveNumberSymbolsSpec object to
 //	      corresponding data elements in this second
-//	      NumStrPositiveNumberSignSpec object in order
+//	      NumStrPositiveNumberSymbolsSpec object in order
 //	      to determine equivalency.
 //
 //
@@ -453,13 +458,13 @@ func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) EmptyTrailingPosNumSign(
 //
 //	bool
 //	   - If all the data elements in the current
-//	     NumStrPositiveNumberSignSpec instance are equal to all the
+//	     NumStrPositiveNumberSymbolsSpec instance are equal to all the
 //	     corresponding data elements in 'incomingNStrPosNumSignSpec',
 //	     this return parameter will be set to 'true'. If all the data
 //	     elements are NOT equal, this return parameter will be set to
 //	     'false'.
-func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) Equal(
-	incomingNStrPosNumSignSpec *NumStrPositiveNumberSignSpec) bool {
+func (nStrPosNumSignSpec *NumStrPositiveNumberSymbolsSpec) Equal(
+	incomingNStrPosNumSignSpec *NumStrPositiveNumberSymbolsSpec) bool {
 
 	if nStrPosNumSignSpec.lock == nil {
 		nStrPosNumSignSpec.lock = new(sync.Mutex)
@@ -476,7 +481,7 @@ func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) Equal(
 
 // GetLeadingPosNumSignStr - Returns a string containing the
 // leading positive number sign character or characters.
-func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) GetLeadingPosNumSignStr() string {
+func (nStrPosNumSignSpec *NumStrPositiveNumberSymbolsSpec) GetLeadingPosNumSignStr() string {
 
 	if nStrPosNumSignSpec.lock == nil {
 		nStrPosNumSignSpec.lock = new(sync.Mutex)
@@ -486,12 +491,12 @@ func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) GetLeadingPosNumSignStr(
 
 	defer nStrPosNumSignSpec.lock.Unlock()
 
-	return nStrPosNumSignSpec.leadingPosNumSign.GetCharacterString()
+	return nStrPosNumSignSpec.leadingPosNumSymbols.GetCharacterString()
 }
 
 // GetTrailingPosNumSignStr - Returns a string containing the
 // trailing positive number sign character or characters.
-func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) GetTrailingPosNumSignStr() string {
+func (nStrPosNumSignSpec *NumStrPositiveNumberSymbolsSpec) GetTrailingPosNumSignStr() string {
 
 	if nStrPosNumSignSpec.lock == nil {
 		nStrPosNumSignSpec.lock = new(sync.Mutex)
@@ -501,12 +506,12 @@ func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) GetTrailingPosNumSignStr
 
 	defer nStrPosNumSignSpec.lock.Unlock()
 
-	return nStrPosNumSignSpec.trailingPosNumSign.GetCharacterString()
+	return nStrPosNumSignSpec.trailingPosNumSymbols.GetCharacterString()
 }
 
 // IsNOP - Stands for 'Is No Operation'. This method returns a
 // boolean value signaling whether this instance of
-// NumStrPositiveNumberSignSpec is engaged, valid and
+// NumStrPositiveNumberSymbolsSpec is engaged, valid and
 // operational with respect to the application of a positive
 // number sign symbol.
 //
@@ -518,11 +523,11 @@ func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) GetTrailingPosNumSignStr
 // as part of a number sign text presentation.
 //
 // If this method returns 'false', it signals that the current
-// instance of 'NumStrPositiveNumberSignSpec' is fully populated,
+// instance of 'NumStrPositiveNumberSymbolsSpec' is fully populated,
 // valid and functional. Number strings formatting operations
 // will therefore include a positive number sign symbol in
 // formatted number strings.
-func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) IsNOP() bool {
+func (nStrPosNumSignSpec *NumStrPositiveNumberSymbolsSpec) IsNOP() bool {
 
 	if nStrPosNumSignSpec.lock == nil {
 		nStrPosNumSignSpec.lock = new(sync.Mutex)
@@ -532,8 +537,8 @@ func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) IsNOP() bool {
 
 	defer nStrPosNumSignSpec.lock.Unlock()
 
-	if nStrPosNumSignSpec.leadingPosNumSign.GetRuneArrayLength() == 0 &&
-		nStrPosNumSignSpec.trailingPosNumSign.GetRuneArrayLength() == 0 {
+	if nStrPosNumSignSpec.leadingPosNumSymbols.GetRuneArrayLength() == 0 &&
+		nStrPosNumSignSpec.trailingPosNumSymbols.GetRuneArrayLength() == 0 {
 
 		return true
 	}
@@ -542,7 +547,7 @@ func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) IsNOP() bool {
 }
 
 // NewLeadingPosNumberSign - Creates and returns a new instance
-// of NumStrPositiveNumberSignSpec configured with a leading
+// of NumStrPositiveNumberSymbolsSpec configured with a leading
 // positive number sign character or characters.
 //
 // ----------------------------------------------------------------
@@ -552,7 +557,7 @@ func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) IsNOP() bool {
 //	leadingPositiveNumSign     string
 //		A string containing the leading positive number sign
 //		character or characters used to configure the returned
-//		instance of NumStrPositiveNumberSignSpec.
+//		instance of NumStrPositiveNumberSymbolsSpec.
 //
 //	errorPrefix					interface{}
 //		This object encapsulates error prefix text which is
@@ -602,9 +607,9 @@ func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) IsNOP() bool {
 //
 // Return Values
 //
-//	newNStrPosNumSign          NumStrPositiveNumberSignSpec
+//	newNStrPosNumSign          NumStrPositiveNumberSymbolsSpec
 //		If this method completes successfully, a new instance of
-//		NumStrPositiveNumberSignSpec, configured with a leading
+//		NumStrPositiveNumberSymbolsSpec, configured with a leading
 //		positive number sign symbol, will be returned through this
 //		parameter.
 //
@@ -617,10 +622,10 @@ func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) IsNOP() bool {
 //		If an error message is returned, the text value of input
 //		parameter 'errorPrefix' will be inserted or prefixed at
 //		the beginning of the error message.
-func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) NewLeadingPosNumberSign(
+func (nStrPosNumSignSpec *NumStrPositiveNumberSymbolsSpec) NewLeadingPosNumberSign(
 	leadingPositiveNumSign string,
 	errorPrefix interface{}) (
-	newNStrPosNumSign NumStrPositiveNumberSignSpec,
+	newNStrPosNumSign NumStrPositiveNumberSymbolsSpec,
 	err error) {
 
 	if nStrPosNumSignSpec.lock == nil {
@@ -636,7 +641,7 @@ func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) NewLeadingPosNumberSign(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"NumStrPositiveNumberSignSpec."+
+		"NumStrPositiveNumberSymbolsSpec."+
 			"NewLeadingPosNumberSign()",
 		"")
 
@@ -656,7 +661,7 @@ func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) NewLeadingPosNumberSign(
 }
 
 // NewLeadingPosNumberSignRunes - Creates and returns a new
-// instance of NumStrPositiveNumberSignSpec configured with
+// instance of NumStrPositiveNumberSymbolsSpec configured with
 // a leading positive number sign character or characters.
 //
 // ----------------------------------------------------------------
@@ -666,7 +671,7 @@ func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) NewLeadingPosNumberSign(
 //		leadingPositiveNumSign     []rune
 //		   - An array of runes containing the leading positive number
 //		     sign character or characters used to configure the
-//		     returned instance of NumStrPositiveNumberSignSpec.
+//		     returned instance of NumStrPositiveNumberSymbolsSpec.
 //
 //	 errorPrefix                interface{}
 //		   - This object encapsulates error prefix text which is
@@ -716,9 +721,9 @@ func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) NewLeadingPosNumberSign(
 //
 // Return Values
 //
-//	newNStrPosNumSign          NumStrPositiveNumberSignSpec
+//	newNStrPosNumSign          NumStrPositiveNumberSymbolsSpec
 //	   - If this method completes successfully, a new instance of
-//		 NumStrPositiveNumberSignSpec, configured with a leading
+//		 NumStrPositiveNumberSymbolsSpec, configured with a leading
 //		 positive number sign symbol, will be returned through this
 //	     parameter.
 //
@@ -732,10 +737,10 @@ func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) NewLeadingPosNumberSign(
 //		 and text passed by input parameter, 'errorPrefix'. The
 //		 'errorPrefix' text will be attached to the beginning of
 //		 the error message.
-func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) NewLeadingPosNumberSignRunes(
+func (nStrPosNumSignSpec *NumStrPositiveNumberSymbolsSpec) NewLeadingPosNumberSignRunes(
 	leadingPositiveNumSign []rune,
 	errorPrefix interface{}) (
-	newNStrPosNumSign NumStrPositiveNumberSignSpec,
+	newNStrPosNumSign NumStrPositiveNumberSymbolsSpec,
 	err error) {
 
 	if nStrPosNumSignSpec.lock == nil {
@@ -751,7 +756,7 @@ func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) NewLeadingPosNumberSignR
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"NumStrPositiveNumberSignSpec."+
+		"NumStrPositiveNumberSymbolsSpec."+
 			"NewLeadingPosNumberSignRunes()",
 		"")
 
@@ -771,7 +776,7 @@ func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) NewLeadingPosNumberSignR
 }
 
 // NewTrailingPosNumberSign - Creates and returns a new instance
-// of NumStrPositiveNumberSignSpec configured with a trailing
+// of NumStrPositiveNumberSymbolsSpec configured with a trailing
 // positive number sign character or characters.
 //
 // ----------------------------------------------------------------
@@ -781,7 +786,7 @@ func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) NewLeadingPosNumberSignR
 //	trailingPositiveNumSign     string
 //		A string containing the trailing positive number sign
 //		character or characters used to configure the returned
-//		instance of NumStrPositiveNumberSignSpec.
+//		instance of NumStrPositiveNumberSymbolsSpec.
 //
 //	errorPrefix					interface{}
 //		This object encapsulates error prefix text which is
@@ -831,9 +836,9 @@ func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) NewLeadingPosNumberSignR
 //
 // Return Values
 //
-//	newNStrPosNumSign			NumStrPositiveNumberSignSpec
+//	newNStrPosNumSign			NumStrPositiveNumberSymbolsSpec
 //		If this method completes successfully, a new instance of
-//		NumStrPositiveNumberSignSpec, configured with a trailing
+//		NumStrPositiveNumberSymbolsSpec, configured with a trailing
 //		positive number sign symbol, will be returned through this
 //		parameter.
 //
@@ -846,10 +851,10 @@ func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) NewLeadingPosNumberSignR
 //		If an error message is returned, the text value of input
 //		parameter 'errorPrefix' will be inserted or prefixed at
 //		the beginning of the error message.
-func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) NewTrailingPosNumberSign(
+func (nStrPosNumSignSpec *NumStrPositiveNumberSymbolsSpec) NewTrailingPosNumberSign(
 	trailingPositiveNumSign string,
 	errorPrefix interface{}) (
-	newNStrPosNumSign NumStrPositiveNumberSignSpec,
+	newNStrPosNumSign NumStrPositiveNumberSymbolsSpec,
 	err error) {
 
 	if nStrPosNumSignSpec.lock == nil {
@@ -865,7 +870,7 @@ func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) NewTrailingPosNumberSign
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"NumStrPositiveNumberSignSpec."+
+		"NumStrPositiveNumberSymbolsSpec."+
 			"NewTrailingPosNumberSign()",
 		"")
 
@@ -885,7 +890,7 @@ func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) NewTrailingPosNumberSign
 }
 
 // NewTrailingPosNumberSignRunes - Creates and returns a new
-// instance of NumStrPositiveNumberSignSpec configured with a
+// instance of NumStrPositiveNumberSymbolsSpec configured with a
 // trailing positive number sign character or characters.
 //
 // ----------------------------------------------------------------
@@ -895,7 +900,7 @@ func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) NewTrailingPosNumberSign
 //		trailingPositiveNumSign    []rune
 //		   - An array of runes containing the trailing positive number
 //		     sign character or characters used to configure the
-//		     returned instance of NumStrPositiveNumberSignSpec.
+//		     returned instance of NumStrPositiveNumberSymbolsSpec.
 //
 //	 errorPrefix                interface{}
 //		   - This object encapsulates error prefix text which is
@@ -945,9 +950,9 @@ func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) NewTrailingPosNumberSign
 //
 // Return Values
 //
-//	newNStrPosNumSign          NumStrPositiveNumberSignSpec
+//	newNStrPosNumSign          NumStrPositiveNumberSymbolsSpec
 //	   - If this method completes successfully, a new instance of
-//		 NumStrPositiveNumberSignSpec, configured with a trailing
+//		 NumStrPositiveNumberSymbolsSpec, configured with a trailing
 //		 positive number sign symbol, will be returned through this
 //	     parameter.
 //
@@ -961,10 +966,10 @@ func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) NewTrailingPosNumberSign
 //		 and text passed by input parameter, 'errorPrefix'. The
 //		 'errorPrefix' text will be attached to the beginning of
 //		 the error message.
-func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) NewTrailingPosNumberSignRunes(
+func (nStrPosNumSignSpec *NumStrPositiveNumberSymbolsSpec) NewTrailingPosNumberSignRunes(
 	trailingPositiveNumSign []rune,
 	errorPrefix interface{}) (
-	newNStrPosNumSign NumStrPositiveNumberSignSpec,
+	newNStrPosNumSign NumStrPositiveNumberSymbolsSpec,
 	err error) {
 
 	if nStrPosNumSignSpec.lock == nil {
@@ -980,7 +985,7 @@ func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) NewTrailingPosNumberSign
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"NumStrPositiveNumberSignSpec."+
+		"NumStrPositiveNumberSymbolsSpec."+
 			"NewTrailingPosNumberSignRunes()",
 		"")
 
@@ -1001,7 +1006,7 @@ func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) NewTrailingPosNumberSign
 
 // SetLeadingPosNumberSign - Resets and configures a leading
 // positive number sign character or characters for the current
-// instance of NumStrPositiveNumberSignSpec
+// instance of NumStrPositiveNumberSymbolsSpec
 //
 // ----------------------------------------------------------------
 //
@@ -1009,7 +1014,7 @@ func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) NewTrailingPosNumberSign
 //
 // This method will delete and overwrite the leading positive
 // number sign symbol data value in the current instance of
-// NumStrPositiveNumberSignSpec.
+// NumStrPositiveNumberSymbolsSpec.
 //
 // ----------------------------------------------------------------
 //
@@ -1018,7 +1023,7 @@ func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) NewTrailingPosNumberSign
 //	leadingPositiveNumSign     string
 //		A string containing the leading positive number sign
 //		character or characters used to configure the current
-//		instance of NumStrPositiveNumberSignSpec.
+//		instance of NumStrPositiveNumberSymbolsSpec.
 //
 //	errorPrefix					interface{}
 //		This object encapsulates error prefix text which is
@@ -1077,7 +1082,7 @@ func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) NewTrailingPosNumberSign
 //		If an error message is returned, the text value of input
 //		parameter 'errorPrefix' will be inserted or prefixed at
 //		the beginning of the error message.
-func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) SetLeadingPosNumberSign(
+func (nStrPosNumSignSpec *NumStrPositiveNumberSymbolsSpec) SetLeadingPosNumberSign(
 	leadingPositiveNumSign string,
 	errorPrefix interface{}) error {
 
@@ -1095,7 +1100,7 @@ func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) SetLeadingPosNumberSign(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"NumStrPositiveNumberSignSpec."+
+		"NumStrPositiveNumberSymbolsSpec."+
 			"SetLeadingPosNumberSign()",
 		"")
 
@@ -1116,7 +1121,7 @@ func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) SetLeadingPosNumberSign(
 
 // SetLeadingPosNumberSignRunes - Resets and configures a leading
 // positive number sign character or characters for the current
-// instance of NumStrPositiveNumberSignSpec
+// instance of NumStrPositiveNumberSymbolsSpec
 //
 // ----------------------------------------------------------------
 //
@@ -1124,7 +1129,7 @@ func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) SetLeadingPosNumberSign(
 //
 // This method will delete and overwrite the leading positive
 // number sign symbol data value in the current instance of
-// NumStrPositiveNumberSignSpec.
+// NumStrPositiveNumberSymbolsSpec.
 //
 // ----------------------------------------------------------------
 //
@@ -1133,7 +1138,7 @@ func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) SetLeadingPosNumberSign(
 //		leadingPositiveNumSign     []rune
 //	    - An array of runes containing the leading positive number
 //	      sign character or characters used to configure the current
-//	      instance of NumStrPositiveNumberSignSpec.
+//	      instance of NumStrPositiveNumberSymbolsSpec.
 //
 //	 errorPrefix                interface{}
 //		   - This object encapsulates error prefix text which is
@@ -1193,7 +1198,7 @@ func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) SetLeadingPosNumberSign(
 //		 and text passed by input parameter, 'errorPrefix'. The
 //		 'errorPrefix' text will be attached to the beginning of
 //		 the error message.
-func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) SetLeadingPosNumberSignRunes(
+func (nStrPosNumSignSpec *NumStrPositiveNumberSymbolsSpec) SetLeadingPosNumberSignRunes(
 	leadingPositiveNumSign []rune,
 	errorPrefix interface{}) error {
 
@@ -1211,7 +1216,7 @@ func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) SetLeadingPosNumberSignR
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"NumStrPositiveNumberSignSpec."+
+		"NumStrPositiveNumberSymbolsSpec."+
 			"SetLeadingPosNumberSignRunes()",
 		"")
 
@@ -1231,7 +1236,7 @@ func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) SetLeadingPosNumberSignR
 }
 
 // SetTrailingPosNumberSign - Creates and returns a new instance
-// of NumStrPositiveNumberSignSpec configured with a trailing
+// of NumStrPositiveNumberSymbolsSpec configured with a trailing
 // positive number sign character or characters.
 //
 // ----------------------------------------------------------------
@@ -1240,7 +1245,7 @@ func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) SetLeadingPosNumberSignR
 //
 // This method will delete and overwrite the trailing positive
 // number sign symbol data value in the current instance of
-// NumStrPositiveNumberSignSpec.
+// NumStrPositiveNumberSymbolsSpec.
 //
 // ----------------------------------------------------------------
 //
@@ -1299,9 +1304,9 @@ func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) SetLeadingPosNumberSignR
 //
 // Return Values
 //
-//	newNStrPosNumSign          NumStrPositiveNumberSignSpec
+//	newNStrPosNumSign          NumStrPositiveNumberSymbolsSpec
 //	   - If this method completes successfully, a new instance of
-//		 NumStrPositiveNumberSignSpec, configured with a trailing
+//		 NumStrPositiveNumberSymbolsSpec, configured with a trailing
 //		 positive number sign symbol, will be returned through this
 //	     parameter.
 //
@@ -1315,7 +1320,7 @@ func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) SetLeadingPosNumberSignR
 //		 and text passed by input parameter, 'errorPrefix'. The
 //		 'errorPrefix' text will be attached to the beginning of
 //		 the error message.
-func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) SetTrailingPosNumberSign(
+func (nStrPosNumSignSpec *NumStrPositiveNumberSymbolsSpec) SetTrailingPosNumberSign(
 	trailingPositiveNumSign string,
 	errorPrefix interface{}) (
 	err error) {
@@ -1333,7 +1338,7 @@ func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) SetTrailingPosNumberSign
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"NumStrPositiveNumberSignSpec."+
+		"NumStrPositiveNumberSymbolsSpec."+
 			"SetTrailingPosNumberSign()",
 		"")
 
@@ -1353,7 +1358,7 @@ func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) SetTrailingPosNumberSign
 }
 
 // SetTrailingPosNumberSignRunes - Creates and returns a new
-// instance of NumStrPositiveNumberSignSpec configured with a
+// instance of NumStrPositiveNumberSymbolsSpec configured with a
 // trailing positive number sign character or characters.
 //
 // ----------------------------------------------------------------
@@ -1362,7 +1367,7 @@ func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) SetTrailingPosNumberSign
 //
 // This method will delete and overwrite the trailing positive
 // number sign symbol data value in the current instance of
-// NumStrPositiveNumberSignSpec.
+// NumStrPositiveNumberSymbolsSpec.
 //
 // ----------------------------------------------------------------
 //
@@ -1421,9 +1426,9 @@ func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) SetTrailingPosNumberSign
 //
 // Return Values
 //
-//	newNStrPosNumSign          NumStrPositiveNumberSignSpec
+//	newNStrPosNumSign          NumStrPositiveNumberSymbolsSpec
 //	   - If this method completes successfully, a new instance of
-//		 NumStrPositiveNumberSignSpec, configured with a trailing
+//		 NumStrPositiveNumberSymbolsSpec, configured with a trailing
 //		 positive number sign symbol, will be returned through this
 //	     parameter.
 //
@@ -1437,7 +1442,7 @@ func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) SetTrailingPosNumberSign
 //		 and text passed by input parameter, 'errorPrefix'. The
 //		 'errorPrefix' text will be attached to the beginning of
 //		 the error message.
-func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) SetTrailingPosNumberSignRunes(
+func (nStrPosNumSignSpec *NumStrPositiveNumberSymbolsSpec) SetTrailingPosNumberSignRunes(
 	trailingPositiveNumSign []rune,
 	errorPrefix interface{}) (
 	err error) {
@@ -1455,7 +1460,7 @@ func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) SetTrailingPosNumberSign
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"NumStrPositiveNumberSignSpec."+
+		"NumStrPositiveNumberSymbolsSpec."+
 			"SetTrailingPosNumberSignRunes()",
 		"")
 
@@ -1475,7 +1480,7 @@ func (nStrPosNumSignSpec *NumStrPositiveNumberSignSpec) SetTrailingPosNumberSign
 }
 
 // numStrPosNumSignSpecNanobot - This type provides
-// helper methods for NumStrPositiveNumberSignSpec
+// helper methods for NumStrPositiveNumberSymbolsSpec
 type numStrPosNumSignSpecNanobot struct {
 	lock *sync.Mutex
 }
@@ -1483,7 +1488,7 @@ type numStrPosNumSignSpecNanobot struct {
 // copyNStrPosNumSignSpec - Copies all data from input parameter
 // 'sourcePosNumSignSpec' to input parameter
 // 'destinationPosNumSignSpec'. Both instances are of type
-// NumStrPositiveNumberSignSpec.
+// NumStrPositiveNumberSymbolsSpec.
 //
 // ----------------------------------------------------------------
 //
@@ -1498,8 +1503,8 @@ type numStrPosNumSignSpecNanobot struct {
 //
 // Input Parameters
 //
-//	destinationPosNumSignSpec  *NumStrPositiveNumberSignSpec
-//	   - A pointer to a NumStrPositiveNumberSignSpec instance.
+//	destinationPosNumSignSpec  *NumStrPositiveNumberSymbolsSpec
+//	   - A pointer to a NumStrPositiveNumberSymbolsSpec instance.
 //	     All the member variable data fields in this object will be
 //	     replaced by data values copied from input parameter
 //	     'sourcePosNumSignSpec'.
@@ -1508,8 +1513,8 @@ type numStrPosNumSignSpecNanobot struct {
 //	     copy operation.
 //
 //
-//	sourcePosNumSignSpec       *NumStrPositiveNumberSignSpec
-//	   - A pointer to another NumStrPositiveNumberSignSpec
+//	sourcePosNumSignSpec       *NumStrPositiveNumberSymbolsSpec
+//	   - A pointer to another NumStrPositiveNumberSymbolsSpec
 //	     instance. All the member variable data values from this
 //	     object will be copied to corresponding member variables in
 //	     'destinationPosNumSignSpec'.
@@ -1546,8 +1551,8 @@ type numStrPosNumSignSpecNanobot struct {
 //	     parameter 'errPrefDto' (error prefix) will be prefixed or
 //	     attached at the beginning of the error message.
 func (nStrPosNumSignSpecNanobot *numStrPosNumSignSpecNanobot) copyNStrPosNumSignSpec(
-	destinationPosNumSignSpec *NumStrPositiveNumberSignSpec,
-	sourcePosNumSignSpec *NumStrPositiveNumberSignSpec,
+	destinationPosNumSignSpec *NumStrPositiveNumberSymbolsSpec,
+	sourcePosNumSignSpec *NumStrPositiveNumberSymbolsSpec,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
 
@@ -1593,22 +1598,22 @@ func (nStrPosNumSignSpecNanobot *numStrPosNumSignSpecNanobot) copyNStrPosNumSign
 	new(numStrPosNumSignSpecAtom).empty(
 		destinationPosNumSignSpec)
 
-	err = destinationPosNumSignSpec.leadingPosNumSign.
+	err = destinationPosNumSignSpec.leadingPosNumSymbols.
 		CopyIn(
-			&sourcePosNumSignSpec.leadingPosNumSign,
+			&sourcePosNumSignSpec.leadingPosNumSymbols,
 			ePrefix.XCpy(
-				"destinationPosNumSignSpec.leadingPosNumSign<-"+
+				"destinationPosNumSignSpec.leadingPosNumSymbols<-"+
 					"sourcePosNumSignSpec"))
 
 	if err != nil {
 		return err
 	}
 
-	err = destinationPosNumSignSpec.trailingPosNumSign.
+	err = destinationPosNumSignSpec.trailingPosNumSymbols.
 		CopyIn(
-			&sourcePosNumSignSpec.trailingPosNumSign,
+			&sourcePosNumSignSpec.trailingPosNumSymbols,
 			ePrefix.XCpy(
-				"destinationPosNumSignSpec.trailingPosNumSign<-"+
+				"destinationPosNumSignSpec.trailingPosNumSymbols<-"+
 					"sourcePosNumSignSpec"))
 
 	return err
@@ -1616,21 +1621,21 @@ func (nStrPosNumSignSpecNanobot *numStrPosNumSignSpecNanobot) copyNStrPosNumSign
 
 // setLeadingNStrPosNumSignSpec - Deletes and resets the data
 // value of the Leading Positive Number Sign contained in an
-// instance of NumStrPositiveNumberSignSpec passed as an input
+// instance of NumStrPositiveNumberSymbolsSpec passed as an input
 // parameter.
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//		posNumSignSpec             *NumStrPositiveNumberSignSpec
-//		   - A pointer to a NumStrPositiveNumberSignSpec instance.
+//		posNumSignSpec             *NumStrPositiveNumberSymbolsSpec
+//		   - A pointer to a NumStrPositiveNumberSymbolsSpec instance.
 //		     The Leading Positive Number Sign contained in this
 //	      instance will be deleted and reset to the value
 //	      specified by input parameter, ''.
 //
 //
-//		leadingPosNumSign          []rune
+//		leadingPosNumSymbols          []rune
 //		   - An array of runes specifying the character or
 //		     characters which will be copied to the Leading
 //		     Positive Number Sign contained in input parameter,
@@ -1663,7 +1668,7 @@ func (nStrPosNumSignSpecNanobot *numStrPosNumSignSpecNanobot) copyNStrPosNumSign
 //	     parameter 'errPrefDto' (error prefix) will be prefixed or
 //	     attached at the beginning of the error message.
 func (nStrPosNumSignSpecNanobot *numStrPosNumSignSpecNanobot) setLeadingNStrPosNumSignSpec(
-	posNumSignSpec *NumStrPositiveNumberSignSpec,
+	posNumSignSpec *NumStrPositiveNumberSymbolsSpec,
 	leadingPosNumSign []rune,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
@@ -1705,32 +1710,32 @@ func (nStrPosNumSignSpecNanobot *numStrPosNumSignSpecNanobot) setLeadingNStrPosN
 		return err
 	}
 
-	err = posNumSignSpec.leadingPosNumSign.SetRuneArray(
+	err = posNumSignSpec.leadingPosNumSymbols.SetRuneArray(
 		leadingPosNumSign,
 		ePrefix.XCpy(
-			"posNumSignSpec.leadingPosNumSign"+
-				"<-leadingPosNumSign"))
+			"posNumSignSpec.leadingPosNumSymbols"+
+				"<-leadingPosNumSymbols"))
 
 	return err
 }
 
 // setTrailingNStrPosNumSignSpec - Deletes and resets the data
 // value of the Trailing Positive Number Sign contained in an
-// instance of NumStrPositiveNumberSignSpec passed as an input
+// instance of NumStrPositiveNumberSymbolsSpec passed as an input
 // parameter.
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//		posNumSignSpec             *NumStrPositiveNumberSignSpec
-//		   - A pointer to a NumStrPositiveNumberSignSpec instance.
+//		posNumSignSpec             *NumStrPositiveNumberSymbolsSpec
+//		   - A pointer to a NumStrPositiveNumberSymbolsSpec instance.
 //		     The Trailing Positive Number Sign contained in this
 //	      instance will be deleted and reset to the value
 //	      specified by input parameter, ''.
 //
 //
-//		trailingPosNumSign          []rune
+//		trailingPosNumSymbols          []rune
 //		   - An array of runes specifying the character or
 //		     characters which will be copied to the Trailing
 //		     Positive Number Sign contained in input parameter,
@@ -1763,7 +1768,7 @@ func (nStrPosNumSignSpecNanobot *numStrPosNumSignSpecNanobot) setLeadingNStrPosN
 //	     parameter 'errPrefDto' (error prefix) will be prefixed or
 //	     attached at the beginning of the error message.
 func (nStrPosNumSignSpecNanobot *numStrPosNumSignSpecNanobot) setTrailingNStrPosNumSignSpec(
-	posNumSignSpec *NumStrPositiveNumberSignSpec,
+	posNumSignSpec *NumStrPositiveNumberSymbolsSpec,
 	trailingPosNumSign []rune,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
@@ -1805,23 +1810,23 @@ func (nStrPosNumSignSpecNanobot *numStrPosNumSignSpecNanobot) setTrailingNStrPos
 		return err
 	}
 
-	err = posNumSignSpec.trailingPosNumSign.SetRuneArray(
+	err = posNumSignSpec.trailingPosNumSymbols.SetRuneArray(
 		trailingPosNumSign,
 		ePrefix.XCpy(
-			"posNumSignSpec.trailingPosNumSign"+
-				"<-trailingPosNumSign"))
+			"posNumSignSpec.trailingPosNumSymbols"+
+				"<-trailingPosNumSymbols"))
 
 	return err
 }
 
 // numStrPosNumSignSpecAtom - This type provides
-// helper methods for NumStrPositiveNumberSignSpec
+// helper methods for NumStrPositiveNumberSymbolsSpec
 type numStrPosNumSignSpecAtom struct {
 	lock *sync.Mutex
 }
 
 // empty - Receives a pointer to an instance of
-// NumStrPositiveNumberSignSpec and proceeds to reset the
+// NumStrPositiveNumberSymbolsSpec and proceeds to reset the
 // data values for all member variables to their initial or
 // zero values.
 //
@@ -1836,8 +1841,8 @@ type numStrPosNumSignSpecAtom struct {
 //
 // Input Parameters
 //
-//	nStrPosNumSpec           *NumStrPositiveNumberSignSpec
-//	   - A pointer to an instance of NumStrPositiveNumberSignSpec.
+//	nStrPosNumSpec           *NumStrPositiveNumberSymbolsSpec
+//	   - A pointer to an instance of NumStrPositiveNumberSymbolsSpec.
 //	     All the internal member variables contained in this
 //	     instance will be deleted and reset to their zero values.
 //
@@ -1847,7 +1852,7 @@ type numStrPosNumSignSpecAtom struct {
 //
 //	NONE
 func (nStrPosNumSpecAtom *numStrPosNumSignSpecAtom) empty(
-	nStrPosNumSpec *NumStrPositiveNumberSignSpec) {
+	nStrPosNumSpec *NumStrPositiveNumberSymbolsSpec) {
 
 	if nStrPosNumSpecAtom.lock == nil {
 		nStrPosNumSpecAtom.lock = new(sync.Mutex)
@@ -1861,13 +1866,13 @@ func (nStrPosNumSpecAtom *numStrPosNumSignSpecAtom) empty(
 		return
 	}
 
-	nStrPosNumSpec.leadingPosNumSign.Empty()
+	nStrPosNumSpec.leadingPosNumSymbols.Empty()
 
-	nStrPosNumSpec.trailingPosNumSign.Empty()
+	nStrPosNumSpec.trailingPosNumSymbols.Empty()
 }
 
 // emptyLeadingPosNumSign - Receives a pointer to an instance
-// of NumStrPositiveNumberSignSpec and proceeds to reset the
+// of NumStrPositiveNumberSymbolsSpec and proceeds to reset the
 // member variable data for the leading positive number sign
 // to an initial or zero value.
 //
@@ -1883,8 +1888,8 @@ func (nStrPosNumSpecAtom *numStrPosNumSignSpecAtom) empty(
 //
 // Input Parameters
 //
-//	nStrPosNumSpec           *NumStrPositiveNumberSignSpec
-//	   - A pointer to an instance of NumStrPositiveNumberSignSpec.
+//	nStrPosNumSpec           *NumStrPositiveNumberSymbolsSpec
+//	   - A pointer to an instance of NumStrPositiveNumberSymbolsSpec.
 //	     The Leading Positive Number Sign contained in this
 //	     instance will be deleted and reset to an empty or zero
 //	     value.
@@ -1895,7 +1900,7 @@ func (nStrPosNumSpecAtom *numStrPosNumSignSpecAtom) empty(
 //
 //	NONE
 func (nStrPosNumSpecAtom *numStrPosNumSignSpecAtom) emptyLeadingPosNumSign(
-	nStrPosNumSpec *NumStrPositiveNumberSignSpec) {
+	nStrPosNumSpec *NumStrPositiveNumberSymbolsSpec) {
 
 	if nStrPosNumSpecAtom.lock == nil {
 		nStrPosNumSpecAtom.lock = new(sync.Mutex)
@@ -1909,12 +1914,12 @@ func (nStrPosNumSpecAtom *numStrPosNumSignSpecAtom) emptyLeadingPosNumSign(
 		return
 	}
 
-	nStrPosNumSpec.leadingPosNumSign.Empty()
+	nStrPosNumSpec.leadingPosNumSymbols.Empty()
 
 }
 
 // emptyTrailingPosNumSign - Receives a pointer to an instance
-// of NumStrPositiveNumberSignSpec and proceeds to reset the
+// of NumStrPositiveNumberSymbolsSpec and proceeds to reset the
 // member variable data for the trailing positive number sign
 // to an initial or zero value.
 //
@@ -1930,8 +1935,8 @@ func (nStrPosNumSpecAtom *numStrPosNumSignSpecAtom) emptyLeadingPosNumSign(
 //
 // Input Parameters
 //
-//	nStrPosNumSpec           *NumStrPositiveNumberSignSpec
-//	   - A pointer to an instance of NumStrPositiveNumberSignSpec.
+//	nStrPosNumSpec           *NumStrPositiveNumberSymbolsSpec
+//	   - A pointer to an instance of NumStrPositiveNumberSymbolsSpec.
 //	     The Trailing Positive Number Sign contained in this
 //	     instance will be deleted and reset to an empty or zero
 //	     value.
@@ -1942,7 +1947,7 @@ func (nStrPosNumSpecAtom *numStrPosNumSignSpecAtom) emptyLeadingPosNumSign(
 //
 //	NONE
 func (nStrPosNumSpecAtom *numStrPosNumSignSpecAtom) emptyTrailingPosNumSign(
-	nStrPosNumSpec *NumStrPositiveNumberSignSpec) {
+	nStrPosNumSpec *NumStrPositiveNumberSymbolsSpec) {
 
 	if nStrPosNumSpecAtom.lock == nil {
 		nStrPosNumSpecAtom.lock = new(sync.Mutex)
@@ -1956,11 +1961,11 @@ func (nStrPosNumSpecAtom *numStrPosNumSignSpecAtom) emptyTrailingPosNumSign(
 		return
 	}
 
-	nStrPosNumSpec.trailingPosNumSign.Empty()
+	nStrPosNumSpec.trailingPosNumSymbols.Empty()
 }
 
 // equal - Receives a pointer to two instances of
-// NumStrPositiveNumberSignSpec and proceeds to compare their
+// NumStrPositiveNumberSymbolsSpec and proceeds to compare their
 // member variables in order to determine if they are
 // equivalent.
 //
@@ -1973,15 +1978,15 @@ func (nStrPosNumSpecAtom *numStrPosNumSignSpecAtom) emptyTrailingPosNumSign(
 //
 // Input Parameters
 //
-//	nStrPosNumSpec1    *NumStrPositiveNumberSignSpec
-//	   - An instance of NumStrPositiveNumberSignSpec.
+//	nStrPosNumSpec1    *NumStrPositiveNumberSymbolsSpec
+//	   - An instance of NumStrPositiveNumberSymbolsSpec.
 //	     Internal member variables from 'nStrPosNumSpec1'
 //	     will be compared to those of 'nStrPosNumSpec2' to
 //	     determine if both instances are equivalent.
 //
 //
-//	nStrPosNumSpec2    *NumStrPositiveNumberSignSpec
-//	   - An instance of NumStrPositiveNumberSignSpec.
+//	nStrPosNumSpec2    *NumStrPositiveNumberSymbolsSpec
+//	   - An instance of NumStrPositiveNumberSymbolsSpec.
 //	     Internal member variables from 'nStrPosNumSpec2'
 //	     will be compared to those of 'nStrPosNumSpec1' to
 //	     determine if both instances are equivalent.
@@ -2000,8 +2005,8 @@ func (nStrPosNumSpecAtom *numStrPosNumSignSpecAtom) emptyTrailingPosNumSign(
 //	     return a boolean value of 'false' to the calling
 //	     function.
 func (nStrPosNumSpecAtom *numStrPosNumSignSpecAtom) equal(
-	nStrPosNumSpec1 *NumStrPositiveNumberSignSpec,
-	nStrPosNumSpec2 *NumStrPositiveNumberSignSpec) bool {
+	nStrPosNumSpec1 *NumStrPositiveNumberSymbolsSpec,
+	nStrPosNumSpec2 *NumStrPositiveNumberSymbolsSpec) bool {
 
 	if nStrPosNumSpecAtom.lock == nil {
 		nStrPosNumSpecAtom.lock = new(sync.Mutex)
@@ -2016,14 +2021,14 @@ func (nStrPosNumSpecAtom *numStrPosNumSignSpecAtom) equal(
 		return false
 	}
 
-	if !nStrPosNumSpec1.leadingPosNumSign.Equal(
-		&nStrPosNumSpec2.leadingPosNumSign) {
+	if !nStrPosNumSpec1.leadingPosNumSymbols.Equal(
+		&nStrPosNumSpec2.leadingPosNumSymbols) {
 
 		return false
 	}
 
-	if !nStrPosNumSpec1.trailingPosNumSign.Equal(
-		&nStrPosNumSpec2.trailingPosNumSign) {
+	if !nStrPosNumSpec1.trailingPosNumSymbols.Equal(
+		&nStrPosNumSpec2.trailingPosNumSymbols) {
 
 		return false
 	}

@@ -28,7 +28,7 @@ type SignedNumberFormatSpec struct {
 	// Controls the rounding algorithm applied to
 	// floating point numbers.
 
-	positiveNumberSign NumStrPositiveNumberSignSpec
+	positiveNumberSign NumStrPositiveNumberSymbolsSpec
 	// Positive number signs are commonly implied and
 	// not specified. However, the user as the option
 	// to specify a positive number sign character or
@@ -3560,13 +3560,13 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setNumberFieldParams(
 //		will be reset to the values provided by the
 //		following input parameters.
 //
-//	leadingPosNumSign			[]rune
+//	leadingPosNumSymbols			[]rune
 //		An array of runes containing the character or
 //		characters which will be formatted and displayed
 //		in front of a positive numeric value in a number
 //		string.
 //
-//	trailingPosNumSign			[]rune
+//	trailingPosNumSymbols			[]rune
 //		An array of runes containing the character or
 //		characters which will be formatted and displayed
 //		after a positive numeric value in a number
@@ -3644,7 +3644,7 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setPositiveNumberSign(
 				leadingPosNumSign,
 				ePrefix.XCpy(
 					"signedNumFmt.positiveNumberSign"+
-						"<-leadingPosNumSign"))
+						"<-leadingPosNumSymbols"))
 
 		if err != nil {
 			return err
@@ -3658,7 +3658,7 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setPositiveNumberSign(
 				trailingPosNumSign,
 				ePrefix.XCpy(
 					"signedNumFmt.positiveNumberSign<-"+
-						"trailingPosNumSign"))
+						"trailingPosNumSymbols"))
 
 		if err != nil {
 			return err

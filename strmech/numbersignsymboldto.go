@@ -18,7 +18,7 @@ import (
 // "(55)".
 //
 // Number Sign Symbols are usually positioned before the numeric
-// value ('USA Example: +25') or after the numeric value ('EU
+// value ('USA Example: +25') or after the numeric value ('EU'
 // Example 25-). However, there are cases where the number sign
 // is positioned before and after the negative value. As shown
 // above, the USA uses opening and closing parentheses to designate
@@ -37,9 +37,8 @@ import (
 // NumberSignSymbolDto objects should only be created using one of
 // the following two methods:
 //
-//   NumberSignSymbolDto.New()
-//   NumberSignSymbolDto.SetNumberSignSymbol()
-//
+//	NumberSignSymbolDto.New()
+//	NumberSignSymbolDto.SetNumberSignSymbol()
 type NumberSignSymbolDto struct {
 	leadingNumSignChars          []rune
 	trailingNumSignChars         []rune
@@ -61,7 +60,6 @@ type NumberSignSymbolDto struct {
 // Specifically, this means that member variables
 // 'leadingNumSignFoundInNumber' will be set to 'false' and
 // 'leadingNumSignFoundIndex' will be set to zero.
-//
 func (nSignSymbol *NumberSignSymbolDto) ClearLeadingNumSignTracking() {
 
 	if nSignSymbol.lock == nil {
@@ -86,7 +84,6 @@ func (nSignSymbol *NumberSignSymbolDto) ClearLeadingNumSignTracking() {
 // Specifically, this means that member variables
 // 'trailingNumSignFoundInNumber' will be set to 'false' and
 // 'trailingNumSignFoundIndex' will be set to zero.
-//
 func (nSignSymbol *NumberSignSymbolDto) ClearTrailingNumSignTracking() {
 
 	if nSignSymbol.lock == nil {
@@ -112,85 +109,82 @@ func (nSignSymbol *NumberSignSymbolDto) ClearTrailingNumSignTracking() {
 // All the data fields in current NumberSignSymbolDto instance
 // ('nSignSymbol') will be modified and overwritten.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  incomingNumSignSymbol      *NumberSignSymbolDto
-//     - A pointer to an instance of NumberSignSymbolDto. This method
-//       will NOT change the values of internal member variables
-//       contained in this instance.
+//	incomingNumSignSymbol      *NumberSignSymbolDto
+//	   - A pointer to an instance of NumberSignSymbolDto. This method
+//	     will NOT change the values of internal member variables
+//	     contained in this instance.
 //
-//       All data values in this NumberSignSymbolDto instance will be
-//       copied to current NumberSignSymbolDto instance ('nSignSymbol').
+//	     All data values in this NumberSignSymbolDto instance will be
+//	     copied to current NumberSignSymbolDto instance ('nSignSymbol').
 //
-//       If 'incomingNumSignSymbol' contains invalid data elements,
-//       this method will return an error and the current
-//       NumberSignSymbolDto instance ('nSignSymbol') will remain
-//       unaltered in its original state.
-//
-//
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
-//
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
-//
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     If 'incomingNumSignSymbol' contains invalid data elements,
+//	     this method will return an error and the current
+//	     NumberSignSymbolDto instance ('nSignSymbol') will remain
+//	     unaltered in its original state.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       2. string - A string containing error prefix information.
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     2. string - A string containing error prefix information.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     4. [][2]string A two-dimensional slice of strings containing
+//	                    error prefix and error context information.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	                        ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  err                        error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	err                        error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (nSignSymbol *NumberSignSymbolDto) CopyIn(
 	incomingNumSignSymbol *NumberSignSymbolDto,
 	errorPrefix interface{}) (
@@ -230,78 +224,75 @@ func (nSignSymbol *NumberSignSymbolDto) CopyIn(
 // If the current NumberSignSymbolDto instance is judged to be
 // invalid, this method will return an error.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       2. string - A string containing error prefix information.
+//	     2. string - A string containing error prefix information.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//	     4. [][2]string A two-dimensional slice of strings containing
+//	                    error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	                        ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
-//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  newNumSignSymbol    NumberSignSymbolDto
-//     - If this method completes successfully, a new instance of
-//       NumberSignSymbolDto will be created and returned
-//       containing all the data values copied from the current
-//       instance of NumberSignSymbolDto.
+//	newNumSignSymbol    NumberSignSymbolDto
+//	   - If this method completes successfully, a new instance of
+//	     NumberSignSymbolDto will be created and returned
+//	     containing all the data values copied from the current
+//	     instance of NumberSignSymbolDto.
 //
 //
-//  err                        error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	err                        error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (nSignSymbol *NumberSignSymbolDto) CopyOut(
 	errorPrefix interface{}) (
 	newNumSignSymbol NumberSignSymbolDto,
@@ -342,7 +333,6 @@ func (nSignSymbol *NumberSignSymbolDto) CopyOut(
 // IMPORTANT
 // This method will effectively delete all data contained in the
 // current NumberSignSymbolDto instance.
-//
 func (nSignSymbol *NumberSignSymbolDto) Empty() {
 
 	if nSignSymbol.lock == nil {
@@ -369,7 +359,6 @@ func (nSignSymbol *NumberSignSymbolDto) Empty() {
 // If the incoming NumberSignSymbolDto data values are NOT
 // equivalent to those of the current NumberSignSymbolDto instance,
 // this method returns 'false'.
-//
 func (nSignSymbol *NumberSignSymbolDto) Equal(
 	incomingNSignSymbol *NumberSignSymbolDto) bool {
 
@@ -399,7 +388,6 @@ func (nSignSymbol *NumberSignSymbolDto) Equal(
 // This method differs from NumberSignSymbolDto.Equal() in that
 // only the number sign rune arrays are compared. No other internal
 // member variables are compared.
-//
 func (nSignSymbol *NumberSignSymbolDto) EqualNumberSignRunes(
 	incomingNSignSymbol *NumberSignSymbolDto) bool {
 
@@ -429,22 +417,23 @@ func (nSignSymbol *NumberSignSymbolDto) EqualNumberSignRunes(
 // displayed within the number string using number sign
 // characters (plus or minus). Explicit Number Sign Symbols
 // are ALWAYS visible and displayed within number strings.
-//       Example: '+123', '-123'.
+//
+//	Example: '+123', '-123'.
 //
 // Implicit Number Sign Symbols are NOT visible or displayed in a
 // number string. Instead, the Number Sign Symbol is assumed or
 // implied. Implicit Number Sign Symbols are NEVER visible or
 // displayed within number strings.
-//      Example: '123' is assumed to be a positive value. The
-//               plus sign is implied or 'implicit'.
+//
+//	Example: '123' is assumed to be a positive value. The
+//	         plus sign is implied or 'implicit'.
 //
 // This method will return an enumeration type which is set to one
 // of the following three values:
 //
-//   NumSignSymbolDisplayMode(0).None()
-//   NumSignSymbolDisplayMode(0).Explicit()
-//   NumSignSymbolDisplayMode(0).Implicit()
-//
+//	NumSignSymbolDisplayMode(0).None()
+//	NumSignSymbolDisplayMode(0).Explicit()
+//	NumSignSymbolDisplayMode(0).Implicit()
 func (nSignSymbol *NumberSignSymbolDto) GetNumSignSymDisplayMode() NumSignSymbolDisplayMode {
 
 	if nSignSymbol.lock == nil {
@@ -461,7 +450,6 @@ func (nSignSymbol *NumberSignSymbolDto) GetNumSignSymDisplayMode() NumSignSymbol
 // GetLeadingNumSignChars - Returns a deep copy of the leading
 // number sign characters contained in this instance of
 // NumberSignSymbolDto.
-//
 func (nSignSymbol *NumberSignSymbolDto) GetLeadingNumSignChars() []rune {
 
 	if nSignSymbol.lock == nil {
@@ -495,7 +483,6 @@ func (nSignSymbol *NumberSignSymbolDto) GetLeadingNumSignChars() []rune {
 //
 // This index is stored as an internal member variable in the
 // current instance of NumberSignSymbolDto.
-//
 func (nSignSymbol *NumberSignSymbolDto) GetLeadingNumSignFoundIndex() int {
 
 	if nSignSymbol.lock == nil {
@@ -512,7 +499,6 @@ func (nSignSymbol *NumberSignSymbolDto) GetLeadingNumSignFoundIndex() int {
 // GetLeadingNumSignFoundInNumber - Returns a boolean flag which
 // signals whether the Leading Number Sign Symbol has been located
 // in a number or number string.
-//
 func (nSignSymbol *NumberSignSymbolDto) GetLeadingNumSignFoundInNumber() (
 	leadingNumSignFoundInNumber bool) {
 
@@ -533,7 +519,6 @@ func (nSignSymbol *NumberSignSymbolDto) GetLeadingNumSignFoundInNumber() (
 //
 // All NumberSignSymbolDto objects have NumericSymbolClass values
 // set equal to NumericSymbolClass(0).NumberSign().
-//
 func (nSignSymbol *NumberSignSymbolDto) GetNumericSymbolClass() NumericSymbolClass {
 
 	if nSignSymbol.lock == nil {
@@ -553,13 +538,13 @@ func (nSignSymbol *NumberSignSymbolDto) GetNumericSymbolClass() NumericSymbolCla
 // number sign associated with this NumberSignSymbolDto instance.
 //
 // Valid return values are:
-//  Negative == -1
-//  Zero     ==  0
-//  Positive ==  1
+//
+//	Negative == -1
+//	Zero     ==  0
+//	Positive ==  1
 //
 // If the Number Sign value is invalid, this method will return a
 // value of -99
-//
 func (nSignSymbol *NumberSignSymbolDto) GetNumSignArithmeticVal() int {
 
 	if nSignSymbol.lock == nil {
@@ -581,10 +566,10 @@ func (nSignSymbol *NumberSignSymbolDto) GetNumSignArithmeticVal() int {
 //
 // This method returns a type of NumSignSymbolPosition. Possible
 // return values are listed as follows:
-//    NumSignSymbolPosition(0).Before()
-//    NumSignSymbolPosition(0).After()
-//    NumSignSymbolPosition(0).BeforeAndAfter()
 //
+//	NumSignSymbolPosition(0).Before()
+//	NumSignSymbolPosition(0).After()
+//	NumSignSymbolPosition(0).BeforeAndAfter()
 func (nSignSymbol *NumberSignSymbolDto) GetNumSignSymPosition() NumSignSymbolPosition {
 
 	if nSignSymbol.lock == nil {
@@ -603,9 +588,9 @@ func (nSignSymbol *NumberSignSymbolDto) GetNumSignSymPosition() NumSignSymbolPos
 // negative.
 //
 // Valid return values:
-//    NumericSignValueType(0).Negative()
-//    NumericSignValueType(0).Positive()
 //
+//	NumericSignValueType(0).Negative()
+//	NumericSignValueType(0).Positive()
 func (nSignSymbol *NumberSignSymbolDto) GetNumSignVal() NumericSignValueType {
 
 	if nSignSymbol.lock == nil {
@@ -622,7 +607,6 @@ func (nSignSymbol *NumberSignSymbolDto) GetNumSignVal() NumericSignValueType {
 // GetTrailingNumSignChars - Returns a deep copy of the trailing
 // number sign characters contained in this instance of
 // NumberSignSymbolDto.
-//
 func (nSignSymbol *NumberSignSymbolDto) GetTrailingNumSignChars() []rune {
 
 	if nSignSymbol.lock == nil {
@@ -656,7 +640,6 @@ func (nSignSymbol *NumberSignSymbolDto) GetTrailingNumSignChars() []rune {
 //
 // This index is stored as an internal member variable in the
 // current instance of NumberSignSymbolDto.
-//
 func (nSignSymbol *NumberSignSymbolDto) GetTrailingNumSignFoundIndex() int {
 
 	if nSignSymbol.lock == nil {
@@ -673,7 +656,6 @@ func (nSignSymbol *NumberSignSymbolDto) GetTrailingNumSignFoundIndex() int {
 // GetTrailingNumSignFoundInNumber - Returns a boolean flag which
 // signals whether the Trailing Number Sign Symbol has been located
 // in a number or number string.
-//
 func (nSignSymbol *NumberSignSymbolDto) GetTrailingNumSignFoundInNumber() (
 	trailingNumSignFoundInNumber bool) {
 
@@ -690,7 +672,6 @@ func (nSignSymbol *NumberSignSymbolDto) GetTrailingNumSignFoundInNumber() (
 
 // IsEmpty - Returns 'true' if the current NumberSignSymbolDto
 // instance is empty or uninitialized.
-//
 func (nSignSymbol *NumberSignSymbolDto) IsEmpty() bool {
 
 	if nSignSymbol.lock == nil {
@@ -726,41 +707,38 @@ func (nSignSymbol *NumberSignSymbolDto) IsEmpty() bool {
 // array, only the last leading number sign symbol encountered
 // before the first numeric digit will be tracked and recorded.
 //
-//
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  hostRunes                  []rune
-//     - An array of runes. This rune array will be searched to
-//       determine if the leading number sign symbol is present in
-//       the array beginning at the 'hostStartIndex'.
+//	hostRunes                  []rune
+//	   - An array of runes. This rune array will be searched to
+//	     determine if the leading number sign symbol is present in
+//	     the array beginning at the 'hostStartIndex'.
 //
-//       If 'hostRunes' is a zero length array, this method will
-//       return 'false'.
+//	     If 'hostRunes' is a zero length array, this method will
+//	     return 'false'.
 //
 //
-//  hostStartIndex             int
-//     - The starting index within the host runes array where
-//       the search operation will commence. If 'hostStartIndex' is
-//       less than zero, it will be automatically set to zero.
+//	hostStartIndex             int
+//	   - The starting index within the host runes array where
+//	     the search operation will commence. If 'hostStartIndex' is
+//	     less than zero, it will be automatically set to zero.
 //
-//       If the 'hostStartIndex' is greater than or equal to the
-//       length of 'hostRunes', this method will return 'false'.
-//
+//	     If the 'hostStartIndex' is greater than or equal to the
+//	     length of 'hostRunes', this method will return 'false'.
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  foundLeadingNumSign        bool
-//     - A boolean flag signaling whether the leading number sign
-//       symbol was located in the host runes array beginning at
-//       the index specified by input parameter 'hostStartIndex'.
+//	foundLeadingNumSign        bool
+//	   - A boolean flag signaling whether the leading number sign
+//	     symbol was located in the host runes array beginning at
+//	     the index specified by input parameter 'hostStartIndex'.
 //
-//       If the target runes array is found at the staring index in
-//       the host runes array, this method will return 'true'.
-//
+//	     If the target runes array is found at the staring index in
+//	     the host runes array, this method will return 'true'.
 func (nSignSymbol *NumberSignSymbolDto) IsLeadingNumSignAtHostIndex(
 	hostRunes []rune,
 	hostStartIndex int) (
@@ -801,11 +779,10 @@ func (nSignSymbol *NumberSignSymbolDto) IsLeadingNumSignAtHostIndex(
 // symbol has been located in the target number or number string.
 // Depending on the configuration of the NumberSignSymbolDto, this
 // could indicate one of the following outcomes:
-//   1. The leading number sign was found.
-//   2. The trailing number sign was found.
-//   3. This symbol has both a leading and trailing component
-//       and both components were found.
-//
+//  1. The leading number sign was found.
+//  2. The trailing number sign was found.
+//  3. This symbol has both a leading and trailing component
+//     and both components were found.
 func (nSignSymbol *NumberSignSymbolDto) IsNumSignSymbolFoundInNumber() bool {
 
 	if nSignSymbol.lock == nil {
@@ -842,41 +819,38 @@ func (nSignSymbol *NumberSignSymbolDto) IsNumSignSymbolFoundInNumber() bool {
 // array, only the first trailing number sign symbol encountered
 // after the last numeric digit will be tracked and recorded.
 //
-//
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  hostRunes                  []rune
-//     - An array of runes. This rune array will be searched to
-//       determine if the trailing number sign symbol is present in
-//       the array beginning at the 'hostStartIndex'.
+//	hostRunes                  []rune
+//	   - An array of runes. This rune array will be searched to
+//	     determine if the trailing number sign symbol is present in
+//	     the array beginning at the 'hostStartIndex'.
 //
-//       If 'hostRunes' is a zero length array, this method will
-//       return 'false'.
+//	     If 'hostRunes' is a zero length array, this method will
+//	     return 'false'.
 //
 //
-//  hostStartIndex             int
-//     - The starting index within the host runes array where
-//       the search operation will commence. If 'hostStartIndex' is
-//       less than zero, it will be automatically set to zero.
+//	hostStartIndex             int
+//	   - The starting index within the host runes array where
+//	     the search operation will commence. If 'hostStartIndex' is
+//	     less than zero, it will be automatically set to zero.
 //
-//       If the 'hostStartIndex' is greater than or equal to the
-//       length of 'hostRunes', this method will return 'false'.
-//
+//	     If the 'hostStartIndex' is greater than or equal to the
+//	     length of 'hostRunes', this method will return 'false'.
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  foundTrailingNumSign       bool
-//     - A boolean flag signaling whether the trailing number sign
-//       symbol was located in the host runes array beginning at
-//       the index specified by input parameter 'hostStartIndex'.
+//	foundTrailingNumSign       bool
+//	   - A boolean flag signaling whether the trailing number sign
+//	     symbol was located in the host runes array beginning at
+//	     the index specified by input parameter 'hostStartIndex'.
 //
-//       If the target runes array is found at the staring index in
-//       the host runes array, this method will return 'true'.
-//
+//	     If the target runes array is found at the staring index in
+//	     the host runes array, this method will return 'true'.
 func (nSignSymbol *NumberSignSymbolDto) IsTrailingNumSignAtHostIndex(
 	hostRunes []rune,
 	hostStartIndex int) (
@@ -923,25 +897,22 @@ func (nSignSymbol *NumberSignSymbolDto) IsTrailingNumSignAtHostIndex(
 // NumberSignSymbolDto instance to determine whether the current
 // instance is valid in all respects.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  --- NONE ---
-//
+//	--- NONE ---
 //
 // -----------------------------------------------------------------
 //
 // Return Values
 //
-//  isValid             bool
-//     - This returned boolean value will signal whether the
-//       current NumberSignSymbolDto instance is valid, or not. If the
-//       current NumberSignSymbolDto contains valid data, this method
-//       returns 'true'. If the data is invalid, this method will
-//       return 'false'.
-//
+//	isValid             bool
+//	   - This returned boolean value will signal whether the
+//	     current NumberSignSymbolDto instance is valid, or not. If the
+//	     current NumberSignSymbolDto contains valid data, this method
+//	     returns 'true'. If the data is invalid, this method will
+//	     return 'false'.
 func (nSignSymbol *NumberSignSymbolDto) IsValidInstance() (
 	isValid bool) {
 
@@ -969,76 +940,73 @@ func (nSignSymbol *NumberSignSymbolDto) IsValidInstance() (
 // If the current NumberSignSymbolDto instance is judged to be
 // invalid, this method will return an error.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       2. string - A string containing error prefix information.
+//	     2. string - A string containing error prefix information.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//	     4. [][2]string A two-dimensional slice of strings containing
+//	                    error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	                        ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
-//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package, "github.com/MikeAustin71/errpref".
 //
 // -----------------------------------------------------------------
 //
 // Return Values
 //
-//  err                 error
-//     - If the current instance of NumberSignSymbolDto contains
-//       invalid data, a detailed error message will be returned
-//       identifying the invalid data item.
+//	err                 error
+//	   - If the current instance of NumberSignSymbolDto contains
+//	     invalid data, a detailed error message will be returned
+//	     identifying the invalid data item.
 //
-//       If errors are encountered during processing, the returned
-//       error Type (err) will encapsulate an error message. This
-//       returned error message will incorporate the method chain
-//       and text passed by input parameter, 'errorPrefix'. The
-//       'errorPrefix' text will be attached to the beginning of
-//       the error message.
+//	     If errors are encountered during processing, the returned
+//	     error Type (err) will encapsulate an error message. This
+//	     returned error message will incorporate the method chain
+//	     and text passed by input parameter, 'errorPrefix'. The
+//	     'errorPrefix' text will be attached to the beginning of
+//	     the error message.
 //
-//       If the current instance is valid, this error parameter
-//       will be set to nil.
-//
+//	     If the current instance is valid, this error parameter
+//	     will be set to nil.
 func (nSignSymbol *NumberSignSymbolDto) IsValidInstanceError(
 	errorPrefix interface{}) (
 	err error) {
@@ -1087,7 +1055,7 @@ func (nSignSymbol *NumberSignSymbolDto) IsValidInstanceError(
 // "(55)".
 //
 // Number Sign Symbols are usually positioned before the numeric
-// value ('USA Example: +25') or after the numeric value ('EU
+// value ('USA Example: +25') or after the numeric value ('EU'
 // Example 25-). However, there are cases where the number sign
 // is positioned before and after the negative value. As shown
 // above, the USA uses opening and closing parentheses to designate
@@ -1100,7 +1068,8 @@ func (nSignSymbol *NumberSignSymbolDto) IsValidInstanceError(
 // displayed within the number string using number sign
 // characters (plus or minus). Explicit Number Sign Symbols
 // are ALWAYS visible and displayed within number strings.
-//       Example: '+123', '-123'.
+//
+//	Example: '+123', '-123'.
 //
 // This method will generate an 'Explicit' Number Sign Symbol.
 //
@@ -1108,13 +1077,15 @@ func (nSignSymbol *NumberSignSymbolDto) IsValidInstanceError(
 // number string. Instead, the Number Sign Symbol is assumed or
 // implied. Implicit Number Sign Symbols are NEVER visible or
 // displayed within number strings.
-//      Example: '123' is assumed to be a positive value. The
-//               plus sign is implied or 'implicit'.
+//
+//	Example: '123' is assumed to be a positive value. The
+//	         plus sign is implied or 'implicit'.
 //
 // To generate an 'Implicit' Number Sign Symbol, use one of the
 // following methods:
-//   NumberSignSymbolDto.NewDefaultPositive()
-//   NewDefaultPositive.SetDefaultPositive()
+//
+//	NumberSignSymbolDto.NewDefaultPositive()
+//	NewDefaultPositive.SetDefaultPositive()
 //
 // Generally, number signs consist of a single text character or
 // symbol (like '+' or '-'). However, depending on national,
@@ -1129,94 +1100,92 @@ func (nSignSymbol *NumberSignSymbolDto) IsValidInstanceError(
 //
 // Input Parameters
 //
-//  leadingNumberSign   string
-//     - A string comprised of the characters which constitute this
-//       leading number sign.
+//	leadingNumberSign   string
+//	   - A string comprised of the characters which constitute this
+//	     leading number sign.
 //
-//       Examples: "-", "+", "("
-//
-//
-//  trailingNumberSign  string
-//     - A string comprised of the characters which constitute this
-//       trailing number sign.
-//
-//       Examples: "-", "+", ")"
+//	     Examples: "-", "+", "("
 //
 //
-//  isNegativeValue     bool
-//     - Number sign symbols will specify either a positive or
-//       negative numeric value. If this parameter is set to
-//       'true', the number sign will be treated as identifying a
-//       negative numeric value. If this parameter is set to
-//       'false', the number sign will be interpreted as
-//       identifying a positive numeric value.
+//	trailingNumberSign  string
+//	   - A string comprised of the characters which constitute this
+//	     trailing number sign.
+//
+//	     Examples: "-", "+", ")"
 //
 //
-//  errorPrefix         interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
-//
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
-//
-//       This empty interface must be convertible to one of the
-//       following types:
+//	isNegativeValue     bool
+//	   - Number sign symbols will specify either a positive or
+//	     negative numeric value. If this parameter is set to
+//	     'true', the number sign will be treated as identifying a
+//	     negative numeric value. If this parameter is set to
+//	     'false', the number sign will be interpreted as
+//	     identifying a positive numeric value.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	errorPrefix         interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       2. string - A string containing error prefix information.
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     2. string - A string containing error prefix information.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     4. [][2]string A two-dimensional slice of strings containing
+//	                    error prefix and error context information.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	                        ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  newNumSignSym       NumberSignSymbolDto
-//     - If this method completes successfully, a new, populated
-//       instance of NumberSignSymbolDto will be returned.
+//	newNumSignSym       NumberSignSymbolDto
+//	   - If this method completes successfully, a new, populated
+//	     instance of NumberSignSymbolDto will be returned.
 //
 //
-//  err                 error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	err                 error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (nSignSymbol NumberSignSymbolDto) New(
 	leadingNumberSign string,
 	trailingNumberSign string,
@@ -1268,23 +1237,25 @@ func (nSignSymbol NumberSignSymbolDto) New(
 // displayed within the number string using number sign
 // characters (plus or minus). Explicit Number Sign Symbols
 // are ALWAYS visible and displayed within number strings.
-//       Example: '+123', '-123'.
+//
+//	Example: '+123', '-123'.
 //
 // To generate an 'Explicit' Number Sign Symbol, use one of the
 // following methods:
-//   NumberSignSymbolDto.New()
-//   NumberSignSymbolDto.SetNumberSignSymbol()
+//
+//	NumberSignSymbolDto.New()
+//	NumberSignSymbolDto.SetNumberSignSymbol()
 //
 // Implicit Number Sign Symbols are NOT visible or displayed in a
 // number string. Instead, the Number Sign Symbol is assumed or
 // implied. Implicit Number Sign Symbols are NEVER visible or
 // displayed within number strings.
-//      Example: '123' is assumed to be a positive value. The
-//               plus sign is implied or 'implicit'.
+//
+//	Example: '123' is assumed to be a positive value. The
+//	         plus sign is implied or 'implicit'.
 //
 // This method will return a default positive Number Sign Symbol
 // with an 'implicit' display mode.
-//
 func (nSignSymbol NumberSignSymbolDto) NewDefaultPositive() NumberSignSymbolDto {
 
 	if nSignSymbol.lock == nil {
@@ -1322,42 +1293,43 @@ func (nSignSymbol NumberSignSymbolDto) NewDefaultPositive() NumberSignSymbolDto 
 // displayed within the number string using number sign
 // characters (plus or minus). Explicit Number Sign Symbols
 // are ALWAYS visible and displayed within number strings.
-//       Example: '+123', '-123'.
+//
+//	Example: '+123', '-123'.
 //
 // To generate an 'Explicit' Number Sign Symbol, use one of the
 // following methods:
-//   NumberSignSymbolDto.New()
-//   NumberSignSymbolDto.SetNumberSignSymbol()
+//
+//	NumberSignSymbolDto.New()
+//	NumberSignSymbolDto.SetNumberSignSymbol()
 //
 // Implicit Number Sign Symbols are NOT visible or displayed in a
 // number string. Instead, the Number Sign Symbol is assumed or
 // implied. Implicit Number Sign Symbols are NEVER visible or
 // displayed within number strings.
-//      Example: '123' is assumed to be a positive value. The
-//               plus sign is implied or 'implicit'.
+//
+//	Example: '123' is assumed to be a positive value. The
+//	         plus sign is implied or 'implicit'.
 //
 // This method will return a default positive Number Sign Symbol
 // with an 'Implicit' display mode.
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // If this method completes successfully, all data values in the
 // current NumberSignSymbolDto instance will be deleted and
 // overwritten.
 //
-//
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  --- NONE ---
+//	--- NONE ---
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  --- NONE ---
-//
+//	--- NONE ---
 func (nSignSymbol *NumberSignSymbolDto) SetDefaultPositive() {
 
 	if nSignSymbol.lock == nil {
@@ -1397,7 +1369,7 @@ func (nSignSymbol *NumberSignSymbolDto) SetDefaultPositive() {
 // "(55)".
 //
 // Number Sign Symbols are usually positioned before the numeric
-// value ('USA Example: +25') or after the numeric value ('EU
+// value ('USA Example: +25') or after the numeric value ('EU'
 // Example 25-). However, there are cases where the number sign
 // is positioned before and after the negative value. As shown
 // above, the USA uses opening and closing parentheses to designate
@@ -1410,7 +1382,8 @@ func (nSignSymbol *NumberSignSymbolDto) SetDefaultPositive() {
 // displayed within the number string using number sign
 // characters (plus or minus). Explicit Number Sign Symbols
 // are ALWAYS visible and displayed within number strings.
-//       Example: '+123', '-123'.
+//
+//	Example: '+123', '-123'.
 //
 // This method will generate an 'Explicit' Number Sign Symbol.
 //
@@ -1418,13 +1391,15 @@ func (nSignSymbol *NumberSignSymbolDto) SetDefaultPositive() {
 // number string. Instead, the Number Sign Symbol is assumed or
 // implied. Implicit Number Sign Symbols are NEVER visible or
 // displayed within number strings.
-//      Example: '123' is assumed to be a positive value. The
-//               plus sign is implied or 'implicit'.
+//
+//	Example: '123' is assumed to be a positive value. The
+//	         plus sign is implied or 'implicit'.
 //
 // To generate an 'Implicit' Number Sign Symbol, use one of the
 // following methods:
-//   NumberSignSymbolDto.NewDefaultPositive()
-//   NewDefaultPositive.SetDefaultPositive()
+//
+//	NumberSignSymbolDto.NewDefaultPositive()
+//	NewDefaultPositive.SetDefaultPositive()
 //
 // Generally, number signs consist of a single text character or
 // symbol (like '+' or '-'). However, depending on national,
@@ -1435,105 +1410,102 @@ func (nSignSymbol *NumberSignSymbolDto) SetDefaultPositive() {
 // All national or cultural number sign styles are supported by the
 // NumberSignSymbolDto type.
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // If this method completes successfully, all data values in the
 // current NumberSignSymbolDto instance will be deleted and
 // overwritten.
 //
-//
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  leadingNumberSign   string
-//     - A string comprised of the characters which constitute this
-//       leading number sign.
+//	leadingNumberSign   string
+//	   - A string comprised of the characters which constitute this
+//	     leading number sign.
 //
-//       Examples: "-", "+", "("
-//
-//
-//  trailingNumberSign  string
-//     - A string comprised of the characters which constitute this
-//       trailing number sign.
-//
-//       Examples: "-", "+", ")"
+//	     Examples: "-", "+", "("
 //
 //
-//  isNegativeValue     bool
-//     - Number sign symbols will specify either a positive or
-//       negative numeric value. If this parameter is set to
-//       'true', the number sign will be treated as identifying a
-//       negative numeric value. If this parameter is set to
-//       'false', the number sign will be interpreted as
-//       identifying a positive numeric value.
+//	trailingNumberSign  string
+//	   - A string comprised of the characters which constitute this
+//	     trailing number sign.
+//
+//	     Examples: "-", "+", ")"
 //
 //
-//  errorPrefix         interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
-//
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
-//
-//       This empty interface must be convertible to one of the
-//       following types:
+//	isNegativeValue     bool
+//	   - Number sign symbols will specify either a positive or
+//	     negative numeric value. If this parameter is set to
+//	     'true', the number sign will be treated as identifying a
+//	     negative numeric value. If this parameter is set to
+//	     'false', the number sign will be interpreted as
+//	     identifying a positive numeric value.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	errorPrefix         interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       2. string - A string containing error prefix information.
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     2. string - A string containing error prefix information.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     4. [][2]string A two-dimensional slice of strings containing
+//	                    error prefix and error context information.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	                        ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  newNumSignSym       NumberSignSymbolDto
-//     - If this method completes successfully, a new, populated
-//       instance of NumberSignSymbolDto will be returned.
+//	newNumSignSym       NumberSignSymbolDto
+//	   - If this method completes successfully, a new, populated
+//	     instance of NumberSignSymbolDto will be returned.
 //
 //
-//  err                 error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	err                 error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (nSignSymbol *NumberSignSymbolDto) SetNumberSignSymbol(
 	leadingNumberSign string,
 	trailingNumberSign string,
@@ -1584,7 +1556,6 @@ func (nSignSymbol *NumberSignSymbolDto) SetNumberSignSymbol(
 // prior to setting the Leading Number Found Index. If the length
 // of Leading Number Sign Chars rune array is zero, this method
 // will take no action and exit.
-//
 func (nSignSymbol *NumberSignSymbolDto) SetLeadingNumSignFoundIndex(
 	leadingNumSignFoundIndex int) {
 
@@ -1618,7 +1589,6 @@ func (nSignSymbol *NumberSignSymbolDto) SetLeadingNumSignFoundIndex(
 // prior to setting the Leading Number Sign Found Flag. If the
 // length of the Leading Number Sign Chars rune array is zero, this
 // method will take no action and exit.
-//
 func (nSignSymbol *NumberSignSymbolDto) SetLeadingNumSignFoundInNumber(
 	leadingNumSignFoundInNumber bool) {
 
@@ -1654,7 +1624,6 @@ func (nSignSymbol *NumberSignSymbolDto) SetLeadingNumSignFoundInNumber(
 // prior to setting the Trailing Number Sign Found Index. If the
 // length of the Trailing Number Sign Chars rune array is zero,
 // this method will take no action and exit.
-//
 func (nSignSymbol *NumberSignSymbolDto) SetTrailingNumSignFoundIndex(
 	trailingNumSignFoundIndex int) {
 
@@ -1685,7 +1654,6 @@ func (nSignSymbol *NumberSignSymbolDto) SetTrailingNumSignFoundIndex(
 // prior to setting the Trailing Number Sign Found Flag. If the
 // length of the Trailing Number Sign Chars rune array is zero,
 // this method will take no action and exit.
-//
 func (nSignSymbol *NumberSignSymbolDto) SetTrailingNumSignFoundInNumber(
 	trailingNumSignFoundInNumber bool) {
 

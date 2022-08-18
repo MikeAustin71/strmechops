@@ -849,8 +849,9 @@ func (sMech *StrMech) CopyOut() *StrMech {
 // CutStringAtIndex - Receives a target string ('targetString')
 // and proceeds to cut of a sub-string of characters at target
 // string index 'cutAtIndex'. This sub-string is returned in
-// parameter 'cutStr'. The remain characters in 'targetString' not
-// included in 'cutStr' are returned via parameter 'remainderStr'
+// parameter 'cutStr'. The remaining characters in 'targetString'
+// not included in 'cutStr' are returned via parameter
+// 'remainderStr'.
 //
 // ----------------------------------------------------------------
 //
