@@ -51,6 +51,10 @@ var mapNumSignSymbolPosLwrCaseStringToCode = map[string]NumSignSymbolPosition{
 // names effectively represent an enumeration of number sign symbol
 // position types. These methods are listed as follows:
 //
+// Method          Integer
+// Name             Value
+// ------          -------
+//
 //	None             (0) - Signals that 'NumSignSymbolPosition' has
 //	                       not been initialized and therefore has no
 //	                       value. This is an error condition.

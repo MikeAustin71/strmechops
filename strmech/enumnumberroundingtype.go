@@ -51,8 +51,8 @@ var mNumberRoundingTypeLwrCaseStringToCode = map[string]NumberRoundingType{
 }
 
 // NumberRoundingType - The 'Number Rounding Type' is an
-// enumeration of type codes used for classification of numeric
-// rounding methodologies and algorithms.
+// enumeration of type codes used for classification of
+// numeric rounding methodologies and algorithms.
 //
 // The examples provided here relate to floating point rounding
 // which is the most common application for this go package.
