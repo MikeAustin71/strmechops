@@ -30,9 +30,8 @@ func NumberFieldSymbolPositionTestSetup0010(
 
 	ucNames = []string{
 		"None",
-		"Left",
-		"Right",
-		"Center",
+		"InsideNumField",
+		"OutsideNumField",
 	}
 
 	lenUcNames := len(ucNames)

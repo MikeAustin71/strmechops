@@ -74,6 +74,10 @@ var mNumStrFmtTypeCodeLwrCaseStringToCode = map[string]NumStrFormatTypeCode{
 // an enumeration of specification or formatting codes for the
 // display of numeric values in text number strings.
 //
+// ----------------------------------------------------------------
+//
+// # BACKGROUND
+//
 // Since the Go Programming Language does not directly support
 // enumerations, the 'NumStrFormatTypeCode' type has been adapted
 // to function in a manner similar to classic enumerations.
@@ -88,75 +92,84 @@ var mNumStrFmtTypeCodeLwrCaseStringToCode = map[string]NumStrFormatTypeCode{
 // ------             -------
 //
 // None                 (0)
-//   - Signals that the Number String Value Specification (NumStrFormatTypeCode)
-//     Type is not initialized. This is an error condition.
+//
+//	Signals that the Number String Value Specification
+//	(NumStrFormatTypeCode) Type is empty and
+//	uninitialized. This is an error condition.
 //
 // AbsoluteValue        (1)
 //
-//   - This format specification signals that a numeric value will
-//     be displayed in text as a positive number regardless of
-//     whether the native value is positive or negative.
-//     Effectively, this means that both negative values and
-//     positive values will be displayed as positive numbers.
+//	This format specification signals that a numeric value will
+//	be displayed in text as a positive number regardless of
+//	whether the native value is positive or negative.
+//	Effectively, this means that both negative values and
+//	positive values will be displayed as positive numbers.
 //
-//     Examples:
-//     Positive Values          Negative Values
-//     +132 = +132              -123 = +123
+//	Examples:
+//	Positive Values          Negative Values
+//	+132 = +132              -123 = +123
 //
 // Binary               (2)
-//   - The 'Binary' format specification provides support for the
-//     display of text number strings in base-16 or binary format.
+//
+//	The 'Binary' format specification provides support for the
+//	display of text number strings in base-16 or binary format.
 //
 // Currency             (3)
 //
-//   - The 'Currency' format specification signals that all numeric
-//     values will be displayed in number strings as currency
-//     formatted with appropriate currency characters.
+//	The 'Currency' format specification signals that all numeric
+//	values will be displayed in number strings as currency
+//	formatted with appropriate currency characters.
 //
-//     Currency number strings are always displayed as signed
-//     numeric values with currency symbols included in the text
-//     string. This means that positive values are displayed in text
-//     as positive numbers with currency symbols (like the dollar
-//     sign) included in the text string. Likewise, negative values
-//     are displayed in text as negative numbers with currency
-//     symbols (like the dollar sign) included in the text string.
+//	Currency number strings are always displayed as signed
+//	numeric values with currency symbols included in the text
+//	string. This means that positive values are displayed in text
+//	as positive numbers with currency symbols (like the dollar
+//	sign) included in the text string. Likewise, negative values
+//	are displayed in text as negative numbers with currency
+//	symbols (like the dollar sign) included in the text string.
 //
-//     Examples:
-//     Positive Values          Negative Values
-//     +132 = $132               -123 = ($123)
+//	Examples:
+//	Positive Values          Negative Values
+//	+132 = $132               -123 = ($123)
 //
 // Hexadecimal          (4)
-//   - The 'Hexadecimal' format specification provides support for
-//     the display of text number strings in base-16 or hexadecimal
-//     format.
+//
+//	The 'Hexadecimal' format specification provides support for
+//	the display of text number strings in base-16 or hexadecimal
+//	format.
 //
 // Octal                (5)
-//   - The 'Octal' format specification provides support for the
-//     display of text number strings in base-8 or octal format.
+//
+//	The 'Octal' format specification provides support for the
+//	display of text number strings in base-8 or octal format.
 //
 // SignedNumber         (6)
 //
-//   - Signals that the numeric value will be displayed in text as a
-//     standard positive or negative value contingent upon the
-//     number sign associated with the numeric value. NO CURRENCY
-//     Symbols will be display in the resulting text number strings.
+//	Signals that the numeric value will be displayed in text as a
+//	standard positive or negative value contingent upon the
+//	number sign associated with the numeric value. NO CURRENCY
+//	Symbols will be display in the resulting text number strings.
 //
-//     This is the default handling for numeric values.
+//	This is the default handling for numeric values.
 //
-//     'SignedNumber' means that positive values will be displayed
-//     as positive numbers and negative values will be displayed as
-//     negative numbers.
+//	'SignedNumber' means that positive values will be displayed
+//	as positive numbers and negative values will be displayed as
+//	negative numbers.
 //
-//     Examples:
-//     Positive Values          Negative Values
-//     +132 = 132               -123 = -123
+//	Examples:
+//	Positive Values          Negative Values
+//	+132 = 132               -123 = -123
 //
 // ScientificNotation   (7)
 //
-//   - Signals that the numeric value will be displayed in text as
-//     Scientific Notation.
+//	Signals that the numeric value will be displayed in text as
+//	Scientific Notation.
 //
-//     Examples: '2.652e+8'     '2.652e-8'
+//	Examples: '2.652e+8'     '2.652e-8'
+//
+// ----------------------------------------------------------------
+//
+// # USAGE
 //
 // For easy access to these enumeration values, use the global
 // constant 'NumStrFmtType'.
@@ -178,8 +191,8 @@ type NumStrFormatTypeCode int
 
 var lockNumStrFormatTypeCode sync.Mutex
 
-// None - Signals that the NumStrFormatTypeCode Type is uninitialized.
-// This is an error condition.
+// None - Signals that the NumStrFormatTypeCode Type is
+// empty and uninitialized. This is an error condition.
 //
 // This method is part of the standard enumeration.
 func (nStrValSpec NumStrFormatTypeCode) None() NumStrFormatTypeCode {

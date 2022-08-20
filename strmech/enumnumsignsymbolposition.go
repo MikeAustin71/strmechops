@@ -186,7 +186,7 @@ func (nSignSymPos NumSignSymbolPosition) XIsValid() bool {
 
 	defer lockNumSignSymbolPosition.Unlock()
 
-	return new(numSignSymbolPosNanobot).
+	return new(numSymbolPositionNanobot).
 		isValidNumSignSymbolPosition(nSignSymPos)
 }
 
@@ -326,7 +326,7 @@ func (nSignSymPos NumSignSymbolPosition) XReturnNoneIfInvalid() NumSignSymbolPos
 
 	defer lockNumSignSymbolPosition.Unlock()
 
-	isValid := new(numSignSymbolPosNanobot).
+	isValid := new(numSymbolPositionNanobot).
 		isValidNumSignSymbolPosition(nSignSymPos)
 
 	if !isValid {
@@ -377,9 +377,9 @@ func (nSignSymPos NumSignSymbolPosition) XValueInt() int {
 // NumSignSymPos.BeforeAndAfter(),
 const NumSignSymPos = NumSignSymbolPosition(0)
 
-// numSignSymbolPosNanobot - Provides helper methods for
+// numSymbolPositionNanobot - Provides helper methods for
 // enumeration NumSignSymbolPosition.
-type numSignSymbolPosNanobot struct {
+type numSymbolPositionNanobot struct {
 	lock *sync.Mutex
 }
 
@@ -395,16 +395,16 @@ type numSignSymbolPosNanobot struct {
 //
 // This is a standard utility method and is not part of the valid
 // NumSignSymbolPosition enumeration.
-func (textFieldNanobot *numSignSymbolPosNanobot) isValidNumSignSymbolPosition(
+func (numFieldSymPosNanobot *numSymbolPositionNanobot) isValidNumSignSymbolPosition(
 	numSignSymbolPos NumSignSymbolPosition) bool {
 
-	if textFieldNanobot.lock == nil {
-		textFieldNanobot.lock = new(sync.Mutex)
+	if numFieldSymPosNanobot.lock == nil {
+		numFieldSymPosNanobot.lock = new(sync.Mutex)
 	}
 
-	textFieldNanobot.lock.Lock()
+	numFieldSymPosNanobot.lock.Lock()
 
-	defer textFieldNanobot.lock.Unlock()
+	defer numFieldSymPosNanobot.lock.Unlock()
 
 	if numSignSymbolPos < 1 ||
 		numSignSymbolPos > 3 {

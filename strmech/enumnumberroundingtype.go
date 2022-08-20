@@ -10,44 +10,47 @@ import (
 
 var mNumberRoundingTypeCodeToString = map[NumberRoundingType]string{
 	NumberRoundingType(0):  "None",
-	NumberRoundingType(1):  "HalfUpWithNegNums",
-	NumberRoundingType(2):  "HalfDownWithNegNums",
-	NumberRoundingType(3):  "HalfAwayFromZero",
-	NumberRoundingType(4):  "HalfTowardsZero",
-	NumberRoundingType(5):  "HalfToEven",
-	NumberRoundingType(6):  "HalfToOdd",
-	NumberRoundingType(7):  "Randomly",
-	NumberRoundingType(8):  "Floor",
-	NumberRoundingType(9):  "Ceiling",
-	NumberRoundingType(10): "Truncate",
+	NumberRoundingType(1):  "NoRounding",
+	NumberRoundingType(2):  "HalfUpWithNegNums",
+	NumberRoundingType(3):  "HalfDownWithNegNums",
+	NumberRoundingType(4):  "HalfAwayFromZero",
+	NumberRoundingType(5):  "HalfTowardsZero",
+	NumberRoundingType(6):  "HalfToEven",
+	NumberRoundingType(7):  "HalfToOdd",
+	NumberRoundingType(8):  "Randomly",
+	NumberRoundingType(9):  "Floor",
+	NumberRoundingType(10): "Ceiling",
+	NumberRoundingType(11): "Truncate",
 }
 
 var mNumberRoundingTypeStringToCode = map[string]NumberRoundingType{
 	"None":                NumberRoundingType(0),
-	"HalfUpWithNegNums":   NumberRoundingType(1),
-	"HalfDownWithNegNums": NumberRoundingType(2),
-	"HalfAwayFromZero":    NumberRoundingType(3),
-	"HalfTowardsZero":     NumberRoundingType(4),
-	"HalfToEven":          NumberRoundingType(5),
-	"HalfToOdd":           NumberRoundingType(6),
-	"Randomly":            NumberRoundingType(7),
-	"Floor":               NumberRoundingType(8),
-	"Ceiling":             NumberRoundingType(9),
-	"Truncate":            NumberRoundingType(10),
+	"NoRounding":          NumberRoundingType(1),
+	"HalfUpWithNegNums":   NumberRoundingType(2),
+	"HalfDownWithNegNums": NumberRoundingType(3),
+	"HalfAwayFromZero":    NumberRoundingType(4),
+	"HalfTowardsZero":     NumberRoundingType(5),
+	"HalfToEven":          NumberRoundingType(6),
+	"HalfToOdd":           NumberRoundingType(7),
+	"Randomly":            NumberRoundingType(8),
+	"Floor":               NumberRoundingType(9),
+	"Ceiling":             NumberRoundingType(10),
+	"Truncate":            NumberRoundingType(11),
 }
 
 var mNumberRoundingTypeLwrCaseStringToCode = map[string]NumberRoundingType{
 	"none":                NumberRoundingType(0),
-	"halfupwithnegnums":   NumberRoundingType(1),
-	"halfdownwithnegnums": NumberRoundingType(2),
-	"halfawayfromzero":    NumberRoundingType(3),
-	"halftowardszero":     NumberRoundingType(4),
-	"halftoeven":          NumberRoundingType(5),
-	"halftoodd":           NumberRoundingType(6),
-	"randomly":            NumberRoundingType(7),
-	"floor":               NumberRoundingType(8),
-	"ceiling":             NumberRoundingType(9),
-	"truncate":            NumberRoundingType(10),
+	"norounding":          NumberRoundingType(1),
+	"halfupwithnegnums":   NumberRoundingType(2),
+	"halfdownwithnegnums": NumberRoundingType(3),
+	"halfawayfromzero":    NumberRoundingType(4),
+	"halftowardszero":     NumberRoundingType(5),
+	"halftoeven":          NumberRoundingType(6),
+	"halftoodd":           NumberRoundingType(7),
+	"randomly":            NumberRoundingType(8),
+	"floor":               NumberRoundingType(9),
+	"ceiling":             NumberRoundingType(10),
+	"truncate":            NumberRoundingType(11),
 }
 
 // NumberRoundingType - The 'Number Rounding Type' is an
@@ -132,6 +135,8 @@ var mNumberRoundingTypeLwrCaseStringToCode = map[string]NumberRoundingType{
 //
 // ----------------------------------------------------------------
 //
+// # BACKGROUND
+//
 // Type NumberRoundingType is styled as an enumeration. Since the
 // Go Programming Language does not directly support enumerations,
 // type NumberRoundingType has been adapted to function in a manner
@@ -188,202 +193,209 @@ var mNumberRoundingTypeLwrCaseStringToCode = map[string]NumberRoundingType{
 // ------                   -------
 //
 // None                     Zero (0)
-//   - Signals that no rounding operation will be performed.
-//     initialized. This is a valid selection for
-//     'NumberRoundingType'.
 //
-// HalfUpWithNegNums            1
+//	Signals that the Number Rounding Type
+//	(NumberRoundingType) Type is empty and
+//	uninitialized. This is an error condition.
 //
-//   - Half Round Up Including Negative Numbers. This method
-//     is intuitive but may produce unexpected results when
-//     applied to negative numbers.
+// NoRounding					1
 //
-//     'HalfUpWithNegNums' rounds .5 up.
+//	Signals that no rounding operation will be performed
+//	on fractional digits contained in a number string.
+//	The fractional digits will therefore remain unchanged.
 //
-//     Examples of 'HalfUpWithNegNums'
-//     7.6 rounds up to 8
-//     7.5 rounds up to 8
-//     7.4 rounds down to 7
-//     -7.4 rounds up to -7
-//     -7.5 rounds up to -7
-//     -7.6 rounds down to -8
+// HalfUpWithNegNums			2
 //
-// HalfDownWithNegNums          2
+//	Half Round Up Including Negative Numbers. This method
+//	is intuitive but may produce unexpected results when
+//	applied to negative numbers.
 //
-//   - Half Round Down Including Negative Numbers. This method
-//     is also considered intuitive but may produce unexpected
-//     results when applied to negative numbers.
+//	'HalfUpWithNegNums' rounds .5 up.
 //
-//     'HalfDownWithNegNums' rounds .5 down.
+//		Examples of 'HalfUpWithNegNums'
+//		7.6 rounds up to 8
+//		7.5 rounds up to 8
+//		7.4 rounds down to 7
+//		-7.4 rounds up to -7
+//		-7.5 rounds up to -7
+//		-7.6 rounds down to -8
 //
-//     Examples of HalfDownWithNegNums
+// HalfDownWithNegNums          3
 //
-//     7.6 rounds up to 8
-//     7.5 rounds down to 7
-//     7.4 rounds down to 7
-//     -7.4 rounds up to -7
-//     -7.5 rounds down to -8
-//     -7.6 rounds down to -8
+//	Half Round Down Including Negative Numbers. This method
+//	is also considered intuitive but may produce unexpected
+//	results when applied to negative numbers.
 //
-// HalfAwayFromZero             3
+//	'HalfDownWithNegNums' rounds .5 down.
 //
-//   - Round Half Away From Zero. This rounding method is treated
-//     as the default and this value is returned by method:
-//     NumberRoundingType(0).XGetDefaultRoundingType()
+//		Examples of HalfDownWithNegNums
 //
-//     The 'HalfAwayFromZero' method rounds .5 further away from zero.
-//     It provides clear and consistent behavior when dealing with
-//     negative numbers.
+//		7.6 rounds up to 8
+//		7.5 rounds down to 7
+//		7.4 rounds down to 7
+//		-7.4 rounds up to -7
+//		-7.5 rounds down to -8
+//		-7.6 rounds down to -8
 //
-//     Examples of HalfAwayFromZero
+// HalfAwayFromZero				4
 //
-//     7.6 rounds away to 8
-//     7.5 rounds away to 8
-//     7.4 rounds to 7
-//     -7.4 rounds to -7
-//     -7.5 rounds away to -8
-//     -7.6 rounds away to -8
+//	Round Half Away From Zero. This rounding method is treated
+//	as the default and this value is returned by method:
+//	NumberRoundingType(0).XGetDefaultRoundingType()
 //
-// HalfTowardsZero              4
+//	The 'HalfAwayFromZero' method rounds .5 further away from zero.
+//	It provides clear and consistent behavior when dealing with
+//	negative numbers.
 //
-//   - Round Half Towards Zero. 'HalfTowardsZero' rounds 0.5
-//     closer to zero. It provides clear and consistent behavior
-//     when dealing with negative numbers.
+//		Examples of HalfAwayFromZero
 //
-//     Examples of HalfTowardsZero
+//		7.6 rounds away to 8
+//		7.5 rounds away to 8
+//		7.4 rounds to 7
+//		-7.4 rounds to -7
+//		-7.5 rounds away to -8
+//		-7.6 rounds away to -8
 //
-//     7.6 rounds away to 8
-//     7.5 rounds to 7
-//     7.4 rounds to 7
-//     -7.4 rounds to -7
-//     -7.5 rounds to -7
-//     -7.6 rounds away to -8
+// HalfTowardsZero				5
 //
-// HalfToEven                   5
+//	Round Half Towards Zero. 'HalfTowardsZero' rounds 0.5
+//	closer to zero. It provides clear and consistent behavior
+//	when dealing with negative numbers.
 //
-//   - Round Half To Even Numbers. 'HalfToEven' is also called
-//     Banker's Rounding. This method rounds 0.5 to the nearest
-//     even digit.
+//		Examples of HalfTowardsZero
 //
-//     Examples of HalfToEven
+//		7.6 rounds away to 8
+//		7.5 rounds to 7
+//		7.4 rounds to 7
+//		-7.4 rounds to -7
+//		-7.5 rounds to -7
+//		-7.6 rounds away to -8
 //
-//     7.5 rounds up to 8 (because 8 is an even number)
-//     but 6.5 rounds down to 6 (because 6 is an even number)
+// HalfToEven					6
 //
-//     HalfToEven only applies to 0.5. Other numbers (not ending
-//     in 0.5) round to nearest as usual, so:
+//	Round Half To Even Numbers. 'HalfToEven' is also called
+//	Banker's Rounding. This method rounds 0.5 to the nearest
+//	even digit.
 //
-//     7.6 rounds up to 8
-//     7.5 rounds up to 8 (because 8 is an even number)
-//     7.4 rounds down to 7
-//     6.6 rounds up to 7
-//     6.5 rounds down to 6 (because 6 is an even number)
-//     6.4 rounds down to 6
+//		Examples of HalfToEven
 //
-// HalfToOdd                    6
+//		7.5 rounds up to 8 (because 8 is an even number)
+//		but 6.5 rounds down to 6 (because 6 is an even number)
 //
-//   - Round Half to Odd Numbers. Similar to 'HalfToEven', but
-//     in this case 'HalfToOdd' rounds 0.5 towards odd numbers.
+//		HalfToEven only applies to 0.5. Other numbers (not ending
+//		in 0.5) round to nearest as usual, so:
 //
-//     Examples of HalfToOdd
+//		7.6 rounds up to 8
+//		7.5 rounds up to 8 (because 8 is an even number)
+//		7.4 rounds down to 7
+//		6.6 rounds up to 7
+//		6.5 rounds down to 6 (because 6 is an even number)
+//		6.4 rounds down to 6
 //
-//     HalfToOdd only applies to 0.5. Other numbers (not ending
-//     in 0.5) round to nearest as usual, so:
+// HalfToOdd					7
 //
-//     7.5 rounds down to 7 (because 7 is an odd number)
+//	Round Half to Odd Numbers. Similar to 'HalfToEven', but
+//	in this case 'HalfToOdd' rounds 0.5 towards odd numbers.
 //
-//     6.5 rounds up to 7 (because 7 is an odd number)
+//		Examples of HalfToOdd
 //
-//     7.6 rounds up to 8
-//     7.5 rounds down to 7 (because 7 is an odd number)
-//     7.4 rounds down to 7
-//     6.6 rounds up to 7
-//     6.5 rounds up to 7 (because 7 is an odd number)
-//     6.4 rounds down to 6
+//		HalfToOdd only applies to 0.5. Other numbers (not ending
+//		in 0.5) round to nearest as usual.
 //
-// Randomly                     7
+//		7.5 rounds down to 7 (because 7 is an odd number)
 //
-//   - Round Half Randomly. Uses a Random Number Generator to choose
-//     between rounding 0.5 up or down.
+//		6.5 rounds up to 7 (because 7 is an odd number)
 //
-//     All numbers other than 0.5 round to the nearest as usual.
+//		7.6 rounds up to 8
+//		7.5 rounds down to 7 (because 7 is an odd number)
+//		7.4 rounds down to 7
+//		6.6 rounds up to 7
+//		6.5 rounds up to 7 (because 7 is an odd number)
+//		6.4 rounds down to 6
 //
-// Floor                        8
+// Randomly						8
 //
-//   - Yields the nearest integer down. Floor does not apply any
-//     special treatment to 0.5.
+//	Round Half Randomly. Uses a Random Number Generator to choose
+//	between rounding 0.5 up or down.
 //
-//     Floor Function: The greatest integer that is less than or
-//     equal to x
-//     Source: https://www.mathsisfun.com/sets/function-floor-ceiling.html
+//	All numbers other than 0.5 round to the nearest as usual.
 //
-//     In mathematics and computer science, the floor function is
-//     the function that takes as input a real number x, and gives
-//     as output the greatest integer less than or equal to x,
-//     denoted floor(x) or ⌊x⌋.
-//     Source: https://en.wikipedia.org/wiki/Floor_and_ceiling_functions
+// Floor						9
 //
-//     Examples of Floor
+//	Yields the nearest integer down. Floor does not apply any
+//	special treatment to 0.5.
 //
-//     Number     Floor
-//     2           2
-//     2.4         2
-//     2.9         2
-//     -2.5        -3
-//     -2.7        -3
-//     -2          -2
+//	Floor Function: The greatest integer that is less than or
+//	equal to x
+//	Source: https://www.mathsisfun.com/sets/function-floor-ceiling.html
 //
-// Ceiling                      9
+//	In mathematics and computer science, the floor function is
+//	the function that takes as input a real number x, and gives
+//	as output the greatest integer less than or equal to x,
+//	denoted floor(x) or ⌊x⌋.
+//	Source: https://en.wikipedia.org/wiki/Floor_and_ceiling_functions
 //
-//   - Yields the nearest integer up. Ceiling does not apply any
-//     special treatment to 0.5.
+//		Examples of Floor
 //
-//     Ceiling Function: The least integer that is greater than or
-//     equal to x.
-//     Source: https://www.mathsisfun.com/sets/function-floor-ceiling.html
+//		Number     Floor
+//		2           2
+//		2.4         2
+//		2.9         2
+//		-2.5        -3
+//		-2.7        -3
+//		-2          -2
 //
-//     The ceiling function maps x to the least integer greater than
-//     or equal to x, denoted ceil(x) or ⌈x⌉.[1]
-//     Source: https://en.wikipedia.org/wiki/Floor_and_ceiling_functions
+// Ceiling						10
 //
-//     Examples of Ceiling
+//	Yields the nearest integer up. Ceiling does not apply any
+//	special treatment to 0.5.
 //
-//     Number    Ceiling
-//     2           2
-//     2.4         3
-//     2.9         3
-//     -2.5        -2
-//     -2.7        -2
-//     -2          -2
+//	Ceiling Function: The least integer that is greater than or
+//	equal to x.
+//	Source: https://www.mathsisfun.com/sets/function-floor-ceiling.html
 //
-// Truncate
+//	The ceiling function maps x to the least integer greater than
+//	or equal to x, denoted ceil(x) or ⌈x⌉.[1]
+//	Source: https://en.wikipedia.org/wiki/Floor_and_ceiling_functions
 //
-//   - Apply NO Rounding whatsoever. The Round From Digit is dropped
-//     or deleted. The Round To Digit is NEVER changed.
+//		Examples of Ceiling
 //
-//     Examples of Truncate
+//		Number    Ceiling
+//		2           2
+//		2.4         3
+//		2.9         3
+//		-2.5        -2
+//		-2.7        -2
+//		-2          -2
 //
-//     Example-1
-//     Number: 23.14567
-//     Objective: Round to two decimal places to
-//     the right of the decimal point.
-//     Rounding Method: Truncate
-//     Round To Digit:   4
-//     Round From Digit: 5
-//     Rounded Number:   23.14 - The Round From Digit is dropped.
+// Truncate						11
 //
-//     Example-2
-//     Number: -23.14567
-//     Objective: Round to two decimal places to
-//     the right of the decimal point.
-//     Rounding Method: Truncate
-//     Round To Digit:   4
-//     Round From Digit: 5
-//     Rounded Number:  -23.14 - The Round From Digit is dropped.
+//	Apply NO Rounding whatsoever. The Round From Digit is dropped
+//	or deleted. The Round To Digit is NEVER changed.
+//
+//		Examples of Truncate
+//
+//		Example-1
+//		Number: 23.14567
+//		Objective: Round to two decimal places to
+//		the right of the decimal point.
+//		Rounding Method: Truncate
+//		Round To Digit:   4
+//		Round From Digit: 5
+//		Rounded Number:   23.14 - The Round From Digit is dropped.
+//
+//		Example-2
+//		Number: -23.14567
+//		Objective: Round to two decimal places to
+//		the right of the decimal point.
+//		Rounding Method: Truncate
+//		Round To Digit:   4
+//		Round From Digit: 5
+//		Rounded Number:  -23.14 - The Round From Digit is dropped.
 //
 // ----------------------------------------------------------------
 //
-// Reference:
+// # REFERENCE
 //
 //	https://www.mathsisfun.com/numbers/rounding-methods.html
 //	https://en.wikipedia.org/wiki/Rounding
@@ -416,10 +428,12 @@ type NumberRoundingType int
 
 var lockNumberRoundingType sync.Mutex
 
-// None - Signals that the no rounding operation will be
-// performed.
+// None
 //
-// 'None' is a valid selection for 'NumberRoundingType'.
+// Signals that the Number Round Type (NumberRoundingType)
+// Type is empty and uninitialized.
+//
+// This is an error condition.
 //
 // This method is part of the standard enumeration.
 func (numRoundingType NumberRoundingType) None() NumberRoundingType {
@@ -431,7 +445,25 @@ func (numRoundingType NumberRoundingType) None() NumberRoundingType {
 	return NumberRoundingType(0)
 }
 
-// HalfUpWithNegNums - Half Round Up Including Negative Numbers.
+// NoRounding
+//
+// Signals that no rounding operation will be performed
+// on fractional digits contained in a number string.
+// The fractional digits will therefore remain unchanged.
+//
+// This method is part of the standard enumeration.
+func (numRoundingType NumberRoundingType) NoRounding() NumberRoundingType {
+
+	lockNumberRoundingType.Lock()
+
+	defer lockNumberRoundingType.Unlock()
+
+	return NumberRoundingType(1)
+}
+
+// HalfUpWithNegNums
+//
+// Half Round Up Including Negative Numbers.
 // This method is intuitive but may produce unexpected results
 // when applied to negative numbers.
 //
@@ -453,12 +485,14 @@ func (numRoundingType NumberRoundingType) HalfUpWithNegNums() NumberRoundingType
 
 	defer lockNumberRoundingType.Unlock()
 
-	return NumberRoundingType(1)
+	return NumberRoundingType(2)
 }
 
-// HalfDownWithNegNums - Half Round Down Including Negative
-// Numbers. This method is considered intuitive but may produce
-// unexpected results when applied to negative numbers.
+// HalfDownWithNegNums
+//
+// Half Round Down Including Negative Numbers. This method
+// is considered intuitive but may produce unexpected
+// results when applied to negative numbers.
 //
 // 'HalfDownWithNegNums' rounds 0.5 down.
 //
@@ -478,11 +512,13 @@ func (numRoundingType NumberRoundingType) HalfDownWithNegNums() NumberRoundingTy
 
 	defer lockNumberRoundingType.Unlock()
 
-	return NumberRoundingType(2)
+	return NumberRoundingType(3)
 }
 
-// HalfAwayFromZero - Round Half Away From Zero. This rounding
-// method is treated as the default and this value is returned by
+// HalfAwayFromZero
+//
+// Round Half Away From Zero. This rounding method is
+// treated as the default and this value is returned by
 // method:
 //
 //	NumberRoundingType(0).XGetDefaultRoundingType()
@@ -507,13 +543,14 @@ func (numRoundingType NumberRoundingType) HalfAwayFromZero() NumberRoundingType 
 
 	defer lockNumberRoundingType.Unlock()
 
-	return NumberRoundingType(3)
+	return NumberRoundingType(4)
 }
 
-// HalfTowardsZero - Round Half Towards Zero.
+// HalfTowardsZero
 //
-// 'HalfTowardsZero' rounds 0.5 closer to zero. It provides clear
-// and consistent behavior when dealing with negative numbers.
+// Round Half Towards Zero.  'HalfTowardsZero' rounds 0.5 closer
+// to zero. It provides clear and consistent behavior when dealing
+// with negative numbers.
 //
 //	Examples of HalfTowardsZero
 //
@@ -531,13 +568,13 @@ func (numRoundingType NumberRoundingType) HalfTowardsZero() NumberRoundingType {
 
 	defer lockNumberRoundingType.Unlock()
 
-	return NumberRoundingType(4)
+	return NumberRoundingType(5)
 }
 
 // HalfToEven
 //
-// Round to Even (Banker's Rounding)
-// We round 0.5 to the nearest even digit
+// Round to Even (Banker's Rounding). Round 0.5 to the
+// nearest even digit.
 //
 //	Examples of HalfToEven
 //
@@ -561,16 +598,18 @@ func (numRoundingType NumberRoundingType) HalfToEven() NumberRoundingType {
 
 	defer lockNumberRoundingType.Unlock()
 
-	return NumberRoundingType(5)
+	return NumberRoundingType(6)
 }
 
-// HalfToOdd - Round Half to Odd Numbers. Similar to 'HalfToEven',
+// HalfToOdd
+//
+// Round Half to Odd Numbers. Similar to 'HalfToEven',
 // but in this case 'HalfToOdd' rounds 0.5 towards odd numbers.
 //
 //	Examples of HalfToOdd
 //
-//	HalfToOdd only applies to 0.5. Other numbers (not ending
-//	in 0.5) round to nearest as usual, so:
+//	HalfToOdd only applies to 0.5. Other numbers
+//	(not ending in 0.5) round to nearest as usual.
 //
 //	7.5 rounds down to 7 (because 7 is an odd number)
 //
@@ -590,10 +629,12 @@ func (numRoundingType NumberRoundingType) HalfToOdd() NumberRoundingType {
 
 	defer lockNumberRoundingType.Unlock()
 
-	return NumberRoundingType(6)
+	return NumberRoundingType(7)
 }
 
-// Randomly - Round Half Randomly. Uses a Random Number Generator
+// Randomly
+//
+// Round Half Randomly. Uses a Random Number Generator
 // to choose between rounding 0.5 up or down.
 //
 // All numbers other than 0.5 round to the nearest as usual.
@@ -605,31 +646,35 @@ func (numRoundingType NumberRoundingType) Randomly() NumberRoundingType {
 
 	defer lockNumberRoundingType.Unlock()
 
-	return NumberRoundingType(7)
+	return NumberRoundingType(8)
 }
 
-// Floor - Yields the nearest integer down. Floor does not apply
+// Floor
+//
+// Yields the nearest integer down. Floor does not apply
 // any special treatment to 0.5.
 //
 //	Floor Function: The greatest integer that is less than or
 //	                equal to x
+//
 //	Source: https://www.mathsisfun.com/sets/function-floor-ceiling.html
 //
-//	In mathematics and computer science, the floor function is the
-//	function that takes as input a real number x, and gives as
-//	output the greatest integer less than or equal to x, denoted
-//	floor(x) or ⌊x⌋.
+// In mathematics and computer science, the floor function is the
+// function that takes as input a real number x, and gives as
+// output the greatest integer less than or equal to x, denoted
+// floor(x) or ⌊x⌋.
+//
 //	Source: https://en.wikipedia.org/wiki/Floor_and_ceiling_functions
 //
-//	Examples of Floor
+//		Examples of Floor
 //
-//	  Number     Floor
-//	   2           2
-//	   2.4         2
-//	   2.9         2
-//	  -2.5        -3
-//	  -2.7        -3
-//	  -2          -2
+//		  Number     Floor
+//		   2           2
+//		   2.4         2
+//		   2.9         2
+//		  -2.5        -3
+//		  -2.7        -3
+//		  -2          -2
 //
 // This method is part of the standard enumeration.
 func (numRoundingType NumberRoundingType) Floor() NumberRoundingType {
@@ -638,29 +683,33 @@ func (numRoundingType NumberRoundingType) Floor() NumberRoundingType {
 
 	defer lockNumberRoundingType.Unlock()
 
-	return NumberRoundingType(8)
+	return NumberRoundingType(9)
 }
 
-// Ceiling - Yields the nearest integer up. Ceiling does not apply
+// Ceiling
+//
+// Yields the nearest integer up. Ceiling does not apply
 // any special treatment to 0.5.
 //
 //	Ceiling Function: The least integer that is greater than or
 //	                  equal to x.
+//
 //	Source: https://www.mathsisfun.com/sets/function-floor-ceiling.html
 //
 //	The ceiling function maps x to the least integer greater than
 //	or equal to x, denoted ceil(x) or ⌈x⌉.[1]
+//
 //	Source: https://en.wikipedia.org/wiki/Floor_and_ceiling_functions
 //
-//	Examples of Ceiling
+//		Examples of Ceiling
 //
-//	  Number    Ceiling
-//	   2           2
-//	   2.4         3
-//	   2.9         3
-//	  -2.5        -2
-//	  -2.7        -2
-//	  -2          -2
+//		  Number    Ceiling
+//		   2           2
+//		   2.4         3
+//		   2.9         3
+//		  -2.5        -2
+//		  -2.7        -2
+//		  -2          -2
 //
 // This method is part of the standard enumeration.
 func (numRoundingType NumberRoundingType) Ceiling() NumberRoundingType {
@@ -669,10 +718,12 @@ func (numRoundingType NumberRoundingType) Ceiling() NumberRoundingType {
 
 	defer lockNumberRoundingType.Unlock()
 
-	return NumberRoundingType(9)
+	return NumberRoundingType(10)
 }
 
-// Truncate - Apply NO Rounding whatsoever. The Round From Digit is
+// Truncate
+//
+// Apply NO Rounding whatsoever. The Round From Digit is
 // dropped or deleted. The Round To Digit is NEVER changed.
 //
 //	Examples of Truncate
@@ -684,7 +735,8 @@ func (numRoundingType NumberRoundingType) Ceiling() NumberRoundingType {
 //	   Rounding Method: Truncate
 //	   Round To Digit:   4
 //	   Round From Digit: 5
-//	   Rounded Number:   23.14 - The Round From Digit is dropped.
+//	   Rounded Number:   23.14 - The Round From Digit
+//	   	is dropped.
 //
 //	 Example-2
 //	   Number: -23.14567
@@ -693,7 +745,8 @@ func (numRoundingType NumberRoundingType) Ceiling() NumberRoundingType {
 //	   Rounding Method: Truncate
 //	   Round To Digit:   4
 //	   Round From Digit: 5
-//	   Rounded Number:  -23.14 - The Round From Digit is dropped.
+//	   Rounded Number:  -23.14 - The Round From Digit
+//	   	is dropped.
 //
 // This method is part of the standard enumeration.
 func (numRoundingType NumberRoundingType) Truncate() NumberRoundingType {
@@ -702,7 +755,7 @@ func (numRoundingType NumberRoundingType) Truncate() NumberRoundingType {
 
 	defer lockNumberRoundingType.Unlock()
 
-	return NumberRoundingType(10)
+	return NumberRoundingType(11)
 }
 
 // String - Returns a string with the name of the enumeration
@@ -922,23 +975,23 @@ func (numRoundingType NumberRoundingType) XParseString(
 //
 // # Background
 //
-// Enumeration NumberRoundingType has an underlying type of integer
-// (int). This means the type could conceivably be set to any
-// integer value. This method ensures that all invalid
+// Enumeration NumberRoundingType has an underlying type of
+// integer (int). This means the type could conceivably be set
+// to any integer value. This method ensures that all invalid
 // NumberRoundingType instances are consistently classified as
-// 'None' (NumberRoundingType(0).None()). Remember that 'None' is
-// considered a valid selection for 'NumberRoundingType'.
+// 'None' (NumberRoundingType(0).None()). Remember that 'None'
+// is considered an INVALID selection for 'NumberRoundingType'.
 //
 // For example, assume that NumberRoundingType was set to an
 // integer value of -848972. Calling this method on a
-// NumberRoundingType with this invalid integer value will return
-// an integer value of zero or the equivalent of
+// NumberRoundingType with this invalid integer value will
+// return an integer value of zero or the equivalent of
 // NumberRoundingType(0).None(). This conversion is useful in
-// generating text strings for meaningful informational and error
-// messages.
+// generating text strings for meaningful informational and
+// error messages.
 //
-// This is a standard utility method and is not part of the valid
-// enumerations for this type.
+// This is a standard utility method and is not part of the
+// valid enumerations for this type.
 func (numRoundingType NumberRoundingType) XReturnNoneIfInvalid() NumberRoundingType {
 
 	lockNumberRoundingType.Lock()
@@ -1001,6 +1054,7 @@ func (numRoundingType NumberRoundingType) XValueInt() int {
 // Usage:
 //
 //	NumRoundType.None(),
+//	NumRoundType.NoRounding(),
 //	NumRoundType.HalfUpWithNegNums(),
 //	NumRoundType.HalfDownWithNegNums(),
 //	NumRoundType.HalfAwayFromZero(),
@@ -1042,7 +1096,7 @@ func (numRoundTypeNanobot *numberRoundingTypeNanobot) isValidNumRoundType(
 
 	defer numRoundTypeNanobot.lock.Unlock()
 
-	if numberRoundingType < 0 ||
+	if numberRoundingType < 1 ||
 		numberRoundingType > 10 {
 
 		return false

@@ -30,6 +30,7 @@ func NumberRoundingTypeTestSetup0010(
 
 	ucNames = []string{
 		"None",
+		"NoRounding",
 		"HalfUpWithNegNums",
 		"HalfDownWithNegNums",
 		"HalfAwayFromZero",
@@ -55,6 +56,9 @@ func NumberRoundingTypeTestSetup0010(
 
 	enumValues =
 		append(enumValues, NumberRoundingType(0).None())
+
+	enumValues =
+		append(enumValues, NumberRoundingType(0).NoRounding())
 
 	enumValues =
 		append(enumValues, NumberRoundingType(0).HalfUpWithNegNums())
@@ -88,6 +92,9 @@ func NumberRoundingTypeTestSetup0010(
 
 	intValues =
 		append(intValues, NumRoundType.None().XValueInt())
+
+	intValues =
+		append(intValues, NumRoundType.NoRounding().XValueInt())
 
 	intValues =
 		append(intValues, NumRoundType.HalfUpWithNegNums().XValueInt())
@@ -204,7 +211,23 @@ func TestNumberRoundingType_XValueInt_000100(t *testing.T) {
 
 		isValid = numberRoundingType1.XIsValid()
 
-		if isValid == false {
+		if i == 0 {
+			if isValid {
+
+				t.Errorf("%v\n"+
+					"Error: TextJustify1.None()\n"+
+					"evaluates as 'Valid'. This is actually an\n"+
+					"invalid value!\n"+
+					"textJustify1 string value  = '%v'\n"+
+					"textJustify1 integer value = '%v'\n",
+					ePrefix.String(),
+					numberRoundingType1.String(),
+					numberRoundingType1.XValueInt())
+
+				return
+			}
+
+		} else if isValid == false {
 
 			t.Errorf("%v\n"+
 				"Error: Valid value classified as invalid!\n"+
