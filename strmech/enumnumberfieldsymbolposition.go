@@ -195,45 +195,48 @@ var mapNumFieldNumSymbolPosLwrCaseStringToCode = map[string]NumberFieldSymbolPos
 //
 // InsideNumField				(1)
 //
-//	Signals that the Number Symbol will be positioned
-//	inside the Number Field.
-//		Example-7:
-//			    Number Field Length: 8
-//			          Numeric Value: 123.45
-//			          Number Symbol: leading minus sign ('-')
-//			 Number Symbol Position: Inside Number Field
-//			Formatted Number String: " -123.45"
-//			     Number Field Index:  01234567
-//		 Total Number String Length: 8
+//		Signals that the Number Symbol will be positioned
+//		inside the Number Field.
+//			Example-7:
+//				Number Field Length: 8
+//				Numeric Value: 123.45
+//				Number Symbol: leading minus sign ('-')
+//				Number Symbol Position: Inside Number Field
+//	         Number Text Justification: Right
+//				Formatted Number String: " -123.45"
+//				Number Field Index:       01234567
+//				Total Number String Length: 8
 //
-//	In this case the final length of the number string is
-//	defined by the Number Field length.
+//		In this case the final length of the number string is
+//		defined by the Number Field length.
 //
 // OutsideNumField				(2)
 //
-//	Signals that the Number Symbol we be positioned
-//	outside the Number Field.
+//		Signals that the Number Symbol we be positioned
+//		outside the Number Field.
 //
-//		Example-8
-//			Number Field Length: 8
-//	     Numeric Value: 123.45
-//	     Number Symbol: leading minus sign ('-')
-//	     Number Symbol Position: Outside Number Field
-//	     Formatted Number String: "-  123.45"
-//	          Number Field Index:  012345678
-//	  Total Number String Length: 9
+//			Example-8:
+//				Number Field Length: 8
+//		     	Numeric Value: 123.45
+//		     	Number Symbol: leading minus sign ('-')
+//		     	Number Symbol Position: Outside Number Field
+//	         Number Text Justification: Right
+//		     	Formatted Number String: "-  123.45"
+//				Number Field Index:       012345678
+//				Total Number String Length: 9
 //
-//		Example-9
-//			Number Field Length: 8
-//	     Numeric Value: 123.45
-//	     Number Symbol: before and after parentheses  ('()')
-//	     Number Symbol Position: Outside Number Field
-//	     Formatted Number String: "( 123.45 )"
-//	          Number Field Index:  0123456789
-//	  Total Number String Length: 10
+//			Example-9:
+//				Number Field Length: 8
+//				Numeric Value: 123.45
+//				Number Symbol: before and after parentheses  ('()')
+//				Number Symbol Position: Outside Number Field
+//	         Number Text Justification: Centered
+//				Formatted Number String: "( 123.45 )"
+//				Number Field Index:       0123456789
+//				Total Number String Length: 10
 //
-//	In this case the final length of the number string is
-//	greater than the Number Field length.
+//		In this case the final length of the number string is
+//		greater than the Number Field length.
 type NumberFieldSymbolPosition int
 
 var lockNumberFieldSymbolPosition sync.Mutex
