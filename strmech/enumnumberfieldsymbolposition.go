@@ -29,8 +29,8 @@ var mapNumFieldNumSymbolPosLwrCaseStringToCode = map[string]NumberFieldSymbolPos
 
 // NumberFieldSymbolPosition - An enumeration used to define
 // the position of number symbols relative to number fields
-// containing numeric values formatted for text dispaly in number
-// strings.
+// containing numeric values formatted for text display in
+// number strings.
 //
 // ----------------------------------------------------------------
 //
@@ -38,7 +38,7 @@ var mapNumFieldNumSymbolPosLwrCaseStringToCode = map[string]NumberFieldSymbolPos
 //
 // Number symbols such as plus signs ('+'), minus signs ('-'),
 // parentheses ('()') currency signs ('$') and other numeric
-// sysbols are positioned either inside of number fields or
+// symbols are positioned either inside of number fields or
 // outside number fields containing the numeric values.
 //
 //		Example-1
@@ -77,7 +77,7 @@ var mapNumFieldNumSymbolPosLwrCaseStringToCode = map[string]NumberFieldSymbolPos
 //
 // # BACKGROUND
 //
-// Number string consist of numic values conveted to their
+// Number string consist of numic values converted to their
 // text character equivalents. These numeric digit strings
 // are commonly formatted within number fields.
 //
@@ -392,12 +392,13 @@ func (numFieldSymbolPos NumberFieldSymbolPosition) XIsValid() bool {
 //
 //	If 'true' the search for enumeration names
 //	will be case-sensitive and will require an
-//	exact match. Therefore, 'right' will NOT
-//	match the enumeration name, 'Right'.
+//	exact match. Therefore, 'insidenumfield' will
+//	NOT	match the enumeration name, 'InsideNumField'.
 //
 //	If 'false' a case-insensitive search is conducted
-//	for the enumeration name. In this case, 'right'
-//	will match the enumeration name 'Right'.
+//	for the enumeration name. In this case,
+//	'insidenumfield' will match the enumeration name
+//	'InsideNumField'.
 //
 // ------------------------------------------------------------------------
 //
@@ -470,6 +471,76 @@ func (numFieldSymbolPos NumberFieldSymbolPosition) XParseString(
 	}
 
 	return numFieldSymPos, nil
+}
+
+// XReturnNoneIfInvalid - Provides a standardized value for invalid
+// instances of enumeration NumberFieldSymbolPosition.
+//
+// If the current instance of NumberFieldSymbolPosition is invalid,
+// this method will always return a value of
+// NumberFieldSymbolPosition(0).None().
+//
+// # Background
+//
+// Enumeration NumberFieldSymbolPosition has an underlying type of
+// integer (int). This means the type could conceivably be set to
+// any integer value. This method ensures that all invalid
+// NumberFieldSymbolPosition instances are consistently classified
+// as 'None' (NumberFieldSymbolPosition(0).None()). Remember that
+// 'None' is considered an invalid value.
+//
+// For example, assume that NumberFieldSymbolPosition was set to
+// an integer value of -848972. Calling this method on a
+// NumberFieldSymbolPosition with this invalid integer value will
+// return an integer value of zero or the equivalent of
+// NumberFieldSymbolPosition(0).None(). This conversion is useful
+// in generating text strings for meaningful informational and
+// error messages.
+//
+// This is a standard utility method and is not part of the valid
+// enumerations for this type.
+func (numFieldSymbolPos NumberFieldSymbolPosition) XReturnNoneIfInvalid() NumberFieldSymbolPosition {
+
+	lockNumberFieldSymbolPosition.Lock()
+
+	defer lockNumberFieldSymbolPosition.Unlock()
+
+	isValid := new(NumberFieldSymbolPositionNanobot).
+		isValidNumberFieldSymbolPosition(numFieldSymbolPos)
+
+	if !isValid {
+		return NumberFieldSymbolPosition(0)
+	}
+
+	return numFieldSymbolPos
+}
+
+// XValue - This method returns the enumeration value of the current
+// NumberFieldSymbolPosition instance.
+//
+// This is a standard utility method and is not part of the valid
+// enumerations for this type.
+func (numFieldSymbolPos NumberFieldSymbolPosition) XValue() NumberFieldSymbolPosition {
+
+	lockNumberFieldSymbolPosition.Lock()
+
+	defer lockNumberFieldSymbolPosition.Unlock()
+
+	return numFieldSymbolPos
+}
+
+// XValueInt - This method returns the integer value of the current
+// NumberFieldSymbolPosition instance.
+//
+// This is a standard utility method and is not part of the valid
+// enumerations for this type.
+func (numFieldSymbolPos NumberFieldSymbolPosition) XValueInt() int {
+
+	lockNumberFieldSymbolPosition.Lock()
+
+	defer lockNumberFieldSymbolPosition.Unlock()
+
+	return int(numFieldSymbolPos)
 }
 
 // NumFieldSymPos - Public global constant of type
