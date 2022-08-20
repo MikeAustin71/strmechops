@@ -77,7 +77,7 @@ var mapNumFieldNumSymbolPosLwrCaseStringToCode = map[string]NumberFieldSymbolPos
 //
 // # BACKGROUND
 //
-// Number string consist of numic values converted to their
+// Number string consist of numeric values converted to their
 // text character equivalents. These numeric digit strings
 // are commonly formatted within number fields.
 //
