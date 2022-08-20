@@ -220,15 +220,17 @@ func (enumTxtJustify TextJustify) XIsValid() bool {
 //
 // # Input Parameters
 //
-// valueString   string - A string which will be matched against the
+// valueString   string
 //
+//	A string which will be matched against the
 //	enumeration string values. If 'valueString'
 //	is equal to one of the enumeration names, this
 //	method will proceed to successful completion
 //	and return the correct enumeration value.
 //
-// caseSensitive   bool - If 'true' the search for enumeration names
+// caseSensitive   bool
 //
+//	If 'true' the search for enumeration names
 //	will be case-sensitive and will require an
 //	exact match. Therefore, 'right' will NOT
 //	match the enumeration name, 'Right'.
@@ -242,16 +244,18 @@ func (enumTxtJustify TextJustify) XIsValid() bool {
 // # Return Values
 //
 // TextJustify
-//   - Upon successful completion, this method will return a new
-//     instance of TextJustify set to the value of the enumeration
-//     matched by the string search performed on input parameter,
-//     'valueString'.
+//
+//	Upon successful completion, this method will return a new
+//	instance of TextJustify set to the value of the enumeration
+//	matched by the string search performed on input parameter,
+//	'valueString'.
 //
 // error
-//   - If this method completes successfully, the returned error
-//     Type is set equal to 'nil'. If an error condition is encountered,
-//     this method will return an error type which encapsulates an
-//     appropriate error message.
+//
+//	If this method completes successfully, the returned error
+//	Type is set equal to 'nil'. If an error condition is encountered,
+//	this method will return an error type which encapsulates an
+//	appropriate error message.
 //
 // ------------------------------------------------------------------------
 //
@@ -269,14 +273,6 @@ func (enumTxtJustify TextJustify) XParseString(
 	defer lockEnumTextJustify.Unlock()
 
 	ePrefix := "TextJustify.XParseString() "
-
-	if len(valueString) < 4 {
-		return TextJustify(0),
-			fmt.Errorf(ePrefix+
-				"\nInput parameter 'valueString' is INVALID!\n"+
-				"String length is less than '4'.\n"+
-				"valueString='%v'\n", valueString)
-	}
 
 	var ok bool
 	var enumTxtJustification TextJustify
@@ -386,7 +382,7 @@ func (enumTxtJustify TextJustify) XValueInt() int {
 // TxtJustify.Left(),
 // TxtJustify.Right(),
 // TxtJustify.Center(),
-var TxtJustify TextJustify
+const TxtJustify = TextJustify(0)
 
 // textJustifyNanobot - Provides helper methods for
 // enumeration TextJustify.
