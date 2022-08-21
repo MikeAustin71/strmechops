@@ -2144,6 +2144,171 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewTrailingNumberSymbolRunes
 	return newNStrNumberSymbolSpec, err
 }
 
+// NewUnitedStatesSignedNumSymbols - Creates and returns
+// new instances of default positive signed number symbols and
+// negative signed number symbols in accordance with formatting
+// parameters commonly applied in the United States.
+//
+// The positive signed number symbol is empty or blank because
+// under United States formatting standards, positive number signs
+// are implied and not specifically displayed. Therefore, no
+// leading plus ('+') symbol is required.
+//
+// The negative signed number symbol is configured with a leading
+// minus sign ('-') meaning that all negative numeric values will
+// be prefixed with a leading minus sign ('-'). The negative
+// number sign will be positioned inside the number field:
+//
+//	NumFieldSymPos.InsideNumField()
+//		Example:
+//			Number Field Length: 8
+//			Numeric Value: 123.45
+//			Number Symbol: leading minus sign ('-')
+//			Number Symbol Position: Inside Number Field
+//			Formatted Number String: " -123.45"
+//			Number Field Index:  01234567
+//			Total Number String Length: 8
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix						interface{}
+//
+//		This object encapsulates error prefix text which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods
+//		listed as a method or function chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of the
+//		following types:
+//
+//		1. nil - A nil value is valid and generates an empty
+//		   collection of error prefix and error context
+//		   information.
+//
+//		2. string - A string containing error prefix information.
+//
+//		3. []string A one-dimensional slice of strings containing
+//		   error prefix information
+//
+//		4. [][2]string A two-dimensional slice of strings
+//		   containing error prefix and error context information.
+//
+//		5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		   from this object will be copied for use in error and
+//		   informational messages.
+//
+//		6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		   Information from this object will be copied for use in
+//		   error and informational messages.
+//
+//		7. IBasicErrorPrefix - An interface to a method generating
+//		   a two-dimensional slice of strings containing error
+//		   prefix and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible to one of
+//		the valid types listed above, it will be considered
+//		invalid and trigger the return of an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		the 'errpref' software package,
+//		"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	positiveSignedNumberSymbols		NumStrNumberSymbolSpec
+//
+//		One of two new returned instances of
+//		NumStrNumberSymbolSpec. This instance is empty or
+//		blank because under United States' signed number
+//		formatting standards, the positive number sign ('+')
+//		is implied and not displayed.
+//
+//	negativeSignedNumberSymbols		NumStrNumberSymbolSpec
+//
+//		One of two new returned instances of
+//		NumStrNumberSymbolSpec. This instance is configured
+//		with a leading minus sign ('-') which will be
+//	 	formatted and displayed for all negative number
+//		values. This negative number sign will be displayed
+//		inside the number field.
+//
+//			NumFieldSymPos.InsideNumField()
+//				Example:
+//					Number Field Length: 8
+//					Numeric Value: 123.45
+//					Number Symbol: leading minus sign ('-')
+//					Number Symbol Position: Inside Number Field
+//					Formatted Number String: " -123.45"
+//					Number Field Index:  01234567
+//					Total Number String Length: 8
+//
+//	err								error
+//
+//		If this method completes successfully and no errors are
+//		encountered this return value is set to 'nil'. Otherwise,
+//		if errors are encountered, this return value will contain
+//		an appropriate error message.
+//
+//		If an error message is returned, the text value of input
+//		parameter 'errorPrefix' will be inserted or prefixed at
+//		the beginning of the error message.
+func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewUnitedStatesSignedNumSymbols(
+	errorPrefix interface{}) (
+	positiveSignedNumberSymbols NumStrNumberSymbolSpec,
+	negativeSignedNumberSymbols NumStrNumberSymbolSpec,
+	err error) {
+
+	if nStrNumberSymbolSpec.lock == nil {
+		nStrNumberSymbolSpec.lock = new(sync.Mutex)
+	}
+
+	nStrNumberSymbolSpec.lock.Lock()
+
+	defer nStrNumberSymbolSpec.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumStrNumberSymbolSpec."+
+			"NewUnitedStatesSignedNumSymbols()",
+		"")
+
+	if err != nil {
+		return positiveSignedNumberSymbols,
+			negativeSignedNumberSymbols,
+			err
+
+	}
+
+	numStrNumSymSpecNanobot := numStrNumberSymbolSpecNanobot{}
+
+	numStrNumSymSpecNanobot.empty(
+		&positiveSignedNumberSymbols)
+
+	numStrNumSymSpecNanobot.empty(
+		&negativeSignedNumberSymbols)
+
+	err = numStrNumSymSpecNanobot.setLeadingNStrNumSymbolSpec(
+		&negativeSignedNumberSymbols,
+		[]rune{'-'},
+		NumFieldSymPos.InsideNumField(),
+		ePrefix.XCpy(
+			"negativeSignedNumberSymbols"))
+
+	return positiveSignedNumberSymbols,
+		negativeSignedNumberSymbols,
+		err
+}
+
 // SetLeadingNumberSymbol - Resets and configures a leading
 // number symbol character or characters for the current
 // instance of NumStrNumberSymbolSpec.
@@ -4087,10 +4252,11 @@ type nStrNumberSymbolSpecAtom struct {
 // Input Parameters
 //
 //	nStrNumSymbolSpec           *NumStrNumberSymbolSpec
-//	   - A pointer to an instance of NumStrNumberSymbolSpec.
-//	     The Leading Number Symbol contained in this
-//	     instance will be deleted and reset to an empty or zero
-//	     value.
+//
+//		A pointer to an instance of NumStrNumberSymbolSpec.
+//		The Leading Number Symbol contained in this
+//		instance will be deleted and reset to an empty or zero
+//		value.
 //
 // ------------------------------------------------------------------------
 //
