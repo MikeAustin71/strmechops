@@ -28,7 +28,7 @@ type SignedNumberFormatSpec struct {
 	// Controls the rounding algorithm applied to
 	// floating point numbers.
 
-	positiveNumberSign NumStrPositiveNumberSymbolsSpec
+	positiveNumberSign NumStrNumberSymbolSpec
 	// Positive number signs are commonly implied and
 	// not specified. However, the user as the option
 	// to specify a positive number sign character or
@@ -36,7 +36,7 @@ type SignedNumberFormatSpec struct {
 	// Number String Positive Number Sign
 	// Specification.
 
-	negativeNumberSign NumStrNegativeNumberSignSpec
+	negativeNumberSign NumStrNumberSymbolSpec
 	// The Number String Negative Number Sign
 	// Specification is used to configure negative
 	// number sign symbols for negative numeric values
@@ -857,6 +857,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) GetIntSeparatorRunes() []rune {
 // # Input Parameters
 //
 //	decSeparator				string
+//
 //		This string contains the character or characters
 //		which will be configured as the Decimal Separator
 //		Symbol or Symbols for the returned instance of
@@ -864,6 +865,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) GetIntSeparatorRunes() []rune {
 //		Specification.
 //
 //	intSeparatorChars			string
+//
 //		One or more characters used to separate groups of
 //		integers. This separator is also known as the 'thousands'
 //		separator. It is used to separate groups of integer digits
@@ -884,6 +886,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) GetIntSeparatorRunes() []rune {
 //		'IntGroupingType.None()', an error will be returned.
 //
 //	intGroupingType				IntegerGroupingType
+//
 //		This instance of IntegerGroupingType defines the type
 //		of IntegerSeparatorDto which will be returned. The
 //		enumeration IntegerGroupingType must be set to one
@@ -894,6 +897,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) GetIntSeparatorRunes() []rune {
 //		IntGroupingType.ChineseNumbering()
 //
 //	roundingType				NumberRoundingType
+//
 //		This parameter will populate the
 //		'NumStrRoundingSpec.roundingType' member variable
 //		data value contained in returned instance of
@@ -904,19 +908,20 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) GetIntSeparatorRunes() []rune {
 //		digit rounding operation. Valid values are listed
 //		as follows:
 //
-//		 NumRoundType.None(),
-//		 NumRoundType.HalfUpWithNegNums(),
-//		 NumRoundType.HalfDownWithNegNums(),
-//		 NumRoundType.HalfAwayFromZero(),
-//		 NumRoundType.HalfTowardsZero(),
-//		 NumRoundType.HalfToEven(),
-//		 NumRoundType.HalfToOdd(),
-//		 NumRoundType.Randomly(),
-//		 NumRoundType.Floor(),
-//		 NumRoundType.Ceiling(),
-//		 NumRoundType.Truncate(),
+//			NumRoundType.NoRounding()
+//			NumRoundType.HalfUpWithNegNums()
+//			NumRoundType.HalfDownWithNegNums()
+//			NumRoundType.HalfAwayFromZero()
+//			NumRoundType.HalfTowardsZero()
+//			NumRoundType.HalfToEven()
+//			NumRoundType.HalfToOdd()
+//			NumRoundType.Randomly()
+//			NumRoundType.Floor()
+//			NumRoundType.Ceiling()
+//			NumRoundType.Truncate()
 //
 //	roundToFractionalDigits		int
+//
 //		When set to a positive integer value, this parameter
 //		controls the number of digits to the right of the
 //		decimal separator (a.k.a. decimal point) which will
@@ -924,26 +929,199 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) GetIntSeparatorRunes() []rune {
 //		operation.
 //
 //	leadingPositiveNumSign		string
+//
 //		A string containing the leading positive number sign
 //		character or characters used to configure a Positive
 //		Number Sign Symbol in a number string.
 //
+//		Leading number symbols can include any combination
+//		of characters to include plus signs ('+') and/or
+//		currency symbols ('$').
+//
+//	positiveNumFieldSymPosition		NumberFieldSymbolPosition
+//
+//		Defines the position of the Positive Number Sign
+//		relative to a Number Field in which a number string
+//		is displayed. Possible valid values are listed as
+//		follows:
+//
+//			NumFieldSymPos.InsideNumField()
+//				Example-1:
+//					Number Field Length: 8
+//					Numeric Value: 123.45
+//					Number Symbol: leading plus sign ('+')
+//					Number Symbol Position: Inside Number Field
+//			     	Number Text Justification: Right
+//					Formatted Number String: " +123.45"
+//					Number Field Index:       01234567
+//					Total Number String Length: 8
+//
+//				Example-2:
+//					Number Field Length: 8
+//					Numeric Value: 123.45
+//					Number Symbol: trailing plus sign ('+')
+//					Number Symbol Position: Inside Number Field
+//			     	Number Text Justification: Right
+//					Formatted Number String: " 123.45+"
+//					Number Field Index:       01234567
+//					Total Number String Length: 8
+//
+//				For the 'NumFieldSymPos.InsideNumField()' specification,
+//				the final length of the number string is defined by the
+//				Number Field length.
+//
+//			NumFieldSymPos.OutsideNumField()
+//				Example-3:
+//					Number Field Length: 8
+//			     	Numeric Value: 123.45
+//			     	Number Symbol: leading plus sign ('+')
+//			     	Number Symbol Position: Outside Number Field
+//			     	Number Text Justification: Right
+//			     	Formatted Number String: "+  123.45"
+//					Number Field Index:       012345678
+//					Total Number String Length: 9
+//
+//				Example-4:
+//					Number Field Length: 8
+//			     	Numeric Value: 123.45
+//			     	Number Symbol: trailing plus sign ('+')
+//			     	Number Symbol Position: Outside Number Field
+//			     	Number Text Justification: Right
+//			     	Formatted Number String: "  123.45+"
+//					Number Field Index:       012345678
+//					Total Number String Length: 9
+//
+//				For the 'NumFieldSymPos.OutsideNumField()' specification,
+//				the final length of the number string is greater than
+//				the Number Field length.
+//
 //	trailingPositiveNumSign     string
+//
 //		A string containing the trailing positive number sign
 //		character or characters used to configure a Positive
 //		Number Sign Symbol in a number string.
 //
+//		Trailing number symbols can include any combination
+//		of characters to include plus signs ('+') and/or
+//	 	currency symbols ('$').
+//
 //	leadingNegativeNumSign		string
+//
 //		A string containing the leading negative number sign
 //		character or characters used to configure a Negative
 //		Number Sign Symbol in a number string.
 //
+//		Leading number symbols can include any combination of
+//		characters to include minus signs ('-') and/or
+//	 	currency symbols ('$').
+//
 //	trailingNegativeNumSign		string
+//
 //		A string containing the trailing negative number
 //		sign character or characters used to configure a
 //		Negative Number Sign Symbol in a number string.
 //
+//		Trailing number symbols can include any	combination
+//		of characters to include minus signs ('-') and/or
+//		currency symbols ('$').
+//
+//	negativeNumFieldSymPosition				NumberFieldSymbolPosition
+//
+//		Defines the position of the Negative Number Sign
+//		relative to a Number Field in which a number string
+//		is displayed. Possible valid values are listed as
+//		follows:
+//
+//			NumFieldSymPos.InsideNumField()
+//				Example-1:
+//					Number Field Length: 8
+//					Numeric Value: 123.45
+//					Number Symbol: leading minus sign ('-')
+//					Number Symbol Position: Inside Number Field
+//			     	Number Text Justification: Right
+//					Formatted Number String: " -123.45"
+//					Number Field Index:  01234567
+//					Total Number String Length: 8
+//
+//				Example-2:
+//					Number Field Length: 8
+//					Numeric Value: 123.45
+//					Number Symbol: trailing minus sign ('-')
+//					Number Symbol Position: Inside Number Field
+//			     	Number Text Justification: Right
+//					Formatted Number String: " 123.45-"
+//					Number Field Index:       01234567
+//					Total Number String Length: 8
+//
+//				Example-3:
+//					Number Field Length: 10
+//					Numeric Value: 123.45
+//					Number Symbol: before and after parentheses  ('()')
+//					Number Symbol Position: Inside Number Field
+//			     	Number Text Justification: Centered
+//					Formatted Number String: " (123.45) "
+//					Number Field Index:       0123456789
+//					Total Number String Length: 10
+//
+//				For the 'NumFieldSymPos.InsideNumField()' specification,
+//				the final length of the number string is defined by the
+//				Number Field length.
+//
+//			NumFieldSymPos.OutsideNumField()
+//				Example-4:
+//					Number Field Length: 8
+//			     	Numeric Value: 123.45
+//			     	Number Symbol: leading minus sign ('-')
+//			     	Number Symbol Position: Outside Number Field
+//			     	Number Text Justification: Right
+//			     	Formatted Number String: "-  123.45"
+//					Number Field Index:       012345678
+//					Total Number String Length: 9
+//
+//				Example-5:
+//					Number Field Length: 8
+//			     	Numeric Value: 123.45
+//			     	Number Symbol: trailing minus sign ('-')
+//			     	Number Symbol Position: Outside Number Field
+//			     	Number Text Justification: Right
+//			     	Formatted Number String: "  123.45-"
+//					Number Field Index:       012345678
+//					Total Number String Length: 9
+//
+//				Example-6:
+//					Number Field Length: 8
+//					Numeric Value: 123.45
+//					Number Symbol: before and after parentheses  ('()')
+//					Number Symbol Position: Outside Number Field
+//			     	Number Text Justification: Centered
+//					Formatted Number String: "( 123.45 )"
+//					Number Field Index:       0123456789
+//					Total Number String Length: 10
+//
+//				For the 'NumFieldSymPos.OutsideNumField()' specification,
+//				the final length of the number string is greater than
+//				the Number Field length.
+//
 //	fieldLength					int
+//
+//		This parameter defines the length of the text field in
+//		which the numeric value will be displayed within a
+//		number string.
+//
+//		If 'fieldLength' is less than the length of the numeric
+//		value string, it will be automatically set equal to the
+//		length of that numeric value string.
+//
+//		To automatically set the value of fieldLength to the string
+//		length of the numeric value, set this parameter to a value
+//		of minus one (-1).
+//
+//		If this parameter is submitted with a value less than minus
+//		one (-1) or greater than 1-million (1,000,000), an error will
+//		be returned.
+//
+//	fieldLength					int
+//
 //		This parameter defines the length of the text field in
 //		which the numeric value will be displayed within a
 //		number string.
@@ -961,6 +1139,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) GetIntSeparatorRunes() []rune {
 //		be returned.
 //
 //	fieldJustification			TextJustify
+//
 //		An enumeration which specifies the justification of the
 //		numeric value within the number field length specified
 //		by input parameter 'fieldLength'.
@@ -987,6 +1166,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) GetIntSeparatorRunes() []rune {
 //			TxtJustify.Center()
 //
 //	errorPrefix					interface{}
+//
 //		This object encapsulates error prefix text which is
 //		included in all returned error messages. Usually, it
 //		contains the name of the calling method or methods
@@ -1035,11 +1215,13 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) GetIntSeparatorRunes() []rune {
 // # Return Values
 //
 //	newSignedNumFmtSpec			SignedNumberFormatSpec
+//
 //		If this method completes successfully, this parameter
 //		will return a new, fully populated instance of
 //		SignedNumberFormatSpec.
 //
 //	err							error
+//
 //		If this method completes successfully, the returned error
 //		Type is set equal to 'nil'.
 //
@@ -1057,8 +1239,10 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) NewSignedNumFmtSpec(
 	roundToFractionalDigits int,
 	leadingPosNumSign string,
 	trailingPosNumSign string,
+	positiveNumFieldSymPosition NumberFieldSymbolPosition,
 	leadingNegNumSign string,
 	trailingNegNumSign string,
+	negativeNumFieldSymPosition NumberFieldSymbolPosition,
 	numFieldLength int,
 	numFieldJustification TextJustify,
 	errorPrefix interface{}) (
@@ -1096,8 +1280,10 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) NewSignedNumFmtSpec(
 			roundToFractionalDigits,
 			[]rune(leadingPosNumSign),
 			[]rune(trailingPosNumSign),
+			positiveNumFieldSymPosition,
 			[]rune(leadingNegNumSign),
 			[]rune(trailingNegNumSign),
+			negativeNumFieldSymPosition,
 			numFieldLength,
 			numFieldJustification,
 			ePrefix.XCpy(
@@ -1114,6 +1300,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) NewSignedNumFmtSpec(
 // # Input Parameters
 //
 //	decSeparator				[]rune
+//
 //		This rune array contains the character or characters
 //		which will be configured as the Decimal Separator
 //		Symbol or Symbols for the returned instance of
@@ -1121,6 +1308,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) NewSignedNumFmtSpec(
 //		Specification.
 //
 //	intSeparatorChars			[]rune
+//
 //		A rune array containing one or more characters used to
 //		separate groups of integers. This separator is also known
 //	 	as the 'thousands' separator in the United States. It is
@@ -1142,6 +1330,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) NewSignedNumFmtSpec(
 //		'IntGroupingType.None()', an error will be returned.
 //
 //	intGroupingType				IntegerGroupingType
+//
 //		This instance of IntegerGroupingType defines the type
 //		of IntegerSeparatorDto which will be returned. The
 //		enumeration IntegerGroupingType must be set to one
@@ -1152,6 +1341,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) NewSignedNumFmtSpec(
 //		IntGroupingType.ChineseNumbering()
 //
 //	roundingType				NumberRoundingType
+//
 //		This parameter will populate the
 //		'NumStrRoundingSpec.roundingType' member variable
 //		data value contained in returned instance of
@@ -1162,19 +1352,20 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) NewSignedNumFmtSpec(
 //		digit rounding operation. Valid values are listed
 //		as follows:
 //
-//		 NumRoundType.None(),
-//		 NumRoundType.HalfUpWithNegNums(),
-//		 NumRoundType.HalfDownWithNegNums(),
-//		 NumRoundType.HalfAwayFromZero(),
-//		 NumRoundType.HalfTowardsZero(),
-//		 NumRoundType.HalfToEven(),
-//		 NumRoundType.HalfToOdd(),
-//		 NumRoundType.Randomly(),
-//		 NumRoundType.Floor(),
-//		 NumRoundType.Ceiling(),
-//		 NumRoundType.Truncate(),
+//			NumRoundType.NoRounding()
+//			NumRoundType.HalfUpWithNegNums()
+//			NumRoundType.HalfDownWithNegNums()
+//			NumRoundType.HalfAwayFromZero()
+//			NumRoundType.HalfTowardsZero()
+//			NumRoundType.HalfToEven()
+//			NumRoundType.HalfToOdd()
+//			NumRoundType.Randomly()
+//			NumRoundType.Floor()
+//			NumRoundType.Ceiling()
+//			NumRoundType.Truncate()
 //
 //	roundToFractionalDigits		int
+//
 //		When set to a positive integer value, this parameter
 //		controls the number of digits to the right of the
 //		decimal separator (a.k.a. decimal point) which will
@@ -1182,26 +1373,181 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) NewSignedNumFmtSpec(
 //		operation.
 //
 //	leadingPositiveNumSign		[]rune
+//
 //		A rune array containing the leading positive number
 //		sign character or characters used to configure a
 //	 	Positive Number Sign Symbol in a number string.
 //
+//		Leading number symbols can include any combination
+//		of characters to include plus signs ('+') and/or
+//		currency symbols ('$').
+//
 //	trailingPositiveNumSign     []rune
+//
 //		A rune array containing the trailing positive number
 //	 	sign character or characters used to configure a
 //	  	Positive Number Sign Symbol in a number string.
 //
+//		Trailing number symbols can include any combination
+//		of characters to include plus signs ('+') and/or
+//	 	currency symbols ('$').
+//
+//	positiveNumFieldSymPosition		NumberFieldSymbolPosition
+//
+//		Defines the position of the Positive Number Sign
+//		relative to a Number Field in which a number string
+//		is displayed. Possible valid values are listed as
+//		follows:
+//
+//			NumFieldSymPos.InsideNumField()
+//				Example-1:
+//					Number Field Length: 8
+//					Numeric Value: 123.45
+//					Number Symbol: leading plus sign ('+')
+//					Number Symbol Position: Inside Number Field
+//			     	Number Text Justification: Right
+//					Formatted Number String: " +123.45"
+//					Number Field Index:       01234567
+//					Total Number String Length: 8
+//
+//				Example-2:
+//					Number Field Length: 8
+//					Numeric Value: 123.45
+//					Number Symbol: trailing plus sign ('+')
+//					Number Symbol Position: Inside Number Field
+//			     	Number Text Justification: Right
+//					Formatted Number String: " 123.45+"
+//					Number Field Index:       01234567
+//					Total Number String Length: 8
+//
+//				For the 'NumFieldSymPos.InsideNumField()' specification,
+//				the final length of the number string is defined by the
+//				Number Field length.
+//
+//			NumFieldSymPos.OutsideNumField()
+//				Example-3:
+//					Number Field Length: 8
+//			     	Numeric Value: 123.45
+//			     	Number Symbol: leading plus sign ('+')
+//			     	Number Symbol Position: Outside Number Field
+//			     	Number Text Justification: Right
+//			     	Formatted Number String: "+  123.45"
+//					Number Field Index:       012345678
+//					Total Number String Length: 9
+//
+//				Example-4:
+//					Number Field Length: 8
+//			     	Numeric Value: 123.45
+//			     	Number Symbol: trailing plus sign ('+')
+//			     	Number Symbol Position: Outside Number Field
+//			     	Number Text Justification: Right
+//			     	Formatted Number String: "  123.45+"
+//					Number Field Index:       012345678
+//					Total Number String Length: 9
+//
+//				For the 'NumFieldSymPos.OutsideNumField()' specification,
+//				the final length of the number string is greater than
+//				the Number Field length.
+//
 //	leadingNegativeNumSign		[]rune
+//
 //		A rune array containing the leading negative number
 //		sign character or characters used to configure a
 //		Negative Number Sign Symbol in a number string.
 //
+//		Leading number symbols can include any combination of
+//		characters to include minus signs ('-') and/or
+//	 	currency symbols ('$').
+//
 //	trailingNegativeNumSign		[]rune
+//
 //		A rune array containing the trailing negative
 //		number sign character or characters used to configure
 //		a Negative Number Sign Symbol in a number string.
 //
+//		Trailing number symbols can include any	combination
+//		of characters to include minus signs ('-') and/or
+//		currency symbols ('$').
+//
+//	negativeNumFieldSymPosition				NumberFieldSymbolPosition
+//
+//		Defines the position of the Negative Number Sign
+//		relative to a Number Field in which a number string
+//		is displayed. Possible valid values are listed as
+//		follows:
+//
+//			NumFieldSymPos.InsideNumField()
+//				Example-1:
+//					Number Field Length: 8
+//					Numeric Value: 123.45
+//					Number Symbol: leading minus sign ('-')
+//					Number Symbol Position: Inside Number Field
+//			     	Number Text Justification: Right
+//					Formatted Number String: " -123.45"
+//					Number Field Index:  01234567
+//					Total Number String Length: 8
+//
+//				Example-2:
+//					Number Field Length: 8
+//					Numeric Value: 123.45
+//					Number Symbol: trailing minus sign ('-')
+//					Number Symbol Position: Inside Number Field
+//			     	Number Text Justification: Right
+//					Formatted Number String: " 123.45-"
+//					Number Field Index:       01234567
+//					Total Number String Length: 8
+//
+//				Example-3:
+//					Number Field Length: 10
+//					Numeric Value: 123.45
+//					Number Symbol: before and after parentheses  ('()')
+//					Number Symbol Position: Inside Number Field
+//			     	Number Text Justification: Centered
+//					Formatted Number String: " (123.45) "
+//					Number Field Index:       0123456789
+//					Total Number String Length: 10
+//
+//				For the 'NumFieldSymPos.InsideNumField()' specification,
+//				the final length of the number string is defined by the
+//				Number Field length.
+//
+//			NumFieldSymPos.OutsideNumField()
+//				Example-4:
+//					Number Field Length: 8
+//			     	Numeric Value: 123.45
+//			     	Number Symbol: leading minus sign ('-')
+//			     	Number Symbol Position: Outside Number Field
+//			     	Number Text Justification: Right
+//			     	Formatted Number String: "-  123.45"
+//					Number Field Index:       012345678
+//					Total Number String Length: 9
+//
+//				Example-5:
+//					Number Field Length: 8
+//			     	Numeric Value: 123.45
+//			     	Number Symbol: trailing minus sign ('-')
+//			     	Number Symbol Position: Outside Number Field
+//			     	Number Text Justification: Right
+//			     	Formatted Number String: "  123.45-"
+//					Number Field Index:       012345678
+//					Total Number String Length: 9
+//
+//				Example-6:
+//					Number Field Length: 8
+//					Numeric Value: 123.45
+//					Number Symbol: before and after parentheses  ('()')
+//					Number Symbol Position: Outside Number Field
+//			     	Number Text Justification: Centered
+//					Formatted Number String: "( 123.45 )"
+//					Number Field Index:       0123456789
+//					Total Number String Length: 10
+//
+//				For the 'NumFieldSymPos.OutsideNumField()' specification,
+//				the final length of the number string is greater than
+//				the Number Field length.
+//
 //	fieldLength					int
+//
 //		This parameter defines the length of the text field in
 //		which the numeric value will be displayed within a
 //		number string.
@@ -1219,6 +1565,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) NewSignedNumFmtSpec(
 //		be returned.
 //
 //	fieldJustification			TextJustify
+//
 //		An enumeration which specifies the justification of the
 //		numeric value within the number field length specified
 //		by input parameter 'fieldLength'.
@@ -1245,6 +1592,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) NewSignedNumFmtSpec(
 //			TxtJustify.Center()
 //
 //	errorPrefix					interface{}
+//
 //		This object encapsulates error prefix text which is
 //		included in all returned error messages. Usually, it
 //		contains the name of the calling method or methods
@@ -1293,11 +1641,13 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) NewSignedNumFmtSpec(
 // # Return Values
 //
 //	newSignedNumFmtSpec			SignedNumberFormatSpec
+//
 //		If this method completes successfully, this parameter
 //		will return a new, fully populated instance of
 //		SignedNumberFormatSpec.
 //
 //	err							error
+//
 //		If this method completes successfully, the returned error
 //		Type is set equal to 'nil'.
 //
@@ -1315,8 +1665,10 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) NewSignedNumFmtSpecRunes(
 	roundToFractionalDigits int,
 	leadingPosNumSign []rune,
 	trailingPosNumSign []rune,
+	positiveNumFieldSymPosition NumberFieldSymbolPosition,
 	leadingNegNumSign []rune,
 	trailingNegNumSign []rune,
+	negativeNumFieldSymPosition NumberFieldSymbolPosition,
 	numFieldLength int,
 	numFieldJustification TextJustify,
 	errorPrefix interface{}) (
@@ -1354,8 +1706,10 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) NewSignedNumFmtSpecRunes(
 			roundToFractionalDigits,
 			leadingPosNumSign,
 			trailingPosNumSign,
+			positiveNumFieldSymPosition,
 			leadingNegNumSign,
 			trailingNegNumSign,
+			negativeNumFieldSymPosition,
 			numFieldLength,
 			numFieldJustification,
 			ePrefix.XCpy(
@@ -1373,6 +1727,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) NewSignedNumFmtSpecRunes(
 // # Input Parameters
 //
 //	decSeparatorSpec			*DecimalSeparatorSpec
+//
 //		An instance of DecimalSeparatorSpec. The member
 //		variable data values contained in this instance
 //		will be copied to the current
@@ -1383,6 +1738,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) NewSignedNumFmtSpecRunes(
 //		referred to as the decimal point.
 //
 //	errorPrefix					interface{}
+//
 //		This object encapsulates error prefix text which is
 //		included in all returned error messages. Usually, it
 //		contains the name of the calling method or methods
@@ -1431,6 +1787,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) NewSignedNumFmtSpecRunes(
 // # Return Values
 //
 //	error
+//
 //		If this method completes successfully, the returned error
 //		Type is set equal to 'nil'.
 //
@@ -1584,6 +1941,232 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetIntegerGroupingSpec(
 			"signedNumFmtSpec<-intGroupingSpec"))
 }
 
+// SetNegativeNumberSignSpec - Deletes and replaces the Negative
+// Number Sign Specification for the current instance of
+// SignedNumberFormatSpec:
+//
+//	SignedNumberFormatSpec.negativeNumberSign
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	negativeNumberSign			NumStrNumberSymbolSpec
+//
+//		An instance of NumStrNumberSymbolSpec. The member
+//		variable data values contained in this instance
+//		will be copied to the current
+//		SignedNumberFormatSpec member variable:
+//			'SignedNumberFormatSpec.negativeNumberSign'.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods
+//		listed as a method or function chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of the
+//		following types:
+//
+//		1. nil - A nil value is valid and generates an empty
+//		   collection of error prefix and error context
+//		   information.
+//
+//		2. string - A string containing error prefix information.
+//
+//		3. []string A one-dimensional slice of strings containing
+//		   error prefix information
+//
+//		4. [][2]string A two-dimensional slice of strings
+//		   containing error prefix and error context information.
+//
+//		5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		   from this object will be copied for use in error and
+//		   informational messages.
+//
+//		6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		   Information from this object will be copied for use in
+//		   error and informational messages.
+//
+//		7. IBasicErrorPrefix - An interface to a method generating
+//		   a two-dimensional slice of strings containing error
+//		   prefix and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible to one of
+//		the valid types listed above, it will be considered
+//		invalid and trigger the return of an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		the 'errpref' software package,
+//		"github.com/MikeAustin71/errpref".
+//
+// -----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the returned error
+//		Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the returned
+//		error Type will encapsulate an error message. This
+//		returned error message will incorporate the method chain
+//		and text passed by input parameter, 'errorPrefix'. The
+//		'errorPrefix' text will be attached to the beginning of
+//		the error message.
+func (signedNumFmtSpec *SignedNumberFormatSpec) SetNegativeNumberSignSpec(
+	negativeNumberSign NumStrNumberSymbolSpec,
+	errorPrefix interface{}) error {
+
+	if signedNumFmtSpec.lock == nil {
+		signedNumFmtSpec.lock = new(sync.Mutex)
+	}
+
+	signedNumFmtSpec.lock.Lock()
+
+	defer signedNumFmtSpec.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"SignedNumberFormatSpec."+
+			"SetNegativeNumberSignSpec()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	return new(signedNumberFormatSpecAtom).
+		setNegativeNumberSignSpec(
+			signedNumFmtSpec,
+			negativeNumberSign,
+			ePrefix.XCpy(
+				"signedNumFmtSpec<-"+
+					"negativeNumberSign"))
+}
+
+// SetPositiveNumberSignSpec - Deletes and replaces the Positive
+// Number Sign Specification for the current instance of
+// SignedNumberFormatSpec:
+//
+//	SignedNumberFormatSpec.positiveNumberSign
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	positiveNumberSign			NumStrNumberSymbolSpec
+//
+//		An instance of NumStrNumberSymbolSpec. The member
+//		variable data values contained in this instance
+//		will be copied to the current
+//		SignedNumberFormatSpec member variable:
+//			'SignedNumberFormatSpec.positiveNumberSign'.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods
+//		listed as a method or function chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of the
+//		following types:
+//
+//		1. nil - A nil value is valid and generates an empty
+//		   collection of error prefix and error context
+//		   information.
+//
+//		2. string - A string containing error prefix information.
+//
+//		3. []string A one-dimensional slice of strings containing
+//		   error prefix information
+//
+//		4. [][2]string A two-dimensional slice of strings
+//		   containing error prefix and error context information.
+//
+//		5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		   from this object will be copied for use in error and
+//		   informational messages.
+//
+//		6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		   Information from this object will be copied for use in
+//		   error and informational messages.
+//
+//		7. IBasicErrorPrefix - An interface to a method generating
+//		   a two-dimensional slice of strings containing error
+//		   prefix and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible to one of
+//		the valid types listed above, it will be considered
+//		invalid and trigger the return of an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		the 'errpref' software package,
+//		"github.com/MikeAustin71/errpref".
+//
+// -----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the returned error
+//		Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the returned
+//		error Type will encapsulate an error message. This
+//		returned error message will incorporate the method chain
+//		and text passed by input parameter, 'errorPrefix'. The
+//		'errorPrefix' text will be attached to the beginning of
+//		the error message.
+func (signedNumFmtSpec *SignedNumberFormatSpec) SetPositiveNumberSignSpec(
+	positiveNumberSign NumStrNumberSymbolSpec,
+	errorPrefix interface{}) error {
+
+	if signedNumFmtSpec.lock == nil {
+		signedNumFmtSpec.lock = new(sync.Mutex)
+	}
+
+	signedNumFmtSpec.lock.Lock()
+
+	defer signedNumFmtSpec.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"SignedNumberFormatSpec."+
+			"SetPositiveNumberSignSpec()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	return new(signedNumberFormatSpecAtom).
+		setPositiveNumberSignSpec(
+			signedNumFmtSpec,
+			positiveNumberSign,
+			ePrefix.XCpy(
+				"signedNumFmtSpec<-"+
+					"positiveNumberSign"))
+}
+
 // SetRoundingSpec - Deletes and replaces the Rounding
 // Specification contained in the current instance of
 // SignedNumberFormatSpec.
@@ -1690,7 +2273,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetRoundingSpec(
 			""))
 }
 
-// SetSignedNumFmtSpec - Deletes and resets all the member variable
+// SetSignedNumFmtParams - Deletes and resets all the member variable
 // data values stored in the current instance of
 // SignedNumberFormatSpec.
 //
@@ -1707,6 +2290,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetRoundingSpec(
 // # Input Parameters
 //
 //	decSeparator				string
+//
 //		This string contains the character or characters
 //		which will be configured as the Decimal Separator
 //		Symbol or Symbols for the returned instance of
@@ -1714,6 +2298,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetRoundingSpec(
 //		Specification.
 //
 //	intSeparatorChars			string
+//
 //		One or more characters used to separate groups of
 //		integers. This separator is also known as the 'thousands'
 //		separator. It is used to separate groups of integer digits
@@ -1734,6 +2319,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetRoundingSpec(
 //		'IntGroupingType.None()', an error will be returned.
 //
 //	intGroupingType				IntegerGroupingType
+//
 //		This instance of IntegerGroupingType defines the type
 //		of IntegerSeparatorDto which will be returned. The
 //		enumeration IntegerGroupingType must be set to one
@@ -1744,6 +2330,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetRoundingSpec(
 //		IntGroupingType.ChineseNumbering()
 //
 //	roundingType				NumberRoundingType
+//
 //		This parameter will populate the
 //		'NumStrRoundingSpec.roundingType' member variable
 //		data value contained in returned instance of
@@ -1754,17 +2341,17 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetRoundingSpec(
 //		digit rounding operation. Valid values are listed
 //		as follows:
 //
-//		 NumRoundType.None(),
-//		 NumRoundType.HalfUpWithNegNums(),
-//		 NumRoundType.HalfDownWithNegNums(),
-//		 NumRoundType.HalfAwayFromZero(),
-//		 NumRoundType.HalfTowardsZero(),
-//		 NumRoundType.HalfToEven(),
-//		 NumRoundType.HalfToOdd(),
-//		 NumRoundType.Randomly(),
-//		 NumRoundType.Floor(),
-//		 NumRoundType.Ceiling(),
-//		 NumRoundType.Truncate(),
+//			NumRoundType.NoRounding()
+//			NumRoundType.HalfUpWithNegNums()
+//			NumRoundType.HalfDownWithNegNums()
+//			NumRoundType.HalfAwayFromZero()
+//			NumRoundType.HalfTowardsZero()
+//			NumRoundType.HalfToEven()
+//			NumRoundType.HalfToOdd()
+//			NumRoundType.Randomly()
+//			NumRoundType.Floor()
+//			NumRoundType.Ceiling()
+//			NumRoundType.Truncate()
 //
 //	roundToFractionalDigits		int
 //		When set to a positive integer value, this parameter
@@ -1778,20 +2365,170 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetRoundingSpec(
 //		character or characters used to configure a Positive
 //		Number Sign Symbol in a number string.
 //
+//		Leading number symbols can include any combination
+//		of characters to include plus signs ('+') and/or
+//		currency symbols ('$').
+//
 //	trailingPositiveNumSign     string
 //		A string containing the trailing positive number sign
 //		character or characters used to configure a Positive
 //		Number Sign Symbol in a number string.
+//
+//		Trailing number symbols can include any combination
+//		of characters to include plus signs ('+') and/or
+//	 	currency symbols ('$').
+//
+//	positiveNumFieldSymPosition		NumberFieldSymbolPosition
+//
+//		Defines the position of the Positive Number Sign
+//		relative to a Number Field in which a number string
+//		is displayed. Possible valid values are listed as
+//		follows:
+//
+//			NumFieldSymPos.InsideNumField()
+//				Example-1:
+//					Number Field Length: 8
+//					Numeric Value: 123.45
+//					Number Symbol: leading plus sign ('+')
+//					Number Symbol Position: Inside Number Field
+//			     	Number Text Justification: Right
+//					Formatted Number String: " +123.45"
+//					Number Field Index:       01234567
+//					Total Number String Length: 8
+//
+//				Example-2:
+//					Number Field Length: 8
+//					Numeric Value: 123.45
+//					Number Symbol: trailing plus sign ('+')
+//					Number Symbol Position: Inside Number Field
+//			     	Number Text Justification: Right
+//					Formatted Number String: " 123.45+"
+//					Number Field Index:       01234567
+//					Total Number String Length: 8
+//
+//				For the 'NumFieldSymPos.InsideNumField()' specification,
+//				the final length of the number string is defined by the
+//				Number Field length.
+//
+//			NumFieldSymPos.OutsideNumField()
+//				Example-3:
+//					Number Field Length: 8
+//			     	Numeric Value: 123.45
+//			     	Number Symbol: leading plus sign ('+')
+//			     	Number Symbol Position: Outside Number Field
+//			     	Number Text Justification: Right
+//			     	Formatted Number String: "+  123.45"
+//					Number Field Index:       012345678
+//					Total Number String Length: 9
+//
+//				Example-4:
+//					Number Field Length: 8
+//			     	Numeric Value: 123.45
+//			     	Number Symbol: trailing plus sign ('+')
+//			     	Number Symbol Position: Outside Number Field
+//			     	Number Text Justification: Right
+//			     	Formatted Number String: "  123.45+"
+//					Number Field Index:       012345678
+//					Total Number String Length: 9
+//
+//				For the 'NumFieldSymPos.OutsideNumField()' specification,
+//				the final length of the number string is greater than
+//				the Number Field length.
 //
 //	leadingNegativeNumSign		string
 //		A string containing the leading negative number sign
 //		character or characters used to configure a Negative
 //		Number Sign Symbol in a number string.
 //
+//		Leading number symbols can include any combination of
+//		characters to include minus signs ('-') and/or
+//	 	currency symbols ('$').
+//
 //	trailingNegativeNumSign		string
 //		A string containing the trailing negative number
 //		sign character or characters used to configure a
 //		Negative Number Sign Symbol in a number string.
+//
+//		Trailing number symbols can include any	combination
+//		of characters to include minus signs ('-') and/or
+//		currency symbols ('$').
+//
+//	negativeNumFieldSymPosition				NumberFieldSymbolPosition
+//
+//		Defines the position of the Negative Number Sign
+//		relative to a Number Field in which a number string
+//		is displayed. Possible valid values are listed as
+//		follows:
+//
+//			NumFieldSymPos.InsideNumField()
+//				Example-1:
+//					Number Field Length: 8
+//					Numeric Value: 123.45
+//					Number Symbol: leading minus sign ('-')
+//					Number Symbol Position: Inside Number Field
+//			     	Number Text Justification: Right
+//					Formatted Number String: " -123.45"
+//					Number Field Index:  01234567
+//					Total Number String Length: 8
+//
+//				Example-2:
+//					Number Field Length: 8
+//					Numeric Value: 123.45
+//					Number Symbol: trailing minus sign ('-')
+//					Number Symbol Position: Inside Number Field
+//			     	Number Text Justification: Right
+//					Formatted Number String: " 123.45-"
+//					Number Field Index:       01234567
+//					Total Number String Length: 8
+//
+//				Example-3:
+//					Number Field Length: 10
+//					Numeric Value: 123.45
+//					Number Symbol: before and after parentheses  ('()')
+//					Number Symbol Position: Inside Number Field
+//			     	Number Text Justification: Centered
+//					Formatted Number String: " (123.45) "
+//					Number Field Index:       0123456789
+//					Total Number String Length: 10
+//
+//				For the 'NumFieldSymPos.InsideNumField()' specification,
+//				the final length of the number string is defined by the
+//				Number Field length.
+//
+//			NumFieldSymPos.OutsideNumField()
+//				Example-4:
+//					Number Field Length: 8
+//			     	Numeric Value: 123.45
+//			     	Number Symbol: leading minus sign ('-')
+//			     	Number Symbol Position: Outside Number Field
+//			     	Number Text Justification: Right
+//			     	Formatted Number String: "-  123.45"
+//					Number Field Index:       012345678
+//					Total Number String Length: 9
+//
+//				Example-5:
+//					Number Field Length: 8
+//			     	Numeric Value: 123.45
+//			     	Number Symbol: trailing minus sign ('-')
+//			     	Number Symbol Position: Outside Number Field
+//			     	Number Text Justification: Right
+//			     	Formatted Number String: "  123.45-"
+//					Number Field Index:       012345678
+//					Total Number String Length: 9
+//
+//				Example-6:
+//					Number Field Length: 8
+//					Numeric Value: 123.45
+//					Number Symbol: before and after parentheses  ('()')
+//					Number Symbol Position: Outside Number Field
+//			     	Number Text Justification: Centered
+//					Formatted Number String: "( 123.45 )"
+//					Number Field Index:       0123456789
+//					Total Number String Length: 10
+//
+//				For the 'NumFieldSymPos.OutsideNumField()' specification,
+//				the final length of the number string is greater than
+//				the Number Field length.
 //
 //	fieldLength					int
 //		This parameter defines the length of the text field in
@@ -1894,7 +2631,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetRoundingSpec(
 //		and text passed by input parameter, 'errorPrefix'. The
 //		'errorPrefix' text will be attached to the beginning of
 //		the error message.
-func (signedNumFmtSpec *SignedNumberFormatSpec) SetSignedNumFmtSpec(
+func (signedNumFmtSpec *SignedNumberFormatSpec) SetSignedNumFmtParams(
 	decSeparatorChars string,
 	intGroupingChars string,
 	intGroupingType IntegerGroupingType,
@@ -1902,8 +2639,10 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetSignedNumFmtSpec(
 	roundToFractionalDigits int,
 	leadingPosNumSign string,
 	trailingPosNumSign string,
+	positiveNumFieldSymPosition NumberFieldSymbolPosition,
 	leadingNegNumSign string,
 	trailingNegNumSign string,
+	negativeNumFieldSymPosition NumberFieldSymbolPosition,
 	numFieldLength int,
 	numFieldJustification TextJustify,
 	errorPrefix interface{}) (
@@ -1923,7 +2662,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetSignedNumFmtSpec(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"SignedNumberFormatSpec."+
-			"SetSignedNumFmtSpec()",
+			"SetSignedNumFmtParams()",
 		"")
 
 	if err != nil {
@@ -1940,8 +2679,10 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetSignedNumFmtSpec(
 			roundToFractionalDigits,
 			[]rune(leadingPosNumSign),
 			[]rune(trailingPosNumSign),
+			positiveNumFieldSymPosition,
 			[]rune(leadingNegNumSign),
 			[]rune(trailingNegNumSign),
+			negativeNumFieldSymPosition,
 			numFieldLength,
 			numFieldJustification,
 			ePrefix.XCpy(
@@ -1967,6 +2708,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetSignedNumFmtSpec(
 // # Input Parameters
 //
 //	decSeparator				[]rune
+//
 //		This rune array contains the character or characters
 //		which will be configured as the Decimal Separator
 //		Symbol or Symbols for the returned instance of
@@ -1974,6 +2716,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetSignedNumFmtSpec(
 //		Specification.
 //
 //	intSeparatorChars			[]rune
+//
 //		A rune array containing one or more characters used to
 //		separate groups of integers. This separator is also known
 //	 	as the 'thousands' separator in the United States. It is
@@ -1995,6 +2738,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetSignedNumFmtSpec(
 //		'IntGroupingType.None()', an error will be returned.
 //
 //	intGroupingType				IntegerGroupingType
+//
 //		This instance of IntegerGroupingType defines the type
 //		of IntegerSeparatorDto which will be returned. The
 //		enumeration IntegerGroupingType must be set to one
@@ -2005,6 +2749,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetSignedNumFmtSpec(
 //		IntGroupingType.ChineseNumbering()
 //
 //	roundingType				NumberRoundingType
+//
 //		This parameter will populate the
 //		'NumStrRoundingSpec.roundingType' member variable
 //		data value contained in returned instance of
@@ -2015,19 +2760,20 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetSignedNumFmtSpec(
 //		digit rounding operation. Valid values are listed
 //		as follows:
 //
-//		 NumRoundType.None(),
-//		 NumRoundType.HalfUpWithNegNums(),
-//		 NumRoundType.HalfDownWithNegNums(),
-//		 NumRoundType.HalfAwayFromZero(),
-//		 NumRoundType.HalfTowardsZero(),
-//		 NumRoundType.HalfToEven(),
-//		 NumRoundType.HalfToOdd(),
-//		 NumRoundType.Randomly(),
-//		 NumRoundType.Floor(),
-//		 NumRoundType.Ceiling(),
-//		 NumRoundType.Truncate(),
+//			NumRoundType.NoRounding()
+//			NumRoundType.HalfUpWithNegNums()
+//			NumRoundType.HalfDownWithNegNums()
+//			NumRoundType.HalfAwayFromZero()
+//			NumRoundType.HalfTowardsZero()
+//			NumRoundType.HalfToEven()
+//			NumRoundType.HalfToOdd()
+//			NumRoundType.Randomly()
+//			NumRoundType.Floor()
+//			NumRoundType.Ceiling()
+//			NumRoundType.Truncate()
 //
 //	roundToFractionalDigits		int
+//
 //		When set to a positive integer value, this parameter
 //		controls the number of digits to the right of the
 //		decimal separator (a.k.a. decimal point) which will
@@ -2035,26 +2781,181 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetSignedNumFmtSpec(
 //		operation.
 //
 //	leadingPositiveNumSign		[]rune
+//
 //		A rune array containing the leading positive number
 //		sign character or characters used to configure a
 //	 	Positive Number Sign Symbol in a number string.
 //
+//		Leading number symbols can include any combination
+//		of characters to include plus signs ('+') and/or
+//		currency symbols ('$').
+//
 //	trailingPositiveNumSign     []rune
+//
 //		A rune array containing the trailing positive number
 //	 	sign character or characters used to configure a
 //	  	Positive Number Sign Symbol in a number string.
 //
+//		Trailing number symbols can include any combination
+//		of characters to include plus signs ('+') and/or
+//	 	currency symbols ('$').
+//
+//	positiveNumFieldSymPosition		NumberFieldSymbolPosition
+//
+//		Defines the position of the Positive Number Sign
+//		relative to a Number Field in which a number string
+//		is displayed. Possible valid values are listed as
+//		follows:
+//
+//			NumFieldSymPos.InsideNumField()
+//				Example-1:
+//					Number Field Length: 8
+//					Numeric Value: 123.45
+//					Number Symbol: leading plus sign ('+')
+//					Number Symbol Position: Inside Number Field
+//			     	Number Text Justification: Right
+//					Formatted Number String: " +123.45"
+//					Number Field Index:       01234567
+//					Total Number String Length: 8
+//
+//				Example-2:
+//					Number Field Length: 8
+//					Numeric Value: 123.45
+//					Number Symbol: trailing plus sign ('+')
+//					Number Symbol Position: Inside Number Field
+//			     	Number Text Justification: Right
+//					Formatted Number String: " 123.45+"
+//					Number Field Index:       01234567
+//					Total Number String Length: 8
+//
+//				For the 'NumFieldSymPos.InsideNumField()' specification,
+//				the final length of the number string is defined by the
+//				Number Field length.
+//
+//			NumFieldSymPos.OutsideNumField()
+//				Example-3:
+//					Number Field Length: 8
+//			     	Numeric Value: 123.45
+//			     	Number Symbol: leading plus sign ('+')
+//			     	Number Symbol Position: Outside Number Field
+//			     	Number Text Justification: Right
+//			     	Formatted Number String: "+  123.45"
+//					Number Field Index:       012345678
+//					Total Number String Length: 9
+//
+//				Example-4:
+//					Number Field Length: 8
+//			     	Numeric Value: 123.45
+//			     	Number Symbol: trailing plus sign ('+')
+//			     	Number Symbol Position: Outside Number Field
+//			     	Number Text Justification: Right
+//			     	Formatted Number String: "  123.45+"
+//					Number Field Index:       012345678
+//					Total Number String Length: 9
+//
+//				For the 'NumFieldSymPos.OutsideNumField()' specification,
+//				the final length of the number string is greater than
+//				the Number Field length.
+//
 //	leadingNegativeNumSign		[]rune
+//
 //		A rune array containing the leading negative number
 //		sign character or characters used to configure a
 //		Negative Number Sign Symbol in a number string.
 //
+//		Leading number symbols can include any combination of
+//		characters to include minus signs ('-') and/or
+//	 	currency symbols ('$').
+//
 //	trailingNegativeNumSign		[]rune
+//
 //		A rune array containing the trailing negative
 //		number sign character or characters used to configure
 //		a Negative Number Sign Symbol in a number string.
 //
+//		Trailing number symbols can include any	combination
+//		of characters to include minus signs ('-') and/or
+//		currency symbols ('$').
+//
+//	negativeNumFieldSymPosition				NumberFieldSymbolPosition
+//
+//		Defines the position of the Negative Number Sign
+//		relative to a Number Field in which a number string
+//		is displayed. Possible valid values are listed as
+//		follows:
+//
+//			NumFieldSymPos.InsideNumField()
+//				Example-1:
+//					Number Field Length: 8
+//					Numeric Value: 123.45
+//					Number Symbol: leading minus sign ('-')
+//					Number Symbol Position: Inside Number Field
+//			     	Number Text Justification: Right
+//					Formatted Number String: " -123.45"
+//					Number Field Index:  01234567
+//					Total Number String Length: 8
+//
+//				Example-2:
+//					Number Field Length: 8
+//					Numeric Value: 123.45
+//					Number Symbol: trailing minus sign ('-')
+//					Number Symbol Position: Inside Number Field
+//			     	Number Text Justification: Right
+//					Formatted Number String: " 123.45-"
+//					Number Field Index:       01234567
+//					Total Number String Length: 8
+//
+//				Example-3:
+//					Number Field Length: 10
+//					Numeric Value: 123.45
+//					Number Symbol: before and after parentheses  ('()')
+//					Number Symbol Position: Inside Number Field
+//			     	Number Text Justification: Centered
+//					Formatted Number String: " (123.45) "
+//					Number Field Index:       0123456789
+//					Total Number String Length: 10
+//
+//				For the 'NumFieldSymPos.InsideNumField()' specification,
+//				the final length of the number string is defined by the
+//				Number Field length.
+//
+//			NumFieldSymPos.OutsideNumField()
+//				Example-4:
+//					Number Field Length: 8
+//			     	Numeric Value: 123.45
+//			     	Number Symbol: leading minus sign ('-')
+//			     	Number Symbol Position: Outside Number Field
+//			     	Number Text Justification: Right
+//			     	Formatted Number String: "-  123.45"
+//					Number Field Index:       012345678
+//					Total Number String Length: 9
+//
+//				Example-5:
+//					Number Field Length: 8
+//			     	Numeric Value: 123.45
+//			     	Number Symbol: trailing minus sign ('-')
+//			     	Number Symbol Position: Outside Number Field
+//			     	Number Text Justification: Right
+//			     	Formatted Number String: "  123.45-"
+//					Number Field Index:       012345678
+//					Total Number String Length: 9
+//
+//				Example-6:
+//					Number Field Length: 8
+//					Numeric Value: 123.45
+//					Number Symbol: before and after parentheses  ('()')
+//					Number Symbol Position: Outside Number Field
+//			     	Number Text Justification: Centered
+//					Formatted Number String: "( 123.45 )"
+//					Number Field Index:       0123456789
+//					Total Number String Length: 10
+//
+//				For the 'NumFieldSymPos.OutsideNumField()' specification,
+//				the final length of the number string is greater than
+//				the Number Field length.
+//
 //	fieldLength					int
+//
 //		This parameter defines the length of the text field in
 //		which the numeric value will be displayed within a
 //		number string.
@@ -2072,6 +2973,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetSignedNumFmtSpec(
 //		be returned.
 //
 //	fieldJustification			TextJustify
+//
 //		An enumeration which specifies the justification of the
 //		numeric value within the number field length specified
 //		by input parameter 'fieldLength'.
@@ -2098,6 +3000,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetSignedNumFmtSpec(
 //			TxtJustify.Center()
 //
 //	errorPrefix					interface{}
+//
 //		This object encapsulates error prefix text which is
 //		included in all returned error messages. Usually, it
 //		contains the name of the calling method or methods
@@ -2146,6 +3049,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetSignedNumFmtSpec(
 // # Return Values
 //
 //	err							error
+//
 //		If this method completes successfully, the returned error
 //		Type is set equal to 'nil'.
 //
@@ -2163,8 +3067,10 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetSignedNumFmtSpecRunes(
 	roundToFractionalDigits int,
 	leadingPosNumSign []rune,
 	trailingPosNumSign []rune,
+	positiveNumFieldSymPosition NumberFieldSymbolPosition,
 	leadingNegNumSign []rune,
 	trailingNegNumSign []rune,
+	negativeNumFieldSymPosition NumberFieldSymbolPosition,
 	numFieldLength int,
 	numFieldJustification TextJustify,
 	errorPrefix interface{}) (
@@ -2201,8 +3107,10 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetSignedNumFmtSpecRunes(
 			roundToFractionalDigits,
 			leadingPosNumSign,
 			trailingPosNumSign,
+			positiveNumFieldSymPosition,
 			leadingNegNumSign,
 			trailingNegNumSign,
+			negativeNumFieldSymPosition,
 			numFieldLength,
 			numFieldJustification,
 			ePrefix.XCpy(
@@ -2403,7 +3311,8 @@ func (nStrNumberFieldSpecNanobot *signedNumFmtSpecNanobot) copySignedNumberForma
 //
 // # Input Parameters
 //
-//	signedNumFmtSpec				*SignedNumberFormatSpec
+//	signedNumFmtSpec						*SignedNumberFormatSpec
+//
 //		A pointer to a SignedNumberFormatSpec instance.
 //		All the member variable data fields in this object will be
 //		replaced by data values configured from the input parameter
@@ -2413,14 +3322,18 @@ func (nStrNumberFieldSpecNanobot *signedNumFmtSpecNanobot) copySignedNumberForma
 //		copy operation.
 //
 //
-//	decSeparator				[]rune
+//	decSeparator							[]rune
+//
 //		This rune array contains the character or characters
 //		which will be configured as the Decimal Separator
 //		Symbol or Symbols for the returned instance of
 //		DecimalSeparatorSpec, the Decimal Separator
 //		Specification.
 //
-//	intSeparatorChars			[]rune
+//			Example: []rune('.')
+//
+//	intSeparatorChars						[]rune
+//
 //		A rune array containing one or more characters used to
 //		separate groups of integers. This separator is also known
 //	 	as the 'thousands' separator in the United States. It is
@@ -2441,7 +3354,8 @@ func (nStrNumberFieldSpecNanobot *signedNumFmtSpecNanobot) copySignedNumberForma
 //		array and 'intGroupingSpec' is NOT equal to
 //		'IntGroupingType.None()', an error will be returned.
 //
-//	intGroupingType				IntegerGroupingType
+//	intGroupingType							IntegerGroupingType
+//
 //		This instance of IntegerGroupingType defines the type
 //		of IntegerSeparatorDto which will be returned. The
 //		enumeration IntegerGroupingType must be set to one
@@ -2451,7 +3365,8 @@ func (nStrNumberFieldSpecNanobot *signedNumFmtSpecNanobot) copySignedNumberForma
 //		IntGroupingType.IndiaNumbering()
 //		IntGroupingType.ChineseNumbering()
 //
-//	roundingType					NumberRoundingType
+//	roundingType							NumberRoundingType
+//
 //		This parameter will populate the
 //		'NumStrRoundingSpec.roundingType' member variable
 //		data value contained in returned instance of
@@ -2462,46 +3377,186 @@ func (nStrNumberFieldSpecNanobot *signedNumFmtSpecNanobot) copySignedNumberForma
 //		digit rounding operation. Valid values are listed
 //		as follows:
 //
-//		 NumRoundType.None(),
-//		 NumRoundType.HalfUpWithNegNums(),
-//		 NumRoundType.HalfDownWithNegNums(),
-//		 NumRoundType.HalfAwayFromZero(),
-//		 NumRoundType.HalfTowardsZero(),
-//		 NumRoundType.HalfToEven(),
-//		 NumRoundType.HalfToOdd(),
-//		 NumRoundType.Randomly(),
-//		 NumRoundType.Floor(),
-//		 NumRoundType.Ceiling(),
-//		 NumRoundType.Truncate(),
+//			NumRoundType.NoRounding()
+//			NumRoundType.HalfUpWithNegNums()
+//			NumRoundType.HalfDownWithNegNums()
+//			NumRoundType.HalfAwayFromZero()
+//			NumRoundType.HalfTowardsZero()
+//			NumRoundType.HalfToEven()
+//			NumRoundType.HalfToOdd()
+//			NumRoundType.Randomly()
+//			NumRoundType.Floor()
+//			NumRoundType.Ceiling()
+//			NumRoundType.Truncate()
 //
-//	roundToFractionalDigits			int
+//	roundToFractionalDigits					int
+//
 //		When set to a positive integer value, this parameter
 //		controls the number of digits to the right of the
 //		decimal separator (a.k.a. decimal point) which will
 //		remain after completion of the number rounding
 //		operation.
 //
-//	leadingPositiveNumSign		[]rune
+//	leadingPositiveNumSign					[]rune
+//
 //		A rune array containing the leading positive number
 //		sign character or characters used to configure a
 //	 	Positive Number Sign Symbol in a number string.
 //
-//	trailingPositiveNumSign     []rune
+//	trailingPositiveNumSign     			[]rune
+//
 //		A rune array containing the trailing positive number
 //	 	sign character or characters used to configure a
 //	  	Positive Number Sign Symbol in a number string.
 //
-//	leadingNegativeNumSign		[]rune
+//	positiveNumFieldSymPosition		NumberFieldSymbolPosition
+//
+//		Defines the position of the Positive Number Sign
+//		relative to a Number Field in which a number string
+//		is displayed. Possible valid values are listed as
+//		follows:
+//
+//			NumFieldSymPos.InsideNumField()
+//				Example-1:
+//					Number Field Length: 8
+//					Numeric Value: 123.45
+//					Number Symbol: leading plus sign ('+')
+//					Number Symbol Position: Inside Number Field
+//			     	Number Text Justification: Right
+//					Formatted Number String: " +123.45"
+//					Number Field Index:       01234567
+//					Total Number String Length: 8
+//
+//				Example-2:
+//					Number Field Length: 8
+//					Numeric Value: 123.45
+//					Number Symbol: trailing plus sign ('+')
+//					Number Symbol Position: Inside Number Field
+//			     	Number Text Justification: Right
+//					Formatted Number String: " 123.45+"
+//					Number Field Index:       01234567
+//					Total Number String Length: 8
+//
+//				For the 'NumFieldSymPos.InsideNumField()' specification,
+//				the final length of the number string is defined by the
+//				Number Field length.
+//
+//			NumFieldSymPos.OutsideNumField()
+//				Example-3:
+//					Number Field Length: 8
+//			     	Numeric Value: 123.45
+//			     	Number Symbol: leading plus sign ('+')
+//			     	Number Symbol Position: Outside Number Field
+//			     	Number Text Justification: Right
+//			     	Formatted Number String: "+  123.45"
+//					Number Field Index:       012345678
+//					Total Number String Length: 9
+//
+//				Example-4:
+//					Number Field Length: 8
+//			     	Numeric Value: 123.45
+//			     	Number Symbol: trailing plus sign ('+')
+//			     	Number Symbol Position: Outside Number Field
+//			     	Number Text Justification: Right
+//			     	Formatted Number String: "  123.45+"
+//					Number Field Index:       012345678
+//					Total Number String Length: 9
+//
+//				For the 'NumFieldSymPos.OutsideNumField()' specification,
+//				the final length of the number string is greater than
+//				the Number Field length.
+//
+//	leadingNegativeNumSign					[]rune
+//
 //		A rune array containing the leading negative number
 //		sign character or characters used to configure a
 //		Negative Number Sign Symbol in a number string.
 //
-//	trailingNegativeNumSign		[]rune
+//	trailingNegativeNumSign					[]rune
+//
 //		A rune array containing the trailing negative
 //		number sign character or characters used to configure
 //		a Negative Number Sign Symbol in a number string.
 //
-//	fieldLength						int
+//	negativeNumFieldSymPosition				NumberFieldSymbolPosition
+//
+//		Defines the position of the Negative Number Sign
+//		relative to a Number Field in which a number string
+//		is displayed. Possible valid values are listed as
+//		follows:
+//
+//			NumFieldSymPos.InsideNumField()
+//				Example-1:
+//					Number Field Length: 8
+//					Numeric Value: 123.45
+//					Number Symbol: leading minus sign ('-')
+//					Number Symbol Position: Inside Number Field
+//			     	Number Text Justification: Right
+//					Formatted Number String: " -123.45"
+//					Number Field Index:  01234567
+//					Total Number String Length: 8
+//
+//				Example-2:
+//					Number Field Length: 8
+//					Numeric Value: 123.45
+//					Number Symbol: trailing minus sign ('-')
+//					Number Symbol Position: Inside Number Field
+//			     	Number Text Justification: Right
+//					Formatted Number String: " 123.45-"
+//					Number Field Index:       01234567
+//					Total Number String Length: 8
+//
+//				Example-3:
+//					Number Field Length: 10
+//					Numeric Value: 123.45
+//					Number Symbol: before and after parentheses  ('()')
+//					Number Symbol Position: Inside Number Field
+//			     	Number Text Justification: Centered
+//					Formatted Number String: " (123.45) "
+//					Number Field Index:       0123456789
+//					Total Number String Length: 10
+//
+//				For the 'NumFieldSymPos.InsideNumField()' specification,
+//				the final length of the number string is defined by the
+//				Number Field length.
+//
+//			NumFieldSymPos.OutsideNumField()
+//				Example-4:
+//					Number Field Length: 8
+//			     	Numeric Value: 123.45
+//			     	Number Symbol: leading minus sign ('-')
+//			     	Number Symbol Position: Outside Number Field
+//			     	Number Text Justification: Right
+//			     	Formatted Number String: "-  123.45"
+//					Number Field Index:       012345678
+//					Total Number String Length: 9
+//
+//				Example-5:
+//					Number Field Length: 8
+//			     	Numeric Value: 123.45
+//			     	Number Symbol: trailing minus sign ('-')
+//			     	Number Symbol Position: Outside Number Field
+//			     	Number Text Justification: Right
+//			     	Formatted Number String: "  123.45-"
+//					Number Field Index:       012345678
+//					Total Number String Length: 9
+//
+//				Example-6:
+//					Number Field Length: 8
+//					Numeric Value: 123.45
+//					Number Symbol: before and after parentheses  ('()')
+//					Number Symbol Position: Outside Number Field
+//			     	Number Text Justification: Centered
+//					Formatted Number String: "( 123.45 )"
+//					Number Field Index:       0123456789
+//					Total Number String Length: 10
+//
+//				For the 'NumFieldSymPos.OutsideNumField()' specification,
+//				the final length of the number string is greater than
+//				the Number Field length.
+//
+//	fieldLength								int
+//
 //		This parameter defines the length of the text field in
 //		which the numeric value will be displayed within a
 //		number string.
@@ -2518,7 +3573,8 @@ func (nStrNumberFieldSpecNanobot *signedNumFmtSpecNanobot) copySignedNumberForma
 //		one (-1) or greater than 1-million (1,000,000), an error will
 //		be returned.
 //
-//	fieldJustification				TextJustify
+//	fieldJustification						TextJustify
+//
 //		An enumeration which specifies the justification of the
 //		numeric value within the number field length specified
 //		by input parameter 'fieldLength'.
@@ -2544,7 +3600,8 @@ func (nStrNumberFieldSpecNanobot *signedNumFmtSpecNanobot) copySignedNumberForma
 //			TxtJustify.Right()
 //			TxtJustify.Center()
 //
-//	errorPrefix						interface{}
+//	errorPrefix								interface{}
+//
 //		This object encapsulates error prefix text which is
 //		included in all returned error messages. Usually, it
 //		contains the name of the calling method or methods
@@ -2611,8 +3668,10 @@ func (nStrNumberFieldSpecNanobot *signedNumFmtSpecNanobot) setNStrNumberFieldSpe
 	roundToFractionalDigits int,
 	leadingPosNumSign []rune,
 	trailingPosNumSign []rune,
+	positiveNumFieldSymPosition NumberFieldSymbolPosition,
 	leadingNegNumSign []rune,
 	trailingNegNumSign []rune,
+	negativeNumFieldSymPosition NumberFieldSymbolPosition,
 	numFieldLength int,
 	numFieldJustification TextJustify,
 	errPrefDto *ePref.ErrPrefixDto) (
@@ -2688,7 +3747,9 @@ func (nStrNumberFieldSpecNanobot *signedNumFmtSpecNanobot) setNStrNumberFieldSpe
 	err = signedNumFmtSpecAtom.setPositiveNumberSign(
 		signedNumFmtSpec,
 		leadingPosNumSign,
+		positiveNumFieldSymPosition,
 		trailingPosNumSign,
+		positiveNumFieldSymPosition,
 		ePrefix.XCpy(
 			"signedNumFmtSpec<-"+
 				"Positive Number Sign Params"))
@@ -2700,7 +3761,9 @@ func (nStrNumberFieldSpecNanobot *signedNumFmtSpecNanobot) setNStrNumberFieldSpe
 	err = signedNumFmtSpecAtom.setNegativeNumberSign(
 		signedNumFmtSpec,
 		leadingNegNumSign,
+		negativeNumFieldSymPosition,
 		trailingNegNumSign,
+		negativeNumFieldSymPosition,
 		ePrefix.XCpy(
 			"signedNumFmtSpec<-"+
 				"Negative Number Sign Params"))
@@ -2989,6 +4052,7 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setDecimalSeparatorParam
 // # Input Parameters
 //
 //	signedNumFmt				*SignedNumberFormatSpec
+//
 //		A pointer to an instance of SignedNumberFormatSpec.
 //		The member variable 'signedNumFmt.decSeparator'
 //		will be reset to the values provided by the
@@ -2996,6 +4060,7 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setDecimalSeparatorParam
 //
 //
 //	decSeparatorSpec			DecimalSeparatorSpec
+//
 //		An instance of DecimalSeparatorSpec. The member
 //		variable data values contained in this instance
 //		will be copied to:
@@ -3005,6 +4070,7 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setDecimalSeparatorParam
 //		referred to as the decimal point.
 //
 //	errPrefDto					*ePref.ErrPrefixDto
+//
 //		This object encapsulates an error prefix string which is
 //		included in all returned error messages. Usually, it
 //		contains the name of the calling method or methods listed
@@ -3021,6 +4087,7 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setDecimalSeparatorParam
 // # Return Values
 //
 //	err							error
+//
 //		If this method completes successfully, this returned error
 //		Type is set equal to 'nil'. If errors are encountered
 //		during processing, the returned error Type will encapsulate
@@ -3298,25 +4365,120 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setIntegerGroupingSpec(
 //
 // Input Parameters
 //
-//	signedNumFmt				*SignedNumberFormatSpec
+//	signedNumFmt					*SignedNumberFormatSpec
 //		A pointer to an instance of SignedNumberFormatSpec.
 //		The member variable 'signedNumFmt.roundingSpec'
 //		will be reset to the values provided by the
 //		following input parameters.
 //
-//	leadingNegNumSign			[]rune
+//	leadingNegNumSign				[]rune
 //		An array of runes containing the character or
 //		characters which will be formatted and displayed
 //		in front of a negative numeric value in a number
 //		string.
 //
-//	trailingNegNumSign			[]rune
+//			Example: Leading Number Symbols
+//			Leading Symbols: "-"
+//			Number String:   "-123.456"
+//
+//	leadingNumFieldSymPosition		NumberFieldSymbolPosition
+//
+//		Defines the position of the Leading Number
+//		Symbol relative to a Number Field in which
+//		a number string is displayed. Possible valid
+//		values are listed as follows:
+//
+//			NumFieldSymPos.InsideNumField()
+//				Example-1:
+//					Number Field Length: 8
+//					Numeric Value: 123.45
+//					Number Symbol: leading minus sign ('-')
+//					Number Symbol Position: Inside Number Field
+//					Formatted Number String: " -123.45"
+//					Number Field Index:  01234567
+//					Total Number String Length: 8
+//
+//				In this case the final length of the number string
+//				is defined by the Number Field length.
+//
+//			NumFieldSymPos.OutsideNumField()
+//				Example-2:
+//					Number Field Length: 8
+//			     	Numeric Value: 123.45
+//			     	Number Symbol: leading minus sign ('-')
+//			     	Number Symbol Position: Outside Number Field
+//			     	Formatted Number String: "-  123.45"
+//					Number Field Index:  012345678
+//					Total Number String Length: 9
+//
+//				Example-3:
+//					Number Field Length: 8
+//					Numeric Value: 123.45
+//					Number Symbol: before and after parentheses  ('()')
+//					Number Symbol Position: Outside Number Field
+//					Formatted Number String: "( 123.45 )"
+//					Number Field Index:  0123456789
+//					Total Number String Length: 10
+//
+//				In this case the final length of the number string
+//				is greater than the Number Field length.
+//
+//	trailingNegNumSign				[]rune
 //		An array of runes containing the character or
 //		characters which will be formatted and displayed
 //		after a negative numeric value in a number
 //		string.
 //
-//	errPrefDto					*ePref.ErrPrefixDto
+//			Example: Trailing Number Symbols
+//				Trailing Symbols: "-"
+//				Number String:   "123.456-"
+//
+//	trailingNumFieldSymPosition		NumberFieldSymbolPosition
+//
+//		Defines the position of the Trailing Number
+//		Symbol relative to a Number Field in which
+//		a number string is displayed. Possible valid
+//		values are listed as follows:
+//
+//			NumFieldSymPos.InsideNumField()
+//				Example-1:
+//					Number Field Length: 8
+//					Numeric Value: 123.45
+//					Number Symbol: trailing minus sign ('-')
+//					Number Symbol Position: Inside Number Field
+//					Formatted Number String: " 123.45-"
+//			     Number Text Justification: Right
+//					Number Field Index:       01234567
+//					Total Number String Length: 8
+//
+//				In this case the final length of the number string
+//				is defined by the Number Field length.
+//
+//			NumFieldSymPos.OutsideNumField()
+//				Example-2:
+//					Number Field Length: 8
+//			     	Numeric Value: 123.45
+//			     	Number Symbol: trailing minus sign ('-')
+//			     	Number Symbol Position: Outside Number Field
+//			     Number Text Justification: Right
+//			     	Formatted Number String: "  123.45-"
+//					Number Field Index:       012345678
+//					Total Number String Length: 9
+//
+//				Example-3:
+//					Number Field Length: 8
+//					Numeric Value: 123.45
+//					Number Symbol: before and after parentheses  ('()')
+//					Number Symbol Position: Outside Number Field
+//			     Number Text Justification: Centered
+//					Formatted Number String: "( 123.45 )"
+//					Number Field Index:       0123456789
+//					Total Number String Length: 10
+//
+//				In this case the final length of the number string
+//				is greater than the Number Field length.
+//
+//	errPrefDto						*ePref.ErrPrefixDto
 //		This object encapsulates an error prefix string which is
 //		included in all returned error messages. Usually, it
 //		contains the name of the calling method or methods listed
@@ -3332,7 +4494,7 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setIntegerGroupingSpec(
 //
 // Return Values
 //
-//	err							error
+//	err								error
 //		If this method completes successfully, this returned error
 //		Type is set equal to 'nil'. If errors are encountered
 //		during processing, the returned error Type will encapsulate
@@ -3344,7 +4506,9 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setIntegerGroupingSpec(
 func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setNegativeNumberSign(
 	signedNumFmt *SignedNumberFormatSpec,
 	leadingNegNumSign []rune,
+	leadingNumFieldSymPosition NumberFieldSymbolPosition,
 	trailingNegNumSign []rune,
+	trailingNumFieldSymPosition NumberFieldSymbolPosition,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
 
@@ -3379,13 +4543,26 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setNegativeNumberSign(
 		return err
 	}
 
+	lenLeadingNegNumSign := len(leadingNegNumSign)
+
+	lenTrailingNegNumSign := len(trailingNegNumSign)
+
+	if lenLeadingNegNumSign == 0 &&
+		lenTrailingNegNumSign == 0 {
+
+		signedNumFmt.negativeNumberSign.SetNOP()
+
+		return err
+	}
+
 	signedNumFmt.negativeNumberSign.Empty()
 
-	if len(leadingNegNumSign) > 0 {
+	if lenLeadingNegNumSign > 0 {
 
 		err = signedNumFmt.negativeNumberSign.
-			SetLeadingNegNumberSignRunes(
+			SetLeadingNumberSymbolRunes(
 				leadingNegNumSign,
+				leadingNumFieldSymPosition,
 				ePrefix.XCpy(
 					"signedNumFmt.negativeNumberSign"+
 						"<-leadingNegNumSign"))
@@ -3395,11 +4572,12 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setNegativeNumberSign(
 		}
 	}
 
-	if len(trailingNegNumSign) > 0 {
+	if lenTrailingNegNumSign > 0 {
 
 		err = signedNumFmt.negativeNumberSign.
-			SetTrailingNegNumberSignRunes(
+			SetTrailingNumberSymbolRunes(
 				trailingNegNumSign,
+				trailingNumFieldSymPosition,
 				ePrefix.XCpy(
 					"signedNumFmt.negativeNumberSign<-"+
 						"trailingNegNumSign"))
@@ -3408,6 +4586,114 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setNegativeNumberSign(
 			return err
 		}
 	}
+
+	return err
+}
+
+// setNegativeNumberSignSpec - Deletes and resets the member
+// variable data value for 'signedNumFmt.negativeNumberSign'
+// contained in the instance of SignedNumberFormatSpec passed as
+// an input parameter.
+//
+// This method receives an instance of 'NumStrNumberSymbolSpec' and
+// copies the member variable data values to
+// 'signedNumFmt.negativeNumberSign'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	signedNumFmt				*SignedNumberFormatSpec
+//
+//		A pointer to an instance of SignedNumberFormatSpec.
+//		The member variable 'signedNumFmt.decSeparator'
+//		will be reset to the values provided by the
+//		following input parameters.
+//
+//
+//	negativeNumberSign 			NumStrNumberSymbolSpec
+//
+//		An instance of NumStrNumberSymbolSpec. The member
+//		variable data values contained in this instance
+//		will be copied to:
+//			'signedNumFmt.negativeNumberSign'.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods listed
+//		as a function chain.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref' software
+//		package, "github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	err							error
+//
+//		If this method completes successfully, this returned error
+//		Type is set equal to 'nil'. If errors are encountered
+//		during processing, the returned error Type will encapsulate
+//		an error message.
+//
+//		If an error message is returned, the text value for input
+//		parameter 'errPrefDto' (error prefix) will be prefixed or
+//		attached at the beginning of the error message.
+func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setNegativeNumberSignSpec(
+	signedNumFmt *SignedNumberFormatSpec,
+	negativeNumberSign NumStrNumberSymbolSpec,
+	errPrefDto *ePref.ErrPrefixDto) (
+	err error) {
+
+	if signedNumFmtSpecAtom.lock == nil {
+		signedNumFmtSpecAtom.lock = new(sync.Mutex)
+	}
+
+	signedNumFmtSpecAtom.lock.Lock()
+
+	defer signedNumFmtSpecAtom.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"signedNumberFormatSpecAtom."+
+			"setNegativeNumberSignSpec()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if signedNumFmt == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'signedNumFmt' is invalid!\n"+
+			"'signedNumFmt' is a 'nil' pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if negativeNumberSign.IsNOP() {
+
+		signedNumFmt.negativeNumberSign.SetNOP()
+
+		return err
+	}
+
+	err = signedNumFmt.negativeNumberSign.CopyIn(
+		&negativeNumberSign,
+		ePrefix.XCpy(
+			"signedNumFmt.negativeNumberSign<-"+
+				"negativeNumberSign"))
 
 	return err
 }
@@ -3555,24 +4841,28 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setNumberFieldParams(
 // Input Parameters
 //
 //	signedNumFmt				*SignedNumberFormatSpec
+//
 //		A pointer to an instance of SignedNumberFormatSpec.
 //		The member variable 'signedNumFmt.roundingSpec'
 //		will be reset to the values provided by the
 //		following input parameters.
 //
 //	leadingPosNumSymbols			[]rune
+//
 //		An array of runes containing the character or
 //		characters which will be formatted and displayed
 //		in front of a positive numeric value in a number
 //		string.
 //
 //	trailingPosNumSymbols			[]rune
+//
 //		An array of runes containing the character or
 //		characters which will be formatted and displayed
 //		after a positive numeric value in a number
 //		string.
 //
 //	errPrefDto					*ePref.ErrPrefixDto
+//
 //		This object encapsulates an error prefix string which is
 //		included in all returned error messages. Usually, it
 //		contains the name of the calling method or methods listed
@@ -3600,7 +4890,9 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setNumberFieldParams(
 func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setPositiveNumberSign(
 	signedNumFmt *SignedNumberFormatSpec,
 	leadingPosNumSign []rune,
+	leadingPosNumFieldSymPosition NumberFieldSymbolPosition,
 	trailingPosNumSign []rune,
+	trailingPosNumFieldSymPosition NumberFieldSymbolPosition,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
 
@@ -3635,13 +4927,25 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setPositiveNumberSign(
 		return err
 	}
 
+	lenLeadingPosNumSign := len(leadingPosNumSign)
+	lenTrailingPosNumSign := len(trailingPosNumSign)
+
+	if lenLeadingPosNumSign == 0 &&
+		lenTrailingPosNumSign == 0 {
+
+		signedNumFmt.positiveNumberSign.SetNOP()
+
+		return err
+	}
+
 	signedNumFmt.positiveNumberSign.Empty()
 
-	if len(leadingPosNumSign) > 0 {
+	if lenLeadingPosNumSign > 0 {
 
 		err = signedNumFmt.positiveNumberSign.
-			SetLeadingPosNumberSignRunes(
+			SetLeadingNumberSymbolRunes(
 				leadingPosNumSign,
+				leadingPosNumFieldSymPosition,
 				ePrefix.XCpy(
 					"signedNumFmt.positiveNumberSign"+
 						"<-leadingPosNumSymbols"))
@@ -3651,11 +4955,12 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setPositiveNumberSign(
 		}
 	}
 
-	if len(trailingPosNumSign) > 0 {
+	if lenTrailingPosNumSign > 0 {
 
 		err = signedNumFmt.positiveNumberSign.
-			SetTrailingPosNumberSignRunes(
+			SetTrailingNumberSymbolRunes(
 				trailingPosNumSign,
+				trailingPosNumFieldSymPosition,
 				ePrefix.XCpy(
 					"signedNumFmt.positiveNumberSign<-"+
 						"trailingPosNumSymbols"))
@@ -3664,6 +4969,114 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setPositiveNumberSign(
 			return err
 		}
 	}
+
+	return err
+}
+
+// setPositiveNumberSignSpec - Deletes and resets the member
+// variable data value for 'signedNumFmt.positiveNumberSign'
+// contained in the instance of SignedNumberFormatSpec passed as
+// an input parameter.
+//
+// This method receives an instance of 'NumStrNumberSymbolSpec' and
+// copies the member variable data values to
+// 'signedNumFmt.positiveNumberSign'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	signedNumFmt				*SignedNumberFormatSpec
+//
+//		A pointer to an instance of SignedNumberFormatSpec.
+//		The member variable 'signedNumFmt.decSeparator'
+//		will be reset to the values provided by the
+//		following input parameters.
+//
+//
+//	positiveNumberSign 			NumStrNumberSymbolSpec
+//
+//		An instance of NumStrNumberSymbolSpec. The member
+//		variable data values contained in this instance
+//		will be copied to:
+//			'signedNumFmt.positiveNumberSign'.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods listed
+//		as a function chain.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref' software
+//		package, "github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	err							error
+//
+//		If this method completes successfully, this returned error
+//		Type is set equal to 'nil'. If errors are encountered
+//		during processing, the returned error Type will encapsulate
+//		an error message.
+//
+//		If an error message is returned, the text value for input
+//		parameter 'errPrefDto' (error prefix) will be prefixed or
+//		attached at the beginning of the error message.
+func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setPositiveNumberSignSpec(
+	signedNumFmt *SignedNumberFormatSpec,
+	positiveNumberSign NumStrNumberSymbolSpec,
+	errPrefDto *ePref.ErrPrefixDto) (
+	err error) {
+
+	if signedNumFmtSpecAtom.lock == nil {
+		signedNumFmtSpecAtom.lock = new(sync.Mutex)
+	}
+
+	signedNumFmtSpecAtom.lock.Lock()
+
+	defer signedNumFmtSpecAtom.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"signedNumberFormatSpecAtom."+
+			"setPositiveNumberSignSpec()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if signedNumFmt == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'signedNumFmt' is invalid!\n"+
+			"'signedNumFmt' is a 'nil' pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if positiveNumberSign.IsNOP() {
+
+		signedNumFmt.positiveNumberSign.SetNOP()
+
+		return err
+	}
+
+	err = signedNumFmt.positiveNumberSign.CopyIn(
+		&positiveNumberSign,
+		ePrefix.XCpy(
+			"signedNumFmt.positiveNumberSign<-"+
+				"positiveNumberSign"))
 
 	return err
 }
@@ -3678,36 +5091,41 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setPositiveNumberSign(
 // Input Parameters
 //
 //	signedNumFmt				*SignedNumberFormatSpec
+//
 //		A pointer to an instance of SignedNumberFormatSpec.
 //		The member variable 'signedNumFmt.roundingSpec'
 //		will be reset to the values provided by the
 //		following input parameters.
 //
 //	roundingType				NumberRoundingType
+//
 //		This enumeration parameter is used to specify the type
 //		of rounding algorithm that will be applied for the
 //		rounding of fractional digits in a number string.
 //
 //		Possible values are listed as follows:
-//			NumRoundType.None(),
-//			NumRoundType.HalfUpWithNegNums(),
-//			NumRoundType.HalfDownWithNegNums(),
-//			NumRoundType.HalfAwayFromZero(),
-//			NumRoundType.HalfTowardsZero(),
-//			NumRoundType.HalfToEven(),
-//			NumRoundType.HalfToOdd(),
-//			NumRoundType.Randomly(),
-//			NumRoundType.Floor(),
-//			NumRoundType.Ceiling(),
-//			NumRoundType.Truncate(),
+//
+//			NumRoundType.NoRounding()
+//			NumRoundType.HalfUpWithNegNums()
+//			NumRoundType.HalfDownWithNegNums()
+//			NumRoundType.HalfAwayFromZero()
+//			NumRoundType.HalfTowardsZero()
+//			NumRoundType.HalfToEven()
+//			NumRoundType.HalfToOdd()
+//			NumRoundType.Randomly()
+//			NumRoundType.Floor()
+//			NumRoundType.Ceiling()
+//			NumRoundType.Truncate()
 //
 //	roundToFractionalDigits		int
+//
 //		When set to a positive integer value, this parameter
 //		controls the number of digits to the right of the decimal
 //	 	separator (a.k.a. decimal point) which will remain after
 //		completion of the number rounding operation.
 //
 //	errPrefDto					*ePref.ErrPrefixDto
+//
 //		This object encapsulates an error prefix string which is
 //		included in all returned error messages. Usually, it
 //		contains the name of the calling method or methods listed
