@@ -69,6 +69,7 @@ type SignedNumberFormatSpec struct {
 // # Input Parameters
 //
 //	incomingSignedNumFmt		*SignedNumberFormatSpec
+//
 //		A pointer to an instance of SignedNumberFormatSpec.
 //		This method will NOT change the values of internal
 //		member variables contained in this instance.
@@ -81,6 +82,7 @@ type SignedNumberFormatSpec struct {
 //		be invalid, an error will be returned.
 //
 //	 errorPrefix                interface{}
+//
 //		This object encapsulates error prefix text which is
 //		included in all returned error messages. Usually, it
 //		contains the name of the calling method or methods
@@ -89,39 +91,43 @@ type SignedNumberFormatSpec struct {
 //		If no error prefix information is needed, set this
 //		parameter to 'nil'.
 //
-//		This empty interface must be convertible to one of the
-//		following types:
+//		This empty interface must be convertible to one of
+//		the following types:
 //
 //		1. nil - A nil value is valid and generates an empty
 //		   collection of error prefix and error context
 //		   information.
 //
-//		2. string - A string containing error prefix information.
+//		2. string - A string containing error prefix
+//			information.
 //
-//		3. []string A one-dimensional slice of strings containing
-//		   error prefix information
+//		3. []string A one-dimensional slice of strings
+//			containing error prefix information.
 //
 //		4. [][2]string A two-dimensional slice of strings
-//		   containing error prefix and error context information.
+//		   containing error prefix and error context
+//		   information.
 //
-//		5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//		   from this object will be copied for use in error and
-//		   informational messages.
+//		5. ErrPrefixDto - An instance of ErrPrefixDto.
+//			Information from this object will be copied for use
+//			in error and informational messages.
 //
-//		6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//		   Information from this object will be copied for use in
-//		   error and informational messages.
+//		6. *ErrPrefixDto - A pointer to an instance of
+//			ErrPrefixDto. Information from this object will be
+//			copied for use in error and informational messages.
 //
-//		7. IBasicErrorPrefix - An interface to a method generating
-//		   a two-dimensional slice of strings containing error
-//		   prefix and error context information.
+//		7. IBasicErrorPrefix - An interface to a method
+//			generating a two-dimensional slice of strings
+//			containing error prefix and error context
+//			information.
 //
-//		If parameter 'errorPrefix' is NOT convertible to one of
-//		the valid types listed above, it will be considered
-//		invalid and trigger the return of an error.
+//		If parameter 'errorPrefix' is NOT convertible to one
+//		of the valid types listed above, it will be
+//		considered invalid and trigger the return of an
+//		error.
 //
-//		Types ErrPrefixDto and IBasicErrorPrefix are included in
-//		the 'errpref' software package,
+//		Types ErrPrefixDto and IBasicErrorPrefix are included
+//		in the 'errpref' software package,
 //		"github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
@@ -129,6 +135,7 @@ type SignedNumberFormatSpec struct {
 // # Return Values
 //
 //	error
+//
 //		If this method completes successfully and no errors are
 //		encountered this return value is set to 'nil'. Otherwise,
 //		if errors are encountered, this return value will contain
@@ -180,6 +187,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) CopyIn(
 // Input Parameters
 //
 //	 errorPrefix                interface{}
+//
 //		This object encapsulates error prefix text which is
 //		included in all returned error messages. Usually, it
 //		contains the name of the calling method or methods
@@ -188,39 +196,43 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) CopyIn(
 //		If no error prefix information is needed, set this
 //		parameter to 'nil'.
 //
-//		This empty interface must be convertible to one of the
-//		following types:
+//		This empty interface must be convertible to one of
+//		the following types:
 //
 //		1. nil - A nil value is valid and generates an empty
 //		   collection of error prefix and error context
 //		   information.
 //
-//		2. string - A string containing error prefix information.
+//		2. string - A string containing error prefix
+//			information.
 //
-//		3. []string A one-dimensional slice of strings containing
-//		   error prefix information
+//		3. []string A one-dimensional slice of strings
+//			containing error prefix information.
 //
 //		4. [][2]string A two-dimensional slice of strings
-//		   containing error prefix and error context information.
+//		   containing error prefix and error context
+//		   information.
 //
-//		5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//		   from this object will be copied for use in error and
-//		   informational messages.
+//		5. ErrPrefixDto - An instance of ErrPrefixDto.
+//			Information from this object will be copied for use
+//			in error and informational messages.
 //
-//		6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//		   Information from this object will be copied for use in
-//		   error and informational messages.
+//		6. *ErrPrefixDto - A pointer to an instance of
+//			ErrPrefixDto. Information from this object will be
+//			copied for use in error and informational messages.
 //
-//		7. IBasicErrorPrefix - An interface to a method generating
-//		   a two-dimensional slice of strings containing error
-//		   prefix and error context information.
+//		7. IBasicErrorPrefix - An interface to a method
+//			generating a two-dimensional slice of strings
+//			containing error prefix and error context
+//			information.
 //
-//		If parameter 'errorPrefix' is NOT convertible to one of
-//		the valid types listed above, it will be considered
-//		invalid and trigger the return of an error.
+//		If parameter 'errorPrefix' is NOT convertible to one
+//		of the valid types listed above, it will be
+//		considered invalid and trigger the return of an
+//		error.
 //
-//		Types ErrPrefixDto and IBasicErrorPrefix are included in
-//		the 'errpref' software package,
+//		Types ErrPrefixDto and IBasicErrorPrefix are included
+//		in the 'errpref' software package,
 //		"github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
@@ -228,12 +240,14 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) CopyIn(
 // Return Values
 //
 //	deepCopySignedNumFmtSpec	SignedNumberFormatSpec
+//
 //		If this method completes successfully and no errors are
 //		encountered, this parameter will return a deep copy of
 //		the current SignedNumberFormatSpec instance.
 //
 //
 //	err							error
+//
 //		If the method completes successfully and no errors are
 //		encountered this return value is set to 'nil'. Otherwise,
 //		if errors are encountered, this return value will contain
@@ -335,6 +349,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) Empty() {
 // Input Parameters
 //
 //	incomingSignedNumFmt		*SignedNumberFormatSpec
+//
 //		A pointer to an external instance of
 //		SignedNumberFormatSpec. The internal member variable
 //		data values in this instance will be compared to those
@@ -347,6 +362,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) Empty() {
 // Return Values
 //
 //	bool
+//
 //		If the internal member variable data values contained in
 //		input parameter 'incomingSignedNumFmt' are equivalent
 //		in all respects to those contained in the current
@@ -385,6 +401,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) Equal(
 // # Return Values
 //
 //	[]rune
+//
 //		An array of runes containing the Decimal Separator character
 //		or characters configured for the current instance of
 //		SignedNumberFormatSpec.
@@ -413,6 +430,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) GetDecSeparatorRunes() []rune {
 // # Input Parameters
 //
 //	 errorPrefix                interface{}
+//
 //		This object encapsulates error prefix text which is
 //		included in all returned error messages. Usually, it
 //		contains the name of the calling method or methods
@@ -421,39 +439,43 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) GetDecSeparatorRunes() []rune {
 //		If no error prefix information is needed, set this
 //		parameter to 'nil'.
 //
-//		This empty interface must be convertible to one of the
-//		following types:
+//		This empty interface must be convertible to one of
+//		the following types:
 //
 //		1. nil - A nil value is valid and generates an empty
 //		   collection of error prefix and error context
 //		   information.
 //
-//		2. string - A string containing error prefix information.
+//		2. string - A string containing error prefix
+//			information.
 //
-//		3. []string A one-dimensional slice of strings containing
-//		   error prefix information
+//		3. []string A one-dimensional slice of strings
+//			containing error prefix information.
 //
 //		4. [][2]string A two-dimensional slice of strings
-//		   containing error prefix and error context information.
+//		   containing error prefix and error context
+//		   information.
 //
-//		5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//		   from this object will be copied for use in error and
-//		   informational messages.
+//		5. ErrPrefixDto - An instance of ErrPrefixDto.
+//			Information from this object will be copied for use
+//			in error and informational messages.
 //
-//		6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//		   Information from this object will be copied for use in
-//		   error and informational messages.
+//		6. *ErrPrefixDto - A pointer to an instance of
+//			ErrPrefixDto. Information from this object will be
+//			copied for use in error and informational messages.
 //
-//		7. IBasicErrorPrefix - An interface to a method generating
-//		   a two-dimensional slice of strings containing error
-//		   prefix and error context information.
+//		7. IBasicErrorPrefix - An interface to a method
+//			generating a two-dimensional slice of strings
+//			containing error prefix and error context
+//			information.
 //
-//		If parameter 'errorPrefix' is NOT convertible to one of
-//		the valid types listed above, it will be considered
-//		invalid and trigger the return of an error.
+//		If parameter 'errorPrefix' is NOT convertible to one
+//		of the valid types listed above, it will be
+//		considered invalid and trigger the return of an
+//		error.
 //
-//		Types ErrPrefixDto and IBasicErrorPrefix are included in
-//		the 'errpref' software package,
+//		Types ErrPrefixDto and IBasicErrorPrefix are included
+//		in the 'errpref' software package,
 //		"github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
@@ -461,12 +483,14 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) GetDecSeparatorRunes() []rune {
 // # Return Values
 //
 //	DecimalSeparatorSpec
+//
 //		If this method completes successfully, a deep copy of
 //		the Decimal Separator Specification configured for the
 //		current instance of SignedNumberFormatSpec will be
 //		returned.
 //
 //	error
+//
 //		If this method completes successfully and no errors are
 //		encountered this return value is set to 'nil'. Otherwise,
 //		if errors are encountered, this return value will contain
@@ -522,6 +546,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) GetDecSeparatorSpec(
 // # Return Values
 //
 //	string
+//
 //		A string containing the Decimal Separator character or
 //	 	characters configured for the current instance of
 //	 	SignedNumberFormatSpec.
@@ -550,6 +575,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) GetDecSeparatorStr() string {
 // # Input Parameters
 //
 //	 errorPrefix                interface{}
+//
 //		This object encapsulates error prefix text which is
 //		included in all returned error messages. Usually, it
 //		contains the name of the calling method or methods
@@ -558,39 +584,43 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) GetDecSeparatorStr() string {
 //		If no error prefix information is needed, set this
 //		parameter to 'nil'.
 //
-//		This empty interface must be convertible to one of the
-//		following types:
+//		This empty interface must be convertible to one of
+//		the following types:
 //
 //		1. nil - A nil value is valid and generates an empty
 //		   collection of error prefix and error context
 //		   information.
 //
-//		2. string - A string containing error prefix information.
+//		2. string - A string containing error prefix
+//			information.
 //
-//		3. []string A one-dimensional slice of strings containing
-//		   error prefix information
+//		3. []string A one-dimensional slice of strings
+//			containing error prefix information.
 //
 //		4. [][2]string A two-dimensional slice of strings
-//		   containing error prefix and error context information.
+//		   containing error prefix and error context
+//		   information.
 //
-//		5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//		   from this object will be copied for use in error and
-//		   informational messages.
+//		5. ErrPrefixDto - An instance of ErrPrefixDto.
+//			Information from this object will be copied for use
+//			in error and informational messages.
 //
-//		6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//		   Information from this object will be copied for use in
-//		   error and informational messages.
+//		6. *ErrPrefixDto - A pointer to an instance of
+//			ErrPrefixDto. Information from this object will be
+//			copied for use in error and informational messages.
 //
-//		7. IBasicErrorPrefix - An interface to a method generating
-//		   a two-dimensional slice of strings containing error
-//		   prefix and error context information.
+//		7. IBasicErrorPrefix - An interface to a method
+//			generating a two-dimensional slice of strings
+//			containing error prefix and error context
+//			information.
 //
-//		If parameter 'errorPrefix' is NOT convertible to one of
-//		the valid types listed above, it will be considered
-//		invalid and trigger the return of an error.
+//		If parameter 'errorPrefix' is NOT convertible to one
+//		of the valid types listed above, it will be
+//		considered invalid and trigger the return of an
+//		error.
 //
-//		Types ErrPrefixDto and IBasicErrorPrefix are included in
-//		the 'errpref' software package,
+//		Types ErrPrefixDto and IBasicErrorPrefix are included
+//		in the 'errpref' software package,
 //		"github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
@@ -598,12 +628,14 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) GetDecSeparatorStr() string {
 // # Return Values
 //
 //	NumStrIntegerGroupingSpec
+//
 //		If this method completes successfully, a deep copy of
 //		the Integer Grouping Specification configured for the
 //		current instance of SignedNumberFormatSpec will be
 //		returned.
 //
 //	error
+//
 //		If this method completes successfully and no errors are
 //		encountered this return value is set to 'nil'. Otherwise,
 //		if errors are encountered, this return value will contain
@@ -677,6 +709,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) GetIntGroupingSpec(
 // # Return Values
 //
 //	string
+//
 //		This method will return a string containing the Integer
 //		Separator character or characters configured for the
 //	 	current instance of SignedNumberFormatSpec.
@@ -707,67 +740,75 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) GetIntSeparatorChars() string {
 // # Input Parameters
 //
 //	 errorPrefix                interface{}
-//		   - This object encapsulates error prefix text which is
-//		     included in all returned error messages. Usually, it
-//		     contains the name of the calling method or methods
-//		     listed as a method or function chain of execution.
 //
-//		     If no error prefix information is needed, set this
-//		     parameter to 'nil'.
+//		This object encapsulates error prefix text which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods
+//		listed as a method or function chain of execution.
 //
-//		     This empty interface must be convertible to one of the
-//		     following types:
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
 //
-//		     1. nil - A nil value is valid and generates an empty
-//		        collection of error prefix and error context
-//		        information.
+//		This empty interface must be convertible to one of
+//		the following types:
 //
-//		     2. string - A string containing error prefix information.
+//		1. nil - A nil value is valid and generates an empty
+//		   collection of error prefix and error context
+//		   information.
 //
-//		     3. []string A one-dimensional slice of strings containing
-//		        error prefix information
+//		2. string - A string containing error prefix
+//			information.
 //
-//		     4. [][2]string A two-dimensional slice of strings
-//		        containing error prefix and error context information.
+//		3. []string A one-dimensional slice of strings
+//			containing error prefix information.
 //
-//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//		        from this object will be copied for use in error and
-//		        informational messages.
+//		4. [][2]string A two-dimensional slice of strings
+//		   containing error prefix and error context
+//		   information.
 //
-//		     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//		        Information from this object will be copied for use in
-//		        error and informational messages.
+//		5. ErrPrefixDto - An instance of ErrPrefixDto.
+//			Information from this object will be copied for use
+//			in error and informational messages.
 //
-//		     7. IBasicErrorPrefix - An interface to a method generating
-//		        a two-dimensional slice of strings containing error
-//		        prefix and error context information.
+//		6. *ErrPrefixDto - A pointer to an instance of
+//			ErrPrefixDto. Information from this object will be
+//			copied for use in error and informational messages.
 //
-//		     If parameter 'errorPrefix' is NOT convertible to one of
-//		     the valid types listed above, it will be considered
-//		     invalid and trigger the return of an error.
+//		7. IBasicErrorPrefix - An interface to a method
+//			generating a two-dimensional slice of strings
+//			containing error prefix and error context
+//			information.
 //
-//		     Types ErrPrefixDto and IBasicErrorPrefix are included in
-//		     the 'errpref' software package,
-//		     "github.com/MikeAustin71/errpref".
+//		If parameter 'errorPrefix' is NOT convertible to one
+//		of the valid types listed above, it will be
+//		considered invalid and trigger the return of an
+//		error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are included
+//		in the 'errpref' software package,
+//		"github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // # Return Values
 //
-//	IntegerSeparatorDto
-//		If this method completes successfully, a new, fully
-//		populated instance of IntegerSeparatorDto will be
-//		returned.
+//		IntegerSeparatorDto
 //
-//	error
-//		If this method completes successfully and no errors are
-//		encountered this return value is set to 'nil'. Otherwise,
-//		if errors are encountered, this return value will contain
-//		an appropriate error message.
+//			If this method completes successfully, a copy
+//			of the integer grouping specification configured
+//	     for the current SignedNumberFormatSpec instance
+//			will be returned.
 //
-//		If an error message is returned, the text value of input
-//		parameter 'errorPrefix' will be inserted or prefixed at
-//		the beginning of the error message.
+//		error
+//
+//			If this method completes successfully and no errors are
+//			encountered this return value is set to 'nil'. Otherwise,
+//			if errors are encountered, this return value will contain
+//			an appropriate error message.
+//
+//			If an error message is returned, the text value of input
+//			parameter 'errorPrefix' will be inserted or prefixed at
+//			the beginning of the error message.
 func (signedNumFmtSpec *SignedNumberFormatSpec) GetIntegerSeparatorDto(
 	errorPrefix interface{}) (
 	IntegerSeparatorDto,
@@ -833,6 +874,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) GetIntegerSeparatorDto(
 // # Return Values
 //
 //	[]rune
+//
 //		This method will return a rune array containing the
 //	 	Integer Separator character or characters configured
 //	  	for the	current instance of SignedNumberFormatSpec.
@@ -849,7 +891,227 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) GetIntSeparatorRunes() []rune {
 	return signedNumFmtSpec.intGroupingSpec.GetIntegerSeparatorRunes()
 }
 
-// NewSignedNumFmtSpec - Creates and returns a new instance of
+// GetNegativeNumSymSpec - Returns the Negative Number Symbol
+// Specification currently configured for this instance of
+// SignedNumberFormatSpec.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	 errorPrefix                interface{}
+//
+//		This object encapsulates error prefix text which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods
+//		listed as a method or function chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1. nil - A nil value is valid and generates an empty
+//		   collection of error prefix and error context
+//		   information.
+//
+//		2. string - A string containing error prefix
+//			information.
+//
+//		3. []string A one-dimensional slice of strings
+//			containing error prefix information.
+//
+//		4. [][2]string A two-dimensional slice of strings
+//		   containing error prefix and error context
+//		   information.
+//
+//		5. ErrPrefixDto - An instance of ErrPrefixDto.
+//			Information from this object will be copied for use
+//			in error and informational messages.
+//
+//		6. *ErrPrefixDto - A pointer to an instance of
+//			ErrPrefixDto. Information from this object will be
+//			copied for use in error and informational messages.
+//
+//		7. IBasicErrorPrefix - An interface to a method
+//			generating a two-dimensional slice of strings
+//			containing error prefix and error context
+//			information.
+//
+//		If parameter 'errorPrefix' is NOT convertible to one
+//		of the valid types listed above, it will be
+//		considered invalid and trigger the return of an
+//		error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are included
+//		in the 'errpref' software package,
+//		"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//		NumStrNumberSymbolSpec
+//
+//			If this method completes successfully, a copy
+//			of the negative number sign specification configured
+//	     for the current SignedNumberFormatSpec instance
+//			will be returned.
+//
+//		error
+//
+//			If this method completes successfully and no errors are
+//			encountered this return value is set to 'nil'. Otherwise,
+//			if errors are encountered, this return value will contain
+//			an appropriate error message.
+//
+//			If an error message is returned, the text value of input
+//			parameter 'errorPrefix' will be inserted or prefixed at
+//			the beginning of the error message.
+func (signedNumFmtSpec *SignedNumberFormatSpec) GetNegativeNumSymSpec(
+	errorPrefix interface{}) (
+	NumStrNumberSymbolSpec,
+	error) {
+
+	if signedNumFmtSpec.lock == nil {
+		signedNumFmtSpec.lock = new(sync.Mutex)
+	}
+
+	signedNumFmtSpec.lock.Lock()
+
+	defer signedNumFmtSpec.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"SignedNumberFormatSpec."+
+			"GetNegativeNumSymSpec()",
+		"")
+
+	if err != nil {
+		return NumStrNumberSymbolSpec{}, err
+	}
+
+	return signedNumFmtSpec.negativeNumberSign.CopyOut(
+		ePrefix.XCpy(
+			"<-signedNumFmtSpec.negativeNumberSign"))
+}
+
+// GetPositiveNumSymSpec - Returns the Positive Number Symbol
+// Specification currently configured for this instance of
+// SignedNumberFormatSpec.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	 errorPrefix                interface{}
+//
+//		This object encapsulates error prefix text which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods
+//		listed as a method or function chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1. nil - A nil value is valid and generates an empty
+//		   collection of error prefix and error context
+//		   information.
+//
+//		2. string - A string containing error prefix
+//			information.
+//
+//		3. []string A one-dimensional slice of strings
+//			containing error prefix information.
+//
+//		4. [][2]string A two-dimensional slice of strings
+//		   containing error prefix and error context
+//		   information.
+//
+//		5. ErrPrefixDto - An instance of ErrPrefixDto.
+//			Information from this object will be copied for use
+//			in error and informational messages.
+//
+//		6. *ErrPrefixDto - A pointer to an instance of
+//			ErrPrefixDto. Information from this object will be
+//			copied for use in error and informational messages.
+//
+//		7. IBasicErrorPrefix - An interface to a method
+//			generating a two-dimensional slice of strings
+//			containing error prefix and error context
+//			information.
+//
+//		If parameter 'errorPrefix' is NOT convertible to one
+//		of the valid types listed above, it will be
+//		considered invalid and trigger the return of an
+//		error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are included
+//		in the 'errpref' software package,
+//		"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//		NumStrNumberSymbolSpec
+//
+//			If this method completes successfully, a copy
+//			of the positive number sign specification configured
+//	     for the current SignedNumberFormatSpec instance
+//			will be returned.
+//
+//		error
+//
+//			If this method completes successfully and no errors are
+//			encountered this return value is set to 'nil'. Otherwise,
+//			if errors are encountered, this return value will contain
+//			an appropriate error message.
+//
+//			If an error message is returned, the text value of input
+//			parameter 'errorPrefix' will be inserted or prefixed at
+//			the beginning of the error message.
+func (signedNumFmtSpec *SignedNumberFormatSpec) GetPositiveNumSymSpec(
+	errorPrefix interface{}) (
+	NumStrNumberSymbolSpec,
+	error) {
+
+	if signedNumFmtSpec.lock == nil {
+		signedNumFmtSpec.lock = new(sync.Mutex)
+	}
+
+	signedNumFmtSpec.lock.Lock()
+
+	defer signedNumFmtSpec.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"SignedNumberFormatSpec."+
+			"GetPositiveNumSymSpec()",
+		"")
+
+	if err != nil {
+		return NumStrNumberSymbolSpec{}, err
+	}
+
+	return signedNumFmtSpec.positiveNumberSign.CopyOut(
+		ePrefix.XCpy(
+			"<-signedNumFmtSpec.positiveNumberSign"))
+}
+
+// NewSignedNumFmtParams - Creates and returns a new instance of
 // SignedNumberFormatSpec.
 //
 // ----------------------------------------------------------------
@@ -1165,7 +1427,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) GetIntSeparatorRunes() []rune {
 //			TxtJustify.Right()
 //			TxtJustify.Center()
 //
-//	errorPrefix					interface{}
+//	 errorPrefix                interface{}
 //
 //		This object encapsulates error prefix text which is
 //		included in all returned error messages. Usually, it
@@ -1175,39 +1437,43 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) GetIntSeparatorRunes() []rune {
 //		If no error prefix information is needed, set this
 //		parameter to 'nil'.
 //
-//		This empty interface must be convertible to one of the
-//		following types:
+//		This empty interface must be convertible to one of
+//		the following types:
 //
 //		1. nil - A nil value is valid and generates an empty
 //		   collection of error prefix and error context
 //		   information.
 //
-//		2. string - A string containing error prefix information.
+//		2. string - A string containing error prefix
+//			information.
 //
-//		3. []string A one-dimensional slice of strings containing
-//		   error prefix information
+//		3. []string A one-dimensional slice of strings
+//			containing error prefix information.
 //
 //		4. [][2]string A two-dimensional slice of strings
-//		   containing error prefix and error context information.
+//		   containing error prefix and error context
+//		   information.
 //
-//		5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//		   from this object will be copied for use in error and
-//		   informational messages.
+//		5. ErrPrefixDto - An instance of ErrPrefixDto.
+//			Information from this object will be copied for use
+//			in error and informational messages.
 //
-//		6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//		   Information from this object will be copied for use in
-//		   error and informational messages.
+//		6. *ErrPrefixDto - A pointer to an instance of
+//			ErrPrefixDto. Information from this object will be
+//			copied for use in error and informational messages.
 //
-//		7. IBasicErrorPrefix - An interface to a method generating
-//		   a two-dimensional slice of strings containing error
-//		   prefix and error context information.
+//		7. IBasicErrorPrefix - An interface to a method
+//			generating a two-dimensional slice of strings
+//			containing error prefix and error context
+//			information.
 //
-//		If parameter 'errorPrefix' is NOT convertible to one of
-//		the valid types listed above, it will be considered
-//		invalid and trigger the return of an error.
+//		If parameter 'errorPrefix' is NOT convertible to one
+//		of the valid types listed above, it will be
+//		considered invalid and trigger the return of an
+//		error.
 //
-//		Types ErrPrefixDto and IBasicErrorPrefix are included in
-//		the 'errpref' software package,
+//		Types ErrPrefixDto and IBasicErrorPrefix are included
+//		in the 'errpref' software package,
 //		"github.com/MikeAustin71/errpref".
 //
 // -----------------------------------------------------------------
@@ -1231,7 +1497,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) GetIntSeparatorRunes() []rune {
 //		and text passed by input parameter, 'errorPrefix'. The
 //		'errorPrefix' text will be attached to the beginning of
 //		the error message.
-func (signedNumFmtSpec *SignedNumberFormatSpec) NewSignedNumFmtSpec(
+func (signedNumFmtSpec *SignedNumberFormatSpec) NewSignedNumFmtParams(
 	decSeparatorChars string,
 	intGroupingChars string,
 	intGroupingType IntegerGroupingType,
@@ -1263,7 +1529,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) NewSignedNumFmtSpec(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"SignedNumberFormatSpec."+
-			"NewSignedNumFmtSpec()",
+			"NewSignedNumFmtParams()",
 		"")
 
 	if err != nil {
@@ -1292,7 +1558,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) NewSignedNumFmtSpec(
 	return newSignedNumFmtSpec, err
 }
 
-// NewSignedNumFmtSpecRunes - Creates and returns a new instance of
+// NewSignedNumFmtParamsRunes - Creates and returns a new instance of
 // SignedNumberFormatSpec.
 //
 // ----------------------------------------------------------------
@@ -1591,7 +1857,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) NewSignedNumFmtSpec(
 //			TxtJustify.Right()
 //			TxtJustify.Center()
 //
-//	errorPrefix					interface{}
+//	 errorPrefix                interface{}
 //
 //		This object encapsulates error prefix text which is
 //		included in all returned error messages. Usually, it
@@ -1601,39 +1867,43 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) NewSignedNumFmtSpec(
 //		If no error prefix information is needed, set this
 //		parameter to 'nil'.
 //
-//		This empty interface must be convertible to one of the
-//		following types:
+//		This empty interface must be convertible to one of
+//		the following types:
 //
 //		1. nil - A nil value is valid and generates an empty
 //		   collection of error prefix and error context
 //		   information.
 //
-//		2. string - A string containing error prefix information.
+//		2. string - A string containing error prefix
+//			information.
 //
-//		3. []string A one-dimensional slice of strings containing
-//		   error prefix information
+//		3. []string A one-dimensional slice of strings
+//			containing error prefix information.
 //
 //		4. [][2]string A two-dimensional slice of strings
-//		   containing error prefix and error context information.
+//		   containing error prefix and error context
+//		   information.
 //
-//		5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//		   from this object will be copied for use in error and
-//		   informational messages.
+//		5. ErrPrefixDto - An instance of ErrPrefixDto.
+//			Information from this object will be copied for use
+//			in error and informational messages.
 //
-//		6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//		   Information from this object will be copied for use in
-//		   error and informational messages.
+//		6. *ErrPrefixDto - A pointer to an instance of
+//			ErrPrefixDto. Information from this object will be
+//			copied for use in error and informational messages.
 //
-//		7. IBasicErrorPrefix - An interface to a method generating
-//		   a two-dimensional slice of strings containing error
-//		   prefix and error context information.
+//		7. IBasicErrorPrefix - An interface to a method
+//			generating a two-dimensional slice of strings
+//			containing error prefix and error context
+//			information.
 //
-//		If parameter 'errorPrefix' is NOT convertible to one of
-//		the valid types listed above, it will be considered
-//		invalid and trigger the return of an error.
+//		If parameter 'errorPrefix' is NOT convertible to one
+//		of the valid types listed above, it will be
+//		considered invalid and trigger the return of an
+//		error.
 //
-//		Types ErrPrefixDto and IBasicErrorPrefix are included in
-//		the 'errpref' software package,
+//		Types ErrPrefixDto and IBasicErrorPrefix are included
+//		in the 'errpref' software package,
 //		"github.com/MikeAustin71/errpref".
 //
 // -----------------------------------------------------------------
@@ -1657,7 +1927,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) NewSignedNumFmtSpec(
 //		and text passed by input parameter, 'errorPrefix'. The
 //		'errorPrefix' text will be attached to the beginning of
 //		the error message.
-func (signedNumFmtSpec *SignedNumberFormatSpec) NewSignedNumFmtSpecRunes(
+func (signedNumFmtSpec *SignedNumberFormatSpec) NewSignedNumFmtParamsRunes(
 	decSeparatorChars []rune,
 	intGroupingChars []rune,
 	intGroupingType IntegerGroupingType,
@@ -1689,7 +1959,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) NewSignedNumFmtSpecRunes(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"SignedNumberFormatSpec."+
-			"NewSignedNumFmtSpecRunes()",
+			"NewSignedNumFmtParamsRunes()",
 		"")
 
 	if err != nil {
@@ -1737,7 +2007,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) NewSignedNumFmtSpecRunes(
 //		In the United States, the decimal separator is
 //		referred to as the decimal point.
 //
-//	errorPrefix					interface{}
+//	 errorPrefix                interface{}
 //
 //		This object encapsulates error prefix text which is
 //		included in all returned error messages. Usually, it
@@ -1747,39 +2017,43 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) NewSignedNumFmtSpecRunes(
 //		If no error prefix information is needed, set this
 //		parameter to 'nil'.
 //
-//		This empty interface must be convertible to one of the
-//		following types:
+//		This empty interface must be convertible to one of
+//		the following types:
 //
 //		1. nil - A nil value is valid and generates an empty
 //		   collection of error prefix and error context
 //		   information.
 //
-//		2. string - A string containing error prefix information.
+//		2. string - A string containing error prefix
+//			information.
 //
-//		3. []string A one-dimensional slice of strings containing
-//		   error prefix information
+//		3. []string A one-dimensional slice of strings
+//			containing error prefix information.
 //
 //		4. [][2]string A two-dimensional slice of strings
-//		   containing error prefix and error context information.
+//		   containing error prefix and error context
+//		   information.
 //
-//		5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//		   from this object will be copied for use in error and
-//		   informational messages.
+//		5. ErrPrefixDto - An instance of ErrPrefixDto.
+//			Information from this object will be copied for use
+//			in error and informational messages.
 //
-//		6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//		   Information from this object will be copied for use in
-//		   error and informational messages.
+//		6. *ErrPrefixDto - A pointer to an instance of
+//			ErrPrefixDto. Information from this object will be
+//			copied for use in error and informational messages.
 //
-//		7. IBasicErrorPrefix - An interface to a method generating
-//		   a two-dimensional slice of strings containing error
-//		   prefix and error context information.
+//		7. IBasicErrorPrefix - An interface to a method
+//			generating a two-dimensional slice of strings
+//			containing error prefix and error context
+//			information.
 //
-//		If parameter 'errorPrefix' is NOT convertible to one of
-//		the valid types listed above, it will be considered
-//		invalid and trigger the return of an error.
+//		If parameter 'errorPrefix' is NOT convertible to one
+//		of the valid types listed above, it will be
+//		considered invalid and trigger the return of an
+//		error.
 //
-//		Types ErrPrefixDto and IBasicErrorPrefix are included in
-//		the 'errpref' software package,
+//		Types ErrPrefixDto and IBasicErrorPrefix are included
+//		in the 'errpref' software package,
 //		"github.com/MikeAustin71/errpref".
 //
 // -----------------------------------------------------------------
@@ -1839,6 +2113,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetDecimalSeparatorSpec(
 // # Input Parameters
 //
 //	intGroupingSpec				*NumStrIntegerGroupingSpec
+//
 //		An instance of NumStrIntegerGroupingSpec. The member
 //		variable data values contained in this instance
 //		will be copied to the current instance of
@@ -1850,7 +2125,8 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetDecimalSeparatorSpec(
 //		thousands.
 //			United States Example: 1,000,000,000
 //
-//	errorPrefix					interface{}
+//	 errorPrefix                interface{}
+//
 //		This object encapsulates error prefix text which is
 //		included in all returned error messages. Usually, it
 //		contains the name of the calling method or methods
@@ -1859,39 +2135,43 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetDecimalSeparatorSpec(
 //		If no error prefix information is needed, set this
 //		parameter to 'nil'.
 //
-//		This empty interface must be convertible to one of the
-//		following types:
+//		This empty interface must be convertible to one of
+//		the following types:
 //
 //		1. nil - A nil value is valid and generates an empty
 //		   collection of error prefix and error context
 //		   information.
 //
-//		2. string - A string containing error prefix information.
+//		2. string - A string containing error prefix
+//			information.
 //
-//		3. []string A one-dimensional slice of strings containing
-//		   error prefix information
+//		3. []string A one-dimensional slice of strings
+//			containing error prefix information.
 //
 //		4. [][2]string A two-dimensional slice of strings
-//		   containing error prefix and error context information.
+//		   containing error prefix and error context
+//		   information.
 //
-//		5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//		   from this object will be copied for use in error and
-//		   informational messages.
+//		5. ErrPrefixDto - An instance of ErrPrefixDto.
+//			Information from this object will be copied for use
+//			in error and informational messages.
 //
-//		6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//		   Information from this object will be copied for use in
-//		   error and informational messages.
+//		6. *ErrPrefixDto - A pointer to an instance of
+//			ErrPrefixDto. Information from this object will be
+//			copied for use in error and informational messages.
 //
-//		7. IBasicErrorPrefix - An interface to a method generating
-//		   a two-dimensional slice of strings containing error
-//		   prefix and error context information.
+//		7. IBasicErrorPrefix - An interface to a method
+//			generating a two-dimensional slice of strings
+//			containing error prefix and error context
+//			information.
 //
-//		If parameter 'errorPrefix' is NOT convertible to one of
-//		the valid types listed above, it will be considered
-//		invalid and trigger the return of an error.
+//		If parameter 'errorPrefix' is NOT convertible to one
+//		of the valid types listed above, it will be
+//		considered invalid and trigger the return of an
+//		error.
 //
-//		Types ErrPrefixDto and IBasicErrorPrefix are included in
-//		the 'errpref' software package,
+//		Types ErrPrefixDto and IBasicErrorPrefix are included
+//		in the 'errpref' software package,
 //		"github.com/MikeAustin71/errpref".
 //
 // -----------------------------------------------------------------
@@ -1899,6 +2179,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetDecimalSeparatorSpec(
 // # Return Values
 //
 //	error
+//
 //		If this method completes successfully, the returned error
 //		Type is set equal to 'nil'.
 //
@@ -1959,7 +2240,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetIntegerGroupingSpec(
 //		SignedNumberFormatSpec member variable:
 //			'SignedNumberFormatSpec.negativeNumberSign'.
 //
-//	errorPrefix					interface{}
+//	 errorPrefix                interface{}
 //
 //		This object encapsulates error prefix text which is
 //		included in all returned error messages. Usually, it
@@ -1969,39 +2250,43 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetIntegerGroupingSpec(
 //		If no error prefix information is needed, set this
 //		parameter to 'nil'.
 //
-//		This empty interface must be convertible to one of the
-//		following types:
+//		This empty interface must be convertible to one of
+//		the following types:
 //
 //		1. nil - A nil value is valid and generates an empty
 //		   collection of error prefix and error context
 //		   information.
 //
-//		2. string - A string containing error prefix information.
+//		2. string - A string containing error prefix
+//			information.
 //
-//		3. []string A one-dimensional slice of strings containing
-//		   error prefix information
+//		3. []string A one-dimensional slice of strings
+//			containing error prefix information.
 //
 //		4. [][2]string A two-dimensional slice of strings
-//		   containing error prefix and error context information.
+//		   containing error prefix and error context
+//		   information.
 //
-//		5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//		   from this object will be copied for use in error and
-//		   informational messages.
+//		5. ErrPrefixDto - An instance of ErrPrefixDto.
+//			Information from this object will be copied for use
+//			in error and informational messages.
 //
-//		6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//		   Information from this object will be copied for use in
-//		   error and informational messages.
+//		6. *ErrPrefixDto - A pointer to an instance of
+//			ErrPrefixDto. Information from this object will be
+//			copied for use in error and informational messages.
 //
-//		7. IBasicErrorPrefix - An interface to a method generating
-//		   a two-dimensional slice of strings containing error
-//		   prefix and error context information.
+//		7. IBasicErrorPrefix - An interface to a method
+//			generating a two-dimensional slice of strings
+//			containing error prefix and error context
+//			information.
 //
-//		If parameter 'errorPrefix' is NOT convertible to one of
-//		the valid types listed above, it will be considered
-//		invalid and trigger the return of an error.
+//		If parameter 'errorPrefix' is NOT convertible to one
+//		of the valid types listed above, it will be
+//		considered invalid and trigger the return of an
+//		error.
 //
-//		Types ErrPrefixDto and IBasicErrorPrefix are included in
-//		the 'errpref' software package,
+//		Types ErrPrefixDto and IBasicErrorPrefix are included
+//		in the 'errpref' software package,
 //		"github.com/MikeAustin71/errpref".
 //
 // -----------------------------------------------------------------
@@ -2072,7 +2357,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetNegativeNumberSignSpec(
 //		SignedNumberFormatSpec member variable:
 //			'SignedNumberFormatSpec.positiveNumberSign'.
 //
-//	errorPrefix					interface{}
+//	 errorPrefix                interface{}
 //
 //		This object encapsulates error prefix text which is
 //		included in all returned error messages. Usually, it
@@ -2082,39 +2367,43 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetNegativeNumberSignSpec(
 //		If no error prefix information is needed, set this
 //		parameter to 'nil'.
 //
-//		This empty interface must be convertible to one of the
-//		following types:
+//		This empty interface must be convertible to one of
+//		the following types:
 //
 //		1. nil - A nil value is valid and generates an empty
 //		   collection of error prefix and error context
 //		   information.
 //
-//		2. string - A string containing error prefix information.
+//		2. string - A string containing error prefix
+//			information.
 //
-//		3. []string A one-dimensional slice of strings containing
-//		   error prefix information
+//		3. []string A one-dimensional slice of strings
+//			containing error prefix information.
 //
 //		4. [][2]string A two-dimensional slice of strings
-//		   containing error prefix and error context information.
+//		   containing error prefix and error context
+//		   information.
 //
-//		5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//		   from this object will be copied for use in error and
-//		   informational messages.
+//		5. ErrPrefixDto - An instance of ErrPrefixDto.
+//			Information from this object will be copied for use
+//			in error and informational messages.
 //
-//		6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//		   Information from this object will be copied for use in
-//		   error and informational messages.
+//		6. *ErrPrefixDto - A pointer to an instance of
+//			ErrPrefixDto. Information from this object will be
+//			copied for use in error and informational messages.
 //
-//		7. IBasicErrorPrefix - An interface to a method generating
-//		   a two-dimensional slice of strings containing error
-//		   prefix and error context information.
+//		7. IBasicErrorPrefix - An interface to a method
+//			generating a two-dimensional slice of strings
+//			containing error prefix and error context
+//			information.
 //
-//		If parameter 'errorPrefix' is NOT convertible to one of
-//		the valid types listed above, it will be considered
-//		invalid and trigger the return of an error.
+//		If parameter 'errorPrefix' is NOT convertible to one
+//		of the valid types listed above, it will be
+//		considered invalid and trigger the return of an
+//		error.
 //
-//		Types ErrPrefixDto and IBasicErrorPrefix are included in
-//		the 'errpref' software package,
+//		Types ErrPrefixDto and IBasicErrorPrefix are included
+//		in the 'errpref' software package,
 //		"github.com/MikeAustin71/errpref".
 //
 // -----------------------------------------------------------------
@@ -2176,13 +2465,15 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetPositiveNumberSignSpec(
 // # Input Parameters
 //
 //	roundingSpec				NumStrRoundingSpec
+//
 //		An instance of NumStrRoundingSpec. All data values in
 //		this NumStrRoundingSpec instance will be copied to the
 //		member variable 'SignedNumberFormatSpec.roundingSpec'
 //		contained in the current instance of
 //		SignedNumberFormatSpec.
 //
-//	errorPrefix					interface{}
+//	 errorPrefix                interface{}
+//
 //		This object encapsulates error prefix text which is
 //		included in all returned error messages. Usually, it
 //		contains the name of the calling method or methods
@@ -2191,39 +2482,43 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetPositiveNumberSignSpec(
 //		If no error prefix information is needed, set this
 //		parameter to 'nil'.
 //
-//		This empty interface must be convertible to one of the
-//		following types:
+//		This empty interface must be convertible to one of
+//		the following types:
 //
 //		1. nil - A nil value is valid and generates an empty
 //		   collection of error prefix and error context
 //		   information.
 //
-//		2. string - A string containing error prefix information.
+//		2. string - A string containing error prefix
+//			information.
 //
-//		3. []string A one-dimensional slice of strings containing
-//		   error prefix information
+//		3. []string A one-dimensional slice of strings
+//			containing error prefix information.
 //
 //		4. [][2]string A two-dimensional slice of strings
-//		   containing error prefix and error context information.
+//		   containing error prefix and error context
+//		   information.
 //
-//		5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//		   from this object will be copied for use in error and
-//		   informational messages.
+//		5. ErrPrefixDto - An instance of ErrPrefixDto.
+//			Information from this object will be copied for use
+//			in error and informational messages.
 //
-//		6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//		   Information from this object will be copied for use in
-//		   error and informational messages.
+//		6. *ErrPrefixDto - A pointer to an instance of
+//			ErrPrefixDto. Information from this object will be
+//			copied for use in error and informational messages.
 //
-//		7. IBasicErrorPrefix - An interface to a method generating
-//		   a two-dimensional slice of strings containing error
-//		   prefix and error context information.
+//		7. IBasicErrorPrefix - An interface to a method
+//			generating a two-dimensional slice of strings
+//			containing error prefix and error context
+//			information.
 //
-//		If parameter 'errorPrefix' is NOT convertible to one of
-//		the valid types listed above, it will be considered
-//		invalid and trigger the return of an error.
+//		If parameter 'errorPrefix' is NOT convertible to one
+//		of the valid types listed above, it will be
+//		considered invalid and trigger the return of an
+//		error.
 //
-//		Types ErrPrefixDto and IBasicErrorPrefix are included in
-//		the 'errpref' software package,
+//		Types ErrPrefixDto and IBasicErrorPrefix are included
+//		in the 'errpref' software package,
 //		"github.com/MikeAustin71/errpref".
 //
 // -----------------------------------------------------------------
@@ -2231,6 +2526,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetPositiveNumberSignSpec(
 // # Return Values
 //
 //	error
+//
 //		If this method completes successfully, the returned error
 //		Type is set equal to 'nil'.
 //
@@ -2354,6 +2650,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetRoundingSpec(
 //			NumRoundType.Truncate()
 //
 //	roundToFractionalDigits		int
+//
 //		When set to a positive integer value, this parameter
 //		controls the number of digits to the right of the
 //		decimal separator (a.k.a. decimal point) which will
@@ -2361,6 +2658,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetRoundingSpec(
 //		operation.
 //
 //	leadingPositiveNumSign		string
+//
 //		A string containing the leading positive number sign
 //		character or characters used to configure a Positive
 //		Number Sign Symbol in a number string.
@@ -2370,6 +2668,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetRoundingSpec(
 //		currency symbols ('$').
 //
 //	trailingPositiveNumSign     string
+//
 //		A string containing the trailing positive number sign
 //		character or characters used to configure a Positive
 //		Number Sign Symbol in a number string.
@@ -2436,6 +2735,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetRoundingSpec(
 //				the Number Field length.
 //
 //	leadingNegativeNumSign		string
+//
 //		A string containing the leading negative number sign
 //		character or characters used to configure a Negative
 //		Number Sign Symbol in a number string.
@@ -2445,6 +2745,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetRoundingSpec(
 //	 	currency symbols ('$').
 //
 //	trailingNegativeNumSign		string
+//
 //		A string containing the trailing negative number
 //		sign character or characters used to configure a
 //		Negative Number Sign Symbol in a number string.
@@ -2531,6 +2832,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetRoundingSpec(
 //				the Number Field length.
 //
 //	fieldLength					int
+//
 //		This parameter defines the length of the text field in
 //		which the numeric value will be displayed within a
 //		number string.
@@ -2548,6 +2850,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetRoundingSpec(
 //		be returned.
 //
 //	fieldJustification			TextJustify
+//
 //		An enumeration which specifies the justification of the
 //		numeric value within the number field length specified
 //		by input parameter 'fieldLength'.
@@ -2573,7 +2876,8 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetRoundingSpec(
 //			TxtJustify.Right()
 //			TxtJustify.Center()
 //
-//	errorPrefix					interface{}
+//	 errorPrefix                interface{}
+//
 //		This object encapsulates error prefix text which is
 //		included in all returned error messages. Usually, it
 //		contains the name of the calling method or methods
@@ -2582,39 +2886,43 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetRoundingSpec(
 //		If no error prefix information is needed, set this
 //		parameter to 'nil'.
 //
-//		This empty interface must be convertible to one of the
-//		following types:
+//		This empty interface must be convertible to one of
+//		the following types:
 //
 //		1. nil - A nil value is valid and generates an empty
 //		   collection of error prefix and error context
 //		   information.
 //
-//		2. string - A string containing error prefix information.
+//		2. string - A string containing error prefix
+//			information.
 //
-//		3. []string A one-dimensional slice of strings containing
-//		   error prefix information
+//		3. []string A one-dimensional slice of strings
+//			containing error prefix information.
 //
 //		4. [][2]string A two-dimensional slice of strings
-//		   containing error prefix and error context information.
+//		   containing error prefix and error context
+//		   information.
 //
-//		5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//		   from this object will be copied for use in error and
-//		   informational messages.
+//		5. ErrPrefixDto - An instance of ErrPrefixDto.
+//			Information from this object will be copied for use
+//			in error and informational messages.
 //
-//		6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//		   Information from this object will be copied for use in
-//		   error and informational messages.
+//		6. *ErrPrefixDto - A pointer to an instance of
+//			ErrPrefixDto. Information from this object will be
+//			copied for use in error and informational messages.
 //
-//		7. IBasicErrorPrefix - An interface to a method generating
-//		   a two-dimensional slice of strings containing error
-//		   prefix and error context information.
+//		7. IBasicErrorPrefix - An interface to a method
+//			generating a two-dimensional slice of strings
+//			containing error prefix and error context
+//			information.
 //
-//		If parameter 'errorPrefix' is NOT convertible to one of
-//		the valid types listed above, it will be considered
-//		invalid and trigger the return of an error.
+//		If parameter 'errorPrefix' is NOT convertible to one
+//		of the valid types listed above, it will be
+//		considered invalid and trigger the return of an
+//		error.
 //
-//		Types ErrPrefixDto and IBasicErrorPrefix are included in
-//		the 'errpref' software package,
+//		Types ErrPrefixDto and IBasicErrorPrefix are included
+//		in the 'errpref' software package,
 //		"github.com/MikeAustin71/errpref".
 //
 // -----------------------------------------------------------------
@@ -2622,6 +2930,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetRoundingSpec(
 // # Return Values
 //
 //	err							error
+//
 //		If this method completes successfully, the returned error
 //		Type is set equal to 'nil'.
 //
@@ -2999,7 +3308,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetSignedNumFmtParams(
 //			TxtJustify.Right()
 //			TxtJustify.Center()
 //
-//	errorPrefix					interface{}
+//	 errorPrefix                interface{}
 //
 //		This object encapsulates error prefix text which is
 //		included in all returned error messages. Usually, it
@@ -3009,39 +3318,43 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetSignedNumFmtParams(
 //		If no error prefix information is needed, set this
 //		parameter to 'nil'.
 //
-//		This empty interface must be convertible to one of the
-//		following types:
+//		This empty interface must be convertible to one of
+//		the following types:
 //
 //		1. nil - A nil value is valid and generates an empty
 //		   collection of error prefix and error context
 //		   information.
 //
-//		2. string - A string containing error prefix information.
+//		2. string - A string containing error prefix
+//			information.
 //
-//		3. []string A one-dimensional slice of strings containing
-//		   error prefix information
+//		3. []string A one-dimensional slice of strings
+//			containing error prefix information.
 //
 //		4. [][2]string A two-dimensional slice of strings
-//		   containing error prefix and error context information.
+//		   containing error prefix and error context
+//		   information.
 //
-//		5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//		   from this object will be copied for use in error and
-//		   informational messages.
+//		5. ErrPrefixDto - An instance of ErrPrefixDto.
+//			Information from this object will be copied for use
+//			in error and informational messages.
 //
-//		6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//		   Information from this object will be copied for use in
-//		   error and informational messages.
+//		6. *ErrPrefixDto - A pointer to an instance of
+//			ErrPrefixDto. Information from this object will be
+//			copied for use in error and informational messages.
 //
-//		7. IBasicErrorPrefix - An interface to a method generating
-//		   a two-dimensional slice of strings containing error
-//		   prefix and error context information.
+//		7. IBasicErrorPrefix - An interface to a method
+//			generating a two-dimensional slice of strings
+//			containing error prefix and error context
+//			information.
 //
-//		If parameter 'errorPrefix' is NOT convertible to one of
-//		the valid types listed above, it will be considered
-//		invalid and trigger the return of an error.
+//		If parameter 'errorPrefix' is NOT convertible to one
+//		of the valid types listed above, it will be
+//		considered invalid and trigger the return of an
+//		error.
 //
-//		Types ErrPrefixDto and IBasicErrorPrefix are included in
-//		the 'errpref' software package,
+//		Types ErrPrefixDto and IBasicErrorPrefix are included
+//		in the 'errpref' software package,
 //		"github.com/MikeAustin71/errpref".
 //
 // -----------------------------------------------------------------

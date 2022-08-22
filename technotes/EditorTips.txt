@@ -4,3 +4,17 @@ containing each word on a new line.
 
 To add new directories, open settings by pressing Ctrl+Alt+S and
 navigate to Editor | Natural Languages | Spelling.
+
+
+GoLand includes a built-in IDE Features Trainer. It
+provides interactive training courses to help you
+learn how to do some common tasks, such as refactoring
+code, navigating through projects, debugging, and working
+with version control.
+
+Make sure the IDE Features Trainer plugin is enabled
+in the Installed tab of the Plugins page in the IDE
+settings.
+
+To open the Learn tool window and start your exercises,
+select View | Tool Windows | Learn or Help | Learn IDE Features from the main menu. The tool window lists the available tutorials.

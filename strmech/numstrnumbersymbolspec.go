@@ -399,7 +399,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) CopyIn(
 //		the beginning of the error message.
 func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) CopyOut(
 	errorPrefix interface{}) (
-	deepCopyNStrNumSymSpec *NumStrNumberSymbolSpec,
+	deepCopyNStrNumSymSpec NumStrNumberSymbolSpec,
 	err error) {
 
 	if nStrNumberSymbolSpec.lock == nil {
@@ -424,7 +424,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) CopyOut(
 	}
 
 	err = new(numStrNumberSymbolSpecNanobot).copyNStrNumberSymbolSpec(
-		deepCopyNStrNumSymSpec,
+		&deepCopyNStrNumSymSpec,
 		nStrNumberSymbolSpec,
 		ePrefix.XCpy(
 			"deepCopyNStrNumSymSpec<-"+
