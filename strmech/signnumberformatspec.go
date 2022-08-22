@@ -792,23 +792,23 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) GetIntSeparatorChars() string {
 //
 // # Return Values
 //
-//		IntegerSeparatorDto
+//	IntegerSeparatorDto
 //
-//			If this method completes successfully, a copy
-//			of the integer grouping specification configured
-//	     for the current SignedNumberFormatSpec instance
-//			will be returned.
+//		If this method completes successfully, a copy
+//		of the integer grouping specification configured
+//		for the current SignedNumberFormatSpec instance
+//		will be returned.
 //
-//		error
+//	error
 //
-//			If this method completes successfully and no errors are
-//			encountered this return value is set to 'nil'. Otherwise,
-//			if errors are encountered, this return value will contain
-//			an appropriate error message.
+//		If this method completes successfully and no errors are
+//		encountered this return value is set to 'nil'. Otherwise,
+//		if errors are encountered, this return value will contain
+//		an appropriate error message.
 //
-//			If an error message is returned, the text value of input
-//			parameter 'errorPrefix' will be inserted or prefixed at
-//			the beginning of the error message.
+//		If an error message is returned, the text value of input
+//		parameter 'errorPrefix' will be inserted or prefixed at
+//		the beginning of the error message.
 func (signedNumFmtSpec *SignedNumberFormatSpec) GetIntegerSeparatorDto(
 	errorPrefix interface{}) (
 	IntegerSeparatorDto,
@@ -876,8 +876,8 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) GetIntegerSeparatorDto(
 //	[]rune
 //
 //		This method will return a rune array containing the
-//	 	Integer Separator character or characters configured
-//	  	for the	current instance of SignedNumberFormatSpec.
+//		Integer Separator character or characters configured
+//		for the	current instance of SignedNumberFormatSpec.
 func (signedNumFmtSpec *SignedNumberFormatSpec) GetIntSeparatorRunes() []rune {
 
 	if signedNumFmtSpec.lock == nil {
@@ -952,23 +952,23 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) GetIntSeparatorRunes() []rune {
 //
 // # Return Values
 //
-//		NumStrNumberSymbolSpec
+//	NumStrNumberSymbolSpec
 //
-//			If this method completes successfully, a copy
-//			of the negative number sign specification configured
-//	     for the current SignedNumberFormatSpec instance
-//			will be returned.
+//		If this method completes successfully, a copy
+//		of the negative number sign specification configured
+//		for the current SignedNumberFormatSpec instance
+//		will be returned.
 //
-//		error
+//	error
 //
-//			If this method completes successfully and no errors are
-//			encountered this return value is set to 'nil'. Otherwise,
-//			if errors are encountered, this return value will contain
-//			an appropriate error message.
+//		If this method completes successfully and no errors are
+//		encountered this return value is set to 'nil'. Otherwise,
+//		if errors are encountered, this return value will contain
+//		an appropriate error message.
 //
-//			If an error message is returned, the text value of input
-//			parameter 'errorPrefix' will be inserted or prefixed at
-//			the beginning of the error message.
+//		If an error message is returned, the text value of input
+//		parameter 'errorPrefix' will be inserted or prefixed at
+//		the beginning of the error message.
 func (signedNumFmtSpec *SignedNumberFormatSpec) GetNegativeNumSymSpec(
 	errorPrefix interface{}) (
 	NumStrNumberSymbolSpec,
@@ -1062,23 +1062,23 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) GetNegativeNumSymSpec(
 //
 // # Return Values
 //
-//		NumStrNumberSymbolSpec
+//	NumStrNumberSymbolSpec
 //
-//			If this method completes successfully, a copy
-//			of the positive number sign specification configured
-//	     for the current SignedNumberFormatSpec instance
-//			will be returned.
+//		If this method completes successfully, a copy
+//		of the positive number sign specification configured
+//		for the current SignedNumberFormatSpec instance
+//		will be returned.
 //
-//		error
+//	error
 //
-//			If this method completes successfully and no errors are
-//			encountered this return value is set to 'nil'. Otherwise,
-//			if errors are encountered, this return value will contain
-//			an appropriate error message.
+//		If this method completes successfully and no errors are
+//		encountered this return value is set to 'nil'. Otherwise,
+//		if errors are encountered, this return value will contain
+//		an appropriate error message.
 //
-//			If an error message is returned, the text value of input
-//			parameter 'errorPrefix' will be inserted or prefixed at
-//			the beginning of the error message.
+//		If an error message is returned, the text value of input
+//		parameter 'errorPrefix' will be inserted or prefixed at
+//		the beginning of the error message.
 func (signedNumFmtSpec *SignedNumberFormatSpec) GetPositiveNumSymSpec(
 	errorPrefix interface{}) (
 	NumStrNumberSymbolSpec,
@@ -2337,6 +2337,128 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetNegativeNumberSignSpec(
 			ePrefix.XCpy(
 				"signedNumFmtSpec<-"+
 					"negativeNumberSign"))
+}
+
+// SetNumberFieldSpec - Deletes and replaces the Number Field
+// Specification for the current instance of
+// SignedNumberFormatSpec.
+//
+// The Number Field Specification includes parameters for
+// field length and text justification ('Right, Center, Left').
+//
+// Numeric digits are formatted using the Number Field
+// Specification within a number field specified by field
+// length. The numeric digits string is then justified
+// within the number field according to a text justification
+// specification of 'Right', 'Center' or 'Left'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	numberFieldSpec				NumStrNumberFieldSpec
+//
+//		An instance of NumStrIntegerGroupingSpec. The member
+//		variable data values contained in this instance
+//		will be copied to the current instance of
+//		SignedNumberFormatSpec :
+//			'SignedNumberFormatSpec.numberFieldSpec'.
+//
+//	 errorPrefix                interface{}
+//
+//		This object encapsulates error prefix text which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods
+//		listed as a method or function chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1. nil - A nil value is valid and generates an empty
+//		   collection of error prefix and error context
+//		   information.
+//
+//		2. string - A string containing error prefix
+//			information.
+//
+//		3. []string A one-dimensional slice of strings
+//			containing error prefix information.
+//
+//		4. [][2]string A two-dimensional slice of strings
+//		   containing error prefix and error context
+//		   information.
+//
+//		5. ErrPrefixDto - An instance of ErrPrefixDto.
+//			Information from this object will be copied for use
+//			in error and informational messages.
+//
+//		6. *ErrPrefixDto - A pointer to an instance of
+//			ErrPrefixDto. Information from this object will be
+//			copied for use in error and informational messages.
+//
+//		7. IBasicErrorPrefix - An interface to a method
+//			generating a two-dimensional slice of strings
+//			containing error prefix and error context
+//			information.
+//
+//		If parameter 'errorPrefix' is NOT convertible to one
+//		of the valid types listed above, it will be
+//		considered invalid and trigger the return of an
+//		error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are included
+//		in the 'errpref' software package,
+//		"github.com/MikeAustin71/errpref".
+//
+// -----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the returned error
+//		Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the returned
+//		error Type will encapsulate an error message. This
+//		returned error message will incorporate the method chain
+//		and text passed by input parameter, 'errorPrefix'. The
+//		'errorPrefix' text will be attached to the beginning of
+//		the error message.
+func (signedNumFmtSpec *SignedNumberFormatSpec) SetNumberFieldSpec(
+	numberFieldSpec NumStrNumberFieldSpec,
+	errorPrefix interface{}) error {
+
+	if signedNumFmtSpec.lock == nil {
+		signedNumFmtSpec.lock = new(sync.Mutex)
+	}
+
+	signedNumFmtSpec.lock.Lock()
+
+	defer signedNumFmtSpec.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"SignedNumberFormatSpec."+
+			"SetNumberFieldSpec()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	return new(signedNumberFormatSpecAtom).setNumberFieldSpec(
+		signedNumFmtSpec,
+		numberFieldSpec,
+		ePrefix.XCpy(
+			"signedNumFmtSpec<-numberFieldSpec"))
 }
 
 // SetPositiveNumberSignSpec - Deletes and replaces the Positive
@@ -4579,6 +4701,7 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setIntegerGroupingParams
 // # Input Parameters
 //
 //	signedNumFmt				*SignedNumberFormatSpec
+//
 //		A pointer to an instance of SignedNumberFormatSpec.
 //		All the member variable data values in this instance
 //		will be deleted and reset to the values contained
@@ -4587,6 +4710,7 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setIntegerGroupingParams
 //
 //
 //	intGroupingSpec				NumStrIntegerGroupingSpec
+//
 //		An instance of NumStrIntegerGroupingSpec. The member
 //		variable data values contained in this instance
 //		will be copied to:
@@ -4598,6 +4722,7 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setIntegerGroupingParams
 //			United States Example: 1,000,000,000
 //
 //	errPrefDto					*ePref.ErrPrefixDto
+//
 //		This object encapsulates an error prefix string which is
 //		included in all returned error messages. Usually, it
 //		contains the name of the calling method or methods listed
@@ -4625,8 +4750,7 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setIntegerGroupingParams
 func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setIntegerGroupingSpec(
 	signedNumFmt *SignedNumberFormatSpec,
 	intGroupingSpec NumStrIntegerGroupingSpec,
-	errPrefDto *ePref.ErrPrefixDto) (
-	err error) {
+	errPrefDto *ePref.ErrPrefixDto) error {
 
 	if signedNumFmtSpecAtom.lock == nil {
 		signedNumFmtSpecAtom.lock = new(sync.Mutex)
@@ -4637,6 +4761,7 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setIntegerGroupingSpec(
 	defer signedNumFmtSpecAtom.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
+	var err error
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
@@ -4660,13 +4785,11 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setIntegerGroupingSpec(
 
 	signedNumFmt.intGroupingSpec.Empty()
 
-	err = signedNumFmt.intGroupingSpec.CopyIn(
+	return signedNumFmt.intGroupingSpec.CopyIn(
 		&intGroupingSpec,
 		ePrefix.XCpy(
 			"signedNumFmt.intGroupingSpec<-"+
 				"intGroupingSpec"))
-
-	return err
 }
 
 // setNegativeNumberSign - Deletes and resets the member variable
@@ -5142,6 +5265,105 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setNumberFieldParams(
 			"signedNumFmt.numberFieldSpec<-"))
 
 	return err
+}
+
+// setNumberFieldSpec - Deletes and resets the member
+// variable data value for 'signedNumFmt.numberFieldSpec'
+// contained in the instance of SignedNumberFormatSpec
+// passed as an input parameter.
+//
+// This method receives an instance of
+// 'NumStrNumberFieldSpec' and copies the member variable
+// data values to 'signedNumFmt.numberFieldSpec'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	signedNumFmt				*SignedNumberFormatSpec
+//
+//		A pointer to an instance of SignedNumberFormatSpec.
+//		All the member variable data values in this instance
+//		will be deleted and reset to the values contained
+//		in the Number Field Specification supplied by
+//		input parameter, 'numberFieldSpec'.
+//
+//	numberFieldSpec				NumStrNumberFieldSpec
+//
+//		An instance of NumStrNumberFieldSpec. The member
+//		variable data values contained in this instance
+//		will be copied to:
+//			'signedNumFmt.numberFieldSpec'.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods listed
+//		as a function chain.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref' software
+//		package, "github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	err							error
+//		If this method completes successfully, this returned error
+//		Type is set equal to 'nil'. If errors are encountered
+//		during processing, the returned error Type will encapsulate
+//		an error message.
+//
+//		If an error message is returned, the text value for input
+//		parameter 'errPrefDto' (error prefix) will be prefixed or
+//		attached at the beginning of the error message.
+func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setNumberFieldSpec(
+	signedNumFmt *SignedNumberFormatSpec,
+	numberFieldSpec NumStrNumberFieldSpec,
+	errPrefDto *ePref.ErrPrefixDto) (
+	err error) {
+
+	if signedNumFmtSpecAtom.lock == nil {
+		signedNumFmtSpecAtom.lock = new(sync.Mutex)
+	}
+
+	signedNumFmtSpecAtom.lock.Lock()
+
+	defer signedNumFmtSpecAtom.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"signedNumFmtSpecNanobot."+
+			"setNumberFieldSpec()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if signedNumFmt == nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'signedNumFmt' is invalid!\n"+
+			"'signedNumFmt' is a 'nil' pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	signedNumFmt.numberFieldSpec.Empty()
+
+	return signedNumFmt.numberFieldSpec.CopyIn(
+		&numberFieldSpec,
+		ePrefix.XCpy(
+			"signedNumFmt<-"+
+				"numberFieldSpec"))
 }
 
 // setPositiveNumberSign - Deletes and resets the member variable
