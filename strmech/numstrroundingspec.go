@@ -13,17 +13,18 @@ type NumStrRoundingSpec struct {
 	// rounding of fractional digits in a number string.
 	//
 	// Possible values are listed as follows:
-	//	NumRoundType.None(),
-	//	NumRoundType.HalfUpWithNegNums(),
-	//	NumRoundType.HalfDownWithNegNums(),
-	//	NumRoundType.HalfAwayFromZero(),
-	//	NumRoundType.HalfTowardsZero(),
-	//	NumRoundType.HalfToEven(),
-	//	NumRoundType.HalfToOdd(),
-	//	NumRoundType.Randomly(),
-	//	NumRoundType.Floor(),
-	//	NumRoundType.Ceiling(),
-	//	NumRoundType.Truncate(),
+	//	NumRoundType.None()
+	//  NumRoundType.NoRounding()
+	//	NumRoundType.HalfUpWithNegNums()
+	//	NumRoundType.HalfDownWithNegNums()
+	//	NumRoundType.HalfAwayFromZero()
+	//	NumRoundType.HalfTowardsZero()
+	//	NumRoundType.HalfToEven()
+	//	NumRoundType.HalfToOdd()
+	//	NumRoundType.Randomly()
+	//	NumRoundType.Floor()
+	//	NumRoundType.Ceiling()
+	//	NumRoundType.Truncate()
 
 	roundToFractionalDigits int
 	// When set to a positive integer value, this
