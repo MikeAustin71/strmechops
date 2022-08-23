@@ -105,15 +105,15 @@
 
 - Error Return with Tabs
 //
-//	error
+//	err							error
 //
-//		If this method completes successfully and no errors are
-//		encountered this return value is set to 'nil'. Otherwise,
-//		if errors are encountered, this return value will contain
-//		an appropriate error message.
+//		If this method completes successfully and no errors
+//		are encountered this return value is set to 'nil'.
+//		Otherwise, if errors are encountered, this return
+//		value will contain an appropriate error message.
 //
-//		If an error message is returned, the text value of input
-//		parameter 'errorPrefix' will be inserted or prefixed at
-//		the beginning of the error message.
+//		If an error message is returned, the text value of
+//		input parameter 'errorPrefix' will be inserted or
+//		prefixed at	the beginning of the error message.
 
 
