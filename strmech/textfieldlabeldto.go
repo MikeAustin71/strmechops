@@ -187,7 +187,7 @@ type TextFieldLabelDto struct {
 //
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // All the data fields in current TextFieldLabelDto instance
 // ('txtLabelDto') will be deleted and overwritten.
@@ -195,30 +195,27 @@ type TextFieldLabelDto struct {
 // NO DATA VALIDATION IS performed on input parameter,
 // 'incomingTxtLabelDto'.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  incomingTxtLabelDto        TextFieldLabelDto
-//     - An instance of TextFieldLabelDto. This method will NOT
-//       change the data values of member variables contained in
-//       this instance.
+//	incomingTxtLabelDto        TextFieldLabelDto
+//	   - An instance of TextFieldLabelDto. This method will NOT
+//	     change the data values of member variables contained in
+//	     this instance.
 //
-//       All data values in this TextFieldLabelDto instance
-//       ('incomingTxtLabelDto') will be copied to the current
-//       TextFieldLabelDto instance ('txtLabelDto').
+//	     All data values in this TextFieldLabelDto instance
+//	     ('incomingTxtLabelDto') will be copied to the current
+//	     TextFieldLabelDto instance ('txtLabelDto').
 //
-//       No data validation is performed on input parameter,
-//       'incomingTxtLabelDto'.
-//
+//	     No data validation is performed on input parameter,
+//	     'incomingTxtLabelDto'.
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  NONE
-//
+//	NONE
 func (txtLabelDto *TextFieldLabelDto) CopyIn(
 	incomingTxtLabelDto TextFieldLabelDto) {
 
@@ -244,22 +241,19 @@ func (txtLabelDto *TextFieldLabelDto) CopyIn(
 // NO DATA VALIDATION is performed on the current instance of
 // TextFieldLabelDto.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  NONE
-//
+//	NONE
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  deepCopyTxtLabelDto        TextFieldLabelDto
-//     - This parameter will return a deep copy of the current
-//       TextFieldLabelDto instance.
-//
+//	deepCopyTxtLabelDto        TextFieldLabelDto
+//	   - This parameter will return a deep copy of the current
+//	     TextFieldLabelDto instance.
 func (txtLabelDto *TextFieldLabelDto) CopyOut() (
 	deepCopyTxtLabelDto TextFieldLabelDto) {
 
@@ -285,29 +279,25 @@ func (txtLabelDto *TextFieldLabelDto) CopyOut() (
 // TextFieldLabelDto in an invalid state and unavailable for
 // immediate reuse.
 //
-//
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // This method will delete all member variable data values in this
 // current instance of TextFieldLabelDto. All member variable data
 // values will be reset to their zero or uninitialized states.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  NONE
-//
+//	NONE
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  NONE
-//
+//	NONE
 func (txtLabelDto *TextFieldLabelDto) Empty() {
 
 	if txtLabelDto.lock == nil {
@@ -337,32 +327,29 @@ func (txtLabelDto *TextFieldLabelDto) Empty() {
 // all respects, this flag is set to 'true'. Otherwise, this method
 // returns 'false'.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  incomingTxtLabelDto        TextFieldLabelDto
-//     - An incoming instance of TextFieldLabelDto. This method
-//       will compare all member variable data values in this
-//       instance against those contained in the current instance
-//       of TextFieldLabelDto. If the data values in both
-//       instances are found to be equal in all respects, this
-//       method will return a boolean value of 'true'.
-//
+//	incomingTxtLabelDto        TextFieldLabelDto
+//	   - An incoming instance of TextFieldLabelDto. This method
+//	     will compare all member variable data values in this
+//	     instance against those contained in the current instance
+//	     of TextFieldLabelDto. If the data values in both
+//	     instances are found to be equal in all respects, this
+//	     method will return a boolean value of 'true'.
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  bool
-//     - If the member variable data values contained in input
-//       parameter 'incomingTxtLabelDto' are equal in all respects
-//       to those contained in the current instance of
-//       TextFieldLabelDto, this method will return a boolean
-//       value of 'true'. Otherwise a value of 'false' will be
-//       returned to the calling function.
-//
+//	bool
+//	   - If the member variable data values contained in input
+//	     parameter 'incomingTxtLabelDto' are equal in all respects
+//	     to those contained in the current instance of
+//	     TextFieldLabelDto, this method will return a boolean
+//	     value of 'true'. Otherwise, a value of 'false' will be
+//	     returned to the calling function.
 func (txtLabelDto *TextFieldLabelDto) Equal(
 	incomingTxtLabelDto TextFieldLabelDto) bool {
 
@@ -473,7 +460,6 @@ func (txtLabelDtoNanobot *textFieldLabelDtoNanobot) copy(
 
 // ptr - Returns a pointer to a new instance of
 // textFieldLabelDtoNanobot.
-//
 func (txtLabelDtoNanobot textFieldLabelDtoNanobot) ptr() *textFieldLabelDtoNanobot {
 
 	if txtLabelDtoNanobot.lock == nil {
@@ -501,7 +487,6 @@ type textFieldLabelDtoAtom struct {
 //
 // This method will therefore delete all data currently held
 // by this instance of TextFieldLabelDto.
-//
 func (txtLabelDtoAtom *textFieldLabelDtoAtom) empty(
 	txtLabelDto *TextFieldLabelDto) {
 
@@ -546,7 +531,6 @@ func (txtLabelDtoAtom *textFieldLabelDtoAtom) empty(
 // If the two instances of TextFieldLabelDto are found to be equal
 // in all respects, this method will return a boolean value of
 // 'true'.
-//
 func (txtLabelDtoAtom *textFieldLabelDtoAtom) equal(
 	txtLabelDto1 *TextFieldLabelDto,
 	txtLabelDto2 *TextFieldLabelDto) bool {
@@ -624,7 +608,6 @@ func (txtLabelDtoAtom *textFieldLabelDtoAtom) equal(
 
 // ptr - Returns a pointer to a new instance of
 // textFieldLabelDtoAtom.
-//
 func (txtLabelDtoAtom textFieldLabelDtoAtom) ptr() *textFieldLabelDtoAtom {
 
 	if txtLabelDtoAtom.lock == nil {

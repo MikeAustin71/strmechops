@@ -192,10 +192,21 @@ func (nStrSignedNumNanobot numStrSignedNumNanobot) formatSignedNumStr(
 		return numStr, err
 	}
 
+	var roundingSpec NumStrRoundingSpec
+
+	roundingSpec,
+		err = signedNumFormatSpec.GetRoundingSpec(
+		ePrefix.XCpy(
+			"roundingSpec<-signedNumFormatSpec"))
+
+	if err != nil {
+		return numStr, err
+	}
+
 	// Performing fractional digit rounding
 	err = new(numStrMathNanobot).roundNumStrKernel(
 		&newNumStrKernel,
-		signedNumFormatSpec.RoundingSpec,
+		roundingSpec,
 		ePrefix.XCpy(
 			"newNumStrKernel Rounding"))
 
@@ -203,8 +214,19 @@ func (nStrSignedNumNanobot numStrSignedNumNanobot) formatSignedNumStr(
 		return numStr, err
 	}
 
+	var decSeparator DecimalSeparatorSpec
+
+	decSeparator,
+		err = signedNumFormatSpec.GetDecSeparatorSpec(
+		ePrefix.XCpy(
+			"decSeparator<-signedNumFormatSpec"))
+
+	if err != nil {
+		return numStr, err
+	}
+
 	if newNumStrKernel.GetNumberOfFractionalDigits() > 0 &&
-		signedNumFormatSpec.DecSeparator.GetNumberOfSeparatorChars() == 0 {
+		decSeparator.GetNumberOfSeparatorChars() == 0 {
 
 		err = fmt.Errorf("%v\n"+
 			"Error: This is a floating point number and the number\n"+

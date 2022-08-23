@@ -23,22 +23,21 @@ import (
 //
 // Text Spacer Field Example-1:
 //
-//  LeftMarginStr = ""
-//  FieldLength = 3
-//  RightMarginStr = ""
-//  LineTerminator = ""
-//  Final Text Spacer string = "   " // 3-white spaces
+//	LeftMarginStr = ""
+//	FieldLength = 3
+//	RightMarginStr = ""
+//	LineTerminator = ""
+//	Final Text Spacer string = "   " // 3-white spaces
 //
 // Text Spacer Field Example-2:
 //
-//  LeftMarginStr = ""
-//  FieldLength = 3
-//  RightMarginStr = ""
-//  LineTerminator = "\n"
-//  Final Text Spacer string = "   \n" // 3-white spaces and
-//                                     // 1-new line character
-//                                     // ('\n')
-//
+//	LeftMarginStr = ""
+//	FieldLength = 3
+//	RightMarginStr = ""
+//	LineTerminator = "\n"
+//	Final Text Spacer string = "   \n" // 3-white spaces and
+//	                                   // 1-new line character
+//	                                   // ('\n')
 type TextFieldSpacerDto struct {
 	FormatType TextFieldType
 	// Required. This enumeration value specifies the type of Text
@@ -129,7 +128,7 @@ type TextFieldSpacerDto struct {
 //
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // All the data fields in current TextFieldSpacerDto instance
 // ('txtSpacerDto') will be deleted and overwritten.
@@ -137,30 +136,27 @@ type TextFieldSpacerDto struct {
 // NO DATA VALIDATION IS performed on input parameter,
 // 'incomingTxtSpacerDto'.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  incomingTxtSpacerDto        TextFieldSpacerDto
-//     - An instance of TextFieldSpacerDto. This method will NOT
-//       change the data values of member variables contained in
-//       this instance.
+//	incomingTxtSpacerDto        TextFieldSpacerDto
+//	   - An instance of TextFieldSpacerDto. This method will NOT
+//	     change the data values of member variables contained in
+//	     this instance.
 //
-//       All data values in this TextFieldSpacerDto instance
-//       ('incomingTxtSpacerDto') will be copied to the current
-//       TextFieldSpacerDto instance ('txtSpacerDto').
+//	     All data values in this TextFieldSpacerDto instance
+//	     ('incomingTxtSpacerDto') will be copied to the current
+//	     TextFieldSpacerDto instance ('txtSpacerDto').
 //
-//       No data validation is performed on input parameter,
-//       'incomingTxtSpacerDto'.
-//
+//	     No data validation is performed on input parameter,
+//	     'incomingTxtSpacerDto'.
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  NONE
-//
+//	NONE
 func (txtSpacerDto *TextFieldSpacerDto) CopyIn(
 	incomingTxtSpacerDto TextFieldSpacerDto) {
 
@@ -186,22 +182,19 @@ func (txtSpacerDto *TextFieldSpacerDto) CopyIn(
 // NO DATA VALIDATION is performed on the current instance of
 // TextFieldSpacerDto.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  NONE
-//
+//	NONE
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  deepCopyTxtSpacerDto        TextFieldSpacerDto
-//     - This parameter will return a deep copy of the current
-//       TextFieldSpacerDto instance.
-//
+//	deepCopyTxtSpacerDto        TextFieldSpacerDto
+//	   - This parameter will return a deep copy of the current
+//	     TextFieldSpacerDto instance.
 func (txtSpacerDto *TextFieldSpacerDto) CopyOut() (
 	deepCopyTxtSpacerDto TextFieldSpacerDto) {
 
@@ -227,29 +220,25 @@ func (txtSpacerDto *TextFieldSpacerDto) CopyOut() (
 // TextFieldSpacerDto in an invalid state and unavailable for
 // immediate reuse.
 //
-//
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // This method will delete all member variable data values in this
 // current instance of TextFieldSpacerDto. All member variable data
 // values will be reset to their zero or uninitialized states.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  NONE
-//
+//	NONE
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  NONE
-//
+//	NONE
 func (txtSpacerDto *TextFieldSpacerDto) Empty() {
 
 	if txtSpacerDto.lock == nil {
@@ -289,32 +278,29 @@ func (txtSpacerDto *TextFieldSpacerDto) Empty() {
 // all respects, this flag is set to 'true'. Otherwise, this method
 // returns 'false'.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  incomingTxtSpacerDto       TextFieldSpacerDto
-//     - An incoming instance of TextFieldSpacerDto. This method
-//       will compare all member variable data values in this
-//       instance against those contained in the current instance
-//       of TextFieldSpacerDto. If the data values in both
-//       instances are found to be equal in all respects, this
-//       method will return a boolean value of 'true'.
-//
+//	incomingTxtSpacerDto       TextFieldSpacerDto
+//	   - An incoming instance of TextFieldSpacerDto. This method
+//	     will compare all member variable data values in this
+//	     instance against those contained in the current instance
+//	     of TextFieldSpacerDto. If the data values in both
+//	     instances are found to be equal in all respects, this
+//	     method will return a boolean value of 'true'.
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  bool
-//     - If the member variable data values contained in input
-//       parameter 'incomingTxtSpacerDto' are equal in all respects
-//       to those contained in the current instance of
-//       TextFieldSpacerDto, this method will return a boolean
-//       value of 'true'. Otherwise a value of 'false' will be
-//       returned to the calling function.
-//
+//	bool
+//	   - If the member variable data values contained in input
+//	     parameter 'incomingTxtSpacerDto' are equal in all respects
+//	     to those contained in the current instance of
+//	     TextFieldSpacerDto, this method will return a boolean
+//	     value of 'true'. Otherwise, a value of 'false' will be
+//	     returned to the calling function.
 func (txtSpacerDto *TextFieldSpacerDto) Equal(
 	incomingTxtSpacerDto TextFieldSpacerDto) bool {
 
@@ -454,7 +440,6 @@ func (txtSpacerDtoNanobot *textFieldSpacerDtoNanobot) copy(
 
 // ptr - Returns a pointer to a new instance of
 // textFieldSpacerDtoNanobot.
-//
 func (txtSpacerDtoNanobot textFieldSpacerDtoNanobot) ptr() *textFieldSpacerDtoNanobot {
 
 	if txtSpacerDtoNanobot.lock == nil {

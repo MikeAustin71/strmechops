@@ -215,7 +215,7 @@ func (paramsLineCol *TextFmtParamsLineColumnsDto) Empty() {
 //	     parameter 'incomingFieldParams' are equal in all respects
 //	     to those contained in the current instance of
 //	     TextFieldFmtParamsDto, this method will return a boolean
-//	     value of 'true'. Otherwise a value of 'false' will be
+//	     value of 'true'. Otherwise, a value of 'false' will be
 //	     returned to the calling function.
 func (paramsLineCol *TextFmtParamsLineColumnsDto) Equal(
 	incomingFmtLineCols TextFmtParamsLineColumnsDto) bool {

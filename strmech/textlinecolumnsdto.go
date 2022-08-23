@@ -27,7 +27,7 @@ type TextLineColumnsDto struct {
 //
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // All the data fields in current TextLineColumnsDto instance
 // ('fmtLineCols') will be deleted and overwritten.
@@ -35,30 +35,27 @@ type TextLineColumnsDto struct {
 // NO DATA VALIDATION IS performed on input parameter,
 // 'incomingTxtLineCols'.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  incomingTxtLineCols        TextLineColumnsDto
-//     - An instance of TextLineColumnsDto. This method will NOT
-//       change the data values of member variables contained in
-//       this instance.
+//	incomingTxtLineCols        TextLineColumnsDto
+//	   - An instance of TextLineColumnsDto. This method will NOT
+//	     change the data values of member variables contained in
+//	     this instance.
 //
-//       All data values in this TextLineColumnsDto instance
-//       ('incomingTxtLineCols') will be copied to the current
-//       TextLineColumnsDto instance ('fmtLineCols').
+//	     All data values in this TextLineColumnsDto instance
+//	     ('incomingTxtLineCols') will be copied to the current
+//	     TextLineColumnsDto instance ('fmtLineCols').
 //
-//       No data validation is performed on input parameter,
-//       'incomingTxtLineCols'.
-//
+//	     No data validation is performed on input parameter,
+//	     'incomingTxtLineCols'.
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  NONE
-//
+//	NONE
 func (fmtLineCols *TextLineColumnsDto) CopyIn(
 	incomingTxtLineCols TextLineColumnsDto) {
 
@@ -85,22 +82,19 @@ func (fmtLineCols *TextLineColumnsDto) CopyIn(
 // NO DATA VALIDATION is performed on the current instance of
 // TextLineColumnsDto.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  NONE
-//
+//	NONE
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  deepCopyTxtLineColsDto     TextLineColumnsDto
-//     - This parameter will return a deep copy of the current
-//       TextLineColumnsDto instance.
-//
+//	deepCopyTxtLineColsDto     TextLineColumnsDto
+//	   - This parameter will return a deep copy of the current
+//	     TextLineColumnsDto instance.
 func (fmtLineCols *TextLineColumnsDto) CopyOut() (
 	deepCopyTxtLineColsDto TextLineColumnsDto) {
 
@@ -127,30 +121,26 @@ func (fmtLineCols *TextLineColumnsDto) CopyOut() (
 // instance of TextLineColumnsDto in an invalid state and
 // unavailable for immediate reuse.
 //
-//
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // This method will delete all member variable data values in this
 // current instance of TextLineColumnsDto. All member
 // variable data values will be reset to their zero or
 // uninitialized states.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  NONE
-//
+//	NONE
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  NONE
-//
+//	NONE
 func (fmtLineCols *TextLineColumnsDto) Empty() {
 
 	if fmtLineCols.lock == nil {
@@ -178,32 +168,29 @@ func (fmtLineCols *TextLineColumnsDto) Empty() {
 // all respects, this flag is set to 'true'. Otherwise, this method
 // returns 'false'.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  incomingTxtLineCols        TextLineColumnsDto
-//     - An incoming instance of TextLineColumnsDto. This method
-//       will compare all member variable data values in this
-//       instance against those contained in the current instance
-//       of TextLineColumnsDto. If the data values in both
-//       instances are found to be equal in all respects, this
-//       method will return a boolean value of 'true'.
-//
+//	incomingTxtLineCols        TextLineColumnsDto
+//	   - An incoming instance of TextLineColumnsDto. This method
+//	     will compare all member variable data values in this
+//	     instance against those contained in the current instance
+//	     of TextLineColumnsDto. If the data values in both
+//	     instances are found to be equal in all respects, this
+//	     method will return a boolean value of 'true'.
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  bool
-//     - If the member variable data values contained in input
-//       parameter 'incomingTxtLineCols' are equal in all respects
-//       to those contained in the current instance of
-//       TextLineColumnsDto, this method will return a boolean
-//       value of 'true'. Otherwise a value of 'false' will be
-//       returned to the calling function.
-//
+//	bool
+//	   - If the member variable data values contained in input
+//	     parameter 'incomingTxtLineCols' are equal in all respects
+//	     to those contained in the current instance of
+//	     TextLineColumnsDto, this method will return a boolean
+//	     value of 'true'. Otherwise, a value of 'false' will be
+//	     returned to the calling function.
 func (fmtLineCols *TextLineColumnsDto) Equal(
 	incomingTxtLineCols TextLineColumnsDto) bool {
 
@@ -229,26 +216,23 @@ func (fmtLineCols *TextLineColumnsDto) Equal(
 // number of Text Fields configured for the current instance of
 // TextLineColumnsDto.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  NONE
-//
+//	NONE
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  int
-//     - This method returns an integer value specifying the number
-//       of Field Format Parameters array maintained by this
-//       instance of TextLineColumnsDto:
+//	int
+//	   - This method returns an integer value specifying the number
+//	     of Field Format Parameters array maintained by this
+//	     instance of TextLineColumnsDto:
 //
-//       TextFmtParamsLineColumnsDto.FmtParameters.
-//           FieldFormatParams
-//
+//	     TextFmtParamsLineColumnsDto.FmtParameters.
+//	         FieldFormatParams
 func (fmtLineCols *TextLineColumnsDto) GetNumberOfFieldFormatParams() int {
 
 	if fmtLineCols.lock == nil {
@@ -269,24 +253,21 @@ func (fmtLineCols *TextLineColumnsDto) GetNumberOfFieldFormatParams() int {
 // Effectively, this is the number of Text Fields currently
 // configured, in this instance of TextLineColumnsDto.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  NONE
-//
+//	NONE
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  int
-//     - This returned integer value specifies the number of Text
-//       Fields currently configured in this instance of
-//       TextLineColumnsDto:
-//          TextLineColumnsDto.TextFieldsContent
-//
+//	int
+//	   - This returned integer value specifies the number of Text
+//	     Fields currently configured in this instance of
+//	     TextLineColumnsDto:
+//	        TextLineColumnsDto.TextFieldsContent
 func (fmtLineCols *TextLineColumnsDto) GetNumberOfTextFields() int {
 
 	if fmtLineCols.lock == nil {
@@ -305,24 +286,21 @@ func (fmtLineCols *TextLineColumnsDto) GetNumberOfTextFields() int {
 // TextLineColumnsDto, this value should be set to
 // TxtFieldType.Line1Column().
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  NONE
-//
+//	NONE
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  TextFieldType
-//     - This method returns an enumeration value specifying the
-//       Text Field Type associated with this instance of
-//       TextLineColumnsDto:
-//          TextLineColumnsDto.FormatType
-//
+//	TextFieldType
+//	   - This method returns an enumeration value specifying the
+//	     Text Field Type associated with this instance of
+//	     TextLineColumnsDto:
+//	        TextLineColumnsDto.FormatType
 func (fmtLineCols *TextLineColumnsDto) GetTextFieldType() TextFieldType {
 
 	if fmtLineCols.lock == nil {
@@ -349,24 +327,21 @@ func (fmtLineCols *TextLineColumnsDto) GetTextFieldType() TextFieldType {
 // the number Field Format Paramter objects configured for this
 // instance of TextLineColumnsDto.
 //
-//
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  --- NONE ---
-//
+//	--- NONE ---
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  isValid             bool
-//     - If all data elements encapsulated by the current instance
-//       of TextLineSpecStandardLine are valid, this returned
-//       boolean value is set to 'true'. If any data values are
-//       invalid, this return parameter is set to 'false'.
-//
+//	isValid             bool
+//	   - If all data elements encapsulated by the current instance
+//	     of TextLineSpecStandardLine are valid, this returned
+//	     boolean value is set to 'true'. If any data values are
+//	     invalid, this return parameter is set to 'false'.
 func (fmtLineCols *TextLineColumnsDto) IsValidInstance() (
 	isValid bool) {
 
@@ -407,71 +382,68 @@ func (fmtLineCols *TextLineColumnsDto) IsValidInstance() (
 // the number Field Format Paramter objects configured for this
 // instance of TextLineColumnsDto.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       2. string - A string containing error prefix information.
+//	     2. string - A string containing error prefix information.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
-//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If any of the internal member data variables contained in
-//       the current instance of TextLineColumnsDto are found
-//       to be invalid, this method will return an error.
+//	error
+//	   - If any of the internal member data variables contained in
+//	     the current instance of TextLineColumnsDto are found
+//	     to be invalid, this method will return an error.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' (error prefix) will be inserted or
-//       prefixed at the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' (error prefix) will be inserted or
+//	     prefixed at the beginning of the error message.
 func (fmtLineCols *TextLineColumnsDto) IsValidInstanceError(
 	errorPrefix interface{}) error {
 
@@ -614,7 +586,6 @@ type textLineColumnsDtoMolecule struct {
 //
 // This method will therefore delete all data currently held
 // by this instance of TextLineColumnsDto.
-//
 func (lineColsDtoMolecule *textLineColumnsDtoMolecule) empty(
 	txtLineColsDto *TextLineColumnsDto) {
 
@@ -652,7 +623,6 @@ func (lineColsDtoMolecule *textLineColumnsDtoMolecule) empty(
 // If the two instances of TextLineColumnsDto are found to be equal
 // in all respects, this method will return a boolean value of
 // 'true'.
-//
 func (lineColsDtoMolecule *textLineColumnsDtoMolecule) equal(
 	txtLineColsDto1 *TextLineColumnsDto,
 	txtLineColsDto2 *TextLineColumnsDto) bool {

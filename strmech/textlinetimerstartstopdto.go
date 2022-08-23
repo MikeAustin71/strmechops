@@ -31,11 +31,10 @@ import (
 //
 // Sample Output
 //
-//    Start Time: 2021-08-13 03:19:32.462108100 -0500 CDT
-//      End Time: 2021-08-13 03:19:32.462163100 -0500 CDT
-//  Elapsed Time: 55 Microseconds 0 Nanoseconds
-//                Total Elapsed Nanoseconds: 55,000
-//
+//	  Start Time: 2021-08-13 03:19:32.462108100 -0500 CDT
+//	    End Time: 2021-08-13 03:19:32.462163100 -0500 CDT
+//	Elapsed Time: 55 Microseconds 0 Nanoseconds
+//	              Total Elapsed Nanoseconds: 55,000
 type TextLineTimerStartStopDto struct {
 	FormatType TextFieldType
 	// Required. This enumeration value specifies the type of Text
@@ -193,7 +192,7 @@ type TextLineTimerStartStopDto struct {
 //
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // All the data fields in current TextFormatterDto instance
 // ('txtFmtDto') will be deleted and overwritten.
@@ -201,31 +200,28 @@ type TextLineTimerStartStopDto struct {
 // NO DATA VALIDATION IS performed on input parameter,
 // 'incomingTxtFmtDto'.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  incomingTimerStartStopDto  TextLineTimerStartStopDto
-//     - An instance of TextLineTimerStartStopDto. This method will
-//       NOT change the data values of member variables contained
-//       in this instance.
+//	incomingTimerStartStopDto  TextLineTimerStartStopDto
+//	   - An instance of TextLineTimerStartStopDto. This method will
+//	     NOT change the data values of member variables contained
+//	     in this instance.
 //
-//       All data values in this TextLineTimerStartStopDto instance
-//       ('incomingTimerStartStopDto') will be copied to the
-//       current TextLineTimerStartStopDto instance
-//       ('lineTimerStartStopDto').
+//	     All data values in this TextLineTimerStartStopDto instance
+//	     ('incomingTimerStartStopDto') will be copied to the
+//	     current TextLineTimerStartStopDto instance
+//	     ('lineTimerStartStopDto').
 //
-//       No data validation is performed on input parameter,
-//       'incomingTimerStartStopDto'.
-//
+//	     No data validation is performed on input parameter,
+//	     'incomingTimerStartStopDto'.
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  NONE
-//
+//	NONE
 func (lineTimerStartStopDto *TextLineTimerStartStopDto) CopyIn(
 	incomingTimerStartStopDto TextLineTimerStartStopDto) {
 
@@ -252,22 +248,19 @@ func (lineTimerStartStopDto *TextLineTimerStartStopDto) CopyIn(
 // NO DATA VALIDATION is performed on the current instance of
 // TextLineTimerStartStopDto.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  NONE
-//
+//	NONE
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  deepCopyTimerStartStopDto     TextLineTimerStartStopDto
-//     - This parameter will return a deep copy of the current
-//       TextLineTimerStartStopDto instance.
-//
+//	deepCopyTimerStartStopDto     TextLineTimerStartStopDto
+//	   - This parameter will return a deep copy of the current
+//	     TextLineTimerStartStopDto instance.
 func (lineTimerStartStopDto *TextLineTimerStartStopDto) CopyOut() (
 	deepCopyTimerStartStopDto TextLineTimerStartStopDto) {
 
@@ -294,30 +287,26 @@ func (lineTimerStartStopDto *TextLineTimerStartStopDto) CopyOut() (
 // instance of TextLineTimerStartStopDto in an invalid state and
 // unavailable for immediate reuse.
 //
-//
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // This method will delete all member variable data values in this
 // current instance of TextLineTimerStartStopDto. All member
 // variable data values will be reset to their zero or
 // uninitialized states.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  NONE
-//
+//	NONE
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  NONE
-//
+//	NONE
 func (lineTimerStartStopDto *TextLineTimerStartStopDto) Empty() {
 
 	if lineTimerStartStopDto.lock == nil {
@@ -346,32 +335,29 @@ func (lineTimerStartStopDto *TextLineTimerStartStopDto) Empty() {
 // all respects, this flag is set to 'true'. Otherwise, this method
 // returns 'false'.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  incomingTimerStartStopDto     TextLineTimerStartStopDto
-//     - An incoming instance of TextLineTimerStartStopDto. This
-//       method will compare all member variable data values in
-//       this instance against those contained in the current
-//       instance of TextLineTimerStartStopDto. If the data values
-//       in both instances are found to be equal in all respects,
-//       this method will return a boolean value of 'true'.
-//
+//	incomingTimerStartStopDto     TextLineTimerStartStopDto
+//	   - An incoming instance of TextLineTimerStartStopDto. This
+//	     method will compare all member variable data values in
+//	     this instance against those contained in the current
+//	     instance of TextLineTimerStartStopDto. If the data values
+//	     in both instances are found to be equal in all respects,
+//	     this method will return a boolean value of 'true'.
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  bool
-//     - If the member variable data values contained in input
-//       parameter 'incomingTimerStartStopDto' are equal in all
-//       respects to those contained in the current instance of
-//       TextLineTimerStartStopDto, this method will return a
-//       boolean value of 'true'. Otherwise a value of 'false'
-//       will be returned to the calling function.
-//
+//	bool
+//	   - If the member variable data values contained in input
+//	     parameter 'incomingTimerStartStopDto' are equal in all
+//	     respects to those contained in the current instance of
+//	     TextLineTimerStartStopDto, this method will return a
+//	     boolean value of 'true'. Otherwise, a value of 'false'
+//	     will be returned to the calling function.
 func (lineTimerStartStopDto *TextLineTimerStartStopDto) Equal(
 	incomingTimerStartStopDto TextLineTimerStartStopDto) bool {
 
@@ -498,7 +484,6 @@ type textLineTimerStartStopDtoAtom struct {
 //
 // This method will therefore delete all data currently held
 // by this instance of TextLineTimerStartStopDto.
-//
 func (timerStartStopDtoAtom *textLineTimerStartStopDtoAtom) empty(
 	txtTimerStartStopDto *TextLineTimerStartStopDto) {
 
@@ -542,7 +527,6 @@ func (timerStartStopDtoAtom *textLineTimerStartStopDtoAtom) empty(
 // If the two instances of TextLineTimerStartStopDto are found to
 // be equal in all respects, this method will return a boolean
 // value of 'true'.
-//
 func (timerStartStopDtoAtom *textLineTimerStartStopDtoAtom) equal(
 	timerStartStopDto1 *TextLineTimerStartStopDto,
 	timerStartStopDto2 *TextLineTimerStartStopDto) bool {

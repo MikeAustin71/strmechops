@@ -122,7 +122,7 @@ type TextFieldDateTimeDto struct {
 //
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // All the data fields in current TextFieldDateTimeDto instance
 // ('txtDateTimeDto') will be deleted and overwritten.
@@ -130,30 +130,27 @@ type TextFieldDateTimeDto struct {
 // NO DATA VALIDATION IS performed on input parameter,
 // 'incomingDateTimeDto'.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  incomingDateTimeDto        TextFieldDateTimeDto
-//     - An instance of TextFieldDateTimeDto. This method will NOT
-//       change the data values of member variables contained in
-//       this instance.
+//	incomingDateTimeDto        TextFieldDateTimeDto
+//	   - An instance of TextFieldDateTimeDto. This method will NOT
+//	     change the data values of member variables contained in
+//	     this instance.
 //
-//       All data values in this TextFieldDateTimeDto instance
-//       ('incomingDateTimeDto') will be copied to the current
-//       TextFieldDateTimeDto instance ('txtDateTimeDto').
+//	     All data values in this TextFieldDateTimeDto instance
+//	     ('incomingDateTimeDto') will be copied to the current
+//	     TextFieldDateTimeDto instance ('txtDateTimeDto').
 //
-//       No data validation is performed on input parameter,
-//       'incomingDateTimeDto'.
-//
+//	     No data validation is performed on input parameter,
+//	     'incomingDateTimeDto'.
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  NONE
-//
+//	NONE
 func (txtDateTimeDto *TextFieldDateTimeDto) CopyIn(
 	incomingDateTimeDto TextFieldDateTimeDto) {
 
@@ -180,22 +177,19 @@ func (txtDateTimeDto *TextFieldDateTimeDto) CopyIn(
 // NO DATA VALIDATION is performed on the current instance of
 // TextFieldDateTimeDto.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  NONE
-//
+//	NONE
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  deepCopyDateTimeDto        TextFieldDateTimeDto
-//     - This parameter will return a deep copy of the current
-//       TextFieldDateTimeDto instance.
-//
+//	deepCopyDateTimeDto        TextFieldDateTimeDto
+//	   - This parameter will return a deep copy of the current
+//	     TextFieldDateTimeDto instance.
 func (txtDateTimeDto *TextFieldDateTimeDto) CopyOut() (
 	deepCopyDateTimeDto TextFieldDateTimeDto) {
 
@@ -222,29 +216,25 @@ func (txtDateTimeDto *TextFieldDateTimeDto) CopyOut() (
 // TextFieldDateTimeDto in an invalid state and unavailable for
 // immediate reuse.
 //
-//
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // This method will delete all member variable data values in this
 // current instance of TextFieldDateTimeDto. All member variable
 // data values will be reset to their zero or uninitialized states.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  NONE
-//
+//	NONE
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  NONE
-//
+//	NONE
 func (txtDateTimeDto *TextFieldDateTimeDto) Empty() {
 
 	if txtDateTimeDto.lock == nil {
@@ -289,32 +279,29 @@ func (txtDateTimeDto *TextFieldDateTimeDto) Empty() {
 // all respects, this flag is set to 'true'. Otherwise, this method
 // returns 'false'.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  incomingDateTimeDto        TextFieldDateTimeDto
-//     - An incoming instance of TextFieldDateTimeDto. This method
-//       will compare all member variable data values in this
-//       instance against those contained in the current instance
-//       of TextFieldDateTimeDto. If the data values in both
-//       instances are found to be equal in all respects, this
-//       method will return a boolean value of 'true'.
-//
+//	incomingDateTimeDto        TextFieldDateTimeDto
+//	   - An incoming instance of TextFieldDateTimeDto. This method
+//	     will compare all member variable data values in this
+//	     instance against those contained in the current instance
+//	     of TextFieldDateTimeDto. If the data values in both
+//	     instances are found to be equal in all respects, this
+//	     method will return a boolean value of 'true'.
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  bool
-//     - If the member variable data values contained in input
-//       parameter 'incomingDateTimeDto' are equal in all respects
-//       to those contained in the current instance of
-//       TextFieldDateTimeDto, this method will return a boolean
-//       value of 'true'. Otherwise a value of 'false' will be
-//       returned to the calling function.
-//
+//	bool
+//	   - If the member variable data values contained in input
+//	     parameter 'incomingDateTimeDto' are equal in all respects
+//	     to those contained in the current instance of
+//	     TextFieldDateTimeDto, this method will return a boolean
+//	     value of 'true'. Otherwise, a value of 'false' will be
+//	     returned to the calling function.
 func (txtDateTimeDto *TextFieldDateTimeDto) Equal(
 	incomingDateTimeDto TextFieldDateTimeDto) bool {
 
@@ -481,7 +468,6 @@ func (txtDateTimeDtoNanobot textFieldDateTimeDtoNanobot) copy(
 
 // ptr - Returns a pointer to a new instance of
 // textFieldDateTimeDtoNanobot.
-//
 func (txtDateTimeDtoNanobot textFieldDateTimeDtoNanobot) ptr() *textFieldDateTimeDtoNanobot {
 
 	if txtDateTimeDtoNanobot.lock == nil {

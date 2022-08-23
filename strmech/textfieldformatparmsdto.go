@@ -23,7 +23,7 @@ type TextFieldFmtParamsDto struct {
 //
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // All the data fields in current TextFieldFmtParamsDto instance
 // ('txtFieldFmtParams') will be deleted and overwritten.
@@ -31,30 +31,27 @@ type TextFieldFmtParamsDto struct {
 // NO DATA VALIDATION IS performed on input parameter,
 // 'incomingFieldParams'.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  incomingFieldParams        TextFieldFmtParamsDto
-//     - An instance of TextFieldFmtParamsDto. This method will NOT
-//       change the data values of member variables contained in
-//       this instance.
+//	incomingFieldParams        TextFieldFmtParamsDto
+//	   - An instance of TextFieldFmtParamsDto. This method will NOT
+//	     change the data values of member variables contained in
+//	     this instance.
 //
-//       All data values in this TextFieldFmtParamsDto instance
-//       ('incomingFieldParams') will be copied to the current
-//       TextFieldFmtParamsDto instance ('txtFieldFmtParams').
+//	     All data values in this TextFieldFmtParamsDto instance
+//	     ('incomingFieldParams') will be copied to the current
+//	     TextFieldFmtParamsDto instance ('txtFieldFmtParams').
 //
-//       No data validation is performed on input parameter,
-//       'incomingFieldParams'.
-//
+//	     No data validation is performed on input parameter,
+//	     'incomingFieldParams'.
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  NONE
-//
+//	NONE
 func (txtFieldFmtParams *TextFieldFmtParamsDto) CopyIn(
 	incomingFieldParams TextFieldFmtParamsDto) {
 
@@ -90,22 +87,19 @@ func (txtFieldFmtParams *TextFieldFmtParamsDto) CopyIn(
 // NO DATA VALIDATION is performed on the current instance of
 // TextFieldFmtParamsDto.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  NONE
-//
+//	NONE
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  deepCopyTxtFieldParams     TextFieldFmtParamsDto
-//     - This parameter will return a deep copy of the current
-//       TextFieldFmtParamsDto instance.
-//
+//	deepCopyTxtFieldParams     TextFieldFmtParamsDto
+//	   - This parameter will return a deep copy of the current
+//	     TextFieldFmtParamsDto instance.
 func (txtFieldFmtParams *TextFieldFmtParamsDto) CopyOut() (
 	deepCopyTxtFieldParams TextFieldFmtParamsDto) {
 
@@ -132,29 +126,25 @@ func (txtFieldFmtParams *TextFieldFmtParamsDto) CopyOut() (
 // TextFieldFmtParamsDto in an invalid state and unavailable for
 // immediate reuse.
 //
-//
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // This method will delete all member variable data values in this
 // current instance of TextFieldFmtParamsDto. All member variable
 // data values will be reset to their zero or uninitialized states.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  NONE
-//
+//	NONE
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  NONE
-//
+//	NONE
 func (txtFieldFmtParams *TextFieldFmtParamsDto) Empty() {
 
 	if txtFieldFmtParams.lock == nil {
@@ -184,32 +174,29 @@ func (txtFieldFmtParams *TextFieldFmtParamsDto) Empty() {
 // all respects, this flag is set to 'true'. Otherwise, this method
 // returns 'false'.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  incomingFieldParams        TextFieldFmtParamsDto
-//     - An incoming instance of TextFieldFmtParamsDto. This method
-//       will compare all member variable data values in this
-//       instance against those contained in the current instance
-//       of TextFieldFmtParamsDto. If the data values in both
-//       instances are found to be equal in all respects, this
-//       method will return a boolean value of 'true'.
-//
+//	incomingFieldParams        TextFieldFmtParamsDto
+//	   - An incoming instance of TextFieldFmtParamsDto. This method
+//	     will compare all member variable data values in this
+//	     instance against those contained in the current instance
+//	     of TextFieldFmtParamsDto. If the data values in both
+//	     instances are found to be equal in all respects, this
+//	     method will return a boolean value of 'true'.
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  bool
-//     - If the member variable data values contained in input
-//       parameter 'incomingFieldParams' are equal in all respects
-//       to those contained in the current instance of
-//       TextFieldFmtParamsDto, this method will return a boolean
-//       value of 'true'. Otherwise a value of 'false' will be
-//       returned to the calling function.
-//
+//	bool
+//	   - If the member variable data values contained in input
+//	     parameter 'incomingFieldParams' are equal in all respects
+//	     to those contained in the current instance of
+//	     TextFieldFmtParamsDto, this method will return a boolean
+//	     value of 'true'. Otherwise, a value of 'false' will be
+//	     returned to the calling function.
 func (txtFieldFmtParams *TextFieldFmtParamsDto) Equal(
 	incomingFieldParams TextFieldFmtParamsDto) bool {
 
@@ -307,7 +294,6 @@ func (txtFmtParamsNanobot *textFieldFmtParamsDtoNanobot) copy(
 //
 // Are previous data values contained in this instance of
 // TextFieldFmtParamsDto will be deleted.
-//
 func (txtFmtParamsNanobot *textFieldFmtParamsDtoNanobot) empty(
 	targetTxtFmtParamsDto *TextFieldFmtParamsDto) {
 
@@ -341,7 +327,6 @@ func (txtFmtParamsNanobot *textFieldFmtParamsDtoNanobot) empty(
 //
 // If the two instances of TextFieldFmtParamsDto are equal,
 // this method returns 'true'.
-//
 func (txtFmtParamsNanobot *textFieldFmtParamsDtoNanobot) equal(
 	txtFmtParamsDto1 *TextFieldFmtParamsDto,
 	txtFmtParamsDto2 *TextFieldFmtParamsDto) bool {
@@ -388,7 +373,6 @@ func (txtFmtParamsNanobot *textFieldFmtParamsDtoNanobot) equal(
 
 // ptr - Returns a pointer to a new instance of
 // textFieldFmtParamsDtoNanobot.
-//
 func (txtFmtParamsNanobot textFieldFmtParamsDtoNanobot) ptr() *textFieldFmtParamsDtoNanobot {
 
 	if txtFmtParamsNanobot.lock == nil {

@@ -6169,7 +6169,7 @@ func (txtFmtCollection *TextFormatterCollection) EmptyLineParamCollection() {
 //	     parameter 'incomingTxtFmtCol' are equal in all respects to
 //	     those contained in the current instance of
 //	     TextFormatterCollection, this method will return a
-//	     boolean value of 'true'. Otherwise a value of 'false' will
+//	     boolean value of 'true'. Otherwise, a value of 'false' will
 //	     be returned to the calling function.
 func (txtFmtCollection *TextFormatterCollection) Equal(
 	incomingTxtFmtCol *TextFormatterCollection) bool {

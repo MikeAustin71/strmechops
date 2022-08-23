@@ -90,7 +90,7 @@ type TextFormatterDto struct {
 //
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // All the data fields in current TextFormatterDto instance
 // ('txtFmtDto') will be deleted and overwritten.
@@ -98,30 +98,27 @@ type TextFormatterDto struct {
 // NO DATA VALIDATION IS performed on input parameter,
 // 'incomingTxtFmtDto'.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  incomingTxtFmtDto        TextFormatterDto
-//     - An instance of TextFormatterDto. This method will NOT
-//       change the data values of member variables contained in
-//       this instance.
+//	incomingTxtFmtDto        TextFormatterDto
+//	   - An instance of TextFormatterDto. This method will NOT
+//	     change the data values of member variables contained in
+//	     this instance.
 //
-//       All data values in this TextFormatterDto instance
-//       ('incomingTxtFmtDto') will be copied to the current
-//       TextFormatterDto instance ('txtFmtDto').
+//	     All data values in this TextFormatterDto instance
+//	     ('incomingTxtFmtDto') will be copied to the current
+//	     TextFormatterDto instance ('txtFmtDto').
 //
-//       No data validation is performed on input parameter,
-//       'incomingTxtFmtDto'.
-//
+//	     No data validation is performed on input parameter,
+//	     'incomingTxtFmtDto'.
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  NONE
-//
+//	NONE
 func (txtFmtDto *TextFormatterDto) CopyIn(
 	incomingTxtFmtDto TextFormatterDto) {
 
@@ -148,22 +145,19 @@ func (txtFmtDto *TextFormatterDto) CopyIn(
 // NO DATA VALIDATION is performed on the current instance of
 // TextFormatterDto.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  NONE
-//
+//	NONE
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  deepCopyTxtFmtDto     TextFormatterDto
-//     - This parameter will return a deep copy of the current
-//       TextFormatterDto instance.
-//
+//	deepCopyTxtFmtDto     TextFormatterDto
+//	   - This parameter will return a deep copy of the current
+//	     TextFormatterDto instance.
 func (txtFmtDto *TextFormatterDto) CopyOut() (
 	deepCopyTxtFmtDto TextFormatterDto) {
 
@@ -190,30 +184,26 @@ func (txtFmtDto *TextFormatterDto) CopyOut() (
 // instance of TextFormatterDto in an invalid state and
 // unavailable for immediate reuse.
 //
-//
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // This method will delete all member variable data values in this
 // current instance of TextFormatterDto. All member
 // variable data values will be reset to their zero or
 // uninitialized states.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  NONE
-//
+//	NONE
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  NONE
-//
+//	NONE
 func (txtFmtDto *TextFormatterDto) Empty() {
 
 	if txtFmtDto.lock == nil {
@@ -242,32 +232,29 @@ func (txtFmtDto *TextFormatterDto) Empty() {
 // all respects, this flag is set to 'true'. Otherwise, this method
 // returns 'false'.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  incomingTxtFmtDto          TextFormatterDto
-//     - An incoming instance of TextFormatterDto. This method
-//       will compare all member variable data values in this
-//       instance against those contained in the current instance
-//       of TextFormatterDto. If the data values in both
-//       instances are found to be equal in all respects, this
-//       method will return a boolean value of 'true'.
-//
+//	incomingTxtFmtDto          TextFormatterDto
+//	   - An incoming instance of TextFormatterDto. This method
+//	     will compare all member variable data values in this
+//	     instance against those contained in the current instance
+//	     of TextFormatterDto. If the data values in both
+//	     instances are found to be equal in all respects, this
+//	     method will return a boolean value of 'true'.
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  bool
-//     - If the member variable data values contained in input
-//       parameter 'incomingTxtFmtDto' are equal in all respects
-//       to those contained in the current instance of
-//       TextFormatterDto, this method will return a boolean
-//       value of 'true'. Otherwise a value of 'false' will be
-//       returned to the calling function.
-//
+//	bool
+//	   - If the member variable data values contained in input
+//	     parameter 'incomingTxtFmtDto' are equal in all respects
+//	     to those contained in the current instance of
+//	     TextFormatterDto, this method will return a boolean
+//	     value of 'true'. Otherwise, a value of 'false' will be
+//	     returned to the calling function.
 func (txtFmtDto *TextFormatterDto) Equal(
 	incomingTxtFmtDto TextFormatterDto) bool {
 
@@ -380,7 +367,6 @@ func (textFMtDtoNanobot *textFormatterDtoNanobot) copyData(
 
 // ptr - Returns a pointer to a new instance of
 // textFormatterDtoNanobot.
-//
 func (textFMtDtoNanobot textFormatterDtoNanobot) ptr() *textFormatterDtoNanobot {
 
 	if textFMtDtoNanobot.lock == nil {
@@ -408,7 +394,6 @@ type textFormatterDtoMolecule struct {
 //
 // This method will therefore delete all data currently held
 // by this instance of TextFormatterDto.
-//
 func (textFmtDtoMolecule *textFormatterDtoMolecule) empty(
 	txtFormatterDto *TextFormatterDto) {
 
@@ -454,7 +439,6 @@ func (textFmtDtoMolecule *textFormatterDtoMolecule) empty(
 // If the two instances of TextFormatterDto are found to be equal
 // in all respects, this method will return a boolean value of
 // 'true'.
-//
 func (textFmtDtoMolecule *textFormatterDtoMolecule) equal(
 	txtFormatterDto1 *TextFormatterDto,
 	txtFormatterDto2 *TextFormatterDto) bool {
@@ -537,7 +521,6 @@ func (textFmtDtoMolecule *textFormatterDtoMolecule) equal(
 
 // ptr - Returns a pointer to a new instance of
 // textFormatterDtoMolecule.
-//
 func (textFmtDtoMolecule textFormatterDtoMolecule) ptr() *textFormatterDtoMolecule {
 
 	if textFmtDtoMolecule.lock == nil {

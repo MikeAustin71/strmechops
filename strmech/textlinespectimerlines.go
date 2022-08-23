@@ -29,159 +29,154 @@ import (
 //
 // Sample Output
 //
-//    Start Time: 2021-08-13 03:19:32.462108100 -0500 CDT
-//      End Time: 2021-08-13 03:19:32.462163100 -0500 CDT
-//  Elapsed Time: 55 Microseconds 0 Nanoseconds
-//                Total Elapsed Nanoseconds: 55,000
+//	  Start Time: 2021-08-13 03:19:32.462108100 -0500 CDT
+//	    End Time: 2021-08-13 03:19:32.462163100 -0500 CDT
+//	Elapsed Time: 55 Microseconds 0 Nanoseconds
+//	              Total Elapsed Nanoseconds: 55,000
 //
 // The TextLineSpecTimerLines methods provide a lot of flexibility
 // for modifying this output format.
-//
 //
 // ----------------------------------------------------------------
 //
 // Member Variables
 //
-//  labelLeftMarginChars       []rune
-//     - The character or characters which will comprise the left
-//       margin of the text label.
+//	labelLeftMarginChars       []rune
+//	   - The character or characters which will comprise the left
+//	     margin of the text label.
 //
 //
-//  startTimeLabel             []rune
-//     - A string containing the text characters constituting the
-//       starting time text label.
+//	startTimeLabel             []rune
+//	   - A string containing the text characters constituting the
+//	     starting time text label.
 //
 //
-//  startTime                  time.Time
-//     - A time value which will be used in conjunction with
-//       'endTime' parameter to compute the time duration or
-//       elapsed for the timer event.
+//	startTime                  time.Time
+//	   - A time value which will be used in conjunction with
+//	     'endTime' parameter to compute the time duration or
+//	     elapsed for the timer event.
 //
 //
-//  endTimeLabel               []rune
-//     - A string containing the text characters constituting the
-//       ending time text label.
+//	endTimeLabel               []rune
+//	   - A string containing the text characters constituting the
+//	     ending time text label.
 //
 //
-//  endTime                    time.Time
-//     - A time value which will be used in conjunction with
-//       'startTime' parameter to compute the time duration or
-//       elapsed for the timer event.
+//	endTime                    time.Time
+//	   - A time value which will be used in conjunction with
+//	     'startTime' parameter to compute the time duration or
+//	     elapsed for the timer event.
 //
 //
-//  timeFormat                 string
-//     - This string holds the time format parameters used to
-//       format starting time and ending time values for text
-//       display and output.
+//	timeFormat                 string
+//	   - This string holds the time format parameters used to
+//	     format starting time and ending time values for text
+//	     display and output.
 //
-//       If this parameter is submitted as an empty string,
-//       parameter 'timeFormat' will be assigned a default value
-//       of "2006-01-02 15:04:05.000000000 -0700 MST"
-//
-//
-//  timeDurationLabel          []rune
-//     - The text label used to describe the time duration or
-//       elapsed time computed from the 'startTime' and 'endTime'
-//       parameters.
+//	     If this parameter is submitted as an empty string,
+//	     parameter 'timeFormat' will be assigned a default value
+//	     of "2006-01-02 15:04:05.000000000 -0700 MST"
 //
 //
-//  textLabelFieldLen          int
-//     - A user entered value which defines the length of the text
-//       field used by all three text labels, 'startTimeLabel',
-//       'endTimeLabel' and 'timeDurationLabel'.
-//
-//       The length of the text fields which will be used to
-//       position and display the three text labels provided by
-//       input parameters 'startTimeLabel', 'endTimeLabel' and
-//       'timeDurationLabel'.
-//
-//       If 'textLabelFieldLen' is less than the length of the
-//       longest text label it will be defaulted to the length
-//       of the longest text label ('startTimeLabel',
-//       'endTimeLabel' or 'timeDurationLabel').
+//	timeDurationLabel          []rune
+//	   - The text label used to describe the time duration or
+//	     elapsed time computed from the 'startTime' and 'endTime'
+//	     parameters.
 //
 //
-//  textLabelJustification         TextJustify
-//     - An enumeration which specifies the justification of the
-//       three text labels 'startTimeLabel', 'endTimeLabel' and
-//       'timeDurationLabel' within the field length specified by
-//       'textLabelFieldLen'.
+//	textLabelFieldLen          int
+//	   - A user entered value which defines the length of the text
+//	     field used by all three text labels, 'startTimeLabel',
+//	     'endTimeLabel' and 'timeDurationLabel'.
 //
-//       Label justification must be equal to one of these three
-//       valid values:
-//           TextJustify(0).Left()
-//           TextJustify(0).Right()
-//           TextJustify(0).Center()
+//	     The length of the text fields which will be used to
+//	     position and display the three text labels provided by
+//	     input parameters 'startTimeLabel', 'endTimeLabel' and
+//	     'timeDurationLabel'.
 //
-//       The abbreviated text justification enumeration syntax can
-//       also be used:
-//
-//           TxtJustify.Left()
-//           TxtJustify.Right()
-//           TxtJustify.Center()
+//	     If 'textLabelFieldLen' is less than the length of the
+//	     longest text label it will be defaulted to the length
+//	     of the longest text label ('startTimeLabel',
+//	     'endTimeLabel' or 'timeDurationLabel').
 //
 //
-//  labelRightMarginChars      []rune
-//     - This rune array contains the character or characters which
-//       will be used to separate the text labels ('startTimeLabel',
-//       'endTimeLabel' and 'timeDurationLabel') from the output or
-//       data values displayed on the same line.
-//       Example:
-//        Start Time[right margin chars]2010-01-02 15:04:05.000000000 -0700 MST
+//	textLabelJustification         TextJustify
+//	   - An enumeration which specifies the justification of the
+//	     three text labels 'startTimeLabel', 'endTimeLabel' and
+//	     'timeDurationLabel' within the field length specified by
+//	     'textLabelFieldLen'.
 //
-//       Often this parameter is set to a single white space
-//       character (" ") or a colon plus white space character,
-//       (": ").
+//	     Label justification must be equal to one of these three
+//	     valid values:
+//	         TextJustify(0).Left()
+//	         TextJustify(0).Right()
+//	         TextJustify(0).Center()
 //
-//       If this parameter is submitted as a zero length array, or
-//       if rune array contains invalid zero rune values,
-//       'labelRightMarginChars' will be assigned a default value
-//       of  ": ".
-//       Example Output:
-//        Start Time: 2010-01-02 15:04:05.000000000 -0700 MST
+//	     The abbreviated text justification enumeration syntax can
+//	     also be used:
 //
+//	         TxtJustify.Left()
+//	         TxtJustify.Right()
+//	         TxtJustify.Center()
+//
+//
+//	labelRightMarginChars      []rune
+//	   - This rune array contains the character or characters which
+//	     will be used to separate the text labels ('startTimeLabel',
+//	     'endTimeLabel' and 'timeDurationLabel') from the output or
+//	     data values displayed on the same line.
+//	     Example:
+//	      Start Time[right margin chars]2010-01-02 15:04:05.000000000 -0700 MST
+//
+//	     Often this parameter is set to a single white space
+//	     character (" ") or a colon plus white space character,
+//	     (": ").
+//
+//	     If this parameter is submitted as a zero length array, or
+//	     if rune array contains invalid zero rune values,
+//	     'labelRightMarginChars' will be assigned a default value
+//	     of  ": ".
+//	     Example Output:
+//	      Start Time: 2010-01-02 15:04:05.000000000 -0700 MST
 //
 // ------------------------------------------------------------------------
 //
-// Example Usage
+// # Example Usage
+//
+//	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+//	           "YourType.YourMethodName()",
+//	            "")
+//
+//	var startTime, endTime time.Time
+//	startTime = time.Now()
+//
+//	someReturnVal := someType.Method()
+//
+//	endTime = time.Now()
+//
+//	timerLines,
+//	err := TextLineSpecTimerLines{}.NewDefaultFullTimerEvent(
+//	startTime,
+//	endTime,
+//	ePrefix)
+//
+//	if err != nil {
+//	  return err
+//	}
 //
 //
-//   ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-//              "YourType.YourMethodName()",
-//               "")
-//
-//   var startTime, endTime time.Time
-//   startTime = time.Now()
-//
-//   someReturnVal := someType.Method()
-//
-//   endTime = time.Now()
-//
-//   timerLines,
-//   err := TextLineSpecTimerLines{}.NewDefaultFullTimerEvent(
-//   startTime,
-//   endTime,
-//   ePrefix)
-//
-//   if err != nil {
-//     return err
-//   }
-//
-//
-//   fmt.Println("Time Required to Run Your Method")
-//   fmt.Println()
-//   fmt.Println(timerLines.String())
-//
+//	fmt.Println("Time Required to Run Your Method")
+//	fmt.Println()
+//	fmt.Println(timerLines.String())
 //
 // ------------------------------------------------------------------------
 //
 // Sample Output
 //
-//    Start Time: 2021-08-13 03:19:32.462108100 -0500 CDT
-//      End Time: 2021-08-13 03:19:32.462163100 -0500 CDT
-//  Elapsed Time: 55 Microseconds 0 Nanoseconds
-//                Total Elapsed Nanoseconds: 55,000
-//
+//	  Start Time: 2021-08-13 03:19:32.462108100 -0500 CDT
+//	    End Time: 2021-08-13 03:19:32.462163100 -0500 CDT
+//	Elapsed Time: 55 Microseconds 0 Nanoseconds
+//	              Total Elapsed Nanoseconds: 55,000
 type TextLineSpecTimerLines struct {
 	labelLeftMarginChars   []rune
 	startTimeLabel         []rune
@@ -204,89 +199,86 @@ type TextLineSpecTimerLines struct {
 //
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // All the data fields in current TextLineSpecTimerLines instance
 // ('txtSpecTimerLines') will be modified and overwritten.
-//
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  incomingTimerLines         *TextLineSpecTimerLines
-//     - A pointer to an instance of TextLineSpecTimerLines. This
-//       method will NOT change the member variable data values
-//       contained in this instance.
+//	incomingTimerLines         *TextLineSpecTimerLines
+//	   - A pointer to an instance of TextLineSpecTimerLines. This
+//	     method will NOT change the member variable data values
+//	     contained in this instance.
 //
-//       All data values in this TextLineSpecTimerLines instance
-//       will be copied to current TextLineSpecTimerLines
-//       instance ('txtSpecTimerLines').
+//	     All data values in this TextLineSpecTimerLines instance
+//	     will be copied to current TextLineSpecTimerLines
+//	     instance ('txtSpecTimerLines').
 //
-//       If 'incomingTimerLines' contains invalid member data
-//       variables, this method will return an error.
-//
-//
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
-//
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
-//
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     If 'incomingTimerLines' contains invalid member data
+//	     variables, this method will return an error.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       2. string - A string containing error prefix information.
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     2. string - A string containing error prefix information.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     4. [][2]string A two-dimensional slice of strings containing
+//	                    error prefix and error context information.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	                        ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (txtSpecTimerLines *TextLineSpecTimerLines) CopyIn(
 	incomingTimerLines *TextLineSpecTimerLines,
 	errorPrefix interface{}) error {
@@ -325,77 +317,74 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) CopyIn(
 // If the current TextLineSpecTimerLines instance contains invalid
 // member variable data values, this method will return an error.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       2. string - A string containing error prefix information.
+//	     2. string - A string containing error prefix information.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//	     4. [][2]string A two-dimensional slice of strings containing
+//	                    error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	                        ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
-//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  TextLineSpecTimerLines
-//     - If this method completes successfully and no errors are
-//       encountered, this parameter will return a deep copy of the
-//       current TextLineSpecTimerLines instance.
+//	TextLineSpecTimerLines
+//	   - If this method completes successfully and no errors are
+//	     encountered, this parameter will return a deep copy of the
+//	     current TextLineSpecTimerLines instance.
 //
 //
-//  error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (txtSpecTimerLines *TextLineSpecTimerLines) CopyOut(
 	errorPrefix interface{}) (
 	TextLineSpecTimerLines,
@@ -434,78 +423,75 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) CopyOut(
 // This method fulfills requirements of ITextLineSpecification
 // interface.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       2. string - A string containing error prefix information.
+//	     2. string - A string containing error prefix information.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//	     4. [][2]string A two-dimensional slice of strings containing
+//	                    error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	                        ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
-//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  ITextLineSpecification
-//     - If this method completes successfully and no errors are
-//       encountered, this parameter will return a deep copy of the
-//       current TextLineSpecTimerLines instance cast as an
-//       ITextLineSpecification object.
+//	ITextLineSpecification
+//	   - If this method completes successfully and no errors are
+//	     encountered, this parameter will return a deep copy of the
+//	     current TextLineSpecTimerLines instance cast as an
+//	     ITextLineSpecification object.
 //
 //
-//  error
-//     - If the method completes successfully and no errors are
-//       encountered, this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If the method completes successfully and no errors are
+//	     encountered, this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (txtSpecTimerLines *TextLineSpecTimerLines) CopyOutITextLine(
 	errorPrefix interface{}) (
 	ITextLineSpecification,
@@ -555,78 +541,75 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) CopyOutITextLine(
 // If the current TextLineSpecTimerLines instance contains invalid
 // member variable data values, this method will return an error.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       2. string - A string containing error prefix information.
+//	     2. string - A string containing error prefix information.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//	     4. [][2]string A two-dimensional slice of strings containing
+//	                    error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	                        ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
-//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  *TextLineSpecTimerLines
-//     - If this method completes successfully and no errors are
-//       encountered, this parameter will return a pointer to a
-//       deep copy of the current TextLineSpecTimerLines
-//       instance.
+//	*TextLineSpecTimerLines
+//	   - If this method completes successfully and no errors are
+//	     encountered, this parameter will return a pointer to a
+//	     deep copy of the current TextLineSpecTimerLines
+//	     instance.
 //
 //
-//  error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (txtSpecTimerLines *TextLineSpecTimerLines) CopyOutPtr(
 	errorPrefix interface{}) (
 	*TextLineSpecTimerLines,
@@ -670,7 +653,6 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) CopyOutPtr(
 //
 // This method fulfills requirements of the ITextLineSpecification
 // interface.
-//
 func (txtSpecTimerLines *TextLineSpecTimerLines) Empty() {
 
 	if txtSpecTimerLines.lock == nil {
@@ -697,7 +679,6 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) Empty() {
 // returned. If the member variables of both instances are equal in
 // all respects, this flag is set to 'true'. Otherwise, this method
 // returns 'false'.
-//
 func (txtSpecTimerLines *TextLineSpecTimerLines) Equal(
 	incomingTxtSpecTimerLines *TextLineSpecTimerLines) bool {
 
@@ -727,7 +708,6 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) Equal(
 // method returns 'false'.
 //
 // This method is required by interface ITextLineSpecification.
-//
 func (txtSpecTimerLines *TextLineSpecTimerLines) EqualITextLine(
 	iTextLine ITextLineSpecification) bool {
 
@@ -758,22 +738,19 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) EqualITextLine(
 // 'endTimeLabel' is a text label inserted in the output
 // string to describe the ending time presentation.
 //
-//
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  NONE
-//
+//	NONE
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  string
-//     - This method returns the current value of the End Time
-//       Label as a string.
-//
+//	string
+//	   - This method returns the current value of the End Time
+//	     Label as a string.
 func (txtSpecTimerLines *TextLineSpecTimerLines) GetEndTimeLabel() string {
 
 	if txtSpecTimerLines.lock == nil {
@@ -809,78 +786,75 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) GetEndTimeLabel() string {
 // This method fulfills requirements of the ITextLineSpecification
 // interface.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       2. string - A string containing error prefix information.
+//	     2. string - A string containing error prefix information.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings
-//                      containing error prefix and error context
-//                      information.
+//	     4. [][2]string A two-dimensional slice of strings
+//	                    containing error prefix and error context
+//	                    information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	                        ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
-//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  formattedText              string
-//     - The formatted text line generated by the current instance
-//       of TextLineSpecTimerLines.
+//	formattedText              string
+//	   - The formatted text line generated by the current instance
+//	     of TextLineSpecTimerLines.
 //
 //
-//  err                        error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	err                        error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (txtSpecTimerLines *TextLineSpecTimerLines) GetFormattedText(
 	errorPrefix interface{}) (
 	formattedText string,
@@ -933,22 +907,19 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) GetFormattedText(
 // The ending time is the end of the timing event described by this
 // instance of TextLineSpecTimerLines.
 //
-//
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  NONE
-//
+//	NONE
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  time.Time
-//     - This method returns the current value of the "End Time"
-//       for this Time Duration Event.
-//
+//	time.Time
+//	   - This method returns the current value of the "End Time"
+//	     for this Time Duration Event.
 func (txtSpecTimerLines *TextLineSpecTimerLines) GetEndTime() time.Time {
 
 	if txtSpecTimerLines.lock == nil {
@@ -971,17 +942,17 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) GetEndTime() time.Time {
 //
 // The text justification enumeration specification must be set to
 // one of these three valid values:
-//           TextJustify(0).Left()
-//           TextJustify(0).Right()
-//           TextJustify(0).Center()
+//
+//	TextJustify(0).Left()
+//	TextJustify(0).Right()
+//	TextJustify(0).Center()
 //
 // You can also use the abbreviated text justification enumeration
 // syntax as follows:
 //
-//           TxtJustify.Left()
-//           TxtJustify.Right()
-//           TxtJustify.Center()
-//
+//	TxtJustify.Left()
+//	TxtJustify.Right()
+//	TxtJustify.Center()
 func (txtSpecTimerLines *TextLineSpecTimerLines) GetLabelJustification() TextJustify {
 
 	if txtSpecTimerLines.lock == nil {
@@ -1004,7 +975,6 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) GetLabelJustification() TextJus
 // 'labelRightMarginChars' is set to either a single white
 // space character or the default value which is a colon and a
 // white space character (": ").
-//
 func (txtSpecTimerLines *TextLineSpecTimerLines) GetLabelOutputSeparationChars() string {
 
 	if txtSpecTimerLines.lock == nil {
@@ -1027,24 +997,21 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) GetLabelOutputSeparationChars()
 // Duration Label, and returns the longest character length as an
 // integer value.
 //
-//
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  NONE
-//
+//	NONE
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  int
-//     - This method analyzes the string lengths of the three text
-//       labels, Start Time Label, End Time Label and Time Duration
-//       Label. It then returns the longest character length as an
-//       integer value.
-//
+//	int
+//	   - This method analyzes the string lengths of the three text
+//	     labels, Start Time Label, End Time Label and Time Duration
+//	     Label. It then returns the longest character length as an
+//	     integer value.
 func (txtSpecTimerLines *TextLineSpecTimerLines) GetLengthLongestTextLabel() int {
 
 	if txtSpecTimerLines.lock == nil {
@@ -1075,22 +1042,19 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) GetLengthLongestTextLabel() int
 // character lengths of the three text labels: 'startTimeLabel',
 // 'endTimeLabel' and 'timeDurationLabel'.
 //
-//
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  NONE
-//
+//	NONE
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  int
-//     - This method computes the total label length and returns
-//       this value as an integer.
-//
+//	int
+//	   - This method computes the total label length and returns
+//	     this value as an integer.
 func (txtSpecTimerLines *TextLineSpecTimerLines) GetLengthTotalLabel() int {
 
 	if txtSpecTimerLines.lock == nil {
@@ -1136,17 +1100,15 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) GetLengthTotalLabel() int {
 //
 // Input Parameters
 //
-//  NONE
-//
+//	NONE
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  int
-//     - Returns the maximum allowable text label length as an
-//       integer value.
-//
+//	int
+//	   - Returns the maximum allowable text label length as an
+//	     integer value.
 func (txtSpecTimerLines *TextLineSpecTimerLines) GetMaximumTextLabelLength() int {
 
 	if txtSpecTimerLines.lock == nil {
@@ -1176,31 +1138,29 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) GetMaximumTextLabelLength() int
 //
 // To obtain the total length of all text lines produced by the
 // current instance of TextLineSpecTimerLines, see method:
-//   TextLineSpecTimerLines.GetTotalLinesLength()
+//
+//	TextLineSpecTimerLines.GetTotalLinesLength()
 //
 // Remember that the returned line length always includes the
 // trailing new line characters.
-//
 //
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  --- NONE ---
-//
+//	--- NONE ---
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  maxSingleLineLen           int
-//     - This method will return an integer value specifying
-//       the length of the longest text line included in
-//       the formatted text produced by the current instance of
-//       TextLineSpecTimerLines.
+//	maxSingleLineLen           int
+//	   - This method will return an integer value specifying
+//	     the length of the longest text line included in
+//	     the formatted text produced by the current instance of
+//	     TextLineSpecTimerLines.
 //
-//       In the event of an error, a zero value will be returned.
-//
+//	     In the event of an error, a zero value will be returned.
 func (txtSpecTimerLines *TextLineSpecTimerLines) GetSingleLineLength() (
 	maxSingleLineLen int) {
 
@@ -1238,22 +1198,19 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) GetSingleLineLength() (
 // 'startTimeLabel' is a text label inserted in the output
 // string to describe the starting time presentation.
 //
-//
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  NONE
-//
+//	NONE
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  string
-//     - This method returns the current value of the Start Time
-//       Label as a string.
-//
+//	string
+//	   - This method returns the current value of the Start Time
+//	     Label as a string.
 func (txtSpecTimerLines *TextLineSpecTimerLines) GetStartTimeLabel() string {
 
 	if txtSpecTimerLines.lock == nil {
@@ -1277,22 +1234,19 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) GetStartTimeLabel() string {
 // The starting time is the start or beginning of the timing event
 // described by this instance of TextLineSpecTimerLines.
 //
-//
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  NONE
-//
+//	NONE
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  time.Time
-//     - This method returns the current value of the "Start Time"
-//       for this Time Duration Event.
-//
+//	time.Time
+//	   - This method returns the current value of the "Start Time"
+//	     for this Time Duration Event.
 func (txtSpecTimerLines *TextLineSpecTimerLines) GetStartTime() time.Time {
 
 	if txtSpecTimerLines.lock == nil {
@@ -1322,7 +1276,7 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) GetStartTime() time.Time {
 //
 // ----------------------------------------------------------------
 //
-// Be Advised
+// # Be Advised
 //
 // If the text field length is less than the length of the longest
 // label, the text field length will be reset to the length of the
@@ -1332,22 +1286,19 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) GetStartTime() time.Time {
 // character lengths of the three text labels: 'startTimeLabel',
 // 'endTimeLabel' and 'timeDurationLabel'.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  NONE
-//
+//	NONE
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  int
-//     - This method returns the Text Label Field Length as an
-//       integer value.
-//
+//	int
+//	   - This method returns the Text Label Field Length as an
+//	     integer value.
 func (txtSpecTimerLines *TextLineSpecTimerLines) GetTextLabelFieldLength() int {
 
 	if txtSpecTimerLines.lock == nil {
@@ -1380,22 +1331,19 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) GetTextLabelFieldLength() int {
 // timer event is computed by subtracting the starting time from
 // the ending time.
 //
-//
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  NONE
-//
+//	NONE
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  string
-//     - This method returns the current value of the Time Duration
-//       Label as a string.
-//
+//	string
+//	   - This method returns the current value of the Time Duration
+//	     Label as a string.
 func (txtSpecTimerLines *TextLineSpecTimerLines) GetTimeDurationLabel() string {
 
 	if txtSpecTimerLines.lock == nil {
@@ -1419,24 +1367,22 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) GetTimeDurationLabel() string {
 //
 // The Go Programming language uses pattern formatting to format
 // time values. Reference:
-//   https://pkg.go.dev/time#Time.Format
 //
+//	https://pkg.go.dev/time#Time.Format
 //
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  NONE
-//
+//	NONE
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  string
-//     - This method returns the current value of the Time Format
-//       as a string.
-//
+//	string
+//	   - This method returns the current value of the Time Format
+//	     as a string.
 func (txtSpecTimerLines *TextLineSpecTimerLines) GetTimeFormat() string {
 
 	if txtSpecTimerLines.lock == nil {
@@ -1463,27 +1409,25 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) GetTimeFormat() string {
 //
 // To obtain the length of the longest single line of text, see
 // method:
-//   TextLineSpecTimerLines.GetSingleLineLength()
 //
+//	TextLineSpecTimerLines.GetSingleLineLength()
 //
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  --- NONE ---
-//
+//	--- NONE ---
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  totalLinesLength           int
-//     - This method will return an integer value specifying the
-//       total length of all the formatted lines produced by the
-//       current instance of TextLineSpecStandardLine.
+//	totalLinesLength           int
+//	   - This method will return an integer value specifying the
+//	     total length of all the formatted lines produced by the
+//	     current instance of TextLineSpecStandardLine.
 //
-//       In the event of an error, a zero value will be returned.
-//
+//	     In the event of an error, a zero value will be returned.
 func (txtSpecTimerLines *TextLineSpecTimerLines) GetTotalLinesLength() (
 	totalLinesLength int) {
 
@@ -1531,28 +1475,25 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) GetTotalLinesLength() (
 // exception being that this method takes no input parameters and
 // returns a boolean value.
 //
-//
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  -- NONE --
-//
+//	-- NONE --
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  bool
-//     - If any of the internal member data variables contained in
-//       the current instance of TextLineSpecTimerLines are found
-//       to be invalid, this method will return a boolean value of
-//       'false'.
+//	bool
+//	   - If any of the internal member data variables contained in
+//	     the current instance of TextLineSpecTimerLines are found
+//	     to be invalid, this method will return a boolean value of
+//	     'false'.
 //
-//       If all internal member data variables contained in the
-//       current instance of TextLineSpecTimerLines are found to be
-//       valid, this method returns a boolean value of 'true'.
-//
+//	     If all internal member data variables contained in the
+//	     current instance of TextLineSpecTimerLines are found to be
+//	     valid, this method returns a boolean value of 'true'.
 func (txtSpecTimerLines *TextLineSpecTimerLines) IsValidInstance() bool {
 
 	if txtSpecTimerLines.lock == nil {
@@ -1587,70 +1528,67 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) IsValidInstance() bool {
 // This method fulfills requirements of ITextLineSpecification
 // interface.
 //
-//
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  errorPrefix         interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	errorPrefix         interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       2. string - A string containing error prefix information.
+//	     2. string - A string containing error prefix information.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//	     4. [][2]string A two-dimensional slice of strings containing
+//	                    error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	                        ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
-//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If any of the internal member data variables contained in
-//       the current instance of TextLineSpecTimerLines are found
-//       to be invalid, this method will return an error.
+//	error
+//	   - If any of the internal member data variables contained in
+//	     the current instance of TextLineSpecTimerLines are found
+//	     to be invalid, this method will return an error.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' (error prefix) will be inserted or
-//       prefixed at the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' (error prefix) will be inserted or
+//	     prefixed at the beginning of the error message.
 func (txtSpecTimerLines *TextLineSpecTimerLines) IsValidInstanceError(
 	errorPrefix interface{}) error {
 
@@ -1698,119 +1636,116 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) IsValidInstanceError(
 //
 // ------------------------------------------------------------------------
 //
-// Default Values
+// # Default Values
 //
 // This method will automatically set the following default values:
 //
-//  labelLeftMarginChars  - Defaults to "" (Empty or Zero left margin)
+//	labelLeftMarginChars  - Defaults to "" (Empty or Zero left margin)
 //
-//  startTimeLabel        - Defaults to "Start Time"
+//	startTimeLabel        - Defaults to "Start Time"
 //
-//  endTimeLabel          - Defaults to "End Time".
+//	endTimeLabel          - Defaults to "End Time".
 //
-//  timeFormat            - Defaults to "2006-01-02 15:04:05.000000000 -0700 MST"
+//	timeFormat            - Defaults to "2006-01-02 15:04:05.000000000 -0700 MST"
 //
-//  timeDurationLabel     - Defaults to "Elapsed Time"
+//	timeDurationLabel     - Defaults to "Elapsed Time"
 //
-//  textLabelFieldLen     - Defaults to  '12'
+//	textLabelFieldLen     - Defaults to  "12"
 //
-//  textLabelJustification    - Defaults to TextJustify(0).Right()
+//	textLabelJustification    - Defaults to TextJustify(0).Right()
 //
-//  labelRightMarginChars - Defaults to ": "
-//
+//	labelRightMarginChars - Defaults to ": "
 //
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  startTime                  time.Time
-//     - A time value which will be used in conjunction with
-//       'endTime' parameter to compute the time duration or
-//       elapsed for the timer event.
+//	startTime                  time.Time
+//	   - A time value which will be used in conjunction with
+//	     'endTime' parameter to compute the time duration or
+//	     elapsed for the timer event.
 //
-//       If this parameter is submitted as a zero time value,
-//       'startTime' will be defaulted to value of July 4, 1776
-//       9:30AM UTC.
-//
-//
-//  endTime                    time.Time
-//     - A time value which will be used in conjunction with
-//       'startTime' parameter to compute the time duration or
-//       elapsed for the timer event.
-//
-//       If this parameter is submitted as a zero time value,
-//       'endTime' will be defaulted to value of July 4, 1776
-//       9:30AM UTC.
+//	     If this parameter is submitted as a zero time value,
+//	     'startTime' will be defaulted to value of July 4, 1776
+//	     9:30AM UTC.
 //
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	endTime                    time.Time
+//	   - A time value which will be used in conjunction with
+//	     'startTime' parameter to compute the time duration or
+//	     elapsed for the timer event.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
-//
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     If this parameter is submitted as a zero time value,
+//	     'endTime' will be defaulted to value of July 4, 1776
+//	     9:30AM UTC.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       2. string - A string containing error prefix information.
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     2. string - A string containing error prefix information.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     4. [][2]string A two-dimensional slice of strings containing
+//	                    error prefix and error context information.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	                        ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  *TextLineSpecTimerLines
-//     - If this method completes successfully, it will create and
-//       return a pointer to a new instance of
-//       TextLineSpecTimerLines which is fully configured with all
-//       the parameters necessary to format a complete timer event
-//       for text display, file output or printing.
+//	*TextLineSpecTimerLines
+//	   - If this method completes successfully, it will create and
+//	     return a pointer to a new instance of
+//	     TextLineSpecTimerLines which is fully configured with all
+//	     the parameters necessary to format a complete timer event
+//	     for text display, file output or printing.
 //
 //
-//  error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (txtSpecTimerLines TextLineSpecTimerLines) NewDefaultFullTimerEvent(
 	startTime time.Time,
 	endTime time.Time,
@@ -1877,14 +1812,14 @@ func (txtSpecTimerLines TextLineSpecTimerLines) NewDefaultFullTimerEvent(
 // calling one or more of the following methods when both starting
 // time and ending time are known:
 //
-//   TextLineSpecTimerLines.SetStartAndEndTime()
-//   - When both 'startTime' and 'endTime' are known.
+//	TextLineSpecTimerLines.SetStartAndEndTime()
+//	- When both 'startTime' and 'endTime' are known.
 //
-//   TextLineSpecTimerLines.SetStartTime()
-//   - When the 'startTime' is known.
+//	TextLineSpecTimerLines.SetStartTime()
+//	- When the 'startTime' is known.
 //
-//   TextLineSpecTimerLines.SetEndTime()
-//   - When the 'startTime' is known.
+//	TextLineSpecTimerLines.SetEndTime()
+//	- When the 'startTime' is known.
 //
 // The purpose of a TextLineSpecTimerLines instance is to capture
 // all the essential elements of a timer event and format that
@@ -1892,47 +1827,44 @@ func (txtSpecTimerLines TextLineSpecTimerLines) NewDefaultFullTimerEvent(
 //
 // ------------------------------------------------------------------------
 //
-// Default Values
+// # Default Values
 //
 // This method will automatically set the following default values:
 //
-//  labelLeftMarginChars  - Defaults to "" (Empty or Zero left margin)
+//	labelLeftMarginChars  - Defaults to "" (Empty or Zero left margin)
 //
-//  startTime             - Defaults to July 4, 1776 9:30AM UTC
+//	startTime             - Defaults to July 4, 1776 9:30AM UTC
 //
-//  startTimeLabel        - Defaults to "Start Time"
+//	startTimeLabel        - Defaults to "Start Time"
 //
-//  endTimeLabel          - Defaults to "End Time".
+//	endTimeLabel          - Defaults to "End Time".
 //
-//  endTime               - Defaults to July 4, 1776 9:30AM UTC
+//	endTime               - Defaults to July 4, 1776 9:30AM UTC
 //
-//  timeFormat            - Defaults to "2006-01-02 15:04:05.000000000 -0700 MST"
+//	timeFormat            - Defaults to "2006-01-02 15:04:05.000000000 -0700 MST"
 //
-//  timeDurationLabel     - Defaults to "Elapsed Time"
+//	timeDurationLabel     - Defaults to "Elapsed Time"
 //
-//  textLabelFieldLen     - Defaults to  '12'
+//	textLabelFieldLen     - Defaults to  "12"
 //
-//  textLabelJustification    - Defaults to TextJustify(0).Right()
+//	textLabelJustification    - Defaults to TextJustify(0).Right()
 //
-//  labelRightMarginChars - Defaults to ": "
-//
+//	labelRightMarginChars - Defaults to ": "
 //
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  --- NONE ---
-//
+//	--- NONE ---
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  *TextLineSpecTimerLines
-//     - This method will create and return a pointer to a new
-//       instance of TextLineSpecTimerLines which is fully
-//       configured except for the starting time and ending times.
-//
+//	*TextLineSpecTimerLines
+//	   - This method will create and return a pointer to a new
+//	     instance of TextLineSpecTimerLines which is fully
+//	     configured except for the starting time and ending times.
 func (txtSpecTimerLines TextLineSpecTimerLines) NewDefaultShellTimerEvent() *TextLineSpecTimerLines {
 
 	if txtSpecTimerLines.lock == nil {
@@ -1980,8 +1912,8 @@ func (txtSpecTimerLines TextLineSpecTimerLines) NewDefaultShellTimerEvent() *Tex
 // use this empty object for calculations, you must first call the
 // following method in order to set the internal member variables
 // to valid values:
-//    TextLineSpecTimerLines.SetFullTimerEvent()
 //
+//	TextLineSpecTimerLines.SetFullTimerEvent()
 func (txtSpecTimerLines TextLineSpecTimerLines) NewEmptyTimerEvent() TextLineSpecTimerLines {
 
 	if txtSpecTimerLines.lock == nil {
@@ -2010,231 +1942,228 @@ func (txtSpecTimerLines TextLineSpecTimerLines) NewEmptyTimerEvent() TextLineSpe
 // input parameters. 'startTime' and 'endTime' can then be entered
 // later using the appropriate setter methods.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  labelLeftMarginChars       string
-//     - The character or characters which will comprise the left
-//       margin of the text label.
+//	labelLeftMarginChars       string
+//	   - The character or characters which will comprise the left
+//	     margin of the text label.
 //
-//       If the string length of 'labelLeftMarginChars' plus
-//       'labelRightMarginChars' plus the text label field length
-//       ('textLabelFieldLen') exceeds the maximum length of
-//       55-characters, this method will return an error.
+//	     If the string length of 'labelLeftMarginChars' plus
+//	     'labelRightMarginChars' plus the text label field length
+//	     ('textLabelFieldLen') exceeds the maximum length of
+//	     55-characters, this method will return an error.
 //
-//       If labelLeftMarginChars is submitted as a zero length
-//       string, no error will be triggered. In this case, the left
-//       margin will simply be omitted.
-//
-//
-//  startTimeLabel             string
-//     - A string containing the text characters constituting the
-//       starting time text label.
-//
-//       If this string is submitted as a zero length or empty
-//       string, 'startTimeLabel' will be assigned a default value
-//       of "Start Time".
-//
-//       If the string length of 'labelLeftMarginChars' plus
-//       'labelRightMarginChars' plus the text label field length
-//       ('textLabelFieldLen') exceeds the maximum length of
-//       55-characters, this method will return an error.
+//	     If labelLeftMarginChars is submitted as a zero length
+//	     string, no error will be triggered. In this case, the left
+//	     margin will simply be omitted.
 //
 //
-//  startTime                  time.Time
-//     - A time value which will be used in conjunction with
-//       'endTime' parameter to compute the time duration or
-//       elapsed for the timer event.
+//	startTimeLabel             string
+//	   - A string containing the text characters constituting the
+//	     starting time text label.
 //
-//       If this parameter is submitted as a zero time value,
-//       'startTime' will be defaulted to value of July 4, 1776
-//       9:30AM UTC.
+//	     If this string is submitted as a zero length or empty
+//	     string, 'startTimeLabel' will be assigned a default value
+//	     of "Start Time".
 //
-//
-//  endTimeLabel               string
-//     - A string containing the text characters constituting the
-//       ending time text label.
-//
-//       If this string is submitted as a zero length or empty
-//       string, 'endTimeLabel' will be assigned a default value of
-//       "End Time".
-//
-//       If the string length of 'labelLeftMarginChars' plus
-//       'labelRightMarginChars' plus the text label field length
-//       ('textLabelFieldLen') exceeds the maximum length of
-//       55-characters, this method will return an error.
+//	     If the string length of 'labelLeftMarginChars' plus
+//	     'labelRightMarginChars' plus the text label field length
+//	     ('textLabelFieldLen') exceeds the maximum length of
+//	     55-characters, this method will return an error.
 //
 //
-//  endTime                    time.Time
-//     - A time value which will be used in conjunction with
-//       'startTime' parameter to compute the time duration or
-//       elapsed for the timer event.
+//	startTime                  time.Time
+//	   - A time value which will be used in conjunction with
+//	     'endTime' parameter to compute the time duration or
+//	     elapsed for the timer event.
 //
-//       If this parameter is submitted as a zero time value,
-//       'endTime' will be defaulted to value of 'startTime'.
-//
-//
-//  timeFormat                 string
-//     - This string holds the time format parameters used to
-//       format starting time and ending time values for text
-//       display and output.
-//
-//       If this parameter is submitted as an empty string,
-//       parameter 'timeFormat' will be assigned a default value
-//       of "2006-01-02 15:04:05.000000000 -0700 MST"
+//	     If this parameter is submitted as a zero time value,
+//	     'startTime' will be defaulted to value of July 4, 1776
+//	     9:30AM UTC.
 //
 //
-//  timeDurationLabel          string
-//     - The text label used to describe the time duration or
-//       elapsed time computed from the 'startTime' and 'endTime'
-//       parameters.
+//	endTimeLabel               string
+//	   - A string containing the text characters constituting the
+//	     ending time text label.
 //
-//       If this string is submitted as a zero length or empty
-//       string, 'timeDurationLabel' will be assigned a default
-//       value of "Elapsed Time".
+//	     If this string is submitted as a zero length or empty
+//	     string, 'endTimeLabel' will be assigned a default value of
+//	     "End Time".
 //
-//       If the string length of 'labelLeftMarginChars' plus
-//       'labelRightMarginChars' plus the text label field length
-//       ('textLabelFieldLen') exceeds the maximum length of
-//       55-characters, this method will return an error.
-//
-//
-//  textLabelFieldLen          int
-//     - A user entered value which defines the length of the
-//       text field used by all three text labels,
-//       'startTimeLabel', 'endTimeLabel' and
-//       'timeDurationLabel'.
-//
-//       This text length value will be used to position and
-//       display the three text labels provided by
-//       input parameters 'startTimeLabel', 'endTimeLabel' and
-//       'timeDurationLabel'.
-//
-//       If 'textLabelFieldLen' is less than the length of the
-//       longest text label it will be defaulted to the length
-//       of the longest text label ('startTimeLabel',
-//       'endTimeLabel' or 'timeDurationLabel').
-//
-//       If the string length of 'labelLeftMarginChars' plus
-//       'labelRightMarginChars' plus the text label field length
-//       ('textLabelFieldLen') exceeds the maximum length of
-//       55-characters, this method will return an error.
+//	     If the string length of 'labelLeftMarginChars' plus
+//	     'labelRightMarginChars' plus the text label field length
+//	     ('textLabelFieldLen') exceeds the maximum length of
+//	     55-characters, this method will return an error.
 //
 //
-//  textLabelJustification         TextJustify
-//     - An enumeration which specifies the justification of the
-//       three text labels 'startTimeLabel', 'endTimeLabel' and
-//       'timeDurationLabel' within the field length specified by
-//       'textLabelFieldLen'.
+//	endTime                    time.Time
+//	   - A time value which will be used in conjunction with
+//	     'startTime' parameter to compute the time duration or
+//	     elapsed for the timer event.
 //
-//       Label justification must be equal to one of these three
-//       valid values:
-//           TextJustify(0).Left()
-//           TextJustify(0).Right()
-//           TextJustify(0).Center()
-//
-//       The abbreviated text justification enumeration syntax can
-//       also be used:
-//
-//           TxtJustify.Left()
-//           TxtJustify.Right()
-//           TxtJustify.Center()
+//	     If this parameter is submitted as a zero time value,
+//	     'endTime' will be defaulted to value of 'startTime'.
 //
 //
-//  labelRightMarginChars      string
-//     - This string contains the character or characters which
-//       will be used to separate the text labels ('startTimeLabel',
-//       'endTimeLabel' and 'timeDurationLabel') from the output or
-//       data values displayed on the same line.
-//       Example:
-//        Start Time[right margin chars]2010-01-02 15:04:05.000000000 -0700 MST
+//	timeFormat                 string
+//	   - This string holds the time format parameters used to
+//	     format starting time and ending time values for text
+//	     display and output.
 //
-//       Often this parameter is set to a single white space
-//       character (" ") or a colon plus white space character,
-//       (": ").
-//
-//       If this string is submitted as a zero length or empty
-//       string, 'labelRightMarginChars' will be assigned a
-//       default value of  ": ". Example Output:
-//        Start Time: 2010-01-02 15:04:05.000000000 -0700 MST
-//
-//       If the string length of 'labelLeftMarginChars' plus
-//       'labelRightMarginChars' plus the text label field length
-//       ('textLabelFieldLen') exceeds the maximum length of
-//       55-characters, this method will return an error.
+//	     If this parameter is submitted as an empty string,
+//	     parameter 'timeFormat' will be assigned a default value
+//	     of "2006-01-02 15:04:05.000000000 -0700 MST"
 //
 //
-//  errorPrefix                     interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	timeDurationLabel          string
+//	   - The text label used to describe the time duration or
+//	     elapsed time computed from the 'startTime' and 'endTime'
+//	     parameters.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	     If this string is submitted as a zero length or empty
+//	     string, 'timeDurationLabel' will be assigned a default
+//	     value of "Elapsed Time".
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     If the string length of 'labelLeftMarginChars' plus
+//	     'labelRightMarginChars' plus the text label field length
+//	     ('textLabelFieldLen') exceeds the maximum length of
+//	     55-characters, this method will return an error.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	textLabelFieldLen          int
+//	   - A user entered value which defines the length of the
+//	     text field used by all three text labels,
+//	     'startTimeLabel', 'endTimeLabel' and
+//	     'timeDurationLabel'.
 //
-//       2. string - A string containing error prefix information.
+//	     This text length value will be used to position and
+//	     display the three text labels provided by
+//	     input parameters 'startTimeLabel', 'endTimeLabel' and
+//	     'timeDurationLabel'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     If 'textLabelFieldLen' is less than the length of the
+//	     longest text label it will be defaulted to the length
+//	     of the longest text label ('startTimeLabel',
+//	     'endTimeLabel' or 'timeDurationLabel').
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
+//	     If the string length of 'labelLeftMarginChars' plus
+//	     'labelRightMarginChars' plus the text label field length
+//	     ('textLabelFieldLen') exceeds the maximum length of
+//	     55-characters, this method will return an error.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	textLabelJustification         TextJustify
+//	   - An enumeration which specifies the justification of the
+//	     three text labels 'startTimeLabel', 'endTimeLabel' and
+//	     'timeDurationLabel' within the field length specified by
+//	     'textLabelFieldLen'.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     Label justification must be equal to one of these three
+//	     valid values:
+//	         TextJustify(0).Left()
+//	         TextJustify(0).Right()
+//	         TextJustify(0).Center()
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     The abbreviated text justification enumeration syntax can
+//	     also be used:
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
+//	         TxtJustify.Left()
+//	         TxtJustify.Right()
+//	         TxtJustify.Center()
 //
+//
+//	labelRightMarginChars      string
+//	   - This string contains the character or characters which
+//	     will be used to separate the text labels ('startTimeLabel',
+//	     'endTimeLabel' and 'timeDurationLabel') from the output or
+//	     data values displayed on the same line.
+//	     Example:
+//	      Start Time[right margin chars]2010-01-02 15:04:05.000000000 -0700 MST
+//
+//	     Often this parameter is set to a single white space
+//	     character (" ") or a colon plus white space character,
+//	     (": ").
+//
+//	     If this string is submitted as a zero length or empty
+//	     string, 'labelRightMarginChars' will be assigned a
+//	     default value of  ": ". Example Output:
+//	      Start Time: 2010-01-02 15:04:05.000000000 -0700 MST
+//
+//	     If the string length of 'labelLeftMarginChars' plus
+//	     'labelRightMarginChars' plus the text label field length
+//	     ('textLabelFieldLen') exceeds the maximum length of
+//	     55-characters, this method will return an error.
+//
+//
+//	errorPrefix                     interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
+//
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
+//
+//	     This empty interface must be convertible to one of the
+//	     following types:
+//
+//
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
+//
+//	     2. string - A string containing error prefix information.
+//
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
+//
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
+//
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
+//
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  *TextLineSpecTimerLines
-//     - If this method completes successfully, it will create and
-//       return a pointer to a new instance of
-//       TextLineSpecTimerLines which is fully configured with all
-//       the parameters necessary to format a complete timer event
-//       for text display, file output or printing.
+//	*TextLineSpecTimerLines
+//	   - If this method completes successfully, it will create and
+//	     return a pointer to a new instance of
+//	     TextLineSpecTimerLines which is fully configured with all
+//	     the parameters necessary to format a complete timer event
+//	     for text display, file output or printing.
 //
 //
-//  error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (txtSpecTimerLines TextLineSpecTimerLines) NewFullTimerEvent(
 	labelLeftMarginChars string,
 	startTimeLabel string,
@@ -2306,235 +2235,232 @@ func (txtSpecTimerLines TextLineSpecTimerLines) NewFullTimerEvent(
 // input parameters. 'startTime' and 'endTime' can then be entered
 // later using the appropriate setter methods.
 //
-//
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  labelLeftMarginChars       []rune
-//     - The character or characters which will comprise the left
-//       margin of the text label.
+//	labelLeftMarginChars       []rune
+//	   - The character or characters which will comprise the left
+//	     margin of the text label.
 //
-//       If the length in characters of 'labelLeftMarginChars' plus
-//       'labelRightMarginChars' plus the text label field length
-//       ('textLabelFieldLen') exceeds the maximum length of
-//       55-characters, this method will return an error.
+//	     If the length in characters of 'labelLeftMarginChars' plus
+//	     'labelRightMarginChars' plus the text label field length
+//	     ('textLabelFieldLen') exceeds the maximum length of
+//	     55-characters, this method will return an error.
 //
-//       If labelLeftMarginChars is submitted with a 'nil' value or
-//       a zero length rune array, no error will be triggered. In
-//       this case, the left margin will simply be omitted.
-//
-//
-//  startTimeLabel             []rune
-//     - A string containing the text characters constituting the
-//       starting time text label.
-//
-//       If this parameter is submitted as a zero length or empty
-//       rune array, or if the rune array contains invalid zero
-//       rune values, 'startTimeLabel' will be assigned a default
-//       value of "Start Time".
-//
-//       If the length in characters of 'labelLeftMarginChars' plus
-//       'labelRightMarginChars' plus the text label field length
-//       ('textLabelFieldLen') exceeds the maximum length of
-//       55-characters, this method will return an error.
+//	     If labelLeftMarginChars is submitted with a 'nil' value or
+//	     a zero length rune array, no error will be triggered. In
+//	     this case, the left margin will simply be omitted.
 //
 //
-//  startTime                  time.Time
-//     - A time value which will be used in conjunction with
-//       'endTime' parameter to compute the time duration or
-//       elapsed time for the timer event.
+//	startTimeLabel             []rune
+//	   - A string containing the text characters constituting the
+//	     starting time text label.
 //
-//       If this parameter is submitted as a zero time value,
-//       'startTime' will be defaulted to value of July 4, 1776
-//       9:30AM UTC.
+//	     If this parameter is submitted as a zero length or empty
+//	     rune array, or if the rune array contains invalid zero
+//	     rune values, 'startTimeLabel' will be assigned a default
+//	     value of "Start Time".
 //
-//
-//  endTimeLabel               []rune
-//     - A string containing the text characters constituting the
-//       ending time text label.
-//
-//       If this parameter is submitted as a zero length or empty
-//       rune array, or if the rune array contains invalid zero
-//       rune values, 'endTimeLabel' will be assigned a default
-//       value of "End Time".
-//
-//       If the length in characters of 'labelLeftMarginChars' plus
-//       'labelRightMarginChars' plus the text label field length
-//       ('textLabelFieldLen') exceeds the maximum length of
-//       55-characters, this method will return an error.
+//	     If the length in characters of 'labelLeftMarginChars' plus
+//	     'labelRightMarginChars' plus the text label field length
+//	     ('textLabelFieldLen') exceeds the maximum length of
+//	     55-characters, this method will return an error.
 //
 //
-//  endTime                    time.Time
-//     - A time value which will be used in conjunction with
-//       the 'startTime' parameter to compute the time duration
-//       or elapsed time for the timer event.
+//	startTime                  time.Time
+//	   - A time value which will be used in conjunction with
+//	     'endTime' parameter to compute the time duration or
+//	     elapsed time for the timer event.
 //
-//       If this parameter is submitted as a zero time value,
-//       'endTime' will be defaulted to value of 'startTime'.
-//
-//
-//  timeFormat                 string
-//     - This string holds the time format parameters used to
-//       format starting time and ending time values for text
-//       display and output.
-//
-//       If this parameter is submitted as an empty string,
-//       parameter 'timeFormat' will be assigned a default
-//       value of:
-//          "2006-01-02 15:04:05.000000000 -0700 MST"
+//	     If this parameter is submitted as a zero time value,
+//	     'startTime' will be defaulted to value of July 4, 1776
+//	     9:30AM UTC.
 //
 //
-//  timeDurationLabel          []rune
-//     - The text label used to describe the time duration or
-//       elapsed time computed from the 'startTime' and 'endTime'
-//       parameters.
+//	endTimeLabel               []rune
+//	   - A string containing the text characters constituting the
+//	     ending time text label.
 //
-//       If this parameter is submitted as a zero length or empty
-//       rune array, or if the rune array contains invalid zero
-//       rune values, 'timeDurationLabel' will be assigned a default
-//       value of "Elapsed Time".
+//	     If this parameter is submitted as a zero length or empty
+//	     rune array, or if the rune array contains invalid zero
+//	     rune values, 'endTimeLabel' will be assigned a default
+//	     value of "End Time".
 //
-//       If the length in characters of 'labelLeftMarginChars' plus
-//       'labelRightMarginChars' plus the text label field length
-//       ('textLabelFieldLen') exceeds the maximum length of
-//       55-characters, this method will return an error.
-//
-//
-//  textLabelFieldLen          int
-//     - A user entered value which defines the length of the text
-//       field used by all three text labels, 'startTimeLabel',
-//       'endTimeLabel' and 'timeDurationLabel'.
-//
-//       The length of the text fields which will be used to
-//       position and display the three text labels provided by
-//       input parameters 'startTimeLabel', 'endTimeLabel' and
-//       'timeDurationLabel'.
-//
-//       If 'textLabelFieldLen' is less than the length of the
-//       longest text label it will be defaulted to the length
-//       of the longest text label ('startTimeLabel',
-//       'endTimeLabel' or 'timeDurationLabel').
-//
-//       If the length in characters of 'labelLeftMarginChars' plus
-//       'labelRightMarginChars' plus the text label field length
-//       ('textLabelFieldLen') exceeds the maximum length of
-//       55-characters, this method will return an error.
+//	     If the length in characters of 'labelLeftMarginChars' plus
+//	     'labelRightMarginChars' plus the text label field length
+//	     ('textLabelFieldLen') exceeds the maximum length of
+//	     55-characters, this method will return an error.
 //
 //
-//  textLabelJustification         TextJustify
-//     - An enumeration which specifies the justification of the
-//       three text labels 'startTimeLabel', 'endTimeLabel' and
-//       'timeDurationLabel' within the field length specified by
-//       'textLabelFieldLen'.
+//	endTime                    time.Time
+//	   - A time value which will be used in conjunction with
+//	     the 'startTime' parameter to compute the time duration
+//	     or elapsed time for the timer event.
 //
-//       Label justification must be equal to one of these three
-//       valid values:
-//           TextJustify(0).Left()
-//           TextJustify(0).Right()
-//           TextJustify(0).Center()
-//
-//       The abbreviated text justification enumeration syntax can
-//       also be used:
-//
-//           TxtJustify.Left()
-//           TxtJustify.Right()
-//           TxtJustify.Center()
+//	     If this parameter is submitted as a zero time value,
+//	     'endTime' will be defaulted to value of 'startTime'.
 //
 //
-//  labelRightMarginChars      []rune
-//     - This rune array contains the character or characters which
-//       will be used to separate the text labels ('startTimeLabel',
-//       'endTimeLabel' and 'timeDurationLabel') from the output or
-//       data values displayed on the same line.
-//       Example:
-//        Start Time[right margin chars]2010-01-02 15:04:05.000000000 -0700 MST
+//	timeFormat                 string
+//	   - This string holds the time format parameters used to
+//	     format starting time and ending time values for text
+//	     display and output.
 //
-//       Often this parameter is set to a single white space
-//       character (" ") or a colon plus white space character,
-//       (": ").
-//
-//       If this parameter is submitted as a zero length array, or
-//       if rune array contains invalid zero rune values,
-//       'labelRightMarginChars' will be assigned a default value
-//       of  ": ".
-//       Example Output:
-//        Start Time: 2010-01-02 15:04:05.000000000 -0700 MST
-//
-//       If the length in characters of 'labelLeftMarginChars' plus
-//       'labelRightMarginChars' plus the text label field length
-//       ('textLabelFieldLen') exceeds the maximum length of
-//       55-characters, this method will return an error.
+//	     If this parameter is submitted as an empty string,
+//	     parameter 'timeFormat' will be assigned a default
+//	     value of:
+//	        "2006-01-02 15:04:05.000000000 -0700 MST"
 //
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	timeDurationLabel          []rune
+//	   - The text label used to describe the time duration or
+//	     elapsed time computed from the 'startTime' and 'endTime'
+//	     parameters.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     If this parameter is submitted as a zero length or empty
+//	     rune array, or if the rune array contains invalid zero
+//	     rune values, 'timeDurationLabel' will be assigned a default
+//	     value of "Elapsed Time".
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     If the length in characters of 'labelLeftMarginChars' plus
+//	     'labelRightMarginChars' plus the text label field length
+//	     ('textLabelFieldLen') exceeds the maximum length of
+//	     55-characters, this method will return an error.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	textLabelFieldLen          int
+//	   - A user entered value which defines the length of the text
+//	     field used by all three text labels, 'startTimeLabel',
+//	     'endTimeLabel' and 'timeDurationLabel'.
 //
-//       2. string - A string containing error prefix information.
+//	     The length of the text fields which will be used to
+//	     position and display the three text labels provided by
+//	     input parameters 'startTimeLabel', 'endTimeLabel' and
+//	     'timeDurationLabel'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     If 'textLabelFieldLen' is less than the length of the
+//	     longest text label it will be defaulted to the length
+//	     of the longest text label ('startTimeLabel',
+//	     'endTimeLabel' or 'timeDurationLabel').
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//	     If the length in characters of 'labelLeftMarginChars' plus
+//	     'labelRightMarginChars' plus the text label field length
+//	     ('textLabelFieldLen') exceeds the maximum length of
+//	     55-characters, this method will return an error.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	textLabelJustification         TextJustify
+//	   - An enumeration which specifies the justification of the
+//	     three text labels 'startTimeLabel', 'endTimeLabel' and
+//	     'timeDurationLabel' within the field length specified by
+//	     'textLabelFieldLen'.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     Label justification must be equal to one of these three
+//	     valid values:
+//	         TextJustify(0).Left()
+//	         TextJustify(0).Right()
+//	         TextJustify(0).Center()
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     The abbreviated text justification enumeration syntax can
+//	     also be used:
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//	         TxtJustify.Left()
+//	         TxtJustify.Right()
+//	         TxtJustify.Center()
 //
+//
+//	labelRightMarginChars      []rune
+//	   - This rune array contains the character or characters which
+//	     will be used to separate the text labels ('startTimeLabel',
+//	     'endTimeLabel' and 'timeDurationLabel') from the output or
+//	     data values displayed on the same line.
+//	     Example:
+//	      Start Time[right margin chars]2010-01-02 15:04:05.000000000 -0700 MST
+//
+//	     Often this parameter is set to a single white space
+//	     character (" ") or a colon plus white space character,
+//	     (": ").
+//
+//	     If this parameter is submitted as a zero length array, or
+//	     if rune array contains invalid zero rune values,
+//	     'labelRightMarginChars' will be assigned a default value
+//	     of  ": ".
+//	     Example Output:
+//	      Start Time: 2010-01-02 15:04:05.000000000 -0700 MST
+//
+//	     If the length in characters of 'labelLeftMarginChars' plus
+//	     'labelRightMarginChars' plus the text label field length
+//	     ('textLabelFieldLen') exceeds the maximum length of
+//	     55-characters, this method will return an error.
+//
+//
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
+//
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
+//
+//	     This empty interface must be convertible to one of the
+//	     following types:
+//
+//
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
+//
+//	     2. string - A string containing error prefix information.
+//
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
+//
+//	     4. [][2]string A two-dimensional slice of strings containing
+//	                    error prefix and error context information.
+//
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
+//
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	                        ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  *TextLineSpecTimerLines
-//     - If this method completes successfully, it will create and
-//       return a pointer to a new instance of
-//       TextLineSpecTimerLines which is fully configured with all
-//       the parameters necessary to format a complete timer event
-//       for text display, file output or printing.
+//	*TextLineSpecTimerLines
+//	   - If this method completes successfully, it will create and
+//	     return a pointer to a new instance of
+//	     TextLineSpecTimerLines which is fully configured with all
+//	     the parameters necessary to format a complete timer event
+//	     for text display, file output or printing.
 //
 //
-//  error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (txtSpecTimerLines TextLineSpecTimerLines) NewFullTimerEventRunes(
 	labelLeftMarginChars []rune,
 	startTimeLabel []rune,
@@ -2601,227 +2527,223 @@ func (txtSpecTimerLines TextLineSpecTimerLines) NewFullTimerEventRunes(
 // calling one or more of the following methods when both starting
 // time and ending time are known:
 //
-//   TextLineSpecTimerLines.SetStartAndEndTime()
-//   - When both 'startTime' and 'endTime' are known.
+//	TextLineSpecTimerLines.SetStartAndEndTime()
+//	- When both 'startTime' and 'endTime' are known.
 //
-//   TextLineSpecTimerLines.SetStartTime()
-//   - When the 'startTime' is known.
+//	TextLineSpecTimerLines.SetStartTime()
+//	- When the 'startTime' is known.
 //
-//   TextLineSpecTimerLines.SetEndTime()
-//   - When the 'startTime' is known.
+//	TextLineSpecTimerLines.SetEndTime()
+//	- When the 'startTime' is known.
 //
 // The purpose of a TextLineSpecTimerLines instance is to capture
 // all the essential elements of a timer event and format that
 // information for text display output or printing.
 //
-//
 // ------------------------------------------------------------------------
 //
-// Default Values
+// # Default Values
 //
 // This method will automatically set the following default values:
 //
-//  startTime           - Defaults to July 4, 1776 9:30AM UTC
+//	startTime           - Defaults to July 4, 1776 9:30AM UTC
 //
-//  endTime             - Defaults to July 4, 1776 9:30AM UTC
-//
+//	endTime             - Defaults to July 4, 1776 9:30AM UTC
 //
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  labelLeftMarginChars       string
-//     - The character or characters which will comprise the left
-//       margin of the text label.
+//	labelLeftMarginChars       string
+//	   - The character or characters which will comprise the left
+//	     margin of the text label.
 //
-//       If the string length of 'labelLeftMarginChars' plus
-//       'labelRightMarginChars' plus the text label field length
-//       ('textLabelFieldLen') exceeds the maximum length of
-//       55-characters, this method will return an error.
-//
-//
-//  startTimeLabel             string
-//     - A string containing the text characters constituting the
-//       starting time text label.
-//
-//       If this string is submitted as a zero length or empty
-//       string, 'startTimeLabel' will be assigned a default value
-//       of "Start Time".
+//	     If the string length of 'labelLeftMarginChars' plus
+//	     'labelRightMarginChars' plus the text label field length
+//	     ('textLabelFieldLen') exceeds the maximum length of
+//	     55-characters, this method will return an error.
 //
 //
-//       If the string length of 'labelLeftMarginChars' plus
-//       'labelRightMarginChars' plus the text label field length
-//       ('textLabelFieldLen') exceeds the maximum length of
-//       55-characters, this method will return an error.
+//	startTimeLabel             string
+//	   - A string containing the text characters constituting the
+//	     starting time text label.
+//
+//	     If this string is submitted as a zero length or empty
+//	     string, 'startTimeLabel' will be assigned a default value
+//	     of "Start Time".
 //
 //
-//  endTimeLabel               string.
-//     - A string containing the text characters constituting the
-//       ending time text label.
-//
-//       If this string is submitted as a zero length or empty
-//       string, 'endTimeLabel' will be assigned a default value of
-//       "End Time".
-//
-//       If the string length of 'labelLeftMarginChars' plus
-//       'labelRightMarginChars' plus the text label field length
-//       ('textLabelFieldLen') exceeds the maximum length of
-//       55-characters, this method will return an error.
+//	     If the string length of 'labelLeftMarginChars' plus
+//	     'labelRightMarginChars' plus the text label field length
+//	     ('textLabelFieldLen') exceeds the maximum length of
+//	     55-characters, this method will return an error.
 //
 //
-//  timeFormat                 string
-//     - This string holds the time format parameters used to
-//       format starting time and ending time values for text
-//       display and output.
+//	endTimeLabel               string.
+//	   - A string containing the text characters constituting the
+//	     ending time text label.
 //
-//       If this parameter is submitted as an empty string,
-//       parameter 'timeFormat' will be assigned a default value
-//       of "2006-01-02 15:04:05.000000000 -0700 MST"
+//	     If this string is submitted as a zero length or empty
+//	     string, 'endTimeLabel' will be assigned a default value of
+//	     "End Time".
 //
-//
-//  timeDurationLabel          string
-//     - The text label used to describe the time duration or
-//       elapsed time computed from the 'startTime' and 'endTime'
-//       parameters.
-//
-//       If this string is submitted as a zero length or empty
-//       string, 'timeDurationLabel' will be assigned a default
-//       value of "Elapsed Time".
-//
-//       If the string length of 'labelLeftMarginChars' plus
-//       'labelRightMarginChars' plus the text label field length
-//       ('textLabelFieldLen') exceeds the maximum length of
-//       55-characters, this method will return an error.
+//	     If the string length of 'labelLeftMarginChars' plus
+//	     'labelRightMarginChars' plus the text label field length
+//	     ('textLabelFieldLen') exceeds the maximum length of
+//	     55-characters, this method will return an error.
 //
 //
-//  textLabelFieldLen          int
-//     - The length of the text fields which will be used to
-//       position and display the three text labels provided by
-//       input parameters 'startTimeLabel', 'endTimeLabel' and
-//       'timeDurationLabel'.
+//	timeFormat                 string
+//	   - This string holds the time format parameters used to
+//	     format starting time and ending time values for text
+//	     display and output.
 //
-//       If 'textLabelFieldLen' is less than the length of the
-//       longest text label it will be defaulted to the length
-//       of the longest text label ('startTimeLabel',
-//       'endTimeLabel' or 'timeDurationLabel').
-//
-//       If the string length of 'labelLeftMarginChars' plus
-//       'labelRightMarginChars' plus the text label field length
-//       ('textLabelFieldLen') exceeds the maximum length of
-//       55-characters, this method will return an error.
+//	     If this parameter is submitted as an empty string,
+//	     parameter 'timeFormat' will be assigned a default value
+//	     of "2006-01-02 15:04:05.000000000 -0700 MST"
 //
 //
-//  textLabelJustification         TextJustify
-//     - An enumeration which specifies the justification of the
-//       three text labels 'startTimeLabel', 'endTimeLabel' and
-//       'timeDurationLabel' within the field length specified by
-//       'textLabelFieldLen'.
+//	timeDurationLabel          string
+//	   - The text label used to describe the time duration or
+//	     elapsed time computed from the 'startTime' and 'endTime'
+//	     parameters.
 //
-//       Label justification must be equal to one of these three
-//       valid values:
-//           TextJustify(0).Left()
-//           TextJustify(0).Right()
-//           TextJustify(0).Center()
+//	     If this string is submitted as a zero length or empty
+//	     string, 'timeDurationLabel' will be assigned a default
+//	     value of "Elapsed Time".
 //
-//       The abbreviated text justification enumeration syntax can
-//       also be used:
-//
-//           TxtJustify.Left()
-//           TxtJustify.Right()
-//           TxtJustify.Center()
+//	     If the string length of 'labelLeftMarginChars' plus
+//	     'labelRightMarginChars' plus the text label field length
+//	     ('textLabelFieldLen') exceeds the maximum length of
+//	     55-characters, this method will return an error.
 //
 //
-//  labelRightMarginChars string
-//     - This string contains the character or characters which
-//       will be used to separate the text labels ('startTimeLabel',
-//       'endTimeLabel' and 'timeDurationLabel') from the output or
-//       data values displayed on the same line.
-//       Example:
-//        Start Time[sep chars]2010-01-02 15:04:05.000000000 -0700 MST
+//	textLabelFieldLen          int
+//	   - The length of the text fields which will be used to
+//	     position and display the three text labels provided by
+//	     input parameters 'startTimeLabel', 'endTimeLabel' and
+//	     'timeDurationLabel'.
 //
-//       Often this parameter is set to a single white space
-//       character (" ") or a colon plus white space character,
-//       (": ").
+//	     If 'textLabelFieldLen' is less than the length of the
+//	     longest text label it will be defaulted to the length
+//	     of the longest text label ('startTimeLabel',
+//	     'endTimeLabel' or 'timeDurationLabel').
 //
-//
-//       If this string is submitted as a zero length or empty
-//       string, 'labelRightMarginChars' will be assigned a
-//       default value of  ": ". Example Output:
-//        Start Time: 2010-01-02 15:04:05.000000000 -0700 MST
-//
-//       If the string length of 'labelLeftMarginChars' plus
-//       'labelRightMarginChars' plus the text label field length
-//       ('textLabelFieldLen') exceeds the maximum length of
-//       55-characters, this method will return an error.
+//	     If the string length of 'labelLeftMarginChars' plus
+//	     'labelRightMarginChars' plus the text label field length
+//	     ('textLabelFieldLen') exceeds the maximum length of
+//	     55-characters, this method will return an error.
 //
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	textLabelJustification         TextJustify
+//	   - An enumeration which specifies the justification of the
+//	     three text labels 'startTimeLabel', 'endTimeLabel' and
+//	     'timeDurationLabel' within the field length specified by
+//	     'textLabelFieldLen'.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     Label justification must be equal to one of these three
+//	     valid values:
+//	         TextJustify(0).Left()
+//	         TextJustify(0).Right()
+//	         TextJustify(0).Center()
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     The abbreviated text justification enumeration syntax can
+//	     also be used:
+//
+//	         TxtJustify.Left()
+//	         TxtJustify.Right()
+//	         TxtJustify.Center()
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	labelRightMarginChars string
+//	   - This string contains the character or characters which
+//	     will be used to separate the text labels ('startTimeLabel',
+//	     'endTimeLabel' and 'timeDurationLabel') from the output or
+//	     data values displayed on the same line.
+//	     Example:
+//	      Start Time[sep chars]2010-01-02 15:04:05.000000000 -0700 MST
 //
-//       2. string - A string containing error prefix information.
+//	     Often this parameter is set to a single white space
+//	     character (" ") or a colon plus white space character,
+//	     (": ").
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//	     If this string is submitted as a zero length or empty
+//	     string, 'labelRightMarginChars' will be assigned a
+//	     default value of  ": ". Example Output:
+//	      Start Time: 2010-01-02 15:04:05.000000000 -0700 MST
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     If the string length of 'labelLeftMarginChars' plus
+//	     'labelRightMarginChars' plus the text label field length
+//	     ('textLabelFieldLen') exceeds the maximum length of
+//	     55-characters, this method will return an error.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
+//
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
+//
+//	     2. string - A string containing error prefix information.
+//
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
+//
+//	     4. [][2]string A two-dimensional slice of strings containing
+//	                    error prefix and error context information.
+//
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
+//
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	                        ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  *TextLineSpecTimerLines
-//     - If this method completes successfully, it will create and
-//       return a pointer to a new instance of
-//       TextLineSpecTimerLines which is fully configured except
-//       for the starting time and ending time.
+//	*TextLineSpecTimerLines
+//	   - If this method completes successfully, it will create and
+//	     return a pointer to a new instance of
+//	     TextLineSpecTimerLines which is fully configured except
+//	     for the starting time and ending time.
 //
 //
-//  error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (txtSpecTimerLines TextLineSpecTimerLines) NewShellTimerEvent(
 	labelLeftMarginChars string,
 	startTimeLabel string,
@@ -2921,121 +2843,117 @@ func (txtSpecTimerLines TextLineSpecTimerLines) NewShellTimerEvent(
 // This method fulfills requirements of the ITextLineSpecification
 // interface.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  p                          []byte
-//     - The byte buffer into which the formatted text line string
-//       generated by the current TextLineSpecTimerLines instance
-//       will be written.
-//
+//	p                          []byte
+//	   - The byte buffer into which the formatted text line string
+//	     generated by the current TextLineSpecTimerLines instance
+//	     will be written.
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  n                          int
-//     - The number of bytes written to byte buffer 'p'.
+//	n                          int
+//	   - The number of bytes written to byte buffer 'p'.
 //
-//       Read() reads up to len(p) bytes into p. It returns
-//       the number of bytes read (0 <= n <= len(p)) and any error
-//       encountered. Even if Read() returns n < len(p), it may use
-//       all of 'p' as scratch space during the call. If some
-//       data is available but not len(p) bytes, Read()
-//       conventionally returns what is available instead of
-//       waiting for more.
+//	     Read() reads up to len(p) bytes into p. It returns
+//	     the number of bytes read (0 <= n <= len(p)) and any error
+//	     encountered. Even if Read() returns n < len(p), it may use
+//	     all of 'p' as scratch space during the call. If some
+//	     data is available but not len(p) bytes, Read()
+//	     conventionally returns what is available instead of
+//	     waiting for more.
 //
 //
-//  err                        error
-//     - If this method completes successfully, this returned error
-//       Type is set equal to 'nil'. If errors are encountered
-//       during processing, the returned error Type will
-//       encapsulate an error message.
+//	err                        error
+//	   - If this method completes successfully, this returned error
+//	     Type is set equal to 'nil'. If errors are encountered
+//	     during processing, the returned error Type will
+//	     encapsulate an error message.
 //
-//       When Read() encounters an error or end-of-file condition
-//       after successfully reading n > 0 bytes, it returns the
-//       number of bytes read. It may return the (non-nil) error
-//       from the same call or return the error (and n == 0) from
-//       a subsequent call. An instance of this general case is
-//       that a Reader returning a non-zero number of bytes at the
-//       end of the input stream may return either err == EOF or
-//       err == nil. The next read operation should return 0, EOF.
-//
+//	     When Read() encounters an error or end-of-file condition
+//	     after successfully reading n > 0 bytes, it returns the
+//	     number of bytes read. It may return the (non-nil) error
+//	     from the same call or return the error (and n == 0) from
+//	     a subsequent call. An instance of this general case is
+//	     that a Reader returning a non-zero number of bytes at the
+//	     end of the input stream may return either err == EOF or
+//	     err == nil. The next read operation should return 0, EOF.
 //
 // ------------------------------------------------------------------------
 //
 // Usage Examples:
 //
-//  Example # 1
+//	Example # 1
 //
-//  p := make([]byte, 50)
+//	p := make([]byte, 50)
 //
-//  var n, readBytesCnt int
-//  sb := strings.Builder{}
+//	var n, readBytesCnt int
+//	sb := strings.Builder{}
 //
-//  for {
+//	for {
 //
-//    n,
-//    err = txtSpecTimerLines01.Read(p)
+//	  n,
+//	  err = txtSpecTimerLines01.Read(p)
 //
-//    if n == 0 {
-//      break
-//    }
+//	  if n == 0 {
+//	    break
+//	  }
 //
-//    sb.Write(p[:n])
-//    readBytesCnt += n
-//  }
+//	  sb.Write(p[:n])
+//	  readBytesCnt += n
+//	}
 //
-//  if err != nil &&
-//    err != io.EOF {
-//     return fmt.Errorf(
-//      "Error Returned From txtSpecTimerLines01.Read(p)\n"+
-//      "Error = \n%v\n",
-//       err.Error())
-//  }
+//	if err != nil &&
+//	  err != io.EOF {
+//	   return fmt.Errorf(
+//	    "Error Returned From txtSpecTimerLines01.Read(p)\n"+
+//	    "Error = \n%v\n",
+//	     err.Error())
+//	}
 //
-//  fmt.Printf("Text Line String: %s\n",
-//                sb.String())
+//	fmt.Printf("Text Line String: %s\n",
+//	              sb.String())
 //
-//  fmt.Printf("Number of bytes Read: %v\n",
-//                readBytesCnt)
+//	fmt.Printf("Number of bytes Read: %v\n",
+//	              readBytesCnt)
 //
-//  Example # 2
+//	Example # 2
 //
-//  p := make([]byte, 50)
+//	p := make([]byte, 50)
 //
-//  var n, readBytesCnt int
-//  var actualStr string
+//	var n, readBytesCnt int
+//	var actualStr string
 //
-//  for {
+//	for {
 //
-//    n,
-//    err = txtSpecTimerLines01.Read(p)
+//	  n,
+//	  err = txtSpecTimerLines01.Read(p)
 //
-//    if n == 0 {
-//      break
-//    }
+//	  if n == 0 {
+//	    break
+//	  }
 //
-//    actualStr += string(p[:n])
-//    readBytesCnt += n
-//  }
+//	  actualStr += string(p[:n])
+//	  readBytesCnt += n
+//	}
 //
-//  if err != nil &&
-//    err != io.EOF {
-//     return fmt.Errorf(
-//      "Error Returned From txtSpecTimerLines01.Read(p)\n"+
-//      "Error = \n%v\n",
-//       err.Error())
-//  }
+//	if err != nil &&
+//	  err != io.EOF {
+//	   return fmt.Errorf(
+//	    "Error Returned From txtSpecTimerLines01.Read(p)\n"+
+//	    "Error = \n%v\n",
+//	     err.Error())
+//	}
 //
-//  fmt.Printf("Text Line String: %v\n",
-//                actualStr)
+//	fmt.Printf("Text Line String: %v\n",
+//	              actualStr)
 //
-//  fmt.Printf("Number of bytes Read: %v\n",
-//                readBytesCnt)
-//
+//	fmt.Printf("Number of bytes Read: %v\n",
+//	              readBytesCnt)
 func (txtSpecTimerLines *TextLineSpecTimerLines) Read(
 	p []byte) (
 	n int,
@@ -3122,7 +3040,6 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) Read(
 //
 // This method fulfills requirements of the ITextLineSpecification
 // interface.
-//
 func (txtSpecTimerLines *TextLineSpecTimerLines) ReaderInitialize() {
 
 	if txtSpecTimerLines.lock == nil {
@@ -3153,119 +3070,115 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) ReaderInitialize() {
 //
 // ------------------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // This method will overwrite and reset all the data values
 // encapsulated by the current TextLineSpecTimerLines instance.
 //
-//
 // ------------------------------------------------------------------------
 //
-// Default Values
+// # Default Values
 //
 // This method will automatically set the following default values:
 //
-//  labelLeftMarginChars  - Defaults to "" (Empty or Zero left margin)
+//	labelLeftMarginChars  - Defaults to "" (Empty or Zero left margin)
 //
-//  startTimeLabel        - Defaults to "Start Time"
+//	startTimeLabel        - Defaults to "Start Time"
 //
-//  endTimeLabel          - Defaults to "End Time".
+//	endTimeLabel          - Defaults to "End Time".
 //
-//  timeFormat            - Defaults to "2006-01-02 15:04:05.000000000 -0700 MST"
+//	timeFormat            - Defaults to "2006-01-02 15:04:05.000000000 -0700 MST"
 //
-//  timeDurationLabel     - Defaults to "Elapsed Time"
+//	timeDurationLabel     - Defaults to "Elapsed Time"
 //
-//  textLabelFieldLen     - Defaults to  '12'
+//	textLabelFieldLen     - Defaults to  "12"
 //
-//  textLabelJustification    - Defaults to TextJustify(0).Right()
+//	textLabelJustification    - Defaults to TextJustify(0).Right()
 //
-//  labelRightMarginChars - Defaults to ": "
-//
+//	labelRightMarginChars - Defaults to ": "
 //
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  startTime                  time.Time
-//     - A time value which will be used in conjunction with
-//       'endTime' parameter to compute the time duration or
-//       elapsed for the timer event.
+//	startTime                  time.Time
+//	   - A time value which will be used in conjunction with
+//	     'endTime' parameter to compute the time duration or
+//	     elapsed for the timer event.
 //
-//       If this parameter is submitted as a zero time value,
-//       'startTime' will be defaulted to value of July 4, 1776
-//       9:30AM UTC.
-//
-//
-//  endTime                    time.Time
-//     - A time value which will be used in conjunction with
-//       'startTime' parameter to compute the time duration or
-//       elapsed for the timer event.
-//
-//       If this parameter is submitted as a zero time value,
-//       'endTime' will be defaulted to value of July 4, 1776
-//       9:30AM UTC.
+//	     If this parameter is submitted as a zero time value,
+//	     'startTime' will be defaulted to value of July 4, 1776
+//	     9:30AM UTC.
 //
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	endTime                    time.Time
+//	   - A time value which will be used in conjunction with
+//	     'startTime' parameter to compute the time duration or
+//	     elapsed for the timer event.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
-//
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     If this parameter is submitted as a zero time value,
+//	     'endTime' will be defaulted to value of July 4, 1776
+//	     9:30AM UTC.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       2. string - A string containing error prefix information.
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     2. string - A string containing error prefix information.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     4. [][2]string A two-dimensional slice of strings containing
+//	                    error prefix and error context information.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	                        ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  err                        error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	err                        error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (txtSpecTimerLines *TextLineSpecTimerLines) SetDefaultFullTimerEvent(
 	startTime time.Time,
 	endTime time.Time,
@@ -3336,14 +3249,14 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetDefaultFullTimerEvent(
 // more of the following methods when both starting time and ending
 // time are known:
 //
-//   TextLineSpecTimerLines.SetStartAndEndTime()
-//   - When both 'startTime' and 'endTime' are known.
+//	TextLineSpecTimerLines.SetStartAndEndTime()
+//	- When both 'startTime' and 'endTime' are known.
 //
-//   TextLineSpecTimerLines.SetStartTime()
-//   - When the 'startTime' is known.
+//	TextLineSpecTimerLines.SetStartTime()
+//	- When the 'startTime' is known.
 //
-//   TextLineSpecTimerLines.SetEndTime()
-//   - When the 'startTime' is known.
+//	TextLineSpecTimerLines.SetEndTime()
+//	- When the 'startTime' is known.
 //
 // The purpose of a TextLineSpecTimerLines instance is to capture
 // all the essential elements of a timer event and format that
@@ -3351,54 +3264,51 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetDefaultFullTimerEvent(
 //
 // ------------------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // This method will overwrite and reset all the data values
 // encapsulated by the current TextLineSpecTimerLines instance.
 //
 // ------------------------------------------------------------------------
 //
-// Default Values
+// # Default Values
 //
 // This method will automatically set the following default values:
 //
-//  labelLeftMarginChars  - Defaults to "" (Empty or Zero left margin)
+//	labelLeftMarginChars  - Defaults to "" (Empty or Zero left margin)
 //
-//  startTime             - Defaults to July 4, 1776 9:30AM UTC
+//	startTime             - Defaults to July 4, 1776 9:30AM UTC
 //
-//  startTimeLabel        - Defaults to "Start Time"
+//	startTimeLabel        - Defaults to "Start Time"
 //
-//  endTime               - Defaults to July 4, 1776 9:30AM UTC
+//	endTime               - Defaults to July 4, 1776 9:30AM UTC
 //
-//  endTimeLabel          - Defaults to "End Time".
+//	endTimeLabel          - Defaults to "End Time".
 //
-//  timeFormat            - Defaults to "2006-01-02 15:04:05.000000000 -0700 MST"
+//	timeFormat            - Defaults to "2006-01-02 15:04:05.000000000 -0700 MST"
 //
-//  timeDurationLabel     - Defaults to "Elapsed Time"
+//	timeDurationLabel     - Defaults to "Elapsed Time"
 //
-//  textLabelFieldLen     - Defaults to  '12'
+//	textLabelFieldLen     - Defaults to  "12"
 //
-//  textLabelJustification    - Defaults to TextJustify(0).Right()
+//	textLabelJustification    - Defaults to TextJustify(0).Right()
 //
-//  labelRightMarginChars - Defaults to ": "
-//
+//	labelRightMarginChars - Defaults to ": "
 //
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  --- NONE ---
-//
+//	--- NONE ---
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  --- NONE ---
-//     - This method will automatically set the internal member
-//       variables encapsulated by the current
-//       TextLineSpecTimerLines to default values.
-//
+//	--- NONE ---
+//	   - This method will automatically set the internal member
+//	     variables encapsulated by the current
+//	     TextLineSpecTimerLines to default values.
 func (txtSpecTimerLines *TextLineSpecTimerLines) SetDefaultShellTimerEvent() {
 
 	if txtSpecTimerLines.lock == nil {
@@ -3451,7 +3361,7 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetDefaultShellTimerEvent() {
 //
 // ----------------------------------------------------------------
 //
-// Be Advised
+// # Be Advised
 //
 // If this method completes successfully and the text field length
 // is less than the length of the longest label, the text field
@@ -3461,83 +3371,80 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetDefaultShellTimerEvent() {
 // calculating the character lengths of the three text labels:
 // 'startTimeLabel', 'endTimeLabel' and 'timeDurationLabel'.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  endTimeLabel               string
-//     - A string containing the text characters constituting the
-//       ending time text label.
+//	endTimeLabel               string
+//	   - A string containing the text characters constituting the
+//	     ending time text label.
 //
-//       If this string is submitted as a zero length or empty
-//       string, 'endTimeLabel' will be assigned a default value of
-//       "End Time".
+//	     If this string is submitted as a zero length or empty
+//	     string, 'endTimeLabel' will be assigned a default value of
+//	     "End Time".
 //
-//       If 'endTimeLabel' exceeds 50-characters in length,
-//       this method will return an error.
-//
-//
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
-//
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
-//
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     If 'endTimeLabel' exceeds 50-characters in length,
+//	     this method will return an error.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       2. string - A string containing error prefix information.
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     2. string - A string containing error prefix information.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     4. [][2]string A two-dimensional slice of strings containing
+//	                    error prefix and error context information.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	                        ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (txtSpecTimerLines *TextLineSpecTimerLines) SetEndTimeLabel(
 	endTimeLabel string,
 	errorPrefix interface{}) error {
@@ -3660,77 +3567,74 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetEndTimeLabel(
 // Of course, the ending time should occur after the starting
 // time for this instance of TextLineSpecTimerLines.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  endTime                    time.Time
-//     - The time at which the time event ends. The timer event
-//       refers to the subject timer event of the current
-//       TextLineSpecTimerLines instance.
+//	endTime                    time.Time
+//	   - The time at which the time event ends. The timer event
+//	     refers to the subject timer event of the current
+//	     TextLineSpecTimerLines instance.
 //
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       2. string - A string containing error prefix information.
+//	     2. string - A string containing error prefix information.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//	     4. [][2]string A two-dimensional slice of strings containing
+//	                    error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	                        ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
-//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (txtSpecTimerLines *TextLineSpecTimerLines) SetEndTime(
 	endTime time.Time,
 	errorPrefix interface{}) error {
@@ -3792,219 +3696,216 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetEndTime(
 //
 // ------------------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // This method will overwrite and reset all the data values
 // encapsulated by the current TextLineSpecTimerLines instance.
-//
 //
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  labelLeftMarginChars       string
-//     - The character or characters which will comprise the left
-//       margin of the text label.
+//	labelLeftMarginChars       string
+//	   - The character or characters which will comprise the left
+//	     margin of the text label.
 //
-//       If the string length of 'labelLeftMarginChars' plus
-//       'labelRightMarginChars' plus the text label field length
-//       ('textLabelFieldLen') exceeds the maximum length of
-//       55-characters, this method will return an error.
-//
-//
-//  startTimeLabel             string
-//     - A string containing the text characters constituting the
-//       starting time text label.
-//
-//       If this string is submitted as a zero length or empty
-//       string, 'startTimeLabel' will be assigned a default value
-//       of "Start Time".
-//
-//       If the string length of 'labelLeftMarginChars' plus
-//       'labelRightMarginChars' plus the text label field length
-//       ('textLabelFieldLen') exceeds the maximum length of
-//       55-characters, this method will return an error.
+//	     If the string length of 'labelLeftMarginChars' plus
+//	     'labelRightMarginChars' plus the text label field length
+//	     ('textLabelFieldLen') exceeds the maximum length of
+//	     55-characters, this method will return an error.
 //
 //
-//  startTime                  time.Time
-//     - A time value which will be used in conjunction with
-//       'endTime' parameter to compute the time duration or
-//       elapsed for the timer event.
+//	startTimeLabel             string
+//	   - A string containing the text characters constituting the
+//	     starting time text label.
 //
-//       If this parameter is submitted as a zero time value,
-//       'startTime' will be defaulted to value of July 4, 1776
-//       9:30AM UTC.
+//	     If this string is submitted as a zero length or empty
+//	     string, 'startTimeLabel' will be assigned a default value
+//	     of "Start Time".
 //
-//
-//  endTimeLabel               string.
-//     - A string containing the text characters constituting the
-//       ending time text label.
-//
-//       If this string is submitted as a zero length or empty
-//       string, 'endTimeLabel' will be assigned a default value of
-//       "End Time".
-//
-//       If the string length of 'labelLeftMarginChars' plus
-//       'labelRightMarginChars' plus the text label field length
-//       ('textLabelFieldLen') exceeds the maximum length of
-//       55-characters, this method will return an error.
+//	     If the string length of 'labelLeftMarginChars' plus
+//	     'labelRightMarginChars' plus the text label field length
+//	     ('textLabelFieldLen') exceeds the maximum length of
+//	     55-characters, this method will return an error.
 //
 //
-//  endTime                    time.Time
-//     - A time value which will be used in conjunction with
-//       'startTime' parameter to compute the time duration or
-//       elapsed for the timer event.
+//	startTime                  time.Time
+//	   - A time value which will be used in conjunction with
+//	     'endTime' parameter to compute the time duration or
+//	     elapsed for the timer event.
 //
-//       If this parameter is submitted as a zero time value,
-//       'endTime' will be defaulted to value of July 4, 1776
-//       9:30AM UTC.
-//
-//
-//  timeFormat                 string
-//     - This string holds the time format parameters used to
-//       format starting time and ending time values for text
-//       display and output.
-//
-//       If this parameter is submitted as an empty string,
-//       parameter 'timeFormat' will be assigned a default value
-//       of "2006-01-02 15:04:05.000000000 -0700 MST"
+//	     If this parameter is submitted as a zero time value,
+//	     'startTime' will be defaulted to value of July 4, 1776
+//	     9:30AM UTC.
 //
 //
-//  timeDurationLabel          string
-//     - The text label used to describe the time duration or
-//       elapsed time computed from the 'startTime' and 'endTime'
-//       parameters.
+//	endTimeLabel               string.
+//	   - A string containing the text characters constituting the
+//	     ending time text label.
 //
-//       If this string is submitted as a zero length or empty
-//       string, 'timeDurationLabel' will be assigned a default
-//       value of "Elapsed Time".
+//	     If this string is submitted as a zero length or empty
+//	     string, 'endTimeLabel' will be assigned a default value of
+//	     "End Time".
 //
-//       If the string length of 'labelLeftMarginChars' plus
-//       'labelRightMarginChars' plus the text label field length
-//       ('textLabelFieldLen') exceeds the maximum length of
-//       55-characters, this method will return an error.
-//
-//
-//  textLabelFieldLen          int
-//     - The length of the text fields which will be used to
-//       position and display the three text labels provided by
-//       input parameters 'startTimeLabel', 'endTimeLabel' and
-//       'timeDurationLabel'.
-//
-//       If 'textLabelFieldLen' is less than the length of the
-//       longest text label it will be defaulted to the length
-//       of the longest text label ('startTimeLabel',
-//       'endTimeLabel' or 'timeDurationLabel').
-//
-//       If the string length of 'labelLeftMarginChars' plus
-//       'labelRightMarginChars' plus the text label field length
-//       ('textLabelFieldLen') exceeds the maximum length of
-//       55-characters, this method will return an error.
+//	     If the string length of 'labelLeftMarginChars' plus
+//	     'labelRightMarginChars' plus the text label field length
+//	     ('textLabelFieldLen') exceeds the maximum length of
+//	     55-characters, this method will return an error.
 //
 //
-//  textLabelJustification         TextJustify
-//     - An enumeration which specifies the justification of the
-//       three text labels 'startTimeLabel', 'endTimeLabel' and
-//       'timeDurationLabel' within the field length specified by
-//       'textLabelFieldLen'.
+//	endTime                    time.Time
+//	   - A time value which will be used in conjunction with
+//	     'startTime' parameter to compute the time duration or
+//	     elapsed for the timer event.
 //
-//       Label justification must be equal to one of these three
-//       valid values:
-//           TextJustify(0).Left()
-//           TextJustify(0).Right()
-//           TextJustify(0).Center()
-//
-//       The abbreviated text justification enumeration syntax can
-//       also be used:
-//
-//           TxtJustify.Left()
-//           TxtJustify.Right()
-//           TxtJustify.Center()
+//	     If this parameter is submitted as a zero time value,
+//	     'endTime' will be defaulted to value of July 4, 1776
+//	     9:30AM UTC.
 //
 //
-//  labelRightMarginChars      string
-//     - This string contains the character or characters which
-//       will be used to separate the text labels ('startTimeLabel',
-//       'endTimeLabel' and 'timeDurationLabel') from the output or
-//       data values displayed on the same line.
-//       Example:
-//        Start Time[right margin chars]2010-01-02 15:04:05.000000000 -0700 MST
+//	timeFormat                 string
+//	   - This string holds the time format parameters used to
+//	     format starting time and ending time values for text
+//	     display and output.
 //
-//       Often this parameter is set to a single white space
-//       character (" ") or a colon plus white space character,
-//       (": ").
-//
-//       If this string is submitted as a zero length or empty
-//       string, 'labelRightMarginChars' will be assigned a
-//       default value of  ": ". Example Output:
-//        Start Time: 2010-01-02 15:04:05.000000000 -0700 MST
-//
-//       If the string length of 'labelLeftMarginChars' plus
-//       'labelRightMarginChars' plus the text label field length
-//       ('textLabelFieldLen') exceeds the maximum length of
-//       55-characters, this method will return an error.
+//	     If this parameter is submitted as an empty string,
+//	     parameter 'timeFormat' will be assigned a default value
+//	     of "2006-01-02 15:04:05.000000000 -0700 MST"
 //
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	timeDurationLabel          string
+//	   - The text label used to describe the time duration or
+//	     elapsed time computed from the 'startTime' and 'endTime'
+//	     parameters.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     If this string is submitted as a zero length or empty
+//	     string, 'timeDurationLabel' will be assigned a default
+//	     value of "Elapsed Time".
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     If the string length of 'labelLeftMarginChars' plus
+//	     'labelRightMarginChars' plus the text label field length
+//	     ('textLabelFieldLen') exceeds the maximum length of
+//	     55-characters, this method will return an error.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	textLabelFieldLen          int
+//	   - The length of the text fields which will be used to
+//	     position and display the three text labels provided by
+//	     input parameters 'startTimeLabel', 'endTimeLabel' and
+//	     'timeDurationLabel'.
 //
-//       2. string - A string containing error prefix information.
+//	     If 'textLabelFieldLen' is less than the length of the
+//	     longest text label it will be defaulted to the length
+//	     of the longest text label ('startTimeLabel',
+//	     'endTimeLabel' or 'timeDurationLabel').
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     If the string length of 'labelLeftMarginChars' plus
+//	     'labelRightMarginChars' plus the text label field length
+//	     ('textLabelFieldLen') exceeds the maximum length of
+//	     55-characters, this method will return an error.
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	textLabelJustification         TextJustify
+//	   - An enumeration which specifies the justification of the
+//	     three text labels 'startTimeLabel', 'endTimeLabel' and
+//	     'timeDurationLabel' within the field length specified by
+//	     'textLabelFieldLen'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     Label justification must be equal to one of these three
+//	     valid values:
+//	         TextJustify(0).Left()
+//	         TextJustify(0).Right()
+//	         TextJustify(0).Center()
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     The abbreviated text justification enumeration syntax can
+//	     also be used:
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	         TxtJustify.Left()
+//	         TxtJustify.Right()
+//	         TxtJustify.Center()
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
 //
+//	labelRightMarginChars      string
+//	   - This string contains the character or characters which
+//	     will be used to separate the text labels ('startTimeLabel',
+//	     'endTimeLabel' and 'timeDurationLabel') from the output or
+//	     data values displayed on the same line.
+//	     Example:
+//	      Start Time[right margin chars]2010-01-02 15:04:05.000000000 -0700 MST
+//
+//	     Often this parameter is set to a single white space
+//	     character (" ") or a colon plus white space character,
+//	     (": ").
+//
+//	     If this string is submitted as a zero length or empty
+//	     string, 'labelRightMarginChars' will be assigned a
+//	     default value of  ": ". Example Output:
+//	      Start Time: 2010-01-02 15:04:05.000000000 -0700 MST
+//
+//	     If the string length of 'labelLeftMarginChars' plus
+//	     'labelRightMarginChars' plus the text label field length
+//	     ('textLabelFieldLen') exceeds the maximum length of
+//	     55-characters, this method will return an error.
+//
+//
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
+//
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
+//
+//	     This empty interface must be convertible to one of the
+//	     following types:
+//
+//
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
+//
+//	     2. string - A string containing error prefix information.
+//
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
+//
+//	     4. [][2]string A two-dimensional slice of strings containing
+//	                    error prefix and error context information.
+//
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
+//
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	                        ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  err                        error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	err                        error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (txtSpecTimerLines *TextLineSpecTimerLines) SetFullTimerEvent(
 	labelLeftMarginChars string,
 	startTimeLabel string,
@@ -4080,232 +3981,229 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetFullTimerEvent(
 //
 // ------------------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // This method will overwrite and reset all the data values
 // encapsulated by the current TextLineSpecTimerLines instance.
-//
 //
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  labelLeftMarginChars       []rune
-//     - The character or characters which will comprise the left
-//       margin of the text label.
+//	labelLeftMarginChars       []rune
+//	   - The character or characters which will comprise the left
+//	     margin of the text label.
 //
-//       If the length in characters of 'labelLeftMarginChars' plus
-//       'labelRightMarginChars' plus the text label field length
-//       ('textLabelFieldLen') exceeds the maximum length of
-//       55-characters, this method will return an error.
+//	     If the length in characters of 'labelLeftMarginChars' plus
+//	     'labelRightMarginChars' plus the text label field length
+//	     ('textLabelFieldLen') exceeds the maximum length of
+//	     55-characters, this method will return an error.
 //
-//       If labelLeftMarginChars is submitted with a 'nil' value or
-//       a zero length rune array, no error will be triggered. In
-//       this case, the left margin will simply be omitted.
-//
-//
-//  startTimeLabel             []rune
-//     - A string containing the text characters constituting the
-//       starting time text label.
-//
-//       If this parameter is submitted as a zero length or empty
-//       rune array, or if the rune array contains invalid zero
-//       rune values, 'startTimeLabel' will be assigned a default
-//       value of "Start Time".
-//
-//       If the length in characters of 'labelLeftMarginChars' plus
-//       'labelRightMarginChars' plus the text label field length
-//       ('textLabelFieldLen') exceeds the maximum length of
-//       55-characters, this method will return an error.
+//	     If labelLeftMarginChars is submitted with a 'nil' value or
+//	     a zero length rune array, no error will be triggered. In
+//	     this case, the left margin will simply be omitted.
 //
 //
-//  startTime                  time.Time
-//     - A time value which will be used in conjunction with
-//       'endTime' parameter to compute the time duration or
-//       elapsed for the timer event.
+//	startTimeLabel             []rune
+//	   - A string containing the text characters constituting the
+//	     starting time text label.
 //
-//       If this parameter is submitted as a zero time value,
-//       'startTime' will be defaulted to value of July 4, 1776
-//       9:30AM UTC.
+//	     If this parameter is submitted as a zero length or empty
+//	     rune array, or if the rune array contains invalid zero
+//	     rune values, 'startTimeLabel' will be assigned a default
+//	     value of "Start Time".
 //
-//
-//  endTimeLabel               []rune
-//     - A string containing the text characters constituting the
-//       ending time text label.
-//
-//       If this parameter is submitted as a zero length or empty
-//       rune array, or if the rune array contains invalid zero
-//       rune values, 'endTimeLabel' will be assigned a default
-//       value of "End Time".
-//
-//       If the length in characters of 'labelLeftMarginChars' plus
-//       'labelRightMarginChars' plus the text label field length
-//       ('textLabelFieldLen') exceeds the maximum length of
-//       55-characters, this method will return an error.
+//	     If the length in characters of 'labelLeftMarginChars' plus
+//	     'labelRightMarginChars' plus the text label field length
+//	     ('textLabelFieldLen') exceeds the maximum length of
+//	     55-characters, this method will return an error.
 //
 //
-//  endTime                    time.Time
-//     - A time value which will be used in conjunction with
-//       'startTime' parameter to compute the time duration or
-//       elapsed for the timer event.
+//	startTime                  time.Time
+//	   - A time value which will be used in conjunction with
+//	     'endTime' parameter to compute the time duration or
+//	     elapsed for the timer event.
 //
-//       If this parameter is submitted as a zero time value,
-//       'endTime' will be defaulted to value of July 4, 1776
-//       9:30AM UTC.
-//
-//
-//  timeFormat                 string
-//     - This string holds the time format parameters used to
-//       format starting time and ending time values for text
-//       display and output.
-//
-//       If this parameter is submitted as an empty string,
-//       parameter 'timeFormat' will be assigned a default value
-//       of "2006-01-02 15:04:05.000000000 -0700 MST"
+//	     If this parameter is submitted as a zero time value,
+//	     'startTime' will be defaulted to value of July 4, 1776
+//	     9:30AM UTC.
 //
 //
-//  timeDurationLabel          []rune
-//     - The text label used to describe the time duration or
-//       elapsed time computed from the 'startTime' and 'endTime'
-//       parameters.
+//	endTimeLabel               []rune
+//	   - A string containing the text characters constituting the
+//	     ending time text label.
 //
-//       If this parameter is submitted as a zero length or empty
-//       rune array, or if the rune array contains invalid zero
-//       rune values, 'timeDurationLabel' will be assigned a default
-//       value of "Elapsed Time".
+//	     If this parameter is submitted as a zero length or empty
+//	     rune array, or if the rune array contains invalid zero
+//	     rune values, 'endTimeLabel' will be assigned a default
+//	     value of "End Time".
 //
-//       If the length in characters of 'labelLeftMarginChars' plus
-//       'labelRightMarginChars' plus the text label field length
-//       ('textLabelFieldLen') exceeds the maximum length of
-//       55-characters, this method will return an error.
-//
-//
-//  textLabelFieldLen          int
-//     - A user entered value which defines the length of the text
-//       field used by all three text labels, 'startTimeLabel',
-//       'endTimeLabel' and 'timeDurationLabel'.
-//
-//       The length of the text fields which will be used to
-//       position and display the three text labels provided by
-//       input parameters 'startTimeLabel', 'endTimeLabel' and
-//       'timeDurationLabel'.
-//
-//       If 'textLabelFieldLen' is less than the length of the
-//       longest text label it will be defaulted to the length
-//       of the longest text label ('startTimeLabel',
-//       'endTimeLabel' or 'timeDurationLabel').
-//
-//       If the length in characters of 'labelLeftMarginChars' plus
-//       'labelRightMarginChars' plus the text label field length
-//       ('textLabelFieldLen') exceeds the maximum length of
-//       55-characters, this method will return an error.
+//	     If the length in characters of 'labelLeftMarginChars' plus
+//	     'labelRightMarginChars' plus the text label field length
+//	     ('textLabelFieldLen') exceeds the maximum length of
+//	     55-characters, this method will return an error.
 //
 //
-//  textLabelJustification         TextJustify
-//     - An enumeration which specifies the justification of the
-//       three text labels 'startTimeLabel', 'endTimeLabel' and
-//       'timeDurationLabel' within the field length specified by
-//       'textLabelFieldLen'.
+//	endTime                    time.Time
+//	   - A time value which will be used in conjunction with
+//	     'startTime' parameter to compute the time duration or
+//	     elapsed for the timer event.
 //
-//       Label justification must be equal to one of these three
-//       valid values:
-//           TextJustify(0).Left()
-//           TextJustify(0).Right()
-//           TextJustify(0).Center()
-//
-//       The abbreviated text justification enumeration syntax can
-//       also be used:
-//
-//           TxtJustify.Left()
-//           TxtJustify.Right()
-//           TxtJustify.Center()
+//	     If this parameter is submitted as a zero time value,
+//	     'endTime' will be defaulted to value of July 4, 1776
+//	     9:30AM UTC.
 //
 //
-//  labelRightMarginChars      []rune
-//     - This rune array contains the character or characters which
-//       will be used to separate the text labels ('startTimeLabel',
-//       'endTimeLabel' and 'timeDurationLabel') from the output or
-//       data values displayed on the same line.
-//       Example:
-//        Start Time[right margin chars]2010-01-02 15:04:05.000000000 -0700 MST
+//	timeFormat                 string
+//	   - This string holds the time format parameters used to
+//	     format starting time and ending time values for text
+//	     display and output.
 //
-//       Often this parameter is set to a single white space
-//       character (" ") or a colon plus white space character,
-//       (": ").
-//
-//       If this parameter is submitted as a zero length array, or
-//       if rune array contains invalid zero rune values,
-//       'labelRightMarginChars' will be assigned a default value
-//       of  ": ".
-//       Example Output:
-//        Start Time: 2010-01-02 15:04:05.000000000 -0700 MST
-//
-//       If the length in characters of 'labelLeftMarginChars' plus
-//       'labelRightMarginChars' plus the text label field length
-//       ('textLabelFieldLen') exceeds the maximum length of
-//       55-characters, this method will return an error.
+//	     If this parameter is submitted as an empty string,
+//	     parameter 'timeFormat' will be assigned a default value
+//	     of "2006-01-02 15:04:05.000000000 -0700 MST"
 //
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	timeDurationLabel          []rune
+//	   - The text label used to describe the time duration or
+//	     elapsed time computed from the 'startTime' and 'endTime'
+//	     parameters.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     If this parameter is submitted as a zero length or empty
+//	     rune array, or if the rune array contains invalid zero
+//	     rune values, 'timeDurationLabel' will be assigned a default
+//	     value of "Elapsed Time".
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     If the length in characters of 'labelLeftMarginChars' plus
+//	     'labelRightMarginChars' plus the text label field length
+//	     ('textLabelFieldLen') exceeds the maximum length of
+//	     55-characters, this method will return an error.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	textLabelFieldLen          int
+//	   - A user entered value which defines the length of the text
+//	     field used by all three text labels, 'startTimeLabel',
+//	     'endTimeLabel' and 'timeDurationLabel'.
 //
-//       2. string - A string containing error prefix information.
+//	     The length of the text fields which will be used to
+//	     position and display the three text labels provided by
+//	     input parameters 'startTimeLabel', 'endTimeLabel' and
+//	     'timeDurationLabel'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     If 'textLabelFieldLen' is less than the length of the
+//	     longest text label it will be defaulted to the length
+//	     of the longest text label ('startTimeLabel',
+//	     'endTimeLabel' or 'timeDurationLabel').
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//	     If the length in characters of 'labelLeftMarginChars' plus
+//	     'labelRightMarginChars' plus the text label field length
+//	     ('textLabelFieldLen') exceeds the maximum length of
+//	     55-characters, this method will return an error.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	textLabelJustification         TextJustify
+//	   - An enumeration which specifies the justification of the
+//	     three text labels 'startTimeLabel', 'endTimeLabel' and
+//	     'timeDurationLabel' within the field length specified by
+//	     'textLabelFieldLen'.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     Label justification must be equal to one of these three
+//	     valid values:
+//	         TextJustify(0).Left()
+//	         TextJustify(0).Right()
+//	         TextJustify(0).Center()
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     The abbreviated text justification enumeration syntax can
+//	     also be used:
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//	         TxtJustify.Left()
+//	         TxtJustify.Right()
+//	         TxtJustify.Center()
 //
+//
+//	labelRightMarginChars      []rune
+//	   - This rune array contains the character or characters which
+//	     will be used to separate the text labels ('startTimeLabel',
+//	     'endTimeLabel' and 'timeDurationLabel') from the output or
+//	     data values displayed on the same line.
+//	     Example:
+//	      Start Time[right margin chars]2010-01-02 15:04:05.000000000 -0700 MST
+//
+//	     Often this parameter is set to a single white space
+//	     character (" ") or a colon plus white space character,
+//	     (": ").
+//
+//	     If this parameter is submitted as a zero length array, or
+//	     if rune array contains invalid zero rune values,
+//	     'labelRightMarginChars' will be assigned a default value
+//	     of  ": ".
+//	     Example Output:
+//	      Start Time: 2010-01-02 15:04:05.000000000 -0700 MST
+//
+//	     If the length in characters of 'labelLeftMarginChars' plus
+//	     'labelRightMarginChars' plus the text label field length
+//	     ('textLabelFieldLen') exceeds the maximum length of
+//	     55-characters, this method will return an error.
+//
+//
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
+//
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
+//
+//	     This empty interface must be convertible to one of the
+//	     following types:
+//
+//
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
+//
+//	     2. string - A string containing error prefix information.
+//
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
+//
+//	     4. [][2]string A two-dimensional slice of strings containing
+//	                    error prefix and error context information.
+//
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
+//
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	                        ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  err                        error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	err                        error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (txtSpecTimerLines *TextLineSpecTimerLines) SetFullTimerEventRunes(
 	labelLeftMarginChars []rune,
 	startTimeLabel []rune,
@@ -4366,15 +4264,16 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetFullTimerEventRunes(
 // Each instance of TextLineSpecTimerLines describes a timer event
 // which uses three labels to describe the key elements of that
 // event. These labels are:
-//   (1) TextLineSpecTimerLines.startTimeLabel
-//       - Describes the starting time for this timer event.
 //
-//   (2) TextLineSpecTimerLines.endTimeLabel
-//       - Describes the ending time for this timer event.
+//	(1) TextLineSpecTimerLines.startTimeLabel
+//	    - Describes the starting time for this timer event.
 //
-//   (3) TextLineSpecTimerLines.timeDuration
-//       - Describes the time duration or elapsed time for this
-//         timer event.
+//	(2) TextLineSpecTimerLines.endTimeLabel
+//	    - Describes the ending time for this timer event.
+//
+//	(3) TextLineSpecTimerLines.timeDuration
+//	    - Describes the time duration or elapsed time for this
+//	      timer event.
 //
 // The length of the text field used to display these three labels
 // is defined either by the user specified parameter 'Label Field
@@ -4387,96 +4286,92 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetFullTimerEventRunes(
 // TextJustify is an enumeration which specifies the position of a
 // string of text within a text field.
 //
-//
 // ------------------------------------------------------------------------
 //
-// Input Parameters
+// # Input Parameters
+//
+//	textLabelJustification         TextJustify
+//	   - An enumeration which specifies the justification of the
+//	     three text labels 'startTimeLabel', 'endTimeLabel' and
+//	     'timeDurationLabel' within the field length specified by
+//	     'textLabelFieldLen'.
+//
+//	     Label justification must be equal to one of these three
+//	     valid values:
+//	         TextJustify(0).Left()
+//	         TextJustify(0).Right()
+//	         TextJustify(0).Center()
+//
+//	     The abbreviated text justification enumeration syntax can
+//	     also be used:
+//
+//	         TxtJustify.Left()
+//	         TxtJustify.Right()
+//	         TxtJustify.Center()
+//
+//	     If the input parameter for label justification
+//	     ('textLabelJustification') is set to a value other than 'Left',
+//	     'Right' or 'Center', this method will return an error.
 //
 //
-//  textLabelJustification         TextJustify
-//     - An enumeration which specifies the justification of the
-//       three text labels 'startTimeLabel', 'endTimeLabel' and
-//       'timeDurationLabel' within the field length specified by
-//       'textLabelFieldLen'.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       Label justification must be equal to one of these three
-//       valid values:
-//           TextJustify(0).Left()
-//           TextJustify(0).Right()
-//           TextJustify(0).Center()
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       The abbreviated text justification enumeration syntax can
-//       also be used:
-//
-//           TxtJustify.Left()
-//           TxtJustify.Right()
-//           TxtJustify.Center()
-//
-//       If the input parameter for label justification
-//       ('textLabelJustification') is set to a value other than 'Left',
-//       'Right' or 'Center', this method will return an error.
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     2. string - A string containing error prefix information.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
+//	     4. [][2]string A two-dimensional slice of strings containing
+//	                    error prefix and error context information.
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       2. string - A string containing error prefix information.
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	                        ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
-//
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
-//
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
-//
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
-//
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
-//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  err                        error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	err                        error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (txtSpecTimerLines *TextLineSpecTimerLines) SetLabelJustification(
 	labelJustification TextJustify,
 	errorPrefix interface{}) error {
@@ -4530,103 +4425,100 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetLabelJustification(
 // 'labelRightMarginChars' is set to either a single white
 // space character or the default value which is a colon and a
 // white space character (": ").
-//       Examples:
-//        Start Time[sep chars]2010-01-02 15:04:05.000000000 -0700 MST
-//        Start Time: 2010-01-02 15:04:05.000000000 -0700 MST
+//
+//	Examples:
+//	 Start Time[sep chars]2010-01-02 15:04:05.000000000 -0700 MST
+//	 Start Time: 2010-01-02 15:04:05.000000000 -0700 MST
 //
 // If input parameter 'labelRightMarginChars' is set to an
 // empty string, its value will be defaulted to a colon and a white
 // space character  (": ").
 //
-//
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  labelRightMarginChars      string
-//     - This string contains the character or characters which
-//       will be used to separate the text labels ('startTimeLabel',
-//       'endTimeLabel' and 'timeDurationLabel') from the output or
-//       data values displayed on the same line.
-//       Example:
-//        Start Time[right margin chars]2010-01-02 15:04:05.000000000 -0700 MST
+//	labelRightMarginChars      string
+//	   - This string contains the character or characters which
+//	     will be used to separate the text labels ('startTimeLabel',
+//	     'endTimeLabel' and 'timeDurationLabel') from the output or
+//	     data values displayed on the same line.
+//	     Example:
+//	      Start Time[right margin chars]2010-01-02 15:04:05.000000000 -0700 MST
 //
-//       Often this parameter is set to a single white space
-//       character (" ") or a colon plus white space character,
-//       (": ").
+//	     Often this parameter is set to a single white space
+//	     character (" ") or a colon plus white space character,
+//	     (": ").
 //
-//       If this string is submitted as a zero length or empty
-//       string, 'labelRightMarginChars' will be assigned a
-//       default value of  ": ". Example Output:
-//        Start Time: 2010-01-02 15:04:05.000000000 -0700 MST
+//	     If this string is submitted as a zero length or empty
+//	     string, 'labelRightMarginChars' will be assigned a
+//	     default value of  ": ". Example Output:
+//	      Start Time: 2010-01-02 15:04:05.000000000 -0700 MST
 //
-//       If the string length of 'labelLeftMarginChars' plus
-//       'labelRightMarginChars' plus the text label field length
-//       ('textLabelFieldLen') exceeds the maximum length of
-//       55-characters, this method will return an error.
-//
-//
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
-//
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
-//
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     If the string length of 'labelLeftMarginChars' plus
+//	     'labelRightMarginChars' plus the text label field length
+//	     ('textLabelFieldLen') exceeds the maximum length of
+//	     55-characters, this method will return an error.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       2. string - A string containing error prefix information.
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     2. string - A string containing error prefix information.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     4. [][2]string A two-dimensional slice of strings containing
+//	                    error prefix and error context information.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	                        ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (txtSpecTimerLines *TextLineSpecTimerLines) SetLabelRightMarginChars(
 	labelRightMarginChars string,
 	errorPrefix interface{}) error {
@@ -4706,220 +4598,216 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetLabelRightMarginChars(
 // calling one or more of the following methods when both starting
 // time and ending time are known:
 //
-//   TextLineSpecTimerLines.SetStartAndEndTime()
-//   - When both 'startTime' and 'endTime' are known.
+//	TextLineSpecTimerLines.SetStartAndEndTime()
+//	- When both 'startTime' and 'endTime' are known.
 //
-//   TextLineSpecTimerLines.SetStartTime()
-//   - When the 'startTime' is known.
+//	TextLineSpecTimerLines.SetStartTime()
+//	- When the 'startTime' is known.
 //
-//   TextLineSpecTimerLines.SetEndTime()
-//   - When the 'startTime' is known.
+//	TextLineSpecTimerLines.SetEndTime()
+//	- When the 'startTime' is known.
 //
 // The purpose of a TextLineSpecTimerLines instance is to capture
 // all the essential elements of a timer event and format that
 // information for text display output or printing.
 //
-//
 // ------------------------------------------------------------------------
 //
-// Default Values
+// # Default Values
 //
 // This method will automatically set the following default values:
 //
-//  startTime           - Defaults to July 4, 1776 9:30AM UTC
+//	startTime           - Defaults to July 4, 1776 9:30AM UTC
 //
-//  endTime             - Defaults to July 4, 1776 9:30AM UTC
-//
+//	endTime             - Defaults to July 4, 1776 9:30AM UTC
 //
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  labelLeftMarginChars       string
-//     - The character or characters which will comprise the left
-//       margin of the text label.
+//	labelLeftMarginChars       string
+//	   - The character or characters which will comprise the left
+//	     margin of the text label.
 //
-//       If the string length of 'labelLeftMarginChars' plus
-//       'labelRightMarginChars' plus the text label field length
-//       ('textLabelFieldLen') exceeds the maximum length of
-//       55-characters, this method will return an error.
-//
-//
-//  startTimeLabel             string
-//     - A string containing the text characters constituting the
-//       starting time text label.
-//
-//       If this string is submitted as a zero length or empty
-//       string, 'startTimeLabel' will be assigned a default value
-//       of "Start Time".
+//	     If the string length of 'labelLeftMarginChars' plus
+//	     'labelRightMarginChars' plus the text label field length
+//	     ('textLabelFieldLen') exceeds the maximum length of
+//	     55-characters, this method will return an error.
 //
 //
-//       If the string length of 'labelLeftMarginChars' plus
-//       'labelRightMarginChars' plus the text label field length
-//       ('textLabelFieldLen') exceeds the maximum length of
-//       55-characters, this method will return an error.
+//	startTimeLabel             string
+//	   - A string containing the text characters constituting the
+//	     starting time text label.
+//
+//	     If this string is submitted as a zero length or empty
+//	     string, 'startTimeLabel' will be assigned a default value
+//	     of "Start Time".
 //
 //
-//  endTimeLabel               string.
-//     - A string containing the text characters constituting the
-//       ending time text label.
-//
-//       If this string is submitted as a zero length or empty
-//       string, 'endTimeLabel' will be assigned a default value of
-//       "End Time".
-//
-//       If the string length of 'labelLeftMarginChars' plus
-//       'labelRightMarginChars' plus the text label field length
-//       ('textLabelFieldLen') exceeds the maximum length of
-//       55-characters, this method will return an error.
+//	     If the string length of 'labelLeftMarginChars' plus
+//	     'labelRightMarginChars' plus the text label field length
+//	     ('textLabelFieldLen') exceeds the maximum length of
+//	     55-characters, this method will return an error.
 //
 //
-//  timeFormat                 string
-//     - This string holds the time format parameters used to
-//       format starting time and ending time values for text
-//       display and output.
+//	endTimeLabel               string.
+//	   - A string containing the text characters constituting the
+//	     ending time text label.
 //
-//       If this parameter is submitted as an empty string,
-//       parameter 'timeFormat' will be assigned a default value
-//       of "2006-01-02 15:04:05.000000000 -0700 MST"
+//	     If this string is submitted as a zero length or empty
+//	     string, 'endTimeLabel' will be assigned a default value of
+//	     "End Time".
 //
-//
-//  timeDurationLabel          string
-//     - The text label used to describe the time duration or
-//       elapsed time computed from the 'startTime' and 'endTime'
-//       parameters.
-//
-//       If this string is submitted as a zero length or empty
-//       string, 'timeDurationLabel' will be assigned a default
-//       value of "Elapsed Time".
-//
-//       If the string length of 'labelLeftMarginChars' plus
-//       'labelRightMarginChars' plus the text label field length
-//       ('textLabelFieldLen') exceeds the maximum length of
-//       55-characters, this method will return an error.
+//	     If the string length of 'labelLeftMarginChars' plus
+//	     'labelRightMarginChars' plus the text label field length
+//	     ('textLabelFieldLen') exceeds the maximum length of
+//	     55-characters, this method will return an error.
 //
 //
-//  textLabelFieldLen          int
-//     - The length of the text fields which will be used to
-//       position and display the three text labels provided by
-//       input parameters 'startTimeLabel', 'endTimeLabel' and
-//       'timeDurationLabel'.
+//	timeFormat                 string
+//	   - This string holds the time format parameters used to
+//	     format starting time and ending time values for text
+//	     display and output.
 //
-//       If 'textLabelFieldLen' is less than the length of the
-//       longest text label it will be defaulted to the length
-//       of the longest text label ('startTimeLabel',
-//       'endTimeLabel' or 'timeDurationLabel').
-//
-//       If the string length of 'labelLeftMarginChars' plus
-//       'labelRightMarginChars' plus the text label field length
-//       ('textLabelFieldLen') exceeds the maximum length of
-//       55-characters, this method will return an error.
+//	     If this parameter is submitted as an empty string,
+//	     parameter 'timeFormat' will be assigned a default value
+//	     of "2006-01-02 15:04:05.000000000 -0700 MST"
 //
 //
-//  textLabelJustification         TextJustify
-//     - An enumeration which specifies the justification of the
-//       three text labels 'startTimeLabel', 'endTimeLabel' and
-//       'timeDurationLabel' within the field length specified by
-//       'textLabelFieldLen'.
+//	timeDurationLabel          string
+//	   - The text label used to describe the time duration or
+//	     elapsed time computed from the 'startTime' and 'endTime'
+//	     parameters.
 //
-//       Label justification must be equal to one of these three
-//       valid values:
-//           TextJustify(0).Left()
-//           TextJustify(0).Right()
-//           TextJustify(0).Center()
+//	     If this string is submitted as a zero length or empty
+//	     string, 'timeDurationLabel' will be assigned a default
+//	     value of "Elapsed Time".
 //
-//       The abbreviated text justification enumeration syntax can
-//       also be used:
-//
-//           TxtJustify.Left()
-//           TxtJustify.Right()
-//           TxtJustify.Center()
+//	     If the string length of 'labelLeftMarginChars' plus
+//	     'labelRightMarginChars' plus the text label field length
+//	     ('textLabelFieldLen') exceeds the maximum length of
+//	     55-characters, this method will return an error.
 //
 //
-//  labelRightMarginChars string
-//     - This string contains the character or characters which
-//       will be used to separate the text labels ('startTimeLabel',
-//       'endTimeLabel' and 'timeDurationLabel') from the output or
-//       data values displayed on the same line.
-//       Example:
-//        Start Time[sep chars]2010-01-02 15:04:05.000000000 -0700 MST
+//	textLabelFieldLen          int
+//	   - The length of the text fields which will be used to
+//	     position and display the three text labels provided by
+//	     input parameters 'startTimeLabel', 'endTimeLabel' and
+//	     'timeDurationLabel'.
 //
-//       Often this parameter is set to a single white space
-//       character (" ") or a colon plus white space character,
-//       (": ").
+//	     If 'textLabelFieldLen' is less than the length of the
+//	     longest text label it will be defaulted to the length
+//	     of the longest text label ('startTimeLabel',
+//	     'endTimeLabel' or 'timeDurationLabel').
 //
-//
-//       If this string is submitted as a zero length or empty
-//       string, 'labelRightMarginChars' will be assigned a
-//       default value of  ": ". Example Output:
-//        Start Time: 2010-01-02 15:04:05.000000000 -0700 MST
-//
-//       If the string length of 'labelLeftMarginChars' plus
-//       'labelRightMarginChars' plus the text label field length
-//       ('textLabelFieldLen') exceeds the maximum length of
-//       55-characters, this method will return an error.
+//	     If the string length of 'labelLeftMarginChars' plus
+//	     'labelRightMarginChars' plus the text label field length
+//	     ('textLabelFieldLen') exceeds the maximum length of
+//	     55-characters, this method will return an error.
 //
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	textLabelJustification         TextJustify
+//	   - An enumeration which specifies the justification of the
+//	     three text labels 'startTimeLabel', 'endTimeLabel' and
+//	     'timeDurationLabel' within the field length specified by
+//	     'textLabelFieldLen'.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     Label justification must be equal to one of these three
+//	     valid values:
+//	         TextJustify(0).Left()
+//	         TextJustify(0).Right()
+//	         TextJustify(0).Center()
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     The abbreviated text justification enumeration syntax can
+//	     also be used:
+//
+//	         TxtJustify.Left()
+//	         TxtJustify.Right()
+//	         TxtJustify.Center()
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	labelRightMarginChars string
+//	   - This string contains the character or characters which
+//	     will be used to separate the text labels ('startTimeLabel',
+//	     'endTimeLabel' and 'timeDurationLabel') from the output or
+//	     data values displayed on the same line.
+//	     Example:
+//	      Start Time[sep chars]2010-01-02 15:04:05.000000000 -0700 MST
 //
-//       2. string - A string containing error prefix information.
+//	     Often this parameter is set to a single white space
+//	     character (" ") or a colon plus white space character,
+//	     (": ").
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//	     If this string is submitted as a zero length or empty
+//	     string, 'labelRightMarginChars' will be assigned a
+//	     default value of  ": ". Example Output:
+//	      Start Time: 2010-01-02 15:04:05.000000000 -0700 MST
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     If the string length of 'labelLeftMarginChars' plus
+//	     'labelRightMarginChars' plus the text label field length
+//	     ('textLabelFieldLen') exceeds the maximum length of
+//	     55-characters, this method will return an error.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
+//
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
+//
+//	     2. string - A string containing error prefix information.
+//
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
+//
+//	     4. [][2]string A two-dimensional slice of strings containing
+//	                    error prefix and error context information.
+//
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
+//
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	                        ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  err                        error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	err                        error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (txtSpecTimerLines *TextLineSpecTimerLines) SetShellTimerEvent(
 	labelLeftMarginChars string,
 	startTimeLabel string,
@@ -4987,77 +4875,74 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetShellTimerEvent(
 // Of course, the starting time should occur before the ending
 // time for this instance of TextLineSpecTimerLines.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  startTime                  time.Time
-//     - The time at which the time event starts. The timer event
-//       refers to the subject timer event of the current
-//       TextLineSpecTimerLines instance.
+//	startTime                  time.Time
+//	   - The time at which the time event starts. The timer event
+//	     refers to the subject timer event of the current
+//	     TextLineSpecTimerLines instance.
 //
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       2. string - A string containing error prefix information.
+//	     2. string - A string containing error prefix information.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//	     4. [][2]string A two-dimensional slice of strings containing
+//	                    error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	                        ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
-//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (txtSpecTimerLines *TextLineSpecTimerLines) SetStartTime(
 	startTime time.Time,
 	errorPrefix interface{}) error {
@@ -5114,7 +4999,7 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetStartTime(
 //
 // ----------------------------------------------------------------
 //
-// Be Advised
+// # Be Advised
 //
 // If this method completes successfully and the text field length
 // is less than the length of the longest label, the text field
@@ -5124,83 +5009,80 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetStartTime(
 // character lengths of the three text labels: 'startTimeLabel',
 // 'endTimeLabel' and 'timeDurationLabel'.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  startTimeLabel             string
-//     - A string containing the text characters constituting the
-//       starting time text label.
+//	startTimeLabel             string
+//	   - A string containing the text characters constituting the
+//	     starting time text label.
 //
-//       If this string is submitted as a zero length or empty
-//       string, 'startTimeLabel' will be assigned a default value
-//       of "Start Time".
+//	     If this string is submitted as a zero length or empty
+//	     string, 'startTimeLabel' will be assigned a default value
+//	     of "Start Time".
 //
-//       If 'startTimeLabel' exceeds 50-characters in length,
-//       this method will return an error.
-//
-//
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
-//
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
-//
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     If 'startTimeLabel' exceeds 50-characters in length,
+//	     this method will return an error.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       2. string - A string containing error prefix information.
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     2. string - A string containing error prefix information.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     4. [][2]string A two-dimensional slice of strings containing
+//	                    error prefix and error context information.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	                        ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (txtSpecTimerLines *TextLineSpecTimerLines) SetStartTimeLabel(
 	startTimeLabel string,
 	errorPrefix interface{}) error {
@@ -5319,83 +5201,80 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetStartTimeLabel(
 // If 'endTime' occurs BEFORE 'startTime', this method will return
 // an error.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  startTime                  time.Time
-//     - The time at which the time event starts. The timer event
-//       refers to the subject timer event of the current
-//       TextLineSpecTimerLines instance.
+//	startTime                  time.Time
+//	   - The time at which the time event starts. The timer event
+//	     refers to the subject timer event of the current
+//	     TextLineSpecTimerLines instance.
 //
 //
-//  endTime                    time.Time
-//     - The time at which the time event ends. The timer event
-//       refers to the subject timer event of the current
-//       TextLineSpecTimerLines instance.
+//	endTime                    time.Time
+//	   - The time at which the time event ends. The timer event
+//	     refers to the subject timer event of the current
+//	     TextLineSpecTimerLines instance.
 //
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       2. string - A string containing error prefix information.
+//	     2. string - A string containing error prefix information.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//	     4. [][2]string A two-dimensional slice of strings containing
+//	                    error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	                        ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
-//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (txtSpecTimerLines *TextLineSpecTimerLines) SetStartAndEndTime(
 	startTime time.Time,
 	endTime time.Time,
@@ -5465,15 +5344,16 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetStartAndEndTime(
 // The three description labels associated with the time event
 // specified by this instance of TextLineSpecTimerLines are listed
 // as follows:
-//   (1) TextLineSpecTimerLines.startTimeLabel
-//       - Describes the starting time for this timer event.
 //
-//   (2) TextLineSpecTimerLines.endTimeLabel
-//       - Describes the ending time for this timer event.
+//	(1) TextLineSpecTimerLines.startTimeLabel
+//	    - Describes the starting time for this timer event.
 //
-//   (3) TextLineSpecTimerLines.timeDuration
-//       - Describes the time duration or elapsed time for this
-//         timer event.
+//	(2) TextLineSpecTimerLines.endTimeLabel
+//	    - Describes the ending time for this timer event.
+//
+//	(3) TextLineSpecTimerLines.timeDuration
+//	    - Describes the time duration or elapsed time for this
+//	      timer event.
 //
 // If Text Label Field Length ('fieldLength') is longer than the
 // length of the longest of the three label strings, the Text
@@ -5488,7 +5368,8 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetStartAndEndTime(
 // strings with a length less than the maximum length will be
 // justified according to the Text Justification Specification.
 // Reference:
-//    TextLineSpecTimerLines.SetLabelJustification()
+//
+//	TextLineSpecTimerLines.SetLabelJustification()
 //
 // If input parameter 'fieldLength' is set to a value less than
 // minus one (-1), an error will be generated.
@@ -5496,83 +5377,80 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetStartAndEndTime(
 // If input parameter 'fieldLength' is set to a value greater than
 // one-million (1,000,000), an error will be generated.
 //
-//
 // -----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  fieldLength               int
-//     - The new value for the Text Label Field Length. If the
-//       value of 'fieldLength' is less than minus one (-1) or
-//       greater than one-million (1,000,000) an error will be
-//       returned.
+//	fieldLength               int
+//	   - The new value for the Text Label Field Length. If the
+//	     value of 'fieldLength' is less than minus one (-1) or
+//	     greater than one-million (1,000,000) an error will be
+//	     returned.
 //
-//       If this input value is less than the length of the
-//       currently configured longest text label, Text Label Field
-//       Length will be automatically set to the length of that
-//       longest text label.
-//
-//
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
-//
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
-//
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     If this input value is less than the length of the
+//	     currently configured longest text label, Text Label Field
+//	     Length will be automatically set to the length of that
+//	     longest text label.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       2. string - A string containing error prefix information.
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     2. string - A string containing error prefix information.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     4. [][2]string A two-dimensional slice of strings containing
+//	                    error prefix and error context information.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	                        ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package, "github.com/MikeAustin71/errpref".
 //
 // -----------------------------------------------------------------
 //
 // Return Values
 //
-//  err                        error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	err                        error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (txtSpecTimerLines *TextLineSpecTimerLines) SetTextLabelFieldLength(
 	fieldLength int,
 	errorPrefix interface{}) (err error) {
@@ -5662,7 +5540,7 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetTextLabelFieldLength(
 //
 // ----------------------------------------------------------------
 //
-// Be Advised
+// # Be Advised
 //
 // If this method completes successfully and the text field length
 // is less than the length of the longest label, the text field
@@ -5672,84 +5550,81 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetTextLabelFieldLength(
 // character lengths of the three text labels: 'startTimeLabel',
 // 'endTimeLabel' and 'timeDurationLabel'.
 //
-//
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  timeDurationLabel          string
-//     - The text label used to describe the time duration or
-//       elapsed time computed from the 'startTime' and 'endTime'
-//       parameters.
+//	timeDurationLabel          string
+//	   - The text label used to describe the time duration or
+//	     elapsed time computed from the 'startTime' and 'endTime'
+//	     parameters.
 //
-//       If this string is submitted as a zero length or empty
-//       string, 'timeDurationLabel' will be assigned a default
-//       value of "Elapsed Time".
+//	     If this string is submitted as a zero length or empty
+//	     string, 'timeDurationLabel' will be assigned a default
+//	     value of "Elapsed Time".
 //
-//       If 'timeDurationLabel' exceeds 50-characters in length,
-//       this method will return an error.
-//
-//
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
-//
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
-//
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     If 'timeDurationLabel' exceeds 50-characters in length,
+//	     this method will return an error.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       2. string - A string containing error prefix information.
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     2. string - A string containing error prefix information.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     4. [][2]string A two-dimensional slice of strings containing
+//	                    error prefix and error context information.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	                        ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (txtSpecTimerLines *TextLineSpecTimerLines) SetTimeDurationLabel(
 	timeDurationLabel string,
 	errorPrefix interface{}) error {
@@ -5864,29 +5739,27 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetTimeDurationLabel(
 //
 // The Go Programming language uses pattern formatting to format
 // time values. Reference:
-//   https://pkg.go.dev/time#Time.Format
 //
+//	https://pkg.go.dev/time#Time.Format
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  timeFormat                 string
-//     - This string holds the time format parameters used to
-//       format starting time and ending time values for text
-//       display and output.
+//	timeFormat                 string
+//	   - This string holds the time format parameters used to
+//	     format starting time and ending time values for text
+//	     display and output.
 //
-//       If this parameter is submitted as an empty string,
-//       parameter 'timeFormat' will be assigned a default value
-//       of "2006-01-02 15:04:05.000000000 -0700 MST"
-//
+//	     If this parameter is submitted as an empty string,
+//	     parameter 'timeFormat' will be assigned a default value
+//	     of "2006-01-02 15:04:05.000000000 -0700 MST"
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  --- None ---
-//
+//	--- None ---
 func (txtSpecTimerLines *TextLineSpecTimerLines) SetTimeFormat(
 	timeFormat string) {
 
@@ -5931,7 +5804,6 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetTimeFormat(
 //
 // This method fulfills requirements of the ITextLineSpecification
 // interface.
-//
 func (txtSpecTimerLines TextLineSpecTimerLines) String() string {
 
 	if txtSpecTimerLines.lock == nil {
@@ -5977,78 +5849,75 @@ func (txtSpecTimerLines TextLineSpecTimerLines) String() string {
 // This method fulfills requirements of the ITextLineSpecification
 // interface.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  strBuilder                 *strings.Builder
-//     - A pointer to an instance of *strings.Builder. The
-//       formatted text characters produced by this method will be
-//       written to this instance of strings.Builder.
+//	strBuilder                 *strings.Builder
+//	   - A pointer to an instance of *strings.Builder. The
+//	     formatted text characters produced by this method will be
+//	     written to this instance of strings.Builder.
 //
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       2. string - A string containing error prefix information.
+//	     2. string - A string containing error prefix information.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
-//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (txtSpecTimerLines *TextLineSpecTimerLines) TextBuilder(
 	strBuilder *strings.Builder,
 	errorPrefix interface{}) error {
@@ -6100,7 +5969,6 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) TextBuilder(
 //
 // This method fulfills requirements of ITextSpecification
 // interface.
-//
 func (txtSpecTimerLines *TextLineSpecTimerLines) TextLineSpecName() string {
 
 	if txtSpecTimerLines.lock == nil {
@@ -6118,7 +5986,6 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) TextLineSpecName() string {
 // of Text Line specification.
 //
 // This method fulfills requirements of ITextSpecification interface.
-//
 func (txtSpecTimerLines *TextLineSpecTimerLines) TextTypeName() string {
 
 	if txtSpecTimerLines.lock == nil {

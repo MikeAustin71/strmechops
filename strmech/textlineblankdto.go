@@ -15,16 +15,15 @@ import (
 // the option to provide alternate or custom line termination
 // characters which will be applied instead.
 //
-//  Example-1 :
-//   NumOfBlankLines = 3
-//   LineTerminator = ""
-//   Final Blank Line Text = "\n\n\n" // 3-new line characters
+//	Example-1 :
+//	 NumOfBlankLines = 3
+//	 LineTerminator = ""
+//	 Final Blank Line Text = "\n\n\n" // 3-new line characters
 //
-//  Example-2 :
-//   NumOfBlankLines = 2
-//   LineTerminator = "\n x \n"
-//   Final Blank Line Text = "\n x \n\n x \n"
-//
+//	Example-2 :
+//	 NumOfBlankLines = 2
+//	 LineTerminator = "\n x \n"
+//	 Final Blank Line Text = "\n x \n\n x \n"
 type TextLineBlankDto struct {
 	FormatType TextFieldType
 	// Required. This enumeration value specifies the type of
@@ -58,7 +57,7 @@ type TextLineBlankDto struct {
 //
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // All the data fields in current TextLineBlankDto instance
 // ('txtLineBlankDto') will be deleted and overwritten.
@@ -66,30 +65,27 @@ type TextLineBlankDto struct {
 // NO DATA VALIDATION IS performed on input parameter,
 // 'incomingTxtBlankLineDto'.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  incomingTxtBlankLineDto        TextLineBlankDto
-//     - An instance of TextLineBlankDto. This method will NOT
-//       change the data values of member variables contained in
-//       this instance.
+//	incomingTxtBlankLineDto        TextLineBlankDto
+//	   - An instance of TextLineBlankDto. This method will NOT
+//	     change the data values of member variables contained in
+//	     this instance.
 //
-//       All data values in this TextLineBlankDto instance
-//       ('incomingTxtBlankLineDto') will be copied to the current
-//       TextLineBlankDto instance ('txtLineBlankDto').
+//	     All data values in this TextLineBlankDto instance
+//	     ('incomingTxtBlankLineDto') will be copied to the current
+//	     TextLineBlankDto instance ('txtLineBlankDto').
 //
-//       No data validation is performed on input parameter,
-//       'incomingTxtBlankLineDto'.
-//
+//	     No data validation is performed on input parameter,
+//	     'incomingTxtBlankLineDto'.
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  NONE
-//
+//	NONE
 func (txtLineBlankDto *TextLineBlankDto) CopyIn(
 	incomingTxtBlankLineDto TextLineBlankDto) {
 
@@ -115,22 +111,19 @@ func (txtLineBlankDto *TextLineBlankDto) CopyIn(
 // NO DATA VALIDATION is performed on the current instance of
 // TextLineBlankDto.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  NONE
-//
+//	NONE
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  deepCopyTxtBlankLineDto        TextLineBlankDto
-//     - This parameter will return a deep copy of the current
-//       TextLineBlankDto instance.
-//
+//	deepCopyTxtBlankLineDto        TextLineBlankDto
+//	   - This parameter will return a deep copy of the current
+//	     TextLineBlankDto instance.
 func (txtLineBlankDto *TextLineBlankDto) CopyOut() (
 	deepCopyTxtBlankLineDto TextLineBlankDto) {
 
@@ -156,29 +149,25 @@ func (txtLineBlankDto *TextLineBlankDto) CopyOut() (
 // TextLineBlankDto in an invalid state and unavailable for
 // immediate reuse.
 //
-//
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // This method will delete all member variable data values in this
 // current instance of TextLineBlankDto. All member variable data
 // values will be reset to their zero or uninitialized states.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  NONE
-//
+//	NONE
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  NONE
-//
+//	NONE
 func (txtLineBlankDto *TextLineBlankDto) Empty() {
 
 	if txtLineBlankDto.lock == nil {
@@ -209,32 +198,29 @@ func (txtLineBlankDto *TextLineBlankDto) Empty() {
 // all respects, this flag is set to 'true'. Otherwise, this method
 // returns 'false'.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  incomingTxtBlankLineDto       TextLineBlankDto
-//     - An incoming instance of TextLineBlankDto. This method
-//       will compare all member variable data values in this
-//       instance against those contained in the current instance
-//       of TextLineBlankDto. If the data values in both
-//       instances are found to be equal in all respects, this
-//       method will return a boolean value of 'true'.
-//
+//	incomingTxtBlankLineDto       TextLineBlankDto
+//	   - An incoming instance of TextLineBlankDto. This method
+//	     will compare all member variable data values in this
+//	     instance against those contained in the current instance
+//	     of TextLineBlankDto. If the data values in both
+//	     instances are found to be equal in all respects, this
+//	     method will return a boolean value of 'true'.
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  bool
-//     - If the member variable data values contained in input
-//       parameter 'incomingTxtBlankLineDto' are equal in all
-//       respects to those contained in the current instance of
-//       TextLineBlankDto, this method will return a boolean
-//       value of 'true'. Otherwise a value of 'false' will be
-//       returned to the calling function.
-//
+//	bool
+//	   - If the member variable data values contained in input
+//	     parameter 'incomingTxtBlankLineDto' are equal in all
+//	     respects to those contained in the current instance of
+//	     TextLineBlankDto, this method will return a boolean
+//	     value of 'true'. Otherwise, a value of 'false' will be
+//	     returned to the calling function.
 func (txtLineBlankDto *TextLineBlankDto) Equal(
 	incomingTxtBlankLineDto TextLineBlankDto) bool {
 

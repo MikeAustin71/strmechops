@@ -876,7 +876,7 @@ func (sMech *StrMech) CopyOut() *StrMech {
 //	      All characters to the left of index 'cutAtIndex' will be
 //	      returned in parameter 'cutStr'. All characters to the
 //	      right of cutAtIndex, including the character designated
-//	      by 'cutAtIndex', will returned in parameter
+//	      by 'cutAtIndex', will be returned in parameter
 //	      'remainderStr'.
 //
 //	     If this parameter has a value less than zero, an error

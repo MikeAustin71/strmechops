@@ -14,7 +14,6 @@ import (
 // Except for line breaks configured at the user's discretion,
 // no additional formatting is performed on this text, and it is
 // inserted "as is" in to the final output of formatted text.
-//
 type TextAdHocDto struct {
 	FormatType TextFieldType
 	// Required. This enumeration value specifies the type of
@@ -118,7 +117,7 @@ type TextAdHocDto struct {
 //
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // All the data fields in current TextAdHocDto instance
 // ('textAdHocDto') will be deleted and overwritten.
@@ -126,30 +125,27 @@ type TextAdHocDto struct {
 // NO DATA VALIDATION IS performed on input parameter,
 // 'incomingTxtAdHocDto'.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  incomingTxtAdHocDto        TextAdHocDto
-//     - An instance of TextAdHocDto. This method will NOT
-//       change the data values of member variables contained in
-//       this instance.
+//	incomingTxtAdHocDto        TextAdHocDto
+//	   - An instance of TextAdHocDto. This method will NOT
+//	     change the data values of member variables contained in
+//	     this instance.
 //
-//       All data values in this TextAdHocDto instance
-//       ('incomingTxtAdHocDto') will be copied to the current
-//       TextAdHocDto instance ('textAdHocDto').
+//	     All data values in this TextAdHocDto instance
+//	     ('incomingTxtAdHocDto') will be copied to the current
+//	     TextAdHocDto instance ('textAdHocDto').
 //
-//       No data validation is performed on input parameter,
-//       'incomingTxtAdHocDto'.
-//
+//	     No data validation is performed on input parameter,
+//	     'incomingTxtAdHocDto'.
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  NONE
-//
+//	NONE
 func (textAdHocDto *TextAdHocDto) CopyIn(
 	incomingTxtAdHocDto TextAdHocDto) {
 
@@ -175,22 +171,19 @@ func (textAdHocDto *TextAdHocDto) CopyIn(
 // NO DATA VALIDATION is performed on the current instance of
 // TextAdHocDto.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  NONE
-//
+//	NONE
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  deepCopyTxtAdHocDto        TextAdHocDto
-//     - This parameter will return a deep copy of the current
-//       TextAdHocDto instance.
-//
+//	deepCopyTxtAdHocDto        TextAdHocDto
+//	   - This parameter will return a deep copy of the current
+//	     TextAdHocDto instance.
 func (textAdHocDto *TextAdHocDto) CopyOut() (
 	deepCopyTxtAdHocDto TextAdHocDto) {
 
@@ -216,29 +209,25 @@ func (textAdHocDto *TextAdHocDto) CopyOut() (
 // TextAdHocDto in an invalid state and unavailable for
 // immediate reuse.
 //
-//
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // This method will delete all member variable data values in this
 // current instance of TextAdHocDto. All member variable data
 // values will be reset to their zero or uninitialized states.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  NONE
-//
+//	NONE
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  NONE
-//
+//	NONE
 func (textAdHocDto *TextAdHocDto) Empty() {
 
 	if textAdHocDto.lock == nil {
@@ -266,32 +255,30 @@ func (textAdHocDto *TextAdHocDto) Empty() {
 // all respects, this flag is set to 'true'. Otherwise, this method
 // returns 'false'.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  incomingTxtAdHocDto        TextAdHocDto
-//     - An incoming instance of TextAdHocDto. This method
-//       will compare all member variable data values in this
-//       instance against those contained in the current instance
-//       of TextAdHocDto. If the data values in both
-//       instances are found to be equal in all respects, this
-//       method will return a boolean value of 'true'.
+//	incomingTxtAdHocDto			TextAdHocDto
 //
+//		An incoming instance of TextAdHocDto. This method
+//		will compare all member variable data values in this
+//		instance against those contained in the current instance
+//		of TextAdHocDto. If the data values in both
+//		instances are found to be equal in all respects, this
+//		method will return a boolean value of 'true'.
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  bool
-//     - If the member variable data values contained in input
-//       parameter 'incomingTxtAdHocDto' are equal in all
-//       respects to those contained in the current instance of
-//       TextAdHocDto, this method will return a boolean
-//       value of 'true'. Otherwise a value of 'false' will be
-//       returned to the calling function.
-//
+//	bool
+//		If the member variable data values contained in input
+//		parameter 'incomingTxtAdHocDto' are equal in all
+//		respects to those contained in the current instance of
+//		TextAdHocDto, this method will return a boolean
+//		value of 'true'. Otherwise, a value of 'false' will
+//		be returned to the calling function.
 func (textAdHocDto *TextAdHocDto) Equal(
 	incomingTxtAdHocDto TextAdHocDto) bool {
 
@@ -397,7 +384,6 @@ func (txtSolidLineDtoNanobot *textAdHocDtoNanobot) copyData(
 
 // ptr - Returns a pointer to a new instance of
 // textAdHocDtoNanobot.
-//
 func (txtSolidLineDtoNanobot textAdHocDtoNanobot) ptr() *textAdHocDtoNanobot {
 
 	if txtSolidLineDtoNanobot.lock == nil {
@@ -425,7 +411,6 @@ type textAdHocDtoMolecule struct {
 //
 // This method will therefore delete all data currently held
 // by this instance of TextAdHocDto.
-//
 func (txtAdHocDtoMolecule *textAdHocDtoMolecule) empty(
 	txtAdHocDto *TextAdHocDto) {
 
@@ -462,7 +447,6 @@ func (txtAdHocDtoMolecule *textAdHocDtoMolecule) empty(
 //
 // If the two instances of TextAdHocDto are found to be equal in
 // all respects, this method will return a boolean value of 'true'.
-//
 func (txtAdHocDtoMolecule *textAdHocDtoMolecule) equal(
 	txtAdHocDto1 *TextAdHocDto,
 	txtAdHocDto2 *TextAdHocDto) bool {
@@ -533,7 +517,6 @@ func (txtAdHocDtoMolecule *textAdHocDtoMolecule) equal(
 
 // ptr - Returns a pointer to a new instance of
 // textFieldSpacerDtoMolecule.
-//
 func (txtAdHocDtoMolecule textAdHocDtoMolecule) ptr() *textAdHocDtoMolecule {
 
 	if txtAdHocDtoMolecule.lock == nil {

@@ -38,6 +38,7 @@ func (nStrMathNanobot *numStrMathNanobot) roundNumStrKernel(
 	}
 
 	if numStrKernel == nil {
+
 		err = fmt.Errorf("%v\n"+
 			"Error: Input parameter 'numStrKernel' is "+
 			"a nil pointer!\n",
@@ -46,78 +47,91 @@ func (nStrMathNanobot *numStrMathNanobot) roundNumStrKernel(
 		return err
 	}
 
-	if !numStrRoundingSpec.RoundFractionalDigits {
+	var roundingType NumberRoundingType
+
+	roundingType = numStrRoundingSpec.GetRoundingType()
+
+	if !roundingType.XIsValid() {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'numStrRoundingSpec Rounding Type' is invalid!\n"+
+			"'roundingType' string  value = '%v'\n"+
+			"'roundingType' integer value = '%v'\n",
+			ePrefix.String(),
+			roundingType.String(),
+			roundingType.XValueInt())
+
+		return err
+
+	}
+
+	if roundingType == NumRoundType.NoRounding() {
 		// Nothing to do
 
 		return err
 	}
 
-	if numStrRoundingSpec.RoundToFractionalDigits < 0 {
+	var roundToFractionalDigits int
+
+	roundToFractionalDigits =
+		numStrRoundingSpec.GetRoundToFractionalDigits()
+
+	if roundToFractionalDigits < 0 {
 
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'numStrRoundingSpec.RoundToFractionalDigits' is invalid!\n"+
-			"'numStrRoundingSpec.RoundToFractionalDigits' has a value which is less than zero (0).\n"+
-			"numStrRoundingSpec.RoundToFractionalDigits = '%v'\n",
+			"Error: Input parameter 'numStrRoundingSpec RoundToFractionalDigits' is invalid!\n"+
+			"'roundToFractionalDigits' has a value which is less than zero (0).\n"+
+			"roundToFractionalDigits = '%v'\n",
 			ePrefix.String(),
-			numStrRoundingSpec.RoundToFractionalDigits)
+			roundToFractionalDigits)
 
 		return err
 	}
 
 	numOfFracDigits := numStrKernel.GetNumberOfFractionalDigits()
 
-	if numStrRoundingSpec.RoundToFractionalDigits >
+	if roundToFractionalDigits >
 		numOfFracDigits {
 
 		return new(numStrMathAtom).extendFractionalDigits(
 			numStrKernel,
-			numStrRoundingSpec.RoundToFractionalDigits,
+			roundToFractionalDigits,
 			ePrefix.XCpy(
 				fmt.Sprintf("roundToFractionalDigits= %v",
-					numStrRoundingSpec.RoundToFractionalDigits)))
+					roundToFractionalDigits)))
 
 	}
 
-	if numStrRoundingSpec.RoundToFractionalDigits ==
+	if roundToFractionalDigits ==
 		numOfFracDigits {
 		// Nothing to do. Already rounded
 
 		return err
 	}
 
-	switch numStrRoundingSpec.RoundingType {
-
-	case NumRoundType.None():
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Rounding was specified, but the\n"+
-			"Number Rounding Type is NumRoundType.None().\n",
-			ePrefix.String())
+	switch roundingType {
 
 	case NumRoundType.HalfAwayFromZero():
 
 		err = new(numStrMathMolecule).
 			roundHalfAwayFromZero(
 				numStrKernel,
-				numStrRoundingSpec.
-					RoundToFractionalDigits,
+				roundToFractionalDigits,
 				ePrefix.XCpy(
 					fmt.Sprintf("newNumStrKernel<-"+
 						"RoundTo %v-digits",
 						numStrRoundingSpec.
-							RoundToFractionalDigits)))
-
-		if err != nil {
-			return err
-		}
+							roundToFractionalDigits)))
 
 	default:
 
 		err = fmt.Errorf("%v\n"+
 			"Error: This rounding algorithm is not supported!\n"+
-			"Rounding Type = '%v'\n",
+			"Rounding Type string value  = '%v'\n"+
+			"Rounding Type integer value = '%v'\n",
 			ePrefix.String(),
-			numStrRoundingSpec.RoundingType.String())
+			roundingType.String(),
+			roundingType.XValueInt())
 
 	}
 

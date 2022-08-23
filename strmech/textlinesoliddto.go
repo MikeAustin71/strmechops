@@ -22,7 +22,8 @@ import (
 //
 // Therefore, the number of solid line characters produced is
 // equal to:
-//     	SolidLineChars x SolidLineCharRepeatCount
+//
+//	SolidLineChars x SolidLineCharRepeatCount
 //
 // By default, all solid lines are terminated by a new line
 // character ('\n'). This means that each instance of a solid will
@@ -31,34 +32,32 @@ import (
 // application of line termination characters through two member
 // variables: 'TurnLineTerminationOff' and 'LineTerminator'.
 //
-//       Example-1:
-//         SolidLineChars = "*"
-//         SolidLineCharRepeatCount = 5
-//         LeftMarginStr = ""
-//         RightMarginStr = ""
-//         TurnLineTerminationOff = false
-//         LineTerminator = ""
-//         Final Solid Line String = "*****\n"
+//	Example-1:
+//	  SolidLineChars = "*"
+//	  SolidLineCharRepeatCount = 5
+//	  LeftMarginStr = ""
+//	  RightMarginStr = ""
+//	  TurnLineTerminationOff = false
+//	  LineTerminator = ""
+//	  Final Solid Line String = "*****\n"
 //
-//       Example-2:
-//         SolidLineChars = "*"
-//         SolidLineCharRepeatCount = 5
-//         LeftMarginStr = ""
-//         RightMarginStr = ""
-//         TurnLineTerminationOff = false
-//         LineTerminator = "\n\n"
-//         Final Solid Line String = "*****\n\n"
+//	Example-2:
+//	  SolidLineChars = "*"
+//	  SolidLineCharRepeatCount = 5
+//	  LeftMarginStr = ""
+//	  RightMarginStr = ""
+//	  TurnLineTerminationOff = false
+//	  LineTerminator = "\n\n"
+//	  Final Solid Line String = "*****\n\n"
 //
-//       Example-3:
-//         SolidLineChars = "*"
-//         SolidLineCharRepeatCount = 5
-//         LeftMarginStr = ""
-//         RightMarginStr = ""
-//         TurnLineTerminationOff = true
-//         LineTerminator = "\n\n"
-//         Final Solid Line String = "*****"
-//
-//
+//	Example-3:
+//	  SolidLineChars = "*"
+//	  SolidLineCharRepeatCount = 5
+//	  LeftMarginStr = ""
+//	  RightMarginStr = ""
+//	  TurnLineTerminationOff = true
+//	  LineTerminator = "\n\n"
+//	  Final Solid Line String = "*****"
 type TextLineSolidDto struct {
 	FormatType TextFieldType
 	// Required. This enumeration value specifies the type of
@@ -247,7 +246,7 @@ type TextLineSolidDto struct {
 //
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // All the data fields in current TextLineSolidDto instance
 // ('txtSolidLineDto') will be deleted and overwritten.
@@ -255,30 +254,27 @@ type TextLineSolidDto struct {
 // NO DATA VALIDATION IS performed on input parameter,
 // 'incomingSolidLineDto'.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  incomingSolidLineDto        TextLineSolidDto
-//     - An instance of TextLineSolidDto. This method will NOT
-//       change the data values of member variables contained in
-//       this instance.
+//	incomingSolidLineDto        TextLineSolidDto
+//	   - An instance of TextLineSolidDto. This method will NOT
+//	     change the data values of member variables contained in
+//	     this instance.
 //
-//       All data values in this TextLineSolidDto instance
-//       ('incomingSolidLineDto') will be copied to the current
-//       TextLineSolidDto instance ('txtSolidLineDto').
+//	     All data values in this TextLineSolidDto instance
+//	     ('incomingSolidLineDto') will be copied to the current
+//	     TextLineSolidDto instance ('txtSolidLineDto').
 //
-//       No data validation is performed on input parameter,
-//       'incomingSolidLineDto'.
-//
+//	     No data validation is performed on input parameter,
+//	     'incomingSolidLineDto'.
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  NONE
-//
+//	NONE
 func (txtSolidLineDto *TextLineSolidDto) CopyIn(
 	incomingSolidLineDto TextLineSolidDto) {
 
@@ -304,22 +300,19 @@ func (txtSolidLineDto *TextLineSolidDto) CopyIn(
 // NO DATA VALIDATION is performed on the current instance of
 // TextLineSolidDto.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  NONE
-//
+//	NONE
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  deepCopyTxtLineSolidDto    TextLineSolidDto
-//     - This parameter will return a deep copy of the current
-//       TextLineSolidDto instance.
-//
+//	deepCopyTxtLineSolidDto    TextLineSolidDto
+//	   - This parameter will return a deep copy of the current
+//	     TextLineSolidDto instance.
 func (txtSolidLineDto *TextLineSolidDto) CopyOut() (
 	deepCopyTxtLineSolidDto TextLineSolidDto) {
 
@@ -345,29 +338,25 @@ func (txtSolidLineDto *TextLineSolidDto) CopyOut() (
 // TextLineSolidDto in an invalid state and unavailable for
 // immediate reuse.
 //
-//
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // This method will delete all member variable data values in this
 // current instance of TextLineSolidDto. All member variable data
 // values will be reset to their zero or uninitialized states.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  NONE
-//
+//	NONE
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  NONE
-//
+//	NONE
 func (txtSolidLineDto *TextLineSolidDto) Empty() {
 
 	if txtSolidLineDto.lock == nil {
@@ -396,32 +385,29 @@ func (txtSolidLineDto *TextLineSolidDto) Empty() {
 // all respects, this flag is set to 'true'. Otherwise, this method
 // returns 'false'.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  incomingTxtLineSolidDto       TextLineSolidDto
-//     - An incoming instance of TextLineSolidDto. This method
-//       will compare all member variable data values in this
-//       instance against those contained in the current instance
-//       of TextLineSolidDto. If the data values in both
-//       instances are found to be equal in all respects, this
-//       method will return a boolean value of 'true'.
-//
+//	incomingTxtLineSolidDto       TextLineSolidDto
+//	   - An incoming instance of TextLineSolidDto. This method
+//	     will compare all member variable data values in this
+//	     instance against those contained in the current instance
+//	     of TextLineSolidDto. If the data values in both
+//	     instances are found to be equal in all respects, this
+//	     method will return a boolean value of 'true'.
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  bool
-//     - If the member variable data values contained in input
-//       parameter 'incomingTxtLineSolidDto' are equal in all
-//       respects to those contained in the current instance of
-//       TextLineSolidDto, this method will return a boolean
-//       value of 'true'. Otherwise a value of 'false' will be
-//       returned to the calling function.
-//
+//	bool
+//	   - If the member variable data values contained in input
+//	     parameter 'incomingTxtLineSolidDto' are equal in all
+//	     respects to those contained in the current instance of
+//	     TextLineSolidDto, this method will return a boolean
+//	     value of 'true'. Otherwise, a value of 'false' will be
+//	     returned to the calling function.
 func (txtSolidLineDto *TextLineSolidDto) Equal(
 	incomingTxtLineSolidDto TextLineSolidDto) bool {
 
@@ -530,7 +516,6 @@ func (txtSolidLineDtoNanobot *textLineSolidLineDtoNanobot) copyData(
 
 // ptr - Returns a pointer to a new instance of
 // textLineSolidLineDtoNanobot.
-//
 func (txtSolidLineDtoNanobot textLineSolidLineDtoNanobot) ptr() *textLineSolidLineDtoNanobot {
 
 	if txtSolidLineDtoNanobot.lock == nil {
@@ -558,7 +543,6 @@ type textLineSolidLineDtoMolecule struct {
 //
 // This method will therefore delete all data currently held
 // by this instance of TextLineSolidDto.
-//
 func (txtSolidLineDtoMolecule *textLineSolidLineDtoMolecule) empty(
 	solidLineDto *TextLineSolidDto) {
 
@@ -598,7 +582,6 @@ func (txtSolidLineDtoMolecule *textLineSolidLineDtoMolecule) empty(
 // If the two instances of TextLineSolidDto are found to be equal
 // in all respects, this method will return a boolean value of
 // 'true'.
-//
 func (txtSolidLineDtoMolecule *textLineSolidLineDtoMolecule) equal(
 	solidLineDto1 *TextLineSolidDto,
 	solidLineDto2 *TextLineSolidDto) bool {
@@ -675,7 +658,6 @@ func (txtSolidLineDtoMolecule *textLineSolidLineDtoMolecule) equal(
 
 // ptr - Returns a pointer to a new instance of
 // textFieldSpacerDtoMolecule.
-//
 func (txtSolidLineDtoMolecule textLineSolidLineDtoMolecule) ptr() *textLineSolidLineDtoMolecule {
 
 	if txtSolidLineDtoMolecule.lock == nil {

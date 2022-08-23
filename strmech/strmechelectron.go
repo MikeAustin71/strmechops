@@ -15,92 +15,90 @@ type strMechElectron struct {
 // cutStringAtIndex - Receives a target string ('targetString')
 // and proceeds to cut of a sub-string of characters at target
 // string index 'cutAtIndex'. This sub-string is returned in
-// parameter 'cutStr'. The remain characters in 'targetString' not
-// included in 'cutStr' are returned via parameter 'remainderStr'
-//
+// parameter 'cutStr'. The remaining characters in 'targetString'
+// not included in 'cutStr' are returned via parameter
+// 'remainderStr'
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  targetStr                  string
-//     - The original string. A segment of this string will be
-//       "cut" and returned in parameter 'cutStr'. The "cut" will
-//       occur at index 'cutAtIndex' and all characters prior to
-//       'cutAtIndex' will be returned in parameter 'cutStr'.
+//	targetStr                  string
+//	   - The original string. A segment of this string will be
+//	     "cut" and returned in parameter 'cutStr'. The "cut" will
+//	     occur at index 'cutAtIndex' and all characters prior to
+//	     'cutAtIndex' will be returned in parameter 'cutStr'.
 //
-//       The returned parameter 'remainderStr' will include all
-//       those remaining characters in 'targetStr' which were NOT
+//	     The returned parameter 'remainderStr' will include all
+//	     those remaining characters in 'targetStr' which were NOT
 //
-//       If this parameter ('targetStr') is an empty or zero length
-//       string, an error will be returned.
-//
-//
-//  cutAtIndex                 int
-//      - The index in 'targetStr' at which marks the dividing line
-//        between return parameters 'cutStr' and 'remainderStr'.
-//        All characters to the left of index 'cutAtIndex' will be
-//        returned in parameter 'cutStr'. All characters to the
-//        right of cutAtIndex, including the character designated
-//        by 'cutAtIndex', will returned in parameter
-//        'remainderStr'.
-//
-//       If this parameter has a value less than zero, an error
-//       will be returned.
-//
-//       If this parameter has a value greater than the string
-//       length of 'targetStr', no error will be generated,
-//       return parameter 'cutStr' will contain a copy of the
-//       entire 'targetStr', and 'remainderStr' will return an
-//       empty string.
+//	     If this parameter ('targetStr') is an empty or zero length
+//	     string, an error will be returned.
 //
 //
-//  errPrefDto                 *ePref.ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//	cutAtIndex                 int
+//	    - The index in 'targetStr' at which marks the dividing line
+//	      between return parameters 'cutStr' and 'remainderStr'.
+//	      All characters to the left of index 'cutAtIndex' will be
+//	      returned in parameter 'cutStr'. All characters to the
+//	      right of cutAtIndex, including the character designated
+//	      by 'cutAtIndex', will be returned in parameter
+//	      'remainderStr'.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	     If this parameter has a value less than zero, an error
+//	     will be returned.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
+//	     If this parameter has a value greater than the string
+//	     length of 'targetStr', no error will be generated,
+//	     return parameter 'cutStr' will contain a copy of the
+//	     entire 'targetStr', and 'remainderStr' will return an
+//	     empty string.
 //
+//
+//	errPrefDto                 *ePref.ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods listed
+//	     as a function chain.
+//
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
+//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  cutStr                     string
-//     - If this method completes successfully, all the characters
-//       in input parameter 'targetStr' to the left of index
-//       'cutAtIndex', excluding the character at index
-//       'cutAtIndex', will be returned in this parameter.
+//	cutStr                     string
+//	   - If this method completes successfully, all the characters
+//	     in input parameter 'targetStr' to the left of index
+//	     'cutAtIndex', excluding the character at index
+//	     'cutAtIndex', will be returned in this parameter.
 //
 //
-//  remainderStr               string
-//     - If this method completes successfully, all the characters
-//       in 'targetStr' to the right of index 'cutAtIndex',
-//       including the character at index 'cutAtIndex', will be
-//       returned in this paramter.
+//	remainderStr               string
+//	   - If this method completes successfully, all the characters
+//	     in 'targetStr' to the right of index 'cutAtIndex',
+//	     including the character at index 'cutAtIndex', will be
+//	     returned in this paramter.
 //
 //
-//  lenOfRemainderStr          int
-//     - Specifies the length of the remainder string returned in
-//       parameter 'remainderStr'.
+//	lenOfRemainderStr          int
+//	   - Specifies the length of the remainder string returned in
+//	     parameter 'remainderStr'.
 //
 //
-//  err                        error
-//     - If this method completes successfully, the returned error
-//       Type is set equal to 'nil'. If errors are encountered during
-//       processing, the returned error Type will encapsulate an error
-//       message.
+//	err                        error
+//	   - If this method completes successfully, the returned error
+//	     Type is set equal to 'nil'. If errors are encountered during
+//	     processing, the returned error Type will encapsulate an error
+//	     message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' (error prefix) will be inserted or
-//       prefixed at the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' (error prefix) will be inserted or
+//	     prefixed at the beginning of the error message.
 func (sMechElectron *strMechElectron) cutStringAtIndex(
 	targetStr string,
 	cutAtIndex int,
@@ -163,59 +161,56 @@ func (sMechElectron *strMechElectron) cutStringAtIndex(
 // (any character that is NOT a space ' ') in the target string segment and returns
 // the index associated with that non-space character.
 //
-//
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  targetStr           string
-//     - The string to be searched for the first non-space character.
+//	targetStr           string
+//	   - The string to be searched for the first non-space character.
 //
 //
-//  startIdx            int
-//     - Since the search is forwards from left to right, this is
-//       the starting index for the search.
+//	startIdx            int
+//	   - Since the search is forwards from left to right, this is
+//	     the starting index for the search.
 //
 //
-//  endIdx              int
-//     - Since the search is forwards from left to right, this is
-//       the ending index for the search.
+//	endIdx              int
+//	   - Since the search is forwards from left to right, this is
+//	     the ending index for the search.
 //
 //
-//  ePrefix             *ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the names of the calling method or methods listed
-//       as a function chain.
+//	ePrefix             *ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the names of the calling method or methods listed
+//	     as a function chain.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
-//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  int
-//     - This method returns the index of the first non-space
-//       character in the target string segment using a left
-//       to right search. If the target string is an empty string
-//       or consists of entirely of space characters, this method
-//       returns a value of minus one (-1).
+//	int
+//	   - This method returns the index of the first non-space
+//	     character in the target string segment using a left
+//	     to right search. If the target string is an empty string
+//	     or consists of entirely of space characters, this method
+//	     returns a value of minus one (-1).
 //
 //
-//  error
-//     - If the method completes successfully this value is
-//       'nil'. If an error is encountered this value will
-//       contain the error message.
+//	error
+//	   - If the method completes successfully this value is
+//	     'nil'. If an error is encountered this value will
+//	     contain the error message.
 //
-//       If an error message is returned, the text value for input
-//       parameter 'ePrefix' (error prefix) will be inserted or
-//       prefixed at the beginning of the error message.
-//
+//	     If an error message is returned, the text value for input
+//	     parameter 'ePrefix' (error prefix) will be inserted or
+//	     prefixed at the beginning of the error message.
 func (sMechElectron *strMechElectron) findFirstNonSpaceChar(
 	targetStr string,
 	startIndex,
@@ -309,50 +304,48 @@ func (sMechElectron *strMechElectron) findFirstNonSpaceChar(
 //
 // Input Parameter
 //
-//  targetStr           string
-//     - The string which will be screened for valid characters.
+//	targetStr           string
+//	   - The string which will be screened for valid characters.
 //
 //
-//  validRunes          []rune
-//     - An array of type rune containing valid characters. Characters
-//       which exist in both 'targetStr' and 'validRunes' will be
-//       returned as a new string. Invalid characters are discarded.
+//	validRunes          []rune
+//	   - An array of type rune containing valid characters. Characters
+//	     which exist in both 'targetStr' and 'validRunes' will be
+//	     returned as a new string. Invalid characters are discarded.
 //
 //
-//  ePrefix             *ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the names of the calling method or methods listed
-//       as a function chain.
+//	ePrefix             *ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the names of the calling method or methods listed
+//	     as a function chain.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
-//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  string
-//     - This string will be returned containing valid characters extracted
-//       from 'targetStr'. A character is considered valid if it exists in
-//       both 'targetStr' and 'validRunes'. Invalid characters are discarded.
-//       This means that if no valid characters are identified, a zero length
-//       string will be returned.
+//	string
+//	   - This string will be returned containing valid characters extracted
+//	     from 'targetStr'. A character is considered valid if it exists in
+//	     both 'targetStr' and 'validRunes'. Invalid characters are discarded.
+//	     This means that if no valid characters are identified, a zero length
+//	     string will be returned.
 //
-//  error
-//     - If the method completes successfully this value is 'nil'. If an error is
-//       encountered this value will contain the error message. Examples of possible
-//       errors include a zero length 'targetStr' (string) or a zero length
-//       'validRunes' array.
+//	error
+//	   - If the method completes successfully this value is 'nil'. If an error is
+//	     encountered this value will contain the error message. Examples of possible
+//	     errors include a zero length 'targetStr' (string) or a zero length
+//	     'validRunes' array.
 //
-//       If an error message is returned, the text value for input
-//       parameter 'ePrefix' (error prefix) will be inserted or
-//       prefixed at the beginning of the error message.
-//
+//	     If an error message is returned, the text value for input
+//	     parameter 'ePrefix' (error prefix) will be inserted or
+//	     prefixed at the beginning of the error message.
 func (sMechElectron *strMechElectron) getValidString(
 	targetStr string,
 	validRunes []rune,
@@ -415,64 +408,61 @@ func (sMechElectron *strMechElectron) getValidString(
 // will reside at index 'targetStrIndex' in the new version of
 // 'targetString' returned by this method.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  targetStr                  string
-//     - The original string in which another string will be
-//       inserted.  'insertStr' will be inserted into 'targetStr'
-//       at index 'targetStrIndex'.
+//	targetStr                  string
+//	   - The original string in which another string will be
+//	     inserted.  'insertStr' will be inserted into 'targetStr'
+//	     at index 'targetStrIndex'.
 //
-//       If this parameter is an empty or zero length string, an
-//       error will be returned.
-//
-//
-//  insertStr                  string
-//     - The string which will be inserted into 'targetStr'.
-//
-//       If this parameter is an empty or zero length string, an
-//       error will be returned.
+//	     If this parameter is an empty or zero length string, an
+//	     error will be returned.
 //
 //
-//  targetStrIndex             int
-//      - The index in 'targetStr' at which 'insertStr' will be
-//        inserted.
+//	insertStr                  string
+//	   - The string which will be inserted into 'targetStr'.
+//
+//	     If this parameter is an empty or zero length string, an
+//	     error will be returned.
 //
 //
-//  errPrefDto                 *ePref.ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//	targetStrIndex             int
+//	    - The index in 'targetStr' at which 'insertStr' will be
+//	      inserted.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
+//	errPrefDto                 *ePref.ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods listed
+//	     as a function chain.
 //
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
+//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  string
-//     - A string containing a new version of 'targetStr' with
-//       'insertStr' inserted at index 'targetStrIndex'.
+//	string
+//	   - A string containing a new version of 'targetStr' with
+//	     'insertStr' inserted at index 'targetStrIndex'.
 //
 //
-//  error
-//     - If this method completes successfully, the returned error
-//       Type is set equal to 'nil'. If errors are encountered during
-//       processing, the returned error Type will encapsulate an error
-//       message.
+//	error
+//	   - If this method completes successfully, the returned error
+//	     Type is set equal to 'nil'. If errors are encountered during
+//	     processing, the returned error Type will encapsulate an error
+//	     message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' (error prefix) will be inserted or
-//       prefixed at the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' (error prefix) will be inserted or
+//	     prefixed at the beginning of the error message.
 func (sMechElectron *strMechElectron) insertStringAtIndex(
 	targetStr string,
 	insertStr string,
@@ -562,7 +552,6 @@ func (sMechElectron *strMechElectron) insertStringAtIndex(
 
 // ptr - Returns a pointer to a new instance of
 // strMechElectron.
-//
 func (sMechElectron strMechElectron) ptr() *strMechElectron {
 
 	if sMechElectron.lock == nil {
@@ -604,62 +593,58 @@ func (sMechElectron strMechElectron) ptr() *strMechElectron {
 //
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // The size of the input parameter 'p' byte array must be equal to
 // or greater than the size of the string to be read,
 // 'StrMech.stringData'. If the size of 'p' is less than the length
 // of 'StrMech.stringData', an error will be returned.
 //
-//
 // ----------------------------------------------------------------
 //
-// Input Parameters
+// # Input Parameters
+//
+//		strOpsInstance             *StrMech
+//	    - A pointer to an instance of type 'StrMech'. The string,
+//	      'StrMech.stringData' will be taken from this instance of
+//	      StrMech.
 //
 //
-// 	strOpsInstance             *StrMech
-//     - A pointer to an instance of type 'StrMech'. The string,
-//       'StrMech.stringData' will be taken from this instance of
-//       StrMech.
+//	 p                          []byte
+//	    - The byte array into which the string 'StrMech.stringData'
+//	      will be read.
+//
+//	      If the size of 'p' is less than the length of
+//	      'StrMech.stringData', an error will be returned.
 //
 //
-//  p                          []byte
-//     - The byte array into which the string 'StrMech.stringData'
-//       will be read.
+//	 errPrefDto                 *ePref.ErrPrefixDto
+//	    - This object encapsulates an error prefix string which is
+//	      included in all returned error messages. Usually, it
+//	      contains the name of the calling method or methods listed
+//	      as a function chain.
 //
-//       If the size of 'p' is less than the length of
-//       'StrMech.stringData', an error will be returned.
+//	      If no error prefix information is needed, set this
+//	      parameter to 'nil'.
 //
-//
-//  errPrefDto                 *ePref.ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
-//
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
-//
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
-//
+//	      Type ErrPrefixDto is included in the 'errpref' software
+//	      package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  n                          int
-//     - The number of bytes read into byte array 'p'.
+//	n                          int
+//	   - The number of bytes read into byte array 'p'.
 //
-//  err                        error
-//     - If all the bytes from internal member variable
-//       'StrMech.stringData' are read into byte array 'p', 'err'
-//       will be set to 'io.EOF'.
+//	err                        error
+//	   - If all the bytes from internal member variable
+//	     'StrMech.stringData' are read into byte array 'p', 'err'
+//	     will be set to 'io.EOF'.
 //
-//       If an operational error is encountered during processing,
-//       this error return parameter will be populated with an
-//       appropriate error message.
-//
+//	     If an operational error is encountered during processing,
+//	     this error return parameter will be populated with an
+//	     appropriate error message.
 func (sMechElectron *strMechElectron) readBytes(
 	strOpsInstance *StrMech,
 	p []byte,
@@ -756,27 +741,24 @@ func (sMechElectron *strMechElectron) readBytes(
 //
 // Input Parameters
 //
-//  bytes          []byte - An array of bytes from which a string will be extracted
-//                          and returned.
+//	bytes          []byte - An array of bytes from which a string will be extracted
+//	                        and returned.
 //
-//  startIdx          int - The starting index in input parameter 'bytes' where the string
-//                          extraction will begin. The string extraction will cease when
-//                          a carriage return ('\r'), a vertical tab ('\v') or a new line
-//                          character ('\n') is encountered.
-//
-//
+//	startIdx          int - The starting index in input parameter 'bytes' where the string
+//	                        extraction will begin. The string extraction will cease when
+//	                        a carriage return ('\r'), a vertical tab ('\v') or a new line
+//	                        character ('\n') is encountered.
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  extractedStr   string - The string extracted from input parameter 'bytes' beginning
-//                          at the index in 'bytes' indicated by input parameter 'startIdx'.
+//	extractedStr   string - The string extracted from input parameter 'bytes' beginning
+//	                        at the index in 'bytes' indicated by input parameter 'startIdx'.
 //
-//  nextStartIdx      int - The index of the beginning of the next string in the byte array
-//                          'bytes' after 'extractedString'. If no more strings exist in the
-//                          byte array, 'nextStartIdx' will be set to -1.
-//
+//	nextStartIdx      int - The index of the beginning of the next string in the byte array
+//	                        'bytes' after 'extractedString'. If no more strings exist in the
+//	                        byte array, 'nextStartIdx' will be set to -1.
 func (sMechElectron *strMechElectron) readStringFromBytes(
 	bytes []byte,
 	startIdx int) (
@@ -856,55 +838,52 @@ func (sMechElectron *strMechElectron) readStringFromBytes(
 //
 // ------------------------------------------------------------------------
 //
-// Input Parameters
+// # Input Parameters
+//
+//	targetBytes         []byte
+//	   - The byte array which will be examined. If characters ('bytes') eligible
+//	     for replacement are identified by replacementBytes[i][0] they will be
+//	     replaced by the character specified in replacementBytes[i][1].
+//
+//	replacementBytes    [][]byte
+//	   - A two-dimensional slice of type byte. Element [i][0] contains the
+//	     target character to locate in 'targetBytes'. Element[i][1] contains
+//	     the replacement character which will replace the target character
+//	     in 'targetBytes'. If the replacement character element [i][1] is
+//	     a zero value, the target character will not be replaced. Instead,
+//	     it will be eliminated or removed from the returned byte array ([]byte).
 //
 //
-//  targetBytes         []byte
-//     - The byte array which will be examined. If characters ('bytes') eligible
-//       for replacement are identified by replacementBytes[i][0] they will be
-//       replaced by the character specified in replacementBytes[i][1].
+//	ePrefix             *ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the names of the calling method or methods listed
+//	     as a function chain.
 //
-//  replacementBytes    [][]byte
-//     - A two-dimensional slice of type byte. Element [i][0] contains the
-//       target character to locate in 'targetBytes'. Element[i][1] contains
-//       the replacement character which will replace the target character
-//       in 'targetBytes'. If the replacement character element [i][1] is
-//       a zero value, the target character will not be replaced. Instead,
-//       it will be eliminated or removed from the returned byte array ([]byte).
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//
-//  ePrefix             *ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the names of the calling method or methods listed
-//       as a function chain.
-//
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
-//
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
-//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  []byte
-//     - The returned byte array containing the characters and replaced characters
-//       from the original 'targetBytes' array.
+//	[]byte
+//	   - The returned byte array containing the characters and replaced characters
+//	     from the original 'targetBytes' array.
 //
-//  error
-//     - If the method completes successfully this value is 'nil'. If an error is
-//       encountered this value will contain the error message. Examples of possible
-//       errors include a zero length targetBytes[] array or replacementBytes[][] array.
-//       In addition, if any of the replacementBytes[][x] 2nd dimension elements have
-//       a length less than two, an error will be returned.
+//	error
+//	   - If the method completes successfully this value is 'nil'. If an error is
+//	     encountered this value will contain the error message. Examples of possible
+//	     errors include a zero length targetBytes[] array or replacementBytes[][] array.
+//	     In addition, if any of the replacementBytes[][x] 2nd dimension elements have
+//	     a length less than two, an error will be returned.
 //
-//       If an error message is returned, the text value for input
-//       parameter 'ePrefix' (error prefix) will be inserted or
-//       prefixed at the beginning of the error message.
-//
+//	     If an error message is returned, the text value for input
+//	     parameter 'ePrefix' (error prefix) will be inserted or
+//	     prefixed at the beginning of the error message.
 func (sMechElectron *strMechElectron) replaceBytes(
 	targetBytes []byte,
 	replacementBytes [][]byte,
@@ -1000,7 +979,6 @@ func (sMechElectron *strMechElectron) replaceBytes(
 // Input parameter 'replaceArray' should be passed as a two-dimensional slice.
 // If the length of the 'replaceArray' second dimension is less than '2', an
 // error will be returned.
-//
 func (sMechElectron *strMechElectron) replaceMultipleStrs(
 	targetStr string,
 	replaceArray [][]string,
@@ -1075,54 +1053,52 @@ func (sMechElectron *strMechElectron) replaceMultipleStrs(
 //
 // Input Parameters
 //
-//  targetStr           string
-//     - The string which will be examined. If target string characters
-//       eligible for replacement are identified by replacementRunes[i][0],
-//       they will be replaced by the character specified in
-//       replacementRunes[i][1].
+//	targetStr           string
+//	   - The string which will be examined. If target string characters
+//	     eligible for replacement are identified by replacementRunes[i][0],
+//	     they will be replaced by the character specified in
+//	     replacementRunes[i][1].
 //
-//  replacementRunes    [][2]rune
-//     - A two-dimensional slice of type 'rune'. Element [i][0] contains
-//       the target character to locate in 'targetStr'. Element[i][1]
-//       contains the replacement character which will replace the target
-//       character in 'targetStr'. If the replacement character
-//       element [i][1] is a zero value, the target character will not
-//       be replaced. Instead, it will be eliminated or removed from the
-//       returned string.
+//	replacementRunes    [][2]rune
+//	   - A two-dimensional slice of type 'rune'. Element [i][0] contains
+//	     the target character to locate in 'targetStr'. Element[i][1]
+//	     contains the replacement character which will replace the target
+//	     character in 'targetStr'. If the replacement character
+//	     element [i][1] is a zero value, the target character will not
+//	     be replaced. Instead, it will be eliminated or removed from the
+//	     returned string.
 //
 //
-//  ePrefix             *ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the names of the calling method or methods listed
-//       as a function chain.
+//	ePrefix             *ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the names of the calling method or methods listed
+//	     as a function chain.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
-//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  string
-//     - The returned string containing the characters and replaced characters
-//       from the original target string, ('targetStr').
+//	string
+//	   - The returned string containing the characters and replaced characters
+//	     from the original target string, ('targetStr').
 //
-//  error
-//     - If the method completes successfully this value is 'nil'. If an error is
-//       encountered this value will contain the error message. Examples of possible
-//       errors include a zero length 'targetStr' or 'replacementRunes[][]' array.
-//       In addition, if any of the replacementRunes[][x] 2nd dimension elements have
-//       a length less than two, an error will be returned.
+//	error
+//	   - If the method completes successfully this value is 'nil'. If an error is
+//	     encountered this value will contain the error message. Examples of possible
+//	     errors include a zero length 'targetStr' or 'replacementRunes[][]' array.
+//	     In addition, if any of the replacementRunes[][x] 2nd dimension elements have
+//	     a length less than two, an error will be returned.
 //
-//       If an error message is returned, the text value for input
-//       parameter 'ePrefix' (error prefix) will be inserted or
-//       prefixed at the beginning of the error message.
-//
+//	     If an error message is returned, the text value for input
+//	     parameter 'ePrefix' (error prefix) will be inserted or
+//	     prefixed at the beginning of the error message.
 func (sMechElectron *strMechElectron) replaceStringChars(
 	targetStr string,
 	replacementRunes [][2]rune,
@@ -1196,7 +1172,6 @@ func (sMechElectron *strMechElectron) replaceStringChars(
 //
 // 'StrMech.stringData' can be accessed through 'Getter' and
 // 'Setter' methods, 'GetStringData()' and 'SetStringData()'.
-//
 func (sMechElectron *strMechElectron) write(
 	strOpsInstance *StrMech,
 	p []byte,

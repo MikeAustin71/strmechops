@@ -25,16 +25,15 @@ import (
 // or more times in order to construct the complete filler field as
 // shown in the following examples:
 //
-//  Example 1:
-//   Filler Characters = "-"
-//   Filler Characters Repeat Count = 3
-//   Formatted Text = "---"
+//	Example 1:
+//	 Filler Characters = "-"
+//	 Filler Characters Repeat Count = 3
+//	 Formatted Text = "---"
 //
-//  Example 2:
-//   Filler Characters = "-*"
-//   Filler Characters Repeat Count = 3
-//   Formatted Text = "-*-*-*"
-//
+//	Example 2:
+//	 Filler Characters = "-*"
+//	 Filler Characters Repeat Count = 3
+//	 Formatted Text = "-*-*-*"
 type TextFieldFillerDto struct {
 	FormatType TextFieldType
 	// Required. This enumeration value specifies the type of Text
@@ -154,7 +153,7 @@ type TextFieldFillerDto struct {
 //
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // All the data fields in current TextFieldFillerDto instance
 // ('txtFillerDto') will be deleted and overwritten.
@@ -162,30 +161,27 @@ type TextFieldFillerDto struct {
 // NO DATA VALIDATION IS performed on input parameter,
 // 'incomingTxtFillerDto'.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  incomingTxtFillerDto        TextFieldFillerDto
-//     - An instance of TextFieldFillerDto. This method will NOT
-//       change the data values of member variables contained in
-//       this instance.
+//	incomingTxtFillerDto        TextFieldFillerDto
+//	   - An instance of TextFieldFillerDto. This method will NOT
+//	     change the data values of member variables contained in
+//	     this instance.
 //
-//       All data values in this TextFieldFillerDto instance
-//       ('incomingTxtFillerDto') will be copied to the current
-//       TextFieldFillerDto instance ('txtFillerDto').
+//	     All data values in this TextFieldFillerDto instance
+//	     ('incomingTxtFillerDto') will be copied to the current
+//	     TextFieldFillerDto instance ('txtFillerDto').
 //
-//       No data validation is performed on input parameter,
-//       'incomingTxtFillerDto'.
-//
+//	     No data validation is performed on input parameter,
+//	     'incomingTxtFillerDto'.
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  NONE
-//
+//	NONE
 func (txtFillerDto *TextFieldFillerDto) CopyIn(
 	incomingTxtFillerDto TextFieldFillerDto) {
 
@@ -211,22 +207,19 @@ func (txtFillerDto *TextFieldFillerDto) CopyIn(
 // NO DATA VALIDATION is performed on the current instance of
 // TextFieldFillerDto.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  NONE
-//
+//	NONE
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  deepCopyTxtFillerDto        TextFieldFillerDto
-//     - This parameter will return a deep copy of the current
-//       TextFieldFillerDto instance.
-//
+//	deepCopyTxtFillerDto        TextFieldFillerDto
+//	   - This parameter will return a deep copy of the current
+//	     TextFieldFillerDto instance.
 func (txtFillerDto *TextFieldFillerDto) CopyOut() (
 	deepCopyTxtFillerDto TextFieldFillerDto) {
 
@@ -252,29 +245,25 @@ func (txtFillerDto *TextFieldFillerDto) CopyOut() (
 // TextFieldFillerDto in an invalid state and unavailable for
 // immediate reuse.
 //
-//
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // This method will delete all member variable data values in this
 // current instance of TextFieldFillerDto. All member variable data
 // values will be reset to their zero or uninitialized states.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  NONE
-//
+//	NONE
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  NONE
-//
+//	NONE
 func (txtFillerDto *TextFieldFillerDto) Empty() {
 
 	if txtFillerDto.lock == nil {
@@ -315,32 +304,29 @@ func (txtFillerDto *TextFieldFillerDto) Empty() {
 // all respects, this flag is set to 'true'. Otherwise, this method
 // returns 'false'.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  incomingTxtFillerDto        TextFieldFillerDto
-//     - An incoming instance of TextFieldFillerDto. This method
-//       will compare all member variable data values in this
-//       instance against those contained in the current instance
-//       of TextFieldFillerDto. If the data values in both
-//       instances are found to be equal in all respects, this
-//       method will return a boolean value of 'true'.
-//
+//	incomingTxtFillerDto        TextFieldFillerDto
+//	   - An incoming instance of TextFieldFillerDto. This method
+//	     will compare all member variable data values in this
+//	     instance against those contained in the current instance
+//	     of TextFieldFillerDto. If the data values in both
+//	     instances are found to be equal in all respects, this
+//	     method will return a boolean value of 'true'.
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  bool
-//     - If the member variable data values contained in input
-//       parameter 'incomingTxtFillerDto' are equal in all respects
-//       to those contained in the current instance of
-//       TextFieldFillerDto, this method will return a boolean
-//       value of 'true'. Otherwise a value of 'false' will be
-//       returned to the calling function.
-//
+//	bool
+//	   - If the member variable data values contained in input
+//	     parameter 'incomingTxtFillerDto' are equal in all respects
+//	     to those contained in the current instance of
+//	     TextFieldFillerDto, this method will return a boolean
+//	     value of 'true'. Otherwise, a value of 'false' will be
+//	     returned to the calling function.
 func (txtFillerDto *TextFieldFillerDto) Equal(
 	incomingTxtFillerDto TextFieldFillerDto) bool {
 
@@ -489,7 +475,6 @@ func (txtFillerDtoNanobot *textFieldFillerDtoNanobot) copy(
 
 // ptr - Returns a pointer to a new instance of
 // textFieldFillerDtoNanobot.
-//
 func (txtFillerDtoNanobot textFieldFillerDtoNanobot) ptr() *textFieldFillerDtoNanobot {
 
 	if txtFillerDtoNanobot.lock == nil {

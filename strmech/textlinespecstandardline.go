@@ -2133,7 +2133,7 @@ func (stdLine *TextLineSpecStandardLine) EmptyTextFields() {
 //	     parameter 'incomingStdLine' are equal in all respects to
 //	     those contained in the current instance of
 //	     TextLineSpecStandardLine, this method will return a
-//	     boolean value of 'true'. Otherwise a value of 'false' will
+//	     boolean value of 'true'. Otherwise, a value of 'false' will
 //	     be returned to the calling function.
 func (stdLine *TextLineSpecStandardLine) Equal(
 	incomingStdLine *TextLineSpecStandardLine) bool {

@@ -24,7 +24,7 @@ type TextFieldsContentDto struct {
 //
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // All the data fields in current TextFieldsContentDto instance
 // ('txtFieldsContent') will be deleted and overwritten.
@@ -32,30 +32,27 @@ type TextFieldsContentDto struct {
 // NO DATA VALIDATION IS performed on input parameter,
 // 'incomingFieldContent'.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  incomingFieldContent       TextFieldsContentDto
-//     - An instance of TextFieldsContentDto. This method will NOT
-//       change the data values of member variables contained in
-//       this instance.
+//	incomingFieldContent       TextFieldsContentDto
+//	   - An instance of TextFieldsContentDto. This method will NOT
+//	     change the data values of member variables contained in
+//	     this instance.
 //
-//       All data values in this TextFieldsContentDto instance
-//       ('incomingFieldContent') will be copied to the current
-//       TextFieldsContentDto instance ('txtFieldsContent').
+//	     All data values in this TextFieldsContentDto instance
+//	     ('incomingFieldContent') will be copied to the current
+//	     TextFieldsContentDto instance ('txtFieldsContent').
 //
-//       No data validation is performed on input parameter,
-//       'incomingFieldContent'.
-//
+//	     No data validation is performed on input parameter,
+//	     'incomingFieldContent'.
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  NONE
-//
+//	NONE
 func (txtFieldsContent *TextFieldsContentDto) CopyIn(
 	incomingFieldContent TextFieldsContentDto) {
 
@@ -82,22 +79,19 @@ func (txtFieldsContent *TextFieldsContentDto) CopyIn(
 // NO DATA VALIDATION is performed on the current instance of
 // TextFieldsContentDto.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  NONE
-//
+//	NONE
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  deepCopyTxtFieldsContent   TextFieldsContentDto
-//     - This parameter will return a deep copy of the current
-//       TextFieldsContentDto instance.
-//
+//	deepCopyTxtFieldsContent   TextFieldsContentDto
+//	   - This parameter will return a deep copy of the current
+//	     TextFieldsContentDto instance.
 func (txtFieldsContent *TextFieldsContentDto) CopyOut() (
 	deepCopyTxtFieldsContent TextFieldsContentDto) {
 
@@ -124,29 +118,25 @@ func (txtFieldsContent *TextFieldsContentDto) CopyOut() (
 // TextFieldsContentDto in an invalid state and unavailable for
 // immediate reuse.
 //
-//
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // This method will delete all member variable data values in this
 // current instance of TextFieldsContentDto. All member variable
 // data values will be reset to their zero or uninitialized states.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  NONE
-//
+//	NONE
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  NONE
-//
+//	NONE
 func (txtFieldsContent *TextFieldsContentDto) Empty() {
 
 	if txtFieldsContent.lock == nil {
@@ -175,32 +165,29 @@ func (txtFieldsContent *TextFieldsContentDto) Empty() {
 // all respects, this flag is set to 'true'. Otherwise, this method
 // returns 'false'.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  incomingFieldContent       TextFieldsContentDto
-//     - An incoming instance of TextFieldsContentDto. This method
-//       will compare all member variable data values in this
-//       instance against those contained in the current instance
-//       of TextFieldsContentDto. If the data values in both
-//       instances are found to be equal in all respects, this
-//       method will return a boolean value of 'true'.
-//
+//	incomingFieldContent       TextFieldsContentDto
+//	   - An incoming instance of TextFieldsContentDto. This method
+//	     will compare all member variable data values in this
+//	     instance against those contained in the current instance
+//	     of TextFieldsContentDto. If the data values in both
+//	     instances are found to be equal in all respects, this
+//	     method will return a boolean value of 'true'.
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  bool
-//     - If the member variable data values contained in input
-//       parameter 'incomingFieldContent' are equal in all respects
-//       to those contained in the current instance of
-//       TextFieldsContentDto, this method will return a boolean
-//       value of 'true'. Otherwise a value of 'false' will be
-//       returned to the calling function.
-//
+//	bool
+//	   - If the member variable data values contained in input
+//	     parameter 'incomingFieldContent' are equal in all respects
+//	     to those contained in the current instance of
+//	     TextFieldsContentDto, this method will return a boolean
+//	     value of 'true'. Otherwise, a value of 'false' will be
+//	     returned to the calling function.
 func (txtFieldsContent *TextFieldsContentDto) Equal(
 	incomingFieldContent TextFieldsContentDto) bool {
 
