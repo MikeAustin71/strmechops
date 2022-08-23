@@ -1,0 +1,15 @@
+
+
+// Convert between numerical bases
+https://math.tools/calculator/base/10-2
+
+// Algorithm to convert from base 10
+// to base 2
+https://www.thoughtco.com/changing-from-base-10-to-base-2-2312136
+
+// Log identity method
+https://en.wikipedia.org/wiki/List_of_logarithmic_identities#Changing_the_base
+
+
+// Big Math Package
+https://pkg.go.dev/github.com/privacybydesign/gabi/big

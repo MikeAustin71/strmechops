@@ -7,116 +7,122 @@ import (
 )
 
 type NegNumSearchSpecCollection struct {
-	negNumSearchSpecsCol []NegativeNumberSearchSpec // The Collection of negative number sign
-	//                                                 search specification objects.
+	negNumSearchSpecsCol []NegativeNumberSearchSpec
+	// The Collection of negative number sign
+	// search specification objects.
 
-	foundNegNumSign bool // When set to 'true' this signals that the current search
-	//                      operation has located a valid negative number sign.
+	foundNegNumSign bool
+	// When set to 'true' this signals that the current search
+	// operation has located a valid negative number sign.
 
-	foundNegNumSignColIndex int // The Collection index at which a negative number sign
-	//                             symbol was found during the current search operation.
+	foundNegNumSignColIndex int
+	// The Collection index at which a negative number sign
+	// symbol was found during the current search operation.
 
 	lock *sync.Mutex
 }
 
-// AddLeadingNegNumSearchRunes - Adds a Leading Negative Number search
-// profile to the end of the collection of NegativeNumberSearchSpec
-// objects maintained by the current instance of
-// NegNumSearchSpecCollection.
+// AddLeadingNegNumSearchRunes - Adds a Leading Negative Number
+// search profile to the end of the collection of
+// NegativeNumberSearchSpec objects maintained by the current
+// instance of NegNumSearchSpecCollection.
 //
 // This method will create a new instance of
 // NegativeNumberSearchSpec and add it to the end of the
-// NegativeNumberSearchSpec collection. This new instance will be
-// configured as a Leading Negative Number Search Specification.
+// NegativeNumberSearchSpec collection. This new instance will
+// be configured as a Leading Negative Number Search
+// Specification.
 //
 // Leading Negative Number symbols are used by many countries
 // including the US and Canada. Examples: -123.45  -6,432
 //
 // This method is identical in function to the method:
-//  NegNumSearchSpecCollection.AddLeadingNegNumSearchStr()
+//
+//	NegNumSearchSpecCollection.AddLeadingNegNumSearchStr()
 //
 // The only difference between the two methods is that this method
 // receives an array of runes as an input parameter.
-//
 //
 // -----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  leadingNegNumSignSymbols   []rune
-//     - An array of runes identifying the text character or
-//       characters which comprise the Leading Negative Number
-//       Symbol used in configuring a NegativeNumberSearchSpec
-//       instance. This instance will be added to the end of the
-//       Negative Number Search Specification Collection maintained
-//       by the current instance of NegNumSearchSpecCollection.
+//		leadingNegNumSignSymbols	[]rune
 //
-//       If this rune array is empty (has a zero length), an error
-//       will be returned.
+//	    - An array of runes identifying the text character or
+//	      characters which comprise the Leading Negative Number
+//	      Symbol used in configuring a NegativeNumberSearchSpec
+//	      instance. This instance will be added to the end of the
+//	      Negative Number Search Specification Collection maintained
+//	      by the current instance of NegNumSearchSpecCollection.
 //
-//
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
-//
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
-//
-//       This empty interface must be convertible to one of the
-//       following types:
+//	      If this rune array is empty (has a zero length), an error
+//	      will be returned.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//		 errorPrefix                interface{}
 //
-//       2. string - A string containing error prefix information.
+//			This object encapsulates error prefix text which is
+//			included in all returned error messages. Usually, it
+//			contains the name of the calling method or methods
+//			listed as a method or function chain of execution.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//			If no error prefix information is needed, set this
+//			parameter to 'nil'.
 //
-//       4. [][2]string A two-dimensional slice of strings
-//                      containing error prefix and error context
-//                      information.
+//			This empty interface must be convertible to one of
+//			the following types:
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//			1. nil - A nil value is valid and generates an empty
+//			   collection of error prefix and error context
+//			   information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//			2. string - A string containing error prefix
+//				information.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//			3. []string A one-dimensional slice of strings
+//				containing error prefix information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//			4. [][2]string A two-dimensional slice of strings
+//			   containing error prefix and error context
+//			   information.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
+//			5. ErrPrefixDto - An instance of ErrPrefixDto.
+//				Information from this object will be copied for use
+//				in error and informational messages.
 //
+//			6. *ErrPrefixDto - A pointer to an instance of
+//				ErrPrefixDto. Information from this object will be
+//				copied for use in error and informational messages.
+//
+//			7. IBasicErrorPrefix - An interface to a method
+//				generating a two-dimensional slice of strings
+//				containing error prefix and error context
+//				information.
+//
+//			If parameter 'errorPrefix' is NOT convertible to one
+//			of the valid types listed above, it will be
+//			considered invalid and trigger the return of an
+//			error.
+//
+//			Types ErrPrefixDto and IBasicErrorPrefix are included
+//			in the 'errpref' software package,
+//			"github.com/MikeAustin71/errpref".
 //
 // -----------------------------------------------------------------
 //
 // Return Values
 //
-//  err                        error
-//     - If the method completes successfully and no errors are
-//       encountered, this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	err							error
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
+//		If this method completes successfully and no errors
+//		are encountered this return value is set to 'nil'.
+//		Otherwise, if errors are encountered, this return
+//		value will contain an appropriate error message.
 //
+//		If an error message is returned, the text value of
+//		input parameter 'errorPrefix' will be inserted or
+//		prefixed at	the beginning of the error message.
 func (negNumSignCol *NegNumSearchSpecCollection) AddLeadingNegNumSearchRunes(
 	leadingNegNumSignSymbols []rune,
 	errorPrefix interface{}) (
@@ -178,90 +184,92 @@ func (negNumSignCol *NegNumSearchSpecCollection) AddLeadingNegNumSearchRunes(
 // including the US and Canada. Examples: -123.45  -6,432
 //
 // This method is identical in function to the method:
-//  NegNumSearchSpecCollection.AddLeadingNegNumSearchRunes()
+//
+//	NegNumSearchSpecCollection.AddLeadingNegNumSearchRunes()
 //
 // The only difference between the two methods is that this method
 // receives a string as an input parameter.
-//
 //
 // -----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  leadingNegNumSignSymbols   string
-//     - A string identifying the text character or characters
-//       which comprise the Leading Negative Number Symbol used in
-//       configuring a NegativeNumberSearchSpec instance, This
-//       instance will be added to the end of the Negative Number
-//       Search Specification Collection maintained by the current
-//       instance of NegNumSearchSpecCollection.
+//	leadingNegNumSignSymbols	string
 //
-//       If this string is empty (has a zero length), an error will
-//       be returned.
+//		A string identifying the text character or characters
+//		which comprise the Leading Negative Number Symbol used in
+//		configuring a NegativeNumberSearchSpec instance, This
+//		instance will be added to the end of the Negative Number
+//		Search Specification Collection maintained by the current
+//		instance of NegNumSearchSpecCollection.
 //
-//
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
-//
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
-//
-//       This empty interface must be convertible to one of the
-//       following types:
+//		If this string is empty (has a zero length), an error will
+//		be returned.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	 errorPrefix                interface{}
 //
-//       2. string - A string containing error prefix information.
+//		This object encapsulates error prefix text which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods
+//		listed as a method or function chain of execution.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
 //
-//       4. [][2]string A two-dimensional slice of strings
-//                      containing error prefix and error context
-//                      information.
+//		This empty interface must be convertible to one of
+//		the following types:
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//		1. nil - A nil value is valid and generates an empty
+//		   collection of error prefix and error context
+//		   information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//		2. string - A string containing error prefix
+//			information.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//		3. []string A one-dimensional slice of strings
+//			containing error prefix information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//		4. [][2]string A two-dimensional slice of strings
+//		   containing error prefix and error context
+//		   information.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
+//		5. ErrPrefixDto - An instance of ErrPrefixDto.
+//			Information from this object will be copied for use
+//			in error and informational messages.
 //
+//		6. *ErrPrefixDto - A pointer to an instance of
+//			ErrPrefixDto. Information from this object will be
+//			copied for use in error and informational messages.
+//
+//		7. IBasicErrorPrefix - An interface to a method
+//			generating a two-dimensional slice of strings
+//			containing error prefix and error context
+//			information.
+//
+//		If parameter 'errorPrefix' is NOT convertible to one
+//		of the valid types listed above, it will be
+//		considered invalid and trigger the return of an
+//		error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are included
+//		in the 'errpref' software package,
+//		"github.com/MikeAustin71/errpref".
 //
 // -----------------------------------------------------------------
 //
 // Return Values
 //
-//  err                        error
-//     - If the method completes successfully and no errors are
-//       encountered, this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	err							error
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
+//		If this method completes successfully and no errors
+//		are encountered this return value is set to 'nil'.
+//		Otherwise, if errors are encountered, this return
+//		value will contain an appropriate error message.
 //
+//		If an error message is returned, the text value of
+//		input parameter 'errorPrefix' will be inserted or
+//		prefixed at	the beginning of the error message.
 func (negNumSignCol *NegNumSearchSpecCollection) AddLeadingNegNumSearchStr(
 	leadingNegNumSignSymbols string,
 	errorPrefix interface{}) (
@@ -325,7 +333,8 @@ func (negNumSignCol *NegNumSearchSpecCollection) AddLeadingNegNumSearchStr(
 // are described here as a Leading and Trailing Negative Number
 // Signs. As an example, the US and Canada use parentheses "()" to
 // indicate negative numeric values.
-//    Examples: (127.45) = -127.45  (4,654.00) = -4,654.00
+//
+//	Examples: (127.45) = -127.45  (4,654.00) = -4,654.00
 //
 // This method receives two input parameters. The first parameter
 // specifies the Leading Negative Number Symbols while the second
@@ -339,97 +348,99 @@ func (negNumSignCol *NegNumSearchSpecCollection) AddLeadingNegNumSearchStr(
 // The only difference between the two methods is that this method
 // receives arrays of runes as input parameters.
 //
-//
 // -----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  leadingNegNumSignSymbols   []rune
-//     - An array of runes identifying the text character or
-//       characters which comprise the Leading Negative Number
-//       Symbols used in configuring a NegativeNumberSearchSpec
-//       instance. This instance will be added to the end of the
-//       Negative Number Search Specification Collection maintained
-//       by the current instance of NegNumSearchSpecCollection.
+//	leadingNegNumSignSymbols	[]rune
 //
-//       If this rune array is empty (has a zero length), an error
-//       will be returned.
+//		An array of runes identifying the text character or
+//		characters which comprise the Leading Negative Number
+//		Symbols used in configuring a NegativeNumberSearchSpec
+//		instance. This instance will be added to the end of the
+//		Negative Number Search Specification Collection maintained
+//		by the current instance of NegNumSearchSpecCollection.
 //
-//
-//  trailingNegNumSignSymbols  []rune
-//     - An array of runes identifying the text character or
-//       characters which comprise the Trailing Negative Number
-//       Symbols used in configuring a NegativeNumberSearchSpec
-//       instance. This instance will be added to the end of the
-//       Negative Number Search Specification Collection maintained
-//       by the current instance of NegNumSearchSpecCollection.
-//
-//       If this rune array is empty (has a zero length), an error
-//       will be returned.
+//		If this rune array is empty (has a zero length), an error
+//		will be returned.
 //
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	trailingNegNumSignSymbols	[]rune
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//		An array of runes identifying the text character or
+//		characters which comprise the Trailing Negative Number
+//		Symbols used in configuring a NegativeNumberSearchSpec
+//		instance. This instance will be added to the end of the
+//		Negative Number Search Specification Collection maintained
+//		by the current instance of NegNumSearchSpecCollection.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//		If this rune array is empty (has a zero length), an error
+//		will be returned.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	 errorPrefix                interface{}
 //
-//       2. string - A string containing error prefix information.
+//		This object encapsulates error prefix text which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods
+//		listed as a method or function chain of execution.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
 //
-//       4. [][2]string A two-dimensional slice of strings
-//                      containing error prefix and error context
-//                      information.
+//		This empty interface must be convertible to one of
+//		the following types:
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//		1. nil - A nil value is valid and generates an empty
+//		   collection of error prefix and error context
+//		   information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//		2. string - A string containing error prefix
+//			information.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//		3. []string A one-dimensional slice of strings
+//			containing error prefix information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//		4. [][2]string A two-dimensional slice of strings
+//		   containing error prefix and error context
+//		   information.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
+//		5. ErrPrefixDto - An instance of ErrPrefixDto.
+//			Information from this object will be copied for use
+//			in error and informational messages.
 //
+//		6. *ErrPrefixDto - A pointer to an instance of
+//			ErrPrefixDto. Information from this object will be
+//			copied for use in error and informational messages.
+//
+//		7. IBasicErrorPrefix - An interface to a method
+//			generating a two-dimensional slice of strings
+//			containing error prefix and error context
+//			information.
+//
+//		If parameter 'errorPrefix' is NOT convertible to one
+//		of the valid types listed above, it will be
+//		considered invalid and trigger the return of an
+//		error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are included
+//		in the 'errpref' software package,
+//		"github.com/MikeAustin71/errpref".
 //
 // -----------------------------------------------------------------
 //
 // Return Values
 //
-//  err                        error
-//     - If the method completes successfully and no errors are
-//       encountered, this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	err							error
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
+//		If this method completes successfully and no errors
+//		are encountered this return value is set to 'nil'.
+//		Otherwise, if errors are encountered, this return
+//		value will contain an appropriate error message.
 //
+//		If an error message is returned, the text value of
+//		input parameter 'errorPrefix' will be inserted or
+//		prefixed at	the beginning of the error message.
 func (negNumSignCol *NegNumSearchSpecCollection) AddLeadingAndTrailingNegNumSearchRunes(
 	leadingNegNumSignSymbols []rune,
 	trailingNegNumSignSymbols []rune,
@@ -495,7 +506,8 @@ func (negNumSignCol *NegNumSearchSpecCollection) AddLeadingAndTrailingNegNumSear
 // are described here as a Leading and Trailing Negative Number
 // Signs. As an example, the US and Canada use parentheses "()" to
 // indicate negative numeric values.
-//    Examples: (127.45) = -127.45  (4,654.00) = -4,654.00
+//
+//	Examples: (127.45) = -127.45  (4,654.00) = -4,654.00
 //
 // This method receives two input parameters. The first parameter
 // specifies the Leading Negative Number Symbols while the second
@@ -509,97 +521,97 @@ func (negNumSignCol *NegNumSearchSpecCollection) AddLeadingAndTrailingNegNumSear
 // The only difference between the two methods is that this method
 // receives strings as input parameters.
 //
-//
 // -----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  leadingNegNumSignSymbols   string
-//     - A string identifying the text character or characters
-//       which comprise the Leading Negative Number Symbols used in
-//       configuring a NegativeNumberSearchSpec instance. This
-//       instance will be added to the end of the Negative Number
-//       Search Specification Collection maintained by the current
-//       instance of NegNumSearchSpecCollection.
+//	leadingNegNumSignSymbols	string
+//		A string identifying the text character or characters
+//		which comprise the Leading Negative Number Symbols used in
+//		configuring a NegativeNumberSearchSpec instance. This
+//		instance will be added to the end of the Negative Number
+//		Search Specification Collection maintained by the current
+//		instance of NegNumSearchSpecCollection.
 //
-//       If this string is empty (has a zero length), an error
-//       will be returned.
-//
-//
-//  trailingNegNumSignSymbols  string
-//     - A string identifying the text character or characters
-//       which comprise the Trailing Negative Number Symbols used
-//       in configuring a NegativeNumberSearchSpec instance. This
-//       instance will be added to the end of the Negative Number
-//       Search Specification Collection maintained by the current
-//       instance of NegNumSearchSpecCollection.
-//
-//       If this string is empty (has a zero length), an error will
-//       be returned.
+//		If this string is empty (has a zero length), an error
+//		will be returned.
 //
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	trailingNegNumSignSymbols	string
+//		A string identifying the text character or characters
+//		which comprise the Trailing Negative Number Symbols used
+//		in configuring a NegativeNumberSearchSpec instance. This
+//		instance will be added to the end of the Negative Number
+//		Search Specification Collection maintained by the current
+//		instance of NegNumSearchSpecCollection.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
-//
-//       This empty interface must be convertible to one of the
-//       following types:
+//		If this string is empty (has a zero length), an error will
+//		be returned.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	 errorPrefix                interface{}
 //
-//       2. string - A string containing error prefix information.
+//		This object encapsulates error prefix text which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods
+//		listed as a method or function chain of execution.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
 //
-//       4. [][2]string A two-dimensional slice of strings
-//                      containing error prefix and error context
-//                      information.
+//		This empty interface must be convertible to one of
+//		the following types:
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//		1. nil - A nil value is valid and generates an empty
+//		   collection of error prefix and error context
+//		   information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//		2. string - A string containing error prefix
+//			information.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//		3. []string A one-dimensional slice of strings
+//			containing error prefix information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//		4. [][2]string A two-dimensional slice of strings
+//		   containing error prefix and error context
+//		   information.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
+//		5. ErrPrefixDto - An instance of ErrPrefixDto.
+//			Information from this object will be copied for use
+//			in error and informational messages.
 //
+//		6. *ErrPrefixDto - A pointer to an instance of
+//			ErrPrefixDto. Information from this object will be
+//			copied for use in error and informational messages.
+//
+//		7. IBasicErrorPrefix - An interface to a method
+//			generating a two-dimensional slice of strings
+//			containing error prefix and error context
+//			information.
+//
+//		If parameter 'errorPrefix' is NOT convertible to one
+//		of the valid types listed above, it will be
+//		considered invalid and trigger the return of an
+//		error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are included
+//		in the 'errpref' software package,
+//		"github.com/MikeAustin71/errpref".
 //
 // -----------------------------------------------------------------
 //
 // Return Values
 //
-//  err                        error
-//     - If the method completes successfully and no errors are
-//       encountered, this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	err							error
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
+//		If this method completes successfully and no errors
+//		are encountered this return value is set to 'nil'.
+//		Otherwise, if errors are encountered, this return
+//		value will contain an appropriate error message.
 //
+//		If an error message is returned, the text value of
+//		input parameter 'errorPrefix' will be inserted or
+//		prefixed at	the beginning of the error message.
 func (negNumSignCol *NegNumSearchSpecCollection) AddLeadingAndTrailingNegNumSearchStr(
 	leadingNegNumSignSymbols string,
 	trailingNegNumSignSymbols string,
@@ -663,90 +675,91 @@ func (negNumSignCol *NegNumSearchSpecCollection) AddLeadingAndTrailingNegNumSear
 // Union countries. Examples:  127.45-   654-
 //
 // This method is identical in function to the method:
-//  NegNumSearchSpecCollection.AddTrailingNegNumSearchStr()
+//
+//	NegNumSearchSpecCollection.AddTrailingNegNumSearchStr()
 //
 // The only difference between the two methods is that this method
 // receives an array of runes as an input parameter.
-//
 //
 // -----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  TrailingNegNumSignSymbols   []rune
-//     - An array of runes identifying the text character or
-//       characters which comprise the Trailing Negative Number
-//       Symbol used in configuring a NegativeNumberSearchSpec
-//       instance. This instance will be added to the end of the
-//       Negative Number Search Specification Collection maintained
-//       by the current instance of NegNumSearchSpecCollection.
+//	TrailingNegNumSignSymbols	[]rune
+//		An array of runes identifying the text character or
+//		characters which comprise the Trailing Negative Number
+//		Symbol used in configuring a NegativeNumberSearchSpec
+//		instance. This instance will be added to the end of the
+//		Negative Number Search Specification Collection maintained
+//		by the current instance of NegNumSearchSpecCollection.
 //
-//       If this rune array is empty (has a zero length), an error
-//       will be returned.
-//
-//
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
-//
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
-//
-//       This empty interface must be convertible to one of the
-//       following types:
+//		If this rune array is empty (has a zero length), an error
+//		will be returned.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	 errorPrefix                interface{}
 //
-//       2. string - A string containing error prefix information.
+//		This object encapsulates error prefix text which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods
+//		listed as a method or function chain of execution.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
 //
-//       4. [][2]string A two-dimensional slice of strings
-//                      containing error prefix and error context
-//                      information.
+//		This empty interface must be convertible to one of
+//		the following types:
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//		1. nil - A nil value is valid and generates an empty
+//		   collection of error prefix and error context
+//		   information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//		2. string - A string containing error prefix
+//			information.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//		3. []string A one-dimensional slice of strings
+//			containing error prefix information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//		4. [][2]string A two-dimensional slice of strings
+//		   containing error prefix and error context
+//		   information.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
+//		5. ErrPrefixDto - An instance of ErrPrefixDto.
+//			Information from this object will be copied for use
+//			in error and informational messages.
 //
+//		6. *ErrPrefixDto - A pointer to an instance of
+//			ErrPrefixDto. Information from this object will be
+//			copied for use in error and informational messages.
+//
+//		7. IBasicErrorPrefix - An interface to a method
+//			generating a two-dimensional slice of strings
+//			containing error prefix and error context
+//			information.
+//
+//		If parameter 'errorPrefix' is NOT convertible to one
+//		of the valid types listed above, it will be
+//		considered invalid and trigger the return of an
+//		error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are included
+//		in the 'errpref' software package,
+//		"github.com/MikeAustin71/errpref".
 //
 // -----------------------------------------------------------------
 //
 // Return Values
 //
-//  err                        error
-//     - If the method completes successfully and no errors are
-//       encountered, this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	err							error
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
+//		If this method completes successfully and no errors
+//		are encountered this return value is set to 'nil'.
+//		Otherwise, if errors are encountered, this return
+//		value will contain an appropriate error message.
 //
+//		If an error message is returned, the text value of
+//		input parameter 'errorPrefix' will be inserted or
+//		prefixed at	the beginning of the error message.
 func (negNumSignCol *NegNumSearchSpecCollection) AddTrailingNegNumSearchRunes(
 	trailingNegNumSignSymbols []rune,
 	errorPrefix interface{}) (
@@ -808,90 +821,91 @@ func (negNumSignCol *NegNumSearchSpecCollection) AddTrailingNegNumSearchRunes(
 // Union countries. Examples:  127.45-   654-
 //
 // This method is identical in function to the method:
-//  NegNumSearchSpecCollection.AddTrailingNegNumSearchRunes()
+//
+//	NegNumSearchSpecCollection.AddTrailingNegNumSearchRunes()
 //
 // The only difference between the two methods is that this method
 // receives a string as an input parameter.
-//
 //
 // -----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  TrailingNegNumSignSymbols   string
-//     - A string identifying the text character or characters
-//       which comprise the Trailing Negative Number Symbol used in
-//       configuring a NegativeNumberSearchSpec instance, This
-//       instance will be added to the end of the Negative Number
-//       Search Specification Collection maintained by the current
-//       instance of NegNumSearchSpecCollection.
+//	TrailingNegNumSignSymbols	string
+//		A string identifying the text character or characters
+//		which comprise the Trailing Negative Number Symbol used in
+//		configuring a NegativeNumberSearchSpec instance, This
+//		instance will be added to the end of the Negative Number
+//		Search Specification Collection maintained by the current
+//		instance of NegNumSearchSpecCollection.
 //
-//       If this string is empty (has a zero length), an error will
-//       be returned.
-//
-//
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
-//
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
-//
-//       This empty interface must be convertible to one of the
-//       following types:
+//		If this string is empty (has a zero length), an error will
+//		be returned.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	 errorPrefix                interface{}
 //
-//       2. string - A string containing error prefix information.
+//		This object encapsulates error prefix text which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods
+//		listed as a method or function chain of execution.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
 //
-//       4. [][2]string A two-dimensional slice of strings
-//                      containing error prefix and error context
-//                      information.
+//		This empty interface must be convertible to one of
+//		the following types:
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//		1. nil - A nil value is valid and generates an empty
+//		   collection of error prefix and error context
+//		   information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//		2. string - A string containing error prefix
+//			information.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//		3. []string A one-dimensional slice of strings
+//			containing error prefix information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//		4. [][2]string A two-dimensional slice of strings
+//		   containing error prefix and error context
+//		   information.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
+//		5. ErrPrefixDto - An instance of ErrPrefixDto.
+//			Information from this object will be copied for use
+//			in error and informational messages.
 //
+//		6. *ErrPrefixDto - A pointer to an instance of
+//			ErrPrefixDto. Information from this object will be
+//			copied for use in error and informational messages.
+//
+//		7. IBasicErrorPrefix - An interface to a method
+//			generating a two-dimensional slice of strings
+//			containing error prefix and error context
+//			information.
+//
+//		If parameter 'errorPrefix' is NOT convertible to one
+//		of the valid types listed above, it will be
+//		considered invalid and trigger the return of an
+//		error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are included
+//		in the 'errpref' software package,
+//		"github.com/MikeAustin71/errpref".
 //
 // -----------------------------------------------------------------
 //
 // Return Values
 //
-//  err                        error
-//     - If the method completes successfully and no errors are
-//       encountered, this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	err							error
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
+//		If this method completes successfully and no errors
+//		are encountered this return value is set to 'nil'.
+//		Otherwise, if errors are encountered, this return
+//		value will contain an appropriate error message.
 //
+//		If an error message is returned, the text value of
+//		input parameter 'errorPrefix' will be inserted or
+//		prefixed at	the beginning of the error message.
 func (negNumSignCol *NegNumSearchSpecCollection) AddTrailingNegNumSearchStr(
 	trailingNegNumSignSymbols string,
 	errorPrefix interface{}) (
@@ -945,26 +959,23 @@ func (negNumSignCol *NegNumSearchSpecCollection) AddTrailingNegNumSearchStr(
 //
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // This method will delete all pre-existing internal member
 // variable data values in the current instance of
 // NegNumSearchSpecCollection.
 //
-//
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  NONE
-//
+//	NONE
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  NONE
-//
+//	NONE
 func (negNumSignCol *NegNumSearchSpecCollection) Empty() {
 
 	if negNumSignCol.lock == nil {
@@ -1000,14 +1011,13 @@ func (negNumSignCol *NegNumSearchSpecCollection) Empty() {
 //
 // -----------------------------------------------------------------
 //
-// BE ADVISED
+// # BE ADVISED
 //
 // If the number of elements in the 'negNumSearchSpecsCol'
 // collection is zero, it means that the current instance of
 // NegNumSearchSpecCollection is invalid and cannot be used in
 // number string parsing functions to search for negative number
 // symbols.
-//
 func (negNumSignCol *NegNumSearchSpecCollection) GetNumberOfNegNumSearchSpecs() int {
 
 	if negNumSignCol.lock == nil {
@@ -1037,7 +1047,7 @@ func (negNumSignCol *NegNumSearchSpecCollection) GetNumberOfNegNumSearchSpecs() 
 //
 // -----------------------------------------------------------------
 //
-// BE ADVISED
+// # BE ADVISED
 //
 // If the length of the 'negNumSearchSpecsCol' collection is zero,
 // this method will return an error.
@@ -1047,7 +1057,6 @@ func (negNumSignCol *NegNumSearchSpecCollection) GetNumberOfNegNumSearchSpecs() 
 // NegNumSearchSpecCollection is invalid and cannot be used in
 // number string parsing functions to search for negative number
 // symbols.
-//
 func (negNumSignCol *NegNumSearchSpecCollection) GetNegNumSearchSpecCollection(
 	errorPrefix interface{}) (
 	negNumSearchSpecCol []NegativeNumberSearchSpec,
@@ -1134,28 +1143,26 @@ func (negNumSignCol *NegNumSearchSpecCollection) GetNegNumSearchSpecCollection(
 // exceptions being that this method takes no input parameters and
 // returns a boolean value.
 //
-//
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  -- NONE --
-//
+//	-- NONE --
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  bool
-//     - If any of the internal member data variables contained in
-//       the current instance of NegNumSearchSpecCollection are found to
-//       be invalid, this method will return a boolean value of
-//       'false'.
+//	bool
 //
-//       If all internal member data variables contained in the
-//       current instance of NegNumSearchSpecCollection are found to be
-//       valid, this method returns a boolean value of 'true'.
+//		If any of the internal member data variables contained in
+//		the current instance of NegNumSearchSpecCollection are found to
+//		be invalid, this method will return a boolean value of
+//		'false'.
 //
+//		If all internal member data variables contained in the
+//		current instance of NegNumSearchSpecCollection are found to be
+//		valid, this method returns a boolean value of 'true'.
 func (negNumSignCol *NegNumSearchSpecCollection) IsValidInstance() bool {
 
 	if negNumSignCol.lock == nil {
@@ -1183,70 +1190,73 @@ func (negNumSignCol *NegNumSearchSpecCollection) IsValidInstance() bool {
 // If any data element evaluates as invalid, this method will
 // return an error.
 //
-//
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  errorPrefix         interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	 errorPrefix                interface{}
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//		This object encapsulates error prefix text which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods
+//		listed as a method or function chain of execution.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
 //
+//		This empty interface must be convertible to one of
+//		the following types:
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//		1. nil - A nil value is valid and generates an empty
+//		   collection of error prefix and error context
+//		   information.
 //
-//       2. string - A string containing error prefix information.
+//		2. string - A string containing error prefix
+//			information.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//		3. []string A one-dimensional slice of strings
+//			containing error prefix information.
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//		4. [][2]string A two-dimensional slice of strings
+//		   containing error prefix and error context
+//		   information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//		5. ErrPrefixDto - An instance of ErrPrefixDto.
+//			Information from this object will be copied for use
+//			in error and informational messages.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//		6. *ErrPrefixDto - A pointer to an instance of
+//			ErrPrefixDto. Information from this object will be
+//			copied for use in error and informational messages.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//		7. IBasicErrorPrefix - An interface to a method
+//			generating a two-dimensional slice of strings
+//			containing error prefix and error context
+//			information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//		If parameter 'errorPrefix' is NOT convertible to one
+//		of the valid types listed above, it will be
+//		considered invalid and trigger the return of an
+//		error.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
-//
+//		Types ErrPrefixDto and IBasicErrorPrefix are included
+//		in the 'errpref' software package,
+//		"github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  err                        error
-//     - If any of the internal member data variables contained in
-//       the current instance of NegNumSearchSpecCollection are found
-//       to be invalid, this method will return an error.
+//	err							error
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' (error prefix) will be inserted or
-//       prefixed at the beginning of the error message.
+//		If this method completes successfully and no errors
+//		are encountered this return value is set to 'nil'.
+//		Otherwise, if errors are encountered, this return
+//		value will contain an appropriate error message.
 //
+//		If an error message is returned, the text value of
+//		input parameter 'errorPrefix' will be inserted or
+//		prefixed at	the beginning of the error message.
 func (negNumSignCol *NegNumSearchSpecCollection) IsValidInstanceError(
 	errorPrefix interface{}) (
 	err error) {
@@ -1320,31 +1330,29 @@ func (negNumSignCol *NegNumSearchSpecCollection) IsValidInstanceError(
 // collection.
 //
 // The 'Add' methods are listed as follows:
-//  NegNumSearchSpecCollection.AddLeadingNegNumSearchRunes()
-//  NegNumSearchSpecCollection.AddLeadingNegNumSearchStr()
-//  NegNumSearchSpecCollection.AddLeadingNegNumSearchRunes()
-//  NegNumSearchSpecCollection.AddLeadingAndTrailingNegNumSearchRunes()
-//  NegNumSearchSpecCollection.AddLeadingAndTrailingNegNumSearchStr()
-//  NegNumSearchSpecCollection.AddTrailingNegNumSearchRunes()
-//  NegNumSearchSpecCollection.AddTrailingNegNumSearchStr()
 //
+//	NegNumSearchSpecCollection.AddLeadingNegNumSearchRunes()
+//	NegNumSearchSpecCollection.AddLeadingNegNumSearchStr()
+//	NegNumSearchSpecCollection.AddLeadingNegNumSearchRunes()
+//	NegNumSearchSpecCollection.AddLeadingAndTrailingNegNumSearchRunes()
+//	NegNumSearchSpecCollection.AddLeadingAndTrailingNegNumSearchStr()
+//	NegNumSearchSpecCollection.AddTrailingNegNumSearchRunes()
+//	NegNumSearchSpecCollection.AddTrailingNegNumSearchStr()
 //
 // -----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  NONE
-//
+//	NONE
 //
 // -----------------------------------------------------------------
 //
 // Return Values
 //
-//  NegNumSearchSpecCollection
-//     - This method returns an unpopulated or empty instance of
-//       NegNumSearchSpecCollection. Thereafter, it is up to the
-//       user to add custom NegativeNumberSearchSpec objects.
-//
+//	NegNumSearchSpecCollection
+//		This method returns an unpopulated or empty instance of
+//		NegNumSearchSpecCollection. Thereafter, it is up to the
+//		user to add custom NegativeNumberSearchSpec objects.
 func (negNumSignCol NegNumSearchSpecCollection) New() NegNumSearchSpecCollection {
 
 	if negNumSignCol.lock == nil {
@@ -1365,9 +1373,8 @@ func (negNumSignCol NegNumSearchSpecCollection) New() NegNumSearchSpecCollection
 // with negative number signs commonly used in the United States.
 //
 // This configuration includes two negative number signs:
-//   1. Leading Minus Sign   -123.45
-//   2. Opposing Parentheses  (123.45)
-//
+//  1. Leading Minus Sign   -123.45
+//  2. Opposing Parentheses  (123.45)
 func (negNumSignCol NegNumSearchSpecCollection) NewUS(
 	errorPrefix interface{}) (
 	newNegNumSearchCol NegNumSearchSpecCollection,
@@ -1441,7 +1448,6 @@ func (negNumSignCol NegNumSearchSpecCollection) NewUS(
 // This will prepare the current instance of
 // NegNumSearchSpecCollection to conduct a Negative Number Sign
 // Symbol search operation on an entire Target Search String.
-//
 func (negNumSignCol *NegNumSearchSpecCollection) SearchForNegNumSignSymbols(
 	targetInputParms CharSearchTargetInputParametersDto,
 	errorPrefix interface{}) (
@@ -1532,11 +1538,11 @@ func (negNumSignCol *NegNumSearchSpecCollection) SearchForNegNumSignSymbols(
 //
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // Call this method each time before calling:
-//   NegNumSearchSpecCollection.SearchForNegNumSignSymbols()
 //
+//	NegNumSearchSpecCollection.SearchForNegNumSignSymbols()
 func (negNumSignCol *NegNumSearchSpecCollection) SetupForNegativeNumberSignSearch() {
 
 	if negNumSignCol.lock == nil {
