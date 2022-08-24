@@ -6,12 +6,10 @@ import (
 	"sync"
 )
 
-// SignedNumberFormatSpec - The Signed Number Format
-// Specification is used to format signed numeric values
-// as number strings. This type contains all the
-// specifications and parameters required to format a
-// numeric value for text displays.
-type SignedNumberFormatSpec struct {
+// NumStrFormatSpec - The Number String Format Specification
+// contains parameters used to format signed numbers and
+// currency numeric values as number strings.
+type NumStrFormatSpec struct {
 	decSeparator DecimalSeparatorSpec
 	// Contains the decimal separator character or
 	// characters which will separate integer and
@@ -53,29 +51,29 @@ type SignedNumberFormatSpec struct {
 }
 
 // CopyIn - Copies the data fields from an incoming instance of
-// SignedNumberFormatSpec ('incomingSignedNumFmt')
-// to the data fields of the current SignedNumberFormatSpec
+// NumStrFormatSpec ('incomingSignedNumFmt')
+// to the data fields of the current NumStrFormatSpec
 // instance ('signedNumFmtSpec').
 //
 // ----------------------------------------------------------------
 //
 // # IMPORTANT
 // All the member variable data values in the current
-// SignedNumberFormatSpec instance ('signedNumFmtSpec') will
+// NumStrFormatSpec instance ('signedNumFmtSpec') will
 // be deleted and replaced.
 //
 // ----------------------------------------------------------------
 //
 // # Input Parameters
 //
-//	incomingSignedNumFmt		*SignedNumberFormatSpec
+//	incomingSignedNumFmt		*NumStrFormatSpec
 //
-//		A pointer to an instance of SignedNumberFormatSpec.
+//		A pointer to an instance of NumStrFormatSpec.
 //		This method will NOT change the values of internal
 //		member variables contained in this instance.
 //
-//		All data values in this SignedNumberFormatSpec instance
-//		will be copied to current SignedNumberFormatSpec
+//		All data values in this NumStrFormatSpec instance
+//		will be copied to current NumStrFormatSpec
 //		instance ('signedNumFmtSpec').
 //
 //		If parameter 'incomingSignedNumFmt' is determined to
@@ -144,17 +142,17 @@ type SignedNumberFormatSpec struct {
 //		If an error message is returned, the text value of input
 //		parameter 'errorPrefix' will be inserted or prefixed at
 //		the beginning of the error message.
-func (signedNumFmtSpec *SignedNumberFormatSpec) CopyIn(
-	incomingSignedNumFmt *SignedNumberFormatSpec,
+func (numStrFmtSpec *NumStrFormatSpec) CopyIn(
+	incomingSignedNumFmt *NumStrFormatSpec,
 	errorPrefix interface{}) error {
 
-	if signedNumFmtSpec.lock == nil {
-		signedNumFmtSpec.lock = new(sync.Mutex)
+	if numStrFmtSpec.lock == nil {
+		numStrFmtSpec.lock = new(sync.Mutex)
 	}
 
-	signedNumFmtSpec.lock.Lock()
+	numStrFmtSpec.lock.Lock()
 
-	defer signedNumFmtSpec.lock.Unlock()
+	defer numStrFmtSpec.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
@@ -162,7 +160,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) CopyIn(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"SignedNumberFormatSpec."+
+		"NumStrFormatSpec."+
 			"CopyIn()",
 		"")
 
@@ -170,17 +168,17 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) CopyIn(
 		return err
 	}
 
-	return new(signedNumFmtSpecNanobot).
+	return new(numStrFmtSpecNanobot).
 		copySignedNumberFormatSpec(
-			signedNumFmtSpec,
+			numStrFmtSpec,
 			incomingSignedNumFmt,
 			ePrefix.XCpy(
-				"signedNumFmtSpec<-"+
+				"numStrFmtSpec<-"+
 					"incomingSignedNumFmt"))
 }
 
 // CopyOut - Returns a deep copy of the current
-// SignedNumberFormatSpec instance.
+// NumStrFormatSpec instance.
 //
 // ----------------------------------------------------------------
 //
@@ -239,11 +237,11 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) CopyIn(
 //
 // Return Values
 //
-//	deepCopySignedNumFmtSpec	SignedNumberFormatSpec
+//	deepCopySignedNumFmtSpec	NumStrFormatSpec
 //
 //		If this method completes successfully and no errors are
 //		encountered, this parameter will return a deep copy of
-//		the current SignedNumberFormatSpec instance.
+//		the current NumStrFormatSpec instance.
 //
 //
 //	err							error
@@ -256,25 +254,25 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) CopyIn(
 //		If an error message is returned, the text value of input
 //		parameter 'errorPrefix' will be inserted or prefixed at
 //		the beginning of the error message.
-func (signedNumFmtSpec *SignedNumberFormatSpec) CopyOut(
+func (numStrFmtSpec *NumStrFormatSpec) CopyOut(
 	errorPrefix interface{}) (
-	deepCopySignedNumFmtSpec SignedNumberFormatSpec,
+	deepCopySignedNumFmtSpec NumStrFormatSpec,
 	err error) {
 
-	if signedNumFmtSpec.lock == nil {
-		signedNumFmtSpec.lock = new(sync.Mutex)
+	if numStrFmtSpec.lock == nil {
+		numStrFmtSpec.lock = new(sync.Mutex)
 	}
 
-	signedNumFmtSpec.lock.Lock()
+	numStrFmtSpec.lock.Lock()
 
-	defer signedNumFmtSpec.lock.Unlock()
+	defer numStrFmtSpec.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"SignedNumberFormatSpec."+
+		"NumStrFormatSpec."+
 			"CopyOut()",
 		"")
 
@@ -282,19 +280,19 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) CopyOut(
 		return deepCopySignedNumFmtSpec, err
 	}
 
-	err = new(signedNumFmtSpecNanobot).
+	err = new(numStrFmtSpecNanobot).
 		copySignedNumberFormatSpec(
 			&deepCopySignedNumFmtSpec,
-			signedNumFmtSpec,
+			numStrFmtSpec,
 			ePrefix.XCpy(
 				"deepCopySignedNumFmtSpec<-"+
-					"signedNumFmtSpec"))
+					"numStrFmtSpec"))
 
 	return deepCopySignedNumFmtSpec, err
 }
 
 // Empty - Resets all internal member variables for the current
-// instance of SignedNumberFormatSpec to their initial or zero
+// instance of NumStrFormatSpec to their initial or zero
 // values.
 //
 // ----------------------------------------------------------------
@@ -303,7 +301,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) CopyOut(
 //
 // This method will delete all pre-existing internal member
 // variable data values in the current instance of
-// SignedNumberFormatSpec.
+// NumStrFormatSpec.
 //
 // ------------------------------------------------------------------------
 //
@@ -316,27 +314,27 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) CopyOut(
 // # Return Values
 //
 //	NONE
-func (signedNumFmtSpec *SignedNumberFormatSpec) Empty() {
+func (numStrFmtSpec *NumStrFormatSpec) Empty() {
 
-	if signedNumFmtSpec.lock == nil {
-		signedNumFmtSpec.lock = new(sync.Mutex)
+	if numStrFmtSpec.lock == nil {
+		numStrFmtSpec.lock = new(sync.Mutex)
 	}
 
-	signedNumFmtSpec.lock.Lock()
+	numStrFmtSpec.lock.Lock()
 
-	new(signedNumberFormatSpecAtom).empty(
-		signedNumFmtSpec)
+	new(numStrFmtSpecAtom).empty(
+		numStrFmtSpec)
 
-	signedNumFmtSpec.lock.Unlock()
+	numStrFmtSpec.lock.Unlock()
 
-	signedNumFmtSpec.lock = nil
+	numStrFmtSpec.lock = nil
 
 }
 
 // Equal - Receives a pointer to another instance of
-// SignedNumberFormatSpec and proceeds to compare its
+// NumStrFormatSpec and proceeds to compare its
 // internal member variables to those of the current
-// SignedNumberFormatSpec instance in order to determine
+// NumStrFormatSpec instance in order to determine
 // if they are equivalent.
 //
 // A boolean flag showing the result of this comparison is
@@ -348,12 +346,12 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) Empty() {
 //
 // Input Parameters
 //
-//	incomingSignedNumFmt		*SignedNumberFormatSpec
+//	incomingSignedNumFmt		*NumStrFormatSpec
 //
 //		A pointer to an external instance of
-//		SignedNumberFormatSpec. The internal member variable
+//		NumStrFormatSpec. The internal member variable
 //		data values in this instance will be compared to those
-//		in the current instance of SignedNumberFormatSpec. The
+//		in the current instance of NumStrFormatSpec. The
 //		results of this comparison will be returned to the
 //		calling function as a boolean value.
 //
@@ -366,29 +364,29 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) Empty() {
 //		If the internal member variable data values contained in
 //		input parameter 'incomingSignedNumFmt' are equivalent
 //		in all respects to those contained in the current
-//		instance of 'SignedNumberFormatSpec', this return value
+//		instance of 'NumStrFormatSpec', this return value
 //		will be set to 'true'.
 //
 //		Otherwise, this method will return 'false'.
-func (signedNumFmtSpec *SignedNumberFormatSpec) Equal(
-	incomingSignedNumFmt *SignedNumberFormatSpec) bool {
+func (numStrFmtSpec *NumStrFormatSpec) Equal(
+	incomingSignedNumFmt *NumStrFormatSpec) bool {
 
-	if signedNumFmtSpec.lock == nil {
-		signedNumFmtSpec.lock = new(sync.Mutex)
+	if numStrFmtSpec.lock == nil {
+		numStrFmtSpec.lock = new(sync.Mutex)
 	}
 
-	signedNumFmtSpec.lock.Lock()
+	numStrFmtSpec.lock.Lock()
 
-	defer signedNumFmtSpec.lock.Unlock()
+	defer numStrFmtSpec.lock.Unlock()
 
-	return new(signedNumberFormatSpecAtom).equal(
-		signedNumFmtSpec,
+	return new(numStrFmtSpecAtom).equal(
+		numStrFmtSpec,
 		incomingSignedNumFmt)
 }
 
 // GetDecSeparatorRunes - Returns an array of runes containing the
 // Decimal Separator character or characters configured for the
-// current instance of SignedNumberFormatSpec.
+// current instance of NumStrFormatSpec.
 //
 // ----------------------------------------------------------------
 //
@@ -404,26 +402,26 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) Equal(
 //
 //		An array of runes containing the Decimal Separator character
 //		or characters configured for the current instance of
-//		SignedNumberFormatSpec.
+//		NumStrFormatSpec.
 //
 //		If Decimal Separator character(s) have not yet been
 //		configured, this method will return 'nil'.
-func (signedNumFmtSpec *SignedNumberFormatSpec) GetDecSeparatorRunes() []rune {
+func (numStrFmtSpec *NumStrFormatSpec) GetDecSeparatorRunes() []rune {
 
-	if signedNumFmtSpec.lock == nil {
-		signedNumFmtSpec.lock = new(sync.Mutex)
+	if numStrFmtSpec.lock == nil {
+		numStrFmtSpec.lock = new(sync.Mutex)
 	}
 
-	signedNumFmtSpec.lock.Lock()
+	numStrFmtSpec.lock.Lock()
 
-	defer signedNumFmtSpec.lock.Unlock()
+	defer numStrFmtSpec.lock.Unlock()
 
-	return signedNumFmtSpec.decSeparator.GetDecimalSeparatorRunes()
+	return numStrFmtSpec.decSeparator.GetDecimalSeparatorRunes()
 }
 
 // GetDecSeparatorSpec - Returns a deep copy of the Decimal
 // Separator Specification configured for the current instance
-// of SignedNumberFormatSpec.
+// of NumStrFormatSpec.
 //
 // ----------------------------------------------------------------
 //
@@ -486,7 +484,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) GetDecSeparatorRunes() []rune {
 //
 //		If this method completes successfully, a deep copy of
 //		the Decimal Separator Specification configured for the
-//		current instance of SignedNumberFormatSpec will be
+//		current instance of NumStrFormatSpec will be
 //		returned.
 //
 //	error
@@ -499,18 +497,18 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) GetDecSeparatorRunes() []rune {
 //		If an error message is returned, the text value of input
 //		parameter 'errorPrefix' will be inserted or prefixed at
 //		the beginning of the error message.
-func (signedNumFmtSpec *SignedNumberFormatSpec) GetDecSeparatorSpec(
+func (numStrFmtSpec *NumStrFormatSpec) GetDecSeparatorSpec(
 	errorPrefix interface{}) (
 	DecimalSeparatorSpec,
 	error) {
 
-	if signedNumFmtSpec.lock == nil {
-		signedNumFmtSpec.lock = new(sync.Mutex)
+	if numStrFmtSpec.lock == nil {
+		numStrFmtSpec.lock = new(sync.Mutex)
 	}
 
-	signedNumFmtSpec.lock.Lock()
+	numStrFmtSpec.lock.Lock()
 
-	defer signedNumFmtSpec.lock.Unlock()
+	defer numStrFmtSpec.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
@@ -518,7 +516,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) GetDecSeparatorSpec(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"SignedNumberFormatSpec."+
+		"NumStrFormatSpec."+
 			"GetDecSeparatorSpec()",
 		"")
 
@@ -526,14 +524,14 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) GetDecSeparatorSpec(
 		return DecimalSeparatorSpec{}, err
 	}
 
-	return signedNumFmtSpec.decSeparator.CopyOut(
+	return numStrFmtSpec.decSeparator.CopyOut(
 		ePrefix.XCpy(
-			"<-signedNumFmtSpec.decSeparator"))
+			"<-numStrFmtSpec.decSeparator"))
 }
 
 // GetDecSeparatorStr - Returns a string containing the Decimal
 // Separator character or characters configured for the current
-// instance of SignedNumberFormatSpec.
+// instance of NumStrFormatSpec.
 //
 // ----------------------------------------------------------------
 //
@@ -549,26 +547,26 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) GetDecSeparatorSpec(
 //
 //		A string containing the Decimal Separator character or
 //	 	characters configured for the current instance of
-//	 	SignedNumberFormatSpec.
+//	 	NumStrFormatSpec.
 //
 //		If Decimal Separator character(s) have not yet been
 //		configured, this method will return an empty string.
-func (signedNumFmtSpec *SignedNumberFormatSpec) GetDecSeparatorStr() string {
+func (numStrFmtSpec *NumStrFormatSpec) GetDecSeparatorStr() string {
 
-	if signedNumFmtSpec.lock == nil {
-		signedNumFmtSpec.lock = new(sync.Mutex)
+	if numStrFmtSpec.lock == nil {
+		numStrFmtSpec.lock = new(sync.Mutex)
 	}
 
-	signedNumFmtSpec.lock.Lock()
+	numStrFmtSpec.lock.Lock()
 
-	defer signedNumFmtSpec.lock.Unlock()
+	defer numStrFmtSpec.lock.Unlock()
 
-	return signedNumFmtSpec.decSeparator.GetDecimalSeparatorStr()
+	return numStrFmtSpec.decSeparator.GetDecimalSeparatorStr()
 }
 
 // GetIntGroupingSpec - Returns a deep copy of the Integer
 // Grouping Specification configured for the current instance
-// of SignedNumberFormatSpec.
+// of NumStrFormatSpec.
 //
 // ----------------------------------------------------------------
 //
@@ -631,7 +629,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) GetDecSeparatorStr() string {
 //
 //		If this method completes successfully, a deep copy of
 //		the Integer Grouping Specification configured for the
-//		current instance of SignedNumberFormatSpec will be
+//		current instance of NumStrFormatSpec will be
 //		returned.
 //
 //	error
@@ -644,18 +642,18 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) GetDecSeparatorStr() string {
 //		If an error message is returned, the text value of input
 //		parameter 'errorPrefix' will be inserted or prefixed at
 //		the beginning of the error message.
-func (signedNumFmtSpec *SignedNumberFormatSpec) GetIntGroupingSpec(
+func (numStrFmtSpec *NumStrFormatSpec) GetIntGroupingSpec(
 	errorPrefix interface{}) (
 	NumStrIntegerGroupingSpec,
 	error) {
 
-	if signedNumFmtSpec.lock == nil {
-		signedNumFmtSpec.lock = new(sync.Mutex)
+	if numStrFmtSpec.lock == nil {
+		numStrFmtSpec.lock = new(sync.Mutex)
 	}
 
-	signedNumFmtSpec.lock.Lock()
+	numStrFmtSpec.lock.Lock()
 
-	defer signedNumFmtSpec.lock.Unlock()
+	defer numStrFmtSpec.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
@@ -663,7 +661,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) GetIntGroupingSpec(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"SignedNumberFormatSpec."+
+		"NumStrFormatSpec."+
 			"GetIntGroupingSpec()",
 		"")
 
@@ -671,14 +669,14 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) GetIntGroupingSpec(
 		return NumStrIntegerGroupingSpec{}, err
 	}
 
-	return signedNumFmtSpec.intGroupingSpec.CopyOut(
+	return numStrFmtSpec.intGroupingSpec.CopyOut(
 		ePrefix.XCpy(
-			"<-signedNumFmtSpec.intGroupingSpec"))
+			"<-numStrFmtSpec.intGroupingSpec"))
 }
 
 // GetIntSeparatorChars - Returns a string containing the Integer
 // Separator character or characters configured for the current
-// instance of SignedNumberFormatSpec.
+// instance of NumStrFormatSpec.
 //
 // Integer Separator Characters consist of one or more text
 // characters used to separate groups of integers. This
@@ -712,24 +710,24 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) GetIntGroupingSpec(
 //
 //		This method will return a string containing the Integer
 //		Separator character or characters configured for the
-//	 	current instance of SignedNumberFormatSpec.
-func (signedNumFmtSpec *SignedNumberFormatSpec) GetIntSeparatorChars() string {
+//	 	current instance of NumStrFormatSpec.
+func (numStrFmtSpec *NumStrFormatSpec) GetIntSeparatorChars() string {
 
-	if signedNumFmtSpec.lock == nil {
-		signedNumFmtSpec.lock = new(sync.Mutex)
+	if numStrFmtSpec.lock == nil {
+		numStrFmtSpec.lock = new(sync.Mutex)
 	}
 
-	signedNumFmtSpec.lock.Lock()
+	numStrFmtSpec.lock.Lock()
 
-	defer signedNumFmtSpec.lock.Unlock()
+	defer numStrFmtSpec.lock.Unlock()
 
-	return signedNumFmtSpec.intGroupingSpec.GetIntegerSeparatorChars()
+	return numStrFmtSpec.intGroupingSpec.GetIntegerSeparatorChars()
 }
 
 // GetIntegerSeparatorDto - Returns an instance of
 // IntegerSeparatorDto based on the configuration parameters
 // contained within the current instance of
-// SignedNumberFormatSpec.
+// NumStrFormatSpec.
 //
 // IntegerSeparatorDto is used by low level number string
 // formatting functions to complete the number string generation
@@ -796,7 +794,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) GetIntSeparatorChars() string {
 //
 //		If this method completes successfully, a copy
 //		of the integer grouping specification configured
-//		for the current SignedNumberFormatSpec instance
+//		for the current NumStrFormatSpec instance
 //		will be returned.
 //
 //	error
@@ -809,18 +807,18 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) GetIntSeparatorChars() string {
 //		If an error message is returned, the text value of input
 //		parameter 'errorPrefix' will be inserted or prefixed at
 //		the beginning of the error message.
-func (signedNumFmtSpec *SignedNumberFormatSpec) GetIntegerSeparatorDto(
+func (numStrFmtSpec *NumStrFormatSpec) GetIntegerSeparatorDto(
 	errorPrefix interface{}) (
 	IntegerSeparatorDto,
 	error) {
 
-	if signedNumFmtSpec.lock == nil {
-		signedNumFmtSpec.lock = new(sync.Mutex)
+	if numStrFmtSpec.lock == nil {
+		numStrFmtSpec.lock = new(sync.Mutex)
 	}
 
-	signedNumFmtSpec.lock.Lock()
+	numStrFmtSpec.lock.Lock()
 
-	defer signedNumFmtSpec.lock.Unlock()
+	defer numStrFmtSpec.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
@@ -828,7 +826,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) GetIntegerSeparatorDto(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"SignedNumberFormatSpec."+
+		"NumStrFormatSpec."+
 			"GetIntegerSeparatorDto()",
 		"")
 
@@ -836,14 +834,14 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) GetIntegerSeparatorDto(
 		return IntegerSeparatorDto{}, err
 	}
 
-	return signedNumFmtSpec.intGroupingSpec.GetIntegerSeparatorDto(
+	return numStrFmtSpec.intGroupingSpec.GetIntegerSeparatorDto(
 		ePrefix.XCpy(
-			"<-signedNumFmtSpec.intGroupingSpec"))
+			"<-numStrFmtSpec.intGroupingSpec"))
 }
 
 // GetIntSeparatorRunes - Returns a rune array containing the
 // Integer Separator character or characters configured for the
-// current instance of SignedNumberFormatSpec.
+// current instance of NumStrFormatSpec.
 //
 // Integer Separator Characters consist of one or more text
 // characters used to separate groups of integers. This
@@ -877,23 +875,23 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) GetIntegerSeparatorDto(
 //
 //		This method will return a rune array containing the
 //		Integer Separator character or characters configured
-//		for the	current instance of SignedNumberFormatSpec.
-func (signedNumFmtSpec *SignedNumberFormatSpec) GetIntSeparatorRunes() []rune {
+//		for the	current instance of NumStrFormatSpec.
+func (numStrFmtSpec *NumStrFormatSpec) GetIntSeparatorRunes() []rune {
 
-	if signedNumFmtSpec.lock == nil {
-		signedNumFmtSpec.lock = new(sync.Mutex)
+	if numStrFmtSpec.lock == nil {
+		numStrFmtSpec.lock = new(sync.Mutex)
 	}
 
-	signedNumFmtSpec.lock.Lock()
+	numStrFmtSpec.lock.Lock()
 
-	defer signedNumFmtSpec.lock.Unlock()
+	defer numStrFmtSpec.lock.Unlock()
 
-	return signedNumFmtSpec.intGroupingSpec.GetIntegerSeparatorRunes()
+	return numStrFmtSpec.intGroupingSpec.GetIntegerSeparatorRunes()
 }
 
 // GetNegativeNumSymSpec - Returns the Negative Number Symbol
 // Specification currently configured for this instance of
-// SignedNumberFormatSpec.
+// NumStrFormatSpec.
 //
 // ----------------------------------------------------------------
 //
@@ -956,7 +954,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) GetIntSeparatorRunes() []rune {
 //
 //		If this method completes successfully, a copy
 //		of the negative number sign specification configured
-//		for the current SignedNumberFormatSpec instance
+//		for the current NumStrFormatSpec instance
 //		will be returned.
 //
 //	error
@@ -969,18 +967,18 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) GetIntSeparatorRunes() []rune {
 //		If an error message is returned, the text value of input
 //		parameter 'errorPrefix' will be inserted or prefixed at
 //		the beginning of the error message.
-func (signedNumFmtSpec *SignedNumberFormatSpec) GetNegativeNumSymSpec(
+func (numStrFmtSpec *NumStrFormatSpec) GetNegativeNumSymSpec(
 	errorPrefix interface{}) (
 	NumStrNumberSymbolSpec,
 	error) {
 
-	if signedNumFmtSpec.lock == nil {
-		signedNumFmtSpec.lock = new(sync.Mutex)
+	if numStrFmtSpec.lock == nil {
+		numStrFmtSpec.lock = new(sync.Mutex)
 	}
 
-	signedNumFmtSpec.lock.Lock()
+	numStrFmtSpec.lock.Lock()
 
-	defer signedNumFmtSpec.lock.Unlock()
+	defer numStrFmtSpec.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
@@ -988,7 +986,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) GetNegativeNumSymSpec(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"SignedNumberFormatSpec."+
+		"NumStrFormatSpec."+
 			"GetNegativeNumSymSpec()",
 		"")
 
@@ -996,14 +994,14 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) GetNegativeNumSymSpec(
 		return NumStrNumberSymbolSpec{}, err
 	}
 
-	return signedNumFmtSpec.negativeNumberSign.CopyOut(
+	return numStrFmtSpec.negativeNumberSign.CopyOut(
 		ePrefix.XCpy(
-			"<-signedNumFmtSpec.negativeNumberSign"))
+			"<-numStrFmtSpec.negativeNumberSign"))
 }
 
 // GetNumberFieldSpec - Returns the Number Field Specification
 // currently configured for this instance of
-// SignedNumberFormatSpec.
+// NumStrFormatSpec.
 //
 // The Number Field Specification includes parameters for
 // field length and text justification ('Right, Center,
@@ -1076,7 +1074,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) GetNegativeNumSymSpec(
 //
 //		If this method completes successfully, a copy
 //		of the Number Field Specification configured
-//		for the current SignedNumberFormatSpec instance
+//		for the current NumStrFormatSpec instance
 //		will be returned.
 //
 //	error
@@ -1089,18 +1087,18 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) GetNegativeNumSymSpec(
 //		If an error message is returned, the text value of input
 //		parameter 'errorPrefix' will be inserted or prefixed at
 //		the beginning of the error message.
-func (signedNumFmtSpec *SignedNumberFormatSpec) GetNumberFieldSpec(
+func (numStrFmtSpec *NumStrFormatSpec) GetNumberFieldSpec(
 	errorPrefix interface{}) (
 	NumStrNumberFieldSpec,
 	error) {
 
-	if signedNumFmtSpec.lock == nil {
-		signedNumFmtSpec.lock = new(sync.Mutex)
+	if numStrFmtSpec.lock == nil {
+		numStrFmtSpec.lock = new(sync.Mutex)
 	}
 
-	signedNumFmtSpec.lock.Lock()
+	numStrFmtSpec.lock.Lock()
 
-	defer signedNumFmtSpec.lock.Unlock()
+	defer numStrFmtSpec.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
@@ -1108,7 +1106,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) GetNumberFieldSpec(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"SignedNumberFormatSpec."+
+		"NumStrFormatSpec."+
 			"GetNumberFieldSpec()",
 		"")
 
@@ -1116,14 +1114,14 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) GetNumberFieldSpec(
 		return NumStrNumberFieldSpec{}, err
 	}
 
-	return signedNumFmtSpec.numberFieldSpec.CopyOut(
+	return numStrFmtSpec.numberFieldSpec.CopyOut(
 		ePrefix.XCpy(
-			"<-signedNumFmtSpec.numberFieldSpec"))
+			"<-numStrFmtSpec.numberFieldSpec"))
 }
 
 // GetPositiveNumSymSpec - Returns the Positive Number Symbol
 // Specification currently configured for this instance of
-// SignedNumberFormatSpec.
+// NumStrFormatSpec.
 //
 // ----------------------------------------------------------------
 //
@@ -1186,7 +1184,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) GetNumberFieldSpec(
 //
 //		If this method completes successfully, a copy
 //		of the positive number sign specification configured
-//		for the current SignedNumberFormatSpec instance
+//		for the current NumStrFormatSpec instance
 //		will be returned.
 //
 //	error
@@ -1199,18 +1197,18 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) GetNumberFieldSpec(
 //		If an error message is returned, the text value of input
 //		parameter 'errorPrefix' will be inserted or prefixed at
 //		the beginning of the error message.
-func (signedNumFmtSpec *SignedNumberFormatSpec) GetPositiveNumSymSpec(
+func (numStrFmtSpec *NumStrFormatSpec) GetPositiveNumSymSpec(
 	errorPrefix interface{}) (
 	NumStrNumberSymbolSpec,
 	error) {
 
-	if signedNumFmtSpec.lock == nil {
-		signedNumFmtSpec.lock = new(sync.Mutex)
+	if numStrFmtSpec.lock == nil {
+		numStrFmtSpec.lock = new(sync.Mutex)
 	}
 
-	signedNumFmtSpec.lock.Lock()
+	numStrFmtSpec.lock.Lock()
 
-	defer signedNumFmtSpec.lock.Unlock()
+	defer numStrFmtSpec.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
@@ -1218,7 +1216,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) GetPositiveNumSymSpec(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"SignedNumberFormatSpec."+
+		"NumStrFormatSpec."+
 			"GetPositiveNumSymSpec()",
 		"")
 
@@ -1226,14 +1224,14 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) GetPositiveNumSymSpec(
 		return NumStrNumberSymbolSpec{}, err
 	}
 
-	return signedNumFmtSpec.positiveNumberSign.CopyOut(
+	return numStrFmtSpec.positiveNumberSign.CopyOut(
 		ePrefix.XCpy(
-			"<-signedNumFmtSpec.positiveNumberSign"))
+			"<-numStrFmtSpec.positiveNumberSign"))
 }
 
 // GetRoundingSpec - Returns the Rounding Specification
 // configured for the current instance of
-// SignedNumberFormatSpec.
+// NumStrFormatSpec.
 //
 // The Rounding Specification determines if rounding will be
 // applied to the fractional digits in a number string as
@@ -1302,7 +1300,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) GetPositiveNumSymSpec(
 //
 //		If this method completes successfully, a copy
 //		of the Rounding Specification configured for
-//		the current SignedNumberFormatSpec instance
+//		the current NumStrFormatSpec instance
 //		will be returned.
 //
 //	error
@@ -1315,18 +1313,18 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) GetPositiveNumSymSpec(
 //		If an error message is returned, the text value of input
 //		parameter 'errorPrefix' will be inserted or prefixed at
 //		the beginning of the error message.
-func (signedNumFmtSpec *SignedNumberFormatSpec) GetRoundingSpec(
+func (numStrFmtSpec *NumStrFormatSpec) GetRoundingSpec(
 	errorPrefix interface{}) (
 	NumStrRoundingSpec,
 	error) {
 
-	if signedNumFmtSpec.lock == nil {
-		signedNumFmtSpec.lock = new(sync.Mutex)
+	if numStrFmtSpec.lock == nil {
+		numStrFmtSpec.lock = new(sync.Mutex)
 	}
 
-	signedNumFmtSpec.lock.Lock()
+	numStrFmtSpec.lock.Lock()
 
-	defer signedNumFmtSpec.lock.Unlock()
+	defer numStrFmtSpec.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
@@ -1334,7 +1332,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) GetRoundingSpec(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"SignedNumberFormatSpec."+
+		"NumStrFormatSpec."+
 			"GetRoundingSpec()",
 		"")
 
@@ -1342,13 +1340,13 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) GetRoundingSpec(
 		return NumStrRoundingSpec{}, err
 	}
 
-	return signedNumFmtSpec.roundingSpec.CopyOut(
+	return numStrFmtSpec.roundingSpec.CopyOut(
 		ePrefix.XCpy(
-			"<-signedNumFmtSpec.roundingSpec"))
+			"<-numStrFmtSpec.roundingSpec"))
 }
 
 // NewSignedNumFmtParams - Creates and returns a new instance of
-// SignedNumberFormatSpec.
+// NumStrFormatSpec.
 //
 // ----------------------------------------------------------------
 //
@@ -1716,11 +1714,11 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) GetRoundingSpec(
 //
 // # Return Values
 //
-//	newSignedNumFmtSpec			SignedNumberFormatSpec
+//	newSignedNumFmtSpec			NumStrFormatSpec
 //
 //		If this method completes successfully, this parameter
 //		will return a new, fully populated instance of
-//		SignedNumberFormatSpec.
+//		NumStrFormatSpec.
 //
 //	err							error
 //
@@ -1733,7 +1731,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) GetRoundingSpec(
 //		and text passed by input parameter, 'errorPrefix'. The
 //		'errorPrefix' text will be attached to the beginning of
 //		the error message.
-func (signedNumFmtSpec *SignedNumberFormatSpec) NewSignedNumFmtParams(
+func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumFmtParams(
 	decSeparatorChars string,
 	intGroupingChars string,
 	intGroupingType IntegerGroupingType,
@@ -1748,23 +1746,23 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) NewSignedNumFmtParams(
 	numFieldLength int,
 	numFieldJustification TextJustify,
 	errorPrefix interface{}) (
-	newSignedNumFmtSpec SignedNumberFormatSpec,
+	newSignedNumFmtSpec NumStrFormatSpec,
 	err error) {
 
-	if signedNumFmtSpec.lock == nil {
-		signedNumFmtSpec.lock = new(sync.Mutex)
+	if numStrFmtSpec.lock == nil {
+		numStrFmtSpec.lock = new(sync.Mutex)
 	}
 
-	signedNumFmtSpec.lock.Lock()
+	numStrFmtSpec.lock.Lock()
 
-	defer signedNumFmtSpec.lock.Unlock()
+	defer numStrFmtSpec.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"SignedNumberFormatSpec."+
+		"NumStrFormatSpec."+
 			"NewSignedNumFmtParams()",
 		"")
 
@@ -1772,7 +1770,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) NewSignedNumFmtParams(
 		return newSignedNumFmtSpec, err
 	}
 
-	err = new(signedNumFmtSpecNanobot).
+	err = new(numStrFmtSpecNanobot).
 		setNStrNumberFieldSpec(
 			&newSignedNumFmtSpec,
 			[]rune(decSeparatorChars),
@@ -1795,7 +1793,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) NewSignedNumFmtParams(
 }
 
 // NewSignedNumFmtParamsRunes - Creates and returns a new instance of
-// SignedNumberFormatSpec.
+// NumStrFormatSpec.
 //
 // ----------------------------------------------------------------
 //
@@ -2146,11 +2144,11 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) NewSignedNumFmtParams(
 //
 // # Return Values
 //
-//	newSignedNumFmtSpec			SignedNumberFormatSpec
+//	newSignedNumFmtSpec			NumStrFormatSpec
 //
 //		If this method completes successfully, this parameter
 //		will return a new, fully populated instance of
-//		SignedNumberFormatSpec.
+//		NumStrFormatSpec.
 //
 //	err							error
 //
@@ -2163,7 +2161,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) NewSignedNumFmtParams(
 //		and text passed by input parameter, 'errorPrefix'. The
 //		'errorPrefix' text will be attached to the beginning of
 //		the error message.
-func (signedNumFmtSpec *SignedNumberFormatSpec) NewSignedNumFmtParamsRunes(
+func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumFmtParamsRunes(
 	decSeparatorChars []rune,
 	intGroupingChars []rune,
 	intGroupingType IntegerGroupingType,
@@ -2178,23 +2176,23 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) NewSignedNumFmtParamsRunes(
 	numFieldLength int,
 	numFieldJustification TextJustify,
 	errorPrefix interface{}) (
-	newSignedNumFmtSpec SignedNumberFormatSpec,
+	newSignedNumFmtSpec NumStrFormatSpec,
 	err error) {
 
-	if signedNumFmtSpec.lock == nil {
-		signedNumFmtSpec.lock = new(sync.Mutex)
+	if numStrFmtSpec.lock == nil {
+		numStrFmtSpec.lock = new(sync.Mutex)
 	}
 
-	signedNumFmtSpec.lock.Lock()
+	numStrFmtSpec.lock.Lock()
 
-	defer signedNumFmtSpec.lock.Unlock()
+	defer numStrFmtSpec.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"SignedNumberFormatSpec."+
+		"NumStrFormatSpec."+
 			"NewSignedNumFmtParamsRunes()",
 		"")
 
@@ -2202,7 +2200,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) NewSignedNumFmtParamsRunes(
 		return newSignedNumFmtSpec, err
 	}
 
-	err = new(signedNumFmtSpecNanobot).
+	err = new(numStrFmtSpecNanobot).
 		setNStrNumberFieldSpec(
 			&newSignedNumFmtSpec,
 			decSeparatorChars,
@@ -2226,7 +2224,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) NewSignedNumFmtParamsRunes(
 
 // SetDecimalSeparatorSpec - Deletes and replaces the Decimal
 // Separator Specification for the current instance of
-// SignedNumberFormatSpec.
+// NumStrFormatSpec.
 //
 // ----------------------------------------------------------------
 //
@@ -2237,8 +2235,8 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) NewSignedNumFmtParamsRunes(
 //		An instance of DecimalSeparatorSpec. The member
 //		variable data values contained in this instance
 //		will be copied to the current
-//		SignedNumberFormatSpec member variable:
-//			'SignedNumberFormatSpec.decSeparator'.
+//		NumStrFormatSpec member variable:
+//			'NumStrFormatSpec.decSeparator'.
 //
 //		In the United States, the decimal separator is
 //		referred to as the decimal point.
@@ -2307,17 +2305,17 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) NewSignedNumFmtParamsRunes(
 //		and text passed by input parameter, 'errorPrefix'. The
 //		'errorPrefix' text will be attached to the beginning of
 //		the error message.
-func (signedNumFmtSpec *SignedNumberFormatSpec) SetDecimalSeparatorSpec(
+func (numStrFmtSpec *NumStrFormatSpec) SetDecimalSeparatorSpec(
 	decSeparatorSpec DecimalSeparatorSpec,
 	errorPrefix interface{}) error {
 
-	if signedNumFmtSpec.lock == nil {
-		signedNumFmtSpec.lock = new(sync.Mutex)
+	if numStrFmtSpec.lock == nil {
+		numStrFmtSpec.lock = new(sync.Mutex)
 	}
 
-	signedNumFmtSpec.lock.Lock()
+	numStrFmtSpec.lock.Lock()
 
-	defer signedNumFmtSpec.lock.Unlock()
+	defer numStrFmtSpec.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
@@ -2325,7 +2323,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetDecimalSeparatorSpec(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"SignedNumberFormatSpec."+
+		"NumStrFormatSpec."+
 			"SetDecimalSeparatorSpec()",
 		"")
 
@@ -2333,16 +2331,16 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetDecimalSeparatorSpec(
 		return err
 	}
 
-	return new(signedNumberFormatSpecAtom).setDecimalSeparatorSpec(
-		signedNumFmtSpec,
+	return new(numStrFmtSpecAtom).setDecimalSeparatorSpec(
+		numStrFmtSpec,
 		decSeparatorSpec,
 		ePrefix.XCpy(
-			"signedNumFmtSpec<-decSeparatorSpec"))
+			"numStrFmtSpec<-decSeparatorSpec"))
 }
 
 // SetIntegerGroupingSpec - Deletes and replaces the Integer
 // Grouping Specification for the current instance of
-// SignedNumberFormatSpec.
+// NumStrFormatSpec.
 //
 // ----------------------------------------------------------------
 //
@@ -2353,8 +2351,8 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetDecimalSeparatorSpec(
 //		An instance of NumStrIntegerGroupingSpec. The member
 //		variable data values contained in this instance
 //		will be copied to the current instance of
-//		SignedNumberFormatSpec :
-//			'SignedNumberFormatSpec.intGroupingSpec'.
+//		NumStrFormatSpec :
+//			'NumStrFormatSpec.intGroupingSpec'.
 //
 //		In the United States, the Integer Group Specification
 //		character is a comma (',') and integer grouped in
@@ -2425,17 +2423,17 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetDecimalSeparatorSpec(
 //		and text passed by input parameter, 'errorPrefix'. The
 //		'errorPrefix' text will be attached to the beginning of
 //		the error message.
-func (signedNumFmtSpec *SignedNumberFormatSpec) SetIntegerGroupingSpec(
+func (numStrFmtSpec *NumStrFormatSpec) SetIntegerGroupingSpec(
 	intGroupingSpec NumStrIntegerGroupingSpec,
 	errorPrefix interface{}) error {
 
-	if signedNumFmtSpec.lock == nil {
-		signedNumFmtSpec.lock = new(sync.Mutex)
+	if numStrFmtSpec.lock == nil {
+		numStrFmtSpec.lock = new(sync.Mutex)
 	}
 
-	signedNumFmtSpec.lock.Lock()
+	numStrFmtSpec.lock.Lock()
 
-	defer signedNumFmtSpec.lock.Unlock()
+	defer numStrFmtSpec.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
@@ -2443,7 +2441,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetIntegerGroupingSpec(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"SignedNumberFormatSpec."+
+		"NumStrFormatSpec."+
 			"SetIntegerGroupingSpec()",
 		"")
 
@@ -2451,18 +2449,18 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetIntegerGroupingSpec(
 		return err
 	}
 
-	return new(signedNumberFormatSpecAtom).setIntegerGroupingSpec(
-		signedNumFmtSpec,
+	return new(numStrFmtSpecAtom).setIntegerGroupingSpec(
+		numStrFmtSpec,
 		intGroupingSpec,
 		ePrefix.XCpy(
-			"signedNumFmtSpec<-intGroupingSpec"))
+			"numStrFmtSpec<-intGroupingSpec"))
 }
 
 // SetNegativeNumberSignSpec - Deletes and replaces the Negative
 // Number Sign Specification for the current instance of
-// SignedNumberFormatSpec:
+// NumStrFormatSpec:
 //
-//	SignedNumberFormatSpec.negativeNumberSign
+//	NumStrFormatSpec.negativeNumberSign
 //
 // ----------------------------------------------------------------
 //
@@ -2473,8 +2471,8 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetIntegerGroupingSpec(
 //		An instance of NumStrNumberSymbolSpec. The member
 //		variable data values contained in this instance
 //		will be copied to the current
-//		SignedNumberFormatSpec member variable:
-//			'SignedNumberFormatSpec.negativeNumberSign'.
+//		NumStrFormatSpec member variable:
+//			'NumStrFormatSpec.negativeNumberSign'.
 //
 //	 errorPrefix                interface{}
 //
@@ -2540,17 +2538,17 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetIntegerGroupingSpec(
 //		and text passed by input parameter, 'errorPrefix'. The
 //		'errorPrefix' text will be attached to the beginning of
 //		the error message.
-func (signedNumFmtSpec *SignedNumberFormatSpec) SetNegativeNumberSignSpec(
+func (numStrFmtSpec *NumStrFormatSpec) SetNegativeNumberSignSpec(
 	negativeNumberSign NumStrNumberSymbolSpec,
 	errorPrefix interface{}) error {
 
-	if signedNumFmtSpec.lock == nil {
-		signedNumFmtSpec.lock = new(sync.Mutex)
+	if numStrFmtSpec.lock == nil {
+		numStrFmtSpec.lock = new(sync.Mutex)
 	}
 
-	signedNumFmtSpec.lock.Lock()
+	numStrFmtSpec.lock.Lock()
 
-	defer signedNumFmtSpec.lock.Unlock()
+	defer numStrFmtSpec.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
@@ -2558,7 +2556,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetNegativeNumberSignSpec(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"SignedNumberFormatSpec."+
+		"NumStrFormatSpec."+
 			"SetNegativeNumberSignSpec()",
 		"")
 
@@ -2566,18 +2564,18 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetNegativeNumberSignSpec(
 		return err
 	}
 
-	return new(signedNumberFormatSpecAtom).
+	return new(numStrFmtSpecAtom).
 		setNegativeNumberSignSpec(
-			signedNumFmtSpec,
+			numStrFmtSpec,
 			negativeNumberSign,
 			ePrefix.XCpy(
-				"signedNumFmtSpec<-"+
+				"numStrFmtSpec<-"+
 					"negativeNumberSign"))
 }
 
 // SetNumberFieldSpec - Deletes and replaces the Number Field
 // Specification for the current instance of
-// SignedNumberFormatSpec.
+// NumStrFormatSpec.
 //
 // The Number Field Specification includes parameters for
 // field length and text justification ('Right, Center,
@@ -2598,8 +2596,8 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetNegativeNumberSignSpec(
 //		An instance of NumStrIntegerGroupingSpec. The member
 //		variable data values contained in this instance
 //		will be copied to the current instance of
-//		SignedNumberFormatSpec :
-//			'SignedNumberFormatSpec.numberFieldSpec'.
+//		NumStrFormatSpec :
+//			'NumStrFormatSpec.numberFieldSpec'.
 //
 //	 errorPrefix                interface{}
 //
@@ -2665,17 +2663,17 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetNegativeNumberSignSpec(
 //		and text passed by input parameter, 'errorPrefix'. The
 //		'errorPrefix' text will be attached to the beginning of
 //		the error message.
-func (signedNumFmtSpec *SignedNumberFormatSpec) SetNumberFieldSpec(
+func (numStrFmtSpec *NumStrFormatSpec) SetNumberFieldSpec(
 	numberFieldSpec NumStrNumberFieldSpec,
 	errorPrefix interface{}) error {
 
-	if signedNumFmtSpec.lock == nil {
-		signedNumFmtSpec.lock = new(sync.Mutex)
+	if numStrFmtSpec.lock == nil {
+		numStrFmtSpec.lock = new(sync.Mutex)
 	}
 
-	signedNumFmtSpec.lock.Lock()
+	numStrFmtSpec.lock.Lock()
 
-	defer signedNumFmtSpec.lock.Unlock()
+	defer numStrFmtSpec.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
@@ -2683,7 +2681,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetNumberFieldSpec(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"SignedNumberFormatSpec."+
+		"NumStrFormatSpec."+
 			"SetNumberFieldSpec()",
 		"")
 
@@ -2691,18 +2689,18 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetNumberFieldSpec(
 		return err
 	}
 
-	return new(signedNumberFormatSpecAtom).setNumberFieldSpec(
-		signedNumFmtSpec,
+	return new(numStrFmtSpecAtom).setNumberFieldSpec(
+		numStrFmtSpec,
 		numberFieldSpec,
 		ePrefix.XCpy(
-			"signedNumFmtSpec<-numberFieldSpec"))
+			"numStrFmtSpec<-numberFieldSpec"))
 }
 
 // SetPositiveNumberSignSpec - Deletes and replaces the Positive
 // Number Sign Specification for the current instance of
-// SignedNumberFormatSpec:
+// NumStrFormatSpec:
 //
-//	SignedNumberFormatSpec.positiveNumberSign
+//	NumStrFormatSpec.positiveNumberSign
 //
 // ----------------------------------------------------------------
 //
@@ -2713,8 +2711,8 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetNumberFieldSpec(
 //		An instance of NumStrNumberSymbolSpec. The member
 //		variable data values contained in this instance
 //		will be copied to the current
-//		SignedNumberFormatSpec member variable:
-//			'SignedNumberFormatSpec.positiveNumberSign'.
+//		NumStrFormatSpec member variable:
+//			'NumStrFormatSpec.positiveNumberSign'.
 //
 //	 errorPrefix                interface{}
 //
@@ -2780,17 +2778,17 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetNumberFieldSpec(
 //		and text passed by input parameter, 'errorPrefix'. The
 //		'errorPrefix' text will be attached to the beginning of
 //		the error message.
-func (signedNumFmtSpec *SignedNumberFormatSpec) SetPositiveNumberSignSpec(
+func (numStrFmtSpec *NumStrFormatSpec) SetPositiveNumberSignSpec(
 	positiveNumberSign NumStrNumberSymbolSpec,
 	errorPrefix interface{}) error {
 
-	if signedNumFmtSpec.lock == nil {
-		signedNumFmtSpec.lock = new(sync.Mutex)
+	if numStrFmtSpec.lock == nil {
+		numStrFmtSpec.lock = new(sync.Mutex)
 	}
 
-	signedNumFmtSpec.lock.Lock()
+	numStrFmtSpec.lock.Lock()
 
-	defer signedNumFmtSpec.lock.Unlock()
+	defer numStrFmtSpec.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
@@ -2798,7 +2796,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetPositiveNumberSignSpec(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"SignedNumberFormatSpec."+
+		"NumStrFormatSpec."+
 			"SetPositiveNumberSignSpec()",
 		"")
 
@@ -2806,18 +2804,18 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetPositiveNumberSignSpec(
 		return err
 	}
 
-	return new(signedNumberFormatSpecAtom).
+	return new(numStrFmtSpecAtom).
 		setPositiveNumberSignSpec(
-			signedNumFmtSpec,
+			numStrFmtSpec,
 			positiveNumberSign,
 			ePrefix.XCpy(
-				"signedNumFmtSpec<-"+
+				"numStrFmtSpec<-"+
 					"positiveNumberSign"))
 }
 
 // SetRoundingSpec - Deletes and replaces the Rounding
 // Specification contained in the current instance of
-// SignedNumberFormatSpec.
+// NumStrFormatSpec.
 //
 // ----------------------------------------------------------------
 //
@@ -2827,9 +2825,9 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetPositiveNumberSignSpec(
 //
 //		An instance of NumStrRoundingSpec. All data values in
 //		this NumStrRoundingSpec instance will be copied to the
-//		member variable 'SignedNumberFormatSpec.roundingSpec'
+//		member variable 'NumStrFormatSpec.roundingSpec'
 //		contained in the current instance of
-//		SignedNumberFormatSpec.
+//		NumStrFormatSpec.
 //
 //	 errorPrefix                interface{}
 //
@@ -2895,17 +2893,17 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetPositiveNumberSignSpec(
 //		and text passed by input parameter, 'errorPrefix'. The
 //		'errorPrefix' text will be attached to the beginning of
 //		the error message.
-func (signedNumFmtSpec *SignedNumberFormatSpec) SetRoundingSpec(
+func (numStrFmtSpec *NumStrFormatSpec) SetRoundingSpec(
 	roundingSpec NumStrRoundingSpec,
 	errorPrefix interface{}) error {
 
-	if signedNumFmtSpec.lock == nil {
-		signedNumFmtSpec.lock = new(sync.Mutex)
+	if numStrFmtSpec.lock == nil {
+		numStrFmtSpec.lock = new(sync.Mutex)
 	}
 
-	signedNumFmtSpec.lock.Lock()
+	numStrFmtSpec.lock.Lock()
 
-	defer signedNumFmtSpec.lock.Unlock()
+	defer numStrFmtSpec.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
@@ -2913,7 +2911,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetRoundingSpec(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"SignedNumberFormatSpec."+
+		"NumStrFormatSpec."+
 			"SetRoundingSpec()",
 		"")
 
@@ -2921,8 +2919,8 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetRoundingSpec(
 		return err
 	}
 
-	return new(signedNumberFormatSpecAtom).setRoundingSpec(
-		signedNumFmtSpec,
+	return new(numStrFmtSpecAtom).setRoundingSpec(
+		numStrFmtSpec,
 		roundingSpec,
 		ePrefix.XCpy(
 			""))
@@ -2930,7 +2928,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetRoundingSpec(
 
 // SetSignedNumFmtParams - Deletes and resets all the member variable
 // data values stored in the current instance of
-// SignedNumberFormatSpec.
+// NumStrFormatSpec.
 //
 // ----------------------------------------------------------------
 //
@@ -3299,7 +3297,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetRoundingSpec(
 //		and text passed by input parameter, 'errorPrefix'. The
 //		'errorPrefix' text will be attached to the beginning of
 //		the error message.
-func (signedNumFmtSpec *SignedNumberFormatSpec) SetSignedNumFmtParams(
+func (numStrFmtSpec *NumStrFormatSpec) SetSignedNumFmtParams(
 	decSeparatorChars string,
 	intGroupingChars string,
 	intGroupingType IntegerGroupingType,
@@ -3316,20 +3314,20 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetSignedNumFmtParams(
 	errorPrefix interface{}) (
 	err error) {
 
-	if signedNumFmtSpec.lock == nil {
-		signedNumFmtSpec.lock = new(sync.Mutex)
+	if numStrFmtSpec.lock == nil {
+		numStrFmtSpec.lock = new(sync.Mutex)
 	}
 
-	signedNumFmtSpec.lock.Lock()
+	numStrFmtSpec.lock.Lock()
 
-	defer signedNumFmtSpec.lock.Unlock()
+	defer numStrFmtSpec.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"SignedNumberFormatSpec."+
+		"NumStrFormatSpec."+
 			"SetSignedNumFmtParams()",
 		"")
 
@@ -3337,9 +3335,9 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetSignedNumFmtParams(
 		return err
 	}
 
-	err = new(signedNumFmtSpecNanobot).
+	err = new(numStrFmtSpecNanobot).
 		setNStrNumberFieldSpec(
-			signedNumFmtSpec,
+			numStrFmtSpec,
 			[]rune(decSeparatorChars),
 			[]rune(intGroupingChars),
 			intGroupingType,
@@ -3361,7 +3359,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetSignedNumFmtParams(
 
 // SetSignedNumFmtSpecRunes - Deletes and resets all the member variable
 // data values stored in the current instance of
-// SignedNumberFormatSpec.
+// NumStrFormatSpec.
 //
 // ----------------------------------------------------------------
 //
@@ -3731,7 +3729,7 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetSignedNumFmtParams(
 //		and text passed by input parameter, 'errorPrefix'. The
 //		'errorPrefix' text will be attached to the beginning of
 //		the error message.
-func (signedNumFmtSpec *SignedNumberFormatSpec) SetSignedNumFmtSpecRunes(
+func (numStrFmtSpec *NumStrFormatSpec) SetSignedNumFmtSpecRunes(
 	decSeparatorChars []rune,
 	intGroupingChars []rune,
 	intGroupingType IntegerGroupingType,
@@ -3748,20 +3746,20 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetSignedNumFmtSpecRunes(
 	errorPrefix interface{}) (
 	err error) {
 
-	if signedNumFmtSpec.lock == nil {
-		signedNumFmtSpec.lock = new(sync.Mutex)
+	if numStrFmtSpec.lock == nil {
+		numStrFmtSpec.lock = new(sync.Mutex)
 	}
 
-	signedNumFmtSpec.lock.Lock()
+	numStrFmtSpec.lock.Lock()
 
-	defer signedNumFmtSpec.lock.Unlock()
+	defer numStrFmtSpec.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"SignedNumberFormatSpec."+
+		"NumStrFormatSpec."+
 			"SetSignedNumFmtSpecRunes()",
 		"")
 
@@ -3769,9 +3767,9 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetSignedNumFmtSpecRunes(
 		return err
 	}
 
-	err = new(signedNumFmtSpecNanobot).
+	err = new(numStrFmtSpecNanobot).
 		setNStrNumberFieldSpec(
-			signedNumFmtSpec,
+			numStrFmtSpec,
 			decSeparatorChars,
 			intGroupingChars,
 			intGroupingType,
@@ -3791,16 +3789,16 @@ func (signedNumFmtSpec *SignedNumberFormatSpec) SetSignedNumFmtSpecRunes(
 	return err
 }
 
-// signedNumFmtSpecNanobot - This type provides
-// helper methods for SignedNumberFormatSpec
-type signedNumFmtSpecNanobot struct {
+// numStrFmtSpecNanobot - This type provides
+// helper methods for NumStrFormatSpec
+type numStrFmtSpecNanobot struct {
 	lock *sync.Mutex
 }
 
 // copySignedNumberFormatSpec - Copies all data from input parameter
 // 'sourceSignedNumFmtSpec' to input parameter
 // 'destinationSignedNumFmtSpec'. Both instances are of type
-// SignedNumberFormatSpec.
+// NumStrFormatSpec.
 //
 // ----------------------------------------------------------------
 //
@@ -3815,8 +3813,8 @@ type signedNumFmtSpecNanobot struct {
 //
 // # Input Parameters
 //
-//	destinationSignedNumFmtSpec		*SignedNumberFormatSpec
-//		A pointer to a SignedNumberFormatSpec instance.
+//	destinationSignedNumFmtSpec		*NumStrFormatSpec
+//		A pointer to a NumStrFormatSpec instance.
 //		All the member variable data fields in this object will be
 //		replaced by data values copied from input parameter
 //		'sourceSignedNumFmtSpec'.
@@ -3824,8 +3822,8 @@ type signedNumFmtSpecNanobot struct {
 //		'destinationSignedNumFmtSpec' is the destination for this
 //		copy operation.
 //
-//	sourceSignedNumFmtSpec			*SignedNumberFormatSpec
-//		A pointer to another SignedNumberFormatSpec
+//	sourceSignedNumFmtSpec			*NumStrFormatSpec
+//		A pointer to another NumStrFormatSpec
 //		instance. All the member variable data values from this
 //		object will be copied to corresponding member variables in
 //		'destinationSignedNumFmtSpec'.
@@ -3860,9 +3858,9 @@ type signedNumFmtSpecNanobot struct {
 //		If an error message is returned, the text value for input
 //		parameter 'errPrefDto' (error prefix) will be prefixed or
 //		attached at the beginning of the error message.
-func (nStrNumberFieldSpecNanobot *signedNumFmtSpecNanobot) copySignedNumberFormatSpec(
-	destinationSignedNumFmtSpec *SignedNumberFormatSpec,
-	sourceSignedNumFmtSpec *SignedNumberFormatSpec,
+func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) copySignedNumberFormatSpec(
+	destinationSignedNumFmtSpec *NumStrFormatSpec,
+	sourceSignedNumFmtSpec *NumStrFormatSpec,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
 
@@ -3879,7 +3877,7 @@ func (nStrNumberFieldSpecNanobot *signedNumFmtSpecNanobot) copySignedNumberForma
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"signedNumFmtSpecNanobot."+
+		"numStrFmtSpecNanobot."+
 			"copySignedNumberFormatSpec()",
 		"")
 
@@ -3905,7 +3903,7 @@ func (nStrNumberFieldSpecNanobot *signedNumFmtSpecNanobot) copySignedNumberForma
 		return err
 	}
 
-	new(signedNumberFormatSpecAtom).empty(
+	new(numStrFmtSpecAtom).empty(
 		destinationSignedNumFmtSpec)
 
 	err = destinationSignedNumFmtSpec.decSeparator.CopyIn(
@@ -3968,7 +3966,7 @@ func (nStrNumberFieldSpecNanobot *signedNumFmtSpecNanobot) copySignedNumberForma
 }
 
 // setNStrNumberFieldSpec - Deletes and resets the member variable
-// data values stored in the instance of SignedNumberFormatSpec
+// data values stored in the instance of NumStrFormatSpec
 // passed as input parameter 'signedNumFmtSpec'.
 //
 // ----------------------------------------------------------------
@@ -3983,9 +3981,9 @@ func (nStrNumberFieldSpecNanobot *signedNumFmtSpecNanobot) copySignedNumberForma
 //
 // # Input Parameters
 //
-//	signedNumFmtSpec						*SignedNumberFormatSpec
+//	signedNumFmtSpec						*NumStrFormatSpec
 //
-//		A pointer to a SignedNumberFormatSpec instance.
+//		A pointer to a NumStrFormatSpec instance.
 //		All the member variable data fields in this object will be
 //		replaced by data values configured from the input parameter
 //		described below.
@@ -4331,8 +4329,8 @@ func (nStrNumberFieldSpecNanobot *signedNumFmtSpecNanobot) copySignedNumberForma
 //		and text passed by input parameter, 'errorPrefix'. The
 //		'errorPrefix' text will be attached to the beginning of
 //		the error message.
-func (nStrNumberFieldSpecNanobot *signedNumFmtSpecNanobot) setNStrNumberFieldSpec(
-	signedNumFmtSpec *SignedNumberFormatSpec,
+func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setNStrNumberFieldSpec(
+	signedNumFmtSpec *NumStrFormatSpec,
 	decSeparatorChars []rune,
 	intGroupingChars []rune,
 	intGroupingType IntegerGroupingType,
@@ -4358,7 +4356,7 @@ func (nStrNumberFieldSpecNanobot *signedNumFmtSpecNanobot) setNStrNumberFieldSpe
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"signedNumFmtSpecNanobot."+
+		"numStrFmtSpecNanobot."+
 			"setNStrNumberFieldSpec()",
 		"")
 
@@ -4376,7 +4374,7 @@ func (nStrNumberFieldSpecNanobot *signedNumFmtSpecNanobot) setNStrNumberFieldSpe
 		return err
 	}
 
-	signedNumFmtSpecAtom := signedNumberFormatSpecAtom{}
+	signedNumFmtSpecAtom := numStrFmtSpecAtom{}
 
 	signedNumFmtSpecAtom.empty(
 		signedNumFmtSpec)
@@ -4455,14 +4453,14 @@ func (nStrNumberFieldSpecNanobot *signedNumFmtSpecNanobot) setNStrNumberFieldSpe
 	return err
 }
 
-// signedNumberFormatSpecAtom - This type provides
-// helper methods for SignedNumberFormatSpec
-type signedNumberFormatSpecAtom struct {
+// numStrFmtSpecAtom - This type provides
+// helper methods for NumStrFormatSpec
+type numStrFmtSpecAtom struct {
 	lock *sync.Mutex
 }
 
 // empty - Receives a pointer to an instance of
-// SignedNumberFormatSpec and proceeds to reset the
+// NumStrFormatSpec and proceeds to reset the
 // data values for all member variables to their
 // initial or zero values.
 //
@@ -4477,8 +4475,8 @@ type signedNumberFormatSpecAtom struct {
 //
 // Input Parameters
 //
-//	SignedNumFmtSpec           *SignedNumberFormatSpec
-//	   - A pointer to an instance of SignedNumberFormatSpec.
+//	SignedNumFmtSpec           *NumStrFormatSpec
+//	   - A pointer to an instance of NumStrFormatSpec.
 //	     All the internal member variables contained in this
 //	     instance will be deleted and reset to their zero values.
 //
@@ -4487,8 +4485,8 @@ type signedNumberFormatSpecAtom struct {
 // Return Values
 //
 //	NONE
-func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) empty(
-	signedNumFmtSpec *SignedNumberFormatSpec) {
+func (signedNumFmtSpecAtom *numStrFmtSpecAtom) empty(
+	signedNumFmtSpec *NumStrFormatSpec) {
 
 	if signedNumFmtSpecAtom.lock == nil {
 		signedNumFmtSpecAtom.lock = new(sync.Mutex)
@@ -4517,7 +4515,7 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) empty(
 }
 
 // equal - Receives a pointer to two instances of
-// SignedNumberFormatSpec and proceeds to compare their
+// NumStrFormatSpec and proceeds to compare their
 // member variables in order to determine if they are
 // equivalent.
 //
@@ -4530,15 +4528,15 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) empty(
 //
 // Input Parameters
 //
-//	signedNumFmtSpec1    *SignedNumberFormatSpec
-//	   - An instance of SignedNumberFormatSpec.
+//	signedNumFmtSpec1    *NumStrFormatSpec
+//	   - An instance of NumStrFormatSpec.
 //	     Internal member variables from 'signedNumFmtSpec1'
 //	     will be compared to those of 'signedNumFmtSpec2' to
 //	     determine if both instances are equivalent.
 //
 //
-//	signedNumFmtSpec2    *SignedNumberFormatSpec
-//	   - An instance of SignedNumberFormatSpec.
+//	signedNumFmtSpec2    *NumStrFormatSpec
+//	   - An instance of NumStrFormatSpec.
 //	     Internal member variables from 'signedNumFmtSpec2'
 //	     will be compared to those of 'signedNumFmtSpec1' to
 //	     determine if both instances are equivalent.
@@ -4556,9 +4554,9 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) empty(
 //	     If the two instances are NOT equal, this method will
 //	     return a boolean value of 'false' to the calling
 //	     function.
-func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) equal(
-	signedNumFmtSpec1 *SignedNumberFormatSpec,
-	signedNumFmtSpec2 *SignedNumberFormatSpec) bool {
+func (signedNumFmtSpecAtom *numStrFmtSpecAtom) equal(
+	signedNumFmtSpec1 *NumStrFormatSpec,
+	signedNumFmtSpec2 *NumStrFormatSpec) bool {
 
 	if signedNumFmtSpecAtom.lock == nil {
 		signedNumFmtSpecAtom.lock = new(sync.Mutex)
@@ -4613,16 +4611,16 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) equal(
 }
 
 // setDecimalSeparatorParams - Deletes and resets the member
-// variable data value for 'SignedNumberFormatSpec.decSeparator'
-// contained in the instance of SignedNumberFormatSpec passed as
+// variable data value for 'NumStrFormatSpec.decSeparator'
+// contained in the instance of NumStrFormatSpec passed as
 // an input parameter.
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//	signedNumFmt				*SignedNumberFormatSpec
-//		A pointer to an instance of SignedNumberFormatSpec.
+//	signedNumFmt				*NumStrFormatSpec
+//		A pointer to an instance of NumStrFormatSpec.
 //		This instance contains the member variable
 //		'signedNumFmt.decSeparator' which will be reset
 //		to the value of the decimal separator specified
@@ -4663,8 +4661,8 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) equal(
 //		If an error message is returned, the text value for input
 //		parameter 'errPrefDto' (error prefix) will be prefixed or
 //		attached at the beginning of the error message.
-func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setDecimalSeparatorParams(
-	signedNumFmt *SignedNumberFormatSpec,
+func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setDecimalSeparatorParams(
+	signedNumFmt *NumStrFormatSpec,
 	decSeparator []rune,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
@@ -4682,7 +4680,7 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setDecimalSeparatorParam
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"signedNumFmtSpecNanobot."+
+		"numStrFmtSpecNanobot."+
 			"setDecimalSeparatorParams()",
 		"")
 
@@ -4712,7 +4710,7 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setDecimalSeparatorParam
 
 // setDecimalSeparatorSpec - Deletes and resets the member
 // variable data value for 'signedNumFmt.decSeparator'
-// contained in the instance of SignedNumberFormatSpec passed as
+// contained in the instance of NumStrFormatSpec passed as
 // an input parameter.
 //
 // This method receives an instance of 'DecimalSeparatorSpec' and
@@ -4723,9 +4721,9 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setDecimalSeparatorParam
 //
 // # Input Parameters
 //
-//	signedNumFmt				*SignedNumberFormatSpec
+//	signedNumFmt				*NumStrFormatSpec
 //
-//		A pointer to an instance of SignedNumberFormatSpec.
+//		A pointer to an instance of NumStrFormatSpec.
 //		The member variable 'signedNumFmt.decSeparator'
 //		will be reset to the values provided by the
 //		following input parameters.
@@ -4768,8 +4766,8 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setDecimalSeparatorParam
 //		If an error message is returned, the text value for input
 //		parameter 'errPrefDto' (error prefix) will be prefixed or
 //		attached at the beginning of the error message.
-func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setDecimalSeparatorSpec(
-	signedNumFmt *SignedNumberFormatSpec,
+func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setDecimalSeparatorSpec(
+	signedNumFmt *NumStrFormatSpec,
 	decSeparatorSpec DecimalSeparatorSpec,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
@@ -4787,7 +4785,7 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setDecimalSeparatorSpec(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"signedNumFmtSpecNanobot."+
+		"numStrFmtSpecNanobot."+
 			"setDecimalSeparatorSpec()",
 		"")
 
@@ -4816,16 +4814,16 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setDecimalSeparatorSpec(
 }
 
 // setIntegerGroupingParams - Deletes and resets the member
-// variable data value for 'SignedNumberFormatSpec.intGroupingSpec'
-// contained in the instance of SignedNumberFormatSpec passed as
+// variable data value for 'NumStrFormatSpec.intGroupingSpec'
+// contained in the instance of NumStrFormatSpec passed as
 // an input parameter.
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//	signedNumFmt				*SignedNumberFormatSpec
-//		A pointer to an instance of SignedNumberFormatSpec.
+//	signedNumFmt				*NumStrFormatSpec
+//		A pointer to an instance of NumStrFormatSpec.
 //		The member variable 'signedNumFmt.intGroupingSpec'
 //		will be reset to the values provided by the
 //		following input parameters.
@@ -4875,8 +4873,8 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setDecimalSeparatorSpec(
 //		If an error message is returned, the text value for input
 //		parameter 'errPrefDto' (error prefix) will be prefixed or
 //		attached at the beginning of the error message.
-func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setIntegerGroupingParams(
-	signedNumFmt *SignedNumberFormatSpec,
+func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setIntegerGroupingParams(
+	signedNumFmt *NumStrFormatSpec,
 	intGroupingChars []rune,
 	intGroupingType IntegerGroupingType,
 	errPrefDto *ePref.ErrPrefixDto) (
@@ -4895,7 +4893,7 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setIntegerGroupingParams
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"signedNumFmtSpecNanobot."+
+		"numStrFmtSpecNanobot."+
 			"setIntegerGroupingParams()",
 		"")
 
@@ -4926,7 +4924,7 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setIntegerGroupingParams
 
 // setIntegerGroupingSpec - Deletes and resets the member
 // variable data value for 'signedNumFmt.intGroupingSpec'
-// contained in the instance of SignedNumberFormatSpec
+// contained in the instance of NumStrFormatSpec
 // passed as an input parameter.
 //
 // This method receives an instance of
@@ -4937,9 +4935,9 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setIntegerGroupingParams
 //
 // # Input Parameters
 //
-//	signedNumFmt				*SignedNumberFormatSpec
+//	signedNumFmt				*NumStrFormatSpec
 //
-//		A pointer to an instance of SignedNumberFormatSpec.
+//		A pointer to an instance of NumStrFormatSpec.
 //		All the member variable data values in this instance
 //		will be deleted and reset to the values contained
 //		in the Integer Grouping Specification supplied by
@@ -4984,8 +4982,8 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setIntegerGroupingParams
 //		If an error message is returned, the text value for input
 //		parameter 'errPrefDto' (error prefix) will be prefixed or
 //		attached at the beginning of the error message.
-func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setIntegerGroupingSpec(
-	signedNumFmt *SignedNumberFormatSpec,
+func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setIntegerGroupingSpec(
+	signedNumFmt *NumStrFormatSpec,
 	intGroupingSpec NumStrIntegerGroupingSpec,
 	errPrefDto *ePref.ErrPrefixDto) error {
 
@@ -5003,7 +5001,7 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setIntegerGroupingSpec(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"signedNumFmtSpecNanobot."+
+		"numStrFmtSpecNanobot."+
 			"setIntegerGroupingSpec()",
 		"")
 
@@ -5030,16 +5028,16 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setIntegerGroupingSpec(
 }
 
 // setNegativeNumberSign - Deletes and resets the member variable
-// data value for 'SignedNumberFormatSpec.negativeNumberSign'
-// contained in the instance of SignedNumberFormatSpec passed as
+// data value for 'NumStrFormatSpec.negativeNumberSign'
+// contained in the instance of NumStrFormatSpec passed as
 // an input parameter.
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//	signedNumFmt					*SignedNumberFormatSpec
-//		A pointer to an instance of SignedNumberFormatSpec.
+//	signedNumFmt					*NumStrFormatSpec
+//		A pointer to an instance of NumStrFormatSpec.
 //		The member variable 'signedNumFmt.roundingSpec'
 //		will be reset to the values provided by the
 //		following input parameters.
@@ -5176,8 +5174,8 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setIntegerGroupingSpec(
 //		If an error message is returned, the text value for input
 //		parameter 'errPrefDto' (error prefix) will be prefixed or
 //		attached at the beginning of the error message.
-func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setNegativeNumberSign(
-	signedNumFmt *SignedNumberFormatSpec,
+func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setNegativeNumberSign(
+	signedNumFmt *NumStrFormatSpec,
 	leadingNegNumSign []rune,
 	leadingNumFieldSymPosition NumberFieldSymbolPosition,
 	trailingNegNumSign []rune,
@@ -5198,7 +5196,7 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setNegativeNumberSign(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"signedNumberFormatSpecAtom."+
+		"numStrFmtSpecAtom."+
 			"setNegativeNumberSign()",
 		"")
 
@@ -5265,7 +5263,7 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setNegativeNumberSign(
 
 // setNegativeNumberSignSpec - Deletes and resets the member
 // variable data value for 'signedNumFmt.negativeNumberSign'
-// contained in the instance of SignedNumberFormatSpec passed as
+// contained in the instance of NumStrFormatSpec passed as
 // an input parameter.
 //
 // This method receives an instance of 'NumStrNumberSymbolSpec' and
@@ -5276,9 +5274,9 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setNegativeNumberSign(
 //
 // # Input Parameters
 //
-//	signedNumFmt				*SignedNumberFormatSpec
+//	signedNumFmt				*NumStrFormatSpec
 //
-//		A pointer to an instance of SignedNumberFormatSpec.
+//		A pointer to an instance of NumStrFormatSpec.
 //		The member variable 'signedNumFmt.decSeparator'
 //		will be reset to the values provided by the
 //		following input parameters.
@@ -5318,8 +5316,8 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setNegativeNumberSign(
 //		If an error message is returned, the text value for input
 //		parameter 'errPrefDto' (error prefix) will be prefixed or
 //		attached at the beginning of the error message.
-func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setNegativeNumberSignSpec(
-	signedNumFmt *SignedNumberFormatSpec,
+func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setNegativeNumberSignSpec(
+	signedNumFmt *NumStrFormatSpec,
 	negativeNumberSign NumStrNumberSymbolSpec,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
@@ -5337,7 +5335,7 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setNegativeNumberSignSpe
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"signedNumberFormatSpecAtom."+
+		"numStrFmtSpecAtom."+
 			"setNegativeNumberSignSpec()",
 		"")
 
@@ -5372,16 +5370,16 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setNegativeNumberSignSpe
 }
 
 // setNumberFieldParams - Deletes and resets the member variable data
-// value for 'SignedNumberFormatSpec.numberFieldSpec'
-// contained in the instance of SignedNumberFormatSpec passed as
+// value for 'NumStrFormatSpec.numberFieldSpec'
+// contained in the instance of NumStrFormatSpec passed as
 // an input parameter.
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//	signedNumFmt				*SignedNumberFormatSpec
-//		A pointer to an instance of SignedNumberFormatSpec.
+//	signedNumFmt				*NumStrFormatSpec
+//		A pointer to an instance of NumStrFormatSpec.
 //		The member variable 'signedNumFmt.numberFieldSpec'
 //		will be reset to the values provided by the
 //		following input parameters.
@@ -5455,8 +5453,8 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setNegativeNumberSignSpe
 //		If an error message is returned, the text value for input
 //		parameter 'errPrefDto' (error prefix) will be prefixed or
 //		attached at the beginning of the error message.
-func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setNumberFieldParams(
-	signedNumFmt *SignedNumberFormatSpec,
+func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setNumberFieldParams(
+	signedNumFmt *NumStrFormatSpec,
 	fieldLength int,
 	fieldJustification TextJustify,
 	errPrefDto *ePref.ErrPrefixDto) (
@@ -5475,7 +5473,7 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setNumberFieldParams(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"signedNumberFormatSpecAtom."+
+		"numStrFmtSpecAtom."+
 			"setNumberFieldParams()",
 		"")
 
@@ -5506,7 +5504,7 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setNumberFieldParams(
 
 // setNumberFieldSpec - Deletes and resets the member
 // variable data value for 'signedNumFmt.numberFieldSpec'
-// contained in the instance of SignedNumberFormatSpec
+// contained in the instance of NumStrFormatSpec
 // passed as an input parameter.
 //
 // This method receives an instance of
@@ -5517,9 +5515,9 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setNumberFieldParams(
 //
 // # Input Parameters
 //
-//	signedNumFmt				*SignedNumberFormatSpec
+//	signedNumFmt				*NumStrFormatSpec
 //
-//		A pointer to an instance of SignedNumberFormatSpec.
+//		A pointer to an instance of NumStrFormatSpec.
 //		All the member variable data values in this instance
 //		will be deleted and reset to the values contained
 //		in the Number Field Specification supplied by
@@ -5558,8 +5556,8 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setNumberFieldParams(
 //		If an error message is returned, the text value for input
 //		parameter 'errPrefDto' (error prefix) will be prefixed or
 //		attached at the beginning of the error message.
-func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setNumberFieldSpec(
-	signedNumFmt *SignedNumberFormatSpec,
+func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setNumberFieldSpec(
+	signedNumFmt *NumStrFormatSpec,
 	numberFieldSpec NumStrNumberFieldSpec,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
@@ -5577,7 +5575,7 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setNumberFieldSpec(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"signedNumFmtSpecNanobot."+
+		"numStrFmtSpecNanobot."+
 			"setNumberFieldSpec()",
 		"")
 
@@ -5604,17 +5602,17 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setNumberFieldSpec(
 }
 
 // setPositiveNumberSign - Deletes and resets the member variable
-// data value for 'SignedNumberFormatSpec.positiveNumberSign'
-// contained in the instance of SignedNumberFormatSpec passed as
+// data value for 'NumStrFormatSpec.positiveNumberSign'
+// contained in the instance of NumStrFormatSpec passed as
 // an input parameter.
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//	signedNumFmt				*SignedNumberFormatSpec
+//	signedNumFmt				*NumStrFormatSpec
 //
-//		A pointer to an instance of SignedNumberFormatSpec.
+//		A pointer to an instance of NumStrFormatSpec.
 //		The member variable 'signedNumFmt.roundingSpec'
 //		will be reset to the values provided by the
 //		following input parameters.
@@ -5659,8 +5657,8 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setNumberFieldSpec(
 //		If an error message is returned, the text value for input
 //		parameter 'errPrefDto' (error prefix) will be prefixed or
 //		attached at the beginning of the error message.
-func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setPositiveNumberSign(
-	signedNumFmt *SignedNumberFormatSpec,
+func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setPositiveNumberSign(
+	signedNumFmt *NumStrFormatSpec,
 	leadingPosNumSign []rune,
 	leadingPosNumFieldSymPosition NumberFieldSymbolPosition,
 	trailingPosNumSign []rune,
@@ -5681,7 +5679,7 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setPositiveNumberSign(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"signedNumberFormatSpecAtom."+
+		"numStrFmtSpecAtom."+
 			"setPositiveNumberSign()",
 		"")
 
@@ -5747,7 +5745,7 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setPositiveNumberSign(
 
 // setPositiveNumberSignSpec - Deletes and resets the member
 // variable data value for 'signedNumFmt.positiveNumberSign'
-// contained in the instance of SignedNumberFormatSpec passed as
+// contained in the instance of NumStrFormatSpec passed as
 // an input parameter.
 //
 // This method receives an instance of 'NumStrNumberSymbolSpec' and
@@ -5758,9 +5756,9 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setPositiveNumberSign(
 //
 // # Input Parameters
 //
-//	signedNumFmt				*SignedNumberFormatSpec
+//	signedNumFmt				*NumStrFormatSpec
 //
-//		A pointer to an instance of SignedNumberFormatSpec.
+//		A pointer to an instance of NumStrFormatSpec.
 //		The member variable 'signedNumFmt.decSeparator'
 //		will be reset to the values provided by the
 //		following input parameters.
@@ -5800,8 +5798,8 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setPositiveNumberSign(
 //		If an error message is returned, the text value for input
 //		parameter 'errPrefDto' (error prefix) will be prefixed or
 //		attached at the beginning of the error message.
-func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setPositiveNumberSignSpec(
-	signedNumFmt *SignedNumberFormatSpec,
+func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setPositiveNumberSignSpec(
+	signedNumFmt *NumStrFormatSpec,
 	positiveNumberSign NumStrNumberSymbolSpec,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
@@ -5819,7 +5817,7 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setPositiveNumberSignSpe
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"signedNumberFormatSpecAtom."+
+		"numStrFmtSpecAtom."+
 			"setPositiveNumberSignSpec()",
 		"")
 
@@ -5854,17 +5852,17 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setPositiveNumberSignSpe
 }
 
 // setRoundingParams - Deletes and resets the member variable data
-// value for 'SignedNumberFormatSpec.intGroupingSpec'
-// contained in the instance of SignedNumberFormatSpec passed as
+// value for 'NumStrFormatSpec.intGroupingSpec'
+// contained in the instance of NumStrFormatSpec passed as
 // an input parameter.
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//	signedNumFmt				*SignedNumberFormatSpec
+//	signedNumFmt				*NumStrFormatSpec
 //
-//		A pointer to an instance of SignedNumberFormatSpec.
+//		A pointer to an instance of NumStrFormatSpec.
 //		The member variable 'signedNumFmt.roundingSpec'
 //		will be reset to the values provided by the
 //		following input parameters.
@@ -5922,8 +5920,8 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setPositiveNumberSignSpe
 //		If an error message is returned, the text value for input
 //		parameter 'errPrefDto' (error prefix) will be prefixed or
 //		attached at the beginning of the error message.
-func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setRoundingParams(
-	signedNumFmt *SignedNumberFormatSpec,
+func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setRoundingParams(
+	signedNumFmt *NumStrFormatSpec,
 	roundingType NumberRoundingType,
 	roundToFractionalDigits int,
 	errPrefDto *ePref.ErrPrefixDto) (
@@ -5942,7 +5940,7 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setRoundingParams(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"signedNumFmtSpecNanobot."+
+		"numStrFmtSpecNanobot."+
 			"setRoundingParams()",
 		"")
 
@@ -5974,7 +5972,7 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setRoundingParams(
 
 // setRoundingSpec - Deletes and resets the member variable
 // data value for 'signedNumFmt.roundingSpec'
-// contained in the instance of SignedNumberFormatSpec passed
+// contained in the instance of NumStrFormatSpec passed
 // as an input parameter.
 //
 // This method receives an instance of 'NumStrRoundingSpec'
@@ -5985,8 +5983,8 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setRoundingParams(
 //
 // # Input Parameters
 //
-//	signedNumFmt				*SignedNumberFormatSpec
-//		A pointer to an instance of SignedNumberFormatSpec.
+//	signedNumFmt				*NumStrFormatSpec
+//		A pointer to an instance of NumStrFormatSpec.
 //		The member variable 'signedNumFmt.roundingSpec'
 //		will be reset to the values provided by the
 //		following input parameters.
@@ -6022,8 +6020,8 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setRoundingParams(
 //		If an error message is returned, the text value for input
 //		parameter 'errPrefDto' (error prefix) will be prefixed or
 //		attached at the beginning of the error message.
-func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setRoundingSpec(
-	signedNumFmt *SignedNumberFormatSpec,
+func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setRoundingSpec(
+	signedNumFmt *NumStrFormatSpec,
 	roundingSpec NumStrRoundingSpec,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
@@ -6041,7 +6039,7 @@ func (signedNumFmtSpecAtom *signedNumberFormatSpecAtom) setRoundingSpec(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"signedNumFmtSpecNanobot."+
+		"numStrFmtSpecNanobot."+
 			"setRoundingParams()",
 		"")
 

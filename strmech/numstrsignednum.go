@@ -24,9 +24,9 @@ type NumStrSignedNum struct {
 //		returned number string.
 //
 //
-//	signedNumFormatSpec			SignedNumberFormatSpec
+//	signedNumFormatSpec			NumStrFormatSpec
 //
-//		This instance of SignedNumberFormatSpec contains all
+//		This instance of NumStrFormatSpec contains all
 //		the parameters required to format a signed number for
 //		text display.
 //
@@ -102,7 +102,7 @@ type NumStrSignedNum struct {
 //		prefixed at	the beginning of the error message.
 func (nStrSignedNum *NumStrSignedNum) GetNumStr(
 	numStrKernel NumberStrKernel,
-	signedNumFormatSpec SignedNumberFormatSpec,
+	signedNumFormatSpec NumStrFormatSpec,
 	errorPrefix interface{}) (
 	numberStr string,
 	err error) {
@@ -154,7 +154,7 @@ type numStrSignedNumNanobot struct {
 
 func (nStrSignedNumNanobot numStrSignedNumNanobot) formatSignedNumStr(
 	numStrKernel NumberStrKernel,
-	signedNumFormatSpec SignedNumberFormatSpec,
+	signedNumFormatSpec NumStrFormatSpec,
 	errPrefDto *ePref.ErrPrefixDto) (
 	numStr string,
 	err error) {
