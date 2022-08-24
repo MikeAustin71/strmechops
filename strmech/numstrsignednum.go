@@ -102,7 +102,7 @@ type NumStrSignedNum struct {
 //		prefixed at	the beginning of the error message.
 func (nStrSignedNum *NumStrSignedNum) GetNumStr(
 	numStrKernel NumberStrKernel,
-	signedNumFormatSpec NumStrFormatSpec,
+	numStrFormatSpec NumStrFormatSpec,
 	errorPrefix interface{}) (
 	numberStr string,
 	err error) {
@@ -141,7 +141,7 @@ func (nStrSignedNum *NumStrSignedNum) GetNumStr(
 	return new(numStrSignedNumNanobot).
 		formatSignedNumStr(
 			numStrKernel,
-			signedNumFormatSpec,
+			numStrFormatSpec,
 			ePrefix.XCpy("numStrKernel"))
 
 }
@@ -154,7 +154,7 @@ type numStrSignedNumNanobot struct {
 
 func (nStrSignedNumNanobot numStrSignedNumNanobot) formatSignedNumStr(
 	numStrKernel NumberStrKernel,
-	signedNumFormatSpec NumStrFormatSpec,
+	nStrFormatSpec NumStrFormatSpec,
 	errPrefDto *ePref.ErrPrefixDto) (
 	numStr string,
 	err error) {
@@ -201,16 +201,16 @@ func (nStrSignedNumNanobot numStrSignedNumNanobot) formatSignedNumStr(
 	var roundingSpec NumStrRoundingSpec
 
 	roundingSpec,
-		err = signedNumFormatSpec.GetRoundingSpec(
+		err = nStrFormatSpec.GetRoundingSpec(
 		ePrefix.XCpy(
-			"roundingSpec<-signedNumFormatSpec"))
+			"roundingSpec<-nStrFormatSpec"))
 
 	if err != nil {
 		return numStr, err
 	}
 
 	// Performing fractional digit rounding
-	err = new(numStrMathNanobot).roundNumStrKernel(
+	err = new(numStrMathRoundingNanobot).roundNumStrKernel(
 		&newNumStrKernel,
 		roundingSpec,
 		ePrefix.XCpy(
@@ -223,9 +223,9 @@ func (nStrSignedNumNanobot numStrSignedNumNanobot) formatSignedNumStr(
 	var decSeparator DecimalSeparatorSpec
 
 	decSeparator,
-		err = signedNumFormatSpec.GetDecSeparatorSpec(
+		err = nStrFormatSpec.GetDecSeparatorSpec(
 		ePrefix.XCpy(
-			"decSeparator<-signedNumFormatSpec"))
+			"decSeparator<-nStrFormatSpec"))
 
 	if err != nil {
 		return numStr, err
@@ -237,7 +237,7 @@ func (nStrSignedNumNanobot numStrSignedNumNanobot) formatSignedNumStr(
 		err = fmt.Errorf("%v\n"+
 			"Error: This is a floating point number and the number\n"+
 			"of decimal separator characters specified is zero.\n"+
-			"Input parameter 'signedNumFormatSpec.DecSeparator'\n"+
+			"Input parameter 'nStrFormatSpec.DecSeparator'\n"+
 			"is invalid!\n",
 			ePrefix.String())
 

@@ -6,22 +6,22 @@ import (
 	"sync"
 )
 
-type numStrMathNanobot struct {
+type numStrMathRoundingNanobot struct {
 	lock *sync.Mutex
 }
 
-func (nStrMathNanobot *numStrMathNanobot) roundNumStrKernel(
+func (nStrMathRoundNanobot *numStrMathRoundingNanobot) roundNumStrKernel(
 	numStrKernel *NumberStrKernel,
 	numStrRoundingSpec NumStrRoundingSpec,
 	errPrefDto *ePref.ErrPrefixDto) error {
 
-	if nStrMathNanobot.lock == nil {
-		nStrMathNanobot.lock = new(sync.Mutex)
+	if nStrMathRoundNanobot.lock == nil {
+		nStrMathRoundNanobot.lock = new(sync.Mutex)
 	}
 
-	nStrMathNanobot.lock.Lock()
+	nStrMathRoundNanobot.lock.Lock()
 
-	defer nStrMathNanobot.lock.Unlock()
+	defer nStrMathRoundNanobot.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
@@ -29,7 +29,7 @@ func (nStrMathNanobot *numStrMathNanobot) roundNumStrKernel(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"numStrMathNanobot."+
+		"numStrMathRoundingNanobot."+
 			"roundNumStrKernel()",
 		"")
 
@@ -113,7 +113,7 @@ func (nStrMathNanobot *numStrMathNanobot) roundNumStrKernel(
 
 	case NumRoundType.HalfAwayFromZero():
 
-		err = new(numStrMathMolecule).
+		err = new(numStrMathRoundingAtom).
 			roundHalfAwayFromZero(
 				numStrKernel,
 				roundToFractionalDigits,

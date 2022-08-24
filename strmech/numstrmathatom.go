@@ -18,40 +18,40 @@ type numStrMathAtom struct {
 //
 // Input Parameters
 //
-//		numStrKernel                    *NumberStrKernel
-//	    - An instance of NumberStrKernel which contains the
-//	      rune array of fractional digits which will be
-//	      extended to comply with the requirement for a
-//	      specific number of fractional digits.
+//	numStrKernel						*NumberStrKernel
+//		An instance of NumberStrKernel which contains the
+//		rune array of fractional digits which will be
+//		extended to comply with the requirement for a
+//		specific number of fractional digits.
 //
-//	 requestedNumOfFractionalDigits  int
-//	    - If the number of digits is the fractional digits array
-//	      contained in parameter 'numStrKernel' is less than
-//	      this integer value, that fractional digits array will
-//	      be extended with zero digits ('0') to meet the
-//	      required number of fractional digits. Zero digits
-//	      ('0') will be appended to the fractional digits array
-//	      until the total length of the fractional digits array
-//	      equals the integer value of
-//	      'requestedNumOfFractionalDigits'.
+//	 requestedNumOfFractionalDigits		int
+//		If the number of digits is the fractional digits array
+//		contained in parameter 'numStrKernel' is less than
+//		this integer value, that fractional digits array will
+//		be extended with zero digits ('0') to meet the
+//		required number of fractional digits. Zero digits
+//		('0') will be appended to the fractional digits array
+//		until the total length of the fractional digits array
+//		equals the integer value of
+//		'requestedNumOfFractionalDigits'.
 //
-//	      If the actual number of fractional digits is greater
-//	      than or equal to 'requestedNumOfFractionalDigits',
-//	      no action will be taken and the method will return
-//	      without error.
+//		If the actual number of fractional digits is greater
+//		than or equal to 'requestedNumOfFractionalDigits',
+//		no action will be taken and the method will return
+//		without error.
 //
 //
-//		errPrefDto          *ePref.ErrPrefixDto
-//		   - This object encapsulates an error prefix string which is
-//		     included in all returned error messages. Usually, it
-//		     contains the name of the calling method or methods listed
-//		     as a function chain.
+//	errPrefDto							*ePref.ErrPrefixDto
+//		This object encapsulates an error prefix string which
+//		is included in all returned error messages. Usually,
+//		it contains the name of the calling method or methods
+//		listed as a function chain.
 //
-//		     If no error prefix information is needed, set this parameter
-//		     to 'nil'.
+//		If no error prefix information is needed, set this parameter
+//		to 'nil'.
 //
-//		     Type ErrPrefixDto is included in the 'errpref' software
-//		     package, "github.com/MikeAustin71/errpref".
+//		Type ErrPrefixDto is included in the 'errpref' software
+//		package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
