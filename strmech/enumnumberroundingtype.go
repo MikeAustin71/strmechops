@@ -927,14 +927,6 @@ func (numRoundingType NumberRoundingType) XParseString(
 
 	ePrefix := "NumberRoundingType.XParseString() "
 
-	if len(valueString) < 4 {
-		return NumberRoundingType(0),
-			fmt.Errorf(ePrefix+
-				"\nInput parameter 'valueString' is INVALID!\n"+
-				"String length is less than '4'.\n"+
-				"valueString='%v'\n", valueString)
-	}
-
 	var ok bool
 	var numberRoundingType NumberRoundingType
 
@@ -1084,7 +1076,7 @@ type numberRoundingTypeNanobot struct {
 // VALID selection for 'NumberRoundingType'.
 //
 // This is a standard utility method and is not part of the valid
-// TextFieldType enumeration.
+// NumberRoundingType enumeration.
 func (numRoundTypeNanobot *numberRoundingTypeNanobot) isValidNumRoundType(
 	numberRoundingType NumberRoundingType) bool {
 
@@ -1097,7 +1089,7 @@ func (numRoundTypeNanobot *numberRoundingTypeNanobot) isValidNumRoundType(
 	defer numRoundTypeNanobot.lock.Unlock()
 
 	if numberRoundingType < 1 ||
-		numberRoundingType > 10 {
+		numberRoundingType > 11 {
 
 		return false
 	}

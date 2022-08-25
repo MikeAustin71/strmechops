@@ -312,7 +312,7 @@ func (numFieldSymbolPos NumberFieldSymbolPosition) OutsideNumField() NumberField
 
 	defer lockNumberFieldSymbolPosition.Unlock()
 
-	return NumberFieldSymbolPosition(1)
+	return NumberFieldSymbolPosition(2)
 }
 
 // String - Returns a string with the name of the enumeration associated
