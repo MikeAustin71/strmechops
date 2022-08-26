@@ -1512,7 +1512,7 @@ func (charsArrayDto RuneArrayDto) NewNumStr(
 //	     The Character Search Type must be set to one of the
 //	     following enumeration values:
 //
-//	      CharSearchType.LinearTargetStartingIndex()
+//	      CharSearchType.LinearTargetStartingIndex() (Default)
 //	      CharSearchType.SingleTargetChar()
 //	      CharSearchType.LinearEndOfString()
 //

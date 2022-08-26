@@ -11,8 +11,8 @@ type numStrMathQuark struct {
 }
 
 // extendRunes - Receives an array of runes and proceeds
-// to add or exented the length of that array using one
-// or more 'fill' characters passed as input parameters.
+// to extend the length of that array using one or more
+// 'fill' characters passed as input parameters.
 //
 // The 'fill' characters will be appended to the beginning
 // or end of the original rune array depending on the
@@ -32,7 +32,7 @@ type numStrMathQuark struct {
 //
 //	incomingCharsToExtend			*RuneArrayDto
 //
-//		A pointer to an instnace of RuneArrayDto containing the
+//		A pointer to an instance of RuneArrayDto containing the
 //		original rune array which be extended with fill
 //		characters.
 //
@@ -109,6 +109,10 @@ func (nStrMathQuark *numStrMathQuark) extendRunes(
 	extendRunesRight bool,
 	errPrefDto *ePref.ErrPrefixDto) error {
 
+	if nStrMathQuark.lock == nil {
+		nStrMathQuark.lock = new(sync.Mutex)
+	}
+
 	nStrMathQuark.lock.Lock()
 
 	defer nStrMathQuark.lock.Unlock()
@@ -150,14 +154,33 @@ func (nStrMathQuark *numStrMathQuark) extendRunes(
 
 	if charArrayLen >= newCharArrayLength {
 		// Nothing to do.
+
+		if charArrayLen !=
+			extendedOutputChars.GetRuneArrayLength() {
+			// These are not equal rune arrays
+
+			err = extendedOutputChars.CopyIn(
+				incomingCharsToExtend,
+				ePrefix.XCpy(
+					"extendedOutputChars<-"+
+						"incomingCharsToExtend"))
+
+			return err
+		}
+
+		for i := 0; i < charArrayLen; i++ {
+			extendedOutputChars.CharsArray[i] =
+				incomingCharsToExtend.CharsArray[i]
+		}
+
 		return err
 	}
 
-	lenghtDelta := newCharArrayLength - charArrayLen
+	lengthDelta := newCharArrayLength - charArrayLen
 
-	newFillArray := make([]rune, lenghtDelta)
+	newFillArray := make([]rune, lengthDelta)
 
-	for i := 0; i < lenghtDelta; i++ {
+	for i := 0; i < lengthDelta; i++ {
 		newFillArray[i] = fillChar
 	}
 
@@ -172,8 +195,8 @@ func (nStrMathQuark *numStrMathQuark) extendRunes(
 
 		extendedOutputChars.CharsArray =
 			append(
-				incomingCharsToExtend.CharsArray,
-				newFillArray...)
+				newFillArray,
+				incomingCharsToExtend.CharsArray...)
 
 	}
 

@@ -352,9 +352,9 @@ func (charSearchType CharacterSearchType) None() CharacterSearchType {
 // immediately after the comparison between first characters
 // 'H' and 'X' fails to produce a match.
 //
-// NOTE: Linear Target Starting Index is the default search
+// NOTE:
 //
-//	     type.
+//	Linear Target Starting Index is the default search type.
 //
 //	This method is part of the standard enumeration.
 func (charSearchType CharacterSearchType) LinearTargetStartingIndex() CharacterSearchType {
