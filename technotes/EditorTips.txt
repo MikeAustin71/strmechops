@@ -17,4 +17,20 @@ in the Installed tab of the Plugins page in the IDE
 settings.
 
 To open the Learn tool window and start your exercises,
-select View | Tool Windows | Learn or Help | Learn IDE Features from the main menu. The tool window lists the available tutorials.
+select View | Tool Windows | Learn or Help | Learn IDE Features
+ from the main menu. The tool window lists the available tutorials.
+
+
+
+Spelling and grammar checks are enabled by default. These checks are
+provided by the Grazie plugin, which is bundled with the IDE. To
+configure proofreading settings, open settings by pressing Ctrl+Alt+S
+and navigate to Editor | Natural Languages | Grammar.
+
+All texts, including comments, textual strings and literals, are
+inspected against the pre-defined or custom dictionaries. Typos are
+highlighted so that you can choose the correct word, accept the
+current spelling, or disable the inspection.
+
+To fix a spelling or grammar error, press Alt+Enter to see the list of
+available actions.
