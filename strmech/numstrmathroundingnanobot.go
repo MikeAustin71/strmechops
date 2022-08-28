@@ -116,9 +116,10 @@ func (nStrMathRoundNanobot *numStrMathRoundingNanobot) roundNumStrKernel(
 
 	case NumRoundType.HalfAwayFromZero():
 
-		err = new(numStrMathMolecule).
+		err = new(numStrMathRoundingAtom).
 			roundHalfAwayFromZero(
-				numStrKernel,
+				&numStrKernel.integerDigits,
+				&numStrKernel.fractionalDigits,
 				roundToFractionalDigits,
 				ePrefix.XCpy(
 					fmt.Sprintf("newNumStrKernel<-"+
