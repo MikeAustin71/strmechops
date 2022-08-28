@@ -93,9 +93,12 @@ func (nStrMathRoundNanobot *numStrMathRoundingNanobot) roundNumStrKernel(
 	if roundToFractionalDigits >
 		numOfFracDigits {
 
-		return new(numStrMathAtom).extendFractionalDigits(
-			numStrKernel,
+		return new(numStrMathQuark).extendRunes(
+			&numStrKernel.fractionalDigits,
+			&numStrKernel.fractionalDigits,
+			'0',
 			roundToFractionalDigits,
+			true,
 			ePrefix.XCpy(
 				fmt.Sprintf("roundToFractionalDigits= %v",
 					roundToFractionalDigits)))
@@ -113,7 +116,7 @@ func (nStrMathRoundNanobot *numStrMathRoundingNanobot) roundNumStrKernel(
 
 	case NumRoundType.HalfAwayFromZero():
 
-		err = new(numStrMathRoundingAtom).
+		err = new(numStrMathMolecule).
 			roundHalfAwayFromZero(
 				numStrKernel,
 				roundToFractionalDigits,

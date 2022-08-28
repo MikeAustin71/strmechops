@@ -53,11 +53,13 @@ type numStrMathQuark struct {
 //		modified.
 //
 //	fillChar						rune
+//
 //		This rune contains the fill character which will be used
 //		to extend the original rune array
 //		('incomingCharsToExtend').
 //
 //	newCharArrayLength				int
+//
 //		The new length of the extended rune array.
 //
 //		If this value is equal to or less than the length of
@@ -66,6 +68,7 @@ type numStrMathQuark struct {
 //		be returned.
 //
 //	extendRunesRight				bool
+//
 //		If this parameter is set to 'true', the fill characters
 //		will be added to the end of the original rune array,
 //		'incomingCharsToExtend'.
@@ -93,14 +96,15 @@ type numStrMathQuark struct {
 //
 //	error
 //
-//	If this method completes successfully, this returned error
-//	Type is set equal to 'nil'. If errors are encountered during
-//	processing, the returned error Type will encapsulate an error
-//	message.
+//		If this method completes successfully, this returned
+//		error Type is set equal to 'nil'. If errors are
+//		encountered during	processing, the returned error
+//		Type will encapsulate an error	message.
 //
-//	If an error message is returned, the text value for input
-//	parameter 'errPrefDto' (error prefix) will be prefixed or
-//	attached at the beginning of the error message.
+//		If an error message is returned, the text value for
+//		input parameter 'errPrefDto' (error prefix) will be
+//		prefixed or attached at the beginning of the error
+//		message.
 func (nStrMathQuark *numStrMathQuark) extendRunes(
 	incomingCharsToExtend *RuneArrayDto,
 	extendedOutputChars *RuneArrayDto,
