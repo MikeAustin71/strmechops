@@ -207,55 +207,23 @@ func (nStrMathRoundAtom *numStrMathRoundingAtom) roundHalfUpWithNegNums(
 
 	}
 
-	// Truncate Fractional Digits array!
-	// Last Index = roundToFractionalDigits - 1
-
-	fractionalDigits.CharsArray =
-		fractionalDigits.CharsArray[:roundToFractionalDigits]
-
 	if roundUp == false {
 
-		return err
-	}
-
-	// MUST BE ROUND UP!
-
-	lenFracDigits = fractionalDigits.GetRuneArrayLength()
-
-	var isCarry bool
-
-	if lenFracDigits > 0 {
-
-		isCarry,
-			err = new(numStrMathAtom).addOneToRunes(
-			fractionalDigits,
-			fractionalDigits,
-			false,
-			ePrefix.XCpy(
-				"fractionalDigits<-total"))
-
-		if err != nil {
-			return err
-		}
-
-	} else {
-
-		isCarry = true
-	}
-
-	if isCarry {
-
-		_,
-			err = new(numStrMathAtom).addOneToRunes(
+		return new(numStrMathRoundingElectron).roundDown(
 			integerDigits,
-			integerDigits,
-			true,
-			ePrefix.XCpy(
-				"fractionalDigits<-total"))
+			fractionalDigits,
+			roundToFractionalDigits,
+			numberSign,
+			ePrefix)
 
 	}
 
-	return err
+	return new(numStrMathRoundingElectron).roundUp(
+		integerDigits,
+		fractionalDigits,
+		roundToFractionalDigits,
+		numberSign,
+		ePrefix)
 }
 
 // roundHalfAwayFromZero - Performs a rounding operation on
@@ -441,53 +409,23 @@ func (nStrMathRoundAtom *numStrMathRoundingAtom) roundHalfAwayFromZero(
 		roundUp = false
 	}
 
-	// Truncate Fractional Digits array!
-	// Last Index = roundToFractionalDigits - 1
-
-	fractionalDigits.CharsArray =
-		fractionalDigits.CharsArray[:roundToFractionalDigits]
-
 	if roundUp == false {
 
-		return err
+		return new(numStrMathRoundingElectron).roundDown(
+			integerDigits,
+			fractionalDigits,
+			roundToFractionalDigits,
+			numberSign,
+			ePrefix)
+
 	}
 
 	// MUST BE ROUND UP!
 
-	lenFracDigits = fractionalDigits.GetRuneArrayLength()
-
-	var isCarry bool
-
-	if lenFracDigits > 0 {
-
-		isCarry,
-			err = new(numStrMathAtom).addOneToRunes(
-			fractionalDigits,
-			fractionalDigits,
-			false,
-			ePrefix.XCpy(
-				"fractionalDigits<-total"))
-
-		if err != nil {
-			return err
-		}
-
-	} else {
-
-		isCarry = true
-	}
-
-	if isCarry {
-
-		_,
-			err = new(numStrMathAtom).addOneToRunes(
-			integerDigits,
-			integerDigits,
-			true,
-			ePrefix.XCpy(
-				"fractionalDigits<-total"))
-
-	}
-
-	return err
+	return new(numStrMathRoundingElectron).roundUp(
+		integerDigits,
+		fractionalDigits,
+		roundToFractionalDigits,
+		numberSign,
+		ePrefix)
 }
