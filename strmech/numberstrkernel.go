@@ -1782,7 +1782,7 @@ func (numStrKernel *NumberStrKernel) RationalizeFractionalIntegerDigits() {
 //
 // Possible values are listed as follows:
 //
-//	NumSignVal.None()     = -1 - Invalid Value
+//	NumSignVal.None()     = -2 - Invalid Value
 //	NumSignVal.Negative() = -1 - Valid Value
 //	NumSignVal.Zero()     =  0 - Valid Value
 //	NumSignVal.Positive() =  1 - Valid Value

@@ -10,6 +10,10 @@ type numStrMathRoundingAtom struct {
 	lock *sync.Mutex
 }
 
+func (nStrMathRoundAtom *numStrMathRoundingAtom) roundHalfUpWithNegNums() {
+
+}
+
 // roundHalfAwayFromZero - Performs a rounding operation on
 // the integer and fractional numeric digit arrays contained
 // in two instances of RuneArrayDto passed as input
@@ -26,6 +30,10 @@ type numStrMathRoundingAtom struct {
 //	-7.4 rounds to -7
 //	-7.5 rounds away to -8
 //	-7.6 rounds away to -8
+//
+// This algorithm corresponds to NumberRoundingType:
+//
+//	NumRoundType.HalfAwayFromZero
 //
 // Reference:
 //
@@ -79,6 +87,14 @@ type numStrMathRoundingAtom struct {
 //			roundToFractionalDigits 3
 //			Floating Point Number after rounding: 0.123
 //
+//	numberSign					NumericSignValueType
+//
+//		Type NumericSignValueType is an enumeration of possible
+//		number sign values listed as follows:
+//			NumSignVal.None()     = -2 - Invalid Value
+//			NumSignVal.Negative() = -1 - Valid Value
+//			NumSignVal.Zero()     =  0 - Valid Value
+//			NumSignVal.Positive() =  1 - Valid Value
 //
 //	errPrefDto					*ePref.ErrPrefixDto
 //
@@ -112,6 +128,7 @@ func (nStrMathRoundAtom *numStrMathRoundingAtom) roundHalfAwayFromZero(
 	integerDigits *RuneArrayDto,
 	fractionalDigits *RuneArrayDto,
 	roundToFractionalDigits int,
+	numberSign NumericSignValueType,
 	errPrefDto *ePref.ErrPrefixDto) error {
 
 	if nStrMathRoundAtom.lock == nil {
@@ -136,40 +153,23 @@ func (nStrMathRoundAtom *numStrMathRoundingAtom) roundHalfAwayFromZero(
 		return err
 	}
 
-	if integerDigits == nil {
+	err = new(numStrMathRoundingQuark).preRoundingValidation(
+		integerDigits,
+		fractionalDigits,
+		roundToFractionalDigits,
+		numberSign,
+		ePrefix)
 
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'integerDigits' is "+
-			"a nil pointer!\n",
-			ePrefix.String())
-
+	if err != nil {
 		return err
-	}
-
-	if fractionalDigits == nil {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'fractionalDigits' is "+
-			"a nil pointer!\n",
-			ePrefix.String())
-
-		return err
-	}
-
-	if roundToFractionalDigits < 0 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'roundToFractionalDigits' is "+
-			"less than zero (0)!\n"+
-			"roundToFractionalDigits = %v\n",
-			ePrefix.String(),
-			roundToFractionalDigits)
-
-		return err
-
 	}
 
 	lenFracDigits := fractionalDigits.GetRuneArrayLength()
+
+	if roundToFractionalDigits == 0 &&
+		lenFracDigits == 0 {
+		return err
+	}
 
 	if roundToFractionalDigits > lenFracDigits {
 		// Not much to do. Extend with zeroes to
@@ -207,27 +207,38 @@ func (nStrMathRoundAtom *numStrMathRoundingAtom) roundHalfAwayFromZero(
 
 	// Truncate Fractional Digits array!
 	// Last Index = roundToFractionalDigits - 1
+
 	fractionalDigits.CharsArray =
 		fractionalDigits.CharsArray[:roundToFractionalDigits]
 
 	if roundUp == false {
+
 		return err
 	}
 
 	// MUST BE ROUND UP!
 
+	lenFracDigits = fractionalDigits.GetRuneArrayLength()
+
 	var isCarry bool
 
-	isCarry,
-		err = new(numStrMathAtom).addOneToRunes(
-		fractionalDigits,
-		fractionalDigits,
-		false,
-		ePrefix.XCpy(
-			"fractionalDigits<-total"))
+	if lenFracDigits > 0 {
 
-	if err != nil {
-		return err
+		isCarry,
+			err = new(numStrMathAtom).addOneToRunes(
+			fractionalDigits,
+			fractionalDigits,
+			false,
+			ePrefix.XCpy(
+				"fractionalDigits<-total"))
+
+		if err != nil {
+			return err
+		}
+
+	} else {
+
+		isCarry = true
 	}
 
 	if isCarry {

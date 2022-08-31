@@ -121,6 +121,7 @@ func (nStrMathRoundNanobot *numStrMathRoundingNanobot) roundNumStrKernel(
 				&numStrKernel.integerDigits,
 				&numStrKernel.fractionalDigits,
 				roundToFractionalDigits,
+				numStrKernel.numberSign,
 				ePrefix.XCpy(
 					fmt.Sprintf("newNumStrKernel<-"+
 						"RoundTo %v-digits",

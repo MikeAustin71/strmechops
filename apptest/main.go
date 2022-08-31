@@ -1,13 +1,14 @@
 package main
 
 import (
-	"github.com/MikeAustin71/strmechops/apptest/examples"
+	"github.com/MikeAustin71/strmechops/strmech"
 )
 
 func main() {
 
-	mt := examples.MainTest02{}
+	mt := strmech.TestDebugAll{}
 
-	mt.ExtractNumberRunes01()
+	mt.MathRounding(
+		"main()")
 
 }
