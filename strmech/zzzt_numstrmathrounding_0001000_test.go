@@ -6,6 +6,160 @@ import (
 	"testing"
 )
 
+func TestNumStrMathRoundingRoundHalfUpWithNegNums_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestNumStrMathRoundingRoundHalfUpWithNegNums_000100()",
+		"")
+
+	// Test # 1
+	expectedIntDigits := "7"
+
+	expectedFracDigits := "5"
+
+	expectedStr := "8"
+
+	roundToFractionalDigits := 0
+
+	intRunes,
+		err := RuneArrayDto{}.NewRunes(
+		[]rune(expectedIntDigits),
+		CharSearchType.LinearTargetStartingIndex(),
+		ePrefix.XCpy(
+			"intRunes"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	var fracRunes RuneArrayDto
+
+	fracRunes,
+		err = RuneArrayDto{}.NewRunes(
+		[]rune(expectedFracDigits),
+		CharSearchType.LinearTargetStartingIndex(),
+		ePrefix.XCpy(
+			"fracRunes"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	nStrMathRoundAtom := numStrMathRoundingAtom{}
+
+	err = nStrMathRoundAtom.roundHalfUpWithNegNums(
+		&intRunes,
+		&fracRunes,
+		roundToFractionalDigits,
+		NumSignVal.Positive(),
+		ePrefix.XCpy(
+			"roundToFracDigits=0 Test#1"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	actualStr := intRunes.GetCharacterString()
+
+	if fracRunes.GetRuneArrayLength() > 0 {
+
+		actualStr += "." +
+			fracRunes.GetCharacterString()
+
+	}
+
+	if expectedStr != actualStr {
+
+		t.Errorf("%v - Test #1\n"+
+			"Error: nStrMathRoundAtom.roundHalfUpWithNegNums()\n"+
+			"Expected String = '%v'\n"+
+			"  Actual String = '%v'\n",
+			ePrefix.String(),
+			expectedStr,
+			actualStr)
+
+		return
+	}
+
+	// Test # 2
+	expectedIntDigits = "7"
+
+	expectedFracDigits = "5"
+
+	expectedStr = "7"
+
+	roundToFractionalDigits = 0
+
+	intRunes,
+		err = RuneArrayDto{}.NewRunes(
+		[]rune(expectedIntDigits),
+		CharSearchType.LinearTargetStartingIndex(),
+		ePrefix.XCpy(
+			"intRunes"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	fracRunes,
+		err = RuneArrayDto{}.NewRunes(
+		[]rune(expectedFracDigits),
+		CharSearchType.LinearTargetStartingIndex(),
+		ePrefix.XCpy(
+			"fracRunes"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = nStrMathRoundAtom.roundHalfUpWithNegNums(
+		&intRunes,
+		&fracRunes,
+		roundToFractionalDigits,
+		NumSignVal.Negative(),
+		ePrefix.XCpy(
+			"roundToFracDigits=0 Test#2"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	actualStr = intRunes.GetCharacterString()
+
+	if fracRunes.GetRuneArrayLength() > 0 {
+
+		actualStr += "." +
+			fracRunes.GetCharacterString()
+
+	}
+
+	if expectedStr != actualStr {
+
+		t.Errorf("%v - Test #2\n"+
+			"Error: nStrMathRoundAtom.roundHalfUpWithNegNums()\n"+
+			"Expected String = '%v'\n"+
+			"  Actual String = '%v'\n",
+			ePrefix.String(),
+			expectedStr,
+			actualStr)
+
+		return
+	}
+
+}
+
 func TestNumStrMathRoundingRoundHalfAwayFromZero_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
