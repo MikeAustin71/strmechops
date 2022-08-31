@@ -401,23 +401,15 @@ func (nStrMathRoundAtom *numStrMathRoundingAtom) roundHalfAwayFromZero(
 	//  less than existingNumOfFracDigits
 	//roundIdx := roundToFractionalDigits
 
-	roundUp := true
-
 	if fractionalDigits.CharsArray[roundToFractionalDigits] <
 		'5' {
-
-		roundUp = false
-	}
-
-	if roundUp == false {
-
+		// ROUND DOWN!
 		return new(numStrMathRoundingElectron).roundDown(
 			integerDigits,
 			fractionalDigits,
 			roundToFractionalDigits,
 			numberSign,
 			ePrefix)
-
 	}
 
 	// MUST BE ROUND UP!
