@@ -40,13 +40,15 @@ func (testDebug *TestDebugAll) MathRounding(
 		return
 	}
 
-	expectedIntDigits := "1"
+	expectedIntDigits := "7"
 
 	expectedFracDigits := "5"
 
 	roundToFractionalDigits := 0
 
-	expectedStr := "2"
+	expectedStr := "8"
+
+	numberSign := NumSignVal.Negative()
 
 	var intRunes RuneArrayDto
 
@@ -84,11 +86,11 @@ func (testDebug *TestDebugAll) MathRounding(
 
 	nStrMathRoundAtom := numStrMathRoundingAtom{}
 
-	err = nStrMathRoundAtom.roundHalfAwayFromZero(
+	err = nStrMathRoundAtom.roundHalfDownWithNegNums(
 		&intRunes,
 		&fracRunes,
 		roundToFractionalDigits,
-		NumSignVal.Zero(),
+		numberSign,
 		ePrefix.XCpy(
 			fmt.Sprintf("Test #5 roundToFracDigits=%v",
 				roundToFractionalDigits)))
