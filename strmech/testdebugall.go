@@ -46,7 +46,7 @@ func (testDebug *TestDebugAll) MathRounding(
 
 	roundToFractionalDigits := 0
 
-	expectedStr := "8"
+	expectedStr := "7"
 
 	numberSign := NumSignVal.Negative()
 
@@ -86,7 +86,7 @@ func (testDebug *TestDebugAll) MathRounding(
 
 	nStrMathRoundAtom := numStrMathRoundingAtom{}
 
-	err = nStrMathRoundAtom.roundHalfDownWithNegNums(
+	err = nStrMathRoundAtom.roundHalfTowardsZero(
 		&intRunes,
 		&fracRunes,
 		roundToFractionalDigits,
@@ -126,8 +126,12 @@ func (testDebug *TestDebugAll) MathRounding(
 	}
 
 	fmt.Printf("%v\n"+
-		"No Errors!\n",
-		ePrefix.String())
+		"No Errors!\n"+
+		"Expected String = '%v'\n"+
+		"  Actual String = '%v'\n",
+		ePrefix.String(),
+		expectedStr,
+		actualStr)
 
 	return
 }
