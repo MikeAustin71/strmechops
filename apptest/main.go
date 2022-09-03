@@ -8,7 +8,7 @@ func main() {
 
 	mt := strmech.TestDebugAll{}
 
-	mt.MathRounding(
+	mt.MathRounding2(
 		"main()")
 
 }
