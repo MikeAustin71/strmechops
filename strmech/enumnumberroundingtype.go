@@ -624,12 +624,12 @@ func (numRoundingType NumberRoundingType) HalfToEven() NumberRoundingType {
 //	HalfToOdd only applies to 0.5. Other numbers
 //	(not ending in 0.5) round to nearest as usual.
 //
-//	7.5 rounds down to 7 (because 7 is an odd number)
+//	7.5 rounds down to 7 (because 8 is an even number)
 //
 //	6.5 rounds up to 7 (because 7 is an odd number)
 //
 //	7.6 rounds up to 8
-//	7.5 rounds down to 7 (because 7 is an odd number)
+//	7.5 rounds down to 7 (because 8 is an even number)
 //	7.4 rounds down to 7
 //	6.6 rounds up to 7
 //	6.5 rounds up to 7 (because 7 is an odd number)
