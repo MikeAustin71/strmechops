@@ -576,20 +576,33 @@ func (numRoundingType NumberRoundingType) HalfTowardsZero() NumberRoundingType {
 // Round to Even (Banker's Rounding). Round 0.5 to the
 // nearest even digit.
 //
-//	Examples of HalfToEven
+//		Examples of HalfToEven
 //
-//	7.5 rounds up to 8 (because 8 is an even number)
-//	but 6.5 rounds down to 6 (because 6 is an even number)
+//		7.5 rounds up to 8 (because 8 is an even number)
+//		but 6.5 rounds down to 6 (because 6 is an even number)
 //
-//	HalfToEven only applies to 0.5. Other numbers (not ending
-//	in 0.5) round to nearest as usual, so:
+//		HalfToEven only applies to 0.5. Other numbers (not ending
+//		in 0.5) round to nearest as usual, so:
 //
-//	7.6 rounds up to 8
-//	7.5 rounds up to 8 (because 8 is an even number)
-//	7.4 rounds down to 7
-//	6.6 rounds up to 7
-//	6.5 rounds down to 6 (because 6 is an even number)
-//	6.4 rounds down to 6
+//		7.6 rounds up to 8
+//		7.5 rounds up to 8 (because 8 is an even number)
+//		7.4 rounds down to 7
+//		6.6 rounds up to 7
+//		6.5 rounds down to 6 (because 7 is an odd number)
+//		6.4 rounds down to 6
+//		-23.5 rounds to -24 (because 4 is an even number)
+//	 -24.5 rounds to -24 (because 5 is an odd number)
+//
+// Reference:
+//
+//	https://en.wikipedia.org/wiki/Rounding#Round_half_to_even
+//	https://rounding.to/understanding-the-bankers-rounding/
+//	https://www.mathsisfun.com/numbers/rounding-methods.html
+//	https://en.wikipedia.org/wiki/Rounding
+//	https://www.mathsisfun.com/rounding-numbers.html
+//	https://www.vedantu.com/maths/rounding-methods
+//	https://rounding.to/the-most-common-rounding-methods/
+//	https://www.wikihow.com/Round-Numbers
 //
 // This method is part of the standard enumeration.
 func (numRoundingType NumberRoundingType) HalfToEven() NumberRoundingType {
