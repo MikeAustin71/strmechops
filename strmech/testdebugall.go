@@ -172,40 +172,41 @@ func (testDebug *TestDebugAll) MathRounding2(
 
 	var intRunes, fracRunes RuneArrayDto
 
-	intRunes,
-		err = RuneArrayDto{}.NewRunes(
-		[]rune("71"),
-		CharSearchType.LinearTargetStartingIndex(),
-		ePrefix)
-
-	if err != nil {
-
-		fmt.Printf("%v\n",
-			err.Error())
-
-		return
-	}
-
-	fracRunes,
-		err = RuneArrayDto{}.NewRunes(
-		[]rune("5"),
-		CharSearchType.LinearTargetStartingIndex(),
-		ePrefix)
-
-	if err != nil {
-
-		fmt.Printf("%v\n",
-			err.Error())
-
-		return
-	}
-
 	baseNum := "71.5"
 
 	var numberSign NumericSignValueType
-	rand.Seed(3200053)
+
+	nStrMathRoundAtom := numStrMathRoundingAtom{}
 
 	for i := 0; i < 30; i++ {
+
+		intRunes,
+			err = RuneArrayDto{}.NewRunes(
+			[]rune("71"),
+			CharSearchType.LinearTargetStartingIndex(),
+			ePrefix)
+
+		if err != nil {
+
+			fmt.Printf("%v\n",
+				err.Error())
+
+			return
+		}
+
+		fracRunes,
+			err = RuneArrayDto{}.NewRunes(
+			[]rune("5"),
+			CharSearchType.LinearTargetStartingIndex(),
+			ePrefix)
+
+		if err != nil {
+
+			fmt.Printf("%v\n",
+				err.Error())
+
+			return
+		}
 
 		if i%2 == 0 {
 			numberSign = NumSignVal.Positive()
@@ -213,10 +214,7 @@ func (testDebug *TestDebugAll) MathRounding2(
 			numberSign = NumSignVal.Negative()
 		}
 
-		waitVal := rand.Intn(400000000) + 100000000
-		time.Sleep(time.Duration(waitVal))
-
-		err = new(numStrMathRoundingAtom).roundRandomly(
+		err = nStrMathRoundAtom.roundRandomly(
 			&intRunes,
 			&fracRunes,
 			0,
@@ -255,11 +253,122 @@ func (testDebug *TestDebugAll) MathRounding2(
 			numberSign.String(),
 			actualStr)
 
+		time.Sleep(time.Duration(500000000))
+
 	}
 
 	return
 }
 
-func (testDebug *TestDebugAll) RandomNum() {
+func (testDebug *TestDebugAll) RandomNum1(
+	errorPrefix interface{}) {
 
+	if testDebug.lock == nil {
+		testDebug.lock = new(sync.Mutex)
+	}
+
+	testDebug.lock.Lock()
+
+	defer testDebug.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TestDebugAll."+
+			"RandomNum1()",
+		"")
+
+	if err != nil {
+
+		fmt.Printf("%v\n",
+			err.Error())
+
+		return
+	}
+
+	var intNums []int
+	var selection int
+
+	for i := 0; i < 10; i++ {
+
+		rand.Seed(time.Now().UnixNano())
+
+		intNums = rand.Perm(10)
+
+		for j := 0; j < 3; j++ {
+			selection = rand.Intn(9)
+		}
+
+		fmt.Printf("%v. "+
+			"%v\n"+
+			"Selection: %v\n",
+			i+1,
+			intNums,
+			intNums[selection])
+
+		time.Sleep(500000000)
+	}
+
+	fmt.Printf("\n\nSuccessful Completion\n"+
+		"%v\n",
+		ePrefix.String())
+
+	return
+}
+
+func (testDebug *TestDebugAll) RandomNum2(
+	errorPrefix interface{}) {
+
+	if testDebug.lock == nil {
+		testDebug.lock = new(sync.Mutex)
+	}
+
+	testDebug.lock.Lock()
+
+	defer testDebug.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TestDebugAll."+
+			"RandomNum2()",
+		"")
+
+	if err != nil {
+
+		fmt.Printf("%v\n",
+			err.Error())
+
+		return
+	}
+
+	for i := 0; i < 30; i++ {
+
+		x := time.Now().UnixNano()
+		y := x
+		z := y % 2
+
+		fmt.Printf("%v. "+
+			"%v - Remainder\n"+
+			"%v - Nanoseconds\n",
+			i+1,
+			z,
+			y)
+
+		time.Sleep(500000000)
+	}
+
+	fmt.Printf("\n\nSuccessful Completion\n"+
+		"%v\n",
+		ePrefix.String())
+
+	return
 }

@@ -3,9 +3,7 @@ package strmech
 import (
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
-	"math/rand"
 	"sync"
-	"time"
 )
 
 type numStrMathRoundingAtom struct {
@@ -1588,9 +1586,9 @@ func (nStrMathRoundAtom *numStrMathRoundingAtom) roundRandomly(
 		// fractionalDigits.CharsArray[roundToFractionalDigits] ==
 		// '5'
 
-		rand.Seed(time.Now().UnixNano())
+		randomNum := new(numStrMathQuark).randomInt()
 
-		remainder := rand.Int() % 2
+		remainder := randomNum % 2
 
 		if remainder == 0 {
 

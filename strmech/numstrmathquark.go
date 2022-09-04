@@ -3,7 +3,9 @@ package strmech
 import (
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
+	"math/rand"
 	"sync"
+	"time"
 )
 
 type numStrMathQuark struct {
@@ -205,4 +207,44 @@ func (nStrMathQuark *numStrMathQuark) extendRunes(
 	}
 
 	return err
+}
+
+// randomInt
+//
+// Returns a random integer number created with the psuedo
+// random number generator provided by the math/rand
+// package
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	NONE
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	NONE
+func (nStrMathQuark *numStrMathQuark) randomInt() int {
+
+	if nStrMathQuark.lock == nil {
+		nStrMathQuark.lock = new(sync.Mutex)
+	}
+
+	nStrMathQuark.lock.Lock()
+
+	defer nStrMathQuark.lock.Unlock()
+
+	rand.Seed(time.Now().UnixNano())
+
+	intNums := rand.Perm(30)
+
+	selection := rand.Intn(29)
+
+	intNums = rand.Perm(30)
+
+	selection = rand.Intn(29)
+
+	return intNums[selection]
 }
