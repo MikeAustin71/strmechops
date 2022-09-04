@@ -437,7 +437,7 @@ func TestNumStrMathRoundingRoundHalfDownWithNegNums_000200(t *testing.T) {
 	if err == nil {
 
 		t.Errorf("%v\n"+
-			"Error: nStrMathRoundAtom.roundHalfDownWithNegNums() Error #2\n"+
+			"Error: nStrMathRoundAtom.roundHalfDownWithNegNums() Error #3\n"+
 			"Expected an error return because 'roundToFractionalDigits' is minus one (-1)\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.String())
@@ -457,7 +457,7 @@ func TestNumStrMathRoundingRoundHalfDownWithNegNums_000200(t *testing.T) {
 	if err == nil {
 
 		t.Errorf("%v\n"+
-			"Error: nStrMathRoundAtom.roundHalfDownWithNegNums() Error #2\n"+
+			"Error: nStrMathRoundAtom.roundHalfDownWithNegNums() Error #4\n"+
 			"Expected an error return because 'Number Sign' is 'None'.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.String())
@@ -1370,7 +1370,7 @@ func TestNumStrMathRoundingRoundHalfTowardsZero_000200(t *testing.T) {
 	if err == nil {
 
 		t.Errorf("%v\n"+
-			"Error: nStrMathRoundAtom.roundHalfTowardsZero() Error #2\n"+
+			"Error: nStrMathRoundAtom.roundHalfTowardsZero() Error #3\n"+
 			"Expected an error return because 'roundToFractionalDigits' is minus one (-1)\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.String())
@@ -1390,7 +1390,7 @@ func TestNumStrMathRoundingRoundHalfTowardsZero_000200(t *testing.T) {
 	if err == nil {
 
 		t.Errorf("%v\n"+
-			"Error: nStrMathRoundAtom.roundHalfTowardsZero() Error #2\n"+
+			"Error: nStrMathRoundAtom.roundHalfTowardsZero() Error #4\n"+
 			"Expected an error return because 'Number Sign' is 'None'.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.String())
@@ -1702,7 +1702,7 @@ func TestNumStrMathRoundingRoundHalfToEven_000200(t *testing.T) {
 	if err == nil {
 
 		t.Errorf("%v\n"+
-			"Error: nStrMathRoundAtom.roundHalfToEven() Error #2\n"+
+			"Error: nStrMathRoundAtom.roundHalfToEven() Error #3\n"+
 			"Expected an error return because 'roundToFractionalDigits' is minus one (-1)\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.String())
@@ -1722,7 +1722,7 @@ func TestNumStrMathRoundingRoundHalfToEven_000200(t *testing.T) {
 	if err == nil {
 
 		t.Errorf("%v\n"+
-			"Error: nStrMathRoundAtom.roundHalfToEven() Error #2\n"+
+			"Error: nStrMathRoundAtom.roundHalfToEven() Error #4\n"+
 			"Expected an error return because 'Number Sign' is 'None'.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.String())
@@ -2034,7 +2034,7 @@ func TestNumStrMathRoundingRoundHalfToOdd_000200(t *testing.T) {
 	if err == nil {
 
 		t.Errorf("%v\n"+
-			"Error: nStrMathRoundAtom.roundHalfToOdd() Error #2\n"+
+			"Error: nStrMathRoundAtom.roundHalfToOdd() Error #3\n"+
 			"Expected an error return because 'roundToFractionalDigits' is minus one (-1)\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.String())
@@ -2054,7 +2054,7 @@ func TestNumStrMathRoundingRoundHalfToOdd_000200(t *testing.T) {
 	if err == nil {
 
 		t.Errorf("%v\n"+
-			"Error: nStrMathRoundAtom.roundHalfToOdd() Error #2\n"+
+			"Error: nStrMathRoundAtom.roundHalfToOdd() Error #4\n"+
 			"Expected an error return because 'Number Sign' is 'None'.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.String())
@@ -2439,7 +2439,7 @@ func TestNumStrMathRoundingRoundRandomly_000200(t *testing.T) {
 	if err == nil {
 
 		t.Errorf("%v\n"+
-			"Error: nStrMathRoundAtom.roundRandomly() Error #2\n"+
+			"Error: nStrMathRoundAtom.roundRandomly() Error #3\n"+
 			"Expected an error return because 'roundToFractionalDigits' is minus one (-1)\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.String())
@@ -2459,7 +2459,316 @@ func TestNumStrMathRoundingRoundRandomly_000200(t *testing.T) {
 	if err == nil {
 
 		t.Errorf("%v\n"+
-			"Error: nStrMathRoundAtom.roundRandomly() Error #2\n"+
+			"Error: nStrMathRoundAtom.roundRandomly() Error #4\n"+
+			"Expected an error return because 'Number Sign' is 'None'.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+
+	}
+
+}
+
+func TestNumStrMathRoundingFloor_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestNumStrMathRoundingFloor_000100()",
+		"")
+
+	const arrayLen = 17
+
+	var expectedIntDigits, expectedFracDigits, expectedNumStr [arrayLen]string
+
+	var numberSigns [arrayLen]NumericSignValueType
+
+	expectedIntDigits[0] = "2"
+	expectedFracDigits[0] = ""
+	expectedNumStr[0] = "2"
+	numberSigns[0] = NumSignVal.Positive()
+
+	expectedIntDigits[1] = "2"
+	expectedFracDigits[1] = "4"
+	expectedNumStr[1] = "2"
+	numberSigns[1] = NumSignVal.Positive()
+
+	expectedIntDigits[2] = "2"
+	expectedFracDigits[2] = "9"
+	expectedNumStr[2] = "2"
+	numberSigns[2] = NumSignVal.Positive()
+
+	expectedIntDigits[3] = "2"
+	expectedFracDigits[3] = "5"
+	expectedNumStr[3] = "3"
+	numberSigns[3] = NumSignVal.Negative()
+
+	expectedIntDigits[4] = "2"
+	expectedFracDigits[4] = "7"
+	expectedNumStr[4] = "3"
+	numberSigns[4] = NumSignVal.Negative()
+
+	expectedIntDigits[5] = "2"
+	expectedFracDigits[5] = ""
+	expectedNumStr[5] = "2"
+	numberSigns[5] = NumSignVal.Negative()
+
+	expectedIntDigits[6] = "2"
+	expectedFracDigits[6] = "1236"
+	expectedNumStr[6] = "3"
+	numberSigns[6] = NumSignVal.Negative()
+
+	expectedIntDigits[7] = "7645"
+	expectedFracDigits[7] = "1234"
+	expectedNumStr[7] = "7646"
+	numberSigns[7] = NumSignVal.Negative()
+
+	expectedIntDigits[8] = "123"
+	expectedFracDigits[8] = "1226"
+	expectedNumStr[8] = "124"
+	numberSigns[8] = NumSignVal.Negative()
+
+	expectedIntDigits[9] = "7645"
+	expectedFracDigits[9] = "1237"
+	expectedNumStr[9] = "7645"
+	numberSigns[9] = NumSignVal.Positive()
+
+	expectedIntDigits[10] = "7999"
+	expectedFracDigits[10] = "1224"
+	expectedNumStr[10] = "7999"
+	numberSigns[10] = NumSignVal.Positive()
+
+	expectedIntDigits[11] = "0"
+	expectedFracDigits[11] = "1233"
+	expectedNumStr[11] = "0"
+	numberSigns[11] = NumSignVal.Positive()
+
+	expectedIntDigits[12] = "7999"
+	expectedFracDigits[12] = ""
+	expectedNumStr[12] = "7999"
+	numberSigns[12] = NumSignVal.Negative()
+
+	expectedIntDigits[13] = "7999"
+	expectedFracDigits[13] = "1234"
+	expectedNumStr[13] = "8000"
+	numberSigns[13] = NumSignVal.Negative()
+
+	expectedIntDigits[14] = "999"
+	expectedFracDigits[14] = "123"
+	expectedNumStr[14] = "999"
+	numberSigns[14] = NumSignVal.Positive()
+
+	expectedIntDigits[15] = "999"
+	expectedFracDigits[15] = ""
+	expectedNumStr[15] = "999"
+	numberSigns[15] = NumSignVal.Negative()
+
+	expectedIntDigits[16] = "999"
+	expectedFracDigits[16] = "1234567"
+	expectedNumStr[16] = "1000"
+	numberSigns[16] = NumSignVal.Negative()
+
+	var actualStr string
+
+	var intRunes, fracRunes RuneArrayDto
+	var err error
+	nStrMathRoundAtom := numStrMathRoundingAtom{}
+
+	for i := 0; i < arrayLen; i++ {
+
+		intRunes,
+			err = RuneArrayDto{}.NewRunes(
+			[]rune(expectedIntDigits[i]),
+			CharSearchType.LinearTargetStartingIndex(),
+			ePrefix.XCpy(
+				fmt.Sprintf(
+					"intRunes[%v]=%v",
+					i,
+					expectedIntDigits[i])))
+
+		if err != nil {
+			t.Errorf("%v\n",
+				err.Error())
+			return
+		}
+
+		fracRunes = RuneArrayDto{}
+
+		if len(expectedFracDigits[i]) > 0 {
+
+			err = fracRunes.SetString(
+				expectedFracDigits[i],
+				ePrefix.XCpy(
+					fmt.Sprintf(
+						"fracRunes[%v]=%v",
+						i,
+						expectedFracDigits[i])))
+
+			if err != nil {
+				t.Errorf("%v\n",
+					err.Error())
+				return
+			}
+		}
+
+		err = fracRunes.SetCharacterSearchType(
+			CharSearchType.LinearTargetStartingIndex(),
+			ePrefix.XCpy(
+				fmt.Sprintf(
+					"fracRunes[%v]=%v",
+					i,
+					expectedFracDigits[i])))
+
+		if err != nil {
+			t.Errorf("%v\n",
+				err.Error())
+			return
+		}
+
+		err = nStrMathRoundAtom.floor(
+			&intRunes,
+			&fracRunes,
+			numberSigns[i],
+			ePrefix.XCpy(
+				fmt.Sprintf(
+					"cycle %v",
+					i)))
+
+		if err != nil {
+			t.Errorf("%v\n",
+				err.Error())
+			return
+		}
+
+		actualStr = intRunes.GetCharacterString()
+
+		if fracRunes.GetRuneArrayLength() > 0 {
+
+			actualStr += "." +
+				fracRunes.GetCharacterString()
+
+		}
+
+		if expectedNumStr[i] != actualStr {
+
+			t.Errorf("%v - Test #1\n"+
+				"Error: nStrMathRoundAtom.floor()\n"+
+				"Cycle Number    = '%v'\n"+
+				"Integer Base    = '%v'\n"+
+				"Fractional Base = '%v'\n"+
+				"Number Sign     = '%v'\n"+
+				"Expected String = '%v'\n"+
+				"  Actual String = '%v'\n",
+				ePrefix.String(),
+				i,
+				expectedIntDigits[i],
+				expectedFracDigits[i],
+				numberSigns[i].String(),
+				expectedNumStr[i],
+				actualStr)
+
+			return
+		}
+
+	}
+
+	return
+}
+
+func TestNumStrMathRoundingFloor_000200(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestNumStrMathRoundingFloor_000200()",
+		"")
+
+	// Test # 1
+	expectedIntDigits := "1"
+
+	expectedFracDigits := "23456789"
+
+	roundToFractionalDigits := 3
+
+	numberSign := NumSignVal.Negative()
+
+	intRunes,
+		err := RuneArrayDto{}.NewRunes(
+		[]rune(expectedIntDigits),
+		CharSearchType.LinearTargetStartingIndex(),
+		ePrefix.XCpy(
+			"intRunes"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	var fracRunes RuneArrayDto
+
+	fracRunes,
+		err = RuneArrayDto{}.NewRunes(
+		[]rune(expectedFracDigits),
+		CharSearchType.LinearTargetStartingIndex(),
+		ePrefix.XCpy(
+			"fracRunes"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	nStrMathRoundAtom := numStrMathRoundingAtom{}
+
+	err = nStrMathRoundAtom.floor(
+		nil,
+		&fracRunes,
+		numberSign,
+		ePrefix.XCpy(
+			fmt.Sprintf("roundToFracDigits=%v",
+				roundToFractionalDigits)))
+
+	if err == nil {
+
+		t.Errorf("%v\n"+
+			"Error: nStrMathRoundAtom.floor() Error #1\n"+
+			"Expected an error return because 'integerDigits' is nil\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+
+	}
+
+	err = nStrMathRoundAtom.floor(
+		&intRunes,
+		nil,
+		numberSign,
+		ePrefix.XCpy(
+			"Error Test #2"))
+
+	if err == nil {
+
+		t.Errorf("%v\n"+
+			"Error: nStrMathRoundAtom.floor() Error #2\n"+
+			"Expected an error return because 'fractionalDigits' is nil\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+
+	}
+
+	err = nStrMathRoundAtom.floor(
+		&intRunes,
+		&fracRunes,
+		NumSignVal.None(),
+		ePrefix.XCpy(
+			"Error Test #3"))
+
+	if err == nil {
+
+		t.Errorf("%v\n"+
+			"Error: nStrMathRoundAtom.floor() Error #3\n"+
 			"Expected an error return because 'Number Sign' is 'None'.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.String())

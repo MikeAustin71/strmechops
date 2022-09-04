@@ -86,5 +86,12 @@ func (nStrMathRoundQuark *numStrMathRoundingQuark) preRoundingValidation(
 
 	}
 
+	if integerDigits.GetRuneArrayLength() == 0 {
+
+		integerDigits.CharsArray = make([]rune, 1)
+
+		integerDigits.CharsArray[0] = '0'
+	}
+
 	return err
 }

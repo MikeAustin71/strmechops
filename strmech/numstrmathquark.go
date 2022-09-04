@@ -211,7 +211,7 @@ func (nStrMathQuark *numStrMathQuark) extendRunes(
 
 // randomInt
 //
-// Returns a random integer number created with the psuedo
+// Returns a random integer number created with the pseudo
 // random number generator provided by the math/rand
 // package
 //

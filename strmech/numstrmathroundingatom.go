@@ -10,6 +10,171 @@ type numStrMathRoundingAtom struct {
 	lock *sync.Mutex
 }
 
+// floor
+//
+// Yields the nearest integer down. Floor does not apply
+// any special treatment to 0.5.
+//
+//	Floor Function: The greatest integer that is less than or
+//	                equal to x
+//
+// Source:
+//
+//	https://www.mathsisfun.com/sets/function-floor-ceiling.html
+//
+// In mathematics and computer science, the floor function is the
+// function that takes as input a real number x, and gives as
+// output the greatest integer less than or equal to x, denoted
+// floor(x) or ⌊x⌋.
+//
+//	Source: https://en.wikipedia.org/wiki/Floor_and_ceiling_functions
+//
+//		Examples of Floor
+//
+//		  Number     Floor
+//		   2           2
+//		   2.4         2
+//		   2.9         2
+//		  -2.5        -3
+//		  -2.7        -3
+//		  -2          -2
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	integerDigits				*RuneArrayDto
+//
+//		A pointer to an instance of RuneArrayDto. This
+//		instance contains the rune array of integer numeric
+//		digits used to construct the base integer numeric
+//		value to which the rounding algorithm is applied.
+//
+//		These integer numeric digits comprise the integer
+//		portion of an integer or floating point numeric
+//		value.
+//
+//	fractionalDigits			*RuneArrayDto
+//
+//		A pointer to an instance of RuneArrayDto. This
+//		instance contains the rune array of fractional
+//		numeric digits used to construct the base floating
+//		point numeric value to which the rounding algorithm
+//		is applied.
+//
+//		These fractional numeric digits comprise the fractional
+//		portion of a floating point numeric value.
+//
+//	numberSign					NumericSignValueType
+//
+//		Type NumericSignValueType is an enumeration of possible
+//		number sign values listed as follows:
+//			NumSignVal.None()     = -2 - Invalid Value
+//			NumSignVal.Negative() = -1 - Valid Value
+//			NumSignVal.Zero()     =  0 - Valid Value
+//			NumSignVal.Positive() =  1 - Valid Value
+//
+//		This parameter designates the number sign of the
+//		numeric value represented by the integer and fractional
+//		digits contained in input parameters, 'integerDigits'
+//		and 'fractionalDigits'.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string which
+//		is included in all returned error messages. Usually,
+//		it contains the name of the calling method or methods
+//		listed as a function chain.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref' software
+//		package, "github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, this returned
+//		error Type is set equal to 'nil'. If errors are
+//		encountered during	processing, the returned error
+//		Type will encapsulate an error	message.
+//
+//		If an error message is returned, the text value for
+//		input parameter 'errPrefDto' (error prefix) will be
+//		prefixed or attached at the beginning of the error
+//		message.
+func (nStrMathRoundAtom *numStrMathRoundingAtom) floor(
+	integerDigits *RuneArrayDto,
+	fractionalDigits *RuneArrayDto,
+	numberSign NumericSignValueType,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if nStrMathRoundAtom.lock == nil {
+		nStrMathRoundAtom.lock = new(sync.Mutex)
+	}
+
+	nStrMathRoundAtom.lock.Lock()
+
+	defer nStrMathRoundAtom.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"nStrMathRoundAtom."+
+			"roundHalfAwayFromZero()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	err = new(numStrMathRoundingQuark).preRoundingValidation(
+		integerDigits,
+		fractionalDigits,
+		0,
+		numberSign,
+		ePrefix)
+
+	if err != nil {
+		return err
+	}
+
+	lenFracDigits := fractionalDigits.GetRuneArrayLength()
+
+	if lenFracDigits == 0 {
+		return err
+	}
+
+	fractionalDigits.CharsArray = nil
+
+	if numberSign == NumSignVal.Zero() ||
+		numberSign == NumSignVal.Positive() {
+
+		return err
+
+	}
+
+	// MUST BE
+	// numberSign == NumSignVal.Negative()
+
+	_,
+		err = new(numStrMathAtom).addOneToRunes(
+		integerDigits,
+		integerDigits,
+		true,
+		ePrefix.XCpy(
+			"integerDigits<- +1"))
+
+	return err
+}
+
 // roundHalfUpWithNegNums
 //
 // Performs a rounding operation on the integer and fractional
@@ -89,6 +254,11 @@ type numStrMathRoundingAtom struct {
 //			NumSignVal.Negative() = -1 - Valid Value
 //			NumSignVal.Zero()     =  0 - Valid Value
 //			NumSignVal.Positive() =  1 - Valid Value
+//
+//		This parameter designates the number sign of the
+//		numeric value represented by the integer and fractional
+//		digits contained in input parameters, 'integerDigits'
+//		and 'fractionalDigits'.
 //
 //	errPrefDto					*ePref.ErrPrefixDto
 //
@@ -317,6 +487,11 @@ func (nStrMathRoundAtom *numStrMathRoundingAtom) roundHalfUpWithNegNums(
 //			NumSignVal.Zero()     =  0 - Valid Value
 //			NumSignVal.Positive() =  1 - Valid Value
 //
+//		This parameter designates the number sign of the
+//		numeric value represented by the integer and fractional
+//		digits contained in input parameters, 'integerDigits'
+//		and 'fractionalDigits'.
+//
 //	errPrefDto					*ePref.ErrPrefixDto
 //
 //		This object encapsulates an error prefix string which
@@ -540,6 +715,11 @@ func (nStrMathRoundAtom *numStrMathRoundingAtom) roundHalfDownWithNegNums(
 //			NumSignVal.Zero()     =  0 - Valid Value
 //			NumSignVal.Positive() =  1 - Valid Value
 //
+//		This parameter designates the number sign of the
+//		numeric value represented by the integer and fractional
+//		digits contained in input parameters, 'integerDigits'
+//		and 'fractionalDigits'.
+//
 //	errPrefDto					*ePref.ErrPrefixDto
 //
 //		This object encapsulates an error prefix string which
@@ -742,6 +922,11 @@ func (nStrMathRoundAtom *numStrMathRoundingAtom) roundHalfAwayFromZero(
 //			NumSignVal.Negative() = -1 - Valid Value
 //			NumSignVal.Zero()     =  0 - Valid Value
 //			NumSignVal.Positive() =  1 - Valid Value
+//
+//		This parameter designates the number sign of the
+//		numeric value represented by the integer and fractional
+//		digits contained in input parameters, 'integerDigits'
+//		and 'fractionalDigits'.
 //
 //	errPrefDto					*ePref.ErrPrefixDto
 //
@@ -955,6 +1140,11 @@ func (nStrMathRoundAtom *numStrMathRoundingAtom) roundHalfTowardsZero(
 //			NumSignVal.Negative() = -1 - Valid Value
 //			NumSignVal.Zero()     =  0 - Valid Value
 //			NumSignVal.Positive() =  1 - Valid Value
+//
+//		This parameter designates the number sign of the
+//		numeric value represented by the integer and fractional
+//		digits contained in input parameters, 'integerDigits'
+//		and 'fractionalDigits'.
 //
 //	errPrefDto					*ePref.ErrPrefixDto
 //
@@ -1223,6 +1413,11 @@ func (nStrMathRoundAtom *numStrMathRoundingAtom) roundHalfToEven(
 //			NumSignVal.Zero()     =  0 - Valid Value
 //			NumSignVal.Positive() =  1 - Valid Value
 //
+//		This parameter designates the number sign of the
+//		numeric value represented by the integer and fractional
+//		digits contained in input parameters, 'integerDigits'
+//		and 'fractionalDigits'.
+//
 //	errPrefDto					*ePref.ErrPrefixDto
 //
 //		This object encapsulates an error prefix string which
@@ -1466,6 +1661,11 @@ func (nStrMathRoundAtom *numStrMathRoundingAtom) roundHalfToOdd(
 //			NumSignVal.Negative() = -1 - Valid Value
 //			NumSignVal.Zero()     =  0 - Valid Value
 //			NumSignVal.Positive() =  1 - Valid Value
+//
+//		This parameter designates the number sign of the
+//		numeric value represented by the integer and fractional
+//		digits contained in input parameters, 'integerDigits'
+//		and 'fractionalDigits'.
 //
 //	errPrefDto					*ePref.ErrPrefixDto
 //
