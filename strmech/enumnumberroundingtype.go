@@ -736,7 +736,7 @@ func (numRoundingType NumberRoundingType) Ceiling() NumberRoundingType {
 
 // Truncate
 //
-// Apply NO Rounding whatsoever. The Round From Digit is
+// Applies NO Rounding whatsoever. The Round From Digit is
 // dropped or deleted. The Round To Digit is NEVER changed.
 //
 //	Examples of Truncate
