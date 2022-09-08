@@ -9,7 +9,7 @@ import (
 // NumStrRoundingSpec
 //
 // This data transfer object contains all the parameters
-// required to configure a rounding algoritm for a
+// required to configure a rounding algorithm for a
 // floating point number string.
 type NumStrRoundingSpec struct {
 	roundingType NumberRoundingType
@@ -30,6 +30,201 @@ type NumStrRoundingSpec struct {
 	//	NumRoundType.Floor()
 	//	NumRoundType.Ceiling()
 	//	NumRoundType.Truncate()
+	//
+	// NoRounding					1
+	//
+	//	Signals that no rounding operation will be performed
+	//	on fractional digits contained in a number string.
+	//	The fractional digits will therefore remain unchanged.
+	//
+	// HalfUpWithNegNums			2
+	//
+	//	Half Round Up Including Negative Numbers. This method
+	//	is intuitive but may produce unexpected results when
+	//	applied to negative numbers.
+	//
+	//	'HalfUpWithNegNums' rounds .5 up.
+	//
+	//		Examples of 'HalfUpWithNegNums'
+	//		7.6 rounds up to 8
+	//		7.5 rounds up to 8
+	//		7.4 rounds down to 7
+	//		-7.4 rounds up to -7
+	//		-7.5 rounds up to -7
+	//		-7.6 rounds down to -8
+	//
+	// HalfDownWithNegNums          3
+	//
+	//	Half Round Down Including Negative Numbers. This method
+	//	is also considered intuitive but may produce unexpected
+	//	results when applied to negative numbers.
+	//
+	//	'HalfDownWithNegNums' rounds .5 down.
+	//
+	//		Examples of HalfDownWithNegNums
+	//
+	//		7.6 rounds up to 8
+	//		7.5 rounds down to 7
+	//		7.4 rounds down to 7
+	//		-7.4 rounds up to -7
+	//		-7.5 rounds down to -8
+	//		-7.6 rounds down to -8
+	//
+	// HalfAwayFromZero				4
+	//
+	//	Round Half Away From Zero. This rounding method is treated
+	//	as the default and this value is returned by method:
+	//	NumberRoundingType(0).XGetDefaultRoundingType()
+	//
+	//	The 'HalfAwayFromZero' method rounds .5 further away from zero.
+	//	It provides clear and consistent behavior when dealing with
+	//	negative numbers.
+	//
+	//		Examples of HalfAwayFromZero
+	//
+	//		7.6 rounds away to 8
+	//		7.5 rounds away to 8
+	//		7.4 rounds to 7
+	//		-7.4 rounds to -7
+	//		-7.5 rounds away to -8
+	//		-7.6 rounds away to -8
+	//
+	// HalfTowardsZero				5
+	//
+	//	Round Half Towards Zero. 'HalfTowardsZero' rounds 0.5
+	//	closer to zero. It provides clear and consistent behavior
+	//	when dealing with negative numbers.
+	//
+	//		Examples of HalfTowardsZero
+	//
+	//		7.6 rounds away to 8
+	//		7.5 rounds to 7
+	//		7.4 rounds to 7
+	//		-7.4 rounds to -7
+	//		-7.5 rounds to -7
+	//		-7.6 rounds away to -8
+	//
+	// HalfToEven					6
+	//
+	//	Round Half To Even Numbers. 'HalfToEven' is also called
+	//	Banker's Rounding. This method rounds 0.5 to the nearest
+	//	even digit.
+	//
+	//		Examples of HalfToEven
+	//
+	//		7.5 rounds up to 8 (because 8 is an even number)
+	//		but 6.5 rounds down to 6 (because 6 is an even number)
+	//
+	//		HalfToEven only applies to 0.5. Other numbers (not ending
+	//		in 0.5) round to nearest as usual, so:
+	//
+	//		7.6 rounds up to 8
+	//		7.5 rounds up to 8 (because 8 is an even number)
+	//		7.4 rounds down to 7
+	//		6.6 rounds up to 7
+	//		6.5 rounds down to 6 (because 6 is an even number)
+	//		6.4 rounds down to 6
+	//
+	// HalfToOdd					7
+	//
+	//	Round Half to Odd Numbers. Similar to 'HalfToEven', but
+	//	in this case 'HalfToOdd' rounds 0.5 towards odd numbers.
+	//
+	//		Examples of HalfToOdd
+	//
+	//		HalfToOdd only applies to 0.5. Other numbers (not ending
+	//		in 0.5) round to nearest as usual.
+	//
+	//		7.5 rounds down to 7 (because 7 is an odd number)
+	//
+	//		6.5 rounds up to 7 (because 7 is an odd number)
+	//
+	//		7.6 rounds up to 8
+	//		7.5 rounds down to 7 (because 7 is an odd number)
+	//		7.4 rounds down to 7
+	//		6.6 rounds up to 7
+	//		6.5 rounds up to 7 (because 7 is an odd number)
+	//		6.4 rounds down to 6
+	//
+	// Randomly						8
+	//
+	//	Round Half Randomly. Uses a Random Number Generator to choose
+	//	between rounding 0.5 up or down.
+	//
+	//	All numbers other than 0.5 round to the nearest as usual.
+	//
+	// Floor						9
+	//
+	//	Yields the nearest integer down. Floor does not apply any
+	//	special treatment to 0.5.
+	//
+	//	Floor Function: The greatest integer that is less than or
+	//	equal to x
+	//	Source: https://www.mathsisfun.com/sets/function-floor-ceiling.html
+	//
+	//	In mathematics and computer science, the floor function is
+	//	the function that takes as input a real number x, and gives
+	//	as output the greatest integer less than or equal to x,
+	//	denoted floor(x) or ⌊x⌋.
+	//	Source: https://en.wikipedia.org/wiki/Floor_and_ceiling_functions
+	//
+	//		Examples of Floor
+	//
+	//		Number     Floor
+	//		2           2
+	//		2.4         2
+	//		2.9         2
+	//		-2.5        -3
+	//		-2.7        -3
+	//		-2          -2
+	//
+	// Ceiling						10
+	//
+	//	Yields the nearest integer up. Ceiling does not apply any
+	//	special treatment to 0.5.
+	//
+	//	Ceiling Function: The least integer that is greater than or
+	//	equal to x.
+	//	Source: https://www.mathsisfun.com/sets/function-floor-ceiling.html
+	//
+	//	The ceiling function maps x to the least integer greater than
+	//	or equal to x, denoted ceil(x) or ⌈x⌉.[1]
+	//	Source: https://en.wikipedia.org/wiki/Floor_and_ceiling_functions
+	//
+	//		Examples of Ceiling
+	//
+	//		Number    Ceiling
+	//		2           2
+	//		2.4         3
+	//		2.9         3
+	//		-2.5        -2
+	//		-2.7        -2
+	//		-2          -2
+	//
+	// Truncate						11
+	//
+	//	Apply NO Rounding whatsoever. The Round From Digit is dropped
+	//	or deleted. The Round To Digit is NEVER changed.
+	//
+	//		Examples of Truncate
+	//
+	//		Example-1
+	//		Number: 23.14567
+	//		Objective: Round to two decimal places to
+	//		the right of the decimal point.
+	//		Rounding Method: Truncate
+	//		Round To Digit:   4
+	//		Round From Digit: 5
+	//		Rounded Number:   23.14 - The Round From Digit is dropped.
+	//
+	//		Example-2
+	//		Number: -23.14567
+	//		Objective: Round to two decimal places to
+	//		the right of the decimal point.
+	//		Rounding Method: Truncate
+	//		Round To Digit:   4
+	//		Round From Digit: 5
+	//		Rounded Number:  -23.14 - The Round From Digit is dropped.
 
 	roundToFractionalDigits int
 	// When set to a positive integer value, this
