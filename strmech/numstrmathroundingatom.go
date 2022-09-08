@@ -1894,7 +1894,7 @@ func (nStrMathRoundAtom *numStrMathRoundingAtom) roundRandomly(
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
 		"nStrMathRoundAtom."+
-			"roundHalfToOdd()",
+			"roundRandomly()",
 		"")
 
 	if err != nil {

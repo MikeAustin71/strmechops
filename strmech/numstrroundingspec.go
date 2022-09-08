@@ -6,6 +6,11 @@ import (
 	"sync"
 )
 
+// NumStrRoundingSpec
+//
+// This data transfer object contains all the parameters
+// required to configure a rounding algoritm for a
+// floating point number string.
 type NumStrRoundingSpec struct {
 	roundingType NumberRoundingType
 	// This enumeration parameter is used to specify the type

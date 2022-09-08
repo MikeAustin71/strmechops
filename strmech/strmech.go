@@ -4195,46 +4195,6 @@ func (sMech *StrMech) MakeSingleCharString(
 		ePrefix)
 }
 
-// NumberStringParser - Parses raw number strings.
-//
-// TODO - Fix NumberStringParser
-func (sMech *StrMech) NumberStringParser(
-	numStr string,
-	numSignSymbols NumberSignSymbolCollection,
-	decimalSeparator string,
-	errorPrefix interface{}) (NumberBuilder, error) {
-
-	if sMech.stringDataMutex == nil {
-		sMech.stringDataMutex = new(sync.Mutex)
-	}
-
-	sMech.stringDataMutex.Lock()
-
-	defer sMech.stringDataMutex.Unlock()
-
-	numStr = ""
-	numSignSymbols.EmptyCollection()
-
-	//var ePrefix *ePref.ErrPrefixDto
-	var err error
-
-	_,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
-		"StrMech.ConvertPrintableChars()",
-		"")
-
-	if err != nil {
-		return NumberBuilder{}, err
-	}
-
-	newNumBuilder := NumberBuilder{}
-	newNumBuilder.decimalSeparator =
-		[]rune(decimalSeparator)
-
-	return newNumBuilder, err
-}
-
 // Read - Implements io.Reader interface. This method reads up to
 // len(p) bytes into byte array 'p'.
 //
