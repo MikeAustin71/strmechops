@@ -12,7 +12,7 @@ type numberStrKernelMolecule struct {
 	lock *sync.Mutex
 }
 
-// convertSignedIntToKernel
+// convertIntToKernel
 //
 // Receives an empty interface which is assumed to be an
 // integer numeric value configured as one of the following
@@ -79,7 +79,7 @@ type numberStrKernelMolecule struct {
 //		If 'numberSign' is set to an invalid value or if
 //		'numberSign' is set to NumSignVal.Zero() for a
 //		non-zero numeric value, an error will be returned.
-func (numStrKernelMolecule *numberStrKernelMolecule) convertSignedIntToKernel(
+func (numStrKernelMolecule *numberStrKernelMolecule) convertIntToKernel(
 	numStrKernel *NumberStrKernel,
 	numberSign NumericSignValueType,
 	intNumericValue interface{},
@@ -100,7 +100,7 @@ func (numStrKernelMolecule *numberStrKernelMolecule) convertSignedIntToKernel(
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
 		"numberStrKernelNanobot."+
-			"convertSignedIntToKernel()",
+			"convertIntToKernel()",
 		"")
 
 	if err != nil {

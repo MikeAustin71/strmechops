@@ -914,13 +914,19 @@ func (numStrKernelNanobot *numberStrKernelNanobot) setWithNumber(
 
 	case int8, int16, int32, int, int64:
 
-		return nStrKernelMolecule.convertSignedIntToKernel(
+		return nStrKernelMolecule.convertIntToKernel(
 			numStrKernel,
 			numberSign,
 			numericValue,
 			ePrefix)
 
 	case uint8, uint16, uint, uint32, uint64:
+
+		return nStrKernelMolecule.convertIntToKernel(
+			numStrKernel,
+			numberSign,
+			numericValue,
+			ePrefix)
 
 	case *big.Int:
 
