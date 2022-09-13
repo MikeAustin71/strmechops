@@ -421,10 +421,8 @@ func (numStrKernel *NumberStrKernel) CopyIn(
 		return err
 	}
 
-	numStrKernelNanobot := numberStrKernelNanobot{}
-
 	err =
-		numStrKernelNanobot.copyIn(
+		new(numberStrKernelNanobot).copyIn(
 			numStrKernel,
 			incomingNumStrKernel,
 			ePrefix.XCpy(
@@ -534,7 +532,7 @@ func (numStrKernel *NumberStrKernel) CopyOut(
 	}
 
 	deepCopyNumStrKernel,
-		err = numberStrKernelNanobot{}.ptr().
+		err = new(numberStrKernelNanobot).
 		copyOut(
 			numStrKernel,
 			ePrefix.XCpy(
@@ -573,7 +571,7 @@ func (numStrKernel *NumberStrKernel) Empty() {
 
 	numStrKernel.lock.Lock()
 
-	numberStrKernelElectron{}.ptr().empty(
+	new(numberStrKernelElectron).empty(
 		numStrKernel)
 
 	numStrKernel.lock.Unlock()
@@ -1738,6 +1736,137 @@ func (numStrKernel *NumberStrKernel) IsNonZeroValue() bool {
 	return false
 }
 
+// NewFromNumericValue
+//
+// Creates a new instance of NumberStrKernel based on any
+// one of several types of numeric values.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	signedIntValue				interface{}
+//
+//		Numeric values passed by means of this empty
+//		interface must match one of the following
+//		types:
+//			int8
+//			int16
+//			int32
+//			int	(equivalent to int32)
+//			int64
+//			uint8
+//			uint16
+//			uint32
+//			uint (equivalent to uint32)
+//			uint64
+//			float32
+//			float65
+//
+//	 errorPrefix                interface{}
+//
+//		This object encapsulates error prefix text which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods
+//		listed as a method or function chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1. nil - A nil value is valid and generates an empty
+//		   collection of error prefix and error context
+//		   information.
+//
+//		2. string - A string containing error prefix
+//			information.
+//
+//		3. []string A one-dimensional slice of strings
+//			containing error prefix information.
+//
+//		4. [][2]string A two-dimensional slice of strings
+//		   containing error prefix and error context
+//		   information.
+//
+//		5. ErrPrefixDto - An instance of ErrPrefixDto.
+//			Information from this object will be copied for use
+//			in error and informational messages.
+//
+//		6. *ErrPrefixDto - A pointer to an instance of
+//			ErrPrefixDto. Information from this object will be
+//			copied for use in error and informational messages.
+//
+//		7. IBasicErrorPrefix - An interface to a method
+//			generating a two-dimensional slice of strings
+//			containing error prefix and error context
+//			information.
+//
+//		If parameter 'errorPrefix' is NOT convertible to one
+//		of the valid types listed above, it will be
+//		considered invalid and trigger the return of an
+//		error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are included
+//		in the 'errpref' software package,
+//		"github.com/MikeAustin71/errpref".
+//
+// -----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the returned error
+//		Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the returned
+//		error Type will encapsulate an error message. This
+//		returned error message will incorporate the method chain
+//		and text passed by input parameter, 'errorPrefix'. The
+//		'errorPrefix' text will be attached to the beginning of
+//		the error message.
+func (numStrKernel *NumberStrKernel) NewFromNumericValue(
+	numericValue interface{},
+	numberSign NumericSignValueType,
+	errorPrefix interface{}) (
+	NumberStrKernel,
+	error) {
+
+	if numStrKernel.lock == nil {
+		numStrKernel.lock = new(sync.Mutex)
+	}
+
+	numStrKernel.lock.Lock()
+
+	defer numStrKernel.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	newNumStrKernel := NumberStrKernel{}
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumberStrKernel."+
+			"NewFromSignedInt()",
+		"")
+
+	if err != nil {
+		return newNumStrKernel, err
+	}
+
+	err = new(numberStrKernelNanobot).setWithNumber(
+		&newNumStrKernel,
+		numericValue,
+		numberSign,
+		ePrefix)
+
+	return newNumStrKernel, err
+}
+
 // RationalizeFractionalIntegerDigits - If fractional digits are
 // present in this instance of NumberStrKernel, this method will
 // ensure that integer digits are also present.
@@ -1767,8 +1896,9 @@ func (numStrKernel *NumberStrKernel) RationalizeFractionalIntegerDigits() {
 	if numStrKernel.integerDigits.GetRuneArrayLength() == 0 {
 
 		numStrKernel.integerDigits.CharsArray =
-			append(numStrKernel.integerDigits.CharsArray,
-				'0')
+			make([]rune, 1)
+
+		numStrKernel.integerDigits.CharsArray[0] = '0'
 	}
 
 	return

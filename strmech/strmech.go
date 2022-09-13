@@ -1657,7 +1657,8 @@ func (sMech *StrMech) ExtractNumberRunes(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"StrMech.ExtractNumberRunes()",
+		"StrMech."+
+			"ExtractNumberRunes()",
 		"")
 
 	if err != nil {

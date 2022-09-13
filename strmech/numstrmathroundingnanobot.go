@@ -14,7 +14,7 @@ type numStrMathRoundingNanobot struct {
 //
 // Receives an instance of NumberStrKernel and a rounding
 // specification (NumStrRoundingSpec). The method the proceeds
-// to apply the selected rounding algorithim to the numeric
+// to apply the selected rounding algorithm to the numeric
 // value contained in the NumberStrKernel.
 //
 // The Number String Rounding Specification allows users to
@@ -33,7 +33,7 @@ type numStrMathRoundingNanobot struct {
 //	numStrRoundingSpec			*NumStrRoundingSpec
 //
 //	This data transfer object contains all the parameters
-//	required to configure a rounding algoritm for a
+//	required to configure a rounding algorithm for a
 //	floating point number string.
 //
 //	errPrefDto					*ePref.ErrPrefixDto

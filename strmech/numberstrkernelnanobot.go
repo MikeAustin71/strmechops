@@ -3,6 +3,7 @@ package strmech
 import (
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
+	"math/big"
 	"strings"
 	"sync"
 	"time"
@@ -147,9 +148,7 @@ func (numStrKernelNanobot *numberStrKernelNanobot) copyIn(
 		return err
 	}
 
-	numStrKernelElectron := numberStrKernelElectron{}
-
-	numStrKernelElectron.empty(
+	new(numberStrKernelElectron).empty(
 		targetNumStrKernel)
 
 	err = targetNumStrKernel.integerDigits.CopyIn(
@@ -256,7 +255,7 @@ func (numStrKernelNanobot *numberStrKernelNanobot) copyOut(
 
 	var ePrefix *ePref.ErrPrefixDto
 
-	numberStrKernelElectron{}.ptr().
+	new(numberStrKernelElectron).
 		empty(&deepCopyNumStrKernel)
 
 	ePrefix,
@@ -771,9 +770,111 @@ func (numStrKernelNanobot *numberStrKernelNanobot) getParameterTextListing(
 	return err
 }
 
-// ptr - Returns a pointer to a new instance of
-// numberStrKernelNanobot.
-func (numStrKernelNanobot numberStrKernelNanobot) ptr() *numberStrKernelNanobot {
+// setWithNumber
+//
+// Sets the internal member variable values for an instance
+// of NumberStrKernel passed as an input parameter.
+//
+// This method assumes that the numeric value passed as
+// an empty interface object is one of the following types:
+//
+//	int8
+//	int16
+//	int32
+//	int	(equivalent to int32)
+//	int64
+//	uint8
+//	uint16
+//	uint32
+//	uint (equivalent to uint32)
+//	uint64
+//	*big.Int
+//	float32
+//	float64
+//	*big.Float
+//
+// If the empty interface object is not one of the types
+// listed above, an error will be returned.
+//
+// # IMPORTANT
+//
+// -----------------------------------------------------------------
+//
+// Be advised that the data fields in 'numStrKernel' will be
+// deleted and set to new values.
+//
+// -----------------------------------------------------------------
+//
+// Input Parameters
+//
+//	numStrKernel				*NumberStrKernel
+//
+//		A pointer to an instance of NumberStrKernel. The data
+//		values for all internal member variables contained in
+//		this instance will be deleted and set to new values.
+//
+//	numericValue				interface{}
+//
+//		A numeric value passed by means of an empty interface.
+//		This numeric value will be used to populate the instance
+//		of NumberStrKernel passed by parameter, 'numStrKernel'.
+//
+//		The object passed by this empty interface must be one of
+//		the following types:
+//
+//			int8
+//			int16
+//			int32
+//			int	(equivalent to int32)
+//			int64
+//			uint8
+//			uint16
+//			uint32
+//			uint (equivalent to uint32)
+//			uint64
+//			*big.Int
+//			float32
+//			float64
+//			*big.Float
+//
+//	If the object passed by this parameter is not one of the types
+//	listed above, an error will be returned.
+//
+//	numberSign					NumericSignValueType
+//
+//		The Number Sign is specified by means of a
+//		NumericSignValueType enumeration value.
+//
+//		Possible values are listed as follows:
+//
+//			NumSignVal.None()     = -2 - Infer From Number
+//			NumSignVal.Negative() = -1 - Valid Value
+//			NumSignVal.Zero()     =  0 - Valid Value
+//			NumSignVal.Positive() =  1 - Valid Value
+//
+//		If 'numberSign' is set to 'NumSignVal.None()', the
+//		number sign will be inferred from the numeric value
+//		and generated as a default. Unsigned integer are
+//		assigned a positive number sign, signed integers and
+//		floating point values are assigned according to their
+//		inherent numbers signs.
+//
+//		A valid 'numberSign' setting will override the default
+//		number sign associated with 'numericValue'.
+//
+//		If 'numberSign' is set to an invalid value or if
+//		'numberSign' is set to NumSignVal.Zero() for a
+//		non-zero numeric value, an error will be returned.
+//
+//		If parameter 'numericValue' includes a signed numeric
+//		value, parameter 'numberSign' will override that
+//		designation.
+func (numStrKernelNanobot *numberStrKernelNanobot) setWithNumber(
+	numStrKernel *NumberStrKernel,
+	numericValue interface{},
+	numberSign NumericSignValueType,
+	errPrefDto *ePref.ErrPrefixDto) (
+	err error) {
 
 	if numStrKernelNanobot.lock == nil {
 		numStrKernelNanobot.lock = new(sync.Mutex)
@@ -783,7 +884,61 @@ func (numStrKernelNanobot numberStrKernelNanobot) ptr() *numberStrKernelNanobot 
 
 	defer numStrKernelNanobot.lock.Unlock()
 
-	return &numberStrKernelNanobot{
-		lock: new(sync.Mutex),
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"numberStrKernelNanobot."+
+			"setWithNumber()",
+		"")
+
+	if err != nil {
+
+		return err
+
 	}
+
+	if numStrKernel == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'numStrKernel' is a nil pointer!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	var nStrKernelMolecule numberStrKernelMolecule
+
+	switch numericValue.(type) {
+
+	case int8, int16, int32, int, int64:
+
+		return nStrKernelMolecule.convertSignedIntToKernel(
+			numStrKernel,
+			numberSign,
+			numericValue,
+			ePrefix)
+
+	case uint8, uint16, uint, uint32, uint64:
+
+	case *big.Int:
+
+	case float32, float64:
+
+	case *big.Float:
+
+	default:
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'numericValue' is an invalid type!\n"+
+			"'numericValue' is unsupported type '%v'\n",
+			ePrefix.String(),
+			fmt.Sprintf("%T", numericValue))
+
+		return err
+
+	}
+
+	return err
 }

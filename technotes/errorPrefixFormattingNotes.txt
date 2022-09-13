@@ -120,3 +120,26 @@
 - Subsidiary Error with Tabs
 
 
+- Number Sign Comment Notes:
+//
+//	numberSign					NumericSignValueType
+//
+//		The Number Sign is specified by means of a
+//		NumericSignValueType enumeration value.
+//
+//		Possible values are listed as follows:
+//
+//			NumSignVal.None()     = -2 - Invalid Value
+//			NumSignVal.Negative() = -1 - Valid Value
+//			NumSignVal.Zero()     =  0 - Valid Value
+//			NumSignVal.Positive() =  1 - Valid Value
+//
+//		If 'numberSign' is set to an invalid value or if
+//		'numberSign' is set to NumSignVal.Zero() for a
+//		non-zero numeric value, an error will be returned.
+//
+//		If parameter 'numericValue' includes a signed numeric
+//		value, parameter 'numberSign' will override that
+//		designation.
+
+

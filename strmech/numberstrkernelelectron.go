@@ -4,7 +4,6 @@ import "sync"
 
 // numberStrKernelElectron - Provides helper methods for type
 // NumberStrKernel.
-//
 type numberStrKernelElectron struct {
 	lock *sync.Mutex
 }
@@ -13,32 +12,28 @@ type numberStrKernelElectron struct {
 // NumberStrKernel and proceeds to reset the data values
 // for member variables to their initial or zero values.
 //
-//
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // All the member variable data values contained in input parameter
 // 'numStrKernel' will be deleted and reset to their zero
 // values.
 //
-//
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  numStrKernel               *NumberStrKernel
-//     - A pointer to an instance of NumberStrKernel. All
-//       the internal member variables contained in this instance
-//       will be deleted and reset to their zero values.
-//
+//	numStrKernel               *NumberStrKernel
+//	   - A pointer to an instance of NumberStrKernel. All
+//	     the internal member variables contained in this instance
+//	     will be deleted and reset to their zero values.
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  NONE
-//
+//	NONE
 func (numStrKernelElectron *numberStrKernelElectron) empty(
 	numStrKernel *NumberStrKernel) {
 
@@ -74,7 +69,6 @@ func (numStrKernelElectron *numberStrKernelElectron) empty(
 // returned. If the member variables for both instances are equal
 // in all respects, this flag is set to 'true'. Otherwise, this
 // method returns 'false'.
-//
 func (numStrKernelElectron *numberStrKernelElectron) equal(
 	numStrKernel1 *NumberStrKernel,
 	numStrKernel2 *NumberStrKernel) bool {
@@ -124,22 +118,4 @@ func (numStrKernelElectron *numberStrKernelElectron) equal(
 	}
 
 	return true
-}
-
-// ptr - Returns a pointer to a new instance of
-// numberStrKernelElectron.
-//
-func (numStrKernelElectron numberStrKernelElectron) ptr() *numberStrKernelElectron {
-
-	if numStrKernelElectron.lock == nil {
-		numStrKernelElectron.lock = new(sync.Mutex)
-	}
-
-	numStrKernelElectron.lock.Lock()
-
-	defer numStrKernelElectron.lock.Unlock()
-
-	return &numberStrKernelElectron{
-		lock: new(sync.Mutex),
-	}
 }
