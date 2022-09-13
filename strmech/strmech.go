@@ -1670,7 +1670,7 @@ func (sMech *StrMech) ExtractNumberRunes(
 
 	searchResults,
 		numStrKernel,
-		err = new(strMechMolecule).extractNumRunes(
+		err = new(numStrBuilderElectron).extractNumRunes(
 		rawNumStrRunes,
 		"numberStr",
 		startSearchIndex,
