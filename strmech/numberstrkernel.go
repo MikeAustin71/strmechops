@@ -2447,6 +2447,43 @@ func (numStrKernel *NumberStrKernel) NewFromUnsignedIntValue(
 	return newNumStrKernel, err
 }
 
+// RationalizeFractionalIntegerDigits - If fractional digits are
+// present in this instance of NumberStrKernel, this method will
+// ensure that integer digits are also present.
+//
+// If fractional digits are present and no integer digits are
+// found, this method will add a zero ('0') to the integer digits
+// rune array.
+//
+// Example:
+//
+//	.752 will be converted to 0.752
+func (numStrKernel *NumberStrKernel) RationalizeFractionalIntegerDigits() {
+
+	if numStrKernel.lock == nil {
+		numStrKernel.lock = new(sync.Mutex)
+	}
+
+	numStrKernel.lock.Lock()
+
+	defer numStrKernel.lock.Unlock()
+
+	if numStrKernel.fractionalDigits.GetRuneArrayLength() == 0 {
+		return
+	}
+
+	// Fractional Digits exist!
+	if numStrKernel.integerDigits.GetRuneArrayLength() == 0 {
+
+		numStrKernel.integerDigits.CharsArray =
+			make([]rune, 1)
+
+		numStrKernel.integerDigits.CharsArray[0] = '0'
+	}
+
+	return
+}
+
 //	SetBigFloatValue
 //
 //	Deletes resets the internal values for the current
@@ -2842,43 +2879,6 @@ func (numStrKernel *NumberStrKernel) SetFloatValue(
 		ePrefix)
 }
 
-// RationalizeFractionalIntegerDigits - If fractional digits are
-// present in this instance of NumberStrKernel, this method will
-// ensure that integer digits are also present.
-//
-// If fractional digits are present and no integer digits are
-// found, this method will add a zero ('0') to the integer digits
-// rune array.
-//
-// Example:
-//
-//	.752 will be converted to 0.752
-func (numStrKernel *NumberStrKernel) RationalizeFractionalIntegerDigits() {
-
-	if numStrKernel.lock == nil {
-		numStrKernel.lock = new(sync.Mutex)
-	}
-
-	numStrKernel.lock.Lock()
-
-	defer numStrKernel.lock.Unlock()
-
-	if numStrKernel.fractionalDigits.GetRuneArrayLength() == 0 {
-		return
-	}
-
-	// Fractional Digits exist!
-	if numStrKernel.integerDigits.GetRuneArrayLength() == 0 {
-
-		numStrKernel.integerDigits.CharsArray =
-			make([]rune, 1)
-
-		numStrKernel.integerDigits.CharsArray[0] = '0'
-	}
-
-	return
-}
-
 // SetNumberSign - Sets the Number Sign for the numeric value
 // represented by the current instance of NumberStrKernel.
 //
@@ -2999,6 +2999,150 @@ func (numStrKernel *NumberStrKernel) SetNumberSignInt(
 	}
 
 	numStrKernel.numberSign = NumericSignValueType(numberSign)
+
+	return err
+}
+
+//	SetSignedIntValue
+//
+//	Deletes resets the internal values for the current
+//	instance of	NumberStrKernel using the signed integer
+//	numeric value passed as input parameter,
+//	'signedIntValue'.
+//
+//	'signedIntValue' is an empty interface which means
+//	that the signed integer value may be any one of the
+//	following types:
+//
+//			int8
+//			int16
+//			int32
+//			int	(equivalent to int32)
+//			int64
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	For the current instance of NumberStrKernel, all
+//	pre-existing data will be deleted and overwritten
+//	with new data generated from the signed numeric
+//	value passed as input parameter, 'signedIntValue'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	signedIntValue				interface{}
+//
+//		Numeric values passed by means of this empty
+//		interface must match one of the following
+//		types:
+//
+//			int8
+//			int16
+//			int32
+//			int	(equivalent to int32)
+//			int64
+//
+//
+//	 errorPrefix                interface{}
+//
+//		This object encapsulates error prefix text which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods
+//		listed as a method or function chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1. nil - A nil value is valid and generates an empty
+//		   collection of error prefix and error context
+//		   information.
+//
+//		2. string - A string containing error prefix
+//			information.
+//
+//		3. []string A one-dimensional slice of strings
+//			containing error prefix information.
+//
+//		4. [][2]string A two-dimensional slice of strings
+//		   containing error prefix and error context
+//		   information.
+//
+//		5. ErrPrefixDto - An instance of ErrPrefixDto.
+//			Information from this object will be copied for use
+//			in error and informational messages.
+//
+//		6. *ErrPrefixDto - A pointer to an instance of
+//			ErrPrefixDto. Information from this object will be
+//			copied for use in error and informational messages.
+//
+//		7. IBasicErrorPrefix - An interface to a method
+//			generating a two-dimensional slice of strings
+//			containing error prefix and error context
+//			information.
+//
+//		If parameter 'errorPrefix' is NOT convertible to one
+//		of the valid types listed above, it will be
+//		considered invalid and trigger the return of an
+//		error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are included
+//		in the 'errpref' software package,
+//		"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the returned
+//		error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error message.
+//	 	This returned error message will incorporate the method
+//	 	chain and text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be attached to the beginning
+//	 	of the error message.
+func (numStrKernel *NumberStrKernel) SetSignedIntValue(
+	signedIntValue interface{},
+	errorPrefix interface{}) error {
+
+	if numStrKernel.lock == nil {
+		numStrKernel.lock = new(sync.Mutex)
+	}
+
+	numStrKernel.lock.Lock()
+
+	defer numStrKernel.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumberStrKernel."+
+			"SetSignedIntValue()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	numberSign := NumSignVal.None()
+
+	err = new(numberStrKernelNanobot).setWithNumber(
+		numStrKernel,
+		signedIntValue,
+		numberSign,
+		ePrefix)
 
 	return err
 }
