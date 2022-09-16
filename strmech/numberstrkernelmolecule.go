@@ -753,6 +753,7 @@ floatNumericValueProcessing:
 //		This empty interface is assumed to encapsulate an unsigned
 //		integer numeric value comprised of one of the following
 //		types:
+//
 //			uint8
 //			uint16
 //			uint32
@@ -774,14 +775,17 @@ floatNumericValueProcessing:
 //			NumSignVal.Zero()     =  0 - Valid Value
 //			NumSignVal.Positive() =  1 - Valid Value
 //
-//		Unsigned integer values are be default converted as
+//		Unsigned integer values are by default converted as
 //		positive numeric values. If this parameter is set
 //		to NumSignVal.Negative(), the numeric value returned
 //		through parameter 'numStrKernel' will be classified
 //		as a negative value.
 //
+//
 //		If 'numberSign' is set to any value other than
-//		NumSignVal.Negative(), it will be ignored.
+//		NumSignVal.Negative(), it will be ignored and
+//		the final number sign for the converted numeric
+//		value will be set to 'positive'.
 //
 //	errPrefDto          *ePref.ErrPrefixDto
 //
