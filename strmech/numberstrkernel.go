@@ -1865,6 +1865,144 @@ func (numStrKernel *NumberStrKernel) NewFromBigIntValue(
 	return newNumStrKernel, err
 }
 
+//	NewFromFloatValue
+//
+//	Creates a new instance of NumberStrKernel based on a
+//	floating point numeric value passed as an empty
+//	interface.
+//
+//	The floating point numeric value may be any one of
+//	the following types:
+//
+//		float32
+//		float64
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	floatingPointValue			interface{}
+//
+//		Numeric values passed by means of this empty
+//		interface must match one of the following
+//		types:
+//
+//			float32
+//			float64
+//
+//
+//	 errorPrefix                interface{}
+//
+//		This object encapsulates error prefix text which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods
+//		listed as a method or function chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1. nil - A nil value is valid and generates an empty
+//		   collection of error prefix and error context
+//		   information.
+//
+//		2. string - A string containing error prefix
+//			information.
+//
+//		3. []string A one-dimensional slice of strings
+//			containing error prefix information.
+//
+//		4. [][2]string A two-dimensional slice of strings
+//		   containing error prefix and error context
+//		   information.
+//
+//		5. ErrPrefixDto - An instance of ErrPrefixDto.
+//			Information from this object will be copied for use
+//			in error and informational messages.
+//
+//		6. *ErrPrefixDto - A pointer to an instance of
+//			ErrPrefixDto. Information from this object will be
+//			copied for use in error and informational messages.
+//
+//		7. IBasicErrorPrefix - An interface to a method
+//			generating a two-dimensional slice of strings
+//			containing error prefix and error context
+//			information.
+//
+//		If parameter 'errorPrefix' is NOT convertible to one
+//		of the valid types listed above, it will be
+//		considered invalid and trigger the return of an
+//		error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are included
+//		in the 'errpref' software package,
+//		"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	NumberStrKernel
+//
+//		If this method completes successfully, a new instance
+//		of NumberStrKernel will be returned configured and
+//		populated with the numeric value passed in paramter,
+//		'floatingPointValue'.
+//
+//	error
+//
+//		If this method completes successfully, the returned
+//		error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error message.
+//	 	This returned error message will incorporate the method
+//	 	chain and text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be attached to the beginning
+//	 	of the error message.
+func (numStrKernel *NumberStrKernel) NewFromFloatValue(
+	floatingPointValue interface{},
+	errorPrefix interface{}) (
+	NumberStrKernel,
+	error) {
+
+	if numStrKernel.lock == nil {
+		numStrKernel.lock = new(sync.Mutex)
+	}
+
+	numStrKernel.lock.Lock()
+
+	defer numStrKernel.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	newNumStrKernel := NumberStrKernel{}
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumberStrKernel."+
+			"NewFromSignedIntValue()",
+		"")
+
+	if err != nil {
+		return newNumStrKernel, err
+	}
+
+	numberSign := NumSignVal.None()
+
+	err = new(numberStrKernelNanobot).setWithNumber(
+		&newNumStrKernel,
+		floatingPointValue,
+		numberSign,
+		ePrefix)
+
+	return newNumStrKernel, err
+}
+
 //	NewFromSignedIntValue
 //
 //	Creates a new instance of NumberStrKernel based on a
@@ -1968,7 +2106,7 @@ func (numStrKernel *NumberStrKernel) NewFromBigIntValue(
 //	 	The 'errorPrefix' text will be attached to the beginning
 //	 	of the error message.
 func (numStrKernel *NumberStrKernel) NewFromSignedIntValue(
-	numericValue interface{},
+	signedIntValue interface{},
 	errorPrefix interface{}) (
 	NumberStrKernel,
 	error) {
@@ -2001,7 +2139,7 @@ func (numStrKernel *NumberStrKernel) NewFromSignedIntValue(
 
 	err = new(numberStrKernelNanobot).setWithNumber(
 		&newNumStrKernel,
-		numericValue,
+		signedIntValue,
 		numberSign,
 		ePrefix)
 
@@ -2031,7 +2169,7 @@ func (numStrKernel *NumberStrKernel) NewFromSignedIntValue(
 //
 // # Input Parameters
 //
-//	signedIntValue				interface{}
+//	unsignedIntValue			interface{}
 //
 //		Numeric values passed by means of this empty
 //		interface must match one of the following
@@ -2127,7 +2265,7 @@ func (numStrKernel *NumberStrKernel) NewFromSignedIntValue(
 //		If this method completes successfully, a new instance
 //		of NumberStrKernel will be returned configured and
 //		populated with the numeric value passed in paramter,
-//		'signedIntValue'.
+//		'unsignedIntValue'.
 //
 //	error
 //
@@ -2141,7 +2279,7 @@ func (numStrKernel *NumberStrKernel) NewFromSignedIntValue(
 //	 	The 'errorPrefix' text will be attached to the beginning
 //	 	of the error message.
 func (numStrKernel *NumberStrKernel) NewFromUnsignedIntValue(
-	numericValue interface{},
+	unsignedIntValue interface{},
 	numberSign NumericSignValueType,
 	errorPrefix interface{}) (
 	NumberStrKernel,
@@ -2173,7 +2311,7 @@ func (numStrKernel *NumberStrKernel) NewFromUnsignedIntValue(
 
 	err = new(numberStrKernelNanobot).setWithNumber(
 		&newNumStrKernel,
-		numericValue,
+		unsignedIntValue,
 		numberSign,
 		ePrefix)
 

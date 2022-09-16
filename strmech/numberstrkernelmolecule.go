@@ -548,7 +548,7 @@ func (numStrKernelMolecule *numberStrKernelMolecule) convertBigIntToKernel(
 //
 //	This floating point numeric value is then converted to
 //	a type of 'NumberStrKernel' and returned to the calling
-//	function.
+//	function via input parameter 'numStrKernel'.
 //
 // ----------------------------------------------------------------
 //
