@@ -1761,7 +1761,7 @@ func (numStrKernel *NumberStrKernel) IsNonZeroValue() bool {
 //			uint (equivalent to uint32)
 //			uint64
 //			float32
-//			float65
+//			float64
 //
 //	 errorPrefix                interface{}
 //

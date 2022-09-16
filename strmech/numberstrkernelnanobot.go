@@ -39,7 +39,6 @@ type numberStrKernelNanobot struct {
 //	     'targetNumStrKernel' is the target of this copy
 //	     operation.
 //
-//
 //	incomingNumStrKernel      *NumberStrKernel
 //	   - A pointer to another NumberStrKernel instance. All
 //	     the member variable data values from this object will
@@ -51,7 +50,6 @@ type numberStrKernelNanobot struct {
 //
 //	     If 'incomingNumStrKernel' is determined to be invalid,
 //	     an error will be returned.
-//
 //
 //	errPrefDto          *ePref.ErrPrefixDto
 //	   - This object encapsulates an error prefix string which is
@@ -910,29 +908,63 @@ func (numStrKernelNanobot *numberStrKernelNanobot) setWithNumber(
 
 	var nStrKernelMolecule numberStrKernelMolecule
 
+	var ok bool
+
 	switch numericValue.(type) {
 
 	case int8, int16, int32, int, int64:
 
-		return nStrKernelMolecule.convertIntToKernel(
+		return nStrKernelMolecule.convertSignedIntToKernel(
 			numStrKernel,
-			numberSign,
 			numericValue,
 			ePrefix)
 
 	case uint8, uint16, uint, uint32, uint64:
 
-		return nStrKernelMolecule.convertIntToKernel(
+		return nStrKernelMolecule.convertUnsignedInteger(
 			numStrKernel,
-			numberSign,
 			numericValue,
+			numberSign,
 			ePrefix)
 
 	case *big.Int:
 
+		var bigIntNum *big.Int
+
+		bigIntNum, ok = numericValue.(*big.Int)
+
+		if !ok {
+
+			err = fmt.Errorf("%v\n"+
+				"ERROR: *big.Int cast to 'bigIntNum' failed!\n",
+				ePrefix.String())
+
+			return err
+
+		}
+
+		return nStrKernelMolecule.convertBigIntToKernel(
+			numStrKernel,
+			bigIntNum,
+			ePrefix)
+
 	case float32, float64:
 
+		return nStrKernelMolecule.convertFloatToKernel(
+			numStrKernel,
+			numericValue,
+			ePrefix)
+
 	case *big.Float:
+
+		var bigFloatNum *big.Float
+
+		bigFloatNum, ok = numericValue.(*big.Float)
+
+		return nStrKernelMolecule.convertBigFloatToKernel(
+			numStrKernel,
+			bigFloatNum,
+			ePrefix)
 
 	default:
 
@@ -941,8 +973,6 @@ func (numStrKernelNanobot *numberStrKernelNanobot) setWithNumber(
 			"'numericValue' is unsupported type '%v'\n",
 			ePrefix.String(),
 			fmt.Sprintf("%T", numericValue))
-
-		return err
 
 	}
 
