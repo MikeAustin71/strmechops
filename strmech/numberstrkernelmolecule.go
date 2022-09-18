@@ -14,6 +14,177 @@ type numberStrKernelMolecule struct {
 	lock *sync.Mutex
 }
 
+//	convertKernelToBigInt
+//
+//	Converts an instance of NumberStrKernel to an integer value of
+//	type *big.Int.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	numStrKernel				*NumberStrKernel
+//
+//		A pointer to an instance of NumberStrKernel. The numeric
+//		value contained in this instance will be converted to
+//		an integer of type *big.Int.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods listed
+//		as a function chain.
+//
+//		If no error prefix information is needed, set this parameter
+//		to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref' software
+//		package, "github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, this returned error
+//		Type is set equal to 'nil'. If errors are encountered during
+//		processing, the returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value for input
+//		parameter 'errPrefDto' (error prefix) will be prefixed or
+//		attached at the beginning of the error message.
+func (numStrKernelMolecule *numberStrKernelMolecule) convertKernelToBigInt(
+	numStrKernel *NumberStrKernel,
+	roundingType NumberRoundingType,
+	errPrefDto *ePref.ErrPrefixDto) (
+	*big.Int,
+	error) {
+
+	if numStrKernelMolecule.lock == nil {
+		numStrKernelMolecule.lock = new(sync.Mutex)
+	}
+
+	numStrKernelMolecule.lock.Lock()
+
+	defer numStrKernelMolecule.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	bigIntValue := big.NewInt(0)
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"numberStrKernelMolecule."+
+			"convertKernelToBigInt()",
+		"")
+
+	if err != nil {
+
+		return bigIntValue, err
+
+	}
+
+	if numStrKernel == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'numStrKernel' is a nil pointer!\n",
+			ePrefix.String())
+
+		return bigIntValue, err
+	}
+
+	if !roundingType.XIsValid() {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'numStrRoundingSpec Rounding Type' is invalid!\n"+
+			"'roundingType' string  value = '%v'\n"+
+			"'roundingType' integer value = '%v'\n",
+			ePrefix.String(),
+			roundingType.String(),
+			roundingType.XValueInt())
+
+		return bigIntValue, err
+
+	}
+
+	var ok bool
+
+	if roundingType == NumRoundType.NoRounding() {
+
+		_,
+			ok = bigIntValue.SetString(
+			numStrKernel.integerDigits.GetCharacterString(),
+			10)
+
+		if !ok {
+			err = fmt.Errorf("%v\n"+
+				"Error Converting Integer string to *big.Int!\n"+
+				"The following integerDigits string generated an error.\n"+
+				"numStrKernel.integerDigits = '%v'\n",
+				ePrefix.String(),
+				numStrKernel.integerDigits.GetCharacterString())
+		}
+
+		return bigIntValue, err
+	}
+
+	var copyNStrKernel NumberStrKernel
+
+	copyNStrKernel,
+		err = numStrKernel.CopyOut(
+		ePrefix.XCpy(
+			"copyNStrKernel<-numStrKernel"))
+
+	if err != nil {
+
+		return bigIntValue, err
+
+	}
+
+	var numStrRoundingSpec NumStrRoundingSpec
+
+	numStrRoundingSpec,
+		err =
+		new(NumStrRoundingSpec).NewRoundingSpec(
+			roundingType,
+			0,
+			ePrefix)
+
+	if err != nil {
+		return bigIntValue, err
+	}
+
+	err = new(numStrMathRoundingNanobot).roundNumStrKernel(
+		&copyNStrKernel,
+		numStrRoundingSpec,
+		ePrefix)
+
+	if err != nil {
+		return bigIntValue, err
+	}
+
+	_,
+		ok = bigIntValue.SetString(
+		copyNStrKernel.integerDigits.GetCharacterString(),
+		10)
+
+	if !ok {
+		err = fmt.Errorf("%v\n"+
+			"Error Converting Rounded Integer string to *big.Int!\n"+
+			"The following integerDigits string generated an error.\n"+
+			"numStrKernel.integerDigits = '%v'\n",
+			ePrefix.String(),
+			copyNStrKernel.integerDigits.GetCharacterString())
+	}
+
+	return bigIntValue, err
+}
+
 //	convertSignedIntToKernel
 //
 //	Receives an empty interface which is assumed to be an
