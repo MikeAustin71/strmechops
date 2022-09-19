@@ -961,6 +961,16 @@ func (numStrKernelNanobot *numberStrKernelNanobot) setWithNumber(
 
 		bigFloatNum, ok = numericValue.(*big.Float)
 
+		if !ok {
+
+			err = fmt.Errorf("%v\n"+
+				"ERROR: *big.Float cast to 'bigFloatNum' failed!\n",
+				ePrefix.String())
+
+			return err
+
+		}
+
 		return nStrKernelMolecule.convertBigFloatToKernel(
 			numStrKernel,
 			bigFloatNum,

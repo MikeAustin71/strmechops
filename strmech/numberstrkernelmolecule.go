@@ -144,6 +144,170 @@ func (numStrKernelMolecule *numberStrKernelMolecule) convertKernelToInt(
 	return convertedInt, err
 }
 
+//	convertKernelToIntNum
+//
+//	Converts an instance of NumberStrKernel to an integer value
+//	of type int.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	numStrKernel				*NumberStrKernel
+//
+//		A pointer to an instance of NumberStrKernel. The
+//		numeric value contained in this instance will be
+//		converted to an integer of type int.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string which
+//		is included in all returned error messages. Usually,
+//		it contains the name of the calling method or methods
+//		listed as a function chain.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package, "github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	int
+//
+//		If this method completes successfully, the numeric
+//		value represented by the current instance of
+//		NumberStrKernel will be returned as a type int.
+//
+//	error
+//
+//		If this method completes successfully, this returned
+//		error Type is set equal to 'nil'. If errors are
+//		encountered during processing, the returned error
+//		Type will encapsulate an error message.
+//
+//		If an error message is returned, the text value for
+//		input parameter 'errPrefDto' (error prefix) will be
+//		prefixed or attached at the beginning of the error
+//		message.
+//
+//		NOTE: If the numeric value of 'numStrKernel' exceeds
+//		the maximum value for type int, an error will be
+//		returned.
+func (numStrKernelMolecule *numberStrKernelMolecule) convertKernelToIntNum(
+	numStrKernel *NumberStrKernel,
+	numericValue interface{},
+	roundingType NumberRoundingType,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if numStrKernelMolecule.lock == nil {
+		numStrKernelMolecule.lock = new(sync.Mutex)
+	}
+
+	numStrKernelMolecule.lock.Lock()
+
+	defer numStrKernelMolecule.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"numberStrKernelMolecule."+
+			"convertKernelToIntNum()",
+		"")
+
+	if err != nil {
+
+		return err
+
+	}
+
+	if numStrKernel == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'numStrKernel' is a nil pointer!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	var bigIntNum *big.Int
+
+	bigIntNum,
+		err = new(numberStrKernelElectron).convertKernelToBigInt(
+		numStrKernel,
+		roundingType,
+		ePrefix)
+
+	if err != nil {
+
+		return err
+
+	}
+
+	var ok bool
+	var maxIntValue *big.Int
+
+	switch numericValue.(type) {
+
+	case *int:
+
+		maxIntValue = big.NewInt(int64(math.MaxInt))
+
+		if bigIntNum.Cmp(maxIntValue) == 1 {
+
+			err = fmt.Errorf("%v\n"+
+				"ERROR: Numeric Value Out Of Range for type 'int'!\n"+
+				"The numeric value of the NumStrKernel (numStrKernel)\n"+
+				"exceeds the maximum capacity of type 'int'.\n"+
+				"Numeric Value = %v\n",
+				ePrefix.String(),
+				bigIntNum.Text(10))
+
+			return err
+
+		}
+
+		if numStrKernel.numberSign == NumSignVal.Negative() {
+
+			bigIntNum.Neg(bigIntNum)
+
+		}
+
+		var intValue *int
+
+		intValue, ok = numericValue.(*int)
+
+		if !ok {
+
+			err = fmt.Errorf("%v\n"+
+				"ERROR: *int cast to 'intValue' failed!\n",
+				ePrefix.String())
+
+			return err
+
+		}
+
+		*intValue = int(bigIntNum.Int64())
+
+	default:
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'numericValue' is an invalid type!\n"+
+			"'numericValue' is unsupported type '%v'\n",
+			ePrefix.String(),
+			fmt.Sprintf("%T", numericValue))
+
+	}
+
+	return err
+}
+
 //	convertKernelToInt32
 //
 //	Converts an instance of NumberStrKernel to an integer value
