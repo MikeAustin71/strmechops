@@ -1236,13 +1236,13 @@ func (numStrKernelNanobot *numberStrKernelNanobot) setWithRunes(
 //		values for all internal member variables contained in
 //		this instance will be deleted and reset to new values.
 //
-//	integerDigitRunes			*RuneArrayDto
+//	integerDigits				*RuneArrayDto
 //
 //		A pointer to a rune array data transfer object used to
 //		configure the integer digits array contained within
 //		the NumberStrKernel instance, 'numStrKernel'.
 //
-//	fractionalDigitRunes		*RuneArrayDto
+//	fractionalDigits			*RuneArrayDto
 //
 //		A pointer to a rune array data transfer object used to
 //		configure the fractional digits array contained within
@@ -1312,6 +1312,24 @@ func (numStrKernelNanobot *numberStrKernelNanobot) setWithRuneArrayDto(
 
 		err = fmt.Errorf("%v\n"+
 			"ERROR: Input parameter 'numStrKernel' is a nil pointer!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if integerDigits == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'integerDigits' is a nil pointer!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if fractionalDigits == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'fractionalDigits' is a nil pointer!\n",
 			ePrefix.String())
 
 		return err
