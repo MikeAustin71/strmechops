@@ -3210,6 +3210,167 @@ func (numStrKernel *NumberStrKernel) NewFromFloatValue(
 	return newNumStrKernel, err
 }
 
+//	NewFromRuneDigits
+//
+//	Creates and returns a new instance of NumberStrKernel
+//	generated from input parameters containing integer
+//	digit and fractional digit rune arrays.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	integerDigits				[]rune
+//
+//		A rune array containing numeric digits used to
+//		populate the integer part of the numeric value
+//		contained in the returned instance of
+//		NumberStrKernel.
+//
+//	fractionalDigits			[]rune
+//
+//		A rune array containing numeric digits used to
+//		populate the fractional part of the numeric
+//		value contained in the returned instance of
+//		NumberStrKernel.
+//
+//	numberSign					NumericSignValueType
+//
+//		The Number Sign is specified by means of a
+//		NumericSignValueType enumeration value.
+//
+//		Possible values are listed as follows:
+//
+//			NumSignVal.None()     = Ignored. Numeric Value
+//									will be set to positive.
+//
+//			NumSignVal.Negative() = Valid Value
+//
+//			NumSignVal.Zero()     = Zero numeric values are
+//									automatically assigned
+//									NumSignVal.Zero().
+//
+//			NumSignVal.Positive() = Default value for
+//									non-zero numeric values.
+//
+//		If 'numberSign' is set to any value other than
+//		NumSignVal.Negative(), it will be ignored and
+//		the final number sign will be automatically
+//		assigned.
+//
+//	 errorPrefix                interface{}
+//
+//		This object encapsulates error prefix text which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods
+//		listed as a method or function chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1. nil - A nil value is valid and generates an empty
+//		   collection of error prefix and error context
+//		   information.
+//
+//		2. string - A string containing error prefix
+//			information.
+//
+//		3. []string A one-dimensional slice of strings
+//			containing error prefix information.
+//
+//		4. [][2]string A two-dimensional slice of strings
+//		   containing error prefix and error context
+//		   information.
+//
+//		5. ErrPrefixDto - An instance of ErrPrefixDto.
+//			Information from this object will be copied for use
+//			in error and informational messages.
+//
+//		6. *ErrPrefixDto - A pointer to an instance of
+//			ErrPrefixDto. Information from this object will be
+//			copied for use in error and informational messages.
+//
+//		7. IBasicErrorPrefix - An interface to a method
+//			generating a two-dimensional slice of strings
+//			containing error prefix and error context
+//			information.
+//
+//		If parameter 'errorPrefix' is NOT convertible to one
+//		of the valid types listed above, it will be
+//		considered invalid and trigger the return of an
+//		error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are included
+//		in the 'errpref' software package,
+//		"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	NumberStrKernel
+//
+//		If this method completes successfully, a new instance
+//		of NumberStrKernel will be returned configured with
+//		the numeric value extracted from input parameters
+//		'integerDigits' and 'fractionalDigits'.
+//
+//	error
+//
+//		If this method completes successfully, the returned
+//		error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error message.
+//	 	This returned error message will incorporate the method
+//	 	chain and text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be attached to the beginning
+//	 	of the error message.
+func (numStrKernel *NumberStrKernel) NewFromRuneDigits(
+	integerDigits []rune,
+	fractionalDigits []rune,
+	numberSign NumericSignValueType,
+	errorPrefix interface{}) (
+	NumberStrKernel,
+	error) {
+
+	if numStrKernel.lock == nil {
+		numStrKernel.lock = new(sync.Mutex)
+	}
+
+	numStrKernel.lock.Lock()
+
+	defer numStrKernel.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	newNumStrKernel := NumberStrKernel{}
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumberStrKernel."+
+			"NewFromRuneDigits()",
+		"")
+
+	if err != nil {
+		return newNumStrKernel, err
+	}
+
+	err = new(numberStrKernelNanobot).setWithRunes(
+		&newNumStrKernel,
+		integerDigits,
+		fractionalDigits,
+		numberSign,
+		ePrefix)
+
+	return newNumStrKernel, err
+}
+
 //	NewFromSignedIntValue
 //
 //	Creates a new instance of NumberStrKernel based on a
@@ -3364,11 +3525,13 @@ func (numStrKernel *NumberStrKernel) NewFromSignedIntValue(
 // # Input Parameters
 //
 //	integerDigits				string
+//
 //		A string of numeric digits used to populate the
 //		integer part of the numeric value contained in the
 //		returned instance of NumberStrKernel
 //
 //	fractionalDigits			string
+//
 //		A string of numeric digits used to populate the
 //		fractional part of the numeric value contained in
 //		the returned instance of NumberStrKernel
@@ -3489,9 +3652,6 @@ func (numStrKernel *NumberStrKernel) NewFromStringDigits(
 
 	newNumStrKernel := NumberStrKernel{}
 
-	new(numberStrKernelElectron).empty(
-		&newNumStrKernel)
-
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
@@ -3503,62 +3663,12 @@ func (numStrKernel *NumberStrKernel) NewFromStringDigits(
 		return newNumStrKernel, err
 	}
 
-	var runeDigits []rune
-
-	runeDigits = []rune(integerDigits)
-
-	lenDigits := len(runeDigits)
-
-	for i := 0; i < lenDigits; i++ {
-
-		err = newNumStrKernel.AddIntegerDigit(
-			runeDigits[i],
-			ePrefix.XCpy(
-				fmt.Sprintf(
-					"integerDigits[%v]=%v",
-					i,
-					runeDigits[i])))
-
-		if err != nil {
-			return newNumStrKernel, err
-		}
-	}
-
-	runeDigits = []rune(fractionalDigits)
-
-	lenDigits = len(runeDigits)
-
-	for j := 0; j < lenDigits; j++ {
-
-		err = newNumStrKernel.AddFractionalDigit(
-			runeDigits[j],
-			ePrefix.XCpy(
-				fmt.Sprintf(
-					"integerDigits[%v]=%v",
-					j,
-					runeDigits[j])))
-
-		if err != nil {
-			return newNumStrKernel, err
-		}
-	}
-
-	if newNumStrKernel.isNonZeroValue == false {
-
-		newNumStrKernel.numberSign = NumSignVal.Zero()
-
-	} else {
-
-		newNumStrKernel.numberSign = NumSignVal.Positive()
-
-		if numberSign == NumSignVal.Negative() {
-
-			newNumStrKernel.numberSign = NumSignVal.Negative()
-
-		}
-	}
-
-	newNumStrKernel.RationalizeFractionalIntegerDigits()
+	err = new(numberStrKernelNanobot).setWithRunes(
+		&newNumStrKernel,
+		[]rune(integerDigits),
+		[]rune(fractionalDigits),
+		numberSign,
+		ePrefix)
 
 	return newNumStrKernel, err
 }
