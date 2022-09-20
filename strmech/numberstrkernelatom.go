@@ -12,6 +12,114 @@ type numberStrKernelAtom struct {
 	lock *sync.Mutex
 }
 
+//	addFractionalDigit
+//
+//	Appends a single numeric digit to the end of the internal
+//	fractional digits rune array.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	numStrKernel				*NumberStrKernel
+//
+//		A pointer to an instance of NumberStrKernel. This
+//		instance contains the fractional digit rune array
+//		to which the 'fractionalDigit' rune will be appended.
+//
+//	fractionalDigit				rune
+//
+//		A rune with a numeric character between '0' (zero)
+//		and '9' (nine) inclusive. This numeric digit will
+//		be appended to the end of the internal member
+//		variable 'NumberStrKernel.fractionalDigits'
+//		contained within the NumberStrKernel input
+//		parameter, 'numStrKernel'.
+//
+// ------------------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, this returned
+//		error Type is set equal to 'nil'. If errors are
+//		encountered during processing, the returned error
+//		Type will encapsulate an error message.
+//
+//		If an error message is returned, the text value for
+//		input parameter 'errPrefDto' (error prefix) will be
+//		prefixed or attached at the beginning of the error
+//		message.
+func (numStrKernelAtom *numberStrKernelAtom) addFractionalDigit(
+	numStrKernel *NumberStrKernel,
+	fractionalDigit rune,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if numStrKernelAtom.lock == nil {
+		numStrKernelAtom.lock = new(sync.Mutex)
+	}
+
+	numStrKernelAtom.lock.Lock()
+
+	defer numStrKernelAtom.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"negNumSearchSpecAtom."+
+			"addFractionalDigit()",
+		"")
+
+	if err != nil {
+
+		return err
+	}
+
+	if numStrKernel == nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'numStrKernel' is a nil pointer!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if fractionalDigit < '0' ||
+		fractionalDigit > '9' {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'fractionalDigit' is invalid!\n"+
+			"Fractional Rune characters must represent a numberic character between\n"+
+			"'0' and '9', inclusive. 'fractionalDigit' fails to meet this criterion.\n"+
+			"The rune value of 'fractionalDigit' is %v\n"+
+			"The string value of 'fractionalDigit' is %v\n",
+			ePrefix.String(),
+			fractionalDigit,
+			string(fractionalDigit))
+
+		return err
+	}
+
+	numStrKernel.fractionalDigits.AddChar(
+		fractionalDigit)
+
+	if numStrKernel.numericValueType !=
+		NumValType.FloatingPoint() {
+
+		numStrKernel.numericValueType =
+			NumValType.FloatingPoint()
+	}
+
+	if fractionalDigit != '0' {
+		numStrKernel.isNonZeroValue = true
+	}
+
+	return err
+}
+
 // addIntegerDigit - Adds a single numeric digit to the internal
 // integer digits rune array.
 //
@@ -92,7 +200,7 @@ func (numStrKernelAtom *numberStrKernelAtom) addIntegerDigit(
 			"'0' and '9', inclusive. 'integerDigit' fails to meet this criterion.\n"+
 			"The rune value of 'integerDigit' is %v\n"+
 			"The string value of 'integerDigit' is %v\n",
-			ePrefix.XCpy("integerDigit Error"),
+			ePrefix.String(),
 			integerDigit,
 			string(integerDigit))
 
