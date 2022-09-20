@@ -2806,39 +2806,14 @@ func (numStrKernel *NumberStrKernel) IsNonZeroValue() bool {
 
 	defer numStrKernel.lock.Unlock()
 
-	lenArray := numStrKernel.
-		integerDigits.
-		GetRuneArrayLength()
+	var isNonZeroValue bool
 
-	for i := 0; i < lenArray; i++ {
+	isNonZeroValue,
+		_ = new(numberStrKernelElectron).isNonZeroValue(
+		numStrKernel,
+		nil)
 
-		if numStrKernel.integerDigits.CharsArray[i] > '0' &&
-			numStrKernel.integerDigits.CharsArray[i] <= '9' {
-
-			numStrKernel.isNonZeroValue = true
-
-			return true
-		}
-	}
-
-	lenArray = numStrKernel.
-		fractionalDigits.
-		GetRuneArrayLength()
-
-	for i := 0; i < lenArray; i++ {
-
-		if numStrKernel.fractionalDigits.CharsArray[i] > '0' &&
-			numStrKernel.fractionalDigits.CharsArray[i] <= '9' {
-
-			numStrKernel.isNonZeroValue = true
-
-			return true
-		}
-	}
-
-	numStrKernel.isNonZeroValue = false
-
-	return false
+	return isNonZeroValue
 }
 
 //	NewFromBigFloatValue
