@@ -1209,3 +1209,192 @@ func (numStrKernelNanobot *numberStrKernelNanobot) setWithRunes(
 
 	return err
 }
+
+//	setWithRuneArrayDto
+//
+//	Deletes and resets all the internal member variable
+//	values for an instance of NumberStrKernel passed as
+//	an input parameter. Integer and fractional digits
+//	are configured from rune array data transfer object
+//	(Dto) parameters passed by the calling function.
+//
+// # IMPORTANT
+//
+// ----------------------------------------------------------------
+//
+//	Be advised that all the data fields within input
+//	parameter 'numStrKernel' will be deleted and reset
+//	to new values.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	numStrKernel				*NumberStrKernel
+//
+//		A pointer to an instance of NumberStrKernel. The data
+//		values for all internal member variables contained in
+//		this instance will be deleted and reset to new values.
+//
+//	integerDigitRunes			*RuneArrayDto
+//
+//		A pointer to a rune array data transfer object used to
+//		configure the integer digits array contained within
+//		the NumberStrKernel instance, 'numStrKernel'.
+//
+//	fractionalDigitRunes		*RuneArrayDto
+//
+//		A pointer to a rune array data transfer object used to
+//		configure the fractional digits array contained within
+//		the NumberStrKernel instance, 'numStrKernel'.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error messages.
+//		Usually, it contains the name of the calling method
+//		or methods listed as a function chain.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ------------------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, this returned
+//		error Type is set equal to 'nil'. If errors are
+//		encountered during processing, the returned error
+//		Type will encapsulate an error message.
+//
+//		If an error message is returned, the text value for
+//		input parameter 'errPrefDto' (error prefix) will be
+//		prefixed or attached at the beginning of the error
+//		message.
+func (numStrKernelNanobot *numberStrKernelNanobot) setWithRuneArrayDto(
+	numStrKernel *NumberStrKernel,
+	integerDigits *RuneArrayDto,
+	fractionalDigits *RuneArrayDto,
+	numberSign NumericSignValueType,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if numStrKernelNanobot.lock == nil {
+		numStrKernelNanobot.lock = new(sync.Mutex)
+	}
+
+	numStrKernelNanobot.lock.Lock()
+
+	defer numStrKernelNanobot.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"numberStrKernelNanobot."+
+			"setWithRuneArrayDto()",
+		"")
+
+	if err != nil {
+
+		return err
+
+	}
+
+	if numStrKernel == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'numStrKernel' is a nil pointer!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	nStrKernelElectron := numberStrKernelElectron{}
+
+	nStrKernelElectron.empty(numStrKernel)
+
+	lenIntDigits := len(integerDigits.CharsArray)
+
+	lenFracDigits := len(fractionalDigits.CharsArray)
+
+	if lenIntDigits == 0 &&
+		lenFracDigits == 0 {
+
+		numStrKernel.integerDigits.CharsArray =
+			make([]rune, 1)
+
+		numStrKernel.integerDigits.CharsArray[0] =
+			'0'
+
+		numStrKernel.numericValueType = NumValType.Integer()
+
+		numStrKernel.numberSign = NumSignVal.Zero()
+
+		numStrKernel.isNonZeroValue = false
+
+		return err
+	}
+
+	nStrKernelAtom := numberStrKernelAtom{}
+
+	for i := 0; i < lenIntDigits; i++ {
+
+		err = nStrKernelAtom.addIntegerDigit(
+			numStrKernel,
+			integerDigits.CharsArray[i],
+			ePrefix.XCpy(
+				fmt.Sprintf(
+					"integerDigits.CharsArray[%v]=%v",
+					i,
+					integerDigits.CharsArray[i])))
+
+		if err != nil {
+			return err
+		}
+	}
+
+	for j := 0; j < lenFracDigits; j++ {
+
+		err = nStrKernelAtom.addFractionalDigit(
+			numStrKernel,
+			fractionalDigits.CharsArray[j],
+			ePrefix.XCpy(
+				fmt.Sprintf(
+					"fractionalDigits.CharsArray[%v]=%v",
+					j,
+					fractionalDigits.CharsArray[j])))
+
+		if err != nil {
+			return err
+		}
+	}
+
+	if numStrKernel.isNonZeroValue == false {
+
+		numStrKernel.numberSign = NumSignVal.Zero()
+
+	} else {
+
+		numStrKernel.numberSign = NumSignVal.Positive()
+
+		if numberSign == NumSignVal.Negative() {
+
+			numStrKernel.numberSign = NumSignVal.Negative()
+
+		}
+	}
+
+	err = nStrKernelElectron.rationalizeFractionalIntegerDigits(
+		numStrKernel,
+		ePrefix)
+
+	return err
+}
