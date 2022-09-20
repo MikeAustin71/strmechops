@@ -3758,13 +3758,15 @@ func (numStrKernel *NumberStrKernel) NewFromUnsignedIntValue(
 	return newNumStrKernel, err
 }
 
-// RationalizeFractionalIntegerDigits - If fractional digits are
-// present in this instance of NumberStrKernel, this method will
-// ensure that integer digits are also present.
+// RationalizeFractionalIntegerDigits
 //
-// If fractional digits are present and no integer digits are
-// found, this method will add a zero ('0') to the integer digits
-// rune array.
+// If fractional digits are present in this instance of
+// NumberStrKernel, this method will ensure that integer
+// digits are also present.
+//
+// If fractional digits are present and no integer digits
+// are found, this method will configure a zero ('0') in
+// the integer digits rune array.
 //
 // Example:
 //

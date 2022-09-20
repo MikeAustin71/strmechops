@@ -24,22 +24,23 @@ type numberStrKernelElectron struct {
 //
 //	numStrKernel				*NumberStrKernel
 //
-//		A pointer to an instance of NumberStrKernel. The numeric
-//		value contained in this instance will be converted to
-//		an integer of type *big.Int.
+//		A pointer to an instance of NumberStrKernel. The
+//		numeric value contained in this instance will be
+//		converted to an integer of type *big.Int.
 //
 //	errPrefDto					*ePref.ErrPrefixDto
 //
-//		This object encapsulates an error prefix string which is
-//		included in all returned error messages. Usually, it
-//		contains the name of the calling method or methods listed
-//		as a function chain.
+//		This object encapsulates an error prefix string
+//		which is included in all returned error messages.
+//		Usually, it contains the name of the calling method
+//		or methods listed as a function chain.
 //
 //		If no error prefix information is needed, set this
 //		parameter to 'nil'.
 //
-//		Type ErrPrefixDto is included in the 'errpref' software
-//		package, "github.com/MikeAustin71/errpref".
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
@@ -47,16 +48,17 @@ type numberStrKernelElectron struct {
 //
 //	*big.Int
 //
-//		If this method completes successfully, the numeric
-//		value represented by the current instance of
-//		NumberStrKernel will be returned as a type *big.Int.
+//		If this method completes successfully, the
+//		numeric	value represented by the current instance
+//		of	NumberStrKernel will be returned as a type
+//		*big.Int.
 //
 //	error
 //
-//		If this method completes successfully, this returned
-//		error Type is set equal to 'nil'. If errors are
-//		encountered during processing, the returned error
-//		Type will encapsulate an error message.
+//		If this method completes successfully, this
+//		returned error Type is set equal to 'nil'. If errors
+//		are	encountered during processing, the returned
+//		error Type will encapsulate an error message.
 //
 //		If an error message is returned, the text value for
 //		input parameter 'errPrefDto' (error prefix) will be
@@ -311,4 +313,115 @@ func (numStrKernelElectron *numberStrKernelElectron) equal(
 	}
 
 	return true
+}
+
+//	rationalizeFractionalIntegerDigits
+//
+//	If fractional digits are present in this instance of
+//	NumberStrKernel, this method will ensure that integer
+//	digits are also present.
+//
+//	If fractional digits are present and no integer digits
+//	are found, this method will configure a zero ('0') in
+//	the integer digits rune array.
+//
+//	Example:
+//
+//		.752 will be converted to 0.752
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	numStrKernel				*NumberStrKernel
+//
+//		A pointer to an instance of NumberStrKernel. If
+//		the fractional digits array contians numeric
+//		digits and the integer digits array contains
+//		zero digits, the integer digits array will be
+//		configured with a zero ('0').
+//
+//			Example:
+//				.752 will be converted to 0.752
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error messages.
+//		Usually, it contains the name of the calling method
+//		or methods listed as a function chain.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, this
+//		returned error Type is set equal to 'nil'. If errors
+//		are	encountered during processing, the returned
+//		error Type will encapsulate an error message.
+//
+//		If an error message is returned, the text value for
+//		input parameter 'errPrefDto' (error prefix) will be
+//		prefixed or attached at the beginning of the error
+//		message.
+func (numStrKernelElectron *numberStrKernelElectron) rationalizeFractionalIntegerDigits(
+	numStrKernel *NumberStrKernel,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if numStrKernelElectron.lock == nil {
+		numStrKernelElectron.lock = new(sync.Mutex)
+	}
+
+	numStrKernelElectron.lock.Lock()
+
+	defer numStrKernelElectron.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"numberStrKernelElectron."+
+			"convertKernelToBigInt()",
+		"")
+
+	if err != nil {
+
+		return err
+
+	}
+
+	if numStrKernel == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'numStrKernel' is a nil pointer!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if numStrKernel.fractionalDigits.GetRuneArrayLength() == 0 {
+		return err
+	}
+
+	// Fractional Digits exist!
+	if numStrKernel.integerDigits.GetRuneArrayLength() == 0 {
+
+		numStrKernel.integerDigits.CharsArray =
+			make([]rune, 1)
+
+		numStrKernel.integerDigits.CharsArray[0] = '0'
+	}
+
+	return err
 }
