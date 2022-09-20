@@ -15,8 +15,8 @@ type numberStrKernelElectron struct {
 
 //	convertKernelToBigInt
 //
-//	Converts an instance of NumberStrKernel to an integer value of
-//	type *big.Int.
+//	Converts an instance of NumberStrKernel to an integer
+//	value of type *big.Int.
 //
 // ----------------------------------------------------------------
 //
@@ -35,8 +35,8 @@ type numberStrKernelElectron struct {
 //		contains the name of the calling method or methods listed
 //		as a function chain.
 //
-//		If no error prefix information is needed, set this parameter
-//		to 'nil'.
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
 //
 //		Type ErrPrefixDto is included in the 'errpref' software
 //		package, "github.com/MikeAustin71/errpref".
@@ -53,14 +53,15 @@ type numberStrKernelElectron struct {
 //
 //	error
 //
-//		If this method completes successfully, this returned error
-//		Type is set equal to 'nil'. If errors are encountered during
-//		processing, the returned error Type will encapsulate an error
-//		message.
+//		If this method completes successfully, this returned
+//		error Type is set equal to 'nil'. If errors are
+//		encountered during processing, the returned error
+//		Type will encapsulate an error message.
 //
-//		If an error message is returned, the text value for input
-//		parameter 'errPrefDto' (error prefix) will be prefixed or
-//		attached at the beginning of the error message.
+//		If an error message is returned, the text value for
+//		input parameter 'errPrefDto' (error prefix) will be
+//		prefixed or attached at the beginning of the error
+//		message.
 func (numStrKernelElectron *numberStrKernelElectron) convertKernelToBigInt(
 	numStrKernel *NumberStrKernel,
 	roundingType NumberRoundingType,
@@ -190,30 +191,34 @@ func (numStrKernelElectron *numberStrKernelElectron) convertKernelToBigInt(
 	return bigIntValue, err
 }
 
-// empty - Receives a pointer to an instance of
-// NumberStrKernel and proceeds to reset the data values
-// for member variables to their initial or zero values.
+//	empty
+//
+//	Receives a pointer to an instance of NumberStrKernel and
+//	proceeds to reset the data values for member variables
+//	to their initial or zero values.
 //
 // ----------------------------------------------------------------
 //
 // # IMPORTANT
 //
-// All the member variable data values contained in input parameter
-// 'numStrKernel' will be deleted and reset to their zero
-// values.
+//	All the member variable data values contained in input
+//	parameter 'numStrKernel' will be deleted and reset to
+//	their zero values.
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
-// Input Parameters
+// # Input Parameters
 //
-//	numStrKernel               *NumberStrKernel
-//	   - A pointer to an instance of NumberStrKernel. All
-//	     the internal member variables contained in this instance
-//	     will be deleted and reset to their zero values.
+//	numStrKernel				*NumberStrKernel
 //
-// ------------------------------------------------------------------------
+//		A pointer to an instance of NumberStrKernel. All
+//		the internal member variables contained in this
+//		instance will be deleted and reset to their zero
+//		values.
 //
-// Return Values
+// ----------------------------------------------------------------
+//
+// # Return Values
 //
 //	NONE
 func (numStrKernelElectron *numberStrKernelElectron) empty(
@@ -233,7 +238,13 @@ func (numStrKernelElectron *numberStrKernelElectron) empty(
 
 	numStrKernel.integerDigits.Empty()
 
+	numStrKernel.integerDigits.charSearchType =
+		CharSearchType.LinearTargetStartingIndex()
+
 	numStrKernel.fractionalDigits.Empty()
+
+	numStrKernel.fractionalDigits.charSearchType =
+		CharSearchType.LinearTargetStartingIndex()
 
 	numStrKernel.numericValueType =
 		NumValType.None()

@@ -3883,6 +3883,7 @@ func (charsArrayDto *RuneArrayDto) SearchForTextCharacterString(
 // Character Search Type Options
 //
 //	CharSearchType.LinearTargetStartingIndex()
+//
 //	- Designates the search type as a Linear Target Starting Index
 //	  Search Type. This means that each character in the Target
 //	  Search String will be compared to each corresponding

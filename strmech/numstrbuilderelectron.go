@@ -10,10 +10,11 @@ type numStrBuilderElectron struct {
 	lock *sync.Mutex
 }
 
-// extractNumRunes - Receives an array of runes and extracts the
-// numeric digits as text characters.
-// Set 'characterSearchLength' to minus one (-1) for end-of-string
-// search.
+// extractNumRunes
+//
+// Receives an array of runes and extracts the numeric
+// digits as text characters. Set 'characterSearchLength'
+// to minus one (-1) for end-of-string search.
 func (nStrBuilderElectron *numStrBuilderElectron) extractNumRunes(
 	targetSearchString RuneArrayDto,
 	targetSearchStringName string,
