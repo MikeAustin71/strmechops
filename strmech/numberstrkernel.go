@@ -8,118 +8,136 @@ import (
 	"sync"
 )
 
-// NumberStrKernel - Contains all the base specifications necessary
-// to construct an integer or floating pointer number string.
+// NumberStrKernel
+//
+//	Contains all the base specifications necessary
+//	to construct an integer or floating point number
+//	string.
 type NumberStrKernel struct {
 	integerDigits RuneArrayDto
-	// An array of numeric digits constituting the integer portion
-	// of the numeric value represented by this instance of
-	// NumberStrKernel.
+	// An array of numeric digits constituting the
+	// integer portion of the numeric value represented
+	// by this instance of NumberStrKernel.
 
 	fractionalDigits RuneArrayDto
-	// An array of numeric digits constituting the fractional
-	// portion of the numeric value represented by this instance of
+	// An array of numeric digits constituting the
+	// fractional portion of the numeric value
+	// represented by this instance of
 	// NumberStrKernel.
 
 	numericValueType NumericValueType
-	// This enumeration value specifies the type of numeric value
-	// contained in the current instance of NumberStrKernel. The
-	// contained numeric value is classified either as an integer
-	// or a floating point value.
+	// This enumeration value specifies the type of
+	// numeric value contained in the current instance
+	// of NumberStrKernel. The contained numeric value
+	// is classified either as an integer or a floating
+	// point value.
 	//
-	// Possible enumeration values are listed as follows:
+	// Possible enumeration values are listed as
+	// follows:
 	//  NumValType.None()
 	//  NumValType.FloatingPoint()
 	//  NumValType.Integer()
 
 	numberSign NumericSignValueType
-	// An enumeration specifying the number sign associated with the
-	// numeric value represented by this instance of
-	// NumberStrKernel.  Possible values are listed as follows:
+	// An enumeration specifying the number sign associated
+	// with the numeric value represented by this instance
+	// of NumberStrKernel.  Possible values are listed as
+	// follows:
 	//      NumSignVal.None() - Invalid Value
 	//      NumSignVal.Negative() = -1
 	//      NumSignVal.Zero()     =  0
 	//      NumSignVal.Positive() =  1
 
-	isNonZeroValue bool // If 'true' the Numeric Value is greater than
-	//                     or less than zero ('0').
-	//                     If 'false' the Numeric Value is equal to zero.
+	isNonZeroValue bool
+	// If 'true', the Numeric Value is greater than
+	// or less than zero ('0'). If 'false', the
+	// Numeric Value is equal to zero.
 
 	lock *sync.Mutex
 }
 
-// AddIntegerDigit - Adds a single numeric digit to the internal
-// integer digits rune array.
+// AddIntegerDigit
+//
+//	Appends a single numeric digit to the end of the
+//	internal integer digits rune array contained
+//	within the current instance of NumberStrKernel.
 //
 // ----------------------------------------------------------------
 //
-// Input Parameters
+// # Input Parameters
 //
-//	integerDigit            rune
-//	   - A rune with a numeric character between '0' (zero) and '9'
-//	     (nine) inclusive. This numeric digit will be added to the
-//	     internal member variable 'NumberStrKernel.integerDigits'
-//	     for the current instance of NumberStrKernel.
+//	integerDigit				rune
 //
+//		A rune with a numeric character between '0' (zero)
+//		and '9' (nine) inclusive. This numeric digit will
+//		be appended to the end of the internal member
+//		variable 'NumberStrKernel.integerDigits' for the
+//		current	instance of NumberStrKernel.
 //
-//	errorPrefix                interface{}
-//	   - This object encapsulates error prefix text which is
-//	     included in all returned error messages. Usually, it
-//	     contains the name of the calling method or methods
-//	     listed as a method or function chain of execution.
+//	 errorPrefix                interface{}
 //
-//	     If no error prefix information is needed, set this parameter
-//	     to 'nil'.
+//		This object encapsulates error prefix text which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods
+//		listed as a method or function chain of execution.
 //
-//	     This empty interface must be convertible to one of the
-//	     following types:
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
 //
+//		This empty interface must be convertible to one of
+//		the following types:
 //
-//	     1. nil - A nil value is valid and generates an empty
-//	              collection of error prefix and error context
-//	              information.
+//		1. nil - A nil value is valid and generates an empty
+//		   collection of error prefix and error context
+//		   information.
 //
-//	     2. string - A string containing error prefix information.
+//		2. string - A string containing error prefix
+//			information.
 //
-//	     3. []string A one-dimensional slice of strings containing
-//	                 error prefix information
+//		3. []string A one-dimensional slice of strings
+//			containing error prefix information.
 //
-//	     4. [][2]string A two-dimensional slice of strings containing
-//	                    error prefix and error context information.
+//		4. [][2]string A two-dimensional slice of strings
+//		   containing error prefix and error context
+//		   information.
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//	                       ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
+//		5. ErrPrefixDto - An instance of ErrPrefixDto.
+//			Information from this object will be copied for use
+//			in error and informational messages.
 //
-//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//	                        ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
+//		6. *ErrPrefixDto - A pointer to an instance of
+//			ErrPrefixDto. Information from this object will be
+//			copied for use in error and informational messages.
 //
-//	     7. IBasicErrorPrefix - An interface to a method generating
-//	                            a two-dimensional slice of strings
-//	                            containing error prefix and error
-//	                            context information.
+//		7. IBasicErrorPrefix - An interface to a method
+//			generating a two-dimensional slice of strings
+//			containing error prefix and error context
+//			information.
 //
-//	     If parameter 'errorPrefix' is NOT convertible to one of
-//	     the valid types listed above, it will be considered
-//	     invalid and trigger the return of an error.
+//		If parameter 'errorPrefix' is NOT convertible to one
+//		of the valid types listed above, it will be
+//		considered invalid and trigger the return of an
+//		error.
 //
-//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
-//	     the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//		Types ErrPrefixDto and IBasicErrorPrefix are included
+//		in the 'errpref' software package,
+//		"github.com/MikeAustin71/errpref".
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
-// Return Values
+// # Return Values
 //
 //	error
-//	   - If this method completes successfully and no errors are
-//	     encountered this return value is set to 'nil'. Otherwise,
-//	     if errors are encountered, this return value will contain
-//	     an appropriate error message.
 //
-//	     If an error message is returned, the text value of input
-//	     parameter 'errorPrefix' will be inserted or prefixed at
-//	     the beginning of the error message.
+//		If this method completes successfully, the returned
+//		error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error message.
+//	 	This returned error message will incorporate the method
+//	 	chain and text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be attached to the beginning
+//	 	of the error message.
 func (numStrKernel *NumberStrKernel) AddIntegerDigit(
 	integerDigit rune,
 	errorPrefix interface{}) (
@@ -146,114 +164,97 @@ func (numStrKernel *NumberStrKernel) AddIntegerDigit(
 		return err
 	}
 
-	if integerDigit < '0' ||
-		integerDigit > '9' {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'integerDigit' is invalid!\n"+
-			"Integer Runes must represent a numberic character between\n"+
-			"'0' and '9', inclusive. 'integerDigit' fails to meet this criterion.\n"+
-			"The rune value of 'integerDigit' is %v\n"+
-			"The string value of 'integerDigit' is %v\n",
-			ePrefix.XCpy("integerDigit Error"),
-			integerDigit,
-			string(integerDigit))
-
-		return err
-	}
-
-	numStrKernel.integerDigits.AddChar(integerDigit)
-
-	if numStrKernel.numericValueType !=
-		NumValType.FloatingPoint() {
-
-		numStrKernel.numericValueType =
-			NumValType.Integer()
-	}
-
-	if integerDigit != '0' {
-		numStrKernel.isNonZeroValue = true
-	}
-
-	return err
+	return new(numberStrKernelAtom).addIntegerDigit(
+		numStrKernel,
+		integerDigit,
+		ePrefix)
 }
 
-// AddFractionalDigit - Adds a single numeric digit to the internal
-// fractional digits rune array.
+// AddFractionalDigit
+//
+//	Appends a single numeric digit to the end of the internal
+//	fractional digits rune array.
 //
 // ----------------------------------------------------------------
 //
-// Input Parameters
+// # Input Parameters
 //
-//		fractionalDigit            rune
-//		   - A rune with a numeric character between '0' (zero) and '9'
-//		     (nine) inclusive. This numeric digit will be added to the
-//		     internal member variable 'NumberStrKernel.fractionalDigits'
-//		     for the current instance of NumberStrKernel.
+//	fractionalDigit				rune
+//
+//		A rune with a numeric character between '0' (zero)
+//		and '9' (nine) inclusive. This numeric digit will
+//		be appended to the end of the internal member
+//		variable 'NumberStrKernel.fractionalDigits'
+//		for the current instance of NumberStrKernel.
 //
 //
 //	 errorPrefix                interface{}
-//	    - This object encapsulates error prefix text which is
-//	      included in all returned error messages. Usually, it
-//	      contains the name of the calling method or methods
-//	      listed as a method or function chain of execution.
 //
-//	      If no error prefix information is needed, set this
-//	      parameter to 'nil'.
+//		This object encapsulates error prefix text which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods
+//		listed as a method or function chain of execution.
 //
-//	      This empty interface must be convertible to one of the
-//	      following types:
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
 //
+//		This empty interface must be convertible to one of
+//		the following types:
 //
-//	      1. nil - A nil value is valid and generates an empty
-//	               collection of error prefix and error context
-//	               information.
+//		1. nil - A nil value is valid and generates an empty
+//		   collection of error prefix and error context
+//		   information.
 //
-//	      2. string - A string containing error prefix information.
+//		2. string - A string containing error prefix
+//			information.
 //
-//	      3. []string A one-dimensional slice of strings containing
-//	                  error prefix information
+//		3. []string A one-dimensional slice of strings
+//			containing error prefix information.
 //
-//	      4. [][2]string A two-dimensional slice of strings
-//	         containing error prefix and error context information.
+//		4. [][2]string A two-dimensional slice of strings
+//		   containing error prefix and error context
+//		   information.
 //
-//	      5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//	                        ErrorPrefixInfo from this object will be
-//	                        copied to 'errPrefDto'.
+//		5. ErrPrefixDto - An instance of ErrPrefixDto.
+//			Information from this object will be copied for use
+//			in error and informational messages.
 //
-//	      6. *ErrPrefixDto - A pointer to an instance of
-//	                         ErrPrefixDto. ErrorPrefixInfo from this
-//	                         object will be copied to 'errPrefDto'.
+//		6. *ErrPrefixDto - A pointer to an instance of
+//			ErrPrefixDto. Information from this object will be
+//			copied for use in error and informational messages.
 //
-//	      7. IBasicErrorPrefix - An interface to a method generating
-//	                             a two-dimensional slice of strings
-//	                             containing error prefix and error
-//	                             context information.
+//		7. IBasicErrorPrefix - An interface to a method
+//			generating a two-dimensional slice of strings
+//			containing error prefix and error context
+//			information.
 //
-//	      If parameter 'errorPrefix' is NOT convertible to one of
-//	      the valid types listed above, it will be considered
-//	      invalid and trigger the return of an error.
+//		If parameter 'errorPrefix' is NOT convertible to one
+//		of the valid types listed above, it will be
+//		considered invalid and trigger the return of an
+//		error.
 //
-//	      Types ErrPrefixDto and IBasicErrorPrefix are included in
-//	      the 'errpref' software package,
-//	      "github.com/MikeAustin71/errpref".
+//		Types ErrPrefixDto and IBasicErrorPrefix are included
+//		in the 'errpref' software package,
+//		"github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
-// Return Values
+// # Return Values
 //
 //	error
-//	   - If this method completes successfully and no errors are
-//	     encountered this return value is set to 'nil'. Otherwise,
-//	     if errors are encountered, this return value will contain
-//	     an appropriate error message.
 //
-//	     If an error message is returned, the text value of input
-//	     parameter 'errorPrefix' will be inserted or prefixed at
-//	     the beginning of the error message.
+//		If this method completes successfully, the returned
+//		error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error message.
+//	 	This returned error message will incorporate the method
+//	 	chain and text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be attached to the beginning
+//	 	of the error message.
 func (numStrKernel *NumberStrKernel) AddFractionalDigit(
 	fractionalDigit rune,
-	errorPrefix interface{}) (
-	err error) {
+	errorPrefix interface{}) error {
 
 	if numStrKernel.lock == nil {
 		numStrKernel.lock = new(sync.Mutex)
@@ -264,6 +265,7 @@ func (numStrKernel *NumberStrKernel) AddFractionalDigit(
 	defer numStrKernel.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
+	var err error
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(

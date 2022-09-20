@@ -8,9 +8,111 @@ import (
 
 // numberStrKernelAtom - Provides helper methods for type
 // NumberStrKernel.
-//
 type numberStrKernelAtom struct {
 	lock *sync.Mutex
+}
+
+// addIntegerDigit - Adds a single numeric digit to the internal
+// integer digits rune array.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	numStrKernel				*NumberStrKernel
+//
+//		A pointer to an instance of NumberStrKernel. This
+//		instance contains the integer digit rune array to
+//		which the 'integerDigit' rune will be appended.
+//
+//	integerDigit            rune
+//
+//		A rune with a numeric character between '0' (zero) and
+//		'9' (nine) inclusive. This numeric digit will be
+//		appended to the internal member variable
+//		'NumberStrKernel.integerDigits' for NumberStrKernel
+//		input parameter 'numStrKernel'.
+//
+// ------------------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, this returned
+//		error Type is set equal to 'nil'. If errors are
+//		encountered during processing, the returned error
+//		Type will encapsulate an error message.
+//
+//		If an error message is returned, the text value for
+//		input parameter 'errPrefDto' (error prefix) will be
+//		prefixed or attached at the beginning of the error
+//		message.
+func (numStrKernelAtom *numberStrKernelAtom) addIntegerDigit(
+	numStrKernel *NumberStrKernel,
+	integerDigit rune,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if numStrKernelAtom.lock == nil {
+		numStrKernelAtom.lock = new(sync.Mutex)
+	}
+
+	numStrKernelAtom.lock.Lock()
+
+	defer numStrKernelAtom.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"negNumSearchSpecAtom."+
+			"addIntegerDigit()",
+		"")
+
+	if err != nil {
+
+		return err
+	}
+
+	if numStrKernel == nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'numStrKernel' is a nil pointer!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if integerDigit < '0' ||
+		integerDigit > '9' {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'integerDigit' is invalid!\n"+
+			"Integer Runes must represent a numberic character between\n"+
+			"'0' and '9', inclusive. 'integerDigit' fails to meet this criterion.\n"+
+			"The rune value of 'integerDigit' is %v\n"+
+			"The string value of 'integerDigit' is %v\n",
+			ePrefix.XCpy("integerDigit Error"),
+			integerDigit,
+			string(integerDigit))
+
+		return err
+	}
+
+	numStrKernel.integerDigits.AddChar(integerDigit)
+
+	if numStrKernel.numericValueType !=
+		NumValType.FloatingPoint() {
+
+		numStrKernel.numericValueType =
+			NumValType.Integer()
+	}
+
+	if integerDigit != '0' {
+		numStrKernel.isNonZeroValue = true
+	}
+
+	return err
 }
 
 // testValidityOfNumStrKernel - Receives a pointer to an instance
@@ -26,55 +128,58 @@ type numberStrKernelAtom struct {
 // return a boolean flag ('isValid') of 'true' and the returned
 // error type ('err') will be set to 'nil'.
 //
+// ------------------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	numStrKernel				*NumberStrKernel
+//
+//		A pointer to an instance of NumberStrKernel. This
+//		object will be subjected to diagnostic analysis in
+//		order to determine if all the member variables
+//		contain valid values.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error messages.
+//		Usually, it contains the name of the calling method
+//		or methods listed as a function chain.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
-// Input Parameters
+// # Return Values
 //
-//  numStrKernel               *NumberStrKernel
-//     - A pointer to an instance of NumberStrKernel. This object
-//       will be subjected to diagnostic analysis in order to
-//       determine if all the member variables contain valid
-//       values.
+//	isValid						bool
 //
+//		If input parameter 'numStrKernel' is judged to be valid in
+//		all respects, this return parameter will be set to 'true'.
 //
-//  errPrefDto                 *ePref.ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//		If input parameter 'numStrKernel' is found to be invalid,
+//		this return parameter will be set to 'false'.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	err							error
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
+//		If this method completes successfully, this returned
+//		error Type is set equal to 'nil'. If errors are
+//		encountered during processing, the returned error
+//		Type will encapsulate an error message.
 //
+//		If an error message is returned, the text value for
+//		input parameter 'errPrefDto' (error prefix) will be
+//		prefixed or attached at the beginning of the error
+//		message.
 //
-// ------------------------------------------------------------------------
-//
-// Return Values
-//
-//  isValid                    bool
-//     - If input parameter 'numStrKernel' is judged to be valid in
-//       all respects, this return parameter will be set to 'true'.
-//
-//     - If input parameter 'numStrKernel' is found to be invalid,
-//       this return parameter will be set to 'false'.
-//
-//
-//  err                        error
-//     - If input parameter 'numStrKernel' is judged to be valid in
-//       all respects, this return parameter will be set to 'nil'.
-//
-//       If input parameter, 'numStrKernel' is found to be invalid,
-//       this return parameter will be configured with an
-//       appropriate error message.
-//
-//       If an error message is returned, the text value for input
-//       parameter 'errPrefDto' (error prefix) will be prefixed or
-//       attached at the beginning of the error message.
-//
+//		NOTE: If the numeric value of 'numStrKernel' exceeds
+//		the maximum value for type int, an error will be
+//		returned.
 func (numStrKernelAtom *numberStrKernelAtom) testValidityOfNumStrKernel(
 	numStrKernel *NumberStrKernel,
 	errPrefDto *ePref.ErrPrefixDto) (
@@ -269,7 +374,6 @@ func (numStrKernelAtom *numberStrKernelAtom) testValidityOfNumStrKernel(
 
 // ptr - Returns a pointer to a new instance of
 // numberStrKernelAtom.
-//
 func (numStrKernelAtom numberStrKernelAtom) ptr() *numberStrKernelAtom {
 
 	if numStrKernelAtom.lock == nil {
