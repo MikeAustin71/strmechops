@@ -770,40 +770,42 @@ func (numStrKernelNanobot *numberStrKernelNanobot) getParameterTextListing(
 
 // setWithNumber
 //
-// Sets the internal member variable values for an instance
-// of NumberStrKernel passed as an input parameter.
+//	Deletes and resets the internal member variable
+//	values for an instance of NumberStrKernel passed
+//	as an input	parameter.
 //
-// This method assumes that the numeric value passed as
-// an empty interface object is one of the following types:
+//	This method assumes that the numeric value passed
+//	as an empty interface object is one of the following
+//	types:
 //
-//	int8
-//	int16
-//	int32
-//	int	(equivalent to int32)
-//	int64
-//	uint8
-//	uint16
-//	uint32
-//	uint (equivalent to uint32)
-//	uint64
-//	*big.Int
-//	float32
-//	float64
-//	*big.Float
+//		int8
+//		int16
+//		int32
+//		int	(equivalent to int32)
+//		int64
+//		uint8
+//		uint16
+//		uint32
+//		uint (equivalent to uint32)
+//		uint64
+//		*big.Int
+//		float32
+//		float64
+//		*big.Float
 //
-// If the empty interface object is not one of the types
-// listed above, an error will be returned.
+//	If the empty interface object is not one of the types
+//	listed above, an error will be returned.
 //
 // # IMPORTANT
 //
-// -----------------------------------------------------------------
+// ----------------------------------------------------------------
 //
-// Be advised that the data fields in 'numStrKernel' will be
-// deleted and set to new values.
+//	Be advised that the data fields in 'numStrKernel' will be
+//	deleted and set to new values.
 //
-// -----------------------------------------------------------------
+// ----------------------------------------------------------------
 //
-// Input Parameters
+// # Input Parameters
 //
 //	numStrKernel				*NumberStrKernel
 //
@@ -867,6 +869,36 @@ func (numStrKernelNanobot *numberStrKernelNanobot) getParameterTextListing(
 //		If parameter 'numericValue' includes a signed numeric
 //		value, parameter 'numberSign' will override that
 //		designation.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error messages.
+//		Usually, it contains the name of the calling method
+//		or methods listed as a function chain.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ------------------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, this returned
+//		error Type is set equal to 'nil'. If errors are
+//		encountered during processing, the returned error
+//		Type will encapsulate an error message.
+//
+//		If an error message is returned, the text value for
+//		input parameter 'errPrefDto' (error prefix) will be
+//		prefixed or attached at the beginning of the error
+//		message.
 func (numStrKernelNanobot *numberStrKernelNanobot) setWithNumber(
 	numStrKernel *NumberStrKernel,
 	numericValue interface{},
@@ -985,6 +1017,191 @@ func (numStrKernelNanobot *numberStrKernelNanobot) setWithNumber(
 			fmt.Sprintf("%T", numericValue))
 
 	}
+
+	return err
+}
+
+//	setWithRunes
+//
+//	Deletes and resets all the internal member variable
+//	values for an instance of NumberStrKernel passed as
+//	an input parameter. Integer and fractional digits
+//	are configured from rune array parameters passed by
+//	the calling function.
+//
+// # IMPORTANT
+//
+// ----------------------------------------------------------------
+//
+//	Be advised that all the data fields within input
+//	parameter 'numStrKernel' will be deleted and reset
+//	to new values.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	numStrKernel				*NumberStrKernel
+//
+//		A pointer to an instance of NumberStrKernel. The data
+//		values for all internal member variables contained in
+//		this instance will be deleted and reset to new values.
+//
+//	integerDigitRunes			[]rune
+//
+//		A rune array used to configure the integer digits
+//		array contained within the NumberStrKernel instance,
+//		'numStrKernel'.
+//
+//	fractionalDigitRunes		[]rune
+//
+//		A rune array used to configure the fractional
+//		digits array contained within the NumberStrKernel
+//		instance, 'numStrKernel'.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error messages.
+//		Usually, it contains the name of the calling method
+//		or methods listed as a function chain.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ------------------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, this returned
+//		error Type is set equal to 'nil'. If errors are
+//		encountered during processing, the returned error
+//		Type will encapsulate an error message.
+//
+//		If an error message is returned, the text value for
+//		input parameter 'errPrefDto' (error prefix) will be
+//		prefixed or attached at the beginning of the error
+//		message.
+func (numStrKernelNanobot *numberStrKernelNanobot) setWithRunes(
+	numStrKernel *NumberStrKernel,
+	integerDigitRunes []rune,
+	fractionalDigitRunes []rune,
+	numberSign NumericSignValueType,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if numStrKernelNanobot.lock == nil {
+		numStrKernelNanobot.lock = new(sync.Mutex)
+	}
+
+	numStrKernelNanobot.lock.Lock()
+
+	defer numStrKernelNanobot.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"numberStrKernelNanobot."+
+			"setWithRunes()",
+		"")
+
+	if err != nil {
+
+		return err
+
+	}
+
+	if numStrKernel == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'numStrKernel' is a nil pointer!\n",
+			ePrefix.String())
+
+		return err
+	}
+	new(numberStrKernelElectron).empty(
+		numStrKernel)
+
+	lenIntDigits := len(integerDigitRunes)
+
+	lenFracDigits := len(fractionalDigitRunes)
+
+	if lenIntDigits == 0 &&
+		lenFracDigits == 0 {
+
+		numStrKernel.integerDigits.CharsArray =
+			make([]rune, 1)
+
+		numStrKernel.integerDigits.CharsArray[0] =
+			'0'
+
+		numStrKernel.numericValueType = NumValType.Integer()
+
+		numStrKernel.numberSign = NumSignVal.Zero()
+
+		numStrKernel.isNonZeroValue = false
+
+		return err
+	}
+
+	nStrKernelAtom := numberStrKernelAtom{}
+
+	for i := 0; i < lenIntDigits; i++ {
+
+		err = nStrKernelAtom.addIntegerDigit(
+			numStrKernel,
+			integerDigitRunes[i],
+			ePrefix.XCpy(
+				fmt.Sprintf(
+					"integerDigitRunes[%v]=%v",
+					i,
+					integerDigitRunes[i])))
+
+		if err != nil {
+			return err
+		}
+	}
+
+	for j := 0; j < lenFracDigits; j++ {
+
+		err = nStrKernelAtom.addFractionalDigit(
+			numStrKernel,
+			fractionalDigitRunes[j],
+			ePrefix.XCpy(
+				fmt.Sprintf(
+					"fractionalDigitRunes[%v]=%v",
+					j,
+					fractionalDigitRunes[j])))
+
+		if err != nil {
+			return err
+		}
+	}
+
+	if numStrKernel.isNonZeroValue == false {
+
+		numStrKernel.numberSign = NumSignVal.Zero()
+
+	} else {
+
+		numStrKernel.numberSign = NumSignVal.Positive()
+
+		if numberSign == NumSignVal.Negative() {
+
+			numStrKernel.numberSign = NumSignVal.Negative()
+
+		}
+	}
+
+	numStrKernel.RationalizeFractionalIntegerDigits()
 
 	return err
 }
