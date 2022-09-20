@@ -1127,8 +1127,10 @@ func (numStrKernelNanobot *numberStrKernelNanobot) setWithRunes(
 
 		return err
 	}
-	new(numberStrKernelElectron).empty(
-		numStrKernel)
+
+	nStrKernelElectron := numberStrKernelElectron{}
+
+	nStrKernelElectron.empty(numStrKernel)
 
 	lenIntDigits := len(integerDigitRunes)
 
@@ -1201,7 +1203,9 @@ func (numStrKernelNanobot *numberStrKernelNanobot) setWithRunes(
 		}
 	}
 
-	numStrKernel.RationalizeFractionalIntegerDigits()
+	err = nStrKernelElectron.rationalizeFractionalIntegerDigits(
+		numStrKernel,
+		ePrefix)
 
 	return err
 }

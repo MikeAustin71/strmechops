@@ -336,7 +336,7 @@ func (numStrKernelElectron *numberStrKernelElectron) equal(
 //	numStrKernel				*NumberStrKernel
 //
 //		A pointer to an instance of NumberStrKernel. If
-//		the fractional digits array contians numeric
+//		the fractional digits array contains numeric
 //		digits and the integer digits array contains
 //		zero digits, the integer digits array will be
 //		configured with a zero ('0').
@@ -392,7 +392,7 @@ func (numStrKernelElectron *numberStrKernelElectron) rationalizeFractionalIntege
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
 		"numberStrKernelElectron."+
-			"convertKernelToBigInt()",
+			"rationalizeFractionalIntegerDigits()",
 		"")
 
 	if err != nil {
