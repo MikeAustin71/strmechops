@@ -2785,11 +2785,17 @@ func (numStrKernel *NumberStrKernel) GetParameterTextListing(
 				"numStrKernel"))
 }
 
-// IsNonZeroValue - Returns 'true' if the value of the current
-// NumberStrKernel instance is non-zero.
+// IsNonZeroValue
 //
-// This means that the numeric value of the NumberStrKernel
-// instance is less than or greater than zero (0).
+// If this method returns 'true', it means that
+// the numeric value of the current NumberStrKernel
+// instance is non-zero. A non-zero numeric value
+// signals that the numeric value is less than or
+// greater than zero (0).
+//
+// If this method returns 'false' it means that the
+// numeric value of current NumberStrKernel instance
+// is zero ('0').
 func (numStrKernel *NumberStrKernel) IsNonZeroValue() bool {
 
 	if numStrKernel.lock == nil {
@@ -3781,18 +3787,9 @@ func (numStrKernel *NumberStrKernel) RationalizeFractionalIntegerDigits() {
 
 	defer numStrKernel.lock.Unlock()
 
-	if numStrKernel.fractionalDigits.GetRuneArrayLength() == 0 {
-		return
-	}
-
-	// Fractional Digits exist!
-	if numStrKernel.integerDigits.GetRuneArrayLength() == 0 {
-
-		numStrKernel.integerDigits.CharsArray =
-			make([]rune, 1)
-
-		numStrKernel.integerDigits.CharsArray[0] = '0'
-	}
+	_ = new(numberStrKernelElectron).rationalizeFractionalIntegerDigits(
+		numStrKernel,
+		nil)
 
 	return
 }
