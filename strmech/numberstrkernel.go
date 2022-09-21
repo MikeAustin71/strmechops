@@ -638,7 +638,9 @@ func (numStrKernel *NumberStrKernel) EmptyIntegerDigits() {
 
 	defer numStrKernel.lock.Unlock()
 
-	numStrKernel.integerDigits.EmptyCharsArray()
+	_ = new(numberStrKernelAtom).emptyIntegerDigits(
+		numStrKernel,
+		nil)
 
 	return
 }
