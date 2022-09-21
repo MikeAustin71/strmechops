@@ -251,10 +251,125 @@ func (numStrKernelAtom *numberStrKernelAtom) addIntegerDigit(
 	return err
 }
 
+//	emptyFractionalDigits
+//
+//	Receives an instance of NumberStrKernel and proceeds
+//	to set the internal fractional digits array to 'nil'.
+//	This effectively deletes the fractional part of the
+//	numeric value contained within the passed instance
+//	of NumberStrKernel.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	numStrKernel				*NumberStrKernel
+//
+//		A pointer to an instance of NumberStrKernel. This
+//		instance contains the fractional digit rune array
+//		which will be deleted and set to 'nil'.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error messages.
+//		Usually, it contains the name of the calling method
+//		or methods listed as a function chain.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ------------------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, this returned
+//		error Type is set equal to 'nil'. If errors are
+//		encountered during processing, the returned error
+//		Type will encapsulate an error message.
+//
+//		If an error message is returned, the text value for
+//		input parameter 'errPrefDto' (error prefix) will be
+//		prefixed or attached at the beginning of the error
+//		message.
+func (numStrKernelAtom *numberStrKernelAtom) emptyFractionalDigits(
+	numStrKernel *NumberStrKernel,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if numStrKernelAtom.lock == nil {
+		numStrKernelAtom.lock = new(sync.Mutex)
+	}
+
+	numStrKernelAtom.lock.Lock()
+
+	defer numStrKernelAtom.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"negNumSearchSpecAtom."+
+			"emptyFractionalDigits()",
+		"")
+
+	if err != nil {
+
+		return err
+	}
+
+	if numStrKernel == nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'numStrKernel' is a nil pointer!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	numStrKernel.fractionalDigits.Empty()
+
+	numStrKernel.fractionalDigits.charSearchType =
+		CharSearchType.LinearTargetStartingIndex()
+
+	var isNonZero bool
+
+	isNonZero,
+		err = new(numberStrKernelElectron).isNonZeroValue(
+		numStrKernel,
+		ePrefix)
+
+	if err != nil {
+
+		return err
+	}
+
+	if isNonZero == false {
+
+		numStrKernel.numberSign = NumSignVal.Zero()
+
+		numStrKernel.numericValueType = NumValType.None()
+
+		return err
+	}
+
+	// integer digits exist
+
+	numStrKernel.numericValueType = NumValType.Integer()
+
+	return err
+}
+
 //	emptyIntegerDigits
 //
 //	Receives an instance of NumberStrKernel and proceeds to set
-//	the intenal integer digits array to 'nil'. This effectively
+//	the internal integer digits array to 'nil'. This effectively
 //	deletes the integer part of the numeric value contained
 //	within the passed instance of NumberStrKernel.
 //
@@ -265,8 +380,8 @@ func (numStrKernelAtom *numberStrKernelAtom) addIntegerDigit(
 //	numStrKernel				*NumberStrKernel
 //
 //		A pointer to an instance of NumberStrKernel. This
-//		instance contains the integer digit rune array to
-//		which the 'integerDigit' rune will be appended.
+//		instance contains the integer digit rune array
+//		which will be deleted and set to 'nil'.
 //
 //	errPrefDto					*ePref.ErrPrefixDto
 //
@@ -316,7 +431,7 @@ func (numStrKernelAtom *numberStrKernelAtom) emptyIntegerDigits(
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
 		"negNumSearchSpecAtom."+
-			"addIntegerDigit()",
+			"emptyIntegerDigits()",
 		"")
 
 	if err != nil {
