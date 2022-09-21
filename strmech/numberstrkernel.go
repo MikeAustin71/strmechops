@@ -599,7 +599,9 @@ func (numStrKernel *NumberStrKernel) EmptyFractionalDigits() {
 
 	defer numStrKernel.lock.Unlock()
 
-	numStrKernel.fractionalDigits.EmptyCharsArray()
+	_ = new(numberStrKernelAtom).emptyFractionalDigits(
+		numStrKernel,
+		nil)
 
 	return
 }
