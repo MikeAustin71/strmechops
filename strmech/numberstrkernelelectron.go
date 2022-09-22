@@ -315,7 +315,7 @@ func (numStrKernelElectron *numberStrKernelElectron) equal(
 	return true
 }
 
-//	isNonZeroValue
+//	getSetIsNonZeroValue
 //
 //	Receives a pointer to an instance of
 //	NumberStrKernel and proceeds to determine if
@@ -386,7 +386,7 @@ func (numStrKernelElectron *numberStrKernelElectron) equal(
 //		input parameter 'errPrefDto' (error prefix) will be
 //		prefixed or attached at the beginning of the error
 //		message.
-func (numStrKernelElectron *numberStrKernelElectron) isNonZeroValue(
+func (numStrKernelElectron *numberStrKernelElectron) getSetIsNonZeroValue(
 	numStrKernel *NumberStrKernel,
 	errPrefDto *ePref.ErrPrefixDto) (
 	isNonZeroValue bool,
@@ -406,7 +406,7 @@ func (numStrKernelElectron *numberStrKernelElectron) isNonZeroValue(
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
 		"numberStrKernelElectron."+
-			"isNonZeroValue()",
+			"getSetIsNonZeroValue()",
 		"")
 
 	if err != nil {
@@ -428,6 +428,8 @@ func (numStrKernelElectron *numberStrKernelElectron) isNonZeroValue(
 		integerDigits.
 		GetRuneArrayLength()
 
+	numStrKernelQuark := numberStrKernelQuark{}
+
 	for i := 0; i < lenArray; i++ {
 
 		if numStrKernel.integerDigits.CharsArray[i] > '0' &&
@@ -436,6 +438,11 @@ func (numStrKernelElectron *numberStrKernelElectron) isNonZeroValue(
 			numStrKernel.isNonZeroValue = true
 
 			isNonZeroValue = true
+
+			_,
+				_ = numStrKernelQuark.getSetNumValueType(
+				numStrKernel,
+				nil)
 
 			return isNonZeroValue, err
 		}
@@ -454,6 +461,11 @@ func (numStrKernelElectron *numberStrKernelElectron) isNonZeroValue(
 
 			isNonZeroValue = true
 
+			_,
+				_ = numStrKernelQuark.getSetNumValueType(
+				numStrKernel,
+				nil)
+
 			return isNonZeroValue, err
 		}
 	}
@@ -461,6 +473,11 @@ func (numStrKernelElectron *numberStrKernelElectron) isNonZeroValue(
 	numStrKernel.isNonZeroValue = false
 
 	isNonZeroValue = false
+
+	_,
+		_ = numStrKernelQuark.getSetNumValueType(
+		numStrKernel,
+		nil)
 
 	return isNonZeroValue, err
 }

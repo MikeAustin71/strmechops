@@ -341,7 +341,7 @@ func (numStrKernelAtom *numberStrKernelAtom) emptyFractionalDigits(
 	var isNonZero bool
 
 	isNonZero,
-		err = new(numberStrKernelElectron).isNonZeroValue(
+		err = new(numberStrKernelElectron).getSetIsNonZeroValue(
 		numStrKernel,
 		ePrefix)
 
@@ -455,7 +455,7 @@ func (numStrKernelAtom *numberStrKernelAtom) emptyIntegerDigits(
 	var isNonZero bool
 
 	isNonZero,
-		err = new(numberStrKernelElectron).isNonZeroValue(
+		err = new(numberStrKernelElectron).getSetIsNonZeroValue(
 		numStrKernel,
 		ePrefix)
 
@@ -708,7 +708,7 @@ func (numStrKernelAtom *numberStrKernelAtom) testValidityOfNumStrKernel(
 				"Error: This instance of NumberStrKernel is invalid!"+
 				"The Number Sign Value is invalid.\n"+
 				"NumberStrKernel has a zero numeric value.\n"+
-				"However, internal flag numStrKernel.isNonZeroValue\n"+
+				"However, internal flag numStrKernel.getSetIsNonZeroValue\n"+
 				"is set to 'true'.\n",
 				ePrefix.String())
 
@@ -723,7 +723,7 @@ func (numStrKernelAtom *numberStrKernelAtom) testValidityOfNumStrKernel(
 				"Error: This instance of NumberStrKernel is invalid!"+
 				"The Number Sign Value is invalid.\n"+
 				"NumberStrKernel has a non-zero numeric value.\n"+
-				"However, internal flag numStrKernel.isNonZeroValue\n"+
+				"However, internal flag numStrKernel.getSetIsNonZeroValue\n"+
 				"is set to 'false'.\n",
 				ePrefix.String())
 

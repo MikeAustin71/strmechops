@@ -1243,6 +1243,187 @@ func (numStrKernel *NumberStrKernel) GetBigIntNum(
 		ePrefix)
 }
 
+// GetFractionalDigits - Returns an instance of RuneArrayDto
+// containing a deep copy of the fractional digits rune array
+// encapsulated by the current instance of NumberStrKernel.
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
+//
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
+//
+//	     This empty interface must be convertible to one of the
+//	     following types:
+//
+//
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
+//
+//	     2. string - A string containing error prefix information.
+//
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
+//
+//	     4. [][2]string A two-dimensional slice of strings containing
+//	                    error prefix and error context information.
+//
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
+//
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	                        ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//		copyOfFractionalDigits     RuneArrayDto
+//	    - If this method completes successfully, the parameter will
+//	      return an instance of RuneArrayDto populated with a deep
+//	      copy of the fractional numeric digits contained in the
+//	      current instance of NumberStrKernel.
+//
+//
+//	 err                        error
+//	    - If this method completes successfully and no errors are
+//	      encountered this return value is set to 'nil'. Otherwise,
+//	      if errors are encountered, this return value will contain
+//	      an appropriate error message.
+//
+//	      If an error message is returned, the text value of input
+//	      parameter 'errorPrefix' will be inserted or prefixed at
+//	      the beginning of the error message.
+func (numStrKernel *NumberStrKernel) GetFractionalDigits(
+	errorPrefix interface{}) (
+	copyOfFractionalDigits RuneArrayDto,
+	err error) {
+
+	if numStrKernel.lock == nil {
+		numStrKernel.lock = new(sync.Mutex)
+	}
+
+	numStrKernel.lock.Lock()
+
+	defer numStrKernel.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumberStrKernel."+
+			"GetFractionalDigits()",
+		"")
+
+	if err != nil {
+		return copyOfFractionalDigits, err
+	}
+
+	if len(numStrKernel.fractionalDigits.CharsArray) == 0 {
+		return copyOfFractionalDigits, err
+	}
+
+	copyOfFractionalDigits,
+		err = numStrKernel.fractionalDigits.CopyOut(
+		ePrefix.XCpy("copyOfFractionalDigits<-" +
+			"numStrKernel.fractionalDigits"))
+
+	return copyOfFractionalDigits, err
+}
+
+// GetFractionalRuneArray - A deep copy of the fractional digits
+// rune array encapsulated by the current instance of
+// NumberStrKernel.
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//	NONE
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//	[]rune
+//	   - This method returns a rune array consisting of the
+//	     fractional digits portion of the numeric value represented
+//	     by the current instance of NumberStrKernel.  This source
+//	     rune array is identified as internal member variable
+//	     'NumberStrKernel.fractionalDigits'.
+func (numStrKernel *NumberStrKernel) GetFractionalRuneArray() []rune {
+
+	if numStrKernel.lock == nil {
+		numStrKernel.lock = new(sync.Mutex)
+	}
+
+	numStrKernel.lock.Lock()
+
+	defer numStrKernel.lock.Unlock()
+
+	return numStrKernel.fractionalDigits.GetRuneArray()
+}
+
+//	GetFractionalString
+//
+//	Converts the fractional rune array contained in the
+//	current instance of NumberStrKernel to a string
+//	and returns it to the calling function.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	NONE
+//
+// ------------------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//
+//		This method returns a string consisting of the
+//		fractional digits portion of the numeric value
+//		represented by the current instance of
+//		NumberStrKernel. This source of these fractional
+//		digits is identified as internal member variable
+//		'NumberStrKernel.fractionalDigits'.
+func (numStrKernel *NumberStrKernel) GetFractionalString() string {
+
+	if numStrKernel.lock == nil {
+		numStrKernel.lock = new(sync.Mutex)
+	}
+
+	numStrKernel.lock.Lock()
+
+	defer numStrKernel.lock.Unlock()
+
+	return numStrKernel.fractionalDigits.GetCharacterString()
+}
+
 func (numStrKernel *NumberStrKernel) GetIntegerNum(
 	roundingType NumberRoundingType,
 	errorPrefix interface{}) (
@@ -2173,171 +2354,34 @@ func (numStrKernel *NumberStrKernel) GetIntegerString() string {
 	return numStrKernel.integerDigits.GetCharacterString()
 }
 
-// GetFractionalDigits - Returns an instance of RuneArrayDto
-// containing a deep copy of the fractional digits rune array
-// encapsulated by the current instance of NumberStrKernel.
+//	GetIsNonZeroValue
+//
+//	Returns a boolean value signaling whether the
+//	numeric value represented by the current instance
+//	of NumberStrKernel is a Non-Zero value.
 //
 // ----------------------------------------------------------------
 //
-// Input Parameters
-//
-//	errorPrefix                interface{}
-//	   - This object encapsulates error prefix text which is
-//	     included in all returned error messages. Usually, it
-//	     contains the name of the calling method or methods
-//	     listed as a method or function chain of execution.
-//
-//	     If no error prefix information is needed, set this parameter
-//	     to 'nil'.
-//
-//	     This empty interface must be convertible to one of the
-//	     following types:
-//
-//
-//	     1. nil - A nil value is valid and generates an empty
-//	              collection of error prefix and error context
-//	              information.
-//
-//	     2. string - A string containing error prefix information.
-//
-//	     3. []string A one-dimensional slice of strings containing
-//	                 error prefix information
-//
-//	     4. [][2]string A two-dimensional slice of strings containing
-//	                    error prefix and error context information.
-//
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//	                       ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
-//
-//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//	                        ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
-//
-//	     7. IBasicErrorPrefix - An interface to a method generating
-//	                            a two-dimensional slice of strings
-//	                            containing error prefix and error
-//	                            context information.
-//
-//	     If parameter 'errorPrefix' is NOT convertible to one of
-//	     the valid types listed above, it will be considered
-//	     invalid and trigger the return of an error.
-//
-//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
-//	     the 'errpref' software package, "github.com/MikeAustin71/errpref".
-//
-// ------------------------------------------------------------------------
-//
-// Return Values
-//
-//		copyOfFractionalDigits     RuneArrayDto
-//	    - If this method completes successfully, the parameter will
-//	      return an instance of RuneArrayDto populated with a deep
-//	      copy of the fractional numeric digits contained in the
-//	      current instance of NumberStrKernel.
-//
-//
-//	 err                        error
-//	    - If this method completes successfully and no errors are
-//	      encountered this return value is set to 'nil'. Otherwise,
-//	      if errors are encountered, this return value will contain
-//	      an appropriate error message.
-//
-//	      If an error message is returned, the text value of input
-//	      parameter 'errorPrefix' will be inserted or prefixed at
-//	      the beginning of the error message.
-func (numStrKernel *NumberStrKernel) GetFractionalDigits(
-	errorPrefix interface{}) (
-	copyOfFractionalDigits RuneArrayDto,
-	err error) {
-
-	if numStrKernel.lock == nil {
-		numStrKernel.lock = new(sync.Mutex)
-	}
-
-	numStrKernel.lock.Lock()
-
-	defer numStrKernel.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
-		"NumberStrKernel."+
-			"GetFractionalDigits()",
-		"")
-
-	if err != nil {
-		return copyOfFractionalDigits, err
-	}
-
-	if len(numStrKernel.fractionalDigits.CharsArray) == 0 {
-		return copyOfFractionalDigits, err
-	}
-
-	copyOfFractionalDigits,
-		err = numStrKernel.fractionalDigits.CopyOut(
-		ePrefix.XCpy("copyOfFractionalDigits<-" +
-			"numStrKernel.fractionalDigits"))
-
-	return copyOfFractionalDigits, err
-}
-
-// GetFractionalRuneArray - A deep copy of the fractional digits
-// rune array encapsulated by the current instance of
-// NumberStrKernel.
-//
-// ----------------------------------------------------------------
-//
-// Input Parameters
+// # Input Parameters
 //
 //	NONE
 //
-// ------------------------------------------------------------------------
-//
-// Return Values
-//
-//	[]rune
-//	   - This method returns a rune array consisting of the
-//	     fractional digits portion of the numeric value represented
-//	     by the current instance of NumberStrKernel.  This source
-//	     rune array is identified as internal member variable
-//	     'NumberStrKernel.fractionalDigits'.
-func (numStrKernel *NumberStrKernel) GetFractionalRuneArray() []rune {
-
-	if numStrKernel.lock == nil {
-		numStrKernel.lock = new(sync.Mutex)
-	}
-
-	numStrKernel.lock.Lock()
-
-	defer numStrKernel.lock.Unlock()
-
-	return numStrKernel.fractionalDigits.GetRuneArray()
-}
-
-// GetFractionalString - Converts the fractional rune array
-// contained in the current instance of NumberStrKernel to a string
-// and returns it to the calling function.
-//
 // ----------------------------------------------------------------
 //
-// Input Parameters
+// # Return Values
 //
-//	NONE
+//	isNonZeroValue				bool
 //
-// ------------------------------------------------------------------------
+//		If this boolean value is set to false it signals
+//		that the numeric value of the current
+//		NumberStrKernel instance is equal to zero.
 //
-// Return Values
-//
-//	string
-//	   - This method returns a string consisting of the fractional
-//	     digits portion of the numeric value represented by the
-//	     current instance of NumberStrKernel. This source of these
-//	     fractional digits is identified as internal member
-//	     variable 'NumberStrKernel.fractionalDigits'.
-func (numStrKernel *NumberStrKernel) GetFractionalString() string {
+//		If this boolean value is set to 'true' it signals
+//		that the numeric value of the current
+//		NumberStrKernel instance is greater than or less
+//		than zero.
+func (numStrKernel *NumberStrKernel) GetIsNonZeroValue() (
+	isNonZeroValue bool) {
 
 	if numStrKernel.lock == nil {
 		numStrKernel.lock = new(sync.Mutex)
@@ -2347,7 +2391,12 @@ func (numStrKernel *NumberStrKernel) GetFractionalString() string {
 
 	defer numStrKernel.lock.Unlock()
 
-	return numStrKernel.fractionalDigits.GetCharacterString()
+	isNonZeroValue,
+		_ = new(numberStrKernelElectron).getSetIsNonZeroValue(
+		numStrKernel,
+		nil)
+
+	return isNonZeroValue
 }
 
 // GetNumberSign - Returns the Number Sign associated with the
@@ -2545,92 +2594,104 @@ func (numStrKernel *NumberStrKernel) GetNumberOfNumericDigits() int {
 
 }
 
-// GetNumberSignInt - Returns the Number Sign associated with the
-// current NumberStrKernel instance as an integer value.
+//	GetNumberSignAsInt
 //
-// If the current number sign value is invalid, an error will be
-// returned.
+//	Returns the Number Sign associated with the
+//	current NumberStrKernel instance as an integer
+//	value.
 //
-// Valid return values for Number Sign are:
+//	If the current number sign value is invalid,
+//	an error will be returned.
 //
-//	-1 Minus One
-//	 0 Zero
-//	 1 Plus 1
+//	Valid return values for Number Sign are:
+//
+//		-1 Minus One for negative values
+//		 0 Zero for value of zero
+//		 1 Plus One (+1) for positive values
 //
 // ----------------------------------------------------------------
 //
-// Input Parameters
+// # Input Parameters
 //
-//	errorPrefix                interface{}
-//	   - This object encapsulates error prefix text which is
-//	     included in all returned error messages. Usually, it
-//	     contains the name of the calling method or methods
-//	     listed as a method or function chain of execution.
+//	 errorPrefix                interface{}
 //
-//	     If no error prefix information is needed, set this parameter
-//	     to 'nil'.
+//		This object encapsulates error prefix text which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods
+//		listed as a method or function chain of execution.
 //
-//	     This empty interface must be convertible to one of the
-//	     following types:
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1. nil - A nil value is valid and generates an empty
+//		   collection of error prefix and error context
+//		   information.
+//
+//		2. string - A string containing error prefix
+//			information.
+//
+//		3. []string A one-dimensional slice of strings
+//			containing error prefix information.
+//
+//		4. [][2]string A two-dimensional slice of strings
+//		   containing error prefix and error context
+//		   information.
+//
+//		5. ErrPrefixDto - An instance of ErrPrefixDto.
+//			Information from this object will be copied for use
+//			in error and informational messages.
+//
+//		6. *ErrPrefixDto - A pointer to an instance of
+//			ErrPrefixDto. Information from this object will be
+//			copied for use in error and informational messages.
+//
+//		7. IBasicErrorPrefix - An interface to a method
+//			generating a two-dimensional slice of strings
+//			containing error prefix and error context
+//			information.
+//
+//		If parameter 'errorPrefix' is NOT convertible to one
+//		of the valid types listed above, it will be
+//		considered invalid and trigger the return of an
+//		error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are included
+//		in the 'errpref' software package,
+//		"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	int
+//
+//		If this method completes successfully, this parameter will
+//		return an integer value specifying the number sign
+//		associated with the numeric value represented by the
+//		current instance of NumberStrKernel. Possible valid return
+//		values are listed as follows:
 //
 //
-//	     1. nil - A nil value is valid and generates an empty
-//	              collection of error prefix and error context
-//	              information.
-//
-//	     2. string - A string containing error prefix information.
-//
-//	     3. []string A one-dimensional slice of strings containing
-//	                 error prefix information
-//
-//	     4. [][2]string A two-dimensional slice of strings containing
-//	                    error prefix and error context information.
-//
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//	                       ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
-//
-//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//	                        ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
-//
-//	     7. IBasicErrorPrefix - An interface to a method generating
-//	                            a two-dimensional slice of strings
-//	                            containing error prefix and error
-//	                            context information.
-//
-//	     If parameter 'errorPrefix' is NOT convertible to one of
-//	     the valid types listed above, it will be considered
-//	     invalid and trigger the return of an error.
-//
-//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
-//	     the 'errpref' software package, "github.com/MikeAustin71/errpref".
-//
-// ------------------------------------------------------------------------
-//
-// Return Values
-//
-//		int
-//	    - If this method completes successfully, this parameter will
-//	      return an integer value specifying the number sign
-//	      associated with the numeric value represented by the
-//	      current instance of NumberStrKernel. Possible valid return
-//	      values are listed as follows:
-//	         -1 (Minus One)
-//	          0 (Zero)
-//	          1 (Plus One)
+//			-1 Minus One for negative values
+//			 0 Zero for value of zero
+//			 1 Plus One (+1) for positive values
 //
 //
-//	 error
-//	    - If this method completes successfully and no errors are
-//	      encountered this return value is set to 'nil'. Otherwise,
-//	      if errors are encountered, this return value will contain
-//	      an appropriate error message.
+//	error
 //
-//	      If an error message is returned, the text value of input
-//	      parameter 'errorPrefix' will be inserted or prefixed at
-//	      the beginning of the error message.
-func (numStrKernel *NumberStrKernel) GetNumberSignInt(
+//		If this method completes successfully, the returned
+//		error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error message.
+//	 	This returned error message will incorporate the method
+//	 	chain and text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be attached to the beginning
+//	 	of the error message.
+func (numStrKernel *NumberStrKernel) GetNumberSignAsInt(
 	errorPrefix interface{}) (
 	int,
 	error) {
@@ -2650,7 +2711,7 @@ func (numStrKernel *NumberStrKernel) GetNumberSignInt(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumberStrKernel."+
-			"GetNumberSignInt()",
+			"GetNumberSignAsInt()",
 		"")
 
 	if err != nil {
@@ -2671,6 +2732,53 @@ func (numStrKernel *NumberStrKernel) GetNumberSignInt(
 	}
 
 	return numStrKernel.numberSign.XArithmeticValue(), err
+}
+
+//	GetNumericValueType
+//
+//	Returns the Numeric Value Type associated with
+//	the current instance of NumberStrKernel.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	NONE
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	NumericValueType
+//		This enumeration value specifies the type of
+//		numeric value contained in the current instance
+//		of NumberStrKernel. The contained numeric value
+//		is classified either as an integer or a floating
+//		point value.
+//
+//		Possible enumeration values are listed as
+//		follows:
+//			NumValType.None()
+//			NumValType.FloatingPoint()
+//			NumValType.Integer()
+func (numStrKernel *NumberStrKernel) GetNumericValueType() NumericValueType {
+
+	if numStrKernel.lock == nil {
+		numStrKernel.lock = new(sync.Mutex)
+	}
+
+	numStrKernel.lock.Lock()
+
+	defer numStrKernel.lock.Unlock()
+
+	var newNumericValueType NumericValueType
+
+	newNumericValueType,
+		_ = new(numberStrKernelQuark).getSetNumValueType(
+		numStrKernel,
+		nil)
+
+	return newNumericValueType
 }
 
 // GetParameterTextListing - Returns formatted text output
@@ -2773,7 +2881,7 @@ func (numStrKernel *NumberStrKernel) GetParameterTextListing(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumberStrKernel."+
-			"GetNumberSignInt()",
+			"GetNumberSignAsInt()",
 		"")
 
 	if err != nil {
@@ -2813,7 +2921,7 @@ func (numStrKernel *NumberStrKernel) IsNonZeroValue() bool {
 	var isNonZeroValue bool
 
 	isNonZeroValue,
-		_ = new(numberStrKernelElectron).isNonZeroValue(
+		_ = new(numberStrKernelElectron).getSetIsNonZeroValue(
 		numStrKernel,
 		nil)
 
