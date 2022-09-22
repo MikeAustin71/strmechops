@@ -13,6 +13,63 @@ type MainTest02 struct {
 	input string
 }
 
+func (MainTest02) NumStrKernelToIntConversion() {
+
+	funcName := "MainTest02.NumStrKernelToIntConversion()"
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		funcName,
+		"")
+
+	intDigits := "12345"
+	fracDigits := ""
+
+	sMechNStrKernel := strmech.NumberStrKernel{}
+	numberSign := strmech.NumSignVal.None()
+
+	numStrKernel,
+		err := sMechNStrKernel.NewFromStringDigits(
+		intDigits,
+		fracDigits,
+		numberSign,
+		ePrefix.XCpy(
+			fmt.Sprintf(
+				"intDigits=%v",
+				intDigits)))
+
+	if err != nil {
+		fmt.Println(
+			fmt.Sprintf("%v",
+				err.Error()))
+
+		return
+	}
+
+	var intNumber int
+
+	var roundType = strmech.NumRoundType.NoRounding()
+
+	intNumber,
+		err = numStrKernel.GetIntNum(
+		roundType,
+		ePrefix)
+
+	if err != nil {
+		fmt.Println(
+			fmt.Sprintf("%v",
+				err.Error()))
+
+		return
+	}
+
+	fmt.Printf("Original Integer Digits: %v\n",
+		intDigits)
+
+	fmt.Printf("NumStrKernel Integer Number: %v\n",
+		intNumber)
+
+}
+
 func (mTest02 MainTest02) CharSearchTermination01() {
 
 	funcName := "MainTest02.CharSearchTermination01()"

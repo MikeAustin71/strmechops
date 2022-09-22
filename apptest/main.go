@@ -1,14 +1,11 @@
 package main
 
-import (
-	"github.com/MikeAustin71/strmechops/strmech"
-)
+import "github.com/MikeAustin71/strmechops/apptest/examples"
 
 func main() {
 
-	mt := strmech.TestDebugAll{}
+	mt := examples.MainTest02{}
 
-	mt.MathRounding2(
-		"main()")
+	mt.NumStrKernelToIntConversion()
 
 }

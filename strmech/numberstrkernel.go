@@ -1424,49 +1424,10 @@ func (numStrKernel *NumberStrKernel) GetFractionalString() string {
 	return numStrKernel.fractionalDigits.GetCharacterString()
 }
 
-func (numStrKernel *NumberStrKernel) GetIntegerNum(
-	roundingType NumberRoundingType,
-	errorPrefix interface{}) (
-	int,
-	error) {
-
-	if numStrKernel.lock == nil {
-		numStrKernel.lock = new(sync.Mutex)
-	}
-
-	numStrKernel.lock.Lock()
-
-	defer numStrKernel.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-	var err error
-
-	intValue := -1
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
-		"NumberStrKernel."+
-			"GetIntegerNum()",
-		"")
-
-	if err != nil {
-		return intValue, err
-	}
-
-	err = new(numberStrKernelMolecule).convertKernelToIntNum(
-		numStrKernel,
-		&intValue,
-		roundingType,
-		ePrefix)
-
-	return intValue, err
-}
-
 //	GetIntNum
 //
 //	Returns the numeric value of the current NumberStrKernel
-//	instance as an integer value of type int.
+//	instance expressed as an integer value of type int.
 //
 //	If numeric value of the current NumberStrKernel instance
 //	is a floating point value, the returned integer value
@@ -1483,6 +1444,10 @@ func (numStrKernel *NumberStrKernel) GetIntegerNum(
 //		type of rounding algorithm that will be applied for
 //		the	rounding of fractional digits contained in the
 //		current instance of NumberStrKernel.
+//
+//		'roundingType' is only applied in cases where the
+//		current NumberStrKernel instance consists of a
+//		floating point numeric value.
 //
 //		If in doubt as to a suitable rounding method,
 //		'HalfAwayFromZero' is recommended.
@@ -1817,10 +1782,13 @@ func (numStrKernel *NumberStrKernel) GetIntNum(
 		return intValue, err
 	}
 
-	return new(numberStrKernelMolecule).convertKernelToInt(
+	err = new(numberStrKernelMolecule).convertKernelToIntNum(
 		numStrKernel,
+		&intValue,
 		roundingType,
 		ePrefix)
+
+	return intValue, err
 }
 
 //	GetInt32Num
@@ -2164,7 +2132,7 @@ func (numStrKernel *NumberStrKernel) GetInt32Num(
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
 
-	intValue := int32(-1)
+	int32Value := int32(-1)
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
@@ -2174,13 +2142,16 @@ func (numStrKernel *NumberStrKernel) GetInt32Num(
 		"")
 
 	if err != nil {
-		return intValue, err
+		return int32Value, err
 	}
 
-	return new(numberStrKernelMolecule).convertKernelToInt32(
+	err = new(numberStrKernelMolecule).convertKernelToIntNum(
 		numStrKernel,
+		&int32Value,
 		roundingType,
 		ePrefix)
+
+	return int32Value, err
 }
 
 // GetIntegerDigits - Returns an instance of RuneArrayDto
