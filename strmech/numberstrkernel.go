@@ -908,6 +908,10 @@ func (numStrKernel *NumberStrKernel) EqualNumericDigits(
 //		the	rounding of fractional digits contained in the
 //		current instance of NumberStrKernel.
 //
+//		'roundingType' is only applied in cases where the
+//		current NumberStrKernel instance consists of a
+//		floating point numeric value.
+//
 //		If in doubt as to a suitable rounding method,
 //		'HalfAwayFromZero' is recommended.
 //
@@ -1237,10 +1241,13 @@ func (numStrKernel *NumberStrKernel) GetBigIntNum(
 		return bigIntValue, err
 	}
 
-	return new(numberStrKernelElectron).convertKernelToBigInt(
+	err = new(numberStrKernelMolecule).convertKernelToIntNum(
 		numStrKernel,
+		bigIntValue,
 		roundingType,
 		ePrefix)
+
+	return bigIntValue, err
 }
 
 // GetFractionalDigits - Returns an instance of RuneArrayDto

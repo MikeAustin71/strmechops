@@ -5,6 +5,7 @@ import (
 	ePref "github.com/MikeAustin71/errpref"
 	"github.com/MikeAustin71/strmechops/strmech"
 	"io"
+	"math/big"
 	"strings"
 	"sync"
 )
@@ -22,7 +23,7 @@ func (MainTest02) NumStrKernelToIntConversion() {
 		"")
 
 	intDigits := "12345"
-	fracDigits := ""
+	fracDigits := "6"
 
 	sMechNStrKernel := strmech.NumberStrKernel{}
 	numberSign := strmech.NumSignVal.None()
@@ -45,12 +46,12 @@ func (MainTest02) NumStrKernelToIntConversion() {
 		return
 	}
 
-	var intNumber int
+	var bigIntNumber *big.Int
 
-	var roundType = strmech.NumRoundType.NoRounding()
+	var roundType = strmech.NumRoundType.HalfAwayFromZero()
 
-	intNumber,
-		err = numStrKernel.GetIntNum(
+	bigIntNumber,
+		err = numStrKernel.GetBigIntNum(
 		roundType,
 		ePrefix)
 
@@ -65,8 +66,11 @@ func (MainTest02) NumStrKernelToIntConversion() {
 	fmt.Printf("Original Integer Digits: %v\n",
 		intDigits)
 
+	fmt.Printf("Original Fractional Digits: %v\n",
+		fracDigits)
+
 	fmt.Printf("NumStrKernel Integer Number: %v\n",
-		intNumber)
+		bigIntNumber.Text(10))
 
 }
 

@@ -144,7 +144,8 @@ func (numStrKernelElectron *numberStrKernelElectron) convertKernelToBigInt(
 	var copyNStrKernel NumberStrKernel
 
 	copyNStrKernel,
-		err = numStrKernel.CopyOut(
+		err = new(numberStrKernelNanobot).copyOut(
+		numStrKernel,
 		ePrefix.XCpy(
 			"copyNStrKernel<-numStrKernel"))
 
