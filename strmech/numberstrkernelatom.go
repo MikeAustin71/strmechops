@@ -503,7 +503,7 @@ func (numStrKernelAtom *numberStrKernelAtom) convertKernelToBigFloat(
 	}
 
 	t.SetPrec(t.MinPrec())
-	t.SetMode(big.ToNearestAway)
+	t.SetMode(big.AwayFromZero)
 
 	if t.Acc() != big.Exact {
 
@@ -939,18 +939,29 @@ func (numStrKernelAtom *numberStrKernelAtom) convertKernelToBigInt(
 		return bigIntValue, err
 	}
 
+	var numberString string
+
+	if copyNStrKernel.numberSign == NumSignVal.Negative() {
+
+		numberString += "-"
+
+	}
+
+	numberString +=
+		copyNStrKernel.integerDigits.GetCharacterString()
+
 	_,
 		ok = bigIntValue.SetString(
-		copyNStrKernel.integerDigits.GetCharacterString(),
+		numberString,
 		10)
 
 	if !ok {
 		err = fmt.Errorf("%v\n"+
 			"Error Converting Rounded Integer string to *big.Int!\n"+
 			"The following integerDigits string generated an error.\n"+
-			"numStrKernel.integerDigits = '%v'\n",
+			"numberString = '%v'\n",
 			ePrefix.String(),
-			copyNStrKernel.integerDigits.GetCharacterString())
+			numberString)
 	}
 
 	return bigIntValue, err

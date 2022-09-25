@@ -14,6 +14,194 @@ type numberStrKernelMolecule struct {
 	lock *sync.Mutex
 }
 
+// convertKernelToFloatNum
+func (numStrKernelMolecule *numberStrKernelMolecule) convertKernelToFloatNum(
+	numStrKernel *NumberStrKernel,
+	numericValue interface{},
+	roundingType NumberRoundingType,
+	roundToFactionalDigits int,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if numStrKernelMolecule.lock == nil {
+		numStrKernelMolecule.lock = new(sync.Mutex)
+	}
+
+	numStrKernelMolecule.lock.Lock()
+
+	defer numStrKernelMolecule.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"numberStrKernelMolecule."+
+			"convertKernelToFloatNum()",
+		"")
+
+	if err != nil {
+
+		return err
+
+	}
+
+	if numStrKernel == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'numStrKernel' is a nil pointer!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	var bigFloatNum *big.Float
+
+	bigFloatNum,
+		err = new(numberStrKernelAtom).convertKernelToBigFloat(
+		numStrKernel,
+		roundingType,
+		roundToFactionalDigits,
+		ePrefix.XCpy(
+			"->bigFloatNum"))
+
+	if err != nil {
+
+		return err
+
+	}
+
+	var ok bool
+	var maxFloatValue *big.Float
+
+	switch numericValue.(type) {
+
+	case *float32:
+
+		maxFloatValue = big.NewFloat(math.MaxFloat32)
+
+		if bigFloatNum.Cmp(maxFloatValue) > 0 {
+
+			err = fmt.Errorf("%v\n"+
+				"ERROR: Numeric Value Out Of Range for type 'float32'!\n"+
+				"The numeric value of the NumStrKernel (numStrKernel)\n"+
+				"exceeds the maximum capacity of type 'float32'.\n"+
+				"NumStrKernel Numeric Value = %v\n"+
+				"Max Float32 Capactiy Value = %v\n",
+				ePrefix.String(),
+				bigFloatNum.Text('f', -1),
+				maxFloatValue.Text('f', -1))
+
+			return err
+
+		}
+
+		var float32Value *float32
+
+		float32Value, ok = numericValue.(*float32)
+
+		if !ok {
+
+			err = fmt.Errorf("%v\n"+
+				"ERROR: *float32 cast to 'float32Value' failed!\n",
+				ePrefix.String())
+
+			return err
+
+		}
+
+		var float64Value float64
+
+		float64Value,
+			_ = bigFloatNum.Float64()
+
+		*float32Value = float32(float64Value)
+
+	case *float64:
+
+		maxFloatValue = big.NewFloat(math.MaxFloat64)
+
+		if bigFloatNum.Cmp(maxFloatValue) > 0 {
+
+			err = fmt.Errorf("%v\n"+
+				"ERROR: Numeric Value Out Of Range for type 'float64'!\n"+
+				"The numeric value of the NumStrKernel (numStrKernel)\n"+
+				"exceeds the maximum capacity of type 'float64'.\n"+
+				"NumStrKernel Numeric Value = %v\n"+
+				"Max Float64 Capacity Value = %v\n",
+				ePrefix.String(),
+				bigFloatNum.Text('f', -1),
+				maxFloatValue.Text('f', -1))
+
+			return err
+
+		}
+
+		var float64Value *float64
+
+		float64Value, ok = numericValue.(*float64)
+
+		if !ok {
+
+			err = fmt.Errorf("%v\n"+
+				"ERROR: *float64 cast to 'float64Value' failed!\n",
+				ePrefix.String())
+
+			return err
+
+		}
+
+		*float64Value,
+			_ = bigFloatNum.Float64()
+
+	case *big.Float:
+
+		var bigFloatVal *big.Float
+
+		bigFloatVal, ok = numericValue.(*big.Float)
+
+		if !ok {
+
+			err = fmt.Errorf("%v\n"+
+				"ERROR: *big.Float cast to 'bigFloatVal' failed!\n",
+				ePrefix.String())
+
+			return err
+
+		}
+
+		bigFloatVal.Set(bigFloatNum)
+
+		bigFloatVal.SetPrec(bigFloatVal.MinPrec())
+		bigFloatVal.SetMode(big.AwayFromZero)
+
+		accuracy := bigFloatVal.Acc()
+
+		if accuracy != big.Exact {
+
+			err = fmt.Errorf("%v\n"+
+				"ERROR: *big.Float Accuracy is NOT equal to 'Exact'!\n"+
+				"Accuracy = '%v'\n",
+				ePrefix.String(),
+				accuracy.String())
+
+			return err
+
+		}
+
+	default:
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'numericValue' is an invalid type!\n"+
+			"'numericValue' is unsupported type '%v'\n",
+			ePrefix.String(),
+			fmt.Sprintf("%T", numericValue))
+
+	}
+
+	return err
+}
+
 //	convertKernelToIntNum
 //
 //	Converts an instance of NumberStrKernel to an integer
@@ -377,12 +565,6 @@ func (numStrKernelMolecule *numberStrKernelMolecule) convertKernelToIntNum(
 
 	}
 
-	if numStrKernel.numberSign == NumSignVal.Negative() {
-
-		bigIntNum.Neg(bigIntNum)
-
-	}
-
 	var ok bool
 	var maxIntValue *big.Int
 
@@ -466,7 +648,7 @@ func (numStrKernelMolecule *numberStrKernelMolecule) convertKernelToIntNum(
 				"ERROR: Numeric Value Out Of Range for type 'int64'!\n"+
 				"The numeric value of the NumStrKernel (numStrKernel)\n"+
 				"exceeds the maximum capacity of type 'int64'.\n"+
-				"Numeric Value = %v\n",
+				"NumStrKernel Numeric Value = %v\n",
 				ePrefix.String(),
 				bigIntNum.Text(10))
 
