@@ -366,7 +366,7 @@ func (numStrKernelMolecule *numberStrKernelMolecule) convertKernelToIntNum(
 	var bigIntNum *big.Int
 
 	bigIntNum,
-		err = new(numberStrKernelElectron).convertKernelToBigInt(
+		err = new(numberStrKernelAtom).convertKernelToBigInt(
 		numStrKernel,
 		roundingType,
 		ePrefix)

@@ -3,7 +3,6 @@ package strmech
 import (
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
-	"math/big"
 	"sync"
 )
 
@@ -11,187 +10,6 @@ import (
 // NumberStrKernel.
 type numberStrKernelElectron struct {
 	lock *sync.Mutex
-}
-
-//	convertKernelToBigInt
-//
-//	Converts an instance of NumberStrKernel to an integer
-//	value of type *big.Int.
-//
-// ----------------------------------------------------------------
-//
-// # Input Parameters
-//
-//	numStrKernel				*NumberStrKernel
-//
-//		A pointer to an instance of NumberStrKernel. The
-//		numeric value contained in this instance will be
-//		converted to an integer of type *big.Int.
-//
-//	errPrefDto					*ePref.ErrPrefixDto
-//
-//		This object encapsulates an error prefix string
-//		which is included in all returned error messages.
-//		Usually, it contains the name of the calling method
-//		or methods listed as a function chain.
-//
-//		If no error prefix information is needed, set this
-//		parameter to 'nil'.
-//
-//		Type ErrPrefixDto is included in the 'errpref'
-//		software package:
-//			"github.com/MikeAustin71/errpref".
-//
-// ----------------------------------------------------------------
-//
-// # Return Values
-//
-//	*big.Int
-//
-//		If this method completes successfully, the
-//		numeric	value represented by the current instance
-//		of	NumberStrKernel will be returned as a type
-//		*big.Int.
-//
-//	error
-//
-//		If this method completes successfully, this
-//		returned error Type is set equal to 'nil'. If errors
-//		are	encountered during processing, the returned
-//		error Type will encapsulate an error message.
-//
-//		If an error message is returned, the text value for
-//		input parameter 'errPrefDto' (error prefix) will be
-//		prefixed or attached at the beginning of the error
-//		message.
-func (numStrKernelElectron *numberStrKernelElectron) convertKernelToBigInt(
-	numStrKernel *NumberStrKernel,
-	roundingType NumberRoundingType,
-	errPrefDto *ePref.ErrPrefixDto) (
-	*big.Int,
-	error) {
-
-	if numStrKernelElectron.lock == nil {
-		numStrKernelElectron.lock = new(sync.Mutex)
-	}
-
-	numStrKernelElectron.lock.Lock()
-
-	defer numStrKernelElectron.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-	var err error
-
-	bigIntValue := big.NewInt(0)
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
-		errPrefDto,
-		"numberStrKernelElectron."+
-			"convertKernelToBigInt()",
-		"")
-
-	if err != nil {
-
-		return bigIntValue, err
-
-	}
-
-	if numStrKernel == nil {
-
-		err = fmt.Errorf("%v\n"+
-			"ERROR: Input parameter 'numStrKernel' is a nil pointer!\n",
-			ePrefix.String())
-
-		return bigIntValue, err
-	}
-
-	if !roundingType.XIsValid() {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'numStrRoundingSpec Rounding Type' is invalid!\n"+
-			"'roundingType' string  value = '%v'\n"+
-			"'roundingType' integer value = '%v'\n",
-			ePrefix.String(),
-			roundingType.String(),
-			roundingType.XValueInt())
-
-		return bigIntValue, err
-
-	}
-
-	var ok bool
-
-	if roundingType == NumRoundType.NoRounding() {
-
-		_,
-			ok = bigIntValue.SetString(
-			numStrKernel.integerDigits.GetCharacterString(),
-			10)
-
-		if !ok {
-			err = fmt.Errorf("%v\n"+
-				"Error Converting Integer string to *big.Int!\n"+
-				"The following integerDigits string generated an error.\n"+
-				"numStrKernel.integerDigits = '%v'\n",
-				ePrefix.String(),
-				numStrKernel.integerDigits.GetCharacterString())
-		}
-
-		return bigIntValue, err
-	}
-
-	var copyNStrKernel NumberStrKernel
-
-	copyNStrKernel,
-		err = new(numberStrKernelNanobot).copyOut(
-		numStrKernel,
-		ePrefix.XCpy(
-			"copyNStrKernel<-numStrKernel"))
-
-	if err != nil {
-
-		return bigIntValue, err
-
-	}
-
-	var numStrRoundingSpec NumStrRoundingSpec
-
-	numStrRoundingSpec,
-		err =
-		new(NumStrRoundingSpec).NewRoundingSpec(
-			roundingType,
-			0,
-			ePrefix)
-
-	if err != nil {
-		return bigIntValue, err
-	}
-
-	err = new(numStrMathRoundingNanobot).roundNumStrKernel(
-		&copyNStrKernel,
-		numStrRoundingSpec,
-		ePrefix)
-
-	if err != nil {
-		return bigIntValue, err
-	}
-
-	_,
-		ok = bigIntValue.SetString(
-		copyNStrKernel.integerDigits.GetCharacterString(),
-		10)
-
-	if !ok {
-		err = fmt.Errorf("%v\n"+
-			"Error Converting Rounded Integer string to *big.Int!\n"+
-			"The following integerDigits string generated an error.\n"+
-			"numStrKernel.integerDigits = '%v'\n",
-			ePrefix.String(),
-			copyNStrKernel.integerDigits.GetCharacterString())
-	}
-
-	return bigIntValue, err
 }
 
 //	empty
@@ -480,6 +298,8 @@ func (numStrKernelElectron *numberStrKernelElectron) getSetIsNonZeroValue(
 		numStrKernel,
 		nil)
 
+	numStrKernel.numberSign = NumSignVal.Zero()
+
 	return isNonZeroValue, err
 }
 
@@ -589,6 +409,114 @@ func (numStrKernelElectron *numberStrKernelElectron) rationalizeFractionalIntege
 			make([]rune, 1)
 
 		numStrKernel.integerDigits.CharsArray[0] = '0'
+	}
+
+	return err
+}
+
+//	setUninitializedKernelToZero
+//
+//	Receives a pointer to an instance of NumberStrKernel
+//	and proceeds to test the internal member variables
+//	for unitialized values.
+//
+//	If the NumberStrKernel numeric value is uninitialized,
+//	this method will set the numeric value to zero.
+//
+//	An uninitiallized numeric value is defined as the case
+//	where both integer digits and fractional digits rune
+//	arrays are both empty and equal to nil. In this case
+//	this method will configure the integer rune array with
+//	a single zero ('0') character.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	numStrKernel				*NumberStrKernel
+//
+//		A pointer to an instance of NumberStrKernel. This
+//		method will be examined to determine whether the
+//		numeric value is unitialized. An uninitialized
+//		numeric value is defined as a case where both the
+//		integer and fractional digits rune arrays are
+//		equal to zero. In this case, this method will set
+//		the integer array to a single zero ('0') character.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error messages.
+//		Usually, it contains the name of the calling method
+//		or methods listed as a function chain.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	err							error
+//
+//		If this method completes successfully, this
+//		returned error Type is set equal to 'nil'. If errors
+//		are	encountered during processing, the returned
+//		error Type will encapsulate an error message.
+//
+//		If an error message is returned, the text value for
+//		input parameter 'errPrefDto' (error prefix) will be
+//		prefixed or attached at the beginning of the error
+//		message.
+func (numStrKernelElectron *numberStrKernelElectron) setUninitializedKernelToZero(
+	numStrKernel *NumberStrKernel,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if numStrKernelElectron.lock == nil {
+		numStrKernelElectron.lock = new(sync.Mutex)
+	}
+
+	numStrKernelElectron.lock.Lock()
+
+	defer numStrKernelElectron.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"numberStrKernelElectron."+
+			"getSetIsNonZeroValue()",
+		"")
+
+	if err != nil {
+
+		return err
+
+	}
+
+	if numStrKernel == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'numStrKernel' is a nil pointer!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if numStrKernel.integerDigits.GetRuneArrayLength() == 0 &&
+		numStrKernel.fractionalDigits.GetRuneArrayLength() == 0 {
+
+		numStrKernel.integerDigits.CharsArray =
+			make([]rune, 1)
+
+		numStrKernel.integerDigits.CharsArray[0] = '0'
+
 	}
 
 	return err
