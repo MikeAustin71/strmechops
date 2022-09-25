@@ -361,29 +361,6 @@ func (numStrKernelAtom *numberStrKernelAtom) convertKernelToBigFloat(
 		return &t, err
 	}
 
-	nStrKernelElectron := numberStrKernelElectron{}
-
-	_,
-		err = nStrKernelElectron.getSetIsNonZeroValue(
-		numStrKernel,
-		ePrefix.XCpy("numStrKernel"))
-
-	if err != nil {
-
-		return &t, err
-
-	}
-
-	err = nStrKernelElectron.rationalizeFractionalIntegerDigits(
-		numStrKernel,
-		ePrefix)
-
-	if err != nil {
-
-		return &t, err
-
-	}
-
 	if !roundingType.XIsValid() {
 
 		err = fmt.Errorf("%v\n"+
@@ -411,6 +388,29 @@ func (numStrKernelAtom *numberStrKernelAtom) convertKernelToBigFloat(
 
 	}
 
+	nStrKernelElectron := numberStrKernelElectron{}
+
+	_,
+		err = nStrKernelElectron.getSetIsNonZeroValue(
+		numStrKernel,
+		ePrefix.XCpy("numStrKernel"))
+
+	if err != nil {
+
+		return &t, err
+
+	}
+
+	err = nStrKernelElectron.rationalizeFractionalIntegerDigits(
+		numStrKernel,
+		ePrefix)
+
+	if err != nil {
+
+		return &t, err
+
+	}
+
 	var ok bool
 
 	var newNumStrKernel NumberStrKernel
@@ -420,6 +420,17 @@ func (numStrKernelAtom *numberStrKernelAtom) convertKernelToBigFloat(
 		numStrKernel,
 		ePrefix.XCpy(
 			"numStrKernel->newNumStrKernel"))
+
+	if err != nil {
+
+		return &t, err
+
+	}
+
+	err = nStrKernelElectron.setUninitializedKernelToZero(
+		&newNumStrKernel,
+		ePrefix.XCpy(
+			"numStrKernel"))
 
 	if err != nil {
 
@@ -842,6 +853,20 @@ func (numStrKernelAtom *numberStrKernelAtom) convertKernelToBigInt(
 		return bigIntValue, err
 	}
 
+	if !roundingType.XIsValid() {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'numStrRoundingSpec Rounding Type' is invalid!\n"+
+			"'roundingType' string  value = '%v'\n"+
+			"'roundingType' integer value = '%v'\n",
+			ePrefix.String(),
+			roundingType.String(),
+			roundingType.XValueInt())
+
+		return bigIntValue, err
+
+	}
+
 	nStrKernelElectron := numberStrKernelElectron{}
 
 	_,
@@ -865,43 +890,7 @@ func (numStrKernelAtom *numberStrKernelAtom) convertKernelToBigInt(
 
 	}
 
-	if !roundingType.XIsValid() {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'numStrRoundingSpec Rounding Type' is invalid!\n"+
-			"'roundingType' string  value = '%v'\n"+
-			"'roundingType' integer value = '%v'\n",
-			ePrefix.String(),
-			roundingType.String(),
-			roundingType.XValueInt())
-
-		return bigIntValue, err
-
-	}
-
 	var ok bool
-
-	if roundingType == NumRoundType.NoRounding() {
-		// Equivalent to 'Truncation' where
-		// fractional digits are ignored and
-		// only existing integer digits are
-		// included.
-		_,
-			ok = bigIntValue.SetString(
-			numStrKernel.integerDigits.GetCharacterString(),
-			10)
-
-		if !ok {
-			err = fmt.Errorf("%v\n"+
-				"Error Converting integer number string to *big.Int!\n"+
-				"The following integerDigits string generated an error.\n"+
-				"numStrKernel.integerDigits = '%v'\n",
-				ePrefix.String(),
-				numStrKernel.integerDigits.GetCharacterString())
-		}
-
-		return bigIntValue, err
-	}
 
 	var copyNStrKernel NumberStrKernel
 
@@ -910,6 +899,17 @@ func (numStrKernelAtom *numberStrKernelAtom) convertKernelToBigInt(
 		numStrKernel,
 		ePrefix.XCpy(
 			"copyNStrKernel<-numStrKernel"))
+
+	if err != nil {
+
+		return bigIntValue, err
+
+	}
+
+	err = nStrKernelElectron.setUninitializedKernelToZero(
+		&copyNStrKernel,
+		ePrefix.XCpy(
+			"copyNStrKernel"))
 
 	if err != nil {
 

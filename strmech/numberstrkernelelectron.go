@@ -418,12 +418,12 @@ func (numStrKernelElectron *numberStrKernelElectron) rationalizeFractionalIntege
 //
 //	Receives a pointer to an instance of NumberStrKernel
 //	and proceeds to test the internal member variables
-//	for unitialized values.
+//	for uninitialized values.
 //
 //	If the NumberStrKernel numeric value is uninitialized,
 //	this method will set the numeric value to zero.
 //
-//	An uninitiallized numeric value is defined as the case
+//	An uninitialized numeric value is defined as the case
 //	where both integer digits and fractional digits rune
 //	arrays are both empty and equal to nil. In this case
 //	this method will configure the integer rune array with
@@ -437,7 +437,7 @@ func (numStrKernelElectron *numberStrKernelElectron) rationalizeFractionalIntege
 //
 //		A pointer to an instance of NumberStrKernel. This
 //		method will be examined to determine whether the
-//		numeric value is unitialized. An uninitialized
+//		numeric value is uninitialized. An uninitialized
 //		numeric value is defined as a case where both the
 //		integer and fractional digits rune arrays are
 //		equal to zero. In this case, this method will set
@@ -491,7 +491,7 @@ func (numStrKernelElectron *numberStrKernelElectron) setUninitializedKernelToZer
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
 		"numberStrKernelElectron."+
-			"getSetIsNonZeroValue()",
+			"setUninitializedKernelToZero()",
 		"")
 
 	if err != nil {
