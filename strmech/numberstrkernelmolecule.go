@@ -346,7 +346,7 @@ type numberStrKernelMolecule struct {
 //
 // # Return Values
 //
-//	numOfFractionalDigits		uint
+//	numOfFractionalDigits		int
 //
 //		The number of fractional digits contained in the
 //		returned numeric value passed through parameter
@@ -383,7 +383,7 @@ func (numStrKernelMolecule *numberStrKernelMolecule) convertKernelToFloatNum(
 	roundingType NumberRoundingType,
 	roundToFactionalDigits int,
 	errPrefDto *ePref.ErrPrefixDto) (
-	numOfFractionalDigits uint,
+	numOfFractionalDigits int,
 	err error) {
 
 	if numStrKernelMolecule.lock == nil {

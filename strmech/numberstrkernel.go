@@ -887,6 +887,372 @@ func (numStrKernel *NumberStrKernel) EqualNumericDigits(
 		&incomingNumStrKernel.fractionalDigits)
 }
 
+//	GetBigFloatNum
+//
+//	Returns the numeric value of the current NumberStrKernel
+//	instance expressed as a floating point number of type
+//	*big.Float.
+//
+//	If numeric value of the current NumberStrKernel instance
+//	is a floating point value, the returned integer value
+//	will be rounded according to the rounding policy
+//	specified by input parameters, 'roundingType' and
+//	'roundToFactionalDigits'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	roundingType				NumberRoundingType
+//
+//		This enumeration parameter is used to specify the
+//		type of rounding algorithm that will be applied for
+//		the	rounding of fractional digits contained in the
+//		current instance of NumberStrKernel.
+//
+//		'roundingType' is only applied in cases where the
+//		current NumberStrKernel instance consists of a
+//		floating point numeric value.
+//
+//		If in doubt as to a suitable rounding method,
+//		'HalfAwayFromZero' is recommended.
+//
+//		Possible values are listed as follows:
+//			NumRoundType.None()	- Invalid Value
+//			NumRoundType.NoRounding()
+//			NumRoundType.HalfUpWithNegNums()
+//			NumRoundType.HalfDownWithNegNums()
+//			NumRoundType.HalfAwayFromZero()
+//			NumRoundType.HalfTowardsZero()
+//			NumRoundType.HalfToEven()
+//			NumRoundType.HalfToOdd()
+//			NumRoundType.Randomly()
+//			NumRoundType.Floor()
+//			NumRoundType.Ceiling()
+//			NumRoundType.Truncate()
+//
+//		Definitions:
+//
+//			NoRounding
+//
+//				Signals that no rounding operation will be
+//				performed on fractional digits. The
+//				fractional digits will therefore remain
+//				unchanged.
+//
+//			HalfUpWithNegNums
+//
+//				Half Round Up Including Negative Numbers.
+//				This method is intuitive but may produce
+//				unexpected results when applied to negative
+//				numbers.
+//
+//				'HalfUpWithNegNums' rounds .5 up.
+//
+//					Examples of 'HalfUpWithNegNums'
+//					7.6 rounds up to 8
+//					7.5 rounds up to 8
+//					7.4 rounds down to 7
+//					-7.4 rounds up to -7
+//					-7.5 rounds up to -7
+//					-7.6 rounds down to -8
+//
+//			HalfDownWithNegNums
+//
+//			Half Round Down Including Negative Numbers. This
+//			method is also considered intuitive but may
+//			produce unexpected results when applied to
+//			negative numbers.
+//
+//			'HalfDownWithNegNums' rounds .5 down.
+//
+//				Examples of HalfDownWithNegNums
+//
+//				7.6 rounds up to 8
+//				7.5 rounds down to 7
+//				7.4 rounds down to 7
+//				-7.4 rounds up to -7
+//				-7.5 rounds down to -8
+//				-7.6 rounds down to -8
+//
+//			HalfAwayFromZero
+//
+//				The 'HalfAwayFromZero' method rounds .5 further
+//				away from zero.	It provides clear and consistent
+//				behavior when dealing with negative numbers.
+//
+//					Examples of HalfAwayFromZero
+//
+//					7.6 rounds away to 8
+//					7.5 rounds away to 8
+//					7.4 rounds to 7
+//					-7.4 rounds to -7
+//					-7.5 rounds away to -8
+//					-7.6 rounds away to -8
+//
+//			HalfTowardsZero
+//
+//				Round Half Towards Zero. 'HalfTowardsZero' rounds
+//				0.5	closer to zero. It provides clear and
+//				consistent behavior	when dealing with negative
+//				numbers.
+//
+//					Examples of HalfTowardsZero
+//
+//					7.6 rounds away to 8
+//					7.5 rounds to 7
+//					7.4 rounds to 7
+//					-7.4 rounds to -7
+//					-7.5 rounds to -7
+//					-7.6 rounds away to -8
+//
+//			HalfToEven
+//
+//				Round Half To Even Numbers. 'HalfToEven' is
+//				also called	Banker's Rounding. This method
+//				rounds 0.5 to the nearest even digit.
+//
+//					Examples of HalfToEven
+//
+//					7.5 rounds up to 8 (because 8 is an even
+//					number)	but 6.5 rounds down to 6 (because
+//					6 is an even number)
+//
+//					HalfToEven only applies to 0.5. Other
+//					numbers (not ending	in 0.5) round to
+//					nearest as usual, so:
+//
+//					7.6 rounds up to 8
+//					7.5 rounds up to 8 (because 8 is an even number)
+//					7.4 rounds down to 7
+//					6.6 rounds up to 7
+//					6.5 rounds down to 6 (because 6 is an even number)
+//					6.4 rounds down to 6
+//
+//			HalfToOdd
+//
+//				Round Half to Odd Numbers. Similar to 'HalfToEven',
+//				but in this case 'HalfToOdd' rounds 0.5 towards odd
+//				numbers.
+//
+//					Examples of HalfToOdd
+//
+//					HalfToOdd only applies to 0.5. Other numbers
+//					(not ending	in 0.5) round to nearest as usual.
+//
+//					7.5 rounds down to 7 (because 7 is an odd number)
+//
+//					6.5 rounds up to 7 (because 7 is an odd number)
+//
+//					7.6 rounds up to 8
+//					7.5 rounds down to 7 (because 7 is an odd number)
+//					7.4 rounds down to 7
+//					6.6 rounds up to 7
+//					6.5 rounds up to 7 (because 7 is an odd number)
+//					6.4 rounds down to 6
+//
+//			Randomly
+//
+//				Round Half Randomly. Uses a Random Number Generator
+//				to choose between rounding 0.5 up or down.
+//
+//				All numbers other than 0.5 round to the nearest as
+//				usual.
+//
+//			Floor
+//
+//				Yields the nearest integer down. Floor does not apply
+//				any	special treatment to 0.5.
+//
+//				Floor Function: The greatest integer that is less than
+//				or equal to x
+//
+//				Source:
+//					https://www.mathsisfun.com/sets/function-floor-ceiling.html
+//
+//				In mathematics and computer science, the floor function
+//				is the function that takes as input a real number x,
+//				and gives as output the greatest integer less than or
+//				equal to x,	denoted floor(x) or ⌊x⌋.
+//
+//				Source:
+//					https://en.wikipedia.org/wiki/Floor_and_ceiling_functions
+//
+//				Examples of Floor
+//
+//					Number     Floor
+//					 2           2
+//					 2.4         2
+//					 2.9         2
+//					-2.5        -3
+//					-2.7        -3
+//					-2          -2
+//
+//			Ceiling
+//
+//				Yields the nearest integer up. Ceiling does not
+//				apply any special treatment to 0.5.
+//
+//				Ceiling Function: The least integer that is
+//				greater than or	equal to x.
+//				Source:
+//					https://www.mathsisfun.com/sets/function-floor-ceiling.html
+//
+//				The ceiling function maps x to the least integer
+//				greater than or equal to x, denoted ceil(x) or
+//				⌈x⌉.[1]
+//
+//				Source:
+//					https://en.wikipedia.org/wiki/Floor_and_ceiling_functions
+//
+//					Examples of Ceiling
+//
+//						Number    Ceiling
+//						 2           2
+//						 2.4         3
+//						 2.9         3
+//						-2.5        -2
+//						-2.7        -2
+//						-2          -2
+//
+//			Truncate
+//
+//				Apply NO Rounding whatsoever. The Round From Digit
+//				is dropped or deleted. The Round To Digit is NEVER
+//				changed.
+//
+//				Examples of Truncate
+//
+//					Example-1
+//					Number: 23.14567
+//					Objective: Round to two decimal places to
+//					the right of the decimal point.
+//					Rounding Method: Truncate
+//					Round To Digit:   4
+//					Round From Digit: 5
+//					Rounded Number:   23.14 - The Round From Digit
+//					is dropped.
+//
+//					Example-2
+//					Number: -23.14567
+//					Objective: Round to two decimal places to
+//					the right of the decimal point.
+//					Rounding Method: Truncate
+//					Round To Digit:   4
+//					Round From Digit: 5
+//					Rounded Number:  -23.14 - The Round From Digit
+//					is dropped.
+//
+//	roundToFractionalDigits int
+//
+//		When set to a positive integer value, this parameter
+//		controls the number of digits to the right of the
+//		radix point or decimal separator (a.k.a. decimal point).
+//		This value is equal to the number fractional digits which
+//		will remain in the floating point number after completion
+//		of the number rounding operation.
+//
+//		If parameter 'roundingType' is set to
+//		NumRoundType.NoRounding(), 'roundToFractionalDigits' is
+//		ignored and has no effect.
+//
+//		if 'roundToFractionalDigits' is set to a value greater
+//		than the number of fractional digits in 'numStrKernel',
+//		the number of fractional digits will be extended with
+//		zero values and reflected in the numeric value returned
+//		through parameter 'numericValue'.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string which
+//		is included in all returned error messages. Usually,
+//		it contains the name of the calling method or methods
+//		listed as a function chain.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package, "github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	bigFloatNum					*big.Float
+//
+//		If this method completes successfully, the
+//		numeric	value represented by the current instance
+//		of NumberStrKernel will be returned as a type
+//		*big.Float.
+//
+//	numOfFractionalDigits		int
+//
+//		The number of fractional digits contained in the
+//		returned numeric value 'bigFloatNum'.
+//
+//		For returned type *big.Float ('bigFloatNum'), the
+//		'numOfFractionalDigits' parameter can be used to
+//		improve accuracy in conversions from type *big.Float
+//		to character strings.
+//
+//	error
+//
+//		If this method completes successfully, this returned
+//		error Type is set equal to 'nil'. If errors are
+//		encountered during processing, the returned error
+//		Type will encapsulate an error message.
+//
+//		If an error message is returned, the text value for
+//		input parameter 'errPrefDto' (error prefix) will be
+//		prefixed or attached at the beginning of the error
+//		message.
+//
+//		NOTE: If the numeric value of 'numStrKernel' exceeds
+//		the maximum value for type int, an error will be
+//		returned.
+func (numStrKernel *NumberStrKernel) GetBigFloatNum(
+	roundingType NumberRoundingType,
+	roundToFactionalDigits int,
+	errorPrefix interface{}) (
+	bigFloatNum *big.Float,
+	numOfFractionalDigits int,
+	err error) {
+
+	if numStrKernel.lock == nil {
+		numStrKernel.lock = new(sync.Mutex)
+	}
+
+	numStrKernel.lock.Lock()
+
+	defer numStrKernel.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	bigFloatNum = big.NewFloat(0.0)
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumberStrKernel."+
+			"GetIntNum()",
+		"")
+
+	if err != nil {
+		return bigFloatNum, numOfFractionalDigits, err
+	}
+
+	numOfFractionalDigits,
+		err = new(numberStrKernelMolecule).convertKernelToFloatNum(
+		numStrKernel,
+		bigFloatNum,
+		roundingType,
+		roundToFactionalDigits,
+		ePrefix)
+
+	return bigFloatNum, numOfFractionalDigits, err
+}
+
 //	GetBigIntNum
 //
 //	Returns the numeric value of the current NumberStrKernel

@@ -304,11 +304,11 @@ type numberStrKernelAtom struct {
 //	*big.Float
 //
 //		If this method completes successfully, the
-//		numeric	value represented by the current instance
-//		of NumberStrKernel will be returned as a type
-//		*big.Float.
+//		numeric	value represented by the NumberStrKernel
+//		instance, 'numStrKernel', will be returned as a
+//		type *big.Float.
 //
-//	uint
+//	int
 //
 //		The number of fractional digits contained in the
 //		numeric value passed through return parameter
@@ -335,7 +335,7 @@ func (numStrKernelAtom *numberStrKernelAtom) convertKernelToBigFloat(
 	roundToFactionalDigits int,
 	errPrefDto *ePref.ErrPrefixDto) (
 	*big.Float,
-	uint,
+	int,
 	error) {
 
 	if numStrKernelAtom.lock == nil {
@@ -349,7 +349,7 @@ func (numStrKernelAtom *numberStrKernelAtom) convertKernelToBigFloat(
 	var ePrefix *ePref.ErrPrefixDto
 	var t big.Float
 	var err error
-	var numOfFractionalDigits uint
+	var numOfFractionalDigits int
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
@@ -478,7 +478,7 @@ func (numStrKernelAtom *numberStrKernelAtom) convertKernelToBigFloat(
 	}
 
 	numOfFractionalDigits =
-		uint(newNumStrKernel.fractionalDigits.GetRuneArrayLength())
+		newNumStrKernel.fractionalDigits.GetRuneArrayLength()
 
 	var numValueStr string
 

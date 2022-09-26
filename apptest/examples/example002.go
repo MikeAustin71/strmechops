@@ -14,6 +14,124 @@ type MainTest02 struct {
 	input string
 }
 
+func (MainTest02) NumStrKernelToFloatConversion() {
+
+	funcName := "MainTest02.NumStrKernelToFloatConversion()"
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		funcName,
+		"")
+
+	intDigits := "1234567"
+	fracDigits := "1234567"
+	expectedNumStr :=
+		intDigits +
+			"." +
+			fracDigits
+
+	sMechNStrKernel := strmech.NumberStrKernel{}
+	numberSign := strmech.NumSignVal.None()
+
+	numStrKernel,
+		err := sMechNStrKernel.NewFromStringDigits(
+		intDigits,
+		fracDigits,
+		numberSign,
+		ePrefix.XCpy(
+			fmt.Sprintf(
+				"intDigits=%v",
+				intDigits)))
+
+	if err != nil {
+		fmt.Println(
+			fmt.Sprintf("%v",
+				err.Error()))
+
+		return
+	}
+
+	var bigFloatNumber *big.Float
+
+	var roundType = strmech.NumRoundType.NoRounding()
+	var numOfFractionalDigits int
+	var roundToFractionalDigits = 0
+
+	bigFloatNumber,
+		numOfFractionalDigits,
+		err = numStrKernel.GetBigFloatNum(
+		roundType,
+		roundToFractionalDigits,
+		ePrefix)
+
+	if err != nil {
+		fmt.Println(
+			fmt.Sprintf("%v",
+				err.Error()))
+
+		return
+	}
+
+	breakStr := strings.Repeat("=", 50)
+
+	fmt.Printf("\n\nFunction: %v\n",
+		ePrefix.String())
+
+	fmt.Printf(breakStr + "\n\n")
+
+	fmt.Printf("Big Float String Value:         '%v'\n",
+		expectedNumStr)
+
+	fmt.Printf(breakStr + "\n\n")
+
+	fmt.Printf("Big Float Intial Precision:     '%v'\n",
+		bigFloatNumber.Prec())
+
+	fmt.Printf("Big Float Intial Min Precision: '%v'\n",
+		bigFloatNumber.MinPrec())
+
+	fmt.Printf("Big Float Intial Mode: '%v'\n",
+		bigFloatNumber.Mode().String())
+
+	fmt.Printf("Big Float Intial Accuracy:      '%v'\n",
+		bigFloatNumber.Acc().String())
+
+	fmt.Printf("Big Float Numeric Value g -1:   '%v'\n",
+		bigFloatNumber.Text('g', -1))
+
+	fmt.Printf("Big Float Numeric Value f -1:   '%v'\n",
+		bigFloatNumber.Text('f', -1))
+
+	fmt.Printf("Big Float Val f numFracDigits:  '%v'\n",
+		bigFloatNumber.Text('f', numOfFractionalDigits))
+
+	fmt.Printf("Big Float Val f 6:              '%v'\n",
+		bigFloatNumber.Text('f', 6))
+
+	fmt.Printf("Big Float Val f 7:              '%v'\n",
+		bigFloatNumber.Text('f', 7))
+
+	fmt.Printf("Big Float Val .11g:             '%.11g'\n",
+		bigFloatNumber)
+
+	fmt.Printf("Big Float Val .11f:             '%.11f'\n",
+		bigFloatNumber)
+
+	fmt.Printf("Big Float Val .20f:             '%.20f'\n",
+		bigFloatNumber)
+
+	fmt.Printf("Big Float Val f  20 Prec :      '%v'\n",
+		bigFloatNumber.Text('f', 20))
+
+	fmt.Printf("\n\n" + breakStr + "\n")
+
+	fmt.Printf("\n Successful Completion!\n"+
+		"Function: %v\n",
+		ePrefix.String())
+
+	fmt.Printf("\n" + breakStr + "\n")
+
+}
+
 func (MainTest02) NumStrKernelToIntConversion() {
 
 	funcName := "MainTest02.NumStrKernelToIntConversion()"
