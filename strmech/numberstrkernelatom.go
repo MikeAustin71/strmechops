@@ -308,6 +308,16 @@ type numberStrKernelAtom struct {
 //		of NumberStrKernel will be returned as a type
 //		*big.Float.
 //
+//	uint
+//
+//		The number of fractional digits contained in the
+//		numeric value passed through return parameter
+//		'*big.Float'.
+//
+//		For returned type *big.Float, the number of
+//		fractional digits can be used to improve accuracy
+//		in conversions from *big.Float to character strings.
+//
 //	error
 //
 //		If this method completes successfully, this
@@ -325,6 +335,7 @@ func (numStrKernelAtom *numberStrKernelAtom) convertKernelToBigFloat(
 	roundToFactionalDigits int,
 	errPrefDto *ePref.ErrPrefixDto) (
 	*big.Float,
+	uint,
 	error) {
 
 	if numStrKernelAtom.lock == nil {
@@ -336,8 +347,9 @@ func (numStrKernelAtom *numberStrKernelAtom) convertKernelToBigFloat(
 	defer numStrKernelAtom.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
-	var err error
 	var t big.Float
+	var err error
+	var numOfFractionalDigits uint
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
@@ -348,7 +360,7 @@ func (numStrKernelAtom *numberStrKernelAtom) convertKernelToBigFloat(
 
 	if err != nil {
 
-		return &t, err
+		return &t, numOfFractionalDigits, err
 
 	}
 
@@ -358,7 +370,7 @@ func (numStrKernelAtom *numberStrKernelAtom) convertKernelToBigFloat(
 			"ERROR: Input parameter 'numStrKernel' is a nil pointer!\n",
 			ePrefix.String())
 
-		return &t, err
+		return &t, numOfFractionalDigits, err
 	}
 
 	if !roundingType.XIsValid() {
@@ -371,7 +383,7 @@ func (numStrKernelAtom *numberStrKernelAtom) convertKernelToBigFloat(
 			roundingType.String(),
 			roundingType.XValueInt())
 
-		return &t, err
+		return &t, numOfFractionalDigits, err
 
 	}
 
@@ -384,7 +396,7 @@ func (numStrKernelAtom *numberStrKernelAtom) convertKernelToBigFloat(
 			ePrefix.String(),
 			roundToFactionalDigits)
 
-		return &t, err
+		return &t, numOfFractionalDigits, err
 
 	}
 
@@ -397,7 +409,7 @@ func (numStrKernelAtom *numberStrKernelAtom) convertKernelToBigFloat(
 
 	if err != nil {
 
-		return &t, err
+		return &t, numOfFractionalDigits, err
 
 	}
 
@@ -407,7 +419,7 @@ func (numStrKernelAtom *numberStrKernelAtom) convertKernelToBigFloat(
 
 	if err != nil {
 
-		return &t, err
+		return &t, numOfFractionalDigits, err
 
 	}
 
@@ -423,7 +435,7 @@ func (numStrKernelAtom *numberStrKernelAtom) convertKernelToBigFloat(
 
 	if err != nil {
 
-		return &t, err
+		return &t, numOfFractionalDigits, err
 
 	}
 
@@ -434,7 +446,7 @@ func (numStrKernelAtom *numberStrKernelAtom) convertKernelToBigFloat(
 
 	if err != nil {
 
-		return &t, err
+		return &t, numOfFractionalDigits, err
 
 	}
 
@@ -449,7 +461,7 @@ func (numStrKernelAtom *numberStrKernelAtom) convertKernelToBigFloat(
 
 	if err != nil {
 
-		return &t, err
+		return &t, numOfFractionalDigits, err
 
 	}
 
@@ -461,9 +473,12 @@ func (numStrKernelAtom *numberStrKernelAtom) convertKernelToBigFloat(
 
 	if err != nil {
 
-		return &t, err
+		return &t, numOfFractionalDigits, err
 
 	}
+
+	numOfFractionalDigits =
+		uint(newNumStrKernel.fractionalDigits.GetRuneArrayLength())
 
 	var numValueStr string
 
@@ -484,12 +499,6 @@ func (numStrKernelAtom *numberStrKernelAtom) convertKernelToBigFloat(
 		ok = t.SetString(numValueStr)
 
 	if !ok {
-		fmt.Printf("Error: t.SetString(numValueStr) Failed!\n")
-
-		return &t, err
-	}
-
-	if !ok {
 
 		err = fmt.Errorf("%v\n"+
 			"Error Converting floating point number string to *big.Float!\n"+
@@ -499,7 +508,7 @@ func (numStrKernelAtom *numberStrKernelAtom) convertKernelToBigFloat(
 			ePrefix.String(),
 			numValueStr)
 
-		return &t, err
+		return &t, numOfFractionalDigits, err
 	}
 
 	t.SetPrec(t.MinPrec())
@@ -517,7 +526,7 @@ func (numStrKernelAtom *numberStrKernelAtom) convertKernelToBigFloat(
 
 	}
 
-	return &t, err
+	return &t, numOfFractionalDigits, err
 }
 
 //	convertKernelToBigInt
