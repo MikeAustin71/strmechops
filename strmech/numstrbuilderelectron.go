@@ -10,6 +10,203 @@ type numStrBuilderElectron struct {
 	lock *sync.Mutex
 }
 
+//	parsePurNumStr
+//
+//	Receives a pure number string and proceeds to return the
+//	extracted numeric value as a type NumberStrKernel.
+//
+//	This method is particularly useful when numeric values
+//	are converted to string using 'fmt.Sprintf()' and
+//	similar formatting algorithms.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	pureNumberString			RuneArrayDto
+//
+//		This rune array contains the character digits from
+//		which the numeric value will be extracted and
+//		returned as a NumberStrKernel.
+//
+//		A "Pure Number String" is defined as follows:
+//
+//			1.	Consists of numeric character digits
+//				zero through nine inclusive (0-9).
+//
+//			2.	Option: May include a period ('.') or decimal
+//				point separating integer and fractional
+//				digits.
+//
+//			3.	Option: May include a leading minus sign
+//				('-') denoting a negative numeric value. If
+//				the leading minus is NOT present, the
+//				numeric value is assumed to be positive.
+//
+//		If parameter 'pureNumberString' fails to include
+//		numeric character digits, an error will be returned.
+//
+//	errPrefDto          *ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods listed
+//		as a function chain.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref' software
+//		package, "github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	numStrKernel				NumberStrKernel
+//
+//		If this method completes successfully, an instance of
+//		NumberStrKernel containing the numeric value extracted
+//		from parameter 'pureNumberString' will be returned.
+//
+//	err							error
+//
+//		If this method completes successfully, this returned
+//		error Type is set equal to 'nil'. If errors are
+//		encountered during processing, the returned error Type
+//		will encapsulate an error message.
+//
+//		If an error message is returned, the text value for
+//		input parameter 'errPrefDto' (error prefix) will be
+//		prefixed or attached at the beginning of the error
+//		message.
+func (nStrBuilderElectron *numStrBuilderElectron) parsePurNumStr(
+	pureNumberString RuneArrayDto,
+	ePrefDto *ePref.ErrPrefixDto) (
+	numStrKernel NumberStrKernel,
+	err error) {
+
+	if nStrBuilderElectron.lock == nil {
+		nStrBuilderElectron.lock = new(sync.Mutex)
+	}
+
+	nStrBuilderElectron.lock.Lock()
+
+	defer nStrBuilderElectron.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		ePrefDto,
+		"numStrBuilderElectron."+
+			"parsePurNumStr()",
+		"")
+
+	if err != nil {
+
+		return numStrKernel, err
+	}
+
+	lenPureNStr := pureNumberString.GetRuneArrayLength()
+
+	if lenPureNStr == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'pureNumberString' is empty\n"+
+			"and contains zero characters.\n",
+			ePrefix.String())
+
+		return numStrKernel, err
+	}
+
+	err = numStrKernel.integerDigits.SetCharacterSearchType(
+		CharSearchType.LinearTargetStartingIndex(),
+		ePrefix.XCpy("integerDigits"))
+
+	if err != nil {
+
+		return numStrKernel, err
+	}
+
+	err = numStrKernel.fractionalDigits.SetCharacterSearchType(
+		CharSearchType.LinearTargetStartingIndex(),
+		ePrefix.XCpy("fractionalDigits"))
+
+	if err != nil {
+
+		return numStrKernel, err
+	}
+
+	foundFirstNumericChar := false
+	foundRadixPoint := false
+	foundLeadingMinusSign := false
+
+	for i := 0; i < lenPureNStr; i++ {
+
+		if foundFirstNumericChar == false &&
+			pureNumberString.CharsArray[i] == '-' {
+
+			foundLeadingMinusSign = true
+
+			continue
+		}
+
+		if pureNumberString.CharsArray[i] == '.' {
+
+			foundRadixPoint = true
+
+			continue
+		}
+
+		if pureNumberString.CharsArray[i] <= '9' &&
+			pureNumberString.CharsArray[i] >= '0' {
+
+			foundFirstNumericChar = true
+
+			if foundRadixPoint == true {
+
+				err = numStrKernel.AddFractionalDigit(
+					pureNumberString.CharsArray[i],
+					ePrefix.XCpy("pureNumberString"))
+
+				if err != nil {
+
+					return numStrKernel, err
+				}
+
+			} else {
+
+				err = numStrKernel.AddIntegerDigit(
+					pureNumberString.CharsArray[i],
+					ePrefix.XCpy("pureNumberString"))
+
+				if err != nil {
+
+					return numStrKernel, err
+				}
+
+			}
+
+			continue
+		}
+
+	}
+
+	isNonZero := numStrKernel.GetIsNonZeroValue()
+
+	numStrKernel.RationalizeFractionalIntegerDigits()
+
+	if isNonZero && foundLeadingMinusSign {
+
+		err = numStrKernel.SetNumberSign(
+			NumSignVal.Negative(),
+			ePrefix.XCpy("numStrKernel"))
+	}
+
+	return numStrKernel, err
+}
+
 // extractNumRunes
 //
 // Receives an array of runes and extracts the numeric
