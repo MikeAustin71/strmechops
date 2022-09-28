@@ -193,6 +193,17 @@ func (nStrBuilderElectron *numStrBuilderElectron) parsePurNumStr(
 
 	}
 
+	if foundFirstNumericChar == false {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'pureNumberString' is invalid!\n"+
+			"It contains zero numeric digit characters.\n",
+			ePrefix.String())
+
+		return numStrKernel, err
+
+	}
+
 	isNonZero := numStrKernel.GetIsNonZeroValue()
 
 	numStrKernel.RationalizeFractionalIntegerDigits()
