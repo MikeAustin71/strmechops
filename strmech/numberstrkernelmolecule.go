@@ -5,6 +5,7 @@ import (
 	ePref "github.com/MikeAustin71/errpref"
 	"math"
 	"math/big"
+	"strconv"
 	"sync"
 )
 
@@ -1062,6 +1063,324 @@ func (numStrKernelMolecule *numberStrKernelMolecule) convertKernelToIntNum(
 			ePrefix.String(),
 			fmt.Sprintf("%T", numericValue))
 
+	}
+
+	return err
+}
+
+//	convertNumberToKernel
+//
+//	Receives an empty interface which is assumed to be an
+//	integer numeric value configured as one of the following
+//	types:
+//
+//		int8
+//		int16
+//		int32
+//		int	(equivalent to int32)
+//		int64
+//
+//	This integer numeric value is then converted to a
+//	type of 'NumberStrKernel' and returned to the calling
+//	function.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	numStrKernel				*NumberStrKernel
+//
+//		A pointer to an instance of NumberStrKernel. The data
+//		values for all internal member variables contained in
+//		this instance will be deleted and reset to new values.
+//		The new numeric value assigned to this instance will
+//		be extracted from parameter, 'numericValue'.
+//
+//	numericValue				interface{}
+//
+//		This empty interface MUST contain of one of the following
+//		types:
+//
+//			int8
+//			int16
+//			int32
+//			int	(equivalent to int32)
+//			int64
+//			*big.Int
+//			uint8
+//			uint16
+//			uint
+//			uint32
+//			uint64
+//			float32
+//			float64
+//			*big.Float
+//			uint8
+//			uint16
+//			uint
+//			uint32
+//			uint64
+//
+//		This numeric value will be used to populate the instance
+//		of NumberStrKernel passed by parameter, 'numStrKernel'.
+//
+//		If the object passed by this empty interface is NOT one
+//		of the types listed above, an error will be returned.
+//
+//	numberSign					NumericSignValueType
+//
+//		This parameter only applies in cases where
+//		'numericValue' contains an unsigned integer
+//		comprised of one of the following types.
+//
+//			uint8
+//			uint16
+//			uint
+//			uint32
+//			uint64
+//
+//		If 'numericValue' is not convertible to one
+//		of the unsigned integer types listed above,
+//		the 'numberSign' parameter will be ignored.
+//
+//		The Number Sign is specified by means of a
+//		NumericSignValueType enumeration value.
+//
+//		Possible values are listed as follows:
+//
+//			NumSignVal.None()     = -2 - Infer From Number
+//			NumSignVal.Negative() = -1 - Valid Value
+//			NumSignVal.Zero()     =  0 - Valid Value
+//			NumSignVal.Positive() =  1 - Valid Value
+//
+//		Unsigned integer values are by default converted as
+//		positive numeric values. If this parameter is set
+//		to NumSignVal.Negative(), the numeric value returned
+//		through parameter 'numStrKernel' will be classified
+//		as a negative value.
+//
+//		If 'numberSign' is set to any value other than
+//		NumSignVal.Negative(), it will be ignored and
+//		the final number sign for the converted numeric
+//		value will be set to 'positive'.
+//
+//	errPrefDto          *ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string which
+//		is included in all returned error messages. Usually,
+//		it contains the name of the calling method or methods
+//		listed as a function chain.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			github.com/MikeAustin71/errpref
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	err							error
+//
+//		If this method completes successfully, this returned
+//		error Type is set equal to 'nil'. If errors are
+//		encountered during processing, the returned error
+//		Type will encapsulate an error message.
+//
+//		If an error message is returned, the text value for
+//		input parameter 'errPrefDto' (error prefix) will be
+//		prefixed or attached at the beginning of the error
+//		message.
+func (numStrKernelMolecule *numberStrKernelMolecule) convertNumberToKernel(
+	numStrKernel *NumberStrKernel,
+	numericValue interface{},
+	numberSign NumericSignValueType,
+	errPrefDto *ePref.ErrPrefixDto) (
+	err error) {
+
+	if numStrKernelMolecule.lock == nil {
+		numStrKernelMolecule.lock = new(sync.Mutex)
+	}
+
+	numStrKernelMolecule.lock.Lock()
+
+	defer numStrKernelMolecule.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"numberStrKernelMolecule."+
+			"convertNumberToKernel()",
+		"")
+
+	if err != nil {
+
+		return err
+
+	}
+
+	if numStrKernel == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'numStrKernel' is a nil pointer!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	var numberStr string
+
+	var isUnsignedInteger = false
+
+	var ok = false
+
+	switch numericValue.(type) {
+
+	case float32:
+
+		var float32Num float32
+
+		float32Num, ok = numericValue.(float32)
+
+		if !ok {
+
+			err = fmt.Errorf("%v\n"+
+				"ERROR: float32 cast to 'float32Num' failed!\n",
+				ePrefix.String())
+
+			return err
+
+		}
+
+		var float64Num float64
+
+		float64Num = float64(float32Num)
+
+		numberStr = strconv.FormatFloat(
+			float64Num, 'f', -1, 32)
+
+	case float64:
+
+		var float64Num float64
+
+		float64Num, ok = numericValue.(float64)
+
+		if !ok {
+
+			err = fmt.Errorf("%v\n"+
+				"ERROR: float64 cast to 'float64Num' failed!\n",
+				ePrefix.String())
+
+			return err
+
+		}
+
+		numberStr = strconv.FormatFloat(
+			float64Num, 'f', -1, 64)
+
+	case *big.Float:
+
+		var bigFloatNum *big.Float
+
+		bigFloatNum, ok = numericValue.(*big.Float)
+
+		if !ok {
+
+			err = fmt.Errorf("%v\n"+
+				"ERROR: *big.Float cast to 'bigFloatNum' failed!\n",
+				ePrefix.String())
+
+			return err
+
+		}
+
+		numberStr = fmt.Sprintf("%v",
+			bigFloatNum.Text('f', -1))
+
+	case int8, int16, int, int32, int64:
+
+		numberStr = fmt.Sprintf("%v",
+			numericValue)
+
+	case *big.Int:
+
+		var bigIntNum *big.Int
+
+		bigIntNum, ok = numericValue.(*big.Int)
+
+		if !ok {
+
+			err = fmt.Errorf("%v\n"+
+				"ERROR: *big.Int cast to 'bigIntNum failed!\n",
+				ePrefix.String())
+
+			return err
+
+		}
+
+		numberStr = fmt.Sprintf("%v",
+			bigIntNum.Text(10))
+
+	case uint8, uint16, uint, uint32, uint64:
+
+		isUnsignedInteger = true
+
+		numberStr = fmt.Sprintf("%v",
+			numericValue)
+
+	default:
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'numericValue' is an invalid type!\n"+
+			"'numericValue' is unsupported type '%v'\n",
+			ePrefix.String(),
+			fmt.Sprintf("%T", numericValue))
+
+		return err
+
+	}
+
+	new(numberStrKernelElectron).empty(
+		numStrKernel)
+
+	runeArrayDto := RuneArrayDto{
+		CharsArray:   []rune(numberStr),
+		Description1: "",
+		Description2: "",
+	}
+
+	err = runeArrayDto.SetCharacterSearchType(
+		CharSearchType.LinearTargetStartingIndex(),
+		ePrefix.XCpy("runeArrayDto"))
+
+	if err != nil {
+
+		return err
+
+	}
+
+	*numStrKernel,
+		err = new(numStrBuilderElectron).parsePurNumStr(
+		runeArrayDto,
+		ePrefix.XCpy(
+			numberStr))
+
+	if err != nil {
+		return err
+	}
+
+	if numStrKernel.numberSign == NumSignVal.Zero() {
+
+		return err
+	}
+
+	if numberSign == NumSignVal.Negative() &&
+		isUnsignedInteger == true {
+		numStrKernel.numberSign = NumSignVal.Negative()
 	}
 
 	return err
