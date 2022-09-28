@@ -1483,56 +1483,30 @@ func (numStrKernelMolecule *numberStrKernelMolecule) convertBigIntToKernel(
 	numberStr := fmt.Sprintf("%v",
 		bigIntValue.Text(10))
 
-	var searchResults CharSearchNumStrParseResultsDto
-	decimalSeparatorSpec := DecimalSeparatorSpec{}
-	numParsingTerminators := RuneArrayCollection{}
-	negativeNumSearchSpecs := NegNumSearchSpecCollection{}
-
-	err = decimalSeparatorSpec.SetDecimalSeparatorStr(
-		".",
-		ePrefix.XCpy("Decimal Point '.'"))
-
-	if err != nil {
-		return err
-	}
-
-	err = negativeNumSearchSpecs.AddLeadingNegNumSearchStr(
-		"-",
-		ePrefix.XCpy("Leading Minus Sign '-'"))
-
-	if err != nil {
-		return err
-	}
-
 	runeArrayDto := RuneArrayDto{
 		CharsArray:   []rune(numberStr),
 		Description1: "",
 		Description2: "",
 	}
 
-	searchResults,
-		*numStrKernel,
-		err = new(numStrBuilderElectron).extractNumRunes(
+	err = runeArrayDto.SetCharacterSearchType(
+		CharSearchType.LinearTargetStartingIndex(),
+		ePrefix.XCpy("runeArrayDto"))
+
+	if err != nil {
+
+		return err
+
+	}
+
+	*numStrKernel,
+		err = new(numStrBuilderElectron).parsePurNumStr(
 		runeArrayDto,
-		"integerNumberStr",
-		0,
-		-1,
-		negativeNumSearchSpecs,
-		decimalSeparatorSpec,
-		numParsingTerminators,
-		false,
 		ePrefix.XCpy(
 			numberStr))
 
 	if err != nil {
 		return err
-	}
-
-	if !searchResults.FoundNumericDigits {
-		err = fmt.Errorf("%v\n"+
-			"Error: No Numeric Digits Found in 'numberStr'!\n",
-			ePrefix.String())
-
 	}
 
 	return err
