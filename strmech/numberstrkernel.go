@@ -1243,7 +1243,7 @@ func (numStrKernel *NumberStrKernel) GetBigFloatNum(
 	}
 
 	numOfFractionalDigits,
-		err = new(numberStrKernelMolecule).convertKernelToFloatNum(
+		err = new(numberStrKernelMolecule).convertKernelToNumber(
 		numStrKernel,
 		bigFloatNum,
 		roundingType,
@@ -1607,10 +1607,12 @@ func (numStrKernel *NumberStrKernel) GetBigIntNum(
 		return bigIntValue, err
 	}
 
-	err = new(numberStrKernelMolecule).convertKernelToIntNum(
+	_,
+		err = new(numberStrKernelMolecule).convertKernelToNumber(
 		numStrKernel,
 		bigIntValue,
 		roundingType,
+		0,
 		ePrefix)
 
 	return bigIntValue, err
@@ -2155,10 +2157,12 @@ func (numStrKernel *NumberStrKernel) GetIntNum(
 		return intValue, err
 	}
 
-	err = new(numberStrKernelMolecule).convertKernelToIntNum(
+	_,
+		err = new(numberStrKernelMolecule).convertKernelToNumber(
 		numStrKernel,
 		&intValue,
 		roundingType,
+		0,
 		ePrefix)
 
 	return intValue, err
@@ -2397,7 +2401,7 @@ func (numStrKernel *NumberStrKernel) GetIntNum(
 //					Example-1
 //					Number: 23.14567
 //					Objective: Round to two decimal places to
-//					the right of the decimal point32.
+//					the right of the decimal point.
 //					Rounding Method: Truncate
 //					Round To Digit:   4
 //					Round From Digit: 5
@@ -2407,7 +2411,7 @@ func (numStrKernel *NumberStrKernel) GetIntNum(
 //					Example-2
 //					Number: -23.14567
 //					Objective: Round to two decimal places to
-//					the right of the decimal point32.
+//					the right of the decimal point.
 //					Rounding Method: Truncate
 //					Round To Digit:   4
 //					Round From Digit: 5
@@ -2518,13 +2522,380 @@ func (numStrKernel *NumberStrKernel) GetInt32Num(
 		return int32Value, err
 	}
 
-	err = new(numberStrKernelMolecule).convertKernelToIntNum(
+	_,
+		err = new(numberStrKernelMolecule).convertKernelToNumber(
 		numStrKernel,
 		&int32Value,
 		roundingType,
+		0,
 		ePrefix)
 
 	return int32Value, err
+}
+
+//	GetInt64Num
+//
+//	Returns the numeric value of the current NumberStrKernel
+//	instance as an integer value of type int64.
+//
+//	If numeric value of the current NumberStrKernel instance
+//	is a floating point value, the returned integer value
+//	will be rounded according to the rounding policy
+//	specified by input parameter, 'roundingType'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	roundingType				NumberRoundingType
+//
+//		This enumeration parameter is used to specify the
+//		type of rounding algorithm that will be applied for
+//		the	rounding of fractional digits contained in the
+//		current instance of NumberStrKernel.
+//
+//		If in doubt as to a suitable rounding method,
+//		'HalfAwayFromZero' is recommended.
+//
+//		Possible values are listed as follows:
+//			NumRoundType.None()	- Invalid Value
+//			NumRoundType.NoRounding()
+//			NumRoundType.HalfUpWithNegNums()
+//			NumRoundType.HalfDownWithNegNums()
+//			NumRoundType.HalfAwayFromZero()
+//			NumRoundType.HalfTowardsZero()
+//			NumRoundType.HalfToEven()
+//			NumRoundType.HalfToOdd()
+//			NumRoundType.Randomly()
+//			NumRoundType.Floor()
+//			NumRoundType.Ceiling()
+//			NumRoundType.Truncate()
+//
+//		Definitions:
+//
+//			NoRounding
+//
+//				Signals that no rounding operation will be
+//				performed on fractional digits. The
+//				fractional digits will therefore remain
+//				unchanged.
+//
+//			HalfUpWithNegNums
+//
+//				Half Round Up Including Negative Numbers.
+//				This method is intuitive but may produce
+//				unexpected results when applied to negative
+//				numbers.
+//
+//				'HalfUpWithNegNums' rounds .5 up.
+//
+//					Examples of 'HalfUpWithNegNums'
+//					7.6 rounds up to 8
+//					7.5 rounds up to 8
+//					7.4 rounds down to 7
+//					-7.4 rounds up to -7
+//					-7.5 rounds up to -7
+//					-7.6 rounds down to -8
+//
+//			HalfDownWithNegNums
+//
+//			Half Round Down Including Negative Numbers. This
+//			method is also considered intuitive but may
+//			produce unexpected results when applied to
+//			negative numbers.
+//
+//			'HalfDownWithNegNums' rounds .5 down.
+//
+//				Examples of HalfDownWithNegNums
+//
+//				7.6 rounds up to 8
+//				7.5 rounds down to 7
+//				7.4 rounds down to 7
+//				-7.4 rounds up to -7
+//				-7.5 rounds down to -8
+//				-7.6 rounds down to -8
+//
+//			HalfAwayFromZero
+//
+//				The 'HalfAwayFromZero' method rounds .5 further
+//				away from zero.	It provides clear and consistent
+//				behavior when dealing with negative numbers.
+//
+//					Examples of HalfAwayFromZero
+//
+//					7.6 rounds away to 8
+//					7.5 rounds away to 8
+//					7.4 rounds to 7
+//					-7.4 rounds to -7
+//					-7.5 rounds away to -8
+//					-7.6 rounds away to -8
+//
+//			HalfTowardsZero
+//
+//				Round Half Towards Zero. 'HalfTowardsZero' rounds
+//				0.5	closer to zero. It provides clear and
+//				consistent behavior	when dealing with negative
+//				numbers.
+//
+//					Examples of HalfTowardsZero
+//
+//					7.6 rounds away to 8
+//					7.5 rounds to 7
+//					7.4 rounds to 7
+//					-7.4 rounds to -7
+//					-7.5 rounds to -7
+//					-7.6 rounds away to -8
+//
+//			HalfToEven
+//
+//				Round Half To Even Numbers. 'HalfToEven' is
+//				also called	Banker's Rounding. This method
+//				rounds 0.5 to the nearest even digit.
+//
+//					Examples of HalfToEven
+//
+//					7.5 rounds up to 8 (because 8 is an even
+//					number)	but 6.5 rounds down to 6 (because
+//					6 is an even number)
+//
+//					HalfToEven only applies to 0.5. Other
+//					numbers (not ending	in 0.5) round to
+//					nearest as usual, so:
+//
+//					7.6 rounds up to 8
+//					7.5 rounds up to 8 (because 8 is an even number)
+//					7.4 rounds down to 7
+//					6.6 rounds up to 7
+//					6.5 rounds down to 6 (because 6 is an even number)
+//					6.4 rounds down to 6
+//
+//			HalfToOdd
+//
+//				Round Half to Odd Numbers. Similar to 'HalfToEven',
+//				but in this case 'HalfToOdd' rounds 0.5 towards odd
+//				numbers.
+//
+//					Examples of HalfToOdd
+//
+//					HalfToOdd only applies to 0.5. Other numbers
+//					(not ending	in 0.5) round to nearest as usual.
+//
+//					7.5 rounds down to 7 (because 7 is an odd number)
+//
+//					6.5 rounds up to 7 (because 7 is an odd number)
+//
+//					7.6 rounds up to 8
+//					7.5 rounds down to 7 (because 7 is an odd number)
+//					7.4 rounds down to 7
+//					6.6 rounds up to 7
+//					6.5 rounds up to 7 (because 7 is an odd number)
+//					6.4 rounds down to 6
+//
+//			Randomly
+//
+//				Round Half Randomly. Uses a Random Number Generator
+//				to choose between rounding 0.5 up or down.
+//
+//				All numbers other than 0.5 round to the nearest as
+//				usual.
+//
+//			Floor
+//
+//				Yields the nearest integer down. Floor does not apply
+//				any	special treatment to 0.5.
+//
+//				Floor Function: The greatest integer that is less than
+//				or equal to x
+//
+//				Source:
+//					https://www.mathsisfun.com/sets/function-floor-ceiling.html
+//
+//				In mathematics and computer science, the floor function
+//				is the function that takes as input a real number x,
+//				and gives as output the greatest integer less than or
+//				equal to x,	denoted floor(x) or ⌊x⌋.
+//
+//				Source:
+//					https://en.wikipedia.org/wiki/Floor_and_ceiling_functions
+//
+//				Examples of Floor
+//
+//					Number     Floor
+//					 2           2
+//					 2.4         2
+//					 2.9         2
+//					-2.5        -3
+//					-2.7        -3
+//					-2          -2
+//
+//			Ceiling
+//
+//				Yields the nearest integer up. Ceiling does not
+//				apply any special treatment to 0.5.
+//
+//				Ceiling Function: The least integer that is
+//				greater than or	equal to x.
+//				Source:
+//					https://www.mathsisfun.com/sets/function-floor-ceiling.html
+//
+//				The ceiling function maps x to the least integer
+//				greater than or equal to x, denoted ceil(x) or
+//				⌈x⌉.[1]
+//
+//				Source:
+//					https://en.wikipedia.org/wiki/Floor_and_ceiling_functions
+//
+//					Examples of Ceiling
+//
+//						Number    Ceiling
+//						 2           2
+//						 2.4         3
+//						 2.9         3
+//						-2.5        -2
+//						-2.7        -2
+//						-2          -2
+//
+//			Truncate
+//
+//				Apply NO Rounding whatsoever. The Round From Digit
+//				is dropped or deleted. The Round To Digit is NEVER
+//				changed.
+//
+//				Examples of Truncate
+//
+//					Example-1
+//					Number: 23.14567
+//					Objective: Round to two decimal places to
+//					the right of the decimal point.
+//					Rounding Method: Truncate
+//					Round To Digit:   4
+//					Round From Digit: 5
+//					Rounded Number:   23.14 - The Round From Digit
+//					is dropped.
+//
+//					Example-2
+//					Number: -23.14567
+//					Objective: Round to two decimal places to
+//					the right of the decimal point.
+//					Rounding Method: Truncate
+//					Round To Digit:   4
+//					Round From Digit: 5
+//					Rounded Number:  -23.14 - The Round From Digit
+//					is dropped.
+//
+//	 errorPrefix                interface{}
+//
+//		This object encapsulates error prefix text which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods
+//		listed as a method or function chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1. nil - A nil value is valid and generates an empty
+//		   collection of error prefix and error context
+//		   information.
+//
+//		2. string - A string containing error prefix
+//			information.
+//
+//		3. []string A one-dimensional slice of strings
+//			containing error prefix information.
+//
+//		4. [][2]string A two-dimensional slice of strings
+//		   containing error prefix and error context
+//		   information.
+//
+//		5. ErrPrefixDto - An instance of ErrPrefixDto.
+//			Information from this object will be copied for use
+//			in error and informational messages.
+//
+//		6. *ErrPrefixDto - A pointer to an instance of
+//			ErrPrefixDto. Information from this object will be
+//			copied for use in error and informational messages.
+//
+//		7. IBasicErrorPrefix - An interface to a method
+//			generating a two-dimensional slice of strings
+//			containing error prefix and error context
+//			information.
+//
+//		If parameter 'errorPrefix' is NOT convertible to one
+//		of the valid types listed above, it will be
+//		considered invalid and trigger the return of an
+//		error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are included
+//		in the 'errpref' software package,
+//		"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	int64
+//
+//		If this method completes successfully, the numeric
+//		value represented by the current instance of
+//		NumberStrKernel will be returned as a type int64.
+//
+//	error
+//
+//		If this method completes successfully, the returned
+//		error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error message.
+//	 	This returned error message will incorporate the method
+//	 	chain and text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be attached to the beginning
+//	 	of the error message.
+//
+//		NOTE: If the numeric value of 'numStrKernel' exceeds
+//		the maximum value for type int, an error will be
+//		returned.
+func (numStrKernel *NumberStrKernel) GetInt64Num(
+	roundingType NumberRoundingType,
+	errorPrefix interface{}) (
+	int64,
+	error) {
+
+	if numStrKernel.lock == nil {
+		numStrKernel.lock = new(sync.Mutex)
+	}
+
+	numStrKernel.lock.Lock()
+
+	defer numStrKernel.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	int64Value := int64(-1)
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumberStrKernel."+
+			"GetInt64Num()",
+		"")
+
+	if err != nil {
+		return int64Value, err
+	}
+
+	_,
+		err = new(numberStrKernelMolecule).convertKernelToNumber(
+		numStrKernel,
+		&int64Value,
+		roundingType,
+		0,
+		ePrefix)
+
+	return int64Value, err
 }
 
 // GetIntegerDigits - Returns an instance of RuneArrayDto
@@ -3391,7 +3762,7 @@ func (numStrKernel *NumberStrKernel) NewFromBigFloatValue(
 
 	numberSign := NumSignVal.None()
 
-	err = new(numberStrKernelNanobot).setWithNumber(
+	err = new(numberStrKernelMolecule).convertNumberToKernel(
 		&newNumStrKernel,
 		bigFloatNum,
 		numberSign,
@@ -3519,7 +3890,7 @@ func (numStrKernel *NumberStrKernel) NewFromBigIntValue(
 
 	numberSign := NumSignVal.None()
 
-	err = new(numberStrKernelNanobot).setWithNumber(
+	err = new(numberStrKernelMolecule).convertNumberToKernel(
 		&newNumStrKernel,
 		bigIntNum,
 		numberSign,
@@ -3657,7 +4028,7 @@ func (numStrKernel *NumberStrKernel) NewFromFloatValue(
 
 	numberSign := NumSignVal.None()
 
-	err = new(numberStrKernelNanobot).setWithNumber(
+	err = new(numberStrKernelMolecule).convertNumberToKernel(
 		&newNumStrKernel,
 		floatingPointValue,
 		numberSign,
@@ -4121,7 +4492,7 @@ func (numStrKernel *NumberStrKernel) NewFromSignedIntValue(
 
 	numberSign := NumSignVal.None()
 
-	err = new(numberStrKernelNanobot).setWithNumber(
+	err = new(numberStrKernelMolecule).convertNumberToKernel(
 		&newNumStrKernel,
 		signedIntValue,
 		numberSign,
@@ -4456,7 +4827,7 @@ func (numStrKernel *NumberStrKernel) NewFromUnsignedIntValue(
 		return newNumStrKernel, err
 	}
 
-	err = new(numberStrKernelNanobot).setWithNumber(
+	err = new(numberStrKernelMolecule).convertNumberToKernel(
 		&newNumStrKernel,
 		unsignedIntValue,
 		numberSign,
@@ -4984,7 +5355,7 @@ func (numStrKernel *NumberStrKernel) SetBigFloatValue(
 
 	numberSign := NumSignVal.None()
 
-	return new(numberStrKernelNanobot).setWithNumber(
+	return new(numberStrKernelMolecule).convertNumberToKernel(
 		numStrKernel,
 		bigFloatNum,
 		numberSign,
@@ -5109,7 +5480,7 @@ func (numStrKernel *NumberStrKernel) SetBigIntValue(
 
 	numberSign := NumSignVal.None()
 
-	return new(numberStrKernelNanobot).setWithNumber(
+	return new(numberStrKernelMolecule).convertNumberToKernel(
 		numStrKernel,
 		bigIntNum,
 		numberSign,
@@ -5253,7 +5624,7 @@ func (numStrKernel *NumberStrKernel) SetFloatValue(
 
 	numberSign := NumSignVal.None()
 
-	return new(numberStrKernelNanobot).setWithNumber(
+	return new(numberStrKernelMolecule).convertNumberToKernel(
 		numStrKernel,
 		floatingPointValue,
 		numberSign,
@@ -5519,7 +5890,7 @@ func (numStrKernel *NumberStrKernel) SetSignedIntValue(
 
 	numberSign := NumSignVal.None()
 
-	err = new(numberStrKernelNanobot).setWithNumber(
+	err = new(numberStrKernelMolecule).convertNumberToKernel(
 		numStrKernel,
 		signedIntValue,
 		numberSign,
@@ -6166,7 +6537,7 @@ func (numStrKernel *NumberStrKernel) SetUnsignedIntValue(
 		return err
 	}
 
-	return new(numberStrKernelNanobot).setWithNumber(
+	return new(numberStrKernelMolecule).convertNumberToKernel(
 		numStrKernel,
 		unsignedIntValue,
 		numberSign,
