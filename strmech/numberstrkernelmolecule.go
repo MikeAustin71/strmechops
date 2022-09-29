@@ -1056,19 +1056,10 @@ func (numStrKernelMolecule *numberStrKernelMolecule) convertNumberToKernel(
 		numStrKernel)
 
 	runeArrayDto := RuneArrayDto{
-		CharsArray:   []rune(numberStr),
-		Description1: "",
-		Description2: "",
-	}
-
-	err = runeArrayDto.SetCharacterSearchType(
-		CharSearchType.LinearTargetStartingIndex(),
-		ePrefix.XCpy("runeArrayDto"))
-
-	if err != nil {
-
-		return err
-
+		CharsArray:     []rune(numberStr),
+		Description1:   "",
+		Description2:   "",
+		charSearchType: CharSearchType.LinearTargetStartingIndex(),
 	}
 
 	*numStrKernel,

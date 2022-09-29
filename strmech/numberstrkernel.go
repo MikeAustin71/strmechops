@@ -4870,6 +4870,170 @@ func (numStrKernel *NumberStrKernel) NewFromFloatValue(
 	return newNumStrKernel, err
 }
 
+//	NewFromPureNumberStr
+//
+//	Receives a Pure Number String and proceeds to return
+//	the extracted numeric value as a type NumberStrKernel.
+//
+//	A Pure Number String is defined as follows:
+//
+//		1.	Contains one or more numeric character digits
+//			zero through nine inclusive (0-9).
+//
+//		2.	Floating point numbers will separate integer
+//			and fractional digits with a period ('.') or
+//			decimal point.
+//
+//		3.	Negative numeric values will include a leading
+//			minus sign ('-'). If the leading minus is NOT
+//			present, the numeric value is assumed to be
+//			positive.
+//
+//	Pure number strings are routinely produced from methods
+//	like fmt.Sprintf() when converting numeric values to
+//	strings.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	pureNumStr					string
+//
+//		This strings contains the numeric character
+//		digits from	which a numeric value will be
+//		extracted and returned as a NumberStrKernel.
+//
+//		A Pure Number String is defined as follows:
+//
+//			1.	Contains one or more numeric character digits
+//				zero through nine inclusive (0-9).
+//
+//			2.	Floating point numbers will separate integer
+//				and fractional digits with a period ('.') or
+//				decimal point.
+//
+//			3.	Negative numeric values will include a leading
+//				minus sign ('-'). If the leading minus is NOT
+//				present, the numeric value is assumed to be
+//				positive.
+//
+//	 errorPrefix                interface{}
+//
+//		This object encapsulates error prefix text which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods
+//		listed as a method or function chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1. nil - A nil value is valid and generates an empty
+//		   collection of error prefix and error context
+//		   information.
+//
+//		2. string - A string containing error prefix
+//			information.
+//
+//		3. []string A one-dimensional slice of strings
+//			containing error prefix information.
+//
+//		4. [][2]string A two-dimensional slice of strings
+//		   containing error prefix and error context
+//		   information.
+//
+//		5. ErrPrefixDto - An instance of ErrPrefixDto.
+//			Information from this object will be copied for use
+//			in error and informational messages.
+//
+//		6. *ErrPrefixDto - A pointer to an instance of
+//			ErrPrefixDto. Information from this object will be
+//			copied for use in error and informational messages.
+//
+//		7. IBasicErrorPrefix - An interface to a method
+//			generating a two-dimensional slice of strings
+//			containing error prefix and error context
+//			information.
+//
+//		If parameter 'errorPrefix' is NOT convertible to one
+//		of the valid types listed above, it will be
+//		considered invalid and trigger the return of an
+//		error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are included
+//		in the 'errpref' software package,
+//		"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	NumberStrKernel
+//
+//		If this method completes successfully, a new instance
+//		of NumberStrKernel will be returned configured with
+//		the numeric value passed through paramter,
+//		'pureNumStr'.
+//
+//	error
+//
+//		If this method completes successfully, the returned
+//		error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error message.
+//	 	This returned error message will incorporate the method
+//	 	chain and text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be attached to the beginning
+//	 	of the error message.
+func (numStrKernel *NumberStrKernel) NewFromPureNumberStr(
+	pureNumStr string,
+	errorPrefix interface{}) (
+	NumberStrKernel,
+	error) {
+
+	if numStrKernel.lock == nil {
+		numStrKernel.lock = new(sync.Mutex)
+	}
+
+	numStrKernel.lock.Lock()
+
+	defer numStrKernel.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	newNumStrKernel := NumberStrKernel{}
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumberStrKernel."+
+			"NewFromBigIntValue()",
+		"")
+
+	if err != nil {
+		return newNumStrKernel, err
+	}
+
+	runeArrayDto := RuneArrayDto{
+		CharsArray:     []rune(pureNumStr),
+		Description1:   "",
+		Description2:   "",
+		charSearchType: CharSearchType.LinearTargetStartingIndex(),
+	}
+
+	newNumStrKernel,
+		err = new(numStrBuilderElectron).parsePurNumStr(
+		runeArrayDto,
+		ePrefix.XCpy(
+			pureNumStr))
+
+	return newNumStrKernel, err
+}
+
 //	NewFromRuneDto
 //
 //	Creates and returns a new instance of NumberStrKernel
