@@ -6112,7 +6112,7 @@ func (numStrKernel *NumberStrKernel) NewParsePureNumberStr(
 //	floating point numeric value is assumed to be
 //	the period ('.') or decimal point.
 //
-//	The negative number signs used to desinate
+//	The negative number signs used to designate
 //	numbers with a negative value are assumed to
 //	be a leading minus sign ('-') or parentheses
 //	('()').
@@ -6146,7 +6146,7 @@ func (numStrKernel *NumberStrKernel) NewParsePureNumberStr(
 //		Number String ('rawNumStr') that are included in
 //		the search for numeric character digits.
 //
-//		If this value is set to minud one (-1), the search
+//		If this value is set to minus one (-1), the search
 //		length will be configured to include the last
 //		index in 'rawNumStr'. In other words the search
 //		will proceed to the end of 'rawNumStr'.
