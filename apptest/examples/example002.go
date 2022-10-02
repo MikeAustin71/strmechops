@@ -14,6 +14,109 @@ type MainTest02 struct {
 	input string
 }
 
+func (MainTest02) NumStrKernelParseUSNumStr() {
+
+	funcName := "MainTest02.NumStrKernelParseUSNumStr()"
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		funcName,
+		"")
+
+	breakStr := strings.Repeat("=", 50)
+
+	fmt.Printf("\n\nFunction: %v\n",
+		ePrefix.String())
+
+	fmt.Printf(breakStr + "\n\n")
+
+	expectedNumStr := "-1234567.1234567"
+
+	sMechNStrKernel := strmech.NumberStrKernel{}
+
+	searchResults,
+		nStrKernel,
+		err := sMechNStrKernel.NewParseUSNumberStr(
+		expectedNumStr,
+		0,
+		-1,
+		[]string{},
+		false,
+		ePrefix)
+
+	if err != nil {
+		fmt.Println(
+			fmt.Sprintf("%v",
+				err.Error()))
+
+		return
+	}
+
+	sBuilder := strings.Builder{}
+
+	err = searchResults.GetParameterTextListing(
+		&sBuilder,
+		false,
+		false,
+		ePrefix)
+
+	if err != nil {
+		fmt.Println(
+			fmt.Sprintf("%v",
+				err.Error()))
+
+		return
+	}
+
+	fmt.Printf("Search Results:\n"+
+		"%v\n",
+		sBuilder.String())
+
+	actualIntegerDigits := nStrKernel.GetIntegerString()
+
+	actualFractionalDigits := nStrKernel.GetFractionalString()
+
+	var actualNumStr string
+
+	var numSign strmech.NumericSignValueType
+
+	numSign,
+		err = nStrKernel.GetNumberSign(
+		ePrefix)
+
+	if err != nil {
+		fmt.Println(
+			fmt.Sprintf("%v",
+				err.Error()))
+
+		return
+	}
+
+	if numSign == strmech.NumSignVal.Negative() {
+		actualNumStr += "-"
+	}
+
+	actualNumStr += actualIntegerDigits
+
+	if len(actualFractionalDigits) > 0 {
+		actualNumStr += "."
+		actualNumStr += actualFractionalDigits
+	}
+
+	fmt.Printf("Expected Number:       %v\n",
+		expectedNumStr)
+
+	fmt.Printf("Actual Number:         %v\n",
+		actualNumStr)
+
+	fmt.Printf("\n\n" + breakStr + "\n")
+
+	fmt.Printf("\n Successful Completion!\n"+
+		"Function: %v\n",
+		ePrefix.String())
+
+	fmt.Printf("\n" + breakStr + "\n")
+}
+
 func (MainTest02) NumStrKernelSetSignedIntValue() {
 
 	funcName := "MainTest02.NumStrKernelSetSignedIntValue()"
