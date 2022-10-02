@@ -14,6 +14,70 @@ type MainTest02 struct {
 	input string
 }
 
+func (MainTest02) NumStrKernelSetSignedIntValue() {
+
+	funcName := "MainTest02.NumStrKernelSetSignedIntValue()"
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		funcName,
+		"")
+
+	breakStr := strings.Repeat("=", 50)
+
+	fmt.Printf("\n\nFunction: %v\n",
+		ePrefix.String())
+
+	fmt.Printf(breakStr + "\n\n")
+
+	expectedNumStr := "1234567"
+
+	sMechNStrKernel := strmech.NumberStrKernel{}
+
+	bigIntNum := big.NewInt(1234567)
+
+	nStrKernel,
+		err := sMechNStrKernel.NewFromSignedIntValue(
+		bigIntNum,
+		ePrefix)
+
+	if err != nil {
+		fmt.Println(
+			fmt.Sprintf("%v",
+				err.Error()))
+
+		return
+	}
+
+	actualIntegerDigits := nStrKernel.GetIntegerString()
+
+	actualFractionalDigits := nStrKernel.GetFractionalString()
+
+	actualNumStr := actualIntegerDigits
+
+	if len(actualFractionalDigits) > 0 {
+		actualNumStr += "."
+		actualNumStr += actualFractionalDigits
+	}
+
+	fmt.Printf("Big Int Number:        %v\n",
+		bigIntNum.Text(10))
+
+	fmt.Printf("Expected Number:       %v\n",
+		expectedNumStr)
+
+	fmt.Printf("Actual Number:         %v\n",
+		actualNumStr)
+
+	fmt.Printf("\n\n" + breakStr + "\n")
+
+	fmt.Printf("\n Successful Completion!\n"+
+		"Function: %v\n",
+		ePrefix.String())
+
+	fmt.Printf("\n" + breakStr + "\n")
+
+}
+
 func (MainTest02) NumStrKernelToFloatConversion() {
 
 	funcName := "MainTest02.NumStrKernelToFloatConversion()"

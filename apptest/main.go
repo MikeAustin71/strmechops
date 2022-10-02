@@ -6,6 +6,6 @@ func main() {
 
 	mt := examples.MainTest02{}
 
-	mt.NumStrKernelToFloatConversion()
+	mt.NumStrKernelSetSignedIntValue()
 
 }
