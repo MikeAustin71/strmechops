@@ -1631,6 +1631,194 @@ func (sMech *StrMech) ExtractNumericDigits(
 // from this array as text characters.
 //
 // Tests are located in zzzt_strmech_0003000_test.go
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	rawNumStrRunes				RuneArrayDto
+//
+//		This parameter encapsulates a rune array
+//		containing numeric digit characters which
+//		will be extracted and processed to identify
+//		the numeric value. This numeric value will
+//		in turn form the basis of the new
+//		NumberStrKernel instance returned to the
+//		calling function.
+//
+//	startSearchIndex			int
+//
+//		The character index in the Raw Number String
+//		Rune Array ('rawNumStrRunes') at which the
+//		search for numeric	digit characters will
+//		begin.
+//
+//		Set this value to zero (0) in order	begin the
+//		search for numeric characters at the first
+//		character in the Raw Number String Rune Array
+//		('rawNumStrRunes').
+//
+//	characterSearchLength		int
+//
+//		The actual number of characters within the Raw
+//		Number String Rune Array ('rawNumStrRunes')
+//		that are included in the search for numeric
+//		character digits.
+//
+//		If this value is set to -1, the search length
+//		will be configured to include the last index in
+//		'rawNumStrRunes'. In other words the search will
+//		proceed	to the end of 'rawNumStrRunes' array.
+//
+//	negativeNumSignSearchSpecs	NegNumSearchSpecCollection
+//
+//		Type NegNumSearchSpecCollection is a collection of
+//		NegativeNumberSearchSpec object. This collection
+//		represents all the negative number signs which
+//		might be located with the Raw Number String
+//		('rawNumStrRunes').
+//
+//		This collections allows the flexibility for
+//		locating such negative number signs as leading
+//		minus signs ('-'), trailing minus signs ('-'),
+//		parentheses ('()') or any other negative number
+//		sign characters which might be associated with
+//		a particular national or cultural usage.
+//
+//	decimalSeparator			DecimalSeparatorSpec
+//
+//		Type DecimalSeparatorSpec is used to specify the
+//		radix point or decimal separator which will
+//		separate integer and fractional digits in the
+//		Raw Number String Rune Array ('rawNumStrRunes').
+//		In the US, the period ('.'), or decimal point,
+//		separates integer and fractional digits within
+//		a floating point numeric value. In Europe, the
+//		comma (',') performs this function.
+//
+//	numParsingTerminators		RuneArrayCollection
+//
+//		A collection of rune arrays used to specify
+//		text characters which will automatically trigger
+//		termination of the search and number parsing
+//		operation.
+//
+//		If any one of these Terminator characters are
+//		encountered while searching the Raw Number
+//		String Rune Array ('rawNumStrRunes'), the
+//		search operation will be immediately terminated.
+//
+//	requestRemainderString		bool
+//
+//		If this parameter is set to 'true', the Number
+//		String Search Results ('numberStrSearchResults')
+//		returned by this method	will include the
+//		remaining string characters	which were NOT
+//		included in the search operation.
+//
+//		This feature may be useful when either
+//		'characterSearchLength' or 'numParsingTerminators'
+//		parameters are used to arbitrarily terminate the
+//		search operation.
+//
+//	 errorPrefix                interface{}
+//
+//		This object encapsulates error prefix text which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods
+//		listed as a method or function chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1. nil - A nil value is valid and generates an empty
+//		   collection of error prefix and error context
+//		   information.
+//
+//		2. string - A string containing error prefix
+//			information.
+//
+//		3. []string A one-dimensional slice of strings
+//			containing error prefix information.
+//
+//		4. [][2]string A two-dimensional slice of strings
+//		   containing error prefix and error context
+//		   information.
+//
+//		5. ErrPrefixDto - An instance of ErrPrefixDto.
+//			Information from this object will be copied for use
+//			in error and informational messages.
+//
+//		6. *ErrPrefixDto - A pointer to an instance of
+//			ErrPrefixDto. Information from this object will be
+//			copied for use in error and informational messages.
+//
+//		7. IBasicErrorPrefix - An interface to a method
+//			generating a two-dimensional slice of strings
+//			containing error prefix and error context
+//			information.
+//
+//		If parameter 'errorPrefix' is NOT convertible to one
+//		of the valid types listed above, it will be
+//		considered invalid and trigger the return of an
+//		error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are included
+//		in the 'errpref' software package,
+//		"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	searchResults				CharSearchNumStrParseResultsDto
+//
+//		This structure contains public member variables
+//		containing operational data describing the
+//		success or failure of the number string parsing
+//		operation and the search for numeric digits in
+//		the Raw Number String Rune Array, 'rawNumStrRunes'.
+//
+//		Users are advised to check the following member
+//		variable values after a number string parsing
+//		operation:
+//
+//			FoundNumericDigits		bool
+//
+//				Signals a successful Number String Parsing
+//				operation. When set to 'true', this means
+//				one or more numeric	digit characters ('0'
+//				through '9' inclusive) were	located in the
+//				Raw Number String Rune Array,
+//				('rawNumStrRunes').
+//
+//			FoundNonZeroValue		bool
+//
+//				When set to 'true' this signals that the
+//				search operation has detected one or more
+//				nonzero numeric digits.
+//
+//	NumberStrKernel
+//
+//		If this method completes successfully, a new instance
+//		of NumberStrKernel will be returned configured with
+//		the numeric value parsed from the Raw Number String
+//		Rune Array, ('rawNumStrRunes').
+//
+//	error
+//
+//		If this method completes successfully, the returned
+//		error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error message.
+//	 	This returned error message will incorporate the method
+//	 	chain and text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be attached to the beginning
+//	 	of the error message.
 func (sMech *StrMech) ExtractNumberRunes(
 	rawNumStrRunes RuneArrayDto,
 	startSearchIndex int,

@@ -4887,7 +4887,7 @@ func (numStrKernel *NumberStrKernel) NewFromFloatValue(
 //	rawNumStr					string
 //
 //		This parameter is the raw number string
-//		containing numeric digit chracters which will
+//		containing numeric digit characters which will
 //		be extracted and processed to identify the
 //		numeric value. This numeric value will in
 //		turn form the basis of the new NumberStrKernel
@@ -4895,7 +4895,7 @@ func (numStrKernel *NumberStrKernel) NewFromFloatValue(
 //
 //	startSearchIndex			int
 //
-//		The chracter index in the Raw Number String
+//		The character index in the Raw Number String
 //		('rawNumStr') at which the search for numeric
 //		digit characters will begin.
 //
@@ -4924,10 +4924,10 @@ func (numStrKernel *NumberStrKernel) NewFromFloatValue(
 //
 //		This collections allows the flexibility for
 //		locating such negative number signs as leading
-//		minus signs ('-'), trailing minus signs ('-')
+//		minus signs ('-'), trailing minus signs ('-'),
 //		parentheses ('()') or any other negative number
 //		sign characters which might be associated with
-//		a national or cultural usage.
+//		a particular national or cultural usage.
 //
 //	decimalSeparator			DecimalSeparatorSpec
 //
@@ -5017,7 +5017,7 @@ func (numStrKernel *NumberStrKernel) NewFromFloatValue(
 //
 //		This structure contains public member variables
 //		containing operational data describing the
-//		success or failue of the number string parsing
+//		success or failure of the number string parsing
 //		operation and the search for numeric digits in
 //		the Raw Number String, 'rawNumStr'.
 //
