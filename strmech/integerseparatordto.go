@@ -2439,6 +2439,62 @@ func (nStrIntSep *IntegerSeparatorDto) NewIndiaNumberingRunes(
 	return newIntSep, err
 }
 
+//	NewNoIntegerSeparation
+//
+//	Returns an instance of IntegerSeparatorDto configured
+//	for NO integer separation.
+//
+//	Call this method if you want to gurantee that integer
+//	separation WILL NOT BE APPLIED in the formatting of
+//	Number Strings.
+//
+//	Example With Integer Separation
+//
+//		1,234,567,890
+//
+//	Example With NO Integer Separation
+//
+//		1234567890
+//
+//	This method will ensure the integer separation WILL
+//	NOT BE APPLIED in the formatting of	Number Strings.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	NONE
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	IntegerSeparatorDto
+//
+//		If this method completes successfully, new instance
+//		of IntegerSeparatorDto will be returned. This new
+//		instance will be configured to ensure that integer
+//		separation WILL NOT BE APPLIED in the formatting of
+//		Number Strings.
+func (nStrIntSep *IntegerSeparatorDto) NewNoIntegerSeparation() IntegerSeparatorDto {
+
+	if nStrIntSep.lock == nil {
+		nStrIntSep.lock = new(sync.Mutex)
+	}
+
+	nStrIntSep.lock.Lock()
+
+	defer nStrIntSep.lock.Unlock()
+
+	newIntSepDto := IntegerSeparatorDto{}
+
+	_ = new(integerSeparatorDtoQuark).empty(
+		&newIntSepDto,
+		nil)
+
+	return newIntSepDto
+}
+
 // NewThousands - Creates and returns a new instance of
 // IntegerSeparatorDto. The returned IntegerSeparatorDto instance
 // represents a basic or simple integer separator object using
