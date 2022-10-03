@@ -13,7 +13,7 @@ type NumStrFormatSpec struct {
 	decSeparator DecimalSeparatorSpec
 	// Contains the decimal separator character or
 	// characters which will separate integer and
-	// fractional digits in a floating point number
+	// fractional digits in a floating point number.
 
 	intGroupingSpec NumStrIntegerGroupingSpec
 	// Integer Grouping Specification. This parameter

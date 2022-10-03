@@ -10,8 +10,10 @@ type NumStrSignedNum struct {
 	lock *sync.Mutex
 }
 
-// GetNumStr - Returns a formatted number string for the current
-// instance of NumStrSignedNum.
+// GetNumStr
+//
+//	Returns a formatted number string for the current
+//	instance of NumStrSignedNum.
 //
 // ----------------------------------------------------------------
 //

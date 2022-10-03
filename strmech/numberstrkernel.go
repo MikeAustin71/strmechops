@@ -3902,6 +3902,206 @@ func (numStrKernel *NumberStrKernel) GetFloat64Num(
 	return float64Value, err
 }
 
+//	GetFmtCustomNumStr
+//
+//	Returns a formatted number string using the
+//	numeric value provided by the current instance
+//	of NumberStrKernel.
+//
+//	This method provides the highest degree of
+//	granular control over all specifications for
+//	the Number String formatting operation.
+//
+//	Options include customizing for currency
+//	symbols, integer separation, number sign
+//	management, radix point symbol, and
+//	floating point number rounding.
+//
+//	If required, users have the options of
+//	implementing the India or Chinese Numbering
+//	Systems.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	numStrFmtSpec				NumStrFormatSpec
+//
+//		This structure includes all parameters
+//		necessary for formatting a number string.
+//		These customization options provide maximum
+//		granularity in controlling the formatting
+//		of the returned Number String.
+//
+//		type NumStrFormatSpec struct {
+//
+//			decSeparator			DecimalSeparatorSpec
+//
+//				Contains the radix point or decimal
+//				separator character(s) which will
+//				separate integer and fractional
+//				numeric digits in a floating point
+//				number.
+//
+//			intGroupingSpec			NumStrIntegerGroupingSpec
+//
+//				Integer Grouping Specification. This
+//				parameter specifies the type of integer
+//				grouping and integer separator characters
+//				which will be applied to the number
+//				string formatting operations.
+//
+//			roundingSpec			NumStrRoundingSpec
+//
+//				Controls the rounding algorithm applied to
+//				floating point numbers.
+//
+//			positiveNumberSign		NumStrNumberSymbolSpec
+//
+//				Positive number signs are commonly implied
+//				and not specified. However, the user as the
+//				option to specify a positive number sign
+//				character or characters for positive numeric
+//				values using a Number String Positive Number
+//				Sign Specification.
+//
+//				This specification can also be used to
+//				configure currency symbols.
+//
+//			negativeNumberSign		NumStrNumberSymbolSpec
+//
+//				The Number String Negative Number Sign
+//				Specification is used to configure negative
+//				number sign symbols for negative numeric values
+//				formatted and displayed in number stings.
+//
+//				This specification can also be used to
+//				configured currency symbols.
+//
+//			numberFieldSpec			NumStrNumberFieldSpec
+//
+//				This Number String Number Field Specification
+//				contains the field length and text
+//				justification parameter necessary to display
+//				a numeric value within a text number field
+//				for display as a number string.
+//		}
+//
+//	 errorPrefix                interface{}
+//
+//		This object encapsulates error prefix text which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods
+//		listed as a method or function chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1. nil - A nil value is valid and generates an empty
+//		   collection of error prefix and error context
+//		   information.
+//
+//		2. string - A string containing error prefix
+//			information.
+//
+//		3. []string A one-dimensional slice of strings
+//			containing error prefix information.
+//
+//		4. [][2]string A two-dimensional slice of strings
+//		   containing error prefix and error context
+//		   information.
+//
+//		5. ErrPrefixDto - An instance of ErrPrefixDto.
+//			Information from this object will be copied for use
+//			in error and informational messages.
+//
+//		6. *ErrPrefixDto - A pointer to an instance of
+//			ErrPrefixDto. Information from this object will be
+//			copied for use in error and informational messages.
+//
+//		7. IBasicErrorPrefix - An interface to a method
+//			generating a two-dimensional slice of strings
+//			containing error prefix and error context
+//			information.
+//
+//		If parameter 'errorPrefix' is NOT convertible to one
+//		of the valid types listed above, it will be
+//		considered invalid and trigger the return of an
+//		error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are included
+//		in the 'errpref' software package,
+//		"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	numberStr					string
+//
+//		If this method completes successfully, a string
+//		containing a formatted Number String will be
+//		returned.
+//
+//	err							error
+//
+//		If this method completes successfully, the returned
+//		error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error message.
+//	 	This returned error message will incorporate the method
+//	 	chain and text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be attached to the beginning
+//	 	of the error message.
+func (numStrKernel *NumberStrKernel) GetFmtCustomNumStr(
+	numStrFmtSpec NumStrFormatSpec,
+	errorPrefix interface{}) (
+	numberStr string,
+	err error) {
+
+	if numStrKernel.lock == nil {
+		numStrKernel.lock = new(sync.Mutex)
+	}
+
+	numStrKernel.lock.Lock()
+
+	defer numStrKernel.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumberStrKernel."+
+			"GetFmtCustomNumStr()",
+		"")
+
+	if err != nil {
+		return numberStr, err
+	}
+
+	if numStrKernel.GetNumberOfIntegerDigits() == 0 &&
+		numStrKernel.GetNumberOfFractionalDigits() == 0 {
+		err = fmt.Errorf("%v\n"+
+			"Error: The current instance NumberStrKernel is invalid!\n"+
+			"This instance of NumberStrKernel is empty and contains\n"+
+			"zero integer and zero fractional numeric digits.\n",
+			ePrefix.String())
+
+		return numberStr, err
+	}
+
+	return new(numStrSignedNumNanobot).
+		formatSignedNumStr(
+			*numStrKernel,
+			numStrFmtSpec,
+			ePrefix.XCpy("numStrKernel"))
+}
+
 //	GetIsNonZeroValue
 //
 //	Returns a boolean value signaling whether the
