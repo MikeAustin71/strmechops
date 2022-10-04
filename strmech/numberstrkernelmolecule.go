@@ -1084,3 +1084,260 @@ func (numStrKernelMolecule *numberStrKernelMolecule) convertNumberToKernel(
 
 	return err
 }
+
+func (numStrKernelMolecule *numberStrKernelMolecule) formatNumStr(
+	numStrKernel NumberStrKernel,
+	nStrFormatSpec NumStrFormatSpec,
+	errPrefDto *ePref.ErrPrefixDto) (
+	numStr string,
+	err error) {
+
+	if numStrKernelMolecule.lock == nil {
+		numStrKernelMolecule.lock = new(sync.Mutex)
+	}
+
+	numStrKernelMolecule.lock.Lock()
+
+	defer numStrKernelMolecule.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"numberStrKernelMolecule."+
+			"formatNumStr()",
+		"")
+
+	if err != nil {
+		return numStr, err
+	}
+
+	if numStrKernel.GetNumberOfIntegerDigits() == 0 &&
+		numStrKernel.GetNumberOfFractionalDigits() == 0 {
+		numStr = "0"
+
+		return numStr, err
+	}
+
+	var newNumStrKernel NumberStrKernel
+
+	newNumStrKernel,
+		err = numStrKernel.CopyOut(
+		ePrefix.XCpy(
+			"newNumStrKernel<-numStrKernel"))
+
+	if err != nil {
+		return numStr, err
+	}
+
+	var roundingSpec NumStrRoundingSpec
+
+	roundingSpec,
+		err = nStrFormatSpec.GetRoundingSpec(
+		ePrefix.XCpy(
+			"roundingSpec<-nStrFormatSpec"))
+
+	if err != nil {
+		return numStr, err
+	}
+
+	// Performing fractional digit rounding
+	err = new(numStrMathRoundingNanobot).roundNumStrKernel(
+		&newNumStrKernel,
+		roundingSpec,
+		ePrefix.XCpy(
+			"newNumStrKernel Rounding"))
+
+	if err != nil {
+		return numStr, err
+	}
+
+	var decSeparator DecimalSeparatorSpec
+
+	decSeparator,
+		err = nStrFormatSpec.GetDecSeparatorSpec(
+		ePrefix.XCpy(
+			"decSeparator<-nStrFormatSpec"))
+
+	if err != nil {
+		return numStr, err
+	}
+
+	var numOfIntDigits, numOfFracDigits int
+
+	numOfIntDigits = newNumStrKernel.GetNumberOfIntegerDigits()
+
+	numOfFracDigits = newNumStrKernel.GetNumberOfFractionalDigits()
+
+	if numOfFracDigits > 0 &&
+		decSeparator.GetNumberOfSeparatorChars() == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: This is a floating point number and the number\n"+
+			"of decimal separator characters specified is zero.\n"+
+			"Input parameter 'nStrFormatSpec.DecSeparator'\n"+
+			"is invalid!\n",
+			ePrefix.String())
+
+		return numStr, err
+	}
+
+	if numOfIntDigits == 0 {
+
+		err = newNumStrKernel.AddIntegerDigit(
+			'0',
+			ePrefix.XCpy("Adding Missing Zero Digit"))
+
+		if err != nil {
+			return numStr, err
+		}
+	}
+
+	var intSeparatorDto IntegerSeparatorDto
+
+	intSeparatorDto,
+		err = nStrFormatSpec.GetIntegerSeparatorDto(
+		ePrefix)
+
+	if err != nil {
+		return numStr, err
+	}
+
+	var numStrWithIntSeps []rune
+
+	numStrWithIntSeps,
+		err = new(integerSeparatorDtoMolecule).applyIntSeparators(
+		&intSeparatorDto,
+		newNumStrKernel.GetIntegerRuneArray(),
+		ePrefix.XCpy("intSeparatorDto"))
+
+	if err != nil {
+		return numStr, err
+	}
+
+	numStrAbsVal := string(numStrWithIntSeps)
+
+	if numOfFracDigits > 0 {
+
+		numStrAbsVal += decSeparator.GetDecimalSeparatorStr()
+
+		numStrAbsVal += newNumStrKernel.GetFractionalString()
+
+	}
+
+	leadingNumSym := ""
+
+	trailingNumSym := ""
+
+	var leadingNumSymPosition, trailingNumSymPosition NumberFieldSymbolPosition
+
+	if newNumStrKernel.numberSign == NumSignVal.Negative() {
+
+		var negativeNumberSign NumStrNumberSymbolSpec
+
+		negativeNumberSign,
+			err = nStrFormatSpec.GetNegativeNumSymSpec(
+			ePrefix.XCpy(
+				"negativeNumberSign"))
+
+		if err != nil {
+			return numStr, err
+		}
+
+		if !negativeNumberSign.IsNOP() {
+
+			leadingNumSym =
+				negativeNumberSign.GetLeadingNumberSymbolStr()
+
+			leadingNumSymPosition =
+				negativeNumberSign.GetLeadingNumberSymbolPosition()
+
+			trailingNumSym =
+				negativeNumberSign.GetTrailingNumberSymbolStr()
+
+			trailingNumSymPosition =
+				negativeNumberSign.GetTrailingNumberSymbolPosition()
+
+		}
+
+	} else if newNumStrKernel.numberSign == NumSignVal.Positive() {
+
+		var positiveNumberSign NumStrNumberSymbolSpec
+
+		positiveNumberSign,
+			err = nStrFormatSpec.GetNegativeNumSymSpec(
+			ePrefix.XCpy(
+				"positiveNumberSign"))
+
+		if err != nil {
+			return numStr, err
+		}
+
+		if !positiveNumberSign.IsNOP() {
+
+			leadingNumSym =
+				positiveNumberSign.GetLeadingNumberSymbolStr()
+
+			leadingNumSymPosition =
+				positiveNumberSign.GetLeadingNumberSymbolPosition()
+
+			trailingNumSym =
+				positiveNumberSign.GetTrailingNumberSymbolStr()
+
+			trailingNumSymPosition =
+				positiveNumberSign.GetTrailingNumberSymbolPosition()
+
+		}
+
+	}
+
+	lenLeadingNumSymbol := len(leadingNumSym)
+	lenTrailingNumSymbol := len(trailingNumSym)
+
+	if lenLeadingNumSymbol > 0 &&
+		leadingNumSymPosition == NumFieldSymPos.InsideNumField() {
+
+		numStrAbsVal = leadingNumSym + numStrAbsVal
+	}
+
+	if lenTrailingNumSymbol > 0 &&
+		trailingNumSymPosition == NumFieldSymPos.InsideNumField() {
+
+		numStrAbsVal = numStrAbsVal + trailingNumSym
+
+	}
+
+	var numberFieldSpec NumStrNumberFieldSpec
+
+	numberFieldSpec,
+		err = nStrFormatSpec.GetNumberFieldSpec(
+		ePrefix.XCpy(
+			"numberFieldSpec"))
+
+	if err != nil {
+		return numStr, err
+	}
+
+	numStr,
+		err = new(strMechNanobot).justifyTextInStrField(
+		numStrAbsVal,
+		numberFieldSpec.GetNumFieldLength(),
+		numberFieldSpec.GetNumFieldJustification(),
+		ePrefix.XCpy("numStr<-numStrAbsVal"))
+
+	if lenLeadingNumSymbol > 0 &&
+		leadingNumSymPosition == NumFieldSymPos.OutsideNumField() {
+
+		numStr = leadingNumSym + numStr
+	}
+
+	if lenTrailingNumSymbol > 0 &&
+		trailingNumSymPosition == NumFieldSymPos.OutsideNumField() {
+
+		numStr = numStr + trailingNumSym
+
+	}
+
+	return numStr, err
+}

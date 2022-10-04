@@ -655,6 +655,88 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) GetLeadingNumberSymbolStr() 
 	return nStrNumberSymbolSpec.leadingNumberSymbols.GetCharacterString()
 }
 
+//		GetLeadingNumberSymbolPosition
+//
+//		Returns an instance of NumberFieldSymbolPosition.
+//
+//		This enumeration value defines the position
+//		of the Leading Number Symbol relative to a
+//		Number Field in which a number string is
+//		displayed. Possible valid values are listed
+//		as follows:
+//
+//		NumFieldSymPos.InsideNumField()
+//			Example-1:
+//				Number Field Length: 8
+//				Numeric Value: 123.45
+//				Number Symbol: leading minus sign ('-')
+//				Number Symbol Position: Inside Number Field
+//				Formatted Number String: " -123.45"
+//				Number Field Index:       01234567
+//				Total Number String Length: 8
+//
+//			Example-2:
+//				Number Field Length: 10
+//				Numeric Value: 123.45
+//				Number Symbol: before and after parentheses  ('()')
+//				Number Symbol Position: Outside Number Field
+//	         Number Text Justification: Centered
+//				Formatted Number String: " (123.45) "
+//				Number Field Index:       0123456789
+//				Total Number String Length: 10
+//
+//			In this case the final length of the number string
+//			is defined by the Number Field length.
+//
+//		NumFieldSymPos.OutsideNumField()
+//			Example-3:
+//				Number Field Length: 8
+//		     	Numeric Value: 123.45
+//		     	Number Symbol: leading minus sign ('-')
+//		     	Number Symbol Position: Outside Number Field
+//		     	Formatted Number String: "-  123.45"
+//				Number Field Index:  012345678
+//				Total Number String Length: 9
+//
+//			Example-4:
+//				Number Field Length: 8
+//				Numeric Value: 123.45
+//				Number Symbol: before and after parentheses  ('()')
+//				Number Symbol Position: Outside Number Field
+//				Formatted Number String: "( 123.45 )"
+//				Number Field Index:  0123456789
+//				Total Number String Length: 10
+//
+//			In this case the final length of the number string
+//			is greater than the Number Field length.
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//	NONE
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//	NumberFieldSymbolPosition
+//		If this method completes successfully, an
+//		instance of NumberFieldSymbolPosition for
+//		the Leading Number Symbol will be returned.
+func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) GetLeadingNumberSymbolPosition() NumberFieldSymbolPosition {
+
+	if nStrNumberSymbolSpec.lock == nil {
+		nStrNumberSymbolSpec.lock = new(sync.Mutex)
+	}
+
+	nStrNumberSymbolSpec.lock.Lock()
+
+	defer nStrNumberSymbolSpec.lock.Unlock()
+
+	return nStrNumberSymbolSpec.leadingNumberFieldSymbolPosition
+}
+
 // GetTrailingNumberSymbolStr - Returns a string containing the
 // trailing number symbol character or characters.
 func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) GetTrailingNumberSymbolStr() string {
@@ -668,6 +750,91 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) GetTrailingNumberSymbolStr()
 	defer nStrNumberSymbolSpec.lock.Unlock()
 
 	return nStrNumberSymbolSpec.trailingNumberSymbols.GetCharacterString()
+}
+
+//		GetTrailingNumberSymbolPosition
+//
+//		Returns an instance of NumberFieldSymbolPosition.
+//
+//		This enumeration value defines the position
+//		of the Trailing Number Symbol relative to a
+//		Number Field in which a number string is
+//		displayed. Possible valid values are listed
+//		as follows:
+//
+//		NumFieldSymPos.InsideNumField()
+//			Example-1:
+//				Number Field Length: 8
+//				Numeric Value: 123.45
+//				Number Symbol: trailing minus sign ('-')
+//				Number Symbol Position: Inside Number Field
+//	         Number Text Justification: Right
+//				Formatted Number String: " 123.45-"
+//				Number Field Index:       01234567
+//				Total Number String Length: 8
+//
+//			Example-2:
+//				Number Field Length: 10
+//				Numeric Value: 123.45
+//				Number Symbol: before and after parentheses  ('()')
+//				Number Symbol Position: Outside Number Field
+//	         Number Text Justification: Centered
+//				Formatted Number String: " (123.45) "
+//				Number Field Index:       0123456789
+//				Total Number String Length: 10
+//
+//			In this case the final length of the number string
+//			is defined by the Number Field length.
+//
+//		NumFieldSymPos.OutsideNumField()
+//			Example-3:
+//				Number Field Length: 8
+//		     	Numeric Value: 123.45
+//		     	Number Symbol: trailing minus sign ('-')
+//		     	Number Symbol Position: Outside Number Field
+//	         Number Text Justification: Right
+//		     	Formatted Number String: "  123.45-"
+//				Number Field Index:       012345678
+//				Total Number String Length: 9
+//
+//			Example-4:
+//				Number Field Length: 8
+//				Numeric Value: 123.45
+//				Number Symbol: before and after parentheses  ('()')
+//				Number Symbol Position: Outside Number Field
+//	         Number Text Justification: Centered
+//				Formatted Number String: "( 123.45 )"
+//				Number Field Index:       0123456789
+//				Total Number String Length: 10
+//
+//			In this case the final length of the number string
+//			is greater than the Number Field length.
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//	NONE
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//	NumberFieldSymbolPosition
+//		If this method completes successfully, an
+//		instance of NumberFieldSymbolPosition for
+//		the Trailing Number Symbol will be returned.
+func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) GetTrailingNumberSymbolPosition() NumberFieldSymbolPosition {
+
+	if nStrNumberSymbolSpec.lock == nil {
+		nStrNumberSymbolSpec.lock = new(sync.Mutex)
+	}
+
+	nStrNumberSymbolSpec.lock.Lock()
+
+	defer nStrNumberSymbolSpec.lock.Unlock()
+
+	return nStrNumberSymbolSpec.trailingNumberFieldSymbolPosition
 }
 
 // IsNOP - Stands for 'Is No Operation'. This method returns a

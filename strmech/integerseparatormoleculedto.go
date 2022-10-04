@@ -165,7 +165,7 @@ func (nStrIntSepMolecule *integerSeparatorDtoMolecule) applyIntSeparators(
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
 		"integerSeparatorDtoMolecule."+
-			"copyIn()",
+			"applyIntSeparators()",
 		"")
 
 	if err != nil {
@@ -181,6 +181,23 @@ func (nStrIntSepMolecule *integerSeparatorDtoMolecule) applyIntSeparators(
 		return numStrWithIntSeps, err
 	}
 
+	lenPureNumRunes := len(pureNumRunes)
+
+	if len(nStrIntSeparator.intSeparatorChars) == 0 {
+		// This is a NOP condition. Integer separation
+		// IS NOT APPLIED
+		numStrWithIntSeps = make(
+			[]rune, lenPureNumRunes)
+
+		for i := 0; i < lenPureNumRunes; i++ {
+			numStrWithIntSeps[i] =
+				pureNumRunes[i]
+
+		}
+
+		return numStrWithIntSeps, err
+	}
+
 	_,
 		err = new(strMechPreon).
 		testValidityOfRuneIntArray(
@@ -192,9 +209,9 @@ func (nStrIntSepMolecule *integerSeparatorDtoMolecule) applyIntSeparators(
 		return numStrWithIntSeps, err
 	}
 
-	// If this is zero, an error would have been
-	// thrown by testValidityOfRuneIntArray()
-	lenPureNumRunes := len(pureNumRunes)
+	// If lenPureNumRunes is zero, an error would
+	// have been thrown by
+	// testValidityOfRuneIntArray()
 
 	_,
 		err = new(integerSeparatorDtoQuark).
