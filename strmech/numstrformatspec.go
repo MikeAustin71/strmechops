@@ -1749,6 +1749,9 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumFmtParams(
 	leadingNegNumSign string,
 	trailingNegNumSign string,
 	negativeNumFieldSymPosition NumberFieldSymbolPosition,
+	leadingZeroNumSign string,
+	trailingZeroNumSign string,
+	zeroNumFieldSymPosition NumberFieldSymbolPosition,
 	numFieldLength int,
 	numFieldJustification TextJustify,
 	errorPrefix interface{}) (
@@ -1790,6 +1793,9 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumFmtParams(
 			[]rune(leadingNegNumSign),
 			[]rune(trailingNegNumSign),
 			negativeNumFieldSymPosition,
+			[]rune(leadingZeroNumSign),
+			[]rune(trailingZeroNumSign),
+			zeroNumFieldSymPosition,
 			numFieldLength,
 			numFieldJustification,
 			ePrefix.XCpy(
@@ -2179,6 +2185,9 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumFmtParamsRunes(
 	leadingNegNumSign []rune,
 	trailingNegNumSign []rune,
 	negativeNumFieldSymPosition NumberFieldSymbolPosition,
+	leadingZeroNumSign []rune,
+	trailingZeroNumSign []rune,
+	zeroNumFieldSymPosition NumberFieldSymbolPosition,
 	numFieldLength int,
 	numFieldJustification TextJustify,
 	errorPrefix interface{}) (
@@ -2220,6 +2229,9 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumFmtParamsRunes(
 			leadingNegNumSign,
 			trailingNegNumSign,
 			negativeNumFieldSymPosition,
+			leadingZeroNumSign,
+			trailingZeroNumSign,
+			zeroNumFieldSymPosition,
 			numFieldLength,
 			numFieldJustification,
 			ePrefix.XCpy(
@@ -3315,6 +3327,9 @@ func (numStrFmtSpec *NumStrFormatSpec) SetSignedNumFmtParams(
 	leadingNegNumSign string,
 	trailingNegNumSign string,
 	negativeNumFieldSymPosition NumberFieldSymbolPosition,
+	leadingZeroNumSign string,
+	trailingZeroNumSign string,
+	zeroNumFieldSymPosition NumberFieldSymbolPosition,
 	numFieldLength int,
 	numFieldJustification TextJustify,
 	errorPrefix interface{}) (
@@ -3355,6 +3370,9 @@ func (numStrFmtSpec *NumStrFormatSpec) SetSignedNumFmtParams(
 			[]rune(leadingNegNumSign),
 			[]rune(trailingNegNumSign),
 			negativeNumFieldSymPosition,
+			[]rune(leadingZeroNumSign),
+			[]rune(trailingZeroNumSign),
+			zeroNumFieldSymPosition,
 			numFieldLength,
 			numFieldJustification,
 			ePrefix.XCpy(
@@ -3747,6 +3765,9 @@ func (numStrFmtSpec *NumStrFormatSpec) SetSignedNumFmtSpecRunes(
 	leadingNegNumSign []rune,
 	trailingNegNumSign []rune,
 	negativeNumFieldSymPosition NumberFieldSymbolPosition,
+	leadingZeroNumSign []rune,
+	trailingZeroNumSign []rune,
+	zeroNumFieldSymPosition NumberFieldSymbolPosition,
 	numFieldLength int,
 	numFieldJustification TextJustify,
 	errorPrefix interface{}) (
@@ -3787,6 +3808,9 @@ func (numStrFmtSpec *NumStrFormatSpec) SetSignedNumFmtSpecRunes(
 			leadingNegNumSign,
 			trailingNegNumSign,
 			negativeNumFieldSymPosition,
+			leadingZeroNumSign,
+			trailingZeroNumSign,
+			zeroNumFieldSymPosition,
 			numFieldLength,
 			numFieldJustification,
 			ePrefix.XCpy(
@@ -3912,17 +3936,20 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) copySignedNumberFormatSp
 	new(numStrFmtSpecAtom).empty(
 		destinationSignedNumFmtSpec)
 
-	err = destinationSignedNumFmtSpec.decSeparator.CopyIn(
-		&sourceSignedNumFmtSpec.decSeparator,
-		ePrefix.XCpy(
-			"destinationSignedNumFmtSpec.decSeparator"+
-				"<-sourceSignedNumFmtSpec"))
+	err = new(decimalSepSpecNanobot).
+		copyDecimalSeparator(
+			&destinationSignedNumFmtSpec.decSeparator,
+			&sourceSignedNumFmtSpec.decSeparator,
+			ePrefix.XCpy(
+				"destinationSignedNumFmtSpec.decSeparator"+
+					"<-sourceSignedNumFmtSpec"))
 
 	if err != nil {
 		return err
 	}
 
-	err = destinationSignedNumFmtSpec.intGroupingSpec.CopyIn(
+	err = new(numStrIntGroupingSpecNanobot).copyNStrIntGroupSpec(
+		&destinationSignedNumFmtSpec.intGroupingSpec,
 		&sourceSignedNumFmtSpec.intGroupingSpec,
 		ePrefix.XCpy(
 			"destinationSignedNumFmtSpec.intGroupingSpec"+
@@ -3932,7 +3959,8 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) copySignedNumberFormatSp
 		return err
 	}
 
-	err = destinationSignedNumFmtSpec.roundingSpec.CopyIn(
+	err = new(numStrRoundingSpecNanobot).copyNStrRoundingSpec(
+		&destinationSignedNumFmtSpec.roundingSpec,
 		&sourceSignedNumFmtSpec.roundingSpec,
 		ePrefix.XCpy(
 			"destinationSignedNumFmtSpec.roundingSpec"+
@@ -3968,11 +3996,13 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) copySignedNumberFormatSp
 		return err
 	}
 
-	err = destinationSignedNumFmtSpec.numberFieldSpec.CopyIn(
-		&sourceSignedNumFmtSpec.numberFieldSpec,
-		ePrefix.XCpy(
-			"destinationSignedNumFmtSpec.numberFieldSpec"+
-				"<-sourceSignedNumFmtSpec"))
+	err = new(numStrNumberFieldSpecNanobot).
+		copyNStrNumberFieldSpec(
+			&destinationSignedNumFmtSpec.numberFieldSpec,
+			&sourceSignedNumFmtSpec.numberFieldSpec,
+			ePrefix.XCpy(
+				"destinationSignedNumFmtSpec.numberFieldSpec"+
+					"<-sourceSignedNumFmtSpec"))
 
 	if err != nil {
 		return err
@@ -4366,6 +4396,9 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setNStrNumberFieldSpec(
 	leadingNegNumSign []rune,
 	trailingNegNumSign []rune,
 	negativeNumFieldSymPosition NumberFieldSymbolPosition,
+	leadingZeroNumSign []rune,
+	trailingZeroNumSign []rune,
+	zeroNumFieldSymPosition NumberFieldSymbolPosition,
 	numFieldLength int,
 	numFieldJustification TextJustify,
 	errPrefDto *ePref.ErrPrefixDto) (
@@ -4461,6 +4494,20 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setNStrNumberFieldSpec(
 		ePrefix.XCpy(
 			"signedNumFmtSpec<-"+
 				"Negative Number Sign Params"))
+
+	if err != nil {
+		return err
+	}
+
+	err = signedNumFmtSpecAtom.setZeroNumberSign(
+		signedNumFmtSpec,
+		leadingZeroNumSign,
+		zeroNumFieldSymPosition,
+		trailingZeroNumSign,
+		zeroNumFieldSymPosition,
+		ePrefix.XCpy(
+			"signedNumFmtSpec<-"+
+				"Zero Number Sign Params"))
 
 	if err != nil {
 		return err
@@ -4836,11 +4883,13 @@ func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setDecimalSeparatorSpec(
 
 	signedNumFmt.decSeparator.Empty()
 
-	err = signedNumFmt.decSeparator.CopyIn(
-		&decSeparatorSpec,
-		ePrefix.XCpy(
-			"signedNumFmt.decSeparatorSpec<-"+
-				"decSeparatorSpec"))
+	err = new(decimalSepSpecNanobot).
+		copyDecimalSeparator(
+			&signedNumFmt.decSeparator,
+			&decSeparatorSpec,
+			ePrefix.XCpy(
+				"signedNumFmt.decSeparatorSpec<-"+
+					"decSeparatorSpec"))
 
 	return err
 }
@@ -5052,7 +5101,8 @@ func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setIntegerGroupingSpec(
 
 	signedNumFmt.intGroupingSpec.Empty()
 
-	return signedNumFmt.intGroupingSpec.CopyIn(
+	return new(numStrIntGroupingSpecNanobot).copyNStrIntGroupSpec(
+		&signedNumFmt.intGroupingSpec,
 		&intGroupingSpec,
 		ePrefix.XCpy(
 			"signedNumFmt.intGroupingSpec<-"+
@@ -5628,11 +5678,13 @@ func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setNumberFieldSpec(
 
 	signedNumFmt.numberFieldSpec.Empty()
 
-	return signedNumFmt.numberFieldSpec.CopyIn(
-		&numberFieldSpec,
-		ePrefix.XCpy(
-			"signedNumFmt<-"+
-				"numberFieldSpec"))
+	return new(numStrNumberFieldSpecNanobot).
+		copyNStrNumberFieldSpec(
+			&signedNumFmt.numberFieldSpec,
+			&numberFieldSpec,
+			ePrefix.XCpy(
+				"signedNumFmt<-"+
+					"numberFieldSpec"))
 }
 
 // setPositiveNumberSign - Deletes and resets the member variable
@@ -6094,7 +6146,8 @@ func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setRoundingSpec(
 
 	signedNumFmt.roundingSpec.Empty()
 
-	err = signedNumFmt.roundingSpec.CopyIn(
+	err = new(numStrRoundingSpecNanobot).copyNStrRoundingSpec(
+		&signedNumFmt.roundingSpec,
 		&roundingSpec,
 		ePrefix.XCpy(
 			"signedNumFmt.roundingSpec<-"+
