@@ -1085,8 +1085,132 @@ func (numStrKernelMolecule *numberStrKernelMolecule) convertNumberToKernel(
 	return err
 }
 
+//	formatNumStr
+//
+//	This method receives an instance of NumberStrKernel
+//	and returns a fully formatted Number String. The
+//	Number String formatting is controlled by the
+//	formatting specifications provided by input
+//	parameter, 'nStrFormatSpec', an instance of type
+//	NumStrFormatSpec.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	The formatting specifications provided by input
+//	parameter 'nStrFormatSpec' allow for granular control
+//	over all aspects of the Number String formatting
+//	operation. Users have the option to configure Number
+//	Strings for integer separation, radix point characters,
+//	leading and trailing number signs, currency symbols
+//	as well as multinational and multicultural
+//	customization requirements.
+//
+//	Users also have the option for specifying India or
+//	Chinese Numbering Systems. See the source code
+//	comments for type NumStrFormatSpec.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	The instance of NumberStrKernel passed to this method,
+//	'numStrKernel', WILL NOT BE MODIFIED.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	numStrKernel				*NumberStrKernel
+//
+//		A pointer to an instance of NumberStrKernel. The
+//		numeric value contained in this instance will be
+//		formatted and returned as Number String.
+//
+//	nStrFormatSpec				NumStrFormatSpec
+//
+//		This instance of NumStrFormatSpec contains all
+//		the detail specifications necessary to format
+//		a Number String.
+//			type NumStrFormatSpec struct {
+//
+//				decSeparator DecimalSeparatorSpec
+//					Contains the decimal separator character or
+//					characters which will separate integer and
+//					fractional digits in a floating point number.
+//
+//				intGroupingSpec NumStrIntegerGroupingSpec
+//					Integer Grouping Specification. This parameter
+//					specifies the type of integer grouping and
+//					integer separator characters which will be
+//					applied to the number string formatting
+//					operations.
+//
+//				roundingSpec NumStrRoundingSpec
+//					Controls the rounding algorithm applied to
+//					floating point numbers.
+//
+//				positiveNumberSign NumStrNumberSymbolSpec
+//					Positive number signs are commonly implied and
+//					not specified. However, the user as the option
+//					to specify a positive number sign character or
+//					characters for positive numeric values using a
+//					Number String Positive Number Sign
+//					Specification.
+//
+//				negativeNumberSign NumStrNumberSymbolSpec
+//					The Number String Negative Number Sign
+//					Specification is used to configure negative
+//					number sign symbols for negative numeric values
+//					formatted and displayed in number stings.
+//
+//				numberFieldSpec NumStrNumberFieldSpec
+//					This Number String Number Field Specification
+//					contains the field length and text justification
+//					parameter necessary to display a numeric value
+//					within a number field for display as a number
+//					string.
+//			}
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error messages.
+//		Usually, it contains the name of the calling method
+//		or methods listed as a function chain.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	numStr						string
+//
+//		If this method completes successfully, the
+//		numeric	value represented by the NumberStrKernel
+//		instance, 'numStrKernel', will be returned as a
+//		formatted Number String, 'numStr'.
+//
+//	err							error
+//
+//		If this method completes successfully, this
+//		returned error Type is set equal to 'nil'. If errors
+//		are	encountered during processing, the returned
+//		error Type will encapsulate an error message.
+//
+//		If an error message is returned, the text value for
+//		input parameter 'errPrefDto' (error prefix) will be
+//		prefixed or attached at the beginning of the error
+//		message.
 func (numStrKernelMolecule *numberStrKernelMolecule) formatNumStr(
-	numStrKernel NumberStrKernel,
+	numStrKernel *NumberStrKernel,
 	nStrFormatSpec NumStrFormatSpec,
 	errPrefDto *ePref.ErrPrefixDto) (
 	numStr string,
@@ -1113,6 +1237,15 @@ func (numStrKernelMolecule *numberStrKernelMolecule) formatNumStr(
 		return numStr, err
 	}
 
+	if numStrKernel == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'numStrKernel' is a nil pointer!\n",
+			ePrefix.String())
+
+		return numStr, err
+	}
+
 	if numStrKernel.GetNumberOfIntegerDigits() == 0 &&
 		numStrKernel.GetNumberOfFractionalDigits() == 0 {
 		numStr = "0"
@@ -1123,7 +1256,8 @@ func (numStrKernelMolecule *numberStrKernelMolecule) formatNumStr(
 	var newNumStrKernel NumberStrKernel
 
 	newNumStrKernel,
-		err = numStrKernel.CopyOut(
+		err = new(numberStrKernelNanobot).copyOut(
+		numStrKernel,
 		ePrefix.XCpy(
 			"newNumStrKernel<-numStrKernel"))
 
@@ -1164,9 +1298,7 @@ func (numStrKernelMolecule *numberStrKernelMolecule) formatNumStr(
 		return numStr, err
 	}
 
-	var numOfIntDigits, numOfFracDigits int
-
-	numOfIntDigits = newNumStrKernel.GetNumberOfIntegerDigits()
+	var numOfFracDigits int
 
 	numOfFracDigits = newNumStrKernel.GetNumberOfFractionalDigits()
 
@@ -1181,17 +1313,6 @@ func (numStrKernelMolecule *numberStrKernelMolecule) formatNumStr(
 			ePrefix.String())
 
 		return numStr, err
-	}
-
-	if numOfIntDigits == 0 {
-
-		err = newNumStrKernel.AddIntegerDigit(
-			'0',
-			ePrefix.XCpy("Adding Missing Zero Digit"))
-
-		if err != nil {
-			return numStr, err
-		}
 	}
 
 	var intSeparatorDto IntegerSeparatorDto
@@ -1216,13 +1337,13 @@ func (numStrKernelMolecule *numberStrKernelMolecule) formatNumStr(
 		return numStr, err
 	}
 
-	numStrAbsVal := string(numStrWithIntSeps)
+	tempNumStr := string(numStrWithIntSeps)
 
 	if numOfFracDigits > 0 {
 
-		numStrAbsVal += decSeparator.GetDecimalSeparatorStr()
+		tempNumStr += decSeparator.GetDecimalSeparatorStr()
 
-		numStrAbsVal += newNumStrKernel.GetFractionalString()
+		tempNumStr += newNumStrKernel.GetFractionalString()
 
 	}
 
@@ -1261,12 +1382,14 @@ func (numStrKernelMolecule *numberStrKernelMolecule) formatNumStr(
 
 		}
 
-	} else if newNumStrKernel.numberSign == NumSignVal.Positive() {
+	}
+
+	if newNumStrKernel.numberSign == NumSignVal.Positive() {
 
 		var positiveNumberSign NumStrNumberSymbolSpec
 
 		positiveNumberSign,
-			err = nStrFormatSpec.GetNegativeNumSymSpec(
+			err = nStrFormatSpec.GetPositiveNumSymSpec(
 			ePrefix.XCpy(
 				"positiveNumberSign"))
 
@@ -1298,13 +1421,13 @@ func (numStrKernelMolecule *numberStrKernelMolecule) formatNumStr(
 	if lenLeadingNumSymbol > 0 &&
 		leadingNumSymPosition == NumFieldSymPos.InsideNumField() {
 
-		numStrAbsVal = leadingNumSym + numStrAbsVal
+		tempNumStr = leadingNumSym + tempNumStr
 	}
 
 	if lenTrailingNumSymbol > 0 &&
 		trailingNumSymPosition == NumFieldSymPos.InsideNumField() {
 
-		numStrAbsVal = numStrAbsVal + trailingNumSym
+		tempNumStr = tempNumStr + trailingNumSym
 
 	}
 
@@ -1321,10 +1444,10 @@ func (numStrKernelMolecule *numberStrKernelMolecule) formatNumStr(
 
 	numStr,
 		err = new(strMechNanobot).justifyTextInStrField(
-		numStrAbsVal,
+		tempNumStr,
 		numberFieldSpec.GetNumFieldLength(),
 		numberFieldSpec.GetNumFieldJustification(),
-		ePrefix.XCpy("numStr<-numStrAbsVal"))
+		ePrefix.XCpy("numStr<-tempNumStr"))
 
 	if lenLeadingNumSymbol > 0 &&
 		leadingNumSymPosition == NumFieldSymPos.OutsideNumField() {

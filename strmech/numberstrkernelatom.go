@@ -1566,14 +1566,13 @@ func (numStrKernelAtom *numberStrKernelAtom) testValidityOfNumStrKernel(
 	if lenIntDigits == 0 &&
 		lenFracDigits > 0 {
 
-		err = fmt.Errorf("%v\n"+
-			"Error: This instance of NumberStrKernel is invalid!"+
-			"The Fractional Digits rune array contains valid numeric digits."+
-			"However, the Integer Digits rune array is empty and has a zero length.\n",
-			ePrefix.String())
+		err = numStrKernel.AddIntegerDigit(
+			'0',
+			ePrefix.XCpy("Adding Missing Zero Digit"))
 
-		return isValid, err
-
+		if err != nil {
+			return isValid, err
+		}
 	}
 
 	if !numStrKernel.numberSign.XIsValid() {
