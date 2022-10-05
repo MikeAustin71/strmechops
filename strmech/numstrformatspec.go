@@ -26,14 +26,6 @@ type NumStrFormatSpec struct {
 	// Controls the rounding algorithm applied to
 	// floating point numbers.
 
-	positiveNumberSign NumStrNumberSymbolSpec
-	// Positive number signs are commonly implied and
-	// not specified. However, the user as the option
-	// to specify a positive number sign character or
-	// characters for positive numeric values using a
-	// Number String Positive Number Sign
-	// Specification.
-
 	negativeNumberSign NumStrNumberSymbolSpec
 	// The Number String Negative Number Sign
 	// Specification is used to configure negative
@@ -46,6 +38,20 @@ type NumStrFormatSpec struct {
 	// parameter necessary to display a numeric value
 	// within a number field for display as a number
 	// string.
+
+	positiveNumberSign NumStrNumberSymbolSpec
+	// Positive number signs are commonly implied and
+	// not specified. However, the user as the option
+	// to specify a positive number sign character or
+	// characters for positive numeric values using a
+	// Number String Positive Number Sign
+	// Specification.
+
+	zeroNumberSign NumStrNumberSymbolSpec
+	// The Number String Zero Number Symbol
+	// Specification is used to configure number
+	// symbols for zero numeric values formatted
+	//and displayed in number stings.
 
 	lock *sync.Mutex
 }
@@ -3936,21 +3942,27 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) copySignedNumberFormatSp
 		return err
 	}
 
-	err = destinationSignedNumFmtSpec.positiveNumberSign.CopyIn(
-		&sourceSignedNumFmtSpec.positiveNumberSign,
-		ePrefix.XCpy(
-			"destinationSignedNumFmtSpec.positiveNumberSign"+
-				"<-sourceSignedNumFmtSpec"))
+	var nStrNumSymSpecNanobot numStrNumberSymbolSpecNanobot
+
+	err = nStrNumSymSpecNanobot.
+		copyNStrNumberSymbolSpec(
+			&destinationSignedNumFmtSpec.positiveNumberSign,
+			&sourceSignedNumFmtSpec.positiveNumberSign,
+			ePrefix.XCpy(
+				"destinationSignedNumFmtSpec.positiveNumberSign"+
+					"<-sourceSignedNumFmtSpec"))
 
 	if err != nil {
 		return err
 	}
 
-	err = destinationSignedNumFmtSpec.negativeNumberSign.CopyIn(
-		&sourceSignedNumFmtSpec.negativeNumberSign,
-		ePrefix.XCpy(
-			"destinationSignedNumFmtSpec.negativeNumberSign"+
-				"<-sourceSignedNumFmtSpec"))
+	err = nStrNumSymSpecNanobot.
+		copyNStrNumberSymbolSpec(
+			&destinationSignedNumFmtSpec.negativeNumberSign,
+			&sourceSignedNumFmtSpec.negativeNumberSign,
+			ePrefix.XCpy(
+				"destinationSignedNumFmtSpec.negativeNumberSign"+
+					"<-sourceSignedNumFmtSpec"))
 
 	if err != nil {
 		return err
@@ -3961,6 +3973,18 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) copySignedNumberFormatSp
 		ePrefix.XCpy(
 			"destinationSignedNumFmtSpec.numberFieldSpec"+
 				"<-sourceSignedNumFmtSpec"))
+
+	if err != nil {
+		return err
+	}
+
+	err = new(numStrNumberSymbolSpecNanobot).
+		copyNStrNumberSymbolSpec(
+			&destinationSignedNumFmtSpec.zeroNumberSign,
+			&sourceSignedNumFmtSpec.zeroNumberSign,
+			ePrefix.XCpy(
+				"destinationSignedNumFmtSpec.zeroNumberSign"+
+					"<-sourceSignedNumFmtSpec"))
 
 	return err
 }
@@ -4512,6 +4536,8 @@ func (signedNumFmtSpecAtom *numStrFmtSpecAtom) empty(
 
 	signedNumFmtSpec.numberFieldSpec.Empty()
 
+	signedNumFmtSpec.zeroNumberSign.Empty()
+
 }
 
 // equal - Receives a pointer to two instances of
@@ -4603,6 +4629,12 @@ func (signedNumFmtSpecAtom *numStrFmtSpecAtom) equal(
 
 	if !signedNumFmtSpec1.numberFieldSpec.Equal(
 		&signedNumFmtSpec2.numberFieldSpec) {
+
+		return false
+	}
+
+	if !signedNumFmtSpec1.zeroNumberSign.Equal(
+		&signedNumFmtSpec2.zeroNumberSign) {
 
 		return false
 	}
@@ -5360,11 +5392,13 @@ func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setNegativeNumberSignSpec(
 		return err
 	}
 
-	err = signedNumFmt.negativeNumberSign.CopyIn(
-		&negativeNumberSign,
-		ePrefix.XCpy(
-			"signedNumFmt.negativeNumberSign<-"+
-				"negativeNumberSign"))
+	err = new(numStrNumberSymbolSpecNanobot).
+		copyNStrNumberSymbolSpec(
+			&signedNumFmt.negativeNumberSign,
+			&negativeNumberSign,
+			ePrefix.XCpy(
+				"signedNumFmt.negativeNumberSign<-"+
+					"negativeNumberSign"))
 
 	return err
 }
@@ -5842,11 +5876,13 @@ func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setPositiveNumberSignSpec(
 		return err
 	}
 
-	err = signedNumFmt.positiveNumberSign.CopyIn(
-		&positiveNumberSign,
-		ePrefix.XCpy(
-			"signedNumFmt.positiveNumberSign<-"+
-				"positiveNumberSign"))
+	err = new(numStrNumberSymbolSpecNanobot).
+		copyNStrNumberSymbolSpec(
+			&signedNumFmt.positiveNumberSign,
+			&positiveNumberSign,
+			ePrefix.XCpy(
+				"signedNumFmt.positiveNumberSign<-"+
+					"positiveNumberSign"))
 
 	return err
 }
@@ -6063,6 +6099,258 @@ func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setRoundingSpec(
 		ePrefix.XCpy(
 			"signedNumFmt.roundingSpec<-"+
 				"roundingSpec"))
+
+	return err
+}
+
+// setZeroNumberSign - Deletes and resets the member variable
+// data value for 'NumStrFormatSpec.zeroNumberSign'
+// contained in the instance of NumStrFormatSpec passed as
+// an input parameter.
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//	signedNumFmt				*NumStrFormatSpec
+//
+//		A pointer to an instance of NumStrFormatSpec.
+//		The member variable 'signedNumFmt.roundingSpec'
+//		will be reset to the values provided by the
+//		following input parameters.
+//
+//	leadingZeroNumSymbols			[]rune
+//
+//		An array of runes containing the character or
+//		characters which will be formatted and displayed
+//		in front of a zero numeric value in a number
+//		string.
+//
+//	trailingZeroNumSymbols			[]rune
+//
+//		An array of runes containing the character or
+//		characters which will be formatted and displayed
+//		after a zero numeric value in a number
+//		string.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods listed
+//		as a function chain.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref' software
+//		package, "github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//	err							error
+//		If this method completes successfully, this returned error
+//		Type is set equal to 'nil'. If errors are encountered
+//		during processing, the returned error Type will encapsulate
+//		an error message.
+//
+//		If an error message is returned, the text value for input
+//		parameter 'errPrefDto' (error prefix) will be prefixed or
+//		attached at the beginning of the error message.
+func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setZeroNumberSign(
+	signedNumFmt *NumStrFormatSpec,
+	leadingZeroNumSign []rune,
+	leadingZeroNumFieldSymPosition NumberFieldSymbolPosition,
+	trailingZeroNumSign []rune,
+	trailingZeroNumFieldSymPosition NumberFieldSymbolPosition,
+	errPrefDto *ePref.ErrPrefixDto) (
+	err error) {
+
+	if signedNumFmtSpecAtom.lock == nil {
+		signedNumFmtSpecAtom.lock = new(sync.Mutex)
+	}
+
+	signedNumFmtSpecAtom.lock.Lock()
+
+	defer signedNumFmtSpecAtom.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"numStrFmtSpecAtom."+
+			"setZeroNumberSign()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if signedNumFmt == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'signedNumFmt' is invalid!\n"+
+			"'signedNumFmt' is a 'nil' pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	lenLeadingZeroNumSign := len(leadingZeroNumSign)
+	lenTrailingZeroNumSign := len(trailingZeroNumSign)
+
+	if lenLeadingZeroNumSign == 0 &&
+		lenTrailingZeroNumSign == 0 {
+
+		signedNumFmt.zeroNumberSign.SetNOP()
+
+		return err
+	}
+
+	signedNumFmt.zeroNumberSign.Empty()
+
+	if lenLeadingZeroNumSign > 0 {
+
+		err = signedNumFmt.zeroNumberSign.
+			SetLeadingNumberSymbolRunes(
+				leadingZeroNumSign,
+				leadingZeroNumFieldSymPosition,
+				ePrefix.XCpy(
+					"signedNumFmt.zeroNumberSign"+
+						"<-leadingZeroNumSymbols"))
+
+		if err != nil {
+			return err
+		}
+	}
+
+	if lenTrailingZeroNumSign > 0 {
+
+		err = signedNumFmt.zeroNumberSign.
+			SetTrailingNumberSymbolRunes(
+				trailingZeroNumSign,
+				trailingZeroNumFieldSymPosition,
+				ePrefix.XCpy(
+					"signedNumFmt.zeroNumberSign<-"+
+						"trailingZeroNumSymbols"))
+
+		if err != nil {
+			return err
+		}
+	}
+
+	return err
+}
+
+// setZeroNumberSignSpec - Deletes and resets the member
+// variable data value for 'signedNumFmt.zeroNumberSign'
+// contained in the instance of NumStrFormatSpec passed as
+// an input parameter.
+//
+// This method receives an instance of 'NumStrNumberSymbolSpec' and
+// copies the member variable data values to
+// 'signedNumFmt.zeroNumberSign'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	signedNumFmt				*NumStrFormatSpec
+//
+//		A pointer to an instance of NumStrFormatSpec.
+//		The member variable 'signedNumFmt.decSeparator'
+//		will be reset to the values provided by the
+//		following input parameters.
+//
+//
+//	zeroNumberSign 			NumStrNumberSymbolSpec
+//
+//		An instance of NumStrNumberSymbolSpec. The member
+//		variable data values contained in this instance
+//		will be copied to:
+//			'signedNumFmt.zeroNumberSign'.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods listed
+//		as a function chain.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref' software
+//		package, "github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	err							error
+//
+//		If this method completes successfully, this returned error
+//		Type is set equal to 'nil'. If errors are encountered
+//		during processing, the returned error Type will encapsulate
+//		an error message.
+//
+//		If an error message is returned, the text value for input
+//		parameter 'errPrefDto' (error prefix) will be prefixed or
+//		attached at the beginning of the error message.
+func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setZeroNumberSignSpec(
+	signedNumFmt *NumStrFormatSpec,
+	zeroNumberSign NumStrNumberSymbolSpec,
+	errPrefDto *ePref.ErrPrefixDto) (
+	err error) {
+
+	if signedNumFmtSpecAtom.lock == nil {
+		signedNumFmtSpecAtom.lock = new(sync.Mutex)
+	}
+
+	signedNumFmtSpecAtom.lock.Lock()
+
+	defer signedNumFmtSpecAtom.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"numStrFmtSpecAtom."+
+			"setZeroNumberSignSpec()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if signedNumFmt == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'signedNumFmt' is invalid!\n"+
+			"'signedNumFmt' is a 'nil' pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if zeroNumberSign.IsNOP() {
+
+		signedNumFmt.zeroNumberSign.SetNOP()
+
+		return err
+	}
+
+	err = new(numStrNumberSymbolSpecNanobot).
+		copyNStrNumberSymbolSpec(
+			&signedNumFmt.zeroNumberSign,
+			&zeroNumberSign,
+			ePrefix.XCpy(
+				"signedNumFmt.zeroNumberSign<-"+
+					"zeroNumberSign"))
 
 	return err
 }
