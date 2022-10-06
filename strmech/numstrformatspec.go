@@ -2567,78 +2567,9 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumFmtUS(
 		return newSignedNumFmtSpec, err
 	}
 
-	var decSeparator DecimalSeparatorSpec
-
-	decSeparator = DecimalSeparatorSpec{
-		decimalSeparatorChars: RuneArrayDto{
-			CharsArray:     []rune{'.'},
-			Description1:   "",
-			Description2:   "",
-			charSearchType: CharSearchType.LinearTargetStartingIndex(),
-			lock:           nil,
-		},
-
-		lock: nil,
-	}
-
-	var intGroupingSpec NumStrIntegerGroupingSpec
-
-	intGroupingSpec = NumStrIntegerGroupingSpec{
-		integerSeparatorChars: RuneArrayDto{
-			CharsArray:     []rune{','},
-			Description1:   "",
-			Description2:   "",
-			charSearchType: CharSearchType.LinearTargetStartingIndex(),
-			lock:           nil,
-		},
-		intGroupingType: IntGroupingType.Thousands(),
-		lock:            nil,
-	}
-
-	var negativeNumberSign NumStrNumberSymbolSpec
-
-	negativeNumberSign = NumStrNumberSymbolSpec{
-		leadingNumberSymbols: RuneArrayDto{
-			CharsArray:     []rune{'-'},
-			Description1:   "",
-			Description2:   "",
-			charSearchType: CharSearchType.LinearTargetStartingIndex(),
-			lock:           nil,
-		},
-		leadingNumberFieldSymbolPosition:  NumFieldSymPos.InsideNumField(),
-		trailingNumberSymbols:             RuneArrayDto{},
-		trailingNumberFieldSymbolPosition: 0,
-		lock:                              nil,
-	}
-
-	var positiveNumberSign NumStrNumberSymbolSpec
-
-	positiveNumberSign = NumStrNumberSymbolSpec{
-		leadingNumberSymbols:              RuneArrayDto{},
-		leadingNumberFieldSymbolPosition:  0,
-		trailingNumberSymbols:             RuneArrayDto{},
-		trailingNumberFieldSymbolPosition: 0,
-		lock:                              nil,
-	}
-
-	var zeroNumberSign NumStrNumberSymbolSpec
-
-	zeroNumberSign = NumStrNumberSymbolSpec{
-		leadingNumberSymbols:              RuneArrayDto{},
-		leadingNumberFieldSymbolPosition:  0,
-		trailingNumberSymbols:             RuneArrayDto{},
-		trailingNumberFieldSymbolPosition: 0,
-		lock:                              nil,
-	}
-
-	err = new(numStrFmtSpecNanobot).setNStrFmtComponents(
+	err = new(numStrFmtSpecNanobot).setNStrFmtComponentsUS(
 		&newSignedNumFmtSpec,
-		decSeparator,
-		intGroupingSpec,
 		roundingSpec,
-		negativeNumberSign,
-		positiveNumberSign,
-		zeroNumberSign,
 		numberFieldSpec,
 		ePrefix.XCpy("newSignedNumFmtSpec<-"))
 
@@ -4567,82 +4498,11 @@ func (numStrFmtSpec *NumStrFormatSpec) SetSignedNumFmtUS(
 		return err
 	}
 
-	var decSeparator DecimalSeparatorSpec
-
-	decSeparator = DecimalSeparatorSpec{
-		decimalSeparatorChars: RuneArrayDto{
-			CharsArray:     []rune{'.'},
-			Description1:   "",
-			Description2:   "",
-			charSearchType: CharSearchType.LinearTargetStartingIndex(),
-			lock:           nil,
-		},
-
-		lock: nil,
-	}
-
-	var intGroupingSpec NumStrIntegerGroupingSpec
-
-	intGroupingSpec = NumStrIntegerGroupingSpec{
-		integerSeparatorChars: RuneArrayDto{
-			CharsArray:     []rune{','},
-			Description1:   "",
-			Description2:   "",
-			charSearchType: CharSearchType.LinearTargetStartingIndex(),
-			lock:           nil,
-		},
-		intGroupingType: IntGroupingType.Thousands(),
-		lock:            nil,
-	}
-
-	var negativeNumberSign NumStrNumberSymbolSpec
-
-	negativeNumberSign = NumStrNumberSymbolSpec{
-		leadingNumberSymbols: RuneArrayDto{
-			CharsArray:     []rune{'-'},
-			Description1:   "",
-			Description2:   "",
-			charSearchType: CharSearchType.LinearTargetStartingIndex(),
-			lock:           nil,
-		},
-		leadingNumberFieldSymbolPosition:  NumFieldSymPos.InsideNumField(),
-		trailingNumberSymbols:             RuneArrayDto{},
-		trailingNumberFieldSymbolPosition: 0,
-		lock:                              nil,
-	}
-
-	var positiveNumberSign NumStrNumberSymbolSpec
-
-	positiveNumberSign = NumStrNumberSymbolSpec{
-		leadingNumberSymbols:              RuneArrayDto{},
-		leadingNumberFieldSymbolPosition:  0,
-		trailingNumberSymbols:             RuneArrayDto{},
-		trailingNumberFieldSymbolPosition: 0,
-		lock:                              nil,
-	}
-
-	var zeroNumberSign NumStrNumberSymbolSpec
-
-	zeroNumberSign = NumStrNumberSymbolSpec{
-		leadingNumberSymbols:              RuneArrayDto{},
-		leadingNumberFieldSymbolPosition:  0,
-		trailingNumberSymbols:             RuneArrayDto{},
-		trailingNumberFieldSymbolPosition: 0,
-		lock:                              nil,
-	}
-
-	err = new(numStrFmtSpecNanobot).setNStrFmtComponents(
+	return new(numStrFmtSpecNanobot).setNStrFmtComponentsUS(
 		numStrFmtSpec,
-		decSeparator,
-		intGroupingSpec,
 		roundingSpec,
-		negativeNumberSign,
-		positiveNumberSign,
-		zeroNumberSign,
 		numberFieldSpec,
 		ePrefix.XCpy("numStrFmtSpec<-"))
-
-	return err
 }
 
 //	SetZeroNumberFmtSpec
@@ -5579,6 +5439,261 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setNStrFmtComponents(
 			ePrefix.String())
 
 		return err
+	}
+
+	err = numStrFmtSpec.decSeparator.CopyIn(
+		&decSeparator,
+		ePrefix.XCpy(
+			"decSeparator->"))
+
+	if err != nil {
+		return err
+	}
+
+	err = numStrFmtSpec.intGroupingSpec.CopyIn(
+		&intGroupingSpec,
+		ePrefix.XCpy(
+			"intGroupingSpec->"))
+
+	if err != nil {
+		return err
+	}
+
+	err = numStrFmtSpec.roundingSpec.CopyIn(
+		&roundingSpec,
+		ePrefix.XCpy(
+			"roundingSpec->"))
+
+	if err != nil {
+		return err
+	}
+
+	err = numStrFmtSpec.negativeNumberSign.CopyIn(
+		&negativeNumberSign,
+		ePrefix.XCpy(
+			"negativeNumberSign->"))
+
+	if err != nil {
+		return err
+	}
+
+	err = numStrFmtSpec.positiveNumberSign.CopyIn(
+		&positiveNumberSign,
+		ePrefix.XCpy(
+			"positiveNumberSign->"))
+
+	if err != nil {
+		return err
+	}
+
+	err = numStrFmtSpec.zeroNumberSign.CopyIn(
+		&zeroNumberSign,
+		ePrefix.XCpy(
+			"zeroNumberSign->"))
+
+	if err != nil {
+		return err
+	}
+
+	err = numStrFmtSpec.numberFieldSpec.CopyIn(
+		&numberFieldSpec,
+		ePrefix.XCpy(
+			"numberFieldSpec->"))
+
+	return err
+}
+
+// setNStrFmtComponentsUS
+//
+// Deletes and resets the member variable data values
+// stored in the instance of NumStrFormatSpec passed
+// as input parameter 'signedNumFmtSpec'.
+//
+//	Reconfigures the current instance of NumStrFormatSpec
+//	using Number String formatting conventions typically
+//	applied in the US (United States).
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	Be advised that the data fields contained in the current
+//	instance of NumStrFormatSpec will be deleted and replaced
+//	by Number String formatting parameters typically applied
+//	in the US (United States).
+//
+// ----------------------------------------------------------------
+//
+// # Defaults
+//
+//	The radix point or decimal separator is set to the
+//	period character ('.').
+//
+//	The integer group specification is set to 'thousands'.
+//	This means that integer digits will be separated into
+//	'thousands' with each group containing three digits each
+//	(Example: 1,000,000,000).
+//
+//	The negative number sign is set to a leading minus sign
+//	('-').
+//
+//	The positive number sign is set to a blank or empty
+//	string ("").
+//
+//	The zero number format is set to a blank or empty
+//	string ("").
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+// numStrFmtSpec				*NumStrFormatSpec
+//
+//	A pointer to a NumStrFormatSpec instance. All  member
+//	variable data fields in this object will be replaced
+//	by data values configured from the input parameter
+//	described below.
+//
+//	roundingSpec 				NumStrRoundingSpec
+//
+//		Numeric Value Rounding Specification. This
+//		specification contains all the parameters
+//		required to configure and apply a rounding
+//		algorithm for floating point Number Strings.
+//
+//	numberFieldSpec				NumStrNumberFieldSpec
+//
+//		This Number Field Specification contains all
+//		parameters necessary to format a Number String
+//		within a larger Number Field. In addition to
+//		specifying the length of number field, this
+//		object contains justification specifications
+//		for centering, left justifying or right
+//		justifying a Number String within a Number
+//		Field.
+//
+//	errPrefDto						*ePref.ErrPrefixDto
+//		This object encapsulates an error prefix string which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods listed
+//		as a function chain.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref' software
+//		package, "github.com/MikeAustin71/errpref".
+//
+// -----------------------------------------------------------------
+//
+// # Return Values
+//
+//	err								error
+//
+//		If this method completes successfully, this returned error
+//		Type is set equal to 'nil'. If errors are encountered during
+//		processing, the returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value for input
+//		parameter 'errPrefDto' (error prefix) will be prefixed or
+//		attached at the beginning of the error message.
+func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setNStrFmtComponentsUS(
+	numStrFmtSpec *NumStrFormatSpec,
+	roundingSpec NumStrRoundingSpec,
+	numberFieldSpec NumStrNumberFieldSpec,
+	errPrefDto *ePref.ErrPrefixDto) (
+	err error) {
+
+	nStrNumberFieldSpecNanobot.lock.Lock()
+
+	defer nStrNumberFieldSpecNanobot.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"numStrFmtSpecNanobot."+
+			"setNStrFmtComponentsUS()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if numStrFmtSpec == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'numStrFmtSpec' is invalid!\n"+
+			"'numStrFmtSpec' is a 'nil' pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	var decSeparator DecimalSeparatorSpec
+
+	decSeparator = DecimalSeparatorSpec{
+		decimalSeparatorChars: RuneArrayDto{
+			CharsArray:     []rune{'.'},
+			Description1:   "",
+			Description2:   "",
+			charSearchType: CharSearchType.LinearTargetStartingIndex(),
+			lock:           nil,
+		},
+
+		lock: nil,
+	}
+
+	var intGroupingSpec NumStrIntegerGroupingSpec
+
+	intGroupingSpec = NumStrIntegerGroupingSpec{
+		integerSeparatorChars: RuneArrayDto{
+			CharsArray:     []rune{','},
+			Description1:   "",
+			Description2:   "",
+			charSearchType: CharSearchType.LinearTargetStartingIndex(),
+			lock:           nil,
+		},
+		intGroupingType: IntGroupingType.Thousands(),
+		lock:            nil,
+	}
+
+	var negativeNumberSign NumStrNumberSymbolSpec
+
+	negativeNumberSign = NumStrNumberSymbolSpec{
+		leadingNumberSymbols: RuneArrayDto{
+			CharsArray:     []rune{'-'},
+			Description1:   "",
+			Description2:   "",
+			charSearchType: CharSearchType.LinearTargetStartingIndex(),
+			lock:           nil,
+		},
+		leadingNumberFieldSymbolPosition:  NumFieldSymPos.InsideNumField(),
+		trailingNumberSymbols:             RuneArrayDto{},
+		trailingNumberFieldSymbolPosition: 0,
+		lock:                              nil,
+	}
+
+	var positiveNumberSign NumStrNumberSymbolSpec
+
+	positiveNumberSign = NumStrNumberSymbolSpec{
+		leadingNumberSymbols:              RuneArrayDto{},
+		leadingNumberFieldSymbolPosition:  0,
+		trailingNumberSymbols:             RuneArrayDto{},
+		trailingNumberFieldSymbolPosition: 0,
+		lock:                              nil,
+	}
+
+	var zeroNumberSign NumStrNumberSymbolSpec
+
+	zeroNumberSign = NumStrNumberSymbolSpec{
+		leadingNumberSymbols:              RuneArrayDto{},
+		leadingNumberFieldSymbolPosition:  0,
+		trailingNumberSymbols:             RuneArrayDto{},
+		trailingNumberFieldSymbolPosition: 0,
+		lock:                              nil,
 	}
 
 	err = numStrFmtSpec.decSeparator.CopyIn(
