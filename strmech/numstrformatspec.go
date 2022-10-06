@@ -2654,11 +2654,17 @@ func (numStrFmtSpec *NumStrFormatSpec) SetIntegerGroupingSpec(
 			"numStrFmtSpec<-intGroupingSpec"))
 }
 
-// SetNegativeNumberSignSpec - Deletes and replaces the Negative
-// Number Sign Specification for the current instance of
-// NumStrFormatSpec:
+//	SetNegativeNumberFmtSpec
 //
-//	NumStrFormatSpec.negativeNumberSign
+//	Deletes and replaces the Negative Number Format
+//	Specification for the current instance of
+//	NumStrFormatSpec:
+//
+//		NumStrFormatSpec.negativeNumberSign
+//
+//	If the current instance of NumStrFormatSpec is set
+//	to a negative numeric value, this formatting
+//	specification will be applied.
 //
 // ----------------------------------------------------------------
 //
@@ -2736,7 +2742,7 @@ func (numStrFmtSpec *NumStrFormatSpec) SetIntegerGroupingSpec(
 //		and text passed by input parameter, 'errorPrefix'. The
 //		'errorPrefix' text will be attached to the beginning of
 //		the error message.
-func (numStrFmtSpec *NumStrFormatSpec) SetNegativeNumberSignSpec(
+func (numStrFmtSpec *NumStrFormatSpec) SetNegativeNumberFmtSpec(
 	negativeNumberSign NumStrNumberSymbolSpec,
 	errorPrefix interface{}) error {
 
@@ -2755,7 +2761,7 @@ func (numStrFmtSpec *NumStrFormatSpec) SetNegativeNumberSignSpec(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumStrFormatSpec."+
-			"SetNegativeNumberSignSpec()",
+			"SetNegativeNumberFmtSpec()",
 		"")
 
 	if err != nil {
@@ -2894,11 +2900,17 @@ func (numStrFmtSpec *NumStrFormatSpec) SetNumberFieldSpec(
 			"numStrFmtSpec<-numberFieldSpec"))
 }
 
-// SetPositiveNumberSignSpec - Deletes and replaces the Positive
-// Number Sign Specification for the current instance of
-// NumStrFormatSpec:
+//	SetPositiveNumberFmtSpec
 //
-//	NumStrFormatSpec.positiveNumberSign
+//	Deletes and replaces the Positive Number Sign Format
+//	Specification for the current instance of
+//	NumStrFormatSpec:
+//
+//		NumStrFormatSpec.positiveNumberSign
+//
+//	If the current instance of NumStrFormatSpec is set
+//	to a positive numeric value, this formatting
+//	specification will be applied.
 //
 // ----------------------------------------------------------------
 //
@@ -2976,7 +2988,7 @@ func (numStrFmtSpec *NumStrFormatSpec) SetNumberFieldSpec(
 //		and text passed by input parameter, 'errorPrefix'. The
 //		'errorPrefix' text will be attached to the beginning of
 //		the error message.
-func (numStrFmtSpec *NumStrFormatSpec) SetPositiveNumberSignSpec(
+func (numStrFmtSpec *NumStrFormatSpec) SetPositiveNumberFmtSpec(
 	positiveNumberSign NumStrNumberSymbolSpec,
 	errorPrefix interface{}) error {
 
@@ -2995,7 +3007,7 @@ func (numStrFmtSpec *NumStrFormatSpec) SetPositiveNumberSignSpec(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumStrFormatSpec."+
-			"SetPositiveNumberSignSpec()",
+			"SetPositiveNumberFmtSpec()",
 		"")
 
 	if err != nil {
@@ -3128,7 +3140,7 @@ func (numStrFmtSpec *NumStrFormatSpec) SetRoundingSpec(
 //
 //	Reconfigures the current instance of NumStrFormatSpec
 //	based on Number String formatting components passed as
-//	input paramters.
+//	input parameters.
 //
 // ----------------------------------------------------------------
 //
@@ -4179,6 +4191,130 @@ func (numStrFmtSpec *NumStrFormatSpec) SetNumFmtParamsRunes(
 				"newSignedNumFmtSpec<-"))
 
 	return err
+}
+
+//	SetZeroNumberFmtSpec
+//
+//	Deletes and replaces the Zero Number Format
+//	Specification for the current instance of
+//	NumStrFormatSpec:
+//
+//		NumStrFormatSpec.zeroNumberSign
+//
+//	If the current instance of NumStrFormatSpec is set
+//	to a zero numeric value, this formatting specification
+//	will be applied.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	zeroNumberSign			NumStrNumberSymbolSpec
+//
+//		An instance of NumStrNumberSymbolSpec. The member
+//		variable data values contained in this instance
+//		will be copied to the current
+//		NumStrFormatSpec member variable:
+//			'NumStrFormatSpec.zeroNumberSign'.
+//
+//	 errorPrefix                interface{}
+//
+//		This object encapsulates error prefix text which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods
+//		listed as a method or function chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1. nil - A nil value is valid and generates an empty
+//		   collection of error prefix and error context
+//		   information.
+//
+//		2. string - A string containing error prefix
+//			information.
+//
+//		3. []string A one-dimensional slice of strings
+//			containing error prefix information.
+//
+//		4. [][2]string A two-dimensional slice of strings
+//		   containing error prefix and error context
+//		   information.
+//
+//		5. ErrPrefixDto - An instance of ErrPrefixDto.
+//			Information from this object will be copied for use
+//			in error and informational messages.
+//
+//		6. *ErrPrefixDto - A pointer to an instance of
+//			ErrPrefixDto. Information from this object will be
+//			copied for use in error and informational messages.
+//
+//		7. IBasicErrorPrefix - An interface to a method
+//			generating a two-dimensional slice of strings
+//			containing error prefix and error context
+//			information.
+//
+//		If parameter 'errorPrefix' is NOT convertible to one
+//		of the valid types listed above, it will be
+//		considered invalid and trigger the return of an
+//		error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are included
+//		in the 'errpref' software package,
+//		"github.com/MikeAustin71/errpref".
+//
+// -----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the returned error
+//		Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the returned
+//		error Type will encapsulate an error message. This
+//		returned error message will incorporate the method chain
+//		and text passed by input parameter, 'errorPrefix'. The
+//		'errorPrefix' text will be attached to the beginning of
+//		the error message.
+func (numStrFmtSpec *NumStrFormatSpec) SetZeroNumberFmtSpec(
+	zeroNumberSign NumStrNumberSymbolSpec,
+	errorPrefix interface{}) error {
+
+	if numStrFmtSpec.lock == nil {
+		numStrFmtSpec.lock = new(sync.Mutex)
+	}
+
+	numStrFmtSpec.lock.Lock()
+
+	defer numStrFmtSpec.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumStrFormatSpec."+
+			"SetZeroNumberFmtSpec()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	return new(numStrFmtSpecAtom).
+		setZeroNumberSignSpec(
+			numStrFmtSpec,
+			zeroNumberSign,
+			ePrefix.XCpy(
+				"numStrFmtSpec<-"+
+					"zeroNumberSign"))
+
 }
 
 // numStrFmtSpecNanobot - This type provides
