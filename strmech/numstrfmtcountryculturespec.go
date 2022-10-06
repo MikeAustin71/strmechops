@@ -1,0 +1,51 @@
+package strmech
+
+import "sync"
+
+type NumStrFmtCountryCultureSpec struct {
+	IdNo                                      uint64
+	IdString                                  string
+	Description                               string
+	Tag                                       string
+	CountryIdNo                               uint64
+	CountryIdString                           string
+	CountryDescription                        string
+	CountryTag                                string
+	CountryCultureName                        string
+	CountryAbbreviatedName                    string
+	CountryAlternateNames                     []string
+	CountryCodeTwoChar                        string
+	CountryCodeThreeChar                      string
+	CountryCodeNumber                         string
+	AbsoluteValFmt                            string
+	AbsoluteValTurnOnIntegerDigitsSeparation  bool
+	AbsoluteValDecSep                         DecimalSeparatorSpec
+	AbsoluteValIntGroupingSpec                NumStrIntegerGroupingSpec
+	AbsoluteValNumField                       NumStrNumberFieldSpec
+	CurrencyPositiveValueFmt                  string
+	CurrencyNegativeValueFmt                  string
+	CurrencyDecimalDigits                     uint
+	CurrencyCode                              string
+	CurrencyCodeNo                            string
+	CurrencyName                              string
+	CurrencySymbols                           []rune
+	MinorCurrencyName                         string
+	MinorCurrencySymbols                      []rune
+	CurrencyTurnOnIntegerDigitsSeparation     bool
+	CurrencyNumDecSep                         DecimalSeparatorSpec
+	CurrencyIntGroupingSpec                   NumStrIntegerGroupingSpec
+	CurrencyNumField                          NumStrNumberFieldSpec
+	SignedNumValPositiveValueFmt              string
+	SignedNumValNegativeValueFmt              string
+	SignedNumValTurnOnIntegerDigitsSeparation bool
+	SignedNumValDecSep                        DecimalSeparatorSpec
+	SignedNumValIntGroupingSpec               NumStrIntegerGroupingSpec
+	SignedNumValNumField                      NumStrNumberFieldSpec
+	SciNotSignificandUsesLeadingPlus          bool
+	SciNotMantissaLength                      uint
+	SciNotExponentChar                        rune
+	SciNotExponentUsesLeadingPlus             bool
+	SciNotNumFieldLen                         int
+	SciNotNumFieldTextJustify                 TextJustify
+	lock                                      *sync.Mutex
+}
