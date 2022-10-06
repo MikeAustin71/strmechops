@@ -5896,6 +5896,9 @@ func (numStrKernel *NumberStrKernel) NewParseCustomNumberStr(
 //	floating point numeric value is assumed to be
 //	the comma (',') character.
 //
+//	The integer digits separator is a space
+//	character (' ').
+//
 //	The negative number sign used to designate
 //	numbers with a negative value is defaulted
 //	to a leading minus sign ('-').
