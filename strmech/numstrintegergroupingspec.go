@@ -6,9 +6,11 @@ import (
 	"sync"
 )
 
-// NumStrIntegerGroupingSpec - Number String Integer Grouping
-// Specification. This type encapsulates the parameters required
-// to format integer grouping and separation within a number
+// NumStrIntegerGroupingSpec
+//
+// Number String Integer Grouping Specification. This
+// type encapsulates the parameters required to format
+// integer grouping and separation within a number
 // string.
 type NumStrIntegerGroupingSpec struct {
 	integerSeparatorChars RuneArrayDto
