@@ -45,7 +45,6 @@ type NumStrFmtCountryCultureSpec struct {
 	SciNotMantissaLength                      uint
 	SciNotExponentChar                        rune
 	SciNotExponentUsesLeadingPlus             bool
-	SciNotNumFieldLen                         int
-	SciNotNumFieldTextJustify                 TextJustify
+	SciNotNumField                            NumStrNumberFieldSpec
 	lock                                      *sync.Mutex
 }
