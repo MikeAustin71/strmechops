@@ -2458,7 +2458,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtParamsRunes(
 //		required to configure and apply a rounding
 //		algorithm for floating point Number Strings.
 //
-//	numberFieldSpec			NumStrNumberFieldSpec
+//	numberFieldSpec				NumStrNumberFieldSpec
 //
 //		This Number Field Specification contains all
 //		parameters necessary to format a Number String
@@ -4465,7 +4465,7 @@ func (numStrFmtSpec *NumStrFormatSpec) SetNumFmtParamsRunes(
 //		required to configure and apply a rounding
 //		algorithm for floating point Number Strings.
 //
-//	numberFieldSpec			NumStrNumberFieldSpec
+//	numberFieldSpec				NumStrNumberFieldSpec
 //
 //		This Number Field Specification contains all
 //		parameters necessary to format a Number String
