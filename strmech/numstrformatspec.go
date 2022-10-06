@@ -1517,7 +1517,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtComponents(
 		return newSignedNumFmtSpec, err
 	}
 
-	err = new(numStrFmtSpecNanobot).setNStrFmtComponents(
+	err = new(numStrFmtSpecAtom).setNStrFmtComponents(
 		&newSignedNumFmtSpec,
 		decSeparator,
 		intGroupingSpec,
@@ -3459,7 +3459,7 @@ func (numStrFmtSpec *NumStrFormatSpec) SetNumFmtComponents(
 		return err
 	}
 
-	err = new(numStrFmtSpecNanobot).setNStrFmtComponents(
+	err = new(numStrFmtSpecAtom).setNStrFmtComponents(
 		numStrFmtSpec,
 		decSeparator,
 		intGroupingSpec,
@@ -5302,207 +5302,6 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setNStrNumberFieldSpec(
 	return err
 }
 
-// setNStrFmtComponents
-//
-// Deletes and resets the member variable data values
-// stored in the instance of NumStrFormatSpec passed
-// as input parameter 'signedNumFmtSpec'.
-//
-// ----------------------------------------------------------------
-//
-// # IMPORTANT
-//
-//	Be advised that the data fields contained in the
-//	NumStrFormatSpec instance passed by input parameter
-//	'numStrFmtSpec'  will be deleted and replaced by
-//	values generated from the other input parameters.
-//
-// ----------------------------------------------------------------
-//
-// # Input Parameters
-//
-// numStrFmtSpec				*NumStrFormatSpec
-//
-//	A pointer to a NumStrFormatSpec instance. All  member
-//	variable data fields in this object will be replaced
-//	by data values configured from the input parameter
-//	described below.
-//
-//	decSeparator				DecimalSeparatorSpec
-//
-//		This structure contains the radix point or decimal
-//		separator character(s) (a.k.a. decimal point)
-//		which be used to separate integer and fractional
-//		digits within a formatted Number String.
-//
-//	intGroupingSpec				NumStrIntegerGroupingSpec
-//
-//		Number String Integer Grouping Specification. This
-//		type encapsulates the parameters required to format
-//		integer grouping and separation within a Number
-//		String.
-//
-//	roundingSpec 				NumStrRoundingSpec
-//		Numeric Value Rounding Specification. This
-//		specification contains all the parameters
-//		required to configure and apply a rounding
-//		algorithm for floating point Number Strings.
-//
-//	negativeNumberSign			NumStrNumberSymbolSpec
-//		This Number String Symbol Specification contains
-//		all the characters used to format number sign
-//		symbols and currency symbols for Number Strings
-//		with negative numeric values.
-//
-//	positiveNumberSign			NumStrNumberSymbolSpec
-//		This Number String Symbol Specification contains
-//		all the characters used to format number sign
-//		symbols and currency symbols for Number Strings
-//		with positive numeric values.
-//
-//	zeroNumberSign			NumStrNumberSymbolSpec
-//		This Number String Symbol Specification contains
-//		all the characters used to format number sign
-//		symbols and currency symbols for Number Strings
-//		with zero numeric values.
-//
-//	numberFieldSpec			NumStrNumberFieldSpec
-//		This Number Field Specification contains all
-//		parameters necessary to format a Number String
-//		within a larger Number Field. In addition to
-//		specifying the length of number field, this
-//		object contains justification specifications
-//		for centering, left justifying or right
-//		justifying a Number String within a Number
-//		Field.
-//
-//	errPrefDto						*ePref.ErrPrefixDto
-//		This object encapsulates an error prefix string which is
-//		included in all returned error messages. Usually, it
-//		contains the name of the calling method or methods listed
-//		as a function chain.
-//
-//		If no error prefix information is needed, set this
-//		parameter to 'nil'.
-//
-//		Type ErrPrefixDto is included in the 'errpref' software
-//		package, "github.com/MikeAustin71/errpref".
-//
-// -----------------------------------------------------------------
-//
-// # Return Values
-//
-//	err								error
-//
-//		If this method completes successfully, this returned error
-//		Type is set equal to 'nil'. If errors are encountered during
-//		processing, the returned error Type will encapsulate an error
-//		message.
-//
-//		If an error message is returned, the text value for input
-//		parameter 'errPrefDto' (error prefix) will be prefixed or
-//		attached at the beginning of the error message.
-func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setNStrFmtComponents(
-	numStrFmtSpec *NumStrFormatSpec,
-	decSeparator DecimalSeparatorSpec,
-	intGroupingSpec NumStrIntegerGroupingSpec,
-	roundingSpec NumStrRoundingSpec,
-	negativeNumberSign NumStrNumberSymbolSpec,
-	positiveNumberSign NumStrNumberSymbolSpec,
-	zeroNumberSign NumStrNumberSymbolSpec,
-	numberFieldSpec NumStrNumberFieldSpec,
-	errPrefDto *ePref.ErrPrefixDto) (
-	err error) {
-
-	nStrNumberFieldSpecNanobot.lock.Lock()
-
-	defer nStrNumberFieldSpecNanobot.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
-		errPrefDto,
-		"numStrFmtSpecNanobot."+
-			"setNStrFmtComponents()",
-		"")
-
-	if err != nil {
-		return err
-	}
-
-	if numStrFmtSpec == nil {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'numStrFmtSpec' is invalid!\n"+
-			"'numStrFmtSpec' is a 'nil' pointer.\n",
-			ePrefix.String())
-
-		return err
-	}
-
-	err = numStrFmtSpec.decSeparator.CopyIn(
-		&decSeparator,
-		ePrefix.XCpy(
-			"decSeparator->"))
-
-	if err != nil {
-		return err
-	}
-
-	err = numStrFmtSpec.intGroupingSpec.CopyIn(
-		&intGroupingSpec,
-		ePrefix.XCpy(
-			"intGroupingSpec->"))
-
-	if err != nil {
-		return err
-	}
-
-	err = numStrFmtSpec.roundingSpec.CopyIn(
-		&roundingSpec,
-		ePrefix.XCpy(
-			"roundingSpec->"))
-
-	if err != nil {
-		return err
-	}
-
-	err = numStrFmtSpec.negativeNumberSign.CopyIn(
-		&negativeNumberSign,
-		ePrefix.XCpy(
-			"negativeNumberSign->"))
-
-	if err != nil {
-		return err
-	}
-
-	err = numStrFmtSpec.positiveNumberSign.CopyIn(
-		&positiveNumberSign,
-		ePrefix.XCpy(
-			"positiveNumberSign->"))
-
-	if err != nil {
-		return err
-	}
-
-	err = numStrFmtSpec.zeroNumberSign.CopyIn(
-		&zeroNumberSign,
-		ePrefix.XCpy(
-			"zeroNumberSign->"))
-
-	if err != nil {
-		return err
-	}
-
-	err = numStrFmtSpec.numberFieldSpec.CopyIn(
-		&numberFieldSpec,
-		ePrefix.XCpy(
-			"numberFieldSpec->"))
-
-	return err
-}
-
 // setNStrFmtComponentsUS
 //
 // Deletes and resets the member variable data values
@@ -5696,66 +5495,16 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setNStrFmtComponentsUS(
 		lock:                              nil,
 	}
 
-	err = numStrFmtSpec.decSeparator.CopyIn(
-		&decSeparator,
-		ePrefix.XCpy(
-			"decSeparator->"))
-
-	if err != nil {
-		return err
-	}
-
-	err = numStrFmtSpec.intGroupingSpec.CopyIn(
-		&intGroupingSpec,
-		ePrefix.XCpy(
-			"intGroupingSpec->"))
-
-	if err != nil {
-		return err
-	}
-
-	err = numStrFmtSpec.roundingSpec.CopyIn(
-		&roundingSpec,
-		ePrefix.XCpy(
-			"roundingSpec->"))
-
-	if err != nil {
-		return err
-	}
-
-	err = numStrFmtSpec.negativeNumberSign.CopyIn(
-		&negativeNumberSign,
-		ePrefix.XCpy(
-			"negativeNumberSign->"))
-
-	if err != nil {
-		return err
-	}
-
-	err = numStrFmtSpec.positiveNumberSign.CopyIn(
-		&positiveNumberSign,
-		ePrefix.XCpy(
-			"positiveNumberSign->"))
-
-	if err != nil {
-		return err
-	}
-
-	err = numStrFmtSpec.zeroNumberSign.CopyIn(
-		&zeroNumberSign,
-		ePrefix.XCpy(
-			"zeroNumberSign->"))
-
-	if err != nil {
-		return err
-	}
-
-	err = numStrFmtSpec.numberFieldSpec.CopyIn(
-		&numberFieldSpec,
-		ePrefix.XCpy(
-			"numberFieldSpec->"))
-
-	return err
+	return new(numStrFmtSpecAtom).setNStrFmtComponents(
+		numStrFmtSpec,
+		decSeparator,
+		intGroupingSpec,
+		roundingSpec,
+		negativeNumberSign,
+		positiveNumberSign,
+		zeroNumberSign,
+		numberFieldSpec,
+		ePrefix.XCpy("numStrFmtSpec<-"))
 }
 
 // numStrFmtSpecAtom - This type provides
@@ -6919,6 +6668,207 @@ func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setNumberFieldSpec(
 			ePrefix.XCpy(
 				"signedNumFmt<-"+
 					"numberFieldSpec"))
+}
+
+// setNStrFmtComponents
+//
+// Deletes and resets the member variable data values
+// stored in the instance of NumStrFormatSpec passed
+// as input parameter 'signedNumFmtSpec'.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	Be advised that the data fields contained in the
+//	NumStrFormatSpec instance passed by input parameter
+//	'numStrFmtSpec'  will be deleted and replaced by
+//	values generated from the other input parameters.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+// numStrFmtSpec				*NumStrFormatSpec
+//
+//	A pointer to a NumStrFormatSpec instance. All  member
+//	variable data fields in this object will be replaced
+//	by data values configured from the input parameter
+//	described below.
+//
+//	decSeparator				DecimalSeparatorSpec
+//
+//		This structure contains the radix point or decimal
+//		separator character(s) (a.k.a. decimal point)
+//		which be used to separate integer and fractional
+//		digits within a formatted Number String.
+//
+//	intGroupingSpec				NumStrIntegerGroupingSpec
+//
+//		Number String Integer Grouping Specification. This
+//		type encapsulates the parameters required to format
+//		integer grouping and separation within a Number
+//		String.
+//
+//	roundingSpec 				NumStrRoundingSpec
+//		Numeric Value Rounding Specification. This
+//		specification contains all the parameters
+//		required to configure and apply a rounding
+//		algorithm for floating point Number Strings.
+//
+//	negativeNumberSign			NumStrNumberSymbolSpec
+//		This Number String Symbol Specification contains
+//		all the characters used to format number sign
+//		symbols and currency symbols for Number Strings
+//		with negative numeric values.
+//
+//	positiveNumberSign			NumStrNumberSymbolSpec
+//		This Number String Symbol Specification contains
+//		all the characters used to format number sign
+//		symbols and currency symbols for Number Strings
+//		with positive numeric values.
+//
+//	zeroNumberSign			NumStrNumberSymbolSpec
+//		This Number String Symbol Specification contains
+//		all the characters used to format number sign
+//		symbols and currency symbols for Number Strings
+//		with zero numeric values.
+//
+//	numberFieldSpec			NumStrNumberFieldSpec
+//		This Number Field Specification contains all
+//		parameters necessary to format a Number String
+//		within a larger Number Field. In addition to
+//		specifying the length of number field, this
+//		object contains justification specifications
+//		for centering, left justifying or right
+//		justifying a Number String within a Number
+//		Field.
+//
+//	errPrefDto						*ePref.ErrPrefixDto
+//		This object encapsulates an error prefix string which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods listed
+//		as a function chain.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref' software
+//		package, "github.com/MikeAustin71/errpref".
+//
+// -----------------------------------------------------------------
+//
+// # Return Values
+//
+//	err								error
+//
+//		If this method completes successfully, this returned error
+//		Type is set equal to 'nil'. If errors are encountered during
+//		processing, the returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value for input
+//		parameter 'errPrefDto' (error prefix) will be prefixed or
+//		attached at the beginning of the error message.
+func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setNStrFmtComponents(
+	numStrFmtSpec *NumStrFormatSpec,
+	decSeparator DecimalSeparatorSpec,
+	intGroupingSpec NumStrIntegerGroupingSpec,
+	roundingSpec NumStrRoundingSpec,
+	negativeNumberSign NumStrNumberSymbolSpec,
+	positiveNumberSign NumStrNumberSymbolSpec,
+	zeroNumberSign NumStrNumberSymbolSpec,
+	numberFieldSpec NumStrNumberFieldSpec,
+	errPrefDto *ePref.ErrPrefixDto) (
+	err error) {
+
+	signedNumFmtSpecAtom.lock.Lock()
+
+	defer signedNumFmtSpecAtom.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"numStrFmtSpecAtom."+
+			"setNStrFmtComponents()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if numStrFmtSpec == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'numStrFmtSpec' is invalid!\n"+
+			"'numStrFmtSpec' is a 'nil' pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	err = numStrFmtSpec.decSeparator.CopyIn(
+		&decSeparator,
+		ePrefix.XCpy(
+			"decSeparator->"))
+
+	if err != nil {
+		return err
+	}
+
+	err = numStrFmtSpec.intGroupingSpec.CopyIn(
+		&intGroupingSpec,
+		ePrefix.XCpy(
+			"intGroupingSpec->"))
+
+	if err != nil {
+		return err
+	}
+
+	err = numStrFmtSpec.roundingSpec.CopyIn(
+		&roundingSpec,
+		ePrefix.XCpy(
+			"roundingSpec->"))
+
+	if err != nil {
+		return err
+	}
+
+	err = numStrFmtSpec.negativeNumberSign.CopyIn(
+		&negativeNumberSign,
+		ePrefix.XCpy(
+			"negativeNumberSign->"))
+
+	if err != nil {
+		return err
+	}
+
+	err = numStrFmtSpec.positiveNumberSign.CopyIn(
+		&positiveNumberSign,
+		ePrefix.XCpy(
+			"positiveNumberSign->"))
+
+	if err != nil {
+		return err
+	}
+
+	err = numStrFmtSpec.zeroNumberSign.CopyIn(
+		&zeroNumberSign,
+		ePrefix.XCpy(
+			"zeroNumberSign->"))
+
+	if err != nil {
+		return err
+	}
+
+	err = numStrFmtSpec.numberFieldSpec.CopyIn(
+		&numberFieldSpec,
+		ePrefix.XCpy(
+			"numberFieldSpec->"))
+
+	return err
 }
 
 // setPositiveNumberSign - Deletes and resets the member variable
