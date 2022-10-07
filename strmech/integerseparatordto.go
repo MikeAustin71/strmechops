@@ -2121,6 +2121,146 @@ func (nStrIntSep *IntegerSeparatorDto) NewFrenchDefaults(
 	return newIntSep, err
 }
 
+//	NewGermanDefaults
+//
+//	Creates and returns a new instance of IntegerSeparatorDto
+//	set to German default integer separators. Integer
+//	separator values used in Germany consist of the period
+//	character ('.'), an integer grouping of three ('3')
+//	and unlimited repetitions of this sequence.
+//
+//		German Integer Separation Example (One-Million):
+//	      				'1.000.000'
+//
+//	While Germany is a member of the European Union, various
+//	European Union member countries apply different characters
+//	for integer separation.
+//
+//	While some countries follow the German integer separation
+//	convention, other European Union member countries
+//	follow the integer separation convention used in France.
+//	For information on French integer separation usage, see
+//	method:
+//
+//		IntegerSeparatorDto.NewFrenchDefaults()
+//
+//	If custom integer separator algorithms are required, see
+//	method:
+//
+//		IntegerSeparatorDto.NewComponents()
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods
+//		listed as a method or function chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil - A nil value is valid and generates an empty
+//		   	collection of error prefix and error context
+//		   	information.
+//
+//		2.	string - A string containing error prefix
+//			information.
+//
+//		3.	[]string A one-dimensional slice of strings
+//			containing error prefix information.
+//
+//		4.	[][2]string A two-dimensional slice of strings
+//		   	containing error prefix and error context
+//		   	information.
+//
+//		5.	ErrPrefixDto - An instance of ErrPrefixDto.
+//			Information from this object will be copied for
+//			use in error and informational messages.
+//
+//		6.	*ErrPrefixDto - A pointer to an instance of
+//			ErrPrefixDto. Information from this object will
+//			be copied for use in error and informational
+//			messages.
+//
+//		7.	IBasicErrorPrefix - An interface to a method
+//			generating a two-dimensional slice of strings
+//			containing error prefix and error context
+//			information.
+//
+//		If parameter 'errorPrefix' is NOT convertible to one
+//		of the valid types listed above, it will be
+//		considered invalid and trigger the return of an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are included
+//		in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref"
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	IntegerSeparatorDto
+//
+//		This will return a new and fully populated instance
+//		of IntegerSeparatorDto configured with German
+//		default integer separator values.
+//
+//	error
+//
+//		If this method completes successfully, the returned
+//		error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error message.
+//		This returned error message will incorporate the method
+//		chain and text passed by input parameter, 'errorPrefix'.
+//		The 'errorPrefix' text will be attached to the beginning
+//		of the error message.
+func (nStrIntSep *IntegerSeparatorDto) NewGermanDefaults(
+	errorPrefix interface{}) (
+	IntegerSeparatorDto,
+	error) {
+
+	if nStrIntSep.lock == nil {
+		nStrIntSep.lock = new(sync.Mutex)
+	}
+
+	nStrIntSep.lock.Lock()
+
+	defer nStrIntSep.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	newIntSep := IntegerSeparatorDto{}
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"IntegerSeparatorDto."+
+			"NewGermanDefaults()",
+		"")
+
+	if err != nil {
+		return newIntSep, err
+	}
+
+	err = new(integerSeparatorDtoMechanics).
+		setToGermanDefaults(
+			&newIntSep,
+			ePrefix.XCpy(
+				"newIntSep"))
+
+	return newIntSep, err
+}
+
 //	NewIndiaNumbering
 //
 //	Returns a new instance of IntegerSeparatorDto configured
@@ -3268,8 +3408,8 @@ func (nStrIntSep *IntegerSeparatorDto) NewThousandsRunes(
 //	comma character (','), an integer grouping of three ('3')
 //	and unlimited repetitions of this sequence.
 //
-//		United States Integer Separation Example:
-//	      		'1,000,000,000,000'
+//		United States Integer Separation Example
+//		(One-Million): '1,000,000'
 //
 // ----------------------------------------------------------------
 //
@@ -5492,83 +5632,93 @@ func (nStrIntSep *IntegerSeparatorDto) SetThousandsRunes(
 				"nStrIntSep"))
 }
 
-// SetUnitedStatesDefaults - This method will overwrite and set the all
-// the internal member variable data values to default values used
-// in the United States. Integer separator values used in the
-// United States consist of the comma character (','), an integer
-// grouping of three ('3') and unlimited repetitions of this
-// sequence.
+//	SetUnitedStatesDefaults
 //
-//	United States Integer Separation Example:
-//	      '1,000,000,000,000'
+//	This method will overwrite and set the all the
+//	internal member variable data values to default
+//	values used in the United States. Integer separator
+//	values used in the United States consist of the
+//	comma character (','), an integer grouping of three
+//	('3') and unlimited repetitions of this sequence.
 //
-// # IMPORTANT
-//
-// This method will overwrite all pre-existing data values in the
-// current IntegerSeparatorDto instance.
+//		United States Integer Separation Example
+//		(One-Million): '1,000,000'
 //
 // ----------------------------------------------------------------
 //
-// Input Parameters
+// # IMPORTANT
 //
-//	errorPrefix                interface{}
-//	   - This object encapsulates error prefix text which is
-//	     included in all returned error messages. Usually, it
-//	     contains the name of the calling method or methods
-//	     listed as a method or function chain of execution.
+//	This method will overwrite all pre-existing data
+//	values in the current IntegerSeparatorDto instance.
 //
-//	     If no error prefix information is needed, set this
-//	     parameter to 'nil'.
+// ----------------------------------------------------------------
 //
-//	     This empty interface must be convertible to one of the
-//	     following types:
+// # Input Parameters
 //
-//	     1. nil - A nil value is valid and generates an empty
-//	        collection of error prefix and error context
-//	        information.
+//	errorPrefix					interface{}
 //
-//	     2. string - A string containing error prefix information.
+//		This object encapsulates error prefix text which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods
+//		listed as a method or function chain of execution.
 //
-//	     3. []string A one-dimensional slice of strings containing
-//	        error prefix information
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
 //
-//	     4. [][2]string A two-dimensional slice of strings
-//	        containing error prefix and error context information.
+//		This empty interface must be convertible to one of
+//		the following types:
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//	        from this object will be copied for use in error and
-//	        informational messages.
+//		1.	nil - A nil value is valid and generates an empty
+//		   	collection of error prefix and error context
+//		   	information.
 //
-//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//	        Information from this object will be copied for use in
-//	        error and informational messages.
+//		2.	string - A string containing error prefix
+//			information.
 //
-//	     7. IBasicErrorPrefix - An interface to a method generating
-//	        a two-dimensional slice of strings containing error
-//	        prefix and error context information.
+//		3.	[]string A one-dimensional slice of strings
+//			containing error prefix information.
 //
-//	     If parameter 'errorPrefix' is NOT convertible to one of
-//	     the valid types listed above, it will be considered
-//	     invalid and trigger the return of an error.
+//		4.	[][2]string A two-dimensional slice of strings
+//		   	containing error prefix and error context
+//		   	information.
 //
-//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
-//	     the 'errpref' software package,
-//	     "github.com/MikeAustin71/errpref".
+//		5.	ErrPrefixDto - An instance of ErrPrefixDto.
+//			Information from this object will be copied for
+//			use in error and informational messages.
 //
-// -----------------------------------------------------------------
+//		6.	*ErrPrefixDto - A pointer to an instance of
+//			ErrPrefixDto. Information from this object will
+//			be copied for use in error and informational
+//			messages.
 //
-// Return Values
+//		7.	IBasicErrorPrefix - An interface to a method
+//			generating a two-dimensional slice of strings
+//			containing error prefix and error context
+//			information.
+//
+//		If parameter 'errorPrefix' is NOT convertible to one
+//		of the valid types listed above, it will be
+//		considered invalid and trigger the return of an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are included
+//		in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref"
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
 //
 //	error
-//	   - If this method completes successfully, the returned error
-//	     Type is set equal to 'nil'.
 //
-//	     If errors are encountered during processing, the returned
-//	     error Type will encapsulate an error message. This
-//	     returned error message will incorporate the method chain
-//	     and text passed by input parameter, 'errorPrefix'. The
-//	     'errorPrefix' text will be attached to the beginning of
-//	     the error message.
+//		If this method completes successfully, the returned
+//		error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error message.
+//		This returned error message will incorporate the method
+//		chain and text passed by input parameter, 'errorPrefix'.
+//		The 'errorPrefix' text will be attached to the beginning
+//		of the error message.
 func (nStrIntSep *IntegerSeparatorDto) SetUnitedStatesDefaults(
 	errorPrefix interface{}) error {
 
