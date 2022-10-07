@@ -10,6 +10,226 @@ type integerSeparatorDtoMechanics struct {
 	lock *sync.Mutex
 }
 
+// setToFrenchDefaults
+//
+//	Receives a pointer to an instance of IntegerSeparatorDto
+//	and proceeds to overwrite and set the internal member
+//	variable data values to default values used in France.
+//
+//	Integer separator values used in France consist of the
+//	space or empty character (' '), an integer grouping of
+//	three ('3') and unlimited repetitions of this sequence.
+//
+//	French Integer Separation Example:
+//		'1 000 000 000 000'
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	All the internal member variables in input parameter
+//	'nStrIntSep' will be deleted and replaced.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	nStrIntSep					*IntegerSeparatorDto
+//
+//		A pointer to an instance of IntegerSeparatorDto. All
+//		the internal member variable data values contained in
+//		this object will be deleted and reset to default
+//		integer separator values used in France.
+//
+//			French Integer Separation Example:
+//					'1 000 000 000 000'
+//
+//	errPrefDto                 *ErrPrefixDto
+//
+//		This object encapsulates an error prefix string which
+//		is included in all returned error messages. Usually,
+//		it contains the names of the calling method or methods.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// -----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the returned
+//		error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error message.
+//		This returned error message will incorporate the method
+//		chain and text passed by input parameter, 'errPrefDto'.
+//		The 'errPrefDto' text will be attached to the beginning
+//		of the error message.
+func (intSeparatorMech *integerSeparatorDtoMechanics) setToFrenchDefaults(
+	nStrIntSep *IntegerSeparatorDto,
+	errPrefDto *ePref.ErrPrefixDto) (
+	err error) {
+
+	if intSeparatorMech.lock == nil {
+		intSeparatorMech.lock = new(sync.Mutex)
+	}
+
+	intSeparatorMech.lock.Lock()
+
+	defer intSeparatorMech.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"integerSeparatorDtoMechanics."+
+			"setToFrenchDefaults()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if nStrIntSep == nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'nStrIntSep' is invalid!\n"+
+			"'nStrIntSep' is a nil pointer.",
+			ePrefix.String())
+
+		return err
+	}
+
+	if nStrIntSep.lock == nil {
+		nStrIntSep.lock = new(sync.Mutex)
+	}
+
+	nStrIntSep.intSeparatorChars = []rune{' '}
+
+	nStrIntSep.intGroupingSequence = []uint{3}
+
+	nStrIntSep.restartIntGroupingSequence = false
+
+	return err
+}
+
+// setToGermanDefaults
+//
+//	Receives a pointer to an instance of IntegerSeparatorDto
+//	and proceeds to overwrite and set the internal member
+//	variable data values to default values used in Germany.
+//
+//	Integer separator values used in Germany consist of the
+//	period character ('.'), an integer grouping of
+//	three ('3') and unlimited repetitions of this sequence.
+//
+//	German Integer Separation Example:
+//		'1.000.000.000.000'
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	All the internal member variables in input parameter
+//	'nStrIntSep' will be deleted and replaced.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	nStrIntSep					*IntegerSeparatorDto
+//
+//		A pointer to an instance of IntegerSeparatorDto. All
+//		the internal member variable data values contained in
+//		this object will be deleted and reset to default
+//		integer separator values used in Germany.
+//
+//			German Integer Separation Example:
+//					'1.000.000.000.000'
+//
+//	errPrefDto                 *ErrPrefixDto
+//
+//		This object encapsulates an error prefix string which
+//		is included in all returned error messages. Usually,
+//		it contains the names of the calling method or methods.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// -----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the returned
+//		error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error message.
+//		This returned error message will incorporate the method
+//		chain and text passed by input parameter, 'errPrefDto'.
+//		The 'errPrefDto' text will be attached to the beginning
+//		of the error message.
+func (intSeparatorMech *integerSeparatorDtoMechanics) setToGermanDefaults(
+	nStrIntSep *IntegerSeparatorDto,
+	errPrefDto *ePref.ErrPrefixDto) (
+	err error) {
+
+	if intSeparatorMech.lock == nil {
+		intSeparatorMech.lock = new(sync.Mutex)
+	}
+
+	intSeparatorMech.lock.Lock()
+
+	defer intSeparatorMech.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"integerSeparatorDtoMechanics."+
+			"setToGermanDefaults()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if nStrIntSep == nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'nStrIntSep' is invalid!\n"+
+			"'nStrIntSep' is a nil pointer.",
+			ePrefix.String())
+
+		return err
+	}
+
+	if nStrIntSep.lock == nil {
+		nStrIntSep.lock = new(sync.Mutex)
+	}
+
+	nStrIntSep.intSeparatorChars = []rune{'.'}
+
+	nStrIntSep.intGroupingSequence = []uint{3}
+
+	nStrIntSep.restartIntGroupingSequence = false
+
+	return err
+}
+
 // setToUSADefaults - Receives a pointer to an instance of
 // IntegerSeparatorDto and proceeds to overwrite and set the
 // internal member variable data values to default values

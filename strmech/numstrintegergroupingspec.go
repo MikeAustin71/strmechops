@@ -543,7 +543,7 @@ func (nStrIntGroupSpec *NumStrIntegerGroupingSpec) GetIntegerSeparatorDto(
 		return IntegerSeparatorDto{}, err
 	}
 
-	return new(IntegerSeparatorDto).NewFromIntGroupEnumRunes(
+	return new(IntegerSeparatorDto).NewIntGroupEnumRunes(
 		nStrIntGroupSpec.intGroupingType,
 		nStrIntGroupSpec.integerSeparatorChars.GetRuneArray(),
 		ePrefix.XCpy(
