@@ -760,12 +760,13 @@ func (nStrIntSep *IntegerSeparatorDto) GetIntegerGroupingSequence() []uint {
 //
 // # Return Values
 //
-//	IntegerSeparatorDto
+//	string
 //
-//		If this method completes successfully, a new instance
-//		of IntegerSeparatorDto, configured with Chinese
-//		Numbering System integer grouping, will be created and
-//		returned.
+//		If this method completes successfully, a
+//		formatted string of integer digits will be
+//		returned incorporating the integer grouping
+//		and separation characters specified by the
+//		current instance of IntegerSeparatorDto.
 //
 //	error
 //
@@ -817,6 +818,152 @@ func (nStrIntSep *IntegerSeparatorDto) GetFormattedIntegerNumStr(
 			"numStrWithIntSeps<-pureNumString"))
 
 	return string(numStrWithIntSeps), err
+}
+
+//	GetFormattedIntegerNumRunes
+//
+//	This method receives an array of runes
+//	consisting of numeric digit characters
+//	zero ('0') through nine ('9'), inclusive.
+//
+//	These numeric character digits are then
+//	grouped and separated using the Integer
+//	Separation parameters provided by the
+//	current instance of IntegerSeparatorDto.
+//
+//	Example:
+//		     Pure Number String: 123456
+//		Formatted Number String: 123,456
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	pureNumberRunes				[]rune
+//
+//		An array of runes consisting exclusively of numeric
+//		text characters falling within the range of zero
+//		('0') through nine ('9'), inclusive.
+//
+//		These numeric character digits are then	grouped and
+//		separated using the Integer Separation parameters
+//		provided by the	current instance of
+//		IntegerSeparatorDto.
+//
+//		If this rune array contains any non-numeric characters,
+//		an error will be returned.
+//
+//	 errorPrefix                interface{}
+//
+//		This object encapsulates error prefix text which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods
+//		listed as a method or function chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1. nil - A nil value is valid and generates an empty
+//		   collection of error prefix and error context
+//		   information.
+//
+//		2. string - A string containing error prefix
+//			information.
+//
+//		3. []string A one-dimensional slice of strings
+//			containing error prefix information.
+//
+//		4. [][2]string A two-dimensional slice of strings
+//		   containing error prefix and error context
+//		   information.
+//
+//		5. ErrPrefixDto - An instance of ErrPrefixDto.
+//			Information from this object will be copied for use
+//			in error and informational messages.
+//
+//		6. *ErrPrefixDto - A pointer to an instance of
+//			ErrPrefixDto. Information from this object will be
+//			copied for use in error and informational messages.
+//
+//		7. IBasicErrorPrefix - An interface to a method
+//			generating a two-dimensional slice of strings
+//			containing error prefix and error context
+//			information.
+//
+//		If parameter 'errorPrefix' is NOT convertible to one
+//		of the valid types listed above, it will be
+//		considered invalid and trigger the return of an
+//		error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are included
+//		in the 'errpref' software package,
+//		"github.com/MikeAustin71/errpref".
+//
+// -----------------------------------------------------------------
+//
+// # Return Values
+//
+//	[]rune
+//
+//		If this method completes successfully, a
+//		formatted rune array of integer digits will
+//		be returned incorporating the integer grouping
+//		and separation characters specified by the
+//		current instance of IntegerSeparatorDto.
+//
+//	error
+//
+//		If this method completes successfully, the returned
+//		error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error message.
+//		This returned error message will incorporate the
+//		method chain and text passed by input parameter,
+//		'errorPrefix'. The 'errorPrefix' text will be attached
+//		to the beginning of	the error message.
+func (nStrIntSep *IntegerSeparatorDto) GetFormattedIntegerNumRunes(
+	pureNumberRunes []rune,
+	errorPrefix interface{}) (
+	[]rune,
+	error) {
+
+	if nStrIntSep.lock == nil {
+		nStrIntSep.lock = new(sync.Mutex)
+	}
+
+	nStrIntSep.lock.Lock()
+
+	defer nStrIntSep.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"IntegerSeparatorDto."+
+			"GetFormattedIntegerNumRunes()",
+		"")
+
+	if err != nil {
+		return []rune{}, err
+	}
+
+	var numRunesWithIntSeps []rune
+
+	numRunesWithIntSeps,
+		err = new(integerSeparatorDtoMolecule).applyIntSeparators(
+		nStrIntSep,
+		pureNumberRunes,
+		ePrefix.XCpy(
+			"numRunesWithIntSeps<-pureNumberRunes"))
+
+	return numRunesWithIntSeps, err
 }
 
 // GetRestartIntGroupingSequence
