@@ -2542,10 +2542,13 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtParamsRunes(
 //	integer separators and negative number signs.
 //
 //	A number of member countries in the European
-//	Union apply the decimal separator and negative
-//	number sign characters used by Germany. See
-//	method:
+//	Union (EU) apply the decimal separator and
+//	negative number sign characters used by Germany.
+//	See	method:
 //		NumStrFormatSpec.NewSignedNumFmtGermany()
+//
+//	Other EU member countries follow the Number
+//	Formatting conventions employed by France.
 //
 //	If custom decimal separator, integer separator
 //	and negative number sign characters are required,
@@ -4660,6 +4663,9 @@ func (numStrFmtSpec *NumStrFormatSpec) SetNumFmtParamsRunes(
 //	number sign characters used by Germany. See
 //	method:
 //		NumStrFormatSpec.SetSignedNumFmtGermany()
+//
+//	Other EU member countries follow the Number
+//	Formatting conventions employed by France.
 //
 //	If custom decimal separator, integer separator
 //	and negative number sign characters are required,
