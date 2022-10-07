@@ -1126,7 +1126,7 @@ func (numStrKernelMolecule *numberStrKernelMolecule) convertNumberToKernel(
 //
 //		A pointer to an instance of NumberStrKernel. The
 //		numeric value contained in this instance will be
-//		formatted and returned as Number String.
+//		formatted and returned as a Number String.
 //
 //	nStrFormatSpec				NumStrFormatSpec
 //
@@ -1246,20 +1246,22 @@ func (numStrKernelMolecule *numberStrKernelMolecule) formatNumStr(
 		return numStr, err
 	}
 
-	if numStrKernel.GetNumberOfIntegerDigits() == 0 &&
-		numStrKernel.GetNumberOfFractionalDigits() == 0 {
-		numStr = "0"
+	var decSeparator DecimalSeparatorSpec
 
+	decSeparator,
+		err = nStrFormatSpec.GetDecSeparatorSpec(
+		ePrefix.XCpy(
+			"decSeparator<-nStrFormatSpec"))
+
+	if err != nil {
 		return numStr, err
 	}
 
-	var newNumStrKernel NumberStrKernel
+	var intSeparatorDto IntegerSeparatorDto
 
-	newNumStrKernel,
-		err = new(numberStrKernelNanobot).copyOut(
-		numStrKernel,
-		ePrefix.XCpy(
-			"newNumStrKernel<-numStrKernel"))
+	intSeparatorDto,
+		err = nStrFormatSpec.GetIntegerSeparatorDto(
+		ePrefix)
 
 	if err != nil {
 		return numStr, err
@@ -1276,159 +1278,37 @@ func (numStrKernelMolecule *numberStrKernelMolecule) formatNumStr(
 		return numStr, err
 	}
 
-	// Performing fractional digit rounding
-	err = new(numStrMathRoundingNanobot).roundNumStrKernel(
-		&newNumStrKernel,
-		roundingSpec,
+	var negativeNumberSign NumStrNumberSymbolSpec
+
+	negativeNumberSign,
+		err = nStrFormatSpec.GetNegativeNumSymSpec(
 		ePrefix.XCpy(
-			"newNumStrKernel Rounding"))
+			"negativeNumberSign"))
 
 	if err != nil {
 		return numStr, err
 	}
 
-	var decSeparator DecimalSeparatorSpec
+	var positiveNumberSign NumStrNumberSymbolSpec
 
-	decSeparator,
-		err = nStrFormatSpec.GetDecSeparatorSpec(
+	positiveNumberSign,
+		err = nStrFormatSpec.GetPositiveNumSymSpec(
 		ePrefix.XCpy(
-			"decSeparator<-nStrFormatSpec"))
+			"positiveNumberSign"))
 
 	if err != nil {
 		return numStr, err
 	}
 
-	var numOfFracDigits int
+	var zeroNumberSign NumStrNumberSymbolSpec
 
-	numOfFracDigits = newNumStrKernel.GetNumberOfFractionalDigits()
-
-	if numOfFracDigits > 0 &&
-		decSeparator.GetNumberOfSeparatorChars() == 0 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: This is a floating point number and the number\n"+
-			"of decimal separator characters specified is zero.\n"+
-			"Input parameter 'nStrFormatSpec.DecSeparator'\n"+
-			"is invalid!\n",
-			ePrefix.String())
-
-		return numStr, err
-	}
-
-	var intSeparatorDto IntegerSeparatorDto
-
-	intSeparatorDto,
-		err = nStrFormatSpec.GetIntegerSeparatorDto(
-		ePrefix)
+	zeroNumberSign,
+		err = nStrFormatSpec.GetZeroNumSymSpec(
+		ePrefix.XCpy(
+			"positiveNumberSign"))
 
 	if err != nil {
 		return numStr, err
-	}
-
-	var numStrWithIntSeps []rune
-
-	numStrWithIntSeps,
-		err = new(integerSeparatorDtoMolecule).applyIntSeparators(
-		&intSeparatorDto,
-		newNumStrKernel.GetIntegerRuneArray(),
-		ePrefix.XCpy("intSeparatorDto"))
-
-	if err != nil {
-		return numStr, err
-	}
-
-	tempNumStr := string(numStrWithIntSeps)
-
-	if numOfFracDigits > 0 {
-
-		tempNumStr += decSeparator.GetDecimalSeparatorStr()
-
-		tempNumStr += newNumStrKernel.GetFractionalString()
-
-	}
-
-	leadingNumSym := ""
-
-	trailingNumSym := ""
-
-	var leadingNumSymPosition, trailingNumSymPosition NumberFieldSymbolPosition
-
-	if newNumStrKernel.numberSign == NumSignVal.Negative() {
-
-		var negativeNumberSign NumStrNumberSymbolSpec
-
-		negativeNumberSign,
-			err = nStrFormatSpec.GetNegativeNumSymSpec(
-			ePrefix.XCpy(
-				"negativeNumberSign"))
-
-		if err != nil {
-			return numStr, err
-		}
-
-		if !negativeNumberSign.IsNOP() {
-
-			leadingNumSym =
-				negativeNumberSign.GetLeadingNumberSymbolStr()
-
-			leadingNumSymPosition =
-				negativeNumberSign.GetLeadingNumberSymbolPosition()
-
-			trailingNumSym =
-				negativeNumberSign.GetTrailingNumberSymbolStr()
-
-			trailingNumSymPosition =
-				negativeNumberSign.GetTrailingNumberSymbolPosition()
-
-		}
-
-	}
-
-	if newNumStrKernel.numberSign == NumSignVal.Positive() {
-
-		var positiveNumberSign NumStrNumberSymbolSpec
-
-		positiveNumberSign,
-			err = nStrFormatSpec.GetPositiveNumSymSpec(
-			ePrefix.XCpy(
-				"positiveNumberSign"))
-
-		if err != nil {
-			return numStr, err
-		}
-
-		if !positiveNumberSign.IsNOP() {
-
-			leadingNumSym =
-				positiveNumberSign.GetLeadingNumberSymbolStr()
-
-			leadingNumSymPosition =
-				positiveNumberSign.GetLeadingNumberSymbolPosition()
-
-			trailingNumSym =
-				positiveNumberSign.GetTrailingNumberSymbolStr()
-
-			trailingNumSymPosition =
-				positiveNumberSign.GetTrailingNumberSymbolPosition()
-
-		}
-
-	}
-
-	lenLeadingNumSymbol := len(leadingNumSym)
-	lenTrailingNumSymbol := len(trailingNumSym)
-
-	if lenLeadingNumSymbol > 0 &&
-		leadingNumSymPosition == NumFieldSymPos.InsideNumField() {
-
-		tempNumStr = leadingNumSym + tempNumStr
-	}
-
-	if lenTrailingNumSymbol > 0 &&
-		trailingNumSymPosition == NumFieldSymPos.InsideNumField() {
-
-		tempNumStr = tempNumStr + trailingNumSym
-
 	}
 
 	var numberFieldSpec NumStrNumberFieldSpec
@@ -1442,25 +1322,15 @@ func (numStrKernelMolecule *numberStrKernelMolecule) formatNumStr(
 		return numStr, err
 	}
 
-	numStr,
-		err = new(strMechNanobot).justifyTextInStrField(
-		tempNumStr,
-		numberFieldSpec.GetNumFieldLength(),
-		numberFieldSpec.GetNumFieldJustification(),
-		ePrefix.XCpy("numStr<-tempNumStr"))
-
-	if lenLeadingNumSymbol > 0 &&
-		leadingNumSymPosition == NumFieldSymPos.OutsideNumField() {
-
-		numStr = leadingNumSym + numStr
-	}
-
-	if lenTrailingNumSymbol > 0 &&
-		trailingNumSymPosition == NumFieldSymPos.OutsideNumField() {
-
-		numStr = numStr + trailingNumSym
-
-	}
-
-	return numStr, err
+	return new(numberStrKernelAtom).formatNumStrComponents(
+		numStrKernel,
+		decSeparator,
+		intSeparatorDto,
+		roundingSpec,
+		negativeNumberSign,
+		positiveNumberSign,
+		zeroNumberSign,
+		numberFieldSpec,
+		ePrefix.XCpy(
+			"numStrKernel->"))
 }

@@ -2636,9 +2636,9 @@ func (numStrKernel *NumberStrKernel) GetFmtCustomNumStr(
 		return numberStr, err
 	}
 
-	return new(numStrSignedNumNanobot).
-		formatSignedNumStr(
-			*numStrKernel,
+	return new(numberStrKernelMolecule).
+		formatNumStr(
+			numStrKernel,
 			numStrFmtSpec,
 			ePrefix.XCpy("numStrKernel"))
 }

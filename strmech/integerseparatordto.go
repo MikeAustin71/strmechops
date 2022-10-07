@@ -6,31 +6,37 @@ import (
 	"sync"
 )
 
-// IntegerSeparatorDto is designed to manage integer separators,
-// primarily thousands separators, for different countries and
-// cultures. The term 'integer separators' is used because this
-// type manages both integer grouping and the characters used to
-// separate integer groups.
+//	IntegerSeparatorDto
 //
-// In the USA and many other countries, integer numbers are often
-// separated by commas thereby grouping the number into thousands.
+//	Type IntegerSeparatorDto is designed to manage integer
+//	separators, primarily thousands separators, for
+//	different countries and cultures. The term
+//	'integer separators' is used because this type manages
+//	both integer grouping and the characters used to
+//	separate integer groups.
 //
-//	Example: 1,000,000,000
+//	In the USA and many other countries, integer numbers
+//	are often separated by commas thereby grouping the
+//	number into thousands.
 //
-// Other countries use characters other than the comma to separate
-// integers into thousands. Some countries/cultures do not use
-// thousands separation and instead rely on multiple integer
-// separation characters and grouping sequences for a single
-// integer number. Notable examples of this found in the
-// 'Indian Number System' and 'Chinese Numerals'.
+//		Example: 1,000,000,000
+//
+//	Other countries use characters other than the comma to
+//	separate integers into thousands. Some countries and
+//	cultures do not use thousands separation and instead
+//	rely on multiple integer separation characters and
+//	grouping sequences for a single integer number. Notable
+//	examples of this are found in the 'India Number System'
+//	and 'Chinese Numerals'.
 //
 //	Reference:
-//	https://en.wikipedia.org/wiki/Indian_numbering_system
-//	https://en.wikipedia.org/wiki/Chinese_numerals
-//	https://en.wikipedia.org/wiki/Decimal_separator
+//		https://en.wikipedia.org/wiki/Indian_numbering_system
+//		https://en.wikipedia.org/wiki/Chinese_numerals
+//		https://en.wikipedia.org/wiki/Decimal_separator
 //
-// The IntegerSeparatorDto type provides the flexibility necessary
-// to process these complex number separation formats.
+//	The IntegerSeparatorDto type provides the flexibility
+//	necessary to process these complex number separation
+//	formats.
 //
 // ----------------------------------------------------------------
 //
@@ -2444,7 +2450,7 @@ func (nStrIntSep *IntegerSeparatorDto) NewIndiaNumberingRunes(
 //	Returns an instance of IntegerSeparatorDto configured
 //	for NO integer separation.
 //
-//	Call this method if you want to gurantee that integer
+//	Call this method if you want to guarantee that integer
 //	separation WILL NOT BE APPLIED in the formatting of
 //	Number Strings.
 //
