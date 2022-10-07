@@ -2443,15 +2443,11 @@ func (numStrKernel *NumberStrKernel) GetFloat64Num(
 	return float64Value, err
 }
 
-//	GetFmtCustomNumStr
+//	GetFmtNumStr
 //
 //	Returns a formatted number string using the
 //	numeric value provided by the current instance
 //	of NumberStrKernel.
-//
-//	This method provides the highest degree of
-//	granular control over all specifications for
-//	the Number String formatting operation.
 //
 //	Options include customizing for currency
 //	symbols, integer separation, number sign
@@ -2581,13 +2577,12 @@ func (numStrKernel *NumberStrKernel) GetFloat64Num(
 //
 // # Return Values
 //
-//	numberStr					string
+//	string
 //
-//		If this method completes successfully, a string
-//		containing a formatted Number String will be
-//		returned.
+//		If this method completes successfully, a formatted
+//		Number String will be returned.
 //
-//	err							error
+//	error
 //
 //		If this method completes successfully, the returned
 //		error Type is set equal to 'nil'.
@@ -2598,11 +2593,11 @@ func (numStrKernel *NumberStrKernel) GetFloat64Num(
 //	 	chain and text passed by input parameter, 'errorPrefix'.
 //	 	The 'errorPrefix' text will be attached to the beginning
 //	 	of the error message.
-func (numStrKernel *NumberStrKernel) GetFmtCustomNumStr(
+func (numStrKernel *NumberStrKernel) GetFmtNumStr(
 	numStrFmtSpec NumStrFormatSpec,
 	errorPrefix interface{}) (
-	numberStr string,
-	err error) {
+	string,
+	error) {
 
 	if numStrKernel.lock == nil {
 		numStrKernel.lock = new(sync.Mutex)
@@ -2613,27 +2608,18 @@ func (numStrKernel *NumberStrKernel) GetFmtCustomNumStr(
 	defer numStrKernel.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
+	var err error
+	var numStr string
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumberStrKernel."+
-			"GetFmtCustomNumStr()",
+			"GetFmtNumStr()",
 		"")
 
 	if err != nil {
-		return numberStr, err
-	}
-
-	if numStrKernel.GetNumberOfIntegerDigits() == 0 &&
-		numStrKernel.GetNumberOfFractionalDigits() == 0 {
-		err = fmt.Errorf("%v\n"+
-			"Error: The current instance NumberStrKernel is invalid!\n"+
-			"This instance of NumberStrKernel is empty and contains\n"+
-			"zero integer and zero fractional numeric digits.\n",
-			ePrefix.String())
-
-		return numberStr, err
+		return numStr, err
 	}
 
 	return new(numberStrKernelMolecule).
@@ -2641,6 +2627,236 @@ func (numStrKernel *NumberStrKernel) GetFmtCustomNumStr(
 			numStrKernel,
 			numStrFmtSpec,
 			ePrefix.XCpy("numStrKernel"))
+}
+
+//	GetFmtNumStrCustom
+//
+//	Creates and returns a fully formatted Number
+//	String generated from Number String formatting
+//	components passed as input parameters.
+//
+//
+//	Options include customizing for currency symbols,
+//	integer separation, number sign	management, radix
+//	point symbols, and floating point number rounding.
+//
+//	If required, users have the options of
+//	implementing the India or Chinese Numbering
+//	Systems.
+//
+//	This method offers the maximum degree of granular
+//	control over all aspects of the Number String
+//	formatting operation.
+//
+//	In particular, it offers maximum flexibility in
+//	configuring integer separator characters and
+//	integer grouping sequences.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	numStrKernel				*NumberStrKernel
+//
+//		A pointer to an instance of NumberStrKernel. The
+//		numeric value contained in this instance will be
+//		formatted and returned as a Number String.
+//
+//	decSeparator				DecimalSeparatorSpec
+//
+//		This structure contains the radix point or decimal
+//		separator character(s) (a.k.a. decimal point)
+//		which be used to separate integer and fractional
+//		digits within a formatted Number String.
+//
+//	intSeparatorDto				IntegerSeparatorDto
+//
+//		Type IntegerSeparatorDto is designed to manage
+//		integer separators, primarily thousands separators,
+//		for different countries and cultures. The term
+//		'integer separators' is used because this type
+//		manages both integer grouping and the characters
+//		used to separate integer groups.
+//
+//		In the USA and many other countries, integer
+//		numbers are often separated by commas thereby
+//		grouping the number into thousands.
+//
+//		Example: 1,000,000,000
+//
+//		Other countries and cultures use characters other
+//		than the comma to separate integers into thousands.
+//		Some countries and cultures do not use thousands
+//		separation and instead rely on multiple integer
+//		separation characters and grouping sequences for a
+//		single integer number. Notable examples of this
+//		are found in the 'India Number System' and
+//		'Chinese Numerals'.
+//
+//		Reference:
+//			https://en.wikipedia.org/wiki/Indian_numbering_system
+//			https://en.wikipedia.org/wiki/Chinese_numerals
+//			https://en.wikipedia.org/wiki/Decimal_separator
+//
+//		The IntegerSeparatorDto type provides the flexibility
+//		necessary to process these complex number separation
+//		formats.
+//
+//	roundingSpec 				NumStrRoundingSpec
+//
+//		Numeric Value Rounding Specification. This
+//		specification contains all the parameters
+//		required to configure and apply a rounding
+//		algorithm for floating point Number Strings.
+//
+//	negativeNumberSign			NumStrNumberSymbolSpec
+//
+//		This Number String Symbol Specification contains
+//		all the characters used to format number sign
+//		symbols and currency symbols for Number Strings
+//		with negative numeric values.
+//
+//	positiveNumberSign			NumStrNumberSymbolSpec
+//
+//		This Number String Symbol Specification contains
+//		all the characters used to format number sign
+//		symbols and currency symbols for Number Strings
+//		with positive numeric values.
+//
+//	zeroNumberSign			NumStrNumberSymbolSpec
+//
+//		This Number String Symbol Specification contains
+//		all the characters used to format number sign
+//		symbols and currency symbols for Number Strings
+//		with zero numeric values.
+//
+//	numberFieldSpec			NumStrNumberFieldSpec
+//
+//		This Number Field Specification contains all
+//		parameters necessary to format a Number String
+//		within a larger Number Field. In addition to
+//		specifying the length of number field, this
+//		object contains justification specifications
+//		for centering, left justifying or right
+//		justifying a Number String within a Number
+//		Field.
+//
+//	 errorPrefix                interface{}
+//
+//		This object encapsulates error prefix text which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods
+//		listed as a method or function chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1. nil - A nil value is valid and generates an empty
+//		   collection of error prefix and error context
+//		   information.
+//
+//		2. string - A string containing error prefix
+//			information.
+//
+//		3. []string A one-dimensional slice of strings
+//			containing error prefix information.
+//
+//		4. [][2]string A two-dimensional slice of strings
+//		   containing error prefix and error context
+//		   information.
+//
+//		5. ErrPrefixDto - An instance of ErrPrefixDto.
+//			Information from this object will be copied for use
+//			in error and informational messages.
+//
+//		6. *ErrPrefixDto - A pointer to an instance of
+//			ErrPrefixDto. Information from this object will be
+//			copied for use in error and informational messages.
+//
+//		7. IBasicErrorPrefix - An interface to a method
+//			generating a two-dimensional slice of strings
+//			containing error prefix and error context
+//			information.
+//
+//		If parameter 'errorPrefix' is NOT convertible to one
+//		of the valid types listed above, it will be
+//		considered invalid and trigger the return of an
+//		error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are included
+//		in the 'errpref' software package,
+//		"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//
+//		If this method completes successfully, a formatted
+//		Number String will be returned.
+//
+//	error
+//
+//		If this method completes successfully, the returned
+//		error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error message.
+//	 	This returned error message will incorporate the method
+//	 	chain and text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be attached to the beginning
+//	 	of the error message.
+func (numStrKernel *NumberStrKernel) GetFmtNumStrCustom(
+	decSeparator DecimalSeparatorSpec,
+	intSeparatorDto IntegerSeparatorDto,
+	roundingSpec NumStrRoundingSpec,
+	negativeNumberSign NumStrNumberSymbolSpec,
+	positiveNumberSign NumStrNumberSymbolSpec,
+	zeroNumberSign NumStrNumberSymbolSpec,
+	numberFieldSpec NumStrNumberFieldSpec,
+	errorPrefix interface{}) (
+	string,
+	error) {
+
+	if numStrKernel.lock == nil {
+		numStrKernel.lock = new(sync.Mutex)
+	}
+
+	numStrKernel.lock.Lock()
+
+	defer numStrKernel.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+	var numStr string
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumberStrKernel."+
+			"GetFmtNumStr()",
+		"")
+
+	if err != nil {
+		return numStr, err
+	}
+
+	return new(numberStrKernelAtom).
+		formatNumStrComponents(
+			numStrKernel,
+			decSeparator,
+			intSeparatorDto,
+			roundingSpec,
+			negativeNumberSign,
+			positiveNumberSign,
+			zeroNumberSign,
+			numberFieldSpec,
+			ePrefix.XCpy(
+				"numStrKernel->"))
 }
 
 // GetFractionalDigits - Returns an instance of RuneArrayDto
