@@ -1989,8 +1989,8 @@ func (nStrIntSep *IntegerSeparatorDto) NewDetailRunes(
 //	or empty space (' '), an integer grouping of three ('3')
 //	and unlimited repetitions of this sequence.
 //
-//		French Integer Separation Example:
-//	      	'1 000 000 000 000'
+//		French Integer Separation Example
+//		(One-Million): '1 000 000'
 //
 //	While France is a member of the European Union, various
 //	European Union member countries apply different characters
@@ -3535,6 +3535,7 @@ func (nStrIntSep *IntegerSeparatorDto) NewUnitedStatesDefaults(
 // # Input Parameters
 //
 //	intSeparatorChars			[]rune
+//
 //		A series of runes or characters used to separate
 //		integer digits in a number string. These characters
 //		are commonly known as the 'thousands separator'. A
@@ -3557,6 +3558,8 @@ func (nStrIntSep *IntegerSeparatorDto) NewUnitedStatesDefaults(
 //
 //		Other countries and cultures use spaces, apostrophes
 //		or multiple characters to separate integers.
+//
+//				French Example: 1 000 000 00
 //
 //		If this parameter is submitted as a zero length array,
 //		an error will be returned.
@@ -3589,10 +3592,12 @@ func (nStrIntSep *IntegerSeparatorDto) NewUnitedStatesDefaults(
 //		be set to uint[]{3,2}.
 //
 //		Chinese Numerals have an integer grouping value of
-//		four and are formatted like this: '12,3456,7890,2345'.
+//		four and are formatted like this:
+//
+//				'12,3456,7890,2345'
+//
 //		In this case the 'intGroupingSequence' value would be
 //		set to four uint[]{4}.
-//
 //
 //	restartIntGroupingSequence	bool
 //
@@ -3622,7 +3627,6 @@ func (nStrIntSep *IntegerSeparatorDto) NewUnitedStatesDefaults(
 //		rare. For the vast majority of integer separation
 //		scenarios, set this parameter should be set to
 //		'false'.
-//
 //
 //	errorPrefix					interface{}
 //
@@ -4526,6 +4530,358 @@ func (nStrIntSep *IntegerSeparatorDto) SetChineseNumberingRunes(
 				"nStrIntSep<-"))
 }
 
+// SetComponents - This method will overwrite and reset the
+// internal member variable data values for the current
+// IntegerSeparatorDto instance based on the component elements
+// passed as input parameters.
+//
+// # IMPORTANT
+//
+// This method will overwrite all pre-existing data values in the
+// current IntegerSeparatorDto instance.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	intSeparatorChars			[]rune
+//
+//		A series of runes or characters used to separate
+//		integer digits in a number string. These characters
+//		are commonly known as the 'thousands separator'. A
+//		'thousands separator' is used to separate groups of
+//		integer digits to the left of the decimal separator
+//		(a.k.a. decimal point).
+//
+//		In the United States, the standard integer digits
+//		separator is the single comma character (','). Other
+//		countries and cultures use periods, spaces,
+//		apostrophes or multiple characters to separate
+//		integers.
+//
+//			United States Example:  1,000,000,000
+//
+//		In many European countries, a single period ('.') is
+//		used as the integer separator character.
+//
+//	           German Example: 1.000.000.000
+//
+//		Other countries and cultures use spaces, apostrophes
+//		or multiple characters to separate integers.
+//
+//				French Example: 1 000 000 00
+//
+//		If this parameter is submitted as a zero length array,
+//		an error will be returned.
+//
+//
+//	intGroupingSequence			[]uint
+//
+//		This unsigned integer array specifies the number of
+//		integer digits within a series of groups. This value
+//		is used to group integers within a number string.
+//
+//		In most western countries, integer digits to the left
+//		of the radix point or decimal separator (a.k.a.
+//		decimal point), are separated into groups of three
+//		digits representing a grouping of 'thousands' like
+//		this:
+//
+//				'1,000,000,000'
+//
+//		In this case the 'intGroupingSequence' value would be
+//		set to three (uint[]{3}).
+//
+//		In some countries and cultures other integer groupings
+//		are used. In India, for example, a number might be
+//		formatted like this:
+//
+//			'6,78,90,00,00,00,00,000'
+//
+//		In this case the 'intGroupingSequence' value would
+//		be set to uint[]{3,2}.
+//
+//		Chinese Numerals have an integer grouping value of
+//		four and are formatted like this:
+//
+//				'12,3456,7890,2345'
+//
+//		In this case the 'intGroupingSequence' value would be
+//		set to four uint[]{4}.
+//
+//	restartIntGroupingSequence	bool
+//
+//		If this flag is set to 'true', the grouping sequence
+//		will be restarted at the beginning of the
+//		'intGroupingSequence' array after completion of the
+//		last group in the 'intGroupingSequence' array.
+//
+//			Example:
+//				restartIntGroupingSequence = 'true'
+//				intGroupingSequence = uint{3,2}
+//				integer = 1234567890123456
+//				result  = 1,23,456,78,901,23,456
+//
+//		If this flag is set to 'false', the last element or
+//		grouping in the 'intGroupingSequence' array will
+//		simply be repeated for all the remaining integer
+//		digits.
+//
+//			Example:
+//				restartIntGroupingSequence = 'false'
+//				intGroupingSequence = uint{3,2}
+//				integer = 1234567890123456
+//				result  = 1,23,45,67,89,01,23,456
+//
+//		The need to set this value to 'true' is exceedingly
+//		rare. For the vast majority of integer separation
+//		scenarios, set this parameter should be set to
+//		'false'.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods
+//		listed as a method or function chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil - A nil value is valid and generates an empty
+//		   	collection of error prefix and error context
+//		   	information.
+//
+//		2.	string - A string containing error prefix
+//			information.
+//
+//		3.	[]string A one-dimensional slice of strings
+//			containing error prefix information.
+//
+//		4.	[][2]string A two-dimensional slice of strings
+//		   	containing error prefix and error context
+//		   	information.
+//
+//		5.	ErrPrefixDto - An instance of ErrPrefixDto.
+//			Information from this object will be copied for
+//			use in error and informational messages.
+//
+//		6.	*ErrPrefixDto - A pointer to an instance of
+//			ErrPrefixDto. Information from this object will
+//			be copied for use in error and informational
+//			messages.
+//
+//		7.	IBasicErrorPrefix - An interface to a method
+//			generating a two-dimensional slice of strings
+//			containing error prefix and error context
+//			information.
+//
+//		If parameter 'errorPrefix' is NOT convertible to one
+//		of the valid types listed above, it will be
+//		considered invalid and trigger the return of an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are included
+//		in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref"
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	newIntSep					IntegerSeparatorDto
+//
+//		If this method completes successfully, the parameter
+//		will return a new and fully populated instance of
+//		IntegerSeparatorDto.
+//
+//
+//	error
+//
+//		If this method completes successfully, the returned
+//		error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error message.
+//		This returned error message will incorporate the method
+//		chain and text passed by input parameter, 'errorPrefix'.
+//		The 'errorPrefix' text will be attached to the beginning
+//		of the error message.
+func (nStrIntSep *IntegerSeparatorDto) SetComponents(
+	intSeparatorChars []rune,
+	intGroupingSequence []uint,
+	restartIntGroupingSequence bool,
+	errorPrefix interface{}) error {
+
+	if nStrIntSep.lock == nil {
+		nStrIntSep.lock = new(sync.Mutex)
+	}
+
+	nStrIntSep.lock.Lock()
+
+	defer nStrIntSep.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"IntegerSeparatorDto."+
+			"SetComponents()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	return new(integerSeparatorDtoMechanics).
+		setWithComponents(
+			nStrIntSep,
+			intSeparatorChars,
+			intGroupingSequence,
+			restartIntGroupingSequence,
+			ePrefix.XCpy("nStrIntSep"))
+}
+
+//	SetFrenchDefaults
+//
+//	This method will overwrite and set the all the
+//	internal member variable data values for the
+//	current instance of IntegerSeparatorDto to
+//	default values used in France. Integer
+//	separator values used in France consist of the
+//	space character (' '), an integer grouping of three
+//	('3') and unlimited repetitions of this sequence.
+//
+//		French Integer Separation Example
+//		(One-Million): '1 000 000'
+//
+//	While France is a member of the European Union,
+//	various European Union member countries apply
+//	different characters for integer separation.
+//
+//	Some countries follow the French integer separation
+//	convention but other European Union member countries
+//	follow the integer separation convention used in
+//	Germany. For information on German integer separation
+//	usage, see method:
+//
+//		IntegerSeparatorDto.SetGermanDefaults()
+//
+//	If custom integer separator algorithms are required, see
+//	method:
+//
+//		IntegerSeparatorDto.SetComponents()
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will overwrite all pre-existing data
+//	values in the current IntegerSeparatorDto instance.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods
+//		listed as a method or function chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil - A nil value is valid and generates an empty
+//		   	collection of error prefix and error context
+//		   	information.
+//
+//		2.	string - A string containing error prefix
+//			information.
+//
+//		3.	[]string A one-dimensional slice of strings
+//			containing error prefix information.
+//
+//		4.	[][2]string A two-dimensional slice of strings
+//		   	containing error prefix and error context
+//		   	information.
+//
+//		5.	ErrPrefixDto - An instance of ErrPrefixDto.
+//			Information from this object will be copied for
+//			use in error and informational messages.
+//
+//		6.	*ErrPrefixDto - A pointer to an instance of
+//			ErrPrefixDto. Information from this object will
+//			be copied for use in error and informational
+//			messages.
+//
+//		7.	IBasicErrorPrefix - An interface to a method
+//			generating a two-dimensional slice of strings
+//			containing error prefix and error context
+//			information.
+//
+//		If parameter 'errorPrefix' is NOT convertible to one
+//		of the valid types listed above, it will be
+//		considered invalid and trigger the return of an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are included
+//		in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref"
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the returned
+//		error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error message.
+//		This returned error message will incorporate the method
+//		chain and text passed by input parameter, 'errorPrefix'.
+//		The 'errorPrefix' text will be attached to the beginning
+//		of the error message.
+func (nStrIntSep *IntegerSeparatorDto) SetFrenchDefaults(
+	errorPrefix interface{}) error {
+
+	if nStrIntSep.lock == nil {
+		nStrIntSep.lock = new(sync.Mutex)
+	}
+
+	nStrIntSep.lock.Lock()
+
+	defer nStrIntSep.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"IntegerSeparatorDto."+
+			"SetFrenchDefaults()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	return new(integerSeparatorDtoMechanics).
+		setToFrenchDefaults(
+			nStrIntSep,
+			ePrefix)
+}
+
 // SetIndiaNumbering - Overwrites all the member variable
 // data values for the current instance of IntegerSeparatorDto.
 //
@@ -4957,245 +5313,138 @@ func (nStrIntSep *IntegerSeparatorDto) SetIndiaNumberingRunes(
 				"nStrIntSep<-"))
 }
 
-// SetIntSeparatorChars - Sets the 'intSeparatorChars' member
-// variable for the current IntegerSeparatorDto instance.
+//	SetIntGroupingSequence
+//
+//	Sets the 'Integer Separator Grouping' specification for
+//	the current IntegerSeparatorDto instance.
+//
+//	This unsigned integer values specifies the number of
+//	integer digits within a group. This value is used to
+//	group integers within a number string.
+//
+//	In most western countries, integer digits to the left
+//	of the radix point or decimal separator (a.k.a. decimal
+//	point), are separated into groups of three digits
+//	representing a grouping of 'thousands' like this:
+//
+//			'1,000,000,000'
+//
+//	In this case the 'intGroupingSequence' value would be
+//	set to three ('3').
+//
+//	In some countries and cultures other integer groupings
+//	are used. In India, for example, a number might be
+//	formatted like this:
+//
+//			'6,78,90,00,00,00,00,000'
+//
+//	Chinese Numerals have an integer grouping value of four
+//	('4').
+//
+//		Chinese Numerals Example: '12,3456,7890,2345'
 //
 // ----------------------------------------------------------------
 //
-// Input Parameters
+// # Input Parameters
 //
-//	intSeparatorChars          []rune
-//	   - A character, or series of characters, used to separate
-//	     integer digits in a number string. These characters are
-//	     commonly known as the 'thousands separator'. A 'thousands
-//	     separator' is used to separate groups of integer digits to
-//	     the left of the decimal separator (a.k.a. decimal point).
-//	     In the United States, the standard integer digits
-//	     separator is the single comma character (',').
-//	           United States Example:  1,000,000,000
+//	intGroupingSequence			[]uint
 //
-//	     In many European countries, a single period ('.') is used
-//	     as the integer separator character.
-//	           European Example: 1.000.000.000
+//		This unsigned integer array specifies the number of
+//		integer digits within a series of groups. This value
+//		is used to group integers within a number string.
 //
-//	     Other countries and cultures use spaces, apostrophes or
-//	     multiple characters to separate integers.
+//		In most western countries, integer digits to the left
+//		of the radix point or decimal separator (a.k.a.
+//		decimal point), are separated into groups of three
+//		digits representing a grouping of 'thousands' like
+//		this:
 //
-//	     If this parameter is submitted as a zero length array, an
-//	     error will be returned.
+//				'1,000,000,000'
 //
+//		In this case the 'intGroupingSequence' value would be
+//		set to three (uint[]{3}).
 //
-//	errorPrefix                interface{}
-//	   - This object encapsulates error prefix text which is
-//	     included in all returned error messages. Usually, it
-//	     contains the name of the calling method or methods
-//	     listed as a method or function chain of execution.
+//		In some countries and cultures other integer groupings
+//		are used. In India, for example, a number might be
+//		formatted like this:
 //
-//	     If no error prefix information is needed, set this
-//	     parameter to 'nil'.
+//			'6,78,90,00,00,00,00,000'
 //
-//	     This empty interface must be convertible to one of the
-//	     following types:
+//		In this case the 'intGroupingSequence' value would
+//		be set to uint[]{3,2}.
 //
-//	     1. nil - A nil value is valid and generates an empty
-//	        collection of error prefix and error context
-//	        information.
+//		Chinese Numerals have an integer grouping value of
+//		four and are formatted like this:
 //
-//	     2. string - A string containing error prefix information.
+//				'12,3456,7890,2345'
 //
-//	     3. []string A one-dimensional slice of strings containing
-//	        error prefix information
+//		In this case the 'intGroupingSequence' value would be
+//		set to four uint[]{4}.
 //
-//	     4. [][2]string A two-dimensional slice of strings
-//	        containing error prefix and error context information.
+//	errorPrefix					interface{}
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//	        from this object will be copied for use in error and
-//	        informational messages.
+//		This object encapsulates error prefix text which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods
+//		listed as a method or function chain of execution.
 //
-//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//	        Information from this object will be copied for use in
-//	        error and informational messages.
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
 //
-//	     7. IBasicErrorPrefix - An interface to a method generating
-//	        a two-dimensional slice of strings containing error
-//	        prefix and error context information.
+//		This empty interface must be convertible to one of
+//		the following types:
 //
-//	     If parameter 'errorPrefix' is NOT convertible to one of
-//	     the valid types listed above, it will be considered
-//	     invalid and trigger the return of an error.
+//		1.	nil - A nil value is valid and generates an empty
+//		   	collection of error prefix and error context
+//		   	information.
 //
-//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
-//	     the 'errpref' software package,
-//	     "github.com/MikeAustin71/errpref".
+//		2.	string - A string containing error prefix
+//			information.
 //
-// ----------------------------------------------------------------
+//		3.	[]string A one-dimensional slice of strings
+//			containing error prefix information.
 //
-// Return Values
+//		4.	[][2]string A two-dimensional slice of strings
+//		   	containing error prefix and error context
+//		   	information.
 //
-//	error
-//	   - If this method completes successfully, the returned error
-//	     Type is set equal to 'nil'.
+//		5.	ErrPrefixDto - An instance of ErrPrefixDto.
+//			Information from this object will be copied for
+//			use in error and informational messages.
 //
-//	     If errors are encountered during processing, the returned
-//	     error Type will encapsulate an error message. This
-//	     returned error message will incorporate the method chain
-//	     and text passed by input parameter, 'errorPrefix'. The
-//	     'errorPrefix' text will be attached to the beginning of
-//	     the error message.
-func (nStrIntSep *IntegerSeparatorDto) SetIntSeparatorChars(
-	intSeparatorChars []rune,
-	errorPrefix interface{}) error {
-
-	if nStrIntSep.lock == nil {
-		nStrIntSep.lock = new(sync.Mutex)
-	}
-
-	nStrIntSep.lock.Lock()
-
-	defer nStrIntSep.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-	var err error
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
-		"IntegerSeparatorDto.SetIntSeparatorChars()",
-		"")
-
-	if err != nil {
-		return err
-	}
-
-	if len(intSeparatorChars) == 0 {
-		return fmt.Errorf("%v\n"+
-			"Error: Input parameter 'intSeparatorChars' is invalid!\n"+
-			"'intSeparatorChars' is a zero length array.\n",
-			ePrefix.String())
-	}
-
-	err = new(strMechPreon).
-		copyRuneArrays(
-			&nStrIntSep.intSeparatorChars,
-			&intSeparatorChars,
-			true,
-			ePrefix.XCpy(
-				"intSeparatorChars->"+
-					"nStrIntSep.intSeparatorChars"))
-
-	return err
-}
-
-// SetIntGroupingSequence - Sets the 'Integer Separator Grouping'
-// specification for the current IntegerSeparatorDto instance.
+//		6.	*ErrPrefixDto - A pointer to an instance of
+//			ErrPrefixDto. Information from this object will
+//			be copied for use in error and informational
+//			messages.
 //
-// This unsigned integer values specifies the number of integer
-// digits within a group. This value is used to group integers
-// within a number string.
+//		7.	IBasicErrorPrefix - An interface to a method
+//			generating a two-dimensional slice of strings
+//			containing error prefix and error context
+//			information.
 //
-// In most western countries, integer digits to the left of the
-// decimal separator (a.k.a. decimal point) are separated into
-// groups of three digits representing a grouping of 'thousands'
-// like this: '1,000,000,000'. In this case the
-// 'intGroupingSequence' value would be set to three ('3').
+//		If parameter 'errorPrefix' is NOT convertible to one
+//		of the valid types listed above, it will be
+//		considered invalid and trigger the return of an error.
 //
-// In some countries and cultures other integer groupings are used.
-// In India, for example, a number might be formatted like this:
-// '6,78,90,00,00,00,00,000'. Chinese Numerals have an integer
-// grouping value of four ('4').
-//
-//	Chinese Numerals Example: '12,3456,7890,2345'
+//		Types ErrPrefixDto and IBasicErrorPrefix are included
+//		in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref"
 //
 // ----------------------------------------------------------------
 //
-// Input Parameters
+// # Return Values
 //
-//		intGroupingSequence        []uint
-//		   - This unsigned integer array specifies the number of
-//		     integer digits within a series of groups. This value is
-//		     used to group integers within a number string.
+//	err							error
 //
-//		     In most western countries, integer digits to the left of
-//		     the decimal separator (a.k.a. decimal point) are separated
-//		     into groups of three digits representing a grouping of
-//		     'thousands' like this: '1,000,000,000'. In this case the
-//		     'intGroupingSequence' value would be set to three
-//		     (uint[]{3}).
+//		If this method completes successfully, the returned
+//		error Type is set equal to 'nil'.
 //
-//		     In some countries and cultures other integer groupings are
-//		     used. In India, for example, a number might be formatted
-//		     like this: '6,78,90,00,00,00,00,000'. In this case the
-//		     'intGroupingSequence' value would be set to uint[]{3,2}.
-//
-//		     Chinese Numerals have an integer grouping value of four
-//		     and are formatted like this: '12,3456,7890,2345'. In this
-//		     case the 'intGroupingSequence' value would be set to four
-//		     uint[]{4}.
-//
-//		     If this input parameter is submitted as a zero length
-//		     array or is otherwise invalid, this method will take no
-//		     action and exit.
-//
-//
-//	 errorPrefix                interface{}
-//		   - This object encapsulates error prefix text which is
-//		     included in all returned error messages. Usually, it
-//		     contains the name of the calling method or methods
-//		     listed as a method or function chain of execution.
-//
-//		     If no error prefix information is needed, set this parameter
-//		     to 'nil'.
-//
-//		     This empty interface must be convertible to one of the
-//		     following types:
-//
-//		     1. nil - A nil value is valid and generates an empty
-//		        collection of error prefix and error context
-//		        information.
-//
-//		     2. string - A string containing error prefix information.
-//
-//		     3. []string A one-dimensional slice of strings containing
-//		        error prefix information
-//
-//		     4. [][2]string A two-dimensional slice of strings
-//		        containing error prefix and error context information.
-//
-//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//		        from this object will be copied for use in error and
-//		        informational messages.
-//
-//		     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//		        Information from this object will be copied for use in
-//		        error and informational messages.
-//
-//		     7. IBasicErrorPrefix - An interface to a method generating
-//		        a two-dimensional slice of strings containing error
-//		        prefix and error context information.
-//
-//		     If parameter 'errorPrefix' is NOT convertible to one of
-//		     the valid types listed above, it will be considered
-//		     invalid and trigger the return of an error.
-//
-//		     Types ErrPrefixDto and IBasicErrorPrefix are included in
-//		     the 'errpref' software package,
-//		     "github.com/MikeAustin71/errpref".
-//
-// -----------------------------------------------------------------
-//
-// Return Values
-//
-//	err                        error
-//	   - If this method completes successfully, the returned error
-//	     Type is set equal to 'nil'.
-//
-//	     If errors are encountered during processing, the returned
-//	     error Type will encapsulate an error message. This
-//	     returned error message will incorporate the method chain
-//	     and text passed by input parameter, 'errorPrefix'. The
-//	     'errorPrefix' text will be attached to the beginning of
-//	     the error message.
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error message.
+//		This returned error message will incorporate the method
+//		chain and text passed by input parameter, 'errorPrefix'.
+//		The 'errorPrefix' text will be attached to the beginning
+//		of the error message.
 func (nStrIntSep *IntegerSeparatorDto) SetIntGroupingSequence(
 	intGroupingSequence []uint,
 	errorPrefix interface{}) (
@@ -5214,7 +5463,8 @@ func (nStrIntSep *IntegerSeparatorDto) SetIntGroupingSequence(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"IntegerSeparatorDto.SetIntGroupingSequence()",
+		"IntegerSeparatorDto."+
+			"SetIntGroupingSequence()",
 		"")
 
 	if err != nil {
@@ -5266,6 +5516,154 @@ func (nStrIntSep *IntegerSeparatorDto) SetIntGroupingSequence(
 			nil)
 
 	return
+}
+
+//	SetIntSeparatorChars
+//
+//	Sets the 'intSeparatorChars' member variable for
+//	the current IntegerSeparatorDto instance.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	intSeparatorChars			[]rune
+//
+//		A series of runes or characters used to separate
+//		integer digits in a number string. These characters
+//		are commonly known as the 'thousands separator'. A
+//		'thousands separator' is used to separate groups of
+//		integer digits to the left of the decimal separator
+//		(a.k.a. decimal point).
+//
+//		In the United States, the standard integer digits
+//		separator is the single comma character (','). Other
+//		countries and cultures use periods, spaces,
+//		apostrophes or multiple characters to separate
+//		integers.
+//
+//			United States Example:  1,000,000,000
+//
+//		In many European countries, a single period ('.') is
+//		used as the integer separator character.
+//
+//	           German Example: 1.000.000.000
+//
+//		Other countries and cultures use spaces, apostrophes
+//		or multiple characters to separate integers.
+//
+//				French Example: 1 000 000 00
+//
+//		If this parameter is submitted as a zero length array,
+//		an error will be returned.
+//
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods
+//		listed as a method or function chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil - A nil value is valid and generates an empty
+//		   	collection of error prefix and error context
+//		   	information.
+//
+//		2.	string - A string containing error prefix
+//			information.
+//
+//		3.	[]string A one-dimensional slice of strings
+//			containing error prefix information.
+//
+//		4.	[][2]string A two-dimensional slice of strings
+//		   	containing error prefix and error context
+//		   	information.
+//
+//		5.	ErrPrefixDto - An instance of ErrPrefixDto.
+//			Information from this object will be copied for
+//			use in error and informational messages.
+//
+//		6.	*ErrPrefixDto - A pointer to an instance of
+//			ErrPrefixDto. Information from this object will
+//			be copied for use in error and informational
+//			messages.
+//
+//		7.	IBasicErrorPrefix - An interface to a method
+//			generating a two-dimensional slice of strings
+//			containing error prefix and error context
+//			information.
+//
+//		If parameter 'errorPrefix' is NOT convertible to one
+//		of the valid types listed above, it will be
+//		considered invalid and trigger the return of an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are included
+//		in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref"
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the returned
+//		error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error message.
+//		This returned error message will incorporate the method
+//		chain and text passed by input parameter, 'errorPrefix'.
+//		The 'errorPrefix' text will be attached to the beginning
+//		of the error message.
+func (nStrIntSep *IntegerSeparatorDto) SetIntSeparatorChars(
+	intSeparatorChars []rune,
+	errorPrefix interface{}) error {
+
+	if nStrIntSep.lock == nil {
+		nStrIntSep.lock = new(sync.Mutex)
+	}
+
+	nStrIntSep.lock.Lock()
+
+	defer nStrIntSep.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"IntegerSeparatorDto.SetIntSeparatorChars()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if len(intSeparatorChars) == 0 {
+		return fmt.Errorf("%v\n"+
+			"Error: Input parameter 'intSeparatorChars' is invalid!\n"+
+			"'intSeparatorChars' is a zero length array.\n",
+			ePrefix.String())
+	}
+
+	err = new(strMechPreon).
+		copyRuneArrays(
+			&nStrIntSep.intSeparatorChars,
+			&intSeparatorChars,
+			true,
+			ePrefix.XCpy(
+				"intSeparatorChars->"+
+					"nStrIntSep.intSeparatorChars"))
+
+	return err
 }
 
 // SetRestartIntGroupingSequence - Sets the internal member
@@ -5635,11 +6033,14 @@ func (nStrIntSep *IntegerSeparatorDto) SetThousandsRunes(
 //	SetUnitedStatesDefaults
 //
 //	This method will overwrite and set the all the
-//	internal member variable data values to default
-//	values used in the United States. Integer separator
-//	values used in the United States consist of the
-//	comma character (','), an integer grouping of three
-//	('3') and unlimited repetitions of this sequence.
+//	internal member variable data values for the
+//	current instance of IntegerSeparatorDto to
+//	default	values used in the United States.
+//
+//	Integer separator values used in the United States
+//	consist of the comma character (','), an integer
+//	grouping of three ('3') and unlimited repetitions
+//	of this sequence.
 //
 //		United States Integer Separation Example
 //		(One-Million): '1,000,000'
@@ -5893,181 +6294,4 @@ func (nStrIntSep *IntegerSeparatorDto) String() string {
 		nStrIntSep.restartIntGroupingSequence)
 
 	return str
-}
-
-// SetWithComponents - This method will overwrite and reset the
-// internal member variable data values for the current
-// IntegerSeparatorDto instance based on the component elements
-// passed as input parameters.
-//
-// # IMPORTANT
-//
-// This method will overwrite all pre-existing data values in the
-// current IntegerSeparatorDto instance.
-//
-// ----------------------------------------------------------------
-//
-// Input Parameters
-//
-//		intSeparatorChars          []rune
-//		   - A character, or series of characters, used to separate
-//		     integer digits in a number string. These characters are
-//		     commonly known as the 'thousands separator'. A 'thousands
-//		     separator' is used to separate groups of integer digits to
-//		     the left of the decimal separator (a.k.a. decimal point).
-//		     In the United States, the standard integer digits
-//		     separator is the single comma character (',').
-//		           United States Example:  1,000,000,000
-//
-//		     In many European countries, a single period ('.') is used
-//		     as the integer separator character.
-//		           European Example: 1.000.000.000
-//
-//		     Other countries and cultures use spaces, apostrophes or
-//		     multiple characters to separate integers.
-//
-//		     If this parameter is submitted as a zero length array, an
-//		     error will be returned.
-//
-//
-//		intGroupingSequence        []uint
-//		   - This unsigned integer array specifies the number of
-//		     integer digits within a series of groups. This value is
-//		     used to group integers within a number string.
-//
-//		     In most western countries, integer digits to the left of
-//		     the decimal separator (a.k.a. decimal point) are separated
-//		     into groups of three digits representing a grouping of
-//		     'thousands' like this: '1,000,000,000'. In this case the
-//		     'intGroupingSequence' value would be set to three
-//		     (uint[]{3}).
-//
-//		     In some countries and cultures other integer groupings are
-//		     used. In India, for example, a number might be formatted
-//		     like this: '6,78,90,00,00,00,00,000'. In this case the
-//		     'intGroupingSequence' value would be set to uint[]{3,2}.
-//
-//		     Chinese Numerals have an integer grouping value of four
-//		     and are formatted like this: '12,3456,7890,2345'. In this
-//		     case the 'intGroupingSequence' value would be set to four
-//		     uint[]{4}.
-//
-//
-//		restartIntGroupingSequence bool
-//		   - If this flag is set to 'true', the grouping sequence
-//		     will be restarted at the beginning of the
-//		     'intGroupingSequence' array after completion of the last
-//		      group in the 'intGroupingSequence' array.
-//		      Example:
-//		        restartIntGroupingSequence = 'true'
-//		        intGroupingSequence = uint{3,2}
-//		        integer = 1234567890123456
-//		        result  = 1,23,456,78,901,23,456
-//
-//		     If this flag is set to 'false', the last element or
-//		     grouping in the 'intGroupingSequence' array will simply be
-//		     repeated for all the remaining integer digits.
-//		      Example:
-//		        restartIntGroupingSequence = 'false'
-//		        intGroupingSequence = uint{3,2}
-//		        integer = 1234567890123456
-//		        result  = 1,23,45,67,89,01,23,456
-//
-//		     The need to set this value to 'true' is exceedingly rare.
-//		     For the vast majority of integer separation scenarios, set
-//		     this parameter should be set to 'false'.
-//
-//
-//	 errorPrefix                interface{}
-//		   - This object encapsulates error prefix text which is
-//		     included in all returned error messages. Usually, it
-//		     contains the name of the calling method or methods
-//		     listed as a method or function chain of execution.
-//
-//		     If no error prefix information is needed, set this parameter
-//		     to 'nil'.
-//
-//		     This empty interface must be convertible to one of the
-//		     following types:
-//
-//		     1. nil - A nil value is valid and generates an empty
-//		        collection of error prefix and error context
-//		        information.
-//
-//		     2. string - A string containing error prefix information.
-//
-//		     3. []string A one-dimensional slice of strings containing
-//		        error prefix information
-//
-//		     4. [][2]string A two-dimensional slice of strings
-//		        containing error prefix and error context information.
-//
-//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//		        from this object will be copied for use in error and
-//		        informational messages.
-//
-//		     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//		        Information from this object will be copied for use in
-//		        error and informational messages.
-//
-//		     7. IBasicErrorPrefix - An interface to a method generating
-//		        a two-dimensional slice of strings containing error
-//		        prefix and error context information.
-//
-//		     If parameter 'errorPrefix' is NOT convertible to one of
-//		     the valid types listed above, it will be considered
-//		     invalid and trigger the return of an error.
-//
-//		     Types ErrPrefixDto and IBasicErrorPrefix are included in
-//		     the 'errpref' software package,
-//		     "github.com/MikeAustin71/errpref".
-//
-// -----------------------------------------------------------------
-//
-// Return Values
-//
-//	error
-//	   - If this method completes successfully, the returned error
-//	     Type is set equal to 'nil'.
-//
-//	     If errors are encountered during processing, the returned
-//	     error Type will encapsulate an error message. This
-//	     returned error message will incorporate the method chain
-//	     and text passed by input parameter, 'errorPrefix'. The
-//	     'errorPrefix' text will be attached to the beginning of
-//	     the error message.
-func (nStrIntSep *IntegerSeparatorDto) SetWithComponents(
-	intSeparatorChars []rune,
-	intGroupingSequence []uint,
-	restartIntGroupingSequence bool,
-	errorPrefix interface{}) error {
-
-	if nStrIntSep.lock == nil {
-		nStrIntSep.lock = new(sync.Mutex)
-	}
-
-	nStrIntSep.lock.Lock()
-
-	defer nStrIntSep.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-	var err error
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
-		"IntegerSeparatorDto.SetWithComponents()",
-		"")
-
-	if err != nil {
-		return err
-	}
-
-	return new(integerSeparatorDtoMechanics).
-		setWithComponents(
-			nStrIntSep,
-			intSeparatorChars,
-			intGroupingSequence,
-			restartIntGroupingSequence,
-			ePrefix.XCpy("nStrIntSep"))
 }
