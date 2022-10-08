@@ -49,91 +49,112 @@ type DecimalSeparatorSpec struct {
 	lock *sync.Mutex
 }
 
-// CopyIn - Copies the data fields from an incoming instance of
-// DecimalSeparatorSpec ('incomingDecSepSpec') to the data fields
-// of the current DecimalSeparatorSpec instance
-// ('decSeparatorSpec').
+//	CopyIn
+//
+//	Copies the data fields from an incoming instance of
+//	DecimalSeparatorSpec ('incomingDecSepSpec') to the
+//	data fields of the current DecimalSeparatorSpec
+//	instance ('decSeparatorSpec').
 //
 // ----------------------------------------------------------------
 //
-// IMPORTANT
-// All the data fields in current DecimalSeparatorSpec instance
-// ('decSeparatorSpec') will be modified and overwritten.
+// # IMPORTANT
+//
+//	All the data fields in current DecimalSeparatorSpec
+//	instance ('decSeparatorSpec') will be modified and
+//	overwritten.
 //
 // ----------------------------------------------------------------
 //
-// Input Parameters
+// # Input Parameters
 //
-//		incomingDecSepSpec   *DecimalSeparatorSpec
-//		   - A pointer to an instance of DecimalSeparatorSpec. This
-//		     method will NOT change the values of internal member
-//		     variables contained in this instance.
+//	incomingDecSepSpec			*DecimalSeparatorSpec
 //
-//		     All data values in this DecimalSeparatorSpec instance
-//		     will be copied to current DecimalSeparatorSpec
-//		     instance ('decSeparatorSpec').
+//		A pointer to an instance of DecimalSeparatorSpec.
+//		This method will NOT change the values of internal
+//		member variables contained in this instance.
 //
-//		     If parameter 'incomingDecSepSpec' is determined to
-//		     be invalid, an error will be returned.
+//		All data values in this DecimalSeparatorSpec
+//		instance will be copied to current
+//		DecimalSeparatorSpec instance ('decSeparatorSpec').
 //
+//		If parameter 'incomingDecSepSpec' is determined to
+//		be invalid, an error will be returned.
 //
 //	 errorPrefix                interface{}
-//		   - This object encapsulates error prefix text which is
-//		     included in all returned error messages. Usually, it
-//		     contains the name of the calling method or methods
-//		     listed as a method or function chain of execution.
 //
-//		     If no error prefix information is needed, set this parameter
-//		     to 'nil'.
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it	contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
 //
-//		     This empty interface must be convertible to one of the
-//		     following types:
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
 //
-//		     1. nil - A nil value is valid and generates an empty
-//		        collection of error prefix and error context
-//		        information.
+//		This empty interface must be convertible to one of
+//		the following types:
 //
-//		     2. string - A string containing error prefix information.
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
 //
-//		     3. []string A one-dimensional slice of strings containing
-//		        error prefix information
+//		2.	string
+//				A string containing error prefix
+//				information.
 //
-//		     4. [][2]string A two-dimensional slice of strings
-//		        containing error prefix and error context information.
+//		3. []string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
 //
-//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//		        from this object will be copied for use in error and
-//		        informational messages.
+//		4. [][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
 //
-//		     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//		        Information from this object will be copied for use in
-//		        error and informational messages.
+//		5. ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
 //
-//		     7. IBasicErrorPrefix - An interface to a method generating
-//		        a two-dimensional slice of strings containing error
-//		        prefix and error context information.
+//		6. *ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
 //
-//		     If parameter 'errorPrefix' is NOT convertible to one of
-//		     the valid types listed above, it will be considered
-//		     invalid and trigger the return of an error.
+//		7. IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
 //
-//		     Types ErrPrefixDto and IBasicErrorPrefix are included in
-//		     the 'errpref' software package,
-//		     "github.com/MikeAustin71/errpref".
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
 //
-// ------------------------------------------------------------------------
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
 //
-// Return Values
+// ----------------------------------------------------------------
 //
-//	error
-//	   - If this method completes successfully and no errors are
-//	     encountered this return value is set to 'nil'. Otherwise,
-//	     if errors are encountered, this return value will contain
-//	     an appropriate error message.
+// # Return Values
 //
-//	     If an error message is returned, the text value of input
-//	     parameter 'errorPrefix' will be inserted or prefixed at
-//	     the beginning of the error message.
+//	err							error
+//
+//		If this method completes successfully, the returned
+//		error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error message.
+//		This returned error message will incorporate the
+//		method chain and text passed by input parameter,
+//		'errorPrefix'. The 'errorPrefix' text will be attached
+//		to the beginning of	the error message.
 func (decSeparatorSpec *DecimalSeparatorSpec) CopyIn(
 	incomingDecSepSpec *DecimalSeparatorSpec,
 	errorPrefix interface{}) (
@@ -170,79 +191,99 @@ func (decSeparatorSpec *DecimalSeparatorSpec) CopyIn(
 	return err
 }
 
-// CopyOut - Returns a deep copy of the current
-// DecimalSeparatorSpec instance.
+//	CopyOut
 //
-// If the current DecimalSeparatorSpec instance contains
-// invalid member variables, this method will return an error.
+//	Returns a deep copy of the current DecimalSeparatorSpec
+//	instance.
+//
+//	If the current DecimalSeparatorSpec instance contains
+//	invalid member variables, this method will return an
+//	error.
 //
 // ----------------------------------------------------------------
 //
-// Input Parameters
+// # Input Parameters
 //
 //	 errorPrefix                interface{}
-//		   - This object encapsulates error prefix text which is
-//		     included in all returned error messages. Usually, it
-//		     contains the name of the calling method or methods
-//		     listed as a method or function chain of execution.
 //
-//		     If no error prefix information is needed, set this parameter
-//		     to 'nil'.
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it	contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
 //
-//		     This empty interface must be convertible to one of the
-//		     following types:
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
 //
-//		     1. nil - A nil value is valid and generates an empty
-//		        collection of error prefix and error context
-//		        information.
+//		This empty interface must be convertible to one of
+//		the following types:
 //
-//		     2. string - A string containing error prefix information.
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
 //
-//		     3. []string A one-dimensional slice of strings containing
-//		        error prefix information
+//		2.	string
+//				A string containing error prefix
+//				information.
 //
-//		     4. [][2]string A two-dimensional slice of strings
-//		        containing error prefix and error context information.
+//		3. []string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
 //
-//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//		        from this object will be copied for use in error and
-//		        informational messages.
+//		4. [][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
 //
-//		     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//		        Information from this object will be copied for use in
-//		        error and informational messages.
+//		5. ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
 //
-//		     7. IBasicErrorPrefix - An interface to a method generating
-//		        a two-dimensional slice of strings containing error
-//		        prefix and error context information.
+//		6. *ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
 //
-//		     If parameter 'errorPrefix' is NOT convertible to one of
-//		     the valid types listed above, it will be considered
-//		     invalid and trigger the return of an error.
+//		7. IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
 //
-//		     Types ErrPrefixDto and IBasicErrorPrefix are included in
-//		     the 'errpref' software package,
-//		     "github.com/MikeAustin71/errpref".
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
-// Return Values
+// # Return Values
 //
-//	copyOfDecSepSpec           DecimalSeparatorSpec
-//	   - If this method completes successfully and no errors are
-//	     encountered, this parameter will return a deep copy of the
-//	     current DecimalSeparatorSpec instance.
+//	copyOfDecSepSpec			DecimalSeparatorSpec
 //
+//		If this method completes successfully and no errors
+//		are encountered, this parameter will return a deep
+//		copy of the	current DecimalSeparatorSpec instance.
 //
-//	err                        error
-//	   - If the method completes successfully and no errors are
-//	     encountered this return value is set to 'nil'. Otherwise,
-//	     if errors are encountered, this return value will contain
-//	     an appropriate error message.
+//	err							error
 //
-//	     If an error message is returned, the text value of input
-//	     parameter 'errorPrefix' will be inserted or prefixed at
-//	     the beginning of the error message.
+//		If this method completes successfully, the returned
+//		error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error message.
+//		This returned error message will incorporate the
+//		method chain and text passed by input parameter,
+//		'errorPrefix'. The 'errorPrefix' text will be attached
+//		to the beginning of	the error message.
 func (decSeparatorSpec *DecimalSeparatorSpec) CopyOut(
 	errorPrefix interface{}) (
 	copyOfDecSepSpec DecimalSeparatorSpec,
@@ -279,27 +320,29 @@ func (decSeparatorSpec *DecimalSeparatorSpec) CopyOut(
 	return copyOfDecSepSpec, err
 }
 
-// Empty - Resets all internal member variables for the current
-// instance of DecimalSeparatorSpec to their initial or zero
-// states.
+//	Empty
+//
+//	Resets all internal member variables for the current
+//	instance of DecimalSeparatorSpec to their initial or
+//	zero states.
 //
 // ----------------------------------------------------------------
 //
 // # IMPORTANT
 //
-// This method will delete all pre-existing internal member
-// variable data values in the current instance of
-// DecimalSeparatorSpec.
+//	This method will delete all pre-existing internal
+//	member variable data values in the current instance
+//	of DecimalSeparatorSpec.
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
-// Input Parameters
+// # Input Parameters
 //
 //	NONE
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
-// Return Values
+// # Return Values
 //
 //	NONE
 func (decSeparatorSpec *DecimalSeparatorSpec) Empty() {
@@ -319,39 +362,45 @@ func (decSeparatorSpec *DecimalSeparatorSpec) Empty() {
 	decSeparatorSpec.lock = nil
 }
 
-// Equal - Receives a pointer to another instance of
-// DecimalSeparatorSpec and proceeds to compare its internal member
-// variables to those of the current DecimalSeparatorSpec instance
-// in order to determine if they are equivalent.
+//	Equal
 //
-// A boolean flag showing the result of this comparison is
-// returned. If the member variables for both instances are equal
-// in all respects, this flag is set to 'true'. Otherwise, this
-// method returns 'false'.
+//	Receives a pointer to another instance of
+//	DecimalSeparatorSpec and proceeds to compare its
+//	internal member variables to those of the current
+//	DecimalSeparatorSpec instance in order to determine
+//	if they are equivalent.
+//
+//	A boolean flag showing the result of this comparison
+//	is returned. If the member variables for both
+//	instances are equal in all respects, this flag is set
+//	to 'true'. Otherwise, this method returns 'false'.
 //
 // ----------------------------------------------------------------
 //
-// Input Parameters
+// # Input Parameters
 //
-//	incomingDepSepSpec         *DecimalSeparatorSpec
-//	   - A pointer to an instance of DecimalSeparatorSpec. The
-//	     internal member variable data values in this instance will
-//	     be compared to those in the current instance of
-//	     DecimalSeparatorSpec. The results of this comparison will
-//	     be returned to the calling function as a boolean value.
+//	incomingDepSepSpec			*DecimalSeparatorSpec
 //
-// ------------------------------------------------------------------------
+//		A pointer to an instance of DecimalSeparatorSpec.
+//		The internal member variable data values in this
+//		instance will be compared to those in the current
+//		instance of DecimalSeparatorSpec. The results of
+//		this comparison will be returned to the calling
+//		function as a boolean value.
 //
-// Return Values
+// ----------------------------------------------------------------
+//
+// # Return Values
 //
 //	bool
-//	   - If the internal member variable data values contained in
-//	     input parameter 'incomingDepSepSpec' are equivalent in all
-//	     respects to those contained in the current instance of
-//	     DecimalSeparatorSpec, this return value will be set to
-//	     'true'.
 //
-//	     Otherwise, this method will return 'false'.
+//		If the internal member variable data values
+//		contained in input parameter 'incomingDepSepSpec'
+//		are equivalent in all respects to those contained
+//		in the current instance of DecimalSeparatorSpec,
+//		this return value will be set to 'true'.
+//
+//		Otherwise, this method will return 'false'.
 func (decSeparatorSpec *DecimalSeparatorSpec) Equal(
 	incomingDepSepSpec *DecimalSeparatorSpec) bool {
 
@@ -369,28 +418,36 @@ func (decSeparatorSpec *DecimalSeparatorSpec) Equal(
 			incomingDepSepSpec)
 }
 
-// GetDecimalSeparatorRunes - Returns the currently configured
-// Decimal Separator character or characters as an array of runes.
+//	GetDecimalSeparatorRunes
 //
-// Decimal Separators are comprised of a text character or
-// characters and are used to separate integer digits from
-// fractional digits in floating point numeric values.
+//	Returns the currently configured Decimal Separator
+//	character or characters as an array of runes.
 //
-// The specific characters used as decimal separators vary by
-// country and culture.
+//	Decimal Separators are comprised of a text character
+//	or characters and are used to separate integer digits
+//	from fractional digits in floating point numeric
+//	values.
 //
-// For example, in the United States, the decimal point or period
-// ('.') serves as the decimal separator. Example: 127.54
+//	The specific characters used as decimal separators
+//	vary by country and culture.
 //
-// In various European countries, the comma (',') is used as a
-// decimal separator. Example: 127,54
+//	For example, in the United States, the decimal point
+//	or period ('.') serves as the decimal separator.
 //
-// This method will return a string containing the configured
-// Decimal Separator text character or characters for the current
-// instance of DecimalSeparatorSpec.
+//		United States Example: 127.54
 //
-// If Decimal Separator character(s) have not yet been configured,
-// this method will return 'nil'.
+//	In various European countries, the comma (',') is
+//	used as a decimal separator.
+//
+//		European Example: 127,54
+//
+//	This method will return a string containing the
+//	configured Decimal Separator text character or
+//	characters for the current instance of
+//	DecimalSeparatorSpec.
+//
+//	If Decimal Separator character(s) have not yet
+//	been configured, this method will return 'nil'.
 //
 // ----------------------------------------------------------------
 //
@@ -403,6 +460,7 @@ func (decSeparatorSpec *DecimalSeparatorSpec) Equal(
 // # Return Values
 //
 //	[]rune
+//
 //		An array of runes containing the text character or
 //		characters configured for the current instance of
 //		DecimalSeparatorSpec.
@@ -422,46 +480,57 @@ func (decSeparatorSpec *DecimalSeparatorSpec) GetDecimalSeparatorRunes() []rune 
 	return decSeparatorSpec.decimalSeparatorChars.CharsArray
 }
 
-// GetDecimalSeparatorStr - Returns the currently configured Decimal Separator
-// character or characters as a string.
+//	GetDecimalSeparatorStr
 //
-// Decimal Separators are comprised of a text character or
-// characters and are used to separate integer digits from
-// fractional digits in floating point numeric values.
+//	Returns the currently configured Decimal Separator
+//	character or characters as a string.
 //
-// The specific characters used as decimal separators vary by
-// country and culture.
+//	Decimal Separators are comprised of a text character
+//	or characters and are used to separate integer digits
+//	from fractional digits in floating point numeric
+//	values.
 //
-// For example, in the United States, the decimal point or period
-// ('.') serves as the decimal separator. Example: 127.54
+//	The specific characters used as decimal separators
+//	vary by country and culture.
 //
-// In various European countries, the comma (',') is used as a
-// decimal separator. Example: 127,54
+//	For example, in the United States, the decimal point
+//	or period ('.') serves as the decimal separator.
 //
-// This method will return a string containing the configured
-// Decimal Separator text character or characters for the current
-// instance of DecimalSeparatorSpec.
+//		United States Example: 127.54
 //
-// If Decimal Separator character(s) have not yet been configured,
-// this method will return an empty string.
+//	In various European countries, the comma (',') is
+//	used as a decimal separator.
+//
+//		European Example: 127,54
+//
+//	This method will return a string containing the
+//	configured Decimal Separator text character or
+//	characters for the current instance of
+//	DecimalSeparatorSpec.
+//
+//	If Decimal Separator character(s) have not yet
+//	been configured, this method will return an empty
+//	string.
 //
 // ----------------------------------------------------------------
 //
-// Input Parameters
+// # Input Parameters
 //
 //	NONE
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
-// Return Values
+// # Return Values
 //
 //	string
-//	   - A string containing the text character or characters
-//	     configured for the current instance of
-//	     DecimalSeparatorSpec.
 //
-//	     If Decimal Separator character(s) have not yet been
-//	     configured, this method will return an empty string.
+//		A string containing the text character or
+//		characters configured for the current instance
+//		of DecimalSeparatorSpec.
+//
+//		If Decimal Separator character(s) have not yet
+//		been configured, this method will return an empty
+//		string.
 func (decSeparatorSpec *DecimalSeparatorSpec) GetDecimalSeparatorStr() string {
 
 	if decSeparatorSpec.lock == nil {
@@ -475,9 +544,27 @@ func (decSeparatorSpec *DecimalSeparatorSpec) GetDecimalSeparatorStr() string {
 	return string(decSeparatorSpec.decimalSeparatorChars.CharsArray)
 }
 
-// GetNumberOfSeparatorChars - Returns an integer value specifying
-// the number of decimal separator characters contained in this
-// instance of DecimalSeparatorSpec.
+//	GetNumberOfSeparatorChars
+//
+//	Returns an integer value specifying the number of
+//	decimal separator characters contained in the
+//	current instance of DecimalSeparatorSpec.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	NONE
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	int
+//
+//		The number of decimal separator characters
+//		contained in the current instance of
+//		DecimalSeparatorSpec.
 func (decSeparatorSpec *DecimalSeparatorSpec) GetNumberOfSeparatorChars() int {
 
 	if decSeparatorSpec.lock == nil {
@@ -491,21 +578,36 @@ func (decSeparatorSpec *DecimalSeparatorSpec) GetNumberOfSeparatorChars() int {
 	return decSeparatorSpec.decimalSeparatorChars.GetRuneArrayLength()
 }
 
-// IsNOP - Stands for 'Is No Operation'. This method returns a
-// boolean value signaling whether this instance of
-// DecimalSeparatorSpec is engaged, valid and operational with
-// respect to the current search algorithm.
+//	IsNOP
 //
-// If 'IsNOP' is set to 'true', it signals that this Decimal
-// Separator Specification is simply an empty placeholder and
-// performs no active role in, and is completely ignored by,
-// the search algorithm. With 'IsNOP' set to 'true', no search
-// for decimal separator characters will ever be conducted.
+//	Stands for 'Is No Operation'. This method returns
+//	a boolean value signaling whether this instance of
+//	DecimalSeparatorSpec is engaged, valid and operational
+//	with respect to the current search algorithm.
 //
-// If this method returns 'false', it signals that the current
-// instance of DecimalSeparatorSpec is fully populated, valid,
-// functional and ready to perform the search for decimal
-// separator characters.
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	NONE
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	bool
+//		If the 'IsNOP' flag is set to 'true', it signals
+//		that the current Decimal Separator Specification
+//		is simply an empty placeholder and performs no
+//		active role in, and is completely ignored by, the
+//		search algorithm. With 'IsNOP' set to 'true', no
+//		search for decimal separator characters will ever
+//		be conducted.
+//
+//		If this method returns 'false', it signals that the
+//		current instance of DecimalSeparatorSpec is fully
+//		populated, valid, functional and ready to perform
+//		the search for decimal separator characters.
 func (decSeparatorSpec *DecimalSeparatorSpec) IsNOP() bool {
 
 	if decSeparatorSpec.lock == nil {
@@ -523,36 +625,39 @@ func (decSeparatorSpec *DecimalSeparatorSpec) IsNOP() bool {
 	return false
 }
 
-// IsValidInstance - Performs a diagnostic review of the data
-// values encapsulated in the current DecimalSeparatorSpec instance
-// to determine if they are valid.
+//	IsValidInstance
 //
-// If any data element evaluates as invalid, this method will
-// return a boolean value of 'false'.
+//	Performs a diagnostic review of the data values
+//	encapsulated in the current DecimalSeparatorSpec
+//	instance to determine if they are valid.
 //
-// If all data elements are determined to be valid, this method
-// returns a boolean value of 'true'.
+//	If any data element evaluates as invalid, this
+//	method will return a boolean value of 'false'.
 //
-// This method is functionally equivalent to
-// DecimalSeparatorSpec.IsValidInstanceError() with the sole
-// exceptions being that this method takes no input parameters and
-// returns a boolean value.
+//	If all data elements are determined to be valid,
+//	this method returns a boolean value of 'true'.
 //
-// ------------------------------------------------------------------------
+//	This method is functionally equivalent to
+//	DecimalSeparatorSpec.IsValidInstanceError() with
+//	the sole exceptions being that this method takes
+//	no input parameters and returns a boolean value.
 //
-// Input Parameters
+// ----------------------------------------------------------------
+//
+// # Input Parameters
 //
 //	-- NONE --
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
-// Return Values
+// # Return Values
 //
 //	bool
-//	   - If any of the internal member data variables contained in
-//	     the current instance of DecimalSeparatorSpec are found to
-//	     be invalid, this method will return a boolean value of
-//	     'false'.
+//
+//		If any of the internal member data variables contained
+//		in the current instance of DecimalSeparatorSpec are
+//		found to be invalid, this method will return a boolean
+//		value of 'false'.
 //
 //	     If all internal member data variables contained in the
 //	     current instance of DecimalSeparatorSpec are found to be
@@ -576,73 +681,92 @@ func (decSeparatorSpec *DecimalSeparatorSpec) IsValidInstance() bool {
 	return isValid
 }
 
-// IsValidInstanceError - Performs a diagnostic review of the data
-// values encapsulated in the current DecimalSeparatorSpec
-// instance to determine if they are valid.
+//	IsValidInstanceError
 //
-// If any data element evaluates as invalid, this method will
-// return an error.
+//	Performs a diagnostic review of the data values
+//	encapsulated in the current DecimalSeparatorSpec
+//	instance to determine if they are valid.
 //
-// ------------------------------------------------------------------------
+//	If any data element evaluates as invalid, this
+//	method will return an error.
 //
-// Input Parameters
+// ----------------------------------------------------------------
+//
+// # Input Parameters
 //
 //	 errorPrefix                interface{}
-//		   - This object encapsulates error prefix text which is
-//		     included in all returned error messages. Usually, it
-//		     contains the name of the calling method or methods
-//		     listed as a method or function chain of execution.
 //
-//		     If no error prefix information is needed, set this parameter
-//		     to 'nil'.
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it	contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
 //
-//		     This empty interface must be convertible to one of the
-//		     following types:
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
 //
-//		     1. nil - A nil value is valid and generates an empty
-//		        collection of error prefix and error context
-//		        information.
+//		This empty interface must be convertible to one of
+//		the following types:
 //
-//		     2. string - A string containing error prefix information.
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
 //
-//		     3. []string A one-dimensional slice of strings containing
-//		        error prefix information
+//		2.	string
+//				A string containing error prefix
+//				information.
 //
-//		     4. [][2]string A two-dimensional slice of strings
-//		        containing error prefix and error context information.
+//		3. []string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
 //
-//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//		        from this object will be copied for use in error and
-//		        informational messages.
+//		4. [][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
 //
-//		     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//		        Information from this object will be copied for use in
-//		        error and informational messages.
+//		5. ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
 //
-//		     7. IBasicErrorPrefix - An interface to a method generating
-//		        a two-dimensional slice of strings containing error
-//		        prefix and error context information.
+//		6. *ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
 //
-//		     If parameter 'errorPrefix' is NOT convertible to one of
-//		     the valid types listed above, it will be considered
-//		     invalid and trigger the return of an error.
+//		7. IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
 //
-//		     Types ErrPrefixDto and IBasicErrorPrefix are included in
-//		     the 'errpref' software package,
-//		     "github.com/MikeAustin71/errpref".
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
 //
-// ------------------------------------------------------------------------
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
 //
-// Return Values
+// ----------------------------------------------------------------
 //
-//	err                        error
-//	   - If any of the internal member data variables contained in
-//	     the current instance of DecimalSeparatorSpec are found
-//	     to be invalid, this method will return an error.
+// # Return Values
 //
-//	     If an error message is returned, the text value of input
-//	     parameter 'errorPrefix' (error prefix) will be inserted or
-//	     prefixed at the beginning of the error message.
+//	err							error
+//
+//		If any of the internal member data variables contained
+//		in the current instance of DecimalSeparatorSpec are
+//		found to be invalid, this method will return an error.
+//
+//		If an error message is returned, the text value of
+//		input parameter 'errorPrefix' (error prefix) will be
+//		inserted or	prefixed at the beginning of the error
+//		message.
 func (decSeparatorSpec *DecimalSeparatorSpec) IsValidInstanceError(
 	errorPrefix interface{}) (
 	err error) {
@@ -678,113 +802,293 @@ func (decSeparatorSpec *DecimalSeparatorSpec) IsValidInstanceError(
 	return err
 }
 
-// NewRunes - Creates and returns a new instance of
-// DecimalSeparatorSpec populated with the decimal
-// separator character or characters contained in an
-// array runes passed by input parameter 'decSeparator'.
+//	NewEuropeanUnion
 //
-// Decimal Separators are comprised of a text character or
-// characters and are used to separate integer digits from
-// fractional digits in floating point numeric values.
+//	Creates and returns a new instance of
+//	DecimalSeparatorSpec configured with the radix
+//	point or decimal separator used by France,
+//	Germany and many other European Union member
+//	countries.
 //
-// This type performs two major functions.
+//	The radix point, or decimal separator (a.k.a.
+//	decimal point), used by France and Germany is
+//	the comma character (",").
 //
-// First, it is used by number string parsing functions to search
-// for decimal separators within a number string or string of
-// numeric digits. Number string parsing functions are designed to
-// convert strings of numeric text characters into numeric values.
+//	The comma character is therefore used as a
+//	radix point to separate integer and fractional
+//	digits within a floating point numeric value.
 //
-// Second, the DecimalSeparatorSpec type is used to format number
-// strings. Number string formatting functions likewise use the
-// Decimal Separator Specification to separate integer and
-// fractional numeric digits when formatting a number string
-// comprised of a floating point numeric value for presentation ond
-// display.
-//
-// The specific characters used as decimal separators vary by
-// country and culture.
-//
-// For example, in the United States, the decimal point or period
-// ('.') serves as the decimal separator. Example: 127.54
-//
-// In various European countries, the comma (',') is used as a
-// decimal separator. Example: 127,54
+//		Example: 1,45 (The fractional value is 45)
 //
 // ----------------------------------------------------------------
 //
-// Input Parameters
+// # Input Parameters
 //
-//	decSeparator               []rune
-//	   - An array of runes containing the character or
-//	     characters which will be configured as the
-//	     Decimal Separator Symbol or Symbols for the
-//	     returned instance of DecimalSeparatorSpec, the
-//	     Decimal Separator Specification.
+//	 errorPrefix                interface{}
 //
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it	contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
 //
-//	errorPrefix                interface{}
-//	   - This object encapsulates error prefix text which is
-//	     included in all returned error messages. Usually, it
-//	     contains the name of the calling method or methods
-//	     listed as a method or function chain of execution.
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
 //
-//	     If no error prefix information is needed, set this
-//	     parameter to 'nil'.
+//		This empty interface must be convertible to one of
+//		the following types:
 //
-//	     This empty interface must be convertible to one of the
-//	     following types:
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
 //
-//	     1. nil - A nil value is valid and generates an empty
-//	        collection of error prefix and error context
-//	        information.
+//		2.	string
+//				A string containing error prefix
+//				information.
 //
-//	     2. string - A string containing error prefix information.
+//		3. []string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
 //
-//	     3. []string A one-dimensional slice of strings containing
-//	        error prefix information
+//		4. [][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
 //
-//	     4. [][2]string A two-dimensional slice of strings
-//	        containing error prefix and error context information.
+//		5. ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//	        from this object will be copied for use in error and
-//	        informational messages.
+//		6. *ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
 //
-//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//	        Information from this object will be copied for use in
-//	        error and informational messages.
+//		7. IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
 //
-//	     7. IBasicErrorPrefix - An interface to a method generating
-//	        a two-dimensional slice of strings containing error
-//	        prefix and error context information.
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
 //
-//	     If parameter 'errorPrefix' is NOT convertible to one of
-//	     the valid types listed above, it will be considered
-//	     invalid and trigger the return of an error.
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
 //
-//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
-//	     the 'errpref' software package,
-//	     "github.com/MikeAustin71/errpref".
+// -----------------------------------------------------------------
 //
-// ------------------------------------------------------------------------
+// # Return Values
 //
-// Return Values
+//	newDecimalSeparator			DecimalSeparatorSpec
 //
-//	newDecimalSeparator        DecimalSeparatorSpec
-//	   - If this method completes successfully, this return
-//	     parameter is configured with the decimal separator
-//	     characters specified by input parameter, 'decSeparator'.
+//		If this method completes successfully, this
+//		parameter returns a new instance of
+//		DecimalSeparatorSpec configured with a
+//		single comma character (',').
 //
+//		The comma character is used by many European
+//		Union member countries as a radix point or
+//		decimal separator when formatting floating
+//		point numeric values.
 //
-//	err                        error
-//	   - If this method completes successfully and no errors are
-//	     encountered this return value is set to 'nil'. Otherwise,
-//	     if errors are encountered, this return value will contain
-//	     an appropriate error message.
+//	err							error
 //
-//	     If an error message is returned, the text value of input
-//	     parameter 'errorPrefix' will be inserted or prefixed at
-//	     the beginning of the error message.
+//		If this method completes successfully, the returned
+//		error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error message.
+//		This returned error message will incorporate the
+//		method chain and text passed by input parameter,
+//		'errorPrefix'. The 'errorPrefix' text will be attached
+//		to the beginning of	the error message.
+func (decSeparatorSpec *DecimalSeparatorSpec) NewEuropeanUnion(
+	errorPrefix interface{}) (
+	newDecimalSeparator DecimalSeparatorSpec,
+	err error) {
+
+	if decSeparatorSpec.lock == nil {
+		decSeparatorSpec.lock = new(sync.Mutex)
+	}
+
+	decSeparatorSpec.lock.Lock()
+
+	defer decSeparatorSpec.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"DecimalSeparatorSpec."+
+			"NewEuropeanUnion()",
+		"")
+
+	if err != nil {
+		return newDecimalSeparator, err
+	}
+
+	err = newDecimalSeparator.decimalSeparatorChars.SetRuneArray(
+		[]rune{','},
+		ePrefix.XCpy(
+			"decSeparatorSpec<-decSepRunes"))
+
+	if err != nil {
+		return newDecimalSeparator, err
+	}
+
+	err = newDecimalSeparator.decimalSeparatorChars.
+		SetCharacterSearchType(
+			CharSearchType.LinearTargetStartingIndex(),
+			ePrefix.XCpy(
+				"LinearTargetStartingIndex()"))
+
+	return newDecimalSeparator, err
+}
+
+//	NewRunes
+//
+//	Creates and returns a new instance of
+//	DecimalSeparatorSpec populated with the decimal
+//	separator character or characters contained in an
+//	array runes passed by input parameter 'decSeparator'.
+//
+//	Decimal Separators are comprised of a text character
+//	or characters and are used to separate integer digits
+//	from fractional digits in floating point numeric
+//	values.
+//
+//	The DecimalSeparatorSpec type performs two major
+//	functions.
+//
+//	First, it is used by number string parsing functions
+//	to search for decimal separators within a number
+//	string	or string of numeric digits. Number string
+//	parsing	functions are designed to convert strings
+//	of numeric text characters into numeric values.
+//
+//	Second, the DecimalSeparatorSpec type is used to
+//	format number strings. Number string formatting
+//	functions likewise use the Decimal Separator
+//	Specification to separate integer and fractional
+//	numeric digits when formatting a number string
+//	comprised of a floating point numeric value for
+//	presentation and display purposes.
+//
+//	The specific characters used as decimal separators
+//	vary by country and culture.
+//
+//	For example, in the United States, the decimal point
+//	or period ('.') serves as the decimal separator.
+//
+//		United States Example: 127.54
+//
+//	In various European countries, the comma (',') is used
+//	as a decimal separator.
+//
+//		European Example: 127,54
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	decSeparator				[]rune
+//
+//		An array of runes containing the character or
+//		characters which will be configured as the
+//		Decimal Separator Symbol or Symbols for the
+//		returned instance of DecimalSeparatorSpec, the
+//		Decimal Separator Specification.
+//
+//	 errorPrefix                interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it	contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3. []string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4. [][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5. ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6. *ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7. IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	newDecimalSeparator			DecimalSeparatorSpec
+//
+//		If this method completes successfully, this return
+//		parameter is configured with the decimal separator
+//		characters specified by input parameter,
+//		'decSeparator'.
+//
+//	err							error
+//
+//		If this method completes successfully, the returned
+//		error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error message.
+//		This returned error message will incorporate the
+//		method chain and text passed by input parameter,
+//		'errorPrefix'. The 'errorPrefix' text will be attached
+//		to the beginning of	the error message.
 func (decSeparatorSpec *DecimalSeparatorSpec) NewRunes(
 	decSeparator []rune,
 	errorPrefix interface{}) (
@@ -805,7 +1109,7 @@ func (decSeparatorSpec *DecimalSeparatorSpec) NewRunes(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"DecimalSeparatorSpec."+
-			"NewStr()",
+			"NewRunes()",
 		"")
 
 	if err != nil {
@@ -829,116 +1133,153 @@ func (decSeparatorSpec *DecimalSeparatorSpec) NewRunes(
 		ePrefix.XCpy(
 			"decSeparatorSpec<-decSepRunes"))
 
+	if err != nil {
+		return newDecimalSeparator, err
+	}
+
+	err = newDecimalSeparator.decimalSeparatorChars.
+		SetCharacterSearchType(
+			CharSearchType.LinearTargetStartingIndex(),
+			ePrefix.XCpy(
+				"LinearTargetStartingIndex()"))
+
 	return newDecimalSeparator, err
 }
 
-// NewStr - Creates and returns a new instance of
-// DecimalSeparatorSpec populated with the decimal
-// separator character or characters passed by input
-// parameter string, 'decSeparator'.
+//	NewStr
 //
-// Decimal Separators are comprised of a text character or
-// characters and are used to separate integer digits from
-// fractional digits in floating point numeric values.
+//	Creates and returns a new instance of
+//	DecimalSeparatorSpec populated with the decimal
+//	separator character or characters passed by input
+//	parameter string, 'decSeparator'.
 //
-// This type performs two major functions.
+//	Decimal Separators are comprised of a text character
+//	or characters and are used to separate integer
+//	digits from fractional digits in floating point
+//	numeric values.
 //
-// First, it is used by number string parsing functions to search
-// for decimal separators within a number string or string of
-// numeric digits. Number string parsing functions are designed to
-// convert strings of numeric text characters into numeric values.
+//	First, it is used by number string parsing functions
+//	to search for decimal separators within a number
+//	string	or string of numeric digits. Number string
+//	parsing	functions are designed to convert strings
+//	of numeric text characters into numeric values.
 //
-// Second, the DecimalSeparatorSpec type is used to format number
-// strings. Number string formatting functions likewise use the
-// Decimal Separator Specification to separate integer and
-// fractional numeric digits when formatting a number string
-// comprised of a floating point numeric value for presentation ond
-// display.
+//	Second, the DecimalSeparatorSpec type is used to
+//	format number strings. Number string formatting
+//	functions likewise use the Decimal Separator
+//	Specification to separate integer and fractional
+//	numeric digits when formatting a number string
+//	comprised of a floating point numeric value for
+//	presentation and display purposes.
 //
-// The specific characters used as decimal separators vary by
-// country and culture.
+//	The specific characters used as decimal separators
+//	vary by country and culture.
 //
-// For example, in the United States, the decimal point or period
-// ('.') serves as the decimal separator. Example: 127.54
+//	For example, in the United States, the decimal point
+//	or period ('.') serves as the decimal separator.
 //
-// In various European countries, the comma (',') is used as a
-// decimal separator. Example: 127,54
+//		United States Example: 127.54
+//
+//	In various European countries, the comma (',') is used
+//	as a decimal separator.
+//
+//		European Example: 127,54
 //
 // ----------------------------------------------------------------
 //
-// Input Parameters
+// # Input Parameters
 //
-//	 decSeparator               string
-//	   - This string contains the character or characters
-//	     which will be configured as the Decimal Separator
-//	     Symbol or Symbols for the returned instance of
-//	     DecimalSeparatorSpec, the Decimal Separator
-//	     Specification.
+//	decSeparator				string
+//
+//		This string contains the character or characters
+//		which will be configured as the Decimal Separator
+//		Symbol or Symbols for the returned instance of
+//		DecimalSeparatorSpec, the Decimal Separator
+//		Specification.
 //
 //
 //	 errorPrefix                interface{}
-//		   - This object encapsulates error prefix text which is
-//		     included in all returned error messages. Usually, it
-//		     contains the name of the calling method or methods
-//		     listed as a method or function chain of execution.
 //
-//		     If no error prefix information is needed, set this
-//	      parameter to 'nil'.
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it	contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
 //
-//		     This empty interface must be convertible to one of the
-//		     following types:
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
 //
-//		     1. nil - A nil value is valid and generates an empty
-//		        collection of error prefix and error context
-//		        information.
+//		This empty interface must be convertible to one of
+//		the following types:
 //
-//		     2. string - A string containing error prefix information.
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
 //
-//		     3. []string A one-dimensional slice of strings containing
-//		        error prefix information
+//		2.	string
+//				A string containing error prefix
+//				information.
 //
-//		     4. [][2]string A two-dimensional slice of strings
-//		        containing error prefix and error context information.
+//		3. []string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
 //
-//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//		        from this object will be copied for use in error and
-//		        informational messages.
+//		4. [][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
 //
-//		     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//		        Information from this object will be copied for use in
-//		        error and informational messages.
+//		5. ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
 //
-//		     7. IBasicErrorPrefix - An interface to a method generating
-//		        a two-dimensional slice of strings containing error
-//		        prefix and error context information.
+//		6. *ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
 //
-//		     If parameter 'errorPrefix' is NOT convertible to one of
-//		     the valid types listed above, it will be considered
-//		     invalid and trigger the return of an error.
+//		7. IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
 //
-//		     Types ErrPrefixDto and IBasicErrorPrefix are included in
-//		     the 'errpref' software package,
-//		     "github.com/MikeAustin71/errpref".
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
 //
-// ------------------------------------------------------------------------
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
 //
-// Return Values
+// ----------------------------------------------------------------
 //
-//	newDecimalSeparator        DecimalSeparatorSpec
-//	   - If this method completes successfully, this return
-//	     parameter is configured with the decimal separator
-//	     characters specified by input parameter, 'decSeparator'.
+// # Return Values
+//
+//	newDecimalSeparator			DecimalSeparatorSpec
+//
+//		If this method completes successfully, this return
+//		parameter is configured with the decimal separator
+//		characters specified by input parameter,
+//		'decSeparator'.
 //
 //
-//	err                        error
-//	   - If this method completes successfully and no errors are
-//	     encountered this return value is set to 'nil'. Otherwise,
-//	     if errors are encountered, this return value will contain
-//	     an appropriate error message.
+//	err							error
 //
-//	     If an error message is returned, the text value of input
-//	     parameter 'errorPrefix' will be inserted or prefixed at
-//	     the beginning of the error message.
+//		If this method completes successfully, the returned
+//		error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error message.
+//		This returned error message will incorporate the
+//		method chain and text passed by input parameter,
+//		'errorPrefix'. The 'errorPrefix' text will be attached
+//		to the beginning of	the error message.
 func (decSeparatorSpec *DecimalSeparatorSpec) NewStr(
 	decSeparator string,
 	errorPrefix interface{}) (
@@ -985,150 +1326,186 @@ func (decSeparatorSpec *DecimalSeparatorSpec) NewStr(
 		ePrefix.XCpy(
 			"decSeparatorSpec<-decSepRunes"))
 
+	if err != nil {
+		return newDecimalSeparator, err
+	}
+
+	err = newDecimalSeparator.decimalSeparatorChars.
+		SetCharacterSearchType(
+			CharSearchType.LinearTargetStartingIndex(),
+			ePrefix.XCpy(
+				"LinearTargetStartingIndex()"))
+
 	return newDecimalSeparator, err
 }
 
-// SearchForDecimalSeparator - Searches a target text character
-// string for the presence of a Decimal Separator Symbol or
-// Symbols specified by the current instance of
-// DecimalSeparatorSpec.
+//	SearchForDecimalSeparator
 //
-// This method is typically called by Number String parsing
-// functions.
+//	Searches a target text character string for the
+//	presence of a Decimal Separator Symbol or Symbols
+//	specified by the current instance of
+//	DecimalSeparatorSpec.
 //
-// Number String parsing functions search for a Decimal Separator
-// Symbol or Symbols in strings of numeric digits called
-// 'Number Strings'. Number String parsing functions review strings
-// of text characters containing numeric digits and convert those
-// numeric digits to numeric values. If a Decimal Separator Symbol
-// or Symbols are located in a Number String the digits to the
-// right of the Decimal Separator are considered fractional numeric
-// values and the digits to the left are considered integer numeric
-// values.
+//	This method is typically called by Number String
+//	parsing functions.
 //
-// If the Decimal Separator specified by the current instance of
-// DecimalSeparatorSpec is located in a Target Search String, this
-// method will return a boolean flag signalling success and the last
-// zero based string index of the Decimal Separator found in the
-// Target Search String.
+//	Number String parsing functions search for a Decimal
+//	Separator Symbol or Symbols in strings of numeric
+//	digits called 'Number Strings'. Number String parsing
+//	functions review strings of text characters
+//	containing numeric digits and convert those numeric
+//	digits to numeric values. If a Decimal Separator
+//	Symbol or Symbols are located in a Number String the
+//	digits to the right of the Decimal Separator are
+//	considered fractional numeric values and the digits
+//	to the left are considered integer numeric values.
 //
-// This method will also configure member variables used as
-// internal processing flags for the current instance of
-// DecimalSeparatorSpec:
+//	If the Decimal Separator specified by the current
+//	instance of DecimalSeparatorSpec is located in a
+//	Target Search String, this method will return a
+//	boolean flag signalling success and the last zero
+//	based string index of the Decimal Separator found
+//	in the Target Search String.
 //
-//	DecimalSeparatorSpec.foundDecimalSeparatorSymbols
-//	DecimalSeparatorSpec.foundDecimalSeparatorIndex
+//	This method will also configure member variables
+//	used as internal processing flags for the current
+//	instance of DecimalSeparatorSpec:
+//
+//		DecimalSeparatorSpec.foundDecimalSeparatorSymbols
+//		DecimalSeparatorSpec.foundDecimalSeparatorIndex
 //
 // ----------------------------------------------------------------
 //
 // # IMPORTANT
 //
-// Before starting the first iteration of a search for a Decimal
-// Separator, make certain you clear all the internal processing
-// flags for this instance of DecimalSeparatorSpec. Call method:
+//	Before starting the first iteration of a search for
+//	a Decimal Separator, make certain you clear all the
+//	internal processing flags for this instance of
+//	DecimalSeparatorSpec by calling method:
 //
-//	DecimalSeparatorSpec.EmptyProcessingFlags()
+//		DecimalSeparatorSpec.EmptyProcessingFlags()
 //
-// -----------------------------------------------------------------
+// ----------------------------------------------------------------
 //
-// Input Parameters
+// # Input Parameters
 //
-//		 targetSearchString           *RuneArrayDto
-//		    - A pointer to a RuneArrayDto. Type
-//		      RuneArrayDto contains the string of text
-//		      characters which will be searched for the presence of a
-//		      Decimal Separator Symbol or Symbols specified by the
-//		      current instance of DecimalSeparatorSpec.
+//	targetSearchString				*RuneArrayDto
 //
-//					  type RuneArrayDto struct {
-//		                CharsArray []rune
-//					  }
+//		A pointer to a RuneArrayDto. Type RuneArrayDto
+//		contains the string of text characters which will
+//		be searched for the presence of a Decimal
+//		Separator Symbol or Symbols specified by the
+//		current instance of DecimalSeparatorSpec.
+//
+//			type RuneArrayDto struct {
+//				CharsArray []rune
+//			}
+//
+//	 errorPrefix                	interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it	contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3. []string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4. [][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5. ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6. *ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7. IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	foundDecimalSeparatorSymbols	bool
+//
+//		A boolean status flag which signals the search of
+//		a target character string located the Decimal
+//		Separator Symbol or Symbols specified by the
+//		current instance of DecimalSeparatorSpec.
+//
+//		If the search operation successfully located the
+//		Decimal Separator Symbol(s), the return parameter
+//		will be set to 'true'.
+//
+//		If the search operation failed to locate the
+//		specified Decimal Separator Symbol(s), this return
+//		parameter will be set to 'false'.
 //
 //
-//	 errorPrefix                interface{}
-//		   - This object encapsulates error prefix text which is
-//		     included in all returned error messages. Usually, it
-//		     contains the name of the calling method or methods
-//		     listed as a method or function chain of execution.
+//	lastSearchIndex					int
 //
-//		     If no error prefix information is needed, set this parameter
-//		     to 'nil'.
+//		If the search operation successfully located the
+//		specified Decimal Separator Symbol(s), the return
+//		parameter will be set to the index in the target
+//		search string ('targetSearchString') occupied by
+//		the last text character in the specified Decimal
+//		Separator Symbol(s).
 //
-//		     This empty interface must be convertible to one of the
-//		     following types:
-//
-//		     1. nil - A nil value is valid and generates an empty
-//		        collection of error prefix and error context
-//		        information.
-//
-//		     2. string - A string containing error prefix information.
-//
-//		     3. []string A one-dimensional slice of strings containing
-//		        error prefix information
-//
-//		     4. [][2]string A two-dimensional slice of strings
-//		        containing error prefix and error context information.
-//
-//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//		        from this object will be copied for use in error and
-//		        informational messages.
-//
-//		     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//		        Information from this object will be copied for use in
-//		        error and informational messages.
-//
-//		     7. IBasicErrorPrefix - An interface to a method generating
-//		        a two-dimensional slice of strings containing error
-//		        prefix and error context information.
-//
-//		     If parameter 'errorPrefix' is NOT convertible to one of
-//		     the valid types listed above, it will be considered
-//		     invalid and trigger the return of an error.
-//
-//		     Types ErrPrefixDto and IBasicErrorPrefix are included in
-//		     the 'errpref' software package,
-//		     "github.com/MikeAustin71/errpref".
-//
-// ------------------------------------------------------------------------
-//
-// Return Values
-//
-//	foundDecimalSeparatorSymbols bool
-//	   - A boolean status flag which signals the search of a target
-//	     character string located the Decimal Separator Symbol or
-//	     Symbols specified by the current instance of
-//	     DecimalSeparatorSpec.
-//
-//	     If the search operation successfully located the Decimal
-//	     Separator Symbol(s), the return parameter will be set to
-//	     'true'.
-//
-//	     If the search operation failed to locate the specified
-//	     Decimal Separator Symbol(s), this return parameter will be
-//	     set to 'false'.
-//
-//
-//	lastSearchIndex              int
-//	   - If the search operation successfully located the specified
-//	     Decimal Separator Symbol(s), the return parameter will be
-//	     set to the index in the target search string
-//	     ('targetSearchString') occupied by the last text character
-//	     in the specified Decimal Separator Symbol(s).
 //	       Example:
 //	         Target Search String: "0123.56"
 //	         Decimal Separator Symbol: "."
 //	         lastIndex = 4
 //
 //
-//	err                          error
-//	   - If this method completes successfully and no errors are
-//	     encountered this return value is set to 'nil'. Otherwise,
-//	     if errors are encountered, this return value will contain
-//	     an appropriate error message.
+//	err							error
 //
-//	     If an error message is returned, the text value of input
-//	     parameter 'errorPrefix' will be inserted or prefixed at
-//	     the beginning of the error message.
+//		If this method completes successfully, the returned
+//		error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error message.
+//		This returned error message will incorporate the
+//		method chain and text passed by input parameter,
+//		'errorPrefix'. The 'errorPrefix' text will be attached
+//		to the beginning of	the error message.
 func (decSeparatorSpec *DecimalSeparatorSpec) SearchForDecimalSeparator(
 	targetInputParms CharSearchTargetInputParametersDto,
 	errorPrefix interface{}) (
@@ -1301,125 +1678,154 @@ func (decSeparatorSpec *DecimalSeparatorSpec) SearchForDecimalSeparator(
 	return decimalSearchResults, err
 }
 
-// SetDecimalSeparatorRunes - Sets the Decimal Separator Symbols
-// for the current instance of DecimalSeparatorSpec.
+//	SetDecimalSeparatorRunes
 //
-// Decimal Separators are comprised of a text character or
-// characters and are used to separate integer digits from
-// fractional digits in floating point numeric values.
+//	Sets the Decimal Separator Symbols for the current
+//	instance of DecimalSeparatorSpec.
 //
-// Type DecimalSeparatorSpec performs two major functions.
+//	Decimal Separators are comprised of a text character
+//	or characters and are used to separate integer digits
+//	from fractional digits in floating point numeric
+//	values.
 //
-// First, it is used by number string parsing functions to search
-// for decimal separators within a number string or string of
-// numeric digits. Number string parsing functions are designed to
-// convert strings of numeric text characters into numeric values.
+//	The DecimalSeparatorSpec type performs two major
+//	functions.
 //
-// Second, the DecimalSeparatorSpec type is used to format number
-// strings. Number string formatting functions likewise use the
-// Decimal Separator Specification to separate integer and
-// fractional numeric digits when formatting a number string
-// comprised of a floating point numeric value for presentation ond
-// display.
+//	First, it is used by number string parsing functions
+//	to search for decimal separators within a number
+//	string	or string of numeric digits. Number string
+//	parsing	functions are designed to convert strings
+//	of numeric text characters into numeric values.
 //
-// The specific characters used as decimal separators vary by
-// country and culture.
+//	Second, the DecimalSeparatorSpec type is used to
+//	format number strings. Number string formatting
+//	functions likewise use the Decimal Separator
+//	Specification to separate integer and fractional
+//	numeric digits when formatting a number string
+//	comprised of a floating point numeric value for
+//	presentation and display purposes.
 //
-// For example, in the United States, the decimal point or period
-// ('.') serves as the decimal separator. Example: 127.54
+//	The specific characters used as decimal separators
+//	vary by country and culture.
 //
-// In various European countries, the comma (',') is used as a
-// decimal separator. Example: 127,54
+//	For example, in the United States, the decimal point
+//	or period ('.') serves as the decimal separator.
 //
-// This method is identical in function to method:
+//		United States Example: 127.54
 //
-//	DecimalSeparatorSpec.SetDecimalSeparatorStr()
+//	In various European countries, the comma (',') is used
+//	as a decimal separator.
 //
-// The sole difference between the two methods is that this method
-// receives an array of runes as an input parameter.
+//		European Example: 127,54
+//
+//	This method is identical in function to method:
+//
+//		DecimalSeparatorSpec.SetDecimalSeparatorStr()
+//
+//	The sole difference between the two methods is that this
+//	method receives an array of runes as an input parameter.
 //
 // ----------------------------------------------------------------
 //
 // # IMPORTANT
 //
-// All the data fields in current DecimalSeparatorSpec instance
-// ('decSeparatorSpec') will be deleted and overwritten.
+//	All the data fields in current DecimalSeparatorSpec
+//	instance ('decSeparatorSpec') will be deleted and
+//	overwritten.
 //
 // ----------------------------------------------------------------
 //
-// Input Parameters
+// # Input Parameters
 //
-//		decSeparator               []rune
-//			   - This array of runes contains the character or
-//	          characters which will be configured as the Decimal
-//	          Separator Symbol for the current instance of
-//	          DecimalSeparatorSpec, the Decimal Separator
-//	          Specification.
+//	decSeparator				[]rune
 //
-//	          If 'decSeparator' is submitted as an empty or nil
-//	          array, it will be accepted, the current instance of
-//	          DecimalSeparatorSpec will be configured with an empty
-//	          decimal separator character array, and no error will
-//	          be returned.
+//		This array of runes contains the character or
+//		characters which will be configured as the Decimal
+//		Separator Symbol for the current instance of
+//		DecimalSeparatorSpec, the Decimal Separator
+//		Specification.
+//
+//		If 'decSeparator' is submitted as an empty or nil
+//		array, it will be accepted, the current instance of
+//		DecimalSeparatorSpec will be configured with an empty
+//		decimal separator character array, and no error will
+//		be returned.
 //
 //
-//		 errorPrefix                interface{}
-//			   - This object encapsulates error prefix text which is
-//			     included in all returned error messages. Usually, it
-//			     contains the name of the calling method or methods
-//			     listed as a method or function chain of execution.
+//	 errorPrefix                	interface{}
 //
-//			     If no error prefix information is needed, set this parameter
-//			     to 'nil'.
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it	contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
 //
-//			     This empty interface must be convertible to one of the
-//			     following types:
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
 //
-//			     1. nil - A nil value is valid and generates an empty
-//			        collection of error prefix and error context
-//			        information.
+//		This empty interface must be convertible to one of
+//		the following types:
 //
-//			     2. string - A string containing error prefix information.
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
 //
-//			     3. []string A one-dimensional slice of strings containing
-//			        error prefix information
+//		2.	string
+//				A string containing error prefix
+//				information.
 //
-//			     4. [][2]string A two-dimensional slice of strings
-//			        containing error prefix and error context information.
+//		3. []string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
 //
-//			     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//			        from this object will be copied for use in error and
-//			        informational messages.
+//		4. [][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
 //
-//			     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//			        Information from this object will be copied for use in
-//			        error and informational messages.
+//		5. ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
 //
-//			     7. IBasicErrorPrefix - An interface to a method generating
-//			        a two-dimensional slice of strings containing error
-//			        prefix and error context information.
+//		6. *ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
 //
-//			     If parameter 'errorPrefix' is NOT convertible to one of
-//			     the valid types listed above, it will be considered
-//			     invalid and trigger the return of an error.
+//		7. IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
 //
-//			     Types ErrPrefixDto and IBasicErrorPrefix are included in
-//			     the 'errpref' software package,
-//			     "github.com/MikeAustin71/errpref".
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
 //
-// ------------------------------------------------------------------------
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
 //
-// Return Values
+// ----------------------------------------------------------------
 //
-//	err                        error
-//	   - If this method completes successfully and no errors are
-//	     encountered this return value is set to 'nil'. Otherwise,
-//	     if errors are encountered, this return value will contain
-//	     an appropriate error message.
+// # Return Values
 //
-//	     If an error message is returned, the text value of input
-//	     parameter 'errorPrefix' will be inserted or prefixed at
-//	     the beginning of the error message.
+//	err							error
+//
+//		If this method completes successfully, the returned
+//		error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error message.
+//		This returned error message will incorporate the
+//		method chain and text passed by input parameter,
+//		'errorPrefix'. The 'errorPrefix' text will be attached
+//		to the beginning of	the error message.
 func (decSeparatorSpec *DecimalSeparatorSpec) SetDecimalSeparatorRunes(
 	decSeparator []rune,
 	errorPrefix interface{}) (
@@ -1485,124 +1891,153 @@ func (decSeparatorSpec *DecimalSeparatorSpec) SetDecimalSeparatorRunes(
 	return err
 }
 
-// SetDecimalSeparatorStr - Sets the Decimal Separator Symbols for
-// the current instance of DecimalSeparatorSpec.
+//	SetDecimalSeparatorStr
 //
-// Decimal Separators are comprised of a text character or
-// characters and are used to separate integer digits from
-// fractional digits in floating point numeric values.
+//	Sets the Decimal Separator Symbols for the current
+//	instance of DecimalSeparatorSpec.
 //
-// This type performs two major functions.
+//	Decimal Separators are comprised of a text character
+//	or characters and are used to separate integer digits
+//	from fractional digits in floating point numeric
+//	values.
 //
-// First, it is used by number string parsing functions to search
-// for decimal separators within a number string or string of
-// numeric digits. Number string parsing functions are designed to
-// convert strings of numeric text characters into numeric values.
+//	The DecimalSeparatorSpec type performs two major
+//	functions.
 //
-// Second, the DecimalSeparatorSpec type is used to format number
-// strings. Number string formatting functions likewise use the
-// Decimal Separator Specification to separate integer and
-// fractional numeric digits when formatting a number string
-// comprised of a floating point numeric value for presentation ond
-// display.
+//	First, it is used by number string parsing functions
+//	to search for decimal separators within a number
+//	string	or string of numeric digits. Number string
+//	parsing	functions are designed to convert strings
+//	of numeric text characters into numeric values.
 //
-// The specific characters used as decimal separators vary by
-// country and culture.
+//	Second, the DecimalSeparatorSpec type is used to
+//	format number strings. Number string formatting
+//	functions likewise use the Decimal Separator
+//	Specification to separate integer and fractional
+//	numeric digits when formatting a number string
+//	comprised of a floating point numeric value for
+//	presentation and display purposes.
 //
-// For example, in the United States, the decimal point or period
-// ('.') serves as the decimal separator. Example: 127.54
+//	The specific characters used as decimal separators
+//	vary by country and culture.
 //
-// In various European countries, the comma (',') is used as a
-// decimal separator. Example: 127,54
+//	For example, in the United States, the decimal point
+//	or period ('.') serves as the decimal separator.
 //
-// This method is identical in function to method:
+//		United States Example: 127.54
 //
-//	DecimalSeparatorSpec.SetDecimalSeparatorRunes()
+//	In various European countries, the comma (',') is used
+//	as a decimal separator.
 //
-// The sole difference between the two methods is that this method
-// receives a string as an input parameter.
+//		European Example: 127,54
+//
+//	This method is identical in function to method:
+//
+//		DecimalSeparatorSpec.SetDecimalSeparatorRunes()
+//
+//	The sole difference between the two methods is that this
+//	method receives a string as an input parameter.
 //
 // ----------------------------------------------------------------
 //
-// IMPORTANT
-// All the data fields in current DecimalSeparatorSpec instance
-// ('decSeparatorSpec') will be deleted and overwritten.
+// # IMPORTANT
+//
+//	All the data fields in current DecimalSeparatorSpec
+//	instance ('decSeparatorSpec') will be deleted and
+//	overwritten.
 //
 // ----------------------------------------------------------------
 //
-// Input Parameters
+// # Input Parameters
 //
-//		decSeparator               string
-//			   - This string contains the character or characters which
-//			     will be configured as the Decimal Separator Symbol or
-//			     Symbols for the current instance of
-//			     DecimalSeparatorSpec, the Decimal Separator
-//			     Specification.
+//	decSeparator				string
 //
-//	          If 'decSeparator' is submitted as an empty string,
-//	          it will be accepted, the current instance of
-//	          DecimalSeparatorSpec will be configured with an empty
-//	          decimal separator character array, and no error will
-//	          be returned.
+//		This string contains the character or characters
+//		which will be configured as the Decimal Separator
+//		Symbol or Symbols for the current instance of
+//		DecimalSeparatorSpec, the Decimal Separator
+//		Specification.
 //
+//		If 'decSeparator' is submitted as an empty string,
+//		it will be accepted, the current instance of
+//		DecimalSeparatorSpec will be configured with an
+//		empty decimal separator character array, and no
+//		error will be returned.
 //
-//		 errorPrefix                interface{}
-//			   - This object encapsulates error prefix text which is
-//			     included in all returned error messages. Usually, it
-//			     contains the name of the calling method or methods
-//			     listed as a method or function chain of execution.
+//	 errorPrefix                interface{}
 //
-//			     If no error prefix information is needed, set this parameter
-//			     to 'nil'.
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it	contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
 //
-//			     This empty interface must be convertible to one of the
-//			     following types:
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
 //
-//			     1. nil - A nil value is valid and generates an empty
-//			        collection of error prefix and error context
-//			        information.
+//		This empty interface must be convertible to one of
+//		the following types:
 //
-//			     2. string - A string containing error prefix information.
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
 //
-//			     3. []string A one-dimensional slice of strings containing
-//			        error prefix information
+//		2.	string
+//				A string containing error prefix
+//				information.
 //
-//			     4. [][2]string A two-dimensional slice of strings
-//			        containing error prefix and error context information.
+//		3. []string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
 //
-//			     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//			        from this object will be copied for use in error and
-//			        informational messages.
+//		4. [][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
 //
-//			     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//			        Information from this object will be copied for use in
-//			        error and informational messages.
+//		5. ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
 //
-//			     7. IBasicErrorPrefix - An interface to a method generating
-//			        a two-dimensional slice of strings containing error
-//			        prefix and error context information.
+//		6. *ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
 //
-//			     If parameter 'errorPrefix' is NOT convertible to one of
-//			     the valid types listed above, it will be considered
-//			     invalid and trigger the return of an error.
+//		7. IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
 //
-//			     Types ErrPrefixDto and IBasicErrorPrefix are included in
-//			     the 'errpref' software package,
-//			     "github.com/MikeAustin71/errpref".
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
 //
-// ------------------------------------------------------------------------
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
 //
-// Return Values
+// ----------------------------------------------------------------
 //
-//	err                        error
-//	   - If this method completes successfully and no errors are
-//	     encountered this return value is set to 'nil'. Otherwise,
-//	     if errors are encountered, this return value will contain
-//	     an appropriate error message.
+// # Return Values
 //
-//	     If an error message is returned, the text value of input
-//	     parameter 'errorPrefix' will be inserted or prefixed at
-//	     the beginning of the error message.
+//	err							error
+//
+//		If this method completes successfully, the returned
+//		error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error message.
+//		This returned error message will incorporate the
+//		method chain and text passed by input parameter,
+//		'errorPrefix'. The 'errorPrefix' text will be attached
+//		to the beginning of	the error message.
 func (decSeparatorSpec *DecimalSeparatorSpec) SetDecimalSeparatorStr(
 	decSeparator string,
 	errorPrefix interface{}) (
