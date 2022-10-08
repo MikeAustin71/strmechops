@@ -6,41 +6,52 @@ import (
 	"sync"
 )
 
-// DecimalSeparatorSpec - Decimal Separator Specification.
+// DecimalSeparatorSpec
 //
-// A decimal separator is one or more text characters used to
-// separate integer digits from fractional digits within a
-// number string.
+// Decimal Separator Specification.
 //
-// This type performs two major functions.
+// A decimal separator is one or more text characters
+// used to separate integer digits from fractional
+// digits within a number string.
 //
-// First, it is used by number string parsing functions to search
-// for decimal separators within a number string or string of
-// numeric digits. Number string parsing functions are designed to
-// convert strings of numeric text characters into numeric values.
+// The DecimalSeparatorSpec type performs two major
+// functions.
 //
-// Second, the DecimalSeparatorSpec type is used to format number
-// strings. Number string formatting functions likewise use the
-// Decimal Separator Specification to separate integer and
-// fractional numeric digits when formatting a number string
-// comprised of a floating point numeric value.
+// First, it is used by number string parsing functions
+// to search for decimal separators within a number
+// string	or string of numeric digits. Number string
+// parsing	functions are designed to convert strings
+// of numeric text characters into numeric values.
 //
-// Decimal Separators are comprised of a text character or
-// characters and are used to separate integer digits from
-// fractional digits in floating point numeric values.
+// Second, the DecimalSeparatorSpec type is used to
+// format number strings. Number string formatting
+// functions likewise use the Decimal Separator
+// Specification to separate integer and fractional
+// numeric digits when formatting a number string
+// comprised of a floating point numeric value for
+// presentation and display purposes.
 //
-// The specific characters used as decimal separators vary by
-// country and culture.
+// Decimal Separators are comprised of a text character
+// or characters and are used to separate integer
+// digits from fractional digits in floating point
+// numeric values.
 //
-// For example, in the United States, the decimal point or period
-// ('.') serves as the decimal separator. Example: 127.54
+// The specific characters used as decimal separators
+// vary by country and culture.
 //
-// In various European countries, the comma (',') is used as a
-// decimal separator. Example: 127,54
+// For example, in the United States, the decimal point
+// or period ('.') serves as the decimal separator.
 //
-// Type DecimalSeparatorSpec allows the user to configure a
-// detailed specification for a Decimal Separator character or
-// characters.
+//	United States Example: 127.54
+//
+// In various European countries, the comma (',') is
+// used as a decimal separator.
+//
+//	European Example: 127,54
+//
+// Type DecimalSeparatorSpec allows the user to configure
+// a detailed specification for a Decimal Separator
+// character or characters.
 type DecimalSeparatorSpec struct {
 	decimalSeparatorChars RuneArrayDto
 	// Contains the character or characters
