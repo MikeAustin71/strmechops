@@ -536,7 +536,7 @@ func (nStrIntGroupSpec *NumStrIntegerGroupingSpec) GetIntegerSeparatorDto(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumStrIntegerGroupingSpec."+
-			"GetIntegerSeparatorDto()",
+			"GetIntegerSeparatorSpec()",
 		"")
 
 	if err != nil {

@@ -6,8 +6,10 @@ import (
 	"sync"
 )
 
-// NumStrFormatSpec - The Number String Format Specification
-// contains parameters used to format signed numbers and
+// NumStrFormatSpec
+//
+// The Number String Format Specification contains
+// parameters used to format signed numbers and
 // currency numeric values as number strings.
 type NumStrFormatSpec struct {
 	decSeparator DecimalSeparatorSpec
@@ -15,8 +17,8 @@ type NumStrFormatSpec struct {
 	// characters which will separate integer and
 	// fractional digits in a floating point number.
 
-	intGroupingSpec NumStrIntegerGroupingSpec
-	// Integer Grouping Specification. This parameter
+	intGroupingSpec IntegerSeparatorSpec
+	// Integer Separator Specification. This parameter
 	// specifies the type of integer grouping and
 	// integer separator characters which will be
 	// applied to the number string formatting
@@ -570,7 +572,7 @@ func (numStrFmtSpec *NumStrFormatSpec) GetDecSeparatorStr() string {
 	return numStrFmtSpec.decSeparator.GetDecimalSeparatorStr()
 }
 
-// GetIntGroupingSpec - Returns a deep copy of the Integer
+// GetIntSeparatorSpec - Returns a deep copy of the Integer
 // Grouping Specification configured for the current instance
 // of NumStrFormatSpec.
 //
@@ -631,10 +633,10 @@ func (numStrFmtSpec *NumStrFormatSpec) GetDecSeparatorStr() string {
 //
 // # Return Values
 //
-//	NumStrIntegerGroupingSpec
+//	IntegerSeparatorSpec
 //
 //		If this method completes successfully, a deep copy of
-//		the Integer Grouping Specification configured for the
+//		the Integer Separator Specification configured for the
 //		current instance of NumStrFormatSpec will be
 //		returned.
 //
@@ -648,9 +650,9 @@ func (numStrFmtSpec *NumStrFormatSpec) GetDecSeparatorStr() string {
 //		If an error message is returned, the text value of input
 //		parameter 'errorPrefix' will be inserted or prefixed at
 //		the beginning of the error message.
-func (numStrFmtSpec *NumStrFormatSpec) GetIntGroupingSpec(
+func (numStrFmtSpec *NumStrFormatSpec) GetIntSeparatorSpec(
 	errorPrefix interface{}) (
-	NumStrIntegerGroupingSpec,
+	IntegerSeparatorSpec,
 	error) {
 
 	if numStrFmtSpec.lock == nil {
@@ -668,11 +670,11 @@ func (numStrFmtSpec *NumStrFormatSpec) GetIntGroupingSpec(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumStrFormatSpec."+
-			"GetIntGroupingSpec()",
+			"GetIntSeparatorSpec()",
 		"")
 
 	if err != nil {
-		return NumStrIntegerGroupingSpec{}, err
+		return IntegerSeparatorSpec{}, err
 	}
 
 	return numStrFmtSpec.intGroupingSpec.CopyOut(
@@ -727,10 +729,14 @@ func (numStrFmtSpec *NumStrFormatSpec) GetIntSeparatorChars() string {
 
 	defer numStrFmtSpec.lock.Unlock()
 
-	return numStrFmtSpec.intGroupingSpec.GetIntegerSeparatorChars()
+	str,
+		_ := numStrFmtSpec.intGroupingSpec.GetIntSeparatorStr(
+		nil)
+
+	return str
 }
 
-// GetIntegerSeparatorDto - Returns an instance of
+// GetIntegerSeparatorSpec - Returns an instance of
 // IntegerSeparatorSpec based on the configuration parameters
 // contained within the current instance of
 // NumStrFormatSpec.
@@ -813,7 +819,7 @@ func (numStrFmtSpec *NumStrFormatSpec) GetIntSeparatorChars() string {
 //		If an error message is returned, the text value of input
 //		parameter 'errorPrefix' will be inserted or prefixed at
 //		the beginning of the error message.
-func (numStrFmtSpec *NumStrFormatSpec) GetIntegerSeparatorDto(
+func (numStrFmtSpec *NumStrFormatSpec) GetIntegerSeparatorSpec(
 	errorPrefix interface{}) (
 	IntegerSeparatorSpec,
 	error) {
@@ -827,22 +833,29 @@ func (numStrFmtSpec *NumStrFormatSpec) GetIntegerSeparatorDto(
 	defer numStrFmtSpec.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
+
 	var err error
+
+	var newIntSeparatorSpec IntegerSeparatorSpec
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumStrFormatSpec."+
-			"GetIntegerSeparatorDto()",
+			"GetIntegerSeparatorSpec()",
 		"")
 
 	if err != nil {
-		return IntegerSeparatorSpec{}, err
+		return newIntSeparatorSpec, err
 	}
 
-	return numStrFmtSpec.intGroupingSpec.GetIntegerSeparatorDto(
-		ePrefix.XCpy(
-			"<-numStrFmtSpec.intGroupingSpec"))
+	newIntSeparatorSpec,
+		err =
+		numStrFmtSpec.intGroupingSpec.CopyOut(
+			ePrefix.XCpy(
+				"<-numStrFmtSpec.intGroupingSpec"))
+
+	return newIntSeparatorSpec, err
 }
 
 // GetIntSeparatorRunes - Returns a rune array containing the
@@ -892,7 +905,11 @@ func (numStrFmtSpec *NumStrFormatSpec) GetIntSeparatorRunes() []rune {
 
 	defer numStrFmtSpec.lock.Unlock()
 
-	return numStrFmtSpec.intGroupingSpec.GetIntegerSeparatorRunes()
+	intSepRunes,
+		_ := numStrFmtSpec.intGroupingSpec.GetIntSeparatorChars(
+		nil)
+
+	return intSepRunes
 }
 
 // GetNegativeNumSymSpec - Returns the Negative Number Symbol
@@ -1480,7 +1497,7 @@ func (numStrFmtSpec *NumStrFormatSpec) GetZeroNumSymSpec(
 //
 //	intGroupingSpec				NumStrIntegerGroupingSpec
 //
-//		Number String Integer Grouping Specification. This
+//		Number String Integer Separator Specification. This
 //		type encapsulates the parameters required to format
 //		integer grouping and separation within a Number
 //		String.
@@ -1492,9 +1509,9 @@ func (numStrFmtSpec *NumStrFormatSpec) GetZeroNumSymSpec(
 //		required to configure and apply a rounding
 //		algorithm for floating point Number Strings.
 //
-//	negativeNumberSign			NumStrNumberSymbolSpec
+//	negativeNumberSign			IntegerSeparatorSpec
 //
-//		This Number String Symbol Specification contains
+//		This Integer Separator Specification contains
 //		all the characters used to format number sign
 //		symbols and currency symbols for Number Strings
 //		with negative numeric values.
@@ -1596,7 +1613,7 @@ func (numStrFmtSpec *NumStrFormatSpec) GetZeroNumSymSpec(
 //		the error message.
 func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtComponents(
 	decSeparator DecimalSeparatorSpec,
-	intGroupingSpec NumStrIntegerGroupingSpec,
+	intGroupingSpec IntegerSeparatorSpec,
 	roundingSpec NumStrRoundingSpec,
 	negativeNumberSign NumStrNumberSymbolSpec,
 	positiveNumberSign NumStrNumberSymbolSpec,
@@ -2998,18 +3015,20 @@ func (numStrFmtSpec *NumStrFormatSpec) SetDecimalSeparatorSpec(
 //
 // # Input Parameters
 //
-//	intGroupingSpec				*NumStrIntegerGroupingSpec
+//	intGroupingSpec				IntegerSeparatorSpec
 //
-//		An instance of NumStrIntegerGroupingSpec. The member
-//		variable data values contained in this instance
-//		will be copied to the current instance of
-//		NumStrFormatSpec :
+//		An instance of Integer Separator Specification.
+//		The member variable data values contained in
+//		this structure will be copied to the current
+//		instance of	NumStrFormatSpec :
+//
 //			'NumStrFormatSpec.intGroupingSpec'.
 //
-//		In the United States, the Integer Group Specification
-//		character is a comma (',') and integer grouped in
-//		thousands.
-//			United States Example: 1,000,000,000
+//		In the United States, the Integer Separator
+//		Specification character is a comma (',') with
+//		integers grouped in	thousands.
+//
+//			United States Example: 1,000,000
 //
 //	 errorPrefix                interface{}
 //
@@ -3076,7 +3095,7 @@ func (numStrFmtSpec *NumStrFormatSpec) SetDecimalSeparatorSpec(
 //		'errorPrefix' text will be attached to the beginning of
 //		the error message.
 func (numStrFmtSpec *NumStrFormatSpec) SetIntegerGroupingSpec(
-	intGroupingSpec NumStrIntegerGroupingSpec,
+	intGroupingSpec IntegerSeparatorSpec,
 	errorPrefix interface{}) error {
 
 	if numStrFmtSpec.lock == nil {
@@ -3251,7 +3270,7 @@ func (numStrFmtSpec *NumStrFormatSpec) SetNegativeNumberFmtSpec(
 //
 //	numberFieldSpec				NumStrNumberFieldSpec
 //
-//		An instance of NumStrIntegerGroupingSpec. The member
+//		An instance of NumStrNumberFieldSpec. The member
 //		variable data values contained in this instance
 //		will be copied to the current instance of
 //		NumStrFormatSpec :
@@ -3615,10 +3634,10 @@ func (numStrFmtSpec *NumStrFormatSpec) SetRoundingSpec(
 //		which be used to separate integer and fractional
 //		digits within a formatted Number String.
 //
-//	intGroupingSpec				NumStrIntegerGroupingSpec
+//	intGroupingSpec				IntegerSeparatorSpec
 //
-//		Number String Integer Grouping Specification. This
-//		type encapsulates the parameters required to format
+//		Integer Separator Specification. This type
+//		encapsulates the parameters required to format
 //		integer grouping and separation within a Number
 //		String.
 //
@@ -3727,7 +3746,7 @@ func (numStrFmtSpec *NumStrFormatSpec) SetRoundingSpec(
 //		the error message.
 func (numStrFmtSpec *NumStrFormatSpec) SetNumFmtComponents(
 	decSeparator DecimalSeparatorSpec,
-	intGroupingSpec NumStrIntegerGroupingSpec,
+	intGroupingSpec IntegerSeparatorSpec,
 	roundingSpec NumStrRoundingSpec,
 	negativeNumberSign NumStrNumberSymbolSpec,
 	positiveNumberSign NumStrNumberSymbolSpec,
@@ -5245,8 +5264,7 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) copySignedNumberFormatSp
 		return err
 	}
 
-	err = new(numStrIntGroupingSpecNanobot).copyNStrIntGroupSpec(
-		&destinationSignedNumFmtSpec.intGroupingSpec,
+	err = destinationSignedNumFmtSpec.intGroupingSpec.CopyIn(
 		&sourceSignedNumFmtSpec.intGroupingSpec,
 		ePrefix.XCpy(
 			"destinationSignedNumFmtSpec.intGroupingSpec"+
@@ -5939,18 +5957,11 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtComponen
 		lock: nil,
 	}
 
-	var intGroupingSpec NumStrIntegerGroupingSpec
-
-	intGroupingSpec = NumStrIntegerGroupingSpec{
-		integerSeparatorChars: RuneArrayDto{
-			CharsArray:     []rune{' '},
-			Description1:   "",
-			Description2:   "",
-			charSearchType: CharSearchType.LinearTargetStartingIndex(),
-			lock:           nil,
-		},
-		intGroupingType: IntGroupingType.Thousands(),
-		lock:            nil,
+	intGroupingSpec := IntegerSeparatorSpec{
+		intSeparatorChars:          []rune{' '},
+		intSeparatorGrouping:       []uint{3},
+		restartIntGroupingSequence: false,
+		lock:                       nil,
 	}
 
 	var negativeNumberSign NumStrNumberSymbolSpec
@@ -6144,18 +6155,11 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtComponen
 		lock: nil,
 	}
 
-	var intGroupingSpec NumStrIntegerGroupingSpec
-
-	intGroupingSpec = NumStrIntegerGroupingSpec{
-		integerSeparatorChars: RuneArrayDto{
-			CharsArray:     []rune{','},
-			Description1:   "",
-			Description2:   "",
-			charSearchType: CharSearchType.LinearTargetStartingIndex(),
-			lock:           nil,
-		},
-		intGroupingType: IntGroupingType.Thousands(),
-		lock:            nil,
+	intGroupingSpec := IntegerSeparatorSpec{
+		intSeparatorChars:          []rune{','},
+		intSeparatorGrouping:       []uint{3},
+		restartIntGroupingSequence: false,
+		lock:                       nil,
 	}
 
 	var negativeNumberSign NumStrNumberSymbolSpec
@@ -6332,8 +6336,12 @@ func (signedNumFmtSpecAtom *numStrFmtSpecAtom) equal(
 		return false
 	}
 
-	if !signedNumFmtSpec1.intGroupingSpec.Equal(
-		&signedNumFmtSpec2.intGroupingSpec) {
+	areEqual,
+		_ := signedNumFmtSpec1.intGroupingSpec.Equal(
+		&signedNumFmtSpec2.intGroupingSpec,
+		nil)
+
+	if !areEqual {
 
 		return false
 	}
@@ -6676,7 +6684,7 @@ func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setIntegerGroupingParams(
 
 	signedNumFmt.intGroupingSpec.Empty()
 
-	err = signedNumFmt.intGroupingSpec.SetRunes(
+	err = signedNumFmt.intGroupingSpec.SetIntGroupEnumRunes(
 		intGroupingType,
 		intGroupingChars,
 		ePrefix.XCpy(
@@ -6690,9 +6698,9 @@ func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setIntegerGroupingParams(
 // contained in the instance of NumStrFormatSpec
 // passed as an input parameter.
 //
-// This method receives an instance of
-// 'NumStrIntegerGroupingSpec' and copies the member variable
-// data values to 'signedNumFmt.intGroupingSpec'.
+// This method receives an instance of IntegerSeparatorSpec
+// and copies the member variable data values to
+// 'signedNumFmt.intGroupingSpec'.
 //
 // ----------------------------------------------------------------
 //
@@ -6703,13 +6711,13 @@ func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setIntegerGroupingParams(
 //		A pointer to an instance of NumStrFormatSpec.
 //		All the member variable data values in this instance
 //		will be deleted and reset to the values contained
-//		in the Integer Grouping Specification supplied by
+//		in the Integer Separator Specification. supplied by
 //		input parameter, 'intGroupingSpec'.
 //
 //
-//	intGroupingSpec				NumStrIntegerGroupingSpec
+//	intGroupingSpec				IntegerSeparatorSpec
 //
-//		An instance of NumStrIntegerGroupingSpec. The member
+//		An instance of IntegerSeparatorSpec. The member
 //		variable data values contained in this instance
 //		will be copied to:
 //			'signedNumFmt.intGroupingSpec'.
@@ -6747,7 +6755,7 @@ func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setIntegerGroupingParams(
 //		attached at the beginning of the error message.
 func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setIntegerGroupingSpec(
 	signedNumFmt *NumStrFormatSpec,
-	intGroupingSpec NumStrIntegerGroupingSpec,
+	intGroupingSpec IntegerSeparatorSpec,
 	errPrefDto *ePref.ErrPrefixDto) error {
 
 	if signedNumFmtSpecAtom.lock == nil {
@@ -6781,14 +6789,12 @@ func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setIntegerGroupingSpec(
 		return err
 	}
 
-	signedNumFmt.intGroupingSpec.Empty()
-
-	return new(numStrIntGroupingSpecNanobot).copyNStrIntGroupSpec(
-		&signedNumFmt.intGroupingSpec,
+	return signedNumFmt.intGroupingSpec.CopyIn(
 		&intGroupingSpec,
 		ePrefix.XCpy(
 			"signedNumFmt.intGroupingSpec<-"+
 				"intGroupingSpec"))
+
 }
 
 // setNegativeNumberSign - Deletes and resets the member variable
@@ -7402,9 +7408,9 @@ func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setNumberFieldSpec(
 //		which be used to separate integer and fractional
 //		digits within a formatted Number String.
 //
-//	intGroupingSpec				NumStrIntegerGroupingSpec
+//	intGroupingSpec				IntegerSeparatorSpec
 //
-//		Number String Integer Grouping Specification. This
+//		Number String Integer Separator Specification. This
 //		type encapsulates the parameters required to format
 //		integer grouping and separation within a Number
 //		String.
@@ -7472,7 +7478,7 @@ func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setNumberFieldSpec(
 func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setNStrFmtComponents(
 	numStrFmtSpec *NumStrFormatSpec,
 	decSeparator DecimalSeparatorSpec,
-	intGroupingSpec NumStrIntegerGroupingSpec,
+	intGroupingSpec IntegerSeparatorSpec,
 	roundingSpec NumStrRoundingSpec,
 	negativeNumberSign NumStrNumberSymbolSpec,
 	positiveNumberSign NumStrNumberSymbolSpec,

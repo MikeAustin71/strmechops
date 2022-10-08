@@ -1260,7 +1260,7 @@ func (numStrKernelMolecule *numberStrKernelMolecule) formatNumStr(
 	var intSeparatorDto IntegerSeparatorSpec
 
 	intSeparatorDto,
-		err = nStrFormatSpec.GetIntegerSeparatorDto(
+		err = nStrFormatSpec.GetIntegerSeparatorSpec(
 		ePrefix)
 
 	if err != nil {
