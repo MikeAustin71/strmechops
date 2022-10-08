@@ -86,7 +86,7 @@ import (
 //	separation parameters, consider the following methods:
 //
 //		IntegerSeparatorDto.SetComponents()
-//		IntegerSeparatorDto.SetDetailRunes()
+//		IntegerSeparatorDto.SetComponentsRunes()
 type IntegerSeparatorDto struct {
 	intSeparatorChars []rune
 	//	A series of runes used to separate
@@ -5001,7 +5001,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetComponents(
 			ePrefix.XCpy("nStrIntSep"))
 }
 
-//	SetDetailRunes
+//	SetComponentsRunes
 //
 //	This method will overwrite and reset the internal
 //	member variable data values for the current
@@ -5193,7 +5193,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetComponents(
 //		chain and text passed by input parameter, 'errorPrefix'.
 //		The 'errorPrefix' text will be attached to the beginning
 //		of the error message.
-func (nStrIntSep *IntegerSeparatorDto) SetDetailRunes(
+func (nStrIntSep *IntegerSeparatorDto) SetComponentsRunes(
 	intSeparatorChars []rune,
 	intSeparatorGrouping []uint,
 	restartIntGroupingSequence bool,
@@ -5214,7 +5214,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetDetailRunes(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"IntegerSeparatorDto."+
-			"SetDetailRunes()",
+			"SetComponentsRunes()",
 		"")
 
 	if err != nil {
