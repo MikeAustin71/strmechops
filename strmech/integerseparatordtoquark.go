@@ -49,7 +49,7 @@ func (nStrIntSepQuark *integerSeparatorDtoQuark) empty(
 
 	nStrIntSep.intSeparatorChars = nil
 
-	nStrIntSep.intGroupingSequence = nil
+	nStrIntSep.intSeparatorGrouping = nil
 
 	nStrIntSep.restartIntGroupingSequence = false
 
@@ -107,12 +107,12 @@ func (nStrIntSepQuark *integerSeparatorDtoQuark) testValidityOfNumStrIntSeparato
 		return isValid, err
 	}
 
-	arrayLen := len(nStrIntSep.intGroupingSequence)
+	arrayLen := len(nStrIntSep.intSeparatorGrouping)
 
 	if arrayLen == 0 {
 		err = fmt.Errorf("%v\n"+
-			"Error: 'intGroupingSequence' is invalid!\n"+
-			"'intGroupingSequence' is a ZERO length rune array.\n",
+			"Error: 'intSeparatorGrouping' is invalid!\n"+
+			"'intSeparatorGrouping' is a ZERO length rune array.\n",
 			ePrefix.String())
 
 		return isValid, err
@@ -120,20 +120,20 @@ func (nStrIntSepQuark *integerSeparatorDtoQuark) testValidityOfNumStrIntSeparato
 
 	for i := 0; i < arrayLen; i++ {
 
-		if nStrIntSep.intGroupingSequence[i] == 0 {
+		if nStrIntSep.intSeparatorGrouping[i] == 0 {
 			err = fmt.Errorf("%v\n"+
-				"Error: 'intGroupingSequence' is invalid!\n"+
-				"'intGroupingSequence' element number '%v' has zero value.\n",
+				"Error: 'intSeparatorGrouping' is invalid!\n"+
+				"'intSeparatorGrouping' element number '%v' has zero value.\n",
 				ePrefix.String(),
 				i)
 
 			return isValid, err
 		}
 
-		if nStrIntSep.intGroupingSequence[i] > 1000000 {
+		if nStrIntSep.intSeparatorGrouping[i] > 1000000 {
 			err = fmt.Errorf("%v\n"+
-				"Error: 'intGroupingSequence' is invalid!\n"+
-				"'intGroupingSequence' element number '%v' has value\n"+
+				"Error: 'intSeparatorGrouping' is invalid!\n"+
+				"'intSeparatorGrouping' element number '%v' has value\n"+
 				"greater than 1,000,000!\n",
 				ePrefix.String(),
 				i)

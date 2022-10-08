@@ -225,14 +225,14 @@ func (nStrIntSepMolecule *integerSeparatorDtoMolecule) applyIntSeparators(
 
 	// If this is zero, an error would have been thrown by
 	// testValidityOfNumStrIntSeparator()
-	lenIGrpSeq := len(nStrIntSeparator.intGroupingSequence)
+	lenIGrpSeq := len(nStrIntSeparator.intSeparatorGrouping)
 
 	var minimumGroupLength uint = math.MaxUint32
 
 	for i := 0; i < lenIGrpSeq; i++ {
 
-		if nStrIntSeparator.intGroupingSequence[i] < minimumGroupLength {
-			minimumGroupLength = nStrIntSeparator.intGroupingSequence[i]
+		if nStrIntSeparator.intSeparatorGrouping[i] < minimumGroupLength {
+			minimumGroupLength = nStrIntSeparator.intSeparatorGrouping[i]
 		}
 
 	}
@@ -273,7 +273,7 @@ func (nStrIntSepMolecule *integerSeparatorDtoMolecule) applyIntSeparators(
 	*/
 
 	groupCnt := uint(0)
-	maxGroupCnt := nStrIntSeparator.intGroupingSequence[0]
+	maxGroupCnt := nStrIntSeparator.intSeparatorGrouping[0]
 	currGroupCntIdx := 0
 	lastGroupCntIdx := lenIGrpSeq - 1
 
@@ -298,19 +298,19 @@ func (nStrIntSepMolecule *integerSeparatorDtoMolecule) applyIntSeparators(
 					currGroupCntIdx = 0
 
 					maxGroupCnt =
-						nStrIntSeparator.intGroupingSequence[currGroupCntIdx]
+						nStrIntSeparator.intSeparatorGrouping[currGroupCntIdx]
 
 				} else {
 					// Repeat the Last Integer Grouping Index
 					maxGroupCnt =
-						nStrIntSeparator.intGroupingSequence[currGroupCntIdx]
+						nStrIntSeparator.intSeparatorGrouping[currGroupCntIdx]
 				}
 
 			} else {
 				// Go to the next Integer Grouping Index
 				currGroupCntIdx++
 
-				maxGroupCnt = nStrIntSeparator.intGroupingSequence[currGroupCntIdx]
+				maxGroupCnt = nStrIntSeparator.intSeparatorGrouping[currGroupCntIdx]
 
 			}
 
@@ -481,12 +481,12 @@ func (nStrIntSepMolecule *integerSeparatorDtoMolecule) copyIntSepDto(
 	}
 
 	err = sMechPreon.copyUnsignedIntArrays(
-		&destinationNStrIntSeparator.intGroupingSequence,
-		&sourceNStrIntSeparator.intGroupingSequence,
+		&destinationNStrIntSeparator.intSeparatorGrouping,
+		&sourceNStrIntSeparator.intSeparatorGrouping,
 		true,
 		ePrefix.XCpy(
-			"sourceNStrIntSeparator.intGroupingSequence->"+
-				"destinationNStrIntSeparator.intGroupingSequence"))
+			"sourceNStrIntSeparator.intSeparatorGrouping->"+
+				"destinationNStrIntSeparator.intSeparatorGrouping"))
 
 	if err != nil {
 		return err
@@ -613,15 +613,15 @@ func (nStrIntSepMolecule *integerSeparatorDtoMolecule) equal(
 		return isEqual, err
 	}
 
-	if nStrIntSepOne.intGroupingSequence != nil &&
-		nStrIntSepTwo.intGroupingSequence == nil {
+	if nStrIntSepOne.intSeparatorGrouping != nil &&
+		nStrIntSepTwo.intSeparatorGrouping == nil {
 		err = fmt.Errorf("%v\n"+
-			"Error: nStrIntSepOne.intGroupingSequence != nil\n"+
-			"nStrIntSepTwo.intGroupingSequence == nil\n"+
-			"nStrIntSepOne.intGroupingSequence='%v'\n"+
-			"nStrIntSepTwo.intGroupingSequence='nil'\n",
+			"Error: nStrIntSepOne.intSeparatorGrouping != nil\n"+
+			"nStrIntSepTwo.intSeparatorGrouping == nil\n"+
+			"nStrIntSepOne.intSeparatorGrouping='%v'\n"+
+			"nStrIntSepTwo.intSeparatorGrouping='nil'\n",
 			ePrefix.String(),
-			nStrIntSepOne.intGroupingSequence)
+			nStrIntSepOne.intSeparatorGrouping)
 
 		return isEqual, err
 	}
@@ -637,8 +637,8 @@ func (nStrIntSepMolecule *integerSeparatorDtoMolecule) equal(
 	}
 
 	isEqual = sMechPreon.equalUintArrays(
-		nStrIntSepOne.intGroupingSequence,
-		nStrIntSepTwo.intGroupingSequence)
+		nStrIntSepOne.intSeparatorGrouping,
+		nStrIntSepTwo.intSeparatorGrouping)
 
 	if !isEqual {
 		return isEqual, err

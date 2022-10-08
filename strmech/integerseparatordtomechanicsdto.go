@@ -113,7 +113,7 @@ func (intSeparatorMech *integerSeparatorDtoMechanics) setToFrenchDefaults(
 
 	nStrIntSep.intSeparatorChars = []rune{' '}
 
-	nStrIntSep.intGroupingSequence = []uint{3}
+	nStrIntSep.intSeparatorGrouping = []uint{3}
 
 	nStrIntSep.restartIntGroupingSequence = false
 
@@ -223,7 +223,7 @@ func (intSeparatorMech *integerSeparatorDtoMechanics) setToGermanDefaults(
 
 	nStrIntSep.intSeparatorChars = []rune{'.'}
 
-	nStrIntSep.intGroupingSequence = []uint{3}
+	nStrIntSep.intSeparatorGrouping = []uint{3}
 
 	nStrIntSep.restartIntGroupingSequence = false
 
@@ -327,7 +327,7 @@ func (intSeparatorMech *integerSeparatorDtoMechanics) setToUSADefaults(
 
 	nStrIntSep.intSeparatorChars = []rune{','}
 
-	nStrIntSep.intGroupingSequence = []uint{3}
+	nStrIntSep.intSeparatorGrouping = []uint{3}
 
 	nStrIntSep.restartIntGroupingSequence = false
 
@@ -380,7 +380,7 @@ func (intSeparatorMech *integerSeparatorDtoMechanics) setToUSADefaults(
 //	     error will be returned.
 //
 //
-//	intGroupingSequence        []uint
+//	intSeparatorGrouping        []uint
 //	   - These unsigned integer values specify the number of
 //	     integer digits within each group. This value is used to
 //	     group integers within a number string.
@@ -389,7 +389,7 @@ func (intSeparatorMech *integerSeparatorDtoMechanics) setToUSADefaults(
 //	     the decimal separator (a.k.a. decimal point) are separated
 //	     into groups of three digits representing a grouping of
 //	     'thousands' like this: '1,000,000,000'. In this case the
-//	     intGroupingSequence value would be set to three
+//	     intSeparatorGrouping value would be set to three
 //	     ([]uint{3}).
 //
 //	     In some countries and cultures other integer groupings are
@@ -401,20 +401,20 @@ func (intSeparatorMech *integerSeparatorDtoMechanics) setToUSADefaults(
 //	restartIntGroupingSequence bool
 //	   - If this flag is set to 'true', the grouping sequence
 //	     will be restarted at the beginning of the
-//	     'intGroupingSequence' array after completion of the last
-//	      group in the 'intGroupingSequence' array.
+//	     'intSeparatorGrouping' array after completion of the last
+//	      group in the 'intSeparatorGrouping' array.
 //	      Example:
 //	        restartIntGroupingSequence = 'true'
-//	        intGroupingSequence = uint{3,2}
+//	        intSeparatorGrouping = uint{3,2}
 //	        integer = 1234567890123456
 //	        result  = 1,23,456,78,901,23,456
 //
 //	     If this flag is set to 'false', the last element or
-//	     grouping in the 'intGroupingSequence' array will simply be
+//	     grouping in the 'intSeparatorGrouping' array will simply be
 //	     repeated for all the remaining integer digits.
 //	      Example:
 //	        restartIntGroupingSequence = 'false'
-//	        intGroupingSequence = uint{3,2}
+//	        intSeparatorGrouping = uint{3,2}
 //	        integer = 1234567890123456
 //	        result  = 1,23,45,67,89,01,23,456
 //
@@ -451,7 +451,7 @@ func (intSeparatorMech *integerSeparatorDtoMechanics) setToUSADefaults(
 func (intSeparatorMech *integerSeparatorDtoMechanics) setWithComponents(
 	nStrIntSep *IntegerSeparatorDto,
 	intSeparatorChars []rune,
-	intGroupingSequence []uint,
+	intSeparatorGrouping []uint,
 	restartIntGroupingSequence bool,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
@@ -520,11 +520,11 @@ func (intSeparatorMech *integerSeparatorDtoMechanics) setWithComponents(
 	}
 
 	err = sMechPreon.copyUnsignedIntArrays(
-		&nStrIntSep.intGroupingSequence,
-		&intGroupingSequence,
+		&nStrIntSep.intSeparatorGrouping,
+		&intSeparatorGrouping,
 		true,
 		ePrefix.XCpy(
-			"intGroupingSequence->nStrIntSep.intGroupingSequence"))
+			"intSeparatorGrouping->nStrIntSep.intSeparatorGrouping"))
 
 	if err != nil {
 		return err
