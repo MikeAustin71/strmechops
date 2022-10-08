@@ -2669,9 +2669,9 @@ func (numStrKernel *NumberStrKernel) GetFmtNumStr(
 //		which be used to separate integer and fractional
 //		digits within a formatted Number String.
 //
-//	intSeparatorDto				IntegerSeparatorDto
+//	intSeparatorDto				IntegerSeparatorSpec
 //
-//		Type IntegerSeparatorDto is designed to manage
+//		Type IntegerSeparatorSpec is designed to manage
 //		integer separators, primarily thousands separators,
 //		for different countries and cultures. The term
 //		'integer separators' is used because this type
@@ -2698,7 +2698,7 @@ func (numStrKernel *NumberStrKernel) GetFmtNumStr(
 //			https://en.wikipedia.org/wiki/Chinese_numerals
 //			https://en.wikipedia.org/wiki/Decimal_separator
 //
-//		The IntegerSeparatorDto type provides the flexibility
+//		The IntegerSeparatorSpec type provides the flexibility
 //		necessary to process these complex number separation
 //		formats.
 //
@@ -2812,7 +2812,7 @@ func (numStrKernel *NumberStrKernel) GetFmtNumStr(
 //	 	of the error message.
 func (numStrKernel *NumberStrKernel) GetFmtNumStrCustom(
 	decSeparator DecimalSeparatorSpec,
-	intSeparatorDto IntegerSeparatorDto,
+	intSeparatorDto IntegerSeparatorSpec,
 	roundingSpec NumStrRoundingSpec,
 	negativeNumberSign NumStrNumberSymbolSpec,
 	positiveNumberSign NumStrNumberSymbolSpec,

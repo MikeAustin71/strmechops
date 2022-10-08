@@ -6,15 +6,15 @@ import (
 	"sync"
 )
 
-type integerSeparatorDtoQuark struct {
+type integerSeparatorSpecQuark struct {
 	lock *sync.Mutex
 }
 
 // empty - Deletes and resets the data values for all member
-// variables within a IntegerSeparatorDto instance to their
+// variables within a IntegerSeparatorSpec instance to their
 // 'zero' values.
-func (nStrIntSepQuark *integerSeparatorDtoQuark) empty(
-	nStrIntSep *IntegerSeparatorDto,
+func (nStrIntSepQuark *integerSeparatorSpecQuark) empty(
+	nStrIntSep *IntegerSeparatorSpec,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
 
@@ -31,7 +31,7 @@ func (nStrIntSepQuark *integerSeparatorDtoQuark) empty(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"integerSeparatorDtoQuark.empty()",
+		"integerSeparatorSpecQuark.empty()",
 		"")
 
 	if err != nil {
@@ -57,12 +57,12 @@ func (nStrIntSepQuark *integerSeparatorDtoQuark) empty(
 }
 
 // testValidityOfNumStrIntSeparator - Tests the validity of a
-// IntegerSeparatorDto instance.
+// IntegerSeparatorSpec instance.
 //
-// If the IntegerSeparatorDto instance is judged invalid, this
+// If the IntegerSeparatorSpec instance is judged invalid, this
 // method will return an error and set 'isValid' to false.
-func (nStrIntSepQuark *integerSeparatorDtoQuark) testValidityOfNumStrIntSeparator(
-	nStrIntSep *IntegerSeparatorDto,
+func (nStrIntSepQuark *integerSeparatorSpecQuark) testValidityOfNumStrIntSeparator(
+	nStrIntSep *IntegerSeparatorSpec,
 	errPrefDto *ePref.ErrPrefixDto) (
 	isValid bool,
 	err error) {
@@ -80,7 +80,7 @@ func (nStrIntSepQuark *integerSeparatorDtoQuark) testValidityOfNumStrIntSeparato
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"integerSeparatorDtoQuark."+
+		"integerSeparatorSpecQuark."+
 			"testValidityOfNumStrIntSeparator()",
 		"")
 

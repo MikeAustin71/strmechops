@@ -263,10 +263,10 @@ func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) computeTimeDuration
 
 	numOfNanoseconds = totalNanoseconds
 
-	var nStrIntSeparator IntegerSeparatorDto
+	var nStrIntSeparator IntegerSeparatorSpec
 
 	nStrIntSeparator,
-		err = new(IntegerSeparatorDto).
+		err = new(IntegerSeparatorSpec).
 		NewUnitedStatesDefaults(
 			ePrefix.XCtxEmpty())
 
@@ -274,7 +274,7 @@ func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) computeTimeDuration
 		return timeDurationStrs, err
 	}
 
-	nStrIntSepMolecule := integerSeparatorDtoMolecule{}
+	nStrIntSepMolecule := integerSeparatorSpecMolecule{}
 
 	outputLine := ""
 	outputValStr := ""

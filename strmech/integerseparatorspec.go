@@ -6,9 +6,9 @@ import (
 	"sync"
 )
 
-//	IntegerSeparatorDto
+//	IntegerSeparatorSpec
 //
-//	Type IntegerSeparatorDto is designed to manage integer
+//	Type IntegerSeparatorSpec is designed to manage integer
 //	separators, primarily thousands separators, for
 //	different countries and cultures. The term
 //	'integer separators' is used because this type manages
@@ -52,42 +52,42 @@ import (
 //	https://en.wikipedia.org/wiki/Chinese_numerals
 //	https://en.wikipedia.org/wiki/Decimal_separator
 //
-//	The IntegerSeparatorDto type provides the flexibility
+//	The IntegerSeparatorSpec type provides the flexibility
 //	necessary to process these complex number separation
 //	formats.
 //
 // ----------------------------------------------------------------
 //
-//	# EASIEST WAY TO CREATE TYPE IntegerSeparatorDto
+//	# EASIEST WAY TO CREATE TYPE IntegerSeparatorSpec
 //
 //	The following methods offer the easiest and simplest
-//	means of creating a Type IntegerSeparatorDto. These
+//	means of creating a Type IntegerSeparatorSpec. These
 //	methods allow the user to create integer separation
 //	configurations for the vast majority of the world's
 //	countries and cultures using enumeration constants:
 //
-//		IntegerSeparatorDto.NewIntGroupEnum()
-//		IntegerSeparatorDto.NewIntGroupEnumRunes()
+//		IntegerSeparatorSpec.NewIntGroupEnum()
+//		IntegerSeparatorSpec.NewIntGroupEnumRunes()
 //
 //	To quickly implement some of the most common integer
 //	separation conventions, reference the following
 //	methods:
 //
-//		IntegerSeparatorDto.NewUnitedStatesDefaults()
-//		IntegerSeparatorDto.NewFrenchDefaults()
-//		IntegerSeparatorDto.NewGermanDefaults()
-//		IntegerSeparatorDto.NewIndiaNumberingDefault()
-//		IntegerSeparatorDto.NewChineseNumberingDefault()
-//		IntegerSeparatorDto.NewThousands()
-//		IntegerSeparatorDto.NewThousandsRunes()
+//		IntegerSeparatorSpec.NewUnitedStatesDefaults()
+//		IntegerSeparatorSpec.NewFrenchDefaults()
+//		IntegerSeparatorSpec.NewGermanDefaults()
+//		IntegerSeparatorSpec.NewIndiaNumberingDefault()
+//		IntegerSeparatorSpec.NewChineseNumberingDefault()
+//		IntegerSeparatorSpec.NewThousands()
+//		IntegerSeparatorSpec.NewThousandsRunes()
 //
 //	For specialty cases or complex integer separation
 //	scenarios requiring granular control over all integer
 //	separation parameters, consider the following methods:
 //
-//		IntegerSeparatorDto.SetComponents()
-//		IntegerSeparatorDto.SetComponentsRunes()
-type IntegerSeparatorDto struct {
+//		IntegerSeparatorSpec.SetComponents()
+//		IntegerSeparatorSpec.SetComponentsRunes()
+type IntegerSeparatorSpec struct {
 	intSeparatorChars []rune
 	//	A series of runes used to separate
 	//	integer digits.
@@ -181,8 +181,8 @@ type IntegerSeparatorDto struct {
 //	CopyIn
 //
 //	Copies the data fields from an incoming
-//	IntegerSeparatorDto instance to the data fields of
-//	the current IntegerSeparatorDto instance.
+//	IntegerSeparatorSpec instance to the data fields of
+//	the current IntegerSeparatorSpec instance.
 //
 //	If input parameter 'incomingNStrIntSeparator' is
 //	judged to be invalid, this method will return an
@@ -193,17 +193,17 @@ type IntegerSeparatorDto struct {
 // # IMPORTANT
 //
 //	Be advised, all the data fields in the current
-//	IntegerSeparatorDto instance will be overwritten.
+//	IntegerSeparatorSpec instance will be overwritten.
 //
 // ----------------------------------------------------------------
 //
 // # Input Parameters
 //
-//	incomingNStrIntSeparator	*IntegerSeparatorDto
+//	incomingNStrIntSeparator	*IntegerSeparatorSpec
 //
-//		A pointer to an instance of IntegerSeparatorDto.
+//		A pointer to an instance of IntegerSeparatorSpec.
 //		The data values in this object will be copied to
-//		the current IntegerSeparatorDto instance.
+//		the current IntegerSeparatorSpec instance.
 //
 //		If input parameter 'incomingNStrIntSeparator' is
 //		judged to be invalid, this method will return an
@@ -232,28 +232,28 @@ type IntegerSeparatorDto struct {
 //				A string containing error prefix
 //				information.
 //
-//		3. []string
+//		3.	[]string
 //				A one-dimensional slice of strings
 //				containing error prefix information.
 //
-//		4. [][2]string
+//		4.	[][2]string
 //				A two-dimensional slice of strings
 //		   		containing error prefix and error
 //		   		context information.
 //
-//		5. ErrPrefixDto
+//		5.	ErrPrefixDto
 //				An instance of ErrPrefixDto.
 //				Information from this object will
 //				be copied for use in error and
 //				informational messages.
 //
-//		6. *ErrPrefixDto
+//		6.	*ErrPrefixDto
 //				A pointer to an instance of
 //				ErrPrefixDto. Information from
 //				this object will be copied for use
 //				in error and informational messages.
 //
-//		7. IBasicErrorPrefix
+//		7.	IBasicErrorPrefix
 //				An interface to a method
 //				generating a two-dimensional slice
 //				of strings containing error prefix
@@ -283,8 +283,8 @@ type IntegerSeparatorDto struct {
 //		chain and text passed by input parameter, 'errorPrefix'.
 //		The 'errorPrefix' text will be attached to the beginning
 //		of the error message.
-func (nStrIntSep *IntegerSeparatorDto) CopyIn(
-	incomingNStrIntSeparator *IntegerSeparatorDto,
+func (nStrIntSep *IntegerSeparatorSpec) CopyIn(
+	incomingNStrIntSeparator *IntegerSeparatorSpec,
 	errorPrefix interface{}) error {
 
 	if nStrIntSep.lock == nil {
@@ -301,14 +301,14 @@ func (nStrIntSep *IntegerSeparatorDto) CopyIn(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"IntegerSeparatorDto.CopyIn()",
+		"IntegerSeparatorSpec.CopyIn()",
 		"")
 
 	if err != nil {
 		return err
 	}
 
-	return new(integerSeparatorDtoMolecule).
+	return new(integerSeparatorSpecMolecule).
 		copyIntSepDto(
 			nStrIntSep,
 			incomingNStrIntSeparator,
@@ -318,9 +318,9 @@ func (nStrIntSep *IntegerSeparatorDto) CopyIn(
 //	CopyOut
 //
 //	Creates and returns a deep copy of the current
-//	IntegerSeparatorDto instance.
+//	IntegerSeparatorSpec instance.
 //
-//	If the current IntegerSeparatorDto instance is
+//	If the current IntegerSeparatorSpec instance is
 //	judged to be invalid, this method will return an
 //	error.
 //
@@ -391,13 +391,13 @@ func (nStrIntSep *IntegerSeparatorDto) CopyIn(
 //
 // # Return Values
 //
-//	IntegerSeparatorDto
+//	IntegerSeparatorSpec
 //
 //		If this method completes successfully, a new
-//		instance of IntegerSeparatorDto will be created
+//		instance of IntegerSeparatorSpec will be created
 //		and returned containing all the data values
 //		copied from the current instance of
-//		IntegerSeparatorDto.
+//		IntegerSeparatorSpec.
 //
 //	error
 //
@@ -410,9 +410,9 @@ func (nStrIntSep *IntegerSeparatorDto) CopyIn(
 //		chain and text passed by input parameter, 'errorPrefix'.
 //		The 'errorPrefix' text will be attached to the beginning
 //		of the error message.
-func (nStrIntSep *IntegerSeparatorDto) CopyOut(
+func (nStrIntSep *IntegerSeparatorSpec) CopyOut(
 	errorPrefix interface{}) (
-	deepCopyIntSepDto IntegerSeparatorDto,
+	deepCopyIntSepDto IntegerSeparatorSpec,
 	err error) {
 
 	if nStrIntSep.lock == nil {
@@ -428,14 +428,14 @@ func (nStrIntSep *IntegerSeparatorDto) CopyOut(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"IntegerSeparatorDto.CopyOut()",
+		"IntegerSeparatorSpec.CopyOut()",
 		"")
 
 	if err != nil {
 		return deepCopyIntSepDto, err
 	}
 
-	err = new(integerSeparatorDtoMolecule).
+	err = new(integerSeparatorSpecMolecule).
 		copyIntSepDto(
 			&deepCopyIntSepDto,
 			nStrIntSep,
@@ -448,9 +448,9 @@ func (nStrIntSep *IntegerSeparatorDto) CopyOut(
 //	Empty
 //
 //	Resets all internal member variables for the current
-//	instance of IntegerSeparatorDto to their zero or
+//	instance of IntegerSeparatorSpec to their zero or
 //	uninitialized states. This method will leave the
-//	current instance of IntegerSeparatorDto in an invalid
+//	current instance of IntegerSeparatorSpec in an invalid
 //	state and unavailable for immediate reuse.
 //
 // ----------------------------------------------------------------
@@ -458,7 +458,7 @@ func (nStrIntSep *IntegerSeparatorDto) CopyOut(
 // # IMPORTANT
 //
 //	This method will delete all member variable data
-//	values in the current instance of IntegerSeparatorDto.
+//	values in the current instance of IntegerSeparatorSpec.
 //	All member variable data values will be reset to their
 //	zero or uninitialized states.
 //
@@ -473,14 +473,14 @@ func (nStrIntSep *IntegerSeparatorDto) CopyOut(
 // # Return Values
 //
 //	NONE
-func (nStrIntSep *IntegerSeparatorDto) Empty() {
+func (nStrIntSep *IntegerSeparatorSpec) Empty() {
 	if nStrIntSep.lock == nil {
 		nStrIntSep.lock = new(sync.Mutex)
 	}
 
 	nStrIntSep.lock.Lock()
 
-	_ = new(integerSeparatorDtoQuark).
+	_ = new(integerSeparatorSpecQuark).
 		empty(
 			nStrIntSep,
 			nil)
@@ -494,22 +494,22 @@ func (nStrIntSep *IntegerSeparatorDto) Empty() {
 
 //	Equal
 //
-//	Receives a pointer to an IntegerSeparatorDto object
+//	Receives a pointer to an IntegerSeparatorSpec object
 //	and proceeds to determine whether all data elements
 //	in this object are equal to all corresponding data
 //	elements in the current instance of
-//	IntegerSeparatorDto.
+//	IntegerSeparatorSpec.
 //
 // ----------------------------------------------------------------
 //
 //	# Input Parameters
 //
-//	nStrIntSepDto				*IntegerSeparatorDto
+//	nStrIntSepDto				*IntegerSeparatorSpec
 //
 //		This method will compare all data elements in
-//		the current IntegerSeparatorDto object to
+//		the current IntegerSeparatorSpec object to
 //		corresponding data elements in this second
-//		IntegerSeparatorDto object in order to determine
+//		IntegerSeparatorSpec object in order to determine
 //		equivalency.
 //
 //	 errorPrefix                interface{}
@@ -578,7 +578,7 @@ func (nStrIntSep *IntegerSeparatorDto) Empty() {
 //	bool
 //
 //		If all the data elements in the current
-//		IntegerSeparatorDto instance are equal to all
+//		IntegerSeparatorSpec instance are equal to all
 //		the corresponding data elements in 'nStrIntSepDto',
 //		this return parameter will be set to 'true'. If all
 //		the data elements are NOT equal, this return
@@ -588,7 +588,7 @@ func (nStrIntSep *IntegerSeparatorDto) Empty() {
 //	error
 //
 //		If all the data elements in the current
-//		IntegerSeparatorDto instance are equal to all the
+//		IntegerSeparatorSpec instance are equal to all the
 //		corresponding data elements	contained in input
 //		parameter 'nStrIntSepDto', this return parameter
 //		will be set to 'nil'.
@@ -602,8 +602,8 @@ func (nStrIntSep *IntegerSeparatorDto) Empty() {
 //		chain and text passed by input parameter,
 //		'errorPrefix'. The 'errorPrefix' text will be
 //		attached to the beginning of the error message.
-func (nStrIntSep *IntegerSeparatorDto) Equal(
-	nStrIntSepDto *IntegerSeparatorDto,
+func (nStrIntSep *IntegerSeparatorSpec) Equal(
+	nStrIntSepDto *IntegerSeparatorSpec,
 	errorPrefix interface{}) (
 	bool,
 	error) {
@@ -622,14 +622,14 @@ func (nStrIntSep *IntegerSeparatorDto) Equal(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"IntegerSeparatorDto.Equal())",
+		"IntegerSeparatorSpec.Equal())",
 		"")
 
 	if err != nil {
 		return false, err
 	}
 
-	return new(integerSeparatorDtoMolecule).
+	return new(integerSeparatorSpecMolecule).
 		equal(
 			nStrIntSep,
 			nStrIntSepDto,
@@ -640,7 +640,7 @@ func (nStrIntSep *IntegerSeparatorDto) Equal(
 //	GetIntSeparatorChars
 //
 //	Returns the integer digit separator characters for
-//	the current IntegerSeparatorDto instance as an array
+//	the current IntegerSeparatorSpec instance as an array
 //	of runes.
 //
 //	If the rune array is zero length, an error will be
@@ -730,7 +730,7 @@ func (nStrIntSep *IntegerSeparatorDto) Equal(
 //		chain and text passed by input parameter, 'errorPrefix'.
 //		The 'errorPrefix' text will be attached to the beginning
 //		of the error message.
-func (nStrIntSep *IntegerSeparatorDto) GetIntSeparatorChars(
+func (nStrIntSep *IntegerSeparatorSpec) GetIntSeparatorChars(
 	errorPrefix interface{}) ([]rune, error) {
 
 	if nStrIntSep.lock == nil {
@@ -747,7 +747,7 @@ func (nStrIntSep *IntegerSeparatorDto) GetIntSeparatorChars(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"IntegerSeparatorDto.GetIntSeparatorChars()",
+		"IntegerSeparatorSpec.GetIntSeparatorChars()",
 		"")
 
 	if err != nil {
@@ -784,7 +784,7 @@ func (nStrIntSep *IntegerSeparatorDto) GetIntSeparatorChars(
 //
 //	Returns an unsigned integer representing the number
 //	of integer digits included in an integer group for
-//	the current IntegerSeparatorDto instance.
+//	the current IntegerSeparatorSpec instance.
 //
 //	This unsigned integer value is used to group integers
 //	within a number string.
@@ -831,8 +831,8 @@ func (nStrIntSep *IntegerSeparatorDto) GetIntSeparatorChars(
 //
 //		An array of unsigned integer detailing the integer
 //		grouping sequence for the current instance of
-//		IntegerSeparatorDto.
-func (nStrIntSep *IntegerSeparatorDto) GetIntegerGrouping() []uint {
+//		IntegerSeparatorSpec.
+func (nStrIntSep *IntegerSeparatorSpec) GetIntegerGrouping() []uint {
 
 	if nStrIntSep.lock == nil {
 		nStrIntSep.lock = new(sync.Mutex)
@@ -863,7 +863,7 @@ func (nStrIntSep *IntegerSeparatorDto) GetIntegerGrouping() []uint {
 //	These numeric character digits are then
 //	grouped and separated using the Integer
 //	Separation parameters provided by the
-//	current instance of IntegerSeparatorDto.
+//	current instance of IntegerSeparatorSpec.
 //
 //	Example:
 //		     Pure Number String: 123456
@@ -882,7 +882,7 @@ func (nStrIntSep *IntegerSeparatorDto) GetIntegerGrouping() []uint {
 //		These numeric character digits are then	grouped and
 //		separated using the Integer Separation parameters
 //		provided by the	current instance of
-//		IntegerSeparatorDto.
+//		IntegerSeparatorSpec.
 //
 //		If this string contains any non-numeric characters,
 //		an error will be returned.
@@ -956,7 +956,7 @@ func (nStrIntSep *IntegerSeparatorDto) GetIntegerGrouping() []uint {
 //		formatted string of integer digits will be
 //		returned incorporating the integer grouping
 //		and separation characters specified by the
-//		current instance of IntegerSeparatorDto.
+//		current instance of IntegerSeparatorSpec.
 //
 //	error
 //
@@ -969,7 +969,7 @@ func (nStrIntSep *IntegerSeparatorDto) GetIntegerGrouping() []uint {
 //		method chain and text passed by input parameter,
 //		'errorPrefix'. The 'errorPrefix' text will be attached
 //		to the beginning of	the error message.
-func (nStrIntSep *IntegerSeparatorDto) GetFmtIntSeparatedNumStr(
+func (nStrIntSep *IntegerSeparatorSpec) GetFmtIntSeparatedNumStr(
 	pureNumString string,
 	errorPrefix interface{}) (
 	string,
@@ -990,7 +990,7 @@ func (nStrIntSep *IntegerSeparatorDto) GetFmtIntSeparatedNumStr(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"IntegerSeparatorDto."+
+		"IntegerSeparatorSpec."+
 			"GetFmtIntSeparatedNumStr()",
 		"")
 
@@ -1001,7 +1001,7 @@ func (nStrIntSep *IntegerSeparatorDto) GetFmtIntSeparatedNumStr(
 	var numStrWithIntSeps []rune
 
 	numStrWithIntSeps,
-		err = new(integerSeparatorDtoMolecule).applyIntSeparators(
+		err = new(integerSeparatorSpecMolecule).applyIntSeparators(
 		nStrIntSep,
 		[]rune(pureNumString),
 		ePrefix.XCpy(
@@ -1019,7 +1019,7 @@ func (nStrIntSep *IntegerSeparatorDto) GetFmtIntSeparatedNumStr(
 //	These numeric character digits are then
 //	grouped and separated using the Integer
 //	Separation parameters provided by the
-//	current instance of IntegerSeparatorDto.
+//	current instance of IntegerSeparatorSpec.
 //
 //	Example:
 //		     Pure Number String: 123456
@@ -1038,7 +1038,7 @@ func (nStrIntSep *IntegerSeparatorDto) GetFmtIntSeparatedNumStr(
 //		These numeric character digits are then	grouped and
 //		separated using the Integer Separation parameters
 //		provided by the	current instance of
-//		IntegerSeparatorDto.
+//		IntegerSeparatorSpec.
 //
 //		If this rune array contains any non-numeric characters,
 //		an error will be returned.
@@ -1112,7 +1112,7 @@ func (nStrIntSep *IntegerSeparatorDto) GetFmtIntSeparatedNumStr(
 //		formatted rune array of integer digits will
 //		be returned incorporating the integer grouping
 //		and separation characters specified by the
-//		current instance of IntegerSeparatorDto.
+//		current instance of IntegerSeparatorSpec.
 //
 //	error
 //
@@ -1125,7 +1125,7 @@ func (nStrIntSep *IntegerSeparatorDto) GetFmtIntSeparatedNumStr(
 //		method chain and text passed by input parameter,
 //		'errorPrefix'. The 'errorPrefix' text will be attached
 //		to the beginning of	the error message.
-func (nStrIntSep *IntegerSeparatorDto) GetFmtIntSeparatedNumRunes(
+func (nStrIntSep *IntegerSeparatorSpec) GetFmtIntSeparatedNumRunes(
 	pureNumberRunes []rune,
 	errorPrefix interface{}) (
 	[]rune,
@@ -1146,7 +1146,7 @@ func (nStrIntSep *IntegerSeparatorDto) GetFmtIntSeparatedNumRunes(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"IntegerSeparatorDto."+
+		"IntegerSeparatorSpec."+
 			"GetFmtIntSeparatedNumRunes()",
 		"")
 
@@ -1157,7 +1157,7 @@ func (nStrIntSep *IntegerSeparatorDto) GetFmtIntSeparatedNumRunes(
 	var numRunesWithIntSeps []rune
 
 	numRunesWithIntSeps,
-		err = new(integerSeparatorDtoMolecule).applyIntSeparators(
+		err = new(integerSeparatorSpecMolecule).applyIntSeparators(
 		nStrIntSep,
 		pureNumberRunes,
 		ePrefix.XCpy(
@@ -1170,7 +1170,7 @@ func (nStrIntSep *IntegerSeparatorDto) GetFmtIntSeparatedNumRunes(
 //
 //	Returns the internal member variable
 //	'restartIntGroupingSequence' for the current
-//	IntegerSeparatorDto instance.
+//	IntegerSeparatorSpec instance.
 //
 //	If this flag is set to 'true', the grouping
 //	sequence will be restarted at the beginning
@@ -1233,7 +1233,7 @@ func (nStrIntSep *IntegerSeparatorDto) GetFmtIntSeparatedNumRunes(
 //				intSeparatorGrouping = uint{3,2}
 //				integer = 1234567890123456
 //				result  = 1,23,45,67,89,01,23,456
-func (nStrIntSep *IntegerSeparatorDto) GetRestartIntGroupingSequence() bool {
+func (nStrIntSep *IntegerSeparatorSpec) GetRestartIntGroupingSequence() bool {
 
 	if nStrIntSep.lock == nil {
 		nStrIntSep.lock = new(sync.Mutex)
@@ -1249,7 +1249,7 @@ func (nStrIntSep *IntegerSeparatorDto) GetRestartIntGroupingSequence() bool {
 //	IsValidInstance
 //
 //	Performs a diagnostic review of the current
-//	IntegerSeparatorDto instance to determine
+//	IntegerSeparatorSpec instance to determine
 //	whether the current instance is valid in all
 //	respects.
 //
@@ -1266,16 +1266,16 @@ func (nStrIntSep *IntegerSeparatorDto) GetRestartIntGroupingSequence() bool {
 //	isValid						bool
 //
 //		This returned boolean value will signal
-//		whether the current IntegerSeparatorDto
+//		whether the current IntegerSeparatorSpec
 //		instance is valid, or not.
 //
-//		If the current IntegerSeparatorDto instance
+//		If the current IntegerSeparatorSpec instance
 //		contains valid data, this  method returns
 //		'true'.
 //
-//		If the current IntegerSeparatorDto instance
+//		If the current IntegerSeparatorSpec instance
 //		is invalid, this method will return 'false'.
-func (nStrIntSep *IntegerSeparatorDto) IsValidInstance() (
+func (nStrIntSep *IntegerSeparatorSpec) IsValidInstance() (
 	isValid bool) {
 
 	if nStrIntSep.lock == nil {
@@ -1288,7 +1288,7 @@ func (nStrIntSep *IntegerSeparatorDto) IsValidInstance() (
 
 	isValid,
 		_ =
-		new(integerSeparatorDtoQuark).
+		new(integerSeparatorSpecQuark).
 			testValidityOfNumStrIntSeparator(
 				nStrIntSep,
 				nil)
@@ -1298,7 +1298,7 @@ func (nStrIntSep *IntegerSeparatorDto) IsValidInstance() (
 
 //	IsValidInstanceError
 //	Performs a diagnostic review of the current
-//	IntegerSeparatorDto instance to determine whether
+//	IntegerSeparatorSpec instance to determine whether
 //	the current instance is valid in all respects.
 //
 // ----------------------------------------------------------------
@@ -1370,7 +1370,7 @@ func (nStrIntSep *IntegerSeparatorDto) IsValidInstance() (
 //
 //	err							error
 //
-//		If the current instance of IntegerSeparatorDto
+//		If the current instance of IntegerSeparatorSpec
 //		contains invalid data, a detailed error message
 //		will be returned identifying the invalid data item.
 //
@@ -1383,7 +1383,7 @@ func (nStrIntSep *IntegerSeparatorDto) IsValidInstance() (
 //
 //		If the current instance is valid, this error parameter
 //	    will be set to nil.
-func (nStrIntSep *IntegerSeparatorDto) IsValidInstanceError(
+func (nStrIntSep *IntegerSeparatorSpec) IsValidInstanceError(
 	errorPrefix interface{}) (
 	err error) {
 
@@ -1400,7 +1400,7 @@ func (nStrIntSep *IntegerSeparatorDto) IsValidInstanceError(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"IntegerSeparatorDto.IsValidInstanceError()",
+		"IntegerSeparatorSpec.IsValidInstanceError()",
 		"")
 
 	if err != nil {
@@ -1409,7 +1409,7 @@ func (nStrIntSep *IntegerSeparatorDto) IsValidInstanceError(
 
 	_,
 		err =
-		new(integerSeparatorDtoQuark).
+		new(integerSeparatorSpecQuark).
 			testValidityOfNumStrIntSeparator(
 				nStrIntSep,
 				ePrefix)
@@ -1419,7 +1419,7 @@ func (nStrIntSep *IntegerSeparatorDto) IsValidInstanceError(
 
 //	NewChineseNumbering
 //
-//	Returns a new instance of IntegerSeparatorDto
+//	Returns a new instance of IntegerSeparatorSpec
 //	configured for the Chinese Numbering System
 //	integer digit grouping.
 //
@@ -1561,10 +1561,10 @@ func (nStrIntSep *IntegerSeparatorDto) IsValidInstanceError(
 //
 // # Return Values
 //
-//	IntegerSeparatorDto
+//	IntegerSeparatorSpec
 //
 //		If this method completes successfully, a new instance of
-//		IntegerSeparatorDto, configured with Chinese Numbering
+//		IntegerSeparatorSpec, configured with Chinese Numbering
 //		System integer grouping, will be created and returned.
 //
 //	error
@@ -1578,10 +1578,10 @@ func (nStrIntSep *IntegerSeparatorDto) IsValidInstanceError(
 //		and text passed by input parameter, 'errorPrefix'. The
 //		'errorPrefix' text will be attached to the beginning of
 //		the error message.
-func (nStrIntSep *IntegerSeparatorDto) NewChineseNumbering(
+func (nStrIntSep *IntegerSeparatorSpec) NewChineseNumbering(
 	intSeparatorChars string,
 	errorPrefix interface{}) (
-	IntegerSeparatorDto,
+	IntegerSeparatorSpec,
 	error) {
 
 	if nStrIntSep.lock == nil {
@@ -1595,12 +1595,12 @@ func (nStrIntSep *IntegerSeparatorDto) NewChineseNumbering(
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
 
-	newIntSep := IntegerSeparatorDto{}
+	newIntSep := IntegerSeparatorSpec{}
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"IntegerSeparatorDto."+
+		"IntegerSeparatorSpec."+
 			"NewChineseNumbering()",
 		"")
 
@@ -1621,7 +1621,7 @@ func (nStrIntSep *IntegerSeparatorDto) NewChineseNumbering(
 
 //	NewChineseNumberingDefault
 //
-//	Returns a new instance of IntegerSeparatorDto
+//	Returns a new instance of IntegerSeparatorSpec
 //	configured for the Chinese Numbering System
 //	integer digit grouping.
 //
@@ -1714,10 +1714,10 @@ func (nStrIntSep *IntegerSeparatorDto) NewChineseNumbering(
 //
 // # Return Values
 //
-//	IntegerSeparatorDto
+//	IntegerSeparatorSpec
 //
 //		If this method completes successfully, a new instance
-//		of IntegerSeparatorDto, configured with the Chinese
+//		of IntegerSeparatorSpec, configured with the Chinese
 //		Numbering System integer grouping, will be created
 //		and returned.
 //
@@ -1735,9 +1735,9 @@ func (nStrIntSep *IntegerSeparatorDto) NewChineseNumbering(
 //		and text passed by input parameter, 'errorPrefix'. The
 //		'errorPrefix' text will be attached to the beginning of
 //		the error message.
-func (nStrIntSep *IntegerSeparatorDto) NewChineseNumberingDefault(
+func (nStrIntSep *IntegerSeparatorSpec) NewChineseNumberingDefault(
 	errorPrefix interface{}) (
-	IntegerSeparatorDto,
+	IntegerSeparatorSpec,
 	error) {
 
 	if nStrIntSep.lock == nil {
@@ -1751,12 +1751,12 @@ func (nStrIntSep *IntegerSeparatorDto) NewChineseNumberingDefault(
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
 
-	newIntSep := IntegerSeparatorDto{}
+	newIntSep := IntegerSeparatorSpec{}
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"IntegerSeparatorDto."+
+		"IntegerSeparatorSpec."+
 			"NewChineseNumberingDefault()",
 		"")
 
@@ -1777,7 +1777,7 @@ func (nStrIntSep *IntegerSeparatorDto) NewChineseNumberingDefault(
 
 //	NewChineseNumberingRunes
 //
-//	Returns a new instance of IntegerSeparatorDto
+//	Returns a new instance of IntegerSeparatorSpec
 //	configured for the Chinese Numbering System
 //	integer digit grouping.
 //
@@ -1919,10 +1919,10 @@ func (nStrIntSep *IntegerSeparatorDto) NewChineseNumberingDefault(
 //
 // # Return Values
 //
-//	IntegerSeparatorDto
+//	IntegerSeparatorSpec
 //
 //		If this method completes successfully, a new instance of
-//		IntegerSeparatorDto, configured with Chinese Numbering
+//		IntegerSeparatorSpec, configured with Chinese Numbering
 //		System integer grouping, will be created and returned.
 //
 //	error
@@ -1936,10 +1936,10 @@ func (nStrIntSep *IntegerSeparatorDto) NewChineseNumberingDefault(
 //		and text passed by input parameter, 'errorPrefix'. The
 //		'errorPrefix' text will be attached to the beginning of
 //		the error message.
-func (nStrIntSep *IntegerSeparatorDto) NewChineseNumberingRunes(
+func (nStrIntSep *IntegerSeparatorSpec) NewChineseNumberingRunes(
 	intSeparatorChars []rune,
 	errorPrefix interface{}) (
-	IntegerSeparatorDto,
+	IntegerSeparatorSpec,
 	error) {
 
 	if nStrIntSep.lock == nil {
@@ -1953,12 +1953,12 @@ func (nStrIntSep *IntegerSeparatorDto) NewChineseNumberingRunes(
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
 
-	newIntSep := IntegerSeparatorDto{}
+	newIntSep := IntegerSeparatorSpec{}
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"IntegerSeparatorDto."+
+		"IntegerSeparatorSpec."+
 			"NewChineseNumberingRunes()",
 		"")
 
@@ -1979,14 +1979,14 @@ func (nStrIntSep *IntegerSeparatorDto) NewChineseNumberingRunes(
 
 //	NewComponents
 //
-//	Creates and returns a new instance of IntegerSeparatorDto.
+//	Creates and returns a new instance of IntegerSeparatorSpec.
 //	The new instance is generated based on component elements
 //	passed as input parameter strings.
 //
-//	This method differs from IntegerSeparatorDto.NewComponentsRunes()
+//	This method differs from IntegerSeparatorSpec.NewComponentsRunes()
 //	in that this method accepts a string for input parameter
 //
-// 'intSeparatorChars' whereas IntegerSeparatorDto.NewComponentsRunes()
+// 'intSeparatorChars' whereas IntegerSeparatorSpec.NewComponentsRunes()
 //
 //	is designed to accept rune arrays.
 //
@@ -2153,11 +2153,11 @@ func (nStrIntSep *IntegerSeparatorDto) NewChineseNumberingRunes(
 //
 // # Return Values
 //
-//	newIntSep					IntegerSeparatorDto
+//	newIntSep					IntegerSeparatorSpec
 //
 //		If this method completes successfully, the parameter
 //		will return a new and fully populated instance of
-//		IntegerSeparatorDto.
+//		IntegerSeparatorSpec.
 //
 //	err							error
 //
@@ -2170,12 +2170,12 @@ func (nStrIntSep *IntegerSeparatorDto) NewChineseNumberingRunes(
 //		chain and text passed by input parameter, 'errorPrefix'.
 //		The 'errorPrefix' text will be attached to the beginning
 //		of the error message.
-func (nStrIntSep *IntegerSeparatorDto) NewComponents(
+func (nStrIntSep *IntegerSeparatorSpec) NewComponents(
 	intSeparatorChars string,
 	intSeparatorGrouping []uint,
 	restartIntGroupingSequence bool,
 	errorPrefix interface{}) (
-	newIntSep IntegerSeparatorDto,
+	newIntSep IntegerSeparatorSpec,
 	err error) {
 
 	if nStrIntSep.lock == nil {
@@ -2191,7 +2191,7 @@ func (nStrIntSep *IntegerSeparatorDto) NewComponents(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"IntegerSeparatorDto.NewComponents()",
+		"IntegerSeparatorSpec.NewComponents()",
 		"")
 
 	if err != nil {
@@ -2208,7 +2208,7 @@ func (nStrIntSep *IntegerSeparatorDto) NewComponents(
 	}
 
 	err =
-		new(integerSeparatorDtoMechanics).
+		new(integerSeparatorSpecMechanics).
 			setWithComponents(
 				&newIntSep,
 				[]rune(intSeparatorChars),
@@ -2222,11 +2222,11 @@ func (nStrIntSep *IntegerSeparatorDto) NewComponents(
 //	NewComponentsRunes
 //
 //	Creates and returns a new instance of
-//	IntegerSeparatorDto. The new instance is generated
+//	IntegerSeparatorSpec. The new instance is generated
 //	based on component elements passed as input
 //	parameters.
 //
-//	This method differs from IntegerSeparatorDto.NewComponents()
+//	This method differs from IntegerSeparatorSpec.NewComponents()
 //	in that this method accepts an array of runes for
 //	'intSeparatorChars'.
 //
@@ -2394,11 +2394,11 @@ func (nStrIntSep *IntegerSeparatorDto) NewComponents(
 //
 // # Return Values
 //
-//	newIntSep					IntegerSeparatorDto
+//	newIntSep					IntegerSeparatorSpec
 //
 //		If this method completes successfully, the parameter
 //		will return a new and fully populated instance of
-//		IntegerSeparatorDto.
+//		IntegerSeparatorSpec.
 //
 //
 //	err							error
@@ -2412,12 +2412,12 @@ func (nStrIntSep *IntegerSeparatorDto) NewComponents(
 //		chain and text passed by input parameter, 'errorPrefix'.
 //		The 'errorPrefix' text will be attached to the beginning
 //		of the error message.
-func (nStrIntSep *IntegerSeparatorDto) NewComponentsRunes(
+func (nStrIntSep *IntegerSeparatorSpec) NewComponentsRunes(
 	intSeparatorChars []rune,
 	intSeparatorGrouping []uint,
 	restartIntGroupingSequence bool,
 	errorPrefix interface{}) (
-	newIntSep IntegerSeparatorDto,
+	newIntSep IntegerSeparatorSpec,
 	err error) {
 
 	if nStrIntSep.lock == nil {
@@ -2433,7 +2433,7 @@ func (nStrIntSep *IntegerSeparatorDto) NewComponentsRunes(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"IntegerSeparatorDto."+
+		"IntegerSeparatorSpec."+
 			"NewComponentsRunes()",
 		"")
 
@@ -2442,7 +2442,7 @@ func (nStrIntSep *IntegerSeparatorDto) NewComponentsRunes(
 	}
 
 	err =
-		new(integerSeparatorDtoMechanics).
+		new(integerSeparatorSpecMechanics).
 			setWithComponents(
 				&newIntSep,
 				intSeparatorChars,
@@ -2455,7 +2455,7 @@ func (nStrIntSep *IntegerSeparatorDto) NewComponentsRunes(
 
 //	NewFrenchDefaults
 //
-//	Creates and returns a new instance of IntegerSeparatorDto
+//	Creates and returns a new instance of IntegerSeparatorSpec
 //	set to French default integer separators. Integer
 //	separator values used in France consist of the one blank
 //	or empty space (' '), an integer grouping of three ('3')
@@ -2474,13 +2474,13 @@ func (nStrIntSep *IntegerSeparatorDto) NewComponentsRunes(
 //	For information on German integer separation usage, see
 //	method:
 //
-//		IntegerSeparatorDto.NewGermanDefaults()
+//		IntegerSeparatorSpec.NewGermanDefaults()
 //
 //	If custom integer separator algorithms are required, see
 //	method:
 //
-//		IntegerSeparatorDto.NewComponents()
-//		IntegerSeparatorDto.NewComponentsRunes()
+//		IntegerSeparatorSpec.NewComponents()
+//		IntegerSeparatorSpec.NewComponentsRunes()
 //
 // ----------------------------------------------------------------
 //
@@ -2549,10 +2549,10 @@ func (nStrIntSep *IntegerSeparatorDto) NewComponentsRunes(
 //
 // # Return Values
 //
-//	IntegerSeparatorDto
+//	IntegerSeparatorSpec
 //
 //		This will return a new and fully populated instance
-//		of IntegerSeparatorDto configured with French
+//		of IntegerSeparatorSpec configured with French
 //		default integer separator values.
 //
 //	error
@@ -2566,9 +2566,9 @@ func (nStrIntSep *IntegerSeparatorDto) NewComponentsRunes(
 //		chain and text passed by input parameter, 'errorPrefix'.
 //		The 'errorPrefix' text will be attached to the beginning
 //		of the error message.
-func (nStrIntSep *IntegerSeparatorDto) NewFrenchDefaults(
+func (nStrIntSep *IntegerSeparatorSpec) NewFrenchDefaults(
 	errorPrefix interface{}) (
-	IntegerSeparatorDto,
+	IntegerSeparatorSpec,
 	error) {
 
 	if nStrIntSep.lock == nil {
@@ -2582,12 +2582,12 @@ func (nStrIntSep *IntegerSeparatorDto) NewFrenchDefaults(
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
 
-	newIntSep := IntegerSeparatorDto{}
+	newIntSep := IntegerSeparatorSpec{}
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"IntegerSeparatorDto."+
+		"IntegerSeparatorSpec."+
 			"NewFrenchDefaults()",
 		"")
 
@@ -2595,7 +2595,7 @@ func (nStrIntSep *IntegerSeparatorDto) NewFrenchDefaults(
 		return newIntSep, err
 	}
 
-	err = new(integerSeparatorDtoMechanics).
+	err = new(integerSeparatorSpecMechanics).
 		setToFrenchDefaults(
 			&newIntSep,
 			ePrefix.XCpy(
@@ -2606,7 +2606,7 @@ func (nStrIntSep *IntegerSeparatorDto) NewFrenchDefaults(
 
 //	NewGermanDefaults
 //
-//	Creates and returns a new instance of IntegerSeparatorDto
+//	Creates and returns a new instance of IntegerSeparatorSpec
 //	set to German default integer separators. Integer
 //	separator values used in Germany consist of the period
 //	character ('.'), an integer grouping of three ('3')
@@ -2625,13 +2625,13 @@ func (nStrIntSep *IntegerSeparatorDto) NewFrenchDefaults(
 //	For information on French integer separation usage, see
 //	method:
 //
-//		IntegerSeparatorDto.NewFrenchDefaults()
+//		IntegerSeparatorSpec.NewFrenchDefaults()
 //
 //	If custom integer separator algorithms are required, see
 //	methods:
 //
-//		IntegerSeparatorDto.NewComponents()
-//		IntegerSeparatorDto.NewComponentsRunes()
+//		IntegerSeparatorSpec.NewComponents()
+//		IntegerSeparatorSpec.NewComponentsRunes()
 //
 // ----------------------------------------------------------------
 //
@@ -2700,10 +2700,10 @@ func (nStrIntSep *IntegerSeparatorDto) NewFrenchDefaults(
 //
 // # Return Values
 //
-//	IntegerSeparatorDto
+//	IntegerSeparatorSpec
 //
 //		This will return a new and fully populated instance
-//		of IntegerSeparatorDto configured with German
+//		of IntegerSeparatorSpec configured with German
 //		default integer separator values.
 //
 //	error
@@ -2717,9 +2717,9 @@ func (nStrIntSep *IntegerSeparatorDto) NewFrenchDefaults(
 //		chain and text passed by input parameter, 'errorPrefix'.
 //		The 'errorPrefix' text will be attached to the beginning
 //		of the error message.
-func (nStrIntSep *IntegerSeparatorDto) NewGermanDefaults(
+func (nStrIntSep *IntegerSeparatorSpec) NewGermanDefaults(
 	errorPrefix interface{}) (
-	IntegerSeparatorDto,
+	IntegerSeparatorSpec,
 	error) {
 
 	if nStrIntSep.lock == nil {
@@ -2733,12 +2733,12 @@ func (nStrIntSep *IntegerSeparatorDto) NewGermanDefaults(
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
 
-	newIntSep := IntegerSeparatorDto{}
+	newIntSep := IntegerSeparatorSpec{}
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"IntegerSeparatorDto."+
+		"IntegerSeparatorSpec."+
 			"NewGermanDefaults()",
 		"")
 
@@ -2746,7 +2746,7 @@ func (nStrIntSep *IntegerSeparatorDto) NewGermanDefaults(
 		return newIntSep, err
 	}
 
-	err = new(integerSeparatorDtoMechanics).
+	err = new(integerSeparatorSpecMechanics).
 		setToGermanDefaults(
 			&newIntSep,
 			ePrefix.XCpy(
@@ -2757,7 +2757,7 @@ func (nStrIntSep *IntegerSeparatorDto) NewGermanDefaults(
 
 //	NewIndiaNumbering
 //
-//	Returns a new instance of IntegerSeparatorDto configured
+//	Returns a new instance of IntegerSeparatorSpec configured
 //	for the India Numbering System integer digit grouping.
 //
 //	The input parameter 'intSeparatorChars' is a string
@@ -2887,10 +2887,10 @@ func (nStrIntSep *IntegerSeparatorDto) NewGermanDefaults(
 //
 // # Return Values
 //
-//	IntegerSeparatorDto
+//	IntegerSeparatorSpec
 //
 //		If this method completes successfully, a new instance of
-//		IntegerSeparatorDto, configured with India Numbering
+//		IntegerSeparatorSpec, configured with India Numbering
 //		System integer grouping, will be created and returned.
 //
 //	error
@@ -2904,10 +2904,10 @@ func (nStrIntSep *IntegerSeparatorDto) NewGermanDefaults(
 //		chain and text passed by input parameter, 'errorPrefix'.
 //		The 'errorPrefix' text will be attached to the beginning
 //		of the error message.
-func (nStrIntSep *IntegerSeparatorDto) NewIndiaNumbering(
+func (nStrIntSep *IntegerSeparatorSpec) NewIndiaNumbering(
 	intSeparatorChars string,
 	errorPrefix interface{}) (
-	IntegerSeparatorDto,
+	IntegerSeparatorSpec,
 	error) {
 
 	if nStrIntSep.lock == nil {
@@ -2921,12 +2921,12 @@ func (nStrIntSep *IntegerSeparatorDto) NewIndiaNumbering(
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
 
-	newIntSep := IntegerSeparatorDto{}
+	newIntSep := IntegerSeparatorSpec{}
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"IntegerSeparatorDto."+
+		"IntegerSeparatorSpec."+
 			"NewIndiaNumbering()",
 		"")
 
@@ -2947,7 +2947,7 @@ func (nStrIntSep *IntegerSeparatorDto) NewIndiaNumbering(
 
 //	NewIndiaNumberingDefault
 //
-//	Returns a new instance of IntegerSeparatorDto
+//	Returns a new instance of IntegerSeparatorSpec
 //	configured for the India Numbering System integer
 //	digit grouping.
 //
@@ -3040,10 +3040,10 @@ func (nStrIntSep *IntegerSeparatorDto) NewIndiaNumbering(
 //
 // # Return Values
 //
-//	IntegerSeparatorDto
+//	IntegerSeparatorSpec
 //
 //		If this method completes successfully, a new
-//		instance of IntegerSeparatorDto, configured
+//		instance of IntegerSeparatorSpec, configured
 //		with India Numbering System integer grouping,
 //		will be created and returned.
 //
@@ -3058,9 +3058,9 @@ func (nStrIntSep *IntegerSeparatorDto) NewIndiaNumbering(
 //		chain and text passed by input parameter, 'errorPrefix'.
 //		The 'errorPrefix' text will be attached to the beginning
 //		of the error message.
-func (nStrIntSep *IntegerSeparatorDto) NewIndiaNumberingDefault(
+func (nStrIntSep *IntegerSeparatorSpec) NewIndiaNumberingDefault(
 	errorPrefix interface{}) (
-	IntegerSeparatorDto,
+	IntegerSeparatorSpec,
 	error) {
 
 	if nStrIntSep.lock == nil {
@@ -3074,12 +3074,12 @@ func (nStrIntSep *IntegerSeparatorDto) NewIndiaNumberingDefault(
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
 
-	newIntSep := IntegerSeparatorDto{}
+	newIntSep := IntegerSeparatorSpec{}
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"IntegerSeparatorDto."+
+		"IntegerSeparatorSpec."+
 			"NewIndiaNumberingDefault()",
 		"")
 
@@ -3100,7 +3100,7 @@ func (nStrIntSep *IntegerSeparatorDto) NewIndiaNumberingDefault(
 
 //	NewIndiaNumberingRunes
 //
-//	Returns a new instance of IntegerSeparatorDto
+//	Returns a new instance of IntegerSeparatorSpec
 //	configured for the India Numbering System
 //	integer digit grouping.
 //
@@ -3218,10 +3218,10 @@ func (nStrIntSep *IntegerSeparatorDto) NewIndiaNumberingDefault(
 //
 // # Return Values
 //
-//	IntegerSeparatorDto
+//	IntegerSeparatorSpec
 //
 //		If this method completes successfully, a new
-//		instance of IntegerSeparatorDto, configured with
+//		instance of IntegerSeparatorSpec, configured with
 //		India Numbering System integer grouping, will be
 //		created and returned.
 //
@@ -3236,10 +3236,10 @@ func (nStrIntSep *IntegerSeparatorDto) NewIndiaNumberingDefault(
 //		chain and text passed by input parameter, 'errorPrefix'.
 //		The 'errorPrefix' text will be attached to the beginning
 //		of the error message.
-func (nStrIntSep *IntegerSeparatorDto) NewIndiaNumberingRunes(
+func (nStrIntSep *IntegerSeparatorSpec) NewIndiaNumberingRunes(
 	intSeparatorChars []rune,
 	errorPrefix interface{}) (
-	IntegerSeparatorDto,
+	IntegerSeparatorSpec,
 	error) {
 
 	if nStrIntSep.lock == nil {
@@ -3253,12 +3253,12 @@ func (nStrIntSep *IntegerSeparatorDto) NewIndiaNumberingRunes(
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
 
-	newIntSep := IntegerSeparatorDto{}
+	newIntSep := IntegerSeparatorSpec{}
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"IntegerSeparatorDto."+
+		"IntegerSeparatorSpec."+
 			"NewIndiaNumberingRunes()",
 		"")
 
@@ -3279,7 +3279,7 @@ func (nStrIntSep *IntegerSeparatorDto) NewIndiaNumberingRunes(
 
 //	NewIntGroupEnum
 //
-//	Creates a new instance of IntegerSeparatorDto based
+//	Creates a new instance of IntegerSeparatorSpec based
 //	on an enumeration value passed through input
 //	parameter 'intGroupingSpec'.
 //
@@ -3293,12 +3293,12 @@ func (nStrIntSep *IntegerSeparatorDto) NewIndiaNumberingRunes(
 //		IntGroupingType.ChineseNumbering()
 //
 //	If 'intGroupingType' is set to 'IntGroupingType.None()',
-//	an empty instance of IntegerSeparatorDto will be
-//	returned. An empty instance of IntegerSeparatorDto
+//	an empty instance of IntegerSeparatorSpec will be
+//	returned. An empty instance of IntegerSeparatorSpec
 //	means that no integer separation will be performed
 //	in subsequent number string formatting operations.
 //
-//	The returned instance of IntegerSeparatorDto will
+//	The returned instance of IntegerSeparatorSpec will
 //	be configured for one of these four Integer Grouping
 //	Type values.
 //
@@ -3323,8 +3323,8 @@ func (nStrIntSep *IntegerSeparatorDto) NewIndiaNumberingRunes(
 //			IntGroupingType.ChineseNumbering()
 //
 //		A value of IntGroupingType.None() will return
-//		an empty instance of IntegerSeparatorDto. An empty
-//		instance of IntegerSeparatorDto means that no
+//		an empty instance of IntegerSeparatorSpec. An empty
+//		instance of IntegerSeparatorSpec means that no
 //		integer separation will be performed in
 //		subsequent number string formatting operations.
 //
@@ -3424,11 +3424,11 @@ func (nStrIntSep *IntegerSeparatorDto) NewIndiaNumberingRunes(
 //
 // # Return Values
 //
-//	IntegerSeparatorDto
+//	IntegerSeparatorSpec
 //
 //		If this method completes successfully, a new
-//		instance of IntegerSeparatorDto will be created
-//		and returned. This IntegerSeparatorDto will be
+//		instance of IntegerSeparatorSpec will be created
+//		and returned. This IntegerSeparatorSpec will be
 //		configured to 'Thousands','India Numbering System'
 //		or 'Chinese Numbering' depending on the
 //		specification provided by input parameter,
@@ -3436,8 +3436,8 @@ func (nStrIntSep *IntegerSeparatorDto) NewIndiaNumberingRunes(
 //
 //		If input parameter 'intGroupingType' is set to
 //		'IntGroupingType.None()', an empty instance of
-//		IntegerSeparatorDto will be returned. Be advised
-//		that an empty instance of IntegerSeparatorDto
+//		IntegerSeparatorSpec will be returned. Be advised
+//		that an empty instance of IntegerSeparatorSpec
 //		means that no integer separation will be performed
 //		in subsequent number string formatting operations.
 //
@@ -3452,11 +3452,11 @@ func (nStrIntSep *IntegerSeparatorDto) NewIndiaNumberingRunes(
 //		chain and text passed by input parameter, 'errorPrefix'.
 //		The 'errorPrefix' text will be attached to the beginning
 //		of the error message.
-func (nStrIntSep *IntegerSeparatorDto) NewIntGroupEnum(
+func (nStrIntSep *IntegerSeparatorSpec) NewIntGroupEnum(
 	intGroupingType IntegerGroupingType,
 	intSeparatorChars string,
 	errorPrefix interface{}) (
-	IntegerSeparatorDto,
+	IntegerSeparatorSpec,
 	error) {
 
 	if nStrIntSep.lock == nil {
@@ -3470,12 +3470,12 @@ func (nStrIntSep *IntegerSeparatorDto) NewIntGroupEnum(
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
 
-	newIntSepDto := IntegerSeparatorDto{}
+	newIntSepDto := IntegerSeparatorSpec{}
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"IntegerSeparatorDto."+
+		"IntegerSeparatorSpec."+
 			"NewIntGroupEnum()",
 		"")
 
@@ -3483,7 +3483,7 @@ func (nStrIntSep *IntegerSeparatorDto) NewIntGroupEnum(
 		return newIntSepDto, err
 	}
 
-	err = new(integerSeparatorDtoHelper).
+	err = new(integerSeparatorSpecHelper).
 		setFromIntGroupEnum(
 			&newIntSepDto,
 			intGroupingType,
@@ -3496,7 +3496,7 @@ func (nStrIntSep *IntegerSeparatorDto) NewIntGroupEnum(
 
 //	NewIntGroupEnumRunes
 //
-//	Creates a new instance of IntegerSeparatorDto
+//	Creates a new instance of IntegerSeparatorSpec
 //	based on an enumeration value passed through
 //	input parameter 'intGroupingSpec'.
 //
@@ -3510,12 +3510,12 @@ func (nStrIntSep *IntegerSeparatorDto) NewIntGroupEnum(
 //		IntGroupingType.ChineseNumbering()
 //
 //	If 'intGroupingType' is set to 'IntGroupingType.None()',
-//	an empty instance of IntegerSeparatorDto will be
-//	returned. An empty instance of IntegerSeparatorDto
+//	an empty instance of IntegerSeparatorSpec will be
+//	returned. An empty instance of IntegerSeparatorSpec
 //	means that no integer separation will be performed
 //	in subsequent number string formatting operations.
 //
-//	The returned instance of IntegerSeparatorDto will
+//	The returned instance of IntegerSeparatorSpec will
 //	be configured for one of these four Integer Grouping
 //	Type values.
 //
@@ -3540,8 +3540,8 @@ func (nStrIntSep *IntegerSeparatorDto) NewIntGroupEnum(
 //			IntGroupingType.ChineseNumbering()
 //
 //		A value of IntGroupingType.None() will return
-//		an empty instance of IntegerSeparatorDto. An empty
-//		instance of IntegerSeparatorDto means that no
+//		an empty instance of IntegerSeparatorSpec. An empty
+//		instance of IntegerSeparatorSpec means that no
 //		integer separation will be performed in
 //		subsequent number string formatting operations.
 //
@@ -3638,19 +3638,19 @@ func (nStrIntSep *IntegerSeparatorDto) NewIntGroupEnum(
 //
 // # Return Values
 //
-//	IntegerSeparatorDto
+//	IntegerSeparatorSpec
 //
 //		If this method completes successfully, a new instance
-//		of IntegerSeparatorDto will be created and returned.
-//		This IntegerSeparatorDto will be configured to
+//		of IntegerSeparatorSpec will be created and returned.
+//		This IntegerSeparatorSpec will be configured to
 //		'Thousands', 'India Numbering System' or 'Chinese
 //		Numbering' depending on the specification provided
 //		by input parameter,	'intGroupingType'.
 //
 //		If input parameter 'intGroupingType' is set to
 //		'IntGroupingType.None()', an empty instance of
-//		IntegerSeparatorDto will be returned. Be advised
-//		that an empty instance of IntegerSeparatorDto
+//		IntegerSeparatorSpec will be returned. Be advised
+//		that an empty instance of IntegerSeparatorSpec
 //		means that no integer separation will be performed
 //		in subsequent number string formatting operations.
 //
@@ -3665,11 +3665,11 @@ func (nStrIntSep *IntegerSeparatorDto) NewIntGroupEnum(
 //		chain and text passed by input parameter, 'errorPrefix'.
 //		The 'errorPrefix' text will be attached to the beginning
 //		of the error message.
-func (nStrIntSep *IntegerSeparatorDto) NewIntGroupEnumRunes(
+func (nStrIntSep *IntegerSeparatorSpec) NewIntGroupEnumRunes(
 	intGroupingType IntegerGroupingType,
 	intSeparatorChars []rune,
 	errorPrefix interface{}) (
-	IntegerSeparatorDto,
+	IntegerSeparatorSpec,
 	error) {
 
 	if nStrIntSep.lock == nil {
@@ -3683,12 +3683,12 @@ func (nStrIntSep *IntegerSeparatorDto) NewIntGroupEnumRunes(
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
 
-	newIntSepDto := IntegerSeparatorDto{}
+	newIntSepDto := IntegerSeparatorSpec{}
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"IntegerSeparatorDto."+
+		"IntegerSeparatorSpec."+
 			"NewIntGroupEnumRunes()",
 		"")
 
@@ -3696,7 +3696,7 @@ func (nStrIntSep *IntegerSeparatorDto) NewIntGroupEnumRunes(
 		return newIntSepDto, err
 	}
 
-	err = new(integerSeparatorDtoHelper).
+	err = new(integerSeparatorSpecHelper).
 		setFromIntGroupEnum(
 			&newIntSepDto,
 			intGroupingType,
@@ -3709,7 +3709,7 @@ func (nStrIntSep *IntegerSeparatorDto) NewIntGroupEnumRunes(
 
 //	NewNoIntegerSeparation
 //
-//	Returns an instance of IntegerSeparatorDto configured
+//	Returns an instance of IntegerSeparatorSpec configured
 //	for NO integer separation.
 //
 //	Call this method if you want to guarantee that integer
@@ -3737,14 +3737,14 @@ func (nStrIntSep *IntegerSeparatorDto) NewIntGroupEnumRunes(
 //
 // # Return Values
 //
-//	IntegerSeparatorDto
+//	IntegerSeparatorSpec
 //
 //		If this method completes successfully, new instance
-//		of IntegerSeparatorDto will be returned. This new
+//		of IntegerSeparatorSpec will be returned. This new
 //		instance will be configured to ensure that integer
 //		separation WILL NOT BE APPLIED in the subsequent
 //		formatting of Number Strings.
-func (nStrIntSep *IntegerSeparatorDto) NewNoIntegerSeparation() IntegerSeparatorDto {
+func (nStrIntSep *IntegerSeparatorSpec) NewNoIntegerSeparation() IntegerSeparatorSpec {
 
 	if nStrIntSep.lock == nil {
 		nStrIntSep.lock = new(sync.Mutex)
@@ -3754,9 +3754,9 @@ func (nStrIntSep *IntegerSeparatorDto) NewNoIntegerSeparation() IntegerSeparator
 
 	defer nStrIntSep.lock.Unlock()
 
-	newIntSepDto := IntegerSeparatorDto{}
+	newIntSepDto := IntegerSeparatorSpec{}
 
-	_ = new(integerSeparatorDtoQuark).empty(
+	_ = new(integerSeparatorSpecQuark).empty(
 		&newIntSepDto,
 		nil)
 
@@ -3766,7 +3766,7 @@ func (nStrIntSep *IntegerSeparatorDto) NewNoIntegerSeparation() IntegerSeparator
 //	NewThousands
 //
 //	Creates and returns a new instance of
-//	IntegerSeparatorDto. The returned IntegerSeparatorDto
+//	IntegerSeparatorSpec. The returned IntegerSeparatorSpec
 //	instance represents a basic or simple integer
 //	separator object using default values and a minimum
 //	number of input parameters.
@@ -3885,10 +3885,10 @@ func (nStrIntSep *IntegerSeparatorDto) NewNoIntegerSeparation() IntegerSeparator
 //
 // # Return Values
 //
-//	IntegerSeparatorDto
+//	IntegerSeparatorSpec
 //
 //		If this method completes successfully, a new
-//		instance of IntegerSeparatorDto will be created
+//		instance of IntegerSeparatorSpec will be created
 //		and returned. The 'integer digits grouping
 //		sequence' will be automatically  set to a
 //		default value of 3-digits.
@@ -3904,10 +3904,10 @@ func (nStrIntSep *IntegerSeparatorDto) NewNoIntegerSeparation() IntegerSeparator
 //		chain and text passed by input parameter, 'errorPrefix'.
 //		The 'errorPrefix' text will be attached to the beginning
 //		of the error message.
-func (nStrIntSep *IntegerSeparatorDto) NewThousands(
+func (nStrIntSep *IntegerSeparatorSpec) NewThousands(
 	intSeparatorChars string,
 	errorPrefix interface{}) (
-	IntegerSeparatorDto,
+	IntegerSeparatorSpec,
 	error) {
 
 	if nStrIntSep.lock == nil {
@@ -3924,18 +3924,18 @@ func (nStrIntSep *IntegerSeparatorDto) NewThousands(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"IntegerSeparatorDto."+
+		"IntegerSeparatorSpec."+
 			"NewThousands()",
 		"")
 
 	if err != nil {
-		return IntegerSeparatorDto{}, err
+		return IntegerSeparatorSpec{}, err
 	}
 
 	ePrefix.SetEPref(
-		"IntegerSeparatorDto.NewThousands()")
+		"IntegerSeparatorSpec.NewThousands()")
 
-	newIntSep := IntegerSeparatorDto{}
+	newIntSep := IntegerSeparatorSpec{}
 
 	err =
 		new(integerSeparatorDtoUtility).
@@ -3951,13 +3951,13 @@ func (nStrIntSep *IntegerSeparatorDto) NewThousands(
 //	NewThousandsRunes
 //
 //	Creates and returns a new instance of
-//	IntegerSeparatorDto. The returned
-//	IntegerSeparatorDto instance represents a basic
+//	IntegerSeparatorSpec. The returned
+//	IntegerSeparatorSpec instance represents a basic
 //	or simple integer separator object using default
 //	values and a minimum number of input parameters.
 //
 //	This method is an alternative to method
-//	IntegerSeparatorDto.NewThousands() in that this
+//	IntegerSeparatorSpec.NewThousands() in that this
 //	method accepts integer separator characters as an
 //	array of runes instead of a string.
 //
@@ -4075,10 +4075,10 @@ func (nStrIntSep *IntegerSeparatorDto) NewThousands(
 //
 // # Return Values
 //
-//	IntegerSeparatorDto
+//	IntegerSeparatorSpec
 //
 //		If this method completes successfully, a new
-//		instance of IntegerSeparatorDto will be created
+//		instance of IntegerSeparatorSpec will be created
 //		and returned. The 'integer digits grouping
 //		sequence' will be automatically set to a default
 //		value of 3-digits.
@@ -4094,10 +4094,10 @@ func (nStrIntSep *IntegerSeparatorDto) NewThousands(
 //		chain and text passed by input parameter, 'errorPrefix'.
 //		The 'errorPrefix' text will be attached to the beginning
 //		of the error message.
-func (nStrIntSep *IntegerSeparatorDto) NewThousandsRunes(
+func (nStrIntSep *IntegerSeparatorSpec) NewThousandsRunes(
 	intSeparatorChars []rune,
 	errorPrefix interface{}) (
-	IntegerSeparatorDto,
+	IntegerSeparatorSpec,
 	error) {
 
 	if nStrIntSep.lock == nil {
@@ -4114,15 +4114,15 @@ func (nStrIntSep *IntegerSeparatorDto) NewThousandsRunes(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"IntegerSeparatorDto."+
+		"IntegerSeparatorSpec."+
 			"NewThousandsRunes()",
 		"")
 
 	if err != nil {
-		return IntegerSeparatorDto{}, err
+		return IntegerSeparatorSpec{}, err
 	}
 
-	newIntSep := IntegerSeparatorDto{}
+	newIntSep := IntegerSeparatorSpec{}
 
 	err =
 		new(integerSeparatorDtoUtility).
@@ -4137,7 +4137,7 @@ func (nStrIntSep *IntegerSeparatorDto) NewThousandsRunes(
 
 //	NewUnitedStatesDefaults
 //
-//	Creates and returns a new instance of IntegerSeparatorDto
+//	Creates and returns a new instance of IntegerSeparatorSpec
 //	set to United States default integer separators. Integer
 //	separator values used in the United States consist of the
 //	comma character (','), an integer grouping of three ('3')
@@ -4213,10 +4213,10 @@ func (nStrIntSep *IntegerSeparatorDto) NewThousandsRunes(
 //
 // # Return Values
 //
-//	IntegerSeparatorDto
+//	IntegerSeparatorSpec
 //
 //		This will return a new and fully populated instance
-//		of IntegerSeparatorDto configured with United States
+//		of IntegerSeparatorSpec configured with United States
 //		default integer separator values.
 //
 //	error
@@ -4230,9 +4230,9 @@ func (nStrIntSep *IntegerSeparatorDto) NewThousandsRunes(
 //		chain and text passed by input parameter, 'errorPrefix'.
 //		The 'errorPrefix' text will be attached to the beginning
 //		of the error message.
-func (nStrIntSep *IntegerSeparatorDto) NewUnitedStatesDefaults(
+func (nStrIntSep *IntegerSeparatorSpec) NewUnitedStatesDefaults(
 	errorPrefix interface{}) (
-	IntegerSeparatorDto,
+	IntegerSeparatorSpec,
 	error) {
 
 	if nStrIntSep.lock == nil {
@@ -4246,12 +4246,12 @@ func (nStrIntSep *IntegerSeparatorDto) NewUnitedStatesDefaults(
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
 
-	newIntSep := IntegerSeparatorDto{}
+	newIntSep := IntegerSeparatorSpec{}
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"IntegerSeparatorDto."+
+		"IntegerSeparatorSpec."+
 			"NewUnitedStatesDefaults()",
 		"")
 
@@ -4259,7 +4259,7 @@ func (nStrIntSep *IntegerSeparatorDto) NewUnitedStatesDefaults(
 		return newIntSep, err
 	}
 
-	err = new(integerSeparatorDtoMechanics).
+	err = new(integerSeparatorSpecMechanics).
 		setToUSADefaults(
 			&newIntSep,
 			ePrefix.XCpy(
@@ -4271,10 +4271,10 @@ func (nStrIntSep *IntegerSeparatorDto) NewUnitedStatesDefaults(
 //	SetChineseNumbering
 //
 //	Overwrites all the member variable data values
-//	for current instance of IntegerSeparatorDto.
+//	for current instance of IntegerSeparatorSpec.
 //
 //	This method will configure the current instance
-//	of IntegerSeparatorDto with Chinese Numbering
+//	of IntegerSeparatorSpec with Chinese Numbering
 //	System integer grouping.
 //
 //	The input parameter 'intSeparatorChars' is a
@@ -4314,7 +4314,7 @@ func (nStrIntSep *IntegerSeparatorDto) NewUnitedStatesDefaults(
 //
 //	This method will delete and overwrite all pre-existing
 //	data values in the current instance of
-//	IntegerSeparatorDto.
+//	IntegerSeparatorSpec.
 //
 // ----------------------------------------------------------------
 //
@@ -4409,7 +4409,7 @@ func (nStrIntSep *IntegerSeparatorDto) NewUnitedStatesDefaults(
 //		chain and text passed by input parameter, 'errorPrefix'.
 //		The 'errorPrefix' text will be attached to the beginning
 //		of the error message.
-func (nStrIntSep *IntegerSeparatorDto) SetChineseNumbering(
+func (nStrIntSep *IntegerSeparatorSpec) SetChineseNumbering(
 	intSeparatorChars string,
 	errorPrefix interface{}) error {
 
@@ -4427,7 +4427,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetChineseNumbering(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"IntegerSeparatorDto."+
+		"IntegerSeparatorSpec."+
 			"SetChineseNumbering()",
 		"")
 
@@ -4446,10 +4446,10 @@ func (nStrIntSep *IntegerSeparatorDto) SetChineseNumbering(
 //	SetChineseNumberingDefault
 //
 //	Overwrites all the member variable data values
-//	for current instance of IntegerSeparatorDto.
+//	for current instance of IntegerSeparatorSpec.
 //
 //	This method will configure the current instance
-//	of IntegerSeparatorDto with Chinese Numbering
+//	of IntegerSeparatorSpec with Chinese Numbering
 //	System integer grouping.
 //
 //	The integer separator character will be defaulted
@@ -4478,7 +4478,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetChineseNumbering(
 // # IMPORTANT
 //
 //	This method will delete and overwrite all pre-existing
-//	data values in the current instance of IntegerSeparatorDto.
+//	data values in the current instance of IntegerSeparatorSpec.
 //
 // ----------------------------------------------------------------
 //
@@ -4558,7 +4558,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetChineseNumbering(
 //		chain and text passed by input parameter, 'errorPrefix'.
 //		The 'errorPrefix' text will be attached to the beginning
 //		of the error message.
-func (nStrIntSep *IntegerSeparatorDto) SetChineseNumberingDefault(
+func (nStrIntSep *IntegerSeparatorSpec) SetChineseNumberingDefault(
 	errorPrefix interface{}) error {
 
 	if nStrIntSep.lock == nil {
@@ -4575,7 +4575,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetChineseNumberingDefault(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"IntegerSeparatorDto."+
+		"IntegerSeparatorSpec."+
 			"SetChineseNumberingDefault()",
 		"")
 
@@ -4594,10 +4594,10 @@ func (nStrIntSep *IntegerSeparatorDto) SetChineseNumberingDefault(
 //	SetChineseNumberingRunes
 //
 //	Overwrites all the member variable data values
-//	for current instance of IntegerSeparatorDto.
+//	for current instance of IntegerSeparatorSpec.
 //
 //	This method will configure the current instance
-//	of IntegerSeparatorDto with Chinese Numbering
+//	of IntegerSeparatorSpec with Chinese Numbering
 //	System integer digit grouping.
 //
 //	The input parameter 'intSeparatorChars' is an
@@ -4637,7 +4637,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetChineseNumberingDefault(
 //
 //	This method will delete and overwrite all pre-existing
 //	data values in the current instance of
-//	IntegerSeparatorDto.
+//	IntegerSeparatorSpec.
 //
 // ----------------------------------------------------------------
 //
@@ -4733,7 +4733,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetChineseNumberingDefault(
 //		chain and text passed by input parameter, 'errorPrefix'.
 //		The 'errorPrefix' text will be attached to the beginning
 //		of the error message.
-func (nStrIntSep *IntegerSeparatorDto) SetChineseNumberingRunes(
+func (nStrIntSep *IntegerSeparatorSpec) SetChineseNumberingRunes(
 	intSeparatorChars []rune,
 	errorPrefix interface{}) error {
 
@@ -4751,7 +4751,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetChineseNumberingRunes(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"IntegerSeparatorDto."+
+		"IntegerSeparatorSpec."+
 			"SetChineseNumberingRunes()",
 		"")
 
@@ -4771,7 +4771,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetChineseNumberingRunes(
 //
 //	This method will overwrite and reset the internal
 //	member variable data values for the current
-//	IntegerSeparatorDto instance based on the component
+//	IntegerSeparatorSpec instance based on the component
 //	elements passed as input parameterS.
 //
 // ----------------------------------------------------------------
@@ -4779,7 +4779,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetChineseNumberingRunes(
 // # IMPORTANT
 //
 //	This method will overwrite all pre-existing data values
-//	in the current IntegerSeparatorDto instance.
+//	in the current IntegerSeparatorSpec instance.
 //
 // ----------------------------------------------------------------
 //
@@ -4957,7 +4957,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetChineseNumberingRunes(
 //		chain and text passed by input parameter, 'errorPrefix'.
 //		The 'errorPrefix' text will be attached to the beginning
 //		of the error message.
-func (nStrIntSep *IntegerSeparatorDto) SetComponents(
+func (nStrIntSep *IntegerSeparatorSpec) SetComponents(
 	intSeparatorChars string,
 	intSeparatorGrouping []uint,
 	restartIntGroupingSequence bool,
@@ -4977,7 +4977,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetComponents(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"IntegerSeparatorDto."+
+		"IntegerSeparatorSpec."+
 			"SetComponents()",
 		"")
 
@@ -4985,7 +4985,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetComponents(
 		return err
 	}
 
-	return new(integerSeparatorDtoMechanics).
+	return new(integerSeparatorSpecMechanics).
 		setWithComponents(
 			nStrIntSep,
 			[]rune(intSeparatorChars),
@@ -4998,10 +4998,10 @@ func (nStrIntSep *IntegerSeparatorDto) SetComponents(
 //
 //	This method will overwrite and reset the internal
 //	member variable data values for the current
-//	IntegerSeparatorDto instance based on the component
+//	IntegerSeparatorSpec instance based on the component
 //	elements passed as input parameters.
 //
-//	This method differs from IntegerSeparatorDto.SetComponents()
+//	This method differs from IntegerSeparatorSpec.SetComponents()
 //	in that this method accepts an array of runes for
 //	'intSeparatorChars'.
 //
@@ -5010,7 +5010,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetComponents(
 // # IMPORTANT
 //
 //	This method will overwrite all pre-existing data values
-//	in the current IntegerSeparatorDto instance.
+//	in the current IntegerSeparatorSpec instance.
 //
 // ----------------------------------------------------------------
 //
@@ -5186,7 +5186,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetComponents(
 //		chain and text passed by input parameter, 'errorPrefix'.
 //		The 'errorPrefix' text will be attached to the beginning
 //		of the error message.
-func (nStrIntSep *IntegerSeparatorDto) SetComponentsRunes(
+func (nStrIntSep *IntegerSeparatorSpec) SetComponentsRunes(
 	intSeparatorChars []rune,
 	intSeparatorGrouping []uint,
 	restartIntGroupingSequence bool,
@@ -5206,7 +5206,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetComponentsRunes(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"IntegerSeparatorDto."+
+		"IntegerSeparatorSpec."+
 			"SetComponentsRunes()",
 		"")
 
@@ -5214,7 +5214,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetComponentsRunes(
 		return err
 	}
 
-	return new(integerSeparatorDtoMechanics).
+	return new(integerSeparatorSpecMechanics).
 		setWithComponents(
 			nStrIntSep,
 			intSeparatorChars,
@@ -5227,7 +5227,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetComponentsRunes(
 //
 //	This method will overwrite and set the all the
 //	internal member variable data values for the
-//	current instance of IntegerSeparatorDto to
+//	current instance of IntegerSeparatorSpec to
 //	default values used in France. Integer
 //	separator values used in France consist of the
 //	space character (' '), an integer grouping of three
@@ -5246,19 +5246,19 @@ func (nStrIntSep *IntegerSeparatorDto) SetComponentsRunes(
 //	Germany. For information on German integer separation
 //	usage, see method:
 //
-//		IntegerSeparatorDto.SetGermanDefaults()
+//		IntegerSeparatorSpec.SetGermanDefaults()
 //
 //	If custom integer separator algorithms are required, see
 //	method:
 //
-//		IntegerSeparatorDto.SetComponents()
+//		IntegerSeparatorSpec.SetComponents()
 //
 // ----------------------------------------------------------------
 //
 // # IMPORTANT
 //
 //	This method will overwrite all pre-existing data
-//	values in the current IntegerSeparatorDto instance.
+//	values in the current IntegerSeparatorSpec instance.
 //
 // ----------------------------------------------------------------
 //
@@ -5338,7 +5338,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetComponentsRunes(
 //		chain and text passed by input parameter, 'errorPrefix'.
 //		The 'errorPrefix' text will be attached to the beginning
 //		of the error message.
-func (nStrIntSep *IntegerSeparatorDto) SetFrenchDefaults(
+func (nStrIntSep *IntegerSeparatorSpec) SetFrenchDefaults(
 	errorPrefix interface{}) error {
 
 	if nStrIntSep.lock == nil {
@@ -5355,7 +5355,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetFrenchDefaults(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"IntegerSeparatorDto."+
+		"IntegerSeparatorSpec."+
 			"SetFrenchDefaults()",
 		"")
 
@@ -5363,7 +5363,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetFrenchDefaults(
 		return err
 	}
 
-	return new(integerSeparatorDtoMechanics).
+	return new(integerSeparatorSpecMechanics).
 		setToFrenchDefaults(
 			nStrIntSep,
 			ePrefix)
@@ -5373,7 +5373,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetFrenchDefaults(
 //
 //	This method will overwrite and set the all the
 //	internal member variable data values for the
-//	current instance of IntegerSeparatorDto to
+//	current instance of IntegerSeparatorSpec to
 //	default values used in Germany. Integer
 //	separator values used in Germany consist of the
 //	period character ('.'), an integer grouping of
@@ -5393,19 +5393,19 @@ func (nStrIntSep *IntegerSeparatorDto) SetFrenchDefaults(
 //	France. For information on German integer separation
 //	usage, see method:
 //
-//		IntegerSeparatorDto.SetFrenchDefaults()
+//		IntegerSeparatorSpec.SetFrenchDefaults()
 //
 //	If custom integer separator algorithms are required, see
 //	method:
 //
-//		IntegerSeparatorDto.SetComponents()
+//		IntegerSeparatorSpec.SetComponents()
 //
 // ----------------------------------------------------------------
 //
 // # IMPORTANT
 //
 //	This method will overwrite all pre-existing data
-//	values in the current IntegerSeparatorDto instance.
+//	values in the current IntegerSeparatorSpec instance.
 //
 // ----------------------------------------------------------------
 //
@@ -5485,7 +5485,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetFrenchDefaults(
 //		chain and text passed by input parameter, 'errorPrefix'.
 //		The 'errorPrefix' text will be attached to the beginning
 //		of the error message.
-func (nStrIntSep *IntegerSeparatorDto) SetGermanDefaults(
+func (nStrIntSep *IntegerSeparatorSpec) SetGermanDefaults(
 	errorPrefix interface{}) error {
 
 	if nStrIntSep.lock == nil {
@@ -5502,7 +5502,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetGermanDefaults(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"IntegerSeparatorDto."+
+		"IntegerSeparatorSpec."+
 			"SetGermanDefaults()",
 		"")
 
@@ -5510,7 +5510,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetGermanDefaults(
 		return err
 	}
 
-	return new(integerSeparatorDtoMechanics).
+	return new(integerSeparatorSpecMechanics).
 		setToGermanDefaults(
 			nStrIntSep,
 			ePrefix)
@@ -5519,10 +5519,10 @@ func (nStrIntSep *IntegerSeparatorDto) SetGermanDefaults(
 //	SetIndiaNumbering
 //
 //	Overwrites all the member variable data values for
-//	the current instance of IntegerSeparatorDto.
+//	the current instance of IntegerSeparatorSpec.
 //
 //	This method will configure the current instance of
-//	IntegerSeparatorDto with India Numbering System
+//	IntegerSeparatorSpec with India Numbering System
 //	integer digit grouping.
 //
 //	The input parameter 'intSeparatorChars' is a string
@@ -5559,7 +5559,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetGermanDefaults(
 // # IMPORTANT
 //
 // This method will delete and overwrite all pre-existing data
-// values in the current instance of IntegerSeparatorDto.
+// values in the current instance of IntegerSeparatorSpec.
 //
 // ----------------------------------------------------------------
 //
@@ -5654,7 +5654,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetGermanDefaults(
 //		chain and text passed by input parameter, 'errorPrefix'.
 //		The 'errorPrefix' text will be attached to the beginning
 //		of the error message.
-func (nStrIntSep *IntegerSeparatorDto) SetIndiaNumbering(
+func (nStrIntSep *IntegerSeparatorSpec) SetIndiaNumbering(
 	intSeparatorChars string,
 	errorPrefix interface{}) error {
 
@@ -5672,7 +5672,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetIndiaNumbering(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"IntegerSeparatorDto."+
+		"IntegerSeparatorSpec."+
 			"SetIndiaNumbering()",
 		"")
 
@@ -5691,10 +5691,10 @@ func (nStrIntSep *IntegerSeparatorDto) SetIndiaNumbering(
 //	SetIndiaNumberingDefault
 //
 //	Deletes and overwrites all the member variable data
-//	values for the current instance of IntegerSeparatorDto.
+//	values for the current instance of IntegerSeparatorSpec.
 //
 //	This method will configure the current instance of
-//	IntegerSeparatorDto with India Numbering System integer
+//	IntegerSeparatorSpec with India Numbering System integer
 //	digit grouping.
 //
 //	The integer separator character will be defaulted to a
@@ -5724,7 +5724,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetIndiaNumbering(
 // # IMPORTANT
 //
 // This method will delete and overwrite all pre-existing data
-// values in the current instance of IntegerSeparatorDto.
+// values in the current instance of IntegerSeparatorSpec.
 //
 // ----------------------------------------------------------------
 //
@@ -5804,7 +5804,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetIndiaNumbering(
 //		chain and text passed by input parameter, 'errorPrefix'.
 //		The 'errorPrefix' text will be attached to the beginning
 //		of the error message.
-func (nStrIntSep *IntegerSeparatorDto) SetIndiaNumberingDefault(
+func (nStrIntSep *IntegerSeparatorSpec) SetIndiaNumberingDefault(
 	errorPrefix interface{}) error {
 
 	if nStrIntSep.lock == nil {
@@ -5821,7 +5821,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetIndiaNumberingDefault(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"IntegerSeparatorDto."+
+		"IntegerSeparatorSpec."+
 			"SetIndiaNumberingDefault()",
 		"")
 
@@ -5840,10 +5840,10 @@ func (nStrIntSep *IntegerSeparatorDto) SetIndiaNumberingDefault(
 //	SetIndiaNumberingRunes
 //
 //	Overwrites all the member variable data values
-//	for the current instance of IntegerSeparatorDto.
+//	for the current instance of IntegerSeparatorSpec.
 //
 //	This method will configure the current instance
-//	of IntegerSeparatorDto with India Numbering
+//	of IntegerSeparatorSpec with India Numbering
 //	System integer digit grouping.
 //
 //	The input parameter 'intSeparatorChars' is an
@@ -5884,7 +5884,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetIndiaNumberingDefault(
 //
 //	This method will delete and overwrite all pre-existing
 //	data values in the current instance of
-//	IntegerSeparatorDto.
+//	IntegerSeparatorSpec.
 //
 // ----------------------------------------------------------------
 //
@@ -5979,7 +5979,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetIndiaNumberingDefault(
 //		chain and text passed by input parameter, 'errorPrefix'.
 //		The 'errorPrefix' text will be attached to the beginning
 //		of the error message.
-func (nStrIntSep *IntegerSeparatorDto) SetIndiaNumberingRunes(
+func (nStrIntSep *IntegerSeparatorSpec) SetIndiaNumberingRunes(
 	intSeparatorChars []rune,
 	errorPrefix interface{}) error {
 
@@ -5997,7 +5997,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetIndiaNumberingRunes(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"IntegerSeparatorDto."+
+		"IntegerSeparatorSpec."+
 			"SetIndiaNumberingRunes()",
 		"")
 
@@ -6016,7 +6016,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetIndiaNumberingRunes(
 //	SetIntGroupingSequence
 //
 //	Sets the 'Integer Separator Grouping' specification for
-//	the current IntegerSeparatorDto instance.
+//	the current IntegerSeparatorSpec instance.
 //
 //	This unsigned integer values specifies the number of
 //	integer digits within a group. This value is used to
@@ -6155,7 +6155,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetIndiaNumberingRunes(
 //		chain and text passed by input parameter, 'errorPrefix'.
 //		The 'errorPrefix' text will be attached to the beginning
 //		of the error message.
-func (nStrIntSep *IntegerSeparatorDto) SetIntGroupingSequence(
+func (nStrIntSep *IntegerSeparatorSpec) SetIntGroupingSequence(
 	intSeparatorGrouping []uint,
 	errorPrefix interface{}) (
 	err error) {
@@ -6173,7 +6173,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetIntGroupingSequence(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"IntegerSeparatorDto."+
+		"IntegerSeparatorSpec."+
 			"SetIntGroupingSequence()",
 		"")
 
@@ -6231,7 +6231,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetIntGroupingSequence(
 //	SetIntSeparatorChars
 //
 //	Sets the 'intSeparatorChars' member variable for
-//	the current IntegerSeparatorDto instance.
+//	the current IntegerSeparatorSpec instance.
 //
 // ----------------------------------------------------------------
 //
@@ -6342,7 +6342,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetIntGroupingSequence(
 //		chain and text passed by input parameter, 'errorPrefix'.
 //		The 'errorPrefix' text will be attached to the beginning
 //		of the error message.
-func (nStrIntSep *IntegerSeparatorDto) SetIntSeparatorChars(
+func (nStrIntSep *IntegerSeparatorSpec) SetIntSeparatorChars(
 	intSeparatorChars []rune,
 	errorPrefix interface{}) error {
 
@@ -6360,7 +6360,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetIntSeparatorChars(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"IntegerSeparatorDto."+
+		"IntegerSeparatorSpec."+
 			"SetIntSeparatorChars()",
 		"")
 
@@ -6391,7 +6391,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetIntSeparatorChars(
 //
 //	Sets the internal member variable
 //	'restartIntGroupingSequence' for the current
-//	IntegerSeparatorDto instance.
+//	IntegerSeparatorSpec instance.
 //
 // ----------------------------------------------------------------
 //
@@ -6431,7 +6431,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetIntSeparatorChars(
 // # Return Values
 //
 //	-- NONE --
-func (nStrIntSep *IntegerSeparatorDto) SetRestartIntGroupingSequence(
+func (nStrIntSep *IntegerSeparatorSpec) SetRestartIntGroupingSequence(
 	restartIntGroupingSequence bool) {
 
 	if nStrIntSep.lock == nil {
@@ -6451,7 +6451,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetRestartIntGroupingSequence(
 //	SetThousands
 //
 //	Overwrites all the member variable data values for
-//	the current IntegerSeparatorDto. This method is
+//	the current IntegerSeparatorSpec. This method is
 //	intended to configure a basic or simple integer
 //	separator object using default values and a minimum
 //	number of input parameters
@@ -6473,7 +6473,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetRestartIntGroupingSequence(
 //	characters through input parameter 'intSeparatorChars'.
 //
 //	This method is an alternative to method:
-//		IntegerSeparatorDto.SetThousandsRunes()
+//		IntegerSeparatorSpec.SetThousandsRunes()
 //
 //	It differs from the alternative in that this method
 //	accepts integer separator characters as a string
@@ -6484,7 +6484,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetRestartIntGroupingSequence(
 // # IMPORTANT
 //
 //	This method will overwrite all pre-existing data values
-//	in the current IntegerSeparatorDto instance.
+//	in the current IntegerSeparatorSpec instance.
 //
 // ----------------------------------------------------------------
 //
@@ -6597,7 +6597,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetRestartIntGroupingSequence(
 //		chain and text passed by input parameter, 'errorPrefix'.
 //		The 'errorPrefix' text will be attached to the beginning
 //		of the error message.
-func (nStrIntSep *IntegerSeparatorDto) SetThousands(
+func (nStrIntSep *IntegerSeparatorSpec) SetThousands(
 	intSeparatorChars string,
 	errorPrefix interface{}) error {
 
@@ -6615,7 +6615,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetThousands(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"IntegerSeparatorDto."+
+		"IntegerSeparatorSpec."+
 			"SetThousands()",
 		"")
 
@@ -6634,7 +6634,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetThousands(
 //	SetThousandsRunes
 //
 //	Overwrites all the member variable data values
-//	for the current IntegerSeparatorDto. This method
+//	for the current IntegerSeparatorSpec. This method
 //	is intended to configure a basic or simple integer
 //	separator object using default values and a
 //	minimum number of input parameters.
@@ -6654,7 +6654,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetThousands(
 //	'integerDigitsSeparators'.
 //
 //	This method is an alternative to method:
-//		IntegerSeparatorDto.SetThousands()
+//		IntegerSeparatorSpec.SetThousands()
 //
 //	It differs from the alternative in that this method
 //	accepts integer separator characters as an array of
@@ -6665,7 +6665,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetThousands(
 // # IMPORTANT
 //
 //	This method will overwrite all pre-existing data
-//	values in the current IntegerSeparatorDto
+//	values in the current IntegerSeparatorSpec
 //	instance.
 //
 // ----------------------------------------------------------------
@@ -6779,7 +6779,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetThousands(
 //		chain and text passed by input parameter, 'errorPrefix'.
 //		The 'errorPrefix' text will be attached to the beginning
 //		of the error message.
-func (nStrIntSep *IntegerSeparatorDto) SetThousandsRunes(
+func (nStrIntSep *IntegerSeparatorSpec) SetThousandsRunes(
 	intSeparatorChars []rune,
 	errorPrefix interface{}) error {
 
@@ -6797,7 +6797,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetThousandsRunes(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"IntegerSeparatorDto."+
+		"IntegerSeparatorSpec."+
 			"SetThousandsRunes()",
 		"")
 
@@ -6817,7 +6817,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetThousandsRunes(
 //
 //	This method will overwrite and set the all the
 //	internal member variable data values for the
-//	current instance of IntegerSeparatorDto to
+//	current instance of IntegerSeparatorSpec to
 //	default	values used in the United States.
 //
 //	Integer separator values used in the United States
@@ -6833,7 +6833,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetThousandsRunes(
 // # IMPORTANT
 //
 //	This method will overwrite all pre-existing data
-//	values in the current IntegerSeparatorDto instance.
+//	values in the current IntegerSeparatorSpec instance.
 //
 // ----------------------------------------------------------------
 //
@@ -6913,7 +6913,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetThousandsRunes(
 //		chain and text passed by input parameter, 'errorPrefix'.
 //		The 'errorPrefix' text will be attached to the beginning
 //		of the error message.
-func (nStrIntSep *IntegerSeparatorDto) SetUnitedStatesDefaults(
+func (nStrIntSep *IntegerSeparatorSpec) SetUnitedStatesDefaults(
 	errorPrefix interface{}) error {
 
 	if nStrIntSep.lock == nil {
@@ -6930,14 +6930,14 @@ func (nStrIntSep *IntegerSeparatorDto) SetUnitedStatesDefaults(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"IntegerSeparatorDto.SetUnitedStatesDefaults()",
+		"IntegerSeparatorSpec.SetUnitedStatesDefaults()",
 		"")
 
 	if err != nil {
 		return err
 	}
 
-	return new(integerSeparatorDtoMechanics).
+	return new(integerSeparatorSpecMechanics).
 		setToUSADefaults(
 			nStrIntSep,
 			ePrefix)
@@ -6945,16 +6945,16 @@ func (nStrIntSep *IntegerSeparatorDto) SetUnitedStatesDefaults(
 
 //	SetUnitedStatesDefaultsIfEmpty
 //
-//	If any of the current IntegerSeparatorDto instance
+//	If any of the current IntegerSeparatorSpec instance
 //	data values are zero or invalid, this method will
 //	reset ALL data elements to United States default
 //	integer separation values.
 //
-//	If the current IntegerSeparatorDto instance is valid
+//	If the current IntegerSeparatorSpec instance is valid
 //	and populated with data, this method will take no
 //	action and exit. This method will ONLY implement
 //	default United States integer separation values
-//	if the current IntegerSeparatorDto instance is
+//	if the current IntegerSeparatorSpec instance is
 //	empty or invalid.
 //
 //	United States default numeric separators are listed
@@ -6970,7 +6970,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetUnitedStatesDefaults(
 // # IMPORTANT
 //
 // This method MAY overwrite all pre-existing data values in the
-// current IntegerSeparatorDto instance.
+// current IntegerSeparatorSpec instance.
 //
 // ----------------------------------------------------------------
 //
@@ -7050,7 +7050,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetUnitedStatesDefaults(
 //		chain and text passed by input parameter, 'errorPrefix'.
 //		The 'errorPrefix' text will be attached to the beginning
 //		of the error message.
-func (nStrIntSep *IntegerSeparatorDto) SetUnitedStatesDefaultsIfEmpty(
+func (nStrIntSep *IntegerSeparatorSpec) SetUnitedStatesDefaultsIfEmpty(
 	errorPrefix interface{}) error {
 
 	if nStrIntSep.lock == nil {
@@ -7067,7 +7067,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetUnitedStatesDefaultsIfEmpty(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"IntegerSeparatorDto."+
+		"IntegerSeparatorSpec."+
 			"SetUnitedStatesDefaultsIfEmpty()",
 		"")
 
@@ -7085,14 +7085,14 @@ func (nStrIntSep *IntegerSeparatorDto) SetUnitedStatesDefaultsIfEmpty(
 // String
 //
 // Returns a string detailing the components of
-// the current IntegerSeparatorDto instance.
+// the current IntegerSeparatorSpec instance.
 //
 // Output includes:
 //
 //	Integer Separator Characters
 //	Integer Separator Grouping
 //	Restart Grouping Sequence
-func (nStrIntSep *IntegerSeparatorDto) String() string {
+func (nStrIntSep *IntegerSeparatorSpec) String() string {
 
 	if nStrIntSep.lock == nil {
 		nStrIntSep.lock = new(sync.Mutex)

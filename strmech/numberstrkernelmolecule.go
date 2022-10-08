@@ -1257,7 +1257,7 @@ func (numStrKernelMolecule *numberStrKernelMolecule) formatNumStr(
 		return numStr, err
 	}
 
-	var intSeparatorDto IntegerSeparatorDto
+	var intSeparatorDto IntegerSeparatorSpec
 
 	intSeparatorDto,
 		err = nStrFormatSpec.GetIntegerSeparatorDto(

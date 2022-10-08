@@ -20,7 +20,7 @@ type NumStrFmtCountryCultureSpec struct {
 	AbsoluteValFmt                            string
 	AbsoluteValTurnOnIntegerDigitsSeparation  bool
 	AbsoluteValDecSep                         DecimalSeparatorSpec
-	AbsoluteValIntGroupingSpec                IntegerSeparatorDto
+	AbsoluteValIntGroupingSpec                IntegerSeparatorSpec
 	AbsoluteValNumField                       NumStrNumberFieldSpec
 	CurrencyPositiveValueFmt                  string
 	CurrencyNegativeValueFmt                  string
@@ -33,13 +33,13 @@ type NumStrFmtCountryCultureSpec struct {
 	MinorCurrencySymbols                      []rune
 	CurrencyTurnOnIntegerDigitsSeparation     bool
 	CurrencyNumDecSep                         DecimalSeparatorSpec
-	CurrencyIntGroupingSpec                   IntegerSeparatorDto
+	CurrencyIntGroupingSpec                   IntegerSeparatorSpec
 	CurrencyNumField                          NumStrNumberFieldSpec
 	SignedNumValPositiveValueFmt              string
 	SignedNumValNegativeValueFmt              string
 	SignedNumValTurnOnIntegerDigitsSeparation bool
 	SignedNumValDecSep                        DecimalSeparatorSpec
-	SignedNumValIntGroupingSpec               IntegerSeparatorDto
+	SignedNumValIntGroupingSpec               IntegerSeparatorSpec
 	SignedNumValNumField                      NumStrNumberFieldSpec
 	SciNotSignificandUsesLeadingPlus          bool
 	SciNotMantissaLength                      uint

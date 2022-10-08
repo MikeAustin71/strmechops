@@ -447,8 +447,8 @@ func (nStrIntGroupSpec *NumStrIntegerGroupingSpec) GetIntegerSeparatorChars() st
 }
 
 // GetIntegerSeparatorDto - Returns an instance of
-// IntegerSeparatorDto based on the configuration parameters
-// contained within the current instance of IntegerSeparatorDto.
+// IntegerSeparatorSpec based on the configuration parameters
+// contained within the current instance of IntegerSeparatorSpec.
 //
 // ----------------------------------------------------------------
 //
@@ -502,9 +502,9 @@ func (nStrIntGroupSpec *NumStrIntegerGroupingSpec) GetIntegerSeparatorChars() st
 //
 // # Return Values
 //
-//	IntegerSeparatorDto
+//	IntegerSeparatorSpec
 //		If this method completes successfully, a new fully
-//		populated instance of IntegerSeparatorDto will be
+//		populated instance of IntegerSeparatorSpec will be
 //		returned.
 //
 //	error
@@ -518,7 +518,7 @@ func (nStrIntGroupSpec *NumStrIntegerGroupingSpec) GetIntegerSeparatorChars() st
 //		the beginning of the error message.
 func (nStrIntGroupSpec *NumStrIntegerGroupingSpec) GetIntegerSeparatorDto(
 	errorPrefix interface{}) (
-	IntegerSeparatorDto,
+	IntegerSeparatorSpec,
 	error) {
 
 	if nStrIntGroupSpec.lock == nil {
@@ -540,10 +540,10 @@ func (nStrIntGroupSpec *NumStrIntegerGroupingSpec) GetIntegerSeparatorDto(
 		"")
 
 	if err != nil {
-		return IntegerSeparatorDto{}, err
+		return IntegerSeparatorSpec{}, err
 	}
 
-	return new(IntegerSeparatorDto).NewIntGroupEnumRunes(
+	return new(IntegerSeparatorSpec).NewIntGroupEnumRunes(
 		nStrIntGroupSpec.intGroupingType,
 		nStrIntGroupSpec.integerSeparatorChars.GetRuneArray(),
 		ePrefix.XCpy(
@@ -616,7 +616,7 @@ func (nStrIntGroupSpec *NumStrIntegerGroupingSpec) GetIntegerSeparatorRunes() []
 //	intGroupingType			IntegerGroupingType
 //
 //		This instance of IntegerGroupingType defines the type
-//		of IntegerSeparatorDto which will be returned. The
+//		of IntegerSeparatorSpec which will be returned. The
 //		enumeration IntegerGroupingType must be set to one
 //		of the following values:
 //		IntGroupingType.None()
@@ -764,7 +764,7 @@ func (nStrIntGroupSpec *NumStrIntegerGroupingSpec) NewRunes(
 //
 //	intGroupingType			IntegerGroupingType
 //		This instance of IntegerGroupingType defines the type
-//		of IntegerSeparatorDto which will be returned. The
+//		of IntegerSeparatorSpec which will be returned. The
 //		enumeration IntegerGroupingType must be set to one
 //		of the following values:
 //		IntGroupingType.None()
@@ -910,7 +910,7 @@ func (nStrIntGroupSpec *NumStrIntegerGroupingSpec) NewStr(
 //	intGroupingType			IntegerGroupingType
 //
 //		This instance of IntegerGroupingType defines the type
-//		of IntegerSeparatorDto which will be returned. The
+//		of IntegerSeparatorSpec which will be returned. The
 //		enumeration IntegerGroupingType must be set to one
 //		of the following values:
 //		IntGroupingType.None()
@@ -1046,7 +1046,7 @@ func (nStrIntGroupSpec *NumStrIntegerGroupingSpec) SetRunes(
 //
 //	intGroupingType			IntegerGroupingType
 //		This instance of IntegerGroupingType defines the type
-//		of IntegerSeparatorDto which will be returned. The
+//		of IntegerSeparatorSpec which will be returned. The
 //		enumeration IntegerGroupingType must be set to one
 //		of the following values:
 //		IntGroupingType.None()
@@ -1322,7 +1322,7 @@ func (nStrIntGroupSpecNanobot *numStrIntGroupingSpecNanobot) copyNStrIntGroupSpe
 // intGroupingSpec             IntegerGroupingType
 //
 //   - This instance of IntegerGroupingType defines the type
-//     of IntegerSeparatorDto which will be returned. The
+//     of IntegerSeparatorSpec which will be returned. The
 //     enumeration IntegerGroupingType must be set to one
 //     of the following values:
 //     IntGroupingType.None()

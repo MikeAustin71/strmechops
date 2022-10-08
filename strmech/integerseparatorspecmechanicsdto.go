@@ -6,13 +6,13 @@ import (
 	"sync"
 )
 
-type integerSeparatorDtoMechanics struct {
+type integerSeparatorSpecMechanics struct {
 	lock *sync.Mutex
 }
 
 // setToFrenchDefaults
 //
-//	Receives a pointer to an instance of IntegerSeparatorDto
+//	Receives a pointer to an instance of IntegerSeparatorSpec
 //	and proceeds to overwrite and set the internal member
 //	variable data values to default values used in France.
 //
@@ -34,9 +34,9 @@ type integerSeparatorDtoMechanics struct {
 //
 // # Input Parameters
 //
-//	nStrIntSep					*IntegerSeparatorDto
+//	nStrIntSep					*IntegerSeparatorSpec
 //
-//		A pointer to an instance of IntegerSeparatorDto. All
+//		A pointer to an instance of IntegerSeparatorSpec. All
 //		the internal member variable data values contained in
 //		this object will be deleted and reset to default
 //		integer separator values used in France.
@@ -72,8 +72,8 @@ type integerSeparatorDtoMechanics struct {
 //		chain and text passed by input parameter, 'errPrefDto'.
 //		The 'errPrefDto' text will be attached to the beginning
 //		of the error message.
-func (intSeparatorMech *integerSeparatorDtoMechanics) setToFrenchDefaults(
-	nStrIntSep *IntegerSeparatorDto,
+func (intSeparatorMech *integerSeparatorSpecMechanics) setToFrenchDefaults(
+	nStrIntSep *IntegerSeparatorSpec,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
 
@@ -90,7 +90,7 @@ func (intSeparatorMech *integerSeparatorDtoMechanics) setToFrenchDefaults(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"integerSeparatorDtoMechanics."+
+		"integerSeparatorSpecMechanics."+
 			"setToFrenchDefaults()",
 		"")
 
@@ -122,7 +122,7 @@ func (intSeparatorMech *integerSeparatorDtoMechanics) setToFrenchDefaults(
 
 // setToGermanDefaults
 //
-//	Receives a pointer to an instance of IntegerSeparatorDto
+//	Receives a pointer to an instance of IntegerSeparatorSpec
 //	and proceeds to overwrite and set the internal member
 //	variable data values to default values used in Germany.
 //
@@ -144,9 +144,9 @@ func (intSeparatorMech *integerSeparatorDtoMechanics) setToFrenchDefaults(
 //
 // # Input Parameters
 //
-//	nStrIntSep					*IntegerSeparatorDto
+//	nStrIntSep					*IntegerSeparatorSpec
 //
-//		A pointer to an instance of IntegerSeparatorDto. All
+//		A pointer to an instance of IntegerSeparatorSpec. All
 //		the internal member variable data values contained in
 //		this object will be deleted and reset to default
 //		integer separator values used in Germany.
@@ -182,8 +182,8 @@ func (intSeparatorMech *integerSeparatorDtoMechanics) setToFrenchDefaults(
 //		chain and text passed by input parameter, 'errPrefDto'.
 //		The 'errPrefDto' text will be attached to the beginning
 //		of the error message.
-func (intSeparatorMech *integerSeparatorDtoMechanics) setToGermanDefaults(
-	nStrIntSep *IntegerSeparatorDto,
+func (intSeparatorMech *integerSeparatorSpecMechanics) setToGermanDefaults(
+	nStrIntSep *IntegerSeparatorSpec,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
 
@@ -200,7 +200,7 @@ func (intSeparatorMech *integerSeparatorDtoMechanics) setToGermanDefaults(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"integerSeparatorDtoMechanics."+
+		"integerSeparatorSpecMechanics."+
 			"setToGermanDefaults()",
 		"")
 
@@ -231,7 +231,7 @@ func (intSeparatorMech *integerSeparatorDtoMechanics) setToGermanDefaults(
 }
 
 // setToUSADefaults - Receives a pointer to an instance of
-// IntegerSeparatorDto and proceeds to overwrite and set the
+// IntegerSeparatorSpec and proceeds to overwrite and set the
 // internal member variable data values to default values
 // used in the United States. Integer separator values used
 // in the United States consist of the comma character (','),
@@ -252,8 +252,8 @@ func (intSeparatorMech *integerSeparatorDtoMechanics) setToGermanDefaults(
 //
 // Input Parameters
 //
-//	nStrIntSep                 *IntegerSeparatorDto
-//	   - A pointer to an instance of IntegerSeparatorDto. All the
+//	nStrIntSep                 *IntegerSeparatorSpec
+//	   - A pointer to an instance of IntegerSeparatorSpec. All the
 //	     internal member variable data values contained in this
 //	     object will be deleted and reset to default integer
 //	     separator values used in the United States.
@@ -286,8 +286,8 @@ func (intSeparatorMech *integerSeparatorDtoMechanics) setToGermanDefaults(
 //	     and text passed by input parameter, 'errPrefDto'. The
 //	     'errPrefDto' text will be attached to the beginning of the
 //	     error message.
-func (intSeparatorMech *integerSeparatorDtoMechanics) setToUSADefaults(
-	nStrIntSep *IntegerSeparatorDto,
+func (intSeparatorMech *integerSeparatorSpecMechanics) setToUSADefaults(
+	nStrIntSep *IntegerSeparatorSpec,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
 
@@ -304,7 +304,7 @@ func (intSeparatorMech *integerSeparatorDtoMechanics) setToUSADefaults(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"integerSeparatorDtoMechanics."+
+		"integerSeparatorSpecMechanics."+
 			"setToUSADefaults()",
 		"")
 
@@ -335,7 +335,7 @@ func (intSeparatorMech *integerSeparatorDtoMechanics) setToUSADefaults(
 }
 
 // setWithComponents - Receives a pointer to an instance of
-// IntegerSeparatorDto and proceeds to overwrite and set the
+// IntegerSeparatorSpec and proceeds to overwrite and set the
 // internal member variable data values based on the other input
 // parameters.
 //
@@ -350,8 +350,8 @@ func (intSeparatorMech *integerSeparatorDtoMechanics) setToUSADefaults(
 //
 // Input Parameters
 //
-//	nStrIntSep                 *IntegerSeparatorDto
-//	   - A pointer to an instance of IntegerSeparatorDto. All the
+//	nStrIntSep                 *IntegerSeparatorSpec
+//	   - A pointer to an instance of IntegerSeparatorSpec. All the
 //	     internal member variable data values contained in this
 //	     object will be deleted and reset based on the
 //	     following input parameters.
@@ -448,8 +448,8 @@ func (intSeparatorMech *integerSeparatorDtoMechanics) setToUSADefaults(
 //	     and text passed by input parameter, 'errPrefDto'. The
 //	     'errPrefDto' text will be attached to the beginning of the
 //	     error message.
-func (intSeparatorMech *integerSeparatorDtoMechanics) setWithComponents(
-	nStrIntSep *IntegerSeparatorDto,
+func (intSeparatorMech *integerSeparatorSpecMechanics) setWithComponents(
+	nStrIntSep *IntegerSeparatorSpec,
 	intSeparatorChars []rune,
 	intSeparatorGrouping []uint,
 	restartIntGroupingSequence bool,
@@ -469,7 +469,7 @@ func (intSeparatorMech *integerSeparatorDtoMechanics) setWithComponents(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"integerSeparatorDtoMechanics."+
+		"integerSeparatorSpecMechanics."+
 			"setWithComponents()",
 		"")
 

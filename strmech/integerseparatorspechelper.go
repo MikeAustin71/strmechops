@@ -6,12 +6,12 @@ import (
 	"sync"
 )
 
-type integerSeparatorDtoHelper struct {
+type integerSeparatorSpecHelper struct {
 	lock *sync.Mutex
 }
 
 // setFromIntGroupEnum - Configures an instance of
-// IntegerSeparatorDto based on an enumeration value
+// IntegerSeparatorSpec based on an enumeration value
 // ('intGroupingSpec') passed as an input parameter.
 //
 // ----------------------------------------------------------------
@@ -25,8 +25,8 @@ type integerSeparatorDtoHelper struct {
 //
 // Input Parameters
 //
-//	intSep						*IntegerSeparatorDto
-//		A pointer to an instance of IntegerSeparatorDto. All the
+//	intSep						*IntegerSeparatorSpec
+//		A pointer to an instance of IntegerSeparatorSpec. All the
 //		member variable data values will be overwritten and reset
 //		using the input parameters listed below and default
 //		values.
@@ -42,7 +42,7 @@ type integerSeparatorDtoHelper struct {
 //			IntGroupingType.ChineseNumbering()
 //
 //		A value of IntGroupingType.None() will set parameter
-//		'intSep' to an empty instance of IntegerSeparatorDto.
+//		'intSep' to an empty instance of IntegerSeparatorSpec.
 //
 //	intSeparatorChars			[]rune
 //		A character, or series of characters, used to separate
@@ -86,8 +86,8 @@ type integerSeparatorDtoHelper struct {
 //		and text passed by input parameter, 'errPrefDto'. The
 //		'errPrefDto' text will be attached to the beginning of the
 //		error message.
-func (intSeparatorHelper *integerSeparatorDtoHelper) setFromIntGroupEnum(
-	intSep *IntegerSeparatorDto,
+func (intSeparatorHelper *integerSeparatorSpecHelper) setFromIntGroupEnum(
+	intSep *IntegerSeparatorSpec,
 	intGroupingType IntegerGroupingType,
 	intSeparatorChars []rune,
 	errPrefDto *ePref.ErrPrefixDto) (
@@ -153,7 +153,7 @@ func (intSeparatorHelper *integerSeparatorDtoHelper) setFromIntGroupEnum(
 
 	case intGroupingType.None():
 
-		err = new(integerSeparatorDtoQuark).
+		err = new(integerSeparatorSpecQuark).
 			empty(
 				intSep,
 				ePrefix.XCpy(

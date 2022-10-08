@@ -7,7 +7,7 @@ import (
 	"sync"
 )
 
-type integerSeparatorDtoMolecule struct {
+type integerSeparatorSpecMolecule struct {
 	lock *sync.Mutex
 }
 
@@ -49,11 +49,11 @@ type integerSeparatorDtoMolecule struct {
 //	integer grouping for thousands = 3
 //	result = 123,456,789,012,345
 //
-// The complexity inherent in the IntegerSeparatorDto type, used as
+// The complexity inherent in the IntegerSeparatorSpec type, used as
 // an input parameter, is necessary in order to provide support for
 // multinational and multicultural integer separation algorithms.
 // For more information on integer grouping sequence, reference the
-// source documentation for type, IntegerSeparatorDto.
+// source documentation for type, IntegerSeparatorSpec.
 //
 // Be advised - This method will never return a number sign for the
 // returned formatted integer separated numeric value. The numeric
@@ -64,8 +64,8 @@ type integerSeparatorDtoMolecule struct {
 //
 // Input Parameters
 //
-//	nStrIntSeparator           *IntegerSeparatorDto
-//	   - A pointer to an IntegerSeparatorDto object which contains
+//	nStrIntSeparator           *IntegerSeparatorSpec
+//	   - A pointer to an IntegerSeparatorSpec object which contains
 //	     the integer separation format parameters which will be
 //	     used to insert integer separators.
 //
@@ -86,11 +86,11 @@ type integerSeparatorDtoMolecule struct {
 //	     Other countries and cultures use spaces, apostrophes or
 //	     multiple characters to separate integers.
 //
-//	     The complexity inherent in the IntegerSeparatorDto type is
+//	     The complexity inherent in the IntegerSeparatorSpec type is
 //	     necessary in order to provide support for multinational
 //	     and multicultural integer separation algorithms. For
 //	     additional details, reference the source code
-//	     documentation for type  IntegerSeparatorDto.
+//	     documentation for type  IntegerSeparatorSpec.
 //
 //	     If 'nStrIntSeparator' is invalid, this method will return
 //	     an error.
@@ -142,8 +142,8 @@ type integerSeparatorDtoMolecule struct {
 //	     and text passed by input parameter, 'errPrefDto'. The
 //	     'errPrefDto' text will be attached to the beginning of the
 //	     error message.
-func (nStrIntSepMolecule *integerSeparatorDtoMolecule) applyIntSeparators(
-	nStrIntSeparator *IntegerSeparatorDto,
+func (nStrIntSepMolecule *integerSeparatorSpecMolecule) applyIntSeparators(
+	nStrIntSeparator *IntegerSeparatorSpec,
 	pureNumRunes []rune,
 	errPrefDto *ePref.ErrPrefixDto) (
 	numStrWithIntSeps []rune,
@@ -164,7 +164,7 @@ func (nStrIntSepMolecule *integerSeparatorDtoMolecule) applyIntSeparators(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"integerSeparatorDtoMolecule."+
+		"integerSeparatorSpecMolecule."+
 			"applyIntSeparators()",
 		"")
 
@@ -174,7 +174,7 @@ func (nStrIntSepMolecule *integerSeparatorDtoMolecule) applyIntSeparators(
 
 	if nStrIntSeparator == nil {
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'nStrIntSeparator' (*IntegerSeparatorDto) is invalid!\n"+
+			"Error: Input parameter 'nStrIntSeparator' (*IntegerSeparatorSpec) is invalid!\n"+
 			"'nStrIntSeparator' is a 'nil' pointer.\n",
 			ePrefix.String())
 
@@ -214,7 +214,7 @@ func (nStrIntSepMolecule *integerSeparatorDtoMolecule) applyIntSeparators(
 	// testValidityOfRuneIntArray()
 
 	_,
-		err = new(integerSeparatorDtoQuark).
+		err = new(integerSeparatorSpecQuark).
 		testValidityOfNumStrIntSeparator(
 			nStrIntSeparator,
 			ePrefix.XCpy("nStrIntSeparator->"))
@@ -363,8 +363,8 @@ func (nStrIntSepMolecule *integerSeparatorDtoMolecule) applyIntSeparators(
 //
 // Input Parameters
 //
-//		destinationNStrIntSeparator     *IntegerSeparatorDto
-//		   - A pointer to a IntegerSeparatorDto instance. All the
+//		destinationNStrIntSeparator     *IntegerSeparatorSpec
+//		   - A pointer to a IntegerSeparatorSpec instance. All the
 //		     member variable data fields in this object will be
 //		     replaced by data values copied from input parameter
 //		     'sourceNStrIntSeparator'.
@@ -373,8 +373,8 @@ func (nStrIntSepMolecule *integerSeparatorDtoMolecule) applyIntSeparators(
 //		     copy operation.
 //
 //
-//		sourceNStrIntSeparator          *IntegerSeparatorDto
-//		   - A pointer to another IntegerSeparatorDto instance. All
+//		sourceNStrIntSeparator          *IntegerSeparatorSpec
+//		   - A pointer to another IntegerSeparatorSpec instance. All
 //		     the member variable data values from this object will
 //		     be copied to corresponding member variables in
 //		     'destinationNStrIntSeparator'.
@@ -410,9 +410,9 @@ func (nStrIntSepMolecule *integerSeparatorDtoMolecule) applyIntSeparators(
 //	     If an error message is returned, the text value for input
 //	     parameter 'errPrefDto' (error prefix) will be prefixed or
 //	     attached at the beginning of the error message.
-func (nStrIntSepMolecule *integerSeparatorDtoMolecule) copyIntSepDto(
-	destinationNStrIntSeparator *IntegerSeparatorDto,
-	sourceNStrIntSeparator *IntegerSeparatorDto,
+func (nStrIntSepMolecule *integerSeparatorSpecMolecule) copyIntSepDto(
+	destinationNStrIntSeparator *IntegerSeparatorSpec,
+	sourceNStrIntSeparator *IntegerSeparatorSpec,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
 
@@ -429,7 +429,7 @@ func (nStrIntSepMolecule *integerSeparatorDtoMolecule) copyIntSepDto(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"integerSeparatorDtoMolecule."+
+		"integerSeparatorSpecMolecule."+
 			"copyIn()",
 		"")
 
@@ -456,7 +456,7 @@ func (nStrIntSepMolecule *integerSeparatorDtoMolecule) copyIntSepDto(
 
 	_,
 		err =
-		new(integerSeparatorDtoQuark).
+		new(integerSeparatorSpecQuark).
 			testValidityOfNumStrIntSeparator(
 				sourceNStrIntSeparator,
 				ePrefix.XCpy(
@@ -498,7 +498,7 @@ func (nStrIntSepMolecule *integerSeparatorDtoMolecule) copyIntSepDto(
 	return err
 }
 
-// equal - Receives two IntegerSeparatorDto objects and proceeds to
+// equal - Receives two IntegerSeparatorSpec objects and proceeds to
 // determine whether all data elements in the first object are
 // equal to corresponding data elements in the second object.
 //
@@ -506,18 +506,18 @@ func (nStrIntSepMolecule *integerSeparatorDtoMolecule) copyIntSepDto(
 //
 // Input Parameters
 //
-//	nStrIntSepOne       *IntegerSeparatorDto
-//	   - A pointer to the first IntegerSeparatorDto object. This
+//	nStrIntSepOne       *IntegerSeparatorSpec
+//	   - A pointer to the first IntegerSeparatorSpec object. This
 //	     method will compare all data elements in this object to
 //	     corresponding data elements in the second
-//	     IntegerSeparatorDto object in order determine equivalency.
+//	     IntegerSeparatorSpec object in order determine equivalency.
 //
 //
-//	nStrIntSepTwo       *IntegerSeparatorDto
-//	   - A pointer to the second IntegerSeparatorDto object. This
+//	nStrIntSepTwo       *IntegerSeparatorSpec
+//	   - A pointer to the second IntegerSeparatorSpec object. This
 //	     method will compare all data elements in the first
-//	     IntegerSeparatorDto object to corresponding data elements in
-//	     this second IntegerSeparatorDto object in order determine
+//	     IntegerSeparatorSpec object to corresponding data elements in
+//	     this second IntegerSeparatorSpec object in order determine
 //	     equivalency.
 //
 //
@@ -552,9 +552,9 @@ func (nStrIntSepMolecule *integerSeparatorDtoMolecule) copyIntSepDto(
 //	     If the corresponding data elements are not equal, a
 //	     detailed error message identifying the unequal elements
 //	     will be returned.
-func (nStrIntSepMolecule *integerSeparatorDtoMolecule) equal(
-	nStrIntSepOne *IntegerSeparatorDto,
-	nStrIntSepTwo *IntegerSeparatorDto,
+func (nStrIntSepMolecule *integerSeparatorSpecMolecule) equal(
+	nStrIntSepOne *IntegerSeparatorSpec,
+	nStrIntSepTwo *IntegerSeparatorSpec,
 	errPrefDto *ePref.ErrPrefixDto) (
 	isEqual bool,
 	err error) {
@@ -572,7 +572,7 @@ func (nStrIntSepMolecule *integerSeparatorDtoMolecule) equal(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"integerSeparatorDtoMolecule."+
+		"integerSeparatorSpecMolecule."+
 			"equal()",
 		"")
 

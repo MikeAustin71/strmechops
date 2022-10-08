@@ -1467,9 +1467,9 @@ func (numStrKernelAtom *numberStrKernelAtom) emptyIntegerDigits(
 //		which be used to separate integer and fractional
 //		digits within a formatted Number String.
 //
-//	intSeparatorDto				IntegerSeparatorDto
+//	intSeparatorDto				IntegerSeparatorSpec
 //
-//		Type IntegerSeparatorDto is designed to manage
+//		Type IntegerSeparatorSpec is designed to manage
 //		integer separators, primarily thousands separators,
 //		for different countries and cultures. The term
 //		'integer separators' is used because this type
@@ -1496,7 +1496,7 @@ func (numStrKernelAtom *numberStrKernelAtom) emptyIntegerDigits(
 //			https://en.wikipedia.org/wiki/Chinese_numerals
 //			https://en.wikipedia.org/wiki/Decimal_separator
 //
-//		The IntegerSeparatorDto type provides the flexibility
+//		The IntegerSeparatorSpec type provides the flexibility
 //		necessary to process these complex number separation
 //		formats.
 //
@@ -1578,7 +1578,7 @@ func (numStrKernelAtom *numberStrKernelAtom) emptyIntegerDigits(
 func (numStrKernelAtom *numberStrKernelAtom) formatNumStrComponents(
 	numStrKernel *NumberStrKernel,
 	decSeparator DecimalSeparatorSpec,
-	intSeparatorDto IntegerSeparatorDto,
+	intSeparatorDto IntegerSeparatorSpec,
 	roundingSpec NumStrRoundingSpec,
 	negativeNumberSign NumStrNumberSymbolSpec,
 	positiveNumberSign NumStrNumberSymbolSpec,
@@ -1668,7 +1668,7 @@ func (numStrKernelAtom *numberStrKernelAtom) formatNumStrComponents(
 	var numStrWithIntSeps []rune
 
 	numStrWithIntSeps,
-		err = new(integerSeparatorDtoMolecule).applyIntSeparators(
+		err = new(integerSeparatorSpecMolecule).applyIntSeparators(
 		&intSeparatorDto,
 		newNumStrKernel.GetIntegerRuneArray(),
 		ePrefix.XCpy("intSeparatorDto"))

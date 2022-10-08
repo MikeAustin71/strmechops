@@ -3515,11 +3515,11 @@ func (sMech *StrMech) InsertStrAtIndex(
 //	integer grouping for thousands = 3
 //	result = 123,456,789,012,345
 //
-// The complexity inherent in the IntegerSeparatorDto type, used as
+// The complexity inherent in the IntegerSeparatorSpec type, used as
 // an input parameter, is necessary in order to provide support for
 // multinational and multicultural integer separation algorithms.
 // For more information on integer grouping sequence, reference the
-// source documentation for type, IntegerSeparatorDto.
+// source documentation for type, IntegerSeparatorSpec.
 //
 // Be advised - This method will never return a number sign for the
 // returned formatted integer separated numeric value. The numeric
@@ -3530,8 +3530,8 @@ func (sMech *StrMech) InsertStrAtIndex(
 //
 // Input Parameters
 //
-//	nStrIntSeparator           *IntegerSeparatorDto
-//	   - A pointer to an IntegerSeparatorDto object which contains
+//	nStrIntSeparator           *IntegerSeparatorSpec
+//	   - A pointer to an IntegerSeparatorSpec object which contains
 //	     the integer separation format parameters which will be
 //	     used to insert integer separators.
 //
@@ -3552,11 +3552,11 @@ func (sMech *StrMech) InsertStrAtIndex(
 //	     Other countries and cultures use spaces, apostrophes or
 //	     multiple characters to separate integers.
 //
-//	     The complexity inherent in the IntegerSeparatorDto type is
+//	     The complexity inherent in the IntegerSeparatorSpec type is
 //	     necessary in order to provide support for multinational
 //	     and multicultural integer separation algorithms. For
 //	     additional details, reference the source code
-//	     documentation for type  IntegerSeparatorDto.
+//	     documentation for type  IntegerSeparatorSpec.
 //
 //	     If 'nStrIntSeparator' is invalid, this method will return
 //	     an error.
@@ -3645,7 +3645,7 @@ func (sMech *StrMech) InsertStrAtIndex(
 //	     'errPrefDto' text will be attached to the beginning of the
 //	     error message.
 func (sMech *StrMech) IntSeparateNumStr(
-	nStrIntSeparator *IntegerSeparatorDto,
+	nStrIntSeparator *IntegerSeparatorSpec,
 	pureNumRunes []rune,
 	errorPrefix interface{}) (
 	numStrWithIntSeps []rune,
@@ -3671,7 +3671,7 @@ func (sMech *StrMech) IntSeparateNumStr(
 	}
 
 	numStrWithIntSeps,
-		err = new(integerSeparatorDtoMolecule).
+		err = new(integerSeparatorSpecMolecule).
 		applyIntSeparators(
 			nStrIntSeparator,
 			pureNumRunes,

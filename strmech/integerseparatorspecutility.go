@@ -12,7 +12,7 @@ type integerSeparatorDtoUtility struct {
 
 // setChineseNumberingRunes - Overwrites all the member variable
 // data values for the input parameter 'intSep', an instance of
-// type IntegerSeparatorDto.
+// type IntegerSeparatorSpec.
 //
 // This method is intended to configure Chinese Numbering System
 // integer grouping using one or more integer separator
@@ -51,8 +51,8 @@ type integerSeparatorDtoUtility struct {
 //
 // # Input Parameters
 //
-//	intSep                     *IntegerSeparatorDto
-//	   - A pointer to an instance of IntegerSeparatorDto. All the
+//	intSep                     *IntegerSeparatorSpec
+//	   - A pointer to an instance of IntegerSeparatorSpec. All the
 //	     member variable data values will be overwritten and reset
 //	     using the input parameters listed below and default
 //	     values.
@@ -94,7 +94,7 @@ type integerSeparatorDtoUtility struct {
 //	     'errPrefDto' text will be attached to the beginning of the
 //	     error message.
 func (intSeparatorUtil *integerSeparatorDtoUtility) setChineseNumberingRunes(
-	intSep *IntegerSeparatorDto,
+	intSep *IntegerSeparatorSpec,
 	intSeparatorChars []rune,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
@@ -149,7 +149,7 @@ func (intSeparatorUtil *integerSeparatorDtoUtility) setChineseNumberingRunes(
 		return err
 	}
 
-	err = new(integerSeparatorDtoQuark).
+	err = new(integerSeparatorSpecQuark).
 		empty(
 			intSep,
 			ePrefix.XCpy(
@@ -160,7 +160,7 @@ func (intSeparatorUtil *integerSeparatorDtoUtility) setChineseNumberingRunes(
 	}
 
 	err =
-		new(integerSeparatorDtoMechanics).
+		new(integerSeparatorSpecMechanics).
 			setWithComponents(
 				intSep,
 				intSeparatorChars,
@@ -174,7 +174,7 @@ func (intSeparatorUtil *integerSeparatorDtoUtility) setChineseNumberingRunes(
 
 // setIndiaNumberingRunes - Overwrites all the member variable
 // data values for the input parameter 'intSep', an instance of
-// type IntegerSeparatorDto.
+// type IntegerSeparatorSpec.
 //
 // This method is intended to configure India Numbering System
 // integer grouping using one or more integer separator
@@ -211,8 +211,8 @@ func (intSeparatorUtil *integerSeparatorDtoUtility) setChineseNumberingRunes(
 //
 // # Input Parameters
 //
-//	intSep                     *IntegerSeparatorDto
-//	   - A pointer to an instance of IntegerSeparatorDto. All the
+//	intSep                     *IntegerSeparatorSpec
+//	   - A pointer to an instance of IntegerSeparatorSpec. All the
 //	     member variable data values will be overwritten and reset
 //	     using the input parameters listed below and default
 //	     values.
@@ -256,7 +256,7 @@ func (intSeparatorUtil *integerSeparatorDtoUtility) setChineseNumberingRunes(
 //
 // [Wikipedia India Numbering System]: https://en.wikipedia.org/wiki/Indian_numbering_system
 func (intSeparatorUtil *integerSeparatorDtoUtility) setIndiaNumberingRunes(
-	intSep *IntegerSeparatorDto,
+	intSep *IntegerSeparatorSpec,
 	intSeparatorChars []rune,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
@@ -311,7 +311,7 @@ func (intSeparatorUtil *integerSeparatorDtoUtility) setIndiaNumberingRunes(
 		return err
 	}
 
-	err = new(integerSeparatorDtoQuark).
+	err = new(integerSeparatorSpecQuark).
 		empty(
 			intSep,
 			ePrefix.XCpy(
@@ -322,7 +322,7 @@ func (intSeparatorUtil *integerSeparatorDtoUtility) setIndiaNumberingRunes(
 	}
 
 	err =
-		new(integerSeparatorDtoMechanics).
+		new(integerSeparatorSpecMechanics).
 			setWithComponents(
 				intSep,
 				intSeparatorChars,
@@ -336,7 +336,7 @@ func (intSeparatorUtil *integerSeparatorDtoUtility) setIndiaNumberingRunes(
 
 // setThousandsRunes - Overwrites all the member variable data values
 // for the input parameter 'intSep', an instance of type
-// IntegerSeparatorDto.
+// IntegerSeparatorSpec.
 //
 // This method is intended to configure a basic or simple integer
 // separator object using default values and a minimum number of
@@ -370,8 +370,8 @@ func (intSeparatorUtil *integerSeparatorDtoUtility) setIndiaNumberingRunes(
 //
 // Input Parameters
 //
-//	intSep                     *IntegerSeparatorDto
-//	   - A pointer to an instance of IntegerSeparatorDto. All the
+//	intSep                     *IntegerSeparatorSpec
+//	   - A pointer to an instance of IntegerSeparatorSpec. All the
 //	     member variable data values will be overwritten and reset
 //	     using the input parameters listed below and default
 //	     values.
@@ -421,7 +421,7 @@ func (intSeparatorUtil *integerSeparatorDtoUtility) setIndiaNumberingRunes(
 //	     'errPrefDto' text will be attached to the beginning of the
 //	     error message.
 func (intSeparatorUtil *integerSeparatorDtoUtility) setThousandsRunes(
-	intSep *IntegerSeparatorDto,
+	intSep *IntegerSeparatorSpec,
 	intSeparatorChars []rune,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
@@ -476,7 +476,7 @@ func (intSeparatorUtil *integerSeparatorDtoUtility) setThousandsRunes(
 		return err
 	}
 
-	err = new(integerSeparatorDtoQuark).
+	err = new(integerSeparatorSpecQuark).
 		empty(
 			intSep,
 			ePrefix.XCpy(
@@ -487,7 +487,7 @@ func (intSeparatorUtil *integerSeparatorDtoUtility) setThousandsRunes(
 	}
 
 	err =
-		new(integerSeparatorDtoMechanics).
+		new(integerSeparatorSpecMechanics).
 			setWithComponents(
 				intSep,
 				intSeparatorChars,
@@ -499,11 +499,11 @@ func (intSeparatorUtil *integerSeparatorDtoUtility) setThousandsRunes(
 	return err
 }
 
-// setToUSADefaultsIfEmpty - If any of the IntegerSeparatorDto data
+// setToUSADefaultsIfEmpty - If any of the IntegerSeparatorSpec data
 // values are zero or invalid, this method will reset ALL data
 // elements to United States default values.
 //
-// If the current IntegerSeparatorDto instance is valid and
+// If the current IntegerSeparatorSpec instance is valid and
 // populated with data, this method will take no action and exit.
 //
 // United States default numeric separators are listed as follows:
@@ -522,8 +522,8 @@ func (intSeparatorUtil *integerSeparatorDtoUtility) setThousandsRunes(
 //
 // Input Parameters
 //
-//	intSep                     *IntegerSeparatorDto
-//	   - A pointer to an instance of IntegerSeparatorDto. If this
+//	intSep                     *IntegerSeparatorSpec
+//	   - A pointer to an instance of IntegerSeparatorSpec. If this
 //	     object is invalid or contains zero data values, all
 //	     member variable data values will be overwritten and reset
 //	     to United States default integer separator values.
@@ -555,7 +555,7 @@ func (intSeparatorUtil *integerSeparatorDtoUtility) setThousandsRunes(
 //	     'errPrefDto' text will be attached to the beginning of the
 //	     error message.
 func (intSeparatorUtil *integerSeparatorDtoUtility) setToUSADefaultsIfEmpty(
-	intSep *IntegerSeparatorDto,
+	intSep *IntegerSeparatorSpec,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
 
@@ -590,11 +590,11 @@ func (intSeparatorUtil *integerSeparatorDtoUtility) setToUSADefaultsIfEmpty(
 	}
 
 	ePrefix.SetEPrefCtx(
-		"IntegerSeparatorDto.IsValidInstanceError()",
+		"IntegerSeparatorSpec.IsValidInstanceError()",
 		"Testing Validity of 'intSep'")
 	_,
 		err =
-		new(integerSeparatorDtoQuark).
+		new(integerSeparatorSpecQuark).
 			testValidityOfNumStrIntSeparator(
 				intSep,
 				ePrefix)
@@ -603,7 +603,7 @@ func (intSeparatorUtil *integerSeparatorDtoUtility) setToUSADefaultsIfEmpty(
 		return err
 	}
 
-	err = new(integerSeparatorDtoQuark).
+	err = new(integerSeparatorSpecQuark).
 		empty(
 			intSep,
 			ePrefix.XCpy(
@@ -613,7 +613,7 @@ func (intSeparatorUtil *integerSeparatorDtoUtility) setToUSADefaultsIfEmpty(
 		return err
 	}
 
-	err = new(integerSeparatorDtoMechanics).
+	err = new(integerSeparatorSpecMechanics).
 		setToUSADefaults(
 			intSep,
 			ePrefix.XCpy(

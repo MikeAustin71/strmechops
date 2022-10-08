@@ -731,11 +731,11 @@ func (numStrFmtSpec *NumStrFormatSpec) GetIntSeparatorChars() string {
 }
 
 // GetIntegerSeparatorDto - Returns an instance of
-// IntegerSeparatorDto based on the configuration parameters
+// IntegerSeparatorSpec based on the configuration parameters
 // contained within the current instance of
 // NumStrFormatSpec.
 //
-// IntegerSeparatorDto is used by low level number string
+// IntegerSeparatorSpec is used by low level number string
 // formatting functions to complete the number string generation
 // operation.
 //
@@ -796,7 +796,7 @@ func (numStrFmtSpec *NumStrFormatSpec) GetIntSeparatorChars() string {
 //
 // # Return Values
 //
-//	IntegerSeparatorDto
+//	IntegerSeparatorSpec
 //
 //		If this method completes successfully, a copy
 //		of the integer grouping specification configured
@@ -815,7 +815,7 @@ func (numStrFmtSpec *NumStrFormatSpec) GetIntSeparatorChars() string {
 //		the beginning of the error message.
 func (numStrFmtSpec *NumStrFormatSpec) GetIntegerSeparatorDto(
 	errorPrefix interface{}) (
-	IntegerSeparatorDto,
+	IntegerSeparatorSpec,
 	error) {
 
 	if numStrFmtSpec.lock == nil {
@@ -837,7 +837,7 @@ func (numStrFmtSpec *NumStrFormatSpec) GetIntegerSeparatorDto(
 		"")
 
 	if err != nil {
-		return IntegerSeparatorDto{}, err
+		return IntegerSeparatorSpec{}, err
 	}
 
 	return numStrFmtSpec.intGroupingSpec.GetIntegerSeparatorDto(
@@ -1680,7 +1680,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtComponents(
 //	intGroupingType				IntegerGroupingType
 //
 //		This instance of IntegerGroupingType defines the type
-//		of IntegerSeparatorDto which will be returned. The
+//		of IntegerSeparatorSpec which will be returned. The
 //		enumeration IntegerGroupingType must be set to one
 //		of the following values:
 //		IntGroupingType.None()
@@ -2134,7 +2134,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtParams(
 //	intGroupingType				IntegerGroupingType
 //
 //		This instance of IntegerGroupingType defines the type
-//		of IntegerSeparatorDto which will be returned. The
+//		of IntegerSeparatorSpec which will be returned. The
 //		enumeration IntegerGroupingType must be set to one
 //		of the following values:
 //		IntGroupingType.None()
@@ -3820,7 +3820,7 @@ func (numStrFmtSpec *NumStrFormatSpec) SetNumFmtComponents(
 //	intGroupingType				IntegerGroupingType
 //
 //		This instance of IntegerGroupingType defines the type
-//		of IntegerSeparatorDto which will be returned. The
+//		of IntegerSeparatorSpec which will be returned. The
 //		enumeration IntegerGroupingType must be set to one
 //		of the following values:
 //		IntGroupingType.None()
@@ -4258,7 +4258,7 @@ func (numStrFmtSpec *NumStrFormatSpec) SetNumFmtParams(
 //	intGroupingType				IntegerGroupingType
 //
 //		This instance of IntegerGroupingType defines the type
-//		of IntegerSeparatorDto which will be returned. The
+//		of IntegerSeparatorSpec which will be returned. The
 //		enumeration IntegerGroupingType must be set to one
 //		of the following values:
 //		IntGroupingType.None()
@@ -5378,7 +5378,7 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) copySignedNumberFormatSp
 //	intGroupingType							IntegerGroupingType
 //
 //		This instance of IntegerGroupingType defines the type
-//		of IntegerSeparatorDto which will be returned. The
+//		of IntegerSeparatorSpec which will be returned. The
 //		enumeration IntegerGroupingType must be set to one
 //		of the following values:
 //		IntGroupingType.None()

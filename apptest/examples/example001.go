@@ -2021,7 +2021,7 @@ func (mt MainTest) IntSeparateNumRunes01() {
 	var outStr string
 
 	intSepDto,
-		err := new(strmech.IntegerSeparatorDto).NewComponents(
+		err := new(strmech.IntegerSeparatorSpec).NewComponents(
 		",",
 		[]uint{3},
 		false,
@@ -2121,7 +2121,7 @@ func (mt MainTest) IntSeparateNumRunes02() {
 	var outStr string
 
 	intSepDto,
-		err := new(strmech.IntegerSeparatorDto).NewComponents(
+		err := new(strmech.IntegerSeparatorSpec).NewComponents(
 		",",
 		[]uint{3},
 		false,
@@ -2198,7 +2198,7 @@ func (mt MainTest) IntSeparateNumRunes03() {
 	var outStr string
 
 	intSepDto,
-		err := new(strmech.IntegerSeparatorDto).NewComponents(
+		err := new(strmech.IntegerSeparatorSpec).NewComponents(
 		",",
 		[]uint{3, 2},
 		false,
@@ -2328,10 +2328,10 @@ func (mt MainTest) IntSeparateNumRunes04() {
 	fmt.Println(txtLineBreak.GetFormattedText(nil))
 	fmt.Println()
 
-	var intSepDto strmech.IntegerSeparatorDto
+	var intSepDto strmech.IntegerSeparatorSpec
 
 	intSepDto,
-		err = new(strmech.IntegerSeparatorDto).NewComponents(
+		err = new(strmech.IntegerSeparatorSpec).NewComponents(
 		",",
 		[]uint{3, 2},
 		true,
@@ -2452,7 +2452,7 @@ func (mt MainTest) IntSeparateNumRunes05() {
 	// uint[]{4}.
 
 	intSepDto,
-		err := new(strmech.IntegerSeparatorDto).NewComponents(
+		err := new(strmech.IntegerSeparatorSpec).NewComponents(
 		",",
 		[]uint{4},
 		false,
