@@ -1977,7 +1977,7 @@ func (nStrIntSep *IntegerSeparatorDto) NewChineseNumberingRunes(
 	return newIntSep, err
 }
 
-//	NewDetail
+//	NewComponents
 //
 //	Creates and returns a new instance of IntegerSeparatorDto.
 //	The new instance is generated based on component elements
@@ -2170,7 +2170,7 @@ func (nStrIntSep *IntegerSeparatorDto) NewChineseNumberingRunes(
 //		chain and text passed by input parameter, 'errorPrefix'.
 //		The 'errorPrefix' text will be attached to the beginning
 //		of the error message.
-func (nStrIntSep *IntegerSeparatorDto) NewDetail(
+func (nStrIntSep *IntegerSeparatorDto) NewComponents(
 	intSeparatorChars string,
 	intSeparatorGrouping []uint,
 	restartIntGroupingSequence bool,
@@ -2191,7 +2191,7 @@ func (nStrIntSep *IntegerSeparatorDto) NewDetail(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"IntegerSeparatorDto.NewDetail()",
+		"IntegerSeparatorDto.NewComponents()",
 		"")
 
 	if err != nil {
@@ -2226,7 +2226,7 @@ func (nStrIntSep *IntegerSeparatorDto) NewDetail(
 //	based on component elements passed as input
 //	parameters.
 //
-//	This method differs from IntegerSeparatorDto.NewDetail()
+//	This method differs from IntegerSeparatorDto.NewComponents()
 //	in that this method accepts an array of runes for
 //	'intSeparatorChars'.
 //
@@ -2479,7 +2479,7 @@ func (nStrIntSep *IntegerSeparatorDto) NewDetailRunes(
 //	If custom integer separator algorithms are required, see
 //	method:
 //
-//		IntegerSeparatorDto.NewDetail()
+//		IntegerSeparatorDto.NewComponents()
 //		IntegerSeparatorDto.NewDetailRunes()
 //
 // ----------------------------------------------------------------
@@ -2630,7 +2630,7 @@ func (nStrIntSep *IntegerSeparatorDto) NewFrenchDefaults(
 //	If custom integer separator algorithms are required, see
 //	methods:
 //
-//		IntegerSeparatorDto.NewDetail()
+//		IntegerSeparatorDto.NewComponents()
 //		IntegerSeparatorDto.NewDetailRunes()
 //
 // ----------------------------------------------------------------
