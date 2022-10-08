@@ -4985,13 +4985,6 @@ func (nStrIntSep *IntegerSeparatorDto) SetComponents(
 		return err
 	}
 
-	if len(intSeparatorChars) == 0 {
-		return fmt.Errorf("%v\n"+
-			"Error: Input parameter 'intSeparatorChars' is invalid!\n"+
-			"'intSeparatorChars' is an empty string.\n",
-			ePrefix.String())
-	}
-
 	return new(integerSeparatorDtoMechanics).
 		setWithComponents(
 			nStrIntSep,
@@ -5219,13 +5212,6 @@ func (nStrIntSep *IntegerSeparatorDto) SetComponentsRunes(
 
 	if err != nil {
 		return err
-	}
-
-	if len(intSeparatorChars) == 0 {
-		return fmt.Errorf("%v\n"+
-			"Error: Input parameter 'intSeparatorChars' is invalid!\n"+
-			"'intSeparatorChars' is an empty string.\n",
-			ePrefix.String())
 	}
 
 	return new(integerSeparatorDtoMechanics).
