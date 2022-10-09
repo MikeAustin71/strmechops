@@ -70,17 +70,18 @@
 //			"github.com/MikeAustin71/errpref".
 
 - Error Return with Tabs
-//
 //	err							error
 //
-//		If this method completes successfully and no errors
-//		are encountered this return value is set to 'nil'.
-//		Otherwise, if errors are encountered, this return
-//		value will contain an appropriate error message.
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
 //
-//		If an error message is returned, the text value of
-//		input parameter 'errorPrefix' will be inserted or
-//		prefixed at	the beginning of the error message.
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the	method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
 
 
 - Subsidiary Error with Tabs
