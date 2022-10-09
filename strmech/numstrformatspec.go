@@ -24,10 +24,6 @@ type NumStrFormatSpec struct {
 	// applied to the number string formatting
 	// operations.
 
-	roundingSpec NumStrRoundingSpec
-	// Controls the rounding algorithm applied to
-	// floating point numbers.
-
 	negativeNumberSign NumStrNumberSymbolSpec
 	// The Number String Negative Number Sign
 	// Specification is used to configure negative
@@ -1332,132 +1328,6 @@ func (numStrFmtSpec *NumStrFormatSpec) GetPositiveNumSymSpec(
 			"<-numStrFmtSpec.positiveNumberSign"))
 }
 
-// GetRoundingSpec - Returns the Rounding Specification
-// configured for the current instance of
-// NumStrFormatSpec.
-//
-// The Rounding Specification determines if rounding will be
-// applied to the fractional digits in a number string as
-// well as the type of rounding algorithm applied and the
-// number of fractional digits remaining after the rounding
-// operation is completed.
-//
-// ----------------------------------------------------------------
-//
-// # Input Parameters
-//
-//	 errorPrefix                interface{}
-//
-//		This object encapsulates error prefix text which
-//		is included in all returned error messages.
-//		Usually, it	contains the name of the calling
-//		method or methods listed as a method or function
-//		chain of execution.
-//
-//		If no error prefix information is needed, set this
-//		parameter to 'nil'.
-//
-//		This empty interface must be convertible to one of
-//		the following types:
-//
-//		1.	nil
-//				A nil value is valid and generates an
-//				empty collection of error prefix and
-//				error context information.
-//
-//		2.	string
-//				A string containing error prefix
-//				information.
-//
-//		3.	[]string
-//				A one-dimensional slice of strings
-//				containing error prefix information.
-//
-//		4.	[][2]string
-//				A two-dimensional slice of strings
-//		   		containing error prefix and error
-//		   		context information.
-//
-//		5.	ErrPrefixDto
-//				An instance of ErrPrefixDto.
-//				Information from this object will
-//				be copied for use in error and
-//				informational messages.
-//
-//		6.	*ErrPrefixDto
-//				A pointer to an instance of
-//				ErrPrefixDto. Information from
-//				this object will be copied for use
-//				in error and informational messages.
-//
-//		7.  IBasicErrorPrefix
-//				An interface to a method
-//				generating a two-dimensional slice
-//				of strings containing error prefix
-//				and error context information.
-//
-//		If parameter 'errorPrefix' is NOT convertible
-//		to one of the valid types listed above, it will
-//		be considered invalid and trigger the return of
-//		an error.
-//
-//		Types ErrPrefixDto and IBasicErrorPrefix are
-//		included in the 'errpref' software package:
-//			"github.com/MikeAustin71/errpref".
-//
-// ----------------------------------------------------------------
-//
-// # Return Values
-//
-//	NumStrRoundingSpec
-//
-//		If this method completes successfully, a copy
-//		of the Rounding Specification configured for
-//		the current NumStrFormatSpec instance
-//		will be returned.
-//
-//	error
-//
-//		If this method completes successfully and no errors are
-//		encountered this return value is set to 'nil'. Otherwise,
-//		if errors are encountered, this return value will contain
-//		an appropriate error message.
-//
-//		If an error message is returned, the text value of input
-//		parameter 'errorPrefix' will be inserted or prefixed at
-//		the beginning of the error message.
-func (numStrFmtSpec *NumStrFormatSpec) GetRoundingSpec(
-	errorPrefix interface{}) (
-	NumStrRoundingSpec,
-	error) {
-
-	if numStrFmtSpec.lock == nil {
-		numStrFmtSpec.lock = new(sync.Mutex)
-	}
-
-	numStrFmtSpec.lock.Lock()
-
-	defer numStrFmtSpec.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-	var err error
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
-		"NumStrFormatSpec."+
-			"GetRoundingSpec()",
-		"")
-
-	if err != nil {
-		return NumStrRoundingSpec{}, err
-	}
-
-	return numStrFmtSpec.roundingSpec.CopyOut(
-		ePrefix.XCpy(
-			"<-numStrFmtSpec.roundingSpec"))
-}
-
 // GetZeroNumSymSpec - Returns the Zero Number Symbol
 // Specification currently configured for this instance of
 // NumStrFormatSpec.
@@ -1602,13 +1472,6 @@ func (numStrFmtSpec *NumStrFormatSpec) GetZeroNumSymSpec(
 //		integer grouping and separation within a Number
 //		String.
 //
-//	roundingSpec 				NumStrRoundingSpec
-//
-//		Numeric Value Rounding Specification. This
-//		specification contains all the parameters
-//		required to configure and apply a rounding
-//		algorithm for floating point Number Strings.
-//
 //	negativeNumberSign			IntegerSeparatorSpec
 //
 //		This Integer Separator Specification contains
@@ -1725,7 +1588,6 @@ func (numStrFmtSpec *NumStrFormatSpec) GetZeroNumSymSpec(
 func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtComponents(
 	decSeparator DecimalSeparatorSpec,
 	intSeparatorSpec IntegerSeparatorSpec,
-	roundingSpec NumStrRoundingSpec,
 	negativeNumberSign NumStrNumberSymbolSpec,
 	positiveNumberSign NumStrNumberSymbolSpec,
 	zeroNumberSign NumStrNumberSymbolSpec,
@@ -1759,7 +1621,6 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtComponents(
 		&newSignedNumFmtSpec,
 		decSeparator,
 		intSeparatorSpec,
-		roundingSpec,
 		negativeNumberSign,
 		positiveNumberSign,
 		zeroNumberSign,
@@ -2169,8 +2030,6 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtParams(
 	decSeparatorChars string,
 	intGroupingChars string,
 	intGroupingType IntegerGroupingType,
-	roundingType NumberRoundingType,
-	roundToFractionalDigits int,
 	leadingPosNumSign string,
 	trailingPosNumSign string,
 	positiveNumFieldSymPosition NumberFieldSymbolPosition,
@@ -2213,8 +2072,6 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtParams(
 			[]rune(decSeparatorChars),
 			[]rune(intGroupingChars),
 			intGroupingType,
-			roundingType,
-			roundToFractionalDigits,
 			[]rune(leadingPosNumSign),
 			[]rune(trailingPosNumSign),
 			positiveNumFieldSymPosition,
@@ -2303,14 +2160,6 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtParams(
 //			NumRoundType.Floor()
 //			NumRoundType.Ceiling()
 //			NumRoundType.Truncate()
-//
-//	roundToFractionalDigits		int
-//
-//		When set to a positive integer value, this parameter
-//		controls the number of digits to the right of the
-//		decimal separator (a.k.a. decimal point) which will
-//		remain after completion of the number rounding
-//		operation.
 //
 //	leadingPositiveNumSign		[]rune
 //
@@ -2615,8 +2464,6 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtParamsRunes(
 	decSeparatorChars []rune,
 	intGroupingChars []rune,
 	intGroupingType IntegerGroupingType,
-	roundingType NumberRoundingType,
-	roundToFractionalDigits int,
 	leadingPosNumSign []rune,
 	trailingPosNumSign []rune,
 	positiveNumFieldSymPosition NumberFieldSymbolPosition,
@@ -2659,8 +2506,6 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtParamsRunes(
 			decSeparatorChars,
 			intGroupingChars,
 			intGroupingType,
-			roundingType,
-			roundToFractionalDigits,
 			leadingPosNumSign,
 			trailingPosNumSign,
 			positiveNumFieldSymPosition,
@@ -2735,13 +2580,6 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtParamsRunes(
 // ----------------------------------------------------------------
 //
 // # Input Parameters
-//
-//	roundingSpec 				NumStrRoundingSpec
-//
-//		Numeric Value Rounding Specification. This
-//		specification contains all the parameters
-//		required to configure and apply a rounding
-//		algorithm for floating point Number Strings.
 //
 //	numberFieldSpec				NumStrNumberFieldSpec
 //
@@ -2835,7 +2673,6 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtParamsRunes(
 //		'errorPrefix' text will be attached to the beginning of
 //		the error message.
 func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumFmtFrance(
-	roundingSpec NumStrRoundingSpec,
 	numberFieldSpec NumStrNumberFieldSpec,
 	errorPrefix interface{}) (
 	newSignedNumFmtSpec NumStrFormatSpec,
@@ -2864,7 +2701,6 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumFmtFrance(
 
 	err = new(numStrFmtSpecNanobot).setSignedNStrFmtComponentsFrance(
 		&newSignedNumFmtSpec,
-		roundingSpec,
 		numberFieldSpec,
 		ePrefix.XCpy("newSignedNumFmtSpec<-"))
 
@@ -3006,7 +2842,6 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumFmtFrance(
 //		'errorPrefix' text will be attached to the beginning of
 //		the error message.
 func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumFmtUS(
-	roundingSpec NumStrRoundingSpec,
 	numberFieldSpec NumStrNumberFieldSpec,
 	errorPrefix interface{}) (
 	newSignedNumFmtSpec NumStrFormatSpec,
@@ -3035,7 +2870,6 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumFmtUS(
 
 	err = new(numStrFmtSpecNanobot).setSignedNStrFmtComponentsUS(
 		&newSignedNumFmtSpec,
-		roundingSpec,
 		numberFieldSpec,
 		ePrefix.XCpy("newSignedNumFmtSpec<-"))
 
@@ -3697,129 +3531,6 @@ func (numStrFmtSpec *NumStrFormatSpec) SetPositiveNumberFmtSpec(
 					"positiveNumberSign"))
 }
 
-// SetRoundingSpec - Deletes and replaces the Rounding
-// Specification contained in the current instance of
-// NumStrFormatSpec.
-//
-// ----------------------------------------------------------------
-//
-// # Input Parameters
-//
-//	roundingSpec				NumStrRoundingSpec
-//
-//		An instance of NumStrRoundingSpec. All data values in
-//		this NumStrRoundingSpec instance will be copied to the
-//		member variable 'NumStrFormatSpec.roundingSpec'
-//		contained in the current instance of
-//		NumStrFormatSpec.
-//
-//	 errorPrefix                interface{}
-//
-//		This object encapsulates error prefix text which
-//		is included in all returned error messages.
-//		Usually, it	contains the name of the calling
-//		method or methods listed as a method or function
-//		chain of execution.
-//
-//		If no error prefix information is needed, set this
-//		parameter to 'nil'.
-//
-//		This empty interface must be convertible to one of
-//		the following types:
-//
-//		1.	nil
-//				A nil value is valid and generates an
-//				empty collection of error prefix and
-//				error context information.
-//
-//		2.	string
-//				A string containing error prefix
-//				information.
-//
-//		3.	[]string
-//				A one-dimensional slice of strings
-//				containing error prefix information.
-//
-//		4.	[][2]string
-//				A two-dimensional slice of strings
-//		   		containing error prefix and error
-//		   		context information.
-//
-//		5.	ErrPrefixDto
-//				An instance of ErrPrefixDto.
-//				Information from this object will
-//				be copied for use in error and
-//				informational messages.
-//
-//		6.	*ErrPrefixDto
-//				A pointer to an instance of
-//				ErrPrefixDto. Information from
-//				this object will be copied for use
-//				in error and informational messages.
-//
-//		7.  IBasicErrorPrefix
-//				An interface to a method
-//				generating a two-dimensional slice
-//				of strings containing error prefix
-//				and error context information.
-//
-//		If parameter 'errorPrefix' is NOT convertible
-//		to one of the valid types listed above, it will
-//		be considered invalid and trigger the return of
-//		an error.
-//
-//		Types ErrPrefixDto and IBasicErrorPrefix are
-//		included in the 'errpref' software package:
-//			"github.com/MikeAustin71/errpref".
-//
-// -----------------------------------------------------------------
-//
-// # Return Values
-//
-//	error
-//
-//		If this method completes successfully, the returned error
-//		Type is set equal to 'nil'.
-//
-//		If errors are encountered during processing, the returned
-//		error Type will encapsulate an error message. This
-//		returned error message will incorporate the method chain
-//		and text passed by input parameter, 'errorPrefix'. The
-//		'errorPrefix' text will be attached to the beginning of
-//		the error message.
-func (numStrFmtSpec *NumStrFormatSpec) SetRoundingSpec(
-	roundingSpec NumStrRoundingSpec,
-	errorPrefix interface{}) error {
-
-	if numStrFmtSpec.lock == nil {
-		numStrFmtSpec.lock = new(sync.Mutex)
-	}
-
-	numStrFmtSpec.lock.Lock()
-
-	defer numStrFmtSpec.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-	var err error
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
-		"NumStrFormatSpec."+
-			"SetRoundingSpec()",
-		"")
-
-	if err != nil {
-		return err
-	}
-
-	return new(numStrFmtSpecAtom).setRoundingSpec(
-		numStrFmtSpec,
-		roundingSpec,
-		ePrefix.XCpy(
-			""))
-}
-
 //	SetNumFmtComponents
 //
 //	Reconfigures the current instance of NumStrFormatSpec
@@ -3851,13 +3562,6 @@ func (numStrFmtSpec *NumStrFormatSpec) SetRoundingSpec(
 //		encapsulates the parameters required to format
 //		integer grouping and separation within a Number
 //		String.
-//
-//	roundingSpec 				NumStrRoundingSpec
-//
-//		Numeric Value Rounding Specification. This
-//		specification contains all the parameters
-//		required to configure and apply a rounding
-//		algorithm for floating point Number Strings.
 //
 //	negativeNumberSign			NumStrNumberSymbolSpec
 //
@@ -3968,13 +3672,11 @@ func (numStrFmtSpec *NumStrFormatSpec) SetRoundingSpec(
 func (numStrFmtSpec *NumStrFormatSpec) SetNumFmtComponents(
 	decSeparator DecimalSeparatorSpec,
 	intSeparatorSpec IntegerSeparatorSpec,
-	roundingSpec NumStrRoundingSpec,
 	negativeNumberSign NumStrNumberSymbolSpec,
 	positiveNumberSign NumStrNumberSymbolSpec,
 	zeroNumberSign NumStrNumberSymbolSpec,
 	numberFieldSpec NumStrNumberFieldSpec,
-	errorPrefix interface{}) (
-	err error) {
+	errorPrefix interface{}) (err error) {
 
 	if numStrFmtSpec.lock == nil {
 		numStrFmtSpec.lock = new(sync.Mutex)
@@ -4001,7 +3703,6 @@ func (numStrFmtSpec *NumStrFormatSpec) SetNumFmtComponents(
 		numStrFmtSpec,
 		decSeparator,
 		intSeparatorSpec,
-		roundingSpec,
 		negativeNumberSign,
 		positiveNumberSign,
 		zeroNumberSign,
@@ -4067,38 +3768,6 @@ func (numStrFmtSpec *NumStrFormatSpec) SetNumFmtComponents(
 //		IntGroupingType.Thousands()
 //		IntGroupingType.IndiaNumbering()
 //		IntGroupingType.ChineseNumbering()
-//
-//	roundingType				NumberRoundingType
-//
-//		This parameter will populate the
-//		'NumStrRoundingSpec.roundingType' member variable
-//		data value contained in returned instance of
-//		NumStrRoundingSpec.
-//
-//		NumberRoundingType is an enumeration specifying the
-//		rounding algorithm to be applied in the fractional
-//		digit rounding operation. Valid values are listed
-//		as follows:
-//
-//			NumRoundType.NoRounding()
-//			NumRoundType.HalfUpWithNegNums()
-//			NumRoundType.HalfDownWithNegNums()
-//			NumRoundType.HalfAwayFromZero()
-//			NumRoundType.HalfTowardsZero()
-//			NumRoundType.HalfToEven()
-//			NumRoundType.HalfToOdd()
-//			NumRoundType.Randomly()
-//			NumRoundType.Floor()
-//			NumRoundType.Ceiling()
-//			NumRoundType.Truncate()
-//
-//	roundToFractionalDigits		int
-//
-//		When set to a positive integer value, this parameter
-//		controls the number of digits to the right of the
-//		decimal separator (a.k.a. decimal point) which will
-//		remain after completion of the number rounding
-//		operation.
 //
 //	leadingPositiveNumSign		string
 //
@@ -4397,8 +4066,6 @@ func (numStrFmtSpec *NumStrFormatSpec) SetNumFmtParams(
 	decSeparatorChars string,
 	intGroupingChars string,
 	intGroupingType IntegerGroupingType,
-	roundingType NumberRoundingType,
-	roundToFractionalDigits int,
 	leadingPosNumSign string,
 	trailingPosNumSign string,
 	positiveNumFieldSymPosition NumberFieldSymbolPosition,
@@ -4440,8 +4107,6 @@ func (numStrFmtSpec *NumStrFormatSpec) SetNumFmtParams(
 			[]rune(decSeparatorChars),
 			[]rune(intGroupingChars),
 			intGroupingType,
-			roundingType,
-			roundToFractionalDigits,
 			[]rune(leadingPosNumSign),
 			[]rune(trailingPosNumSign),
 			positiveNumFieldSymPosition,
@@ -4515,38 +4180,6 @@ func (numStrFmtSpec *NumStrFormatSpec) SetNumFmtParams(
 //		IntGroupingType.Thousands()
 //		IntGroupingType.IndiaNumbering()
 //		IntGroupingType.ChineseNumbering()
-//
-//	roundingType				NumberRoundingType
-//
-//		This parameter will populate the
-//		'NumStrRoundingSpec.roundingType' member variable
-//		data value contained in returned instance of
-//		NumStrRoundingSpec.
-//
-//		NumberRoundingType is an enumeration specifying the
-//		rounding algorithm to be applied in the fractional
-//		digit rounding operation. Valid values are listed
-//		as follows:
-//
-//			NumRoundType.NoRounding()
-//			NumRoundType.HalfUpWithNegNums()
-//			NumRoundType.HalfDownWithNegNums()
-//			NumRoundType.HalfAwayFromZero()
-//			NumRoundType.HalfTowardsZero()
-//			NumRoundType.HalfToEven()
-//			NumRoundType.HalfToOdd()
-//			NumRoundType.Randomly()
-//			NumRoundType.Floor()
-//			NumRoundType.Ceiling()
-//			NumRoundType.Truncate()
-//
-//	roundToFractionalDigits		int
-//
-//		When set to a positive integer value, this parameter
-//		controls the number of digits to the right of the
-//		decimal separator (a.k.a. decimal point) which will
-//		remain after completion of the number rounding
-//		operation.
 //
 //	leadingPositiveNumSign		[]rune
 //
@@ -4845,8 +4478,6 @@ func (numStrFmtSpec *NumStrFormatSpec) SetNumFmtParamsRunes(
 	decSeparatorChars []rune,
 	intGroupingChars []rune,
 	intGroupingType IntegerGroupingType,
-	roundingType NumberRoundingType,
-	roundToFractionalDigits int,
 	leadingPosNumSign []rune,
 	trailingPosNumSign []rune,
 	positiveNumFieldSymPosition NumberFieldSymbolPosition,
@@ -4888,8 +4519,6 @@ func (numStrFmtSpec *NumStrFormatSpec) SetNumFmtParamsRunes(
 			decSeparatorChars,
 			intGroupingChars,
 			intGroupingType,
-			roundingType,
-			roundToFractionalDigits,
 			leadingPosNumSign,
 			trailingPosNumSign,
 			positiveNumFieldSymPosition,
@@ -4973,13 +4602,6 @@ func (numStrFmtSpec *NumStrFormatSpec) SetNumFmtParamsRunes(
 // ----------------------------------------------------------------
 //
 // # Input Parameters
-//
-//	roundingSpec 				NumStrRoundingSpec
-//
-//		Numeric Value Rounding Specification. This
-//		specification contains all the parameters
-//		required to configure and apply a rounding
-//		algorithm for floating point Number Strings.
 //
 //	numberFieldSpec				NumStrNumberFieldSpec
 //
@@ -5067,7 +4689,6 @@ func (numStrFmtSpec *NumStrFormatSpec) SetNumFmtParamsRunes(
 //		'errorPrefix' text will be attached to the beginning of
 //		the error message.
 func (numStrFmtSpec *NumStrFormatSpec) SetSignedNumFmtFrance(
-	roundingSpec NumStrRoundingSpec,
 	numberFieldSpec NumStrNumberFieldSpec,
 	errorPrefix interface{}) (
 	err error) {
@@ -5095,7 +4716,6 @@ func (numStrFmtSpec *NumStrFormatSpec) SetSignedNumFmtFrance(
 
 	return new(numStrFmtSpecNanobot).setSignedNStrFmtComponentsFrance(
 		numStrFmtSpec,
-		roundingSpec,
 		numberFieldSpec,
 		ePrefix.XCpy("numStrFmtSpec<-"))
 }
@@ -5144,13 +4764,6 @@ func (numStrFmtSpec *NumStrFormatSpec) SetSignedNumFmtFrance(
 // ----------------------------------------------------------------
 //
 // # Input Parameters
-//
-//	roundingSpec 				NumStrRoundingSpec
-//
-//		Numeric Value Rounding Specification. This
-//		specification contains all the parameters
-//		required to configure and apply a rounding
-//		algorithm for floating point Number Strings.
 //
 //	numberFieldSpec				NumStrNumberFieldSpec
 //
@@ -5238,7 +4851,6 @@ func (numStrFmtSpec *NumStrFormatSpec) SetSignedNumFmtFrance(
 //		'errorPrefix' text will be attached to the beginning of
 //		the error message.
 func (numStrFmtSpec *NumStrFormatSpec) SetSignedNumFmtUS(
-	roundingSpec NumStrRoundingSpec,
 	numberFieldSpec NumStrNumberFieldSpec,
 	errorPrefix interface{}) (
 	err error) {
@@ -5266,7 +4878,6 @@ func (numStrFmtSpec *NumStrFormatSpec) SetSignedNumFmtUS(
 
 	return new(numStrFmtSpecNanobot).setSignedNStrFmtComponentsUS(
 		numStrFmtSpec,
-		roundingSpec,
 		numberFieldSpec,
 		ePrefix.XCpy("numStrFmtSpec<-"))
 }
@@ -5539,17 +5150,6 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) copySignedNumberFormatSp
 		&sourceSignedNumFmtSpec.intSeparatorSpec,
 		ePrefix.XCpy(
 			"destinationSignedNumFmtSpec.intSeparatorSpec"+
-				"<-sourceSignedNumFmtSpec"))
-
-	if err != nil {
-		return err
-	}
-
-	err = new(numStrRoundingSpecNanobot).copyNStrRoundingSpec(
-		&destinationSignedNumFmtSpec.roundingSpec,
-		&sourceSignedNumFmtSpec.roundingSpec,
-		ePrefix.XCpy(
-			"destinationSignedNumFmtSpec.roundingSpec"+
 				"<-sourceSignedNumFmtSpec"))
 
 	if err != nil {
@@ -5941,8 +5541,6 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setNStrNumberFieldSpec(
 	decSeparatorChars []rune,
 	intGroupingChars []rune,
 	intGroupingType IntegerGroupingType,
-	roundingType NumberRoundingType,
-	roundToFractionalDigits int,
 	leadingPosNumSign []rune,
 	trailingPosNumSign []rune,
 	positiveNumFieldSymPosition NumberFieldSymbolPosition,
@@ -6007,18 +5605,6 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setNStrNumberFieldSpec(
 		ePrefix.XCpy(
 			"numStrFmtSpec<-"+
 				"intGroupingParams"))
-
-	if err != nil {
-		return err
-	}
-
-	err = signedNumFmtSpecAtom.setRoundingParams(
-		numStrFmtSpec,
-		roundingType,
-		roundToFractionalDigits,
-		ePrefix.XCpy(
-			"numStrFmtSpec<-"+
-				"RoundingParams"))
 
 	if err != nil {
 		return err
@@ -6136,13 +5722,6 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setNStrNumberFieldSpec(
 //	by data values configured from the input parameter
 //	described below.
 //
-//	roundingSpec 				NumStrRoundingSpec
-//
-//		Numeric Value Rounding Specification. This
-//		specification contains all the parameters
-//		required to configure and apply a rounding
-//		algorithm for floating point Number Strings.
-//
 //	numberFieldSpec				NumStrNumberFieldSpec
 //
 //		This Number Field Specification contains all
@@ -6182,7 +5761,6 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setNStrNumberFieldSpec(
 //		attached at the beginning of the error message.
 func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtComponentsFrance(
 	numStrFmtSpec *NumStrFormatSpec,
-	roundingSpec NumStrRoundingSpec,
 	numberFieldSpec NumStrNumberFieldSpec,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
@@ -6275,7 +5853,6 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtComponen
 		numStrFmtSpec,
 		decSeparator,
 		intSeparatorSpec,
-		roundingSpec,
 		negativeNumberSign,
 		positiveNumberSign,
 		zeroNumberSign,
@@ -6329,17 +5906,10 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtComponen
 //
 // numStrFmtSpec				*NumStrFormatSpec
 //
-//	A pointer to a NumStrFormatSpec instance. All  member
-//	variable data fields in this object will be replaced
-//	by data values configured from the input parameter
-//	described below.
-//
-//	roundingSpec 				NumStrRoundingSpec
-//
-//		Numeric Value Rounding Specification. This
-//		specification contains all the parameters
-//		required to configure and apply a rounding
-//		algorithm for floating point Number Strings.
+//		A pointer to a NumStrFormatSpec instance. All
+//		member variable data fields in this object will
+//		be replaced by data values configured from the
+//		input parameter described below.
 //
 //	numberFieldSpec				NumStrNumberFieldSpec
 //
@@ -6352,35 +5922,39 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtComponen
 //		justifying a Number String within a Number
 //		Field.
 //
-//	errPrefDto						*ePref.ErrPrefixDto
-//		This object encapsulates an error prefix string which is
-//		included in all returned error messages. Usually, it
-//		contains the name of the calling method or methods listed
-//		as a function chain.
+//	errPrefDto					*ePref.ErrPrefixDto
 //
-//		If no error prefix information is needed, set this
-//		parameter to 'nil'.
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
 //
-//		Type ErrPrefixDto is included in the 'errpref' software
-//		package, "github.com/MikeAustin71/errpref".
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
 //
 // -----------------------------------------------------------------
 //
 // # Return Values
 //
-//	err								error
+//	err							error
 //
-//		If this method completes successfully, this returned error
-//		Type is set equal to 'nil'. If errors are encountered during
-//		processing, the returned error Type will encapsulate an error
+//		If this method completes successfully, this
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
 //		message.
 //
-//		If an error message is returned, the text value for input
-//		parameter 'errPrefDto' (error prefix) will be prefixed or
-//		attached at the beginning of the error message.
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
 func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtComponentsUS(
 	numStrFmtSpec *NumStrFormatSpec,
-	roundingSpec NumStrRoundingSpec,
 	numberFieldSpec NumStrNumberFieldSpec,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
@@ -6473,7 +6047,6 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtComponen
 		numStrFmtSpec,
 		decSeparator,
 		intSeparatorSpec,
-		roundingSpec,
 		negativeNumberSign,
 		positiveNumberSign,
 		zeroNumberSign,
@@ -6531,8 +6104,6 @@ func (signedNumFmtSpecAtom *numStrFmtSpecAtom) empty(
 	signedNumFmtSpec.decSeparator.Empty()
 
 	signedNumFmtSpec.intSeparatorSpec.Empty()
-
-	signedNumFmtSpec.roundingSpec.Empty()
 
 	signedNumFmtSpec.positiveNumberSign.Empty()
 
@@ -6613,12 +6184,6 @@ func (signedNumFmtSpecAtom *numStrFmtSpecAtom) equal(
 		nil)
 
 	if !areEqual {
-
-		return false
-	}
-
-	if !signedNumFmtSpec1.roundingSpec.Equal(
-		&signedNumFmtSpec2.roundingSpec) {
 
 		return false
 	}
@@ -7686,12 +7251,6 @@ func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setNumberFieldSpec(
 //		integer grouping and separation within a Number
 //		String.
 //
-//	roundingSpec 				NumStrRoundingSpec
-//		Numeric Value Rounding Specification. This
-//		specification contains all the parameters
-//		required to configure and apply a rounding
-//		algorithm for floating point Number Strings.
-//
 //	negativeNumberSign			NumStrNumberSymbolSpec
 //		This Number String Symbol Specification contains
 //		all the characters used to format number sign
@@ -7750,7 +7309,6 @@ func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setNStrFmtComponents(
 	numStrFmtSpec *NumStrFormatSpec,
 	decSeparator DecimalSeparatorSpec,
 	intSeparatorSpec IntegerSeparatorSpec,
-	roundingSpec NumStrRoundingSpec,
 	negativeNumberSign NumStrNumberSymbolSpec,
 	positiveNumberSign NumStrNumberSymbolSpec,
 	zeroNumberSign NumStrNumberSymbolSpec,
@@ -7798,15 +7356,6 @@ func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setNStrFmtComponents(
 		&intSeparatorSpec,
 		ePrefix.XCpy(
 			"intSeparatorSpec->"))
-
-	if err != nil {
-		return err
-	}
-
-	err = numStrFmtSpec.roundingSpec.CopyIn(
-		&roundingSpec,
-		ePrefix.XCpy(
-			"roundingSpec->"))
 
 	if err != nil {
 		return err
@@ -8095,223 +7644,6 @@ func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setPositiveNumberSignSpec(
 			ePrefix.XCpy(
 				"signedNumFmt.positiveNumberSign<-"+
 					"positiveNumberSign"))
-
-	return err
-}
-
-// setRoundingParams - Deletes and resets the member variable data
-// value for 'NumStrFormatSpec.intSeparatorSpec'
-// contained in the instance of NumStrFormatSpec passed as
-// an input parameter.
-//
-// ----------------------------------------------------------------
-//
-// Input Parameters
-//
-//	signedNumFmt				*NumStrFormatSpec
-//
-//		A pointer to an instance of NumStrFormatSpec.
-//		The member variable 'signedNumFmt.roundingSpec'
-//		will be reset to the values provided by the
-//		following input parameters.
-//
-//	roundingType				NumberRoundingType
-//
-//		This enumeration parameter is used to specify the type
-//		of rounding algorithm that will be applied for the
-//		rounding of fractional digits in a number string.
-//
-//		Possible values are listed as follows:
-//
-//			NumRoundType.NoRounding()
-//			NumRoundType.HalfUpWithNegNums()
-//			NumRoundType.HalfDownWithNegNums()
-//			NumRoundType.HalfAwayFromZero()
-//			NumRoundType.HalfTowardsZero()
-//			NumRoundType.HalfToEven()
-//			NumRoundType.HalfToOdd()
-//			NumRoundType.Randomly()
-//			NumRoundType.Floor()
-//			NumRoundType.Ceiling()
-//			NumRoundType.Truncate()
-//
-//	roundToFractionalDigits		int
-//
-//		When set to a positive integer value, this parameter
-//		controls the number of digits to the right of the decimal
-//	 	separator (a.k.a. decimal point) which will remain after
-//		completion of the number rounding operation.
-//
-//	errPrefDto					*ePref.ErrPrefixDto
-//
-//		This object encapsulates an error prefix string which is
-//		included in all returned error messages. Usually, it
-//		contains the name of the calling method or methods listed
-//		as a function chain.
-//
-//		If no error prefix information is needed, set this
-//		parameter to 'nil'.
-//
-//		Type ErrPrefixDto is included in the 'errpref' software
-//		package, "github.com/MikeAustin71/errpref".
-//
-// ----------------------------------------------------------------
-//
-// Return Values
-//
-//	err							error
-//		If this method completes successfully, this returned error
-//		Type is set equal to 'nil'. If errors are encountered
-//		during processing, the returned error Type will encapsulate
-//		an error message.
-//
-//		If an error message is returned, the text value for input
-//		parameter 'errPrefDto' (error prefix) will be prefixed or
-//		attached at the beginning of the error message.
-func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setRoundingParams(
-	signedNumFmt *NumStrFormatSpec,
-	roundingType NumberRoundingType,
-	roundToFractionalDigits int,
-	errPrefDto *ePref.ErrPrefixDto) (
-	err error) {
-
-	if signedNumFmtSpecAtom.lock == nil {
-		signedNumFmtSpecAtom.lock = new(sync.Mutex)
-	}
-
-	signedNumFmtSpecAtom.lock.Lock()
-
-	defer signedNumFmtSpecAtom.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
-		errPrefDto,
-		"numStrFmtSpecNanobot."+
-			"setRoundingParams()",
-		"")
-
-	if err != nil {
-		return err
-	}
-
-	if signedNumFmt == nil {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'signedNumFmt' is invalid!\n"+
-			"'signedNumFmt' is a 'nil' pointer.\n",
-			ePrefix.String())
-
-		return err
-	}
-
-	signedNumFmt.roundingSpec.Empty()
-
-	err = signedNumFmt.roundingSpec.SetRoundingSpec(
-		roundingType,
-		roundToFractionalDigits,
-		ePrefix.XCpy(
-			"signedNumFmt.roundingSpec<-"))
-
-	return err
-
-}
-
-// setRoundingSpec - Deletes and resets the member variable
-// data value for 'signedNumFmt.roundingSpec'
-// contained in the instance of NumStrFormatSpec passed
-// as an input parameter.
-//
-// This method receives an instance of 'NumStrRoundingSpec'
-// and copies the member variable data values to
-// 'signedNumFmt.roundingSpec'.
-//
-// ----------------------------------------------------------------
-//
-// # Input Parameters
-//
-//	signedNumFmt				*NumStrFormatSpec
-//		A pointer to an instance of NumStrFormatSpec.
-//		The member variable 'signedNumFmt.roundingSpec'
-//		will be reset to the values provided by the
-//		following input parameters.
-//
-//	roundingSpec				NumStrRoundingSpec
-//		An instance of NumStrRoundingSpec. The member
-//		variable data values contained in this instance
-//		will be copied to:
-//			'signedNumFmt.roundingSpec'.
-//
-//	errPrefDto					*ePref.ErrPrefixDto
-//		This object encapsulates an error prefix string which is
-//		included in all returned error messages. Usually, it
-//		contains the name of the calling method or methods listed
-//		as a function chain.
-//
-//		If no error prefix information is needed, set this
-//		parameter to 'nil'.
-//
-//		Type ErrPrefixDto is included in the 'errpref' software
-//		package, "github.com/MikeAustin71/errpref".
-//
-// ----------------------------------------------------------------
-//
-// # Return Values
-//
-//	err							error
-//		If this method completes successfully, this returned error
-//		Type is set equal to 'nil'. If errors are encountered
-//		during processing, the returned error Type will encapsulate
-//		an error message.
-//
-//		If an error message is returned, the text value for input
-//		parameter 'errPrefDto' (error prefix) will be prefixed or
-//		attached at the beginning of the error message.
-func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setRoundingSpec(
-	signedNumFmt *NumStrFormatSpec,
-	roundingSpec NumStrRoundingSpec,
-	errPrefDto *ePref.ErrPrefixDto) (
-	err error) {
-
-	if signedNumFmtSpecAtom.lock == nil {
-		signedNumFmtSpecAtom.lock = new(sync.Mutex)
-	}
-
-	signedNumFmtSpecAtom.lock.Lock()
-
-	defer signedNumFmtSpecAtom.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
-		errPrefDto,
-		"numStrFmtSpecNanobot."+
-			"setRoundingParams()",
-		"")
-
-	if err != nil {
-		return err
-	}
-
-	if signedNumFmt == nil {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'signedNumFmt' is invalid!\n"+
-			"'signedNumFmt' is a 'nil' pointer.\n",
-			ePrefix.String())
-
-		return err
-	}
-
-	signedNumFmt.roundingSpec.Empty()
-
-	err = new(numStrRoundingSpecNanobot).copyNStrRoundingSpec(
-		&signedNumFmt.roundingSpec,
-		&roundingSpec,
-		ePrefix.XCpy(
-			"signedNumFmt.roundingSpec<-"+
-				"roundingSpec"))
 
 	return err
 }
