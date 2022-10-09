@@ -858,28 +858,28 @@ func (decSeparatorSpec *DecimalSeparatorSpec) IsValidInstanceError(
 //				A string containing error prefix
 //				information.
 //
-//		3. []string
+//		3.	[]string
 //				A one-dimensional slice of strings
 //				containing error prefix information.
 //
-//		4. [][2]string
+//		4.	[][2]string
 //				A two-dimensional slice of strings
 //		   		containing error prefix and error
 //		   		context information.
 //
-//		5. ErrPrefixDto
+//		5.	ErrPrefixDto
 //				An instance of ErrPrefixDto.
 //				Information from this object will
 //				be copied for use in error and
 //				informational messages.
 //
-//		6. *ErrPrefixDto
+//		6.	*ErrPrefixDto
 //				A pointer to an instance of
 //				ErrPrefixDto. Information from
 //				this object will be copied for use
 //				in error and informational messages.
 //
-//		7. IBasicErrorPrefix
+//		7.	IBasicErrorPrefix
 //				An interface to a method
 //				generating a two-dimensional slice
 //				of strings containing error prefix
@@ -1334,6 +1334,160 @@ func (decSeparatorSpec *DecimalSeparatorSpec) NewStr(
 
 	err = newDecimalSeparator.decimalSeparatorChars.SetRuneArray(
 		decSepRunes,
+		ePrefix.XCpy(
+			"decSeparatorSpec<-decSepRunes"))
+
+	if err != nil {
+		return newDecimalSeparator, err
+	}
+
+	err = newDecimalSeparator.decimalSeparatorChars.
+		SetCharacterSearchType(
+			CharSearchType.LinearTargetStartingIndex(),
+			ePrefix.XCpy(
+				"LinearTargetStartingIndex()"))
+
+	return newDecimalSeparator, err
+}
+
+//	NewUS
+//
+//	Creates and returns a new instance of
+//	DecimalSeparatorSpec configured with the radix
+//	point or decimal separator used by the United
+//	States and most of Canada.
+//
+//	The radix point or decimal separator used by
+//	the United States is the period character
+//	("."), also known as a decimal point.
+//
+//	This period character (".") is therefore used
+//	as a radix point to separate integer and
+//	fractional digits within a floating point
+//	numeric value.
+//
+//		United States Example
+//			1.45 (The fractional value is 45)
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	 errorPrefix                interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it	contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// -----------------------------------------------------------------
+//
+// # Return Values
+//
+//	newDecimalSeparator			DecimalSeparatorSpec
+//
+//		If this method completes successfully, this
+//		parameter returns a new instance of
+//		DecimalSeparatorSpec configured with a
+//		single period character ('.').
+//
+//		The period character or decimal point is
+//		used by the United States, most of Canada
+//		and many other countries as a radix point
+//		separating integer and fractional digits
+//		withing floating point numeric values.
+//
+//	err							error
+//
+//		If this method completes successfully, the returned
+//		error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error message.
+//		This returned error message will incorporate the
+//		method chain and text passed by input parameter,
+//		'errorPrefix'. The 'errorPrefix' text will be attached
+//		to the beginning of	the error message.
+func (decSeparatorSpec *DecimalSeparatorSpec) NewUS(
+	errorPrefix interface{}) (
+	newDecimalSeparator DecimalSeparatorSpec,
+	err error) {
+
+	if decSeparatorSpec.lock == nil {
+		decSeparatorSpec.lock = new(sync.Mutex)
+	}
+
+	decSeparatorSpec.lock.Lock()
+
+	defer decSeparatorSpec.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"DecimalSeparatorSpec."+
+			"NewUS()",
+		"")
+
+	if err != nil {
+		return newDecimalSeparator, err
+	}
+
+	err = newDecimalSeparator.decimalSeparatorChars.SetRuneArray(
+		[]rune{','},
 		ePrefix.XCpy(
 			"decSeparatorSpec<-decSepRunes"))
 

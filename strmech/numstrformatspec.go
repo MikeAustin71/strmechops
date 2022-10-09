@@ -5794,23 +5794,22 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtComponen
 
 	var decSeparator DecimalSeparatorSpec
 
-	decSeparator = DecimalSeparatorSpec{
-		decimalSeparatorChars: RuneArrayDto{
-			CharsArray:     []rune{','},
-			Description1:   "",
-			Description2:   "",
-			charSearchType: CharSearchType.LinearTargetStartingIndex(),
-			lock:           nil,
-		},
+	decSeparator,
+		err = new(DecimalSeparatorSpec).NewEuropeanUnion(
+		ePrefix.XCpy("decSeparator"))
 
-		lock: nil,
+	if err != nil {
+		return err
 	}
 
-	intSeparatorSpec := IntegerSeparatorSpec{
-		intSeparatorChars:          []rune{' '},
-		intSeparatorGrouping:       []uint{3},
-		restartIntGroupingSequence: false,
-		lock:                       nil,
+	var intSeparatorSpec IntegerSeparatorSpec
+
+	intSeparatorSpec,
+		err = new(IntegerSeparatorSpec).NewFrenchDefaults(
+		ePrefix.XCpy("intSeparatorSpec"))
+
+	if err != nil {
+		return err
 	}
 
 	var negativeNumberSign NumStrNumberSymbolSpec
@@ -5988,23 +5987,22 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtComponen
 
 	var decSeparator DecimalSeparatorSpec
 
-	decSeparator = DecimalSeparatorSpec{
-		decimalSeparatorChars: RuneArrayDto{
-			CharsArray:     []rune{'.'},
-			Description1:   "",
-			Description2:   "",
-			charSearchType: CharSearchType.LinearTargetStartingIndex(),
-			lock:           nil,
-		},
+	decSeparator,
+		err = new(DecimalSeparatorSpec).NewUS(
+		ePrefix.XCpy("decSeparator"))
 
-		lock: nil,
+	if err != nil {
+		return err
 	}
 
-	intSeparatorSpec := IntegerSeparatorSpec{
-		intSeparatorChars:          []rune{','},
-		intSeparatorGrouping:       []uint{3},
-		restartIntGroupingSequence: false,
-		lock:                       nil,
+	var intSeparatorSpec IntegerSeparatorSpec
+
+	intSeparatorSpec,
+		err = new(IntegerSeparatorSpec).NewUnitedStatesDefaults(
+		ePrefix.XCpy("intSeparatorSpec"))
+
+	if err != nil {
+		return err
 	}
 
 	var negativeNumberSign NumStrNumberSymbolSpec
