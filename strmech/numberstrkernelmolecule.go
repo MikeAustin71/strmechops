@@ -1176,12 +1176,13 @@ func (numStrKernelMolecule *numberStrKernelMolecule) convertNumberToKernel(
 //	errPrefDto					*ePref.ErrPrefixDto
 //
 //		This object encapsulates an error prefix string
-//		which is included in all returned error messages.
-//		Usually, it contains the name of the calling method
-//		or methods listed as a function chain.
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
 //
-//		If no error prefix information is needed, set this
-//		parameter to 'nil'.
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
 //
 //		Type ErrPrefixDto is included in the 'errpref'
 //		software package:
@@ -1194,24 +1195,27 @@ func (numStrKernelMolecule *numberStrKernelMolecule) convertNumberToKernel(
 //	numStr						string
 //
 //		If this method completes successfully, the
-//		numeric	value represented by the NumberStrKernel
-//		instance, 'numStrKernel', will be returned as a
-//		formatted Number String, 'numStr'.
+//		numeric	value represented by the
+//		NumberStrKernel instance, 'numStrKernel',
+//		will be returned as a formatted Number String,
+//		'numStr'.
 //
 //	err							error
 //
 //		If this method completes successfully, this
-//		returned error Type is set equal to 'nil'. If errors
-//		are	encountered during processing, the returned
-//		error Type will encapsulate an error message.
-//
-//		If an error message is returned, the text value for
-//		input parameter 'errPrefDto' (error prefix) will be
-//		prefixed or attached at the beginning of the error
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
 //		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
 func (numStrKernelMolecule *numberStrKernelMolecule) formatNumStr(
 	numStrKernel *NumberStrKernel,
 	nStrFormatSpec NumStrFormatSpec,
+	roundingSpec NumStrRoundingSpec,
 	errPrefDto *ePref.ErrPrefixDto) (
 	numStr string,
 	err error) {
@@ -1262,17 +1266,6 @@ func (numStrKernelMolecule *numberStrKernelMolecule) formatNumStr(
 	intSeparatorDto,
 		err = nStrFormatSpec.GetIntegerSeparatorSpec(
 		ePrefix)
-
-	if err != nil {
-		return numStr, err
-	}
-
-	var roundingSpec NumStrRoundingSpec
-
-	roundingSpec,
-		err = nStrFormatSpec.GetRoundingSpec(
-		ePrefix.XCpy(
-			"roundingSpec<-nStrFormatSpec"))
 
 	if err != nil {
 		return numStr, err

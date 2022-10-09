@@ -8,8 +8,11 @@ import (
 
 // NumStrRoundingSpec
 //
-// This data transfer object contains all the parameters
-// required to configure a rounding algorithm for a
+// Number String Rounding Specification.
+//
+// The Number String Rounding Specification
+// contains all the parameters required to
+// configure a rounding algorithm for a
 // floating point number string.
 type NumStrRoundingSpec struct {
 	roundingType NumberRoundingType
@@ -236,23 +239,27 @@ type NumStrRoundingSpec struct {
 	lock *sync.Mutex
 }
 
-// CopyIn - Copies the data fields from an incoming instance of
-// NumStrRoundingSpec ('incomingNStrRoundingSpec')
-// to the data fields of the current NumStrRoundingSpec
-// instance ('nStrRoundingSpec').
+//	CopyIn
+//
+//	Copies the data fields from an incoming instance
+//	of NumStrRoundingSpec ('incomingNStrRoundingSpec')
+//	to the data fields of the current NumStrRoundingSpec
+//	instance ('nStrRoundingSpec').
 //
 // ----------------------------------------------------------------
 //
-// IMPORTANT
-// All the data fields in current NumStrRoundingSpec
-// instance ('nStrRoundingSpec') will be deleted and
-// overwritten.
+// # IMPORTANT
+//
+//	All the data fields in current NumStrRoundingSpec
+//	instance ('nStrRoundingSpec') will be deleted and
+//	overwritten.
 //
 // ----------------------------------------------------------------
 //
-// Input Parameters
+// # Input Parameters
 //
 //	incomingNStrRoundingSpec	*NumStrRoundingSpec
+//
 //		A pointer to an instance of NumStrRoundingSpec.
 //		This method will NOT change the values of internal member
 //		variables contained in this instance.
@@ -264,63 +271,81 @@ type NumStrRoundingSpec struct {
 //		If parameter 'incomingNStrRoundingSpec' is determined to
 //		be invalid, an error will be returned.
 //
-//	errorPrefix					interface{}
-//		This object encapsulates error prefix text which is
-//		included in all returned error messages. Usually, it
-//		contains the name of the calling method or methods
-//		listed as a method or function chain of execution.
+//	 errorPrefix                interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it	contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
 //
 //		If no error prefix information is needed, set this
 //		parameter to 'nil'.
 //
-//		This empty interface must be convertible to one of the
-//		following types:
+//		This empty interface must be convertible to one of
+//		the following types:
 //
-//		1. nil - A nil value is valid and generates an empty
-//		   collection of error prefix and error context
-//		   information.
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
 //
-//		2. string - A string containing error prefix information.
+//		2.	string
+//				A string containing error prefix
+//				information.
 //
-//		3. []string A one-dimensional slice of strings containing
-//		   error prefix information
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
 //
-//		4. [][2]string A two-dimensional slice of strings
-//		   containing error prefix and error context information.
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
 //
-//		5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//		   from this object will be copied for use in error and
-//		   informational messages.
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
 //
-//		6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//		   Information from this object will be copied for use in
-//		   error and informational messages.
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
 //
-//		7. IBasicErrorPrefix - An interface to a method generating
-//		   a two-dimensional slice of strings containing error
-//		   prefix and error context information.
+//		7.  IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
 //
-//		If parameter 'errorPrefix' is NOT convertible to one of
-//		the valid types listed above, it will be considered
-//		invalid and trigger the return of an error.
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
 //
-//		Types ErrPrefixDto and IBasicErrorPrefix are included in
-//		the 'errpref' software package,
-//		"github.com/MikeAustin71/errpref".
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
 //	error
-//		If this method completes successfully and no errors are
-//		encountered this return value is set to 'nil'. Otherwise,
-//		if errors are encountered, this return value will contain
-//		an appropriate error message.
 //
-//		If an error message is returned, the text value of input
-//		parameter 'errorPrefix' will be inserted or prefixed at
-//		the beginning of the error message.
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the	method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
 func (nStrRoundingSpec *NumStrRoundingSpec) CopyIn(
 	incomingNStrRoundingSpec *NumStrRoundingSpec,
 	errorPrefix interface{}) error {

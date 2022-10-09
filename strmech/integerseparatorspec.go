@@ -866,15 +866,16 @@ func (nStrIntSep *IntegerSeparatorSpec) GetIntSeparatorChars(
 //
 //	error
 //
-//		If this method completes successfully, the returned
-//		error Type is set equal to 'nil'.
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
 //
 //		If errors are encountered during processing, the
-//		returned error Type will encapsulate an error message.
-//		This returned error message will incorporate the method
-//		chain and text passed by input parameter, 'errorPrefix'.
-//		The 'errorPrefix' text will be attached to the beginning
-//		of the error message.
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
 func (nStrIntSep *IntegerSeparatorSpec) GetIntSeparatorStr(
 	errorPrefix interface{}) (string, error) {
 
@@ -1709,21 +1710,23 @@ func (nStrIntSep *IntegerSeparatorSpec) IsValidInstanceError(
 //
 //	IntegerSeparatorSpec
 //
-//		If this method completes successfully, a new instance of
-//		IntegerSeparatorSpec, configured with Chinese Numbering
-//		System integer grouping, will be created and returned.
+//		If this method completes successfully, a new
+//		instance of IntegerSeparatorSpec, configured
+//		with Chinese Numbering System integer grouping,
+//		will be	created and returned.
 //
 //	error
 //
-//		If this method completes successfully, the returned error
-//		Type is set equal to 'nil'.
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
 //
-//		If errors are encountered during processing, the returned
-//		error Type will encapsulate an error message. This
-//		returned error message will incorporate the method chain
-//		and text passed by input parameter, 'errorPrefix'. The
-//		'errorPrefix' text will be attached to the beginning of
-//		the error message.
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
 func (nStrIntSep *IntegerSeparatorSpec) NewChineseNumbering(
 	intSeparatorChars string,
 	errorPrefix interface{}) (
