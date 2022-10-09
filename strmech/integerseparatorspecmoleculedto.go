@@ -349,68 +349,85 @@ func (nStrIntSepMolecule *integerSeparatorSpecMolecule) applyIntSeparators(
 	return numStrWithIntSeps, err
 }
 
-// copyIntSepDto - Copies the data fields from input parameter
-// 'incomingNStrIntSeparator' to input parameter
-// 'targetNStrIntSeparator'.
+//	copyIntSepSpec
 //
-// Be advised - All data fields in 'targetNStrIntSeparator'
-// will be overwritten.
+//	Copies the data fields from input parameter
+//	'incomingNStrIntSeparator' to input parameter
+//	'targetNStrIntSeparator'.
 //
-// If input parameter 'incomingNStrIntSeparator' is judged
-// to be invalid, this method will return an error.
+//	If input parameter 'incomingNStrIntSeparator'
+//	is judged to be invalid, this method will
+//	return an error.
 //
 // ----------------------------------------------------------------
 //
-// Input Parameters
+// # IMPORTANT
 //
-//		destinationNStrIntSeparator     *IntegerSeparatorSpec
-//		   - A pointer to a IntegerSeparatorSpec instance. All the
-//		     member variable data fields in this object will be
-//		     replaced by data values copied from input parameter
-//		     'sourceNStrIntSeparator'.
+//	Be advised that all data fields in
+//	'targetNStrIntSeparator' will be overwritten.
 //
-//		     'destinationPosNumSignSpec' is the destination for this
-//		     copy operation.
+// ----------------------------------------------------------------
 //
+//	# Input Parameters
 //
-//		sourceNStrIntSeparator          *IntegerSeparatorSpec
-//		   - A pointer to another IntegerSeparatorSpec instance. All
-//		     the member variable data values from this object will
-//		     be copied to corresponding member variables in
-//		     'destinationNStrIntSeparator'.
+//	destinationNStrIntSeparator		*IntegerSeparatorSpec
 //
-//		     'sourceNStrIntSeparator' is the source for this copy
-//		     operation.
+//		A pointer to a IntegerSeparatorSpec instance. All
+//		the member variable data fields in this object will
+//		be replaced by data values copied from input
+//		parameter 'sourceNStrIntSeparator'.
 //
-//	      If 'sourceNStrIntSeparator' is found to be invalid,
-//	      an error will be returned.
+//		'destinationPosNumSignSpec' is the destination for
+//		this copy operation.
 //
 //
-//		errPrefDto          *ErrPrefixDto
-//		   - This object encapsulates an error prefix string which is
-//		     included in all returned error messages. Usually, it
-//		     contains the names of the calling method or methods.
+//	sourceNStrIntSeparator			*IntegerSeparatorSpec
 //
-//		     If no error prefix information is needed, set this parameter
-//		     to 'nil'.
+//		A pointer to another IntegerSeparatorSpec instance. All
+//		the member variable data values from this object will
+//		be copied to corresponding member variables in
+//		'destinationNStrIntSeparator'.
 //
-//		     Type ErrPrefixDto is included in the 'errpref' software
+//		'sourceNStrIntSeparator' is the source for this copy
+//		operation.
+//
+//		If 'sourceNStrIntSeparator' is found to be invalid,
+//		an error will be returned.
+//
+//
+//	errPrefDto						*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
 //		     package, "github.com/MikeAustin71/errpref".
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
-// Return Values
+// # Return Values
 //
-//	err                 error
-//	   - If this method completes successfully, this returned error
-//	     Type is set equal to 'nil'. If errors are encountered during
-//	     processing, the returned error Type will encapsulate an error
-//	     message.
+//	err								error
 //
-//	     If an error message is returned, the text value for input
-//	     parameter 'errPrefDto' (error prefix) will be prefixed or
-//	     attached at the beginning of the error message.
-func (nStrIntSepMolecule *integerSeparatorSpecMolecule) copyIntSepDto(
+//		If this method completes successfully, this
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (nStrIntSepMolecule *integerSeparatorSpecMolecule) copyIntSepSpec(
 	destinationNStrIntSeparator *IntegerSeparatorSpec,
 	sourceNStrIntSeparator *IntegerSeparatorSpec,
 	errPrefDto *ePref.ErrPrefixDto) (

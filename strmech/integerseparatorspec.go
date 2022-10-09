@@ -311,7 +311,7 @@ func (nStrIntSep *IntegerSeparatorSpec) CopyIn(
 	}
 
 	return new(integerSeparatorSpecMolecule).
-		copyIntSepDto(
+		copyIntSepSpec(
 			nStrIntSep,
 			incomingNStrIntSeparator,
 			ePrefix)
@@ -353,28 +353,28 @@ func (nStrIntSep *IntegerSeparatorSpec) CopyIn(
 //				A string containing error prefix
 //				information.
 //
-//		3. []string
+//		3.	[]string
 //				A one-dimensional slice of strings
 //				containing error prefix information.
 //
-//		4. [][2]string
+//		4.	[][2]string
 //				A two-dimensional slice of strings
 //		   		containing error prefix and error
 //		   		context information.
 //
-//		5. ErrPrefixDto
+//		5.	ErrPrefixDto
 //				An instance of ErrPrefixDto.
 //				Information from this object will
 //				be copied for use in error and
 //				informational messages.
 //
-//		6. *ErrPrefixDto
+//		6.	*ErrPrefixDto
 //				A pointer to an instance of
 //				ErrPrefixDto. Information from
 //				this object will be copied for use
 //				in error and informational messages.
 //
-//		7. IBasicErrorPrefix
+//		7.	IBasicErrorPrefix
 //				An interface to a method
 //				generating a two-dimensional slice
 //				of strings containing error prefix
@@ -438,7 +438,7 @@ func (nStrIntSep *IntegerSeparatorSpec) CopyOut(
 	}
 
 	err = new(integerSeparatorSpecMolecule).
-		copyIntSepDto(
+		copyIntSepSpec(
 			&deepCopyIntSepDto,
 			nStrIntSep,
 			ePrefix.XCpy(
