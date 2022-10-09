@@ -2659,7 +2659,8 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtParamsRunes(
 //
 //		If this method completes successfully, this parameter
 //		will return a new, fully populated instance of
-//		NumStrFormatSpec.
+//		NumStrFormatSpec configured with French number
+//		formatting specifications.
 //
 //	err							error
 //
@@ -2700,6 +2701,193 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumFmtFrance(
 	}
 
 	err = new(numStrFmtSpecNanobot).setSignedNStrFmtComponentsFrance(
+		&newSignedNumFmtSpec,
+		numberFieldSpec,
+		ePrefix.XCpy("newSignedNumFmtSpec<-"))
+
+	return newSignedNumFmtSpec, err
+}
+
+//	NewSignedNumFmtGermany
+//
+//	Returns a new instance of NumStrFormatSpec
+//	configured for a Signed Number using German
+//	Number String formatting conventions.
+//
+//	Germany is a member of the European Union
+//	(EU) and many EU member countries apply
+//	the same number formatting conventions as
+//	those applied in Germany.
+//
+//	A number of member countries in the European
+//	Union (EU) apply the decimal separator and
+//	negative number sign characters used by France.
+//	To implement French number formatting
+//	standards see method:
+//		NumStrFormatSpec.NewSignedNumFmtFrance()
+//
+//	Other EU member countries follow the Number
+//	Formatting conventions employed by Germany.
+//
+//	If custom decimal separator, integer separator
+//	and negative number sign characters are required,
+//	see method:
+//		NumStrFormatSpec.NewNumFmtComponents()
+//
+// ----------------------------------------------------------------
+//
+// # Defaults
+//
+//	The radix point or decimal separator is set to the
+//	comma character (','):
+//
+//		Example: 123,45
+//
+//	The integer group separator is a space character
+//	('.').
+//
+//	The integer group specification is set to
+//	'thousands'. This means that integer digits will be
+//	separated into 'thousands' with each group containing
+//	three digits each:
+//
+//		Example: 1.000.000.000
+//
+//	The negative number sign is set to a trailing minus
+//	sign ('-').
+//
+//		Example: 1.000.000-
+//
+//	The positive number sign is set to a blank or empty
+//	string ("").
+//
+//	The zero number format is set to a blank or empty
+//	string ("").
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	numberFieldSpec				NumStrNumberFieldSpec
+//
+//		This Number Field Specification contains all
+//		parameters necessary to format a Number String
+//		within a larger Number Field. In addition to
+//		specifying the length of number field, this
+//		object contains justification specifications
+//		for centering, left justifying or right
+//		justifying a Number String within a Number
+//		Field.
+//
+//	 errorPrefix                interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it	contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.  IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// -----------------------------------------------------------------
+//
+// # Return Values
+//
+//	newSignedNumFmtSpec			NumStrFormatSpec
+//
+//		If this method completes successfully, this parameter
+//		will return a new, fully populated instance of
+//		NumStrFormatSpec configured with German number
+//		formatting specifications.
+//
+//	err							error
+//
+//		If this method completes successfully, the returned error
+//		Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the returned
+//		error Type will encapsulate an error message. This
+//		returned error message will incorporate the method chain
+//		and text passed by input parameter, 'errorPrefix'. The
+//		'errorPrefix' text will be attached to the beginning of
+//		the error message.
+func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumFmtGermany(
+	numberFieldSpec NumStrNumberFieldSpec,
+	errorPrefix interface{}) (
+	newSignedNumFmtSpec NumStrFormatSpec,
+	err error) {
+
+	if numStrFmtSpec.lock == nil {
+		numStrFmtSpec.lock = new(sync.Mutex)
+	}
+
+	numStrFmtSpec.lock.Lock()
+
+	defer numStrFmtSpec.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumStrFormatSpec."+
+			"NewSignedNumFmtGermany()",
+		"")
+
+	if err != nil {
+		return newSignedNumFmtSpec, err
+	}
+
+	err = new(numStrFmtSpecNanobot).setSignedNStrFmtComponentsGermany(
 		&newSignedNumFmtSpec,
 		numberFieldSpec,
 		ePrefix.XCpy("newSignedNumFmtSpec<-"))
@@ -5689,7 +5877,8 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setNStrNumberFieldSpec(
 //	The radix point or decimal separator is set to the
 //	comma character (','):
 //
-//		Example 123,45
+//		French Example-1
+//			123,45
 //
 //	The integer group separator is a space character
 //	(' ').
@@ -5698,12 +5887,14 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setNStrNumberFieldSpec(
 //	This means that integer digits will be separated into
 //	'thousands' with each group containing three digits each:
 //
-//		Example: 1 000 000 000
+//		French Example-2
+//		1 000 000 000
 //
 //	The negative number sign is set to a leading minus sign
 //	('-').
 //
-//		Example: -1 000 000 000
+//		French Example-3
+//		-1 000 000 000
 //
 //	The positive number sign is set to a blank or empty
 //	string ("").
@@ -5825,6 +6016,215 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtComponen
 		leadingNumberFieldSymbolPosition:  NumFieldSymPos.InsideNumField(),
 		trailingNumberSymbols:             RuneArrayDto{},
 		trailingNumberFieldSymbolPosition: 0,
+		lock:                              nil,
+	}
+
+	var positiveNumberSign NumStrNumberSymbolSpec
+
+	positiveNumberSign = NumStrNumberSymbolSpec{
+		leadingNumberSymbols:              RuneArrayDto{},
+		leadingNumberFieldSymbolPosition:  0,
+		trailingNumberSymbols:             RuneArrayDto{},
+		trailingNumberFieldSymbolPosition: 0,
+		lock:                              nil,
+	}
+
+	var zeroNumberSign NumStrNumberSymbolSpec
+
+	zeroNumberSign = NumStrNumberSymbolSpec{
+		leadingNumberSymbols:              RuneArrayDto{},
+		leadingNumberFieldSymbolPosition:  0,
+		trailingNumberSymbols:             RuneArrayDto{},
+		trailingNumberFieldSymbolPosition: 0,
+		lock:                              nil,
+	}
+
+	return new(numStrFmtSpecAtom).setNStrFmtComponents(
+		numStrFmtSpec,
+		decSeparator,
+		intSeparatorSpec,
+		negativeNumberSign,
+		positiveNumberSign,
+		zeroNumberSign,
+		numberFieldSpec,
+		ePrefix.XCpy("numStrFmtSpec<-"))
+}
+
+//	setSignedNStrFmtComponentsGermany
+//
+//	Deletes and resets the member variable data values
+//	stored in the instance of NumStrFormatSpec passed
+//	as input parameter 'signedNumFmtSpec'.
+//
+//	Reconfigures the current instance of NumStrFormatSpec
+//	using Number String formatting conventions typically
+//	applied in the Germany.
+//
+//	Germany is a member of the European Union, and
+//	various European Union member countries apply
+//	the same numeric formatting conventions as those
+//	applied in Germany.
+//
+// ----------------------------------------------------------------
+//
+// # Reference:
+//
+// https://freeformatter.com/germany-standards-code-snippets.html
+// https://www.evertype.com/standards/euro/formats.html
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	Be advised that the data fields contained in the
+//	NumStrFormatSpec input	parameter, 'numStrFmtSpec', will
+//	be deleted and replaced by Number String formatting
+//	parameters typically applied in Germany.
+//
+// ----------------------------------------------------------------
+//
+// # Defaults
+//
+//	The radix point or decimal separator is set to the
+//	comma character (','):
+//
+//		Example 123,45
+//
+//	The integer group separator is a period character
+//	('.').
+//
+//	The integer group specification is set to
+//	'thousands'. This means that integer digits will be
+//	separated into 'thousands' with each group containing
+//	three digits each:
+//
+//		Example: 1.000.000.000
+//
+//	The negative number sign is set to a trailing minus
+//	sign ('-').
+//
+//		Example: 1.000.000-
+//
+//	The positive number sign is set to a blank or empty
+//	string ("").
+//
+//	The zero number format is set to a blank or empty
+//	string ("").
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+// numStrFmtSpec				*NumStrFormatSpec
+//
+//	A pointer to a NumStrFormatSpec instance. All  member
+//	variable data fields in this object will be replaced
+//	by data values configured from the input parameter
+//	described below.
+//
+//	numberFieldSpec				NumStrNumberFieldSpec
+//
+//		This Number Field Specification contains all
+//		parameters necessary to format a Number String
+//		within a larger Number Field. In addition to
+//		specifying the length of number field, this
+//		object contains justification specifications
+//		for centering, left justifying or right
+//		justifying a Number String within a Number
+//		Field.
+//
+//	errPrefDto						*ePref.ErrPrefixDto
+//		This object encapsulates an error prefix string which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods listed
+//		as a function chain.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref' software
+//		package, "github.com/MikeAustin71/errpref".
+//
+// -----------------------------------------------------------------
+//
+// # Return Values
+//
+//	err								error
+//
+//		If this method completes successfully, this returned error
+//		Type is set equal to 'nil'. If errors are encountered during
+//		processing, the returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value for input
+//		parameter 'errPrefDto' (error prefix) will be prefixed or
+//		attached at the beginning of the error message.
+func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtComponentsGermany(
+	numStrFmtSpec *NumStrFormatSpec,
+	numberFieldSpec NumStrNumberFieldSpec,
+	errPrefDto *ePref.ErrPrefixDto) (
+	err error) {
+
+	nStrNumberFieldSpecNanobot.lock.Lock()
+
+	defer nStrNumberFieldSpecNanobot.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"numStrFmtSpecNanobot."+
+			"setSignedNStrFmtComponentsGermany()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if numStrFmtSpec == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'numStrFmtSpec' is invalid!\n"+
+			"'numStrFmtSpec' is a 'nil' pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	var decSeparator DecimalSeparatorSpec
+
+	decSeparator,
+		err = new(DecimalSeparatorSpec).NewEuropeanUnion(
+		ePrefix.XCpy("decSeparator"))
+
+	if err != nil {
+		return err
+	}
+
+	var intSeparatorSpec IntegerSeparatorSpec
+
+	intSeparatorSpec,
+		err = new(IntegerSeparatorSpec).NewGermanDefaults(
+		ePrefix.XCpy("intSeparatorSpec"))
+
+	if err != nil {
+		return err
+	}
+
+	var negativeNumberSign NumStrNumberSymbolSpec
+
+	negativeNumberSign = NumStrNumberSymbolSpec{
+		leadingNumberSymbols:             RuneArrayDto{},
+		leadingNumberFieldSymbolPosition: 0,
+		trailingNumberSymbols: RuneArrayDto{
+			CharsArray:     []rune{'-'},
+			Description1:   "",
+			Description2:   "",
+			charSearchType: CharSearchType.LinearTargetStartingIndex(),
+			lock:           nil,
+		},
+		trailingNumberFieldSymbolPosition: NumFieldSymPos.InsideNumField(),
 		lock:                              nil,
 	}
 
