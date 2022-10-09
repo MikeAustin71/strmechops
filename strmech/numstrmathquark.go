@@ -1,11 +1,11 @@
 package strmech
 
 import (
+	"crypto/rand"
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
-	"math/rand"
+	"math/big"
 	"sync"
-	"time"
 )
 
 type numStrMathQuark struct {
@@ -209,24 +209,49 @@ func (nStrMathQuark *numStrMathQuark) extendRunes(
 	return err
 }
 
-// randomInt
+//	randomInt64
 //
-// Returns a random integer number created with the pseudo
-// random number generator provided by the math/rand
-// package
+//	Returns a random integer number created with the
+//	pseudo random number generator provided by the
+//	"crypto/rand" package.
 //
 // ----------------------------------------------------------------
 //
 // # Input Parameters
 //
-//	NONE
+//	intervalUpperBound			int64
+//
+//		This method utilizes a non-negative pseudo-random
+//		number in the range [0,intervalUpperBound].
+//
+//		If this value is less than one (+1), an will be
+//		returned.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // # Return Values
 //
 //	NONE
-func (nStrMathQuark *numStrMathQuark) randomInt() int {
+func (nStrMathQuark *numStrMathQuark) randomInt64(
+	intervalUpperBound int64,
+	errPrefDto *ePref.ErrPrefixDto) (
+	int64,
+	error) {
 
 	if nStrMathQuark.lock == nil {
 		nStrMathQuark.lock = new(sync.Mutex)
@@ -236,15 +261,50 @@ func (nStrMathQuark *numStrMathQuark) randomInt() int {
 
 	defer nStrMathQuark.lock.Unlock()
 
-	rand.Seed(time.Now().UnixNano())
+	var ePrefix *ePref.ErrPrefixDto
 
-	intNums := rand.Perm(30)
+	var err error
 
-	selection := rand.Intn(29)
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"numStrMathQuark."+
+			"randomInt64()",
+		"")
 
-	intNums = rand.Perm(30)
+	if err != nil {
 
-	selection = rand.Intn(29)
+		return -1, err
+	}
 
-	return intNums[selection]
+	if intervalUpperBound < 1 {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'intervalUpperBound' is invalid!\n"+
+			"'intervalUpperBound' has a value less than one (+1).\n"+
+			"intervalUpperBound = '%v'\n",
+			ePrefix.String(),
+			intervalUpperBound)
+
+		return -1, err
+	}
+
+	maxNumLimit := big.NewInt(intervalUpperBound)
+
+	var bigRandomNum *big.Int
+
+	bigRandomNum,
+		err = rand.Int(rand.Reader, maxNumLimit)
+
+	if err != nil {
+		err = fmt.Errorf("%v\n"+
+			"Error returned from big.NewInt(intervalUpperBound)\n"+
+			"Error=\n%v\n",
+			ePrefix.String(),
+			err.Error())
+
+		return -1, err
+
+	}
+
+	return bigRandomNum.Int64(), err
 }

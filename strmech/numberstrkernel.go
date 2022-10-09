@@ -7639,8 +7639,8 @@ func (numStrKernel *NumberStrKernel) RationalizeFractionalIntegerDigits() {
 //
 // # IMPORTANT
 //
-//	This method may alter the numeric value of contained
-//	withing the current instance of NumberStrKernel.
+//	This method may alter the numeric value contained
+//	within the current instance of NumberStrKernel.
 //
 // ----------------------------------------------------------------
 //
@@ -7934,7 +7934,7 @@ func (numStrKernel *NumberStrKernel) RationalizeFractionalIntegerDigits() {
 //				this object will be copied for use
 //				in error and informational messages.
 //
-//		7.  IBasicErrorPrefix
+//		7.	IBasicErrorPrefix
 //				An interface to a method
 //				generating a two-dimensional slice
 //				of strings containing error prefix
@@ -7961,7 +7961,7 @@ func (numStrKernel *NumberStrKernel) RationalizeFractionalIntegerDigits() {
 //		If errors are encountered during processing, the
 //		returned error Type will encapsulate an error
 //		message. This returned error message will
-//		incorporate the	method chain and text passed by
+//		incorporate the method chain and text passed by
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
