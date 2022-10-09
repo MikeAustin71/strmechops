@@ -1133,45 +1133,63 @@ func (numStrKernelMolecule *numberStrKernelMolecule) convertNumberToKernel(
 //		This instance of NumStrFormatSpec contains all
 //		the detail specifications necessary to format
 //		a Number String.
-//			type NumStrFormatSpec struct {
 //
-//				decSeparator DecimalSeparatorSpec
-//					Contains the decimal separator character or
-//					characters which will separate integer and
-//					fractional digits in a floating point number.
+//		type NumStrFormatSpec struct {
 //
-//				intGroupingSpec NumStrIntegerGroupingSpec
-//					Integer Grouping Specification. This parameter
-//					specifies the type of integer grouping and
-//					integer separator characters which will be
-//					applied to the number string formatting
-//					operations.
+//			decSeparator			DecimalSeparatorSpec
 //
-//				roundingSpec NumStrRoundingSpec
-//					Controls the rounding algorithm applied to
-//					floating point numbers.
+//				Contains the radix point or decimal
+//				separator character(s) which will
+//				separate integer and fractional
+//				numeric digits in a floating point
+//				number.
 //
-//				positiveNumberSign NumStrNumberSymbolSpec
-//					Positive number signs are commonly implied and
-//					not specified. However, the user as the option
-//					to specify a positive number sign character or
-//					characters for positive numeric values using a
-//					Number String Positive Number Sign
-//					Specification.
+//			intSeparatorSpec 		IntegerSeparatorSpec
 //
-//				negativeNumberSign NumStrNumberSymbolSpec
-//					The Number String Negative Number Sign
-//					Specification is used to configure negative
-//					number sign symbols for negative numeric values
-//					formatted and displayed in number stings.
+//				Integer Separator Specification. This
+//				parameter specifies the type of integer
+//				specifies the type of integer grouping and
+//				integer separator characters which will be
+//				applied to the number string formatting
+//				operations.
 //
-//				numberFieldSpec NumStrNumberFieldSpec
-//					This Number String Number Field Specification
-//					contains the field length and text justification
-//					parameter necessary to display a numeric value
-//					within a number field for display as a number
-//					string.
-//			}
+//			negativeNumberSign		NumStrNumberSymbolSpec
+//
+//				The Number String Negative Number Sign
+//				Specification is used to configure negative
+//				number sign symbols for negative numeric values
+//				formatted and displayed in number stings.
+//
+//				This specification can also be used to
+//				configured currency symbols.
+//
+//			numberFieldSpec			NumStrNumberFieldSpec
+//
+//				This Number String Number Field Specification
+//				contains the field length and text
+//				justification parameter necessary to display
+//				a numeric value within a text number field
+//				for display as a number string.
+//
+//			positiveNumberSign		NumStrNumberSymbolSpec
+//
+//				Positive number signs are commonly implied
+//				and not specified. However, the user as the
+//				option to specify a positive number sign
+//				character or characters for positive numeric
+//				values using a Number String Positive Number
+//				Sign Specification.
+//
+//				This specification can also be used to
+//				configure currency symbols.
+//
+//			zeroNumberSign		NumStrNumberSymbolSpec
+//
+//				The Number String Zero Number Symbol
+//				Specification is used to configure
+//				number symbols for zero numeric values
+//				formatted and displayed in number stings.
+//		}
 //
 //	errPrefDto					*ePref.ErrPrefixDto
 //
