@@ -372,3 +372,82 @@ func (testDebug *TestDebugAll) RandomNum2(
 
 	return
 }
+
+func (testDebug *TestDebugAll) RandomNum3Crypto(
+	errorPrefix interface{}) {
+
+	if testDebug.lock == nil {
+		testDebug.lock = new(sync.Mutex)
+	}
+
+	testDebug.lock.Lock()
+
+	defer testDebug.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TestDebugAll."+
+			"RandomNum3Crypto()",
+		"")
+
+	if err != nil {
+
+		fmt.Printf("\n%v\n"+
+			"Error return from ePref.ErrPrefixDto{}.NewIEmpty()\n"+
+			"Error:\n%v\n\n",
+			"RandomNum3Crypto()",
+			err.Error())
+
+		return
+	}
+
+	fmt.Printf("\n%v\n"+
+		"Crypto Random Number Test\n\n",
+		ePrefix.String())
+
+	nStrMathQuark := numStrMathQuark{}
+
+	var intervalUpperBound, randomNum int64
+
+	intervalUpperBound = 30
+
+	for i := 0; i < 30; i++ {
+
+		randomNum,
+			err = nStrMathQuark.randomInt64(
+			intervalUpperBound,
+			ePrefix.XCpy(
+				fmt.Sprintf("Cycle No: %v",
+					i)))
+
+		if err != nil {
+			fmt.Printf("%v\n"+
+				"Error return from nStrMathQuark.randomInt64()\n"+
+				"Cycle = %v\n"+
+				"intervalUpperBound = %v\n",
+				ePrefix.String(),
+				i,
+				intervalUpperBound)
+
+			return
+		}
+
+		fmt.Printf("%v. Remainder: %v Random Num: %v\n",
+			i+1,
+			randomNum%2,
+			randomNum)
+
+		time.Sleep(500000000)
+	}
+
+	fmt.Printf("\n\nSuccessful Completion\n"+
+		"%v\n",
+		ePrefix.String())
+
+	return
+}

@@ -1,11 +1,14 @@
 package main
 
-import "github.com/MikeAustin71/strmechops/apptest/examples"
+// "github.com/MikeAustin71/strmechops/apptest/examples"
+
+import (
+	"github.com/MikeAustin71/strmechops/strmech"
+)
 
 func main() {
 
-	mt := examples.MainTest02{}
-
-	mt.NumStrKernelParseUSNumStr()
+	new(strmech.TestDebugAll).RandomNum3Crypto(
+		"main")
 
 }
