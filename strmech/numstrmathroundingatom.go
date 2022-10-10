@@ -1963,9 +1963,18 @@ func (nStrMathRoundAtom *numStrMathRoundingAtom) roundRandomly(
 		// fractionalDigits.CharsArray[roundToFractionalDigits] ==
 		// '5'
 
-		randomNum := new(numStrMathQuark).randomInt()
+		var randomNum64 int64
 
-		remainder := randomNum % 2
+		randomNum64,
+			err = new(numStrMathQuark).randomInt64(
+			int64(70),
+			ePrefix.XCpy(""))
+
+		if err != nil {
+			return err
+		}
+
+		remainder := randomNum64 % 2
 
 		if remainder == 0 {
 
@@ -1995,7 +2004,6 @@ func (nStrMathRoundAtom *numStrMathRoundingAtom) roundRandomly(
 		roundToFractionalDigits,
 		numberSign,
 		ePrefix)
-
 }
 
 // truncate

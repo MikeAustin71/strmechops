@@ -217,6 +217,12 @@ func (nStrMathQuark *numStrMathQuark) extendRunes(
 //
 // ----------------------------------------------------------------
 //
+// # Reference:
+//
+//	https://golangdocs.com/the-crypto-rand-package-in-golang
+//
+// ----------------------------------------------------------------
+//
 // # Input Parameters
 //
 //	intervalUpperBound			int64
@@ -224,8 +230,8 @@ func (nStrMathQuark *numStrMathQuark) extendRunes(
 //		This method utilizes a non-negative pseudo-random
 //		number in the range [0,intervalUpperBound].
 //
-//		If this value is less than one (+1), an will be
-//		returned.
+//		If this value is less than one (+1), an error will
+//		be returned.
 //
 //	errPrefDto					*ePref.ErrPrefixDto
 //
@@ -246,7 +252,23 @@ func (nStrMathQuark *numStrMathQuark) extendRunes(
 //
 // # Return Values
 //
-//	NONE
+//	int64
+//
+//		This parameter returns a pseudo-random number
+//		between zero (0) and 'intervalUpperBound'.
+//
+//	error
+//
+//		If this method completes successfully, this
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
 func (nStrMathQuark *numStrMathQuark) randomInt64(
 	intervalUpperBound int64,
 	errPrefDto *ePref.ErrPrefixDto) (
