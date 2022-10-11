@@ -6,44 +6,51 @@ import (
 	"sync"
 )
 
-// NumStrNumberFieldSpec - Number String Number Field
-// Specification. This type contains all the parameters
-// required to format a numeric value withing a text
-// field for display as a number string.
+// NumStrNumberFieldSpec
+//
+// Number String Number Field Specification. This type
+// contains all the parameters required to format a
+// numeric value withing a text field for display as a
+// number string.
 type NumStrNumberFieldSpec struct {
 	fieldLength int
-	//	This parameter defines the length of the text field in
-	//	which the numeric value will be displayed within a
-	//	number string.
+	//	This parameter defines the length of the text
+	//	field in which the numeric value will be
+	//	displayed within a number string.
 	//
-	//	If 'fieldLength' is less than the length of the numeric
-	//	value string, it will be automatically set equal to the
-	//	length of that numeric value string.
+	//	If 'fieldLength' is less than the length of the
+	//	numeric value string, it will be automatically
+	//	set equal to the length of that numeric value
+	//	string.
 	//
-	//	To automatically set the value of fieldLength to the string
-	//	length of the numeric value, set this parameter to a value
-	//	of minus one (-1).
+	//	To automatically set the value of 'fieldLength'
+	//	to the string length of the numeric value, set
+	//	this parameter to a value of minus one (-1).
 	//
-	//	If this parameter is submitted with a value less than minus
-	//	one (-1) or greater than 1-million (1,000,000), an error will
-	//	be returned.
+	//	If this parameter is submitted with a value less
+	//	than minus one (-1) or greater than 1-million
+	//	(1,000,000), an error will be returned.
 
 	fieldJustification TextJustify
-	//	An enumeration which specifies the justification of the
-	//	numeric value string within the number field length specified
-	//	by input parameter 'fieldLength'.
+	//	An enumeration which specifies the
+	//	justification of the numeric value string within
+	//	the number field length specified by data field
+	//	'fieldLength'.
 	//
-	//	Text justification can only be evaluated in the context of
-	//	a number string, field length and a 'textJustification'
-	//	object of type TextJustify. This is because number strings
-	//	with a field length equal to or less than the length of the
-	//	numeric value string never use text justification. In these
-	//	cases, text justification is completely ignored.
+	//	Text justification can only be evaluated in the
+	//	context of a number string, field length and a
+	//	'textJustification' object of type TextJustify.
+	//	This is because number strings with a field length
+	//	equal to or less than the length of the numeric
+	//	value string never use text justification. In
+	//	these cases, text justification is completely
+	//	ignored.
 	//
-	//	If the field length parameter ('fieldLength') is greater
-	//	than the length of the numeric value string, text
-	//	justification must be equal to one of these
-	//	three valid values:
+	//	If the field length parameter ('fieldLength') is
+	//	greater than the length of the numeric value
+	//	string, text justification must be equal to one of
+	//	these three valid values:
+	//
 	//	          TextJustify(0).Left()
 	//	          TextJustify(0).Right()
 	//	          TextJustify(0).Center()
