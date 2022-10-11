@@ -6029,11 +6029,272 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) copySignedNumberFormatSp
 	return err
 }
 
-// setCurrencyNStrFmtUS
+//	setCurrencyNStrFmtFrance
 //
-// Deletes and resets the member variable data values
-// stored in the instance of NumStrFormatSpec passed
-// as input parameter 'signedNumFmtSpec'.
+//	Deletes and resets the member variable data values
+//	stored in the instance of NumStrFormatSpec passed
+//	as input parameter 'numStrFmtSpec'.
+//
+//	Reconfigures the current instance of NumStrFormatSpec
+//	using Currency Number String formatting conventions
+//	typically applied in France.
+//
+// ----------------------------------------------------------------
+//
+// # Reference:
+//
+// https://www.ibm.com/support/pages/english-and-french-currency-formats
+// https://freeformatter.com/france-standards-code-snippets.html
+// https://docs.microsoft.com/en-us/globalization/locale/currency-formatting
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	Be advised that the data fields contained in the current
+//	instance of NumStrFormatSpec will be deleted and replaced
+//	by Currency Number String formatting parameters typically
+//	applied in France.
+//
+// ----------------------------------------------------------------
+//
+// # Defaults
+//
+//	The radix point or decimal separator is set to the
+//	comma character (','):
+//
+//		French Example-1
+//			123,45
+//
+//	The integer group separator is a space character
+//	(' ').
+//
+//	The integer group specification is set to 'thousands'.
+//	This means that integer digits will be separated into
+//	'thousands' with each group containing three digits each:
+//
+//		French Example-2
+//		1 000 000 000
+//
+//	The currency symbol used in the France is the
+//	Euro symbol ('€').
+//
+//		France Example: 1,000,000.00 €
+//
+//	The negative number sign is set to leading minus
+//	sign ('-') and a trailing Euro symbol ("€").
+//
+//		France Example: -1,000,000.00 €
+//
+//	The positive number sign is set to a trailing
+//	Euro symbol.
+//
+//		France Example: 1,000,000.00 €
+//
+//	The zero number format is set to a trailing
+//	Euro symbol.
+//
+//		France Example: 0.00 €
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+// numStrFmtSpec				*NumStrFormatSpec
+//
+//		A pointer to a NumStrFormatSpec instance. All
+//		member variable data fields in this object will
+//		be replaced by data values configured from the
+//		input parameter described below.
+//
+//	numberFieldSpec				NumStrNumberFieldSpec
+//
+//		This Number Field Specification contains all
+//		parameters necessary to format a Number String
+//		within a larger Number Field. In addition to
+//		specifying the length of number field, this
+//		object contains justification specifications
+//		for centering, left justifying or right
+//		justifying a Number String within a Number
+//		Field.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// -----------------------------------------------------------------
+//
+// # Return Values
+//
+//	err							error
+//
+//		If this method completes successfully, this
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setCurrencyNStrFmtFrance(
+	numStrFmtSpec *NumStrFormatSpec,
+	numberFieldSpec NumStrNumberFieldSpec,
+	errPrefDto *ePref.ErrPrefixDto) (
+	err error) {
+
+	nStrNumberFieldSpecNanobot.lock.Lock()
+
+	defer nStrNumberFieldSpecNanobot.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"numStrFmtSpecNanobot."+
+			"setCurrencyNStrFmtFrance()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if numStrFmtSpec == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'numStrFmtSpec' is invalid!\n"+
+			"'numStrFmtSpec' is a 'nil' pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	var decSeparator DecimalSeparatorSpec
+
+	decSeparator,
+		err = new(DecimalSeparatorSpec).NewUS(
+		ePrefix.XCpy("decSeparator"))
+
+	if err != nil {
+		return err
+	}
+
+	var intSeparatorSpec IntegerSeparatorSpec
+
+	intSeparatorSpec,
+		err = new(IntegerSeparatorSpec).NewUnitedStatesDefaults(
+		ePrefix.XCpy("intSeparatorSpec"))
+
+	if err != nil {
+		return err
+	}
+
+	var negativeNumberSign NumStrNumberSymbolSpec
+
+	negativeNumberSign = NumStrNumberSymbolSpec{
+
+		leadingNumberSymbols: RuneArrayDto{
+			CharsArray:     []rune{'-'},
+			Description1:   "",
+			Description2:   "",
+			charSearchType: CharSearchType.LinearTargetStartingIndex(),
+			lock:           nil,
+		},
+
+		leadingNumberFieldSymbolPosition: NumFieldSymPos.InsideNumField(),
+
+		trailingNumberSymbols: RuneArrayDto{
+			CharsArray:     []rune{' ', '\U000020ac'},
+			Description1:   "",
+			Description2:   "",
+			charSearchType: CharSearchType.LinearTargetStartingIndex(),
+			lock:           nil,
+		},
+
+		trailingNumberFieldSymbolPosition: NumFieldSymPos.InsideNumField(),
+
+		lock: nil,
+	}
+
+	var positiveNumberSign NumStrNumberSymbolSpec
+
+	positiveNumberSign = NumStrNumberSymbolSpec{
+
+		leadingNumberSymbols: RuneArrayDto{
+			CharsArray:     []rune{},
+			Description1:   "",
+			Description2:   "",
+			charSearchType: CharSearchType.LinearTargetStartingIndex(),
+			lock:           nil,
+		},
+
+		leadingNumberFieldSymbolPosition: NumFieldSymPos.InsideNumField(),
+
+		trailingNumberSymbols: RuneArrayDto{
+			CharsArray:     []rune{' ', '\U000020ac'},
+			Description1:   "",
+			Description2:   "",
+			charSearchType: CharSearchType.LinearTargetStartingIndex(),
+			lock:           nil,
+		},
+		trailingNumberFieldSymbolPosition: 0,
+		lock:                              nil,
+	}
+
+	var zeroNumberSign NumStrNumberSymbolSpec
+
+	zeroNumberSign = NumStrNumberSymbolSpec{
+
+		leadingNumberSymbols: RuneArrayDto{
+			CharsArray:     []rune{},
+			Description1:   "",
+			Description2:   "",
+			charSearchType: CharSearchType.LinearTargetStartingIndex(),
+			lock:           nil,
+		},
+
+		leadingNumberFieldSymbolPosition: NumFieldSymPos.InsideNumField(),
+
+		trailingNumberSymbols: RuneArrayDto{
+			CharsArray:     []rune{' ', '\U000020ac'},
+			Description1:   "",
+			Description2:   "",
+			charSearchType: CharSearchType.LinearTargetStartingIndex(),
+			lock:           nil,
+		},
+		trailingNumberFieldSymbolPosition: NumFieldSymPos.InsideNumField(),
+		lock:                              nil,
+	}
+
+	return new(numStrFmtSpecAtom).setNStrFmtComponents(
+		numStrFmtSpec,
+		decSeparator,
+		intSeparatorSpec,
+		negativeNumberSign,
+		positiveNumberSign,
+		zeroNumberSign,
+		numberFieldSpec,
+		ePrefix.XCpy("numStrFmtSpec<-"))
+}
+
+//	setCurrencyNStrFmtUS
+//
+//	Deletes and resets the member variable data values
+//	stored in the instance of NumStrFormatSpec passed
+//	as input parameter 'numStrFmtSpec'.
 //
 //	Reconfigures the current instance of NumStrFormatSpec
 //	using Currency Number String formatting conventions
@@ -6046,7 +6307,7 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) copySignedNumberFormatSp
 //	Be advised that the data fields contained in the current
 //	instance of NumStrFormatSpec will be deleted and replaced
 //	by Currency Number String formatting parameters typically
-//	applied the US (United States).
+//	applied the in US (United States).
 //
 // ----------------------------------------------------------------
 //
