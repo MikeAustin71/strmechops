@@ -8938,8 +8938,10 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtFrance(
 	var positiveNumberSign NumStrNumberSymbolSpec
 
 	positiveNumberSign = NumStrNumberSymbolSpec{
-		leadingNumberSymbols:              RuneArrayDto{},
-		leadingNumberFieldSymbolPosition:  0,
+
+		leadingNumberSymbols:             RuneArrayDto{},
+		leadingNumberFieldSymbolPosition: 0,
+
 		trailingNumberSymbols:             RuneArrayDto{},
 		trailingNumberFieldSymbolPosition: 0,
 		lock:                              nil,
@@ -8948,8 +8950,10 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtFrance(
 	var zeroNumberSign NumStrNumberSymbolSpec
 
 	zeroNumberSign = NumStrNumberSymbolSpec{
-		leadingNumberSymbols:              RuneArrayDto{},
-		leadingNumberFieldSymbolPosition:  0,
+
+		leadingNumberSymbols:             RuneArrayDto{},
+		leadingNumberFieldSymbolPosition: 0,
+
 		trailingNumberSymbols:             RuneArrayDto{},
 		trailingNumberFieldSymbolPosition: 0,
 		lock:                              nil,
@@ -9184,8 +9188,10 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtGermany(
 	var negativeNumberSign NumStrNumberSymbolSpec
 
 	negativeNumberSign = NumStrNumberSymbolSpec{
+
 		leadingNumberSymbols:             RuneArrayDto{},
 		leadingNumberFieldSymbolPosition: 0,
+
 		trailingNumberSymbols: RuneArrayDto{
 			CharsArray:     []rune{'-'},
 			Description1:   "",
