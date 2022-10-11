@@ -17,14 +17,14 @@ type decimalSepSpecNanobot struct {
 // 'targetDecSepSpec'. Both instances are of type
 // DecimalSeparatorSpec.
 //
-// IMPORTANT
+// # IMPORTANT
 // -----------------------------------------------------------------
 // Be advised that the data fields in 'targetDecSepSpec' will
 // be deleted and overwritten.
 //
 // -----------------------------------------------------------------
 //
-// Input Parameters
+// # Input Parameters
 //
 //	destinationDecSepSpec      *DecimalSeparatorSpec
 //	   - A pointer to a DecimalSeparatorSpec instance. All the
@@ -106,7 +106,7 @@ func (decSepSpecNanobot *decimalSepSpecNanobot) copyDecimalSeparator(
 	if destinationDecSepSpec == nil {
 
 		err = fmt.Errorf("%v\n"+
-			"ERROR: Input parameter 'targetNegNumSearchSpec' is a nil pointer!\n",
+			"ERROR: Input parameter 'destinationDecSepSpec' is a nil pointer!\n",
 			ePrefix.String())
 
 		return err
@@ -115,7 +115,7 @@ func (decSepSpecNanobot *decimalSepSpecNanobot) copyDecimalSeparator(
 	if sourceDecSepSpec == nil {
 
 		err = fmt.Errorf("%v\n"+
-			"ERROR: Input parameter 'incomingNegNumSearchSpec' is a 'nil' pointer!\n",
+			"ERROR: Input parameter 'sourceDecSepSpec' is a 'nil' pointer!\n",
 			ePrefix.String())
 
 		return err
@@ -150,6 +150,132 @@ func (decSepSpecNanobot *decimalSepSpecNanobot) copyDecimalSeparator(
 		&sourceDecSepSpec.decimalSeparatorChars,
 		ePrefix.XCpy(
 			"destinationDecSepSpec<-sourceDecSepSpec"))
+
+	return err
+}
+
+//	setFrenchGermanDecSep
+//
+//	Deletes and resets the member variable data values
+//	stored in the instance of DecimalSeparatorSpec passed
+//	as input parameter 'decSeparatorSpec'.
+//
+//	Reconfigures the NumStrFormatSpec instance,
+//	'decSeparatorSpec', using decimal separator
+//	conventions typically applied in France and
+//	Germany.
+//
+//	For French and German numeric values, the
+//	radix point or decimal separator is set to
+//	the comma character (',').
+//
+//	As such, the comma character is used to separate
+//	integer and fractional digits within a floating
+//	point numeric value configured according to French
+//	and German standards.
+//
+// -----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	Be advised that the data fields in 'decSeparatorSpec'
+//	will be deleted and overwritten using decimal
+//	separator conventions typically applied in France and
+//	Germany.
+//
+// -----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	decSeparatorSpec			*DecimalSeparatorSpec
+//
+//		A pointer to a DecimalSeparatorSpec instance. All
+//		the member variable data values in this object will
+//		be replaced and configured for decimal separator
+//		conventions typically applied in France and Germany.
+//
+//		As such, this instance of DecimalSeparatorSpec
+//		will be configured with a single comma character
+//		(',') for use as a radix point or decimal separator.
+//
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//		the error message.
+//
+//	err							error
+//
+//		If this method completes successfully, this
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (decSepSpecNanobot *decimalSepSpecNanobot) setFrenchGermanDecSep(
+	decSeparatorSpec *DecimalSeparatorSpec,
+	errPrefDto *ePref.ErrPrefixDto) (
+	err error) {
+
+	if decSepSpecNanobot.lock == nil {
+		decSepSpecNanobot.lock = new(sync.Mutex)
+	}
+
+	decSepSpecNanobot.lock.Lock()
+
+	defer decSepSpecNanobot.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"decimalSepSpecNanobot."+
+			"setFrenchGermanDecSep()",
+		"")
+
+	if err != nil {
+
+		return err
+
+	}
+
+	if decSeparatorSpec == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'decSeparatorSpec' is a nil pointer!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	new(decimalSeparatorSpecAtom).
+		empty(
+			decSeparatorSpec)
+
+	decSeparatorSpec.decimalSeparatorChars.CharsArray = []rune{','}
+	decSeparatorSpec.decimalSeparatorChars.charSearchType =
+		CharSearchType.LinearTargetStartingIndex()
 
 	return err
 }

@@ -3991,7 +3991,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumFmtUS(
 //	comma character (','):
 //
 //		French Example-1
-//			123,45
+//			123,45 (The fractional digits are "45")
 //
 //	The integer group separator is a space character
 //	(' ').
@@ -4006,22 +4006,26 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumFmtUS(
 //	The currency symbol used in the France is the
 //	Euro symbol ('€').
 //
-//		France Example: 1,000,000.00 €
+//		France Example-3
+//		1,000,000.00 €
 //
 //	The negative number sign is set to leading minus
 //	sign ('-') and a trailing Euro symbol ("€").
 //
-//		France Example: -1,000,000.00 €
+//		France Example-4
+//		-1,000,000.00 €
 //
 //	The positive number sign is set to a trailing
 //	Euro symbol.
 //
-//		France Example: 1,000,000.00 €
+//		France Example-5
+//		1,000,000.00 €
 //
 //	The zero number format is set to a trailing
 //	Euro symbol.
 //
-//		France Example: 0.00 €
+//		France Example-6
+//			0.00 €
 //
 // ----------------------------------------------------------------
 //
@@ -6435,7 +6439,7 @@ func (numStrFmtSpec *NumStrFormatSpec) SetSignedNumFmtFrance(
 //	formatting conventions typically
 //	applied in Germany.
 //
-//	Within in the European Union many, if not
+//	Within in the European Union, many, if not
 //	most, of the member countries subscribe to
 //	the Signed Number String formatting standards
 //	implemented by either France or Germany.
@@ -6455,6 +6459,14 @@ func (numStrFmtSpec *NumStrFormatSpec) SetSignedNumFmtFrance(
 //
 // ----------------------------------------------------------------
 //
+// # Reference:
+//
+//	https://freeformatter.com/germany-standards-code-snippets.html
+//
+//	https://www.evertype.com/standards/euro/formats.html
+//
+// ----------------------------------------------------------------
+//
 // # IMPORTANT
 //
 //	Be advised that the data fields contained in the current
@@ -6469,7 +6481,8 @@ func (numStrFmtSpec *NumStrFormatSpec) SetSignedNumFmtFrance(
 //	The radix point or decimal separator is set to the
 //	comma character (','):
 //
-//		Example-1:
+//		German Example-1:
+//
 //		123,45 (The fractional digits are "45")
 //
 //	The integer group separator is a space character
@@ -6480,7 +6493,7 @@ func (numStrFmtSpec *NumStrFormatSpec) SetSignedNumFmtFrance(
 //	separated into 'thousands' with each group containing
 //	three digits each:
 //
-//		Example-2:
+//		German Example-2:
 //		1.000.000.000
 //
 //	The negative number sign is set to a trailing minus
@@ -7221,9 +7234,8 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) copySignedNumberFormatSp
 //	stored in the instance of NumStrFormatSpec passed
 //	as input parameter 'numStrFmtSpec'.
 //
-//	Reconfigures the current instance of NumStrFormatSpec
-//	using Currency Number String formatting conventions
-//	typically applied in France.
+//	Reconfigures 'numStrFmtSpec' using Currency Number
+//	String formatting conventions typically applied in France.
 //
 //	Within in the European Union many, if not most, of
 //	the member countries subscribe to the Number String
@@ -7234,18 +7246,21 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) copySignedNumberFormatSp
 //
 // # Reference:
 //
-// https://www.ibm.com/support/pages/english-and-french-currency-formats
-// https://freeformatter.com/france-standards-code-snippets.html
-// https://docs.microsoft.com/en-us/globalization/locale/currency-formatting
+//	https://www.ibm.com/support/pages/english-and-french-currency-formats
+//
+//	https://freeformatter.com/france-standards-code-snippets.html
+//
+//	https://docs.microsoft.com/en-us/globalization/locale/currency-formatting
 //
 // ----------------------------------------------------------------
 //
 // # IMPORTANT
 //
-//	Be advised that the data fields contained in the current
-//	instance of NumStrFormatSpec will be deleted and replaced
-//	by Currency Number String formatting parameters typically
-//	applied in France.
+//	Be advised that the data fields contained in the instance
+//	of NumStrFormatSpec passed as input parameter,
+//	'numStrFmtSpec', will be deleted and replaced by Currency
+//	Number String formatting parameters typically applied in
+//	France.
 //
 // ----------------------------------------------------------------
 //
@@ -7255,7 +7270,7 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) copySignedNumberFormatSp
 //	comma character (','):
 //
 //		French Example-1
-//			123,45
+//			123,45 (The fractional digits are "45")
 //
 //	The integer group separator is a space character
 //	(' ').
@@ -7270,22 +7285,26 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) copySignedNumberFormatSp
 //	The currency symbol used in the France is the
 //	Euro symbol ('€').
 //
-//		France Example: 1,000,000.00 €
+//		France Example-3
+//		1,000,000.00 €
 //
 //	The negative number sign is set to leading minus
 //	sign ('-') and a trailing Euro symbol ("€").
 //
-//		France Example: -1,000,000.00 €
+//		France Example-4
+//		-1,000,000.00 €
 //
 //	The positive number sign is set to a trailing
 //	Euro symbol.
 //
-//		France Example: 1,000,000.00 €
+//		France Example-5
+//		1,000,000.00 €
 //
 //	The zero number format is set to a trailing
 //	Euro symbol.
 //
-//		France Example: 0.00 €
+//		France Example-6
+//			0.00 €
 //
 // ----------------------------------------------------------------
 //
@@ -7410,6 +7429,330 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setCurrencyNStrFmtFrance
 		errPrefDto,
 		"numStrFmtSpecNanobot."+
 			"setCurrencyNStrFmtFrance()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if numStrFmtSpec == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'numStrFmtSpec' is invalid!\n"+
+			"'numStrFmtSpec' is a 'nil' pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	var decSeparator DecimalSeparatorSpec
+
+	decSeparator,
+		err = new(DecimalSeparatorSpec).NewUS(
+		ePrefix.XCpy("decSeparator"))
+
+	if err != nil {
+		return err
+	}
+
+	var intSeparatorSpec IntegerSeparatorSpec
+
+	intSeparatorSpec,
+		err = new(IntegerSeparatorSpec).NewUnitedStatesDefaults(
+		ePrefix.XCpy("intSeparatorSpec"))
+
+	if err != nil {
+		return err
+	}
+
+	var negativeNumberSign NumStrNumberSymbolSpec
+
+	negativeNumberSign = NumStrNumberSymbolSpec{
+
+		leadingNumberSymbols: RuneArrayDto{
+			CharsArray:     []rune{'-'},
+			Description1:   "",
+			Description2:   "",
+			charSearchType: CharSearchType.LinearTargetStartingIndex(),
+			lock:           nil,
+		},
+
+		leadingNumberFieldSymbolPosition: NumFieldSymPos.InsideNumField(),
+
+		trailingNumberSymbols: RuneArrayDto{
+			CharsArray:     []rune{' ', '\U000020ac'},
+			Description1:   "",
+			Description2:   "",
+			charSearchType: CharSearchType.LinearTargetStartingIndex(),
+			lock:           nil,
+		},
+
+		trailingNumberFieldSymbolPosition: NumFieldSymPos.InsideNumField(),
+
+		lock: nil,
+	}
+
+	var positiveNumberSign NumStrNumberSymbolSpec
+
+	positiveNumberSign = NumStrNumberSymbolSpec{
+
+		leadingNumberSymbols: RuneArrayDto{
+			CharsArray:     []rune{},
+			Description1:   "",
+			Description2:   "",
+			charSearchType: CharSearchType.LinearTargetStartingIndex(),
+			lock:           nil,
+		},
+
+		leadingNumberFieldSymbolPosition: NumFieldSymPos.InsideNumField(),
+
+		trailingNumberSymbols: RuneArrayDto{
+			CharsArray:     []rune{' ', '\U000020ac'},
+			Description1:   "",
+			Description2:   "",
+			charSearchType: CharSearchType.LinearTargetStartingIndex(),
+			lock:           nil,
+		},
+		trailingNumberFieldSymbolPosition: 0,
+		lock:                              nil,
+	}
+
+	var zeroNumberSign NumStrNumberSymbolSpec
+
+	zeroNumberSign = NumStrNumberSymbolSpec{
+
+		leadingNumberSymbols: RuneArrayDto{
+			CharsArray:     []rune{},
+			Description1:   "",
+			Description2:   "",
+			charSearchType: CharSearchType.LinearTargetStartingIndex(),
+			lock:           nil,
+		},
+
+		leadingNumberFieldSymbolPosition: NumFieldSymPos.InsideNumField(),
+
+		trailingNumberSymbols: RuneArrayDto{
+			CharsArray:     []rune{' ', '\U000020ac'},
+			Description1:   "",
+			Description2:   "",
+			charSearchType: CharSearchType.LinearTargetStartingIndex(),
+			lock:           nil,
+		},
+		trailingNumberFieldSymbolPosition: NumFieldSymPos.InsideNumField(),
+		lock:                              nil,
+	}
+
+	return new(numStrFmtSpecAtom).setNStrFmtComponents(
+		numStrFmtSpec,
+		decSeparator,
+		intSeparatorSpec,
+		negativeNumberSign,
+		positiveNumberSign,
+		zeroNumberSign,
+		numberFieldSpec,
+		ePrefix.XCpy("numStrFmtSpec<-"))
+}
+
+//	setCurrencyNStrFmtGermany
+//
+//	Deletes and resets the member variable data values
+//	stored in the instance of NumStrFormatSpec passed
+//	as input parameter 'numStrFmtSpec'.
+//
+//	Reconfigures the current instance of NumStrFormatSpec
+//	using Currency Number String formatting conventions
+//	typically applied in Germany.
+//
+//	Within in the European Union, many, if not most, of
+//	the member countries subscribe to the Number String
+//	Currency formatting standards implemented by either
+//	Germany or Germany.
+//
+// ----------------------------------------------------------------
+//
+// # Reference:
+//
+// https://freeformatter.com/germany-standards-code-snippets.html
+//
+// https://www.evertype.com/standards/euro/formats.html
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	Be advised that the data fields contained in the current
+//	instance of NumStrFormatSpec will be deleted and replaced
+//	by Currency Number String formatting parameters typically
+//	applied in Germany.
+//
+// ----------------------------------------------------------------
+//
+// # Defaults
+//
+//	The radix point or decimal separator is set to the
+//	comma character (','):
+//
+//		German Example-1
+//			123,45 (The fractional digits are "45")
+//
+//	The integer group separator is a space character
+//	('.').
+//
+//	The integer group specification is set to
+//	'thousands'. This means that integer digits will be
+//	separated into 'thousands' with each group containing
+//	three digits each:
+//
+//		German Example-2:
+//		1.000.000.000
+//
+//	The currency symbol used in the Germany is the
+//	Euro symbol ('€').
+//
+//		German Example-3
+//		1.000.000,00 €
+//
+//	The negative number sign is set to a trailing minus
+//	sign ('-').
+//
+//		German Example-4
+//		1.000.000,00- €
+//
+//	The positive number sign is set to a trailing
+//	Euro symbol.
+//
+//		Germany Example-5
+//		1.000.000,00 €
+//
+//	The zero number format is set to a trailing
+//	Euro symbol.
+//
+//		Germany Example-6
+//			0,00 €
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+// numStrFmtSpec				*NumStrFormatSpec
+//
+//		A pointer to a NumStrFormatSpec instance. All
+//		member variable data fields in this object will
+//		be replaced by data values configured from the
+//		input parameter described below.
+//
+//	numberFieldSpec				NumStrNumberFieldSpec
+//
+//		This Number Field Specification contains all
+//		parameters necessary to format a Number String
+//		within a larger Number Field. In addition to
+//		specifying the length of number field, this
+//		object contains justification specifications
+//		for centering, left justifying or right
+//		justifying a Number String within a Number
+//		Field.
+//
+//		type NumStrNumberFieldSpec struct {
+//
+//			fieldLength int
+//
+//				This parameter defines the length of the
+//				text field in which the numeric value will
+//				be displayed within a number string.
+//
+//				If 'fieldLength' is less than the length
+//				of the numeric value string, it will be
+//				automatically set equal to the length of
+//				that numeric value string.
+//
+//				To automatically set the value of
+//				'fieldLength' to the string length of the
+//				numeric value, set this parameter to a
+//				value of minus one (-1).
+//
+//				If this parameter is submitted with a
+//				value less than minus one (-1) or greater
+//				than 1-million (1,000,000), an error will
+//				be returned.
+//
+//			fieldJustification TextJustify
+//
+//				An enumeration which specifies the
+//				justification of the numeric value string
+//				within the number field length specified
+//				by data field 'fieldLength'.
+//
+//				Text justification can only be evaluated in the context of
+//				a number string, field length and a 'textJustification'
+//				object of type TextJustify. This is because number strings
+//				with a field length equal to or less than the length of the
+//				numeric value string never use text justification. In these
+//				cases, text justification is completely ignored.
+//
+//				If the field length parameter ('fieldLength') is greater
+//				than the length of the numeric value string, text
+//				justification must be equal to one of these
+//				three valid values:
+//				          TextJustify(0).Left()
+//				          TextJustify(0).Right()
+//				          TextJustify(0).Center()
+//
+//				You can also use the abbreviated text justification
+//				enumeration syntax as follows:
+//
+//				          TxtJustify.Left()
+//				          TxtJustify.Right()
+//				          TxtJustify.Center()
+//		}
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// -----------------------------------------------------------------
+//
+// # Return Values
+//
+//	err							error
+//
+//		If this method completes successfully, this
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setCurrencyNStrFmtGermany(
+	numStrFmtSpec *NumStrFormatSpec,
+	numberFieldSpec NumStrNumberFieldSpec,
+	errPrefDto *ePref.ErrPrefixDto) (
+	err error) {
+
+	nStrNumberFieldSpecNanobot.lock.Lock()
+
+	defer nStrNumberFieldSpecNanobot.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"numStrFmtSpecNanobot."+
+			"setCurrencyNStrFmtGermany()",
 		"")
 
 	if err != nil {
