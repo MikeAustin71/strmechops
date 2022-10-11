@@ -2530,6 +2530,103 @@ func (decSeparatorSpec *DecimalSeparatorSpec) SetDecimalSeparatorStr(
 	return err
 }
 
+// SetEuropeanUnionDecSep
+//
+//	Deletes and resets the all member variable data values
+//	stored in the current instance of DecimalSeparatorSpec.
+//
+//	Reconfigures the current NumStrFormatSpec instance,
+//	using decimal separator standards applied by many
+//	European Union member countries.
+//
+//	Floating point numeric value formatted in accordance
+//	with European Union standards use a comma character
+//	(',') as the radix point or decimal separator.
+//
+//	This comma character (',') is therefore used to
+//	separate integer and fractional digits within a
+//	floating point numeric value.
+//
+//		EuropeanUnion Example
+//		123,45 (The fractional digits are "45")
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	Be advised that the data fields contained in the
+//	current instance of DecimalSeparatorSpec will be
+//	deleted and replaced by Decimal Separator formatting
+//	parameters applied by many countries within the
+//	European Union.
+//
+// ----------------------------------------------------------------
+//
+//	# Input Parameters
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	err							error
+//
+//		If this method completes successfully, this
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (decSeparatorSpec *DecimalSeparatorSpec) SetEuropeanUnionDecSep(
+	errorPrefix interface{}) (
+	err error) {
+
+	if decSeparatorSpec.lock == nil {
+		decSeparatorSpec.lock = new(sync.Mutex)
+	}
+
+	decSeparatorSpec.lock.Lock()
+
+	defer decSeparatorSpec.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"DecimalSeparatorSpec."+
+			"SetEuropeanUnionDecSep()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	return new(decimalSepSpecNanobot).
+		setFrenchGermanDecSep(
+			decSeparatorSpec,
+			ePrefix.XCpy(
+				"decSeparatorSpec"))
+}
+
 // SetFrenchDecSep
 //
 //	Deletes and resets the all member variable data values
@@ -2558,6 +2655,42 @@ func (decSeparatorSpec *DecimalSeparatorSpec) SetDecimalSeparatorStr(
 //	current instance of DecimalSeparatorSpec will be
 //	deleted and replaced by Decimal Separator formatting
 //	parameters typically applied in France.
+//
+// ----------------------------------------------------------------
+//
+//	# Input Parameters
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	err							error
+//
+//		If this method completes successfully, this
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
 func (decSeparatorSpec *DecimalSeparatorSpec) SetFrenchDecSep(
 	errorPrefix interface{}) (
 	err error) {
@@ -2618,6 +2751,42 @@ func (decSeparatorSpec *DecimalSeparatorSpec) SetFrenchDecSep(
 //	current instance of DecimalSeparatorSpec will be
 //	deleted and replaced by Decimal Separator formatting
 //	parameters typically applied in Germany.
+//
+// ----------------------------------------------------------------
+//
+//	# Input Parameters
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	err							error
+//
+//		If this method completes successfully, this
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
 func (decSeparatorSpec *DecimalSeparatorSpec) SetGermanDecSep(
 	errorPrefix interface{}) (
 	err error) {
