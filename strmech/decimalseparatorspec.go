@@ -947,20 +947,10 @@ func (decSeparatorSpec *DecimalSeparatorSpec) NewEuropeanUnion(
 		return newDecimalSeparator, err
 	}
 
-	err = newDecimalSeparator.decimalSeparatorChars.SetRuneArray(
-		[]rune{','},
+	err = new(decimalSepSpecNanobot).setFrenchGermanDecSep(
+		&newDecimalSeparator,
 		ePrefix.XCpy(
-			"decSeparatorSpec<-decSepRunes"))
-
-	if err != nil {
-		return newDecimalSeparator, err
-	}
-
-	err = newDecimalSeparator.decimalSeparatorChars.
-		SetCharacterSearchType(
-			CharSearchType.LinearTargetStartingIndex(),
-			ePrefix.XCpy(
-				"LinearTargetStartingIndex()"))
+			"newDecimalSeparator<-"))
 
 	return newDecimalSeparator, err
 }
@@ -1481,6 +1471,151 @@ func (decSeparatorSpec *DecimalSeparatorSpec) NewFrance(
 		errorPrefix,
 		"DecimalSeparatorSpec."+
 			"NewFrance()",
+		"")
+
+	if err != nil {
+		return newDecimalSeparator, err
+	}
+
+	err = new(decimalSepSpecNanobot).setFrenchGermanDecSep(
+		&newDecimalSeparator,
+		ePrefix.XCpy(
+			"newDecimalSeparator<-"))
+
+	return newDecimalSeparator, err
+}
+
+//	NewGermany
+//
+//	Creates and returns a new instance of
+//	DecimalSeparatorSpec configured with the
+//	radix point or decimal separator used in
+//	Germany.
+//
+//	The radix point or decimal separator used
+//	by Germany is the comma character (",").
+//
+//	This comma character (",") is therefore
+//	used as a radix point or decimal separator
+//	to separate integer and fractional digits
+//	within a floating point numeric value by
+//	Germany and various other member countries
+//	in the European Union.
+//
+//		German Example
+//			1,45 (The fractional value is 45)
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	 errorPrefix                interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it	contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// -----------------------------------------------------------------
+//
+// # Return Values
+//
+//	newDecimalSeparator			DecimalSeparatorSpec
+//
+//		If this method completes successfully, this
+//		parameter returns a new instance of
+//		DecimalSeparatorSpec configured with a
+//		single comma character (',').
+//
+//		The comma character (',') is used by Germany
+//		and other countries in the European Union as
+//		a radix point separating integer and
+//		fractional digits withing floating point
+//		numeric values.
+//
+//	err							error
+//
+//		If this method completes successfully, the returned
+//		error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error message.
+//		This returned error message will incorporate the
+//		method chain and text passed by input parameter,
+//		'errorPrefix'. The 'errorPrefix' text will be attached
+//		to the beginning of	the error message.
+func (decSeparatorSpec *DecimalSeparatorSpec) NewGermany(
+	errorPrefix interface{}) (
+	newDecimalSeparator DecimalSeparatorSpec,
+	err error) {
+
+	if decSeparatorSpec.lock == nil {
+		decSeparatorSpec.lock = new(sync.Mutex)
+	}
+
+	decSeparatorSpec.lock.Lock()
+
+	defer decSeparatorSpec.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"DecimalSeparatorSpec."+
+			"NewGermany()",
 		"")
 
 	if err != nil {
