@@ -7448,7 +7448,7 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setCurrencyNStrFmtFrance
 	var decSeparator DecimalSeparatorSpec
 
 	decSeparator,
-		err = new(DecimalSeparatorSpec).NewUS(
+		err = new(DecimalSeparatorSpec).NewFrance(
 		ePrefix.XCpy("decSeparator"))
 
 	if err != nil {
@@ -7458,7 +7458,7 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setCurrencyNStrFmtFrance
 	var intSeparatorSpec IntegerSeparatorSpec
 
 	intSeparatorSpec,
-		err = new(IntegerSeparatorSpec).NewUnitedStatesDefaults(
+		err = new(IntegerSeparatorSpec).NewFrenchDefaults(
 		ePrefix.XCpy("intSeparatorSpec"))
 
 	if err != nil {
@@ -7772,7 +7772,7 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setCurrencyNStrFmtGerman
 	var decSeparator DecimalSeparatorSpec
 
 	decSeparator,
-		err = new(DecimalSeparatorSpec).NewUS(
+		err = new(DecimalSeparatorSpec).NewGermany(
 		ePrefix.XCpy("decSeparator"))
 
 	if err != nil {
@@ -7782,7 +7782,7 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setCurrencyNStrFmtGerman
 	var intSeparatorSpec IntegerSeparatorSpec
 
 	intSeparatorSpec,
-		err = new(IntegerSeparatorSpec).NewUnitedStatesDefaults(
+		err = new(IntegerSeparatorSpec).NewGermanDefaults(
 		ePrefix.XCpy("intSeparatorSpec"))
 
 	if err != nil {
@@ -8901,7 +8901,7 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtFrance(
 	var decSeparator DecimalSeparatorSpec
 
 	decSeparator,
-		err = new(DecimalSeparatorSpec).NewEuropeanUnion(
+		err = new(DecimalSeparatorSpec).NewFrance(
 		ePrefix.XCpy("decSeparator"))
 
 	if err != nil {
@@ -9163,7 +9163,7 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtGermany(
 	var decSeparator DecimalSeparatorSpec
 
 	decSeparator,
-		err = new(DecimalSeparatorSpec).NewEuropeanUnion(
+		err = new(DecimalSeparatorSpec).NewGermany(
 		ePrefix.XCpy("decSeparator"))
 
 	if err != nil {
