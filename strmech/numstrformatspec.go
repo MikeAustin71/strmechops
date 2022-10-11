@@ -1531,9 +1531,11 @@ func (numStrFmtSpec *NumStrFormatSpec) GetZeroNumSymSpec(
 //
 // # Reference:
 //
-// https://www.ibm.com/support/pages/english-and-french-currency-formats
-// https://freeformatter.com/france-standards-code-snippets.html
-// https://docs.microsoft.com/en-us/globalization/locale/currency-formatting
+//	https://www.ibm.com/support/pages/english-and-french-currency-formats
+//
+//	https://freeformatter.com/france-standards-code-snippets.html
+//
+//	https://docs.microsoft.com/en-us/globalization/locale/currency-formatting
 //
 // ----------------------------------------------------------------
 //
@@ -1543,7 +1545,7 @@ func (numStrFmtSpec *NumStrFormatSpec) GetZeroNumSymSpec(
 //	comma character (','):
 //
 //		French Example-1
-//			123,45
+//			123,45 (The fractional digits are "45")
 //
 //	The integer group separator is a space character
 //	(' ').
@@ -1558,22 +1560,26 @@ func (numStrFmtSpec *NumStrFormatSpec) GetZeroNumSymSpec(
 //	The currency symbol used in the France is the
 //	Euro symbol ('€').
 //
-//		France Example: 1,000,000.00 €
+//		France Example-3
+//		1 000 000,00 €
 //
 //	The negative number sign is set to leading minus
 //	sign ('-') and a trailing Euro symbol ("€").
 //
-//		France Example: -1,000,000.00 €
+//		France Example-4
+//		-1 000 000,00 €
 //
 //	The positive number sign is set to a trailing
 //	Euro symbol.
 //
-//		France Example: 1,000,000.00 €
+//		France Example-5
+//		1 000 000,00 €
 //
 //	The zero number format is set to a trailing
 //	Euro symbol.
 //
-//		France Example: 0.00 €
+//		France Example-6
+//			0,00 €
 //
 // ----------------------------------------------------------------
 //
@@ -3261,6 +3267,16 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtParamsRunes(
 //
 // ----------------------------------------------------------------
 //
+// # Reference:
+//
+//	https://www.ibm.com/support/pages/english-and-french-currency-formats
+//
+//	https://freeformatter.com/france-standards-code-snippets.html
+//
+//	https://docs.microsoft.com/en-us/globalization/locale/currency-formatting
+//
+// ----------------------------------------------------------------
+//
 // # Defaults
 //
 //	The radix point or decimal separator is set to the
@@ -3276,13 +3292,13 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtParamsRunes(
 //	This means that integer digits will be separated into
 //	'thousands' with each group containing three digits each:
 //
-//		Example-2:
+//		French Example-2
 //		1 000 000 000
 //
 //	The negative number sign is set to a leading minus sign
 //	('-').
 //
-//		Example-3:
+//		French Example-3:
 //		-1 000 000 000
 //
 //	The positive number sign is set to a blank or empty
@@ -8735,6 +8751,16 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setNStrNumberFieldSpec(
 //
 // ----------------------------------------------------------------
 //
+// # Reference:
+//
+//	https://www.ibm.com/support/pages/english-and-french-currency-formats
+//
+//	https://freeformatter.com/france-standards-code-snippets.html
+//
+//	https://docs.microsoft.com/en-us/globalization/locale/currency-formatting
+//
+// ----------------------------------------------------------------
+//
 // # Defaults
 //
 //	The radix point or decimal separator is set to the
@@ -8762,8 +8788,14 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setNStrNumberFieldSpec(
 //	The positive number sign is set to a blank or empty
 //	string ("").
 //
+//		France Example-4
+//		1 000 000 000
+//
 //	The zero number format is set to a blank or empty
 //	string ("").
+//
+//		France Example-6
+//			0,00
 //
 // ----------------------------------------------------------------
 //
