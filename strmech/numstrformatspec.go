@@ -1503,9 +1503,29 @@ func (numStrFmtSpec *NumStrFormatSpec) GetZeroNumSymSpec(
 
 //	NewCurrencyNumFmtFrance
 //
-//	Returns a new instance of NumStrFormatSpec configured
-//	for Currency Number String formatting conventions
-//	typically applied in France.
+//	Returns a new instance of NumStrFormatSpec
+//	configured for Currency Number String
+//	formatting conventions typically applied
+//	in France.
+//
+//	Within in the European Union many, if not
+//	most, of the member countries subscribe to
+//	the Currency Number String formatting
+//	standards implemented by either France or
+//	Germany.
+//
+//	For information on German Number String
+//	formatting conventions, see method:
+//
+//		NumStrFormatSpec.NewCurrencyNumFmtGermany()
+//
+//	If custom decimal separator, integer separators,
+//	negative number sign characters or currency
+//	symbols are required, see methods:
+//
+//		NumStrFormatSpec.NewNumFmtComponents()
+//		NumStrFormatSpec.NewNumFmtParams()
+//		NumStrFormatSpec.NewNumFmtParamsRunes()
 //
 // ----------------------------------------------------------------
 //
@@ -1742,9 +1762,17 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtFrance(
 
 //	NewCurrencyNumFmtUS
 //
-//	Returns a new instance of NumStrFormatSpec configured
-//	for US (United States) Currency	Number String
-//	formatting conventions.
+//	Returns a new instance of NumStrFormatSpec
+//	configured for US (United States) Currency
+//	Number String formatting conventions.
+//
+//	If custom decimal separator, integer separators,
+//	negative number sign characters or currency
+//	symbols are required, see methods:
+//
+//		NumStrFormatSpec.NewNumFmtComponents()
+//		NumStrFormatSpec.NewNumFmtParams()
+//		NumStrFormatSpec.NewNumFmtParamsRunes()
 //
 // ----------------------------------------------------------------
 //
@@ -3213,21 +3241,23 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtParamsRunes(
 //	configured for a Signed Number using French
 //	Number String formatting conventions.
 //
-//	France is a member of the European Union
-//	(EU) and a number of EU member countries
-//	also apply the same number formatting
-//	conventions as those applied in France.
+//	Within in the European Union many, if not
+//	most, of the member countries subscribe to
+//	the Signed Number String formatting standards
+//	implemented by either France or Germany.
 //
-//	Other European Union member countries
-//	apply the decimal separator and negative
-//	number sign characters used by Germany.
-//	See	method:
+//	For information on German Signed Number
+//	String formatting conventions, see method:
+//
 //		NumStrFormatSpec.NewSignedNumFmtGermany()
 //
 //	If custom decimal separator, integer separator
 //	and negative number sign characters are required,
-//	see method:
+//	see methods:
+//
 //		NumStrFormatSpec.NewNumFmtComponents()
+//		NumStrFormatSpec.NewNumFmtParams()
+//		NumStrFormatSpec.NewNumFmtParamsRunes()
 //
 // ----------------------------------------------------------------
 //
@@ -3451,21 +3481,23 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumFmtFrance(
 //	configured for a Signed Number using German
 //	Number String formatting conventions.
 //
-//	Germany is a member of the European Union
-//	(EU) and many EU member countries apply
-//	the same number formatting conventions as
-//	those applied in Germany.
+//	Within in the European Union many, if not
+//	most, of the member countries subscribe to
+//	the Signed Number String formatting standards
+//	implemented by either France or Germany.
 //
-//	Other European Union member countries
-//	apply the decimal separator and negative
-//	number sign characters used by France.
-//	See	method:
+//	For information on French Signed Number
+//	String formatting conventions, see method:
+//
 //		NumStrFormatSpec.NewSignedNumFmtFrance()
 //
 //	If custom decimal separator, integer separator
 //	and negative number sign characters are required,
-//	see method:
+//	see methods:
+//
 //		NumStrFormatSpec.NewNumFmtComponents()
+//		NumStrFormatSpec.NewNumFmtParams()
+//		NumStrFormatSpec.NewNumFmtParamsRunes()
 //
 // ----------------------------------------------------------------
 //
@@ -3686,9 +3718,18 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumFmtGermany(
 
 //	NewSignedNumFmtUS
 //
-//	Returns a new instance of NumStrFormatSpec configured
-//	for a Signed Number using US (United States)
-//	Number String formatting conventions.
+//	Returns a new instance of NumStrFormatSpec
+//	configured for a Signed Number using US
+//	(United States) Number String formatting
+//	conventions.
+//
+//	If custom decimal separator, integer separators
+//	or negative number sign characters are required,
+//	see methods:
+//
+//		NumStrFormatSpec.NewNumFmtComponents()
+//		NumStrFormatSpec.NewNumFmtParams()
+//		NumStrFormatSpec.NewNumFmtParamsRunes()
 //
 // ----------------------------------------------------------------
 //
@@ -3901,9 +3942,29 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumFmtUS(
 
 //	SetCurrencyFmtFrance
 //
-//	Reconfigures the current instance of NumStrFormatSpec
-//	using Currency Number String formatting conventions
-//	typically applied in France.
+//	Reconfigures the current instance of
+//	NumStrFormatSpec using Currency Number
+//	String formatting conventions typically
+//	applied in France.
+//
+//	Within in the European Union many, if not
+//	most, of the member countries subscribe to
+//	the Currency Number String formatting
+//	standards implemented by either France or
+//	Germany.
+//
+//	For information on German Number String
+//	formatting conventions, see method:
+//
+//		NumStrFormatSpec.SetCurrencyFmtGermany()
+//
+//	If custom decimal separator, integer separators,
+//	negative number sign characters or currency
+//	symbols are required, see methods:
+//
+//		NumStrFormatSpec.SetNumFmtComponents()
+//		NumStrFormatSpec.SetNumFmtParams()
+//		NumStrFormatSpec.SetNumFmtParamsRunes()
 //
 // ----------------------------------------------------------------
 //
@@ -6134,21 +6195,23 @@ func (numStrFmtSpec *NumStrFormatSpec) SetNumFmtParamsRunes(
 //	formatting conventions typically
 //	applied in France.
 //
-//	France is a member of the European Union
-//	(EU) and a number of EU member countries
-//	also apply the same number formatting
-//	conventions as those applied in France.
+//	Within in the European Union many, if not
+//	most, of the member countries subscribe to
+//	the Signed Number String formatting standards
+//	implemented by either France or Germany.
 //
-//	Other European Union member countries
-//	apply the decimal separator and negative
-//	number sign characters used by Germany.
-//	See	method:
+//	For information on German Signed Number
+//	String formatting conventions, see method:
+//
 //		NumStrFormatSpec.SetSignedNumFmtGermany()
 //
 //	If custom decimal separator, integer separator
 //	and negative number sign characters are required,
-//	see method:
+//	see methods:
+//
 //		NumStrFormatSpec.SetNumFmtComponents()
+//		NumStrFormatSpec.SetNumFmtParams()
+//		NumStrFormatSpec.SetNumFmtParamsRunes()
 //
 // ----------------------------------------------------------------
 //
@@ -6372,21 +6435,23 @@ func (numStrFmtSpec *NumStrFormatSpec) SetSignedNumFmtFrance(
 //	formatting conventions typically
 //	applied in Germany.
 //
-//	Germany is a member of the European Union
-//	(EU) and many EU member countries also
-//	apply the same number formatting
-//	standards as those applied in Germany.
+//	Within in the European Union many, if not
+//	most, of the member countries subscribe to
+//	the Signed Number String formatting standards
+//	implemented by either France or Germany.
 //
-//	Other European Union member countries
-//	apply the decimal separator and negative
-//	number sign characters used by France.
-//	See	method:
+//	For information on French Signed Number
+//	String formatting conventions, see method:
+//
 //		NumStrFormatSpec.SetSignedNumFmtFrance()
 //
 //	If custom decimal separator, integer separator
 //	and negative number sign characters are required,
 //	see method:
+//
 //		NumStrFormatSpec.SetNumFmtComponents()
+//		NumStrFormatSpec.SetNumFmtParams()
+//		NumStrFormatSpec.SetNumFmtParamsRunes()
 //
 // ----------------------------------------------------------------
 //
@@ -6609,6 +6674,14 @@ func (numStrFmtSpec *NumStrFormatSpec) SetSignedNumFmtGermany(
 //	Reconfigures the current instance of NumStrFormatSpec
 //	using Number String formatting conventions typically
 //	applied in the US (United States).
+//
+//	If custom decimal separator, integer separators,
+//	negative number sign characters or currency
+//	symbols are required, see methods:
+//
+//		NumStrFormatSpec.SetNumFmtComponents()
+//		NumStrFormatSpec.SetNumFmtParams()
+//		NumStrFormatSpec.SetNumFmtParamsRunes()
 //
 // ----------------------------------------------------------------
 //
@@ -7151,6 +7224,11 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) copySignedNumberFormatSp
 //	Reconfigures the current instance of NumStrFormatSpec
 //	using Currency Number String formatting conventions
 //	typically applied in France.
+//
+//	Within in the European Union many, if not most, of
+//	the member countries subscribe to the Number String
+//	Currency formatting standards implemented by either
+//	France or Germany.
 //
 // ----------------------------------------------------------------
 //
@@ -8289,6 +8367,11 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setNStrNumberFieldSpec(
 //	using Number String formatting conventions typically
 //	applied in the France.
 //
+//	Within in the European Union many, if not most, of
+//	the member countries subscribe to the Signed Number
+//	String formatting standards implemented by either
+//	France or Germany.
+//
 // ----------------------------------------------------------------
 //
 // # IMPORTANT
@@ -8541,10 +8624,10 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtFrance(
 //	using Number String formatting conventions typically
 //	applied in the Germany.
 //
-//	Germany is a member of the European Union, and
-//	various European Union member countries apply
-//	the same numeric formatting conventions as those
-//	applied in Germany.
+//	Within in the European Union many, if not most, of
+//	the member countries subscribe to the Signed Number
+//	String formatting standards implemented by either
+//	France or Germany.
 //
 // ----------------------------------------------------------------
 //
