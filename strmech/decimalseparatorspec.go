@@ -2394,3 +2394,63 @@ func (decSeparatorSpec *DecimalSeparatorSpec) SetDecimalSeparatorStr(
 
 	return err
 }
+
+// SetFrenchDecSep
+//
+//	Deletes and resets the all member variable data values
+//	stored in the current instance of DecimalSeparatorSpec.
+//
+//	Reconfigures the current NumStrFormatSpec instance,
+//	using decimal separator standards typically applied
+//	in France.
+//
+//	Floating point numeric value formatted in accordance
+//	with French standards use a comma character (',') as
+//	the radix point or decimal separator.
+//
+//	This comma character (',') is therefore used to
+//	separate integer and fractional digits within a
+//	floating point numeric value.
+//
+//		French Example
+//		123,45 (The fractional digits are "45")
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	Be advised that the data fields contained in the
+//	current instance of DecimalSeparatorSpec will be
+//	deleted and replaced by Decimal Separator formatting
+//	parameters typically applied in France.
+func (decSeparatorSpec *DecimalSeparatorSpec) SetFrenchDecSep(
+	errorPrefix interface{}) (
+	err error) {
+
+	if decSeparatorSpec.lock == nil {
+		decSeparatorSpec.lock = new(sync.Mutex)
+	}
+
+	decSeparatorSpec.lock.Lock()
+
+	defer decSeparatorSpec.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"DecimalSeparatorSpec."+
+			"SetFrenchDecSep()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	return new(decimalSepSpecNanobot).
+		setFrenchGermanDecSep(
+			decSeparatorSpec,
+			ePrefix.XCpy(
+				"decSeparatorSpec"))
+}
