@@ -7286,25 +7286,25 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) copySignedNumberFormatSp
 //	Euro symbol ('€').
 //
 //		France Example-3
-//		1,000,000.00 €
+//		1 000 000,00 €
 //
 //	The negative number sign is set to leading minus
 //	sign ('-') and a trailing Euro symbol ("€").
 //
 //		France Example-4
-//		-1,000,000.00 €
+//		-1 000 000,00 €
 //
 //	The positive number sign is set to a trailing
 //	Euro symbol.
 //
 //		France Example-5
-//		1,000,000.00 €
+//		1 000 000,00 €
 //
 //	The zero number format is set to a trailing
 //	Euro symbol.
 //
 //		France Example-6
-//			0.00 €
+//			0,00 €
 //
 // ----------------------------------------------------------------
 //
@@ -7497,10 +7497,10 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setCurrencyNStrFmtFrance
 	positiveNumberSign = NumStrNumberSymbolSpec{
 
 		leadingNumberSymbols: RuneArrayDto{
-			CharsArray:     []rune{},
+			CharsArray:     nil,
 			Description1:   "",
 			Description2:   "",
-			charSearchType: CharSearchType.LinearTargetStartingIndex(),
+			charSearchType: CharSearchType.None(),
 			lock:           nil,
 		},
 
@@ -7522,10 +7522,10 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setCurrencyNStrFmtFrance
 	zeroNumberSign = NumStrNumberSymbolSpec{
 
 		leadingNumberSymbols: RuneArrayDto{
-			CharsArray:     []rune{},
+			CharsArray:     nil,
 			Description1:   "",
 			Description2:   "",
-			charSearchType: CharSearchType.LinearTargetStartingIndex(),
+			charSearchType: CharSearchType.None(),
 			lock:           nil,
 		},
 
@@ -7693,6 +7693,7 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setCurrencyNStrFmtFrance
 //				than the length of the numeric value string, text
 //				justification must be equal to one of these
 //				three valid values:
+//
 //				          TextJustify(0).Left()
 //				          TextJustify(0).Right()
 //				          TextJustify(0).Center()
@@ -7794,17 +7795,17 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setCurrencyNStrFmtGerman
 	negativeNumberSign = NumStrNumberSymbolSpec{
 
 		leadingNumberSymbols: RuneArrayDto{
-			CharsArray:     []rune{'-'},
+			CharsArray:     nil,
 			Description1:   "",
 			Description2:   "",
-			charSearchType: CharSearchType.LinearTargetStartingIndex(),
+			charSearchType: CharSearchType.None(),
 			lock:           nil,
 		},
 
 		leadingNumberFieldSymbolPosition: NumFieldSymPos.InsideNumField(),
 
 		trailingNumberSymbols: RuneArrayDto{
-			CharsArray:     []rune{' ', '\U000020ac'},
+			CharsArray:     []rune{'-', ' ', '\U000020ac'},
 			Description1:   "",
 			Description2:   "",
 			charSearchType: CharSearchType.LinearTargetStartingIndex(),
