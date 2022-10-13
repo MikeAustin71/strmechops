@@ -1165,7 +1165,76 @@ func (charsArrayDto *RuneArrayDto) IsValidCharacterSearchTypeError(
 	return err
 }
 
-//	New
+//	NewRunesDefault
+//
+//	Receives an array of runes and returns a new instance
+//	of RuneArrayDto.
+//
+//	The Character Search type for the new
+//	RuneArrayDto is defaulted to:
+//		CharSearchType.LinearTargetStartingIndex()
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	runeChars	[]rune
+//
+//	An array of runes which will comprise the rune
+//	array in the returned instance of RuneArrayDto.
+//
+// -----------------------------------------------------------------
+//
+// # Return Values
+//
+//	RuneArrayDto
+//
+//	This method returns a new instance of RuneArrayDto.
+//	The internal rune array is set according to text
+//	characters supplied by input parameter, 'runeChars'.
+//
+//	The Character Search type for the new
+//	RuneArrayDto is defaulted to:
+//		CharSearchType.LinearTargetStartingIndex()
+func (charsArrayDto RuneArrayDto) NewRunesDefault(
+	runeChars []rune) RuneArrayDto {
+
+	if charsArrayDto.lock == nil {
+		charsArrayDto.lock = new(sync.Mutex)
+	}
+
+	charsArrayDto.lock.Lock()
+
+	defer charsArrayDto.lock.Unlock()
+
+	newRuneArray := RuneArrayDto{}
+
+	lenRuneChars := len(runeChars)
+
+	if lenRuneChars == 0 {
+
+		newRuneArray.CharsArray = nil
+
+	} else {
+
+		newRuneArray.CharsArray =
+			make([]rune, lenRuneChars)
+
+		for i := 0; i < lenRuneChars; i++ {
+
+			newRuneArray.CharsArray[i] =
+				runeChars[i]
+		}
+
+	}
+
+	newRuneArray.charSearchType =
+		CharSearchType.LinearTargetStartingIndex()
+
+	return newRuneArray
+}
+
+//	NewStrDefault
 //
 //	Receives a string and returns a new instance
 //	of RuneArrayDto.
@@ -1196,7 +1265,7 @@ func (charsArrayDto *RuneArrayDto) IsValidCharacterSearchTypeError(
 //	The Character Search type for the new
 //	RuneArrayDto is defaulted to:
 //		CharSearchType.LinearTargetStartingIndex()
-func (charsArrayDto RuneArrayDto) New(
+func (charsArrayDto RuneArrayDto) NewStrDefault(
 	stringChars string) RuneArrayDto {
 
 	if charsArrayDto.lock == nil {
