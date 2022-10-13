@@ -1180,8 +1180,9 @@ func (charsArrayDto *RuneArrayDto) IsValidCharacterSearchTypeError(
 //
 //	runeChars	[]rune
 //
-//	An array of runes which will comprise the rune
-//	array in the returned instance of RuneArrayDto.
+//		An array of runes which will comprise the
+//		rune array in the returned instance of
+//		RuneArrayDto.
 //
 // -----------------------------------------------------------------
 //
@@ -1209,24 +1210,11 @@ func (charsArrayDto RuneArrayDto) NewRunesDefault(
 
 	newRuneArray := RuneArrayDto{}
 
-	lenRuneChars := len(runeChars)
-
-	if lenRuneChars == 0 {
-
-		newRuneArray.CharsArray = nil
-
-	} else {
-
-		newRuneArray.CharsArray =
-			make([]rune, lenRuneChars)
-
-		for i := 0; i < lenRuneChars; i++ {
-
-			newRuneArray.CharsArray[i] =
-				runeChars[i]
-		}
-
-	}
+	_ = new(runeArrayDtoElectron).
+		setRuneArray(
+			&newRuneArray,
+			runeChars,
+			nil)
 
 	newRuneArray.charSearchType =
 		CharSearchType.LinearTargetStartingIndex()
@@ -4213,89 +4201,110 @@ func (charsArrayDto *RuneArrayDto) SetDescription2(
 	return
 }
 
-// SetRuneArray - Deletes the internal rune array for the current
-// instance of RuneArrayDto and repopulates it with a deep copy
-// extracted from input parameter, 'charArray'.
+//	SetRuneArray
+//
+//	Deletes the internal rune array for the current
+//	instance of RuneArrayDto and repopulates it with
+//	a deep copy extracted from input parameter,
+//	'charArray'.
 //
 // ----------------------------------------------------------------
 //
 // # IMPORTANT
 //
-// For the current instance of RuneArrayDto, all pre-existing data
-// in the internal rune array member variable, 'CharsArray' will be
-// deleted and overwritten with new data.
+//	For the current instance of RuneArrayDto, all
+//	pre-existing data in the internal rune array
+//	member variable, 'CharsArray' will be deleted
+//	and overwritten with new data.
 //
 // ----------------------------------------------------------------
 //
-// Input Parameters
+//	# Input Parameters
 //
-//	charArray                  []rune
-//	   - An array of runes used to populate the internal member
-//	     variable rune array for the current instance of
-//	     RuneArrayDto.
+//	charArray					[]rune
+//		An array of runes used to populate the internal
+//		member variable rune array for the current
+//		instance of RuneArrayDto.
 //
-//	     If this array is empty or has a zero length, an error will
-//	     be returned.
-//
-//
-//	errorPrefix                interface{}
-//	   - This object encapsulates error prefix text which is
-//	     included in all returned error messages. Usually, it
-//	     contains the name of the calling method or methods
-//	     listed as a method or function chain of execution.
-//
-//	     If no error prefix information is needed, set this parameter
-//	     to 'nil'.
-//
-//	     This empty interface must be convertible to one of the
-//	     following types:
+//	     If this array is empty or has a zero length, an
+//	     error will be returned.
 //
 //
-//	     1. nil - A nil value is valid and generates an empty
-//	              collection of error prefix and error context
-//	              information.
+//	 errorPrefix                interface{}
 //
-//	     2. string - A string containing error prefix information.
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it	contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
 //
-//	     3. []string A one-dimensional slice of strings containing
-//	                 error prefix information
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
 //
-//	     4. [][2]string A two-dimensional slice of strings containing
-//	                    error prefix and error context information.
+//		This empty interface must be convertible to one of
+//		the following types:
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//	                       ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
 //
-//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//	                        ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
+//		2.	string
+//				A string containing error prefix
+//				information.
 //
-//	     7. IBasicErrorPrefix - An interface to a method generating
-//	                            a two-dimensional slice of strings
-//	                            containing error prefix and error
-//	                            context information.
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
 //
-//	     If parameter 'errorPrefix' is NOT convertible to one of
-//	     the valid types listed above, it will be considered
-//	     invalid and trigger the return of an error.
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
 //
-//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
-//	     the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
 //
-// ------------------------------------------------------------------------
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
 //
-// Return Values
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
 //
 //	error
-//	   - If this method completes successfully and no errors are
-//	     encountered this return value is set to 'nil'. Otherwise,
-//	     if errors are encountered, this return value will contain
-//	     an appropriate error message.
 //
-//	     If an error message is returned, the text value of input
-//	     parameter 'errorPrefix' will be inserted or prefixed at
-//	     the beginning of the error message.
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
 func (charsArrayDto *RuneArrayDto) SetRuneArray(
 	charArray []rune,
 	errorPrefix interface{}) error {
@@ -4328,6 +4337,77 @@ func (charsArrayDto *RuneArrayDto) SetRuneArray(
 			charArray,
 			ePrefix.XCpy(
 				"charsArrayDto"))
+}
+
+//	SetRunesDefault
+//
+//	Receives an array of runes and proceeds to reset
+//	the internal rune array and the character search
+//	type for the current instance of RuneArrayDto.
+//
+//	The Character Search type for the current
+//	instance of RuneArrayDto will be defaulted
+//	to:
+//		CharSearchType.LinearTargetStartingIndex()
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	For the current instance of RuneArrayDto, all
+//	pre-existing data in the internal rune array
+//	member variable, 'RuneArrayDto.CharsArray',
+//	will be deleted and overwritten with new data.
+//
+//	In addition, the Character Search type for the
+//	current instance of RuneArrayDto will be
+//	defaulted to:
+//		CharSearchType.LinearTargetStartingIndex()
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	runeChars					[]rune
+//
+//	An array of runes which will be copied to the
+//	member variable, 'RuneArrayDto.CharsArray', in
+//	the current instance of RuneArrayDto.
+//
+// -----------------------------------------------------------------
+//
+// # Return Values
+//
+//	NONE
+func (charsArrayDto *RuneArrayDto) SetRunesDefault(
+	runeChars []rune) {
+
+	if charsArrayDto.lock == nil {
+		charsArrayDto.lock = new(sync.Mutex)
+	}
+
+	charsArrayDto.lock.Lock()
+
+	defer charsArrayDto.lock.Unlock()
+
+	if charsArrayDto.lock == nil {
+		charsArrayDto.lock = new(sync.Mutex)
+	}
+
+	charsArrayDto.lock.Lock()
+
+	defer charsArrayDto.lock.Unlock()
+
+	_ = new(runeArrayDtoElectron).
+		setRuneArray(
+			charsArrayDto,
+			runeChars,
+			nil)
+
+	charsArrayDto.charSearchType =
+		CharSearchType.LinearTargetStartingIndex()
+
+	return
 }
 
 // SetString - Receives a string as an input parameter
