@@ -4341,9 +4341,11 @@ func (charsArrayDto *RuneArrayDto) SetRuneArray(
 
 //	SetRunesDefault
 //
-//	Receives an array of runes and proceeds to reset
-//	the internal rune array and the character search
-//	type for the current instance of RuneArrayDto.
+//	Receives a rune array and proceeds to copy the
+//	text characters to the internal rune array
+//	maintained by the current instance of
+//	RuneArrayDto:
+//		RuneArrayDto.CharsArray
 //
 //	The Character Search type for the current
 //	instance of RuneArrayDto will be defaulted
@@ -4353,6 +4355,9 @@ func (charsArrayDto *RuneArrayDto) SetRuneArray(
 // ----------------------------------------------------------------
 //
 // # IMPORTANT
+//
+//	The data fields for the current instance of
+//	RuneArrayDto will be modified.
 //
 //	For the current instance of RuneArrayDto, all
 //	pre-existing data in the internal rune array
@@ -4402,6 +4407,82 @@ func (charsArrayDto *RuneArrayDto) SetRunesDefault(
 		setRuneArray(
 			charsArrayDto,
 			runeChars,
+			nil)
+
+	charsArrayDto.charSearchType =
+		CharSearchType.LinearTargetStartingIndex()
+
+	return
+}
+
+//	SetStrDefault
+//
+//	Receives a string and proceeds to copy the text
+//	characters to the internal rune array maintained
+//	by the current instance of RuneArrayDto:
+//		RuneArrayDto.CharsArray
+//
+//	The Character Search type for the current
+//	instance of RuneArrayDto will be defaulted
+//	to:
+//		CharSearchType.LinearTargetStartingIndex()
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	The data fields for the current instance of
+//	RuneArrayDto will be modified.
+//
+//	For the current instance of RuneArrayDto, all
+//	pre-existing data in the internal rune array
+//	member variable, 'RuneArrayDto.CharsArray',
+//	will be deleted and overwritten with new data.
+//
+//	In addition, the Character Search type for the
+//	current instance of RuneArrayDto will be
+//	defaulted to:
+//		CharSearchType.LinearTargetStartingIndex()
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	stringChars					string
+//
+//	The text characters contained in this string
+//	will be copied to the member variable,
+//	'RuneArrayDto.CharsArray', in the current
+//	instance of RuneArrayDto.
+//
+// -----------------------------------------------------------------
+//
+// # Return Values
+//
+//	NONE
+func (charsArrayDto *RuneArrayDto) SetStrDefault(
+	stringChars string) {
+
+	if charsArrayDto.lock == nil {
+		charsArrayDto.lock = new(sync.Mutex)
+	}
+
+	charsArrayDto.lock.Lock()
+
+	defer charsArrayDto.lock.Unlock()
+
+	if charsArrayDto.lock == nil {
+		charsArrayDto.lock = new(sync.Mutex)
+	}
+
+	charsArrayDto.lock.Lock()
+
+	defer charsArrayDto.lock.Unlock()
+
+	_ = new(runeArrayDtoElectron).
+		setRuneArray(
+			charsArrayDto,
+			[]rune(stringChars),
 			nil)
 
 	charsArrayDto.charSearchType =
