@@ -2051,32 +2051,40 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtGermany(
 //	The radix point or decimal separator is set to the
 //	period character ('.').
 //
+//		United States Example-1
+//			123.45 (The fractional digits are "45")
+//
 //	The integer group specification is set to 'thousands'.
 //	This means that integer digits will be separated into
 //	'thousands' with each group containing three digits
 //	each:
 //
-//		United States Example: 1,000,000
+//		United States Example-2
+//			1,000,000
 //
 //	The currency symbol used in the United States is the
 //	Dollar Sign symbol ('$').
 //
-//		United States Example: $ 1,000,000.00
+//		United States Example-3
+//			$ 1,000,000.00
 //
 //	The negative number sign is set to leading and
 //	trailing parentheses ("()").
 //
-//		United States Example: $ (1,000,000.00)
+//		United States Example-4
+//			$ (1,000,000.00)
 //
 //	The positive number sign is set to a blank or empty
 //	string ("").
 //
-//		United States Example: $ 1,000,000.00
+//		United States Example-5
+//			$ 1,000,000.00
 //
 //	The zero number format is set to a blank or empty
 //	string ("").
 //
-//		United States Example: $ 0.00
+//		United States Example-6
+//			$ 0.00
 //
 // ----------------------------------------------------------------
 //
