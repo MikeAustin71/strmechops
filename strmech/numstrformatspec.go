@@ -7576,13 +7576,14 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setCurrencyNStrFmtFrance
 //	as input parameter 'numStrFmtSpec'.
 //
 //	Reconfigures the current instance of NumStrFormatSpec
-//	using Currency Number String formatting conventions
-//	typically applied in Germany.
+//	using Number String formatting conventions typically
+//	applied in the Germany.
 //
-//	Within in the European Union, many, if not most, of
-//	the member countries subscribe to the Number String
-//	Currency formatting standards implemented by either
-//	Germany or Germany.
+// /
+//
+//	Within in the European Union, many member countries
+//	subscribe to the Number String Currency formatting
+//	standards implemented by either France or Germany.
 //
 // ----------------------------------------------------------------
 //
@@ -7596,10 +7597,10 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setCurrencyNStrFmtFrance
 //
 // # IMPORTANT
 //
-//	Be advised that the data fields contained in the current
-//	instance of NumStrFormatSpec will be deleted and replaced
-//	by Currency Number String formatting parameters typically
-//	applied in Germany.
+//	Be advised that the data fields contained in the
+//	NumStrFormatSpec input	parameter, 'numStrFmtSpec',
+//	will be deleted and replaced by Number String Currency
+//	formatting parameters typically applied in Germany.
 //
 // ----------------------------------------------------------------
 //
@@ -7620,7 +7621,7 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setCurrencyNStrFmtFrance
 //	three digits each:
 //
 //		German Example-2:
-//		1.000.000.000
+//		1.000.000.000,00
 //
 //	The currency symbol used in the Germany is the
 //	Euro symbol ('€').
@@ -9012,7 +9013,7 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtFrance(
 //	using Number String formatting conventions typically
 //	applied in the Germany.
 //
-//	Within in the European Union many, if not most, of
+//	Within in the European Union, many, if not most, of
 //	the member countries subscribe to the Signed Number
 //	String formatting standards implemented by either
 //	France or Germany.
@@ -9022,6 +9023,7 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtFrance(
 // # Reference:
 //
 // https://freeformatter.com/germany-standards-code-snippets.html
+//
 // https://www.evertype.com/standards/euro/formats.html
 //
 // ----------------------------------------------------------------
@@ -9040,7 +9042,8 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtFrance(
 //	The radix point or decimal separator is set to the
 //	comma character (','):
 //
-//		Example 123,45 (The fractional digits are "45")
+//		German Example-1
+//			123,45 (The fractional digits are "45")
 //
 //	The integer group separator is a period character
 //	('.').
@@ -9050,12 +9053,15 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtFrance(
 //	separated into 'thousands' with each group containing
 //	three digits each:
 //
-//		Example: 1.000.000.000
+// /		German Example-2:
+//
+//		1.000.000.000,00
 //
 //	The negative number sign is set to a trailing minus
 //	sign ('-').
 //
-//		Example: 1.000.000-
+//		German Example-4
+//		1.000.000,00-
 //
 //	The positive number sign is set to a blank or empty
 //	string ("").
@@ -9138,17 +9144,21 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtFrance(
 //				          TxtJustify.Center()
 //		}
 //
-//	errPrefDto						*ePref.ErrPrefixDto
-//		This object encapsulates an error prefix string which is
-//		included in all returned error messages. Usually, it
-//		contains the name of the calling method or methods listed
-//		as a function chain.
 //
-//		If no error prefix information is needed, set this
-//		parameter to 'nil'.
+//	errPrefDto					*ePref.ErrPrefixDto
 //
-//		Type ErrPrefixDto is included in the 'errpref' software
-//		package, "github.com/MikeAustin71/errpref".
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
 //
 // -----------------------------------------------------------------
 //
