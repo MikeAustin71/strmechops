@@ -10114,7 +10114,7 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtFrance(
 //	separated into 'thousands' with each group containing
 //	three digits each:
 //
-// /		German Example-2:
+//		German Example-2:
 //
 //		1.000.000.000,00
 //

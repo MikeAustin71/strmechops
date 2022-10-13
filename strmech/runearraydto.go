@@ -1165,6 +1165,66 @@ func (charsArrayDto *RuneArrayDto) IsValidCharacterSearchTypeError(
 	return err
 }
 
+//	New
+//
+//	Receives a string and returns a new instance
+//	of RuneArrayDto.
+//
+//	The Character Search type for the new
+//	RuneArrayDto is defaulted to:
+//		CharSearchType.LinearTargetStartingIndex()
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	stringChars					string
+//
+//	A string of characters which will comprise the rune
+//	array in the returned instance of RuneArrayDto.
+//
+// -----------------------------------------------------------------
+//
+// # Return Values
+//
+//	RuneArrayDto
+//
+//	This method returns a new instance of RuneArrayDto.
+//	The internal rune array is set according to text
+//	characters supplied by input parameter, 'stringChars'.
+//
+//	The Character Search type for the new
+//	RuneArrayDto is defaulted to:
+//		CharSearchType.LinearTargetStartingIndex()
+func (charsArrayDto RuneArrayDto) New(
+	stringChars string) RuneArrayDto {
+
+	if charsArrayDto.lock == nil {
+		charsArrayDto.lock = new(sync.Mutex)
+	}
+
+	charsArrayDto.lock.Lock()
+
+	defer charsArrayDto.lock.Unlock()
+
+	newRuneArray := RuneArrayDto{}
+
+	if len(stringChars) == 0 {
+
+		newRuneArray.CharsArray = nil
+
+	} else {
+
+		newRuneArray.CharsArray = []rune(stringChars)
+
+	}
+
+	newRuneArray.charSearchType =
+		CharSearchType.LinearTargetStartingIndex()
+
+	return newRuneArray
+}
+
 // NewNumericCharacters - Returns a new instance of RuneArrayDto
 // configured with numeric characters (0 through 9 inclusive).
 //
