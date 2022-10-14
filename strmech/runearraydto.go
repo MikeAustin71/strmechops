@@ -1223,13 +1223,14 @@ func (charsArrayDto RuneArrayDto) NewRunesDefault(
 	return newRuneArray
 }
 
-//	NewStrDefault
+//	NewStringDefault
 //
 //	Receives a string and returns a new instance
 //	of RuneArrayDto.
 //
 //	The Character Search type for the new
-//	RuneArrayDto is defaulted to:
+//	RuneArrayDto is automatically defaulted to:
+//
 //		CharSearchType.LinearTargetStartingIndex()
 //
 // ----------------------------------------------------------------
@@ -1252,9 +1253,10 @@ func (charsArrayDto RuneArrayDto) NewRunesDefault(
 //	characters supplied by input parameter, 'stringChars'.
 //
 //	The Character Search type for the new
-//	RuneArrayDto is defaulted to:
+//	RuneArrayDto is automatically defaulted to:
+//
 //		CharSearchType.LinearTargetStartingIndex()
-func (charsArrayDto RuneArrayDto) NewStrDefault(
+func (charsArrayDto RuneArrayDto) NewStringDefault(
 	stringChars string) RuneArrayDto {
 
 	if charsArrayDto.lock == nil {

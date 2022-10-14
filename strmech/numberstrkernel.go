@@ -6866,9 +6866,8 @@ func (numStrKernel *NumberStrKernel) NewParseFrenchNumberStr(
 
 	for i := 0; i < lenStrArray; i++ {
 
-		err = numParsingTerminatorsCol.AddRuneArrayString(
+		err = numParsingTerminatorsCol.AddStringDefault(
 			breakOnCharDelimiters[i],
-			CharSearchType.LinearTargetStartingIndex(),
 			ePrefix.XCpy(
 				fmt.Sprintf("breakOnCharDelimiters[%v]",
 					i)))
@@ -6880,16 +6879,8 @@ func (numStrKernel *NumberStrKernel) NewParseFrenchNumberStr(
 
 	var runeDto RuneArrayDto
 
-	runeDto,
-		err = RuneArrayDto{}.NewString(
-		rawNumStr,
-		CharSearchType.LinearTargetStartingIndex(),
-		ePrefix.XCpy("rawNumStr"))
-
-	if err != nil {
-
-		return numberStrSearchResults, numberStrKernel, err
-	}
+	runeDto = RuneArrayDto{}.NewStringDefault(
+		rawNumStr)
 
 	var decSeparator DecimalSeparatorSpec
 
