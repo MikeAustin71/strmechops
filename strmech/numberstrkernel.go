@@ -7382,13 +7382,14 @@ func (numStrKernel *NumberStrKernel) NewParsePureNumberStr(
 //
 //	The radix point or decimal separator used to
 //	separate integer and fractional digits in a
-//	floating point numeric value is assumed to be
-//	the period ('.') or decimal point.
+//	floating point numeric value is therefore
+//	assumed to be the period ('.') or decimal
+//	point.
 //
 //	The negative number signs used to designate
 //	numbers with a negative value are assumed to
-//	be a leading minus sign ('-') or parentheses
-//	('()').
+//	be either a leading minus sign ('-') or
+//	parentheses ('()').
 //
 // ----------------------------------------------------------------
 //
@@ -7413,23 +7414,33 @@ func (numStrKernel *NumberStrKernel) NewParsePureNumberStr(
 //		search for numeric characters at the first
 //		character in the Raw Number String ('rawNumStr').
 //
-//	characterSearchLength		int
+//	breakOnCharSearchLength		int
 //
 //		The actual number of characters within the Raw
 //		Number String ('rawNumStr') that are included in
 //		the search for numeric character digits.
 //
-//		If this value is set to minus one (-1), the search
-//		length will be configured to include the last
-//		index in 'rawNumStr'. In other words the search
-//		will proceed to the end of 'rawNumStr'.
+//		If this parameter is set to a value greater than
+//		zero ('0'), the Number String Parsing algorithm
+//		will search the specified number of text
+//		characters and then terminate the search.
 //
-//	numParsingTerminators		[]string
+//		If this value is set to value less than one (+1),
+//		the search length will be configured to include
+//		the last character in 'rawNumStr'. In other words
+//		the search for numeric characters will proceed to
+//		the end of the string, 'rawNumStr'.
+//
+//	breakOnCharDelimiters		[]string
 //
 //		An array of strings. If any one of these strings
 //		is encountered while searching the Raw Number
 //		String ('rawNumStr'), the search operation will
 //		be automatically terminated.
+//
+//		If this string array is set to nil, this
+//		parameter will be ignored by the Number String
+//		parsing algorithm.
 //
 //	requestRemainderString		bool
 //
@@ -7446,10 +7457,11 @@ func (numStrKernel *NumberStrKernel) NewParsePureNumberStr(
 //
 //	 errorPrefix                interface{}
 //
-//		This object encapsulates error prefix text which is
-//		included in all returned error messages. Usually, it
-//		contains the name of the calling method or methods
-//		listed as a method or function chain of execution.
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it	contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
 //
 //		If no error prefix information is needed, set this
 //		parameter to 'nil'.
@@ -7457,41 +7469,50 @@ func (numStrKernel *NumberStrKernel) NewParsePureNumberStr(
 //		This empty interface must be convertible to one of
 //		the following types:
 //
-//		1. nil - A nil value is valid and generates an empty
-//		   collection of error prefix and error context
-//		   information.
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
 //
-//		2. string - A string containing error prefix
-//			information.
+//		2.	string
+//				A string containing error prefix
+//				information.
 //
-//		3. []string A one-dimensional slice of strings
-//			containing error prefix information.
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
 //
-//		4. [][2]string A two-dimensional slice of strings
-//		   containing error prefix and error context
-//		   information.
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
 //
-//		5. ErrPrefixDto - An instance of ErrPrefixDto.
-//			Information from this object will be copied for use
-//			in error and informational messages.
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
 //
-//		6. *ErrPrefixDto - A pointer to an instance of
-//			ErrPrefixDto. Information from this object will be
-//			copied for use in error and informational messages.
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
 //
-//		7. IBasicErrorPrefix - An interface to a method
-//			generating a two-dimensional slice of strings
-//			containing error prefix and error context
-//			information.
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
 //
-//		If parameter 'errorPrefix' is NOT convertible to one
-//		of the valid types listed above, it will be
-//		considered invalid and trigger the return of an
-//		error.
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
 //
-//		Types ErrPrefixDto and IBasicErrorPrefix are included
-//		in the 'errpref' software package,
-//		"github.com/MikeAustin71/errpref".
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
@@ -7532,20 +7553,21 @@ func (numStrKernel *NumberStrKernel) NewParsePureNumberStr(
 //
 //	error
 //
-//		If this method completes successfully, the returned
-//		error Type is set equal to 'nil'.
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
 //
 //		If errors are encountered during processing, the
-//		returned error Type will encapsulate an error message.
-//	 	This returned error message will incorporate the method
-//	 	chain and text passed by input parameter, 'errorPrefix'.
-//	 	The 'errorPrefix' text will be attached to the beginning
-//	 	of the error message.
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
 func (numStrKernel *NumberStrKernel) NewParseUSNumberStr(
 	rawNumStr string,
 	startSearchIndex int,
-	characterSearchLength int,
-	numParsingTerminators []string,
+	breakOnCharSearchLength int,
+	breakOnCharDelimiters []string,
 	requestRemainderString bool,
 	errorPrefix interface{}) (
 	numberStrSearchResults CharSearchNumStrParseResultsDto,
@@ -7575,15 +7597,15 @@ func (numStrKernel *NumberStrKernel) NewParseUSNumberStr(
 
 	numParsingTerminatorsCol := RuneArrayCollection{}
 
-	lenStrArray := len(numParsingTerminators)
+	lenStrArray := len(breakOnCharDelimiters)
 
 	for i := 0; i < lenStrArray; i++ {
 
 		err = numParsingTerminatorsCol.AddRuneArrayString(
-			numParsingTerminators[i],
+			breakOnCharDelimiters[i],
 			CharSearchType.LinearTargetStartingIndex(),
 			ePrefix.XCpy(
-				fmt.Sprintf("numParsingTerminators[%v]",
+				fmt.Sprintf("breakOnCharDelimiters[%v]",
 					i)))
 
 		if err != nil {
@@ -7643,7 +7665,7 @@ func (numStrKernel *NumberStrKernel) NewParseUSNumberStr(
 		runeDto,
 		"rawNumStr",
 		startSearchIndex,
-		characterSearchLength,
+		breakOnCharSearchLength,
 		negativeNumSearchSpecs,
 		decSeparator,
 		numParsingTerminatorsCol,
