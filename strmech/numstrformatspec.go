@@ -67,23 +67,26 @@ type NumStrFormatSpec struct {
 	//				within the number field length specified
 	//				by data field 'fieldLength'.
 	//
-	//				Text justification can only be evaluated in the context of
-	//				a number string, field length and a 'textJustification'
-	//				object of type TextJustify. This is because number strings
-	//				with a field length equal to or less than the length of the
-	//				numeric value string never use text justification. In these
-	//				cases, text justification is completely ignored.
+	//				Text justification can only be evaluated in
+	//				the context of a number string, field length
+	//				and a 'textJustification' object of type
+	//				TextJustify. This is because number strings
+	//				with a field length equal to or less than the
+	//				length of the numeric value string never use
+	//				text justification. In these cases, text
+	//				justification is completely ignored.
 	//
-	//				If the field length parameter ('fieldLength') is greater
-	//				than the length of the numeric value string, text
-	//				justification must be equal to one of these
-	//				three valid values:
+	//				If the field length parameter ('fieldLength')
+	//				is greater than the length of the numeric
+	//				value string, text justification must be equal
+	//				to one of these three valid values:
+	//
 	//				          TextJustify(0).Left()
 	//				          TextJustify(0).Right()
 	//				          TextJustify(0).Center()
 	//
-	//				You can also use the abbreviated text justification
-	//				enumeration syntax as follows:
+	//				You can also use the abbreviated text
+	//				justification enumeration syntax as follows:
 	//
 	//				          TxtJustify.Left()
 	//				          TxtJustify.Right()
@@ -1219,6 +1222,62 @@ func (numStrFmtSpec *NumStrFormatSpec) GetNegativeNumSymSpec(
 //		for the current NumStrFormatSpec instance
 //		will be returned.
 //
+//		type NumStrNumberFieldSpec struct {
+//
+//			fieldLength int
+//
+//				This parameter defines the length of the
+//				text field in which the numeric value will
+//				be displayed within a number string.
+//
+//				If 'fieldLength' is less than the length
+//				of the numeric value string, it will be
+//				automatically set equal to the length of
+//				that numeric value string.
+//
+//				To automatically set the value of
+//				'fieldLength' to the string length of the
+//				numeric value, set this parameter to a
+//				value of minus one (-1).
+//
+//				If this parameter is submitted with a
+//				value less than minus one (-1) or greater
+//				than 1-million (1,000,000), an error will
+//				be returned.
+//
+//			fieldJustification TextJustify
+//
+//				An enumeration which specifies the
+//				justification of the numeric value string
+//				within the number field length specified
+//				by data field 'fieldLength'.
+//
+//				Text justification can only be evaluated in
+//				the context of a number string, field length
+//				and a 'textJustification' object of type
+//				TextJustify. This is because number strings
+//				with a field length equal to or less than the
+//				length of the numeric value string never use
+//				text justification. In these cases, text
+//				justification is completely ignored.
+//
+//				If the field length parameter ('fieldLength')
+//				is greater than the length of the numeric
+//				value string, text justification must be equal
+//				to one of these three valid values:
+//
+//				          TextJustify(0).Left()
+//				          TextJustify(0).Right()
+//				          TextJustify(0).Center()
+//
+//				You can also use the abbreviated text
+//				justification enumeration syntax as follows:
+//
+//				          TxtJustify.Left()
+//				          TxtJustify.Right()
+//				          TxtJustify.Center()
+//		}
+//
 //	error
 //
 //		If this method completes successfully and no errors are
@@ -1626,23 +1685,26 @@ func (numStrFmtSpec *NumStrFormatSpec) GetZeroNumSymSpec(
 //				within the number field length specified
 //				by data field 'fieldLength'.
 //
-//				Text justification can only be evaluated in the context of
-//				a number string, field length and a 'textJustification'
-//				object of type TextJustify. This is because number strings
-//				with a field length equal to or less than the length of the
-//				numeric value string never use text justification. In these
-//				cases, text justification is completely ignored.
+//				Text justification can only be evaluated in
+//				the context of a number string, field length
+//				and a 'textJustification' object of type
+//				TextJustify. This is because number strings
+//				with a field length equal to or less than the
+//				length of the numeric value string never use
+//				text justification. In these cases, text
+//				justification is completely ignored.
 //
-//				If the field length parameter ('fieldLength') is greater
-//				than the length of the numeric value string, text
-//				justification must be equal to one of these
-//				three valid values:
+//				If the field length parameter ('fieldLength')
+//				is greater than the length of the numeric
+//				value string, text justification must be equal
+//				to one of these three valid values:
+//
 //				          TextJustify(0).Left()
 //				          TextJustify(0).Right()
 //				          TextJustify(0).Center()
 //
-//				You can also use the abbreviated text justification
-//				enumeration syntax as follows:
+//				You can also use the abbreviated text
+//				justification enumeration syntax as follows:
 //
 //				          TxtJustify.Left()
 //				          TxtJustify.Right()
@@ -1890,23 +1952,26 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtFrance(
 //				within the number field length specified
 //				by data field 'fieldLength'.
 //
-//				Text justification can only be evaluated in the context of
-//				a number string, field length and a 'textJustification'
-//				object of type TextJustify. This is because number strings
-//				with a field length equal to or less than the length of the
-//				numeric value string never use text justification. In these
-//				cases, text justification is completely ignored.
+//				Text justification can only be evaluated in
+//				the context of a number string, field length
+//				and a 'textJustification' object of type
+//				TextJustify. This is because number strings
+//				with a field length equal to or less than the
+//				length of the numeric value string never use
+//				text justification. In these cases, text
+//				justification is completely ignored.
 //
-//				If the field length parameter ('fieldLength') is greater
-//				than the length of the numeric value string, text
-//				justification must be equal to one of these
-//				three valid values:
+//				If the field length parameter ('fieldLength')
+//				is greater than the length of the numeric
+//				value string, text justification must be equal
+//				to one of these three valid values:
+//
 //				          TextJustify(0).Left()
 //				          TextJustify(0).Right()
 //				          TextJustify(0).Center()
 //
-//				You can also use the abbreviated text justification
-//				enumeration syntax as follows:
+//				You can also use the abbreviated text
+//				justification enumeration syntax as follows:
 //
 //				          TxtJustify.Left()
 //				          TxtJustify.Right()
@@ -2131,23 +2196,26 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtGermany(
 //				within the number field length specified
 //				by data field 'fieldLength'.
 //
-//				Text justification can only be evaluated in the context of
-//				a number string, field length and a 'textJustification'
-//				object of type TextJustify. This is because number strings
-//				with a field length equal to or less than the length of the
-//				numeric value string never use text justification. In these
-//				cases, text justification is completely ignored.
+//				Text justification can only be evaluated in
+//				the context of a number string, field length
+//				and a 'textJustification' object of type
+//				TextJustify. This is because number strings
+//				with a field length equal to or less than the
+//				length of the numeric value string never use
+//				text justification. In these cases, text
+//				justification is completely ignored.
 //
-//				If the field length parameter ('fieldLength') is greater
-//				than the length of the numeric value string, text
-//				justification must be equal to one of these
-//				three valid values:
+//				If the field length parameter ('fieldLength')
+//				is greater than the length of the numeric
+//				value string, text justification must be equal
+//				to one of these three valid values:
+//
 //				          TextJustify(0).Left()
 //				          TextJustify(0).Right()
 //				          TextJustify(0).Center()
 //
-//				You can also use the abbreviated text justification
-//				enumeration syntax as follows:
+//				You can also use the abbreviated text
+//				justification enumeration syntax as follows:
 //
 //				          TxtJustify.Left()
 //				          TxtJustify.Right()
@@ -2355,23 +2423,26 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtUS(
 //				within the number field length specified
 //				by data field 'fieldLength'.
 //
-//				Text justification can only be evaluated in the context of
-//				a number string, field length and a 'textJustification'
-//				object of type TextJustify. This is because number strings
-//				with a field length equal to or less than the length of the
-//				numeric value string never use text justification. In these
-//				cases, text justification is completely ignored.
+//				Text justification can only be evaluated in
+//				the context of a number string, field length
+//				and a 'textJustification' object of type
+//				TextJustify. This is because number strings
+//				with a field length equal to or less than the
+//				length of the numeric value string never use
+//				text justification. In these cases, text
+//				justification is completely ignored.
 //
-//				If the field length parameter ('fieldLength') is greater
-//				than the length of the numeric value string, text
-//				justification must be equal to one of these
-//				three valid values:
+//				If the field length parameter ('fieldLength')
+//				is greater than the length of the numeric
+//				value string, text justification must be equal
+//				to one of these three valid values:
+//
 //				          TextJustify(0).Left()
 //				          TextJustify(0).Right()
 //				          TextJustify(0).Center()
 //
-//				You can also use the abbreviated text justification
-//				enumeration syntax as follows:
+//				You can also use the abbreviated text
+//				justification enumeration syntax as follows:
 //
 //				          TxtJustify.Left()
 //				          TxtJustify.Right()
@@ -3624,23 +3695,26 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtParamsRunes(
 //				within the number field length specified
 //				by data field 'fieldLength'.
 //
-//				Text justification can only be evaluated in the context of
-//				a number string, field length and a 'textJustification'
-//				object of type TextJustify. This is because number strings
-//				with a field length equal to or less than the length of the
-//				numeric value string never use text justification. In these
-//				cases, text justification is completely ignored.
+//				Text justification can only be evaluated in
+//				the context of a number string, field length
+//				and a 'textJustification' object of type
+//				TextJustify. This is because number strings
+//				with a field length equal to or less than the
+//				length of the numeric value string never use
+//				text justification. In these cases, text
+//				justification is completely ignored.
 //
-//				If the field length parameter ('fieldLength') is greater
-//				than the length of the numeric value string, text
-//				justification must be equal to one of these
-//				three valid values:
+//				If the field length parameter ('fieldLength')
+//				is greater than the length of the numeric
+//				value string, text justification must be equal
+//				to one of these three valid values:
+//
 //				          TextJustify(0).Left()
 //				          TextJustify(0).Right()
 //				          TextJustify(0).Center()
 //
-//				You can also use the abbreviated text justification
-//				enumeration syntax as follows:
+//				You can also use the abbreviated text
+//				justification enumeration syntax as follows:
 //
 //				          TxtJustify.Left()
 //				          TxtJustify.Right()
@@ -3865,23 +3939,26 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumFmtFrance(
 //				within the number field length specified
 //				by data field 'fieldLength'.
 //
-//				Text justification can only be evaluated in the context of
-//				a number string, field length and a 'textJustification'
-//				object of type TextJustify. This is because number strings
-//				with a field length equal to or less than the length of the
-//				numeric value string never use text justification. In these
-//				cases, text justification is completely ignored.
+//				Text justification can only be evaluated in
+//				the context of a number string, field length
+//				and a 'textJustification' object of type
+//				TextJustify. This is because number strings
+//				with a field length equal to or less than the
+//				length of the numeric value string never use
+//				text justification. In these cases, text
+//				justification is completely ignored.
 //
-//				If the field length parameter ('fieldLength') is greater
-//				than the length of the numeric value string, text
-//				justification must be equal to one of these
-//				three valid values:
+//				If the field length parameter ('fieldLength')
+//				is greater than the length of the numeric
+//				value string, text justification must be equal
+//				to one of these three valid values:
+//
 //				          TextJustify(0).Left()
 //				          TextJustify(0).Right()
 //				          TextJustify(0).Center()
 //
-//				You can also use the abbreviated text justification
-//				enumeration syntax as follows:
+//				You can also use the abbreviated text
+//				justification enumeration syntax as follows:
 //
 //				          TxtJustify.Left()
 //				          TxtJustify.Right()
@@ -4110,23 +4187,26 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumFmtGermany(
 //				within the number field length specified
 //				by data field 'fieldLength'.
 //
-//				Text justification can only be evaluated in the context of
-//				a number string, field length and a 'textJustification'
-//				object of type TextJustify. This is because number strings
-//				with a field length equal to or less than the length of the
-//				numeric value string never use text justification. In these
-//				cases, text justification is completely ignored.
+//				Text justification can only be evaluated in
+//				the context of a number string, field length
+//				and a 'textJustification' object of type
+//				TextJustify. This is because number strings
+//				with a field length equal to or less than the
+//				length of the numeric value string never use
+//				text justification. In these cases, text
+//				justification is completely ignored.
 //
-//				If the field length parameter ('fieldLength') is greater
-//				than the length of the numeric value string, text
-//				justification must be equal to one of these
-//				three valid values:
+//				If the field length parameter ('fieldLength')
+//				is greater than the length of the numeric
+//				value string, text justification must be equal
+//				to one of these three valid values:
+//
 //				          TextJustify(0).Left()
 //				          TextJustify(0).Right()
 //				          TextJustify(0).Center()
 //
-//				You can also use the abbreviated text justification
-//				enumeration syntax as follows:
+//				You can also use the abbreviated text
+//				justification enumeration syntax as follows:
 //
 //				          TxtJustify.Left()
 //				          TxtJustify.Right()
@@ -4346,23 +4426,26 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumFmtUK(
 //				within the number field length specified
 //				by data field 'fieldLength'.
 //
-//				Text justification can only be evaluated in the context of
-//				a number string, field length and a 'textJustification'
-//				object of type TextJustify. This is because number strings
-//				with a field length equal to or less than the length of the
-//				numeric value string never use text justification. In these
-//				cases, text justification is completely ignored.
+//				Text justification can only be evaluated in
+//				the context of a number string, field length
+//				and a 'textJustification' object of type
+//				TextJustify. This is because number strings
+//				with a field length equal to or less than the
+//				length of the numeric value string never use
+//				text justification. In these cases, text
+//				justification is completely ignored.
 //
-//				If the field length parameter ('fieldLength') is greater
-//				than the length of the numeric value string, text
-//				justification must be equal to one of these
-//				three valid values:
+//				If the field length parameter ('fieldLength')
+//				is greater than the length of the numeric
+//				value string, text justification must be equal
+//				to one of these three valid values:
+//
 //				          TextJustify(0).Left()
 //				          TextJustify(0).Right()
 //				          TextJustify(0).Center()
 //
-//				You can also use the abbreviated text justification
-//				enumeration syntax as follows:
+//				You can also use the abbreviated text
+//				justification enumeration syntax as follows:
 //
 //				          TxtJustify.Left()
 //				          TxtJustify.Right()
@@ -4618,23 +4701,26 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumFmtUS(
 //				within the number field length specified
 //				by data field 'fieldLength'.
 //
-//				Text justification can only be evaluated in the context of
-//				a number string, field length and a 'textJustification'
-//				object of type TextJustify. This is because number strings
-//				with a field length equal to or less than the length of the
-//				numeric value string never use text justification. In these
-//				cases, text justification is completely ignored.
+//				Text justification can only be evaluated in
+//				the context of a number string, field length
+//				and a 'textJustification' object of type
+//				TextJustify. This is because number strings
+//				with a field length equal to or less than the
+//				length of the numeric value string never use
+//				text justification. In these cases, text
+//				justification is completely ignored.
 //
-//				If the field length parameter ('fieldLength') is greater
-//				than the length of the numeric value string, text
-//				justification must be equal to one of these
-//				three valid values:
+//				If the field length parameter ('fieldLength')
+//				is greater than the length of the numeric
+//				value string, text justification must be equal
+//				to one of these three valid values:
+//
 //				          TextJustify(0).Left()
 //				          TextJustify(0).Right()
 //				          TextJustify(0).Center()
 //
-//				You can also use the abbreviated text justification
-//				enumeration syntax as follows:
+//				You can also use the abbreviated text
+//				justification enumeration syntax as follows:
 //
 //				          TxtJustify.Left()
 //				          TxtJustify.Right()
@@ -4881,23 +4967,26 @@ func (numStrFmtSpec *NumStrFormatSpec) SetCurrencyFmtFrance(
 //				within the number field length specified
 //				by data field 'fieldLength'.
 //
-//				Text justification can only be evaluated in the context of
-//				a number string, field length and a 'textJustification'
-//				object of type TextJustify. This is because number strings
-//				with a field length equal to or less than the length of the
-//				numeric value string never use text justification. In these
-//				cases, text justification is completely ignored.
+//				Text justification can only be evaluated in
+//				the context of a number string, field length
+//				and a 'textJustification' object of type
+//				TextJustify. This is because number strings
+//				with a field length equal to or less than the
+//				length of the numeric value string never use
+//				text justification. In these cases, text
+//				justification is completely ignored.
 //
-//				If the field length parameter ('fieldLength') is greater
-//				than the length of the numeric value string, text
-//				justification must be equal to one of these
-//				three valid values:
+//				If the field length parameter ('fieldLength')
+//				is greater than the length of the numeric
+//				value string, text justification must be equal
+//				to one of these three valid values:
+//
 //				          TextJustify(0).Left()
 //				          TextJustify(0).Right()
 //				          TextJustify(0).Center()
 //
-//				You can also use the abbreviated text justification
-//				enumeration syntax as follows:
+//				You can also use the abbreviated text
+//				justification enumeration syntax as follows:
 //
 //				          TxtJustify.Left()
 //				          TxtJustify.Right()
@@ -5116,23 +5205,26 @@ func (numStrFmtSpec *NumStrFormatSpec) SetCurrencyFmtGermany(
 //				within the number field length specified
 //				by data field 'fieldLength'.
 //
-//				Text justification can only be evaluated in the context of
-//				a number string, field length and a 'textJustification'
-//				object of type TextJustify. This is because number strings
-//				with a field length equal to or less than the length of the
-//				numeric value string never use text justification. In these
-//				cases, text justification is completely ignored.
+//				Text justification can only be evaluated in
+//				the context of a number string, field length
+//				and a 'textJustification' object of type
+//				TextJustify. This is because number strings
+//				with a field length equal to or less than the
+//				length of the numeric value string never use
+//				text justification. In these cases, text
+//				justification is completely ignored.
 //
-//				If the field length parameter ('fieldLength') is greater
-//				than the length of the numeric value string, text
-//				justification must be equal to one of these
-//				three valid values:
+//				If the field length parameter ('fieldLength')
+//				is greater than the length of the numeric
+//				value string, text justification must be equal
+//				to one of these three valid values:
+//
 //				          TextJustify(0).Left()
 //				          TextJustify(0).Right()
 //				          TextJustify(0).Center()
 //
-//				You can also use the abbreviated text justification
-//				enumeration syntax as follows:
+//				You can also use the abbreviated text
+//				justification enumeration syntax as follows:
 //
 //				          TxtJustify.Left()
 //				          TxtJustify.Right()
@@ -5691,23 +5783,26 @@ func (numStrFmtSpec *NumStrFormatSpec) SetNegativeNumberFmtSpec(
 //				within the number field length specified
 //				by data field 'fieldLength'.
 //
-//				Text justification can only be evaluated in the context of
-//				a number string, field length and a 'textJustification'
-//				object of type TextJustify. This is because number strings
-//				with a field length equal to or less than the length of the
-//				numeric value string never use text justification. In these
-//				cases, text justification is completely ignored.
+//				Text justification can only be evaluated in
+//				the context of a number string, field length
+//				and a 'textJustification' object of type
+//				TextJustify. This is because number strings
+//				with a field length equal to or less than the
+//				length of the numeric value string never use
+//				text justification. In these cases, text
+//				justification is completely ignored.
 //
-//				If the field length parameter ('fieldLength') is greater
-//				than the length of the numeric value string, text
-//				justification must be equal to one of these
-//				three valid values:
+//				If the field length parameter ('fieldLength')
+//				is greater than the length of the numeric
+//				value string, text justification must be equal
+//				to one of these three valid values:
+//
 //				          TextJustify(0).Left()
 //				          TextJustify(0).Right()
 //				          TextJustify(0).Center()
 //
-//				You can also use the abbreviated text justification
-//				enumeration syntax as follows:
+//				You can also use the abbreviated text
+//				justification enumeration syntax as follows:
 //
 //				          TxtJustify.Left()
 //				          TxtJustify.Right()
@@ -6048,23 +6143,26 @@ func (numStrFmtSpec *NumStrFormatSpec) SetPositiveNumberFmtSpec(
 //				within the number field length specified
 //				by data field 'fieldLength'.
 //
-//				Text justification can only be evaluated in the context of
-//				a number string, field length and a 'textJustification'
-//				object of type TextJustify. This is because number strings
-//				with a field length equal to or less than the length of the
-//				numeric value string never use text justification. In these
-//				cases, text justification is completely ignored.
+//				Text justification can only be evaluated in
+//				the context of a number string, field length
+//				and a 'textJustification' object of type
+//				TextJustify. This is because number strings
+//				with a field length equal to or less than the
+//				length of the numeric value string never use
+//				text justification. In these cases, text
+//				justification is completely ignored.
 //
-//				If the field length parameter ('fieldLength') is greater
-//				than the length of the numeric value string, text
-//				justification must be equal to one of these
-//				three valid values:
+//				If the field length parameter ('fieldLength')
+//				is greater than the length of the numeric
+//				value string, text justification must be equal
+//				to one of these three valid values:
+//
 //				          TextJustify(0).Left()
 //				          TextJustify(0).Right()
 //				          TextJustify(0).Center()
 //
-//				You can also use the abbreviated text justification
-//				enumeration syntax as follows:
+//				You can also use the abbreviated text
+//				justification enumeration syntax as follows:
 //
 //				          TxtJustify.Left()
 //				          TxtJustify.Right()
@@ -7123,23 +7221,26 @@ func (numStrFmtSpec *NumStrFormatSpec) SetNumFmtParamsRunes(
 //				within the number field length specified
 //				by data field 'fieldLength'.
 //
-//				Text justification can only be evaluated in the context of
-//				a number string, field length and a 'textJustification'
-//				object of type TextJustify. This is because number strings
-//				with a field length equal to or less than the length of the
-//				numeric value string never use text justification. In these
-//				cases, text justification is completely ignored.
+//				Text justification can only be evaluated in
+//				the context of a number string, field length
+//				and a 'textJustification' object of type
+//				TextJustify. This is because number strings
+//				with a field length equal to or less than the
+//				length of the numeric value string never use
+//				text justification. In these cases, text
+//				justification is completely ignored.
 //
-//				If the field length parameter ('fieldLength') is greater
-//				than the length of the numeric value string, text
-//				justification must be equal to one of these
-//				three valid values:
+//				If the field length parameter ('fieldLength')
+//				is greater than the length of the numeric
+//				value string, text justification must be equal
+//				to one of these three valid values:
+//
 //				          TextJustify(0).Left()
 //				          TextJustify(0).Right()
 //				          TextJustify(0).Center()
 //
-//				You can also use the abbreviated text justification
-//				enumeration syntax as follows:
+//				You can also use the abbreviated text
+//				justification enumeration syntax as follows:
 //
 //				          TxtJustify.Left()
 //				          TxtJustify.Right()
@@ -7373,23 +7474,26 @@ func (numStrFmtSpec *NumStrFormatSpec) SetSignedNumFmtFrance(
 //				within the number field length specified
 //				by data field 'fieldLength'.
 //
-//				Text justification can only be evaluated in the context of
-//				a number string, field length and a 'textJustification'
-//				object of type TextJustify. This is because number strings
-//				with a field length equal to or less than the length of the
-//				numeric value string never use text justification. In these
-//				cases, text justification is completely ignored.
+//				Text justification can only be evaluated in
+//				the context of a number string, field length
+//				and a 'textJustification' object of type
+//				TextJustify. This is because number strings
+//				with a field length equal to or less than the
+//				length of the numeric value string never use
+//				text justification. In these cases, text
+//				justification is completely ignored.
 //
-//				If the field length parameter ('fieldLength') is greater
-//				than the length of the numeric value string, text
-//				justification must be equal to one of these
-//				three valid values:
+//				If the field length parameter ('fieldLength')
+//				is greater than the length of the numeric
+//				value string, text justification must be equal
+//				to one of these three valid values:
+//
 //				          TextJustify(0).Left()
 //				          TextJustify(0).Right()
 //				          TextJustify(0).Center()
 //
-//				You can also use the abbreviated text justification
-//				enumeration syntax as follows:
+//				You can also use the abbreviated text
+//				justification enumeration syntax as follows:
 //
 //				          TxtJustify.Left()
 //				          TxtJustify.Right()
@@ -7616,23 +7720,26 @@ func (numStrFmtSpec *NumStrFormatSpec) SetSignedNumFmtGermany(
 //				within the number field length specified
 //				by data field 'fieldLength'.
 //
-//				Text justification can only be evaluated in the context of
-//				a number string, field length and a 'textJustification'
-//				object of type TextJustify. This is because number strings
-//				with a field length equal to or less than the length of the
-//				numeric value string never use text justification. In these
-//				cases, text justification is completely ignored.
+//				Text justification can only be evaluated in
+//				the context of a number string, field length
+//				and a 'textJustification' object of type
+//				TextJustify. This is because number strings
+//				with a field length equal to or less than the
+//				length of the numeric value string never use
+//				text justification. In these cases, text
+//				justification is completely ignored.
 //
-//				If the field length parameter ('fieldLength') is greater
-//				than the length of the numeric value string, text
-//				justification must be equal to one of these
-//				three valid values:
+//				If the field length parameter ('fieldLength')
+//				is greater than the length of the numeric
+//				value string, text justification must be equal
+//				to one of these three valid values:
+//
 //				          TextJustify(0).Left()
 //				          TextJustify(0).Right()
 //				          TextJustify(0).Center()
 //
-//				You can also use the abbreviated text justification
-//				enumeration syntax as follows:
+//				You can also use the abbreviated text
+//				justification enumeration syntax as follows:
 //
 //				          TxtJustify.Left()
 //				          TxtJustify.Right()
@@ -7851,23 +7958,26 @@ func (numStrFmtSpec *NumStrFormatSpec) SetSignedNumFmtUK(
 //				within the number field length specified
 //				by data field 'fieldLength'.
 //
-//				Text justification can only be evaluated in the context of
-//				a number string, field length and a 'textJustification'
-//				object of type TextJustify. This is because number strings
-//				with a field length equal to or less than the length of the
-//				numeric value string never use text justification. In these
-//				cases, text justification is completely ignored.
+//				Text justification can only be evaluated in
+//				the context of a number string, field length
+//				and a 'textJustification' object of type
+//				TextJustify. This is because number strings
+//				with a field length equal to or less than the
+//				length of the numeric value string never use
+//				text justification. In these cases, text
+//				justification is completely ignored.
 //
-//				If the field length parameter ('fieldLength') is greater
-//				than the length of the numeric value string, text
-//				justification must be equal to one of these
-//				three valid values:
+//				If the field length parameter ('fieldLength')
+//				is greater than the length of the numeric
+//				value string, text justification must be equal
+//				to one of these three valid values:
+//
 //				          TextJustify(0).Left()
 //				          TextJustify(0).Right()
 //				          TextJustify(0).Center()
 //
-//				You can also use the abbreviated text justification
-//				enumeration syntax as follows:
+//				You can also use the abbreviated text
+//				justification enumeration syntax as follows:
 //
 //				          TxtJustify.Left()
 //				          TxtJustify.Right()
@@ -8433,23 +8543,26 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) copySignedNumberFormatSp
 //				within the number field length specified
 //				by data field 'fieldLength'.
 //
-//				Text justification can only be evaluated in the context of
-//				a number string, field length and a 'textJustification'
-//				object of type TextJustify. This is because number strings
-//				with a field length equal to or less than the length of the
-//				numeric value string never use text justification. In these
-//				cases, text justification is completely ignored.
+//				Text justification can only be evaluated in
+//				the context of a number string, field length
+//				and a 'textJustification' object of type
+//				TextJustify. This is because number strings
+//				with a field length equal to or less than the
+//				length of the numeric value string never use
+//				text justification. In these cases, text
+//				justification is completely ignored.
 //
-//				If the field length parameter ('fieldLength') is greater
-//				than the length of the numeric value string, text
-//				justification must be equal to one of these
-//				three valid values:
+//				If the field length parameter ('fieldLength')
+//				is greater than the length of the numeric
+//				value string, text justification must be equal
+//				to one of these three valid values:
+//
 //				          TextJustify(0).Left()
 //				          TextJustify(0).Right()
 //				          TextJustify(0).Center()
 //
-//				You can also use the abbreviated text justification
-//				enumeration syntax as follows:
+//				You can also use the abbreviated text
+//				justification enumeration syntax as follows:
 //
 //				          TxtJustify.Left()
 //				          TxtJustify.Right()
@@ -8757,24 +8870,26 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setCurrencyNStrFmtFrance
 //				within the number field length specified
 //				by data field 'fieldLength'.
 //
-//				Text justification can only be evaluated in the context of
-//				a number string, field length and a 'textJustification'
-//				object of type TextJustify. This is because number strings
-//				with a field length equal to or less than the length of the
-//				numeric value string never use text justification. In these
-//				cases, text justification is completely ignored.
+//				Text justification can only be evaluated in
+//				the context of a number string, field length
+//				and a 'textJustification' object of type
+//				TextJustify. This is because number strings
+//				with a field length equal to or less than the
+//				length of the numeric value string never use
+//				text justification. In these cases, text
+//				justification is completely ignored.
 //
-//				If the field length parameter ('fieldLength') is greater
-//				than the length of the numeric value string, text
-//				justification must be equal to one of these
-//				three valid values:
+//				If the field length parameter ('fieldLength')
+//				is greater than the length of the numeric
+//				value string, text justification must be equal
+//				to one of these three valid values:
 //
 //				          TextJustify(0).Left()
 //				          TextJustify(0).Right()
 //				          TextJustify(0).Center()
 //
-//				You can also use the abbreviated text justification
-//				enumeration syntax as follows:
+//				You can also use the abbreviated text
+//				justification enumeration syntax as follows:
 //
 //				          TxtJustify.Left()
 //				          TxtJustify.Right()
@@ -8953,6 +9068,302 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setCurrencyNStrFmtGerman
 		ePrefix.XCpy("numStrFmtSpec<-"))
 }
 
+//	setCurrencyNStrFmtUK
+//
+//	Deletes and resets the member variable data values
+//	stored in the instance of NumStrFormatSpec passed
+//	as input parameter 'numStrFmtSpec'.
+//
+//	Reconfigures the current instance of NumStrFormatSpec
+//	using Currency Number String formatting conventions
+//	typically applied in the UK (United Kingdom).
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	Be advised that the data fields contained in the current
+//	instance of NumStrFormatSpec will be deleted and replaced
+//	by Currency Number String formatting parameters typically
+//	applied the in UK (United Kingdom).
+//
+// ----------------------------------------------------------------
+//
+// # Defaults
+//
+//	The radix point or decimal separator is set to the
+//	period character ('.').
+//
+//		United Kingdom Example-1
+//		123.45 (The fractional digits are "45")
+//
+//	The integer group separator is a comma character
+//	(',').
+//
+//	The integer group specification is set to 'thousands'.
+//	This means that integer digits will be separated into
+//	'thousands' with each group containing three digits
+//	each:
+//
+//		United Kingdom Example-2
+//				1,000,000
+//
+//	The currency symbol used in the United Kingdom is the
+//	Pound Sterling symbol ('£').
+//
+//		United Kingdom Example-3
+//			£ 1,000,000.00
+//
+//	The negative number sign is set to leading and
+//	trailing parentheses ("()").
+//
+//		United Kingdom Example-4
+//			£ -1,000,000.00
+//
+//	The positive number sign is set to a blank or empty
+//	string ("").
+//
+//		United Kingdom Example-5
+//			£ 1,000,000.00
+//
+//	The zero number format is set to a blank or empty
+//	string ("").
+//
+//		United Kingdom Example-6
+//				£ 0.00
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+// numStrFmtSpec				*NumStrFormatSpec
+//
+//		A pointer to a NumStrFormatSpec instance. All
+//		member variable data fields in this object will
+//		be replaced by data values configured from the
+//		input parameter described below.
+//
+//	numberFieldSpec				NumStrNumberFieldSpec
+//
+//		This Number Field Specification contains all
+//		parameters necessary to format a Number String
+//		within a larger Number Field. In addition to
+//		specifying the length of number field, this
+//		object contains justification specifications
+//		for centering, left justifying or right
+//		justifying a Number String within a Number
+//		Field.
+//
+//		type NumStrNumberFieldSpec struct {
+//
+//			fieldLength int
+//
+//				This parameter defines the length of the
+//				text field in which the numeric value will
+//				be displayed within a number string.
+//
+//				If 'fieldLength' is less than the length
+//				of the numeric value string, it will be
+//				automatically set equal to the length of
+//				that numeric value string.
+//
+//				To automatically set the value of
+//				'fieldLength' to the string length of the
+//				numeric value, set this parameter to a
+//				value of minus one (-1).
+//
+//				If this parameter is submitted with a
+//				value less than minus one (-1) or greater
+//				than 1-million (1,000,000), an error will
+//				be returned.
+//
+//			fieldJustification TextJustify
+//
+//				An enumeration which specifies the
+//				justification of the numeric value string
+//				within the number field length specified
+//				by data field 'fieldLength'.
+//
+//				Text justification can only be evaluated in
+//				the context of a number string, field length
+//				and a 'textJustification' object of type
+//				TextJustify. This is because number strings
+//				with a field length equal to or less than the
+//				length of the numeric value string never use
+//				text justification. In these cases, text
+//				justification is completely ignored.
+//
+//				If the field length parameter ('fieldLength')
+//				is greater than the length of the numeric
+//				value string, text justification must be equal
+//				to one of these three valid values:
+//
+//				          TextJustify(0).Left()
+//				          TextJustify(0).Right()
+//				          TextJustify(0).Center()
+//
+//				You can also use the abbreviated text justification
+//				enumeration syntax as follows:
+//
+//				          TxtJustify.Left()
+//				          TxtJustify.Right()
+//				          TxtJustify.Center()
+//		}
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// -----------------------------------------------------------------
+//
+// # Return Values
+//
+//	err							error
+//
+//		If this method completes successfully, this
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setCurrencyNStrFmtUK(
+	numStrFmtSpec *NumStrFormatSpec,
+	numberFieldSpec NumStrNumberFieldSpec,
+	errPrefDto *ePref.ErrPrefixDto) (
+	err error) {
+
+	nStrNumberFieldSpecNanobot.lock.Lock()
+
+	defer nStrNumberFieldSpecNanobot.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"numStrFmtSpecNanobot."+
+			"setCurrencyNStrFmtUK()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if numStrFmtSpec == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'numStrFmtSpec' is invalid!\n"+
+			"'numStrFmtSpec' is a 'nil' pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	var decSeparator DecimalSeparatorSpec
+
+	decSeparator,
+		err = new(DecimalSeparatorSpec).NewUS(
+		ePrefix.XCpy("decSeparator"))
+
+	if err != nil {
+		return err
+	}
+
+	var intSeparatorSpec IntegerSeparatorSpec
+
+	intSeparatorSpec,
+		err = new(IntegerSeparatorSpec).NewUnitedStatesDefaults(
+		ePrefix.XCpy("intSeparatorSpec"))
+
+	if err != nil {
+		return err
+	}
+
+	var negativeNumberSign NumStrNumberSymbolSpec
+
+	negativeNumberSign = NumStrNumberSymbolSpec{
+
+		leadingNumberSymbols: RuneArrayDto{
+			CharsArray:     []rune{'\U000000a3', ' ', '-'},
+			Description1:   "",
+			Description2:   "",
+			charSearchType: CharSearchType.LinearTargetStartingIndex(),
+			lock:           nil,
+		},
+
+		leadingNumberFieldSymbolPosition: NumFieldSymPos.InsideNumField(),
+
+		trailingNumberSymbols: RuneArrayDto{},
+
+		trailingNumberFieldSymbolPosition: 0,
+
+		lock: nil,
+	}
+
+	var positiveNumberSign NumStrNumberSymbolSpec
+
+	positiveNumberSign = NumStrNumberSymbolSpec{
+
+		leadingNumberSymbols: RuneArrayDto{
+			CharsArray:     []rune{'\U000000a3', ' '},
+			Description1:   "",
+			Description2:   "",
+			charSearchType: CharSearchType.LinearTargetStartingIndex(),
+			lock:           nil,
+		},
+
+		leadingNumberFieldSymbolPosition: NumFieldSymPos.InsideNumField(),
+
+		trailingNumberSymbols:             RuneArrayDto{},
+		trailingNumberFieldSymbolPosition: 0,
+		lock:                              nil,
+	}
+
+	var zeroNumberSign NumStrNumberSymbolSpec
+
+	zeroNumberSign = NumStrNumberSymbolSpec{
+
+		leadingNumberSymbols: RuneArrayDto{
+			CharsArray:     []rune{'\U000000a3', ' '},
+			Description1:   "",
+			Description2:   "",
+			charSearchType: CharSearchType.LinearTargetStartingIndex(),
+			lock:           nil,
+		},
+
+		leadingNumberFieldSymbolPosition: NumFieldSymPos.InsideNumField(),
+
+		trailingNumberSymbols:             RuneArrayDto{},
+		trailingNumberFieldSymbolPosition: 0,
+		lock:                              nil,
+	}
+
+	return new(numStrFmtSpecAtom).setNStrFmtComponents(
+		numStrFmtSpec,
+		decSeparator,
+		intSeparatorSpec,
+		negativeNumberSign,
+		positiveNumberSign,
+		zeroNumberSign,
+		numberFieldSpec,
+		ePrefix.XCpy("numStrFmtSpec<-"))
+}
+
 //	setCurrencyNStrFmtUS
 //
 //	Deletes and resets the member variable data values
@@ -9069,23 +9480,26 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setCurrencyNStrFmtGerman
 //				within the number field length specified
 //				by data field 'fieldLength'.
 //
-//				Text justification can only be evaluated in the context of
-//				a number string, field length and a 'textJustification'
-//				object of type TextJustify. This is because number strings
-//				with a field length equal to or less than the length of the
-//				numeric value string never use text justification. In these
-//				cases, text justification is completely ignored.
+//				Text justification can only be evaluated in
+//				the context of a number string, field length
+//				and a 'textJustification' object of type
+//				TextJustify. This is because number strings
+//				with a field length equal to or less than the
+//				length of the numeric value string never use
+//				text justification. In these cases, text
+//				justification is completely ignored.
 //
-//				If the field length parameter ('fieldLength') is greater
-//				than the length of the numeric value string, text
-//				justification must be equal to one of these
-//				three valid values:
+//				If the field length parameter ('fieldLength')
+//				is greater than the length of the numeric
+//				value string, text justification must be equal
+//				to one of these three valid values:
+//
 //				          TextJustify(0).Left()
 //				          TextJustify(0).Right()
 //				          TextJustify(0).Center()
 //
-//				You can also use the abbreviated text justification
-//				enumeration syntax as follows:
+//				You can also use the abbreviated text
+//				justification enumeration syntax as follows:
 //
 //				          TxtJustify.Left()
 //				          TxtJustify.Right()
@@ -9911,23 +10325,26 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setNStrNumberFieldSpec(
 //				within the number field length specified
 //				by data field 'fieldLength'.
 //
-//				Text justification can only be evaluated in the context of
-//				a number string, field length and a 'textJustification'
-//				object of type TextJustify. This is because number strings
-//				with a field length equal to or less than the length of the
-//				numeric value string never use text justification. In these
-//				cases, text justification is completely ignored.
+//				Text justification can only be evaluated in
+//				the context of a number string, field length
+//				and a 'textJustification' object of type
+//				TextJustify. This is because number strings
+//				with a field length equal to or less than the
+//				length of the numeric value string never use
+//				text justification. In these cases, text
+//				justification is completely ignored.
 //
-//				If the field length parameter ('fieldLength') is greater
-//				than the length of the numeric value string, text
-//				justification must be equal to one of these
-//				three valid values:
+//				If the field length parameter ('fieldLength')
+//				is greater than the length of the numeric
+//				value string, text justification must be equal
+//				to one of these three valid values:
+//
 //				          TextJustify(0).Left()
 //				          TextJustify(0).Right()
 //				          TextJustify(0).Center()
 //
-//				You can also use the abbreviated text justification
-//				enumeration syntax as follows:
+//				You can also use the abbreviated text
+//				justification enumeration syntax as follows:
 //
 //				          TxtJustify.Left()
 //				          TxtJustify.Right()
@@ -10182,23 +10599,26 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtFrance(
 //				within the number field length specified
 //				by data field 'fieldLength'.
 //
-//				Text justification can only be evaluated in the context of
-//				a number string, field length and a 'textJustification'
-//				object of type TextJustify. This is because number strings
-//				with a field length equal to or less than the length of the
-//				numeric value string never use text justification. In these
-//				cases, text justification is completely ignored.
+//				Text justification can only be evaluated in
+//				the context of a number string, field length
+//				and a 'textJustification' object of type
+//				TextJustify. This is because number strings
+//				with a field length equal to or less than the
+//				length of the numeric value string never use
+//				text justification. In these cases, text
+//				justification is completely ignored.
 //
-//				If the field length parameter ('fieldLength') is greater
-//				than the length of the numeric value string, text
-//				justification must be equal to one of these
-//				three valid values:
+//				If the field length parameter ('fieldLength')
+//				is greater than the length of the numeric
+//				value string, text justification must be equal
+//				to one of these three valid values:
+//
 //				          TextJustify(0).Left()
 //				          TextJustify(0).Right()
 //				          TextJustify(0).Center()
 //
-//				You can also use the abbreviated text justification
-//				enumeration syntax as follows:
+//				You can also use the abbreviated text
+//				justification enumeration syntax as follows:
 //
 //				          TxtJustify.Left()
 //				          TxtJustify.Right()
@@ -10446,23 +10866,26 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtGermany(
 //				within the number field length specified
 //				by data field 'fieldLength'.
 //
-//				Text justification can only be evaluated in the context of
-//				a number string, field length and a 'textJustification'
-//				object of type TextJustify. This is because number strings
-//				with a field length equal to or less than the length of the
-//				numeric value string never use text justification. In these
-//				cases, text justification is completely ignored.
+//				Text justification can only be evaluated in
+//				the context of a number string, field length
+//				and a 'textJustification' object of type
+//				TextJustify. This is because number strings
+//				with a field length equal to or less than the
+//				length of the numeric value string never use
+//				text justification. In these cases, text
+//				justification is completely ignored.
 //
-//				If the field length parameter ('fieldLength') is greater
-//				than the length of the numeric value string, text
-//				justification must be equal to one of these
-//				three valid values:
+//				If the field length parameter ('fieldLength')
+//				is greater than the length of the numeric
+//				value string, text justification must be equal
+//				to one of these three valid values:
+//
 //				          TextJustify(0).Left()
 //				          TextJustify(0).Right()
 //				          TextJustify(0).Center()
 //
-//				You can also use the abbreviated text justification
-//				enumeration syntax as follows:
+//				You can also use the abbreviated text
+//				justification enumeration syntax as follows:
 //
 //				          TxtJustify.Left()
 //				          TxtJustify.Right()
@@ -11714,23 +12137,26 @@ func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setNumberFieldParams(
 //				within the number field length specified
 //				by data field 'fieldLength'.
 //
-//				Text justification can only be evaluated in the context of
-//				a number string, field length and a 'textJustification'
-//				object of type TextJustify. This is because number strings
-//				with a field length equal to or less than the length of the
-//				numeric value string never use text justification. In these
-//				cases, text justification is completely ignored.
+//				Text justification can only be evaluated in
+//				the context of a number string, field length
+//				and a 'textJustification' object of type
+//				TextJustify. This is because number strings
+//				with a field length equal to or less than the
+//				length of the numeric value string never use
+//				text justification. In these cases, text
+//				justification is completely ignored.
 //
-//				If the field length parameter ('fieldLength') is greater
-//				than the length of the numeric value string, text
-//				justification must be equal to one of these
-//				three valid values:
+//				If the field length parameter ('fieldLength')
+//				is greater than the length of the numeric
+//				value string, text justification must be equal
+//				to one of these three valid values:
+//
 //				          TextJustify(0).Left()
 //				          TextJustify(0).Right()
 //				          TextJustify(0).Center()
 //
-//				You can also use the abbreviated text justification
-//				enumeration syntax as follows:
+//				You can also use the abbreviated text
+//				justification enumeration syntax as follows:
 //
 //				          TxtJustify.Left()
 //				          TxtJustify.Right()
@@ -11908,23 +12334,26 @@ func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setNumberFieldSpec(
 //				within the number field length specified
 //				by data field 'fieldLength'.
 //
-//				Text justification can only be evaluated in the context of
-//				a number string, field length and a 'textJustification'
-//				object of type TextJustify. This is because number strings
-//				with a field length equal to or less than the length of the
-//				numeric value string never use text justification. In these
-//				cases, text justification is completely ignored.
+//				Text justification can only be evaluated in
+//				the context of a number string, field length
+//				and a 'textJustification' object of type
+//				TextJustify. This is because number strings
+//				with a field length equal to or less than the
+//				length of the numeric value string never use
+//				text justification. In these cases, text
+//				justification is completely ignored.
 //
-//				If the field length parameter ('fieldLength') is greater
-//				than the length of the numeric value string, text
-//				justification must be equal to one of these
-//				three valid values:
+//				If the field length parameter ('fieldLength')
+//				is greater than the length of the numeric
+//				value string, text justification must be equal
+//				to one of these three valid values:
+//
 //				          TextJustify(0).Left()
 //				          TextJustify(0).Right()
 //				          TextJustify(0).Center()
 //
-//				You can also use the abbreviated text justification
-//				enumeration syntax as follows:
+//				You can also use the abbreviated text
+//				justification enumeration syntax as follows:
 //
 //				          TxtJustify.Left()
 //				          TxtJustify.Right()
