@@ -6642,19 +6642,20 @@ func (numStrKernel *NumberStrKernel) NewParseCustomNumberStr(
 //	numbers with a negative value is defaulted
 //	to a leading minus sign ('-').
 //
-//	While France is a member of the European Union,
-//	various members of the European Union apply
-//	different characters for decimal separator and
-//	negative number signs.
+//	Within in the European Union many, if not
+//	most, of the member countries subscribe to
+//	the decimal separator and negative number
+//	formatting standards implemented by either
+//	France or Germany.
 //
-//	A number of member countries in the European
-//	Union apply the decimal separator and negative
-//	number sign characters used by Germany. See
-//	method:
+//	For information on German Number String
+//	parsing conventions, see method:
+//
 //		NumberStrKernel.NewParseGermanNumberStr()
 //
 //	If custom decimal separator and negative number
 //	characters are required, see method:
+//
 //		NumberStrKernel.NewParseCustomNumberStr()
 //
 // ----------------------------------------------------------------
@@ -6688,23 +6689,34 @@ func (numStrKernel *NumberStrKernel) NewParseCustomNumberStr(
 //		search for numeric characters at the first
 //		character in the Raw Number String ('rawNumStr').
 //
-//	characterSearchLength		int
+//	breakOnCharSearchLength		int
 //
 //		The actual number of characters within the Raw
 //		Number String ('rawNumStr') that are included in
 //		the search for numeric character digits.
 //
-//		If this value is set to minus one (-1), the search
-//		length will be configured to include the last
-//		index in 'rawNumStr'. In other words the search
-//		will proceed to the end of 'rawNumStr'.
+//		If this parameter is set to a value greater than
+//		zero ('0'), the Number String Parsing algorithm
+//		will search the specified number of text
+//		characters and then automatically terminate the
+//		search for numeric digits.
 //
-//	numParsingTerminators		[]string
+//		If this value is set to value less than one (+1),
+//		the search length will be configured to include
+//		the last character in 'rawNumStr'. In other words
+//		the search for numeric characters will proceed to
+//		the end of the string, 'rawNumStr'.
+//
+//	breakOnCharDelimiters		[]string
 //
 //		An array of strings. If any one of these strings
 //		is encountered while searching the Raw Number
-//		String ('rawNumStr'), the search operation will
-//		be automatically terminated.
+//		String ('rawNumStr'), the search for numeric
+//		digits will be automatically terminated.
+//
+//		If this string array is set to nil, this
+//		parameter will be ignored by the Number String
+//		parsing algorithm.
 //
 //	requestRemainderString		bool
 //
@@ -6819,8 +6831,8 @@ func (numStrKernel *NumberStrKernel) NewParseCustomNumberStr(
 func (numStrKernel *NumberStrKernel) NewParseFrenchNumberStr(
 	rawNumStr string,
 	startSearchIndex int,
-	characterSearchLength int,
-	numParsingTerminators []string,
+	breakOnCharSearchLength int,
+	breakOnCharDelimiters []string,
 	requestRemainderString bool,
 	errorPrefix interface{}) (
 	numberStrSearchResults CharSearchNumStrParseResultsDto,
@@ -6850,15 +6862,15 @@ func (numStrKernel *NumberStrKernel) NewParseFrenchNumberStr(
 
 	numParsingTerminatorsCol := RuneArrayCollection{}
 
-	lenStrArray := len(numParsingTerminators)
+	lenStrArray := len(breakOnCharDelimiters)
 
 	for i := 0; i < lenStrArray; i++ {
 
 		err = numParsingTerminatorsCol.AddRuneArrayString(
-			numParsingTerminators[i],
+			breakOnCharDelimiters[i],
 			CharSearchType.LinearTargetStartingIndex(),
 			ePrefix.XCpy(
-				fmt.Sprintf("numParsingTerminators[%v]",
+				fmt.Sprintf("breakOnCharDelimiters[%v]",
 					i)))
 
 		if err != nil {
@@ -6908,7 +6920,7 @@ func (numStrKernel *NumberStrKernel) NewParseFrenchNumberStr(
 		runeDto,
 		"rawNumStr",
 		startSearchIndex,
-		characterSearchLength,
+		breakOnCharSearchLength,
 		negativeNumSearchSpecs,
 		decSeparator,
 		numParsingTerminatorsCol,
@@ -7423,7 +7435,8 @@ func (numStrKernel *NumberStrKernel) NewParsePureNumberStr(
 //		If this parameter is set to a value greater than
 //		zero ('0'), the Number String Parsing algorithm
 //		will search the specified number of text
-//		characters and then terminate the search.
+//		characters and then automatically terminate the
+//		search for numeric digits.
 //
 //		If this value is set to value less than one (+1),
 //		the search length will be configured to include
@@ -7435,8 +7448,8 @@ func (numStrKernel *NumberStrKernel) NewParsePureNumberStr(
 //
 //		An array of strings. If any one of these strings
 //		is encountered while searching the Raw Number
-//		String ('rawNumStr'), the search operation will
-//		be automatically terminated.
+//		String ('rawNumStr'), the search for numeric
+//		digits will be automatically terminated.
 //
 //		If this string array is set to nil, this
 //		parameter will be ignored by the Number String

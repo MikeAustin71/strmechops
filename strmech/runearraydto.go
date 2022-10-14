@@ -1167,11 +1167,12 @@ func (charsArrayDto *RuneArrayDto) IsValidCharacterSearchTypeError(
 
 //	NewRunesDefault
 //
-//	Receives an array of runes and returns a new instance
+//	Receives a rune array and returns a new instance
 //	of RuneArrayDto.
 //
 //	The Character Search type for the new
 //	RuneArrayDto is defaulted to:
+//
 //		CharSearchType.LinearTargetStartingIndex()
 //
 // ----------------------------------------------------------------

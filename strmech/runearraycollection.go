@@ -1720,6 +1720,154 @@ func (runeArrayCol *RuneArrayCollection) AddRuneArrayStringDesc(
 	return err
 }
 
+//	AddRunesDefault
+//
+//	Receives a rune array and proceeds to create a new
+//	instance of RuneArrayDto which is then added to the
+//	collection maintained by the current instance of
+//	RuneArrayCollection.
+//
+//	When creating the RuneArrayDto object to be added
+//	to the collection, the Character Search Type is
+//	automatically defaulted to:
+//
+//		CharSearchType.LinearTargetStartingIndex()
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	charArray					[]rune
+//
+//		This rune array is used to construct the new
+//		RuneArrayDto object which will be added to the
+//		collection maintained by the current instance
+//		of RuneArrayCollection.
+//
+//		If this rune array is 'nil' or has a zero
+//		length, an error will be returned.
+//
+//	 errorPrefix                interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it	contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// -----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (runeArrayCol *RuneArrayCollection) AddRunesDefault(
+	charArray []rune,
+	errorPrefix interface{}) error {
+
+	if runeArrayCol.lock == nil {
+		runeArrayCol.lock = new(sync.Mutex)
+	}
+
+	runeArrayCol.lock.Lock()
+
+	defer runeArrayCol.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"RuneArrayCollection."+
+			"AddRunesDefault()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if len(charArray) == 0 {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'charArray' is zero length\n"+
+			"rune array!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	var newRuneArrayDto RuneArrayDto
+
+	newRuneArrayDto = RuneArrayDto{}.NewRunesDefault(
+		charArray)
+
+	runeArrayCol.runeArrayDtoCol =
+		append(runeArrayCol.runeArrayDtoCol, newRuneArrayDto)
+
+	return err
+}
+
 // CopyIn - Copies the data fields from an incoming instance of
 // RuneArrayCollection ('incomingRuneArrayCol') to the data fields
 // of the current RuneArrayCollection instance ('runeArrayCol').
@@ -1833,7 +1981,7 @@ func (runeArrayCol *RuneArrayCollection) CopyIn(
 		return err
 	}
 
-	return runeArrayCollectionNanobot{}.ptr().
+	return new(runeArrayCollectionNanobot).
 		copyIn(
 			runeArrayCol,
 			incomingRuneArrayCol,
@@ -1943,7 +2091,7 @@ func (runeArrayCol *RuneArrayCollection) CopyOut(
 		return RuneArrayCollection{}, err
 	}
 
-	return runeArrayCollectionNanobot{}.ptr().
+	return new(runeArrayCollectionNanobot).
 		copyOut(
 			runeArrayCol,
 			ePrefix.XCpy(
