@@ -6635,12 +6635,12 @@ func (numStrKernel *NumberStrKernel) NewParseCustomNumberStr(
 //	floating point numeric value is assumed to be
 //	the comma (',') character.
 //
-//	The integer digits separator is a space
-//	character (' ').
+//	The integer digits separator is assumed to be
+//	a space character (' ').
 //
 //	The negative number sign used to designate
-//	numbers with a negative value is defaulted
-//	to a leading minus sign ('-').
+//	numbers with a negative value is assumed to
+//	be a leading minus sign ('-').
 //
 //	Within in the European Union many, if not
 //	most, of the member countries subscribe to
@@ -6731,12 +6731,14 @@ func (numStrKernel *NumberStrKernel) NewParseCustomNumberStr(
 //		parameters are used to arbitrarily terminate the
 //		search operation.
 //
+//
 //	 errorPrefix                interface{}
 //
-//		This object encapsulates error prefix text which is
-//		included in all returned error messages. Usually, it
-//		contains the name of the calling method or methods
-//		listed as a method or function chain of execution.
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it	contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
 //
 //		If no error prefix information is needed, set this
 //		parameter to 'nil'.
@@ -6744,41 +6746,50 @@ func (numStrKernel *NumberStrKernel) NewParseCustomNumberStr(
 //		This empty interface must be convertible to one of
 //		the following types:
 //
-//		1. nil - A nil value is valid and generates an empty
-//		   collection of error prefix and error context
-//		   information.
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
 //
-//		2. string - A string containing error prefix
-//			information.
+//		2.	string
+//				A string containing error prefix
+//				information.
 //
-//		3. []string A one-dimensional slice of strings
-//			containing error prefix information.
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
 //
-//		4. [][2]string A two-dimensional slice of strings
-//		   containing error prefix and error context
-//		   information.
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
 //
-//		5. ErrPrefixDto - An instance of ErrPrefixDto.
-//			Information from this object will be copied for use
-//			in error and informational messages.
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
 //
-//		6. *ErrPrefixDto - A pointer to an instance of
-//			ErrPrefixDto. Information from this object will be
-//			copied for use in error and informational messages.
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
 //
-//		7. IBasicErrorPrefix - An interface to a method
-//			generating a two-dimensional slice of strings
-//			containing error prefix and error context
-//			information.
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
 //
-//		If parameter 'errorPrefix' is NOT convertible to one
-//		of the valid types listed above, it will be
-//		considered invalid and trigger the return of an
-//		error.
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
 //
-//		Types ErrPrefixDto and IBasicErrorPrefix are included
-//		in the 'errpref' software package,
-//		"github.com/MikeAustin71/errpref".
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
@@ -6810,24 +6821,25 @@ func (numStrKernel *NumberStrKernel) NewParseCustomNumberStr(
 //				search operation has detected one or more
 //				nonzero numeric digits.
 //
-//	NumberStrKernel
+//	nStrKernel					NumberStrKernel
 //
 //		If this method completes successfully, a new instance
 //		of NumberStrKernel will be returned configured with
 //		the numeric value parsed from the Raw Number String,
 //		'rawNumStr'.
 //
-//	error
+//	err							error
 //
-//		If this method completes successfully, the returned
-//		error Type is set equal to 'nil'.
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
 //
 //		If errors are encountered during processing, the
-//		returned error Type will encapsulate an error message.
-//	 	This returned error message will incorporate the method
-//	 	chain and text passed by input parameter, 'errorPrefix'.
-//	 	The 'errorPrefix' text will be attached to the beginning
-//	 	of the error message.
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
 func (numStrKernel *NumberStrKernel) NewParseFrenchNumberStr(
 	rawNumStr string,
 	startSearchIndex int,
@@ -6836,7 +6848,7 @@ func (numStrKernel *NumberStrKernel) NewParseFrenchNumberStr(
 	requestRemainderString bool,
 	errorPrefix interface{}) (
 	numberStrSearchResults CharSearchNumStrParseResultsDto,
-	numberStrKernel NumberStrKernel,
+	nStrKernel NumberStrKernel,
 	err error) {
 
 	if numStrKernel.lock == nil {
@@ -6857,7 +6869,7 @@ func (numStrKernel *NumberStrKernel) NewParseFrenchNumberStr(
 		"")
 
 	if err != nil {
-		return numberStrSearchResults, numberStrKernel, err
+		return numberStrSearchResults, nStrKernel, err
 	}
 
 	numParsingTerminatorsCol := RuneArrayCollection{}
@@ -6873,7 +6885,7 @@ func (numStrKernel *NumberStrKernel) NewParseFrenchNumberStr(
 					i)))
 
 		if err != nil {
-			return numberStrSearchResults, numberStrKernel, err
+			return numberStrSearchResults, nStrKernel, err
 		}
 	}
 
@@ -6891,7 +6903,7 @@ func (numStrKernel *NumberStrKernel) NewParseFrenchNumberStr(
 
 	if err != nil {
 
-		return numberStrSearchResults, numberStrKernel, err
+		return numberStrSearchResults, nStrKernel, err
 	}
 
 	negativeNumSearchSpecs := NegNumSearchSpecCollection{}
@@ -6902,11 +6914,11 @@ func (numStrKernel *NumberStrKernel) NewParseFrenchNumberStr(
 
 	if err != nil {
 
-		return numberStrSearchResults, numberStrKernel, err
+		return numberStrSearchResults, nStrKernel, err
 	}
 
 	numberStrSearchResults,
-		numberStrKernel,
+		nStrKernel,
 		err = new(numStrBuilderElectron).extractNumRunes(
 		runeDto,
 		"rawNumStr",
@@ -6918,7 +6930,7 @@ func (numStrKernel *NumberStrKernel) NewParseFrenchNumberStr(
 		requestRemainderString,
 		ePrefix)
 
-	return numberStrSearchResults, numberStrKernel, err
+	return numberStrSearchResults, nStrKernel, err
 }
 
 //	NewParseGermanNumberStr
@@ -6933,23 +6945,27 @@ func (numStrKernel *NumberStrKernel) NewParseFrenchNumberStr(
 //	floating point numeric value is assumed to be
 //	the comma (',') character.
 //
+//	The integer digits separator is assumed to be
+//	a period character ('.').
+//
 //	The negative number sign used to designate
-//	numbers with a negative value is defaulted
-//	to a trailing minus sign ('-').
+//	numbers with a negative value is assumed to
+//	be a trailing minus sign ('-').
 //
-//	While Germany is a member of the European Union,
-//	various members of the European Union apply
-//	different characters for decimal separator and
-//	negative number signs.
+//	Within in the European Union many, if not
+//	most, of the member countries subscribe to
+//	the decimal separator and negative number
+//	formatting standards implemented by either
+//	Germany or France.
 //
-//	A number of member countries in the European
-//	Union apply the decimal separator and negative
-//	number sign characters used by France. See
-//	method:
+//	For information on French Number String
+//	parsing conventions, see method:
+//
 //		NumberStrKernel.NewParseFrenchNumberStr()
 //
 //	If custom decimal separator and negative number
 //	characters are required, see method:
+//
 //		NumberStrKernel.NewParseCustomNumberStr()
 //
 // ----------------------------------------------------------------
@@ -6982,23 +6998,34 @@ func (numStrKernel *NumberStrKernel) NewParseFrenchNumberStr(
 //		search for numeric characters at the first
 //		character in the Raw Number String ('rawNumStr').
 //
-//	characterSearchLength		int
+//	breakOnCharSearchLength		int
 //
 //		The actual number of characters within the Raw
 //		Number String ('rawNumStr') that are included in
 //		the search for numeric character digits.
 //
-//		If this value is set to minus one (-1), the search
-//		length will be configured to include the last
-//		index in 'rawNumStr'. In other words the search
-//		will proceed to the end of 'rawNumStr'.
+//		If this parameter is set to a value greater than
+//		zero ('0'), the Number String Parsing algorithm
+//		will search the specified number of text
+//		characters and then automatically terminate the
+//		search for numeric digits.
 //
-//	numParsingTerminators		[]string
+//		If this value is set to value less than one (+1),
+//		the search length will be configured to include
+//		the last character in 'rawNumStr'. In other words
+//		the search for numeric characters will proceed to
+//		the end of the string, 'rawNumStr'.
+//
+//	breakOnCharDelimiters		[]string
 //
 //		An array of strings. If any one of these strings
 //		is encountered while searching the Raw Number
-//		String ('rawNumStr'), the search operation will
-//		be automatically terminated.
+//		String ('rawNumStr'), the search for numeric
+//		digits will be automatically terminated.
+//
+//		If this string array is set to nil, this
+//		parameter will be ignored by the Number String
+//		parsing algorithm.
 //
 //	requestRemainderString		bool
 //
@@ -7015,10 +7042,11 @@ func (numStrKernel *NumberStrKernel) NewParseFrenchNumberStr(
 //
 //	 errorPrefix                interface{}
 //
-//		This object encapsulates error prefix text which is
-//		included in all returned error messages. Usually, it
-//		contains the name of the calling method or methods
-//		listed as a method or function chain of execution.
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it	contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
 //
 //		If no error prefix information is needed, set this
 //		parameter to 'nil'.
@@ -7026,41 +7054,50 @@ func (numStrKernel *NumberStrKernel) NewParseFrenchNumberStr(
 //		This empty interface must be convertible to one of
 //		the following types:
 //
-//		1. nil - A nil value is valid and generates an empty
-//		   collection of error prefix and error context
-//		   information.
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
 //
-//		2. string - A string containing error prefix
-//			information.
+//		2.	string
+//				A string containing error prefix
+//				information.
 //
-//		3. []string A one-dimensional slice of strings
-//			containing error prefix information.
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
 //
-//		4. [][2]string A two-dimensional slice of strings
-//		   containing error prefix and error context
-//		   information.
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
 //
-//		5. ErrPrefixDto - An instance of ErrPrefixDto.
-//			Information from this object will be copied for use
-//			in error and informational messages.
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
 //
-//		6. *ErrPrefixDto - A pointer to an instance of
-//			ErrPrefixDto. Information from this object will be
-//			copied for use in error and informational messages.
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
 //
-//		7. IBasicErrorPrefix - An interface to a method
-//			generating a two-dimensional slice of strings
-//			containing error prefix and error context
-//			information.
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
 //
-//		If parameter 'errorPrefix' is NOT convertible to one
-//		of the valid types listed above, it will be
-//		considered invalid and trigger the return of an
-//		error.
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
 //
-//		Types ErrPrefixDto and IBasicErrorPrefix are included
-//		in the 'errpref' software package,
-//		"github.com/MikeAustin71/errpref".
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
@@ -7092,33 +7129,34 @@ func (numStrKernel *NumberStrKernel) NewParseFrenchNumberStr(
 //				search operation has detected one or more
 //				nonzero numeric digits.
 //
-//	NumberStrKernel
+//	nStrKernel					NumberStrKernel
 //
 //		If this method completes successfully, a new instance
 //		of NumberStrKernel will be returned configured with
 //		the numeric value parsed from the Raw Number String,
 //		'rawNumStr'.
 //
-//	error
+//	err							error
 //
-//		If this method completes successfully, the returned
-//		error Type is set equal to 'nil'.
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
 //
 //		If errors are encountered during processing, the
-//		returned error Type will encapsulate an error message.
-//	 	This returned error message will incorporate the method
-//	 	chain and text passed by input parameter, 'errorPrefix'.
-//	 	The 'errorPrefix' text will be attached to the beginning
-//	 	of the error message.
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
 func (numStrKernel *NumberStrKernel) NewParseGermanNumberStr(
 	rawNumStr string,
 	startSearchIndex int,
-	characterSearchLength int,
-	numParsingTerminators []string,
+	breakOnCharSearchLength int,
+	breakOnCharDelimiters []string,
 	requestRemainderString bool,
 	errorPrefix interface{}) (
 	numberStrSearchResults CharSearchNumStrParseResultsDto,
-	numberStrKernel NumberStrKernel,
+	nStrKernel NumberStrKernel,
 	err error) {
 
 	if numStrKernel.lock == nil {
@@ -7139,38 +7177,34 @@ func (numStrKernel *NumberStrKernel) NewParseGermanNumberStr(
 		"")
 
 	if err != nil {
-		return numberStrSearchResults, numberStrKernel, err
+		return numberStrSearchResults, nStrKernel, err
 	}
 
 	numParsingTerminatorsCol := RuneArrayCollection{}
 
-	lenStrArray := len(numParsingTerminators)
+	lenStrArray := len(breakOnCharDelimiters)
 
 	for i := 0; i < lenStrArray; i++ {
 
-		err = numParsingTerminatorsCol.AddRuneArrayString(
-			numParsingTerminators[i],
-			CharSearchType.LinearTargetStartingIndex(),
+		err = numParsingTerminatorsCol.AddStringDefault(
+			breakOnCharDelimiters[i],
 			ePrefix.XCpy(
-				fmt.Sprintf("numParsingTerminators[%v]",
+				fmt.Sprintf("breakOnCharDelimiters[%v]",
 					i)))
 
 		if err != nil {
-			return numberStrSearchResults, numberStrKernel, err
+			return numberStrSearchResults, nStrKernel, err
 		}
 	}
 
 	var runeDto RuneArrayDto
 
-	runeDto,
-		err = RuneArrayDto{}.NewString(
-		rawNumStr,
-		CharSearchType.LinearTargetStartingIndex(),
-		ePrefix.XCpy("rawNumStr"))
+	runeDto = RuneArrayDto{}.NewStringDefault(
+		rawNumStr)
 
 	if err != nil {
 
-		return numberStrSearchResults, numberStrKernel, err
+		return numberStrSearchResults, nStrKernel, err
 	}
 
 	var decSeparator DecimalSeparatorSpec
@@ -7182,7 +7216,7 @@ func (numStrKernel *NumberStrKernel) NewParseGermanNumberStr(
 
 	if err != nil {
 
-		return numberStrSearchResults, numberStrKernel, err
+		return numberStrSearchResults, nStrKernel, err
 	}
 
 	negativeNumSearchSpecs := NegNumSearchSpecCollection{}
@@ -7193,23 +7227,23 @@ func (numStrKernel *NumberStrKernel) NewParseGermanNumberStr(
 
 	if err != nil {
 
-		return numberStrSearchResults, numberStrKernel, err
+		return numberStrSearchResults, nStrKernel, err
 	}
 
 	numberStrSearchResults,
-		numberStrKernel,
+		nStrKernel,
 		err = new(numStrBuilderElectron).extractNumRunes(
 		runeDto,
 		"rawNumStr",
 		startSearchIndex,
-		characterSearchLength,
+		breakOnCharSearchLength,
 		negativeNumSearchSpecs,
 		decSeparator,
 		numParsingTerminatorsCol,
 		requestRemainderString,
 		ePrefix)
 
-	return numberStrSearchResults, numberStrKernel, err
+	return numberStrSearchResults, nStrKernel, err
 }
 
 //	NewParsePureNumberStr
