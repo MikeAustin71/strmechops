@@ -8,7 +8,6 @@ import (
 
 // charSearchTargetInputParametersDtoAtom - Provides helper methods for type
 // CharSearchTargetInputParametersDto.
-//
 type charSearchTargetInputParametersDtoAtom struct {
 	lock *sync.Mutex
 }
@@ -18,33 +17,29 @@ type charSearchTargetInputParametersDtoAtom struct {
 // data values for member variables to their initial or zero
 // values.
 //
-//
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // All the member variable data values contained in input parameter
 // 'targetInputParms' will be deleted and reset to their zero
 // values.
 //
-//
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  targetInputParms           *CharSearchTargetInputParametersDto
-//     - A pointer to an instance of
-//       CharSearchTargetInputParametersDto. All the internal
-//       member variables contained in this instance will be
-//       deleted and reset to their zero values.
-//
+//	targetInputParms           *CharSearchTargetInputParametersDto
+//	   - A pointer to an instance of
+//	     CharSearchTargetInputParametersDto. All the internal
+//	     member variables contained in this instance will be
+//	     deleted and reset to their zero values.
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  NONE
-//
+//	NONE
 func (searchTargetInputParmsAtom *charSearchTargetInputParametersDtoAtom) empty(
 	targetInputParms *CharSearchTargetInputParametersDto) {
 
@@ -115,38 +110,35 @@ func (searchTargetInputParmsAtom *charSearchTargetInputParametersDtoAtom) empty(
 // in all respects, this flag is set to 'true'. Otherwise, this
 // method returns 'false'.
 //
-//
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  targetInputParms1          *CharSearchTargetInputParametersDto
-//     - An instance of CharSearchTargetInputParametersDto.
-//       Internal member variables from 'targetInputParms1' will be
-//       compared to those of 'targetInputParms2' to determine if
-//       both instances are equivalent.
+//	targetInputParms1          *CharSearchTargetInputParametersDto
+//	   - An instance of CharSearchTargetInputParametersDto.
+//	     Internal member variables from 'targetInputParms1' will be
+//	     compared to those of 'targetInputParms2' to determine if
+//	     both instances are equivalent.
 //
 //
-//  targetInputParms2          *CharSearchTargetInputParametersDto
-//     - An instance of CharSearchTargetInputParametersDto.
-//       Internal member variables from 'targetInputParms2' will be
-//       compared to those of 'targetInputParms1' to determine if
-//       both instances are equivalent.
-//
+//	targetInputParms2          *CharSearchTargetInputParametersDto
+//	   - An instance of CharSearchTargetInputParametersDto.
+//	     Internal member variables from 'targetInputParms2' will be
+//	     compared to those of 'targetInputParms1' to determine if
+//	     both instances are equivalent.
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  bool
-//     - If the comparison of 'targetInputParms1' and
-//       'targetInputParms2' shows that all internal member
-//       variables are equivalent, this method will return a
-//       boolean value of 'true'.
+//	bool
+//	   - If the comparison of 'targetInputParms1' and
+//	     'targetInputParms2' shows that all internal member
+//	     variables are equivalent, this method will return a
+//	     boolean value of 'true'.
 //
-//       If the two instances are NOT equal, this method will
-//       return a boolean value of 'false' to the calling function.
-//
+//	     If the two instances are NOT equal, this method will
+//	     return a boolean value of 'false' to the calling function.
 func (searchTargetInputParmsAtom *charSearchTargetInputParametersDtoAtom) equal(
 	targetInputParms1 *CharSearchTargetInputParametersDto,
 	targetInputParms2 *CharSearchTargetInputParametersDto) bool {
@@ -296,7 +288,6 @@ func (searchTargetInputParmsAtom *charSearchTargetInputParametersDtoAtom) equal(
 
 // ptr - Returns a pointer to a new instance of
 // charSearchTargetInputParametersDtoAtom.
-//
 func (searchTargetInputParmsAtom charSearchTargetInputParametersDtoAtom) ptr() *charSearchTargetInputParametersDtoAtom {
 
 	if searchTargetInputParmsAtom.lock == nil {
@@ -328,7 +319,7 @@ func (searchTargetInputParmsAtom charSearchTargetInputParametersDtoAtom) ptr() *
 //
 // ----------------------------------------------------------------
 //
-// Be Advised
+// # Be Advised
 //
 // In addition to performing validation diagnostics on input
 // parameter 'targetInputParms', this method will proceed to set
@@ -341,57 +332,54 @@ func (searchTargetInputParmsAtom charSearchTargetInputParametersDtoAtom) ptr() *
 // label strings are empty when this method is called, those empty
 // label strings will be set to their default values.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  targetInputParms           *CharSearchTargetInputParametersDto
-//     - A pointer to an instance of
-//       CharSearchTargetInputParametersDto. This object will be
-//       subjected to diagnostic analysis in order to determine if
-//       all the member variables contain valid values.
+//	targetInputParms           *CharSearchTargetInputParametersDto
+//	   - A pointer to an instance of
+//	     CharSearchTargetInputParametersDto. This object will be
+//	     subjected to diagnostic analysis in order to determine if
+//	     all the member variables contain valid values.
 //
 //
-//  errPrefDto                 *ePref.ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//	errPrefDto                 *ePref.ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods listed
+//	     as a function chain.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
-//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  isValid                    bool
-//     - If input parameter 'targetInputParms' is judged to be
-//       valid in all respects, this return parameter will be set
-//       to 'true'.
+//	isValid                    bool
+//	   - If input parameter 'targetInputParms' is judged to be
+//	     valid in all respects, this return parameter will be set
+//	     to 'true'.
 //
-//     - If input parameter 'targetInputParms' is found to be
-//       invalid, this return parameter will be set to 'false'.
+//	   - If input parameter 'targetInputParms' is found to be
+//	     invalid, this return parameter will be set to 'false'.
 //
 //
-//  err                        error
-//     - If input parameter 'targetInputParms' is judged to be
-//       valid in all respects, this return parameter will be set
-//       to 'nil'.
+//	err                        error
+//	   - If input parameter 'targetInputParms' is judged to be
+//	     valid in all respects, this return parameter will be set
+//	     to 'nil'.
 //
-//       If input parameter, 'targetInputParms' is found to be
-//       invalid, this return parameter will be configured with an
-//       appropriate error message.
+//	     If input parameter, 'targetInputParms' is found to be
+//	     invalid, this return parameter will be configured with an
+//	     appropriate error message.
 //
-//       If an error message is returned, the text value for input
-//       parameter 'errPrefDto' (error prefix) will be prefixed or
-//       attached at the beginning of the error message.
-//
+//	     If an error message is returned, the text value for input
+//	     parameter 'errPrefDto' (error prefix) will be prefixed or
+//	     attached at the beginning of the error message.
 func (searchTargetInputParmsAtom *charSearchTargetInputParametersDtoAtom) testValidityOfTargetInputParms(
 	targetInputParms *CharSearchTargetInputParametersDto,
 	errPrefDto *ePref.ErrPrefixDto) (
@@ -536,14 +524,7 @@ func (searchTargetInputParmsAtom *charSearchTargetInputParametersDtoAtom) testVa
 
 	if targetInputParms.TargetStringSearchLength == 0 {
 
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter %v is invalid!\n"+
-			"%v has a value of Zero (0)\n",
-			ePrefix.String(),
-			targetInputParms.TargetStringSearchLengthName,
-			targetInputParms.TargetStringSearchLengthName)
-
-		return isValid, err
+		targetInputParms.TargetStringSearchLength = -1
 	}
 
 	if targetInputParms.TargetStringSearchLength == -1 {

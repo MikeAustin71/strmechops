@@ -227,10 +227,10 @@ func (nStrBuilderElectron *numStrBuilderElectron) extractNumRunes(
 	targetSearchString RuneArrayDto,
 	targetSearchStringName string,
 	startingSearchIndex int,
-	characterSearchLength int,
+	breakOnCharSearchLength int,
 	negativeNumSearchSpecsCol NegNumSearchSpecCollection,
 	decimalSeparatorSpec DecimalSeparatorSpec,
-	numParsingTerminators RuneArrayCollection,
+	breakOnCharDelimiters RuneArrayCollection,
 	requestRemainderRunesString bool,
 	ePrefDto *ePref.ErrPrefixDto) (
 	searchResults CharSearchNumStrParseResultsDto,
@@ -362,19 +362,7 @@ func (nStrBuilderElectron *numStrBuilderElectron) extractNumRunes(
 			err
 	}
 
-	targetInputParms.TargetStringSearchLength = characterSearchLength
-
-	if targetInputParms.TargetStringSearchLength == 0 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'characterSearchLength' is invalid.\n"+
-			"'characterSearchLength' has a value of zero.\n",
-			ePrefix.String())
-
-		return searchResults,
-			numStrKernel,
-			err
-	}
+	targetInputParms.TargetStringSearchLength = breakOnCharSearchLength
 
 	err = targetInputParms.ValidateTargetParameters(
 		ePrefix.XCpy(
@@ -479,7 +467,7 @@ func (nStrBuilderElectron *numStrBuilderElectron) extractNumRunes(
 
 	// Number Parsing Setup
 	searchResults.ParsingTerminatorSearchResults.IsNOP =
-		numParsingTerminators.IsNOP()
+		breakOnCharDelimiters.IsNOP()
 
 	searchResults.ParsingTerminatorSearchResults.SearchResultsName =
 		"Number Parsing Terminator Search Results"
@@ -565,10 +553,10 @@ func (nStrBuilderElectron *numStrBuilderElectron) extractNumRunes(
 			targetInputParms.FoundFirstNumericDigitInNumStr {
 
 			searchResults.ParsingTerminatorSearchResults,
-				err = numParsingTerminators.SearchForTextCharacters(
+				err = breakOnCharDelimiters.SearchForTextCharacters(
 				targetInputParms,
 				ePrefix.XCpy(
-					"numParsingTerminators"))
+					"breakOnCharDelimiters"))
 
 			if searchResults.ParsingTerminatorSearchResults.FoundSearchTarget {
 
