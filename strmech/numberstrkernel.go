@@ -2459,7 +2459,7 @@ func (numStrKernel *NumberStrKernel) GetFloat64Num(
 //	symbols are required, see methods:
 //
 //		NumberStrKernel.FmtNumStr()
-//		NumberStrKernel.GetFmtNumStrCustom()
+//		NumberStrKernel.FmtNumStrCustom()
 //
 // ----------------------------------------------------------------
 //
@@ -3370,7 +3370,7 @@ func (numStrKernel *NumberStrKernel) FmtNumStr(
 			ePrefix.XCpy("numStrKernel"))
 }
 
-//	GetFmtNumStrCustom
+//	FmtNumStrCustom
 //
 //	Creates and returns a fully formatted Number
 //	String generated from Number String formatting
@@ -3841,7 +3841,7 @@ func (numStrKernel *NumberStrKernel) FmtNumStr(
 //	 	chain and text passed by input parameter, 'errorPrefix'.
 //	 	The 'errorPrefix' text will be attached to the beginning
 //	 	of the error message.
-func (numStrKernel *NumberStrKernel) GetFmtNumStrCustom(
+func (numStrKernel *NumberStrKernel) FmtNumStrCustom(
 	decSeparator DecimalSeparatorSpec,
 	intSeparatorDto IntegerSeparatorSpec,
 	negativeNumberSign NumStrNumberSymbolSpec,
@@ -3906,7 +3906,7 @@ func (numStrKernel *NumberStrKernel) GetFmtNumStrCustom(
 //	see methods:
 //
 //		NumberStrKernel.FmtNumStr()
-//		NumberStrKernel.GetFmtNumStrCustom()
+//		NumberStrKernel.FmtNumStrCustom()
 //
 // ----------------------------------------------------------------
 //
