@@ -5349,6 +5349,244 @@ func (numStrFmtSpec *NumStrFormatSpec) SetCurrencyFmtGermany(
 			ePrefix.XCpy("numStrFmtSpec<-"))
 }
 
+//	SetCurrencyFmtUK
+//
+//	Reconfigures the current instance of NumStrFormatSpec
+//	using Currency Number String formatting conventions
+//	typically applied in the UK (United Kingdom).
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	Be advised that the data fields contained in the current
+//	instance of NumStrFormatSpec will be deleted and replaced
+//	by Currency Number String formatting parameters typically
+//	applied in the UK (United Kingdom).
+//
+// ----------------------------------------------------------------
+//
+// # Defaults
+//
+//	The radix point or decimal separator is set to the
+//	period character ('.').
+//
+//		United Kingdom Example-1
+//		123.45 (The fractional digits are "45")
+//
+//	The integer group separator is a comma character
+//	(',').
+//
+//	The integer group specification is set to 'thousands'.
+//	This means that integer digits will be separated into
+//	'thousands' with each group containing three digits
+//	each:
+//
+//		United Kingdom Example-2
+//				1,000,000
+//
+//	The currency symbol used in the United Kingdom is the
+//	Pound Sterling symbol ('£').
+//
+//		United Kingdom Example-3
+//			£ 1,000,000.00
+//
+//	The negative number sign is set to leading and
+//	trailing parentheses ("()").
+//
+//		United Kingdom Example-4
+//			£ -1,000,000.00
+//
+//	The positive number sign is set to a blank or empty
+//	string ("").
+//
+//		United Kingdom Example-5
+//			£ 1,000,000.00
+//
+//	The zero number format is set to a blank or empty
+//	string ("").
+//
+//		United Kingdom Example-6
+//				£ 0.00
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	numberFieldSpec				NumStrNumberFieldSpec
+//
+//		This Number Field Specification contains all
+//		parameters necessary to format a Number String
+//		within a larger Number Field. In addition to
+//		specifying the length of number field, this
+//		object contains justification specifications
+//		for centering, left justifying or right
+//		justifying a Number String within a Number
+//		Field.
+//
+//		type NumStrNumberFieldSpec struct {
+//
+//			fieldLength int
+//
+//				This parameter defines the length of the
+//				text field in which the numeric value will
+//				be displayed within a number string.
+//
+//				If 'fieldLength' is less than the length
+//				of the numeric value string, it will be
+//				automatically set equal to the length of
+//				that numeric value string.
+//
+//				To automatically set the value of
+//				'fieldLength' to the string length of the
+//				numeric value, set this parameter to a
+//				value of minus one (-1).
+//
+//				If this parameter is submitted with a
+//				value less than minus one (-1) or greater
+//				than 1-million (1,000,000), an error will
+//				be returned.
+//
+//			fieldJustification TextJustify
+//
+//				An enumeration which specifies the
+//				justification of the numeric value string
+//				within the number field length specified
+//				by data field 'fieldLength'.
+//
+//				Text justification can only be evaluated in
+//				the context of a number string, field length
+//				and a 'textJustification' object of type
+//				TextJustify. This is because number strings
+//				with a field length equal to or less than the
+//				length of the numeric value string never use
+//				text justification. In these cases, text
+//				justification is completely ignored.
+//
+//				If the field length parameter ('fieldLength')
+//				is greater than the length of the numeric
+//				value string, text justification must be equal
+//				to one of these three valid values:
+//
+//				          TextJustify(0).Left()
+//				          TextJustify(0).Right()
+//				          TextJustify(0).Center()
+//
+//				You can also use the abbreviated text
+//				justification enumeration syntax as follows:
+//
+//				          TxtJustify.Left()
+//				          TxtJustify.Right()
+//				          TxtJustify.Center()
+//		}
+//
+//	 errorPrefix                interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it	contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.  IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// -----------------------------------------------------------------
+//
+// # Return Values
+//
+//	err							error
+//
+//		If this method completes successfully, the returned error
+//		Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the returned
+//		error Type will encapsulate an error message. This
+//		returned error message will incorporate the method chain
+//		and text passed by input parameter, 'errorPrefix'. The
+//		'errorPrefix' text will be attached to the beginning of
+//		the error message.
+func (numStrFmtSpec *NumStrFormatSpec) SetCurrencyFmtUK(
+	numberFieldSpec NumStrNumberFieldSpec,
+	errorPrefix interface{}) (
+	err error) {
+
+	if numStrFmtSpec.lock == nil {
+		numStrFmtSpec.lock = new(sync.Mutex)
+	}
+
+	numStrFmtSpec.lock.Lock()
+
+	defer numStrFmtSpec.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumStrFormatSpec."+
+			"SetCurrencyFmtUK()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	return new(numStrFmtSpecNanobot).
+		setCurrencyNStrFmtUK(
+			numStrFmtSpec,
+			numberFieldSpec,
+			ePrefix.XCpy("numStrFmtSpec<-"))
+}
+
 //	SetCurrencyFmtUS
 //
 //	Reconfigures the current instance of NumStrFormatSpec
