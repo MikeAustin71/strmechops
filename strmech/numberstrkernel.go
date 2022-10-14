@@ -2458,7 +2458,7 @@ func (numStrKernel *NumberStrKernel) GetFloat64Num(
 //	negative number sign characters or currency
 //	symbols are required, see methods:
 //
-//		NumberStrKernel.GetFmtNumStr()
+//		NumberStrKernel.FmtNumStr()
 //		NumberStrKernel.GetFmtNumStrCustom()
 //
 // ----------------------------------------------------------------
@@ -2941,7 +2941,7 @@ func (numStrKernel *NumberStrKernel) FmtCurrencyNumStrUS(
 
 }
 
-//	GetFmtNumStr
+//	FmtNumStr
 //
 //	Returns a formatted number string using the
 //	numeric value provided by the current instance
@@ -3332,7 +3332,7 @@ func (numStrKernel *NumberStrKernel) FmtCurrencyNumStrUS(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (numStrKernel *NumberStrKernel) GetFmtNumStr(
+func (numStrKernel *NumberStrKernel) FmtNumStr(
 	numStrFmtSpec NumStrFormatSpec,
 	roundingSpec NumStrRoundingSpec,
 	errorPrefix interface{}) (
@@ -3355,7 +3355,7 @@ func (numStrKernel *NumberStrKernel) GetFmtNumStr(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumberStrKernel."+
-			"GetFmtNumStr()",
+			"FmtNumStr()",
 		"")
 
 	if err != nil {
@@ -3869,7 +3869,7 @@ func (numStrKernel *NumberStrKernel) GetFmtNumStrCustom(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumberStrKernel."+
-			"GetFmtNumStr()",
+			"FmtNumStr()",
 		"")
 
 	if err != nil {
@@ -3905,7 +3905,7 @@ func (numStrKernel *NumberStrKernel) GetFmtNumStrCustom(
 //	or negative number sign characters are required,
 //	see methods:
 //
-//		NumberStrKernel.GetFmtNumStr()
+//		NumberStrKernel.FmtNumStr()
 //		NumberStrKernel.GetFmtNumStrCustom()
 //
 // ----------------------------------------------------------------
