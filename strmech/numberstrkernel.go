@@ -7582,14 +7582,14 @@ func (numStrKernel *NumberStrKernel) NewParsePureNumberStr(
 //				search operation has detected one or more
 //				nonzero numeric digits.
 //
-//	NumberStrKernel
+//	nStrKernel					NumberStrKernel
 //
 //		If this method completes successfully, a new instance
 //		of NumberStrKernel will be returned configured with
 //		the numeric value parsed from the Raw Number String,
 //		'rawNumStr'.
 //
-//	error
+//	err							error
 //
 //		If this method completes successfully, the
 //		returned error Type is set equal to 'nil'.
@@ -7609,7 +7609,7 @@ func (numStrKernel *NumberStrKernel) NewParseUSNumberStr(
 	requestRemainderString bool,
 	errorPrefix interface{}) (
 	numberStrSearchResults CharSearchNumStrParseResultsDto,
-	numberStrKernel NumberStrKernel,
+	nStrKernel NumberStrKernel,
 	err error) {
 
 	if numStrKernel.lock == nil {
@@ -7630,7 +7630,7 @@ func (numStrKernel *NumberStrKernel) NewParseUSNumberStr(
 		"")
 
 	if err != nil {
-		return numberStrSearchResults, numberStrKernel, err
+		return numberStrSearchResults, nStrKernel, err
 	}
 
 	numParsingTerminatorsCol := RuneArrayCollection{}
@@ -7647,7 +7647,7 @@ func (numStrKernel *NumberStrKernel) NewParseUSNumberStr(
 					i)))
 
 		if err != nil {
-			return numberStrSearchResults, numberStrKernel, err
+			return numberStrSearchResults, nStrKernel, err
 		}
 	}
 
@@ -7661,7 +7661,7 @@ func (numStrKernel *NumberStrKernel) NewParseUSNumberStr(
 
 	if err != nil {
 
-		return numberStrSearchResults, numberStrKernel, err
+		return numberStrSearchResults, nStrKernel, err
 	}
 
 	var decSeparator DecimalSeparatorSpec
@@ -7673,7 +7673,7 @@ func (numStrKernel *NumberStrKernel) NewParseUSNumberStr(
 
 	if err != nil {
 
-		return numberStrSearchResults, numberStrKernel, err
+		return numberStrSearchResults, nStrKernel, err
 	}
 
 	negativeNumSearchSpecs := NegNumSearchSpecCollection{}
@@ -7684,7 +7684,7 @@ func (numStrKernel *NumberStrKernel) NewParseUSNumberStr(
 
 	if err != nil {
 
-		return numberStrSearchResults, numberStrKernel, err
+		return numberStrSearchResults, nStrKernel, err
 	}
 
 	err = negativeNumSearchSpecs.AddLeadingAndTrailingNegNumSearchStr(
@@ -7694,11 +7694,11 @@ func (numStrKernel *NumberStrKernel) NewParseUSNumberStr(
 
 	if err != nil {
 
-		return numberStrSearchResults, numberStrKernel, err
+		return numberStrSearchResults, nStrKernel, err
 	}
 
 	numberStrSearchResults,
-		numberStrKernel,
+		nStrKernel,
 		err = new(numStrBuilderElectron).extractNumRunes(
 		runeDto,
 		"rawNumStr",
@@ -7710,7 +7710,7 @@ func (numStrKernel *NumberStrKernel) NewParseUSNumberStr(
 		requestRemainderString,
 		ePrefix)
 
-	return numberStrSearchResults, numberStrKernel, err
+	return numberStrSearchResults, nStrKernel, err
 }
 
 // RationalizeFractionalIntegerDigits
