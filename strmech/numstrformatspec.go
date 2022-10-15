@@ -4118,12 +4118,20 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumFmtFrance(
 //
 // ----------------------------------------------------------------
 //
+// # Reference:
+//
+// https://freeformatter.com/germany-standards-code-snippets.html
+//
+// https://www.evertype.com/standards/euro/formats.html
+//
+// ----------------------------------------------------------------
+//
 // # Defaults
 //
 //	The radix point or decimal separator is set to the
 //	comma character (','):
 //
-//		Example-1:
+//		German Example-1
 //		123,45 (The fractional digits are "45")
 //
 //	The integer group separator is a space character
@@ -4134,20 +4142,26 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumFmtFrance(
 //	separated into 'thousands' with each group containing
 //	three digits each:
 //
-//		Example-2:
+//		German Example-2
 //		1.000.000.000
 //
 //	The negative number sign is set to a trailing minus
 //	sign ('-').
 //
-//		Example-3:
+//		German Example-3
 //		1.000.000-
 //
 //	The positive number sign is set to a blank or empty
 //	string ("").
 //
+//		German Example-4
+//		1.000.000
+//
 //	The zero number format is set to a blank or empty
 //	string ("").
+//
+//		German Example-5
+//			0,00
 //
 // ----------------------------------------------------------------
 //
@@ -7901,8 +7915,7 @@ func (numStrFmtSpec *NumStrFormatSpec) SetSignedNumFmtFrance(
 //	The radix point or decimal separator is set to the
 //	comma character (','):
 //
-//		German Example-1:
-//
+//		German Example-1
 //		123,45 (The fractional digits are "45")
 //
 //	The integer group separator is a space character
@@ -7913,20 +7926,26 @@ func (numStrFmtSpec *NumStrFormatSpec) SetSignedNumFmtFrance(
 //	separated into 'thousands' with each group containing
 //	three digits each:
 //
-//		German Example-2:
+//		German Example-2
 //		1.000.000.000
 //
 //	The negative number sign is set to a trailing minus
 //	sign ('-').
 //
-//		Example-3:
+//		German Example-3
 //		1.000.000-
 //
 //	The positive number sign is set to a blank or empty
 //	string ("").
 //
+//		German Example-4
+//		1.000.000
+//
 //	The zero number format is set to a blank or empty
 //	string ("").
+//
+//		German Example-5
+//			0,00
 //
 // ----------------------------------------------------------------
 //
@@ -11020,9 +11039,9 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtFrance(
 //	comma character (','):
 //
 //		German Example-1
-//			123,45 (The fractional digits are "45")
+//		123,45 (The fractional digits are "45")
 //
-//	The integer group separator is a period character
+//	The integer group separator is a space character
 //	('.').
 //
 //	The integer group specification is set to
@@ -11030,21 +11049,26 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtFrance(
 //	separated into 'thousands' with each group containing
 //	three digits each:
 //
-//		German Example-2:
-//
-//		1.000.000.000,00
+//		German Example-2
+//		1.000.000.000
 //
 //	The negative number sign is set to a trailing minus
 //	sign ('-').
 //
-//		German Example-4
-//		1.000.000,00-
+//		German Example-3
+//		1.000.000-
 //
 //	The positive number sign is set to a blank or empty
 //	string ("").
 //
+//		German Example-4
+//		1.000.000
+//
 //	The zero number format is set to a blank or empty
 //	string ("").
+//
+//		German Example-5
+//			0,00
 //
 // ----------------------------------------------------------------
 //
