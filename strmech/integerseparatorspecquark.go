@@ -53,6 +53,8 @@ func (nStrIntSepQuark *integerSeparatorSpecQuark) empty(
 
 	nStrIntSep.restartIntGroupingSequence = false
 
+	nStrIntSep.turnOffIntegerSeparation = false
+
 	return err
 }
 

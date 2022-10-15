@@ -177,6 +177,20 @@ type IntegerSeparatorSpec struct {
 	//	scenarios, set this parameter should be set to
 	//	'false'.
 
+	turnOffIntegerSeparation bool
+	//	When set to 'true' integer separation will NOT
+	//	be applied.
+	//
+	//	The following examples show the resulting number
+	//	string presentations when this parameter is set
+	//	to 'true' and 'false'
+	//
+	//	Example turnOffIntegerSeparation = 'true'
+	//		Number String: 1000000000
+	//
+	//	Example turnOffIntegerSeparation = 'false'
+	//		Number String: 1,000,000,000
+
 	lock *sync.Mutex
 }
 

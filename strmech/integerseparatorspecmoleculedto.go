@@ -183,7 +183,8 @@ func (nStrIntSepMolecule *integerSeparatorSpecMolecule) applyIntSeparators(
 
 	lenPureNumRunes := len(pureNumRunes)
 
-	if len(nStrIntSeparator.intSeparatorChars) == 0 {
+	if len(nStrIntSeparator.intSeparatorChars) == 0 ||
+		nStrIntSeparator.turnOffIntegerSeparation == true {
 		// This is a NOP condition. Integer separation
 		// IS NOT APPLIED
 		numStrWithIntSeps = make(
@@ -512,6 +513,9 @@ func (nStrIntSepMolecule *integerSeparatorSpecMolecule) copyIntSepSpec(
 	destinationNStrIntSeparator.restartIntGroupingSequence =
 		sourceNStrIntSeparator.restartIntGroupingSequence
 
+	destinationNStrIntSeparator.turnOffIntegerSeparation =
+		sourceNStrIntSeparator.turnOffIntegerSeparation
+
 	return err
 }
 
@@ -632,6 +636,7 @@ func (nStrIntSepMolecule *integerSeparatorSpecMolecule) equal(
 
 	if nStrIntSepOne.intSeparatorGrouping != nil &&
 		nStrIntSepTwo.intSeparatorGrouping == nil {
+
 		err = fmt.Errorf("%v\n"+
 			"Error: nStrIntSepOne.intSeparatorGrouping != nil\n"+
 			"nStrIntSepTwo.intSeparatorGrouping == nil\n"+
@@ -650,6 +655,11 @@ func (nStrIntSepMolecule *integerSeparatorSpecMolecule) equal(
 		nStrIntSepTwo.intSeparatorChars)
 
 	if !isEqual {
+
+		err = fmt.Errorf("%v\n" +
+			"Error: 'intSeparatorChars' member variables not equal.\n" +
+			ePrefix.String())
+
 		return isEqual, err
 	}
 
@@ -658,6 +668,11 @@ func (nStrIntSepMolecule *integerSeparatorSpecMolecule) equal(
 		nStrIntSepTwo.intSeparatorGrouping)
 
 	if !isEqual {
+
+		err = fmt.Errorf("%v\n" +
+			"Error: 'intSeparatorGrouping' member variables are not equal.\n" +
+			ePrefix.String())
+
 		return isEqual, err
 	}
 
@@ -676,6 +691,17 @@ func (nStrIntSepMolecule *integerSeparatorSpecMolecule) equal(
 			nStrIntSepTwo.restartIntGroupingSequence)
 
 		return isEqual, err
+	}
+
+	if nStrIntSepOne.turnOffIntegerSeparation !=
+		nStrIntSepTwo.turnOffIntegerSeparation {
+
+		err = fmt.Errorf("%v\n" +
+			"Error: 'turnOffIntegerSeparation' member variables are not equal.\n" +
+			ePrefix.String())
+
+		return isEqual, err
+
 	}
 
 	isEqual = true
