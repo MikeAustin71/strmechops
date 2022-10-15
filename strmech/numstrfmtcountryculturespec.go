@@ -533,6 +533,63 @@ func (nStrFmtCountryCultureSpec *NumStrFmtCountryCultureSpec) Equal(
 		incomingCountryCulture)
 }
 
+//	SetCurrencyNumFieldSpec
+//
+//	Deletes and resets the currency number field
+//	specification for the current instance of
+//	NumStrFmtCountryCultureSpec.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	No data validation is performed on input parameter,
+//	'currencyNumFieldSpec'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	currencyNumFieldSpec		NumStrNumberFieldSpec
+//
+//		Contains the Number String Number Field Specification
+//		which will be copied to the Currency Number String
+//		Number Field Specification encapsulated within
+//		the current instance of NumStrFmtCountryCultureSpec.
+func (nStrFmtCountryCultureSpec *NumStrFmtCountryCultureSpec) SetCurrencyNumFieldSpec(
+	currencyNumFieldSpec NumStrNumberFieldSpec,
+	errorPrefix interface{}) error {
+
+	if nStrFmtCountryCultureSpec.lock == nil {
+		nStrFmtCountryCultureSpec.lock = new(sync.Mutex)
+	}
+
+	nStrFmtCountryCultureSpec.lock.Lock()
+
+	defer nStrFmtCountryCultureSpec.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumStrFmtCountryCultureSpec."+
+			"CopyIn()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	return new(numStrFmtCountryCultureSpecElectron).
+		setCurrencyNumFieldSpec(
+			nStrFmtCountryCultureSpec,
+			currencyNumFieldSpec,
+			ePrefix.XCpy(
+				"nStrFmtCountryCultureSpec<-currencyNumFieldSpec"))
+}
+
 // numStrFmtCountryCultureSpecMech
 //
 // Provides helper methods for type
@@ -1049,6 +1106,13 @@ type numStrFmtCountryCultureSpecElectron struct {
 //	Deletes and resets the currency number field
 //	specification for an instance of
 //	NumStrFmtCountryCultureSpec.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	No data validation is performed on input parameter,
+//	'currencyNumFieldSpec'.
 //
 // ----------------------------------------------------------------
 //
