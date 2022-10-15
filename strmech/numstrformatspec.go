@@ -1596,6 +1596,12 @@ func (numStrFmtSpec *NumStrFormatSpec) GetZeroNumSymSpec(
 //
 //	https://docs.microsoft.com/en-us/globalization/locale/currency-formatting
 //
+//	https://www.thefinancials.com/Default.aspx?SubSectionID=curformat
+//
+//	https://www.codeproject.com/articles/78175/international-number-formats
+//
+//	https://docs.oracle.com/cd/E19455-01/806-0169/overview-9/index.html
+//
 // ----------------------------------------------------------------
 //
 // # Defaults
@@ -1619,25 +1625,25 @@ func (numStrFmtSpec *NumStrFormatSpec) GetZeroNumSymSpec(
 //	The currency symbol used in the France is the
 //	Euro symbol ('€').
 //
-//		France Example-3
+//		French Example-3
 //		1 000 000,00 €
 //
 //	The negative number sign is set to leading minus
 //	sign ('-') and a trailing Euro symbol ("€").
 //
-//		France Example-4
+//		French Example-4
 //		-1 000 000,00 €
 //
 //	The positive number sign is set to a trailing
 //	Euro symbol.
 //
-//		France Example-5
+//		French Example-5
 //		1 000 000,00 €
 //
 //	The zero number format is set to a trailing
 //	Euro symbol.
 //
-//		France Example-6
+//		French Example-6
 //			0,00 €
 //
 // ----------------------------------------------------------------
@@ -1858,9 +1864,15 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtFrance(
 //
 // # Reference:
 //
-// https://freeformatter.com/germany-standards-code-snippets.html
+//	https://freeformatter.com/germany-standards-code-snippets.html
 //
-// https://www.evertype.com/standards/euro/formats.html
+//	https://www.evertype.com/standards/euro/formats.html
+//
+//	https://www.thefinancials.com/Default.aspx?SubSectionID=curformat
+//
+//	https://www.codeproject.com/articles/78175/international-number-formats
+//
+//	https://docs.oracle.com/cd/E19455-01/806-0169/overview-9/index.html
 //
 // ----------------------------------------------------------------
 //
@@ -1898,13 +1910,13 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtFrance(
 //	The positive number sign is set to a trailing
 //	Euro symbol.
 //
-//		Germany Example-5
+//		German Example-5
 //		1.000.000,00 €
 //
 //	The zero number format is set to a trailing
 //	Euro symbol.
 //
-//		Germany Example-6
+//		German Example-6
 //			0,00 €
 //
 // ----------------------------------------------------------------
@@ -2108,6 +2120,16 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtGermany(
 //		NumStrFormatSpec.NewNumFmtComponents()
 //		NumStrFormatSpec.NewNumFmtParams()
 //		NumStrFormatSpec.NewNumFmtParamsRunes()
+//
+// ----------------------------------------------------------------
+//
+// # Reference:
+//
+//	https://www.thefinancials.com/Default.aspx?SubSectionID=curformat
+//
+//	https://www.codeproject.com/articles/78175/international-number-formats
+//
+//	https://docs.oracle.com/cd/E19455-01/806-0169/overview-9/index.html
 //
 // ----------------------------------------------------------------
 //
@@ -4875,11 +4897,17 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumFmtUS(
 //
 // # Reference:
 //
-// https://www.ibm.com/support/pages/english-and-french-currency-formats
+//	https://www.ibm.com/support/pages/english-and-french-currency-formats
 //
-// https://freeformatter.com/france-standards-code-snippets.html
+//	https://freeformatter.com/france-standards-code-snippets.html
 //
-// https://docs.microsoft.com/en-us/globalization/locale/currency-formatting
+//	https://docs.microsoft.com/en-us/globalization/locale/currency-formatting
+//
+//	https://www.thefinancials.com/Default.aspx?SubSectionID=curformat
+//
+//	https://www.codeproject.com/articles/78175/international-number-formats
+//
+//	https://docs.oracle.com/cd/E19455-01/806-0169/overview-9/index.html
 //
 // ----------------------------------------------------------------
 //
@@ -4904,25 +4932,25 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumFmtUS(
 //	The currency symbol used in the France is the
 //	Euro symbol ('€').
 //
-//		France Example-3
+//		French Example-3
 //		1 000 000,00 €
 //
 //	The negative number sign is set to leading minus
 //	sign ('-') and a trailing Euro symbol ("€").
 //
-//		France Example-4
+//		French Example-4
 //		-1 000 000,00 €
 //
 //	The positive number sign is set to a trailing
 //	Euro symbol.
 //
-//		France Example-5
+//		French Example-5
 //		1 000 000,00 €
 //
 //	The zero number format is set to a trailing
 //	Euro symbol.
 //
-//		France Example-6
+//		French Example-6
 //			0,00 €
 //
 // ----------------------------------------------------------------
@@ -5142,9 +5170,15 @@ func (numStrFmtSpec *NumStrFormatSpec) SetCurrencyFmtFrance(
 //
 // # Reference:
 //
-// https://freeformatter.com/germany-standards-code-snippets.html
+//	https://freeformatter.com/germany-standards-code-snippets.html
 //
-// https://www.evertype.com/standards/euro/formats.html
+//	https://www.evertype.com/standards/euro/formats.html
+//
+//	https://www.thefinancials.com/Default.aspx?SubSectionID=curformat
+//
+//	https://www.codeproject.com/articles/78175/international-number-formats
+//
+//	https://docs.oracle.com/cd/E19455-01/806-0169/overview-9/index.html
 //
 // ----------------------------------------------------------------
 //
@@ -5164,7 +5198,7 @@ func (numStrFmtSpec *NumStrFormatSpec) SetCurrencyFmtFrance(
 //	separated into 'thousands' with each group containing
 //	three digits each:
 //
-//		German Example-2:
+//		German Example-2
 //		1.000.000,00
 //
 //	The currency symbol used in the Germany is the
@@ -5182,13 +5216,13 @@ func (numStrFmtSpec *NumStrFormatSpec) SetCurrencyFmtFrance(
 //	The positive number sign is set to a trailing
 //	Euro symbol.
 //
-//		Germany Example-5
+//		German Example-5
 //		1.000.000,00 €
 //
 //	The zero number format is set to a trailing
 //	Euro symbol.
 //
-//		Germany Example-6
+//		German Example-6
 //			0,00 €
 //
 // ----------------------------------------------------------------
@@ -5374,6 +5408,16 @@ func (numStrFmtSpec *NumStrFormatSpec) SetCurrencyFmtGermany(
 //	Reconfigures the current instance of NumStrFormatSpec
 //	using Currency Number String formatting conventions
 //	typically applied in the UK (United Kingdom).
+//
+// ----------------------------------------------------------------
+//
+// # Reference:
+//
+//	https://www.thefinancials.com/Default.aspx?SubSectionID=curformat
+//
+//	https://www.codeproject.com/articles/78175/international-number-formats
+//
+//	https://docs.oracle.com/cd/E19455-01/806-0169/overview-9/index.html
 //
 // ----------------------------------------------------------------
 //
@@ -7644,6 +7688,16 @@ func (numStrFmtSpec *NumStrFormatSpec) SetNumFmtParamsRunes(
 //
 // ----------------------------------------------------------------
 //
+// # Reference:
+//
+//	https://www.ibm.com/support/pages/english-and-french-currency-formats
+//
+//	https://freeformatter.com/france-standards-code-snippets.html
+//
+//	https://docs.microsoft.com/en-us/globalization/locale/currency-formatting
+//
+// ----------------------------------------------------------------
+//
 // # IMPORTANT
 //
 //	Be advised that the data fields contained in the current
@@ -7668,13 +7722,13 @@ func (numStrFmtSpec *NumStrFormatSpec) SetNumFmtParamsRunes(
 //	This means that integer digits will be separated into
 //	'thousands' with each group containing three digits each:
 //
-//		Example-2:
+//		French Example-2
 //		1 000 000 000
 //
 //	The negative number sign is set to a leading minus sign
 //	('-').
 //
-//		Example-3
+//		French Example-3
 //		-1 000 000 000
 //
 //	The positive number sign is set to a blank or empty
@@ -8955,6 +9009,12 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) copySignedNumberFormatSp
 //
 //	https://docs.microsoft.com/en-us/globalization/locale/currency-formatting
 //
+//	https://www.thefinancials.com/Default.aspx?SubSectionID=curformat
+//
+//	https://www.codeproject.com/articles/78175/international-number-formats
+//
+//	https://docs.oracle.com/cd/E19455-01/806-0169/overview-9/index.html
+//
 // ----------------------------------------------------------------
 //
 // # IMPORTANT
@@ -8988,19 +9048,19 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) copySignedNumberFormatSp
 //	The currency symbol used in the France is the
 //	Euro symbol ('€').
 //
-//		France Example-3
+//		French Example-3
 //		1 000 000,00 €
 //
 //	The negative number sign is set to leading minus
 //	sign ('-') and a trailing Euro symbol ("€").
 //
-//		France Example-4
+//		French Example-4
 //		-1 000 000,00 €
 //
 //	The positive number sign is set to a trailing
 //	Euro symbol.
 //
-//		France Example-5
+//		French Example-5
 //		1 000 000,00 €
 //
 //	The zero number format is set to a trailing
@@ -9278,9 +9338,15 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setCurrencyNStrFmtFrance
 //
 // # Reference:
 //
-// https://freeformatter.com/germany-standards-code-snippets.html
+//	https://freeformatter.com/germany-standards-code-snippets.html
 //
-// https://www.evertype.com/standards/euro/formats.html
+//	https://www.evertype.com/standards/euro/formats.html
+//
+//	https://www.thefinancials.com/Default.aspx?SubSectionID=curformat
+//
+//	https://www.codeproject.com/articles/78175/international-number-formats
+//
+//	https://docs.oracle.com/cd/E19455-01/806-0169/overview-9/index.html
 //
 // ----------------------------------------------------------------
 //
@@ -9301,7 +9367,7 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setCurrencyNStrFmtFrance
 //		German Example-1
 //			123,45 (The fractional digits are "45")
 //
-//	The integer group separator is a period character
+//	The integer group separator is a space character
 //	('.').
 //
 //	The integer group specification is set to
@@ -9309,7 +9375,7 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setCurrencyNStrFmtFrance
 //	separated into 'thousands' with each group containing
 //	three digits each:
 //
-//		German Example-2:
+//		German Example-2
 //		1.000.000,00
 //
 //	The currency symbol used in the Germany is the
@@ -9327,13 +9393,13 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setCurrencyNStrFmtFrance
 //	The positive number sign is set to a trailing
 //	Euro symbol.
 //
-//		Germany Example-5
+//		German Example-5
 //		1.000.000,00 €
 //
 //	The zero number format is set to a trailing
 //	Euro symbol.
 //
-//		Germany Example-6
+//		German Example-6
 //			0,00 €
 //
 // ----------------------------------------------------------------
@@ -9595,6 +9661,16 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setCurrencyNStrFmtGerman
 //	Reconfigures the current instance of NumStrFormatSpec
 //	using Currency Number String formatting conventions
 //	typically applied in the UK (United Kingdom).
+//
+// ----------------------------------------------------------------
+//
+// # Reference:
+//
+//	https://www.thefinancials.com/Default.aspx?SubSectionID=curformat
+//
+//	https://www.codeproject.com/articles/78175/international-number-formats
+//
+//	https://docs.oracle.com/cd/E19455-01/806-0169/overview-9/index.html
 //
 // ----------------------------------------------------------------
 //
@@ -10753,6 +10829,12 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setNStrNumberFieldSpec(
 //
 //	https://docs.microsoft.com/en-us/globalization/locale/currency-formatting
 //
+//	https://www.thefinancials.com/Default.aspx?SubSectionID=curformat
+//
+//	https://www.codeproject.com/articles/78175/international-number-formats
+//
+//	https://docs.oracle.com/cd/E19455-01/806-0169/overview-9/index.html
+//
 // ----------------------------------------------------------------
 //
 // # Defaults
@@ -10782,13 +10864,13 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setNStrNumberFieldSpec(
 //	The positive number sign is set to a blank or empty
 //	string ("").
 //
-//		France Example-4
+//		French Example-4
 //		1 000 000 000
 //
 //	The zero number format is set to a blank or empty
 //	string ("").
 //
-//		France Example-5
+//		French Example-5
 //			0,0
 //
 // ----------------------------------------------------------------
@@ -11018,9 +11100,15 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtFrance(
 //
 // # Reference:
 //
-// https://freeformatter.com/germany-standards-code-snippets.html
+//	https://freeformatter.com/germany-standards-code-snippets.html
 //
-// https://www.evertype.com/standards/euro/formats.html
+//	https://www.evertype.com/standards/euro/formats.html
+//
+//	https://www.thefinancials.com/Default.aspx?SubSectionID=curformat
+//
+//	https://www.codeproject.com/articles/78175/international-number-formats
+//
+//	https://docs.oracle.com/cd/E19455-01/806-0169/overview-9/index.html
 //
 // ----------------------------------------------------------------
 //
