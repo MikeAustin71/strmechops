@@ -435,6 +435,47 @@ func (nStrFmtCountryCultureSpec *NumStrFmtCountryCultureSpec) CopyOut(
 	return newNStrFmtCountryCulture, err
 }
 
+//	Empty
+//
+//	Resets all internal member variables for the current
+//	instance of NumStrFmtCountryCultureSpec to their
+//	initial or zero values.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will delete all pre-existing internal
+//	member variable data values in the current instance
+//	of NumStrFmtCountryCultureSpec.
+//
+// ------------------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	NONE
+//
+// ------------------------------------------------------------------------
+//
+// # Return Values
+//
+//	NONE
+func (nStrFmtCountryCultureSpec *NumStrFmtCountryCultureSpec) Empty() {
+
+	if nStrFmtCountryCultureSpec.lock == nil {
+		nStrFmtCountryCultureSpec.lock = new(sync.Mutex)
+	}
+
+	nStrFmtCountryCultureSpec.lock.Lock()
+
+	new(numStrFmtCountryCultureSpecAtom).empty(
+		nStrFmtCountryCultureSpec)
+
+	nStrFmtCountryCultureSpec.lock.Unlock()
+
+	nStrFmtCountryCultureSpec.lock = nil
+}
+
 // numStrFmtCountryCultureSpecMech
 //
 // Provides helper methods for type

@@ -389,17 +389,19 @@ func (numStrFmtSpec *NumStrFormatSpec) CopyOut(
 	return deepCopySignedNumFmtSpec, err
 }
 
-// Empty - Resets all internal member variables for the current
-// instance of NumStrFormatSpec to their initial or zero
-// values.
+//	Empty
+//
+//	Resets all internal member variables for the current
+//	instance of NumStrFormatSpec to their initial or zero
+//	values.
 //
 // ----------------------------------------------------------------
 //
 // # IMPORTANT
 //
-// This method will delete all pre-existing internal member
-// variable data values in the current instance of
-// NumStrFormatSpec.
+//	This method will delete all pre-existing internal
+//	member variable data values in the current instance
+//	of NumStrFormatSpec.
 //
 // ------------------------------------------------------------------------
 //
@@ -426,7 +428,6 @@ func (numStrFmtSpec *NumStrFormatSpec) Empty() {
 	numStrFmtSpec.lock.Unlock()
 
 	numStrFmtSpec.lock = nil
-
 }
 
 // Equal - Receives a pointer to another instance of
