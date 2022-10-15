@@ -13,29 +13,35 @@ import (
 // currency numeric values as number strings.
 type NumStrFormatSpec struct {
 	decSeparator DecimalSeparatorSpec
-	// Contains the decimal separator character or
-	// characters which will separate integer and
-	// fractional digits in a floating point number.
+	//	Contains the decimal separator character
+	//	or characters which will separate integer
+	//	and fractional digits in a floating point
+	//	number.
 
 	intSeparatorSpec IntegerSeparatorSpec
-	// Integer Separator Specification. This parameter
-	// specifies the type of integer grouping and
-	// integer separator characters which will be
-	// applied to the number string formatting
-	// operations.
+	//	Integer Separator Specification. This
+	//	parameter specifies the type of integer
+	//	grouping and integer separator characters
+	//	which will be applied to the number string
+	//	formatting operations.
 
 	negativeNumberSign NumStrNumberSymbolSpec
-	// The Number String Negative Number Sign
-	// Specification is used to configure negative
-	// number sign symbols for negative numeric values
-	// formatted and displayed in number stings.
+	//	The Number String Negative Number Sign
+	//	Specification is used to configure negative
+	//	number sign symbols for negative numeric
+	//	values formatted and displayed in number
+	//	stings.
+	//
+	//	For currency presentations, the currency
+	//	symbol is combined with the negative number
+	//	sign.
 
 	numberFieldSpec NumStrNumberFieldSpec
-	// This Number String Number Field Specification
-	// contains the field length and text justification
-	// parameter necessary to display a numeric value
-	// within a number field for display as a number
-	// string.
+	//	This Number String Number Field Specification
+	//	contains the field length and text justification
+	//	parameter necessary to display a numeric value
+	//	within a number field for display as a number
+	//	string.
 	//
 	//		type NumStrNumberFieldSpec struct {
 	//
@@ -94,18 +100,26 @@ type NumStrFormatSpec struct {
 	//		}
 
 	positiveNumberSign NumStrNumberSymbolSpec
-	// Positive number signs are commonly implied and
-	// not specified. However, the user as the option
-	// to specify a positive number sign character or
-	// characters for positive numeric values using a
-	// Number String Positive Number Sign
-	// Specification.
+	//	Positive number signs are commonly implied
+	//	and not specified. However, the user has
+	//	the option to specify a positive number sign
+	//	character or characters for positive numeric
+	//	values using a Number String Positive Number
+	//	Sign Specification.
+	//
+	//	For currency presentations, the currency
+	//	symbol is combined with the positive number
+	//	sign.
 
 	zeroNumberSign NumStrNumberSymbolSpec
-	// The Number String Zero Number Symbol
-	// Specification is used to configure number
-	// symbols for zero numeric values formatted
-	//and displayed in number stings.
+	//	The Number String Zero Number Symbol
+	//	Specification is used to configure number
+	//	symbols for zero numeric values formatted
+	//	and displayed in number stings.
+	//
+	//	For currency presentations, the currency
+	//	symbol is combined with the zero number
+	//	sign.
 
 	lock *sync.Mutex
 }
