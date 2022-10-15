@@ -1209,3 +1209,113 @@ func (nStrFmtCountryCultureElectron *numStrFmtCountryCultureSpecElectron) setCur
 			ePrefix.XCpy(
 				"<-currencyNumFieldSpec"))
 }
+
+//	setSignedNumFieldSpec
+//
+//	Deletes and resets the signed number field
+//	specification for an instance of
+//	NumStrFmtCountryCultureSpec.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	No data validation is performed on input parameter,
+//	'signedNumFieldSpec'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	countryCultureSpec			*NumStrFmtCountryCultureSpec
+//
+//		A pointer to a NumStrFmtCountryCultureSpec
+//		instance. The Number String Number Field
+//		Specification from input parameter
+//		'signedNumFieldSpec' will be copied to the
+//		Signed Number String Number Field
+//		Specification contained within this
+//		NumStrFmtCountryCultureSpec instance.
+//
+//	signedNumFieldSpec			NumStrNumberFieldSpec
+//
+//		Contains the Number String Number Field Specification
+//		which will be copied to the Signed Number String
+//		Number Field Specification encapsulated within
+//		input parameter, 'countryCultureSpec'.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, this
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (nStrFmtCountryCultureElectron *numStrFmtCountryCultureSpecElectron) setSignedNumFieldSpec(
+	countryCultureSpec *NumStrFmtCountryCultureSpec,
+	signedNumFieldSpec NumStrNumberFieldSpec,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if nStrFmtCountryCultureElectron.lock == nil {
+		nStrFmtCountryCultureElectron.lock = new(sync.Mutex)
+	}
+
+	nStrFmtCountryCultureElectron.lock.Lock()
+
+	defer nStrFmtCountryCultureElectron.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"numStrFmtCountryCultureSpecElectron."+
+			"setSignedNumFieldSpec()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if countryCultureSpec == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'countryCultureSpec' is invalid!\n"+
+			"'countryCultureSpec' is a 'nil' pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	return countryCultureSpec.SignedNumStrFormat.
+		SetNumberFieldSpec(
+			signedNumFieldSpec,
+			ePrefix.XCpy(
+				"<-signedNumFieldSpec"))
+}
