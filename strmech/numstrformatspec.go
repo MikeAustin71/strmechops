@@ -430,16 +430,18 @@ func (numStrFmtSpec *NumStrFormatSpec) Empty() {
 	numStrFmtSpec.lock = nil
 }
 
-// Equal - Receives a pointer to another instance of
-// NumStrFormatSpec and proceeds to compare its
-// internal member variables to those of the current
-// NumStrFormatSpec instance in order to determine
-// if they are equivalent.
+//	Equal
 //
-// A boolean flag showing the result of this comparison is
-// returned. If the member variables for both instances are
-// equal in all respects, this flag is set to 'true'.
-// Otherwise, this method returns 'false'.
+//	Receives a pointer to another instance of
+//	NumStrFormatSpec and proceeds to compare its internal
+//	member variables to those of the current
+//	NumStrFormatSpec instance in order to determine if
+//	they are equivalent.
+//
+//	A boolean flag showing the result of this comparison
+//	is returned. If the member variables for both
+//	instances are equal in all respects, this flag is set
+//	to 'true'. Otherwise, this method returns 'false'.
 //
 // ----------------------------------------------------------------
 //

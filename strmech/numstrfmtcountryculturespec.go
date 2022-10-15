@@ -476,6 +476,63 @@ func (nStrFmtCountryCultureSpec *NumStrFmtCountryCultureSpec) Empty() {
 	nStrFmtCountryCultureSpec.lock = nil
 }
 
+//	Equal
+//
+//	Receives a pointer to another instance of
+//	NumStrFormatSpec and proceeds to compare its internal
+//	member variables to those of the current
+//	NumStrFormatSpec instance in order to determine if
+//	they are equivalent.
+//
+//	A boolean flag showing the result of this comparison
+//	is returned. If the member variables for both
+//	instances are equal in all respects, this flag is set
+//	to 'true'. Otherwise, this method returns 'false'.
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//	incomingCountryCulture		*NumStrFmtCountryCultureSpec
+//
+//		A pointer to an external instance of
+//		NumStrFormatSpec. The internal member variable
+//		data values in this instance will be compared to
+//		those in the current instance of
+//		NumStrFmtCountryCultureSpec. The results of this
+//		comparison will be returned to the calling
+//		function as a boolean value.
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//	bool
+//
+//		If the internal member variable data values
+//		contained in input parameter 'incomingCountryCulture'
+//		are equivalent in all respects to those contained
+//		in the current instance of
+//		'NumStrFmtCountryCultureSpec', this return value
+//		will be set to 'true'.
+//
+//		Otherwise, this method will return 'false'.
+func (nStrFmtCountryCultureSpec *NumStrFmtCountryCultureSpec) Equal(
+	incomingCountryCulture *NumStrFmtCountryCultureSpec) bool {
+
+	if nStrFmtCountryCultureSpec.lock == nil {
+		nStrFmtCountryCultureSpec.lock = new(sync.Mutex)
+	}
+
+	nStrFmtCountryCultureSpec.lock.Lock()
+
+	defer nStrFmtCountryCultureSpec.lock.Unlock()
+
+	return new(numStrFmtCountryCultureSpecAtom).equal(
+		nStrFmtCountryCultureSpec,
+		incomingCountryCulture)
+}
+
 // numStrFmtCountryCultureSpecMech
 //
 // Provides helper methods for type
