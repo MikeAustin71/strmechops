@@ -264,8 +264,9 @@ func (numStrFmtSpec *NumStrFormatSpec) CopyIn(
 					"incomingSignedNumFmt"))
 }
 
-// CopyOut - Returns a deep copy of the current
-// NumStrFormatSpec instance.
+//	CopyOut
+//
+//	Returns a deep copy of the current NumStrFormatSpec instance.
 //
 // ----------------------------------------------------------------
 //
