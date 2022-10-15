@@ -17,14 +17,6 @@ type NumStrFmtCountryCultureSpec struct {
 	CountryCodeTwoChar                        string
 	CountryCodeThreeChar                      string
 	CountryCodeNumber                         string
-	AbsoluteValFmt                            string
-	AbsoluteValTurnOnIntegerDigitsSeparation  bool
-	AbsoluteValDecSep                         DecimalSeparatorSpec
-	AbsoluteValIntGroupingSpec                IntegerSeparatorSpec
-	AbsoluteValNumField                       NumStrNumberFieldSpec
-	CurrencyPositiveValueFmt                  string
-	CurrencyNegativeValueFmt                  string
-	CurrencyDecimalDigits                     uint
 	CurrencyCode                              string
 	CurrencyCodeNo                            string
 	CurrencyName                              string
@@ -34,17 +26,14 @@ type NumStrFmtCountryCultureSpec struct {
 	CurrencyTurnOnIntegerDigitsSeparation     bool
 	CurrencyNumDecSep                         DecimalSeparatorSpec
 	CurrencyIntGroupingSpec                   IntegerSeparatorSpec
-	CurrencyNumField                          NumStrNumberFieldSpec
-	SignedNumValPositiveValueFmt              string
-	SignedNumValNegativeValueFmt              string
+	CurrencyPositiveValueFmt                  NumStrNumberSymbolSpec
+	CurrencyNegativeValueFmt                  NumStrNumberSymbolSpec
+	CurrencyZeroValueFmt                      NumStrNumberSymbolSpec
 	SignedNumValTurnOnIntegerDigitsSeparation bool
 	SignedNumValDecSep                        DecimalSeparatorSpec
 	SignedNumValIntGroupingSpec               IntegerSeparatorSpec
-	SignedNumValNumField                      NumStrNumberFieldSpec
-	SciNotSignificandUsesLeadingPlus          bool
-	SciNotMantissaLength                      uint
-	SciNotExponentChar                        rune
-	SciNotExponentUsesLeadingPlus             bool
-	SciNotNumField                            NumStrNumberFieldSpec
+	SignedNumValPositiveValueFmt              NumStrNumberSymbolSpec
+	SignedNumValNegativeValueFmt              NumStrNumberSymbolSpec
+	SignedNumValZeroValueFmt                  NumStrNumberSymbolSpec
 	lock                                      *sync.Mutex
 }
