@@ -1407,6 +1407,87 @@ func (nStrIntSep *IntegerSeparatorSpec) GetRestartIntGroupingSequence() bool {
 	return nStrIntSep.restartIntGroupingSequence
 }
 
+//	IsIntegerSeparationOn
+//
+//
+//	By default Integer Separation is on, active and fully
+//	engaged upon creating new instances of
+//	IntegerSeparatorSpec.
+//
+//		Example Turn Integer Separation On:
+//			Number String: 1,000,000,000
+//
+//		Example Turn Integer Separation Off:
+//			Number String: 1000000000
+//
+//	To verify the status of Integer Separation, this
+//	method will return a boolean signaling whether
+//	integer separation is turned on, active and
+//	fully engaged for number string formatting.
+//
+//	If this method returns 'true', it signals that
+//	integer separation is turned on, active and
+//	fully engaged for number string formatting.
+//
+//		Example Turn Integer Separation On:
+//			Number String: 1,000,000,000
+//
+//	If this method returns 'false', it signals that
+//	integer separation is turned off, disabled and
+//	inactive for number string formatting.
+//
+//		Example Turn Integer Separation Off:
+//			Number String: 1000000000
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	NONE
+//
+// -----------------------------------------------------------------
+//
+// # Return Values
+//
+//	bool
+//		If this method returns 'true', it signals that
+//		integer separation is turned on, active and
+//		fully engaged for number string formatting.
+//
+//			Example Turn Integer Separation On:
+//				Number String: 1,000,000,000
+//
+//		If this method returns 'false', it signals that
+//		integer separation is turned off, disabled and
+//		inactive for number string formatting.
+//
+//			Example Turn Integer Separation Off:
+//				Number String: 1000000000
+func (nStrIntSep *IntegerSeparatorSpec) IsIntegerSeparationOn() (
+	isValid bool) {
+
+	if nStrIntSep.lock == nil {
+		nStrIntSep.lock = new(sync.Mutex)
+	}
+
+	nStrIntSep.lock.Lock()
+
+	defer nStrIntSep.lock.Unlock()
+
+	var isIntSepOn bool
+
+	if nStrIntSep.turnOffIntegerSeparation == true {
+
+		isIntSepOn = false
+
+	} else {
+
+		isIntSepOn = true
+	}
+
+	return isIntSepOn
+}
+
 //	IsValidInstance
 //
 //	Performs a diagnostic review of the current
@@ -1610,8 +1691,16 @@ func (nStrIntSep *IntegerSeparatorSpec) IsValidInstanceError(
 //	repetitions.
 //
 //	By default, integer separation is turned on and
-//	fully engaged. To control the application of
-//	integer separators, see methods:
+//	fully engaged.
+//
+//		Example Turn Integer Separation On:
+//			Number String: 1,000,000,000
+//
+//		Example Turn Integer Separation Off:
+//			Number String: 1000000000
+//
+//	To control the application of integer separators,
+//	see methods:
 //
 //		IntegerSeparatorSpec.TurnIntegerSeparationOff()
 //
@@ -1740,8 +1829,16 @@ func (nStrIntSep *IntegerSeparatorSpec) IsValidInstanceError(
 //		will be	created and returned.
 //
 //		By default, integer separation is turned on and
-//		fully engaged. To control the application of
-//		integer separators, see methods:
+//		fully engaged.
+//
+//			Example Turn Integer Separation On:
+//				Number String: 1,000,000,000
+//
+//			Example Turn Integer Separation Off:
+//				Number String: 1000000000
+//
+//		To control the application of integer separators,
+//		see methods:
 //
 //			IntegerSeparatorSpec.TurnIntegerSeparationOff()
 //
@@ -7743,11 +7840,11 @@ func (nStrIntSep *IntegerSeparatorSpec) TurnIntegerSeparationOff() {
 //	This means that integers WILL BE separated when
 //	generating integer digits in number string formatting.
 //
-//	Example Turn Integer Separation On:
-//		Number String: 1,000,000,000
+//		Example Turn Integer Separation On:
+//			Number String: 1,000,000,000
 //
-//	Example Turn Integer Separation Off:
-//		Number String: 1000000000
+//		Example Turn Integer Separation Off:
+//			Number String: 1000000000
 //
 //	By default Integer Separation is on, active and fully
 //	engaged upon creating new instances of
