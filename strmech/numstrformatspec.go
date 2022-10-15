@@ -1573,8 +1573,8 @@ func (numStrFmtSpec *NumStrFormatSpec) GetZeroNumSymSpec(
 //	standards implemented by either France or
 //	Germany.
 //
-//	For information on German Number String
-//	formatting conventions, see method:
+//	For information on German Currency Number
+//	String formatting conventions, see method:
 //
 //		NumStrFormatSpec.NewCurrencyNumFmtGermany()
 //
@@ -1841,8 +1841,8 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtFrance(
 //	standards implemented by either Germany or
 //	France.
 //
-//	For information on French Number String
-//	formatting conventions, see method:
+//	For information on French Currency Number
+//	String formatting conventions, see method:
 //
 //		NumStrFormatSpec.NewCurrencyNumFmtFrance()
 //
