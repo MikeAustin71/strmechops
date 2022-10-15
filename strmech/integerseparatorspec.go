@@ -1921,6 +1921,24 @@ func (nStrIntSep *IntegerSeparatorSpec) NewChineseNumbering(
 //	defaulted to zero (0) signaling unlimited
 //	repetitions.
 //
+//	By default, integer separation is turned on and
+//	fully engaged.
+//
+//		Example Turn Integer Separation On:
+//			Number String: 1,000,000,000
+//
+//		Example Turn Integer Separation Off:
+//			Number String: 1000000000
+//
+//	To control the application of integer separators,
+//	see methods:
+//
+//		IntegerSeparatorSpec.TurnIntegerSeparationOff()
+//
+//		IntegerSeparatorSpec.TurnIntegerSeparationOn()
+//
+//		IntegerSeparatorSpec.IsIntegerSeparationOn()
+//
 // ----------------------------------------------------------------
 //
 // # Reference:
@@ -2003,6 +2021,23 @@ func (nStrIntSep *IntegerSeparatorSpec) NewChineseNumbering(
 //
 //		The integer separator character for the new returned
 //		instance will be defaulted to the comma (',') character.
+//		By default, integer separation is turned on and
+//		fully engaged.
+//
+//			Example Turn Integer Separation On:
+//				Number String: 1,000,000,000
+//
+//			Example Turn Integer Separation Off:
+//				Number String: 1000000000
+//
+//		To control the application of integer separators,
+//		see methods:
+//
+//			IntegerSeparatorSpec.TurnIntegerSeparationOff()
+//
+//			IntegerSeparatorSpec.TurnIntegerSeparationOn()
+//
+//			IntegerSeparatorSpec.IsIntegerSeparationOn()
 //
 //	error
 //
@@ -2085,6 +2120,24 @@ func (nStrIntSep *IntegerSeparatorSpec) NewChineseNumberingDefault(
 //	The 'integer separator repetitions' value is
 //	defaulted to zero (0) signaling unlimited
 //	repetitions.
+//
+//	By default, integer separation is turned on and
+//	fully engaged.
+//
+//		Example Turn Integer Separation On:
+//			Number String: 1,000,000,000
+//
+//		Example Turn Integer Separation Off:
+//			Number String: 1000000000
+//
+//	To control the application of integer separators,
+//	see methods:
+//
+//		IntegerSeparatorSpec.TurnIntegerSeparationOff()
+//
+//		IntegerSeparatorSpec.TurnIntegerSeparationOn()
+//
+//		IntegerSeparatorSpec.IsIntegerSeparationOn()
 //
 // ----------------------------------------------------------------
 //
@@ -2205,6 +2258,24 @@ func (nStrIntSep *IntegerSeparatorSpec) NewChineseNumberingDefault(
 //		IntegerSeparatorSpec, configured with Chinese Numbering
 //		System integer grouping, will be created and returned.
 //
+//		By default, integer separation is turned on and
+//		fully engaged.
+//
+//			Example Turn Integer Separation On:
+//				Number String: 1,000,000,000
+//
+//			Example Turn Integer Separation Off:
+//				Number String: 1000000000
+//
+//		To control the application of integer separators,
+//		see methods:
+//
+//			IntegerSeparatorSpec.TurnIntegerSeparationOff()
+//
+//			IntegerSeparatorSpec.TurnIntegerSeparationOn()
+//
+//			IntegerSeparatorSpec.IsIntegerSeparationOn()
+//
 //	error
 //
 //		If this method completes successfully, the returned error
@@ -2269,6 +2340,24 @@ func (nStrIntSep *IntegerSeparatorSpec) NewChineseNumberingRunes(
 // 'intSeparatorChars' whereas IntegerSeparatorSpec.NewComponentsRunes()
 //
 //	is designed to accept rune arrays.
+//
+//	By default, integer separation is turned on and
+//	fully engaged.
+//
+//		Example Turn Integer Separation On:
+//			Number String: 1,000,000,000
+//
+//		Example Turn Integer Separation Off:
+//			Number String: 1000000000
+//
+//	To control the application of integer separators,
+//	see methods:
+//
+//		IntegerSeparatorSpec.TurnIntegerSeparationOff()
+//
+//		IntegerSeparatorSpec.TurnIntegerSeparationOn()
+//
+//		IntegerSeparatorSpec.IsIntegerSeparationOn()
 //
 // ----------------------------------------------------------------
 //
@@ -2439,6 +2528,24 @@ func (nStrIntSep *IntegerSeparatorSpec) NewChineseNumberingRunes(
 //		will return a new and fully populated instance of
 //		IntegerSeparatorSpec.
 //
+//		By default, integer separation is turned on and
+//		fully engaged.
+//
+//			Example Turn Integer Separation On:
+//				Number String: 1,000,000,000
+//
+//			Example Turn Integer Separation Off:
+//				Number String: 1000000000
+//
+//		To control the application of integer separators,
+//		see methods:
+//
+//			IntegerSeparatorSpec.TurnIntegerSeparationOff()
+//
+//			IntegerSeparatorSpec.TurnIntegerSeparationOn()
+//
+//			IntegerSeparatorSpec.IsIntegerSeparationOn()
+//
 //	err							error
 //
 //		If this method completes successfully, the returned
@@ -2509,6 +2616,24 @@ func (nStrIntSep *IntegerSeparatorSpec) NewComponents(
 //	This method differs from IntegerSeparatorSpec.NewComponents()
 //	in that this method accepts an array of runes for
 //	'intSeparatorChars'.
+//
+//	By default, integer separation is turned on and
+//	fully engaged.
+//
+//		Example Turn Integer Separation On:
+//			Number String: 1,000,000,000
+//
+//		Example Turn Integer Separation Off:
+//			Number String: 1000000000
+//
+//	To control the application of integer separators,
+//	see methods:
+//
+//		IntegerSeparatorSpec.TurnIntegerSeparationOff()
+//
+//		IntegerSeparatorSpec.TurnIntegerSeparationOn()
+//
+//		IntegerSeparatorSpec.IsIntegerSeparationOn()
 //
 // ----------------------------------------------------------------
 //
@@ -2680,6 +2805,23 @@ func (nStrIntSep *IntegerSeparatorSpec) NewComponents(
 //		will return a new and fully populated instance of
 //		IntegerSeparatorSpec.
 //
+//		By default, integer separation is turned on and
+//		fully engaged.
+//
+//			Example Turn Integer Separation On:
+//				Number String: 1,000,000,000
+//
+//			Example Turn Integer Separation Off:
+//				Number String: 1000000000
+//
+//		To control the application of integer separators,
+//		see methods:
+//
+//			IntegerSeparatorSpec.TurnIntegerSeparationOff()
+//
+//			IntegerSeparatorSpec.TurnIntegerSeparationOn()
+//
+//			IntegerSeparatorSpec.IsIntegerSeparationOn()
 //
 //	err							error
 //
@@ -2762,6 +2904,24 @@ func (nStrIntSep *IntegerSeparatorSpec) NewComponentsRunes(
 //		IntegerSeparatorSpec.NewComponents()
 //		IntegerSeparatorSpec.NewComponentsRunes()
 //
+//	By default, integer separation is turned on and
+//	fully engaged.
+//
+//		Example Turn Integer Separation On:
+//			Number String: 1,000,000,000
+//
+//		Example Turn Integer Separation Off:
+//			Number String: 1000000000
+//
+//	To control the application of integer separators,
+//	see methods:
+//
+//		IntegerSeparatorSpec.TurnIntegerSeparationOff()
+//
+//		IntegerSeparatorSpec.TurnIntegerSeparationOn()
+//
+//		IntegerSeparatorSpec.IsIntegerSeparationOn()
+//
 // ----------------------------------------------------------------
 //
 // # Input Parameters
@@ -2834,6 +2994,24 @@ func (nStrIntSep *IntegerSeparatorSpec) NewComponentsRunes(
 //		This will return a new and fully populated instance
 //		of IntegerSeparatorSpec configured with French
 //		default integer separator values.
+//
+//		By default, integer separation is turned on and
+//		fully engaged.
+//
+//			Example Turn Integer Separation On:
+//				Number String: 1,000,000,000
+//
+//			Example Turn Integer Separation Off:
+//				Number String: 1000000000
+//
+//		To control the application of integer separators,
+//		see methods:
+//
+//			IntegerSeparatorSpec.TurnIntegerSeparationOff()
+//
+//			IntegerSeparatorSpec.TurnIntegerSeparationOn()
+//
+//			IntegerSeparatorSpec.IsIntegerSeparationOn()
 //
 //	error
 //
@@ -2913,6 +3091,24 @@ func (nStrIntSep *IntegerSeparatorSpec) NewFrenchDefaults(
 //		IntegerSeparatorSpec.NewComponents()
 //		IntegerSeparatorSpec.NewComponentsRunes()
 //
+//	By default, integer separation is turned on and
+//	fully engaged.
+//
+//		Example Turn Integer Separation On:
+//			Number String: 1,000,000,000
+//
+//		Example Turn Integer Separation Off:
+//			Number String: 1000000000
+//
+//	To control the application of integer separators,
+//	see methods:
+//
+//		IntegerSeparatorSpec.TurnIntegerSeparationOff()
+//
+//		IntegerSeparatorSpec.TurnIntegerSeparationOn()
+//
+//		IntegerSeparatorSpec.IsIntegerSeparationOn()
+//
 // ----------------------------------------------------------------
 //
 // # Input Parameters
@@ -2985,6 +3181,24 @@ func (nStrIntSep *IntegerSeparatorSpec) NewFrenchDefaults(
 //		This will return a new and fully populated instance
 //		of IntegerSeparatorSpec configured with German
 //		default integer separator values.
+//
+//		By default, integer separation is turned on and
+//		fully engaged.
+//
+//			Example Turn Integer Separation On:
+//				Number String: 1,000,000,000
+//
+//			Example Turn Integer Separation Off:
+//				Number String: 1000000000
+//
+//		To control the application of integer separators,
+//		see methods:
+//
+//			IntegerSeparatorSpec.TurnIntegerSeparationOff()
+//
+//			IntegerSeparatorSpec.TurnIntegerSeparationOn()
+//
+//			IntegerSeparatorSpec.IsIntegerSeparationOn()
 //
 //	error
 //
@@ -3062,6 +3276,26 @@ func (nStrIntSep *IntegerSeparatorSpec) NewGermanDefaults(
 //
 //	The 'integer separator repetitions' value is defaulted to
 //	zero (0) signaling unlimited repetitions.
+//
+//	By default, integer separation is turned on and
+//	fully engaged.
+//
+//		Example Turn Integer Separation On:
+//			Number String: 1,000,000,000
+//
+//		Example Turn Integer Separation Off:
+//			Number String: 1000000000
+//
+//	To control the application of integer separators,
+//	see methods:
+//
+//		IntegerSeparatorSpec.TurnIntegerSeparationOff()
+//
+//		IntegerSeparatorSpec.TurnIntegerSeparationOn()
+//
+//		IntegerSeparatorSpec.IsIntegerSeparationOn()
+//
+// ----------------------------------------------------------------
 //
 // # Reference:
 //
@@ -3173,6 +3407,24 @@ func (nStrIntSep *IntegerSeparatorSpec) NewGermanDefaults(
 //		IntegerSeparatorSpec, configured with India Numbering
 //		System integer grouping, will be created and returned.
 //
+//		By default, integer separation is turned on and
+//		fully engaged.
+//
+//			Example Turn Integer Separation On:
+//				Number String: 1,000,000,000
+//
+//			Example Turn Integer Separation Off:
+//				Number String: 1000000000
+//
+//		To control the application of integer separators,
+//		see methods:
+//
+//			IntegerSeparatorSpec.TurnIntegerSeparationOff()
+//
+//			IntegerSeparatorSpec.TurnIntegerSeparationOn()
+//
+//			IntegerSeparatorSpec.IsIntegerSeparationOn()
+//
 //	error
 //
 //		If this method completes successfully, the returned
@@ -3246,6 +3498,24 @@ func (nStrIntSep *IntegerSeparatorSpec) NewIndiaNumbering(
 //
 //	The 'integer separator repetitions' value is
 //	defaulted to zero (0) signaling unlimited repetitions.
+//
+//	By default, integer separation is turned on and
+//	fully engaged.
+//
+//		Example Turn Integer Separation On:
+//			Number String: 1,000,000,000
+//
+//		Example Turn Integer Separation Off:
+//			Number String: 1000000000
+//
+//	To control the application of integer separators,
+//	see methods:
+//
+//		IntegerSeparatorSpec.TurnIntegerSeparationOff()
+//
+//		IntegerSeparatorSpec.TurnIntegerSeparationOn()
+//
+//		IntegerSeparatorSpec.IsIntegerSeparationOn()
 //
 // ----------------------------------------------------------------
 //
@@ -3326,6 +3596,24 @@ func (nStrIntSep *IntegerSeparatorSpec) NewIndiaNumbering(
 //		instance of IntegerSeparatorSpec, configured
 //		with India Numbering System integer grouping,
 //		will be created and returned.
+//
+//		By default, integer separation is turned on and
+//		fully engaged.
+//
+//			Example Turn Integer Separation On:
+//				Number String: 1,000,000,000
+//
+//			Example Turn Integer Separation Off:
+//				Number String: 1000000000
+//
+//		To control the application of integer separators,
+//		see methods:
+//
+//			IntegerSeparatorSpec.TurnIntegerSeparationOff()
+//
+//			IntegerSeparatorSpec.TurnIntegerSeparationOn()
+//
+//			IntegerSeparatorSpec.IsIntegerSeparationOn()
 //
 //	error
 //
@@ -3409,6 +3697,24 @@ func (nStrIntSep *IntegerSeparatorSpec) NewIndiaNumberingDefault(
 //	The 'integer separator repetitions' value is
 //	defaulted to zero (0) signaling unlimited
 //	repetitions.
+//
+//	By default, integer separation is turned on and
+//	fully engaged.
+//
+//		Example Turn Integer Separation On:
+//			Number String: 1,000,000,000
+//
+//		Example Turn Integer Separation Off:
+//			Number String: 1000000000
+//
+//	To control the application of integer separators,
+//	see methods:
+//
+//		IntegerSeparatorSpec.TurnIntegerSeparationOff()
+//
+//		IntegerSeparatorSpec.TurnIntegerSeparationOn()
+//
+//		IntegerSeparatorSpec.IsIntegerSeparationOn()
 //
 // ----------------------------------------------------------------
 //
@@ -3505,6 +3811,24 @@ func (nStrIntSep *IntegerSeparatorSpec) NewIndiaNumberingDefault(
 //		India Numbering System integer grouping, will be
 //		created and returned.
 //
+//		By default, integer separation is turned on and
+//		fully engaged.
+//
+//			Example Turn Integer Separation On:
+//				Number String: 1,000,000,000
+//
+//			Example Turn Integer Separation Off:
+//				Number String: 1000000000
+//
+//		To control the application of integer separators,
+//		see methods:
+//
+//			IntegerSeparatorSpec.TurnIntegerSeparationOff()
+//
+//			IntegerSeparatorSpec.TurnIntegerSeparationOn()
+//
+//			IntegerSeparatorSpec.IsIntegerSeparationOn()
+//
 //	error
 //
 //		If this method completes successfully, the returned
@@ -3585,6 +3909,24 @@ func (nStrIntSep *IntegerSeparatorSpec) NewIndiaNumberingRunes(
 //	The character or characters separating the integer
 //	groups is supplied by input parameter
 //	'intSeparatorChars'.
+//
+//	By default, integer separation is turned on and
+//	fully engaged.
+//
+//		Example Turn Integer Separation On:
+//			Number String: 1,000,000,000
+//
+//		Example Turn Integer Separation Off:
+//			Number String: 1000000000
+//
+//	To control the application of integer separators,
+//	see methods:
+//
+//		IntegerSeparatorSpec.TurnIntegerSeparationOff()
+//
+//		IntegerSeparatorSpec.TurnIntegerSeparationOn()
+//
+//		IntegerSeparatorSpec.IsIntegerSeparationOn()
 //
 // ----------------------------------------------------------------
 //
@@ -3721,6 +4063,24 @@ func (nStrIntSep *IntegerSeparatorSpec) NewIndiaNumberingRunes(
 //		means that no integer separation will be performed
 //		in subsequent number string formatting operations.
 //
+//		By default, integer separation is turned on and
+//		fully engaged.
+//
+//			Example Turn Integer Separation On:
+//				Number String: 1,000,000,000
+//
+//			Example Turn Integer Separation Off:
+//				Number String: 1000000000
+//
+//		To control the application of integer separators,
+//		see methods:
+//
+//			IntegerSeparatorSpec.TurnIntegerSeparationOff()
+//
+//			IntegerSeparatorSpec.TurnIntegerSeparationOn()
+//
+//			IntegerSeparatorSpec.IsIntegerSeparationOn()
+//
 //	error
 //
 //		If this method completes successfully, the returned
@@ -3802,6 +4162,24 @@ func (nStrIntSep *IntegerSeparatorSpec) NewIntGroupEnum(
 // The character or characters separating the integer
 // groups is supplied by rune array input parameter
 // 'intSeparatorChars'.
+//
+//	By default, integer separation is turned on and
+//	fully engaged.
+//
+//		Example Turn Integer Separation On:
+//			Number String: 1,000,000,000
+//
+//		Example Turn Integer Separation Off:
+//			Number String: 1000000000
+//
+//	To control the application of integer separators,
+//	see methods:
+//
+//		IntegerSeparatorSpec.TurnIntegerSeparationOff()
+//
+//		IntegerSeparatorSpec.TurnIntegerSeparationOn()
+//
+//		IntegerSeparatorSpec.IsIntegerSeparationOn()
 //
 // ----------------------------------------------------------------
 //
@@ -3934,6 +4312,24 @@ func (nStrIntSep *IntegerSeparatorSpec) NewIntGroupEnum(
 //		means that no integer separation will be performed
 //		in subsequent number string formatting operations.
 //
+//		By default, integer separation is turned on and
+//		fully engaged.
+//
+//			Example Turn Integer Separation On:
+//				Number String: 1,000,000,000
+//
+//			Example Turn Integer Separation Off:
+//				Number String: 1000000000
+//
+//		To control the application of integer separators,
+//		see methods:
+//
+//			IntegerSeparatorSpec.TurnIntegerSeparationOff()
+//
+//			IntegerSeparatorSpec.TurnIntegerSeparationOn()
+//
+//			IntegerSeparatorSpec.IsIntegerSeparationOn()
+//
 //	error
 //
 //		If this method completes successfully, the returned
@@ -3996,11 +4392,11 @@ func (nStrIntSep *IntegerSeparatorSpec) NewIntGroupEnumRunes(
 //	separation WILL NOT BE APPLIED in the formatting of
 //	Number Strings.
 //
-//	Example With Integer Separation
+//	Example Number String With Integer Separation:
 //
 //		1,234,567,890
 //
-//	Example With NO Integer Separation
+//	Example Number String With NO Integer Separation:
 //
 //		1234567890
 //
@@ -4064,6 +4460,24 @@ func (nStrIntSep *IntegerSeparatorSpec) NewNoIntegerSeparation() IntegerSeparato
 //	the option of specifying integer separator
 //	characters through input parameter
 //	'intSeparatorChars'.
+//
+//	By default, integer separation is turned on and
+//	fully engaged.
+//
+//		Example Turn Integer Separation On:
+//			Number String: 1,000,000,000
+//
+//		Example Turn Integer Separation Off:
+//			Number String: 1000000000
+//
+//	To control the application of integer separators,
+//	see methods:
+//
+//		IntegerSeparatorSpec.TurnIntegerSeparationOff()
+//
+//		IntegerSeparatorSpec.TurnIntegerSeparationOn()
+//
+//		IntegerSeparatorSpec.IsIntegerSeparationOn()
 //
 // ----------------------------------------------------------------
 //
@@ -4173,6 +4587,24 @@ func (nStrIntSep *IntegerSeparatorSpec) NewNoIntegerSeparation() IntegerSeparato
 //		sequence' will be automatically  set to a
 //		default value of 3-digits.
 //
+//		By default, integer separation is turned on and
+//		fully engaged.
+//
+//			Example Turn Integer Separation On:
+//				Number String: 1,000,000,000
+//
+//			Example Turn Integer Separation Off:
+//				Number String: 1000000000
+//
+//		To control the application of integer separators,
+//		see methods:
+//
+//			IntegerSeparatorSpec.TurnIntegerSeparationOff()
+//
+//			IntegerSeparatorSpec.TurnIntegerSeparationOn()
+//
+//			IntegerSeparatorSpec.IsIntegerSeparationOn()
+//
 //	error
 //
 //		If this method completes successfully, the returned
@@ -4254,6 +4686,24 @@ func (nStrIntSep *IntegerSeparatorSpec) NewThousands(
 //	each (Example: 1,000,000,000). Users have the option
 //	of specifying integer separator characters through
 //	input parameter 'intSeparatorChars'.
+//
+//	By default, integer separation is turned on and
+//	fully engaged.
+//
+//		Example Turn Integer Separation On:
+//			Number String: 1,000,000,000
+//
+//		Example Turn Integer Separation Off:
+//			Number String: 1000000000
+//
+//	To control the application of integer separators,
+//	see methods:
+//
+//		IntegerSeparatorSpec.TurnIntegerSeparationOff()
+//
+//		IntegerSeparatorSpec.TurnIntegerSeparationOn()
+//
+//		IntegerSeparatorSpec.IsIntegerSeparationOn()
 //
 // ----------------------------------------------------------------
 //
@@ -4363,6 +4813,24 @@ func (nStrIntSep *IntegerSeparatorSpec) NewThousands(
 //		sequence' will be automatically set to a default
 //		value of 3-digits.
 //
+//		By default, integer separation is turned on and
+//		fully engaged.
+//
+//			Example Turn Integer Separation On:
+//				Number String: 1,000,000,000
+//
+//			Example Turn Integer Separation Off:
+//				Number String: 1000000000
+//
+//		To control the application of integer separators,
+//		see methods:
+//
+//			IntegerSeparatorSpec.TurnIntegerSeparationOff()
+//
+//			IntegerSeparatorSpec.TurnIntegerSeparationOn()
+//
+//			IntegerSeparatorSpec.IsIntegerSeparationOn()
+//
 //	error
 //
 //		If this method completes successfully, the returned
@@ -4425,6 +4893,24 @@ func (nStrIntSep *IntegerSeparatorSpec) NewThousandsRunes(
 //
 //		United States Integer Separation Example
 //		(One-Million): '1,000,000'
+//
+//	By default, integer separation is turned on and
+//	fully engaged.
+//
+//		Example Turn Integer Separation On:
+//			Number String: 1,000,000,000
+//
+//		Example Turn Integer Separation Off:
+//			Number String: 1000000000
+//
+//	To control the application of integer separators,
+//	see methods:
+//
+//		IntegerSeparatorSpec.TurnIntegerSeparationOff()
+//
+//		IntegerSeparatorSpec.TurnIntegerSeparationOn()
+//
+//		IntegerSeparatorSpec.IsIntegerSeparationOn()
 //
 // ----------------------------------------------------------------
 //
@@ -4498,6 +4984,24 @@ func (nStrIntSep *IntegerSeparatorSpec) NewThousandsRunes(
 //		This will return a new and fully populated instance
 //		of IntegerSeparatorSpec configured with United States
 //		default integer separator values.
+//
+//		By default, integer separation is turned on and
+//		fully engaged.
+//
+//			Example Turn Integer Separation On:
+//				Number String: 1,000,000,000
+//
+//			Example Turn Integer Separation Off:
+//				Number String: 1000000000
+//
+//		To control the application of integer separators,
+//		see methods:
+//
+//			IntegerSeparatorSpec.TurnIntegerSeparationOff()
+//
+//			IntegerSeparatorSpec.TurnIntegerSeparationOn()
+//
+//			IntegerSeparatorSpec.IsIntegerSeparationOn()
 //
 //	error
 //
