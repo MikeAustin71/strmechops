@@ -118,8 +118,8 @@ type NumStrFmtCountryCultureSpec struct {
 	//	instance.
 
 	CurrencySymbols []rune
-	//	Required for Currency Number String
-	//	Formatting.
+	//	Optional. Not required for Currency Number
+	//	String Formatting.
 	//
 	//	The official ISO 4217 currency symbol or symbols
 	//	for the country or culture identified by the
@@ -140,123 +140,23 @@ type NumStrFmtCountryCultureSpec struct {
 	//	name is "Cents" and the minor currency
 	//	symbol is "¢".
 
-	CurrencyNumDecSep DecimalSeparatorSpec
+	CurrencyNumStrFormat NumStrFormatSpec
 	//	Required for Currency Number String
 	//	Formatting.
 	//
-	//	The Decimal Separator specifies the
-	//	character or characters which serve
-	//	as the radix point. Decimal separators
-	//	are used to separate integer and
-	//	fractional numeric digits in a floating
-	//	point numeric value. In the United
-	//	States, the Decimal Separator is the
-	//	period character ('.') or decimal point.
+	//	This NumStrFormatSpec instance
+	//	contains all the parameters necessary
+	//	to produce a formatted Currency
+	//	Number String.
 
-	CurrencyIntGroupingSpec IntegerSeparatorSpec
-	//	Required for Currency Number String
-	//	Formatting.
-	//
-	//	Integer Separator Specification. This
-	//	parameter specifies the type of integer
-	//	grouping and integer separator characters
-	//	which will be applied to the number
-	//	string formatting operations.
-
-	CurrencyNegativeValueFmt NumStrNumberSymbolSpec
-	//	Required for Currency Number String
-	//	Formatting.
-	//
-	//	The Number String Negative Number Sign
-	//	Specification is used to configure negative
-	//	number sign symbols for negative numeric
-	//	values formatted and displayed in number
-	//	stings.
-	//
-	//	For currency presentations, the currency
-	//	symbol is combined with the negative number
-	//	sign.
-
-	CurrencyPositiveValueFmt NumStrNumberSymbolSpec
-	//	Required for Currency Number String
-	//	Formatting.
-	//
-	//	Positive number signs are commonly implied
-	//	and not specified. However, the user has
-	//	the option to specify a positive number sign
-	//	character or characters for positive numeric
-	//	values using a Number String Positive Number
-	//	Sign Specification.
-	//
-	//	For currency presentations, the currency
-	//	symbol is combined with the positive number
-	//	sign.
-
-	CurrencyZeroValueFmt NumStrNumberSymbolSpec
-	//	Required for Currency Number String
-	//	Formatting.
-	//
-	//	The Currency Zero Value Format Specification
-	//	is used to configure number symbols for zero
-	//	numeric values formatted and displayed in
-	//	number stings.
-	//
-	//	For currency presentations, the currency
-	//	symbol is combined with the zero number
-	//	sign.
-
-	SignedNumValDecSep DecimalSeparatorSpec
+	SignedNumStrFormat NumStrFormatSpec
 	//	Required for Signed Number String
 	//	Formatting.
 	//
-	//	The Decimal Separator specifies the
-	//	character or characters which serve
-	//	as the radix point. Decimal separators
-	//	are used to separate integer and
-	//	fractional numeric digits in a floating
-	//	point numeric value. In the United
-	//	States, the Decimal Separator is the
-	//	period character ('.') or decimal point.
-
-	SignedNumValIntGroupingSpec IntegerSeparatorSpec
-	//	Required for Signed Number String
-	//	Formatting.
-	//
-	//	Integer Separator Specification. This
-	//	parameter specifies the type of integer
-	//	grouping and integer separator characters
-	//	which will be applied to the number
-	//	string formatting operations.
-
-	SignedNumValNegativeValueFmt NumStrNumberSymbolSpec
-	//	Required for Signed Number String
-	//	Formatting.
-	//
-	//	The Number String Negative Number Sign
-	//	Specification is used to configure negative
-	//	number sign symbols for negative numeric
-	//	values formatted and displayed in number
-	//	stings.
-
-	SignedNumValPositiveValueFmt NumStrNumberSymbolSpec
-	//	Required for Currency Number String
-	//	Formatting.
-	//
-	//	Positive number signs are commonly implied
-	//	and not specified. However, the user has
-	//	the option to specify a positive number sign
-	//	character or characters for positive numeric
-	//	values using a Number String Positive Number
-	//	Sign Specification.
-
-	SignedNumValZeroValueFmt NumStrNumberSymbolSpec
-	//	Required for Signed Number String
-	//	Formatting.
-	//
-	//	The Currency Zero Value Format Specification
-	//	is used to configure number symbols for zero
-	//	numeric values formatted and displayed in
-	//	number stings.
+	//	This NumStrFormatSpec instance
+	//	contains all the parameters necessary
+	//	to produce a formatted Signed
+	//	Number String.
 
 	lock *sync.Mutex
 }
@@ -739,91 +639,19 @@ func (nStrFmtCountryCultureMech *numStrFmtCountryCultureSpecMech) copyCountryCul
 			sourceSpec.MinorCurrencySymbols[i]
 	}
 
-	err = destinationSpec.CurrencyNumDecSep.CopyIn(
-		&sourceSpec.CurrencyNumDecSep,
+	err = destinationSpec.CurrencyNumStrFormat.CopyIn(
+		&sourceSpec.CurrencyNumStrFormat,
 		ePrefix.XCpy(
-			"destinationSpec.CurrencyNumDecSep"))
+			"destinationSpec.CurrencyNumStrFormat"))
 
 	if err != nil {
 		return err
 	}
 
-	err = destinationSpec.CurrencyIntGroupingSpec.CopyIn(
-		&sourceSpec.CurrencyIntGroupingSpec,
+	err = destinationSpec.SignedNumStrFormat.CopyIn(
+		&sourceSpec.SignedNumStrFormat,
 		ePrefix.XCpy(
-			"destinationSpec.CurrencyIntGroupingSpec"))
-
-	if err != nil {
-		return err
-	}
-
-	err = destinationSpec.CurrencyNegativeValueFmt.CopyIn(
-		&sourceSpec.CurrencyNegativeValueFmt,
-		ePrefix.XCpy(
-			"destinationSpec.CurrencyNegativeValueFmt"))
-
-	if err != nil {
-		return err
-	}
-
-	err = destinationSpec.CurrencyPositiveValueFmt.CopyIn(
-		&sourceSpec.CurrencyPositiveValueFmt,
-		ePrefix.XCpy(
-			"destinationSpec.CurrencyPositiveValueFmt"))
-
-	if err != nil {
-		return err
-	}
-
-	err = destinationSpec.CurrencyZeroValueFmt.CopyIn(
-		&sourceSpec.CurrencyZeroValueFmt,
-		ePrefix.XCpy(
-			"destinationSpec.CurrencyZeroValueFmt"))
-
-	if err != nil {
-		return err
-	}
-
-	err = destinationSpec.SignedNumValDecSep.CopyIn(
-		&sourceSpec.SignedNumValDecSep,
-		ePrefix.XCpy(
-			"destinationSpec.SignedNumValDecSep"))
-
-	if err != nil {
-		return err
-	}
-
-	err = destinationSpec.SignedNumValIntGroupingSpec.CopyIn(
-		&sourceSpec.SignedNumValIntGroupingSpec,
-		ePrefix.XCpy(
-			"destinationSpec.SignedNumValIntGroupingSpec"))
-
-	if err != nil {
-		return err
-	}
-
-	err = destinationSpec.SignedNumValNegativeValueFmt.CopyIn(
-		&sourceSpec.SignedNumValNegativeValueFmt,
-		ePrefix.XCpy(
-			"destinationSpec.SignedNumValNegativeValueFmt"))
-
-	if err != nil {
-		return err
-	}
-
-	err = destinationSpec.SignedNumValPositiveValueFmt.CopyIn(
-		&sourceSpec.SignedNumValPositiveValueFmt,
-		ePrefix.XCpy(
-			"destinationSpec.SignedNumValPositiveValueFmt"))
-
-	if err != nil {
-		return err
-	}
-
-	err = destinationSpec.SignedNumValZeroValueFmt.CopyIn(
-		&sourceSpec.SignedNumValZeroValueFmt,
-		ePrefix.XCpy(
-			"destinationSpec.SignedNumValZeroValueFmt"))
+			"destinationSpec.SignedNumStrFormat"))
 
 	return err
 }
@@ -893,24 +721,219 @@ func (nStrFmtCountryCultureAtom *numStrFmtCountryCultureSpecAtom) empty(
 
 	countryCultureSpec.MinorCurrencySymbols = nil
 
-	countryCultureSpec.CurrencyNumDecSep.Empty()
+	countryCultureSpec.CurrencyNumStrFormat.Empty()
 
-	countryCultureSpec.CurrencyIntGroupingSpec.Empty()
+	countryCultureSpec.SignedNumStrFormat.Empty()
+}
 
-	countryCultureSpec.CurrencyNegativeValueFmt.Empty()
+//	equal
+//
+//	Receives a pointer to two instances of
+//	NumStrFmtCountryCultureSpec and proceeds to compare
+//	their member variables in order to determine if they
+//	are equivalent.
+//
+//	A boolean flag showing the result of this comparison
+//	is returned. If the member variables for both instances
+//	are equal in all respects, this flag is set to 'true'.
+//	Otherwise, this method returns 'false'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	countryCultureOne			*NumStrFmtCountryCultureSpec
+//
+//		An instance of NumStrFmtCountryCultureSpec.
+//		Internal member variables from 'countryCultureOne'
+//		will be compared to those of 'signedNumFmtSpec2' to
+//		determine if both instances are equivalent.
+//
+//
+//	countryCultureTwo			*NumStrFmtCountryCultureSpec
+//
+//		An instance of NumStrFmtCountryCultureSpec
+//		Internal member variables from 'countryCultureTwo'
+//		will be compared to those of 'countryCultureOne' to
+//		determine if both instances are equivalent.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	bool
+//
+//		If the comparison of 'countryCultureOne' and
+//		'countryCultureTwo' shows that all internal
+//		member variables are equivalent, this method
+//		will return a boolean value of 'true'.
+//
+//		If the two instances are NOT equal, this method
+//		will return a boolean value of 'false' to the
+//		calling function.
+func (nStrFmtCountryCultureAtom *numStrFmtCountryCultureSpecAtom) equal(
+	countryCultureOne *NumStrFmtCountryCultureSpec,
+	countryCultureTwo *NumStrFmtCountryCultureSpec) bool {
 
-	countryCultureSpec.CurrencyPositiveValueFmt.Empty()
+	if nStrFmtCountryCultureAtom.lock == nil {
+		nStrFmtCountryCultureAtom.lock = new(sync.Mutex)
+	}
 
-	countryCultureSpec.CurrencyZeroValueFmt.Empty()
+	nStrFmtCountryCultureAtom.lock.Lock()
 
-	countryCultureSpec.SignedNumValDecSep.Empty()
+	defer nStrFmtCountryCultureAtom.lock.Unlock()
 
-	countryCultureSpec.SignedNumValIntGroupingSpec.Empty()
+	if countryCultureOne == nil {
 
-	countryCultureSpec.SignedNumValNegativeValueFmt.Empty()
+		return false
+	}
 
-	countryCultureSpec.SignedNumValPositiveValueFmt.Empty()
+	if countryCultureTwo == nil {
 
-	countryCultureSpec.SignedNumValZeroValueFmt.Empty()
+		return false
+	}
 
+	if countryCultureOne.IdNo != countryCultureTwo.IdNo {
+
+		return false
+	}
+
+	if countryCultureOne.IdString != countryCultureTwo.IdString {
+
+		return false
+	}
+
+	if countryCultureOne.Description != countryCultureTwo.Description {
+
+		return false
+	}
+
+	if countryCultureOne.Tag != countryCultureTwo.Tag {
+
+		return false
+	}
+
+	if countryCultureOne.CountryIdNo != countryCultureTwo.CountryIdNo {
+
+		return false
+	}
+
+	if countryCultureOne.CountryIdString != countryCultureTwo.CountryIdString {
+
+		return false
+	}
+
+	if countryCultureOne.CountryDescription !=
+		countryCultureTwo.CountryDescription {
+
+		return false
+	}
+
+	if countryCultureOne.CountryTag != countryCultureTwo.CountryTag {
+
+		return false
+	}
+
+	if countryCultureOne.CountryCultureName !=
+		countryCultureTwo.CountryCultureName {
+
+		return false
+	}
+
+	if countryCultureOne.CountryCultureOfficialStateName !=
+		countryCultureTwo.CountryCultureOfficialStateName {
+
+		return false
+	}
+
+	if countryCultureOne.CountryAbbreviatedName !=
+		countryCultureTwo.CountryAbbreviatedName {
+
+		return false
+	}
+
+	arrayLen := len(countryCultureTwo.CountryAlternateNames)
+
+	if len(countryCultureOne.CountryAbbreviatedName) !=
+		arrayLen {
+
+		return false
+	}
+
+	for i := 0; i < arrayLen; i++ {
+
+		if countryCultureOne.CountryAlternateNames[i] !=
+			countryCultureTwo.CountryAlternateNames[i] {
+
+			return false
+		}
+	}
+
+	countryCultureOne.CountryCodeTwoChar =
+		countryCultureTwo.CountryCodeTwoChar
+
+	countryCultureOne.CountryCodeThreeChar =
+		countryCultureTwo.CountryCodeThreeChar
+
+	countryCultureOne.CountryCodeNumber =
+		countryCultureTwo.CountryCodeNumber
+
+	countryCultureOne.CurrencyCode =
+		countryCultureTwo.CurrencyCode
+
+	countryCultureOne.CurrencyCodeNo =
+		countryCultureTwo.CurrencyCodeNo
+
+	countryCultureOne.CurrencyName =
+		countryCultureTwo.CurrencyName
+
+	arrayLen = len(countryCultureTwo.CurrencySymbols)
+
+	if len(countryCultureOne.CurrencySymbols) !=
+		arrayLen {
+
+		return false
+	}
+
+	for i := 0; i < arrayLen; i++ {
+
+		if countryCultureOne.CurrencySymbols[i] !=
+			countryCultureTwo.CurrencySymbols[i] {
+
+			return false
+		}
+	}
+
+	countryCultureOne.MinorCurrencyName =
+		countryCultureTwo.MinorCurrencyName
+
+	arrayLen = len(countryCultureTwo.MinorCurrencySymbols)
+
+	if len(countryCultureOne.MinorCurrencySymbols) !=
+		arrayLen {
+
+		return false
+	}
+
+	for i := 0; i < arrayLen; i++ {
+
+		if countryCultureOne.MinorCurrencySymbols[i] !=
+			countryCultureTwo.MinorCurrencySymbols[i] {
+
+			return false
+		}
+	}
+
+	areEqual := countryCultureOne.CurrencyNumStrFormat.Equal(
+		&countryCultureTwo.CurrencyNumStrFormat)
+
+	if !areEqual {
+
+		return false
+	}
+
+	areEqual = countryCultureOne.SignedNumStrFormat.Equal(
+		&countryCultureTwo.SignedNumStrFormat)
+
+	return areEqual
 }

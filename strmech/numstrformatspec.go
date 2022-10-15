@@ -11713,46 +11713,51 @@ func (signedNumFmtSpecAtom *numStrFmtSpecAtom) empty(
 
 }
 
-// equal - Receives a pointer to two instances of
-// NumStrFormatSpec and proceeds to compare their
-// member variables in order to determine if they are
-// equivalent.
+//	equal
 //
-// A boolean flag showing the result of this comparison is
-// returned. If the member variables for both instances are
-// equal in all respects, this flag is set to 'true'. Otherwise,
-// this method returns 'false'.
+//	Receives a pointer to two instances of
+//	NumStrFormatSpec and proceeds to compare their member
+//	variables in order to determine if they are
+//	equivalent.
 //
-// ----------------------------------------------------------------
-//
-// Input Parameters
-//
-//	signedNumFmtSpec1    *NumStrFormatSpec
-//	   - An instance of NumStrFormatSpec.
-//	     Internal member variables from 'signedNumFmtSpec1'
-//	     will be compared to those of 'signedNumFmtSpec2' to
-//	     determine if both instances are equivalent.
-//
-//
-//	signedNumFmtSpec2    *NumStrFormatSpec
-//	   - An instance of NumStrFormatSpec.
-//	     Internal member variables from 'signedNumFmtSpec2'
-//	     will be compared to those of 'signedNumFmtSpec1' to
-//	     determine if both instances are equivalent.
+//	A boolean flag showing the result of this comparison
+//	is returned. If the member variables for both instances
+//	are equal in all respects, this flag is set to 'true'.
+//	Otherwise, this method returns 'false'.
 //
 // ----------------------------------------------------------------
 //
-// Return Values
+// # Input Parameters
+//
+//	signedNumFmtSpec1			*NumStrFormatSpec
+//
+//		An instance of NumStrFormatSpec. Internal member
+//		variables from 'signedNumFmtSpec1' will be
+//		compared to those of 'signedNumFmtSpec2' to
+//		determine if both instances are equivalent.
+//
+//
+//	signedNumFmtSpec2			*NumStrFormatSpec
+//
+//		An instance of NumStrFormatSpec. Internal member
+//		variables from 'signedNumFmtSpec2' will be
+//		compared to those of 'signedNumFmtSpec1' to
+//		determine if both instances are equivalent.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
 //
 //	bool
-//	   - If the comparison of 'signedNumFmtSpec1' and
-//	     'signedNumFmtSpec2' shows that all internal member
-//	     variables are equivalent, this method will return a
-//	     boolean value of 'true'.
 //
-//	     If the two instances are NOT equal, this method will
-//	     return a boolean value of 'false' to the calling
-//	     function.
+//		If the comparison of 'signedNumFmtSpec1' and
+//		'signedNumFmtSpec2' shows that all internal
+//		member variables are equivalent, this method
+//		will return a boolean value of 'true'.
+//
+//		If the two instances are NOT equal, this method
+//		will return a boolean value of 'false' to the
+//		calling function.
 func (signedNumFmtSpecAtom *numStrFmtSpecAtom) equal(
 	signedNumFmtSpec1 *NumStrFormatSpec,
 	signedNumFmtSpec2 *NumStrFormatSpec) bool {
