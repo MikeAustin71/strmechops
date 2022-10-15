@@ -1,6 +1,10 @@
 package strmech
 
-import "sync"
+import (
+	"fmt"
+	ePref "github.com/MikeAustin71/errpref"
+	"sync"
+)
 
 type NumStrFmtCountryCultureSpec struct {
 	IdNo uint64
@@ -52,9 +56,15 @@ type NumStrFmtCountryCultureSpec struct {
 
 	CountryCultureName string
 	//	Required
-	//	The full name of the country or culture
+	//	The ISO 3166 name of the country or culture
 	//	identified by the current Country Culture
 	//	Specification instance.
+
+	CountryCultureOfficialStateName string
+	//	Optional
+	//	The ISO 3166 official state name of the country
+	//	or culture identified by the current Country
+	//	Culture Specification instance.
 
 	CountryAbbreviatedName string
 	//	Optional
@@ -70,49 +80,50 @@ type NumStrFmtCountryCultureSpec struct {
 
 	CountryCodeTwoChar string
 	//	Optional
-	//	The unique Two Character code identifying the
-	//	country or culture associated with the current
-	//	Country Culture Specification instance.
+	//	The unique ISO 3166-1 alpha-2 Two Character code
+	//	identifying the country or culture associated
+	//	with the current Country Culture Specification
+	//	instance.
 
 	CountryCodeThreeChar string
 	//	Optional
-	//	The unique Three Character code identifying the
-	//	country or culture associated with the current
-	//	Country Culture Specification instance.
+	//	The unique ISO 3166-1 alpha-3 Three Character code
+	//	identifying the country or culture associated with
+	//	the current Country Culture Specification instance.
 
 	CountryCodeNumber string
 	//	Optional
-	//	The official code identifier for the country or
-	//	culture associated with the current Country
-	//	Culture Specification instance.
+	//	The official ISO 3166-1 numeric code identifier
+	//	for the country or culture associated with the
+	//	current Country Culture Specification instance.
 
 	CurrencyCode string
 	//	Optional
-	//	The official currency code associated with
-	//	the country or culture identified by the
-	//	current Country Culture Specification
-	//	instance.
+	//	The official ISO 4217 currency code associated
+	//	with the country or culture identified by the
+	//	current Country Culture Specification instance.
 
 	CurrencyCodeNo string
 	//	Optional
-	//	The official currency code number associated
-	//	with the country or culture identified by the
-	//	current Country Culture Specification
+	//	The official ISO 4217 currency code number
+	//	associated with the country or culture identified
+	//	by the current Country Culture Specification
 	//	instance.
 
 	CurrencyName string
 	//	Optional
-	//	The official currency code number associated
+	//	The official ISO 4217 currency name associated
 	//	with the country or culture identified by the
 	//	current Country Culture Specification
 	//	instance.
 
 	CurrencySymbols []rune
-	//	Required
-	//	The official currency symbol or symbols for
-	//	the country or culture identified by the
-	//	current Country Culture Specification
-	//	instance.
+	//	Required for Currency Number String
+	//	Formatting.
+	//
+	//	The official ISO 4217 currency symbol or symbols
+	//	for the country or culture identified by the
+	//	current Country Culture Specification instance.
 
 	MinorCurrencyName string
 	//	Optional
@@ -141,17 +152,6 @@ type NumStrFmtCountryCultureSpec struct {
 	//	point numeric value. In the United
 	//	States, the Decimal Separator is the
 	//	period character ('.') or decimal point.
-
-	CurrencyTurnOnIntegerDigitsSeparation bool
-	//	Required for Currency Number String
-	//	Formatting.
-	//
-	//	When set to 'true' Currency Number Strings
-	//	will be formatted with integer separation.
-	//	This usually means the integer portion
-	//	of the numeric value is separated into
-	//	thousands.
-	//		United States Example: 1,000,000
 
 	CurrencyIntGroupingSpec IntegerSeparatorSpec
 	//	Required for Currency Number String
@@ -218,17 +218,6 @@ type NumStrFmtCountryCultureSpec struct {
 	//	States, the Decimal Separator is the
 	//	period character ('.') or decimal point.
 
-	SignedNumValTurnOnIntegerDigitsSeparation bool
-	//	Required for Signed Number String
-	//	Formatting.
-	//
-	//	When set to 'true' Signed Number Strings
-	//	will be formatted with integer separation.
-	//	This usually means the integer portion
-	//	of the numeric value is separated into
-	//	thousands.
-	//		United States Example: 1,000,000
-
 	SignedNumValIntGroupingSpec IntegerSeparatorSpec
 	//	Required for Signed Number String
 	//	Formatting.
@@ -270,4 +259,528 @@ type NumStrFmtCountryCultureSpec struct {
 	//	number stings.
 
 	lock *sync.Mutex
+}
+
+//	CopyIn
+//
+//	Copies the data fields from an incoming instance of
+//	NumStrFmtCountryCultureSpec ('sourceCountryCultureSpec')
+//	to the data fields of the current
+//	NumStrFmtCountryCultureSpec instance
+//	('nStrFmtCountryCultureSpec').
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	All the member variable data values in the current
+//	NumStrFmtCountryCultureSpec instance
+//	('nStrFmtCountryCultureSpec') will	be deleted and
+//	replaced.
+//
+//	No data validation is performed on input parameter,
+//	'incomingSignedNumFmt'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	sourceCountryCultureSpec		*NumStrFmtCountryCultureSpec
+//
+//		A pointer to an instance of NumStrFmtCountryCultureSpec.
+//		This method will NOT change the values of internal
+//		member variables contained in this instance.
+//
+//		All data values in this NumStrFmtCountryCultureSpec
+//		instance will be copied to current
+//		NumStrFmtCountryCultureSpec instance
+//		('nStrFmtCountryCultureSpec').
+//
+//	 errorPrefix                interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it	contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (nStrFmtCountryCultureSpec *NumStrFmtCountryCultureSpec) CopyIn(
+	sourceCountryCultureSpec *NumStrFmtCountryCultureSpec,
+	errorPrefix interface{}) error {
+
+	if nStrFmtCountryCultureSpec.lock == nil {
+		nStrFmtCountryCultureSpec.lock = new(sync.Mutex)
+	}
+
+	nStrFmtCountryCultureSpec.lock.Lock()
+
+	defer nStrFmtCountryCultureSpec.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumStrFmtCountryCultureSpec."+
+			"CopyIn()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	return new(numStrFmtCountryCultureSpecMech).
+		copyCountryCulture(
+			nStrFmtCountryCultureSpec,
+			sourceCountryCultureSpec,
+			ePrefix.XCpy(
+				"sourceCountryCultureSpec"))
+}
+
+// numStrFmtCountryCultureSpecMech
+//
+// Provides helper methods for type
+// NumStrFmtCountryCultureSpec
+type numStrFmtCountryCultureSpecMech struct {
+	lock *sync.Mutex
+}
+
+//	copyCountryCulture
+//
+//	Copies all data from input parameter 'sourceSpec'
+//	to input parameter 'destinationSpec'. Both instances
+//	are of type NumStrFmtCountryCultureSpec.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	Be advised that the data fields in 'destinationSpec'
+//	will be deleted and overwritten.
+//
+//	Also, NO data validation is performed on 'sourceSpec'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	destinationSpec				*NumStrFmtCountryCultureSpec
+//
+//		A pointer to a NumStrFmtCountryCultureSpec instance.
+//		All the member variable data fields in this object
+//		will be replaced by data values copied from input
+//		parameter 'sourceSignedNumFmtSpec'.
+//
+//		'destinationSpec' is the destination for this
+//		copy operation.
+//
+//	sourceSpec			*NumStrFormatSpec
+//
+//		A pointer to another *NumStrFmtCountryCultureSpec
+//		instance. All the member variable data values from this
+//		object will be copied to corresponding member variables in
+//		'destinationSpec'.
+//
+//		'sourceSpec' is the source for this copy operation.
+//
+//		No data validation is performed on 'sourceSpec'.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	err							error
+//
+//		If this method completes successfully, this
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (nStrFmtCountryCultureMech *numStrFmtCountryCultureSpecMech) copyCountryCulture(
+	destinationSpec *NumStrFmtCountryCultureSpec,
+	sourceSpec *NumStrFmtCountryCultureSpec,
+	errPrefDto *ePref.ErrPrefixDto) (
+	err error) {
+
+	if nStrFmtCountryCultureMech.lock == nil {
+		nStrFmtCountryCultureMech.lock = new(sync.Mutex)
+	}
+
+	nStrFmtCountryCultureMech.lock.Lock()
+
+	defer nStrFmtCountryCultureMech.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"nStrFmtCountryCultureMech."+
+			"copyCountryCulture()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if destinationSpec == nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'destinationSpec' is invalid!\n"+
+			"'destinationSpec' is a 'nil' pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if sourceSpec == nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'sourceSpec' is invalid!\n"+
+			"'sourceSpec' is a 'nil' pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	new(numStrFmtCountryCultureSpecAtom).empty(
+		destinationSpec)
+
+	destinationSpec.IdNo = sourceSpec.IdNo
+
+	destinationSpec.IdString = sourceSpec.IdString
+
+	destinationSpec.Description = sourceSpec.Description
+
+	destinationSpec.Tag = sourceSpec.Tag
+
+	destinationSpec.CountryIdNo = sourceSpec.CountryIdNo
+
+	destinationSpec.CountryIdString = sourceSpec.CountryIdString
+
+	destinationSpec.CountryDescription =
+		sourceSpec.CountryDescription
+
+	destinationSpec.CountryTag = sourceSpec.CountryTag
+
+	destinationSpec.CountryCultureName =
+		sourceSpec.CountryCultureName
+
+	destinationSpec.CountryCultureOfficialStateName =
+		sourceSpec.CountryCultureOfficialStateName
+
+	destinationSpec.CountryAbbreviatedName =
+		sourceSpec.CountryAbbreviatedName
+
+	arrayLen := len(sourceSpec.CountryAlternateNames)
+
+	destinationSpec.CountryAlternateNames =
+		make([]string, arrayLen)
+
+	for i := 0; i < arrayLen; i++ {
+		destinationSpec.CountryAlternateNames[i] =
+			sourceSpec.CountryAlternateNames[i]
+	}
+
+	destinationSpec.CountryCodeTwoChar =
+		sourceSpec.CountryCodeTwoChar
+
+	destinationSpec.CountryCodeThreeChar =
+		sourceSpec.CountryCodeThreeChar
+
+	destinationSpec.CountryCodeNumber =
+		sourceSpec.CountryCodeNumber
+
+	destinationSpec.CurrencyCode =
+		sourceSpec.CurrencyCode
+
+	destinationSpec.CurrencyCodeNo =
+		sourceSpec.CurrencyCodeNo
+
+	destinationSpec.CurrencyName =
+		sourceSpec.CurrencyName
+
+	arrayLen = len(sourceSpec.CurrencySymbols)
+
+	destinationSpec.CurrencySymbols =
+		make([]rune, arrayLen)
+
+	for i := 0; i < arrayLen; i++ {
+		destinationSpec.CurrencySymbols[i] =
+			sourceSpec.CurrencySymbols[i]
+	}
+
+	destinationSpec.MinorCurrencyName =
+		sourceSpec.MinorCurrencyName
+
+	arrayLen = len(sourceSpec.MinorCurrencySymbols)
+
+	destinationSpec.MinorCurrencySymbols =
+		make([]rune, arrayLen)
+
+	for i := 0; i < arrayLen; i++ {
+		destinationSpec.MinorCurrencySymbols[i] =
+			sourceSpec.MinorCurrencySymbols[i]
+	}
+
+	err = destinationSpec.CurrencyNumDecSep.CopyIn(
+		&sourceSpec.CurrencyNumDecSep,
+		ePrefix.XCpy(
+			"destinationSpec.CurrencyNumDecSep"))
+
+	if err != nil {
+		return err
+	}
+
+	err = destinationSpec.CurrencyIntGroupingSpec.CopyIn(
+		&sourceSpec.CurrencyIntGroupingSpec,
+		ePrefix.XCpy(
+			"destinationSpec.CurrencyIntGroupingSpec"))
+
+	if err != nil {
+		return err
+	}
+
+	err = destinationSpec.CurrencyNegativeValueFmt.CopyIn(
+		&sourceSpec.CurrencyNegativeValueFmt,
+		ePrefix.XCpy(
+			"destinationSpec.CurrencyNegativeValueFmt"))
+
+	if err != nil {
+		return err
+	}
+
+	err = destinationSpec.CurrencyPositiveValueFmt.CopyIn(
+		&sourceSpec.CurrencyPositiveValueFmt,
+		ePrefix.XCpy(
+			"destinationSpec.CurrencyPositiveValueFmt"))
+
+	if err != nil {
+		return err
+	}
+
+	err = destinationSpec.CurrencyZeroValueFmt.CopyIn(
+		&sourceSpec.CurrencyZeroValueFmt,
+		ePrefix.XCpy(
+			"destinationSpec.CurrencyZeroValueFmt"))
+
+	if err != nil {
+		return err
+	}
+
+	err = destinationSpec.SignedNumValDecSep.CopyIn(
+		&sourceSpec.SignedNumValDecSep,
+		ePrefix.XCpy(
+			"destinationSpec.SignedNumValDecSep"))
+
+	if err != nil {
+		return err
+	}
+
+	err = destinationSpec.SignedNumValIntGroupingSpec.CopyIn(
+		&sourceSpec.SignedNumValIntGroupingSpec,
+		ePrefix.XCpy(
+			"destinationSpec.SignedNumValIntGroupingSpec"))
+
+	if err != nil {
+		return err
+	}
+
+	err = destinationSpec.SignedNumValNegativeValueFmt.CopyIn(
+		&sourceSpec.SignedNumValNegativeValueFmt,
+		ePrefix.XCpy(
+			"destinationSpec.SignedNumValNegativeValueFmt"))
+
+	if err != nil {
+		return err
+	}
+
+	err = destinationSpec.SignedNumValPositiveValueFmt.CopyIn(
+		&sourceSpec.SignedNumValPositiveValueFmt,
+		ePrefix.XCpy(
+			"destinationSpec.SignedNumValPositiveValueFmt"))
+
+	if err != nil {
+		return err
+	}
+
+	err = destinationSpec.SignedNumValZeroValueFmt.CopyIn(
+		&sourceSpec.SignedNumValZeroValueFmt,
+		ePrefix.XCpy(
+			"destinationSpec.SignedNumValZeroValueFmt"))
+
+	return err
+}
+
+// numStrFmtCountryCultureSpecAtom
+//
+// Provides helper methods for type
+// NumStrFmtCountryCultureSpec
+type numStrFmtCountryCultureSpecAtom struct {
+	lock *sync.Mutex
+}
+
+func (nStrFmtCountryCultureAtom *numStrFmtCountryCultureSpecAtom) empty(
+	countryCultureSpec *NumStrFmtCountryCultureSpec) {
+
+	if nStrFmtCountryCultureAtom.lock == nil {
+		nStrFmtCountryCultureAtom.lock = new(sync.Mutex)
+	}
+
+	nStrFmtCountryCultureAtom.lock.Lock()
+
+	defer nStrFmtCountryCultureAtom.lock.Unlock()
+
+	if countryCultureSpec == nil {
+		return
+	}
+
+	countryCultureSpec.IdNo = 0
+
+	countryCultureSpec.IdString = ""
+
+	countryCultureSpec.Description = ""
+
+	countryCultureSpec.Tag = ""
+
+	countryCultureSpec.CountryIdNo = 0
+
+	countryCultureSpec.CountryIdString = ""
+
+	countryCultureSpec.CountryDescription = ""
+
+	countryCultureSpec.CountryTag = ""
+
+	countryCultureSpec.CountryCultureName = ""
+
+	countryCultureSpec.CountryCultureOfficialStateName = ""
+
+	countryCultureSpec.CountryAbbreviatedName = ""
+
+	countryCultureSpec.CountryAlternateNames = nil
+
+	countryCultureSpec.CountryCodeTwoChar = ""
+
+	countryCultureSpec.CountryCodeThreeChar = ""
+
+	countryCultureSpec.CountryCodeNumber = ""
+
+	countryCultureSpec.CurrencyCode = ""
+
+	countryCultureSpec.CurrencyCodeNo = ""
+
+	countryCultureSpec.CurrencyName = ""
+
+	countryCultureSpec.CurrencySymbols = nil
+
+	countryCultureSpec.MinorCurrencyName = ""
+
+	countryCultureSpec.MinorCurrencySymbols = nil
+
+	countryCultureSpec.CurrencyNumDecSep.Empty()
+
+	countryCultureSpec.CurrencyIntGroupingSpec.Empty()
+
+	countryCultureSpec.CurrencyNegativeValueFmt.Empty()
+
+	countryCultureSpec.CurrencyPositiveValueFmt.Empty()
+
+	countryCultureSpec.CurrencyZeroValueFmt.Empty()
+
+	countryCultureSpec.SignedNumValDecSep.Empty()
+
+	countryCultureSpec.SignedNumValIntGroupingSpec.Empty()
+
+	countryCultureSpec.SignedNumValNegativeValueFmt.Empty()
+
+	countryCultureSpec.SignedNumValPositiveValueFmt.Empty()
+
+	countryCultureSpec.SignedNumValZeroValueFmt.Empty()
+
 }

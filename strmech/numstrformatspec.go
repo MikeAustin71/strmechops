@@ -124,17 +124,23 @@ type NumStrFormatSpec struct {
 	lock *sync.Mutex
 }
 
-// CopyIn - Copies the data fields from an incoming instance of
-// NumStrFormatSpec ('incomingSignedNumFmt')
-// to the data fields of the current NumStrFormatSpec
-// instance ('signedNumFmtSpec').
+//	CopyIn
+//
+//	Copies the data fields from an incoming instance of
+//	NumStrFormatSpec ('incomingSignedNumFmt')
+//	to the data fields of the current NumStrFormatSpec
+//	instance ('numStrFmtSpec').
 //
 // ----------------------------------------------------------------
 //
 // # IMPORTANT
-// All the member variable data values in the current
-// NumStrFormatSpec instance ('signedNumFmtSpec') will
-// be deleted and replaced.
+//
+//	All the member variable data values in the current
+//	NumStrFormatSpec instance ('numStrFmtSpec') will
+//	be deleted and replaced.
+//
+//	No data validation is performed on input parameter,
+//	'incomingSignedNumFmt'.
 //
 // ----------------------------------------------------------------
 //
@@ -149,9 +155,6 @@ type NumStrFormatSpec struct {
 //		All data values in this NumStrFormatSpec instance
 //		will be copied to current NumStrFormatSpec
 //		instance ('signedNumFmtSpec').
-//
-//		If parameter 'incomingSignedNumFmt' is determined to
-//		be invalid, an error will be returned.
 //
 //	 errorPrefix                interface{}
 //
