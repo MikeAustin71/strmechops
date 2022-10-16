@@ -915,7 +915,7 @@ func (numStrKernel *NumberStrKernel) EqualNumericDigits(
 //		An instance of NumStrFmtCountryCultureSpec.
 //
 //		The Country Culture Specification contains
-//		currency formatting information for the
+//		currency formatting information for a
 //		designated country or culture.
 //
 //		This method will NOT modify the values of
@@ -1389,7 +1389,7 @@ func (numStrKernel *NumberStrKernel) FmtCountryCurrencyNumStr(
 //		An instance of NumStrFmtCountryCultureSpec.
 //
 //		The Country Culture Specification contains
-//		signed number formatting information for the
+//		signed number formatting information for a
 //		designated country or culture.
 //
 //		This method will NOT modify the values of
