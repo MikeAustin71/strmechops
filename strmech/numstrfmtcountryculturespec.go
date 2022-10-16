@@ -533,6 +533,197 @@ func (nStrFmtCountryCultureSpec *NumStrFmtCountryCultureSpec) Equal(
 		incomingCountryCulture)
 }
 
+//	New
+//
+//	Creates and returns a new instance of
+//	NumStrFmtCountryCultureSpec.
+//
+//	The returned instance will be configured with the
+//	currency and signed number string formatters. In
+//	addition, the Country/Culture name will also be
+//	populated.
+//
+//	While the returned instance is sufficient for
+//	generating formatted number strings for currency
+//	and signed numbers, all the description member
+//	variables will remain empty. These description
+//	member variables are public variables and may be
+//	populated manually by the user as needed.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	countryCultureName			string
+//
+//		It is recommended that this parameter be set
+//		to the ISO 3166 name of the country or culture.
+//
+//	currencyNumStrFormat		NumStrFormatSpec
+//
+//		An instance of NumStrFormatSpec which will be
+//		used to generate Number Strings using the
+//		currency format associated with the
+//		designated Country or Culture.
+//
+//	signedNumStrFormat			NumStrFormatSpec
+//
+//		An instance of NumStrFormatSpec which will be
+//		used to generate Number Strings using the
+//		signed number format associated with the
+//		designated Country or Culture.
+//
+//	 errorPrefix                interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it	contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	NumStrFmtCountryCultureSpec
+//
+//		If this method completes successfully, a partially
+//		completed instance of NumStrFmtCountryCultureSpec
+//		will be returned.
+//
+//		While the returned instance is sufficient for
+//		generating formatted number strings for currency
+//		and signed numbers, all the description member
+//		variables will remain empty. These description
+//		member variables are public variables and may be
+//		populated manually by the user as needed.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (nStrFmtCountryCultureSpec *NumStrFmtCountryCultureSpec) New(
+	countryCultureName string,
+	currencyNumStrFormat NumStrFormatSpec,
+	signedNumStrFormat NumStrFormatSpec,
+	errorPrefix interface{}) (
+	NumStrFmtCountryCultureSpec,
+	error) {
+
+	if nStrFmtCountryCultureSpec.lock == nil {
+		nStrFmtCountryCultureSpec.lock = new(sync.Mutex)
+	}
+
+	nStrFmtCountryCultureSpec.lock.Lock()
+
+	defer nStrFmtCountryCultureSpec.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	var newCountryCultureSpec NumStrFmtCountryCultureSpec
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumStrFmtCountryCultureSpec."+
+			"CopyIn()",
+		"")
+
+	if err != nil {
+		return newCountryCultureSpec, err
+	}
+
+	fmtCountryCultureAtom := numStrFmtCountryCultureSpecAtom{}
+
+	err = fmtCountryCultureAtom.copyNumStrFormatSpec(
+		&newCountryCultureSpec.CurrencyNumStrFormat,
+		&currencyNumStrFormat,
+		ePrefix.XCpy(
+			"newCountryCultureSpec<-"+
+				"currencyNumStrFormat"))
+
+	if err != nil {
+		return newCountryCultureSpec, err
+	}
+
+	err = fmtCountryCultureAtom.copyNumStrFormatSpec(
+		&newCountryCultureSpec.SignedNumStrFormat,
+		&signedNumStrFormat,
+		ePrefix.XCpy(
+			"newCountryCultureSpec<-"+
+				"signedNumStrFormat"))
+
+	if err != nil {
+		return newCountryCultureSpec, err
+	}
+
+	newCountryCultureSpec.CountryCultureName =
+		countryCultureName
+
+	return newCountryCultureSpec, err
+}
+
 //	SetCurrencyNumberFieldSpec
 //
 //	Deletes and resets the Currency Number Field
@@ -946,6 +1137,130 @@ func (nStrFmtCountryCultureAtom *numStrFmtCountryCultureSpecAtom) empty(
 	countryCultureSpec.CurrencyNumStrFormat.Empty()
 
 	countryCultureSpec.SignedNumStrFormat.Empty()
+}
+
+//	copyNumStrFormatSpec
+//
+//	Copies a source instance of NumStrFormatSpec to a
+//	destination instance of NumStrFormatSpec.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will delete and reset the data values
+//	for the destination instance of NumStrFormatSpec,
+//	input parameter 'destinationNStrFormatSpec'.
+//
+// ----------------------------------------------------------------
+//
+//	# Input Parameters
+//
+//	destinationNStrFormatSpec	*NumStrFormatSpec
+//
+//		A pointer to an instance of NumStrFormatSpec. The
+//		data values contained in this input parameter
+//		('destinationNStrFormatSpec') will be deleted and
+//		reset to new values extracted from input parameter,
+//		'sourceNStrFormatSpec'.
+//
+//		'destinationNStrFormatSpec' is the destination for
+//		this copy operation.
+//
+//	sourceNStrFormatSpec		*NumStrFormatSpec
+//
+//		A pointer to an instance of NumStrFormatSpec. The
+//		data values contained in this input parameter
+//		('sourceNStrFormatSpec') will be copied to input
+//		parameter, 'destinationNStrFormatSpec'.
+//
+//		'sourceNStrFormatSpec' is the data source for
+//		this copy operation.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, this
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (nStrFmtCountryCultureAtom *numStrFmtCountryCultureSpecAtom) copyNumStrFormatSpec(
+	destinationNStrFormatSpec *NumStrFormatSpec,
+	sourceNStrFormatSpec *NumStrFormatSpec,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if nStrFmtCountryCultureAtom.lock == nil {
+		nStrFmtCountryCultureAtom.lock = new(sync.Mutex)
+	}
+
+	nStrFmtCountryCultureAtom.lock.Lock()
+
+	defer nStrFmtCountryCultureAtom.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"numStrFmtCountryCultureSpecAtom."+
+			"copyNumStrFormatSpec()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if destinationNStrFormatSpec == nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'destinationNStrFormatSpec' is invalid!\n"+
+			"'destinationNStrFormatSpec' is a 'nil' pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if sourceNStrFormatSpec == nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'sourceNStrFormatSpec' is invalid!\n"+
+			"'sourceNStrFormatSpec' is a 'nil' pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	destinationNStrFormatSpec.Empty()
+
+	return destinationNStrFormatSpec.CopyIn(
+		sourceNStrFormatSpec,
+		ePrefix.XCpy(
+			"destinationNStrFormatSpec<-"+
+				"sourceNStrFormatSpec"))
 }
 
 //	equal
