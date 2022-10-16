@@ -535,8 +535,8 @@ func (nStrFmtCountryCultureSpec *NumStrFmtCountryCultureSpec) Equal(
 
 //	SetCurrencyNumberFieldSpec
 //
-//	Deletes and resets the currency number field
-//	specification for the current instance of
+//	Deletes and resets the Currency Number Field
+//	Specification for the current instance of
 //	NumStrFmtCountryCultureSpec.
 //
 // ----------------------------------------------------------------
@@ -545,6 +545,11 @@ func (nStrFmtCountryCultureSpec *NumStrFmtCountryCultureSpec) Equal(
 //
 //	No data validation is performed on input parameter,
 //	'currencyNumFieldSpec'.
+//
+//	For the current instance of NumStrFmtCountryCultureSpec,
+//	this method will modify the internal member variable:
+//
+//	NumStrFmtCountryCultureSpec.CurrencyNumStrFormat.numberFieldSpec
 //
 // ----------------------------------------------------------------
 //
@@ -588,6 +593,68 @@ func (nStrFmtCountryCultureSpec *NumStrFmtCountryCultureSpec) SetCurrencyNumberF
 			&currencyNumFieldSpec,
 			ePrefix.XCpy(
 				"nStrFmtCountryCultureSpec<-currencyNumFieldSpec"))
+}
+
+//	SetSignedNumberFieldSpec
+//
+//	Deletes and resets the Signed Number Field
+//	Specification for the current instance of
+//	NumStrFmtCountryCultureSpec.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	No data validation is performed on input parameter,
+//	'signedNumFieldSpec'.
+//
+//	For the current instance of NumStrFmtCountryCultureSpec,
+//	this method will modify the internal member variable:
+//
+//	NumStrFmtCountryCultureSpec.SignedNumStrFormat.numberFieldSpec
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	signedNumFieldSpec		NumStrNumberFieldSpec
+//
+//		Contains the Number String Number Field Specification
+//		which will be copied to the Signed Number String
+//		Number Field Specification encapsulated within
+//		the current instance of NumStrFmtCountryCultureSpec.
+func (nStrFmtCountryCultureSpec *NumStrFmtCountryCultureSpec) SetSignedNumberFieldSpec(
+	signedNumFieldSpec NumStrNumberFieldSpec,
+	errorPrefix interface{}) error {
+
+	if nStrFmtCountryCultureSpec.lock == nil {
+		nStrFmtCountryCultureSpec.lock = new(sync.Mutex)
+	}
+
+	nStrFmtCountryCultureSpec.lock.Lock()
+
+	defer nStrFmtCountryCultureSpec.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumStrFmtCountryCultureSpec."+
+			"SetSignedNumberFieldSpec()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	return new(numStrFmtCountryCultureSpecElectron).
+		copyNumberFieldSpec(
+			&nStrFmtCountryCultureSpec.SignedNumStrFormat.numberFieldSpec,
+			&signedNumFieldSpec,
+			ePrefix.XCpy(
+				"nStrFmtCountryCultureSpec<-signedNumFieldSpec"))
 }
 
 // numStrFmtCountryCultureSpecMech
