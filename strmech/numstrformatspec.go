@@ -1600,9 +1600,15 @@ func (numStrFmtSpec *NumStrFormatSpec) GetZeroNumSymSpec(
 //
 //	countryCultureFormat		NumStrFmtCountryCultureSpec
 //
-//		An instance of NumStrFmtCountryCultureSpec. This
-//		method will NOT change the values of internal
-//		member variables contained in this instance.
+//		An instance of NumStrFmtCountryCultureSpec.
+//
+//		The Country Culture Specification contains
+//		currency formatting information for the
+//		designated country or culture.
+//
+//		This method will NOT change the values of
+//		internal member variables contained in this
+//		instance.
 //
 //		The data values in 'countryCultureFormat' will be
 //		combined with input parameter 'numberFieldSpec'
