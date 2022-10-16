@@ -566,6 +566,65 @@ func (nStrNumberFieldSpec *NumStrNumberFieldSpec) NewFieldSpec(
 	return newNStrNumFieldSpec, err
 }
 
+//	NewNOP
+//
+//	'NOP' is a computer science term that stands for
+//	"No Operation". In this context, it means that
+//	method 'NewNOP' is returning an instance of
+//	NumStrNumberFieldSpec which will NOT construct
+//	a number field within which a number string
+//	is displayed. This means the length of the
+//	number field will be equal to the length of
+//	the number string and no text justification
+//	will be applied.
+//
+// ----------------------------------------------------------------
+//
+// # Defaults
+//
+//	newNumberField.fieldLength = -1
+//
+//	newNumberField.fieldJustification = TxtJustify.None()
+//
+// ----------------------------------------------------------------
+//
+//	# Input Parameters
+//
+//	NONE
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	newNumberField				NumStrNumberFieldSpec
+//
+//		This Number Field Specification configuration will
+//		set the length of a Number String Number Field to
+//		the length of the number string.
+//
+//		Field length and Text Justification are automatically
+//		set to the following values:
+//
+//			newNumberField.fieldLength = -1
+//
+//			newNumberField.fieldJustification = TxtJustify.None()
+func (nStrNumberFieldSpec *NumStrNumberFieldSpec) NewNOP() (newNumberField NumStrNumberFieldSpec) {
+
+	if nStrNumberFieldSpec.lock == nil {
+		nStrNumberFieldSpec.lock = new(sync.Mutex)
+	}
+
+	nStrNumberFieldSpec.lock.Lock()
+
+	defer nStrNumberFieldSpec.lock.Unlock()
+
+	newNumberField.fieldLength = -1
+
+	newNumberField.fieldJustification = TxtJustify.None()
+
+	return newNumberField
+}
+
 // SetFieldSpec - Deletes and overwrites all member variable
 // data values in the current instance of NumStrNumberFieldSpec.
 //
