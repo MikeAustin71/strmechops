@@ -533,7 +533,7 @@ func (nStrFmtCountryCultureSpec *NumStrFmtCountryCultureSpec) Equal(
 		incomingCountryCulture)
 }
 
-//	SetCurrencyNumFieldSpec
+//	SetCurrencyNumberFieldSpec
 //
 //	Deletes and resets the currency number field
 //	specification for the current instance of
@@ -556,7 +556,7 @@ func (nStrFmtCountryCultureSpec *NumStrFmtCountryCultureSpec) Equal(
 //		which will be copied to the Currency Number String
 //		Number Field Specification encapsulated within
 //		the current instance of NumStrFmtCountryCultureSpec.
-func (nStrFmtCountryCultureSpec *NumStrFmtCountryCultureSpec) SetCurrencyNumFieldSpec(
+func (nStrFmtCountryCultureSpec *NumStrFmtCountryCultureSpec) SetCurrencyNumberFieldSpec(
 	currencyNumFieldSpec NumStrNumberFieldSpec,
 	errorPrefix interface{}) error {
 
@@ -575,7 +575,7 @@ func (nStrFmtCountryCultureSpec *NumStrFmtCountryCultureSpec) SetCurrencyNumFiel
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumStrFmtCountryCultureSpec."+
-			"CopyIn()",
+			"SetCurrencyNumberFieldSpec()",
 		"")
 
 	if err != nil {
@@ -583,9 +583,9 @@ func (nStrFmtCountryCultureSpec *NumStrFmtCountryCultureSpec) SetCurrencyNumFiel
 	}
 
 	return new(numStrFmtCountryCultureSpecElectron).
-		setCurrencyNumFieldSpec(
-			nStrFmtCountryCultureSpec,
-			currencyNumFieldSpec,
+		copyNumberFieldSpec(
+			&nStrFmtCountryCultureSpec.CurrencyNumStrFormat.numberFieldSpec,
+			&currencyNumFieldSpec,
 			ePrefix.XCpy(
 				"nStrFmtCountryCultureSpec<-currencyNumFieldSpec"))
 }
@@ -1101,41 +1101,49 @@ type numStrFmtCountryCultureSpecElectron struct {
 	lock *sync.Mutex
 }
 
-//	setCurrencyNumFieldSpec
+//	copyNumberFieldSpec
 //
-//	Deletes and resets the currency number field
-//	specification for an instance of
-//	NumStrFmtCountryCultureSpec.
+//	Copies a source Number String Number Field
+//	Specification (NumStrNumberFieldSpec) to a destination
+//	Number String Number Field Specification.
 //
 // ----------------------------------------------------------------
 //
 // # IMPORTANT
 //
 //	No data validation is performed on input parameter,
-//	'currencyNumFieldSpec'.
+//	'sourceNumFieldSpec'.
 //
 // ----------------------------------------------------------------
 //
 // # Input Parameters
 //
-//	countryCultureSpec			*NumStrFmtCountryCultureSpec
+//	destinationNumFieldSpec			*NumStrNumberFieldSpec
 //
-//		A pointer to a NumStrFmtCountryCultureSpec
+//		A pointer to a NumStrNumberFieldSpec
 //		instance. The Number String Number Field
 //		Specification from input parameter
-//		'currencyNumFieldSpec' will be copied to the
-//		Currency Number String Number Field
-//		Specification contained within this
-//		NumStrFmtCountryCultureSpec instance.
+//		'sourceNumFieldSpec' will be copied to this
+//		parameter 'destinationNumFieldSpec'.
 //
-//	currencyNumFieldSpec		NumStrNumberFieldSpec
+//		All data values contained in
+//		'destinationNumFieldSpec' will be deleted and
+//		reset to new values extracted from
+//		'sourceNumFieldSpec'.
 //
-//		Contains the Number String Number Field Specification
-//		which will be copied to the Currency Number String
-//		Number Field Specification encapsulated within
-//		input parameter, 'countryCultureSpec'.
+//	sourceNumFieldSpec				*NumStrNumberFieldSpec
 //
-//	errPrefDto					*ePref.ErrPrefixDto
+//		A pointer to a NumStrNumberFieldSpec
+//		instance. The Number String Number Field
+//		Specification from this parameter
+//		'sourceNumFieldSpec' will be copied to the
+//		destination input parameter,
+//		'destinationNumFieldSpec'.
+//
+//		The data values contained in 'sourceNumFieldSpec'
+//		WILL NOT be modified by this method.
+//
+//	errPrefDto						*ePref.ErrPrefixDto
 //
 //		This object encapsulates an error prefix string
 //		which is included in all returned error
@@ -1166,9 +1174,9 @@ type numStrFmtCountryCultureSpecElectron struct {
 //		for input parameter 'errPrefDto' (error prefix)
 //		will be prefixed or attached at the beginning of
 //		the error message.
-func (nStrFmtCountryCultureElectron *numStrFmtCountryCultureSpecElectron) setCurrencyNumFieldSpec(
-	countryCultureSpec *NumStrFmtCountryCultureSpec,
-	currencyNumFieldSpec NumStrNumberFieldSpec,
+func (nStrFmtCountryCultureElectron *numStrFmtCountryCultureSpecElectron) copyNumberFieldSpec(
+	destinationNumFieldSpec *NumStrNumberFieldSpec,
+	sourceNumFieldSpec *NumStrNumberFieldSpec,
 	errPrefDto *ePref.ErrPrefixDto) error {
 
 	if nStrFmtCountryCultureElectron.lock == nil {
@@ -1187,135 +1195,37 @@ func (nStrFmtCountryCultureElectron *numStrFmtCountryCultureSpecElectron) setCur
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
 		"numStrFmtCountryCultureSpecElectron."+
-			"setCurrencyNumFieldSpec()",
+			"copyNumberFieldSpec()",
 		"")
 
 	if err != nil {
 		return err
 	}
 
-	if countryCultureSpec == nil {
+	if destinationNumFieldSpec == nil {
+
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'countryCultureSpec' is invalid!\n"+
+			"Error: Input parameter 'destinationNumFieldSpec' is invalid!\n"+
 			"'countryCultureSpec' is a 'nil' pointer.\n",
 			ePrefix.String())
 
 		return err
 	}
 
-	return countryCultureSpec.CurrencyNumStrFormat.
-		SetNumberFieldSpec(
-			currencyNumFieldSpec,
-			ePrefix.XCpy(
-				"<-currencyNumFieldSpec"))
-}
-
-//	setSignedNumFieldSpec
-//
-//	Deletes and resets the signed number field
-//	specification for an instance of
-//	NumStrFmtCountryCultureSpec.
-//
-// ----------------------------------------------------------------
-//
-// # IMPORTANT
-//
-//	No data validation is performed on input parameter,
-//	'signedNumFieldSpec'.
-//
-// ----------------------------------------------------------------
-//
-// # Input Parameters
-//
-//	countryCultureSpec			*NumStrFmtCountryCultureSpec
-//
-//		A pointer to a NumStrFmtCountryCultureSpec
-//		instance. The Number String Number Field
-//		Specification from input parameter
-//		'signedNumFieldSpec' will be copied to the
-//		Signed Number String Number Field
-//		Specification contained within this
-//		NumStrFmtCountryCultureSpec instance.
-//
-//	signedNumFieldSpec			NumStrNumberFieldSpec
-//
-//		Contains the Number String Number Field Specification
-//		which will be copied to the Signed Number String
-//		Number Field Specification encapsulated within
-//		input parameter, 'countryCultureSpec'.
-//
-//	errPrefDto					*ePref.ErrPrefixDto
-//
-//		This object encapsulates an error prefix string
-//		which is included in all returned error
-//		messages. Usually, it contains the name of the
-//		calling method or methods listed as a function
-//		chain.
-//
-//		If no error prefix information is needed, set
-//		this parameter to 'nil'.
-//
-//		Type ErrPrefixDto is included in the 'errpref'
-//		software package:
-//			"github.com/MikeAustin71/errpref".
-//
-// ----------------------------------------------------------------
-//
-// # Return Values
-//
-//	error
-//
-//		If this method completes successfully, this
-//		returned error Type is set equal to 'nil'. If
-//		errors are encountered during processing, the
-//		returned error Type will encapsulate an error
-//		message.
-//
-//		If an error message is returned, the text value
-//		for input parameter 'errPrefDto' (error prefix)
-//		will be prefixed or attached at the beginning of
-//		the error message.
-func (nStrFmtCountryCultureElectron *numStrFmtCountryCultureSpecElectron) setSignedNumFieldSpec(
-	countryCultureSpec *NumStrFmtCountryCultureSpec,
-	signedNumFieldSpec NumStrNumberFieldSpec,
-	errPrefDto *ePref.ErrPrefixDto) error {
-
-	if nStrFmtCountryCultureElectron.lock == nil {
-		nStrFmtCountryCultureElectron.lock = new(sync.Mutex)
-	}
-
-	nStrFmtCountryCultureElectron.lock.Lock()
-
-	defer nStrFmtCountryCultureElectron.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-
-	var err error
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
-		errPrefDto,
-		"numStrFmtCountryCultureSpecElectron."+
-			"setSignedNumFieldSpec()",
-		"")
-
-	if err != nil {
-		return err
-	}
-
-	if countryCultureSpec == nil {
+	if sourceNumFieldSpec == nil {
 
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'countryCultureSpec' is invalid!\n"+
-			"'countryCultureSpec' is a 'nil' pointer.\n",
+			"Error: Input parameter 'sourceNumFieldSpec' is invalid!\n"+
+			"'sourceNumFieldSpec' is a 'nil' pointer.\n",
 			ePrefix.String())
 
 		return err
 	}
 
-	return countryCultureSpec.SignedNumStrFormat.
-		SetNumberFieldSpec(
-			signedNumFieldSpec,
-			ePrefix.XCpy(
-				"<-signedNumFieldSpec"))
+	destinationNumFieldSpec.Empty()
+
+	return destinationNumFieldSpec.CopyIn(
+		sourceNumFieldSpec,
+		ePrefix.XCpy(
+			"<-signedNumFieldSpec"))
 }
