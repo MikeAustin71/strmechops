@@ -17,7 +17,9 @@ import (
 //
 // ----------------------------------------------------------------
 //
-//	 2.652e+8
+//	 	Example: 2.652e+8
+//
+//	Definition of Terms
 //
 //	significand 				=	'2.652'
 //	significand integer digits 	= 	'2'
@@ -124,9 +126,14 @@ type NumStrSciNotationFormatSpec struct {
 	//	this case the positive value is implied.
 	//	Example: '2.652e8'.
 
-	exponentChar rune
-	// 	defaults to 'e'. May be customized to 'E'
-	//	Examples: '2.652e8' or '2.652E8'.
+	exponentCharIsUpperCase bool
+	//	When set to 'true', the Exponent label 'E'
+	//	is set to upper case. Example: '2.652E8'
+	//
+	//	When set to 'false', the Exponent label 'e'
+	//	is set to lower case. Example: '2.652e8'
+	//
+	// 	The default is lower case 'e'.
 
 	lock *sync.Mutex
 }
