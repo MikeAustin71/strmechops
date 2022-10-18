@@ -7,19 +7,26 @@ import (
 
 //	NumStrSciNotationKernel
 //
-//	This structure contains the data elements necessary
-//	to store and format a numeric value using scientific
-//	notation.
+//	Type NumStrSciNotationKernel contains the scientific
+//	notation value used to format number strings
+//	displaying numeric values as scientific notation.
+//
+//	The type only contains the scientific or engineering
+//	notation values, NOT the format specifications.
 //
 // ----------------------------------------------------------------
 //
-//	Scientific Notation Terminology
+//	# Definition of Terms
 //
 // ----------------------------------------------------------------
+//
+//	Exponential Format
+//
+//		Example: "2.652 x 10^8"
+//
+//	E-Notation Format
 //
 //	 	Example: 2.652e+8
-//
-//	Definition of Terms
 //
 //	significand 				=	'2.652'
 //	significand integer digits 	= 	'2'
@@ -50,44 +57,86 @@ import (
 //
 //	# Engineering Notation
 //
+//	https://en.wikipedia.org/wiki/Engineering_notation
 //	https://sciencing.com/convert-between-base-number-systems-8442032.html
 //	https://mathworld.wolfram.com/EngineeringNotation.html
+//	https://www.youtube.com/watch?v=WfnTO_Pr3HE
 //
 // ----------------------------------------------------------------
 //
 // # Scientific Notation:
 //
-//	1.	Scientific Notation has only 1-digit to the
-//		left of the decimal point.
-
+//  1. Scientific Notation has only 1-digit to the
+//     left of the decimal point.
+//
+// ----------------------------------------------------------------
+//
+// # Engineering Notation:
+//
+//  1. Numbers multiplied by 1 get no modifier. This
+//     is a base number.
+//
+//  2. Multipliers
+//
+//     k kilo	1 x 10^3	1,000
+//     M mega	1 x 10^6	1,000,000
+//     G giga	1 x 10^9	1,000,000,000
+//     T tera	1 x 10^12	1,000,000,000,000
+//     P peta	1 x 10^15	1,000,000,000,000,000
+//     E exa	1 x 10^18	1,000,000,000,000,000,000
+//     Z zetta	1 x 10^21	1,000,000,000,000,000,000,000
+//     Y yotta	1 x 10^24	1,000,000,000,000,000,000,000,000
+//     Base	1 x 10^0	1
+//     m milli	1 x 10^-3	0.001
+//     μ micro	1 x 10^-6	0.000 001
+//     n nano	1 x 10^-9	0.000 000 001
+//     p pico	1 x 10^-12	0.000 000 000 001
+//     f femto	1 x 10^-15	0.000 000 000 000 001
+//     a atto	1 x 10^-18  0.000 000 000 000 000 001
+//     y yocto	1 x 10^-24	0.000 000 000 000 000 000 001
 type NumStrSciNotationKernel struct {
-	significand *big.Int
+	significand NumberStrKernel
 	//	The significand consists of the leading integer and
 	//	fractional digits of the scientific notation.
 	//
-	// In the example '2.652E+8', the significand is '2.652'
-	// and will be stored as a *big.Int number, '2652'.
+	// In the example '2.652E+8', the significand is '2.652'.
 
 	exponent *big.Int
 	// The exponent portion of the scientific notation string
 	// In the example '2.652E+8', the exponent is '8'
 
-	mantissaLength uint
-	//	The length of the fractional digits in the
-	//	significand.
-	//
-	//	In the example '2.652E+8', the mantissa length is
-	//	'3'.
-
 	lock *sync.Mutex
 }
 
-// NumStrSciNotationFormatSpec
+// NumStrENotationFormatSpec
 //
 // Contains all the specification parameters required
-// to format a numeric value in scientific notation for
-// presentation as a number string.
-type NumStrSciNotationFormatSpec struct {
+// to format a numeric value in scientific notation using
+// the E-Notation Format.
+//
+// ----------------------------------------------------------------
+//
+//	# Definition of Terms
+//
+// ----------------------------------------------------------------
+//
+//	There are two types of formats used to display numeric
+//	values in scientific notation: The Exponential Format
+//	and the E-Notation Format.
+//
+//		Exponential Format Example
+//
+//			"2.652 x 10^8"
+//
+//		E-Notation Format Example
+//
+//	 		"2.652e+8"
+//
+//	Type NumStrENotationFormatSpec contains the
+//	specification parameter necessary to format a
+//	scientific notation or engineering notation value in
+//	E-Notation Format.
+type NumStrENotationFormatSpec struct {
 	decimalSeparator DecimalSeparatorSpec
 	//	The radix point or decimal separator used to separate
 	//	integer and	fractional digits in the significand. The
