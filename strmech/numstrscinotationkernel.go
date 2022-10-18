@@ -39,6 +39,7 @@ import (
 //
 // # Reference:
 //
+//	https://en.wikipedia.org/wiki/Scientific_notation
 //	https://www.medcalc.org/manual/scientific-notation.php
 //	https://researchtweet.com/scientific-notation-definition-calculation/
 //	https://www.wikihow.com/Multiply-Scientific-Notation
@@ -182,7 +183,10 @@ type NumStrENotationFormatSpec struct {
 	//	When set to 'false', the Exponent label 'e'
 	//	is set to lower case. Example: '2.652e8'
 	//
-	// 	The default is lower case 'e'.
+	// 	The default is upper case 'E' in order
+	//	to avoid confusion with the abbreviation
+	//	of Euler's Number (e) or the exponential
+	//	function  f(x) = e^x.
 
 	lock *sync.Mutex
 }

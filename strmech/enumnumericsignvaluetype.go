@@ -479,7 +479,7 @@ type numericSignValueTypeNanobot struct {
 // VALID. "None" represents an error condition.
 //
 // This is a standard utility method and is not part of the valid
-// TextFieldType enumeration.
+// NumericSignValueType enumeration.
 func (numSignValTypeNanobot *numericSignValueTypeNanobot) isValidNumSignValueType(
 	numSignValueType NumericSignValueType) bool {
 
