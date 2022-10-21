@@ -309,6 +309,420 @@ func (nStrNumSym *NumStrNumberSymbols) NewSymbolSpecs(
 	return newNumberSymbols, err
 }
 
+//	SetNegativeNumSignSpec
+//
+//	Reconfigures the current instance of
+//	NumStrNumberSymbols based on the Negative Number
+//	Sign Symbol Specification object passed as an input
+//	parameter.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	Be advised that this method will delete and reset the
+//	Negative Number Sign Symbol member variable data
+//	fields contained in the current instance of
+//	NumStrNumberSymbols.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	negativeNumberSign			NumStrNumberSymbolSpec
+//
+//		This Negative Number Sign Symbol Specification
+//		will be copied to the corresponding Negative
+//		Symbol Specification in the current instance of
+//		NumStrNumberSymbols.
+//
+//	 errorPrefix                interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it	contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (nStrNumSym *NumStrNumberSymbols) SetNegativeNumSignSpec(
+	negativeNumberSign NumStrNumberSymbolSpec,
+	errorPrefix interface{}) error {
+
+	if nStrNumSym.lock == nil {
+		nStrNumSym.lock = new(sync.Mutex)
+	}
+
+	nStrNumSym.lock.Lock()
+
+	defer nStrNumSym.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumStrNumberSymbols."+
+			"SetNegativeNumSignSpec()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	return new(numStrNumberSymbolsNanobot).
+		setNegativeNumSignSpec(
+			nStrNumSym,
+			negativeNumberSign,
+			ePrefix.XCpy(
+				"nStrNumSym"))
+
+}
+
+//	SetPositiveNumSignSpec
+//
+//	Reconfigures the current instance of
+//	NumStrNumberSymbols based on the Positive Number
+//	Sign Symbol Specification object passed as an input
+//	parameter.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	Be advised that this method will delete and reset the
+//	Positive Number Sign Symbol member variable data
+//	fields contained in the current instance of
+//	NumStrNumberSymbols.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	positiveNumberSign			NumStrNumberSymbolSpec
+//
+//		This Positive Number Sign Symbol Specification
+//		will be copied to the corresponding Positive
+//		Symbol Specification in the current instance of
+//		NumStrNumberSymbols.
+//
+//	 errorPrefix                interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it	contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (nStrNumSym *NumStrNumberSymbols) SetPositiveNumSignSpec(
+	positiveNumberSign NumStrNumberSymbolSpec,
+	errorPrefix interface{}) error {
+
+	if nStrNumSym.lock == nil {
+		nStrNumSym.lock = new(sync.Mutex)
+	}
+
+	nStrNumSym.lock.Lock()
+
+	defer nStrNumSym.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumStrNumberSymbols."+
+			"SetPositiveNumSignSpec()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	return new(numStrNumberSymbolsNanobot).
+		setPositiveNumSignSpec(
+			nStrNumSym,
+			positiveNumberSign,
+			ePrefix.XCpy(
+				"nStrNumSym"))
+
+}
+
+//	SetZeroNumSignSpec
+//
+//	Reconfigures the current instance of
+//	NumStrNumberSymbols based on the Zero Number
+//	Sign Symbol Specification object passed as an input
+//	parameter.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	Be advised that this method will delete and reset the
+//	Zero Number Sign Symbol member variable data
+//	fields contained in the current instance of
+//	NumStrNumberSymbols.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	zeroNumberSign				NumStrNumberSymbolSpec
+//
+//		This Zero Number Sign Symbol Specification
+//		will be copied to the corresponding Zero
+//		Symbol Specification in the current instance of
+//		NumStrNumberSymbols.
+//
+//	 errorPrefix                interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it	contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (nStrNumSym *NumStrNumberSymbols) SetZeroNumSignSpec(
+	positiveNumberSign NumStrNumberSymbolSpec,
+	errorPrefix interface{}) error {
+
+	if nStrNumSym.lock == nil {
+		nStrNumSym.lock = new(sync.Mutex)
+	}
+
+	nStrNumSym.lock.Lock()
+
+	defer nStrNumSym.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumStrNumberSymbols."+
+			"SetZeroNumSignSpec()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	return new(numStrNumberSymbolsNanobot).
+		setZeroNumSignSpec(
+			nStrNumSym,
+			positiveNumberSign,
+			ePrefix.XCpy(
+				"nStrNumSym"))
+
+}
+
 //	SetSymbolSpecs
 //
 //	Reconfigures the current instance of
@@ -607,6 +1021,354 @@ func (nStrNumSymMech *numStrNumberSymbolsMechanics) setNumSymbolSpecs(
 				"negativeNumberSign"))
 
 	if err != nil {
+		return err
+	}
+
+	err = nStrNumSymbols.zeroNumberSign.CopyIn(
+		&zeroNumberSign,
+		ePrefix.XCpy(
+			"nStrNumSymbols.zeroNumberSign<-"+
+				"zeroNumberSign"))
+
+	return err
+}
+
+type numStrNumberSymbolsNanobot struct {
+	lock *sync.Mutex
+}
+
+//	setNegativeNumSignSpec
+//
+//	Receives a single NumStrNumberSymbolSpec object
+//	configured as a Negative Number Sign Symbol.
+//
+//	This method then proceeds to reset the
+//	corresponding Negative Number Sign Symbol member
+//	variable data value for the NumStrNumberSymbols
+//	input paramter 'nStrNumSymbols'.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	Be advised that this method will delete and reset the
+//	Negative Number Sign Symbol member variable data fields
+//	contained in input paramter, 'nStrNumSymbols'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	nStrNumSymbols				*NumStrNumberSymbols
+//
+//		A pointer to an instance of NumStrNumberSymbols.
+//		The Negative Number Sign Symbol Specifications
+//		for this instance will be deleted and reset to
+//		the values provided by input parameter
+//		'negativeNumberSign'.
+//
+//	negativeNumberSign			NumStrNumberSymbolSpec
+//
+//		This Negative Number Sign Symbol Specification
+//		will be copied to the corresponding Negative
+//		Symbol Specification in input paramter,
+//		'nStrNumSymbols'.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// -----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, this
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (nStrNumSymNanobot *numStrNumberSymbolsNanobot) setNegativeNumSignSpec(
+	nStrNumSymbols *NumStrNumberSymbols,
+	negativeNumberSign NumStrNumberSymbolSpec,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if nStrNumSymNanobot.lock == nil {
+		nStrNumSymNanobot.lock = new(sync.Mutex)
+	}
+
+	nStrNumSymNanobot.lock.Lock()
+
+	defer nStrNumSymNanobot.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"numStrNumberSymbolsNanobot."+
+			"setNegativeNumSignSpec()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if nStrNumSymbols == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'nStrNumSymbols' is invalid!\n"+
+			"'nStrNumSymbols' is a 'nil' pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	err = nStrNumSymbols.negativeNumberSign.CopyIn(
+		&negativeNumberSign,
+		ePrefix.XCpy(
+			"nStrNumSymbols.negativeNumberSign<-"+
+				"negativeNumberSign"))
+
+	return err
+}
+
+//	setPositiveNumSignSpec
+//
+//	Receives a single NumStrNumberSymbolSpec object
+//	configured as a Positive Number Sign Symbol.
+//
+//	This method then proceeds to reset the
+//	corresponding Positive Number Sign Symbol member
+//	variable data value for the NumStrNumberSymbols
+//	input paramter 'nStrNumSymbols'.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	Be advised that this method will delete and reset the
+//	Positive Number Sign Symbol member variable data fields
+//	contained in input paramter, 'nStrNumSymbols'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	nStrNumSymbols				*NumStrNumberSymbols
+//
+//		A pointer to an instance of NumStrNumberSymbols.
+//		The Positive Number Sign Symbol Specification
+//		for this instance will be deleted and reset to
+//		the values provided by input parameter
+//		'positiveNumberSign'.
+//
+//	positiveNumberSign			NumStrNumberSymbolSpec
+//
+//		This Positive Number Sign Symbol Specification
+//		will be copied to the corresponding Positive
+//		Symbol Specification in input paramter,
+//		'nStrNumSymbols'.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// -----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, this
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (nStrNumSymNanobot *numStrNumberSymbolsNanobot) setPositiveNumSignSpec(
+	nStrNumSymbols *NumStrNumberSymbols,
+	positiveNumberSign NumStrNumberSymbolSpec,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if nStrNumSymNanobot.lock == nil {
+		nStrNumSymNanobot.lock = new(sync.Mutex)
+	}
+
+	nStrNumSymNanobot.lock.Lock()
+
+	defer nStrNumSymNanobot.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"numStrNumberSymbolsNanobot."+
+			"setPositiveNumSignSpec()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if nStrNumSymbols == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'nStrNumSymbols' is invalid!\n"+
+			"'nStrNumSymbols' is a 'nil' pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	err = nStrNumSymbols.positiveNumberSign.CopyIn(
+		&positiveNumberSign,
+		ePrefix.XCpy(
+			"nStrNumSymbols.positiveNumberSign<-"+
+				"positiveNumberSign"))
+
+	return err
+}
+
+//	setZeroNumSignSpec
+//
+//	Receives a single NumStrNumberSymbolSpec object
+//	configured as a Zero Number Sign Symbol.
+//
+//	This method then proceeds to reset the
+//	corresponding Zero Number Sign Symbol member
+//	variable data value for the NumStrNumberSymbols
+//	input paramter 'nStrNumSymbols'.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	Be advised that this method will delete and reset the
+//	Zero Number Sign Symbol member variable data fields
+//	contained in input paramter, 'nStrNumSymbols'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	nStrNumSymbols				*NumStrNumberSymbols
+//
+//		A pointer to an instance of NumStrNumberSymbols.
+//		The Zero Number Sign for this instance will be
+//		deleted and reset to the values	provided by input
+//		parameter 'zeroNumberSign'.
+//
+//	zeroNumberSign			NumStrNumberSymbolSpec
+//
+//		This Zero Number Sign Symbol Specification
+//		will be copied to the corresponding Zero
+//		Symbol Specification in input paramter,
+//		'nStrNumSymbols'.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// -----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, this
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (nStrNumSymNanobot *numStrNumberSymbolsNanobot) setZeroNumSignSpec(
+	nStrNumSymbols *NumStrNumberSymbols,
+	zeroNumberSign NumStrNumberSymbolSpec,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if nStrNumSymNanobot.lock == nil {
+		nStrNumSymNanobot.lock = new(sync.Mutex)
+	}
+
+	nStrNumSymNanobot.lock.Lock()
+
+	defer nStrNumSymNanobot.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"numStrNumberSymbolsNanobot."+
+			"setZeroNumSignSpec()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if nStrNumSymbols == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'nStrNumSymbols' is invalid!\n"+
+			"'nStrNumSymbols' is a 'nil' pointer.\n",
+			ePrefix.String())
+
 		return err
 	}
 
