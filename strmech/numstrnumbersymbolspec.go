@@ -6,85 +6,116 @@ import (
 	"sync"
 )
 
-// NumStrNumberSymbolSpec - Contains one or
-// more characters to be inserted and displayed in a
-// number string.
+//	NumStrNumberSymbolSpec
+//
+//	Contains one or more characters to be inserted and
+//	displayed in a number string.
 //
 // # Background
 //
-// The Number String Number Symbol Specification includes
-// specifications for both leading and trailing characters.
-// As such, 'Number Symbols' can include plus signs ('+'),
-// minus signs ('-'), parentheses ('()') as well as currency
-// ('$') and other symbols.
+//	The Number String Number Symbol Specification
+//	includes specifications for both leading and
+//	trailing characters.
 //
-// The user has the option to configure both leading and
-// trailing number symbols.
+//	As such, 'Number Symbols' can include plus signs
+//	('+'), minus signs ('-'), parentheses ('()') as
+//	well as currency ('$') and other symbols.
 //
-// Number Symbols can include one or more text characters.
+//	The user has the option to configure both leading and
+//	trailing number symbols, leading number symbols only
+//	or trailing number symbols only.
+//
+//	A Number Symbol is defined as one or more text
+//	characters.
 //
 // # Usage
 //
-// Example-1: Leading Number Symbols
+//	Example-1:
+//		Leading Number Symbols for Positive Values
 //
-//	Leading Symbols: "+ "
-//	Number String:   "+ 123.456"
+//		Leading Symbols: "+ "
+//		Number String:   "+ 123.456"
 //
-// Example-2: Leading Number Symbols
+//	Example-2: Leading Number Symbols
+//		Leading Number Symbols for Positive Values
 //
-//	Leading Symbols: "$+"
-//	Number String:   "$+123.456"
+//		Leading Symbols: "$+"
+//		Number String:   "$+123.456"
 //
-// Example-3: Leading Number Symbols
+//	Example-3: Leading Number Symbols
+//		Leading Number Symbols for Positive Values
 //
-//	Leading Symbols: "$"
-//	Number String:   "$123.456"
+//		Leading Symbols: "$"
+//		Number String:   "$123.456"
 //
-// Example-4: Leading Number Symbols
+//	Example-4: Leading Number Symbols
+//		Leading Number Symbols for Negative Values
 //
-//	Leading Symbols: "- "
-//	Number String:   "- 123.456"
+//		Leading Symbols: "- "
+//		Number String:   "- 123.456"
 //
-// Example-5: Leading Number Symbols
+//	Example-5: Leading Number Symbols
+//		Leading Number Symbols for Negative Values
 //
-//	Leading Symbols: "$-"
-//	Number String:   "$-123.456"
+//		Leading Symbols: "$-"
+//		Number String:   "$-123.456"
 //
-// Example-6: Leading Number Symbols
+//	Example-6: Leading Number Symbols
+//		Leading Number Symbols for Positive Values
 //
-//	Leading Symbols: "$"
-//	Number String:   "$123.456"
+//		Leading Symbols: "$"
+//		Number String:   "$123.456"
 //
-// Example-7: Trailing Number Symbols
+//	Example-7: Trailing Number Symbols
+//		Trailing Number Symbols for Positive Values
 //
-//	Trailing Symbols: " +"
-//	Number String:   "123.456 +"
+//		Trailing Symbols: " +"
+//		Number String:   "123.456 +"
 //
-// Example-8: Trailing Number Symbols
+//	Example-8: Trailing Number Symbols
+//		Trailing Number Symbols for Positive Values
 //
-//	Trailing Symbols: "+$"
-//	Number String:   "123.456+$"
+//		Trailing Symbols: "+$"
+//		Number String:   "123.456+$"
 //
-// Example-9: Trailing Number Symbols
+//	Example-9: Trailing Number Symbols
+//		Trailing Number Symbols for Positive Values
 //
-//	Trailing Symbols: "$"
-//	Number String:   "123.456$"
+//		Trailing Symbols: "$"
+//		Number String:   "123.456$"
 //
-// Example-10: Trailing Number Symbols
+//	Example-10: Trailing Number Symbols
+//		Trailing Number Symbols for Negative Values
 //
-//	Trailing Symbols: " -"
-//	Number String:   "123.456 -"
+//		Trailing Symbols: " -"
+//		Number String:   "123.456 -"
 //
-// Example-11: Trailing Number Symbols
+//	Example-11: Trailing Number Symbols
+//		Trailing Number Symbols for Negative Values
 //
-//	Trailing Symbols: "-$"
-//	Number String:   "123.456-$"
+//		Trailing Symbols: "-$"
+//		Number String:   "123.456-$"
 //
-// Example-12: Trailing Number Symbols
+//	Example-12: Trailing Number Symbols
+//		Trailing Number Symbols for Negative Values
 //
-//	 Leading Symbols: "("
+//		Leading Symbols: "("
 //		Trailing Symbols: ")"
 //		Number String:   "(123.456)"
+//
+//	Example-13: Leading Number Symbols
+//		Leading Number Symbols for Zero Values
+//
+//		Leading Symbols: "$"
+//		Trailing Symbols: ""
+//		Number String:   "$0.00"
+//
+//	Example-14: Trailing Number Symbols
+//		Trailing Number Symbols for Zero Values
+//
+//		Leading Symbols: ""
+//		Trailing Symbols: " $"
+//		Number String:   "0.00 $"
 type NumStrNumberSymbolSpec struct {
 	leadingNumberSymbols RuneArrayDto
 	// Contains the character or characters which

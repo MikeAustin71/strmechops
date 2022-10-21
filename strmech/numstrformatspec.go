@@ -35,6 +35,31 @@ type NumStrFormatSpec struct {
 	//	For currency presentations, the currency
 	//	symbol is combined with the negative number
 	//	sign.
+	//
+	//	Example-1: Leading Number Symbols
+	//		Leading Number Symbols for Negative Values
+	//
+	//		Leading Symbols: "- "
+	//		Number String:   "- 123.456"
+	//
+	//	Example-2: Leading Number Symbols With Currency
+	//		Leading Number Symbols for Negative Values
+	//
+	//		Leading Symbols: "$-"
+	//		Number String:   "$-123.456"
+	//
+	//
+	//	Example-3: Trailing Number Symbols
+	//		Trailing Number Symbols for Negative Values
+	//
+	//		Trailing Symbols: " -"
+	//		Number String:   "123.456 -"
+	//
+	//	Example-4: Trailing Number Symbols
+	//		Trailing Number Symbols for Negative Values
+	//
+	//		Trailing Symbols: "-$"
+	//		Number String:   "123.456-$"
 
 	numberFieldSpec NumStrNumberFieldSpec
 	//	This Number String Number Field Specification
@@ -110,16 +135,72 @@ type NumStrFormatSpec struct {
 	//	For currency presentations, the currency
 	//	symbol is combined with the positive number
 	//	sign.
+	//
+	//	Example-1: Leading Number Symbols
+	//		Leading Number Symbols for Positive Values
+	//
+	//		Leading Symbols: "+ "
+	//		Number String:   "+ 123.456"
+	//
+	//	Example-2: Leading Number Symbols
+	//		Leading Number Symbols for Positive Values
+	//
+	//		Leading Symbols: "$+"
+	//		Number String:   "$+123.456"
+	//
+	//	Example-3: Leading Number Symbols
+	//		Leading Number Symbols for Positive Values
+	//
+	//		Leading Symbols: "$"
+	//		Number String:   "$123.456"
+	//
+	//	Example-4: Trailing Number Symbols
+	//		Trailing Number Symbols for Positive Values
+	//
+	//		Trailing Symbols: " +"
+	//		Number String:   "123.456 +"
+	//
+	//	Example-5: Trailing Number Symbols
+	//		Trailing Number Symbols for Positive Values
+	//
+	//		Trailing Symbols: "+$"
+	//		Number String:   "123.456+$"
+	//
+	//	Example-6: Trailing Number Symbols
+	//		Trailing Number Symbols for Positive Values
+	//
+	//		Trailing Symbols: "$"
+	//		Number String:   "123.456$"
 
 	zeroNumberSign NumStrNumberSymbolSpec
 	//	The Number String Zero Number Symbol
 	//	Specification is used to configure number
 	//	symbols for zero numeric values formatted
-	//	and displayed in number stings.
+	//	and displayed in number stings. Zero number
+	//	signs are commonly omitted because zero
+	//	does not technically qualify as either a
+	//	positive or negatvie value. However,
+	//	currency symbols may be required for zero
+	//	values.
 	//
 	//	For currency presentations, the currency
-	//	symbol is combined with the zero number
-	//	sign.
+	//	symbol is often used as either a leading
+	//	or trailing symbol for zero numeric
+	//	values.
+	//
+	//	Example-1: Leading Number Symbols
+	//		Leading Number Symbols for Zero Values
+	//
+	//		Leading Symbols: "$"
+	//		Trailing Symbols: ""
+	//		Number String:   "$0.00"
+	//
+	//	Example-2: Trailing Number Symbols
+	//		Trailing Number Symbols for Zero Values
+	//
+	//		Leading Symbols: ""
+	//		Trailing Symbols: " $"
+	//		Number String:   "0.00 $"
 
 	lock *sync.Mutex
 }
@@ -10153,6 +10234,10 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setCurrencyNStrFmtFrance
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
 
+	if nStrNumberFieldSpecNanobot.lock == nil {
+		nStrNumberFieldSpecNanobot.lock = new(sync.Mutex)
+	}
+
 	nStrNumberFieldSpecNanobot.lock.Lock()
 
 	defer nStrNumberFieldSpecNanobot.lock.Unlock()
@@ -10486,6 +10571,10 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setCurrencyNStrFmtGerman
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
 
+	if nStrNumberFieldSpecNanobot.lock == nil {
+		nStrNumberFieldSpecNanobot.lock = new(sync.Mutex)
+	}
+
 	nStrNumberFieldSpecNanobot.lock.Lock()
 
 	defer nStrNumberFieldSpecNanobot.lock.Unlock()
@@ -10810,6 +10899,10 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setCurrencyNStrFmtUK(
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
 
+	if nStrNumberFieldSpecNanobot.lock == nil {
+		nStrNumberFieldSpecNanobot.lock = new(sync.Mutex)
+	}
+
 	nStrNumberFieldSpecNanobot.lock.Lock()
 
 	defer nStrNumberFieldSpecNanobot.lock.Unlock()
@@ -11105,6 +11198,10 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setCurrencyNStrFmtUS(
 	numberFieldSpec NumStrNumberFieldSpec,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
+
+	if nStrNumberFieldSpecNanobot.lock == nil {
+		nStrNumberFieldSpecNanobot.lock = new(sync.Mutex)
+	}
 
 	nStrNumberFieldSpecNanobot.lock.Lock()
 
@@ -11656,6 +11753,10 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setNStrNumberFieldSpec(
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
 
+	if nStrNumberFieldSpecNanobot.lock == nil {
+		nStrNumberFieldSpecNanobot.lock = new(sync.Mutex)
+	}
+
 	nStrNumberFieldSpecNanobot.lock.Lock()
 
 	defer nStrNumberFieldSpecNanobot.lock.Unlock()
@@ -11952,6 +12053,10 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtFrance(
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
 
+	if nStrNumberFieldSpecNanobot.lock == nil {
+		nStrNumberFieldSpecNanobot.lock = new(sync.Mutex)
+	}
+
 	nStrNumberFieldSpecNanobot.lock.Lock()
 
 	defer nStrNumberFieldSpecNanobot.lock.Unlock()
@@ -12241,6 +12346,10 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtGermany(
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
 
+	if nStrNumberFieldSpecNanobot.lock == nil {
+		nStrNumberFieldSpecNanobot.lock = new(sync.Mutex)
+	}
+
 	nStrNumberFieldSpecNanobot.lock.Lock()
 
 	defer nStrNumberFieldSpecNanobot.lock.Unlock()
@@ -12508,6 +12617,10 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtUS(
 	numberFieldSpec NumStrNumberFieldSpec,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
+
+	if nStrNumberFieldSpecNanobot.lock == nil {
+		nStrNumberFieldSpecNanobot.lock = new(sync.Mutex)
+	}
 
 	nStrNumberFieldSpecNanobot.lock.Lock()
 
@@ -13981,6 +14094,10 @@ func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setNStrFmtComponents(
 	numberFieldSpec NumStrNumberFieldSpec,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
+
+	if signedNumFmtSpecAtom.lock == nil {
+		signedNumFmtSpecAtom.lock = new(sync.Mutex)
+	}
 
 	signedNumFmtSpecAtom.lock.Lock()
 
