@@ -1472,6 +1472,277 @@ func (nStrNumSym *NumStrNumberSymbols) SetNegativeNumSignSpec(
 
 }
 
+//	SetNegativeSymbolsRunes
+//
+//	Deletes and resets the Negative Number Symbols data
+//	fields for the current instance of NumStrNumberSymbols.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	Be advised that this method will delete and reset the
+//	Negative Number Sign Symbol member variable data
+//	fields as specified by the Negative Number Symbol
+//	input parameters passed as rune arrays.
+//
+//	The Negative Number Sign Symbol member variable for
+//	the current instance of NumStrNumberSymbols is:
+//
+//		NumStrNumberSymbols.negativeNumberSign
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	leadingNegativeNumberSymbols	[]rune
+//
+//		A rune array containing the leading negative
+//		number sign character or characters used to
+//		configure Negative Number Sign Symbols in a
+//		number string with a negative numeric value.
+//
+//		Leading number symbols can include any
+//		combination of characters such as minus signs
+//		('-') and/or currency symbols ('$').
+//
+//		Example-1: Leading Number Symbols
+//			Leading Number Symbols for Negative Values
+//
+//			Leading Symbols: "+ "
+//			Number String:   "+ 123.456"
+//
+//		Example-2: Leading Number Symbols
+//			Leading Number Symbols for Negative Values
+//
+//			Leading Symbols: "$+"
+//			Number String:   "$+123.456"
+//
+//		Example-3: Leading Number Symbols
+//			Leading Number Symbols for Negative Values
+//
+//			Leading Symbols: "$"
+//			Number String:   "$123.456"
+//
+//	trailingNegativeNumberSymbols	[]rune
+//
+//		A rune array containing the trailing negative
+//		number sign character or characters used to
+//		configure Negative Number Sign Symbols in a
+//		number string with a negative numeric value.
+//
+//		Trailing number symbols can include any
+//		combination of characters such as minus signs
+//		('-') and/or currency symbols ('$').
+//
+//		Example-1: Trailing Number Symbols
+//			Trailing Number Symbols for Negative Values
+//
+//			Trailing Symbols: " +"
+//			Number String:   "123.456 +"
+//
+//		Example-2: Trailing Number Symbols
+//			Trailing Number Symbols for Negative Values
+//
+//			Trailing Symbols: "+$"
+//			Number String:   "123.456+$"
+//
+//		Example-3: Trailing Number Symbols
+//			Trailing Number Symbols for Negative Values
+//
+//			Trailing Symbols: "$"
+//			Number String:   "123.456$"
+//
+//	negativeNumFieldSymPosition		NumberFieldSymbolPosition
+//
+//		Defines the position of the Negative Number Sign
+//		relative to a Number Field in which a number
+//		string is displayed. Possible valid values are
+//		listed as follows:
+//
+//			NumFieldSymPos.InsideNumField()
+//				Example-1:
+//					Number Field Length: 8
+//					Numeric Value: 123.45
+//					Number Symbol: leading minus sign ('-')
+//					Number Symbol Position: Inside Number Field
+//			     	Number Text Justification: Right
+//					Formatted Number String: " -123.45"
+//					Number Field Index:  01234567
+//					Total Number String Length: 8
+//
+//				Example-2:
+//					Number Field Length: 8
+//					Numeric Value: 123.45
+//					Number Symbol: trailing minus sign ('-')
+//					Number Symbol Position: Inside Number Field
+//			     	Number Text Justification: Right
+//					Formatted Number String: " 123.45-"
+//					Number Field Index:       01234567
+//					Total Number String Length: 8
+//
+//				Example-3:
+//					Number Field Length: 10
+//					Numeric Value: 123.45
+//					Number Symbol: before and after parentheses  ('()')
+//					Number Symbol Position: Inside Number Field
+//			     	Number Text Justification: Centered
+//					Formatted Number String: " (123.45) "
+//					Number Field Index:       0123456789
+//					Total Number String Length: 10
+//
+//				For the 'NumFieldSymPos.InsideNumField()'
+//				specification, the final length of the number
+//				string is defined by the Number Field length.
+//
+//			NumFieldSymPos.OutsideNumField()
+//				Example-4:
+//					Number Field Length: 8
+//			     	Numeric Value: 123.45
+//			     	Number Symbol: leading minus sign ('-')
+//			     	Number Symbol Position: Outside Number Field
+//			     	Number Text Justification: Right
+//			     	Formatted Number String: "-  123.45"
+//					Number Field Index:       012345678
+//					Total Number String Length: 9
+//
+//				Example-5:
+//					Number Field Length: 8
+//			     	Numeric Value: 123.45
+//			     	Number Symbol: trailing minus sign ('-')
+//			     	Number Symbol Position: Outside Number Field
+//			     	Number Text Justification: Right
+//			     	Formatted Number String: "  123.45-"
+//					Number Field Index:       012345678
+//					Total Number String Length: 9
+//
+//				Example-6:
+//					Number Field Length: 8
+//					Numeric Value: 123.45
+//					Number Symbol: before and after parentheses  ('()')
+//					Number Symbol Position: Outside Number Field
+//			     	Number Text Justification: Centered
+//					Formatted Number String: "( 123.45 )"
+//					Number Field Index:       0123456789
+//					Total Number String Length: 10
+//
+//				For the 'NumFieldSymPos.OutsideNumField()'
+//				specification, the final length of the number
+//				string is greater than the Number Field length.
+//
+//	 errorPrefix                interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it	contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (nStrNumSym *NumStrNumberSymbols) SetNegativeSymbolsRunes(
+	leadingNegativeNumberSymbols []rune,
+	trailingNegativeNumberSymbols []rune,
+	negativeNumFieldSymPosition NumberFieldSymbolPosition,
+	errorPrefix interface{}) error {
+
+	if nStrNumSym.lock == nil {
+		nStrNumSym.lock = new(sync.Mutex)
+	}
+
+	nStrNumSym.lock.Lock()
+
+	defer nStrNumSym.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumStrNumberSymbols."+
+			"SetNegativeSymbolsRunes()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	return new(numStrNumberSymbolsNanobot).setNegativeNumSignRunes(
+		nStrNumSym,
+		leadingNegativeNumberSymbols,
+		trailingNegativeNumberSymbols,
+		negativeNumFieldSymPosition,
+		ePrefix.XCpy(
+			"nuStrNumSym<-NegativeNumSyms"))
+}
+
 //	SetNegativeSymbolsStrings
 //
 //	Deletes and resets the Negative Number Symbols data
@@ -1484,7 +1755,7 @@ func (nStrNumSym *NumStrNumberSymbols) SetNegativeNumSignSpec(
 //	Be advised that this method will delete and reset the
 //	Negative Number Sign Symbol member variable data
 //	fields as specified by the Negative Number Symbol
-//	input parameters.
+//	input parameters passed as strings.
 //
 //	The Negative Number Sign Symbol member variable for
 //	the current instance of NumStrNumberSymbols is:
