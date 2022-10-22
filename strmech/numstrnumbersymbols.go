@@ -1172,7 +1172,7 @@ func (nStrNumSym *NumStrNumberSymbols) NewSymbolsStrings(
 	return newNumberSymbols, err
 }
 
-//	NewSymbolSpecs
+//	NewSymbolsSpecs
 //
 //	Creates and returns a new instance of
 //	NumStrNumberSymbols. The new instance is generated
@@ -1289,7 +1289,7 @@ func (nStrNumSym *NumStrNumberSymbols) NewSymbolsStrings(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (nStrNumSym *NumStrNumberSymbols) NewSymbolSpecs(
+func (nStrNumSym *NumStrNumberSymbols) NewSymbolsSpecs(
 	positiveNumberSign NumStrNumberSymbolSpec,
 	negativeNumberSign NumStrNumberSymbolSpec,
 	zeroNumberSign NumStrNumberSymbolSpec,
@@ -1315,7 +1315,7 @@ func (nStrNumSym *NumStrNumberSymbols) NewSymbolSpecs(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumStrNumberSymbols."+
-			"NewSymbolSpecs()",
+			"NewSymbolsSpecs()",
 		"")
 
 	if err != nil {
@@ -2800,7 +2800,7 @@ func (nStrNumSym *NumStrNumberSymbols) SetZeroNumSignSpec(
 
 }
 
-//	SetSymbolSpecs
+//	SetSymbolsSpecs
 //
 //	Reconfigures the current instance of
 //	NumStrNumberSymbols based on the Positive, Negative
@@ -2917,7 +2917,7 @@ func (nStrNumSym *NumStrNumberSymbols) SetZeroNumSignSpec(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (nStrNumSym *NumStrNumberSymbols) SetSymbolSpecs(
+func (nStrNumSym *NumStrNumberSymbols) SetSymbolsSpecs(
 	positiveNumberSign NumStrNumberSymbolSpec,
 	negativeNumberSign NumStrNumberSymbolSpec,
 	zeroNumberSign NumStrNumberSymbolSpec,
@@ -2939,7 +2939,7 @@ func (nStrNumSym *NumStrNumberSymbols) SetSymbolSpecs(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumStrNumberSymbols."+
-			"SetSymbolSpecs()",
+			"SetSymbolsSpecs()",
 		"")
 
 	if err != nil {
