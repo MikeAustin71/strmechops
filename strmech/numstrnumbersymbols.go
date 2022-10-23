@@ -466,6 +466,12 @@ func (nStrNumSym *NumStrNumberSymbols) Empty() {
 //	object is member variable contained in the current
 //	instance of NumStrNumberSymbols.
 //
+//	This action will put the Negative Number Sign Symbol
+//	Specification into a NOP or No Operation state. In
+//	this state, the Negative Number Sign Symbol
+//	Specification will be treated as a placeholder and
+//	ignored by Number String Formatting operations.
+//
 // ----------------------------------------------------------------
 //
 // # IMPORTANT
