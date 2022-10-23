@@ -241,23 +241,27 @@ type NumStrNumberSymbolSpec struct {
 	lock *sync.Mutex
 }
 
-// CopyIn - Copies the data fields from an incoming instance of
-// NumStrNumberSymbolSpec ('incomingNStrNumSymSpec')
-// to the data fields of the current NumStrNumberSymbolSpec
-// instance ('nStrNumberSymbolSpec').
+//	CopyIn
+//
+//	Copies the data fields from an incoming instance of
+//	NumStrNumberSymbolSpec ('incomingNStrNumSymSpec')
+//	to the data fields of the current NumStrNumberSymbolSpec
+//	instance ('nStrNumberSymbolSpec').
 //
 // ----------------------------------------------------------------
 //
-// IMPORTANT
-// All the data fields in current NumStrNumberSymbolSpec
-// instance ('nStrNumberSymbolSpec') will be deleted and
-// overwritten.
+// # IMPORTANT
+//
+//	All the data fields in current NumStrNumberSymbolSpec
+//	instance ('nStrNumberSymbolSpec') will be deleted and
+//	overwritten.
 //
 // ----------------------------------------------------------------
 //
-// Input Parameters
+// # Input Parameters
 //
 //	incomingNStrNumSymSpec	*NumStrNumberSymbolSpec
+//
 //		A pointer to an instance of NumStrNumberSymbolSpec.
 //		This method will NOT change the values of internal member
 //		variables contained in this instance.
@@ -268,6 +272,7 @@ type NumStrNumberSymbolSpec struct {
 //
 //
 //	errorPrefix					interface{}
+//
 //		This object encapsulates error prefix text which is
 //		included in all returned error messages. Usually, it
 //		contains the name of the calling method or methods
@@ -313,9 +318,10 @@ type NumStrNumberSymbolSpec struct {
 //
 // ----------------------------------------------------------------
 //
-// Return Values
+// # Return Values
 //
 //	error
+//
 //		If this method completes successfully and no errors are
 //		encountered this return value is set to 'nil'. Otherwise,
 //		if errors are encountered, this return value will contain
