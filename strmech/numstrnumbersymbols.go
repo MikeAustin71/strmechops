@@ -2890,6 +2890,55 @@ func (nStrNumSym *NumStrNumberSymbols) SetNOPPositiveNumSymbols() {
 	return
 }
 
+//	SetNOPZeroNumSymbols
+//
+//	'NOP' stands for 'No Operation'.
+//
+//	When called, this method will convert the Zero
+//	Number Symbol Specification in the current instance
+//	of NumStrNumberSymbols to NOP or 'No Operation'. This
+//	means that the Zero Number Symbol Specification
+//	is simply an empty placeholder and performs no active
+//	role in, and is completely ignored by, Number String
+//	Formatting algorithms. After conversion to NOP, no
+//	Zero Number Symbols will be inserted or formatted
+//	as part of a Number String formatting operation.
+//
+//	To determine the status of NOP for the current
+//	instance of NumStrNumberSymbols, use the following
+//	methods:
+//
+//		NumStrNumberSymbols.IsNOP()
+//		NumStrNumberSymbols.IsNOPZeroNumSymbols()
+//		NumStrNumberSymbols.IsNOPZeroNumSymbols()
+//		NumStrNumberSymbols.IsNOPZeroNumSymbols()
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	NONE
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	NONE
+func (nStrNumSym *NumStrNumberSymbols) SetNOPZeroNumSymbols() {
+
+	if nStrNumSym.lock == nil {
+		nStrNumSym.lock = new(sync.Mutex)
+	}
+
+	nStrNumSym.lock.Lock()
+
+	defer nStrNumSym.lock.Unlock()
+
+	nStrNumSym.zeroNumberSign.SetNOP()
+
+	return
+}
+
 //	SetPositiveNumSignSpec
 //
 //	Reconfigures the current instance of
