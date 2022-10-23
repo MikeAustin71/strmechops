@@ -286,6 +286,130 @@ func (nStrNumSym *NumStrNumberSymbols) CopyIn(
 			"nStrNumSym<-incomingNumSymbols"))
 }
 
+//	CopyOut
+//
+//	Returns a deep copy of the current NumStrNumberSymbols
+//	instance.
+//
+// ----------------------------------------------------------------
+//
+//	# Input Parameters
+//
+//	 errorPrefix                interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it	contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	deepCopyNumSymbols			NumStrNumberSymbols
+//
+//		If this method completes successfully, this
+//		parameter will return a deep copy of the
+//		current NumStrNumberSymbols instance.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+func (nStrNumSym *NumStrNumberSymbols) CopyOut(
+	errorPrefix interface{}) (
+	deepCopyNumSymbols NumStrNumberSymbols,
+	err error) {
+
+	if nStrNumSym.lock == nil {
+		nStrNumSym.lock = new(sync.Mutex)
+	}
+
+	nStrNumSym.lock.Lock()
+
+	defer nStrNumSym.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumStrNumberSymbols."+
+			"CopyOut()",
+		"")
+
+	if err != nil {
+		return deepCopyNumSymbols, err
+	}
+
+	err = new(numStrNumberSymbolsMechanics).copyNumSymbols(
+		&deepCopyNumSymbols,
+		nStrNumSym,
+		ePrefix.XCpy(
+			"deepCopyNumSymbols<-nStrNumSym"))
+
+	return deepCopyNumSymbols, err
+}
+
 //	NewSymbolsRunes
 //
 // ----------------------------------------------------------------

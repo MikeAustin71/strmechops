@@ -364,14 +364,17 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) CopyIn(
 				"incomingNStrNumSymSpec"))
 }
 
-// CopyOut - Returns a deep copy of the current
-// NumStrNumberSymbolSpec instance.
+//	CopyOut
+//
+//	Returns a deep copy of the current
+//	NumStrNumberSymbolSpec instance.
 //
 // ----------------------------------------------------------------
 //
-// Input Parameters
+// # Input Parameters
 //
 //	errorPrefix					interface{}
+//
 //		This object encapsulates error prefix text which is
 //		included in all returned error messages. Usually, it
 //		contains the name of the calling method or methods
@@ -417,15 +420,17 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) CopyIn(
 //
 // ----------------------------------------------------------------
 //
-// Return Values
+// # Return Values
 //
-//	deepCopyNStrNumSymSpec	NumStrNumberSymbolSpec
+//	deepCopyNStrNumSymSpec		NumStrNumberSymbolSpec
+//
 //		If this method completes successfully and no errors are
 //		encountered, this parameter will return a deep copy of the
 //		current NumStrNumberSymbolSpec instance.
 //
 //
 //	err							error
+//
 //		If the method completes successfully and no errors are
 //		encountered this return value is set to 'nil'. Otherwise,
 //		if errors are encountered, this return value will contain
