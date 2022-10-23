@@ -685,12 +685,13 @@ func (nStrNumSym *NumStrNumberSymbols) IsNOP() bool {
 
 //	IsNOPNegativeNumSymbols
 //
-//	'NOP' stands for 'No Operation'. This method
-//	returns a boolean value signaling whether the
-//	Negative Number Sign Symbol Specification contained
-//	in the current NumStrNumberSymbols instance is
-//	engaged, valid and fully operational with respect to
-//	Number String Formatting.
+//	'NOP' stands for 'No Operation'.
+//
+//	This method returns a boolean value signaling whether
+//	the Negative Number Sign Symbol Specification
+//	contained in the current NumStrNumberSymbols instance
+//	is engaged, valid and fully operational with respect
+//	to Number String Formatting.
 //
 //	If this method returns 'true', it signals that the
 //	Negative Number Symbol Specification is simply an
@@ -2787,6 +2788,104 @@ func (nStrNumSym *NumStrNumberSymbols) SetNOP() {
 	nStrNumSym.positiveNumberSign.SetNOP()
 
 	nStrNumSym.zeroNumberSign.SetNOP()
+
+	return
+}
+
+//	SetNOPNegativeNumSymbols
+//
+//	'NOP' stands for 'No Operation'.
+//
+//	When called, this method will convert the Negative
+//	Number Symbol Specification in the current instance
+//	of NumStrNumberSymbols to NOP or 'No Operation'. This
+//	means that the Negative Number Symbol Specification
+//	is simply an empty placeholder and performs no active
+//	role in, and is completely ignored by, Number String
+//	Formatting algorithms. After conversion to NOP, no
+//	Negative Number Symbols will be inserted or formatted
+//	as part of a Number String formatting operation.
+//
+//	To determine the status of NOP for the current
+//	instance of NumStrNumberSymbols, use the following
+//	methods:
+//
+//		NumStrNumberSymbols.IsNOP()
+//		NumStrNumberSymbols.IsNOPNegativeNumSymbols()
+//		NumStrNumberSymbols.IsNOPPositiveNumSymbols()
+//		NumStrNumberSymbols.IsNOPZeroNumSymbols()
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	NONE
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	NONE
+func (nStrNumSym *NumStrNumberSymbols) SetNOPNegativeNumSymbols() {
+
+	if nStrNumSym.lock == nil {
+		nStrNumSym.lock = new(sync.Mutex)
+	}
+
+	nStrNumSym.lock.Lock()
+
+	defer nStrNumSym.lock.Unlock()
+
+	nStrNumSym.negativeNumberSign.SetNOP()
+
+	return
+}
+
+//	SetNOPPositiveNumSymbols
+//
+//	'NOP' stands for 'No Operation'.
+//
+//	When called, this method will convert the Positive
+//	Number Symbol Specification in the current instance
+//	of NumStrNumberSymbols to NOP or 'No Operation'. This
+//	means that the Positive Number Symbol Specification
+//	is simply an empty placeholder and performs no active
+//	role in, and is completely ignored by, Number String
+//	Formatting algorithms. After conversion to NOP, no
+//	Positive Number Symbols will be inserted or formatted
+//	as part of a Number String formatting operation.
+//
+//	To determine the status of NOP for the current
+//	instance of NumStrNumberSymbols, use the following
+//	methods:
+//
+//		NumStrNumberSymbols.IsNOP()
+//		NumStrNumberSymbols.IsNOPPositiveNumSymbols()
+//		NumStrNumberSymbols.IsNOPPositiveNumSymbols()
+//		NumStrNumberSymbols.IsNOPZeroNumSymbols()
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	NONE
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	NONE
+func (nStrNumSym *NumStrNumberSymbols) SetNOPPositiveNumSymbols() {
+
+	if nStrNumSym.lock == nil {
+		nStrNumSym.lock = new(sync.Mutex)
+	}
+
+	nStrNumSym.lock.Lock()
+
+	defer nStrNumSym.lock.Unlock()
+
+	nStrNumSym.positiveNumberSign.SetNOP()
 
 	return
 }
