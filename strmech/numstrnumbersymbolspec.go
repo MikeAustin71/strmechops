@@ -882,23 +882,56 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) GetTrailingNumberSymbolPosit
 	return nStrNumberSymbolSpec.trailingNumberFieldSymbolPosition
 }
 
-// IsNOP - Stands for 'Is No Operation'. This method returns a
-// boolean value signaling whether this instance of
-// NumStrNumberSymbolSpec is engaged, valid and
-// operational with respect to the application of a number symbol.
+//	IsNOP
 //
-// If 'IsNOP' is set to 'true', it signals that this Number String
-// Number Symbol Specification is simply an empty placeholder
-// and performs no active role in, and is completely ignored by,
-// the number string algorithms. With 'IsNOP' set to 'true',
-// no number symbol will be inserted or formatted as part of a
-// number sign text presentation.
+//	Stands for 'Is No Operation'. This method returns a
+//	boolean value signaling whether this instance of
+//	NumStrNumberSymbolSpec is engaged, valid and
+//	operational with respect to the application of a
+//	number symbol.
 //
-// If this method returns 'false', it signals that the current
-// instance of 'NumStrNumberSymbolSpec' is fully populated,
-// valid and functional. Number strings formatting operations
-// will therefore include a number symbol in formatted number
-// strings.
+//	If 'IsNOP' is set to 'true', it signals that this
+//	Number String Number Symbol Specification is simply
+//	an empty placeholder and performs no active role in,
+//	and is completely ignored by, Number String Formatting
+//	algorithms. When 'IsNOP' set to 'true', no Number
+//	Symbol will be inserted or formatted as part of a
+//	number sign in a Number String text presentation.
+//
+//	If this method returns 'false', it signals that the
+//	current instance of NumStrNumberSymbolSpec is fully
+//	populated, valid and functional. Number Strings
+//	Formatting operations will therefore include the
+//	specified number symbol in formatted number strings.
+//
+// ----------------------------------------------------------------
+//
+//	# Input Parameters
+//
+//	NONE
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	bool
+//
+//		If this method returns 'true', it signls that the
+//		current instance of NumStrNumberSymbolSpec is a
+//		'NOP' or No Operation. This condition signals that
+//		the Number String Number Symbol Specification is
+//		simply an empty placeholder and performs no active
+//		role in, and is completely ignored by, Number
+//		String Formatting algorithms. In this case, no
+//		number symbol will be inserted in formatted number
+//		strings.
+//
+//		If this method returns 'false', it signals that
+//		the current instance of NumStrNumberSymbolSpec
+//		is fully populated, valid and functional. Number
+//		Strings Formatting operations will therefore
+//		include the specified number symbol in formatted
+//		number strings.
 func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) IsNOP() bool {
 
 	if nStrNumberSymbolSpec.lock == nil {
