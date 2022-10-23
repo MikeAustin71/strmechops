@@ -876,6 +876,70 @@ func (nStrNumSym *NumStrNumberSymbols) IsNOPZeroNumSymbols() bool {
 	return nStrNumSym.zeroNumberSign.IsNOP()
 }
 
+//	NewNOP Creates and returns a new instance of
+//	NumStrNumberSymbols configured as a NOP.
+//
+//	'NOP' stands for 'No Operation'.
+//
+//	Type NumStrNumberSymbols encapsulates the Negative,
+//	Positive and Zero Number Symbol Specifications.
+//
+//	Configured as a NOP, the returned instance of
+//	NumStrNumberSymbols will contain three invalid
+//	Number Symbol Specifications which are simple empty
+//	placeholders. As such these Number Symbol
+//	Specifications perform no active role in, and are
+//	completely ignored by, Number String Formatting
+//	algorithms.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	NONE
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	NumStrNumberSymbols
+//
+//		This method returns a new instance of
+//		NumStrNumberSymbols configured as a NOP.
+//
+//		'NOP' stands for 'No Operation'.
+//
+//		This means that	all Number Symbol Specifications
+//		contained in the returned instance of
+//		NumStrNumberSymbols are	empty placeholders and
+//		perform no active role in, and are completely
+//		ignored by, Number String Formatting algorithms.
+//
+//		Therefore, none of the Number Symbols contained
+//		in this returned NumStrNumberSymbols instance
+//		will be inserted or formatted as part of Number
+//		String Formatting operations.
+func (nStrNumSym *NumStrNumberSymbols) NewNOP() NumStrNumberSymbols {
+
+	if nStrNumSym.lock == nil {
+		nStrNumSym.lock = new(sync.Mutex)
+	}
+
+	nStrNumSym.lock.Lock()
+
+	defer nStrNumSym.lock.Unlock()
+
+	newNStrNumSym := NumStrNumberSymbols{}
+
+	newNStrNumSym.negativeNumberSign.SetNOP()
+
+	newNStrNumSym.positiveNumberSign.SetNOP()
+
+	newNStrNumSym.zeroNumberSign.SetNOP()
+
+	return newNStrNumSym
+}
+
 //	NewSymbolsRunes
 //
 // ----------------------------------------------------------------
