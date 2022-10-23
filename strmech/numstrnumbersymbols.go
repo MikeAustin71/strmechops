@@ -460,7 +460,7 @@ func (nStrNumSym *NumStrNumberSymbols) Empty() {
 //	EmptyNegativeNumSymbols
 //
 //	Deletes and resets the Negative Number Sign Symbol
-//	Specifiction to its zero or uninitialized state.
+//	Specification to its zero or uninitialized state.
 //
 //	The target Negative Number Sign Symbol Specification
 //	object is a member variable contained in the current
@@ -511,7 +511,7 @@ func (nStrNumSym *NumStrNumberSymbols) EmptyNegativeNumSymbols() {
 //	EmptyPositiveNumSymbols
 //
 //	Deletes and resets the Positive Number Sign Symbol
-//	Specifiction to its zero or uninitialized state.
+//	Specification to its zero or uninitialized state.
 //
 //	The target Positive Number Sign Symbol Specification
 //	object is a member variable contained in the current
@@ -556,6 +556,57 @@ func (nStrNumSym *NumStrNumberSymbols) EmptyPositiveNumSymbols() {
 	defer nStrNumSym.lock.Unlock()
 
 	new(numStrNumberSymbolsAtom).emptyPositiveNumSymbols(
+		nStrNumSym)
+}
+
+//	EmptyZeroNumSymbols
+//
+//	Deletes and resets the Zero Number Sign Symbol
+//	Specification to its zero or uninitialized state.
+//
+//	The target Zero Number Sign Symbol Specification
+//	object is a member variable contained in the current
+//	instance of NumStrNumberSymbols.
+//
+//	This action will put the Zero Number Sign Symbol
+//	Specification into a NOP or No Operation state. In
+//	this state, the Zero Number Sign Symbol
+//	Specification will be treated as a placeholder and
+//	ignored by Number String Formatting operations.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will modify the current instance of
+//	NumStrNumberSymbols.
+//
+//	The Zero Number Sign Symbol member variable
+//	data values will be reset to their zero or
+//	uninitialized states.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	NONE
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	NONE
+func (nStrNumSym *NumStrNumberSymbols) EmptyZeroNumSymbols() {
+
+	if nStrNumSym.lock == nil {
+		nStrNumSym.lock = new(sync.Mutex)
+	}
+
+	nStrNumSym.lock.Lock()
+
+	defer nStrNumSym.lock.Unlock()
+
+	new(numStrNumberSymbolsAtom).emptyZeroNumSymbols(
 		nStrNumSym)
 }
 
@@ -6336,7 +6387,7 @@ type numStrNumberSymbolsAtom struct {
 //	emptyNegativeNumSymbols
 //
 //	Deletes and resets the Negative Number Sign Symbol
-//	Specifiction to its zero or uninitialized state.
+//	Specification to its zero or uninitialized state.
 //
 //	The Negative Number Sign Symbol Specification object
 //	is a member variable in the 'nStrNumSymbols' instance
@@ -6387,7 +6438,7 @@ func (nStrNumSymbolsAtom *numStrNumberSymbolsAtom) emptyNegativeNumSymbols(
 //	emptyPositiveNumSymbols
 //
 //	Deletes and resets the Positive Number Sign Symbol
-//	Specifiction to its zero or uninitialized state.
+//	Specification to its zero or uninitialized state.
 //
 //	The Positive Number Sign Symbol Specification object
 //	is a member variable in the 'nStrNumSymbols' instance
@@ -6438,7 +6489,7 @@ func (nStrNumSymbolsAtom *numStrNumberSymbolsAtom) emptyPositiveNumSymbols(
 //	emptyZeroNumSymbols
 //
 //	Deletes and resets the Zero Number Sign Symbol
-//	Specifiction to its zero or uninitialized state.
+//	Specification to its zero or uninitialized state.
 //
 //	The Zero Number Sign Symbol Specification object
 //	is a member variable in the 'nStrNumSymbols' instance
