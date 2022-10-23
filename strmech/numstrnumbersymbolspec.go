@@ -475,30 +475,33 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) CopyOut(
 	return deepCopyNStrNumSymSpec, err
 }
 
-// Empty - Resets all internal member variables for the current
-// instance of NumStrNumberSymbolSpec to their zero or
-// uninitialized states. This method will leave the current
-// instance of NumStrNumberSymbolSpec in an invalid state
-// and unavailable for immediate reuse.
+//	Empty
+//
+//	Resets all internal member variables for the current
+//	instance of NumStrNumberSymbolSpec to their zero or
+//	uninitialized states. This method will leave the
+//	current instance of NumStrNumberSymbolSpec in an
+//	invalid state and unavailable for immediate reuse.
 //
 // ----------------------------------------------------------------
 //
 // # IMPORTANT
 //
-// This method will delete all member variable data values in the
-// current instance of NumStrNumberSymbolSpec. All member
-// variable data values will be reset to their zero or
-// uninitialized states.
+//	This method will delete all member variable data
+//	values in the current instance of
+//	NumStrNumberSymbolSpec. All member variable data
+//	values will be reset to their zero or uninitialized
+//	states.
 //
 // ----------------------------------------------------------------
 //
-// Input Parameters
+// # Input Parameters
 //
 //	NONE
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
-// Return Values
+// # Return Values
 //
 //	NONE
 func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) Empty() {

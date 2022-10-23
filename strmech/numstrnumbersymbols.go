@@ -375,6 +375,7 @@ func (nStrNumSym *NumStrNumberSymbols) CopyIn(
 //		incorporate the method chain and text passed by
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
+//		error message.
 func (nStrNumSym *NumStrNumberSymbols) CopyOut(
 	errorPrefix interface{}) (
 	deepCopyNumSymbols NumStrNumberSymbols,
@@ -408,6 +409,52 @@ func (nStrNumSym *NumStrNumberSymbols) CopyOut(
 			"deepCopyNumSymbols<-nStrNumSym"))
 
 	return deepCopyNumSymbols, err
+}
+
+//	Empty
+//
+//	Resets all internal member variables for the current
+//	instance of NumStrNumberSymbols to their zero or
+//	uninitialized states.
+//
+//	This method will leave the current instance of
+//	NumStrNumberSymbols in an invalid state and
+//	unavailable for immediate reuse.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will delete all member variable data
+//	values in the current instance of NumStrNumberSymbols.
+//	All member variable data values will be reset to their
+//	zero or uninitialized states.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	NONE
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	NONE
+func (nStrNumSym *NumStrNumberSymbols) Empty() {
+
+	if nStrNumSym.lock == nil {
+		nStrNumSym.lock = new(sync.Mutex)
+	}
+
+	nStrNumSym.lock.Lock()
+
+	new(numStrNumberSymbolsNanobot).empty(
+		nStrNumSym)
+
+	nStrNumSym.lock.Unlock()
+
+	nStrNumSym.lock = nil
 }
 
 //	NewSymbolsRunes
