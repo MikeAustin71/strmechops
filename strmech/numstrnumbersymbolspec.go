@@ -4302,25 +4302,30 @@ type numStrNumberSymbolSpecNanobot struct {
 	lock *sync.Mutex
 }
 
-// copyNStrNumberSymbolSpec - Copies all data from input parameter
-// 'sourceNumSymbolSpec' to input parameter
-// 'destinationNumSymbolSpec'. Both instances are of type
-// NumStrNumberSymbolSpec.
+//	copyNStrNumberSymbolSpec
+//
+//	Copies all data from input parameter
+//	'sourceNumSymbolSpec' to input parameter
+//
+// 'destinationNumSymbolSpec'. Both instances are of
+//
+//	type NumStrNumberSymbolSpec.
 //
 // ----------------------------------------------------------------
 //
 // # IMPORTANT
 //
-// Be advised that the data fields in
-// 'destinationNumSymbolSpec' will be deleted and overwritten.
+//	Be advised that the data fields in
+//	'destinationNumSymbolSpec' will be deleted and overwritten.
 //
-// Also, NO data validation is performed on 'sourceNumSymbolSpec'.
+//	Also, NO data validation is performed on 'sourceNumSymbolSpec'.
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
 //	destinationNumSymbolSpec	*NumStrNumberSymbolSpec
+//
 //		A pointer to a NumStrNumberSymbolSpec instance.
 //		All the member variable data fields in this object will be
 //		replaced by data values copied from input parameter
@@ -4331,6 +4336,7 @@ type numStrNumberSymbolSpecNanobot struct {
 //
 //
 //	sourceNumSymbolSpec			*NumStrNumberSymbolSpec
+//
 //		A pointer to another NumStrNumberSymbolSpec
 //		instance. All the member variable data values from this
 //		object will be copied to corresponding member variables in
@@ -4340,7 +4346,6 @@ type numStrNumberSymbolSpecNanobot struct {
 //		operation.
 //
 //		No data validation is performed on 'sourceNumSymbolSpec'.
-//
 //
 //	errPrefDto		*ePref.ErrPrefixDto
 //		This object encapsulates an error prefix string which is
@@ -4453,9 +4458,9 @@ func (nStrNumSymSpecNanobot *numStrNumberSymbolSpecNanobot) copyNStrNumberSymbol
 // All the member variable data values contained in input parameter
 // 'nStrNumSymbolSpec' will be deleted and reset to their zero values.
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
-// Input Parameters
+//	# Input Parameters
 //
 //	nStrNumSymbolSpec           *NumStrNumberSymbolSpec
 //	   - A pointer to an instance of NumStrNumberSymbolSpec.
@@ -4464,7 +4469,7 @@ func (nStrNumSymSpecNanobot *numStrNumberSymbolSpecNanobot) copyNStrNumberSymbol
 //
 // ------------------------------------------------------------------------
 //
-// Return Values
+// # Return Values
 //
 //	NONE
 func (nStrNumSymSpecNanobot *numStrNumberSymbolSpecNanobot) empty(
@@ -4500,7 +4505,7 @@ func (nStrNumSymSpecNanobot *numStrNumberSymbolSpecNanobot) empty(
 //
 // ----------------------------------------------------------------
 //
-// Input Parameters
+//	# Input Parameters
 //
 //	posNumSignSpec				*NumStrNumberSymbolSpec
 //		A pointer to a NumStrNumberSymbolSpec instance.
@@ -4584,7 +4589,7 @@ func (nStrNumSymSpecNanobot *numStrNumberSymbolSpecNanobot) empty(
 //
 // ----------------------------------------------------------------
 //
-// Return Values
+// # Return Values
 //
 //	err							error
 //		If this method completes successfully, this returned error

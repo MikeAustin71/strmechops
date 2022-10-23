@@ -4482,8 +4482,167 @@ func (nStrNumSym *NumStrNumberSymbols) SetZeroSymbolsStrings(
 			"nuStrNumSym<-ZeroNumSyms"))
 }
 
+// numStrNumberSymbolsMechanics
+//
+// Provides helper methods for NumStrNumberSymbols.
 type numStrNumberSymbolsMechanics struct {
 	lock *sync.Mutex
+}
+
+//	copyNumSymbols
+//
+//	Copies all Number Symbol Specification data
+//	from input parameter 'sourceNumSymbols' to
+//	input parameter 'destinationNumSymbols'.
+//	Both instances are of type
+//	NumStrNumberSymbols.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	Be advised that the data fields in
+//	'destinationNumSymbolSpec' will be deleted and overwritten.
+//
+//	Also, NO data validation is performed on 'sourceNumSymbolSpec'.
+//
+// ----------------------------------------------------------------
+//
+//	# Input Parameters
+//
+//	destinationNumSymbols			*NumStrNumberSymbols
+//
+//		A pointer to an instance of NumStrNumberSymbols.
+//		All the member variable data fields in this object will be
+//		replaced by data values copied from input parameter
+//		'sourceNumSymbolSpec'.
+//
+//		'destinationNumSymbolSpec' is the destination for this
+//		copy operation.
+//
+//	sourceNumSymbols				*NumStrNumberSymbols
+//
+//		A pointer to another instance of NumStrNumberSymbols.
+//		All the member variable data values from this object
+//		will be copied to corresponding member variables in
+//		'destinationNumSymbols'.
+//
+//		'sourceNumSymbolSpec' is the source for this copy
+//		operation.
+//
+//		No data validation is performed on 'sourceNumSymbols'.
+//
+//		No data values contained in 'sourceNumSymbols' will
+//		be modified.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, this
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (nStrNumSymMech *numStrNumberSymbolsMechanics) copyNumSymbols(
+	destinationNumSymbols *NumStrNumberSymbols,
+	sourceNumSymbols *NumStrNumberSymbols,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if nStrNumSymMech.lock == nil {
+		nStrNumSymMech.lock = new(sync.Mutex)
+	}
+
+	nStrNumSymMech.lock.Lock()
+
+	defer nStrNumSymMech.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"numStrNumberSymbolsMechanics."+
+			"copyNumSymbols()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if destinationNumSymbols == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'destinationNumSymbols' is invalid!\n"+
+			"'destinationNumSymbols' is a 'nil' pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if sourceNumSymbols == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'sourceNumSymbols' is invalid!\n"+
+			"'sourceNumSymbols' is a 'nil' pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	new(numStrNumberSymbolsNanobot).empty(destinationNumSymbols)
+
+	err = destinationNumSymbols.positiveNumberSign.CopyIn(
+		&sourceNumSymbols.positiveNumberSign,
+		ePrefix.XCpy(
+			"destinationNumSymbols<-"+
+				"sourceNumSymbols.positiveNumberSign"))
+
+	if err != nil {
+		return err
+	}
+
+	err = destinationNumSymbols.negativeNumberSign.CopyIn(
+		&sourceNumSymbols.negativeNumberSign,
+		ePrefix.XCpy(
+			"destinationNumSymbols<-"+
+				"sourceNumSymbols.negativeNumberSign"))
+
+	if err != nil {
+		return err
+	}
+
+	err = destinationNumSymbols.zeroNumberSign.CopyIn(
+		&sourceNumSymbols.zeroNumberSign,
+		ePrefix.XCpy(
+			"destinationNumSymbols<-"+
+				"sourceNumSymbols.zeroNumberSign"))
+
+	return err
 }
 
 //	setNumSymbolSpecs
@@ -4635,8 +4794,65 @@ func (nStrNumSymMech *numStrNumberSymbolsMechanics) setNumSymbolSpecs(
 	return err
 }
 
+// numStrNumberSymbolsNanobot
+//
+// Provides helper methods for NumStrNumberSymbols.
 type numStrNumberSymbolsNanobot struct {
 	lock *sync.Mutex
+}
+
+//	empty
+//
+//	Deletes and resets all data values contained in
+//	paramter 'nStrNumSymbols' to their zero or
+//	uninitialized states.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	All data contained in the Positive, Negative and
+//	Zero Number Symbol Specification will be deleted
+//	and reset to their zero or uninitialized states.
+//	The affected member variables are identified as
+//	follows:
+//
+//		nStrNumSymbols.positiveNumberSign
+//		nStrNumSymbols.negativeNumberSign
+//		nStrNumSymbols.zeroNumberSign
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	NONE
+//
+// -----------------------------------------------------------------
+//
+// # Return Values
+//
+//	NONE
+func (nStrNumSymNanobot *numStrNumberSymbolsNanobot) empty(
+	nStrNumSymbols *NumStrNumberSymbols) {
+
+	if nStrNumSymNanobot.lock == nil {
+		nStrNumSymNanobot.lock = new(sync.Mutex)
+	}
+
+	nStrNumSymNanobot.lock.Lock()
+
+	defer nStrNumSymNanobot.lock.Unlock()
+
+	if nStrNumSymbols == nil {
+
+		return
+	}
+
+	nStrNumSymbols.positiveNumberSign.Empty()
+
+	nStrNumSymbols.negativeNumberSign.Empty()
+
+	nStrNumSymbols.zeroNumberSign.Empty()
 }
 
 //	setNegativeNumSignRunes
@@ -5696,4 +5912,164 @@ func (nStrNumSymNanobot *numStrNumberSymbolsNanobot) setZeroNumSignSpec(
 				"zeroNumberSign"))
 
 	return err
+}
+
+// numStrNumberSymbolsAtom
+//
+// Provides helper methods for NumStrNumberSymbols.
+type numStrNumberSymbolsAtom struct {
+	lock *sync.Mutex
+}
+
+//	emptyNegativeNumSymbols
+//
+//	Deletes and resets the Negative Number Sign Symbol
+//	Specifiction to its zero or uninitialized state.
+//
+//	The Negative Number Sign Symbol Specification object
+//	is a member variable in the 'nStrNumSymbols' instance
+//	passed as an input parameter.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	All data values contained in the  Negative Number
+//	Sign Symbol Specification will be deleted and reset
+//	to their zero or uninitialized values. This Negative
+//	Number Sign Symbol Specification member variable
+//	is identified as:
+//
+//		nStrNumSymbols.negativeNumberSign
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	NONE
+//
+// -----------------------------------------------------------------
+//
+// # Return Values
+//
+//	NONE
+func (nStrNumSymbolsAtom *numStrNumberSymbolsAtom) emptyNegativeNumSymbols(
+	nStrNumSymbols *NumStrNumberSymbols) {
+
+	if nStrNumSymbolsAtom.lock == nil {
+		nStrNumSymbolsAtom.lock = new(sync.Mutex)
+	}
+
+	nStrNumSymbolsAtom.lock.Lock()
+
+	defer nStrNumSymbolsAtom.lock.Unlock()
+
+	if nStrNumSymbols == nil {
+
+		return
+	}
+
+	nStrNumSymbols.negativeNumberSign.Empty()
+}
+
+//	emptyPositiveNumSymbols
+//
+//	Deletes and resets the Positive Number Sign Symbol
+//	Specifiction to its zero or uninitialized state.
+//
+//	The Positive Number Sign Symbol Specification object
+//	is a member variable in the 'nStrNumSymbols' instance
+//	passed as an input parameter.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	All data values contained in the  Positive Number
+//	Sign Symbol Specification will be deleted and reset
+//	to their zero or uninitialized values. This Positive
+//	Number Sign Symbol Specification member variable
+//	is identified as:
+//
+//		nStrNumSymbols.positiveNumberSign
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	NONE
+//
+// -----------------------------------------------------------------
+//
+// # Return Values
+//
+//	NONE
+func (nStrNumSymbolsAtom *numStrNumberSymbolsAtom) emptyPositiveNumSymbols(
+	nStrNumSymbols *NumStrNumberSymbols) {
+
+	if nStrNumSymbolsAtom.lock == nil {
+		nStrNumSymbolsAtom.lock = new(sync.Mutex)
+	}
+
+	nStrNumSymbolsAtom.lock.Lock()
+
+	defer nStrNumSymbolsAtom.lock.Unlock()
+
+	if nStrNumSymbols == nil {
+
+		return
+	}
+
+	nStrNumSymbols.positiveNumberSign.Empty()
+}
+
+//	emptyZeroNumSymbols
+//
+//	Deletes and resets the Zero Number Sign Symbol
+//	Specifiction to its zero or uninitialized state.
+//
+//	The Zero Number Sign Symbol Specification object
+//	is a member variable in the 'nStrNumSymbols' instance
+//	passed as an input parameter.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	All data values contained in the Zero Number
+//	Sign Symbol Specification will be deleted and reset
+//	to their zero or uninitialized values. This Zero
+//	Number Sign Symbol Specification member variable
+//	is identified as:
+//
+//		nStrNumSymbols.zeroNumberSign
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	NONE
+//
+// -----------------------------------------------------------------
+//
+// # Return Values
+//
+//	NONE
+func (nStrNumSymbolsAtom *numStrNumberSymbolsAtom) emptyZeroNumSymbols(
+	nStrNumSymbols *NumStrNumberSymbols) {
+
+	if nStrNumSymbolsAtom.lock == nil {
+		nStrNumSymbolsAtom.lock = new(sync.Mutex)
+	}
+
+	nStrNumSymbolsAtom.lock.Lock()
+
+	defer nStrNumSymbolsAtom.lock.Unlock()
+
+	if nStrNumSymbols == nil {
+
+		return
+	}
+
+	nStrNumSymbols.zeroNumberSign.Empty()
 }
