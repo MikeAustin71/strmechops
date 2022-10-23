@@ -457,6 +457,51 @@ func (nStrNumSym *NumStrNumberSymbols) Empty() {
 	nStrNumSym.lock = nil
 }
 
+//	EmptyNegativeNumSymbols
+//
+//	Deletes and resets the Negative Number Sign Symbol
+//	Specifiction to its zero or uninitialized state.
+//
+//	The target Negative Number Sign Symbol Specification
+//	object is member variable contained in the current
+//	instance of NumStrNumberSymbols.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will modify the current instance of
+//	NumStrNumberSymbols.
+//
+//	The Negative Number Sign Symbol member variable
+//	data values will be reset to their zero or
+//	uninitialized states.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	NONE
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	NONE
+func (nStrNumSym *NumStrNumberSymbols) EmptyNegativeNumSymbols() {
+
+	if nStrNumSym.lock == nil {
+		nStrNumSym.lock = new(sync.Mutex)
+	}
+
+	nStrNumSym.lock.Lock()
+
+	defer nStrNumSym.lock.Unlock()
+
+	new(numStrNumberSymbolsAtom).emptyNegativeNumSymbols(
+		nStrNumSym)
+}
+
 //	NewSymbolsRunes
 //
 // ----------------------------------------------------------------
