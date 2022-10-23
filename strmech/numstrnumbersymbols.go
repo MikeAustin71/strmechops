@@ -6537,20 +6537,20 @@ func (nStrNumSymbolsAtom *numStrNumberSymbolsAtom) emptyZeroNumSymbols(
 	nStrNumSymbols.zeroNumberSign.Empty()
 }
 
-// isNOPNegativeNumSymbols
+//	isNOPNegativeNumSymbols
 //
 //	'NOP' stands for 'No Operation'. This method
 //	returns a boolean value signaling whether the
 //	Negative Number Sign Symbol Specification contained
 //	in the NumStrNumberSymbols instance is engaged, valid
-//	and fully operational with respect Number String
+//	and fully operational with respect to Number String
 //	Formatting.
 //
 //	If this method returns 'true', it signals that the
 //	Negative Number Symbol Specification is simply an
 //	empty placeholder and performs no active role in,
 //	and is completely ignored by, Number String Formatting
-//	algorithms. When 'IsNOP' set to 'true', no Negative
+//	algorithms. When 'NOP' is 'true', no Negative
 //	Number Symbols will be inserted or formatted as part
 //	of a Number String formatting operation.
 //
@@ -6562,14 +6562,14 @@ func (nStrNumSymbolsAtom *numStrNumberSymbolsAtom) emptyZeroNumSymbols(
 //
 // ----------------------------------------------------------------
 //
-//	# Input Parameters
+// # Input Parameters
 //
 //	nStrNumSymbols				*NumStrNumberSymbols
 //
 //		A pointer to an instance of NumStrNumberSymbols.
 //		The Negative Number Sign Symbol Specifications
 //		for this instance analyzed to determine whether
-//		the specification is valid an fully functional.
+//		the specification is valid and fully functional.
 //
 // ----------------------------------------------------------------
 //
@@ -6608,4 +6608,150 @@ func (nStrNumSymbolsAtom *numStrNumberSymbolsAtom) isNOPNegativeNumSymbols(
 	}
 
 	return nStrNumSymbols.negativeNumberSign.IsNOP()
+}
+
+// isNOPPositiveNumSymbols
+//
+//	'NOP' stands for 'No Operation'. This method
+//	returns a boolean value signaling whether the
+//	Positive Number Sign Symbol Specification contained
+//	in the NumStrNumberSymbols instance is engaged, valid
+//	and fully operational with respect to Number String
+//	Formatting.
+//
+//	If this method returns 'true', it signals that the
+//	Positive Number Symbol Specification is simply an
+//	empty placeholder and performs no active role in,
+//	and is completely ignored by, Number String Formatting
+//	algorithms. When 'NOP' is 'true', no Positive
+//	Number Symbols will be inserted or formatted as part
+//	of a Number String formatting operation.
+//
+//	If this method returns 'false', it signals that the
+//	Positive Number Sign Symbol Specification is fully
+//	populated, valid and functional. Number String
+//	Formatting operations will therefore include these
+//	Positive Number Symbols in formatted number strings.
+//
+// ----------------------------------------------------------------
+//
+//	# Input Parameters
+//
+//	nStrNumSymbols				*NumStrNumberSymbols
+//
+//		A pointer to an instance of NumStrNumberSymbols.
+//		The Positive Number Sign Symbol Specifications
+//		for this instance analyzed to determine whether
+//		the specification is valid and fully functional.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	bool
+//
+//		If this method returns 'true', it signals that
+//		the Positive Number Symbol Specification is
+//		simply an empty placeholder and performs no
+//		active role in, and is completely ignored by,
+//		Number String Formatting algorithms. This means,
+//		no Positive Number Symbols will be inserted
+//		or formatted as part of a Number String
+//		formatting operation.
+//
+//		If this method returns 'false', it signals that
+//		the Positive Number Sign Symbol Specification is
+//		fully populated, valid and functional. Number
+//		String Formatting operations will therefore
+//		include these Positive Number Symbols in
+//		formatted number strings.
+func (nStrNumSymbolsAtom *numStrNumberSymbolsAtom) isNOPPositiveNumSymbols(
+	nStrNumSymbols *NumStrNumberSymbols) bool {
+
+	if nStrNumSymbolsAtom.lock == nil {
+		nStrNumSymbolsAtom.lock = new(sync.Mutex)
+	}
+
+	nStrNumSymbolsAtom.lock.Lock()
+
+	defer nStrNumSymbolsAtom.lock.Unlock()
+
+	if nStrNumSymbols == nil {
+		return true
+	}
+
+	return nStrNumSymbols.positiveNumberSign.IsNOP()
+}
+
+// isNOPZeroNumSymbols
+//
+//	'NOP' stands for 'No Operation'. This method
+//	returns a boolean value signaling whether the
+//	Zero Number Sign Symbol Specification contained
+//	in the NumStrNumberSymbols instance is engaged, valid
+//	and fully operational with respect to Number String
+//	Formatting.
+//
+//	If this method returns 'true', it signals that the
+//	Zero Number Symbol Specification is simply an
+//	empty placeholder and performs no active role in,
+//	and is completely ignored by, Number String Formatting
+//	algorithms. When 'NOP' is 'true', no Zero
+//	Number Symbols will be inserted or formatted as part
+//	of a Number String formatting operation.
+//
+//	If this method returns 'false', it signals that the
+//	Zero Number Sign Symbol Specification is fully
+//	populated, valid and functional. Number String
+//	Formatting operations will therefore include these
+//	Zero Number Symbols in formatted number strings.
+//
+// ----------------------------------------------------------------
+//
+//	# Input Parameters
+//
+//	nStrNumSymbols				*NumStrNumberSymbols
+//
+//		A pointer to an instance of NumStrNumberSymbols.
+//		The Zero Number Sign Symbol Specifications
+//		for this instance analyzed to determine whether
+//		the specification is valid and fully functional.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	bool
+//
+//		If this method returns 'true', it signals that
+//		the Zero Number Symbol Specification is
+//		simply an empty placeholder and performs no
+//		active role in, and is completely ignored by,
+//		Number String Formatting algorithms. This means,
+//		no Zero Number Symbols will be inserted
+//		or formatted as part of a Number String
+//		formatting operation.
+//
+//		If this method returns 'false', it signals that
+//		the Zero Number Sign Symbol Specification is
+//		fully populated, valid and functional. Number
+//		String Formatting operations will therefore
+//		include these Zero Number Symbols in
+//		formatted number strings.
+func (nStrNumSymbolsAtom *numStrNumberSymbolsAtom) isNOPZeroNumSymbols(
+	nStrNumSymbols *NumStrNumberSymbols) bool {
+
+	if nStrNumSymbolsAtom.lock == nil {
+		nStrNumSymbolsAtom.lock = new(sync.Mutex)
+	}
+
+	nStrNumSymbolsAtom.lock.Lock()
+
+	defer nStrNumSymbolsAtom.lock.Unlock()
+
+	if nStrNumSymbols == nil {
+		return true
+	}
+
+	return nStrNumSymbols.zeroNumberSign.IsNOP()
 }
