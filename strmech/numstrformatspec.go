@@ -25,7 +25,7 @@ type NumStrFormatSpec struct {
 	//	which will be applied to the number string
 	//	formatting operations.
 
-	negativeNumberSign NumStrNumberSymbolSpec
+	//negativeNumberSign NumStrNumberSymbolSpec
 	//	The Number String Negative Number Sign
 	//	Specification is used to configure negative
 	//	number sign symbols for negative numeric
@@ -124,7 +124,136 @@ type NumStrFormatSpec struct {
 	//				          TxtJustify.Center()
 	//		}
 
-	positiveNumberSign NumStrNumberSymbolSpec
+	numberSymbols NumStrNumberSymbols
+	//	This member variable is used to configure Number
+	//	Symbols required in converting numeric values to
+	//	Number Strings.
+	//
+	//	NumStrNumberSymbols contains three instances of
+	//	NumStrNumberSymbolSpec defining the Number
+	//	Symbols to be used with positive numeric values,
+	//	negative numeric values and zero numeric values.
+	//
+	//	type NumStrNumberSymbols struct {
+	//
+	//		negativeNumberSign NumStrNumberSymbolSpec
+	//
+	//			The Number String Negative Number Sign
+	//			Specification is used to configure negative
+	//			number sign symbols for negative numeric
+	//			values formatted and displayed in number
+	//			stings.
+	//
+	//			For currency presentations, the currency
+	//			symbol is combined with the negative number
+	//			sign.
+	//
+	//			Example-1: Leading Number Symbols
+	//				Leading Number Symbols for Negative Values
+	//
+	//				Leading Symbols: "- "
+	//				Number String:   "- 123.456"
+	//
+	//			Example-2: Leading Number Symbols With Currency
+	//				Leading Number Symbols for Negative Values
+	//
+	//				Leading Symbols: "$-"
+	//				Number String:   "$-123.456"
+	//
+	//
+	//			Example-3: Trailing Number Symbols
+	//				Trailing Number Symbols for Negative Values
+	//
+	//				Trailing Symbols: " -"
+	//				Number String:   "123.456 -"
+	//
+	//			Example-4: Trailing Number Symbols
+	//				Trailing Number Symbols for Negative Values
+	//
+	//				Trailing Symbols: "-€"
+	//				Number String:   "123.456-€"
+	//
+	//		positiveNumberSign NumStrNumberSymbolSpec
+	//
+	//			Positive number signs are commonly implied
+	//			and not specified. However, the user has
+	//			the option to specify a positive number sign
+	//			character or characters for positive numeric
+	//			values using a Number String Positive Number
+	//			Sign Specification.
+	//
+	//			For currency presentations, the currency
+	//			symbol is combined with the positive number
+	//			sign.
+	//
+	//			Example-1: Leading Number Symbols
+	//				Leading Number Symbols for Positive Values
+	//
+	//				Leading Symbols: "+ "
+	//				Number String:   "+ 123.456"
+	//
+	//			Example-2: Leading Number Symbols
+	//				Leading Number Symbols for Positive Values
+	//
+	//				Leading Symbols: "$+"
+	//				Number String:   "$+123.456"
+	//
+	//			Example-3: Leading Number Symbols
+	//				Leading Number Symbols for Positive Values
+	//
+	//				Leading Symbols: "$"
+	//				Number String:   "$123.456"
+	//
+	//			Example-4: Trailing Number Symbols
+	//				Trailing Number Symbols for Positive Values
+	//
+	//				Trailing Symbols: " +"
+	//				Number String:   "123.456 +"
+	//
+	//			Example-5: Trailing Number Symbols
+	//				Trailing Number Symbols for Positive Values
+	//
+	//				Trailing Symbols: "+€"
+	//				Number String:   "123.456+€"
+	//
+	//			Example-6: Trailing Number Symbols
+	//				Trailing Number Symbols for Positive Values
+	//
+	//				Trailing Symbols: " €"
+	//				Number String:   "123.456 €"
+	//
+	//		zeroNumberSign NumStrNumberSymbolSpec
+	//
+	//			The Number String Zero Number Symbol
+	//			Specification is used to configure number
+	//			symbols for zero numeric values formatted
+	//			and displayed in number stings. Zero number
+	//			signs are commonly omitted because zero
+	//			does not technically qualify as either a
+	//			positive or negative value. However,
+	//			currency symbols may be required for zero
+	//			values.
+	//
+	//			For currency presentations, the currency
+	//			symbol is often used as either a leading
+	//			or trailing symbol for zero numeric
+	//			values.
+	//
+	//			Example-1: Leading Number Symbols
+	//				Leading Number Symbols for Zero Values
+	//
+	//				Leading Symbols: "$"
+	//				Trailing Symbols: ""
+	//				Number String:   "$0.00"
+	//
+	//			Example-2: Trailing Number Symbols
+	//				Trailing Number Symbols for Zero Values
+	//
+	//				Leading Symbols: ""
+	//				Trailing Symbols: " €"
+	//				Number String:   "0.00 €"
+
+	// positiveNumberSign NumStrNumberSymbolSpec
 	//	Positive number signs are commonly implied
 	//	and not specified. However, the user has
 	//	the option to specify a positive number sign
@@ -172,7 +301,7 @@ type NumStrFormatSpec struct {
 	//		Trailing Symbols: "$"
 	//		Number String:   "123.456$"
 
-	zeroNumberSign NumStrNumberSymbolSpec
+	//zeroNumberSign NumStrNumberSymbolSpec
 	//	The Number String Zero Number Symbol
 	//	Specification is used to configure number
 	//	symbols for zero numeric values formatted
@@ -12767,14 +12896,9 @@ func (signedNumFmtSpecAtom *numStrFmtSpecAtom) empty(
 
 	signedNumFmtSpec.intSeparatorSpec.Empty()
 
-	signedNumFmtSpec.positiveNumberSign.Empty()
-
-	signedNumFmtSpec.negativeNumberSign.Empty()
+	signedNumFmtSpec.numberSymbols.Empty()
 
 	signedNumFmtSpec.numberFieldSpec.Empty()
-
-	signedNumFmtSpec.zeroNumberSign.Empty()
-
 }
 
 //	equal
@@ -12855,8 +12979,8 @@ func (signedNumFmtSpecAtom *numStrFmtSpecAtom) equal(
 		return false
 	}
 
-	if !signedNumFmtSpec1.positiveNumberSign.Equal(
-		&signedNumFmtSpec2.positiveNumberSign) {
+	if !signedNumFmtSpec1.numberSymbols.Equal(
+		&signedNumFmtSpec2.numberSymbols) {
 
 		return false
 	}

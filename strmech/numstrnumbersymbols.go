@@ -115,7 +115,7 @@ type NumStrNumberSymbols struct {
 	//		Trailing Number Symbols for Negative Values
 	//
 	//		Trailing Symbols: "-$"
-	//		Number String:   "123.456-$"
+	//		Number String:   "123.456-€"
 
 	positiveNumberSign NumStrNumberSymbolSpec
 	//	Positive number signs are commonly implied
@@ -156,14 +156,14 @@ type NumStrNumberSymbols struct {
 	//	Example-5: Trailing Number Symbols
 	//		Trailing Number Symbols for Positive Values
 	//
-	//		Trailing Symbols: "+$"
-	//		Number String:   "123.456+$"
+	//		Trailing Symbols: "+€"
+	//		Number String:   "123.456+€"
 	//
 	//	Example-6: Trailing Number Symbols
 	//		Trailing Number Symbols for Positive Values
 	//
-	//		Trailing Symbols: "$"
-	//		Number String:   "123.456$"
+	//		Trailing Symbols: " €"
+	//		Number String:   "123.456 €"
 
 	zeroNumberSign NumStrNumberSymbolSpec
 	//	The Number String Zero Number Symbol
@@ -192,8 +192,8 @@ type NumStrNumberSymbols struct {
 	//		Trailing Number Symbols for Zero Values
 	//
 	//		Leading Symbols: ""
-	//		Trailing Symbols: " $"
-	//		Number String:   "0.00 $"
+	//		Trailing Symbols: " €"
+	//		Number String:   "0.00 €"
 
 	lock *sync.Mutex
 }
@@ -7215,6 +7215,57 @@ func (nStrNumSymNanobot *numStrNumberSymbolsNanobot) empty(
 	nStrNumSymbols.negativeNumberSign.Empty()
 
 	nStrNumSymbols.zeroNumberSign.Empty()
+}
+
+//	equal
+//
+//	Receives a pointer to two instances of
+//	NumStrFormatSpec and proceeds to compare their member
+//	variables in order to determine if they are
+//	equivalent.
+//
+//	A boolean flag showing the result of this comparison
+//	is returned. If the member variables for both instances
+//	are equal in all respects, this flag is set to 'true'.
+//	Otherwise, this method returns 'false'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	signedNumFmtSpec1			*NumStrFormatSpec
+//
+//		An instance of NumStrFormatSpec. Internal member
+//		variables from 'signedNumFmtSpec1' will be
+//		compared to those of 'signedNumFmtSpec2' to
+//		determine if both instances are equivalent.
+//
+//
+//	signedNumFmtSpec2			*NumStrFormatSpec
+//
+//		An instance of NumStrFormatSpec. Internal member
+//		variables from 'signedNumFmtSpec2' will be
+//		compared to those of 'signedNumFmtSpec1' to
+//		determine if both instances are equivalent.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	bool
+//
+//		If the comparison of 'signedNumFmtSpec1' and
+//		'signedNumFmtSpec2' shows that all internal
+//		member variables are equivalent, this method
+//		will return a boolean value of 'true'.
+//
+//		If the two instances are NOT equal, this method
+//		will return a boolean value of 'false' to the
+//		calling function.
+func (nStrNumSymNanobot *numStrNumberSymbolsNanobot) equal(
+	nNumSymbols1 *NumStrNumberSymbols,
+	nNumSymbols2 *NumStrNumberSymbols) bool {
+
 }
 
 //	setNegativeNumSignRunes
