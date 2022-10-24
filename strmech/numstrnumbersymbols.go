@@ -661,6 +661,61 @@ func (nStrNumSym *NumStrNumberSymbols) EmptyZeroNumSymbols() {
 		nStrNumSym)
 }
 
+//	Equal
+//
+//	Receives a pointer to another instance of
+//	NumStrNumberSymbols and proceeds to compare its
+//	internal member variables to those of the current
+//	NumStrNumberSymbols instance in order to determine if
+//	they are equivalent.
+//
+//	A boolean flag showing the result of this comparison
+//	is returned. If the member variables for both
+//	instances are equal in all respects, this flag is set
+//	to 'true'. Otherwise, this method returns 'false'.
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//	incomingNumSymbols		*NumStrNumberSymbols
+//
+//		A pointer to an external instance of
+//		NumStrNumberSymbols. The member variable data
+//		values in this instance will be compared to those
+//		in the current instance of NumStrNumberSymbols.
+//		The results of this comparison will be returned
+//		to the calling function as a boolean value.
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//	bool
+//
+//		If the internal member variable data values contained in
+//		input parameter 'incomingNumSymbols' are equivalent
+//		in all respects to those contained in the current
+//		instance of 'NumStrNumberSymbols', this return value
+//		will be set to 'true'.
+//
+//		Otherwise, this method will return 'false'.
+func (nStrNumSym *NumStrNumberSymbols) Equal(
+	incomingNumSymbols *NumStrNumberSymbols) bool {
+
+	if nStrNumSym.lock == nil {
+		nStrNumSym.lock = new(sync.Mutex)
+	}
+
+	nStrNumSym.lock.Lock()
+
+	defer nStrNumSym.lock.Unlock()
+
+	return new(numStrNumberSymbolsNanobot).equal(
+		nStrNumSym,
+		incomingNumSymbols)
+}
+
 // IsNOP
 //
 //	'NOP' stands for 'No Operation'. This method signals
@@ -7220,32 +7275,32 @@ func (nStrNumSymNanobot *numStrNumberSymbolsNanobot) empty(
 //	equal
 //
 //	Receives a pointer to two instances of
-//	NumStrFormatSpec and proceeds to compare their member
-//	variables in order to determine if they are
+//	NumStrNumberSymbols and proceeds to compare their
+//	member variables in order to determine if they are
 //	equivalent.
 //
 //	A boolean flag showing the result of this comparison
-//	is returned. If the member variables for both instances
-//	are equal in all respects, this flag is set to 'true'.
-//	Otherwise, this method returns 'false'.
+//	is returned. If the member variables for both
+//	instances are equal in all respects, this flag is set
+//	to 'true'. Otherwise, this method returns 'false'.
 //
 // ----------------------------------------------------------------
 //
 // # Input Parameters
 //
-//	signedNumFmtSpec1			*NumStrFormatSpec
+//	nNumSymbols1			*NumStrNumberSymbols
 //
-//		An instance of NumStrFormatSpec. Internal member
-//		variables from 'signedNumFmtSpec1' will be
-//		compared to those of 'signedNumFmtSpec2' to
+//		An instance of NumStrNumberSymbols. Internal
+//		member variables from 'nNumSymbols1' will be
+//		compared to those of 'nNumSymbols2' to
 //		determine if both instances are equivalent.
 //
 //
-//	signedNumFmtSpec2			*NumStrFormatSpec
+//	nNumSymbols2			*NumStrNumberSymbols
 //
-//		An instance of NumStrFormatSpec. Internal member
-//		variables from 'signedNumFmtSpec2' will be
-//		compared to those of 'signedNumFmtSpec1' to
+//		An instance of NumStrNumberSymbols. Internal
+//		member variables from 'nNumSymbols1' will
+//		be compared to those of 'nNumSymbols2' to
 //		determine if both instances are equivalent.
 //
 // ----------------------------------------------------------------
@@ -7254,8 +7309,8 @@ func (nStrNumSymNanobot *numStrNumberSymbolsNanobot) empty(
 //
 //	bool
 //
-//		If the comparison of 'signedNumFmtSpec1' and
-//		'signedNumFmtSpec2' shows that all internal
+//		If the comparison of 'nNumSymbols1' and
+//		'nNumSymbols2' shows that all internal
 //		member variables are equivalent, this method
 //		will return a boolean value of 'true'.
 //
@@ -7266,6 +7321,39 @@ func (nStrNumSymNanobot *numStrNumberSymbolsNanobot) equal(
 	nNumSymbols1 *NumStrNumberSymbols,
 	nNumSymbols2 *NumStrNumberSymbols) bool {
 
+	if nStrNumSymNanobot.lock == nil {
+		nStrNumSymNanobot.lock = new(sync.Mutex)
+	}
+
+	nStrNumSymNanobot.lock.Lock()
+
+	defer nStrNumSymNanobot.lock.Unlock()
+
+	if nNumSymbols1 == nil ||
+		nNumSymbols2 == nil {
+
+		return false
+	}
+
+	if !nNumSymbols1.negativeNumberSign.Equal(
+		&nNumSymbols2.negativeNumberSign) {
+
+		return false
+	}
+
+	if !nNumSymbols1.positiveNumberSign.Equal(
+		&nNumSymbols2.positiveNumberSign) {
+
+		return false
+	}
+
+	if !nNumSymbols1.zeroNumberSign.Equal(
+		&nNumSymbols2.zeroNumberSign) {
+
+		return false
+	}
+
+	return true
 }
 
 //	setNegativeNumSignRunes
