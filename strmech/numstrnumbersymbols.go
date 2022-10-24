@@ -8,10 +8,16 @@ import (
 
 //	NumStrNumberSymbols
 //
-//	Contains three instances of NumStrNumberSymbolSpec
-//	defining the Number Symbols to be used with positive
-//	numeric values, negative numeric values and zero
-//	numeric values.
+//	This type is used to configure Number Symbols
+//	required in converting numeric values to Number
+//	Strings.
+//
+//	NumStrNumberSymbols contains three instances of
+//	NumStrNumberSymbolSpec defining the Number Symbols to
+//	be used with positive numeric values, negative numeric
+//	values and zero numeric values.
+//
+// ----------------------------------------------------------------
 //
 // # Background
 //
@@ -29,6 +35,38 @@ import (
 //
 //	A Number Symbol is defined as one or more text
 //	characters.
+//
+//	For Number Symbol examples, see the source code
+//	documentation for NumStrNumberSymbols member
+//	variables listed below.
+//
+// ----------------------------------------------------------------
+//
+// # Usage
+//
+//	Configuring formatting for Number Stings while
+//	supporting multinational and multicultural standards
+//	necessarily requires a complex series of parameters
+//	and specifications.
+//
+//	Configuring the Number Symbols which comprise part of
+//	the Number String formatting process also involves
+//	complexity.
+//
+//	Typically, instances of NumStrNumberSymbols are
+//	created, or constructed, using the 'New' methods
+//	documented below. Many of these methods provide
+//	input parameters capable of detailing all the
+//	Number Symbol features required to support
+//	any multinational and multicultural Number Symbol
+//	formatting requirement.
+//
+//	For those only interested in a quick and simple means
+//	of generating Number Symbol formatting, the following
+//	methods provide defaults which greatly simplify the
+//	Number Symbols creation process:
+//
+//		NumStrNumberSymbols.NewSimpleCurrency()
 type NumStrNumberSymbols struct {
 	negativeNumberSign NumStrNumberSymbolSpec
 	//	The Number String Negative Number Sign
@@ -940,7 +978,311 @@ func (nStrNumSym *NumStrNumberSymbols) NewNOP() NumStrNumberSymbols {
 	return newNStrNumSym
 }
 
+//	NewSimpleCurrency
+//
+//	Creates and returns and instance of
+//	NumStrNumberSymbols configured for currency
+//	Number Symbol formatting.
+//
+//	If currency number symbol formatting is
+//	NOT required, see method:
+//
+//		NumStrNumberSymbols.NewSimpleSignedNumber()
+//
+//	Type NumStrNumberSymbols is used to configure
+//	Number Symbols required in converting numeric
+//	values to formatted Number Strings.
+//
+//	NumStrNumberSymbols contains three instances of
+//	type NumStrNumberSymbolSpec defining the Number
+//	Symbols to be used with positive numeric values,
+//	negative numeric values and zero numeric values.
+//
+//	This method provides a simplified means of creating
+//	type NumStrNumberSymbols using default values. The
+//	generated returned instance of NumStrNumberSymbols
+//	will be configured with currency number symbols.
+//
+// ----------------------------------------------------------------
+//
+// # Defaults
+//
+//	Currency-Negative Symbol Position:
+//		Currency Symbol defaults to 'outside' the
+//		minus sign.
+//
+//		Examples:
+//			European Number String: "123.456- €"
+//			US Number String: "$ -123.456"
+//
+//	Negative Number Symbol:
+//		The default Negative Number Symbol is the
+//		minus sign ('-').
+//
+//		Examples:
+//			European Number String: "123.456- €"
+//			US Number String: "$ -123.456"
+//
+//	Positive Number Symbol:
+//		No Positive Number Sign Symbol. Positive
+//		values are assumed.
+//
+//		Positive Numeric Value Currency Examples:
+//			European Number String: "123.456 €"
+//			US Number String: "$ 123.456"
+//
+//	Zero Number Symbol:
+//		No Number Sign Symbol. Technically a zero value
+//		is neither positive nor negative.
+//
+//		Zero Numeric Value Currency Examples:
+//			European Number String: "0.00 €"
+//			US Number String: "$ 0.00"
+//
+//	Number Field Symbol Position:
+//		Defaults to "Inside Number Field"
+//
+//		Example:
+//			Number Field Length: 8
+//			Numeric Value: 123.45
+//			Number Symbol: leading minus sign ('-')
+//			Number Symbol Position: Inside Number Field
+//			Formatted Number String: " -123.45"
+//			Number Field Index:       01234567
+//			Total Number String Length: 8
+//
+// ----------------------------------------------------------------
+//
+//	# Input Parameters
+//
+//	currencySymbols				string
+//
+//		The symbol or symbols used to format currency. This
+//		currency formatting will be configured in the new
+//		instance of NumStrNumberSymbols returned by this
+//		method.
+//
+//	leadingNumSymbols			bool
+//
+//		Controls the positioning of Number Symbols in a
+//		Number String Format.
+//
+//		When set to 'true', the returned instance of
+//		NumStrNumberSymbols will configure Number Symbols
+//		on the left side of the numeric value. Number
+//		Symbols are therefore configured as leading
+//		Number Symbols. This is the positioning format
+//		used in the US, UK, Australia and most of Canada.
+//
+//		Example Number Strings:
+//			"$ -123.456"
+//
+//		NOTE:	A space is automatically inserted between
+//				the currency symbol and the minus sign.
+//
+//		When set to 'false', the returned instance of
+//		NumStrNumberSymbols will configure Number Symbols
+//		on the right side of the numeric value. Number
+//		Symbols are therefore configured as trailing
+//		Number Symbols. This is the positioning format
+//		used in France, Germany and many countries in the
+//		European Union.
+//
+//		Example Number Strings:
+//			"123.456- €"
+//
+//		NOTE:	A space is automatically inserted between
+//				the minus sign and the currency symbol.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	NumStrNumberSymbols
+//		If this method completes successfully, this
+//		parameter will return a new, fully populated
+//		instance of NumStrNumberSymbols configured
+//		with the Positive, Negative and Zero Number
+//		Sign Symbol Specification objects.
+//
+//		This returned NumStrNumberSymbols instance will
+//		be configured with currency symbols for Number
+//		String formatting.
+func (nStrNumSym *NumStrNumberSymbols) NewSimpleCurrency(
+	currencySymbols string,
+	leadingNumSymbols bool) NumStrNumberSymbols {
+
+	if nStrNumSym.lock == nil {
+		nStrNumSym.lock = new(sync.Mutex)
+	}
+
+	nStrNumSym.lock.Lock()
+
+	defer nStrNumSym.lock.Unlock()
+
+	var newNStrNumSymbols NumStrNumberSymbols
+
+	new(numStrNumberSymbolsMechanics).setSimpleNumSymbolsConfig(
+		&newNStrNumSymbols,
+		currencySymbols,
+		leadingNumSymbols)
+
+	return newNStrNumSymbols
+}
+
+//	NewSimpleSignedNumber
+//
+//	Creates and returns and instance of
+//	NumStrNumberSymbols configured for Signed
+//	Number formatting. Signed numbers do NOT
+//	contain currency symbols.
+//
+//	If currency number symbol formatting is
+//	required, see method:
+//
+//		NumStrNumberSymbols.NewSimpleCurrency()
+//
+//	Type NumStrNumberSymbols is used to configure
+//	Number Symbols required in converting numeric
+//	values to formatted Number Strings.
+//
+//	NumStrNumberSymbols contains three instances of
+//	type NumStrNumberSymbolSpec defining the Number
+//	Symbols to be used with positive numeric values,
+//	negative numeric values and zero numeric values.
+//
+//	This method provides a simplified means of creating
+//	type NumStrNumberSymbols using default values. The
+//	returned instance of NumStrNumberSymbols will be
+//	configured with symbols suitable for signed numeric
+//	values. Signed Number Symbols do NOT contain currency
+//	symbols.
+//
+// ----------------------------------------------------------------
+//
+// # Defaults
+//
+//	Negative Signed Number Symbol:
+//		The default Negative Number Symbol is the
+//		minus sign ('-').
+//
+//		Examples:
+//			European Number String: "123.456-"
+//			US Number String: "-123.456"
+//
+//	Positive Signed Number Symbol:
+//		No Positive Number Sign Symbol. Positive values
+//		are assumed.
+//
+//			Positive Value Number String: "123.456"
+//
+//	Zero Signed Number Symbol:
+//		No Number Sign Symbol. Technically a zero value
+//		is neither positive nor negative.
+//
+//			Zero Value Number String: "123.456"
+//
+//	Number Field Symbol Position:
+//		Defaults to "Inside Number Field"
+//
+//		Example:
+//			Number Field Length: 8
+//			Numeric Value: 123.45
+//			Number Symbol: leading minus sign ('-')
+//			Number Symbol Position: Inside Number Field
+//			Formatted Number String: " -123.45"
+//			Number Field Index:       01234567
+//			Total Number String Length: 8
+//
+// ----------------------------------------------------------------
+//
+//	# Input Parameters
+//
+//	leadingNumSymbols			bool
+//
+//		Controls the positioning of Number Symbols in a
+//		Number String Format.
+//
+//		When set to 'true', the returned instance of
+//		NumStrNumberSymbols will configure Number Symbols
+//		on the left side of the numeric value. Number
+//		Symbols are therefore configured as leading
+//		Number Symbols. This is the positioning format
+//		used in the US, UK, Australia and most of Canada.
+//
+//		Example Number String with Leading Number Symbols:
+//			"$ -123.456"
+//
+//		NOTE:	A space is automatically inserted between
+//				the currency symbol and the minus sign.
+//
+//		When set to 'false', the returned instance of
+//		NumStrNumberSymbols will configure Number Symbols
+//		on the right side of the numeric value. Number
+//		Symbols are therefore configured as trailing
+//		Number Symbols. This is the positioning format
+//		used in France, Germany and many countries in the
+//		European Union.
+//
+//		Example Number String with Trailing Number Symbols:
+//			"123.456- €"
+//
+//		NOTE:	A space is automatically inserted between
+//				the minus sign and the currency symbol.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	NumStrNumberSymbols
+//
+//		If this method completes successfully, this
+//		parameter will return a new, fully populated
+//		instance of NumStrNumberSymbols configured
+//		with the Positive, Negative and Zero Number
+//		Sign Symbol Specification objects.
+//
+//		This returned NumStrNumberSymbols instance will
+//		be configured with symbols suitable for Signed
+//		Number String formatting.
+func (nStrNumSym *NumStrNumberSymbols) NewSimpleSignedNumber(
+	leadingNumSymbols bool) NumStrNumberSymbols {
+
+	if nStrNumSym.lock == nil {
+		nStrNumSym.lock = new(sync.Mutex)
+	}
+
+	nStrNumSym.lock.Lock()
+
+	defer nStrNumSym.lock.Unlock()
+
+	var newNStrNumSymbols NumStrNumberSymbols
+
+	new(numStrNumberSymbolsMechanics).setSimpleNumSymbolsConfig(
+		&newNStrNumSymbols,
+		"",
+		leadingNumSymbols)
+
+	return newNStrNumSymbols
+}
+
 //	NewSymbolsRunes
+//
+//	Creates and returns and instance of
+//	NumStrNumberSymbols.
+//
+//	This type is used to configure Number Symbols
+//	required in converting numeric values to Number
+//	Strings.
+//
+//	Type NumStrNumberSymbols contains three instances of
+//	NumStrNumberSymbolSpec defining the Number Symbols to
+//	be used with positive numeric values, negative numeric
+//	values and zero numeric values.
+//
+//	This method generates a new instance of
+//	NumStrNumberSymbols using rune arrays as input
+//	parameters.
 //
 // ----------------------------------------------------------------
 //
@@ -1455,6 +1797,21 @@ func (nStrNumSym *NumStrNumberSymbols) NewSymbolsRunes(
 
 //	NewSymbolsStrings
 //
+//	Creates and returns and instance of
+//	NumStrNumberSymbols.
+//
+//	This type is used to configure Number Symbols
+//	required in converting numeric values to Number
+//	Strings.
+//
+//	Type NumStrNumberSymbols contains three instances of
+//	NumStrNumberSymbolSpec defining the Number Symbols to
+//	be used with positive numeric values, negative numeric
+//	values and zero numeric values.
+//
+//	This method generates a new instance of
+//	NumStrNumberSymbols using strings as input parameters.
+//
 // ----------------------------------------------------------------
 //
 // # Input Parameters
@@ -1967,11 +2324,22 @@ func (nStrNumSym *NumStrNumberSymbols) NewSymbolsStrings(
 
 //	NewSymbolsSpecs
 //
-//	Creates and returns a new instance of
-//	NumStrNumberSymbols. The new instance is generated
-//	from the Positive, Negative and Zero Number Sign
-//	Symbol Specification objects passed as input
-//	parameters.
+//	Creates and returns and instance of
+//	NumStrNumberSymbols.
+//
+//	This type is used to configure Number Symbols
+//	required in converting numeric values to Number
+//	Strings.
+//
+//	Type NumStrNumberSymbols contains three instances of
+//	NumStrNumberSymbolSpec defining the Number Symbols to
+//	be used with positive numeric values, negative numeric
+//	values and zero numeric values.
+//
+//	This method generates a new instance of
+//	NumStrNumberSymbols using Positive, Negative and Zero
+//	Number Sign Symbol Specification objects passed as
+//	input parameters.
 //
 // ----------------------------------------------------------------
 //
@@ -5793,6 +6161,110 @@ func (nStrNumSymMech *numStrNumberSymbolsMechanics) setNumSymbolSpecs(
 				"zeroNumberSign"))
 
 	return err
+}
+func (nStrNumSymMech *numStrNumberSymbolsMechanics) setSimpleNumSymbolsConfig(
+	nStrNumSymbols *NumStrNumberSymbols,
+	currencySymbols string,
+	leadingNumSymbols bool) NumStrNumberSymbols {
+
+	if nStrNumSymMech.lock == nil {
+		nStrNumSymMech.lock = new(sync.Mutex)
+	}
+
+	nStrNumSymMech.lock.Lock()
+
+	defer nStrNumSymMech.lock.Unlock()
+
+	var newNStrNumSymbols NumStrNumberSymbols
+
+	if nStrNumSymbols == nil {
+
+		newNStrNumSymbols.SetNOP()
+
+		return newNStrNumSymbols
+	}
+
+	var numSymStr string
+
+	if leadingNumSymbols {
+		// Leading Number Symbols
+
+		if len(currencySymbols) == 0 {
+
+			numSymStr = ""
+
+		} else {
+
+			numSymStr = currencySymbols + " "
+		}
+
+		_ = newNStrNumSymbols.SetPositiveSymbolsRunes(
+			[]rune(numSymStr),
+			nil,
+			NumFieldSymPos.InsideNumField(),
+			nil)
+
+		_ = newNStrNumSymbols.SetZeroSymbolsRunes(
+			[]rune(numSymStr),
+			nil,
+			NumFieldSymPos.InsideNumField(),
+			nil)
+
+		if len(currencySymbols) == 0 {
+
+			numSymStr = "-"
+
+		} else {
+			numSymStr = currencySymbols + " -"
+		}
+
+		_ = newNStrNumSymbols.SetNegativeSymbolsRunes(
+			[]rune(numSymStr),
+			nil,
+			NumFieldSymPos.InsideNumField(),
+			nil)
+
+	} else {
+		// Trailing Number Symbols
+
+		if len(currencySymbols) == 0 {
+
+			numSymStr = ""
+
+		} else {
+
+			numSymStr = " " + currencySymbols
+		}
+
+		_ = newNStrNumSymbols.SetPositiveSymbolsRunes(
+			nil,
+			[]rune(numSymStr),
+			NumFieldSymPos.InsideNumField(),
+			nil)
+
+		_ = newNStrNumSymbols.SetZeroSymbolsRunes(
+			nil,
+			[]rune(numSymStr),
+			NumFieldSymPos.InsideNumField(),
+			nil)
+
+		if len(currencySymbols) == 0 {
+
+			numSymStr = "-"
+
+		} else {
+			numSymStr = "- " + currencySymbols
+		}
+
+		_ = newNStrNumSymbols.SetNegativeSymbolsRunes(
+			nil,
+			[]rune(numSymStr),
+			NumFieldSymPos.InsideNumField(),
+			nil)
+
+	}
+
+	return newNStrNumSymbols
 }
 
 // numStrNumberSymbolsNanobot

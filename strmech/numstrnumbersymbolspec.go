@@ -916,7 +916,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) GetTrailingNumberSymbolPosit
 //
 //	bool
 //
-//		If this method returns 'true', it signls that the
+//		If this method returns 'true', it signals that the
 //		current instance of NumStrNumberSymbolSpec is a
 //		'NOP' or No Operation. This condition signals that
 //		the Number String Number Symbol Specification is
