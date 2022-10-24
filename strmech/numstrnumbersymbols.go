@@ -1003,6 +1003,17 @@ func (nStrNumSym *NumStrNumberSymbols) NewNOP() NumStrNumberSymbols {
 //	generated returned instance of NumStrNumberSymbols
 //	will be configured with currency number symbols.
 //
+//	If the default configuration values fail to provide
+//	sufficient granular control over currency number
+//	symbol creation, use one of the more advanced
+//	constructor or 'New' methods to achieve specialized
+//	multinational or multicultural currency number
+//	symbol formatting requirements:
+//
+//		NumStrNumberSymbols.NewSymbolsRunes()
+//		NumStrNumberSymbols.NewSymbolsStrings()
+//		NumStrNumberSymbols.NewSymbolsSpecs()
+//
 // ----------------------------------------------------------------
 //
 // # Currency Defaults
@@ -1230,7 +1241,7 @@ func (nStrNumSym *NumStrNumberSymbols) NewSimpleCurrency(
 //	Number formatting. Signed numbers do NOT
 //	contain currency symbols.
 //
-//	If currency number symbol formatting is
+//	If currency number symbol formatting IS
 //	required, see method:
 //
 //		NumStrNumberSymbols.NewSimpleCurrency()
@@ -1245,11 +1256,21 @@ func (nStrNumSym *NumStrNumberSymbols) NewSimpleCurrency(
 //	negative numeric values and zero numeric values.
 //
 //	This method provides a simplified means of creating
-//	type NumStrNumberSymbols using default values. The
-//	returned instance of NumStrNumberSymbols will be
-//	configured with symbols suitable for signed numeric
+//	type NumStrNumberSymbols using default values and
+//	generating number symbols suitable for signed numeric
 //	values. Signed Number Symbols do NOT contain currency
 //	symbols.
+//
+//	If the default configuration values fail to provide
+//	sufficient granular control over signed number symbol
+//	creation, use one of the more advanced constructor or
+//	'New' methods to achieve specialized multinational or
+//	multicultural signed number symbol formatting
+//	requirements:
+//
+//		NumStrNumberSymbols.NewSymbolsRunes()
+//		NumStrNumberSymbols.NewSymbolsStrings()
+//		NumStrNumberSymbols.NewSymbolsSpecs()
 //
 // ----------------------------------------------------------------
 //
@@ -4187,6 +4208,17 @@ func (nStrNumSym *NumStrNumberSymbols) SetPositiveSymbolsStrings(
 // current instance of NumStrNumberSymbols with
 // currency number symbols.
 //
+//	If the default configuration values fail to provide
+//	sufficient granular control over currency number
+//	symbol creation, use one of the more advanced
+//	'Setter' methods to achieve specialized
+//	multinational or multicultural currency number
+//	symbol formatting requirements:
+//
+//		NumStrNumberSymbols.SetSymbolsRunes()
+//		NumStrNumberSymbols.SetSymbolsStrings()
+//		NumStrNumberSymbols.SetSymbolsSpecs()
+//
 // ----------------------------------------------------------------
 //
 // # IMPORTANT
@@ -4250,7 +4282,7 @@ func (nStrNumSym *NumStrNumberSymbols) SetPositiveSymbolsStrings(
 //	currencySymbols				string
 //
 //		The symbol or symbols used to format currency. The
-//		curent instance of NumStrNumberSymbols will be
+//		current instance of NumStrNumberSymbols will be
 //		reconfigured with the currency symbols contained
 //		in this input parameter.
 //
@@ -4393,6 +4425,236 @@ func (nStrNumSym *NumStrNumberSymbols) SetSimpleCurrency(
 	return new(numStrNumberSymbolsMechanics).setSimpleNumSymbolsConfig(
 		nStrNumSym,
 		currencySymbols,
+		leadingNumSymbols,
+		ePrefix.XCpy(
+			"nStrNumSym<-"))
+}
+
+//	SetSimpleSignedNumber
+//
+//	Deletes and reconfigures the data values contained in
+//	the current instance of NumStrNumberSymbols with
+//	signed number symbol parameters. Signed numbers do
+//	NOT contain currency symbols.
+//
+//	If currency number symbol formatting IS required,
+//	see method:
+//
+//	NumStrNumberSymbols.SetSimpleCurrency()
+//
+//	Type NumStrNumberSymbols is used to configure Number
+//	Symbols required in converting numeric values to
+//	formatted Number Strings.
+//
+//	NumStrNumberSymbols contains three instances of type
+//	NumStrNumberSymbolSpec defining the Number Symbols to
+//	be used with positive numeric values, negative
+//	numeric values and zero numeric values.
+//
+//	This method provides a simplified means for
+//	reconfiguring the current instance of
+//	NumStrNumberSymbols using default values and
+//	generating number symbols suitable for signed numeric
+//	values. Signed Number Symbols do NOT contain currency
+//	symbols.
+//
+//	If the default configuration values fail to provide
+//	sufficient granular control over signed number symbol
+//	creation, use one of the more advanced 'Setter'
+//	methods to achieve specialized multinational or
+//	multicultural signed number symbol formatting
+//	requirements:
+//
+//		NumStrNumberSymbols.SetSymbolsRunes()
+//		NumStrNumberSymbols.SetSymbolsStrings()
+//		NumStrNumberSymbols.SetSymbolsSpecs()
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	Be advised that this method will delete and
+//	reconfigure all data values contained in the current
+//	instance of NumStrNumberSymbols.
+//
+// ----------------------------------------------------------------
+//
+// # Signed Number Defaults
+//
+//	Negative Signed Number Symbol:
+//		The default Negative Number Symbol is the
+//		minus sign ('-').
+//
+//		Examples:
+//			European Number String: "123.456-"
+//			US Number String: "-123.456"
+//
+//	Positive Signed Number Symbol:
+//		No Positive Number Sign Symbol. Positive values
+//		are assumed.
+//
+//			Positive Value Number String: "123.456"
+//
+//	Zero Signed Number Symbol:
+//		No Number Sign Symbol. Technically a zero value
+//		is neither positive nor negative.
+//
+//			Zero Value Number String: "123.456"
+//
+//	Number Field Symbol Position:
+//		Defaults to "Inside Number Field"
+//
+//		Example:
+//			Number Field Length: 8
+//			Numeric Value: 123.45
+//			Number Symbol: leading minus sign ('-')
+//			Number Symbol Position: Inside Number Field
+//			Formatted Number String: " -123.45"
+//			Number Field Index:       01234567
+//			Total Number String Length: 8
+//
+// ----------------------------------------------------------------
+//
+//	# Input Parameters
+//
+//	leadingNumSymbols			bool
+//
+//		Controls the positioning of Number Symbols in a
+//		Number String Format.
+//
+//		When set to 'true', the current instance of
+//		NumStrNumberSymbols will configure Number Symbols
+//		on the left side of the numeric value. Such
+//		Number Symbols are therefore configured as
+//		leading Number Symbols. This is the positioning
+//		format used in the US, UK, Australia and most of
+//		Canada.
+//
+//		Example Number Strings:
+//			"$ -123.456"
+//
+//		NOTE:	A space is automatically inserted between
+//				the currency symbol and the minus sign.
+//
+//		When 'leadingNumSymbols' is set to 'false', the
+//		current instance of NumStrNumberSymbols will
+//		configure Number Symbols on the right side of the
+//		numeric value. Such Number Symbols are therefore
+//		configured as trailing Number Symbols. This is
+//		the positioning format used in France, Germany
+//		and many countries in the European Union.
+//
+//		Example Number Strings:
+//			"123.456- €"
+//
+//		NOTE:	A space is automatically inserted between
+//				the minus sign and the currency symbol.
+//
+//	 errorPrefix                interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it	contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (nStrNumSym *NumStrNumberSymbols) SetSimpleSignedNumber(
+	leadingNumSymbols bool,
+	errorPrefix interface{}) error {
+
+	if nStrNumSym.lock == nil {
+		nStrNumSym.lock = new(sync.Mutex)
+	}
+
+	nStrNumSym.lock.Lock()
+
+	defer nStrNumSym.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumStrNumberSymbols."+
+			"SetSimpleSignedNumber()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	return new(numStrNumberSymbolsMechanics).setSimpleNumSymbolsConfig(
+		nStrNumSym,
+		"",
 		leadingNumSymbols,
 		ePrefix.XCpy(
 			"nStrNumSym<-"))
