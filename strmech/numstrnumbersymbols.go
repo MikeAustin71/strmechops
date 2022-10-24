@@ -984,8 +984,8 @@ func (nStrNumSym *NumStrNumberSymbols) NewNOP() NumStrNumberSymbols {
 //	NumStrNumberSymbols configured for currency
 //	Number Symbol formatting.
 //
-//	If currency number symbol formatting is
-//	NOT required, see method:
+//	If currency number symbol formatting is NOT
+//	required, see method:
 //
 //		NumStrNumberSymbols.NewSimpleSignedNumber()
 //
@@ -1005,7 +1005,7 @@ func (nStrNumSym *NumStrNumberSymbols) NewNOP() NumStrNumberSymbols {
 //
 // ----------------------------------------------------------------
 //
-// # Defaults
+// # Currency Defaults
 //
 //	Currency-Negative Symbol Position:
 //		Currency Symbol defaults to 'outside' the
@@ -1069,10 +1069,11 @@ func (nStrNumSym *NumStrNumberSymbols) NewNOP() NumStrNumberSymbols {
 //
 //		When set to 'true', the returned instance of
 //		NumStrNumberSymbols will configure Number Symbols
-//		on the left side of the numeric value. Number
-//		Symbols are therefore configured as leading
-//		Number Symbols. This is the positioning format
-//		used in the US, UK, Australia and most of Canada.
+//		on the left side of the numeric value. Such
+//		Number Symbols are therefore configured as
+//		leading Number Symbols. This is the positioning
+//		format used in the US, UK, Australia and most of
+//		Canada.
 //
 //		Example Number Strings:
 //			"$ -123.456"
@@ -1082,17 +1083,76 @@ func (nStrNumSym *NumStrNumberSymbols) NewNOP() NumStrNumberSymbols {
 //
 //		When set to 'false', the returned instance of
 //		NumStrNumberSymbols will configure Number Symbols
-//		on the right side of the numeric value. Number
-//		Symbols are therefore configured as trailing
-//		Number Symbols. This is the positioning format
-//		used in France, Germany and many countries in the
-//		European Union.
+//		on the right side of the numeric value. Such
+//		Number Symbols are therefore configured as
+//		trailing Number Symbols. This is the positioning
+//		format used in France, Germany and many countries
+//		in the European Union.
 //
 //		Example Number Strings:
 //			"123.456- €"
 //
 //		NOTE:	A space is automatically inserted between
 //				the minus sign and the currency symbol.
+//
+//	 errorPrefix                interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it	contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
@@ -1108,9 +1168,25 @@ func (nStrNumSym *NumStrNumberSymbols) NewNOP() NumStrNumberSymbols {
 //		This returned NumStrNumberSymbols instance will
 //		be configured with currency symbols for Number
 //		String formatting.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
 func (nStrNumSym *NumStrNumberSymbols) NewSimpleCurrency(
 	currencySymbols string,
-	leadingNumSymbols bool) NumStrNumberSymbols {
+	leadingNumSymbols bool,
+	errorPrefix interface{}) (
+	NumStrNumberSymbols,
+	error) {
 
 	if nStrNumSym.lock == nil {
 		nStrNumSym.lock = new(sync.Mutex)
@@ -1120,14 +1196,31 @@ func (nStrNumSym *NumStrNumberSymbols) NewSimpleCurrency(
 
 	defer nStrNumSym.lock.Unlock()
 
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
 	var newNStrNumSymbols NumStrNumberSymbols
 
-	new(numStrNumberSymbolsMechanics).setSimpleNumSymbolsConfig(
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumStrNumberSymbols."+
+			"NewSimpleCurrency()",
+		"")
+
+	if err != nil {
+		return newNStrNumSymbols, err
+	}
+
+	err = new(numStrNumberSymbolsMechanics).setSimpleNumSymbolsConfig(
 		&newNStrNumSymbols,
 		currencySymbols,
-		leadingNumSymbols)
+		leadingNumSymbols,
+		ePrefix.XCpy(
+			"newNStrNumSymbols<-"))
 
-	return newNStrNumSymbols
+	return newNStrNumSymbols, err
 }
 
 //	NewSimpleSignedNumber
@@ -1160,7 +1253,7 @@ func (nStrNumSym *NumStrNumberSymbols) NewSimpleCurrency(
 //
 // ----------------------------------------------------------------
 //
-// # Defaults
+// # Signed Number Defaults
 //
 //	Negative Signed Number Symbol:
 //		The default Negative Number Symbol is the
@@ -1205,10 +1298,11 @@ func (nStrNumSym *NumStrNumberSymbols) NewSimpleCurrency(
 //
 //		When set to 'true', the returned instance of
 //		NumStrNumberSymbols will configure Number Symbols
-//		on the left side of the numeric value. Number
-//		Symbols are therefore configured as leading
-//		Number Symbols. This is the positioning format
-//		used in the US, UK, Australia and most of Canada.
+//		on the left side of the numeric value. Such
+//		Number Symbols are therefore configured as
+//		leading Number Symbols. This is the positioning
+//		format used in the US, UK, Australia and most of
+//		Canada.
 //
 //		Example Number String with Leading Number Symbols:
 //			"$ -123.456"
@@ -1218,11 +1312,11 @@ func (nStrNumSym *NumStrNumberSymbols) NewSimpleCurrency(
 //
 //		When set to 'false', the returned instance of
 //		NumStrNumberSymbols will configure Number Symbols
-//		on the right side of the numeric value. Number
-//		Symbols are therefore configured as trailing
-//		Number Symbols. This is the positioning format
-//		used in France, Germany and many countries in the
-//		European Union.
+//		on the right side of the numeric value. Such
+//		Number Symbols are therefore configured as
+//		trailing Number Symbols. This is the positioning
+//		format used in France, Germany and many countries
+//		in the European Union.
 //
 //		Example Number String with Trailing Number Symbols:
 //			"123.456- €"
@@ -1245,8 +1339,24 @@ func (nStrNumSym *NumStrNumberSymbols) NewSimpleCurrency(
 //		This returned NumStrNumberSymbols instance will
 //		be configured with symbols suitable for Signed
 //		Number String formatting.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
 func (nStrNumSym *NumStrNumberSymbols) NewSimpleSignedNumber(
-	leadingNumSymbols bool) NumStrNumberSymbols {
+	leadingNumSymbols bool,
+	errorPrefix interface{}) (
+	NumStrNumberSymbols,
+	error) {
 
 	if nStrNumSym.lock == nil {
 		nStrNumSym.lock = new(sync.Mutex)
@@ -1256,14 +1366,31 @@ func (nStrNumSym *NumStrNumberSymbols) NewSimpleSignedNumber(
 
 	defer nStrNumSym.lock.Unlock()
 
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
 	var newNStrNumSymbols NumStrNumberSymbols
 
-	new(numStrNumberSymbolsMechanics).setSimpleNumSymbolsConfig(
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumStrNumberSymbols."+
+			"NewSimpleSignedNumber()",
+		"")
+
+	if err != nil {
+		return newNStrNumSymbols, err
+	}
+
+	err = new(numStrNumberSymbolsMechanics).setSimpleNumSymbolsConfig(
 		&newNStrNumSymbols,
 		"",
-		leadingNumSymbols)
+		leadingNumSymbols,
+		ePrefix.XCpy(
+			"newNStrNumSymbols<-"))
 
-	return newNStrNumSymbols
+	return newNStrNumSymbols, err
 }
 
 //	NewSymbolsRunes
@@ -4031,6 +4158,246 @@ func (nStrNumSym *NumStrNumberSymbols) SetPositiveSymbolsStrings(
 			"nuStrNumSym<-PositiveNumSyms"))
 }
 
+// SetSimpleCurrency
+//
+// Deletes and reconfigures the data values contained in
+// the current instance of NumStrNumberSymbols with
+// currency number symbol parameters.
+//
+// If currency number symbol formatting is NOT required,
+// see method:
+//
+//	NumStrNumberSymbols.SetSimpleSignedNumber()
+//
+// Type NumStrNumberSymbols is used to configure
+// Number Symbols required in converting numeric
+// values to formatted Number Strings.
+//
+// NumStrNumberSymbols contains three instances of
+// type NumStrNumberSymbolSpec defining the Number
+// Symbols to be used with positive numeric values,
+// negative numeric values and zero numeric values.
+//
+// This method provides a simplified means of
+// reconfiguring the current instance of
+// NumStrNumberSymbols with currency number symbols
+// using default values.
+//
+// Upon completion, this method will reconfigure the
+// current instance of NumStrNumberSymbols with
+// currency number symbols.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	Be advised that this method will delete and
+//	reconfigure all data values contained in the current
+//	instance of NumStrNumberSymbols.
+//
+// ----------------------------------------------------------------
+//
+// # Currency Defaults
+//
+//	Currency-Negative Symbol Position:
+//		Currency Symbol defaults to 'outside' the
+//		minus sign.
+//
+//		Examples:
+//			European Number String: "123.456- €"
+//			US Number String: "$ -123.456"
+//
+//	Negative Number Symbol:
+//		The default Negative Number Symbol is the
+//		minus sign ('-').
+//
+//		Examples:
+//			European Number String: "123.456- €"
+//			US Number String: "$ -123.456"
+//
+//	Positive Number Symbol:
+//		No Positive Number Sign Symbol. Positive
+//		values are assumed.
+//
+//		Positive Numeric Value Currency Examples:
+//			European Number String: "123.456 €"
+//			US Number String: "$ 123.456"
+//
+//	Zero Number Symbol:
+//		No Number Sign Symbol. Technically a zero value
+//		is neither positive nor negative.
+//
+//		Zero Numeric Value Currency Examples:
+//			European Number String: "0.00 €"
+//			US Number String: "$ 0.00"
+//
+//	Number Field Symbol Position:
+//		Defaults to "Inside Number Field"
+//
+//		Example:
+//			Number Field Length: 8
+//			Numeric Value: 123.45
+//			Number Symbol: leading minus sign ('-')
+//			Number Symbol Position: Inside Number Field
+//			Formatted Number String: " -123.45"
+//			Number Field Index:       01234567
+//			Total Number String Length: 8
+//
+// ----------------------------------------------------------------
+//
+//	# Input Parameters
+//
+//	currencySymbols				string
+//
+//		The symbol or symbols used to format currency. The
+//		curent instance of NumStrNumberSymbols will be
+//		reconfigured with the currency symbols contained
+//		in this input parameter.
+//
+//	leadingNumSymbols			bool
+//
+//		Controls the positioning of Number Symbols in a
+//		Number String Format.
+//
+//		When set to 'true', the current instance of
+//		NumStrNumberSymbols will configure Number Symbols
+//		on the left side of the numeric value. Such
+//		Number Symbols are therefore configured as
+//		leading Number Symbols. This is the positioning
+//		format used in the US, UK, Australia and most of
+//		Canada.
+//
+//		Example Number Strings:
+//			"$ -123.456"
+//
+//		NOTE:	A space is automatically inserted between
+//				the currency symbol and the minus sign.
+//
+//		When 'leadingNumSymbols' is set to 'false', the
+//		current instance of NumStrNumberSymbols will
+//		configure Number Symbols on the right side of the
+//		numeric value. Such Number Symbols are therefore
+//		configured as trailing Number Symbols. This is
+//		the positioning format used in France, Germany
+//		and many countries in the European Union.
+//
+//		Example Number Strings:
+//			"123.456- €"
+//
+//		NOTE:	A space is automatically inserted between
+//				the minus sign and the currency symbol.
+//
+//	 errorPrefix                interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it	contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (nStrNumSym *NumStrNumberSymbols) SetSimpleCurrency(
+	currencySymbols string,
+	leadingNumSymbols bool,
+	errorPrefix interface{}) error {
+
+	if nStrNumSym.lock == nil {
+		nStrNumSym.lock = new(sync.Mutex)
+	}
+
+	nStrNumSym.lock.Lock()
+
+	defer nStrNumSym.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumStrNumberSymbols."+
+			"SetSimpleCurrency()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	return new(numStrNumberSymbolsMechanics).setSimpleNumSymbolsConfig(
+		nStrNumSym,
+		currencySymbols,
+		leadingNumSymbols,
+		ePrefix.XCpy(
+			"nStrNumSym<-"))
+}
+
 //	SetZeroNumSignSpec
 //
 //	Reconfigures the current instance of
@@ -6162,10 +6529,214 @@ func (nStrNumSymMech *numStrNumberSymbolsMechanics) setNumSymbolSpecs(
 
 	return err
 }
+
+//	setSimpleNumSymbolsConfig
+//
+//	Receives a pointer to an instance of
+//	NumStrNumberSymbols and proceeds to reconfigure that
+//	instance for currency number symbols or signed number
+//	symbols.
+//
+//	Type NumStrNumberSymbols is used to configure
+//	Number Symbols required in converting numeric
+//	values to formatted Number Strings.
+//
+//	NumStrNumberSymbols contains three instances of
+//	type NumStrNumberSymbolSpec defining the Number
+//	Symbols to be used with positive numeric values,
+//	negative numeric values and zero numeric values.
+//
+//	This method provides a simplified means of
+//	configuring type NumStrNumberSymbols using default
+//	values. The generated returned instance of
+//	NumStrNumberSymbols will be configured for either
+//	Currency Number Symbols or Signed Number Symbols,
+//	depending on the input parameters.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	Be advised that this method will delete and
+//	reconfigure all data values contained in input
+//	parameter, 'nStrNumSymbols'.
+//
+// ----------------------------------------------------------------
+//
+// # Currency Defaults
+//
+//	Currency-Negative Symbol Position:
+//		Currency Symbol defaults to 'outside' the
+//		minus sign.
+//
+//		Examples:
+//			European Number String: "123.456- €"
+//			US Number String: "$ -123.456"
+//
+//	Negative Number Symbol:
+//		The default Negative Number Symbol is the
+//		minus sign ('-').
+//
+//		Examples:
+//			European Number String: "123.456- €"
+//			US Number String: "$ -123.456"
+//
+//	Positive Number Symbol:
+//		No Positive Number Sign Symbol. Positive
+//		values are assumed.
+//
+//		Positive Numeric Value Currency Examples:
+//			European Number String: "123.456 €"
+//			US Number String: "$ 123.456"
+//
+//	Zero Number Symbol:
+//		No Number Sign Symbol. Technically a zero value
+//		is neither positive nor negative.
+//
+//		Zero Numeric Value Currency Examples:
+//			European Number String: "0.00 €"
+//			US Number String: "$ 0.00"
+//
+//	Number Field Symbol Position:
+//		Defaults to "Inside Number Field"
+//
+//		Example:
+//			Number Field Length: 8
+//			Numeric Value: 123.45
+//			Number Symbol: leading minus sign ('-')
+//			Number Symbol Position: Inside Number Field
+//			Formatted Number String: " -123.45"
+//			Number Field Index:       01234567
+//			Total Number String Length: 8
+//
+// ----------------------------------------------------------------
+//
+// # Signed Number Defaults
+//
+//	Negative Signed Number Symbol:
+//		The default Negative Number Symbol is the
+//		minus sign ('-').
+//
+//		Examples:
+//			European Number String: "123.456-"
+//			US Number String: "-123.456"
+//
+//	Positive Signed Number Symbol:
+//		No Positive Number Sign Symbol. Positive values
+//		are assumed.
+//
+//			Positive Value Number String: "123.456"
+//
+//	Zero Signed Number Symbol:
+//		No Number Sign Symbol. Technically a zero value
+//		is neither positive nor negative.
+//
+//			Zero Value Number String: "123.456"
+//
+//	Number Field Symbol Position:
+//		Defaults to "Inside Number Field"
+//
+//		Example:
+//			Number Field Length: 8
+//			Numeric Value: 123.45
+//			Number Symbol: leading minus sign ('-')
+//			Number Symbol Position: Inside Number Field
+//			Formatted Number String: " -123.45"
+//			Number Field Index:       01234567
+//			Total Number String Length: 8
+//
+// ----------------------------------------------------------------
+//
+//	# Input Parameters
+//
+//	nStrNumSymbols				*NumStrNumberSymbols
+//
+//		A pointer to an instance of NumStrNumberSymbols.
+//		All Number Symbol data values contained in this
+//		object will be deleted and reconfigured as either
+//		new currency symbol specifications or new signed
+//		number specifications.
+//
+//	currencySymbols				string
+//
+//		The symbol or symbols used to format currency.
+//		This currency formatting will be used to
+//		reconfigure the NumStrNumberSymbols instance
+//		passed by input parameter, 'nStrNumSymbols'.
+//
+//		If this string is empty, 'nStrNumSymbols' will be
+//		reconfigured with signed number symbols suitable
+//		for a number string containing a signed numeric
+//		value.
+//
+//	leadingNumSymbols			bool
+//
+//		Controls the positioning of Number Symbols in a
+//		Number String Format.
+//
+//		When set to 'true', 'nStrNumSymbols' will be
+//		reconfigured with Number Symbols on the left side
+//		of the numeric value. Such Number Symbols are
+//		therefore configured as leading	Number Symbols.
+//		This is the positioning format used in the US,
+//		UK, Australia and most of Canada.
+//
+//		Example Number Strings:
+//			"$ -123.456"
+//
+//		NOTE:	A space is automatically inserted between
+//				the currency symbol and the minus sign.
+//
+//		When set to 'false', the returned instance of
+//		NumStrNumberSymbols will configure Number Symbols
+//		on the right side of the numeric value. Such
+//		Number Symbols are therefore configured as
+//		trailing Number Symbols. This is the positioning
+//		format used in France, Germany and many countries
+//		in the European Union.
+//
+//		Example Number Strings:
+//			"123.456- €"
+//
+//		NOTE:	A space is automatically inserted between
+//				the minus sign and the currency symbol.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, this
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
 func (nStrNumSymMech *numStrNumberSymbolsMechanics) setSimpleNumSymbolsConfig(
 	nStrNumSymbols *NumStrNumberSymbols,
 	currencySymbols string,
-	leadingNumSymbols bool) NumStrNumberSymbols {
+	leadingNumSymbols bool,
+	errPrefDto *ePref.ErrPrefixDto) error {
 
 	if nStrNumSymMech.lock == nil {
 		nStrNumSymMech.lock = new(sync.Mutex)
@@ -6175,14 +6746,33 @@ func (nStrNumSymMech *numStrNumberSymbolsMechanics) setSimpleNumSymbolsConfig(
 
 	defer nStrNumSymMech.lock.Unlock()
 
-	var newNStrNumSymbols NumStrNumberSymbols
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"numStrNumberSymbolsMechanics."+
+			"setSimpleNumSymbolsConfig()",
+		"")
+
+	if err != nil {
+		return err
+	}
 
 	if nStrNumSymbols == nil {
 
-		newNStrNumSymbols.SetNOP()
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'nStrNumSymbols' is invalid!\n"+
+			"'nStrNumSymbols' is a 'nil' pointer.\n",
+			ePrefix.String())
 
-		return newNStrNumSymbols
+		return err
 	}
+
+	new(numStrNumberSymbolsNanobot).empty(
+		nStrNumSymbols)
 
 	var numSymStr string
 
@@ -6198,17 +6788,25 @@ func (nStrNumSymMech *numStrNumberSymbolsMechanics) setSimpleNumSymbolsConfig(
 			numSymStr = currencySymbols + " "
 		}
 
-		_ = newNStrNumSymbols.SetPositiveSymbolsRunes(
+		err = nStrNumSymbols.SetPositiveSymbolsRunes(
 			[]rune(numSymStr),
 			nil,
 			NumFieldSymPos.InsideNumField(),
 			nil)
 
-		_ = newNStrNumSymbols.SetZeroSymbolsRunes(
+		if err != nil {
+			return err
+		}
+
+		err = nStrNumSymbols.SetZeroSymbolsRunes(
 			[]rune(numSymStr),
 			nil,
 			NumFieldSymPos.InsideNumField(),
 			nil)
+
+		if err != nil {
+			return err
+		}
 
 		if len(currencySymbols) == 0 {
 
@@ -6218,11 +6816,15 @@ func (nStrNumSymMech *numStrNumberSymbolsMechanics) setSimpleNumSymbolsConfig(
 			numSymStr = currencySymbols + " -"
 		}
 
-		_ = newNStrNumSymbols.SetNegativeSymbolsRunes(
+		err = nStrNumSymbols.SetNegativeSymbolsRunes(
 			[]rune(numSymStr),
 			nil,
 			NumFieldSymPos.InsideNumField(),
 			nil)
+
+		if err != nil {
+			return err
+		}
 
 	} else {
 		// Trailing Number Symbols
@@ -6236,17 +6838,25 @@ func (nStrNumSymMech *numStrNumberSymbolsMechanics) setSimpleNumSymbolsConfig(
 			numSymStr = " " + currencySymbols
 		}
 
-		_ = newNStrNumSymbols.SetPositiveSymbolsRunes(
+		err = nStrNumSymbols.SetPositiveSymbolsRunes(
 			nil,
 			[]rune(numSymStr),
 			NumFieldSymPos.InsideNumField(),
 			nil)
 
-		_ = newNStrNumSymbols.SetZeroSymbolsRunes(
+		if err != nil {
+			return err
+		}
+
+		err = nStrNumSymbols.SetZeroSymbolsRunes(
 			nil,
 			[]rune(numSymStr),
 			NumFieldSymPos.InsideNumField(),
 			nil)
+
+		if err != nil {
+			return err
+		}
 
 		if len(currencySymbols) == 0 {
 
@@ -6256,15 +6866,19 @@ func (nStrNumSymMech *numStrNumberSymbolsMechanics) setSimpleNumSymbolsConfig(
 			numSymStr = "- " + currencySymbols
 		}
 
-		_ = newNStrNumSymbols.SetNegativeSymbolsRunes(
+		err = nStrNumSymbols.SetNegativeSymbolsRunes(
 			nil,
 			[]rune(numSymStr),
 			NumFieldSymPos.InsideNumField(),
 			nil)
 
+		if err != nil {
+			return err
+		}
+
 	}
 
-	return newNStrNumSymbols
+	return err
 }
 
 // numStrNumberSymbolsNanobot
