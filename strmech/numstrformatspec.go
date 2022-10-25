@@ -1910,8 +1910,8 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCountryCurrencyNumFormat(
 		&newNumStrFmtSpec,
 		countryCultureFormat.CurrencyNumStrFormat.decSeparator,
 		countryCultureFormat.CurrencyNumStrFormat.intSeparatorSpec,
-		numberFieldSpec,
 		countryCultureFormat.CurrencyNumStrFormat.numberSymbols,
+		numberFieldSpec,
 		ePrefix.XCpy("newCurrencyNumFmtSpec<-"))
 
 	return newNumStrFmtSpec, err
@@ -2149,8 +2149,8 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCountrySignedNumFormat(
 		&newNumStrFmtSpec,
 		countryCultureFormat.SignedNumStrFormat.decSeparator,
 		countryCultureFormat.SignedNumStrFormat.intSeparatorSpec,
-		numberFieldSpec,
 		countryCultureFormat.SignedNumStrFormat.numberSymbols,
+		numberFieldSpec,
 		ePrefix.XCpy("newSignedNumFmtSpec<-"))
 
 	return newNumStrFmtSpec, err
@@ -3228,26 +3228,132 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtUS(
 //		integer grouping and separation within a Number
 //		String.
 //
-//	negativeNumberSign			IntegerSeparatorSpec
+//	numberSymbols 					NumStrNumberSymbols
 //
-//		This Integer Separator Specification contains
-//		all the characters used to format number sign
-//		symbols and currency symbols for Number Strings
-//		with negative numeric values.
+//		This instance of NumStrNumberSymbols contains the
+//		Number Symbol Specifications for negative numeric
+//		values, positive numeric values and zero numeric
+//		values.
 //
-//	positiveNumberSign			NumStrNumberSymbolSpec
+//		type NumStrNumberSymbols struct {
 //
-//		This Number String Symbol Specification contains
-//		all the characters used to format number sign
-//		symbols and currency symbols for Number Strings
-//		with positive numeric values.
+//			negativeNumberSign NumStrNumberSymbolSpec
 //
-//	zeroNumberSign			NumStrNumberSymbolSpec
+//				The Number String Negative Number Sign
+//				Specification is used to configure negative
+//				number sign symbols for negative numeric
+//				values formatted and displayed in number
+//				stings.
 //
-//		This Number String Symbol Specification contains
-//		all the characters used to format number sign
-//		symbols and currency symbols for Number Strings
-//		with zero numeric values.
+//				For currency presentations, the currency
+//				symbol is combined with the negative number
+//				sign.
+//
+//				Example-1: Leading Number Symbols
+//					Leading Number Symbols for Negative Values
+//
+//					Leading Symbols: "- "
+//					Number String:   "- 123.456"
+//
+//				Example-2: Leading Number Symbols With Currency
+//					Leading Number Symbols for Negative Values
+//
+//					Leading Symbols: "$-"
+//					Number String:   "$-123.456"
+//
+//
+//				Example-3: Trailing Number Symbols
+//					Trailing Number Symbols for Negative Values
+//
+//					Trailing Symbols: " -"
+//					Number String:   "123.456 -"
+//
+//				Example-4: Trailing Number Symbols
+//					Trailing Number Symbols for Negative Values
+//
+//					Trailing Symbols: "-$"
+//					Number String:   "123.456-€"
+//
+//			positiveNumberSign NumStrNumberSymbolSpec
+//
+//				Positive number signs are commonly implied
+//				and not specified. However, the user has
+//				the option to specify a positive number sign
+//				character or characters for positive numeric
+//				values using a Number String Positive Number
+//				Sign Specification.
+//
+//				For currency presentations, the currency
+//				symbol is combined with the positive number
+//				sign.
+//
+//				Example-1: Leading Number Symbols
+//					Leading Number Symbols for Positive Values
+//
+//					Leading Symbols: "+ "
+//					Number String:   "+ 123.456"
+//
+//				Example-2: Leading Number Symbols
+//					Leading Number Symbols for Positive Values
+//
+//					Leading Symbols: "$+"
+//					Number String:   "$+123.456"
+//
+//				Example-3: Leading Number Symbols
+//					Leading Number Symbols for Positive Values
+//
+//					Leading Symbols: "$"
+//					Number String:   "$123.456"
+//
+//				Example-4: Trailing Number Symbols
+//					Trailing Number Symbols for Positive Values
+//
+//					Trailing Symbols: " +"
+//					Number String:   "123.456 +"
+//
+//				Example-5: Trailing Number Symbols
+//					Trailing Number Symbols for Positive Values
+//
+//					Trailing Symbols: "+€"
+//					Number String:   "123.456+€"
+//
+//				Example-6: Trailing Number Symbols
+//					Trailing Number Symbols for Positive Values
+//
+//					Trailing Symbols: " €"
+//					Number String:   "123.456 €"
+//
+//			zeroNumberSign NumStrNumberSymbolSpec
+//
+//				The Number String Zero Number Symbol
+//				Specification is used to configure number
+//				symbols for zero numeric values formatted
+//				and displayed in number stings. Zero number
+//				signs are commonly omitted because zero
+//				does not technically qualify as either a
+//				positive or negative value. However,
+//				currency symbols may be required for zero
+//				values.
+//
+//				For currency presentations, the currency
+//				symbol is often used as either a leading
+//				or trailing symbol for zero numeric
+//				values.
+//
+//				Example-1: Leading Number Symbols
+//					Leading Number Symbols for Zero Values
+//
+//					Leading Symbols: "$"
+//					Trailing Symbols: ""
+//					Number String:   "$0.00"
+//
+//				Example-2: Trailing Number Symbols
+//					Trailing Number Symbols for Zero Values
+//
+//					Leading Symbols: ""
+//					Trailing Symbols: " €"
+//					Number String:   "0.00 €"
+//		}
 //
 //	numberFieldSpec			NumStrNumberFieldSpec
 //
@@ -3400,9 +3506,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtUS(
 func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtComponents(
 	decSeparator DecimalSeparatorSpec,
 	intSeparatorSpec IntegerSeparatorSpec,
-	negativeNumberSign NumStrNumberSymbolSpec,
-	positiveNumberSign NumStrNumberSymbolSpec,
-	zeroNumberSign NumStrNumberSymbolSpec,
+	numberSymbols NumStrNumberSymbols,
 	numberFieldSpec NumStrNumberFieldSpec,
 	errorPrefix interface{}) (
 	newSignedNumFmtSpec NumStrFormatSpec,
@@ -3429,41 +3533,12 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtComponents(
 		return newSignedNumFmtSpec, err
 	}
 
-	var numSymbols NumStrNumberSymbols
-
-	err = numSymbols.negativeNumberSign.CopyIn(
-		&negativeNumberSign,
-		ePrefix.XCpy(
-			"numSymbols.negativeNumberSign<-"))
-
-	if err != nil {
-		return newSignedNumFmtSpec, err
-	}
-
-	err = numSymbols.positiveNumberSign.CopyIn(
-		&positiveNumberSign,
-		ePrefix.XCpy(
-			"numSymbols.positiveNumberSign<-"))
-
-	if err != nil {
-		return newSignedNumFmtSpec, err
-	}
-
-	err = numSymbols.zeroNumberSign.CopyIn(
-		&zeroNumberSign,
-		ePrefix.XCpy(
-			"numSymbols.zeroNumberSign<-"))
-
-	if err != nil {
-		return newSignedNumFmtSpec, err
-	}
-
 	err = new(numStrFmtSpecAtom).setNStrFmtComponents(
 		&newSignedNumFmtSpec,
 		decSeparator,
 		intSeparatorSpec,
+		numberSymbols,
 		numberFieldSpec,
-		numSymbols,
 		ePrefix.XCpy("newSignedNumFmtSpec<-"))
 
 	return newSignedNumFmtSpec, err
@@ -5707,8 +5782,8 @@ func (numStrFmtSpec *NumStrFormatSpec) SetCountryCurrencyNumFmt(
 		numStrFmtSpec,
 		countryCultureFormat.CurrencyNumStrFormat.decSeparator,
 		countryCultureFormat.CurrencyNumStrFormat.intSeparatorSpec,
-		numberFieldSpec,
 		countryCultureFormat.CurrencyNumStrFormat.numberSymbols,
+		numberFieldSpec,
 		ePrefix.XCpy("newCurrencyNumFmtSpec<-"))
 }
 
@@ -5938,8 +6013,8 @@ func (numStrFmtSpec *NumStrFormatSpec) SetCountrySignedNumFmt(
 		numStrFmtSpec,
 		countryCultureFormat.SignedNumStrFormat.decSeparator,
 		countryCultureFormat.SignedNumStrFormat.intSeparatorSpec,
-		numberFieldSpec,
 		countryCultureFormat.SignedNumStrFormat.numberSymbols,
+		numberFieldSpec,
 		ePrefix.XCpy("newSignedNumFmtSpec<-"))
 }
 
@@ -7942,8 +8017,8 @@ func (numStrFmtSpec *NumStrFormatSpec) SetNumFmtComponents(
 		numStrFmtSpec,
 		decSeparator,
 		intSeparatorSpec,
-		numberFieldSpec,
 		numSymbols,
+		numberFieldSpec,
 		ePrefix.XCpy("numStrFmtSpec<-"))
 
 	return err
@@ -10425,8 +10500,8 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setCurrencyNStrFmtFrance
 		numStrFmtSpec,
 		decSeparator,
 		intSeparatorSpec,
-		numberFieldSpec,
 		numSymbols,
+		numberFieldSpec,
 		ePrefix.XCpy("numStrFmtSpec<-"))
 }
 
@@ -10789,8 +10864,8 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setCurrencyNStrFmtGerman
 		numStrFmtSpec,
 		decSeparator,
 		intSeparatorSpec,
-		numberFieldSpec,
 		numSymbols,
+		numberFieldSpec,
 		ePrefix.XCpy("numStrFmtSpec<-"))
 }
 
@@ -11126,8 +11201,8 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setCurrencyNStrFmtUK(
 		numStrFmtSpec,
 		decSeparator,
 		intSeparatorSpec,
-		numberFieldSpec,
 		numSymbols,
+		numberFieldSpec,
 		ePrefix.XCpy("numStrFmtSpec<-"))
 }
 
@@ -11459,8 +11534,8 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setCurrencyNStrFmtUS(
 		numStrFmtSpec,
 		decSeparator,
 		intSeparatorSpec,
-		numberFieldSpec,
 		numSymbols,
+		numberFieldSpec,
 		ePrefix.XCpy("numStrFmtSpec<-"))
 }
 
@@ -12315,8 +12390,8 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtFrance(
 		numStrFmtSpec,
 		decSeparator,
 		intSeparatorSpec,
-		numberFieldSpec,
 		numSymbols,
+		numberFieldSpec,
 		ePrefix.XCpy("numStrFmtSpec<-"))
 }
 
@@ -12633,8 +12708,8 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtGermany(
 		numStrFmtSpec,
 		decSeparator,
 		intSeparatorSpec,
-		numberFieldSpec,
 		numSymbols,
+		numberFieldSpec,
 		ePrefix.XCpy("numStrFmtSpec<-"))
 }
 
@@ -12930,8 +13005,8 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtUS(
 		numStrFmtSpec,
 		decSeparator,
 		intSeparatorSpec,
-		numberFieldSpec,
 		numSymbols,
+		numberFieldSpec,
 		ePrefix.XCpy("numStrFmtSpec<-"))
 }
 
@@ -14178,6 +14253,13 @@ func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setNumberFieldSpec(
 //		integer grouping and separation within a Number
 //		String.
 //
+//	numberSymbols 					NumStrNumberSymbols
+//
+//		This instance of NumStrNumberSymbols contains the
+//		Number Symbol Specifications for negative numeric
+//		values, positive numeric values and zero numeric
+//		values.
+//
 //	numberFieldSpec					NumStrNumberFieldSpec
 //		This Number Field Specification contains all
 //		parameters necessary to format a Number String
@@ -14244,13 +14326,6 @@ func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setNumberFieldSpec(
 //				          TxtJustify.Center()
 //		}
 //
-//	numSymbols 						NumStrNumberSymbols
-//
-//		This instance of NumStrNumberSymbols contains the
-//		Number Symbol Specifications for negative numeric
-//		values, positive numeric values and zero numeric
-//		values.
-//
 //	errPrefDto						*ePref.ErrPrefixDto
 //		This object encapsulates an error prefix string which is
 //		included in all returned error messages. Usually, it
@@ -14281,8 +14356,8 @@ func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setNStrFmtComponents(
 	numStrFmtSpec *NumStrFormatSpec,
 	decSeparator DecimalSeparatorSpec,
 	intSeparatorSpec IntegerSeparatorSpec,
+	numberSymbols NumStrNumberSymbols,
 	numberFieldSpec NumStrNumberFieldSpec,
-	numSymbols NumStrNumberSymbols,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
 
@@ -14345,10 +14420,10 @@ func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setNStrFmtComponents(
 	}
 
 	err = numStrFmtSpec.numberSymbols.CopyIn(
-		&numSymbols,
+		&numberSymbols,
 		ePrefix.XCpy(
 			"numStrFmtSpec.numberSymbols<-"+
-				"numSymbols"))
+				"numberSymbols"))
 
 	return err
 }
