@@ -6,17 +6,75 @@ import (
 	"sync"
 )
 
-// NumStrFormatSpec
+//	NumStrFormatSpec
 //
-// The Number String Format Specification contains
-// parameters used to format signed numbers and
-// currency numeric values as number strings.
+//	The Number String Format Specification contains
+//	parameters used to format signed numbers and currency
+//	numeric values as number strings.
+//
+//	The member variables contained in this structure
+//	provide the detail specifications required to
+//	support number string multinational and multicultural
+//	formatting requirements.
+//
+// ----------------------------------------------------------------
+//
+// # Usage
+//
+//	Configuring formatting for Number Stings while
+//	supporting multinational and multicultural standards
+//	necessarily requires a complex series of parameters
+//	and specifications.
+//
+//	Typically, instances of NumStrFormatSpec are created,
+//	or constructed, using the 'New' methods documented
+//	below. Many of these methods provide input parameters
+//	capable of detailing all the Number Symbol features
+//	required to support any multinational and
+//	multicultural Number Symbol formatting requirement.
+//
+//	For those only interested in a quick and simple means
+//	of generating Number String formatting configurations,
+//	the following methods provide defaults which greatly
+//	simplify the Number String Format creation process:
+//
+//		NumStrFormatSpec.NewCurrencyNumFmtFrance()
+//		NumStrFormatSpec.NewSignedNumFmtFrance()
+//		NumStrFormatSpec.NewCurrencyNumFmtGermany()
+//		NumStrFormatSpec.NewSignedNumFmtGermany()
+//		NumStrFormatSpec.NewCurrencyNumFmtUK()
+//		NumStrFormatSpec.NewSignedNumFmtUK()
+//		NumStrFormatSpec.NewCurrencyNumFmtUS()
+//		NumStrFormatSpec.NewSignedNumFmtUS()
+//
+//	If more granular control is required to meet
+//	specialized requirements for multinational or
+//	multicultural number string formatting, consider
+//	using one of the following methods:
+//
+//		NumStrFormatSpec.NewCountryCurrencyNumFormat()
+//		NumStrFormatSpec.NewCountrySignedNumFormat()
+//		NumStrFormatSpec.NewNumFmtComponents()
+//		NumStrFormatSpec.NewNumFmtParams()
+//		NumStrFormatSpec.NewNumFmtParamsRunes()
+//		NumStrFormatSpec.SetCountryCurrencyNumFmt()
+//		NumStrFormatSpec.SetCountrySignedNumFmt()
+//		NumStrFormatSpec.SetNumFmtComponents()
+//		NumStrFormatSpec.SetNumFmtParams()
+//		NumStrFormatSpec.SetNumFmtParamsRunes()
 type NumStrFormatSpec struct {
 	decSeparator DecimalSeparatorSpec
 	//	Contains the decimal separator character
 	//	or characters which will separate integer
 	//	and fractional digits in a floating point
-	//	number.
+	//	numbers within a formatted Number String.
+	//
+	//	The decimal separator is also known as the
+	//	radix point.
+	//
+	//	In the US, UK, Australia and most of
+	//	Canada, the decimal separator is the period
+	//	character ('.') known as the decimal point.
 
 	intSeparatorSpec IntegerSeparatorSpec
 	//	Integer Separator Specification. This
@@ -3556,8 +3614,15 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtComponents(
 //		This string contains the character or characters
 //		which will be configured as the Decimal Separator
 //		Symbol or Symbols for the returned instance of
-//		DecimalSeparatorSpec, the Decimal Separator
-//		Specification.
+//		NumStrFormatSpec.
+//
+//		The decimal separator is also known as the radix
+//		point and is used to separate integer and fractional
+//		digits within a formatted Number String.
+//
+//		In the US, UK, Australia and most of Canada, the
+//		decimal separator is the period character ('.')
+//		known as the decimal point.
 //
 //	intSeparatorChars				string
 //
@@ -4058,10 +4123,17 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtParams(
 //	decSeparator					[]rune
 //
 //		This rune array contains the character or
-//		characters which will be configured as the Decimal
-//		Separator Symbol or Symbols for the returned
-//		instance of	DecimalSeparatorSpec, the Decimal
-//		Separator Specification.
+//		characters which will be configured as the
+//		Decimal Separator Symbol or Symbols for the
+//		returned instance of NumStrFormatSpec.
+//
+//		The decimal separator is also known as the radix
+//		point and is used to separate integer and fractional
+//		digits within a formatted Number String.
+//
+//		In the US, UK, Australia and most of Canada, the
+//		decimal separator is the period character ('.')
+//		known as the decimal point.
 //
 //	intSeparatorChars				[]rune
 //
@@ -5554,6 +5626,349 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumFmtUS(
 		ePrefix.XCpy("newSignedNumFmtSpec<-"))
 
 	return newSignedNumFmtSpec, err
+}
+
+//	NewSimpleCurrency
+//
+//	Creates and returns and instance of NumStrFormatSpec
+//	configured for currency Number String formatting.
+//
+//	If currency number symbol formatting is NOT
+//	required, see method:
+//
+//		NumStrFormatSpec.NewSimpleSignedNumber()
+//
+//	Type NumStrFormatSpec is used to convert numeric
+//	values to formatted Number Strings.
+//
+//	This method provides a simplified means of creating
+//	type NumStrFormatSpec using default values. The
+//	generated returned instance of NumStrFormatSpec
+//	will be configured with currency number symbols.
+//
+//	If the default configuration values fail to provide
+//	sufficient granular control over currency number
+//	string formatting, use one of the more advanced
+//	constructor or 'New' methods to achieve specialized
+//	multinational or multicultural currency number
+//	symbol formatting requirements:
+//
+//		NumStrFormatSpec.NewCountryCurrencyNumFormat()
+//		NumStrFormatSpec.NewCountrySignedNumFormat()
+//		NumStrFormatSpec.NewNumFmtComponents()
+//		NumStrFormatSpec.NewNumFmtParams()
+//		NumStrFormatSpec.NewNumFmtParamsRunes()
+//
+// ----------------------------------------------------------------
+//
+// # Currency Defaults
+//
+//	Integer Grouping
+//		Integers are grouped by thousands or groups
+//		of three integers.
+//
+//		Example: 1,000,000,000
+//
+//	Currency-Negative Symbol Position:
+//		Currency Symbol defaults to 'outside' the
+//		minus sign.
+//
+//		Examples:
+//			European Number String: "123.456- €"
+//			US Number String: "$ -123.456"
+//
+//	Negative Number Symbol:
+//		The default Negative Number Symbol is the
+//		minus sign ('-').
+//
+//		Examples:
+//			European Number String: "123.456- €"
+//			US Number String: "$ -123.456"
+//
+//	Positive Number Symbol:
+//		No Positive Number Sign Symbol. Positive
+//		values are assumed.
+//
+//		Positive Numeric Value Currency Examples:
+//			European Number String: "123.456 €"
+//			US Number String: "$ 123.456"
+//
+//	Zero Number Symbol:
+//		No Number Sign Symbol. Technically a zero value
+//		is neither positive nor negative.
+//
+//		Zero Numeric Value Currency Examples:
+//			European Number String: "0.00 €"
+//			US Number String: "$ 0.00"
+//
+//	Number Field Symbol Position:
+//		Defaults to "Inside Number Field"
+//
+//		Example:
+//			Number Field Length: 8
+//			Numeric Value: 123.45
+//			Number Symbol: leading minus sign ('-')
+//			Number Symbol Position: Inside Number Field
+//			Formatted Number String: " -123.45"
+//			Number Field Index:       01234567
+//			Total Number String Length: 8
+//
+// ----------------------------------------------------------------
+//
+//	# Input Parameters
+//
+//	decSeparator				string
+//
+//		This string contains the character or characters
+//		which will be configured as the Decimal Separator
+//		Symbol or Symbols for the returned instance of
+//		NumStrFormatSpec.
+//
+//		The decimal separator is also known as the radix
+//		point and is used to separate integer and fractional
+//		digits within a formatted Number String.
+//
+//		In the US, UK, Australia and most of Canada, the
+//		decimal separator is the period character ('.')
+//		known as the decimal point.
+//
+//	intSeparatorChars			string
+//
+//		One or more characters used to separate groups of
+//		integers. This separator is also known as the
+//		'thousands' separator. It is used to separate
+//		groups of integer digits to the left of the
+//		decimal separator (a.k.a. decimal point). In the
+//		United States, the standard integer digits
+//		separator is the comma (",").
+//
+//			United States Example:  1,000,000,000
+//
+//		In many European countries, a single period ('.')
+//		is used as the integer separator character.
+//
+//			European Example: 1.000.000.000
+//
+//		Other countries and cultures use spaces,
+//		apostrophes or multiple characters to separate
+//		integers.
+//
+//		If this input parameter contains a zero length
+//		string, an error will be returned.
+//
+//	currencySymbols				string
+//
+//		The symbol or symbols used to format currency.
+//		This currency formatting will be configured in
+//		the new instance of NumStrFormatSpec returned by
+//		this method.
+//
+//	leadingNumSymbols			bool
+//
+//		Controls the positioning of Number Symbols in a
+//		Number String Format.
+//
+//		When set to 'true', the returned instance of
+//		NumStrFormatSpec will configure Number Symbols on
+//		the left side of the numeric value. Such Number
+//		Symbols are therefore configured as leading
+//		Number Symbols. This is the positioning format
+//		used in the US, UK, Australia and most of Canada.
+//
+//		Example Number Strings:
+//			"$ -123.456"
+//
+//		NOTE:	A space is automatically inserted between
+//				the currency symbol and the minus sign.
+//
+//		When set to 'false', the returned instance of
+//		NumStrFormatSpec will configure Number Symbols on
+//		the right side of the numeric value. Such Number
+//		Symbols are therefore configured as trailing
+//		Number Symbols. This is the positioning format
+//		used in France, Germany and many countries in
+//		the European Union.
+//
+//		Example Number Strings:
+//			"123.456- €"
+//
+//		NOTE:	A space is automatically inserted between
+//				the minus sign and the currency symbol.
+//
+//	numFieldLength					int
+//
+//		This parameter defines the length of the text
+//		field in which the numeric value will be displayed
+//		within a number string.
+//
+//		If 'numFieldLength' is less than the length of the
+//		numeric value string, it will be automatically set
+//		equal to the length of that numeric value string.
+//
+//		To automatically set the value of fieldLength to
+//		the string length of the numeric value, set this
+//		parameter to a value of minus one (-1).
+//
+//		If this parameter is submitted with a value less
+//		than minus one (-1) or greater than 1-million
+//		(1,000,000), an error will be returned.
+//
+//	numFieldJustification		TextJustify
+//
+//		An enumeration which specifies the justification
+//		of the numeric value within the number field
+//		length specified by input parameter
+//		'numFieldLength'.
+//
+//		Text justification can only be evaluated in the
+//		context of a number string, field length and a
+//		'textJustification' object of type TextJustify.
+//		This is because number strings with a field length
+//		equal to or less than the length of the numeric
+//		value string never use text justification. In
+//		these cases, text justification is completely
+//		ignored.
+//
+//		If the field length parameter ('numFieldLength')
+//		is greater than the length of the numeric value
+//		string, text justification must be equal to one
+//		of these three valid values:
+//
+//			TextJustify(0).Left()
+//			TextJustify(0).Right()
+//			TextJustify(0).Center()
+//
+//		You can also use the abbreviated text justification
+//		enumeration syntax as follows:
+//
+//			TxtJustify.Left()
+//			TxtJustify.Right()
+//			TxtJustify.Center()
+//
+//	 errorPrefix                interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it	contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.  IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// -----------------------------------------------------------------
+//
+// # Return Values
+//
+//	newNumStrFmtSpec			NumStrFormatSpec
+//
+//		If this method completes successfully, this parameter
+//		will return a new, fully populated instance of
+//		NumStrFormatSpec.
+//
+//	err							error
+//
+//		If this method completes successfully, the returned error
+//		Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the returned
+//		error Type will encapsulate an error message. This
+//		returned error message will incorporate the method chain
+//		and text passed by input parameter, 'errorPrefix'. The
+//		'errorPrefix' text will be attached to the beginning of
+//		the error message.
+func (numStrFmtSpec *NumStrFormatSpec) NewSimpleCurrency(
+	decSeparatorChars string,
+	intSeparatorChars string,
+	currencySymbols string,
+	leadingNumSymbols bool,
+	numFieldLength int,
+	numFieldJustification TextJustify,
+	errorPrefix interface{}) (
+	newNumStrFmtSpec NumStrFormatSpec,
+	err error) {
+
+	if numStrFmtSpec.lock == nil {
+		numStrFmtSpec.lock = new(sync.Mutex)
+	}
+
+	numStrFmtSpec.lock.Lock()
+
+	defer numStrFmtSpec.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumStrFormatSpec."+
+			"NewNumFmtParams()",
+		"")
+
+	if err != nil {
+		return newNumStrFmtSpec, err
+	}
+
+	err = new(numStrFmtSpecNanobot).setSimpleFormatSpec(
+		&newNumStrFmtSpec,
+		decSeparatorChars,
+		intSeparatorChars,
+		currencySymbols,
+		leadingNumSymbols,
+		numFieldLength,
+		numFieldJustification,
+		ePrefix.XCpy(
+			"newNumStrFmtSpec<-"))
+
+	return newNumStrFmtSpec, err
 }
 
 //	SetCountryCurrencyNumFmt
@@ -7063,10 +7478,16 @@ func (numStrFmtSpec *NumStrFormatSpec) SetCurrencyFmtUS(
 //		variable data values contained in this instance
 //		will be copied to the current
 //		NumStrFormatSpec member variable:
+//
 //			'NumStrFormatSpec.decSeparator'.
 //
-//		In the United States, the decimal separator is
-//		referred to as the decimal point.
+//		The decimal separator is also known as the radix
+//		point and is used to separate integer and fractional
+//		digits within a formatted Number String.
+//
+//		In the US, UK, Australia and most of Canada, the
+//		decimal separator is the period character ('.')
+//		known as the decimal point.
 //
 //	 errorPrefix                interface{}
 //
@@ -7785,6 +8206,10 @@ func (numStrFmtSpec *NumStrFormatSpec) SetPositiveNumberFmtSpec(
 //		which be used to separate integer and fractional
 //		digits within a formatted Number String.
 //
+//		In the US, UK, Australia and most of Canada, the
+//		decimal separator is the period character ('.')
+//		known as the decimal point.
+//
 //	intSeparatorSpec				IntegerSeparatorSpec
 //
 //		Integer Separator Specification. This type
@@ -8045,9 +8470,16 @@ func (numStrFmtSpec *NumStrFormatSpec) SetNumFmtComponents(
 //
 //		This string contains the character or characters
 //		which will be configured as the Decimal Separator
-//		Symbol or Symbols for the returned instance of
-//		DecimalSeparatorSpec, the Decimal Separator
-//		Specification.
+//		Symbol or Symbols for the current instance of
+//		NumStrFormatSpec.
+//
+//		The decimal separator is also known as the radix
+//		point and is used to separate integer and fractional
+//		digits within a formatted Number String.
+//
+//		In the US, UK, Australia and most of Canada, the
+//		decimal separator is the period character ('.')
+//		known as the decimal point.
 //
 //	intSeparatorChars			string
 //
@@ -8454,11 +8886,19 @@ func (numStrFmtSpec *NumStrFormatSpec) SetNumFmtParams(
 //
 //	decSeparator				[]rune
 //
-//		This rune array contains the character or characters
-//		which will be configured as the Decimal Separator
-//		Symbol or Symbols for the returned instance of
-//		DecimalSeparatorSpec, the Decimal Separator
-//		Specification.
+//		This rune array contains the character or
+//		characters which will be configured as the
+//		Decimal Separator Symbol or Symbols for the
+//		current instance of NumStrFormatSpec.
+//
+//		The decimal separator is also known as the radix
+//		point and is used to separate integer and
+//		fractional digits within a formatted Number
+//		String.
+//
+//		In the US, UK, Australia and most of Canada, the
+//		decimal separator is the period character ('.')
+//		known as the decimal point.
 //
 //	intSeparatorChars			[]rune
 //
@@ -10233,7 +10673,7 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) copySignedNumberFormatSp
 //		A pointer to a NumStrFormatSpec instance. All
 //		member variable data fields in this object will
 //		be replaced by data values configured from the
-//		input parameter described below.
+//		input parameters described below.
 //
 //	numberFieldSpec				NumStrNumberFieldSpec
 //
@@ -10597,7 +11037,7 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setCurrencyNStrFmtFrance
 //		A pointer to a NumStrFormatSpec instance. All
 //		member variable data fields in this object will
 //		be replaced by data values configured from the
-//		input parameter described below.
+//		input parameters described below.
 //
 //	numberFieldSpec				NumStrNumberFieldSpec
 //
@@ -10893,9 +11333,10 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setCurrencyNStrFmtGerman
 //
 // # IMPORTANT
 //
-//	Be advised that the data fields contained in the current
-//	instance of NumStrFormatSpec will be deleted and replaced
-//	by Currency Number String formatting parameters typically
+//	Be advised that the data fields contained in the
+//	instance of NumStrFormatSpec passed as an input
+//	parameter will be deleted and replaced by Currency
+//	Number String formatting parameters typically
 //	applied the in UK (United Kingdom).
 //
 // ----------------------------------------------------------------
@@ -10947,12 +11388,12 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setCurrencyNStrFmtGerman
 //
 // # Input Parameters
 //
-// numStrFmtSpec				*NumStrFormatSpec
+//	numStrFmtSpec				*NumStrFormatSpec
 //
 //		A pointer to a NumStrFormatSpec instance. All
 //		member variable data fields in this object will
 //		be replaced by data values configured from the
-//		input parameter described below.
+//		input parameters described below.
 //
 //	numberFieldSpec				NumStrNumberFieldSpec
 //
@@ -11220,10 +11661,11 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setCurrencyNStrFmtUK(
 //
 // # IMPORTANT
 //
-//	Be advised that the data fields contained in the current
-//	instance of NumStrFormatSpec will be deleted and replaced
-//	by Currency Number String formatting parameters typically
-//	applied the in US (United States).
+//	Be advised that the data fields contained in input
+//	parameter 'numStrFmtSpec' will be deleted and
+//	replaced by Currency Number String formatting
+//	parameters typically applied the in US (United
+//	States).
 //
 // ----------------------------------------------------------------
 //
@@ -11279,7 +11721,7 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setCurrencyNStrFmtUK(
 //		A pointer to a NumStrFormatSpec instance. All
 //		member variable data fields in this object will
 //		be replaced by data values configured from the
-//		input parameter described below.
+//		input parameters described below.
 //
 //	numberFieldSpec				NumStrNumberFieldSpec
 //
@@ -11569,10 +12011,18 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setCurrencyNStrFmtUS(
 //	decSeparator					[]rune
 //
 //		This rune array contains the character or
-//		characters which will be configured as the Decimal
-//		Separator Symbol or Symbols for the returned
-//		instance of	DecimalSeparatorSpec, the Decimal
-//		Separator Specification.
+//		characters which will be configured as the
+//		Decimal Separator Symbol or Symbols for the
+//		current instance of NumStrFormatSpec.
+//
+//		The decimal separator is also known as the radix
+//		point and is used to separate integer and
+//		fractional digits within a formatted Number
+//		String.
+//
+//		In the US, UK, Australia and most of Canada, the
+//		decimal separator is the period character ('.')
+//		known as the decimal point.
 //
 //	intSeparatorChars				[]rune
 //
@@ -12162,10 +12612,10 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setNStrNumberFieldSpec(
 //
 // numStrFmtSpec				*NumStrFormatSpec
 //
-//	A pointer to a NumStrFormatSpec instance. All  member
-//	variable data fields in this object will be replaced
-//	by data values configured from the input parameter
-//	described below.
+//		A pointer to a NumStrFormatSpec instance. All
+//		member variable data fields in this object will
+//		be replaced by data values configured from the
+//		input parameters described below.
 //
 //	numberFieldSpec				NumStrNumberFieldSpec
 //
@@ -12478,10 +12928,10 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtFrance(
 //
 // numStrFmtSpec				*NumStrFormatSpec
 //
-//	A pointer to a NumStrFormatSpec instance. All  member
-//	variable data fields in this object will be replaced
-//	by data values configured from the input parameter
-//	described below.
+//		A pointer to a NumStrFormatSpec instance. All
+//		member variable data fields in this object will
+//		be replaced by data values configured from the
+//		input parameters described below.
 //
 //	numberFieldSpec				NumStrNumberFieldSpec
 //
@@ -12779,7 +13229,7 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtGermany(
 //		A pointer to a NumStrFormatSpec instance. All
 //		member variable data fields in this object will
 //		be replaced by data values configured from the
-//		input parameter described below.
+//		input parameters described below.
 //
 //	numberFieldSpec				NumStrNumberFieldSpec
 //
@@ -13010,6 +13460,338 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtUS(
 		ePrefix.XCpy("numStrFmtSpec<-"))
 }
 
+//	setSimpleFormatSpec
+//
+//	Deletes all the data values and reconfigures an
+//	instance of NumStrFormatSpec for currency Number
+//	String formatting.
+//
+//	This method provides a simplified means of creating
+//	type NumStrFormatSpec using default values. The
+//	passed instance of NumStrFormatSpec will be
+//	configured for either Currency, or Signed Number
+//	formatting.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	Be advised that the data fields contained in the
+//	instance of NumStrFormatSpec passed as an input
+//	parameter will be deleted and replaced by with
+//	either Currency or Signed Number formatting as
+//	specified by the input parameters.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	numStrFmtSpec				*NumStrFormatSpec
+//
+//		A pointer to a NumStrFormatSpec instance. All
+//		member variable data fields in this object will
+//		be replaced by data values configured from the
+//		input parameters described below.
+//
+//	decSeparator				string
+//
+//		This string contains the character or characters
+//		which will be configured as the Decimal Separator
+//		Symbol or Symbols for the returned instance of
+//		NumStrFormatSpec.
+//
+//		The decimal separator is also known as the radix
+//		point and is used to separate integer and fractional
+//		digits within a formatted Number String.
+//
+//		In the US, UK, Australia and most of Canada, the
+//		decimal separator is the period character ('.')
+//		known as the decimal point.
+//
+//	intSeparatorChars			string
+//
+//		One or more characters used to separate groups of
+//		integers. This separator is also known as the
+//		'thousands' separator. It is used to separate
+//		groups of integer digits to the left of the
+//		decimal separator (a.k.a. decimal point). In the
+//		United States, the standard integer digits
+//		separator is the comma (",").
+//
+//			United States Example:  1,000,000,000
+//
+//		In many European countries, a single period ('.')
+//		is used as the integer separator character.
+//
+//			European Example: 1.000.000.000
+//
+//		Other countries and cultures use spaces,
+//		apostrophes or multiple characters to separate
+//		integers.
+//
+//		If this input parameter contains a zero length
+//		string, an error will be returned.
+//
+//	currencySymbols				string
+//
+//		The symbol or symbols used to format currency.
+//		This currency formatting will be configured in
+//		the new instance of NumStrFormatSpec returned by
+//		this method.
+//
+//	leadingNumSymbols			bool
+//
+//		Controls the positioning of Number Symbols in a
+//		Number String Format.
+//
+//		When set to 'true', the returned instance of
+//		NumStrFormatSpec will configure Number Symbols on
+//		the left side of the numeric value. Such Number
+//		Symbols are therefore configured as leading
+//		Number Symbols. This is the positioning format
+//		used in the US, UK, Australia and most of Canada.
+//
+//		Example Number Strings:
+//			"$ -123.456"
+//
+//		NOTE:	A space is automatically inserted between
+//				the currency symbol and the minus sign.
+//
+//		When set to 'false', the returned instance of
+//		NumStrFormatSpec will configure Number Symbols on
+//		the right side of the numeric value. Such Number
+//		Symbols are therefore configured as trailing
+//		Number Symbols. This is the positioning format
+//		used in France, Germany and many countries in
+//		the European Union.
+//
+//		Example Number Strings:
+//			"123.456- €"
+//
+//		NOTE:	A space is automatically inserted between
+//				the minus sign and the currency symbol.
+//
+//	numFieldLength					int
+//
+//		This parameter defines the length of the text
+//		field in which the numeric value will be displayed
+//		within a number string.
+//
+//		If 'numFieldLength' is less than the length of the
+//		numeric value string, it will be automatically set
+//		equal to the length of that numeric value string.
+//
+//		To automatically set the value of fieldLength to
+//		the string length of the numeric value, set this
+//		parameter to a value of minus one (-1).
+//
+//		If this parameter is submitted with a value less
+//		than minus one (-1) or greater than 1-million
+//		(1,000,000), an error will be returned.
+//
+//	numFieldJustification		TextJustify
+//
+//		An enumeration which specifies the justification
+//		of the numeric value within the number field
+//		length specified by input parameter
+//		'numFieldLength'.
+//
+//		Text justification can only be evaluated in the
+//		context of a number string, field length and a
+//		'textJustification' object of type TextJustify.
+//		This is because number strings with a field length
+//		equal to or less than the length of the numeric
+//		value string never use text justification. In
+//		these cases, text justification is completely
+//		ignored.
+//
+//		If the field length parameter ('numFieldLength')
+//		is greater than the length of the numeric value
+//		string, text justification must be equal to one
+//		of these three valid values:
+//
+//			TextJustify(0).Left()
+//			TextJustify(0).Right()
+//			TextJustify(0).Center()
+//
+//		You can also use the abbreviated text justification
+//		enumeration syntax as follows:
+//
+//			TxtJustify.Left()
+//			TxtJustify.Right()
+//			TxtJustify.Center()
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// -----------------------------------------------------------------
+//
+// # Return Values
+//
+//	err							error
+//
+//		If this method completes successfully, this
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setSimpleFormatSpec(
+	numStrFmtSpec *NumStrFormatSpec,
+	decSeparatorChars string,
+	intSeparatorChars string,
+	currencySymbols string,
+	leadingNumSymbols bool,
+	numFieldLength int,
+	numFieldJustification TextJustify,
+	errPrefDto *ePref.ErrPrefixDto) (
+	err error) {
+
+	if nStrNumberFieldSpecNanobot.lock == nil {
+		nStrNumberFieldSpecNanobot.lock = new(sync.Mutex)
+	}
+
+	nStrNumberFieldSpecNanobot.lock.Lock()
+
+	defer nStrNumberFieldSpecNanobot.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"numStrFmtSpecNanobot."+
+			"setSignedNStrFmtUS()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if numStrFmtSpec == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'numStrFmtSpec' is invalid!\n"+
+			"'numStrFmtSpec' is a 'nil' pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	var decSeparatorSpec DecimalSeparatorSpec
+
+	decSeparatorSpec,
+		err = new(DecimalSeparatorSpec).NewStr(
+		decSeparatorChars,
+		ePrefix.XCpy(
+			"decSeparatorSpec<-"))
+
+	if err != nil {
+
+		return err
+	}
+
+	var intSeparatorSpec IntegerSeparatorSpec
+
+	intSeparatorSpec,
+		err = new(IntegerSeparatorSpec).NewThousands(
+		intSeparatorChars,
+		ePrefix.XCpy(
+			"intSeparatorSpec<-"))
+
+	if err != nil {
+
+		return err
+	}
+
+	var numSymbolsSpec NumStrNumberSymbols
+
+	numSymbolsSpec,
+		err = new(NumStrNumberSymbols).NewSimpleCurrency(
+		currencySymbols,
+		leadingNumSymbols,
+		ePrefix.XCpy(
+			"numSymbolsSpec<-"))
+
+	if err != nil {
+
+		return err
+	}
+
+	var nStrNumFieldSpec NumStrNumberFieldSpec
+
+	nStrNumFieldSpec,
+		err = new(NumStrNumberFieldSpec).NewFieldSpec(
+		numFieldLength,
+		numFieldJustification,
+		ePrefix.XCpy(
+			"nStrNumFieldSpec<-"))
+
+	if err != nil {
+
+		return err
+	}
+
+	nStrFmtSpecAtom := numStrFmtSpecAtom{}
+
+	err = nStrFmtSpecAtom.setDecimalSeparatorSpec(
+		numStrFmtSpec,
+		decSeparatorSpec,
+		ePrefix.XCpy(
+			"numStrFmtSpec<-"))
+
+	if err != nil {
+
+		return err
+	}
+
+	err = nStrFmtSpecAtom.setIntegerGroupingSpec(
+		numStrFmtSpec,
+		intSeparatorSpec,
+		ePrefix.XCpy(
+			""))
+
+	if err != nil {
+
+		return err
+	}
+
+	err = nStrFmtSpecAtom.setNumberFieldSpec(
+		numStrFmtSpec,
+		nStrNumFieldSpec,
+		ePrefix.XCpy(
+			"numStrFmtSpec<-nStrNumFieldSpec"))
+
+	if err != nil {
+
+		return err
+	}
+
+	err = nStrFmtSpecAtom.setNumberSymbolSpec(
+		numStrFmtSpec,
+		numSymbolsSpec,
+		ePrefix.XCpy(
+			"numStrFmtSpec<-numSymbolsSpec"))
+
+	return err
+}
+
 // numStrFmtSpecAtom - This type provides
 // helper methods for NumStrFormatSpec
 type numStrFmtSpecAtom struct {
@@ -13169,6 +13951,7 @@ func (signedNumFmtSpecAtom *numStrFmtSpecAtom) equal(
 // Input Parameters
 //
 //	signedNumFmt				*NumStrFormatSpec
+//
 //		A pointer to an instance of NumStrFormatSpec.
 //		This instance contains the member variable
 //		'signedNumFmt.decSeparator' which will be reset
@@ -13177,15 +13960,23 @@ func (signedNumFmtSpecAtom *numStrFmtSpecAtom) equal(
 //
 //
 //	decSeparator				[]rune
-//		This rune array contains the decimal separator
-//		character or characters used to separate integer
-//		digits from fractional digits in floating point
-//		number strings.
 //
-//		In the United States, the decimal separator is
-//		referred to as the decimal point.
+//		This rune array contains the character or
+//		characters which will be configured as the
+//		Decimal Separator Symbol or Symbols for the
+//		current instance of NumStrFormatSpec.
+//
+//		The decimal separator is also known as the radix
+//		point and is used to separate integer and
+//		fractional digits within a formatted Number
+//		String.
+//
+//		In the US, UK, Australia and most of Canada, the
+//		decimal separator is the period character ('.')
+//		known as the decimal point.
 //
 //	errPrefDto					*ePref.ErrPrefixDto
+//
 //		This object encapsulates an error prefix string which is
 //		included in all returned error messages. Usually, it
 //		contains the name of the calling method or methods listed
@@ -13923,6 +14714,221 @@ func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setNegativeNumberSignSpec(
 	return err
 }
 
+// setNStrFmtComponents
+//
+// Deletes and resets the member variable data values
+// stored in the instance of NumStrFormatSpec passed
+// as input parameter 'signedNumFmtSpec'.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	Be advised that the data fields contained in the
+//	NumStrFormatSpec instance passed by input parameter
+//	'numStrFmtSpec'  will be deleted and replaced by
+//	values generated from the other input parameters.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+// numStrFmtSpec					*NumStrFormatSpec
+//
+//	A pointer to a NumStrFormatSpec instance. All  member
+//	variable data fields in this object will be replaced
+//	by data values configured from the input parameter
+//	described below.
+//
+//	decSeparator					DecimalSeparatorSpec
+//
+//		This structure contains the radix point or decimal
+//		separator character(s) (a.k.a. decimal point)
+//		which be used to separate integer and fractional
+//		digits within a formatted Number String.
+//
+//	intSeparatorSpec				IntegerSeparatorSpec
+//
+//		Number String Integer Separator Specification. This
+//		type encapsulates the parameters required to format
+//		integer grouping and separation within a Number
+//		String.
+//
+//	numberSymbols 					NumStrNumberSymbols
+//
+//		This instance of NumStrNumberSymbols contains the
+//		Number Symbol Specifications for negative numeric
+//		values, positive numeric values and zero numeric
+//		values.
+//
+//	numberFieldSpec					NumStrNumberFieldSpec
+//		This Number Field Specification contains all
+//		parameters necessary to format a Number String
+//		within a larger Number Field. In addition to
+//		specifying the length of number field, this
+//		object contains justification specifications
+//		for centering, left justifying or right
+//		justifying a Number String within a Number
+//		Field.
+//
+//		type NumStrNumberFieldSpec struct {
+//
+//			fieldLength int
+//
+//				This parameter defines the length of the
+//				text field in which the numeric value will
+//				be displayed within a number string.
+//
+//				If 'fieldLength' is less than the length
+//				of the numeric value string, it will be
+//				automatically set equal to the length of
+//				that numeric value string.
+//
+//				To automatically set the value of
+//				'fieldLength' to the string length of the
+//				numeric value, set this parameter to a
+//				value of minus one (-1).
+//
+//				If this parameter is submitted with a
+//				value less than minus one (-1) or greater
+//				than 1-million (1,000,000), an error will
+//				be returned.
+//
+//			fieldJustification TextJustify
+//
+//				An enumeration which specifies the
+//				justification of the numeric value string
+//				within the number field length specified
+//				by data field 'fieldLength'.
+//
+//				Text justification can only be evaluated in
+//				the context of a number string, field length
+//				and a 'textJustification' object of type
+//				TextJustify. This is because number strings
+//				with a field length equal to or less than the
+//				length of the numeric value string never use
+//				text justification. In these cases, text
+//				justification is completely ignored.
+//
+//				If the field length parameter ('fieldLength')
+//				is greater than the length of the numeric
+//				value string, text justification must be equal
+//				to one of these three valid values:
+//
+//				          TextJustify(0).Left()
+//				          TextJustify(0).Right()
+//				          TextJustify(0).Center()
+//
+//				You can also use the abbreviated text
+//				justification enumeration syntax as follows:
+//
+//				          TxtJustify.Left()
+//				          TxtJustify.Right()
+//				          TxtJustify.Center()
+//		}
+//
+//	errPrefDto						*ePref.ErrPrefixDto
+//		This object encapsulates an error prefix string which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods listed
+//		as a function chain.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref' software
+//		package, "github.com/MikeAustin71/errpref".
+//
+// -----------------------------------------------------------------
+//
+// # Return Values
+//
+//	err								error
+//
+//		If this method completes successfully, this returned error
+//		Type is set equal to 'nil'. If errors are encountered during
+//		processing, the returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value for input
+//		parameter 'errPrefDto' (error prefix) will be prefixed or
+//		attached at the beginning of the error message.
+func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setNStrFmtComponents(
+	numStrFmtSpec *NumStrFormatSpec,
+	decSeparator DecimalSeparatorSpec,
+	intSeparatorSpec IntegerSeparatorSpec,
+	numberSymbols NumStrNumberSymbols,
+	numberFieldSpec NumStrNumberFieldSpec,
+	errPrefDto *ePref.ErrPrefixDto) (
+	err error) {
+
+	if signedNumFmtSpecAtom.lock == nil {
+		signedNumFmtSpecAtom.lock = new(sync.Mutex)
+	}
+
+	signedNumFmtSpecAtom.lock.Lock()
+
+	defer signedNumFmtSpecAtom.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"numStrFmtSpecAtom."+
+			"setNStrFmtComponents()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if numStrFmtSpec == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'numStrFmtSpec' is invalid!\n"+
+			"'numStrFmtSpec' is a 'nil' pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	err = numStrFmtSpec.decSeparator.CopyIn(
+		&decSeparator,
+		ePrefix.XCpy(
+			"decSeparator->"))
+
+	if err != nil {
+		return err
+	}
+
+	err = numStrFmtSpec.intSeparatorSpec.CopyIn(
+		&intSeparatorSpec,
+		ePrefix.XCpy(
+			"intSeparatorSpec->"))
+
+	if err != nil {
+		return err
+	}
+
+	err = numStrFmtSpec.numberFieldSpec.CopyIn(
+		&numberFieldSpec,
+		ePrefix.XCpy(
+			"numberFieldSpec->"))
+
+	if err != nil {
+		return err
+	}
+
+	err = numStrFmtSpec.numberSymbols.CopyIn(
+		&numberSymbols,
+		ePrefix.XCpy(
+			"numStrFmtSpec.numberSymbols<-"+
+				"numberSymbols"))
+
+	return err
+}
+
 // setNumberFieldParams - Deletes and resets the member variable data
 // value for 'NumStrFormatSpec.numberFieldSpec'
 // contained in the instance of NumStrFormatSpec passed as
@@ -14213,151 +15219,75 @@ func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setNumberFieldSpec(
 					"numberFieldSpec"))
 }
 
-// setNStrFmtComponents
+//	setNumberSymbolSpec
 //
-// Deletes and resets the member variable data values
-// stored in the instance of NumStrFormatSpec passed
-// as input parameter 'signedNumFmtSpec'.
+//	Receives a pointer to an instance of NumStrFormatSpec
+//	and proceeds to reconfigure all the internal member
+//	variable data values based on an instance of
+//	NumStrNumberSymbols passed as an input parameter.
 //
 // ----------------------------------------------------------------
 //
 // # IMPORTANT
 //
-//	Be advised that the data fields contained in the
-//	NumStrFormatSpec instance passed by input parameter
-//	'numStrFmtSpec'  will be deleted and replaced by
-//	values generated from the other input parameters.
+//	Be advised that the Number Symbol data field
+//	contained in input parameter 'numStrFmtSpec'
+//	will be deleted and replaced by Number Symbol
+//	specifications passed through input parameter,
+//	'numberSymbolSpec'.
 //
 // ----------------------------------------------------------------
 //
 // # Input Parameters
 //
-// numStrFmtSpec					*NumStrFormatSpec
+// numStrFmtSpec				*NumStrFormatSpec
 //
-//	A pointer to a NumStrFormatSpec instance. All  member
-//	variable data fields in this object will be replaced
-//	by data values configured from the input parameter
-//	described below.
+//		A pointer to a NumStrFormatSpec instance. All
+//		member variable data fields in this object will
+//		be replaced by data values configured from the
+//		input parameters described below.
 //
-//	decSeparator					DecimalSeparatorSpec
+//	numberSymbolSpec			NumStrNumberSymbols
 //
-//		This structure contains the radix point or decimal
-//		separator character(s) (a.k.a. decimal point)
-//		which be used to separate integer and fractional
-//		digits within a formatted Number String.
+//		An instance of NumStrNumberSymbols which is used
+//		to reconfigure the NumStrNumberSymbols member
+//		variable contained in input parameter,
+//		'numStrFmtSpec'.
 //
-//	intSeparatorSpec				IntegerSeparatorSpec
+//	errPrefDto					*ePref.ErrPrefixDto
 //
-//		Number String Integer Separator Specification. This
-//		type encapsulates the parameters required to format
-//		integer grouping and separation within a Number
-//		String.
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
 //
-//	numberSymbols 					NumStrNumberSymbols
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
 //
-//		This instance of NumStrNumberSymbols contains the
-//		Number Symbol Specifications for negative numeric
-//		values, positive numeric values and zero numeric
-//		values.
-//
-//	numberFieldSpec					NumStrNumberFieldSpec
-//		This Number Field Specification contains all
-//		parameters necessary to format a Number String
-//		within a larger Number Field. In addition to
-//		specifying the length of number field, this
-//		object contains justification specifications
-//		for centering, left justifying or right
-//		justifying a Number String within a Number
-//		Field.
-//
-//		type NumStrNumberFieldSpec struct {
-//
-//			fieldLength int
-//
-//				This parameter defines the length of the
-//				text field in which the numeric value will
-//				be displayed within a number string.
-//
-//				If 'fieldLength' is less than the length
-//				of the numeric value string, it will be
-//				automatically set equal to the length of
-//				that numeric value string.
-//
-//				To automatically set the value of
-//				'fieldLength' to the string length of the
-//				numeric value, set this parameter to a
-//				value of minus one (-1).
-//
-//				If this parameter is submitted with a
-//				value less than minus one (-1) or greater
-//				than 1-million (1,000,000), an error will
-//				be returned.
-//
-//			fieldJustification TextJustify
-//
-//				An enumeration which specifies the
-//				justification of the numeric value string
-//				within the number field length specified
-//				by data field 'fieldLength'.
-//
-//				Text justification can only be evaluated in
-//				the context of a number string, field length
-//				and a 'textJustification' object of type
-//				TextJustify. This is because number strings
-//				with a field length equal to or less than the
-//				length of the numeric value string never use
-//				text justification. In these cases, text
-//				justification is completely ignored.
-//
-//				If the field length parameter ('fieldLength')
-//				is greater than the length of the numeric
-//				value string, text justification must be equal
-//				to one of these three valid values:
-//
-//				          TextJustify(0).Left()
-//				          TextJustify(0).Right()
-//				          TextJustify(0).Center()
-//
-//				You can also use the abbreviated text
-//				justification enumeration syntax as follows:
-//
-//				          TxtJustify.Left()
-//				          TxtJustify.Right()
-//				          TxtJustify.Center()
-//		}
-//
-//	errPrefDto						*ePref.ErrPrefixDto
-//		This object encapsulates an error prefix string which is
-//		included in all returned error messages. Usually, it
-//		contains the name of the calling method or methods listed
-//		as a function chain.
-//
-//		If no error prefix information is needed, set this
-//		parameter to 'nil'.
-//
-//		Type ErrPrefixDto is included in the 'errpref' software
-//		package, "github.com/MikeAustin71/errpref".
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
 //
 // -----------------------------------------------------------------
 //
 // # Return Values
 //
-//	err								error
+//	err							error
 //
-//		If this method completes successfully, this returned error
-//		Type is set equal to 'nil'. If errors are encountered during
-//		processing, the returned error Type will encapsulate an error
+//		If this method completes successfully, this
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
 //		message.
 //
-//		If an error message is returned, the text value for input
-//		parameter 'errPrefDto' (error prefix) will be prefixed or
-//		attached at the beginning of the error message.
-func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setNStrFmtComponents(
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setNumberSymbolSpec(
 	numStrFmtSpec *NumStrFormatSpec,
-	decSeparator DecimalSeparatorSpec,
-	intSeparatorSpec IntegerSeparatorSpec,
-	numberSymbols NumStrNumberSymbols,
-	numberFieldSpec NumStrNumberFieldSpec,
+	numberSymbolSpec NumStrNumberSymbols,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
 
@@ -14375,7 +15305,7 @@ func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setNStrFmtComponents(
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
 		"numStrFmtSpecAtom."+
-			"setNStrFmtComponents()",
+			"setNegativeNumberSignSpec()",
 		"")
 
 	if err != nil {
@@ -14392,38 +15322,10 @@ func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setNStrFmtComponents(
 		return err
 	}
 
-	err = numStrFmtSpec.decSeparator.CopyIn(
-		&decSeparator,
-		ePrefix.XCpy(
-			"decSeparator->"))
-
-	if err != nil {
-		return err
-	}
-
-	err = numStrFmtSpec.intSeparatorSpec.CopyIn(
-		&intSeparatorSpec,
-		ePrefix.XCpy(
-			"intSeparatorSpec->"))
-
-	if err != nil {
-		return err
-	}
-
-	err = numStrFmtSpec.numberFieldSpec.CopyIn(
-		&numberFieldSpec,
-		ePrefix.XCpy(
-			"numberFieldSpec->"))
-
-	if err != nil {
-		return err
-	}
-
 	err = numStrFmtSpec.numberSymbols.CopyIn(
-		&numberSymbols,
+		&numberSymbolSpec,
 		ePrefix.XCpy(
-			"numStrFmtSpec.numberSymbols<-"+
-				"numberSymbols"))
+			"numStrFmtSpec.numberSymbols<-"))
 
 	return err
 }
