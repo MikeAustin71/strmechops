@@ -6,13 +6,13 @@ import (
 	"sync"
 )
 
-//	NumStrNumberSymbols
+//	NumStrNumberSymbolsSpec
 //
 //	This type is used to configure Number Symbols
 //	required in converting numeric values to Number
 //	Strings.
 //
-//	NumStrNumberSymbols contains three instances of
+//	NumStrNumberSymbolsSpec contains three instances of
 //	NumStrNumberSymbolSpec defining the Number Symbols to
 //	be used with positive numeric values, negative numeric
 //	values and zero numeric values.
@@ -37,7 +37,7 @@ import (
 //	characters.
 //
 //	For Number Symbol examples, see the source code
-//	documentation for NumStrNumberSymbols member
+//	documentation for NumStrNumberSymbolsSpec member
 //	variables listed below.
 //
 // ----------------------------------------------------------------
@@ -53,7 +53,7 @@ import (
 //	the Number String formatting process also involves
 //	complexity.
 //
-//	Typically, instances of NumStrNumberSymbols are
+//	Typically, instances of NumStrNumberSymbolsSpec are
 //	created, or constructed, using the 'New' methods
 //	documented below. Many of these methods provide
 //	input parameters capable of detailing all the
@@ -66,21 +66,21 @@ import (
 //	methods provide defaults which greatly simplify the
 //	Number Symbols creation process:
 //
-//		NumStrNumberSymbols.NewSimpleCurrency()
-//		NumStrNumberSymbols.NewSimpleSignedNumber()
+//		NumStrNumberSymbolsSpec.NewSimpleCurrency()
+//		NumStrNumberSymbolsSpec.NewSimpleSignedNumber()
 //
 //	If more granular control is required to meet
 //	specialized requirements for multinational or
 //	multicultural number symbol formatting, consider
 //	using one of the following methods:
 //
-//		NumStrNumberSymbols.NewSymbolsRunes()
-//		NumStrNumberSymbols.NewSymbolsStrings()
-//		NumStrNumberSymbols.NewSymbolsSpecs()
-//		NumStrNumberSymbols.SetSymbolsRunes()
-//		NumStrNumberSymbols.SetSymbolsStrings()
-//		NumStrNumberSymbols.SetSymbolsSpecs()
-type NumStrNumberSymbols struct {
+//		NumStrNumberSymbolsSpec.NewSymbolsRunes()
+//		NumStrNumberSymbolsSpec.NewSymbolsStrings()
+//		NumStrNumberSymbolsSpec.NewSymbolsSpecs()
+//		NumStrNumberSymbolsSpec.SetSymbolsRunes()
+//		NumStrNumberSymbolsSpec.SetSymbolsStrings()
+//		NumStrNumberSymbolsSpec.SetSymbolsSpecs()
+type NumStrNumberSymbolsSpec struct {
 	negativeNumberSign NumStrNumberSymbolSpec
 	//	The Number String Negative Number Sign
 	//	Specification is used to configure negative
@@ -201,15 +201,15 @@ type NumStrNumberSymbols struct {
 //	CopyIn
 //
 //	Copies the data fields from an incoming instance of
-//	NumStrNumberSymbols ('incomingNumSymbols')
-//	to the data fields of the current NumStrNumberSymbols
+//	NumStrNumberSymbolsSpec ('incomingNumSymbols')
+//	to the data fields of the current NumStrNumberSymbolsSpec
 //	instance ('nStrNumSym').
 //
 // ----------------------------------------------------------------
 //
 // # IMPORTANT
 //
-//	All the data fields in current NumStrNumberSymbols
+//	All the data fields in current NumStrNumberSymbolsSpec
 //	instance ('nStrNumSym') will be deleted and
 //	overwritten.
 //
@@ -217,16 +217,16 @@ type NumStrNumberSymbols struct {
 //
 //	# Input Parameters
 //
-//	incomingNumSymbols				*NumStrNumberSymbols
+//	incomingNumSymbols				*NumStrNumberSymbolsSpec
 //
-//		A pointer to an instance of NumStrNumberSymbols.
+//		A pointer to an instance of NumStrNumberSymbolsSpec.
 //		This method will NOT change the data values of
 //		internal member variables contained in this
 //		instance.
 //
-//		All data values in this NumStrNumberSymbols
+//		All data values in this NumStrNumberSymbolsSpec
 //		instance will be copied to current
-//		NumStrNumberSymbols instance ('nStrNumSym').
+//		NumStrNumberSymbolsSpec instance ('nStrNumSym').
 //
 //	 errorPrefix                	interface{}
 //
@@ -303,8 +303,8 @@ type NumStrNumberSymbols struct {
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (nStrNumSym *NumStrNumberSymbols) CopyIn(
-	incomingNumSymbols *NumStrNumberSymbols,
+func (nStrNumSym *NumStrNumberSymbolsSpec) CopyIn(
+	incomingNumSymbols *NumStrNumberSymbolsSpec,
 	errorPrefix interface{}) error {
 
 	if nStrNumSym.lock == nil {
@@ -322,7 +322,7 @@ func (nStrNumSym *NumStrNumberSymbols) CopyIn(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"NumStrNumberSymbols."+
+		"NumStrNumberSymbolsSpec."+
 			"CopyIn()",
 		"")
 
@@ -330,7 +330,7 @@ func (nStrNumSym *NumStrNumberSymbols) CopyIn(
 		return err
 	}
 
-	return new(numStrNumberSymbolsMechanics).copyNumSymbols(
+	return new(numStrNumberSymbolsSpecMechanics).copyNumSymbols(
 		nStrNumSym,
 		incomingNumSymbols,
 		ePrefix.XCpy(
@@ -339,7 +339,7 @@ func (nStrNumSym *NumStrNumberSymbols) CopyIn(
 
 //	CopyOut
 //
-//	Returns a deep copy of the current NumStrNumberSymbols
+//	Returns a deep copy of the current NumStrNumberSymbolsSpec
 //	instance.
 //
 // ----------------------------------------------------------------
@@ -409,11 +409,11 @@ func (nStrNumSym *NumStrNumberSymbols) CopyIn(
 //
 // # Return Values
 //
-//	deepCopyNumSymbols			NumStrNumberSymbols
+//	deepCopyNumSymbols			NumStrNumberSymbolsSpec
 //
 //		If this method completes successfully, this
 //		parameter will return a deep copy of the
-//		current NumStrNumberSymbols instance.
+//		current NumStrNumberSymbolsSpec instance.
 //
 //	err							error
 //
@@ -427,9 +427,9 @@ func (nStrNumSym *NumStrNumberSymbols) CopyIn(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (nStrNumSym *NumStrNumberSymbols) CopyOut(
+func (nStrNumSym *NumStrNumberSymbolsSpec) CopyOut(
 	errorPrefix interface{}) (
-	deepCopyNumSymbols NumStrNumberSymbols,
+	deepCopyNumSymbols NumStrNumberSymbolsSpec,
 	err error) {
 
 	if nStrNumSym.lock == nil {
@@ -445,7 +445,7 @@ func (nStrNumSym *NumStrNumberSymbols) CopyOut(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"NumStrNumberSymbols."+
+		"NumStrNumberSymbolsSpec."+
 			"CopyOut()",
 		"")
 
@@ -453,7 +453,7 @@ func (nStrNumSym *NumStrNumberSymbols) CopyOut(
 		return deepCopyNumSymbols, err
 	}
 
-	err = new(numStrNumberSymbolsMechanics).copyNumSymbols(
+	err = new(numStrNumberSymbolsSpecMechanics).copyNumSymbols(
 		&deepCopyNumSymbols,
 		nStrNumSym,
 		ePrefix.XCpy(
@@ -465,11 +465,11 @@ func (nStrNumSym *NumStrNumberSymbols) CopyOut(
 //	Empty
 //
 //	Resets all internal member variables for the current
-//	instance of NumStrNumberSymbols to their zero or
+//	instance of NumStrNumberSymbolsSpec to their zero or
 //	uninitialized states.
 //
 //	This method will leave the current instance of
-//	NumStrNumberSymbols in an invalid state and
+//	NumStrNumberSymbolsSpec in an invalid state and
 //	unavailable for immediate reuse.
 //
 // ----------------------------------------------------------------
@@ -477,7 +477,7 @@ func (nStrNumSym *NumStrNumberSymbols) CopyOut(
 // # IMPORTANT
 //
 //	This method will delete all member variable data
-//	values in the current instance of NumStrNumberSymbols.
+//	values in the current instance of NumStrNumberSymbolsSpec.
 //	All member variable data values will be reset to their
 //	zero or uninitialized states.
 //
@@ -492,7 +492,7 @@ func (nStrNumSym *NumStrNumberSymbols) CopyOut(
 // # Return Values
 //
 //	NONE
-func (nStrNumSym *NumStrNumberSymbols) Empty() {
+func (nStrNumSym *NumStrNumberSymbolsSpec) Empty() {
 
 	if nStrNumSym.lock == nil {
 		nStrNumSym.lock = new(sync.Mutex)
@@ -500,7 +500,7 @@ func (nStrNumSym *NumStrNumberSymbols) Empty() {
 
 	nStrNumSym.lock.Lock()
 
-	new(numStrNumberSymbolsNanobot).empty(
+	new(numStrNumberSymbolsSpecNanobot).empty(
 		nStrNumSym)
 
 	nStrNumSym.lock.Unlock()
@@ -515,7 +515,7 @@ func (nStrNumSym *NumStrNumberSymbols) Empty() {
 //
 //	The target Negative Number Sign Symbol Specification
 //	object is a member variable contained in the current
-//	instance of NumStrNumberSymbols.
+//	instance of NumStrNumberSymbolsSpec.
 //
 //	This action will put the Negative Number Sign Symbol
 //	Specification into a NOP or No Operation state. In
@@ -528,7 +528,7 @@ func (nStrNumSym *NumStrNumberSymbols) Empty() {
 // # IMPORTANT
 //
 //	This method will modify the current instance of
-//	NumStrNumberSymbols.
+//	NumStrNumberSymbolsSpec.
 //
 //	The Negative Number Sign Symbol member variable
 //	data values will be reset to their zero or
@@ -545,7 +545,7 @@ func (nStrNumSym *NumStrNumberSymbols) Empty() {
 // # Return Values
 //
 //	NONE
-func (nStrNumSym *NumStrNumberSymbols) EmptyNegativeNumSymbols() {
+func (nStrNumSym *NumStrNumberSymbolsSpec) EmptyNegativeNumSymbols() {
 
 	if nStrNumSym.lock == nil {
 		nStrNumSym.lock = new(sync.Mutex)
@@ -555,7 +555,7 @@ func (nStrNumSym *NumStrNumberSymbols) EmptyNegativeNumSymbols() {
 
 	defer nStrNumSym.lock.Unlock()
 
-	new(numStrNumberSymbolsAtom).emptyNegativeNumSymbols(
+	new(numStrNumberSymbolsSpecAtom).emptyNegativeNumSymbols(
 		nStrNumSym)
 }
 
@@ -566,7 +566,7 @@ func (nStrNumSym *NumStrNumberSymbols) EmptyNegativeNumSymbols() {
 //
 //	The target Positive Number Sign Symbol Specification
 //	object is a member variable contained in the current
-//	instance of NumStrNumberSymbols.
+//	instance of NumStrNumberSymbolsSpec.
 //
 //	This action will put the Positive Number Sign Symbol
 //	Specification into a NOP or No Operation state. In
@@ -579,7 +579,7 @@ func (nStrNumSym *NumStrNumberSymbols) EmptyNegativeNumSymbols() {
 // # IMPORTANT
 //
 //	This method will modify the current instance of
-//	NumStrNumberSymbols.
+//	NumStrNumberSymbolsSpec.
 //
 //	The Positive Number Sign Symbol member variable
 //	data values will be reset to their zero or
@@ -596,7 +596,7 @@ func (nStrNumSym *NumStrNumberSymbols) EmptyNegativeNumSymbols() {
 // # Return Values
 //
 //	NONE
-func (nStrNumSym *NumStrNumberSymbols) EmptyPositiveNumSymbols() {
+func (nStrNumSym *NumStrNumberSymbolsSpec) EmptyPositiveNumSymbols() {
 
 	if nStrNumSym.lock == nil {
 		nStrNumSym.lock = new(sync.Mutex)
@@ -606,7 +606,7 @@ func (nStrNumSym *NumStrNumberSymbols) EmptyPositiveNumSymbols() {
 
 	defer nStrNumSym.lock.Unlock()
 
-	new(numStrNumberSymbolsAtom).emptyPositiveNumSymbols(
+	new(numStrNumberSymbolsSpecAtom).emptyPositiveNumSymbols(
 		nStrNumSym)
 }
 
@@ -617,7 +617,7 @@ func (nStrNumSym *NumStrNumberSymbols) EmptyPositiveNumSymbols() {
 //
 //	The target Zero Number Sign Symbol Specification
 //	object is a member variable contained in the current
-//	instance of NumStrNumberSymbols.
+//	instance of NumStrNumberSymbolsSpec.
 //
 //	This action will put the Zero Number Sign Symbol
 //	Specification into a NOP or No Operation state. In
@@ -630,7 +630,7 @@ func (nStrNumSym *NumStrNumberSymbols) EmptyPositiveNumSymbols() {
 // # IMPORTANT
 //
 //	This method will modify the current instance of
-//	NumStrNumberSymbols.
+//	NumStrNumberSymbolsSpec.
 //
 //	The Zero Number Sign Symbol member variable
 //	data values will be reset to their zero or
@@ -647,7 +647,7 @@ func (nStrNumSym *NumStrNumberSymbols) EmptyPositiveNumSymbols() {
 // # Return Values
 //
 //	NONE
-func (nStrNumSym *NumStrNumberSymbols) EmptyZeroNumSymbols() {
+func (nStrNumSym *NumStrNumberSymbolsSpec) EmptyZeroNumSymbols() {
 
 	if nStrNumSym.lock == nil {
 		nStrNumSym.lock = new(sync.Mutex)
@@ -657,16 +657,16 @@ func (nStrNumSym *NumStrNumberSymbols) EmptyZeroNumSymbols() {
 
 	defer nStrNumSym.lock.Unlock()
 
-	new(numStrNumberSymbolsAtom).emptyZeroNumSymbols(
+	new(numStrNumberSymbolsSpecAtom).emptyZeroNumSymbols(
 		nStrNumSym)
 }
 
 //	Equal
 //
 //	Receives a pointer to another instance of
-//	NumStrNumberSymbols and proceeds to compare its
+//	NumStrNumberSymbolsSpec and proceeds to compare its
 //	internal member variables to those of the current
-//	NumStrNumberSymbols instance in order to determine if
+//	NumStrNumberSymbolsSpec instance in order to determine if
 //	they are equivalent.
 //
 //	A boolean flag showing the result of this comparison
@@ -678,12 +678,12 @@ func (nStrNumSym *NumStrNumberSymbols) EmptyZeroNumSymbols() {
 //
 // Input Parameters
 //
-//	incomingNumSymbols		*NumStrNumberSymbols
+//	incomingNumSymbols		*NumStrNumberSymbolsSpec
 //
 //		A pointer to an external instance of
-//		NumStrNumberSymbols. The member variable data
+//		NumStrNumberSymbolsSpec. The member variable data
 //		values in this instance will be compared to those
-//		in the current instance of NumStrNumberSymbols.
+//		in the current instance of NumStrNumberSymbolsSpec.
 //		The results of this comparison will be returned
 //		to the calling function as a boolean value.
 //
@@ -696,12 +696,12 @@ func (nStrNumSym *NumStrNumberSymbols) EmptyZeroNumSymbols() {
 //		If the internal member variable data values contained in
 //		input parameter 'incomingNumSymbols' are equivalent
 //		in all respects to those contained in the current
-//		instance of 'NumStrNumberSymbols', this return value
+//		instance of 'NumStrNumberSymbolsSpec', this return value
 //		will be set to 'true'.
 //
 //		Otherwise, this method will return 'false'.
-func (nStrNumSym *NumStrNumberSymbols) Equal(
-	incomingNumSymbols *NumStrNumberSymbols) bool {
+func (nStrNumSym *NumStrNumberSymbolsSpec) Equal(
+	incomingNumSymbols *NumStrNumberSymbolsSpec) bool {
 
 	if nStrNumSym.lock == nil {
 		nStrNumSym.lock = new(sync.Mutex)
@@ -711,7 +711,7 @@ func (nStrNumSym *NumStrNumberSymbols) Equal(
 
 	defer nStrNumSym.lock.Unlock()
 
-	return new(numStrNumberSymbolsNanobot).equal(
+	return new(numStrNumberSymbolsSpecNanobot).equal(
 		nStrNumSym,
 		incomingNumSymbols)
 }
@@ -721,11 +721,11 @@ func (nStrNumSym *NumStrNumberSymbols) Equal(
 //	'NOP' stands for 'No Operation'. This method signals
 //	whether the three Number Symbol Specifications
 //	contained in the current instance of
-//	NumStrNumberSymbols are all valid, engaged and fully
+//	NumStrNumberSymbolsSpec are all valid, engaged and fully
 //	operational with respect to Number String Formatting
 //	operations.
 //
-//	Type NumStrNumberSymbols encapsulates the Negative,
+//	Type NumStrNumberSymbolsSpec encapsulates the Negative,
 //	Positive and Zero Number Symbol Specifications.
 //
 //	If this method returns 'true', it signals that all
@@ -757,7 +757,7 @@ func (nStrNumSym *NumStrNumberSymbols) Equal(
 //
 //		If this method returns 'true', it signals that
 //		all Number Symbol Specifications contained in
-//		the current instance of NumStrNumberSymbols are
+//		the current instance of NumStrNumberSymbolsSpec are
 //		simply empty placeholders and perform no
 //		active role in, and are completely ignored by,
 //		Number String Formatting algorithms. This means,
@@ -769,7 +769,7 @@ func (nStrNumSym *NumStrNumberSymbols) Equal(
 //		populated, valid and functional. Number String
 //		Formatting operations will therefore include all
 //		specified Number Symbols in formatted number strings.
-func (nStrNumSym *NumStrNumberSymbols) IsNOP() bool {
+func (nStrNumSym *NumStrNumberSymbolsSpec) IsNOP() bool {
 
 	if nStrNumSym.lock == nil {
 		nStrNumSym.lock = new(sync.Mutex)
@@ -795,7 +795,7 @@ func (nStrNumSym *NumStrNumberSymbols) IsNOP() bool {
 //
 //	This method returns a boolean value signaling whether
 //	the Negative Number Sign Symbol Specification
-//	contained in the current NumStrNumberSymbols instance
+//	contained in the current NumStrNumberSymbolsSpec instance
 //	is engaged, valid and fully operational with respect
 //	to Number String Formatting.
 //
@@ -841,7 +841,7 @@ func (nStrNumSym *NumStrNumberSymbols) IsNOP() bool {
 //		String Formatting operations will therefore
 //		include these Negative Number Symbols in
 //		formatted number strings.
-func (nStrNumSym *NumStrNumberSymbols) IsNOPNegativeNumSymbols() bool {
+func (nStrNumSym *NumStrNumberSymbolsSpec) IsNOPNegativeNumSymbols() bool {
 
 	if nStrNumSym.lock == nil {
 		nStrNumSym.lock = new(sync.Mutex)
@@ -859,7 +859,7 @@ func (nStrNumSym *NumStrNumberSymbols) IsNOPNegativeNumSymbols() bool {
 //	'NOP' stands for 'No Operation'. This method
 //	returns a boolean value signaling whether the
 //	Positive Number Sign Symbol Specification contained
-//	in the current NumStrNumberSymbols instance is
+//	in the current NumStrNumberSymbolsSpec instance is
 //	engaged, valid and fully operational with respect to
 //	Number String Formatting.
 //
@@ -905,7 +905,7 @@ func (nStrNumSym *NumStrNumberSymbols) IsNOPNegativeNumSymbols() bool {
 //		String Formatting operations will therefore
 //		include these Positive Number Symbols in
 //		formatted number strings.
-func (nStrNumSym *NumStrNumberSymbols) IsNOPPositiveNumSymbols() bool {
+func (nStrNumSym *NumStrNumberSymbolsSpec) IsNOPPositiveNumSymbols() bool {
 
 	if nStrNumSym.lock == nil {
 		nStrNumSym.lock = new(sync.Mutex)
@@ -923,7 +923,7 @@ func (nStrNumSym *NumStrNumberSymbols) IsNOPPositiveNumSymbols() bool {
 //	'NOP' stands for 'No Operation'. This method
 //	returns a boolean value signaling whether the
 //	Zero Number Sign Symbol Specification contained
-//	in the current NumStrNumberSymbols instance is
+//	in the current NumStrNumberSymbolsSpec instance is
 //	engaged, valid and fully operational with respect to
 //	Number String Formatting.
 //
@@ -969,7 +969,7 @@ func (nStrNumSym *NumStrNumberSymbols) IsNOPPositiveNumSymbols() bool {
 //		String Formatting operations will therefore
 //		include these Zero Number Symbols in
 //		formatted number strings.
-func (nStrNumSym *NumStrNumberSymbols) IsNOPZeroNumSymbols() bool {
+func (nStrNumSym *NumStrNumberSymbolsSpec) IsNOPZeroNumSymbols() bool {
 
 	if nStrNumSym.lock == nil {
 		nStrNumSym.lock = new(sync.Mutex)
@@ -983,15 +983,15 @@ func (nStrNumSym *NumStrNumberSymbols) IsNOPZeroNumSymbols() bool {
 }
 
 //	NewNOP Creates and returns a new instance of
-//	NumStrNumberSymbols configured as a NOP.
+//	NumStrNumberSymbolsSpec configured as a NOP.
 //
 //	'NOP' stands for 'No Operation'.
 //
-//	Type NumStrNumberSymbols encapsulates the Negative,
+//	Type NumStrNumberSymbolsSpec encapsulates the Negative,
 //	Positive and Zero Number Symbol Specifications.
 //
 //	Configured as a NOP, the returned instance of
-//	NumStrNumberSymbols will contain three invalid
+//	NumStrNumberSymbolsSpec will contain three invalid
 //	Number Symbol Specifications which are simple empty
 //	placeholders. As such these Number Symbol
 //	Specifications perform no active role in, and are
@@ -1008,24 +1008,24 @@ func (nStrNumSym *NumStrNumberSymbols) IsNOPZeroNumSymbols() bool {
 //
 // # Return Values
 //
-//	NumStrNumberSymbols
+//	NumStrNumberSymbolsSpec
 //
 //		This method returns a new instance of
-//		NumStrNumberSymbols configured as a NOP.
+//		NumStrNumberSymbolsSpec configured as a NOP.
 //
 //		'NOP' stands for 'No Operation'.
 //
 //		This means that	all Number Symbol Specifications
 //		contained in the returned instance of
-//		NumStrNumberSymbols are	empty placeholders and
+//		NumStrNumberSymbolsSpec are	empty placeholders and
 //		perform no active role in, and are completely
 //		ignored by, Number String Formatting algorithms.
 //
 //		Therefore, none of the Number Symbols contained
-//		in this returned NumStrNumberSymbols instance
+//		in this returned NumStrNumberSymbolsSpec instance
 //		will be inserted or formatted as part of Number
 //		String Formatting operations.
-func (nStrNumSym *NumStrNumberSymbols) NewNOP() NumStrNumberSymbols {
+func (nStrNumSym *NumStrNumberSymbolsSpec) NewNOP() NumStrNumberSymbolsSpec {
 
 	if nStrNumSym.lock == nil {
 		nStrNumSym.lock = new(sync.Mutex)
@@ -1035,7 +1035,7 @@ func (nStrNumSym *NumStrNumberSymbols) NewNOP() NumStrNumberSymbols {
 
 	defer nStrNumSym.lock.Unlock()
 
-	newNStrNumSym := NumStrNumberSymbols{}
+	newNStrNumSym := NumStrNumberSymbolsSpec{}
 
 	newNStrNumSym.negativeNumberSign.SetNOP()
 
@@ -1049,26 +1049,26 @@ func (nStrNumSym *NumStrNumberSymbols) NewNOP() NumStrNumberSymbols {
 //	NewSimpleCurrency
 //
 //	Creates and returns and instance of
-//	NumStrNumberSymbols configured for currency
+//	NumStrNumberSymbolsSpec configured for currency
 //	Number Symbol formatting.
 //
 //	If currency number symbol formatting is NOT
 //	required, see method:
 //
-//		NumStrNumberSymbols.NewSimpleSignedNumber()
+//		NumStrNumberSymbolsSpec.NewSimpleSignedNumber()
 //
-//	Type NumStrNumberSymbols is used to configure
+//	Type NumStrNumberSymbolsSpec is used to configure
 //	Number Symbols required in converting numeric
 //	values to formatted Number Strings.
 //
-//	NumStrNumberSymbols contains three instances of
+//	NumStrNumberSymbolsSpec contains three instances of
 //	type NumStrNumberSymbolSpec defining the Number
 //	Symbols to be used with positive numeric values,
 //	negative numeric values and zero numeric values.
 //
 //	This method provides a simplified means of creating
-//	type NumStrNumberSymbols using default values. The
-//	generated returned instance of NumStrNumberSymbols
+//	type NumStrNumberSymbolsSpec using default values. The
+//	generated returned instance of NumStrNumberSymbolsSpec
 //	will be configured with currency number symbols.
 //
 //	If the default configuration values fail to provide
@@ -1078,9 +1078,9 @@ func (nStrNumSym *NumStrNumberSymbols) NewNOP() NumStrNumberSymbols {
 //	multinational or multicultural currency number
 //	symbol formatting requirements:
 //
-//		NumStrNumberSymbols.NewSymbolsRunes()
-//		NumStrNumberSymbols.NewSymbolsStrings()
-//		NumStrNumberSymbols.NewSymbolsSpecs()
+//		NumStrNumberSymbolsSpec.NewSymbolsRunes()
+//		NumStrNumberSymbolsSpec.NewSymbolsStrings()
+//		NumStrNumberSymbolsSpec.NewSymbolsSpecs()
 //
 // ----------------------------------------------------------------
 //
@@ -1138,7 +1138,7 @@ func (nStrNumSym *NumStrNumberSymbols) NewNOP() NumStrNumberSymbols {
 //
 //		The symbol or symbols used to format currency. This
 //		currency formatting will be configured in the new
-//		instance of NumStrNumberSymbols returned by this
+//		instance of NumStrNumberSymbolsSpec returned by this
 //		method.
 //
 //	leadingNumSymbols			bool
@@ -1147,7 +1147,7 @@ func (nStrNumSym *NumStrNumberSymbols) NewNOP() NumStrNumberSymbols {
 //		Number String Format.
 //
 //		When set to 'true', the returned instance of
-//		NumStrNumberSymbols will configure Number Symbols
+//		NumStrNumberSymbolsSpec will configure Number Symbols
 //		on the left side of the numeric value. Such
 //		Number Symbols are therefore configured as
 //		leading Number Symbols. This is the positioning
@@ -1161,7 +1161,7 @@ func (nStrNumSym *NumStrNumberSymbols) NewNOP() NumStrNumberSymbols {
 //				the currency symbol and the minus sign.
 //
 //		When set to 'false', the returned instance of
-//		NumStrNumberSymbols will configure Number Symbols
+//		NumStrNumberSymbolsSpec will configure Number Symbols
 //		on the right side of the numeric value. Such
 //		Number Symbols are therefore configured as
 //		trailing Number Symbols. This is the positioning
@@ -1237,14 +1237,14 @@ func (nStrNumSym *NumStrNumberSymbols) NewNOP() NumStrNumberSymbols {
 //
 // # Return Values
 //
-//	NumStrNumberSymbols
+//	NumStrNumberSymbolsSpec
 //		If this method completes successfully, this
 //		parameter will return a new, fully populated
-//		instance of NumStrNumberSymbols configured
+//		instance of NumStrNumberSymbolsSpec configured
 //		with the Positive, Negative and Zero Number
 //		Sign Symbol Specification objects.
 //
-//		This returned NumStrNumberSymbols instance will
+//		This returned NumStrNumberSymbolsSpec instance will
 //		be configured with currency symbols for Number
 //		String formatting.
 //
@@ -1260,11 +1260,11 @@ func (nStrNumSym *NumStrNumberSymbols) NewNOP() NumStrNumberSymbols {
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (nStrNumSym *NumStrNumberSymbols) NewSimpleCurrency(
+func (nStrNumSym *NumStrNumberSymbolsSpec) NewSimpleCurrency(
 	currencySymbols string,
 	leadingNumSymbols bool,
 	errorPrefix interface{}) (
-	NumStrNumberSymbols,
+	NumStrNumberSymbolsSpec,
 	error) {
 
 	if nStrNumSym.lock == nil {
@@ -1279,12 +1279,12 @@ func (nStrNumSym *NumStrNumberSymbols) NewSimpleCurrency(
 
 	var err error
 
-	var newNStrNumSymbols NumStrNumberSymbols
+	var newNStrNumSymbols NumStrNumberSymbolsSpec
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"NumStrNumberSymbols."+
+		"NumStrNumberSymbolsSpec."+
 			"NewSimpleCurrency()",
 		"")
 
@@ -1292,7 +1292,7 @@ func (nStrNumSym *NumStrNumberSymbols) NewSimpleCurrency(
 		return newNStrNumSymbols, err
 	}
 
-	err = new(numStrNumberSymbolsMechanics).setSimpleNumSymbolsConfig(
+	err = new(numStrNumberSymbolsSpecMechanics).setSimpleNumSymbolsConfig(
 		&newNStrNumSymbols,
 		currencySymbols,
 		leadingNumSymbols,
@@ -1305,26 +1305,26 @@ func (nStrNumSym *NumStrNumberSymbols) NewSimpleCurrency(
 //	NewSimpleSignedNumber
 //
 //	Creates and returns and instance of
-//	NumStrNumberSymbols configured for Signed
+//	NumStrNumberSymbolsSpec configured for Signed
 //	Number formatting. Signed numbers do NOT
 //	contain currency symbols.
 //
 //	If currency number symbol formatting IS
 //	required, see method:
 //
-//		NumStrNumberSymbols.NewSimpleCurrency()
+//		NumStrNumberSymbolsSpec.NewSimpleCurrency()
 //
-//	Type NumStrNumberSymbols is used to configure
+//	Type NumStrNumberSymbolsSpec is used to configure
 //	Number Symbols required in converting numeric
 //	values to formatted Number Strings.
 //
-//	NumStrNumberSymbols contains three instances of
+//	NumStrNumberSymbolsSpec contains three instances of
 //	type NumStrNumberSymbolSpec defining the Number
 //	Symbols to be used with positive numeric values,
 //	negative numeric values and zero numeric values.
 //
 //	This method provides a simplified means of creating
-//	type NumStrNumberSymbols using default values and
+//	type NumStrNumberSymbolsSpec using default values and
 //	generating number symbols suitable for signed numeric
 //	values. Signed Number Symbols do NOT contain currency
 //	symbols.
@@ -1336,9 +1336,9 @@ func (nStrNumSym *NumStrNumberSymbols) NewSimpleCurrency(
 //	multicultural signed number symbol formatting
 //	requirements:
 //
-//		NumStrNumberSymbols.NewSymbolsRunes()
-//		NumStrNumberSymbols.NewSymbolsStrings()
-//		NumStrNumberSymbols.NewSymbolsSpecs()
+//		NumStrNumberSymbolsSpec.NewSymbolsRunes()
+//		NumStrNumberSymbolsSpec.NewSymbolsStrings()
+//		NumStrNumberSymbolsSpec.NewSymbolsSpecs()
 //
 // ----------------------------------------------------------------
 //
@@ -1386,7 +1386,7 @@ func (nStrNumSym *NumStrNumberSymbols) NewSimpleCurrency(
 //		Number String Format.
 //
 //		When set to 'true', the returned instance of
-//		NumStrNumberSymbols will configure Number Symbols
+//		NumStrNumberSymbolsSpec will configure Number Symbols
 //		on the left side of the numeric value. Such
 //		Number Symbols are therefore configured as
 //		leading Number Symbols. This is the positioning
@@ -1400,7 +1400,7 @@ func (nStrNumSym *NumStrNumberSymbols) NewSimpleCurrency(
 //				the currency symbol and the minus sign.
 //
 //		When set to 'false', the returned instance of
-//		NumStrNumberSymbols will configure Number Symbols
+//		NumStrNumberSymbolsSpec will configure Number Symbols
 //		on the right side of the numeric value. Such
 //		Number Symbols are therefore configured as
 //		trailing Number Symbols. This is the positioning
@@ -1417,15 +1417,15 @@ func (nStrNumSym *NumStrNumberSymbols) NewSimpleCurrency(
 //
 // # Return Values
 //
-//	NumStrNumberSymbols
+//	NumStrNumberSymbolsSpec
 //
 //		If this method completes successfully, this
 //		parameter will return a new, fully populated
-//		instance of NumStrNumberSymbols configured
+//		instance of NumStrNumberSymbolsSpec configured
 //		with the Positive, Negative and Zero Number
 //		Sign Symbol Specification objects.
 //
-//		This returned NumStrNumberSymbols instance will
+//		This returned NumStrNumberSymbolsSpec instance will
 //		be configured with symbols suitable for Signed
 //		Number String formatting.
 //
@@ -1441,10 +1441,10 @@ func (nStrNumSym *NumStrNumberSymbols) NewSimpleCurrency(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (nStrNumSym *NumStrNumberSymbols) NewSimpleSignedNumber(
+func (nStrNumSym *NumStrNumberSymbolsSpec) NewSimpleSignedNumber(
 	leadingNumSymbols bool,
 	errorPrefix interface{}) (
-	NumStrNumberSymbols,
+	NumStrNumberSymbolsSpec,
 	error) {
 
 	if nStrNumSym.lock == nil {
@@ -1459,12 +1459,12 @@ func (nStrNumSym *NumStrNumberSymbols) NewSimpleSignedNumber(
 
 	var err error
 
-	var newNStrNumSymbols NumStrNumberSymbols
+	var newNStrNumSymbols NumStrNumberSymbolsSpec
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"NumStrNumberSymbols."+
+		"NumStrNumberSymbolsSpec."+
 			"NewSimpleSignedNumber()",
 		"")
 
@@ -1472,7 +1472,7 @@ func (nStrNumSym *NumStrNumberSymbols) NewSimpleSignedNumber(
 		return newNStrNumSymbols, err
 	}
 
-	err = new(numStrNumberSymbolsMechanics).setSimpleNumSymbolsConfig(
+	err = new(numStrNumberSymbolsSpecMechanics).setSimpleNumSymbolsConfig(
 		&newNStrNumSymbols,
 		"",
 		leadingNumSymbols,
@@ -1485,19 +1485,19 @@ func (nStrNumSym *NumStrNumberSymbols) NewSimpleSignedNumber(
 //	NewSymbolsRunes
 //
 //	Creates and returns and instance of
-//	NumStrNumberSymbols.
+//	NumStrNumberSymbolsSpec.
 //
 //	This type is used to configure Number Symbols
 //	required in converting numeric values to Number
 //	Strings.
 //
-//	Type NumStrNumberSymbols contains three instances of
+//	Type NumStrNumberSymbolsSpec contains three instances of
 //	NumStrNumberSymbolSpec defining the Number Symbols to
 //	be used with positive numeric values, negative numeric
 //	values and zero numeric values.
 //
 //	This method generates a new instance of
-//	NumStrNumberSymbols using rune arrays as input
+//	NumStrNumberSymbolsSpec using rune arrays as input
 //	parameters.
 //
 // ----------------------------------------------------------------
@@ -1914,11 +1914,11 @@ func (nStrNumSym *NumStrNumberSymbols) NewSimpleSignedNumber(
 //
 // # Return Values
 //
-//	NumStrNumberSymbols
+//	NumStrNumberSymbolsSpec
 //
 //		If this method completes successfully, this
 //		parameter will return a new, fully populated
-//		instance of NumStrNumberSymbols configured
+//		instance of NumStrNumberSymbolsSpec configured
 //		with the Positive, Negative and Zero Number
 //		Sign Symbol Specification objects passed as
 //		input parameters.
@@ -1935,7 +1935,7 @@ func (nStrNumSym *NumStrNumberSymbols) NewSimpleSignedNumber(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (nStrNumSym *NumStrNumberSymbols) NewSymbolsRunes(
+func (nStrNumSym *NumStrNumberSymbolsSpec) NewSymbolsRunes(
 	leadingPositiveNumberSymbols []rune,
 	trailingPositiveNumberSymbols []rune,
 	positiveNumFieldSymPosition NumberFieldSymbolPosition,
@@ -1946,7 +1946,7 @@ func (nStrNumSym *NumStrNumberSymbols) NewSymbolsRunes(
 	trailingZeroNumberSymbols []rune,
 	zeroNumFieldSymPosition NumberFieldSymbolPosition,
 	errorPrefix interface{}) (
-	NumStrNumberSymbols,
+	NumStrNumberSymbolsSpec,
 	error) {
 
 	if nStrNumSym.lock == nil {
@@ -1961,12 +1961,12 @@ func (nStrNumSym *NumStrNumberSymbols) NewSymbolsRunes(
 
 	var err error
 
-	var newNumberSymbols NumStrNumberSymbols
+	var newNumberSymbols NumStrNumberSymbolsSpec
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"NumStrNumberSymbols."+
+		"NumStrNumberSymbolsSpec."+
 			"NewSymbolsRunes()",
 		"")
 
@@ -1974,7 +1974,7 @@ func (nStrNumSym *NumStrNumberSymbols) NewSymbolsRunes(
 		return newNumberSymbols, err
 	}
 
-	nStrNumSymNanobot := numStrNumberSymbolsNanobot{}
+	nStrNumSymNanobot := numStrNumberSymbolsSpecNanobot{}
 
 	err = nStrNumSymNanobot.setPositiveNumSignRunes(
 		&newNumberSymbols,
@@ -2014,19 +2014,19 @@ func (nStrNumSym *NumStrNumberSymbols) NewSymbolsRunes(
 //	NewSymbolsStrings
 //
 //	Creates and returns and instance of
-//	NumStrNumberSymbols.
+//	NumStrNumberSymbolsSpec.
 //
 //	This type is used to configure Number Symbols
 //	required in converting numeric values to Number
 //	Strings.
 //
-//	Type NumStrNumberSymbols contains three instances of
+//	Type NumStrNumberSymbolsSpec contains three instances of
 //	NumStrNumberSymbolSpec defining the Number Symbols to
 //	be used with positive numeric values, negative numeric
 //	values and zero numeric values.
 //
 //	This method generates a new instance of
-//	NumStrNumberSymbols using strings as input parameters.
+//	NumStrNumberSymbolsSpec using strings as input parameters.
 //
 // ----------------------------------------------------------------
 //
@@ -2441,11 +2441,11 @@ func (nStrNumSym *NumStrNumberSymbols) NewSymbolsRunes(
 //
 // # Return Values
 //
-//	NumStrNumberSymbols
+//	NumStrNumberSymbolsSpec
 //
 //		If this method completes successfully, this
 //		parameter will return a new, fully populated
-//		instance of NumStrNumberSymbols configured
+//		instance of NumStrNumberSymbolsSpec configured
 //		with the Positive, Negative and Zero Number
 //		Sign Symbol Specification objects passed as
 //		input parameters.
@@ -2462,7 +2462,7 @@ func (nStrNumSym *NumStrNumberSymbols) NewSymbolsRunes(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (nStrNumSym *NumStrNumberSymbols) NewSymbolsStrings(
+func (nStrNumSym *NumStrNumberSymbolsSpec) NewSymbolsStrings(
 	leadingPositiveNumberSymbols string,
 	trailingPositiveNumberSymbols string,
 	positiveNumFieldSymPosition NumberFieldSymbolPosition,
@@ -2473,7 +2473,7 @@ func (nStrNumSym *NumStrNumberSymbols) NewSymbolsStrings(
 	trailingZeroNumberSymbols string,
 	zeroNumFieldSymPosition NumberFieldSymbolPosition,
 	errorPrefix interface{}) (
-	NumStrNumberSymbols,
+	NumStrNumberSymbolsSpec,
 	error) {
 
 	if nStrNumSym.lock == nil {
@@ -2488,12 +2488,12 @@ func (nStrNumSym *NumStrNumberSymbols) NewSymbolsStrings(
 
 	var err error
 
-	var newNumberSymbols NumStrNumberSymbols
+	var newNumberSymbols NumStrNumberSymbolsSpec
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"NumStrNumberSymbols."+
+		"NumStrNumberSymbolsSpec."+
 			"NewSymbolsStrings()",
 		"")
 
@@ -2501,7 +2501,7 @@ func (nStrNumSym *NumStrNumberSymbols) NewSymbolsStrings(
 		return newNumberSymbols, err
 	}
 
-	nStrNumSymNanobot := numStrNumberSymbolsNanobot{}
+	nStrNumSymNanobot := numStrNumberSymbolsSpecNanobot{}
 
 	err = nStrNumSymNanobot.setPositiveNumSignRunes(
 		&newNumberSymbols,
@@ -2541,19 +2541,19 @@ func (nStrNumSym *NumStrNumberSymbols) NewSymbolsStrings(
 //	NewSymbolsSpecs
 //
 //	Creates and returns and instance of
-//	NumStrNumberSymbols.
+//	NumStrNumberSymbolsSpec.
 //
 //	This type is used to configure Number Symbols
 //	required in converting numeric values to Number
 //	Strings.
 //
-//	Type NumStrNumberSymbols contains three instances of
+//	Type NumStrNumberSymbolsSpec contains three instances of
 //	NumStrNumberSymbolSpec defining the Number Symbols to
 //	be used with positive numeric values, negative numeric
 //	values and zero numeric values.
 //
 //	This method generates a new instance of
-//	NumStrNumberSymbols using Positive, Negative and Zero
+//	NumStrNumberSymbolsSpec using Positive, Negative and Zero
 //	Number Sign Symbol Specification objects passed as
 //	input parameters.
 //
@@ -2566,21 +2566,21 @@ func (nStrNumSym *NumStrNumberSymbols) NewSymbolsStrings(
 //		This Positive Number Sign Symbol Specification
 //		will be copied to the corresponding Positive
 //		Symbol Specification in the new, returned
-//		instance of NumStrNumberSymbols.
+//		instance of NumStrNumberSymbolsSpec.
 //
 //	negativeNumberSign			NumStrNumberSymbolSpec
 //
 //		This Negative Number Sign Symbol Specification
 //		will be copied to the corresponding Negative
 //		Symbol Specification in the new, returned
-//		instance of NumStrNumberSymbols.
+//		instance of NumStrNumberSymbolsSpec.
 //
 //	zeroNumberSign			NumStrNumberSymbolSpec
 //
 //		This Zero Number Sign Symbol Specification
 //		will be copied to the corresponding Zero
 //		Symbol Specification in the new, returned
-//		instance of NumStrNumberSymbols.
+//		instance of NumStrNumberSymbolsSpec.
 //
 //	 errorPrefix                interface{}
 //
@@ -2645,11 +2645,11 @@ func (nStrNumSym *NumStrNumberSymbols) NewSymbolsStrings(
 //
 // # Return Values
 //
-//	NumStrNumberSymbols
+//	NumStrNumberSymbolsSpec
 //
 //		If this method completes successfully, this
 //		parameter will return a new, fully populated
-//		instance of NumStrNumberSymbols configured
+//		instance of NumStrNumberSymbolsSpec configured
 //		with the Positive, Negative and Zero Number
 //		Sign Symbol Specification objects passed as
 //		input parameters.
@@ -2666,12 +2666,12 @@ func (nStrNumSym *NumStrNumberSymbols) NewSymbolsStrings(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (nStrNumSym *NumStrNumberSymbols) NewSymbolsSpecs(
+func (nStrNumSym *NumStrNumberSymbolsSpec) NewSymbolsSpecs(
 	positiveNumberSign NumStrNumberSymbolSpec,
 	negativeNumberSign NumStrNumberSymbolSpec,
 	zeroNumberSign NumStrNumberSymbolSpec,
 	errorPrefix interface{}) (
-	NumStrNumberSymbols,
+	NumStrNumberSymbolsSpec,
 	error) {
 
 	if nStrNumSym.lock == nil {
@@ -2686,12 +2686,12 @@ func (nStrNumSym *NumStrNumberSymbols) NewSymbolsSpecs(
 
 	var err error
 
-	var newNumberSymbols NumStrNumberSymbols
+	var newNumberSymbols NumStrNumberSymbolsSpec
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"NumStrNumberSymbols."+
+		"NumStrNumberSymbolsSpec."+
 			"NewSymbolsSpecs()",
 		"")
 
@@ -2699,7 +2699,7 @@ func (nStrNumSym *NumStrNumberSymbols) NewSymbolsSpecs(
 		return newNumberSymbols, err
 	}
 
-	err = new(numStrNumberSymbolsMechanics).
+	err = new(numStrNumberSymbolsSpecMechanics).
 		setNumSymbolSpecs(
 			&newNumberSymbols,
 			positiveNumberSign,
@@ -2714,7 +2714,7 @@ func (nStrNumSym *NumStrNumberSymbols) NewSymbolsSpecs(
 //	SetNegativeNumSignSpec
 //
 //	Reconfigures the current instance of
-//	NumStrNumberSymbols based on the Negative Number
+//	NumStrNumberSymbolsSpec based on the Negative Number
 //	Sign Symbol Specification object passed as an input
 //	parameter.
 //
@@ -2725,7 +2725,7 @@ func (nStrNumSym *NumStrNumberSymbols) NewSymbolsSpecs(
 //	Be advised that this method will delete and reset the
 //	Negative Number Sign Symbol member variable data
 //	fields contained in the current instance of
-//	NumStrNumberSymbols.
+//	NumStrNumberSymbolsSpec.
 //
 // ----------------------------------------------------------------
 //
@@ -2736,7 +2736,7 @@ func (nStrNumSym *NumStrNumberSymbols) NewSymbolsSpecs(
 //		This Negative Number Sign Symbol Specification
 //		will be copied to the corresponding Negative
 //		Symbol Specification in the current instance of
-//		NumStrNumberSymbols.
+//		NumStrNumberSymbolsSpec.
 //
 //	 errorPrefix                interface{}
 //
@@ -2813,7 +2813,7 @@ func (nStrNumSym *NumStrNumberSymbols) NewSymbolsSpecs(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (nStrNumSym *NumStrNumberSymbols) SetNegativeNumSignSpec(
+func (nStrNumSym *NumStrNumberSymbolsSpec) SetNegativeNumSignSpec(
 	negativeNumberSign NumStrNumberSymbolSpec,
 	errorPrefix interface{}) error {
 
@@ -2832,7 +2832,7 @@ func (nStrNumSym *NumStrNumberSymbols) SetNegativeNumSignSpec(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"NumStrNumberSymbols."+
+		"NumStrNumberSymbolsSpec."+
 			"SetNegativeNumSignSpec()",
 		"")
 
@@ -2840,7 +2840,7 @@ func (nStrNumSym *NumStrNumberSymbols) SetNegativeNumSignSpec(
 		return err
 	}
 
-	return new(numStrNumberSymbolsNanobot).
+	return new(numStrNumberSymbolsSpecNanobot).
 		setNegativeNumSignSpec(
 			nStrNumSym,
 			negativeNumberSign,
@@ -2852,7 +2852,7 @@ func (nStrNumSym *NumStrNumberSymbols) SetNegativeNumSignSpec(
 //	SetNegativeSymbolsRunes
 //
 //	Deletes and resets the Negative Number Symbols data
-//	fields for the current instance of NumStrNumberSymbols.
+//	fields for the current instance of NumStrNumberSymbolsSpec.
 //
 // ----------------------------------------------------------------
 //
@@ -2864,9 +2864,9 @@ func (nStrNumSym *NumStrNumberSymbols) SetNegativeNumSignSpec(
 //	input parameters passed as rune arrays.
 //
 //	The Negative Number Sign Symbol member variable for
-//	the current instance of NumStrNumberSymbols is:
+//	the current instance of NumStrNumberSymbolsSpec is:
 //
-//		NumStrNumberSymbols.negativeNumberSign
+//		NumStrNumberSymbolsSpec.negativeNumberSign
 //
 // ----------------------------------------------------------------
 //
@@ -3082,7 +3082,7 @@ func (nStrNumSym *NumStrNumberSymbols) SetNegativeNumSignSpec(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (nStrNumSym *NumStrNumberSymbols) SetNegativeSymbolsRunes(
+func (nStrNumSym *NumStrNumberSymbolsSpec) SetNegativeSymbolsRunes(
 	leadingNegativeNumberSymbols []rune,
 	trailingNegativeNumberSymbols []rune,
 	negativeNumFieldSymPosition NumberFieldSymbolPosition,
@@ -3103,7 +3103,7 @@ func (nStrNumSym *NumStrNumberSymbols) SetNegativeSymbolsRunes(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"NumStrNumberSymbols."+
+		"NumStrNumberSymbolsSpec."+
 			"SetNegativeSymbolsRunes()",
 		"")
 
@@ -3111,7 +3111,7 @@ func (nStrNumSym *NumStrNumberSymbols) SetNegativeSymbolsRunes(
 		return err
 	}
 
-	return new(numStrNumberSymbolsNanobot).setNegativeNumSignRunes(
+	return new(numStrNumberSymbolsSpecNanobot).setNegativeNumSignRunes(
 		nStrNumSym,
 		leadingNegativeNumberSymbols,
 		trailingNegativeNumberSymbols,
@@ -3123,7 +3123,7 @@ func (nStrNumSym *NumStrNumberSymbols) SetNegativeSymbolsRunes(
 //	SetNegativeSymbolsStrings
 //
 //	Deletes and resets the Negative Number Symbols data
-//	fields for the current instance of NumStrNumberSymbols.
+//	fields for the current instance of NumStrNumberSymbolsSpec.
 //
 // ----------------------------------------------------------------
 //
@@ -3135,9 +3135,9 @@ func (nStrNumSym *NumStrNumberSymbols) SetNegativeSymbolsRunes(
 //	input parameters passed as strings.
 //
 //	The Negative Number Sign Symbol member variable for
-//	the current instance of NumStrNumberSymbols is:
+//	the current instance of NumStrNumberSymbolsSpec is:
 //
-//		NumStrNumberSymbols.negativeNumberSign
+//		NumStrNumberSymbolsSpec.negativeNumberSign
 //
 // ----------------------------------------------------------------
 //
@@ -3341,7 +3341,7 @@ func (nStrNumSym *NumStrNumberSymbols) SetNegativeSymbolsRunes(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (nStrNumSym *NumStrNumberSymbols) SetNegativeSymbolsStrings(
+func (nStrNumSym *NumStrNumberSymbolsSpec) SetNegativeSymbolsStrings(
 	leadingNegativeNumberSymbols string,
 	trailingNegativeNumberSymbols string,
 	negativeNumFieldSymPosition NumberFieldSymbolPosition,
@@ -3362,7 +3362,7 @@ func (nStrNumSym *NumStrNumberSymbols) SetNegativeSymbolsStrings(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"NumStrNumberSymbols."+
+		"NumStrNumberSymbolsSpec."+
 			"SetNegativeSymbolsStrings()",
 		"")
 
@@ -3370,7 +3370,7 @@ func (nStrNumSym *NumStrNumberSymbols) SetNegativeSymbolsStrings(
 		return err
 	}
 
-	return new(numStrNumberSymbolsNanobot).setNegativeNumSignRunes(
+	return new(numStrNumberSymbolsSpecNanobot).setNegativeNumSignRunes(
 		nStrNumSym,
 		[]rune(leadingNegativeNumberSymbols),
 		[]rune(trailingNegativeNumberSymbols),
@@ -3384,13 +3384,13 @@ func (nStrNumSym *NumStrNumberSymbols) SetNegativeSymbolsStrings(
 //	'NOP' stands for 'No Operation'.
 //
 //	When called, this method will convert the current
-//	instance of NumStrNumberSymbols to NOP or 'No
+//	instance of NumStrNumberSymbolsSpec to NOP or 'No
 //	Operation'. This means that all data values
-//	contained in the current NumStrNumberSymbols
+//	contained in the current NumStrNumberSymbolsSpec
 //	instance will be deleted and reset to their
 //	zero or uninitialized state.
 //
-//	Type NumStrNumberSymbols encapsulates the Negative,
+//	Type NumStrNumberSymbolsSpec encapsulates the Negative,
 //	Positive and Zero Number Symbol Specifications.
 //
 //	Calling this method will convert all three Number
@@ -3402,13 +3402,13 @@ func (nStrNumSym *NumStrNumberSymbols) SetNegativeSymbolsStrings(
 //	empty placeholders when formatting Number Strings.
 //
 //	To determine the status of NOP for the current
-//	instance of NumStrNumberSymbols, use the following
+//	instance of NumStrNumberSymbolsSpec, use the following
 //	methods:
 //
-//		NumStrNumberSymbols.IsNOP()
-//		NumStrNumberSymbols.IsNOPNegativeNumSymbols()
-//		NumStrNumberSymbols.IsNOPPositiveNumSymbols()
-//		NumStrNumberSymbols.IsNOPZeroNumSymbols()
+//		NumStrNumberSymbolsSpec.IsNOP()
+//		NumStrNumberSymbolsSpec.IsNOPNegativeNumSymbols()
+//		NumStrNumberSymbolsSpec.IsNOPPositiveNumSymbols()
+//		NumStrNumberSymbolsSpec.IsNOPZeroNumSymbols()
 //
 // ----------------------------------------------------------------
 //
@@ -3421,7 +3421,7 @@ func (nStrNumSym *NumStrNumberSymbols) SetNegativeSymbolsStrings(
 // # Return Values
 //
 //	NONE
-func (nStrNumSym *NumStrNumberSymbols) SetNOP() {
+func (nStrNumSym *NumStrNumberSymbolsSpec) SetNOP() {
 
 	if nStrNumSym.lock == nil {
 		nStrNumSym.lock = new(sync.Mutex)
@@ -3446,7 +3446,7 @@ func (nStrNumSym *NumStrNumberSymbols) SetNOP() {
 //
 //	When called, this method will convert the Negative
 //	Number Symbol Specification in the current instance
-//	of NumStrNumberSymbols to NOP or 'No Operation'. This
+//	of NumStrNumberSymbolsSpec to NOP or 'No Operation'. This
 //	means that the Negative Number Symbol Specification
 //	is simply an empty placeholder and performs no active
 //	role in, and is completely ignored by, Number String
@@ -3455,13 +3455,13 @@ func (nStrNumSym *NumStrNumberSymbols) SetNOP() {
 //	as part of a Number String formatting operation.
 //
 //	To determine the status of NOP for the current
-//	instance of NumStrNumberSymbols, use the following
+//	instance of NumStrNumberSymbolsSpec, use the following
 //	methods:
 //
-//		NumStrNumberSymbols.IsNOP()
-//		NumStrNumberSymbols.IsNOPNegativeNumSymbols()
-//		NumStrNumberSymbols.IsNOPPositiveNumSymbols()
-//		NumStrNumberSymbols.IsNOPZeroNumSymbols()
+//		NumStrNumberSymbolsSpec.IsNOP()
+//		NumStrNumberSymbolsSpec.IsNOPNegativeNumSymbols()
+//		NumStrNumberSymbolsSpec.IsNOPPositiveNumSymbols()
+//		NumStrNumberSymbolsSpec.IsNOPZeroNumSymbols()
 //
 // ----------------------------------------------------------------
 //
@@ -3474,7 +3474,7 @@ func (nStrNumSym *NumStrNumberSymbols) SetNOP() {
 // # Return Values
 //
 //	NONE
-func (nStrNumSym *NumStrNumberSymbols) SetNOPNegativeNumSymbols() {
+func (nStrNumSym *NumStrNumberSymbolsSpec) SetNOPNegativeNumSymbols() {
 
 	if nStrNumSym.lock == nil {
 		nStrNumSym.lock = new(sync.Mutex)
@@ -3495,7 +3495,7 @@ func (nStrNumSym *NumStrNumberSymbols) SetNOPNegativeNumSymbols() {
 //
 //	When called, this method will convert the Positive
 //	Number Symbol Specification in the current instance
-//	of NumStrNumberSymbols to NOP or 'No Operation'. This
+//	of NumStrNumberSymbolsSpec to NOP or 'No Operation'. This
 //	means that the Positive Number Symbol Specification
 //	is simply an empty placeholder and performs no active
 //	role in, and is completely ignored by, Number String
@@ -3504,13 +3504,13 @@ func (nStrNumSym *NumStrNumberSymbols) SetNOPNegativeNumSymbols() {
 //	as part of a Number String formatting operation.
 //
 //	To determine the status of NOP for the current
-//	instance of NumStrNumberSymbols, use the following
+//	instance of NumStrNumberSymbolsSpec, use the following
 //	methods:
 //
-//		NumStrNumberSymbols.IsNOP()
-//		NumStrNumberSymbols.IsNOPPositiveNumSymbols()
-//		NumStrNumberSymbols.IsNOPPositiveNumSymbols()
-//		NumStrNumberSymbols.IsNOPZeroNumSymbols()
+//		NumStrNumberSymbolsSpec.IsNOP()
+//		NumStrNumberSymbolsSpec.IsNOPPositiveNumSymbols()
+//		NumStrNumberSymbolsSpec.IsNOPPositiveNumSymbols()
+//		NumStrNumberSymbolsSpec.IsNOPZeroNumSymbols()
 //
 // ----------------------------------------------------------------
 //
@@ -3523,7 +3523,7 @@ func (nStrNumSym *NumStrNumberSymbols) SetNOPNegativeNumSymbols() {
 // # Return Values
 //
 //	NONE
-func (nStrNumSym *NumStrNumberSymbols) SetNOPPositiveNumSymbols() {
+func (nStrNumSym *NumStrNumberSymbolsSpec) SetNOPPositiveNumSymbols() {
 
 	if nStrNumSym.lock == nil {
 		nStrNumSym.lock = new(sync.Mutex)
@@ -3544,7 +3544,7 @@ func (nStrNumSym *NumStrNumberSymbols) SetNOPPositiveNumSymbols() {
 //
 //	When called, this method will convert the Zero
 //	Number Symbol Specification in the current instance
-//	of NumStrNumberSymbols to NOP or 'No Operation'. This
+//	of NumStrNumberSymbolsSpec to NOP or 'No Operation'. This
 //	means that the Zero Number Symbol Specification
 //	is simply an empty placeholder and performs no active
 //	role in, and is completely ignored by, Number String
@@ -3553,13 +3553,13 @@ func (nStrNumSym *NumStrNumberSymbols) SetNOPPositiveNumSymbols() {
 //	as part of a Number String formatting operation.
 //
 //	To determine the status of NOP for the current
-//	instance of NumStrNumberSymbols, use the following
+//	instance of NumStrNumberSymbolsSpec, use the following
 //	methods:
 //
-//		NumStrNumberSymbols.IsNOP()
-//		NumStrNumberSymbols.IsNOPZeroNumSymbols()
-//		NumStrNumberSymbols.IsNOPZeroNumSymbols()
-//		NumStrNumberSymbols.IsNOPZeroNumSymbols()
+//		NumStrNumberSymbolsSpec.IsNOP()
+//		NumStrNumberSymbolsSpec.IsNOPZeroNumSymbols()
+//		NumStrNumberSymbolsSpec.IsNOPZeroNumSymbols()
+//		NumStrNumberSymbolsSpec.IsNOPZeroNumSymbols()
 //
 // ----------------------------------------------------------------
 //
@@ -3572,7 +3572,7 @@ func (nStrNumSym *NumStrNumberSymbols) SetNOPPositiveNumSymbols() {
 // # Return Values
 //
 //	NONE
-func (nStrNumSym *NumStrNumberSymbols) SetNOPZeroNumSymbols() {
+func (nStrNumSym *NumStrNumberSymbolsSpec) SetNOPZeroNumSymbols() {
 
 	if nStrNumSym.lock == nil {
 		nStrNumSym.lock = new(sync.Mutex)
@@ -3590,7 +3590,7 @@ func (nStrNumSym *NumStrNumberSymbols) SetNOPZeroNumSymbols() {
 //	SetPositiveNumSignSpec
 //
 //	Reconfigures the current instance of
-//	NumStrNumberSymbols based on the Positive Number
+//	NumStrNumberSymbolsSpec based on the Positive Number
 //	Sign Symbol Specification object passed as an input
 //	parameter.
 //
@@ -3601,7 +3601,7 @@ func (nStrNumSym *NumStrNumberSymbols) SetNOPZeroNumSymbols() {
 //	Be advised that this method will delete and reset the
 //	Positive Number Sign Symbol member variable data
 //	fields contained in the current instance of
-//	NumStrNumberSymbols.
+//	NumStrNumberSymbolsSpec.
 //
 // ----------------------------------------------------------------
 //
@@ -3612,7 +3612,7 @@ func (nStrNumSym *NumStrNumberSymbols) SetNOPZeroNumSymbols() {
 //		This Positive Number Sign Symbol Specification
 //		will be copied to the corresponding Positive
 //		Symbol Specification in the current instance of
-//		NumStrNumberSymbols.
+//		NumStrNumberSymbolsSpec.
 //
 //	 errorPrefix                interface{}
 //
@@ -3689,7 +3689,7 @@ func (nStrNumSym *NumStrNumberSymbols) SetNOPZeroNumSymbols() {
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (nStrNumSym *NumStrNumberSymbols) SetPositiveNumSignSpec(
+func (nStrNumSym *NumStrNumberSymbolsSpec) SetPositiveNumSignSpec(
 	positiveNumberSign NumStrNumberSymbolSpec,
 	errorPrefix interface{}) error {
 
@@ -3708,7 +3708,7 @@ func (nStrNumSym *NumStrNumberSymbols) SetPositiveNumSignSpec(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"NumStrNumberSymbols."+
+		"NumStrNumberSymbolsSpec."+
 			"SetPositiveNumSignSpec()",
 		"")
 
@@ -3716,7 +3716,7 @@ func (nStrNumSym *NumStrNumberSymbols) SetPositiveNumSignSpec(
 		return err
 	}
 
-	return new(numStrNumberSymbolsNanobot).
+	return new(numStrNumberSymbolsSpecNanobot).
 		setPositiveNumSignSpec(
 			nStrNumSym,
 			positiveNumberSign,
@@ -3728,7 +3728,7 @@ func (nStrNumSym *NumStrNumberSymbols) SetPositiveNumSignSpec(
 //	SetPositiveSymbolsRunes
 //
 //	Deletes and resets the Positive Number Symbols data
-//	fields for the current instance of NumStrNumberSymbols.
+//	fields for the current instance of NumStrNumberSymbolsSpec.
 //
 // ----------------------------------------------------------------
 //
@@ -3740,9 +3740,9 @@ func (nStrNumSym *NumStrNumberSymbols) SetPositiveNumSignSpec(
 //	input parameters passed as rune arrays.
 //
 //	The Positive Number Sign Symbol member variable for
-//	the current instance of NumStrNumberSymbols is:
+//	the current instance of NumStrNumberSymbolsSpec is:
 //
-//		NumStrNumberSymbols.positiveNumberSign
+//		NumStrNumberSymbolsSpec.positiveNumberSign
 //
 // ----------------------------------------------------------------
 //
@@ -3958,7 +3958,7 @@ func (nStrNumSym *NumStrNumberSymbols) SetPositiveNumSignSpec(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (nStrNumSym *NumStrNumberSymbols) SetPositiveSymbolsRunes(
+func (nStrNumSym *NumStrNumberSymbolsSpec) SetPositiveSymbolsRunes(
 	leadingPositiveNumberSymbols []rune,
 	trailingPositiveNumberSymbols []rune,
 	positiveNumFieldSymPosition NumberFieldSymbolPosition,
@@ -3979,7 +3979,7 @@ func (nStrNumSym *NumStrNumberSymbols) SetPositiveSymbolsRunes(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"NumStrNumberSymbols."+
+		"NumStrNumberSymbolsSpec."+
 			"SetPositiveSymbolsRunes()",
 		"")
 
@@ -3987,7 +3987,7 @@ func (nStrNumSym *NumStrNumberSymbols) SetPositiveSymbolsRunes(
 		return err
 	}
 
-	return new(numStrNumberSymbolsNanobot).setPositiveNumSignRunes(
+	return new(numStrNumberSymbolsSpecNanobot).setPositiveNumSignRunes(
 		nStrNumSym,
 		leadingPositiveNumberSymbols,
 		trailingPositiveNumberSymbols,
@@ -3999,7 +3999,7 @@ func (nStrNumSym *NumStrNumberSymbols) SetPositiveSymbolsRunes(
 //	SetPositiveSymbolsStrings
 //
 //	Deletes and resets the Positive Number Symbols data
-//	fields for the current instance of NumStrNumberSymbols.
+//	fields for the current instance of NumStrNumberSymbolsSpec.
 //
 // ----------------------------------------------------------------
 //
@@ -4011,9 +4011,9 @@ func (nStrNumSym *NumStrNumberSymbols) SetPositiveSymbolsRunes(
 //	input parameters passed as strings.
 //
 //	The Positive Number Sign Symbol member variable for
-//	the current instance of NumStrNumberSymbols is:
+//	the current instance of NumStrNumberSymbolsSpec is:
 //
-//		NumStrNumberSymbols.positiveNumberSign
+//		NumStrNumberSymbolsSpec.positiveNumberSign
 //
 // ----------------------------------------------------------------
 //
@@ -4209,7 +4209,7 @@ func (nStrNumSym *NumStrNumberSymbols) SetPositiveSymbolsRunes(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (nStrNumSym *NumStrNumberSymbols) SetPositiveSymbolsStrings(
+func (nStrNumSym *NumStrNumberSymbolsSpec) SetPositiveSymbolsStrings(
 	leadingPositiveNumberSymbols string,
 	trailingPositiveNumberSymbols string,
 	positiveNumFieldSymPosition NumberFieldSymbolPosition,
@@ -4230,7 +4230,7 @@ func (nStrNumSym *NumStrNumberSymbols) SetPositiveSymbolsStrings(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"NumStrNumberSymbols."+
+		"NumStrNumberSymbolsSpec."+
 			"SetPositiveSymbolsStrings()",
 		"")
 
@@ -4238,7 +4238,7 @@ func (nStrNumSym *NumStrNumberSymbols) SetPositiveSymbolsStrings(
 		return err
 	}
 
-	return new(numStrNumberSymbolsNanobot).setPositiveNumSignRunes(
+	return new(numStrNumberSymbolsSpecNanobot).setPositiveNumSignRunes(
 		nStrNumSym,
 		[]rune(leadingPositiveNumberSymbols),
 		[]rune(trailingPositiveNumberSymbols),
@@ -4250,30 +4250,30 @@ func (nStrNumSym *NumStrNumberSymbols) SetPositiveSymbolsStrings(
 // SetSimpleCurrency
 //
 // Deletes and reconfigures the data values contained in
-// the current instance of NumStrNumberSymbols with
+// the current instance of NumStrNumberSymbolsSpec with
 // currency number symbol parameters.
 //
 // If currency number symbol formatting is NOT required,
 // see method:
 //
-//	NumStrNumberSymbols.SetSimpleSignedNumber()
+//	NumStrNumberSymbolsSpec.SetSimpleSignedNumber()
 //
-// Type NumStrNumberSymbols is used to configure
+// Type NumStrNumberSymbolsSpec is used to configure
 // Number Symbols required in converting numeric
 // values to formatted Number Strings.
 //
-// NumStrNumberSymbols contains three instances of
+// NumStrNumberSymbolsSpec contains three instances of
 // type NumStrNumberSymbolSpec defining the Number
 // Symbols to be used with positive numeric values,
 // negative numeric values and zero numeric values.
 //
 // This method provides a simplified means of
 // reconfiguring the current instance of
-// NumStrNumberSymbols with currency number symbols
+// NumStrNumberSymbolsSpec with currency number symbols
 // using default values.
 //
 // Upon completion, this method will reconfigure the
-// current instance of NumStrNumberSymbols with
+// current instance of NumStrNumberSymbolsSpec with
 // currency number symbols.
 //
 //	If the default configuration values fail to provide
@@ -4283,9 +4283,9 @@ func (nStrNumSym *NumStrNumberSymbols) SetPositiveSymbolsStrings(
 //	multinational or multicultural currency number
 //	symbol formatting requirements:
 //
-//		NumStrNumberSymbols.SetSymbolsRunes()
-//		NumStrNumberSymbols.SetSymbolsStrings()
-//		NumStrNumberSymbols.SetSymbolsSpecs()
+//		NumStrNumberSymbolsSpec.SetSymbolsRunes()
+//		NumStrNumberSymbolsSpec.SetSymbolsStrings()
+//		NumStrNumberSymbolsSpec.SetSymbolsSpecs()
 //
 // ----------------------------------------------------------------
 //
@@ -4293,7 +4293,7 @@ func (nStrNumSym *NumStrNumberSymbols) SetPositiveSymbolsStrings(
 //
 //	Be advised that this method will delete and
 //	reconfigure all data values contained in the current
-//	instance of NumStrNumberSymbols.
+//	instance of NumStrNumberSymbolsSpec.
 //
 // ----------------------------------------------------------------
 //
@@ -4350,7 +4350,7 @@ func (nStrNumSym *NumStrNumberSymbols) SetPositiveSymbolsStrings(
 //	currencySymbols				string
 //
 //		The symbol or symbols used to format currency. The
-//		current instance of NumStrNumberSymbols will be
+//		current instance of NumStrNumberSymbolsSpec will be
 //		reconfigured with the currency symbols contained
 //		in this input parameter.
 //
@@ -4360,7 +4360,7 @@ func (nStrNumSym *NumStrNumberSymbols) SetPositiveSymbolsStrings(
 //		Number String Format.
 //
 //		When set to 'true', the current instance of
-//		NumStrNumberSymbols will configure Number Symbols
+//		NumStrNumberSymbolsSpec will configure Number Symbols
 //		on the left side of the numeric value. Such
 //		Number Symbols are therefore configured as
 //		leading Number Symbols. This is the positioning
@@ -4374,7 +4374,7 @@ func (nStrNumSym *NumStrNumberSymbols) SetPositiveSymbolsStrings(
 //				the currency symbol and the minus sign.
 //
 //		When 'leadingNumSymbols' is set to 'false', the
-//		current instance of NumStrNumberSymbols will
+//		current instance of NumStrNumberSymbolsSpec will
 //		configure Number Symbols on the right side of the
 //		numeric value. Such Number Symbols are therefore
 //		configured as trailing Number Symbols. This is
@@ -4462,7 +4462,7 @@ func (nStrNumSym *NumStrNumberSymbols) SetPositiveSymbolsStrings(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (nStrNumSym *NumStrNumberSymbols) SetSimpleCurrency(
+func (nStrNumSym *NumStrNumberSymbolsSpec) SetSimpleCurrency(
 	currencySymbols string,
 	leadingNumSymbols bool,
 	errorPrefix interface{}) error {
@@ -4482,7 +4482,7 @@ func (nStrNumSym *NumStrNumberSymbols) SetSimpleCurrency(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"NumStrNumberSymbols."+
+		"NumStrNumberSymbolsSpec."+
 			"SetSimpleCurrency()",
 		"")
 
@@ -4490,7 +4490,7 @@ func (nStrNumSym *NumStrNumberSymbols) SetSimpleCurrency(
 		return err
 	}
 
-	return new(numStrNumberSymbolsMechanics).setSimpleNumSymbolsConfig(
+	return new(numStrNumberSymbolsSpecMechanics).setSimpleNumSymbolsConfig(
 		nStrNumSym,
 		currencySymbols,
 		leadingNumSymbols,
@@ -4501,27 +4501,27 @@ func (nStrNumSym *NumStrNumberSymbols) SetSimpleCurrency(
 //	SetSimpleSignedNumber
 //
 //	Deletes and reconfigures the data values contained in
-//	the current instance of NumStrNumberSymbols with
+//	the current instance of NumStrNumberSymbolsSpec with
 //	signed number symbol parameters. Signed numbers do
 //	NOT contain currency symbols.
 //
 //	If currency number symbol formatting IS required,
 //	see method:
 //
-//	NumStrNumberSymbols.SetSimpleCurrency()
+//	NumStrNumberSymbolsSpec.SetSimpleCurrency()
 //
-//	Type NumStrNumberSymbols is used to configure Number
+//	Type NumStrNumberSymbolsSpec is used to configure Number
 //	Symbols required in converting numeric values to
 //	formatted Number Strings.
 //
-//	NumStrNumberSymbols contains three instances of type
+//	NumStrNumberSymbolsSpec contains three instances of type
 //	NumStrNumberSymbolSpec defining the Number Symbols to
 //	be used with positive numeric values, negative
 //	numeric values and zero numeric values.
 //
 //	This method provides a simplified means for
 //	reconfiguring the current instance of
-//	NumStrNumberSymbols using default values and
+//	NumStrNumberSymbolsSpec using default values and
 //	generating number symbols suitable for signed numeric
 //	values. Signed Number Symbols do NOT contain currency
 //	symbols.
@@ -4533,9 +4533,9 @@ func (nStrNumSym *NumStrNumberSymbols) SetSimpleCurrency(
 //	multicultural signed number symbol formatting
 //	requirements:
 //
-//		NumStrNumberSymbols.SetSymbolsRunes()
-//		NumStrNumberSymbols.SetSymbolsStrings()
-//		NumStrNumberSymbols.SetSymbolsSpecs()
+//		NumStrNumberSymbolsSpec.SetSymbolsRunes()
+//		NumStrNumberSymbolsSpec.SetSymbolsStrings()
+//		NumStrNumberSymbolsSpec.SetSymbolsSpecs()
 //
 // ----------------------------------------------------------------
 //
@@ -4543,7 +4543,7 @@ func (nStrNumSym *NumStrNumberSymbols) SetSimpleCurrency(
 //
 //	Be advised that this method will delete and
 //	reconfigure all data values contained in the current
-//	instance of NumStrNumberSymbols.
+//	instance of NumStrNumberSymbolsSpec.
 //
 // ----------------------------------------------------------------
 //
@@ -4591,7 +4591,7 @@ func (nStrNumSym *NumStrNumberSymbols) SetSimpleCurrency(
 //		Number String Format.
 //
 //		When set to 'true', the current instance of
-//		NumStrNumberSymbols will configure Number Symbols
+//		NumStrNumberSymbolsSpec will configure Number Symbols
 //		on the left side of the numeric value. Such
 //		Number Symbols are therefore configured as
 //		leading Number Symbols. This is the positioning
@@ -4605,7 +4605,7 @@ func (nStrNumSym *NumStrNumberSymbols) SetSimpleCurrency(
 //				the currency symbol and the minus sign.
 //
 //		When 'leadingNumSymbols' is set to 'false', the
-//		current instance of NumStrNumberSymbols will
+//		current instance of NumStrNumberSymbolsSpec will
 //		configure Number Symbols on the right side of the
 //		numeric value. Such Number Symbols are therefore
 //		configured as trailing Number Symbols. This is
@@ -4693,7 +4693,7 @@ func (nStrNumSym *NumStrNumberSymbols) SetSimpleCurrency(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (nStrNumSym *NumStrNumberSymbols) SetSimpleSignedNumber(
+func (nStrNumSym *NumStrNumberSymbolsSpec) SetSimpleSignedNumber(
 	leadingNumSymbols bool,
 	errorPrefix interface{}) error {
 
@@ -4712,7 +4712,7 @@ func (nStrNumSym *NumStrNumberSymbols) SetSimpleSignedNumber(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"NumStrNumberSymbols."+
+		"NumStrNumberSymbolsSpec."+
 			"SetSimpleSignedNumber()",
 		"")
 
@@ -4720,7 +4720,7 @@ func (nStrNumSym *NumStrNumberSymbols) SetSimpleSignedNumber(
 		return err
 	}
 
-	return new(numStrNumberSymbolsMechanics).setSimpleNumSymbolsConfig(
+	return new(numStrNumberSymbolsSpecMechanics).setSimpleNumSymbolsConfig(
 		nStrNumSym,
 		"",
 		leadingNumSymbols,
@@ -4731,7 +4731,7 @@ func (nStrNumSym *NumStrNumberSymbols) SetSimpleSignedNumber(
 //	SetSymbolsRunes
 //
 //	Reconfigures the current instance of
-//	NumStrNumberSymbols based on the Positive, Negative
+//	NumStrNumberSymbolsSpec based on the Positive, Negative
 //	and Zero Number	Sign Symbol rune arrays passed as
 //	input parameters.
 //
@@ -4740,7 +4740,7 @@ func (nStrNumSym *NumStrNumberSymbols) SetSimpleSignedNumber(
 // # IMPORTANT
 //
 //	Be advised that the data fields contained in the
-//	current instance of NumStrNumberSymbols will be
+//	current instance of NumStrNumberSymbolsSpec will be
 //	deleted and replaced with the Positive, Negative
 //	and Zero Number	Sign Symbol input parameters
 //	passed as rune arrays.
@@ -5171,7 +5171,7 @@ func (nStrNumSym *NumStrNumberSymbols) SetSimpleSignedNumber(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (nStrNumSym *NumStrNumberSymbols) SetSymbolsRunes(
+func (nStrNumSym *NumStrNumberSymbolsSpec) SetSymbolsRunes(
 	leadingPositiveNumberSymbols []rune,
 	trailingPositiveNumberSymbols []rune,
 	positiveNumFieldSymPosition NumberFieldSymbolPosition,
@@ -5198,7 +5198,7 @@ func (nStrNumSym *NumStrNumberSymbols) SetSymbolsRunes(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"NumStrNumberSymbols."+
+		"NumStrNumberSymbolsSpec."+
 			"SetSymbolsRunes()",
 		"")
 
@@ -5206,7 +5206,7 @@ func (nStrNumSym *NumStrNumberSymbols) SetSymbolsRunes(
 		return err
 	}
 
-	nStrNumSymNanobot := numStrNumberSymbolsNanobot{}
+	nStrNumSymNanobot := numStrNumberSymbolsSpecNanobot{}
 
 	err = nStrNumSymNanobot.setPositiveNumSignRunes(
 		nStrNumSym,
@@ -5245,7 +5245,7 @@ func (nStrNumSym *NumStrNumberSymbols) SetSymbolsRunes(
 //	SetSymbolsSpecs
 //
 //	Reconfigures the current instance of
-//	NumStrNumberSymbols based on the Positive, Negative
+//	NumStrNumberSymbolsSpec based on the Positive, Negative
 //	and Zero Number	Sign Symbol Specification objects
 //	passed as input parameters.
 //
@@ -5254,7 +5254,7 @@ func (nStrNumSym *NumStrNumberSymbols) SetSymbolsRunes(
 // # IMPORTANT
 //
 //	Be advised that the data fields contained in the
-//	current instance of NumStrNumberSymbols will be
+//	current instance of NumStrNumberSymbolsSpec will be
 //	deleted and replaced with the Positive, Negative
 //	and Zero Number	Sign Symbol Specifications passed
 //	as input parameters.
@@ -5268,21 +5268,21 @@ func (nStrNumSym *NumStrNumberSymbols) SetSymbolsRunes(
 //		This Positive Number Sign Symbol Specification
 //		will be copied to the corresponding Positive
 //		Symbol Specification in the new, returned
-//		instance of NumStrNumberSymbols.
+//		instance of NumStrNumberSymbolsSpec.
 //
 //	negativeNumberSign			NumStrNumberSymbolSpec
 //
 //		This Negative Number Sign Symbol Specification
 //		will be copied to the corresponding Negative
 //		Symbol Specification in the new, returned
-//		instance of NumStrNumberSymbols.
+//		instance of NumStrNumberSymbolsSpec.
 //
 //	zeroNumberSign			NumStrNumberSymbolSpec
 //
 //		This Zero Number Sign Symbol Specification
 //		will be copied to the corresponding Zero
 //		Symbol Specification in the new, returned
-//		instance of NumStrNumberSymbols.
+//		instance of NumStrNumberSymbolsSpec.
 //
 //	 errorPrefix                interface{}
 //
@@ -5359,7 +5359,7 @@ func (nStrNumSym *NumStrNumberSymbols) SetSymbolsRunes(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (nStrNumSym *NumStrNumberSymbols) SetSymbolsSpecs(
+func (nStrNumSym *NumStrNumberSymbolsSpec) SetSymbolsSpecs(
 	positiveNumberSign NumStrNumberSymbolSpec,
 	negativeNumberSign NumStrNumberSymbolSpec,
 	zeroNumberSign NumStrNumberSymbolSpec,
@@ -5380,7 +5380,7 @@ func (nStrNumSym *NumStrNumberSymbols) SetSymbolsSpecs(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"NumStrNumberSymbols."+
+		"NumStrNumberSymbolsSpec."+
 			"SetSymbolsSpecs()",
 		"")
 
@@ -5388,7 +5388,7 @@ func (nStrNumSym *NumStrNumberSymbols) SetSymbolsSpecs(
 		return err
 	}
 
-	return new(numStrNumberSymbolsMechanics).
+	return new(numStrNumberSymbolsSpecMechanics).
 		setNumSymbolSpecs(
 			nStrNumSym,
 			positiveNumberSign,
@@ -5402,7 +5402,7 @@ func (nStrNumSym *NumStrNumberSymbols) SetSymbolsSpecs(
 //	SetSymbolsStrings
 //
 //	Reconfigures the current instance of
-//	NumStrNumberSymbols based on the Positive, Negative
+//	NumStrNumberSymbolsSpec based on the Positive, Negative
 //	and Zero Number	Sign Symbol strings passed as
 //	input parameters.
 //
@@ -5411,7 +5411,7 @@ func (nStrNumSym *NumStrNumberSymbols) SetSymbolsSpecs(
 // # IMPORTANT
 //
 //	Be advised that the data fields contained in the
-//	current instance of NumStrNumberSymbols will be
+//	current instance of NumStrNumberSymbolsSpec will be
 //	deleted and replaced with the Positive, Negative
 //	and Zero Number	Sign Symbol input parameters
 //	passed as strings.
@@ -5829,11 +5829,11 @@ func (nStrNumSym *NumStrNumberSymbols) SetSymbolsSpecs(
 //
 // # Return Values
 //
-//	NumStrNumberSymbols
+//	NumStrNumberSymbolsSpec
 //
 //		If this method completes successfully, this
 //		parameter will return a new, fully populated
-//		instance of NumStrNumberSymbols configured
+//		instance of NumStrNumberSymbolsSpec configured
 //		with the Positive, Negative and Zero Number
 //		Sign Symbol Specification objects passed as
 //		input parameters.
@@ -5850,7 +5850,7 @@ func (nStrNumSym *NumStrNumberSymbols) SetSymbolsSpecs(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (nStrNumSym *NumStrNumberSymbols) SetSymbolsStrings(
+func (nStrNumSym *NumStrNumberSymbolsSpec) SetSymbolsStrings(
 	leadingPositiveNumberSymbols string,
 	trailingPositiveNumberSymbols string,
 	positiveNumFieldSymPosition NumberFieldSymbolPosition,
@@ -5874,12 +5874,12 @@ func (nStrNumSym *NumStrNumberSymbols) SetSymbolsStrings(
 
 	var err error
 
-	var newNumberSymbols NumStrNumberSymbols
+	var newNumberSymbols NumStrNumberSymbolsSpec
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"NumStrNumberSymbols."+
+		"NumStrNumberSymbolsSpec."+
 			"SetSymbolsStrings()",
 		"")
 
@@ -5887,7 +5887,7 @@ func (nStrNumSym *NumStrNumberSymbols) SetSymbolsStrings(
 		return err
 	}
 
-	nStrNumSymNanobot := numStrNumberSymbolsNanobot{}
+	nStrNumSymNanobot := numStrNumberSymbolsSpecNanobot{}
 
 	err = nStrNumSymNanobot.setPositiveNumSignRunes(
 		&newNumberSymbols,
@@ -5925,7 +5925,7 @@ func (nStrNumSym *NumStrNumberSymbols) SetSymbolsStrings(
 //	SetZeroSymbolsRunes
 //
 //	Deletes and resets the Zero Number Symbols data
-//	fields for the current instance of NumStrNumberSymbols.
+//	fields for the current instance of NumStrNumberSymbolsSpec.
 //
 // ----------------------------------------------------------------
 //
@@ -5937,9 +5937,9 @@ func (nStrNumSym *NumStrNumberSymbols) SetSymbolsStrings(
 //	input parameters passed as rune arrays.
 //
 //	The Zero Number Sign Symbol member variable for
-//	the current instance of NumStrNumberSymbols is:
+//	the current instance of NumStrNumberSymbolsSpec is:
 //
-//		NumStrNumberSymbols.zeroNumberSign
+//		NumStrNumberSymbolsSpec.zeroNumberSign
 //
 // ----------------------------------------------------------------
 //
@@ -6128,7 +6128,7 @@ func (nStrNumSym *NumStrNumberSymbols) SetSymbolsStrings(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (nStrNumSym *NumStrNumberSymbols) SetZeroSymbolsRunes(
+func (nStrNumSym *NumStrNumberSymbolsSpec) SetZeroSymbolsRunes(
 	leadingZeroNumberSymbols []rune,
 	trailingZeroNumberSymbols []rune,
 	zeroNumFieldSymPosition NumberFieldSymbolPosition,
@@ -6149,7 +6149,7 @@ func (nStrNumSym *NumStrNumberSymbols) SetZeroSymbolsRunes(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"NumStrNumberSymbols."+
+		"NumStrNumberSymbolsSpec."+
 			"SetZeroSymbolsRunes()",
 		"")
 
@@ -6157,7 +6157,7 @@ func (nStrNumSym *NumStrNumberSymbols) SetZeroSymbolsRunes(
 		return err
 	}
 
-	return new(numStrNumberSymbolsNanobot).setZeroNumSignRunes(
+	return new(numStrNumberSymbolsSpecNanobot).setZeroNumSignRunes(
 		nStrNumSym,
 		leadingZeroNumberSymbols,
 		trailingZeroNumberSymbols,
@@ -6169,7 +6169,7 @@ func (nStrNumSym *NumStrNumberSymbols) SetZeroSymbolsRunes(
 //	SetZeroNumSignSpec
 //
 //	Reconfigures the current instance of
-//	NumStrNumberSymbols based on the Zero Number
+//	NumStrNumberSymbolsSpec based on the Zero Number
 //	Sign Symbol Specification object passed as an input
 //	parameter.
 //
@@ -6180,7 +6180,7 @@ func (nStrNumSym *NumStrNumberSymbols) SetZeroSymbolsRunes(
 //	Be advised that this method will delete and reset the
 //	Zero Number Sign Symbol member variable data
 //	fields contained in the current instance of
-//	NumStrNumberSymbols.
+//	NumStrNumberSymbolsSpec.
 //
 // ----------------------------------------------------------------
 //
@@ -6191,7 +6191,7 @@ func (nStrNumSym *NumStrNumberSymbols) SetZeroSymbolsRunes(
 //		This Zero Number Sign Symbol Specification
 //		will be copied to the corresponding Zero
 //		Symbol Specification in the current instance of
-//		NumStrNumberSymbols.
+//		NumStrNumberSymbolsSpec.
 //
 //	 errorPrefix                interface{}
 //
@@ -6268,7 +6268,7 @@ func (nStrNumSym *NumStrNumberSymbols) SetZeroSymbolsRunes(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (nStrNumSym *NumStrNumberSymbols) SetZeroNumSignSpec(
+func (nStrNumSym *NumStrNumberSymbolsSpec) SetZeroNumSignSpec(
 	positiveNumberSign NumStrNumberSymbolSpec,
 	errorPrefix interface{}) error {
 
@@ -6287,7 +6287,7 @@ func (nStrNumSym *NumStrNumberSymbols) SetZeroNumSignSpec(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"NumStrNumberSymbols."+
+		"NumStrNumberSymbolsSpec."+
 			"SetZeroNumSignSpec()",
 		"")
 
@@ -6295,7 +6295,7 @@ func (nStrNumSym *NumStrNumberSymbols) SetZeroNumSignSpec(
 		return err
 	}
 
-	return new(numStrNumberSymbolsNanobot).
+	return new(numStrNumberSymbolsSpecNanobot).
 		setZeroNumSignSpec(
 			nStrNumSym,
 			positiveNumberSign,
@@ -6307,7 +6307,7 @@ func (nStrNumSym *NumStrNumberSymbols) SetZeroNumSignSpec(
 //	SetZeroSymbolsStrings
 //
 //	Deletes and resets the Zero Number Symbols data
-//	fields for the current instance of NumStrNumberSymbols.
+//	fields for the current instance of NumStrNumberSymbolsSpec.
 //
 // ----------------------------------------------------------------
 //
@@ -6319,9 +6319,9 @@ func (nStrNumSym *NumStrNumberSymbols) SetZeroNumSignSpec(
 //	input parameters passed as strings.
 //
 //	The Zero Number Sign Symbol member variable for
-//	the current instance of NumStrNumberSymbols is:
+//	the current instance of NumStrNumberSymbolsSpec is:
 //
-//		NumStrNumberSymbols.zeroNumberSign
+//		NumStrNumberSymbolsSpec.zeroNumberSign
 //
 // ----------------------------------------------------------------
 //
@@ -6510,7 +6510,7 @@ func (nStrNumSym *NumStrNumberSymbols) SetZeroNumSignSpec(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (nStrNumSym *NumStrNumberSymbols) SetZeroSymbolsStrings(
+func (nStrNumSym *NumStrNumberSymbolsSpec) SetZeroSymbolsStrings(
 	leadingZeroNumberSymbols string,
 	trailingZeroNumberSymbols string,
 	zeroNumFieldSymPosition NumberFieldSymbolPosition,
@@ -6531,7 +6531,7 @@ func (nStrNumSym *NumStrNumberSymbols) SetZeroSymbolsStrings(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"NumStrNumberSymbols."+
+		"NumStrNumberSymbolsSpec."+
 			"SetZeroSymbolsStrings()",
 		"")
 
@@ -6539,7 +6539,7 @@ func (nStrNumSym *NumStrNumberSymbols) SetZeroSymbolsStrings(
 		return err
 	}
 
-	return new(numStrNumberSymbolsNanobot).setZeroNumSignRunes(
+	return new(numStrNumberSymbolsSpecNanobot).setZeroNumSignRunes(
 		nStrNumSym,
 		[]rune(leadingZeroNumberSymbols),
 		[]rune(trailingZeroNumberSymbols),
@@ -6548,10 +6548,10 @@ func (nStrNumSym *NumStrNumberSymbols) SetZeroSymbolsStrings(
 			"nuStrNumSym<-ZeroNumSyms"))
 }
 
-// numStrNumberSymbolsMechanics
+// numStrNumberSymbolsSpecMechanics
 //
-// Provides helper methods for NumStrNumberSymbols.
-type numStrNumberSymbolsMechanics struct {
+// Provides helper methods for NumStrNumberSymbolsSpec.
+type numStrNumberSymbolsSpecMechanics struct {
 	lock *sync.Mutex
 }
 
@@ -6561,7 +6561,7 @@ type numStrNumberSymbolsMechanics struct {
 //	from input parameter 'sourceNumSymbols' to
 //	input parameter 'destinationNumSymbols'.
 //	Both instances are of type
-//	NumStrNumberSymbols.
+//	NumStrNumberSymbolsSpec.
 //
 // ----------------------------------------------------------------
 //
@@ -6576,9 +6576,9 @@ type numStrNumberSymbolsMechanics struct {
 //
 //	# Input Parameters
 //
-//	destinationNumSymbols			*NumStrNumberSymbols
+//	destinationNumSymbols			*NumStrNumberSymbolsSpec
 //
-//		A pointer to an instance of NumStrNumberSymbols.
+//		A pointer to an instance of NumStrNumberSymbolsSpec.
 //		All the member variable data fields in this object will be
 //		replaced by data values copied from input parameter
 //		'sourceNumSymbolSpec'.
@@ -6586,9 +6586,9 @@ type numStrNumberSymbolsMechanics struct {
 //		'destinationNumSymbolSpec' is the destination for this
 //		copy operation.
 //
-//	sourceNumSymbols				*NumStrNumberSymbols
+//	sourceNumSymbols				*NumStrNumberSymbolsSpec
 //
-//		A pointer to another instance of NumStrNumberSymbols.
+//		A pointer to another instance of NumStrNumberSymbolsSpec.
 //		All the member variable data values from this object
 //		will be copied to corresponding member variables in
 //		'destinationNumSymbols'.
@@ -6632,18 +6632,18 @@ type numStrNumberSymbolsMechanics struct {
 //		for input parameter 'errPrefDto' (error prefix)
 //		will be prefixed or attached at the beginning of
 //		the error message.
-func (nStrNumSymMech *numStrNumberSymbolsMechanics) copyNumSymbols(
-	destinationNumSymbols *NumStrNumberSymbols,
-	sourceNumSymbols *NumStrNumberSymbols,
+func (nStrNumSymbolsSpecMech *numStrNumberSymbolsSpecMechanics) copyNumSymbols(
+	destinationNumSymbols *NumStrNumberSymbolsSpec,
+	sourceNumSymbols *NumStrNumberSymbolsSpec,
 	errPrefDto *ePref.ErrPrefixDto) error {
 
-	if nStrNumSymMech.lock == nil {
-		nStrNumSymMech.lock = new(sync.Mutex)
+	if nStrNumSymbolsSpecMech.lock == nil {
+		nStrNumSymbolsSpecMech.lock = new(sync.Mutex)
 	}
 
-	nStrNumSymMech.lock.Lock()
+	nStrNumSymbolsSpecMech.lock.Lock()
 
-	defer nStrNumSymMech.lock.Unlock()
+	defer nStrNumSymbolsSpecMech.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -6652,7 +6652,7 @@ func (nStrNumSymMech *numStrNumberSymbolsMechanics) copyNumSymbols(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"numStrNumberSymbolsMechanics."+
+		"numStrNumberSymbolsSpecMechanics."+
 			"copyNumSymbols()",
 		"")
 
@@ -6680,7 +6680,7 @@ func (nStrNumSymMech *numStrNumberSymbolsMechanics) copyNumSymbols(
 		return err
 	}
 
-	new(numStrNumberSymbolsNanobot).empty(destinationNumSymbols)
+	new(numStrNumberSymbolsSpecNanobot).empty(destinationNumSymbols)
 
 	err = destinationNumSymbols.positiveNumberSign.CopyIn(
 		&sourceNumSymbols.positiveNumberSign,
@@ -6715,7 +6715,7 @@ func (nStrNumSymMech *numStrNumberSymbolsMechanics) copyNumSymbols(
 //
 //	Receives three NumStrNumberSymbolSpec objects and
 //	proceeds to reset the corresponding member variable
-//	data values for the NumStrNumberSymbols input
+//	data values for the NumStrNumberSymbolsSpec input
 //	paramter 'nStrNumSymbols'.
 //
 // ----------------------------------------------------------------
@@ -6730,9 +6730,9 @@ func (nStrNumSymMech *numStrNumberSymbolsMechanics) copyNumSymbols(
 //
 // # Input Parameters
 //
-//	nStrNumSymbols				*NumStrNumberSymbols
+//	nStrNumSymbols				*NumStrNumberSymbolsSpec
 //
-//		A pointer to an instance of NumStrNumberSymbols.
+//		A pointer to an instance of NumStrNumberSymbolsSpec.
 //		The Positive Number Sign, Negative Number Sign and
 //		Zero Number Sign Symbol Specifications for this
 //		instance will be deleted and reset to the values
@@ -6791,20 +6791,20 @@ func (nStrNumSymMech *numStrNumberSymbolsMechanics) copyNumSymbols(
 //		for input parameter 'errPrefDto' (error prefix)
 //		will be prefixed or attached at the beginning of
 //		the error message.
-func (nStrNumSymMech *numStrNumberSymbolsMechanics) setNumSymbolSpecs(
-	nStrNumSymbols *NumStrNumberSymbols,
+func (nStrNumSymbolsSpecMech *numStrNumberSymbolsSpecMechanics) setNumSymbolSpecs(
+	nStrNumSymbols *NumStrNumberSymbolsSpec,
 	positiveNumberSign NumStrNumberSymbolSpec,
 	negativeNumberSign NumStrNumberSymbolSpec,
 	zeroNumberSign NumStrNumberSymbolSpec,
 	errPrefDto *ePref.ErrPrefixDto) error {
 
-	if nStrNumSymMech.lock == nil {
-		nStrNumSymMech.lock = new(sync.Mutex)
+	if nStrNumSymbolsSpecMech.lock == nil {
+		nStrNumSymbolsSpecMech.lock = new(sync.Mutex)
 	}
 
-	nStrNumSymMech.lock.Lock()
+	nStrNumSymbolsSpecMech.lock.Lock()
 
-	defer nStrNumSymMech.lock.Unlock()
+	defer nStrNumSymbolsSpecMech.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -6813,7 +6813,7 @@ func (nStrNumSymMech *numStrNumberSymbolsMechanics) setNumSymbolSpecs(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"numStrNumberSymbolsMechanics."+
+		"numStrNumberSymbolsSpecMechanics."+
 			"setNumSymbolSpecs()",
 		"")
 
@@ -6863,23 +6863,23 @@ func (nStrNumSymMech *numStrNumberSymbolsMechanics) setNumSymbolSpecs(
 //	setSimpleNumSymbolsConfig
 //
 //	Receives a pointer to an instance of
-//	NumStrNumberSymbols and proceeds to reconfigure that
+//	NumStrNumberSymbolsSpec and proceeds to reconfigure that
 //	instance for currency number symbols or signed number
 //	symbols.
 //
-//	Type NumStrNumberSymbols is used to configure
+//	Type NumStrNumberSymbolsSpec is used to configure
 //	Number Symbols required in converting numeric
 //	values to formatted Number Strings.
 //
-//	NumStrNumberSymbols contains three instances of
+//	NumStrNumberSymbolsSpec contains three instances of
 //	type NumStrNumberSymbolSpec defining the Number
 //	Symbols to be used with positive numeric values,
 //	negative numeric values and zero numeric values.
 //
 //	This method provides a simplified means of
-//	configuring type NumStrNumberSymbols using default
+//	configuring type NumStrNumberSymbolsSpec using default
 //	values. The generated returned instance of
-//	NumStrNumberSymbols will be configured for either
+//	NumStrNumberSymbolsSpec will be configured for either
 //	Currency Number Symbols or Signed Number Symbols,
 //	depending on the input parameters.
 //
@@ -6979,9 +6979,9 @@ func (nStrNumSymMech *numStrNumberSymbolsMechanics) setNumSymbolSpecs(
 //
 //	# Input Parameters
 //
-//	nStrNumSymbols				*NumStrNumberSymbols
+//	nStrNumSymbols				*NumStrNumberSymbolsSpec
 //
-//		A pointer to an instance of NumStrNumberSymbols.
+//		A pointer to an instance of NumStrNumberSymbolsSpec.
 //		All Number Symbol data values contained in this
 //		object will be deleted and reconfigured as either
 //		new currency symbol specifications or new signed
@@ -6991,7 +6991,7 @@ func (nStrNumSymMech *numStrNumberSymbolsMechanics) setNumSymbolSpecs(
 //
 //		The symbol or symbols used to format currency.
 //		This currency formatting will be used to
-//		reconfigure the NumStrNumberSymbols instance
+//		reconfigure the NumStrNumberSymbolsSpec instance
 //		passed by input parameter, 'nStrNumSymbols'.
 //
 //		If this string is empty, 'nStrNumSymbols' will be
@@ -7018,7 +7018,7 @@ func (nStrNumSymMech *numStrNumberSymbolsMechanics) setNumSymbolSpecs(
 //				the currency symbol and the minus sign.
 //
 //		When set to 'false', the returned instance of
-//		NumStrNumberSymbols will configure Number Symbols
+//		NumStrNumberSymbolsSpec will configure Number Symbols
 //		on the right side of the numeric value. Such
 //		Number Symbols are therefore configured as
 //		trailing Number Symbols. This is the positioning
@@ -7062,19 +7062,19 @@ func (nStrNumSymMech *numStrNumberSymbolsMechanics) setNumSymbolSpecs(
 //		for input parameter 'errPrefDto' (error prefix)
 //		will be prefixed or attached at the beginning of
 //		the error message.
-func (nStrNumSymMech *numStrNumberSymbolsMechanics) setSimpleNumSymbolsConfig(
-	nStrNumSymbols *NumStrNumberSymbols,
+func (nStrNumSymbolsSpecMech *numStrNumberSymbolsSpecMechanics) setSimpleNumSymbolsConfig(
+	nStrNumSymbols *NumStrNumberSymbolsSpec,
 	currencySymbols string,
 	leadingNumSymbols bool,
 	errPrefDto *ePref.ErrPrefixDto) error {
 
-	if nStrNumSymMech.lock == nil {
-		nStrNumSymMech.lock = new(sync.Mutex)
+	if nStrNumSymbolsSpecMech.lock == nil {
+		nStrNumSymbolsSpecMech.lock = new(sync.Mutex)
 	}
 
-	nStrNumSymMech.lock.Lock()
+	nStrNumSymbolsSpecMech.lock.Lock()
 
-	defer nStrNumSymMech.lock.Unlock()
+	defer nStrNumSymbolsSpecMech.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -7083,7 +7083,7 @@ func (nStrNumSymMech *numStrNumberSymbolsMechanics) setSimpleNumSymbolsConfig(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"numStrNumberSymbolsMechanics."+
+		"numStrNumberSymbolsSpecMechanics."+
 			"setSimpleNumSymbolsConfig()",
 		"")
 
@@ -7101,7 +7101,7 @@ func (nStrNumSymMech *numStrNumberSymbolsMechanics) setSimpleNumSymbolsConfig(
 		return err
 	}
 
-	new(numStrNumberSymbolsNanobot).empty(
+	new(numStrNumberSymbolsSpecNanobot).empty(
 		nStrNumSymbols)
 
 	var numSymStr string
@@ -7211,10 +7211,10 @@ func (nStrNumSymMech *numStrNumberSymbolsMechanics) setSimpleNumSymbolsConfig(
 	return err
 }
 
-// numStrNumberSymbolsNanobot
+// numStrNumberSymbolsSpecNanobot
 //
-// Provides helper methods for NumStrNumberSymbols.
-type numStrNumberSymbolsNanobot struct {
+// Provides helper methods for NumStrNumberSymbolsSpec.
+type numStrNumberSymbolsSpecNanobot struct {
 	lock *sync.Mutex
 }
 
@@ -7249,16 +7249,16 @@ type numStrNumberSymbolsNanobot struct {
 // # Return Values
 //
 //	NONE
-func (nStrNumSymNanobot *numStrNumberSymbolsNanobot) empty(
-	nStrNumSymbols *NumStrNumberSymbols) {
+func (nStrNumSymbolsSpecNanobot *numStrNumberSymbolsSpecNanobot) empty(
+	nStrNumSymbols *NumStrNumberSymbolsSpec) {
 
-	if nStrNumSymNanobot.lock == nil {
-		nStrNumSymNanobot.lock = new(sync.Mutex)
+	if nStrNumSymbolsSpecNanobot.lock == nil {
+		nStrNumSymbolsSpecNanobot.lock = new(sync.Mutex)
 	}
 
-	nStrNumSymNanobot.lock.Lock()
+	nStrNumSymbolsSpecNanobot.lock.Lock()
 
-	defer nStrNumSymNanobot.lock.Unlock()
+	defer nStrNumSymbolsSpecNanobot.lock.Unlock()
 
 	if nStrNumSymbols == nil {
 
@@ -7275,7 +7275,7 @@ func (nStrNumSymNanobot *numStrNumberSymbolsNanobot) empty(
 //	equal
 //
 //	Receives a pointer to two instances of
-//	NumStrNumberSymbols and proceeds to compare their
+//	NumStrNumberSymbolsSpec and proceeds to compare their
 //	member variables in order to determine if they are
 //	equivalent.
 //
@@ -7288,17 +7288,17 @@ func (nStrNumSymNanobot *numStrNumberSymbolsNanobot) empty(
 //
 // # Input Parameters
 //
-//	nNumSymbols1			*NumStrNumberSymbols
+//	nNumSymbols1			*NumStrNumberSymbolsSpec
 //
-//		An instance of NumStrNumberSymbols. Internal
+//		An instance of NumStrNumberSymbolsSpec. Internal
 //		member variables from 'nNumSymbols1' will be
 //		compared to those of 'nNumSymbols2' to
 //		determine if both instances are equivalent.
 //
 //
-//	nNumSymbols2			*NumStrNumberSymbols
+//	nNumSymbols2			*NumStrNumberSymbolsSpec
 //
-//		An instance of NumStrNumberSymbols. Internal
+//		An instance of NumStrNumberSymbolsSpec. Internal
 //		member variables from 'nNumSymbols1' will
 //		be compared to those of 'nNumSymbols2' to
 //		determine if both instances are equivalent.
@@ -7317,17 +7317,17 @@ func (nStrNumSymNanobot *numStrNumberSymbolsNanobot) empty(
 //		If the two instances are NOT equal, this method
 //		will return a boolean value of 'false' to the
 //		calling function.
-func (nStrNumSymNanobot *numStrNumberSymbolsNanobot) equal(
-	nNumSymbols1 *NumStrNumberSymbols,
-	nNumSymbols2 *NumStrNumberSymbols) bool {
+func (nStrNumSymbolsSpecNanobot *numStrNumberSymbolsSpecNanobot) equal(
+	nNumSymbols1 *NumStrNumberSymbolsSpec,
+	nNumSymbols2 *NumStrNumberSymbolsSpec) bool {
 
-	if nStrNumSymNanobot.lock == nil {
-		nStrNumSymNanobot.lock = new(sync.Mutex)
+	if nStrNumSymbolsSpecNanobot.lock == nil {
+		nStrNumSymbolsSpecNanobot.lock = new(sync.Mutex)
 	}
 
-	nStrNumSymNanobot.lock.Lock()
+	nStrNumSymbolsSpecNanobot.lock.Lock()
 
-	defer nStrNumSymNanobot.lock.Unlock()
+	defer nStrNumSymbolsSpecNanobot.lock.Unlock()
 
 	if nNumSymbols1 == nil ||
 		nNumSymbols2 == nil {
@@ -7375,9 +7375,9 @@ func (nStrNumSymNanobot *numStrNumberSymbolsNanobot) equal(
 //
 // # Input Parameters
 //
-//	nStrNumSymbols					*NumStrNumberSymbols
+//	nStrNumSymbols					*NumStrNumberSymbolsSpec
 //
-//		A pointer to an instance of NumStrNumberSymbols.
+//		A pointer to an instance of NumStrNumberSymbolsSpec.
 //		The Negative Number Sign Symbol Specifications
 //		for this instance will be deleted and reset to
 //		the values provided by the following input
@@ -7537,20 +7537,20 @@ func (nStrNumSymNanobot *numStrNumberSymbolsNanobot) equal(
 //		for input parameter 'errPrefDto' (error prefix)
 //		will be prefixed or attached at the beginning of
 //		the error message.
-func (nStrNumSymNanobot *numStrNumberSymbolsNanobot) setNegativeNumSignRunes(
-	nStrNumSymbols *NumStrNumberSymbols,
+func (nStrNumSymbolsSpecNanobot *numStrNumberSymbolsSpecNanobot) setNegativeNumSignRunes(
+	nStrNumSymbols *NumStrNumberSymbolsSpec,
 	leadingNegativeNumberSymbols []rune,
 	trailingNegativeNumberSymbols []rune,
 	negativeNumFieldSymPosition NumberFieldSymbolPosition,
 	errPrefDto *ePref.ErrPrefixDto) error {
 
-	if nStrNumSymNanobot.lock == nil {
-		nStrNumSymNanobot.lock = new(sync.Mutex)
+	if nStrNumSymbolsSpecNanobot.lock == nil {
+		nStrNumSymbolsSpecNanobot.lock = new(sync.Mutex)
 	}
 
-	nStrNumSymNanobot.lock.Lock()
+	nStrNumSymbolsSpecNanobot.lock.Lock()
 
-	defer nStrNumSymNanobot.lock.Unlock()
+	defer nStrNumSymbolsSpecNanobot.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -7559,7 +7559,7 @@ func (nStrNumSymNanobot *numStrNumberSymbolsNanobot) setNegativeNumSignRunes(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"numStrNumberSymbolsNanobot."+
+		"numStrNumberSymbolsSpecNanobot."+
 			"setNegativeNumSignRunes()",
 		"")
 
@@ -7596,7 +7596,7 @@ func (nStrNumSymNanobot *numStrNumberSymbolsNanobot) setNegativeNumSignRunes(
 //
 //	This method then proceeds to reset the
 //	corresponding Negative Number Sign Symbol member
-//	variable data value for the NumStrNumberSymbols
+//	variable data value for the NumStrNumberSymbolsSpec
 //	input paramter 'nStrNumSymbols'.
 //
 // ----------------------------------------------------------------
@@ -7611,9 +7611,9 @@ func (nStrNumSymNanobot *numStrNumberSymbolsNanobot) setNegativeNumSignRunes(
 //
 // # Input Parameters
 //
-//	nStrNumSymbols				*NumStrNumberSymbols
+//	nStrNumSymbols				*NumStrNumberSymbolsSpec
 //
-//		A pointer to an instance of NumStrNumberSymbols.
+//		A pointer to an instance of NumStrNumberSymbolsSpec.
 //		The Negative Number Sign Symbol Specifications
 //		for this instance will be deleted and reset to
 //		the values provided by input parameter
@@ -7657,18 +7657,18 @@ func (nStrNumSymNanobot *numStrNumberSymbolsNanobot) setNegativeNumSignRunes(
 //		for input parameter 'errPrefDto' (error prefix)
 //		will be prefixed or attached at the beginning of
 //		the error message.
-func (nStrNumSymNanobot *numStrNumberSymbolsNanobot) setNegativeNumSignSpec(
-	nStrNumSymbols *NumStrNumberSymbols,
+func (nStrNumSymbolsSpecNanobot *numStrNumberSymbolsSpecNanobot) setNegativeNumSignSpec(
+	nStrNumSymbols *NumStrNumberSymbolsSpec,
 	negativeNumberSign NumStrNumberSymbolSpec,
 	errPrefDto *ePref.ErrPrefixDto) error {
 
-	if nStrNumSymNanobot.lock == nil {
-		nStrNumSymNanobot.lock = new(sync.Mutex)
+	if nStrNumSymbolsSpecNanobot.lock == nil {
+		nStrNumSymbolsSpecNanobot.lock = new(sync.Mutex)
 	}
 
-	nStrNumSymNanobot.lock.Lock()
+	nStrNumSymbolsSpecNanobot.lock.Lock()
 
-	defer nStrNumSymNanobot.lock.Unlock()
+	defer nStrNumSymbolsSpecNanobot.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -7677,7 +7677,7 @@ func (nStrNumSymNanobot *numStrNumberSymbolsNanobot) setNegativeNumSignSpec(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"numStrNumberSymbolsNanobot."+
+		"numStrNumberSymbolsSpecNanobot."+
 			"setNegativeNumSignSpec()",
 		"")
 
@@ -7723,9 +7723,9 @@ func (nStrNumSymNanobot *numStrNumberSymbolsNanobot) setNegativeNumSignSpec(
 //
 // # Input Parameters
 //
-//	nStrNumSymbols					*NumStrNumberSymbols
+//	nStrNumSymbols					*NumStrNumberSymbolsSpec
 //
-//		A pointer to an instance of NumStrNumberSymbols.
+//		A pointer to an instance of NumStrNumberSymbolsSpec.
 //		The Positive Number Sign Symbol Specifications
 //		for this instance will be deleted and reset to
 //		the values provided by the following input
@@ -7897,20 +7897,20 @@ func (nStrNumSymNanobot *numStrNumberSymbolsNanobot) setNegativeNumSignSpec(
 //		for input parameter 'errPrefDto' (error prefix)
 //		will be prefixed or attached at the beginning of
 //		the error message.
-func (nStrNumSymNanobot *numStrNumberSymbolsNanobot) setPositiveNumSignRunes(
-	nStrNumSymbols *NumStrNumberSymbols,
+func (nStrNumSymbolsSpecNanobot *numStrNumberSymbolsSpecNanobot) setPositiveNumSignRunes(
+	nStrNumSymbols *NumStrNumberSymbolsSpec,
 	leadingPositiveNumberSymbols []rune,
 	trailingPositiveNumberSymbols []rune,
 	positiveNumFieldSymPosition NumberFieldSymbolPosition,
 	errPrefDto *ePref.ErrPrefixDto) error {
 
-	if nStrNumSymNanobot.lock == nil {
-		nStrNumSymNanobot.lock = new(sync.Mutex)
+	if nStrNumSymbolsSpecNanobot.lock == nil {
+		nStrNumSymbolsSpecNanobot.lock = new(sync.Mutex)
 	}
 
-	nStrNumSymNanobot.lock.Lock()
+	nStrNumSymbolsSpecNanobot.lock.Lock()
 
-	defer nStrNumSymNanobot.lock.Unlock()
+	defer nStrNumSymbolsSpecNanobot.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -7919,7 +7919,7 @@ func (nStrNumSymNanobot *numStrNumberSymbolsNanobot) setPositiveNumSignRunes(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"numStrNumberSymbolsNanobot."+
+		"numStrNumberSymbolsSpecNanobot."+
 			"setPositiveNumSignRunes()",
 		"")
 
@@ -7956,7 +7956,7 @@ func (nStrNumSymNanobot *numStrNumberSymbolsNanobot) setPositiveNumSignRunes(
 //
 //	This method then proceeds to reset the
 //	corresponding Positive Number Sign Symbol member
-//	variable data value for the NumStrNumberSymbols
+//	variable data value for the NumStrNumberSymbolsSpec
 //	input paramter 'nStrNumSymbols'.
 //
 // ----------------------------------------------------------------
@@ -7971,9 +7971,9 @@ func (nStrNumSymNanobot *numStrNumberSymbolsNanobot) setPositiveNumSignRunes(
 //
 // # Input Parameters
 //
-//	nStrNumSymbols				*NumStrNumberSymbols
+//	nStrNumSymbols				*NumStrNumberSymbolsSpec
 //
-//		A pointer to an instance of NumStrNumberSymbols.
+//		A pointer to an instance of NumStrNumberSymbolsSpec.
 //		The Positive Number Sign Symbol Specification
 //		for this instance will be deleted and reset to
 //		the values provided by input parameter
@@ -8017,18 +8017,18 @@ func (nStrNumSymNanobot *numStrNumberSymbolsNanobot) setPositiveNumSignRunes(
 //		for input parameter 'errPrefDto' (error prefix)
 //		will be prefixed or attached at the beginning of
 //		the error message.
-func (nStrNumSymNanobot *numStrNumberSymbolsNanobot) setPositiveNumSignSpec(
-	nStrNumSymbols *NumStrNumberSymbols,
+func (nStrNumSymbolsSpecNanobot *numStrNumberSymbolsSpecNanobot) setPositiveNumSignSpec(
+	nStrNumSymbols *NumStrNumberSymbolsSpec,
 	positiveNumberSign NumStrNumberSymbolSpec,
 	errPrefDto *ePref.ErrPrefixDto) error {
 
-	if nStrNumSymNanobot.lock == nil {
-		nStrNumSymNanobot.lock = new(sync.Mutex)
+	if nStrNumSymbolsSpecNanobot.lock == nil {
+		nStrNumSymbolsSpecNanobot.lock = new(sync.Mutex)
 	}
 
-	nStrNumSymNanobot.lock.Lock()
+	nStrNumSymbolsSpecNanobot.lock.Lock()
 
-	defer nStrNumSymNanobot.lock.Unlock()
+	defer nStrNumSymbolsSpecNanobot.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -8037,7 +8037,7 @@ func (nStrNumSymNanobot *numStrNumberSymbolsNanobot) setPositiveNumSignSpec(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"numStrNumberSymbolsNanobot."+
+		"numStrNumberSymbolsSpecNanobot."+
 			"setPositiveNumSignSpec()",
 		"")
 
@@ -8083,9 +8083,9 @@ func (nStrNumSymNanobot *numStrNumberSymbolsNanobot) setPositiveNumSignSpec(
 //
 // # Input Parameters
 //
-//	nStrNumSymbols					*NumStrNumberSymbols
+//	nStrNumSymbols					*NumStrNumberSymbolsSpec
 //
-//		A pointer to an instance of NumStrNumberSymbols.
+//		A pointer to an instance of NumStrNumberSymbolsSpec.
 //		The Zero Number Sign Symbol Specifications
 //		for this instance will be deleted and reset to
 //		the values provided by the following input
@@ -8249,20 +8249,20 @@ func (nStrNumSymNanobot *numStrNumberSymbolsNanobot) setPositiveNumSignSpec(
 //		for input parameter 'errPrefDto' (error prefix)
 //		will be prefixed or attached at the beginning of
 //		the error message.
-func (nStrNumSymNanobot *numStrNumberSymbolsNanobot) setZeroNumSignRunes(
-	nStrNumSymbols *NumStrNumberSymbols,
+func (nStrNumSymbolsSpecNanobot *numStrNumberSymbolsSpecNanobot) setZeroNumSignRunes(
+	nStrNumSymbols *NumStrNumberSymbolsSpec,
 	leadingZeroNumberSymbols []rune,
 	trailingZeroNumberSymbols []rune,
 	zeroNumFieldSymPosition NumberFieldSymbolPosition,
 	errPrefDto *ePref.ErrPrefixDto) error {
 
-	if nStrNumSymNanobot.lock == nil {
-		nStrNumSymNanobot.lock = new(sync.Mutex)
+	if nStrNumSymbolsSpecNanobot.lock == nil {
+		nStrNumSymbolsSpecNanobot.lock = new(sync.Mutex)
 	}
 
-	nStrNumSymNanobot.lock.Lock()
+	nStrNumSymbolsSpecNanobot.lock.Lock()
 
-	defer nStrNumSymNanobot.lock.Unlock()
+	defer nStrNumSymbolsSpecNanobot.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -8271,7 +8271,7 @@ func (nStrNumSymNanobot *numStrNumberSymbolsNanobot) setZeroNumSignRunes(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"numStrNumberSymbolsNanobot."+
+		"numStrNumberSymbolsSpecNanobot."+
 			"setZeroNumSignRunes()",
 		"")
 
@@ -8308,7 +8308,7 @@ func (nStrNumSymNanobot *numStrNumberSymbolsNanobot) setZeroNumSignRunes(
 //
 //	This method then proceeds to reset the
 //	corresponding Zero Number Sign Symbol member
-//	variable data value for the NumStrNumberSymbols
+//	variable data value for the NumStrNumberSymbolsSpec
 //	input paramter 'nStrNumSymbols'.
 //
 // ----------------------------------------------------------------
@@ -8323,9 +8323,9 @@ func (nStrNumSymNanobot *numStrNumberSymbolsNanobot) setZeroNumSignRunes(
 //
 // # Input Parameters
 //
-//	nStrNumSymbols				*NumStrNumberSymbols
+//	nStrNumSymbols				*NumStrNumberSymbolsSpec
 //
-//		A pointer to an instance of NumStrNumberSymbols.
+//		A pointer to an instance of NumStrNumberSymbolsSpec.
 //		The Zero Number Sign for this instance will be
 //		deleted and reset to the values	provided by input
 //		parameter 'zeroNumberSign'.
@@ -8368,18 +8368,18 @@ func (nStrNumSymNanobot *numStrNumberSymbolsNanobot) setZeroNumSignRunes(
 //		for input parameter 'errPrefDto' (error prefix)
 //		will be prefixed or attached at the beginning of
 //		the error message.
-func (nStrNumSymNanobot *numStrNumberSymbolsNanobot) setZeroNumSignSpec(
-	nStrNumSymbols *NumStrNumberSymbols,
+func (nStrNumSymbolsSpecNanobot *numStrNumberSymbolsSpecNanobot) setZeroNumSignSpec(
+	nStrNumSymbols *NumStrNumberSymbolsSpec,
 	zeroNumberSign NumStrNumberSymbolSpec,
 	errPrefDto *ePref.ErrPrefixDto) error {
 
-	if nStrNumSymNanobot.lock == nil {
-		nStrNumSymNanobot.lock = new(sync.Mutex)
+	if nStrNumSymbolsSpecNanobot.lock == nil {
+		nStrNumSymbolsSpecNanobot.lock = new(sync.Mutex)
 	}
 
-	nStrNumSymNanobot.lock.Lock()
+	nStrNumSymbolsSpecNanobot.lock.Lock()
 
-	defer nStrNumSymNanobot.lock.Unlock()
+	defer nStrNumSymbolsSpecNanobot.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -8388,7 +8388,7 @@ func (nStrNumSymNanobot *numStrNumberSymbolsNanobot) setZeroNumSignSpec(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"numStrNumberSymbolsNanobot."+
+		"numStrNumberSymbolsSpecNanobot."+
 			"setZeroNumSignSpec()",
 		"")
 
@@ -8415,10 +8415,10 @@ func (nStrNumSymNanobot *numStrNumberSymbolsNanobot) setZeroNumSignSpec(
 	return err
 }
 
-// numStrNumberSymbolsAtom
+// numStrNumberSymbolsSpecAtom
 //
-// Provides helper methods for NumStrNumberSymbols.
-type numStrNumberSymbolsAtom struct {
+// Provides helper methods for NumStrNumberSymbolsSpec.
+type numStrNumberSymbolsSpecAtom struct {
 	lock *sync.Mutex
 }
 
@@ -8454,16 +8454,16 @@ type numStrNumberSymbolsAtom struct {
 // # Return Values
 //
 //	NONE
-func (nStrNumSymbolsAtom *numStrNumberSymbolsAtom) emptyNegativeNumSymbols(
-	nStrNumSymbols *NumStrNumberSymbols) {
+func (nStrNumSymbolsSpecAtom *numStrNumberSymbolsSpecAtom) emptyNegativeNumSymbols(
+	nStrNumSymbols *NumStrNumberSymbolsSpec) {
 
-	if nStrNumSymbolsAtom.lock == nil {
-		nStrNumSymbolsAtom.lock = new(sync.Mutex)
+	if nStrNumSymbolsSpecAtom.lock == nil {
+		nStrNumSymbolsSpecAtom.lock = new(sync.Mutex)
 	}
 
-	nStrNumSymbolsAtom.lock.Lock()
+	nStrNumSymbolsSpecAtom.lock.Lock()
 
-	defer nStrNumSymbolsAtom.lock.Unlock()
+	defer nStrNumSymbolsSpecAtom.lock.Unlock()
 
 	if nStrNumSymbols == nil {
 
@@ -8505,16 +8505,16 @@ func (nStrNumSymbolsAtom *numStrNumberSymbolsAtom) emptyNegativeNumSymbols(
 // # Return Values
 //
 //	NONE
-func (nStrNumSymbolsAtom *numStrNumberSymbolsAtom) emptyPositiveNumSymbols(
-	nStrNumSymbols *NumStrNumberSymbols) {
+func (nStrNumSymbolsSpecAtom *numStrNumberSymbolsSpecAtom) emptyPositiveNumSymbols(
+	nStrNumSymbols *NumStrNumberSymbolsSpec) {
 
-	if nStrNumSymbolsAtom.lock == nil {
-		nStrNumSymbolsAtom.lock = new(sync.Mutex)
+	if nStrNumSymbolsSpecAtom.lock == nil {
+		nStrNumSymbolsSpecAtom.lock = new(sync.Mutex)
 	}
 
-	nStrNumSymbolsAtom.lock.Lock()
+	nStrNumSymbolsSpecAtom.lock.Lock()
 
-	defer nStrNumSymbolsAtom.lock.Unlock()
+	defer nStrNumSymbolsSpecAtom.lock.Unlock()
 
 	if nStrNumSymbols == nil {
 
@@ -8556,16 +8556,16 @@ func (nStrNumSymbolsAtom *numStrNumberSymbolsAtom) emptyPositiveNumSymbols(
 // # Return Values
 //
 //	NONE
-func (nStrNumSymbolsAtom *numStrNumberSymbolsAtom) emptyZeroNumSymbols(
-	nStrNumSymbols *NumStrNumberSymbols) {
+func (nStrNumSymbolsSpecAtom *numStrNumberSymbolsSpecAtom) emptyZeroNumSymbols(
+	nStrNumSymbols *NumStrNumberSymbolsSpec) {
 
-	if nStrNumSymbolsAtom.lock == nil {
-		nStrNumSymbolsAtom.lock = new(sync.Mutex)
+	if nStrNumSymbolsSpecAtom.lock == nil {
+		nStrNumSymbolsSpecAtom.lock = new(sync.Mutex)
 	}
 
-	nStrNumSymbolsAtom.lock.Lock()
+	nStrNumSymbolsSpecAtom.lock.Lock()
 
-	defer nStrNumSymbolsAtom.lock.Unlock()
+	defer nStrNumSymbolsSpecAtom.lock.Unlock()
 
 	if nStrNumSymbols == nil {
 

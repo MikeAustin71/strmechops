@@ -146,17 +146,17 @@ type NumStrFormatSpec struct {
 	//				          TxtJustify.Center()
 	//		}
 
-	numberSymbols NumStrNumberSymbols
+	numberSymbolsSpec NumStrNumberSymbolsSpec
 	//	This member variable is used to configure Number
 	//	Symbols required in converting numeric values to
 	//	Number Strings.
 	//
-	//	NumStrNumberSymbols contains three instances of
+	//	NumStrNumberSymbolsSpec contains three instances of
 	//	NumStrNumberSymbolSpec defining the Number
 	//	Symbols to be used with positive numeric values,
 	//	negative numeric values and zero numeric values.
 	//
-	//	type NumStrNumberSymbols struct {
+	//	type NumStrNumberSymbolsSpec struct {
 	//
 	//		negativeNumberSign NumStrNumberSymbolSpec
 	//
@@ -1304,7 +1304,7 @@ func (numStrFmtSpec *NumStrFormatSpec) GetNegativeNumSymSpec(
 		return NumStrNumberSymbolSpec{}, err
 	}
 
-	return numStrFmtSpec.numberSymbols.negativeNumberSign.CopyOut(
+	return numStrFmtSpec.numberSymbolsSpec.negativeNumberSign.CopyOut(
 		ePrefix.XCpy(
 			"<-numStrFmtSpec.numberSymbols" +
 				".negativeNumberSign"))
@@ -1611,9 +1611,9 @@ func (numStrFmtSpec *NumStrFormatSpec) GetPositiveNumSymSpec(
 		return NumStrNumberSymbolSpec{}, err
 	}
 
-	return numStrFmtSpec.numberSymbols.positiveNumberSign.CopyOut(
+	return numStrFmtSpec.numberSymbolsSpec.positiveNumberSign.CopyOut(
 		ePrefix.XCpy(
-			"<-numStrFmtSpec.numberSymbols.positiveNumberSign"))
+			"<-numStrFmtSpec.numberSymbolsSpec.positiveNumberSign"))
 }
 
 // GetZeroNumSymSpec - Returns the Zero Number Symbol
@@ -1731,7 +1731,7 @@ func (numStrFmtSpec *NumStrFormatSpec) GetZeroNumSymSpec(
 		return NumStrNumberSymbolSpec{}, err
 	}
 
-	return numStrFmtSpec.numberSymbols.zeroNumberSign.CopyOut(
+	return numStrFmtSpec.numberSymbolsSpec.zeroNumberSign.CopyOut(
 		ePrefix.XCpy(
 			"<-numStrFmtSpec.zeroNumberSign"))
 }
@@ -1968,7 +1968,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCountryCurrencyNumFormat(
 		&newNumStrFmtSpec,
 		countryCultureFormat.CurrencyNumStrFormat.decSeparator,
 		countryCultureFormat.CurrencyNumStrFormat.intSeparatorSpec,
-		countryCultureFormat.CurrencyNumStrFormat.numberSymbols,
+		countryCultureFormat.CurrencyNumStrFormat.numberSymbolsSpec,
 		numberFieldSpec,
 		ePrefix.XCpy("newCurrencyNumFmtSpec<-"))
 
@@ -2207,7 +2207,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCountrySignedNumFormat(
 		&newNumStrFmtSpec,
 		countryCultureFormat.SignedNumStrFormat.decSeparator,
 		countryCultureFormat.SignedNumStrFormat.intSeparatorSpec,
-		countryCultureFormat.SignedNumStrFormat.numberSymbols,
+		countryCultureFormat.SignedNumStrFormat.numberSymbolsSpec,
 		numberFieldSpec,
 		ePrefix.XCpy("newSignedNumFmtSpec<-"))
 
@@ -3286,14 +3286,14 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtUS(
 //		integer grouping and separation within a Number
 //		String.
 //
-//	numberSymbols 					NumStrNumberSymbols
+//	numberSymbolsSpec  				NumStrNumberSymbolsSpec
 //
-//		This instance of NumStrNumberSymbols contains the
+//		This instance of NumStrNumberSymbolsSpec contains the
 //		Number Symbol Specifications for negative numeric
 //		values, positive numeric values and zero numeric
 //		values.
 //
-//		type NumStrNumberSymbols struct {
+//		type NumStrNumberSymbolsSpec struct {
 //
 //			negativeNumberSign NumStrNumberSymbolSpec
 //
@@ -3564,7 +3564,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtUS(
 func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtComponents(
 	decSeparator DecimalSeparatorSpec,
 	intSeparatorSpec IntegerSeparatorSpec,
-	numberSymbols NumStrNumberSymbols,
+	numberSymbolsSpec NumStrNumberSymbolsSpec,
 	numberFieldSpec NumStrNumberFieldSpec,
 	errorPrefix interface{}) (
 	newSignedNumFmtSpec NumStrFormatSpec,
@@ -3595,7 +3595,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtComponents(
 		&newSignedNumFmtSpec,
 		decSeparator,
 		intSeparatorSpec,
-		numberSymbols,
+		numberSymbolsSpec,
 		numberFieldSpec,
 		ePrefix.XCpy("newSignedNumFmtSpec<-"))
 
@@ -6520,7 +6520,7 @@ func (numStrFmtSpec *NumStrFormatSpec) SetCountryCurrencyNumFmt(
 		numStrFmtSpec,
 		countryCultureFormat.CurrencyNumStrFormat.decSeparator,
 		countryCultureFormat.CurrencyNumStrFormat.intSeparatorSpec,
-		countryCultureFormat.CurrencyNumStrFormat.numberSymbols,
+		countryCultureFormat.CurrencyNumStrFormat.numberSymbolsSpec,
 		numberFieldSpec,
 		ePrefix.XCpy("newCurrencyNumFmtSpec<-"))
 }
@@ -6751,7 +6751,7 @@ func (numStrFmtSpec *NumStrFormatSpec) SetCountrySignedNumFmt(
 		numStrFmtSpec,
 		countryCultureFormat.SignedNumStrFormat.decSeparator,
 		countryCultureFormat.SignedNumStrFormat.intSeparatorSpec,
-		countryCultureFormat.SignedNumStrFormat.numberSymbols,
+		countryCultureFormat.SignedNumStrFormat.numberSymbolsSpec,
 		numberFieldSpec,
 		ePrefix.XCpy("newSignedNumFmtSpec<-"))
 }
@@ -8732,7 +8732,7 @@ func (numStrFmtSpec *NumStrFormatSpec) SetNumFmtComponents(
 		return err
 	}
 
-	var numSymbols NumStrNumberSymbols
+	var numSymbols NumStrNumberSymbolsSpec
 
 	err = numSymbols.negativeNumberSign.CopyIn(
 		&negativeNumberSign,
@@ -10894,8 +10894,8 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) copySignedNumberFormatSp
 		return err
 	}
 
-	err = destinationSignedNumFmtSpec.numberSymbols.CopyIn(
-		&sourceSignedNumFmtSpec.numberSymbols,
+	err = destinationSignedNumFmtSpec.numberSymbolsSpec.CopyIn(
+		&sourceSignedNumFmtSpec.numberSymbolsSpec,
 		ePrefix.XCpy(
 			" destinationSignedNumFmtSpec.numberSymbols"+
 				"<-sourceSignedNumFmtSpec"))
@@ -11230,7 +11230,7 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setCurrencyNStrFmtFrance
 		lock:                              nil,
 	}
 
-	var numSymbols NumStrNumberSymbols
+	var numSymbols NumStrNumberSymbolsSpec
 
 	err = numSymbols.negativeNumberSign.CopyIn(
 		&negativeNumberSign,
@@ -11594,7 +11594,7 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setCurrencyNStrFmtGerman
 		lock:                              nil,
 	}
 
-	var numSymbols NumStrNumberSymbols
+	var numSymbols NumStrNumberSymbolsSpec
 
 	err = numSymbols.negativeNumberSign.CopyIn(
 		&negativeNumberSign,
@@ -11932,7 +11932,7 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setCurrencyNStrFmtUK(
 		lock:                              nil,
 	}
 
-	var numSymbols NumStrNumberSymbols
+	var numSymbols NumStrNumberSymbolsSpec
 
 	err = numSymbols.negativeNumberSign.CopyIn(
 		&negativeNumberSign,
@@ -12266,7 +12266,7 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setCurrencyNStrFmtUS(
 		lock:                              nil,
 	}
 
-	var numSymbols NumStrNumberSymbols
+	var numSymbols NumStrNumberSymbolsSpec
 
 	err = numSymbols.negativeNumberSign.CopyIn(
 		&negativeNumberSign,
@@ -13130,7 +13130,7 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtFrance(
 		lock:                              nil,
 	}
 
-	var numSymbols NumStrNumberSymbols
+	var numSymbols NumStrNumberSymbolsSpec
 
 	err = numSymbols.negativeNumberSign.CopyIn(
 		&negativeNumberSign,
@@ -13448,7 +13448,7 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtGermany(
 		lock:                              nil,
 	}
 
-	var numSymbols NumStrNumberSymbols
+	var numSymbols NumStrNumberSymbolsSpec
 
 	err = numSymbols.negativeNumberSign.CopyIn(
 		&negativeNumberSign,
@@ -13745,7 +13745,7 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtUS(
 		lock:                              nil,
 	}
 
-	var numSymbols NumStrNumberSymbols
+	var numSymbols NumStrNumberSymbolsSpec
 
 	err = numSymbols.negativeNumberSign.CopyIn(
 		&negativeNumberSign,
@@ -14043,10 +14043,10 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setSimpleFormatSpec(
 		return err
 	}
 
-	var numSymbolsSpec NumStrNumberSymbols
+	var numSymbolsSpec NumStrNumberSymbolsSpec
 
 	numSymbolsSpec,
-		err = new(NumStrNumberSymbols).NewSimpleCurrency(
+		err = new(NumStrNumberSymbolsSpec).NewSimpleCurrency(
 		currencySymbols,
 		leadingNumSymbols,
 		ePrefix.XCpy(
@@ -14166,7 +14166,7 @@ func (signedNumFmtSpecAtom *numStrFmtSpecAtom) empty(
 
 	signedNumFmtSpec.intSeparatorSpec.Empty()
 
-	signedNumFmtSpec.numberSymbols.Empty()
+	signedNumFmtSpec.numberSymbolsSpec.Empty()
 
 	signedNumFmtSpec.numberFieldSpec.Empty()
 }
@@ -14249,8 +14249,8 @@ func (signedNumFmtSpecAtom *numStrFmtSpecAtom) equal(
 		return false
 	}
 
-	if !signedNumFmtSpec1.numberSymbols.Equal(
-		&signedNumFmtSpec2.numberSymbols) {
+	if !signedNumFmtSpec1.numberSymbolsSpec.Equal(
+		&signedNumFmtSpec2.numberSymbolsSpec) {
 
 		return false
 	}
@@ -14885,21 +14885,21 @@ func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setNegativeNumberSign(
 	if lenLeadingNegNumSign == 0 &&
 		lenTrailingNegNumSign == 0 {
 
-		signedNumFmt.numberSymbols.negativeNumberSign.SetNOP()
+		signedNumFmt.numberSymbolsSpec.negativeNumberSign.SetNOP()
 
 		return err
 	}
 
-	signedNumFmt.numberSymbols.negativeNumberSign.Empty()
+	signedNumFmt.numberSymbolsSpec.negativeNumberSign.Empty()
 
 	if lenLeadingNegNumSign > 0 {
 
-		err = signedNumFmt.numberSymbols.negativeNumberSign.
+		err = signedNumFmt.numberSymbolsSpec.negativeNumberSign.
 			SetLeadingNumberSymbolRunes(
 				leadingNegNumSign,
 				leadingNumFieldSymPosition,
 				ePrefix.XCpy(
-					"signedNumFmt.numberSymbols.negativeNumberSign"+
+					"signedNumFmt.numberSymbolsSpec.negativeNumberSign"+
 						"<-leadingNegNumSign"))
 
 		if err != nil {
@@ -14909,12 +14909,12 @@ func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setNegativeNumberSign(
 
 	if lenTrailingNegNumSign > 0 {
 
-		err = signedNumFmt.numberSymbols.negativeNumberSign.
+		err = signedNumFmt.numberSymbolsSpec.negativeNumberSign.
 			SetTrailingNumberSymbolRunes(
 				trailingNegNumSign,
 				trailingNumFieldSymPosition,
 				ePrefix.XCpy(
-					"signedNumFmt.numberSymbols."+
+					"signedNumFmt.numberSymbolsSpec."+
 						"negativeNumberSign<-"+
 						"trailingNegNumSign"))
 
@@ -15020,17 +15020,17 @@ func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setNegativeNumberSignSpec(
 
 	if negativeNumberSign.IsNOP() {
 
-		signedNumFmt.numberSymbols.negativeNumberSign.SetNOP()
+		signedNumFmt.numberSymbolsSpec.negativeNumberSign.SetNOP()
 
 		return err
 	}
 
 	err = new(numStrNumberSymbolSpecNanobot).
 		copyNStrNumberSymbolSpec(
-			&signedNumFmt.numberSymbols.negativeNumberSign,
+			&signedNumFmt.numberSymbolsSpec.negativeNumberSign,
 			&negativeNumberSign,
 			ePrefix.XCpy(
-				"signedNumFmt.numberSymbols."+
+				"signedNumFmt.numberSymbolsSpec."+
 					"negativeNumberSign<-"+
 					"negativeNumberSign"))
 
@@ -15077,9 +15077,9 @@ func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setNegativeNumberSignSpec(
 //		integer grouping and separation within a Number
 //		String.
 //
-//	numberSymbols 					NumStrNumberSymbols
+//	numberSymbolsSpec					NumStrNumberSymbolsSpec
 //
-//		This instance of NumStrNumberSymbols contains the
+//		This instance of NumStrNumberSymbolsSpec contains the
 //		Number Symbol Specifications for negative numeric
 //		values, positive numeric values and zero numeric
 //		values.
@@ -15180,7 +15180,7 @@ func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setNStrFmtComponents(
 	numStrFmtSpec *NumStrFormatSpec,
 	decSeparator DecimalSeparatorSpec,
 	intSeparatorSpec IntegerSeparatorSpec,
-	numberSymbols NumStrNumberSymbols,
+	numberSymbolsSpec NumStrNumberSymbolsSpec,
 	numberFieldSpec NumStrNumberFieldSpec,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
@@ -15243,8 +15243,8 @@ func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setNStrFmtComponents(
 		return err
 	}
 
-	err = numStrFmtSpec.numberSymbols.CopyIn(
-		&numberSymbols,
+	err = numStrFmtSpec.numberSymbolsSpec.CopyIn(
+		&numberSymbolsSpec,
 		ePrefix.XCpy(
 			"numStrFmtSpec.numberSymbols<-"+
 				"numberSymbols"))
@@ -15547,7 +15547,7 @@ func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setNumberFieldSpec(
 //	Receives a pointer to an instance of NumStrFormatSpec
 //	and proceeds to reconfigure all the internal member
 //	variable data values based on an instance of
-//	NumStrNumberSymbols passed as an input parameter.
+//	NumStrNumberSymbolsSpec passed as an input parameter.
 //
 // ----------------------------------------------------------------
 //
@@ -15570,10 +15570,10 @@ func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setNumberFieldSpec(
 //		be replaced by data values configured from the
 //		input parameters described below.
 //
-//	numberSymbolSpec			NumStrNumberSymbols
+//	numberSymbolSpec			NumStrNumberSymbolsSpec
 //
-//		An instance of NumStrNumberSymbols which is used
-//		to reconfigure the NumStrNumberSymbols member
+//		An instance of NumStrNumberSymbolsSpec which is used
+//		to reconfigure the NumStrNumberSymbolsSpec member
 //		variable contained in input parameter,
 //		'numStrFmtSpec'.
 //
@@ -15610,7 +15610,7 @@ func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setNumberFieldSpec(
 //		the error message.
 func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setNumberSymbolSpec(
 	numStrFmtSpec *NumStrFormatSpec,
-	numberSymbolSpec NumStrNumberSymbols,
+	numberSymbolSpec NumStrNumberSymbolsSpec,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
 
@@ -15645,7 +15645,7 @@ func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setNumberSymbolSpec(
 		return err
 	}
 
-	err = numStrFmtSpec.numberSymbols.CopyIn(
+	err = numStrFmtSpec.numberSymbolsSpec.CopyIn(
 		&numberSymbolSpec,
 		ePrefix.XCpy(
 			"numStrFmtSpec.numberSymbols<-"))
@@ -15755,21 +15755,21 @@ func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setPositiveNumberSign(
 	if lenLeadingPosNumSign == 0 &&
 		lenTrailingPosNumSign == 0 {
 
-		signedNumFmt.numberSymbols.positiveNumberSign.SetNOP()
+		signedNumFmt.numberSymbolsSpec.positiveNumberSign.SetNOP()
 
 		return err
 	}
 
-	signedNumFmt.numberSymbols.EmptyPositiveNumSymbols()
+	signedNumFmt.numberSymbolsSpec.EmptyPositiveNumSymbols()
 
 	if lenLeadingPosNumSign > 0 {
 
-		err = signedNumFmt.numberSymbols.positiveNumberSign.
+		err = signedNumFmt.numberSymbolsSpec.positiveNumberSign.
 			SetLeadingNumberSymbolRunes(
 				leadingPosNumSign,
 				leadingPosNumFieldSymPosition,
 				ePrefix.XCpy(
-					"signedNumFmt.numberSymbols.positiveNumberSign"+
+					"signedNumFmt.numberSymbolsSpec.positiveNumberSign"+
 						"<-leadingPosNumSymbols"))
 
 		if err != nil {
@@ -15779,12 +15779,12 @@ func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setPositiveNumberSign(
 
 	if lenTrailingPosNumSign > 0 {
 
-		err = signedNumFmt.numberSymbols.positiveNumberSign.
+		err = signedNumFmt.numberSymbolsSpec.positiveNumberSign.
 			SetTrailingNumberSymbolRunes(
 				trailingPosNumSign,
 				trailingPosNumFieldSymPosition,
 				ePrefix.XCpy(
-					"signedNumFmt.numberSymbols.positiveNumberSign<-"+
+					"signedNumFmt.numberSymbolsSpec.positiveNumberSign<-"+
 						"trailingPosNumSymbols"))
 
 	}
@@ -15886,14 +15886,14 @@ func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setPositiveNumberSignSpec(
 
 	if positiveNumberSign.IsNOP() {
 
-		signedNumFmt.numberSymbols.positiveNumberSign.SetNOP()
+		signedNumFmt.numberSymbolsSpec.positiveNumberSign.SetNOP()
 
 		return err
 	}
 
 	err = new(numStrNumberSymbolSpecNanobot).
 		copyNStrNumberSymbolSpec(
-			&signedNumFmt.numberSymbols.positiveNumberSign,
+			&signedNumFmt.numberSymbolsSpec.positiveNumberSign,
 			&positiveNumberSign,
 			ePrefix.XCpy(
 				"signedNumFmt.numberSymbols"+
@@ -16005,16 +16005,16 @@ func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setZeroNumberSign(
 	if lenLeadingZeroNumSign == 0 &&
 		lenTrailingZeroNumSign == 0 {
 
-		signedNumFmt.numberSymbols.zeroNumberSign.SetNOP()
+		signedNumFmt.numberSymbolsSpec.zeroNumberSign.SetNOP()
 
 		return err
 	}
 
-	signedNumFmt.numberSymbols.EmptyZeroNumSymbols()
+	signedNumFmt.numberSymbolsSpec.EmptyZeroNumSymbols()
 
 	if lenLeadingZeroNumSign > 0 {
 
-		err = signedNumFmt.numberSymbols.zeroNumberSign.
+		err = signedNumFmt.numberSymbolsSpec.zeroNumberSign.
 			SetLeadingNumberSymbolRunes(
 				leadingZeroNumSign,
 				leadingZeroNumFieldSymPosition,
@@ -16030,7 +16030,7 @@ func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setZeroNumberSign(
 
 	if lenTrailingZeroNumSign > 0 {
 
-		err = signedNumFmt.numberSymbols.zeroNumberSign.
+		err = signedNumFmt.numberSymbolsSpec.zeroNumberSign.
 			SetTrailingNumberSymbolRunes(
 				trailingZeroNumSign,
 				trailingZeroNumFieldSymPosition,
@@ -16141,14 +16141,14 @@ func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setZeroNumberSignSpec(
 
 	if zeroNumberSign.IsNOP() {
 
-		signedNumFmt.numberSymbols.zeroNumberSign.SetNOP()
+		signedNumFmt.numberSymbolsSpec.zeroNumberSign.SetNOP()
 
 		return err
 	}
 
 	err = new(numStrNumberSymbolSpecNanobot).
 		copyNStrNumberSymbolSpec(
-			&signedNumFmt.numberSymbols.zeroNumberSign,
+			&signedNumFmt.numberSymbolsSpec.zeroNumberSign,
 			&zeroNumberSign,
 			ePrefix.XCpy(
 				"signedNumFmt.zeroNumberSign<-"+
