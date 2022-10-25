@@ -10816,19 +10816,19 @@ type numStrFmtSpecNanobot struct {
 //		If an error message is returned, the text value for input
 //		parameter 'errPrefDto' (error prefix) will be prefixed or
 //		attached at the beginning of the error message.
-func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) copySignedNumberFormatSpec(
+func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) copySignedNumberFormatSpec(
 	destinationSignedNumFmtSpec *NumStrFormatSpec,
 	sourceSignedNumFmtSpec *NumStrFormatSpec,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
 
-	if nStrNumberFieldSpecNanobot.lock == nil {
-		nStrNumberFieldSpecNanobot.lock = new(sync.Mutex)
+	if nStrFmtSpecNanobot.lock == nil {
+		nStrFmtSpecNanobot.lock = new(sync.Mutex)
 	}
 
-	nStrNumberFieldSpecNanobot.lock.Lock()
+	nStrFmtSpecNanobot.lock.Lock()
 
-	defer nStrNumberFieldSpecNanobot.lock.Unlock()
+	defer nStrFmtSpecNanobot.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -11096,19 +11096,19 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) copySignedNumberFormatSp
 //		for input parameter 'errPrefDto' (error prefix)
 //		will be prefixed or attached at the beginning of
 //		the error message.
-func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setCurrencyNStrFmtFrance(
+func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setCurrencyNStrFmtFrance(
 	numStrFmtSpec *NumStrFormatSpec,
 	numberFieldSpec NumStrNumberFieldSpec,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
 
-	if nStrNumberFieldSpecNanobot.lock == nil {
-		nStrNumberFieldSpecNanobot.lock = new(sync.Mutex)
+	if nStrFmtSpecNanobot.lock == nil {
+		nStrFmtSpecNanobot.lock = new(sync.Mutex)
 	}
 
-	nStrNumberFieldSpecNanobot.lock.Lock()
+	nStrFmtSpecNanobot.lock.Lock()
 
-	defer nStrNumberFieldSpecNanobot.lock.Unlock()
+	defer nStrFmtSpecNanobot.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -11460,19 +11460,19 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setCurrencyNStrFmtFrance
 //		for input parameter 'errPrefDto' (error prefix)
 //		will be prefixed or attached at the beginning of
 //		the error message.
-func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setCurrencyNStrFmtGermany(
+func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setCurrencyNStrFmtGermany(
 	numStrFmtSpec *NumStrFormatSpec,
 	numberFieldSpec NumStrNumberFieldSpec,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
 
-	if nStrNumberFieldSpecNanobot.lock == nil {
-		nStrNumberFieldSpecNanobot.lock = new(sync.Mutex)
+	if nStrFmtSpecNanobot.lock == nil {
+		nStrFmtSpecNanobot.lock = new(sync.Mutex)
 	}
 
-	nStrNumberFieldSpecNanobot.lock.Lock()
+	nStrFmtSpecNanobot.lock.Lock()
 
-	defer nStrNumberFieldSpecNanobot.lock.Unlock()
+	defer nStrFmtSpecNanobot.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -11816,19 +11816,19 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setCurrencyNStrFmtGerman
 //		for input parameter 'errPrefDto' (error prefix)
 //		will be prefixed or attached at the beginning of
 //		the error message.
-func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setCurrencyNStrFmtUK(
+func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setCurrencyNStrFmtUK(
 	numStrFmtSpec *NumStrFormatSpec,
 	numberFieldSpec NumStrNumberFieldSpec,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
 
-	if nStrNumberFieldSpecNanobot.lock == nil {
-		nStrNumberFieldSpecNanobot.lock = new(sync.Mutex)
+	if nStrFmtSpecNanobot.lock == nil {
+		nStrFmtSpecNanobot.lock = new(sync.Mutex)
 	}
 
-	nStrNumberFieldSpecNanobot.lock.Lock()
+	nStrFmtSpecNanobot.lock.Lock()
 
-	defer nStrNumberFieldSpecNanobot.lock.Unlock()
+	defer nStrFmtSpecNanobot.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -12144,19 +12144,19 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setCurrencyNStrFmtUK(
 //		for input parameter 'errPrefDto' (error prefix)
 //		will be prefixed or attached at the beginning of
 //		the error message.
-func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setCurrencyNStrFmtUS(
+func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setCurrencyNStrFmtUS(
 	numStrFmtSpec *NumStrFormatSpec,
 	numberFieldSpec NumStrNumberFieldSpec,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
 
-	if nStrNumberFieldSpecNanobot.lock == nil {
-		nStrNumberFieldSpecNanobot.lock = new(sync.Mutex)
+	if nStrFmtSpecNanobot.lock == nil {
+		nStrFmtSpecNanobot.lock = new(sync.Mutex)
 	}
 
-	nStrNumberFieldSpecNanobot.lock.Lock()
+	nStrFmtSpecNanobot.lock.Lock()
 
-	defer nStrNumberFieldSpecNanobot.lock.Unlock()
+	defer nStrFmtSpecNanobot.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -12720,7 +12720,7 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setCurrencyNStrFmtUS(
 //		If an error message is returned, the text value for input
 //		parameter 'errPrefDto' (error prefix) will be prefixed or
 //		attached at the beginning of the error message.
-func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setNStrNumberFieldSpec(
+func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setNStrNumberFieldSpec(
 	numStrFmtSpec *NumStrFormatSpec,
 	decSeparatorChars []rune,
 	intGroupingChars []rune,
@@ -12739,13 +12739,13 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setNStrNumberFieldSpec(
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
 
-	if nStrNumberFieldSpecNanobot.lock == nil {
-		nStrNumberFieldSpecNanobot.lock = new(sync.Mutex)
+	if nStrFmtSpecNanobot.lock == nil {
+		nStrFmtSpecNanobot.lock = new(sync.Mutex)
 	}
 
-	nStrNumberFieldSpecNanobot.lock.Lock()
+	nStrFmtSpecNanobot.lock.Lock()
 
-	defer nStrNumberFieldSpecNanobot.lock.Unlock()
+	defer nStrFmtSpecNanobot.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -13033,19 +13033,19 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setNStrNumberFieldSpec(
 //		If an error message is returned, the text value for input
 //		parameter 'errPrefDto' (error prefix) will be prefixed or
 //		attached at the beginning of the error message.
-func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtFrance(
+func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtFrance(
 	numStrFmtSpec *NumStrFormatSpec,
 	numberFieldSpec NumStrNumberFieldSpec,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
 
-	if nStrNumberFieldSpecNanobot.lock == nil {
-		nStrNumberFieldSpecNanobot.lock = new(sync.Mutex)
+	if nStrFmtSpecNanobot.lock == nil {
+		nStrFmtSpecNanobot.lock = new(sync.Mutex)
 	}
 
-	nStrNumberFieldSpecNanobot.lock.Lock()
+	nStrFmtSpecNanobot.lock.Lock()
 
-	defer nStrNumberFieldSpecNanobot.lock.Unlock()
+	defer nStrFmtSpecNanobot.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -13353,19 +13353,19 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtFrance(
 //		If an error message is returned, the text value for input
 //		parameter 'errPrefDto' (error prefix) will be prefixed or
 //		attached at the beginning of the error message.
-func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtGermany(
+func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtGermany(
 	numStrFmtSpec *NumStrFormatSpec,
 	numberFieldSpec NumStrNumberFieldSpec,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
 
-	if nStrNumberFieldSpecNanobot.lock == nil {
-		nStrNumberFieldSpecNanobot.lock = new(sync.Mutex)
+	if nStrFmtSpecNanobot.lock == nil {
+		nStrFmtSpecNanobot.lock = new(sync.Mutex)
 	}
 
-	nStrNumberFieldSpecNanobot.lock.Lock()
+	nStrFmtSpecNanobot.lock.Lock()
 
-	defer nStrNumberFieldSpecNanobot.lock.Unlock()
+	defer nStrFmtSpecNanobot.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -13652,19 +13652,19 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtGermany(
 //		for input parameter 'errPrefDto' (error prefix)
 //		will be prefixed or attached at the beginning of
 //		the error message.
-func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtUS(
+func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtUS(
 	numStrFmtSpec *NumStrFormatSpec,
 	numberFieldSpec NumStrNumberFieldSpec,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
 
-	if nStrNumberFieldSpecNanobot.lock == nil {
-		nStrNumberFieldSpecNanobot.lock = new(sync.Mutex)
+	if nStrFmtSpecNanobot.lock == nil {
+		nStrFmtSpecNanobot.lock = new(sync.Mutex)
 	}
 
-	nStrNumberFieldSpecNanobot.lock.Lock()
+	nStrFmtSpecNanobot.lock.Lock()
 
-	defer nStrNumberFieldSpecNanobot.lock.Unlock()
+	defer nStrFmtSpecNanobot.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -13975,7 +13975,7 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtUS(
 //		for input parameter 'errPrefDto' (error prefix)
 //		will be prefixed or attached at the beginning of
 //		the error message.
-func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setSimpleFormatSpec(
+func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setSimpleFormatSpec(
 	numStrFmtSpec *NumStrFormatSpec,
 	decSeparatorChars string,
 	intSeparatorChars string,
@@ -13986,13 +13986,13 @@ func (nStrNumberFieldSpecNanobot *numStrFmtSpecNanobot) setSimpleFormatSpec(
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
 
-	if nStrNumberFieldSpecNanobot.lock == nil {
-		nStrNumberFieldSpecNanobot.lock = new(sync.Mutex)
+	if nStrFmtSpecNanobot.lock == nil {
+		nStrFmtSpecNanobot.lock = new(sync.Mutex)
 	}
 
-	nStrNumberFieldSpecNanobot.lock.Lock()
+	nStrFmtSpecNanobot.lock.Lock()
 
-	defer nStrNumberFieldSpecNanobot.lock.Unlock()
+	defer nStrFmtSpecNanobot.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -14147,16 +14147,16 @@ type numStrFmtSpecAtom struct {
 // Return Values
 //
 //	NONE
-func (signedNumFmtSpecAtom *numStrFmtSpecAtom) empty(
+func (numStrFmtSpecAtom *numStrFmtSpecAtom) empty(
 	signedNumFmtSpec *NumStrFormatSpec) {
 
-	if signedNumFmtSpecAtom.lock == nil {
-		signedNumFmtSpecAtom.lock = new(sync.Mutex)
+	if numStrFmtSpecAtom.lock == nil {
+		numStrFmtSpecAtom.lock = new(sync.Mutex)
 	}
 
-	signedNumFmtSpecAtom.lock.Lock()
+	numStrFmtSpecAtom.lock.Lock()
 
-	defer signedNumFmtSpecAtom.lock.Unlock()
+	defer numStrFmtSpecAtom.lock.Unlock()
 
 	if signedNumFmtSpec == nil {
 		return
@@ -14216,17 +14216,17 @@ func (signedNumFmtSpecAtom *numStrFmtSpecAtom) empty(
 //		If the two instances are NOT equal, this method
 //		will return a boolean value of 'false' to the
 //		calling function.
-func (signedNumFmtSpecAtom *numStrFmtSpecAtom) equal(
+func (numStrFmtSpecAtom *numStrFmtSpecAtom) equal(
 	signedNumFmtSpec1 *NumStrFormatSpec,
 	signedNumFmtSpec2 *NumStrFormatSpec) bool {
 
-	if signedNumFmtSpecAtom.lock == nil {
-		signedNumFmtSpecAtom.lock = new(sync.Mutex)
+	if numStrFmtSpecAtom.lock == nil {
+		numStrFmtSpecAtom.lock = new(sync.Mutex)
 	}
 
-	signedNumFmtSpecAtom.lock.Lock()
+	numStrFmtSpecAtom.lock.Lock()
 
-	defer signedNumFmtSpecAtom.lock.Unlock()
+	defer numStrFmtSpecAtom.lock.Unlock()
 
 	if signedNumFmtSpec1 == nil ||
 		signedNumFmtSpec2 == nil {
@@ -14324,19 +14324,19 @@ func (signedNumFmtSpecAtom *numStrFmtSpecAtom) equal(
 //		If an error message is returned, the text value for input
 //		parameter 'errPrefDto' (error prefix) will be prefixed or
 //		attached at the beginning of the error message.
-func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setDecimalSeparatorParams(
+func (numStrFmtSpecAtom *numStrFmtSpecAtom) setDecimalSeparatorParams(
 	signedNumFmt *NumStrFormatSpec,
 	decSeparator []rune,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
 
-	if signedNumFmtSpecAtom.lock == nil {
-		signedNumFmtSpecAtom.lock = new(sync.Mutex)
+	if numStrFmtSpecAtom.lock == nil {
+		numStrFmtSpecAtom.lock = new(sync.Mutex)
 	}
 
-	signedNumFmtSpecAtom.lock.Lock()
+	numStrFmtSpecAtom.lock.Lock()
 
-	defer signedNumFmtSpecAtom.lock.Unlock()
+	defer numStrFmtSpecAtom.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -14429,19 +14429,19 @@ func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setDecimalSeparatorParams(
 //		If an error message is returned, the text value for input
 //		parameter 'errPrefDto' (error prefix) will be prefixed or
 //		attached at the beginning of the error message.
-func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setDecimalSeparatorSpec(
+func (numStrFmtSpecAtom *numStrFmtSpecAtom) setDecimalSeparatorSpec(
 	signedNumFmt *NumStrFormatSpec,
 	decSeparatorSpec DecimalSeparatorSpec,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
 
-	if signedNumFmtSpecAtom.lock == nil {
-		signedNumFmtSpecAtom.lock = new(sync.Mutex)
+	if numStrFmtSpecAtom.lock == nil {
+		numStrFmtSpecAtom.lock = new(sync.Mutex)
 	}
 
-	signedNumFmtSpecAtom.lock.Lock()
+	numStrFmtSpecAtom.lock.Lock()
 
-	defer signedNumFmtSpecAtom.lock.Unlock()
+	defer numStrFmtSpecAtom.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -14538,20 +14538,20 @@ func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setDecimalSeparatorSpec(
 //		If an error message is returned, the text value for input
 //		parameter 'errPrefDto' (error prefix) will be prefixed or
 //		attached at the beginning of the error message.
-func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setIntegerGroupingParams(
+func (numStrFmtSpecAtom *numStrFmtSpecAtom) setIntegerGroupingParams(
 	signedNumFmt *NumStrFormatSpec,
 	intGroupingChars []rune,
 	intGroupingType IntegerGroupingType,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
 
-	if signedNumFmtSpecAtom.lock == nil {
-		signedNumFmtSpecAtom.lock = new(sync.Mutex)
+	if numStrFmtSpecAtom.lock == nil {
+		numStrFmtSpecAtom.lock = new(sync.Mutex)
 	}
 
-	signedNumFmtSpecAtom.lock.Lock()
+	numStrFmtSpecAtom.lock.Lock()
 
-	defer signedNumFmtSpecAtom.lock.Unlock()
+	defer numStrFmtSpecAtom.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -14647,18 +14647,18 @@ func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setIntegerGroupingParams(
 //		If an error message is returned, the text value for input
 //		parameter 'errPrefDto' (error prefix) will be prefixed or
 //		attached at the beginning of the error message.
-func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setIntegerGroupingSpec(
+func (numStrFmtSpecAtom *numStrFmtSpecAtom) setIntegerGroupingSpec(
 	signedNumFmt *NumStrFormatSpec,
 	intSeparatorSpec IntegerSeparatorSpec,
 	errPrefDto *ePref.ErrPrefixDto) error {
 
-	if signedNumFmtSpecAtom.lock == nil {
-		signedNumFmtSpecAtom.lock = new(sync.Mutex)
+	if numStrFmtSpecAtom.lock == nil {
+		numStrFmtSpecAtom.lock = new(sync.Mutex)
 	}
 
-	signedNumFmtSpecAtom.lock.Lock()
+	numStrFmtSpecAtom.lock.Lock()
 
-	defer signedNumFmtSpecAtom.lock.Unlock()
+	defer numStrFmtSpecAtom.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
@@ -14838,7 +14838,7 @@ func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setIntegerGroupingSpec(
 //		If an error message is returned, the text value for input
 //		parameter 'errPrefDto' (error prefix) will be prefixed or
 //		attached at the beginning of the error message.
-func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setNegativeNumberSign(
+func (numStrFmtSpecAtom *numStrFmtSpecAtom) setNegativeNumberSign(
 	signedNumFmt *NumStrFormatSpec,
 	leadingNegNumSign []rune,
 	leadingNumFieldSymPosition NumberFieldSymbolPosition,
@@ -14847,13 +14847,13 @@ func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setNegativeNumberSign(
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
 
-	if signedNumFmtSpecAtom.lock == nil {
-		signedNumFmtSpecAtom.lock = new(sync.Mutex)
+	if numStrFmtSpecAtom.lock == nil {
+		numStrFmtSpecAtom.lock = new(sync.Mutex)
 	}
 
-	signedNumFmtSpecAtom.lock.Lock()
+	numStrFmtSpecAtom.lock.Lock()
 
-	defer signedNumFmtSpecAtom.lock.Unlock()
+	defer numStrFmtSpecAtom.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -14981,19 +14981,19 @@ func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setNegativeNumberSign(
 //		If an error message is returned, the text value for input
 //		parameter 'errPrefDto' (error prefix) will be prefixed or
 //		attached at the beginning of the error message.
-func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setNegativeNumberSignSpec(
+func (numStrFmtSpecAtom *numStrFmtSpecAtom) setNegativeNumberSignSpec(
 	signedNumFmt *NumStrFormatSpec,
 	negativeNumberSign NumStrNumberSymbolSpec,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
 
-	if signedNumFmtSpecAtom.lock == nil {
-		signedNumFmtSpecAtom.lock = new(sync.Mutex)
+	if numStrFmtSpecAtom.lock == nil {
+		numStrFmtSpecAtom.lock = new(sync.Mutex)
 	}
 
-	signedNumFmtSpecAtom.lock.Lock()
+	numStrFmtSpecAtom.lock.Lock()
 
-	defer signedNumFmtSpecAtom.lock.Unlock()
+	defer numStrFmtSpecAtom.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -15176,7 +15176,7 @@ func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setNegativeNumberSignSpec(
 //		If an error message is returned, the text value for input
 //		parameter 'errPrefDto' (error prefix) will be prefixed or
 //		attached at the beginning of the error message.
-func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setNStrFmtComponents(
+func (numStrFmtSpecAtom *numStrFmtSpecAtom) setNStrFmtComponents(
 	numStrFmtSpec *NumStrFormatSpec,
 	decSeparator DecimalSeparatorSpec,
 	intSeparatorSpec IntegerSeparatorSpec,
@@ -15185,13 +15185,13 @@ func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setNStrFmtComponents(
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
 
-	if signedNumFmtSpecAtom.lock == nil {
-		signedNumFmtSpecAtom.lock = new(sync.Mutex)
+	if numStrFmtSpecAtom.lock == nil {
+		numStrFmtSpecAtom.lock = new(sync.Mutex)
 	}
 
-	signedNumFmtSpecAtom.lock.Lock()
+	numStrFmtSpecAtom.lock.Lock()
 
-	defer signedNumFmtSpecAtom.lock.Unlock()
+	defer numStrFmtSpecAtom.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -15336,20 +15336,20 @@ func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setNStrFmtComponents(
 //		If an error message is returned, the text value for input
 //		parameter 'errPrefDto' (error prefix) will be prefixed or
 //		attached at the beginning of the error message.
-func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setNumberFieldParams(
+func (numStrFmtSpecAtom *numStrFmtSpecAtom) setNumberFieldParams(
 	signedNumFmt *NumStrFormatSpec,
 	fieldLength int,
 	fieldJustification TextJustify,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
 
-	if signedNumFmtSpecAtom.lock == nil {
-		signedNumFmtSpecAtom.lock = new(sync.Mutex)
+	if numStrFmtSpecAtom.lock == nil {
+		numStrFmtSpecAtom.lock = new(sync.Mutex)
 	}
 
-	signedNumFmtSpecAtom.lock.Lock()
+	numStrFmtSpecAtom.lock.Lock()
 
-	defer signedNumFmtSpecAtom.lock.Unlock()
+	defer numStrFmtSpecAtom.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -15495,19 +15495,19 @@ func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setNumberFieldParams(
 //		If an error message is returned, the text value for input
 //		parameter 'errPrefDto' (error prefix) will be prefixed or
 //		attached at the beginning of the error message.
-func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setNumberFieldSpec(
+func (numStrFmtSpecAtom *numStrFmtSpecAtom) setNumberFieldSpec(
 	signedNumFmt *NumStrFormatSpec,
 	numberFieldSpec NumStrNumberFieldSpec,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
 
-	if signedNumFmtSpecAtom.lock == nil {
-		signedNumFmtSpecAtom.lock = new(sync.Mutex)
+	if numStrFmtSpecAtom.lock == nil {
+		numStrFmtSpecAtom.lock = new(sync.Mutex)
 	}
 
-	signedNumFmtSpecAtom.lock.Lock()
+	numStrFmtSpecAtom.lock.Lock()
 
-	defer signedNumFmtSpecAtom.lock.Unlock()
+	defer numStrFmtSpecAtom.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -15608,19 +15608,19 @@ func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setNumberFieldSpec(
 //		for input parameter 'errPrefDto' (error prefix)
 //		will be prefixed or attached at the beginning of
 //		the error message.
-func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setNumberSymbolSpec(
+func (numStrFmtSpecAtom *numStrFmtSpecAtom) setNumberSymbolSpec(
 	numStrFmtSpec *NumStrFormatSpec,
 	numberSymbolSpec NumStrNumberSymbolsSpec,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
 
-	if signedNumFmtSpecAtom.lock == nil {
-		signedNumFmtSpecAtom.lock = new(sync.Mutex)
+	if numStrFmtSpecAtom.lock == nil {
+		numStrFmtSpecAtom.lock = new(sync.Mutex)
 	}
 
-	signedNumFmtSpecAtom.lock.Lock()
+	numStrFmtSpecAtom.lock.Lock()
 
-	defer signedNumFmtSpecAtom.lock.Unlock()
+	defer numStrFmtSpecAtom.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -15709,7 +15709,7 @@ func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setNumberSymbolSpec(
 //		If an error message is returned, the text value for input
 //		parameter 'errPrefDto' (error prefix) will be prefixed or
 //		attached at the beginning of the error message.
-func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setPositiveNumberSign(
+func (numStrFmtSpecAtom *numStrFmtSpecAtom) setPositiveNumberSign(
 	signedNumFmt *NumStrFormatSpec,
 	leadingPosNumSign []rune,
 	leadingPosNumFieldSymPosition NumberFieldSymbolPosition,
@@ -15718,13 +15718,13 @@ func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setPositiveNumberSign(
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
 
-	if signedNumFmtSpecAtom.lock == nil {
-		signedNumFmtSpecAtom.lock = new(sync.Mutex)
+	if numStrFmtSpecAtom.lock == nil {
+		numStrFmtSpecAtom.lock = new(sync.Mutex)
 	}
 
-	signedNumFmtSpecAtom.lock.Lock()
+	numStrFmtSpecAtom.lock.Lock()
 
-	defer signedNumFmtSpecAtom.lock.Unlock()
+	defer numStrFmtSpecAtom.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -15847,19 +15847,19 @@ func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setPositiveNumberSign(
 //		If an error message is returned, the text value for input
 //		parameter 'errPrefDto' (error prefix) will be prefixed or
 //		attached at the beginning of the error message.
-func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setPositiveNumberSignSpec(
+func (numStrFmtSpecAtom *numStrFmtSpecAtom) setPositiveNumberSignSpec(
 	signedNumFmt *NumStrFormatSpec,
 	positiveNumberSign NumStrNumberSymbolSpec,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
 
-	if signedNumFmtSpecAtom.lock == nil {
-		signedNumFmtSpecAtom.lock = new(sync.Mutex)
+	if numStrFmtSpecAtom.lock == nil {
+		numStrFmtSpecAtom.lock = new(sync.Mutex)
 	}
 
-	signedNumFmtSpecAtom.lock.Lock()
+	numStrFmtSpecAtom.lock.Lock()
 
-	defer signedNumFmtSpecAtom.lock.Unlock()
+	defer numStrFmtSpecAtom.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -15959,7 +15959,7 @@ func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setPositiveNumberSignSpec(
 //		If an error message is returned, the text value for input
 //		parameter 'errPrefDto' (error prefix) will be prefixed or
 //		attached at the beginning of the error message.
-func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setZeroNumberSign(
+func (numStrFmtSpecAtom *numStrFmtSpecAtom) setZeroNumberSign(
 	signedNumFmt *NumStrFormatSpec,
 	leadingZeroNumSign []rune,
 	leadingZeroNumFieldSymPosition NumberFieldSymbolPosition,
@@ -15968,13 +15968,13 @@ func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setZeroNumberSign(
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
 
-	if signedNumFmtSpecAtom.lock == nil {
-		signedNumFmtSpecAtom.lock = new(sync.Mutex)
+	if numStrFmtSpecAtom.lock == nil {
+		numStrFmtSpecAtom.lock = new(sync.Mutex)
 	}
 
-	signedNumFmtSpecAtom.lock.Lock()
+	numStrFmtSpecAtom.lock.Lock()
 
-	defer signedNumFmtSpecAtom.lock.Unlock()
+	defer numStrFmtSpecAtom.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -16102,19 +16102,19 @@ func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setZeroNumberSign(
 //		If an error message is returned, the text value for input
 //		parameter 'errPrefDto' (error prefix) will be prefixed or
 //		attached at the beginning of the error message.
-func (signedNumFmtSpecAtom *numStrFmtSpecAtom) setZeroNumberSignSpec(
+func (numStrFmtSpecAtom *numStrFmtSpecAtom) setZeroNumberSignSpec(
 	signedNumFmt *NumStrFormatSpec,
 	zeroNumberSign NumStrNumberSymbolSpec,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
 
-	if signedNumFmtSpecAtom.lock == nil {
-		signedNumFmtSpecAtom.lock = new(sync.Mutex)
+	if numStrFmtSpecAtom.lock == nil {
+		numStrFmtSpecAtom.lock = new(sync.Mutex)
 	}
 
-	signedNumFmtSpecAtom.lock.Lock()
+	numStrFmtSpecAtom.lock.Lock()
 
-	defer signedNumFmtSpecAtom.lock.Unlock()
+	defer numStrFmtSpecAtom.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
