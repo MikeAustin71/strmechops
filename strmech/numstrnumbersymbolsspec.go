@@ -303,17 +303,17 @@ type NumStrNumberSymbolsSpec struct {
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (nStrNumSym *NumStrNumberSymbolsSpec) CopyIn(
+func (nStrNumSymSpec *NumStrNumberSymbolsSpec) CopyIn(
 	incomingNumSymbols *NumStrNumberSymbolsSpec,
 	errorPrefix interface{}) error {
 
-	if nStrNumSym.lock == nil {
-		nStrNumSym.lock = new(sync.Mutex)
+	if nStrNumSymSpec.lock == nil {
+		nStrNumSymSpec.lock = new(sync.Mutex)
 	}
 
-	nStrNumSym.lock.Lock()
+	nStrNumSymSpec.lock.Lock()
 
-	defer nStrNumSym.lock.Unlock()
+	defer nStrNumSymSpec.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -331,10 +331,10 @@ func (nStrNumSym *NumStrNumberSymbolsSpec) CopyIn(
 	}
 
 	return new(numStrNumberSymbolsSpecMechanics).copyNumSymbols(
-		nStrNumSym,
+		nStrNumSymSpec,
 		incomingNumSymbols,
 		ePrefix.XCpy(
-			"nStrNumSym<-incomingNumSymbols"))
+			"nStrNumSymSpec<-incomingNumSymbols"))
 }
 
 //	CopyOut
@@ -427,18 +427,18 @@ func (nStrNumSym *NumStrNumberSymbolsSpec) CopyIn(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (nStrNumSym *NumStrNumberSymbolsSpec) CopyOut(
+func (nStrNumSymSpec *NumStrNumberSymbolsSpec) CopyOut(
 	errorPrefix interface{}) (
 	deepCopyNumSymbols NumStrNumberSymbolsSpec,
 	err error) {
 
-	if nStrNumSym.lock == nil {
-		nStrNumSym.lock = new(sync.Mutex)
+	if nStrNumSymSpec.lock == nil {
+		nStrNumSymSpec.lock = new(sync.Mutex)
 	}
 
-	nStrNumSym.lock.Lock()
+	nStrNumSymSpec.lock.Lock()
 
-	defer nStrNumSym.lock.Unlock()
+	defer nStrNumSymSpec.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -455,9 +455,9 @@ func (nStrNumSym *NumStrNumberSymbolsSpec) CopyOut(
 
 	err = new(numStrNumberSymbolsSpecMechanics).copyNumSymbols(
 		&deepCopyNumSymbols,
-		nStrNumSym,
+		nStrNumSymSpec,
 		ePrefix.XCpy(
-			"deepCopyNumSymbols<-nStrNumSym"))
+			"deepCopyNumSymbols<-nStrNumSymSpec"))
 
 	return deepCopyNumSymbols, err
 }
@@ -492,20 +492,20 @@ func (nStrNumSym *NumStrNumberSymbolsSpec) CopyOut(
 // # Return Values
 //
 //	NONE
-func (nStrNumSym *NumStrNumberSymbolsSpec) Empty() {
+func (nStrNumSymSpec *NumStrNumberSymbolsSpec) Empty() {
 
-	if nStrNumSym.lock == nil {
-		nStrNumSym.lock = new(sync.Mutex)
+	if nStrNumSymSpec.lock == nil {
+		nStrNumSymSpec.lock = new(sync.Mutex)
 	}
 
-	nStrNumSym.lock.Lock()
+	nStrNumSymSpec.lock.Lock()
 
 	new(numStrNumberSymbolsSpecNanobot).empty(
-		nStrNumSym)
+		nStrNumSymSpec)
 
-	nStrNumSym.lock.Unlock()
+	nStrNumSymSpec.lock.Unlock()
 
-	nStrNumSym.lock = nil
+	nStrNumSymSpec.lock = nil
 }
 
 //	EmptyNegativeNumSymbols
@@ -545,18 +545,18 @@ func (nStrNumSym *NumStrNumberSymbolsSpec) Empty() {
 // # Return Values
 //
 //	NONE
-func (nStrNumSym *NumStrNumberSymbolsSpec) EmptyNegativeNumSymbols() {
+func (nStrNumSymSpec *NumStrNumberSymbolsSpec) EmptyNegativeNumSymbols() {
 
-	if nStrNumSym.lock == nil {
-		nStrNumSym.lock = new(sync.Mutex)
+	if nStrNumSymSpec.lock == nil {
+		nStrNumSymSpec.lock = new(sync.Mutex)
 	}
 
-	nStrNumSym.lock.Lock()
+	nStrNumSymSpec.lock.Lock()
 
-	defer nStrNumSym.lock.Unlock()
+	defer nStrNumSymSpec.lock.Unlock()
 
 	new(numStrNumberSymbolsSpecAtom).emptyNegativeNumSymbols(
-		nStrNumSym)
+		nStrNumSymSpec)
 }
 
 //	EmptyPositiveNumSymbols
@@ -596,18 +596,18 @@ func (nStrNumSym *NumStrNumberSymbolsSpec) EmptyNegativeNumSymbols() {
 // # Return Values
 //
 //	NONE
-func (nStrNumSym *NumStrNumberSymbolsSpec) EmptyPositiveNumSymbols() {
+func (nStrNumSymSpec *NumStrNumberSymbolsSpec) EmptyPositiveNumSymbols() {
 
-	if nStrNumSym.lock == nil {
-		nStrNumSym.lock = new(sync.Mutex)
+	if nStrNumSymSpec.lock == nil {
+		nStrNumSymSpec.lock = new(sync.Mutex)
 	}
 
-	nStrNumSym.lock.Lock()
+	nStrNumSymSpec.lock.Lock()
 
-	defer nStrNumSym.lock.Unlock()
+	defer nStrNumSymSpec.lock.Unlock()
 
 	new(numStrNumberSymbolsSpecAtom).emptyPositiveNumSymbols(
-		nStrNumSym)
+		nStrNumSymSpec)
 }
 
 //	EmptyZeroNumSymbols
@@ -647,18 +647,18 @@ func (nStrNumSym *NumStrNumberSymbolsSpec) EmptyPositiveNumSymbols() {
 // # Return Values
 //
 //	NONE
-func (nStrNumSym *NumStrNumberSymbolsSpec) EmptyZeroNumSymbols() {
+func (nStrNumSymSpec *NumStrNumberSymbolsSpec) EmptyZeroNumSymbols() {
 
-	if nStrNumSym.lock == nil {
-		nStrNumSym.lock = new(sync.Mutex)
+	if nStrNumSymSpec.lock == nil {
+		nStrNumSymSpec.lock = new(sync.Mutex)
 	}
 
-	nStrNumSym.lock.Lock()
+	nStrNumSymSpec.lock.Lock()
 
-	defer nStrNumSym.lock.Unlock()
+	defer nStrNumSymSpec.lock.Unlock()
 
 	new(numStrNumberSymbolsSpecAtom).emptyZeroNumSymbols(
-		nStrNumSym)
+		nStrNumSymSpec)
 }
 
 //	Equal
@@ -700,20 +700,147 @@ func (nStrNumSym *NumStrNumberSymbolsSpec) EmptyZeroNumSymbols() {
 //		will be set to 'true'.
 //
 //		Otherwise, this method will return 'false'.
-func (nStrNumSym *NumStrNumberSymbolsSpec) Equal(
+func (nStrNumSymSpec *NumStrNumberSymbolsSpec) Equal(
 	incomingNumSymbols *NumStrNumberSymbolsSpec) bool {
 
-	if nStrNumSym.lock == nil {
-		nStrNumSym.lock = new(sync.Mutex)
+	if nStrNumSymSpec.lock == nil {
+		nStrNumSymSpec.lock = new(sync.Mutex)
 	}
 
-	nStrNumSym.lock.Lock()
+	nStrNumSymSpec.lock.Lock()
 
-	defer nStrNumSym.lock.Unlock()
+	defer nStrNumSymSpec.lock.Unlock()
 
 	return new(numStrNumberSymbolsSpecNanobot).equal(
-		nStrNumSym,
+		nStrNumSymSpec,
 		incomingNumSymbols)
+}
+
+//	GetNegativeNumberSignSpec
+//
+//	Returns a deep copy of the NumStrNumberSymbolSpec
+//	configured for negative number signs.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	 errorPrefix                interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it	contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	negativeNumSignSpec			NumStrNumberSymbolSpec
+//
+//		If this method completes successfully, this
+//		parameter will return a new, fully populated
+//		instance of NumStrNumberSymbolSpec configured
+//		with the Negative Number Sign Symbol configured
+//		for the current instance of
+//		NumStrNumberSymbolsSpec.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (nStrNumSymSpec *NumStrNumberSymbolsSpec) GetNegativeNumberSignSpec(
+	errorPrefix interface{}) (
+	negativeNumSignSpec NumStrNumberSymbolSpec,
+	err error) {
+
+	if nStrNumSymSpec.lock == nil {
+		nStrNumSymSpec.lock = new(sync.Mutex)
+	}
+
+	nStrNumSymSpec.lock.Lock()
+
+	defer nStrNumSymSpec.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumStrNumberSymbolsSpec."+
+			"GetNegativeNumberSignSpec()",
+		"")
+
+	if err != nil {
+		return negativeNumSignSpec, err
+	}
+
+	negativeNumSignSpec,
+		err = nStrNumSymSpec.negativeNumberSign.CopyOut(
+		ePrefix.XCpy(
+			"negativeNumSignSpec<-"))
+
+	return negativeNumSignSpec, err
 }
 
 // IsNOP
@@ -769,19 +896,19 @@ func (nStrNumSym *NumStrNumberSymbolsSpec) Equal(
 //		populated, valid and functional. Number String
 //		Formatting operations will therefore include all
 //		specified Number Symbols in formatted number strings.
-func (nStrNumSym *NumStrNumberSymbolsSpec) IsNOP() bool {
+func (nStrNumSymSpec *NumStrNumberSymbolsSpec) IsNOP() bool {
 
-	if nStrNumSym.lock == nil {
-		nStrNumSym.lock = new(sync.Mutex)
+	if nStrNumSymSpec.lock == nil {
+		nStrNumSymSpec.lock = new(sync.Mutex)
 	}
 
-	nStrNumSym.lock.Lock()
+	nStrNumSymSpec.lock.Lock()
 
-	defer nStrNumSym.lock.Unlock()
+	defer nStrNumSymSpec.lock.Unlock()
 
-	if nStrNumSym.negativeNumberSign.IsNOP() &&
-		nStrNumSym.positiveNumberSign.IsNOP() &&
-		nStrNumSym.zeroNumberSign.IsNOP() {
+	if nStrNumSymSpec.negativeNumberSign.IsNOP() &&
+		nStrNumSymSpec.positiveNumberSign.IsNOP() &&
+		nStrNumSymSpec.zeroNumberSign.IsNOP() {
 
 		return true
 	}
@@ -841,17 +968,17 @@ func (nStrNumSym *NumStrNumberSymbolsSpec) IsNOP() bool {
 //		String Formatting operations will therefore
 //		include these Negative Number Symbols in
 //		formatted number strings.
-func (nStrNumSym *NumStrNumberSymbolsSpec) IsNOPNegativeNumSymbols() bool {
+func (nStrNumSymSpec *NumStrNumberSymbolsSpec) IsNOPNegativeNumSymbols() bool {
 
-	if nStrNumSym.lock == nil {
-		nStrNumSym.lock = new(sync.Mutex)
+	if nStrNumSymSpec.lock == nil {
+		nStrNumSymSpec.lock = new(sync.Mutex)
 	}
 
-	nStrNumSym.lock.Lock()
+	nStrNumSymSpec.lock.Lock()
 
-	defer nStrNumSym.lock.Unlock()
+	defer nStrNumSymSpec.lock.Unlock()
 
-	return nStrNumSym.negativeNumberSign.IsNOP()
+	return nStrNumSymSpec.negativeNumberSign.IsNOP()
 }
 
 //	IsNOPPositiveNumSymbols
@@ -905,17 +1032,17 @@ func (nStrNumSym *NumStrNumberSymbolsSpec) IsNOPNegativeNumSymbols() bool {
 //		String Formatting operations will therefore
 //		include these Positive Number Symbols in
 //		formatted number strings.
-func (nStrNumSym *NumStrNumberSymbolsSpec) IsNOPPositiveNumSymbols() bool {
+func (nStrNumSymSpec *NumStrNumberSymbolsSpec) IsNOPPositiveNumSymbols() bool {
 
-	if nStrNumSym.lock == nil {
-		nStrNumSym.lock = new(sync.Mutex)
+	if nStrNumSymSpec.lock == nil {
+		nStrNumSymSpec.lock = new(sync.Mutex)
 	}
 
-	nStrNumSym.lock.Lock()
+	nStrNumSymSpec.lock.Lock()
 
-	defer nStrNumSym.lock.Unlock()
+	defer nStrNumSymSpec.lock.Unlock()
 
-	return nStrNumSym.positiveNumberSign.IsNOP()
+	return nStrNumSymSpec.positiveNumberSign.IsNOP()
 }
 
 //	IsNOPZeroNumSymbols
@@ -969,17 +1096,17 @@ func (nStrNumSym *NumStrNumberSymbolsSpec) IsNOPPositiveNumSymbols() bool {
 //		String Formatting operations will therefore
 //		include these Zero Number Symbols in
 //		formatted number strings.
-func (nStrNumSym *NumStrNumberSymbolsSpec) IsNOPZeroNumSymbols() bool {
+func (nStrNumSymSpec *NumStrNumberSymbolsSpec) IsNOPZeroNumSymbols() bool {
 
-	if nStrNumSym.lock == nil {
-		nStrNumSym.lock = new(sync.Mutex)
+	if nStrNumSymSpec.lock == nil {
+		nStrNumSymSpec.lock = new(sync.Mutex)
 	}
 
-	nStrNumSym.lock.Lock()
+	nStrNumSymSpec.lock.Lock()
 
-	defer nStrNumSym.lock.Unlock()
+	defer nStrNumSymSpec.lock.Unlock()
 
-	return nStrNumSym.zeroNumberSign.IsNOP()
+	return nStrNumSymSpec.zeroNumberSign.IsNOP()
 }
 
 //	NewNOP Creates and returns a new instance of
@@ -1025,15 +1152,15 @@ func (nStrNumSym *NumStrNumberSymbolsSpec) IsNOPZeroNumSymbols() bool {
 //		in this returned NumStrNumberSymbolsSpec instance
 //		will be inserted or formatted as part of Number
 //		String Formatting operations.
-func (nStrNumSym *NumStrNumberSymbolsSpec) NewNOP() NumStrNumberSymbolsSpec {
+func (nStrNumSymSpec *NumStrNumberSymbolsSpec) NewNOP() NumStrNumberSymbolsSpec {
 
-	if nStrNumSym.lock == nil {
-		nStrNumSym.lock = new(sync.Mutex)
+	if nStrNumSymSpec.lock == nil {
+		nStrNumSymSpec.lock = new(sync.Mutex)
 	}
 
-	nStrNumSym.lock.Lock()
+	nStrNumSymSpec.lock.Lock()
 
-	defer nStrNumSym.lock.Unlock()
+	defer nStrNumSymSpec.lock.Unlock()
 
 	newNStrNumSym := NumStrNumberSymbolsSpec{}
 
@@ -1260,20 +1387,20 @@ func (nStrNumSym *NumStrNumberSymbolsSpec) NewNOP() NumStrNumberSymbolsSpec {
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (nStrNumSym *NumStrNumberSymbolsSpec) NewSimpleCurrency(
+func (nStrNumSymSpec *NumStrNumberSymbolsSpec) NewSimpleCurrency(
 	currencySymbols string,
 	leadingNumSymbols bool,
 	errorPrefix interface{}) (
 	NumStrNumberSymbolsSpec,
 	error) {
 
-	if nStrNumSym.lock == nil {
-		nStrNumSym.lock = new(sync.Mutex)
+	if nStrNumSymSpec.lock == nil {
+		nStrNumSymSpec.lock = new(sync.Mutex)
 	}
 
-	nStrNumSym.lock.Lock()
+	nStrNumSymSpec.lock.Lock()
 
-	defer nStrNumSym.lock.Unlock()
+	defer nStrNumSymSpec.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -1441,19 +1568,19 @@ func (nStrNumSym *NumStrNumberSymbolsSpec) NewSimpleCurrency(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (nStrNumSym *NumStrNumberSymbolsSpec) NewSimpleSignedNumber(
+func (nStrNumSymSpec *NumStrNumberSymbolsSpec) NewSimpleSignedNumber(
 	leadingNumSymbols bool,
 	errorPrefix interface{}) (
 	NumStrNumberSymbolsSpec,
 	error) {
 
-	if nStrNumSym.lock == nil {
-		nStrNumSym.lock = new(sync.Mutex)
+	if nStrNumSymSpec.lock == nil {
+		nStrNumSymSpec.lock = new(sync.Mutex)
 	}
 
-	nStrNumSym.lock.Lock()
+	nStrNumSymSpec.lock.Lock()
 
-	defer nStrNumSym.lock.Unlock()
+	defer nStrNumSymSpec.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -1935,7 +2062,7 @@ func (nStrNumSym *NumStrNumberSymbolsSpec) NewSimpleSignedNumber(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (nStrNumSym *NumStrNumberSymbolsSpec) NewSymbolsRunes(
+func (nStrNumSymSpec *NumStrNumberSymbolsSpec) NewSymbolsRunes(
 	leadingPositiveNumberSymbols []rune,
 	trailingPositiveNumberSymbols []rune,
 	positiveNumFieldSymPosition NumberFieldSymbolPosition,
@@ -1949,13 +2076,13 @@ func (nStrNumSym *NumStrNumberSymbolsSpec) NewSymbolsRunes(
 	NumStrNumberSymbolsSpec,
 	error) {
 
-	if nStrNumSym.lock == nil {
-		nStrNumSym.lock = new(sync.Mutex)
+	if nStrNumSymSpec.lock == nil {
+		nStrNumSymSpec.lock = new(sync.Mutex)
 	}
 
-	nStrNumSym.lock.Lock()
+	nStrNumSymSpec.lock.Lock()
 
-	defer nStrNumSym.lock.Unlock()
+	defer nStrNumSymSpec.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -2462,7 +2589,7 @@ func (nStrNumSym *NumStrNumberSymbolsSpec) NewSymbolsRunes(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (nStrNumSym *NumStrNumberSymbolsSpec) NewSymbolsStrings(
+func (nStrNumSymSpec *NumStrNumberSymbolsSpec) NewSymbolsStrings(
 	leadingPositiveNumberSymbols string,
 	trailingPositiveNumberSymbols string,
 	positiveNumFieldSymPosition NumberFieldSymbolPosition,
@@ -2476,13 +2603,13 @@ func (nStrNumSym *NumStrNumberSymbolsSpec) NewSymbolsStrings(
 	NumStrNumberSymbolsSpec,
 	error) {
 
-	if nStrNumSym.lock == nil {
-		nStrNumSym.lock = new(sync.Mutex)
+	if nStrNumSymSpec.lock == nil {
+		nStrNumSymSpec.lock = new(sync.Mutex)
 	}
 
-	nStrNumSym.lock.Lock()
+	nStrNumSymSpec.lock.Lock()
 
-	defer nStrNumSym.lock.Unlock()
+	defer nStrNumSymSpec.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -2666,7 +2793,7 @@ func (nStrNumSym *NumStrNumberSymbolsSpec) NewSymbolsStrings(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (nStrNumSym *NumStrNumberSymbolsSpec) NewSymbolsSpecs(
+func (nStrNumSymSpec *NumStrNumberSymbolsSpec) NewSymbolsSpecs(
 	positiveNumberSign NumStrNumberSymbolSpec,
 	negativeNumberSign NumStrNumberSymbolSpec,
 	zeroNumberSign NumStrNumberSymbolSpec,
@@ -2674,13 +2801,13 @@ func (nStrNumSym *NumStrNumberSymbolsSpec) NewSymbolsSpecs(
 	NumStrNumberSymbolsSpec,
 	error) {
 
-	if nStrNumSym.lock == nil {
-		nStrNumSym.lock = new(sync.Mutex)
+	if nStrNumSymSpec.lock == nil {
+		nStrNumSymSpec.lock = new(sync.Mutex)
 	}
 
-	nStrNumSym.lock.Lock()
+	nStrNumSymSpec.lock.Lock()
 
-	defer nStrNumSym.lock.Unlock()
+	defer nStrNumSymSpec.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -2813,17 +2940,17 @@ func (nStrNumSym *NumStrNumberSymbolsSpec) NewSymbolsSpecs(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (nStrNumSym *NumStrNumberSymbolsSpec) SetNegativeNumSignSpec(
+func (nStrNumSymSpec *NumStrNumberSymbolsSpec) SetNegativeNumSignSpec(
 	negativeNumberSign NumStrNumberSymbolSpec,
 	errorPrefix interface{}) error {
 
-	if nStrNumSym.lock == nil {
-		nStrNumSym.lock = new(sync.Mutex)
+	if nStrNumSymSpec.lock == nil {
+		nStrNumSymSpec.lock = new(sync.Mutex)
 	}
 
-	nStrNumSym.lock.Lock()
+	nStrNumSymSpec.lock.Lock()
 
-	defer nStrNumSym.lock.Unlock()
+	defer nStrNumSymSpec.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -2842,10 +2969,10 @@ func (nStrNumSym *NumStrNumberSymbolsSpec) SetNegativeNumSignSpec(
 
 	return new(numStrNumberSymbolsSpecNanobot).
 		setNegativeNumSignSpec(
-			nStrNumSym,
+			nStrNumSymSpec,
 			negativeNumberSign,
 			ePrefix.XCpy(
-				"nStrNumSym"))
+				"nStrNumSymSpec"))
 
 }
 
@@ -3082,19 +3209,19 @@ func (nStrNumSym *NumStrNumberSymbolsSpec) SetNegativeNumSignSpec(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (nStrNumSym *NumStrNumberSymbolsSpec) SetNegativeSymbolsRunes(
+func (nStrNumSymSpec *NumStrNumberSymbolsSpec) SetNegativeSymbolsRunes(
 	leadingNegativeNumberSymbols []rune,
 	trailingNegativeNumberSymbols []rune,
 	negativeNumFieldSymPosition NumberFieldSymbolPosition,
 	errorPrefix interface{}) error {
 
-	if nStrNumSym.lock == nil {
-		nStrNumSym.lock = new(sync.Mutex)
+	if nStrNumSymSpec.lock == nil {
+		nStrNumSymSpec.lock = new(sync.Mutex)
 	}
 
-	nStrNumSym.lock.Lock()
+	nStrNumSymSpec.lock.Lock()
 
-	defer nStrNumSym.lock.Unlock()
+	defer nStrNumSymSpec.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -3112,7 +3239,7 @@ func (nStrNumSym *NumStrNumberSymbolsSpec) SetNegativeSymbolsRunes(
 	}
 
 	return new(numStrNumberSymbolsSpecNanobot).setNegativeNumSignRunes(
-		nStrNumSym,
+		nStrNumSymSpec,
 		leadingNegativeNumberSymbols,
 		trailingNegativeNumberSymbols,
 		negativeNumFieldSymPosition,
@@ -3341,19 +3468,19 @@ func (nStrNumSym *NumStrNumberSymbolsSpec) SetNegativeSymbolsRunes(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (nStrNumSym *NumStrNumberSymbolsSpec) SetNegativeSymbolsStrings(
+func (nStrNumSymSpec *NumStrNumberSymbolsSpec) SetNegativeSymbolsStrings(
 	leadingNegativeNumberSymbols string,
 	trailingNegativeNumberSymbols string,
 	negativeNumFieldSymPosition NumberFieldSymbolPosition,
 	errorPrefix interface{}) error {
 
-	if nStrNumSym.lock == nil {
-		nStrNumSym.lock = new(sync.Mutex)
+	if nStrNumSymSpec.lock == nil {
+		nStrNumSymSpec.lock = new(sync.Mutex)
 	}
 
-	nStrNumSym.lock.Lock()
+	nStrNumSymSpec.lock.Lock()
 
-	defer nStrNumSym.lock.Unlock()
+	defer nStrNumSymSpec.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -3371,7 +3498,7 @@ func (nStrNumSym *NumStrNumberSymbolsSpec) SetNegativeSymbolsStrings(
 	}
 
 	return new(numStrNumberSymbolsSpecNanobot).setNegativeNumSignRunes(
-		nStrNumSym,
+		nStrNumSymSpec,
 		[]rune(leadingNegativeNumberSymbols),
 		[]rune(trailingNegativeNumberSymbols),
 		negativeNumFieldSymPosition,
@@ -3421,21 +3548,21 @@ func (nStrNumSym *NumStrNumberSymbolsSpec) SetNegativeSymbolsStrings(
 // # Return Values
 //
 //	NONE
-func (nStrNumSym *NumStrNumberSymbolsSpec) SetNOP() {
+func (nStrNumSymSpec *NumStrNumberSymbolsSpec) SetNOP() {
 
-	if nStrNumSym.lock == nil {
-		nStrNumSym.lock = new(sync.Mutex)
+	if nStrNumSymSpec.lock == nil {
+		nStrNumSymSpec.lock = new(sync.Mutex)
 	}
 
-	nStrNumSym.lock.Lock()
+	nStrNumSymSpec.lock.Lock()
 
-	defer nStrNumSym.lock.Unlock()
+	defer nStrNumSymSpec.lock.Unlock()
 
-	nStrNumSym.negativeNumberSign.SetNOP()
+	nStrNumSymSpec.negativeNumberSign.SetNOP()
 
-	nStrNumSym.positiveNumberSign.SetNOP()
+	nStrNumSymSpec.positiveNumberSign.SetNOP()
 
-	nStrNumSym.zeroNumberSign.SetNOP()
+	nStrNumSymSpec.zeroNumberSign.SetNOP()
 
 	return
 }
@@ -3474,17 +3601,17 @@ func (nStrNumSym *NumStrNumberSymbolsSpec) SetNOP() {
 // # Return Values
 //
 //	NONE
-func (nStrNumSym *NumStrNumberSymbolsSpec) SetNOPNegativeNumSymbols() {
+func (nStrNumSymSpec *NumStrNumberSymbolsSpec) SetNOPNegativeNumSymbols() {
 
-	if nStrNumSym.lock == nil {
-		nStrNumSym.lock = new(sync.Mutex)
+	if nStrNumSymSpec.lock == nil {
+		nStrNumSymSpec.lock = new(sync.Mutex)
 	}
 
-	nStrNumSym.lock.Lock()
+	nStrNumSymSpec.lock.Lock()
 
-	defer nStrNumSym.lock.Unlock()
+	defer nStrNumSymSpec.lock.Unlock()
 
-	nStrNumSym.negativeNumberSign.SetNOP()
+	nStrNumSymSpec.negativeNumberSign.SetNOP()
 
 	return
 }
@@ -3523,17 +3650,17 @@ func (nStrNumSym *NumStrNumberSymbolsSpec) SetNOPNegativeNumSymbols() {
 // # Return Values
 //
 //	NONE
-func (nStrNumSym *NumStrNumberSymbolsSpec) SetNOPPositiveNumSymbols() {
+func (nStrNumSymSpec *NumStrNumberSymbolsSpec) SetNOPPositiveNumSymbols() {
 
-	if nStrNumSym.lock == nil {
-		nStrNumSym.lock = new(sync.Mutex)
+	if nStrNumSymSpec.lock == nil {
+		nStrNumSymSpec.lock = new(sync.Mutex)
 	}
 
-	nStrNumSym.lock.Lock()
+	nStrNumSymSpec.lock.Lock()
 
-	defer nStrNumSym.lock.Unlock()
+	defer nStrNumSymSpec.lock.Unlock()
 
-	nStrNumSym.positiveNumberSign.SetNOP()
+	nStrNumSymSpec.positiveNumberSign.SetNOP()
 
 	return
 }
@@ -3572,17 +3699,17 @@ func (nStrNumSym *NumStrNumberSymbolsSpec) SetNOPPositiveNumSymbols() {
 // # Return Values
 //
 //	NONE
-func (nStrNumSym *NumStrNumberSymbolsSpec) SetNOPZeroNumSymbols() {
+func (nStrNumSymSpec *NumStrNumberSymbolsSpec) SetNOPZeroNumSymbols() {
 
-	if nStrNumSym.lock == nil {
-		nStrNumSym.lock = new(sync.Mutex)
+	if nStrNumSymSpec.lock == nil {
+		nStrNumSymSpec.lock = new(sync.Mutex)
 	}
 
-	nStrNumSym.lock.Lock()
+	nStrNumSymSpec.lock.Lock()
 
-	defer nStrNumSym.lock.Unlock()
+	defer nStrNumSymSpec.lock.Unlock()
 
-	nStrNumSym.zeroNumberSign.SetNOP()
+	nStrNumSymSpec.zeroNumberSign.SetNOP()
 
 	return
 }
@@ -3689,17 +3816,17 @@ func (nStrNumSym *NumStrNumberSymbolsSpec) SetNOPZeroNumSymbols() {
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (nStrNumSym *NumStrNumberSymbolsSpec) SetPositiveNumSignSpec(
+func (nStrNumSymSpec *NumStrNumberSymbolsSpec) SetPositiveNumSignSpec(
 	positiveNumberSign NumStrNumberSymbolSpec,
 	errorPrefix interface{}) error {
 
-	if nStrNumSym.lock == nil {
-		nStrNumSym.lock = new(sync.Mutex)
+	if nStrNumSymSpec.lock == nil {
+		nStrNumSymSpec.lock = new(sync.Mutex)
 	}
 
-	nStrNumSym.lock.Lock()
+	nStrNumSymSpec.lock.Lock()
 
-	defer nStrNumSym.lock.Unlock()
+	defer nStrNumSymSpec.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -3718,10 +3845,10 @@ func (nStrNumSym *NumStrNumberSymbolsSpec) SetPositiveNumSignSpec(
 
 	return new(numStrNumberSymbolsSpecNanobot).
 		setPositiveNumSignSpec(
-			nStrNumSym,
+			nStrNumSymSpec,
 			positiveNumberSign,
 			ePrefix.XCpy(
-				"nStrNumSym"))
+				"nStrNumSymSpec"))
 
 }
 
@@ -3958,19 +4085,19 @@ func (nStrNumSym *NumStrNumberSymbolsSpec) SetPositiveNumSignSpec(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (nStrNumSym *NumStrNumberSymbolsSpec) SetPositiveSymbolsRunes(
+func (nStrNumSymSpec *NumStrNumberSymbolsSpec) SetPositiveSymbolsRunes(
 	leadingPositiveNumberSymbols []rune,
 	trailingPositiveNumberSymbols []rune,
 	positiveNumFieldSymPosition NumberFieldSymbolPosition,
 	errorPrefix interface{}) error {
 
-	if nStrNumSym.lock == nil {
-		nStrNumSym.lock = new(sync.Mutex)
+	if nStrNumSymSpec.lock == nil {
+		nStrNumSymSpec.lock = new(sync.Mutex)
 	}
 
-	nStrNumSym.lock.Lock()
+	nStrNumSymSpec.lock.Lock()
 
-	defer nStrNumSym.lock.Unlock()
+	defer nStrNumSymSpec.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -3988,7 +4115,7 @@ func (nStrNumSym *NumStrNumberSymbolsSpec) SetPositiveSymbolsRunes(
 	}
 
 	return new(numStrNumberSymbolsSpecNanobot).setPositiveNumSignRunes(
-		nStrNumSym,
+		nStrNumSymSpec,
 		leadingPositiveNumberSymbols,
 		trailingPositiveNumberSymbols,
 		positiveNumFieldSymPosition,
@@ -4209,19 +4336,19 @@ func (nStrNumSym *NumStrNumberSymbolsSpec) SetPositiveSymbolsRunes(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (nStrNumSym *NumStrNumberSymbolsSpec) SetPositiveSymbolsStrings(
+func (nStrNumSymSpec *NumStrNumberSymbolsSpec) SetPositiveSymbolsStrings(
 	leadingPositiveNumberSymbols string,
 	trailingPositiveNumberSymbols string,
 	positiveNumFieldSymPosition NumberFieldSymbolPosition,
 	errorPrefix interface{}) error {
 
-	if nStrNumSym.lock == nil {
-		nStrNumSym.lock = new(sync.Mutex)
+	if nStrNumSymSpec.lock == nil {
+		nStrNumSymSpec.lock = new(sync.Mutex)
 	}
 
-	nStrNumSym.lock.Lock()
+	nStrNumSymSpec.lock.Lock()
 
-	defer nStrNumSym.lock.Unlock()
+	defer nStrNumSymSpec.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -4239,7 +4366,7 @@ func (nStrNumSym *NumStrNumberSymbolsSpec) SetPositiveSymbolsStrings(
 	}
 
 	return new(numStrNumberSymbolsSpecNanobot).setPositiveNumSignRunes(
-		nStrNumSym,
+		nStrNumSymSpec,
 		[]rune(leadingPositiveNumberSymbols),
 		[]rune(trailingPositiveNumberSymbols),
 		positiveNumFieldSymPosition,
@@ -4462,18 +4589,18 @@ func (nStrNumSym *NumStrNumberSymbolsSpec) SetPositiveSymbolsStrings(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (nStrNumSym *NumStrNumberSymbolsSpec) SetSimpleCurrency(
+func (nStrNumSymSpec *NumStrNumberSymbolsSpec) SetSimpleCurrency(
 	currencySymbols string,
 	leadingNumSymbols bool,
 	errorPrefix interface{}) error {
 
-	if nStrNumSym.lock == nil {
-		nStrNumSym.lock = new(sync.Mutex)
+	if nStrNumSymSpec.lock == nil {
+		nStrNumSymSpec.lock = new(sync.Mutex)
 	}
 
-	nStrNumSym.lock.Lock()
+	nStrNumSymSpec.lock.Lock()
 
-	defer nStrNumSym.lock.Unlock()
+	defer nStrNumSymSpec.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -4491,11 +4618,11 @@ func (nStrNumSym *NumStrNumberSymbolsSpec) SetSimpleCurrency(
 	}
 
 	return new(numStrNumberSymbolsSpecMechanics).setSimpleNumSymbolsConfig(
-		nStrNumSym,
+		nStrNumSymSpec,
 		currencySymbols,
 		leadingNumSymbols,
 		ePrefix.XCpy(
-			"nStrNumSym<-"))
+			"nStrNumSymSpec<-"))
 }
 
 //	SetSimpleSignedNumber
@@ -4693,17 +4820,17 @@ func (nStrNumSym *NumStrNumberSymbolsSpec) SetSimpleCurrency(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (nStrNumSym *NumStrNumberSymbolsSpec) SetSimpleSignedNumber(
+func (nStrNumSymSpec *NumStrNumberSymbolsSpec) SetSimpleSignedNumber(
 	leadingNumSymbols bool,
 	errorPrefix interface{}) error {
 
-	if nStrNumSym.lock == nil {
-		nStrNumSym.lock = new(sync.Mutex)
+	if nStrNumSymSpec.lock == nil {
+		nStrNumSymSpec.lock = new(sync.Mutex)
 	}
 
-	nStrNumSym.lock.Lock()
+	nStrNumSymSpec.lock.Lock()
 
-	defer nStrNumSym.lock.Unlock()
+	defer nStrNumSymSpec.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -4721,11 +4848,11 @@ func (nStrNumSym *NumStrNumberSymbolsSpec) SetSimpleSignedNumber(
 	}
 
 	return new(numStrNumberSymbolsSpecMechanics).setSimpleNumSymbolsConfig(
-		nStrNumSym,
+		nStrNumSymSpec,
 		"",
 		leadingNumSymbols,
 		ePrefix.XCpy(
-			"nStrNumSym<-"))
+			"nStrNumSymSpec<-"))
 }
 
 //	SetSymbolsRunes
@@ -5171,7 +5298,7 @@ func (nStrNumSym *NumStrNumberSymbolsSpec) SetSimpleSignedNumber(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (nStrNumSym *NumStrNumberSymbolsSpec) SetSymbolsRunes(
+func (nStrNumSymSpec *NumStrNumberSymbolsSpec) SetSymbolsRunes(
 	leadingPositiveNumberSymbols []rune,
 	trailingPositiveNumberSymbols []rune,
 	positiveNumFieldSymPosition NumberFieldSymbolPosition,
@@ -5183,13 +5310,13 @@ func (nStrNumSym *NumStrNumberSymbolsSpec) SetSymbolsRunes(
 	zeroNumFieldSymPosition NumberFieldSymbolPosition,
 	errorPrefix interface{}) error {
 
-	if nStrNumSym.lock == nil {
-		nStrNumSym.lock = new(sync.Mutex)
+	if nStrNumSymSpec.lock == nil {
+		nStrNumSymSpec.lock = new(sync.Mutex)
 	}
 
-	nStrNumSym.lock.Lock()
+	nStrNumSymSpec.lock.Lock()
 
-	defer nStrNumSym.lock.Unlock()
+	defer nStrNumSymSpec.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -5209,7 +5336,7 @@ func (nStrNumSym *NumStrNumberSymbolsSpec) SetSymbolsRunes(
 	nStrNumSymNanobot := numStrNumberSymbolsSpecNanobot{}
 
 	err = nStrNumSymNanobot.setPositiveNumSignRunes(
-		nStrNumSym,
+		nStrNumSymSpec,
 		leadingPositiveNumberSymbols,
 		trailingPositiveNumberSymbols,
 		positiveNumFieldSymPosition,
@@ -5221,7 +5348,7 @@ func (nStrNumSym *NumStrNumberSymbolsSpec) SetSymbolsRunes(
 	}
 
 	err = nStrNumSymNanobot.setNegativeNumSignRunes(
-		nStrNumSym,
+		nStrNumSymSpec,
 		leadingNegativeNumberSymbols,
 		trailingNegativeNumberSymbols,
 		negativeNumFieldSymPosition,
@@ -5233,7 +5360,7 @@ func (nStrNumSym *NumStrNumberSymbolsSpec) SetSymbolsRunes(
 	}
 
 	return nStrNumSymNanobot.setZeroNumSignRunes(
-		nStrNumSym,
+		nStrNumSymSpec,
 		leadingZeroNumberSymbols,
 		trailingZeroNumberSymbols,
 		zeroNumFieldSymPosition,
@@ -5359,19 +5486,19 @@ func (nStrNumSym *NumStrNumberSymbolsSpec) SetSymbolsRunes(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (nStrNumSym *NumStrNumberSymbolsSpec) SetSymbolsSpecs(
+func (nStrNumSymSpec *NumStrNumberSymbolsSpec) SetSymbolsSpecs(
 	positiveNumberSign NumStrNumberSymbolSpec,
 	negativeNumberSign NumStrNumberSymbolSpec,
 	zeroNumberSign NumStrNumberSymbolSpec,
 	errorPrefix interface{}) error {
 
-	if nStrNumSym.lock == nil {
-		nStrNumSym.lock = new(sync.Mutex)
+	if nStrNumSymSpec.lock == nil {
+		nStrNumSymSpec.lock = new(sync.Mutex)
 	}
 
-	nStrNumSym.lock.Lock()
+	nStrNumSymSpec.lock.Lock()
 
-	defer nStrNumSym.lock.Unlock()
+	defer nStrNumSymSpec.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -5390,12 +5517,12 @@ func (nStrNumSym *NumStrNumberSymbolsSpec) SetSymbolsSpecs(
 
 	return new(numStrNumberSymbolsSpecMechanics).
 		setNumSymbolSpecs(
-			nStrNumSym,
+			nStrNumSymSpec,
 			positiveNumberSign,
 			negativeNumberSign,
 			zeroNumberSign,
 			ePrefix.XCpy(
-				"nStrNumSym"))
+				"nStrNumSymSpec"))
 
 }
 
@@ -5850,7 +5977,7 @@ func (nStrNumSym *NumStrNumberSymbolsSpec) SetSymbolsSpecs(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (nStrNumSym *NumStrNumberSymbolsSpec) SetSymbolsStrings(
+func (nStrNumSymSpec *NumStrNumberSymbolsSpec) SetSymbolsStrings(
 	leadingPositiveNumberSymbols string,
 	trailingPositiveNumberSymbols string,
 	positiveNumFieldSymPosition NumberFieldSymbolPosition,
@@ -5862,13 +5989,13 @@ func (nStrNumSym *NumStrNumberSymbolsSpec) SetSymbolsStrings(
 	zeroNumFieldSymPosition NumberFieldSymbolPosition,
 	errorPrefix interface{}) error {
 
-	if nStrNumSym.lock == nil {
-		nStrNumSym.lock = new(sync.Mutex)
+	if nStrNumSymSpec.lock == nil {
+		nStrNumSymSpec.lock = new(sync.Mutex)
 	}
 
-	nStrNumSym.lock.Lock()
+	nStrNumSymSpec.lock.Lock()
 
-	defer nStrNumSym.lock.Unlock()
+	defer nStrNumSymSpec.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -6128,19 +6255,19 @@ func (nStrNumSym *NumStrNumberSymbolsSpec) SetSymbolsStrings(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (nStrNumSym *NumStrNumberSymbolsSpec) SetZeroSymbolsRunes(
+func (nStrNumSymSpec *NumStrNumberSymbolsSpec) SetZeroSymbolsRunes(
 	leadingZeroNumberSymbols []rune,
 	trailingZeroNumberSymbols []rune,
 	zeroNumFieldSymPosition NumberFieldSymbolPosition,
 	errorPrefix interface{}) error {
 
-	if nStrNumSym.lock == nil {
-		nStrNumSym.lock = new(sync.Mutex)
+	if nStrNumSymSpec.lock == nil {
+		nStrNumSymSpec.lock = new(sync.Mutex)
 	}
 
-	nStrNumSym.lock.Lock()
+	nStrNumSymSpec.lock.Lock()
 
-	defer nStrNumSym.lock.Unlock()
+	defer nStrNumSymSpec.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -6158,7 +6285,7 @@ func (nStrNumSym *NumStrNumberSymbolsSpec) SetZeroSymbolsRunes(
 	}
 
 	return new(numStrNumberSymbolsSpecNanobot).setZeroNumSignRunes(
-		nStrNumSym,
+		nStrNumSymSpec,
 		leadingZeroNumberSymbols,
 		trailingZeroNumberSymbols,
 		zeroNumFieldSymPosition,
@@ -6268,17 +6395,17 @@ func (nStrNumSym *NumStrNumberSymbolsSpec) SetZeroSymbolsRunes(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (nStrNumSym *NumStrNumberSymbolsSpec) SetZeroNumSignSpec(
+func (nStrNumSymSpec *NumStrNumberSymbolsSpec) SetZeroNumSignSpec(
 	positiveNumberSign NumStrNumberSymbolSpec,
 	errorPrefix interface{}) error {
 
-	if nStrNumSym.lock == nil {
-		nStrNumSym.lock = new(sync.Mutex)
+	if nStrNumSymSpec.lock == nil {
+		nStrNumSymSpec.lock = new(sync.Mutex)
 	}
 
-	nStrNumSym.lock.Lock()
+	nStrNumSymSpec.lock.Lock()
 
-	defer nStrNumSym.lock.Unlock()
+	defer nStrNumSymSpec.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -6297,10 +6424,10 @@ func (nStrNumSym *NumStrNumberSymbolsSpec) SetZeroNumSignSpec(
 
 	return new(numStrNumberSymbolsSpecNanobot).
 		setZeroNumSignSpec(
-			nStrNumSym,
+			nStrNumSymSpec,
 			positiveNumberSign,
 			ePrefix.XCpy(
-				"nStrNumSym"))
+				"nStrNumSymSpec"))
 
 }
 
@@ -6510,19 +6637,19 @@ func (nStrNumSym *NumStrNumberSymbolsSpec) SetZeroNumSignSpec(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (nStrNumSym *NumStrNumberSymbolsSpec) SetZeroSymbolsStrings(
+func (nStrNumSymSpec *NumStrNumberSymbolsSpec) SetZeroSymbolsStrings(
 	leadingZeroNumberSymbols string,
 	trailingZeroNumberSymbols string,
 	zeroNumFieldSymPosition NumberFieldSymbolPosition,
 	errorPrefix interface{}) error {
 
-	if nStrNumSym.lock == nil {
-		nStrNumSym.lock = new(sync.Mutex)
+	if nStrNumSymSpec.lock == nil {
+		nStrNumSymSpec.lock = new(sync.Mutex)
 	}
 
-	nStrNumSym.lock.Lock()
+	nStrNumSymSpec.lock.Lock()
 
-	defer nStrNumSym.lock.Unlock()
+	defer nStrNumSymSpec.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -6540,7 +6667,7 @@ func (nStrNumSym *NumStrNumberSymbolsSpec) SetZeroSymbolsStrings(
 	}
 
 	return new(numStrNumberSymbolsSpecNanobot).setZeroNumSignRunes(
-		nStrNumSym,
+		nStrNumSymSpec,
 		[]rune(leadingZeroNumberSymbols),
 		[]rune(trailingZeroNumberSymbols),
 		zeroNumFieldSymPosition,
