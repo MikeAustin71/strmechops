@@ -3274,10 +3274,14 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtUS(
 //
 //	decSeparator				DecimalSeparatorSpec
 //
-//		This structure contains the radix point or decimal
-//		separator character(s) (a.k.a. decimal point)
-//		which be used to separate integer and fractional
-//		digits within a formatted Number String.
+//		This structure contains the radix point or
+//		decimal separator character(s) which will be used
+//		to separate integer and fractional digits within
+//		a formatted Number String.
+//
+//		In the US, UK, Australia and most of Canada, the
+//		decimal separator is the period character ('.')
+//		known as the decimal point.
 //
 //	intSeparatorSpec				IntegerSeparatorSpec
 //
@@ -8524,10 +8528,10 @@ func (numStrFmtSpec *NumStrFormatSpec) SetPositiveNumberFmtSpec(
 //
 //	decSeparator				DecimalSeparatorSpec
 //
-//		This structure contains the radix point or decimal
-//		separator character(s) (a.k.a. decimal point)
-//		which be used to separate integer and fractional
-//		digits within a formatted Number String.
+//		This structure contains the radix point or
+//		decimal separator character(s) which will be used
+//		to separate integer and fractional digits within
+//		a formatted Number String.
 //
 //		In the US, UK, Australia and most of Canada, the
 //		decimal separator is the period character ('.')
@@ -14951,7 +14955,6 @@ func (numStrFmtSpecAtom *numStrFmtSpecAtom) equal(
 //		to the value of the decimal separator specified
 //		by input parameter, 'decSeparator'.
 //
-//
 //	decSeparator				[]rune
 //
 //		This rune array contains the character or
@@ -15735,10 +15738,14 @@ func (numStrFmtSpecAtom *numStrFmtSpecAtom) setNegativeNumberSignSpec(
 //
 //	decSeparator					DecimalSeparatorSpec
 //
-//		This structure contains the radix point or decimal
-//		separator character(s) (a.k.a. decimal point)
-//		which be used to separate integer and fractional
-//		digits within a formatted Number String.
+//		This structure contains the radix point or
+//		decimal separator character(s) which will be used
+//		to separate integer and fractional digits within
+//		a formatted Number String.
+//
+//		In the US, UK, Australia and most of Canada, the
+//		decimal separator is the period character ('.')
+//		known as the decimal point.
 //
 //	intSeparatorSpec				IntegerSeparatorSpec
 //
