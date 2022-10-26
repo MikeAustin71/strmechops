@@ -5872,13 +5872,13 @@ func (numStrKernel *NumberStrKernel) FmtSignedNumStrUS(
 			ePrefix.XCpy("numStrKernel"))
 }
 
-//	FmtSimpleCurrency
+//	FmtSimpleSignedNumber
 //
-//	Returns a number string configured with Currency
+//	Returns a number string configured with Signed
 //	Number String Formatting.
 //
 //	This method provides a simplified means of creating
-//	a Currency Number String using default values.
+//	a Signed Number String using default values.
 //
 //	If the default configuration values fail to provide
 //	sufficient granular control over currency number
@@ -5900,7 +5900,7 @@ func (numStrKernel *NumberStrKernel) FmtSignedNumStrUS(
 //
 // ----------------------------------------------------------------
 //
-// # Currency Defaults
+// # Signed Number Defaults
 //
 //	Integer Grouping
 //		Integers are grouped by thousands or groups
@@ -5908,37 +5908,25 @@ func (numStrKernel *NumberStrKernel) FmtSignedNumStrUS(
 //
 //		Example: 1,000,000,000
 //
-//	Currency-Negative Symbol Position:
-//		Currency Symbol defaults to 'outside' the
-//		minus sign.
-//
-//		Examples:
-//			European Number String: "123.456- €"
-//			US Number String: "$ -123.456"
-//
-//	Negative Number Symbol:
+//	Negative Signed Number Symbol:
 //		The default Negative Number Symbol is the
 //		minus sign ('-').
 //
 //		Examples:
-//			European Number String: "123.456- €"
-//			US Number String: "$ -123.456"
+//			European Number String: "123.456-"
+//			US Number String: "-123.456"
 //
-//	Positive Number Symbol:
-//		No Positive Number Sign Symbol. Positive
-//		values are assumed.
+//	Positive Signed Number Symbol:
+//		No Positive Number Sign Symbol. Positive values
+//		are assumed.
 //
-//		Positive Numeric Value Currency Examples:
-//			European Number String: "123.456 €"
-//			US Number String: "$ 123.456"
+//			Positive Value Number String: "123.456"
 //
-//	Zero Number Symbol:
+//	Zero Signed Number Symbol:
 //		No Number Sign Symbol. Technically a zero value
 //		is neither positive nor negative.
 //
-//		Zero Numeric Value Currency Examples:
-//			European Number String: "0.00 €"
-//			US Number String: "$ 0.00"
+//			Zero Value Number String: "123.456"
 //
 //	Number Field Symbol Position:
 //		Defaults to "Inside Number Field"
@@ -5994,13 +5982,6 @@ func (numStrKernel *NumberStrKernel) FmtSignedNumStrUS(
 //
 //		If this input parameter contains a zero length
 //		string, an error will be returned.
-//
-//	currencySymbols				string
-//
-//		The symbol or symbols used to format currency.
-//		This currency formatting will be configured in
-//		the new instance of NumStrFormatSpec returned by
-//		this method.
 //
 //	leadingNumSymbols			bool
 //
@@ -6387,7 +6368,7 @@ func (numStrKernel *NumberStrKernel) FmtSignedNumStrUS(
 //		will return a formatted number string based on the
 //		numeric value specified in the current instance of
 //		NumberStrKernel. The returned number string will
-//		be configured with Currency Number String Formatting.
+//		be configured with Signed Number String Formatting.
 //
 //	err							error
 //
@@ -6400,10 +6381,9 @@ func (numStrKernel *NumberStrKernel) FmtSignedNumStrUS(
 //		and text passed by input parameter, 'errorPrefix'. The
 //		'errorPrefix' text will be attached to the beginning of
 //		the error message.
-func (numStrKernel *NumberStrKernel) FmtSimpleCurrency(
+func (numStrKernel *NumberStrKernel) FmtSimpleSignedNumber(
 	decSeparatorChars string,
 	intSeparatorChars string,
-	currencySymbols string,
 	leadingNumSymbols bool,
 	numFieldLength int,
 	numFieldJustification TextJustify,
@@ -6425,7 +6405,7 @@ func (numStrKernel *NumberStrKernel) FmtSimpleCurrency(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumberStrKernel."+
-			"FmtSimpleCurrency()",
+			"FmtSimpleSignedNumber()",
 		"")
 
 	if err != nil {
@@ -6434,10 +6414,9 @@ func (numStrKernel *NumberStrKernel) FmtSimpleCurrency(
 	var numStrFmtSpec NumStrFormatSpec
 
 	numStrFmtSpec,
-		err = new(NumStrFormatSpec).NewSimpleCurrency(
+		err = new(NumStrFormatSpec).NewSimpleSignedNumber(
 		decSeparatorChars,
 		intSeparatorChars,
-		currencySymbols,
 		leadingNumSymbols,
 		numFieldLength,
 		numFieldJustification,
