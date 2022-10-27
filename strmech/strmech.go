@@ -1858,7 +1858,7 @@ func (sMech *StrMech) ExtractNumberRunes(
 
 	searchResults,
 		numStrKernel,
-		err = new(numStrBuilderElectron).extractNumRunes(
+		err = new(numberStrKernelQuark).extractNumRunes(
 		rawNumStrRunes,
 		"numberStr",
 		startSearchIndex,
