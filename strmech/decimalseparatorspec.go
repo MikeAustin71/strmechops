@@ -813,6 +813,54 @@ func (decSeparatorSpec *DecimalSeparatorSpec) IsValidInstanceError(
 	return err
 }
 
+//	NewNOP
+//
+//	'NOP' stands for 'No Operation'. It signals that the
+//	instance of DecimalSeparatorSpec returned by this
+//	method is empty, invalid and non-operational in terms
+//	of formatting decimal separators or radix points
+//	within a formatted number string.
+//
+//	In essence, this means that the DecimalSeparatorSpec
+//	instance returned by this method is an empty placeholder
+//	which will be completely ignored when parsing or
+//	formatting number strings.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	NONE
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	newDecimalSeparator			DecimalSeparatorSpec
+//
+//	An new, empty and non-operational instance of
+//	DecimalSeparatorSpec.
+//
+//	This instance will serve as an empty placeholder
+//	which will be completely ignored by number string
+//	parsing and formatting algorithms.
+func (decSeparatorSpec *DecimalSeparatorSpec) NewNOP() (newDecimalSeparator DecimalSeparatorSpec) {
+
+	if decSeparatorSpec.lock == nil {
+		decSeparatorSpec.lock = new(sync.Mutex)
+	}
+
+	decSeparatorSpec.lock.Lock()
+
+	defer decSeparatorSpec.lock.Unlock()
+
+	new(decimalSeparatorSpecAtom).
+		empty(
+			&newDecimalSeparator)
+
+	return newDecimalSeparator
+}
+
 //	NewRunes
 //
 //	Creates and returns a new instance of
@@ -1201,19 +1249,19 @@ func (decSeparatorSpec *DecimalSeparatorSpec) NewStr(
 //	NewFrance
 //
 //	Creates and returns a new instance of
-//	DecimalSeparatorSpec configured with the
-//	radix point or decimal separator used in
-//	France.
+//	DecimalSeparatorSpec configured with a comma
+//	character (',').
 //
-//	The radix point or decimal separator used
-//	by France is the comma character (",").
+//	Type DecimalSeparatorSpec contains the radix point
+//	or decimal separator character(s) which will be used
+//	to separate integer and fractional digits within a
+//	formatted Number String.
 //
-//	This comma character (",") is therefore
-//	used as a radix point or decimal separator
-//	to separate integer and fractional digits
-//	within a floating point numeric value by
-//	France and various other member countries
-//	in the European Union.
+//	The comma character (',') is used by France
+//	Quebec, Canada and many countries in the European
+//	Union as a radix point separating integer and
+//	fractional digits within floating point numeric
+//	values.
 //
 //		French Example
 //			1,45 (The fractional value is 45)
@@ -1293,10 +1341,10 @@ func (decSeparatorSpec *DecimalSeparatorSpec) NewStr(
 //		single comma character (',').
 //
 //		The comma character (',') is used by France
-//		and other countries in the European Union as
-//		a radix point separating integer and
-//		fractional digits withing floating point
-//		numeric values.
+//		Quebec, Canada and many countries in the
+//		European Union as a radix point separating
+//		integer and fractional digits withing floating
+//		point numeric values.
 //
 //	err							error
 //
@@ -1357,10 +1405,10 @@ func (decSeparatorSpec *DecimalSeparatorSpec) NewFrance(
 //	used as a radix point or decimal separator
 //	to separate integer and fractional digits
 //	within a floating point numeric value by
-//	Germany and various other member countries
+//	Germany and many other member countries
 //	in the European Union.
 //
-//		German Example
+//		German Decimal Separator Example
 //			1,45 (The fractional value is 45)
 //
 // ----------------------------------------------------------------
@@ -1438,10 +1486,10 @@ func (decSeparatorSpec *DecimalSeparatorSpec) NewFrance(
 //		single comma character (',').
 //
 //		The comma character (',') is used by Germany
-//		and other countries in the European Union as
-//		a radix point separating integer and
-//		fractional digits withing floating point
-//		numeric values.
+//		and many other countries in the European Union
+//		as a radix point separating integer and
+//		fractional digits withing floating point numeric
+//		values.
 //
 //	err							error
 //
@@ -1493,11 +1541,12 @@ func (decSeparatorSpec *DecimalSeparatorSpec) NewGermany(
 //	Creates and returns a new instance of
 //	DecimalSeparatorSpec configured with the radix
 //	point or decimal separator used by the United
-//	States and most of Canada.
+//	States, UK, Australia and most of Canada.
 //
 //	The radix point or decimal separator used by
-//	the United States is the period character
-//	("."), also known as a decimal point.
+//	the United States, UK, Australia and most of
+//	Canada is the period character ("."), also
+//	known as a decimal point.
 //
 //	This period character (".") is therefore used
 //	as a radix point to separate integer and
