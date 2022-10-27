@@ -6536,7 +6536,7 @@ func (numStrKernel *NumberStrKernel) FmtSignedNumStrUS(
 //
 //	# Input Parameters
 //
-//	decSeparator				string
+//	decSeparatorChars			string
 //
 //		This string contains the character or characters
 //		which will be configured as the Decimal Separator
@@ -12453,19 +12453,41 @@ func (numStrKernel *NumberStrKernel) NewParseGermanNumberStr(
 //	Receives a Pure Number String and proceeds to return
 //	the extracted numeric value as a type NumberStrKernel.
 //
-//	A Pure Number String is defined as follows:
+//	A "Pure Number String" is defined as follows:
 //
-//		1.	Contains one or more numeric character digits
+//		1.	Consists of numeric character digits
 //			zero through nine inclusive (0-9).
 //
-//		2.	Floating point numbers will separate integer
-//			and fractional digits with a period ('.') or
-//			decimal point.
+//		2.	Option: A Pure Number String may include
+//			a radix point or decimal separator. The
+//			decimal separator may consist of one or
+//			more characters.
 //
-//		3.	Negative numeric values will include a leading
-//			minus sign ('-'). If the leading minus is NOT
-//			present, the numeric value is assumed to be
-//			positive.
+//			In the US, UK, Australia and most of Canada,
+//			the decimal separator is the period
+//			character ('.') known as the decimal point.
+//
+//		3.	Optional: A Pure Number String may include a
+//			negative number sign symbol consisting of a
+//			minus sign ('-'). Only the minus sign ('-')
+//			classifies the numeric value as a negative
+//			number in Pure Number String.
+//
+//			If the leading or trailing minus sign ('-')
+//			is NOT present, the numeric value is assumed
+//			to be positive.
+//
+//		4.	Only numeric characters, the decimal
+//			separator and the minus sign will be
+//			processed by the number string parsing
+//			algorithm. All other characters will be
+//			ignored.
+//
+//		5.	Pure Number Strings consist of a single
+//			numeric value. The entire Pure Number String
+//			will be parsed, or processed, and only one
+//			numeric value per Pure Number String will
+//			be returned.
 //
 //	Pure number strings are routinely produced from methods
 //	like fmt.Sprintf() when converting numeric values to
@@ -12481,19 +12503,87 @@ func (numStrKernel *NumberStrKernel) NewParseGermanNumberStr(
 //		digits from	which a numeric value will be
 //		extracted and returned as a NumberStrKernel.
 //
-//		A Pure Number String is defined as follows:
+//		A "Pure Number String" is defined as follows:
 //
-//			1.	Contains one or more numeric character digits
+//			1.	Consists of numeric character digits
 //				zero through nine inclusive (0-9).
 //
-//			2.	Floating point numbers will separate integer
-//				and fractional digits with a period ('.') or
-//				decimal point.
+//			2.	Option: A Pure Number String may include
+//				a radix point or decimal separator. The
+//				decimal separator may consist of one or
+//				more characters.
 //
-//			3.	Negative numeric values will include a leading
-//				minus sign ('-'). If the leading minus is NOT
-//				present, the numeric value is assumed to be
-//				positive.
+//				In the US, UK, Australia and most of Canada,
+//				the decimal separator is the period
+//				character ('.') known as the decimal point.
+//
+//			3.	Optional: A Pure Number String may include a
+//				negative number sign symbol consisting of a
+//				minus sign ('-'). Only the minus sign ('-')
+//				classifies the numeric value as a negative
+//				number in Pure Number String.
+//
+//				If the leading or trailing minus sign ('-')
+//				is NOT present, the numeric value is assumed
+//				to be positive.
+//
+//			4.	Only numeric characters, the decimal
+//				separator and the minus sign will be
+//				processed by the number string parsing
+//				algorithm. All other characters will be
+//				ignored.
+//
+//			5.	Pure Number Strings consist of a single
+//				numeric value. The entire Pure Number String
+//				will be parsed, or processed, and only one
+//				numeric value per Pure Number String will
+//				be returned.
+//
+//	decSeparatorChars			string
+//
+//		This string contains the character or characters
+//		which will be configured as the Decimal Separator
+//		Symbol.
+//
+//		The Decimal Separator is also known as the radix
+//		point and is used to separate integer and
+//		fractional digits within a formatted, floating
+//		point Number String.
+//
+//		In the US, UK, Australia and most of Canada, the
+//		Decimal Separator is the period character ('.')
+//		known as the decimal point.
+//
+//		In France, Germany and many countries in the
+//		European Union, the Decimal Separator is the
+//		comma character (',').
+//
+//	leadingNumSymbols 			bool
+//
+//		Controls the positioning of Number Symbols in a
+//		Number String Format. Number Symbols refers to
+//		the negative number sign or minus sign ('-') used
+//		in classifying negative numeric values.
+//
+//		When set to 'true', the Pure Number String
+//		parsing algorithm will search for leading minus
+//		signs ('-') at the beginning of the Pure Number
+//		String. Leading minus signs represent the
+//		standard for designating negative numeric values
+//		in the US, UK, Australia and most of Canada.
+//
+//		Example Leading Number Symbols:
+//			"-123.456"
+//
+//		When set to 'false', the Pure Number String
+//		parsing algorithm will search for trailing minus
+//		signs ('-') at the end of Pure Number String.
+//		Trailing minus signs represent the standard for
+//		France, Germany and many countries in the
+//		European Union.
+//
+//		Example Trailing Number Symbols:
+//			"123.456-"
 //
 //	 errorPrefix                interface{}
 //
@@ -12552,8 +12642,8 @@ func (numStrKernel *NumberStrKernel) NewParseGermanNumberStr(
 //
 //		If this method completes successfully, a new instance
 //		of NumberStrKernel will be returned configured with
-//		the numeric value passed through paramter,
-//		'pureNumStr'.
+//		the numeric value parsed and extracted from input
+//		paramter, 'pureNumStr'.
 //
 //	error
 //
@@ -12568,6 +12658,8 @@ func (numStrKernel *NumberStrKernel) NewParseGermanNumberStr(
 //	 	of the error message.
 func (numStrKernel *NumberStrKernel) NewParsePureNumberStr(
 	pureNumStr string,
+	decSeparatorChars string,
+	leadingNumSymbols bool,
 	errorPrefix interface{}) (
 	NumberStrKernel,
 	error) {
@@ -12603,9 +12695,20 @@ func (numStrKernel *NumberStrKernel) NewParsePureNumberStr(
 		charSearchType: CharSearchType.LinearTargetStartingIndex(),
 	}
 
+	var decSeparatorSpec DecimalSeparatorSpec
+
+	decSeparatorSpec,
+		err = new(DecimalSeparatorSpec).NewStr(
+		decSeparatorChars,
+		ePrefix.XCpy(
+			"decSeparatorSpec<-"+
+				"decSeparatorChars"))
+
 	newNumStrKernel,
-		err = new(numStrBuilderElectron).parsePurNumStr(
+		err = new(numStrBuilderElectron).parsePureNumStr(
 		runeArrayDto,
+		decSeparatorSpec,
+		leadingNumSymbols,
 		ePrefix.XCpy(
 			pureNumStr))
 

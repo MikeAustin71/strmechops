@@ -3272,7 +3272,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtUS(
 //
 // # Input Parameters
 //
-//	decSeparator				DecimalSeparatorSpec
+//	decSeparatorSpec				DecimalSeparatorSpec
 //
 //		This structure contains the radix point or
 //		decimal separator character(s) which will be used
@@ -3282,6 +3282,10 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtUS(
 //		In the US, UK, Australia and most of Canada, the
 //		decimal separator is the period character ('.')
 //		known as the decimal point.
+//
+//		In France, Germany and many countries in the
+//		European Union, the Decimal Separator is the
+//		comma character (',').
 //
 //	intSeparatorSpec				IntegerSeparatorSpec
 //
@@ -3566,7 +3570,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtUS(
 //		text will be attached to the beginning of the
 //		error message.
 func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtComponents(
-	decSeparator DecimalSeparatorSpec,
+	decSeparatorSpec DecimalSeparatorSpec,
 	intSeparatorSpec IntegerSeparatorSpec,
 	numberSymbolsSpec NumStrNumberSymbolsSpec,
 	numberFieldSpec NumStrNumberFieldSpec,
@@ -3597,7 +3601,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtComponents(
 
 	err = new(numStrFmtSpecAtom).setNStrFmtComponents(
 		&newSignedNumFmtSpec,
-		decSeparator,
+		decSeparatorSpec,
 		intSeparatorSpec,
 		numberSymbolsSpec,
 		numberFieldSpec,
@@ -3627,6 +3631,10 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtComponents(
 //		In the US, UK, Australia and most of Canada, the
 //		decimal separator is the period character ('.')
 //		known as the decimal point.
+//
+//		In France, Germany and many countries in the
+//		European Union, the Decimal Separator is the
+//		comma character (',').
 //
 //	intSeparatorChars				string
 //
@@ -4138,6 +4146,10 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtParams(
 //		In the US, UK, Australia and most of Canada, the
 //		decimal separator is the period character ('.')
 //		known as the decimal point.
+//
+//		In France, Germany and many countries in the
+//		European Union, the Decimal Separator is the
+//		comma character (',').
 //
 //	intSeparatorChars				[]rune
 //
@@ -5736,6 +5748,10 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumFmtUS(
 //		decimal separator is the period character ('.')
 //		known as the decimal point.
 //
+//		In France, Germany and many countries in the
+//		European Union, the Decimal Separator is the
+//		comma character (',').
+//
 //	intSeparatorChars			string
 //
 //		One or more characters used to separate groups of
@@ -6066,6 +6082,10 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSimpleCurrency(
 //		In the US, UK, Australia and most of Canada, the
 //		decimal separator is the period character ('.')
 //		known as the decimal point.
+//
+//		In France, Germany and many countries in the
+//		European Union, the Decimal Separator is the
+//		comma character (',').
 //
 //	intSeparatorChars			string
 //
@@ -7791,15 +7811,17 @@ func (numStrFmtSpec *NumStrFormatSpec) SetCurrencyFmtUS(
 			ePrefix.XCpy("numStrFmtSpec<-"))
 }
 
-// SetDecimalSeparatorSpec - Deletes and replaces the Decimal
-// Separator Specification for the current instance of
-// NumStrFormatSpec.
+//	SetDecimalSeparator
+//
+//	SpecDeletes and replaces the Decimal Separator
+//	Specification for the current instance of
+//	NumStrFormatSpec.
 //
 // ----------------------------------------------------------------
 //
 // # Input Parameters
 //
-//	decSeparatorSpec			*DecimalSeparatorSpec
+//	decSeparatorSpec			DecimalSeparatorSpec
 //
 //		An instance of DecimalSeparatorSpec. The member
 //		variable data values contained in this instance
@@ -7808,13 +7830,18 @@ func (numStrFmtSpec *NumStrFormatSpec) SetCurrencyFmtUS(
 //
 //			'NumStrFormatSpec.decSeparator'.
 //
-//		The decimal separator is also known as the radix
-//		point and is used to separate integer and fractional
-//		digits within a formatted Number String.
+//		The Decimal Separator is also known as the radix
+//		point and is used to separate integer and
+//		fractional digits within a formatted, floating
+//		point Number String.
 //
 //		In the US, UK, Australia and most of Canada, the
-//		decimal separator is the period character ('.')
+//		Decimal Separator is the period character ('.')
 //		known as the decimal point.
+//
+//		In France, Germany and many countries in the
+//		European Union, the Decimal Separator is the
+//		comma character (',').
 //
 //	 errorPrefix                interface{}
 //
@@ -8537,6 +8564,10 @@ func (numStrFmtSpec *NumStrFormatSpec) SetPositiveNumberFmtSpec(
 //		decimal separator is the period character ('.')
 //		known as the decimal point.
 //
+//		In France, Germany and many countries in the
+//		European Union, the Decimal Separator is the
+//		comma character (',').
+//
 //	intSeparatorSpec				IntegerSeparatorSpec
 //
 //		Integer Separator Specification. This type
@@ -8807,6 +8838,10 @@ func (numStrFmtSpec *NumStrFormatSpec) SetNumFmtComponents(
 //		In the US, UK, Australia and most of Canada, the
 //		decimal separator is the period character ('.')
 //		known as the decimal point.
+//
+//		In France, Germany and many countries in the
+//		European Union, the Decimal Separator is the
+//		comma character (',').
 //
 //	intSeparatorChars			string
 //
@@ -9226,6 +9261,10 @@ func (numStrFmtSpec *NumStrFormatSpec) SetNumFmtParams(
 //		In the US, UK, Australia and most of Canada, the
 //		decimal separator is the period character ('.')
 //		known as the decimal point.
+//
+//		In France, Germany and many countries in the
+//		European Union, the Decimal Separator is the
+//		comma character (',').
 //
 //	intSeparatorChars			[]rune
 //
@@ -10730,6 +10769,10 @@ func (numStrFmtSpec *NumStrFormatSpec) SetSignedNumFmtUS(
 //		decimal separator is the period character ('.')
 //		known as the decimal point.
 //
+//		In France, Germany and many countries in the
+//		European Union, the Decimal Separator is the
+//		comma character (',').
+//
 //	intSeparatorChars			string
 //
 //		One or more characters used to separate groups of
@@ -11062,6 +11105,10 @@ func (numStrFmtSpec *NumStrFormatSpec) SetSimpleCurrency(
 //		In the US, UK, Australia and most of Canada, the
 //		decimal separator is the period character ('.')
 //		known as the decimal point.
+//
+//		In France, Germany and many countries in the
+//		European Union, the Decimal Separator is the
+//		comma character (',').
 //
 //	intSeparatorChars			string
 //
@@ -13021,6 +13068,10 @@ func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setCurrencyNStrFmtUS(
 //		decimal separator is the period character ('.')
 //		known as the decimal point.
 //
+//		In France, Germany and many countries in the
+//		European Union, the Decimal Separator is the
+//		comma character (',').
+//
 //	intSeparatorChars				[]rune
 //
 //		A rune array containing one or more characters
@@ -14505,6 +14556,10 @@ func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtUS(
 //		decimal separator is the period character ('.')
 //		known as the decimal point.
 //
+//		In France, Germany and many countries in the
+//		European Union, the Decimal Separator is the
+//		comma character (',').
+//
 //	intSeparatorChars			string
 //
 //		One or more characters used to separate groups of
@@ -14971,6 +15026,10 @@ func (numStrFmtSpecAtom *numStrFmtSpecAtom) equal(
 //		decimal separator is the period character ('.')
 //		known as the decimal point.
 //
+//		In France, Germany and many countries in the
+//		European Union, the Decimal Separator is the
+//		comma character (',').
+//
 //	errPrefDto					*ePref.ErrPrefixDto
 //
 //		This object encapsulates an error prefix string which is
@@ -15072,8 +15131,13 @@ func (numStrFmtSpecAtom *numStrFmtSpecAtom) setDecimalSeparatorParams(
 //		will be copied to:
 //			'signedNumFmt.decSeparator'.
 //
-//		In the United States, the decimal separator is
-//		referred to as the decimal point.
+//		In the US, UK, Australia and most of Canada, the
+//		Decimal Separator is the period character ('.')
+//		known as the decimal point.
+//
+//		In France, Germany and many countries in the
+//		European Union, the Decimal Separator is the
+//		comma character (',').
 //
 //	errPrefDto					*ePref.ErrPrefixDto
 //
@@ -15736,7 +15800,7 @@ func (numStrFmtSpecAtom *numStrFmtSpecAtom) setNegativeNumberSignSpec(
 //	by data values configured from the input parameter
 //	described below.
 //
-//	decSeparator					DecimalSeparatorSpec
+//	decSeparatorSpec				DecimalSeparatorSpec
 //
 //		This structure contains the radix point or
 //		decimal separator character(s) which will be used
@@ -15746,6 +15810,10 @@ func (numStrFmtSpecAtom *numStrFmtSpecAtom) setNegativeNumberSignSpec(
 //		In the US, UK, Australia and most of Canada, the
 //		decimal separator is the period character ('.')
 //		known as the decimal point.
+//
+//		In France, Germany and many countries in the
+//		European Union, the Decimal Separator is the
+//		comma character (',').
 //
 //	intSeparatorSpec				IntegerSeparatorSpec
 //
@@ -15828,6 +15896,7 @@ func (numStrFmtSpecAtom *numStrFmtSpecAtom) setNegativeNumberSignSpec(
 //		}
 //
 //	errPrefDto						*ePref.ErrPrefixDto
+//
 //		This object encapsulates an error prefix string which is
 //		included in all returned error messages. Usually, it
 //		contains the name of the calling method or methods listed
@@ -15855,7 +15924,7 @@ func (numStrFmtSpecAtom *numStrFmtSpecAtom) setNegativeNumberSignSpec(
 //		attached at the beginning of the error message.
 func (numStrFmtSpecAtom *numStrFmtSpecAtom) setNStrFmtComponents(
 	numStrFmtSpec *NumStrFormatSpec,
-	decSeparator DecimalSeparatorSpec,
+	decSeparatorSpec DecimalSeparatorSpec,
 	intSeparatorSpec IntegerSeparatorSpec,
 	numberSymbolsSpec NumStrNumberSymbolsSpec,
 	numberFieldSpec NumStrNumberFieldSpec,
@@ -15894,9 +15963,9 @@ func (numStrFmtSpecAtom *numStrFmtSpecAtom) setNStrFmtComponents(
 	}
 
 	err = numStrFmtSpec.decSeparator.CopyIn(
-		&decSeparator,
+		&decSeparatorSpec,
 		ePrefix.XCpy(
-			"decSeparator->"))
+			"decSeparatorSpec->"))
 
 	if err != nil {
 		return err

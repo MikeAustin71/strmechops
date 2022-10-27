@@ -1062,9 +1062,23 @@ func (numStrKernelMolecule *numberStrKernelMolecule) convertNumberToKernel(
 		charSearchType: CharSearchType.LinearTargetStartingIndex(),
 	}
 
+	var decSeparatorSpec DecimalSeparatorSpec
+
+	decSeparatorSpec,
+
+		err = new(DecimalSeparatorSpec).NewUS(
+		ePrefix.XCpy(
+			"decSeparatorSpec<-"))
+
+	if err != nil {
+		return err
+	}
+
 	*numStrKernel,
-		err = new(numStrBuilderElectron).parsePurNumStr(
+		err = new(numStrBuilderElectron).parsePureNumStr(
 		runeArrayDto,
+		decSeparatorSpec,
+		true,
 		ePrefix.XCpy(
 			numberStr))
 
