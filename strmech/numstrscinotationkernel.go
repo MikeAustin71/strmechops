@@ -11,22 +11,36 @@ import (
 //	notation value used to format number strings
 //	displaying numeric values as scientific notation.
 //
-//	The type only contains the scientific or engineering
-//	notation values, NOT the format specifications.
-//
 // ----------------------------------------------------------------
 //
 //	# Definition of Terms
+//
+//	In scientific notation, nonzero numbers are written
+//	in the form	'm × 10n' or m times ten raised to the
+//	power of n, where n is an integer, and the coefficient
+//	m is a nonzero real number (usually between 1 and 10
+//	in absolute value, and nearly always written as a
+//	terminating decimal).
+//
+//										Wikipedia
+//
+//
+//	This type only contains the scientific or engineering
+//	notation values. It DOES NOT contain format specifications.
 //
 // ----------------------------------------------------------------
 //
 //	Exponential Format
 //
-//		Example: "2.652 x 10^8"
+//		Example:
+//			Numeric Value: 265,200,000
+//			Expnential Display Foramt: "2.652 x 10^8"
 //
 //	E-Notation Format
 //
-//	 	Example: 2.652e+8
+//	 	Example:
+//			Numeric Value: 265,200,000
+//	 		E-Notation Display Format: "2.652e+8"
 //
 //	significand 				=	'2.652'
 //	significand integer digits 	= 	'2'
@@ -40,6 +54,7 @@ import (
 // # Reference:
 //
 //	https://en.wikipedia.org/wiki/Scientific_notation
+//	https://encyclopedia2.thefreedictionary.com/E+notation
 //	https://www.medcalc.org/manual/scientific-notation.php
 //	https://researchtweet.com/scientific-notation-definition-calculation/
 //	https://www.wikihow.com/Multiply-Scientific-Notation

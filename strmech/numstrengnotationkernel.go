@@ -37,7 +37,10 @@ type NumStrEngNotationKernel struct {
 	//	The coefficient consists of the leading integer and
 	//	fractional digits of the engineering notation.
 	//
-	// In the example '2.652E+8', the significand is '2.652'.
+	//	The coefficient is also referred to as the
+	//	significand.
+	//
+	// In the example '2.652E+8', the coefficient is '2.652'.
 
 	exponent *big.Int
 	// The exponent portion of the Engineering Notation

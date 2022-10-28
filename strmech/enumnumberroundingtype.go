@@ -53,12 +53,15 @@ var mNumberRoundingTypeLwrCaseStringToCode = map[string]NumberRoundingType{
 	"truncate":            NumberRoundingType(11),
 }
 
-// NumberRoundingType - The 'Number Rounding Type' is an
-// enumeration of type codes used for classification of
-// numeric rounding methodologies and algorithms.
+// NumberRoundingType
 //
-// The examples provided here relate to floating point rounding
-// which is the most common application for this go package.
+//	The 'Number Rounding' Type is an enumeration of type
+//	codes used for classification of numeric rounding
+//	methodologies and algorithms.
+//
+//	The examples provided here relate to floating point
+//	rounding which is the most common application for this
+//	go package.
 //
 // ----------------------------------------------------------------
 //
@@ -820,7 +823,7 @@ func (numRoundingType NumberRoundingType) XGetDefaultRoundingType() NumberRoundi
 // XIsValid - Returns a boolean value signaling whether the current
 // NumberRoundingType value is valid.
 //
-// Be advised, the enumeration value "None" is considered a VALID
+// Be advised, the enumeration value "None" is considered an INVALID
 // selection for 'NumberRoundingType'.
 //
 // This is a standard utility method and is not part of the valid
@@ -1058,18 +1061,18 @@ func (numRoundingType NumberRoundingType) XValueInt() int {
 //
 // Usage:
 //
-//	NumRoundType.None(),
-//	NumRoundType.NoRounding(),
-//	NumRoundType.HalfUpWithNegNums(),
-//	NumRoundType.HalfDownWithNegNums(),
-//	NumRoundType.HalfAwayFromZero(),
-//	NumRoundType.HalfTowardsZero(),
-//	NumRoundType.HalfToEven(),
-//	NumRoundType.HalfToOdd(),
-//	NumRoundType.Randomly(),
-//	NumRoundType.Floor(),
-//	NumRoundType.Ceiling(),
-//	NumRoundType.Truncate(),
+//	NumRoundType.None()
+//	NumRoundType.NoRounding()
+//	NumRoundType.HalfUpWithNegNums()
+//	NumRoundType.HalfDownWithNegNums()
+//	NumRoundType.HalfAwayFromZero()
+//	NumRoundType.HalfTowardsZero()
+//	NumRoundType.HalfToEven()
+//	NumRoundType.HalfToOdd()
+//	NumRoundType.Randomly()
+//	NumRoundType.Floor()
+//	NumRoundType.Ceiling()
+//	NumRoundType.Truncate()
 const NumRoundType = NumberRoundingType(0)
 
 // numberRoundingTypeNanobot - Provides helper methods for
@@ -1085,8 +1088,8 @@ type numberRoundingTypeNanobot struct {
 // If the passed instance of NumberRoundingType is valid, this
 // method returns 'true'.
 //
-// Be advised, the enumeration value "None" is considered a
-// VALID selection for 'NumberRoundingType'.
+// Be advised, the enumeration value "None" is considered an
+// INVALID selection for 'NumberRoundingType'.
 //
 // This is a standard utility method and is not part of the valid
 // NumberRoundingType enumeration.
