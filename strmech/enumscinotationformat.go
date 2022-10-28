@@ -334,13 +334,13 @@ func (sciNotationFmt ScientificNotationFormat) String() string {
 // # Usage
 //
 //	 sciNotFmt :=
-//				NumberRoundingType(0).HalfAwayFromZero()
+//				ScientificNotationFormat(0).ENotation()
 //
-//	 isValid := roundingType.XIsValid() // isValid == true
+//	 isValid := sciNotFmt.XIsValid() // isValid == true
 //
-//	 roundingType = NumberRoundingType(-999)
+//	 sciNotFmt = ScientificNotationFormat(-999)
 //
-//	 isValid = roundingType.XIsValid() // isValid == false
+//	 isValid = sciNotFmt.XIsValid() // isValid == false
 func (sciNotationFmt ScientificNotationFormat) XIsValid() bool {
 
 	lockScientificNotationFormat.Lock()
@@ -492,12 +492,13 @@ func (sciNotationFmt ScientificNotationFormat) XParseString(
 //	'None' is considered an INVALID selection for
 //	'ScientificNotationFormat'.
 //
-//	For example, assume that NumberRoundingType was set
-//	to an integer value of -848972. Calling this method on
-//	a ScientificNotationFormat with this invalid integer
-//	value will return an integer value of zero or the
-//	equivalent of ScientificNotationFormat(0).None(). This
-//	conversion is useful in generating text strings for
+//	For example, assume that ScientificNotationFormat was
+//	set to an integer value of -848972. Calling this
+//	method on a ScientificNotationFormat with this
+//	invalid integer value will return an integer value of
+//	zero or the equivalent of ScientificNotationFormat(0).None().
+//
+//	This conversion is useful in generating text strings for
 //	meaningful informational and error messages.
 //
 //	This is a standard utility method and is not part of the

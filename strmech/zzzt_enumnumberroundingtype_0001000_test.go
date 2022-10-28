@@ -215,11 +215,11 @@ func TestNumberRoundingType_XValueInt_000100(t *testing.T) {
 			if isValid {
 
 				t.Errorf("%v\n"+
-					"Error: TextJustify1.None()\n"+
+					"Error: numberRoundingType.None()\n"+
 					"evaluates as 'Valid'. This is actually an\n"+
 					"invalid value!\n"+
-					"textJustify1 string value  = '%v'\n"+
-					"textJustify1 integer value = '%v'\n",
+					"numberRoundingType1 string value  = '%v'\n"+
+					"numberRoundingType1 integer value = '%v'\n",
 					ePrefix.String(),
 					numberRoundingType1.String(),
 					numberRoundingType1.XValueInt())
