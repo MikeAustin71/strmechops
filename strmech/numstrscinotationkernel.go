@@ -33,13 +33,13 @@ import (
 //	Exponential Format
 //
 //		Example:
-//			Numeric Value: 265,200,000
+//			Base Numeric Value: 265,200,000
 //			Expnential Display Foramt: "2.652 x 10^8"
 //
 //	E-Notation Format
 //
 //	 	Example:
-//			Numeric Value: 265,200,000
+//			Base Numeric Value: 265,200,000
 //	 		E-Notation Display Format: "2.652e+8"
 //
 //	significand 				=	'2.652'

@@ -17,14 +17,14 @@ var mSciNotationFmtCodeToString = map[ScientificNotationFormat]string{
 
 var mSciNotationFmtStringToCode = map[string]ScientificNotationFormat{
 	"None":        ScientificNotationFormat(0),
-	"Exponential": ScientificNotationFormat(0),
-	"ENotation":   ScientificNotationFormat(0),
+	"Exponential": ScientificNotationFormat(1),
+	"ENotation":   ScientificNotationFormat(2),
 }
 
 var mSciNotationFmtLwrCaseStringToCode = map[string]ScientificNotationFormat{
 	"none":        ScientificNotationFormat(0),
-	"exponential": ScientificNotationFormat(0),
-	"enotation":   ScientificNotationFormat(0),
+	"exponential": ScientificNotationFormat(1),
+	"enotation":   ScientificNotationFormat(2),
 }
 
 //	ScientificNotationFormat
@@ -81,7 +81,7 @@ var mSciNotationFmtLwrCaseStringToCode = map[string]ScientificNotationFormat{
 //	ScientificNotationFormat is declared as a type
 //	'int'. The method names associated with this type
 //	effectively represent an enumeration of Scientific
-//	Notation Display Types. These methods are listed as
+//	Notation Format Types. These methods are listed as
 //	follows:
 //
 //	Method		Integer
