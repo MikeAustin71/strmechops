@@ -222,6 +222,9 @@ func (sciNotationFmt ScientificNotationFormat) None() ScientificNotationFormat {
 //	Numeric Value: 265,200,000
 //
 //	Exponential Display Format: "2.652 x 10^8"
+//
+//	This method is part of the ScientificNotationFormat
+//	enumeration.
 func (sciNotationFmt ScientificNotationFormat) Exponential() ScientificNotationFormat {
 
 	lockScientificNotationFormat.Lock()
@@ -274,6 +277,9 @@ func (sciNotationFmt ScientificNotationFormat) Exponential() ScientificNotationF
 //
 //	https://encyclopedia2.thefreedictionary.com/E+notation
 //	https://en.wikipedia.org/wiki/Scientific_notation#E_notation
+//
+//	This method is part of the ScientificNotationFormat
+//	enumeration.
 func (sciNotationFmt ScientificNotationFormat) ENotation() ScientificNotationFormat {
 
 	lockScientificNotationFormat.Lock()

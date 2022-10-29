@@ -175,7 +175,6 @@ var mSciNotationCalcTypeLwrCaseStringToCode = map[string]ScientificNotationCalcT
 //
 //	https://en.wikipedia.org/wiki/Scientific_notation
 //	https://sciencing.com/e-5491586.html
-//	https://en.wikipedia.org/wiki/Scientific_notation
 //	https://en.wikipedia.org/wiki/Engineering_notation
 //	https://mathworld.wolfram.com/EngineeringNotation.html
 //	https://www.mathsisfun.com/numbers/scientific-notation.html
@@ -219,6 +218,8 @@ var mSciNotationCalcTypeLwrCaseStringToCode = map[string]ScientificNotationCalcT
 //
 //			m × 10^n
 //
+//			Where:
+//
 //				1.	m is a number greater than or equal
 //					to one and less than 10.
 //
@@ -231,6 +232,8 @@ var mSciNotationCalcTypeLwrCaseStringToCode = map[string]ScientificNotationCalcT
 //		Notation is written in the form:
 //
 //			m × 10^n
+//
+//			Where:
 //
 //				1.	m is a number greater than zero and less
 //					than 999.
@@ -267,10 +270,10 @@ var lockScientificNotationCalcType sync.Mutex
 
 // None
 //
-//	Signals that 'ScientificNotationCalcType' has not
-//	been initialized and therefore has no value.
+// Signals that 'ScientificNotationCalcType' has not
+// been initialized and therefore has no value.
 //
-//	This is an error condition.
+// This is an error condition.
 func (sciNotationCalcType ScientificNotationCalcType) None() ScientificNotationCalcType {
 
 	lockScientificNotationCalcType.Lock()
@@ -278,4 +281,81 @@ func (sciNotationCalcType ScientificNotationCalcType) None() ScientificNotationC
 	defer lockScientificNotationCalcType.Unlock()
 
 	return ScientificNotationCalcType(0)
+}
+
+//	Standard
+//
+//	Specifies the Standard Scientific Notation
+//	Calculation Type.
+//
+//	A numeric value calulated in Standard Scientific
+//	Notation is written in the form:
+//
+//			m × 10^n
+//
+//			Where:
+//
+//				1.	m is a number greater than zero and
+//					less than 10.
+//
+//				2.	n is an integer.
+//
+//	This method is part of the ScientificNotationCalcType
+//	enumeration.
+//
+// ----------------------------------------------------------------
+//
+// # Reference
+//
+//	https://en.wikipedia.org/wiki/Scientific_notation
+//	https://sciencing.com/e-5491586.html
+//	https://en.wikipedia.org/wiki/Scientific_notation
+//	https://www.mathsisfun.com/numbers/scientific-notation.html
+//	https://www.rapidtables.com/convert/number/scientific-notation-converter.html
+func (sciNotationCalcType ScientificNotationCalcType) Standard() ScientificNotationCalcType {
+
+	lockScientificNotationCalcType.Lock()
+
+	defer lockScientificNotationCalcType.Unlock()
+
+	return ScientificNotationCalcType(1)
+}
+
+//	Engineering
+//
+//	Specifies an Engineering Notation Calculation. A
+//	numeric value calculated in Engineering Notation is
+//	written in the form:
+//
+//			m × 10^n
+//
+//			Where:
+//
+//				1.	m is a number greater than zero and less
+//					than 999.
+//
+//				2.	n is an integer multiple of 3
+//
+//	This method is part of the ScientificNotationCalcType
+//	enumeration.
+//
+// ----------------------------------------------------------------
+//
+// # Reference
+//
+// /	https://en.wikipedia.org/wiki/Engineering_notation
+//
+//	https://mathworld.wolfram.com/EngineeringNotation.html
+//	https://www.mathsisfun.com/definitions/engineering-notation.html
+//	https://sciencing.com/e-5491586.html
+//	https://www.engineeringtoolbox.com/standard-form-scientific-engineering-notation-d_1801.html
+//	https://openoregon.pressbooks.pub/techmath/chapter/module-11-scientific-notation/
+//	https://www.rapidtables.com/convert/number/scientific-notation-converter.html
+func (sciNotationCalcType ScientificNotationCalcType) Engineering() ScientificNotationCalcType {
+
+	lockScientificNotationCalcType.Lock()
+
+	defer lockScientificNotationCalcType.Unlock()
+
+	return ScientificNotationCalcType(2)
 }
