@@ -12,19 +12,28 @@ import (
 var mSciNotationFmtCodeToString = map[ScientificNotationFormat]string{
 	ScientificNotationFormat(0): "None",
 	ScientificNotationFormat(1): "Exponential",
-	ScientificNotationFormat(2): "ENotation",
+	ScientificNotationFormat(2): "ENotUprCaseELeadPlus",
+	ScientificNotationFormat(3): "ENotUprCaseENoLeadPlus",
+	ScientificNotationFormat(4): "ENotLwrCaseELeadPlus",
+	ScientificNotationFormat(5): "ENotLwrCaseENoLeadPlus",
 }
 
 var mSciNotationFmtStringToCode = map[string]ScientificNotationFormat{
-	"None":        ScientificNotationFormat(0),
-	"Exponential": ScientificNotationFormat(1),
-	"ENotation":   ScientificNotationFormat(2),
+	"None":                   ScientificNotationFormat(0),
+	"Exponential":            ScientificNotationFormat(1),
+	"ENotUprCaseELeadPlus":   ScientificNotationFormat(2),
+	"ENotUprCaseENoLeadPlus": ScientificNotationFormat(3),
+	"ENotLwrCaseELeadPlus":   ScientificNotationFormat(4),
+	"ENotLwrCaseENoLeadPlus": ScientificNotationFormat(5),
 }
 
 var mSciNotationFmtLwrCaseStringToCode = map[string]ScientificNotationFormat{
-	"none":        ScientificNotationFormat(0),
-	"exponential": ScientificNotationFormat(1),
-	"enotation":   ScientificNotationFormat(2),
+	"none":                   ScientificNotationFormat(0),
+	"exponential":            ScientificNotationFormat(1),
+	"enotuprcaseeleadplus":   ScientificNotationFormat(2),
+	"enotuprcaseenoleadplus": ScientificNotationFormat(3),
+	"enotlwrcaseeleadplus":   ScientificNotationFormat(4),
+	"enotlwrcaseenoleadplus": ScientificNotationFormat(5),
 }
 
 //	ScientificNotationFormat
@@ -84,17 +93,17 @@ var mSciNotationFmtLwrCaseStringToCode = map[string]ScientificNotationFormat{
 //	Notation Format Types. These methods are listed as
 //	follows:
 //
-//	Method		Integer
-//	 Name	 	 Value
-//	------		-------
+//	Method			 Integer
+//	 Name	 	 	  Value
+//	------			 -------
 //
-//	None	   	   0
+//	None	   	   		0
 //
 //		Signals that 'ScientificNotationFormat' has
 //		not been initialized and therefore has no value.
 //		This is an error condition.
 //
-//	Exponential	   1
+//	Exponential	   			1
 //
 //		Signals that a Scientific Notation value will be
 //		displayed using the Exponential notation format.
@@ -109,54 +118,91 @@ var mSciNotationFmtLwrCaseStringToCode = map[string]ScientificNotationFormat{
 //		Reference:
 //			https://en.wikipedia.org/wiki/Scientific_notation
 //
-//		Exponential Format Example:
+//		Exponential Format Example
 //
 //			Numeric Value: 265,200,000
+//
 //			Exponential Display Format: "2.652 x 10^8"
 //
-//	ENotation	   2
+//	ENotUprCaseELeadPlus	2
+//
+//		E-Notation Upper Case 'E' and Positive Exponent
+//		HAS Leading Plus Sign.
 //
 //		A type of scientific notation in which the phrase
 //		“times 10 to the power of” is replaced by the
-//		letter E; for example, 3.1 × 107 is written
-//		3.1E+7 and 5.1 × 10-9 is written 5.1E-9.
+//		upper case letter E.
 //
-//		Most calculators and many computer programs
-//		present very large and very small results in
-//		scientific notation, typically invoked by a
-//		key labelled EXP (for exponent), EEX (for enter
-//		exponent), EE, EX, E, or ×10x depending on vendor
-//		and model.
+//		Positive exponents have a leading plus sign (+).
 //
-//		Because superscripted exponents like 107 cannot
-//		always be conveniently displayed, the letter E
-//		(or e) is often used to represent "times ten
-//		raised to the power of" (which would be written
-//		as "× 10n") and is followed by the value of the
-//		exponent; in other words, for any real number m
-//		and integer n, the usage of "mEn" would indicate
-//		a value of m × 10n. In this usage the character
-//		e is not related to the mathematical constant e
-//		or the exponential function ex (a confusion that
-//		is unlikely if scientific notation is represented
-//		by a capital E). Although the E stands for
-//		exponent, the notation is usually referred to as
-//		(scientific) E notation rather than (scientific)
-//		exponential notation. The use of E notation
-//		facilitates data entry and readability in textual
-//		communication since it minimizes keystrokes,
-//		avoids reduced font sizes and provides a simpler
-//		and more concise display, but it is not encouraged
-//		in some publications.
+//		For example, 3.1 × 10^7 is written 3.1E+7 and
+//		5.1 × 10^-9 is written 5.1E-9.
 //
-//	 	Example E-Notation Format:
+//	 	Example ENotUprCaseELeadPlus Format
 //
-//			Numeric Value: 265,200,000
-//	 		E-Notation Display Format: "2.652e+8"
+//						 	      Numeric Value: 265,200,000
 //
-//		Reference:
-//			https://encyclopedia2.thefreedictionary.com/E+notation
-//			https://en.wikipedia.org/wiki/Scientific_notation#E_notation
+//	 		ENotUprCaseELeadPlus Display Format: "2.652E+8"
+//
+//	ENotUprCaseENoLeadPlus	3
+//
+//		E-Notation Upper Case 'E' and Positive Exponents
+//		have NO Leading Plus Sign.
+//
+//		A type of scientific notation in which the phrase
+//		“times 10 to the power of” is replaced by the
+//		upper case letter E.
+//
+//		Positive exponents DO NOT HAVE a leading plus
+//		sign (+).
+//
+//		For example, 3.1 × 10^7 is written 3.1E7 and
+//		5.1 × 10^-9 is written 5.1E-9.
+//
+//	 	Example ENotUprCaseENoLeadPlus Format
+//
+//						 	   Numeric Value: 265,200,000
+//	 		E-NotationUprCase Display Format: "2.652E8"
+//
+//	ENotLwrCaseELeadPlus	4
+//
+//		E-Notation Lower Case 'e' and Positive Exponents
+//		have Leading Plus Sign.
+//
+//		A type of scientific notation in which the phrase
+//		“times 10 to the power of” is replaced by the
+//		lower case letter 'e'.
+//
+//		Positive exponents have a leading plus sign (+).
+//
+//		For example, 3.1 × 10^7 is written 3.1e+7 and
+//		5.1 × 10^-9 is written 5.1e-9.
+//
+//	 	Example ENotLwrCaseELeadPlus Format
+//
+//								  Numeric Value: 265,200,000
+//
+//	 		ENotLwrCaseELeadPlus Display Format: "2.652e+8"
+//
+//	ENotLwrCaseENoLeadPlus	5
+//
+//		E-Notation Lower Case 'e' and Positive Exponents
+//		HAVE NO Leading Plus Sign.
+//
+//		A type of scientific notation in which the phrase
+//		“times 10 to the power of” is replaced by the
+//		lower case letter 'e'.
+//
+//		Positive exponents DO NOT HAVE a leading plus sign (+).
+//
+//		For example, 3.1 × 10^7 is written 3.1e7 and
+//		5.1 × 10^-9 is written 5.1e-9.
+//
+//	 	Example ENotLwrCaseENoLeadPlus Format
+//
+//									Numeric Value: 265,200,000
+//
+//	 		ENotLwrCaseENoLeadPlus Display Format: "2.652e8"
 //
 // ----------------------------------------------------------------
 //
@@ -201,30 +247,32 @@ func (sciNotationFmt ScientificNotationFormat) None() ScientificNotationFormat {
 	return ScientificNotationFormat(0)
 }
 
-// Exponential
+//	Exponential
 //
-// Signals that a Scientific Notation value will be
-// displayed using the Exponential notation format.
+//	Signals that a Scientific Notation value will be
+//	displayed using the Exponential notation format.
 //
-// Exponential notation is displayed in the form
-// "m × 10n" or m times ten raised to the power of n,
-// where n is an integer, and the coefficient m is a
-// nonzero real number (usually between 1 and 10 in
-// absolute value, and nearly always written as a
-// terminating decimal).
+//	Exponential notation is displayed in the form
+//	"m × 10n" or m times ten raised to the power of n,
+//	where n is an integer, and the coefficient m is a
+//	nonzero real number (usually between 1 and 10 in
+//	absolute value, and nearly always written as a
+//	terminating decimal).
 //
-// Reference:
+//	Exponential Format Example
 //
-//	https://en.wikipedia.org/wiki/Scientific_notation
+//				Base Numeric Value: 265,200,000
 //
-// Exponential Format Example:
-//
-//	Numeric Value: 265,200,000
-//
-//	Exponential Display Format: "2.652 x 10^8"
+//		Exponential Display Format: "2.652 x 10^8"
 //
 //	This method is part of the ScientificNotationFormat
 //	enumeration.
+//
+// ----------------------------------------------------------------
+//
+//	Reference:
+//
+//	https://en.wikipedia.org/wiki/Scientific_notation
 func (sciNotationFmt ScientificNotationFormat) Exponential() ScientificNotationFormat {
 
 	lockScientificNotationFormat.Lock()
@@ -234,59 +282,188 @@ func (sciNotationFmt ScientificNotationFormat) Exponential() ScientificNotationF
 	return ScientificNotationFormat(1)
 }
 
-// ENotation
+//	ENotUprCaseELeadPlus
 //
-// A type of scientific notation in which the phrase
-// “times 10 to the power of” is replaced by the letter
-// E; for example, 3.1 × 107 is written 3.1E+7 and
-// 5.1 × 10-9 is written 5.1E-9.
+//	E-Notation Upper Case 'E' and Positive Exponent
+//	Leading	Plus Sign.
 //
-// Most calculators and many computer programs present
-// very large and very small results in scientific
-// notation, typically invoked by a key labelled EXP
-// (for exponent), EEX (for enter exponent), EE, EX,
-// E, or ×10x depending on vendor and model.
+//	ENotUprCaseELeadPlus is a type of scientific
+//	notation in which the phrase “times 10 to the power
+//	of” is replaced by the upper case letter, 'E'.
 //
-// Because superscripted exponents like 107 cannot
-// always be conveniently displayed, the letter E (or e)
-// is often used to represent "times ten raised to the
-// power of" (which would be written as "× 10n") and is
-// followed by the value of the exponent; in other
-// words, for any real number m and integer n, the usage
-// of "mEn" would indicate a value of m × 10n. In this
-// usage the character e is not related to the
-// mathematical constant e or the exponential function
-// ex (a confusion that is unlikely if scientific
-// notation is represented by a capital E). Although the
-// E stands for exponent, the notation is usually
-// referred to as (scientific) E notation rather than
-// (scientific) exponential notation. The use of E
-// notation facilitates data entry and readability in
-// textual communication since it minimizes keystrokes,
-// avoids reduced font sizes and provides a simpler and
-// more concise display, but it is not encouraged in
-// some publications.
+//	Positive exponents have a leading plus sign (+).
 //
-// Example E-Notation Format:
+//	For example, 3.1 × 10^7 is written 3.1E+7 and
+//	5.1 × 10^-9 is written 5.1E-9.
 //
-//	Numeric Value: 265,200,000
+//	"UprCase" in "ENotUprCaseELeadPlus" refers to the
+//	upper case 'E' used in the E-Notation format.
 //
-//	E-Notation Display Format: "2.652e+8"
+//	"LeadPlus" in "ENotUprCaseELeadPlus" means that
+//	positive exponents are formatted with a leading
+//	plus sign ('+').
 //
-// Reference:
+//	Example ENotUprCaseELeadPlus Format
 //
-//	https://encyclopedia2.thefreedictionary.com/E+notation
-//	https://en.wikipedia.org/wiki/Scientific_notation#E_notation
+//					  Base Numeric Value: 265,200,000
+//
+//		E-NotationUprCase Display Format: "2.652E+8"
 //
 //	This method is part of the ScientificNotationFormat
 //	enumeration.
-func (sciNotationFmt ScientificNotationFormat) ENotation() ScientificNotationFormat {
+//
+// ----------------------------------------------------------------
+//
+//	Reference:
+//
+//	https://encyclopedia2.thefreedictionary.com/E+notation
+//	https://en.wikipedia.org/wiki/Scientific_notation#E_notation
+//	https://en.wikipedia.org/wiki/Scientific_notation#E_notation
+func (sciNotationFmt ScientificNotationFormat) ENotUprCaseELeadPlus() ScientificNotationFormat {
 
 	lockScientificNotationFormat.Lock()
 
 	defer lockScientificNotationFormat.Unlock()
 
 	return ScientificNotationFormat(2)
+}
+
+//	ENotUprCaseENoLeadPlus
+//
+//	E-Notation Upper Case 'E' and Positive Exponents
+//	HAVE NO Leading Plus Sign.
+//
+//	ENotUprCaseENoLeadPlus is a type of scientific
+//	notation in which the phrase “times 10 to the power
+//	of” is replaced by the upper case letter, 'E'.
+//
+//	Positive exponents DO NOT HAVE a leading plus sign
+//	(+).
+//
+//	For example, 3.1 × 10^7 is written 3.1E7 and
+//	5.1 × 10^-9 is written 5.1E-9.
+//
+//	"UprCase" in "ENotUprCaseENoLeadPlus" refers to the
+//	upper case 'E' used in the E-Notation format.
+//
+//	"NoLeadPlus" in "ENotUprCaseENoLeadPlus" means that
+//	positive exponents are NOT formatted with a leading
+//	plus sign ('+').
+//
+//	Example ENotUprCaseENoLeadPlus Format
+//
+//				   Base Numeric Value: 265,200,000
+//
+//		ENotUprCaseENoLeadPlus Format: "2.652E8"
+//
+//	This method is part of the ScientificNotationFormat
+//	enumeration.
+//
+// ----------------------------------------------------------------
+//
+//	Reference:
+//
+//	https://encyclopedia2.thefreedictionary.com/E+notation
+//	https://en.wikipedia.org/wiki/Scientific_notation#E_notation
+//	https://en.wikipedia.org/wiki/Scientific_notation#E_notation
+func (sciNotationFmt ScientificNotationFormat) ENotUprCaseENoLeadPlus() ScientificNotationFormat {
+
+	lockScientificNotationFormat.Lock()
+
+	defer lockScientificNotationFormat.Unlock()
+
+	return ScientificNotationFormat(3)
+}
+
+//	ENotLwrCaseELeadPlus
+//
+//	E-Notation Lower Case 'e' and Positive Exponent
+//	Leading	Plus Sign.
+//
+//	ENotLwrCaseELeadPlus is a type of scientific
+//	notation in which the phrase “times 10 to the power
+//	of” is replaced by the lower case letter, 'e'.
+//
+//	Positive exponents have a leading plus sign (+).
+//
+//	For example, 3.1 × 10^7 is written 3.1e+7 and
+//	5.1 × 10^-9 is written 5.1e-9.
+//
+//	"LwrCase" in "ENotLwrCaseELeadPlus" refers to the
+//	lower case 'e' used in the E-Notation format.
+//
+//	"LeadPlus" in "ENotLwrCaseELeadPlus" means that
+//	positive exponents are formatted with a leading
+//	plus sign ('+').
+//
+//	Example ENotLwrCaseELeadPlusFormat
+//
+//				 Base Numeric Value: 265,200,000
+//
+//		ENotLwrCaseELeadPlus Format: "2.652e+8"
+//
+//	This method is part of the ScientificNotationFormat
+//	enumeration.
+//
+// ----------------------------------------------------------------
+//
+//	Reference:
+//
+//	https://encyclopedia2.thefreedictionary.com/E+notation
+//	https://en.wikipedia.org/wiki/Scientific_notation#E_notation
+func (sciNotationFmt ScientificNotationFormat) ENotLwrCaseELeadPlus() ScientificNotationFormat {
+
+	lockScientificNotationFormat.Lock()
+
+	defer lockScientificNotationFormat.Unlock()
+
+	return ScientificNotationFormat(4)
+}
+
+//	ENotLwrCaseENoLeadPlus
+//
+//	E-Notation Lower Case 'e' and Positive Exponent
+//	HAVE NO Leading Plus Sign.
+//
+//	ENotLwrCaseENoLeadPlus is a type of scientific
+//	notation in which the phrase “times 10 to the power
+//	of” is replaced by the lower case letter, 'e'.
+//
+//	Positive exponents DO NOT have a leading plus sign
+//	(+).
+//
+//	For example, 3.1 × 10^7 is written 3.1e7 and
+//	5.1 × 10^-9 is written 5.1e-9.
+//
+//	"LwrCase" in "ENotLwrCaseENoLeadPlus" refers to the
+//	lower case 'e' used in the E-Notation format.
+//
+//	"NoLeadPlus" in "ENotLwrCaseENoLeadPlus" means that
+//	positive exponents ARE NOT formatted with a leading
+//	plus sign ('+').
+//
+//	Example ENotLwrCaseENoLeadPlus
+//
+//				   Base Numeric Value: 265,200,000
+//
+//		ENotLwrCaseENoLeadPlus Format: "2.652e8"
+//
+//	This method is part of the ScientificNotationFormat
+//	enumeration.
+//
+// ----------------------------------------------------------------
+//
+//	Reference:
+//
+//	https://encyclopedia2.thefreedictionary.com/E+notation
+//	https://en.wikipedia.org/wiki/Scientific_notation#E_notation
+func (sciNotationFmt ScientificNotationFormat) ENotLwrCaseENoLeadPlus() ScientificNotationFormat {
+
+	lockScientificNotationFormat.Lock()
+
+	defer lockScientificNotationFormat.Unlock()
+
+	return ScientificNotationFormat(5)
 }
 
 //	String
@@ -621,7 +798,7 @@ func (sciNotFmtNanobot *scientificNotationFormatNanobot) isValidNumSciNotFmt(
 	defer sciNotFmtNanobot.lock.Unlock()
 
 	if sciNotFmt < 1 ||
-		sciNotFmt > 2 {
+		sciNotFmt > 5 {
 
 		return false
 	}

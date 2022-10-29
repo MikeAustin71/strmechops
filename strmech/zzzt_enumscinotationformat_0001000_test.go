@@ -31,7 +31,8 @@ func ScientificNotationFormatTestSetup0010(
 	ucNames = []string{
 		"None",
 		"Exponential",
-		"ENotation",
+		"ENotationUprCase",
+		"ENotationLwrCase",
 	}
 
 	lenUcNames := len(ucNames)
@@ -52,7 +53,16 @@ func ScientificNotationFormatTestSetup0010(
 		append(enumValues, ScientificNotationFormat(0).Exponential())
 
 	enumValues =
-		append(enumValues, ScientificNotationFormat(0).ENotation())
+		append(enumValues, ScientificNotationFormat(0).ENotUprCaseELeadPlus())
+
+	enumValues =
+		append(enumValues, ScientificNotationFormat(0).ENotUprCaseENoLeadPlus())
+
+	enumValues =
+		append(enumValues, ScientificNotationFormat(0).ENotLwrCaseELeadPlus())
+
+	enumValues =
+		append(enumValues, ScientificNotationFormat(0).ENotLwrCaseENoLeadPlus())
 
 	intValues =
 		append(intValues, SciNotFmt.None().XValueInt())
@@ -61,7 +71,16 @@ func ScientificNotationFormatTestSetup0010(
 		append(intValues, SciNotFmt.Exponential().XValueInt())
 
 	intValues =
-		append(intValues, SciNotFmt.ENotation().XValueInt())
+		append(intValues, SciNotFmt.ENotUprCaseELeadPlus().XValueInt())
+
+	intValues =
+		append(intValues, SciNotFmt.ENotUprCaseENoLeadPlus().XValueInt())
+
+	intValues =
+		append(intValues, SciNotFmt.ENotLwrCaseELeadPlus().XValueInt())
+
+	intValues =
+		append(intValues, SciNotFmt.ENotLwrCaseENoLeadPlus().XValueInt())
 
 	if lenUcNames != len(intValues) {
 		err = fmt.Errorf("%v\n"+
