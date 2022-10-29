@@ -9,72 +9,6 @@ import (
 //	Lock lockEngineeringNotationFormat before accessing
 //	these maps!
 
-//	International System of Units (SI)
-//
-// 	SI is also referred to as a Metric prefix.
-//
-//	A metric prefix is a unit prefix that precedes a
-//	basic unit of measure to indicate a multiple or
-//	submultiple of the unit.
-//
-//	All metric prefixes used today are decadic (of or
-//	relating to the decimal system of counting). Each
-//	prefix has a unique symbol that is prepended to
-//	any unit symbol.
-//
-//	The prefix kilo-, for example, may be added to gram to
-//	indicate multiplication by one thousand: one kilogram
-//	is equal to one thousand grams. The prefix milli-,
-//	likewise, may be added to metre to indicate division
-//	by one thousand; one millimetre is equal to one
-//	thousandth of a metre.
-//
-//	A metric power is an integer unit affix, written in
-//	superscript in formal typography, that follows the
-//	basic unit of measure to indicate a multiplicity of
-//	the basic unit. In electronic plain text where
-//	superscript is not available, the subscript is often
-//	omitted, or where confusion is possible, indicated by
-//	placing the caret symbol ^ between the base unit and
-//	the integer power, thus km2, km2, and km^2 are
-//	variously encountered. When no integer affix is
-//	supplied, the implied power is 1. When a unit is not
-//	mentioned at all, the implied power is 0. Negative
-//	powers imply division. With extreme formality, the
-//	unit m/s2 can also be rendered m1s-2, but the literal
-//	present of the implied integer 1 is considered
-//	unconventional in common usage. Often all the units
-//	with positive prefixes will be listed first (in some
-//	natural order), followed by all the units with
-//	negative prefixes (in some natural order); this
-//	semi-canonical form is most easily mapped by the mind
-//	onto division notation, and makes switching between
-//	the two conventions less mentally onerous.
-//
-//						SI prefixes
-//					Prefix	Representations
-//
-//						Base 	 Base
-//		Name	Symbol	1000	  10		Value
-//		----	------  -----	-----	-------------
-//		yotta	  Y		1000^8	 10^24	1000000000000000000000000
-//		zetta	  Z		1000^7	 10^21	1000000000000000000000
-//		exa		  E		1000^6	 10^18	1000000000000000000
-//		peta 	  P		1000^5	 10^15	1000000000000000
-//		tera	  T		1000^4	 10^12	1000000000000
-//		giga	  G		1000^3	 10^9	1000000000
-//		mega	  M		1000^2	 10^6	1000000
-//		kilo	  k		1000^1	 10^3	1000
-//						1000^0	 10^0	1
-//		milli	  m		1000^−1	 10^−3	0.001
-//		micro	  μ		1000^−2	 10^−6	0.000001
-//		nano	  n		1000^−3	 10^−9	0.000000001
-//		pico	  p		1000^−4	 10^−12	0.000000000001
-//		femto	  f		1000^−5	 10^−15	0.000000000000001
-//		atto	  a		1000^−6	 10^−18	0.000000000000000001
-//		zepto	  z		1000^−7	 10^−21	0.000000000000000000001
-//		yocto	  y		1000^−8	 10^−24	0.000000000000000000000001
-
 var mEngNotationFmtCodeToString = map[EngineeringNotationFormat]string{
 	EngineeringNotationFormat(0): "None",
 	EngineeringNotationFormat(1): "Exponential",
@@ -111,41 +45,34 @@ var mEngNotationFmtLwrCaseStringToCode = map[string]EngineeringNotationFormat{
 //	EngineeringNotationFormat
 //
 //
-//	The 'Engineering Notation Format' is an
-//	enumeration of type codes used for classifying
-//	the output or display formats for Engineering
-//	Notation.
+//	The 'Engineering Notation Format' is an enumeration
+//	of type codes used for classifying the output or
+//	display formats for Engineering Notation.
 //
 // ----------------------------------------------------------------
 //
 // # Terminology
 //
-//	Engineering notation is a way of expressing numbers
-//	that are too large or too small (usually would result
-//	in a long string of digits) to be conveniently
-//	written in decimal form. It may be referred to as
-//	scientific form or standard index form, or standard
-//	form in the United Kingdom. This base ten notation
-//	is commonly used by scientists, mathematicians, and
-//	engineers, in part because it can simplify certain
-//	arithmetic operations. On scientific calculators
-//	it is usually known as "SCI" display mode.
+//	Engineering notation or engineering form is a version
+//	of scientific notation in which the exponent of ten
+//	must be divisible by three (i.e., they are powers of
+//	a thousand, but written as, for example, 106 instead
+//	of 10002).
 //
-//	In scientific notation, nonzero numbers are written
-//	in the form	"m × 10n" or m times ten raised to the
-//	power of n, where n is an integer, and the coefficient
-//	m is a nonzero real number (usually between 1 and 10
-//	in absolute value, and nearly always written as a
-//	terminating decimal).
+//	As an alternative to writing powers of 10, SI or
+//	Metric prefixes can be used, which also usually
+//	provide steps of a factor of a thousand.
+//
+//	On most calculators, engineering notation is called
+//	"ENG" mode.
 //
 //		Wikipedia
-//
-//	Reference:
 //		https://en.wikipedia.org/wiki/Engineering_notation
 //
-//	Engineering notation values are either displayed in the
-//	Exponential Format (2.652 x 10^8) or the E-Notation
-//	Format (2.652e+8).
+//	In Engineering Notation numeric values like
+//	2,652,000,000 are either displayed in the Exponential
+//	Format "2.652 x 10^9", E-Notation Format "2.652e+9" or
+//	SI (Metric) Format "2.652 G".
 //
 //	Reference:
 //		https://en.wikipedia.org/wiki/Engineering_notation#E_notation
@@ -165,11 +92,11 @@ var mEngNotationFmtLwrCaseStringToCode = map[string]EngineeringNotationFormat{
 //	Notation Format Types. These methods are listed as
 //	follows:
 //
-//	Method			 Integer
-//	 Name	 	 	  Value
-//	------			 -------
+//	Method				 Integer
+//	 Name				  Value
+//	------			 	 -------
 //
-//	None	   	   		0
+//	None	   	   			0
 //
 //		Signals that 'EngineeringNotationFormat' has
 //		not been initialized and therefore has no value.
@@ -177,8 +104,14 @@ var mEngNotationFmtLwrCaseStringToCode = map[string]EngineeringNotationFormat{
 //
 //	Exponential	   			1
 //
-//		Signals that a Engineering Notation value will be
-//		displayed using the Exponential notation format.
+//		Signals that an Engineering Notation value will be
+//		displayed using the Exponential format.
+//
+//		Exponential Format Example
+//
+//					Base Numeric Value: 2,652,000,000
+//
+//			Exponential Display Format: "2.652 x 10^9"
 //
 //		Exponential notation is displayed in the form
 //		"m × 10n" or m times ten raised to the power of
@@ -190,91 +123,187 @@ var mEngNotationFmtLwrCaseStringToCode = map[string]EngineeringNotationFormat{
 //		Reference:
 //			https://en.wikipedia.org/wiki/Engineering_notation
 //
-//		Exponential Format Example
-//
-//			Numeric Value: 265,200,000
-//
-//			Exponential Display Format: "2.652 x 10^8"
-//
 //	ENotUprCaseELeadPlus	2
 //
 //		E-Notation Upper Case 'E' and Positive Exponent
-//		HAS Leading Plus Sign.
+//		Leading	Plus Sign.
 //
-//		A type of scientific notation in which the phrase
-//		“times 10 to the power of” is replaced by the
-//		upper case letter E.
+//		ENotUprCaseELeadPlus Format Example
+//
+//						  Base Numeric Value: 2,652,000,000
+//
+//			E-NotationUprCase Display Format: "2.652E+9"
+//
+//		ENotUprCaseELeadPlus is a type of scientific
+//		notation in which the phrase “times 10 to the power
+//		of” is replaced by the upper case letter, 'E'.
 //
 //		Positive exponents have a leading plus sign (+).
 //
-//		For example, 3.1 × 10^7 is written 3.1E+7 and
-//		5.1 × 10^-9 is written 5.1E-9.
+//		For example, 5.1 × 10^+6 is written 5.1E+6.
 //
-//	 	Example ENotUprCaseELeadPlus Format
+//		"UprCase" in "ENotUprCaseELeadPlus" refers to the
+//		upper case 'E' used in the E-Notation format.
 //
-//						 	      Numeric Value: 265,200,000
-//
-//	 		ENotUprCaseELeadPlus Display Format: "2.652E+8"
+//		"LeadPlus" in "ENotUprCaseELeadPlus" means that
+//		positive exponents are formatted with a leading
+//		plus sign ('+').
 //
 //	ENotUprCaseENoLeadPlus	3
 //
 //		E-Notation Upper Case 'E' and Positive Exponents
-//		have NO Leading Plus Sign.
+//		HAVE NO Leading Plus Sign.
 //
-//		A type of scientific notation in which the phrase
-//		“times 10 to the power of” is replaced by the
-//		upper case letter E.
+//		ENotUprCaseENoLeadPlus Format Example
 //
-//		Positive exponents DO NOT HAVE a leading plus
-//		sign (+).
+//						  Base Numeric Value: 2,652,000,000
 //
-//		For example, 3.1 × 10^7 is written 3.1E7 and
-//		5.1 × 10^-9 is written 5.1E-9.
+//			E-NotationUprCase Display Format: "2.652E9"
 //
-//	 	Example ENotUprCaseENoLeadPlus Format
+//		ENotUprCaseENoLeadPlus is a type of scientific
+//		notation in which the phrase “times 10 to the power
+//		of” is replaced by the upper case letter, 'E'.
 //
-//						 	   Numeric Value: 265,200,000
-//	 		E-NotationUprCase Display Format: "2.652E8"
+//		Positive exponents DO NOT HAVE a leading plus sign
+//		(+).
+//
+//		For example, 5.1 × 10^9 is written 5.1E9.
+//
+//		"UprCase" in "ENotUprCaseENoLeadPlus" refers to the
+//		upper case 'E' used in the E-Notation format.
+//
+//		"NoLeadPlus" in "ENotUprCaseENoLeadPlus" means that
+//		positive exponents are NOT formatted with a leading
+//		plus sign ('+').
 //
 //	ENotLwrCaseELeadPlus	4
 //
 //		E-Notation Lower Case 'e' and Positive Exponents
-//		have Leading Plus Sign.
+//		HAVE Leading Plus Signs.
 //
-//		A type of scientific notation in which the phrase
-//		“times 10 to the power of” is replaced by the
-//		lower case letter 'e'.
+//		E-Notation denotes the use of the letter 'e' in
+//		the formatted Engineering Notation output display.
+//
+//		ENotLwrCaseELeadPlus Format Example
+//
+//					 Base Numeric Value: 2,652,000,000
+//
+//			ENotLwrCaseELeadPlus Format: "2.652e+9"
+//
+//		ENotLwrCaseELeadPlus is a type of scientific
+//		notation in which the phrase “times 10 to the power
+//		of” is replaced by the lower case letter, 'e'.
 //
 //		Positive exponents have a leading plus sign (+).
 //
-//		For example, 3.1 × 10^7 is written 3.1e+7 and
-//		5.1 × 10^-9 is written 5.1e-9.
+//		For example, 5.1 × 10^9 is written 5.1e+9.
 //
-//	 	Example ENotLwrCaseELeadPlus Format
+//		"LwrCase" in "ENotLwrCaseELeadPlus" refers to the
+//		lower case 'e' used in the E-Notation format.
 //
-//								  Numeric Value: 265,200,000
-//
-//	 		ENotLwrCaseELeadPlus Display Format: "2.652e+8"
+//		"LeadPlus" in "ENotLwrCaseELeadPlus" means that
+//		positive exponents HAVE leading plus signs ('+').
 //
 //	ENotLwrCaseENoLeadPlus	5
 //
-//		E-Notation Lower Case 'e' and Positive Exponents
+//		E-Notation Lower Case 'e' and Positive Exponent
 //		HAVE NO Leading Plus Sign.
 //
-//		A type of scientific notation in which the phrase
-//		“times 10 to the power of” is replaced by the
-//		lower case letter 'e'.
+//		E-Notation denotes the use of the letter 'e' in
+//		the formatted Engineering Notation output display.
 //
-//		Positive exponents DO NOT HAVE a leading plus sign (+).
+//		ENotLwrCaseENoLeadPlus Example
 //
-//		For example, 3.1 × 10^7 is written 3.1e7 and
-//		5.1 × 10^-9 is written 5.1e-9.
+//					 Base Numeric Value: 2,652,000,000
 //
-//	 	Example ENotLwrCaseENoLeadPlus Format
+//			ENotLwrCaseELeadPlus Format: "2.652e9"
 //
-//									Numeric Value: 265,200,000
+//		ENotLwrCaseENoLeadPlus is a type of scientific
+//		notation in which the phrase “times 10 to the power
+//		of” is replaced by the lower case letter, 'e'.
 //
-//	 		ENotLwrCaseENoLeadPlus Display Format: "2.652e8"
+//		Positive exponents DO NOT have a leading plus sign
+//		(+).
+//
+//		For example, 5.1 × 10^9 is written 5.1e9.
+//
+//		"LwrCase" in "ENotLwrCaseENoLeadPlus" refers to the
+//		lower case 'e' used in the E-Notation format.
+//
+//		"NoLeadPlus" in "ENotLwrCaseENoLeadPlus" means that
+//		positive exponents ARE NOT formatted with a leading
+//		plus sign ('+').
+//
+//		ENotLwrCaseENoLeadPlus Example
+//
+//					 Base Numeric Value: 2,652,000,000
+//
+//			ENotLwrCaseELeadPlus Format: "2.652e9"
+//
+//	SIPrefixSymbol			6
+//
+//		Specifies the use of 'SI' Prefix Symbol in the
+//		formatted display output for Engineering Notation
+//		numeric values.
+//
+//		SI stands for the International System of Units.
+//		SI is also referred to as a Metric prefix.
+//
+//		In the arithmetic of measurements having units, the
+//		units are treated as multiplicative factors to
+//		values. If they have prefixes, all but one of the
+//		prefixes must be expanded to their numeric
+//		multiplier, except when combining values with
+//		identical units. Hence:
+//
+//			In SI Symbology 'm' = 10^−3
+//
+//			5 m = 0.005 = 5 x 10^-3 = 5 m
+//
+//		SIPrefixSymbol Example
+//
+//					   Base Numeric Value: 2,650
+//
+//			ENotLwrCaseENoLeadPlus Format: "2.65 k"
+//
+//		In SI Symbology 'k' (kilo) Equals: "10^3"
+//
+//
+//	SIPrefixName			7
+//
+//		Specifies the use of 'SI' Prefix Name in the
+//		formatted display output for Engineering Notation
+//		numeric values.
+//
+//		SI stands for the International System of Units.
+//		SI is also referred to as a Metric prefix.
+//
+//		SIPrefixName Example
+//
+//					   Base Numeric Value: 2,650
+//
+//			ENotLwrCaseENoLeadPlus Format: "2.65 kilo"
+//
+//			In SI Symbology 'kilo' Equals: "10^3"
+//
+//		In the arithmetic of measurements having units, the
+//		units are treated as multiplicative factors to
+//		values. If they have prefixes, all but one of the
+//		prefixes must be expanded to their numeric
+//		multiplier, except when combining values with
+//		identical units. Hence:
+//
+//			In SI Symbology 'milli' = 10^−3
+//
+//			5 m = 0.005 = 5 x 10^-3 = 5 milli
+//
+//		SIPrefixName Example
+//
+//					   Base Numeric Value: 2,650
+//
+//			ENotLwrCaseENoLeadPlus Format: "2.65 kilo"
+//
+//			In SI Symbology 'kilo' Equals: "10^3"
 //
 // ----------------------------------------------------------------
 //
@@ -321,8 +350,14 @@ func (engNotationFmt EngineeringNotationFormat) None() EngineeringNotationFormat
 
 //	Exponential
 //
-//	Signals that a Engineering Notation value will be
-//	displayed using the Exponential notation format.
+//	Signals that an Engineering Notation value will be
+//	displayed using the Exponential format.
+//
+//	Exponential Format Example
+//
+//				Base Numeric Value: 2,652,000,000
+//
+//		Exponential Display Format: "2.652 x 10^9"
 //
 //	Exponential notation is displayed in the form
 //	"m × 10n" or m times ten raised to the power of n,
@@ -330,12 +365,6 @@ func (engNotationFmt EngineeringNotationFormat) None() EngineeringNotationFormat
 //	nonzero real number (usually between 1 and 10 in
 //	absolute value, and nearly always written as a
 //	terminating decimal).
-//
-//	Exponential Format Example
-//
-//				Base Numeric Value: 265,200,000
-//
-//		Exponential Display Format: "2.652 x 10^8"
 //
 //	This method is part of the EngineeringNotationFormat
 //	enumeration.
@@ -359,14 +388,22 @@ func (engNotationFmt EngineeringNotationFormat) Exponential() EngineeringNotatio
 //	E-Notation Upper Case 'E' and Positive Exponent
 //	Leading	Plus Sign.
 //
+//	E-Notation denotes the use of the letter 'E' in
+//	the formatted Engineering Notation output display.
+//
+//	ENotUprCaseELeadPlus Format Example
+//
+//					  Base Numeric Value: 2,652,000,000
+//
+//		E-NotationUprCase Display Format: "2.652E+9"
+//
 //	ENotUprCaseELeadPlus is a type of scientific
 //	notation in which the phrase “times 10 to the power
 //	of” is replaced by the upper case letter, 'E'.
 //
 //	Positive exponents have a leading plus sign (+).
 //
-//	For example, 3.1 × 10^7 is written 3.1E+7 and
-//	5.1 × 10^-9 is written 5.1E-9.
+//	For example, 5.1 × 10^+6 is written 5.1E+6.
 //
 //	"UprCase" in "ENotUprCaseELeadPlus" refers to the
 //	upper case 'E' used in the E-Notation format.
@@ -375,11 +412,11 @@ func (engNotationFmt EngineeringNotationFormat) Exponential() EngineeringNotatio
 //	positive exponents are formatted with a leading
 //	plus sign ('+').
 //
-//	Example ENotUprCaseELeadPlus Format
+//	ENotUprCaseELeadPlus Format Example
 //
-//					  Base Numeric Value: 265,200,000
+//					  Base Numeric Value: 2,652,000,000
 //
-//		E-NotationUprCase Display Format: "2.652E+8"
+//		E-NotationUprCase Display Format: "2.652E+9"
 //
 //	This method is part of the EngineeringNotationFormat
 //	enumeration.
@@ -405,6 +442,12 @@ func (engNotationFmt EngineeringNotationFormat) ENotUprCaseELeadPlus() Engineeri
 //	E-Notation Upper Case 'E' and Positive Exponents
 //	HAVE NO Leading Plus Sign.
 //
+//	ENotUprCaseENoLeadPlus Format Example
+//
+//					  Base Numeric Value: 2,652,000,000
+//
+//		E-NotationUprCase Display Format: "2.652E9"
+//
 //	ENotUprCaseENoLeadPlus is a type of scientific
 //	notation in which the phrase “times 10 to the power
 //	of” is replaced by the upper case letter, 'E'.
@@ -412,8 +455,7 @@ func (engNotationFmt EngineeringNotationFormat) ENotUprCaseELeadPlus() Engineeri
 //	Positive exponents DO NOT HAVE a leading plus sign
 //	(+).
 //
-//	For example, 3.1 × 10^7 is written 3.1E7 and
-//	5.1 × 10^-9 is written 5.1E-9.
+//	For example, 5.1 × 10^9 is written 5.1E9.
 //
 //	"UprCase" in "ENotUprCaseENoLeadPlus" refers to the
 //	upper case 'E' used in the E-Notation format.
@@ -422,11 +464,11 @@ func (engNotationFmt EngineeringNotationFormat) ENotUprCaseELeadPlus() Engineeri
 //	positive exponents are NOT formatted with a leading
 //	plus sign ('+').
 //
-//	Example ENotUprCaseENoLeadPlus Format
+//	ENotUprCaseENoLeadPlus Format Example
 //
-//				   Base Numeric Value: 265,200,000
+//					  Base Numeric Value: 2,652,000,000
 //
-//		ENotUprCaseENoLeadPlus Format: "2.652E8"
+//		E-NotationUprCase Display Format: "2.652E9"
 //
 //	This method is part of the EngineeringNotationFormat
 //	enumeration.
@@ -449,8 +491,17 @@ func (engNotationFmt EngineeringNotationFormat) ENotUprCaseENoLeadPlus() Enginee
 
 //	ENotLwrCaseELeadPlus
 //
-//	E-Notation Lower Case 'e' and Positive Exponent
-//	Leading	Plus Sign.
+//	E-Notation Lower Case 'e' and Positive Exponents
+//	HAVE Leading Plus Signs.
+//
+//	E-Notation denotes the use of the letter 'e' in
+//	the formatted Engineering Notation output display.
+//
+//	ENotLwrCaseELeadPlus Format Example
+//
+//				 Base Numeric Value: 2,652,000,000
+//
+//		ENotLwrCaseELeadPlus Format: "2.652e+9"
 //
 //	ENotLwrCaseELeadPlus is a type of scientific
 //	notation in which the phrase “times 10 to the power
@@ -458,21 +509,19 @@ func (engNotationFmt EngineeringNotationFormat) ENotUprCaseENoLeadPlus() Enginee
 //
 //	Positive exponents have a leading plus sign (+).
 //
-//	For example, 3.1 × 10^7 is written 3.1e+7 and
-//	5.1 × 10^-9 is written 5.1e-9.
+//	For example, 5.1 × 10^9 is written 5.1e+9.
 //
 //	"LwrCase" in "ENotLwrCaseELeadPlus" refers to the
 //	lower case 'e' used in the E-Notation format.
 //
 //	"LeadPlus" in "ENotLwrCaseELeadPlus" means that
-//	positive exponents are formatted with a leading
-//	plus sign ('+').
+//	positive exponents HAVE leading plus signs ('+').
 //
-//	Example ENotLwrCaseELeadPlusFormat
+//	ENotLwrCaseELeadPlusFormat Example
 //
-//				 Base Numeric Value: 265,200,000
+//				 Base Numeric Value: 2,652,000,000
 //
-//		ENotLwrCaseELeadPlus Format: "2.652e+8"
+//		ENotLwrCaseELeadPlus Format: "2.652e+9"
 //
 //	This method is part of the EngineeringNotationFormat
 //	enumeration.
@@ -497,6 +546,15 @@ func (engNotationFmt EngineeringNotationFormat) ENotLwrCaseELeadPlus() Engineeri
 //	E-Notation Lower Case 'e' and Positive Exponent
 //	HAVE NO Leading Plus Sign.
 //
+//	E-Notation denotes the use of the letter 'e' in
+//	the formatted Engineering Notation output display.
+//
+//	ENotLwrCaseENoLeadPlus Example
+//
+//				 Base Numeric Value: 2,652,000,000
+//
+//		ENotLwrCaseELeadPlus Format: "2.652e9"
+//
 //	ENotLwrCaseENoLeadPlus is a type of scientific
 //	notation in which the phrase “times 10 to the power
 //	of” is replaced by the lower case letter, 'e'.
@@ -504,8 +562,7 @@ func (engNotationFmt EngineeringNotationFormat) ENotLwrCaseELeadPlus() Engineeri
 //	Positive exponents DO NOT have a leading plus sign
 //	(+).
 //
-//	For example, 3.1 × 10^7 is written 3.1e7 and
-//	5.1 × 10^-9 is written 5.1e-9.
+//	For example, 5.1 × 10^9 is written 5.1e9.
 //
 //	"LwrCase" in "ENotLwrCaseENoLeadPlus" refers to the
 //	lower case 'e' used in the E-Notation format.
@@ -514,11 +571,11 @@ func (engNotationFmt EngineeringNotationFormat) ENotLwrCaseELeadPlus() Engineeri
 //	positive exponents ARE NOT formatted with a leading
 //	plus sign ('+').
 //
-//	Example ENotLwrCaseENoLeadPlus
+//	ENotLwrCaseENoLeadPlus Example
 //
-//				   Base Numeric Value: 265,200,000
+//				 Base Numeric Value: 2,652,000,000
 //
-//		ENotLwrCaseENoLeadPlus Format: "2.652e8"
+//		ENotLwrCaseELeadPlus Format: "2.652e9"
 //
 //	This method is part of the EngineeringNotationFormat
 //	enumeration.
@@ -527,6 +584,7 @@ func (engNotationFmt EngineeringNotationFormat) ENotLwrCaseELeadPlus() Engineeri
 //
 //	Reference:
 //
+//	https://en.wikipedia.org/wiki/Engineering_notation
 //	https://encyclopedia2.thefreedictionary.com/E+notation
 //	https://en.wikipedia.org/wiki/Engineering_notation#E_notation
 func (engNotationFmt EngineeringNotationFormat) ENotLwrCaseENoLeadPlus() EngineeringNotationFormat {
@@ -536,6 +594,184 @@ func (engNotationFmt EngineeringNotationFormat) ENotLwrCaseENoLeadPlus() Enginee
 	defer lockEngineeringNotationFormat.Unlock()
 
 	return EngineeringNotationFormat(5)
+}
+
+//	SIPrefixSymbol
+//
+//	Specifies the use of 'SI' Prefix Symbol in the
+//	formatted display output for Engineering Notation
+//	numeric values.
+//
+//		SI stands for the International System of Units.
+//		SI is also referred to as a Metric prefix.
+//
+//	SIPrefixSymbol Example
+//
+//				   Base Numeric Value: 2,650
+//
+//		ENotLwrCaseENoLeadPlus Format: "2.65 k"
+//
+//	In SI Symbology 'k' (kilo) Equals: "10^3"
+//
+//	In the arithmetic of measurements having units, the
+//	units are treated as multiplicative factors to
+//	values. If they have prefixes, all but one of the
+//	prefixes must be expanded to their numeric
+//	multiplier, except when combining values with
+//	identical units. Hence:
+//
+//		In SI Symbology 'm' = 10^−3
+//
+//		5 m = 0.005 = 5 x 10^-3 = 5 m
+//
+//	SIPrefixSymbol Example
+//
+//				   Base Numeric Value: 2,650
+//
+//		ENotLwrCaseENoLeadPlus Format: "2.65 k"
+//
+//	In SI Symbology 'k' (kilo) Equals: "10^3"
+//
+//	SI is also referred to as a Metric prefix. A metric
+//	prefix is a unit prefix that precedes a basic unit
+//	of measure to indicate a multiple or sub-multiple
+//	of the unit.
+//
+//	All metric prefixes used today are decadic (of or
+//	relating to the decimal system of counting). Each
+//	prefix has a unique symbol that is prepended to
+//	any unit symbol.
+//
+//						SI prefixes
+//					Prefix	Representations
+//
+//						Base 	 Base
+//		Name	Symbol	1000	  10		Value
+//		----	------  -----	-----	-------------
+//		yotta	  Y		1000^8	 10^24	1 000 000 000 000 000 000 000 000
+//		zetta	  Z		1000^7	 10^21	1 000 000 000 000 000 000 000
+//		exa		  E		1000^6	 10^18	1 000 000 000 000 000 000
+//		peta 	  P		1000^5	 10^15	1 000 000 000 000 000
+//		tera	  T		1000^4	 10^12	1 000 000 000 000
+//		giga	  G		1000^3	 10^9	1 000 000 000
+//		mega	  M		1000^2	 10^6	1 000 000
+//		kilo	  k		1000^1	 10^3	1 000
+//						1000^0	 10^0	1
+//		milli	  m		1000^−1	 10^−3	0.001
+//		micro	  μ		1000^−2	 10^−6	0.000 001
+//		nano	  n		1000^−3	 10^−9	0.000 000 001
+//		pico	  p		1000^−4	 10^−12	0.000 000 000 001
+//		femto	  f		1000^−5	 10^−15	0.000 000 000 000 001
+//		atto	  a		1000^−6	 10^−18	0.000 000 000 000 000 001
+//		zepto	  z		1000^−7	 10^−21	0.000 000 000 000 000 000 001
+//		yocto	  y		1000^−8	 10^−24	0.000 000 000 000 000 000 000 001
+//
+//	This method is part of the EngineeringNotationFormat
+//	enumeration.
+//
+// ----------------------------------------------------------------
+//
+//	Reference:
+//
+//	https://www.nist.gov/pml/owm/metric-si-prefixes
+//	https://en.wikipedia.org/wiki/Metric_prefix
+//	https://en.wikipedia.org/wiki/International_System_of_Units
+func (engNotationFmt EngineeringNotationFormat) SIPrefixSymbol() EngineeringNotationFormat {
+
+	lockEngineeringNotationFormat.Lock()
+
+	defer lockEngineeringNotationFormat.Unlock()
+
+	return EngineeringNotationFormat(6)
+}
+
+//	SIPrefixName
+//
+//	Specifies the use of 'SI' Prefix Name in the
+//	formatted display output for Engineering Notation
+//	numeric values.
+//
+//	SI stands for the International System of Units.
+//	SI is also referred to as a Metric prefix.
+//
+//	SIPrefixName Example
+//
+//				   Base Numeric Value: 2,650
+//
+//		ENotLwrCaseENoLeadPlus Format: "2.65 kilo"
+//
+//		In SI Symbology 'kilo' Equals: "10^3"
+//
+//	In the arithmetic of measurements having units, the
+//	units are treated as multiplicative factors to
+//	values. If they have prefixes, all but one of the
+//	prefixes must be expanded to their numeric
+//	multiplier, except when combining values with
+//	identical units. Hence:
+//
+//		In SI Symbology 'milli' = 10^−3
+//
+//		5 m = 0.005 = 5 x 10^-3 = 5 milli
+//
+//	SIPrefixName Example
+//
+//				   Base Numeric Value: 2,650
+//
+//		ENotLwrCaseENoLeadPlus Format: "2.65 kilo"
+//
+//		In SI Symbology 'kilo' Equals: "10^3"
+//
+//	SI is also referred to as a Metric prefix. A metric
+//	prefix is a unit prefix that precedes a basic unit
+//	of measure to indicate a multiple or sub-multiple
+//	of the unit.
+//
+//	All metric prefixes used today are decadic (of or
+//	relating to the decimal system of counting). Each
+//	prefix has a unique symbol that is prepended to
+//	any unit symbol.
+//
+//						SI prefixes
+//					Prefix	Representations
+//
+//						Base 	 Base
+//		Name	Symbol	1000	  10		Value
+//		----	------  -----	-----	-------------
+//		yotta	  Y		1000^8	 10^24	1 000 000 000 000 000 000 000 000
+//		zetta	  Z		1000^7	 10^21	1 000 000 000 000 000 000 000
+//		exa		  E		1000^6	 10^18	1 000 000 000 000 000 000
+//		peta 	  P		1000^5	 10^15	1 000 000 000 000 000
+//		tera	  T		1000^4	 10^12	1 000 000 000 000
+//		giga	  G		1000^3	 10^9	1 000 000 000
+//		mega	  M		1000^2	 10^6	1 000 000
+//		kilo	  k		1000^1	 10^3	1 000
+//						1000^0	 10^0	1
+//		milli	  m		1000^−1	 10^−3	0.001
+//		micro	  μ		1000^−2	 10^−6	0.000 001
+//		nano	  n		1000^−3	 10^−9	0.000 000 001
+//		pico	  p		1000^−4	 10^−12	0.000 000 000 001
+//		femto	  f		1000^−5	 10^−15	0.000 000 000 000 001
+//		atto	  a		1000^−6	 10^−18	0.000 000 000 000 000 001
+//		zepto	  z		1000^−7	 10^−21	0.000 000 000 000 000 000 001
+//		yocto	  y		1000^−8	 10^−24	0.000 000 000 000 000 000 000 001
+//
+//	This method is part of the EngineeringNotationFormat
+//	enumeration.
+//
+// ----------------------------------------------------------------
+//
+//	Reference:
+//
+//	https://www.nist.gov/pml/owm/metric-si-prefixes
+//	https://en.wikipedia.org/wiki/Metric_prefix
+//	https://en.wikipedia.org/wiki/International_System_of_Units
+func (engNotationFmt EngineeringNotationFormat) SIPrefixName() EngineeringNotationFormat {
+
+	lockEngineeringNotationFormat.Lock()
+
+	defer lockEngineeringNotationFormat.Unlock()
+
+	return EngineeringNotationFormat(7)
 }
 
 //	String
@@ -622,39 +858,49 @@ func (engNotationFmt EngineeringNotationFormat) XIsValid() bool {
 //
 // # Input Parameters
 //
-//		valueString			string
+//	valueString			string
 //
-//			A string which will be matched against the
-//			enumeration string values. If 'valueString' is
-//			equal to one of the enumeration names, this
-//			method will proceed to successful completion and
-//			return the correct enumeration value.
+//		A string which will be matched against the
+//		enumeration string values. If 'valueString' is
+//		equal to one of the enumeration names, this
+//		method will proceed to successful completion and
+//		return the correct enumeration value.
 //
-//		caseSensitive		bool
+//	caseSensitive		bool
 //
-//			If 'true' the search for enumeration names will
-//			be case-sensitive and will require an exact
-//			match. Therefore, 'exponential' will NOT match
-//			the enumeration name, 'Exponential'.
+//		If 'true' the search for enumeration names will
+//		be case-sensitive and will require an exact
+//		match. Therefore, 'exponential' will NOT match
+//		the enumeration name, 'Exponential'.
 //
-//			A case-sensitive search will match any of the
-//			following strings:
+//		A case-sensitive search will match any of the
+//		following strings:
 //
-//	    "None"
-//	    "Exponential"
-//	    "ENotation"
+//			"None"
+//			"Exponential"
+//			"ENotUprCaseELeadPlus"
+//			"ENotUprCaseENoLeadPlus"
+//			"ENotLwrCaseELeadPlus"
+//			"ENotLwrCaseENoLeadPlus"
+//			"SIPrefixSymbol"
+//			"SIPrefixName"
 //
-//			If 'false', a case-insensitive search is conducted
-//			for the enumeration name. In this example,
-//			'exponential' WILL MATCH the enumeration name,
-//			'Exponential'.
+//		If 'false', a case-insensitive search is conducted
+//		for the enumeration name. In this example,
+//		'exponential' WILL MATCH the enumeration name,
+//		'Exponential'.
 //
-//			A case-insensitive search will match any of the
-//			following lower case names:
+//		A case-insensitive search will match any of the
+//		following lower case names:
 //
-//	    "none"
-//	    "exponential"
-//	    "enotation"
+//			"none"
+//			"exponential"
+//			"enotuprcaseeleadplus"
+//			"enotuprcaseenoleadplus"
+//			"enotlwrcaseeleadplus"
+//			"enotlwrcaseenoleadplus"
+//			"siprefixsymbol"
+//			"siprefixname"
 //
 // ----------------------------------------------------------------
 //
@@ -873,7 +1119,7 @@ func (engNotFmtNanobot *engineeringNotationFormatNanobot) isValidNumEngNotFmt(
 	defer engNotFmtNanobot.lock.Unlock()
 
 	if sciNotFmt < 1 ||
-		sciNotFmt > 5 {
+		sciNotFmt > 7 {
 
 		return false
 	}
