@@ -8,7 +8,7 @@ import "sync"
 //
 //	A metric prefix is a unit prefix that precedes a
 //	basic unit of measure to indicate a multiple or
-//	submultiple of the unit.
+//	sub-multiple of the unit.
 //
 //	All metric prefixes used today are decadic (of or
 //	relating to the decimal system of counting). Each
