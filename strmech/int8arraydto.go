@@ -714,3 +714,41 @@ func (i8ArrayDto *Int8ArrayDto) EqualIntegerArrays(
 
 	return areEqual, err
 }
+
+//	GetExponent
+//
+//	Returns the 'exponent' for the numeric value
+//	specified by the current instance of Int8ArrayDto.
+//
+//	The final numeric value is equal to the
+//	significand multiplied by 10 to the power of
+//	'exponent'.
+//
+//		numeric value = significand x 10^exponent
+//
+// ----------------------------------------------------------------
+//
+//	# Input Parameters
+//
+//	 NONE
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	int64
+//
+//		This method returns the value of the 'exponent' as
+//		an int64.
+func (i8ArrayDto *Int8ArrayDto) GetExponent() int64 {
+
+	if i8ArrayDto.lock == nil {
+		i8ArrayDto.lock = new(sync.Mutex)
+	}
+
+	i8ArrayDto.lock.Lock()
+
+	defer i8ArrayDto.lock.Unlock()
+
+	return i8ArrayDto.exponent
+}
