@@ -15,6 +15,11 @@ type int8ArrayDtoElectron struct {
 //	instance of Int8ArrayDto passed as input parameter
 //	'i8ArrayDto'.
 //
+//	The name of the internal member variable data value
+//	being deleted is:
+//
+//		Int8ArrayDto.IntsArray
+//
 // ------------------------------------------------------------------------
 //
 // # Input Parameters

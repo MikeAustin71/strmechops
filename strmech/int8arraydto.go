@@ -7,14 +7,18 @@ import (
 
 type Int8ArrayDto struct {
 	IntsArray []int8
+	//	An array of int8 types. Each element of this
+	//	array is designed hold a numeric digit with a
+	//	value equal to or greater than zero and less
+	//	than or equal to nine (0-9 inclusive).
 
 	Description1 string
-	// Optional. A name, label or narrative text used to describe
-	// the current instance of RuneArrayDto.
+	//	Optional. A name, label or narrative text used to
+	//	describe the current instance of Int8ArrayDto.
 
 	Description2 string
-	// Optional. A name, label or narrative text used to describe
-	// the current instance of RuneArrayDto.
+	//	Optional. A name, label or narrative text used to
+	//	describe the current instance of Int8ArrayDto.
 
 	lock *sync.Mutex
 }
@@ -519,6 +523,165 @@ func (i8ArrayDto *Int8ArrayDto) Equal(
 
 	areEqual,
 		err = new(int8ArrayDtoAtom).equal(
+		i8ArrayDto,
+		incomingI8Array,
+		ePrefix.XCpy(
+			"i8ArrayDto!=incomingI8Array"))
+
+	return areEqual, err
+}
+
+//	int8ArraysAreEqual
+//
+//	Compares the integer arrays from the current
+//	Int8ArrayDto instance and input parameter
+//	'incomingI8Array' to determine if they are
+//	equal in all respects.
+//
+//	The name of the internal member variable being
+//	evaluated is:
+//
+//		Int8ArrayDto.IntsArray
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	incomingI8Array		*Int8ArrayDto
+//
+//		A pointer to the first of Int8ArrayDto instances.
+//
+//		The internal integer array data values contained
+//		in this instance will be compared to the
+//		corresponding integer array data values in
+//		the current instance of incomingI8Array to
+//		determine if the arrays are equivalent in all
+//		respects.
+//
+//	 errorPrefix		interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it	contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	areEqual			bool
+//
+//		This method will evaluate the integer arrays
+//		contained in the input parameter
+//		'incomingI8Array' and the current Int8ArrayDto
+//		instance to determine if the arrays are
+//		equivalent.
+//
+//		If all array data values are equivalent, this
+//		parameter will be set to 'true'.
+//
+//		Otherwise, this parameter will return 'false'.
+//
+//	err					error
+//
+//		If this method completes successfully, and
+//		integer array data values in parameter
+//		'incomingI8Array' are equivalent to those
+//		contained in the current Int8ArrayDto instance,
+//		the returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing or
+//		the array data elements are not equivalent, the
+//		returned error Type will encapsulate an
+//		appropriate error message.
+//
+//		This returned error message will incorporate the
+//		method chain and text passed by input parameter,
+//		'errorPrefix'. The 'errorPrefix' text will be
+//		attached to the beginning of the error message.
+func (i8ArrayDto *Int8ArrayDto) EqualIntegerArrays(
+	incomingI8Array *Int8ArrayDto,
+	errorPrefix interface{}) (
+	areEqual bool,
+	err error) {
+
+	if i8ArrayDto.lock == nil {
+		i8ArrayDto.lock = new(sync.Mutex)
+	}
+
+	i8ArrayDto.lock.Lock()
+
+	defer i8ArrayDto.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	areEqual = false
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"Int8ArrayDto."+
+			"EqualIntegerArrays()",
+		"")
+
+	if err != nil {
+		return areEqual, err
+	}
+
+	areEqual,
+		err = new(int8ArrayDtoPreon).int8ArraysAreEqual(
 		i8ArrayDto,
 		incomingI8Array,
 		ePrefix.XCpy(

@@ -28,7 +28,8 @@ type int8ArrayDtoPreon struct {
 //
 //	i8ArrayDto1			*Int8ArrayDto
 //
-//		A pointer to the first of Int8ArrayDto instances.
+//		A pointer to the first of two Int8ArrayDto
+//		instances.
 //
 //		The internal integer array data values contained
 //		in this instance will be compared to the
