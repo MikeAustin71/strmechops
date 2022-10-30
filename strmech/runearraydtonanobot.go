@@ -8,7 +8,6 @@ import (
 
 // runeArrayDtoNanobot - Provides helper methods for type
 // RuneArrayDto.
-//
 type runeArrayDtoNanobot struct {
 	lock *sync.Mutex
 }
@@ -18,7 +17,7 @@ type runeArrayDtoNanobot struct {
 //
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // The pre-existing data fields for input parameter
 // 'destinationRunesDto' will be overwritten and deleted.
@@ -26,69 +25,62 @@ type runeArrayDtoNanobot struct {
 // NO DATA VALIDATION is performed on input parameter,
 // 'sourceRunesDto'.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  destinationRunesDto        *RuneArrayDto
-//     - A pointer to an instance of RuneArrayDto. All data
-//       contained in the internal member variables of input
-//       parameter 'sourceRunesDto' will be copied to the member
-//       variables of this input parameter, 'destinationRunesDto'.
-//       If this method completes successfully, all member data
-//       variables encapsulated in 'destinationRunesDto' will be
-//       identical to those contained in input parameter,
-//       'sourceRunesDto'.
+//	destinationRunesDto        *RuneArrayDto
+//	   - A pointer to an instance of RuneArrayDto. All data
+//	     contained in the internal member variables of input
+//	     parameter 'sourceRunesDto' will be copied to the member
+//	     variables of this input parameter, 'destinationRunesDto'.
+//	     If this method completes successfully, all member data
+//	     variables encapsulated in 'destinationRunesDto' will be
+//	     identical to those contained in input parameter,
+//	     'sourceRunesDto'.
 //
-//       Be advised that the pre-existing data fields in input
-//       parameter 'destinationRunesDto' will be overwritten and
-//       deleted.
-//
-//
-//  sourceRunesDto             *RuneArrayDto
-//     - A pointer to an instance of RuneArrayDto.
-//
-//       All data contained in the member variables of this
-//       RuneArrayDto instance will be copied to corresponding
-//       member variables contained within input parameter
-//       'destinationRunesDto'.
-//
-//       The original member variable data values encapsulated in
-//       'sourceRunesDto' will remain unchanged and will NOT be
-//       overwritten or deleted.
-//
-//       If 'sourceRunesDto' contains invalid member data
-//       variables, this method will return an error.
+//	     Be advised that the pre-existing data fields in input
+//	     parameter 'destinationRunesDto' will be overwritten and
+//	     deleted.
 //
 //
-//  errPrefDto                 *ePref.ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//	sourceRunesDto             *RuneArrayDto
+//	   - A pointer to an instance of RuneArrayDto.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     All data contained in the member variables of this
+//	     RuneArrayDto instance will be copied to corresponding
+//	     member variables contained within input parameter
+//	     'destinationRunesDto'.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
+//	     The original member variable data values encapsulated in
+//	     'sourceRunesDto' will remain unchanged and will NOT be
+//	     overwritten or deleted.
 //
+//	errPrefDto                 *ePref.ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods listed
+//	     as a function chain.
+//
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
+//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If this method completes successfully, this returned error
-//       Type is set equal to 'nil'. If errors are encountered during
-//       processing, the returned error Type will encapsulate an error
-//       message.
+//	error
+//	   - If this method completes successfully, this returned error
+//	     Type is set equal to 'nil'. If errors are encountered during
+//	     processing, the returned error Type will encapsulate an error
+//	     message.
 //
-//       If an error message is returned, the text value for input
-//       parameter 'errPrefDto' (error prefix) will be prefixed or
-//       attached at the beginning of the error message.
-//
+//	     If an error message is returned, the text value for input
+//	     parameter 'errPrefDto' (error prefix) will be prefixed or
+//	     attached at the beginning of the error message.
 func (runeDtoNanobot *runeArrayDtoNanobot) copyRuneArrayDto(
 	destinationRunesDto *RuneArrayDto,
 	sourceRunesDto *RuneArrayDto,

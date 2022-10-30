@@ -61,7 +61,7 @@ var mSciNotationCalcTypeLwrCaseStringToCode = map[string]ScientificNotationCalcT
 //
 //			Exponential Example:
 //				Base Numeric Value: 265,200,000
-//				Expnential Display Format: "2.652 x 10^8"
+//				Exponential Display Format: "2.652 x 10^8"
 //
 //		2. E-Notation Format
 //
@@ -69,13 +69,13 @@ var mSciNotationCalcTypeLwrCaseStringToCode = map[string]ScientificNotationCalcT
 //				Base Numeric Value: 265,200,000
 //		 		E-Notation Display Format: "2.652e+8"
 //
-//		For an enmeration of Scientific Notation Display
+//		For an enumeration of Scientific Notation Display
 //		Formats see type 'ScientificNotationFormat'.
 //
 //	Standard Calculation Type
 //
 //	Second, there is the manner in which the Scientific
-//	Notation value is calulated. Generally, there are
+//	Notation value is calculated. Generally, there are
 //	two different methods for calculating the Scientific
 //	Notation value.
 //
@@ -145,10 +145,10 @@ var mSciNotationCalcTypeLwrCaseStringToCode = map[string]ScientificNotationCalcT
 //
 //		Numbers of forms such as 12×10^-6, 230×10^-3,
 //		340, and 4.5×10^3 therefore correspond to an
-//		Engineering	Calcuation Type.
+//		Engineering	Calculation Type.
 //
 //		Numbers such as 12×10^-2, 2×10^2, and 123×10^5 DO
-//		NOT correspond to the Engineering Calcuation Type.
+//		NOT correspond to the Engineering Calculation Type.
 //
 //		Care must be taken when attempting to infer
 //		significant digits from numbers expressed in
@@ -211,8 +211,8 @@ var mSciNotationCalcTypeLwrCaseStringToCode = map[string]ScientificNotationCalcT
 //
 //	Standard		1
 //
-//		Specifies a Standard Scientific Notaion
-//		Calculation. A numeric value calulated in
+//		Specifies a Standard Scientific Notation
+//		Calculation. A numeric value calculated in
 //		Standard Scientific Notation is written in the
 //		form:
 //
@@ -288,7 +288,7 @@ func (sciNotationCalcType ScientificNotationCalcType) None() ScientificNotationC
 //	Specifies the Standard Scientific Notation
 //	Calculation Type.
 //
-//	A numeric value calulated in Standard Scientific
+//	A numeric value calculated in Standard Scientific
 //	Notation is written in the form:
 //
 //			m × 10^n
