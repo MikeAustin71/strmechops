@@ -20,7 +20,7 @@ type int8ArrayDtoPreon struct {
 //	The name of the internal member variable being
 //	evaluated is:
 //
-//		Int8ArrayDto.IntsArray
+//		Int8ArrayDto.significand
 //
 // ------------------------------------------------------------------------
 //
@@ -122,9 +122,9 @@ func (i8ArrayDtoPreon *int8ArrayDtoPreon) int8ArraysAreEqual(
 		return areEqual, err
 	}
 
-	lenI8Array1 := len(i8ArrayDto1.IntsArray)
+	lenI8Array1 := len(i8ArrayDto1.significand)
 
-	if lenI8Array1 != len(i8ArrayDto2.IntsArray) {
+	if lenI8Array1 != len(i8ArrayDto2.significand) {
 
 		err = fmt.Errorf("%v\n"+
 			"Error: Integer Arrays have unequal lengths!\n",
@@ -135,18 +135,18 @@ func (i8ArrayDtoPreon *int8ArrayDtoPreon) int8ArraysAreEqual(
 
 	for i := 0; i < lenI8Array1; i++ {
 
-		if i8ArrayDto1.IntsArray[i] !=
-			i8ArrayDto2.IntsArray[i] {
+		if i8ArrayDto1.significand[i] !=
+			i8ArrayDto2.significand[i] {
 
 			err = fmt.Errorf("%v\n"+
 				"Error: Integer Arrays have unequal values!\n"+
-				"i8ArrayDto1.IntsArray[%v]='%v'\n"+
-				"i8ArrayDto2.IntsArray[%v]='%v'\n",
+				"i8ArrayDto1.significand[%v]='%v'\n"+
+				"i8ArrayDto2.significand[%v]='%v'\n",
 				ePrefix.String(),
 				i,
-				i8ArrayDto1.IntsArray[i],
+				i8ArrayDto1.significand[i],
 				i,
-				i8ArrayDto2.IntsArray[i])
+				i8ArrayDto2.significand[i])
 
 			return areEqual, err
 
@@ -252,13 +252,13 @@ func (i8ArrayDtoPreon *int8ArrayDtoPreon) isValidI8ArrayDto(
 		return isValid, err
 	}
 
-	lenI8Array := len(i8ArrayDto.IntsArray)
+	lenI8Array := len(i8ArrayDto.significand)
 
 	if lenI8Array == 0 {
 
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter i8ArrayDto.IntsArray is invalid.\n"+
-			"i8ArrayDto.IntsArray is empty and has a length of zero!\n",
+			"Error: Input parameter i8ArrayDto.significand is invalid.\n"+
+			"i8ArrayDto.significand is empty and has a length of zero!\n",
 			ePrefix.String())
 
 		return isValid, err
@@ -266,18 +266,32 @@ func (i8ArrayDtoPreon *int8ArrayDtoPreon) isValidI8ArrayDto(
 
 	for i := 0; i < lenI8Array; i++ {
 
-		if i8ArrayDto.IntsArray[i] < 0 ||
-			i8ArrayDto.IntsArray[i] > 9 {
+		if i8ArrayDto.significand[i] < 0 ||
+			i8ArrayDto.significand[i] > 9 {
 
 			err = fmt.Errorf("%v\n"+
-				"Error: in8 Array Element is invalid!\n"+
-				"i8ArrayDto.IntsArray[%v] = %v\n",
+				"Error: int8 Array (significand) Element is invalid!\n"+
+				"i8ArrayDto.significand[%v] = %v\n",
 				ePrefix.String(),
 				i,
-				i8ArrayDto.IntsArray[i])
+				i8ArrayDto.significand[i])
 
 			return isValid, err
 		}
+
+	}
+
+	if !i8ArrayDto.numberSign.XIsValid() {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: 'numberSign' is invalid!\n"+
+			"'numberSign' string value  = %v\n"+
+			"'numberSign' integer value = %v\n",
+			ePrefix.String(),
+			i8ArrayDto.numberSign.String(),
+			i8ArrayDto.numberSign.XValueInt())
+
+		return isValid, err
 
 	}
 

@@ -5,12 +5,37 @@ import (
 	"sync"
 )
 
+// Int8ArrayDto
+//
+// This type is designed to store and transport a
+// numeric value. The numeric value is stored as
+// scientific notation comprised of a significand and an
+// exponent in the form:
+//
+//	numeric value = significand x 10^exponent
 type Int8ArrayDto struct {
-	IntsArray []int8
+	significand []int8
 	//	An array of int8 types. Each element of this
 	//	array is designed hold a numeric digit with a
 	//	value equal to or greater than zero and less
 	//	than or equal to nine (0-9 inclusive).
+
+	exponent int64
+	//	The final numeric value is equal to the
+	//	significand multiplied by 10 to the power of
+	//	'exponent'.
+	//
+	//		numeric value = significand x 10^exponent
+
+	numberSign NumericSignValueType
+	//	An enumeration specifying the number sign
+	//	associated with the numeric value represented by
+	//	this instance Int8ArrayDto.  Possible values are
+	//	listed as follows:
+	//      NumSignVal.None() - Invalid Value
+	//      NumSignVal.Negative() = -1
+	//      NumSignVal.Zero()     =  0
+	//      NumSignVal.Positive() =  1
 
 	Description1 string
 	//	Optional. A name, label or narrative text used to
@@ -338,7 +363,7 @@ func (i8ArrayDto *Int8ArrayDto) Empty() {
 //	EmptyIntegersArray
 //
 //	Deletes the internal integers array. Member variable
-//	Int8ArrayDto.IntsArray is set to nil.
+//	Int8ArrayDto.significand is set to nil.
 //
 // ----------------------------------------------------------------
 //
@@ -346,7 +371,7 @@ func (i8ArrayDto *Int8ArrayDto) Empty() {
 //
 //	For the current instance of Int8ArrayDto, all data
 //	values in the internal Integers array
-//	(Int8ArrayDto.IntsArray) will be deleted.
+//	(Int8ArrayDto.significand) will be deleted.
 //
 // ----------------------------------------------------------------
 //
@@ -541,7 +566,7 @@ func (i8ArrayDto *Int8ArrayDto) Equal(
 //	The name of the internal member variable being
 //	evaluated is:
 //
-//		Int8ArrayDto.IntsArray
+//		Int8ArrayDto.significand
 //
 // ----------------------------------------------------------------
 //

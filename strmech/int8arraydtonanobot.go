@@ -154,14 +154,20 @@ func (i8ArrayNanobot *int8ArrayDtoNanobot) copyInt8ArrayDto(
 	new(int8ArrayDtoAtom).empty(
 		destinationI8Array)
 
-	lenSourceArray := len(sourceI8Array.IntsArray)
+	lenSourceArray := len(sourceI8Array.significand)
 
-	destinationI8Array.IntsArray = make([]int8, lenSourceArray)
+	destinationI8Array.significand = make([]int8, lenSourceArray)
 
 	for i := 0; i < lenSourceArray; i++ {
-		destinationI8Array.IntsArray[i] =
-			sourceI8Array.IntsArray[i]
+		destinationI8Array.significand[i] =
+			sourceI8Array.significand[i]
 	}
+
+	destinationI8Array.exponent =
+		sourceI8Array.exponent
+
+	destinationI8Array.numberSign =
+		sourceI8Array.numberSign
 
 	destinationI8Array.Description1 =
 		sourceI8Array.Description1

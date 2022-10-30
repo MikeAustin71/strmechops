@@ -61,6 +61,8 @@ func (i8ArrayDtoAtom *int8ArrayDtoAtom) empty(
 	new(int8ArrayDtoElectron).emptyIntsArray(
 		i8ArrayDto)
 
+	i8ArrayDto.exponent = 0
+
 	i8ArrayDto.Description1 = ""
 
 	i8ArrayDto.Description2 = ""
@@ -203,6 +205,28 @@ func (i8ArrayDtoAtom *int8ArrayDtoAtom) equal(
 
 	if err != nil {
 		return areEqual, err
+	}
+
+	if i8ArrayDto1.exponent !=
+		i8ArrayDto2.exponent {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: exponent values are NOT Equal!\n",
+			ePrefix.String())
+
+		return areEqual, err
+
+	}
+
+	if i8ArrayDto1.numberSign !=
+		i8ArrayDto2.numberSign {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: numberSign values are NOT Equal!\n",
+			ePrefix.String())
+
+		return areEqual, err
+
 	}
 
 	if i8ArrayDto1.Description1 !=
