@@ -7,31 +7,29 @@ import (
 
 // Int8ArrayDto
 //
-// This type is designed to store and transport a
-// numeric value. The numeric value is stored as
-// scientific notation comprised of a significand and an
-// exponent in the form:
+// This type is designed to store and transport an
+// integer array containing numeric digits.
 //
-//	numeric value = significand x 10^exponent
+// The integer array consists of an array of type
+// int8.
+//
+// The value of each element in the Int8Array will
+// from zero (0) to nine (9) inclusive.
 type Int8ArrayDto struct {
-	significand []int8
+	Int8Array []int8
 	//	An array of int8 types. Each element of this
 	//	array is designed hold a numeric digit with a
 	//	value equal to or greater than zero and less
 	//	than or equal to nine (0-9 inclusive).
 
-	exponent int64
-	//	The final numeric value is equal to the
-	//	significand multiplied by 10 to the power of
-	//	'exponent'.
+	NumberSign NumericSignValueType
+	//	An enumeration specifying the number sign associated
+	//	with the numeric value represented by the numeric
+	//	digits contained within the member variable,
+	//	'Int8Array'
 	//
-	//		numeric value = significand x 10^exponent
-
-	numberSign NumericSignValueType
-	//	An enumeration specifying the number sign
-	//	associated with the numeric value represented by
-	//	this instance Int8ArrayDto.  Possible values are
-	//	listed as follows:
+	//	Possible values are listed as follows:
+	//
 	//      NumSignVal.None() - Invalid Value
 	//      NumSignVal.Negative() = -1
 	//      NumSignVal.Zero()     =  0
@@ -363,7 +361,7 @@ func (i8ArrayDto *Int8ArrayDto) Empty() {
 //	EmptyIntegersArray
 //
 //	Deletes the internal integers array. Member variable
-//	Int8ArrayDto.significand is set to nil.
+//	Int8ArrayDto.Int8Array is set to nil.
 //
 // ----------------------------------------------------------------
 //
@@ -371,7 +369,7 @@ func (i8ArrayDto *Int8ArrayDto) Empty() {
 //
 //	For the current instance of Int8ArrayDto, all data
 //	values in the internal Integers array
-//	(Int8ArrayDto.significand) will be deleted.
+//	(Int8ArrayDto.Int8Array) will be deleted.
 //
 // ----------------------------------------------------------------
 //
@@ -566,7 +564,7 @@ func (i8ArrayDto *Int8ArrayDto) Equal(
 //	The name of the internal member variable being
 //	evaluated is:
 //
-//		Int8ArrayDto.significand
+//		Int8ArrayDto.Int8Array
 //
 // ----------------------------------------------------------------
 //
@@ -715,57 +713,11 @@ func (i8ArrayDto *Int8ArrayDto) EqualIntegerArrays(
 	return areEqual, err
 }
 
-//	GetExponent
+//	GetCopyInt8Array
 //
-//	Returns the 'exponent' for the numeric value
-//	specified by the current instance of Int8ArrayDto.
-//
-//	The final numeric value is equal to the
-//	significand multiplied by 10 to the power of
-//	'exponent'.
-//
-//		numeric value = significand x 10^exponent
-//
-// ----------------------------------------------------------------
-//
-//	# Input Parameters
-//
-//	 NONE
-//
-// ----------------------------------------------------------------
-//
-// # Return Values
-//
-//	int64
-//
-//		This method returns the value of the 'exponent' as
-//		an int64.
-func (i8ArrayDto *Int8ArrayDto) GetExponent() int64 {
-
-	if i8ArrayDto.lock == nil {
-		i8ArrayDto.lock = new(sync.Mutex)
-	}
-
-	i8ArrayDto.lock.Lock()
-
-	defer i8ArrayDto.lock.Unlock()
-
-	return i8ArrayDto.exponent
-}
-
-//	GetSignificandIntArray
-//
-//	Returns an int8 array of numerical digits which
-//	comprise the significand value for the current
-//	instance of	Int8ArrayDto.
-//
-//	The numerical value encapsulated in the current
-//	instance of Int8ArrayDto is calculated as follows:
-//
-//		numeric value = significand x 10^exponent
-//
-//	This method returns teh significand as an array of
-//	type int8.
+//	Returns a deep copy of the int8 array of numerical
+//	digits encapsulated within the current instance of
+//	Int8ArrayDto.
 //
 // ----------------------------------------------------------------
 //
@@ -780,9 +732,9 @@ func (i8ArrayDto *Int8ArrayDto) GetExponent() int64 {
 //	[]int8
 //
 //		An array of numerical digits comprising the
-//		significand for the current instance of
+//		Int8Array for the current instance of
 //		Int8ArrayDto.
-func (i8ArrayDto *Int8ArrayDto) GetSignificandIntArray() []int8 {
+func (i8ArrayDto *Int8ArrayDto) GetCopyInt8Array() []int8 {
 
 	if i8ArrayDto.lock == nil {
 		i8ArrayDto.lock = new(sync.Mutex)
@@ -792,5 +744,62 @@ func (i8ArrayDto *Int8ArrayDto) GetSignificandIntArray() []int8 {
 
 	defer i8ArrayDto.lock.Unlock()
 
-	return i8ArrayDto.significand
+	lenI8Array := len(i8ArrayDto.Int8Array)
+
+	if lenI8Array == 0 {
+
+		return nil
+	}
+
+	newI8Array := make([]int8, lenI8Array)
+
+	for i := 0; i < lenI8Array; i++ {
+
+		newI8Array[i] = i8ArrayDto.Int8Array[i]
+	}
+
+	return newI8Array
+}
+
+//	GetNumberSign
+//
+//	Returns the number sign of the integer digits stored
+//	in the internal member variable:
+//		Int8ArrayDto.Int8Array
+//
+// ----------------------------------------------------------------
+//
+//	# Input Parameters
+//
+//	 NONE
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//		NumericSignValueType
+//
+//			An enumeration specifying the number sign
+//			associated with the numeric value represented
+//			by the numeric digits contained within the
+//			integer array member variable:
+//					Int8ArrayDto.Int8Array
+//
+//		Possible values are listed as follows:
+//
+//	     NumSignVal.None() - Invalid Value
+//	     NumSignVal.Negative() = -1
+//	     NumSignVal.Zero()     =  0
+//	     NumSignVal.Positive() =  1
+func (i8ArrayDto *Int8ArrayDto) GetNumberSign() NumericSignValueType {
+
+	if i8ArrayDto.lock == nil {
+		i8ArrayDto.lock = new(sync.Mutex)
+	}
+
+	i8ArrayDto.lock.Lock()
+
+	defer i8ArrayDto.lock.Unlock()
+
+	return i8ArrayDto.NumberSign
 }

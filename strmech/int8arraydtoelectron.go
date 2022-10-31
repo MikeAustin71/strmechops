@@ -11,14 +11,14 @@ type int8ArrayDtoElectron struct {
 //	emptyCharsArray
 //
 //	Empties or deletes all the characters residing in the
-//	internal member variable 'significand' contained in the
+//	internal member variable 'Int8Array' contained in the
 //	instance of Int8ArrayDto passed as input parameter
 //	'i8ArrayDto'.
 //
 //	The name of the internal member variable data value
 //	being deleted is:
 //
-//		Int8ArrayDto.significand
+//		Int8ArrayDto.Int8Array
 //
 // ------------------------------------------------------------------------
 //
@@ -28,7 +28,7 @@ type int8ArrayDtoElectron struct {
 //
 //		A pointer to an instance of Int8ArrayDto. All the
 //		integers contained in the internal member variable
-//		int8 array 'significand', will be deleted. This
+//		int8 array 'Int8Array', will be deleted. This
 //		internal member variable int8 array will then be
 //		set to a value of 'nil'.
 //
@@ -52,7 +52,7 @@ func (i8ArrayDtoElectron *int8ArrayDtoElectron) emptyIntsArray(
 		return
 	}
 
-	i8ArrayDto.significand = nil
+	i8ArrayDto.Int8Array = nil
 
 	return
 }
