@@ -1,13 +1,14 @@
 package strmech
 
 import (
+	"math/big"
 	"sync"
 )
 
 type BigDecimal struct {
-	numericValue Int8ArrayDto
-	//	Contains an array of int8 integers which
-	//	comprise the BigDecimal numeric value.
+	significand *big.Int
+
+	exponent *big.Int
 
 	numberStrFormat NumStrFmtCountryCultureSpec
 	//	Required for Number String Formatting. Includes
