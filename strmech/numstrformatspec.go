@@ -2779,6 +2779,8 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtGermany(
 //
 // # Reference:
 //
+//	https://learn.microsoft.com/en-us/globalization/locale/currency-formatting
+//
 //	https://www.thefinancials.com/Default.aspx?SubSectionID=curformat
 //
 //	https://www.codeproject.com/articles/78175/international-number-formats
@@ -2816,7 +2818,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtGermany(
 //	trailing parentheses ("()").
 //
 //		United Kingdom Example-4
-//			£ -1,000,000.00
+//			-£ 1,000,000.00
 //
 //	The positive number sign is set to a blank or empty
 //	string ("").
@@ -12367,6 +12369,8 @@ func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setCurrencyNStrFmtGermany(
 //
 // # Reference:
 //
+//	https://learn.microsoft.com/en-us/globalization/locale/currency-formatting
+//
 //	https://www.thefinancials.com/Default.aspx?SubSectionID=curformat
 //
 //	https://www.codeproject.com/articles/78175/international-number-formats
@@ -12414,7 +12418,7 @@ func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setCurrencyNStrFmtGermany(
 //	trailing parentheses ("()").
 //
 //		United Kingdom Example-4
-//			£ -1,000,000.00
+//			-£ 1,000,000.00
 //
 //	The positive number sign is set to a blank or empty
 //	string ("").
@@ -12599,7 +12603,7 @@ func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setCurrencyNStrFmtUK(
 	negativeNumberSign = NumStrNumberSymbolSpec{
 
 		leadingNumberSymbols: RuneArrayDto{
-			CharsArray:     []rune{'\U000000a3', ' ', '-'},
+			CharsArray:     []rune{'-', '\U000000a3', ' '},
 			Description1:   "",
 			Description2:   "",
 			charSearchType: CharSearchType.LinearTargetStartingIndex(),

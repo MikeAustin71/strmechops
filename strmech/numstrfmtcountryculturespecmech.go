@@ -384,7 +384,7 @@ func (nStrFmtCountryCultureMech *numStrFmtCountryCultureSpecMech) setCountryFran
 //	formatting specifications commonly used in Germany.
 //
 //	These same formatting specifications are also used by
-//	various other member countries in the European Union.
+//	many member countries in the European Union.
 //
 // ----------------------------------------------------------------
 //
@@ -521,6 +521,156 @@ func (nStrFmtCountryCultureMech *numStrFmtCountryCultureSpecMech) setCountryGerm
 
 	countryNStrFmtSpec.MinorCurrencyName = "Cent"
 	countryNStrFmtSpec.MinorCurrencySymbols = []rune{'\U00000063'}
+
+	return err
+}
+
+//	setCountryUK
+//
+//	Receives a pointer to an instance of
+//	NumStrFmtCountryCultureSpec and proceeds to configure
+//	that instance with country and Number String
+//	formatting specifications commonly used in the UK
+//	(United Kingdom).
+//
+//	https://www.answers.com/Q/What_is_the_symbol_for_Pence
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	Be advised that the data fields in 'countryNStrFmtSpec'
+//	instance NumStrFmtCountryCultureSpec will be deleted
+//	and overwritten with UK country parameters.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	countryNStrFmtSpec	*NumStrFmtCountryCultureSpec
+//
+//		A pointer to a NumStrFmtCountryCultureSpec instance.
+//		All the member variable data fields in this object
+//		will be replaced with country and Number String
+//		Formatting specifications commonly used in the
+//		UK (United Kingdom).
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	err							error
+//
+//		If this method completes successfully, this
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (nStrFmtCountryCultureMech *numStrFmtCountryCultureSpecMech) setCountryUK(
+	countryNStrFmtSpec *NumStrFmtCountryCultureSpec,
+	errPrefDto *ePref.ErrPrefixDto) (err error) {
+
+	if nStrFmtCountryCultureMech.lock == nil {
+		nStrFmtCountryCultureMech.lock = new(sync.Mutex)
+	}
+
+	nStrFmtCountryCultureMech.lock.Lock()
+
+	defer nStrFmtCountryCultureMech.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"nStrFmtCountryCultureMech."+
+			"setCountryUK()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if countryNStrFmtSpec == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'countryNStrFmtSpec' is invalid!\n"+
+			"'countryNStrFmtSpec' is a 'nil' pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	new(numStrFmtCountryCultureSpecAtom).empty(
+		countryNStrFmtSpec)
+
+	numStrFmtSpec := NumStrFormatSpec{}
+
+	nopNumFieldSpec := new(NumStrNumberFieldSpec).NewNOP()
+
+	countryNStrFmtSpec.CurrencyNumStrFormat,
+		err = numStrFmtSpec.NewCurrencyNumFmtUK(
+		nopNumFieldSpec,
+		ePrefix.XCpy(
+			"countryNStrFmtSpec.CurrencyNumStrFormat"))
+
+	if err != nil {
+		return err
+	}
+
+	countryNStrFmtSpec.SignedNumStrFormat,
+		err = numStrFmtSpec.NewSignedNumFmtUK(
+		nopNumFieldSpec,
+		ePrefix.XCpy(
+			"countryNStrFmtSpec.SignedNumStrFormat"))
+
+	countryNStrFmtSpec.IdNo = 826
+	countryNStrFmtSpec.IdString = "826"
+	countryNStrFmtSpec.Description = "Country Setup"
+	countryNStrFmtSpec.Tag = ""
+	countryNStrFmtSpec.CountryIdNo = 826
+	countryNStrFmtSpec.CountryIdString = "826"
+	countryNStrFmtSpec.CountryDescription = "Country Setup - United Kingdom"
+	countryNStrFmtSpec.CountryTag = ""
+	countryNStrFmtSpec.CountryCultureName = "United Kingdom"
+	countryNStrFmtSpec.CountryAbbreviatedName = "UK"
+
+	countryNStrFmtSpec.CountryAlternateNames =
+		[]string{
+			"United Kingdom of Great Britain and Northern Ireland",
+			"England",
+			"Great Britain"}
+
+	countryNStrFmtSpec.CountryCodeTwoChar = "GB"
+	countryNStrFmtSpec.CountryCodeThreeChar = "GBR"
+	countryNStrFmtSpec.CountryCodeNumber = "826"
+	countryNStrFmtSpec.CurrencyDecimalDigits = 2
+	countryNStrFmtSpec.CurrencyCode = "GBP"
+	countryNStrFmtSpec.CurrencyCodeNo = "826"
+	countryNStrFmtSpec.CurrencyName = "Pound"
+	countryNStrFmtSpec.CurrencySymbols = []rune{'\U000000a3'}
+	countryNStrFmtSpec.MinorCurrencyName = "Pence"
+	countryNStrFmtSpec.MinorCurrencySymbols = []rune{'\U000000a2'}
 
 	return err
 }
