@@ -12,10 +12,10 @@ type runeArrayDtoQuark struct {
 
 //	isRuneArrayAllNumericDigits
 //
-//	Receives a pointer to a RuneArrayDto and
-//	proceeds to examine the internal rune array to
-//	determine if the array contains all numeric character
-//	digits in range of '0' through '9', inclusive.
+//	Receives a pointer to a RuneArrayDto and proceeds to
+//	examine the internal rune array to determine if the
+//	array contains all numeric character digits in range
+//	of '0' through '9', inclusive.
 //
 //	The name of the member variable rune array is:
 //
@@ -88,6 +88,91 @@ func (runeDtoQuark *runeArrayDtoQuark) isRuneArrayAllNumericDigits(
 	isAllNumericDigits = true
 
 	return isAllNumericDigits
+}
+
+//	isRuneArrayAllNumericZeros
+//
+//	Receives a pointer to a RuneArrayDto and proceeds to
+//	examine the internal rune array to determine if the
+//	array consists entirely of the numeric character
+//	digit, zero ('0').
+//
+//	The name of the member variable rune array tested is:
+//
+//			RuneArrayDto.CharsArray
+//
+// ----------------------------------------------------------------
+//
+//	# Input Parameters
+//
+//	runeArrayDto				*RuneArrayDto
+//
+//		A pointer to a RuneArrayDto object containing a
+//		rune array. The contents of this rune array will
+//		be examined to determine if all the member
+//		elements contain the numeric character zero
+//		('0').
+//
+//		If all the rune array member elements consist of
+//		the zero numeric character, '0', this method
+//		returns true.
+//
+//		If the rune array is nil or a length of zero,
+//		this method returns 'false'. Likewise, if any of
+//		the rune array member elements are not equal to
+//		the zero numeric character ('0'), this method
+//		will return 'false'.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	isAllNumericZeros			bool
+//
+//		If the rune array contained within input
+//		paramter, 'runeArrayDto', contains only zero
+//		numeric characters ('0'), this method will return
+//		'true'.
+//
+//		Otherwise, this return parameter is set to
+//		'false'.
+func (runeDtoQuark *runeArrayDtoQuark) isRuneArrayAllNumericZeros(
+	runeArrayDto *RuneArrayDto) (
+	isAllZeros bool) {
+
+	if runeDtoQuark.lock == nil {
+		runeDtoQuark.lock = new(sync.Mutex)
+	}
+
+	runeDtoQuark.lock.Lock()
+
+	defer runeDtoQuark.lock.Unlock()
+
+	isAllZeros = false
+
+	if runeArrayDto == nil {
+
+		return isAllZeros
+	}
+
+	lenTargetAry := len(runeArrayDto.CharsArray)
+
+	if lenTargetAry == 0 {
+
+		return isAllZeros
+	}
+
+	for i := 0; i < lenTargetAry; i++ {
+
+		if runeArrayDto.CharsArray[i] != '0' {
+
+			return isAllZeros
+		}
+	}
+
+	isAllZeros = true
+
+	return isAllZeros
 }
 
 // isValidCharacterArray - Tests the validity of the Character

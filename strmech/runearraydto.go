@@ -841,6 +841,31 @@ func (charsArrayDto *RuneArrayDto) IsAllNumericDigits() bool {
 			charsArrayDto)
 }
 
+// IsAllNumericZeros
+//
+// If the rune array contained in this instance of
+// RuneArrayDto consists entirely of zero numeric
+// character digits ('0'), this method return a boolean
+// value of 'true'.
+//
+// If all rune array member elements do NOT consist
+// exclusively of zero numeric character digits ('0'),
+// this method returns 'false'.
+func (charsArrayDto *RuneArrayDto) IsAllNumericZeros() bool {
+
+	if charsArrayDto.lock == nil {
+		charsArrayDto.lock = new(sync.Mutex)
+	}
+
+	charsArrayDto.lock.Lock()
+
+	defer charsArrayDto.lock.Unlock()
+
+	return new(runeArrayDtoQuark).
+		isRuneArrayAllNumericZeros(
+			charsArrayDto)
+}
+
 // IsEmpty
 //
 // Returns a boolean value of 'true' if the Character
