@@ -817,10 +817,38 @@ func (charsArrayDto *RuneArrayDto) GetCharacterString() string {
 	return string(charsArrayDto.CharsArray)
 }
 
-// IsEmpty - Returns a boolean value of 'true' if the Character
-// Array for the current RuneArrayDto is empty or has a zero length.
+// IsAllNumericDigits
 //
-// A Character Array with a zero length contains zero characters.
+// If the rune array contained in this instance of
+// RuneArrayDto consists entirely of numeric character
+// digits, this method return a boolean value of 'true'.
+//
+// If all rune array member elements do NOT consist
+// of numeric character digits in the range '0' through
+// '9' inclusive, this method returns 'false'.
+func (charsArrayDto *RuneArrayDto) IsAllNumericDigits() bool {
+
+	if charsArrayDto.lock == nil {
+		charsArrayDto.lock = new(sync.Mutex)
+	}
+
+	charsArrayDto.lock.Lock()
+
+	defer charsArrayDto.lock.Unlock()
+
+	return new(runeArrayDtoQuark).
+		isRuneArrayAllNumericDigits(
+			charsArrayDto)
+}
+
+// IsEmpty
+//
+// Returns a boolean value of 'true' if the Character
+// Array for the current RuneArrayDto is empty or has a
+// zero length.
+//
+// A Character Array with a zero length contains zero
+// characters.
 func (charsArrayDto *RuneArrayDto) IsEmpty() bool {
 
 	if charsArrayDto.lock == nil {
@@ -838,35 +866,38 @@ func (charsArrayDto *RuneArrayDto) IsEmpty() bool {
 	return false
 }
 
-// IsValidCharacterArray - Returns a boolean value of 'true' if the
-// Character Array for the current RuneArrayDto instance.
+//	IsValidCharacterArray
 //
-// The Character Array of the current RuneArrayDto instance is
-// stored in member variable:
+//	Returns a boolean value of 'true' if the Character
+//	Array for the current RuneArrayDto instance.
 //
-//	RuneArrayDto.CharsArray
+//	The Character Array of the current RuneArrayDto
+//	instance is stored in member variable:
 //
-// The Character array is judged to be valid if it has an array
-// length greater than zero.
+//			RuneArrayDto.CharsArray
 //
-// Conversely, character arrays with a length of zero are
-// classified as invalid.
+//	The Character array is judged to be valid if it has
+//	an array length greater than zero.
+//
+//	Conversely, character arrays with a length of zero
+//	are classified as invalid.
 //
 // ----------------------------------------------------------------
 //
-// Input Parameters
+// # Input Parameters
 //
 //	NONE
 //
 // ----------------------------------------------------------------
 //
-// Return Values
+// # Return Values
 //
 //	isValid                    bool
-//	   - If the current RuneArrayDto instance member variable
-//	     'CharsArray' (Character Array) is judged to be valid
-//	     in all respects, this return parameter will be set to
-//	     'true'.
+//
+//		If the current RuneArrayDto instance member
+//		variable 'CharsArray' (Character Array) is judged
+//		to be valid in all respects, this return
+//		parameter will be set to 'true'.
 //
 //	   - If the current RuneArrayDto instance member variable
 //	     'CharsArray' (Character Array) is judged to be invalid,

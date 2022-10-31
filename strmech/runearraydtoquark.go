@@ -10,6 +10,86 @@ type runeArrayDtoQuark struct {
 	lock *sync.Mutex
 }
 
+//	isRuneArrayAllNumericDigits
+//
+//	Receives a pointer to a RuneArrayDto and
+//	proceeds to examine the internal rune array to
+//	determine if the array contains all numeric character
+//	digits in range of '0' through '9', inclusive.
+//
+//	The name of the member variable rune array is:
+//
+//			RuneArrayDto.CharsArray
+//
+// ----------------------------------------------------------------
+//
+//	# Input Parameters
+//
+//	runeArrayDto		*RuneArrayDto
+//
+//		A pointer to a RuneArrayDto object containing a
+//		rune array. The contents of this rune array will
+//		be examined to determine if the member elements
+//		consist exclusively of numeric character digits
+//		in the range '0' through '9', inclusive.
+//
+//		If the rune array is 'nil', or has a length of
+//		zero, this method will return 'false' and no
+//		error will be generated.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	isAllNumericDigits			bool
+//
+//		If the rune array contained within input
+//		paramter, 'runeArrayDto' contains all numeric
+//		characters in the range '0' through '9',
+//		inclusive, this	method will return 'true'.
+//
+//		Otherwise, this return parameter is set to
+//		'false'.
+func (runeDtoQuark *runeArrayDtoQuark) isRuneArrayAllNumericDigits(
+	runeArrayDto *RuneArrayDto) (
+	isAllNumericDigits bool) {
+
+	if runeDtoQuark.lock == nil {
+		runeDtoQuark.lock = new(sync.Mutex)
+	}
+
+	runeDtoQuark.lock.Lock()
+
+	defer runeDtoQuark.lock.Unlock()
+
+	isAllNumericDigits = false
+
+	if runeArrayDto == nil {
+
+		return isAllNumericDigits
+
+	}
+
+	lenTargetAry := len(runeArrayDto.CharsArray)
+
+	if lenTargetAry == 0 {
+
+		return isAllNumericDigits
+	}
+
+	for i := 0; i < lenTargetAry; i++ {
+		if runeArrayDto.CharsArray[i] < '0' ||
+			runeArrayDto.CharsArray[i] > '9' {
+
+			return isAllNumericDigits
+		}
+	}
+
+	isAllNumericDigits = true
+
+	return isAllNumericDigits
+}
+
 // isValidCharacterArray - Tests the validity of the Character
 // Array contained in an instance of RuneArrayDto.
 //
@@ -21,63 +101,61 @@ type runeArrayDtoQuark struct {
 // character array is classified as valid.
 //
 // The Character Array member variable is styled as:
-//   runeArrayDto.CharsArray
 //
+//	runeArrayDto.CharsArray
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  runeArrayDto               *RuneArrayDto
-//     - A pointer to an instance of RuneArrayDto. The internal
-//       member variable, 'CharsArray' (Character Array),
-//       will be tested for validity.
+//	runeArrayDto               *RuneArrayDto
+//	   - A pointer to an instance of RuneArrayDto. The internal
+//	     member variable, 'CharsArray' (Character Array),
+//	     will be tested for validity.
 //
-//       If the character array has a length of zero, it is
-//       classified as invalid.  If the array length is greater
-//       than zero, the character array is classified as valid.
+//	     If the character array has a length of zero, it is
+//	     classified as invalid.  If the array length is greater
+//	     than zero, the character array is classified as valid.
 //
 //
-//  errPrefDto                   *ePref.ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//	errPrefDto                   *ePref.ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods listed
+//	     as a function chain.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
-//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  isValid                    bool
-//     - If 'runeArrayDto' member variable 'CharsArray' (Character
-//       Array) is judged to be valid in all respects, this return
-//       parameter will be set to 'true'.
+//	isValid                    bool
+//	   - If 'runeArrayDto' member variable 'CharsArray' (Character
+//	     Array) is judged to be valid in all respects, this return
+//	     parameter will be set to 'true'.
 //
-//       If 'runeArrayDto' member variable 'CharsArray' (Character
-//       Array) is found to be invalid, this return parameter will
-//       be set to 'false'.
+//	     If 'runeArrayDto' member variable 'CharsArray' (Character
+//	     Array) is found to be invalid, this return parameter will
+//	     be set to 'false'.
 //
 //
-//  err                        error
-//     - If 'runeArrayDto' member variable 'CharsArray' (Character
-//       Array) is judged to be valid in all respects, this return
-//       parameter will be set to 'nil'.
+//	err                        error
+//	   - If 'runeArrayDto' member variable 'CharsArray' (Character
+//	     Array) is judged to be valid in all respects, this return
+//	     parameter will be set to 'nil'.
 //
-//       If 'runeArrayDto' member variable 'CharsArray' (Character
-//       Array) is found to be invalid, this return parameter will
-//       be configured with an appropriate error message.
+//	     If 'runeArrayDto' member variable 'CharsArray' (Character
+//	     Array) is found to be invalid, this return parameter will
+//	     be configured with an appropriate error message.
 //
-//       If an error message is returned, the text value for input
-//       parameter 'errPrefDto' (error prefix) will be prefixed or
-//       attached at the beginning of the error message.
-//
+//	     If an error message is returned, the text value for input
+//	     parameter 'errPrefDto' (error prefix) will be prefixed or
+//	     attached at the beginning of the error message.
 func (runeDtoQuark *runeArrayDtoQuark) isValidCharacterArray(
 	runeArrayDto *RuneArrayDto,
 	errPrefDto *ePref.ErrPrefixDto) (
@@ -142,60 +220,58 @@ func (runeDtoQuark *runeArrayDtoQuark) isValidCharacterArray(
 // RuneArrayDto instance.
 //
 // The Character Search Type variable is styled as:
-//   runeArrayDto.charSearchType
 //
+//	runeArrayDto.charSearchType
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  runeArrayDto               *RuneArrayDto
-//     - A pointer to an instance of RuneArrayDto. The internal
-//       member variable, 'charSearchType' (Character Search Type),
-//       will be tested for validity.
+//	runeArrayDto               *RuneArrayDto
+//	   - A pointer to an instance of RuneArrayDto. The internal
+//	     member variable, 'charSearchType' (Character Search Type),
+//	     will be tested for validity.
 //
 //
-//  errPrefDto                   *ePref.ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//	errPrefDto                   *ePref.ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods listed
+//	     as a function chain.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
-//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  isValid                    bool
-//     - If 'runeArrayDto' member variable 'charSearchType'
-//       (Character Search Type) is judged to be valid in all
-//       respects, this return parameter will be set to 'true'.
+//	isValid                    bool
+//	   - If 'runeArrayDto' member variable 'charSearchType'
+//	     (Character Search Type) is judged to be valid in all
+//	     respects, this return parameter will be set to 'true'.
 //
-//       If 'runeArrayDto' member variable 'charSearchType'
-//       (Character Search Type) is found to be invalid,
-//       this return parameter will be set to 'false'.
+//	     If 'runeArrayDto' member variable 'charSearchType'
+//	     (Character Search Type) is found to be invalid,
+//	     this return parameter will be set to 'false'.
 //
 //
-//  err                        error
-//     - If 'runeArrayDto' member variable 'charSearchType'
-//       (Character Search Type) is judged to be valid in
-//       all respects, this return parameter will be set to 'nil'.
+//	err                        error
+//	   - If 'runeArrayDto' member variable 'charSearchType'
+//	     (Character Search Type) is judged to be valid in
+//	     all respects, this return parameter will be set to 'nil'.
 //
-//       If 'runeArrayDto' member variable 'charSearchType'
-//       (Character Search Type) is found to be invalid, this
-//       return parameter will be configured with an appropriate
-//       error message.
+//	     If 'runeArrayDto' member variable 'charSearchType'
+//	     (Character Search Type) is found to be invalid, this
+//	     return parameter will be configured with an appropriate
+//	     error message.
 //
-//       If an error message is returned, the text value for input
-//       parameter 'errPrefDto' (error prefix) will be prefixed or
-//       attached at the beginning of the error message.
-//
+//	     If an error message is returned, the text value for input
+//	     parameter 'errPrefDto' (error prefix) will be prefixed or
+//	     attached at the beginning of the error message.
 func (runeDtoQuark *runeArrayDtoQuark) isValidCharacterSearchType(
 	runeArrayDto *RuneArrayDto,
 	errPrefDto *ePref.ErrPrefixDto) (
