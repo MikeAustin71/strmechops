@@ -17,6 +17,19 @@ type IntDecimal struct {
 
 	exponent Int8ArrayDto
 
+	numberSign NumericSignValueType
+	//	An enumeration specifying the number sign associated
+	//	with the numeric value represented by the numeric
+	//	digits contained within the member variable,
+	//	'Int8Array'
+	//
+	//	Possible values are listed as follows:
+	//
+	//      NumSignVal.None() - Invalid Value
+	//      NumSignVal.Negative() = -1
+	//      NumSignVal.Zero()     =  0
+	//      NumSignVal.Positive() =  1
+
 	Description1 string
 	//	Optional. A name, label or narrative text used to
 	//	describe the current instance of Int8ArrayDto.

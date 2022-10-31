@@ -163,9 +163,6 @@ func (i8ArrayNanobot *int8ArrayDtoNanobot) copyInt8ArrayDto(
 			sourceI8Array.Int8Array[i]
 	}
 
-	destinationI8Array.NumberSign =
-		sourceI8Array.NumberSign
-
 	destinationI8Array.Description1 =
 		sourceI8Array.Description1
 

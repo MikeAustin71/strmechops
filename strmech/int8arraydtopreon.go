@@ -281,20 +281,6 @@ func (i8ArrayDtoPreon *int8ArrayDtoPreon) isValidI8ArrayDto(
 
 	}
 
-	if !i8ArrayDto.NumberSign.XIsValid() {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: i8ArrayDto.NumberSign is invalid!\n"+
-			"i8ArrayDto.NumberSign string value  = %v\n"+
-			"i8ArrayDto.NumberSign integer value = %v\n",
-			ePrefix.String(),
-			i8ArrayDto.NumberSign.String(),
-			i8ArrayDto.NumberSign.XValueInt())
-
-		return isValid, err
-
-	}
-
 	isValid = true
 
 	return isValid, err

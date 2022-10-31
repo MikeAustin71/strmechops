@@ -22,19 +22,6 @@ type Int8ArrayDto struct {
 	//	value equal to or greater than zero and less
 	//	than or equal to nine (0-9 inclusive).
 
-	NumberSign NumericSignValueType
-	//	An enumeration specifying the number sign associated
-	//	with the numeric value represented by the numeric
-	//	digits contained within the member variable,
-	//	'Int8Array'
-	//
-	//	Possible values are listed as follows:
-	//
-	//      NumSignVal.None() - Invalid Value
-	//      NumSignVal.Negative() = -1
-	//      NumSignVal.Zero()     =  0
-	//      NumSignVal.Positive() =  1
-
 	Description1 string
 	//	Optional. A name, label or narrative text used to
 	//	describe the current instance of Int8ArrayDto.
@@ -759,47 +746,4 @@ func (i8ArrayDto *Int8ArrayDto) GetCopyInt8Array() []int8 {
 	}
 
 	return newI8Array
-}
-
-//	GetNumberSign
-//
-//	Returns the number sign of the integer digits stored
-//	in the internal member variable:
-//		Int8ArrayDto.Int8Array
-//
-// ----------------------------------------------------------------
-//
-//	# Input Parameters
-//
-//	 NONE
-//
-// ----------------------------------------------------------------
-//
-// # Return Values
-//
-//		NumericSignValueType
-//
-//			An enumeration specifying the number sign
-//			associated with the numeric value represented
-//			by the numeric digits contained within the
-//			integer array member variable:
-//					Int8ArrayDto.Int8Array
-//
-//		Possible values are listed as follows:
-//
-//	     NumSignVal.None() - Invalid Value
-//	     NumSignVal.Negative() = -1
-//	     NumSignVal.Zero()     =  0
-//	     NumSignVal.Positive() =  1
-func (i8ArrayDto *Int8ArrayDto) GetNumberSign() NumericSignValueType {
-
-	if i8ArrayDto.lock == nil {
-		i8ArrayDto.lock = new(sync.Mutex)
-	}
-
-	i8ArrayDto.lock.Lock()
-
-	defer i8ArrayDto.lock.Unlock()
-
-	return i8ArrayDto.NumberSign
 }

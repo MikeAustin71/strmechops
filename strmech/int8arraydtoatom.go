@@ -61,8 +61,6 @@ func (i8ArrayDtoAtom *int8ArrayDtoAtom) empty(
 	new(int8ArrayDtoElectron).emptyIntsArray(
 		i8ArrayDto)
 
-	i8ArrayDto.NumberSign = NumSignVal.None()
-
 	i8ArrayDto.Description1 = ""
 
 	i8ArrayDto.Description2 = ""
@@ -205,17 +203,6 @@ func (i8ArrayDtoAtom *int8ArrayDtoAtom) equal(
 
 	if err != nil {
 		return areEqual, err
-	}
-
-	if i8ArrayDto1.NumberSign !=
-		i8ArrayDto2.NumberSign {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: NumberSign values are NOT Equal!\n",
-			ePrefix.String())
-
-		return areEqual, err
-
 	}
 
 	if i8ArrayDto1.Description1 !=
