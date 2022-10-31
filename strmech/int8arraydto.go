@@ -752,3 +752,45 @@ func (i8ArrayDto *Int8ArrayDto) GetExponent() int64 {
 
 	return i8ArrayDto.exponent
 }
+
+//	GetSignificandIntArray
+//
+//	Returns an int8 array of numerical digits which
+//	comprise the significand value for the current
+//	instance of	Int8ArrayDto.
+//
+//	The numerical value encapsulated in the current
+//	instance of Int8ArrayDto is calculated as follows:
+//
+//		numeric value = significand x 10^exponent
+//
+//	This method returns teh significand as an array of
+//	type int8.
+//
+// ----------------------------------------------------------------
+//
+//	# Input Parameters
+//
+//	 NONE
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	[]int8
+//
+//		An array of numerical digits comprising the
+//		significand for the current instance of
+//		Int8ArrayDto.
+func (i8ArrayDto *Int8ArrayDto) GetSignificandIntArray() []int8 {
+
+	if i8ArrayDto.lock == nil {
+		i8ArrayDto.lock = new(sync.Mutex)
+	}
+
+	i8ArrayDto.lock.Lock()
+
+	defer i8ArrayDto.lock.Unlock()
+
+	return i8ArrayDto.significand
+}
