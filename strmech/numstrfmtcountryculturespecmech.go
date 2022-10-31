@@ -227,6 +227,155 @@ func (nStrFmtCountryCultureMech *numStrFmtCountryCultureSpecMech) copyCountryCul
 	return err
 }
 
+//	setCountryFrance
+//
+//	Receives a pointer to an instance of
+//	NumStrFmtCountryCultureSpec and proceeds to configure
+//	that instance with country and Number String
+//	formatting specifications commonly used in France.
+//
+//	These same formatting specifications are also used by
+//	various other member countries in the European Union.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	Be advised that the data fields in 'countryNStrFmtSpec'
+//	instance NumStrFmtCountryCultureSpec will be deleted
+//	and overwritten with French country parameters.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	countryNStrFmtSpec	*NumStrFmtCountryCultureSpec
+//
+//		A pointer to a NumStrFmtCountryCultureSpec instance.
+//		All the member variable data fields in this object
+//		will be replaced with country and Number String
+//		Formatting specifications commonly used in France.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	err							error
+//
+//		If this method completes successfully, this
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (nStrFmtCountryCultureMech *numStrFmtCountryCultureSpecMech) setCountryFrance(
+	countryNStrFmtSpec *NumStrFmtCountryCultureSpec,
+	errPrefDto *ePref.ErrPrefixDto) (err error) {
+
+	if nStrFmtCountryCultureMech.lock == nil {
+		nStrFmtCountryCultureMech.lock = new(sync.Mutex)
+	}
+
+	nStrFmtCountryCultureMech.lock.Lock()
+
+	defer nStrFmtCountryCultureMech.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"nStrFmtCountryCultureMech."+
+			"setCountryFrance()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if countryNStrFmtSpec == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'countryNStrFmtSpec' is invalid!\n"+
+			"'countryNStrFmtSpec' is a 'nil' pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	new(numStrFmtCountryCultureSpecAtom).empty(
+		countryNStrFmtSpec)
+
+	numStrFmtSpec := NumStrFormatSpec{}
+
+	nopNumFieldSpec := new(NumStrNumberFieldSpec).NewNOP()
+
+	countryNStrFmtSpec.CurrencyNumStrFormat,
+		err = numStrFmtSpec.NewCurrencyNumFmtFrance(
+		nopNumFieldSpec,
+		ePrefix.XCpy(
+			"countryNStrFmtSpec.CurrencyNumStrFormat"))
+
+	if err != nil {
+		return err
+	}
+
+	countryNStrFmtSpec.SignedNumStrFormat,
+		err = numStrFmtSpec.NewSignedNumFmtFrance(
+		nopNumFieldSpec,
+		ePrefix.XCpy(
+			"countryNStrFmtSpec.SignedNumStrFormat"))
+
+	countryNStrFmtSpec.IdNo = 250
+	countryNStrFmtSpec.IdString = "250"
+	countryNStrFmtSpec.Description = "Country Setup"
+	countryNStrFmtSpec.Tag = ""
+	countryNStrFmtSpec.CountryIdNo = 250
+	countryNStrFmtSpec.CountryIdString = "250"
+	countryNStrFmtSpec.CountryDescription = "Country Setup - France"
+	countryNStrFmtSpec.CountryTag = ""
+	countryNStrFmtSpec.CountryCultureName = "France"
+	countryNStrFmtSpec.CountryAbbreviatedName = "France"
+
+	countryNStrFmtSpec.CountryAlternateNames =
+		[]string{
+			"French Republic",
+			"The French Republic"}
+
+	countryNStrFmtSpec.CountryCodeTwoChar = "FR"
+	countryNStrFmtSpec.CountryCodeThreeChar = "FRA"
+	countryNStrFmtSpec.CountryCodeNumber = "250"
+	countryNStrFmtSpec.CurrencyDecimalDigits = 2
+	countryNStrFmtSpec.CurrencyCode = "FRF"
+	countryNStrFmtSpec.CurrencyCodeNo = "978"
+	countryNStrFmtSpec.CurrencyName = "Euro"
+	countryNStrFmtSpec.CurrencySymbols = []rune{'\U000020ac'}
+
+	countryNStrFmtSpec.MinorCurrencyName = "Cent"
+	countryNStrFmtSpec.MinorCurrencySymbols = []rune{'\U00000063'}
+
+	return err
+}
+
 //	setCountryUS
 //
 //	Receives a pointer to an instance of
