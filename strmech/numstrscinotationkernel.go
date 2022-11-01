@@ -34,7 +34,7 @@ import (
 //
 //		Example:
 //			Base Numeric Value: 265,200,000
-//			Expnential Display Foramt: "2.652 x 10^8"
+//			Exponential Display Format: "2.652 x 10^8"
 //
 //	E-Notation Format
 //
