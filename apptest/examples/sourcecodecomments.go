@@ -26,7 +26,7 @@ type SourceCodeComments struct {
 //
 //	# Input Parameters
 //
-//	 errorPrefix                interface{}
+//	errorPrefix					interface{}
 //
 //		This object encapsulates error prefix text which
 //		is included in all returned error messages.

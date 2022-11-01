@@ -12,21 +12,23 @@ type numStrMathQuark struct {
 	lock *sync.Mutex
 }
 
-// extendRunes - Receives an array of runes and proceeds
-// to extend the length of that array using one or more
-// 'fill' characters passed as input parameters.
+//	extendRunes
 //
-// The 'fill' characters will be appended to the beginning
-// or end of the original rune array depending on the
-// value of input parameter, 'extendRunesRight'.
+//	Receives an array of runes and proceeds to extend the
+//	length of that array using one or more 'fill'
+//	characters passed as input parameters.
 //
-// If 'extendRunesRight' is 'true', the fill characters
-// will be appended to the end of the original rune
-// array.
+//	The 'fill' characters will be appended to the
+//	beginning or end of the original rune array depending
+//	on the value of input parameter, 'extendRunesRight'.
 //
-// If 'extendRunesRight' is 'false', the fill characters
-// will be appended to the beginning of the original rune
-// array.
+//	If 'extendRunesRight' is 'true', the fill characters
+//	will be appended to the end of the original rune
+//	array.
+//
+//	If 'extendRunesRight' is 'false', the fill characters
+//	will be appended to the beginning of the original
+//	rune array.
 //
 // ----------------------------------------------------------------
 //

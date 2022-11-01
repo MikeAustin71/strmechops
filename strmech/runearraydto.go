@@ -98,18 +98,25 @@ type RuneArrayDto struct {
 	lock *sync.Mutex
 }
 
-// AddChar - Adds a single text character of type rune to the end
-// of the rune array (RuneArrayDto.CharsArray) encapsulated by the
-// current instance of RuneArrayDto
+//	AddChar
+//
+//	Adds a single text character of type rune to the end
+//	of the rune array (RuneArrayDto.CharsArray)
+//	encapsulated by the current instance of RuneArrayDto.
+//
+//	Another method which is similar in function is:
+//
+//			RuneArrayDto.ExtendRuneArray()
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//	charToAdd                  rune
-//	   - The text character which will be appended to the end of
-//	     the rune array encapsulated by the current instance of
-//	     RuneArrayDto.
+//	charToAdd					rune
+//
+//		The text character which will be appended to the
+//		end of the rune array encapsulated by the current
+//		instance of RuneArrayDto.
 //
 // ------------------------------------------------------------------------
 //
@@ -131,90 +138,114 @@ func (charsArrayDto *RuneArrayDto) AddChar(
 		append(charsArrayDto.CharsArray, charToAdd)
 }
 
-// CopyIn - Copies the internal rune array from an incoming
-// instance of RuneArrayDto ('incomingChars') to the internal
-// rune array of the current RuneArrayDto instance
-// ('charsArrayDto').
+//	CopyIn
 //
-// IMPORTANT
-// The internal rune array for the current RuneArrayDto instance
-// ('charsArrayDto') will be deleted and overwritten.
+//	Copies the internal rune array from an incoming
+//	instance of RuneArrayDto ('incomingChars') to the
+//	internal rune array of the current RuneArrayDto
+//	instance ('charsArrayDto').
 //
 // ----------------------------------------------------------------
 //
-// Input Parameters
+// # IMPORTANT
 //
-//	incomingChars              *RuneArrayDto
-//	   - A pointer to an instance of RuneArrayDto. This method will
-//	     NOT change the values of internal rune array contained in
-//	     this instance.
+//	The internal rune array for the current RuneArrayDto
+//	instance ('charsArrayDto') will be deleted and
+//	overwritten.
 //
-//	     All data values in this RuneArrayDto instance will be
-//	     copied to current RuneArrayDto instance ('charsArrayDto').
+// ----------------------------------------------------------------
 //
-//	     If parameter 'incomingChars' is 'nil' pointer or if its
-//	     internal rune array has a length of zero, an error will be
-//	     returned.
+// # Input Parameters
 //
+//	incomingChars				*RuneArrayDto
 //
-//	errorPrefix                interface{}
-//	   - This object encapsulates error prefix text which is
-//	     included in all returned error messages. Usually, it
-//	     contains the name of the calling method or methods
-//	     listed as a method or function chain of execution.
+//		A pointer to an instance of RuneArrayDto. This
+//		method will NOT change the values of internal
+//		rune array contained in this instance.
 //
-//	     If no error prefix information is needed, set this parameter
-//	     to 'nil'.
+//		All data values in this RuneArrayDto instance
+//		will be copied to current RuneArrayDto instance
+//		('charsArrayDto').
 //
-//	     This empty interface must be convertible to one of the
-//	     following types:
+//		If parameter 'incomingChars' is 'nil' pointer or
+//		if its internal rune array has a length of zero,
+//		an error will be returned.
 //
+//	errorPrefix					interface{}
 //
-//	     1. nil - A nil value is valid and generates an empty
-//	              collection of error prefix and error context
-//	              information.
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it	contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
 //
-//	     2. string - A string containing error prefix information.
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
 //
-//	     3. []string A one-dimensional slice of strings containing
-//	                 error prefix information
+//		This empty interface must be convertible to one of
+//		the following types:
 //
-//	     4. [][2]string A two-dimensional slice of strings containing
-//	                    error prefix and error context information.
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//	                       ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
+//		2.	string
+//				A string containing error prefix
+//				information.
 //
-//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//	                        ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
 //
-//	     7. IBasicErrorPrefix - An interface to a method generating
-//	                            a two-dimensional slice of strings
-//	                            containing error prefix and error
-//	                            context information.
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
 //
-//	     If parameter 'errorPrefix' is NOT convertible to one of
-//	     the valid types listed above, it will be considered
-//	     invalid and trigger the return of an error.
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
 //
-//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
-//	     the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
 //
-// ------------------------------------------------------------------------
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
 //
-// Return Values
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
 //
-//	error
-//	   - If this method completes successfully and no errors are
-//	     encountered this return value is set to 'nil'. Otherwise,
-//	     if errors are encountered, this return value will contain
-//	     an appropriate error message.
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
 //
-//	     If an error message is returned, the text value of input
-//	     parameter 'errorPrefix' will be inserted or prefixed at
-//	     the beginning of the error message.
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
 func (charsArrayDto *RuneArrayDto) CopyIn(
 	incomingChars *RuneArrayDto,
 	errorPrefix interface{}) (
@@ -729,8 +760,10 @@ func (charsArrayDto *RuneArrayDto) GetRuneArrayDescription2() string {
 	return charsArrayDto.Description2
 }
 
-// GetRuneArrayLength - Returns the length of the internal
-// rune array, 'CharsArray' as an integer value.
+// GetRuneArrayLength
+//
+// Returns the length of the internal rune array,
+// 'CharsArray' as an integer value.
 func (charsArrayDto *RuneArrayDto) GetRuneArrayLength() int {
 
 	if charsArrayDto.lock == nil {
@@ -744,12 +777,14 @@ func (charsArrayDto *RuneArrayDto) GetRuneArrayLength() int {
 	return len(charsArrayDto.CharsArray)
 }
 
-// GetRuneArray - Returns a deep copy of the internal rune array,
+// GetRuneArray
+//
+// Returns a deep copy of the internal rune array,
 // 'CharsArray' configured for the current instance of
 // RuneArrayDto.
 //
-// If the length of the internal rune array 'CharsArray' is zero,
-// a value of 'nil' will be returned.
+// If the length of the internal rune array 'CharsArray'
+// is zero, a value of 'nil' will be returned.
 func (charsArrayDto *RuneArrayDto) GetRuneArray() []rune {
 
 	if charsArrayDto.lock == nil {
@@ -815,6 +850,180 @@ func (charsArrayDto *RuneArrayDto) GetCharacterString() string {
 	defer charsArrayDto.lock.Unlock()
 
 	return string(charsArrayDto.CharsArray)
+}
+
+//	ExtendRuneArray
+//
+//	Adds one or more characters to the beginning or end
+//	of the rune array contained in the current instance
+//	of RuneArrayDto.
+//
+//	The name of the rune array member variable is:
+//
+//			RuneArrayDto.CharsArray
+//
+// ----------------------------------------------------------------
+//
+//	# Input Parameters
+//
+//	fillChar					rune
+//
+//		This Character will be added to the beginning or
+//		the end of the rune array contained in the
+//		current instance of RuneArrayDto.
+//
+//	numOfCharsToAdd				int
+//
+//		'fillChar' will be added to the rune array
+//		'numOfCharsToAdd' of times.
+//
+//		'numOfCharsToAdd' is equal to the total number of
+//		characters which will be added to the rune array.
+//
+//		If the value of 'numOfCharsToAdd' is less than
+//		one (1), an error will be returned.
+//
+//	addTrailingChars			bool
+//
+//		If this parameter is set to 'true', the additonal
+//		characters will be appended to the rune arrays as
+//		trailing characters. This means the characters
+//		will be added to the end of the rune array.
+//
+//		If this parameter is set to 'false', the
+//		additional characters will be added to the rune
+//		array as leading characters. In other words, the
+//		characters will be added to the beginning of the
+//		rune array.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it	contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (charsArrayDto *RuneArrayDto) ExtendRuneArray(
+	fillChar rune,
+	numOfCharsToAdd int,
+	addTrailingChars bool,
+	errorPrefix interface{}) error {
+
+	if charsArrayDto.lock == nil {
+		charsArrayDto.lock = new(sync.Mutex)
+	}
+
+	charsArrayDto.lock.Lock()
+
+	defer charsArrayDto.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"RuneArrayDto."+
+			"CopyIn()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if numOfCharsToAdd < 1 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'numOfCharsToAdd' is invalid!\n"+
+			"'numOfCharsToAdd' has a value less than one (1).\n"+
+			"numOfCharsToAdd = '%v'\n",
+			ePrefix.String(),
+			numOfCharsToAdd)
+
+		return err
+	}
+
+	newCharArrayLength := len(charsArrayDto.CharsArray)
+
+	newCharArrayLength += numOfCharsToAdd
+
+	return new(numStrMathQuark).extendRunes(
+		charsArrayDto,
+		charsArrayDto,
+		fillChar,
+		newCharArrayLength,
+		addTrailingChars,
+		ePrefix.XCpy(
+			"charsArrayDto<-"))
 }
 
 // IsAllNumericDigits
