@@ -24,7 +24,7 @@ type runeArrayDtoAtom struct {
 //	The name of the rune array member variable which will
 //	be modified by this method is:
 //
-//			RuneArrayDto.CharsArray
+//			runeArrayDto.CharsArray
 //
 // ----------------------------------------------------------------
 //
@@ -120,6 +120,160 @@ func (runeDtoAtom *runeArrayDtoAtom) addRunes(
 		runeArrayDto.CharsArray = append(
 			runeArrayDto.CharsArray,
 			charsToAdd...)
+
+	}
+
+	return err
+}
+
+//	deleteRunes
+//
+//	Receives a pointer to a rune array and proceeds to
+//	delete rune text characters from the rune array
+//	contained in the RuneArrayDto input parameter,
+//	'runeArrayDto'. The name of the member variable
+//	rune array which will be modified by this method is:
+//
+//			runeArrayDto.CharsArray
+//
+//	The rune characters deleted will either be leading
+//	characters or trailing characters depending on the
+//	setting for input parameter, 'deleteTrailingChars'.
+//
+// ----------------------------------------------------------------
+//
+//	# Input Parameters
+//
+//	runeArrayDto				*RuneArrayDto
+//
+//		A pointer to an instance of RuneArrayDto. The
+//		rune array contained in this RuneArrayDto
+//		instance will be modified in that rune characters
+//		will be deleted. The name of the member variable
+//		which will be modified is:
+//
+//			runeArrayDto.CharsArray
+//
+//	numOfRunesToDelete			uint64
+//
+//		This uint64 parameter specifies the number of
+//		rune characters which will be deleted from the
+//		rune array contained in parameter
+//		'runeArrayDto'. These runes will be deleted
+//		from rune array 'runeArrayDto.CharsArray'.
+//
+//		If this parameter is set to zero, no rune
+//		characters will be deleted and no error will be
+//		returned.
+//
+//		If this parameter is set to a value greater than
+//		or equal to the length of the rune array, the
+//		rune array will be set to 'nil' and no error will
+//		be returned.
+//
+//	deleteTrailingChars			bool
+//
+//		This parameter determines whether the rune
+//		characters deleted from the rune array will be
+//		trailing characters or leading characters.
+//
+//		If this parameter is set to 'true', trailing
+//		characters at the end of the rune array will be
+//		deleted.
+//
+//		If this parameter is set to 'false', leading
+//		characters at the beginning of the rune array
+//		will be deleted.
+func (runeDtoAtom *runeArrayDtoAtom) deleteRunes(
+	runeArrayDto *RuneArrayDto,
+	numOfRunesToDelete uint64,
+	deleteTrailingChars bool,
+	errPrefDto *ePref.ErrPrefixDto) (
+	err error) {
+
+	if runeDtoAtom.lock == nil {
+		runeDtoAtom.lock = new(sync.Mutex)
+	}
+
+	runeDtoAtom.lock.Lock()
+
+	defer runeDtoAtom.lock.Unlock()
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"runeArrayDtoNanobot."+
+			"copyRuneArrayDto()",
+		"")
+
+	if err != nil {
+
+		return err
+
+	}
+
+	if runeArrayDto == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'runeArrayDto' is "+
+			"a nil pointer!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	lenCharArray := uint64(len(runeArrayDto.CharsArray))
+
+	if numOfRunesToDelete == 0 ||
+		lenCharArray == 0 {
+		return err
+	}
+
+	if numOfRunesToDelete >=
+		lenCharArray {
+
+		runeArrayDto.CharsArray = nil
+
+		return err
+	}
+
+	// MUST BE: numOfRunesToDelete < lenCharArray
+
+	// Slice Examples
+	//arr := []int{1,2,3,4,5}
+	//
+	// Length = 5
+	// Last Index = 4
+	//
+	//fmt.Println(arr[:2])        // [1,2]
+	//
+	//fmt.Println(arr[2:])        // [3,4,5]
+	//
+	//fmt.Println(arr[2:3])        // [3]
+	//
+	//fmt.Println(arr[:])            // [1,2,3,4,5]
+
+	var targetIdx uint64
+
+	if deleteTrailingChars == true {
+
+		//  2     =  5     -      3
+		targetIdx =
+			lenCharArray - numOfRunesToDelete
+
+		runeArrayDto.CharsArray =
+			runeArrayDto.CharsArray[:targetIdx]
+
+	} else {
+		// MUST BE: Delete Leading Chars
+
+		//   3    =  5   -   3  + 1
+		targetIdx =
+			lenCharArray - numOfRunesToDelete + 1
+
+		runeArrayDto.CharsArray =
+			runeArrayDto.CharsArray[targetIdx:]
 
 	}
 
