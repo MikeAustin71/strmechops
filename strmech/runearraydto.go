@@ -110,7 +110,7 @@ type RuneArrayDto struct {
 //
 // ----------------------------------------------------------------
 //
-// Input Parameters
+// # Input Parameters
 //
 //	charToAdd					rune
 //
@@ -120,7 +120,7 @@ type RuneArrayDto struct {
 //
 // ------------------------------------------------------------------------
 //
-// Return Values
+// # Return Values
 //
 //	NONE
 func (charsArrayDto *RuneArrayDto) AddChar(
@@ -136,6 +136,160 @@ func (charsArrayDto *RuneArrayDto) AddChar(
 
 	charsArrayDto.CharsArray =
 		append(charsArrayDto.CharsArray, charToAdd)
+}
+
+//	AddString
+//
+//	Receives a string of text characters and proceeds to
+//	add them to the existing rune array contained in the
+//	current instance of RuneArrayDto.
+//
+//	The rune array to which the new characters will be
+//	added is specified by member variable:
+//
+//		RuneArrayDto.CharsArray
+//
+//	The setting for input parameter 'addTrailingChars'
+//	will determine whether the new characters are added
+//	to as trailing characters to the end of the existing
+//	rune array, or as leading characters as the beginning
+//	of the existing rune array.
+//
+// ----------------------------------------------------------------
+//
+//	# Input Parameters
+//
+//	charsToAdd					string
+//
+//		A string containing text characters which be
+//		added to the existing rune contained within the
+//		current instance of RuneArrayDto:
+//
+//			RuneArrayDto.CharsArray
+//
+//	addTrailingChars			bool
+//
+//		This parameter determines whether 'charsToAdd'
+//		will be added to 'RuneArrayDto.CharsArray' as
+//		trailing characters or as leading characters.
+//
+//		If 'addTrailingChars' is set to 'true',
+//		'charsToAdd' will be added to the end of the
+//		existing rune array as trailing characters.
+//
+//		If 'addTrailingChars' is set to 'false',
+//		'charsToAdd' will be added to the beginning of
+//		the existing rune array as leading characters.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it	contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (charsArrayDto *RuneArrayDto) AddString(
+	charsToAdd string,
+	addTrailingChars bool,
+	errorPrefix interface{}) error {
+
+	if charsArrayDto.lock == nil {
+		charsArrayDto.lock = new(sync.Mutex)
+	}
+
+	charsArrayDto.lock.Lock()
+
+	defer charsArrayDto.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"RuneArrayDto."+
+			"CopyIn()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	return new(runeArrayDtoAtom).addRunes(
+		charsArrayDto,
+		[]rune(charsToAdd),
+		addTrailingChars,
+		ePrefix.XCpy(
+			"charsArrayDto<-"))
 }
 
 //	CopyIn
@@ -885,7 +1039,7 @@ func (charsArrayDto *RuneArrayDto) GetCharacterString() string {
 //
 //	addTrailingChars			bool
 //
-//		If this parameter is set to 'true', the additonal
+//		If this parameter is set to 'true', the additional
 //		characters will be appended to the rune arrays as
 //		trailing characters. This means the characters
 //		will be added to the end of the rune array.

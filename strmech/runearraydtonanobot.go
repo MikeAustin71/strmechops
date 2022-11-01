@@ -162,6 +162,11 @@ func (runeDtoNanobot *runeArrayDtoNanobot) copyRuneArrayDto(
 	return err
 }
 
+// characterSearchExecutor
+//
+// This high level function analyzes a search request
+// and assigns the search operation to the appropriate
+// low-level search method.
 func (runeDtoNanobot *runeArrayDtoNanobot) characterSearchExecutor(
 	targetInputParms CharSearchTargetInputParametersDto,
 	testInputParms CharSearchTestInputParametersDto,
