@@ -696,6 +696,164 @@ func (charsArrayDto *RuneArrayDto) CopyOut(
 	return copyOfRuneArrayDto, err
 }
 
+//	DeleteRunes
+//
+//	This method will delete rune text characters from the
+//	internal rune array contained in the current instance
+//	of RuneArrayDto. The characters will either be
+//	deleted from the beginning of the rune array (delete
+//	leading characters) or the end of the rune array
+//	(delete trailing characters) as specified by input
+//	parameter, 'deleteTrailingChars'.
+//
+// ----------------------------------------------------------------
+//
+//	# Input Parameters
+//
+//	numOfRunesToDelete			uint64
+//
+//		This uint64 parameter specifies the number of
+//		rune characters which will be deleted from the
+//		rune array contained in the current instance
+//		of RuneArrayDto. These rune characters will be
+//		deleted from the internal rune array:
+//
+//			'RuneArrayDto.CharsArray'
+//
+//		If 'numOfRunesToDelete' is set to zero, no rune
+//		characters will be deleted and no error will be
+//		returned.
+//
+//		If this parameter is set to a value greater than
+//		or equal to the length of the rune array, the
+//		rune array will be set to 'nil' and no error will
+//		be returned.
+//
+//	deleteTrailingChars			bool
+//
+//		This parameter determines whether the rune
+//		characters deleted from the rune array will be
+//		trailing characters or leading characters.
+//
+//		If this parameter is set to 'true', trailing
+//		characters at the end of the rune array will be
+//		deleted.
+//
+//		If this parameter is set to 'false', leading
+//		characters at the beginning of the rune array
+//		will be deleted.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it	contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (charsArrayDto *RuneArrayDto) DeleteRunes(
+	numOfRunesToDelete uint64,
+	deleteTrailingChars bool,
+	errorPrefix interface{}) error {
+
+	if charsArrayDto.lock == nil {
+		charsArrayDto.lock = new(sync.Mutex)
+	}
+
+	charsArrayDto.lock.Lock()
+
+	defer charsArrayDto.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"RuneArrayDto."+
+			"CopyIn()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	return new(runeArrayDtoAtom).deleteRunes(
+		charsArrayDto,
+		numOfRunesToDelete,
+		deleteTrailingChars,
+		ePrefix.XCpy(
+			"charsArrayDto<-"))
+}
+
 // Empty - Resets all internal member variables for the current
 // instance of RuneArrayDto to their initial or zero values.
 //
