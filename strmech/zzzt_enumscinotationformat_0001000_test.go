@@ -31,8 +31,10 @@ func ScientificNotationFormatTestSetup0010(
 	ucNames = []string{
 		"None",
 		"Exponential",
-		"ENotationUprCase",
-		"ENotationLwrCase",
+		"ENotUprCaseELeadPlus",
+		"ENotUprCaseENoLeadPlus",
+		"ENotLwrCaseELeadPlus",
+		"ENotLwrCaseENoLeadPlus",
 	}
 
 	lenUcNames := len(ucNames)

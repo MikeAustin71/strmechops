@@ -760,7 +760,10 @@ func (sciNotationFmt ScientificNotationFormat) XValueInt() int {
 //
 //	SciNotFmt.None()
 //	SciNotFmt.Exponential()
-//	SciNotFmt.ENotation()
+//	SciNotFmt.ENotUprCaseELeadPlus()
+//	SciNotFmt.ENotUprCaseENoLeadPlus()
+//	SciNotFmt.ENotLwrCaseELeadPlus()
+//	SciNotFmt.ENotLwrCaseENoLeadPlus()
 const SciNotFmt = ScientificNotationFormat(0)
 
 // scientificNotationFormatNanobot
