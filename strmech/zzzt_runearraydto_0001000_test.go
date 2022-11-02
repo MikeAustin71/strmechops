@@ -58,7 +58,7 @@ func TestRuneArrayDto_DeleteLeadingTrailingChars_000100(t *testing.T) {
 	runeArrayDto2 = new(RuneArrayDto).NewStringDefault(
 		originalStr)
 
-	err = runeArrayDto.DeleteLeadingTrailingChars(
+	err = runeArrayDto2.DeleteLeadingTrailingChars(
 		numOfCharsToDelete,
 		true,
 		ePrefix.XCpy(
@@ -76,11 +76,13 @@ func TestRuneArrayDto_DeleteLeadingTrailingChars_000100(t *testing.T) {
 
 		t.Errorf("\n%v\n"+
 			"Test # 2\n"+
+			"Original String = '%v'\n"+
 			"Error: Returned 'actualStr' is NOT EQUAL\n"+
 			"to 'expectedStr'!\n"+
 			"expectedStr = '%v'\n"+
 			"actualStr   = '%v'\n",
 			ePrefix.String(),
+			originalStr,
 			expectedStr,
 			actualStr)
 

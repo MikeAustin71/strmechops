@@ -14,6 +14,74 @@ type MainTest02 struct {
 	input string
 }
 
+func (MainTest02) RuneArrayDtoDeleteChars01() {
+
+	funcName := "MainTest02.RuneArrayDtoDeleteChars01()"
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		funcName,
+		"")
+
+	breakStr := strings.Repeat("=", 50)
+	var runeArrayDto strmech.RuneArrayDto
+	var err error
+
+	originalStr := "How now brown cow."
+	expectedStr := "How now brown"
+	numOfCharsToDelete := uint64(5)
+
+	runeArrayDto = new(strmech.RuneArrayDto).NewStringDefault(
+		originalStr)
+
+	preDeleteStr := runeArrayDto.GetCharacterString()
+
+	fmt.Printf("\nPre Delete Str = '%v'\n",
+		preDeleteStr)
+
+	err = runeArrayDto.DeleteLeadingTrailingChars(
+		numOfCharsToDelete,
+		true,
+		ePrefix.XCpy(
+			"runeArrayDto"))
+
+	if err != nil {
+		fmt.Printf("%v\n",
+			err.Error())
+		return
+	}
+
+	actualStr := runeArrayDto.GetCharacterString()
+
+	if actualStr != expectedStr {
+
+		fmt.Printf("\n%v\n"+
+			"Test # 2\n"+
+			"Original String = '%v'\n"+
+			"Error: Returned 'actualStr' is NOT EQUAL\n"+
+			"to 'expectedStr'!\n"+
+			"expectedStr = '%v'\n"+
+			"actualStr   = '%v'\n",
+			ePrefix.String(),
+			originalStr,
+			expectedStr,
+			actualStr)
+
+		return
+	}
+
+	fmt.Printf("\nPost Delet Str = '%v'\n",
+		actualStr)
+
+	fmt.Printf("\n\n" + breakStr + "\n")
+
+	fmt.Printf("\n Successful Completion!\n"+
+		"Function: %v\n",
+		ePrefix.String())
+
+	fmt.Printf("\n" + breakStr + "\n")
+
+	return
+}
 func (MainTest02) NumStrKernelParseUSNumStr() {
 
 	funcName := "MainTest02.NumStrKernelParseUSNumStr()"

@@ -302,7 +302,7 @@ func (runeDtoAtom *runeArrayDtoAtom) deleteRunes(
 
 		//   3    =  5   -   3  + 1
 		targetIdx =
-			lenCharArray - numOfRunesToDelete + 1
+			numOfRunesToDelete
 
 		runeArrayDto.CharsArray =
 			runeArrayDto.CharsArray[targetIdx:]
