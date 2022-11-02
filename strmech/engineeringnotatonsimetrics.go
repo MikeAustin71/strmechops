@@ -91,7 +91,7 @@ import "sync"
 var lockEngNotationSI = sync.Mutex{}
 
 //	Lock var lockEngNotationSI  before accessing
-//	thia maps!
+//	this map!
 
 var mEngNotationSISymbols = map[string]string{
 	"10^24":  "Y",
@@ -99,12 +99,12 @@ var mEngNotationSISymbols = map[string]string{
 	"10^18":  "E",
 	"10^15":  "P",
 	"10^12":  "T",
-	"10^9 ":  "G",
-	"10^6 ":  "M",
-	"10^3 ":  "k",
-	"10^−3 ": "m",
-	"10^−6 ": "μ",
-	"10^−9 ": "n",
+	"10^9":   "G",
+	"10^6":   "M",
+	"10^3":   "k",
+	"10^−3":  "m",
+	"10^−6":  "μ",
+	"10^−9":  "n",
 	"10^−12": "p",
 	"10^−15": "f",
 	"10^−18": "a",

@@ -64,14 +64,14 @@ func TestEngineeringNotationSI_Metrics_000200(t *testing.T) {
 
 	defer lockEngNotationSI.Unlock()
 
-	expectedSymbolName := "G"
+	expectedSymbolName := "zepto"
 	index := "10^−21"
 
 	var actualSymbolName string
 	var ok bool
 
 	actualSymbolName,
-		ok = mEngNotationSINames[expectedSymbolName]
+		ok = mEngNotationSINames[index]
 
 	if !ok {
 
