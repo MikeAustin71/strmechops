@@ -93,9 +93,6 @@ func EngineeringNotationFormatTestSetup0010(
 		append(intValues, EngNotFmt.ENotLwrCaseENoLeadPlus().XValueInt())
 
 	intValues =
-		append(intValues, EngNotFmt.ENotLwrCaseENoLeadPlus().XValueInt())
-
-	intValues =
 		append(intValues, EngNotFmt.SIPrefixSymbol().XValueInt())
 
 	intValues =

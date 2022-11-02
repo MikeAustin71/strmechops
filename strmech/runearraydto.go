@@ -696,21 +696,23 @@ func (charsArrayDto *RuneArrayDto) CopyOut(
 	return copyOfRuneArrayDto, err
 }
 
-//	DeleteRunes
+//	DeleteLeadingTrailingChars
 //
-//	This method will delete rune text characters from the
-//	internal rune array contained in the current instance
-//	of RuneArrayDto. The characters will either be
-//	deleted from the beginning of the rune array (delete
-//	leading characters) or the end of the rune array
-//	(delete trailing characters) as specified by input
+//	This method will delete text characters from either
+//	the beginning or end of the rune array encapsulated
+//	by the current instance of RuneArrayDto.
+//
+//	The text characters will either be deleted from the
+//	beginning of the rune array (delete leading
+//	characters) or the end of the rune array (delete
+//	trailing characters) as specified by input
 //	parameter, 'deleteTrailingChars'.
 //
 // ----------------------------------------------------------------
 //
 //	# Input Parameters
 //
-//	numOfRunesToDelete			uint64
+//	numOfCharsToDelete			uint64
 //
 //		This uint64 parameter specifies the number of
 //		rune characters which will be deleted from the
@@ -720,7 +722,7 @@ func (charsArrayDto *RuneArrayDto) CopyOut(
 //
 //			'RuneArrayDto.CharsArray'
 //
-//		If 'numOfRunesToDelete' is set to zero, no rune
+//		If 'numOfCharsToDelete' is set to zero, no rune
 //		characters will be deleted and no error will be
 //		returned.
 //
@@ -818,8 +820,8 @@ func (charsArrayDto *RuneArrayDto) CopyOut(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (charsArrayDto *RuneArrayDto) DeleteRunes(
-	numOfRunesToDelete uint64,
+func (charsArrayDto *RuneArrayDto) DeleteLeadingTrailingChars(
+	numOfCharsToDelete uint64,
 	deleteTrailingChars bool,
 	errorPrefix interface{}) error {
 
@@ -839,7 +841,7 @@ func (charsArrayDto *RuneArrayDto) DeleteRunes(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"RuneArrayDto."+
-			"CopyIn()",
+			"DeleteLeadingTrailingChars()",
 		"")
 
 	if err != nil {
@@ -848,7 +850,7 @@ func (charsArrayDto *RuneArrayDto) DeleteRunes(
 
 	return new(runeArrayDtoAtom).deleteRunes(
 		charsArrayDto,
-		numOfRunesToDelete,
+		numOfCharsToDelete,
 		deleteTrailingChars,
 		ePrefix.XCpy(
 			"charsArrayDto<-"))

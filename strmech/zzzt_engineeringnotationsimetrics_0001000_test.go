@@ -22,13 +22,14 @@ func TestEngineeringNotationSI_Metrics_000100(t *testing.T) {
 	var ok bool
 
 	actualSymbol,
-		ok = mEngNotationSISymbols[expectedSymbol]
+		ok = mEngNotationSISymbols[index]
 
 	if !ok {
 
 		t.Errorf("%v\n"+
+			"Test # 1\n"+
 			"Error: Lookup of index '%v' failed!\n"+
-			"Map = mEngNotationSISymbols[expectedSymbol]\n",
+			"Map = mEngNotationSISymbols[index]\n",
 			ePrefix.String(),
 			index)
 
@@ -38,6 +39,7 @@ func TestEngineeringNotationSI_Metrics_000100(t *testing.T) {
 	if actualSymbol != expectedSymbol {
 
 		t.Errorf("%v\n"+
+			"Test # 2\n"+
 			"Error: Lookup of index '%v' failed!\n"+
 			"Expected return of symbol '%v'.\n"+
 			"Instead, recevied invalid symbol '%v'\n",

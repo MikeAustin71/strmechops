@@ -1075,7 +1075,7 @@ func (numStrKernelMolecule *numberStrKernelMolecule) convertNumberToKernel(
 	}
 
 	*numStrKernel,
-		err = new(numStrBuilderElectron).parsePureNumStr(
+		err = new(numberStrKernelQuark).parsePureNumStr(
 		runeArrayDto,
 		decSeparatorSpec,
 		true,
