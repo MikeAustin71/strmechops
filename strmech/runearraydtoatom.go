@@ -61,6 +61,38 @@ type runeArrayDtoAtom struct {
 //		If 'addTrailingChars' is set to 'false',
 //		'charsToAdd' will be added to the beginning of
 //		the existing rune array as leading characters.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	err							error
+//
+//		If this method completes successfully, this
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
 func (runeDtoAtom *runeArrayDtoAtom) addRunes(
 	runeArrayDto *RuneArrayDto,
 	charsToAdd []rune,
@@ -80,8 +112,8 @@ func (runeDtoAtom *runeArrayDtoAtom) addRunes(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"runeArrayDtoNanobot."+
-			"copyRuneArrayDto()",
+		"runeArrayDtoAtom."+
+			"addRunes()",
 		"")
 
 	if err != nil {
@@ -120,6 +152,239 @@ func (runeDtoAtom *runeArrayDtoAtom) addRunes(
 		runeArrayDto.CharsArray = append(
 			runeArrayDto.CharsArray,
 			charsToAdd...)
+
+	}
+
+	return err
+}
+
+//	addRuneArrayDtos
+//
+//	Receives a series of RuneArrayDto objects and proceeds
+//	to add the rune arrays contained in these objects to
+//	the existing rune array contained in the RuneArrayDto
+//	passed as an input parameter ('runeArrayDto').
+//
+//	The name of the rune array member variable which will
+//	be modified by this method is:
+//
+//			runeArrayDto.CharsArray
+//
+//	The additional rune arrays are contained in a series
+//	of RuneArrayDto objects passed as a variadic
+//	argument.
+//
+//	Each additional rune array will be appended in
+//	sequence to the end of the 'runeArrayDto' existing
+//	rune array in sequence.
+//
+// ----------------------------------------------------------------
+//
+//	# Input Parameters
+//
+//	runeArrayDto				*RuneArrayDto
+//
+//		A pointer to an instance of RuneArrayDto. The
+//		rune array contained in this RuneArrayDto
+//		instance will be modified. Additional rune arrays
+//		will be appended to the end of rune array:
+//
+//			runeArrayDto.CharsArray
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+//	runeArrayDtosToAdd			... RuneArrayDto
+//
+//		This is a variadic argument consisting of a
+//		variable number of RuneArrayDto objects.
+//
+//		The rune arrays contained in these RuneArrayDto
+//		objects will be appended in sequence to the end
+//		of the existing rune array contained in input
+//		parameter, 'runeArrayDto'.
+//
+//			runeArrayDto.CharsArray
+//
+//		If this parameter has a length of zero, an error
+//		will be returned.
+func (runeDtoAtom *runeArrayDtoAtom) addRuneArrayDtos(
+	runeArrayDto *RuneArrayDto,
+	errPrefDto *ePref.ErrPrefixDto,
+	runeArrayDtosToAdd ...RuneArrayDto) (
+	err error) {
+
+	if runeDtoAtom.lock == nil {
+		runeDtoAtom.lock = new(sync.Mutex)
+	}
+
+	runeDtoAtom.lock.Lock()
+
+	defer runeDtoAtom.lock.Unlock()
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"runeArrayDtoAtom."+
+			"addRuneArrayDtos()",
+		"")
+
+	if err != nil {
+
+		return err
+
+	}
+
+	if runeArrayDto == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'runeArrayDto' is "+
+			"a nil pointer!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if len(runeArrayDtosToAdd) == 0 {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'runeArrayDtosToAdd' is invalid!\n"+
+			"'runeArrayDtosToAdd' is empty!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	for _, runeArrayDtoToAdd := range runeArrayDtosToAdd {
+
+		runeArrayDto.CharsArray = append(
+			runeArrayDto.CharsArray,
+			runeArrayDtoToAdd.CharsArray...)
+
+	}
+
+	return err
+}
+
+//	addRuneArrays
+//
+//	Adds a series of rune arrays to the existing rune
+//	array contained in the RuneArrayDto passed as an
+//	input parameter ('runeArrayDto').
+//
+//	The additional rune arrays will be appended to the
+//	end of the existing rune array.
+//
+//	The name of the rune array member variable which will
+//	be modified by this method is:
+//
+//			runeArrayDto.CharsArray
+//
+// ----------------------------------------------------------------
+//
+//	# Input Parameters
+//
+//	runeArrayDto				*RuneArrayDto
+//
+//		A pointer to an instance of RuneArrayDto. The
+//		rune array contained in this RuneArrayDto
+//		instance will be modified. Additional rune arrays
+//		will be appended to the end of rune array:
+//
+//			runeArrayDto.CharsArray
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+//	charArraysToAdd				... []rune
+//
+//		This is a variadic argument consisting of a
+//		variable number of rune arrays.
+//
+//		The rune arrays will be appended in sequence
+//		to the end of the existing rune array contained
+//		in input parameter, 'runeArrayDto'.
+//
+//			runeArrayDto.CharsArray
+//
+//		If this parameter has a length of zero, an error
+//		will be returned.
+func (runeDtoAtom *runeArrayDtoAtom) addRuneArrays(
+	runeArrayDto *RuneArrayDto,
+	errPrefDto *ePref.ErrPrefixDto,
+	charArraysToAdd ...[]rune) (
+	err error) {
+
+	if runeDtoAtom.lock == nil {
+		runeDtoAtom.lock = new(sync.Mutex)
+	}
+
+	runeDtoAtom.lock.Lock()
+
+	defer runeDtoAtom.lock.Unlock()
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"runeArrayDtoAtom."+
+			"addRuneArrays()",
+		"")
+
+	if err != nil {
+
+		return err
+
+	}
+
+	if runeArrayDto == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'runeArrayDto' is "+
+			"a nil pointer!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if len(charArraysToAdd) == 0 {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'charArraysToAdd' is invalid!\n"+
+			"'charArraysToAdd' is empty!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	for _, charArray := range charArraysToAdd {
+
+		runeArrayDto.CharsArray = append(
+			runeArrayDto.CharsArray,
+			charArray...)
 
 	}
 
@@ -235,8 +500,8 @@ func (runeDtoAtom *runeArrayDtoAtom) deleteRunes(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"runeArrayDtoNanobot."+
-			"copyRuneArrayDto()",
+		"runeArrayDtoAtom."+
+			"deleteRunes()",
 		"")
 
 	if err != nil {

@@ -446,6 +446,294 @@ func (charsArrayDto *RuneArrayDto) AddRunes(
 			"charsArrayDto<-"))
 }
 
+//	AddRuneArrayDtos
+//
+//	Receives a series of RuneArrayDto objects and proceeds
+//	to add the rune arrays contained in these objects to
+//	the existing rune array contained in the current
+//	instance of RuneArrayDto.
+//
+//	The name of the rune array member variable contained
+//	in the current RuneArrayDto instance which will be
+//	modified by this method is:
+//
+//			RuneArrayDto.CharsArray
+//
+//	The additional rune arrays to be added to
+//	RuneArrayDto.CharsArray are contained in a series of
+//	RuneArrayDto objects passed as a variadic argument.
+//
+//	Each additional rune array will be appended in
+//	sequence to the end of the existing rune array,
+//	RuneArrayDto.CharsArray.
+//
+// ----------------------------------------------------------------
+//
+//	# Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it	contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+//	runeArrayDtosToAdd			... RuneArrayDto
+//
+//		This is a variadic argument consisting of a
+//		variable number of RuneArrayDto objects.
+//
+//		The rune arrays contained in these RuneArrayDto
+//		objects will be appended in sequence to the end
+//		of the existing rune array contained in the
+//		current instance of RuneArrayDto:
+//
+//			RuneArrayDto.CharsArray
+//
+//		If this parameter has a length of zero, an error
+//		will be returned.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (charsArrayDto *RuneArrayDto) AddRuneArrayDtos(
+	errorPrefix interface{},
+	runeArrayDtosToAdd ...RuneArrayDto) error {
+
+	if charsArrayDto.lock == nil {
+		charsArrayDto.lock = new(sync.Mutex)
+	}
+
+	charsArrayDto.lock.Lock()
+
+	defer charsArrayDto.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"RuneArrayDto."+
+			"AddRuneArrayDtos()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	return new(runeArrayDtoAtom).addRuneArrayDtos(
+		charsArrayDto,
+		ePrefix,
+		runeArrayDtosToAdd...)
+}
+
+//	AddRuneArrays
+//
+//	Adds a series of rune arrays to the existing rune
+//	array contained in the current instance of
+//	RuneArrayDto.
+//
+//	The name of the rune array member variable which will
+//	be modified by this method is:
+//
+//			RuneArrayDto.CharsArray
+//
+//	The additional rune arrays will be appended to the
+//	end of the existing rune array.
+//
+// ----------------------------------------------------------------
+//
+//	# Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it	contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+//	charArraysToAdd				... []rune
+//
+//		This is a variadic argument consisting of a
+//		variable number of rune arrays.
+//
+//		The rune arrays will be appended in sequence
+//		to the end of the existing rune array contained
+//		in the current instance of RuneArrayDto.
+//
+//			RuneArrayDto.CharsArray
+//
+//		If this parameter has a length of zero, an error
+//		will be returned.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (charsArrayDto *RuneArrayDto) AddRuneArrays(
+	errorPrefix interface{},
+	charArraysToAdd ...[]rune) error {
+
+	if charsArrayDto.lock == nil {
+		charsArrayDto.lock = new(sync.Mutex)
+	}
+
+	charsArrayDto.lock.Lock()
+
+	defer charsArrayDto.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"RuneArrayDto."+
+			"AddRuneArrays()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	return new(runeArrayDtoAtom).addRuneArrays(
+		charsArrayDto,
+		ePrefix,
+		charArraysToAdd...)
+}
+
 //	CopyIn
 //
 //	Copies the internal rune array from an incoming
