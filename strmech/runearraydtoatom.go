@@ -10,6 +10,151 @@ type runeArrayDtoAtom struct {
 	lock *sync.Mutex
 }
 
+//	addChar
+//
+//	Adds a single rune text character to the rune array
+//	contained in the RuneArrayDto input parameter,
+//	'runeArrayDto'.
+//
+//	The rune text character will be added either to
+//	the beginning of the rune array or to the end of
+//	the rune array depending on the setting for input
+//	parameter 'addTrailingChar'.
+//
+// ----------------------------------------------------------------
+//
+//	# Input Parameters
+//
+//	runeArrayDto				*RuneArrayDto
+//
+//		A pointer to an instance of RuneArrayDto. The
+//		rune array contained in this RuneArrayDto
+//		instance will be modified. A single rune text
+//		character will either be added to the beginning,
+//		or the end, of this rune array:
+//
+//			runeArrayDto.CharsArray
+//
+//	charToAdd					rune
+//
+//		A single rune text character which will be
+//		prepended or appended to the rune array contained
+//		in the RuneArrayDto input parameter,
+//		'runeArrayDto'.
+//
+//	addTrailingChar				bool
+//
+//		This parameter determines whether 'charToAdd'
+//		will be added to the existing ruen array,
+//		'runeArrayDto.CharsArray', as a trailing
+//		character or as a leading character.
+//
+//		If 'addTrailingChars' is set to 'true',
+//		'charsToAdd' will be added to the end of the
+//		existing rune array as a trailing character.
+//
+//		If 'addTrailingChars' is set to 'false',
+//		'charToAdd' will be added to the beginning of
+//		the existing rune array as leading character.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	err							error
+//
+//		If this method completes successfully, this
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (runeDtoAtom *runeArrayDtoAtom) addChar(
+	runeArrayDto *RuneArrayDto,
+	charToAdd rune,
+	addTrailingChar bool,
+	errPrefDto *ePref.ErrPrefixDto) (
+	err error) {
+
+	if runeDtoAtom.lock == nil {
+		runeDtoAtom.lock = new(sync.Mutex)
+	}
+
+	runeDtoAtom.lock.Lock()
+
+	defer runeDtoAtom.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"runeArrayDtoAtom."+
+			"addChar()",
+		"")
+
+	if err != nil {
+
+		return err
+
+	}
+
+	if runeArrayDto == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'runeArrayDto' is "+
+			"a nil pointer!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if charToAdd == 0 {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'charToAdd' is invalid!\n"+
+			"'charToAdd' has a zero value!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if addTrailingChar == true {
+		// Add trailing suffix Character
+
+		runeArrayDto.CharsArray = append(
+			runeArrayDto.CharsArray,
+			charToAdd)
+
+	} else {
+		// MUST BE - Add leading Prefix Character
+		runeArrayDto.CharsArray = append(
+			[]rune{charToAdd},
+			runeArrayDto.CharsArray...)
+
+	}
+
+	return err
+}
+
 //	addRunes
 //
 //	Will add another rune array to the existing rune
@@ -107,6 +252,7 @@ func (runeDtoAtom *runeArrayDtoAtom) addRunes(
 	runeDtoAtom.lock.Lock()
 
 	defer runeDtoAtom.lock.Unlock()
+
 	var ePrefix *ePref.ErrPrefixDto
 
 	ePrefix,
@@ -144,14 +290,14 @@ func (runeDtoAtom *runeArrayDtoAtom) addRunes(
 	if addTrailingChars == true {
 
 		runeArrayDto.CharsArray = append(
-			charsToAdd,
-			runeArrayDto.CharsArray...)
+			runeArrayDto.CharsArray,
+			charsToAdd...)
 
 	} else {
 
 		runeArrayDto.CharsArray = append(
-			runeArrayDto.CharsArray,
-			charsToAdd...)
+			charsToAdd,
+			runeArrayDto.CharsArray...)
 
 	}
 

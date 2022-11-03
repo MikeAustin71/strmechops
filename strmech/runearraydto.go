@@ -100,11 +100,20 @@ type RuneArrayDto struct {
 
 //	AddChar
 //
-//	Adds a single text character of type rune to the end
-//	of the rune array (RuneArrayDto.CharsArray)
-//	encapsulated by the current instance of RuneArrayDto.
+//	Adds a single rune text character to the rune array
+//	contained in the current instance of RuneArrayDto.
 //
-//	Another method which is similar in function is:
+//	The name of the internal member variable rune array
+//	which will be modified is:
+//
+//			RuneArrayDto.CharsArray
+//
+//	The rune text character will be added either to
+//	the beginning of the rune array, or to the end of
+//	the rune array, depending on the setting for input
+//	parameter 'addTrailingChar'.
+//
+//	Another method which is similar this one is:
 //
 //			RuneArrayDto.ExtendRuneArray()
 //
@@ -114,17 +123,112 @@ type RuneArrayDto struct {
 //
 //	charToAdd					rune
 //
-//		The text character which will be appended to the
-//		end of the rune array encapsulated by the current
-//		instance of RuneArrayDto.
+//		The rune text character which will be added to
+//		the end of the rune array encapsulated by the
+//		current instance of RuneArrayDto:
 //
-// ------------------------------------------------------------------------
+//			RuneArrayDto.CharsArray
+//
+//		This text character ('charToAdd') will either be
+//		prepended to the beginning of this array or
+//		appended to the end of this array depending on
+//		the setting for input parameter
+//		'addTrailingChar'.
+//
+//	addTrailingChar				bool
+//
+//		This parameter determines whether 'charToAdd'
+//		will be added to the existing rune array,
+//		'RuneArrayDto.CharsArray', as a trailing
+//		character or as a leading character.
+//
+//		If 'addTrailingChars' is set to 'true',
+//		'charsToAdd' will be added to the end of the
+//		existing rune array as a trailing character.
+//
+//		If 'addTrailingChars' is set to 'false',
+//		'charToAdd' will be added to the beginning of
+//		the existing rune array as leading character.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it	contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
 //
 // # Return Values
 //
-//	NONE
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
 func (charsArrayDto *RuneArrayDto) AddChar(
-	charToAdd rune) {
+	charToAdd rune,
+	addTrailingChar bool,
+	errorPrefix interface{}) error {
 
 	if charsArrayDto.lock == nil {
 		charsArrayDto.lock = new(sync.Mutex)
@@ -134,8 +238,27 @@ func (charsArrayDto *RuneArrayDto) AddChar(
 
 	defer charsArrayDto.lock.Unlock()
 
-	charsArrayDto.CharsArray =
-		append(charsArrayDto.CharsArray, charToAdd)
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"RuneArrayDto."+
+			"AddChar()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	return new(runeArrayDtoAtom).addChar(
+		charsArrayDto,
+		charToAdd,
+		addTrailingChar,
+		ePrefix.XCpy(
+			"charsArrayDto<-"))
 }
 
 //	AddString

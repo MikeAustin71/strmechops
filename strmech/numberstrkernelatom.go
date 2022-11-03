@@ -1081,8 +1081,15 @@ func (numStrKernelAtom *numberStrKernelAtom) addFractionalDigit(
 		return err
 	}
 
-	numStrKernel.fractionalDigits.AddChar(
-		fractionalDigit)
+	err = numStrKernel.fractionalDigits.AddChar(
+		fractionalDigit,
+		true,
+		ePrefix.XCpy(
+			"numStrKernel.fractionalDigits<-"))
+
+	if err != nil {
+		return err
+	}
 
 	if numStrKernel.numericValueType !=
 		NumValType.FloatingPoint() {
@@ -1199,7 +1206,15 @@ func (numStrKernelAtom *numberStrKernelAtom) addIntegerDigit(
 		return err
 	}
 
-	numStrKernel.integerDigits.AddChar(integerDigit)
+	err = numStrKernel.integerDigits.AddChar(
+		integerDigit,
+		true,
+		ePrefix.XCpy(
+			"numStrKernel.integerDigits<-"))
+
+	if err != nil {
+		return err
+	}
 
 	if numStrKernel.numericValueType !=
 		NumValType.FloatingPoint() {
