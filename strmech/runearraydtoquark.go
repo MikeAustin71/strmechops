@@ -12,16 +12,40 @@ type runeArrayDtoQuark struct {
 
 //	countLeadingZeros
 //
-//	Receives a pointer to a RuneArrayDto as input
-//	parameter, 'runeArrayDto'.
+//	Receives a pointer to a RuneArrayDto as an input
+//	parameter, 'runeArrayDto'. This object encapsulates
+//	a rune array which will be searched for trailing
+//	zero digits ('0').
+//
+// /
 //
 //	This method computes the total number of leading
-//	zeros in the internal rune array contained in
-//	'runeArrayDto'.
+//	zero numeric digits in the internal rune array
+//	contained in 'runeArrayDto'.
 //
 //	This returned uint64 value is the number of zero
 //	digits, counting left to right, before encountering
 //	the	first non-zero digit in the rune array.
+//
+// ----------------------------------------------------------------
+//
+// # Usage
+//
+//	Example-1
+//		Rune Array Digits: "00012"
+//		Number Of Leading Zeros: 3
+//
+//	Example-2
+//		Rune Array Digits: "012"
+//		Number Of Leading Zeros: 1
+//
+//	Example-3
+//		Rune Array Digits: "0000"
+//		Number Of Leading Zeros: 4
+//
+//	Example-4
+//		Rune Array Digits: "1234"
+//		Number Of Leading Zeros: 0
 //
 // ----------------------------------------------------------------
 //
@@ -37,6 +61,17 @@ type runeArrayDtoQuark struct {
 //		The number of leading zeros is computed as the
 //		number of zero digits, counting left to right,
 //		before encountering the first nonzero digit.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	uint64
+//
+//		This return value contains the number of leading
+//		zero numeric digits ('0'), counting from left to
+//		right, currently exising in the rune array
+//		contained within input parameter, 'runeArrayDto'.
 func (runeDtoQuark *runeArrayDtoQuark) countTotalLeadingZeros(
 	runeArrayDto *RuneArrayDto) uint64 {
 
@@ -54,18 +89,119 @@ func (runeDtoQuark *runeArrayDtoQuark) countTotalLeadingZeros(
 		return leadingZeroCount
 	}
 
-	lenRuneArray := len(runeArrayDto.CharsArray)
+	lenCharsArray := len(runeArrayDto.CharsArray)
 
-	for i := 0; i < lenRuneArray; i++ {
+	for i := 0; i < lenCharsArray; i++ {
 
 		if runeArrayDto.CharsArray[i] != '0' {
 			break
 		}
 
 		leadingZeroCount++
+
 	}
 
 	return leadingZeroCount
+}
+
+//	countTotalTrailingZeros
+//
+//	Receives a pointer to a RuneArrayDto as an input
+//	parameter, 'runeArrayDto'. This object encapsulates
+//	a rune array which will be searched for trailing
+//	zero digits ('0').
+//
+//	This method computes the total number of trailing
+//	zeros ('0') in the internal rune array contained in
+//	'runeArrayDto'.
+//
+//	This returned uint64 value represents the number of
+//	trailing zero numeric digits ('0'), counting right to
+//	left, before encountering the first non-zero digit in
+//	the rune array.
+//
+// ----------------------------------------------------------------
+//
+// # Usage
+//
+//	Example-1
+//		Rune Array Digits: "12000"
+//		Number Of Trailing Zeros: 3
+//
+//	Example-2
+//		Rune Array Digits: "120"
+//		Number Of Trailing Zeros: 1
+//
+//	Example-3
+//		Rune Array Digits: "0000"
+//		Number Of Trailing Zeros: 4
+//
+//	Example-4
+//		Rune Array Digits: "1234"
+//		Number Of Trailing Zeros: 0
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	runeArrayDto		*RuneArrayDto
+//
+//		A pointer to a RuneArrayDto object containing a
+//		rune array. The contents of this rune array will
+//		be searched from right to left in order to count
+//		the total number trailing zeros.
+//
+//		The number of trailing zeros is computed as the
+//		number of zero digits ('0'), counting right to left,
+//		before encountering the first nonzero digit.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	uint64
+//
+//		This return value contains the number of trailing
+//		zero numeric digits ('0'), counting from right
+//		to left, currently exising in the rune array
+//		contained within input parameter, 'runeArrayDto'.
+func (runeDtoQuark *runeArrayDtoQuark) countTotalTrailingZeros(
+	runeArrayDto *RuneArrayDto) uint64 {
+
+	if runeDtoQuark.lock == nil {
+		runeDtoQuark.lock = new(sync.Mutex)
+	}
+
+	runeDtoQuark.lock.Lock()
+
+	defer runeDtoQuark.lock.Unlock()
+
+	var trailingZeroCount uint64 = 0
+
+	if runeArrayDto == nil {
+		return trailingZeroCount
+	}
+
+	lastIdx := len(runeArrayDto.CharsArray)
+
+	if lastIdx == 0 {
+
+		return trailingZeroCount
+
+	}
+
+	lastIdx--
+
+	for i := lastIdx; i >= 0; i++ {
+
+		if runeArrayDto.CharsArray[i] != '0' {
+			break
+		}
+
+		trailingZeroCount++
+	}
+
+	return trailingZeroCount
 }
 
 //	isRuneArrayAllNumericDigits

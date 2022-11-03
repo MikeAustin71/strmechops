@@ -1645,13 +1645,34 @@ func (charsArrayDto *RuneArrayDto) GetCharSearchType() CharacterSearchType {
 
 //	GetCountLeadingZeros
 //
-//	Computes the number of leading zeros in the rune
-//	array contained in the current instance of
+//	Computes the number of leading zeros ('0') in the
+//	rune array contained within the current instance of
 //	RuneArrayDto.
 //
 //	This returned uint64 value is the number of zero
-//	digits, counting left to right, before encountering
-//	the	first non-zero digit in the rune array.
+//	numeric digits ('0'), counting left to right, before
+//	encountering the first nonzero digit in the rune
+//	array.
+//
+// ----------------------------------------------------------------
+//
+// # Usage
+//
+//	Example-1
+//		Rune Array Digits: "00012"
+//		Number Of Leading Zeros: 3
+//
+//	Example-2
+//		Rune Array Digits: "012"
+//		Number Of Leading Zeros: 1
+//
+//	Example-3
+//		Rune Array Digits: "0000"
+//		Number Of Leading Zeros: 4
+//
+//	Example-4
+//		Rune Array Digits: "1234"
+//		Number Of Leading Zeros: 0
 //
 // ----------------------------------------------------------------
 //
@@ -1665,9 +1686,11 @@ func (charsArrayDto *RuneArrayDto) GetCharSearchType() CharacterSearchType {
 //
 //	uint64
 //
-//		The number of zero digts before the first
-//		non-zero digit in the rune array encapsulated by
-//		the current instance of RuneArrayDto.
+//		This return value contains the number of leading
+//		zero numeric digits ('0'), counting from left to
+//		right, currently exising in the rune array
+//		contained within the current instance of
+//		RuneArrayDto.
 func (charsArrayDto *RuneArrayDto) GetCountLeadingZeros() uint64 {
 
 	if charsArrayDto.lock == nil {
@@ -1681,6 +1704,68 @@ func (charsArrayDto *RuneArrayDto) GetCountLeadingZeros() uint64 {
 	return new(runeArrayDtoQuark).
 		countTotalLeadingZeros(charsArrayDto)
 
+}
+
+//	GetCountTrailingZeros
+//
+//	This method computes the total number of trailing
+//	zeros ('0') in the rune array contained within
+//	the current instance of RuneArrayDto.
+//
+//	This returned uint64 value represents the number of
+//	trailing zero numeric digits ('0'), counting right to
+//	left, before encountering the first non-zero digit in
+//	the rune array.
+//
+// ----------------------------------------------------------------
+//
+// # Usage
+//
+//	Example-1
+//		Rune Array Digits: "12000"
+//		Number Of Trailing Zeros: 3
+//
+//	Example-2
+//		Rune Array Digits: "120"
+//		Number Of Trailing Zeros: 1
+//
+//	Example-3
+//		Rune Array Digits: "0000"
+//		Number Of Trailing Zeros: 4
+//
+//	Example-4
+//		Rune Array Digits: "1234"
+//		Number Of Trailing Zeros: 0
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	NONE
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	uint64
+//
+//		This return value contains the number of trailing
+//		zero numeric digits ('0'), counting from right
+//		to left, currently exising in the rune array
+//		contained within the current instance of
+//		RuneArrayDto.
+func (charsArrayDto *RuneArrayDto) GetCountTrailingZeros() uint64 {
+
+	if charsArrayDto.lock == nil {
+		charsArrayDto.lock = new(sync.Mutex)
+	}
+
+	charsArrayDto.lock.Lock()
+
+	defer charsArrayDto.lock.Unlock()
+
+	return new(runeArrayDtoQuark).
+		countTotalTrailingZeros(charsArrayDto)
 }
 
 // GetRuneArrayDescription1 - Returns 'Description1', the optional
