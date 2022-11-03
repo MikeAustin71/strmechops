@@ -261,48 +261,26 @@ func (charsArrayDto *RuneArrayDto) AddChar(
 			"charsArrayDto<-"))
 }
 
-//	AddString
+//	AddStrings
 //
-//	Receives a string of text characters and proceeds to
-//	add them to the existing rune array contained in the
-//	current instance of RuneArrayDto.
+//	Receives one or more strings and proceeds to add them
+//	to the existing rune array contained in the current
+//	instance of RuneArrayDto.
 //
-//	The rune array to which the new characters will be
-//	added is specified by member variable:
+//	The rune array to which the new strings will be added
+//	is specified by member variable:
 //
 //		RuneArrayDto.CharsArray
 //
 //	The setting for input parameter 'addTrailingChars'
-//	will determine whether the new characters are added
+//	will determine whether the new strings are added
 //	as trailing characters to the end of the existing
-//	rune array, or as leading characters as the beginning
+//	rune array, or as leading characters at the beginning
 //	of the existing rune array.
 //
 // ----------------------------------------------------------------
 //
 //	# Input Parameters
-//
-//	charsToAdd					string
-//
-//		A string containing text characters which will
-//		be added to the existing rune contained within
-//		the current instance of RuneArrayDto:
-//
-//			RuneArrayDto.CharsArray
-//
-//	addTrailingChars			bool
-//
-//		This parameter determines whether 'charsToAdd'
-//		will be added to 'RuneArrayDto.CharsArray' as
-//		trailing characters or as leading characters.
-//
-//		If 'addTrailingChars' is set to 'true',
-//		'charsToAdd' will be added to the end of the
-//		existing rune array as trailing characters.
-//
-//		If 'addTrailingChars' is set to 'false',
-//		'charsToAdd' will be added to the beginning of
-//		the existing rune array as leading characters.
 //
 //	errorPrefix					interface{}
 //
@@ -363,6 +341,42 @@ func (charsArrayDto *RuneArrayDto) AddChar(
 //		included in the 'errpref' software package:
 //			"github.com/MikeAustin71/errpref".
 //
+//	addTrailingChars			bool
+//
+//		This parameter determines whether the strings
+//		passed via input parameter 'charStrsToAdd'
+//		will be added to 'RuneArrayDto.CharsArray' as
+//		trailing characters or as leading characters.
+//
+//		If 'addTrailingChars' is set to 'true',
+//		'charStrsToAdd' will be added to the end of the
+//		existing rune array as trailing characters.
+//
+//		If 'addTrailingChars' is set to 'false',
+//		'charStrsToAdd' will be added to the beginning of
+//		the existing rune array as leading characters.
+//
+//	charStrsToAdd				... string
+//
+//		This is a variadic argument consisting of a
+//		variable number of strings (one or more
+//		strings).
+//
+//		These strings will be added to the rune array
+//		contained in the current instance of
+//		RuneArrayDto.
+//
+//		The name of the rune array member variable to
+//		which these strings will be added is:
+//
+//			RuneArrayDto.CharsArray
+//
+//		The number of strings passed through this
+//		parameter must be greater than zero.
+//
+//		If 'charStrings' has a length of zero, an error
+//		will be returned.
+//
 // ----------------------------------------------------------------
 //
 // # Return Values
@@ -379,10 +393,10 @@ func (charsArrayDto *RuneArrayDto) AddChar(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (charsArrayDto *RuneArrayDto) AddString(
-	charsToAdd string,
+func (charsArrayDto *RuneArrayDto) AddStrings(
+	errorPrefix interface{},
 	addTrailingChars bool,
-	errorPrefix interface{}) error {
+	charStrsToAdd ...string) error {
 
 	if charsArrayDto.lock == nil {
 		charsArrayDto.lock = new(sync.Mutex)
@@ -400,19 +414,19 @@ func (charsArrayDto *RuneArrayDto) AddString(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"RuneArrayDto."+
-			"AddString()",
+			"AddStrings()",
 		"")
 
 	if err != nil {
 		return err
 	}
 
-	return new(runeArrayDtoAtom).addRunes(
+	return new(runeArrayDtoNanobot).addStrings(
 		charsArrayDto,
-		[]rune(charsToAdd),
 		addTrailingChars,
 		ePrefix.XCpy(
-			"charsArrayDto<-"))
+			"newRuneArrayDto"),
+		charStrsToAdd...)
 }
 
 //	AddRunes
@@ -429,7 +443,7 @@ func (charsArrayDto *RuneArrayDto) AddString(
 //	The setting for input parameter 'addTrailingChars'
 //	will determine whether the new characters are added
 //	as trailing characters to the end of the existing
-//	rune array, or as leading characters as the beginning
+//	rune array, or as leading characters at the beginning
 //	of the existing rune array.
 //
 // ----------------------------------------------------------------
