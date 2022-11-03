@@ -12,18 +12,129 @@ type runeArrayDtoNanobot struct {
 	lock *sync.Mutex
 }
 
-// copyRuneArrayDto - Copies all data from input parameter
-// 'sourceRunesDto' to input parameter 'destinationRunesDto'.
+//	addStrings
+//
+//	Receives a series of strings as a variadic argument
+//	and proceeds to add them to the rune array contained
+//	in an instance of RuneArrayDto passed as an input
+//	parameter.
+//
+// ----------------------------------------------------------------
+//
+//	# Input Parameters
+//
+//
+//	runeArrayDto				*RuneArrayDto
+//
+//		A pointer to an instance of RuneArrayDto. The
+//		rune array contained in this RuneArrayDto
+//		instance will be modified. A single rune text
+//		character will either be added to the beginning,
+//		or the end, of this rune array:
+//
+//			runeArrayDto.CharsArray
+//
+//	addTrailingChar				bool
+//
+//		This parameter determines whether 'charToAdd'
+//		will be added to the existing rune array,
+//		'runeArrayDto.CharsArray', as a trailing
+//		character or as a leading character.
+//
+//		If 'addTrailingChars' is set to 'true',
+//		'charsToAdd' will be added to the end of the
+//		existing rune array as a trailing character.
+//
+//		If 'addTrailingChars' is set to 'false',
+//		'charToAdd' will be added to the beginning of
+//		the existing rune array as leading character.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+func (runeDtoNanobot *runeArrayDtoNanobot) addStrings(
+	runeArrayDto *RuneArrayDto,
+	addTrailingChars bool,
+	errPrefDto *ePref.ErrPrefixDto,
+	strings ...string) error {
+
+	if runeDtoNanobot.lock == nil {
+		runeDtoNanobot.lock = new(sync.Mutex)
+	}
+
+	runeDtoNanobot.lock.Lock()
+
+	defer runeDtoNanobot.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"runeArrayDtoNanobot."+
+			"addStrings()",
+		"")
+
+	if err != nil {
+
+		return err
+
+	}
+
+	if runeArrayDto == nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'runeArrayDto' is "+
+			"a nil pointer!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	for _, charStr := range strings {
+
+		err = new(runeArrayDtoAtom).addRunes(
+			runeArrayDto,
+			[]rune(charStr),
+			addTrailingChars,
+			ePrefix.XCpy(
+				"runeArrayDto<-"))
+
+		if err != nil {
+			return err
+		}
+	}
+
+	return err
+}
+
+//	copyRuneArrayDto
+//
+//	Copies all data from input parameter 'sourceRunesDto'
+//	to input parameter 'destinationRunesDto'.
 //
 // ----------------------------------------------------------------
 //
 // # IMPORTANT
 //
-// The pre-existing data fields for input parameter
-// 'destinationRunesDto' will be overwritten and deleted.
+//	The pre-existing data fields for input parameter
+//	'destinationRunesDto' will be overwritten and
+//	deleted.
 //
-// NO DATA VALIDATION is performed on input parameter,
-// 'sourceRunesDto'.
+//	NO DATA VALIDATION is performed on input parameter,
+//	'sourceRunesDto'.
 //
 // ----------------------------------------------------------------
 //

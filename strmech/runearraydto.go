@@ -4219,6 +4219,179 @@ func (charsArrayDto RuneArrayDto) NewString(
 	return newRuneArrayDto, err
 }
 
+//	NewStrings
+//
+//	Returns a new instance of RuneArrayDto generated from
+//	a series of strings passed as input parameters.
+//
+//	The name of the rune array member variable for the new
+//	instance of RuneArrayDto is:
+//
+//			RuneArrayDto.CharsArray
+//
+//	The input parameter strings will be appended in
+//	sequence to form the rune array encapsulated in the
+//	returned instance of RuneArrayDto.
+//
+//	The Character Search type for the new, returned
+//	instance of RuneArrayDto is defaulted to:
+//
+//		CharSearchType.LinearTargetStartingIndex()
+//
+// ----------------------------------------------------------------
+//
+//	# Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it	contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+//	charStrings					... string
+//
+//		This is a variadic argument consisting of a
+//		variable number of strings.
+//
+//		These strings will be appended in sequence
+//		to form the rune array contained in the returned
+//		instance of RuneArrayDto.
+//
+//		The rune array member variable name is:
+//
+//			RuneArrayDto.CharsArray
+//
+//		The number of strings passed through this
+//		parameter must be greater than zero.
+//
+//		If 'charStrings' has a length of zero, an error
+//		will be returned.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	RuneArrayDto
+//
+//		This method returns a new instance of
+//		RuneArrayDto. The internal rune array is
+//		initialized by appending the strings passed as
+//		variadic input parameter, 'charStrings'.
+//
+//		The Character Search type for the new
+//		RuneArrayDto is defaulted to:
+//
+//			CharSearchType.LinearTargetStartingIndex()
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (charsArrayDto RuneArrayDto) NewStrings(
+	errorPrefix interface{},
+	charStrings ...string) (
+	RuneArrayDto,
+	error) {
+
+	if charsArrayDto.lock == nil {
+		charsArrayDto.lock = new(sync.Mutex)
+	}
+
+	charsArrayDto.lock.Lock()
+
+	defer charsArrayDto.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	var newRuneArrayDto RuneArrayDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"RuneArrayDto."+
+			"NewStrings()",
+		"")
+
+	if err != nil {
+		return newRuneArrayDto, err
+	}
+
+	newRuneArrayDto.charSearchType =
+		CharSearchType.LinearTargetStartingIndex()
+
+	err = new(runeArrayDtoNanobot).addStrings(
+		&newRuneArrayDto,
+		true,
+		ePrefix.XCpy(
+			"newRuneArrayDto"),
+		charStrings...)
+
+	return newRuneArrayDto, err
+}
+
 // NewStringAllParams - Creates and returns a new instance of
 // RuneArrayDto using a string input parameter. This method
 // requires input parameters for all internal member variables
