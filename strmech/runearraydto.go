@@ -1465,6 +1465,50 @@ func (charsArrayDto *RuneArrayDto) EqualCharArrays(
 			incomingRuneArrayDto)
 }
 
+//	GetCharacterString
+//
+//	Returns a string populated with the text characters
+//	taken from the rune array internal member variable
+//	contained in the current instance of RuneArrayDto.
+//
+//	The internal member variable is identified as
+//
+//			RuneArrayDto.CharsArray
+//
+//	This method is identical in functionality to method:
+//
+//				RuneArrayDto.String()
+//					RuneArrayDto.String() implements the
+//					Stringer interface.
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//	NONE
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//	string
+//
+//		This method returns a string of characters
+//		extracted from the internal member variable rune
+//		array 'RuneArrayDto.CharsArray'.
+func (charsArrayDto *RuneArrayDto) GetCharacterString() string {
+
+	if charsArrayDto.lock == nil {
+		charsArrayDto.lock = new(sync.Mutex)
+	}
+
+	charsArrayDto.lock.Lock()
+
+	defer charsArrayDto.lock.Unlock()
+
+	return string(charsArrayDto.CharsArray)
+}
+
 // GetCharSearchType - Returns the value of internal member
 // variable, 'charSearchType', or Character Search Type.
 //
@@ -1599,6 +1643,46 @@ func (charsArrayDto *RuneArrayDto) GetCharSearchType() CharacterSearchType {
 	return charsArrayDto.charSearchType
 }
 
+//	GetCountLeadingZeros
+//
+//	Computes the number of leading zeros in the rune
+//	array contained in the current instance of
+//	RuneArrayDto.
+//
+//	This returned uint64 value is the number of zero
+//	digits, counting left to right, before encountering
+//	the	first non-zero digit in the rune array.
+//
+// ----------------------------------------------------------------
+//
+//	# Input Parameters
+//
+//	NONE
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	uint64
+//
+//		The number of zero digts before the first
+//		non-zero digit in the rune array encapsulated by
+//		the current instance of RuneArrayDto.
+func (charsArrayDto *RuneArrayDto) GetCountLeadingZeros() uint64 {
+
+	if charsArrayDto.lock == nil {
+		charsArrayDto.lock = new(sync.Mutex)
+	}
+
+	charsArrayDto.lock.Lock()
+
+	defer charsArrayDto.lock.Unlock()
+
+	return new(runeArrayDtoQuark).
+		countTotalLeadingZeros(charsArrayDto)
+
+}
+
 // GetRuneArrayDescription1 - Returns 'Description1', the optional
 // description string associated with the current instance of RuneArrayDto.
 //
@@ -1702,47 +1786,6 @@ func (charsArrayDto *RuneArrayDto) GetRuneArray() []rune {
 	}
 
 	return newCharsArray
-}
-
-// GetCharacterString - Returns a string populated with the text
-// characters taken from the rune array internal member variable
-// contained in the current instance of RuneArrayDto.
-//
-// The internal member variable is identified as
-//
-//	RuneArrayDto.CharsArray
-//
-// This method is identical in functionality to method:
-//
-//	RuneArrayDto.String()
-//
-// RuneArrayDto.String() implements the Stringer interface.
-//
-// ----------------------------------------------------------------
-//
-// Input Parameters
-//
-//	NONE
-//
-// ------------------------------------------------------------------------
-//
-// Return Values
-//
-//	string
-//	   - This method returns a string of characters extracted from
-//	     the internal member variable rune array
-//	     'RuneArrayDto.CharsArray'.
-func (charsArrayDto *RuneArrayDto) GetCharacterString() string {
-
-	if charsArrayDto.lock == nil {
-		charsArrayDto.lock = new(sync.Mutex)
-	}
-
-	charsArrayDto.lock.Lock()
-
-	defer charsArrayDto.lock.Unlock()
-
-	return string(charsArrayDto.CharsArray)
 }
 
 //	ExtendRuneArray

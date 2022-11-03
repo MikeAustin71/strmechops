@@ -10,6 +10,64 @@ type runeArrayDtoQuark struct {
 	lock *sync.Mutex
 }
 
+//	countLeadingZeros
+//
+//	Receives a pointer to a RuneArrayDto as input
+//	parameter, 'runeArrayDto'.
+//
+//	This method computes the total number of leading
+//	zeros in the internal rune array contained in
+//	'runeArrayDto'.
+//
+//	This returned uint64 value is the number of zero
+//	digits, counting left to right, before encountering
+//	the	first non-zero digit in the rune array.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	runeArrayDto		*RuneArrayDto
+//
+//		A pointer to a RuneArrayDto object containing a
+//		rune array. The contents of this rune array will
+//		be searched from left to right in order to count
+//		the total number leading zeros.
+//
+//		The number of leading zeros is computed as the
+//		number of zero digits, counting left to right,
+//		before encountering the first nonzero digit.
+func (runeDtoQuark *runeArrayDtoQuark) countTotalLeadingZeros(
+	runeArrayDto *RuneArrayDto) uint64 {
+
+	if runeDtoQuark.lock == nil {
+		runeDtoQuark.lock = new(sync.Mutex)
+	}
+
+	runeDtoQuark.lock.Lock()
+
+	defer runeDtoQuark.lock.Unlock()
+
+	var leadingZeroCount uint64 = 0
+
+	if runeArrayDto == nil {
+		return leadingZeroCount
+	}
+
+	lenRuneArray := len(runeArrayDto.CharsArray)
+
+	for i := 0; i < lenRuneArray; i++ {
+
+		if runeArrayDto.CharsArray[i] != '0' {
+			break
+		}
+
+		leadingZeroCount++
+	}
+
+	return leadingZeroCount
+}
+
 //	isRuneArrayAllNumericDigits
 //
 //	Receives a pointer to a RuneArrayDto and proceeds to

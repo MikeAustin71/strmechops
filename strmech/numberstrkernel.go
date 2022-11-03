@@ -7028,6 +7028,82 @@ func (numStrKernel *NumberStrKernel) FmtSimpleSignedNumber(
 			ePrefix.XCpy("numStrKernel"))
 }
 
+//	GetCountExcessIntegerLeadingZeros
+//
+//	Returns the count of excess integer leading zeros.
+//
+//	If the integer value is zero, the count will NOT
+//	include the first zero to the left of the decimal
+//	point.
+//
+//	Example-1
+//		Numeric Value:  0001
+//		Count of Excess Integer Leading Zeros: 3
+//
+//	Example-2
+//		Numeric Value:  000
+//		Count of Excess Integer Leading Zeros: 2
+//
+//	Example-3
+//		Numeric Value:  050.0032
+//		Count of Excess Integer Leading Zeros: 1
+//
+// ----------------------------------------------------------------
+//
+//	# Input Parameters
+//
+//	NONE
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	uint64
+//
+//		Returns the number of excess leading zeros for
+//		the integer part of the numeric value represented
+//		by this instance of NumberStrKernel.
+//
+//		NOTE: If the integer value is zero, the returned
+//		count of excess leading zeros will NOT include
+//		the first zero to the left of the decimal point.
+//
+//			Example
+//				Numeric Value:  000
+//				Count of Excess Integer Leading Zeros: 2
+func (numStrKernel *NumberStrKernel) GetCountExcessIntegerLeadingZeros() uint64 {
+
+	if numStrKernel.lock == nil {
+		numStrKernel.lock = new(sync.Mutex)
+	}
+
+	numStrKernel.lock.Lock()
+
+	defer numStrKernel.lock.Unlock()
+
+	var excessIntLeadingZeros uint64 = 0
+
+	lenIntChars :=
+		uint64(len(numStrKernel.integerDigits.CharsArray))
+
+	if lenIntChars == 0 {
+
+		return excessIntLeadingZeros
+	}
+
+	excessIntLeadingZeros =
+		numStrKernel.integerDigits.GetCountLeadingZeros()
+
+	if excessIntLeadingZeros < lenIntChars {
+
+		return excessIntLeadingZeros
+	}
+
+	excessIntLeadingZeros--
+
+	return excessIntLeadingZeros
+}
+
 //	GetBigFloatNum
 //
 //	Returns the numeric value of the current NumberStrKernel
