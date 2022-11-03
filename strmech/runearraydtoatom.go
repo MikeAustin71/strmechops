@@ -45,7 +45,7 @@ type runeArrayDtoAtom struct {
 //	addTrailingChar				bool
 //
 //		This parameter determines whether 'charToAdd'
-//		will be added to the existing ruen array,
+//		will be added to the existing rune array,
 //		'runeArrayDto.CharsArray', as a trailing
 //		character or as a leading character.
 //
