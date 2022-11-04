@@ -7859,13 +7859,21 @@ func (numStrKernel *NumberStrKernel) FmtSimpleSignedNumber(
 			ePrefix.XCpy("numStrKernel"))
 }
 
-//	GetCountExcessIntegerLeadingZeros
+//	GetExcessIntegerLeadingZerosCount
 //
 //	Returns the count of excess integer leading zeros.
 //
 //	If the integer value is zero, the count will NOT
 //	include the first zero to the left of the decimal
 //	point.
+//
+//	This method differs significantly from method:
+//
+//		NumberStrKernel.GetIntegerLeadingZerosCount()
+//
+// ----------------------------------------------------------------
+//
+// # Usage
 //
 //	Example-1
 //		Numeric Value:  0001
@@ -7902,7 +7910,7 @@ func (numStrKernel *NumberStrKernel) FmtSimpleSignedNumber(
 //			Example
 //				Numeric Value:  000
 //				Count of Excess Integer Leading Zeros: 2
-func (numStrKernel *NumberStrKernel) GetCountExcessIntegerLeadingZeros() uint64 {
+func (numStrKernel *NumberStrKernel) GetExcessIntegerLeadingZerosCount() uint64 {
 
 	if numStrKernel.lock == nil {
 		numStrKernel.lock = new(sync.Mutex)
@@ -10950,6 +10958,9 @@ func (numStrKernel *NumberStrKernel) GetIntegerDigits(
 //	and fractional digits in the current NumberStrKernel
 //	instance.
 //
+//	NOTE: All leading integer zeros are deleted from
+//	the returned instance of 'consolidatedIntegerKernel'.
+//
 //	In addition, this method also returns an int64 value,
 //	(exponent) specifying the location of the radix
 //	point, or decimal point, in the integer digits.
@@ -10967,16 +10978,22 @@ func (numStrKernel *NumberStrKernel) GetIntegerDigits(
 //			 Returned 'exponent' Value: -4
 //
 //	Example-2
+//		 Current NumberStrKernel Value:	001234.5678
+//		Returned NumberStrKernel Value:	12345678
+//			 Returned 'exponent' Value: -4
+//		NOTE: Leading Integer Zeros are Deleted!
+//
+//	Example-3
 //		 Current NumberStrKernel Value:	1234
 //		Returned NumberStrKernel Value:	1234
 //			 Returned 'exponent' Value: 0
 //
-//	Example-3
+//	Example-4
 //		 Current NumberStrKernel Value:	-1234.5678
 //		Returned NumberStrKernel Value:	-12345678
 //			 Returned 'exponent' Value: -4
 //
-//	Example-4
+//	Example-5
 //		 Current NumberStrKernel Value:	-1234
 //		Returned NumberStrKernel Value:	-1234
 //			 Returned 'exponent' Value: 0
@@ -11056,9 +11073,16 @@ func (numStrKernel *NumberStrKernel) GetIntegerDigits(
 //		NumberStrKernel instance to form a single
 //		integer value.
 //
-//		Example:
+//		Example-1:
 //		 	Current NumberStrKernel Value:	1234.5678
 //			Returned NumberStrKernel Value:	12345678
+//
+//		Example-2:
+//		 	Current NumberStrKernel Value:	0001234.5678
+//			Returned NumberStrKernel Value:	12345678
+//
+//		NOTE: All leading zeros are deleted in the
+//		returned instance of 'consolidatedIntegerKernel'.
 //
 //	exponent					int64
 //
@@ -11140,7 +11164,86 @@ func (numStrKernel *NumberStrKernel) GetIntFracDigitsKernel(
 		numStrKernel.numberSign,
 		ePrefix)
 
+	leadingIntZeros :=
+		consolidatedIntegerKernel.GetIntegerLeadingZerosCount()
+
+	if leadingIntZeros > 0 {
+
+		err = consolidatedIntegerKernel.integerDigits.
+			DeleteLeadingTrailingChars(
+				leadingIntZeros,
+				false,
+				ePrefix.XCpy(
+					"numStrKernel.integerDigits<-"))
+
+	}
+
 	return consolidatedIntegerKernel, exponent, err
+}
+
+//	GetIntegerLeadingZerosCount
+//
+//	Returns the count of all integer leading zeros.
+//
+//	This method differs significantly from method:
+//
+//		NumberStrKernel.GetExcessIntegerLeadingZerosCount()
+//
+// ----------------------------------------------------------------
+//
+// # Usage
+//
+//	Example-1
+//		Numeric Value:  0001
+//		Count of Total Integer Leading Zeros: 3
+//
+//	Example-2
+//		Numeric Value:  000
+//		Count of Total Integer Leading Zeros: 3
+//
+//	Example-3
+//		Numeric Value:  050.0032
+//		Count of Total Integer Leading Zeros: 1
+//
+// ----------------------------------------------------------------
+//
+//	# Input Parameters
+//
+//	NONE
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	uint64
+//
+//		Returns the number of total leading zeros for
+//		the integer part of the numeric value represented
+//		by this instance of NumberStrKernel.
+func (numStrKernel *NumberStrKernel) GetIntegerLeadingZerosCount() uint64 {
+
+	if numStrKernel.lock == nil {
+		numStrKernel.lock = new(sync.Mutex)
+	}
+
+	numStrKernel.lock.Lock()
+
+	defer numStrKernel.lock.Unlock()
+
+	var totalIntLeadingZeros uint64 = 0
+
+	lenIntChars :=
+		uint64(len(numStrKernel.integerDigits.CharsArray))
+
+	if lenIntChars == 0 {
+
+		return totalIntLeadingZeros
+	}
+
+	totalIntLeadingZeros =
+		numStrKernel.integerDigits.GetCountLeadingZeros()
+
+	return totalIntLeadingZeros
 }
 
 //	GetIntegerRuneArray
