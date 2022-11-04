@@ -14,6 +14,189 @@ type MainTest02 struct {
 	input string
 }
 
+func (MainTest02) NumberStrKernelExtendArrays01() {
+
+	funcName := "\nMainTest02.NumberStrKernelExtendArrays01()"
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		funcName,
+		"")
+
+	breakStr := strings.Repeat("=", 50)
+
+	fmt.Printf("\n\n" + breakStr + "\n")
+
+	fmt.Printf("\n Starting Run!\n"+
+		"Function: %v\n",
+		ePrefix.String())
+
+	fmt.Printf("\n" + breakStr + "\n")
+
+	origIntStr := "1234"
+	origFracStr := "5678"
+	origNumStr := origIntStr + "." + origFracStr
+
+	var err error
+	var numStrKernel01 strmech.NumberStrKernel
+	var numberStrSearchResults strmech.CharSearchNumStrParseResultsDto
+
+	numberStrSearchResults,
+		numStrKernel01,
+		err = new(strmech.NumberStrKernel).NewParseUSNumberStr(
+		origNumStr,
+		0,
+		-1,
+		nil,
+		false,
+		&ePrefix)
+
+	if err != nil {
+		fmt.Printf("%v\n",
+			err.Error())
+		return
+	}
+
+	if !numberStrSearchResults.FoundIntegerDigits {
+
+		fmt.Printf("%v\n"+
+			"Test#1\n"+
+			"Error: No Integer Digits Found!\n"+
+			"The number string search failed to find integer digits.\n"+
+			"origNumStr   = '%v'\n"+
+			"origIntStr   = '%v'\n",
+			ePrefix.String(),
+			origNumStr,
+			origIntStr)
+
+		return
+
+	}
+
+	if !numberStrSearchResults.FoundDecimalDigits {
+
+		fmt.Printf("%v\n"+
+			"Test#1\n"+
+			"Error: No Fractional Digits Found!\n"+
+			"The number string search failed to find fractional digits.\n"+
+			"origNumStr   = '%v'\n"+
+			"origFracStr   = '%v'\n",
+			ePrefix.String(),
+			origNumStr,
+			origFracStr)
+
+		return
+
+	}
+
+	actualIntStr := numStrKernel01.GetIntegerString()
+
+	if actualIntStr != origIntStr {
+		fmt.Printf("%v\n"+
+			"Test#2\n"+
+			"Error: actualIntStr != origIntStr\n"+
+			"actualIntStr = '%v'\n"+
+			"origIntStr   = '%v'\n",
+			ePrefix.String(),
+			actualIntStr,
+			origIntStr)
+
+		return
+	}
+
+	actualFracStr := numStrKernel01.GetFractionalString()
+
+	if actualFracStr != origFracStr {
+
+		fmt.Printf("%v\n"+
+			"Test#3\n"+
+			"Error: actualFracStr != origFracStr\n"+
+			"actualFracStr = '%v'\n"+
+			"origFracStr   = '%v'\n",
+			ePrefix.String(),
+			actualFracStr,
+			origFracStr)
+
+		return
+	}
+
+	err = numStrKernel01.ExtendIntegerDigitsArray(
+		'0',
+		3,
+		true,
+		ePrefix)
+
+	if err != nil {
+		fmt.Printf("%v\n",
+			err.Error())
+		return
+	}
+
+	//origIntStr := "1234"
+
+	expectedIntStr := "1234000"
+
+	actualIntStr = numStrKernel01.GetIntegerString()
+
+	if actualIntStr != expectedIntStr {
+
+		fmt.Printf("%v\n"+
+			"Test#4\n"+
+			"Error: actualIntStr != expectedIntStr\n"+
+			"origIntStr       = '%v'\n"+
+			"actualIntStr     = '%v'\n"+
+			"expectedIntStr   = '%v'\n",
+			ePrefix.String(),
+			origIntStr,
+			actualIntStr,
+			expectedIntStr)
+
+		return
+	}
+
+	err = numStrKernel01.ExtendFractionalDigitsArray(
+		'0',
+		3,
+		false,
+		ePrefix)
+
+	if err != nil {
+		fmt.Printf("%v\n",
+			err.Error())
+		return
+	}
+
+	//origFracStr := "5678"
+	expectedFracStr := "0005678"
+
+	actualFracStr = numStrKernel01.GetFractionalString()
+
+	if actualFracStr != expectedFracStr {
+
+		fmt.Printf("%v\n"+
+			"Test#4\n"+
+			"Error: actualFracStr != expectedFracStr\n"+
+			"origFracStr       = '%v'\n"+
+			"actualFracStr     = '%v'\n"+
+			"expectedFracStr   = '%v'\n",
+			ePrefix.String(),
+			origFracStr,
+			actualFracStr,
+			expectedFracStr)
+
+		return
+	}
+
+	fmt.Printf("\n\n" + breakStr + "\n")
+
+	fmt.Printf("\n Successful Completion!\n"+
+		"Function: %v\n",
+		ePrefix.String())
+
+	fmt.Printf("\n" + breakStr + "\n")
+
+	return
+}
+
 func (MainTest02) RuneArrayDtoDeleteChars01() {
 
 	funcName := "MainTest02.RuneArrayDtoDeleteChars01()"
@@ -23,6 +206,7 @@ func (MainTest02) RuneArrayDtoDeleteChars01() {
 		"")
 
 	breakStr := strings.Repeat("=", 50)
+
 	var runeArrayDto strmech.RuneArrayDto
 	var err error
 

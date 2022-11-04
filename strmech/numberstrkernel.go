@@ -1493,7 +1493,7 @@ func (numStrKernel *NumberStrKernel) ExtendFractionalDigitsArray(
 	}
 
 	if numCharToAdd < '0' ||
-		numOfCharsToAdd > '9' {
+		numCharToAdd > '9' {
 
 		err = fmt.Errorf("%v\n"+
 			"Error: Input parameter 'numCharToAdd' is invalid!\n"+
@@ -1698,7 +1698,7 @@ func (numStrKernel *NumberStrKernel) ExtendIntegerDigitsArray(
 	}
 
 	if numCharToAdd < '0' ||
-		numOfCharsToAdd > '9' {
+		numCharToAdd > '9' {
 
 		err = fmt.Errorf("%v\n"+
 			"Error: Input parameter 'numCharToAdd' is invalid!\n"+

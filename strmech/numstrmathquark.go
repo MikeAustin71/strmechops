@@ -158,16 +158,17 @@ func (nStrMathQuark *numStrMathQuark) extendRunes(
 	}
 
 	charArrayLen :=
-		incomingCharsToExtend.GetRuneArrayLength()
+		len(incomingCharsToExtend.CharsArray)
 
 	if charArrayLen >= newCharArrayLength {
 		// Nothing to do.
 
 		if charArrayLen !=
-			extendedOutputChars.GetRuneArrayLength() {
+			len(extendedOutputChars.CharsArray) {
 			// These are not equal rune arrays
 
-			err = extendedOutputChars.CopyIn(
+			err = new(runeArrayDtoNanobot).copyRuneArrayDto(
+				extendedOutputChars,
 				incomingCharsToExtend,
 				ePrefix.XCpy(
 					"extendedOutputChars<-"+

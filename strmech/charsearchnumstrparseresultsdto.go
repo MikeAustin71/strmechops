@@ -172,6 +172,8 @@ type CharSearchNumStrParseResultsDto struct {
 	// numeric digit characters ('0' through '9' inclusive)
 	// were located in the Target String to the right of
 	// the Decimal Separator Symbol (a.k.a Decimal Point).
+	//
+	// Decimal Digits are Fractional Digits.
 
 	IdentifiedFractionalDigits string
 	// If Fractional Digits (to the right of the decimal
