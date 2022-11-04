@@ -11918,18 +11918,17 @@ func (numStrKernel *NumberStrKernel) GetParameterTextListing(
 				"numStrKernel"))
 }
 
-// IsNonZeroValue
+// IsZeroValue
 //
-// If this method returns 'true', it means that
-// the numeric value of the current NumberStrKernel
-// instance is non-zero. A non-zero numeric value
-// signals that the numeric value is less than or
-// greater than zero (0).
+// If this method returns 'true', it means that the
+// numeric value of the current NumberStrKernel instance
+// is zero (0).
 //
 // If this method returns 'false' it means that the
-// numeric value of current NumberStrKernel instance
-// is zero ('0').
-func (numStrKernel *NumberStrKernel) IsNonZeroValue() bool {
+// numeric value of current NumberStrKernel instance is
+// nonzero. A nonzero value will be less than or greater
+// than zero.
+func (numStrKernel *NumberStrKernel) IsZeroValue() bool {
 
 	if numStrKernel.lock == nil {
 		numStrKernel.lock = new(sync.Mutex)
@@ -11946,7 +11945,7 @@ func (numStrKernel *NumberStrKernel) IsNonZeroValue() bool {
 		numStrKernel,
 		nil)
 
-	return isNonZeroValue
+	return !isNonZeroValue
 }
 
 //	NewFromFloatValue
