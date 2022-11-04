@@ -131,3 +131,96 @@ func TestNumberStrKernel_DeleteLeadingTrailingFractionalChars_000100(t *testing.
 
 	return
 }
+
+func TestNumberStrKernel_DeleteLeadingTrailingFractionalChars_000200(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"\nTestNumberStrKernel_DeleteLeadingTrailingFractionalChars_000200()",
+		"")
+
+	origIntStr := "1234"
+	origFracStr := ""
+
+	var err error
+	var numStrKernel01 NumberStrKernel
+
+	numStrKernel01,
+		err = new(NumberStrKernel).NewFromRuneDigits(
+		[]rune(origIntStr),
+		[]rune(origFracStr),
+		NumSignVal.Positive(),
+		&ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	actualIntStr := numStrKernel01.GetIntegerString()
+
+	if actualIntStr != origIntStr {
+		t.Errorf("%v\n"+
+			"Test#1\n"+
+			"Error: actualIntStr != origIntStr\n"+
+			"actualIntStr = '%v'\n"+
+			"origIntStr   = '%v'\n",
+			ePrefix.String(),
+			actualIntStr,
+			origIntStr)
+
+		return
+	}
+
+	actualFracStr := numStrKernel01.GetFractionalString()
+
+	if actualFracStr != origFracStr {
+
+		t.Errorf("%v\n"+
+			"Test#2\n"+
+			"Error: actualFracStr != origFracStr\n"+
+			"actualFracStr = '%v'\n"+
+			"origFracStr   = '%v'\n",
+			ePrefix.String(),
+			actualFracStr,
+			origFracStr)
+
+		return
+	}
+
+	err = numStrKernel01.DeleteLeadingTrailingIntegerChars(
+		uint64(len(origIntStr)),
+		false,
+		ePrefix.XCpy(
+			"Delete Leading Chars"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	//origIntStr := "1234"
+
+	expectedIntStr := ""
+
+	actualIntStr = numStrKernel01.GetIntegerString()
+
+	if actualIntStr != expectedIntStr {
+
+		t.Errorf("%v\n"+
+			"Test#3\n"+
+			"Error: actualIntStr != expectedIntStr\n"+
+			"origIntStr       = '%v'\n"+
+			"actualIntStr     = '%v'\n"+
+			"expectedIntStr   = '%v'\n",
+			ePrefix.String(),
+			origIntStr,
+			actualIntStr,
+			expectedIntStr)
+
+		return
+	}
+
+	return
+}
