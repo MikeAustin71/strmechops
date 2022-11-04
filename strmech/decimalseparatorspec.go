@@ -836,7 +836,7 @@ func (decSeparatorSpec *DecimalSeparatorSpec) IsValidInstanceError(
 //
 // # Return Values
 //
-//	newDecimalSeparator			DecimalSeparatorSpec
+//	newNOPDecimalSeparator		DecimalSeparatorSpec
 //
 //	An new, empty and non-operational instance of
 //	DecimalSeparatorSpec.
@@ -844,7 +844,7 @@ func (decSeparatorSpec *DecimalSeparatorSpec) IsValidInstanceError(
 //	This instance will serve as an empty placeholder
 //	which will be completely ignored by number string
 //	parsing and formatting algorithms.
-func (decSeparatorSpec *DecimalSeparatorSpec) NewNOP() (newDecimalSeparator DecimalSeparatorSpec) {
+func (decSeparatorSpec *DecimalSeparatorSpec) NewNOP() (newNOPDecimalSeparator DecimalSeparatorSpec) {
 
 	if decSeparatorSpec.lock == nil {
 		decSeparatorSpec.lock = new(sync.Mutex)
@@ -856,9 +856,9 @@ func (decSeparatorSpec *DecimalSeparatorSpec) NewNOP() (newDecimalSeparator Deci
 
 	new(decimalSeparatorSpecAtom).
 		empty(
-			&newDecimalSeparator)
+			&newNOPDecimalSeparator)
 
-	return newDecimalSeparator
+	return newNOPDecimalSeparator
 }
 
 //	NewRunes

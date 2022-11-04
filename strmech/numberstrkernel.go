@@ -10942,6 +10942,207 @@ func (numStrKernel *NumberStrKernel) GetIntegerDigits(
 	return copyOfIntegerDigits, err
 }
 
+//	GetIntFracDigitsKernel
+//
+//	Returns a new instance of NumberStrKernel,
+//	'consolidatedIntegerKernel', containing integer
+//	digits representing a consolidation of the integer
+//	and fractional digits in the current NumberStrKernel
+//	instance.
+//
+//	In addition, this method also returns an int64 value,
+//	(exponent) specifying the location of the radix
+//	point, or decimal point, in the integer digits.
+//
+//	The actual numeric value is there for equal to:
+//		consolidatedIntegerKernel x 10^exponent
+//
+// ----------------------------------------------------------------
+//
+// # Usage
+//
+//	Example-1
+//		 Current NumberStrKernel Value:	1234.5678
+//		Returned NumberStrKernel Value:	12345678
+//			 Returned 'exponent' Value: -4
+//
+//	Example-2
+//		 Current NumberStrKernel Value:	1234
+//		Returned NumberStrKernel Value:	1234
+//			 Returned 'exponent' Value: 0
+//
+//	Example-3
+//		 Current NumberStrKernel Value:	-1234.5678
+//		Returned NumberStrKernel Value:	-12345678
+//			 Returned 'exponent' Value: -4
+//
+//	Example-4
+//		 Current NumberStrKernel Value:	-1234
+//		Returned NumberStrKernel Value:	-1234
+//			 Returned 'exponent' Value: 0
+//
+// ----------------------------------------------------------------
+//
+//	# Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it	contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	consolidatedIntegerKernel	NumberStrKernel
+//
+//		This method returns an instance of
+//		NumberStrKernel which consolidates the integer
+//		and fractional digits of the current
+//		NumberStrKernel instance to form a single
+//		integer value.
+//
+//		Example:
+//		 	Current NumberStrKernel Value:	1234.5678
+//			Returned NumberStrKernel Value:	12345678
+//
+//	exponent					int64
+//
+//		This returned exponent value identifies the
+//		location of the radix point, or decimal point,
+//		within the integer digits returned by parameter,
+//		'consolidatedIntegerKernel'.
+//
+//		Example-1
+//			 Current NumberStrKernel Value:	1234.5678
+//			Returned NumberStrKernel Value:	12345678
+//				 Returned 'exponent' Value: -4
+//
+//		Example-2
+//			 Current NumberStrKernel Value:	1234
+//			Returned NumberStrKernel Value:	1234
+//				 Returned 'exponent' Value: 0
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (numStrKernel *NumberStrKernel) GetIntFracDigitsKernel(
+	errorPrefix interface{}) (
+	consolidatedIntegerKernel NumberStrKernel,
+	exponent int64,
+	err error) {
+
+	if numStrKernel.lock == nil {
+		numStrKernel.lock = new(sync.Mutex)
+	}
+
+	numStrKernel.lock.Lock()
+
+	defer numStrKernel.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumberStrKernel."+
+			"GetIntFracDigitsKernel()",
+		"")
+
+	if err != nil {
+		return consolidatedIntegerKernel, exponent, err
+	}
+
+	var consolidatedRuneArrayDto RuneArrayDto
+
+	runeArrayDto := RuneArrayDto{}
+
+	consolidatedRuneArrayDto,
+		err = runeArrayDto.NewRuneArrayDtos(
+		ePrefix.XCpy(
+			"numStrKernel integer+fractional"),
+		numStrKernel.integerDigits,
+		numStrKernel.fractionalDigits)
+
+	if err != nil {
+		return consolidatedIntegerKernel, exponent, err
+	}
+
+	nopRuneArrayDto := runeArrayDto.NewNOP()
+
+	err = new(numberStrKernelNanobot).setWithRuneArrayDto(
+		&consolidatedIntegerKernel,
+		&consolidatedRuneArrayDto,
+		&nopRuneArrayDto,
+		numStrKernel.numberSign,
+		ePrefix)
+
+	return consolidatedIntegerKernel, exponent, err
+}
+
 //	GetIntegerRuneArray
 //
 //	Returns a deep copy of the integer digits rune array

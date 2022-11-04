@@ -2505,6 +2505,52 @@ func (charsArrayDto *RuneArrayDto) IsValidCharacterSearchTypeError(
 	return err
 }
 
+//	NewNOP
+//
+//	'NOP' stands for 'No Operation'. It signals that the
+//	instance of RuneArrayDto returned by this method is
+//	empty, invalid and non-operational. The rune contained
+//	within this new, returned RuneArrayDto instance is
+//	likewise empty and has an array length of zero.
+//
+//	In essence, this means that the RuneArrayDto instance
+//	returned by this method is an empty placeholder which
+//	will be completely ignored when processing rune
+//	arrays.
+//
+// ----------------------------------------------------------------
+//
+//	# Input Parameters
+//
+//	NONE
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	newNOPRuneArrayDto			RuneArrayDto
+//
+//		A new, empty and non-operational instance of
+//		RuneArrayDto. The rune array contained by this
+//		instance is likewise empty with an array length
+//		of zero. This returned instance effectively
+//		serves as an empty placeholder object.
+func (charsArrayDto *RuneArrayDto) NewNOP() (newNOPRuneArrayDto RuneArrayDto) {
+
+	if charsArrayDto.lock == nil {
+		charsArrayDto.lock = new(sync.Mutex)
+	}
+
+	charsArrayDto.lock.Lock()
+
+	defer charsArrayDto.lock.Unlock()
+
+	new(runeArrayDtoElectron).emptyCharsArray(
+		&newNOPRuneArrayDto)
+
+	return newNOPRuneArrayDto
+}
+
 //	NewRuneArrayDtos
 //
 //	Returns a new instance of RuneArrayDto generated from
