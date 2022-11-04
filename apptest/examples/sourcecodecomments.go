@@ -24,6 +24,26 @@ type SourceCodeComments struct {
 //
 // ----------------------------------------------------------------
 //
+// # Usage
+//
+//	Example-1
+//		Rune Array Digits: "00012"
+//		Number Of Leading Zeros: 3
+//
+//	Example-2
+//		Rune Array Digits: "012"
+//		Number Of Leading Zeros: 1
+//
+//	Example-3
+//		Rune Array Digits: "0000"
+//		Number Of Leading Zeros: 4
+//
+//	Example-4
+//		Rune Array Digits: "1234"
+//		Number Of Leading Zeros: 0
+//
+// ----------------------------------------------------------------
+//
 //	# Input Parameters
 //
 //	errorPrefix					interface{}

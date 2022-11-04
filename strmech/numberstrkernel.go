@@ -526,6 +526,426 @@ func (numStrKernel *NumberStrKernel) CopyOut(
 	return deepCopyNumStrKernel, err
 }
 
+//	DeleteLeadingTrailingFractionalChars
+//
+//	Deletes Leading or Trailing characters from the
+//	internal fractional rune array:
+//
+//			numStrKernel.fractionalDigits
+//
+//	Leading numeric digit characters will be deleted
+//	from the beginning of the fractional rune array, OR,
+//	Trailing numeric digit characters will be deleted
+//	from the end of the fractional rune array, depending
+//	on the setting for input parameter
+//	'deleteTrailingChars'.
+//
+//	If 'deleteTrailingChars' is set to 'false', Leading
+//	numeric digit characters are deleted from the
+//	beginning of the fractional rune array.
+//
+//	If 'deleteTrailingChars' is set to 'true', Trailing
+//	numeric digit characters are deleted from the
+//	end of the fractional rune array.
+//
+// ----------------------------------------------------------------
+//
+// # Usage
+//
+//	Example-1
+//		Fractional Digits: "123456"
+//		numOfCharsToDelete: 2
+//		deleteTrailingChars: false
+//		New Fractional Digits: "3456"
+//
+//	Example-2
+//		Fractional Digits: "123456"
+//		numOfCharsToDelete: 3
+//		deleteTrailingChars: true
+//		New Fractional Digits: "123"
+//
+//	Example-3
+//		Fractional Digits: "123456"
+//		numOfCharsToDelete: 6
+//		deleteTrailingChars: true
+//		New Fractional Digits: ""
+//
+//	Example-4
+//		Fractional Digits: "123456"
+//		numOfCharsToDelete: 7
+//		deleteTrailingChars: false
+//		New Fractional Digits: ""
+//
+// ----------------------------------------------------------------
+//
+//	# Input Parameters
+//
+//	numOfCharsToDelete			uint64
+//
+//		This uint64 parameter specifies the number of
+//		rune numeric digit characters which will be
+//		deleted from the fractional rune array contained
+//		in the current instance of NumberStrKernel. These
+//		rune numeric digit characters will be deleted
+//		from the internal rune array:
+//
+//			'NumberStrKernel.fractionalDigits'
+//
+//		If 'numOfCharsToDelete' is set to zero, no rune
+//		numeric digit characters will be deleted and no
+//		error will be returned.
+//
+//		If this parameter is set to a value greater than
+//		or equal to the length of the rune array, the
+//		rune array will be set to 'nil', all fractional
+//		numeric digit characters will be deleted and no
+//		error will be returned.
+//
+//	deleteTrailingChars			bool
+//
+//		This parameter determines whether the rune
+//		characters deleted from the rune array will be
+//		trailing characters or leading characters.
+//
+//		If this parameter is set to 'true', trailing
+//		characters at the end of the fractional rune
+//		array will be deleted.
+//
+//		If this parameter is set to 'false', leading
+//		characters at the beginning of the fractional
+//		rune array will be deleted.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it	contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (numStrKernel *NumberStrKernel) DeleteLeadingTrailingFractionalChars(
+	numOfCharsToDelete uint64,
+	deleteTrailingChars bool,
+	errorPrefix interface{}) error {
+
+	if numStrKernel.lock == nil {
+		numStrKernel.lock = new(sync.Mutex)
+	}
+
+	numStrKernel.lock.Lock()
+
+	defer numStrKernel.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumberStrKernel."+
+			"DeleteLeadingTrailingFractionalChars()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	err = numStrKernel.fractionalDigits.
+		DeleteLeadingTrailingChars(
+			numOfCharsToDelete,
+			deleteTrailingChars,
+			ePrefix.XCpy(
+				"numStrKernel.fractionalDigits<-"))
+
+	if err != nil {
+		return err
+	}
+	_,
+		err = new(numberStrKernelElectron).getSetIsNonZeroValue(
+		numStrKernel,
+		ePrefix.XCpy(
+			"numStrKernel after fractional deletion"))
+
+	return err
+}
+
+//	DeleteLeadingTrailingIntegerChars
+//
+//	Deletes Leading or Trailing characters from the
+//	internal integer rune array:
+//
+//			numStrKernel.integerDigits
+//
+//	Leading numeric digit characters will be deleted
+//	from the beginning of the integer rune array, OR,
+//	Trailing numeric digit characters will be deleted
+//	from the end of the integer rune array, depending
+//	on the setting for input parameter
+//	'deleteTrailingChars'.
+//
+//	If 'deleteTrailingChars' is set to 'false', Leading
+//	numeric digit characters are deleted from the
+//	beginning of the integer rune array.
+//
+//	If 'deleteTrailingChars' is set to 'true', Trailing
+//	numeric digit characters are deleted from the
+//	end of the integer rune array.
+//
+// ----------------------------------------------------------------
+//
+// # Usage
+//
+//	Example-1
+//		Integer Digits: "123456"
+//		numOfCharsToDelete: 2
+//		deleteTrailingChars: false
+//		New Integer Digits: "3456"
+//
+//	Example-2
+//		Integer Digits: "123456"
+//		numOfCharsToDelete: 3
+//		deleteTrailingChars: true
+//		New Integer Digits: "123"
+//
+//	Example-3
+//		Integer Digits: "123456"
+//		numOfCharsToDelete: 6
+//		deleteTrailingChars: true
+//		New Integer Digits: ""
+//
+//	Example-4
+//		Integer Digits: "123456"
+//		numOfCharsToDelete: 7
+//		deleteTrailingChars: false
+//		New Integer Digits: ""
+//
+// ----------------------------------------------------------------
+//
+//	# Input Parameters
+//
+//	numOfCharsToDelete			uint64
+//
+//		This uint64 parameter specifies the number of
+//		rune numeric digit characters which will be
+//		deleted from the integer rune array contained in
+//		the current instance of NumberStrKernel. These
+//		rune numeric digit characters will be
+//		deleted from the internal rune array:
+//
+//			'NumberStrKernel.integerDigits'
+//
+//		If 'numOfCharsToDelete' is set to zero, no rune
+//		numeric digit characters will be deleted and no
+//		error will be returned.
+//
+//		If this parameter is set to a value greater than
+//		or equal to the length of the rune array, the
+//		rune array will be set to 'nil', all integer
+//		numeric digit characters will be deleted and no
+//		error will be returned.
+//
+//	deleteTrailingChars			bool
+//
+//		This parameter determines whether the rune
+//		characters deleted from the rune array will be
+//		trailing characters or leading characters.
+//
+//		If this parameter is set to 'true', trailing
+//		characters at the end of the integer rune array
+//		will be deleted.
+//
+//		If this parameter is set to 'false', leading
+//		characters at the beginning of the integer rune
+//		array will be deleted.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it	contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (numStrKernel *NumberStrKernel) DeleteLeadingTrailingIntegerChars(
+	numOfCharsToDelete uint64,
+	deleteTrailingChars bool,
+	errorPrefix interface{}) error {
+
+	if numStrKernel.lock == nil {
+		numStrKernel.lock = new(sync.Mutex)
+	}
+
+	numStrKernel.lock.Lock()
+
+	defer numStrKernel.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumberStrKernel."+
+			"DeleteLeadingTrailingIntegerChars()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	err = numStrKernel.integerDigits.
+		DeleteLeadingTrailingChars(
+			numOfCharsToDelete,
+			deleteTrailingChars,
+			ePrefix.XCpy(
+				"numStrKernel.integerDigits<-"))
+
+	if err != nil {
+		return err
+	}
+	_,
+		err = new(numberStrKernelElectron).getSetIsNonZeroValue(
+		numStrKernel,
+		ePrefix.XCpy(
+			"numStrKernel after integer deletion"))
+
+	return err
+}
+
 // Empty - Resets all internal member variables for the current
 // instance of NumberStrKernel to their initial or zero values.
 //

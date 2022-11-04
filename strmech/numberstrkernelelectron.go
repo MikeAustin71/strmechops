@@ -151,6 +151,10 @@ func (numStrKernelElectron *numberStrKernelElectron) equal(
 //	numeric value of the NumberStrKernel instance
 //	is zero ('0').
 //
+//	If the NumberStrKernel is found to have a zero,
+//	this method will reset the Number Sign and Numeric
+//	Value Type accordingly.
+//
 // ----------------------------------------------------------------
 //
 // # Input Parameters

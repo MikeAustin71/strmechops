@@ -1135,6 +1135,34 @@ func (charsArrayDto *RuneArrayDto) CopyOut(
 //
 // ----------------------------------------------------------------
 //
+// # Usage
+//
+//	Example-1
+//		Rune Array Contents: "123456"
+//		numOfCharsToDelete: 2
+//		deleteTrailingChars: false
+//		New Rune Array Contents: "3456"
+//
+//	Example-2
+//		Rune Array Contents: "123456"
+//		numOfCharsToDelete: 3
+//		deleteTrailingChars: true
+//		New Rune Array Contents: "123"
+//
+//	Example-3
+//		Rune Array Contents: "123456"
+//		numOfCharsToDelete: 6
+//		deleteTrailingChars: true
+//		New Rune Array Contents: ""
+//
+//	Example-4
+//		Rune Array Contents: "123456"
+//		numOfCharsToDelete: 7
+//		deleteTrailingChars: false
+//		New Rune Array Contents: ""
+//
+// ----------------------------------------------------------------
+//
 //	# Input Parameters
 //
 //	numOfCharsToDelete			uint64
