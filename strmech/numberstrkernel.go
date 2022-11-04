@@ -9672,6 +9672,63 @@ func (numStrKernel *NumberStrKernel) GetFractionalString() string {
 	return numStrKernel.fractionalDigits.GetCharacterString()
 }
 
+//	GetFractionalRuneArrayDto
+//
+//	Returns a deep copy of the fractional digits
+//	RuneArrayDto object maintained by the current
+//	instance of NumberStrKernel.
+//
+//	This RuneArrayDto object encapsulates the fractional
+//	digits rune array containing the fractional portion
+//	of the numeric value represented by the current
+//	NumberStrKernel instance.
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//	NONE
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//	RuneArrayDto
+//
+//		This method returns an instance of RuneArrayDto
+//		consisting of the fractional digits portion of the
+//		numeric value represented by the current instance
+//		of NumberStrKernel. This RuneArrayDto member
+//		variable identified as:
+//
+//	     	'NumberStrKernel.fractionalDigits'
+//
+//		This RuneArrayDto object encapsulates the fractional
+//		digits rune array for the current instance of
+//		NumberStrKernel.
+func (numStrKernel *NumberStrKernel) GetFractionalRuneArrayDto(
+	errorPrefix interface{}) (
+	RuneArrayDto,
+	error) {
+
+	if numStrKernel.lock == nil {
+		numStrKernel.lock = new(sync.Mutex)
+	}
+
+	numStrKernel.lock.Lock()
+
+	defer numStrKernel.lock.Unlock()
+
+	var runeArrayDto RuneArrayDto
+	var err error
+
+	runeArrayDto,
+		err = numStrKernel.fractionalDigits.CopyOut(
+		errorPrefix)
+
+	return runeArrayDto, err
+}
+
 //	GetIntNum
 //
 //	Returns the numeric value of the current NumberStrKernel
@@ -10885,8 +10942,11 @@ func (numStrKernel *NumberStrKernel) GetIntegerDigits(
 	return copyOfIntegerDigits, err
 }
 
-// GetIntegerRuneArray - A deep copy of the integer digits rune
-// array encapsulated by the current instance of NumberStrKernel.
+//	GetIntegerRuneArray
+//
+//	Returns a deep copy of the integer digits rune array
+//	encapsulated by the current instance of
+//	NumberStrKernel.
 //
 // ----------------------------------------------------------------
 //
@@ -10899,11 +10959,15 @@ func (numStrKernel *NumberStrKernel) GetIntegerDigits(
 // Return Values
 //
 //	[]rune
-//	   - This method returns a rune array consisting of the integer
-//	     digits portion of the numeric value represented by the
-//	     current instance of NumberStrKernel. This source rune
-//	     array is identified as internal member variable
-//	     'NumberStrKernel.integerDigits'.
+//
+//		This method returns a rune array consisting of
+//		the integer digits portion of the numeric value
+//		represented by the current instance of
+//		NumberStrKernel. This rune array is encapsulated
+//		in the RuneArrayDto member variable identified
+//		as:
+//
+//	     	'NumberStrKernel.integerDigits'.
 func (numStrKernel *NumberStrKernel) GetIntegerRuneArray() []rune {
 
 	if numStrKernel.lock == nil {
@@ -10915,6 +10979,63 @@ func (numStrKernel *NumberStrKernel) GetIntegerRuneArray() []rune {
 	defer numStrKernel.lock.Unlock()
 
 	return numStrKernel.integerDigits.GetRuneArray()
+}
+
+//	GetIntegerRuneArrayDto
+//
+//	Returns a deep copy of the integer digits
+//	RuneArrayDto object maintained by the current
+//	instance of NumberStrKernel.
+//
+//	This RuneArrayDto object encapsulates the integer
+//	digits rune array containing the integer portion of
+//	the numeric value represented by the current
+//	NumberStrKernel instance.
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//	NONE
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//	RuneArrayDto
+//
+//		This method returns an instance of RuneArrayDto
+//		consisting of the integer digits portion of the
+//		numeric value represented by the current instance
+//		of NumberStrKernel. This RuneArrayDto member
+//		variable identified as:
+//
+//	     	'NumberStrKernel.integerDigits'
+//
+//		This RuneArrayDto object encapsulates the integer
+//		digits rune array for the current instance of
+//		NumberStrKernel.
+func (numStrKernel *NumberStrKernel) GetIntegerRuneArrayDto(
+	errorPrefix interface{}) (
+	RuneArrayDto,
+	error) {
+
+	if numStrKernel.lock == nil {
+		numStrKernel.lock = new(sync.Mutex)
+	}
+
+	numStrKernel.lock.Lock()
+
+	defer numStrKernel.lock.Unlock()
+
+	var runeArrayDto RuneArrayDto
+	var err error
+
+	runeArrayDto,
+		err = numStrKernel.integerDigits.CopyOut(
+		errorPrefix)
+
+	return runeArrayDto, err
 }
 
 // GetIntegerString - Converts the integer rune array contained in
