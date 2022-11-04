@@ -1307,6 +1307,212 @@ func (numStrKernel *NumberStrKernel) EqualNumericDigits(
 		&incomingNumStrKernel.fractionalDigits)
 }
 
+//	ExtendFractionalDigitsArray
+//
+//	Adds one or more characters to the beginning or end
+//	of the fractional rune array contained within the
+//	current instance of NumberStrKernel.
+//
+//	The name of the fractional rune array internal member
+//	variable modified by this method is:
+//
+//			NumberStrKernel.fractionalDigits
+//
+//	A single numeric digit character will be replicated
+//	one or more times as specified by input parameter,
+//	'numOfCharsToAdd'.
+//
+//	This numeric digit character or characters will be
+//	added either as leading characters at the beginning
+//	of the fractional array or as trailing characters at the
+//	end of the fractional array depending on the setting for
+//	input paramter, 'addTrailingChars'.
+//
+// ----------------------------------------------------------------
+//
+// # Usage
+//
+//	Example-1
+//		Original Fractional Rune Array: "1234"
+//		charToAdd: '0'
+//		numOfCharsToAdd: 3
+//		addTrailingChars: false
+//		New Fractional Rune Array: "0001234"
+//
+//	Example-2
+//		Original Fractional Rune Array: "1234"
+//		charToAdd: '0'
+//		numOfCharsToAdd: 6
+//		addTrailingChars: true
+//		New Fractional Rune Array: "1234000000"
+//
+// ----------------------------------------------------------------
+//
+//	# Input Parameters
+//
+//	numCharToAdd				rune
+//
+//		This numeric character digit will be replicated
+//		one or more times at the beginning or the end of
+//		the fractional rune array contained within the
+//		current instance of NumberStrKernel.
+//
+//		This numeric character digit must be greater than
+//		or equal to '0' (zero) and less than or equal to
+//		'9' (nine). If the numeric character digit is not
+//		in the range '0' - '9' inclusive, an error will
+//		be returned.
+//
+//	numOfCharsToAdd				int
+//
+//		'numCharToAdd' will be added to the fractional
+//		rune array 'numOfCharsToAdd' of times.
+//
+//		'numOfCharsToAdd' is equal to the total number of
+//		characters which will be added to the fractional
+//		rune array.
+//
+//		If the value of 'numOfCharsToAdd' is less than
+//		one (1), an error will be returned.
+//
+//	addTrailingChars			bool
+//
+//		If this parameter is set to 'true', the
+//		additional numeric digit characters will be
+//		appended to the fractional rune array as trailing
+//		characters, at the end of the fractional rune
+//		array.
+//
+//		If this parameter is set to 'false', the
+//		additional numeric digit characters will be
+//		prepended to the fractional rune array as leading
+//		characters, at the beginning of the fractional
+//		rune array.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it	contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (numStrKernel *NumberStrKernel) ExtendFractionalDigitsArray(
+	numCharToAdd rune,
+	numOfCharsToAdd int,
+	addTrailingChars bool,
+	errorPrefix interface{}) error {
+
+	if numStrKernel.lock == nil {
+		numStrKernel.lock = new(sync.Mutex)
+	}
+
+	numStrKernel.lock.Lock()
+
+	defer numStrKernel.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumberStrKernel."+
+			"ExtendFractionalDigitsArray()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if numCharToAdd < '0' ||
+		numOfCharsToAdd > '9' {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'numCharToAdd' is invalid!\n"+
+			"'numCharToAdd' is NOT a valid numeric digit character.\n"+
+			"'numCharToAdd' = '%v'\n",
+			ePrefix.String(),
+			string(numCharToAdd))
+
+		return err
+	}
+
+	return numStrKernel.fractionalDigits.ExtendRuneArray(
+		numCharToAdd,
+		numOfCharsToAdd,
+		addTrailingChars,
+		ePrefix.XCpy(
+			"numStrKernel.fractionalDigits"))
+}
+
 //	ExtendIntegerDigitsArray
 //
 //	Adds one or more characters to the beginning or end
@@ -1316,7 +1522,7 @@ func (numStrKernel *NumberStrKernel) EqualNumericDigits(
 //	The name of the integer rune array internal member
 //	variable modified by this method is:
 //
-//			NumberStrKernel.integerDigits.
+//			NumberStrKernel.integerDigits
 //
 //	A single numeric digit character will be replicated
 //	one or more times as specified by input parameter,
@@ -1352,14 +1558,16 @@ func (numStrKernel *NumberStrKernel) EqualNumericDigits(
 //
 //	numCharToAdd				rune
 //
-//		This numeric character digit will be added to the
-//		beginning or the end of the integer rune array
-//		contained within the current instance of
-//		NumberStrKernel.
+//		This numeric character digit will be replicated
+//		one or more times at the beginning or the end of
+//		the integer rune array contained within the
+//		current instance of NumberStrKernel.
 //
-//		This rune text character must be greater than or
-//		equal to '0' (zero) and less than or equal to '9'
-//		(nine).
+//		This numeric character digit must be greater than
+//		or equal to '0' (zero) and less than or equal to
+//		'9' (nine). If the numeric character digit is not
+//		in the range '0' - '9' inclusive, an error will
+//		be returned.
 //
 //	numOfCharsToAdd				int
 //
@@ -1367,7 +1575,8 @@ func (numStrKernel *NumberStrKernel) EqualNumericDigits(
 //		array 'numOfCharsToAdd' of times.
 //
 //		'numOfCharsToAdd' is equal to the total number of
-//		characters which will be added to the rune array.
+//		characters which will be added to the integer
+//		rune array.
 //
 //		If the value of 'numOfCharsToAdd' is less than
 //		one (1), an error will be returned.
@@ -1380,9 +1589,10 @@ func (numStrKernel *NumberStrKernel) EqualNumericDigits(
 //		characters, at the end of the integer rune array.
 //
 //		If this parameter is set to 'false', the
-//		additional numeric digit characters will be added
-//		to the integer rune array as leading characters,
-//		at the beginning of the integer rune array.
+//		additional numeric digit characters will be
+//		prepended to the integer rune array as leading
+//		characters, at the beginning of the integer rune
+//		array.
 //
 //	errorPrefix					interface{}
 //
@@ -1484,6 +1694,19 @@ func (numStrKernel *NumberStrKernel) ExtendIntegerDigitsArray(
 		"")
 
 	if err != nil {
+		return err
+	}
+
+	if numCharToAdd < '0' ||
+		numOfCharsToAdd > '9' {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'numCharToAdd' is invalid!\n"+
+			"'numCharToAdd' is NOT a valid numeric digit character.\n"+
+			"'numCharToAdd' = '%v'\n",
+			ePrefix.String(),
+			string(numCharToAdd))
+
 		return err
 	}
 
