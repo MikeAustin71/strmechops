@@ -1,6 +1,7 @@
 package strmech
 
 import (
+	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
 	"testing"
 )
@@ -587,4 +588,224 @@ func TestNumberStrKernel_ExtendIntegerDigitsArray_000200(t *testing.T) {
 	}
 
 	return
+}
+
+func TestNumberStrKernel_IsZeroValue_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"\nTestNumberStrKernel_IsZeroValue_000100()",
+		"")
+
+	var err error
+	var numStrKernel01 NumberStrKernel
+
+	origNum := uint64(12345)
+
+	origIntStr := fmt.Sprintf("%v",
+		origNum)
+
+	origFracStr := ""
+
+	numStrKernel01,
+		err = new(NumberStrKernel).NewFromUnsignedIntValue(
+		origNum,
+		NumSignVal.Positive(),
+		&ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	actualIntStr := numStrKernel01.GetIntegerString()
+
+	if actualIntStr != origIntStr {
+		t.Errorf("%v\n"+
+			"Test#1\n"+
+			"Error: actualIntStr != origIntStr\n"+
+			"         actualIntStr = '%v'\n"+
+			"         origIntStr   = '%v'\n"+
+			"Original uint64 Value = '%v'\n",
+			ePrefix.String(),
+			actualIntStr,
+			origIntStr,
+			origNum)
+
+		return
+	}
+
+	actualFracStr := numStrKernel01.GetFractionalString()
+
+	if actualFracStr != origFracStr {
+
+		t.Errorf("%v\n"+
+			"Test#2\n"+
+			"Error: actualFracStr != origFracStr\n"+
+			"actualFracStr = '%v'\n"+
+			"origFracStr   = '%v'\n",
+			ePrefix.String(),
+			actualFracStr,
+			origFracStr)
+
+		return
+	}
+
+	isZeroValue := numStrKernel01.IsZeroValue()
+
+	if isZeroValue == true {
+
+		t.Errorf("%v\n"+
+			"Test#3\n"+
+			"Error: Expected numStrKernel01.IsZeroValue()\n"+
+			"would be equal to 'false'. Instead the return value\n"+
+			"was 'true'!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	var numStrKernel02 NumberStrKernel
+
+	uintNum := uint(0)
+
+	numStrKernel02,
+		err = new(NumberStrKernel).NewFromUnsignedIntValue(
+		uintNum,
+		NumSignVal.Positive(),
+		&ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	expectedIntStr := "0"
+
+	actualIntStr = numStrKernel02.GetIntegerString()
+
+	if actualIntStr != expectedIntStr {
+		t.Errorf("%v\n"+
+			"Test#4\n"+
+			"Error: actualIntStr != origIntStr\n"+
+			"         actualIntStr = '%v'\n"+
+			"     expectedIntStr   = '%v'\n"+
+			"  Original uint Value = '%v'\n",
+			ePrefix.String(),
+			actualIntStr,
+			origIntStr,
+			uintNum)
+
+		return
+	}
+
+	actualFracStr = numStrKernel02.GetFractionalString()
+
+	if actualFracStr != origFracStr {
+
+		t.Errorf("%v\n"+
+			"Test#5\n"+
+			"Error: actualFracStr != origFracStr\n"+
+			"actualFracStr = '%v'\n"+
+			"origFracStr   = '%v'\n",
+			ePrefix.String(),
+			actualFracStr,
+			origFracStr)
+
+		return
+	}
+
+	isZeroValue = numStrKernel02.IsZeroValue()
+
+	if isZeroValue == false {
+
+		t.Errorf("%v\n"+
+			"Test#6\n"+
+			"Error: Expected numStrKernel02.IsZeroValue()\n"+
+			"would be equal to 'true'. Instead the return value\n"+
+			"was 'false'!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	var numStrKernel03 NumberStrKernel
+
+	uint32Num := uint32(9879)
+
+	expectedIntStr = fmt.Sprintf("%v",
+		uint32Num)
+
+	numStrKernel03,
+		err = new(NumberStrKernel).NewFromUnsignedIntValue(
+		uint32Num,
+		NumSignVal.Positive(),
+		&ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	var intRuneArrayDto RuneArrayDto
+
+	intRuneArrayDto,
+		err = numStrKernel03.GetIntegerDigits(
+		ePrefix.XCpy(
+			"numStrKernel03"))
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	actualIntStr = intRuneArrayDto.GetCharacterString()
+
+	if actualIntStr != expectedIntStr {
+		t.Errorf("%v\n"+
+			"Test#7\n"+
+			"Error: actualIntStr != origIntStr\n"+
+			"         actualIntStr = '%v'\n"+
+			"     expectedIntStr   = '%v'\n"+
+			"  Original uint Value = '%v'\n",
+			ePrefix.String(),
+			actualIntStr,
+			expectedIntStr,
+			uint32Num)
+
+		return
+	}
+
+	actualFracStr = numStrKernel03.GetFractionalString()
+
+	if actualFracStr != origFracStr {
+
+		t.Errorf("%v\n"+
+			"Test#8\n"+
+			"Error: actualFracStr != origFracStr\n"+
+			"actualFracStr = '%v'\n"+
+			"origFracStr   = '%v'\n",
+			ePrefix.String(),
+			actualFracStr,
+			origFracStr)
+
+		return
+	}
+
+	isZeroValue = numStrKernel03.IsZeroValue()
+
+	if isZeroValue == true {
+
+		t.Errorf("%v\n"+
+			"Test#9\n"+
+			"Error: Expected numStrKernel03.IsZeroValue()\n"+
+			"would be equal to 'false'. Instead the return value\n"+
+			"was 'false'!\n",
+			ePrefix.String())
+
+		return
+	}
+
 }
