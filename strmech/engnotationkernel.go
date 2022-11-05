@@ -5,9 +5,9 @@ import (
 	"sync"
 )
 
-//	NumStrEngNotationKernel
+//	EngNotationKernel
 //
-//	Type NumStrEngNotationKernel contains the Engineering
+//	Type EngNotationKernel contains the Engineering
 //	Notation value used to format number strings
 //	displaying numeric values as Engineering Notation.
 //
@@ -32,8 +32,8 @@ import (
 //	https://sciencing.com/convert-between-base-number-systems-8442032.html
 //	https://mathworld.wolfram.com/EngineeringNotation.html
 //	https://www.youtube.com/watch?v=WfnTO_Pr3HE
-type NumStrEngNotationKernel struct {
-	coefficient NumberStrKernel
+type EngNotationKernel struct {
+	coefficient *big.Int
 	//	The coefficient consists of the leading integer and
 	//	fractional digits of the engineering notation.
 	//
