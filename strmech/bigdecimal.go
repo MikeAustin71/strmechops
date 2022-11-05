@@ -18,7 +18,7 @@ import (
 // The encapsulated numeric value is maintained
 // internally as form of scientific notation.
 type BigDecimal struct {
-	significand NumberStrKernel
+	significand SciNotationKernel
 	//	The significand is also known as the mantissa or
 	//	coefficient in scientific notation. It represents
 	//	the significant digits in the base number shown
@@ -31,7 +31,7 @@ type BigDecimal struct {
 	//		significand: '2.652'
 	//		exponent: 8
 
-	exponent NumberStrKernel
+	exponent SciNotationKernel
 	//	The component of scientific notation known as the
 	//	'exponent' is illustrated in the following example:
 	//

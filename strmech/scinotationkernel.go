@@ -81,7 +81,7 @@ import (
 //     or equal the one (1) and less than or equal to nine
 //     (9).
 type SciNotationKernel struct {
-	significand *sync.Mutex
+	significand *big.Int
 	//	The significand consists of the leading integer and
 	//	fractional digits of the scientific notation.
 	//
