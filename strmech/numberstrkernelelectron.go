@@ -67,7 +67,7 @@ func (numStrKernelElectron *numberStrKernelElectron) empty(
 	numStrKernel.fractionalDigits.charSearchType =
 		CharSearchType.LinearTargetStartingIndex()
 
-	numStrKernel.numericValueType =
+	numStrKernel.numberValueType =
 		NumValType.None()
 
 	numStrKernel.numberSign = NumSignVal.None()
@@ -113,8 +113,8 @@ func (numStrKernelElectron *numberStrKernelElectron) equal(
 		return false
 	}
 
-	if numStrKernel1.numericValueType !=
-		numStrKernel2.numericValueType {
+	if numStrKernel1.numberValueType !=
+		numStrKernel2.numberValueType {
 
 		return false
 	}
@@ -305,6 +305,149 @@ func (numStrKernelElectron *numberStrKernelElectron) getSetIsNonZeroValue(
 	numStrKernel.numberSign = NumSignVal.Zero()
 
 	return isNonZeroValue, err
+}
+
+//	getSetIsFloatingPointValue
+//
+//	Receives a pointer to an instance of NumberStrKernel
+//	(numStrKernel).
+//
+//	If the internal member variable
+//	'numStrKernel.fractionalDigits' encapsulates a rune
+//	array containing numeric digit characters ( a length
+//	greater than zero), this method classifies the
+//	NumberStrKernel numeric value as a floating point
+//	numeric value and returns 'true'.
+//
+//	If the rune array contains no numeric digit
+//	characters, this method returns false.
+//
+//	Be advised that as part of the analysis performed by
+//	this method, the following member variable will be
+//	modified and updated:
+//		'numStrKernel.numberValueType'
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	numStrKernel				*NumberStrKernel
+//
+//		A pointer to an instance of NumberStrKernel. This
+//		method will determine whether the numeric value
+//		of this instance is non-zero.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error messages.
+//		Usually, it contains the name of the calling method
+//		or methods listed as a function chain.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	numberValueType				NumericValueType
+//
+//		This method will examine the NumberStrKernel
+//		instance passed as input parameter 'numStrKernel'
+//		to determine if it contains a non-zero numeric
+//		value.
+//
+//		If this method returns 'true', it means that
+//		the numeric value of 'numStrKernel' is non-zero.
+//		A non-zero numeric value signals that the numeric
+//		value is less than or greater than zero (0).
+//
+//		If this method returns 'false' it means that the
+//		numeric value of 'numStrKernel' is zero ('0').
+//
+//	err							error
+//
+//		If this method completes successfully, this
+//		returned error Type is set equal to 'nil'. If errors
+//		are	encountered during processing, the returned
+//		error Type will encapsulate an error message.
+//
+//		If an error message is returned, the text value for
+//		input parameter 'errPrefDto' (error prefix) will be
+//		prefixed or attached at the beginning of the error
+//		message.
+func (numStrKernelElectron *numberStrKernelElectron) getSetIsNumericValueType(
+	numStrKernel *NumberStrKernel,
+	errPrefDto *ePref.ErrPrefixDto) (
+	numericValueType NumericValueType,
+	err error) {
+
+	if numStrKernelElectron.lock == nil {
+		numStrKernelElectron.lock = new(sync.Mutex)
+	}
+
+	numStrKernelElectron.lock.Lock()
+
+	defer numStrKernelElectron.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	numericValueType = NumValType.None()
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"numberStrKernelElectron."+
+			"getSetIsFloatingPointValue()",
+		"")
+
+	if err != nil {
+
+		return numericValueType, err
+
+	}
+
+	if numStrKernel == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'numStrKernel' is a nil pointer!\n",
+			ePrefix.String())
+
+		return numericValueType, err
+	}
+
+	lenIntArray := len(numStrKernel.integerDigits.CharsArray)
+
+	lenFracArray := len(numStrKernel.fractionalDigits.CharsArray)
+
+	if lenFracArray > 0 {
+
+		numStrKernel.numberValueType = NumValType.FloatingPoint()
+
+		numericValueType = NumValType.FloatingPoint()
+
+	} else if lenIntArray > 0 {
+
+		numStrKernel.numberValueType = NumValType.Integer()
+
+		numericValueType = NumValType.Integer()
+
+	} else {
+		// MUST BE lenIntArray == 0 &&
+		//	lenFracArray == 0
+
+		numStrKernel.numberValueType = NumValType.None()
+
+		numericValueType = NumValType.None()
+
+	}
+
+	return numericValueType, err
 }
 
 //	rationalizeFractionalIntegerDigits

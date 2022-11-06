@@ -371,7 +371,7 @@ func TestNumericValueType_XReturnNoneIfInvalid_000200(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error: Expected NumericValueType(-972)\n"+
 			"would return name of 'None' from \n"+
-			"numericValueType.XReturnNoneIfInvalid().\n"+
+			"numberValueType.XReturnNoneIfInvalid().\n"+
 			"It DID NOT!\n"+
 			"valueNone string value = '%v'\n"+
 			"   valueNone int value = '%v'\n",
@@ -451,10 +451,10 @@ func TestNumericValueType_XValueInt_000300(t *testing.T) {
 	if expectedIntValue != actualIntValue {
 
 		t.Errorf("%v\n"+
-			"Error: Expected numericValueType integer value\n"+
+			"Error: Expected numberValueType integer value\n"+
 			" NOT equal to actual integer value\n"+
-			"Expected numericValueType integer value = '%v'\n"+
-			"Actual numericValueType integer value   = '%v'\n",
+			"Expected numberValueType integer value = '%v'\n"+
+			"Actual numberValueType integer value   = '%v'\n",
 			ePrefix.String(),
 			expectedIntValue,
 			actualIntValue)
@@ -470,7 +470,7 @@ func TestNumericValueType_XValueInt_000300(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error: Expected NumericValueType(-972)\n"+
 			"would return name of 'None' from \n"+
-			"numericValueType.XReturnNoneIfInvalid().\n"+
+			"numberValueType.XReturnNoneIfInvalid().\n"+
 			"It DID NOT!\n"+
 			"strName string value = '%v'\n"+
 			"   strName int value = '%v'\n",

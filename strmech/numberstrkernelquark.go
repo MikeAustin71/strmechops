@@ -42,7 +42,7 @@ type numberStrKernelQuark struct {
 //		The internal variable contained in 'numStrKernel'
 //		which will be configured is:
 //
-//			NumberStrKernel.numericValueType
+//			NumberStrKernel.numberValueType
 //
 //	errPrefDto					*ePref.ErrPrefixDto
 //
@@ -120,7 +120,7 @@ func (numStrKernelQuark *numberStrKernelQuark) getSetNumValueType(
 
 	if lenIntegerDigits == 0 &&
 		lenFracDigits == 0 {
-		numStrKernel.numericValueType = newNumericValueType
+		numStrKernel.numberValueType = newNumericValueType
 
 		return newNumericValueType, err
 	}

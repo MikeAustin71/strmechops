@@ -25,7 +25,7 @@ type NumberStrKernel struct {
 	// represented by this instance of
 	// NumberStrKernel.
 
-	numericValueType NumericValueType
+	numberValueType NumericValueType
 	// This enumeration value specifies the type of
 	// numeric value contained in the current instance
 	// of NumberStrKernel. The contained numeric value

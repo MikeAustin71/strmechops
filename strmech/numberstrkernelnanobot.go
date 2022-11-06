@@ -168,8 +168,8 @@ func (numStrKernelNanobot *numberStrKernelNanobot) copyIn(
 		return err
 	}
 
-	targetNumStrKernel.numericValueType =
-		incomingNumStrKernel.numericValueType
+	targetNumStrKernel.numberValueType =
+		incomingNumStrKernel.numberValueType
 
 	targetNumStrKernel.numberSign =
 		incomingNumStrKernel.numberSign
@@ -319,8 +319,8 @@ func (numStrKernelNanobot *numberStrKernelNanobot) copyOut(
 		return deepCopyNumStrKernel, err
 	}
 
-	deepCopyNumStrKernel.numericValueType =
-		numStrKernel.numericValueType
+	deepCopyNumStrKernel.numberValueType =
+		numStrKernel.numberValueType
 
 	deepCopyNumStrKernel.numberSign =
 		numStrKernel.numberSign
@@ -674,13 +674,13 @@ func (numStrKernelNanobot *numberStrKernelNanobot) getParameterTextListing(
 
 	txtStrLabel = "Numeric Value Type"
 
-	if !numStrKernel.numericValueType.XIsValid() {
-		numStrKernel.numericValueType = NumValType.None()
+	if !numStrKernel.numberValueType.XIsValid() {
+		numStrKernel.numberValueType = NumValType.None()
 	}
 
 	err = txtFormatCol.AddLine2Col(
 		txtStrLabel,
-		numStrKernel.numericValueType,
+		numStrKernel.numberValueType,
 		ePrefix.XCpy(
 			"Numeric Value Type"))
 
@@ -891,7 +891,7 @@ func (numStrKernelNanobot *numberStrKernelNanobot) setWithRunes(
 		numStrKernel.integerDigits.CharsArray[0] =
 			'0'
 
-		numStrKernel.numericValueType = NumValType.Integer()
+		numStrKernel.numberValueType = NumValType.Integer()
 
 		numStrKernel.numberSign = NumSignVal.Zero()
 
@@ -1098,7 +1098,7 @@ func (numStrKernelNanobot *numberStrKernelNanobot) setWithRuneArrayDto(
 		numStrKernel.integerDigits.CharsArray[0] =
 			'0'
 
-		numStrKernel.numericValueType = NumValType.Integer()
+		numStrKernel.numberValueType = NumValType.Integer()
 
 		numStrKernel.numberSign = NumSignVal.Zero()
 

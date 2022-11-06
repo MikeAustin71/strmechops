@@ -1091,10 +1091,10 @@ func (numStrKernelAtom *numberStrKernelAtom) addFractionalDigit(
 		return err
 	}
 
-	if numStrKernel.numericValueType !=
+	if numStrKernel.numberValueType !=
 		NumValType.FloatingPoint() {
 
-		numStrKernel.numericValueType =
+		numStrKernel.numberValueType =
 			NumValType.FloatingPoint()
 	}
 
@@ -1216,10 +1216,10 @@ func (numStrKernelAtom *numberStrKernelAtom) addIntegerDigit(
 		return err
 	}
 
-	if numStrKernel.numericValueType !=
+	if numStrKernel.numberValueType !=
 		NumValType.FloatingPoint() {
 
-		numStrKernel.numericValueType =
+		numStrKernel.numberValueType =
 			NumValType.Integer()
 	}
 
@@ -1333,14 +1333,14 @@ func (numStrKernelAtom *numberStrKernelAtom) emptyFractionalDigits(
 
 		numStrKernel.numberSign = NumSignVal.Zero()
 
-		numStrKernel.numericValueType = NumValType.None()
+		numStrKernel.numberValueType = NumValType.None()
 
 		return err
 	}
 
 	// integer digits exist
 
-	numStrKernel.numericValueType = NumValType.Integer()
+	numStrKernel.numberValueType = NumValType.Integer()
 
 	return err
 }
@@ -1447,14 +1447,14 @@ func (numStrKernelAtom *numberStrKernelAtom) emptyIntegerDigits(
 
 		numStrKernel.numberSign = NumSignVal.Zero()
 
-		numStrKernel.numericValueType = NumValType.None()
+		numStrKernel.numberValueType = NumValType.None()
 
 		return err
 	}
 
 	// fractional digits exist
 
-	numStrKernel.numericValueType = NumValType.FloatingPoint()
+	numStrKernel.numberValueType = NumValType.FloatingPoint()
 
 	return err
 }
