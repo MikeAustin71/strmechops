@@ -54,7 +54,7 @@ type numberStrKernelAtom struct {
 //
 //		This data transfer object will return key
 //		statistics on the numeric value encapsulated
-//		input parameter, 'numStrKernel'.
+//		by input parameter, 'numStrKernel'.
 //
 //		type NumberStrStatsDto struct {
 //
