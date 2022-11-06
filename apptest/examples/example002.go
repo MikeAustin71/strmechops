@@ -89,6 +89,8 @@ func (MainTest02) NumberStrKernelPureNumStr01() {
 
 	sciNot01,
 		err = numStrKernel01.GetScientificNotation(
+		strmech.NumRoundType.NoRounding(),
+		0,
 		ePrefix.XCpy(
 			"sciNot01<-"))
 

@@ -11927,9 +11927,304 @@ func (numStrKernel *NumberStrKernel) GetParameterTextListing(
 //
 // ----------------------------------------------------------------
 //
+//	# Definition of Terms
+//
+//	In scientific notation, nonzero numbers are written
+//	in the form	m × 10n or m times ten raised to the
+//	power of n, where n is an integer, and the coefficient
+//	m is a nonzero real number (usually between 1 and 10
+//	in absolute value, and nearly always written as a
+//	terminating decimal).
+//
+//										Wikipedia
+//
+//	The Scientific Notation value consists of a
+//	significand and exponent which are used to express a
+//	numeric value in the form:
+//
+//		significand x 10^exponent = numeric value
+//
+//	Example
+//
+//		Numeric Value				=	265,200,000
+//		Scientific Notation Value	=	'2.652 x 10^8'
+//		significand 				=	'2.652'
+//		significand integer digits 	= 	'2'
+//	    significand fractional digits =	'652'
+//		exponent    				= 	'8'  (10^8)
+//
+// ----------------------------------------------------------------
+//
 //	# Input Parameters
 //
-//	errorPrefix					interface{}
+//	significandRoundingType				NumberRoundingType
+//
+//		This enumeration parameter is used to specify the
+//		type of rounding algorithm which will be applied
+//		when rounding fractional digits contained in the
+//		significand of the returned Scientific Notation
+//		value.
+//
+//		If in doubt as to a suitable rounding method,
+//		'HalfAwayFromZero' is recommended.
+//
+//		Possible values are listed as follows:
+//			NumRoundType.None()	- Invalid Value
+//			NumRoundType.NoRounding()
+//			NumRoundType.HalfUpWithNegNums()
+//			NumRoundType.HalfDownWithNegNums()
+//			NumRoundType.HalfAwayFromZero()
+//			NumRoundType.HalfTowardsZero()
+//			NumRoundType.HalfToEven()
+//			NumRoundType.HalfToOdd()
+//			NumRoundType.Randomly()
+//			NumRoundType.Floor()
+//			NumRoundType.Ceiling()
+//			NumRoundType.Truncate()
+//
+//		Definitions:
+//
+//			NoRounding
+//
+//				Signals that no rounding operation will be
+//				performed on fractional digits. The
+//				fractional digits will therefore remain
+//				unchanged.
+//
+//			HalfUpWithNegNums
+//
+//				Half Round Up Including Negative Numbers.
+//				This method is intuitive but may produce
+//				unexpected results when applied to negative
+//				numbers.
+//
+//				'HalfUpWithNegNums' rounds .5 up.
+//
+//					Examples of 'HalfUpWithNegNums'
+//					7.6 rounds up to 8
+//					7.5 rounds up to 8
+//					7.4 rounds down to 7
+//					-7.4 rounds up to -7
+//					-7.5 rounds up to -7
+//					-7.6 rounds down to -8
+//
+//			HalfDownWithNegNums
+//
+//			Half Round Down Including Negative Numbers. This
+//			method is also considered intuitive but may
+//			produce unexpected results when applied to
+//			negative numbers.
+//
+//			'HalfDownWithNegNums' rounds .5 down.
+//
+//				Examples of HalfDownWithNegNums
+//
+//				7.6 rounds up to 8
+//				7.5 rounds down to 7
+//				7.4 rounds down to 7
+//				-7.4 rounds up to -7
+//				-7.5 rounds down to -8
+//				-7.6 rounds down to -8
+//
+//			HalfAwayFromZero
+//
+//				The 'HalfAwayFromZero' method rounds .5 further
+//				away from zero.	It provides clear and consistent
+//				behavior when dealing with negative numbers.
+//
+//					Examples of HalfAwayFromZero
+//
+//					7.6 rounds away to 8
+//					7.5 rounds away to 8
+//					7.4 rounds to 7
+//					-7.4 rounds to -7
+//					-7.5 rounds away to -8
+//					-7.6 rounds away to -8
+//
+//			HalfTowardsZero
+//
+//				Round Half Towards Zero. 'HalfTowardsZero' rounds
+//				0.5	closer to zero. It provides clear and
+//				consistent behavior	when dealing with negative
+//				numbers.
+//
+//					Examples of HalfTowardsZero
+//
+//					7.6 rounds away to 8
+//					7.5 rounds to 7
+//					7.4 rounds to 7
+//					-7.4 rounds to -7
+//					-7.5 rounds to -7
+//					-7.6 rounds away to -8
+//
+//			HalfToEven
+//
+//				Round Half To Even Numbers. 'HalfToEven' is
+//				also called	Banker's Rounding. This method
+//				rounds 0.5 to the nearest even digit.
+//
+//					Examples of HalfToEven
+//
+//					7.5 rounds up to 8 (because 8 is an even
+//					number)	but 6.5 rounds down to 6 (because
+//					6 is an even number)
+//
+//					HalfToEven only applies to 0.5. Other
+//					numbers (not ending	in 0.5) round to
+//					nearest as usual, so:
+//
+//					7.6 rounds up to 8
+//					7.5 rounds up to 8 (because 8 is an even number)
+//					7.4 rounds down to 7
+//					6.6 rounds up to 7
+//					6.5 rounds down to 6 (because 6 is an even number)
+//					6.4 rounds down to 6
+//
+//			HalfToOdd
+//
+//				Round Half to Odd Numbers. Similar to 'HalfToEven',
+//				but in this case 'HalfToOdd' rounds 0.5 towards odd
+//				numbers.
+//
+//					Examples of HalfToOdd
+//
+//					HalfToOdd only applies to 0.5. Other numbers
+//					(not ending	in 0.5) round to nearest as usual.
+//
+//					7.5 rounds down to 7 (because 7 is an odd number)
+//
+//					6.5 rounds up to 7 (because 7 is an odd number)
+//
+//					7.6 rounds up to 8
+//					7.5 rounds down to 7 (because 7 is an odd number)
+//					7.4 rounds down to 7
+//					6.6 rounds up to 7
+//					6.5 rounds up to 7 (because 7 is an odd number)
+//					6.4 rounds down to 6
+//
+//			Randomly
+//
+//				Round Half Randomly. Uses a Random Number Generator
+//				to choose between rounding 0.5 up or down.
+//
+//				All numbers other than 0.5 round to the nearest as
+//				usual.
+//
+//			Floor
+//
+//				Yields the nearest integer down. Floor does not apply
+//				any	special treatment to 0.5.
+//
+//				Floor Function: The greatest integer that is less than
+//				or equal to x
+//
+//				Source:
+//					https://www.mathsisfun.com/sets/function-floor-ceiling.html
+//
+//				In mathematics and computer science, the floor function
+//				is the function that takes as input a real number x,
+//				and gives as output the greatest integer less than or
+//				equal to x,	denoted floor(x) or ⌊x⌋.
+//
+//				Source:
+//					https://en.wikipedia.org/wiki/Floor_and_ceiling_functions
+//
+//				Examples of Floor
+//
+//					Number     Floor
+//					 2           2
+//					 2.4         2
+//					 2.9         2
+//					-2.5        -3
+//					-2.7        -3
+//					-2          -2
+//
+//			Ceiling
+//
+//				Yields the nearest integer up. Ceiling does not
+//				apply any special treatment to 0.5.
+//
+//				Ceiling Function: The least integer that is
+//				greater than or	equal to x.
+//				Source:
+//					https://www.mathsisfun.com/sets/function-floor-ceiling.html
+//
+//				The ceiling function maps x to the least integer
+//				greater than or equal to x, denoted ceil(x) or
+//				⌈x⌉.[1]
+//
+//				Source:
+//					https://en.wikipedia.org/wiki/Floor_and_ceiling_functions
+//
+//					Examples of Ceiling
+//
+//						Number    Ceiling
+//						 2           2
+//						 2.4         3
+//						 2.9         3
+//						-2.5        -2
+//						-2.7        -2
+//						-2          -2
+//
+//			Truncate
+//
+//				Apply NO Rounding whatsoever. The Round From Digit
+//				is dropped or deleted. The Round To Digit is NEVER
+//				changed.
+//
+//				Examples of Truncate
+//
+//					Example-1
+//					Number: 23.14567
+//					Objective: Round to two decimal places to
+//					the right of the decimal point.
+//					Rounding Method: Truncate
+//					Round To Digit:   4
+//					Round From Digit: 5
+//					Rounded Number:   23.14 - The Round From Digit
+//					is dropped.
+//
+//					Example-2
+//					Number: -23.14567
+//					Objective: Round to two decimal places to
+//					the right of the decimal point.
+//					Rounding Method: Truncate
+//					Round To Digit:   4
+//					Round From Digit: 5
+//					Rounded Number:  -23.14 - The Round From Digit
+//					is dropped.
+//
+//	significandRoundToFactionalDigits	int
+//
+//		This parameter in conjunction with
+//		'significandRoundingType' to specify the number of digits
+//		to the right of the radix point, or decimal point, which
+//		will be returned as the Scientific Notation significand
+//		value.
+//
+//		When set to a positive integer value, this parameter
+//		controls the number of digits to the right of the
+//		radix point or decimal separator (a.k.a. decimal point).
+//		This value is equal to the number fractional digits which
+//		will remain in the floating point number after completion
+//		of the number rounding operation.
+//
+//		If parameter 'roundingType' is set to NumRoundType.NoRounding(),
+//		'significandRoundToFactionalDigits' is ignored and has no
+//		effect.
+//
+//		if 'significandRoundToFactionalDigits' is set to a value
+//		greater than the number of fractional digits in the
+//		'significand', the number of fractional digits will be
+//		extended with zero values and reflected in the numeric
+//		value returned through parameter 'numericValue'.
+//
+//		NOTE: Rounding the significand to zero is considered bad
+//		form. Common practice always retains at least one digit
+//		to the right of the decimal point in Scientific Notation.
+//
+//
+//	errorPrefix							interface{}
 //
 //		This object encapsulates error prefix text which
 //		is included in all returned error messages.
@@ -12011,6 +12306,8 @@ func (numStrKernel *NumberStrKernel) GetParameterTextListing(
 //		text will be attached to the beginning of the
 //		error message.
 func (numStrKernel *NumberStrKernel) GetScientificNotation(
+	significandRoundingType NumberRoundingType,
+	significandRoundToFactionalDigits int,
 	errorPrefix interface{}) (
 	SciNotationKernel,
 	error) {
@@ -12041,6 +12338,8 @@ func (numStrKernel *NumberStrKernel) GetScientificNotation(
 	return new(numberStrKernelMechanics).
 		convertToSciNotation(
 			numStrKernel,
+			significandRoundingType,
+			significandRoundToFactionalDigits,
 			ePrefix.XCpy(
 				"numStrKernel"))
 }

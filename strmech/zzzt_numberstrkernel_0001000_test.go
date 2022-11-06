@@ -875,6 +875,8 @@ func TestNumberStrKernel_GetScientificNotation_000100(t *testing.T) {
 
 	sciNot01,
 		err = numStrKernel01.GetScientificNotation(
+		NumRoundType.NoRounding(),
+		0,
 		ePrefix.XCpy(
 			"sciNot01<-"))
 
