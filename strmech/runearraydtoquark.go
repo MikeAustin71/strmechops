@@ -192,7 +192,7 @@ func (runeDtoQuark *runeArrayDtoQuark) countTotalTrailingZeros(
 
 	lastIdx--
 
-	for i := lastIdx; i >= 0; i++ {
+	for i := lastIdx; i >= 0; i-- {
 
 		if runeArrayDto.CharsArray[i] != '0' {
 			break

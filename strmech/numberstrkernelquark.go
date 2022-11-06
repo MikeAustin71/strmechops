@@ -1163,6 +1163,8 @@ func (numStrKernelQuark *numberStrKernelQuark) parsePureNumStr(
 
 	for i := 0; i < lenPureNStr; i++ {
 
+		targetInputParms.TargetStringCurrentSearchIndex = i
+
 		if pureNumberString.CharsArray[i] == '-' {
 
 			if leadingNumSymbols {
@@ -1185,11 +1187,17 @@ func (numStrKernelQuark *numberStrKernelQuark) parsePureNumStr(
 			continue
 		}
 
+		testStr := string(pureNumberString.CharsArray[i])
+
+		//if decSeparatorIsNOP == false &&
+		//	!foundRadixPoint &&
+		//	(pureNumberString.CharsArray[i] < '0' ||
+		//		pureNumberString.CharsArray[i] > '9')
 		// Test for Radix Point
 		if decSeparatorIsNOP == false &&
 			!foundRadixPoint &&
-			(pureNumberString.CharsArray[i] < '0' ||
-				pureNumberString.CharsArray[i] > '9') {
+			(testStr < "0" ||
+				testStr > "9") {
 
 			decSepSearchResults,
 				err = decSeparatorSpec.SearchForDecimalSeparator(

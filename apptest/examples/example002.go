@@ -14,6 +14,122 @@ type MainTest02 struct {
 	input string
 }
 
+func (MainTest02) NumberStrKernelPureNumStr01() {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestNumberStrKernel_GetScientificNotation_000100()",
+		"")
+
+	breakStr := strings.Repeat("=", 50)
+
+	fmt.Printf("\n\n" + breakStr + "\n")
+
+	fmt.Printf("\n Starting Run!\n"+
+		"Function: %v\n",
+		ePrefix.String())
+
+	fmt.Printf("\n" + breakStr + "\n")
+
+	origIntStr := "1234567"
+
+	origFracStr := "890"
+
+	expectedSciNotStr := "1.23456789 x 10^6"
+
+	compositeNumStr := origIntStr + "." + origFracStr
+
+	var err error
+	var numStrKernel01 strmech.NumberStrKernel
+
+	numStrKernel01,
+		err = new(strmech.NumberStrKernel).NewParsePureNumberStr(
+		compositeNumStr,
+		".",
+		true,
+		ePrefix)
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	actualIntStr := numStrKernel01.GetIntegerString()
+
+	if actualIntStr != origIntStr {
+		fmt.Printf("%v\n"+
+			"Test#1\n"+
+			"Error: actualIntStr != origIntStr\n"+
+			"actualIntStr = '%v'\n"+
+			"origIntStr   = '%v'\n",
+			ePrefix.String(),
+			actualIntStr,
+			origIntStr)
+
+		return
+	}
+
+	actualFracStr := numStrKernel01.GetFractionalString()
+
+	if actualFracStr != origFracStr {
+
+		fmt.Printf("%v\n"+
+			"Test#2\n"+
+			"Error: actualFracStr != origFracStr\n"+
+			"actualFracStr = '%v'\n"+
+			"origFracStr   = '%v'\n",
+			ePrefix.String(),
+			actualFracStr,
+			origFracStr)
+
+		return
+	}
+
+	var sciNot01 strmech.SciNotationKernel
+
+	sciNot01,
+		err = numStrKernel01.GetScientificNotation(
+		ePrefix.XCpy(
+			"sciNot01<-"))
+
+	if err != nil {
+		fmt.Printf("%v\n",
+			err.Error())
+		return
+	}
+
+	var actualSciNotStr string
+
+	actualSciNotStr = sciNot01.GetNumStrExponentFmt()
+
+	if actualSciNotStr != expectedSciNotStr {
+
+		fmt.Printf("%v\n"+
+			"Test#3\n"+
+			"Scientific Notaion String Error\n"+
+			"actualSciNotStr  !=  expectedSciNotStr\n"+
+			"actualSciNotStr   = '%v'\n"+
+			"expectedSciNotStr = '%v'\n",
+			ePrefix.String(),
+			actualSciNotStr,
+			expectedSciNotStr)
+
+		return
+
+	}
+
+	fmt.Printf("\n\n" + breakStr + "\n")
+
+	fmt.Printf("\n Successful Completion!\n"+
+		"Function: %v\n",
+		ePrefix.String())
+
+	fmt.Printf("\n" + breakStr + "\n")
+
+	return
+
+}
+
 func (MainTest02) NumberStrKernelExtendArrays01() {
 
 	funcName := "\nMainTest02.NumberStrKernelExtendArrays01()"
@@ -266,6 +382,7 @@ func (MainTest02) RuneArrayDtoDeleteChars01() {
 
 	return
 }
+
 func (MainTest02) NumStrKernelParseUSNumStr() {
 
 	funcName := "MainTest02.NumStrKernelParseUSNumStr()"
