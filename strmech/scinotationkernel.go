@@ -1,15 +1,16 @@
 package strmech
 
 import (
-	"math/big"
 	"sync"
 )
 
 //	SciNotationKernel
 //
-//	Type SciNotationKernel contains the scientific
-//	notation value used to format number strings
-//	displaying numeric values as scientific notation.
+//	Type SciNotationKernel contains a numeric value in
+//	scientific notation. This type can therefore be used
+//	in arithmetic calulations and the creation of number
+//	strings for the display numeric values as scientific
+//	notation.
 //
 // ----------------------------------------------------------------
 //
@@ -25,30 +26,45 @@ import (
 //										Wikipedia
 //
 //
-//	This type only contains the scientific or engineering
-//	notation values. It DOES NOT contain format specifications.
+//	This type only contains the scientific notation values.
+//	It DOES NOT contain engineering notation values.
+//
+//	For Engineering Notation reference type,
+//	EngNotationKernel.
+//
+//	Example
+//
+//		Numeric Value				=	265,200,000
+//		Scientifc Notation Value	=	'2.652 x 10^8'
+//		significand 				=	'2.652'
+//		significand integer digits 	= 	'2'
+//	    significand fractional digits =	'652'
+//		exponent    				= 	'8'  (10^8)
 //
 // ----------------------------------------------------------------
 //
-//	Exponential Format
+// # Scientific Notation Display Formats
+//
+//	Scientific Notation may be formatted using one of
+//	of two display formats.
+//
+//	1.	Exponential Format
 //
 //		Example:
-//			Base Numeric Value: 265,200,000
+//			Numeric Value: 265,200,000
+//
 //			Exponential Display Format: "2.652 x 10^8"
 //
-//	E-Notation Format
+//	2.	E-Notation Format
 //
 //	 	Example:
-//			Base Numeric Value: 265,200,000
+//			Numeric Value: 265,200,000
+//
 //			E-Notation Display Format has two
 //			variants:
 //	 			E-Notation Display Format: "2.652E+8"
 //							or
 //				E-Notation Display Format: "2.652e+8"
-//
-//	significand 				=	'2.652'
-//	significand integer digits 	= 	'2'
-//	exponent    				= 	'8'  (10^8)
 //
 // ----------------------------------------------------------------
 //
@@ -81,15 +97,112 @@ import (
 //     or equal the one (1) and less than or equal to nine
 //     (9).
 type SciNotationKernel struct {
-	significand *big.Int
+	significand NumberStrKernel
 	//	The significand consists of the leading integer and
 	//	fractional digits of the scientific notation.
 	//
 	// In the example '2.652E+8', the significand is '2.652'.
 
-	exponent *big.Int
+	exponent NumberStrKernel
 	// The exponent portion of the scientific notation string
 	// In the example '2.652E+8', the exponent is '8'
 
 	lock *sync.Mutex
+}
+
+//	GetNumStrExponentFmt
+//
+//	Converts the numeric value configured for the current
+//	instance of SciNotationKernel to a Number String
+//	configured with the Scientific Notation Exponential
+//	Format.
+//
+//		Example:
+//			Numeric Value: 265,200,000
+//
+//			Exponential Display Format: "2.652 x 10^8"
+//
+// ----------------------------------------------------------------
+//
+// # Reference:
+//
+//	https://en.wikipedia.org/wiki/Scientific_notation
+//
+// ----------------------------------------------------------------
+//
+// # Usage
+//
+//	Example-1
+//
+//		Numeric Value: 265,200,000
+//
+//		Exponential Display Format: "2.652 x 10^8"
+//
+//	Example-2
+//
+//		Numeric Value: -265,200,000
+//
+//		Exponential Display Format: "-2.652 x 10^8"
+//
+//	Example-3
+//
+//		Numeric Value: 0.0002652
+//
+//		Exponential Display Format: "2.652 x 10^-4"
+func (sciNotKernel *SciNotationKernel) GetNumStrExponentFmt() string {
+
+	if sciNotKernel.lock == nil {
+		sciNotKernel.lock = new(sync.Mutex)
+	}
+
+	sciNotKernel.lock.Lock()
+
+	defer sciNotKernel.lock.Unlock()
+
+	sigNifIntStr := sciNotKernel.significand.GetIntegerString()
+
+	sigNifFracStr := sciNotKernel.significand.GetFractionalString()
+
+	sigNifNumSign,
+		_ := sciNotKernel.significand.GetNumberSign(
+		nil)
+
+	var significandStr string
+
+	if sigNifNumSign == NumSignVal.Negative() {
+		significandStr += "-"
+	}
+
+	significandStr += sigNifIntStr
+
+	if len(sigNifFracStr) == 0 {
+
+		significandStr += ".0"
+
+	} else {
+
+		significandStr += "." + sigNifFracStr
+	}
+
+	exponentIntStr := sciNotKernel.exponent.GetIntegerString()
+
+	exponentFracStr := sciNotKernel.exponent.GetFractionalString()
+
+	exponentNumSign,
+		_ := sciNotKernel.exponent.GetNumberSign(
+		nil)
+
+	exponentStr := " x 10^"
+
+	if exponentNumSign == NumSignVal.Negative() {
+		exponentStr += "-"
+	}
+
+	exponentStr += exponentIntStr
+
+	if len(exponentFracStr) > 0 {
+		exponentStr += "." + exponentFracStr
+	}
+
+	return significandStr + exponentStr
 }
