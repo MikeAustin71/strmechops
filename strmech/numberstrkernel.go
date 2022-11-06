@@ -12344,6 +12344,34 @@ func (numStrKernel *NumberStrKernel) GetScientificNotation(
 				"numStrKernel"))
 }
 
+// IsFloatingPointValue
+//
+// If the current instance of NumberStrKernel
+// encapsulates a floating point numeric value, this
+// method returns 'true'.
+//
+// If the numeric value is not a floating point value,
+// this method returns 'false'.
+func (numStrKernel *NumberStrKernel) IsFloatingPointValue() bool {
+
+	if numStrKernel.lock == nil {
+		numStrKernel.lock = new(sync.Mutex)
+	}
+
+	numStrKernel.lock.Lock()
+
+	defer numStrKernel.lock.Unlock()
+
+	var newNumericValueType NumericValueType
+
+	newNumericValueType,
+		_ = new(numberStrKernelQuark).getSetNumValueType(
+		numStrKernel,
+		nil)
+
+	return newNumericValueType == NumValType.FloatingPoint()
+}
+
 // IsZeroValue
 //
 // If this method returns 'true', it means that the

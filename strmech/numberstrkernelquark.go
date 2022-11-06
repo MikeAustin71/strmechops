@@ -95,8 +95,8 @@ func (numStrKernelQuark *numberStrKernelQuark) getSetNumValueType(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"negNumSearchSpecAtom."+
-			"emptyIntegerDigits()",
+		"numberStrKernelQuark."+
+			"getSetNumValueType()",
 		"")
 
 	if err != nil {
@@ -120,27 +120,23 @@ func (numStrKernelQuark *numberStrKernelQuark) getSetNumValueType(
 
 	if lenIntegerDigits == 0 &&
 		lenFracDigits == 0 {
-		numStrKernel.numberValueType = newNumericValueType
 
-		return newNumericValueType, err
-	}
+		newNumericValueType = NumValType.None()
 
-	if lenIntegerDigits > 0 &&
+	} else if lenIntegerDigits > 0 &&
 		lenFracDigits == 0 {
 
 		newNumericValueType = NumValType.Integer()
 
-		return newNumericValueType, err
-	}
+	} else {
 
-	if lenFracDigits > 0 {
+		// MUST BE lenFracDigits > 0
 
 		newNumericValueType = NumValType.FloatingPoint()
 
-		return newNumericValueType, err
 	}
 
-	newNumericValueType = NumValType.None()
+	numStrKernel.numberValueType = newNumericValueType
 
 	return newNumericValueType, err
 }

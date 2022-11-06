@@ -13,6 +13,205 @@ type numberStrKernelAtom struct {
 	lock *sync.Mutex
 }
 
+//	calcNumStrKernelStats
+//
+//	Receives a pointer to an instance of NumberStrKernel
+//	and proceeds to analyze that instance to produce
+//	statistical information on the encapsulated numeric
+//	value.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	numStrKernel				*NumberStrKernel
+//
+//		A pointer to an instance of NumberStrKernel. The
+//		numeric value contained in this instance will be
+//		analyzed to produce a statistics on the nature of
+//		the numeric value encapsulated by this instance.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	numStrStatsDto				NumberStrStatsDto
+//
+//		This data transfer object will return key
+//		statistics on the numeric value encapsulated
+//		input parameter, 'numStrKernel'.
+//
+//		type NumberStrStatsDto struct {
+//
+//		NumOfIntegerDigits					uint64
+//
+//			The total number of integer digits to the
+//			left of the radix point or, decimal point, in
+//			the subject numeric value.
+//
+//		NumOfSignificantIntegerDigits		uint64
+//
+//			The number of nonzero integer digits to the
+//			left of the radix point or, decimal point, in
+//			the subject numeric value.
+//
+//		NumOfFractionalDigits				uint64
+//
+//			The total number of fractional digits to the
+//			right of the radix point or, decimal point,
+//			in the subject numeric value.
+//
+//		NumOfSignificantFractionalDigits	uint64
+//
+//			The number of nonzero fractional digits to
+//			the right of the radix point or, decimal
+//			point, in the subject numeric value.
+//
+//		NumberValueType 					NumericValueType
+//
+//			This enumeration value specifies whether the
+//			subject numeric value is classified either as
+//			an integer or a floating point number.
+//
+//			Possible enumeration values are listed as
+//			follows:
+//				NumValType.None()
+//				NumValType.FloatingPoint()
+//				NumValType.Integer()
+//
+//		NumberSign							NumericSignValueType
+//
+//			An enumeration specifying the number sign
+//			associated with the numeric value. Possible
+//			values are listed as follows:
+//				NumSignVal.None()		= Invalid Value
+//				NumSignVal.Negative()	= -1
+//				NumSignVal.Zero()		=  0
+//				NumSignVal.Positive()	=  1
+//
+//		IsZeroValue							bool
+//
+//			If 'false', the subject numeric value is
+//			greater than or less than zero ('0').
+//
+//			If 'true', the Numeric Value is equal to
+//			zero.
+//		}
+//
+//	error
+//
+//		If this method completes successfully, this
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (numStrKernelAtom *numberStrKernelAtom) calcNumStrKernelStats(
+	numStrKernel *NumberStrKernel,
+	errPrefDto *ePref.ErrPrefixDto) (
+	numStrStatsDto NumberStrStatsDto,
+	err error) {
+
+	if numStrKernelAtom.lock == nil {
+		numStrKernelAtom.lock = new(sync.Mutex)
+	}
+
+	numStrKernelAtom.lock.Lock()
+
+	defer numStrKernelAtom.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"numberStrKernelAtom."+
+			"calcNumStrKernelStats()",
+		"")
+
+	if err != nil {
+
+		return numStrStatsDto, err
+
+	}
+
+	if numStrKernel == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'numStrKernel' is a nil pointer!\n",
+			ePrefix.String())
+
+		return numStrStatsDto, err
+	}
+
+	numStrStatsDto.NumOfIntegerDigits =
+		uint64(len(numStrKernel.integerDigits.CharsArray))
+
+	lenZeros := numStrKernel.integerDigits.GetCountLeadingZeros()
+
+	numStrStatsDto.NumOfSignificantIntegerDigits =
+		numStrStatsDto.NumOfIntegerDigits - lenZeros
+
+	numStrStatsDto.NumOfFractionalDigits =
+		uint64(len(numStrKernel.fractionalDigits.CharsArray))
+
+	lenZeros = numStrKernel.fractionalDigits.GetCountTrailingZeros()
+
+	numStrStatsDto.NumOfSignificantFractionalDigits =
+		numStrStatsDto.NumOfFractionalDigits - lenZeros
+
+	numStrStatsDto.NumberValueType,
+		err = new(numberStrKernelQuark).getSetNumValueType(
+		numStrKernel,
+		ePrefix.XCpy(
+			"numStrStatsDto.NumberValueType<-"+
+				"numStrKernel"))
+
+	if err != nil {
+
+		return numStrStatsDto, err
+
+	}
+
+	numStrStatsDto.NumberSign =
+		numStrKernel.numberSign
+
+	numStrStatsDto.IsZeroValue,
+		err = new(numberStrKernelElectron).getSetIsNonZeroValue(
+		numStrKernel,
+		ePrefix.XCpy(
+			"numStrKernel"))
+
+	if err != nil {
+
+		return numStrStatsDto, err
+
+	}
+
+	numStrStatsDto.IsZeroValue = !numStrStatsDto.IsZeroValue
+
+	return numStrStatsDto, err
+}
+
 //	convertKernelToBigFloat
 //
 //	Converts an instance of NumberStrKernel to a floating
