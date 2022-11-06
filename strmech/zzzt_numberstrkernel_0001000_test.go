@@ -843,6 +843,7 @@ func TestNumberStrKernel_GetScientificNotation_000100(t *testing.T) {
 	actualIntStr := numStrKernel01.GetIntegerString()
 
 	if actualIntStr != origIntStr {
+
 		t.Errorf("%v\n"+
 			"Test#1\n"+
 			"Error: actualIntStr != origIntStr\n"+
@@ -889,6 +890,123 @@ func TestNumberStrKernel_GetScientificNotation_000100(t *testing.T) {
 	var actualSciNotStr string
 
 	actualSciNotStr = sciNot01.GetNumStrExponentFmt()
+
+	if actualSciNotStr != expectedSciNotStr {
+
+		t.Errorf("%v\n"+
+			"Test#3\n"+
+			"Scientific Notaion String Error\n"+
+			"actualSciNotStr  !=  expectedSciNotStr\n"+
+			"actualSciNotStr   = '%v'\n"+
+			"expectedSciNotStr = '%v'\n",
+			ePrefix.String(),
+			actualSciNotStr,
+			expectedSciNotStr)
+
+		return
+
+	}
+
+	return
+}
+
+func TestNumberStrKernel_GetScientificNotation_000200(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestNumberStrKernel_GetScientificNotation_000100()",
+		"")
+
+	origIntStr := "1234567"
+
+	origFracStr := "8901"
+
+	expectedSciNotStr := "1.2345678901E+6"
+
+	compositeNumStr := origIntStr + "." + origFracStr
+
+	var err error
+	var numStrKernel01 NumberStrKernel
+	var numStrSearchResults CharSearchNumStrParseResultsDto
+
+	numStrSearchResults,
+		numStrKernel01,
+		err = new(NumberStrKernel).NewParseUSNumberStr(
+		compositeNumStr,
+		0,
+		-1,
+		nil,
+		false,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if !numStrSearchResults.FoundNumericDigits {
+
+		t.Errorf("%v\n" +
+			"Test#1\n" +
+			"Error: Failed to locate numeric\n" +
+			"digits in number string!\n" +
+			ePrefix.String())
+
+		return
+	}
+
+	actualIntStr := numStrKernel01.GetIntegerString()
+
+	if actualIntStr != origIntStr {
+
+		t.Errorf("%v\n"+
+			"Test#2\n"+
+			"Error: actualIntStr != origIntStr\n"+
+			"actualIntStr = '%v'\n"+
+			"origIntStr   = '%v'\n",
+			ePrefix.String(),
+			actualIntStr,
+			origIntStr)
+
+		return
+	}
+
+	actualFracStr := numStrKernel01.GetFractionalString()
+
+	if actualFracStr != origFracStr {
+
+		t.Errorf("%v\n"+
+			"Test#3\n"+
+			"Error: actualFracStr != origFracStr\n"+
+			"actualFracStr = '%v'\n"+
+			"origFracStr   = '%v'\n",
+			ePrefix.String(),
+			actualFracStr,
+			origFracStr)
+
+		return
+	}
+
+	var sciNot01 SciNotationKernel
+
+	sciNot01,
+		err = numStrKernel01.GetScientificNotation(
+		NumRoundType.NoRounding(),
+		0,
+		ePrefix.XCpy(
+			"sciNot01<-"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	var actualSciNotStr string
+
+	actualSciNotStr = sciNot01.GetENotationFmt(
+		"",
+		"")
 
 	if actualSciNotStr != expectedSciNotStr {
 

@@ -8,7 +8,7 @@ import (
 //
 //	Type SciNotationKernel contains a numeric value in
 //	scientific notation. This type can therefore be used
-//	in arithmetic calulations and the creation of number
+//	in arithmetic calculations and the creation of number
 //	strings for the display numeric values as scientific
 //	notation.
 //
@@ -35,7 +35,7 @@ import (
 //	Example
 //
 //		Numeric Value				=	265,200,000
-//		Scientifc Notation Value	=	'2.652 x 10^8'
+//		Scientific Notation Value	=	'2.652 x 10^8'
 //		significand 				=	'2.652'
 //		significand integer digits 	= 	'2'
 //	    significand fractional digits =	'652'
@@ -110,6 +110,164 @@ type SciNotationKernel struct {
 	lock *sync.Mutex
 }
 
+//	GetENotationFmt
+//
+//	Converts the numeric value configured for the current
+//	instance of SciNotationKernel to a Number String
+//	configured with the Scientific Notation E-Notation
+//	Format.
+//
+// ----------------------------------------------------------------
+//
+// # Reference:
+//
+//	https://en.wikipedia.org/wiki/Scientific_notation
+//	https://encyclopedia2.thefreedictionary.com/E+notation
+//
+// ----------------------------------------------------------------
+//
+// # Usage
+//
+//	Example-1
+//		 Numeric Value: 265,200,000
+//		Display Format: "2.652E+8"
+//
+//	Example-2
+//		 Numeric Value: 0.0002652
+//		Display Format: "2.652E-4"
+//
+//	Example-3
+//		 Numeric Value: 265,200,000
+//		Display Format: "2.652E8"
+//
+//	Example-4
+//		 Numeric Value: 265,200,000
+//		Display Format: "2.652e+8"
+//
+//	Example-5
+//		 Numeric Value: -265,200,000
+//		Display Format: "-2.652e8"
+//
+// ----------------------------------------------------------------
+//
+//	# Input Parameters
+//
+//	positiveExponentFmt			string
+//
+//		This string contains the exponent format to
+//		be applied when the exponent is a positive
+//		numeric value. In the example "2.652E+8",
+//		the positive exponent format is "E+"
+//
+//		If this parameter is submitted as an empty
+//		string, it will be defaulted to, "E+"
+//
+//		Recommended options for this string value
+//		are listed as follows:
+//			"E+"
+//			"E"
+//			"e+"
+//			"e"
+//
+//	negativeExponentFmt			string
+//
+//		This string contains the exponent format to
+//		be applied when the exponent is a negative
+//		numeric value. In the example "2.652E-4",
+//		the negative exponent format is "E-"
+//
+//		If this parameter is submitted as an empty
+//		string, it will be defaulted to, "E-"
+//
+//		Recommended options for this string value
+//		are listed as follows:
+//			"E-"
+//			"e-"
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//
+//		This returned string will contain the Scientific
+//		Notation numeric value configured with the
+//		E-Notation display format.
+func (sciNotKernel *SciNotationKernel) GetENotationFmt(
+	positiveExponentFmt string,
+	negativeExponentFmt string) string {
+
+	if sciNotKernel.lock == nil {
+		sciNotKernel.lock = new(sync.Mutex)
+	}
+
+	sciNotKernel.lock.Lock()
+
+	defer sciNotKernel.lock.Unlock()
+
+	if positiveExponentFmt == "" {
+		positiveExponentFmt = "E+"
+	}
+
+	if negativeExponentFmt == "" {
+		negativeExponentFmt = "E-"
+	}
+
+	sigNifIntStr := sciNotKernel.significand.GetIntegerString()
+
+	sigNifFracStr := sciNotKernel.significand.GetFractionalString()
+
+	sigNifNumSign,
+		_ := sciNotKernel.significand.GetNumberSign(
+		nil)
+
+	var significandStr string
+
+	if sigNifNumSign == NumSignVal.Negative() {
+
+		significandStr += "-"
+
+	}
+
+	significandStr += sigNifIntStr
+
+	if len(sigNifFracStr) == 0 {
+
+		significandStr += ".0"
+
+	} else {
+
+		significandStr += "." + sigNifFracStr
+	}
+
+	exponentIntStr := sciNotKernel.exponent.GetIntegerString()
+
+	exponentFracStr := sciNotKernel.exponent.GetFractionalString()
+
+	exponentNumSign,
+		_ := sciNotKernel.exponent.GetNumberSign(
+		nil)
+
+	var exponentStr = ""
+
+	if exponentNumSign == NumSignVal.Negative() {
+
+		exponentStr += negativeExponentFmt
+
+	} else {
+
+		exponentStr += positiveExponentFmt
+	}
+
+	exponentStr += exponentIntStr
+
+	if len(exponentFracStr) > 0 {
+		exponentStr += "." + exponentFracStr
+	}
+
+	return significandStr + exponentStr
+}
+
 //	GetNumStrExponentFmt
 //
 //	Converts the numeric value configured for the current
@@ -149,6 +307,16 @@ type SciNotationKernel struct {
 //		Numeric Value: 0.0002652
 //
 //		Exponential Display Format: "2.652 x 10^-4"
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//
+//		This returned string will contain the Scientific
+//		Notation numeric value configured with the
+//		Exponential display format.
 func (sciNotKernel *SciNotationKernel) GetNumStrExponentFmt() string {
 
 	if sciNotKernel.lock == nil {
