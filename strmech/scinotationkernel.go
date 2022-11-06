@@ -123,6 +123,9 @@ type SciNotationKernel struct {
 //
 //	https://en.wikipedia.org/wiki/Scientific_notation
 //	https://encyclopedia2.thefreedictionary.com/E+notation
+//	https://www.gigacalculator.com/calculators/scientific-notation-calculator.php
+//	https://www.medcalc.org/manual/scientific-notation.php
+//	https://calculatort.com/convert-scientific-notation-into-standard-form/
 //
 // ----------------------------------------------------------------
 //
