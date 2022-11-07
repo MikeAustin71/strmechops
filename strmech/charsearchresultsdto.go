@@ -517,7 +517,6 @@ func (charSearchResults *CharSearchResultsDto) CopyIn(
 //	     encountered, this parameter will return a deep copy of the
 //	     current CharSearchResultsDto instance.
 //
-//
 //	error
 //	   - If the method completes successfully and no errors are
 //	     encountered this return value is set to 'nil'. Otherwise,
