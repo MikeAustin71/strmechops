@@ -13,6 +13,212 @@ type numberStrKernelMechanics struct {
 	lock *sync.Mutex
 }
 
+//	compareNumStrKernels
+//
+//	Receives pointers to two instances of NumberStrKernel,
+//	'numStrKernel01' and 'numStrKernel02'.
+//
+//	The numeric value of 'numStrKernel01' is compared to
+//	that of 'numStrKernel01'. The comparison results are
+//	returned as one of three integer value:
+//
+//		-1	= numStrKernel01 is less than numStrKernel02
+//		 0	= numStrKernel01 is equal to numStrKernel02
+//		+1	= numStrKernel01 is greater than numStrKernel02
+//
+// ----------------------------------------------------------------
+//
+//	# Input Parameters
+//
+//	numStrKernel01				*NumberStrKernel
+//
+//		The numeric value of numStrKernel01 will be
+//		compared to that of numStrKernel02. The
+//		comparison results will be returned as an integer
+//		value.
+//
+//	numStrKernel02				*NumberStrKernel
+//
+//		The numeric value of numStrKernel01 will be
+//		compared to that of this parameter,
+//		numStrKernel02. The comparison results will be
+//		returned as an integer value.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	comparisonValue				int
+//
+//		This parameter will return the results of numeric
+//		value comparisons for input parameters,
+//		'numStrKernel01' and 'numStrKernel02'. The
+//		integer comparison result will be set to one of
+//		three values:
+//
+//		-1	= numStrKernel01 is less than numStrKernel02
+//		 0	= numStrKernel01 is equal to numStrKernel02
+//		+1	= numStrKernel01 is greater than numStrKernel02
+//
+//	err							error
+//
+//		If this method completes successfully, this
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (numStrKernelMech *numberStrKernelMechanics) compareNumStrKernels(
+	numStrKernel01 *NumberStrKernel,
+	numStrKernel02 *NumberStrKernel,
+	errPrefDto *ePref.ErrPrefixDto) (
+	comparisonValue int,
+	err error) {
+
+	if numStrKernelMech.lock == nil {
+		numStrKernelMech.lock = new(sync.Mutex)
+	}
+
+	numStrKernelMech.lock.Lock()
+
+	defer numStrKernelMech.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"numberStrKernelMechanics."+
+			"compareNumStrKernels()",
+		"")
+
+	if err != nil {
+
+		return comparisonValue, err
+	}
+
+	if numStrKernel01 == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'numStrKernel01' is a nil pointer!\n",
+			ePrefix.String())
+
+		return comparisonValue, err
+	}
+
+	if numStrKernel02 == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'numStrKernel02' is a nil pointer!\n",
+			ePrefix.String())
+
+		return comparisonValue, err
+	}
+
+	var numStrStats01, numStrStats02 NumberStrStatsDto
+
+	nStrKernelAtom := numberStrKernelAtom{}
+
+	numStrStats01,
+		err = nStrKernelAtom.calcNumStrKernelStats(
+		numStrKernel01,
+		ePrefix.XCpy(
+			"numStrStats01<-numStrKernel01"))
+
+	if err != nil {
+
+		return comparisonValue, err
+	}
+
+	numStrStats02,
+		err = nStrKernelAtom.calcNumStrKernelStats(
+		numStrKernel02,
+		ePrefix.XCpy(
+			"numStrStats02<-numStrKernel02"))
+
+	if err != nil {
+
+		return comparisonValue, err
+	}
+
+	if numStrStats01.NumberSign ==
+		numStrStats02.NumberSign {
+
+		if numStrStats01.NumberSign == 0 {
+
+			comparisonValue = 0
+
+			return comparisonValue, err
+
+		} else if numStrStats01.NumberSign ==
+			NumSignVal.Positive() {
+
+			if numStrStats01.NumOfSignificantIntegerDigits >
+				numStrStats02.NumOfSignificantIntegerDigits {
+
+				comparisonValue = 1
+
+				return comparisonValue, err
+			}
+
+			if numStrStats01.NumOfSignificantIntegerDigits <
+				numStrStats02.NumOfSignificantIntegerDigits {
+
+				comparisonValue = -1
+
+				return comparisonValue, err
+			}
+
+		} else {
+			// MUST BE
+			// numStrStats01.NumberSign == NumSignVal.Negative()
+
+			if numStrStats01.NumOfSignificantIntegerDigits >
+				numStrStats02.NumOfSignificantIntegerDigits {
+
+				comparisonValue = -1
+
+				return comparisonValue, err
+			}
+
+			if numStrStats01.NumOfSignificantIntegerDigits <
+				numStrStats02.NumOfSignificantIntegerDigits {
+
+				comparisonValue = 1
+
+				return comparisonValue, err
+			}
+
+		}
+
+	}
+
+	// Number Signs Are NOT Equal
+
+	// TODO - Get some sleep and finish this!
+	return comparisonValue, err
+
+}
+
 //	convertToSciNotation
 //
 //	Receives a pointer to an instance of numStrKernel and
@@ -297,7 +503,7 @@ type numberStrKernelMechanics struct {
 //		form. Common practice always retains at least one digit
 //		to the right of the decimal point in Scientific Notation.
 //
-// /
+//
 //
 //	errPrefDto					*ePref.ErrPrefixDto
 //
