@@ -1,6 +1,10 @@
 package strmech
 
-import "sync"
+import (
+	"fmt"
+	ePref "github.com/MikeAustin71/errpref"
+	"sync"
+)
 
 // NumberStrStatsDto
 //
@@ -54,4 +58,86 @@ type NumberStrStatsDto struct {
 	//	If 'true', the Numeric Value is equal to zero.
 
 	lock *sync.Mutex
+}
+
+// numberStrStatsDtoNanobot
+//
+// Provides helper methods for type NumberStrStatsDto.
+type numberStrStatsDtoNanobot struct {
+	lock *sync.Mutex
+}
+
+// copyNumStatsDto
+//
+// Copies NumberStrStatsDto information from a source
+// object to a destination object.
+func (numStrStatsNanobot *numberStrStatsDtoNanobot) copyNumStatsDto(
+	destinationNumStatsDto *NumberStrStatsDto,
+	sourceNumStatsDto *NumberStrStatsDto,
+	errPrefDto *ePref.ErrPrefixDto) (
+	err error) {
+
+	if numStrStatsNanobot.lock == nil {
+		numStrStatsNanobot.lock = new(sync.Mutex)
+	}
+
+	numStrStatsNanobot.lock.Lock()
+
+	defer numStrStatsNanobot.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"numberStrStatsDtoNanobot."+
+			"copyNumStatsDto()",
+		"")
+
+	if err != nil {
+
+		return err
+
+	}
+
+	if destinationNumStatsDto == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'destinationNumStatsDto' is a nil pointer!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if sourceNumStatsDto == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'sourceNumStatsDto' is a nil pointer!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	destinationNumStatsDto.NumOfIntegerDigits =
+		sourceNumStatsDto.NumOfIntegerDigits
+
+	destinationNumStatsDto.NumOfSignificantIntegerDigits =
+		sourceNumStatsDto.NumOfSignificantIntegerDigits
+
+	destinationNumStatsDto.NumOfFractionalDigits =
+		sourceNumStatsDto.NumOfFractionalDigits
+
+	destinationNumStatsDto.NumOfSignificantFractionalDigits =
+		sourceNumStatsDto.NumOfSignificantFractionalDigits
+
+	destinationNumStatsDto.NumberValueType =
+		sourceNumStatsDto.NumberValueType
+
+	destinationNumStatsDto.NumberSign =
+		sourceNumStatsDto.NumberSign
+
+	destinationNumStatsDto.IsZeroValue =
+		sourceNumStatsDto.IsZeroValue
+
+	return err
 }
