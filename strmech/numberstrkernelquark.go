@@ -1709,6 +1709,7 @@ func (numStrKernelQuark *numberStrKernelQuark) parsePureNumStr(
 	foundFirstNumericChar := false
 	foundRadixPoint := false
 	foundMinusSign := false
+	isNonZero := false
 
 	for i := 0; i < lenPureNStr; i++ {
 
@@ -1774,6 +1775,10 @@ func (numStrKernelQuark *numberStrKernelQuark) parsePureNumStr(
 		if pureNumberString.CharsArray[i] <= '9' &&
 			pureNumberString.CharsArray[i] >= '0' {
 
+			if pureNumberString.CharsArray[i] != '0' {
+				isNonZero = true
+			}
+
 			foundFirstNumericChar = true
 
 			if foundRadixPoint == true {
@@ -1815,9 +1820,6 @@ func (numStrKernelQuark *numberStrKernelQuark) parsePureNumStr(
 		return numStrKernel, err
 
 	}
-
-	// TODO - Fix This
-	isNonZero := numStrKernel.GetIsNonZeroValue()
 
 	numStrKernel.RationalizeFractionalIntegerDigits()
 
