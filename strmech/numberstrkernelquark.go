@@ -1816,6 +1816,7 @@ func (numStrKernelQuark *numberStrKernelQuark) parsePureNumStr(
 
 	}
 
+	// TODO - Fix This
 	isNonZero := numStrKernel.GetIsNonZeroValue()
 
 	numStrKernel.RationalizeFractionalIntegerDigits()
@@ -1824,6 +1825,13 @@ func (numStrKernelQuark *numberStrKernelQuark) parsePureNumStr(
 
 		err = numStrKernel.SetNumberSign(
 			NumSignVal.Negative(),
+			ePrefix.XCpy("numStrKernel"))
+	}
+
+	if isNonZero && !foundMinusSign {
+
+		err = numStrKernel.SetNumberSign(
+			NumSignVal.Positive(),
 			ePrefix.XCpy("numStrKernel"))
 	}
 

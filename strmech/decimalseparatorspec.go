@@ -1674,7 +1674,7 @@ func (decSeparatorSpec *DecimalSeparatorSpec) NewUS(
 	}
 
 	err = newDecimalSeparator.decimalSeparatorChars.SetRuneArray(
-		[]rune{','},
+		[]rune{'.'},
 		ePrefix.XCpy(
 			"decSeparatorSpec<-decSepRunes"))
 

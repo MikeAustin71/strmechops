@@ -14,10 +14,256 @@ type MainTest02 struct {
 	input string
 }
 
+func (MainTest02) NumberStrKernelCompare01() {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"NumberStrKernelCompare01()",
+		"")
+
+	breakStr := strings.Repeat("=", 50)
+
+	fmt.Printf("\n\n" + breakStr + "\n")
+
+	fmt.Printf("\n Starting Run!\n"+
+		"Function: %v\n",
+		ePrefix.String())
+
+	fmt.Printf("\n" + breakStr + "\n")
+
+	origIntStr := "1234"
+	origFracStr := "5678"
+
+	var err error
+	var baseValue strmech.NumberStrKernel
+	var intDigitsDto, fracDigitsDto strmech.RuneArrayDto
+
+	intDigitsDto,
+		err = new(strmech.RuneArrayDto).NewString(
+		origIntStr,
+		strmech.CharSearchType.LinearTargetStartingIndex(),
+		ePrefix.XCpy(
+			"origIntStr"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	fracDigitsDto,
+		err = new(strmech.RuneArrayDto).NewString(
+		origFracStr,
+		strmech.CharSearchType.LinearTargetStartingIndex(),
+		ePrefix.XCpy(
+			"origIntStr"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	baseValue,
+		err = new(strmech.NumberStrKernel).NewFromRuneDto(
+		&intDigitsDto,
+		&fracDigitsDto,
+		strmech.NumSignVal.Positive(),
+		ePrefix.XCpy(
+			"baseValue<-"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var testNStrValue01 strmech.NumberStrKernel
+
+	testValueIntDigits := "5234"
+	testValueFracDigits := "5678"
+
+	testValue := testValueIntDigits +
+		"." +
+		testValueFracDigits
+
+	testBigFloat := big.NewFloat(0.0)
+
+	_,
+		_,
+		err = testBigFloat.Parse(testValue, 10)
+
+	if err != nil {
+		fmt.Printf("\n%v\n"+
+			"Error return from testBigFloat.Parse(testValue,10)\n"+
+			"testValue = '%v'\n",
+			ePrefix.String(),
+			testValue)
+
+		return
+	}
+
+	minPrecision := testBigFloat.MinPrec()
+
+	testBigFloat.SetPrec(minPrecision)
+
+	testNStrValue01,
+		err = new(strmech.NumberStrKernel).NewFromFloatValue(
+		testBigFloat,
+		ePrefix.XCpy(
+			"testNStrValue01<-testBigFloat"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	actualIntStr := testNStrValue01.GetIntegerString()
+
+	if actualIntStr != testValueIntDigits {
+		fmt.Printf("\n%v\n"+
+			"Test#5\n"+
+			"Error: actualIntStr != testValueIntDigits\n"+
+			"actualIntStr         = '%v'\n"+
+			"testValueIntDigits   = '%v'\n",
+			ePrefix.String(),
+			actualIntStr,
+			testValueIntDigits)
+
+		return
+	}
+
+	actualFracStr := testNStrValue01.GetFractionalString()
+
+	if actualFracStr != testValueFracDigits {
+
+		fmt.Printf("\n%v\n"+
+			"Test#6\n"+
+			"Error: actualFracStr != testValueFracDigits\n"+
+			"actualFracStr         = '%v'\n"+
+			"testValueFracDigits   = '%v'\n",
+			ePrefix.String(),
+			actualFracStr,
+			testValueFracDigits)
+
+		return
+	}
+
+	var comparisonResult int
+
+	comparisonResult,
+		err = baseValue.Compare(
+		&testNStrValue01,
+		ePrefix.XCpy(
+			"<-testNStrValue01"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if comparisonResult != -1 {
+		fmt.Printf("\n%v\n"+
+			"Test#7\n"+
+			"Error: Expected a comparisonResult of -1.\n"+
+			"Instead, comparisonResult = '%v'\n",
+			ePrefix.String(),
+			comparisonResult)
+
+		return
+	}
+
+	var testNStrValue02 strmech.NumberStrKernel
+
+	testValueIntDigits = "-234"
+	testValueFracDigits = "5678"
+
+	testValue = testValueIntDigits +
+		"." +
+		testValueFracDigits
+
+	testNStrValue02,
+		err = new(strmech.NumberStrKernel).NewParsePureNumberStr(
+		testValue,
+		".",
+		true,
+		ePrefix.XCpy(
+			"testNStrValue02<-testValue"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	actualIntStr = testNStrValue02.GetIntegerString()
+
+	if actualIntStr != testValueIntDigits {
+		fmt.Printf("\n%v\n"+
+			"Test#8\n"+
+			"Error: actualIntStr != testValueIntDigits\n"+
+			"actualIntStr         = '%v'\n"+
+			"testValueIntDigits   = '%v'\n",
+			ePrefix.String(),
+			actualIntStr,
+			testValueIntDigits)
+
+		return
+	}
+
+	actualFracStr = testNStrValue02.GetFractionalString()
+
+	if actualFracStr != testValueFracDigits {
+
+		fmt.Printf("\n%v\n"+
+			"Test#9\n"+
+			"Error: actualFracStr != testValueFracDigits\n"+
+			"actualFracStr         = '%v'\n"+
+			"testValueFracDigits   = '%v'\n",
+			ePrefix.String(),
+			actualFracStr,
+			testValueFracDigits)
+
+		return
+	}
+
+	comparisonResult,
+		err = baseValue.Compare(
+		&testNStrValue01,
+		ePrefix.XCpy(
+			"<-testNStrValue01"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if comparisonResult != 1 {
+		fmt.Printf("\n%v\n"+
+			"Test#10\n"+
+			"Error: Expected a comparisonResult of +1.\n"+
+			"Instead, comparisonResult = '%v'\n",
+			ePrefix.String(),
+			comparisonResult)
+	}
+
+	fmt.Printf("\n\n" + breakStr + "\n")
+
+	fmt.Printf("\n Successful Completion!\n"+
+		"Function: %v\n",
+		ePrefix.String())
+
+	fmt.Printf("\n" + breakStr + "\n")
+
+	return
+}
+
 func (MainTest02) NumberStrKernelPureNumStr01() {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestNumberStrKernel_GetScientificNotation_000100()",
+		"NumberStrKernelPureNumStr01()",
 		"")
 
 	breakStr := strings.Repeat("=", 50)

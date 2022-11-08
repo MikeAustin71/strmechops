@@ -1065,7 +1065,6 @@ func (numStrKernelMolecule *numberStrKernelMolecule) convertNumberToKernel(
 	var decSeparatorSpec DecimalSeparatorSpec
 
 	decSeparatorSpec,
-
 		err = new(DecimalSeparatorSpec).NewUS(
 		ePrefix.XCpy(
 			"decSeparatorSpec<-"))
