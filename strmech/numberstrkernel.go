@@ -284,6 +284,111 @@ func (numStrKernel *NumberStrKernel) AddIntegerDigit(
 		ePrefix)
 }
 
+//	Compare
+//
+//	Receives a pointer to an external instance of
+//	NumberStrKernel ('incomingNumStrKernel') and
+//	proceeds to compare the numeric value with that
+//	of the current NumberStrKernel instance.
+//
+//	The numeric value of the current NumberStrKernel
+//	instance is compared to that of
+//	'incomingNumStrKernel'. The comparison results are
+//	returned as one of three integer values:
+//
+//		-1	= Current Instance numeric value is less
+//				than 'incomingNumStrKernel'
+//
+//		 0	= Current Instance numeric value equal to
+//		 		'incomingNumStrKernel'
+//
+//		+1	= Current Instance numeric value is greater
+//				than 'incomingNumStrKernel'
+//
+// ----------------------------------------------------------------
+//
+//	# Input Parameters
+//
+//	incomingNumStrKernel		*NumberStrKernel
+//
+//		The numeric value of 'incomingNumStrKernel' will
+//		be compared to that of the current
+//		NumberStrKernel instance. The comparison results
+//		will be returned as an integer value.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	comparisonValue				int
+//
+//		This parameter will return the results of numeric
+//		value comparison for the current NumberStrKernel
+//		instance versus the input parameters,
+//		'incomingNumStrKernel'. The returned integer
+//		comparison result will be set to one of three
+//		values:
+//
+//		-1	= Current Instance numeric value is less
+//				than 'incomingNumStrKernel'
+//
+//		 0	= Current Instance numeric value equal to
+//		 		'incomingNumStrKernel'
+//
+//		+1	= Current Instance numeric value is greater
+//				than 'incomingNumStrKernel'
+//
+//	err							error
+//
+//		If this method completes successfully, this
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (numStrKernel *NumberStrKernel) Compare(
+	incomingNumStrKernel *NumberStrKernel,
+	errorPrefix interface{}) (
+	comparisonValue int,
+	err error) {
+
+	if numStrKernel.lock == nil {
+		numStrKernel.lock = new(sync.Mutex)
+	}
+
+	numStrKernel.lock.Lock()
+
+	defer numStrKernel.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumberStrKernel."+
+			"Compare()",
+		"")
+
+	if err != nil {
+		return comparisonValue, err
+	}
+
+	comparisonValue,
+		err = new(numberStrKernelMechanics).
+		compareNumStrKernels(
+			numStrKernel,
+			incomingNumStrKernel,
+			ePrefix.XCpy(
+				"numStrKernel vs "+
+					"incomingNumStrKernel"))
+
+	return comparisonValue, err
+}
+
 // CopyIn
 //
 //	Copies the data fields from an incoming instance of

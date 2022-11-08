@@ -20,7 +20,7 @@ type numberStrKernelMechanics struct {
 //
 //	The numeric value of 'numStrKernel01' is compared to
 //	that of 'numStrKernel01'. The comparison results are
-//	returned as one of three integer value:
+//	returned as one of three integer values:
 //
 //		-1	= numStrKernel01 is less than numStrKernel02
 //		 0	= numStrKernel01 is equal to numStrKernel02
@@ -160,63 +160,160 @@ func (numStrKernelMech *numberStrKernelMechanics) compareNumStrKernels(
 		return comparisonValue, err
 	}
 
+	if !numStrStats01.NumberSign.XIsValid() {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: numStrStats01.NumberSign is Invalid!\n"+
+			"numStrStats01.NumberSign integer value ='%v'\n"+
+			"numStrStats01.NumberSign string value  ='%v'\n",
+			ePrefix.String(),
+			numStrStats01.NumberSign.XValueInt(),
+			numStrStats01.NumberSign.String())
+
+		return comparisonValue, err
+
+	}
+
+	if !numStrStats02.NumberSign.XIsValid() {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: numStrStats02.NumberSign is Invalid!\n"+
+			"numStrStats02.NumberSign integer value ='%v'\n"+
+			"numStrStats02.NumberSign string value  ='%v'\n",
+			ePrefix.String(),
+			numStrStats02.NumberSign.XValueInt(),
+			numStrStats02.NumberSign.String())
+
+		return comparisonValue, err
+	}
+
+	// Are both values zero?
+	if numStrStats01.IsZeroValue &&
+		numStrStats02.IsZeroValue {
+
+		comparisonValue = 0
+
+		return comparisonValue, err
+
+	}
+
 	if numStrStats01.NumberSign ==
 		numStrStats02.NumberSign {
+		// MUST BE Equal Number Signs
 
-		if numStrStats01.NumberSign == 0 {
+		if numStrStats01.NumberSign == NumSignVal.Zero() {
 
 			comparisonValue = 0
 
 			return comparisonValue, err
 
-		} else if numStrStats01.NumberSign ==
-			NumSignVal.Positive() {
-
-			if numStrStats01.NumOfSignificantIntegerDigits >
-				numStrStats02.NumOfSignificantIntegerDigits {
-
-				comparisonValue = 1
-
-				return comparisonValue, err
-			}
-
-			if numStrStats01.NumOfSignificantIntegerDigits <
-				numStrStats02.NumOfSignificantIntegerDigits {
-
-				comparisonValue = -1
-
-				return comparisonValue, err
-			}
-
 		} else {
-			// MUST BE
-			// numStrStats01.NumberSign == NumSignVal.Negative()
+			// MUST BE -
+			//	Number Sign is NumSignVal.Positive() OR
+			//	NumSignVal.Negative() AND the Number Signs
+			//	are equal.
 
 			if numStrStats01.NumOfSignificantIntegerDigits >
 				numStrStats02.NumOfSignificantIntegerDigits {
 
-				comparisonValue = -1
+				if numStrStats01.NumberSign == NumSignVal.Positive() {
+
+					comparisonValue = 1
+
+				} else {
+					// MUST BE
+					// numStrStats01.NumberSign == NumSignVal.Negative()
+
+					comparisonValue = -1
+				}
 
 				return comparisonValue, err
-			}
 
-			if numStrStats01.NumOfSignificantIntegerDigits <
+			} else if numStrStats01.NumOfSignificantIntegerDigits <
 				numStrStats02.NumOfSignificantIntegerDigits {
 
-				comparisonValue = 1
+				if numStrStats01.NumberSign == NumSignVal.Positive() {
+
+					comparisonValue = -1
+
+				} else {
+					// MUST BE
+					// numStrStats01.NumberSign == NumSignVal.Negative()
+
+					comparisonValue = 1
+				}
+
+				return comparisonValue, err
+
+			} else {
+				// MUST BE EQUAL Number Signs And EQUAL
+				//		Significant Integer Digits
+				// numStrStats01.NumOfSignificantIntegerDigits ==
+				// 		numStrStats02.NumOfSignificantIntegerDigits
+
+				if numStrStats01.NumOfIntegerDigits ==
+					numStrStats02.NumOfIntegerDigits &&
+					numStrStats01.NumOfFractionalDigits ==
+						numStrStats02.NumOfFractionalDigits {
+					// Int and Frac arrays have equal lengths
+
+					comparisonValue,
+						err = new(numberStrKernelQuark).
+						compareNumStrKernelValues(
+							numStrKernel01,
+							numStrKernel02,
+							ePrefix.XCpy(
+								"numStrKernel01 vs "+
+									"numStrKernel02"))
+
+					return comparisonValue, err
+				}
+
+				// Int and Frac arrays have unequal lengths
+
+				comparisonValue,
+					err = new(numberStrKernelAtom).
+					prepareCompareNumStrKernels(
+						numStrKernel01,
+						numStrKernel02,
+						ePrefix.XCpy(
+							"numStrKernel01 vs "+
+								"numStrKernel02"))
 
 				return comparisonValue, err
 			}
 
 		}
 
-	}
+	} // End Of
+	// if numStrStats01.NumberSign == numStrStats02.NumberSign
 
 	// Number Signs Are NOT Equal
+	//	Each sign is either Positive, Negative or Zero.
+	if numStrStats01.NumberSign == NumSignVal.Positive() {
 
-	// TODO - Get some sleep and finish this!
+		comparisonValue = 1
+
+	} else if numStrStats01.NumberSign == NumSignVal.Negative() {
+
+		comparisonValue = -1
+
+	} else if numStrStats01.NumberSign == NumSignVal.Zero() {
+
+		if numStrStats02.NumberSign == NumSignVal.Positive() {
+
+			comparisonValue = -1
+
+		} else {
+			// MUST BE
+			//	numStrStats02.NumberSign == NumSignVal.Negative()
+
+			comparisonValue = 1
+
+		}
+	}
+
 	return comparisonValue, err
-
 }
 
 //	convertToSciNotation

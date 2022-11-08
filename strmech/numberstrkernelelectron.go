@@ -134,6 +134,237 @@ func (numStrKernelElectron *numberStrKernelElectron) equal(
 	return true
 }
 
+//	equalizeNumStrDigitsLengths
+//
+//	Receives pointers to two instances of NumberStrKernel,
+//	'numStrKernel01' and 'numStrKernel02'. This method
+//	will ensure that both the integer digit arrays and
+//	fractional digit arrays contained in both instances
+//	have equal array lengths.
+//
+//	If the integer arrays do not have equal array
+//	lengths, leading zero characters ('0') will be added
+//	to configure their array lengths as equal.
+//
+//	If the fractional arrays do not have equal array
+//	lengths, trailing zero characters ('0') will be added
+//	to configure their array lengths as equal.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method may modify the internal integer digit and
+//	fractional digit rune arrays contained within input
+//	parameters 'numStrKernel01' and 'numStrKernel02'.
+//
+// ----------------------------------------------------------------
+//
+//	# Input Parameters
+//
+//	numStrKernel01				*NumberStrKernel
+//
+//		A pointer to an instance of NumberStrKernel. The
+//		internal integer and fractional array lengths for
+//		this instance will be compared to those of input
+//		parameter, 'numStrKernel02'.
+//
+//		If the 'numStrKernel01' integer digit array has a
+//		shorter array length, leading zero characters
+//		('0') will be added to the 'numStrKernel01'
+//		integer array to achieve array length
+//		equivalency.
+//
+//		If the 'numStrKernel01' fractional digit array
+//		has a shorter array length, trailing zero
+//		characters ('0') will be added to the
+//		'numStrKernel01' fractional array to achieve
+//		array length equivalency.
+//
+//
+//	numStrKernel02				*NumberStrKernel
+//
+//		A pointer to an instance of NumberStrKernel. The
+//		internal integer and fractional array lengths for
+//		this instance will be compared to those of input
+//		parameter, 'numStrKernel01'.
+//
+//		If the 'numStrKernel02' integer digit array has a
+//		shorter array length, leading zero characters
+//		('0') will be added to the 'numStrKernel02'
+//		integer array to achieve array length
+//		equivalency.
+//
+//		If the 'numStrKernel02' fractional digit array
+//		has a shorter array length, trailing zero
+//		characters ('0') will be added to the
+//		'numStrKernel02' fractional array to achieve
+//		array length equivalency.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	err							error
+//
+//		If this method completes successfully, this
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (numStrKernelElectron *numberStrKernelElectron) equalizeNumStrDigitsLengths(
+	numStrKernel01 *NumberStrKernel,
+	numStrKernel02 *NumberStrKernel,
+	errPrefDto *ePref.ErrPrefixDto) (
+	err error) {
+
+	if numStrKernelElectron.lock == nil {
+		numStrKernelElectron.lock = new(sync.Mutex)
+	}
+
+	numStrKernelElectron.lock.Lock()
+
+	defer numStrKernelElectron.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"numberStrKernelElectron."+
+			"equalizeNumStrDigitsLengths()",
+		"")
+
+	if err != nil {
+
+		return err
+	}
+
+	if numStrKernel01 == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'numStrKernel01' is a nil pointer!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if numStrKernel02 == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'numStrKernel02' is a nil pointer!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	lenArray01 :=
+		len(numStrKernel01.integerDigits.CharsArray)
+
+	lenArray02 :=
+		len(numStrKernel02.integerDigits.CharsArray)
+
+	numStrKernelQuark := numberStrKernelQuark{}
+
+	if lenArray01 != lenArray02 {
+
+		err = numStrKernelQuark.
+			equalizeNStrIntDigitsLengths(
+				numStrKernel01,
+				numStrKernel02,
+				ePrefix.XCpy(
+					"numStrKernel01 - numStrKernel02"))
+
+		if err != nil {
+
+			return err
+		}
+
+		lenArray01 =
+			len(numStrKernel01.integerDigits.CharsArray)
+
+		lenArray02 =
+			len(numStrKernel02.integerDigits.CharsArray)
+
+		if lenArray01 != lenArray02 {
+
+			err = fmt.Errorf("%v\n"+
+				"SYSTEM ERROR: Integer Digit Array Lengths\n"+
+				"ARE NOT EQUAL!\n"+
+				"lenIntDigitArray01 = '%v'\n"+
+				"lenIntDigitArray02 = '%v'\n",
+				ePrefix.String(),
+				lenArray01,
+				lenArray02)
+
+			return err
+		}
+	}
+
+	lenArray01 =
+		len(numStrKernel01.fractionalDigits.CharsArray)
+
+	lenArray02 =
+		len(numStrKernel02.fractionalDigits.CharsArray)
+
+	if lenArray01 != lenArray02 {
+
+		err = numStrKernelQuark.
+			equalizeNStrFracDigitsLengths(
+				numStrKernel01,
+				numStrKernel02,
+				ePrefix.XCpy(
+					"numStrKernel01 - numStrKernel02"))
+
+		if err != nil {
+
+			return err
+		}
+
+		lenArray01 =
+			len(numStrKernel01.fractionalDigits.CharsArray)
+
+		lenArray02 =
+			len(numStrKernel02.fractionalDigits.CharsArray)
+
+		if lenArray01 != lenArray02 {
+
+			err = fmt.Errorf("%v\n"+
+				"SYSTEM ERROR: Fractional Digit Array Lengths\n"+
+				"ARE NOT EQUAL!\n"+
+				"lenFracDigitArray01 = '%v'\n"+
+				"lenFracDigitArray02 = '%v'\n",
+				ePrefix.String(),
+				lenArray01,
+				lenArray02)
+
+			return err
+		}
+	}
+
+	return err
+}
+
 //	getSetIsNonZeroValue
 //
 //	Receives a pointer to an instance of

@@ -13,6 +13,260 @@ type numberStrKernelAtom struct {
 	lock *sync.Mutex
 }
 
+//	addFractionalDigit
+//
+//	Appends a single numeric digit to the end of the internal
+//	fractional digits rune array.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	numStrKernel				*NumberStrKernel
+//
+//		A pointer to an instance of NumberStrKernel. This
+//		instance contains the fractional digit rune array
+//		to which the 'fractionalDigit' rune will be appended.
+//
+//	fractionalDigit				rune
+//
+//		A rune with a numeric character between '0' (zero)
+//		and '9' (nine) inclusive. This numeric digit will
+//		be appended to the end of the internal member
+//		variable 'NumberStrKernel.fractionalDigits'
+//		contained within the NumberStrKernel input
+//		parameter, 'numStrKernel'.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error messages.
+//		Usually, it contains the name of the calling method
+//		or methods listed as a function chain.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ------------------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, this returned
+//		error Type is set equal to 'nil'. If errors are
+//		encountered during processing, the returned error
+//		Type will encapsulate an error message.
+//
+//		If an error message is returned, the text value for
+//		input parameter 'errPrefDto' (error prefix) will be
+//		prefixed or attached at the beginning of the error
+//		message.
+func (numStrKernelAtom *numberStrKernelAtom) addFractionalDigit(
+	numStrKernel *NumberStrKernel,
+	fractionalDigit rune,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if numStrKernelAtom.lock == nil {
+		numStrKernelAtom.lock = new(sync.Mutex)
+	}
+
+	numStrKernelAtom.lock.Lock()
+
+	defer numStrKernelAtom.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"negNumSearchSpecAtom."+
+			"addFractionalDigit()",
+		"")
+
+	if err != nil {
+
+		return err
+	}
+
+	if numStrKernel == nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'numStrKernel' is a nil pointer!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if fractionalDigit < '0' ||
+		fractionalDigit > '9' {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'fractionalDigit' is invalid!\n"+
+			"Fractional Rune characters must represent a numberic character between\n"+
+			"'0' and '9', inclusive. 'fractionalDigit' fails to meet this criterion.\n"+
+			"The rune value of 'fractionalDigit' is %v\n"+
+			"The string value of 'fractionalDigit' is %v\n",
+			ePrefix.String(),
+			fractionalDigit,
+			string(fractionalDigit))
+
+		return err
+	}
+
+	err = numStrKernel.fractionalDigits.AddChar(
+		fractionalDigit,
+		true,
+		ePrefix.XCpy(
+			"numStrKernel.fractionalDigits<-"))
+
+	if err != nil {
+		return err
+	}
+
+	if numStrKernel.numberValueType !=
+		NumValType.FloatingPoint() {
+
+		numStrKernel.numberValueType =
+			NumValType.FloatingPoint()
+	}
+
+	if fractionalDigit != '0' {
+		numStrKernel.isNonZeroValue = true
+	}
+
+	return err
+}
+
+// addIntegerDigit - Adds a single numeric digit to the internal
+// integer digits rune array.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	numStrKernel				*NumberStrKernel
+//
+//		A pointer to an instance of NumberStrKernel. This
+//		instance contains the integer digit rune array to
+//		which the 'integerDigit' rune will be appended.
+//
+//	integerDigit            rune
+//
+//		A rune with a numeric character between '0' (zero) and
+//		'9' (nine) inclusive. This numeric digit will be
+//		appended to the internal member variable
+//		'NumberStrKernel.integerDigits' for NumberStrKernel
+//		input parameter 'numStrKernel'.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error messages.
+//		Usually, it contains the name of the calling method
+//		or methods listed as a function chain.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ------------------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, this returned
+//		error Type is set equal to 'nil'. If errors are
+//		encountered during processing, the returned error
+//		Type will encapsulate an error message.
+//
+//		If an error message is returned, the text value for
+//		input parameter 'errPrefDto' (error prefix) will be
+//		prefixed or attached at the beginning of the error
+//		message.
+func (numStrKernelAtom *numberStrKernelAtom) addIntegerDigit(
+	numStrKernel *NumberStrKernel,
+	integerDigit rune,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if numStrKernelAtom.lock == nil {
+		numStrKernelAtom.lock = new(sync.Mutex)
+	}
+
+	numStrKernelAtom.lock.Lock()
+
+	defer numStrKernelAtom.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"negNumSearchSpecAtom."+
+			"addIntegerDigit()",
+		"")
+
+	if err != nil {
+
+		return err
+	}
+
+	if numStrKernel == nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'numStrKernel' is a nil pointer!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if integerDigit < '0' ||
+		integerDigit > '9' {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'integerDigit' is invalid!\n"+
+			"Integer Runes must represent a numberic character between\n"+
+			"'0' and '9', inclusive. 'integerDigit' fails to meet this criterion.\n"+
+			"The rune value of 'integerDigit' is %v\n"+
+			"The string value of 'integerDigit' is %v\n",
+			ePrefix.String(),
+			integerDigit,
+			string(integerDigit))
+
+		return err
+	}
+
+	err = numStrKernel.integerDigits.AddChar(
+		integerDigit,
+		true,
+		ePrefix.XCpy(
+			"numStrKernel.integerDigits<-"))
+
+	if err != nil {
+		return err
+	}
+
+	if numStrKernel.numberValueType !=
+		NumValType.FloatingPoint() {
+
+		numStrKernel.numberValueType =
+			NumValType.Integer()
+	}
+
+	if integerDigit != '0' {
+		numStrKernel.isNonZeroValue = true
+	}
+
+	return err
+}
+
 //	calcNumStrKernelStats
 //
 //	Receives a pointer to an instance of NumberStrKernel
@@ -1175,260 +1429,6 @@ func (numStrKernelAtom *numberStrKernelAtom) convertKernelToBigInt(
 	return bigIntValue, err
 }
 
-//	addFractionalDigit
-//
-//	Appends a single numeric digit to the end of the internal
-//	fractional digits rune array.
-//
-// ----------------------------------------------------------------
-//
-// # Input Parameters
-//
-//	numStrKernel				*NumberStrKernel
-//
-//		A pointer to an instance of NumberStrKernel. This
-//		instance contains the fractional digit rune array
-//		to which the 'fractionalDigit' rune will be appended.
-//
-//	fractionalDigit				rune
-//
-//		A rune with a numeric character between '0' (zero)
-//		and '9' (nine) inclusive. This numeric digit will
-//		be appended to the end of the internal member
-//		variable 'NumberStrKernel.fractionalDigits'
-//		contained within the NumberStrKernel input
-//		parameter, 'numStrKernel'.
-//
-//	errPrefDto					*ePref.ErrPrefixDto
-//
-//		This object encapsulates an error prefix string
-//		which is included in all returned error messages.
-//		Usually, it contains the name of the calling method
-//		or methods listed as a function chain.
-//
-//		If no error prefix information is needed, set this
-//		parameter to 'nil'.
-//
-//		Type ErrPrefixDto is included in the 'errpref'
-//		software package:
-//			"github.com/MikeAustin71/errpref".
-//
-// ------------------------------------------------------------------------
-//
-// # Return Values
-//
-//	error
-//
-//		If this method completes successfully, this returned
-//		error Type is set equal to 'nil'. If errors are
-//		encountered during processing, the returned error
-//		Type will encapsulate an error message.
-//
-//		If an error message is returned, the text value for
-//		input parameter 'errPrefDto' (error prefix) will be
-//		prefixed or attached at the beginning of the error
-//		message.
-func (numStrKernelAtom *numberStrKernelAtom) addFractionalDigit(
-	numStrKernel *NumberStrKernel,
-	fractionalDigit rune,
-	errPrefDto *ePref.ErrPrefixDto) error {
-
-	if numStrKernelAtom.lock == nil {
-		numStrKernelAtom.lock = new(sync.Mutex)
-	}
-
-	numStrKernelAtom.lock.Lock()
-
-	defer numStrKernelAtom.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-	var err error
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
-		errPrefDto,
-		"negNumSearchSpecAtom."+
-			"addFractionalDigit()",
-		"")
-
-	if err != nil {
-
-		return err
-	}
-
-	if numStrKernel == nil {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'numStrKernel' is a nil pointer!\n",
-			ePrefix.String())
-
-		return err
-	}
-
-	if fractionalDigit < '0' ||
-		fractionalDigit > '9' {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'fractionalDigit' is invalid!\n"+
-			"Fractional Rune characters must represent a numberic character between\n"+
-			"'0' and '9', inclusive. 'fractionalDigit' fails to meet this criterion.\n"+
-			"The rune value of 'fractionalDigit' is %v\n"+
-			"The string value of 'fractionalDigit' is %v\n",
-			ePrefix.String(),
-			fractionalDigit,
-			string(fractionalDigit))
-
-		return err
-	}
-
-	err = numStrKernel.fractionalDigits.AddChar(
-		fractionalDigit,
-		true,
-		ePrefix.XCpy(
-			"numStrKernel.fractionalDigits<-"))
-
-	if err != nil {
-		return err
-	}
-
-	if numStrKernel.numberValueType !=
-		NumValType.FloatingPoint() {
-
-		numStrKernel.numberValueType =
-			NumValType.FloatingPoint()
-	}
-
-	if fractionalDigit != '0' {
-		numStrKernel.isNonZeroValue = true
-	}
-
-	return err
-}
-
-// addIntegerDigit - Adds a single numeric digit to the internal
-// integer digits rune array.
-//
-// ----------------------------------------------------------------
-//
-// # Input Parameters
-//
-//	numStrKernel				*NumberStrKernel
-//
-//		A pointer to an instance of NumberStrKernel. This
-//		instance contains the integer digit rune array to
-//		which the 'integerDigit' rune will be appended.
-//
-//	integerDigit            rune
-//
-//		A rune with a numeric character between '0' (zero) and
-//		'9' (nine) inclusive. This numeric digit will be
-//		appended to the internal member variable
-//		'NumberStrKernel.integerDigits' for NumberStrKernel
-//		input parameter 'numStrKernel'.
-//
-//	errPrefDto					*ePref.ErrPrefixDto
-//
-//		This object encapsulates an error prefix string
-//		which is included in all returned error messages.
-//		Usually, it contains the name of the calling method
-//		or methods listed as a function chain.
-//
-//		If no error prefix information is needed, set this
-//		parameter to 'nil'.
-//
-//		Type ErrPrefixDto is included in the 'errpref'
-//		software package:
-//			"github.com/MikeAustin71/errpref".
-//
-// ------------------------------------------------------------------------
-//
-// # Return Values
-//
-//	error
-//
-//		If this method completes successfully, this returned
-//		error Type is set equal to 'nil'. If errors are
-//		encountered during processing, the returned error
-//		Type will encapsulate an error message.
-//
-//		If an error message is returned, the text value for
-//		input parameter 'errPrefDto' (error prefix) will be
-//		prefixed or attached at the beginning of the error
-//		message.
-func (numStrKernelAtom *numberStrKernelAtom) addIntegerDigit(
-	numStrKernel *NumberStrKernel,
-	integerDigit rune,
-	errPrefDto *ePref.ErrPrefixDto) error {
-
-	if numStrKernelAtom.lock == nil {
-		numStrKernelAtom.lock = new(sync.Mutex)
-	}
-
-	numStrKernelAtom.lock.Lock()
-
-	defer numStrKernelAtom.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-	var err error
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
-		errPrefDto,
-		"negNumSearchSpecAtom."+
-			"addIntegerDigit()",
-		"")
-
-	if err != nil {
-
-		return err
-	}
-
-	if numStrKernel == nil {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'numStrKernel' is a nil pointer!\n",
-			ePrefix.String())
-
-		return err
-	}
-
-	if integerDigit < '0' ||
-		integerDigit > '9' {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'integerDigit' is invalid!\n"+
-			"Integer Runes must represent a numberic character between\n"+
-			"'0' and '9', inclusive. 'integerDigit' fails to meet this criterion.\n"+
-			"The rune value of 'integerDigit' is %v\n"+
-			"The string value of 'integerDigit' is %v\n",
-			ePrefix.String(),
-			integerDigit,
-			string(integerDigit))
-
-		return err
-	}
-
-	err = numStrKernel.integerDigits.AddChar(
-		integerDigit,
-		true,
-		ePrefix.XCpy(
-			"numStrKernel.integerDigits<-"))
-
-	if err != nil {
-		return err
-	}
-
-	if numStrKernel.numberValueType !=
-		NumValType.FloatingPoint() {
-
-		numStrKernel.numberValueType =
-			NumValType.Integer()
-	}
-
-	if integerDigit != '0' {
-		numStrKernel.isNonZeroValue = true
-	}
-
-	return err
-}
-
 //	emptyFractionalDigits
 //
 //	Receives an instance of NumberStrKernel and proceeds
@@ -2004,6 +2004,202 @@ func (numStrKernelAtom *numberStrKernelAtom) formatNumStrComponents(
 	}
 
 	return numStr, err
+}
+
+//	prepareCompareNumStrKernels
+//
+//	This method receives pointers to two instances of
+//	NumberStrKernel, 'numStrKernel01' and
+//	'numStrKernel02'.
+//
+//	These two instances will be revamped to ensure that
+//	their integer digits and fractional digits are of
+//	equal lengths. Next, this method will proceed to
+//	compare the numeric values of 'numStrKernel01' and
+//	'numStrKernel02'. The comparison results will be
+//	returned as one of three integer values:
+//
+//		-1	= numStrKernel01 is less than numStrKernel02
+//		 0	= numStrKernel01 is equal to numStrKernel02
+//		+1	= numStrKernel01 is greater than numStrKernel02
+//
+// ----------------------------------------------------------------
+//
+//	# Input Parameters
+//
+//	numStrKernel01				*NumberStrKernel
+//
+//		The numeric value of numStrKernel01 will be
+//		compared to that of numStrKernel02. The
+//		comparison results will be returned as an integer
+//		value.
+//
+//	numStrKernel02				*NumberStrKernel
+//
+//		The numeric value of numStrKernel01 will be
+//		compared to that of this parameter,
+//		numStrKernel02. The comparison results will be
+//		returned as an integer value.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	comparisonValue				int
+//
+//		This parameter will return the results of numeric
+//		value comparisons for input parameters,
+//		'numStrKernel01' and 'numStrKernel02'. The
+//		integer comparison result will be set to one of
+//		three values:
+//
+//		-1	= numStrKernel01 is less than numStrKernel02
+//		 0	= numStrKernel01 is equal to numStrKernel02
+//		+1	= numStrKernel01 is greater than numStrKernel02
+//
+//	err							error
+//
+//		If this method completes successfully, this
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (numStrKernelAtom *numberStrKernelAtom) prepareCompareNumStrKernels(
+	numStrKernel01 *NumberStrKernel,
+	numStrKernel02 *NumberStrKernel,
+	errPrefDto *ePref.ErrPrefixDto) (
+	comparisonValue int,
+	err error) {
+
+	if numStrKernelAtom.lock == nil {
+		numStrKernelAtom.lock = new(sync.Mutex)
+	}
+
+	numStrKernelAtom.lock.Lock()
+
+	defer numStrKernelAtom.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"numberStrKernelAtom."+
+			"calcNumStrKernelStats()",
+		"")
+
+	if err != nil {
+
+		return comparisonValue, err
+
+	}
+
+	if numStrKernel01 == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'numStrKernel01' is a nil pointer!\n",
+			ePrefix.String())
+
+		return comparisonValue, err
+	}
+
+	if numStrKernel02 == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'numStrKernel02' is a nil pointer!\n",
+			ePrefix.String())
+
+		return comparisonValue, err
+	}
+
+	var numStrKernel01V2, numStrKernel02V2 NumberStrKernel
+
+	numStrKernel01V2,
+		err = numStrKernel01.CopyOut(
+		ePrefix.XCpy(
+			"numStrKernel01V2<-numStrKernel01"))
+
+	if err != nil {
+
+		return comparisonValue, err
+
+	}
+
+	numStrKernel02V2,
+		err = numStrKernel02.CopyOut(
+		ePrefix.XCpy(
+			"numStrKernel02V2<-numStrKernel02"))
+
+	if err != nil {
+
+		return comparisonValue, err
+
+	}
+
+	lenIntDigits01V2 :=
+		len(numStrKernel01V2.integerDigits.CharsArray)
+
+	lenFracDigits01V2 :=
+		len(numStrKernel01V2.fractionalDigits.CharsArray)
+
+	lenIntDigits02V2 :=
+		len(numStrKernel02V2.integerDigits.CharsArray)
+
+	lenFracDigits02V2 :=
+		len(numStrKernel02V2.fractionalDigits.CharsArray)
+
+	numStrKernelElectron := numberStrKernelElectron{}
+
+	if lenIntDigits01V2 != lenIntDigits02V2 ||
+		lenFracDigits01V2 != lenFracDigits02V2 {
+
+		err = numStrKernelElectron.
+			equalizeNumStrDigitsLengths(
+				&numStrKernel01V2,
+				&numStrKernel02V2,
+				ePrefix.XCpy(
+					"numStrKernel01V2 - numStrKernel02V2"))
+
+		if err != nil {
+
+			return comparisonValue, err
+
+		}
+	}
+
+	// Integer Digits and Fractional Digits are NOW
+	// equivalent between:
+	//    numStrKernel01V2 and numStrKernel02V2
+
+	comparisonValue,
+		err = new(numberStrKernelQuark).
+		compareNumStrKernelValues(
+			&numStrKernel01V2,
+			&numStrKernel02V2,
+			ePrefix.XCpy(
+				"numStrKernel01V2 & numStrKernel02V2"))
+
+	return comparisonValue, err
 }
 
 // testValidityOfNumStrKernel - Receives a pointer to an instance

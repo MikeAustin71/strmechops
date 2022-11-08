@@ -12,72 +12,100 @@ type numberStrKernelQuark struct {
 	lock *sync.Mutex
 }
 
-//	getSetNumValueType
+//	compareNumStrKernelValues
 //
-//	Sets and returns the current NumericValueType for the
-//	instance of NumberStrKernel passed as an input
-//	parameter.
+//	This method receives pointers to two instances of
+//	NumberStrKernel, 'numStrKernel01' and
+//	'numStrKernel02'.
+//
+//	The numeric value of 'numStrKernel01' is compared to
+//	that of 'numStrKernel01'. The comparison results are
+//	returned as one of three integer values:
+//
+//		-1	= numStrKernel01 is less than numStrKernel02
+//		 0	= numStrKernel01 is equal to numStrKernel02
+//		+1	= numStrKernel01 is greater than numStrKernel02
 //
 // ----------------------------------------------------------------
 //
-// # Input Parameters
+// # IMPORTANT
 //
-//	numStrKernel				*NumberStrKernel
+//	This method assumes the integer and fractional digit
+//	arrays contained in input parameters 'numStrKernel01'
+//	and 'numStrKernel02' are equal in length.
 //
-//		A pointer to an instance of NumberStrKernel. This
-//		method will examine the internal member variables
-//		contained in this instance and set the correct
-//		value for Numeric Value Type.
+//	If the integer digit array length and fractional
+//	digit array lengths of 'numStrKernel01' are NOT equal
+//	to the corresponding array lengths in
+//	'numStrKernel02', an error will be returned.
 //
-//		NumericValueType is an enumeration value specifying
-//		the type of numeric value contained in the
-//		'numStrKernel' instance.
+// ----------------------------------------------------------------
 //
-//		Possible NumericValueType enumeration values are
-//		listed as follows:
-//			NumValType.None()
-//			NumValType.FloatingPoint()
-//			NumValType.Integer()
+//	# Input Parameters
 //
-//		The internal variable contained in 'numStrKernel'
-//		which will be configured is:
+//	numStrKernel01				*NumberStrKernel
 //
-//			NumberStrKernel.numberValueType
+//		The numeric value of numStrKernel01 will be
+//		compared to that of numStrKernel02. The
+//		comparison results will be returned as an integer
+//		value.
+//
+//	numStrKernel02				*NumberStrKernel
+//
+//		The numeric value of numStrKernel01 will be
+//		compared to that of this parameter,
+//		numStrKernel02. The comparison results will be
+//		returned as an integer value.
 //
 //	errPrefDto					*ePref.ErrPrefixDto
 //
 //		This object encapsulates an error prefix string
-//		which is included in all returned error messages.
-//		Usually, it contains the name of the calling method
-//		or methods listed as a function chain.
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
 //
-//		If no error prefix information is needed, set this
-//		parameter to 'nil'.
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
 //
 //		Type ErrPrefixDto is included in the 'errpref'
 //		software package:
 //			"github.com/MikeAustin71/errpref".
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
 // # Return Values
 //
-//	error
+//	comparisonValue				int
 //
-//		If this method completes successfully, this returned
-//		error Type is set equal to 'nil'. If errors are
-//		encountered during processing, the returned error
-//		Type will encapsulate an error message.
+//		This parameter will return the results of numeric
+//		value comparisons for input parameters,
+//		'numStrKernel01' and 'numStrKernel02'. The
+//		integer comparison result will be set to one of
+//		three values:
 //
-//		If an error message is returned, the text value for
-//		input parameter 'errPrefDto' (error prefix) will be
-//		prefixed or attached at the beginning of the error
+//		-1	= numStrKernel01 is less than numStrKernel02
+//		 0	= numStrKernel01 is equal to numStrKernel02
+//		+1	= numStrKernel01 is greater than numStrKernel02
+//
+//	err							error
+//
+//		If this method completes successfully, this
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
 //		message.
-func (numStrKernelQuark *numberStrKernelQuark) getSetNumValueType(
-	numStrKernel *NumberStrKernel,
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (numStrKernelQuark *numberStrKernelQuark) compareNumStrKernelValues(
+	numStrKernel01 *NumberStrKernel,
+	numStrKernel02 *NumberStrKernel,
 	errPrefDto *ePref.ErrPrefixDto) (
-	NumericValueType,
-	error) {
+	comparisonValue int,
+	err error) {
 
 	if numStrKernelQuark.lock == nil {
 		numStrKernelQuark.lock = new(sync.Mutex)
@@ -88,57 +116,97 @@ func (numStrKernelQuark *numberStrKernelQuark) getSetNumValueType(
 	defer numStrKernelQuark.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
-	var err error
-
-	newNumericValueType := NumValType.None()
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
 		"numberStrKernelQuark."+
-			"getSetNumValueType()",
+			"equalizeNStrFracDigitsLengths()",
 		"")
 
 	if err != nil {
 
-		return newNumericValueType, err
+		return comparisonValue, err
 	}
 
-	if numStrKernel == nil {
+	if numStrKernel01 == nil {
+
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'numStrKernel' is a nil pointer!\n",
+			"ERROR: Input parameter 'numStrKernel01' is a nil pointer!\n",
 			ePrefix.String())
 
-		return newNumericValueType, err
+		return comparisonValue, err
 	}
 
-	lenIntegerDigits :=
-		numStrKernel.integerDigits.GetRuneArrayLength()
+	if numStrKernel02 == nil {
 
-	lenFracDigits :=
-		numStrKernel.fractionalDigits.GetRuneArrayLength()
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'numStrKernel02' is a nil pointer!\n",
+			ePrefix.String())
 
-	if lenIntegerDigits == 0 &&
-		lenFracDigits == 0 {
-
-		newNumericValueType = NumValType.None()
-
-	} else if lenIntegerDigits > 0 &&
-		lenFracDigits == 0 {
-
-		newNumericValueType = NumValType.Integer()
-
-	} else {
-
-		// MUST BE lenFracDigits > 0
-
-		newNumericValueType = NumValType.FloatingPoint()
-
+		return comparisonValue, err
 	}
 
-	numStrKernel.numberValueType = newNumericValueType
+	lenIntDigits01 :=
+		len(numStrKernel01.integerDigits.CharsArray)
 
-	return newNumericValueType, err
+	lenFracDigits01 :=
+		len(numStrKernel01.fractionalDigits.CharsArray)
+
+	lenIntDigits02 :=
+		len(numStrKernel02.integerDigits.CharsArray)
+
+	lenFracDigits02 :=
+		len(numStrKernel02.fractionalDigits.CharsArray)
+
+	if lenIntDigits01 != lenIntDigits02 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: numStrKernel01.integerDigits array length is\n"+
+			"NOT EQUAL to numStrKernel02.integerDigits array length!\n,"+
+			"numStrKernel01.integerDigits array length = '%v'\n"+
+			"numStrKernel02.integerDigits array length = '%v'\n",
+			ePrefix.String(),
+			lenIntDigits01,
+			lenIntDigits02)
+
+		return comparisonValue, err
+	}
+
+	if lenFracDigits01 != lenFracDigits02 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: numStrKernel01.fractionalDigits array length is\n"+
+			"NOT EQUAL to numStrKernel02.fractionalDigits array length!\n,"+
+			"numStrKernel01.fractionalDigits array length = '%v'\n"+
+			"numStrKernel02.fractionalDigits array length = '%v'\n",
+			ePrefix.String(),
+			lenFracDigits01,
+			lenFracDigits02)
+
+		return comparisonValue, err
+	}
+
+	for i := 0; i < lenIntDigits01; i++ {
+
+		if numStrKernel01.integerDigits.CharsArray[i] >
+			numStrKernel02.integerDigits.CharsArray[i] {
+
+			comparisonValue = 1
+			break
+
+		}
+
+		if numStrKernel02.integerDigits.CharsArray[i] >
+			numStrKernel01.integerDigits.CharsArray[i] {
+
+			comparisonValue = -1
+			break
+
+		}
+	}
+
+	return comparisonValue, err
 }
 
 // extractNumRunes
@@ -827,6 +895,491 @@ computeExitStats:
 	return searchResults,
 		numStrKernel,
 		err
+}
+
+//	getSetNumValueType
+//
+//	Sets and returns the current NumericValueType for the
+//	instance of NumberStrKernel passed as an input
+//	parameter.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	numStrKernel				*NumberStrKernel
+//
+//		A pointer to an instance of NumberStrKernel. This
+//		method will examine the internal member variables
+//		contained in this instance and set the correct
+//		value for Numeric Value Type.
+//
+//		NumericValueType is an enumeration value specifying
+//		the type of numeric value contained in the
+//		'numStrKernel' instance.
+//
+//		Possible NumericValueType enumeration values are
+//		listed as follows:
+//			NumValType.None()
+//			NumValType.FloatingPoint()
+//			NumValType.Integer()
+//
+//		The internal variable contained in 'numStrKernel'
+//		which will be configured is:
+//
+//			NumberStrKernel.numberValueType
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error messages.
+//		Usually, it contains the name of the calling method
+//		or methods listed as a function chain.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ------------------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, this returned
+//		error Type is set equal to 'nil'. If errors are
+//		encountered during processing, the returned error
+//		Type will encapsulate an error message.
+//
+//		If an error message is returned, the text value for
+//		input parameter 'errPrefDto' (error prefix) will be
+//		prefixed or attached at the beginning of the error
+//		message.
+func (numStrKernelQuark *numberStrKernelQuark) getSetNumValueType(
+	numStrKernel *NumberStrKernel,
+	errPrefDto *ePref.ErrPrefixDto) (
+	NumericValueType,
+	error) {
+
+	if numStrKernelQuark.lock == nil {
+		numStrKernelQuark.lock = new(sync.Mutex)
+	}
+
+	numStrKernelQuark.lock.Lock()
+
+	defer numStrKernelQuark.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	newNumericValueType := NumValType.None()
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"numberStrKernelQuark."+
+			"getSetNumValueType()",
+		"")
+
+	if err != nil {
+
+		return newNumericValueType, err
+	}
+
+	if numStrKernel == nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'numStrKernel' is a nil pointer!\n",
+			ePrefix.String())
+
+		return newNumericValueType, err
+	}
+
+	lenIntegerDigits :=
+		numStrKernel.integerDigits.GetRuneArrayLength()
+
+	lenFracDigits :=
+		numStrKernel.fractionalDigits.GetRuneArrayLength()
+
+	if lenIntegerDigits == 0 &&
+		lenFracDigits == 0 {
+
+		newNumericValueType = NumValType.None()
+
+	} else if lenIntegerDigits > 0 &&
+		lenFracDigits == 0 {
+
+		newNumericValueType = NumValType.Integer()
+
+	} else {
+
+		// MUST BE lenFracDigits > 0
+
+		newNumericValueType = NumValType.FloatingPoint()
+
+	}
+
+	numStrKernel.numberValueType = newNumericValueType
+
+	return newNumericValueType, err
+}
+
+//	equalizeNStrIntDigitsLengths
+//
+//	Receives pointers to two instances of
+//	NumberStrKernel, 'numStrKernel01' and
+//	'numStrKernel02'. This method will ensure that the
+//	integer arrays contained in both instances have
+//	equal array lengths.
+//
+//	If the integer arrays do not have equal array
+//	lengths, leading zero characters ('0') will be added
+//	to configure their array lengths as equal.
+//
+// ----------------------------------------------------------------
+//
+//	# Input Parameters
+//
+//	numStrKernel01				*NumberStrKernel
+//
+//		A pointer to an instance of NumberStrKernel. The
+//		internal integer array contained in this instance
+//		will be	compared to that of input parameter,
+//		'numStrKernel02'. If the 'numStrKernel01' integer
+//		array length is shorter than that of
+//		'numStrKernel02', leading zero characters ('0')
+//		will be added to achieve an equal integer array
+//		length with the integer array contained in
+//		'numStrKernel02'.
+//
+//	numStrKernel02				*NumberStrKernel
+//
+//		A pointer to an instance of NumberStrKernel. The
+//		internal integer array contained in this instance
+//		will be	compared to that of input parameter,
+//		'numStrKernel01'. If the 'numStrKernel02' integer
+//		array length is shorter than that of
+//		'numStrKernel01', leading zero characters ('0')
+//		will be added to achieve an equal integer array
+//		length with the integer array contained in
+//		'numStrKernel01'.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	err							error
+//
+//		If this method completes successfully, this
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (numStrKernelQuark *numberStrKernelQuark) equalizeNStrIntDigitsLengths(
+	numStrKernel01 *NumberStrKernel,
+	numStrKernel02 *NumberStrKernel,
+	errPrefDto *ePref.ErrPrefixDto) (
+	err error) {
+
+	if numStrKernelQuark.lock == nil {
+		numStrKernelQuark.lock = new(sync.Mutex)
+	}
+
+	numStrKernelQuark.lock.Lock()
+
+	defer numStrKernelQuark.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"numberStrKernelQuark."+
+			"equalizeNStrIntDigitsLengths()",
+		"")
+
+	if err != nil {
+
+		return err
+	}
+
+	if numStrKernel01 == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'numStrKernel01' is a nil pointer!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if numStrKernel02 == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'numStrKernel02' is a nil pointer!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	lenIntArray01 :=
+		len(numStrKernel01.integerDigits.CharsArray)
+
+	lenIntArray02 :=
+		len(numStrKernel02.integerDigits.CharsArray)
+
+	if lenIntArray01 == lenIntArray02 {
+
+		// Nothing to do
+		return err
+	}
+
+	// Integer Array Lengths Are NOT Equal
+
+	var numOfCharsToAdd int
+
+	if lenIntArray01 > lenIntArray02 {
+
+		numOfCharsToAdd =
+			lenIntArray01 - lenIntArray02
+
+		err =
+			numStrKernel02.integerDigits.ExtendRuneArray(
+				'0',
+				numOfCharsToAdd,
+				false,
+				ePrefix.XCpy(
+					"numStrKernel02.integerDigits"))
+
+		if err != nil {
+
+			return err
+
+		}
+
+	} else {
+		// MUST BE
+		// lenIntArray02 > lenIntArray01
+
+		numOfCharsToAdd =
+			lenIntArray02 - lenIntArray01
+
+		err =
+			numStrKernel01.integerDigits.ExtendRuneArray(
+				'0',
+				numOfCharsToAdd,
+				false,
+				ePrefix.XCpy(
+					"numStrKernel01.integerDigits"))
+
+		if err != nil {
+
+			return err
+
+		}
+
+	}
+
+	return err
+}
+
+//	equalizeNStrFracDigitsLengths
+//
+//	Receives pointers to two instances of
+//	NumberStrKernel, 'numStrKernel01' and
+//	'numStrKernel01'. This method will ensure that the
+//	fractional arrays contained in both instances have
+//	equal array lengths.
+//
+//	If the fractional arrays do not have equal array
+//	lengths, trailing zero characters ('0') will be added
+//	to configure their array lengths as equal.
+//
+// ----------------------------------------------------------------
+//
+//	# Input Parameters
+//
+//	numStrKernel01				*NumberStrKernel
+//
+//		A pointer to an instance of NumberStrKernel. The
+//		internal fractional array contained in this instance
+//		will be	compared to that of input parameter,
+//		'numStrKernel02'. If the 'numStrKernel01' fractional
+//		array length is shorter than that of
+//		'numStrKernel02', trailing zero characters ('0')
+//		will be added to achieve an equal fractional array
+//		length with the fractional array contained in
+//		'numStrKernel02'.
+//
+//	numStrKernel02				*NumberStrKernel
+//
+//		A pointer to an instance of NumberStrKernel. The
+//		internal fractional array contained in this instance
+//		will be	compared to that of input parameter,
+//		'numStrKernel01'. If the 'numStrKernel02' fractional
+//		array length is shorter than that of
+//		'numStrKernel01', trailing zero characters ('0')
+//		will be added to achieve an equal fractional array
+//		length with the fractional array contained in
+//		'numStrKernel01'.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	err							error
+//
+//		If this method completes successfully, this
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (numStrKernelQuark *numberStrKernelQuark) equalizeNStrFracDigitsLengths(
+	numStrKernel01 *NumberStrKernel,
+	numStrKernel02 *NumberStrKernel,
+	errPrefDto *ePref.ErrPrefixDto) (
+	err error) {
+
+	if numStrKernelQuark.lock == nil {
+		numStrKernelQuark.lock = new(sync.Mutex)
+	}
+
+	numStrKernelQuark.lock.Lock()
+
+	defer numStrKernelQuark.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"numberStrKernelQuark."+
+			"equalizeNStrFracDigitsLengths()",
+		"")
+
+	if err != nil {
+
+		return err
+	}
+
+	if numStrKernel01 == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'numStrKernel01' is a nil pointer!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if numStrKernel02 == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'numStrKernel02' is a nil pointer!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	lenFracArray01 :=
+		len(numStrKernel01.fractionalDigits.CharsArray)
+
+	lenFracArray02 :=
+		len(numStrKernel02.fractionalDigits.CharsArray)
+
+	if lenFracArray01 == lenFracArray02 {
+
+		// Nothing to do
+		return err
+	}
+
+	// Fractional Digit Array Lengths Are NOT Equal
+
+	var numOfCharsToAdd int
+
+	if lenFracArray01 > lenFracArray02 {
+
+		numOfCharsToAdd =
+			lenFracArray01 - lenFracArray02
+
+		err =
+			numStrKernel02.fractionalDigits.ExtendRuneArray(
+				'0',
+				numOfCharsToAdd,
+				true,
+				ePrefix.XCpy(
+					"numStrKernel02.fractionalDigits"))
+
+		if err != nil {
+
+			return err
+
+		}
+
+	} else {
+		// MUST BE
+		// lenFracArray02 > lenFracArray01
+
+		numOfCharsToAdd =
+			lenFracArray02 - lenFracArray01
+
+		err =
+			numStrKernel01.fractionalDigits.ExtendRuneArray(
+				'0',
+				numOfCharsToAdd,
+				true,
+				ePrefix.XCpy(
+					"numStrKernel01.fractionalDigits"))
+
+		if err != nil {
+
+			return err
+
+		}
+
+	}
+
+	return err
 }
 
 //	parsePureNumStr
