@@ -193,7 +193,7 @@ func (numStrKernelQuark *numberStrKernelQuark) compareNumStrKernelValues(
 			numStrKernel02.integerDigits.CharsArray[i] {
 
 			comparisonValue = 1
-			break
+			return comparisonValue, err
 
 		}
 
@@ -201,9 +201,32 @@ func (numStrKernelQuark *numberStrKernelQuark) compareNumStrKernelValues(
 			numStrKernel01.integerDigits.CharsArray[i] {
 
 			comparisonValue = -1
+			return comparisonValue, err
+
+		}
+	}
+
+	// Integer Digits ARE EQUAL
+	// Now test Fractional Digits
+
+	for k := 0; k < lenFracDigits01; k++ {
+
+		if numStrKernel01.fractionalDigits.CharsArray[k] >
+			numStrKernel02.fractionalDigits.CharsArray[k] {
+
+			comparisonValue = 1
 			break
 
 		}
+
+		if numStrKernel02.fractionalDigits.CharsArray[k] >
+			numStrKernel01.fractionalDigits.CharsArray[k] {
+
+			comparisonValue = -1
+			break
+
+		}
+
 	}
 
 	return comparisonValue, err

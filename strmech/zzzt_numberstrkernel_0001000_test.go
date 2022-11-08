@@ -227,6 +227,7 @@ func TestNumberStrKernel_Compare_000100(t *testing.T) {
 	if actualNumSign != NumSignVal.Negative() {
 
 		t.Errorf("\n%v\n"+
+			"Test # 9.5"+
 			"Error: Expected Number Sign Equal To 'Negative'.\n"+
 			"Instead, Number Sign Equals Integer Value ='%v'"+
 			"Actual Number Sign string value = '%v'\n",
@@ -253,6 +254,105 @@ func TestNumberStrKernel_Compare_000100(t *testing.T) {
 		t.Errorf("\n%v\n"+
 			"Test#10\n"+
 			"Error: Expected a comparisonResult of +1.\n"+
+			"Instead, comparisonResult = '%v'\n",
+			ePrefix.String(),
+			comparisonResult)
+	}
+
+	var testNStrValue03 NumberStrKernel
+
+	testValueIntDigits = "1234"
+	testValueFracDigits = "5679"
+
+	testValue = testValueIntDigits +
+		"." +
+		testValueFracDigits
+
+	testNStrValue03,
+		err = new(NumberStrKernel).NewParsePureNumberStr(
+		testValue,
+		".",
+		true,
+		ePrefix.XCpy(
+			"testNStrValue03<-testValue"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	actualIntStr = testNStrValue03.GetIntegerString()
+
+	if actualIntStr != testValueIntDigits {
+		t.Errorf("\n%v\n"+
+			"Test#11\n"+
+			"Error: actualIntStr != testValueIntDigits\n"+
+			"actualIntStr         = '%v'\n"+
+			"testValueIntDigits   = '%v'\n",
+			ePrefix.String(),
+			actualIntStr,
+			testValueIntDigits)
+
+		return
+	}
+
+	actualFracStr = testNStrValue03.GetFractionalString()
+
+	if actualFracStr != testValueFracDigits {
+
+		t.Errorf("\n%v\n"+
+			"Test#12\n"+
+			"Error: actualFracStr != testValueFracDigits\n"+
+			"actualFracStr         = '%v'\n"+
+			"testValueFracDigits   = '%v'\n",
+			ePrefix.String(),
+			actualFracStr,
+			testValueFracDigits)
+
+		return
+	}
+
+	actualNumSign,
+		err = testNStrValue03.GetNumberSign(
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if actualNumSign != NumSignVal.Positive() {
+
+		t.Errorf("\n%v\n"+
+			"Test #13\n"+
+			"Error: Expected Number Sign Equal To 'Positive'.\n"+
+			"Instead, Number Sign Equals Integer Value ='%v'"+
+			"Actual Number Sign string value = '%v'\n",
+			ePrefix.String(),
+			actualNumSign.XValueInt(),
+			actualNumSign.String())
+
+		return
+	}
+
+	comparisonResult,
+		err = baseValue.Compare(
+		&testNStrValue03,
+		ePrefix.XCpy(
+			"<-testNStrValue03"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if comparisonResult != -1 {
+		t.Errorf("\n%v\n"+
+			"Test#14\n"+
+			"Error: Expected a comparisonResult of -1.\n"+
 			"Instead, comparisonResult = '%v'\n",
 			ePrefix.String(),
 			comparisonResult)
