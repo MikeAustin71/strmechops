@@ -30,14 +30,26 @@ type numberStrKernelQuark struct {
 //
 // # IMPORTANT
 //
-//	This method assumes the integer and fractional digit
-//	arrays contained in input parameters 'numStrKernel01'
-//	and 'numStrKernel02' are equal in length.
+//  1. This method assumes the integer and fractional
+//     digit arrays contained in input parameters
+//     'numStrKernel01' and 'numStrKernel02' are equal
+//     in length.
 //
-//	If the integer digit array length and fractional
-//	digit array lengths of 'numStrKernel01' are NOT equal
-//	to the corresponding array lengths in
-//	'numStrKernel02', an error will be returned.
+//     If the integer digit array length and fractional
+//     digit array lengths of 'numStrKernel01' are NOT
+//     equal to the corresponding array lengths in
+//     'numStrKernel02', an error will be returned.
+//
+//  2. This method assume that the number signs for
+//     'numStrKernel01' and 'numStrKernel02' are equal.
+//     If 'numStrKernel01' and 'numStrKernel02' ARE NOT
+//     equal, an error will be returned.
+//
+//     Possible values for number sign are listed as
+//     follows:
+//     NumSignVal.Negative() = -1
+//     NumSignVal.Zero()     =  0
+//     NumSignVal.Positive() =  1
 //
 // ----------------------------------------------------------------
 //
@@ -147,6 +159,28 @@ func (numStrKernelQuark *numberStrKernelQuark) compareNumStrKernelValues(
 		return comparisonValue, err
 	}
 
+	if numStrKernel01.numberSign !=
+		numStrKernel02.numberSign {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: The number signs for 'numStrKernel01'"+
+			"and 'numStrKernel02' ARE NOT EQUAL!\n"+
+			"numStrKernel01.numberSign = '%v'\n"+
+			"numStrKernel02.numberSign = '%v'\n",
+			ePrefix.String(),
+			numStrKernel01.numberSign.String(),
+			numStrKernel02.numberSign.String())
+
+		return comparisonValue, err
+	}
+
+	if numStrKernel01.numberSign == NumSignVal.Zero() {
+
+		comparisonValue = 0
+
+		return comparisonValue, err
+	}
+
 	lenIntDigits01 :=
 		len(numStrKernel01.integerDigits.CharsArray)
 
@@ -192,7 +226,11 @@ func (numStrKernelQuark *numberStrKernelQuark) compareNumStrKernelValues(
 		if numStrKernel01.integerDigits.CharsArray[i] >
 			numStrKernel02.integerDigits.CharsArray[i] {
 
-			comparisonValue = 1
+			// Remember, numStrKernel01 & numStrKernel02
+			// number signs are equal
+			comparisonValue =
+				1 * int(numStrKernel01.numberSign)
+
 			return comparisonValue, err
 
 		}
@@ -200,7 +238,11 @@ func (numStrKernelQuark *numberStrKernelQuark) compareNumStrKernelValues(
 		if numStrKernel02.integerDigits.CharsArray[i] >
 			numStrKernel01.integerDigits.CharsArray[i] {
 
-			comparisonValue = -1
+			// Remember, numStrKernel01 & numStrKernel02
+			// number signs are equal
+			comparisonValue =
+				1 * int(numStrKernel01.numberSign)
+
 			return comparisonValue, err
 
 		}
@@ -214,20 +256,30 @@ func (numStrKernelQuark *numberStrKernelQuark) compareNumStrKernelValues(
 		if numStrKernel01.fractionalDigits.CharsArray[k] >
 			numStrKernel02.fractionalDigits.CharsArray[k] {
 
-			comparisonValue = 1
-			break
+			// Remember, numStrKernel01 & numStrKernel02
+			// number signs are equal
+			comparisonValue =
+				1 * int(numStrKernel01.numberSign)
 
+			return comparisonValue, err
 		}
 
 		if numStrKernel02.fractionalDigits.CharsArray[k] >
 			numStrKernel01.fractionalDigits.CharsArray[k] {
 
-			comparisonValue = -1
-			break
+			// Remember, numStrKernel01 & numStrKernel02
+			// number signs are equal
+			comparisonValue =
+				1 * int(numStrKernel01.numberSign)
 
+			return comparisonValue, err
 		}
-
 	}
+
+	// MUST BE -
+	//	numStrKernel01 and numStrKernel02 have
+	//	equal numerical values
+	comparisonValue = 0
 
 	return comparisonValue, err
 }
