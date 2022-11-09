@@ -118,6 +118,32 @@ func (MainTest02) NumberStrKernelCompare01() {
 		return
 	}
 
+	var actualNumSign strmech.NumericSignValueType
+
+	actualNumSign,
+		err = testNStrValue01.GetNumberSign(
+		ePrefix)
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if actualNumSign != strmech.NumSignVal.Positive() {
+
+		fmt.Printf("\n%v\n"+
+			"Test # 0.01 testNStrValue01 Floating Point Value\n"+
+			"Error: Expected Number Sign Equal To 'Positive'.\n"+
+			"Instead, Number Sign Equals Integer Value ='%v'"+
+			"Actual Number Sign string value = '%v'\n",
+			ePrefix.String(),
+			actualNumSign.XValueInt(),
+			actualNumSign.String())
+
+		return
+	}
+
 	actualIntStr := testNStrValue01.GetIntegerString()
 
 	if actualIntStr != testValueIntDigits {
@@ -227,8 +253,6 @@ func (MainTest02) NumberStrKernelCompare01() {
 
 		return
 	}
-
-	var actualNumSign strmech.NumericSignValueType
 
 	actualNumSign,
 		err = testNStrValue02.GetNumberSign(

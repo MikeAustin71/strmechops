@@ -228,8 +228,17 @@ func (numStrKernelQuark *numberStrKernelQuark) compareNumStrKernelValues(
 
 			// Remember, numStrKernel01 & numStrKernel02
 			// number signs are equal
-			comparisonValue =
-				1 * int(numStrKernel01.numberSign)
+			if numStrKernel01.numberSign == NumSignVal.Positive() {
+
+				comparisonValue = 1
+
+			} else {
+				//	MUST BE -
+				//	numStrKernel01.numberSign ==
+				//		NumSignVal.Negative()
+				comparisonValue = -1
+
+			}
 
 			return comparisonValue, err
 
@@ -240,11 +249,19 @@ func (numStrKernelQuark *numberStrKernelQuark) compareNumStrKernelValues(
 
 			// Remember, numStrKernel01 & numStrKernel02
 			// number signs are equal
-			comparisonValue =
-				1 * int(numStrKernel01.numberSign)
+			if numStrKernel02.numberSign == NumSignVal.Positive() {
+
+				comparisonValue = -1
+
+			} else {
+				//	MUST BE -
+				//	numStrKernel02.numberSign ==
+				//		NumSignVal.Negative()
+				comparisonValue = 1
+
+			}
 
 			return comparisonValue, err
-
 		}
 	}
 
@@ -258,8 +275,17 @@ func (numStrKernelQuark *numberStrKernelQuark) compareNumStrKernelValues(
 
 			// Remember, numStrKernel01 & numStrKernel02
 			// number signs are equal
-			comparisonValue =
-				1 * int(numStrKernel01.numberSign)
+			if numStrKernel01.numberSign == NumSignVal.Positive() {
+
+				comparisonValue = 1
+
+			} else {
+				//	MUST BE -
+				//	numStrKernel01.numberSign ==
+				//		NumSignVal.Negative()
+				comparisonValue = -1
+
+			}
 
 			return comparisonValue, err
 		}
@@ -269,8 +295,17 @@ func (numStrKernelQuark *numberStrKernelQuark) compareNumStrKernelValues(
 
 			// Remember, numStrKernel01 & numStrKernel02
 			// number signs are equal
-			comparisonValue =
-				1 * int(numStrKernel01.numberSign)
+			if numStrKernel02.numberSign == NumSignVal.Positive() {
+
+				comparisonValue = -1
+
+			} else {
+				//	MUST BE -
+				//	numStrKernel02.numberSign ==
+				//		NumSignVal.Negative()
+				comparisonValue = 1
+
+			}
 
 			return comparisonValue, err
 		}
