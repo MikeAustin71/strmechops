@@ -1,10 +1,7 @@
 package strmech
 
 import (
-	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
-	"math/big"
-	"strconv"
 	"sync"
 )
 
@@ -23,7 +20,7 @@ type MathIntHelper struct {
 //
 //	# Input Parameters
 //
-//	signedIntValue	interface{}
+//	intNumericValue				interface{}
 //
 //		Integer numeric values passed by means of this
 //		empty interface MUST BE convertible to one of the
@@ -32,19 +29,18 @@ type MathIntHelper struct {
 //			int8
 //			int16
 //			int32
-//			int	(equivalent to int32)
+//			int	(currently equivalent to int32)
 //			int64
-//			*big.Int
 //			uint8
 //			uint16
 //			uint32
-//			uint (equivalent to uint32)
+//			uint (currently equivalent to uint32)
 //			uint64
+//			*big.Int
 //
-//		If parameter 'signedIntValue' is NOT convertible
+//		If parameter 'intNumericValue' is NOT convertible
 //		to one of the types listed above, an error will
 //		be returned.
-//
 //
 //	errorPrefix					interface{}
 //
@@ -111,38 +107,52 @@ type MathIntHelper struct {
 //
 //	absValueNumberStr			string
 //
-//		The integer input parameter, 'signedIntValue',
+//		The integer input parameter, 'intNumericValue',
 //		will be converted to an absolute value and
-//		returned as	a string of numeric digits.
+//		returned by 'absValueNumberStr' as a string of
+//		numeric digits.
 //
 //	numberStrStats				NumberStrStatsDto
 //
-//		This returned instance of NumberStrStatsDto
-//		contains a description of the numeric value
-//		passed as input parameter 'signedIntValue'.
-//		This returned information includes the number
-//		sign, number of significant digits and a zero
-//		value indicator.
+//		This data transfer object will return critical
+//		statistics on the numeric value represented
+//		by the returned absolute value number string,
+//		'absValueNumberStr'.
+//
+//		Most notably, the number sign, positive or
+//		negative, associated with return parameter,
+//		'absValueNumberStr', will be specified by
+//		'numberStrStats.NumberSign'.
+//
+//		Since 'absValueNumberStr' represents an integer
+//		value, statistics on fractional digits are not
+//		relevant.
 //
 //		type NumberStrStatsDto struct {
 //
 //		NumOfIntegerDigits					uint64
 //
-//			The total number of integer digits.
+//			The total number of integer digits to the
+//			left of the radix point or, decimal point, in
+//			the subject numeric value.
 //
 //		NumOfSignificantIntegerDigits		uint64
 //
-//			The number of nonzero integer digits.
+//			The number of nonzero integer digits to the
+//			left of the radix point or, decimal point, in
+//			the subject numeric value.
 //
 //		NumOfFractionalDigits				uint64
 //
-//			This value is always zero. No fractional
-//			digits are ever returned.
+//			The total number of fractional digits to the
+//			right of the radix point or, decimal point,
+//			in the subject numeric value.
 //
 //		NumOfSignificantFractionalDigits	uint64
 //
-//			This value is always zero. No fractional
-//			digits are ever returned.
+//			The number of nonzero fractional digits to
+//			the right of the radix point or, decimal
+//			point, in the subject numeric value.
 //
 //		NumberValueType 					NumericValueType
 //
@@ -150,28 +160,29 @@ type MathIntHelper struct {
 //			subject numeric value is classified either as
 //			an integer or a floating point number.
 //
-//			For purposes of this method, the NumberValueType
-//			is always set to: NumValType.Integer()
-//
+//			Possible enumeration values are listed as
+//			follows:
+//				NumValType.None()
+//				NumValType.FloatingPoint()
+//				NumValType.Integer()
 //
 //		NumberSign							NumericSignValueType
 //
 //			An enumeration specifying the number sign
-//			associated with the input parameter
-//			'signedIntValue'.
-//
-//			Possible values are listed as follows:
+//			associated with the numeric value. Possible
+//			values are listed as follows:
+//				NumSignVal.None()		= Invalid Value
 //				NumSignVal.Negative()	= -1
 //				NumSignVal.Zero()		=  0
 //				NumSignVal.Positive()	=  1
 //
 //		IsZeroValue							bool
 //
+//			If 'true', the subject numeric value is equal
+//			to zero ('0').
+//
 //			If 'false', the subject numeric value is
 //			greater than or less than zero ('0').
-//
-//			If 'true', the Numeric Value is equal to
-//			zero.
 //		}
 //
 //	err							error
@@ -187,10 +198,10 @@ type MathIntHelper struct {
 //		text will be attached to the beginning of the
 //		error message.
 func (mathIntHelper *MathIntHelper) IntegerToAbsValueNumStr(
-	numericValue interface{},
+	intNumericValue interface{},
 	errorPrefix interface{}) (
 	absValueNumberStr string,
-	numberSign NumericSignValueType,
+	numberStrStats NumberStrStatsDto,
 	err error) {
 
 	if mathIntHelper.lock == nil {
@@ -211,418 +222,15 @@ func (mathIntHelper *MathIntHelper) IntegerToAbsValueNumStr(
 		"")
 
 	if err != nil {
-		return absValueNumberStr, numberSign, err
+		return absValueNumberStr, numberStrStats, err
 	}
 
-	var ok bool
-
-	switch numericValue.(type) {
-
-	case int8:
-
-		var int8Num int8
-
-		int8Num, ok = numericValue.(int8)
-
-		if !ok {
-
-			err = fmt.Errorf("%v\n"+
-				"ERROR: int8 cast to 'int8Num' failed!\n",
-				ePrefix.String())
-
-			return absValueNumberStr, numberSign, err
-		}
-
-		if int8Num < 0 {
-
-			numberSign = NumSignVal.Negative()
-
-			int8Num = int8Num * -1
-
-		} else if int8Num == 0 {
-
-			numberSign = NumSignVal.Zero()
-
-		} else {
-			// MUST BE -
-			//	int8Num  > 0
-
-			numberSign = NumSignVal.Positive()
-
-		}
-
-		absValueNumberStr = fmt.Sprintf("%v",
-			int8Num)
-
-	case int16:
-
-		var int16Num int16
-
-		int16Num, ok = numericValue.(int16)
-
-		if !ok {
-
-			err = fmt.Errorf("%v\n"+
-				"ERROR: int16 cast to 'int16Num' failed!\n",
-				ePrefix.String())
-
-			return absValueNumberStr, numberSign, err
-		}
-
-		if int16Num < 0 {
-
-			numberSign = NumSignVal.Negative()
-
-			int16Num = int16Num * -1
-
-		} else if int16Num == 0 {
-
-			numberSign = NumSignVal.Zero()
-
-		} else {
-			// MUST BE -
-			//	int16Num  > 0
-
-			numberSign = NumSignVal.Positive()
-
-		}
-
-		absValueNumberStr = fmt.Sprintf("%v",
-			int16Num)
-
-	case int:
-
-		var intNum int
-
-		intNum, ok = numericValue.(int)
-
-		if !ok {
-
-			err = fmt.Errorf("%v\n"+
-				"ERROR: int cast to 'intNum' failed!\n",
-				ePrefix.String())
-
-			return absValueNumberStr, numberSign, err
-		}
-
-		if intNum < 0 {
-
-			numberSign = NumSignVal.Negative()
-
-			intNum = intNum * -1
-
-		} else if intNum == 0 {
-
-			numberSign = NumSignVal.Zero()
-
-		} else {
-			// MUST BE -
-			//	intNum  > 0
-
-			numberSign = NumSignVal.Positive()
-
-		}
-
-		absValueNumberStr = fmt.Sprintf("%v",
-			intNum)
-
-	case int32:
-
-		var int32Num int32
-
-		int32Num, ok = numericValue.(int32)
-
-		if !ok {
-
-			err = fmt.Errorf("%v\n"+
-				"ERROR: int32 cast to 'int32Num' failed!\n",
-				ePrefix.String())
-
-			return absValueNumberStr, numberSign, err
-		}
-
-		if int32Num < 0 {
-
-			numberSign = NumSignVal.Negative()
-
-			int32Num = int32Num * -1
-
-		} else if int32Num == 0 {
-
-			numberSign = NumSignVal.Zero()
-
-		} else {
-			// MUST BE -
-			//	int32Num  > 0
-
-			numberSign = NumSignVal.Positive()
-
-		}
-
-		absValueNumberStr = fmt.Sprintf("%v",
-			int32Num)
-
-	case int64:
-
-		var int64Num int64
-
-		int64Num, ok = numericValue.(int64)
-
-		if !ok {
-
-			err = fmt.Errorf("%v\n"+
-				"ERROR: int64 cast to 'int64Num' failed!\n",
-				ePrefix.String())
-
-			return absValueNumberStr, numberSign, err
-		}
-
-		if int64Num < 0 {
-
-			numberSign = NumSignVal.Negative()
-
-			int64Num = int64Num * -1
-
-		} else if int64Num == 0 {
-
-			numberSign = NumSignVal.Zero()
-
-		} else {
-			// MUST BE -
-			//	int64Num  > 0
-
-			numberSign = NumSignVal.Positive()
-
-		}
-
-		absValueNumberStr = fmt.Sprintf("%v",
-			int64Num)
-
-	case *big.Int:
-
-		var bigIntNum *big.Int
-
-		bigIntNum, ok = numericValue.(*big.Int)
-
-		if !ok {
-
-			err = fmt.Errorf("%v\n"+
-				"ERROR: *big.Int cast to 'bigIntNum' failed!\n",
-				ePrefix.String())
-
-			return absValueNumberStr, numberSign, err
-		}
-
-		var bigZero *big.Int
-
-		bigZero = big.NewInt(0)
-
-		comparison := bigIntNum.Cmp(bigZero)
-
-		if comparison < 0 {
-
-			numberSign = NumSignVal.Negative()
-
-			bigIntNum.Neg(bigIntNum)
-
-		} else if comparison == 0 {
-
-			numberSign = NumSignVal.Zero()
-
-		} else {
-			// MUST BE -
-			//	int64Num  > 0
-
-			numberSign = NumSignVal.Positive()
-
-		}
-
-		absValueNumberStr = fmt.Sprintf("%v",
-			bigIntNum.Text(10))
-
-	case uint8:
-
-		var uint8Num uint8
-
-		uint8Num, ok = numericValue.(uint8)
-
-		if !ok {
-
-			err = fmt.Errorf("%v\n"+
-				"ERROR: uint8 cast to 'uint8Num' failed!\n",
-				ePrefix.String())
-
-			return absValueNumberStr, numberSign, err
-		}
-
-		if uint8Num == 0 {
-
-			numberSign = NumSignVal.Zero()
-
-		} else {
-			// MUST BE -
-			//	uint8Num  > 0
-
-			numberSign = NumSignVal.Positive()
-
-		}
-
-		absValueNumberStr = fmt.Sprintf("%v",
-			uint8Num)
-
-	case uint16:
-
-		var uint16Num uint16
-
-		uint16Num, ok = numericValue.(uint16)
-
-		if !ok {
-
-			err = fmt.Errorf("%v\n"+
-				"ERROR: uint16 cast to 'uint16Num' failed!\n",
-				ePrefix.String())
-
-			return absValueNumberStr, numberSign, err
-		}
-
-		if uint16Num == 0 {
-
-			numberSign = NumSignVal.Zero()
-
-		} else {
-			// MUST BE -
-			//	uint16Num  > 0
-
-			numberSign = NumSignVal.Positive()
-
-		}
-
-		absValueNumberStr = fmt.Sprintf("%v",
-			uint16Num)
-
-	case uint:
-
-		var uintNum uint
-
-		uintNum, ok = numericValue.(uint)
-
-		if !ok {
-
-			err = fmt.Errorf("%v\n"+
-				"ERROR: uint cast to 'uintNum' failed!\n",
-				ePrefix.String())
-
-			return absValueNumberStr, numberSign, err
-		}
-
-		if uintNum == 0 {
-
-			numberSign = NumSignVal.Zero()
-
-		} else {
-			// MUST BE -
-			//	uintNum  > 0
-
-			numberSign = NumSignVal.Positive()
-
-		}
-
-		absValueNumberStr = fmt.Sprintf("%v",
-			uintNum)
-
-	case uint32:
-
-		var uint32Num uint32
-
-		uint32Num, ok = numericValue.(uint32)
-
-		if !ok {
-
-			err = fmt.Errorf("%v\n"+
-				"ERROR: uint32 cast to 'uint32Num' failed!\n",
-				ePrefix.String())
-
-			return absValueNumberStr, numberSign, err
-		}
-
-		if uint32Num == 0 {
-
-			numberSign = NumSignVal.Zero()
-
-		} else {
-			// MUST BE -
-			//	uint32Num  > 0
-
-			numberSign = NumSignVal.Positive()
-
-		}
-
-		absValueNumberStr = fmt.Sprintf("%v",
-			uint32Num)
-
-	case uint64:
-
-		var uint64Num uint64
-
-		uint64Num, ok = numericValue.(uint64)
-
-		if !ok {
-
-			err = fmt.Errorf("%v\n"+
-				"ERROR: uint64 cast to 'uint64Num' failed!\n",
-				ePrefix.String())
-
-			return absValueNumberStr, numberSign, err
-		}
-
-		if uint64Num == 0 {
-
-			numberSign = NumSignVal.Zero()
-
-		} else {
-			// MUST BE -
-			//	uint64Num  > 0
-
-			numberSign = NumSignVal.Positive()
-
-		}
-
-		absValueNumberStr = fmt.Sprintf("%v",
-			uint64Num)
-
-	case float32:
-
-		var float32Num float32
-
-		float32Num, ok = numericValue.(float32)
-
-		if !ok {
-
-			err = fmt.Errorf("%v\n"+
-				"ERROR: float32 cast to 'float32Num' failed!\n",
-				ePrefix.String())
-
-			return absValueNumberStr, numberSign, err
-		}
-
-		var float64Num float64
-
-		float64Num = float64(float32Num)
-
-		numberStr := strconv.FormatFloat(
-			float64Num, 'f', -1, 32)
-
-	default:
-
-		err = fmt.Errorf("%v\n"+
-			"ERROR: Input parameter 'numericValue' is an invalid type!\n"+
-			"'numericValue' is unsupported type '%v'\n",
-			ePrefix.String(),
-			fmt.Sprintf("%T", numericValue))
-
-		return absValueNumberStr, numberSign, err
-
-	}
-
-	return absValueNumberStr, numberSign, err
+	absValueNumberStr,
+		numberStrStats,
+		err = new(mathIntHelperMechanics).
+		intToAbsoluteValueStr(
+			intNumericValue,
+			ePrefix)
+
+	return absValueNumberStr, numberStrStats, err
 }

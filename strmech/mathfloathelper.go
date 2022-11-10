@@ -24,7 +24,8 @@ type MathFloatHelper struct {
 //
 //	The positive or negative number sign for the returned
 //	numeric digits can be determined by examining the
-//	statistics returned by parameter 'numberStats'.
+//	statistics returned by parameter 'numberStats'
+//	(numberStats.NumberSign).
 //
 // ----------------------------------------------------------------
 //
@@ -55,7 +56,7 @@ type MathFloatHelper struct {
 //		The positive or negative number sign for the
 //		extracted integer digits, can be determined by
 //		examining the statistics returned by parameter
-//		'numberStats'.
+//		'numberStats' (numberStats.NumberSign).
 //
 //	fracDigits					*RuneArrayDto
 //
@@ -68,7 +69,7 @@ type MathFloatHelper struct {
 //		The positive or negative number sign for the
 //		extracted integer digits, can be determined by
 //		examining the statistics returned by parameter
-//		'numberStats'.
+//		'numberStats' (numberStats.NumberSign).
 //
 //	errorPrefix					interface{}
 //
@@ -242,7 +243,7 @@ func (mathFloatHelper *MathFloatHelper) FloatNumToIntFracRunes(
 
 	numberStats,
 		err = new(mathFloatHelperAtom).
-		floatNumToIntFracRunes(
+		floatNumToSignedPureNumStr(
 			floatingPointNumber,
 			intDigits,
 			fracDigits,
