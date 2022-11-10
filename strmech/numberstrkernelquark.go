@@ -2030,7 +2030,7 @@ func (numStrKernelQuark *numberStrKernelQuark) parsePureNumStr(
 //		examining the statistics returned by parameter
 //		'numberStats' (numberStats.NumberSign).
 //
-//		decSeparatorChars		*RuneArrayDto
+//	decSeparatorChars		*RuneArrayDto
 //
 //		A pointer to an instance of RuneArrayDto.
 //

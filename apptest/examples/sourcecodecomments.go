@@ -638,3 +638,50 @@ type sourceCodeCommentQuark struct {
 }
 
 */
+
+//
+//	leadingMinusSign			bool
+//
+//		When set to 'true', negative numbers returned by
+//		the signed pure number string will be prefixed
+//		with a leading minus sign ('-') at the beginning
+//		of the number string.
+//
+//		Leading minus signs represent the standard means
+//		for designating negative numeric values in the
+//		US, UK, Australia, most of Canada and many other
+//		parts of world.
+//
+//		Example Leading Minus Sign:
+//			"-123.456"
+//
+//		When set to 'false', negative number returned by
+//		the signed pure number string parsing will have a
+//		trailing minus sign ('-') at the end of the number
+//		string.
+//
+//		Trailing minus signs represent the standard for
+//		France, Germany and many countries in the European
+//		Union.
+//
+//		Example Trailing Number Symbols:
+//			"123.456-"
+//
+//	decSeparatorChars			DecimalSeparatorSpec
+//
+//		An instance of DecimalSeparatorSpec.
+//
+//		This specification object encapsulates a rune
+//		array containing the radix point or decimal
+//		separator character or characters which will be
+//		used to separate integer and fractional digits
+//		within the signed pure number string returned
+//		by this method ('signedPureNumStr').
+//
+//		In the US, UK, Australia and most of Canada, the
+//		decimal separator is the period character ('.')
+//		known as the decimal point.
+//
+//		In France, Germany and many countries in the
+//		European Union, the Decimal Separator is the
+//		comma character (',').

@@ -46,6 +46,7 @@ type mathFloatHelperAtom struct {
 //			float64
 //			*big.Float
 //
+//
 //	errPrefDto					*ePref.ErrPrefixDto
 //
 //		This object encapsulates an error prefix string
@@ -81,8 +82,8 @@ type mathFloatHelperAtom struct {
 //
 //		Integer and fractional numeric digits contained
 //		in this signed pure number string will be
-//		separated by a period character ('.') known as
-//		the decimal point.
+//		separated by radix point, or decimal seprator,
+//		specified by input paramter, 'decSeparatorChars'.
 //
 //	err							error
 //
