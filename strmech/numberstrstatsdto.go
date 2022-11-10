@@ -52,10 +52,11 @@ type NumberStrStatsDto struct {
 	//      NumSignVal.Positive()	=  1
 
 	IsZeroValue bool
-	//	If 'false', the Numeric Value is greater than or
-	//	less than zero ('0').
+	//	If 'true', the subject numeric value is equal
+	//	to zero ('0').
 	//
-	//	If 'true', the Numeric Value is equal to zero.
+	//	If 'false', the subject numeric value is
+	//	greater than or less than zero ('0').
 
 	lock *sync.Mutex
 }

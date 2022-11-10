@@ -11990,11 +11990,11 @@ func (numStrKernel *NumberStrKernel) GetNumberSignAsInt(
 //
 //		IsZeroValue							bool
 //
+//			If 'true', the subject numeric value is equal
+//			to zero ('0').
+//
 //			If 'false', the subject numeric value is
 //			greater than or less than zero ('0').
-//
-//			If 'true', the Numeric Value is equal to
-//			zero.
 //		}
 //
 //	error
@@ -12715,7 +12715,6 @@ func (numStrKernel *NumberStrKernel) IsZeroValue() bool {
 //			float32
 //			float64
 //			*big.Float
-//
 //
 //	 errorPrefix                interface{}
 //
