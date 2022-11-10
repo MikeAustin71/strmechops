@@ -1,6 +1,8 @@
 package examples
 
-import "fmt"
+import (
+	"fmt"
+)
 
 type SourceCodeComments struct {
 	input string
@@ -625,3 +627,14 @@ func (srcCodeComments *SourceCodeComments) testNumStrNumberFieldSpecComments() {
 	fmt.Println("HELLO WORLD!")
 
 }
+
+// sourceCodeCommentQuark
+//
+// Provides helper methods for type SourceCodeComments
+/*
+
+type sourceCodeCommentQuark struct {
+	lock *sync.Mutex
+}
+
+*/

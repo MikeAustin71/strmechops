@@ -40,13 +40,14 @@ type numberStrKernelQuark struct {
 //     equal to the corresponding array lengths in
 //     'numStrKernel02', an error will be returned.
 //
-//  2. This method assume that the number signs for
+//  2. This method assumes that the number signs for
 //     'numStrKernel01' and 'numStrKernel02' are equal.
 //     If 'numStrKernel01' and 'numStrKernel02' ARE NOT
 //     equal, an error will be returned.
 //
 //     Possible values for number sign are listed as
 //     follows:
+//
 //     NumSignVal.Negative() = -1
 //     NumSignVal.Zero()     =  0
 //     NumSignVal.Positive() =  1

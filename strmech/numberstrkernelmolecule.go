@@ -823,11 +823,6 @@ func (numStrKernelMolecule *numberStrKernelMolecule) convertKernelToNumber(
 //			float32
 //			float64
 //			*big.Float
-//			uint8
-//			uint16
-//			uint
-//			uint32
-//			uint64
 //
 //		This numeric value will be used to populate the instance
 //		of NumberStrKernel passed by parameter, 'numStrKernel'.
@@ -1023,7 +1018,7 @@ func (numStrKernelMolecule *numberStrKernelMolecule) convertNumberToKernel(
 		if !ok {
 
 			err = fmt.Errorf("%v\n"+
-				"ERROR: *big.Int cast to 'bigIntNum failed!\n",
+				"ERROR: *big.Int cast to 'bigIntNum' failed!\n",
 				ePrefix.String())
 
 			return err
@@ -1044,9 +1039,9 @@ func (numStrKernelMolecule *numberStrKernelMolecule) convertNumberToKernel(
 
 		err = fmt.Errorf("%v\n"+
 			"ERROR: Input parameter 'numericValue' is an invalid type!\n"+
-			"'numericValue' is unsupported type '%v'\n",
+			"'numericValue' is unsupported type '%T'\n",
 			ePrefix.String(),
-			fmt.Sprintf("%T", numericValue))
+			numericValue)
 
 		return err
 

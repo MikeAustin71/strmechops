@@ -13171,8 +13171,8 @@ func (numStrKernel *NumberStrKernel) NewFromRuneDigits(
 //
 //	signedIntValue				interface{}
 //
-//		Numeric values passed by means of this empty
-//		interface MUST BE convertible to one of the
+//		Integer numeric values passed by means of this
+//		empty interface MUST BE convertible to one of the
 //		following types:
 //
 //			int8
