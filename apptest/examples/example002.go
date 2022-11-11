@@ -14,6 +14,121 @@ type MainTest02 struct {
 	input string
 }
 
+func (MainTest02) BigRat002() {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"BigRat002()",
+		"")
+
+	breakStr := strings.Repeat("=", 50)
+
+	fmt.Printf("\n\n" + breakStr + "\n")
+
+	fmt.Printf("\n Starting Run!\n"+
+		"Function: %v\n",
+		ePrefix.String())
+
+	fmt.Printf("\n" + breakStr + "\n")
+
+	var origIntDigits, origFracDigits string
+
+	origIntDigits = "123456"
+	origFracDigits = ""
+
+	bigRatToFracDigits := 5
+
+	origNumberSign := strmech.NumSignVal.Negative()
+
+	var origNumStr string
+
+	if origNumberSign == strmech.NumSignVal.Negative() {
+		origNumStr += "-"
+	}
+
+	origNumStr += origIntDigits
+
+	if len(origFracDigits) > 0 {
+
+		origNumStr += "."
+		origNumStr += origFracDigits
+	}
+
+	numStrKernelBase,
+		err := new(strmech.NumberStrKernel).
+		NewFromStringDigits(
+			origIntDigits,
+			origFracDigits,
+			origNumberSign,
+			ePrefix.XCpy(
+				origNumStr))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var pureNumStr string
+
+	pureNumStr = numStrKernelBase.GetPureNumberStr(
+		".",
+		true)
+
+	fmt.Printf("%v\n"+
+		"Original NumStr    = '%v'\n"+
+		"Initial Pure NumStr= '%v'\n\n",
+		ePrefix.String(),
+		origNumStr,
+		pureNumStr)
+
+	var bigRatNum *big.Rat
+
+	bigRatNum,
+		err = numStrKernelBase.GetBigRatNum(
+		strmech.NumRoundType.NoRounding(),
+		0,
+		ePrefix.XCpy(
+			"bigRatNum<-"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var bigRatNumStr, bigRatTwoElementStr string
+
+	bigRatNumStr =
+		bigRatNum.FloatString(bigRatToFracDigits)
+
+	bigRatTwoElementStr = bigRatNum.RatString()
+
+	bigRatNumerator := bigRatNum.Num()
+	bigRatDenominator := bigRatNum.Denom()
+
+	fmt.Printf("%v\n"+
+		"bigRatNum to %v-Digits\n"+
+		"bigRatNum         = '%v'\n"+
+		"bigRatString      = '%v'\n"+
+		"bigRatNumerator   = '%v'\n"+
+		"bigRatDenominator = '%v'\n\n",
+		ePrefix.String(),
+		bigRatToFracDigits,
+		bigRatNumStr,
+		bigRatTwoElementStr,
+		bigRatNumerator.Text(10),
+		bigRatDenominator.Text(10))
+
+	fmt.Printf("\n\n" + breakStr + "\n")
+
+	fmt.Printf("\n Successful Completion!\n"+
+		"Function: %v\n",
+		ePrefix.String())
+
+	fmt.Printf("\n" + breakStr + "\n")
+
+}
+
 func (MainTest02) BigRatHelper01() {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(

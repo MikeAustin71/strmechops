@@ -916,6 +916,13 @@ func (numStrKernelElectron *numberStrKernelElectron) rationalizeFractionalIntege
 //
 // ----------------------------------------------------------------
 //
+// # IMPORTANT
+//
+//	Modification of internal data values for input
+//	parameter 'numStrKernel' may occur.
+//
+// ----------------------------------------------------------------
+//
 // # Input Parameters
 //
 //	numStrKernel				*NumberStrKernel
