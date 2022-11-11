@@ -2336,10 +2336,9 @@ func (numStrKernelQuark *numberStrKernelQuark) roundNumStrKernel(
 
 	}
 
-	_,
-		err = nStrKernelElectron.getSetIsNonZeroValue(
+	err = nStrKernelElectron.rationalizeFractionalIntegerDigits(
 		numStrKernel,
-		ePrefix.XCpy("numStrKernel"))
+		ePrefix)
 
 	if err != nil {
 
@@ -2347,9 +2346,10 @@ func (numStrKernelQuark *numberStrKernelQuark) roundNumStrKernel(
 
 	}
 
-	err = nStrKernelElectron.rationalizeFractionalIntegerDigits(
+	_,
+		err = nStrKernelElectron.getSetIsNonZeroValue(
 		numStrKernel,
-		ePrefix)
+		ePrefix.XCpy("numStrKernel"))
 
 	if err != nil {
 

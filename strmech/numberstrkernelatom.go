@@ -906,37 +906,13 @@ func (numStrKernelAtom *numberStrKernelAtom) convertKernelToBigFloat(
 
 	}
 
-	err = nStrKernelElectron.setUninitializedKernelToZero(
-		&newNumStrKernel,
-		ePrefix.XCpy(
-			"newNumStrKernel"))
-
-	if err != nil {
-
-		return &t, numOfFractionalDigits, err
-
-	}
-
-	var numStrRoundingSpec NumStrRoundingSpec
-
-	numStrRoundingSpec,
-		err = new(NumStrRoundingSpec).NewRoundingSpec(
-		roundingType,
-		roundToFactionalDigits,
-		ePrefix.XCpy(
-			"->numStrRoundingSpec"))
-
-	if err != nil {
-
-		return &t, numOfFractionalDigits, err
-
-	}
-
-	err = new(numStrMathRoundingNanobot).roundNumStrKernel(
-		&newNumStrKernel,
-		numStrRoundingSpec,
-		ePrefix.XCpy(
-			"->newNumStrKernel"))
+	err = new(numberStrKernelQuark).
+		roundNumStrKernel(
+			&newNumStrKernel,
+			roundingType,
+			roundToFactionalDigits,
+			ePrefix.XCpy(
+				"newNumStrKernel"))
 
 	if err != nil {
 
@@ -1374,44 +1350,13 @@ func (numStrKernelAtom *numberStrKernelAtom) convertKernelToBigInt(
 
 	}
 
-	err = nStrKernelElectron.rationalizeFractionalIntegerDigits(
-		&copyNStrKernel,
-		ePrefix)
-
-	if err != nil {
-
-		return bigIntValue, err
-
-	}
-
-	err = nStrKernelElectron.setUninitializedKernelToZero(
-		&copyNStrKernel,
-		ePrefix.XCpy(
-			"copyNStrKernel"))
-
-	if err != nil {
-
-		return bigIntValue, err
-
-	}
-
-	var numStrRoundingSpec NumStrRoundingSpec
-
-	numStrRoundingSpec,
-		err =
-		new(NumStrRoundingSpec).NewRoundingSpec(
+	err = new(numberStrKernelQuark).
+		roundNumStrKernel(
+			&copyNStrKernel,
 			roundingType,
 			0,
-			ePrefix)
-
-	if err != nil {
-		return bigIntValue, err
-	}
-
-	err = new(numStrMathRoundingNanobot).roundNumStrKernel(
-		&copyNStrKernel,
-		numStrRoundingSpec,
-		ePrefix)
+			ePrefix.XCpy(
+				"newNumStrKernel"))
 
 	if err != nil {
 		return bigIntValue, err
