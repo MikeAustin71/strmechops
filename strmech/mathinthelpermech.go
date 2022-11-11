@@ -220,7 +220,7 @@ func (mathIntHelpMech *mathIntHelperMechanics) intToAbsoluteValueStr(
 
 	numberStrStats,
 		err = new(numberStrKernelQuark).
-		signedPureNumStrToRunes(
+		pureNumStrToRunes(
 			signedPureNumStr,
 			&intDigits,
 			&fracDigits,

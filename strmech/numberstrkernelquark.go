@@ -1493,508 +1493,32 @@ func (numStrKernelQuark *numberStrKernelQuark) equalizeNStrFracDigitsLengths(
 	return err
 }
 
-//	parsePureNumStr
+//	pureNumStrToRunes
 //
-//	Receives a pure number string and proceeds to return the
-//	extracted numeric value as a type NumberStrKernel.
-//
-//	This method is particularly useful when numeric values
-//	are converted to string using 'fmt.Sprintf()' and
-//	similar formatting algorithms.
-//
-//	A "Pure Number String" is defined as follows:
-//
-//		1.	Consists of numeric character digits
-//			zero through nine inclusive (0-9).
-//
-//		2.	Option: A Pure Number String may include
-//			a radix point or decimal separator. The
-//			decimal separator may consist of one or
-//			more characters.
-//
-//			In the US, UK, Australia and most of Canada,
-//			the decimal separator is the period
-//			character ('.') known as the decimal point.
-//
-//		3.	Optional: A Pure Number String may include a
-//			negative number sign symbol consisting of a
-//			minus sign ('-'). Only the minus sign ('-')
-//			classifies the numeric value as a negative
-//			number in Pure Number String.
-//
-//			If the leading or trailing minus sign ('-')
-//			is NOT present, the numeric value is assumed
-//			to be positive.
-//
-//		4.	Only numeric characters, the decimal
-//			separator and the minus sign will be
-//			processed by the number string parsing
-//			algorithm. All other characters will be
-//			ignored.
-//
-//		5.	Pure Number Strings consist of a single
-//			numeric value. The entire Pure Number String
-//			will be parsed, or processed, and only one
-//			numeric value per Pure Number String will
-//			be returned.
-//
-// ----------------------------------------------------------------
-//
-// # Input Parameters
-//
-//	pureNumberString			RuneArrayDto
-//
-//		This rune array contains the character digits from
-//		which the numeric value will be extracted and
-//		returned as a NumberStrKernel.
-//
-//		A "Pure Number String" is defined as follows:
-//
-//			1.	Consists of numeric character digits
-//				zero through nine inclusive (0-9).
-//
-//			2.	Option: A Pure Number String may include
-//				a radix point or decimal separator. The
-//				decimal separator may consist of one or
-//				more characters.
-//
-//				In the US, UK, Australia and most of Canada,
-//				the decimal separator is the period
-//				character ('.') known as the decimal point.
-//
-//			3.	Optional: A Pure Number String may include a
-//				negative number sign symbol consisting of a
-//				minus sign ('-'). Only the minus sign ('-')
-//				classifies the numeric value as a negative
-//				number in Pure Number String.
-//
-//				If the leading or trailing minus sign ('-')
-//				is NOT present, the numeric value is assumed
-//				to be positive.
-//
-//			4.	Only numeric characters, the decimal
-//				separator and the minus sign will be
-//				processed by the number string parsing
-//				algorithm. All other characters will be
-//				ignored.
-//
-//			5.	Pure Number Strings consist of a single
-//				numeric value. The entire Pure Number String
-//				will be parsed, or processed, and only one
-//				numeric value per Pure Number String will
-//				be returned.
-//
-//		If parameter 'pureNumberString' fails to include
-//		numeric character digits, an error will be returned.
-//
-//	decSeparatorSpec				DecimalSeparatorSpec
-//
-//		This structure contains the radix point or
-//		decimal separator character(s) which will be used
-//		to separate integer and fractional digits within
-//		a formatted Number String.
-//
-//		In the US, UK, Australia and most of Canada, the
-//		decimal separator is the period character ('.')
-//		known as the decimal point.
-//
-//		In France, Germany and many countries in the
-//		European Union, the Decimal Separator is the
-//		comma character (',').
-//
-//	leadingNumSymbols 			bool
-//
-//		Controls the positioning of Number Symbols in a
-//		Number String Format. Number Symbols refers to
-//		the negative number sign or minus sign ('-') used
-//		in classifying negative numeric values.
-//
-//		When set to 'true', the Pure Number String
-//		parsing algorithm will search for leading minus
-//		signs ('-') at the beginning of the Pure Number
-//		String. Leading minus signs represent the
-//		standard for designating negative numeric values
-//		in the US, UK, Australia and most of Canada.
-//
-//		Example Leading Number Symbols:
-//			"-123.456"
-//
-//		When set to 'false', the Pure Number String
-//		parsing algorithm will search for trailing minus
-//		signs ('-') at the end of Pure Number String.
-//		Trailing minus signs represent the standard for
-//		France, Germany and many countries in the
-//		European Union.
-//
-//		Example Trailing Number Symbols:
-//			"123.456-"
-//
-//	errPrefDto          		*ePref.ErrPrefixDto
-//
-//		This object encapsulates an error prefix string which is
-//		included in all returned error messages. Usually, it
-//		contains the name of the calling method or methods listed
-//		as a function chain.
-//
-//		If no error prefix information is needed, set this
-//		parameter to 'nil'.
-//
-//		Type ErrPrefixDto is included in the 'errpref' software
-//		package, "github.com/MikeAustin71/errpref".
-//
-// ----------------------------------------------------------------
-//
-// # Return Values
-//
-//	numStrKernel				NumberStrKernel
-//
-//		If this method completes successfully, an instance of
-//		NumberStrKernel containing the numeric value extracted
-//		from parameter 'pureNumberString' will be returned.
-//
-//	err							error
-//
-//		If this method completes successfully, this returned
-//		error Type is set equal to 'nil'. If errors are
-//		encountered during processing, the returned error Type
-//		will encapsulate an error message.
-//
-//		If an error message is returned, the text value for
-//		input parameter 'errPrefDto' (error prefix) will be
-//		prefixed or attached at the beginning of the error
-//		message.
-func (numStrKernelQuark *numberStrKernelQuark) parsePureNumStr(
-	pureNumberString RuneArrayDto,
-	decSeparatorSpec DecimalSeparatorSpec,
-	leadingNumSymbols bool,
-	ePrefDto *ePref.ErrPrefixDto) (
-	numStrKernel NumberStrKernel,
-	err error) {
-
-	if numStrKernelQuark.lock == nil {
-		numStrKernelQuark.lock = new(sync.Mutex)
-	}
-
-	numStrKernelQuark.lock.Lock()
-
-	defer numStrKernelQuark.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
-		ePrefDto,
-		"numberStrKernelQuark."+
-			"parsePureNumStr()",
-		"")
-
-	if err != nil {
-
-		return numStrKernel, err
-	}
-
-	lenPureNStr := pureNumberString.GetRuneArrayLength()
-
-	if lenPureNStr == 0 {
-
-		err = fmt.Errorf("%v\n"+
-			"ERROR: Input parameter 'pureNumberString' is empty\n"+
-			"and contains zero characters.\n",
-			ePrefix.String())
-
-		return numStrKernel, err
-	}
-
-	err = numStrKernel.integerDigits.SetCharacterSearchType(
-		CharSearchType.LinearTargetStartingIndex(),
-		ePrefix.XCpy("integerDigits"))
-
-	if err != nil {
-
-		return numStrKernel, err
-	}
-
-	err = numStrKernel.fractionalDigits.SetCharacterSearchType(
-		CharSearchType.LinearTargetStartingIndex(),
-		ePrefix.XCpy("fractionalDigits"))
-
-	if err != nil {
-
-		return numStrKernel, err
-	}
-
-	targetInputParms := CharSearchTargetInputParametersDto{}.New()
-
-	targetInputParms.TargetString = &pureNumberString
-
-	targetInputParms.TargetStringLength = lenPureNStr
-
-	if targetInputParms.TargetStringLength == 0 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'pureNumberString' is invalid.\n"+
-			"'pureNumberString' has an array length of zero!\n",
-			ePrefix.String())
-
-		return numStrKernel, err
-
-	}
-
-	targetInputParms.TargetStringName = "pureNumberString"
-
-	sMechPreon := strMechPreon{}
-	var err2 error
-
-	_,
-		err2 = sMechPreon.testValidityOfRuneCharArray(
-		targetInputParms.TargetString.CharsArray,
-		nil)
-
-	if err2 != nil {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter '%v' is invalid.\n"+
-			"'%v' should contain valid characters.\n"+
-			"A validity test on this rune array produced the following error:\n"+
-			"%v\n",
-			ePrefix.String(),
-			pureNumberString,
-			pureNumberString,
-			err2.Error())
-
-		return numStrKernel, err
-	}
-
-	targetInputParms.TargetInputParametersName = "Extract Number Runes"
-	targetInputParms.TargetStringDescription2 =
-		"strMechMolecule.extractNumRunes()"
-
-	targetInputParms.TargetStringLengthName =
-		targetInputParms.TargetStringName + "Length"
-
-	targetInputParms.TargetStringStartingSearchIndexName =
-		targetInputParms.TargetStringName + "StartingSearchIndex"
-
-	targetInputParms.TargetStringSearchLength = lenPureNStr
-
-	targetInputParms.FoundFirstNumericDigitInNumStr = false
-
-	targetInputParms.TargetStringStartingSearchIndex = 0
-
-	if targetInputParms.TargetStringStartingSearchIndex >=
-		targetInputParms.TargetStringLength {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'startingSearchIndex' is invalid.\n"+
-			"'startingSearchIndex' has a value greater than the last index\n"+
-			"of %v!\n"+
-			"startingSearchIndex = '%v'\n"+
-			"%v last index = %v\n",
-			ePrefix.String(),
-			targetInputParms.TargetStringName,
-			targetInputParms.TargetStringStartingSearchIndex,
-			targetInputParms.TargetStringName,
-			targetInputParms.TargetStringLength-1)
-
-		return numStrKernel, err
-	}
-
-	targetInputParms.RequestRemainderString = false
-	targetInputParms.RequestFoundTestCharacters = false
-	targetInputParms.RequestReplacementString = false
-
-	err = targetInputParms.ValidateTargetParameters(
-		ePrefix.XCpy(
-			"targetInputParms"))
-
-	if err != nil {
-
-		return numStrKernel, err
-
-	}
-
-	decSeparatorIsNOP := decSeparatorSpec.IsNOP()
-
-	var decSepSearchResults CharSearchDecimalSeparatorResultsDto
-
-	foundFirstNumericChar := false
-	foundRadixPoint := false
-	foundMinusSign := false
-	isNonZero := false
-
-	for i := 0; i < lenPureNStr; i++ {
-
-		targetInputParms.TargetStringCurrentSearchIndex = i
-
-		if pureNumberString.CharsArray[i] == '-' {
-
-			if leadingNumSymbols {
-				// MUST BE A LEADING MINUS SIGN
-
-				if !foundFirstNumericChar {
-
-					foundMinusSign = true
-				}
-
-			} else {
-				// MUST BE A TRAILING MINUS SIGN
-
-				if foundFirstNumericChar {
-
-					foundMinusSign = true
-				}
-			}
-
-			continue
-		}
-
-		testStr := string(pureNumberString.CharsArray[i])
-
-		//if decSeparatorIsNOP == false &&
-		//	!foundRadixPoint &&
-		//	(pureNumberString.CharsArray[i] < '0' ||
-		//		pureNumberString.CharsArray[i] > '9')
-		// Test for Radix Point
-		if decSeparatorIsNOP == false &&
-			!foundRadixPoint &&
-			(testStr < "0" ||
-				testStr > "9") {
-
-			decSepSearchResults,
-				err = decSeparatorSpec.SearchForDecimalSeparator(
-				targetInputParms,
-				ePrefix.XCpy(
-					"decSeparatorSpec"))
-
-			if err != nil {
-
-				return numStrKernel, err
-
-			}
-
-			if decSepSearchResults.FoundDecimalSeparatorSymbols == true {
-
-				foundRadixPoint = true
-
-				i = decSepSearchResults.TargetStringLastSearchIndex
-
-			}
-
-			continue
-		}
-
-		if pureNumberString.CharsArray[i] <= '9' &&
-			pureNumberString.CharsArray[i] >= '0' {
-
-			if pureNumberString.CharsArray[i] != '0' {
-				isNonZero = true
-			}
-
-			foundFirstNumericChar = true
-
-			if foundRadixPoint == true {
-
-				err = numStrKernel.AddFractionalDigit(
-					pureNumberString.CharsArray[i],
-					ePrefix.XCpy("pureNumberString"))
-
-				if err != nil {
-
-					return numStrKernel, err
-				}
-
-			} else {
-
-				err = numStrKernel.AddIntegerDigit(
-					pureNumberString.CharsArray[i],
-					ePrefix.XCpy("pureNumberString"))
-
-				if err != nil {
-
-					return numStrKernel, err
-				}
-
-			}
-
-			continue
-		}
-
-	}
-
-	if foundFirstNumericChar == false {
-
-		err = fmt.Errorf("%v\n"+
-			"ERROR: Input parameter 'pureNumberString' is invalid!\n"+
-			"It contains zero numeric digit characters.\n",
-			ePrefix.String())
-
-		return numStrKernel, err
-
-	}
-
-	numStrKernel.RationalizeFractionalIntegerDigits()
-
-	if isNonZero && foundMinusSign {
-
-		err = numStrKernel.SetNumberSign(
-			NumSignVal.Negative(),
-			ePrefix.XCpy("numStrKernel"))
-	}
-
-	if isNonZero && !foundMinusSign {
-
-		err = numStrKernel.SetNumberSign(
-			NumSignVal.Positive(),
-			ePrefix.XCpy("numStrKernel"))
-	}
-
-	if !isNonZero {
-		// MUST BE ZERO
-		err = numStrKernel.SetNumberSign(
-			NumSignVal.Zero(),
-			ePrefix.XCpy(
-				"numStrKernel"))
-	}
-
-	return numStrKernel, err
-}
-
-//	intNumToRunes
-//
-//	Receives one of several types of integer numeric
-//	values and converts that value to an integer digit
-//	rune array.
-//
-//	The integer rune array represents the absolute value
-//	of the original integer number.
-//
-//	The returned integer digits are stored in input
-//	parameter 'intDigits'.
-//
-//	The positive or negative number sign for the returned
-//	numeric digits can be determined by examining the
-//	statistics returned by parameter 'numberStats'
-//	(numberStats.NumberSign).
+//	Receives a pure number string and proceeds to return
+//	the extracted numeric value as integer and fractional
+//	rune arrays which taken together constitute the
+//	extracted numeric value.
 //
 // ----------------------------------------------------------------
 //
 //	# Input Parameters
 //
-//	signedPureNumStr			string
+//	pureNumberStr				string
 //
-//		A signed pure number string consists entirely of
-//		numeric digit text characters.
+//		A pure number string consists entirely of numeric
+//		digit text characters.
 //
 //		In the case of negative numeric values, a leading
-//		or trailing minus sign ('-') will be present. A
+//		or trailing minus sign ('-') must be present. A
 //		valid minus sign will therefore classify the
 //		numeric value as a negative number.
 //
 //		Leading minus signs ('-') are prefixed at the
-//		beginning of the signed pure number string.
+//		beginning of the pure number string.
 //
 //		Trailing minus signs ('-') are located at the end
-//		of the signed pure number string.
+//		of the pure number string.
 //
 //		The input parameter, 'leadingMinusSign' will
 //		determine whether a leading or a tailing minus
@@ -2008,7 +1532,7 @@ func (numStrKernelQuark *numberStrKernelQuark) parsePureNumStr(
 //
 //		A pointer to an instance of RuneArrayDto. The
 //		integer numeric digits extracted from
-//		'signedPureNumStr' will be stored as text
+//		'pureNumberStr' will be stored as text
 //		characters in the rune array encapsulated by
 //		this RuneArrayDto object.
 //
@@ -2021,7 +1545,7 @@ func (numStrKernelQuark *numberStrKernelQuark) parsePureNumStr(
 //
 //		A pointer to an instance of RuneArrayDto. The
 //		fractional numeric digits extracted from
-//		'signedPureNumStr' will be stored as text
+//		'pureNumberStr' will be stored as text
 //		characters in the rune array encapsulated by
 //		this RuneArrayDto object.
 //
@@ -2038,8 +1562,8 @@ func (numStrKernelQuark *numberStrKernelQuark) parsePureNumStr(
 //		containing the radix point or decimal separator
 //		character or characters which will be used to
 //		separate integer and fractional digits within
-//		the signed pure number string input parameter,
-//		'signedPureNumStr'.
+//		the pure number string input parameter,
+//		'pureNumberStr'.
 //
 //		In the US, UK, Australia and most of Canada, the
 //		decimal separator is the period character ('.')
@@ -2051,28 +1575,30 @@ func (numStrKernelQuark *numberStrKernelQuark) parsePureNumStr(
 //
 //	leadingMinusSign			bool
 //
-//		When set to 'true', the signed pure number
-//		string parsing algorithm will search for a
-//		leading minus sign ('-') at the beginning of
-//		the number string. Leading minus signs represent
-//		the standard means for designating negative
-//		numeric values in the US, UK, Australia, most of
-//		Canada and many other parts of world.
+//		When set to 'true', the pure number string
+//		parsing algorithm will search for a leading minus
+//		sign ('-') at the beginning of the number string.
+//
+//		Leading minus signs represent the standard means
+//		for designating negative numeric values in the
+//		US, UK, Australia, most of Canada and many other
+//		countries.
 //
 //		Example Leading Minus Sign:
 //			"-123.456" or "- 123.456"
 //
-//		When set to 'false', the signed pure number
-//		string parsing algorithm will search for trailing
-//		minus signs ('-') located at the end of the
-//		number string. Trailing minus signs represent the
-//		standard for France, Germany and many countries
-//		in the European Union.
+//		When set to 'false', the pure number string
+//		parsing algorithm will search for trailing minus
+//		signs ('-') located at the end of the pure number
+//		string.
 //
+//		Trailing minus signs represent the standard for
+//		France, Germany and many countries in the
+//		European Union.
 //
 //		NOTE: Identification of a trailing minus sign in
-//		the signed pure number string (signedPureNumStr)
-//		will immediately terminate the search for numeric
+//		the pure number string ('pureNumberStr') will
+//		immediately terminate the search for numeric
 //		characters.
 //
 //		Example Trailing Number Symbols:
@@ -2102,7 +1628,7 @@ func (numStrKernelQuark *numberStrKernelQuark) parsePureNumStr(
 //		This data transfer object will return critical
 //		statistics on the numeric value represented
 //		by the integer and fractional digits extracted
-//		from 'signedPureNumStr' and stored in the
+//		from 'pureNumberStr' and stored in the
 //		'intDigits' and 'fracDigits' RuneArrayDto
 //		objects.
 //
@@ -2175,8 +1701,8 @@ func (numStrKernelQuark *numberStrKernelQuark) parsePureNumStr(
 //		for input parameter 'errPrefDto' (error prefix)
 //		will be prefixed or attached at the beginning of
 //		the error message.
-func (numStrKernelQuark *numberStrKernelQuark) signedPureNumStrToRunes(
-	signedPureNumStr string,
+func (numStrKernelQuark *numberStrKernelQuark) pureNumStrToRunes(
+	pureNumberStr string,
 	intDigits *RuneArrayDto,
 	fracDigits *RuneArrayDto,
 	decSeparatorChars *RuneArrayDto,
@@ -2213,7 +1739,7 @@ func (numStrKernelQuark *numberStrKernelQuark) signedPureNumStrToRunes(
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
 		"mathIntHelperAtom."+
-			"signedPureNumStrToRunes()",
+			"pureNumStrToRunes()",
 		"")
 
 	if err != nil {
@@ -2264,11 +1790,11 @@ func (numStrKernelQuark *numberStrKernelQuark) signedPureNumStrToRunes(
 	fracDigits.charSearchType =
 		CharSearchType.LinearTargetStartingIndex()
 
-	if len(signedPureNumStr) == 0 {
+	if len(pureNumberStr) == 0 {
 
 		err = fmt.Errorf("%v\n"+
-			"ERROR: Input parameter 'signedPureNumStr' is invalid!\n"+
-			"'signedPureNumStr' is an empty string and has a\n"+
+			"ERROR: Input parameter 'pureNumberStr' is invalid!\n"+
+			"'pureNumberStr' is an empty string and has a\n"+
 			"length of zero characters.\n",
 			ePrefix.String())
 
@@ -2276,7 +1802,7 @@ func (numStrKernelQuark *numberStrKernelQuark) signedPureNumStrToRunes(
 
 	}
 
-	numberRunes := []rune(signedPureNumStr)
+	numberRunes := []rune(pureNumberStr)
 
 	lenNumberRunes := len(numberRunes)
 

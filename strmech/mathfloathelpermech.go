@@ -245,7 +245,7 @@ func (mathFloatHelpMech *mathFloatHelperMechanics) floatNumToIntFracRunes(
 
 	numberStats,
 		err = new(numberStrKernelQuark).
-		signedPureNumStrToRunes(
+		pureNumStrToRunes(
 			signedPureNumStr,
 			intDigits,
 			fracDigits,
