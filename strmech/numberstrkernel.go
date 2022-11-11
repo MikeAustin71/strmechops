@@ -12205,6 +12205,156 @@ func (numStrKernel *NumberStrKernel) GetParameterTextListing(
 				"numStrKernel"))
 }
 
+//	GetPureNumberStr
+//
+//	Extracts the numeric value from the current
+//	NumberStrKernel instance and returns it as
+//	a pure number string.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	decSeparatorChars			string
+//
+//		This string contains the character or characters
+//		which will be configured as the Decimal Separator
+//		Symbol.
+//
+//		The Decimal Separator is also known as the radix
+//		point and is used to separate integer and
+//		fractional digits within a floating point number
+//		string.
+//
+//		In the US, UK, Australia, most of Canada and many
+//		other countries the Decimal Separator is the
+//		period character ('.') known as the decimal
+//		point.
+//
+//		In France, Germany and many countries in the
+//		European Union, the Decimal Separator is the
+//		comma character (',').
+//
+//	leadingMinusSign			bool
+//
+//		In pure number strings, a minus sign ('-')
+//		identifies a number as a negative numeric value.
+//
+//		When 'leadingMinusSign' is set to 'true', the
+//		pure number string returned by this method will
+//		format negative numeric values with a leading
+//		minus sign ('-') at the beginning of the number
+//		string.
+//
+//		Leading minus signs represent the standard means
+//		for designating negative numeric values in the
+//		US, UK, Australia, most of Canada and many other
+//		countries.
+//
+//		Example Leading Minus Sign:
+//			"-123.456"
+//
+//		When 'leadingMinusSign' is set to 'false', the
+//		pure number string returned by this method will
+//		format negative numeric values with a trailing
+//		minus signs ('-') located at the end of the
+//		number string.
+//
+//		Trailing minus signs represent the standard for
+//		France, Germany and many countries in the
+//		European Union.
+//
+//		Example Trailing Number Symbols:
+//			"123.456-"
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//
+//		If this method completes successfully, a pure
+//		number string containing the numeric value
+//		extracted from the current instance of
+//		NumberStrKernel will be returned.
+//
+//		A "Pure Number String" is defined as follows:
+//
+//			1.	Consists of numeric character digits
+//				zero through nine inclusive (0-9).
+//
+//			2.	Option: A Pure Number String may include
+//				a radix point or decimal separator.
+//				Decimal separators separate integer and
+//				fractional numeric digits in a pure
+//				number string. The decimal separator may
+//				consist of one or more text characters.
+//
+//				In the US, UK, Australia, most of Canada
+//				and many other countries, the decimal
+//				separator is the period character ('.')
+//				known as the decimal point.
+//
+//				In France, Germany and many countries in
+//				the European Union, the Decimal Separator
+//				is the comma character (',').
+//
+//			3.	Optional: A Pure Number String may
+//				include a negative number sign symbol
+//				consisting of a minus sign ('-'). The
+//				minus sign will identify the numeric
+//				value contained in the pure number string
+//				as a negative number. Only the minus sign
+//				('-') classifies a numeric value as a
+//				negative number in a pure number string.
+//
+//				If a leading or trailing minus sign ('-')
+//				is NOT present,	the numeric value is
+//				positive.
+//
+//			4.	Only numeric characters, the decimal
+//				separator and the minus sign will be
+//				included in the pure number string.
+func (numStrKernel *NumberStrKernel) GetPureNumberStr(
+	decimalSeparatorChars string,
+	leadingMinusSign bool) string {
+
+	if numStrKernel.lock == nil {
+		numStrKernel.lock = new(sync.Mutex)
+	}
+
+	numStrKernel.lock.Lock()
+
+	defer numStrKernel.lock.Unlock()
+
+	numberStr := ""
+
+	if leadingMinusSign == true &&
+		numStrKernel.numberSign == NumSignVal.Negative() {
+
+		numberStr += "-"
+	}
+
+	numberStr +=
+		numStrKernel.integerDigits.GetCharacterString()
+
+	if len(numStrKernel.fractionalDigits.CharsArray) > 0 {
+
+		numberStr += decimalSeparatorChars
+
+		numberStr +=
+			numStrKernel.fractionalDigits.GetCharacterString()
+	}
+
+	if leadingMinusSign == false &&
+		numStrKernel.numberSign == NumSignVal.Negative() {
+
+		numberStr += "-"
+	}
+
+	return numberStr
+}
+
 //	GetScientificNotation
 //
 //	Converts the numeric value contained in the current
@@ -12687,6 +12837,169 @@ func (numStrKernel *NumberStrKernel) IsZeroValue() bool {
 		nil)
 
 	return !isNonZeroValue
+}
+
+//	NewFromBigRat
+//
+//	Creates and returns a new instance of NumberStrKernel
+//	from a Rational Number (big.Rat) passed as an input
+//	parameter.
+//
+// ----------------------------------------------------------------
+//
+//	# Input Parameters
+//
+//	bigRatNum					*big.Rat
+//
+//		The rational number which will be converted to a
+//		new instance of NumberStrKernel.
+//
+//	roundToFractionalDigits 	int
+//
+//		Controls the number of fractional digits returned
+//		to the new instance of NumberStrKernel.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it	contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	NumberStrKernel
+//
+//		If this method completes successfully, a new
+//		instance of NumberStrKernel will be returned
+//		configured with the numeric value extracted
+//		from the Rational Number passed as input
+//		parameter 'bigRatNum'.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (numStrKernel *NumberStrKernel) NewFromBigRat(
+	bigRatNum *big.Rat,
+	roundToFractionalDigits int,
+	errorPrefix interface{}) (
+	NumberStrKernel,
+	error) {
+
+	if numStrKernel.lock == nil {
+		numStrKernel.lock = new(sync.Mutex)
+	}
+
+	numStrKernel.lock.Lock()
+
+	defer numStrKernel.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	newNumStrKernel := NumberStrKernel{}
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumberStrKernel."+
+			"NewFromBigRat()",
+		"")
+
+	if err != nil {
+		return newNumStrKernel, err
+	}
+
+	ratFloatStr := bigRatNum.FloatString(roundToFractionalDigits)
+
+	runeArrayDto := RuneArrayDto{
+		CharsArray:     []rune(ratFloatStr),
+		Description1:   "",
+		Description2:   "",
+		charSearchType: CharSearchType.LinearTargetStartingIndex(),
+	}
+
+	var decSeparatorSpec DecimalSeparatorSpec
+
+	decSeparatorSpec,
+		err = new(DecimalSeparatorSpec).NewStr(
+		".",
+		ePrefix.XCpy(
+			"decSeparatorSpec<-"+
+				"decSeparatorChars"))
+
+	newNumStrKernel,
+		err = new(numberStrKernelElectron).parsePureNumStr(
+		runeArrayDto,
+		decSeparatorSpec,
+		true,
+		ePrefix.XCpy(
+			"ratFloatStr"))
+
+	return newNumStrKernel, err
 }
 
 //	NewFromFloatValue
@@ -14821,7 +15134,7 @@ func (numStrKernel *NumberStrKernel) NewParsePureNumberStr(
 		decSeparatorSpec,
 		leadingMinusSign,
 		ePrefix.XCpy(
-			pureNumberStr))
+			"pureNumberStr"))
 
 	return newNumStrKernel, err
 }
