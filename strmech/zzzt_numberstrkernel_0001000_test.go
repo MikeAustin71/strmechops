@@ -1334,6 +1334,107 @@ func TestNumberStrKernel_IsZeroValue_000100(t *testing.T) {
 
 }
 
+func TestNumberStrKernel_GetBigRatNum_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestNumberStrKernel_GetScientificNotation_000100()",
+		"")
+
+	var origIntDigits, origFracDigits string
+
+	origIntDigits = "123"
+	origFracDigits = "456"
+
+	bigRatToFracDigits := 5
+
+	expectedBigRatNumStr := "123.45600"
+
+	origNumberSign := NumSignVal.Positive()
+
+	var origNumStr string
+
+	origNumStr += origIntDigits
+
+	if len(origFracDigits) > 0 {
+
+		origNumStr += "."
+		origNumStr += origFracDigits
+	}
+
+	numStrKernelBase,
+		err := new(NumberStrKernel).
+		NewFromStringDigits(
+			origIntDigits,
+			origFracDigits,
+			origNumberSign,
+			ePrefix.XCpy(
+				origNumStr))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var pureNumStr string
+
+	pureNumStr = numStrKernelBase.GetPureNumberStr(
+		".",
+		true)
+
+	if pureNumStr != origNumStr {
+
+		t.Errorf("%v\n"+
+			"Test#1\n"+
+			"Error: pureNumStr != origNumStr\n"+
+			"pureNumStr = '%v'\n"+
+			"origNumStr = '%v'\n",
+			ePrefix.String(),
+			pureNumStr,
+			origNumStr)
+
+		return
+
+	}
+
+	var bigRatNum *big.Rat
+
+	bigRatNum,
+		err = numStrKernelBase.GetBigRatNum(
+		NumRoundType.NoRounding(),
+		0,
+		ePrefix.XCpy(
+			"bigRatNum<-"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var actualBigRatNumStr string
+
+	actualBigRatNumStr =
+		bigRatNum.FloatString(bigRatToFracDigits)
+
+	if actualBigRatNumStr != expectedBigRatNumStr {
+
+		t.Errorf("%v\n"+
+			"Test#2\n"+
+			"Error: actualBigRatNumStr != expectedBigRatNumStr\n"+
+			"actualBigRatNumStr   = '%v'\n"+
+			"expectedBigRatNumStr = '%v'\n",
+			ePrefix.String(),
+			actualBigRatNumStr,
+			expectedBigRatNumStr)
+
+		return
+
+	}
+
+	return
+}
+
 func TestNumberStrKernel_GetScientificNotation_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
