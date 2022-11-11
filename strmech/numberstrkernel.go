@@ -12716,6 +12716,13 @@ func (numStrKernel *NumberStrKernel) IsZeroValue() bool {
 //			float64
 //			*big.Float
 //
+//		If 'floatingPointValue' is NOT convertible to
+//		one of the types listed above, an error will be
+//		returned.
+//
+//		This numeric value will be used to populate the
+//		returned instance of NumberStrKernel.
+//
 //	 errorPrefix                interface{}
 //
 //		This object encapsulates error prefix text which is
@@ -12817,12 +12824,9 @@ func (numStrKernel *NumberStrKernel) NewFromFloatValue(
 		return newNumStrKernel, err
 	}
 
-	numberSign := NumSignVal.None()
-
-	err = new(numberStrKernelMolecule).convertNumberToKernel(
+	err = new(numberStrKernelMolecule).convertFloatNumberToKernel(
 		&newNumStrKernel,
 		floatingPointValue,
-		numberSign,
 		ePrefix)
 
 	return newNumStrKernel, err
@@ -13283,13 +13287,11 @@ func (numStrKernel *NumberStrKernel) NewFromSignedIntValue(
 		return newNumStrKernel, err
 	}
 
-	numberSign := NumSignVal.None()
-
-	err = new(numberStrKernelMolecule).convertNumberToKernel(
-		&newNumStrKernel,
-		signedIntValue,
-		numberSign,
-		ePrefix)
+	err = new(numberStrKernelMolecule).
+		convertIntNumberToKernel(
+			&newNumStrKernel,
+			signedIntValue,
+			ePrefix)
 
 	return newNumStrKernel, err
 }
@@ -13620,11 +13622,22 @@ func (numStrKernel *NumberStrKernel) NewFromUnsignedIntValue(
 		return newNumStrKernel, err
 	}
 
-	err = new(numberStrKernelMolecule).convertNumberToKernel(
-		&newNumStrKernel,
-		unsignedIntValue,
-		numberSign,
-		ePrefix)
+	err = new(numberStrKernelMolecule).
+		convertIntNumberToKernel(
+			&newNumStrKernel,
+			unsignedIntValue,
+			ePrefix)
+
+	if err != nil {
+		return newNumStrKernel, err
+	}
+
+	if numberSign == NumSignVal.Negative() {
+
+		newNumStrKernel.numberSign =
+			numberSign
+
+	}
 
 	return newNumStrKernel, err
 }
@@ -15638,13 +15651,11 @@ func (numStrKernel *NumberStrKernel) SetFloatValue(
 		return err
 	}
 
-	numberSign := NumSignVal.None()
-
-	return new(numberStrKernelMolecule).convertNumberToKernel(
-		numStrKernel,
-		floatingPointValue,
-		numberSign,
-		ePrefix)
+	return new(numberStrKernelMolecule).
+		convertFloatNumberToKernel(
+			numStrKernel,
+			floatingPointValue,
+			ePrefix)
 }
 
 // SetNumberSign - Sets the Number Sign for the numeric value
@@ -16222,13 +16233,11 @@ func (numStrKernel *NumberStrKernel) SetSignedIntegerValue(
 		return err
 	}
 
-	numberSign := NumSignVal.None()
-
-	err = new(numberStrKernelMolecule).convertNumberToKernel(
-		numStrKernel,
-		signedIntegerValue,
-		numberSign,
-		ePrefix)
+	err = new(numberStrKernelMolecule).
+		convertIntNumberToKernel(
+			numStrKernel,
+			signedIntegerValue,
+			ePrefix)
 
 	return err
 }
@@ -16555,11 +16564,22 @@ func (numStrKernel *NumberStrKernel) SetUnsignedIntValue(
 		return err
 	}
 
-	return new(numberStrKernelMolecule).convertNumberToKernel(
-		numStrKernel,
-		unsignedIntValue,
-		numberSign,
-		ePrefix)
+	err = new(numberStrKernelMolecule).
+		convertIntNumberToKernel(
+			numStrKernel,
+			unsignedIntValue,
+			ePrefix)
+
+	if err != nil {
+		return err
+	}
+
+	if numberSign == NumSignVal.Negative() {
+
+		numStrKernel.numberSign = numberSign
+	}
+
+	return err
 }
 
 // String - Returns a formatted text string detailing all the

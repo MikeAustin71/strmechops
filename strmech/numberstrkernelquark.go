@@ -2317,33 +2317,13 @@ func (numStrKernelQuark *numberStrKernelQuark) signedPureNumStrToRunes(
 		}
 
 		// Test For Decimal Separator
-		if numberRunes[i] == decSeparatorChars.CharsArray[i] {
+		if numberRunes[i] == decSeparatorChars.CharsArray[0] {
 
 			newLastIndex = lenDecSepChars + i - 1
 
 			if newLastIndex > lastNumberRunesIdx {
 				continue
 			}
-
-			if leadingMinusSign == true &&
-				foundFirstNumericDigit == true {
-				continue
-			}
-
-			if leadingMinusSign == false &&
-				foundFirstNumericDigit == false {
-
-				continue
-			}
-
-			// MUST BE -
-			// leadingMinusSign == false &&
-			//	foundFirstNumericDigit == true
-			//
-			//			OR
-			//
-			// leadingMinusSign == true &&
-			//	foundFirstNumericDigit == false
 
 			j := i
 

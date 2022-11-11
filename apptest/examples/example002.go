@@ -102,6 +102,9 @@ func (MainTest02) NumberStrKernelCompare01() {
 		return
 	}
 
+	fmt.Printf("Verifying 'testBigFloat': %v\n",
+		testBigFloat.Text('f', -1))
+
 	minPrecision := testBigFloat.MinPrec()
 
 	testBigFloat.SetPrec(minPrecision)

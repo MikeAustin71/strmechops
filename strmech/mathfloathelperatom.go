@@ -82,7 +82,7 @@ type mathFloatHelperAtom struct {
 //
 //		Integer and fractional numeric digits contained
 //		in this signed pure number string will be
-//		separated by radix point, or decimal seprator,
+//		separated by radix point, or decimal separator,
 //		specified by input paramter, 'decSeparatorChars'.
 //
 //	err							error

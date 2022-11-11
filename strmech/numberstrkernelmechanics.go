@@ -808,20 +808,20 @@ func (numStrKernelMech *numberStrKernelMechanics) convertToSciNotation(
 
 		exponent = 0
 
-		err = nStrKernelMolecule.convertNumberToKernel(
-			&sciNotKernel.exponent,
-			exponent,
-			NumSignVal.Zero(),
-			ePrefix.XCpy(
-				fmt.Sprintf("sciNotKernel.exponent='%v'",
-					exponent)))
+		err = nStrKernelMolecule.
+			convertIntNumberToKernel(
+				&sciNotKernel.exponent,
+				exponent,
+				ePrefix.XCpy(
+					fmt.Sprintf("sciNotKernel.exponent='%v'",
+						exponent)))
 
 		if err != nil {
 
 			return sciNotKernel, err
 		}
 
-	} else if intArrayLen >= 1 {
+	} else if intArrayLen > 1 {
 
 		newIntRuneArray = make([]rune, 1)
 		newIntRuneArray[0] = intArray.CharsArray[0]
@@ -844,13 +844,13 @@ func (numStrKernelMech *numberStrKernelMechanics) convertToSciNotation(
 
 		exponent = int64(intArrayLen - 1)
 
-		err = nStrKernelMolecule.convertNumberToKernel(
-			&sciNotKernel.exponent,
-			exponent,
-			NumSignVal.Positive(),
-			ePrefix.XCpy(
-				fmt.Sprintf("sciNotKernel.exponent='%v'",
-					exponent)))
+		err = nStrKernelMolecule.
+			convertIntNumberToKernel(
+				&sciNotKernel.exponent,
+				exponent,
+				ePrefix.XCpy(
+					fmt.Sprintf("sciNotKernel.exponent='%v'",
+						exponent)))
 
 		if err != nil {
 
@@ -876,13 +876,13 @@ func (numStrKernelMech *numberStrKernelMechanics) convertToSciNotation(
 
 		exponent = 0
 
-		err = nStrKernelMolecule.convertNumberToKernel(
-			&sciNotKernel.exponent,
-			exponent,
-			NumSignVal.Zero(),
-			ePrefix.XCpy(
-				fmt.Sprintf("sciNotKernel.exponent='%v'",
-					exponent)))
+		err = nStrKernelMolecule.
+			convertIntNumberToKernel(
+				&sciNotKernel.exponent,
+				exponent,
+				ePrefix.XCpy(
+					fmt.Sprintf("sciNotKernel.exponent='%v'",
+						exponent)))
 
 		if err != nil {
 
@@ -934,13 +934,13 @@ func (numStrKernelMech *numberStrKernelMechanics) convertToSciNotation(
 
 			exponent = int64(zerosCount + 1)
 
-			err = nStrKernelMolecule.convertNumberToKernel(
-				&sciNotKernel.exponent,
-				exponent,
-				NumSignVal.Zero(),
-				ePrefix.XCpy(
-					fmt.Sprintf("sciNotKernel.exponent='%v'",
-						exponent)))
+			err = nStrKernelMolecule.
+				convertIntNumberToKernel(
+					&sciNotKernel.exponent,
+					exponent,
+					ePrefix.XCpy(
+						fmt.Sprintf("sciNotKernel.exponent='%v'",
+							exponent)))
 
 			if err != nil {
 
@@ -971,13 +971,13 @@ func (numStrKernelMech *numberStrKernelMechanics) convertToSciNotation(
 
 			exponent = int64(zerosCount + 1)
 
-			err = nStrKernelMolecule.convertNumberToKernel(
-				&sciNotKernel.exponent,
-				exponent,
-				NumSignVal.Zero(),
-				ePrefix.XCpy(
-					fmt.Sprintf("sciNotKernel.exponent='%v'",
-						exponent)))
+			err = nStrKernelMolecule.
+				convertIntNumberToKernel(
+					&sciNotKernel.exponent,
+					exponent,
+					ePrefix.XCpy(
+						fmt.Sprintf("sciNotKernel.exponent='%v'",
+							exponent)))
 
 			if err != nil {
 

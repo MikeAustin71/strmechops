@@ -603,7 +603,7 @@
 === RUN   TestStrMech_ExtractNumericDigits_21
 --- PASS: TestStrMech_ExtractNumericDigits_21 (0.00s)
 === RUN   TestStrMech_ExtractNumberRunes_01
---- PASS: TestStrMech_ExtractNumberRunes_01 (0.01s)
+--- PASS: TestStrMech_ExtractNumberRunes_01 (0.02s)
 === RUN   TestStrMech_ExtractNumberRunes_02
 --- PASS: TestStrMech_ExtractNumberRunes_02 (0.08s)
 === RUN   TestStrMech_ExtractNumberRunes_03
@@ -1669,7 +1669,7 @@
 === RUN   TestTextLineSpecLinesCollection_InsertTextLine_000100
 --- PASS: TestTextLineSpecLinesCollection_InsertTextLine_000100 (0.01s)
 === RUN   TestTextLineSpecLinesCollection_InsertTextLine_000200
---- PASS: TestTextLineSpecLinesCollection_InsertTextLine_000200 (0.02s)
+--- PASS: TestTextLineSpecLinesCollection_InsertTextLine_000200 (0.01s)
 === RUN   TestTextLineSpecLinesCollection_InsertTextLine_000300
 --- PASS: TestTextLineSpecLinesCollection_InsertTextLine_000300 (0.01s)
 === RUN   TestTextLineSpecLinesCollection_InsertTextLine_000400
@@ -1693,7 +1693,7 @@
 === RUN   TestTextLineSpecLinesCollection_PeekAtTextLine_000200
 --- PASS: TestTextLineSpecLinesCollection_PeekAtTextLine_000200 (0.04s)
 === RUN   TestTextLineSpecLinesCollection_PopFirstTextLine_000100
---- PASS: TestTextLineSpecLinesCollection_PopFirstTextLine_000100 (0.04s)
+--- PASS: TestTextLineSpecLinesCollection_PopFirstTextLine_000100 (0.03s)
 === RUN   TestTextLineSpecLinesCollection_PopLastTextLine_000100
 --- PASS: TestTextLineSpecLinesCollection_PopLastTextLine_000100 (0.04s)
 === RUN   TestTextLineSpecLinesCollection_PopTextLine_000100
@@ -1701,17 +1701,17 @@
 === RUN   TestTextLineSpecLinesCollection_ReplaceTextLine_000100
 --- PASS: TestTextLineSpecLinesCollection_ReplaceTextLine_000100 (0.06s)
 === RUN   TestTextLineSpecLinesCollection_SetTextLineCollection_000100
---- PASS: TestTextLineSpecLinesCollection_SetTextLineCollection_000100 (0.10s)
+--- PASS: TestTextLineSpecLinesCollection_SetTextLineCollection_000100 (0.11s)
 === RUN   TestTextLineSpecLinesCollectionAtom_emptyCollection_000100
---- PASS: TestTextLineSpecLinesCollectionAtom_emptyCollection_000100 (0.00s)
+--- PASS: TestTextLineSpecLinesCollectionAtom_emptyCollection_000100 (0.01s)
 === RUN   TestTextLineSpecLinesCollectionAtom_equalCollections_000100
 --- PASS: TestTextLineSpecLinesCollectionAtom_equalCollections_000100 (0.02s)
 === RUN   TestTextLineSpecLinesCollectionAtom_insertTextLine_000100
---- PASS: TestTextLineSpecLinesCollectionAtom_insertTextLine_000100 (0.03s)
+--- PASS: TestTextLineSpecLinesCollectionAtom_insertTextLine_000100 (0.02s)
 === RUN   TestTextLineSpecLinesCollectionAtom_peekPopTextLine_000100
 --- PASS: TestTextLineSpecLinesCollectionAtom_peekPopTextLine_000100 (0.00s)
 === RUN   TestTextLineSpecLinesCollectionAtom_testValidityOfTextLinesCollection_000100
---- PASS: TestTextLineSpecLinesCollectionAtom_testValidityOfTextLinesCollection_000100 (0.02s)
+--- PASS: TestTextLineSpecLinesCollectionAtom_testValidityOfTextLinesCollection_000100 (0.01s)
 === RUN   TestTextLineSpecLinesCollectionNanobot_addTextLine_000100
 --- PASS: TestTextLineSpecLinesCollectionNanobot_addTextLine_000100 (0.02s)
 === RUN   TestTextLineSpecLinesCollectionNanobot_copyIn_000100
@@ -2333,11 +2333,11 @@
 === RUN   TestTextLineSpecTimerLines_String_000100
 --- PASS: TestTextLineSpecTimerLines_String_000100 (0.00s)
 === RUN   TestTextLineSpecTimerLines_String_000200
---- PASS: TestTextLineSpecTimerLines_String_000200 (0.01s)
+--- PASS: TestTextLineSpecTimerLines_String_000200 (0.00s)
 === RUN   TestTextLineSpecTimerLines_String_000300
 --- PASS: TestTextLineSpecTimerLines_String_000300 (0.00s)
 === RUN   TestTextLineSpecTimerLines_TextBuilder_000100
---- PASS: TestTextLineSpecTimerLines_TextBuilder_000100 (0.00s)
+--- PASS: TestTextLineSpecTimerLines_TextBuilder_000100 (0.01s)
 === RUN   TestTextLineSpecTimerLines_TextLineSpecName_000100
 --- PASS: TestTextLineSpecTimerLines_TextLineSpecName_000100 (0.00s)
 === RUN   TestTextLineSpecTimerLines_TextTypeName_000100
@@ -2376,4 +2376,4 @@
 --- PASS: TestTextLineSpecTimerLinesPreon_getMaximumTimerLabelLen_000100 (0.00s)
 PASS
 coverage: 50.7% of statements
-ok  	github.com/MikeAustin71/strmechops/strmech	2.904s
+ok  	github.com/MikeAustin71/strmechops/strmech	2.709s
