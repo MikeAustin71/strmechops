@@ -7,6 +7,6 @@ import "github.com/MikeAustin71/strmechops/apptest/examples"
 
 func main() {
 
-	examples.MainTest02{}.NumberStrKernelCompare01()
+	examples.MainTest02{}.BigRatHelper01()
 
 }

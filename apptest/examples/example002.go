@@ -14,6 +14,61 @@ type MainTest02 struct {
 	input string
 }
 
+func (MainTest02) BigRatHelper01() {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"BigRatHelper01()",
+		"")
+
+	breakStr := strings.Repeat("=", 50)
+
+	fmt.Printf("\n\n" + breakStr + "\n")
+
+	fmt.Printf("\n Starting Run!\n"+
+		"Function: %v\n",
+		ePrefix.String())
+
+	fmt.Printf("\n" + breakStr + "\n")
+
+	newRat := big.NewRat(1, 3)
+
+	var bigFloatNum *big.Float
+
+	var err error
+
+	bigFloatNum,
+		err = new(strmech.MathBigRatHelper).RatToBigFloat(
+		newRat,
+		10,
+		ePrefix)
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	ratNum := newRat.Num()
+
+	ratDenom := newRat.Denom()
+
+	fmt.Printf("newRat = %v/%v\n",
+		ratNum.Text(10),
+		ratDenom.Text(10))
+
+	fmt.Printf("bigFloatNum = %v\n",
+		bigFloatNum.Text('f', -1))
+
+	fmt.Printf("\n\n" + breakStr + "\n")
+
+	fmt.Printf("\n Successful Completion!\n"+
+		"Function: %v\n",
+		ePrefix.String())
+
+	fmt.Printf("\n" + breakStr + "\n")
+
+}
+
 func (MainTest02) NumberStrKernelCompare01() {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
