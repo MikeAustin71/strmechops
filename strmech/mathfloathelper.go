@@ -2,6 +2,7 @@ package strmech
 
 import (
 	ePref "github.com/MikeAustin71/errpref"
+	"math/big"
 	"sync"
 )
 
@@ -250,4 +251,37 @@ func (mathFloatHelper *MathFloatHelper) FloatNumToIntFracRunes(
 			ePrefix)
 
 	return numberStats, err
+}
+
+// PrecisionToDigitsFactor
+//
+// Returns an instance of big.Float configured with the
+// numerical value used to convert bits of precision to
+// numerical digits.
+//
+// This factor is used when converting precision to
+// numerical digits or numerical digits to precision.
+//
+// The values produced with this constant represent an
+// estimate with an error of plus or minus 5.
+func (mathFloatHelper *MathFloatHelper) PrecisionToDigitsFactor() *big.Float {
+
+	if mathFloatHelper.lock == nil {
+		mathFloatHelper.lock = new(sync.Mutex)
+	}
+
+	mathFloatHelper.lock.Lock()
+
+	defer mathFloatHelper.lock.Unlock()
+
+	conversionStrValue := new(MathConstantsFloat).
+		PrecisionToDigitsFactorStr()
+
+	precisionToDigitsFactor,
+		_ := new(big.Float).
+		SetInt64(0).
+		SetMode(big.AwayFromZero).SetString(
+		conversionStrValue)
+
+	return precisionToDigitsFactor
 }
