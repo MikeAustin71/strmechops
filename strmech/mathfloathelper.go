@@ -1,6 +1,7 @@
 package strmech
 
 import (
+	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
 	"math/big"
 	"sync"
@@ -234,7 +235,7 @@ func (mathFloatHelper *MathFloatHelper) FloatNumToIntFracRunes(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"NumberStrKernel."+
+		"MathFloatHelper."+
 			"GetNumericValueStats()",
 		"")
 
@@ -251,6 +252,69 @@ func (mathFloatHelper *MathFloatHelper) FloatNumToIntFracRunes(
 			ePrefix)
 
 	return numberStats, err
+}
+
+// PiTo20k
+//
+//	Returns an instance of *big.Float configured for Pi
+//	to 20k digits.
+//
+//	Pi to 20,001 digits. OEIS A000796
+//
+//	https://oeis.org/A000796
+//	https://oeis.org/A000796/b000796.txt
+func (mathFloatHelper *MathFloatHelper) PiTo20k(
+	errorPrefix interface{}) (
+	*big.Float,
+	error) {
+
+	if mathFloatHelper.lock == nil {
+		mathFloatHelper.lock = new(sync.Mutex)
+	}
+
+	mathFloatHelper.lock.Lock()
+
+	defer mathFloatHelper.lock.Unlock()
+
+	pi20k := new(big.Float).
+		SetInt64(0).
+		SetPrec(66504).
+		SetMode(big.AwayFromZero).
+		SetInt64(0)
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"MathFloatHelper."+
+			"PiTo20k()",
+		"")
+
+	if err != nil {
+		return pi20k, err
+	}
+
+	piStrValue := new(MathConstantsFloat).
+		PrecisionToDigitsFactorStr()
+
+	var ok bool
+	_,
+		ok = pi20k.SetString(piStrValue)
+
+	if !ok {
+
+		err = fmt.Errorf("\n%v\n"+
+			"Error: pi20k.SetString(piStrValue) FAILED!\n"+
+			"big.Float was unable to set the Pi value to\n"+
+			"20,000 digits.\n",
+			ePrefix.String())
+
+		return pi20k, err
+	}
+
+	return pi20k, err
 }
 
 // PrecisionToDigitsFactor
