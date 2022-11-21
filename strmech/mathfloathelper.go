@@ -725,14 +725,6 @@ func (mathFloatHelper *MathFloatHelper) PrecisionToDigitsFactor() *big.Float {
 
 	defer mathFloatHelper.lock.Unlock()
 
-	conversionStrValue := new(MathConstantsFloat).
-		PrecisionToDigitsFactorStr()
-
-	precisionToDigitsFactor,
-		_ := new(big.Float).
-		SetInt64(0).
-		SetMode(big.AwayFromZero).SetString(
-		conversionStrValue)
-
-	return precisionToDigitsFactor
+	return new(mathFloatHelperPreon).
+		precisionToDigitsFactor()
 }
