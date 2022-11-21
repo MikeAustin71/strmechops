@@ -706,15 +706,56 @@ func (mathFloatHelper *MathFloatHelper) PiTo20k(
 
 // PrecisionToDigitsFactor
 //
-// Returns an instance of big.Float configured with the
-// numerical value used to convert bits of precision to
-// numerical digits.
+// Returns an instance of *big.Float configured with the
+// "Precision To Digits" conversion factor.
 //
-// This factor is used when converting precision to
-// numerical digits or numerical digits to precision.
+// Precision bits are used in the configuration of
+// big.Float types. The conversion factor is
+// "3.3219789....".
 //
-// The values produced with this constant represent an
-// estimate with an error of plus or minus 5.
+//		Precision Bits / Conversion Factor =
+//				Numeric Digit Capacity
+//
+//	Conversely:
+//
+//		Conversion Factor  x  Numeric Digit Capacity =
+//				Precision Bits
+//
+//	Precision, as used in connection with type big.Float,
+//	specifies the mantissa precision of a number in bits.
+//
+//	Also, remember that the number of numeric digits
+//	identified using this conversion factor includes
+//	both integer and fractional digits.
+//
+//	For information on 'precision bits' and their
+//	relevance to type big.Float, reference:
+//
+//	https://pkg.go.dev/math/big#Float
+//
+//	Bear in mind that this conversion factor may only be
+//	used to generate an estimate of numeric digits
+//	associated with a give precision bits value. This
+//	estimate may vary from the actual number of numeric
+//	digits. This estimate has a margin of error of plus
+//	or minus five (+ or - 3).
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	None
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	*big.Float
+//
+//		This method returns a pointer to an instance of
+//		big.Float configured with the conversion factor
+//		used to convert precision bits to the number of
+//		equivalent numeric digits.
 func (mathFloatHelper *MathFloatHelper) PrecisionToDigitsFactor() *big.Float {
 
 	if mathFloatHelper.lock == nil {
