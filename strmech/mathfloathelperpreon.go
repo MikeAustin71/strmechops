@@ -22,10 +22,11 @@ type mathFloatHelperPreon struct {
 //
 //		Conversion Factor  x  Numeric Digit Capacity =
 //				Precision Bits
+//			(margin of error +/- 16)
 //
 //	The number of precision bits returned is an
 //	estimate with a margin of error of plus or minus
-//	three (+ or - 16).
+//	sixteen (+ or - 16).
 //
 // ----------------------------------------------------------------
 //
@@ -120,6 +121,7 @@ func (floatHelperPreon *mathFloatHelperPreon) estimateDigitsToPrecision(
 //
 //		Precision Bits / Conversion Factor =
 //				Numeric Digit Capacity
+//			(margin of error +/- 3)
 //
 //	The number of numerical digits returned is an
 //	estimate with a margin of error of plus or minus
@@ -208,11 +210,13 @@ func (floatHelperPreon *mathFloatHelperPreon) estimatePrecisionToDigits(
 //
 //		Precision Bits / Conversion Factor =
 //				Numeric Digit Capacity
+//			(margin of error +/- 3)
 //
 //	Conversely:
 //
 //		Conversion Factor  x  Numeric Digit Capacity =
 //				Precision Bits
+//			(margin of error +/- 16)
 //
 //	Precision, as used in connection with type big.Float,
 //	specifies the mantissa precision of a number in bits.

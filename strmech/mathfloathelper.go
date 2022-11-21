@@ -704,6 +704,75 @@ func (mathFloatHelper *MathFloatHelper) PiTo20k(
 	return pi20k, err
 }
 
+//	DigitsToPrecisionEstimate
+//
+//	Computes an estimate of the number of precision
+//	bits required in order to store a given number
+//	of numeric digits in a type big.Float, floating
+//	point number.
+//
+//	Precision bits are used in the configuration of
+//	big.Float types. The conversion factor is
+//	"3.3219789132197891321978913219789".
+//
+//		Conversion Factor  x  Numeric Digit Capacity =
+//				Precision Bits
+//			(margin of error +/- 16)
+//
+//	The number of precision bits returned is an
+//	estimate with a margin of error of plus or minus
+//	sixteen (+ or - 16).
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	numNumericDigitsRequired	int64
+//
+//		The number of numeric digits to be stored and
+//		processed by a type big.Float floating point
+//		numeric value. This value represents the desired
+//		capacity for a big.Float number. This number of
+//		numeric digits should include both integer and
+//		fractional numeric digits.
+//
+//		If this value is less than one (+1), this
+//		method will return a value of zero, thereby
+//		signaling an error.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	uint
+//
+//		If input parameter 'numNumericDigitsRequired'
+//		has a value less than one (+1), this parameter
+//		will return a value of zero (0) signaling an
+//		error.
+//
+//		Otherwise, the value returned will represent the
+//		estimated number of precision bits required for
+//		the mantissa of a big.Float value i
+//		be stored given the value of input parameter,
+//		'precisionBits'. This estimate has a margin of
+//		error of plus or minus sixteen bits (+ or - 16).
+func (mathFloatHelper *MathFloatHelper) DigitsToPrecisionEstimate(
+	numNumericDigitsRequired int64) uint {
+
+	if mathFloatHelper.lock == nil {
+		mathFloatHelper.lock = new(sync.Mutex)
+	}
+
+	mathFloatHelper.lock.Lock()
+
+	defer mathFloatHelper.lock.Unlock()
+
+	return new(mathFloatHelperPreon).
+		estimateDigitsToPrecision(
+			numNumericDigitsRequired)
+}
+
 // PrecisionToDigitsFactor
 //
 // Returns an instance of *big.Float configured with the
@@ -711,15 +780,17 @@ func (mathFloatHelper *MathFloatHelper) PiTo20k(
 //
 // Precision bits are used in the configuration of
 // big.Float types. The conversion factor is
-// "3.3219789....".
+// "3.3219789132197891321978913219789".
 //
 //		Precision Bits / Conversion Factor =
 //				Numeric Digit Capacity
+//			(margin of error +/- 3)
 //
 //	Conversely:
 //
 //		Conversion Factor  x  Numeric Digit Capacity =
 //				Precision Bits
+//			(margin of error +/- 16)
 //
 //	Precision, as used in connection with type big.Float,
 //	specifies the mantissa precision of a number in bits.
