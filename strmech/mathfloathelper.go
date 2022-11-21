@@ -773,6 +773,69 @@ func (mathFloatHelper *MathFloatHelper) DigitsToPrecisionEstimate(
 			numNumericDigitsRequired)
 }
 
+//	PrecisionToDigitsEstimate
+//
+//	Computes an estimates of the number of numerical
+//	digits which can be stored given the number of
+//	precision bits configured for a type big.Float,
+//	floating point number.
+//
+// Precision bits are used in the configuration of
+// big.Float types. The conversion factor is
+// "3.3219789132197891321978913219789".
+//
+//		Precision Bits / Conversion Factor =
+//				Numeric Digit Capacity
+//			(margin of error +/- 3)
+//
+//	The number of numerical digits returned is an
+//	estimate with a margin of error of plus or minus
+//	three (+ or - 3).
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	precisionBits				uint
+//
+//		The number of bits of precision in the mantissa
+//		of a big.Float floating point numeric value.
+//
+//		If this value is less than four (+4), an invalid
+//		value of minus one (-1) will be returned.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	int64
+//
+//		If input parameter 'precisionBits' has a value
+//		less than four (+4), this parameter will return
+//		a value of minus one (-1) signaling an error.
+//
+//		Otherwise, the value returned will represent the
+//		estimated number of numerical digits which can
+//		be stored given the value of input parameter,
+//		'precisionBits'. This estimate has a margin of
+//		error of plus or minus three numeric digits
+//		(+ or - 3).
+func (mathFloatHelper *MathFloatHelper) PrecisionToDigitsEstimate(
+	precisionBits uint) int64 {
+
+	if mathFloatHelper.lock == nil {
+		mathFloatHelper.lock = new(sync.Mutex)
+	}
+
+	mathFloatHelper.lock.Lock()
+
+	defer mathFloatHelper.lock.Unlock()
+
+	return new(mathFloatHelperPreon).
+		estimatePrecisionToDigits(
+			precisionBits)
+}
+
 // PrecisionToDigitsFactor
 //
 // Returns an instance of *big.Float configured with the
