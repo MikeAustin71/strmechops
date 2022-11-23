@@ -1080,3 +1080,179 @@ func (mathFloatHelper *MathFloatHelper) RaiseToPositiveExponent(
 
 	return raisedToExponent, err
 }
+
+//	PrecisionBitsFromRequiredDigits
+//
+//	Generates the number of precision bits in the
+//	mantissa of a big.Float number based on the
+//	number of numerical digits required to produce
+//	an accurate calculation result.
+//
+//	Be advised that the number of mantissa precision bits
+//	required to store a process an accurate numeric value
+//	includes both integer and fractional numeric digits.
+//
+// ----------------------------------------------------------------
+//
+//	# Input Parameters
+//
+//
+//	requiredIntegerDigits		int64
+//
+//		The number of integer digits required for the
+//		pending calculation.
+//
+//		If this parameter has a value less than zero,
+//		an error will be returned.
+//
+//		If the sum of parameters 'requiredIntegerDigits'
+//		and 'requiredFractionalDigits' is equal to zero,
+//		an error will be returned.
+//
+//	requiredFractionalDigits	int64
+//
+//		The number of fractional digits required to
+//		ensure accuracy for the pending calculation.
+//
+//		If this parameter has a value less than zero,
+//		an error will be returned.
+//
+//		If the sum of parameters 'requiredIntegerDigits'
+//		and 'requiredFractionalDigits' is equal to zero,
+//		an error will be returned.
+//
+//	requestedBufferDigits		int64
+//
+//		The number of extra numerical digits required to
+//		ensure accuracy for the pending calculation. It
+//		is generally a good idea to add space for extra
+//		numerical digits to accommodate rounding and/or
+//		complex numerical calculations.
+//
+//		If this parameter has a value less than zero,
+//		an error will be returned.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it	contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	precisionBits				uint
+//
+//		If this method completes successfully, this
+//		parameter will return the number of precision
+//		bits required to store and accurately process
+//		the number of numerical digits identified by
+//		input parameters, 'requiredIntegerDigits',
+//		'requiredFractionalDigits' and
+//		'requestedBufferDigits'.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (mathFloatHelper *MathFloatHelper) PrecisionBitsFromRequiredDigits(
+	requiredIntegerDigits,
+	requiredFractionalDigits,
+	requestedBufferDigits int64,
+	errorPrefix interface{}) (
+	precisionBits uint,
+	err error) {
+
+	if mathFloatHelper.lock == nil {
+		mathFloatHelper.lock = new(sync.Mutex)
+	}
+
+	mathFloatHelper.lock.Lock()
+
+	defer mathFloatHelper.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"MathFloatHelper."+
+			"PrecisionBitsFromRequiredDigits()",
+		"")
+
+	if err != nil {
+
+		return precisionBits, err
+	}
+
+	precisionBits,
+		err = new(mathFloatHelperAtom).precisionBitsFromRequiredDigits(
+		requiredIntegerDigits,
+		requiredFractionalDigits,
+		requestedBufferDigits,
+		ePrefix)
+
+	return precisionBits, err
+}
