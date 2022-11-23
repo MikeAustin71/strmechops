@@ -14,8 +14,8 @@ type mathFloatHelperQuark struct {
 //	raiseToPositiveExponent
 //
 //	Receives a pointer to a big.Float floating point
-//	number and raises that value to the power specified
-//	by input parameter exponent.
+//	number and raises that number to the power specified
+//	by input parameter 'exponent'.
 //
 //		Example:	3.2 ^ 4 = 104.8576
 //					base ^ exponent = raisedToExponent
@@ -140,6 +140,16 @@ func (floatHelperQuark *mathFloatHelperQuark) raiseToPositiveExponent(
 		return raisedToExponent, err
 	}
 
+	if base == nil {
+
+		err = fmt.Errorf("\n%v\n"+
+			"Error: Input parameter 'base' is invalid!\n"+
+			"'base' is a nil pointer.\n",
+			ePrefix.String())
+
+		return raisedToExponent, err
+	}
+
 	var ok bool
 	_,
 		ok = raisedToExponent.SetString("1.0")
@@ -149,6 +159,11 @@ func (floatHelperQuark *mathFloatHelperQuark) raiseToPositiveExponent(
 		err = fmt.Errorf("\n%v\n"+
 			"Error: raisedToExponent.SetString(\"1.0\") Failed!\n",
 			ePrefix.String())
+
+		return raisedToExponent, err
+	}
+
+	if exponent == 0 {
 
 		return raisedToExponent, err
 	}

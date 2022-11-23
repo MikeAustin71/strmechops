@@ -236,7 +236,7 @@ func (mathFloatHelper *MathFloatHelper) FloatNumToIntFracRunes(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"MathFloatHelper."+
-			"GetNumericValueStats()",
+			"FloatNumToIntFracRunes()",
 		"")
 
 	if err != nil {
@@ -902,4 +902,181 @@ func (mathFloatHelper *MathFloatHelper) PrecisionToDigitsFactor() *big.Float {
 
 	return new(mathFloatHelperPreon).
 		precisionToDigitsFactor()
+}
+
+//	RaiseToPositiveExponent
+//
+//	Receives a pointer to a big.Float floating point
+//	number and raises that number to the power specified
+//	by input parameter 'exponent'.
+//
+//		Example:	3.2 ^ 4 = 104.8576
+//					base ^ exponent = raisedToExponent
+//
+//	This method will only process positive exponents.
+//
+// ----------------------------------------------------------------
+//
+//	# Input Parameters
+//
+//	base						*big.Float
+//
+//		This floating point value will be raised to the
+//		power of 'exponent' and returned to the calling
+//		function.
+//
+//	exponent					int64
+//
+//		This value will be used to raise 'base' to the
+//		power of 'exponent'.
+//
+//		Example:	3.2 ^ 4 = 104.8576
+//					base ^ exponent = raisedToExponent
+//
+//	precisionBits				uint
+//
+//		The number of bits in the mantissa of the result
+//		'raisedToExponent'. Effectively, this parameter
+//		controls the precision and accuracy for the
+//		calculation of 'base' raised to the power of
+//		'exponent'.
+//
+//		If in doubt as to this number, identify the
+//		total number of integer and fractional digits
+//		required to store an accurate result and
+//		multiply this number times four (+4) for a
+//		rough and safe estimate. The following method may
+//		also be used to calculate 'precisionBits' from
+//		required numerical digits:
+//
+//			MathFloatHelper.DigitsToPrecisionEstimate()
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it	contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	raisedToExponent	*big.Float
+//
+//		If this method completes successfully, this will
+//		return 'base' value raised to the power of the
+//		'exponent' value.
+//
+//		Example:	3.2 ^ 4 = 104.8576
+//					base ^ exponent = raisedToExponent
+//
+//	err							error
+//
+//		If this method completes successfully, this
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (mathFloatHelper *MathFloatHelper) RaiseToPositiveExponent(
+	base *big.Float,
+	exponent int64,
+	precisionBits uint,
+	errorPrefix interface{}) (
+	raisedToExponent *big.Float,
+	err error) {
+
+	if mathFloatHelper.lock == nil {
+		mathFloatHelper.lock = new(sync.Mutex)
+	}
+
+	mathFloatHelper.lock.Lock()
+
+	defer mathFloatHelper.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	raisedToExponent =
+		new(big.Float).
+			SetPrec(precisionBits).
+			SetMode(big.AwayFromZero).
+			SetInt64(0)
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"MathFloatHelper."+
+			"RaiseToPositiveExponent()",
+		"")
+
+	if err != nil {
+		return raisedToExponent, err
+	}
+
+	raisedToExponent,
+		err = new(mathFloatHelperQuark).
+		raiseToPositiveExponent(
+			base,
+			exponent,
+			precisionBits,
+			ePrefix)
+
+	return raisedToExponent, err
 }
