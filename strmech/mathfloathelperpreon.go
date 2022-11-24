@@ -1,6 +1,9 @@
 package strmech
 
 import (
+	"fmt"
+	ePref "github.com/MikeAustin71/errpref"
+	"math"
 	"math/big"
 	"sync"
 )
@@ -13,12 +16,13 @@ type mathFloatHelperPreon struct {
 //
 //	Computes an estimate of the number of precision
 //	bits required in order to store a given number
-//	of numeric digits in a type big.Float, floating
-//	point number.
+//	of integer and fractional numeric digits in a
+//	big.Float floating point numeric value.
 //
 //	Precision bits are used in the configuration of
-//	big.Float types. The conversion factor is
-//	"3.3219789132197891321978913219789".
+//	big.Float types. The conversion factor used to
+//	convert numeric digits to precision bits is:
+//		"3.3219789132197891321978913219789"
 //
 //		Conversion Factor  x  Numeric Digit Capacity =
 //				Precision Bits
@@ -27,6 +31,9 @@ type mathFloatHelperPreon struct {
 //	The number of precision bits returned is an
 //	estimate with a margin of error of plus or minus
 //	sixteen (+ or - 16).
+//
+//	The value of the returned precision bits will always
+//	be a multiple of eight (8).
 //
 // ----------------------------------------------------------------
 //
@@ -39,31 +46,71 @@ type mathFloatHelperPreon struct {
 //		numeric value. This value represents the desired
 //		capacity for a big.Float number. This number of
 //		numeric digits should include both integer and
-//		fractional numeric digits.
+//		fractional numeric digits as well as a buffer
+//		of extra digits necessary to perform accurate
+//		calculations. The number of buffer digits will
+//		vary depending on the complexity of pending
+//		calculations.
 //
-//		If this value is less than one (+1), this
-//		method will return a value of zero, thereby
-//		signaling an error.
+//		If this value is less than one (+1), an error will
+//		be returned.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // # Return Values
 //
-//	uint
+//	precisionBits				uint
 //
-//		If input parameter 'numNumericDigitsRequired'
-//		has a value less than one (+1), this parameter
-//		will return a value of zero (0) signaling an
-//		error.
+//		Precision bits defines the number of bits in the
+//		mantissa of a big.Float numeric value. The number
+//		of precision bits controls the number of integer
+//		and fractional numeric digits that can be stored
+//		in an instance of big.Float.
 //
-//		Otherwise, the value returned will represent the
-//		estimated number of precision bits required for
-//		the mantissa of a big.Float value i
-//		be stored given the value of input parameter,
-//		'precisionBits'. This estimate has a margin of
+//		If this method completes successfully, the value
+//		returned will represent the estimated number of
+//		precision bits required to store and process
+//		the number of numerical digits specified by input
+//		parameter, 'numNumericDigitsRequired'.
+//
+//		This estimate for precision bits has a margin of
 //		error of plus or minus sixteen bits (+ or - 16).
+//
+//		The value of 'precisionBits' returned by this
+//		method will always be a multiple of eight (+8).
+//
+//	err							error
+//
+//		If this method completes successfully, this
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
 func (floatHelperPreon *mathFloatHelperPreon) estimateDigitsToPrecision(
-	numNumericDigitsRequired int64) uint {
+	numNumericDigitsRequired int64,
+	errPrefDto *ePref.ErrPrefixDto) (
+	precisionBits uint,
+	err error) {
 
 	if floatHelperPreon.lock == nil {
 		floatHelperPreon.lock = new(sync.Mutex)
@@ -73,9 +120,30 @@ func (floatHelperPreon *mathFloatHelperPreon) estimateDigitsToPrecision(
 
 	defer floatHelperPreon.lock.Unlock()
 
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"mathFloatHelperAtom."+
+			"precisionBitsFromRequiredDigits()",
+		"")
+
+	if err != nil {
+
+		return precisionBits, err
+	}
+
 	if numNumericDigitsRequired < 1 {
 
-		return uint(0)
+		err = fmt.Errorf("\n%v\n"+
+			"Error: Input parameter 'numNumericDigitsRequired' is invalid!\n"+
+			"'numNumericDigitsRequired' is less than one (+1).\n"+
+			"numNumericDigitsRequired = '%v'\n",
+			ePrefix.String(),
+			numNumericDigitsRequired)
+
+		return precisionBits, err
 	}
 
 	conversionStrValue := new(MathConstantsFloat).
@@ -99,13 +167,47 @@ func (floatHelperPreon *mathFloatHelperPreon) estimateDigitsToPrecision(
 		Mul(
 			numOfDigitsFloat, precisionToDigitsFactor)
 
-	precisionBitsInt64,
-		_ :=
-		numOfPrecisionBitsFloat.Uint64()
+	numOfPrecisionBitsUint64,
+		accuracy := numOfPrecisionBitsFloat.Uint64()
 
-	precisionBitsUint := uint(precisionBitsInt64)
+	if accuracy == -1 {
 
-	return precisionBitsUint
+		numOfPrecisionBitsUint64 += 8
+	}
+
+	if numOfPrecisionBitsUint64%8 != 0 {
+
+		// Precision bits are not a multiple
+		//	of 8.
+
+		numOfPrecisionBitsUint64 =
+			numOfPrecisionBitsUint64 / 8
+
+		numOfPrecisionBitsUint64++
+
+		numOfPrecisionBitsUint64 =
+			numOfPrecisionBitsUint64 * 8
+
+	}
+
+	if numOfPrecisionBitsUint64 > math.MaxUint32 {
+
+		err = fmt.Errorf("\n%v\n"+
+			"Error: The value of numOfPrecisionBitsUint64 (uint64)\n"+
+			" exceeds the maximum value of an unsigned integer (uint).\n"+
+			"numOfPrecisionBitsUint64 = '%v'\n",
+			ePrefix.String(),
+			numOfPrecisionBitsUint64)
+
+		return precisionBits, err
+
+	} else {
+
+		precisionBits = uint(numOfPrecisionBitsUint64)
+
+	}
+
+	return precisionBits, err
 }
 
 //	estimatePrecisionToDigits

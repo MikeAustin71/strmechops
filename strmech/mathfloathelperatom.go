@@ -371,8 +371,13 @@ func (mathFloatHelpAtom *mathFloatHelperAtom) precisionBitsFromRequiredDigits(
 			requiredFractionalDigits +
 			requestedBufferDigits
 
-	precisionBits = new(mathFloatHelperPreon).
-		estimateDigitsToPrecision(totalRequiredNumericalDigits)
+	precisionBits,
+		err = new(mathFloatHelperPreon).
+		estimateDigitsToPrecision(
+			totalRequiredNumericalDigits,
+			ePrefix.XCpy(
+				fmt.Sprintf("totalRequiredNumericalDigits= %v",
+					totalRequiredNumericalDigits)))
 
 	return precisionBits, err
 }
