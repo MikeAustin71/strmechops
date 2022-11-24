@@ -175,7 +175,7 @@ func (mathFloatHelpAtom *mathFloatHelperAtom) floatNumToSignedPureNumStr(
 			return signedPureNumStr, err
 		}
 
-		bigFloatNum.SetPrec(bigFloatNum.MinPrec())
+		// bigFloatNum.SetPrec(bigFloatNum.MinPrec())
 
 		signedPureNumStr = fmt.Sprintf("%v",
 			bigFloatNum.Text('f', -1))

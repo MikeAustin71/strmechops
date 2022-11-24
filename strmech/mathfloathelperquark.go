@@ -558,10 +558,23 @@ func (floatHelperQuark *mathFloatHelperQuark) roundBigFloat(
 
 	numStrKernel.numberValueType = numberStats.NumberValueType
 
-	err = numStrKernel.Round(
-		roundingType,
-		roundToFractionalDigits,
-		ePrefix.XCpy("numberToRound"))
+	var numStrRoundingSpec NumStrRoundingSpec
+
+	numStrRoundingSpec,
+		err =
+		new(NumStrRoundingSpec).NewRoundingSpec(
+			roundingType,
+			roundToFractionalDigits,
+			ePrefix)
+
+	if err != nil {
+		return err
+	}
+
+	err = new(numStrMathRoundingNanobot).roundNumStrKernel(
+		&numStrKernel,
+		numStrRoundingSpec,
+		ePrefix)
 
 	if err != nil {
 		return err

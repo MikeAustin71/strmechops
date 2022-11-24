@@ -116,7 +116,7 @@ func (nStrMathRoundNanobot *numStrMathRoundingNanobot) roundNumStrKernel(
 
 	var roundingType NumberRoundingType
 
-	roundingType = numStrRoundingSpec.GetRoundingType()
+	roundingType = numStrRoundingSpec.roundingType
 
 	if !roundingType.XIsValid() {
 
@@ -141,7 +141,7 @@ func (nStrMathRoundNanobot *numStrMathRoundingNanobot) roundNumStrKernel(
 	var roundToFractionalDigits int
 
 	roundToFractionalDigits =
-		numStrRoundingSpec.GetRoundToFractionalDigits()
+		numStrRoundingSpec.roundToFractionalDigits
 
 	if roundToFractionalDigits < 0 {
 
@@ -155,7 +155,7 @@ func (nStrMathRoundNanobot *numStrMathRoundingNanobot) roundNumStrKernel(
 		return err
 	}
 
-	numOfFracDigits := numStrKernel.GetNumberOfFractionalDigits()
+	numOfFracDigits := len(numStrKernel.fractionalDigits.CharsArray)
 
 	if roundToFractionalDigits >
 		numOfFracDigits {

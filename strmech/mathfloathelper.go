@@ -1718,6 +1718,14 @@ func (mathFloatHelper *MathFloatHelper) RoundBigFloat(
 	errorPrefix interface{}) (
 	err error) {
 
+	if mathFloatHelper.lock == nil {
+		mathFloatHelper.lock = new(sync.Mutex)
+	}
+
+	mathFloatHelper.lock.Lock()
+
+	defer mathFloatHelper.lock.Unlock()
+
 	var ePrefix *ePref.ErrPrefixDto
 
 	ePrefix,
