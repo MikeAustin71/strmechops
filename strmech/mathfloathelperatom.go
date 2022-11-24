@@ -212,6 +212,13 @@ skipNumStrConversion:
 //	required to store a process an accurate numeric value
 //	includes both integer and fractional numeric digits.
 //
+//	The number of precision bits generated is an estimate
+//	with a margin of error of plus or minus sixteen
+//	(+ or - 16) bits.
+//
+//	The value of 'precisionBits' returned by this method
+//	will always be a multiple of eight (+8).
+//
 // ----------------------------------------------------------------
 //
 //	# Input Parameters
@@ -300,6 +307,10 @@ func (mathFloatHelpAtom *mathFloatHelperAtom) precisionBitsFromRequiredDigits(
 	errPrefDto *ePref.ErrPrefixDto) (
 	precisionBits uint,
 	err error) {
+
+	if mathFloatHelpAtom.lock == nil {
+		mathFloatHelpAtom.lock = new(sync.Mutex)
+	}
 
 	mathFloatHelpAtom.lock.Lock()
 

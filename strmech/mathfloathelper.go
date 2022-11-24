@@ -1053,14 +1053,14 @@ func (mathFloatHelper *MathFloatHelper) PrecisionBitsFromRequiredDigits(
 
 //	PrecisionToDigitsEstimate
 //
-//	Computes an estimates of the number of numerical
+//	Computes an estimate of the number of numerical
 //	digits which can be stored given the number of
 //	precision bits configured for a type big.Float,
 //	floating point number.
 //
-// Precision bits are used in the configuration of
-// big.Float types. The conversion factor is
-// "3.3219789132197891321978913219789".
+//	Precision bits are used in the configuration of
+//	big.Float types. The conversion factor is:
+//		"3.3219789132197891321978913219789"
 //
 //		Precision Bits / Conversion Factor =
 //				Numeric Digit Capacity
@@ -1068,7 +1068,7 @@ func (mathFloatHelper *MathFloatHelper) PrecisionBitsFromRequiredDigits(
 //
 //	The number of numerical digits returned is an
 //	estimate with a margin of error of plus or minus
-//	three (+ or - 3).
+//	three (+ or - 3) numeric digits.
 //
 // ----------------------------------------------------------------
 //
@@ -1079,27 +1079,42 @@ func (mathFloatHelper *MathFloatHelper) PrecisionBitsFromRequiredDigits(
 //		The number of bits of precision in the mantissa
 //		of a big.Float floating point numeric value.
 //
-//		If this value is less than four (+8), an invalid
-//		value of minus one (-1) will be returned.
+//		If this value is less than eight (+8), an error
+//		will be returned.
 //
 // ----------------------------------------------------------------
 //
 // # Return Values
 //
-//	int64
+//	totalNumOfNumericalDigits	int64
 //
-//		If input parameter 'precisionBits' has a value
-//		less than four (+4), this parameter will return
-//		a value of minus one (-1) signaling an error.
+//		If this method completes successfully, the value
+//		returned will represent the estimated total
+//		number of numerical digits which can be stored
+//		in a big.Float floating point number mantissa
+//		configured for the number of Precision Bits
+//		specified by input parameter 'precisionBits'.
 //
-//		Otherwise, the value returned will represent the
-//		estimated number of numerical digits which can
-//		be stored given the value of input parameter,
-//		'precisionBits'. This estimate has a margin of
-//		error of plus or minus three numeric digits
-//		(+ or - 3).
+//		This estimate has a margin of error of plus or
+//		minus three (+ or - 3) numeric digits.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
 func (mathFloatHelper *MathFloatHelper) PrecisionToDigitsEstimate(
-	precisionBits uint) int64 {
+	precisionBits uint,
+	errorPrefix interface{}) (
+	totalNumOfNumericalDigits int64,
+	err error) {
 
 	if mathFloatHelper.lock == nil {
 		mathFloatHelper.lock = new(sync.Mutex)
@@ -1109,9 +1124,27 @@ func (mathFloatHelper *MathFloatHelper) PrecisionToDigitsEstimate(
 
 	defer mathFloatHelper.lock.Unlock()
 
-	return new(mathFloatHelperPreon).
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"MathFloatHelper."+
+			"PrecisionToDigitsEstimate()",
+		"")
+
+	if err != nil {
+
+		return totalNumOfNumericalDigits, err
+	}
+
+	totalNumOfNumericalDigits,
+		err = new(mathFloatHelperPreon).
 		estimatePrecisionToDigits(
-			precisionBits)
+			precisionBits,
+			ePrefix)
+
+	return totalNumOfNumericalDigits, err
 }
 
 // PrecisionToDigitsFactor
