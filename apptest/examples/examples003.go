@@ -12,6 +12,108 @@ type MainTest03 struct {
 	input string
 }
 
+func (MainTest03) RaiseToExponent01() {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"MainTest03.RaiseToExponent01()",
+		"")
+
+	breakStr := strings.Repeat("=", 50)
+
+	fmt.Printf("\n\n" + breakStr + "\n")
+
+	fmt.Printf("\n Starting Run!\n"+
+		"Function: %v\n",
+		ePrefix.String())
+
+	fmt.Printf("\n" + breakStr + "\n")
+
+	// int digits 4
+	// frac digits 12
+	baseStr := "5084.987654321000"
+
+	exponent := int64(4)
+
+	// int digits = 15
+	// frac digits = 17
+	expectedResultStr := "668589591687777.75101222860206783"
+	expectedFracDigits := 17
+
+	floatHelper := strmech.MathFloatHelper{}
+
+	precisionBits,
+		err := floatHelper.PrecisionBitsFromRequiredDigits(
+		4,
+		12,
+		500,
+		ePrefix)
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	baseFloat,
+		ok :=
+		new(big.Float).
+			SetMode(big.AwayFromZero).
+			//SetPrec(precisionBits).
+			SetString(baseStr)
+
+	if !ok {
+
+		fmt.Printf("\n%v\n"+
+			"Error:\n"+
+			"baseFloat.SetString(baseStr) FAILED!\n"+
+			"baseStr = '%v'\n",
+			ePrefix.String(),
+			baseStr)
+
+		return
+	}
+
+	fmt.Printf("\nInitialization\n"+
+		"baseStr   = %v\n"+
+		"baseFloat = %v\n",
+		baseStr,
+		baseFloat.Text('f', 12))
+
+	var raisedToExponent *big.Float
+
+	raisedToExponent,
+		err = floatHelper.RaiseToPositiveExponent(
+		baseFloat,
+		exponent,
+		precisionBits,
+		ePrefix.XCpy(
+			"raisedToExponent"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	raisedToExponentStr :=
+		raisedToExponent.Text('f', expectedFracDigits)
+
+	fmt.Printf("After Calculation Of Raise To Power\n"+
+		"Actual raisedToExponent   = %v\n"+
+		"Expected raisedToExponent = %v",
+		raisedToExponentStr,
+		expectedResultStr)
+
+	fmt.Printf("\n\n" + breakStr + "\n")
+
+	fmt.Printf("\n Successful Completion!\n"+
+		"Function: %v\n",
+		ePrefix.String())
+
+	fmt.Printf("\n" + breakStr + "\n")
+
+}
+
 func (MainTest03) RoundBigFloat01() {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(

@@ -1244,6 +1244,9 @@ func (mathFloatHelper *MathFloatHelper) PrecisionToDigitsFactor() *big.Float {
 //		Example:	3.2 ^ 4 = 104.8576
 //					base ^ exponent = raisedToExponent
 //
+//		If this value is less than zero, an error will be
+//		returned.
+//
 //	precisionBits				uint
 //
 //		The number of bits in the mantissa of the result
@@ -1256,11 +1259,12 @@ func (mathFloatHelper *MathFloatHelper) PrecisionToDigitsFactor() *big.Float {
 //		total number of integer and fractional digits
 //		required to store an accurate result and
 //		multiply this number times four (+4) for a
-//		rough and safe estimate. The following method may
-//		also be used to calculate 'precisionBits' from
-//		required numerical digits:
+//		rough and safe estimate. The following methods
+//		may also be used to calculate 'precisionBits'
+//		from required numerical digits:
 //
 //			MathFloatHelper.DigitsToPrecisionEstimate()
+//			MathFloatHelper.PrecisionBitsFromRequiredDigits()
 //
 //	errorPrefix					interface{}
 //
@@ -1381,13 +1385,17 @@ func (mathFloatHelper *MathFloatHelper) RaiseToPositiveExponent(
 		return raisedToExponent, err
 	}
 
-	raisedToExponent,
+	var tempVal *big.Float
+
+	tempVal,
 		err = new(mathFloatHelperQuark).
 		raiseToPositiveExponent(
 			base,
 			exponent,
 			precisionBits,
 			ePrefix)
+
+	raisedToExponent.Copy(tempVal)
 
 	return raisedToExponent, err
 }

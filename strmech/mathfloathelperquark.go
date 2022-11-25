@@ -98,8 +98,8 @@ func (floatHelperQuark *mathFloatHelperQuark) raiseToPositiveExponent(
 	exponent int64,
 	precisionBits uint,
 	errPrefDto *ePref.ErrPrefixDto) (
-	raisedToExponent *big.Float,
-	err error) {
+	*big.Float,
+	error) {
 
 	if floatHelperQuark.lock == nil {
 		floatHelperQuark.lock = new(sync.Mutex)
@@ -109,13 +109,14 @@ func (floatHelperQuark *mathFloatHelperQuark) raiseToPositiveExponent(
 
 	defer floatHelperQuark.lock.Unlock()
 
-	raisedToExponent =
+	tExitFloat :=
 		new(big.Float).
 			SetPrec(precisionBits).
 			SetMode(big.AwayFromZero).
 			SetInt64(0)
 
 	var ePrefix *ePref.ErrPrefixDto
+	var err error
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
@@ -125,7 +126,7 @@ func (floatHelperQuark *mathFloatHelperQuark) raiseToPositiveExponent(
 		"")
 
 	if err != nil {
-		return raisedToExponent, err
+		return tExitFloat, err
 	}
 
 	if exponent < 0 {
@@ -137,7 +138,7 @@ func (floatHelperQuark *mathFloatHelperQuark) raiseToPositiveExponent(
 			ePrefix.String(),
 			exponent)
 
-		return raisedToExponent, err
+		return tExitFloat, err
 	}
 
 	if base == nil {
@@ -147,30 +148,57 @@ func (floatHelperQuark *mathFloatHelperQuark) raiseToPositiveExponent(
 			"'base' is a nil pointer.\n",
 			ePrefix.String())
 
-		return raisedToExponent, err
+		return tExitFloat, err
 	}
 
 	var ok bool
 	_,
-		ok = raisedToExponent.SetString("1.0")
+		ok = tExitFloat.SetString("1.0")
 
 	if !ok {
 
 		err = fmt.Errorf("\n%v\n"+
-			"Error: raisedToExponent.SetString(\"1.0\") Failed!\n",
+			"Error: tExitFloat.SetString(\"1.0\") Failed!\n",
 			ePrefix.String())
 
-		return raisedToExponent, err
+		return tExitFloat, err
 	}
 
 	if exponent == 0 {
 
-		return raisedToExponent, err
+		return tExitFloat, err
 	}
+
+	baseStr := base.Text('f', 12)
+
+	var newBase *big.Float
+
+	newBase,
+		ok = new(big.Float).
+		SetMode(big.AwayFromZero).
+		SetPrec(precisionBits).
+		SetString(baseStr)
+
+	if !ok {
+
+		err = fmt.Errorf("\n%v\n"+
+			"Error: newBase.SetString(baseStr) Failed!\n"+
+			"baseStr = %v\n",
+			ePrefix.String(),
+			baseStr)
+
+		return tExitFloat, err
+	}
+
+	raisedToExponent :=
+		new(big.Float).
+			SetPrec(precisionBits).
+			SetMode(big.AwayFromZero).
+			SetInt64(1)
 
 	for i := int64(0); i < exponent; i++ {
 
-		raisedToExponent.Mul(raisedToExponent, base)
+		raisedToExponent.Mul(raisedToExponent, newBase)
 	}
 
 	return raisedToExponent, err
