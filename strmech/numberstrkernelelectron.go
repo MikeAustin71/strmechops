@@ -765,7 +765,7 @@ func (numStrKernelElectron *numberStrKernelElectron) parsePureNumStr(
 	var numberStats NumberStrStatsDto
 
 	numberStats,
-		err = new(numberStrKernelQuark).
+		err = new(numStrMathQuark).
 		pureNumStrToRunes(
 			string(pureNumberString.CharsArray),
 			&numStrKernel.integerDigits,

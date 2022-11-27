@@ -219,7 +219,7 @@ func (mathIntHelpMech *mathIntHelperMechanics) intToAbsoluteValueStr(
 		ePrefix)
 
 	numberStrStats,
-		err = new(numberStrKernelQuark).
+		err = new(numStrMathQuark).
 		pureNumStrToRunes(
 			signedPureNumStr,
 			&intDigits,

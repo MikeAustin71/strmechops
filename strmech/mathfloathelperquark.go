@@ -40,6 +40,9 @@ type mathFloatHelperQuark struct {
 //		Example:	3.2 ^ 4 = 104.8576
 //					base ^ exponent = raisedToExponent
 //
+//		If this value is less than zero, an error will be
+//		returned.
+//
 //	precisionBits				uint
 //
 //		The number of bits in the mantissa of the result
@@ -113,7 +116,7 @@ func (floatHelperQuark *mathFloatHelperQuark) raiseToPositiveExponent(
 		new(big.Float).
 			SetPrec(precisionBits).
 			SetMode(big.AwayFromZero).
-			SetInt64(0)
+			SetInt64(1)
 
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
@@ -151,19 +154,6 @@ func (floatHelperQuark *mathFloatHelperQuark) raiseToPositiveExponent(
 		return tExitFloat, err
 	}
 
-	var ok bool
-	_,
-		ok = tExitFloat.SetString("1.0")
-
-	if !ok {
-
-		err = fmt.Errorf("\n%v\n"+
-			"Error: tExitFloat.SetString(\"1.0\") Failed!\n",
-			ePrefix.String())
-
-		return tExitFloat, err
-	}
-
 	if exponent == 0 {
 
 		return tExitFloat, err
@@ -172,6 +162,8 @@ func (floatHelperQuark *mathFloatHelperQuark) raiseToPositiveExponent(
 	baseStr := base.Text('f', 12)
 
 	var newBase *big.Float
+
+	var ok bool
 
 	newBase,
 		ok = new(big.Float).
@@ -185,7 +177,7 @@ func (floatHelperQuark *mathFloatHelperQuark) raiseToPositiveExponent(
 			"Error: newBase.SetString(baseStr) Failed!\n"+
 			"baseStr = %v\n",
 			ePrefix.String(),
-			baseStr)
+			base.Text('f', 12))
 
 		return tExitFloat, err
 	}

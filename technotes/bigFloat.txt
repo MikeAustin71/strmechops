@@ -1,0 +1,28 @@
+
+## Setting Minimum Precision
+
+Most effective technique found so far for setting a big.Float value to minimum precision.
+
+
+	tFloat02 := big.NewFloat(0.0)
+
+	_,
+		ok = tFloat02.
+		SetString(baseNumStr)
+
+	if !ok {
+
+		fmt.Printf("\n%v\n"+
+			"Error: tFloat01=SetString(baseNumStr)\n"+
+			"SetString Failed!\n"+
+			"baseNumStr = %v\n",
+			funcName,
+			baseNumStr)
+
+		return
+	}
+
+	tFloat02.SetPrec(tFloat02.MinPrec())
+
+
+

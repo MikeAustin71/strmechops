@@ -1400,7 +1400,7 @@ func (numStrKernelMolecule *numberStrKernelMolecule) convertIntNumberToKernel(
 	var numberStats NumberStrStatsDto
 
 	numberStats,
-		err = new(numberStrKernelQuark).
+		err = new(numStrMathQuark).
 		pureNumStrToRunes(
 			signedPureNumStr,
 			&numStrKernel.integerDigits,
