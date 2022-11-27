@@ -664,6 +664,10 @@ func (nStrMathAtom *numStrMathAtom) pureNumStrToComponents(
 	pureNumStrComponents PureNumberStrComponents,
 	err error) {
 
+	if nStrMathAtom.lock == nil {
+		nStrMathAtom.lock = new(sync.Mutex)
+	}
+
 	nStrMathAtom.lock.Lock()
 
 	defer nStrMathAtom.lock.Unlock()

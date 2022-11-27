@@ -467,7 +467,7 @@ func (mathFloatHelpMech *mathFloatHelperMechanics) raiseToExponentConfig(
 	}
 
 	return new(mathFloatHelperQuark).
-		raiseToPositiveExponent(
+		raiseToFloatPositiveExponent(
 			base,
 			exponent,
 			precisionBits,

@@ -378,7 +378,7 @@ func TestMathFloatHelper_RaiseToPositiveExponent000100(t *testing.T) {
 	var raisedToExponent *big.Float
 
 	raisedToExponent,
-		err = floatHelper.RaiseToPositiveExponent(
+		err = floatHelper.RaiseToFloatPositiveExponent(
 		baseFloat,
 		exponent,
 		precisionBits,
@@ -398,7 +398,7 @@ func TestMathFloatHelper_RaiseToPositiveExponent000100(t *testing.T) {
 
 		t.Errorf("\n%v\n"+
 			"Test Series # 1\n"+
-			"floatHelper.RaiseToPositiveExponent()\n"+
+			"floatHelper.RaiseToFloatPositiveExponent()\n"+
 			"Error: Expected Result Does NOT Match Actual Result!\n"+
 			"Expected Result = '%v'\n"+
 			"Actual Result   = '%v'\n",
@@ -413,7 +413,7 @@ func TestMathFloatHelper_RaiseToPositiveExponent000100(t *testing.T) {
 	exponent = 0
 
 	raisedToExponent,
-		err = floatHelper.RaiseToPositiveExponent(
+		err = floatHelper.RaiseToFloatPositiveExponent(
 		baseFloat,
 		exponent,
 		precisionBits,
@@ -435,7 +435,7 @@ func TestMathFloatHelper_RaiseToPositiveExponent000100(t *testing.T) {
 
 		t.Errorf("\n%v\n"+
 			"Test Series # 2\n"+
-			"floatHelper.RaiseToPositiveExponent()\n"+
+			"floatHelper.RaiseToFloatPositiveExponent()\n"+
 			"Error: Expected Result Does NOT Match Actual Result!\n"+
 			"Expected Result = '%v'\n"+
 			"Actual Result   = '%v'\n",
@@ -450,7 +450,7 @@ func TestMathFloatHelper_RaiseToPositiveExponent000100(t *testing.T) {
 	exponent = 1
 
 	raisedToExponent,
-		err = floatHelper.RaiseToPositiveExponent(
+		err = floatHelper.RaiseToFloatPositiveExponent(
 		baseFloat,
 		exponent,
 		precisionBits,
@@ -472,7 +472,7 @@ func TestMathFloatHelper_RaiseToPositiveExponent000100(t *testing.T) {
 
 		t.Errorf("\n%v\n"+
 			"Test Series # 3\n"+
-			"floatHelper.RaiseToPositiveExponent()\n"+
+			"floatHelper.RaiseToFloatPositiveExponent()\n"+
 			"Error: Expected Result Does NOT Match Actual Result!\n"+
 			"Expected Result = '%v'\n"+
 			"Actual Result   = '%v'\n",

@@ -1215,7 +1215,7 @@ func (mathFloatHelper *MathFloatHelper) PrecisionToDigitsFactor() *big.Float {
 		precisionToDigitsFactor()
 }
 
-//	RaiseToPositiveExponent
+//	RaiseToFloatPositiveExponent
 //
 //	Receives a pointer to a big.Float floating point
 //	number and raises that number to the power specified
@@ -1225,6 +1225,10 @@ func (mathFloatHelper *MathFloatHelper) PrecisionToDigitsFactor() *big.Float {
 //					base ^ exponent = raisedToExponent
 //
 //	This method will only process positive exponents.
+//
+//	This method employs floating point mathematics and
+//	type big.Float to compute the base floating point
+//	value raised to the power of exponent.
 //
 // ----------------------------------------------------------------
 //
@@ -1256,12 +1260,16 @@ func (mathFloatHelper *MathFloatHelper) PrecisionToDigitsFactor() *big.Float {
 //		'exponent'.
 //
 //		If in doubt as to this number, identify the
-//		total number of integer and fractional digits
-//		required to store an accurate result and
-//		multiply this number times four (+4) for a
-//		rough and safe estimate. The following methods
-//		may also be used to calculate 'precisionBits'
-//		from required numerical digits:
+//		total number of calculation result integer and
+//		fractional digits required to store an accurate
+//		result and multiply this number times four (+4).
+//		Be sure to add a safety buffer of extra numerical
+//		digits (maybe 50-digits) to handle processing
+//		requirements.
+//
+//		The following methods may also be used to
+//		calculate 'precisionBits' from required numerical
+//		digits:
 //
 //			MathFloatHelper.DigitsToPrecisionEstimate()
 //			MathFloatHelper.PrecisionBitsFromRequiredDigits()
@@ -1329,16 +1337,16 @@ func (mathFloatHelper *MathFloatHelper) PrecisionToDigitsFactor() *big.Float {
 //
 // # Return Values
 //
-//	raisedToExponent	*big.Float
+//	*big.Float
 //
-//		If this method completes successfully, this will
-//		return 'base' value raised to the power of the
-//		'exponent' value.
+//		If this method completes successfully, this
+//		parameter will return 'base' value raised to the
+//		power of the 'exponent' value.
 //
 //		Example:	3.2 ^ 4 = 104.8576
 //					base ^ exponent = raisedToExponent
 //
-//	err							error
+//	error
 //
 //		If this method completes successfully, this
 //		returned error Type is set equal to 'nil'. If
@@ -1350,10 +1358,129 @@ func (mathFloatHelper *MathFloatHelper) PrecisionToDigitsFactor() *big.Float {
 //		for input parameter 'errPrefDto' (error prefix)
 //		will be prefixed or attached at the beginning of
 //		the error message.
-func (mathFloatHelper *MathFloatHelper) RaiseToPositiveExponent(
+func (mathFloatHelper *MathFloatHelper) RaiseToFloatPositiveExponent(
 	base *big.Float,
 	exponent int64,
 	precisionBits uint,
+	errorPrefix interface{}) (
+	*big.Float,
+	error) {
+
+	if mathFloatHelper.lock == nil {
+		mathFloatHelper.lock = new(sync.Mutex)
+	}
+
+	mathFloatHelper.lock.Lock()
+
+	defer mathFloatHelper.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"MathFloatHelper."+
+			"RaiseToFloatPositiveExponent()",
+		"")
+
+	if err != nil {
+		return big.NewFloat(0), err
+	}
+
+	return new(mathFloatHelperQuark).
+		raiseToFloatPositiveExponent(
+			base,
+			exponent,
+			precisionBits,
+			ePrefix)
+}
+
+//	RaiseToIntPositiveExponent
+//
+//	Receives a pointer to a big.Float floating point
+//	number and raises that number to the power specified
+//	by input parameter 'exponent'.
+//
+//		Example:	3.2 ^ 4 = 104.8576
+//					base ^ exponent = raisedToExponent
+//
+//	The floating point precision value required to
+//	support the calculation result ('raisedToExponent')
+//	is computed internally.
+//
+//	This method will only process positive exponents.
+//
+//	This method employs integer mathematics and type
+//	big.Int to compute the base floating point value
+//	raised to the power of exponent. As such it
+//	produces highly accurate results.
+//
+// ----------------------------------------------------------------
+//
+//	# Input Parameters
+//
+//	base						*big.Float
+//
+//		This floating point value will be raised to the
+//		power of 'exponent' and returned to the calling
+//		function.
+//
+//	exponent					int64
+//
+//		This value will be used to raise 'base' to the
+//		power of 'exponent'.
+//
+//		Example:	3.2 ^ 4 = 104.8576
+//					base ^ exponent = raisedToExponent
+//
+//		If this value is less than zero, an error will be
+//		returned.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	*big.Float
+//
+//		If this method completes successfully, this
+//		parameter will return 'base' value raised to the
+//		power of the 'exponent' value.
+//
+//		Example:	3.2 ^ 4 = 104.8576
+//					base ^ exponent = raisedToExponent
+//
+//	error
+//
+//		If this method completes successfully, this
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (mathFloatHelper *MathFloatHelper) RaiseToIntPositiveExponent(
+	base *big.Float,
+	exponent int64,
 	errorPrefix interface{}) (
 	raisedToExponent *big.Float,
 	err error) {
@@ -1368,36 +1495,22 @@ func (mathFloatHelper *MathFloatHelper) RaiseToPositiveExponent(
 
 	var ePrefix *ePref.ErrPrefixDto
 
-	raisedToExponent =
-		new(big.Float).
-			SetPrec(precisionBits).
-			SetMode(big.AwayFromZero).
-			SetInt64(0)
-
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"MathFloatHelper."+
-			"RaiseToPositiveExponent()",
+			"RaiseToIntPositiveExponent()",
 		"")
 
 	if err != nil {
-		return raisedToExponent, err
+		return big.NewFloat(0), err
 	}
 
-	var tempVal *big.Float
-
-	tempVal,
-		err = new(mathFloatHelperQuark).
-		raiseToPositiveExponent(
+	return new(mathFloatHelperQuark).
+		raiseToIntPositiveExponent(
 			base,
 			exponent,
-			precisionBits,
 			ePrefix)
-
-	raisedToExponent.Copy(tempVal)
-
-	return raisedToExponent, err
 }
 
 //	RoundBigFloat

@@ -11,7 +11,7 @@ type mathFloatHelperQuark struct {
 	lock *sync.Mutex
 }
 
-//	raiseToPositiveExponent
+//	raiseToFloatPositiveExponent
 //
 //	Receives a pointer to a big.Float floating point
 //	number and raises that number to the power specified
@@ -52,9 +52,12 @@ type mathFloatHelperQuark struct {
 //		'exponent'.
 //
 //		If in doubt as to this number, identify the
-//		total number of integer and fractional digits
-//		required to store an accurate result and
-//		multiply this number times four (+4).
+//		total number of calculation result integer and
+//		fractional digits required to store an accurate
+//		result and multiply this number times four (+4).
+//		Be sure to add a safety buffer of extra numerical
+//		digits (maybe 50-digits) to handle processing
+//		requirements.
 //
 //	errPrefDto					*ePref.ErrPrefixDto
 //
@@ -75,7 +78,7 @@ type mathFloatHelperQuark struct {
 //
 // # Return Values
 //
-//	raisedToExponent	*big.Float
+//	*big.Float
 //
 //		If this method completes successfully, this will
 //		return 'base' value raised to the power of the
@@ -84,7 +87,7 @@ type mathFloatHelperQuark struct {
 //		Example:	3.2 ^ 4 = 104.8576
 //					base ^ exponent = raisedToExponent
 //
-//	err							error
+//	error
 //
 //		If this method completes successfully, this
 //		returned error Type is set equal to 'nil'. If
@@ -96,7 +99,7 @@ type mathFloatHelperQuark struct {
 //		for input parameter 'errPrefDto' (error prefix)
 //		will be prefixed or attached at the beginning of
 //		the error message.
-func (floatHelperQuark *mathFloatHelperQuark) raiseToPositiveExponent(
+func (floatHelperQuark *mathFloatHelperQuark) raiseToFloatPositiveExponent(
 	base *big.Float,
 	exponent int64,
 	precisionBits uint,
@@ -112,12 +115,6 @@ func (floatHelperQuark *mathFloatHelperQuark) raiseToPositiveExponent(
 
 	defer floatHelperQuark.lock.Unlock()
 
-	tExitFloat :=
-		new(big.Float).
-			SetPrec(precisionBits).
-			SetMode(big.AwayFromZero).
-			SetInt64(1)
-
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
 
@@ -125,11 +122,11 @@ func (floatHelperQuark *mathFloatHelperQuark) raiseToPositiveExponent(
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
 		"mathFloatHelperQuark."+
-			"raiseToPositiveExponent()",
+			"raiseToFloatPositiveExponent()",
 		"")
 
 	if err != nil {
-		return tExitFloat, err
+		return big.NewFloat(0), err
 	}
 
 	if exponent < 0 {
@@ -141,7 +138,7 @@ func (floatHelperQuark *mathFloatHelperQuark) raiseToPositiveExponent(
 			ePrefix.String(),
 			exponent)
 
-		return tExitFloat, err
+		return big.NewFloat(0), err
 	}
 
 	if base == nil {
@@ -151,12 +148,12 @@ func (floatHelperQuark *mathFloatHelperQuark) raiseToPositiveExponent(
 			"'base' is a nil pointer.\n",
 			ePrefix.String())
 
-		return tExitFloat, err
+		return big.NewFloat(0), err
 	}
 
 	if exponent == 0 {
 
-		return tExitFloat, err
+		return big.NewFloat(0), err
 	}
 
 	baseStr := base.Text('f', 12)
@@ -179,7 +176,7 @@ func (floatHelperQuark *mathFloatHelperQuark) raiseToPositiveExponent(
 			ePrefix.String(),
 			base.Text('f', 12))
 
-		return tExitFloat, err
+		return big.NewFloat(0), err
 	}
 
 	raisedToExponent :=
@@ -194,6 +191,256 @@ func (floatHelperQuark *mathFloatHelperQuark) raiseToPositiveExponent(
 	}
 
 	return raisedToExponent, err
+}
+
+//	raiseToIntPositiveExponent
+//
+//	Receives a pointer to a big.Float floating point
+//	number and raises that number to the power specified
+//	by input parameter 'exponent'.
+//
+//		Example:	3.2 ^ 4 = 104.8576
+//					base ^ exponent = raisedToExponent
+//
+//	The floating point precision value required to
+//	support the calculation result ('raisedToExponent')
+//	is computed internally.
+//
+//	This method will only process positive exponents.
+//
+//	This method employs integer mathematics and type
+//	big.Int to compute the base floating point value
+//	raised to the power of exponent. As such it
+//	produces highly accurate results.
+//
+// ----------------------------------------------------------------
+//
+//	# Input Parameters
+//
+//	base						*big.Float
+//
+//		This floating point value will be raised to the
+//		power of 'exponent' and returned to the calling
+//		function.
+//
+//	exponent					int64
+//
+//		This value will be used to raise 'base' to the
+//		power of 'exponent'.
+//
+//		Example:	3.2 ^ 4 = 104.8576
+//					base ^ exponent = raisedToExponent
+//
+//		If this value is less than zero, an error will be
+//		returned.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	*big.Float
+//
+//		If this method completes successfully, this
+//		parameter will return 'base' value raised to the
+//		power of the 'exponent' value.
+//
+//		Example:	3.2 ^ 4 = 104.8576
+//					base ^ exponent = raisedToExponent
+//
+//	error
+//
+//		If this method completes successfully, this
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (floatHelperQuark *mathFloatHelperQuark) raiseToIntPositiveExponent(
+	base *big.Float,
+	exponent int64,
+	errPrefDto *ePref.ErrPrefixDto) (
+	*big.Float,
+	error) {
+
+	if floatHelperQuark.lock == nil {
+		floatHelperQuark.lock = new(sync.Mutex)
+	}
+
+	floatHelperQuark.lock.Lock()
+
+	defer floatHelperQuark.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"mathFloatHelperQuark."+
+			"raiseToIntPositiveExponent()",
+		"")
+
+	if err != nil {
+		return big.NewFloat(0), err
+	}
+
+	if base == nil {
+
+		err = fmt.Errorf("\n%v\n"+
+			"Error: Input parameter 'base' is invalid!\n"+
+			"'base' is a nil pointer.\n",
+			ePrefix.String())
+
+		return big.NewFloat(0), err
+	}
+
+	if exponent == 0 {
+
+		return big.NewFloat(0), err
+	}
+
+	if exponent < 0 {
+
+		err = fmt.Errorf("\n\n%v\n"+
+			"Error: Input parameter 'exponent' is INVALID!\n"+
+			"'exponent' has a value less than zero.\n"+
+			"exponent = %v\n",
+			ePrefix.String(),
+			exponent)
+
+		return big.NewFloat(0), err
+	}
+
+	base.SetPrec(base.MinPrec())
+
+	var pureNumStrStats PureNumberStrComponents
+
+	pureNumStrStats,
+		err = new(numStrMathAtom).
+		pureNumStrToComponents(
+			base.Text('f', -1),
+			".",
+			true,
+			ePrefix.XCpy(
+				"<-base"))
+
+	if err != nil {
+
+		return big.NewFloat(0), err
+	}
+
+	if pureNumStrStats.NumberStrStats.IsZeroValue == true {
+
+		// base is zero.
+		//	zero^exponent = zero
+		return big.NewFloat(0), err
+	}
+
+	var ok bool
+
+	var numStr string
+
+	if pureNumStrStats.NumberStrStats.NumberSign ==
+		NumSignVal.Negative() {
+
+		numStr += "-"
+
+	}
+
+	numStr += pureNumStrStats.AllIntegerDigitsNumStr
+
+	bigIntBase,
+		ok := big.NewInt(0).
+		SetString(
+			numStr,
+			10)
+
+	if !ok {
+
+		fmt.Printf("\n%v\n"+
+			"Error: bigIntBase=SetString(numStr)\n"+
+			"SetString Failed!\n"+
+			"numStr = %v\n",
+			ePrefix,
+			numStr)
+
+		return big.NewFloat(0), err
+	}
+
+	bigIntExponent := big.NewInt(
+		exponent)
+
+	bigIntBase.Exp(bigIntBase, bigIntExponent, nil)
+
+	numStr =
+		bigIntBase.Text(10)
+
+	minusAdjustment := uint64(0)
+
+	if pureNumStrStats.NumberStrStats.NumberSign ==
+		NumSignVal.Negative() {
+
+		minusAdjustment = 1
+	}
+
+	numStr =
+		numStr[0:(pureNumStrStats.NumberStrStats.NumOfIntegerDigits+minusAdjustment)] +
+			"." +
+			numStr[pureNumStrStats.NumberStrStats.NumOfIntegerDigits+minusAdjustment:]
+
+	var precisionBits uint
+
+	precisionBits,
+		err = new(mathFloatHelperAtom).precisionBitsFromRequiredDigits(
+		int64(pureNumStrStats.NumberStrStats.NumOfIntegerDigits),
+		int64(pureNumStrStats.NumberStrStats.NumOfFractionalDigits),
+		50,
+		ePrefix)
+
+	if err != nil {
+
+		return big.NewFloat(0), err
+	}
+
+	calcResult := big.NewFloat(0)
+
+	_,
+		ok = calcResult.
+		SetPrec(precisionBits).
+		SetMode(big.AwayFromZero).
+		SetString(numStr)
+
+	if !ok {
+
+		fmt.Printf("\n%v\n"+
+			"Error: calcResult=SetString(numStr)\n"+
+			"SetString Failed!\n"+
+			"numStr = %v\n",
+			ePrefix.String(),
+			numStr)
+
+	}
+
+	return calcResult, err
 }
 
 //	roundBigFloat
