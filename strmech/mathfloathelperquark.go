@@ -330,7 +330,7 @@ func (floatHelperQuark *mathFloatHelperQuark) raiseToIntPositiveExponent(
 		return big.NewFloat(0), err
 	}
 
-	base.SetPrec(base.MinPrec())
+	// base.SetPrec(base.MinPrec())
 
 	var pureNumStrStats PureNumberStrComponents
 
@@ -386,34 +386,48 @@ func (floatHelperQuark *mathFloatHelperQuark) raiseToIntPositiveExponent(
 		return big.NewFloat(0), err
 	}
 
-	bigIntExponent := big.NewInt(
-		exponent)
+	bigIntExponent := big.NewInt(0).SetInt64(exponent)
 
 	bigIntBase.Exp(bigIntBase, bigIntExponent, nil)
 
 	numStr =
 		bigIntBase.Text(10)
 
-	minusAdjustment := uint64(0)
+	lenNumStr := uint64(len(numStr))
+
+	negativeAdjustment := uint64(0)
 
 	if pureNumStrStats.NumberStrStats.NumberSign ==
 		NumSignVal.Negative() {
 
-		minusAdjustment = 1
+		negativeAdjustment = 1
 	}
 
+	raisedToPowerStats := PureNumberStrComponents{}
+
+	raisedToPowerStats.NumberStrStats.NumOfFractionalDigits =
+		pureNumStrStats.NumberStrStats.NumOfFractionalDigits *
+			uint64(exponent)
+
+	raisedToPowerStats.NumberStrStats.NumOfIntegerDigits =
+		lenNumStr -
+			raisedToPowerStats.NumberStrStats.NumOfFractionalDigits -
+			negativeAdjustment
+
 	numStr =
-		numStr[0:(pureNumStrStats.NumberStrStats.NumOfIntegerDigits+minusAdjustment)] +
+		numStr[0:(raisedToPowerStats.NumberStrStats.NumOfIntegerDigits+
+			negativeAdjustment)] +
 			"." +
-			numStr[pureNumStrStats.NumberStrStats.NumOfIntegerDigits+minusAdjustment:]
+			numStr[raisedToPowerStats.NumberStrStats.NumOfIntegerDigits+
+				negativeAdjustment:]
 
 	var precisionBits uint
 
 	precisionBits,
 		err = new(mathFloatHelperAtom).precisionBitsFromRequiredDigits(
-		int64(pureNumStrStats.NumberStrStats.NumOfIntegerDigits),
-		int64(pureNumStrStats.NumberStrStats.NumOfFractionalDigits),
-		50,
+		int64(raisedToPowerStats.NumberStrStats.NumOfIntegerDigits),
+		int64(raisedToPowerStats.NumberStrStats.NumOfFractionalDigits),
+		5,
 		ePrefix)
 
 	if err != nil {
@@ -421,10 +435,10 @@ func (floatHelperQuark *mathFloatHelperQuark) raiseToIntPositiveExponent(
 		return big.NewFloat(0), err
 	}
 
-	calcResult := big.NewFloat(0)
+	var raisedToPowerFloat *big.Float
 
-	_,
-		ok = calcResult.
+	raisedToPowerFloat,
+		ok = big.NewFloat(0).
 		SetPrec(precisionBits).
 		SetMode(big.AwayFromZero).
 		SetString(numStr)
@@ -432,7 +446,7 @@ func (floatHelperQuark *mathFloatHelperQuark) raiseToIntPositiveExponent(
 	if !ok {
 
 		fmt.Printf("\n%v\n"+
-			"Error: calcResult=SetString(numStr)\n"+
+			"Error: raisedToPowerFloat=SetString(numStr)\n"+
 			"SetString Failed!\n"+
 			"numStr = %v\n",
 			ePrefix.String(),
@@ -440,7 +454,16 @@ func (floatHelperQuark *mathFloatHelperQuark) raiseToIntPositiveExponent(
 
 	}
 
-	return calcResult, err
+	raisedToPowerFloat.SetPrec(raisedToPowerFloat.MinPrec())
+
+	fmt.Printf("raisedToPower = %v\n"+
+		"raisedToPower Precision = %v\n"+
+		"    Estimated Precision = %v\n",
+		raisedToPowerFloat.Text('f', -1),
+		raisedToPowerFloat.Prec(),
+		precisionBits)
+
+	return raisedToPowerFloat, err
 }
 
 //	roundBigFloat

@@ -43,9 +43,9 @@ func (MainTest03) RaiseToExponent02() {
 
 	baseFloat,
 		ok :=
-		new(big.Float).
+		big.NewFloat(0).
 			SetMode(big.AwayFromZero).
-			//SetPrec(precisionBits).
+			//SetPrec(200).
 			SetString(baseStr)
 
 	if !ok {
