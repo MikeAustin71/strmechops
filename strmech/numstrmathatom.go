@@ -431,11 +431,13 @@ func (nStrMathAtom *numStrMathAtom) addOneToRunes(
 
 //	pureNumStrToComponents
 //
-//	Receives and analyzes a Pure Number String. The
-//	results of this analysis including number sign,
-//	number type, absolute value number string and all
-//	digits numbers string are returned to the calling
-//	method.
+//	Receives and analyzes the numeric digits configured
+//	in a Pure Number String. The results of this analysis,
+//	including number sign, number type, absolute value
+//	number string and key statistics relating to the
+//	numeric value contained in the Pure Number String
+//	will be returned by an instance of type,
+//	PureNumberStrComponents.
 //
 // ----------------------------------------------------------------
 //
@@ -453,12 +455,13 @@ func (nStrMathAtom *numStrMathAtom) addOneToRunes(
 //			1.	Consists of numeric character digits
 //				zero through nine inclusive (0-9).
 //
-//			2.	Option: A Pure Number String may include
-//				a radix point or decimal separator.
-//				Decimal separators separate integer and
-//				fractional numeric digits in a pure
-//				number string. The decimal separator may
-//				consist of one or more text characters.
+//			2.	Optional: A Pure Number String may
+//				include a radix point or decimal
+//				separator. Decimal separators separate
+//				integer and fractional numeric digits in
+//				a Pure Number String. The decimal
+//				separator may consist of one or more text
+//				characters.
 //
 //			3.	Optional: A Pure Number String may
 //				include a negative number sign symbol
@@ -476,7 +479,7 @@ func (nStrMathAtom *numStrMathAtom) addOneToRunes(
 //
 //			4.	Only numeric characters, the decimal
 //				separator and the minus sign will be
-//				processed by the pure number string
+//				processed by the Pure Number String
 //				parsing algorithm. All other characters
 //				will be	ignored.
 //
@@ -498,7 +501,7 @@ func (nStrMathAtom *numStrMathAtom) addOneToRunes(
 //		point Number String.
 //
 //		In the US, UK, Australia, most of Canada and many
-//		other countries the Decimal Separator is the
+//		other countries, the Decimal Separator is the
 //		period character ('.') known as the decimal
 //		point.
 //
@@ -508,11 +511,11 @@ func (nStrMathAtom *numStrMathAtom) addOneToRunes(
 //
 //	leadingMinusSign			bool
 //
-//		In pure number strings, a minus sign ('-')
+//		In Pure Number Strings, a minus sign ('-')
 //		identifies a number as a negative numeric value.
 //
 //		When 'leadingMinusSign' is set to 'true', the
-//		pure number string parsing algorithm will search
+//		Pure Number String parsing algorithm will search
 //		for a leading minus sign ('-') at the beginning of
 //		the number string. Leading minus signs represent
 //		the standard means for designating negative
@@ -523,16 +526,16 @@ func (nStrMathAtom *numStrMathAtom) addOneToRunes(
 //			"-123.456" or "- 123.456"
 //
 //		When 'leadingMinusSign' is set to 'false', the
-//		pure number string parsing algorithm will search
+//		Pure Number String parsing algorithm will search
 //		for trailing minus signs ('-') located at the end
 //		of the number string. Trailing minus signs
 //		represent the standard for France, Germany and
 //		many countries in the European Union.
 //
 //		NOTE: Identification of a trailing minus sign in
-//		the pure number string input parameter,
+//		the Pure Number String input parameter,
 //		'pureNumberString', will immediately terminate
-//		the search for numeric characters.
+//		the search for additional numeric characters.
 //
 //		Example Trailing Number Symbols:
 //			"123.456-" or "123.456 -"

@@ -3,7 +3,7 @@ package strmech
 // BigFloatPrecisionDto
 //
 // This Data Transfer Object (DTO) is used to transmit
-// and store specifications related the precision bits
+// and store specifications related to the precision bits
 // of a big.Float floating point numeric value.
 type BigFloatPrecisionDto struct {
 	NumIntegerDigits int64
@@ -32,8 +32,15 @@ type BigFloatPrecisionDto struct {
 	//	digits used in a calculation of total require
 	//	precision bits.
 
-	EstimatedNumPrecisionBits uint
-	//	This parameter stores the estimated number of
+	PrecisionBitsSpec uint
+	//	This parameter represents the estimated number of
 	//	bits required to store a specific floating point
 	//	numeric value in an instance of type big.Float.
+	//
+	//	The 'PrecisionBitsSpec' value is usually generated
+	//	by an internal calculation based on the estimated
+	//	number of integer and fractional digits contained
+	//	in a big.Float floating point number. However,
+	//	users have the option to specify an arbitrary
+	//	precision bits value.
 }

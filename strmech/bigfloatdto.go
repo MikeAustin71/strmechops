@@ -13,10 +13,10 @@ type BigFloatDto struct {
 	Value big.Float
 	//	The actual value of the big.Float instance.
 
-	ActualNumStrComponents PureNumberStrComponents
-	//	This parameter profiles the big.Float floating
-	//	point numeric value identified by structure
-	//	element 'Value'.
+	NumStrComponents PureNumberStrComponents
+	//	This parameter profiles the actual big.Float
+	//	floating point numeric value identified by
+	//	structure element 'Value'.
 	//
 	//		type PureNumberStrComponents struct {
 	//
@@ -105,5 +105,47 @@ type BigFloatDto struct {
 	//	point number. As such, the calculation of a
 	//	correct and adequate precision bits value can
 	//	affect the accuracy of floating point calculations.
+	//
+	//	type BigFloatPrecisionDto struct {
+	//
+	//		NumIntegerDigits			int64
+	//
+	//			The actual or estimated number of integer digits
+	//			in a big.Float floating point numeric value. The
+	//			number of integer digits in a floating point
+	//			number is one of the elements used to calculate
+	//			the precision bits required to store that
+	//			floating point number.
+	//
+	//		NumFractionalDigits			int64
+	//
+	//			The actual or estimated number of fractional
+	//			digits in a big.Float floating point numeric
+	//			value. The number of fractional digits in a
+	//			floating point number is one of the elements used
+	//			to calculate the precision bits required to store
+	//			that floating point number.
+	//
+	//		NumOfExtraDigitsBuffer		int64
+	//
+	//			When estimating the number of precision necessary
+	//			to store or process big.Float floating point
+	//			values, is generally a good idea to include a
+	//			safety margin consisting of excess numeric digits.
+	//
+	//			This parameter stores the number of extra numeric
+	//			digits used in a calculation of total require
+	//			precision bits.
+	//
+	//		PrecisionBitsSpec	uint
+	//
+	//			This parameter stores the estimated number of
+	//			bits required to store a specific floating point
+	//			numeric value in an instance of type big.Float.
+	//
+	//			This value is used to specify the number of
+	//			precision bits configured for a big.Float floating
+	//			point numeric value.
+	//	}
 	//
 }
