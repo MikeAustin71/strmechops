@@ -284,18 +284,13 @@ func (mathFloatHelpMech *mathFloatHelperMechanics) floatNumToIntFracRunes(
 //
 //	# Input Parameters
 //
-//	base								*big.Float
+//	base							*big.Float
 //
 //		This floating point value will be raised to the
 //		power of 'exponent' and returned to the calling
 //		function.
 //
-//	baseSignificantFractionalDigits		int
-//
-//		The number of significant fractional digits
-//		contained in the 'base' floating point number.
-//
-//	exponent							int64
+//	exponent						int64
 //
 //		This value will be used to raise 'base' to the
 //		power of 'exponent'.
@@ -307,13 +302,56 @@ func (mathFloatHelpMech *mathFloatHelperMechanics) floatNumToIntFracRunes(
 //		exponent. Therefore, if input parameter 'exponent'
 //		is less than zero, an error will be returned.
 //
-//	precisionBits						uint
 //
-//		The number of bits in the mantissa of the result
-//		'raisedToExponent'. Effectively, this parameter
-//		controls the precision and accuracy for the
-//		calculation of 'base' raised to the power of
-//		'exponent'.
+//	numOfExtraDigitsBuffer		int64
+//
+//		The term 'precision bits' refers to the number of
+//		bits in the mantissa of a big.Float floating
+//		point number. Effectively, 'precision bits'
+//		controls the precision, accuracy and numerical
+//		digit storage capacity for a big.Float floating
+//		point number
+//
+//		When configuring the big.Float numeric value
+//		returned by this method, the number of big.Float
+//		precision bits will be calculated based on the
+//		number of integer and fractional numeric digits
+//		contained in the base floating point value
+//		('base'). To deal with contingencies and
+//		requirements often found in complex floating
+//		point operations, users have the option to
+//		arbitrarily increase the number of precision bits
+//		by specifying additional numeric digits via
+//		parameter, 'numOfExtraDigitsBuffer'.
+//
+//		The automatic precision bits calculation will add
+//		the number of integer digits, fractional digits and
+//		'numOfExtraDigitsBuffer' to compute the estimated
+//		number of precision bits.
+//
+//		Note: The user has the option of overriding the
+//		automatic precision bits calculation by specifying
+//		a precision bits value directly through parameter,
+//		'precisionBitsOverride'.
+//
+//	precisionBitsOverride		uint
+//
+//		The term 'precision bits' refers to the number of
+//		bits in the mantissa of a big.Float floating point
+//		number. Effectively, 'precision bits' controls the
+//		precision, accuracy and numerical digit storage
+//		capacity for a big.Float floating point number.
+//
+//		Typically, this method will automatically
+//		calculate the value of big.Float precision bits
+//		using the parameter 'numOfExtraDigitsBuffer'
+//		listed above. However, if 'precisionBitsOverride'
+//		has a value greater than zero, the automatic
+//		precision bit calculation will be overridden and
+//		big.Float precision bits will be set to the value
+//		of this	precision bits specification
+//		('precisionBitsOverride').
+//
 //
 //		If in doubt as to this number, identify the
 //		total number of integer and fractional digits
@@ -339,11 +377,11 @@ func (mathFloatHelpMech *mathFloatHelperMechanics) floatNumToIntFracRunes(
 //
 // # Return Values
 //
-//	raisedToExponent	*big.Float
+//	*big.Float
 //
-//		If this method completes successfully, this will
-//		return 'base' value raised to the power of the
-//		'exponent' value.
+//		If this method completes successfully, this
+//		parameter will return 'base' value raised to
+//		the power of the 'exponent' value.
 //
 //		Example:	3.2 ^ 4 = 104.8576
 //					base ^ exponent = raisedToExponent
@@ -363,6 +401,8 @@ func (mathFloatHelpMech *mathFloatHelperMechanics) floatNumToIntFracRunes(
 func (mathFloatHelpMech *mathFloatHelperMechanics) raiseToFloatExponentConfig(
 	base *big.Float,
 	exponent int64,
+	numOfExtraDigitsBuffer int64,
+	precisionBitsOverride uint,
 	errPrefDto *ePref.ErrPrefixDto) (
 	*big.Float,
 	error) {
@@ -413,9 +453,9 @@ func (mathFloatHelpMech *mathFloatHelperMechanics) raiseToFloatExponentConfig(
 		return big.NewFloat(0), err
 	}
 
-	var pureNumStrComponents PureNumberStrComponents
-
 	baseStr := base.Text('f', -1)
+
+	var pureNumStrComponents PureNumberStrComponents
 
 	pureNumStrComponents,
 		err = new(numStrMathAtom).
@@ -445,38 +485,47 @@ func (mathFloatHelpMech *mathFloatHelperMechanics) raiseToFloatExponentConfig(
 
 	}
 
-	var precisionBits uint
+	var bFloatDto BigFloatDto
 
-	precisionBits,
-		err = new(mathFloatHelperAtom).precisionBitsFromRequiredDigits(
-		int64(pureNumStrComponents.NumStrStats.NumOfIntegerDigits)*
-			exponent,
-		int64(pureNumStrComponents.NumStrStats.NumOfFractionalDigits)*
-			exponent,
-		50,
-		ePrefix)
+	bFloatDto,
+		err = new(mathFloatHelperBoson).
+		bigFloatFromPureNumStr(
+			baseStr,
+			".",
+			true,
+			numOfExtraDigitsBuffer,
+			precisionBitsOverride,
+			ePrefix)
 
-	if err != nil {
+	requiredIntegerDigits :=
+		int64(bFloatDto.NumStrComponents.NumStrStats.NumOfIntegerDigits) *
+			exponent
 
-		return big.NewFloat(0), err
+	requiredFractionalDigits :=
+		int64(bFloatDto.NumStrComponents.NumStrStats.NumOfFractionalDigits) *
+			exponent
+
+	var estimatedPrecisionBits uint
+
+	if precisionBitsOverride == 0 {
+
+		estimatedPrecisionBits,
+			err = new(mathFloatHelperAtom).
+			precisionBitsFromRequiredDigits(
+				requiredIntegerDigits,
+				requiredFractionalDigits,
+				numOfExtraDigitsBuffer,
+				ePrefix)
+
+	} else {
+
+		estimatedPrecisionBits = precisionBitsOverride
 	}
-
-	basePrec := base.Prec()
-
-	if precisionBits < basePrec {
-
-		precisionBits = basePrec
-
-	}
-
-	newBase := big.NewFloat(0).
-		SetPrec(precisionBits).
-		SetString()
 
 	return new(mathFloatHelperQuark).
 		raiseToFloatPositiveExponent(
-			base,
+			&bFloatDto.Value,
 			exponent,
-			precisionBits,
+			estimatedPrecisionBits,
 			ePrefix)
 }

@@ -193,6 +193,21 @@ func (floatHelperQuark *mathFloatHelperQuark) raiseToFloatPositiveExponent(
 		raisedToExponent.Mul(raisedToExponent, newBase)
 	}
 
+	raisedToExponent.SetPrec(raisedToExponent.MinPrec())
+
+	if raisedToExponent.Acc() != big.Exact {
+
+		err = fmt.Errorf("\n%v\n"+
+			"Error: Final 'raisedToExponent' Accuracy is NOT equal to 'Exact'!\n"+
+			"Accuracy may be compromised.\n"+
+			"'raisedToExponent' Accuracy = %v\n"+
+			"raisedToExponent = %v\n",
+			ePrefix.String(),
+			raisedToExponent.Acc(),
+			raisedToExponent.Text('f', -1))
+
+	}
+
 	return raisedToExponent, err
 }
 

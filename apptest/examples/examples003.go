@@ -108,7 +108,7 @@ func (MainTest03) RaiseToExponent01() {
 		"MainTest03.RaiseToExponent01()",
 		"")
 
-	breakStr := strings.Repeat("=", 50)
+	breakStr := strings.Repeat("=", 200)
 
 	fmt.Printf("\n\n" + breakStr + "\n")
 
@@ -160,40 +160,70 @@ func (MainTest03) RaiseToExponent01() {
 	//		SetPrec(precisionBits).
 	//		SetString(baseStr)
 
-	baseFloat := new(big.Float)
-	var ok bool
-	_,
-		ok = baseFloat.
-		SetMode(big.AwayFromZero).
-		SetString(baseStr)
+	//baseFloat := new(big.Float)
+	//var ok bool
+	//_,
+	//	ok = baseFloat.
+	//	SetMode(big.AwayFromZero).
+	//	SetString(baseStr)
+	//
+	//if !ok {
+	//
+	//	fmt.Printf("\n%v\n"+
+	//		"Error:\n"+
+	//		"baseFloat.SetString(baseStr) FAILED!\n"+
+	//		"baseStr = '%v'\n",
+	//		ePrefix.String(),
+	//		baseStr)
+	//
+	//	return
+	//}
 
-	if !ok {
+	var bFloatDto strmech.BigFloatDto
+	var err error
 
-		fmt.Printf("\n%v\n"+
-			"Error:\n"+
-			"baseFloat.SetString(baseStr) FAILED!\n"+
-			"baseStr = '%v'\n",
+	bFloatDto,
+		err = floatHelper.BigFloatFromPureNumStr(
+		baseStr,
+		".",
+		true,
+		10,
+		0,
+		ePrefix)
+
+	if err != nil {
+
+		fmt.Printf("\n\n%v\n"+
+			"%v\n",
 			ePrefix.String(),
-			baseStr)
+			err.Error())
 
 		return
+
 	}
 
 	fmt.Printf("\nInitialization\n"+
 		"baseStr        = %v\n"+
 		"baseFloat      = %v\n"+
-		"base Precision = %v\n\n",
+		"base Precision = %v\n"+
+		"base Accuracy  = %v\n"+
+		"base Round Mode= %v\n"+
+		"exponent       = %v\n\n",
 		baseStr,
-		baseFloat.Text('f', 12),
-		baseFloat.Prec())
+		bFloatDto.Value.Text('f', -1),
+		bFloatDto.Value.Prec(),
+		bFloatDto.Value.Acc(),
+		bFloatDto.Value.Mode(),
+		exponent)
 
 	var raisedToExponent *big.Float
-	var err error
 
 	raisedToExponent,
 		err = floatHelper.RaiseToFloatPositiveExponent(
-		baseFloat,
+		&bFloatDto.Value,
 		exponent,
+		200,
+		0,
 		ePrefix.XCpy(
 			"raisedToExponent"))
 
@@ -207,12 +237,16 @@ func (MainTest03) RaiseToExponent01() {
 		raisedToExponent.Text('f', expectedFracDigits)
 
 	fmt.Printf("After Calculation Of Raise To Power\n"+
-		"Actual raisedToExponent   = %v\n"+
-		"Expected raisedToExponent = %v\n"+
-		"raisedToExponent Precision = %v\n\n",
+		"Actual raisedToExponent    = %v\n"+
+		"Expected raisedToExponent  = %v\n"+
+		"raisedToExponent Precision = %v\n"+
+		"raisedToExponent Accuracy  = %v\n"+
+		"raisedToExponent Mode      = %v\n",
 		raisedToExponentStr,
 		expectedResultStr,
-		raisedToExponent.Prec())
+		raisedToExponent.Prec(),
+		raisedToExponent.Acc(),
+		raisedToExponent.Mode())
 
 	fmt.Printf("\n\n" + breakStr + "\n")
 

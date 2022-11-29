@@ -133,7 +133,18 @@ type mathFloatHelperBoson struct {
 //		numeric digits via parameter,
 //		'numOfExtraDigitsBuffer'.
 //
+//		Note: The user has the option of overriding the
+//		automatic precision bits calculation by specifying
+//		a precision bits value directly through parameter,
+//		'precisionBitsOverride'.
+//
 //	precisionBitsOverride		uint
+//
+//		The term 'precision bits' refers to the number of
+//		bits in the mantissa of a big.Float floating point
+//		number. Effectively, 'precision bits' controls the
+//		precision, accuracy and numerical digit storage
+//		capacity for a big.Float floating point number.
 //
 //		Typically, this method will automatically
 //		calculate the value of big.Float precision bits
