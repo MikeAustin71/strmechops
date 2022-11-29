@@ -1,11 +1,11 @@
 package strmech
 
 type PureNumberStrComponents struct {
-	NumberStrStats NumberStrStatsDto
+	NumStrStats NumberStrStatsDto
 	//
 	//		This data transfer object will return key
 	//		statistics on the numeric value encapsulated
-	//		by the current instance of NumberStrKernel.
+	//		in a number string.
 	//
 	//		type NumberStrStatsDto struct {
 	//

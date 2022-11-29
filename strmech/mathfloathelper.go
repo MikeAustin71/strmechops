@@ -1251,29 +1251,6 @@ func (mathFloatHelper *MathFloatHelper) PrecisionToDigitsFactor() *big.Float {
 //		If this value is less than zero, an error will be
 //		returned.
 //
-//	precisionBits				uint
-//
-//		The number of bits in the mantissa of the result
-//		'raisedToExponent'. Effectively, this parameter
-//		controls the precision and accuracy for the
-//		calculation of 'base' raised to the power of
-//		'exponent'.
-//
-//		If in doubt as to this number, identify the
-//		total number of calculation result integer and
-//		fractional digits required to store an accurate
-//		result and multiply this number times four (+4).
-//		Be sure to add a safety buffer of extra numerical
-//		digits (maybe 50-digits) to handle processing
-//		requirements.
-//
-//		The following methods may also be used to
-//		calculate 'precisionBits' from required numerical
-//		digits:
-//
-//			MathFloatHelper.DigitsToPrecisionEstimate()
-//			MathFloatHelper.PrecisionBitsFromRequiredDigits()
-//
 //	errorPrefix					interface{}
 //
 //		This object encapsulates error prefix text which
@@ -1361,7 +1338,6 @@ func (mathFloatHelper *MathFloatHelper) PrecisionToDigitsFactor() *big.Float {
 func (mathFloatHelper *MathFloatHelper) RaiseToFloatPositiveExponent(
 	base *big.Float,
 	exponent int64,
-	precisionBits uint,
 	errorPrefix interface{}) (
 	*big.Float,
 	error) {
@@ -1389,11 +1365,10 @@ func (mathFloatHelper *MathFloatHelper) RaiseToFloatPositiveExponent(
 		return big.NewFloat(0), err
 	}
 
-	return new(mathFloatHelperQuark).
-		raiseToFloatPositiveExponent(
+	return new(mathFloatHelperMechanics).
+		raiseToFloatExponentConfig(
 			base,
 			exponent,
-			precisionBits,
 			ePrefix)
 }
 

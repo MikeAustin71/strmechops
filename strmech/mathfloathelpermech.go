@@ -262,7 +262,7 @@ func (mathFloatHelpMech *mathFloatHelperMechanics) floatNumToIntFracRunes(
 	return numberStats, err
 }
 
-//	raiseToExponentConfig
+//	raiseToFloatExponentConfig
 //
 //	Receives a pointer to a big.Float floating point
 //	number and raises that number to the power specified
@@ -360,7 +360,7 @@ func (mathFloatHelpMech *mathFloatHelperMechanics) floatNumToIntFracRunes(
 //		for input parameter 'errPrefDto' (error prefix)
 //		will be prefixed or attached at the beginning of
 //		the error message.
-func (mathFloatHelpMech *mathFloatHelperMechanics) raiseToExponentConfig(
+func (mathFloatHelpMech *mathFloatHelperMechanics) raiseToFloatExponentConfig(
 	base *big.Float,
 	exponent int64,
 	errPrefDto *ePref.ErrPrefixDto) (
@@ -383,7 +383,7 @@ func (mathFloatHelpMech *mathFloatHelperMechanics) raiseToExponentConfig(
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
 		"mathFloatHelperMechanics."+
-			"raiseToExponentConfig()",
+			"raiseToFloatExponentConfig()",
 		"")
 
 	if err != nil {
@@ -415,10 +415,12 @@ func (mathFloatHelpMech *mathFloatHelperMechanics) raiseToExponentConfig(
 
 	var pureNumStrComponents PureNumberStrComponents
 
+	baseStr := base.Text('f', -1)
+
 	pureNumStrComponents,
 		err = new(numStrMathAtom).
 		pureNumStrToComponents(
-			base.Text('f', -1),
+			baseStr,
 			".",
 			true,
 			ePrefix.XCpy(
@@ -429,7 +431,7 @@ func (mathFloatHelpMech *mathFloatHelperMechanics) raiseToExponentConfig(
 		return big.NewFloat(0), err
 	}
 
-	if pureNumStrComponents.NumberStrStats.IsZeroValue {
+	if pureNumStrComponents.NumStrStats.IsZeroValue {
 
 		// zero^exponent = 0
 		return big.NewFloat(0), err
@@ -447,9 +449,9 @@ func (mathFloatHelpMech *mathFloatHelperMechanics) raiseToExponentConfig(
 
 	precisionBits,
 		err = new(mathFloatHelperAtom).precisionBitsFromRequiredDigits(
-		int64(pureNumStrComponents.NumberStrStats.NumOfIntegerDigits)*
+		int64(pureNumStrComponents.NumStrStats.NumOfIntegerDigits)*
 			exponent,
-		int64(pureNumStrComponents.NumberStrStats.NumOfFractionalDigits)*
+		int64(pureNumStrComponents.NumStrStats.NumOfFractionalDigits)*
 			exponent,
 		50,
 		ePrefix)
@@ -464,7 +466,12 @@ func (mathFloatHelpMech *mathFloatHelperMechanics) raiseToExponentConfig(
 	if precisionBits < basePrec {
 
 		precisionBits = basePrec
+
 	}
+
+	newBase := big.NewFloat(0).
+		SetPrec(precisionBits).
+		SetString()
 
 	return new(mathFloatHelperQuark).
 		raiseToFloatPositiveExponent(

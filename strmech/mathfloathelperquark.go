@@ -156,14 +156,17 @@ func (floatHelperQuark *mathFloatHelperQuark) raiseToFloatPositiveExponent(
 		return big.NewFloat(0), err
 	}
 
-	baseStr := base.Text('f', 12)
+	baseStr := base.Text('f', -1)
 
-	var newBase *big.Float
-
-	var ok bool
+	fmt.Printf("baseStr = %v\n",
+		baseStr)
+	// We use t as a temporary variable. There's no need to set its precision
+	// since big.Float values with unset (== 0) precision automatically assume
+	// the largest precision of the arguments when used as the result (receiver)
+	// of a big.Float operation.
 
 	newBase,
-		ok = new(big.Float).
+		ok := big.NewFloat(0).
 		SetMode(big.AwayFromZero).
 		SetPrec(precisionBits).
 		SetString(baseStr)
@@ -174,13 +177,13 @@ func (floatHelperQuark *mathFloatHelperQuark) raiseToFloatPositiveExponent(
 			"Error: newBase.SetString(baseStr) Failed!\n"+
 			"baseStr = %v\n",
 			ePrefix.String(),
-			base.Text('f', 12))
+			base.Text('f', 80))
 
 		return big.NewFloat(0), err
 	}
 
 	raisedToExponent :=
-		new(big.Float).
+		big.NewFloat(0).
 			SetPrec(precisionBits).
 			SetMode(big.AwayFromZero).
 			SetInt64(1)
@@ -348,7 +351,7 @@ func (floatHelperQuark *mathFloatHelperQuark) raiseToIntPositiveExponent(
 		return big.NewFloat(0), err
 	}
 
-	if pureNumStrStats.NumberStrStats.IsZeroValue == true {
+	if pureNumStrStats.NumStrStats.IsZeroValue == true {
 
 		// base is zero.
 		//	zero^exponent = zero
@@ -359,7 +362,7 @@ func (floatHelperQuark *mathFloatHelperQuark) raiseToIntPositiveExponent(
 
 	var numStr string
 
-	if pureNumStrStats.NumberStrStats.NumberSign ==
+	if pureNumStrStats.NumStrStats.NumberSign ==
 		NumSignVal.Negative() {
 
 		numStr += "-"
@@ -397,7 +400,7 @@ func (floatHelperQuark *mathFloatHelperQuark) raiseToIntPositiveExponent(
 
 	negativeAdjustment := uint64(0)
 
-	if pureNumStrStats.NumberStrStats.NumberSign ==
+	if pureNumStrStats.NumStrStats.NumberSign ==
 		NumSignVal.Negative() {
 
 		negativeAdjustment = 1
@@ -405,28 +408,28 @@ func (floatHelperQuark *mathFloatHelperQuark) raiseToIntPositiveExponent(
 
 	raisedToPowerStats := PureNumberStrComponents{}
 
-	raisedToPowerStats.NumberStrStats.NumOfFractionalDigits =
-		pureNumStrStats.NumberStrStats.NumOfFractionalDigits *
+	raisedToPowerStats.NumStrStats.NumOfFractionalDigits =
+		pureNumStrStats.NumStrStats.NumOfFractionalDigits *
 			uint64(exponent)
 
-	raisedToPowerStats.NumberStrStats.NumOfIntegerDigits =
+	raisedToPowerStats.NumStrStats.NumOfIntegerDigits =
 		lenNumStr -
-			raisedToPowerStats.NumberStrStats.NumOfFractionalDigits -
+			raisedToPowerStats.NumStrStats.NumOfFractionalDigits -
 			negativeAdjustment
 
 	numStr =
-		numStr[0:(raisedToPowerStats.NumberStrStats.NumOfIntegerDigits+
+		numStr[0:(raisedToPowerStats.NumStrStats.NumOfIntegerDigits+
 			negativeAdjustment)] +
 			"." +
-			numStr[raisedToPowerStats.NumberStrStats.NumOfIntegerDigits+
+			numStr[raisedToPowerStats.NumStrStats.NumOfIntegerDigits+
 				negativeAdjustment:]
 
 	var precisionBits uint
 
 	precisionBits,
 		err = new(mathFloatHelperAtom).precisionBitsFromRequiredDigits(
-		int64(raisedToPowerStats.NumberStrStats.NumOfIntegerDigits),
-		int64(raisedToPowerStats.NumberStrStats.NumOfFractionalDigits),
+		int64(raisedToPowerStats.NumStrStats.NumOfIntegerDigits),
+		int64(raisedToPowerStats.NumStrStats.NumOfFractionalDigits),
 		5,
 		ePrefix)
 

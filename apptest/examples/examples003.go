@@ -121,35 +121,51 @@ func (MainTest03) RaiseToExponent01() {
 	// int digits 4
 	// frac digits 12
 	baseStr := "5084.987654321000"
+	//baseStr := "2.24"
 
 	exponent := int64(4)
 
 	// int digits = 15
 	// frac digits = 17
 	expectedResultStr := "668589591687777.75101222860206783"
+	//expectedResultStr := "25.17630976"
 	expectedFracDigits := 17
 
 	floatHelper := strmech.MathFloatHelper{}
 
-	precisionBits,
-		err := floatHelper.PrecisionBitsFromRequiredDigits(
-		4*exponent,
-		12*exponent,
-		50,
-		ePrefix)
+	//precisionBits,
+	//	err := floatHelper.PrecisionBitsFromRequiredDigits(
+	//	4*exponent,
+	//	12*exponent,
+	//	50,
+	//	ePrefix)
+	//
+	//if err != nil {
+	//	fmt.Printf("\n%v\n",
+	//		err.Error())
+	//	return
+	//}
 
-	if err != nil {
-		fmt.Printf("\n%v\n",
-			err.Error())
-		return
-	}
+	//baseFloat,
+	//	ok :=
+	//	new(big.Float).
+	//		SetMode(big.AwayFromZero).
+	//		SetPrec(precisionBits).
+	//		SetString(baseStr)
 
-	baseFloat,
-		ok :=
-		new(big.Float).
-			SetMode(big.AwayFromZero).
-			//SetPrec(precisionBits).
-			SetString(baseStr)
+	//baseFloat,
+	//	ok :=
+	//	big.NewFloat(0).
+	//		SetMode(big.AwayFromZero).
+	//		SetPrec(precisionBits).
+	//		SetString(baseStr)
+
+	baseFloat := new(big.Float)
+	var ok bool
+	_,
+		ok = baseFloat.
+		SetMode(big.AwayFromZero).
+		SetString(baseStr)
 
 	if !ok {
 
@@ -172,12 +188,12 @@ func (MainTest03) RaiseToExponent01() {
 		baseFloat.Prec())
 
 	var raisedToExponent *big.Float
+	var err error
 
 	raisedToExponent,
 		err = floatHelper.RaiseToFloatPositiveExponent(
 		baseFloat,
 		exponent,
-		precisionBits,
 		ePrefix.XCpy(
 			"raisedToExponent"))
 

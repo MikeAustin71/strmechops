@@ -567,7 +567,7 @@ func (nStrMathAtom *numStrMathAtom) addOneToRunes(
 //
 //		type PureNumberStrComponents struct {
 //
-//			NumberStrStats NumberStrStatsDto
+//			NumStrStats NumberStrStatsDto
 //
 //				This data transfer object will return key
 //				statistics on the numeric value encapsulated
@@ -725,7 +725,7 @@ func (nStrMathAtom *numStrMathAtom) pureNumStrToComponents(
 		return pureNumStrComponents, err
 	}
 
-	err = pureNumStrComponents.NumberStrStats.CopyIn(
+	err = pureNumStrComponents.NumStrStats.CopyIn(
 		&numberStats,
 		ePrefix.XCpy(
 			"<-numberStats"))
@@ -734,12 +734,12 @@ func (nStrMathAtom *numStrMathAtom) pureNumStrToComponents(
 		return pureNumStrComponents, err
 	}
 
-	if pureNumStrComponents.NumberStrStats.NumberSign ==
+	if pureNumStrComponents.NumStrStats.NumberSign ==
 		NumSignVal.Zero() {
 
-		if pureNumStrComponents.NumberStrStats.NumOfFractionalDigits > 0 {
+		if pureNumStrComponents.NumStrStats.NumOfFractionalDigits > 0 {
 
-			pureNumStrComponents.NumberStrStats.NumOfIntegerDigits = 1
+			pureNumStrComponents.NumStrStats.NumOfIntegerDigits = 1
 
 			pureNumStrComponents.AbsoluteValueNumStr =
 				"0.0"
@@ -747,14 +747,14 @@ func (nStrMathAtom *numStrMathAtom) pureNumStrToComponents(
 			pureNumStrComponents.AllIntegerDigitsNumStr =
 				"00"
 
-			pureNumStrComponents.NumberStrStats.NumOfFractionalDigits = 1
+			pureNumStrComponents.NumStrStats.NumOfFractionalDigits = 1
 
 		} else {
 
 			pureNumStrComponents.AbsoluteValueNumStr =
 				"0"
 
-			pureNumStrComponents.NumberStrStats.NumOfIntegerDigits = 1
+			pureNumStrComponents.NumStrStats.NumOfIntegerDigits = 1
 
 		}
 
