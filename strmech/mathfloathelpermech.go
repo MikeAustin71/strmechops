@@ -302,7 +302,6 @@ func (mathFloatHelpMech *mathFloatHelperMechanics) floatNumToIntFracRunes(
 //		exponent. Therefore, if input parameter 'exponent'
 //		is less than zero, an error will be returned.
 //
-//
 //	numOfExtraDigitsBuffer		int64
 //
 //		The term 'precision bits' refers to the number of
@@ -310,19 +309,20 @@ func (mathFloatHelpMech *mathFloatHelperMechanics) floatNumToIntFracRunes(
 //		point number. Effectively, 'precision bits'
 //		controls the precision, accuracy and numerical
 //		digit storage capacity for a big.Float floating
-//		point number
+//		point number.
 //
 //		When configuring the big.Float numeric value
 //		returned by this method, the number of big.Float
-//		precision bits will be calculated based on the
-//		number of integer and fractional numeric digits
-//		contained in the base floating point value
-//		('base'). To deal with contingencies and
-//		requirements often found in complex floating
+//		precision bits will be automatically calculated
+//		based on the number of integer and fractional
+//		numeric digits contained in the base floating
+//		point value ('base'). To deal with contingencies
+//		and requirements often found in complex floating
 //		point operations, users have the option to
-//		arbitrarily increase the number of precision bits
-//		by specifying additional numeric digits via
-//		parameter, 'numOfExtraDigitsBuffer'.
+//		arbitrarily increase the number of automatically
+//		calculated precision bits by specifying additional
+//		numeric digits via parameter,
+//		'numOfExtraDigitsBuffer'.
 //
 //		The automatic precision bits calculation will add
 //		the number of integer digits, fractional digits and
@@ -355,7 +355,8 @@ func (mathFloatHelpMech *mathFloatHelperMechanics) floatNumToIntFracRunes(
 //		If in doubt as to this number, identify the
 //		total number of integer and fractional digits
 //		required to store an accurate result and
-//		multiply this number times four (+4).
+//		multiply this number times four (+4) to generate
+//		an estimate of precision bits required.
 //
 //	roundingMode 				big.RoundingMode
 //

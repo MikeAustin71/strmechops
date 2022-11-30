@@ -270,6 +270,84 @@ func (floatHelperQuark *mathFloatHelperQuark) raiseToFloatPositiveExponent(
 //		If this value is less than zero, an error will be
 //		returned.
 //
+//	numOfExtraDigitsBuffer		int64
+//
+//		The term 'precision bits' refers to the number of
+//		bits in the mantissa of a big.Float floating
+//		point number. Effectively, 'precision bits'
+//		controls the precision, accuracy and numerical
+//		digit storage capacity for a big.Float floating
+//		point number
+//
+//		When configuring the big.Float numeric value
+//		returned by this method, the number of big.Float
+//		precision bits will be calculated based on the
+//		number of integer and fractional numeric digits
+//		contained in the base floating point value
+//		('base'). To deal with contingencies and
+//		requirements often found in complex floating
+//		point operations, users have the option to
+//		arbitrarily increase the number of precision bits
+//		by specifying additional numeric digits via
+//		parameter, 'numOfExtraDigitsBuffer'.
+//
+//		The automatic precision bits calculation will add
+//		the number of integer digits, fractional digits and
+//		'numOfExtraDigitsBuffer' to compute the estimated
+//		number of precision bits.
+//
+//		Note: The user has the option of overriding the
+//		automatic precision bits calculation by specifying
+//		a precision bits value directly through parameter,
+//		'precisionBitsOverride'.
+//
+//	precisionBitsOverride		uint
+//
+//		The term 'precision bits' refers to the number of
+//		bits in the mantissa of a big.Float floating point
+//		number. Effectively, 'precision bits' controls the
+//		precision, accuracy and numerical digit storage
+//		capacity for a big.Float floating point number.
+//
+//		Typically, this method will automatically
+//		calculate the value of big.Float precision bits
+//		using the parameter 'numOfExtraDigitsBuffer'
+//		listed above. However, if 'precisionBitsOverride'
+//		has a value greater than zero, the automatic
+//		precision bit calculation will be overridden and
+//		big.Float precision bits will be set to the value
+//		of this	precision bits specification
+//		('precisionBitsOverride').
+//
+//		If in doubt as to this number, identify the
+//		total number of integer and fractional digits
+//		required to store an accurate result and
+//		multiply this number times four (+4).
+//
+//	roundingMode 				big.RoundingMode
+//
+//		Specifies the rounding algorithm which will be used
+//		internally to calculate the base value raised to the
+//		power of exponent.
+//
+//		Each instance of big.Float is configured with a
+//		rounding mode. Input parameter 'roundingMode'
+//		controls this configuration for the calculation
+//		and the big.Float value returned by this method.
+//
+//		The constant values available for big.Float
+//		rounding mode are listed as follows:
+//
+//		big.ToNearestEven  		// == IEEE 754-2008 roundTiesToEven
+//		big.ToNearestAway       // == IEEE 754-2008 roundTiesToAway
+//		big.ToZero              // == IEEE 754-2008 roundTowardZero
+//		big.AwayFromZero        // no IEEE 754-2008 equivalent
+//		big.ToNegativeInf       // == IEEE 754-2008 roundTowardNegative
+//		big.ToPositiveInf       // == IEEE 754-2008 roundTowardPositive
+//
+//		If in doubt as this setting, 'big.AwayFromZero' is a
+//		common selection for rounding mode.
+//
 //	errPrefDto					*ePref.ErrPrefixDto
 //
 //		This object encapsulates an error prefix string
@@ -313,6 +391,9 @@ func (floatHelperQuark *mathFloatHelperQuark) raiseToFloatPositiveExponent(
 func (floatHelperQuark *mathFloatHelperQuark) raiseToIntPositiveExponent(
 	base *big.Float,
 	exponent int64,
+	numOfExtraDigitsBuffer int64,
+	precisionBitsOverride uint,
+	roundingMode big.RoundingMode,
 	errPrefDto *ePref.ErrPrefixDto) (
 	*big.Float,
 	error) {
@@ -365,8 +446,6 @@ func (floatHelperQuark *mathFloatHelperQuark) raiseToIntPositiveExponent(
 
 		return big.NewFloat(0), err
 	}
-
-	// base.SetPrec(base.MinPrec())
 
 	var pureNumStrStats PureNumberStrComponents
 
@@ -446,37 +525,49 @@ func (floatHelperQuark *mathFloatHelperQuark) raiseToIntPositiveExponent(
 			uint64(exponent)
 
 	raisedToPowerStats.NumStrStats.NumOfIntegerDigits =
+		pureNumStrStats.NumStrStats.NumOfIntegerDigits *
+			uint64(exponent)
+
+	actualNumOfIntegerDigits :=
 		lenNumStr -
 			raisedToPowerStats.NumStrStats.NumOfFractionalDigits -
 			negativeAdjustment
 
 	numStr =
-		numStr[0:(raisedToPowerStats.NumStrStats.NumOfIntegerDigits+
+		numStr[0:(actualNumOfIntegerDigits+
 			negativeAdjustment)] +
 			"." +
-			numStr[raisedToPowerStats.NumStrStats.NumOfIntegerDigits+
+			numStr[actualNumOfIntegerDigits+
 				negativeAdjustment:]
 
-	var precisionBits uint
+	var precisionBitsSpec uint
 
-	precisionBits,
-		err = new(mathFloatHelperAtom).precisionBitsFromRequiredDigits(
-		int64(raisedToPowerStats.NumStrStats.NumOfIntegerDigits),
-		int64(raisedToPowerStats.NumStrStats.NumOfFractionalDigits),
-		5,
-		ePrefix)
+	if precisionBitsOverride == 0 {
 
-	if err != nil {
+		precisionBitsSpec,
+			err = new(mathFloatHelperAtom).precisionBitsFromRequiredDigits(
+			int64(raisedToPowerStats.NumStrStats.NumOfIntegerDigits),
+			int64(raisedToPowerStats.NumStrStats.NumOfFractionalDigits),
+			numOfExtraDigitsBuffer,
+			ePrefix)
 
-		return big.NewFloat(0), err
+		if err != nil {
+
+			return big.NewFloat(0), err
+		}
+
+	} else {
+
+		precisionBitsSpec = precisionBitsOverride
+
 	}
 
 	var raisedToPowerFloat *big.Float
 
 	raisedToPowerFloat,
 		ok = big.NewFloat(0).
-		SetPrec(precisionBits).
-		SetMode(big.AwayFromZero).
+		SetPrec(precisionBitsSpec).
+		SetMode(roundingMode).
 		SetString(numStr)
 
 	if !ok {
@@ -492,12 +583,12 @@ func (floatHelperQuark *mathFloatHelperQuark) raiseToIntPositiveExponent(
 
 	raisedToPowerFloat.SetPrec(raisedToPowerFloat.MinPrec())
 
-	fmt.Printf("raisedToPower = %v\n"+
-		"raisedToPower Precision = %v\n"+
-		"    Estimated Precision = %v\n",
-		raisedToPowerFloat.Text('f', -1),
-		raisedToPowerFloat.Prec(),
-		precisionBits)
+	//fmt.Printf("raisedToPower = %v\n"+
+	//	"raisedToPower Precision = %v\n"+
+	//	"    Estimated Precision = %v\n",
+	//	raisedToPowerFloat.Text('f', -1),
+	//	raisedToPowerFloat.Prec(),
+	//	precisionBits)
 
 	return raisedToPowerFloat, err
 }

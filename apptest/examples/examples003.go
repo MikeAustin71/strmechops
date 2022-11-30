@@ -12,6 +12,114 @@ type MainTest03 struct {
 	input string
 }
 
+func (MainTest03) RaiseToExponent03() {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"MainTest03.RaiseToExponent03()",
+		"")
+
+	breakStr := strings.Repeat("=", 50)
+
+	fmt.Printf("\n\n" + breakStr + "\n")
+
+	fmt.Printf("\n Starting Run!\n"+
+		"Function: %v\n",
+		ePrefix.String())
+
+	fmt.Printf("\n" + breakStr + "\n")
+
+	// int digits 4
+	// frac digits 12
+	baseStr := "5084.987654321000"
+
+	exponent := int64(4)
+
+	// int digits = 15
+	// frac digits = 17
+	expectedResultStr := "668589591687777.75101222860206783"
+	expectedFracDigits := 17
+
+	var numOfExtraDigitsBuffer int64
+	var precisionBitsOverride uint
+	var roundingMode big.RoundingMode
+
+	numOfExtraDigitsBuffer = 10
+	precisionBitsOverride = 0
+	roundingMode = big.AwayFromZero
+
+	floatHelper := strmech.MathFloatHelper{}
+
+	var bFloatDto strmech.BigFloatDto
+	var err error
+
+	bFloatDto,
+		err = floatHelper.BigFloatFromPureNumStr(
+		baseStr,
+		".",
+		true,
+		numOfExtraDigitsBuffer,
+		precisionBitsOverride,
+		big.AwayFromZero,
+		ePrefix)
+
+	fmt.Printf("\nInitialization\n"+
+		"----- RaiseToIntPositiveExponent() -----\n"+
+		"baseStr        = %v\n"+
+		"baseFloat      = %v\n"+
+		"base Precision = %v\n"+
+		"base Mode      = %v\n"+
+		"base Accuracy  = %v\n"+
+		"exponent       = %v\n\n",
+		baseStr,
+		bFloatDto.Value.Text('f', 12),
+		bFloatDto.Value.Prec(),
+		bFloatDto.Value.Mode(),
+		bFloatDto.Value.Acc(),
+		exponent)
+
+	var raisedToIntExponent *big.Float
+
+	raisedToIntExponent,
+		err = floatHelper.RaiseToIntPositiveExponent(
+		&bFloatDto.Value,
+		exponent,
+		numOfExtraDigitsBuffer,
+		precisionBitsOverride,
+		roundingMode,
+		ePrefix.XCpy(
+			"raisedToIntExponent"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	fmt.Printf("After Calculation Of Raise To Power\n"+
+		"----- RaiseToIntPositiveExponent() -----\n"+
+		"Actual raisedToIntExponent    = %v\n"+
+		"Expected raisedToIntExponent  = %v\n"+
+		"raisedToIntExponent Precision = %v\n"+
+		"raisedToIntExponent Mode      = %v\n"+
+		"raisedToIntExponent Accuracy  = %v\n"+
+		"exponent                      = %v\n\n\n",
+		raisedToIntExponent.Text('f', expectedFracDigits),
+		expectedResultStr,
+		raisedToIntExponent.Prec(),
+		raisedToIntExponent.Mode(),
+		raisedToIntExponent.Acc(),
+		exponent)
+
+	fmt.Printf("\n\n" + breakStr + "\n")
+
+	fmt.Printf("\n Successful Completion!\n"+
+		"Function: %v\n",
+		ePrefix.String())
+
+	fmt.Printf("\n" + breakStr + "\n")
+
+}
+
 func (MainTest03) RaiseToExponent02() {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
@@ -39,6 +147,14 @@ func (MainTest03) RaiseToExponent02() {
 	expectedResultStr := "668589591687777.75101222860206783"
 	expectedFracDigits := 17
 
+	var numOfExtraDigitsBuffer int64
+	var precisionBitsOverride uint
+	var roundingMode big.RoundingMode
+
+	numOfExtraDigitsBuffer = 10
+	precisionBitsOverride = 0
+	roundingMode = big.AwayFromZero
+
 	floatHelper := strmech.MathFloatHelper{}
 
 	var bFloatDto strmech.BigFloatDto
@@ -49,8 +165,9 @@ func (MainTest03) RaiseToExponent02() {
 		baseStr,
 		".",
 		true,
-		10,
-		0,
+		numOfExtraDigitsBuffer,
+		precisionBitsOverride,
+		big.AwayFromZero,
 		ePrefix)
 
 	fmt.Printf("\nInitialization\n"+
@@ -58,7 +175,7 @@ func (MainTest03) RaiseToExponent02() {
 		"baseStr        = %v\n"+
 		"baseFloat      = %v\n"+
 		"base Precision = %v\n"+
-		"base Mode		= %v\n"+
+		"base Mode      = %v\n"+
 		"base Accuracy  = %v\n"+
 		"exponent       = %v\n\n",
 		baseStr,
@@ -74,6 +191,9 @@ func (MainTest03) RaiseToExponent02() {
 		err = floatHelper.RaiseToIntPositiveExponent(
 		&bFloatDto.Value,
 		exponent,
+		numOfExtraDigitsBuffer,
+		precisionBitsOverride,
+		roundingMode,
 		ePrefix.XCpy(
 			"raisedToIntExponent"))
 
@@ -90,7 +210,7 @@ func (MainTest03) RaiseToExponent02() {
 		"raisedToIntExponent Precision = %v\n"+
 		"raisedToIntExponent Mode      = %v\n"+
 		"raisedToIntExponent Accuracy  = %v\n"+
-		"exponent                   = %v\n\n\n",
+		"exponent                      = %v\n\n\n",
 		raisedToIntExponent.Text('f', expectedFracDigits),
 		expectedResultStr,
 		raisedToIntExponent.Prec(),
@@ -103,7 +223,7 @@ func (MainTest03) RaiseToExponent02() {
 		"baseStr        = %v\n"+
 		"baseFloat      = %v\n"+
 		"base Precision = %v\n"+
-		"base Mode		= %v\n"+
+		"base Mode      = %v\n"+
 		"base Accuracy  = %v\n"+
 		"exponent       = %v\n\n\n",
 		baseStr,
@@ -115,12 +235,16 @@ func (MainTest03) RaiseToExponent02() {
 
 	var raisedToFloatExponent *big.Float
 
+	numOfExtraDigitsBuffer = 200
+	precisionBitsOverride = 0
+
 	raisedToFloatExponent,
 		err = floatHelper.RaiseToFloatPositiveExponent(
 		&bFloatDto.Value,
 		exponent,
-		200,
-		0,
+		numOfExtraDigitsBuffer,
+		precisionBitsOverride,
+		roundingMode,
 		ePrefix)
 
 	fmt.Printf("After Calculation Of Raise To Power\n"+
@@ -131,7 +255,7 @@ func (MainTest03) RaiseToExponent02() {
 		"raisedToFloatExponent Precision = %v\n"+
 		"raisedToFloatExponent Mode      = %v\n"+
 		"raisedToFloatExponent Accuracy  = %v\n"+
-		"exponent                   = %v\n\n",
+		"exponent                        = %v\n\n",
 		raisedToFloatExponent.Text('f', -1),
 		raisedToFloatExponent.Text('f', expectedFracDigits),
 		expectedResultStr,
@@ -218,6 +342,7 @@ func (MainTest03) RaiseToExponent01() {
 		true,
 		10,
 		0,
+		big.AwayFromZero,
 		ePrefix)
 
 	if err != nil {
@@ -253,6 +378,7 @@ func (MainTest03) RaiseToExponent01() {
 		exponent,
 		200,
 		0,
+		big.AwayFromZero,
 		ePrefix.XCpy(
 			"raisedToExponent"))
 
