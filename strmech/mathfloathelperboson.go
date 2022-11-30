@@ -156,6 +156,30 @@ type mathFloatHelperBoson struct {
 //		of this	precision bits specification
 //		('precisionBitsOverride').
 //
+//	roundingMode 				big.RoundingMode
+//
+//		Specifies the rounding algorithm which will be used
+//		internally to calculate the base value raised to the
+//		power of exponent.
+//
+//		Each instance of big.Float is configured with a
+//		rounding mode. Input parameter 'roundingMode'
+//		controls this configuration for the calculation
+//		and the big.Float value returned by this method.
+//
+//		The constant values available for big.Float
+//		rounding mode are listed as follows:
+//
+//		big.ToNearestEven  		// == IEEE 754-2008 roundTiesToEven
+//		big.ToNearestAway       // == IEEE 754-2008 roundTiesToAway
+//		big.ToZero              // == IEEE 754-2008 roundTowardZero
+//		big.AwayFromZero        // no IEEE 754-2008 equivalent
+//		big.ToNegativeInf       // == IEEE 754-2008 roundTowardNegative
+//		big.ToPositiveInf       // == IEEE 754-2008 roundTowardPositive
+//
+//		If in doubt as this setting, 'big.AwayFromZero' is a
+//		common selection for rounding mode.
+//
 //	errPrefDto					*ePref.ErrPrefixDto
 //
 //		This object encapsulates an error prefix string
@@ -344,6 +368,7 @@ func (floatHelperBoson *mathFloatHelperBoson) bigFloatFromPureNumStr(
 	leadingMinusSign bool,
 	numOfExtraDigitsBuffer int64,
 	precisionBitsOverride uint,
+	roundingMode big.RoundingMode,
 	errPrefDto *ePref.ErrPrefixDto) (
 	BigFloatDto,
 	error) {
@@ -412,7 +437,7 @@ func (floatHelperBoson *mathFloatHelperBoson) bigFloatFromPureNumStr(
 	bFloatDto.Value.SetInt64(0).
 		SetPrec(bFloatDto.EstimatedPrecisionBits.
 			PrecisionBitsSpec).
-		SetMode(big.AwayFromZero)
+		SetMode(roundingMode)
 
 	var ok bool
 	_,

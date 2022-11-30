@@ -352,11 +352,34 @@ func (mathFloatHelpMech *mathFloatHelperMechanics) floatNumToIntFracRunes(
 //		of this	precision bits specification
 //		('precisionBitsOverride').
 //
-//
 //		If in doubt as to this number, identify the
 //		total number of integer and fractional digits
 //		required to store an accurate result and
 //		multiply this number times four (+4).
+//
+//	roundingMode 				big.RoundingMode
+//
+//		Specifies the rounding algorithm which will be used
+//		internally to calculate the base value raised to the
+//		power of exponent.
+//
+//		Each instance of big.Float is configured with a
+//		rounding mode. Input parameter 'roundingMode'
+//		controls this configuration for the calculation
+//		and the big.Float value returned by this method.
+//
+//		The constant values available for big.Float
+//		rounding mode are listed as follows:
+//
+//		big.ToNearestEven  		// == IEEE 754-2008 roundTiesToEven
+//		big.ToNearestAway       // == IEEE 754-2008 roundTiesToAway
+//		big.ToZero              // == IEEE 754-2008 roundTowardZero
+//		big.AwayFromZero        // no IEEE 754-2008 equivalent
+//		big.ToNegativeInf       // == IEEE 754-2008 roundTowardNegative
+//		big.ToPositiveInf       // == IEEE 754-2008 roundTowardPositive
+//
+//		If in doubt as this setting, 'big.AwayFromZero' is a
+//		common selection for rounding mode.
 //
 //	errPrefDto					*ePref.ErrPrefixDto
 //
@@ -403,6 +426,7 @@ func (mathFloatHelpMech *mathFloatHelperMechanics) raiseToFloatExponentConfig(
 	exponent int64,
 	numOfExtraDigitsBuffer int64,
 	precisionBitsOverride uint,
+	roundingMode big.RoundingMode,
 	errPrefDto *ePref.ErrPrefixDto) (
 	*big.Float,
 	error) {
@@ -495,6 +519,7 @@ func (mathFloatHelpMech *mathFloatHelperMechanics) raiseToFloatExponentConfig(
 			true,
 			numOfExtraDigitsBuffer,
 			precisionBitsOverride,
+			roundingMode,
 			ePrefix)
 
 	requiredIntegerDigits :=
@@ -527,5 +552,6 @@ func (mathFloatHelpMech *mathFloatHelperMechanics) raiseToFloatExponentConfig(
 			&bFloatDto.Value,
 			exponent,
 			estimatedPrecisionBits,
+			roundingMode,
 			ePrefix)
 }

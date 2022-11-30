@@ -59,6 +59,30 @@ type mathFloatHelperQuark struct {
 //		digits (maybe 50-digits) to handle processing
 //		requirements.
 //
+//	roundingMode 				big.RoundingMode
+//
+//		Specifies the rounding algorithm which will be used
+//		internally to calculate the base value raised to the
+//		power of exponent.
+//
+//		Each instance of big.Float is configured with a
+//		rounding mode. Input parameter 'roundingMode'
+//		controls this configuration for the calculation
+//		and the big.Float value returned by this method.
+//
+//		The constant values available for big.Float
+//		rounding mode are listed as follows:
+//
+//		big.ToNearestEven  		// == IEEE 754-2008 roundTiesToEven
+//		big.ToNearestAway       // == IEEE 754-2008 roundTiesToAway
+//		big.ToZero              // == IEEE 754-2008 roundTowardZero
+//		big.AwayFromZero        // no IEEE 754-2008 equivalent
+//		big.ToNegativeInf       // == IEEE 754-2008 roundTowardNegative
+//		big.ToPositiveInf       // == IEEE 754-2008 roundTowardPositive
+//
+//		If in doubt as this setting, 'big.AwayFromZero' is a
+//		common selection for rounding mode.
+//
 //	errPrefDto					*ePref.ErrPrefixDto
 //
 //		This object encapsulates an error prefix string
@@ -103,6 +127,7 @@ func (floatHelperQuark *mathFloatHelperQuark) raiseToFloatPositiveExponent(
 	base *big.Float,
 	exponent int64,
 	precisionBits uint,
+	roundingMode big.RoundingMode,
 	errPrefDto *ePref.ErrPrefixDto) (
 	*big.Float,
 	error) {
@@ -158,16 +183,9 @@ func (floatHelperQuark *mathFloatHelperQuark) raiseToFloatPositiveExponent(
 
 	baseStr := base.Text('f', -1)
 
-	fmt.Printf("baseStr = %v\n",
-		baseStr)
-	// We use t as a temporary variable. There's no need to set its precision
-	// since big.Float values with unset (== 0) precision automatically assume
-	// the largest precision of the arguments when used as the result (receiver)
-	// of a big.Float operation.
-
 	newBase,
 		ok := big.NewFloat(0).
-		SetMode(big.AwayFromZero).
+		SetMode(roundingMode).
 		SetPrec(precisionBits).
 		SetString(baseStr)
 
@@ -185,7 +203,7 @@ func (floatHelperQuark *mathFloatHelperQuark) raiseToFloatPositiveExponent(
 	raisedToExponent :=
 		big.NewFloat(0).
 			SetPrec(precisionBits).
-			SetMode(big.AwayFromZero).
+			SetMode(roundingMode).
 			SetInt64(1)
 
 	for i := int64(0); i < exponent; i++ {
