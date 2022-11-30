@@ -399,6 +399,7 @@ func (floatHelperBoson *mathFloatHelperBoson) bigFloatFromPureNumStr(
 	}
 
 	if len(pureNumberStr) == 0 {
+
 		err = fmt.Errorf("\n\n%v\n"+
 			"Error: Input parameter 'pureNumberStr'\n"+
 			"is a zero length string and INVALID!\n",
@@ -434,9 +435,11 @@ func (floatHelperBoson *mathFloatHelperBoson) bigFloatFromPureNumStr(
 			precisionBitsOverride
 	}
 
+	precisionBitsSpec := bFloatDto.EstimatedPrecisionBits.
+		PrecisionBitsSpec
+
 	bFloatDto.Value.SetInt64(0).
-		SetPrec(bFloatDto.EstimatedPrecisionBits.
-			PrecisionBitsSpec).
+		SetPrec(precisionBitsSpec).
 		SetMode(roundingMode)
 
 	var ok bool
@@ -454,7 +457,14 @@ func (floatHelperBoson *mathFloatHelperBoson) bigFloatFromPureNumStr(
 		return bFloatDto, err
 	}
 
-	bFloatDto.Value.SetPrec(bFloatDto.Value.MinPrec())
+	bFloatStr := bFloatDto.Value.Text('f', -1)
+	bFloatPrec := bFloatDto.Value.Prec()
+	fmt.Printf("bFloatStr #1: %v\n"+
+		"bFloat Prec: %v\n",
+		bFloatStr,
+		bFloatPrec)
+
+	//bFloatDto.Value.SetPrec(bFloatDto.Value.MinPrec())
 
 	if bFloatDto.Value.Acc() != big.Exact {
 
@@ -469,7 +479,16 @@ func (floatHelperBoson *mathFloatHelperBoson) bigFloatFromPureNumStr(
 			pureNumberStr,
 			bFloatDto.Value.Acc())
 
+		return bFloatDto, err
 	}
+
+	bFloatStr = bFloatDto.Value.Text('f', -1)
+	bFloatPrec = bFloatDto.Value.Prec()
+
+	fmt.Printf("bFloatStr #1: %v\n"+
+		"bFloat Prec: %v\n",
+		bFloatStr,
+		bFloatPrec)
 
 	return bFloatDto, err
 }

@@ -523,6 +523,14 @@ func (mathFloatHelpMech *mathFloatHelperMechanics) raiseToFloatExponentConfig(
 			roundingMode,
 			ePrefix)
 
+	bFloatStr := bFloatDto.Value.Text('f', -1)
+	bFloatPrec := bFloatDto.Value.Prec()
+
+	fmt.Printf("bFloatStr #1: %v\n"+
+		"bFloat Prec: %v\n",
+		bFloatStr,
+		bFloatPrec)
+
 	requiredIntegerDigits :=
 		int64(bFloatDto.NumStrComponents.NumStrStats.NumOfIntegerDigits) *
 			exponent

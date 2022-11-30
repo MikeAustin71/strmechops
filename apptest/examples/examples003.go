@@ -307,7 +307,7 @@ func (MainTest03) RaiseToExponent01() {
 		"MainTest03.RaiseToExponent01()",
 		"")
 
-	breakStr := strings.Repeat("=", 200)
+	breakStr := strings.Repeat("=", 60)
 
 	fmt.Printf("\n\n" + breakStr + "\n")
 
@@ -317,18 +317,12 @@ func (MainTest03) RaiseToExponent01() {
 
 	fmt.Printf("\n" + breakStr + "\n")
 
-	// int digits 4
-	// frac digits 12
-	baseStr := "5084.987654321000"
-	//baseStr := "2.24"
+	baseStr := "32"
 
-	exponent := int64(4)
+	exponent := int64(8)
 
-	// int digits = 15
-	// frac digits = 17
-	expectedResultStr := "668589591687777.75101222860206783"
-	//expectedResultStr := "25.17630976"
-	expectedFracDigits := 17
+	expectedResultStr := "1099511627776"
+	expectedFracDigits := 0
 
 	floatHelper := strmech.MathFloatHelper{}
 
@@ -340,7 +334,7 @@ func (MainTest03) RaiseToExponent01() {
 		baseStr,
 		".",
 		true,
-		10,
+		50,
 		0,
 		big.AwayFromZero,
 		ePrefix)
@@ -356,6 +350,8 @@ func (MainTest03) RaiseToExponent01() {
 
 	}
 
+	bFloatDtoValueStr := bFloatDto.Value.Text('f', -1)
+
 	fmt.Printf("\nInitialization\n"+
 		"baseStr        = %v\n"+
 		"baseFloat      = %v\n"+
@@ -364,7 +360,7 @@ func (MainTest03) RaiseToExponent01() {
 		"base Round Mode= %v\n"+
 		"exponent       = %v\n\n",
 		baseStr,
-		bFloatDto.Value.Text('f', -1),
+		bFloatDtoValueStr,
 		bFloatDto.Value.Prec(),
 		bFloatDto.Value.Acc(),
 		bFloatDto.Value.Mode(),
