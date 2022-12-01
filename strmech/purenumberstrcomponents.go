@@ -13,25 +13,25 @@ type PureNumberStrComponents struct {
 	//
 	//			The total number of integer digits to the
 	//			left of the radix point or, decimal point, in
-	//			the subject numeric value.
+	//			the subject number string.
 	//
 	//		NumOfSignificantIntegerDigits		uint64
 	//
-	//			The number of nonzero integer digits to the
-	//			left of the radix point or, decimal point, in
-	//			the subject numeric value.
+	//			The number of integer digits to the left of
+	//			the radix point, excluding leading zeros, in
+	//			the subject number string.
 	//
 	//		NumOfFractionalDigits				uint64
 	//
 	//			The total number of fractional digits to the
 	//			right of the radix point or, decimal point,
-	//			in the subject numeric value.
+	//			in the subject number string.
 	//
 	//		NumOfSignificantFractionalDigits	uint64
 	//
-	//			The number of nonzero fractional digits to
-	//			the right of the radix point or, decimal
-	//			point, in the subject numeric value.
+	//			The number of fractional digits to the right
+	//			of the radix point, excluding trailing zeros,
+	//			in the subject number string.
 	//
 	//		NumberValueType 					NumericValueType
 	//

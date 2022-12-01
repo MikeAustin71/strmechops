@@ -149,16 +149,30 @@ func (floatHelperPreon *mathFloatHelperPreon) estimateDigitsToPrecision(
 	conversionStrValue := new(MathConstantsFloat).
 		PrecisionToDigitsFactorStr()
 
-	precisionToDigitsFactor,
-		_ := new(big.Float).
-		SetMode(big.AwayFromZero).
+	precisionToDigitsFactor := new(big.Float).
+		SetPrec(uint(len(conversionStrValue) * 8)).
+		SetMode(big.AwayFromZero)
+
+	var ok bool
+
+	_,
+		ok = precisionToDigitsFactor.
 		SetString(
 			conversionStrValue)
 
-	precisionToDigitsFactor.SetPrec(
-		precisionToDigitsFactor.Prec())
+	if !ok {
+
+		err = fmt.Errorf("\n%v\n"+
+			"precToDigitsFactor.SetString(conversionStrValue) FAILED!\n"+
+			"conversionStrValue = %v\n",
+			ePrefix.String(),
+			conversionStrValue)
+
+		return 0, err
+	}
 
 	numOfDigitsFloat := new(big.Float).
+		SetPrec(uint(numNumericDigitsRequired * 8)).
 		SetMode(big.AwayFromZero).
 		SetInt64(numNumericDigitsRequired)
 

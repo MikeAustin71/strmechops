@@ -200,29 +200,32 @@ func (floatHelperQuark *mathFloatHelperQuark) raiseToFloatPositiveExponent(
 		return big.NewFloat(0), err
 	}
 
-	raisedToExponent :=
-		big.NewFloat(0).
-			SetPrec(precisionBits).
-			SetMode(roundingMode).
-			SetInt64(1)
+	raisedToExponent := new(big.Float).
+		SetPrec(precisionBits).
+		SetMode(roundingMode).
+		SetInt64(1)
 
 	for i := int64(0); i < exponent; i++ {
 
 		raisedToExponent.Mul(raisedToExponent, newBase)
 	}
 
-	raisedToExponent.SetPrec(raisedToExponent.MinPrec())
+	if !raisedToExponent.IsInt() {
 
-	if raisedToExponent.Acc() != big.Exact {
+		raisedToExponent.SetPrec(raisedToExponent.MinPrec())
 
-		err = fmt.Errorf("\n%v\n"+
-			"Error: Final 'raisedToExponent' Accuracy is NOT equal to 'Exact'!\n"+
-			"Accuracy may be compromised.\n"+
-			"'raisedToExponent' Accuracy = %v\n"+
-			"raisedToExponent = %v\n",
-			ePrefix.String(),
-			raisedToExponent.Acc(),
-			raisedToExponent.Text('f', -1))
+		if raisedToExponent.Acc() != big.Exact {
+
+			err = fmt.Errorf("\n%v\n"+
+				"Error: Final 'raisedToExponent' Accuracy is NOT equal to 'Exact'!\n"+
+				"Accuracy may be compromised.\n"+
+				"'raisedToExponent' Accuracy = %v\n"+
+				"raisedToExponent = %v\n",
+				ePrefix.String(),
+				raisedToExponent.Acc(),
+				raisedToExponent.Text('f', -1))
+
+		}
 
 	}
 

@@ -435,11 +435,8 @@ func (floatHelperBoson *mathFloatHelperBoson) bigFloatFromPureNumStr(
 			precisionBitsOverride
 	}
 
-	precisionBitsSpec := bFloatDto.EstimatedPrecisionBits.
-		PrecisionBitsSpec
-
-	bFloatDto.Value.SetInt64(0).
-		SetPrec(precisionBitsSpec).
+	bFloatDto.Value.
+		SetPrec(bFloatDto.EstimatedPrecisionBits.PrecisionBitsSpec).
 		SetMode(roundingMode)
 
 	var ok bool
@@ -457,38 +454,11 @@ func (floatHelperBoson *mathFloatHelperBoson) bigFloatFromPureNumStr(
 		return bFloatDto, err
 	}
 
-	bFloatStr := bFloatDto.Value.Text('f', -1)
-	bFloatPrec := bFloatDto.Value.Prec()
-	fmt.Printf("bFloatStr #1: %v\n"+
-		"bFloat Prec: %v\n",
-		bFloatStr,
-		bFloatPrec)
+	if !bFloatDto.Value.IsInt() {
 
-	//bFloatDto.Value.SetPrec(bFloatDto.Value.MinPrec())
-
-	if bFloatDto.Value.Acc() != big.Exact {
-
-		err = fmt.Errorf("\n%v\n"+
-			"Accuracy Error\n"+
-			"An exact floating pointing number value could NOT\n"+
-			"be calculated accurately from the Pure Number string\n"+
-			"input parameter 'pureNumberStr',\n"+
-			"pureNumberValueStr = %v\n"+
-			"Accuracy = %v",
-			ePrefix.String(),
-			pureNumberStr,
-			bFloatDto.Value.Acc())
-
-		return bFloatDto, err
+		bFloatDto.Value.SetPrec(
+			bFloatDto.Value.MinPrec())
 	}
-
-	bFloatStr = bFloatDto.Value.Text('f', -1)
-	bFloatPrec = bFloatDto.Value.Prec()
-
-	fmt.Printf("bFloatStr #1: %v\n"+
-		"bFloat Prec: %v\n",
-		bFloatStr,
-		bFloatPrec)
 
 	return bFloatDto, err
 }

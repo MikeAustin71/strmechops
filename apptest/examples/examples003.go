@@ -317,17 +317,39 @@ func (MainTest03) RaiseToExponent01() {
 
 	fmt.Printf("\n" + breakStr + "\n")
 
-	baseStr := "32"
+	baseStr := "5"
 
-	exponent := int64(8)
+	exponent := int64(2)
 
-	expectedResultStr := "1099511627776"
-	expectedFracDigits := 0
+	expectedResultStr := "25"
+
+	var pureNumStrStats strmech.NumberStrStatsDto
+	var err error
+
+	pureNumStrStats,
+		err = new(strmech.NumStrMath).PureNumStrStats(
+		expectedResultStr,
+		".",
+		true,
+		ePrefix)
+
+	if err != nil {
+
+		fmt.Printf("\n\n%v\n"+
+			"%v\n",
+			ePrefix.String(),
+			err.Error())
+
+		return
+
+	}
+
+	expectedFracDigits :=
+		int(pureNumStrStats.NumOfFractionalDigits)
 
 	floatHelper := strmech.MathFloatHelper{}
 
 	var bFloatDto strmech.BigFloatDto
-	var err error
 
 	bFloatDto,
 		err = floatHelper.BigFloatFromPureNumStr(
@@ -353,17 +375,19 @@ func (MainTest03) RaiseToExponent01() {
 	bFloatDtoValueStr := bFloatDto.Value.Text('f', -1)
 
 	fmt.Printf("\nInitialization\n"+
-		"baseStr        = %v\n"+
-		"baseFloat      = %v\n"+
-		"base Precision = %v\n"+
-		"base Accuracy  = %v\n"+
-		"base Round Mode= %v\n"+
-		"exponent       = %v\n\n",
+		"baseStr         = %v\n"+
+		"baseFloat       = %v\n"+
+		"base Precision  = %v\n"+
+		"base Accuracy   = %v\n"+
+		"base Round Mode = %v\n"+
+		"base is Integer = %v\n"+
+		"exponent        = %v\n\n",
 		baseStr,
 		bFloatDtoValueStr,
 		bFloatDto.Value.Prec(),
 		bFloatDto.Value.Acc(),
 		bFloatDto.Value.Mode(),
+		bFloatDto.Value.IsInt(),
 		exponent)
 
 	var raisedToExponent *big.Float
@@ -372,7 +396,7 @@ func (MainTest03) RaiseToExponent01() {
 		err = floatHelper.RaiseToFloatPositiveExponent(
 		&bFloatDto.Value,
 		exponent,
-		200,
+		100,
 		0,
 		big.AwayFromZero,
 		ePrefix.XCpy(
@@ -387,17 +411,68 @@ func (MainTest03) RaiseToExponent01() {
 	raisedToExponentStr :=
 		raisedToExponent.Text('f', expectedFracDigits)
 
+	pureNumStrStats,
+		err = new(strmech.NumStrMath).PureNumStrStats(
+		raisedToExponentStr,
+		".",
+		true,
+		ePrefix)
+
+	if err != nil {
+
+		fmt.Printf("\n\n%v\n"+
+			"%v\n",
+			ePrefix.String(),
+			err.Error())
+
+		return
+
+	}
+
+	actualRaisedToExponentStr :=
+		raisedToExponent.Text('f', -1)
+
+	var actualRaisedToExpStats strmech.NumberStrStatsDto
+
+	actualRaisedToExpStats,
+		err = new(strmech.NumStrMath).PureNumStrStats(
+		actualRaisedToExponentStr,
+		".",
+		true,
+		ePrefix)
+
+	if err != nil {
+
+		fmt.Printf("\n\n%v\n"+
+			"%v\n",
+			ePrefix.String(),
+			err.Error())
+
+		return
+
+	}
+
 	fmt.Printf("After Calculation Of Raise To Power\n"+
-		"Actual raisedToExponent    = %v\n"+
-		"Expected raisedToExponent  = %v\n"+
-		"raisedToExponent Precision = %v\n"+
-		"raisedToExponent Accuracy  = %v\n"+
-		"raisedToExponent Mode      = %v\n",
+		"Actual raisedToExponent      = %v\n"+
+		"Expected raisedToExponent    = %v\n"+
+		"raisedToExponent Precision   = %v\n"+
+		"raisedToExponent Accuracy    = %v\n"+
+		"raisedToExponent Mode        = %v\n"+
+		"raisedToExponent is Integer  = %v\n"+
+		"raisedToExponent Int Digits  = %v\n"+
+		"raisedToExponent Frac Digits = %v\n"+
+		"Actual raised Int Digits     = %v\n"+
+		"Actual raised Frac Digits    = %v\n\n",
 		raisedToExponentStr,
 		expectedResultStr,
 		raisedToExponent.Prec(),
 		raisedToExponent.Acc(),
-		raisedToExponent.Mode())
+		raisedToExponent.Mode(),
+		raisedToExponent.IsInt(),
+		pureNumStrStats.NumOfIntegerDigits,
+		pureNumStrStats.NumOfFractionalDigits,
+		actualRaisedToExpStats.NumOfIntegerDigits,
+		actualRaisedToExpStats.NumOfFractionalDigits)
 
 	fmt.Printf("\n\n" + breakStr + "\n")
 

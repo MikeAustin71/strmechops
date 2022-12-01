@@ -1892,6 +1892,10 @@ func (mathFloatHelper *MathFloatHelper) RaiseToFloatPositivePower(
 //		provides of safety in terms of ensuring accurate
 //		calculation results.
 //
+//		The greater the value of this parameter, the
+//		greater the number of accurate significant digits
+//		produced in the calculation result.
+//
 //		Note: The user has the option of overriding the
 //		automatic precision bits calculation by specifying
 //		a precision bits value directly through parameter,
@@ -2133,6 +2137,10 @@ func (mathFloatHelper *MathFloatHelper) RaiseToFloatPositiveExponent(
 //		the number of integer digits, fractional digits and
 //		'numOfExtraDigitsBuffer' to compute the estimated
 //		number of precision bits.
+//
+//		The greater the value of this parameter, the
+//		greater the number of accurate significant digits
+//		produced in the calculation result.
 //
 //		Note: The user has the option of overriding the
 //		automatic precision bits calculation by specifying
