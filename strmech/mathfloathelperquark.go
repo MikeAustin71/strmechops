@@ -3,7 +3,9 @@ package strmech
 import (
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
+	"math"
 	"math/big"
+	"strings"
 	"sync"
 )
 
@@ -184,7 +186,7 @@ func (floatHelperQuark *mathFloatHelperQuark) raiseToFloatPositiveExponent(
 	baseStr := base.Text('f', -1)
 
 	newBase,
-		ok := big.NewFloat(0).
+		ok := new(big.Float).
 		SetMode(roundingMode).
 		SetPrec(precisionBits).
 		SetString(baseStr)
@@ -435,7 +437,7 @@ func (floatHelperQuark *mathFloatHelperQuark) raiseToIntPositiveExponent(
 
 	if exponent == 0 {
 
-		return big.NewFloat(0), err
+		return big.NewFloat(1), err
 	}
 
 	if exponent < 0 {
@@ -494,7 +496,7 @@ func (floatHelperQuark *mathFloatHelperQuark) raiseToIntPositiveExponent(
 
 	if !ok {
 
-		fmt.Printf("\n%v\n"+
+		err = fmt.Errorf("\n%v\n"+
 			"Error: bigIntBase=SetString(numStr)\n"+
 			"SetString Failed!\n"+
 			"numStr = %v\n",
@@ -513,44 +515,65 @@ func (floatHelperQuark *mathFloatHelperQuark) raiseToIntPositiveExponent(
 
 	lenNumStr := uint64(len(numStr))
 
-	negativeAdjustment := uint64(0)
-
-	if pureNumStrStats.NumStrStats.NumberSign ==
-		NumSignVal.Negative() {
-
-		negativeAdjustment = 1
-	}
-
-	raisedToPowerStats := PureNumberStrComponents{}
-
-	raisedToPowerStats.NumStrStats.NumOfFractionalDigits =
+	actualNumOfFractionalDigits :=
 		pureNumStrStats.NumStrStats.NumOfFractionalDigits *
 			uint64(exponent)
 
-	raisedToPowerStats.NumStrStats.NumOfIntegerDigits =
-		pureNumStrStats.NumStrStats.NumOfIntegerDigits *
-			uint64(exponent)
+	if actualNumOfFractionalDigits > uint64(math.MaxInt32) {
 
-	actualNumOfIntegerDigits :=
+		err = fmt.Errorf("\n%v\n"+
+			"Error: Actual Number of Fractional Digits Exceeds Maximum!\n"+
+			"actualNumOfFractionalDigits greater than math.MaxInt32\n"+
+			"actualNumOfFractionalDigits = %v\n",
+			ePrefix,
+			actualNumOfFractionalDigits)
+
+		return big.NewFloat(0), err
+	}
+
+	if actualNumOfFractionalDigits > lenNumStr {
+
+		numStr =
+			strings.Repeat("0",
+				int(actualNumOfFractionalDigits-
+					lenNumStr)+1) +
+				numStr
+
+		lenNumStr = uint64(len(numStr))
+
+	} else if actualNumOfFractionalDigits == lenNumStr {
+
+		numStr =
+			"0" +
+				numStr
+
+		lenNumStr = uint64(len(numStr))
+
+	}
+
+	actualNumOfIntegerDigitsPlusMinusSign :=
 		lenNumStr -
-			raisedToPowerStats.NumStrStats.NumOfFractionalDigits -
-			negativeAdjustment
+			actualNumOfFractionalDigits
 
 	numStr =
-		numStr[0:(actualNumOfIntegerDigits+
-			negativeAdjustment)] +
+		numStr[0:actualNumOfIntegerDigitsPlusMinusSign] +
 			"." +
-			numStr[actualNumOfIntegerDigits+
-				negativeAdjustment:]
+			numStr[actualNumOfIntegerDigitsPlusMinusSign:]
 
 	var precisionBitsSpec uint
 
 	if precisionBitsOverride == 0 {
 
+		if pureNumStrStats.NumStrStats.NumberSign ==
+			NumSignVal.Negative() {
+
+			actualNumOfIntegerDigitsPlusMinusSign--
+		}
+
 		precisionBitsSpec,
 			err = new(mathFloatHelperAtom).precisionBitsFromRequiredDigits(
-			int64(raisedToPowerStats.NumStrStats.NumOfIntegerDigits),
-			int64(raisedToPowerStats.NumStrStats.NumOfFractionalDigits),
+			int64(actualNumOfIntegerDigitsPlusMinusSign),
+			int64(actualNumOfFractionalDigits),
 			numOfExtraDigitsBuffer,
 			ePrefix)
 
@@ -565,26 +588,46 @@ func (floatHelperQuark *mathFloatHelperQuark) raiseToIntPositiveExponent(
 
 	}
 
-	var raisedToPowerFloat *big.Float
+	raisedToPowerFloat :=
+		new(big.Float).
+			SetPrec(precisionBitsSpec).
+			SetMode(roundingMode)
 
-	raisedToPowerFloat,
-		ok = big.NewFloat(0).
-		SetPrec(precisionBitsSpec).
-		SetMode(roundingMode).
+	_,
+		ok = raisedToPowerFloat.
 		SetString(numStr)
 
 	if !ok {
 
-		fmt.Printf("\n%v\n"+
+		err = fmt.Errorf("\n%v\n"+
 			"Error: raisedToPowerFloat=SetString(numStr)\n"+
 			"SetString Failed!\n"+
 			"numStr = %v\n",
 			ePrefix.String(),
 			numStr)
 
+		return big.NewFloat(0), err
+
 	}
 
-	raisedToPowerFloat.SetPrec(raisedToPowerFloat.MinPrec())
+	if !raisedToPowerFloat.IsInt() {
+
+		raisedToPowerFloat.SetPrec(raisedToPowerFloat.MinPrec())
+
+		if raisedToPowerFloat.Acc() != big.Exact {
+
+			err = fmt.Errorf("\n%v\n"+
+				"Error: raisedToPowerFloat=SetString(numStr)\n"+
+				"SetString Failed!\n"+
+				"numStr = %v\n",
+				ePrefix.String(),
+				numStr)
+
+			return big.NewFloat(0), err
+
+		}
+
+	}
 
 	//fmt.Printf("raisedToPower = %v\n"+
 	//	"raisedToPower Precision = %v\n"+

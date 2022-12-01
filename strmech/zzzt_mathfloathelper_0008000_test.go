@@ -418,10 +418,10 @@ func TestMathFloatHelper_RaiseToFloatPositiveExponent_000100(t *testing.T) {
 	return
 }
 
-func TestMathFloatHelper_RaiseToIntPositiveExponent_000100(t *testing.T) {
+func TestMathFloatHelper_RaiseToFloatPositiveExponent_000200(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestMathFloatHelper_RaiseToFloatPositiveExponent_000100()",
+		"TestMathFloatHelper_RaiseToFloatPositiveExponent_000200()",
 		"")
 
 	baseStrs,
@@ -479,6 +479,88 @@ func TestMathFloatHelper_RaiseToIntPositiveExponent_000100(t *testing.T) {
 			t.Errorf("\n%v\n"+
 				"Test Series Index = %v\n"+
 				"floatHelper.RaiseToFloatPositiveExponent()\n"+
+				"Error: Expected Result Does NOT Match Actual Result!\n"+
+				"Expected Result = '%v'\n"+
+				"Actual Result   = '%v'\n"+
+				"Base Str        = '%v'\n"+
+				"Exponent        = '%v'\n",
+				ePrefix.String(),
+				i,
+				expectedResults[i],
+				raisedToExponentStr,
+				baseStrs[i],
+				exponents[i])
+
+			return
+
+		}
+
+	}
+
+	return
+}
+
+func TestMathFloatHelper_RaiseToIntPositiveExponent_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestMathFloatHelper_RaiseToIntPositiveExponent_000100()",
+		"")
+
+	baseStrs,
+		exponents,
+		expectedResults,
+		expectedResultFracDigits,
+		err := getRaiseToExponentTestDataSeries01()
+
+	floatHelper := MathFloatHelper{}
+	var bFloatDto BigFloatDto
+	var raisedToExponent *big.Float
+	var raisedToExponentStr string
+	var numOfExtraDigitsBuffer int64
+	var precisionBitsOverride uint
+
+	numOfExtraDigitsBuffer = 50
+	precisionBitsOverride = 0
+
+	lenBaseStrs := len(baseStrs)
+
+	for i := 0; i < lenBaseStrs; i++ {
+
+		bFloatDto,
+			err = floatHelper.BigFloatFromPureNumStr(
+			baseStrs[i],
+			".",
+			true,
+			numOfExtraDigitsBuffer,
+			precisionBitsOverride,
+			big.AwayFromZero,
+			&ePrefix)
+
+		raisedToExponent,
+			err = floatHelper.RaiseToIntPositiveExponent(
+			&bFloatDto.Value,
+			exponents[i],
+			numOfExtraDigitsBuffer,
+			precisionBitsOverride,
+			big.AwayFromZero,
+			ePrefix.XCpy(
+				fmt.Sprintf("raisedToExponent<- index=%v",
+					i)))
+
+		if err != nil {
+			t.Errorf("\n%v\n",
+				err.Error())
+			return
+		}
+
+		raisedToExponentStr =
+			raisedToExponent.Text('f', expectedResultFracDigits[i])
+
+		if expectedResults[i] != raisedToExponentStr {
+
+			t.Errorf("\n%v\n"+
+				"Test Series ExpectedResults Index = %v\n"+
+				"floatHelper.RaiseToIntPositiveExponent()\n"+
 				"Error: Expected Result Does NOT Match Actual Result!\n"+
 				"Expected Result = '%v'\n"+
 				"Actual Result   = '%v'\n"+

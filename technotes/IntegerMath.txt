@@ -1,0 +1,12 @@
+Notes On Integer Mathematics
+-------------------------------------------------------------
+
+-------------------------------------------------------------
+The Exponent Estimate will ONLY work for fractional Digits!!
+
+Number of Base Fractional Digits x Exponent =
+    The Number of Raised To Power fractional Digits
+
+-------------------------------------------------------------
+
+
