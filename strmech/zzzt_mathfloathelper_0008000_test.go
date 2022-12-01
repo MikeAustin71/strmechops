@@ -4,7 +4,6 @@ import (
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
 	"math/big"
-	"strings"
 	"testing"
 )
 
@@ -12,7 +11,12 @@ func getRaiseToExponentTestDataSeries01() (
 	baseStrs []string,
 	exponents []int64,
 	expectedResults []string,
-	expectedResultFracDigits []int) {
+	expectedResultFracDigits []int,
+	err error) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"getRaiseToExponentTestDataSeries01",
+		"")
 
 	// ------------------------------------------
 	// # 0
@@ -190,41 +194,78 @@ func getRaiseToExponentTestDataSeries01() (
 	expectedResults = append(
 		expectedResults, "1.1915535798808993682549439073204")
 
+	// ------------------------------------------
+	// # 16
+	baseStrs = append(
+		baseStrs, "-4")
+
+	exponents = append(
+		exponents, 2)
+
+	expectedResults = append(
+		expectedResults, "16")
+
+	// ------------------------------------------
+	// # 16
+	baseStrs = append(
+		baseStrs, "-4")
+
+	exponents = append(
+		exponents, 3)
+
+	expectedResults = append(
+		expectedResults, "-64")
+
+	// ------------------------------------------
+	// # 16
+	baseStrs = append(
+		baseStrs, "2.71536917")
+
+	exponents = append(
+		exponents, 11)
+
+	expectedResults = append(
+		expectedResults, "59172.199169912494907439522372064")
+
 	// =====================================================
 
 	lenExpectedResults := len(expectedResults)
 
-	var idx, lenStr int
+	var nStrStats NumberStrStatsDto
+
+	numStrMath := NumStrMath{}
 
 	for i := 0; i < lenExpectedResults; i++ {
 
-		idx = strings.Index(expectedResults[i], ".")
+		nStrStats,
+			err = numStrMath.PureNumStrStats(
+			expectedResults[i],
+			".",
+			true,
+			ePrefix.XCpy(
+				fmt.Sprintf("expectedResults[%v]",
+					i)))
 
-		lenStr = len(expectedResults[i])
-
-		if idx == -1 ||
-			(lenStr-1) == idx {
-
-			expectedResultFracDigits =
-				append(expectedResultFracDigits, 0)
-
-		} else {
-			// Len = 6
-			// 012345
-			// 123.45
-
-			expectedResultFracDigits =
-				append(expectedResultFracDigits,
-					lenStr-(idx+1))
+		if err != nil {
+			return baseStrs,
+				exponents,
+				expectedResults,
+				expectedResultFracDigits,
+				err
 
 		}
 
+		expectedResultFracDigits =
+			append(
+				expectedResultFracDigits,
+				int(nStrStats.NumOfFractionalDigits))
 	}
 
 	return baseStrs,
 		exponents,
 		expectedResults,
-		expectedResultFracDigits
+		expectedResultFracDigits,
+		err
 }
 
 func TestMathFloatHelper_RaiseToFloatPositiveExponent_000100(t *testing.T) {
@@ -386,11 +427,11 @@ func TestMathFloatHelper_RaiseToIntPositiveExponent_000100(t *testing.T) {
 	baseStrs,
 		exponents,
 		expectedResults,
-		expectedResultFracDigits := getRaiseToExponentTestDataSeries01()
+		expectedResultFracDigits,
+		err := getRaiseToExponentTestDataSeries01()
 
 	floatHelper := MathFloatHelper{}
 	var bFloatDto BigFloatDto
-	var err error
 	var raisedToExponent *big.Float
 	var raisedToExponentStr string
 	var numOfExtraDigitsBuffer int64

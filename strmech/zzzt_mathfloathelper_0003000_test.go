@@ -30,10 +30,10 @@ func TestMathFloatHelper_RoundBigFloat_000100(t *testing.T) {
 		return
 	}
 
-	if requiredPrecision != 504 {
+	if requiredPrecision != 512 {
 
 		t.Errorf("\n%v\n"+
-			"Error: Expected 504 bits of precision from "+
+			"Error: Expected 512 bits of precision from "+
 			"150 digits.\n"+
 			"Instead, requiredPrecision = '%v'\n",
 			ePrefix.String(),
@@ -237,7 +237,7 @@ func TestMathFloatHelper_PrecisionBitsFromRequiredDigits_000100(t *testing.T) {
 		return
 	}
 
-	expectedPrecision := uint(544)
+	expectedPrecision := uint(552)
 
 	if actualPrecision != expectedPrecision {
 
