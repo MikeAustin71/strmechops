@@ -18,10 +18,9 @@ import (
 // may be used to compute average time for any series
 // of events.
 type TextLineSpecAverageTime struct {
-	numberOfCycles        big.Int
-	totalDurationNanoSecs big.Int
-	averageTimeNanoSecs   big.Int
-	lock                  *sync.Mutex
+	numberOfDurationEvents big.Int
+	totalDurationNanoSecs  big.Int
+	lock                   *sync.Mutex
 }
 
 //	New
@@ -56,7 +55,7 @@ type TextLineSpecAverageTime struct {
 //
 //		This new instance will be ready in all respects
 //		to receive and process event durations.
-func (txtLineAvgTime *TextLineSpecAverageTime) New() {
+func (txtLineAvgTime *TextLineSpecAverageTime) New() TextLineSpecAverageTime {
 
 	if txtLineAvgTime.lock == nil {
 		txtLineAvgTime.lock = new(sync.Mutex)
@@ -68,8 +67,52 @@ func (txtLineAvgTime *TextLineSpecAverageTime) New() {
 
 	newAvgTimer := TextLineSpecAverageTime{}
 
-	newAvgTimer.numberOfCycles.SetInt64(0)
+	newAvgTimer.numberOfDurationEvents.SetInt64(0)
 	newAvgTimer.totalDurationNanoSecs.SetInt64(0)
-	newAvgTimer.averageTimeNanoSecs.SetInt64(0)
 
+	return newAvgTimer
+}
+
+//	SetInitializeTimerToZero
+//
+//	Reinitializes the internal timers to zero for the
+//	current instance of TextLineSpecAverageTime.
+//
+//	After this method completes, the current instance
+//	of TextLineSpecAverageTime is ready in all respects
+//	to begin processing a new series of time duration
+//	events.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	All previously collected time event duration data
+//	will be deleted by this method.
+//
+// ----------------------------------------------------------------
+//
+//	# Input Parameters
+//
+//	None
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	None
+func (txtLineAvgTime *TextLineSpecAverageTime) SetInitializeTimerToZero() {
+
+	if txtLineAvgTime.lock == nil {
+		txtLineAvgTime.lock = new(sync.Mutex)
+	}
+
+	txtLineAvgTime.lock.Lock()
+
+	defer txtLineAvgTime.lock.Unlock()
+
+	txtLineAvgTime.numberOfDurationEvents.SetInt64(0)
+	txtLineAvgTime.totalDurationNanoSecs.SetInt64(0)
+
+	return
 }
