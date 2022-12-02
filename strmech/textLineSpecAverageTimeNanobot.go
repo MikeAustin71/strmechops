@@ -130,6 +130,16 @@ func (txtLineAvgTimeNanobot *textLineSpecAverageTimeNanobot) copy(
 		return err
 	}
 
+	_,
+		err = new(textLineSpecAverageTimeElectron).
+		testValidityOfTxtLineAvgTimer(
+			sourceAvgTimer,
+			ePrefix.XCpy("sourceAvgTimer"))
+
+	if err != nil {
+		return err
+	}
+
 	new(textLineSpecAverageTimeElectron).empty(
 		destinationAvgTimer)
 
