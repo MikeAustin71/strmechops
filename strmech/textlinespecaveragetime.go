@@ -418,6 +418,46 @@ func (txtLineAvgTime *TextLineSpecAverageTime) CopyOutPtr(
 	return &deepCopyTxtLineAvgTimer, err
 }
 
+//	Empty
+//
+//	Resets all internal member variables to their initial
+//	or zero states.
+//
+//	Effectively, this method resets all the internal
+//	event timer counters to zero.
+//
+//	This method fulfills requirements of the
+//	ITextLineSpecification interface.
+//
+// ----------------------------------------------------------------
+//
+//	# Input Parameters
+//
+//	None
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	NONE
+func (txtLineAvgTime *TextLineSpecAverageTime) Empty() {
+
+	if txtLineAvgTime.lock == nil {
+		txtLineAvgTime.lock = new(sync.Mutex)
+	}
+
+	txtLineAvgTime.lock.Lock()
+
+	new(textLineSpecAverageTimeElectron).empty(
+		txtLineAvgTime)
+
+	txtLineAvgTime.lock.Unlock()
+
+	txtLineAvgTime.lock = nil
+
+	return
+}
+
 //	New
 //
 //	Returns an initialized instance of
