@@ -404,8 +404,13 @@ func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) g
 
 	err = new(TextUtility).BuildOneColLeadingMarquee(
 		strBuilder,
+		true,
+		"=",
+		"=",
+		true,
 		titles,
 		txtFmtParams,
+		true,
 		ePrefix.XCpy(
 			"strBuilder<-txtFmtParams"))
 
@@ -804,6 +809,10 @@ func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) g
 
 	err = new(TextUtility).BuildOneColTrailingMarquee(
 		strBuilder,
+		true,
+		"=",
+		"=",
+		true,
 		titles,
 		txtFmtParams,
 		ePrefix.XCpy(

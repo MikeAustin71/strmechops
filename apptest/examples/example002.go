@@ -2095,8 +2095,13 @@ func (mt02Nanobot *mainTest02Nanobot) SetLeadingMarquee(
 
 	err = new(strmech.TextUtility).BuildOneColLeadingMarquee(
 		strBuilder,
+		true,
+		"=",
+		"=",
+		true,
 		titles,
 		txtFmtParams,
+		true,
 		ePrefix.XCpy(
 			"strBuilder<-txtFmtParams"))
 
@@ -2191,6 +2196,10 @@ func (mt02Nanobot *mainTest02Nanobot) SetTrailingMarquee(
 	// Trailing Title Marquee
 	err = new(strmech.TextUtility).BuildOneColTrailingMarquee(
 		strBuilder,
+		true,
+		"=",
+		"=",
+		true,
 		titles,
 		txtFmtParams,
 		ePrefix.XCpy(

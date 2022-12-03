@@ -666,8 +666,13 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 
 	err = new(TextUtility).BuildOneColLeadingMarquee(
 		strBuilder,
+		true,
+		"=",
+		"=",
+		true,
 		titles,
 		txtFmtParams,
+		true,
 		ePrefix.XCpy(
 			"strBuilder<-txtFmtParams"))
 
@@ -1475,6 +1480,10 @@ exitMethodTrailer:
 
 	err = new(TextUtility).BuildOneColTrailingMarquee(
 		strBuilder,
+		true,
+		"=",
+		"=",
+		true,
 		titles,
 		txtFmtParams,
 		ePrefix.XCpy(
