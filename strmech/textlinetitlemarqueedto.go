@@ -80,18 +80,53 @@ type TextLineTitleMarqueeDto struct {
 
 //	AddDateTimeTitleLine
 //
-//	Adds a Date Time text line to the text lines
-//	array contained in the current instance of
-//	TextLineTitleMarqueeDto.
-//
-//	The generated Date Time Text Field will use the
-//	standard field length configured Text Line Title
-//	Marquee:
-//		TextLineTitleMarqueeDto.StandardTextFieldLen
+//	Adds a Date Time text title line to the text
+//	title lines array contained in the current instance
+//	of TextLineTitleMarqueeDto.
 //
 //	Be advised that the left and right margins for this
 //	Date Time Title field will automatically use the
 //	Text Line Title standard left and right margins.
+//
+// ----------------------------------------------------------------
+//
+//	# Terminology
+//
+//	Maximum Available Text Field Length =
+//		TextLineTitleMarqueeDto.StandardMaxLineLen -
+//		1 -
+//		len(TextLineTitleMarqueeDto.StandardTitleLeftMargin) -
+//		len(TextLineTitleMarqueeDto.StandardTitleRightMargin)
+//
+//	Standard Text Field Length for all text lines is
+//		defined at initialization by internal member
+//		variable:
+//
+//			TextLineTitleMarqueeDto.StandardTextFieldLen
+//
+// ----------------------------------------------------------------
+//
+//	# Field Length Values And Defaults
+//
+//		fieldLen > Maximum Available Text Field Length
+//			fieldLen = Maximum Available Text Field Length
+//
+//		fieldLen >= 1 &&
+//			fieldLen < len(txtLabel)
+//				fieldLen = textLabel string length
+//
+//		fieldLen = 0
+//			fieldLen = Maximum Available Text Field Length
+//
+//		fieldLen = -1
+//			fieldLen = textLabel string length
+//
+//		fieldLen = -2
+//			fieldLen =
+//			TextLineTitleMarqueeDto.StandardTextFieldLen
+//
+//		fieldLen < -2
+//			Return value = Error
 //
 // ----------------------------------------------------------------
 //
@@ -106,6 +141,61 @@ type TextLineTitleMarqueeDto struct {
 //
 //		If this parameter is submitted as a zero value, an
 //		error will be returned.
+//
+//	fieldLen					int
+//
+//		The length of the text field in which the
+//		formatted 'dateTime' value will be displayed.
+//
+//		If 'fieldLen' is less than the length of the
+//		formatted 'dateTime' string, it will be
+//		automatically set equal to the formatted
+//		'dateTime' string length.
+//
+//		To automatically set the value of 'fieldLen' to
+//		the Maximum Available Text Field Length for this
+//		Text Line Title Marquee instance, set this
+//		parameter to zero (0).
+//
+//		The Maximum Available Text Field Length is
+//		calculated as follows:
+//
+//		Maximum Available Text Field Length =
+//			TextLineTitleMarqueeDto.StandardMaxLineLen -
+//			1 -
+//			len(TextLineTitleMarqueeDto.StandardTitleLeftMargin) -
+//			len(TextLineTitleMarqueeDto.StandardTitleRightMargin)
+//
+//		Field Length Values And Defaults
+//		--------------------------------
+//
+//		fieldLen > Maximum Available Text Field Length
+//			fieldLen = Maximum Available Text Field Length
+//
+//		fieldLen >= 1 &&
+//			fieldLen < len(txtLabel)
+//				fieldLen = textLabel string length
+//
+//		fieldLen = 0
+//			fieldLen = Maximum Available Text Field Length
+//
+//		fieldLen = -1
+//			fieldLen = textLabel string length
+//
+//		fieldLen = -2
+//			fieldLen =
+//			TextLineTitleMarqueeDto.StandardTextFieldLen
+//
+//		fieldLen < -2
+//			Return value = Error
+//
+//		If 'fieldLen' is greater than the length of the
+//		formatted 'dateTime' string, 'dateTime' will be
+//		positioned within a text field with a length equal
+//		to 'fieldLen'. In this case, the position of the
+//		'dateTime' string within the text field will be
+//		controlled by the text justification value
+//		contained in parameter, 'textJustification'.
 //
 //	dateTimeFormat				string
 //
@@ -147,29 +237,31 @@ type TextLineTitleMarqueeDto struct {
 //		An enumeration which specifies the justification
 //		of the 'dateTime' string within a text field.
 //
-//		The text field length is taken from the Title
-//		Marquee standard field length.
+//		The text field length is taken from input
+//		parameter 'fieldLen'.
 //
 //		Text justification can only be evaluated in the
 //		context of a 'dateTime' text string, field length
 //		and a 'textJustification' object of type
 //		TextJustify. This is because a field length
-//		('TextLineTitleMarqueeDto.StandardTextFieldLen') value
-//		equal to or less than the length of the 'dateTime'
-//		text string will never use text justification. In
-//		these cases, text justification is completely
-//		ignored because the length of the text field
-//		is automatically set equal to the length of
-//		the 'dateTime' text string.
+//		('fieldLen') value equal to or less than the
+//		length of the 'dateTime' text string will never
+//		use text justification. In these cases, text
+//		justification is completely	ignored because the
+//		length of the text field is automatically set
+//		equal to the length of the 'dateTime' text
+//		string.
 //
-//		If the field length is greater than the length of
-//		the text label, text justification must be equal
-//		to one of these	three valid values:
+//		If the field length ('fieldLen') is greater than
+//		the length of the 'dateTime' text string, text
+//		justification must be equal to one of these three
+//		valid values:
+//
 //		    TextJustify(0).Left()
 //		    TextJustify(0).Right()
 //		    TextJustify(0).Center()
 //
-//		You can also use the abbreviated text
+//		Users can also apply the abbreviated text
 //		justification enumeration syntax as follows:
 //
 //		    TxtJustify.Left()
@@ -253,6 +345,7 @@ type TextLineTitleMarqueeDto struct {
 //		error message.
 func (txtLineTitleMarqueeDto *TextLineTitleMarqueeDto) AddDateTimeTitleLine(
 	dateTime time.Time,
+	fieldLen int,
 	dateTimeFormat string,
 	textJustification TextJustify,
 	errorPrefix interface{}) error {
@@ -270,7 +363,7 @@ func (txtLineTitleMarqueeDto *TextLineTitleMarqueeDto) AddDateTimeTitleLine(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"TextLineTitleMarqueeDto.AddLabelTitleLine()",
+		"TextLineTitleMarqueeDto.AddTextLabelTitleLine()",
 		"")
 
 	if err != nil {
@@ -285,6 +378,17 @@ func (txtLineTitleMarqueeDto *TextLineTitleMarqueeDto) AddDateTimeTitleLine(
 	}
 
 	stdLine := TextLineSpecStandardLine{}.New()
+
+	fieldLen,
+		err = new(textLineTitleMarqueeDtoMechanics).
+		calcTextFieldLen(
+			txtLineTitleMarqueeDto,
+			fieldLen,
+			ePrefix)
+
+	if err != nil {
+		return err
+	}
 
 	lenStr = len(txtLineTitleMarqueeDto.StandardTitleLeftMargin)
 
@@ -308,7 +412,7 @@ func (txtLineTitleMarqueeDto *TextLineTitleMarqueeDto) AddDateTimeTitleLine(
 	_,
 		err = stdLine.AddTextFieldDateTime(
 		dateTime,
-		txtLineTitleMarqueeDto.StandardTextFieldLen,
+		fieldLen,
 		dateTimeFormat,
 		textJustification,
 		ePrefix.XCpy(
@@ -341,19 +445,55 @@ func (txtLineTitleMarqueeDto *TextLineTitleMarqueeDto) AddDateTimeTitleLine(
 	return err
 }
 
-//	AddLabelTitleLine
+//	AddTextLabelTitleLine
 //
 //	Adds a text label title line to the text lines
 //	array contained in the current instance of
 //	TextLineTitleMarqueeDto.
 //
-//	This text label will use the standard field length
-//	configured Text Line Title Marquee:
-//		TextLineTitleMarqueeDto.StandardTextFieldLen
-//
 //	Be advised that the left and right margins for this
 //	Date Time Title field will automatically use the
 //	Text Line Title standard left and right margins.
+//
+// ----------------------------------------------------------------
+//
+//	# Terminology
+//
+//	Maximum Available Text Field Length =
+//		TextLineTitleMarqueeDto.StandardMaxLineLen -
+//		1 -
+//		len(TextLineTitleMarqueeDto.StandardTitleLeftMargin) -
+//		len(TextLineTitleMarqueeDto.StandardTitleRightMargin)
+//
+//	Standard Text Field Length for all text lines is
+//		defined at initialization by internal member
+//		variable:
+//
+//			TextLineTitleMarqueeDto.StandardTextFieldLen
+//
+// ----------------------------------------------------------------
+//
+//	# Field Length Values And Defaults
+//
+//		fieldLen > Maximum Available Text Field Length
+//			fieldLen = Maximum Available Text Field Length
+//
+//		fieldLen >= 1 &&
+//			fieldLen < len(txtLabel)
+//				fieldLen = textLabel string length
+//
+//		fieldLen = 0
+//			fieldLen = Maximum Available Text Field Length
+//
+//		fieldLen = -1
+//			fieldLen = textLabel string length
+//
+//		fieldLen = -2
+//			fieldLen =
+//			TextLineTitleMarqueeDto.StandardTextFieldLen
+//
+//		fieldLen < -2
+//			Return value = Error
 //
 // ----------------------------------------------------------------
 //
@@ -367,13 +507,74 @@ func (txtLineTitleMarqueeDto *TextLineTitleMarqueeDto) AddDateTimeTitleLine(
 //		If this parameter is submitted as a zero length
 //		string, an error will be returned.
 //
+//	fieldLen					int
+//
+//		The length of the text field in which the
+//		'textLabel' value will be displayed.
+//
+//		If 'fieldLen' is less than the length of the
+//		formatted 'textLabel' string, it will be
+//		automatically set equal to the 'textLabel'
+//		string length.
+//
+//		To automatically set the value of 'fieldLen' to
+//		the Maximum Available Text Field Length for this
+//		Text Line Title Marquee instance, set this
+//		parameter to zero (0).
+//
+//		The Maximum Available Text Field Length is
+//		calculated as follows:
+//
+//		Maximum Available Text Field Length =
+//			TextLineTitleMarqueeDto.StandardMaxLineLen -
+//			1 -
+//			len(TextLineTitleMarqueeDto.StandardTitleLeftMargin) -
+//			len(TextLineTitleMarqueeDto.StandardTitleRightMargin)
+//
+//		Standard Text Field Length for all text lines is
+//		defined at initialization by internal member
+//		variable:
+//
+//			TextLineTitleMarqueeDto.StandardTextFieldLen
+//
+//		Field Length Values And Defaults
+//		--------------------------------
+//
+//		fieldLen > Maximum Available Text Field Length
+//			fieldLen = Maximum Available Text Field Length
+//
+//		fieldLen >= 1 &&
+//			fieldLen < len(txtLabel)
+//				fieldLen = textLabel string length
+//
+//		fieldLen = 0
+//			fieldLen = Maximum Available Text Field Length
+//
+//		fieldLen = -1
+//			fieldLen = textLabel string length
+//
+//		fieldLen = -2
+//			fieldLen =
+//			TextLineTitleMarqueeDto.StandardTextFieldLen
+//
+//		fieldLen < -2
+//			Return value = Error
+//
+//		If 'fieldLen' is greater than the length of the
+//		'textLabel' string, 'textLabel' will be
+//		positioned within a text field with a length equal
+//		to 'fieldLen'. In this case, the position of the
+//		'textLabel' string within the text field will be
+//		controlled by the text justification value
+//		contained in parameter, 'textJustification'.
+//
 //	textJustification			TextJustify
 //
 //		An enumeration which specifies the justification
-//		of the 'textLabel' string within the text field
-//		specified by the standard Text Line Title field
-//		length:
-//			TextLineTitleMarqueeDto.StandardTextFieldLen
+//		of the 'textLabel' string within a text field.
+//
+//		The text field length is taken from input
+//		parameter 'fieldLen'.
 //
 //		Text justification can only be evaluated in the
 //		context of a text label, field length and a Text
@@ -383,11 +584,12 @@ func (txtLineTitleMarqueeDto *TextLineTitleMarqueeDto) AddDateTimeTitleLine(
 //		never use text justification. In these cases,
 //		text justification is completely ignored.
 //
-//		If the standard Text Line Title field length
-//	    (TextLineTitleMarqueeDto.StandardTextFieldLen) is greater
-//	    than the length of the text label, text
-//	    justification must be equal to one of these three
-//	    valid values:
+//
+//		If the field length ('fieldLen') is greater than
+//		the length of the 'textLabel' string, text
+//		justification must be equal to one of these three
+//		valid values:
+//
 //	         TextJustify(0).Left()
 //	         TextJustify(0).Right()
 //	         TextJustify(0).Center()
@@ -474,8 +676,9 @@ func (txtLineTitleMarqueeDto *TextLineTitleMarqueeDto) AddDateTimeTitleLine(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (txtLineTitleMarqueeDto *TextLineTitleMarqueeDto) AddLabelTitleLine(
+func (txtLineTitleMarqueeDto *TextLineTitleMarqueeDto) AddTextLabelTitleLine(
 	textLabel string,
+	fieldLen int,
 	textJustification TextJustify,
 	errorPrefix interface{}) error {
 
@@ -492,7 +695,8 @@ func (txtLineTitleMarqueeDto *TextLineTitleMarqueeDto) AddLabelTitleLine(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"TextLineTitleMarqueeDto.AddLabelTitleLine()",
+		"TextLineTitleMarqueeDto."+
+			"AddTextLabelTitleLine()",
 		"")
 
 	if err != nil {
@@ -500,6 +704,17 @@ func (txtLineTitleMarqueeDto *TextLineTitleMarqueeDto) AddLabelTitleLine(
 	}
 
 	stdLine := TextLineSpecStandardLine{}.New()
+
+	if len(textLabel) == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'textLabel' is INVALID!\n"+
+			"'textLabel' is an empty string with zero text characters!\n",
+			ePrefix.String())
+
+		return err
+
+	}
 
 	lenStr := len(txtLineTitleMarqueeDto.StandardTitleLeftMargin)
 
@@ -558,13 +773,20 @@ func (txtLineTitleMarqueeDto *TextLineTitleMarqueeDto) AddLabelTitleLine(
 //	AddTitleLineTextFields
 //
 //	Receives an array of text fields which are used to
-//	construct a single Title Text Line which will be
-//	added to the Title Lines array maintained by the
-//	current instance of TextLineTitleMarqueeDto.
+//	construct a single Title Text Line (type
+//	TextLineSpecStandardLine) which will be added to the
+//	Title Lines array maintained by the current instance
+//	of TextLineTitleMarqueeDto.
 //
 //	Be advised that the left and right margins for this
-//	newly constructed title line will automatically use
+//	newly constructed title line will automatically apply
 //	the Text Line Title standard left and right margins.
+//
+//	This method gives maximum flexibility in customizing
+//	individual lines to text added to the internal title
+//	lines array:
+//
+//		TextLineTitleMarqueeDto.TitleLines
 //
 // ----------------------------------------------------------------
 //
@@ -760,4 +982,372 @@ func (txtLineTitleMarqueeDto *TextLineTitleMarqueeDto) AddTitleLineTextFields(
 			stdLine)
 
 	return err
+}
+
+//	AddStandardTitleLine
+//
+//	Adds a deep copy of a TextLineSpecStandardLine object
+//	to the member variable title lines array maintained
+//	by the current instance of TextLineTitleMarqueeDto.
+//
+// ----------------------------------------------------------------
+//
+//	# Input Parameters
+//
+//	stdTitleLine				*TextLineSpecStandardLine
+//
+//		A pointer to an instance of
+//		TextLineSpecStandardLine. A deep copy of this
+//		object will be added to the member variable title
+//		lines array maintained by the current instance of
+//		TextLineTitleMarqueeDto:
+//			TextLineTitleMarqueeDto.TitleLines
+//
+//		If this instance of TextLineSpecStandardLine is
+//		judged to be invalid, an error will be returned.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it	contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (txtLineTitleMarqueeDto *TextLineTitleMarqueeDto) AddStandardTitleLine(
+	stdTitleLine *TextLineSpecStandardLine,
+	errorPrefix interface{}) error {
+
+	if txtLineTitleMarqueeDto.lock == nil {
+		txtLineTitleMarqueeDto.lock = new(sync.Mutex)
+	}
+
+	txtLineTitleMarqueeDto.lock.Lock()
+
+	defer txtLineTitleMarqueeDto.lock.Unlock()
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineTitleMarqueeDto."+
+			"AddStandardTitleLine()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	_,
+		err = textLineSpecStandardLineAtom{}.ptr().
+		testValidityOfTextLineSpecStdLine(
+			stdTitleLine,
+			false, // allowZeroLengthTextFieldsArray
+			ePrefix.XCpy("stdTitleLine"))
+
+	if err != nil {
+		return err
+	}
+
+	var deepCopyStdTitleLine TextLineSpecStandardLine
+
+	deepCopyStdTitleLine,
+		err = stdTitleLine.CopyOut(
+		ePrefix.XCpy("deepCopyStdTitleLine<-"))
+
+	if err != nil {
+		return err
+	}
+
+	txtLineTitleMarqueeDto.TitleLines =
+		append(txtLineTitleMarqueeDto.TitleLines,
+			deepCopyStdTitleLine)
+
+	return err
+}
+
+//	textLineTitleMarqueeDtoMechanics
+//
+//	Provides helper methods for type
+//	TextLineTitleMarqueeDto
+
+type textLineTitleMarqueeDtoMechanics struct {
+	lock *sync.Mutex
+}
+
+//	calcTextFieldLen
+//
+//	Receives a field length value and proceeds to validate
+//	that value setting automatic default values where
+//	required.
+//
+//	The validated or default field length value is then
+//	returned to the calling function.
+//
+// ----------------------------------------------------------------
+//
+//	# Input Parameters
+//
+//	fieldLen					int
+//
+//		A text field length value which will be validated.
+//		In certain cases, default values will be applied
+//		and returned to the calling function.
+//
+//		The Maximum Available Text Field Length is
+//		calculated as follows:
+//
+//		Maximum Available Text Field Length =
+//			TextLineTitleMarqueeDto.StandardMaxLineLen -
+//			1 -
+//			len(TextLineTitleMarqueeDto.StandardTitleLeftMargin) -
+//			len(TextLineTitleMarqueeDto.StandardTitleRightMargin)
+//
+//		Field Length Values And Defaults
+//		--------------------------------
+//
+//		fieldLen > Maximum Available Text Field Length
+//			fieldLen = Maximum Available Text Field Length
+//
+//		fieldLen >= 1 &&
+//			fieldLen < len(txtLabel)
+//				fieldLen = textLabel string length
+//
+//		fieldLen = 0
+//			fieldLen = Maximum Available Text Field Length
+//
+//		fieldLen = -1
+//			fieldLen = textLabel string length
+//
+//		fieldLen = -2
+//			fieldLen =
+//			TextLineTitleMarqueeDto.StandardTextFieldLen
+//
+//		fieldLen < -2
+//			Return value = Error
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	validFieldLen				int
+//
+//		If this method completes successfully, valid
+//		text field length value will be returned.
+//
+//		Be advised that the returned value may not
+//		equal the original 'fieldLen' input parameter,
+//		as default values may be applied in certain
+//		cases.
+//
+//		The Maximum Available Text Field Length is
+//		calculated as follows:
+//
+//		Maximum Available Text Field Length =
+//			TextLineTitleMarqueeDto.StandardMaxLineLen -
+//			1 -
+//			len(TextLineTitleMarqueeDto.StandardTitleLeftMargin) -
+//			len(TextLineTitleMarqueeDto.StandardTitleRightMargin)
+//
+//		Field Length Values And Defaults
+//		--------------------------------
+//
+//		fieldLen > Maximum Available Text Field Length
+//			fieldLen = Maximum Available Text Field Length
+//
+//		fieldLen >= 1 &&
+//			fieldLen < len(txtLabel)
+//				fieldLen = textLabel string length
+//
+//		fieldLen = 0
+//			fieldLen = Maximum Available Text Field Length
+//
+//		fieldLen = -1
+//			fieldLen = textLabel string length
+//
+//		fieldLen = -2
+//			fieldLen =
+//			TextLineTitleMarqueeDto.StandardTextFieldLen
+//
+//		fieldLen < -2
+//			Return value = Error
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (txtTitleDtoMech *textLineTitleMarqueeDtoMechanics) calcTextFieldLen(
+	txtTitleMarqueeDto *TextLineTitleMarqueeDto,
+	fieldLen int,
+	errPrefDto *ePref.ErrPrefixDto) (
+	validFieldLen int,
+	err error) {
+
+	if txtTitleDtoMech.lock == nil {
+		txtTitleDtoMech.lock = new(sync.Mutex)
+	}
+
+	txtTitleDtoMech.lock.Lock()
+
+	defer txtTitleDtoMech.lock.Unlock()
+
+	validFieldLen = 0
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"textLineTitleMarqueeDtoMechanics."+
+			"calcTextFieldLen()",
+		"")
+
+	if err != nil {
+		return validFieldLen, err
+	}
+
+	if txtTitleMarqueeDto == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'txtTitleMarqueeDto' is a nil pointer!\n",
+			ePrefix.String())
+
+		return validFieldLen, err
+	}
+
+	if txtTitleMarqueeDto.StandardMaxLineLen < 1 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: The TextLineTitleMarqueeDto object ('txtTitleMarqueeDto') is INVALID!\n"+
+			"'txtTitleMarqueeDto.StandardMaxLineLen' has NOT been properly configured.\n"+
+			"'txtTitleMarqueeDto.StandardMaxLineLen' has a value less than one (1).\n"+
+			"txtTitleMarqueeDto.StandardMaxLineLen = %v\n",
+			ePrefix.String(),
+			txtTitleMarqueeDto.StandardMaxLineLen)
+
+		return validFieldLen, err
+
+	}
+
+	if fieldLen < -2 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'fieldLen' is INVALID!\n"+
+			"'fieldLen' has a value less than -2\n"+
+			"fieldLen = %v\n",
+			ePrefix.String(),
+			fieldLen)
+
+		return validFieldLen, err
+
+	}
+
+	maxAvailableTextFieldLen :=
+		txtTitleMarqueeDto.StandardMaxLineLen -
+			1 -
+			len(txtTitleMarqueeDto.StandardTitleLeftMargin) -
+			len(txtTitleMarqueeDto.StandardTitleRightMargin)
+
+	if fieldLen > maxAvailableTextFieldLen ||
+		fieldLen == 0 {
+
+		validFieldLen = maxAvailableTextFieldLen
+	}
+
+	if fieldLen == -2 {
+		fieldLen = txtTitleMarqueeDto.StandardTextFieldLen
+	}
+
+	return validFieldLen, err
 }
