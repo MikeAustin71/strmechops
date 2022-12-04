@@ -716,6 +716,17 @@ func (txtLineTitleMarqueeDto *TextLineTitleMarqueeDto) AddTextLabelTitleLine(
 
 	}
 
+	fieldLen,
+		err = new(textLineTitleMarqueeDtoMechanics).
+		calcTextFieldLen(
+			txtLineTitleMarqueeDto,
+			fieldLen,
+			ePrefix)
+
+	if err != nil {
+		return err
+	}
+
 	lenStr := len(txtLineTitleMarqueeDto.StandardTitleLeftMargin)
 
 	// Left Margin Label
@@ -738,7 +749,7 @@ func (txtLineTitleMarqueeDto *TextLineTitleMarqueeDto) AddTextLabelTitleLine(
 	_,
 		err = stdLine.AddTextFieldLabel(
 		textLabel,
-		txtLineTitleMarqueeDto.StandardTextFieldLen,
+		fieldLen,
 		textJustification,
 		ePrefix.XCpy(
 			"textLabel"))
@@ -1156,6 +1167,15 @@ type textLineTitleMarqueeDtoMechanics struct {
 //
 //	# Input Parameters
 //
+//	txtTitleMarqueeDto 			*TextLineTitleMarqueeDto
+//
+//		A pointer to an instance of TextLineTitleMarqueeDto.
+//		No data elements in this instance will be modified.
+//
+//		The internal member data elements contained in this
+//		instance will be used to compute a valid value for
+//		text field length passed as input paramter 'fieldLen'.
+//
 //	fieldLen					int
 //
 //		A text field length value which will be validated.
@@ -1350,4 +1370,183 @@ func (txtTitleDtoMech *textLineTitleMarqueeDtoMechanics) calcTextFieldLen(
 	}
 
 	return validFieldLen, err
+}
+
+// testValidityOfTxtSpecTimerLines - Receives a pointer to an
+// instance of TextLineSpecTimerLines and performs a diagnostic
+// analysis to determine if that instance is valid in all respects.
+//
+// If the input parameter 'txtTimerLines' is determined to be
+// invalid, this method will return a boolean flag ('isValid') of
+// 'false'. In addition, an instance of type error ('err') will be
+// returned configured with an appropriate error message.
+//
+// If the input parameter 'txtTimerLines' is valid, this method
+// will return a boolean flag ('isValid') of 'true' and the
+// returned error type ('err') will be set to 'nil'.
+//
+// ----------------------------------------------------------------
+//
+//		# Input Parameters
+//
+//		txtTitleMarqueeDto 			*TextLineTitleMarqueeDto
+//
+//			A pointer to an instance of TextLineTitleMarqueeDto.
+//			No data elements in this instance will be modified.
+//
+//			The internal member data elements contained in this
+//			instance will be used to compute a valid value for
+//			text field length passed as input paramter 'fieldLen'.
+//
+//
+//	 errPrefDto                 *ePref.ErrPrefixDto
+//	    - This object encapsulates an error prefix string which is
+//	      included in all returned error messages. Usually, it
+//	      contains the name of the calling method or methods listed
+//	      as a function chain.
+//
+//	      If no error prefix information is needed, set this parameter
+//	      to 'nil'.
+//
+//	      Type ErrPrefixDto is included in the 'errpref' software
+//	      package, "github.com/MikeAustin71/errpref".
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//	isValid                    bool
+//	   - If input parameter 'txtTimerLines' is judged to be valid
+//	     in all respects, this return parameter will be set to
+//	     'true'.
+//
+//	   - If input parameter 'txtTimerLines' is found to be invalid,
+//	     this return parameter will be set to 'false'.
+//
+//
+//	err                        error
+//	   - If input parameter 'txtTimerLines' is judged to be valid
+//	     in all respects, this return parameter will be set to
+//	     'nil'.
+//
+//	     If input parameter, 'txtTimerLines' is found to be
+//	     invalid, this return parameter will be configured with an
+//	     appropriate error message.
+//
+//	     If an error message is returned, the text value for input
+//	     parameter 'errPrefDto' (error prefix) will be prefixed or
+//	     attached at the beginning of the error message.
+func (txtTitleDtoMech *textLineTitleMarqueeDtoMechanics) testValidityOfTitleMarqueeDto(
+	txtTitleMarqueeDto *TextLineTitleMarqueeDto,
+	errPrefDto *ePref.ErrPrefixDto) (
+	isValid bool,
+	err error) {
+
+	if txtTitleDtoMech.lock == nil {
+		txtTitleDtoMech.lock = new(sync.Mutex)
+	}
+
+	txtTitleDtoMech.lock.Lock()
+
+	defer txtTitleDtoMech.lock.Unlock()
+
+	isValid = false
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"textLineTitleMarqueeDtoMechanics."+
+			"testValidityOfTitleMarqueeDto()",
+		"")
+
+	if err != nil {
+		return isValid, err
+	}
+
+	if txtTitleMarqueeDto == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'txtTitleMarqueeDto' is a nil pointer!\n",
+			ePrefix.String())
+
+		return isValid, err
+	}
+
+	if txtTitleMarqueeDto.StandardMaxLineLen < 1 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: The TextLineTitleMarqueeDto contains invalid data values!\n"+
+			"'StandardMaxLineLen' has NOT been properly configured.\n"+
+			"'StandardMaxLineLen' has a value less than one (1).\n"+
+			"StandardMaxLineLen = %v\n",
+			ePrefix.String(),
+			txtTitleMarqueeDto.StandardMaxLineLen)
+
+		return isValid, err
+	}
+
+	if txtTitleMarqueeDto.StandardTextFieldLen < 1 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: The TextLineTitleMarqueeDto contains invalid data values!\n"+
+			"'StandardTextFieldLen' has NOT been properly configured.\n"+
+			"'StandardTextFieldLen' has a value less than one (1).\n"+
+			"StandardTextFieldLen = %v\n",
+			ePrefix.String(),
+			txtTitleMarqueeDto.StandardTextFieldLen)
+
+		return isValid, err
+	}
+
+	maxAvailableTextFieldLen :=
+		txtTitleMarqueeDto.StandardMaxLineLen -
+			1 -
+			len(txtTitleMarqueeDto.StandardTitleLeftMargin) -
+			len(txtTitleMarqueeDto.StandardTitleRightMargin)
+
+	if txtTitleMarqueeDto.StandardTextFieldLen > maxAvailableTextFieldLen {
+
+		txtTitleMarqueeDto.StandardTextFieldLen =
+			maxAvailableTextFieldLen
+	}
+
+	if txtTitleMarqueeDto.NumLeadingBlankLines < 0 {
+
+		txtTitleMarqueeDto.NumLeadingBlankLines = 0
+	}
+
+	if txtTitleMarqueeDto.NumLeadingSolidLines < 0 {
+
+		txtTitleMarqueeDto.NumLeadingSolidLines = 0
+	}
+
+	if txtTitleMarqueeDto.NumTopTitleBlankLines < 0 {
+
+		txtTitleMarqueeDto.NumTopTitleBlankLines = 0
+	}
+
+	if len(txtTitleMarqueeDto.TitleLines) == 0 {
+		txtTitleMarqueeDto.TitleLines = nil
+	}
+
+	if txtTitleMarqueeDto.NumBottomTitleBlankLines < 0 {
+
+		txtTitleMarqueeDto.NumBottomTitleBlankLines = 0
+	}
+
+	if txtTitleMarqueeDto.NumTrailingSolidLines < 0 {
+
+		txtTitleMarqueeDto.NumTrailingSolidLines = 0
+	}
+
+	if txtTitleMarqueeDto.NumTrailingBlankLines < 0 {
+
+		txtTitleMarqueeDto.NumTrailingBlankLines = 0
+	}
+
+	isValid = true
+
+	return isValid, err
 }
