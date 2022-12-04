@@ -45,7 +45,7 @@ type TextLineTitleMarqueeDto struct {
 
 	NumLeadingSolidLines int
 	//	The Number of Leading Solid Lines to
-	//	Display above the Title Lines.
+	//	display above the Title Lines.
 
 	NumTopTitleBlankLines int
 	//	The number of blank lines or 'new lines' to
@@ -53,9 +53,9 @@ type TextLineTitleMarqueeDto struct {
 	//	Display.
 
 	TitleLines TextLineSpecLinesCollection
-	//	An array of TextLineSpecStandardLine objects
-	//	containing all specifications necessary to
-	//	display the Text Title Lines.
+	//	A collection of text line objects containing
+	//	all specifications necessary to display the
+	//	Text Title Lines.
 
 	NumBottomTitleBlankLines int
 	//	The number of blank lines or 'new lines' to
@@ -69,7 +69,7 @@ type TextLineTitleMarqueeDto struct {
 
 	NumTrailingSolidLines int
 	//	The Number of Trailing Solid Lines to
-	//	Display below the Title Lines.
+	//	display below the Title Lines.
 
 	NumTrailingBlankLines int
 	//	The number of blank lines or 'new lines'

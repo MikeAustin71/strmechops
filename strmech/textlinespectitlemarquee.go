@@ -70,7 +70,7 @@ type TextLineSpecTitleMarquee struct {
 //			len(TextLineTitleMarqueeDto.StandardTitleLeftMargin) -
 //			len(TextLineTitleMarqueeDto.StandardTitleRightMargin)
 //
-//	leadingBlankLines			int
+//	numLeadingBlankLines		int
 //
 //		The number of blank lines or 'new lines'
 //		inserted above the Leading Solid Line.
@@ -81,19 +81,42 @@ type TextLineSpecTitleMarquee struct {
 //		Solid Line displayed above the Title
 //		Lines.
 //
-//	leadingSolidLines			int
+//	numLeadingSolidLines		int
 //
-//	topTitleBlankLines			int
+//		The Number of Leading Solid Lines to display
+//		above the Title Lines.
 //
-//	titleLines					[]TextLineSpecStandardLine
+//	numTopTitleBlankLines		int
 //
-//	bottomTitleBlankLines		int
+//		The number of blank lines or 'new lines' to
+//		insert immediately above the Title Lines
+//		Display.
+//
+//	titleLines					TextLineSpecLinesCollection
+//
+//		A collection of text line objects containing all
+//		specifications necessary to display the Text
+//		Title Lines.
+//
+//	numBottomTitleBlankLines	int
+//
+//		The number of blank lines or 'new lines' to
+//		insert immediately below the Title Lines Display.
 //
 //	trailingSolidLineChar		string
 //
-//	trailingSolidLines			int
+//		The character used to create the Trailing Solid
+//		Line displayed below the Title Lines.
 //
-//	trailingBlankLines			int
+//	numTrailingSolidLines		int
+//
+//		The Number of Trailing Solid Lines to display
+//		below the Title Lines.
+//
+//	numTrailingBlankLines		int
+//
+//		The number of blank lines or 'new lines' inserted
+//		after the Trailing Solid Line.
 //
 //	errorPrefix					interface{}
 //
@@ -177,10 +200,10 @@ type TextLineSpecTitleMarquee struct {
 //		text will be attached to the beginning of the
 //		error message.
 func (txtLineSpecTitleMarquee *TextLineSpecTitleMarquee) NewAllParams(
-	titleMarqueeLeftMargin string,
-	titleMarqueeRightMargin string,
-	maxLineLen int,
-	textFieldLen int,
+	standardTitleLeftMargin string,
+	standardTitleRightMargin string,
+	standardMaxLineLen int,
+	standardTextFieldLen int,
 	numLeadingBlankLines int,
 	leadingSolidLineChar string,
 	numLeadingSolidLines int,
@@ -209,7 +232,8 @@ func (txtLineSpecTitleMarquee *TextLineSpecTitleMarquee) NewAllParams(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"TextLineSpecTitleMarquee.NewAllParams()",
+		"TextLineSpecTitleMarquee."+
+			"NewAllParams()",
 		"")
 
 	if err != nil {
@@ -217,10 +241,10 @@ func (txtLineSpecTitleMarquee *TextLineSpecTitleMarquee) NewAllParams(
 	}
 
 	titleMarqueeDto := TextLineTitleMarqueeDto{
-		StandardTitleLeftMargin:  titleMarqueeLeftMargin,
-		StandardTitleRightMargin: titleMarqueeRightMargin,
-		StandardMaxLineLen:       maxLineLen,
-		StandardTextFieldLen:     textFieldLen,
+		StandardTitleLeftMargin:  standardTitleLeftMargin,
+		StandardTitleRightMargin: standardTitleRightMargin,
+		StandardMaxLineLen:       standardMaxLineLen,
+		StandardTextFieldLen:     standardTextFieldLen,
 		NumLeadingBlankLines:     numLeadingBlankLines,
 		LeadingSolidLineChar:     leadingSolidLineChar,
 		NumLeadingSolidLines:     numLeadingSolidLines,
