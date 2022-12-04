@@ -6,6 +6,10 @@ import (
 	"sync"
 )
 
+// TextLineSpecLinesCollection
+//
+// A collection of objects implementing the
+// ITextLineSpecification interface.
 type TextLineSpecLinesCollection struct {
 	textLines []ITextLineSpecification
 	lock      *sync.Mutex

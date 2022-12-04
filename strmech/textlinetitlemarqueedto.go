@@ -52,7 +52,7 @@ type TextLineTitleMarqueeDto struct {
 	//	insert immediately above the Title Lines
 	//	Display.
 
-	TitleLines []TextLineSpecStandardLine
+	TitleLines TextLineSpecLinesCollection
 	//	An array of TextLineSpecStandardLine objects
 	//	containing all specifications necessary to
 	//	display the Text Title Lines.
@@ -438,10 +438,19 @@ func (txtLineTitleMarqueeDto *TextLineTitleMarqueeDto) AddDateTimeTitleLine(
 
 	}
 
-	txtLineTitleMarqueeDto.TitleLines =
-		append(
-			txtLineTitleMarqueeDto.TitleLines,
-			stdLine)
+	err = stdLine.IsValidInstanceError(
+		ePrefix.XCpy(
+			"stdLine<-dateTime"))
+
+	if err != nil {
+
+		return err
+	}
+
+	err = txtLineTitleMarqueeDto.TitleLines.AddTextLine(
+		&stdLine,
+		ePrefix.XCpy(
+			"stdLine<-"))
 
 	return err
 }
@@ -774,10 +783,19 @@ func (txtLineTitleMarqueeDto *TextLineTitleMarqueeDto) AddTextLabelTitleLine(
 
 	}
 
-	txtLineTitleMarqueeDto.TitleLines =
-		append(
-			txtLineTitleMarqueeDto.TitleLines,
-			stdLine)
+	err = stdLine.IsValidInstanceError(
+		ePrefix.XCpy(
+			"stdLine<-textLabel"))
+
+	if err != nil {
+
+		return err
+	}
+
+	err = txtLineTitleMarqueeDto.TitleLines.AddTextLine(
+		&stdLine,
+		ePrefix.XCpy(
+			"stdLine<-"))
 
 	return err
 }
@@ -988,10 +1006,19 @@ func (txtLineTitleMarqueeDto *TextLineTitleMarqueeDto) AddTitleLineTextFields(
 
 	}
 
-	txtLineTitleMarqueeDto.TitleLines =
-		append(
-			txtLineTitleMarqueeDto.TitleLines,
-			stdLine)
+	err = stdLine.IsValidInstanceError(
+		ePrefix.XCpy(
+			"stdLine<-textFields"))
+
+	if err != nil {
+
+		return err
+	}
+
+	err = txtLineTitleMarqueeDto.TitleLines.AddTextLine(
+		&stdLine,
+		ePrefix.XCpy(
+			"stdLine<-"))
 
 	return err
 }
@@ -1139,9 +1166,19 @@ func (txtLineTitleMarqueeDto *TextLineTitleMarqueeDto) AddStandardTitleLine(
 		return err
 	}
 
-	txtLineTitleMarqueeDto.TitleLines =
-		append(txtLineTitleMarqueeDto.TitleLines,
-			deepCopyStdTitleLine)
+	err = deepCopyStdTitleLine.IsValidInstanceError(
+		ePrefix.XCpy(
+			"deepCopyStdTitleLine<-textLabel"))
+
+	if err != nil {
+
+		return err
+	}
+
+	err = txtLineTitleMarqueeDto.TitleLines.AddTextLine(
+		&deepCopyStdTitleLine,
+		ePrefix.XCpy(
+			"deepCopyStdTitleLine<-"))
 
 	return err
 }
@@ -1608,7 +1645,7 @@ func (txtTitleDtoMech *textLineTitleMarqueeDtoMechanics) empty(
 
 	txtTitleMarqueeDto.NumTopTitleBlankLines = 0
 
-	txtTitleMarqueeDto.TitleLines = nil
+	txtTitleMarqueeDto.TitleLines.Empty()
 
 	txtTitleMarqueeDto.NumBottomTitleBlankLines = 0
 
@@ -1776,10 +1813,6 @@ func (txtTitleDtoMech *textLineTitleMarqueeDtoMechanics) testValidityOfTitleMarq
 	if txtTitleMarqueeDto.NumTopTitleBlankLines < 0 {
 
 		txtTitleMarqueeDto.NumTopTitleBlankLines = 0
-	}
-
-	if len(txtTitleMarqueeDto.TitleLines) == 0 {
-		txtTitleMarqueeDto.TitleLines = nil
 	}
 
 	if txtTitleMarqueeDto.NumBottomTitleBlankLines < 0 {
