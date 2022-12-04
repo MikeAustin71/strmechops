@@ -13,7 +13,7 @@ type TextLineSpecTitleMarquee struct {
 	leadingBlankLines        TextLineSpecBlankLines
 	leadingSolidLines        TextLineSpecSolidLine
 	topTitleBlankLines       TextLineSpecBlankLines
-	titleLines               []TextLineSpecStandardLine
+	titleLines               TextLineSpecLinesCollection
 	bottomTitleBlankLines    TextLineSpecBlankLines
 	trailingSolidLines       TextLineSpecSolidLine
 	trailingBlankLines       TextLineSpecBlankLines
@@ -45,12 +45,30 @@ type TextLineSpecTitleMarquee struct {
 //	standardMaxLineLen					int
 //
 //		The maximum number of characters allowed on
-//		a text title line.
+//		a text title line. This maximum limit will be
+//		applied to the length of all text lines generated
+//		by the returned instance of
+//		TextLineSpecTitleMarquee.
 //
 //	standardTextFieldLen		int
 //
-//		The standard field length applied to all Text
-//		Title Lines in the 'TitleLines' array.
+//		The standard field length applied to Text
+//		Title Lines in the 'TitleLines' array unless
+//		overridden by user customizations.
+//
+//		If the standardTextFieldLen exceeds the value of
+//		the Maximum Available Text Field Length, it will
+//		be reset and defaulted to the Maximum Available
+//		Text Field Length.
+//
+//		The Maximum Available Text Field Length is
+//		calculated as follows:
+//
+//		Maximum Available Text Field Length =
+//			TextLineTitleMarqueeDto.StandardMaxLineLen -
+//			1 -
+//			len(TextLineTitleMarqueeDto.StandardTitleLeftMargin) -
+//			len(TextLineTitleMarqueeDto.StandardTitleRightMargin)
 //
 //	leadingBlankLines			int
 //
@@ -140,6 +158,12 @@ type TextLineSpecTitleMarquee struct {
 //
 // # Return Values
 //
+//	TextLineSpecTitleMarquee
+//
+//		If this method completes successfully, a new
+//		instance of TextLineSpecTitleMarquee will be
+//		returned.
+//
 //	error
 //
 //		If this method completes successfully, the
@@ -161,7 +185,7 @@ func (txtLineSpecTitleMarquee *TextLineSpecTitleMarquee) NewAllParams(
 	leadingSolidLineChar string,
 	numLeadingSolidLines int,
 	numTopTitleBlankLines int,
-	titleLines []TextLineSpecStandardLine,
+	titleLines TextLineSpecLinesCollection,
 	numBottomTitleBlankLines int,
 	trailingSolidLineChar string,
 	numTrailingSolidLines int,
@@ -201,11 +225,26 @@ func (txtLineSpecTitleMarquee *TextLineSpecTitleMarquee) NewAllParams(
 		LeadingSolidLineChar:     leadingSolidLineChar,
 		NumLeadingSolidLines:     numLeadingSolidLines,
 		NumTopTitleBlankLines:    numTopTitleBlankLines,
-		TitleLines:               titleLines,
 		NumBottomTitleBlankLines: numBottomTitleBlankLines,
 		TrailingSolidLineChar:    trailingSolidLineChar,
 		NumTrailingSolidLines:    numTrailingSolidLines,
 		NumTrailingBlankLines:    numTrailingBlankLines,
+	}
+
+	if titleLines.GetNumberOfTextLines() == 0 {
+
+		titleMarqueeDto.TitleLines.Empty()
+
+	} else {
+
+		err = titleMarqueeDto.TitleLines.CopyIn(
+			&titleLines,
+			ePrefix.XCpy("<-titleLines"))
+
+		if err != nil {
+			return newTxtLineTitle, err
+		}
+
 	}
 
 	err = new(textLineSpecTitleMarqueeMechanics).

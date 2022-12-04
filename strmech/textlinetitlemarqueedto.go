@@ -1229,6 +1229,51 @@ func (txtLineTitleMarqueeDto *TextLineTitleMarqueeDto) Empty() {
 	return
 }
 
+// IsValidInstance - Performs a diagnostic review of the data
+// values encapsulated in the current TextLineSpecLinesCollection
+// instance to determine if they are valid.
+//
+// If all data element evaluate as valid, this method returns
+// 'true'. If any data element is invalid, this method returns
+// 'false'.
+//
+// ----------------------------------------------------------------
+//
+//	# Input Parameters
+//
+//	--- NONE ---
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	isValid						bool
+//
+//		If all data elements encapsulated by the current
+//		instance of TextLineTitleMarqueeDto are valid,
+//		this returned boolean value is set to 'true'. If
+//		any data values are invalid, this return
+//		parameter is set to 'false'.
+func (txtLineTitleMarqueeDto *TextLineTitleMarqueeDto) IsValidInstance() (
+	isValid bool) {
+
+	if txtLineTitleMarqueeDto.lock == nil {
+		txtLineTitleMarqueeDto.lock = new(sync.Mutex)
+	}
+
+	txtLineTitleMarqueeDto.lock.Lock()
+
+	defer txtLineTitleMarqueeDto.lock.Unlock()
+
+	isValid,
+		_ = new(textLineTitleMarqueeDtoMechanics).
+		testValidityOfTitleMarqueeDto(
+			txtLineTitleMarqueeDto,
+			nil)
+
+	return isValid
+}
+
 //	IsValidInstanceError
 //
 //	Performs a diagnostic review of the data values
@@ -1327,6 +1372,7 @@ func (txtLineTitleMarqueeDto *TextLineTitleMarqueeDto) IsValidInstanceError(
 	txtLineTitleMarqueeDto.lock.Lock()
 
 	defer txtLineTitleMarqueeDto.lock.Unlock()
+
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
 
@@ -1565,6 +1611,25 @@ func (txtTitleDtoMech *textLineTitleMarqueeDtoMechanics) calcTextFieldLen(
 			len(txtTitleMarqueeDto.StandardTitleLeftMargin) -
 			len(txtTitleMarqueeDto.StandardTitleRightMargin)
 
+	if maxAvailableTextFieldLen < 1 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: 'maxAvailableTextFieldLen' produces a value less than one (1).\n"+
+			"maxAvailableTextFieldLen = \n"+
+			"	StandardMaxLineLen - Left Margin Length - Right Margin Length -1\n"+
+			"StandardMaxLineLen is probably invalid."+
+			"StandardMaxLineLen  = %v\n"+
+			"Left Margin Length  = %v\n"+
+			"Right Margin Length = %v\n",
+			ePrefix.String(),
+			txtTitleMarqueeDto.StandardMaxLineLen,
+			len(txtTitleMarqueeDto.StandardTitleLeftMargin),
+			len(txtTitleMarqueeDto.StandardTitleRightMargin))
+
+		return validFieldLen, err
+
+	}
+
 	if fieldLen > maxAvailableTextFieldLen ||
 		fieldLen == 0 {
 
@@ -1793,6 +1858,24 @@ func (txtTitleDtoMech *textLineTitleMarqueeDtoMechanics) testValidityOfTitleMarq
 			1 -
 			len(txtTitleMarqueeDto.StandardTitleLeftMargin) -
 			len(txtTitleMarqueeDto.StandardTitleRightMargin)
+
+	if maxAvailableTextFieldLen < 1 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: 'maxAvailableTextFieldLen' produces a value less than one (1).\n"+
+			"maxAvailableTextFieldLen = \n"+
+			"	StandardMaxLineLen - Left Margin Length - Right Margin Length -1\n"+
+			"StandardMaxLineLen is probably invalid."+
+			"StandardMaxLineLen  = %v\n"+
+			"Left Margin Length  = %v\n"+
+			"Right Margin Length = %v\n",
+			ePrefix.String(),
+			txtTitleMarqueeDto.StandardMaxLineLen,
+			len(txtTitleMarqueeDto.StandardTitleLeftMargin),
+			len(txtTitleMarqueeDto.StandardTitleRightMargin))
+
+		return isValid, err
+	}
 
 	if txtTitleMarqueeDto.StandardTextFieldLen > maxAvailableTextFieldLen {
 

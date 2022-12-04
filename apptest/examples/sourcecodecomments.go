@@ -18,6 +18,14 @@ type SourceCodeComments struct {
 //
 // ----------------------------------------------------------------
 //
+// # BE ADVISED
+//
+//	This method will delete and overwrite all pre-existing
+//	data values in the current instance of
+//	IntegerSeparatorSpec.
+//
+// ----------------------------------------------------------------
+//
 // # IMPORTANT
 //
 //	This method will delete and overwrite all pre-existing

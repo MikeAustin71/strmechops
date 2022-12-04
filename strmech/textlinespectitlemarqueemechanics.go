@@ -203,40 +203,12 @@ func (txtLineTitleMarqueeMech *textLineSpecTitleMarqueeMechanics) setTxtLineTitl
 		return err
 	}
 
-	if configSpecs.StandardMaxLineLen < 5 {
+	err = configSpecs.IsValidInstanceError(
+		ePrefix.XCpy(
+			"configSpecs"))
 
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'configSpecs' is INVALID!\n"+
-			"configSpecs.StandardMaxLineLen is less than five (5)\n"+
-			"configSpecs.StandardMaxLineLen = %v\n",
-			ePrefix.String(),
-			configSpecs.StandardMaxLineLen)
-
+	if err != nil {
 		return err
-	}
-
-	standardTextFieldLength :=
-		configSpecs.StandardTextFieldLen
-
-	if standardTextFieldLength < 5 {
-		standardTextFieldLength =
-			configSpecs.StandardMaxLineLen - 1 -
-				len(configSpecs.StandardTitleLeftMargin) -
-				len(configSpecs.StandardTitleRightMargin)
-
-		if standardTextFieldLength < 5 {
-
-			err = fmt.Errorf("%v\n"+
-				"Error: Input parameter 'configSpecs' is INVALID!\n"+
-				"After attempting to set a default value for configSpecs.StandardTextFieldLen,\n"+
-				"configSpecs.StandardTextFieldLen now has a value less than five (5).\n"+
-				"configSpecs.StandardTextFieldLen = %v\n",
-				ePrefix.String(),
-				configSpecs.StandardTextFieldLen)
-
-			return err
-
-		}
 	}
 
 	new(textLineSpecTitleMarqueeElectron).empty(
@@ -252,7 +224,7 @@ func (txtLineTitleMarqueeMech *textLineSpecTitleMarqueeMechanics) setTxtLineTitl
 		configSpecs.StandardMaxLineLen
 
 	txtLineTitleMarquee.standardTextFieldLen =
-		standardTextFieldLength
+		configSpecs.StandardTextFieldLen
 
 	if configSpecs.NumLeadingBlankLines > 0 {
 
@@ -342,28 +314,12 @@ func (txtLineTitleMarqueeMech *textLineSpecTitleMarqueeMechanics) setTxtLineTitl
 
 	}
 
-	lenTitleLines := len(configSpecs.TitleLines)
+	if configSpecs.TitleLines.GetNumberOfTextLines() > 0 {
 
-	if lenTitleLines == 0 {
-		return err
-	}
+		err = txtLineTitleMarquee.titleLines.CopyIn(
+			&configSpecs.TitleLines,
+			ePrefix.XCpy("configSpecs.TitleLines"))
 
-	txtLineTitleMarquee.titleLines =
-		make([]TextLineSpecStandardLine, lenTitleLines)
-
-	for i := 0; i < lenTitleLines; i++ {
-
-		err = textLineSpecStandardLineNanobot{}.ptr().
-			copyIn(
-				&txtLineTitleMarquee.titleLines[i],
-				&configSpecs.TitleLines[i],
-				ePrefix.XCpy(
-					fmt.Sprintf("txtLineTitleMarquee.titleLines[%v]",
-						i)))
-
-		if err != nil {
-			return err
-		}
 	}
 
 	return err

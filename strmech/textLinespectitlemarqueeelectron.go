@@ -10,6 +10,37 @@ type textLineSpecTitleMarqueeElectron struct {
 	lock *sync.Mutex
 }
 
+//	empty
+//
+//	Receives a pointer to an instance of
+//	TextLineSpecTitleMarquee and proceeds to reset the
+//	data values for member variables to their initial
+//	or zero values.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	All the member variable data values contained in
+//	input parameter 'txtLineTitleMarquee' will be
+//	deleted and reset to their zero values.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	txtLineTitleMarquee			*TextLineSpecTitleMarquee
+//
+//		A pointer to an instance of
+//		TextLineSpecTitleMarquee. All the internal member
+//		variables contained in this instance will be
+//		deleted and reset to their zero values.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	NONE
 func (txtLineTitleMarqueeElectron *textLineSpecTitleMarqueeElectron) empty(
 	txtLineTitleMarquee *TextLineSpecTitleMarquee) {
 
@@ -33,29 +64,34 @@ func (txtLineTitleMarqueeElectron *textLineSpecTitleMarqueeElectron) empty(
 
 	txtLineTitleMarquee.standardTextFieldLen = 0
 
-	txtLineTitleMarquee.leadingBlankLines =
-		TextLineSpecBlankLines{}
+	txtLineTitleMarquee.leadingBlankLines.Empty()
 
-	txtLineTitleMarquee.leadingSolidLines =
-		TextLineSpecSolidLine{}
+	txtLineTitleMarquee.leadingSolidLines.Empty()
 
-	txtLineTitleMarquee.topTitleBlankLines =
-		TextLineSpecBlankLines{}
+	txtLineTitleMarquee.topTitleBlankLines.Empty()
 
-	txtLineTitleMarquee.titleLines = nil
+	txtLineTitleMarquee.titleLines.Empty()
 
-	txtLineTitleMarquee.bottomTitleBlankLines =
-		TextLineSpecBlankLines{}
+	txtLineTitleMarquee.bottomTitleBlankLines.Empty()
 
-	txtLineTitleMarquee.trailingSolidLines =
-		TextLineSpecSolidLine{}
+	txtLineTitleMarquee.trailingSolidLines.Empty()
 
-	txtLineTitleMarquee.trailingBlankLines =
-		TextLineSpecBlankLines{}
+	txtLineTitleMarquee.trailingBlankLines.Empty()
 
 	return
 }
 
+// equal
+//
+// Receives a pointer to two instances of
+// TextLineSpecTitleMarquee and proceeds to compare
+// their member variables in order to determine if
+// they are equivalent.
+//
+// A boolean flag showing the result of this comparison
+// is returned. If the member variables for both
+// instances are equal in all respects, this flag is set
+// to 'true'. Otherwise, this method returns 'false'.
 func (txtLineTitleMarqueeElectron *textLineSpecTitleMarqueeElectron) equal(
 	txtLineTitleOne *TextLineSpecTitleMarquee,
 	txtLineTitleTwo *TextLineSpecTitleMarquee) bool {
@@ -110,21 +146,10 @@ func (txtLineTitleMarqueeElectron *textLineSpecTitleMarqueeElectron) equal(
 		return false
 	}
 
-	lenTitleLines := len(txtLineTitleOne.titleLines)
-
-	if lenTitleLines != len(txtLineTitleTwo.titleLines) {
+	if !txtLineTitleOne.titleLines.Equal(
+		&txtLineTitleTwo.titleLines) {
 
 		return false
-	}
-
-	for i := 0; i < lenTitleLines; i++ {
-
-		if !txtLineTitleOne.titleLines[i].Equal(
-			&txtLineTitleTwo.titleLines[i]) {
-
-			return false
-		}
-
 	}
 
 	if !txtLineTitleOne.bottomTitleBlankLines.Equal(
