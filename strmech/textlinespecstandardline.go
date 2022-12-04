@@ -1673,8 +1673,8 @@ func (stdLine *TextLineSpecStandardLine) CopyOut(
 // TextLineSpecStandardLine instance cast as a type
 // ITextLineSpecification.
 //
-// This method fulfills requirements of ITextLineSpecification
-// interface.
+// This method fulfills requirements of the
+// ITextLineSpecification interface.
 //
 // ----------------------------------------------------------------
 //
