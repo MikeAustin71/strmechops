@@ -174,7 +174,7 @@ func (txtLineSpecTitleMarquee *TextLineSpecTitleMarquee) CopyIn(
 //
 // ----------------------------------------------------------------
 //
-//	# Input Parameters
+// # Input Parameters
 //
 //	errorPrefix					interface{}
 //
@@ -307,7 +307,7 @@ func (txtLineSpecTitleMarquee *TextLineSpecTitleMarquee) CopyOut(
 //
 // ----------------------------------------------------------------
 //
-//	# Input Parameters
+// # Input Parameters
 //
 //	errorPrefix					interface{}
 //
@@ -429,6 +429,238 @@ func (txtLineSpecTitleMarquee *TextLineSpecTitleMarquee) CopyOutITextLine(
 					"txtLineSpecTitleMarquee"))
 
 	return ITextLineSpecification(&deepCopyTitleMarquee), err
+}
+
+//	CopyOutPtr
+//
+//	Returns a pointer to a deep copy of the current
+//	TextLineSpecTitleMarquee instance.
+//
+//	If the current TextLineSpecTitleMarquee instance
+//	contains invalid member variables, this method will
+//	return an error.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it	contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	*TextLineSpecTitleMarquee
+//
+//		If this method completes successfully, a pointer
+//		to a deep copy of the current
+//		TextLineSpecTitleMarquee instance will be
+//		returned through this parameter.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (txtLineSpecTitleMarquee *TextLineSpecTitleMarquee) CopyOutPtr(
+	errorPrefix interface{}) (
+	*TextLineSpecTitleMarquee,
+	error) {
+
+	if txtLineSpecTitleMarquee.lock == nil {
+		txtLineSpecTitleMarquee.lock = new(sync.Mutex)
+	}
+
+	txtLineSpecTitleMarquee.lock.Lock()
+
+	defer txtLineSpecTitleMarquee.lock.Unlock()
+
+	deepCopyTitleMarquee := TextLineSpecTitleMarquee{}
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecTitleMarquee."+
+			"CopyOutPtr()",
+		"")
+
+	if err != nil {
+		return &deepCopyTitleMarquee, err
+	}
+
+	err = new(textLineSpecTitleMarqueeNanobot).
+		copy(&deepCopyTitleMarquee,
+			txtLineSpecTitleMarquee,
+			ePrefix.XCpy(
+				"deepCopyTitleMarquee<-"+
+					"txtLineSpecTitleMarquee"))
+
+	return &deepCopyTitleMarquee, err
+}
+
+//	Empty
+//
+//	Resets all internal member variables for the current
+//	instance of TextLineSpecTitleMarquee to their initial
+//	or zero values.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will delete all pre-existing internal
+//	member variable data values in the current instance
+//	of TextLineSpecTitleMarquee.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	NONE
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	NONE
+func (txtLineSpecTitleMarquee *TextLineSpecTitleMarquee) Empty() {
+
+	if txtLineSpecTitleMarquee.lock == nil {
+		txtLineSpecTitleMarquee.lock = new(sync.Mutex)
+	}
+
+	txtLineSpecTitleMarquee.lock.Lock()
+
+	new(textLineSpecTitleMarqueeElectron).
+		empty(txtLineSpecTitleMarquee)
+
+	txtLineSpecTitleMarquee.lock.Unlock()
+
+	txtLineSpecTitleMarquee.lock = nil
+}
+
+//	Equal
+//
+//	Receives a pointer to another instance of
+//	TextLineSpecTitleMarquee and proceeds to compare the
+//	member variables to those of the current
+//	TextLineSpecTitleMarquee instance in order to
+//	determine if they are equivalent.
+//
+//	A boolean flag showing the result of this comparison
+//	is returned. If the member variables of both
+//	instances are equal in all respects, this flag is set
+//	to 'true'. Otherwise, this method returns 'false'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	incomingTitleMarquee	*TextLineSpecTitleMarquee
+//
+//		A pointer to an incoming instance of
+//		TextLineSpecTitleMarquee. This method will
+//		compare all member variable data values in this
+//		instance against those contained in the current
+//		instance of TextLineSpecTitleMarquee. If the data
+//		values in both instances are found to be equal in
+//		all respects, this method will return a boolean
+//		value of 'true'.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	bool
+//
+//		If the member variable data values contained in
+//		input parameter 'incomingTitleMarquee' are equal
+//		in all respects to those contained in the current
+//		instance of TextLineSpecTitleMarquee, this method
+//		will return a boolean value of 'true'. Otherwise,
+//		a value of 'false' will be returned.
+func (txtLineSpecTitleMarquee *TextLineSpecTitleMarquee) Equal(
+	incomingTitleMarquee *TextLineSpecTitleMarquee) bool {
+
+	if txtLineSpecTitleMarquee.lock == nil {
+		txtLineSpecTitleMarquee.lock = new(sync.Mutex)
+	}
+
+	txtLineSpecTitleMarquee.lock.Lock()
+
+	defer txtLineSpecTitleMarquee.lock.Unlock()
+
+	return new(textLineSpecTitleMarqueeElectron).
+		equal(
+			txtLineSpecTitleMarquee,
+			incomingTitleMarquee)
 }
 
 //	NewAllParams
