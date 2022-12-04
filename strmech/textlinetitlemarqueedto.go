@@ -1494,6 +1494,84 @@ func (txtTitleDtoMech *textLineTitleMarqueeDtoMechanics) calcTextFieldLen(
 	return validFieldLen, err
 }
 
+//	empty
+//
+//	Resets all internal member variables for the
+//	TextLineTitleMarqueeDto input parameter
+//	'txtTitleMarqueeDto' to their zero or uninitialized
+//	states.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will delete all member variable data
+//	values in instance of TextLineTitleMarqueeDto passed
+//	as input parameter 'txtTitleMarqueeDto'.
+//
+//	All member variable data values in this instance will
+//	be reset to their zero or uninitialized states.
+//
+// ----------------------------------------------------------------
+//
+//	# Input Parameters
+//
+//
+//	txtTitleMarqueeDto 			*TextLineTitleMarqueeDto
+//
+//		A pointer to an instance of TextLineTitleMarqueeDto.
+//
+//		All the data elements in this instance will be
+//		deleted and reset to their zero values or
+//		uninitialized states.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	NONE
+func (txtTitleDtoMech *textLineTitleMarqueeDtoMechanics) empty(
+	txtTitleMarqueeDto *TextLineTitleMarqueeDto) {
+
+	if txtTitleDtoMech.lock == nil {
+		txtTitleDtoMech.lock = new(sync.Mutex)
+	}
+
+	txtTitleDtoMech.lock.Lock()
+
+	defer txtTitleDtoMech.lock.Unlock()
+
+	if txtTitleMarqueeDto == nil {
+		return
+	}
+
+	txtTitleMarqueeDto.StandardTitleLeftMargin = ""
+
+	txtTitleMarqueeDto.StandardTitleRightMargin = ""
+
+	txtTitleMarqueeDto.StandardMaxLineLen = 0
+
+	txtTitleMarqueeDto.StandardTextFieldLen = 0
+
+	txtTitleMarqueeDto.NumLeadingBlankLines = 0
+
+	txtTitleMarqueeDto.LeadingSolidLineChar = ""
+
+	txtTitleMarqueeDto.NumLeadingSolidLines = 0
+
+	txtTitleMarqueeDto.NumTopTitleBlankLines = 0
+
+	txtTitleMarqueeDto.TitleLines = nil
+
+	txtTitleMarqueeDto.NumBottomTitleBlankLines = 0
+
+	txtTitleMarqueeDto.TrailingSolidLineChar = ""
+
+	txtTitleMarqueeDto.NumTrailingSolidLines = 0
+
+	txtTitleMarqueeDto.NumTrailingBlankLines = 0
+}
+
 // testValidityOfTxtSpecTimerLines - Receives a pointer to an
 // instance of TextLineSpecTimerLines and performs a diagnostic
 // analysis to determine if that instance is valid in all respects.
@@ -1509,55 +1587,59 @@ func (txtTitleDtoMech *textLineTitleMarqueeDtoMechanics) calcTextFieldLen(
 //
 // ----------------------------------------------------------------
 //
-//		# Input Parameters
+//	# Input Parameters
 //
-//		txtTitleMarqueeDto 			*TextLineTitleMarqueeDto
+//	txtTitleMarqueeDto 			*TextLineTitleMarqueeDto
 //
-//			A pointer to an instance of TextLineTitleMarqueeDto.
-//			No data elements in this instance will be modified.
+//		A pointer to an instance of TextLineTitleMarqueeDto.
+//		No data elements in this instance will be modified.
 //
-//			The internal member data elements contained in this
-//			instance will be used to compute a valid value for
-//			text field length passed as input paramter 'fieldLen'.
+//		The internal member data elements contained in this
+//		instance will be used to compute a valid value for
+//		text field length passed as input paramter 'fieldLen'.
 //
 //
-//	 errPrefDto                 *ePref.ErrPrefixDto
-//	    - This object encapsulates an error prefix string which is
-//	      included in all returned error messages. Usually, it
-//	      contains the name of the calling method or methods listed
-//	      as a function chain.
+//	errPrefDto					*ePref.ErrPrefixDto
 //
-//	      If no error prefix information is needed, set this parameter
-//	      to 'nil'.
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
 //
-//	      Type ErrPrefixDto is included in the 'errpref' software
-//	      package, "github.com/MikeAustin71/errpref".
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
 //
-// ------------------------------------------------------------------------
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
 //
-// Return Values
+// ----------------------------------------------------------------
+//
+// # Return Values
 //
 //	isValid                    bool
-//	   - If input parameter 'txtTimerLines' is judged to be valid
-//	     in all respects, this return parameter will be set to
-//	     'true'.
 //
-//	   - If input parameter 'txtTimerLines' is found to be invalid,
-//	     this return parameter will be set to 'false'.
+//		If input parameter 'txtTitleMarqueeDto' is judged
+//		to be valid in all respects, this return parameter
+//		will be set to 'true'.
 //
+//		If input parameter 'txtTitleMarqueeDto' is found to
+//		be invalid, this return parameter will be set to
+//		'false'.
 //
-//	err                        error
-//	   - If input parameter 'txtTimerLines' is judged to be valid
-//	     in all respects, this return parameter will be set to
-//	     'nil'.
+//	err							error
 //
-//	     If input parameter, 'txtTimerLines' is found to be
-//	     invalid, this return parameter will be configured with an
-//	     appropriate error message.
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
 //
-//	     If an error message is returned, the text value for input
-//	     parameter 'errPrefDto' (error prefix) will be prefixed or
-//	     attached at the beginning of the error message.
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
 func (txtTitleDtoMech *textLineTitleMarqueeDtoMechanics) testValidityOfTitleMarqueeDto(
 	txtTitleMarqueeDto *TextLineTitleMarqueeDto,
 	errPrefDto *ePref.ErrPrefixDto) (
@@ -1666,6 +1748,38 @@ func (txtTitleDtoMech *textLineTitleMarqueeDtoMechanics) testValidityOfTitleMarq
 	if txtTitleMarqueeDto.NumTrailingBlankLines < 0 {
 
 		txtTitleMarqueeDto.NumTrailingBlankLines = 0
+	}
+
+	if txtTitleMarqueeDto.NumLeadingSolidLines > 0 &&
+		len(txtTitleMarqueeDto.LeadingSolidLineChar) == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: The TextLineTitleMarqueeDto contains invalid data values!\n"+
+			"'LeadingSolidLineChar' has NOT been properly configured.\n"+
+			"'NumLeadingSolidLines' has a value greater than zero, but"+
+			"'LeadingSolidLineChar' is an empty string.\n"+
+			"NumLeadingSolidLines = %v\n",
+			ePrefix.String(),
+			txtTitleMarqueeDto.NumLeadingSolidLines)
+
+		return isValid, err
+
+	}
+
+	if txtTitleMarqueeDto.NumTrailingSolidLines > 0 &&
+		len(txtTitleMarqueeDto.TrailingSolidLineChar) == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: The TextLineTitleMarqueeDto contains invalid data values!\n"+
+			"'TrailingSolidLineChar' has NOT been properly configured.\n"+
+			"'NumTrailingSolidLines' has a value greater than zero, but"+
+			"'TrailingSolidLineChar' is an empty string.\n"+
+			"NumTrailingSolidLines = %v\n",
+			ePrefix.String(),
+			txtTitleMarqueeDto.NumTrailingSolidLines)
+
+		return isValid, err
+
 	}
 
 	isValid = true
