@@ -357,6 +357,7 @@ func (txtLineTitleMarqueeDto *TextLineTitleMarqueeDto) AddDateTimeTitleLine(
 	txtLineTitleMarqueeDto.lock.Lock()
 
 	defer txtLineTitleMarqueeDto.lock.Unlock()
+
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
 
@@ -1143,6 +1144,52 @@ func (txtLineTitleMarqueeDto *TextLineTitleMarqueeDto) AddStandardTitleLine(
 			deepCopyStdTitleLine)
 
 	return err
+}
+
+//	Empty
+//
+//	Resets all internal member variables for the current
+//	instance of TextLineTitleMarqueeDto to their zero or
+//	uninitialized states.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will delete all member variable data
+//	values in the current instance of
+//	TextLineTitleMarqueeDto.
+//
+//	All member variable data values in this instance will
+//	be reset to their zero or uninitialized states.
+//
+// ----------------------------------------------------------------
+//
+//	# Input Parameters
+//
+//	NONE
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	NONE
+func (txtLineTitleMarqueeDto *TextLineTitleMarqueeDto) Empty() {
+
+	if txtLineTitleMarqueeDto.lock == nil {
+		txtLineTitleMarqueeDto.lock = new(sync.Mutex)
+	}
+
+	txtLineTitleMarqueeDto.lock.Lock()
+
+	new(textLineTitleMarqueeDtoMechanics).empty(
+		txtLineTitleMarqueeDto)
+
+	txtLineTitleMarqueeDto.lock.Unlock()
+
+	txtLineTitleMarqueeDto.lock = nil
+
+	return
 }
 
 //	IsValidInstanceError
