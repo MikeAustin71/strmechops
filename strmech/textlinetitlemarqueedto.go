@@ -1721,18 +1721,23 @@ func (txtTitleDtoMech *textLineTitleMarqueeDtoMechanics) empty(
 	txtTitleMarqueeDto.NumTrailingBlankLines = 0
 }
 
-// testValidityOfTxtSpecTimerLines - Receives a pointer to an
-// instance of TextLineSpecTimerLines and performs a diagnostic
-// analysis to determine if that instance is valid in all respects.
+//	testValidityOfTitleMarqueeDto
 //
-// If the input parameter 'txtTimerLines' is determined to be
-// invalid, this method will return a boolean flag ('isValid') of
-// 'false'. In addition, an instance of type error ('err') will be
-// returned configured with an appropriate error message.
+//	Receives a pointer to an instance of
+//	TextLineTitleMarqueeDto and performs a diagnostic
+//	analysis to determine if that instance is valid in
+//	all respects.
 //
-// If the input parameter 'txtTimerLines' is valid, this method
-// will return a boolean flag ('isValid') of 'true' and the
-// returned error type ('err') will be set to 'nil'.
+//	If the input parameter 'txtTitleMarqueeDto' is
+//	determined to be invalid, this method will return a
+//	boolean flag ('isValid') of 'false'. In addition, an
+//	instance of type error ('err') will be returned
+//	configured with an appropriate error message.
+//
+//	If the input parameter 'txtTitleMarqueeDto' is valid,
+//	this method will return a boolean flag ('isValid') of
+//	'true' and the returned error type ('err') will be
+//	set to 'nil'.
 //
 // ----------------------------------------------------------------
 //
@@ -1744,8 +1749,8 @@ func (txtTitleDtoMech *textLineTitleMarqueeDtoMechanics) empty(
 //		No data elements in this instance will be modified.
 //
 //		The internal member data elements contained in this
-//		instance will be used to compute a valid value for
-//		text field length passed as input paramter 'fieldLen'.
+//		instance will be analyzed to determine if they are
+//		valid in all respects.
 //
 //
 //	errPrefDto					*ePref.ErrPrefixDto
@@ -1779,11 +1784,13 @@ func (txtTitleDtoMech *textLineTitleMarqueeDtoMechanics) empty(
 //
 //	err							error
 //
-//		If this method completes successfully, the
-//		returned error Type is set equal to 'nil'. If
-//		errors are encountered during processing, the
-//		returned error Type will encapsulate an error
-//		message.
+//		If input parameter 'txtTitleMarqueeDto' is judged
+//		to be valid in all respects, the returned error
+//		Type is set equal to 'nil'.
+//
+//		If input parameter 'txtTitleMarqueeDto' is found
+//		to be invalid, the returned error Type will
+//		encapsulate an appropriate error message.
 //
 //		If an error message is returned, the text value
 //		for input parameter 'errPrefDto' (error prefix)
@@ -1862,7 +1869,8 @@ func (txtTitleDtoMech *textLineTitleMarqueeDtoMechanics) testValidityOfTitleMarq
 	if maxAvailableTextFieldLen < 1 {
 
 		err = fmt.Errorf("%v\n"+
-			"Error: 'maxAvailableTextFieldLen' produces a value less than one (1).\n"+
+			"Error: The TextLineTitleMarqueeDto contains invalid data values!\n"+
+			"'maxAvailableTextFieldLen' produces a value less than one (1).\n"+
 			"maxAvailableTextFieldLen = \n"+
 			"	StandardMaxLineLen - Left Margin Length - Right Margin Length -1\n"+
 			"StandardMaxLineLen is probably invalid."+

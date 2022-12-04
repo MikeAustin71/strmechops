@@ -135,7 +135,20 @@ func (txtLineTitleMarqueeNanobot *textLineSpecTitleMarqueeNanobot) copy(
 		return err
 	}
 
-	new(textLineSpecTitleMarqueeElectron).empty(
+	txtLineTitleMarqueeElectron :=
+		textLineSpecTitleMarqueeElectron{}
+
+	_,
+		err = txtLineTitleMarqueeElectron.testValidityTitleMarquee(
+		sourceTitleMarquee,
+		ePrefix.XCpy(
+			"sourceTitleMarquee"))
+
+	if err != nil {
+		return err
+	}
+
+	txtLineTitleMarqueeElectron.empty(
 		destinationTitleMarquee)
 
 	destinationTitleMarquee.standardTitleLeftMargin =
