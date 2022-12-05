@@ -1280,6 +1280,60 @@ func (txtLineSpecTitleMarquee *TextLineSpecTitleMarquee) Read(
 	return n, err
 }
 
+//	ReaderInitialize
+//
+//	This method will reset the internal member variable
+//	'TextLineSpecTitleMarquee.textLineReader' to its
+//	initial zero state of 'nil'. Effectively, this resets
+//	the internal strings.Reader object for use in future
+//	read operations.
+//
+//	This method is rarely used or needed. It provides a
+//	means of reinitializing the internal strings.Reader
+//	object in case an error occurs during a read
+//	operation initiated by method
+//	TextLineSpecTitleMarquee.Read().
+//
+//	Calling this method cleans up the residue from an
+//	aborted read operation and prepares the
+//	strings.Reader object for future read operations.
+//
+//	If any errors are returned by method
+//	TextLineSpecTitleMarquee.Read() which are NOT equal
+//	to io.EOF, call this method,
+//	TextLineSpecTitleMarquee.ReaderInitialize(), to reset
+//	and prepare the internal reader for future read
+//	operations.
+//
+//	This method fulfills requirements of the
+//	ITextLineSpecification interface.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	NONE
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	NONE
+func (txtLineSpecTitleMarquee *TextLineSpecTitleMarquee) ReaderInitialize() {
+
+	if txtLineSpecTitleMarquee.lock == nil {
+		txtLineSpecTitleMarquee.lock = new(sync.Mutex)
+	}
+
+	txtLineSpecTitleMarquee.lock.Lock()
+
+	defer txtLineSpecTitleMarquee.lock.Unlock()
+
+	txtLineSpecTitleMarquee.textLineReader = nil
+
+	return
+}
+
 //	NewAllParams
 //
 //	Creates and returns a new instance of
