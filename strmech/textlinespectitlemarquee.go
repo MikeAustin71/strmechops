@@ -1536,6 +1536,38 @@ func (txtLineSpecTitleMarquee *TextLineSpecTitleMarquee) TextBuilder(
 	return err
 }
 
+//	TextLineSpecName
+//
+//	Returns a string specifying the name of this Text
+//	Line Specification (TextLineSpecTitleMarquee).
+//
+//	This method fulfills requirements of
+//	ITextLineSpecification interface.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	NONE
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	NONE
+func (txtLineSpecTitleMarquee *TextLineSpecTitleMarquee) TextLineSpecName() string {
+
+	if txtLineSpecTitleMarquee.lock == nil {
+		txtLineSpecTitleMarquee.lock = new(sync.Mutex)
+	}
+
+	txtLineSpecTitleMarquee.lock.Lock()
+
+	defer txtLineSpecTitleMarquee.lock.Unlock()
+
+	return "TextLineSpecTitleMarquee"
+}
+
 //	NewAllParams
 //
 //	Creates and returns a new instance of
