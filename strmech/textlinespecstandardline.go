@@ -2195,9 +2195,6 @@ func (stdLine *TextLineSpecStandardLine) EqualITextLine(
 // value of internal member variable' stdLine.numOfStdLines' is
 // greater than one ('1').
 //
-// If an error occurs, the error message will be included in the
-// returned string.
-//
 // This method is similar to TextLineSpecStandardLine.String() with
 // the sole difference being that this method returns an error.
 //

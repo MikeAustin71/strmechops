@@ -160,7 +160,7 @@ func (srcCodeComments *SourceCodeComments) testPrimaryComments() {
 //
 // ----------------------------------------------------------------
 //
-//	# Input Parameters
+// # Input Parameters
 //
 //	errPrefDto					*ePref.ErrPrefixDto
 //
