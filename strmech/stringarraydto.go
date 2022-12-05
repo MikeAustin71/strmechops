@@ -778,6 +778,57 @@ func (strArrayDto *StringArrayDto) GetDescription2() string {
 	return strArrayDto.Description2
 }
 
+//	GetMinStringLen
+//
+//	Returns the length of the shortest string in the
+//	internal string array maintained by the current
+//	instance of StringArrayDto:
+//
+//			StringArrayDto.StrArray
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	NONE
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	int
+//
+//		This parameter returns the length of the shortest
+//		string in the internal string array maintained by
+//		the current instance of StringArrayDto:
+//
+//			StringArrayDto.StrArray
+func (strArrayDto *StringArrayDto) GetMinStringLen() int {
+
+	if strArrayDto.lock == nil {
+		strArrayDto.lock = new(sync.Mutex)
+	}
+
+	strArrayDto.lock.Lock()
+
+	defer strArrayDto.lock.Unlock()
+
+	var minStrLen = len(strArrayDto.StrArray[0])
+	var lenStr int
+
+	for i := 1; i < len(strArrayDto.StrArray); i++ {
+
+		lenStr = len(strArrayDto.StrArray[i])
+
+		if lenStr < minStrLen {
+			minStrLen = lenStr
+		}
+
+	}
+
+	return minStrLen
+}
+
 //	GetMaxStringLen
 //
 //	Returns the length of the longest string in the
