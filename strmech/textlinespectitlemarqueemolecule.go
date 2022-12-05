@@ -32,7 +32,7 @@ type textLineSpecTitleMarqueeMolecule struct {
 //			will be written to this instance of
 //			strings.Builder.
 //
-//		txtLineTitleMarquee			*TextLineSpecTitleMarquee
+//	txtLineTitleMarquee			*TextLineSpecTitleMarquee
 //
 //			A pointer to an instance of
 //			TextLineSpecTitleMarquee. The member variables

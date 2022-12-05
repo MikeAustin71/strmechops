@@ -3,6 +3,7 @@ package strmech
 import (
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
+	"strings"
 	"sync"
 )
 
@@ -98,18 +99,18 @@ type TextLineSpecLinesCollection struct {
 //	     If an error message is returned, the text value of input
 //	     parameter 'errorPrefix' will be inserted or prefixed at
 //	     the beginning of the error message.
-func (txtLinesCol *TextLineSpecLinesCollection) AddTextLine(
+func (txtLinesSpecCol *TextLineSpecLinesCollection) AddTextLine(
 	textLine ITextLineSpecification,
 	errorPrefix interface{}) (
 	err error) {
 
-	if txtLinesCol.lock == nil {
-		txtLinesCol.lock = new(sync.Mutex)
+	if txtLinesSpecCol.lock == nil {
+		txtLinesSpecCol.lock = new(sync.Mutex)
 	}
 
-	txtLinesCol.lock.Lock()
+	txtLinesSpecCol.lock.Lock()
 
-	defer txtLinesCol.lock.Unlock()
+	defer txtLinesSpecCol.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -126,10 +127,10 @@ func (txtLinesCol *TextLineSpecLinesCollection) AddTextLine(
 	txtLinesColNanobot := textLineSpecLinesCollectionNanobot{}
 
 	err = txtLinesColNanobot.addTextLine(
-		txtLinesCol,
+		txtLinesSpecCol,
 		textLine,
 		ePrefix.XCpy(
-			"txtLinesCol<-textLine"))
+			"txtLinesSpecCol<-textLine"))
 
 	return err
 }
@@ -226,17 +227,17 @@ func (txtLinesCol *TextLineSpecLinesCollection) AddTextLine(
 //	     If an error message is returned, the text value of input
 //	     parameter 'errorPrefix' will be inserted or prefixed at
 //	     the beginning of the error message.
-func (txtLinesCol *TextLineSpecLinesCollection) CopyIn(
+func (txtLinesSpecCol *TextLineSpecLinesCollection) CopyIn(
 	incomingTxtLinesCol *TextLineSpecLinesCollection,
 	errorPrefix interface{}) error {
 
-	if txtLinesCol.lock == nil {
-		txtLinesCol.lock = new(sync.Mutex)
+	if txtLinesSpecCol.lock == nil {
+		txtLinesSpecCol.lock = new(sync.Mutex)
 	}
 
-	txtLinesCol.lock.Lock()
+	txtLinesSpecCol.lock.Lock()
 
-	defer txtLinesCol.lock.Unlock()
+	defer txtLinesSpecCol.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
@@ -251,13 +252,13 @@ func (txtLinesCol *TextLineSpecLinesCollection) CopyIn(
 		return err
 	}
 
-	return textLineSpecLinesCollectionNanobot{}.ptr().
+	return new(textLineSpecLinesCollectionNanobot).
 		copyIn(
-			txtLinesCol,
+			txtLinesSpecCol,
 			incomingTxtLinesCol,
 			ePrefix.XCpy(
 				"incomingTxtLinesCol->"+
-					"txtLinesCol"))
+					"txtLinesSpecCol"))
 }
 
 // CopyOut - Returns a deep copy of the current
@@ -334,18 +335,18 @@ func (txtLinesCol *TextLineSpecLinesCollection) CopyIn(
 //	     If an error message is returned, the text value of input
 //	     parameter 'errorPrefix' will be inserted or prefixed at
 //	     the beginning of the error message.
-func (txtLinesCol *TextLineSpecLinesCollection) CopyOut(
+func (txtLinesSpecCol *TextLineSpecLinesCollection) CopyOut(
 	errorPrefix interface{}) (
 	TextLineSpecLinesCollection,
 	error) {
 
-	if txtLinesCol.lock == nil {
-		txtLinesCol.lock = new(sync.Mutex)
+	if txtLinesSpecCol.lock == nil {
+		txtLinesSpecCol.lock = new(sync.Mutex)
 	}
 
-	txtLinesCol.lock.Lock()
+	txtLinesSpecCol.lock.Lock()
 
-	defer txtLinesCol.lock.Unlock()
+	defer txtLinesSpecCol.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
@@ -360,11 +361,11 @@ func (txtLinesCol *TextLineSpecLinesCollection) CopyOut(
 		return TextLineSpecLinesCollection{}, err
 	}
 
-	return textLineSpecLinesCollectionNanobot{}.ptr().
+	return new(textLineSpecLinesCollectionNanobot).
 		copyOut(
-			txtLinesCol,
+			txtLinesSpecCol,
 			ePrefix.XCpy(
-				"txtLinesCol->"))
+				"txtLinesSpecCol->"))
 }
 
 // DeleteTextLineMember - Deletes a member of the Text Lines
@@ -465,17 +466,17 @@ func (txtLinesCol *TextLineSpecLinesCollection) CopyOut(
 //	     If an error message is returned, the text value of input
 //	     parameter 'errorPrefix' will be inserted or prefixed at
 //	     the beginning of the error message.
-func (txtLinesCol *TextLineSpecLinesCollection) DeleteTextLineMember(
+func (txtLinesSpecCol *TextLineSpecLinesCollection) DeleteTextLineMember(
 	zeroBasedIndex int,
 	errorPrefix interface{}) error {
 
-	if txtLinesCol.lock == nil {
-		txtLinesCol.lock = new(sync.Mutex)
+	if txtLinesSpecCol.lock == nil {
+		txtLinesSpecCol.lock = new(sync.Mutex)
 	}
 
-	txtLinesCol.lock.Lock()
+	txtLinesSpecCol.lock.Lock()
 
-	defer txtLinesCol.lock.Unlock()
+	defer txtLinesSpecCol.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
@@ -493,11 +494,11 @@ func (txtLinesCol *TextLineSpecLinesCollection) DeleteTextLineMember(
 
 	err = textLineSpecLinesCollectionElectron{}.ptr().
 		deleteTextLineElement(
-			txtLinesCol,
+			txtLinesSpecCol,
 			zeroBasedIndex,
 			ePrefix.XCpy(
 				fmt.Sprintf(
-					"Delete Element txtLinesCol[%v]",
+					"Delete Element txtLinesSpecCol[%v]",
 					zeroBasedIndex)))
 
 	return err
@@ -513,20 +514,20 @@ func (txtLinesCol *TextLineSpecLinesCollection) DeleteTextLineMember(
 // If you wish to delete the text line collection and immediately
 // reuse this TextLineSpecLinesCollection instance, use method
 // TextLineSpecLinesCollection.EmptyTextLines() instead.
-func (txtLinesCol *TextLineSpecLinesCollection) Empty() {
+func (txtLinesSpecCol *TextLineSpecLinesCollection) Empty() {
 
-	if txtLinesCol.lock == nil {
-		txtLinesCol.lock = new(sync.Mutex)
+	if txtLinesSpecCol.lock == nil {
+		txtLinesSpecCol.lock = new(sync.Mutex)
 	}
 
-	txtLinesCol.lock.Lock()
+	txtLinesSpecCol.lock.Lock()
 
 	textLineSpecLinesCollectionAtom{}.ptr().
-		emptyCollection(txtLinesCol)
+		emptyCollection(txtLinesSpecCol)
 
-	txtLinesCol.lock.Unlock()
+	txtLinesSpecCol.lock.Unlock()
 
-	txtLinesCol.lock = nil
+	txtLinesSpecCol.lock = nil
 
 	return
 }
@@ -538,18 +539,18 @@ func (txtLinesCol *TextLineSpecLinesCollection) Empty() {
 // means that the TextLineSpecLinesCollection instance is
 // immediately for reuse and new text lines may be added to the now
 // empty collection.
-func (txtLinesCol *TextLineSpecLinesCollection) EmptyTextLines() {
+func (txtLinesSpecCol *TextLineSpecLinesCollection) EmptyTextLines() {
 
-	if txtLinesCol.lock == nil {
-		txtLinesCol.lock = new(sync.Mutex)
+	if txtLinesSpecCol.lock == nil {
+		txtLinesSpecCol.lock = new(sync.Mutex)
 	}
 
-	txtLinesCol.lock.Lock()
+	txtLinesSpecCol.lock.Lock()
 
-	defer txtLinesCol.lock.Unlock()
+	defer txtLinesSpecCol.lock.Unlock()
 
 	textLineSpecLinesCollectionAtom{}.ptr().
-		emptyCollection(txtLinesCol)
+		emptyCollection(txtLinesSpecCol)
 
 	return
 }
@@ -563,20 +564,20 @@ func (txtLinesCol *TextLineSpecLinesCollection) EmptyTextLines() {
 // returned. If the member variables of both instances are equal in
 // all respects, this flag is set to 'true'. Otherwise, this method
 // returns 'false'.
-func (txtLinesCol *TextLineSpecLinesCollection) Equal(
+func (txtLinesSpecCol *TextLineSpecLinesCollection) Equal(
 	textLinesCol02 *TextLineSpecLinesCollection) bool {
 
-	if txtLinesCol.lock == nil {
-		txtLinesCol.lock = new(sync.Mutex)
+	if txtLinesSpecCol.lock == nil {
+		txtLinesSpecCol.lock = new(sync.Mutex)
 	}
 
-	txtLinesCol.lock.Lock()
+	txtLinesSpecCol.lock.Lock()
 
-	defer txtLinesCol.lock.Unlock()
+	defer txtLinesSpecCol.lock.Unlock()
 
 	return textLineSpecLinesCollectionAtom{}.ptr().
 		equalCollections(
-			txtLinesCol,
+			txtLinesSpecCol,
 			textLinesCol02)
 }
 
@@ -588,17 +589,286 @@ func (txtLinesCol *TextLineSpecLinesCollection) Equal(
 // verification that text lines exist and are ready for formatting.
 // Once properly formatted text lines may be presented for text
 // display, file output or printing.
-func (txtLinesCol *TextLineSpecLinesCollection) GetNumberOfTextLines() int {
+func (txtLinesSpecCol *TextLineSpecLinesCollection) GetNumberOfTextLines() int {
 
-	if txtLinesCol.lock == nil {
-		txtLinesCol.lock = new(sync.Mutex)
+	if txtLinesSpecCol.lock == nil {
+		txtLinesSpecCol.lock = new(sync.Mutex)
 	}
 
-	txtLinesCol.lock.Lock()
+	txtLinesSpecCol.lock.Lock()
 
-	defer txtLinesCol.lock.Unlock()
+	defer txtLinesSpecCol.lock.Unlock()
 
-	return len(txtLinesCol.textLines)
+	return len(txtLinesSpecCol.textLines)
+}
+
+//	GetFormattedText
+//
+//	Generates formatted text strings for all member
+//	elements in the Text Line Specification Collection
+//	maintained by the current instance of
+//	TextLineSpecLinesCollection. These formatted text
+//	strings are then written to a String Builder
+//	(strBuilder) passed as an input parameter.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	strBuilder					*strings.Builder
+//
+//			A pointer to an instance of strings.Builder.
+//			The formatted text strings generated from
+//			the current instance of
+//			TextLineSpecLinesCollection
+//			('txtLinesSpecCol') will be written to this
+//			instance of strings.Builder.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it	contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (txtLinesSpecCol *TextLineSpecLinesCollection) GetFormattedText(
+	strBuilder *strings.Builder,
+	errorPrefix interface{}) error {
+
+	if txtLinesSpecCol.lock == nil {
+		txtLinesSpecCol.lock = new(sync.Mutex)
+	}
+
+	txtLinesSpecCol.lock.Lock()
+
+	defer txtLinesSpecCol.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecLinesCollection."+
+			"GetFormattedText()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	return new(textLineSpecLinesCollectionNanobot).
+		getFormattedText(
+			strBuilder,
+			txtLinesSpecCol,
+			ePrefix.XCpy(
+				"txtLinesSpecCol"))
+}
+
+//	GetFmtTextStrArray
+//
+//	Generates formatted text strings from the Text Line
+//	Specifications collection maintained by the current
+//	instance of TextLineSpecLinesCollection. These text
+//	strings are then returned as individual elements in
+//	a string array.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it	contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	StringArrayDto
+//
+//		If this method completes successfully, an
+//		instance of StringArrayDto will be returned
+//		encapsulating a string array containing the
+//		formatted text strings generated from the
+//		Text Line Specification objects contained in
+//		the current instance of
+//		TextLineSpecLinesCollection.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (txtLinesSpecCol *TextLineSpecLinesCollection) GetFmtTextStrArray(
+	errorPrefix interface{}) (
+	StringArrayDto,
+	error) {
+
+	if txtLinesSpecCol.lock == nil {
+		txtLinesSpecCol.lock = new(sync.Mutex)
+	}
+
+	txtLinesSpecCol.lock.Lock()
+
+	defer txtLinesSpecCol.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	txtStrArray := new(StringArrayDto).New()
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecLinesCollection."+
+			"GetFmtTextStrArray()",
+		"")
+
+	if err != nil {
+		return txtStrArray, err
+	}
+
+	var strArrayDto StringArrayDto
+
+	err = new(textLineSpecLinesCollectionNanobot).
+		getFormattedTextStrArray(
+			&strArrayDto,
+			txtLinesSpecCol,
+			ePrefix.XCpy(
+				"txtLinesSpecCol"))
+
+	return strArrayDto, err
 }
 
 // GetTextLine - Returns a deep copy of the Text Line Collection
@@ -749,19 +1019,19 @@ func (txtLinesCol *TextLineSpecLinesCollection) GetNumberOfTextLines() int {
 //	   // 'stdLine' is now available for use
 //	   // as a concrete object.
 //	   stdLineLen := stdLine.GetSingleLineLength()
-func (txtLinesCol *TextLineSpecLinesCollection) GetTextLine(
+func (txtLinesSpecCol *TextLineSpecLinesCollection) GetTextLine(
 	zeroBasedIndex int,
 	errorPrefix interface{}) (
 	ITextLineSpecification,
 	error) {
 
-	if txtLinesCol.lock == nil {
-		txtLinesCol.lock = new(sync.Mutex)
+	if txtLinesSpecCol.lock == nil {
+		txtLinesSpecCol.lock = new(sync.Mutex)
 	}
 
-	txtLinesCol.lock.Lock()
+	txtLinesSpecCol.lock.Lock()
 
-	defer txtLinesCol.lock.Unlock()
+	defer txtLinesSpecCol.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
@@ -782,12 +1052,12 @@ func (txtLinesCol *TextLineSpecLinesCollection) GetTextLine(
 	iTextLineSpec,
 		err = textLineSpecLinesCollectionAtom{}.ptr().
 		peekPopTextLine(
-			txtLinesCol,
+			txtLinesSpecCol,
 			zeroBasedIndex,
 			false,
 			ePrefix.XCpy(
 				fmt.Sprintf(
-					"txtLinesCol[%v]",
+					"txtLinesSpecCol[%v]",
 					zeroBasedIndex)))
 
 	return iTextLineSpec, err
@@ -878,18 +1148,18 @@ func (txtLinesCol *TextLineSpecLinesCollection) GetTextLine(
 //	     If an error message is returned, the text value of input
 //	     parameter 'errorPrefix' will be inserted or prefixed at
 //	     the beginning of the error message.
-func (txtLinesCol *TextLineSpecLinesCollection) GetTextLineCollection(
+func (txtLinesSpecCol *TextLineSpecLinesCollection) GetTextLineCollection(
 	errorPrefix interface{}) (
 	[]ITextLineSpecification,
 	error) {
 
-	if txtLinesCol.lock == nil {
-		txtLinesCol.lock = new(sync.Mutex)
+	if txtLinesSpecCol.lock == nil {
+		txtLinesSpecCol.lock = new(sync.Mutex)
 	}
 
-	txtLinesCol.lock.Lock()
+	txtLinesSpecCol.lock.Lock()
 
-	defer txtLinesCol.lock.Unlock()
+	defer txtLinesSpecCol.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
@@ -905,7 +1175,7 @@ func (txtLinesCol *TextLineSpecLinesCollection) GetTextLineCollection(
 		return nil, err
 	}
 
-	lenTxtLines := len(txtLinesCol.textLines)
+	lenTxtLines := len(txtLinesSpecCol.textLines)
 
 	if lenTxtLines == 0 {
 
@@ -922,9 +1192,9 @@ func (txtLinesCol *TextLineSpecLinesCollection) GetTextLineCollection(
 
 	for i := 0; i < lenTxtLines; i++ {
 
-		if txtLinesCol.textLines[i] == nil {
+		if txtLinesSpecCol.textLines[i] == nil {
 			err = fmt.Errorf("%v\n"+
-				"Error: Text Line element txtLinesCol.textLines[%v]\n"+
+				"Error: Text Line element txtLinesSpecCol.textLines[%v]\n"+
 				"has a 'nil' value!\n",
 				ePrefix.String(),
 				i)
@@ -932,10 +1202,10 @@ func (txtLinesCol *TextLineSpecLinesCollection) GetTextLineCollection(
 			return nil, err
 		}
 
-		err = txtLinesCol.textLines[i].IsValidInstanceError(
+		err = txtLinesSpecCol.textLines[i].IsValidInstanceError(
 			ePrefix.XCpy(
 				fmt.Sprintf(
-					"txtLinesCol.textLines[%v] invalid",
+					"txtLinesSpecCol.textLines[%v] invalid",
 					i)))
 
 		if err != nil {
@@ -945,10 +1215,10 @@ func (txtLinesCol *TextLineSpecLinesCollection) GetTextLineCollection(
 		var newTextLine ITextLineSpecification
 
 		newTextLine,
-			err = txtLinesCol.textLines[i].CopyOutITextLine(
+			err = txtLinesSpecCol.textLines[i].CopyOutITextLine(
 			ePrefix.XCpy(
 				fmt.Sprintf(
-					"txtLinesCol.textLines[%v] copy error",
+					"txtLinesSpecCol.textLines[%v] copy error",
 					i)))
 
 		if err != nil {
@@ -1092,20 +1362,20 @@ func (txtLinesCol *TextLineSpecLinesCollection) GetTextLineCollection(
 //	     If an error message is returned, the text value of input
 //	     parameter 'errorPrefix' will be inserted or prefixed at
 //	     the beginning of the error message.
-func (txtLinesCol *TextLineSpecLinesCollection) InsertTextLine(
+func (txtLinesSpecCol *TextLineSpecLinesCollection) InsertTextLine(
 	textLine ITextLineSpecification,
 	zeroBasedIndex int,
 	errorPrefix interface{}) (
 	lastIndexId int,
 	err error) {
 
-	if txtLinesCol.lock == nil {
-		txtLinesCol.lock = new(sync.Mutex)
+	if txtLinesSpecCol.lock == nil {
+		txtLinesSpecCol.lock = new(sync.Mutex)
 	}
 
-	txtLinesCol.lock.Lock()
+	txtLinesSpecCol.lock.Lock()
 
-	defer txtLinesCol.lock.Unlock()
+	defer txtLinesSpecCol.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -1125,12 +1395,12 @@ func (txtLinesCol *TextLineSpecLinesCollection) InsertTextLine(
 	lastIndexId,
 		err = new(textLineSpecLinesCollectionAtom).
 		insertTextLine(
-			txtLinesCol,
+			txtLinesSpecCol,
 			textLine,
 			zeroBasedIndex,
 			ePrefix.XCpy(
 				fmt.Sprintf(
-					"txtLinesCol[%v]<-textLine",
+					"txtLinesSpecCol[%v]<-textLine",
 					zeroBasedIndex)))
 
 	return lastIndexId, err
@@ -1167,21 +1437,21 @@ func (txtLinesCol *TextLineSpecLinesCollection) InsertTextLine(
 //	     of TextLineSpecLinesCollection are valid, this returned
 //	     boolean value is set to 'true'. If any data values are
 //	     invalid, this return parameter is set to 'false'.
-func (txtLinesCol *TextLineSpecLinesCollection) IsValidInstance() (
+func (txtLinesSpecCol *TextLineSpecLinesCollection) IsValidInstance() (
 	isValid bool) {
 
-	if txtLinesCol.lock == nil {
-		txtLinesCol.lock = new(sync.Mutex)
+	if txtLinesSpecCol.lock == nil {
+		txtLinesSpecCol.lock = new(sync.Mutex)
 	}
 
-	txtLinesCol.lock.Lock()
+	txtLinesSpecCol.lock.Lock()
 
-	defer txtLinesCol.lock.Unlock()
+	defer txtLinesSpecCol.lock.Unlock()
 
 	isValid,
 		_ = textLineSpecLinesCollectionAtom{}.ptr().
 		testValidityOfTextLinesCollection(
-			txtLinesCol,
+			txtLinesSpecCol,
 			nil)
 
 	return isValid
@@ -1267,16 +1537,16 @@ func (txtLinesCol *TextLineSpecLinesCollection) IsValidInstance() (
 //	     If an error message is returned, the text value of input
 //	     parameter 'errorPrefix' (error prefix) will be inserted or
 //	     prefixed at the beginning of the error message.
-func (txtLinesCol *TextLineSpecLinesCollection) IsValidInstanceError(
+func (txtLinesSpecCol *TextLineSpecLinesCollection) IsValidInstanceError(
 	errorPrefix interface{}) error {
 
-	if txtLinesCol.lock == nil {
-		txtLinesCol.lock = new(sync.Mutex)
+	if txtLinesSpecCol.lock == nil {
+		txtLinesSpecCol.lock = new(sync.Mutex)
 	}
 
-	txtLinesCol.lock.Lock()
+	txtLinesSpecCol.lock.Lock()
 
-	defer txtLinesCol.lock.Unlock()
+	defer txtLinesSpecCol.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
@@ -1295,9 +1565,9 @@ func (txtLinesCol *TextLineSpecLinesCollection) IsValidInstanceError(
 	_,
 		err = textLineSpecLinesCollectionAtom{}.ptr().
 		testValidityOfTextLinesCollection(
-			txtLinesCol,
+			txtLinesSpecCol,
 			ePrefix.XCpy(
-				"txtLinesCol"))
+				"txtLinesSpecCol"))
 
 	return err
 }
@@ -1328,15 +1598,15 @@ func (txtLinesCol *TextLineSpecLinesCollection) IsValidInstanceError(
 //	     of TextLineSpecLinesCollection. The Text Line Collection
 //	     encapsulated by this instance contains zero member
 //	     elements.
-func (txtLinesCol TextLineSpecLinesCollection) New() TextLineSpecLinesCollection {
+func (txtLinesSpecCol TextLineSpecLinesCollection) New() TextLineSpecLinesCollection {
 
-	if txtLinesCol.lock == nil {
-		txtLinesCol.lock = new(sync.Mutex)
+	if txtLinesSpecCol.lock == nil {
+		txtLinesSpecCol.lock = new(sync.Mutex)
 	}
 
-	txtLinesCol.lock.Lock()
+	txtLinesSpecCol.lock.Lock()
 
-	defer txtLinesCol.lock.Unlock()
+	defer txtLinesSpecCol.lock.Unlock()
 
 	newTxtLineSpec := TextLineSpecLinesCollection{}
 
@@ -1436,19 +1706,19 @@ func (txtLinesCol TextLineSpecLinesCollection) New() TextLineSpecLinesCollection
 //	     If an error message is returned, the text value of input
 //	     parameter 'errorPrefix' will be inserted or prefixed at
 //	     the beginning of the error message.
-func (txtLinesCol TextLineSpecLinesCollection) NewTextLine(
+func (txtLinesSpecCol TextLineSpecLinesCollection) NewTextLine(
 	textLine ITextLineSpecification,
 	errorPrefix interface{}) (
 	newTextLineCol TextLineSpecLinesCollection,
 	err error) {
 
-	if txtLinesCol.lock == nil {
-		txtLinesCol.lock = new(sync.Mutex)
+	if txtLinesSpecCol.lock == nil {
+		txtLinesSpecCol.lock = new(sync.Mutex)
 	}
 
-	txtLinesCol.lock.Lock()
+	txtLinesSpecCol.lock.Lock()
 
-	defer txtLinesCol.lock.Unlock()
+	defer txtLinesSpecCol.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -1500,15 +1770,15 @@ func (txtLinesCol TextLineSpecLinesCollection) NewTextLine(
 //	     uninitialized instance of TextLineSpecLinesCollection. The
 //	     Text Line Collection encapsulated by this instance
 //	     contains zero member elements.
-func (txtLinesCol TextLineSpecLinesCollection) NewPtr() *TextLineSpecLinesCollection {
+func (txtLinesSpecCol TextLineSpecLinesCollection) NewPtr() *TextLineSpecLinesCollection {
 
-	if txtLinesCol.lock == nil {
-		txtLinesCol.lock = new(sync.Mutex)
+	if txtLinesSpecCol.lock == nil {
+		txtLinesSpecCol.lock = new(sync.Mutex)
 	}
 
-	txtLinesCol.lock.Lock()
+	txtLinesSpecCol.lock.Lock()
 
-	defer txtLinesCol.lock.Unlock()
+	defer txtLinesSpecCol.lock.Unlock()
 
 	newTxtLineSpec := TextLineSpecLinesCollection{}
 
@@ -1609,19 +1879,19 @@ func (txtLinesCol TextLineSpecLinesCollection) NewPtr() *TextLineSpecLinesCollec
 //	     If an error message is returned, the text value of input
 //	     parameter 'errorPrefix' will be inserted or prefixed at
 //	     the beginning of the error message.
-func (txtLinesCol TextLineSpecLinesCollection) NewPtrTextLine(
+func (txtLinesSpecCol TextLineSpecLinesCollection) NewPtrTextLine(
 	textLine ITextLineSpecification,
 	errorPrefix interface{}) (
 	newTextLineCol *TextLineSpecLinesCollection,
 	err error) {
 
-	if txtLinesCol.lock == nil {
-		txtLinesCol.lock = new(sync.Mutex)
+	if txtLinesSpecCol.lock == nil {
+		txtLinesSpecCol.lock = new(sync.Mutex)
 	}
 
-	txtLinesCol.lock.Lock()
+	txtLinesSpecCol.lock.Lock()
 
-	defer txtLinesCol.lock.Unlock()
+	defer txtLinesSpecCol.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -1775,18 +2045,18 @@ func (txtLinesCol TextLineSpecLinesCollection) NewPtrTextLine(
 //	   // 'stdLine' is now available for use
 //	   // as a concrete object.
 //	   stdLineLen := stdLine.GetSingleLineLength()
-func (txtLinesCol *TextLineSpecLinesCollection) PeekAtFirstTextLine(
+func (txtLinesSpecCol *TextLineSpecLinesCollection) PeekAtFirstTextLine(
 	errorPrefix interface{}) (
 	ITextLineSpecification,
 	error) {
 
-	if txtLinesCol.lock == nil {
-		txtLinesCol.lock = new(sync.Mutex)
+	if txtLinesSpecCol.lock == nil {
+		txtLinesSpecCol.lock = new(sync.Mutex)
 	}
 
-	txtLinesCol.lock.Lock()
+	txtLinesSpecCol.lock.Lock()
 
-	defer txtLinesCol.lock.Unlock()
+	defer txtLinesSpecCol.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
@@ -1807,11 +2077,11 @@ func (txtLinesCol *TextLineSpecLinesCollection) PeekAtFirstTextLine(
 	iTextLineSpec,
 		err = textLineSpecLinesCollectionAtom{}.ptr().
 		peekPopTextLine(
-			txtLinesCol,
+			txtLinesSpecCol,
 			0,
 			false,
 			ePrefix.XCpy(
-				"txtLinesCol[0]"))
+				"txtLinesSpecCol[0]"))
 
 	return iTextLineSpec, err
 }
@@ -1945,18 +2215,18 @@ func (txtLinesCol *TextLineSpecLinesCollection) PeekAtFirstTextLine(
 //	   // 'stdLine' is now available for use
 //	   // as a concrete object.
 //	   stdLineLen := stdLine.GetSingleLineLength()
-func (txtLinesCol *TextLineSpecLinesCollection) PeekAtLastTextLine(
+func (txtLinesSpecCol *TextLineSpecLinesCollection) PeekAtLastTextLine(
 	errorPrefix interface{}) (
 	ITextLineSpecification,
 	error) {
 
-	if txtLinesCol.lock == nil {
-		txtLinesCol.lock = new(sync.Mutex)
+	if txtLinesSpecCol.lock == nil {
+		txtLinesSpecCol.lock = new(sync.Mutex)
 	}
 
-	txtLinesCol.lock.Lock()
+	txtLinesSpecCol.lock.Lock()
 
-	defer txtLinesCol.lock.Unlock()
+	defer txtLinesSpecCol.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
@@ -1974,7 +2244,7 @@ func (txtLinesCol *TextLineSpecLinesCollection) PeekAtLastTextLine(
 		return iTextLineSpec, err
 	}
 
-	lastIdx := len(txtLinesCol.textLines) - 1
+	lastIdx := len(txtLinesSpecCol.textLines) - 1
 
 	if lastIdx < 0 {
 		err = fmt.Errorf("%v - ERROR\n"+
@@ -1987,11 +2257,11 @@ func (txtLinesCol *TextLineSpecLinesCollection) PeekAtLastTextLine(
 	iTextLineSpec,
 		err = textLineSpecLinesCollectionAtom{}.ptr().
 		peekPopTextLine(
-			txtLinesCol,
+			txtLinesSpecCol,
 			lastIdx,
 			false,
 			ePrefix.XCpy(
-				fmt.Sprintf("txtLinesCol[%v]",
+				fmt.Sprintf("txtLinesSpecCol[%v]",
 					lastIdx)))
 
 	return iTextLineSpec, err
@@ -2145,19 +2415,19 @@ func (txtLinesCol *TextLineSpecLinesCollection) PeekAtLastTextLine(
 //	   // 'stdLine' is now available for use
 //	   // as a concrete object.
 //	   stdLineLen := stdLine.GetSingleLineLength()
-func (txtLinesCol *TextLineSpecLinesCollection) PeekAtTextLine(
+func (txtLinesSpecCol *TextLineSpecLinesCollection) PeekAtTextLine(
 	zeroBasedIndex int,
 	errorPrefix interface{}) (
 	ITextLineSpecification,
 	error) {
 
-	if txtLinesCol.lock == nil {
-		txtLinesCol.lock = new(sync.Mutex)
+	if txtLinesSpecCol.lock == nil {
+		txtLinesSpecCol.lock = new(sync.Mutex)
 	}
 
-	txtLinesCol.lock.Lock()
+	txtLinesSpecCol.lock.Lock()
 
-	defer txtLinesCol.lock.Unlock()
+	defer txtLinesSpecCol.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
@@ -2178,12 +2448,12 @@ func (txtLinesCol *TextLineSpecLinesCollection) PeekAtTextLine(
 	iTextLineSpec,
 		err = textLineSpecLinesCollectionAtom{}.ptr().
 		peekPopTextLine(
-			txtLinesCol,
+			txtLinesSpecCol,
 			zeroBasedIndex,
 			false,
 			ePrefix.XCpy(
 				fmt.Sprintf(
-					"txtLinesCol[%v]",
+					"txtLinesSpecCol[%v]",
 					zeroBasedIndex)))
 
 	return iTextLineSpec, err
@@ -2342,19 +2612,19 @@ func (txtLinesCol *TextLineSpecLinesCollection) PeekAtTextLine(
 //	   // 'stdLine' is now available for use
 //	   // as a concrete object.
 //	   stdLineLen := stdLine.GetSingleLineLength()
-func (txtLinesCol *TextLineSpecLinesCollection) PopFirstTextLine(
+func (txtLinesSpecCol *TextLineSpecLinesCollection) PopFirstTextLine(
 	errorPrefix interface{}) (
 	iTxtLineSpec ITextLineSpecification,
 	remainingNumOfTextLines int,
 	err error) {
 
-	if txtLinesCol.lock == nil {
-		txtLinesCol.lock = new(sync.Mutex)
+	if txtLinesSpecCol.lock == nil {
+		txtLinesSpecCol.lock = new(sync.Mutex)
 	}
 
-	txtLinesCol.lock.Lock()
+	txtLinesSpecCol.lock.Lock()
 
-	defer txtLinesCol.lock.Unlock()
+	defer txtLinesSpecCol.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -2376,13 +2646,13 @@ func (txtLinesCol *TextLineSpecLinesCollection) PopFirstTextLine(
 	iTextLineSpec,
 		err = textLineSpecLinesCollectionAtom{}.ptr().
 		peekPopTextLine(
-			txtLinesCol,
+			txtLinesSpecCol,
 			0,
 			true,
 			ePrefix.XCpy(
-				"txtLinesCol[0]"))
+				"txtLinesSpecCol[0]"))
 
-	remainingNumOfTextLines = len(txtLinesCol.textLines)
+	remainingNumOfTextLines = len(txtLinesSpecCol.textLines)
 
 	return iTextLineSpec, remainingNumOfTextLines, err
 }
@@ -2536,19 +2806,19 @@ func (txtLinesCol *TextLineSpecLinesCollection) PopFirstTextLine(
 //	   // 'stdLine' is now available for use
 //	   // as a concrete object.
 //	   stdLineLen := stdLine.GetSingleLineLength()
-func (txtLinesCol *TextLineSpecLinesCollection) PopLastTextLine(
+func (txtLinesSpecCol *TextLineSpecLinesCollection) PopLastTextLine(
 	errorPrefix interface{}) (
 	iTxtLineSpec ITextLineSpecification,
 	remainingNumOfTextLines int,
 	err error) {
 
-	if txtLinesCol.lock == nil {
-		txtLinesCol.lock = new(sync.Mutex)
+	if txtLinesSpecCol.lock == nil {
+		txtLinesSpecCol.lock = new(sync.Mutex)
 	}
 
-	txtLinesCol.lock.Lock()
+	txtLinesSpecCol.lock.Lock()
 
-	defer txtLinesCol.lock.Unlock()
+	defer txtLinesSpecCol.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -2567,7 +2837,7 @@ func (txtLinesCol *TextLineSpecLinesCollection) PopLastTextLine(
 		return iTextLineSpec, remainingNumOfTextLines, err
 	}
 
-	lastIdx := len(txtLinesCol.textLines) - 1
+	lastIdx := len(txtLinesSpecCol.textLines) - 1
 
 	if lastIdx < 0 {
 		err = fmt.Errorf("%v - ERROR\n"+
@@ -2580,13 +2850,13 @@ func (txtLinesCol *TextLineSpecLinesCollection) PopLastTextLine(
 	iTextLineSpec,
 		err = textLineSpecLinesCollectionAtom{}.ptr().
 		peekPopTextLine(
-			txtLinesCol,
+			txtLinesSpecCol,
 			lastIdx,
 			true,
 			ePrefix.XCpy(
-				"txtLinesCol[0]"))
+				"txtLinesSpecCol[0]"))
 
-	remainingNumOfTextLines = len(txtLinesCol.textLines)
+	remainingNumOfTextLines = len(txtLinesSpecCol.textLines)
 
 	return iTextLineSpec, remainingNumOfTextLines, err
 }
@@ -2762,20 +3032,20 @@ func (txtLinesCol *TextLineSpecLinesCollection) PopLastTextLine(
 //	   // 'stdLine' is now available for use
 //	   // as a concrete object.
 //	   stdLineLen := stdLine.GetSingleLineLength()
-func (txtLinesCol *TextLineSpecLinesCollection) PopTextLine(
+func (txtLinesSpecCol *TextLineSpecLinesCollection) PopTextLine(
 	zeroBasedIndex int,
 	errorPrefix interface{}) (
 	iTxtLineSpec ITextLineSpecification,
 	remainingNumOfTextLines int,
 	err error) {
 
-	if txtLinesCol.lock == nil {
-		txtLinesCol.lock = new(sync.Mutex)
+	if txtLinesSpecCol.lock == nil {
+		txtLinesSpecCol.lock = new(sync.Mutex)
 	}
 
-	txtLinesCol.lock.Lock()
+	txtLinesSpecCol.lock.Lock()
 
-	defer txtLinesCol.lock.Unlock()
+	defer txtLinesSpecCol.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -2795,15 +3065,15 @@ func (txtLinesCol *TextLineSpecLinesCollection) PopTextLine(
 	iTextLineSpec,
 		err = textLineSpecLinesCollectionAtom{}.ptr().
 		peekPopTextLine(
-			txtLinesCol,
+			txtLinesSpecCol,
 			zeroBasedIndex,
 			true,
 			ePrefix.XCpy(
 				fmt.Sprintf(
-					"txtLinesCol[%v]",
+					"txtLinesSpecCol[%v]",
 					zeroBasedIndex)))
 
-	remainingNumOfTextLines = len(txtLinesCol.textLines)
+	remainingNumOfTextLines = len(txtLinesSpecCol.textLines)
 
 	return iTextLineSpec, remainingNumOfTextLines, err
 }
@@ -2911,19 +3181,19 @@ func (txtLinesCol *TextLineSpecLinesCollection) PopTextLine(
 //	     If an error message is returned, the text value of input
 //	     parameter 'errorPrefix' will be inserted or prefixed at
 //	     the beginning of the error message.
-func (txtLinesCol *TextLineSpecLinesCollection) ReplaceTextLine(
+func (txtLinesSpecCol *TextLineSpecLinesCollection) ReplaceTextLine(
 	textLine ITextLineSpecification,
 	replaceAtIndex int,
 	errorPrefix interface{}) (
 	err error) {
 
-	if txtLinesCol.lock == nil {
-		txtLinesCol.lock = new(sync.Mutex)
+	if txtLinesSpecCol.lock == nil {
+		txtLinesSpecCol.lock = new(sync.Mutex)
 	}
 
-	txtLinesCol.lock.Lock()
+	txtLinesSpecCol.lock.Lock()
 
-	defer txtLinesCol.lock.Unlock()
+	defer txtLinesSpecCol.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -2938,7 +3208,7 @@ func (txtLinesCol *TextLineSpecLinesCollection) ReplaceTextLine(
 		return err
 	}
 
-	lenOfTextLinesCol := len(txtLinesCol.textLines)
+	lenOfTextLinesCol := len(txtLinesSpecCol.textLines)
 
 	if lenOfTextLinesCol == 0 {
 		err = fmt.Errorf("%v\n"+
@@ -3003,15 +3273,15 @@ func (txtLinesCol *TextLineSpecLinesCollection) ReplaceTextLine(
 		return err
 	}
 
-	if txtLinesCol.textLines[replaceAtIndex] != nil {
+	if txtLinesSpecCol.textLines[replaceAtIndex] != nil {
 
-		txtLinesCol.textLines[replaceAtIndex].Empty()
+		txtLinesSpecCol.textLines[replaceAtIndex].Empty()
 
-		txtLinesCol.textLines[replaceAtIndex] = nil
+		txtLinesSpecCol.textLines[replaceAtIndex] = nil
 
 	}
 
-	txtLinesCol.textLines[replaceAtIndex] = newTextLine
+	txtLinesSpecCol.textLines[replaceAtIndex] = newTextLine
 
 	return err
 }
@@ -3113,17 +3383,17 @@ func (txtLinesCol *TextLineSpecLinesCollection) ReplaceTextLine(
 //	     If an error message is returned, the text value of input
 //	     parameter 'errorPrefix' will be inserted or prefixed at
 //	     the beginning of the error message.
-func (txtLinesCol *TextLineSpecLinesCollection) SetTextLineCollection(
+func (txtLinesSpecCol *TextLineSpecLinesCollection) SetTextLineCollection(
 	newTextLineCol []ITextLineSpecification,
 	errorPrefix interface{}) error {
 
-	if txtLinesCol.lock == nil {
-		txtLinesCol.lock = new(sync.Mutex)
+	if txtLinesSpecCol.lock == nil {
+		txtLinesSpecCol.lock = new(sync.Mutex)
 	}
 
-	txtLinesCol.lock.Lock()
+	txtLinesSpecCol.lock.Lock()
 
-	defer txtLinesCol.lock.Unlock()
+	defer txtLinesSpecCol.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
@@ -3186,20 +3456,20 @@ func (txtLinesCol *TextLineSpecLinesCollection) SetTextLineCollection(
 	textLineColAtom := textLineSpecLinesCollectionAtom{}
 
 	textLineColAtom.emptyCollection(
-		txtLinesCol)
+		txtLinesSpecCol)
 
-	txtLinesCol.textLines = make([]ITextLineSpecification, lenOfNewTxtLines)
+	txtLinesSpecCol.textLines = make([]ITextLineSpecification, lenOfNewTxtLines)
 
 	for j := 0; j < lenOfNewTxtLines; j++ {
 
-		txtLinesCol.textLines[j],
+		txtLinesSpecCol.textLines[j],
 			err2 = newTextLineCol[j].CopyOutITextLine(
 			nil)
 
 		if err2 != nil {
 
 			textLineColAtom.emptyCollection(
-				txtLinesCol)
+				txtLinesSpecCol)
 
 			err = fmt.Errorf("%v\n"+
 				"Error: newTextLineCol[%v] Deep Copy Failed!\n"+
