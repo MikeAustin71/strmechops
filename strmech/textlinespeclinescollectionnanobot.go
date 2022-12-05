@@ -518,7 +518,13 @@ func (txtLinesColNanobot *textLineSpecLinesCollectionNanobot) copyOut(
 //
 // # Return Values
 //
-//	error
+//	maxLineLen					int
+//
+//		This parameter returns the length of the longest
+//		text line generated from this collection of Text
+//		Line Specifications ('textLinesCol').
+//
+//	err							error
 //
 //		If this method completes successfully, the
 //		returned error Type is set equal to 'nil'. If
@@ -533,7 +539,9 @@ func (txtLinesColNanobot *textLineSpecLinesCollectionNanobot) copyOut(
 func (txtLinesColNanobot *textLineSpecLinesCollectionNanobot) getFormattedText(
 	strBuilder *strings.Builder,
 	textLinesCol *TextLineSpecLinesCollection,
-	errPrefDto *ePref.ErrPrefixDto) error {
+	errPrefDto *ePref.ErrPrefixDto) (
+	maxLineLen int,
+	err error) {
 
 	if txtLinesColNanobot.lock == nil {
 		txtLinesColNanobot.lock = new(sync.Mutex)
@@ -544,7 +552,6 @@ func (txtLinesColNanobot *textLineSpecLinesCollectionNanobot) getFormattedText(
 	defer txtLinesColNanobot.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
-	var err error
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
@@ -554,7 +561,7 @@ func (txtLinesColNanobot *textLineSpecLinesCollectionNanobot) getFormattedText(
 		"")
 
 	if err != nil {
-		return err
+		return maxLineLen, err
 	}
 
 	if textLinesCol == nil {
@@ -563,7 +570,7 @@ func (txtLinesColNanobot *textLineSpecLinesCollectionNanobot) getFormattedText(
 			"is a nil pointer!\n",
 			ePrefix.String())
 
-		return err
+		return maxLineLen, err
 	}
 
 	if strBuilder == nil {
@@ -572,7 +579,7 @@ func (txtLinesColNanobot *textLineSpecLinesCollectionNanobot) getFormattedText(
 			"is a nil pointer!\n",
 			ePrefix.String())
 
-		return err
+		return maxLineLen, err
 	}
 
 	_,
@@ -583,12 +590,13 @@ func (txtLinesColNanobot *textLineSpecLinesCollectionNanobot) getFormattedText(
 				"textLinesCol"))
 
 	if err != nil {
-		return err
+		return maxLineLen, err
 	}
 
 	lenColElements := len(textLinesCol.textLines)
 
 	var str string
+	var lenStr int
 
 	for i := 0; i < lenColElements; i++ {
 
@@ -600,15 +608,20 @@ func (txtLinesColNanobot *textLineSpecLinesCollectionNanobot) getFormattedText(
 					i)))
 
 		if err != nil {
-			return err
+			return maxLineLen, err
+		}
+
+		lenStr = len(str)
+
+		if lenStr > maxLineLen {
+			maxLineLen = lenStr
 		}
 
 		strBuilder.WriteString(str)
 
 	}
 
-	return err
-
+	return maxLineLen, err
 }
 
 //	getFormattedTextStrArray

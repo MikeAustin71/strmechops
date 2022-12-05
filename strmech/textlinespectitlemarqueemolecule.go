@@ -146,188 +146,58 @@ func (txtLineTitleMolecule *textLineSpecTitleMarqueeMolecule) getFormattedText(
 
 	}
 
-	var str string
-	var lenStr int
+	beginningStrBuilderLen := strBuilder.Len()
+	var collectionMaxLineLen int
 
-	if txtLineTitleMarquee.leadingBlankLines.numBlankLines > 0 {
-
-		str,
-			err = txtLineTitleMarquee.leadingBlankLines.GetFormattedText(
+	collectionMaxLineLen,
+		err = txtLineTitleMarquee.leadingMarqueeLines.
+		GetFormattedText(
+			strBuilder,
 			ePrefix.XCpy(
-				"txtLineTitleMarquee.leadingBlankLines"))
+				"txtLineTitleMarquee.leadingMarqueeLines"))
 
-		if err != nil {
-
-			return maxLineLength, totalStrLength, err
-
-		}
-
-		lenStr = len(str)
-
-		if lenStr > maxLineLength {
-			maxLineLength = lenStr
-		}
-
-		strBuilder.WriteString(str)
+	if err != nil {
+		return maxLineLength, totalStrLength, err
 	}
 
-	if txtLineTitleMarquee.leadingSolidLines.solidLineCharsRepeatCount > 0 {
-
-		str,
-			err = txtLineTitleMarquee.leadingSolidLines.GetFormattedText(
-			ePrefix.XCpy(
-				"txtLineTitleMarquee.leadingSolidLines"))
-
-		if err != nil {
-
-			return maxLineLength, totalStrLength, err
-
-		}
-
-		lenStr = len(str)
-
-		if lenStr > maxLineLength {
-			maxLineLength = lenStr
-		}
-
-		strBuilder.WriteString(str)
+	if collectionMaxLineLen > maxLineLength {
+		maxLineLength = collectionMaxLineLen
 	}
 
-	if txtLineTitleMarquee.topTitleBlankLines.numBlankLines > 0 {
-
-		str,
-			err = txtLineTitleMarquee.topTitleBlankLines.GetFormattedText(
+	collectionMaxLineLen,
+		err = txtLineTitleMarquee.titleLines.
+		GetFormattedText(
+			strBuilder,
 			ePrefix.XCpy(
-				"txtLineTitleMarquee.topTitleBlankLines"))
+				"txtLineTitleMarquee.titleLines"))
 
-		if err != nil {
-
-			return maxLineLength, totalStrLength, err
-
-		}
-
-		lenStr = len(str)
-
-		if lenStr > maxLineLength {
-			maxLineLength = lenStr
-		}
-
-		strBuilder.WriteString(str)
+	if err != nil {
+		return maxLineLength, totalStrLength, err
 	}
 
-	numTitleLines := txtLineTitleMarquee.titleLines.GetNumberOfTextLines()
-
-	var iTextLine ITextLineSpecification
-
-	for i := 0; i < numTitleLines; i++ {
-
-		iTextLine,
-			err =
-			txtLineTitleMarquee.titleLines.PeekAtTextLine(
-				i,
-				ePrefix.XCpy(
-					"txtLineTitleMarquee."+
-						"titleLines"))
-
-		if err != nil {
-
-			return maxLineLength, totalStrLength, err
-
-		}
-
-		str,
-			err = iTextLine.GetFormattedText(
-			ePrefix.XCpy(
-				fmt.Sprintf(
-					"iTextLine[%v]",
-					i)))
-
-		if err != nil {
-
-			return maxLineLength, totalStrLength, err
-
-		}
-
-		lenStr = len(str)
-
-		if lenStr > maxLineLength {
-			maxLineLength = lenStr
-		}
-
-		strBuilder.WriteString(str)
-
+	if collectionMaxLineLen > maxLineLength {
+		maxLineLength = collectionMaxLineLen
 	}
 
-	if txtLineTitleMarquee.bottomTitleBlankLines.numBlankLines > 0 {
-
-		str,
-			err = txtLineTitleMarquee.bottomTitleBlankLines.GetFormattedText(
+	collectionMaxLineLen,
+		err = txtLineTitleMarquee.trailingMarqueeLines.
+		GetFormattedText(
+			strBuilder,
 			ePrefix.XCpy(
-				"txtLineTitleMarquee.bottomTitleBlankLines"))
+				"txtLineTitleMarquee.trailingMarqueeLines"))
 
-		if err != nil {
-
-			return maxLineLength, totalStrLength, err
-
-		}
-
-		lenStr = len(str)
-
-		if lenStr > maxLineLength {
-			maxLineLength = lenStr
-		}
-
-		strBuilder.WriteString(str)
-
+	if err != nil {
+		return maxLineLength, totalStrLength, err
 	}
 
-	if txtLineTitleMarquee.trailingSolidLines.solidLineCharsRepeatCount > 0 {
-
-		str,
-			err = txtLineTitleMarquee.trailingSolidLines.GetFormattedText(
-			ePrefix.XCpy(
-				"trailingSolidLines.trailingSolidLines"))
-
-		if err != nil {
-
-			return maxLineLength, totalStrLength, err
-
-		}
-
-		lenStr = len(str)
-
-		if lenStr > maxLineLength {
-			maxLineLength = lenStr
-		}
-
-		strBuilder.WriteString(str)
-
+	if collectionMaxLineLen > maxLineLength {
+		maxLineLength = collectionMaxLineLen
 	}
 
-	if txtLineTitleMarquee.trailingBlankLines.numBlankLines > 0 {
+	endingStrBuilderLen := strBuilder.Len()
 
-		str,
-			err = txtLineTitleMarquee.trailingBlankLines.GetFormattedText(
-			ePrefix.XCpy(
-				"txtLineTitleMarquee.trailingBlankLines"))
-
-		if err != nil {
-
-			return maxLineLength, totalStrLength, err
-
-		}
-
-		lenStr = len(str)
-
-		if lenStr > maxLineLength {
-			maxLineLength = lenStr
-		}
-
-		strBuilder.WriteString(str)
-
-	}
-
-	totalStrLength = strBuilder.Len()
+	totalStrLength =
+		endingStrBuilderLen - beginningStrBuilderLen
 
 	return maxLineLength, totalStrLength, err
 }

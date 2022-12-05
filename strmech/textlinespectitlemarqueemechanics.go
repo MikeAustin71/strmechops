@@ -226,99 +226,15 @@ func (txtLineTitleMarqueeMech *textLineSpecTitleMarqueeMechanics) setTxtLineTitl
 	txtLineTitleMarquee.standardTextFieldLen =
 		configSpecs.StandardTextFieldLen
 
-	if configSpecs.NumLeadingBlankLines > 0 {
-
-		err = txtLineTitleMarquee.leadingBlankLines.
-			SetSpecBlankLines(
-				configSpecs.NumLeadingBlankLines,
-				"\n",
-				ePrefix.XCpy("txtLineTitleMarquee.leadingBlankLines"))
-
-		if err != nil {
-			return err
-		}
-
-	}
-
-	if configSpecs.NumLeadingSolidLines > 0 {
-
-		err = txtLineTitleMarquee.leadingSolidLines.
-			SetSolidLine(
-				configSpecs.StandardTitleLeftMargin,
-				configSpecs.StandardTitleRightMargin,
-				configSpecs.LeadingSolidLineChar,
-				configSpecs.NumLeadingSolidLines,
-				ePrefix.XCpy("txtLineTitleMarquee.leadingSolidLines<-"))
-
-		if err != nil {
-			return err
-		}
-
-	}
-
-	if configSpecs.NumTopTitleBlankLines > 0 {
-
-		err = txtLineTitleMarquee.topTitleBlankLines.
-			SetSpecBlankLines(
-				configSpecs.NumTopTitleBlankLines,
-				"\n",
-				ePrefix.XCpy("txtLineTitleMarquee.topTitleBlankLines"))
-
-		if err != nil {
-			return err
-		}
-
-	}
-
-	if configSpecs.NumBottomTitleBlankLines > 0 {
-
-		err = txtLineTitleMarquee.bottomTitleBlankLines.
-			SetSpecBlankLines(
-				configSpecs.NumBottomTitleBlankLines,
-				"\n",
-				ePrefix.XCpy("txtLineTitleMarquee.bottomTitleBlankLines"))
-
-		if err != nil {
-			return err
-		}
-
-	}
-
-	if configSpecs.NumTrailingSolidLines > 0 {
-
-		err = txtLineTitleMarquee.trailingSolidLines.
-			SetSolidLine(
-				configSpecs.StandardTitleLeftMargin,
-				configSpecs.StandardTitleRightMargin,
-				configSpecs.TrailingSolidLineChar,
-				configSpecs.NumTrailingBlankLines,
-				ePrefix.XCpy("txtLineTitleMarquee.trailingSolidLines<-"))
-
-		if err != nil {
-			return err
-		}
-
-	}
-
-	if configSpecs.NumTrailingBlankLines > 0 {
-
-		err = txtLineTitleMarquee.trailingBlankLines.
-			SetSpecBlankLines(
-				configSpecs.NumTrailingBlankLines,
-				"\n",
-				ePrefix.XCpy("txtLineTitleMarquee.trailingBlankLines"))
-
-		if err != nil {
-			return err
-		}
-
-	}
-
 	if configSpecs.TitleLines.GetNumberOfTextLines() > 0 {
 
 		err = txtLineTitleMarquee.titleLines.CopyIn(
 			&configSpecs.TitleLines,
 			ePrefix.XCpy("configSpecs.TitleLines"))
+
+		if err != nil {
+			return err
+		}
 
 	}
 

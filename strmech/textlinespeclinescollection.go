@@ -687,7 +687,13 @@ func (txtLinesSpecCol *TextLineSpecLinesCollection) GetNumberOfTextLines() int {
 //
 // # Return Values
 //
-//	error
+//	maxLineLen					int
+//
+//		This parameter returns the length of the longest
+//		text line generated from this collection of Text
+//		Line Specifications ('textLinesCol').
+//
+//	err							error
 //
 //		If this method completes successfully, the
 //		returned error Type is set equal to 'nil'.
@@ -701,7 +707,9 @@ func (txtLinesSpecCol *TextLineSpecLinesCollection) GetNumberOfTextLines() int {
 //		error message.
 func (txtLinesSpecCol *TextLineSpecLinesCollection) GetFormattedText(
 	strBuilder *strings.Builder,
-	errorPrefix interface{}) error {
+	errorPrefix interface{}) (
+	maxLineLen int,
+	err error) {
 
 	if txtLinesSpecCol.lock == nil {
 		txtLinesSpecCol.lock = new(sync.Mutex)
@@ -712,7 +720,6 @@ func (txtLinesSpecCol *TextLineSpecLinesCollection) GetFormattedText(
 	defer txtLinesSpecCol.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
-	var err error
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
@@ -722,7 +729,7 @@ func (txtLinesSpecCol *TextLineSpecLinesCollection) GetFormattedText(
 		"")
 
 	if err != nil {
-		return err
+		return maxLineLen, err
 	}
 
 	return new(textLineSpecLinesCollectionNanobot).

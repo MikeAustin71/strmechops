@@ -68,19 +68,11 @@ func (txtLineTitleMarqueeElectron *textLineSpecTitleMarqueeElectron) empty(
 
 	txtLineTitleMarquee.standardTextFieldLen = 0
 
-	txtLineTitleMarquee.leadingBlankLines.Empty()
-
-	txtLineTitleMarquee.leadingSolidLines.Empty()
-
-	txtLineTitleMarquee.topTitleBlankLines.Empty()
+	txtLineTitleMarquee.leadingMarqueeLines.Empty()
 
 	txtLineTitleMarquee.titleLines.Empty()
 
-	txtLineTitleMarquee.bottomTitleBlankLines.Empty()
-
-	txtLineTitleMarquee.trailingSolidLines.Empty()
-
-	txtLineTitleMarquee.trailingBlankLines.Empty()
+	txtLineTitleMarquee.trailingMarqueeLines.Empty()
 
 	txtLineTitleMarquee.textLineReader = nil
 
@@ -134,20 +126,8 @@ func (txtLineTitleMarqueeElectron *textLineSpecTitleMarqueeElectron) equal(
 		return false
 	}
 
-	if !txtLineTitleOne.leadingBlankLines.Equal(
-		&txtLineTitleTwo.leadingBlankLines) {
-
-		return false
-	}
-
-	if !txtLineTitleOne.leadingSolidLines.Equal(
-		&txtLineTitleTwo.leadingSolidLines) {
-
-		return false
-	}
-
-	if !txtLineTitleOne.topTitleBlankLines.Equal(
-		&txtLineTitleTwo.topTitleBlankLines) {
+	if !txtLineTitleOne.leadingMarqueeLines.Equal(
+		&txtLineTitleTwo.leadingMarqueeLines) {
 
 		return false
 	}
@@ -158,20 +138,8 @@ func (txtLineTitleMarqueeElectron *textLineSpecTitleMarqueeElectron) equal(
 		return false
 	}
 
-	if !txtLineTitleOne.bottomTitleBlankLines.Equal(
-		&txtLineTitleTwo.bottomTitleBlankLines) {
-
-		return false
-	}
-
-	if !txtLineTitleOne.trailingSolidLines.Equal(
-		&txtLineTitleTwo.trailingSolidLines) {
-
-		return false
-	}
-
-	if !txtLineTitleOne.trailingBlankLines.Equal(
-		&txtLineTitleTwo.trailingBlankLines) {
+	if !txtLineTitleOne.trailingMarqueeLines.Equal(
+		&txtLineTitleTwo.trailingMarqueeLines) {
 
 		return false
 	}
@@ -349,41 +317,25 @@ func (txtLineTitleMarqueeElectron *textLineSpecTitleMarqueeElectron) testValidit
 			maxAvailableTextFieldLen
 	}
 
-	if txtLineTitleMarquee.leadingBlankLines.numBlankLines > 0 {
+	if txtLineTitleMarquee.leadingMarqueeLines.GetNumberOfTextLines() == 0 {
 
-		err = txtLineTitleMarquee.leadingBlankLines.
-			IsValidInstanceError(ePrefix.XCpy(
-				"txtLineTitleMarquee.leadingBlankLines invalid!"))
+		err = fmt.Errorf("%v\n"+
+			"Error: The TextLineSpecTitleMarquee object contains invalid data values!\n"+
+			"txtLineTitleMarquee.leadingMarqueeLines is empty.\n"+
+			"Configure leadingMarqueeLines before continuing.\n",
+			ePrefix.String())
 
-		if err != nil {
-			return isValid, err
-		}
-
-	}
-
-	if txtLineTitleMarquee.leadingSolidLines.solidLineCharsRepeatCount > 0 {
-
-		err = txtLineTitleMarquee.leadingSolidLines.
-			IsValidInstanceError(ePrefix.XCpy(
-				"txtLineTitleMarquee.leadingSolidLines invalid!"))
-
-		if err != nil {
-			return isValid, err
-		}
+		return isValid, err
 
 	}
 
-	if txtLineTitleMarquee.topTitleBlankLines.numBlankLines > 0 {
+	err = txtLineTitleMarquee.leadingMarqueeLines.IsValidInstanceError(
+		ePrefix.XCpy(
+			"txtLineTitleMarquee.leadingMarqueeLines invalid."))
 
-		err = txtLineTitleMarquee.topTitleBlankLines.
-			IsValidInstanceError(ePrefix.XCpy(
-				" txtLineTitleMarquee.topTitleBlankLines" +
-					" invalid!"))
+	if err != nil {
 
-		if err != nil {
-			return isValid, err
-		}
-
+		return isValid, err
 	}
 
 	if txtLineTitleMarquee.titleLines.GetNumberOfTextLines() == 0 {
@@ -398,42 +350,34 @@ func (txtLineTitleMarqueeElectron *textLineSpecTitleMarqueeElectron) testValidit
 
 	}
 
-	if txtLineTitleMarquee.bottomTitleBlankLines.numBlankLines > 0 {
+	err = txtLineTitleMarquee.titleLines.IsValidInstanceError(
+		ePrefix.XCpy(
+			"txtLineTitleMarquee.titleLines invalid."))
 
-		err = txtLineTitleMarquee.bottomTitleBlankLines.
-			IsValidInstanceError(ePrefix.XCpy(
-				" txtLineTitleMarquee.bottomTitleBlankLines" +
-					" invalid!"))
+	if err != nil {
 
-		if err != nil {
-			return isValid, err
-		}
+		return isValid, err
+	}
+
+	if txtLineTitleMarquee.trailingMarqueeLines.GetNumberOfTextLines() == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: The TextLineSpecTitleMarquee object contains invalid data values!\n"+
+			"txtLineTitleMarquee.trailingMarqueeLines is empty.\n"+
+			"Configure trailingMarqueeLines before continuing.\n",
+			ePrefix.String())
+
+		return isValid, err
 
 	}
 
-	if txtLineTitleMarquee.trailingSolidLines.solidLineCharsRepeatCount > 0 {
+	err = txtLineTitleMarquee.trailingMarqueeLines.IsValidInstanceError(
+		ePrefix.XCpy(
+			"txtLineTitleMarquee.trailingMarqueeLines invalid."))
 
-		err = txtLineTitleMarquee.trailingSolidLines.
-			IsValidInstanceError(ePrefix.XCpy(
-				"txtLineTitleMarquee.trailingSolidLines invalid!"))
+	if err != nil {
 
-		if err != nil {
-			return isValid, err
-		}
-
-	}
-
-	if txtLineTitleMarquee.trailingBlankLines.numBlankLines > 0 {
-
-		err = txtLineTitleMarquee.trailingBlankLines.
-			IsValidInstanceError(ePrefix.XCpy(
-				" txtLineTitleMarquee.trailingBlankLines" +
-					" invalid!"))
-
-		if err != nil {
-			return isValid, err
-		}
-
+		return isValid, err
 	}
 
 	isValid = true

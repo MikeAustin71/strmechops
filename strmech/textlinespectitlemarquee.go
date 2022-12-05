@@ -13,13 +13,9 @@ type TextLineSpecTitleMarquee struct {
 	standardTitleRightMargin string
 	standardMaxLineLen       int
 	standardTextFieldLen     int
-	leadingBlankLines        TextLineSpecBlankLines
-	leadingSolidLines        TextLineSpecSolidLine
-	topTitleBlankLines       TextLineSpecBlankLines
+	leadingMarqueeLines      TextLineSpecLinesCollection
 	titleLines               TextLineSpecLinesCollection
-	bottomTitleBlankLines    TextLineSpecBlankLines
-	trailingSolidLines       TextLineSpecSolidLine
-	trailingBlankLines       TextLineSpecBlankLines
+	trailingMarqueeLines     TextLineSpecLinesCollection
 	textLineReader           *strings.Reader
 
 	lock *sync.Mutex
