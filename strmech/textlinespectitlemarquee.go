@@ -1541,7 +1541,7 @@ func (txtLineSpecTitleMarquee *TextLineSpecTitleMarquee) TextBuilder(
 //	Returns a string specifying the name of this Text
 //	Line Specification (TextLineSpecTitleMarquee).
 //
-//	This method fulfills requirements of
+//	This method fulfills requirements of the
 //	ITextLineSpecification interface.
 //
 // ----------------------------------------------------------------
@@ -1556,6 +1556,26 @@ func (txtLineSpecTitleMarquee *TextLineSpecTitleMarquee) TextBuilder(
 //
 //	NONE
 func (txtLineSpecTitleMarquee *TextLineSpecTitleMarquee) TextLineSpecName() string {
+
+	if txtLineSpecTitleMarquee.lock == nil {
+		txtLineSpecTitleMarquee.lock = new(sync.Mutex)
+	}
+
+	txtLineSpecTitleMarquee.lock.Lock()
+
+	defer txtLineSpecTitleMarquee.lock.Unlock()
+
+	return "TextLineSpecTitleMarquee"
+}
+
+// TextTypeName
+//
+// Returns a string specifying the type of Text Line
+// Specification (TextLineSpecTitleMarquee).
+//
+// This method fulfills requirements of the
+// ITextSpecification interface.
+func (txtLineSpecTitleMarquee *TextLineSpecTitleMarquee) TextTypeName() string {
 
 	if txtLineSpecTitleMarquee.lock == nil {
 		txtLineSpecTitleMarquee.lock = new(sync.Mutex)
