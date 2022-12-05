@@ -82,6 +82,8 @@ func (txtLineTitleMarqueeElectron *textLineSpecTitleMarqueeElectron) empty(
 
 	txtLineTitleMarquee.trailingBlankLines.Empty()
 
+	txtLineTitleMarquee.textLineReader = nil
+
 	return
 }
 

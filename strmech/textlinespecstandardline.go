@@ -2132,7 +2132,7 @@ func (stdLine *TextLineSpecStandardLine) EmptyTextFields() {
 //	   - If the member variable data values contained in input
 //	     parameter 'incomingStdLine' are equal in all respects to
 //	     those contained in the current instance of
-//	     TextLineSpecStandardLine, this method will return a
+//	     TextLineS`pecStandardLine, this method will return a
 //	     boolean value of 'true'. Otherwise, a value of 'false' will
 //	     be returned to the calling function.
 func (stdLine *TextLineSpecStandardLine) Equal(
@@ -5847,7 +5847,7 @@ func (stdLine *TextLineSpecStandardLine) Read(
 			err = fmt.Errorf("%v\n"+
 				"Error: strings.NewReader(formattedText)\n"+
 				"returned a nil pointer.\n"+
-				"plainTextLine.textLineReader == nil\n",
+				"stdLine.textLineReader == nil\n",
 				ePrefix.String())
 
 			return n, err
