@@ -7169,8 +7169,8 @@ func (stdLine TextLineSpecStandardLine) String() string {
 }
 
 // TextBuilder - Configures the line of text produced by this
-// instance of TextLineSpecPlainText, and writes it to an instance
-// of strings.Builder.
+// instance of TextLineSpecStandardLine, and writes it to an
+// instance of strings.Builder.
 //
 // This method fulfills requirements of the ITextLineSpecification
 // interface.
@@ -7267,16 +7267,6 @@ func (stdLine *TextLineSpecStandardLine) TextBuilder(
 		return err
 	}
 
-	if strBuilder == nil {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'strBuilder' is invalid!\n"+
-			"'strBuilder' is a nil pointer.\n",
-			ePrefix.String())
-
-		return err
-	}
-
 	_,
 		_,
 		err = textLineSpecStandardLineMolecule{}.ptr().
@@ -7284,10 +7274,6 @@ func (stdLine *TextLineSpecStandardLine) TextBuilder(
 			strBuilder,
 			stdLine,
 			ePrefix.XCpy("stdLine"))
-
-	if err != nil {
-		return err
-	}
 
 	return err
 }
