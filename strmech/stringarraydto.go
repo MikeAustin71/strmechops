@@ -240,6 +240,73 @@ func (strArrayDto *StringArrayDto) AddStringArrayDto(
 	return
 }
 
+//	ConcatenateStrings
+//
+//	Concatenates all the strings in the internal string
+//	array maintained by the current StringArrayDto and
+//	returns them as a single string.
+//
+//	If the input string 'insertStr' has a length greater
+//	than zero, it will be appended to the end of each
+//	string in the array before that string is
+//	concatenated.
+//
+//	If the internal string array is empty, an empty
+//	string will be returned.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	insertStr					string
+//
+//		If 'insertStr' has a string length greater than
+//		zero, it will be appended to the end of each
+//		string extracted for concatenation from the
+//		internal string array maintained by the current
+//		StringArrayDto instance.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//
+//		The strings contained in the internal string
+//		array maintained by the current StringArrayDto
+//		instance will be concatenated together and
+//		returned through this parameter
+func (strArrayDto *StringArrayDto) ConcatenateStrings(
+	insertStr string) string {
+
+	if strArrayDto.lock == nil {
+		strArrayDto.lock = new(sync.Mutex)
+	}
+
+	strArrayDto.lock.Lock()
+
+	defer strArrayDto.lock.Unlock()
+
+	lenInsertStr := len(insertStr)
+
+	conCatStr := ""
+
+	for i := 0; i < len(strArrayDto.StrArray); i++ {
+
+		if len(strArrayDto.StrArray[i]) == 0 {
+			continue
+		}
+
+		conCatStr += strArrayDto.StrArray[i]
+
+		if lenInsertStr > 0 {
+			conCatStr += insertStr
+		}
+	}
+
+	return conCatStr
+}
+
 // CopyIn - Copies the data fields from an incoming instance of
 // StringArrayDto ('incomingStrArray') to the data fields of the
 // current StringArrayDto instance ('strArrayDto').
