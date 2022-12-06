@@ -3258,6 +3258,68 @@ func (stdLine *TextLineSpecStandardLine) IsValidInstanceError(
 	return err
 }
 
+// NewStdLine1Col
+//
+// Configures and returns a new fully populated instance
+// of TextLineSpecStandardLine consisting of a single text
+// column. In other words the result is a single line of
+// text containing only one text column.
+func (stdLine TextLineSpecStandardLine) NewStdLine1Col(
+	leftMarginStr string,
+	column1FieldContents interface{},
+	column1FieldLength int,
+	column1FieldJustify TextJustify,
+	rightMarginStr string,
+	lineTerminator string,
+	errorPrefix interface{}) (
+	TextLineSpecStandardLine,
+	error) {
+
+	var err error
+	return TextLineSpecStandardLine{}, err
+}
+
+// NewStdLine2Col
+//
+// Configures and returns a new fully populated instance
+// of TextLineSpecStandardLine consisting of two text
+// columns. In other words the result is a single line
+// of text containing two text columns.
+func (stdLine TextLineSpecStandardLine) NewStdLine2Col(
+	leftMarginStr string,
+	column1FieldContents interface{},
+	column1FieldLength int,
+	column1FieldJustify TextJustify,
+	column1RightMarginStr string,
+	column2Field interface{},
+	column2FieldLength int,
+	column2FieldJustify TextJustify,
+	column2RightMarginStr string,
+	lineTerminator string,
+	errorPrefix interface{}) (
+	TextLineSpecStandardLine,
+	error) {
+
+	var err error
+
+	return TextLineSpecStandardLine{}, err
+}
+
+func (stdLine TextLineSpecStandardLine) NewStdLineMultiCol(
+	textFields []interface{},
+	fieldFormatParams []TextFieldFmtParamsDto,
+	turnLineTerminationOff bool,
+	lineTerminator string,
+	errorPrefix interface{}) (
+	TextLineSpecStandardLine,
+	error) {
+
+	var err error
+
+	return TextLineSpecStandardLine{}, err
+
+}
+
 // New - This method returns a new, partially configured concrete
 // instance of TextLineSpecStandardLine. The returned instance of
 // TextLineSpecStandardLine sets defaults for the parameters listed
