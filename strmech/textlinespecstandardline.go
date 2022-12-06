@@ -3443,8 +3443,45 @@ func (stdLine TextLineSpecStandardLine) NewStdLine1Col(
 	TextLineSpecStandardLine,
 	error) {
 
+	if stdLine.lock == nil {
+		stdLine.lock = new(sync.Mutex)
+	}
+
+	stdLine.lock.Lock()
+
+	defer stdLine.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
 	var err error
-	return TextLineSpecStandardLine{}, err
+
+	newStdLine := TextLineSpecStandardLine{}
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecStandardLine."+
+			"NewStdLine1Col()",
+		"")
+
+	if err != nil {
+		return newStdLine, err
+	}
+
+	if len(lineTerminator) == 0 {
+		lineTerminator = "\n"
+	}
+
+	err = new(textLineSpecStandardLineNanobot).
+		setTextFieldFmtStdLine(
+			&newStdLine,
+			[]TextFieldFormatDto{oneColumnTextField},
+			1,
+			[]rune(lineTerminator),
+			turnLineTerminatorOff,
+			ePrefix.XCpy(
+				"newStdLine<-"))
+
+	return newStdLine, err
 }
 
 // NewStdLine2Col

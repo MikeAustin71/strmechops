@@ -813,8 +813,9 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) setTextFieldFmtStdLine
 		return err
 	}
 
+	sMechPreon := strMechPreon{}
 	_,
-		err = new(strMechPreon).testValidityOfRuneCharArray(
+		err = sMechPreon.testValidityOfRuneCharArray(
 		newLineChars,
 		ePrefix.XCpy(
 			"newLineChars"))
@@ -830,10 +831,57 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) setTextFieldFmtStdLine
 				ePrefix.XCpy(
 					"empty->txtStdLine"))
 
+	var fieldContentsText string
+	var txtFieldSpecLabel TextFieldSpecLabel
+	txtSpecAtom := textSpecificationAtom{}
+
 	for i := 0; i < lenTextFieldFmtDtos; i++ {
 
+		fieldContentsText,
+			err = txtSpecAtom.
+			convertParamEmptyInterfaceToString(
+				txtFieldFmtDtos[i].FieldContents,
+				fmt.Sprintf("txtFieldFmtDtos[%v].FieldContents",
+					i),
+				ePrefix.XCpy(
+					fmt.Sprintf("txtFieldFmtDtos[%v].FieldContents",
+						i)))
+
+		if err != nil {
+			return err
+		}
+
+		txtFieldSpecLabel,
+			err = TextFieldSpecLabel{}.NewTextLabel(
+			fieldContentsText,
+			txtFieldFmtDtos[i].FieldLength,
+			txtFieldFmtDtos[i].FieldJustify,
+			ePrefix.XCpy(
+				"txtFieldSpecLabel<-fieldContentsText"))
+
+		if err != nil {
+			return err
+		}
+
+		txtStdLine.textFields =
+			append(txtStdLine.textFields,
+				&txtFieldSpecLabel)
 	}
 
+	txtStdLine.numOfStdLines =
+		numOfStdLines
+
+	txtStdLine.turnLineTerminatorOff =
+		turnLineTerminatorOff
+
+	err = sMechPreon.copyRuneArrays(
+		&txtStdLine.newLineChars,
+		&newLineChars,
+		true,
+		ePrefix.XCpy(
+			"txtStdLine.newLineChars<-newLineChars"))
+
+	return err
 }
 
 // setTxtSpecStandardLine - Reconfigures all the data values for
