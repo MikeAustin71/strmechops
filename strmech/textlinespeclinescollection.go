@@ -16,7 +16,158 @@ type TextLineSpecLinesCollection struct {
 	lock      *sync.Mutex
 }
 
-// AddTextLine - Adds a ITextLineSpecification object to the
+//	AddBlankLine
+//
+//	Creates an instance of TextLineSpecBlankLines and
+//	adds it to the Text Line collection maintained by
+//	this instance of TextLineSpecLinesCollection.
+//
+//	The TextLineSpecBlankLines type is a specialized
+//	form of text line specification which is used to
+//	create one or more blank lines of text.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	numOfBlankLines				int
+//
+//		The number of blank lines which will be generated
+//		by the newly created instance of
+//		TextLineSpecBlankLines.
+//
+//		If input parameter 'numOfBlankLines' is less than
+//		one (1), it is invalid and an error will be
+//		returned.
+//
+//		If input parameter 'numOfBlankLines' is greater
+//		than one-million (1,000,000), it is invalid and
+//		an error will be returned.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it	contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (txtLinesSpecCol *TextLineSpecLinesCollection) AddBlankLine(
+	numOfBlankLines int,
+	errorPrefix interface{}) error {
+
+	if txtLinesSpecCol.lock == nil {
+		txtLinesSpecCol.lock = new(sync.Mutex)
+	}
+
+	txtLinesSpecCol.lock.Lock()
+
+	defer txtLinesSpecCol.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecLinesCollection."+
+			"AddBlankLine()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	var newBlankLine *TextLineSpecBlankLines
+
+	newBlankLine,
+		err = new(TextLineSpecBlankLines).
+		NewPtrDefaultBlankLines(
+			numOfBlankLines,
+			ePrefix.XCpy(
+				"newBlankLine<-"))
+
+	if err != nil {
+		return err
+	}
+
+	err = new(textLineSpecLinesCollectionNanobot).addTextLine(
+		txtLinesSpecCol,
+		newBlankLine,
+		ePrefix.XCpy(
+			"txtLinesSpecCol<-newBlankLine"))
+
+	return err
+}
+
+// AddTextLineSpec - Adds a ITextLineSpecification object to the
 // end of the Text Line collection maintained by this instance of
 // TextLineSpecLinesCollection.
 //
@@ -99,7 +250,7 @@ type TextLineSpecLinesCollection struct {
 //	     If an error message is returned, the text value of input
 //	     parameter 'errorPrefix' will be inserted or prefixed at
 //	     the beginning of the error message.
-func (txtLinesSpecCol *TextLineSpecLinesCollection) AddTextLine(
+func (txtLinesSpecCol *TextLineSpecLinesCollection) AddTextLineSpec(
 	textLine ITextLineSpecification,
 	errorPrefix interface{}) (
 	err error) {
@@ -117,7 +268,7 @@ func (txtLinesSpecCol *TextLineSpecLinesCollection) AddTextLine(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"TextLineSpecLinesCollection.AddTextLine()",
+		"TextLineSpecLinesCollection.AddTextLineSpec()",
 		"")
 
 	if err != nil {
@@ -1588,7 +1739,7 @@ func (txtLinesSpecCol *TextLineSpecLinesCollection) IsValidInstanceError(
 // To add Text Lines to the collection encapsulated by this
 // instance of TextLineSpecLinesCollection, call the method
 //
-//	TextLineSpecLinesCollection.AddTextLine()
+//	TextLineSpecLinesCollection.AddTextLineSpec()
 //
 // ------------------------------------------------------------------------
 //
@@ -1629,7 +1780,7 @@ func (txtLinesSpecCol TextLineSpecLinesCollection) New() TextLineSpecLinesCollec
 // by the returned instance of TextLineSpecLinesCollection, call
 // the method
 //
-//	TextLineSpecLinesCollection.AddTextLine()
+//	TextLineSpecLinesCollection.AddTextLineSpec()
 //
 // ------------------------------------------------------------------------
 //
@@ -1760,7 +1911,7 @@ func (txtLinesSpecCol TextLineSpecLinesCollection) NewTextLine(
 // To add Text Lines to the collection encapsulated by this
 // instance of TextLineSpecLinesCollection, call the method
 //
-//	TextLineSpecLinesCollection.AddTextLine()
+//	TextLineSpecLinesCollection.AddTextLineSpec()
 //
 // ------------------------------------------------------------------------
 //
@@ -1802,7 +1953,7 @@ func (txtLinesSpecCol TextLineSpecLinesCollection) NewPtr() *TextLineSpecLinesCo
 // by the returned instance of TextLineSpecLinesCollection, call
 // the method
 //
-//	TextLineSpecLinesCollection.AddTextLine()
+//	TextLineSpecLinesCollection.AddTextLineSpec()
 //
 // ------------------------------------------------------------------------
 //

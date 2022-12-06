@@ -238,5 +238,17 @@ func (txtLineTitleMarqueeMech *textLineSpecTitleMarqueeMechanics) setTxtLineTitl
 
 	}
 
+	if configSpecs.NumLeadingBlankLines > 0 {
+
+		err = txtLineTitleMarquee.leadingMarqueeLines.AddBlankLine(
+			configSpecs.NumLeadingBlankLines,
+			ePrefix.XCpy(
+				"configSpecs.NumLeadingBlankLines"))
+
+		if err != nil {
+			return err
+		}
+	}
+
 	return err
 }

@@ -38,7 +38,7 @@ func createTestTextLineSpecCollection01(
 	}
 
 	// Index 0
-	err = txtLineCollection.AddTextLine(
+	err = txtLineCollection.AddTextLineSpec(
 		&stdLine01,
 		ePrefix.XCpy(
 			"stdLine01"))
@@ -59,7 +59,7 @@ func createTestTextLineSpecCollection01(
 	}
 
 	// Index 1
-	err = txtLineCollection.AddTextLine(
+	err = txtLineCollection.AddTextLineSpec(
 		&stdLine02,
 		ePrefix.XCpy(
 			"stdLine02"))
@@ -80,7 +80,7 @@ func createTestTextLineSpecCollection01(
 	}
 
 	// Index 2
-	err = txtLineCollection.AddTextLine(
+	err = txtLineCollection.AddTextLineSpec(
 		&stdLine03,
 		ePrefix.XCpy(
 			"stdLine03"))
@@ -108,7 +108,7 @@ func createTestTextLineSpecCollection01(
 		return numOfLines, txtLineCollection, err
 	}
 
-	err = txtLineCollection.AddTextLine(
+	err = txtLineCollection.AddTextLineSpec(
 		&blankLines01,
 		ePrefix.XCpy(
 			"blankLines01"))
@@ -137,7 +137,7 @@ func createTestTextLineSpecCollection01(
 		return numOfLines, txtLineCollection, err
 	}
 
-	err = txtLineCollection.AddTextLine(
+	err = txtLineCollection.AddTextLineSpec(
 		&plainTextLine01,
 		ePrefix.XCpy(
 			"plainTextLine01"))
@@ -166,7 +166,7 @@ func createTestTextLineSpecCollection01(
 		return numOfLines, txtLineCollection, err
 	}
 
-	err = txtLineCollection.AddTextLine(
+	err = txtLineCollection.AddTextLineSpec(
 		&plainTextLine02,
 		ePrefix.XCpy(
 			"plainTextLine02"))
@@ -184,7 +184,7 @@ func createTestTextLineSpecCollection01(
 		ePrefix.XCpy(
 			"timerLines01"))
 
-	err = txtLineCollection.AddTextLine(
+	err = txtLineCollection.AddTextLineSpec(
 		timerLines01,
 		ePrefix.XCpy(
 			"timerLines01"))
@@ -233,7 +233,7 @@ func createTestTextLineSpecCollection02(
 		return numOfLines, txtLineCollection, err
 	}
 
-	err = txtLineCollection.AddTextLine(
+	err = txtLineCollection.AddTextLineSpec(
 		&plainTextLine01,
 		ePrefix.XCpy(
 			"plainTextLine01"))
@@ -255,7 +255,7 @@ func createTestTextLineSpecCollection02(
 		return numOfLines, txtLineCollection, err
 	}
 
-	err = txtLineCollection.AddTextLine(
+	err = txtLineCollection.AddTextLineSpec(
 		&stdLine01,
 		ePrefix.XCpy(
 			"stdLine01"))
@@ -275,7 +275,7 @@ func createTestTextLineSpecCollection02(
 		return numOfLines, txtLineCollection, err
 	}
 
-	err = txtLineCollection.AddTextLine(
+	err = txtLineCollection.AddTextLineSpec(
 		&stdLine02,
 		ePrefix.XCpy(
 			"stdLine02"))
@@ -329,7 +329,7 @@ func createTestTextLineSpecCollection03(
 	}
 
 	// Index 0
-	err = txtLineCollection.AddTextLine(
+	err = txtLineCollection.AddTextLineSpec(
 		&plainTextLine01,
 		ePrefix.XCpy(
 			"plainTextLine01"))
@@ -352,7 +352,7 @@ func createTestTextLineSpecCollection03(
 	}
 
 	// Index 1
-	err = txtLineCollection.AddTextLine(
+	err = txtLineCollection.AddTextLineSpec(
 		&stdLine01,
 		ePrefix.XCpy(
 			"stdLine01"))
@@ -373,7 +373,7 @@ func createTestTextLineSpecCollection03(
 	}
 
 	// Index 2
-	err = txtLineCollection.AddTextLine(
+	err = txtLineCollection.AddTextLineSpec(
 		&stdLine02,
 		ePrefix.XCpy(
 			"stdLine02"))
@@ -402,7 +402,7 @@ func createTestTextLineSpecCollection03(
 	}
 
 	// Index 3
-	err = txtLineCollection.AddTextLine(
+	err = txtLineCollection.AddTextLineSpec(
 		&stdLine03,
 		ePrefix.XCpy(
 			"stdLine03"))
@@ -423,7 +423,7 @@ func createTestTextLineSpecCollection03(
 	}
 
 	// Index 4
-	err = txtLineCollection.AddTextLine(
+	err = txtLineCollection.AddTextLineSpec(
 		&stdLine04,
 		ePrefix.XCpy(
 			"stdLine04"))
@@ -444,7 +444,7 @@ func createTestTextLineSpecCollection03(
 	}
 
 	// Index 5
-	err = txtLineCollection.AddTextLine(
+	err = txtLineCollection.AddTextLineSpec(
 		&stdLine05,
 		ePrefix.XCpy(
 			"stdLine05"))
@@ -469,7 +469,7 @@ func createTestTextLineSpecCollection03(
 	}
 
 	// Index 6
-	err = txtLineCollection.AddTextLine(
+	err = txtLineCollection.AddTextLineSpec(
 		&txtSolidLine01,
 		ePrefix.XCpy(
 			"txtSolidLine01"))
@@ -493,7 +493,7 @@ func createTestTextLineSpecCollection03(
 	}
 
 	// Index 7
-	err = txtLineCollection.AddTextLine(
+	err = txtLineCollection.AddTextLineSpec(
 		&blankLines01,
 		ePrefix.XCpy(
 			"blankLines01"))
@@ -518,7 +518,7 @@ func createTestTextLineSpecCollection03(
 
 	// Index 8
 
-	err = txtLineCollection.AddTextLine(
+	err = txtLineCollection.AddTextLineSpec(
 		timerLines01,
 		ePrefix.XCpy(
 			"timerLines01"))

@@ -447,7 +447,7 @@ func (txtLineTitleMarqueeDto *TextLineTitleMarqueeDto) AddDateTimeTitleLine(
 		return err
 	}
 
-	err = txtLineTitleMarqueeDto.TitleLines.AddTextLine(
+	err = txtLineTitleMarqueeDto.TitleLines.AddTextLineSpec(
 		&stdLine,
 		ePrefix.XCpy(
 			"stdLine<-"))
@@ -792,7 +792,7 @@ func (txtLineTitleMarqueeDto *TextLineTitleMarqueeDto) AddTextLabelTitleLine(
 		return err
 	}
 
-	err = txtLineTitleMarqueeDto.TitleLines.AddTextLine(
+	err = txtLineTitleMarqueeDto.TitleLines.AddTextLineSpec(
 		&stdLine,
 		ePrefix.XCpy(
 			"stdLine<-"))
@@ -1015,7 +1015,7 @@ func (txtLineTitleMarqueeDto *TextLineTitleMarqueeDto) AddTitleLineTextFields(
 		return err
 	}
 
-	err = txtLineTitleMarqueeDto.TitleLines.AddTextLine(
+	err = txtLineTitleMarqueeDto.TitleLines.AddTextLineSpec(
 		&stdLine,
 		ePrefix.XCpy(
 			"stdLine<-"))
@@ -1175,7 +1175,7 @@ func (txtLineTitleMarqueeDto *TextLineTitleMarqueeDto) AddStandardTitleLine(
 		return err
 	}
 
-	err = txtLineTitleMarqueeDto.TitleLines.AddTextLine(
+	err = txtLineTitleMarqueeDto.TitleLines.AddTextLineSpec(
 		&deepCopyStdTitleLine,
 		ePrefix.XCpy(
 			"deepCopyStdTitleLine<-"))

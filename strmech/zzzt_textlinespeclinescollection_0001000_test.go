@@ -66,7 +66,7 @@ func TestTextLineSpecLinesCollection_AddTextLine_000100(t *testing.T) {
 		return
 	}
 
-	err = txtLinesCol02.AddTextLine(
+	err = txtLinesCol02.AddTextLineSpec(
 		&stdLine01,
 		ePrefix.XCpy(
 			"txtLinesCol02<-stdLine01"))
@@ -108,7 +108,7 @@ func TestTextLineSpecLinesCollection_AddTextLine_000100(t *testing.T) {
 		return
 	}
 
-	err = txtLinesCol03.AddTextLine(
+	err = txtLinesCol03.AddTextLineSpec(
 		&stdLine02,
 		StrMech{})
 
@@ -116,7 +116,7 @@ func TestTextLineSpecLinesCollection_AddTextLine_000100(t *testing.T) {
 
 		t.Errorf("%v - ERROR\n"+
 			"Expected an error return from txtLinesCol03."+
-			"AddTextLine()\n"+
+			"AddTextLineSpec()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.String())
