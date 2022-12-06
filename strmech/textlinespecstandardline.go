@@ -3258,273 +3258,6 @@ func (stdLine *TextLineSpecStandardLine) IsValidInstanceError(
 	return err
 }
 
-// NewStdLine1Col
-//
-// Configures and returns a new fully populated instance
-// of TextLineSpecStandardLine consisting of a single text
-// column. In other words the result is a single line of
-// text containing only one text column.
-//
-// ----------------------------------------------------------------
-//
-// # Input Parameters
-//
-//	oneColumnTextField			TextFieldFormatDto
-//
-//		Contains all the text field content and
-//		formatting specifications necessary to format a
-//		one-column text field.
-//
-//		type TextFieldFormatDto struct {
-//
-//			LeftMarginStr string
-//				One or more characters used to create a left
-//				margin for this Text Field.
-//
-//				If this parameter is set to an empty string, no
-//				left margin will be configured for this Text
-//				Field.
-//
-//			FieldContents interface{}
-//				This parameter may contain one of several
-//				specific data types. This empty interface type
-//				will be converted to a string and configured as
-//				the text column content within a text line.
-//
-//				Supported types which may be submitted through
-//				this empty interface parameter are listed as
-//				follows:
-//
-//				   time.Time (Converted using default format)
-//				   string
-//				   bool
-//				   uint, uint8, uint16, uint32, uint64,
-//				   int, int8, int16, int32, int64
-//				   float32, float64
-//				   *big.Int *big.Float
-//				   fmt.Stringer (types that support this interface)
-//				   TextInputParamFieldDateTimeDto
-//				         (Converts date time to string. The best way
-//				          to transmit and configure date time values.)
-//
-//			 FieldLength int
-//				The length of the text field in which the
-//				'FieldContents' will be displayed. If
-//				'FieldLength' is less than the length of the
-//				'FieldContents' string, it will be automatically
-//				set equal to the 'FieldContents' string length.
-//
-//				To automatically set the value of 'FieldLength'
-//				to the length of 'FieldContents', set this
-//				parameter to a value of minus one (-1).
-//
-//				If this parameter is submitted with a value less
-//				than minus one (-1) or greater than 1-million
-//				(1,000,000), an error will be returned.
-//
-//			 FieldJustify TextJustify
-//				An enumeration which specifies the justification
-//				of the 'FieldContents' string within the text
-//				field length specified by 'FieldLength'.
-//
-//				Text justification can only be evaluated in the
-//				context of a text label ('FieldContents'), field
-//				length ('FieldLength') and a Text Justification
-//				object of type TextJustify. This is because text
-//				labels with a field length equal to or less than
-//				the length of the text label string will never
-//				use text justification. In these cases, text
-//				justification is completely ignored.
-//
-//				If the field length is greater than the length of
-//				the text label string, text justification must be
-//				equal to one of these three valid values:
-//
-//				    TextJustify(0).Left()
-//				    TextJustify(0).Right()
-//				    TextJustify(0).Center()
-//
-//				Users can also specify the abbreviated text
-//				justification enumeration syntax as follows:
-//
-//				    TxtJustify.Left()
-//				    TxtJustify.Right()
-//				    TxtJustify.Center()
-//
-//			RightMarginStr string
-//				One or more characters used to create a right
-//				margin for this Text Field.
-//
-//				If this parameter is set to an empty string, no
-//				right margin will be configured for this Text
-//				Field.
-//		}
-//
-//	errorPrefix					interface{}
-//
-//		This object encapsulates error prefix text which
-//		is included in all returned error messages.
-//		Usually, it	contains the name of the calling
-//		method or methods listed as a method or function
-//		chain of execution.
-//
-//		If no error prefix information is needed, set this
-//		parameter to 'nil'.
-//
-//		This empty interface must be convertible to one of
-//		the following types:
-//
-//		1.	nil
-//				A nil value is valid and generates an
-//				empty collection of error prefix and
-//				error context information.
-//
-//		2.	string
-//				A string containing error prefix
-//				information.
-//
-//		3.	[]string
-//				A one-dimensional slice of strings
-//				containing error prefix information.
-//
-//		4.	[][2]string
-//				A two-dimensional slice of strings
-//		   		containing error prefix and error
-//		   		context information.
-//
-//		5.	ErrPrefixDto
-//				An instance of ErrPrefixDto.
-//				Information from this object will
-//				be copied for use in error and
-//				informational messages.
-//
-//		6.	*ErrPrefixDto
-//				A pointer to an instance of
-//				ErrPrefixDto. Information from
-//				this object will be copied for use
-//				in error and informational messages.
-//
-//		7.	IBasicErrorPrefix
-//				An interface to a method
-//				generating a two-dimensional slice
-//				of strings containing error prefix
-//				and error context information.
-//
-//		If parameter 'errorPrefix' is NOT convertible
-//		to one of the valid types listed above, it will
-//		be considered invalid and trigger the return of
-//		an error.
-//
-//		Types ErrPrefixDto and IBasicErrorPrefix are
-//		included in the 'errpref' software package:
-//			"github.com/MikeAustin71/errpref".
-//
-// ----------------------------------------------------------------
-//
-// # Return Values
-//
-//	error
-//
-//		If this method completes successfully, the
-//		returned error Type is set equal to 'nil'.
-//
-//		If errors are encountered during processing, the
-//		returned error Type will encapsulate an error
-//		message. This returned error message will
-//		incorporate the method chain and text passed by
-//		input parameter, 'errorPrefix'. The 'errorPrefix'
-//		text will be attached to the beginning of the
-//		error message.
-func (stdLine TextLineSpecStandardLine) NewStdLine1Col(
-	oneColumnTextField TextFieldFormatDto,
-	lineTerminator string,
-	turnLineTerminatorOff bool,
-	errorPrefix interface{}) (
-	TextLineSpecStandardLine,
-	error) {
-
-	if stdLine.lock == nil {
-		stdLine.lock = new(sync.Mutex)
-	}
-
-	stdLine.lock.Lock()
-
-	defer stdLine.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-	var err error
-
-	newStdLine := TextLineSpecStandardLine{}
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
-		"TextLineSpecStandardLine."+
-			"NewStdLine1Col()",
-		"")
-
-	if err != nil {
-		return newStdLine, err
-	}
-
-	if len(lineTerminator) == 0 {
-		lineTerminator = "\n"
-	}
-
-	err = new(textLineSpecStandardLineNanobot).
-		setTextFieldFmtStdLine(
-			&newStdLine,
-			[]TextFieldFormatDto{oneColumnTextField},
-			1,
-			[]rune(lineTerminator),
-			turnLineTerminatorOff,
-			ePrefix.XCpy(
-				"newStdLine<-"))
-
-	return newStdLine, err
-}
-
-// NewStdLine2Col
-//
-// Configures and returns a new fully populated instance
-// of TextLineSpecStandardLine consisting of two text
-// columns. In other words the result is a single line
-// of text containing two text columns.
-func (stdLine TextLineSpecStandardLine) NewStdLine2Col(
-	leftMarginStr string,
-	column1FieldContents interface{},
-	column1FieldLength int,
-	column1FieldJustify TextJustify,
-	column1RightMarginStr string,
-	column2Field interface{},
-	column2FieldLength int,
-	column2FieldJustify TextJustify,
-	column2RightMarginStr string,
-	lineTerminator string,
-	errorPrefix interface{}) (
-	TextLineSpecStandardLine,
-	error) {
-
-	var err error
-
-	return TextLineSpecStandardLine{}, err
-}
-
-func (stdLine TextLineSpecStandardLine) NewStdLineMultiCol(
-	textFields []interface{},
-	fieldFormatParams []TextFieldFmtParamsDto,
-	turnLineTerminationOff bool,
-	lineTerminator string,
-	errorPrefix interface{}) (
-	TextLineSpecStandardLine,
-	error) {
-
-	var err error
-
-	return TextLineSpecStandardLine{}, err
-
-}
-
 // New - This method returns a new, partially configured concrete
 // instance of TextLineSpecStandardLine. The returned instance of
 // TextLineSpecStandardLine sets defaults for the parameters listed
@@ -3729,276 +3462,6 @@ func (stdLine TextLineSpecStandardLine) NewPtr() *TextLineSpecStandardLine {
 	newStdLine.turnLineTerminatorOff = false
 
 	return &newStdLine
-}
-
-// NewStandardLine - Returns a new concrete instance of
-// TextLineSpecStandardLine. The returned new instance is
-// constructed from input parameters 'numOfStdLines' and
-// 'textFields'.
-//
-// This method is identical to
-// TextLineSpecStandardLine.NewPtrStandardLine() with the sole
-// exception being that this method returns a concrete instance of
-// TextLineSpecStandardLine while method
-// TextLineSpecStandardLine.NewPtrStandardLine() returns a pointer
-// to a TextLineSpecStandardLine instance.
-//
-// The TextLineSpecStandardLine type is a text specification for a
-// standard line of text. A standard line of text comprises a
-// single line of text which may be repeated one or more times.
-//
-// TextLineSpecStandardLine encapsulates an array of
-// ITextFieldSpecification objects which are used to format text
-// fields within a single line of text. Essentially, a standard
-// text line is a collection of text fields which implement the
-// ITextFieldSpecification interface. Text fields are the building
-// blocks used to construct a standard line of text.
-//
-// Input parameter 'textFields' is an array of
-// ITextFieldSpecification objects which will be assembled and
-// formatted on a single line of text.
-//
-// ------------------------------------------------------------------------
-//
-// # Default Values
-//
-// This method will automatically set the following default values:
-//
-//	newLineChars               []rune{'\n'}
-//	   - By default, each line of text generated by
-//	     TextLineSpecStandardLine will be terminated with a new
-//	     line character ('\n'). However, users have the option to
-//	     override and modify this behavior by supplying an
-//	     alternative character or characters to be used as a line
-//	     termination sequence for each line of text produced by the
-//	     current TextLineSpecStandardLine instance.
-//
-//	     This method will not change the current value of
-//	     'newLineChars'.
-//
-//	     To override, change or control the behavior of
-//	     'newLineChars', see the following methods:
-//	       TextLineSpecStandardLine.GetNewLineRunes()
-//	       TextLineSpecStandardLine.SetNewLineChars()
-//	       TextLineSpecStandardLine.SetNewLineRunes()
-//	       TextLineSpecStandardLine.TurnAutoLineTerminationOff()
-//	       TextLineSpecStandardLine.TurnAutoLineTerminationOn()
-//
-//
-//	turnLineTerminatorOff      false
-//	   - The 'turnLineTerminatorOff' flag controls whether a line
-//	     termination character or characters will be automatically
-//	     appended to each line of text produced by
-//	     TextLineSpecStandardLine.
-//
-//	     When the boolean flag 'turnLineTerminatorOff' is set to
-//	     'false', line terminators as defined by member variable
-//	     'newLineChars' will be applied as a line termination
-//	     sequence for each line of text produced by
-//	     TextLineSpecStandardLine.
-//
-//	     When this boolean value is set to 'true', it turns off or
-//	     cancels the automatic generation of line terminators for
-//	     each line of text produced by TextLineSpecStandardLine.
-//
-//	     The default line terminator is the new line character
-//	     ('\n') which is defined by member variable 'newLineChars'.
-//	     However, this value is subject to user control and may be
-//	     overridden by one or more characters supplied by the user.
-//
-// ----------------------------------------------------------------
-//
-// Input Parameters
-//
-//	numOfStdLines              int
-//	   - An integer value specifying the number of repetitions for
-//	     a standard line text formatted for text display, file
-//	     output or printing.
-//
-//	     A 'numOfStdLines' value of 1 means the line will be output
-//	     once, a value of 2 signals the line will be repeated or
-//	     output twice, a value of '3' signals the line will be output
-//	     3-times and so on.
-//
-//	     If the 'numOfStdLines' value is set to zero, no text line
-//	     will be formatted for text display, file output or printing.
-//
-//	     If this value is set to a value less than zero, it will be
-//	     automatically reset to a value of one ('1').
-//
-//	     The following examples illustrate the use of
-//	     'numOfStdLines':
-//	       Example #1:
-//	        Standard Line Text = "Hello World"
-//	        numOfStdLines = 1
-//	        Text Output:
-//	          "Hello World"
-//
-//	       Example #2:
-//	        Standard Line Text = "Hello World"
-//	        numOfStdLines = 3
-//	        Text Output:
-//	          "Hello World"
-//	          "Hello World"
-//	          "Hello World"
-//
-//
-//	textFields                 []ITextFieldSpecification
-//	   - 'textFields' is a collection of objects implementing the
-//	     ITextLineSpecification interface. These text fields are
-//	     assembled by the TextLineSpecStandardLine type and formatted
-//	     as a single line of text. This single line of text is
-//	     output one or more times as specified by input parameter,
-//	     'numOfStdLines'.
-//
-//	     Text fields are the building blocks used to assemble a
-//	     standard line of text.
-//
-//	     If this parameter is submitted as a 'nil' value or a zero
-//	     length array, an error will be returned.
-//
-//	     If any of the objects contained in this collection are
-//	     invalid, an error will be returned.
-//
-//
-//	errorPrefix                interface{}
-//	   - This object encapsulates error prefix text which is
-//	     included in all returned error messages. Usually, it
-//	     contains the name of the calling method or methods
-//	     listed as a method or function chain of execution.
-//
-//	     If no error prefix information is needed, set this
-//	     parameter to 'nil'.
-//
-//	     This empty interface must be convertible to one of the
-//	     following types:
-//
-//	     1. nil - A nil value is valid and generates an empty
-//	        collection of error prefix and error context
-//	        information.
-//
-//	     2. string - A string containing error prefix information.
-//
-//	     3. []string A one-dimensional slice of strings containing
-//	        error prefix information
-//
-//	     4. [][2]string A two-dimensional slice of strings
-//	        containing error prefix and error context information.
-//
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//	        from this object will be copied for use in error and
-//	        informational messages.
-//
-//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//	        Information from this object will be copied for use in
-//	        error and informational messages.
-//
-//	     7. IBasicErrorPrefix - An interface to a method generating
-//	        a two-dimensional slice of strings containing error
-//	        prefix and error context information.
-//
-//	     If parameter 'errorPrefix' is NOT convertible to one of
-//	     the valid types listed above, it will be considered
-//	     invalid and trigger the return of an error.
-//
-//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
-//	     the 'errpref' software package,
-//	     "github.com/MikeAustin71/errpref".
-//
-// ----------------------------------------------------------------
-//
-// Return Values
-//
-//	TextLineSpecStandardLine
-//	   - If this method completes successfully, it will create and
-//	     return a new concrete instance of TextLineSpecStandardLine
-//	     which is fully configured with all the parameters
-//	     necessary to format a standard text line for text display,
-//	     file output or printing.
-//
-//
-//	error
-//	   - If the method completes successfully and no errors are
-//	     encountered this return value is set to 'nil'. Otherwise,
-//	     if errors are encountered, this return value will contain
-//	     an appropriate error message.
-//
-//	     If an error message is returned, the text value of input
-//	     parameter 'errorPrefix' will be inserted or prefixed at
-//	     the beginning of the error message.
-func (stdLine TextLineSpecStandardLine) NewStandardLine(
-	numOfStdLines int,
-	textFields []ITextFieldSpecification,
-	errorPrefix interface{}) (
-	TextLineSpecStandardLine,
-	error) {
-
-	if stdLine.lock == nil {
-		stdLine.lock = new(sync.Mutex)
-	}
-
-	stdLine.lock.Lock()
-
-	defer stdLine.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-	var err error
-
-	newStdLine := TextLineSpecStandardLine{}
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
-		"TextLineSpecStandardLine."+
-			"NewPtrStandardLine()",
-		"")
-
-	if err != nil {
-		return newStdLine, err
-	}
-
-	newStdLine.lock = new(sync.Mutex)
-
-	if textFields == nil {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'textFields' is invalid!\n"+
-			"'textFields' is a 'nil' value.\n",
-			ePrefix.String())
-
-		return newStdLine, err
-	}
-
-	lenTxtFields := len(textFields)
-
-	if lenTxtFields == 0 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'textFields' is invalid!\n"+
-			"'textFields' is a zero length array.\n",
-			ePrefix.String())
-
-		return newStdLine, err
-	}
-
-	if numOfStdLines < 0 {
-		numOfStdLines = 1
-	}
-
-	newLineChars :=
-		textSpecificationAtom{}.ptr().
-			getDefaultNewLineChars()
-
-	err = textLineSpecStandardLineNanobot{}.ptr().
-		setTxtSpecStandardLine(
-			&newStdLine,
-			numOfStdLines,
-			textFields,
-			newLineChars,
-			false,
-			ePrefix)
-
-	return newStdLine, err
 }
 
 // NewPtrStandardLine - Returns a pointer to a new instance of
@@ -4271,6 +3734,543 @@ func (stdLine TextLineSpecStandardLine) NewPtrStandardLine(
 	return &newStdLine, err
 }
 
+// NewPtrStandardLineAllParms - Returns a new, populated concrete
+// instance of TextLineSpecStandardLine. This method includes the
+// maximum number input parameters thereby allowing the caller to
+// control and configure all member variables for the new
+// TextLineSpecStandardLine instance.
+//
+// This method is identical to
+// TextLineSpecStandardLine.NewStandardLineAllParms() with the sole
+// exception being that this method returns a pointer to a
+// TextLineSpecStandardLine instance while method
+// TextLineSpecStandardLine.NewStandardLineAllParms() returns a
+// concrete instance of TextLineSpecStandardLine.
+//
+// The TextLineSpecStandardLine type is a text specification for a
+// standard line of text. A standard line of text comprises a
+// single line of text which may be repeated one or more times.
+//
+// TextLineSpecStandardLine encapsulates an array of
+// ITextFieldSpecification objects which are used to format text
+// fields within a single line of text. Essentially, a standard
+// text line is a collection of text fields which implement the
+// ITextFieldSpecification interface. Text fields are the building
+// blocks used to construct a standard line of text.
+//
+// Input parameter 'textFields' is an array of
+// ITextFieldSpecification objects which will be assembled and
+// formatted on a single line of text.
+//
+// ----------------------------------------------------------------
+//
+// Default Values
+//
+//	--- NONE ---   - Input parameters shown below configure all
+//	                 internal member variables associated with the
+//	                 returned new instance of
+//	                 TextLineSpecStandardLine.
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//	numOfStdLines              int
+//	   - An integer value specifying the number of repetitions for
+//	     a standard line text formatted for text display, file
+//	     output or printing.
+//
+//	     A 'numOfStdLines' value of 1 means the line will be output
+//	     once, a value of 2 signals the line will be repeated or
+//	     output twice, a value of '3' signals the line will be output
+//	     3-times and so on.
+//
+//	     If the 'numOfStdLines' value is set to zero, no text line
+//	     will be formatted for text display, file output or printing.
+//
+//	     If this value is set to a value less than zero, it will be
+//	     automatically reset to a value of one ('1').
+//
+//	     The following examples illustrate the use of
+//	     'numOfStdLines':
+//	       Example #1:
+//	        Standard Line Text = "Hello World"
+//	        numOfStdLines = 1
+//	        Text Output:
+//	          "Hello World"
+//
+//	       Example #2:
+//	        Standard Line Text = "Hello World"
+//	        numOfStdLines = 3
+//	        Text Output:
+//	          "Hello World"
+//	          "Hello World"
+//	          "Hello World"
+//
+//
+//	textFields                 []ITextFieldSpecification
+//	   - 'textFields' is a collection of objects implementing the
+//	     ITextLineSpecification interface. These text fields are
+//	     assembled by the TextLineSpecStandardLine type and formatted
+//	     as a single line of text. This single line of text is
+//	     output one or more times as specified by input parameter,
+//	     'numOfStdLines'.
+//
+//	     Text fields are the building blocks used to assemble a
+//	     standard line of text.
+//
+//	     If this parameter is submitted as a 'nil' value or a zero
+//	     length array, an error will be returned.
+//
+//	     If any of the objects contained in this collection are
+//	     invalid, an error will be returned.
+//
+//
+//	newLineChars               []rune
+//	   - An array of runes which contains the text characters which
+//	     will be applied as line termination characters for each
+//	     line of text produced by the returned instance of
+//	     TextLineSpecStandardLine.
+//
+//	     By default, each line of text generated by
+//	     TextLineSpecStandardLine will be terminated with a new
+//	     line character ('\n'). However, this parameter allows the
+//	     caller to specify the character or characters to be used
+//	     as a line termination sequence for each line of text
+//	     produced by the returned instance of
+//	     TextLineSpecStandardLine.
+//
+//	     If this parameter is submitted as a 'nil' value or, if
+//	     'newLineChars' is a zero length array, this method will
+//	     set 'newLineChars' to the default new line termination
+//	     character ('\n').
+//
+//
+//	turnLineTerminatorOff      bool
+//	   - The 'turnLineTerminatorOff' flag controls whether a line
+//	     termination character or characters will be automatically
+//	     appended to each line of text produced by
+//	     TextLineSpecStandardLine.
+//
+//	     When the boolean flag 'turnLineTerminatorOff' is set to
+//	     'false', line terminators as defined by parameter
+//	     'newLineChars' will be applied as a line termination
+//	     sequence for each line of text produced by
+//	     TextLineSpecStandardLine.
+//
+//	     When this boolean value is set to 'true', it turns off or
+//	     cancels the automatic generation of line terminators for
+//	     each line of text produced by TextLineSpecStandardLine.
+//
+//
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
+//
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
+//
+//	     This empty interface must be convertible to one of the
+//	     following types:
+//
+//	     1. nil - A nil value is valid and generates an empty
+//	        collection of error prefix and error context
+//	        information.
+//
+//	     2. string - A string containing error prefix information.
+//
+//	     3. []string A one-dimensional slice of strings containing
+//	        error prefix information
+//
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
+//
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	        from this object will be copied for use in error and
+//	        informational messages.
+//
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	        Information from this object will be copied for use in
+//	        error and informational messages.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	        a two-dimensional slice of strings containing error
+//	        prefix and error context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//	*TextLineSpecStandardLine
+//	   - If this method completes successfully, it will create and
+//	     return a pointer to a new, populated instance of
+//	     TextLineSpecStandardLine which is fully configured with
+//	     all the parameters necessary to format one or more
+//	     lines of text for text display, file output or printing.
+//
+//
+//	error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
+//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
+func (stdLine TextLineSpecStandardLine) NewPtrStandardLineAllParms(
+	numOfStdLines int,
+	textFields []ITextFieldSpecification,
+	newLineChars []rune,
+	turnLineTerminatorOff bool,
+	errorPrefix interface{}) (
+	*TextLineSpecStandardLine,
+	error) {
+
+	if stdLine.lock == nil {
+		stdLine.lock = new(sync.Mutex)
+	}
+
+	stdLine.lock.Lock()
+
+	defer stdLine.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	newStdLine := TextLineSpecStandardLine{}
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecStandardLine."+
+			"NewPtrStandardLineAllParms()",
+		"")
+
+	if err != nil {
+		return &newStdLine, err
+	}
+
+	newStdLine.lock = new(sync.Mutex)
+
+	if textFields == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'textFields' is invalid!\n"+
+			"'textFields' is a 'nil' value.\n",
+			ePrefix.String())
+
+		return &newStdLine, err
+	}
+
+	lenTxtFields := len(textFields)
+
+	if lenTxtFields == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'textFields' is invalid!\n"+
+			"'textFields' is a zero length array.\n",
+			ePrefix.String())
+
+		return &newStdLine, err
+	}
+
+	if numOfStdLines < 0 {
+		numOfStdLines = 1
+	}
+
+	err = textLineSpecStandardLineNanobot{}.ptr().
+		setTxtSpecStandardLine(
+			&newStdLine,
+			numOfStdLines,
+			textFields,
+			newLineChars,
+			turnLineTerminatorOff,
+			ePrefix)
+
+	return &newStdLine, err
+}
+
+// NewStandardLine - Returns a new concrete instance of
+// TextLineSpecStandardLine. The returned new instance is
+// constructed from input parameters 'numOfStdLines' and
+// 'textFields'.
+//
+// This method is identical to
+// TextLineSpecStandardLine.NewPtrStandardLine() with the sole
+// exception being that this method returns a concrete instance of
+// TextLineSpecStandardLine while method
+// TextLineSpecStandardLine.NewPtrStandardLine() returns a pointer
+// to a TextLineSpecStandardLine instance.
+//
+// The TextLineSpecStandardLine type is a text specification for a
+// standard line of text. A standard line of text comprises a
+// single line of text which may be repeated one or more times.
+//
+// TextLineSpecStandardLine encapsulates an array of
+// ITextFieldSpecification objects which are used to format text
+// fields within a single line of text. Essentially, a standard
+// text line is a collection of text fields which implement the
+// ITextFieldSpecification interface. Text fields are the building
+// blocks used to construct a standard line of text.
+//
+// Input parameter 'textFields' is an array of
+// ITextFieldSpecification objects which will be assembled and
+// formatted on a single line of text.
+//
+// ------------------------------------------------------------------------
+//
+// # Default Values
+//
+// This method will automatically set the following default values:
+//
+//	newLineChars               []rune{'\n'}
+//	   - By default, each line of text generated by
+//	     TextLineSpecStandardLine will be terminated with a new
+//	     line character ('\n'). However, users have the option to
+//	     override and modify this behavior by supplying an
+//	     alternative character or characters to be used as a line
+//	     termination sequence for each line of text produced by the
+//	     current TextLineSpecStandardLine instance.
+//
+//	     This method will not change the current value of
+//	     'newLineChars'.
+//
+//	     To override, change or control the behavior of
+//	     'newLineChars', see the following methods:
+//	       TextLineSpecStandardLine.GetNewLineRunes()
+//	       TextLineSpecStandardLine.SetNewLineChars()
+//	       TextLineSpecStandardLine.SetNewLineRunes()
+//	       TextLineSpecStandardLine.TurnAutoLineTerminationOff()
+//	       TextLineSpecStandardLine.TurnAutoLineTerminationOn()
+//
+//
+//	turnLineTerminatorOff      false
+//	   - The 'turnLineTerminatorOff' flag controls whether a line
+//	     termination character or characters will be automatically
+//	     appended to each line of text produced by
+//	     TextLineSpecStandardLine.
+//
+//	     When the boolean flag 'turnLineTerminatorOff' is set to
+//	     'false', line terminators as defined by member variable
+//	     'newLineChars' will be applied as a line termination
+//	     sequence for each line of text produced by
+//	     TextLineSpecStandardLine.
+//
+//	     When this boolean value is set to 'true', it turns off or
+//	     cancels the automatic generation of line terminators for
+//	     each line of text produced by TextLineSpecStandardLine.
+//
+//	     The default line terminator is the new line character
+//	     ('\n') which is defined by member variable 'newLineChars'.
+//	     However, this value is subject to user control and may be
+//	     overridden by one or more characters supplied by the user.
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//	numOfStdLines              int
+//	   - An integer value specifying the number of repetitions for
+//	     a standard line text formatted for text display, file
+//	     output or printing.
+//
+//	     A 'numOfStdLines' value of 1 means the line will be output
+//	     once, a value of 2 signals the line will be repeated or
+//	     output twice, a value of '3' signals the line will be output
+//	     3-times and so on.
+//
+//	     If the 'numOfStdLines' value is set to zero, no text line
+//	     will be formatted for text display, file output or printing.
+//
+//	     If this value is set to a value less than zero, it will be
+//	     automatically reset to a value of one ('1').
+//
+//	     The following examples illustrate the use of
+//	     'numOfStdLines':
+//	       Example #1:
+//	        Standard Line Text = "Hello World"
+//	        numOfStdLines = 1
+//	        Text Output:
+//	          "Hello World"
+//
+//	       Example #2:
+//	        Standard Line Text = "Hello World"
+//	        numOfStdLines = 3
+//	        Text Output:
+//	          "Hello World"
+//	          "Hello World"
+//	          "Hello World"
+//
+//
+//	textFields                 []ITextFieldSpecification
+//	   - 'textFields' is a collection of objects implementing the
+//	     ITextLineSpecification interface. These text fields are
+//	     assembled by the TextLineSpecStandardLine type and formatted
+//	     as a single line of text. This single line of text is
+//	     output one or more times as specified by input parameter,
+//	     'numOfStdLines'.
+//
+//	     Text fields are the building blocks used to assemble a
+//	     standard line of text.
+//
+//	     If this parameter is submitted as a 'nil' value or a zero
+//	     length array, an error will be returned.
+//
+//	     If any of the objects contained in this collection are
+//	     invalid, an error will be returned.
+//
+//
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
+//
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
+//
+//	     This empty interface must be convertible to one of the
+//	     following types:
+//
+//	     1. nil - A nil value is valid and generates an empty
+//	        collection of error prefix and error context
+//	        information.
+//
+//	     2. string - A string containing error prefix information.
+//
+//	     3. []string A one-dimensional slice of strings containing
+//	        error prefix information
+//
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
+//
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	        from this object will be copied for use in error and
+//	        informational messages.
+//
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	        Information from this object will be copied for use in
+//	        error and informational messages.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	        a two-dimensional slice of strings containing error
+//	        prefix and error context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//	TextLineSpecStandardLine
+//	   - If this method completes successfully, it will create and
+//	     return a new concrete instance of TextLineSpecStandardLine
+//	     which is fully configured with all the parameters
+//	     necessary to format a standard text line for text display,
+//	     file output or printing.
+//
+//
+//	error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
+//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
+func (stdLine TextLineSpecStandardLine) NewStandardLine(
+	numOfStdLines int,
+	textFields []ITextFieldSpecification,
+	errorPrefix interface{}) (
+	TextLineSpecStandardLine,
+	error) {
+
+	if stdLine.lock == nil {
+		stdLine.lock = new(sync.Mutex)
+	}
+
+	stdLine.lock.Lock()
+
+	defer stdLine.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	newStdLine := TextLineSpecStandardLine{}
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecStandardLine."+
+			"NewPtrStandardLine()",
+		"")
+
+	if err != nil {
+		return newStdLine, err
+	}
+
+	newStdLine.lock = new(sync.Mutex)
+
+	if textFields == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'textFields' is invalid!\n"+
+			"'textFields' is a 'nil' value.\n",
+			ePrefix.String())
+
+		return newStdLine, err
+	}
+
+	lenTxtFields := len(textFields)
+
+	if lenTxtFields == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'textFields' is invalid!\n"+
+			"'textFields' is a zero length array.\n",
+			ePrefix.String())
+
+		return newStdLine, err
+	}
+
+	if numOfStdLines < 0 {
+		numOfStdLines = 1
+	}
+
+	newLineChars :=
+		textSpecificationAtom{}.ptr().
+			getDefaultNewLineChars()
+
+	err = textLineSpecStandardLineNanobot{}.ptr().
+		setTxtSpecStandardLine(
+			&newStdLine,
+			numOfStdLines,
+			textFields,
+			newLineChars,
+			false,
+			ePrefix)
+
+	return newStdLine, err
+}
+
 // NewStandardLineAllParms - Returns a new, populated concrete
 // instance of TextLineSpecStandardLine. This method includes the
 // maximum number input parameters thereby allowing the caller to
@@ -4537,207 +4537,239 @@ func (stdLine TextLineSpecStandardLine) NewStandardLineAllParms(
 	return newStdLine, err
 }
 
-// NewPtrStandardLineAllParms - Returns a new, populated concrete
-// instance of TextLineSpecStandardLine. This method includes the
-// maximum number input parameters thereby allowing the caller to
-// control and configure all member variables for the new
-// TextLineSpecStandardLine instance.
+//	NewStdLine1Col
 //
-// This method is identical to
-// TextLineSpecStandardLine.NewStandardLineAllParms() with the sole
-// exception being that this method returns a pointer to a
-// TextLineSpecStandardLine instance while method
-// TextLineSpecStandardLine.NewStandardLineAllParms() returns a
-// concrete instance of TextLineSpecStandardLine.
-//
-// The TextLineSpecStandardLine type is a text specification for a
-// standard line of text. A standard line of text comprises a
-// single line of text which may be repeated one or more times.
-//
-// TextLineSpecStandardLine encapsulates an array of
-// ITextFieldSpecification objects which are used to format text
-// fields within a single line of text. Essentially, a standard
-// text line is a collection of text fields which implement the
-// ITextFieldSpecification interface. Text fields are the building
-// blocks used to construct a standard line of text.
-//
-// Input parameter 'textFields' is an array of
-// ITextFieldSpecification objects which will be assembled and
-// formatted on a single line of text.
+//	Configures and returns a new fully populated instance
+//	of TextLineSpecStandardLine consisting of a single text
+//	column. In other words the result is a single line of
+//	text containing only one text column.
 //
 // ----------------------------------------------------------------
 //
-// Default Values
+// # Input Parameters
 //
-//	--- NONE ---   - Input parameters shown below configure all
-//	                 internal member variables associated with the
-//	                 returned new instance of
-//	                 TextLineSpecStandardLine.
+//	oneColumnTextField			TextFieldFormatDto
+//
+//		Contains all the text field content and
+//		formatting specifications necessary to format a
+//		one-column text field.
+//
+//		type TextFieldFormatDto struct {
+//
+//			LeftMarginStr string
+//				One or more characters used to create a left
+//				margin for this Text Field.
+//
+//				If this parameter is set to an empty string, no
+//				left margin will be configured for this Text
+//				Field.
+//
+//			FieldContents interface{}
+//				This parameter may contain one of several
+//				specific data types. This empty interface type
+//				will be converted to a string and configured as
+//				the text column content within a text line.
+//
+//				Supported types which may be submitted through
+//				this empty interface parameter are listed as
+//				follows:
+//
+//				   time.Time (Converted using default format)
+//				   string
+//				   bool
+//				   uint, uint8, uint16, uint32, uint64,
+//				   int, int8, int16, int32, int64
+//				   float32, float64
+//				   *big.Int *big.Float
+//				   fmt.Stringer (types that support this interface)
+//				   TextInputParamFieldDateTimeDto
+//				         (Converts date time to string. The best way
+//				          to transmit and configure date time values.)
+//
+//			 FieldLength int
+//				The length of the text field in which the
+//				'FieldContents' will be displayed. If
+//				'FieldLength' is less than the length of the
+//				'FieldContents' string, it will be automatically
+//				set equal to the 'FieldContents' string length.
+//
+//				To automatically set the value of 'FieldLength'
+//				to the length of 'FieldContents', set this
+//				parameter to a value of minus one (-1).
+//
+//				If this parameter is submitted with a value less
+//				than minus one (-1) or greater than 1-million
+//				(1,000,000), an error will be returned.
+//
+//			 FieldJustify TextJustify
+//				An enumeration which specifies the justification
+//				of the 'FieldContents' string within the text
+//				field length specified by 'FieldLength'.
+//
+//				Text justification can only be evaluated in the
+//				context of a text label ('FieldContents'), field
+//				length ('FieldLength') and a Text Justification
+//				object of type TextJustify. This is because text
+//				labels with a field length equal to or less than
+//				the length of the text label string will never
+//				use text justification. In these cases, text
+//				justification is completely ignored.
+//
+//				If the field length is greater than the length of
+//				the text label string, text justification must be
+//				equal to one of these three valid values:
+//
+//				    TextJustify(0).Left()
+//				    TextJustify(0).Right()
+//				    TextJustify(0).Center()
+//
+//				Users can also specify the abbreviated text
+//				justification enumeration syntax as follows:
+//
+//				    TxtJustify.Left()
+//				    TxtJustify.Right()
+//				    TxtJustify.Center()
+//
+//			RightMarginStr string
+//				One or more characters used to create a right
+//				margin for this Text Field.
+//
+//				If this parameter is set to an empty string, no
+//				right margin will be configured for this Text
+//				Field.
+//		}
+//
+//	lineTerminator				string
+//
+//		Also known as 'New Line characters'. This string
+//		contains the text characters which will be
+//		applied as line termination characters for each
+//		line of text produced by the returned instance of
+//		TextLineSpecStandardLine.
+//
+//		By default, each line of text generated by
+//		TextLineSpecStandardLine will be terminated with
+//		a new line character ('\n'). However, this
+//		parameter allows the user to specify the
+//		character or characters to be used as a line
+//		termination sequence for each line of text
+//		produced by the returned instance of
+//		TextLineSpecStandardLine.
+//
+//		If this parameter is submitted as an empty string
+//		with zero string length, this method will set
+//		'lineTerminator' to the default new line
+//		termination character ("\n").
+//
+//	turnLineTerminatorOff		bool
+//
+//		The 'turnLineTerminatorOff' flag controls whether
+//		a line termination character or characters will
+//		be automatically appended to each line of text
+//		produced by TextLineSpecStandardLine.
+//
+//		When the boolean flag 'turnLineTerminatorOff' is
+//		set to 'false', line terminators as defined by
+//		parameter 'lineTerminator' will be applied as a
+//		line termination sequence for each line of text
+//		produced by TextLineSpecStandardLine.
+//
+//		When this boolean value is set to 'true', it
+//		turns off or cancels the automatic generation of
+//		line terminators for each line of text produced
+//		by TextLineSpecStandardLine.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it	contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
-// Input Parameters
+// # Return Values
 //
-//	numOfStdLines              int
-//	   - An integer value specifying the number of repetitions for
-//	     a standard line text formatted for text display, file
-//	     output or printing.
+//	TextLineSpecStandardLine
 //
-//	     A 'numOfStdLines' value of 1 means the line will be output
-//	     once, a value of 2 signals the line will be repeated or
-//	     output twice, a value of '3' signals the line will be output
-//	     3-times and so on.
-//
-//	     If the 'numOfStdLines' value is set to zero, no text line
-//	     will be formatted for text display, file output or printing.
-//
-//	     If this value is set to a value less than zero, it will be
-//	     automatically reset to a value of one ('1').
-//
-//	     The following examples illustrate the use of
-//	     'numOfStdLines':
-//	       Example #1:
-//	        Standard Line Text = "Hello World"
-//	        numOfStdLines = 1
-//	        Text Output:
-//	          "Hello World"
-//
-//	       Example #2:
-//	        Standard Line Text = "Hello World"
-//	        numOfStdLines = 3
-//	        Text Output:
-//	          "Hello World"
-//	          "Hello World"
-//	          "Hello World"
-//
-//
-//	textFields                 []ITextFieldSpecification
-//	   - 'textFields' is a collection of objects implementing the
-//	     ITextLineSpecification interface. These text fields are
-//	     assembled by the TextLineSpecStandardLine type and formatted
-//	     as a single line of text. This single line of text is
-//	     output one or more times as specified by input parameter,
-//	     'numOfStdLines'.
-//
-//	     Text fields are the building blocks used to assemble a
-//	     standard line of text.
-//
-//	     If this parameter is submitted as a 'nil' value or a zero
-//	     length array, an error will be returned.
-//
-//	     If any of the objects contained in this collection are
-//	     invalid, an error will be returned.
-//
-//
-//	newLineChars               []rune
-//	   - An array of runes which contains the text characters which
-//	     will be applied as line termination characters for each
-//	     line of text produced by the returned instance of
-//	     TextLineSpecStandardLine.
-//
-//	     By default, each line of text generated by
-//	     TextLineSpecStandardLine will be terminated with a new
-//	     line character ('\n'). However, this parameter allows the
-//	     caller to specify the character or characters to be used
-//	     as a line termination sequence for each line of text
-//	     produced by the returned instance of
-//	     TextLineSpecStandardLine.
-//
-//	     If this parameter is submitted as a 'nil' value or, if
-//	     'newLineChars' is a zero length array, this method will
-//	     set 'newLineChars' to the default new line termination
-//	     character ('\n').
-//
-//
-//	turnLineTerminatorOff      bool
-//	   - The 'turnLineTerminatorOff' flag controls whether a line
-//	     termination character or characters will be automatically
-//	     appended to each line of text produced by
-//	     TextLineSpecStandardLine.
-//
-//	     When the boolean flag 'turnLineTerminatorOff' is set to
-//	     'false', line terminators as defined by parameter
-//	     'newLineChars' will be applied as a line termination
-//	     sequence for each line of text produced by
-//	     TextLineSpecStandardLine.
-//
-//	     When this boolean value is set to 'true', it turns off or
-//	     cancels the automatic generation of line terminators for
-//	     each line of text produced by TextLineSpecStandardLine.
-//
-//
-//	errorPrefix                interface{}
-//	   - This object encapsulates error prefix text which is
-//	     included in all returned error messages. Usually, it
-//	     contains the name of the calling method or methods
-//	     listed as a method or function chain of execution.
-//
-//	     If no error prefix information is needed, set this
-//	     parameter to 'nil'.
-//
-//	     This empty interface must be convertible to one of the
-//	     following types:
-//
-//	     1. nil - A nil value is valid and generates an empty
-//	        collection of error prefix and error context
-//	        information.
-//
-//	     2. string - A string containing error prefix information.
-//
-//	     3. []string A one-dimensional slice of strings containing
-//	        error prefix information
-//
-//	     4. [][2]string A two-dimensional slice of strings
-//	        containing error prefix and error context information.
-//
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//	        from this object will be copied for use in error and
-//	        informational messages.
-//
-//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//	        Information from this object will be copied for use in
-//	        error and informational messages.
-//
-//	     7. IBasicErrorPrefix - An interface to a method generating
-//	        a two-dimensional slice of strings containing error
-//	        prefix and error context information.
-//
-//	     If parameter 'errorPrefix' is NOT convertible to one of
-//	     the valid types listed above, it will be considered
-//	     invalid and trigger the return of an error.
-//
-//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
-//	     the 'errpref' software package,
-//	     "github.com/MikeAustin71/errpref".
-//
-// ------------------------------------------------------------------------
-//
-// Return Values
-//
-//	*TextLineSpecStandardLine
-//	   - If this method completes successfully, it will create and
-//	     return a pointer to a new, populated instance of
-//	     TextLineSpecStandardLine which is fully configured with
-//	     all the parameters necessary to format one or more
-//	     lines of text for text display, file output or printing.
-//
+//		If this method completes successfully, it will
+//		create and return a new, populated concrete
+//		instance of TextLineSpecStandardLine which is
+//		fully configured with all the parameters
+//		necessary to generate a formatted, one-column
+//		text string for screen display, file output or
+//		printing.
 //
 //	error
-//	   - If the method completes successfully and no errors are
-//	     encountered this return value is set to 'nil'. Otherwise,
-//	     if errors are encountered, this return value will contain
-//	     an appropriate error message.
 //
-//	     If an error message is returned, the text value of input
-//	     parameter 'errorPrefix' will be inserted or prefixed at
-//	     the beginning of the error message.
-func (stdLine TextLineSpecStandardLine) NewPtrStandardLineAllParms(
-	numOfStdLines int,
-	textFields []ITextFieldSpecification,
-	newLineChars []rune,
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (stdLine TextLineSpecStandardLine) NewStdLine1Col(
+	oneColumnTextField TextFieldFormatDto,
+	lineTerminator string,
 	turnLineTerminatorOff bool,
 	errorPrefix interface{}) (
-	*TextLineSpecStandardLine,
+	TextLineSpecStandardLine,
 	error) {
 
 	if stdLine.lock == nil {
@@ -4757,51 +4789,622 @@ func (stdLine TextLineSpecStandardLine) NewPtrStandardLineAllParms(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"TextLineSpecStandardLine."+
-			"NewPtrStandardLineAllParms()",
+			"NewStdLine1Col()",
 		"")
 
 	if err != nil {
-		return &newStdLine, err
+		return newStdLine, err
 	}
 
-	newStdLine.lock = new(sync.Mutex)
-
-	if textFields == nil {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'textFields' is invalid!\n"+
-			"'textFields' is a 'nil' value.\n",
-			ePrefix.String())
-
-		return &newStdLine, err
+	if len(lineTerminator) == 0 {
+		lineTerminator = "\n"
 	}
 
-	lenTxtFields := len(textFields)
-
-	if lenTxtFields == 0 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'textFields' is invalid!\n"+
-			"'textFields' is a zero length array.\n",
-			ePrefix.String())
-
-		return &newStdLine, err
-	}
-
-	if numOfStdLines < 0 {
-		numOfStdLines = 1
-	}
-
-	err = textLineSpecStandardLineNanobot{}.ptr().
-		setTxtSpecStandardLine(
+	err = new(textLineSpecStandardLineNanobot).
+		setTextFieldFmtStdLine(
 			&newStdLine,
-			numOfStdLines,
-			textFields,
-			newLineChars,
+			[]TextFieldFormatDto{oneColumnTextField},
+			1,
+			[]rune(lineTerminator),
 			turnLineTerminatorOff,
-			ePrefix)
+			ePrefix.XCpy(
+				"newStdLine<-"))
 
-	return &newStdLine, err
+	return newStdLine, err
+}
+
+//	NewStdLine2Col
+//
+//	Configures and returns a new fully populated instance
+//	of TextLineSpecStandardLine consisting of two text
+//	columns. In other words the result is a single line
+//	of text containing two text columns.
+//
+// ----------------------------------------------------------------
+//
+// # Type TextFieldFormatDto
+//
+//	This method employs type TextFieldFormatDto to define
+//	text fields for the two column layout configured for
+//	the returned instance of TextLineSpecStandardLine.
+//
+//	The type TextFieldFormatDto structure is defined as
+//	follows:
+//
+//		type TextFieldFormatDto struct {
+//
+//			LeftMarginStr string
+//				One or more characters used to create a left
+//				margin for this Text Field.
+//
+//				If this parameter is set to an empty string, no
+//				left margin will be configured for this Text
+//				Field.
+//
+//			FieldContents interface{}
+//				This parameter may contain one of several
+//				specific data types. This empty interface type
+//				will be converted to a string and configured as
+//				the text column content within a text line.
+//
+//				Supported types which may be submitted through
+//				this empty interface parameter are listed as
+//				follows:
+//
+//				   time.Time (Converted using default format)
+//				   string
+//				   bool
+//				   uint, uint8, uint16, uint32, uint64,
+//				   int, int8, int16, int32, int64
+//				   float32, float64
+//				   *big.Int *big.Float
+//				   fmt.Stringer (types that support this interface)
+//				   TextInputParamFieldDateTimeDto
+//				         (Converts date time to string. The best way
+//				          to transmit and configure date time values.)
+//
+//			 FieldLength int
+//				The length of the text field in which the
+//				'FieldContents' will be displayed. If
+//				'FieldLength' is less than the length of the
+//				'FieldContents' string, it will be automatically
+//				set equal to the 'FieldContents' string length.
+//
+//				To automatically set the value of 'FieldLength'
+//				to the length of 'FieldContents', set this
+//				parameter to a value of minus one (-1).
+//
+//				If this parameter is submitted with a value less
+//				than minus one (-1) or greater than 1-million
+//				(1,000,000), an error will be returned.
+//
+//			 FieldJustify TextJustify
+//				An enumeration which specifies the justification
+//				of the 'FieldContents' string within the text
+//				field length specified by 'FieldLength'.
+//
+//				Text justification can only be evaluated in the
+//				context of a text label ('FieldContents'), field
+//				length ('FieldLength') and a Text Justification
+//				object of type TextJustify. This is because text
+//				labels with a field length equal to or less than
+//				the length of the text label string will never
+//				use text justification. In these cases, text
+//				justification is completely ignored.
+//
+//				If the field length is greater than the length of
+//				the text label string, text justification must be
+//				equal to one of these three valid values:
+//
+//				    TextJustify(0).Left()
+//				    TextJustify(0).Right()
+//				    TextJustify(0).Center()
+//
+//				Users can also specify the abbreviated text
+//				justification enumeration syntax as follows:
+//
+//				    TxtJustify.Left()
+//				    TxtJustify.Right()
+//				    TxtJustify.Center()
+//
+//			RightMarginStr string
+//				One or more characters used to create a right
+//				margin for this Text Field.
+//
+//				If this parameter is set to an empty string, no
+//				right margin will be configured for this Text
+//				Field.
+//		}
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	columnOneTextField			TextFieldFormatDto
+//
+//		Contains all the text field content and
+//		formatting specifications necessary to format the
+//		first column text field.
+//
+//		For more information on Type TextFieldFormatDto,
+//		see above.
+//
+//	columnTwoTextField			TextFieldFormatDto
+//
+//		Contains all the text field content and
+//		formatting specifications necessary to format the
+//		second column text field.
+//
+//		For more information on Type TextFieldFormatDto,
+//		see above.
+//
+//	lineTerminator				string
+//
+//		Also known as 'New Line characters'. This string
+//		contains the text characters which will be
+//		applied as line termination characters for each
+//		line of text produced by the returned instance of
+//		TextLineSpecStandardLine.
+//
+//		By default, each line of text generated by
+//		TextLineSpecStandardLine will be terminated with
+//		a new line character ('\n'). However, this
+//		parameter allows the user to specify the
+//		character or characters to be used as a line
+//		termination sequence for each line of text
+//		produced by the returned instance of
+//		TextLineSpecStandardLine.
+//
+//		If this parameter is submitted as an empty string
+//		with zero string length, this method will set
+//		'lineTerminator' to the default new line
+//		termination character ("\n").
+//
+//	turnLineTerminatorOff		bool
+//
+//		The 'turnLineTerminatorOff' flag controls whether
+//		a line termination character or characters will
+//		be automatically appended to each line of text
+//		produced by TextLineSpecStandardLine.
+//
+//		When the boolean flag 'turnLineTerminatorOff' is
+//		set to 'false', line terminators as defined by
+//		parameter 'lineTerminator' will be applied as a
+//		line termination sequence for each line of text
+//		produced by TextLineSpecStandardLine.
+//
+//		When this boolean value is set to 'true', it
+//		turns off or cancels the automatic generation of
+//		line terminators for each line of text produced
+//		by TextLineSpecStandardLine.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it	contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	TextLineSpecStandardLine
+//
+//		If this method completes successfully, it will
+//		create and return a new, populated concrete
+//		instance of TextLineSpecStandardLine which is
+//		fully configured with all the parameters
+//		necessary to generate a formatted, two-column
+//		text string for screen display, file output or
+//		printing.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (stdLine TextLineSpecStandardLine) NewStdLine2Col(
+	columnOneTextField TextFieldFormatDto,
+	columnTwoTextField TextFieldFormatDto,
+	lineTerminator string,
+	turnLineTerminatorOff bool,
+	errorPrefix interface{}) (
+	TextLineSpecStandardLine,
+	error) {
+
+	if stdLine.lock == nil {
+		stdLine.lock = new(sync.Mutex)
+	}
+
+	stdLine.lock.Lock()
+
+	defer stdLine.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	newStdLine := TextLineSpecStandardLine{}
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecStandardLine."+
+			"NewStdLine2Col()",
+		"")
+
+	if err != nil {
+		return newStdLine, err
+	}
+
+	if len(lineTerminator) == 0 {
+		lineTerminator = "\n"
+	}
+
+	err = new(textLineSpecStandardLineNanobot).
+		setTextFieldFmtStdLine(
+			&newStdLine,
+			[]TextFieldFormatDto{
+				columnOneTextField,
+				columnTwoTextField},
+			1,
+			[]rune(lineTerminator),
+			turnLineTerminatorOff,
+			ePrefix.XCpy(
+				"newStdLine<-"))
+
+	return newStdLine, err
+}
+
+//	NewStdLineMultiCol
+//
+//	Configures and returns a new fully populated instance
+//	of TextLineSpecStandardLine consisting of multiple
+//	text columns. In other words the result is a single
+//	line of text containing multiple text field columns.
+//
+// ----------------------------------------------------------------
+//
+// # Type TextFieldFormatDto
+//
+//	This method employs type TextFieldFormatDto to define
+//	text fields for the two column layout configured for
+//	the returned instance of TextLineSpecStandardLine.
+//
+//	The type TextFieldFormatDto structure is defined as
+//	follows:
+//
+//		type TextFieldFormatDto struct {
+//
+//			LeftMarginStr string
+//				One or more characters used to create a left
+//				margin for this Text Field.
+//
+//				If this parameter is set to an empty string, no
+//				left margin will be configured for this Text
+//				Field.
+//
+//			FieldContents interface{}
+//				This parameter may contain one of several
+//				specific data types. This empty interface type
+//				will be converted to a string and configured as
+//				the text column content within a text line.
+//
+//				Supported types which may be submitted through
+//				this empty interface parameter are listed as
+//				follows:
+//
+//				   time.Time (Converted using default format)
+//				   string
+//				   bool
+//				   uint, uint8, uint16, uint32, uint64,
+//				   int, int8, int16, int32, int64
+//				   float32, float64
+//				   *big.Int *big.Float
+//				   fmt.Stringer (types that support this interface)
+//				   TextInputParamFieldDateTimeDto
+//				         (Converts date time to string. The best way
+//				          to transmit and configure date time values.)
+//
+//			 FieldLength int
+//				The length of the text field in which the
+//				'FieldContents' will be displayed. If
+//				'FieldLength' is less than the length of the
+//				'FieldContents' string, it will be automatically
+//				set equal to the 'FieldContents' string length.
+//
+//				To automatically set the value of 'FieldLength'
+//				to the length of 'FieldContents', set this
+//				parameter to a value of minus one (-1).
+//
+//				If this parameter is submitted with a value less
+//				than minus one (-1) or greater than 1-million
+//				(1,000,000), an error will be returned.
+//
+//			 FieldJustify TextJustify
+//				An enumeration which specifies the justification
+//				of the 'FieldContents' string within the text
+//				field length specified by 'FieldLength'.
+//
+//				Text justification can only be evaluated in the
+//				context of a text label ('FieldContents'), field
+//				length ('FieldLength') and a Text Justification
+//				object of type TextJustify. This is because text
+//				labels with a field length equal to or less than
+//				the length of the text label string will never
+//				use text justification. In these cases, text
+//				justification is completely ignored.
+//
+//				If the field length is greater than the length of
+//				the text label string, text justification must be
+//				equal to one of these three valid values:
+//
+//				    TextJustify(0).Left()
+//				    TextJustify(0).Right()
+//				    TextJustify(0).Center()
+//
+//				Users can also specify the abbreviated text
+//				justification enumeration syntax as follows:
+//
+//				    TxtJustify.Left()
+//				    TxtJustify.Right()
+//				    TxtJustify.Center()
+//
+//			RightMarginStr string
+//				One or more characters used to create a right
+//				margin for this Text Field.
+//
+//				If this parameter is set to an empty string, no
+//				right margin will be configured for this Text
+//				Field.
+//		}
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	textFields					[]TextFieldFormatDto
+//
+//		An array of TextFieldFormatDto objects containing
+//		all the text field content and formatting
+//		specifications necessary to format multiple text
+//		field columns in the returned instance of
+//		TextLineSpecStandardLine.
+//
+//		For more information on Type TextFieldFormatDto,
+//		see above.
+//
+//	lineTerminator				string
+//
+//		Also known as 'New Line characters'. This string
+//		contains the text characters which will be
+//		applied as line termination characters for each
+//		line of text produced by the returned instance of
+//		TextLineSpecStandardLine.
+//
+//		By default, each line of text generated by
+//		TextLineSpecStandardLine will be terminated with
+//		a new line character ('\n'). However, this
+//		parameter allows the user to specify the
+//		character or characters to be used as a line
+//		termination sequence for each line of text
+//		produced by the returned instance of
+//		TextLineSpecStandardLine.
+//
+//		If this parameter is submitted as an empty string
+//		with zero string length, this method will set
+//		'lineTerminator' to the default new line
+//		termination character ("\n").
+//
+//	turnLineTerminatorOff		bool
+//
+//		The 'turnLineTerminatorOff' flag controls whether
+//		a line termination character or characters will
+//		be automatically appended to each line of text
+//		produced by TextLineSpecStandardLine.
+//
+//		When the boolean flag 'turnLineTerminatorOff' is
+//		set to 'false', line terminators as defined by
+//		parameter 'lineTerminator' will be applied as a
+//		line termination sequence for each line of text
+//		produced by TextLineSpecStandardLine.
+//
+//		When this boolean value is set to 'true', it
+//		turns off or cancels the automatic generation of
+//		line terminators for each line of text produced
+//		by TextLineSpecStandardLine.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it	contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	TextLineSpecStandardLine
+//
+//		If this method completes successfully, it will
+//		create and return a new, populated concrete
+//		instance of TextLineSpecStandardLine which is
+//		fully configured with all the parameters
+//		necessary to generate a formatted, two-column
+//		text string for screen display, file output or
+//		printing.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (stdLine TextLineSpecStandardLine) NewStdLineMultiCol(
+	textFields []TextFieldFormatDto,
+	lineTerminator string,
+	turnLineTerminatorOff bool,
+	errorPrefix interface{}) (
+	TextLineSpecStandardLine,
+	error) {
+
+	if stdLine.lock == nil {
+		stdLine.lock = new(sync.Mutex)
+	}
+
+	stdLine.lock.Lock()
+
+	defer stdLine.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	newStdLine := TextLineSpecStandardLine{}
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecStandardLine."+
+			"NewStdLineMultiCol()",
+		"")
+
+	if err != nil {
+		return newStdLine, err
+	}
+
+	if len(lineTerminator) == 0 {
+		lineTerminator = "\n"
+	}
+
+	err = new(textLineSpecStandardLineNanobot).
+		setTextFieldFmtStdLine(
+			&newStdLine,
+			textFields,
+			1,
+			[]rune(lineTerminator),
+			turnLineTerminatorOff,
+			ePrefix.XCpy(
+				"newStdLine<-"))
+
+	return newStdLine, err
 }
 
 // PeekAtFirstTextField - Returns a deep copy of the first Text Field
