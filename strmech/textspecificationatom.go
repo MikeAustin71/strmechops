@@ -13,86 +13,80 @@ type textSpecificationAtom struct {
 	lock *sync.Mutex
 }
 
-// convertParamEmptyInterfaceToString - Receives an object styled
-// as an empty interface and attempts to convert it to a string.
+// convertParamEmptyInterfaceToString
 //
-//
+// Receives an object styled as an empty interface and
+// attempts to convert it to a string.
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  emptyIFace                 interface{}
-//     - This object will be converted to a type of string and
-//       returned to the calling function.
+//	 emptyIFace                 interface{}
+//	    - This object will be converted to a type of string and
+//	      returned to the calling function.
 //
-//       This parameter is an empty interface which must contain
-//       of several specific types. This empty interface type will
-//       be converted to a string and configured as the single text
-//       field in this 'Line1Column' Text Line.
+//	      This parameter is an empty interface which must contain
+//	      of several specific types. This empty interface type will
+//	      be converted to a string and configured as the single text
+//	      field in this 'Line1Column' Text Line.
 //
-//       Supported types which may be submitted through this empty
-//       interface parameter are listed as follows:
-//          time.Time (Converted using default format)
-//          string
-//          bool
-//          uint, uint8, uint16, uint32, uint64,
-//          int, int8, int16, int32, int64
-//          float32, float64
-//          *big.Int *big.Float
-//          fmt.Stringer (types that support this interface)
-//          TextInputParamFieldDateTimeDto
-//                (Converts date time to string)
-//
-//
-//       If the 'column1Field' is not convertible to one of the
-//       supported types, an error will be returned.
-//
-//       If the converted string value for 'column1Field' is empty,
-//       it will be defaulted to a single white space character
-//       (" ").
+//	      Supported types which may be submitted through this empty
+//	      interface parameter are listed as follows:
+//	         time.Time (Converted using default format)
+//	         string
+//	         bool
+//	         uint, uint8, uint16, uint32, uint64,
+//	         int, int8, int16, int32, int64
+//	         float32, float64
+//	         *big.Int *big.Float
+//	         fmt.Stringer (types that support this interface)
+//	         TextInputParamFieldDateTimeDto
+//	               (Converts date time to string)
 //
 //
-//  emptyIFaceParamName        string
-//     - This is the name or text label used to describe input
-//       parameter 'emptyIFace' when formatting informational or
-//       error messages. If this parameter is submitted as an empty
-//       string its value will be defaulted to 'emptyIFace'.
+//			If the 'emptyIFace' object is not convertible to
+//			one of the supported types, an error will be returned.
 //
 //
-//  errPrefDto                 *ePref.ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//	 emptyIFaceParamName        string
+//	    - This is the name or text label used to describe input
+//	      parameter 'emptyIFace' when formatting informational or
+//	      error messages. If this parameter is submitted as an empty
+//	      string its value will be defaulted to 'emptyIFace'.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
+//	 errPrefDto                 *ePref.ErrPrefixDto
+//	    - This object encapsulates an error prefix string which is
+//	      included in all returned error messages. Usually, it
+//	      contains the name of the calling method or methods listed
+//	      as a function chain.
 //
+//	      If no error prefix information is needed, set this parameter
+//	      to 'nil'.
+//
+//	      Type ErrPrefixDto is included in the 'errpref' software
+//	      package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  convertedString            string
-//     - If this method completes successfully, this parameter will
-//       be populated with a string value extracted and converted
-//       from the empty interface input parameter, 'emptyIFace'.
+//	convertedString            string
+//	   - If this method completes successfully, this parameter will
+//	     be populated with a string value extracted and converted
+//	     from the empty interface input parameter, 'emptyIFace'.
 //
 //
-//  err                        error
-//     - If this method completes successfully and no errors are
-//       encountered, this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	err                        error
+//	   - If this method completes successfully and no errors are
+//	     encountered, this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (txtSpecAtom *textSpecificationAtom) convertParamEmptyInterfaceToString(
 	emptyIFace interface{},
 	emptyIFaceParamName string,
@@ -299,7 +293,6 @@ stringerConversion:
 // currently defined as the character '\n'.
 //
 // This method returns that default new line character ('\n').
-//
 func (txtSpecAtom *textSpecificationAtom) getDefaultNewLineChars() []rune {
 
 	if txtSpecAtom.lock == nil {
@@ -317,7 +310,6 @@ func (txtSpecAtom *textSpecificationAtom) getDefaultNewLineChars() []rune {
 
 // ptr - Returns a pointer to a new instance of
 // textSpecificationAtom.
-//
 func (txtSpecAtom textSpecificationAtom) ptr() *textSpecificationAtom {
 
 	if txtSpecAtom.lock == nil {
@@ -361,72 +353,69 @@ func (txtSpecAtom textSpecificationAtom) ptr() *textSpecificationAtom {
 //
 // This method supports buffered 'read' operations.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  textReader                 *strings.Reader
-//     - A pointer to an instance of strings.Reader. The text
-//       string encapsulated by 'textReader' will be written to the
-//       byte buffer 'p'.
+//	textReader                 *strings.Reader
+//	   - A pointer to an instance of strings.Reader. The text
+//	     string encapsulated by 'textReader' will be written to the
+//	     byte buffer 'p'.
 //
 //
-//  p                          []byte
-//     - The byte buffer into which the text string encapsulated by
-//       parameter 'textReader' will be written.
+//	p                          []byte
+//	   - The byte buffer into which the text string encapsulated by
+//	     parameter 'textReader' will be written.
 //
 //
-//  errPrefDto                 *ePref.ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//	errPrefDto                 *ePref.ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods listed
+//	     as a function chain.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
-//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  n                          int
-//     - The number of bytes written to byte buffer 'p'.
+//	n                          int
+//	   - The number of bytes written to byte buffer 'p'.
 //
 //
-//  err                        error
-//     - If this method completes successfully, this returned error
-//       Type is set equal to 'nil'. If errors are encountered during
-//       processing, the returned error Type will encapsulate an error
-//       message.
+//	err                        error
+//	   - If this method completes successfully, this returned error
+//	     Type is set equal to 'nil'. If errors are encountered during
+//	     processing, the returned error Type will encapsulate an error
+//	     message.
 //
-//       readBytes() reads up to len(p) bytes into p. It returns
-//       the number of bytes read (0 <= n <= len(p)) and any error
-//       encountered. Even if readBytes() returns n < len(p), it
-//       may use all of p as scratch space during the call. If some
-//       data is available but not len(p) bytes, readBytes()
-//       conventionally returns what is available instead of
-//       waiting for more.
+//	     readBytes() reads up to len(p) bytes into p. It returns
+//	     the number of bytes read (0 <= n <= len(p)) and any error
+//	     encountered. Even if readBytes() returns n < len(p), it
+//	     may use all of p as scratch space during the call. If some
+//	     data is available but not len(p) bytes, readBytes()
+//	     conventionally returns what is available instead of
+//	     waiting for more.
 //
-//       When readBytes() encounters an error or end-of-file
-//       condition after successfully reading n > 0 bytes, it
-//       returns the number of bytes read. It may return the
-//       (non-nil) error from the same call or return the error
-//       (and n == 0) from a subsequent call. An instance of this
-//       general case is that a Reader returning a non-zero number
-//       of bytes at the end of the input stream may return either
-//       err == EOF or err == nil. The next Read operation should
-//       return 0, EOF.
+//	     When readBytes() encounters an error or end-of-file
+//	     condition after successfully reading n > 0 bytes, it
+//	     returns the number of bytes read. It may return the
+//	     (non-nil) error from the same call or return the error
+//	     (and n == 0) from a subsequent call. An instance of this
+//	     general case is that a Reader returning a non-zero number
+//	     of bytes at the end of the input stream may return either
+//	     err == EOF or err == nil. The next Read operation should
+//	     return 0, EOF.
 //
-//       If an error message is returned and the error is NOT equal
-//       to io.EOF, the text value for input parameter 'errPrefDto'
-//       (error prefix) will be prefixed or attached at the beginning
-//       of the error message.
-//
+//	     If an error message is returned and the error is NOT equal
+//	     to io.EOF, the text value for input parameter 'errPrefDto'
+//	     (error prefix) will be prefixed or attached at the beginning
+//	     of the error message.
 func (txtSpecAtom *textSpecificationAtom) readBytes(
 	textReader *strings.Reader,
 	p []byte,
