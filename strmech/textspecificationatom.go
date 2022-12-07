@@ -22,32 +22,34 @@ type textSpecificationAtom struct {
 //
 // Input Parameters
 //
-//	 emptyIFace                 interface{}
-//	    - This object will be converted to a type of string and
-//	      returned to the calling function.
+//	emptyIFace                 interface{}
+//		This object will be converted to a type of string and
+//		returned to the calling function.
 //
-//	      This parameter is an empty interface which must contain
-//	      of several specific types. This empty interface type will
-//	      be converted to a string and configured as the single text
-//	      field in this 'Line1Column' Text Line.
+//		This parameter is an empty interface which must contain
+//		of several specific types. This empty interface type will
+//		be converted to a string and configured as the single text
+//		field in this 'Line1Column' Text Line.
 //
-//	      Supported types which may be submitted through this empty
-//	      interface parameter are listed as follows:
-//	         time.Time (Converted using default format)
-//	         string
-//	         bool
-//	         uint, uint8, uint16, uint32, uint64,
-//	         int, int8, int16, int32, int64
-//	         float32, float64
-//	         *big.Int *big.Float
-//	         fmt.Stringer (types that support this interface)
-//	         TextInputParamFieldDateTimeDto
+//		Supported types which may be submitted through this empty
+//		interface parameter are listed as follows:
+//
+//			time.Time (Converted using default format)
+//			string
+//			bool
+//			uint, uint8, uint16, uint32, uint64,
+//			int, int8, int16, int32, int64
+//			float32, float64
+//			*big.Int *big.Float
+//			fmt.Stringer (types that support this interface)
+//			TextInputParamFieldDateTimeDto
 //	               (Converts date time to string)
-//
+//			ITextLineSpecification
+//			ITextFieldSpecification
+//			BigFloatTextFormatDto - Formats big.Float numbers
 //
 //			If the 'emptyIFace' object is not convertible to
 //			one of the supported types, an error will be returned.
-//
 //
 //	 emptyIFaceParamName        string
 //	    - This is the name or text label used to describe input
@@ -183,6 +185,72 @@ func (txtSpecAtom *textSpecificationAtom) convertParamEmptyInterfaceToString(
 
 	case string:
 		goto straightStringConversion
+
+	case ITextFieldSpecification:
+
+		iTextFieldSpec,
+			ok := emptyIFace.(ITextFieldSpecification)
+
+		if !ok {
+			err = fmt.Errorf("%v\n"+
+				"Error: Failed to convert empty interface\n"+
+				"(%v) ITextFieldSpecification!\n"+
+				"String Conversion Error.\n",
+				ePrefix.String(),
+				emptyIFaceParamName)
+
+			return convertedString, err
+		}
+
+		convertedString,
+			err = iTextFieldSpec.GetFormattedText(
+			ePrefix.XCpy(
+				"convertedString<-iTextFieldSpec"))
+
+		return convertedString, err
+
+	case ITextLineSpecification:
+
+		iTextLineSpec,
+			ok := emptyIFace.(ITextLineSpecification)
+
+		if !ok {
+			err = fmt.Errorf("%v\n"+
+				"Error: Failed to convert empty interface\n"+
+				"(%v) ITextLineSpecification!\n"+
+				"String Conversion Error.\n",
+				ePrefix.String(),
+				emptyIFaceParamName)
+
+			return convertedString, err
+		}
+
+		convertedString,
+			err = iTextLineSpec.GetFormattedText(
+			ePrefix.XCpy(
+				"convertedString<-iTextLineSpec"))
+
+		return convertedString, err
+
+	case BigFloatTextFormatDto:
+
+		bigFloatFmtDto,
+			ok := emptyIFace.(BigFloatTextFormatDto)
+
+		if !ok {
+			err = fmt.Errorf("%v\n"+
+				"Error: Failed to convert empty interface\n"+
+				"(%v) BigFloatTextFormatDto!\n"+
+				"String Conversion Error.\n",
+				ePrefix.String(),
+				emptyIFaceParamName)
+
+			return convertedString, err
+		}
+
+		convertedString = bigFloatFmtDto.GetFormattedText()
+
+		return convertedString, err
 
 	case nil:
 		err = fmt.Errorf("%v\n"+

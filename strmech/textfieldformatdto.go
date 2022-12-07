@@ -29,17 +29,22 @@ type TextFieldFormatDto struct {
 	//	this empty interface parameter are listed as
 	//	follows:
 	//
-	//	   time.Time (Converted using default format)
-	//	   string
-	//	   bool
-	//	   uint, uint8, uint16, uint32, uint64,
-	//	   int, int8, int16, int32, int64
-	//	   float32, float64
-	//	   *big.Int *big.Float
-	//	   fmt.Stringer (types that support this interface)
-	//	   TextInputParamFieldDateTimeDto
-	//	         (Converts date time to string. The best way
-	//	          to transmit and configure date time values.)
+	//		time.Time (Converted using default format)
+	//		string
+	//		bool
+	//		uint, uint8, uint16, uint32, uint64,
+	//		int, int8, int16, int32, int64
+	//		float32, float64
+	//		*big.Int *big.Float
+	//		fmt.Stringer (types that support this interface)
+	//		TextInputParamFieldDateTimeDto
+	//		       (Converts date time to string)
+	//		ITextLineSpecification
+	//		ITextFieldSpecification
+	//		BigFloatTextFormatDto - Formats big.Float numbers
+	//
+	//		If the 'emptyIFace' object is not convertible to
+	//		one of the supported types, an error will be returned.
 
 	FieldLength int
 	//	The length of the text field in which the
