@@ -8,7 +8,9 @@ type SourceCodeComments struct {
 	input string
 }
 
-//	testPrimaryComments
+// testPrimaryComments
+//
+// Sample test primary comments. Bla, bla, bla.
 //
 // ----------------------------------------------------------------
 //
@@ -148,7 +150,9 @@ func (srcCodeComments *SourceCodeComments) testPrimaryComments() {
 	fmt.Println("HELLO WORLD!")
 }
 
-//	testSubsidiaryComments
+// testSubsidiaryComments
+//
+// Sample test subsidiary comments. Bla, bla, bla.
 //
 // ----------------------------------------------------------------
 //
