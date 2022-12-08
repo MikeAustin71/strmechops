@@ -34,6 +34,38 @@ type TextLineTitleMarqueeDto struct {
 	//	The standard field length applied to all
 	//	Text Title Lines in the 'TitleLines' array.
 
+	StandardTextJustification TextJustify
+	//	The standard field length applied to all
+	//	Text Title Lines in the 'TitleLines' array.
+	//
+	//	Type 'TextJustify' is an enumeration which
+	//	specifies the justification of the text field
+	//	contents string within the text	field length
+	//	specified by 'StandardTextFieldLen'.
+	//
+	//	Text justification can only be evaluated in the
+	//	context of a text label, field length and a Text
+	//	Justification object of type TextJustify. This is
+	//	because text labels with a field length equal to
+	//	or less than the length of the text label string
+	//	will never use text justification. In these cases,
+	//	text justification is completely ignored.
+	//
+	//	If the field length is greater than the length of
+	//	the text label string, text justification must be
+	//	equal to one of these three valid values:
+	//
+	//	    TextJustify(0).Left()
+	//	    TextJustify(0).Right()
+	//	    TextJustify(0).Center()
+	//
+	//	Users can also specify the abbreviated text
+	//	justification enumeration syntax as follows:
+	//
+	//	    TxtJustify.Left()
+	//	    TxtJustify.Right()
+	//	    TxtJustify.Center()
+
 	NumLeadingBlankLines int
 	//	The number of blank lines or 'new lines'
 	//	inserted above the Leading Solid Line.
@@ -1701,6 +1733,9 @@ func (txtTitleDtoMech *textLineTitleMarqueeDtoMechanics) empty(
 	txtTitleMarqueeDto.StandardMaxLineLen = 0
 
 	txtTitleMarqueeDto.StandardTextFieldLen = 0
+
+	txtTitleMarqueeDto.StandardTextJustification =
+		TxtJustify.None()
 
 	txtTitleMarqueeDto.NumLeadingBlankLines = 0
 

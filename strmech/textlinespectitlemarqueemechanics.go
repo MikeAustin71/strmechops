@@ -226,6 +226,9 @@ func (txtLineTitleMarqueeMech *textLineSpecTitleMarqueeMechanics) setTxtLineTitl
 	txtLineTitleMarquee.standardTextFieldLen =
 		configSpecs.StandardTextFieldLen
 
+	txtLineTitleMarquee.standardTextFieldJustification =
+		configSpecs.StandardTextJustification
+
 	if configSpecs.TitleLines.GetNumberOfTextLines() > 0 {
 
 		err = txtLineTitleMarquee.titleLines.CopyIn(

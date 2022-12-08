@@ -163,85 +163,53 @@ func (txtLineTitleMarqueeNanobot *textLineSpecTitleMarqueeNanobot) copy(
 	destinationTitleMarquee.standardTextFieldLen =
 		sourceTitleMarquee.standardTextFieldLen
 
-	if sourceTitleMarquee.leadingBlankLines.numBlankLines > 0 {
-		err = destinationTitleMarquee.leadingBlankLines.
+	destinationTitleMarquee.standardTextFieldJustification =
+		sourceTitleMarquee.standardTextFieldJustification
+
+	if sourceTitleMarquee.leadingMarqueeLines.
+		GetNumberOfTextLines() > 0 {
+
+		err = destinationTitleMarquee.leadingMarqueeLines.
 			CopyIn(
-				&sourceTitleMarquee.leadingBlankLines,
-				ePrefix.XCpy("sourceTitleMarquee."+
-					"leadingBlankLines"))
-
-		if err != nil {
-			return err
-		}
-	}
-
-	if sourceTitleMarquee.leadingSolidLines.solidLineCharsRepeatCount > 0 {
-
-		err = destinationTitleMarquee.leadingSolidLines.
-			CopyIn(&sourceTitleMarquee.leadingSolidLines,
+				&sourceTitleMarquee.leadingMarqueeLines,
 				ePrefix.XCpy(
-					"<-sourceTitleMarquee.leadingSolidLines"))
+					"destinationTitleMarquee<-"+
+						"sourceTitleMarquee.leadingMarqueeLines"))
 
 		if err != nil {
 			return err
 		}
+
 	}
 
-	if sourceTitleMarquee.topTitleBlankLines.numBlankLines > 0 {
-		err = destinationTitleMarquee.topTitleBlankLines.
+	if sourceTitleMarquee.titleLines.
+		GetNumberOfTextLines() > 0 {
+
+		err = destinationTitleMarquee.titleLines.
 			CopyIn(
-				&sourceTitleMarquee.topTitleBlankLines,
-				ePrefix.XCpy("sourceTitleMarquee."+
-					"topTitleBlankLines"))
-
-		if err != nil {
-			return err
-		}
-	}
-
-	if sourceTitleMarquee.titleLines.GetNumberOfTextLines() > 0 {
-
-		err = destinationTitleMarquee.titleLines.CopyIn(
-			&sourceTitleMarquee.titleLines,
-			ePrefix.XCpy(
-				"<-sourceTitleMarquee.titleLines"))
-
-		if err != nil {
-			return err
-		}
-	}
-
-	if sourceTitleMarquee.bottomTitleBlankLines.numBlankLines > 0 {
-		err = destinationTitleMarquee.bottomTitleBlankLines.
-			CopyIn(
-				&sourceTitleMarquee.bottomTitleBlankLines,
-				ePrefix.XCpy("bottomTitleBlankLines."+
-					"topTitleBlankLines"))
-
-		if err != nil {
-			return err
-		}
-	}
-
-	if sourceTitleMarquee.trailingSolidLines.solidLineCharsRepeatCount > 0 {
-
-		err = destinationTitleMarquee.trailingSolidLines.
-			CopyIn(&sourceTitleMarquee.trailingSolidLines,
+				&sourceTitleMarquee.titleLines,
 				ePrefix.XCpy(
-					"<-sourceTitleMarquee.trailingSolidLines"))
+					"destinationTitleMarquee<-"+
+						"sourceTitleMarquee.titleLines"))
 
 		if err != nil {
 			return err
 		}
 	}
 
-	if sourceTitleMarquee.trailingBlankLines.numBlankLines > 0 {
-		err = destinationTitleMarquee.trailingBlankLines.
-			CopyIn(
-				&sourceTitleMarquee.trailingBlankLines,
-				ePrefix.XCpy("trailingBlankLines."+
-					"topTitleBlankLines"))
+	if sourceTitleMarquee.trailingMarqueeLines.
+		GetNumberOfTextLines() > 0 {
 
+		err = destinationTitleMarquee.trailingMarqueeLines.
+			CopyIn(
+				&sourceTitleMarquee.trailingMarqueeLines,
+				ePrefix.XCpy(
+					"destinationTitleMarquee<-"+
+						"sourceTitleMarquee.trailingMarqueeLines"))
+
+		if err != nil {
+			return err
+		}
 	}
 
 	return err

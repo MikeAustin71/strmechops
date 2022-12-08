@@ -68,6 +68,9 @@ func (txtLineTitleMarqueeElectron *textLineSpecTitleMarqueeElectron) empty(
 
 	txtLineTitleMarquee.standardTextFieldLen = 0
 
+	txtLineTitleMarquee.standardTextFieldJustification =
+		TxtJustify.None()
+
 	txtLineTitleMarquee.leadingMarqueeLines.Empty()
 
 	txtLineTitleMarquee.titleLines.Empty()
@@ -122,6 +125,12 @@ func (txtLineTitleMarqueeElectron *textLineSpecTitleMarqueeElectron) equal(
 
 	if txtLineTitleOne.standardTextFieldLen !=
 		txtLineTitleTwo.standardTextFieldLen {
+
+		return false
+	}
+
+	if txtLineTitleOne.standardTextFieldJustification !=
+		txtLineTitleTwo.standardTextFieldJustification {
 
 		return false
 	}

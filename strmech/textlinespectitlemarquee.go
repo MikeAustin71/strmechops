@@ -9,14 +9,15 @@ import (
 )
 
 type TextLineSpecTitleMarquee struct {
-	standardTitleLeftMargin  string
-	standardTitleRightMargin string
-	standardMaxLineLen       int
-	standardTextFieldLen     int
-	leadingMarqueeLines      TextLineSpecLinesCollection
-	titleLines               TextLineSpecLinesCollection
-	trailingMarqueeLines     TextLineSpecLinesCollection
-	textLineReader           *strings.Reader
+	standardTitleLeftMargin        string
+	standardTitleRightMargin       string
+	standardMaxLineLen             int
+	standardTextFieldLen           int
+	standardTextFieldJustification TextJustify
+	leadingMarqueeLines            TextLineSpecLinesCollection
+	titleLines                     TextLineSpecLinesCollection
+	trailingMarqueeLines           TextLineSpecLinesCollection
+	textLineReader                 *strings.Reader
 
 	lock *sync.Mutex
 }
@@ -1094,6 +1095,39 @@ func (txtLineSpecTitleMarquee *TextLineSpecTitleMarquee) IsValidInstanceError(
 //			len(TextLineTitleMarqueeDto.StandardTitleLeftMargin) -
 //			len(TextLineTitleMarqueeDto.StandardTitleRightMargin)
 //
+//	standardTextJustification	TextJustify
+//
+//		The standard Justification specification applied to
+//		the standard text field.
+//
+//		Type 'TextJustify' is an enumeration which
+//		specifies the justification of the text field
+//		contents string within the text	field length
+//		specified by 'standardTextFieldLen'.
+//
+//		Text justification can only be evaluated in the
+//		context of a text label, field length and a Text
+//		Justification object of type TextJustify. This is
+//		because text labels with a field length equal to
+//		or less than the length of the text label string
+//		will never use text justification. In these cases,
+//		text justification is completely ignored.
+//
+//		If the field length is greater than the length of
+//		the text label string, text justification must be
+//		equal to one of these three valid values:
+//
+//		    TextJustify(0).Left()
+//		    TextJustify(0).Right()
+//		    TextJustify(0).Center()
+//
+//		Users can also specify the abbreviated text
+//		justification enumeration syntax as follows:
+//
+//		    TxtJustify.Left()
+//		    TxtJustify.Right()
+//		    TxtJustify.Center()
+//
 //	numLeadingBlankLines		int
 //
 //		The number of blank lines or 'new lines'
@@ -1235,6 +1269,7 @@ func (txtLineSpecTitleMarquee *TextLineSpecTitleMarquee) NewAllParams(
 	standardTitleRightMargin string,
 	standardMaxLineLen int,
 	standardTextFieldLen int,
+	standardTextJustification TextJustify,
 	numLeadingBlankLines int,
 	leadingSolidLineChar string,
 	numLeadingSolidLines int,
@@ -1272,18 +1307,19 @@ func (txtLineSpecTitleMarquee *TextLineSpecTitleMarquee) NewAllParams(
 	}
 
 	titleMarqueeDto := TextLineTitleMarqueeDto{
-		StandardTitleLeftMargin:  standardTitleLeftMargin,
-		StandardTitleRightMargin: standardTitleRightMargin,
-		StandardMaxLineLen:       standardMaxLineLen,
-		StandardTextFieldLen:     standardTextFieldLen,
-		NumLeadingBlankLines:     numLeadingBlankLines,
-		LeadingSolidLineChar:     leadingSolidLineChar,
-		NumLeadingSolidLines:     numLeadingSolidLines,
-		NumTopTitleBlankLines:    numTopTitleBlankLines,
-		NumBottomTitleBlankLines: numBottomTitleBlankLines,
-		TrailingSolidLineChar:    trailingSolidLineChar,
-		NumTrailingSolidLines:    numTrailingSolidLines,
-		NumTrailingBlankLines:    numTrailingBlankLines,
+		StandardTitleLeftMargin:   standardTitleLeftMargin,
+		StandardTitleRightMargin:  standardTitleRightMargin,
+		StandardMaxLineLen:        standardMaxLineLen,
+		StandardTextFieldLen:      standardTextFieldLen,
+		StandardTextJustification: standardTextJustification,
+		NumLeadingBlankLines:      numLeadingBlankLines,
+		LeadingSolidLineChar:      leadingSolidLineChar,
+		NumLeadingSolidLines:      numLeadingSolidLines,
+		NumTopTitleBlankLines:     numTopTitleBlankLines,
+		NumBottomTitleBlankLines:  numBottomTitleBlankLines,
+		TrailingSolidLineChar:     trailingSolidLineChar,
+		NumTrailingSolidLines:     numTrailingSolidLines,
+		NumTrailingBlankLines:     numTrailingBlankLines,
 	}
 
 	if titleLines.GetNumberOfTextLines() == 0 {
