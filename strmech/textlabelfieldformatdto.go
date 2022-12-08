@@ -7,7 +7,7 @@ import (
 	"sync"
 )
 
-// TextFieldFormatDto
+// TextLabelFieldFormatDto
 //
 // Used to specify content and format specifications for
 // a Text Field formatted for screen display, file
@@ -16,7 +16,7 @@ import (
 // This Data Transfer Object (Dto) contains all the
 // format parameters necessary format a single text
 // field.
-type TextFieldFormatDto struct {
+type TextLabelFieldFormatDto struct {
 	LeftMarginStr string
 	//	One or more characters used to create a left
 	//	margin for this Text Field.
@@ -110,9 +110,9 @@ type TextFieldFormatDto struct {
 // CopyIn
 //
 // Copies all the data fields from an incoming instance
-// of TextFieldFormatDto ('incomingTxtFieldFmtDto') to
+// of TextLabelFieldFormatDto ('incomingTxtFieldFmtDto') to
 // the corresponding data fields of the current
-// TextFieldFormatDto instance ('textFieldFormatDto').
+// TextLabelFieldFormatDto instance ('textFieldFormatDto').
 //
 // ----------------------------------------------------------------
 //
@@ -120,7 +120,7 @@ type TextFieldFormatDto struct {
 //
 //	This method will delete and overwrite all
 //	pre-existing data values contained within the
-//	current instance of TextFieldFormatDto
+//	current instance of TextLabelFieldFormatDto
 //	('textFieldFormatDto').
 //
 // ----------------------------------------------------------------
@@ -141,13 +141,13 @@ type TextFieldFormatDto struct {
 //
 // # Input Parameters
 //
-//	incomingTxtFieldFmtDto		*TextFieldFormatDto
+//	incomingTxtFieldFmtDto		*TextLabelFieldFormatDto
 //
-//		A pointer to an instance of TextFieldFormatDto.
+//		A pointer to an instance of TextLabelFieldFormatDto.
 //
 //		All the internal data field values in this
 //		instance will be copied to corresponding data
-//		fields of the current TextFieldFormatDto instance.
+//		fields of the current TextLabelFieldFormatDto instance.
 //
 //		The data fields contained in
 //		'incomingTxtFieldFmtDto' will NOT be changed or
@@ -231,8 +231,8 @@ type TextFieldFormatDto struct {
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (textFieldFormatDto *TextFieldFormatDto) CopyIn(
-	incomingTxtFieldFmtDto *TextFieldFormatDto,
+func (textFieldFormatDto *TextLabelFieldFormatDto) CopyIn(
+	incomingTxtFieldFmtDto *TextLabelFieldFormatDto,
 	errorPrefix interface{}) error {
 
 	if textFieldFormatDto.lock == nil {
@@ -249,7 +249,7 @@ func (textFieldFormatDto *TextFieldFormatDto) CopyIn(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"TextFieldFormatDto."+
+		"TextLabelFieldFormatDto."+
 			"CopyIn()",
 		"")
 
@@ -257,7 +257,7 @@ func (textFieldFormatDto *TextFieldFormatDto) CopyIn(
 		return err
 	}
 
-	return new(textFieldFormatDtoNanobot).copy(
+	return new(textLabelFieldFormatDtoNanobot).copy(
 		textFieldFormatDto,
 		incomingTxtFieldFmtDto,
 		ePrefix.XCpy(
@@ -267,10 +267,10 @@ func (textFieldFormatDto *TextFieldFormatDto) CopyIn(
 
 // CopyOut
 //
-// Returns a deep copy of the current TextFieldFormatDto
+// Returns a deep copy of the current TextLabelFieldFormatDto
 // instance.
 //
-// If the current TextFieldFormatDto instance contains
+// If the current TextLabelFieldFormatDto instance contains
 // invalid member variable dat values, this method will
 // return an error.
 //
@@ -279,14 +279,14 @@ func (textFieldFormatDto *TextFieldFormatDto) CopyIn(
 // # BE ADVISED
 //
 //	The original member variable data values encapsulated
-//	within the current TextFieldFormatDto instance will
+//	within the current TextLabelFieldFormatDto instance will
 //	remain unchanged with the sole exception of
-//	'TextFieldFormatDto.FieldContents'.
+//	'TextLabelFieldFormatDto.FieldContents'.
 //
-//	'TextFieldFormatDto.FieldContents' will be
+//	'TextLabelFieldFormatDto.FieldContents' will be
 //	converted to its equivalent string value and that
 //	string value will be saved to
-//	'TextFieldFormatDto.FieldContents'.
+//	'TextLabelFieldFormatDto.FieldContents'.
 //
 // ----------------------------------------------------------------
 //
@@ -355,12 +355,12 @@ func (textFieldFormatDto *TextFieldFormatDto) CopyIn(
 //
 // # Return Values
 //
-//	TextFieldFormatDto
+//	TextLabelFieldFormatDto
 //
 //		If this method completes successfully and no
 //		errors are encountered, this parameter will
 //		return a deep copy of the current
-//		TextFieldFormatDto instance.
+//		TextLabelFieldFormatDto instance.
 //
 //	error
 //
@@ -374,9 +374,9 @@ func (textFieldFormatDto *TextFieldFormatDto) CopyIn(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (textFieldFormatDto *TextFieldFormatDto) CopyOut(
+func (textFieldFormatDto *TextLabelFieldFormatDto) CopyOut(
 	errorPrefix interface{}) (
-	TextFieldFormatDto,
+	TextLabelFieldFormatDto,
 	error) {
 
 	if textFieldFormatDto.lock == nil {
@@ -390,12 +390,12 @@ func (textFieldFormatDto *TextFieldFormatDto) CopyOut(
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
 
-	newTextFieldFormatDto := TextFieldFormatDto{}
+	newTextFieldFormatDto := TextLabelFieldFormatDto{}
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"TextFieldFormatDto."+
+		"TextLabelFieldFormatDto."+
 			"CopyOut()",
 		"")
 
@@ -403,7 +403,7 @@ func (textFieldFormatDto *TextFieldFormatDto) CopyOut(
 		return newTextFieldFormatDto, err
 	}
 
-	err = new(textFieldFormatDtoNanobot).copy(
+	err = new(textLabelFieldFormatDtoNanobot).copy(
 		&newTextFieldFormatDto,
 		textFieldFormatDto,
 		ePrefix.XCpy(
@@ -416,9 +416,9 @@ func (textFieldFormatDto *TextFieldFormatDto) CopyOut(
 // Empty
 //
 // Resets all internal member variables for the current
-// instance of TextFieldFormatDto to their zero or
+// instance of TextLabelFieldFormatDto to their zero or
 // uninitialized states. This method will leave the
-// current instance of TextFieldFormatDto in an invalid
+// current instance of TextLabelFieldFormatDto in an invalid
 // state and unavailable for immediate reuse.
 //
 // ----------------------------------------------------------------
@@ -426,7 +426,7 @@ func (textFieldFormatDto *TextFieldFormatDto) CopyOut(
 // # IMPORTANT
 //
 // This method will delete all member variable data
-// values in the current instance of TextFieldFormatDto.
+// values in the current instance of TextLabelFieldFormatDto.
 // All member variable data values will be reset to their
 // zero or uninitialized states.
 //
@@ -441,7 +441,7 @@ func (textFieldFormatDto *TextFieldFormatDto) CopyOut(
 // # Return Values
 //
 //	NONE
-func (textFieldFormatDto *TextFieldFormatDto) Empty() {
+func (textFieldFormatDto *TextLabelFieldFormatDto) Empty() {
 
 	if textFieldFormatDto.lock == nil {
 		textFieldFormatDto.lock = new(sync.Mutex)
@@ -449,7 +449,7 @@ func (textFieldFormatDto *TextFieldFormatDto) Empty() {
 
 	textFieldFormatDto.lock.Lock()
 
-	new(textFieldFormatDtoAtom).empty(
+	new(textLabelFieldFormatDtoAtom).empty(
 		textFieldFormatDto)
 
 	textFieldFormatDto.lock.Unlock()
@@ -462,9 +462,9 @@ func (textFieldFormatDto *TextFieldFormatDto) Empty() {
 // Equal
 //
 // Receives a pointer to another instance of
-// TextFieldFormatDto and proceeds to compare the member
+// TextLabelFieldFormatDto and proceeds to compare the member
 // variables to those contained in the current
-// TextFieldFormatDto instance in order to determine if
+// TextLabelFieldFormatDto instance in order to determine if
 // they are equivalent.
 //
 // A boolean flag showing the result of this comparison
@@ -476,13 +476,13 @@ func (textFieldFormatDto *TextFieldFormatDto) Empty() {
 //
 // # Input Parameters
 //
-//	incomingTxtFieldFmtDto		*TextFieldFormatDto
+//	incomingTxtFieldFmtDto		*TextLabelFieldFormatDto
 //
 //		A pointer to an incoming instance of
-//		TextFieldFormatDto. This method will compare all
+//		TextLabelFieldFormatDto. This method will compare all
 //		member variable data values in this instance
 //		against those contained in the current instance
-//		of TextFieldFormatDto. If the data values in both
+//		of TextLabelFieldFormatDto. If the data values in both
 //		instances are found to be equal in all respects,
 //		this method will return a boolean value of 'true'.
 //
@@ -495,12 +495,12 @@ func (textFieldFormatDto *TextFieldFormatDto) Empty() {
 //		If the member variable data values contained in
 //		input parameter 'incomingTxtFieldFmtDto' are
 //		equal in all respects to those contained in the
-//		current instance of TextFieldFormatDto, this
+//		current instance of TextLabelFieldFormatDto, this
 //		method will return a boolean value of 'true'.
 //		Otherwise, a value of 'false' will be returned
 //		to the calling function.
-func (textFieldFormatDto *TextFieldFormatDto) Equal(
-	incomingTxtFieldFmtDto *TextFieldFormatDto) bool {
+func (textFieldFormatDto *TextLabelFieldFormatDto) Equal(
+	incomingTxtFieldFmtDto *TextLabelFieldFormatDto) bool {
 
 	if textFieldFormatDto.lock == nil {
 		textFieldFormatDto.lock = new(sync.Mutex)
@@ -510,14 +510,14 @@ func (textFieldFormatDto *TextFieldFormatDto) Equal(
 
 	defer textFieldFormatDto.lock.Unlock()
 
-	return new(textFieldFormatDtoAtom).equal(
+	return new(textLabelFieldFormatDtoAtom).equal(
 		textFieldFormatDto,
 		incomingTxtFieldFmtDto)
 }
 
 // GetFieldContentTextLabel
 //
-// Converts the current TextFieldFormatDto instance
+// Converts the current TextLabelFieldFormatDto instance
 // member variable, 'FieldContents', to an instance of
 // TextFieldSpecLabel.
 //
@@ -600,7 +600,7 @@ func (textFieldFormatDto *TextFieldFormatDto) Equal(
 //
 //		If this method completes successfully, the Text
 //		Field Contents extracted from the current
-//		instance of TextFieldFormatDto, will be returned
+//		instance of TextLabelFieldFormatDto, will be returned
 //		as text label of type TextFieldSpecLabel.
 //
 //		This returned text label will ONLY contain the
@@ -619,7 +619,7 @@ func (textFieldFormatDto *TextFieldFormatDto) Equal(
 //		for input parameter 'errPrefDto' (error prefix)
 //		will be prefixed or attached at the beginning of
 //		the error message.
-func (textFieldFormatDto *TextFieldFormatDto) GetFieldContentTextLabel(
+func (textFieldFormatDto *TextLabelFieldFormatDto) GetFieldContentTextLabel(
 	errorPrefix interface{}) (
 	TextFieldSpecLabel,
 	error) {
@@ -638,7 +638,7 @@ func (textFieldFormatDto *TextFieldFormatDto) GetFieldContentTextLabel(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"TextFieldFormatDto."+
+		"TextLabelFieldFormatDto."+
 			"GetFieldContentTextLabel()",
 		"")
 
@@ -646,7 +646,7 @@ func (textFieldFormatDto *TextFieldFormatDto) GetFieldContentTextLabel(
 		return TextFieldSpecLabel{}, err
 	}
 
-	return new(textFieldFormatDtoMolecule).
+	return new(textLabelFieldFormatDtoMolecule).
 		getFieldContentTextLabel(
 			textFieldFormatDto,
 			ePrefix.XCpy(
@@ -657,7 +657,7 @@ func (textFieldFormatDto *TextFieldFormatDto) GetFieldContentTextLabel(
 //
 // Returns a string containing the formatted text field
 // generated from the current instance of
-// TextFieldFormatDto.
+// TextLabelFieldFormatDto.
 //
 // ----------------------------------------------------------------
 //
@@ -730,14 +730,14 @@ func (textFieldFormatDto *TextFieldFormatDto) GetFieldContentTextLabel(
 //
 //		If this method completes successfully, the text
 //		field specifications contained in the current
-//		instance of TextFieldFormatDto will be converted
+//		instance of TextLabelFieldFormatDto will be converted
 //		to, and returned as, a formatted text field
 //		string.
 //
 //		The returned string will therefore contain the
 //		left margin, text field contents and right
 //		margin as those elements are defined in the
-//		current instance of TextFieldFormatDto.
+//		current instance of TextLabelFieldFormatDto.
 //
 //	error
 //
@@ -751,7 +751,7 @@ func (textFieldFormatDto *TextFieldFormatDto) GetFieldContentTextLabel(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (textFieldFormatDto *TextFieldFormatDto) GetFormattedTextField(
+func (textFieldFormatDto *TextLabelFieldFormatDto) GetFormattedTextField(
 	errorPrefix interface{}) (
 	string,
 	error) {
@@ -770,7 +770,7 @@ func (textFieldFormatDto *TextFieldFormatDto) GetFormattedTextField(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"TextFieldFormatDto."+
+		"TextLabelFieldFormatDto."+
 			"GetFormattedTextField()",
 		"")
 
@@ -778,7 +778,7 @@ func (textFieldFormatDto *TextFieldFormatDto) GetFormattedTextField(
 		return "", err
 	}
 
-	return new(textFieldFormatDtoNanobot).
+	return new(textLabelFieldFormatDtoNanobot).
 		getFormattedTextFieldStr(
 			textFieldFormatDto,
 			ePrefix.XCpy(
@@ -789,7 +789,7 @@ func (textFieldFormatDto *TextFieldFormatDto) GetFormattedTextField(
 //
 // Returns the length of the Left Margin String as an
 // integer value.
-func (textFieldFormatDto *TextFieldFormatDto) GetLeftMarginLength() int {
+func (textFieldFormatDto *TextLabelFieldFormatDto) GetLeftMarginLength() int {
 
 	if textFieldFormatDto.lock == nil {
 		textFieldFormatDto.lock = new(sync.Mutex)
@@ -805,7 +805,7 @@ func (textFieldFormatDto *TextFieldFormatDto) GetLeftMarginLength() int {
 // GetLeftMarginStr
 //
 // Returns the Left Margin String.
-func (textFieldFormatDto *TextFieldFormatDto) GetLeftMarginStr() string {
+func (textFieldFormatDto *TextLabelFieldFormatDto) GetLeftMarginStr() string {
 
 	if textFieldFormatDto.lock == nil {
 		textFieldFormatDto.lock = new(sync.Mutex)
@@ -822,7 +822,7 @@ func (textFieldFormatDto *TextFieldFormatDto) GetLeftMarginStr() string {
 //
 // Returns the length of the Right Margin String as an
 // integer value.
-func (textFieldFormatDto *TextFieldFormatDto) GetRightMarginLength() int {
+func (textFieldFormatDto *TextLabelFieldFormatDto) GetRightMarginLength() int {
 
 	if textFieldFormatDto.lock == nil {
 		textFieldFormatDto.lock = new(sync.Mutex)
@@ -838,7 +838,7 @@ func (textFieldFormatDto *TextFieldFormatDto) GetRightMarginLength() int {
 // GetRightMarginStr
 //
 // Returns the Right Margin String.
-func (textFieldFormatDto *TextFieldFormatDto) GetRightMarginStr() string {
+func (textFieldFormatDto *TextLabelFieldFormatDto) GetRightMarginStr() string {
 
 	if textFieldFormatDto.lock == nil {
 		textFieldFormatDto.lock = new(sync.Mutex)
@@ -851,17 +851,17 @@ func (textFieldFormatDto *TextFieldFormatDto) GetRightMarginStr() string {
 	return textFieldFormatDto.RightMarginStr
 }
 
-// textFieldFormatDtoNanobot - Provides helper methods for
-// TextFieldFormatDto.
-type textFieldFormatDtoNanobot struct {
+// textLabelFieldFormatDtoNanobot - Provides helper methods for
+// TextLabelFieldFormatDto.
+type textLabelFieldFormatDtoNanobot struct {
 	lock *sync.Mutex
 }
 
 // copy
 //
 // Copies all data from a source instance of
-// TextFieldFormatDto to a destination instance of
-// TextFieldFormatDto.
+// TextLabelFieldFormatDto to a destination instance of
+// TextLabelFieldFormatDto.
 //
 // ----------------------------------------------------------------
 //
@@ -869,7 +869,7 @@ type textFieldFormatDtoNanobot struct {
 //
 //	This method will delete and overwrite all
 //	pre-existing data values contained within the
-//	TextFieldFormatDto instance passed as input
+//	TextLabelFieldFormatDto instance passed as input
 //	parameter 'destinationTxtFieldFmtDto'.
 //
 // ----------------------------------------------------------------
@@ -889,9 +889,9 @@ type textFieldFormatDtoNanobot struct {
 //
 // # Input Parameters
 //
-//	destinationTxtFieldFmtDto	*TextFieldFormatDto
+//	destinationTxtFieldFmtDto	*TextLabelFieldFormatDto
 //
-//		A pointer to an instance of TextFieldFormatDto.
+//		A pointer to an instance of TextLabelFieldFormatDto.
 //
 //		Data extracted from input parameter
 //		'sourceTxtFieldFmtDto' will be copied to this
@@ -911,11 +911,11 @@ type textFieldFormatDtoNanobot struct {
 //		'destinationTxtFieldFmtDto' will be overwritten
 //		and deleted.
 //
-//	sourceTxtFieldFmtDto		*TextFieldFormatDto
+//	sourceTxtFieldFmtDto		*TextLabelFieldFormatDto
 //
-//		A pointer to an instance of TextFieldFormatDto.
+//		A pointer to an instance of TextLabelFieldFormatDto.
 //
-//		All data values in this TextFieldFormatDto
+//		All data values in this TextLabelFieldFormatDto
 //		instance will be copied to input parameter
 //		'destinationTxtFieldFmtDto'.
 //
@@ -966,18 +966,18 @@ type textFieldFormatDtoNanobot struct {
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (txtFieldFmtDtoNanobot *textFieldFormatDtoNanobot) copy(
-	destinationTxtFieldFmtDto *TextFieldFormatDto,
-	sourceTxtFieldFmtDto *TextFieldFormatDto,
+func (txtLabelFieldFmtDtoNanobot *textLabelFieldFormatDtoNanobot) copy(
+	destinationTxtFieldFmtDto *TextLabelFieldFormatDto,
+	sourceTxtFieldFmtDto *TextLabelFieldFormatDto,
 	errPrefDto *ePref.ErrPrefixDto) error {
 
-	if txtFieldFmtDtoNanobot.lock == nil {
-		txtFieldFmtDtoNanobot.lock = new(sync.Mutex)
+	if txtLabelFieldFmtDtoNanobot.lock == nil {
+		txtLabelFieldFmtDtoNanobot.lock = new(sync.Mutex)
 	}
 
-	txtFieldFmtDtoNanobot.lock.Lock()
+	txtLabelFieldFmtDtoNanobot.lock.Lock()
 
-	defer txtFieldFmtDtoNanobot.lock.Unlock()
+	defer txtLabelFieldFmtDtoNanobot.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -986,7 +986,7 @@ func (txtFieldFmtDtoNanobot *textFieldFormatDtoNanobot) copy(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"textFieldFormatDtoNanobot."+
+		"textLabelFieldFormatDtoNanobot."+
 			"copy()",
 		"")
 
@@ -1005,7 +1005,7 @@ func (txtFieldFmtDtoNanobot *textFieldFormatDtoNanobot) copy(
 		return err
 	}
 
-	txtFieldFmtDtoAtom := textFieldFormatDtoAtom{}
+	txtFieldFmtDtoAtom := textLabelFieldFormatDtoAtom{}
 
 	_,
 		err = txtFieldFmtDtoAtom.
@@ -1071,16 +1071,16 @@ func (txtFieldFmtDtoNanobot *textFieldFormatDtoNanobot) copy(
 
 // getFormattedTextFieldStr
 //
-// Converts an instance of TextFieldFormatDto to a
+// Converts an instance of TextLabelFieldFormatDto to a
 // formatted text field string.
 //
 // ----------------------------------------------------------------
 //
 // # Input Parameters
 //
-//	txtFieldFmtDto				*TextFieldFormatDto
+//	txtFieldFmtDto				*TextLabelFieldFormatDto
 //
-//		A pointer to an instance of TextFieldFormatDto.
+//		A pointer to an instance of TextLabelFieldFormatDto.
 //
 //		The left and right margins as well as the member
 //		variable 'FieldContents' will be processed and
@@ -1127,19 +1127,19 @@ func (txtFieldFmtDtoNanobot *textFieldFormatDtoNanobot) copy(
 //		for input parameter 'errPrefDto' (error prefix)
 //		will be prefixed or attached at the beginning of
 //		the error message.
-func (txtFieldFmtDtoNanobot *textFieldFormatDtoNanobot) getFormattedTextFieldStr(
-	txtFieldFmtDto *TextFieldFormatDto,
+func (txtLabelFieldFmtDtoNanobot *textLabelFieldFormatDtoNanobot) getFormattedTextFieldStr(
+	txtFieldFmtDto *TextLabelFieldFormatDto,
 	errPrefDto *ePref.ErrPrefixDto) (
 	string,
 	error) {
 
-	if txtFieldFmtDtoNanobot.lock == nil {
-		txtFieldFmtDtoNanobot.lock = new(sync.Mutex)
+	if txtLabelFieldFmtDtoNanobot.lock == nil {
+		txtLabelFieldFmtDtoNanobot.lock = new(sync.Mutex)
 	}
 
-	txtFieldFmtDtoNanobot.lock.Lock()
+	txtLabelFieldFmtDtoNanobot.lock.Lock()
 
-	defer txtFieldFmtDtoNanobot.lock.Unlock()
+	defer txtLabelFieldFmtDtoNanobot.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -1148,7 +1148,7 @@ func (txtFieldFmtDtoNanobot *textFieldFormatDtoNanobot) getFormattedTextFieldStr
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"textFieldFormatDtoNanobot."+
+		"textLabelFieldFormatDtoNanobot."+
 			"getFormattedTextFieldStr()",
 		"")
 
@@ -1174,7 +1174,7 @@ func (txtFieldFmtDtoNanobot *textFieldFormatDtoNanobot) getFormattedTextFieldStr
 	var textLabel TextFieldSpecLabel
 
 	textLabel,
-		err = new(textFieldFormatDtoMolecule).
+		err = new(textLabelFieldFormatDtoMolecule).
 		getFieldContentTextLabel(
 			txtFieldFmtDto,
 			ePrefix.XCpy(
@@ -1193,19 +1193,19 @@ func (txtFieldFmtDtoNanobot *textFieldFormatDtoNanobot) getFormattedTextFieldStr
 	return strBuilder.String(), err
 }
 
-// textFieldFormatDtoMolecule - Provides helper methods for
-// TextFieldFormatDto.
-type textFieldFormatDtoMolecule struct {
+// textLabelFieldFormatDtoMolecule - Provides helper methods for
+// TextLabelFieldFormatDto.
+type textLabelFieldFormatDtoMolecule struct {
 	lock *sync.Mutex
 }
 
 // getFieldContentTextLabel
 //
-// Converts a TextFieldFormatDto instance member
+// Converts a TextLabelFieldFormatDto instance member
 // variable, 'FieldContents', to an instance of
 // TextFieldSpecLabel.
 //
-// The TextFieldFormatDto instance is passed as input
+// The TextLabelFieldFormatDto instance is passed as input
 // parameter, 'txtFieldFmtDto'.
 //
 // The returned TextFieldSpecLabel will only contain
@@ -1217,16 +1217,16 @@ type textFieldFormatDtoMolecule struct {
 // # BE ADVISED
 //
 //	If input parameter 'txtFieldFmtDto', an instance of
-//	TextFieldFormatDto, is found to be invalid, an error
+//	TextLabelFieldFormatDto, is found to be invalid, an error
 //	will be returned.
 //
 // ----------------------------------------------------------------
 //
 // # Input Parameters
 //
-//	txtFieldFmtDto				*TextFieldFormatDto
+//	txtFieldFmtDto				*TextLabelFieldFormatDto
 //
-//		A pointer to an instance of TextFieldFormatDto.
+//		A pointer to an instance of TextLabelFieldFormatDto.
 //
 //		The member variable 'FieldContents' will be
 //		converted to a text label of type
@@ -1278,19 +1278,19 @@ type textFieldFormatDtoMolecule struct {
 //		for input parameter 'errPrefDto' (error prefix)
 //		will be prefixed or attached at the beginning of
 //		the error message.
-func (txtFieldFmtDtoMolecule *textFieldFormatDtoMolecule) getFieldContentTextLabel(
-	txtFieldFmtDto *TextFieldFormatDto,
+func (txtLabelFieldFmtDtoMolecule *textLabelFieldFormatDtoMolecule) getFieldContentTextLabel(
+	txtFieldFmtDto *TextLabelFieldFormatDto,
 	errPrefDto *ePref.ErrPrefixDto) (
 	TextFieldSpecLabel,
 	error) {
 
-	if txtFieldFmtDtoMolecule.lock == nil {
-		txtFieldFmtDtoMolecule.lock = new(sync.Mutex)
+	if txtLabelFieldFmtDtoMolecule.lock == nil {
+		txtLabelFieldFmtDtoMolecule.lock = new(sync.Mutex)
 	}
 
-	txtFieldFmtDtoMolecule.lock.Lock()
+	txtLabelFieldFmtDtoMolecule.lock.Lock()
 
-	defer txtFieldFmtDtoMolecule.lock.Unlock()
+	defer txtLabelFieldFmtDtoMolecule.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -1301,7 +1301,7 @@ func (txtFieldFmtDtoMolecule *textFieldFormatDtoMolecule) getFieldContentTextLab
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"textFieldFormatDtoMolecule."+
+		"textLabelFieldFormatDtoMolecule."+
 			"getFieldContentTextLabel()",
 		"")
 
@@ -1320,7 +1320,7 @@ func (txtFieldFmtDtoMolecule *textFieldFormatDtoMolecule) getFieldContentTextLab
 	}
 
 	_,
-		err = new(textFieldFormatDtoAtom).
+		err = new(textLabelFieldFormatDtoAtom).
 		testValidityOfTextFieldFmtDto(
 			txtFieldFmtDto,
 			ePrefix.XCpy(
@@ -1356,16 +1356,16 @@ func (txtFieldFmtDtoMolecule *textFieldFormatDtoMolecule) getFieldContentTextLab
 	return fieldContentsLabel, err
 }
 
-// textFieldFormatDtoAtom - Provides helper methods for
-// TextFieldFormatDto.
-type textFieldFormatDtoAtom struct {
+// textLabelFieldFormatDtoAtom - Provides helper methods for
+// TextLabelFieldFormatDto.
+type textLabelFieldFormatDtoAtom struct {
 	lock *sync.Mutex
 }
 
 // empty
 //
 // Receives a pointer to an instance of
-// TextFieldFormatDto and proceeds to set all the member
+// TextLabelFieldFormatDto and proceeds to set all the member
 // variables to their zero or uninitialized states.
 //
 // ----------------------------------------------------------------
@@ -1373,7 +1373,7 @@ type textFieldFormatDtoAtom struct {
 // # IMPORTANT
 //
 //	This method will delete reset all pre-existing data
-//	values contained within the TextFieldFormatDto
+//	values contained within the TextLabelFieldFormatDto
 //	instance passed as input
 //	parameter 'txtFieldFmtDto' to their zero or
 //	uninitialized states.
@@ -1382,9 +1382,9 @@ type textFieldFormatDtoAtom struct {
 //
 // # Input Parameters
 //
-//	txtFieldFmtDto				*TextFieldFormatDto
+//	txtFieldFmtDto				*TextLabelFieldFormatDto
 //
-//		A pointer to an instance of TextFieldFormatDto.
+//		A pointer to an instance of TextLabelFieldFormatDto.
 //		All data values contained within this instance
 //		will be deleted and reset to their zero or
 //		uninitialized states.
@@ -1394,16 +1394,16 @@ type textFieldFormatDtoAtom struct {
 // # Return Values
 //
 //	NONE
-func (txtFieldFmtDtoAtom *textFieldFormatDtoAtom) empty(
-	txtFieldFmtDto *TextFieldFormatDto) {
+func (txtLabelFieldFmtDtoAtom *textLabelFieldFormatDtoAtom) empty(
+	txtFieldFmtDto *TextLabelFieldFormatDto) {
 
-	if txtFieldFmtDtoAtom.lock == nil {
-		txtFieldFmtDtoAtom.lock = new(sync.Mutex)
+	if txtLabelFieldFmtDtoAtom.lock == nil {
+		txtLabelFieldFmtDtoAtom.lock = new(sync.Mutex)
 	}
 
-	txtFieldFmtDtoAtom.lock.Lock()
+	txtLabelFieldFmtDtoAtom.lock.Lock()
 
-	defer txtFieldFmtDtoAtom.lock.Unlock()
+	defer txtLabelFieldFmtDtoAtom.lock.Unlock()
 
 	if txtFieldFmtDto == nil {
 
@@ -1425,33 +1425,33 @@ func (txtFieldFmtDtoAtom *textFieldFormatDtoAtom) empty(
 
 // equal
 //
-// Compares two instances of TextFieldFormatDto and
+// Compares two instances of TextLabelFieldFormatDto and
 // returns a boolean value signaling whether the two
 // instances are equivalent in all respects.
 //
-// If the two instances of TextFieldFormatDto are equal,
+// If the two instances of TextLabelFieldFormatDto are equal,
 // this method returns 'true'.
 //
 // ----------------------------------------------------------------
 //
 // # Input Parameters
 //
-//	txtFieldFmtDtoOne			*TextFieldFormatDto
+//	txtFieldFmtDtoOne			*TextLabelFieldFormatDto
 //
-//		A pointer to an instance of TextFieldFormatDto.
+//		A pointer to an instance of TextLabelFieldFormatDto.
 //		The data values contained within this instance
 //		will be compared to corresponding data values
-//		contained within a second TextFieldFormatDto
+//		contained within a second TextLabelFieldFormatDto
 //		instance ('txtFieldFmtDtoTwo') in order to
 //		determine if they are equivalent.
 //
-//	txtFieldFmtDtoTwo			*TextFieldFormatDto
+//	txtFieldFmtDtoTwo			*TextLabelFieldFormatDto
 //
 //		A pointer to the second of two instances of
-//		TextFieldFormatDto. The data values contained
+//		TextLabelFieldFormatDto. The data values contained
 //		within this instance will be compared to
 //		corresponding data values contained within the
-//		first TextFieldFormatDto instance
+//		first TextLabelFieldFormatDto instance
 //		('txtFieldFmtDtoOne') in order to determine if
 //		they are equivalent.
 //
@@ -1468,17 +1468,17 @@ func (txtFieldFmtDtoAtom *textFieldFormatDtoAtom) empty(
 //
 //		If the compared data values are NOT equivalent,
 //		this method returns 'false'.
-func (txtFieldFmtDtoAtom *textFieldFormatDtoAtom) equal(
-	txtFieldFmtDtoOne *TextFieldFormatDto,
-	txtFieldFmtDtoTwo *TextFieldFormatDto) bool {
+func (txtLabelFieldFmtDtoAtom *textLabelFieldFormatDtoAtom) equal(
+	txtFieldFmtDtoOne *TextLabelFieldFormatDto,
+	txtFieldFmtDtoTwo *TextLabelFieldFormatDto) bool {
 
-	if txtFieldFmtDtoAtom.lock == nil {
-		txtFieldFmtDtoAtom.lock = new(sync.Mutex)
+	if txtLabelFieldFmtDtoAtom.lock == nil {
+		txtLabelFieldFmtDtoAtom.lock = new(sync.Mutex)
 	}
 
-	txtFieldFmtDtoAtom.lock.Lock()
+	txtLabelFieldFmtDtoAtom.lock.Lock()
 
-	defer txtFieldFmtDtoAtom.lock.Unlock()
+	defer txtLabelFieldFmtDtoAtom.lock.Unlock()
 
 	if txtFieldFmtDtoOne == nil ||
 		txtFieldFmtDtoTwo == nil {
@@ -1522,7 +1522,7 @@ func (txtFieldFmtDtoAtom *textFieldFormatDtoAtom) equal(
 // testValidityOfTextFieldFmtDto
 //
 // Receives a pointer to an instance of
-// TextFieldFormatDto and performs a diagnostic analysis
+// TextLabelFieldFormatDto and performs a diagnostic analysis
 // to determine if the data values contained in that
 // instance are valid in all respects.
 //
@@ -1541,9 +1541,9 @@ func (txtFieldFmtDtoAtom *textFieldFormatDtoAtom) equal(
 //
 // # Input Parameters
 //
-//	txtFieldFmtDto				*TextFieldFormatDto
+//	txtFieldFmtDto				*TextLabelFieldFormatDto
 //
-//		A pointer to an instance of TextFieldFormatDto.
+//		A pointer to an instance of TextLabelFieldFormatDto.
 //
 //		The data values contained in this instance will
 //		be reviewed and analyzed to determine if they
@@ -1586,19 +1586,19 @@ func (txtFieldFmtDtoAtom *textFieldFormatDtoAtom) equal(
 //		for input parameter 'errPrefDto' (error prefix)
 //		will be prefixed or attached at the beginning of
 //		the error message.
-func (txtFieldFmtDtoAtom *textFieldFormatDtoAtom) testValidityOfTextFieldFmtDto(
-	txtFieldFmtDto *TextFieldFormatDto,
+func (txtLabelFieldFmtDtoAtom *textLabelFieldFormatDtoAtom) testValidityOfTextFieldFmtDto(
+	txtFieldFmtDto *TextLabelFieldFormatDto,
 	errPrefDto *ePref.ErrPrefixDto) (
 	isValid bool,
 	err error) {
 
-	if txtFieldFmtDtoAtom.lock == nil {
-		txtFieldFmtDtoAtom.lock = new(sync.Mutex)
+	if txtLabelFieldFmtDtoAtom.lock == nil {
+		txtLabelFieldFmtDtoAtom.lock = new(sync.Mutex)
 	}
 
-	txtFieldFmtDtoAtom.lock.Lock()
+	txtLabelFieldFmtDtoAtom.lock.Lock()
 
-	defer txtFieldFmtDtoAtom.lock.Unlock()
+	defer txtLabelFieldFmtDtoAtom.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -1607,7 +1607,7 @@ func (txtFieldFmtDtoAtom *textFieldFormatDtoAtom) testValidityOfTextFieldFmtDto(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"textFieldFormatDtoAtom."+
+		"textLabelFieldFormatDtoAtom."+
 			"testValidityOfTextFieldFmtDto()",
 		"")
 
@@ -1629,7 +1629,7 @@ func (txtFieldFmtDtoAtom *textFieldFormatDtoAtom) testValidityOfTextFieldFmtDto(
 	if txtFieldFmtDto.FieldContents == nil {
 
 		err = fmt.Errorf("%v\n"+
-			"ERROR: TextFieldFormatDto parameter 'FieldContents' is INVALID!\n"+
+			"ERROR: TextLabelFieldFormatDto parameter 'FieldContents' is INVALID!\n"+
 			"txtFieldFmtDto.FieldContents has a value of 'nil'.\n",
 			ePrefix.String())
 
@@ -1639,7 +1639,7 @@ func (txtFieldFmtDtoAtom *textFieldFormatDtoAtom) testValidityOfTextFieldFmtDto(
 	if txtFieldFmtDto.FieldLength < -1 {
 
 		err = fmt.Errorf("%v\n"+
-			"ERROR: TextFieldFormatDto parameter 'FieldLength' is INVALID!\n"+
+			"ERROR: TextLabelFieldFormatDto parameter 'FieldLength' is INVALID!\n"+
 			"txtFieldFmtDto.FieldLength has a value less than minus none (-1)\n"+
 			"txtFieldFmtDto.FieldLength = %v\n",
 			ePrefix.String(),

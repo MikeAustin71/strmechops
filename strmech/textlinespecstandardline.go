@@ -4548,13 +4548,13 @@ func (stdLine TextLineSpecStandardLine) NewStandardLineAllParms(
 //
 // # Input Parameters
 //
-//	oneColumnTextField			TextFieldFormatDto
+//	oneColumnTextField			TextLabelFieldFormatDto
 //
 //		Contains all the text field content and
 //		formatting specifications necessary to format a
 //		one-column text field.
 //
-//		type TextFieldFormatDto struct {
+//		type TextLabelFieldFormatDto struct {
 //
 //			LeftMarginStr string
 //				One or more characters used to create a left
@@ -4765,7 +4765,7 @@ func (stdLine TextLineSpecStandardLine) NewStandardLineAllParms(
 //		text will be attached to the beginning of the
 //		error message.
 func (stdLine TextLineSpecStandardLine) NewStdLine1Col(
-	oneColumnTextField TextFieldFormatDto,
+	oneColumnTextField TextLabelFieldFormatDto,
 	lineTerminator string,
 	turnLineTerminatorOff bool,
 	errorPrefix interface{}) (
@@ -4803,7 +4803,7 @@ func (stdLine TextLineSpecStandardLine) NewStdLine1Col(
 	err = new(textLineSpecStandardLineNanobot).
 		setTextFieldFmtStdLine(
 			&newStdLine,
-			[]TextFieldFormatDto{oneColumnTextField},
+			[]TextLabelFieldFormatDto{oneColumnTextField},
 			1,
 			[]rune(lineTerminator),
 			turnLineTerminatorOff,
@@ -4822,16 +4822,16 @@ func (stdLine TextLineSpecStandardLine) NewStdLine1Col(
 //
 // ----------------------------------------------------------------
 //
-// # Type TextFieldFormatDto
+// # Type TextLabelFieldFormatDto
 //
-//	This method employs type TextFieldFormatDto to define
+//	This method employs type TextLabelFieldFormatDto to define
 //	text fields for the two column layout configured for
 //	the returned instance of TextLineSpecStandardLine.
 //
-//	The type TextFieldFormatDto structure is defined as
+//	The type TextLabelFieldFormatDto structure is defined as
 //	follows:
 //
-//		type TextFieldFormatDto struct {
+//		type TextLabelFieldFormatDto struct {
 //
 //			LeftMarginStr string
 //				One or more characters used to create a left
@@ -4920,22 +4920,22 @@ func (stdLine TextLineSpecStandardLine) NewStdLine1Col(
 //
 // # Input Parameters
 //
-//	columnOneTextField			TextFieldFormatDto
+//	columnOneTextField			TextLabelFieldFormatDto
 //
 //		Contains all the text field content and
 //		formatting specifications necessary to format the
 //		first column text field.
 //
-//		For more information on Type TextFieldFormatDto,
+//		For more information on Type TextLabelFieldFormatDto,
 //		see above.
 //
-//	columnTwoTextField			TextFieldFormatDto
+//	columnTwoTextField			TextLabelFieldFormatDto
 //
 //		Contains all the text field content and
 //		formatting specifications necessary to format the
 //		second column text field.
 //
-//		For more information on Type TextFieldFormatDto,
+//		For more information on Type TextLabelFieldFormatDto,
 //		see above.
 //
 //	lineTerminator				string
@@ -5064,8 +5064,8 @@ func (stdLine TextLineSpecStandardLine) NewStdLine1Col(
 //		text will be attached to the beginning of the
 //		error message.
 func (stdLine TextLineSpecStandardLine) NewStdLine2Col(
-	columnOneTextField TextFieldFormatDto,
-	columnTwoTextField TextFieldFormatDto,
+	columnOneTextField TextLabelFieldFormatDto,
+	columnTwoTextField TextLabelFieldFormatDto,
 	lineTerminator string,
 	turnLineTerminatorOff bool,
 	errorPrefix interface{}) (
@@ -5103,7 +5103,7 @@ func (stdLine TextLineSpecStandardLine) NewStdLine2Col(
 	err = new(textLineSpecStandardLineNanobot).
 		setTextFieldFmtStdLine(
 			&newStdLine,
-			[]TextFieldFormatDto{
+			[]TextLabelFieldFormatDto{
 				columnOneTextField,
 				columnTwoTextField},
 			1,
@@ -5124,16 +5124,16 @@ func (stdLine TextLineSpecStandardLine) NewStdLine2Col(
 //
 // ----------------------------------------------------------------
 //
-// # Type TextFieldFormatDto
+// # Type TextLabelFieldFormatDto
 //
-//	This method employs type TextFieldFormatDto to define
+//	This method employs type TextLabelFieldFormatDto to define
 //	text fields for the two column layout configured for
 //	the returned instance of TextLineSpecStandardLine.
 //
-//	The type TextFieldFormatDto structure is defined as
+//	The type TextLabelFieldFormatDto structure is defined as
 //	follows:
 //
-//		type TextFieldFormatDto struct {
+//		type TextLabelFieldFormatDto struct {
 //
 //			LeftMarginStr string
 //				One or more characters used to create a left
@@ -5222,15 +5222,15 @@ func (stdLine TextLineSpecStandardLine) NewStdLine2Col(
 //
 // # Input Parameters
 //
-//	textFields					[]TextFieldFormatDto
+//	textFields					[]TextLabelFieldFormatDto
 //
-//		An array of TextFieldFormatDto objects containing
+//		An array of TextLabelFieldFormatDto objects containing
 //		all the text field content and formatting
 //		specifications necessary to format multiple text
 //		field columns in the returned instance of
 //		TextLineSpecStandardLine.
 //
-//		For more information on Type TextFieldFormatDto,
+//		For more information on Type TextLabelFieldFormatDto,
 //		see above.
 //
 //	lineTerminator				string
@@ -5359,7 +5359,7 @@ func (stdLine TextLineSpecStandardLine) NewStdLine2Col(
 //		text will be attached to the beginning of the
 //		error message.
 func (stdLine TextLineSpecStandardLine) NewStdLineMultiCol(
-	textFields []TextFieldFormatDto,
+	textFields []TextLabelFieldFormatDto,
 	lineTerminator string,
 	turnLineTerminatorOff bool,
 	errorPrefix interface{}) (

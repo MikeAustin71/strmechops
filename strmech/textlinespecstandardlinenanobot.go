@@ -728,16 +728,16 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) insertTextFieldAtIndex
 //
 // ----------------------------------------------------------------
 //
-// # Type TextFieldFormatDto
+// # Type TextLabelFieldFormatDto
 //
-//	This method employs type TextFieldFormatDto to define
+//	This method employs type TextLabelFieldFormatDto to define
 //	text fields for the two column layout configured for
 //	the returned instance of TextLineSpecStandardLine.
 //
-//	The type TextFieldFormatDto structure is defined as
+//	The type TextLabelFieldFormatDto structure is defined as
 //	follows:
 //
-//		type TextFieldFormatDto struct {
+//		type TextLabelFieldFormatDto struct {
 //
 //			LeftMarginStr string
 //				One or more characters used to create a left
@@ -838,15 +838,15 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) insertTextFieldAtIndex
 //		TextLineSpecStandardLine instance will be deleted
 //		and overwritten with new values.
 //
-//	txtFieldFmtDtos				[]TextFieldFormatDto
+//	txtFieldFmtDtos				[]TextLabelFieldFormatDto
 //
-//		An array of TextFieldFormatDto objects containing
+//		An array of TextLabelFieldFormatDto objects containing
 //		all the text field content and formatting
 //		specifications necessary to format multiple text
 //		field columns in the returned instance of
 //		TextLineSpecStandardLine.
 //
-//		For more information on Type TextFieldFormatDto,
+//		For more information on Type TextLabelFieldFormatDto,
 //		see above.
 //
 //	numOfStdLines				int
@@ -959,7 +959,7 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) insertTextFieldAtIndex
 //		the error message.
 func (txtStdLineNanobot *textLineSpecStandardLineNanobot) setTextFieldFmtStdLine(
 	txtStdLine *TextLineSpecStandardLine,
-	txtFieldFmtDtos []TextFieldFormatDto,
+	txtFieldFmtDtos []TextLabelFieldFormatDto,
 	numOfStdLines int,
 	newLineChars []rune,
 	turnLineTerminatorOff bool,
