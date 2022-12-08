@@ -1146,7 +1146,7 @@ func (txtLineTitleMarqueeDto *TextLineTitleMarqueeDto) AddStandardTitleLine(
 	}
 
 	_,
-		err = textLineSpecStandardLineAtom{}.ptr().
+		err = new(textLineSpecStandardLineAtom).
 		testValidityOfTextLineSpecStdLine(
 			stdTitleLine,
 			false, // allowZeroLengthTextFieldsArray

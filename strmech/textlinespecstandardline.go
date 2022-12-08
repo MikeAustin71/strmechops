@@ -1550,7 +1550,7 @@ func (stdLine *TextLineSpecStandardLine) CopyIn(
 		return err
 	}
 
-	err = textLineSpecStandardLineNanobot{}.ptr().
+	err = new(textLineSpecStandardLineNanobot).
 		copyIn(
 			stdLine,
 			incomingStdLine,
@@ -1661,7 +1661,7 @@ func (stdLine *TextLineSpecStandardLine) CopyOut(
 	var newStdLine TextLineSpecStandardLine
 
 	newStdLine,
-		err = textLineSpecStandardLineNanobot{}.ptr().
+		err = new(textLineSpecStandardLineNanobot).
 		copyOut(
 			stdLine,
 			ePrefix.XCpy("stdLine"))
@@ -1773,7 +1773,7 @@ func (stdLine *TextLineSpecStandardLine) CopyOutITextLine(
 	var newStdLine TextLineSpecStandardLine
 
 	newStdLine,
-		err = textLineSpecStandardLineNanobot{}.ptr().
+		err = new(textLineSpecStandardLineNanobot).
 		copyOut(
 			stdLine,
 			ePrefix.XCpy("stdLine"))
@@ -1884,7 +1884,7 @@ func (stdLine *TextLineSpecStandardLine) CopyOutPtr(
 	var newStdLine TextLineSpecStandardLine
 
 	newStdLine,
-		err = textLineSpecStandardLineNanobot{}.ptr().
+		err = new(textLineSpecStandardLineNanobot).
 		copyOut(
 			stdLine,
 			ePrefix.XCpy("stdLine"))
@@ -1993,7 +1993,7 @@ func (stdLine *TextLineSpecStandardLine) DeleteTextField(
 		return err
 	}
 
-	return textLineSpecStandardLineElectron{}.ptr().
+	return new(textLineSpecStandardLineElectron).
 		deleteTextField(
 			stdLine,
 			indexId,
@@ -2043,7 +2043,7 @@ func (stdLine *TextLineSpecStandardLine) Empty() {
 
 	stdLine.lock.Lock()
 
-	_ = textLineSpecStandardLineMolecule{}.ptr().
+	_ = new(textLineSpecStandardLineMolecule).
 		emptyStandardLine(
 			stdLine,
 			nil)
@@ -2095,7 +2095,7 @@ func (stdLine *TextLineSpecStandardLine) EmptyTextFields() {
 
 	defer stdLine.lock.Unlock()
 
-	textLineSpecStandardLineMolecule{}.ptr().
+	new(textLineSpecStandardLineMolecule).
 		emptyStdLineTextFields(stdLine)
 
 	return
@@ -2146,7 +2146,7 @@ func (stdLine *TextLineSpecStandardLine) Equal(
 
 	defer stdLine.lock.Unlock()
 
-	return textLineSpecStandardLineMolecule{}.ptr().
+	return new(textLineSpecStandardLineMolecule).
 		equal(
 			stdLine,
 			incomingStdLine)
@@ -2181,7 +2181,7 @@ func (stdLine *TextLineSpecStandardLine) EqualITextLine(
 		return false
 	}
 
-	return textLineSpecStandardLineMolecule{}.ptr().
+	return new(textLineSpecStandardLineMolecule).
 		equal(
 			stdLine,
 			stdLineTwo)
@@ -2297,7 +2297,7 @@ func (stdLine *TextLineSpecStandardLine) GetFormattedText(
 
 	_,
 		_,
-		err = textLineSpecStandardLineMolecule{}.ptr().
+		err = new(textLineSpecStandardLineMolecule).
 		getFormattedText(
 			&strBuilder,
 			stdLine,
@@ -2384,7 +2384,7 @@ func (stdLine *TextLineSpecStandardLine) GetNewLineRunes() []rune {
 
 	var newLineChars []rune
 
-	_ = strMechPreon{}.ptr().
+	_ = new(strMechPreon).
 		copyRuneArrays(
 			&newLineChars,
 			&stdLine.newLineChars,
@@ -2484,7 +2484,7 @@ func (stdLine *TextLineSpecStandardLine) GetSingleLineLength() int {
 
 	singleLineLength,
 		_,
-		err = textLineSpecStandardLineMolecule{}.ptr().
+		err = new(textLineSpecStandardLineMolecule).
 		getFormattedText(
 			&strBuilder,
 			stdLine,
@@ -2675,7 +2675,7 @@ func (stdLine *TextLineSpecStandardLine) GetTextField(
 	}
 
 	iTxtFieldSpec,
-		err = textLineSpecStandardLineAtom{}.ptr().
+		err = new(textLineSpecStandardLineAtom).
 		peekPopTextField(
 			stdLine,
 			zeroBasedIndex,
@@ -2804,7 +2804,7 @@ func (stdLine *TextLineSpecStandardLine) GetTextFieldCollection(
 	}
 
 	_,
-		err = textLineSpecStandardLineElectron{}.ptr().
+		err = new(textLineSpecStandardLineElectron).
 		testValidityOfTextFields(
 			&stdLine.textFields,
 			false, // allowZeroLengthTextFields
@@ -2818,7 +2818,7 @@ func (stdLine *TextLineSpecStandardLine) GetTextFieldCollection(
 	newTextFields := make([]ITextFieldSpecification, 0)
 
 	_,
-		err = textLineSpecStandardLineAtom{}.ptr().
+		err = new(textLineSpecStandardLineAtom).
 		copyTextFields(
 			&newTextFields,
 			&stdLine.textFields,
@@ -2879,7 +2879,7 @@ func (stdLine *TextLineSpecStandardLine) GetTotalLinesLength() int {
 
 	_,
 		totalLinesLength,
-		err = textLineSpecStandardLineMolecule{}.ptr().
+		err = new(textLineSpecStandardLineMolecule).
 		getFormattedText(
 			&strBuilder,
 			stdLine,
@@ -3086,7 +3086,7 @@ func (stdLine *TextLineSpecStandardLine) InsertTextField(
 	}
 
 	lastIndexId,
-		err = textLineSpecStandardLineNanobot{}.ptr().
+		err = new(textLineSpecStandardLineNanobot).
 		insertTextFieldAtIndex(
 			stdLine,
 			iTextField,
@@ -3139,7 +3139,7 @@ func (stdLine *TextLineSpecStandardLine) IsValidInstance() (
 	defer stdLine.lock.Unlock()
 
 	isValid,
-		_ = textLineSpecStandardLineAtom{}.ptr().
+		_ = new(textLineSpecStandardLineAtom).
 		testValidityOfTextLineSpecStdLine(
 			stdLine,
 			false, // allowZeroLengthTextFieldsArray
@@ -3249,7 +3249,7 @@ func (stdLine *TextLineSpecStandardLine) IsValidInstanceError(
 	}
 
 	_,
-		err = textLineSpecStandardLineAtom{}.ptr().
+		err = new(textLineSpecStandardLineAtom).
 		testValidityOfTextLineSpecStdLine(
 			stdLine,
 			false, // allowZeroLengthTextFieldsArray
@@ -3719,10 +3719,10 @@ func (stdLine TextLineSpecStandardLine) NewPtrStandardLine(
 	}
 
 	newLineChars :=
-		textSpecificationAtom{}.ptr().
+		new(textSpecificationAtom).
 			getDefaultNewLineChars()
 
-	err = textLineSpecStandardLineNanobot{}.ptr().
+	err = new(textLineSpecStandardLineNanobot).
 		setTxtSpecStandardLine(
 			&newStdLine,
 			numOfStdLines,
@@ -3989,7 +3989,7 @@ func (stdLine TextLineSpecStandardLine) NewPtrStandardLineAllParms(
 		numOfStdLines = 1
 	}
 
-	err = textLineSpecStandardLineNanobot{}.ptr().
+	err = new(textLineSpecStandardLineNanobot).
 		setTxtSpecStandardLine(
 			&newStdLine,
 			numOfStdLines,
@@ -4256,10 +4256,10 @@ func (stdLine TextLineSpecStandardLine) NewStandardLine(
 	}
 
 	newLineChars :=
-		textSpecificationAtom{}.ptr().
+		new(textSpecificationAtom).
 			getDefaultNewLineChars()
 
-	err = textLineSpecStandardLineNanobot{}.ptr().
+	err = new(textLineSpecStandardLineNanobot).
 		setTxtSpecStandardLine(
 			&newStdLine,
 			numOfStdLines,
@@ -4525,7 +4525,7 @@ func (stdLine TextLineSpecStandardLine) NewStandardLineAllParms(
 		numOfStdLines = 1
 	}
 
-	err = textLineSpecStandardLineNanobot{}.ptr().
+	err = new(textLineSpecStandardLineNanobot).
 		setTxtSpecStandardLine(
 			&newStdLine,
 			numOfStdLines,
@@ -5561,7 +5561,7 @@ func (stdLine *TextLineSpecStandardLine) PeekAtFirstTextField(
 	}
 
 	iTxtFieldSpec,
-		err = textLineSpecStandardLineAtom{}.ptr().
+		err = new(textLineSpecStandardLineAtom).
 		peekPopTextField(
 			stdLine,
 			0,
@@ -5737,7 +5737,7 @@ func (stdLine *TextLineSpecStandardLine) PeekAtLastTextField(
 	}
 
 	iTxtFieldSpec,
-		err = textLineSpecStandardLineAtom{}.ptr().
+		err = new(textLineSpecStandardLineAtom).
 		peekPopTextField(
 			stdLine,
 			lastIdx,
@@ -5927,7 +5927,7 @@ func (stdLine *TextLineSpecStandardLine) PeekAtTextField(
 	}
 
 	iTxtFieldSpec,
-		err = textLineSpecStandardLineAtom{}.ptr().
+		err = new(textLineSpecStandardLineAtom).
 		peekPopTextField(
 			stdLine,
 			indexId,
@@ -6113,7 +6113,7 @@ func (stdLine *TextLineSpecStandardLine) PopFirstTextField(
 	}
 
 	iTxtFieldSpec,
-		err = textLineSpecStandardLineAtom{}.ptr().
+		err = new(textLineSpecStandardLineAtom).
 		peekPopTextField(
 			stdLine,
 			0,
@@ -6309,7 +6309,7 @@ func (stdLine *TextLineSpecStandardLine) PopLastTextField(
 	}
 
 	iTxtFieldSpec,
-		err = textLineSpecStandardLineAtom{}.ptr().
+		err = new(textLineSpecStandardLineAtom).
 		peekPopTextField(
 			stdLine,
 			lastIdx,
@@ -6511,7 +6511,7 @@ func (stdLine *TextLineSpecStandardLine) PopTextField(
 	}
 
 	iTxtFieldSpec,
-		err = textLineSpecStandardLineAtom{}.ptr().
+		err = new(textLineSpecStandardLineAtom).
 		peekPopTextField(
 			stdLine,
 			indexId,
@@ -6701,7 +6701,7 @@ func (stdLine *TextLineSpecStandardLine) Read(
 
 		_,
 			_,
-			err = textLineSpecStandardLineMolecule{}.ptr().
+			err = new(textLineSpecStandardLineMolecule).
 			getFormattedText(
 				&strBuilder,
 				stdLine,
@@ -6728,7 +6728,7 @@ func (stdLine *TextLineSpecStandardLine) Read(
 	}
 
 	n,
-		err = textSpecificationAtom{}.ptr().
+		err = new(textSpecificationAtom).
 		readBytes(
 			stdLine.textLineReader,
 			p,
@@ -7529,7 +7529,7 @@ func (stdLine *TextLineSpecStandardLine) SetStandardLine(
 	if len(stdLine.newLineChars) == 0 {
 
 		err =
-			textSpecificationMolecule{}.ptr().
+			new(textSpecificationMolecule).
 				setDefaultNewLineChars(
 					&newLineChars,
 					ePrefix.XCpy(
@@ -7541,7 +7541,7 @@ func (stdLine *TextLineSpecStandardLine) SetStandardLine(
 
 	} else {
 
-		err = strMechPreon{}.ptr().
+		err = new(strMechPreon).
 			copyRuneArrays(
 				&newLineChars,
 				&stdLine.newLineChars,
@@ -7557,7 +7557,7 @@ func (stdLine *TextLineSpecStandardLine) SetStandardLine(
 
 	turnLineTerminatorOff := stdLine.turnLineTerminatorOff
 
-	return textLineSpecStandardLineNanobot{}.ptr().
+	return new(textLineSpecStandardLineNanobot).
 		setTxtSpecStandardLine(
 			stdLine,
 			numOfStdLines,
@@ -7765,7 +7765,7 @@ func (stdLine *TextLineSpecStandardLine) SetStandardLineAllParms(
 	if len(newLineChars) == 0 {
 
 		err =
-			textSpecificationMolecule{}.ptr().
+			new(textSpecificationMolecule).
 				setDefaultNewLineChars(
 					&newLineChars,
 					ePrefix)
@@ -7776,7 +7776,7 @@ func (stdLine *TextLineSpecStandardLine) SetStandardLineAllParms(
 
 	}
 
-	return textLineSpecStandardLineNanobot{}.ptr().
+	return new(textLineSpecStandardLineNanobot).
 		setTxtSpecStandardLine(
 			stdLine,
 			numOfStdLines,
@@ -7938,7 +7938,7 @@ func (stdLine *TextLineSpecStandardLine) SetTextFields(
 	if len(stdLine.newLineChars) == 0 {
 
 		err =
-			textSpecificationMolecule{}.ptr().
+			new(textSpecificationMolecule).
 				setDefaultNewLineChars(
 					&stdLine.newLineChars,
 					ePrefix.XCpy(
@@ -7959,29 +7959,27 @@ func (stdLine *TextLineSpecStandardLine) SetTextFields(
 	}
 
 	_,
-		err =
-		textLineSpecStandardLineElectron{}.ptr().
-			testValidityOfTextFields(
-				&textFields,
-				false, // allowZeroLengthTextFieldsArray
-				ePrefix.XCpy("Input parameter textFields is invalid!"))
+		err = new(textLineSpecStandardLineElectron).
+		testValidityOfTextFields(
+			&textFields,
+			false, // allowZeroLengthTextFieldsArray
+			ePrefix.XCpy("Input parameter textFields is invalid!"))
 
 	if err != nil {
 		return err
 	}
 
-	textLineSpecStandardLineMolecule{}.ptr().
+	new(textLineSpecStandardLineMolecule).
 		emptyStdLineTextFields(stdLine)
 
 	_,
-		err =
-		textLineSpecStandardLineAtom{}.ptr().
-			copyTextFields(
-				&stdLine.textFields,
-				&textFields,
-				ePrefix.XCpy(
-					"textFields->"+
-						"stdLine.textFields"))
+		err = new(textLineSpecStandardLineAtom).
+		copyTextFields(
+			&stdLine.textFields,
+			&textFields,
+			ePrefix.XCpy(
+				"textFields->"+
+					"stdLine.textFields"))
 
 	return err
 }
@@ -8023,7 +8021,7 @@ func (stdLine TextLineSpecStandardLine) String() string {
 
 	_,
 		_,
-		err = textLineSpecStandardLineMolecule{}.ptr().
+		err = new(textLineSpecStandardLineMolecule).
 		getFormattedText(
 			&strBuilder,
 			&stdLine,
@@ -8140,7 +8138,7 @@ func (stdLine *TextLineSpecStandardLine) TextBuilder(
 
 	_,
 		_,
-		err = textLineSpecStandardLineMolecule{}.ptr().
+		err = new(textLineSpecStandardLineMolecule).
 		getFormattedText(
 			strBuilder,
 			stdLine,

@@ -28,7 +28,7 @@ type textLineSpecStandardLineAtom struct {
 // TextLineSpecStandardLine objects. This method is designed to
 // facilitate those copy operations.
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // ----------------------------------------------------------------
 //
@@ -36,73 +36,70 @@ type textLineSpecStandardLineAtom struct {
 // their data values, contained in input parameter,
 // 'targetTextFields'.
 //
-//
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  targetTextFields           *[]ITextFieldSpecification
-//     - A pointer to the target text fields array.
+//	targetTextFields           *[]ITextFieldSpecification
+//	   - A pointer to the target text fields array.
 //
-//       All the array elements within input parameter
-//       'sourceTextFields' will be copied to this array,
-//       'targetTextFields'. When the copy operation is completed
-//       the elements and their data values contained in this array
-//       will be identical to those in 'sourceTextFields'.
+//	     All the array elements within input parameter
+//	     'sourceTextFields' will be copied to this array,
+//	     'targetTextFields'. When the copy operation is completed
+//	     the elements and their data values contained in this array
+//	     will be identical to those in 'sourceTextFields'.
 //
-//       Be advised, all the elements in the target text fields
-//       array will be deleted and overwritten.
-//
-//
-//  sourceTextFields           *[]ITextFieldSpecification
-//     - A pointer to the source text fields array.
-//
-//       All the data elements in this array will be copied to the
-//       input parameter 'targetTextFields'. When the copy
-//       operation is completed all the array elements and their
-//       data values in 'targetTextFields' will be identical to
-//       those found in this array, 'sourceTextFields'.
-//
-//       If 'sourceTextFields' contains an empty or zero length
-//       array, an error will be returned.
-//
-//       If any of the ITextFieldSpecification objects in this
-//       array are found to be invalid, an error will be returned.
+//	     Be advised, all the elements in the target text fields
+//	     array will be deleted and overwritten.
 //
 //
-//  errPrefDto          *ePref.ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//	sourceTextFields           *[]ITextFieldSpecification
+//	   - A pointer to the source text fields array.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	     All the data elements in this array will be copied to the
+//	     input parameter 'targetTextFields'. When the copy
+//	     operation is completed all the array elements and their
+//	     data values in 'targetTextFields' will be identical to
+//	     those found in this array, 'sourceTextFields'.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
+//	     If 'sourceTextFields' contains an empty or zero length
+//	     array, an error will be returned.
 //
+//	     If any of the ITextFieldSpecification objects in this
+//	     array are found to be invalid, an error will be returned.
+//
+//
+//	errPrefDto          *ePref.ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods listed
+//	     as a function chain.
+//
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
+//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------
 //
 // Return Values
 //
-//  lengthTargetTxtFields      int
-//     - If this method completes successfully,
-//       'lengthTargetTxtFields' will contain the number of array
-//       elements copied to Text Fields array, 'targetTextFields'.
+//	lengthTargetTxtFields      int
+//	   - If this method completes successfully,
+//	     'lengthTargetTxtFields' will contain the number of array
+//	     elements copied to Text Fields array, 'targetTextFields'.
 //
 //
-//  error
-//     - If this method completes successfully, this returned error
-//       Type is set equal to 'nil'. If errors are encountered during
-//       processing, the returned error Type will encapsulate an error
-//       message.
+//	error
+//	   - If this method completes successfully, this returned error
+//	     Type is set equal to 'nil'. If errors are encountered during
+//	     processing, the returned error Type will encapsulate an error
+//	     message.
 //
-//       If an error message is returned, the text value for input
-//       parameter 'errPrefDto' (error prefix) will be prefixed or
-//       attached at the beginning of the error message.
-//
+//	     If an error message is returned, the text value for input
+//	     parameter 'errPrefDto' (error prefix) will be prefixed or
+//	     attached at the beginning of the error message.
 func (txtStdLineAtom *textLineSpecStandardLineAtom) copyTextFields(
 	targetTextFields *[]ITextFieldSpecification,
 	sourceTextFields *[]ITextFieldSpecification,
@@ -148,7 +145,7 @@ func (txtStdLineAtom *textLineSpecStandardLineAtom) copyTextFields(
 	}
 
 	lengthTargetTxtFields,
-		err = textLineSpecStandardLineElectron{}.ptr().
+		err = new(textLineSpecStandardLineElectron).
 		testValidityOfTextFields(
 			sourceTextFields,
 			false, // allowZeroLengthTextFieldArray
@@ -161,7 +158,7 @@ func (txtStdLineAtom *textLineSpecStandardLineAtom) copyTextFields(
 
 	}
 
-	err = textLineSpecStandardLineElectron{}.ptr().
+	err = new(textLineSpecStandardLineElectron).
 		emptyTextFields(
 			targetTextFields,
 			ePrefix.XCpy(
@@ -221,7 +218,7 @@ func (txtStdLineAtom *textLineSpecStandardLineAtom) copyTextFields(
 		concreteTargetFields[i] = newTextField
 	}
 
-	areEqual := textLineSpecStandardLineElectron{}.ptr().
+	areEqual := new(textLineSpecStandardLineElectron).
 		equalTextFieldArrays(
 			targetTextFields,
 			sourceTextFields)
@@ -258,79 +255,76 @@ func (txtStdLineAtom *textLineSpecStandardLineAtom) copyTextFields(
 // therefore remains in the collection after the 'Peek' operation
 // is completed.
 //
-//
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  txtStdLine                 *TextLineSpecStandardLine
-//     - A pointer to an instance of TextLineSpecStandardLine. A
-//       deep copy of the designated Text Field in the Text Fields
-//       Collection for this instance of TextLineSpecStandardLine
-//       will be returned to the calling function.
+//	txtStdLine                 *TextLineSpecStandardLine
+//	   - A pointer to an instance of TextLineSpecStandardLine. A
+//	     deep copy of the designated Text Field in the Text Fields
+//	     Collection for this instance of TextLineSpecStandardLine
+//	     will be returned to the calling function.
 //
-//       Depending on the value of input parameter, 'popTextField',
-//       either a 'Peek' or 'Pop' operation will be performed on
-//       the designated Text Field in the Text Fields Collection.
-//
-//
-//  indexId                    int
-//     - The zero based index number of the array element in the
-//       Text Fields Collection on which the 'Pop' or 'Peek'
-//       operation will be performed.
+//	     Depending on the value of input parameter, 'popTextField',
+//	     either a 'Peek' or 'Pop' operation will be performed on
+//	     the designated Text Field in the Text Fields Collection.
 //
 //
-//  popTextField               bool
-//     - If this parameter is set to 'true', it signals that a
-//       'Pop' operation will be performed on the designated Text
-//       Field in the Text Fields Collection encapsulated in
-//       parameter 'txtStdLine'. A 'Pop' operation WILL DELETE the
-//       designated Text Field from the Text Fields Collection.
-//
-//       If this parameter is set to 'false', it signals that a
-//       'Peek' operation will be performed on the designated Text
-//       Field in the Text Fields Collection encapsulated in
-//       parameter 'txtStdLine'. A 'Peek' operation means that the
-//       designated Text Field element in the Text Fields
-//       Collection WILL NOT BE DELETED and will remain in the
-//       collection.
+//	indexId                    int
+//	   - The zero based index number of the array element in the
+//	     Text Fields Collection on which the 'Pop' or 'Peek'
+//	     operation will be performed.
 //
 //
-//  errPrefDto                 *ePref.ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//	popTextField               bool
+//	   - If this parameter is set to 'true', it signals that a
+//	     'Pop' operation will be performed on the designated Text
+//	     Field in the Text Fields Collection encapsulated in
+//	     parameter 'txtStdLine'. A 'Pop' operation WILL DELETE the
+//	     designated Text Field from the Text Fields Collection.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     If this parameter is set to 'false', it signals that a
+//	     'Peek' operation will be performed on the designated Text
+//	     Field in the Text Fields Collection encapsulated in
+//	     parameter 'txtStdLine'. A 'Peek' operation means that the
+//	     designated Text Field element in the Text Fields
+//	     Collection WILL NOT BE DELETED and will remain in the
+//	     collection.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
 //
+//	errPrefDto                 *ePref.ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods listed
+//	     as a function chain.
+//
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
+//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  iTextField                 ITextFieldSpecification
-//     - If this method completes successfully, a deep copy of
-//       if the designated member of the Text Fields Collection
-//       will be returned to the calling function. The returned
-//       object will implement the ITextFieldSpecification
-//       interface.
+//	iTextField                 ITextFieldSpecification
+//	   - If this method completes successfully, a deep copy of
+//	     if the designated member of the Text Fields Collection
+//	     will be returned to the calling function. The returned
+//	     object will implement the ITextFieldSpecification
+//	     interface.
 //
 //
-//  err                        error
-//     - If this method completes successfully, this returned error
-//       Type is set equal to 'nil'. If errors are encountered during
-//       processing, the returned error Type will encapsulate an error
-//       message.
+//	err                        error
+//	   - If this method completes successfully, this returned error
+//	     Type is set equal to 'nil'. If errors are encountered during
+//	     processing, the returned error Type will encapsulate an error
+//	     message.
 //
-//       If an error message is returned, the text value for input
-//       parameter 'errPrefDto' (error prefix) will be prefixed or
-//       attached at the beginning of the error message.
-//
+//	     If an error message is returned, the text value for input
+//	     parameter 'errPrefDto' (error prefix) will be prefixed or
+//	     attached at the beginning of the error message.
 func (txtStdLineAtom *textLineSpecStandardLineAtom) peekPopTextField(
 	txtStdLine *TextLineSpecStandardLine,
 	indexId int,
@@ -442,7 +436,7 @@ func (txtStdLineAtom *textLineSpecStandardLineAtom) peekPopTextField(
 	}
 
 	err =
-		textLineSpecStandardLineElectron{}.ptr().
+		new(textLineSpecStandardLineElectron).
 			deleteTextField(
 				txtStdLine,
 				indexId,
@@ -452,24 +446,6 @@ func (txtStdLineAtom *textLineSpecStandardLineAtom) peekPopTextField(
 						indexId)))
 
 	return iTextField, err
-}
-
-// ptr - Returns a pointer to a new instance of
-// textLineSpecStandardLineAtom.
-//
-func (txtStdLineAtom textLineSpecStandardLineAtom) ptr() *textLineSpecStandardLineAtom {
-
-	if txtStdLineAtom.lock == nil {
-		txtStdLineAtom.lock = new(sync.Mutex)
-	}
-
-	txtStdLineAtom.lock.Lock()
-
-	defer txtStdLineAtom.lock.Unlock()
-
-	return &textLineSpecStandardLineAtom{
-		lock: new(sync.Mutex),
-	}
 }
 
 // testValidityOfTextLineSpecStdLine - Receives a pointer to an
@@ -489,65 +465,62 @@ func (txtStdLineAtom textLineSpecStandardLineAtom) ptr() *textLineSpecStandardLi
 // will automatically set this value to the default new line
 // character or characters.
 //
-//
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  txtStdLine                 *TextLineSpecStandardLine
-//     - A pointer to an instance of TextLineSpecStandardLine. This
-//       object will be subjected to diagnostic analysis in order
-//       to determine if all the member variables contain valid
-//       values.
+//	txtStdLine                 *TextLineSpecStandardLine
+//	   - A pointer to an instance of TextLineSpecStandardLine. This
+//	     object will be subjected to diagnostic analysis in order
+//	     to determine if all the member variables contain valid
+//	     values.
 //
 //
-//  allowZeroLengthTextFieldsArray  bool
-//     - When set to 'true', no error will be generated if the
-//       input parameter 'txtStdLine.textFields' contains a zero
-//       length Text Fields array.
+//	allowZeroLengthTextFieldsArray  bool
+//	   - When set to 'true', no error will be generated if the
+//	     input parameter 'txtStdLine.textFields' contains a zero
+//	     length Text Fields array.
 //
-//       Conversely, if 'allowZeroLengthTextFieldsArray' is set to
-//       'false', an error WILL BE returned if
-//       'txtStdLine.textFields' is a zero length array.
+//	     Conversely, if 'allowZeroLengthTextFieldsArray' is set to
+//	     'false', an error WILL BE returned if
+//	     'txtStdLine.textFields' is a zero length array.
 //
 //
-//  errPrefDto                 *ePref.ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//	errPrefDto                 *ePref.ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods listed
+//	     as a function chain.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
-//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  isValid                    bool
-//     - If input parameter 'txtStdLine' is judged to be valid in
-//       all respects, this return parameter will be set to 'true'.
+//	isValid                    bool
+//	   - If input parameter 'txtStdLine' is judged to be valid in
+//	     all respects, this return parameter will be set to 'true'.
 //
-//     - If input parameter 'txtStdLine' is found to be invalid,
-//       this return parameter will be set to 'false'.
+//	   - If input parameter 'txtStdLine' is found to be invalid,
+//	     this return parameter will be set to 'false'.
 //
 //
-//  err                        error
-//     - If input parameter 'txtStdLine' is judged to be valid in
-//       all respects, this return parameter will be set to 'nil'.
+//	err                        error
+//	   - If input parameter 'txtStdLine' is judged to be valid in
+//	     all respects, this return parameter will be set to 'nil'.
 //
-//       If input parameter, 'txtStdLine' is found to be invalid,
-//       this return parameter will be configured with an appropriate
-//       error message.
+//	     If input parameter, 'txtStdLine' is found to be invalid,
+//	     this return parameter will be configured with an appropriate
+//	     error message.
 //
-//       If an error message is returned, the text value for input
-//       parameter 'errPrefDto' (error prefix) will be prefixed or
-//       attached at the beginning of the error message.
-//
+//	     If an error message is returned, the text value for input
+//	     parameter 'errPrefDto' (error prefix) will be prefixed or
+//	     attached at the beginning of the error message.
 func (txtStdLineAtom *textLineSpecStandardLineAtom) testValidityOfTextLineSpecStdLine(
 	txtStdLine *TextLineSpecStandardLine,
 	allowZeroLengthTextFieldsArray bool,
@@ -624,7 +597,7 @@ func (txtStdLineAtom *textLineSpecStandardLineAtom) testValidityOfTextLineSpecSt
 	}
 
 	_,
-		err = textLineSpecStandardLineElectron{}.ptr().
+		err = new(textLineSpecStandardLineElectron).
 		testValidityOfTextFields(
 			&txtStdLine.textFields,
 			allowZeroLengthTextFieldsArray,

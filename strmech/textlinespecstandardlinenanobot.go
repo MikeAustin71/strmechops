@@ -617,7 +617,7 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) insertTextFieldAtIndex
 	}
 
 	_,
-		err = textLineSpecStandardLineAtom{}.ptr().
+		err = new(textLineSpecStandardLineAtom).
 		testValidityOfTextLineSpecStdLine(
 			txtStdLine,
 			true, // allowZeroLengthTextFieldsArray
@@ -710,23 +710,6 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) insertTextFieldAtIndex
 	lengthTextFields++
 
 	return lengthTextFields, err
-}
-
-// ptr - Returns a pointer to a new instance of
-// textLineSpecStandardLineNanobot.
-func (txtStdLineNanobot textLineSpecStandardLineNanobot) ptr() *textLineSpecStandardLineNanobot {
-
-	if txtStdLineNanobot.lock == nil {
-		txtStdLineNanobot.lock = new(sync.Mutex)
-	}
-
-	txtStdLineNanobot.lock.Lock()
-
-	defer txtStdLineNanobot.lock.Unlock()
-
-	return &textLineSpecStandardLineNanobot{
-		lock: new(sync.Mutex),
-	}
 }
 
 // setTextFieldFmtStdLine
@@ -1066,7 +1049,7 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) setTextFieldFmtStdLine
 	}
 
 	_ =
-		textLineSpecStandardLineMolecule{}.ptr().
+		new(textLineSpecStandardLineMolecule).
 			emptyStandardLine(
 				txtStdLine,
 				ePrefix.XCpy(
@@ -1387,7 +1370,7 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) setTxtSpecStandardLine
 
 	_,
 		err =
-		textLineSpecStandardLineElectron{}.ptr().
+		new(textLineSpecStandardLineElectron).
 			testValidityOfTextFields(
 				&textFields,
 				false, // allowZeroLengthTextFieldsArray
@@ -1409,15 +1392,14 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) setTxtSpecStandardLine
 		return err
 	}
 
-	_ =
-		textLineSpecStandardLineMolecule{}.ptr().
-			emptyStandardLine(
-				txtStdLine,
-				ePrefix.XCpy(
-					"empty->txtStdLine"))
+	_ = new(textLineSpecStandardLineMolecule).
+		emptyStandardLine(
+			txtStdLine,
+			ePrefix.XCpy(
+				"empty->txtStdLine"))
 
 	_,
-		err = textLineSpecStandardLineAtom{}.ptr().
+		err = new(textLineSpecStandardLineAtom).
 		copyTextFields(
 			&txtStdLine.textFields,
 			&textFields,

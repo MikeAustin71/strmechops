@@ -17,49 +17,46 @@ type textLineSpecStandardLineMolecule struct {
 //
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // This method will delete all existing data values contained in
 // input parameter 'txtStdLine'.
-//
 //
 // -----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  txtStdLine                 *TextLineSpecStandardLine
-//     - All the internal member variables contained in input
-//       parameter 'txtStdLine' will be set to their initial or
-//       zero values.
+//	txtStdLine                 *TextLineSpecStandardLine
+//	   - All the internal member variables contained in input
+//	     parameter 'txtStdLine' will be set to their initial or
+//	     zero values.
 //
 //
-//  errPrefDto                 *ePref.ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//	errPrefDto                 *ePref.ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods listed
+//	     as a function chain.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
-//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If this method completes successfully, this returned error
-//       Type is set equal to 'nil'. If errors are encountered during
-//       processing, the returned error Type will encapsulate an error
-//       message.
+//	error
+//	   - If this method completes successfully, this returned error
+//	     Type is set equal to 'nil'. If errors are encountered during
+//	     processing, the returned error Type will encapsulate an error
+//	     message.
 //
-//       If an error message is returned, the text value for input
-//       parameter 'errPrefDto' (error prefix) will be prefixed or
-//       attached at the beginning of the error message.
-//
+//	     If an error message is returned, the text value for input
+//	     parameter 'errPrefDto' (error prefix) will be prefixed or
+//	     attached at the beginning of the error message.
 func (txtStdLineMolecule *textLineSpecStandardLineMolecule) emptyStandardLine(
 	txtStdLine *TextLineSpecStandardLine,
 	errPrefDto *ePref.ErrPrefixDto) error {
@@ -99,7 +96,7 @@ func (txtStdLineMolecule *textLineSpecStandardLineMolecule) emptyStandardLine(
 	txtStdLine.newLineChars = nil
 	txtStdLine.textLineReader = nil
 
-	err = textLineSpecStandardLineElectron{}.ptr().
+	err = new(textLineSpecStandardLineElectron).
 		emptyTextFields(
 			&txtStdLine.textFields,
 			ePrefix.XCpy(
@@ -112,14 +109,12 @@ func (txtStdLineMolecule *textLineSpecStandardLineMolecule) emptyStandardLine(
 // TextLineSpecStandardLine and proceeds to delete all the text
 // fields contained in the internal text field collection.
 //
-//
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // All the text fields stored in the text field collection
 // maintained by input parameter 'txtStdLine' will be deleted.
-//
 func (txtStdLineMolecule *textLineSpecStandardLineMolecule) emptyStdLineTextFields(
 	txtStdLine *TextLineSpecStandardLine) {
 
@@ -135,7 +130,7 @@ func (txtStdLineMolecule *textLineSpecStandardLineMolecule) emptyStdLineTextFiel
 		return
 	}
 
-	_ = textLineSpecStandardLineElectron{}.ptr().
+	_ = new(textLineSpecStandardLineElectron).
 		emptyTextFields(
 			&txtStdLine.textFields,
 			nil)
@@ -150,7 +145,6 @@ func (txtStdLineMolecule *textLineSpecStandardLineMolecule) emptyStdLineTextFiel
 // If the data elements of both input parameters 'stdLineOne' and
 // 'stdLineTwo' are equal in all respects, this method returns a
 // boolean value of 'true'. Otherwise, this method returns 'false'.
-//
 func (txtStdLineMolecule *textLineSpecStandardLineMolecule) equal(
 	stdLineOne *TextLineSpecStandardLine,
 	stdLineTwo *TextLineSpecStandardLine) bool {
@@ -188,7 +182,7 @@ func (txtStdLineMolecule *textLineSpecStandardLineMolecule) equal(
 		return false
 	}
 
-	return textLineSpecStandardLineElectron{}.ptr().
+	return new(textLineSpecStandardLineElectron).
 		equalTextFieldArrays(
 			&stdLineOne.textFields,
 			&stdLineTwo.textFields)
@@ -201,64 +195,61 @@ func (txtStdLineMolecule *textLineSpecStandardLineMolecule) equal(
 // value of internal member variable' stdLine.numOfStdLines' is
 // greater than one ('1').
 //
-//
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  strBuilder                 *strings.Builder
-//     - A pointer to an instance of *strings.Builder. The
-//       formatted text characters produced by this method will be
-//       written to this instance of strings.Builder.
+//	strBuilder                 *strings.Builder
+//	   - A pointer to an instance of *strings.Builder. The
+//	     formatted text characters produced by this method will be
+//	     written to this instance of strings.Builder.
 //
 //
-//  txtStdLine                 *TextLineSpecStandardLine
-//     - A pointer to an instance of TextLineSpecStandardLine. The
-//       member variables encapsulated by this instance will be
-//       used to generate formatted text for text display, file
-//       output and printing.
+//	txtStdLine                 *TextLineSpecStandardLine
+//	   - A pointer to an instance of TextLineSpecStandardLine. The
+//	     member variables encapsulated by this instance will be
+//	     used to generate formatted text for text display, file
+//	     output and printing.
 //
 //
-//  errPrefDto                 *ePref.ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//	errPrefDto                 *ePref.ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods listed
+//	     as a function chain.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
-//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  singleLineLength           int
-//     - The length of a single text line including trailing new
-//       line characters if new line characters are configured.
+//	singleLineLength           int
+//	   - The length of a single text line including trailing new
+//	     line characters if new line characters are configured.
 //
 //
-//  totalLinesLength           int
-//     - The length of all text lines including trailing new
-//       line characters if new line characters are configured.
-//       Users have the option of specifying a repeat count for
-//       text lines. Therefore,
-//        'totalLineLength' = 'singleLineLength' X repeat count
+//	totalLinesLength           int
+//	   - The length of all text lines including trailing new
+//	     line characters if new line characters are configured.
+//	     Users have the option of specifying a repeat count for
+//	     text lines. Therefore,
+//	      'totalLineLength' = 'singleLineLength' X repeat count
 //
 //
-//  error
-//     - If this method completes successfully, this returned error
-//       Type is set equal to 'nil'. If errors are encountered during
-//       processing, the returned error Type will encapsulate an error
-//       message.
+//	error
+//	   - If this method completes successfully, this returned error
+//	     Type is set equal to 'nil'. If errors are encountered during
+//	     processing, the returned error Type will encapsulate an error
+//	     message.
 //
-//       If an error message is returned, the text value for input
-//       parameter 'errPrefDto' (error prefix) will be prefixed or
-//       attached at the beginning of the error message.
-//
+//	     If an error message is returned, the text value for input
+//	     parameter 'errPrefDto' (error prefix) will be prefixed or
+//	     attached at the beginning of the error message.
 func (txtStdLineMolecule *textLineSpecStandardLineMolecule) getFormattedText(
 	strBuilder *strings.Builder,
 	txtStdLine *TextLineSpecStandardLine,
@@ -307,7 +298,7 @@ func (txtStdLineMolecule *textLineSpecStandardLineMolecule) getFormattedText(
 	}
 
 	_,
-		err = textLineSpecStandardLineAtom{}.ptr().
+		err = new(textLineSpecStandardLineAtom).
 		testValidityOfTextLineSpecStdLine(
 			txtStdLine,
 			false, // allowZeroLengthTextFieldsArray
@@ -367,22 +358,4 @@ func (txtStdLineMolecule *textLineSpecStandardLineMolecule) getFormattedText(
 	sb2.Reset()
 
 	return singleLineLength, totalLinesLength, err
-}
-
-// ptr - Returns a pointer to a new instance of
-// textLineSpecStandardLineMolecule.
-//
-func (txtStdLineMolecule textLineSpecStandardLineMolecule) ptr() *textLineSpecStandardLineMolecule {
-
-	if txtStdLineMolecule.lock == nil {
-		txtStdLineMolecule.lock = new(sync.Mutex)
-	}
-
-	txtStdLineMolecule.lock.Lock()
-
-	defer txtStdLineMolecule.lock.Unlock()
-
-	return &textLineSpecStandardLineMolecule{
-		lock: new(sync.Mutex),
-	}
 }

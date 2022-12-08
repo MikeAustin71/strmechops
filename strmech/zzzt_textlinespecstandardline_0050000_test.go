@@ -340,7 +340,7 @@ func TestTextLineSpecStandardLineAtom_copyTextFields_000300(t *testing.T) {
 		return
 	}
 
-	areEqual := textLineSpecStandardLineElectron{}.ptr().
+	areEqual := new(textLineSpecStandardLineElectron).
 		equalTextFieldArrays(
 			&textFields01,
 			&textFields02)
@@ -833,11 +833,12 @@ func TestTextLineSpecStandardLineElectron_deleteTextField_000200(t *testing.T) {
 	}
 
 	err =
-		textLineSpecStandardLineElectron{}.ptr().deleteTextField(
-			&stdLine01,
-			1,
-			ePrefix.XCpy(
-				"stdLine01 delete index 1"))
+		new(textLineSpecStandardLineElectron).
+			deleteTextField(
+				&stdLine01,
+				1,
+				ePrefix.XCpy(
+					"stdLine01 delete index 1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
