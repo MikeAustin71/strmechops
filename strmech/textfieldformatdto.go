@@ -3,6 +3,7 @@ package strmech
 import (
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
+	"strings"
 	"sync"
 )
 
@@ -652,6 +653,138 @@ func (textFieldFormatDto *TextFieldFormatDto) GetFieldContentTextLabel(
 				"textFieldFormatDto"))
 }
 
+// GetFormattedTextField
+//
+// Returns a string containing the formatted text field
+// generated from the current instance of
+// TextFieldFormatDto.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it	contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//
+//		If this method completes successfully, the text
+//		field specifications contained in the current
+//		instance of TextFieldFormatDto will be converted
+//		to, and returned as, a formatted text field
+//		string.
+//
+//		The returned string will therefore contain the
+//		left margin, text field contents and right
+//		margin as those elements are defined in the
+//		current instance of TextFieldFormatDto.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (textFieldFormatDto *TextFieldFormatDto) GetFormattedTextField(
+	errorPrefix interface{}) (
+	string,
+	error) {
+
+	if textFieldFormatDto.lock == nil {
+		textFieldFormatDto.lock = new(sync.Mutex)
+	}
+
+	textFieldFormatDto.lock.Lock()
+
+	defer textFieldFormatDto.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextFieldFormatDto."+
+			"GetFormattedTextField()",
+		"")
+
+	if err != nil {
+		return "", err
+	}
+
+	return new(textFieldFormatDtoNanobot).
+		getFormattedTextFieldStr(
+			textFieldFormatDto,
+			ePrefix.XCpy(
+				"textFieldFormatDto"))
+}
+
 // textFieldFormatDtoNanobot - Provides helper methods for
 // TextFieldFormatDto.
 type textFieldFormatDtoNanobot struct {
@@ -868,6 +1001,130 @@ func (txtFieldFmtDtoNanobot *textFieldFormatDtoNanobot) copy(
 		sourceTxtFieldFmtDto.RightMarginStr
 
 	return err
+}
+
+// getFormattedTextFieldStr
+//
+// Converts an instance of TextFieldFormatDto to a
+// formatted text field string.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	txtFieldFmtDto				*TextFieldFormatDto
+//
+//		A pointer to an instance of TextFieldFormatDto.
+//
+//		The left and right margins as well as the member
+//		variable 'FieldContents' will be processed and
+//		converted to a formatted text field for use in
+//		to screen displays, file output and printing.
+//
+//		None of the data values in this instance will be
+//		changed or modified.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//
+//		If this method completes successfully, the input
+//		parameter, 'txtFieldFmtDto', will be converted
+//		to, and returned as, a formatted string of text.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (txtFieldFmtDtoNanobot *textFieldFormatDtoNanobot) getFormattedTextFieldStr(
+	txtFieldFmtDto *TextFieldFormatDto,
+	errPrefDto *ePref.ErrPrefixDto) (
+	string,
+	error) {
+
+	if txtFieldFmtDtoNanobot.lock == nil {
+		txtFieldFmtDtoNanobot.lock = new(sync.Mutex)
+	}
+
+	txtFieldFmtDtoNanobot.lock.Lock()
+
+	defer txtFieldFmtDtoNanobot.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"textFieldFormatDtoNanobot."+
+			"getFormattedTextFieldStr()",
+		"")
+
+	if err != nil {
+
+		return "", err
+
+	}
+
+	if txtFieldFmtDto == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'txtFieldFmtDto' is a nil pointer!\n",
+			ePrefix.String())
+
+		return "", err
+	}
+
+	strBuilder := new(strings.Builder)
+
+	strBuilder.WriteString(txtFieldFmtDto.LeftMarginStr)
+
+	var textLabel TextFieldSpecLabel
+
+	textLabel,
+		err = new(textFieldFormatDtoMolecule).
+		getFieldContentTextLabel(
+			txtFieldFmtDto,
+			ePrefix.XCpy(
+				"txtFieldFmtDto"))
+
+	if err != nil {
+
+		return "", err
+
+	}
+
+	strBuilder.WriteString(textLabel.GetTextLabel())
+
+	strBuilder.WriteString(txtFieldFmtDto.RightMarginStr)
+
+	return strBuilder.String(), err
 }
 
 // textFieldFormatDtoMolecule - Provides helper methods for
