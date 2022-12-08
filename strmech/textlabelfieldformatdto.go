@@ -1169,7 +1169,11 @@ func (txtLabelFieldFmtDtoNanobot *textLabelFieldFormatDtoNanobot) getFormattedTe
 
 	strBuilder := new(strings.Builder)
 
-	strBuilder.WriteString(txtFieldFmtDto.LeftMarginStr)
+	if len(txtFieldFmtDto.LeftMarginStr) > 0 {
+
+		strBuilder.WriteString(txtFieldFmtDto.LeftMarginStr)
+
+	}
 
 	var textLabel TextFieldSpecLabel
 
@@ -1188,7 +1192,11 @@ func (txtLabelFieldFmtDtoNanobot *textLabelFieldFormatDtoNanobot) getFormattedTe
 
 	strBuilder.WriteString(textLabel.GetTextLabel())
 
-	strBuilder.WriteString(txtFieldFmtDto.RightMarginStr)
+	if len(txtFieldFmtDto.RightMarginStr) > 0 {
+
+		strBuilder.WriteString(txtFieldFmtDto.RightMarginStr)
+
+	}
 
 	return strBuilder.String(), err
 }
