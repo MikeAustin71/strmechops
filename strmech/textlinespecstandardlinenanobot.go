@@ -1074,31 +1074,38 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) setTextFieldFmtStdLine
 
 	var fieldContentsText string
 	var txtFieldSpecLabel TextFieldSpecLabel
-	txtSpecAtom := textSpecificationAtom{}
 
 	for i := 0; i < lenTextFieldFmtDtos; i++ {
 
-		fieldContentsText,
-			err = txtSpecAtom.
-			convertParamEmptyInterfaceToString(
-				txtFieldFmtDtos[i].FieldContents,
-				fmt.Sprintf("txtFieldFmtDtos[%v].FieldContents",
-					i),
-				ePrefix.XCpy(
-					fmt.Sprintf("txtFieldFmtDtos[%v].FieldContents",
-						i)))
+		if txtFieldFmtDtos[i].GetLeftMarginLength() > 0 {
 
-		if err != nil {
-			return err
+			fieldContentsText =
+				txtFieldFmtDtos[i].GetLeftMarginStr()
+
+			txtFieldSpecLabel,
+				err = TextFieldSpecLabel{}.NewTextLabel(
+				fieldContentsText,
+				-1,
+				TxtJustify.Left(),
+				ePrefix.XCpy(
+					"Left Margin String"))
+
+			if err != nil {
+				return err
+			}
+
+			txtStdLine.textFields =
+				append(txtStdLine.textFields,
+					&txtFieldSpecLabel)
+
 		}
 
 		txtFieldSpecLabel,
-			err = TextFieldSpecLabel{}.NewTextLabel(
-			fieldContentsText,
-			txtFieldFmtDtos[i].FieldLength,
-			txtFieldFmtDtos[i].FieldJustify,
+			err = txtFieldFmtDtos[i].GetFieldContentTextLabel(
 			ePrefix.XCpy(
-				"txtFieldSpecLabel<-fieldContentsText"))
+				fmt.Sprintf("txtFieldFmtDtos[%v]."+
+					"FieldContents",
+					i)))
 
 		if err != nil {
 			return err
@@ -1107,6 +1114,30 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) setTextFieldFmtStdLine
 		txtStdLine.textFields =
 			append(txtStdLine.textFields,
 				&txtFieldSpecLabel)
+
+		if txtFieldFmtDtos[i].GetRightMarginLength() > 0 {
+
+			fieldContentsText =
+				txtFieldFmtDtos[i].GetRightMarginStr()
+
+			txtFieldSpecLabel,
+				err = TextFieldSpecLabel{}.NewTextLabel(
+				fieldContentsText,
+				-1,
+				TxtJustify.Left(),
+				ePrefix.XCpy(
+					"Right Margin String"))
+
+			if err != nil {
+				return err
+			}
+
+			txtStdLine.textFields =
+				append(txtStdLine.textFields,
+					&txtFieldSpecLabel)
+
+		}
+
 	}
 
 	txtStdLine.numOfStdLines =

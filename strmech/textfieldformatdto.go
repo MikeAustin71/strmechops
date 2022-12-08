@@ -785,6 +785,72 @@ func (textFieldFormatDto *TextFieldFormatDto) GetFormattedTextField(
 				"textFieldFormatDto"))
 }
 
+// GetLeftMarginLength
+//
+// Returns the length of the Left Margin String as an
+// integer value.
+func (textFieldFormatDto *TextFieldFormatDto) GetLeftMarginLength() int {
+
+	if textFieldFormatDto.lock == nil {
+		textFieldFormatDto.lock = new(sync.Mutex)
+	}
+
+	textFieldFormatDto.lock.Lock()
+
+	defer textFieldFormatDto.lock.Unlock()
+
+	return len(textFieldFormatDto.LeftMarginStr)
+}
+
+// GetLeftMarginStr
+//
+// Returns the Left Margin String.
+func (textFieldFormatDto *TextFieldFormatDto) GetLeftMarginStr() string {
+
+	if textFieldFormatDto.lock == nil {
+		textFieldFormatDto.lock = new(sync.Mutex)
+	}
+
+	textFieldFormatDto.lock.Lock()
+
+	defer textFieldFormatDto.lock.Unlock()
+
+	return textFieldFormatDto.LeftMarginStr
+}
+
+// GetRightMarginLength
+//
+// Returns the length of the Right Margin String as an
+// integer value.
+func (textFieldFormatDto *TextFieldFormatDto) GetRightMarginLength() int {
+
+	if textFieldFormatDto.lock == nil {
+		textFieldFormatDto.lock = new(sync.Mutex)
+	}
+
+	textFieldFormatDto.lock.Lock()
+
+	defer textFieldFormatDto.lock.Unlock()
+
+	return len(textFieldFormatDto.RightMarginStr)
+}
+
+// GetRightMarginStr
+//
+// Returns the Right Margin String.
+func (textFieldFormatDto *TextFieldFormatDto) GetRightMarginStr() string {
+
+	if textFieldFormatDto.lock == nil {
+		textFieldFormatDto.lock = new(sync.Mutex)
+	}
+
+	textFieldFormatDto.lock.Lock()
+
+	defer textFieldFormatDto.lock.Unlock()
+
+	return textFieldFormatDto.RightMarginStr
+}
+
 // textFieldFormatDtoNanobot - Provides helper methods for
 // TextFieldFormatDto.
 type textFieldFormatDtoNanobot struct {
