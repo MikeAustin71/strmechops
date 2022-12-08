@@ -12,8 +12,9 @@ import (
 // a Text Field formatted for screen display, file
 // output and printing.
 //
-// This Data Transfer Object (Dto) contains all the format
-// parameters necessary format a single text field.
+// This Data Transfer Object (Dto) contains all the
+// format parameters necessary format a single text
+// field.
 type TextFieldFormatDto struct {
 	LeftMarginStr string
 	//	One or more characters used to create a left
@@ -105,17 +106,12 @@ type TextFieldFormatDto struct {
 	lock *sync.Mutex
 }
 
-// textFieldFormatDtoNanobot - Provides helper methods for
-// TextFieldFormatDto.
-type textFieldFormatDtoNanobot struct {
-	lock *sync.Mutex
-}
-
-// copyData
+// CopyIn
 //
-// Copies all data from a source instance of
-// TextFieldFormatDto to a destination instance of
-// TextFieldFormatDto.
+// Copies all the data fields from an incoming instance
+// of TextFieldFormatDto ('incomingTxtFieldFmtDto') to
+// the corresponding data fields of the current
+// TextFieldFormatDto instance ('textFieldFormatDto').
 //
 // ----------------------------------------------------------------
 //
@@ -123,51 +119,27 @@ type textFieldFormatDtoNanobot struct {
 //
 //	This method will delete and overwrite all
 //	pre-existing data values contained within the
-//	TextFieldFormatDto instance passed as input
-//	parameter 'destinationTxtFieldFmtDto'.
+//	current instance of TextFieldFormatDto
+//	('textFieldFormatDto').
 //
 // ----------------------------------------------------------------
 //
 // # Input Parameters
 //
-//	destinationTxtFieldFmtDto	*TextFieldFormatDto
+//	incomingTxtFieldFmtDto		*TextFieldFormatDto
 //
 //		A pointer to an instance of TextFieldFormatDto.
-//		Data extracted from input parameter
-//		'sourceTxtFieldFmtDto' will be copied to this
-//		input parameter, 'destinationTxtFieldFmtDto'.
 //
-//		'destinationTxtFieldFmtDto' is the destination
-//		for the	copy operation.
+//		All the internal data field values in this
+//		instance will be copied to corresponding data
+//		fields of the current TextFieldFormatDto instance.
 //
-//		If this method completes successfully, all member
-//		data variables encapsulated in
-//		'destinationTxtFieldFmtDto' will be identical to
-//		those contained in input parameter,
-//		'sourceTxtFieldFmtDto'.
+//		The data fields contained in
+//		'incomingTxtFieldFmtDto' will NOT be changed or
+//		modified.
 //
-//		Be advised that the pre-existing data fields
-//		contained within input parameter
-//		'destinationTxtFieldFmtDto' will be overwritten
-//		and deleted.
-//
-//	sourceTxtFieldFmtDto		*TextFieldFormatDto
-//		A pointer to an instance of TextFieldFormatDto.
-//
-//		All data values in this TextFieldFormatDto
-//		instance will be copied to input parameter
-//		'destinationTxtFieldFmtDto'.
-//
-//		'sourceTxtFieldFmtDto' is the source of the
-//		copy operation.
-//
-//		The original member variable data values
-//		encapsulated within 'sourceTxtFieldFmtDto' will
-//		remain unchanged and will NOT be overwritten or
-//		deleted.
-//
-//		If 'sourceTxtFieldFmtDto' contains invalid member data
-//		variables, this method will return an error.
+//		If 'incomingTxtFieldFmtDto' contains invalid data
+//		value, an error will be returned.
 //
 //	errorPrefix					interface{}
 //
@@ -244,6 +216,271 @@ type textFieldFormatDtoNanobot struct {
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
+func (textFieldFormatDto *TextFieldFormatDto) CopyIn(
+	incomingTxtFieldFmtDto *TextFieldFormatDto,
+	errorPrefix interface{}) error {
+
+	if textFieldFormatDto.lock == nil {
+		textFieldFormatDto.lock = new(sync.Mutex)
+	}
+
+	textFieldFormatDto.lock.Lock()
+
+	defer textFieldFormatDto.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextFieldFormatDto."+
+			"CopyIn()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	return new(textFieldFormatDtoNanobot).copy(
+		textFieldFormatDto,
+		incomingTxtFieldFmtDto,
+		ePrefix.XCpy(
+			"textFieldFormatDto<-"+
+				"incomingTxtFieldFmtDto"))
+}
+
+// CopyOut
+//
+// Returns a deep copy of the current TextFieldFormatDto
+// instance.
+//
+// If the current TextFieldFormatDto instance contains
+// invalid member variable dat values, this method will
+// return an error.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it	contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	TextFieldFormatDto
+//
+//		If this method completes successfully and no
+//		errors are encountered, this parameter will
+//		return a deep copy of the current
+//		TextFieldFormatDto instance.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (textFieldFormatDto *TextFieldFormatDto) CopyOut(
+	errorPrefix interface{}) (
+	TextFieldFormatDto,
+	error) {
+
+	if textFieldFormatDto.lock == nil {
+		textFieldFormatDto.lock = new(sync.Mutex)
+	}
+
+	textFieldFormatDto.lock.Lock()
+
+	defer textFieldFormatDto.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	newTextFieldFormatDto := TextFieldFormatDto{}
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextFieldFormatDto."+
+			"CopyOut()",
+		"")
+
+	if err != nil {
+		return newTextFieldFormatDto, err
+	}
+
+	err = new(textFieldFormatDtoNanobot).copy(
+		&newTextFieldFormatDto,
+		textFieldFormatDto,
+		ePrefix.XCpy(
+			"newTextFieldFormatDto<-"+
+				"textFieldFormatDto"))
+
+	return newTextFieldFormatDto, err
+}
+
+// textFieldFormatDtoNanobot - Provides helper methods for
+// TextFieldFormatDto.
+type textFieldFormatDtoNanobot struct {
+	lock *sync.Mutex
+}
+
+// copy
+//
+// Copies all data from a source instance of
+// TextFieldFormatDto to a destination instance of
+// TextFieldFormatDto.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will delete and overwrite all
+//	pre-existing data values contained within the
+//	TextFieldFormatDto instance passed as input
+//	parameter 'destinationTxtFieldFmtDto'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	destinationTxtFieldFmtDto	*TextFieldFormatDto
+//
+//		A pointer to an instance of TextFieldFormatDto.
+//
+//		Data extracted from input parameter
+//		'sourceTxtFieldFmtDto' will be copied to this
+//		input parameter, 'destinationTxtFieldFmtDto'.
+//
+//		'destinationTxtFieldFmtDto' is the destination
+//		for the	copy operation.
+//
+//		If this method completes successfully, all member
+//		data variables encapsulated in
+//		'destinationTxtFieldFmtDto' will be identical to
+//		those contained in input parameter,
+//		'sourceTxtFieldFmtDto'.
+//
+//		Be advised that the pre-existing data fields
+//		contained within input parameter
+//		'destinationTxtFieldFmtDto' will be overwritten
+//		and deleted.
+//
+//	sourceTxtFieldFmtDto		*TextFieldFormatDto
+//
+//		A pointer to an instance of TextFieldFormatDto.
+//
+//		All data values in this TextFieldFormatDto
+//		instance will be copied to input parameter
+//		'destinationTxtFieldFmtDto'.
+//
+//		'sourceTxtFieldFmtDto' is the source of the
+//		copy operation.
+//
+//		The original member variable data values
+//		encapsulated within 'sourceTxtFieldFmtDto' will
+//		remain unchanged and will NOT be overwritten or
+//		deleted.
+//
+//		If 'sourceTxtFieldFmtDto' contains invalid member data
+//		variables, this method will return an error.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
 func (txtFieldFmtDtoNanobot *textFieldFormatDtoNanobot) copy(
 	destinationTxtFieldFmtDto *TextFieldFormatDto,
 	sourceTxtFieldFmtDto *TextFieldFormatDto,
@@ -283,6 +520,21 @@ func (txtFieldFmtDtoNanobot *textFieldFormatDtoNanobot) copy(
 		return err
 	}
 
+	txtFieldFmtDtoAtom := textFieldFormatDtoAtom{}
+
+	_,
+		err = txtFieldFmtDtoAtom.
+		testValidityOfTextFieldFmtDto(
+			sourceTxtFieldFmtDto,
+			ePrefix.XCpy(
+				"sourceTxtFieldFmtDto"))
+
+	if err != nil {
+
+		return err
+
+	}
+
 	if destinationTxtFieldFmtDto == nil {
 
 		err = fmt.Errorf("%v\n"+
@@ -291,6 +543,40 @@ func (txtFieldFmtDtoNanobot *textFieldFormatDtoNanobot) copy(
 
 		return err
 	}
+
+	txtFieldFmtDtoAtom.empty(
+		destinationTxtFieldFmtDto)
+
+	destinationTxtFieldFmtDto.LeftMarginStr =
+		sourceTxtFieldFmtDto.LeftMarginStr
+
+	var convertedStr string
+
+	convertedStr,
+		err = new(textSpecificationAtom).
+		convertParamEmptyInterfaceToString(
+			sourceTxtFieldFmtDto.FieldContents,
+			"sourceTxtFieldFmtDto.FieldContents",
+			ePrefix.XCpy(
+				"sourceTxtFieldFmtDto.FieldContents"))
+
+	if err != nil {
+
+		return err
+
+	}
+
+	destinationTxtFieldFmtDto.FieldContents =
+		convertedStr
+
+	destinationTxtFieldFmtDto.FieldLength =
+		sourceTxtFieldFmtDto.FieldLength
+
+	destinationTxtFieldFmtDto.FieldJustify =
+		sourceTxtFieldFmtDto.FieldJustify
+
+	destinationTxtFieldFmtDto.RightMarginStr =
+		sourceTxtFieldFmtDto.RightMarginStr
 
 	return err
 }
@@ -384,7 +670,7 @@ func (txtFieldFmtDtoAtom *textFieldFormatDtoAtom) empty(
 //		instance ('txtFieldFmtDtoTwo') in order to
 //		determine if they are equivalent.
 //
-//	txtFieldFmtDtoOne			*TextFieldFormatDto
+//	txtFieldFmtDtoTwo			*TextFieldFormatDto
 //
 //		A pointer to the second of two instances of
 //		TextFieldFormatDto. The data values contained
@@ -437,28 +723,157 @@ func (txtFieldFmtDtoAtom *textFieldFormatDtoAtom) equal(
 		return false
 	}
 
-	if txtFieldFmtDtoOne.LeftMarginStr !=
-		txtFieldFmtDtoTwo.LeftMarginStr {
+	if txtFieldFmtDtoOne.FieldLength !=
+		txtFieldFmtDtoTwo.FieldLength {
 
 		return false
 	}
 
-	if txtFieldFmtDtoOne.LeftMarginStr !=
-		txtFieldFmtDtoTwo.LeftMarginStr {
+	if txtFieldFmtDtoOne.FieldJustify !=
+		txtFieldFmtDtoTwo.FieldJustify {
 
 		return false
 	}
 
-	if txtFieldFmtDtoOne.LeftMarginStr !=
-		txtFieldFmtDtoTwo.LeftMarginStr {
+	if txtFieldFmtDtoOne.RightMarginStr !=
+		txtFieldFmtDtoTwo.RightMarginStr {
 
 		return false
 	}
 
-	if txtFieldFmtDtoOne.LeftMarginStr !=
-		txtFieldFmtDtoTwo.LeftMarginStr {
+	return true
+}
 
-		return false
+// testValidityOfTextFieldFmtDto
+//
+// Receives a pointer to an instance of
+// TextFieldFormatDto and performs a diagnostic analysis
+// to determine if the data values contained in that
+// instance are valid in all respects.
+//
+// If the input parameter 'txtFieldFmtDto' is determined
+// to be invalid, this method will return a boolean flag
+// ('isValid') of 'false'. In addition, an instance of
+// type error ('err') will be returned configured with an
+// appropriate error message.
+//
+// If the input parameter 'txtFieldFmtDto' is valid, this
+// method will return a boolean flag ('isValid') of
+// 'true' and the returned error type ('err') will be set
+// to 'nil'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	txtFieldFmtDto				*TextFieldFormatDto
+//
+//		A pointer to an instance of TextFieldFormatDto.
+//
+//		The data values contained in this instance will
+//		be reviewed and analyzed to determine if they
+//		are valid in all respects.
+//
+//		None of the data values in this instance will be
+//		changed or modified.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully and all the
+//		data values contained in input parameter '' are judged
+//		to be valid, this returned error Type is set equal to 'nil'.
+//
+//		If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (txtFieldFmtDtoAtom *textFieldFormatDtoAtom) testValidityOfTextFieldFmtDto(
+	txtFieldFmtDto *TextFieldFormatDto,
+	errPrefDto *ePref.ErrPrefixDto) (
+	isValid bool,
+	err error) {
+
+	if txtFieldFmtDtoAtom.lock == nil {
+		txtFieldFmtDtoAtom.lock = new(sync.Mutex)
 	}
 
+	txtFieldFmtDtoAtom.lock.Lock()
+
+	defer txtFieldFmtDtoAtom.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	isValid = false
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"textFieldFormatDtoAtom."+
+			"testValidityOfTextFieldFmtDto()",
+		"")
+
+	if err != nil {
+
+		return isValid, err
+
+	}
+
+	if txtFieldFmtDto == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'txtFieldFmtDto' is a nil pointer!\n",
+			ePrefix.String())
+
+		return isValid, err
+	}
+
+	if txtFieldFmtDto.FieldContents == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: TextFieldFormatDto parameter 'FieldContents' is INVALID!\n"+
+			"txtFieldFmtDto.FieldContents has a value of 'nil'.\n",
+			ePrefix.String())
+
+		return isValid, err
+	}
+
+	if txtFieldFmtDto.FieldLength < -1 {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: TextFieldFormatDto parameter 'FieldLength' is INVALID!\n"+
+			"txtFieldFmtDto.FieldLength has a value less than minus none (-1)\n"+
+			"txtFieldFmtDto.FieldLength = %v\n",
+			ePrefix.String(),
+			txtFieldFmtDto.FieldLength)
+
+		return isValid, err
+	}
+
+	isValid = true
+
+	return isValid, err
 }
