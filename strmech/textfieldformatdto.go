@@ -124,6 +124,20 @@ type TextFieldFormatDto struct {
 //
 // ----------------------------------------------------------------
 //
+// # BE ADVISED
+//
+//	The original member variable data values encapsulated
+//	within 'incomingTxtFieldFmtDto' will remain unchanged
+//	with the sole exception of
+//	'incomingTxtFieldFmtDto.FieldContents'.
+//
+//	'incomingTxtFieldFmtDto.FieldContents' will be
+//	converted to its equivalent string value and that
+//	string value will be saved to
+//	'incomingTxtFieldFmtDto.FieldContents'.
+//
+// ----------------------------------------------------------------
+//
 // # Input Parameters
 //
 //	incomingTxtFieldFmtDto		*TextFieldFormatDto
@@ -258,6 +272,20 @@ func (textFieldFormatDto *TextFieldFormatDto) CopyIn(
 // If the current TextFieldFormatDto instance contains
 // invalid member variable dat values, this method will
 // return an error.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	The original member variable data values encapsulated
+//	within the current TextFieldFormatDto instance will
+//	remain unchanged with the sole exception of
+//	'TextFieldFormatDto.FieldContents'.
+//
+//	'TextFieldFormatDto.FieldContents' will be
+//	converted to its equivalent string value and that
+//	string value will be saved to
+//	'TextFieldFormatDto.FieldContents'.
 //
 // ----------------------------------------------------------------
 //
@@ -430,6 +458,62 @@ func (textFieldFormatDto *TextFieldFormatDto) Empty() {
 	return
 }
 
+// Equal
+//
+// Receives a pointer to another instance of
+// TextFieldFormatDto and proceeds to compare the member
+// variables to those contained in the current
+// TextFieldFormatDto instance in order to determine if
+// they are equivalent.
+//
+// A boolean flag showing the result of this comparison
+// is returned. If the member variables of both instances
+// are equal in all respects, this flag is set to 'true'.
+// Otherwise, this method returns 'false'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	incomingTxtFieldFmtDto		*TextFieldFormatDto
+//
+//		A pointer to an incoming instance of
+//		TextFieldFormatDto. This method will compare all
+//		member variable data values in this instance
+//		against those contained in the current instance
+//		of TextFieldFormatDto. If the data values in both
+//		instances are found to be equal in all respects,
+//		this method will return a boolean value of 'true'.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	bool
+//
+//		If the member variable data values contained in
+//		input parameter 'incomingTxtFieldFmtDto' are
+//		equal in all respects to those contained in the
+//		current instance of TextFieldFormatDto, this
+//		method will return a boolean value of 'true'.
+//		Otherwise, a value of 'false' will be returned
+//		to the calling function.
+func (textFieldFormatDto *TextFieldFormatDto) Equal(
+	incomingTxtFieldFmtDto *TextFieldFormatDto) bool {
+
+	if textFieldFormatDto.lock == nil {
+		textFieldFormatDto.lock = new(sync.Mutex)
+	}
+
+	textFieldFormatDto.lock.Lock()
+
+	defer textFieldFormatDto.lock.Unlock()
+
+	return new(textFieldFormatDtoAtom).equal(
+		textFieldFormatDto,
+		incomingTxtFieldFmtDto)
+}
+
 // textFieldFormatDtoNanobot - Provides helper methods for
 // TextFieldFormatDto.
 type textFieldFormatDtoNanobot struct {
@@ -450,6 +534,19 @@ type textFieldFormatDtoNanobot struct {
 //	pre-existing data values contained within the
 //	TextFieldFormatDto instance passed as input
 //	parameter 'destinationTxtFieldFmtDto'.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	The original member variable data values encapsulated
+//	within 'sourceTxtFieldFmtDto' will remain unchanged
+//	with the sole exception of
+//	'sourceTxtFieldFmtDto.FieldContents'.
+//
+//	'sourceTxtFieldFmtDto.FieldContents' will be converted
+//	to its equivalent string value and that string value
+//	will be saved to 'sourceTxtFieldFmtDto.FieldContents'.
 //
 // ----------------------------------------------------------------
 //
@@ -490,11 +587,16 @@ type textFieldFormatDtoNanobot struct {
 //
 //		The original member variable data values
 //		encapsulated within 'sourceTxtFieldFmtDto' will
-//		remain unchanged and will NOT be overwritten or
-//		deleted.
+//		remain unchanged with the sole exception of
+//		'sourceTxtFieldFmtDto.FieldContents'.
 //
-//		If 'sourceTxtFieldFmtDto' contains invalid member data
-//		variables, this method will return an error.
+//		'sourceTxtFieldFmtDto.FieldContents' will be
+//		converted to its equivalent string and that
+//		string will be saved to
+//		'sourceTxtFieldFmtDto.FieldContents'
+//
+//		If 'sourceTxtFieldFmtDto' contains invalid member
+//		data variables, this method will return an error.
 //
 //	errPrefDto					*ePref.ErrPrefixDto
 //
@@ -613,6 +715,9 @@ func (txtFieldFmtDtoNanobot *textFieldFormatDtoNanobot) copy(
 	}
 
 	destinationTxtFieldFmtDto.FieldContents =
+		convertedStr
+
+	sourceTxtFieldFmtDto.FieldContents =
 		convertedStr
 
 	destinationTxtFieldFmtDto.FieldLength =
