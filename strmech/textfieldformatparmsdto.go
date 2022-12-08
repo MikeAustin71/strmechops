@@ -292,7 +292,7 @@ func (txtFmtParamsNanobot *textFieldFmtParamsDtoNanobot) copy(
 // TextFieldFmtParamsDto and proceeds to set all the member
 // variables to their zero or uninitialized states.
 //
-// Are previous data values contained in this instance of
+// All pre-existing data values contained in this instance of
 // TextFieldFmtParamsDto will be deleted.
 func (txtFmtParamsNanobot *textFieldFmtParamsDtoNanobot) empty(
 	targetTxtFmtParamsDto *TextFieldFmtParamsDto) {

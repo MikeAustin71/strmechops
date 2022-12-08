@@ -278,7 +278,7 @@ type textFormatterDtoNanobot struct {
 	lock *sync.Mutex
 }
 
-// copyDta - Copies all data from a source instance of
+// copyData - Copies all data from a source instance of
 // TextFmtParamsLineColumnsDto to a destination instance of
 // TextFmtParamsLineColumnsDto.
 func (textFMtDtoNanobot *textFormatterDtoNanobot) copyData(
