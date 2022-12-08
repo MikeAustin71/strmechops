@@ -78,15 +78,24 @@ import (
 //	         TxtJustify.Right()
 //	         TxtJustify.Center()
 type TextFieldSpecLabel struct {
-	textLabel []rune // The text content of the label.
-	fieldLen  int    // The length of the text field in which
-	//               //  the text label will be positioned.
-	textJustification TextJustify // The specification which controls
-	//                            //  how the text label will be positioned
-	//                            //  within the text field: 'Left', 'Right'
-	//                            //  or 'Center'.
+	textLabel []rune
+	// The text content of the label.
+
+	fieldLen int
+	// The length of the text field in which
+	//  the text label will be positioned.
+
+	textJustification TextJustify
+	// The specification which controls
+	//  how the text label will be positioned
+	//  within the text field: 'Left', 'Right'
+	//  or 'Center'.
+
 	textLineReader *strings.Reader
-	lock           *sync.Mutex
+	// Text Line Reader used to read the text
+	// content of the label.
+
+	lock *sync.Mutex
 }
 
 // CopyIn - Copies the data fields from an incoming instance of

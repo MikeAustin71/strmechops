@@ -514,6 +514,144 @@ func (textFieldFormatDto *TextFieldFormatDto) Equal(
 		incomingTxtFieldFmtDto)
 }
 
+// GetFieldContentTextLabel
+//
+// Converts the current TextFieldFormatDto instance
+// member variable, 'FieldContents', to an instance of
+// TextFieldSpecLabel.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+// The returned TextFieldSpecLabel will only contain
+// the member variable 'FieldContents'. It will NOT
+// contain the left and right margins.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it	contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	TextFieldSpecLabel
+//
+//		If this method completes successfully, the Text
+//		Field Contents extracted from the current
+//		instance of TextFieldFormatDto, will be returned
+//		as text label of type TextFieldSpecLabel.
+//
+//		This returned text label will ONLY contain the
+//		Text Field Contents. It will NOT contain the left
+//		and right margin strings.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (textFieldFormatDto *TextFieldFormatDto) GetFieldContentTextLabel(
+	errorPrefix interface{}) (
+	TextFieldSpecLabel,
+	error) {
+
+	if textFieldFormatDto.lock == nil {
+		textFieldFormatDto.lock = new(sync.Mutex)
+	}
+
+	textFieldFormatDto.lock.Lock()
+
+	defer textFieldFormatDto.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextFieldFormatDto."+
+			"GetFieldContentTextLabel()",
+		"")
+
+	if err != nil {
+		return TextFieldSpecLabel{}, err
+	}
+
+	return new(textFieldFormatDtoMolecule).
+		getFieldContentTextLabel(
+			textFieldFormatDto,
+			ePrefix.XCpy(
+				"textFieldFormatDto"))
+}
+
 // textFieldFormatDtoNanobot - Provides helper methods for
 // TextFieldFormatDto.
 type textFieldFormatDtoNanobot struct {
@@ -730,6 +868,169 @@ func (txtFieldFmtDtoNanobot *textFieldFormatDtoNanobot) copy(
 		sourceTxtFieldFmtDto.RightMarginStr
 
 	return err
+}
+
+// textFieldFormatDtoMolecule - Provides helper methods for
+// TextFieldFormatDto.
+type textFieldFormatDtoMolecule struct {
+	lock *sync.Mutex
+}
+
+// getFieldContentTextLabel
+//
+// Converts a TextFieldFormatDto instance member
+// variable, 'FieldContents', to an instance of
+// TextFieldSpecLabel.
+//
+// The TextFieldFormatDto instance is passed as input
+// parameter, 'txtFieldFmtDto'.
+//
+// The returned TextFieldSpecLabel will only contain
+// the member variable 'FieldContents'. It will NOT
+// contain the left and right margins.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	If input parameter 'txtFieldFmtDto', an instance of
+//	TextFieldFormatDto, is found to be invalid, an error
+//	will be returned.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	txtFieldFmtDto				*TextFieldFormatDto
+//
+//		A pointer to an instance of TextFieldFormatDto.
+//
+//		The member variable 'FieldContents' will be
+//		converted to a text label of type
+//		TextFieldSpecLabel and returned to the calling
+//		function.
+//
+//		None of the data values in this instance will be
+//		changed or modified.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	TextFieldSpecLabel
+//
+//		If this method completes successfully, the Text
+//		Field Contents extracted from the input
+//		parameter, 'txtFieldFmtDto', will be returned as
+//		an instance of TextFieldSpecLabel.
+//
+//		This returned text label will ONLY contain the
+//		Text Field Contents. It will NOT contain the left
+//		and right margin strings.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (txtFieldFmtDtoMolecule *textFieldFormatDtoMolecule) getFieldContentTextLabel(
+	txtFieldFmtDto *TextFieldFormatDto,
+	errPrefDto *ePref.ErrPrefixDto) (
+	TextFieldSpecLabel,
+	error) {
+
+	if txtFieldFmtDtoMolecule.lock == nil {
+		txtFieldFmtDtoMolecule.lock = new(sync.Mutex)
+	}
+
+	txtFieldFmtDtoMolecule.lock.Lock()
+
+	defer txtFieldFmtDtoMolecule.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	fieldContentsLabel := TextFieldSpecLabel{}
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"textFieldFormatDtoMolecule."+
+			"getFieldContentTextLabel()",
+		"")
+
+	if err != nil {
+
+		return fieldContentsLabel, err
+	}
+
+	if txtFieldFmtDto == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'txtFieldFmtDto' is a nil pointer!\n",
+			ePrefix.String())
+
+		return fieldContentsLabel, err
+	}
+
+	_,
+		err = new(textFieldFormatDtoAtom).
+		testValidityOfTextFieldFmtDto(
+			txtFieldFmtDto,
+			ePrefix.XCpy(
+				"txtFieldFmtDto"))
+
+	if err != nil {
+
+		return fieldContentsLabel, err
+	}
+
+	var fieldContentsText string
+
+	fieldContentsText,
+		err = new(textSpecificationAtom).
+		convertParamEmptyInterfaceToString(
+			txtFieldFmtDto.FieldContents,
+			"txtFieldFmtDto.FieldContents",
+			ePrefix.XCpy(
+				"txtFieldFmtDto.FieldContents"))
+
+	if err != nil {
+		return fieldContentsLabel, err
+	}
+
+	fieldContentsLabel,
+		err = TextFieldSpecLabel{}.NewTextLabel(
+		fieldContentsText,
+		txtFieldFmtDto.FieldLength,
+		txtFieldFmtDto.FieldJustify,
+		ePrefix.XCpy(
+			"fieldContentsLabel<-txtFieldFmtDto"))
+
+	return fieldContentsLabel, err
 }
 
 // textFieldFormatDtoAtom - Provides helper methods for
