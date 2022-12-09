@@ -857,6 +857,53 @@ func (textLabelFieldFormatDto *TextLabelFieldFormatDto) GetRightMarginStr() stri
 	return textLabelFieldFormatDto.RightMarginStr
 }
 
+// IsValidInstance
+//
+// Performs a diagnostic review of the data values
+// encapsulated in the current TextLabelFieldFormatDto
+// instance to determine if they are valid.
+//
+// If all data elements evaluate as valid, this method
+// returns 'true'. If any data element is invalid, this
+// method returns 'false'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	--- NONE ---
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	isValid						bool
+//
+//		If all data elements encapsulated by the current
+//		instance of TextLabelFieldFormatDto are valid,
+//		this returned boolean value is set to 'true'. If
+//		any data values are invalid, this return
+//		parameter is set to 'false'.
+func (textLabelFieldFormatDto *TextLabelFieldFormatDto) IsValidInstance() (
+	isValid bool) {
+
+	if textLabelFieldFormatDto.lock == nil {
+		textLabelFieldFormatDto.lock = new(sync.Mutex)
+	}
+
+	textLabelFieldFormatDto.lock.Lock()
+
+	defer textLabelFieldFormatDto.lock.Unlock()
+
+	isValid,
+		_ = new(textLabelFieldFormatDtoAtom).
+		testValidityOfTextFieldFmtDto(
+			textLabelFieldFormatDto,
+			nil)
+
+	return isValid
+}
+
 // textLabelFieldFormatDtoNanobot - Provides helper methods for
 // TextLabelFieldFormatDto.
 type textLabelFieldFormatDtoNanobot struct {
