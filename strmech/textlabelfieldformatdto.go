@@ -1650,8 +1650,8 @@ type textLabelFieldFormatDtoMolecule struct {
 // variable, 'FieldContents', to an instance of
 // TextFieldSpecLabel.
 //
-// The TextLabelFieldFormatDto instance is passed as input
-// parameter, 'txtFieldFmtDto'.
+// The TextLabelFieldFormatDto instance is passed as
+// input parameter, 'txtLabelFieldFmtDto'.
 //
 // The returned TextFieldSpecLabel will only contain
 // the member variable 'FieldContents'. It will NOT
@@ -1661,15 +1661,15 @@ type textLabelFieldFormatDtoMolecule struct {
 //
 // # BE ADVISED
 //
-//	If input parameter 'txtFieldFmtDto', an instance of
-//	TextLabelFieldFormatDto, is found to be invalid, an
-//	error will be returned.
+//	If input parameter 'txtLabelFieldFmtDto', an instance
+//	of TextLabelFieldFormatDto, is found to be invalid,
+//	an error will be returned.
 //
 // ----------------------------------------------------------------
 //
 // # Input Parameters
 //
-//	txtFieldFmtDto				*TextLabelFieldFormatDto
+//	txtLabelFieldFmtDto			*TextLabelFieldFormatDto
 //
 //		A pointer to an instance of TextLabelFieldFormatDto.
 //
@@ -1704,8 +1704,8 @@ type textLabelFieldFormatDtoMolecule struct {
 //
 //		If this method completes successfully, the Text
 //		Field Contents extracted from the input
-//		parameter, 'txtFieldFmtDto', will be returned as
-//		an instance of TextFieldSpecLabel.
+//		parameter, 'txtLabelFieldFmtDto', will be
+//		returned as an instance of TextFieldSpecLabel.
 //
 //		This returned text label will ONLY contain the
 //		Text Field Contents. It will NOT contain the left
@@ -1724,7 +1724,7 @@ type textLabelFieldFormatDtoMolecule struct {
 //		will be prefixed or attached at the beginning of
 //		the error message.
 func (txtLabelFieldFmtDtoMolecule *textLabelFieldFormatDtoMolecule) getFieldContentTextLabel(
-	txtFieldFmtDto *TextLabelFieldFormatDto,
+	txtLabelFieldFmtDto *TextLabelFieldFormatDto,
 	errPrefDto *ePref.ErrPrefixDto) (
 	TextFieldSpecLabel,
 	error) {
@@ -1755,10 +1755,10 @@ func (txtLabelFieldFmtDtoMolecule *textLabelFieldFormatDtoMolecule) getFieldCont
 		return fieldContentsLabel, err
 	}
 
-	if txtFieldFmtDto == nil {
+	if txtLabelFieldFmtDto == nil {
 
 		err = fmt.Errorf("%v\n"+
-			"ERROR: Input parameter 'txtFieldFmtDto' is a nil pointer!\n",
+			"ERROR: Input parameter 'txtLabelFieldFmtDto' is a nil pointer!\n",
 			ePrefix.String())
 
 		return fieldContentsLabel, err
@@ -1767,9 +1767,9 @@ func (txtLabelFieldFmtDtoMolecule *textLabelFieldFormatDtoMolecule) getFieldCont
 	_,
 		err = new(textLabelFieldFormatDtoAtom).
 		testValidityOfTextFieldFmtDto(
-			txtFieldFmtDto,
+			txtLabelFieldFmtDto,
 			ePrefix.XCpy(
-				"txtFieldFmtDto"))
+				"txtLabelFieldFmtDto"))
 
 	if err != nil {
 
@@ -1781,10 +1781,10 @@ func (txtLabelFieldFmtDtoMolecule *textLabelFieldFormatDtoMolecule) getFieldCont
 	fieldContentsText,
 		err = new(textSpecificationAtom).
 		convertParamEmptyInterfaceToString(
-			txtFieldFmtDto.FieldContents,
-			"txtFieldFmtDto.FieldContents",
+			txtLabelFieldFmtDto.FieldContents,
+			"txtLabelFieldFmtDto.FieldContents",
 			ePrefix.XCpy(
-				"txtFieldFmtDto.FieldContents"))
+				"txtLabelFieldFmtDto.FieldContents"))
 
 	if err != nil {
 		return fieldContentsLabel, err
@@ -1793,10 +1793,10 @@ func (txtLabelFieldFmtDtoMolecule *textLabelFieldFormatDtoMolecule) getFieldCont
 	fieldContentsLabel,
 		err = TextFieldSpecLabel{}.NewTextLabel(
 		fieldContentsText,
-		txtFieldFmtDto.FieldLength,
-		txtFieldFmtDto.FieldJustify,
+		txtLabelFieldFmtDto.FieldLength,
+		txtLabelFieldFmtDto.FieldJustify,
 		ePrefix.XCpy(
-			"fieldContentsLabel<-txtFieldFmtDto"))
+			"fieldContentsLabel<-txtLabelFieldFmtDto"))
 
 	return fieldContentsLabel, err
 }

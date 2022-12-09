@@ -154,6 +154,163 @@ type TextDateFieldFormatDto struct {
 	lock *sync.Mutex
 }
 
+// textDateFieldFormatDtoMolecule - Provides helper
+// methods for TextDateFieldFormatDto.
+type textDateFieldFormatDtoMolecule struct {
+	lock *sync.Mutex
+}
+
+// getFieldContentTextLabel
+//
+// Converts a TextDateFieldFormatDto instance member
+// variable, 'FieldDateTime', to an instance of
+// TextFieldSpecLabel.
+//
+// The TextDateFieldFormatDto instance is passed as
+// input parameter, 'txtDateFieldDto'.
+//
+// The returned TextFieldSpecLabel will only contain
+// the member variable 'FieldDateTime'. It will NOT
+// contain the left and right margins.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	If input parameter 'txtDateFieldDto', an instance
+//	of TextDateFieldFormatDto, is found to be invalid,
+//	an error will be returned.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	txtDateFieldDto				*TextDateFieldFormatDto
+//
+//		A pointer to an instance of TextDateFieldFormatDto.
+//
+//		The member variable 'FieldDateTime' will be
+//		converted to a text label of type
+//		TextFieldSpecLabel and returned to the calling
+//		function.
+//
+//		None of the data values in this instance will be
+//		changed or modified.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	TextFieldSpecLabel
+//
+//		If this method completes successfully, the Text
+//		Field Contents extracted from the input
+//		parameter, 'txtDateFieldDto', will be
+//		returned as an instance of TextFieldSpecLabel.
+//
+//		This returned text label will ONLY contain the
+//		Text Field Date/Time String ('FieldDateTime').
+//		It will NOT contain the left or right margin
+//		strings.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (txtDateFieldFmtDtoMolecule *textDateFieldFormatDtoMolecule) getFieldContentTextLabel(
+	txtDateFieldDto *TextDateFieldFormatDto,
+	errPrefDto *ePref.ErrPrefixDto) (
+	TextFieldSpecLabel,
+	error) {
+
+	if txtDateFieldFmtDtoMolecule.lock == nil {
+		txtDateFieldFmtDtoMolecule.lock = new(sync.Mutex)
+	}
+
+	txtDateFieldFmtDtoMolecule.lock.Lock()
+
+	defer txtDateFieldFmtDtoMolecule.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	fieldContentsLabel := TextFieldSpecLabel{}
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"textDateFieldFormatDtoMolecule."+
+			"getFieldContentTextLabel()",
+		"")
+
+	if err != nil {
+
+		return fieldContentsLabel, err
+
+	}
+
+	if txtDateFieldDto == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'txtDateFieldDto' is a nil pointer!\n",
+			ePrefix.String())
+
+		return fieldContentsLabel, err
+	}
+
+	_,
+		err = new(textDateFieldFormatDtoAtom).
+		testValidityOfTextDateFieldFormatDto(
+			txtDateFieldDto,
+			ePrefix.XCpy(
+				"txtDateFieldDto"))
+
+	if err != nil {
+
+		return fieldContentsLabel, err
+	}
+
+	// If txtDateFieldDto.FieldDateTimeFormat was
+	// empty, default format string was applied
+
+	fieldContentsText := txtDateFieldDto.
+		FieldDateTime.Format(txtDateFieldDto.FieldDateTimeFormat)
+
+	fieldContentsLabel,
+		err = TextFieldSpecLabel{}.NewTextLabel(
+		fieldContentsText,
+		txtDateFieldDto.FieldLength,
+		txtDateFieldDto.FieldJustify,
+		ePrefix.XCpy(
+			"fieldContentsLabel<-txtDateFieldDto"))
+
+	return fieldContentsLabel, err
+}
+
 // textDateFieldFormatDtoAtom - Provides helper
 // methods for TextDateFieldFormatDto.
 type textDateFieldFormatDtoAtom struct {
