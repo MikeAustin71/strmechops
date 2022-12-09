@@ -154,6 +154,191 @@ type TextDateFieldFormatDto struct {
 	lock *sync.Mutex
 }
 
+// textDateFieldFormatDtoNanobot - Provides helper
+// methods for TextDateFieldFormatDto.
+type textDateFieldFormatDtoNanobot struct {
+	lock *sync.Mutex
+}
+
+// copy
+//
+// Copies all data from a source instance of
+// TextDateFieldFormatDto to a destination instance of
+// TextDateFieldFormatDto.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will delete and overwrite all
+//	pre-existing data values contained within the
+//	TextDateFieldFormatDto instance passed as input
+//	parameter 'destinationTxtDateFieldDto'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	destinationTxtDateFieldDto		*TextDateFieldFormatDto
+//
+//		A pointer to an instance of
+//		TextDateFieldFormatDto.
+//
+//		Data extracted from input parameter
+//		'sourceTxtDateFieldDto' will be copied to this
+//		input parameter, 'destinationTxtDateFieldDto'.
+//
+//		'destinationTxtDateFieldDto' is the destination
+//		for this copy operation.
+//
+//		If this method completes successfully, all member
+//		data variables encapsulated in
+//		'destinationTxtDateFieldDto' will be identical to
+//		those contained in input parameter,
+//		'sourceTxtDateFieldDto'.
+//
+//		Be advised that the pre-existing data fields
+//		contained within input parameter
+//		'destinationTxtDateFieldDto' will be deleted and
+//		overwritten.
+//
+//	sourceTxtDateFieldDto			*TextDateFieldFormatDto
+//
+//		A pointer to an instance of
+//		TextDateFieldFormatDto.
+//
+//		All data values in this TextDateFieldFormatDto
+//		instance will be copied to input parameter
+//		'destinationTxtDateFieldDto'.
+//
+//		'sourceTxtDateFieldDto' is the source of the
+//		copy operation.
+//
+//		The original member variable data values
+//		encapsulated within 'sourceTxtDateFieldDto'
+//		will remain unchanged and unmodified.
+//
+//		If 'sourceTxtDateFieldDto' contains invalid
+//		member data variables, this method will return
+//		an error.
+//
+//	errPrefDto						*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (txtDateFieldDtoNanobot *textDateFieldFormatDtoNanobot) copy(
+	destinationTxtDateFieldDto *TextDateFieldFormatDto,
+	sourceTxtDateFieldDto *TextDateFieldFormatDto,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if txtDateFieldDtoNanobot.lock == nil {
+		txtDateFieldDtoNanobot.lock = new(sync.Mutex)
+	}
+
+	txtDateFieldDtoNanobot.lock.Lock()
+
+	defer txtDateFieldDtoNanobot.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"textDateFieldFormatDtoNanobot."+
+			"copy()",
+		"")
+
+	if err != nil {
+
+		return err
+
+	}
+
+	if destinationTxtDateFieldDto == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'destinationTxtDateFieldDto' is a nil pointer!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if sourceTxtDateFieldDto == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'sourceTxtDateFieldDto' is a nil pointer!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	txtDateFieldFmtDtoAtom := textDateFieldFormatDtoAtom{}
+
+	_,
+		err = txtDateFieldFmtDtoAtom.
+		testValidityOfTextDateFieldFormatDto(
+			sourceTxtDateFieldDto,
+			ePrefix.XCpy(
+				"sourceTxtDateFieldDto"))
+
+	if err != nil {
+
+		return err
+	}
+
+	txtDateFieldFmtDtoAtom.empty(
+		destinationTxtDateFieldDto)
+
+	destinationTxtDateFieldDto.LeftMarginStr =
+		sourceTxtDateFieldDto.LeftMarginStr
+
+	destinationTxtDateFieldDto.FieldDateTime =
+		sourceTxtDateFieldDto.FieldDateTime
+
+	destinationTxtDateFieldDto.FieldDateTimeFormat =
+		sourceTxtDateFieldDto.FieldDateTimeFormat
+
+	destinationTxtDateFieldDto.FieldLength =
+		sourceTxtDateFieldDto.FieldLength
+
+	destinationTxtDateFieldDto.FieldJustify =
+		sourceTxtDateFieldDto.FieldJustify
+
+	destinationTxtDateFieldDto.RightMarginStr =
+		sourceTxtDateFieldDto.RightMarginStr
+
+	return err
+}
+
 // textDateFieldFormatDtoMolecule - Provides helper
 // methods for TextDateFieldFormatDto.
 type textDateFieldFormatDtoMolecule struct {
