@@ -127,7 +127,7 @@ func (txtSpecAtom *textSpecificationAtom) convertParamEmptyInterfaceToString(
 	}
 
 	defaultDateTimeFormat =
-		textSpecificationMolecule{}.ptr().getDefaultDateTimeFormat()
+		new(textSpecificationMolecule).getDefaultDateTimeFormat()
 
 	switch emptyIFace.(type) { // the switch uses the type of the interface
 

@@ -1875,7 +1875,15 @@ func (txtFillerFieldDtoAtom *textFillerFieldFormatDtoAtom) equal(
 //
 // # Return Values
 //
-//	error
+//	isValid						bool
+//
+//		If all data elements contained within input
+//		parameter 'txtFieldFillerDto' are judged to be
+//		valid, this returned boolean value will be set to
+//		'true'. If any data values are invalid, this
+//		return parameter will be set to 'false'.
+//
+//	err							error
 //
 //		If this method completes successfully and all the
 //		data values contained in input parameter

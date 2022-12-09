@@ -1989,7 +1989,7 @@ func (txtLabelFieldFmtDtoAtom *textLabelFieldFormatDtoAtom) equal(
 //
 // # Input Parameters
 //
-//	txtFieldFmtDto				*TextLabelFieldFormatDto
+//	txtLabelFieldFmtDto			*TextLabelFieldFormatDto
 //
 //		A pointer to an instance of TextLabelFieldFormatDto.
 //
@@ -2019,6 +2019,14 @@ func (txtLabelFieldFmtDtoAtom *textLabelFieldFormatDtoAtom) equal(
 //
 // # Return Values
 //
+//	isValid						bool
+//
+//		If all data elements contained within input
+//		parameter 'txtLabelFieldFmtDto' are judged to be
+//		valid, this returned boolean value will be set to
+//		'true'. If any data values are invalid, this
+//		return parameter will be set to 'false'.
+//
 //	error
 //
 //		If this method completes successfully and all the
@@ -2026,7 +2034,6 @@ func (txtLabelFieldFmtDtoAtom *textLabelFieldFormatDtoAtom) equal(
 //		'txtLabelFieldFmtDto' are judged to be valid,
 //		the returned error Type will be set equal to
 //		'nil'.
-//
 //
 //		If the data values contained in input parameter
 //		'txtLabelFieldFmtDto' are invalid, the returned
@@ -2091,7 +2098,19 @@ func (txtLabelFieldFmtDtoAtom *textLabelFieldFormatDtoAtom) testValidityOfTextFi
 
 		err = fmt.Errorf("%v\n"+
 			"ERROR: TextLabelFieldFormatDto parameter 'FieldLength' is INVALID!\n"+
-			"txtLabelFieldFmtDto.FieldLength has a value less than minus none (-1)\n"+
+			"txtLabelFieldFmtDto.FieldLength has a value less than minus one (-1)\n"+
+			"txtLabelFieldFmtDto.FieldLength = %v\n",
+			ePrefix.String(),
+			txtLabelFieldFmtDto.FieldLength)
+
+		return isValid, err
+	}
+
+	if txtLabelFieldFmtDto.FieldLength > 1000000 {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: TextLabelFieldFormatDto parameter 'FieldLength' is INVALID!\n"+
+			"txtLabelFieldFmtDto.FieldLength has a value greater than one-million (1,000,000)\n"+
 			"txtLabelFieldFmtDto.FieldLength = %v\n",
 			ePrefix.String(),
 			txtLabelFieldFmtDto.FieldLength)
