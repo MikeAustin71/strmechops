@@ -414,6 +414,159 @@ func (textLabelFieldFormatDto *TextLabelFieldFormatDto) CopyOut(
 	return newTextFieldFormatDto, err
 }
 
+// CopyOutITextFieldFormat
+//
+// Returns a deep copy of the current
+// TextLabelFieldFormatDto instance cast as an
+// ITextFieldFormatDto interface object.
+//
+// If the current TextLabelFieldFormatDto instance
+// contains invalid member variable data values, this
+// method will return an error.
+//
+// This method is required in order to implement the
+// ITextFieldFormatDto interface.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	The original member variable data values encapsulated
+//	within the current TextLabelFieldFormatDto instance will
+//	remain unchanged with the sole exception of
+//	'TextLabelFieldFormatDto.FieldContents'.
+//
+//	'TextLabelFieldFormatDto.FieldContents' will be
+//	converted to its equivalent string value and that
+//	string value will be saved to
+//	'TextLabelFieldFormatDto.FieldContents'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it	contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	ITextFieldFormatDto
+//
+//		If this method completes successfully and no
+//		errors are encountered, this parameter will
+//		return a deep copy of the current
+//		TextLabelFieldFormatDto instance cast as an
+//		ITextFieldFormatDto interface object.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (textLabelFieldFormatDto *TextLabelFieldFormatDto) CopyOutITextFieldFormat(
+	errorPrefix interface{}) (
+	ITextFieldFormatDto,
+	error) {
+
+	if textLabelFieldFormatDto.lock == nil {
+		textLabelFieldFormatDto.lock = new(sync.Mutex)
+	}
+
+	textLabelFieldFormatDto.lock.Lock()
+
+	defer textLabelFieldFormatDto.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	newTextFieldFormatDto := TextLabelFieldFormatDto{}
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLabelFieldFormatDto."+
+			"CopyOutITextFieldFormat()",
+		"")
+
+	if err != nil {
+		return ITextFieldFormatDto(&newTextFieldFormatDto), err
+	}
+
+	err = new(textLabelFieldFormatDtoNanobot).copy(
+		&newTextFieldFormatDto,
+		textLabelFieldFormatDto,
+		ePrefix.XCpy(
+			"newTextFieldFormatDto<-"+
+				"textLabelFieldFormatDto"))
+
+	return ITextFieldFormatDto(&newTextFieldFormatDto), err
+}
+
 // Empty
 //
 // Resets all internal member variables for the current
@@ -421,6 +574,9 @@ func (textLabelFieldFormatDto *TextLabelFieldFormatDto) CopyOut(
 // uninitialized states. This method will leave the
 // current instance of TextLabelFieldFormatDto in an invalid
 // state and unavailable for immediate reuse.
+//
+// This method is required in order to implement the
+// ITextFieldFormatDto interface.
 //
 // ----------------------------------------------------------------
 //
@@ -522,6 +678,9 @@ func (textLabelFieldFormatDto *TextLabelFieldFormatDto) Equal(
 // Converts the current TextLabelFieldFormatDto instance
 // member variable, 'FieldContents', to an instance of
 // TextFieldSpecLabel.
+//
+// This method is required in order to implement the
+// ITextFieldFormatDto interface.
 //
 // ----------------------------------------------------------------
 //
@@ -656,6 +815,26 @@ func (textLabelFieldFormatDto *TextLabelFieldFormatDto) GetFieldContentTextLabel
 				"textLabelFieldFormatDto"))
 }
 
+// GetFieldFormatDtoType
+//
+// Returns a string containing the name of this type
+// ('TextLabelFieldFormatDto').
+//
+// This method is required in order to implement the
+// ITextFieldFormatDto interface.
+func (textLabelFieldFormatDto *TextLabelFieldFormatDto) GetFieldFormatDtoType() string {
+
+	if textLabelFieldFormatDto.lock == nil {
+		textLabelFieldFormatDto.lock = new(sync.Mutex)
+	}
+
+	textLabelFieldFormatDto.lock.Lock()
+
+	defer textLabelFieldFormatDto.lock.Unlock()
+
+	return "TextLabelFieldFormatDto"
+}
+
 // GetFormattedTextFieldStr
 //
 // Returns a string containing the formatted text field
@@ -664,6 +843,9 @@ func (textLabelFieldFormatDto *TextLabelFieldFormatDto) GetFieldContentTextLabel
 //
 // The returned formatted text field string contains the
 // left margin, field contents and right margin.
+//
+// This method is required in order to implement the
+// ITextFieldFormatDto interface.
 //
 // ----------------------------------------------------------------
 //
@@ -795,6 +977,9 @@ func (textLabelFieldFormatDto *TextLabelFieldFormatDto) GetFormattedTextFieldStr
 //
 // Returns the length of the Left Margin String as an
 // integer value.
+//
+// This method is required in order to implement the
+// ITextFieldFormatDto interface.
 func (textLabelFieldFormatDto *TextLabelFieldFormatDto) GetLeftMarginLength() int {
 
 	if textLabelFieldFormatDto.lock == nil {
@@ -811,6 +996,9 @@ func (textLabelFieldFormatDto *TextLabelFieldFormatDto) GetLeftMarginLength() in
 // GetLeftMarginStr
 //
 // Returns the Left Margin String.
+//
+// This method is required in order to implement the
+// ITextFieldFormatDto interface.
 func (textLabelFieldFormatDto *TextLabelFieldFormatDto) GetLeftMarginStr() string {
 
 	if textLabelFieldFormatDto.lock == nil {
@@ -828,6 +1016,9 @@ func (textLabelFieldFormatDto *TextLabelFieldFormatDto) GetLeftMarginStr() strin
 //
 // Returns the length of the Right Margin String as an
 // integer value.
+//
+// This method is required in order to implement the
+// ITextFieldFormatDto interface.
 func (textLabelFieldFormatDto *TextLabelFieldFormatDto) GetRightMarginLength() int {
 
 	if textLabelFieldFormatDto.lock == nil {
@@ -844,6 +1035,9 @@ func (textLabelFieldFormatDto *TextLabelFieldFormatDto) GetRightMarginLength() i
 // GetRightMarginStr
 //
 // Returns the Right Margin String.
+//
+// This method is required in order to implement the
+// ITextFieldFormatDto interface.
 func (textLabelFieldFormatDto *TextLabelFieldFormatDto) GetRightMarginStr() string {
 
 	if textLabelFieldFormatDto.lock == nil {
@@ -857,23 +1051,6 @@ func (textLabelFieldFormatDto *TextLabelFieldFormatDto) GetRightMarginStr() stri
 	return textLabelFieldFormatDto.RightMarginStr
 }
 
-// GetFieldFormatDtoType
-//
-// Returns a string containing the name of this type
-// ('TextLabelFieldFormatDto').
-func (textLabelFieldFormatDto *TextLabelFieldFormatDto) GetFieldFormatDtoType() string {
-
-	if textLabelFieldFormatDto.lock == nil {
-		textLabelFieldFormatDto.lock = new(sync.Mutex)
-	}
-
-	textLabelFieldFormatDto.lock.Lock()
-
-	defer textLabelFieldFormatDto.lock.Unlock()
-
-	return "TextLabelFieldFormatDto"
-}
-
 // IsValidInstance
 //
 // Performs a diagnostic review of the data values
@@ -883,6 +1060,9 @@ func (textLabelFieldFormatDto *TextLabelFieldFormatDto) GetFieldFormatDtoType() 
 // If all data elements evaluate as valid, this method
 // returns 'true'. If any data element is invalid, this
 // method returns 'false'.
+//
+// This method is required in order to implement the
+// ITextFieldFormatDto interface.
 //
 // ----------------------------------------------------------------
 //
@@ -929,6 +1109,9 @@ func (textLabelFieldFormatDto *TextLabelFieldFormatDto) IsValidInstance() (
 //
 // If any data element evaluates as invalid, this method
 // will return an error.
+//
+// This method is required in order to implement the
+// ITextFieldFormatDto interface.
 //
 // ----------------------------------------------------------------
 //
