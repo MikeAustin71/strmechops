@@ -392,6 +392,63 @@ func (txtFillerFieldFmtDto *TextFillerFieldFormatDto) Empty() {
 	return
 }
 
+// Equal
+//
+// Receives a pointer to another instance of
+// TextFillerFieldFormatDto and proceeds to compare the
+// member variables to those contained in the current
+// TextFillerFieldFormatDto instance in order to
+// determine if they are equivalent.
+//
+// A boolean flag showing the result of this comparison
+// is returned. If the member variables of both instances
+// are equal in all respects, this flag is set to 'true'.
+// Otherwise, this method returns 'false'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	incomingTxtFieldFillerFmtDto	*TextFillerFieldFormatDto
+//
+//		A pointer to an incoming instance of
+//		TextFillerFieldFormatDto. This method will
+//		compare all member variable data values in this
+//		instance against those contained in the current
+//		instance of TextFillerFieldFormatDto. If the data
+//		values in both instances are found to be equal in
+//		all respects, this method will return a boolean
+//		value of 'true'.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	bool
+//
+//		If the member variable data values contained in
+//		input parameter 'incomingTxtFieldFillerFmtDto'
+//		are equal in all respects to those contained in
+//		the current instance of TextFillerFieldFormatDto,
+//		this method will return a boolean value of
+//		'true'. Otherwise, a value of 'false' will be
+//		returned to the calling function.
+func (txtFillerFieldFmtDto *TextFillerFieldFormatDto) Equal(
+	incomingTxtFieldFillerFmtDto *TextFillerFieldFormatDto) bool {
+
+	if txtFillerFieldFmtDto.lock == nil {
+		txtFillerFieldFmtDto.lock = new(sync.Mutex)
+	}
+
+	txtFillerFieldFmtDto.lock.Lock()
+
+	defer txtFillerFieldFmtDto.lock.Unlock()
+
+	return new(textFillerFieldFormatDtoAtom).equal(
+		txtFillerFieldFmtDto,
+		incomingTxtFieldFillerFmtDto)
+}
+
 // textFillerFieldFormatDtoNanobot - Provides helper
 // methods for TextFillerFieldFormatDto.
 type textFillerFieldFormatDtoNanobot struct {
