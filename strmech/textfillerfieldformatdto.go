@@ -345,6 +345,53 @@ func (txtFillerFieldFmtDto *TextFillerFieldFormatDto) CopyOut(
 	return newTxtFillerFieldFmtDto, err
 }
 
+// Empty
+//
+// Resets all internal member variables for the current
+// instance of TextFillerFieldFormatDto to their zero or
+// uninitialized states. This method will leave the
+// current instance of TextFillerFieldFormatDto in an
+// invalid state and unavailable for immediate reuse.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+// This method will delete all member variable data
+// values in the current instance of
+// TextFillerFieldFormatDto. All member variable data
+// values will be reset to their zero or uninitialized
+// states.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	NONE
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	NONE
+func (txtFillerFieldFmtDto *TextFillerFieldFormatDto) Empty() {
+
+	if txtFillerFieldFmtDto.lock == nil {
+		txtFillerFieldFmtDto.lock = new(sync.Mutex)
+	}
+
+	txtFillerFieldFmtDto.lock.Lock()
+
+	new(textFillerFieldFormatDtoAtom).
+		empty(txtFillerFieldFmtDto)
+
+	txtFillerFieldFmtDto.lock.Unlock()
+
+	txtFillerFieldFmtDto.lock = nil
+
+	return
+}
+
 // textFillerFieldFormatDtoNanobot - Provides helper
 // methods for TextFillerFieldFormatDto.
 type textFillerFieldFormatDtoNanobot struct {
