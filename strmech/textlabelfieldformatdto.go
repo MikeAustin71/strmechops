@@ -19,11 +19,11 @@ import (
 type TextLabelFieldFormatDto struct {
 	LeftMarginStr string
 	//	One or more characters used to create a left
-	//	margin for this Text Field.
+	//	margin for this Text Label Field.
 	//
 	//	If this parameter is set to an empty string, no
 	//	left margin will be configured for this Text
-	//	Field.
+	//	Label Field.
 
 	FieldContents interface{}
 	//	This parameter may contain one of several
@@ -98,11 +98,11 @@ type TextLabelFieldFormatDto struct {
 
 	RightMarginStr string
 	//	One or more characters used to create a right
-	//	margin for this Text Field.
+	//	margin for this Text Label Field.
 	//
 	//	If this parameter is set to an empty string, no
 	//	right margin will be configured for this Text
-	//	Field.
+	//	Label Field.
 
 	lock *sync.Mutex
 }
@@ -659,6 +659,9 @@ func (textFieldFormatDto *TextLabelFieldFormatDto) GetFieldContentTextLabel(
 // generated from the current instance of
 // TextLabelFieldFormatDto.
 //
+// The returned formatted text field string contains the
+// left margin, field contents and right margin.
+//
 // ----------------------------------------------------------------
 //
 // # Input Parameters
@@ -730,14 +733,14 @@ func (textFieldFormatDto *TextLabelFieldFormatDto) GetFieldContentTextLabel(
 //
 //		If this method completes successfully, the text
 //		field specifications contained in the current
-//		instance of TextLabelFieldFormatDto will be converted
-//		to, and returned as, a formatted text field
-//		string.
+//		instance of TextLabelFieldFormatDto will be
+//		converted to, and returned as, a formatted text
+//		field string.
 //
-//		The returned string will therefore contain the
-//		left margin, text field contents and right
-//		margin as those elements are defined in the
-//		current instance of TextLabelFieldFormatDto.
+//		The returned text field string will contain the
+//		left margin, text field contents and right margin
+//		as those elements are defined in the current
+//		instance of TextLabelFieldFormatDto.
 //
 //	error
 //
@@ -967,8 +970,8 @@ type textLabelFieldFormatDtoNanobot struct {
 //		text will be attached to the beginning of the
 //		error message.
 func (txtLabelFieldFmtDtoNanobot *textLabelFieldFormatDtoNanobot) copy(
-	destinationTxtFieldFmtDto *TextLabelFieldFormatDto,
-	sourceTxtFieldFmtDto *TextLabelFieldFormatDto,
+	destinationTxtLabelFieldFmtDto *TextLabelFieldFormatDto,
+	sourceTxtLabelFieldFmtDto *TextLabelFieldFormatDto,
 	errPrefDto *ePref.ErrPrefixDto) error {
 
 	if txtLabelFieldFmtDtoNanobot.lock == nil {
@@ -996,10 +999,10 @@ func (txtLabelFieldFmtDtoNanobot *textLabelFieldFormatDtoNanobot) copy(
 
 	}
 
-	if sourceTxtFieldFmtDto == nil {
+	if sourceTxtLabelFieldFmtDto == nil {
 
 		err = fmt.Errorf("%v\n"+
-			"ERROR: Input parameter 'sourceTxtFieldFmtDto' is a nil pointer!\n",
+			"ERROR: Input parameter 'sourceTxtLabelFieldFmtDto' is a nil pointer!\n",
 			ePrefix.String())
 
 		return err
@@ -1010,9 +1013,9 @@ func (txtLabelFieldFmtDtoNanobot *textLabelFieldFormatDtoNanobot) copy(
 	_,
 		err = txtFieldFmtDtoAtom.
 		testValidityOfTextFieldFmtDto(
-			sourceTxtFieldFmtDto,
+			sourceTxtLabelFieldFmtDto,
 			ePrefix.XCpy(
-				"sourceTxtFieldFmtDto"))
+				"sourceTxtLabelFieldFmtDto"))
 
 	if err != nil {
 
@@ -1020,30 +1023,30 @@ func (txtLabelFieldFmtDtoNanobot *textLabelFieldFormatDtoNanobot) copy(
 
 	}
 
-	if destinationTxtFieldFmtDto == nil {
+	if destinationTxtLabelFieldFmtDto == nil {
 
 		err = fmt.Errorf("%v\n"+
-			"ERROR: Input parameter 'destinationTxtFieldFmtDto' is a nil pointer!\n",
+			"ERROR: Input parameter 'destinationTxtLabelFieldFmtDto' is a nil pointer!\n",
 			ePrefix.String())
 
 		return err
 	}
 
 	txtFieldFmtDtoAtom.empty(
-		destinationTxtFieldFmtDto)
+		destinationTxtLabelFieldFmtDto)
 
-	destinationTxtFieldFmtDto.LeftMarginStr =
-		sourceTxtFieldFmtDto.LeftMarginStr
+	destinationTxtLabelFieldFmtDto.LeftMarginStr =
+		sourceTxtLabelFieldFmtDto.LeftMarginStr
 
 	var convertedStr string
 
 	convertedStr,
 		err = new(textSpecificationAtom).
 		convertParamEmptyInterfaceToString(
-			sourceTxtFieldFmtDto.FieldContents,
-			"sourceTxtFieldFmtDto.FieldContents",
+			sourceTxtLabelFieldFmtDto.FieldContents,
+			"sourceTxtLabelFieldFmtDto.FieldContents",
 			ePrefix.XCpy(
-				"sourceTxtFieldFmtDto.FieldContents"))
+				"sourceTxtLabelFieldFmtDto.FieldContents"))
 
 	if err != nil {
 
@@ -1051,20 +1054,20 @@ func (txtLabelFieldFmtDtoNanobot *textLabelFieldFormatDtoNanobot) copy(
 
 	}
 
-	destinationTxtFieldFmtDto.FieldContents =
+	destinationTxtLabelFieldFmtDto.FieldContents =
 		convertedStr
 
-	sourceTxtFieldFmtDto.FieldContents =
+	sourceTxtLabelFieldFmtDto.FieldContents =
 		convertedStr
 
-	destinationTxtFieldFmtDto.FieldLength =
-		sourceTxtFieldFmtDto.FieldLength
+	destinationTxtLabelFieldFmtDto.FieldLength =
+		sourceTxtLabelFieldFmtDto.FieldLength
 
-	destinationTxtFieldFmtDto.FieldJustify =
-		sourceTxtFieldFmtDto.FieldJustify
+	destinationTxtLabelFieldFmtDto.FieldJustify =
+		sourceTxtLabelFieldFmtDto.FieldJustify
 
-	destinationTxtFieldFmtDto.RightMarginStr =
-		sourceTxtFieldFmtDto.RightMarginStr
+	destinationTxtLabelFieldFmtDto.RightMarginStr =
+		sourceTxtLabelFieldFmtDto.RightMarginStr
 
 	return err
 }
@@ -1073,6 +1076,9 @@ func (txtLabelFieldFmtDtoNanobot *textLabelFieldFormatDtoNanobot) copy(
 //
 // Converts an instance of TextLabelFieldFormatDto to a
 // formatted text field string.
+//
+// This formatted text field string contains the left
+// margin, field contents and right margin.
 //
 // ----------------------------------------------------------------
 //
@@ -1225,8 +1231,8 @@ type textLabelFieldFormatDtoMolecule struct {
 // # BE ADVISED
 //
 //	If input parameter 'txtFieldFmtDto', an instance of
-//	TextLabelFieldFormatDto, is found to be invalid, an error
-//	will be returned.
+//	TextLabelFieldFormatDto, is found to be invalid, an
+//	error will be returned.
 //
 // ----------------------------------------------------------------
 //
@@ -1272,7 +1278,7 @@ type textLabelFieldFormatDtoMolecule struct {
 //
 //		This returned text label will ONLY contain the
 //		Text Field Contents. It will NOT contain the left
-//		and right margin strings.
+//		or right margin strings.
 //
 //	error
 //
@@ -1373,8 +1379,9 @@ type textLabelFieldFormatDtoAtom struct {
 // empty
 //
 // Receives a pointer to an instance of
-// TextLabelFieldFormatDto and proceeds to set all the member
-// variables to their zero or uninitialized states.
+// TextLabelFieldFormatDto and proceeds to set all the
+// member variables to their zero or uninitialized
+// states.
 //
 // ----------------------------------------------------------------
 //
@@ -1382,9 +1389,8 @@ type textLabelFieldFormatDtoAtom struct {
 //
 //	This method will delete reset all pre-existing data
 //	values contained within the TextLabelFieldFormatDto
-//	instance passed as input
-//	parameter 'txtFieldFmtDto' to their zero or
-//	uninitialized states.
+//	instance passed as input parameter 'txtFieldFmtDto'
+//	to their zero or uninitialized states.
 //
 // ----------------------------------------------------------------
 //
@@ -1470,7 +1476,7 @@ func (txtLabelFieldFmtDtoAtom *textLabelFieldFormatDtoAtom) empty(
 //	bool
 //
 //		If all the data values within input parameters
-//		'txtFieldFmtDtoOne' and 'txtFieldFmtDtoOne' are
+//		'txtFieldFmtDtoOne' and 'txtFieldFmtDtoTwo' are
 //		found to be equivalent in all respects, this
 //		return parameter will be set to 'true'.
 //
@@ -1530,9 +1536,9 @@ func (txtLabelFieldFmtDtoAtom *textLabelFieldFormatDtoAtom) equal(
 // testValidityOfTextFieldFmtDto
 //
 // Receives a pointer to an instance of
-// TextLabelFieldFormatDto and performs a diagnostic analysis
-// to determine if the data values contained in that
-// instance are valid in all respects.
+// TextLabelFieldFormatDto and performs a diagnostic
+// analysis to determine if the data values contained in
+// that instance are valid in all respects.
 //
 // If the input parameter 'txtFieldFmtDto' is determined
 // to be invalid, this method will return a boolean flag
@@ -1582,12 +1588,14 @@ func (txtLabelFieldFmtDtoAtom *textLabelFieldFormatDtoAtom) equal(
 //	error
 //
 //		If this method completes successfully and all the
-//		data values contained in input parameter '' are judged
-//		to be valid, this returned error Type is set equal to 'nil'.
+//		data values contained in input parameter
+//		'txtFieldFmtDto' are judged to be valid, this
+//		returned error Type is set equal to 'nil'.
 //
-//		If
-//		errors are encountered during processing, the
-//		returned error Type will encapsulate an error
+//
+//		If the data values contained in input parameter
+//		'txtFieldFmtDto' are invalid, 'error' will be
+//		non-nil and configured with an appropriate error
 //		message.
 //
 //		If an error message is returned, the text value

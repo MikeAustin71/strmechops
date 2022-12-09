@@ -69,7 +69,7 @@ import (
 //	   - Controls the number of times 'fillerCharacters' is
 //	     repeated when constructing the final Text Filler Field
 //	     returned by this method. The actual length of the string
-//	     which will populated the completed Text Filler Field is
+//	     which will populate the completed Text Filler Field is
 //	     equal to the length of 'fillerCharacters' times the value
 //	     of 'fillerCharsRepeatCount'.
 //
