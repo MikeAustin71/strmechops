@@ -788,6 +788,23 @@ func (txtFillerFieldFmtDto *TextFillerFieldFormatDto) GetRightMarginStr() string
 	return txtFillerFieldFmtDto.RightMarginStr
 }
 
+// GetFieldFormatDtoType
+//
+// Returns a string containing the name of this type
+// ('TextFillerFieldFormatDto').
+func (txtFillerFieldFmtDto *TextFillerFieldFormatDto) GetFieldFormatDtoType() string {
+
+	if txtFillerFieldFmtDto.lock == nil {
+		txtFillerFieldFmtDto.lock = new(sync.Mutex)
+	}
+
+	txtFillerFieldFmtDto.lock.Lock()
+
+	defer txtFillerFieldFmtDto.lock.Unlock()
+
+	return "TextFillerFieldFormatDto"
+}
+
 // IsValidInstance
 //
 // Performs a diagnostic review of the data values

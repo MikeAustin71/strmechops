@@ -857,6 +857,23 @@ func (textLabelFieldFormatDto *TextLabelFieldFormatDto) GetRightMarginStr() stri
 	return textLabelFieldFormatDto.RightMarginStr
 }
 
+// GetFieldFormatDtoType
+//
+// Returns a string containing the name of this type
+// ('TextLabelFieldFormatDto').
+func (textLabelFieldFormatDto *TextLabelFieldFormatDto) GetFieldFormatDtoType() string {
+
+	if textLabelFieldFormatDto.lock == nil {
+		textLabelFieldFormatDto.lock = new(sync.Mutex)
+	}
+
+	textLabelFieldFormatDto.lock.Lock()
+
+	defer textLabelFieldFormatDto.lock.Unlock()
+
+	return "TextLabelFieldFormatDto"
+}
+
 // IsValidInstance
 //
 // Performs a diagnostic review of the data values
