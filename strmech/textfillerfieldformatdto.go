@@ -788,6 +788,53 @@ func (txtFillerFieldFmtDto *TextFillerFieldFormatDto) GetRightMarginStr() string
 	return txtFillerFieldFmtDto.RightMarginStr
 }
 
+// IsValidInstance
+//
+// Performs a diagnostic review of the data values
+// encapsulated in the current TextFillerFieldFormatDto
+// instance to determine if they are valid.
+//
+// If all data elements evaluate as valid, this method
+// returns 'true'. If any data element is invalid, this
+// method returns 'false'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	--- NONE ---
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	isValid						bool
+//
+//		If all data elements encapsulated by the current
+//		instance of TextFillerFieldFormatDto are valid,
+//		this returned boolean value is set to 'true'. If
+//		any data values are invalid, this return
+//		parameter is set to 'false'.
+func (txtFillerFieldFmtDto *TextFillerFieldFormatDto) IsValidInstance() (
+	isValid bool) {
+
+	if txtFillerFieldFmtDto.lock == nil {
+		txtFillerFieldFmtDto.lock = new(sync.Mutex)
+	}
+
+	txtFillerFieldFmtDto.lock.Lock()
+
+	defer txtFillerFieldFmtDto.lock.Unlock()
+
+	isValid,
+		_ = new(textFillerFieldFormatDtoAtom).
+		testValidityOfTextFillerFieldFmtDto(
+			txtFillerFieldFmtDto,
+			nil)
+
+	return isValid
+}
+
 // textFillerFieldFormatDtoNanobot - Provides helper
 // methods for TextFillerFieldFormatDto.
 type textFillerFieldFormatDtoNanobot struct {

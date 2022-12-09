@@ -3108,7 +3108,7 @@ func (stdLine *TextLineSpecStandardLine) InsertTextField(
 // values encapsulated in the current TextLineSpecStandardLine
 // instance to determine if they are valid.
 //
-// If all data element evaluate as valid, this method returns
+// If all data elements evaluate as valid, this method returns
 // 'true'. If any data element is invalid, this method returns
 // 'false'.
 //
