@@ -739,6 +739,22 @@ func (txtFillerFieldFmtDto *TextFillerFieldFormatDto) GetLeftMarginLength() int 
 	return len(txtFillerFieldFmtDto.LeftMarginStr)
 }
 
+// GetLeftMarginStr
+//
+// Returns the Left Margin String.
+func (txtFillerFieldFmtDto *TextFillerFieldFormatDto) GetLeftMarginStr() string {
+
+	if txtFillerFieldFmtDto.lock == nil {
+		txtFillerFieldFmtDto.lock = new(sync.Mutex)
+	}
+
+	txtFillerFieldFmtDto.lock.Lock()
+
+	defer txtFillerFieldFmtDto.lock.Unlock()
+
+	return txtFillerFieldFmtDto.LeftMarginStr
+}
+
 // textFillerFieldFormatDtoNanobot - Provides helper
 // methods for TextFillerFieldFormatDto.
 type textFillerFieldFormatDtoNanobot struct {
