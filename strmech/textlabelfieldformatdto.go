@@ -268,12 +268,12 @@ func (textLabelFieldFormatDto *TextLabelFieldFormatDto) CopyIn(
 
 // CopyOut
 //
-// Returns a deep copy of the current TextLabelFieldFormatDto
-// instance.
+// Returns a deep copy of the current
+// TextLabelFieldFormatDto instance.
 //
-// If the current TextLabelFieldFormatDto instance contains
-// invalid member variable dat values, this method will
-// return an error.
+// If the current TextLabelFieldFormatDto instance
+// contains invalid member variable data values, this
+// method will return an error.
 //
 // ----------------------------------------------------------------
 //
