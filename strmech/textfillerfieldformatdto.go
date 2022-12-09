@@ -244,6 +244,147 @@ func (txtFillerFieldDtoNanobot *textFillerFieldFormatDtoNanobot) copy(
 	return err
 }
 
+// getFormattedTextFieldStr
+//
+// Converts an instance of TextFillerFieldFormatDto to a
+// formatted text field string.
+//
+// This formatted text field string contains the left
+// margin, field contents and right margin.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	txtFillerFieldFmtDto		*TextFillerFieldFormatDto
+//
+//		A pointer to an instance of
+//		TextFillerFieldFormatDto.
+//
+//		The left and right margins as well as the member
+//		variable 'FillerChars' will be processed and
+//		converted to a formatted text field for use in
+//		screen displays, file output and printing.
+//
+//		If input parameter 'txtFillerFieldFmtDto' is
+//		found to contain invalid data values, an error
+//		will be returned
+//
+//		None of the data values in this instance will be
+//		changed or modified.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//
+//		If this method completes successfully, the input
+//		parameter, 'txtFillerFieldFmtDto', will be
+//		converted to, and returned as, a formatted string
+//		of text.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (txtFillerFieldDtoNanobot *textFillerFieldFormatDtoNanobot) getFormattedTextFieldStr(
+	txtFillerFieldFmtDto *TextFillerFieldFormatDto,
+	errPrefDto *ePref.ErrPrefixDto) (
+	string,
+	error) {
+
+	if txtFillerFieldDtoNanobot.lock == nil {
+		txtFillerFieldDtoNanobot.lock = new(sync.Mutex)
+	}
+
+	txtFillerFieldDtoNanobot.lock.Lock()
+
+	defer txtFillerFieldDtoNanobot.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"textFillerFieldFormatDtoNanobot."+
+			"getFormattedTextFieldStr()",
+		"")
+
+	if err != nil {
+
+		return "", err
+
+	}
+
+	if txtFillerFieldFmtDto == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'txtFillerFieldFmtDto' is a nil pointer!\n",
+			ePrefix.String())
+
+		return "", err
+	}
+
+	strBuilder := new(strings.Builder)
+
+	if len(txtFillerFieldFmtDto.LeftMarginStr) > 0 {
+
+		strBuilder.WriteString(txtFillerFieldFmtDto.LeftMarginStr)
+
+	}
+
+	var textLabel TextFieldSpecLabel
+
+	textLabel,
+		err = new(textFillerFieldFormatDtoMolecule).
+		getFieldContentTextLabel(
+			txtFillerFieldFmtDto,
+			ePrefix.XCpy(
+				"txtFillerFieldFmtDto"))
+
+	if err != nil {
+
+		return "", err
+
+	}
+
+	strBuilder.WriteString(textLabel.GetTextLabel())
+
+	if len(txtFillerFieldFmtDto.RightMarginStr) > 0 {
+
+		strBuilder.WriteString(txtFillerFieldFmtDto.RightMarginStr)
+
+	}
+
+	return strBuilder.String(), err
+}
+
 // textFillerFieldFormatDtoMolecule - Provides helper
 // methods for TextFillerFieldFormatDto.
 type textFillerFieldFormatDtoMolecule struct {
@@ -614,8 +755,8 @@ func (txtFillerFieldDtoAtom *textFillerFieldFormatDtoAtom) equal(
 //
 //		If this method completes successfully and all the
 //		data values contained in input parameter
-//		'txtFieldFillerDto' are judged to be valid, this
-//		returned error Type is set equal to 'nil'.
+//		'txtFieldFillerDto' are judged to be valid, the
+//		returned error Type will be set equal to 'nil'.
 //
 //		If the data values contained in input parameter
 //		'txtFieldFillerDto' are invalid, 'error' will be

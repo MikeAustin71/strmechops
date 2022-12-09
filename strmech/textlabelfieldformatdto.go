@@ -1084,14 +1084,18 @@ func (txtLabelFieldFmtDtoNanobot *textLabelFieldFormatDtoNanobot) copy(
 //
 // # Input Parameters
 //
-//	txtFieldFmtDto				*TextLabelFieldFormatDto
+//	txtLabelFieldFmtDto			*TextLabelFieldFormatDto
 //
 //		A pointer to an instance of TextLabelFieldFormatDto.
 //
 //		The left and right margins as well as the member
 //		variable 'FieldContents' will be processed and
 //		converted to a formatted text field for use in
-//		to screen displays, file output and printing.
+//		screen displays, file output and printing.
+//
+//		If input parameter 'txtLabelFieldFmtDto' is found
+//		to contain invalid data values, an error will be
+//		returned
 //
 //		None of the data values in this instance will be
 //		changed or modified.
@@ -1118,8 +1122,9 @@ func (txtLabelFieldFmtDtoNanobot *textLabelFieldFormatDtoNanobot) copy(
 //	string
 //
 //		If this method completes successfully, the input
-//		parameter, 'txtFieldFmtDto', will be converted
-//		to, and returned as, a formatted string of text.
+//		parameter, 'txtLabelFieldFmtDto', will be
+//		converted to, and returned as, a formatted string
+//		of text.
 //
 //	error
 //
@@ -1134,7 +1139,7 @@ func (txtLabelFieldFmtDtoNanobot *textLabelFieldFormatDtoNanobot) copy(
 //		will be prefixed or attached at the beginning of
 //		the error message.
 func (txtLabelFieldFmtDtoNanobot *textLabelFieldFormatDtoNanobot) getFormattedTextFieldStr(
-	txtFieldFmtDto *TextLabelFieldFormatDto,
+	txtLabelFieldFmtDto *TextLabelFieldFormatDto,
 	errPrefDto *ePref.ErrPrefixDto) (
 	string,
 	error) {
@@ -1164,10 +1169,10 @@ func (txtLabelFieldFmtDtoNanobot *textLabelFieldFormatDtoNanobot) getFormattedTe
 
 	}
 
-	if txtFieldFmtDto == nil {
+	if txtLabelFieldFmtDto == nil {
 
 		err = fmt.Errorf("%v\n"+
-			"ERROR: Input parameter 'txtFieldFmtDto' is a nil pointer!\n",
+			"ERROR: Input parameter 'txtLabelFieldFmtDto' is a nil pointer!\n",
 			ePrefix.String())
 
 		return "", err
@@ -1175,9 +1180,9 @@ func (txtLabelFieldFmtDtoNanobot *textLabelFieldFormatDtoNanobot) getFormattedTe
 
 	strBuilder := new(strings.Builder)
 
-	if len(txtFieldFmtDto.LeftMarginStr) > 0 {
+	if len(txtLabelFieldFmtDto.LeftMarginStr) > 0 {
 
-		strBuilder.WriteString(txtFieldFmtDto.LeftMarginStr)
+		strBuilder.WriteString(txtLabelFieldFmtDto.LeftMarginStr)
 
 	}
 
@@ -1186,9 +1191,9 @@ func (txtLabelFieldFmtDtoNanobot *textLabelFieldFormatDtoNanobot) getFormattedTe
 	textLabel,
 		err = new(textLabelFieldFormatDtoMolecule).
 		getFieldContentTextLabel(
-			txtFieldFmtDto,
+			txtLabelFieldFmtDto,
 			ePrefix.XCpy(
-				"txtFieldFmtDto"))
+				"txtLabelFieldFmtDto"))
 
 	if err != nil {
 
@@ -1198,9 +1203,9 @@ func (txtLabelFieldFmtDtoNanobot *textLabelFieldFormatDtoNanobot) getFormattedTe
 
 	strBuilder.WriteString(textLabel.GetTextLabel())
 
-	if len(txtFieldFmtDto.RightMarginStr) > 0 {
+	if len(txtLabelFieldFmtDto.RightMarginStr) > 0 {
 
-		strBuilder.WriteString(txtFieldFmtDto.RightMarginStr)
+		strBuilder.WriteString(txtLabelFieldFmtDto.RightMarginStr)
 
 	}
 
@@ -1409,7 +1414,7 @@ type textLabelFieldFormatDtoAtom struct {
 //
 //	NONE
 func (txtLabelFieldFmtDtoAtom *textLabelFieldFormatDtoAtom) empty(
-	txtFieldFmtDto *TextLabelFieldFormatDto) {
+	txtLabelFieldFmtDto *TextLabelFieldFormatDto) {
 
 	if txtLabelFieldFmtDtoAtom.lock == nil {
 		txtLabelFieldFmtDtoAtom.lock = new(sync.Mutex)
@@ -1419,20 +1424,20 @@ func (txtLabelFieldFmtDtoAtom *textLabelFieldFormatDtoAtom) empty(
 
 	defer txtLabelFieldFmtDtoAtom.lock.Unlock()
 
-	if txtFieldFmtDto == nil {
+	if txtLabelFieldFmtDto == nil {
 
 		return
 	}
 
-	txtFieldFmtDto.LeftMarginStr = ""
+	txtLabelFieldFmtDto.LeftMarginStr = ""
 
-	txtFieldFmtDto.FieldContents = nil
+	txtLabelFieldFmtDto.FieldContents = nil
 
-	txtFieldFmtDto.FieldLength = 0
+	txtLabelFieldFmtDto.FieldLength = 0
 
-	txtFieldFmtDto.FieldJustify = TxtJustify.None()
+	txtLabelFieldFmtDto.FieldJustify = TxtJustify.None()
 
-	txtFieldFmtDto.RightMarginStr = ""
+	txtLabelFieldFmtDto.RightMarginStr = ""
 
 	return
 }
@@ -1450,24 +1455,26 @@ func (txtLabelFieldFmtDtoAtom *textLabelFieldFormatDtoAtom) empty(
 //
 // # Input Parameters
 //
-//	txtFieldFmtDtoOne			*TextLabelFieldFormatDto
+//	txtLabelFieldFmtDtoOne			*TextLabelFieldFormatDto
 //
-//		A pointer to an instance of TextLabelFieldFormatDto.
+//		A pointer to an instance of
+//		TextLabelFieldFormatDto.
+//
 //		The data values contained within this instance
 //		will be compared to corresponding data values
 //		contained within a second TextLabelFieldFormatDto
-//		instance ('txtFieldFmtDtoTwo') in order to
+//		instance ('txtLabelFieldFmtDtoTwo') in order to
 //		determine if they are equivalent.
 //
-//	txtFieldFmtDtoTwo			*TextLabelFieldFormatDto
+//	txtLabelFieldFmtDtoTwo			*TextLabelFieldFormatDto
 //
 //		A pointer to the second of two instances of
-//		TextLabelFieldFormatDto. The data values contained
-//		within this instance will be compared to
-//		corresponding data values contained within the
+//		TextLabelFieldFormatDto. The data values
+//		contained within this instance will be compared
+//		to corresponding data values contained within the
 //		first TextLabelFieldFormatDto instance
-//		('txtFieldFmtDtoOne') in order to determine if
-//		they are equivalent.
+//		('txtLabelFieldFmtDtoOne') in order to determine
+//		if they are equivalent.
 //
 // ----------------------------------------------------------------
 //
@@ -1476,15 +1483,16 @@ func (txtLabelFieldFmtDtoAtom *textLabelFieldFormatDtoAtom) empty(
 //	bool
 //
 //		If all the data values within input parameters
-//		'txtFieldFmtDtoOne' and 'txtFieldFmtDtoTwo' are
-//		found to be equivalent in all respects, this
-//		return parameter will be set to 'true'.
+//		'txtLabelFieldFmtDtoOne' and
+//		'txtLabelFieldFmtDtoTwo' are found to be
+//		equivalent in all respects, this return parameter
+//		will be set to 'true'.
 //
 //		If the compared data values are NOT equivalent,
 //		this method returns 'false'.
 func (txtLabelFieldFmtDtoAtom *textLabelFieldFormatDtoAtom) equal(
-	txtFieldFmtDtoOne *TextLabelFieldFormatDto,
-	txtFieldFmtDtoTwo *TextLabelFieldFormatDto) bool {
+	txtLabelFieldFmtDtoOne *TextLabelFieldFormatDto,
+	txtLabelFieldFmtDtoTwo *TextLabelFieldFormatDto) bool {
 
 	if txtLabelFieldFmtDtoAtom.lock == nil {
 		txtLabelFieldFmtDtoAtom.lock = new(sync.Mutex)
@@ -1494,38 +1502,38 @@ func (txtLabelFieldFmtDtoAtom *textLabelFieldFormatDtoAtom) equal(
 
 	defer txtLabelFieldFmtDtoAtom.lock.Unlock()
 
-	if txtFieldFmtDtoOne == nil ||
-		txtFieldFmtDtoTwo == nil {
+	if txtLabelFieldFmtDtoOne == nil ||
+		txtLabelFieldFmtDtoTwo == nil {
 
 		return false
 	}
 
-	if txtFieldFmtDtoOne.LeftMarginStr !=
-		txtFieldFmtDtoTwo.LeftMarginStr {
+	if txtLabelFieldFmtDtoOne.LeftMarginStr !=
+		txtLabelFieldFmtDtoTwo.LeftMarginStr {
 
 		return false
 	}
 
-	if txtFieldFmtDtoOne.FieldContents !=
-		txtFieldFmtDtoTwo.FieldContents {
+	if txtLabelFieldFmtDtoOne.FieldContents !=
+		txtLabelFieldFmtDtoTwo.FieldContents {
 
 		return false
 	}
 
-	if txtFieldFmtDtoOne.FieldLength !=
-		txtFieldFmtDtoTwo.FieldLength {
+	if txtLabelFieldFmtDtoOne.FieldLength !=
+		txtLabelFieldFmtDtoTwo.FieldLength {
 
 		return false
 	}
 
-	if txtFieldFmtDtoOne.FieldJustify !=
-		txtFieldFmtDtoTwo.FieldJustify {
+	if txtLabelFieldFmtDtoOne.FieldJustify !=
+		txtLabelFieldFmtDtoTwo.FieldJustify {
 
 		return false
 	}
 
-	if txtFieldFmtDtoOne.RightMarginStr !=
-		txtFieldFmtDtoTwo.RightMarginStr {
+	if txtLabelFieldFmtDtoOne.RightMarginStr !=
+		txtLabelFieldFmtDtoTwo.RightMarginStr {
 
 		return false
 	}
@@ -1589,21 +1597,22 @@ func (txtLabelFieldFmtDtoAtom *textLabelFieldFormatDtoAtom) equal(
 //
 //		If this method completes successfully and all the
 //		data values contained in input parameter
-//		'txtFieldFmtDto' are judged to be valid, this
-//		returned error Type is set equal to 'nil'.
+//		'txtLabelFieldFmtDto' are judged to be valid,
+//		the returned error Type will be set equal to
+//		'nil'.
 //
 //
 //		If the data values contained in input parameter
-//		'txtFieldFmtDto' are invalid, 'error' will be
-//		non-nil and configured with an appropriate error
-//		message.
+//		'txtLabelFieldFmtDto' are invalid, the returned
+//		'error' will be non-nil and configured with an
+//		appropriate error message.
 //
 //		If an error message is returned, the text value
 //		for input parameter 'errPrefDto' (error prefix)
 //		will be prefixed or attached at the beginning of
 //		the error message.
 func (txtLabelFieldFmtDtoAtom *textLabelFieldFormatDtoAtom) testValidityOfTextFieldFmtDto(
-	txtFieldFmtDto *TextLabelFieldFormatDto,
+	txtLabelFieldFmtDto *TextLabelFieldFormatDto,
 	errPrefDto *ePref.ErrPrefixDto) (
 	isValid bool,
 	err error) {
@@ -1633,33 +1642,33 @@ func (txtLabelFieldFmtDtoAtom *textLabelFieldFormatDtoAtom) testValidityOfTextFi
 
 	}
 
-	if txtFieldFmtDto == nil {
+	if txtLabelFieldFmtDto == nil {
 
 		err = fmt.Errorf("%v\n"+
-			"ERROR: Input parameter 'txtFieldFmtDto' is a nil pointer!\n",
+			"ERROR: Input parameter 'txtLabelFieldFmtDto' is a nil pointer!\n",
 			ePrefix.String())
 
 		return isValid, err
 	}
 
-	if txtFieldFmtDto.FieldContents == nil {
+	if txtLabelFieldFmtDto.FieldContents == nil {
 
 		err = fmt.Errorf("%v\n"+
 			"ERROR: TextLabelFieldFormatDto parameter 'FieldContents' is INVALID!\n"+
-			"txtFieldFmtDto.FieldContents has a value of 'nil'.\n",
+			"txtLabelFieldFmtDto.FieldContents has a value of 'nil'.\n",
 			ePrefix.String())
 
 		return isValid, err
 	}
 
-	if txtFieldFmtDto.FieldLength < -1 {
+	if txtLabelFieldFmtDto.FieldLength < -1 {
 
 		err = fmt.Errorf("%v\n"+
 			"ERROR: TextLabelFieldFormatDto parameter 'FieldLength' is INVALID!\n"+
-			"txtFieldFmtDto.FieldLength has a value less than minus none (-1)\n"+
-			"txtFieldFmtDto.FieldLength = %v\n",
+			"txtLabelFieldFmtDto.FieldLength has a value less than minus none (-1)\n"+
+			"txtLabelFieldFmtDto.FieldLength = %v\n",
 			ePrefix.String(),
-			txtFieldFmtDto.FieldLength)
+			txtLabelFieldFmtDto.FieldLength)
 
 		return isValid, err
 	}
