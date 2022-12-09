@@ -656,7 +656,7 @@ func (textLabelFieldFormatDto *TextLabelFieldFormatDto) GetFieldContentTextLabel
 				"textLabelFieldFormatDto"))
 }
 
-// GetFormattedTextField
+// GetFormattedTextFieldStr
 //
 // Returns a string containing the formatted text field
 // generated from the current instance of
@@ -757,7 +757,7 @@ func (textLabelFieldFormatDto *TextLabelFieldFormatDto) GetFieldContentTextLabel
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (textLabelFieldFormatDto *TextLabelFieldFormatDto) GetFormattedTextField(
+func (textLabelFieldFormatDto *TextLabelFieldFormatDto) GetFormattedTextFieldStr(
 	errorPrefix interface{}) (
 	string,
 	error) {
@@ -777,7 +777,7 @@ func (textLabelFieldFormatDto *TextLabelFieldFormatDto) GetFormattedTextField(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"TextLabelFieldFormatDto."+
-			"GetFormattedTextField()",
+			"GetFormattedTextFieldStr()",
 		"")
 
 	if err != nil {
