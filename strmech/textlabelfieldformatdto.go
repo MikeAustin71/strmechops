@@ -602,12 +602,13 @@ func (textLabelFieldFormatDto *TextLabelFieldFormatDto) Equal(
 //
 //		If this method completes successfully, the Text
 //		Field Contents extracted from the current
-//		instance of TextLabelFieldFormatDto, will be returned
-//		as text label of type TextFieldSpecLabel.
+//		instance of TextLabelFieldFormatDto, will be
+//		returned as text label of type
+//		TextFieldSpecLabel.
 //
 //		This returned text label will ONLY contain the
-//		Text Field Contents. It will NOT contain the left
-//		and right margin strings.
+//		Text Field Contents ('FieldContents'). It will
+//		NOT contain the left and right margin strings.
 //
 //	error
 //
