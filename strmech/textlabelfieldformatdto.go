@@ -9,13 +9,13 @@ import (
 
 // TextLabelFieldFormatDto
 //
-// Used to specify content and format specifications for
-// a Text Field formatted for screen display, file
-// output and printing.
+// Field Format Data Transfer Objects (Dto) are used
+// to facilitate easy data entry which creating and
+// configuring text lines strings for screen display,
+// file output or printing.
 //
-// This Data Transfer Object (Dto) contains all the
-// format parameters necessary format a single text
-// field.
+// Type TextLabelFieldFormatDto contains all the format
+// parameters necessary format a single text label field.
 type TextLabelFieldFormatDto struct {
 	LeftMarginStr string
 	//	One or more characters used to create a left
@@ -66,6 +66,32 @@ type TextLabelFieldFormatDto struct {
 	//	If this parameter is submitted with a value less
 	//	than minus one (-1) or greater than 1-million
 	//	(1,000,000), an error will be returned.
+	//
+	//	Field Length Examples
+	//
+	//		Example-1
+	//          FieldContents String = "Hello World!"
+	//			FieldContents String Length = 12
+	//			FieldLength = 18
+	//			FieldJustify = TxtJustify.Center()
+	//			Text Field String =
+	//				"   Hello World!   "
+	//
+	//		Example-2
+	//          FieldContents = "Hello World!"
+	//			FieldContents String Length = 12
+	//			FieldLength = 18
+	//			FieldJustify = TxtJustify.Left()
+	//			Text Field String =
+	//				"Hello World!      "
+	//
+	//		Example-3
+	//          FieldContents = "Hello World!"
+	//			FieldContents String Length = 12
+	//			FieldLength = -1
+	//			FieldJustify = TxtJustify.Center() // Ignored
+	//			Text Field String =
+	//				"Hello World!"
 
 	FieldJustify TextJustify
 	//	An enumeration which specifies the justification
@@ -95,6 +121,32 @@ type TextLabelFieldFormatDto struct {
 	//	    TxtJustify.Left()
 	//	    TxtJustify.Right()
 	//	    TxtJustify.Center()
+	//
+	//	Text Justification Examples
+	//
+	//		Example-1
+	//          FieldContents String = "Hello World!"
+	//			FieldContents String Length = 12
+	//			FieldLength = 18
+	//			FieldJustify = TxtJustify.Center()
+	//			Text Field String =
+	//				"   Hello World!   "
+	//
+	//		Example-2
+	//          FieldContents = "Hello World!"
+	//			FieldContents String Length = 12
+	//			FieldLength = 18
+	//			FieldJustify = TxtJustify.Left()
+	//			Text Field String =
+	//				"Hello World!      "
+	//
+	//		Example-3
+	//          FieldContents = "Hello World!"
+	//			FieldContents String Length = 12
+	//			FieldLength = -1
+	//			FieldJustify = TxtJustify.Center() // Ignored
+	//			Text Field String =
+	//				"Hello World!"
 
 	RightMarginStr string
 	//	One or more characters used to create a right

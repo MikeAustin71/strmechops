@@ -7,6 +7,46 @@ import (
 	"sync"
 )
 
+// TextFillerFieldFormatDto
+//
+// Field Format Data Transfer Objects (Dto) are used
+// to facilitate easy data entry which creating and
+// configuring text lines strings for screen display,
+// file output or printing.
+//
+// Type TextFillerFieldFormatDto encapsulates all the
+// specification parameters necessary to create and
+// construct Text Filler Field strings.
+//
+// Typically, filler fields are used as margins
+// containing multiple white space characters, or line
+// separators containing multiple dashes, equal signs
+// or underscore characters. Filler fields consist of
+// filler characters ('FillerChars') and the filler
+// characters repeat count ('FillerCharsRepeatCount').
+// A filler field is made up of one or more filler
+// characters. These filler characters are repeated one
+// or more times in order to construct the complete
+// filler field as shown in the following examples:
+//
+//	Example 1:
+//	 Filler Characters = "-"
+//	 Filler Characters Repeat Count = 3
+//	 Formatted Text = "---"
+//
+//	Example 2:
+//	 Filler Characters = "-*"
+//	 Filler Characters Repeat Count = 3
+//	 Formatted Text = "-*-*-*"
+//
+// The 'FillerCharsRepeatCount' integer value is the
+// number times that 'fillerCharacters' is repeated in
+// order to construct the Filler Text Field.
+//
+// Be advised that Filler Text Fields requires a
+// 'FillerCharsRepeatCount' value greater than zero.
+// 'FillerCharsRepeatCount' values less than or equal
+// to zero constitute an error condition.
 type TextFillerFieldFormatDto struct {
 	LeftMarginStr string
 	//	One or more characters used to create a left
@@ -1642,10 +1682,11 @@ type textFillerFieldFormatDtoAtom struct {
 //
 // # IMPORTANT
 //
-//	This method will delete reset all pre-existing data
-//	values contained within the TextFillerFieldFormatDto
-//	instance passed as input parameter 'txtFieldFmtDto'
-//	to their zero or uninitialized states.
+//	This method will delete and reset all pre-existing
+//	data values contained within the
+//	TextFillerFieldFormatDto instance passed as input
+//	parameter 'txtFieldFmtDto' to their zero or
+//	uninitialized states.
 //
 // ----------------------------------------------------------------
 //
