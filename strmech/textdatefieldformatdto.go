@@ -867,6 +867,25 @@ func (textDateFieldFormatDto *TextDateFieldFormatDto) GetLeftMarginLength() int 
 	return len(textDateFieldFormatDto.LeftMarginStr)
 }
 
+// GetLeftMarginStr
+//
+// Returns the Left Margin String.
+//
+// This method is required in order to implement the
+// ITextFieldFormatDto interface.
+func (textDateFieldFormatDto *TextDateFieldFormatDto) GetLeftMarginStr() string {
+
+	if textDateFieldFormatDto.lock == nil {
+		textDateFieldFormatDto.lock = new(sync.Mutex)
+	}
+
+	textDateFieldFormatDto.lock.Lock()
+
+	defer textDateFieldFormatDto.lock.Unlock()
+
+	return textDateFieldFormatDto.LeftMarginStr
+}
+
 // textDateFieldFormatDtoNanobot - Provides helper
 // methods for TextDateFieldFormatDto.
 type textDateFieldFormatDtoNanobot struct {
