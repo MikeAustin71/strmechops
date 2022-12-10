@@ -1389,7 +1389,7 @@ func (txtFillerFieldDtoNanobot *textFillerFieldFormatDtoNanobot) copy(
 //
 //		If input parameter 'txtFillerFieldFmtDto' is
 //		found to contain invalid data values, an error
-//		will be returned
+//		will be returned.
 //
 //		None of the data values in this instance will be
 //		changed or modified.
