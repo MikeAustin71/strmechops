@@ -162,19 +162,499 @@ type TextBigFloatFieldFormatDto struct {
 	lock *sync.Mutex
 }
 
-// GetFormattedText
+// GetPureNumberStr
 //
-// Returns a string containing the formatted text
-// representation of the big.Float floating point number
-// encapsulated in the current instance of
+// Returns a pure number string representing the floating
+// point numeric value specified by the current instance
+// of TextBigFloatFieldFormatDto.
+//
+// The floating point pure number string returned by
+// this method will:
+//
+//  1. Consist entirely of numeric digit characters.
+//
+//  2. Separate integer and fractional digits with a
+//     decimal point ('.').
+//
+//  3. Designate negative values with a leading minus
+//     sign ('-').
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+// If the current instance of TextBigFloatFieldFormatDto
+// contains invalid data elements, an error will be
+// returned.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//
+//		If this method completes successfully, this
+//		string parameter will return a pure number string
+//		representation of the big.Float floating point
+//		value specified by the current instance of
+//		TextBigFloatFieldFormatDto.
+//
+//		The returned floating point pure number string
+//		will:
+//
+//		1.	Consist entirely of numeric digit characters.
+//
+//		2.	Separate integer and fractional digits with a
+//			decimal point ('.').
+//
+//		3.	Designate negative values with a leading minus
+//			sign ('-').
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (textBigFloatFieldFmtDto *TextBigFloatFieldFormatDto) GetPureNumberStr(
+	errorPrefix interface{}) (
+	string,
+	error) {
+
+	if textBigFloatFieldFmtDto.lock == nil {
+		textBigFloatFieldFmtDto.lock = new(sync.Mutex)
+	}
+
+	textBigFloatFieldFmtDto.lock.Lock()
+
+	defer textBigFloatFieldFmtDto.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextFillerFieldFormatDto."+
+			"GetPureNumberStr()",
+		"")
+
+	if err != nil {
+		return "", err
+	}
+
+	return new(textBigFloatFieldFormatDtoElectron).
+		getBigFloatPureNumberStr(
+			textBigFloatFieldFmtDto,
+			ePrefix.XCpy(
+				"textBigFloatFieldFmtDto"))
+}
+
+// textBigFloatFieldFormatDtoNanobot
+//
+// Provides helper methods for TextBigFloatFieldFormatDto.
+type textBigFloatFieldFormatDtoNanobot struct {
+	lock *sync.Mutex
+}
+
+// copy
+//
+// Copies all data from a source instance of
+// TextBigFloatFieldFormatDto to a destination instance of
 // TextBigFloatFieldFormatDto.
-func (bFloatFmtDto *TextBigFloatFieldFormatDto) GetFormattedText() string {
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will delete and overwrite all
+//	pre-existing data values contained within the
+//	TextBigFloatFieldFormatDto instance passed as input
+//	parameter 'destinationTxtBigFloatFieldFmtDto'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	destinationTxtBigFloatFieldFmtDto	*TextBigFloatFieldFormatDto
+//
+//		A pointer to an instance of TextBigFloatFieldFormatDto.
+//
+//		Data extracted from input parameter
+//		'sourceTxtFieldFmtDto' will be copied to this
+//		input parameter, 'destinationTxtFieldFmtDto'.
+//
+//		'destinationTxtFieldFmtDto' is the destination
+//		for the	copy operation.
+//
+//		If this method completes successfully, all member
+//		data variables encapsulated in
+//		'destinationTxtFieldFmtDto' will be identical to
+//		those contained in input parameter,
+//		'sourceTxtFieldFmtDto'.
+//
+//		Be advised that the pre-existing data fields
+//		contained within input parameter
+//		'destinationTxtFieldFmtDto' will be overwritten
+//		and deleted.
+//
+//	sourceTxtBigFloatFieldFmtDto		*TextBigFloatFieldFormatDto
+//
+//		A pointer to an instance of TextBigFloatFieldFormatDto.
+//
+//		All data values in this TextBigFloatFieldFormatDto
+//		instance will be copied to input parameter
+//		'destinationTxtBigFloatFieldFmtDto'.
+//
+//		'sourceTxtBigFloatFieldFmtDto' is the source of
+//		the copy operation.
+//
+//		If 'sourceTxtBigFloatFieldFmtDto' contains
+//		invalid member data variables, an error will be
+//		returned.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (txtBigFloatFieldFmtDtoNanobot *textBigFloatFieldFormatDtoNanobot) copy(
+	destinationTxtBigFloatFieldFmtDto *TextBigFloatFieldFormatDto,
+	sourceTxtBigFloatFieldFmtDto *TextBigFloatFieldFormatDto,
+	errPrefDto *ePref.ErrPrefixDto) error {
 
-	bFloatFmtDto.BigFloatNum.SetMode(
-		bFloatFmtDto.RoundingMode)
+	if txtBigFloatFieldFmtDtoNanobot.lock == nil {
+		txtBigFloatFieldFmtDtoNanobot.lock = new(sync.Mutex)
+	}
 
-	return bFloatFmtDto.BigFloatNum.Text(
-		'f', bFloatFmtDto.NumOfFractionalDigits)
+	txtBigFloatFieldFmtDtoNanobot.lock.Lock()
+
+	defer txtBigFloatFieldFmtDtoNanobot.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"textBigFloatFieldFormatDtoNanobot."+
+			"copy()",
+		"")
+
+	if err != nil {
+
+		return err
+	}
+
+	if sourceTxtBigFloatFieldFmtDto == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'sourceTxtBigFloatFieldFmtDto' is a nil pointer!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	txtBigFloatFieldFmtAtom := textBigFloatFieldFormatDtoAtom{}
+
+	_,
+		err = txtBigFloatFieldFmtAtom.
+		testValidityOfTxtBigFloatFieldFmtDto(
+			sourceTxtBigFloatFieldFmtDto,
+			ePrefix.XCpy(
+				"sourceTxtBigFloatFieldFmtDto"))
+
+	if err != nil {
+
+		return err
+	}
+
+	if destinationTxtBigFloatFieldFmtDto == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'destinationTxtBigFloatFieldFmtDto' is a nil pointer!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	txtBigFloatFieldFmtAtom.empty(
+		destinationTxtBigFloatFieldFmtDto)
+
+	destinationTxtBigFloatFieldFmtDto.LeftMarginStr =
+		sourceTxtBigFloatFieldFmtDto.LeftMarginStr
+
+	destinationTxtBigFloatFieldFmtDto.BigFloatNum.
+		Copy(&sourceTxtBigFloatFieldFmtDto.BigFloatNum)
+
+	destinationTxtBigFloatFieldFmtDto.RoundingMode =
+		sourceTxtBigFloatFieldFmtDto.RoundingMode
+
+	destinationTxtBigFloatFieldFmtDto.NumOfFractionalDigits =
+		sourceTxtBigFloatFieldFmtDto.NumOfFractionalDigits
+
+	destinationTxtBigFloatFieldFmtDto.FieldLength =
+		sourceTxtBigFloatFieldFmtDto.FieldLength
+
+	destinationTxtBigFloatFieldFmtDto.FieldJustify =
+		sourceTxtBigFloatFieldFmtDto.FieldJustify
+
+	destinationTxtBigFloatFieldFmtDto.RightMarginStr =
+		sourceTxtBigFloatFieldFmtDto.RightMarginStr
+
+	return err
+}
+
+// textBigFloatFieldFormatDtoMolecule - Provides helper methods for
+// TextBigFloatFieldFormatDto.
+type textBigFloatFieldFormatDtoMolecule struct {
+	lock *sync.Mutex
+}
+
+// getFieldContentTextLabel
+//
+// Converts a TextBigFloatFieldFormatDto instance member
+// variable, 'BigFloatNum', to an instance of
+// TextFieldSpecLabel.
+//
+// The TextBigFloatFieldFormatDto instance is passed as
+// input parameter, 'txtBigFloatFieldFmtDto'.
+//
+// The returned TextFieldSpecLabel will only contain
+// the member variable 'BigFloatNum'. It will NOT
+// contain the left and right margins.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	If input parameter 'txtBigFloatFieldFmtDto', an
+//	instance of TextBigFloatFieldFormatDto, is found to
+//	be invalid, an error will be returned.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	txtBigFloatFieldFmtDto		*TextBigFloatFieldFormatDto
+//
+//		A pointer to an instance of TextBigFloatFieldFormatDto.
+//
+//		The member variable 'BigFloatNum' will be
+//		converted to a text label of type
+//		TextFieldSpecLabel and returned to the calling
+//		function.
+//
+//		None of the data values in this instance will be
+//		changed or modified.
+//
+//		If this instance of TextBigFloatFieldFormatDto
+//		contains invalid data elements, an error will be
+//		returned.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	TextFieldSpecLabel
+//
+//		If this method completes successfully, the Text
+//		Field Contents extracted from the input
+//		parameter, 'txtBigFloatFieldFmtDto', will be
+//		returned as an instance of TextFieldSpecLabel.
+//
+//		This returned text label will ONLY contain the
+//		Big Float numeric value ('BigFloatNum'). It will
+//		NOT contain the left or right margin strings.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (txtBigFloatFieldFmtDtoMolecule *textBigFloatFieldFormatDtoMolecule) getFieldContentTextLabel(
+	txtBigFloatFieldFmtDto *TextBigFloatFieldFormatDto,
+	errPrefDto *ePref.ErrPrefixDto) (
+	TextFieldSpecLabel,
+	error) {
+
+	if txtBigFloatFieldFmtDtoMolecule.lock == nil {
+		txtBigFloatFieldFmtDtoMolecule.lock = new(sync.Mutex)
+	}
+
+	txtBigFloatFieldFmtDtoMolecule.lock.Lock()
+
+	defer txtBigFloatFieldFmtDtoMolecule.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	fieldContentsLabel := TextFieldSpecLabel{}
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"textBigFloatFieldFormatDtoMolecule."+
+			"getFieldContentTextLabel()",
+		"")
+
+	if err != nil {
+
+		return fieldContentsLabel, err
+	}
+
+	if txtBigFloatFieldFmtDto == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'txtBigFloatFieldFmtDto' is a nil pointer!\n",
+			ePrefix.String())
+
+		return fieldContentsLabel, err
+	}
+
+	var pureNumStr string
+
+	pureNumStr,
+		err = new(textBigFloatFieldFormatDtoElectron).
+		getBigFloatPureNumberStr(
+			txtBigFloatFieldFmtDto,
+			ePrefix.XCpy(
+				"txtBigFloatFieldFmtDto"))
+
+	if err != nil {
+
+		return fieldContentsLabel, err
+	}
+
+	fieldContentsLabel,
+		err = TextFieldSpecLabel{}.NewTextLabel(
+		pureNumStr,
+		txtBigFloatFieldFmtDto.FieldLength,
+		txtBigFloatFieldFmtDto.FieldJustify,
+		ePrefix.XCpy(
+			"fieldContentsLabel<-txtBigFloatFieldFmtDto"))
+
+	return fieldContentsLabel, err
 }
 
 // textBigFloatFieldFormatDtoAtom - Provides helper methods for
@@ -540,4 +1020,159 @@ func (txtBigFloatFieldFmtDtoAtom *textBigFloatFieldFormatDtoAtom) testValidityOf
 	isValid = true
 
 	return isValid, err
+}
+
+// textBigFloatFieldFormatDtoElectron - Provides helper
+// methods for TextBigFloatFieldFormatDto.
+type textBigFloatFieldFormatDtoElectron struct {
+	lock *sync.Mutex
+}
+
+// getBigFloatPureNumberStr
+//
+// Receives a pointer to an instance of
+// TextBigFloatFieldFormatDto and extracts the
+// specifications necessary to format and return a
+// floating, pure number string.
+//
+// The floating point pure number string returned by
+// this method will:
+//
+//  1. Consist entirely of numeric digit characters.
+//
+//  2. Separate integer and fractional digits with a
+//     decimal point ('.').
+//
+//  3. Designate negative values with a leading minus
+//     sign ('-').
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	txtBigFloatFieldFmtDto		*TextBigFloatFieldFormatDto
+//
+//		A pointer to an instance of
+//		TextBigFloatFieldFormatDto.
+//
+//		This instance of TextBigFloatFieldFormatDto will
+//		be converted, formatted and returned as a
+//		floating point pure number string.
+//
+//		If this instance of TextBigFloatFieldFormatDto
+//		contains invalid data elements, an error will
+//		be returned.
+//
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//
+//		If this method completes successfully, this
+//		string parameter will return a floating point
+//		pure number string representation of the
+//		big.Float value passed by input paramter,
+//		'txtBigFloatFieldFmtDto'.
+//
+//		The returned floating point pure number string
+//		will:
+//
+//		1.	Consist entirely of numeric digit characters.
+//
+//		2.	Separate integer and fractional digits with a
+//			decimal point ('.').
+//
+//		3.	Designate negative values with a leading minus
+//			sign ('-').
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (txtBigFloatFieldFmtDtoElectron *textBigFloatFieldFormatDtoElectron) getBigFloatPureNumberStr(
+	txtBigFloatFieldFmtDto *TextBigFloatFieldFormatDto,
+	errPrefDto *ePref.ErrPrefixDto) (
+	string,
+	error) {
+
+	if txtBigFloatFieldFmtDtoElectron.lock == nil {
+		txtBigFloatFieldFmtDtoElectron.lock = new(sync.Mutex)
+	}
+
+	txtBigFloatFieldFmtDtoElectron.lock.Lock()
+
+	defer txtBigFloatFieldFmtDtoElectron.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"textBigFloatFieldFormatDtoElectron."+
+			"getBigFloatPureNumberStr()",
+		"")
+
+	if err != nil {
+
+		return "", err
+
+	}
+
+	if txtBigFloatFieldFmtDto == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'txtBigFloatFieldFmtDto' is a nil pointer!\n",
+			ePrefix.String())
+
+		return "", err
+	}
+
+	_,
+		err = new(textBigFloatFieldFormatDtoAtom).
+		testValidityOfTxtBigFloatFieldFmtDto(
+			txtBigFloatFieldFmtDto,
+			ePrefix.XCpy(
+				"txtBigFloatFieldFmtDto"))
+
+	if err != nil {
+
+		return "", err
+
+	}
+
+	txtBigFloatFieldFmtDto.BigFloatNum.SetMode(
+		txtBigFloatFieldFmtDto.RoundingMode)
+
+	numStr := txtBigFloatFieldFmtDto.BigFloatNum.Text(
+		'f',
+		txtBigFloatFieldFmtDto.NumOfFractionalDigits)
+
+	return numStr, err
 }

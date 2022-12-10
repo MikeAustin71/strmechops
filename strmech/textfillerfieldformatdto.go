@@ -229,6 +229,7 @@ func (txtFillerFieldFmtDto *TextFillerFieldFormatDto) CopyIn(
 	defer txtFillerFieldFmtDto.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
+
 	var err error
 
 	ePrefix,
