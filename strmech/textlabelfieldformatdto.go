@@ -443,7 +443,7 @@ func (textLabelFieldFormatDto *TextLabelFieldFormatDto) CopyOut(
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
 
-	newTextFieldFormatDto := TextLabelFieldFormatDto{}
+	newTextLabelFieldFormatDto := TextLabelFieldFormatDto{}
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
@@ -453,17 +453,17 @@ func (textLabelFieldFormatDto *TextLabelFieldFormatDto) CopyOut(
 		"")
 
 	if err != nil {
-		return newTextFieldFormatDto, err
+		return newTextLabelFieldFormatDto, err
 	}
 
 	err = new(textLabelFieldFormatDtoNanobot).copy(
-		&newTextFieldFormatDto,
+		&newTextLabelFieldFormatDto,
 		textLabelFieldFormatDto,
 		ePrefix.XCpy(
-			"newTextFieldFormatDto<-"+
+			"newTextLabelFieldFormatDto<-"+
 				"textLabelFieldFormatDto"))
 
-	return newTextFieldFormatDto, err
+	return newTextLabelFieldFormatDto, err
 }
 
 // CopyOutITextFieldFormat
