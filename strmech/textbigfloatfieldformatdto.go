@@ -247,3 +247,136 @@ func (txtBigFloatFieldFmtDtoAtom *textBigFloatFieldFormatDtoAtom) empty(
 
 	return
 }
+
+// equal
+//
+// Compares two instances of TextBigFloatFieldFormatDto
+// and returns a boolean value signaling whether the two
+// instances are equivalent in all respects.
+//
+// If the two instances of TextBigFloatFieldFormatDto are
+// equal, this method returns 'true'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	txtBigFloatFieldFmtDtoOne		*TextBigFloatFieldFormatDto
+//
+//		A pointer to an instance of
+//		TextBigFloatFieldFormatDto.
+//
+//		The data values contained within this instance
+//		will be compared to corresponding data values
+//		contained within a second
+//		TextBigFloatFieldFormatDto instance
+//		('txtBigFloatFieldFmtDtoTwo') in order to
+//		determine if they are equivalent.
+//
+//	txtBigFloatFieldFmtDtoTwo		*TextBigFloatFieldFormatDto
+//
+//		A pointer to the second of two instances of
+//		TextBigFloatFieldFormatDto. The data values
+//		contained within this instance will be compared
+//		to corresponding data values contained within the
+//		first TextBigFloatFieldFormatDto instance
+//		('txtBigFloatFieldFmtDtoOne') in order to
+//		determine if they are equivalent.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	bool
+//
+//		If all the data values within input parameters
+//		'txtBigFloatFieldFmtDtoOne' and
+//		'txtBigFloatFieldFmtDtoTwo' are found to be
+//		equivalent in all respects, this return parameter
+//		will be set to 'true'.
+//
+//		If the compared data values are NOT equivalent,
+//		this method returns 'false'.
+func (txtBigFloatFieldFmtDtoAtom *textBigFloatFieldFormatDtoAtom) equal(
+	txtBigFloatFieldFmtDtoOne *TextBigFloatFieldFormatDto,
+	txtBigFloatFieldFmtDtoTwo *TextBigFloatFieldFormatDto) bool {
+
+	if txtBigFloatFieldFmtDtoAtom.lock == nil {
+		txtBigFloatFieldFmtDtoAtom.lock = new(sync.Mutex)
+	}
+
+	txtBigFloatFieldFmtDtoAtom.lock.Lock()
+
+	defer txtBigFloatFieldFmtDtoAtom.lock.Unlock()
+
+	if txtBigFloatFieldFmtDtoOne == nil ||
+		txtBigFloatFieldFmtDtoTwo == nil {
+
+		return false
+	}
+
+	if txtBigFloatFieldFmtDtoOne.LeftMarginStr !=
+		txtBigFloatFieldFmtDtoOne.LeftMarginStr {
+
+		return false
+	}
+
+	if txtBigFloatFieldFmtDtoOne.RoundingMode !=
+		txtBigFloatFieldFmtDtoOne.RoundingMode {
+
+		return false
+	}
+
+	if txtBigFloatFieldFmtDtoOne.NumOfFractionalDigits !=
+		txtBigFloatFieldFmtDtoOne.NumOfFractionalDigits {
+
+		return false
+	}
+
+	if txtBigFloatFieldFmtDtoOne.FieldLength !=
+		txtBigFloatFieldFmtDtoOne.FieldLength {
+
+		return false
+	}
+
+	if txtBigFloatFieldFmtDtoOne.FieldJustify !=
+		txtBigFloatFieldFmtDtoOne.FieldJustify {
+
+		return false
+	}
+
+	if txtBigFloatFieldFmtDtoOne.RightMarginStr !=
+		txtBigFloatFieldFmtDtoOne.RightMarginStr {
+
+		return false
+	}
+
+	var bFloatNumStrOne, bFloatNumStrTwo string
+	var tempBFloatOne, tempBFloatTwo big.Float
+
+	tempBFloatOne.Copy(
+		&txtBigFloatFieldFmtDtoOne.BigFloatNum)
+
+	tempBFloatOne.SetMode(
+		txtBigFloatFieldFmtDtoOne.RoundingMode)
+
+	bFloatNumStrOne = tempBFloatOne.Text(
+		'f',
+		txtBigFloatFieldFmtDtoOne.NumOfFractionalDigits)
+
+	tempBFloatTwo.Copy(
+		&txtBigFloatFieldFmtDtoTwo.BigFloatNum)
+
+	tempBFloatTwo.SetMode(
+		txtBigFloatFieldFmtDtoTwo.RoundingMode)
+
+	bFloatNumStrTwo = tempBFloatTwo.Text(
+		'f',
+		txtBigFloatFieldFmtDtoTwo.NumOfFractionalDigits)
+
+	if bFloatNumStrOne != bFloatNumStrTwo {
+		return false
+	}
+
+	return true
+}
