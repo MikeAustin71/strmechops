@@ -883,6 +883,25 @@ func (textBigFloatFieldFmtDto *TextBigFloatFieldFormatDto) GetLeftMarginLength()
 	return len(textBigFloatFieldFmtDto.LeftMarginStr)
 }
 
+// GetLeftMarginStr
+//
+// Returns the Left Margin String.
+//
+// This method is required in order to implement the
+// ITextFieldFormatDto interface.
+func (textBigFloatFieldFmtDto *TextBigFloatFieldFormatDto) GetLeftMarginStr() string {
+
+	if textBigFloatFieldFmtDto.lock == nil {
+		textBigFloatFieldFmtDto.lock = new(sync.Mutex)
+	}
+
+	textBigFloatFieldFmtDto.lock.Lock()
+
+	defer textBigFloatFieldFmtDto.lock.Unlock()
+
+	return textBigFloatFieldFmtDto.LeftMarginStr
+}
+
 // GetPureNumberStr
 //
 // Returns a pure number string representing the floating
@@ -1039,6 +1058,45 @@ func (textBigFloatFieldFmtDto *TextBigFloatFieldFormatDto) GetPureNumberStr(
 			textBigFloatFieldFmtDto,
 			ePrefix.XCpy(
 				"textBigFloatFieldFmtDto"))
+}
+
+// GetRightMarginLength
+//
+// Returns the length of the Right Margin String as an
+// integer value.
+//
+// This method is required in order to implement the
+// ITextFieldFormatDto interface.
+func (textBigFloatFieldFmtDto *TextBigFloatFieldFormatDto) GetRightMarginLength() int {
+
+	if textBigFloatFieldFmtDto.lock == nil {
+		textBigFloatFieldFmtDto.lock = new(sync.Mutex)
+	}
+
+	textBigFloatFieldFmtDto.lock.Lock()
+
+	defer textBigFloatFieldFmtDto.lock.Unlock()
+
+	return len(textBigFloatFieldFmtDto.RightMarginStr)
+}
+
+// GetRightMarginStr
+//
+// Returns the Right Margin String.
+//
+// This method is required in order to implement the
+// ITextFieldFormatDto interface.
+func (textBigFloatFieldFmtDto *TextBigFloatFieldFormatDto) GetRightMarginStr() string {
+
+	if textBigFloatFieldFmtDto.lock == nil {
+		textBigFloatFieldFmtDto.lock = new(sync.Mutex)
+	}
+
+	textBigFloatFieldFmtDto.lock.Lock()
+
+	defer textBigFloatFieldFmtDto.lock.Unlock()
+
+	return textBigFloatFieldFmtDto.RightMarginStr
 }
 
 // textBigFloatFieldFormatDtoNanobot
