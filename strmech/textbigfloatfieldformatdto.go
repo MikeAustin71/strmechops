@@ -863,6 +863,26 @@ func (textBigFloatFieldFmtDto *TextBigFloatFieldFormatDto) GetFormattedTextField
 				"textBigFloatFieldFmtDto"))
 }
 
+// GetLeftMarginLength
+//
+// Returns the length of the Left Margin String as an
+// integer value.
+//
+// This method is required in order to implement the
+// ITextFieldFormatDto interface.
+func (textBigFloatFieldFmtDto *TextBigFloatFieldFormatDto) GetLeftMarginLength() int {
+
+	if textBigFloatFieldFmtDto.lock == nil {
+		textBigFloatFieldFmtDto.lock = new(sync.Mutex)
+	}
+
+	textBigFloatFieldFmtDto.lock.Lock()
+
+	defer textBigFloatFieldFmtDto.lock.Unlock()
+
+	return len(textBigFloatFieldFmtDto.LeftMarginStr)
+}
+
 // GetPureNumberStr
 //
 // Returns a pure number string representing the floating
