@@ -1146,7 +1146,7 @@ func (textLabelFieldFormatDto *TextLabelFieldFormatDto) IsValidInstance() (
 
 	isValid,
 		_ = new(textLabelFieldFormatDtoAtom).
-		testValidityOfTextFieldFmtDto(
+		testValidityOfTextLabelFieldFmtDto(
 			textLabelFieldFormatDto,
 			nil)
 
@@ -1272,7 +1272,7 @@ func (textLabelFieldFormatDto *TextLabelFieldFormatDto) IsValidInstanceError(
 
 	_,
 		err = new(textLabelFieldFormatDtoAtom).
-		testValidityOfTextFieldFmtDto(
+		testValidityOfTextLabelFieldFmtDto(
 			textLabelFieldFormatDto,
 			ePrefix.XCpy(
 				"textLabelFieldFormatDto"))
@@ -1438,7 +1438,7 @@ func (txtLabelFieldFmtDtoNanobot *textLabelFieldFormatDtoNanobot) copy(
 
 	_,
 		err = txtFieldFmtDtoAtom.
-		testValidityOfTextFieldFmtDto(
+		testValidityOfTextLabelFieldFmtDto(
 			sourceTxtLabelFieldFmtDto,
 			ePrefix.XCpy(
 				"sourceTxtLabelFieldFmtDto"))
@@ -1766,7 +1766,7 @@ func (txtLabelFieldFmtDtoMolecule *textLabelFieldFormatDtoMolecule) getFieldCont
 
 	_,
 		err = new(textLabelFieldFormatDtoAtom).
-		testValidityOfTextFieldFmtDto(
+		testValidityOfTextLabelFieldFmtDto(
 			txtLabelFieldFmtDto,
 			ePrefix.XCpy(
 				"txtLabelFieldFmtDto"))
@@ -1968,7 +1968,7 @@ func (txtLabelFieldFmtDtoAtom *textLabelFieldFormatDtoAtom) equal(
 	return true
 }
 
-// testValidityOfTextFieldFmtDto
+// testValidityOfTextLabelFieldFmtDto
 //
 // Receives a pointer to an instance of
 // TextLabelFieldFormatDto and performs a diagnostic
@@ -2045,7 +2045,7 @@ func (txtLabelFieldFmtDtoAtom *textLabelFieldFormatDtoAtom) equal(
 //		for input parameter 'errPrefDto' (error prefix)
 //		will be prefixed or attached at the beginning of
 //		the error message.
-func (txtLabelFieldFmtDtoAtom *textLabelFieldFormatDtoAtom) testValidityOfTextFieldFmtDto(
+func (txtLabelFieldFmtDtoAtom *textLabelFieldFormatDtoAtom) testValidityOfTextLabelFieldFmtDto(
 	txtLabelFieldFmtDto *TextLabelFieldFormatDto,
 	errPrefDto *ePref.ErrPrefixDto) (
 	isValid bool,
@@ -2067,7 +2067,7 @@ func (txtLabelFieldFmtDtoAtom *textLabelFieldFormatDtoAtom) testValidityOfTextFi
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
 		"textLabelFieldFormatDtoAtom."+
-			"testValidityOfTextFieldFmtDto()",
+			"testValidityOfTextLabelFieldFmtDto()",
 		"")
 
 	if err != nil {

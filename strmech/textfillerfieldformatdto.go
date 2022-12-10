@@ -1820,7 +1820,7 @@ func (txtFillerFieldDtoAtom *textFillerFieldFormatDtoAtom) equal(
 	return true
 }
 
-// testValidityOfTextFieldFmtDto
+// testValidityOfTextLabelFieldFmtDto
 //
 // Receives a pointer to an instance of
 // TextFillerFieldFormatDto and performs a diagnostic

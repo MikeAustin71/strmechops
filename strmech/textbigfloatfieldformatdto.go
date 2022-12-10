@@ -1,6 +1,8 @@
 package strmech
 
 import (
+	"fmt"
+	ePref "github.com/MikeAustin71/errpref"
 	"math/big"
 	"sync"
 )
@@ -379,4 +381,163 @@ func (txtBigFloatFieldFmtDtoAtom *textBigFloatFieldFormatDtoAtom) equal(
 	}
 
 	return true
+}
+
+// testValidityOfTextLabelFieldFmtDto
+//
+// Receives a pointer to an instance of
+// TextBigFloatFieldFormatDto and performs a diagnostic
+// analysis to determine if the data values contained in
+// that instance are valid in all respects.
+//
+// If the input parameter 'txtBigFloatFieldFmtDto' is
+// determined to be invalid, this method will return a
+// boolean flag ('isValid') of 'false'. In addition, an
+// instance of type error ('err') will be returned
+// configured with an appropriate error message.
+//
+// If the input parameter 'txtBigFloatFieldFmtDto' is
+// valid, this method will return a boolean flag
+// ('isValid') of 'true' and the returned error type
+// ('err') will be set to 'nil'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	txtBigFloatFieldFmtDto		*TextBigFloatFieldFormatDto
+//
+//		A pointer to an instance of
+//		TextBigFloatFieldFormatDto.
+//
+//		The data values contained in this instance will
+//		be reviewed and analyzed to determine if they
+//		are valid in all respects.
+//
+//		None of the data values in this instance will be
+//		changed or modified.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	isValid						bool
+//
+//		If all data elements contained within input
+//		parameter 'txtBigFloatFieldFmtDto' are judged to
+//		be valid, this returned boolean value will be set
+//		to 'true'. If any data values are invalid, this
+//		return parameter will be set to 'false'.
+//
+//	error
+//
+//		If this method completes successfully and all the
+//		data values contained in input parameter
+//		'txtBigFloatFieldFmtDto' are judged to be valid,
+//		the returned error Type will be set equal to
+//		'nil'.
+//
+//		If the data values contained in input parameter
+//		'txtBigFloatFieldFmtDto' are invalid, the
+//		returned 'error' will be non-nil and configured
+//		with an appropriate error message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (txtBigFloatFieldFmtDtoAtom *textBigFloatFieldFormatDtoAtom) testValidityOfTxtBigFloatFieldFmtDto(
+	txtBigFloatFieldFmtDto *TextBigFloatFieldFormatDto,
+	errPrefDto *ePref.ErrPrefixDto) (
+	isValid bool,
+	err error) {
+
+	if txtBigFloatFieldFmtDtoAtom.lock == nil {
+		txtBigFloatFieldFmtDtoAtom.lock = new(sync.Mutex)
+	}
+
+	txtBigFloatFieldFmtDtoAtom.lock.Lock()
+
+	defer txtBigFloatFieldFmtDtoAtom.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	isValid = false
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"textBigFloatFieldFormatDtoAtom."+
+			"testValidityOfTxtBigFloatFieldFmtDto()",
+		"")
+
+	if err != nil {
+
+		return isValid, err
+
+	}
+
+	if txtBigFloatFieldFmtDto == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'txtLabelFieldFmtDto' is a nil pointer!\n",
+			ePrefix.String())
+
+		return isValid, err
+	}
+
+	if txtBigFloatFieldFmtDto.FieldLength < -1 {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: TextBigFloatFieldFormatDto parameter 'FieldLength' is INVALID!\n"+
+			"txtBigFloatFieldFmtDto.FieldLength has a value less than minus one (-1)\n"+
+			"txtBigFloatFieldFmtDto.FieldLength = %v\n",
+			ePrefix.String(),
+			txtBigFloatFieldFmtDto.FieldLength)
+
+		return isValid, err
+	}
+
+	if txtBigFloatFieldFmtDto.FieldLength > 1000000 {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: TextBigFloatFieldFormatDto parameter 'FieldLength' is INVALID!\n"+
+			"txtBigFloatFieldFmtDto.FieldLength has a value greater than one-million (1,000,000)\n"+
+			"txtBigFloatFieldFmtDto.FieldLength = %v\n",
+			ePrefix.String(),
+			txtBigFloatFieldFmtDto.FieldLength)
+
+		return isValid, err
+	}
+
+	if txtBigFloatFieldFmtDto.NumOfFractionalDigits < -1 {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: TextBigFloatFieldFormatDto parameter 'NumOfFractionalDigits' is INVALID!\n"+
+			"txtBigFloatFieldFmtDto.NumOfFractionalDigits has a value less than minus one (-1)\n"+
+			"txtBigFloatFieldFmtDto.NumOfFractionalDigits = %v\n",
+			ePrefix.String(),
+			txtBigFloatFieldFmtDto.NumOfFractionalDigits)
+
+		return isValid, err
+	}
+
+	isValid = true
+
+	return isValid, err
 }
