@@ -213,7 +213,7 @@ type TextLabelFieldFormatDto struct {
 //
 //		This object encapsulates error prefix text which
 //		is included in all returned error messages.
-//		Usually, it	contains the name of the calling
+//		Usually, it contains the name of the calling
 //		method or methods listed as a method or function
 //		chain of execution.
 //
@@ -349,7 +349,7 @@ func (textLabelFieldFormatDto *TextLabelFieldFormatDto) CopyIn(
 //
 //		This object encapsulates error prefix text which
 //		is included in all returned error messages.
-//		Usually, it	contains the name of the calling
+//		Usually, it contains the name of the calling
 //		method or methods listed as a method or function
 //		chain of execution.
 //
@@ -501,7 +501,7 @@ func (textLabelFieldFormatDto *TextLabelFieldFormatDto) CopyOut(
 //
 //		This object encapsulates error prefix text which
 //		is included in all returned error messages.
-//		Usually, it	contains the name of the calling
+//		Usually, it contains the name of the calling
 //		method or methods listed as a method or function
 //		chain of execution.
 //
@@ -750,7 +750,7 @@ func (textLabelFieldFormatDto *TextLabelFieldFormatDto) Equal(
 //
 //		This object encapsulates error prefix text which
 //		is included in all returned error messages.
-//		Usually, it	contains the name of the calling
+//		Usually, it contains the name of the calling
 //		method or methods listed as a method or function
 //		chain of execution.
 //
@@ -907,7 +907,7 @@ func (textLabelFieldFormatDto *TextLabelFieldFormatDto) GetFieldFormatDtoType() 
 //
 //		This object encapsulates error prefix text which
 //		is included in all returned error messages.
-//		Usually, it	contains the name of the calling
+//		Usually, it contains the name of the calling
 //		method or methods listed as a method or function
 //		chain of execution.
 //
@@ -1173,7 +1173,7 @@ func (textLabelFieldFormatDto *TextLabelFieldFormatDto) IsValidInstance() (
 //
 //		This object encapsulates error prefix text which
 //		is included in all returned error messages.
-//		Usually, it	contains the name of the calling
+//		Usually, it contains the name of the calling
 //		method or methods listed as a method or function
 //		chain of execution.
 //
