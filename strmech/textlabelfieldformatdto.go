@@ -47,7 +47,7 @@ type TextLabelFieldFormatDto struct {
 	//		       (Converts date time to string)
 	//		ITextLineSpecification
 	//		ITextFieldSpecification
-	//		BigFloatTextFormatDto - Formats big.Float numbers
+	//		TextBigFloatFieldFormatDto - Formats big.Float numbers
 	//
 	//		If the 'emptyIFace' object is not convertible to
 	//		one of the supported types, an error will be returned.
@@ -1818,10 +1818,11 @@ type textLabelFieldFormatDtoAtom struct {
 //
 // # IMPORTANT
 //
-//	This method will delete reset all pre-existing data
-//	values contained within the TextLabelFieldFormatDto
-//	instance passed as input parameter 'txtFieldFmtDto'
-//	to their zero or uninitialized states.
+//	This method will delete and reset all pre-existing
+//	data values contained within the
+//	TextLabelFieldFormatDto instance passed as input
+//	parameter 'txtFieldFmtDto' to their zero or
+//	uninitialized states.
 //
 // ----------------------------------------------------------------
 //

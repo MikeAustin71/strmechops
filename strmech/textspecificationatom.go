@@ -46,7 +46,7 @@ type textSpecificationAtom struct {
 //	               (Converts date time to string)
 //			ITextLineSpecification
 //			ITextFieldSpecification
-//			BigFloatTextFormatDto - Formats big.Float numbers
+//			TextBigFloatFieldFormatDto - Formats big.Float numbers
 //
 //			If the 'emptyIFace' object is not convertible to
 //			one of the supported types, an error will be returned.
@@ -232,15 +232,15 @@ func (txtSpecAtom *textSpecificationAtom) convertParamEmptyInterfaceToString(
 
 		return convertedString, err
 
-	case BigFloatTextFormatDto:
+	case TextBigFloatFieldFormatDto:
 
 		bigFloatFmtDto,
-			ok := emptyIFace.(BigFloatTextFormatDto)
+			ok := emptyIFace.(TextBigFloatFieldFormatDto)
 
 		if !ok {
 			err = fmt.Errorf("%v\n"+
 				"Error: Failed to convert empty interface\n"+
-				"(%v) BigFloatTextFormatDto!\n"+
+				"(%v) TextBigFloatFieldFormatDto!\n"+
 				"String Conversion Error.\n",
 				ePrefix.String(),
 				emptyIFaceParamName)
