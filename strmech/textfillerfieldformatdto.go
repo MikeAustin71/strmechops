@@ -508,7 +508,7 @@ func (txtFillerFieldFmtDto *TextFillerFieldFormatDto) CopyOutITextFieldFormat(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"TextFillerFieldFormatDto."+
-			"CopyOut()",
+			"CopyOutITextFieldFormat()",
 		"")
 
 	if err != nil {
