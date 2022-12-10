@@ -1099,6 +1099,56 @@ func (textBigFloatFieldFmtDto *TextBigFloatFieldFormatDto) GetRightMarginStr() s
 	return textBigFloatFieldFmtDto.RightMarginStr
 }
 
+// IsValidInstance
+//
+// Performs a diagnostic review of the data values
+// encapsulated in the current TextBigFloatFieldFormatDto
+// instance to determine if they are valid.
+//
+// If all data elements evaluate as valid, this method
+// returns 'true'. If any data element is invalid, this
+// method returns 'false'.
+//
+// This method is required in order to implement the
+// ITextFieldFormatDto interface.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	--- NONE ---
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	isValid						bool
+//
+//		If all data elements encapsulated by the current
+//		instance of TextBigFloatFieldFormatDto are valid,
+//		this returned boolean value is set to 'true'. If
+//		any data values are invalid, this return
+//		parameter is set to 'false'.
+func (textBigFloatFieldFmtDto *TextBigFloatFieldFormatDto) IsValidInstance() (
+	isValid bool) {
+
+	if textBigFloatFieldFmtDto.lock == nil {
+		textBigFloatFieldFmtDto.lock = new(sync.Mutex)
+	}
+
+	textBigFloatFieldFmtDto.lock.Lock()
+
+	defer textBigFloatFieldFmtDto.lock.Unlock()
+
+	isValid,
+		_ = new(textBigFloatFieldFormatDtoAtom).
+		testValidityOfTxtBigFloatFieldFmtDto(
+			textBigFloatFieldFmtDto,
+			nil)
+
+	return isValid
+}
+
 // textBigFloatFieldFormatDtoNanobot
 //
 // Provides helper methods for TextBigFloatFieldFormatDto.
