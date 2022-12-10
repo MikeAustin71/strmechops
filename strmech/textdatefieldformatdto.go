@@ -486,6 +486,63 @@ func (textDateFieldFormatDto *TextDateFieldFormatDto) Empty() {
 
 }
 
+// Equal
+//
+// Receives a pointer to another instance of
+// TextDateFieldFormatDto and proceeds to compare the
+// member variables to those contained in the current
+// TextDateFieldFormatDto instance in order to
+// determine if they are equivalent.
+//
+// A boolean flag showing the result of this comparison
+// is returned. If the member variables of both instances
+// are equal in all respects, this flag is set to 'true'.
+// Otherwise, this method returns 'false'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	incomingTxtDateFieldFmtDto		*TextDateFieldFormatDto
+//
+//		A pointer to an incoming instance of
+//		TextDateFieldFormatDto. This method will
+//		compare all member variable data values in this
+//		instance against those contained in the current
+//		instance of TextDateFieldFormatDto. If the data
+//		values in both instances are found to be equal in
+//		all respects, this method will return a boolean
+//		value of 'true'.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	bool
+//
+//		If the member variable data values contained in
+//		input parameter 'incomingTxtDateFieldFmtDto'
+//		are equal in all respects to those contained in
+//		the current instance of TextDateFieldFormatDto,
+//		this method will return a boolean value of
+//		'true'. Otherwise, a value of 'false' will be
+//		returned to the calling function.
+func (textDateFieldFormatDto *TextDateFieldFormatDto) Equal(
+	incomingTxtDateFieldFmtDto *TextDateFieldFormatDto) bool {
+
+	if textDateFieldFormatDto.lock == nil {
+		textDateFieldFormatDto.lock = new(sync.Mutex)
+	}
+
+	textDateFieldFormatDto.lock.Lock()
+
+	defer textDateFieldFormatDto.lock.Unlock()
+
+	return new(textDateFieldFormatDtoAtom).equal(
+		textDateFieldFormatDto,
+		incomingTxtDateFieldFmtDto)
+}
+
 // textDateFieldFormatDtoNanobot - Provides helper
 // methods for TextDateFieldFormatDto.
 type textDateFieldFormatDtoNanobot struct {
