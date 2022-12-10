@@ -925,6 +925,56 @@ func (textDateFieldFormatDto *TextDateFieldFormatDto) GetRightMarginStr() string
 	return textDateFieldFormatDto.RightMarginStr
 }
 
+// IsValidInstance
+//
+// Performs a diagnostic review of the data values
+// encapsulated in the current TextDateFieldFormatDto
+// instance to determine if they are valid.
+//
+// If all data elements evaluate as valid, this method
+// returns 'true'. If any data element is invalid, this
+// method returns 'false'.
+//
+// This method is required in order to implement the
+// ITextFieldFormatDto interface.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	--- NONE ---
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	isValid						bool
+//
+//		If all data elements encapsulated by the current
+//		instance of TextDateFieldFormatDto are valid,
+//		this returned boolean value is set to 'true'. If
+//		any data values are invalid, this return
+//		value is set to 'false'.
+func (textDateFieldFormatDto *TextDateFieldFormatDto) IsValidInstance() (
+	isValid bool) {
+
+	if textDateFieldFormatDto.lock == nil {
+		textDateFieldFormatDto.lock = new(sync.Mutex)
+	}
+
+	textDateFieldFormatDto.lock.Lock()
+
+	defer textDateFieldFormatDto.lock.Unlock()
+
+	isValid,
+		_ = new(textDateFieldFormatDtoAtom).
+		testValidityOfTextDateFieldFormatDto(
+			textDateFieldFormatDto,
+			nil)
+
+	return isValid
+}
+
 // textDateFieldFormatDtoNanobot - Provides helper
 // methods for TextDateFieldFormatDto.
 type textDateFieldFormatDtoNanobot struct {
