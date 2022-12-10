@@ -437,6 +437,55 @@ func (textDateFieldFormatDto *TextDateFieldFormatDto) CopyOut(
 	return newTxtDateFieldFormatDto, err
 }
 
+// Empty
+//
+// Resets all internal member variables for the current
+// instance of TextDateFieldFormatDto to their zero or
+// uninitialized states. This method will leave the
+// current instance of TextDateFieldFormatDto in an
+// invalid state and unavailable for immediate reuse.
+//
+// This method is required in order to implement the
+// ITextFieldFormatDto interface.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+// This method will delete all member variable data
+// values in the current instance of
+// TextDateFieldFormatDto. All member variable data
+// values will be reset to their zero or uninitialized
+// states.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	NONE
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	NONE
+func (textDateFieldFormatDto *TextDateFieldFormatDto) Empty() {
+
+	if textDateFieldFormatDto.lock == nil {
+		textDateFieldFormatDto.lock = new(sync.Mutex)
+	}
+
+	textDateFieldFormatDto.lock.Lock()
+
+	new(textDateFieldFormatDtoAtom).empty(
+		textDateFieldFormatDto)
+
+	textDateFieldFormatDto.lock.Unlock()
+
+	textDateFieldFormatDto.lock = nil
+
+}
+
 // textDateFieldFormatDtoNanobot - Provides helper
 // methods for TextDateFieldFormatDto.
 type textDateFieldFormatDtoNanobot struct {
