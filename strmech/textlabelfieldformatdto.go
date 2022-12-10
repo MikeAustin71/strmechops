@@ -685,7 +685,7 @@ func (textLabelFieldFormatDto *TextLabelFieldFormatDto) Empty() {
 //
 // # Input Parameters
 //
-//	incomingTxtFieldFmtDto		*TextLabelFieldFormatDto
+//	incomingTxtLabelFieldFmtDto		*TextLabelFieldFormatDto
 //
 //		A pointer to an incoming instance of
 //		TextLabelFieldFormatDto. This method will compare
@@ -710,7 +710,7 @@ func (textLabelFieldFormatDto *TextLabelFieldFormatDto) Empty() {
 //		Otherwise, a value of 'false' will be returned
 //		to the calling function.
 func (textLabelFieldFormatDto *TextLabelFieldFormatDto) Equal(
-	incomingTxtFieldFmtDto *TextLabelFieldFormatDto) bool {
+	incomingTxtLabelFieldFmtDto *TextLabelFieldFormatDto) bool {
 
 	if textLabelFieldFormatDto.lock == nil {
 		textLabelFieldFormatDto.lock = new(sync.Mutex)
@@ -722,7 +722,7 @@ func (textLabelFieldFormatDto *TextLabelFieldFormatDto) Equal(
 
 	return new(textLabelFieldFormatDtoAtom).equal(
 		textLabelFieldFormatDto,
-		incomingTxtFieldFmtDto)
+		incomingTxtLabelFieldFmtDto)
 }
 
 // GetFieldContentTextLabel

@@ -503,6 +503,64 @@ func (textBigFloatFieldFmtDto *TextBigFloatFieldFormatDto) Empty() {
 
 }
 
+// Equal
+//
+// Receives a pointer to another instance of
+// TextBigFloatFieldFormatDto and proceeds to compare the
+// member variables to those contained in the current
+// TextBigFloatFieldFormatDto instance in order to
+// determine if they are equivalent.
+//
+// A boolean flag showing the result of this comparison
+// is returned. If the member variables of both instances
+// are equal in all respects, this flag is set to 'true'.
+// Otherwise, this method returns 'false'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	incomingTxtLabelFieldFmtDto		*TextBigFloatFieldFormatDto
+//
+//		A pointer to an incoming instance of
+//		TextBigFloatFieldFormatDto. This method will
+//		compare all member variable data values in this
+//		instance against those contained in the current
+//		instance of TextBigFloatFieldFormatDto. If the
+//		data values in both instances are found to be
+//		equal in all respects, this method will return a
+//		boolean value of 'true'.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	bool
+//
+//		If the member variable data values contained in
+//		input parameter 'incomingBigFloatFieldFmtDto' are
+//		equal in all respects to those contained in the
+//		current instance of TextBigFloatFieldFormatDto,
+//		this method will return a boolean value of
+//		'true'. Otherwise, a value of 'false' will be
+//		returned to the calling function.
+func (textBigFloatFieldFmtDto *TextBigFloatFieldFormatDto) Equal(
+	incomingBigFloatFieldFmtDto *TextBigFloatFieldFormatDto) bool {
+
+	if textBigFloatFieldFmtDto.lock == nil {
+		textBigFloatFieldFmtDto.lock = new(sync.Mutex)
+	}
+
+	textBigFloatFieldFmtDto.lock.Lock()
+
+	defer textBigFloatFieldFmtDto.lock.Unlock()
+
+	return new(textBigFloatFieldFormatDtoAtom).
+		equal(
+			textBigFloatFieldFmtDto,
+			incomingBigFloatFieldFmtDto)
+}
+
 // GetPureNumberStr
 //
 // Returns a pure number string representing the floating
