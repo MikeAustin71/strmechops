@@ -704,6 +704,26 @@ func (textBigFloatFieldFmtDto *TextBigFloatFieldFormatDto) GetFieldContentTextLa
 				"textBigFloatFieldFmtDto"))
 }
 
+// GetFieldFormatDtoType
+//
+// Returns a string containing the name of this type
+// ('TextBigFloatFieldFormatDto').
+//
+// This method is required in order to implement the
+// ITextFieldFormatDto interface.
+func (textBigFloatFieldFmtDto *TextBigFloatFieldFormatDto) GetFieldFormatDtoType() string {
+
+	if textBigFloatFieldFmtDto.lock == nil {
+		textBigFloatFieldFmtDto.lock = new(sync.Mutex)
+	}
+
+	textBigFloatFieldFmtDto.lock.Lock()
+
+	defer textBigFloatFieldFmtDto.lock.Unlock()
+
+	return "TextBigFloatFieldFormatDto"
+}
+
 // GetPureNumberStr
 //
 // Returns a pure number string representing the floating
