@@ -454,6 +454,55 @@ func (textBigFloatFieldFmtDto *TextBigFloatFieldFormatDto) CopyOut(
 	return newTxtBigFloatFieldFmtDto, err
 }
 
+// Empty
+//
+// Resets all internal member variables for the current
+// instance of TextBigFloatFieldFormatDto to their zero
+// or uninitialized states. This method will leave the
+// current instance of TextBigFloatFieldFormatDto in an
+// invalid state and unavailable for immediate reuse.
+//
+// This method is required in order to implement the
+// ITextFieldFormatDto interface.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+// This method will delete all member variable data
+// values in the current instance of
+// TextBigFloatFieldFormatDto. All member variable data
+// values will be reset to their zero or uninitialized
+// states.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	NONE
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	NONE
+func (textBigFloatFieldFmtDto *TextBigFloatFieldFormatDto) Empty() {
+
+	if textBigFloatFieldFmtDto.lock == nil {
+		textBigFloatFieldFmtDto.lock = new(sync.Mutex)
+	}
+
+	textBigFloatFieldFmtDto.lock.Lock()
+
+	new(textBigFloatFieldFormatDtoAtom).empty(
+		textBigFloatFieldFmtDto)
+
+	textBigFloatFieldFmtDto.lock.Unlock()
+
+	textBigFloatFieldFmtDto.lock = nil
+
+}
+
 // GetPureNumberStr
 //
 // Returns a pure number string representing the floating
