@@ -688,6 +688,26 @@ func (textDateFieldFormatDto *TextDateFieldFormatDto) GetFieldContentTextLabel(
 				"textDateFieldFormatDto"))
 }
 
+// GetFieldFormatDtoType
+//
+// Returns a string containing the name of this type
+// ('TextDateFieldFormatDto').
+//
+// This method is required in order to implement the
+// ITextFieldFormatDto interface.
+func (textDateFieldFormatDto *TextDateFieldFormatDto) GetFieldFormatDtoType() string {
+
+	if textDateFieldFormatDto.lock == nil {
+		textDateFieldFormatDto.lock = new(sync.Mutex)
+	}
+
+	textDateFieldFormatDto.lock.Lock()
+
+	defer textDateFieldFormatDto.lock.Unlock()
+
+	return "TextDateFieldFormatDto"
+}
+
 // textDateFieldFormatDtoNanobot - Provides helper
 // methods for TextDateFieldFormatDto.
 type textDateFieldFormatDtoNanobot struct {
