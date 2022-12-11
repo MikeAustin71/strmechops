@@ -52,14 +52,14 @@ type TextLineSpecLinesCollection struct {
 //
 //				TextFieldFormatDtoBigFloat
 //				TextFieldFormatDtoDate
-//				TextLabelFieldFormatDto
+//				TextFieldFormatDtoLabel
 //				TextFillerFieldFormatDto
 //
 //		The most frequently used type is the
-//		TextLabelFieldFormatDto structure which is defined
+//		TextFieldFormatDtoLabel structure which is defined
 //		as follows:
 //
-//			type TextLabelFieldFormatDto struct {
+//			type TextFieldFormatDtoLabel struct {
 //
 //				LeftMarginStr string
 //					One or more characters used to create a left
@@ -335,7 +335,7 @@ type TextLineSpecLinesCollection struct {
 //
 //			TextFieldFormatDtoBigFloat
 //			TextFieldFormatDtoDate
-//			TextLabelFieldFormatDto
+//			TextFieldFormatDtoLabel
 //			TextFillerFieldFormatDto
 //
 //		For additional information on the

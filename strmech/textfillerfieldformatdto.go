@@ -1673,7 +1673,7 @@ type textFillerFieldFormatDtoAtom struct {
 // empty
 //
 // Receives a pointer to an instance of
-// TextLabelFieldFormatDto and proceeds to set all the
+// TextFieldFormatDtoLabel and proceeds to set all the
 // member variables to their zero or uninitialized
 // states.
 //

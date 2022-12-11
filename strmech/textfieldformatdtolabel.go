@@ -7,16 +7,16 @@ import (
 	"sync"
 )
 
-// TextLabelFieldFormatDto
+// TextFieldFormatDtoLabel
 //
 // Field Format Data Transfer Objects (Dto) are used
 // to facilitate easy data entry which creating and
 // configuring text lines strings for screen display,
 // file output or printing.
 //
-// Type TextLabelFieldFormatDto contains all the format
+// Type TextFieldFormatDtoLabel contains all the format
 // parameters necessary format a single text label field.
-type TextLabelFieldFormatDto struct {
+type TextFieldFormatDtoLabel struct {
 	LeftMarginStr string
 	//	One or more characters used to create a left
 	//	margin for this Text Label Field.
@@ -50,7 +50,7 @@ type TextLabelFieldFormatDto struct {
 	//		ITextFieldFormatDto
 	//			TextFieldFormatDtoBigFloat
 	//			TextFieldFormatDtoDate
-	//			TextLabelFieldFormatDto
+	//			TextFieldFormatDtoLabel
 	//			TextFillerFieldFormatDto
 	//
 	//		If the 'emptyIFace' object is not convertible to
@@ -186,9 +186,9 @@ type TextLabelFieldFormatDto struct {
 // CopyIn
 //
 // Copies all the data fields from an incoming instance
-// of TextLabelFieldFormatDto
+// of TextFieldFormatDtoLabel
 // ('incomingTxtLabelFieldFmtDto') to the corresponding
-// data fields of the current TextLabelFieldFormatDto
+// data fields of the current TextFieldFormatDtoLabel
 // instance ('textLabelFieldFormatDto').
 //
 // ----------------------------------------------------------------
@@ -197,7 +197,7 @@ type TextLabelFieldFormatDto struct {
 //
 //	This method will delete and overwrite all
 //	pre-existing data values contained within the
-//	current instance of TextLabelFieldFormatDto
+//	current instance of TextFieldFormatDtoLabel
 //	('textLabelFieldFormatDto').
 //
 // ----------------------------------------------------------------
@@ -218,13 +218,13 @@ type TextLabelFieldFormatDto struct {
 //
 // # Input Parameters
 //
-//	incomingTxtLabelFieldFmtDto		*TextLabelFieldFormatDto
+//	incomingTxtLabelFieldFmtDto		*TextFieldFormatDtoLabel
 //
-//		A pointer to an instance of TextLabelFieldFormatDto.
+//		A pointer to an instance of TextFieldFormatDtoLabel.
 //
 //		All the internal data field values in this
 //		instance will be copied to corresponding data
-//		fields of the current TextLabelFieldFormatDto instance.
+//		fields of the current TextFieldFormatDtoLabel instance.
 //
 //		The data fields contained in
 //		'incomingTxtFieldFmtDto' will NOT be changed or
@@ -308,8 +308,8 @@ type TextLabelFieldFormatDto struct {
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (textLabelFieldFormatDto *TextLabelFieldFormatDto) CopyIn(
-	incomingTxtLabelFieldFmtDto *TextLabelFieldFormatDto,
+func (textLabelFieldFormatDto *TextFieldFormatDtoLabel) CopyIn(
+	incomingTxtLabelFieldFmtDto *TextFieldFormatDtoLabel,
 	errorPrefix interface{}) error {
 
 	if textLabelFieldFormatDto.lock == nil {
@@ -326,7 +326,7 @@ func (textLabelFieldFormatDto *TextLabelFieldFormatDto) CopyIn(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"TextLabelFieldFormatDto."+
+		"TextFieldFormatDtoLabel."+
 			"CopyIn()",
 		"")
 
@@ -345,9 +345,9 @@ func (textLabelFieldFormatDto *TextLabelFieldFormatDto) CopyIn(
 // CopyOut
 //
 // Returns a deep copy of the current
-// TextLabelFieldFormatDto instance.
+// TextFieldFormatDtoLabel instance.
 //
-// If the current TextLabelFieldFormatDto instance
+// If the current TextFieldFormatDtoLabel instance
 // contains invalid member variable data values, this
 // method will return an error.
 //
@@ -356,14 +356,14 @@ func (textLabelFieldFormatDto *TextLabelFieldFormatDto) CopyIn(
 // # BE ADVISED
 //
 //	The original member variable data values encapsulated
-//	within the current TextLabelFieldFormatDto instance will
+//	within the current TextFieldFormatDtoLabel instance will
 //	remain unchanged with the sole exception of
-//	'TextLabelFieldFormatDto.FieldContents'.
+//	'TextFieldFormatDtoLabel.FieldContents'.
 //
-//	'TextLabelFieldFormatDto.FieldContents' will be
+//	'TextFieldFormatDtoLabel.FieldContents' will be
 //	converted to its equivalent string value and that
 //	string value will be saved to
-//	'TextLabelFieldFormatDto.FieldContents'.
+//	'TextFieldFormatDtoLabel.FieldContents'.
 //
 // ----------------------------------------------------------------
 //
@@ -432,12 +432,12 @@ func (textLabelFieldFormatDto *TextLabelFieldFormatDto) CopyIn(
 //
 // # Return Values
 //
-//	TextLabelFieldFormatDto
+//	TextFieldFormatDtoLabel
 //
 //		If this method completes successfully and no
 //		errors are encountered, this parameter will
 //		return a deep copy of the current
-//		TextLabelFieldFormatDto instance.
+//		TextFieldFormatDtoLabel instance.
 //
 //	error
 //
@@ -451,9 +451,9 @@ func (textLabelFieldFormatDto *TextLabelFieldFormatDto) CopyIn(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (textLabelFieldFormatDto *TextLabelFieldFormatDto) CopyOut(
+func (textLabelFieldFormatDto *TextFieldFormatDtoLabel) CopyOut(
 	errorPrefix interface{}) (
-	TextLabelFieldFormatDto,
+	TextFieldFormatDtoLabel,
 	error) {
 
 	if textLabelFieldFormatDto.lock == nil {
@@ -467,12 +467,12 @@ func (textLabelFieldFormatDto *TextLabelFieldFormatDto) CopyOut(
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
 
-	newTextLabelFieldFormatDto := TextLabelFieldFormatDto{}
+	newTextLabelFieldFormatDto := TextFieldFormatDtoLabel{}
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"TextLabelFieldFormatDto."+
+		"TextFieldFormatDtoLabel."+
 			"CopyOut()",
 		"")
 
@@ -493,10 +493,10 @@ func (textLabelFieldFormatDto *TextLabelFieldFormatDto) CopyOut(
 // CopyOutITextFieldFormat
 //
 // Returns a deep copy of the current
-// TextLabelFieldFormatDto instance cast as an
+// TextFieldFormatDtoLabel instance cast as an
 // ITextFieldFormatDto interface object.
 //
-// If the current TextLabelFieldFormatDto instance
+// If the current TextFieldFormatDtoLabel instance
 // contains invalid member variable data values, this
 // method will return an error.
 //
@@ -508,14 +508,14 @@ func (textLabelFieldFormatDto *TextLabelFieldFormatDto) CopyOut(
 // # BE ADVISED
 //
 //	The original member variable data values encapsulated
-//	within the current TextLabelFieldFormatDto instance will
+//	within the current TextFieldFormatDtoLabel instance will
 //	remain unchanged with the sole exception of
-//	'TextLabelFieldFormatDto.FieldContents'.
+//	'TextFieldFormatDtoLabel.FieldContents'.
 //
-//	'TextLabelFieldFormatDto.FieldContents' will be
+//	'TextFieldFormatDtoLabel.FieldContents' will be
 //	converted to its equivalent string value and that
 //	string value will be saved to
-//	'TextLabelFieldFormatDto.FieldContents'.
+//	'TextFieldFormatDtoLabel.FieldContents'.
 //
 // ----------------------------------------------------------------
 //
@@ -589,7 +589,7 @@ func (textLabelFieldFormatDto *TextLabelFieldFormatDto) CopyOut(
 //		If this method completes successfully and no
 //		errors are encountered, this parameter will
 //		return a deep copy of the current
-//		TextLabelFieldFormatDto instance cast as an
+//		TextFieldFormatDtoLabel instance cast as an
 //		ITextFieldFormatDto interface object.
 //
 //	error
@@ -604,7 +604,7 @@ func (textLabelFieldFormatDto *TextLabelFieldFormatDto) CopyOut(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (textLabelFieldFormatDto *TextLabelFieldFormatDto) CopyOutITextFieldFormat(
+func (textLabelFieldFormatDto *TextFieldFormatDtoLabel) CopyOutITextFieldFormat(
 	errorPrefix interface{}) (
 	ITextFieldFormatDto,
 	error) {
@@ -620,12 +620,12 @@ func (textLabelFieldFormatDto *TextLabelFieldFormatDto) CopyOutITextFieldFormat(
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
 
-	newTextFieldFormatDto := TextLabelFieldFormatDto{}
+	newTextFieldFormatDto := TextFieldFormatDtoLabel{}
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"TextLabelFieldFormatDto."+
+		"TextFieldFormatDtoLabel."+
 			"CopyOutITextFieldFormat()",
 		"")
 
@@ -646,9 +646,9 @@ func (textLabelFieldFormatDto *TextLabelFieldFormatDto) CopyOutITextFieldFormat(
 // Empty
 //
 // Resets all internal member variables for the current
-// instance of TextLabelFieldFormatDto to their zero or
+// instance of TextFieldFormatDtoLabel to their zero or
 // uninitialized states. This method will leave the
-// current instance of TextLabelFieldFormatDto in an invalid
+// current instance of TextFieldFormatDtoLabel in an invalid
 // state and unavailable for immediate reuse.
 //
 // This method is required in order to implement the
@@ -659,7 +659,7 @@ func (textLabelFieldFormatDto *TextLabelFieldFormatDto) CopyOutITextFieldFormat(
 // # IMPORTANT
 //
 // This method will delete all member variable data
-// values in the current instance of TextLabelFieldFormatDto.
+// values in the current instance of TextFieldFormatDtoLabel.
 // All member variable data values will be reset to their
 // zero or uninitialized states.
 //
@@ -674,7 +674,7 @@ func (textLabelFieldFormatDto *TextLabelFieldFormatDto) CopyOutITextFieldFormat(
 // # Return Values
 //
 //	NONE
-func (textLabelFieldFormatDto *TextLabelFieldFormatDto) Empty() {
+func (textLabelFieldFormatDto *TextFieldFormatDtoLabel) Empty() {
 
 	if textLabelFieldFormatDto.lock == nil {
 		textLabelFieldFormatDto.lock = new(sync.Mutex)
@@ -695,9 +695,9 @@ func (textLabelFieldFormatDto *TextLabelFieldFormatDto) Empty() {
 // Equal
 //
 // Receives a pointer to another instance of
-// TextLabelFieldFormatDto and proceeds to compare the
+// TextFieldFormatDtoLabel and proceeds to compare the
 // member variables to those contained in the current
-// TextLabelFieldFormatDto instance in order to determine
+// TextFieldFormatDtoLabel instance in order to determine
 // if they are equivalent.
 //
 // A boolean flag showing the result of this comparison
@@ -709,13 +709,13 @@ func (textLabelFieldFormatDto *TextLabelFieldFormatDto) Empty() {
 //
 // # Input Parameters
 //
-//	incomingTxtLabelFieldFmtDto		*TextLabelFieldFormatDto
+//	incomingTxtLabelFieldFmtDto		*TextFieldFormatDtoLabel
 //
 //		A pointer to an incoming instance of
-//		TextLabelFieldFormatDto. This method will compare
+//		TextFieldFormatDtoLabel. This method will compare
 //		all member variable data values in this instance
 //		against those contained in the current instance
-//		of TextLabelFieldFormatDto. If the data values in
+//		of TextFieldFormatDtoLabel. If the data values in
 //		both instances are found to be equal in all
 //		respects, this method will return a boolean value
 //		of 'true'.
@@ -729,12 +729,12 @@ func (textLabelFieldFormatDto *TextLabelFieldFormatDto) Empty() {
 //		If the member variable data values contained in
 //		input parameter 'incomingTxtFieldFmtDto' are
 //		equal in all respects to those contained in the
-//		current instance of TextLabelFieldFormatDto, this
+//		current instance of TextFieldFormatDtoLabel, this
 //		method will return a boolean value of 'true'.
 //		Otherwise, a value of 'false' will be returned
 //		to the calling function.
-func (textLabelFieldFormatDto *TextLabelFieldFormatDto) Equal(
-	incomingTxtLabelFieldFmtDto *TextLabelFieldFormatDto) bool {
+func (textLabelFieldFormatDto *TextFieldFormatDtoLabel) Equal(
+	incomingTxtLabelFieldFmtDto *TextFieldFormatDtoLabel) bool {
 
 	if textLabelFieldFormatDto.lock == nil {
 		textLabelFieldFormatDto.lock = new(sync.Mutex)
@@ -751,7 +751,7 @@ func (textLabelFieldFormatDto *TextLabelFieldFormatDto) Equal(
 
 // GetFieldContentTextLabel
 //
-// Converts the current TextLabelFieldFormatDto instance
+// Converts the current TextFieldFormatDtoLabel instance
 // member variable, 'FieldContents', to an instance of
 // TextFieldSpecLabel.
 //
@@ -837,7 +837,7 @@ func (textLabelFieldFormatDto *TextLabelFieldFormatDto) Equal(
 //
 //		If this method completes successfully, the Text
 //		Field Contents extracted from the current
-//		instance of TextLabelFieldFormatDto, will be
+//		instance of TextFieldFormatDtoLabel, will be
 //		returned as text label of type
 //		TextFieldSpecLabel.
 //
@@ -857,7 +857,7 @@ func (textLabelFieldFormatDto *TextLabelFieldFormatDto) Equal(
 //		for input parameter 'errPrefDto' (error prefix)
 //		will be prefixed or attached at the beginning of
 //		the error message.
-func (textLabelFieldFormatDto *TextLabelFieldFormatDto) GetFieldContentTextLabel(
+func (textLabelFieldFormatDto *TextFieldFormatDtoLabel) GetFieldContentTextLabel(
 	errorPrefix interface{}) (
 	TextFieldSpecLabel,
 	error) {
@@ -876,7 +876,7 @@ func (textLabelFieldFormatDto *TextLabelFieldFormatDto) GetFieldContentTextLabel
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"TextLabelFieldFormatDto."+
+		"TextFieldFormatDtoLabel."+
 			"GetFieldContentTextLabel()",
 		"")
 
@@ -894,11 +894,11 @@ func (textLabelFieldFormatDto *TextLabelFieldFormatDto) GetFieldContentTextLabel
 // GetFieldFormatDtoType
 //
 // Returns a string containing the name of this type
-// ('TextLabelFieldFormatDto').
+// ('TextFieldFormatDtoLabel').
 //
 // This method is required in order to implement the
 // ITextFieldFormatDto interface.
-func (textLabelFieldFormatDto *TextLabelFieldFormatDto) GetFieldFormatDtoType() string {
+func (textLabelFieldFormatDto *TextFieldFormatDtoLabel) GetFieldFormatDtoType() string {
 
 	if textLabelFieldFormatDto.lock == nil {
 		textLabelFieldFormatDto.lock = new(sync.Mutex)
@@ -908,14 +908,14 @@ func (textLabelFieldFormatDto *TextLabelFieldFormatDto) GetFieldFormatDtoType() 
 
 	defer textLabelFieldFormatDto.lock.Unlock()
 
-	return "TextLabelFieldFormatDto"
+	return "TextFieldFormatDtoLabel"
 }
 
 // GetFormattedTextFieldStr
 //
 // Returns a string containing the formatted text field
 // generated from the current instance of
-// TextLabelFieldFormatDto.
+// TextFieldFormatDtoLabel.
 //
 // The returned formatted text field string contains the
 // left margin, field contents and right margin.
@@ -994,14 +994,14 @@ func (textLabelFieldFormatDto *TextLabelFieldFormatDto) GetFieldFormatDtoType() 
 //
 //		If this method completes successfully, the text
 //		field specifications contained in the current
-//		instance of TextLabelFieldFormatDto will be
+//		instance of TextFieldFormatDtoLabel will be
 //		converted to, and returned as, a formatted text
 //		field string.
 //
 //		The returned text field string will contain the
 //		left margin, text field contents and right margin
 //		as those elements are defined in the current
-//		instance of TextLabelFieldFormatDto.
+//		instance of TextFieldFormatDtoLabel.
 //
 //	error
 //
@@ -1015,7 +1015,7 @@ func (textLabelFieldFormatDto *TextLabelFieldFormatDto) GetFieldFormatDtoType() 
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (textLabelFieldFormatDto *TextLabelFieldFormatDto) GetFormattedTextFieldStr(
+func (textLabelFieldFormatDto *TextFieldFormatDtoLabel) GetFormattedTextFieldStr(
 	errorPrefix interface{}) (
 	string,
 	error) {
@@ -1034,7 +1034,7 @@ func (textLabelFieldFormatDto *TextLabelFieldFormatDto) GetFormattedTextFieldStr
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"TextLabelFieldFormatDto."+
+		"TextFieldFormatDtoLabel."+
 			"GetFormattedTextFieldStr()",
 		"")
 
@@ -1056,7 +1056,7 @@ func (textLabelFieldFormatDto *TextLabelFieldFormatDto) GetFormattedTextFieldStr
 //
 // This method is required in order to implement the
 // ITextFieldFormatDto interface.
-func (textLabelFieldFormatDto *TextLabelFieldFormatDto) GetLeftMarginLength() int {
+func (textLabelFieldFormatDto *TextFieldFormatDtoLabel) GetLeftMarginLength() int {
 
 	if textLabelFieldFormatDto.lock == nil {
 		textLabelFieldFormatDto.lock = new(sync.Mutex)
@@ -1075,7 +1075,7 @@ func (textLabelFieldFormatDto *TextLabelFieldFormatDto) GetLeftMarginLength() in
 //
 // This method is required in order to implement the
 // ITextFieldFormatDto interface.
-func (textLabelFieldFormatDto *TextLabelFieldFormatDto) GetLeftMarginStr() string {
+func (textLabelFieldFormatDto *TextFieldFormatDtoLabel) GetLeftMarginStr() string {
 
 	if textLabelFieldFormatDto.lock == nil {
 		textLabelFieldFormatDto.lock = new(sync.Mutex)
@@ -1095,7 +1095,7 @@ func (textLabelFieldFormatDto *TextLabelFieldFormatDto) GetLeftMarginStr() strin
 //
 // This method is required in order to implement the
 // ITextFieldFormatDto interface.
-func (textLabelFieldFormatDto *TextLabelFieldFormatDto) GetRightMarginLength() int {
+func (textLabelFieldFormatDto *TextFieldFormatDtoLabel) GetRightMarginLength() int {
 
 	if textLabelFieldFormatDto.lock == nil {
 		textLabelFieldFormatDto.lock = new(sync.Mutex)
@@ -1114,7 +1114,7 @@ func (textLabelFieldFormatDto *TextLabelFieldFormatDto) GetRightMarginLength() i
 //
 // This method is required in order to implement the
 // ITextFieldFormatDto interface.
-func (textLabelFieldFormatDto *TextLabelFieldFormatDto) GetRightMarginStr() string {
+func (textLabelFieldFormatDto *TextFieldFormatDtoLabel) GetRightMarginStr() string {
 
 	if textLabelFieldFormatDto.lock == nil {
 		textLabelFieldFormatDto.lock = new(sync.Mutex)
@@ -1130,7 +1130,7 @@ func (textLabelFieldFormatDto *TextLabelFieldFormatDto) GetRightMarginStr() stri
 // IsValidInstance
 //
 // Performs a diagnostic review of the data values
-// encapsulated in the current TextLabelFieldFormatDto
+// encapsulated in the current TextFieldFormatDtoLabel
 // instance to determine if they are valid.
 //
 // If all data elements evaluate as valid, this method
@@ -1153,11 +1153,11 @@ func (textLabelFieldFormatDto *TextLabelFieldFormatDto) GetRightMarginStr() stri
 //	isValid						bool
 //
 //		If all data elements encapsulated by the current
-//		instance of TextLabelFieldFormatDto are valid,
+//		instance of TextFieldFormatDtoLabel are valid,
 //		this returned boolean value is set to 'true'. If
 //		any data values are invalid, this return
 //		parameter is set to 'false'.
-func (textLabelFieldFormatDto *TextLabelFieldFormatDto) IsValidInstance() (
+func (textLabelFieldFormatDto *TextFieldFormatDtoLabel) IsValidInstance() (
 	isValid bool) {
 
 	if textLabelFieldFormatDto.lock == nil {
@@ -1180,7 +1180,7 @@ func (textLabelFieldFormatDto *TextLabelFieldFormatDto) IsValidInstance() (
 // IsValidInstanceError
 //
 // Performs a diagnostic review of the data values
-// encapsulated in the current TextLabelFieldFormatDto
+// encapsulated in the current TextFieldFormatDtoLabel
 // instance to determine if they are valid.
 //
 // If any data element evaluates as invalid, this method
@@ -1260,7 +1260,7 @@ func (textLabelFieldFormatDto *TextLabelFieldFormatDto) IsValidInstance() (
 //
 //		If any of the internal member data variables
 //		contained in the current instance of
-//		TextLabelFieldFormatDto are found to be invalid,
+//		TextFieldFormatDtoLabel are found to be invalid,
 //		this method will return an error containing an
 //		appropriate error message.
 //
@@ -1269,7 +1269,7 @@ func (textLabelFieldFormatDto *TextLabelFieldFormatDto) IsValidInstance() (
 //		and text passed by input parameter, 'errorPrefix'.
 //		The 'errorPrefix' text will be attached to the
 //		beginning of the error message.
-func (textLabelFieldFormatDto *TextLabelFieldFormatDto) IsValidInstanceError(
+func (textLabelFieldFormatDto *TextFieldFormatDtoLabel) IsValidInstanceError(
 	errorPrefix interface{}) error {
 
 	if textLabelFieldFormatDto.lock == nil {
@@ -1286,7 +1286,7 @@ func (textLabelFieldFormatDto *TextLabelFieldFormatDto) IsValidInstanceError(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"TextLabelFieldFormatDto."+
+		"TextFieldFormatDtoLabel."+
 			"IsValidInstanceError()",
 		"")
 
@@ -1305,7 +1305,7 @@ func (textLabelFieldFormatDto *TextLabelFieldFormatDto) IsValidInstanceError(
 }
 
 // textLabelFieldFormatDtoNanobot - Provides helper methods for
-// TextLabelFieldFormatDto.
+// TextFieldFormatDtoLabel.
 type textLabelFieldFormatDtoNanobot struct {
 	lock *sync.Mutex
 }
@@ -1313,8 +1313,8 @@ type textLabelFieldFormatDtoNanobot struct {
 // copy
 //
 // Copies all data from a source instance of
-// TextLabelFieldFormatDto to a destination instance of
-// TextLabelFieldFormatDto.
+// TextFieldFormatDtoLabel to a destination instance of
+// TextFieldFormatDtoLabel.
 //
 // ----------------------------------------------------------------
 //
@@ -1322,7 +1322,7 @@ type textLabelFieldFormatDtoNanobot struct {
 //
 //	This method will delete and overwrite all
 //	pre-existing data values contained within the
-//	TextLabelFieldFormatDto instance passed as input
+//	TextFieldFormatDtoLabel instance passed as input
 //	parameter 'destinationTxtFieldFmtDto'.
 //
 // ----------------------------------------------------------------
@@ -1342,9 +1342,9 @@ type textLabelFieldFormatDtoNanobot struct {
 //
 // # Input Parameters
 //
-//	destinationTxtFieldFmtDto	*TextLabelFieldFormatDto
+//	destinationTxtFieldFmtDto	*TextFieldFormatDtoLabel
 //
-//		A pointer to an instance of TextLabelFieldFormatDto.
+//		A pointer to an instance of TextFieldFormatDtoLabel.
 //
 //		Data extracted from input parameter
 //		'sourceTxtFieldFmtDto' will be copied to this
@@ -1364,11 +1364,11 @@ type textLabelFieldFormatDtoNanobot struct {
 //		'destinationTxtFieldFmtDto' will be overwritten
 //		and deleted.
 //
-//	sourceTxtFieldFmtDto		*TextLabelFieldFormatDto
+//	sourceTxtFieldFmtDto		*TextFieldFormatDtoLabel
 //
-//		A pointer to an instance of TextLabelFieldFormatDto.
+//		A pointer to an instance of TextFieldFormatDtoLabel.
 //
-//		All data values in this TextLabelFieldFormatDto
+//		All data values in this TextFieldFormatDtoLabel
 //		instance will be copied to input parameter
 //		'destinationTxtFieldFmtDto'.
 //
@@ -1420,8 +1420,8 @@ type textLabelFieldFormatDtoNanobot struct {
 //		text will be attached to the beginning of the
 //		error message.
 func (txtLabelFieldFmtDtoNanobot *textLabelFieldFormatDtoNanobot) copy(
-	destinationTxtLabelFieldFmtDto *TextLabelFieldFormatDto,
-	sourceTxtLabelFieldFmtDto *TextLabelFieldFormatDto,
+	destinationTxtLabelFieldFmtDto *TextFieldFormatDtoLabel,
+	sourceTxtLabelFieldFmtDto *TextFieldFormatDtoLabel,
 	errPrefDto *ePref.ErrPrefixDto) error {
 
 	if txtLabelFieldFmtDtoNanobot.lock == nil {
@@ -1524,7 +1524,7 @@ func (txtLabelFieldFmtDtoNanobot *textLabelFieldFormatDtoNanobot) copy(
 
 // getFormattedTextFieldStr
 //
-// Converts an instance of TextLabelFieldFormatDto to a
+// Converts an instance of TextFieldFormatDtoLabel to a
 // formatted text field string.
 //
 // This formatted text field string contains the left
@@ -1534,9 +1534,9 @@ func (txtLabelFieldFmtDtoNanobot *textLabelFieldFormatDtoNanobot) copy(
 //
 // # Input Parameters
 //
-//	txtLabelFieldFmtDto			*TextLabelFieldFormatDto
+//	txtLabelFieldFmtDto			*TextFieldFormatDtoLabel
 //
-//		A pointer to an instance of TextLabelFieldFormatDto.
+//		A pointer to an instance of TextFieldFormatDtoLabel.
 //
 //		The left and right margins as well as the member
 //		variable 'FieldContents' will be processed and
@@ -1589,7 +1589,7 @@ func (txtLabelFieldFmtDtoNanobot *textLabelFieldFormatDtoNanobot) copy(
 //		will be prefixed or attached at the beginning of
 //		the error message.
 func (txtLabelFieldFmtDtoNanobot *textLabelFieldFormatDtoNanobot) getFormattedTextFieldStr(
-	txtLabelFieldFmtDto *TextLabelFieldFormatDto,
+	txtLabelFieldFmtDto *TextFieldFormatDtoLabel,
 	errPrefDto *ePref.ErrPrefixDto) (
 	string,
 	error) {
@@ -1663,18 +1663,18 @@ func (txtLabelFieldFmtDtoNanobot *textLabelFieldFormatDtoNanobot) getFormattedTe
 }
 
 // textLabelFieldFormatDtoMolecule - Provides helper methods for
-// TextLabelFieldFormatDto.
+// TextFieldFormatDtoLabel.
 type textLabelFieldFormatDtoMolecule struct {
 	lock *sync.Mutex
 }
 
 // getFieldContentTextLabel
 //
-// Converts a TextLabelFieldFormatDto instance member
+// Converts a TextFieldFormatDtoLabel instance member
 // variable, 'FieldContents', to an instance of
 // TextFieldSpecLabel.
 //
-// The TextLabelFieldFormatDto instance is passed as
+// The TextFieldFormatDtoLabel instance is passed as
 // input parameter, 'txtLabelFieldFmtDto'.
 //
 // The returned TextFieldSpecLabel will only contain
@@ -1686,16 +1686,16 @@ type textLabelFieldFormatDtoMolecule struct {
 // # BE ADVISED
 //
 //	If input parameter 'txtLabelFieldFmtDto', an instance
-//	of TextLabelFieldFormatDto, is found to be invalid,
+//	of TextFieldFormatDtoLabel, is found to be invalid,
 //	an error will be returned.
 //
 // ----------------------------------------------------------------
 //
 // # Input Parameters
 //
-//	txtLabelFieldFmtDto			*TextLabelFieldFormatDto
+//	txtLabelFieldFmtDto			*TextFieldFormatDtoLabel
 //
-//		A pointer to an instance of TextLabelFieldFormatDto.
+//		A pointer to an instance of TextFieldFormatDtoLabel.
 //
 //		The member variable 'FieldContents' will be
 //		converted to a text label of type
@@ -1748,7 +1748,7 @@ type textLabelFieldFormatDtoMolecule struct {
 //		will be prefixed or attached at the beginning of
 //		the error message.
 func (txtLabelFieldFmtDtoMolecule *textLabelFieldFormatDtoMolecule) getFieldContentTextLabel(
-	txtLabelFieldFmtDto *TextLabelFieldFormatDto,
+	txtLabelFieldFmtDto *TextFieldFormatDtoLabel,
 	errPrefDto *ePref.ErrPrefixDto) (
 	TextFieldSpecLabel,
 	error) {
@@ -1826,7 +1826,7 @@ func (txtLabelFieldFmtDtoMolecule *textLabelFieldFormatDtoMolecule) getFieldCont
 }
 
 // textLabelFieldFormatDtoAtom - Provides helper methods for
-// TextLabelFieldFormatDto.
+// TextFieldFormatDtoLabel.
 type textLabelFieldFormatDtoAtom struct {
 	lock *sync.Mutex
 }
@@ -1834,7 +1834,7 @@ type textLabelFieldFormatDtoAtom struct {
 // empty
 //
 // Receives a pointer to an instance of
-// TextLabelFieldFormatDto and proceeds to set all the
+// TextFieldFormatDtoLabel and proceeds to set all the
 // member variables to their zero or uninitialized
 // states.
 //
@@ -1844,7 +1844,7 @@ type textLabelFieldFormatDtoAtom struct {
 //
 //	This method will delete and reset all pre-existing
 //	data values contained within the
-//	TextLabelFieldFormatDto instance passed as input
+//	TextFieldFormatDtoLabel instance passed as input
 //	parameter 'txtFieldFmtDto' to their zero or
 //	uninitialized states.
 //
@@ -1852,9 +1852,9 @@ type textLabelFieldFormatDtoAtom struct {
 //
 // # Input Parameters
 //
-//	txtFieldFmtDto				*TextLabelFieldFormatDto
+//	txtFieldFmtDto				*TextFieldFormatDtoLabel
 //
-//		A pointer to an instance of TextLabelFieldFormatDto.
+//		A pointer to an instance of TextFieldFormatDtoLabel.
 //		All data values contained within this instance
 //		will be deleted and reset to their zero or
 //		uninitialized states.
@@ -1865,7 +1865,7 @@ type textLabelFieldFormatDtoAtom struct {
 //
 //	NONE
 func (txtLabelFieldFmtDtoAtom *textLabelFieldFormatDtoAtom) empty(
-	txtLabelFieldFmtDto *TextLabelFieldFormatDto) {
+	txtLabelFieldFmtDto *TextFieldFormatDtoLabel) {
 
 	if txtLabelFieldFmtDtoAtom.lock == nil {
 		txtLabelFieldFmtDtoAtom.lock = new(sync.Mutex)
@@ -1895,35 +1895,35 @@ func (txtLabelFieldFmtDtoAtom *textLabelFieldFormatDtoAtom) empty(
 
 // equal
 //
-// Compares two instances of TextLabelFieldFormatDto and
+// Compares two instances of TextFieldFormatDtoLabel and
 // returns a boolean value signaling whether the two
 // instances are equivalent in all respects.
 //
-// If the two instances of TextLabelFieldFormatDto are equal,
+// If the two instances of TextFieldFormatDtoLabel are equal,
 // this method returns 'true'.
 //
 // ----------------------------------------------------------------
 //
 // # Input Parameters
 //
-//	txtLabelFieldFmtDtoOne			*TextLabelFieldFormatDto
+//	txtLabelFieldFmtDtoOne			*TextFieldFormatDtoLabel
 //
 //		A pointer to an instance of
-//		TextLabelFieldFormatDto.
+//		TextFieldFormatDtoLabel.
 //
 //		The data values contained within this instance
 //		will be compared to corresponding data values
-//		contained within a second TextLabelFieldFormatDto
+//		contained within a second TextFieldFormatDtoLabel
 //		instance ('txtLabelFieldFmtDtoTwo') in order to
 //		determine if they are equivalent.
 //
-//	txtLabelFieldFmtDtoTwo			*TextLabelFieldFormatDto
+//	txtLabelFieldFmtDtoTwo			*TextFieldFormatDtoLabel
 //
 //		A pointer to the second of two instances of
-//		TextLabelFieldFormatDto. The data values
+//		TextFieldFormatDtoLabel. The data values
 //		contained within this instance will be compared
 //		to corresponding data values contained within the
-//		first TextLabelFieldFormatDto instance
+//		first TextFieldFormatDtoLabel instance
 //		('txtLabelFieldFmtDtoOne') in order to determine
 //		if they are equivalent.
 //
@@ -1942,8 +1942,8 @@ func (txtLabelFieldFmtDtoAtom *textLabelFieldFormatDtoAtom) empty(
 //		If the compared data values are NOT equivalent,
 //		this method returns 'false'.
 func (txtLabelFieldFmtDtoAtom *textLabelFieldFormatDtoAtom) equal(
-	txtLabelFieldFmtDtoOne *TextLabelFieldFormatDto,
-	txtLabelFieldFmtDtoTwo *TextLabelFieldFormatDto) bool {
+	txtLabelFieldFmtDtoOne *TextFieldFormatDtoLabel,
+	txtLabelFieldFmtDtoTwo *TextFieldFormatDtoLabel) bool {
 
 	if txtLabelFieldFmtDtoAtom.lock == nil {
 		txtLabelFieldFmtDtoAtom.lock = new(sync.Mutex)
@@ -1995,7 +1995,7 @@ func (txtLabelFieldFmtDtoAtom *textLabelFieldFormatDtoAtom) equal(
 // testValidityOfTextLabelFieldFmtDto
 //
 // Receives a pointer to an instance of
-// TextLabelFieldFormatDto and performs a diagnostic
+// TextFieldFormatDtoLabel and performs a diagnostic
 // analysis to determine if the data values contained in
 // that instance are valid in all respects.
 //
@@ -2014,9 +2014,9 @@ func (txtLabelFieldFmtDtoAtom *textLabelFieldFormatDtoAtom) equal(
 //
 // # Input Parameters
 //
-//	txtLabelFieldFmtDto			*TextLabelFieldFormatDto
+//	txtLabelFieldFmtDto			*TextFieldFormatDtoLabel
 //
-//		A pointer to an instance of TextLabelFieldFormatDto.
+//		A pointer to an instance of TextFieldFormatDtoLabel.
 //
 //		The data values contained in this instance will
 //		be reviewed and analyzed to determine if they
@@ -2070,7 +2070,7 @@ func (txtLabelFieldFmtDtoAtom *textLabelFieldFormatDtoAtom) equal(
 //		will be prefixed or attached at the beginning of
 //		the error message.
 func (txtLabelFieldFmtDtoAtom *textLabelFieldFormatDtoAtom) testValidityOfTextLabelFieldFmtDto(
-	txtLabelFieldFmtDto *TextLabelFieldFormatDto,
+	txtLabelFieldFmtDto *TextFieldFormatDtoLabel,
 	errPrefDto *ePref.ErrPrefixDto) (
 	isValid bool,
 	err error) {
@@ -2112,7 +2112,7 @@ func (txtLabelFieldFmtDtoAtom *textLabelFieldFormatDtoAtom) testValidityOfTextLa
 	if txtLabelFieldFmtDto.FieldContents == nil {
 
 		err = fmt.Errorf("%v\n"+
-			"ERROR: TextLabelFieldFormatDto parameter 'FieldContents' is INVALID!\n"+
+			"ERROR: TextFieldFormatDtoLabel parameter 'FieldContents' is INVALID!\n"+
 			"txtLabelFieldFmtDto.FieldContents has a value of 'nil'.\n",
 			ePrefix.String())
 
@@ -2122,7 +2122,7 @@ func (txtLabelFieldFmtDtoAtom *textLabelFieldFormatDtoAtom) testValidityOfTextLa
 	if txtLabelFieldFmtDto.FieldLength < -1 {
 
 		err = fmt.Errorf("%v\n"+
-			"ERROR: TextLabelFieldFormatDto parameter 'FieldLength' is INVALID!\n"+
+			"ERROR: TextFieldFormatDtoLabel parameter 'FieldLength' is INVALID!\n"+
 			"txtLabelFieldFmtDto.FieldLength has a value less than minus one (-1)\n"+
 			"txtLabelFieldFmtDto.FieldLength = %v\n",
 			ePrefix.String(),
@@ -2134,7 +2134,7 @@ func (txtLabelFieldFmtDtoAtom *textLabelFieldFormatDtoAtom) testValidityOfTextLa
 	if txtLabelFieldFmtDto.FieldLength > 1000000 {
 
 		err = fmt.Errorf("%v\n"+
-			"ERROR: TextLabelFieldFormatDto parameter 'FieldLength' is INVALID!\n"+
+			"ERROR: TextFieldFormatDtoLabel parameter 'FieldLength' is INVALID!\n"+
 			"txtLabelFieldFmtDto.FieldLength has a value greater than one-million (1,000,000)\n"+
 			"txtLabelFieldFmtDto.FieldLength = %v\n",
 			ePrefix.String(),
