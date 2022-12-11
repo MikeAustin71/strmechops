@@ -1195,7 +1195,7 @@ func (textBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat) GetPureNumberStr(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"TextFillerFieldFormatDto."+
+		"TextFieldFormatDtoFiller."+
 			"GetPureNumberStr()",
 		"")
 

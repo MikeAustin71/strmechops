@@ -54,7 +54,7 @@ type textLineSpecStandardLineElectron struct {
 //				TextFieldFormatDtoBigFloat
 //				TextFieldFormatDtoDate
 //				TextFieldFormatDtoLabel
-//				TextFillerFieldFormatDto
+//				TextFieldFormatDtoFiller
 //
 //		The most frequently used type is the
 //		TextFieldFormatDtoLabel structure which is defined
@@ -249,7 +249,7 @@ type textLineSpecStandardLineElectron struct {
 //			TextFieldFormatDtoBigFloat
 //			TextFieldFormatDtoDate
 //			TextFieldFormatDtoLabel
-//			TextFillerFieldFormatDto
+//			TextFieldFormatDtoFiller
 //
 //		For additional information on the
 //		ITextFieldFormatDto interface, see above

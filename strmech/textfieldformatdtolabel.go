@@ -51,7 +51,7 @@ type TextFieldFormatDtoLabel struct {
 	//			TextFieldFormatDtoBigFloat
 	//			TextFieldFormatDtoDate
 	//			TextFieldFormatDtoLabel
-	//			TextFillerFieldFormatDto
+	//			TextFieldFormatDtoFiller
 	//
 	//		If the 'emptyIFace' object is not convertible to
 	//		one of the supported types, an error will be returned.

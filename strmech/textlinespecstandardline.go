@@ -521,7 +521,7 @@ func (stdLine *TextLineSpecStandardLine) AddTextField(
 //				TextFieldFormatDtoBigFloat
 //				TextFieldFormatDtoDate
 //				TextFieldFormatDtoLabel
-//				TextFillerFieldFormatDto
+//				TextFieldFormatDtoFiller
 //
 //		The most frequently used type is the
 //		TextFieldFormatDtoLabel structure which is defined
@@ -703,7 +703,7 @@ func (stdLine *TextLineSpecStandardLine) AddTextField(
 //			TextFieldFormatDtoBigFloat
 //			TextFieldFormatDtoDate
 //			TextFieldFormatDtoLabel
-//			TextFillerFieldFormatDto
+//			TextFieldFormatDtoFiller
 //
 //		For additional information on the
 //		ITextFieldFormatDto interface, see above.
@@ -870,7 +870,7 @@ func (stdLine *TextLineSpecStandardLine) AddTextFieldDtosMultiCol(
 //				TextFieldFormatDtoBigFloat
 //				TextFieldFormatDtoDate
 //				TextFieldFormatDtoLabel
-//				TextFillerFieldFormatDto
+//				TextFieldFormatDtoFiller
 //
 //		The most frequently used type is the
 //		TextFieldFormatDtoLabel structure which is defined
@@ -1113,7 +1113,7 @@ func (stdLine *TextLineSpecStandardLine) AddTextFieldDtosMultiCol(
 //			TextFieldFormatDtoBigFloat
 //			TextFieldFormatDtoDate
 //			TextFieldFormatDtoLabel
-//			TextFillerFieldFormatDto
+//			TextFieldFormatDtoFiller
 //
 //		For additional information on the
 //		ITextFieldFormatDto interface, see above.
@@ -5298,7 +5298,7 @@ func (stdLine TextLineSpecStandardLine) NewStandardLineAllParms(
 //				TextFieldFormatDtoBigFloat
 //				TextFieldFormatDtoDate
 //				TextFieldFormatDtoLabel
-//				TextFillerFieldFormatDto
+//				TextFieldFormatDtoFiller
 //
 //		The most frequently used type is the
 //		TextFieldFormatDtoLabel structure which is defined
@@ -5581,7 +5581,7 @@ func (stdLine TextLineSpecStandardLine) NewStandardLineAllParms(
 //			TextFieldFormatDtoBigFloat
 //			TextFieldFormatDtoDate
 //			TextFieldFormatDtoLabel
-//			TextFillerFieldFormatDto
+//			TextFieldFormatDtoFiller
 //
 //		For additional information on the
 //		ITextFieldFormatDto interface, see above.
@@ -5701,7 +5701,7 @@ func (stdLine TextLineSpecStandardLine) NewStdLineColumns(
 //				TextFieldFormatDtoBigFloat
 //				TextFieldFormatDtoDate
 //				TextFieldFormatDtoLabel
-//				TextFillerFieldFormatDto
+//				TextFieldFormatDtoFiller
 //
 //		The most frequently used type is the
 //		TextFieldFormatDtoLabel structure which is defined
@@ -5883,7 +5883,7 @@ func (stdLine TextLineSpecStandardLine) NewStdLineColumns(
 //			TextFieldFormatDtoBigFloat
 //			TextFieldFormatDtoDate
 //			TextFieldFormatDtoLabel
-//			TextFillerFieldFormatDto
+//			TextFieldFormatDtoFiller
 //
 //		For additional information on the
 //		ITextFieldFormatDto interface, see above.

@@ -7,14 +7,14 @@ import (
 	"sync"
 )
 
-// TextFillerFieldFormatDto
+// TextFieldFormatDtoFiller
 //
 // Field Format Data Transfer Objects (Dto) are used
 // to facilitate easy data entry which creating and
 // configuring text lines strings for screen display,
 // file output or printing.
 //
-// Type TextFillerFieldFormatDto encapsulates all the
+// Type TextFieldFormatDtoFiller encapsulates all the
 // specification parameters necessary to create and
 // construct Text Filler Field strings.
 //
@@ -47,7 +47,7 @@ import (
 // 'FillerCharsRepeatCount' value greater than zero.
 // 'FillerCharsRepeatCount' values less than or equal
 // to zero constitute an error condition.
-type TextFillerFieldFormatDto struct {
+type TextFieldFormatDtoFiller struct {
 	LeftMarginStr string
 	//	One or more characters used to create a left
 	//	margin for this Text Filler Field.
@@ -106,9 +106,9 @@ type TextFillerFieldFormatDto struct {
 // CopyIn
 //
 // Copies all the data fields from an incoming instance
-// of TextFillerFieldFormatDto
+// of TextFieldFormatDtoFiller
 // ('incomingTxtFillerFieldFmtDto') to the corresponding
-// data fields of the current TextFillerFieldFormatDto
+// data fields of the current TextFieldFormatDtoFiller
 // instance ('txtFillerFieldFmtDto').
 //
 // ----------------------------------------------------------------
@@ -117,21 +117,21 @@ type TextFillerFieldFormatDto struct {
 //
 //	This method will delete and overwrite all
 //	pre-existing data values contained within the
-//	current instance of TextFillerFieldFormatDto
+//	current instance of TextFieldFormatDtoFiller
 //	('txtFillerFieldFmtDto').
 //
 // ----------------------------------------------------------------
 //
 // # Input Parameters
 //
-//	incomingTxtFillerFieldFmtDto	*TextFillerFieldFormatDto
+//	incomingTxtFillerFieldFmtDto	*TextFieldFormatDtoFiller
 //
 //		A pointer to an instance of
-//		TextFillerFieldFormatDto.
+//		TextFieldFormatDtoFiller.
 //
 //		All the internal data field values in this
 //		instance will be copied to corresponding data
-//		fields of the current TextFillerFieldFormatDto
+//		fields of the current TextFieldFormatDtoFiller
 //		instance.
 //
 //		The data fields contained in
@@ -216,8 +216,8 @@ type TextFillerFieldFormatDto struct {
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (txtFillerFieldFmtDto *TextFillerFieldFormatDto) CopyIn(
-	incomingTxtFillerFieldFmtDto *TextFillerFieldFormatDto,
+func (txtFillerFieldFmtDto *TextFieldFormatDtoFiller) CopyIn(
+	incomingTxtFillerFieldFmtDto *TextFieldFormatDtoFiller,
 	errorPrefix interface{}) error {
 
 	if txtFillerFieldFmtDto.lock == nil {
@@ -235,7 +235,7 @@ func (txtFillerFieldFmtDto *TextFillerFieldFormatDto) CopyIn(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"TextFillerFieldFormatDto."+
+		"TextFieldFormatDtoFiller."+
 			"CopyIn()",
 		"")
 
@@ -254,9 +254,9 @@ func (txtFillerFieldFmtDto *TextFillerFieldFormatDto) CopyIn(
 // CopyOut
 //
 // Returns a deep copy of the current
-// TextFillerFieldFormatDto instance.
+// TextFieldFormatDtoFiller instance.
 //
-// If the current TextFillerFieldFormatDto instance
+// If the current TextFieldFormatDtoFiller instance
 // contains invalid member variable data values, this
 // method will return an error.
 //
@@ -327,12 +327,12 @@ func (txtFillerFieldFmtDto *TextFillerFieldFormatDto) CopyIn(
 //
 // # Return Values
 //
-//	TextFillerFieldFormatDto
+//	TextFieldFormatDtoFiller
 //
 //		If this method completes successfully and no
 //		errors are encountered, this parameter will
 //		return a deep copy of the current
-//		TextFillerFieldFormatDto instance.
+//		TextFieldFormatDtoFiller instance.
 //
 //	error
 //
@@ -346,9 +346,9 @@ func (txtFillerFieldFmtDto *TextFillerFieldFormatDto) CopyIn(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (txtFillerFieldFmtDto *TextFillerFieldFormatDto) CopyOut(
+func (txtFillerFieldFmtDto *TextFieldFormatDtoFiller) CopyOut(
 	errorPrefix interface{}) (
-	TextFillerFieldFormatDto,
+	TextFieldFormatDtoFiller,
 	error) {
 
 	if txtFillerFieldFmtDto.lock == nil {
@@ -363,12 +363,12 @@ func (txtFillerFieldFmtDto *TextFillerFieldFormatDto) CopyOut(
 
 	var err error
 
-	newTxtFillerFieldFmtDto := TextFillerFieldFormatDto{}
+	newTxtFillerFieldFmtDto := TextFieldFormatDtoFiller{}
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"TextFillerFieldFormatDto."+
+		"TextFieldFormatDtoFiller."+
 			"CopyOut()",
 		"")
 
@@ -389,10 +389,10 @@ func (txtFillerFieldFmtDto *TextFillerFieldFormatDto) CopyOut(
 // CopyOutITextFieldFormat
 //
 // Returns a deep copy of the current
-// TextFillerFieldFormatDto instance cast as an
+// TextFieldFormatDtoFiller instance cast as an
 // ITextFieldFormatDto interface object.
 //
-// If the current TextFillerFieldFormatDto instance
+// If the current TextFieldFormatDtoFiller instance
 // contains invalid member variable data values, this
 // method will return an error.
 //
@@ -471,7 +471,7 @@ func (txtFillerFieldFmtDto *TextFillerFieldFormatDto) CopyOut(
 //		If this method completes successfully and no
 //		errors are encountered, this parameter will
 //		return a deep copy of the current
-//		TextFillerFieldFormatDto instance cast as an
+//		TextFieldFormatDtoFiller instance cast as an
 //		ITextFieldFormatDto interface object.
 //
 //	error
@@ -486,7 +486,7 @@ func (txtFillerFieldFmtDto *TextFillerFieldFormatDto) CopyOut(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (txtFillerFieldFmtDto *TextFillerFieldFormatDto) CopyOutITextFieldFormat(
+func (txtFillerFieldFmtDto *TextFieldFormatDtoFiller) CopyOutITextFieldFormat(
 	errorPrefix interface{}) (
 	ITextFieldFormatDto,
 	error) {
@@ -503,12 +503,12 @@ func (txtFillerFieldFmtDto *TextFillerFieldFormatDto) CopyOutITextFieldFormat(
 
 	var err error
 
-	newTxtFillerFieldFmtDto := TextFillerFieldFormatDto{}
+	newTxtFillerFieldFmtDto := TextFieldFormatDtoFiller{}
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"TextFillerFieldFormatDto."+
+		"TextFieldFormatDtoFiller."+
 			"CopyOutITextFieldFormat()",
 		"")
 
@@ -529,9 +529,9 @@ func (txtFillerFieldFmtDto *TextFillerFieldFormatDto) CopyOutITextFieldFormat(
 // Empty
 //
 // Resets all internal member variables for the current
-// instance of TextFillerFieldFormatDto to their zero or
+// instance of TextFieldFormatDtoFiller to their zero or
 // uninitialized states. This method will leave the
-// current instance of TextFillerFieldFormatDto in an
+// current instance of TextFieldFormatDtoFiller in an
 // invalid state and unavailable for immediate reuse.
 //
 // This method is required in order to implement the
@@ -543,7 +543,7 @@ func (txtFillerFieldFmtDto *TextFillerFieldFormatDto) CopyOutITextFieldFormat(
 //
 // This method will delete all member variable data
 // values in the current instance of
-// TextFillerFieldFormatDto. All member variable data
+// TextFieldFormatDtoFiller. All member variable data
 // values will be reset to their zero or uninitialized
 // states.
 //
@@ -558,7 +558,7 @@ func (txtFillerFieldFmtDto *TextFillerFieldFormatDto) CopyOutITextFieldFormat(
 // # Return Values
 //
 //	NONE
-func (txtFillerFieldFmtDto *TextFillerFieldFormatDto) Empty() {
+func (txtFillerFieldFmtDto *TextFieldFormatDtoFiller) Empty() {
 
 	if txtFillerFieldFmtDto.lock == nil {
 		txtFillerFieldFmtDto.lock = new(sync.Mutex)
@@ -579,9 +579,9 @@ func (txtFillerFieldFmtDto *TextFillerFieldFormatDto) Empty() {
 // Equal
 //
 // Receives a pointer to another instance of
-// TextFillerFieldFormatDto and proceeds to compare the
+// TextFieldFormatDtoFiller and proceeds to compare the
 // member variables to those contained in the current
-// TextFillerFieldFormatDto instance in order to
+// TextFieldFormatDtoFiller instance in order to
 // determine if they are equivalent.
 //
 // A boolean flag showing the result of this comparison
@@ -593,13 +593,13 @@ func (txtFillerFieldFmtDto *TextFillerFieldFormatDto) Empty() {
 //
 // # Input Parameters
 //
-//	incomingTxtFieldFillerFmtDto	*TextFillerFieldFormatDto
+//	incomingTxtFieldFillerFmtDto	*TextFieldFormatDtoFiller
 //
 //		A pointer to an incoming instance of
-//		TextFillerFieldFormatDto. This method will
+//		TextFieldFormatDtoFiller. This method will
 //		compare all member variable data values in this
 //		instance against those contained in the current
-//		instance of TextFillerFieldFormatDto. If the data
+//		instance of TextFieldFormatDtoFiller. If the data
 //		values in both instances are found to be equal in
 //		all respects, this method will return a boolean
 //		value of 'true'.
@@ -613,12 +613,12 @@ func (txtFillerFieldFmtDto *TextFillerFieldFormatDto) Empty() {
 //		If the member variable data values contained in
 //		input parameter 'incomingTxtFieldFillerFmtDto'
 //		are equal in all respects to those contained in
-//		the current instance of TextFillerFieldFormatDto,
+//		the current instance of TextFieldFormatDtoFiller,
 //		this method will return a boolean value of
 //		'true'. Otherwise, a value of 'false' will be
 //		returned to the calling function.
-func (txtFillerFieldFmtDto *TextFillerFieldFormatDto) Equal(
-	incomingTxtFieldFillerFmtDto *TextFillerFieldFormatDto) bool {
+func (txtFillerFieldFmtDto *TextFieldFormatDtoFiller) Equal(
+	incomingTxtFieldFillerFmtDto *TextFieldFormatDtoFiller) bool {
 
 	if txtFillerFieldFmtDto.lock == nil {
 		txtFillerFieldFmtDto.lock = new(sync.Mutex)
@@ -635,7 +635,7 @@ func (txtFillerFieldFmtDto *TextFillerFieldFormatDto) Equal(
 
 // GetFieldContentTextLabel
 //
-// Converts the current TextFillerFieldFormatDto instance
+// Converts the current TextFieldFormatDtoFiller instance
 // member variable, 'FillerChars', to an instance of
 // TextFieldSpecLabel.
 //
@@ -721,7 +721,7 @@ func (txtFillerFieldFmtDto *TextFillerFieldFormatDto) Equal(
 //
 //		If this method completes successfully, the Text
 //		Field Contents extracted from the current
-//		instance of TextFillerFieldFormatDto, will be
+//		instance of TextFieldFormatDtoFiller, will be
 //		returned as text label of type TextFieldSpecLabel.
 //
 //		This returned text label will ONLY contain the
@@ -740,7 +740,7 @@ func (txtFillerFieldFmtDto *TextFillerFieldFormatDto) Equal(
 //		for input parameter 'errPrefDto' (error prefix)
 //		will be prefixed or attached at the beginning of
 //		the error message.
-func (txtFillerFieldFmtDto *TextFillerFieldFormatDto) GetFieldContentTextLabel(
+func (txtFillerFieldFmtDto *TextFieldFormatDtoFiller) GetFieldContentTextLabel(
 	errorPrefix interface{}) (
 	TextFieldSpecLabel,
 	error) {
@@ -759,7 +759,7 @@ func (txtFillerFieldFmtDto *TextFillerFieldFormatDto) GetFieldContentTextLabel(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"TextFillerFieldFormatDto."+
+		"TextFieldFormatDtoFiller."+
 			"GetFieldContentTextLabel()",
 		"")
 
@@ -777,11 +777,11 @@ func (txtFillerFieldFmtDto *TextFillerFieldFormatDto) GetFieldContentTextLabel(
 // GetFieldFormatDtoType
 //
 // Returns a string containing the name of this type
-// ('TextFillerFieldFormatDto').
+// ('TextFieldFormatDtoFiller').
 //
 // This method is required in order to implement the
 // ITextFieldFormatDto interface.
-func (txtFillerFieldFmtDto *TextFillerFieldFormatDto) GetFieldFormatDtoType() string {
+func (txtFillerFieldFmtDto *TextFieldFormatDtoFiller) GetFieldFormatDtoType() string {
 
 	if txtFillerFieldFmtDto.lock == nil {
 		txtFillerFieldFmtDto.lock = new(sync.Mutex)
@@ -791,14 +791,14 @@ func (txtFillerFieldFmtDto *TextFillerFieldFormatDto) GetFieldFormatDtoType() st
 
 	defer txtFillerFieldFmtDto.lock.Unlock()
 
-	return "TextFillerFieldFormatDto"
+	return "TextFieldFormatDtoFiller"
 }
 
 // GetFormattedTextFieldStr
 //
 // Returns a string containing the formatted text field
 // generated from the current instance of
-// TextFillerFieldFormatDto.
+// TextFieldFormatDtoFiller.
 //
 // The returned formatted text field string contains the
 // left margin, field contents and right margin.
@@ -877,14 +877,14 @@ func (txtFillerFieldFmtDto *TextFillerFieldFormatDto) GetFieldFormatDtoType() st
 //
 //		If this method completes successfully, the text
 //		field specifications contained in the current
-//		instance of TextFillerFieldFormatDto will be
+//		instance of TextFieldFormatDtoFiller will be
 //		converted to, and returned as, a formatted text
 //		field string.
 //
 //		The returned text field string will contain the
 //		left margin, text field contents and right margin
 //		as those elements are defined in the current
-//		instance of TextFillerFieldFormatDto.
+//		instance of TextFieldFormatDtoFiller.
 //
 //	error
 //
@@ -898,7 +898,7 @@ func (txtFillerFieldFmtDto *TextFillerFieldFormatDto) GetFieldFormatDtoType() st
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (txtFillerFieldFmtDto *TextFillerFieldFormatDto) GetFormattedTextFieldStr(
+func (txtFillerFieldFmtDto *TextFieldFormatDtoFiller) GetFormattedTextFieldStr(
 	errorPrefix interface{}) (
 	string,
 	error) {
@@ -917,7 +917,7 @@ func (txtFillerFieldFmtDto *TextFillerFieldFormatDto) GetFormattedTextFieldStr(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"TextFillerFieldFormatDto."+
+		"TextFieldFormatDtoFiller."+
 			"GetFormattedTextFieldStr()",
 		"")
 
@@ -939,7 +939,7 @@ func (txtFillerFieldFmtDto *TextFillerFieldFormatDto) GetFormattedTextFieldStr(
 //
 // This method is required in order to implement the
 // ITextFieldFormatDto interface.
-func (txtFillerFieldFmtDto *TextFillerFieldFormatDto) GetLeftMarginLength() int {
+func (txtFillerFieldFmtDto *TextFieldFormatDtoFiller) GetLeftMarginLength() int {
 
 	if txtFillerFieldFmtDto.lock == nil {
 		txtFillerFieldFmtDto.lock = new(sync.Mutex)
@@ -958,7 +958,7 @@ func (txtFillerFieldFmtDto *TextFillerFieldFormatDto) GetLeftMarginLength() int 
 //
 // This method is required in order to implement the
 // ITextFieldFormatDto interface.
-func (txtFillerFieldFmtDto *TextFillerFieldFormatDto) GetLeftMarginStr() string {
+func (txtFillerFieldFmtDto *TextFieldFormatDtoFiller) GetLeftMarginStr() string {
 
 	if txtFillerFieldFmtDto.lock == nil {
 		txtFillerFieldFmtDto.lock = new(sync.Mutex)
@@ -978,7 +978,7 @@ func (txtFillerFieldFmtDto *TextFillerFieldFormatDto) GetLeftMarginStr() string 
 //
 // This method is required in order to implement the
 // ITextFieldFormatDto interface.
-func (txtFillerFieldFmtDto *TextFillerFieldFormatDto) GetRightMarginLength() int {
+func (txtFillerFieldFmtDto *TextFieldFormatDtoFiller) GetRightMarginLength() int {
 
 	if txtFillerFieldFmtDto.lock == nil {
 		txtFillerFieldFmtDto.lock = new(sync.Mutex)
@@ -997,7 +997,7 @@ func (txtFillerFieldFmtDto *TextFillerFieldFormatDto) GetRightMarginLength() int
 //
 // This method is required in order to implement the
 // ITextFieldFormatDto interface.
-func (txtFillerFieldFmtDto *TextFillerFieldFormatDto) GetRightMarginStr() string {
+func (txtFillerFieldFmtDto *TextFieldFormatDtoFiller) GetRightMarginStr() string {
 
 	if txtFillerFieldFmtDto.lock == nil {
 		txtFillerFieldFmtDto.lock = new(sync.Mutex)
@@ -1013,7 +1013,7 @@ func (txtFillerFieldFmtDto *TextFillerFieldFormatDto) GetRightMarginStr() string
 // IsValidInstance
 //
 // Performs a diagnostic review of the data values
-// encapsulated in the current TextFillerFieldFormatDto
+// encapsulated in the current TextFieldFormatDtoFiller
 // instance to determine if they are valid.
 //
 // If all data elements evaluate as valid, this method
@@ -1036,11 +1036,11 @@ func (txtFillerFieldFmtDto *TextFillerFieldFormatDto) GetRightMarginStr() string
 //	isValid						bool
 //
 //		If all data elements encapsulated by the current
-//		instance of TextFillerFieldFormatDto are valid,
+//		instance of TextFieldFormatDtoFiller are valid,
 //		this returned boolean value is set to 'true'. If
 //		any data values are invalid, this return
 //		parameter is set to 'false'.
-func (txtFillerFieldFmtDto *TextFillerFieldFormatDto) IsValidInstance() (
+func (txtFillerFieldFmtDto *TextFieldFormatDtoFiller) IsValidInstance() (
 	isValid bool) {
 
 	if txtFillerFieldFmtDto.lock == nil {
@@ -1063,7 +1063,7 @@ func (txtFillerFieldFmtDto *TextFillerFieldFormatDto) IsValidInstance() (
 // IsValidInstanceError
 //
 // Performs a diagnostic review of the data values
-// encapsulated in the current TextFillerFieldFormatDto
+// encapsulated in the current TextFieldFormatDtoFiller
 // instance to determine if they are valid.
 //
 // If any data element evaluates as invalid, this method
@@ -1143,7 +1143,7 @@ func (txtFillerFieldFmtDto *TextFillerFieldFormatDto) IsValidInstance() (
 //
 //		If any of the internal member data variables
 //		contained in the current instance of
-//		TextFillerFieldFormatDto are found to be invalid,
+//		TextFieldFormatDtoFiller are found to be invalid,
 //		this method will return an error containing an
 //		appropriate error message.
 //
@@ -1152,7 +1152,7 @@ func (txtFillerFieldFmtDto *TextFillerFieldFormatDto) IsValidInstance() (
 //		and text passed by input parameter, 'errorPrefix'.
 //		The 'errorPrefix' text will be attached to the
 //		beginning of the error message.
-func (txtFillerFieldFmtDto *TextFillerFieldFormatDto) IsValidInstanceError(
+func (txtFillerFieldFmtDto *TextFieldFormatDtoFiller) IsValidInstanceError(
 	errorPrefix interface{}) error {
 
 	if txtFillerFieldFmtDto.lock == nil {
@@ -1169,7 +1169,7 @@ func (txtFillerFieldFmtDto *TextFillerFieldFormatDto) IsValidInstanceError(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"TextFillerFieldFormatDto."+
+		"TextFieldFormatDtoFiller."+
 			"IsValidInstanceError()",
 		"")
 
@@ -1188,7 +1188,7 @@ func (txtFillerFieldFmtDto *TextFillerFieldFormatDto) IsValidInstanceError(
 }
 
 // textFillerFieldFormatDtoNanobot - Provides helper
-// methods for TextFillerFieldFormatDto.
+// methods for TextFieldFormatDtoFiller.
 type textFillerFieldFormatDtoNanobot struct {
 	lock *sync.Mutex
 }
@@ -1196,8 +1196,8 @@ type textFillerFieldFormatDtoNanobot struct {
 // copy
 //
 // Copies all data from a source instance of
-// TextFillerFieldFormatDto to a destination instance of
-// TextFillerFieldFormatDto.
+// TextFieldFormatDtoFiller to a destination instance of
+// TextFieldFormatDtoFiller.
 //
 // ----------------------------------------------------------------
 //
@@ -1205,17 +1205,17 @@ type textFillerFieldFormatDtoNanobot struct {
 //
 //	This method will delete and overwrite all
 //	pre-existing data values contained within the
-//	TextFillerFieldFormatDto instance passed as input
+//	TextFieldFormatDtoFiller instance passed as input
 //	parameter 'destinationTxtFieldFillerDto'.
 //
 // ----------------------------------------------------------------
 //
 // # Input Parameters
 //
-//	destinationTxtFieldFillerDto	*TextFillerFieldFormatDto
+//	destinationTxtFieldFillerDto	*TextFieldFormatDtoFiller
 //
 //		A pointer to an instance of
-//		TextFillerFieldFormatDto.
+//		TextFieldFormatDtoFiller.
 //
 //		Data extracted from input parameter
 //		'sourceTxtFieldFillerDto' will be copied to this
@@ -1235,12 +1235,12 @@ type textFillerFieldFormatDtoNanobot struct {
 //		'destinationTxtFieldFmtDto' will be overwritten
 //		and deleted.
 //
-//	sourceTxtFieldFillerDto			*TextFillerFieldFormatDto
+//	sourceTxtFieldFillerDto			*TextFieldFormatDtoFiller
 //
 //		A pointer to an instance of
-//		TextFillerFieldFormatDto.
+//		TextFieldFormatDtoFiller.
 //
-//		All data values in this TextFillerFieldFormatDto
+//		All data values in this TextFieldFormatDtoFiller
 //		instance will be copied to input parameter
 //		'destinationTxtFieldFillerDto'.
 //
@@ -1287,8 +1287,8 @@ type textFillerFieldFormatDtoNanobot struct {
 //		text will be attached to the beginning of the
 //		error message.
 func (txtFillerFieldDtoNanobot *textFillerFieldFormatDtoNanobot) copy(
-	destinationTxtFieldFillerDto *TextFillerFieldFormatDto,
-	sourceTxtFieldFillerDto *TextFillerFieldFormatDto,
+	destinationTxtFieldFillerDto *TextFieldFormatDtoFiller,
+	sourceTxtFieldFillerDto *TextFieldFormatDtoFiller,
 	errPrefDto *ePref.ErrPrefixDto) error {
 
 	if txtFillerFieldDtoNanobot.lock == nil {
@@ -1368,7 +1368,7 @@ func (txtFillerFieldDtoNanobot *textFillerFieldFormatDtoNanobot) copy(
 
 // getFormattedTextFieldStr
 //
-// Converts an instance of TextFillerFieldFormatDto to a
+// Converts an instance of TextFieldFormatDtoFiller to a
 // formatted text field string.
 //
 // This formatted text field string contains the left
@@ -1378,10 +1378,10 @@ func (txtFillerFieldDtoNanobot *textFillerFieldFormatDtoNanobot) copy(
 //
 // # Input Parameters
 //
-//	txtFillerFieldFmtDto		*TextFillerFieldFormatDto
+//	txtFillerFieldFmtDto		*TextFieldFormatDtoFiller
 //
 //		A pointer to an instance of
-//		TextFillerFieldFormatDto.
+//		TextFieldFormatDtoFiller.
 //
 //		The left and right margins as well as the member
 //		variable 'FillerChars' will be processed and
@@ -1434,7 +1434,7 @@ func (txtFillerFieldDtoNanobot *textFillerFieldFormatDtoNanobot) copy(
 //		will be prefixed or attached at the beginning of
 //		the error message.
 func (txtFillerFieldDtoNanobot *textFillerFieldFormatDtoNanobot) getFormattedTextFieldStr(
-	txtFillerFieldFmtDto *TextFillerFieldFormatDto,
+	txtFillerFieldFmtDto *TextFieldFormatDtoFiller,
 	errPrefDto *ePref.ErrPrefixDto) (
 	string,
 	error) {
@@ -1508,18 +1508,18 @@ func (txtFillerFieldDtoNanobot *textFillerFieldFormatDtoNanobot) getFormattedTex
 }
 
 // textFillerFieldFormatDtoMolecule - Provides helper
-// methods for TextFillerFieldFormatDto.
+// methods for TextFieldFormatDtoFiller.
 type textFillerFieldFormatDtoMolecule struct {
 	lock *sync.Mutex
 }
 
 // getFieldContentTextLabel
 //
-// Converts a TextFillerFieldFormatDto instance member
+// Converts a TextFieldFormatDtoFiller instance member
 // variable, 'FillerChars', to an instance of
 // TextFieldSpecLabel.
 //
-// The TextFillerFieldFormatDto instance is passed as
+// The TextFieldFormatDtoFiller instance is passed as
 // input parameter, 'txtFieldFillerDto'.
 //
 // The returned TextFieldSpecLabel will only contain
@@ -1531,17 +1531,17 @@ type textFillerFieldFormatDtoMolecule struct {
 // # BE ADVISED
 //
 //	If input parameter 'txtFieldFillerDto', an instance of
-//	TextFillerFieldFormatDto, is found to be invalid, an
+//	TextFieldFormatDtoFiller, is found to be invalid, an
 //	error will be returned.
 //
 // ----------------------------------------------------------------
 //
 // # Input Parameters
 //
-//	txtFieldFillerDto			*TextFillerFieldFormatDto
+//	txtFieldFillerDto			*TextFieldFormatDtoFiller
 //
 //		A pointer to an instance of
-//		TextFillerFieldFormatDto.
+//		TextFieldFormatDtoFiller.
 //
 //		The member variable 'FillerChars' will be
 //		converted to a text label of type
@@ -1594,7 +1594,7 @@ type textFillerFieldFormatDtoMolecule struct {
 //		will be prefixed or attached at the beginning of
 //		the error message.
 func (txtFillerFieldDtoMolecule *textFillerFieldFormatDtoMolecule) getFieldContentTextLabel(
-	txtFieldFillerDto *TextFillerFieldFormatDto,
+	txtFieldFillerDto *TextFieldFormatDtoFiller,
 	errPrefDto *ePref.ErrPrefixDto) (
 	TextFieldSpecLabel,
 	error) {
@@ -1665,7 +1665,7 @@ func (txtFillerFieldDtoMolecule *textFillerFieldFormatDtoMolecule) getFieldConte
 }
 
 // textFillerFieldFormatDtoAtom - Provides helper
-// methods for TextFillerFieldFormatDto.
+// methods for TextFieldFormatDtoFiller.
 type textFillerFieldFormatDtoAtom struct {
 	lock *sync.Mutex
 }
@@ -1683,7 +1683,7 @@ type textFillerFieldFormatDtoAtom struct {
 //
 //	This method will delete and reset all pre-existing
 //	data values contained within the
-//	TextFillerFieldFormatDto instance passed as input
+//	TextFieldFormatDtoFiller instance passed as input
 //	parameter 'txtFieldFmtDto' to their zero or
 //	uninitialized states.
 //
@@ -1691,9 +1691,9 @@ type textFillerFieldFormatDtoAtom struct {
 //
 // # Input Parameters
 //
-//	txtFieldFmtDto				*TextFillerFieldFormatDto
+//	txtFieldFmtDto				*TextFieldFormatDtoFiller
 //
-//		A pointer to an instance of TextFillerFieldFormatDto.
+//		A pointer to an instance of TextFieldFormatDtoFiller.
 //		All data values contained within this instance
 //		will be deleted and reset to their zero or
 //		uninitialized states.
@@ -1704,7 +1704,7 @@ type textFillerFieldFormatDtoAtom struct {
 //
 //	NONE
 func (txtFillerFieldDtoAtom *textFillerFieldFormatDtoAtom) empty(
-	txtFieldFillerDto *TextFillerFieldFormatDto) {
+	txtFieldFillerDto *TextFieldFormatDtoFiller) {
 
 	if txtFillerFieldDtoAtom.lock == nil {
 		txtFillerFieldDtoAtom.lock = new(sync.Mutex)
@@ -1732,34 +1732,34 @@ func (txtFillerFieldDtoAtom *textFillerFieldFormatDtoAtom) empty(
 
 // equal
 //
-// Compares two instances of TextFillerFieldFormatDto and
+// Compares two instances of TextFieldFormatDtoFiller and
 // returns a boolean value signaling whether the two
 // instances are equivalent in all respects.
 //
-// If the two instances of TextFillerFieldFormatDto are
+// If the two instances of TextFieldFormatDtoFiller are
 // equal, this method returns 'true'.
 //
 // ----------------------------------------------------------------
 //
 // # Input Parameters
 //
-//	txtFieldFillerDtoOne		*TextFillerFieldFormatDto
+//	txtFieldFillerDtoOne		*TextFieldFormatDtoFiller
 //
 //		A pointer to an instance of
-//		TextFillerFieldFormatDto. The data values
+//		TextFieldFormatDtoFiller. The data values
 //		contained within this instance will be compared
 //		to corresponding data values contained within a
-//		second TextFillerFieldFormatDto instance
+//		second TextFieldFormatDtoFiller instance
 //		('txtFieldFillerDtoTwo') in order to determine if
 //		they are equivalent.
 //
-//	txtFieldFillerDtoTwo		*TextFillerFieldFormatDto
+//	txtFieldFillerDtoTwo		*TextFieldFormatDtoFiller
 //
 //		A pointer to the second of two instances of
-//		TextFillerFieldFormatDto. The data values
+//		TextFieldFormatDtoFiller. The data values
 //		contained within this instance will be compared
 //		to corresponding data values contained within the
-//		first TextFillerFieldFormatDto instance
+//		first TextFieldFormatDtoFiller instance
 //		('txtFieldFillerDtoOne') in order to determine if
 //		they are equivalent.
 //
@@ -1777,8 +1777,8 @@ func (txtFillerFieldDtoAtom *textFillerFieldFormatDtoAtom) empty(
 //		If the compared data values are NOT equivalent,
 //		this method returns 'false'.
 func (txtFillerFieldDtoAtom *textFillerFieldFormatDtoAtom) equal(
-	txtFieldFillerDtoOne *TextFillerFieldFormatDto,
-	txtFieldFillerDtoTwo *TextFillerFieldFormatDto) bool {
+	txtFieldFillerDtoOne *TextFieldFormatDtoFiller,
+	txtFieldFillerDtoTwo *TextFieldFormatDtoFiller) bool {
 
 	if txtFillerFieldDtoAtom.lock == nil {
 		txtFillerFieldDtoAtom.lock = new(sync.Mutex)
@@ -1824,7 +1824,7 @@ func (txtFillerFieldDtoAtom *textFillerFieldFormatDtoAtom) equal(
 // testValidityOfTextLabelFieldFmtDto
 //
 // Receives a pointer to an instance of
-// TextFillerFieldFormatDto and performs a diagnostic
+// TextFieldFormatDtoFiller and performs a diagnostic
 // analysis to determine if the data values contained in
 // that instance are valid in all respects.
 //
@@ -1843,10 +1843,10 @@ func (txtFillerFieldDtoAtom *textFillerFieldFormatDtoAtom) equal(
 //
 // # Input Parameters
 //
-//	txtFieldFillerDto			*TextFillerFieldFormatDto
+//	txtFieldFillerDto			*TextFieldFormatDtoFiller
 //
 //		A pointer to an instance of
-//		TextFillerFieldFormatDto.
+//		TextFieldFormatDtoFiller.
 //
 //		The data values contained in this instance will
 //		be reviewed and analyzed to determine if they
@@ -1899,7 +1899,7 @@ func (txtFillerFieldDtoAtom *textFillerFieldFormatDtoAtom) equal(
 //		will be prefixed or attached at the beginning of
 //		the error message.
 func (txtFillerFieldDtoAtom *textFillerFieldFormatDtoAtom) testValidityOfTextFillerFieldFmtDto(
-	txtFieldFillerDto *TextFillerFieldFormatDto,
+	txtFieldFillerDto *TextFieldFormatDtoFiller,
 	errPrefDto *ePref.ErrPrefixDto) (
 	isValid bool,
 	err error) {
@@ -1941,7 +1941,7 @@ func (txtFillerFieldDtoAtom *textFillerFieldFormatDtoAtom) testValidityOfTextFil
 	if len(txtFieldFillerDto.FillerChars) == 0 {
 
 		err = fmt.Errorf("%v\n"+
-			"ERROR: TextFillerFieldFormatDto parameter 'FillerChars' is INVALID!\n"+
+			"ERROR: TextFieldFormatDtoFiller parameter 'FillerChars' is INVALID!\n"+
 			"txtFieldFillerDto.FillerChars is empty an has a length of zero characters.\n",
 			ePrefix.String())
 
@@ -1951,7 +1951,7 @@ func (txtFillerFieldDtoAtom *textFillerFieldFormatDtoAtom) testValidityOfTextFil
 	if txtFieldFillerDto.FillerCharsRepeatCount < 1 {
 
 		err = fmt.Errorf("%v\n"+
-			"ERROR: TextFillerFieldFormatDto parameter 'FillerCharsRepeatCount' is INVALID!\n"+
+			"ERROR: TextFieldFormatDtoFiller parameter 'FillerCharsRepeatCount' is INVALID!\n"+
 			"txtFieldFillerDto.FillerCharsRepeatCount has value less than one (1).\n"+
 			"txtFieldFillerDto.FillerCharsRepeatCount = '%v'\n",
 			ePrefix.String(),
