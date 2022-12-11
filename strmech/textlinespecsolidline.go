@@ -2037,144 +2037,144 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewSolidLine(
 //
 // Input Parameters
 //
-//	 leftMarginStr              string
-//	    - A string containing the text characters to be positioned
-//	      on the left side of the Solid Line.
+//		 leftMarginStr              string
+//		    - A string containing the text characters to be positioned
+//		      on the left side of the Solid Line.
 //
-//	      If no left margin is required, set this parameter to an
-//	      empty string.
+//		      If no left margin is required, set this parameter to an
+//		      empty string.
 //
-//	      Example:
-//	        solidLineChars = "*"
-//	        solidLineCharsRepeatCount = 5
-//	        leftMarginStr  = "   " // 3-spaces
-//	        rightMarginStr = "" // Empty string
-//	        Solid line = "   *****"
+//		      Example:
+//		        solidLineChars = "*"
+//		        solidLineCharsRepeatCount = 5
+//		        leftMarginStr  = "   " // 3-spaces
+//		        rightMarginStr = "" // Empty string
+//		        Solid line = "   *****"
 //
-//	      If the 'leftMarginStr' string length is greater than
-//	      one-million (1,000,000), an error will be returned.
-//
-//
-//	 rightMarginStr             string
-//	    - A string containing the text characters to positioned on
-//	      the right side of the Solid Line.
-//
-//	      If no right margin is required, set this parameter to an
-//	      empty string.
-//
-//	      Example:
-//	        solidLineChars = "*"
-//	        solidLineCharsRepeatCount = 5
-//	        leftMarginStr = "" // Empty string
-//	        rightMarginStr = "   " // 3-spaces
-//	        Solid line = "*****   "
-//
-//	      If the 'rightMarginStr' string length is greater than
-//	      one-million (1,000,000), an error will be returned.
+//		      If the 'leftMarginStr' string length is greater than
+//		      one-million (1,000,000), an error will be returned.
 //
 //
-//	 solidLineChars               string
-//	    - This string specifies the character or characters which
-//	      will comprise the solid line output for screen display or
-//	      printing.
+//		 rightMarginStr             string
+//		    - A string containing the text characters to be positioned
+//	       on the right side of the Solid Line.
 //
-//	      Example:
-//	        solidLineChars = "*"
-//	        solidLineCharsRepeatCount = 5
-//	        Solid line = "*****"
+//		      If no right margin is required, set this parameter to an
+//		      empty string.
 //
-//	      If this parameter is submitted as a zero length string, an
-//	      error will be returned.
+//		      Example:
+//		        solidLineChars = "*"
+//		        solidLineCharsRepeatCount = 5
+//		        leftMarginStr = "" // Empty string
+//		        rightMarginStr = "   " // 3-spaces
+//		        Solid line = "*****   "
 //
-//
-//	 solidLineCharsRepeatCount    int
-//	    - This integer value specifies the number of times that
-//	      parameter 'solidLineChars' will be repeated in
-//	      constructing the solid line.
-//
-//	      If this parameter is submitted with a value less than one
-//	      (1), an error will be returned.
-//
-//	      Example:
-//	        solidLineChars = "*"
-//	        solidLineCharsRepeatCount = 5
-//	        Solid line = "*****"
+//		      If the 'rightMarginStr' string length is greater than
+//		      one-million (1,000,000), an error will be returned.
 //
 //
-//	 newLineChars                 string
-//	    - This string contains one or more characters which will
-//	      be used to terminate the solid text line.
+//		 solidLineChars               string
+//		    - This string specifies the character or characters which
+//		      will comprise the solid line output for screen display or
+//		      printing.
 //
-//	      Example:
-//	        solidLineChars = "*"
-//	        solidLineCharsRepeatCount = 5
-//	        newLineChars = "??\n\n"
-//	        Solid line = "*****??\n\n"
+//		      Example:
+//		        solidLineChars = "*"
+//		        solidLineCharsRepeatCount = 5
+//		        Solid line = "*****"
 //
-//	      If this parameter is submitted as a zero length rune
-//	      array, 'newLineChars' will be set to the default new
-//	      line character ('\n').
-//
-//	      If this parameter is submitted with a string length
-//	      greater than one-million (1,000,000), 'newLineChars' will
-//	      be set to the default new line character ('\n').
+//		      If this parameter is submitted as a zero length string, an
+//		      error will be returned.
 //
 //
-//	 turnAutoLineTerminationOff   bool
-//	    - When set to 'true', line termination characters
-//	      ('newLineChars') will NOT be added to the end of the solid
-//	      line text produced by this instance of
-//	      TextLineSpecSolidLine.
+//		 solidLineCharsRepeatCount    int
+//		    - This integer value specifies the number of times that
+//		      parameter 'solidLineChars' will be repeated in
+//		      constructing the solid line.
 //
-//	      When set to 'false', line termination characters
-//	      ('newLineChars') WILL BE added  to the end of the solid
-//	      line text produced by this instance of
-//	      TextLineSpecSolidLine.
+//		      If this parameter is submitted with a value less than one
+//		      (1), an error will be returned.
+//
+//		      Example:
+//		        solidLineChars = "*"
+//		        solidLineCharsRepeatCount = 5
+//		        Solid line = "*****"
 //
 //
-//	errorPrefix                interface{}
-//	   - This object encapsulates error prefix text which is
-//	     included in all returned error messages. Usually, it
-//	     contains the name of the calling method or methods
-//	     listed as a method or function chain of execution.
+//		 newLineChars                 string
+//		    - This string contains one or more characters which will
+//		      be used to terminate the solid text line.
 //
-//	     If no error prefix information is needed, set this
-//	     parameter to 'nil'.
+//		      Example:
+//		        solidLineChars = "*"
+//		        solidLineCharsRepeatCount = 5
+//		        newLineChars = "??\n\n"
+//		        Solid line = "*****??\n\n"
 //
-//	     This empty interface must be convertible to one of the
-//	     following types:
+//		      If this parameter is submitted as a zero length string,
+//		      'newLineChars' will be set to the default new line
+//		      character ("\n").
 //
-//	     1. nil - A nil value is valid and generates an empty
-//	        collection of error prefix and error context
-//	        information.
+//		      If this parameter is submitted with a string length
+//		      greater than one-million (1,000,000), 'newLineChars' will
+//		      be set to the default new line character ('\n').
 //
-//	     2. string - A string containing error prefix information.
 //
-//	     3. []string A one-dimensional slice of strings containing
-//	        error prefix information
+//		 turnAutoLineTerminationOff   bool
+//		    - When set to 'true', line termination characters
+//		      ('newLineChars') will NOT be added to the end of the solid
+//		      line text produced by this instance of
+//		      TextLineSpecSolidLine.
 //
-//	     4. [][2]string A two-dimensional slice of strings
-//	        containing error prefix and error context information.
+//		      When set to 'false', line termination characters
+//		      ('newLineChars') WILL BE added  to the end of the solid
+//		      line text produced by this instance of
+//		      TextLineSpecSolidLine.
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//	        from this object will be copied for use in error and
-//	        informational messages.
 //
-//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//	        Information from this object will be copied for use in
-//	        error and informational messages.
+//		errorPrefix                interface{}
+//		   - This object encapsulates error prefix text which is
+//		     included in all returned error messages. Usually, it
+//		     contains the name of the calling method or methods
+//		     listed as a method or function chain of execution.
 //
-//	     7. IBasicErrorPrefix - An interface to a method generating
-//	        a two-dimensional slice of strings containing error
-//	        prefix and error context information.
+//		     If no error prefix information is needed, set this
+//		     parameter to 'nil'.
 //
-//	     If parameter 'errorPrefix' is NOT convertible to one of
-//	     the valid types listed above, it will be considered
-//	     invalid and trigger the return of an error.
+//		     This empty interface must be convertible to one of the
+//		     following types:
 //
-//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
-//	     the 'errpref' software package,
-//	     "github.com/MikeAustin71/errpref".
+//		     1. nil - A nil value is valid and generates an empty
+//		        collection of error prefix and error context
+//		        information.
+//
+//		     2. string - A string containing error prefix information.
+//
+//		     3. []string A one-dimensional slice of strings containing
+//		        error prefix information
+//
+//		     4. [][2]string A two-dimensional slice of strings
+//		        containing error prefix and error context information.
+//
+//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		        from this object will be copied for use in error and
+//		        informational messages.
+//
+//		     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		        Information from this object will be copied for use in
+//		        error and informational messages.
+//
+//		     7. IBasicErrorPrefix - An interface to a method generating
+//		        a two-dimensional slice of strings containing error
+//		        prefix and error context information.
+//
+//		     If parameter 'errorPrefix' is NOT convertible to one of
+//		     the valid types listed above, it will be considered
+//		     invalid and trigger the return of an error.
+//
+//		     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		     the 'errpref' software package,
+//		     "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
