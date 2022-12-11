@@ -485,16 +485,18 @@ func (stdLine *TextLineSpecStandardLine) AddTextField(
 	return lastIndexId, err
 }
 
-// AddTextFieldDtos
+// AddTextFieldDtosMultiCol
 //
-// This method receives multiple text field data transfer
-// objects containing specifications for constructing text
-// fields which will be appended to the end of the internal
-// array of text field objects maintained by the current
-// instance of TextLineSpecStandardLine.
+// This method receives and array of text field data
+// transfer objects containing specifications for
+// constructing one or more text fields which will be
+// appended to the end of the internal array of text
+// field objects maintained by the current instance of
+// TextLineSpecStandardLine.
 //
-// If the method completes successfully, the internal array
-// index of the last Text Field object will be returned to
+// If the method completes successfully, the internal
+// array index of the last Text Field object in the
+// newly expanded text field array will be returned to
 // the calling function.
 //
 // Remember that the last array index is equal the array
@@ -794,7 +796,7 @@ func (stdLine *TextLineSpecStandardLine) AddTextField(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (stdLine *TextLineSpecStandardLine) AddTextFieldDtos(
+func (stdLine *TextLineSpecStandardLine) AddTextFieldDtosMultiCol(
 	textFieldDtos []ITextFieldFormatDto,
 	errorPrefix interface{}) (
 	lastIndexId int,
@@ -816,7 +818,7 @@ func (stdLine *TextLineSpecStandardLine) AddTextFieldDtos(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"TextLineSpecStandardLine."+
-			"AddTextFieldDtos()",
+			"AddTextFieldDtosMultiCol()",
 		"")
 
 	if err != nil {
@@ -827,6 +829,382 @@ func (stdLine *TextLineSpecStandardLine) AddTextFieldDtos(
 		addTextFieldDtos(
 			stdLine,
 			textFieldDtos,
+			ePrefix.XCpy("stdLine"+
+				"<-textFieldDtos"))
+}
+
+// AddTextFieldDtoColumns
+//
+// Adds one or more text fields to the current instance
+// of TextLineSpecStandardLine based on a series of
+// ITextFieldFormatDto objects passed as a variadic
+// argument.
+//
+// Variadic methods like this one accept a variable
+// number of arguments.
+//
+// Each ITextFieldFormatDto passed to this method will
+// constitute a separate text field in the current
+// instance of TextLineSpecStandardLine.
+//
+// Concrete types implementing the ITextFieldFormatDto
+// interface contain all the necessary specifications
+// to construct a text field.
+//
+// ----------------------------------------------------------------
+//
+// # ITextFieldFormatDto Interface
+//
+//		This method processes objects implementing the
+//		ITextFieldFormatDto interface to define text field
+//		specifications used to generate multi-column lines of
+//		text.
+//
+//		These text fields are then bundled to configure a
+//		line of text returned as an instance of
+//		TextLineSpecStandardLine.
+//
+//		Examples of concrete types implementing the
+//		ITextFieldFormatDto interface are:
+//
+//				TextBigFloatFieldFormatDto
+//				TextDateFieldFormatDto
+//				TextLabelFieldFormatDto
+//				TextFillerFieldFormatDto
+//
+//		The most frequently used type is the
+//		TextLabelFieldFormatDto structure which is defined
+//		as follows:
+//
+//			type TextLabelFieldFormatDto struct {
+//
+//				LeftMarginStr string
+//					One or more characters used to create a left
+//					margin for this Text Field.
+//
+//					If this parameter is set to an empty string, no
+//					left margin will be configured for this Text
+//					Field.
+//
+//				FieldContents interface{}
+//					This parameter may contain one of several
+//					specific data types. This empty interface type
+//					will be converted to a string and configured as
+//					the text column content within a text line.
+//
+//					Supported types which may be submitted through
+//					this empty interface parameter are listed as
+//					follows:
+//
+//					   time.Time (Converted using default format)
+//					   string
+//					   bool
+//					   uint, uint8, uint16, uint32, uint64,
+//					   int, int8, int16, int32, int64
+//					   float32, float64
+//					   *big.Int *big.Float
+//					   fmt.Stringer (types that support this interface)
+//					   TextInputParamFieldDateTimeDto
+//					         (Converts date time to string. The best way
+//					          to transmit and configure date time values.)
+//
+//				 FieldLength int
+//					The length of the text field in which the
+//					'FieldContents' will be displayed. If
+//					'FieldLength' is less than the length of the
+//					'FieldContents' string, it will be automatically
+//					set equal to the 'FieldContents' string length.
+//
+//					To automatically set the value of 'FieldLength'
+//					to the length of 'FieldContents', set this
+//					parameter to a value of minus one (-1).
+//
+//					If this parameter is submitted with a value less
+//					than minus one (-1) or greater than 1-million
+//					(1,000,000), an error will be returned.
+//
+//					Field Length Examples
+//
+//						Example-1
+//	 			        FieldContents String = "Hello World!"
+//							FieldContents String Length = 12
+//							FieldLength = 18
+//							FieldJustify = TxtJustify.Center()
+//							Text Field String =
+//								"   Hello World!   "
+//
+//						Example-2
+//	 			        FieldContents = "Hello World!"
+//							FieldContents String Length = 12
+//							FieldLength = 18
+//							FieldJustify = TxtJustify.Left()
+//							Text Field String =
+//								"Hello World!      "
+//
+//						Example-3
+//	 			        FieldContents = "Hello World!"
+//							FieldContents String Length = 12
+//							FieldLength = -1
+//							FieldJustify = TxtJustify.Center() // Ignored
+//							Text Field String =
+//								"Hello World!"
+//
+//						Example-4
+//	 			        FieldContents = "Hello World!"
+//							FieldContents String Length = 12
+//							FieldLength = 2
+//							FieldJustify = TxtJustify.Center()
+//								Ignored, because FieldLength Less
+//								Than FieldContents String Length.
+//							Text Field String =
+//								"Hello World!"
+//
+//				 FieldJustify TextJustify
+//					An enumeration which specifies the justification
+//					of the 'FieldContents' string within the text
+//					field length specified by 'FieldLength'.
+//
+//					Text justification can only be evaluated in the
+//					context of a text label ('FieldContents'), field
+//					length ('FieldLength') and a Text Justification
+//					object of type TextJustify. This is because text
+//					labels with a field length equal to or less than
+//					the length of the text label string will never
+//					use text justification. In these cases, text
+//					justification is completely ignored.
+//
+//					If the field length is greater than the length of
+//					the text label string, text justification must be
+//					equal to one of these three valid values:
+//
+//					    TextJustify(0).Left()
+//					    TextJustify(0).Right()
+//					    TextJustify(0).Center()
+//
+//					Users can also specify the abbreviated text
+//					justification enumeration syntax as follows:
+//
+//					    TxtJustify.Left()
+//					    TxtJustify.Right()
+//					    TxtJustify.Center()
+//
+//					Text Justification Examples
+//
+//						Example-1
+//	 			        FieldContents String = "Hello World!"
+//							FieldContents String Length = 12
+//							FieldLength = 18
+//							FieldJustify = TxtJustify.Center()
+//							Text Field String =
+//								"   Hello World!   "
+//
+//						Example-2
+//	 			        FieldContents = "Hello World!"
+//							FieldContents String Length = 12
+//							FieldLength = 18
+//							FieldJustify = TxtJustify.Left()
+//							Text Field String =
+//								"Hello World!      "
+//
+//						Example-3
+//	 			        FieldContents = "Hello World!"
+//							FieldContents String Length = 12
+//							FieldLength = -1
+//							FieldJustify = TxtJustify.Center() // Ignored
+//							Text Field String =
+//								"Hello World!"
+//
+//						Example-4
+//	 			        FieldContents = "Hello World!"
+//							FieldContents String Length = 12
+//							FieldLength = 2
+//							FieldJustify = TxtJustify.Center()
+//								Ignored, because FieldLength Less
+//								Than FieldContents String Length.
+//							Text Field String =
+//								"Hello World!"
+//
+//				RightMarginStr string
+//					One or more characters used to create a right
+//					margin for this Text Field.
+//
+//					If this parameter is set to an empty string, no
+//					right margin will be configured for this Text
+//					Field.
+//			}
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+//	textFieldColumns			...ITextFieldFormatDto
+//
+//		This variadic parameter is used to pass one or
+//		more instances of objects implementing the
+//		ITextFieldFormatDto interface.
+//
+//		These ITextFieldFormatDto object contains all the
+//		text field content and formatting specifications
+//		necessary to format one or more text fields in
+//		a standard line of text.
+//
+//		Examples of concrete types implementing the
+//		ITextFieldFormatDto interface are:
+//
+//			TextBigFloatFieldFormatDto
+//			TextDateFieldFormatDto
+//			TextLabelFieldFormatDto
+//			TextFillerFieldFormatDto
+//
+//		For additional information on the
+//		ITextFieldFormatDto interface, see above.
+//
+//		Note: In the Go Programming language the
+//		variadic arguments must be positioned last
+//		in the parameter list.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	lastIndexId					int
+//
+//		If this method completes successfully, the
+//		internal array index of the last text field
+//		object for the current TextLineSpecStandardLine
+//		instance will be returned as an integer value.
+//
+//		Remember that the last array index is equal the
+//		array length minus one (array length - 1).
+//
+//		In the event of an error, 'lastIndexId' will be
+//		set to a value of minus one (-1).
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (stdLine *TextLineSpecStandardLine) AddTextFieldDtoColumns(
+	errorPrefix interface{},
+	textFieldColumns ...ITextFieldFormatDto) (
+	lastIndexId int,
+	err error) {
+
+	if stdLine.lock == nil {
+		stdLine.lock = new(sync.Mutex)
+	}
+
+	stdLine.lock.Lock()
+
+	defer stdLine.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	lastIndexId = -1
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecStandardLine."+
+			"AddTextFieldDtoColumns()",
+		"")
+
+	if err != nil {
+		return lastIndexId, err
+	}
+
+	var iTextFieldFormatDtos []ITextFieldFormatDto
+
+	for _, txtCol := range textFieldColumns {
+
+		iTextFieldFormatDtos = append(
+			iTextFieldFormatDtos,
+			txtCol)
+
+	}
+
+	if len(iTextFieldFormatDtos) == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'textFieldColumns' is invalid!\n"+
+			"'textFieldColumns' is an empty and contains zero\n"+
+			"ITextFieldFormatDto objects.\n",
+			ePrefix.String())
+
+		return lastIndexId, err
+	}
+
+	return new(textLineSpecStandardLineNanobot).
+		addTextFieldDtos(
+			stdLine,
+			iTextFieldFormatDtos,
 			ePrefix.XCpy("stdLine"+
 				"<-textFieldDtos"))
 }
@@ -5297,7 +5675,7 @@ func (stdLine TextLineSpecStandardLine) NewStdLineColumns(
 	return newStdLine, err
 }
 
-//	NewStdLineMultiCol
+//	NewStdLineMultiColTextFieldDtos
 //
 //	Configures and returns a new fully populated instance
 //	of TextLineSpecStandardLine consisting of multiple
@@ -5635,7 +6013,7 @@ func (stdLine TextLineSpecStandardLine) NewStdLineColumns(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (stdLine TextLineSpecStandardLine) NewStdLineMultiCol(
+func (stdLine TextLineSpecStandardLine) NewStdLineMultiColTextFieldDtos(
 	textFieldDtos []ITextFieldFormatDto,
 	lineTerminator string,
 	turnLineTerminatorOff bool,
@@ -5660,7 +6038,7 @@ func (stdLine TextLineSpecStandardLine) NewStdLineMultiCol(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"TextLineSpecStandardLine."+
-			"NewStdLineMultiCol()",
+			"NewStdLineMultiColTextFieldDtos()",
 		"")
 
 	if err != nil {
