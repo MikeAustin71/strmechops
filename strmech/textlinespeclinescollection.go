@@ -18,13 +18,21 @@ type TextLineSpecLinesCollection struct {
 
 // AddStdLineColumns
 //
-// Adds a Standard Text Line to the Text Specification
+// Adds a standard text line to the Text Specification
 // Lines Collection maintained by the current instance of
 // TextLineSpecLinesCollection.
 //
 // The standard text line created and added to the
-// collection will consist of one column of text as
-// specified by input parameter 'oneColumnTextField'.
+// collection will consist of one or more columns of text
+// as specified by input parameter 'textFieldColumns'.
+//
+// 'textFieldColumns' is a variadic parameter which
+// accepts a variable number of arguments of type
+// ITextFieldFormatDto. These ITextFieldFormatDto
+// objects contain all the specifications necessary to
+// construct a text field. Each ITextFieldFormatDto
+// object will be instantiated in the standard text line
+// as a separate text field.
 //
 // ----------------------------------------------------------------
 //
@@ -402,6 +410,73 @@ func (txtLinesSpecCol *TextLineSpecLinesCollection) AddStdLineColumns(
 			"txtLinesSpecCol<-newStdLine"))
 
 	return err
+}
+
+// AddStdLineMultiCols
+//
+// Adds a standard text line to the Text Specification
+// Lines Collection maintained by the current instance of
+// TextLineSpecLinesCollection.
+//
+// 'textFieldColumns' is an array of ITextFieldFormatDto
+// objects. These ITextFieldFormatDto objects contain all
+// the specifications necessary to construct a text
+// field. Each ITextFieldFormatDto object will be
+// instantiated in the standard text line as a separate
+// text field. When completed, the newly created standard
+// text line will be added to the Text Line Specifications
+// Collection maintained by the current instance of
+// TextLineSpecLinesCollection.
+func (txtLinesSpecCol *TextLineSpecLinesCollection) AddStdLineMultiCols(
+	textFieldColumns []ITextFieldFormatDto,
+	lineTerminator string,
+	turnLineTerminatorOff bool,
+	errorPrefix interface{}) error {
+
+	if txtLinesSpecCol.lock == nil {
+		txtLinesSpecCol.lock = new(sync.Mutex)
+	}
+
+	txtLinesSpecCol.lock.Lock()
+
+	defer txtLinesSpecCol.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecLinesCollection."+
+			"AddStdLineMultiCols()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	var newStdLine TextLineSpecStandardLine
+
+	newStdLine,
+		err = TextLineSpecStandardLine{}.NewStdLineMultiColTextFieldDtos(
+		textFieldColumns,
+		lineTerminator,
+		turnLineTerminatorOff,
+		ePrefix.XCpy(
+			"newStdLine<-oneColumnTextField"))
+
+	if err != nil {
+		return err
+	}
+
+	err = new(textLineSpecLinesCollectionNanobot).addTextLine(
+		txtLinesSpecCol,
+		&newStdLine,
+		ePrefix.XCpy(
+			"txtLinesSpecCol<-newStdLine"))
+
+	return err
+
 }
 
 //	AddBlankLine
