@@ -519,7 +519,7 @@ func (stdLine *TextLineSpecStandardLine) AddTextField(
 //		ITextFieldFormatDto interface are:
 //
 //				TextFieldFormatDtoBigFloat
-//				TextDateFieldFormatDto
+//				TextFieldFormatDtoDate
 //				TextLabelFieldFormatDto
 //				TextFillerFieldFormatDto
 //
@@ -701,7 +701,7 @@ func (stdLine *TextLineSpecStandardLine) AddTextField(
 //		ITextFieldFormatDto interface are:
 //
 //			TextFieldFormatDtoBigFloat
-//			TextDateFieldFormatDto
+//			TextFieldFormatDtoDate
 //			TextLabelFieldFormatDto
 //			TextFillerFieldFormatDto
 //
@@ -868,7 +868,7 @@ func (stdLine *TextLineSpecStandardLine) AddTextFieldDtosMultiCol(
 //		ITextFieldFormatDto interface are:
 //
 //				TextFieldFormatDtoBigFloat
-//				TextDateFieldFormatDto
+//				TextFieldFormatDtoDate
 //				TextLabelFieldFormatDto
 //				TextFillerFieldFormatDto
 //
@@ -1111,7 +1111,7 @@ func (stdLine *TextLineSpecStandardLine) AddTextFieldDtosMultiCol(
 //		ITextFieldFormatDto interface are:
 //
 //			TextFieldFormatDtoBigFloat
-//			TextDateFieldFormatDto
+//			TextFieldFormatDtoDate
 //			TextLabelFieldFormatDto
 //			TextFillerFieldFormatDto
 //
@@ -5296,7 +5296,7 @@ func (stdLine TextLineSpecStandardLine) NewStandardLineAllParms(
 //		ITextFieldFormatDto interface are:
 //
 //				TextFieldFormatDtoBigFloat
-//				TextDateFieldFormatDto
+//				TextFieldFormatDtoDate
 //				TextLabelFieldFormatDto
 //				TextFillerFieldFormatDto
 //
@@ -5579,7 +5579,7 @@ func (stdLine TextLineSpecStandardLine) NewStandardLineAllParms(
 //		ITextFieldFormatDto interface are:
 //
 //			TextFieldFormatDtoBigFloat
-//			TextDateFieldFormatDto
+//			TextFieldFormatDtoDate
 //			TextLabelFieldFormatDto
 //			TextFillerFieldFormatDto
 //
@@ -5699,7 +5699,7 @@ func (stdLine TextLineSpecStandardLine) NewStdLineColumns(
 //		ITextFieldFormatDto interface are:
 //
 //				TextFieldFormatDtoBigFloat
-//				TextDateFieldFormatDto
+//				TextFieldFormatDtoDate
 //				TextLabelFieldFormatDto
 //				TextFillerFieldFormatDto
 //
@@ -5881,7 +5881,7 @@ func (stdLine TextLineSpecStandardLine) NewStdLineColumns(
 //		ITextFieldFormatDto interface are:
 //
 //			TextFieldFormatDtoBigFloat
-//			TextDateFieldFormatDto
+//			TextFieldFormatDtoDate
 //			TextLabelFieldFormatDto
 //			TextFillerFieldFormatDto
 //

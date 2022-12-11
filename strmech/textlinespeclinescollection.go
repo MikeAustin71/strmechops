@@ -51,7 +51,7 @@ type TextLineSpecLinesCollection struct {
 //		ITextFieldFormatDto interface are:
 //
 //				TextFieldFormatDtoBigFloat
-//				TextDateFieldFormatDto
+//				TextFieldFormatDtoDate
 //				TextLabelFieldFormatDto
 //				TextFillerFieldFormatDto
 //
@@ -334,7 +334,7 @@ type TextLineSpecLinesCollection struct {
 //		ITextFieldFormatDto interface are:
 //
 //			TextFieldFormatDtoBigFloat
-//			TextDateFieldFormatDto
+//			TextFieldFormatDtoDate
 //			TextLabelFieldFormatDto
 //			TextFillerFieldFormatDto
 //

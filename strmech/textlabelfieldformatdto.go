@@ -49,7 +49,7 @@ type TextLabelFieldFormatDto struct {
 	//		ITextFieldSpecification
 	//		ITextFieldFormatDto
 	//			TextFieldFormatDtoBigFloat
-	//			TextDateFieldFormatDto
+	//			TextFieldFormatDtoDate
 	//			TextLabelFieldFormatDto
 	//			TextFillerFieldFormatDto
 	//

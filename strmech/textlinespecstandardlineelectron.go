@@ -52,7 +52,7 @@ type textLineSpecStandardLineElectron struct {
 //		ITextFieldFormatDto interface are:
 //
 //				TextFieldFormatDtoBigFloat
-//				TextDateFieldFormatDto
+//				TextFieldFormatDtoDate
 //				TextLabelFieldFormatDto
 //				TextFillerFieldFormatDto
 //
@@ -247,7 +247,7 @@ type textLineSpecStandardLineElectron struct {
 //		ITextFieldFormatDto interface are:
 //
 //			TextFieldFormatDtoBigFloat
-//			TextDateFieldFormatDto
+//			TextFieldFormatDtoDate
 //			TextLabelFieldFormatDto
 //			TextFillerFieldFormatDto
 //

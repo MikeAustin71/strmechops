@@ -220,7 +220,7 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) addTextFields(
 //		ITextFieldFormatDto interface are:
 //
 //				TextFieldFormatDtoBigFloat
-//				TextDateFieldFormatDto
+//				TextFieldFormatDtoDate
 //				TextLabelFieldFormatDto
 //				TextFillerFieldFormatDto
 //
@@ -412,7 +412,7 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) addTextFields(
 //		ITextFieldFormatDto interface are:
 //
 //			TextFieldFormatDtoBigFloat
-//			TextDateFieldFormatDto
+//			TextFieldFormatDtoDate
 //			TextLabelFieldFormatDto
 //			TextFillerFieldFormatDto
 //
@@ -1095,7 +1095,7 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) insertTextFieldAtIndex
 //		ITextFieldFormatDto interface are:
 //
 //				TextFieldFormatDtoBigFloat
-//				TextDateFieldFormatDto
+//				TextFieldFormatDtoDate
 //				TextLabelFieldFormatDto
 //				TextFillerFieldFormatDto
 //
@@ -1289,7 +1289,7 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) insertTextFieldAtIndex
 //		ITextFieldFormatDto interface are:
 //
 //			TextFieldFormatDtoBigFloat
-//			TextDateFieldFormatDto
+//			TextFieldFormatDtoDate
 //			TextLabelFieldFormatDto
 //			TextFillerFieldFormatDto
 //

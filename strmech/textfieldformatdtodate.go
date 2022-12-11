@@ -8,9 +8,9 @@ import (
 	"time"
 )
 
-// TextDateFieldFormatDto
+// TextFieldFormatDtoDate
 //
-// The TextDateFieldFormatDto type encapsulates input
+// The TextFieldFormatDtoDate type encapsulates input
 // specifications for a text field populated with a
 // formatted Date/Time string created from a type
 // time.Time.
@@ -19,7 +19,7 @@ import (
 // to facilitate easy data entry which creating and
 // configuring text lines strings for screen display,
 // file output or printing.
-type TextDateFieldFormatDto struct {
+type TextFieldFormatDtoDate struct {
 	LeftMarginStr string
 	//	One or more characters used to create a left
 	//	margin for this 'FieldDateTime' Text Field.
@@ -158,9 +158,9 @@ type TextDateFieldFormatDto struct {
 // CopyIn
 //
 // Copies all the data fields from an incoming instance
-// of TextDateFieldFormatDto
+// of TextFieldFormatDtoDate
 // ('incomingTxtDateFieldFmtDto') to the corresponding
-// data fields of the current TextDateFieldFormatDto
+// data fields of the current TextFieldFormatDtoDate
 // instance ('textDateFieldFormatDto').
 //
 // ----------------------------------------------------------------
@@ -169,21 +169,21 @@ type TextDateFieldFormatDto struct {
 //
 //	This method will delete and overwrite all
 //	pre-existing data values contained within the
-//	current instance of TextDateFieldFormatDto
+//	current instance of TextFieldFormatDtoDate
 //	('textDateFieldFormatDto').
 //
 // ----------------------------------------------------------------
 //
 // # Input Parameters
 //
-//	incomingTxtDateFieldFmtDto		*TextDateFieldFormatDto
+//	incomingTxtDateFieldFmtDto		*TextFieldFormatDtoDate
 //
 //		A pointer to an instance of
-//		TextDateFieldFormatDto.
+//		TextFieldFormatDtoDate.
 //
 //		All the internal data field values in this
 //		instance will be copied to corresponding data
-//		fields of the current TextDateFieldFormatDto
+//		fields of the current TextFieldFormatDtoDate
 //		instance.
 //
 //		The data fields contained in
@@ -268,8 +268,8 @@ type TextDateFieldFormatDto struct {
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (textDateFieldFormatDto *TextDateFieldFormatDto) CopyIn(
-	incomingTxtDateFieldFmtDto *TextDateFieldFormatDto,
+func (textDateFieldFormatDto *TextFieldFormatDtoDate) CopyIn(
+	incomingTxtDateFieldFmtDto *TextFieldFormatDtoDate,
 	errorPrefix interface{}) error {
 
 	if textDateFieldFormatDto.lock == nil {
@@ -286,7 +286,7 @@ func (textDateFieldFormatDto *TextDateFieldFormatDto) CopyIn(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"TextDateFieldFormatDto."+
+		"TextFieldFormatDtoDate."+
 			"CopyIn()",
 		"")
 
@@ -305,9 +305,9 @@ func (textDateFieldFormatDto *TextDateFieldFormatDto) CopyIn(
 // CopyOut
 //
 // Returns a deep copy of the current
-// TextDateFieldFormatDto instance.
+// TextFieldFormatDtoDate instance.
 //
-// If the current TextDateFieldFormatDto instance
+// If the current TextFieldFormatDtoDate instance
 // contains invalid member variable data values, this
 // method will return an error.
 //
@@ -378,12 +378,12 @@ func (textDateFieldFormatDto *TextDateFieldFormatDto) CopyIn(
 //
 // # Return Values
 //
-//	TextDateFieldFormatDto
+//	TextFieldFormatDtoDate
 //
 //		If this method completes successfully and no
 //		errors are encountered, this parameter will
 //		return a deep copy of the current
-//		TextDateFieldFormatDto instance.
+//		TextFieldFormatDtoDate instance.
 //
 //	error
 //
@@ -397,9 +397,9 @@ func (textDateFieldFormatDto *TextDateFieldFormatDto) CopyIn(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (textDateFieldFormatDto *TextDateFieldFormatDto) CopyOut(
+func (textDateFieldFormatDto *TextFieldFormatDtoDate) CopyOut(
 	errorPrefix interface{}) (
-	TextDateFieldFormatDto,
+	TextFieldFormatDtoDate,
 	error) {
 
 	if textDateFieldFormatDto.lock == nil {
@@ -414,12 +414,12 @@ func (textDateFieldFormatDto *TextDateFieldFormatDto) CopyOut(
 
 	var err error
 
-	newTxtDateFieldFormatDto := TextDateFieldFormatDto{}
+	newTxtDateFieldFormatDto := TextFieldFormatDtoDate{}
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"TextDateFieldFormatDto."+
+		"TextFieldFormatDtoDate."+
 			"CopyOut()",
 		"")
 
@@ -440,10 +440,10 @@ func (textDateFieldFormatDto *TextDateFieldFormatDto) CopyOut(
 // CopyOutITextFieldFormat
 //
 // Returns a deep copy of the current
-// TextDateFieldFormatDto instance cast as an
+// TextFieldFormatDtoDate instance cast as an
 // ITextFieldFormatDto interface object.
 //
-// If the current TextDateFieldFormatDto instance
+// If the current TextFieldFormatDtoDate instance
 // contains invalid member variable data values, this
 // method will return an error.
 //
@@ -522,7 +522,7 @@ func (textDateFieldFormatDto *TextDateFieldFormatDto) CopyOut(
 //		If this method completes successfully and no
 //		errors are encountered, this parameter will
 //		return a deep copy of the current
-//		TextDateFieldFormatDto instance cast as an
+//		TextFieldFormatDtoDate instance cast as an
 //		ITextFieldFormatDto interface object.
 //
 //	error
@@ -537,7 +537,7 @@ func (textDateFieldFormatDto *TextDateFieldFormatDto) CopyOut(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (textDateFieldFormatDto *TextDateFieldFormatDto) CopyOutITextFieldFormat(
+func (textDateFieldFormatDto *TextFieldFormatDtoDate) CopyOutITextFieldFormat(
 	errorPrefix interface{}) (
 	ITextFieldFormatDto,
 	error) {
@@ -554,12 +554,12 @@ func (textDateFieldFormatDto *TextDateFieldFormatDto) CopyOutITextFieldFormat(
 
 	var err error
 
-	newTxtDateFieldFormatDto := TextDateFieldFormatDto{}
+	newTxtDateFieldFormatDto := TextFieldFormatDtoDate{}
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"TextDateFieldFormatDto."+
+		"TextFieldFormatDtoDate."+
 			"CopyOutITextFieldFormat()",
 		"")
 
@@ -581,9 +581,9 @@ func (textDateFieldFormatDto *TextDateFieldFormatDto) CopyOutITextFieldFormat(
 // Empty
 //
 // Resets all internal member variables for the current
-// instance of TextDateFieldFormatDto to their zero or
+// instance of TextFieldFormatDtoDate to their zero or
 // uninitialized states. This method will leave the
-// current instance of TextDateFieldFormatDto in an
+// current instance of TextFieldFormatDtoDate in an
 // invalid state and unavailable for immediate reuse.
 //
 // This method is required in order to implement the
@@ -595,7 +595,7 @@ func (textDateFieldFormatDto *TextDateFieldFormatDto) CopyOutITextFieldFormat(
 //
 // This method will delete all member variable data
 // values in the current instance of
-// TextDateFieldFormatDto. All member variable data
+// TextFieldFormatDtoDate. All member variable data
 // values will be reset to their zero or uninitialized
 // states.
 //
@@ -610,7 +610,7 @@ func (textDateFieldFormatDto *TextDateFieldFormatDto) CopyOutITextFieldFormat(
 // # Return Values
 //
 //	NONE
-func (textDateFieldFormatDto *TextDateFieldFormatDto) Empty() {
+func (textDateFieldFormatDto *TextFieldFormatDtoDate) Empty() {
 
 	if textDateFieldFormatDto.lock == nil {
 		textDateFieldFormatDto.lock = new(sync.Mutex)
@@ -630,9 +630,9 @@ func (textDateFieldFormatDto *TextDateFieldFormatDto) Empty() {
 // Equal
 //
 // Receives a pointer to another instance of
-// TextDateFieldFormatDto and proceeds to compare the
+// TextFieldFormatDtoDate and proceeds to compare the
 // member variables to those contained in the current
-// TextDateFieldFormatDto instance in order to
+// TextFieldFormatDtoDate instance in order to
 // determine if they are equivalent.
 //
 // A boolean flag showing the result of this comparison
@@ -644,13 +644,13 @@ func (textDateFieldFormatDto *TextDateFieldFormatDto) Empty() {
 //
 // # Input Parameters
 //
-//	incomingTxtDateFieldFmtDto		*TextDateFieldFormatDto
+//	incomingTxtDateFieldFmtDto		*TextFieldFormatDtoDate
 //
 //		A pointer to an incoming instance of
-//		TextDateFieldFormatDto. This method will
+//		TextFieldFormatDtoDate. This method will
 //		compare all member variable data values in this
 //		instance against those contained in the current
-//		instance of TextDateFieldFormatDto. If the data
+//		instance of TextFieldFormatDtoDate. If the data
 //		values in both instances are found to be equal in
 //		all respects, this method will return a boolean
 //		value of 'true'.
@@ -664,12 +664,12 @@ func (textDateFieldFormatDto *TextDateFieldFormatDto) Empty() {
 //		If the member variable data values contained in
 //		input parameter 'incomingTxtDateFieldFmtDto'
 //		are equal in all respects to those contained in
-//		the current instance of TextDateFieldFormatDto,
+//		the current instance of TextFieldFormatDtoDate,
 //		this method will return a boolean value of
 //		'true'. Otherwise, a value of 'false' will be
 //		returned to the calling function.
-func (textDateFieldFormatDto *TextDateFieldFormatDto) Equal(
-	incomingTxtDateFieldFmtDto *TextDateFieldFormatDto) bool {
+func (textDateFieldFormatDto *TextFieldFormatDtoDate) Equal(
+	incomingTxtDateFieldFmtDto *TextFieldFormatDtoDate) bool {
 
 	if textDateFieldFormatDto.lock == nil {
 		textDateFieldFormatDto.lock = new(sync.Mutex)
@@ -686,7 +686,7 @@ func (textDateFieldFormatDto *TextDateFieldFormatDto) Equal(
 
 // GetFieldContentTextLabel
 //
-// Converts the current TextDateFieldFormatDto instance
+// Converts the current TextFieldFormatDtoDate instance
 // member variable, 'FieldDateTime', to an instance of
 // TextFieldSpecLabel.
 //
@@ -772,7 +772,7 @@ func (textDateFieldFormatDto *TextDateFieldFormatDto) Equal(
 //
 //		If this method completes successfully, the Text
 //		Field Contents extracted from the current
-//		instance of TextDateFieldFormatDto, will be
+//		instance of TextFieldFormatDtoDate, will be
 //		returned as text label of type
 //		TextFieldSpecLabel.
 //
@@ -792,7 +792,7 @@ func (textDateFieldFormatDto *TextDateFieldFormatDto) Equal(
 //		for input parameter 'errPrefDto' (error prefix)
 //		will be prefixed or attached at the beginning of
 //		the error message.
-func (textDateFieldFormatDto *TextDateFieldFormatDto) GetFieldContentTextLabel(
+func (textDateFieldFormatDto *TextFieldFormatDtoDate) GetFieldContentTextLabel(
 	errorPrefix interface{}) (
 	TextFieldSpecLabel,
 	error) {
@@ -814,7 +814,7 @@ func (textDateFieldFormatDto *TextDateFieldFormatDto) GetFieldContentTextLabel(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"TextDateFieldFormatDto."+
+		"TextFieldFormatDtoDate."+
 			"GetFieldContentTextLabel()",
 		"")
 
@@ -832,11 +832,11 @@ func (textDateFieldFormatDto *TextDateFieldFormatDto) GetFieldContentTextLabel(
 // GetFieldFormatDtoType
 //
 // Returns a string containing the name of this type
-// ('TextDateFieldFormatDto').
+// ('TextFieldFormatDtoDate').
 //
 // This method is required in order to implement the
 // ITextFieldFormatDto interface.
-func (textDateFieldFormatDto *TextDateFieldFormatDto) GetFieldFormatDtoType() string {
+func (textDateFieldFormatDto *TextFieldFormatDtoDate) GetFieldFormatDtoType() string {
 
 	if textDateFieldFormatDto.lock == nil {
 		textDateFieldFormatDto.lock = new(sync.Mutex)
@@ -846,14 +846,14 @@ func (textDateFieldFormatDto *TextDateFieldFormatDto) GetFieldFormatDtoType() st
 
 	defer textDateFieldFormatDto.lock.Unlock()
 
-	return "TextDateFieldFormatDto"
+	return "TextFieldFormatDtoDate"
 }
 
 // GetFormattedTextFieldStr
 //
 // Returns a string containing the formatted text field
 // generated from the current instance of
-// TextDateFieldFormatDto.
+// TextFieldFormatDtoDate.
 //
 // The returned formatted text field string contains the
 // left margin, field contents and right margin.
@@ -932,14 +932,14 @@ func (textDateFieldFormatDto *TextDateFieldFormatDto) GetFieldFormatDtoType() st
 //
 //		If this method completes successfully, the text
 //		field specifications contained in the current
-//		instance of TextDateFieldFormatDto will be
+//		instance of TextFieldFormatDtoDate will be
 //		converted to, and returned as, a formatted text
 //		field string.
 //
 //		The returned text field string will contain the
 //		left margin, text field contents and right margin
 //		as those elements are defined in the current
-//		instance of TextDateFieldFormatDto.
+//		instance of TextFieldFormatDtoDate.
 //
 //	error
 //
@@ -953,7 +953,7 @@ func (textDateFieldFormatDto *TextDateFieldFormatDto) GetFieldFormatDtoType() st
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (textDateFieldFormatDto *TextDateFieldFormatDto) GetFormattedTextFieldStr(
+func (textDateFieldFormatDto *TextFieldFormatDtoDate) GetFormattedTextFieldStr(
 	errorPrefix interface{}) (
 	string,
 	error) {
@@ -973,7 +973,7 @@ func (textDateFieldFormatDto *TextDateFieldFormatDto) GetFormattedTextFieldStr(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"TextDateFieldFormatDto."+
+		"TextFieldFormatDtoDate."+
 			"GetFormattedTextFieldStr()",
 		"")
 
@@ -995,7 +995,7 @@ func (textDateFieldFormatDto *TextDateFieldFormatDto) GetFormattedTextFieldStr(
 //
 // This method is required in order to implement the
 // ITextFieldFormatDto interface.
-func (textDateFieldFormatDto *TextDateFieldFormatDto) GetLeftMarginLength() int {
+func (textDateFieldFormatDto *TextFieldFormatDtoDate) GetLeftMarginLength() int {
 
 	if textDateFieldFormatDto.lock == nil {
 		textDateFieldFormatDto.lock = new(sync.Mutex)
@@ -1014,7 +1014,7 @@ func (textDateFieldFormatDto *TextDateFieldFormatDto) GetLeftMarginLength() int 
 //
 // This method is required in order to implement the
 // ITextFieldFormatDto interface.
-func (textDateFieldFormatDto *TextDateFieldFormatDto) GetLeftMarginStr() string {
+func (textDateFieldFormatDto *TextFieldFormatDtoDate) GetLeftMarginStr() string {
 
 	if textDateFieldFormatDto.lock == nil {
 		textDateFieldFormatDto.lock = new(sync.Mutex)
@@ -1034,7 +1034,7 @@ func (textDateFieldFormatDto *TextDateFieldFormatDto) GetLeftMarginStr() string 
 //
 // This method is required in order to implement the
 // ITextFieldFormatDto interface.
-func (textDateFieldFormatDto *TextDateFieldFormatDto) GetRightMarginLength() int {
+func (textDateFieldFormatDto *TextFieldFormatDtoDate) GetRightMarginLength() int {
 
 	if textDateFieldFormatDto.lock == nil {
 		textDateFieldFormatDto.lock = new(sync.Mutex)
@@ -1053,7 +1053,7 @@ func (textDateFieldFormatDto *TextDateFieldFormatDto) GetRightMarginLength() int
 //
 // This method is required in order to implement the
 // ITextFieldFormatDto interface.
-func (textDateFieldFormatDto *TextDateFieldFormatDto) GetRightMarginStr() string {
+func (textDateFieldFormatDto *TextFieldFormatDtoDate) GetRightMarginStr() string {
 
 	if textDateFieldFormatDto.lock == nil {
 		textDateFieldFormatDto.lock = new(sync.Mutex)
@@ -1069,7 +1069,7 @@ func (textDateFieldFormatDto *TextDateFieldFormatDto) GetRightMarginStr() string
 // IsValidInstance
 //
 // Performs a diagnostic review of the data values
-// encapsulated in the current TextDateFieldFormatDto
+// encapsulated in the current TextFieldFormatDtoDate
 // instance to determine if they are valid.
 //
 // If all data elements evaluate as valid, this method
@@ -1092,11 +1092,11 @@ func (textDateFieldFormatDto *TextDateFieldFormatDto) GetRightMarginStr() string
 //	isValid						bool
 //
 //		If all data elements encapsulated by the current
-//		instance of TextDateFieldFormatDto are valid,
+//		instance of TextFieldFormatDtoDate are valid,
 //		this returned boolean value is set to 'true'. If
 //		any data values are invalid, this return
 //		value is set to 'false'.
-func (textDateFieldFormatDto *TextDateFieldFormatDto) IsValidInstance() (
+func (textDateFieldFormatDto *TextFieldFormatDtoDate) IsValidInstance() (
 	isValid bool) {
 
 	if textDateFieldFormatDto.lock == nil {
@@ -1119,7 +1119,7 @@ func (textDateFieldFormatDto *TextDateFieldFormatDto) IsValidInstance() (
 // IsValidInstanceError
 //
 // Performs a diagnostic review of the data values
-// encapsulated in the current TextDateFieldFormatDto
+// encapsulated in the current TextFieldFormatDtoDate
 // instance to determine if they are valid.
 //
 // If any data element evaluates as invalid, this method
@@ -1199,7 +1199,7 @@ func (textDateFieldFormatDto *TextDateFieldFormatDto) IsValidInstance() (
 //
 //		If any of the internal member data variables
 //		contained in the current instance of
-//		TextDateFieldFormatDto are found to be invalid,
+//		TextFieldFormatDtoDate are found to be invalid,
 //		this method will return an error containing an
 //		appropriate error message.
 //
@@ -1208,7 +1208,7 @@ func (textDateFieldFormatDto *TextDateFieldFormatDto) IsValidInstance() (
 //		and text passed by input parameter, 'errorPrefix'.
 //		The 'errorPrefix' text will be attached to the
 //		beginning of the error message.
-func (textDateFieldFormatDto *TextDateFieldFormatDto) IsValidInstanceError(
+func (textDateFieldFormatDto *TextFieldFormatDtoDate) IsValidInstanceError(
 	errorPrefix interface{}) error {
 
 	if textDateFieldFormatDto.lock == nil {
@@ -1225,7 +1225,7 @@ func (textDateFieldFormatDto *TextDateFieldFormatDto) IsValidInstanceError(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"TextDateFieldFormatDto."+
+		"TextFieldFormatDtoDate."+
 			"IsValidInstanceError()",
 		"")
 
@@ -1244,7 +1244,7 @@ func (textDateFieldFormatDto *TextDateFieldFormatDto) IsValidInstanceError(
 }
 
 // textDateFieldFormatDtoNanobot - Provides helper
-// methods for TextDateFieldFormatDto.
+// methods for TextFieldFormatDtoDate.
 type textDateFieldFormatDtoNanobot struct {
 	lock *sync.Mutex
 }
@@ -1252,8 +1252,8 @@ type textDateFieldFormatDtoNanobot struct {
 // copy
 //
 // Copies all data from a source instance of
-// TextDateFieldFormatDto to a destination instance of
-// TextDateFieldFormatDto.
+// TextFieldFormatDtoDate to a destination instance of
+// TextFieldFormatDtoDate.
 //
 // ----------------------------------------------------------------
 //
@@ -1261,17 +1261,17 @@ type textDateFieldFormatDtoNanobot struct {
 //
 //	This method will delete and overwrite all
 //	pre-existing data values contained within the
-//	TextDateFieldFormatDto instance passed as input
+//	TextFieldFormatDtoDate instance passed as input
 //	parameter 'destinationTxtDateFieldDto'.
 //
 // ----------------------------------------------------------------
 //
 // # Input Parameters
 //
-//	destinationTxtDateFieldDto		*TextDateFieldFormatDto
+//	destinationTxtDateFieldDto		*TextFieldFormatDtoDate
 //
 //		A pointer to an instance of
-//		TextDateFieldFormatDto.
+//		TextFieldFormatDtoDate.
 //
 //		Data extracted from input parameter
 //		'sourceTxtDateFieldDto' will be copied to this
@@ -1291,12 +1291,12 @@ type textDateFieldFormatDtoNanobot struct {
 //		'destinationTxtDateFieldDto' will be deleted and
 //		overwritten.
 //
-//	sourceTxtDateFieldDto			*TextDateFieldFormatDto
+//	sourceTxtDateFieldDto			*TextFieldFormatDtoDate
 //
 //		A pointer to an instance of
-//		TextDateFieldFormatDto.
+//		TextFieldFormatDtoDate.
 //
-//		All data values in this TextDateFieldFormatDto
+//		All data values in this TextFieldFormatDtoDate
 //		instance will be copied to input parameter
 //		'destinationTxtDateFieldDto'.
 //
@@ -1343,8 +1343,8 @@ type textDateFieldFormatDtoNanobot struct {
 //		text will be attached to the beginning of the
 //		error message.
 func (txtDateFieldDtoNanobot *textDateFieldFormatDtoNanobot) copy(
-	destinationTxtDateFieldDto *TextDateFieldFormatDto,
-	sourceTxtDateFieldDto *TextDateFieldFormatDto,
+	destinationTxtDateFieldDto *TextFieldFormatDtoDate,
+	sourceTxtDateFieldDto *TextFieldFormatDtoDate,
 	errPrefDto *ePref.ErrPrefixDto) error {
 
 	if txtDateFieldDtoNanobot.lock == nil {
@@ -1430,7 +1430,7 @@ func (txtDateFieldDtoNanobot *textDateFieldFormatDtoNanobot) copy(
 
 // getFormattedTextFieldStr
 //
-// Converts an instance of TextDateFieldFormatDto to a
+// Converts an instance of TextFieldFormatDtoDate to a
 // formatted text field string.
 //
 // This formatted text field string contains the left
@@ -1440,10 +1440,10 @@ func (txtDateFieldDtoNanobot *textDateFieldFormatDtoNanobot) copy(
 //
 // # Input Parameters
 //
-//	txtDateFieldDto				*TextDateFieldFormatDto
+//	txtDateFieldDto				*TextFieldFormatDtoDate
 //
 //		A pointer to an instance of
-//		TextDateFieldFormatDto.
+//		TextFieldFormatDtoDate.
 //
 //		The left and right margins as well as the member
 //		variable 'FieldDateTime' will be processed and
@@ -1495,7 +1495,7 @@ func (txtDateFieldDtoNanobot *textDateFieldFormatDtoNanobot) copy(
 //		will be prefixed or attached at the beginning of
 //		the error message.
 func (txtDateFieldDtoNanobot *textDateFieldFormatDtoNanobot) getFormattedTextFieldStr(
-	txtDateFieldDto *TextDateFieldFormatDto,
+	txtDateFieldDto *TextFieldFormatDtoDate,
 	errPrefDto *ePref.ErrPrefixDto) (
 	string,
 	error) {
@@ -1569,18 +1569,18 @@ func (txtDateFieldDtoNanobot *textDateFieldFormatDtoNanobot) getFormattedTextFie
 }
 
 // textDateFieldFormatDtoMolecule - Provides helper
-// methods for TextDateFieldFormatDto.
+// methods for TextFieldFormatDtoDate.
 type textDateFieldFormatDtoMolecule struct {
 	lock *sync.Mutex
 }
 
 // getFieldContentTextLabel
 //
-// Converts a TextDateFieldFormatDto instance member
+// Converts a TextFieldFormatDtoDate instance member
 // variable, 'FieldDateTime', to an instance of
 // TextFieldSpecLabel.
 //
-// The TextDateFieldFormatDto instance is passed as
+// The TextFieldFormatDtoDate instance is passed as
 // input parameter, 'txtDateFieldDto'.
 //
 // The returned TextFieldSpecLabel will only contain
@@ -1592,16 +1592,16 @@ type textDateFieldFormatDtoMolecule struct {
 // # BE ADVISED
 //
 //	If input parameter 'txtDateFieldDto', an instance
-//	of TextDateFieldFormatDto, is found to be invalid,
+//	of TextFieldFormatDtoDate, is found to be invalid,
 //	an error will be returned.
 //
 // ----------------------------------------------------------------
 //
 // # Input Parameters
 //
-//	txtDateFieldDto				*TextDateFieldFormatDto
+//	txtDateFieldDto				*TextFieldFormatDtoDate
 //
-//		A pointer to an instance of TextDateFieldFormatDto.
+//		A pointer to an instance of TextFieldFormatDtoDate.
 //
 //		The member variable 'FieldDateTime' will be
 //		converted to a text label of type
@@ -1655,7 +1655,7 @@ type textDateFieldFormatDtoMolecule struct {
 //		will be prefixed or attached at the beginning of
 //		the error message.
 func (txtDateFieldFmtDtoMolecule *textDateFieldFormatDtoMolecule) getFieldContentTextLabel(
-	txtDateFieldDto *TextDateFieldFormatDto,
+	txtDateFieldDto *TextFieldFormatDtoDate,
 	errPrefDto *ePref.ErrPrefixDto) (
 	TextFieldSpecLabel,
 	error) {
@@ -1726,7 +1726,7 @@ func (txtDateFieldFmtDtoMolecule *textDateFieldFormatDtoMolecule) getFieldConten
 }
 
 // textDateFieldFormatDtoAtom - Provides helper
-// methods for TextDateFieldFormatDto.
+// methods for TextFieldFormatDtoDate.
 type textDateFieldFormatDtoAtom struct {
 	lock *sync.Mutex
 }
@@ -1734,7 +1734,7 @@ type textDateFieldFormatDtoAtom struct {
 // empty
 //
 // Receives a pointer to an instance of
-// TextDateFieldFormatDto and proceeds to set all the
+// TextFieldFormatDtoDate and proceeds to set all the
 // member variables to their zero or uninitialized
 // states.
 //
@@ -1744,7 +1744,7 @@ type textDateFieldFormatDtoAtom struct {
 //
 //	This method will delete and reset all pre-existing
 //	data values contained within the
-//	TextDateFieldFormatDto instance passed as input
+//	TextFieldFormatDtoDate instance passed as input
 //	parameter 'txtDateFieldDto' to their zero or
 //	uninitialized states.
 //
@@ -1752,9 +1752,9 @@ type textDateFieldFormatDtoAtom struct {
 //
 // # Input Parameters
 //
-//	txtDateFieldDto				*TextDateFieldFormatDto
+//	txtDateFieldDto				*TextFieldFormatDtoDate
 //
-//		A pointer to an instance of TextDateFieldFormatDto.
+//		A pointer to an instance of TextFieldFormatDtoDate.
 //		All data values contained within this instance
 //		will be deleted and reset to their zero or
 //		uninitialized states.
@@ -1765,7 +1765,7 @@ type textDateFieldFormatDtoAtom struct {
 //
 //	NONE
 func (txtDateFieldDtoAtom *textDateFieldFormatDtoAtom) empty(
-	txtDateFieldDto *TextDateFieldFormatDto) {
+	txtDateFieldDto *TextFieldFormatDtoDate) {
 
 	if txtDateFieldDtoAtom.lock == nil {
 		txtDateFieldDtoAtom.lock = new(sync.Mutex)
@@ -1797,34 +1797,34 @@ func (txtDateFieldDtoAtom *textDateFieldFormatDtoAtom) empty(
 
 // equal
 //
-// Compares two instances of TextDateFieldFormatDto and
+// Compares two instances of TextFieldFormatDtoDate and
 // returns a boolean value signaling whether the two
 // instances are equivalent in all respects.
 //
-// If the two instances of TextDateFieldFormatDto are
+// If the two instances of TextFieldFormatDtoDate are
 // equal, this method returns 'true'.
 //
 // ----------------------------------------------------------------
 //
 // # Input Parameters
 //
-//	txtDateFieldDtoOne			*TextDateFieldFormatDto
+//	txtDateFieldDtoOne			*TextFieldFormatDtoDate
 //
 //		A pointer to an instance of
-//		TextDateFieldFormatDto. The data values
+//		TextFieldFormatDtoDate. The data values
 //		contained within this instance will be compared
 //		to corresponding data values contained within a
-//		second TextDateFieldFormatDto instance
+//		second TextFieldFormatDtoDate instance
 //		('txtDateFieldDtoTwo') in order to determine if
 //		they are equivalent.
 //
-//	txtDateFieldDtoTwo			*TextDateFieldFormatDto
+//	txtDateFieldDtoTwo			*TextFieldFormatDtoDate
 //
 //		A pointer to the second of two instances of
-//		TextDateFieldFormatDto. The data values
+//		TextFieldFormatDtoDate. The data values
 //		contained within this instance will be compared
 //		to corresponding data values contained within the
-//		first TextDateFieldFormatDto instance
+//		first TextFieldFormatDtoDate instance
 //		('txtDateFieldDtoOne') in order to determine if
 //		they are equivalent.
 //
@@ -1842,8 +1842,8 @@ func (txtDateFieldDtoAtom *textDateFieldFormatDtoAtom) empty(
 //		If the compared data values are NOT equivalent,
 //		this method returns 'false'.
 func (txtDateFieldDtoAtom *textDateFieldFormatDtoAtom) equal(
-	txtDateFieldDtoOne *TextDateFieldFormatDto,
-	txtDateFieldDtoTwo *TextDateFieldFormatDto) bool {
+	txtDateFieldDtoOne *TextFieldFormatDtoDate,
+	txtDateFieldDtoTwo *TextFieldFormatDtoDate) bool {
 
 	if txtDateFieldDtoAtom.lock == nil {
 		txtDateFieldDtoAtom.lock = new(sync.Mutex)
@@ -1901,7 +1901,7 @@ func (txtDateFieldDtoAtom *textDateFieldFormatDtoAtom) equal(
 // testValidityOfTextDateFieldFormatDto
 //
 // Receives a pointer to an instance of
-// TextDateFieldFormatDto and performs a diagnostic
+// TextFieldFormatDtoDate and performs a diagnostic
 // analysis to determine if the data values contained in
 // that instance are valid in all respects.
 //
@@ -1932,9 +1932,9 @@ func (txtDateFieldDtoAtom *textDateFieldFormatDtoAtom) equal(
 //
 // # Input Parameters
 //
-//	txtDateFieldDto				*TextDateFieldFormatDto
+//	txtDateFieldDto				*TextFieldFormatDtoDate
 //
-//		A pointer to an instance of TextDateFieldFormatDto.
+//		A pointer to an instance of TextFieldFormatDtoDate.
 //
 //		The data values contained in this instance will
 //		be reviewed and analyzed to determine if they
@@ -1987,7 +1987,7 @@ func (txtDateFieldDtoAtom *textDateFieldFormatDtoAtom) equal(
 //		will be prefixed or attached at the beginning of
 //		the error message.
 func (txtDateFieldDtoAtom *textDateFieldFormatDtoAtom) testValidityOfTextDateFieldFormatDto(
-	txtDateFieldDto *TextDateFieldFormatDto,
+	txtDateFieldDto *TextFieldFormatDtoDate,
 	errPrefDto *ePref.ErrPrefixDto) (
 	isValid bool,
 	err error) {
@@ -2029,7 +2029,7 @@ func (txtDateFieldDtoAtom *textDateFieldFormatDtoAtom) testValidityOfTextDateFie
 	if txtDateFieldDto.FieldDateTime.IsZero() {
 
 		err = fmt.Errorf("%v\n"+
-			"Error: TextDateFieldFormatDto parameter 'FieldDateTime' is INVALID!\n"+
+			"Error: TextFieldFormatDtoDate parameter 'FieldDateTime' is INVALID!\n"+
 			"txtDateFieldDto.FieldDateTime has a value of zero (0).\n",
 			ePrefix.String())
 
@@ -2048,7 +2048,7 @@ func (txtDateFieldDtoAtom *textDateFieldFormatDtoAtom) testValidityOfTextDateFie
 	if txtDateFieldDto.FieldLength < -1 {
 
 		err = fmt.Errorf("%v\n"+
-			"Error: TextDateFieldFormatDto parameter 'FieldLength' is INVALID!\n"+
+			"Error: TextFieldFormatDtoDate parameter 'FieldLength' is INVALID!\n"+
 			"txtDateFieldDto.FieldLength has a value less than minus one (-1)\n"+
 			"txtDateFieldDto.FieldLength = %v\n",
 			ePrefix.String(),
@@ -2060,7 +2060,7 @@ func (txtDateFieldDtoAtom *textDateFieldFormatDtoAtom) testValidityOfTextDateFie
 	if txtDateFieldDto.FieldLength > 1000000 {
 
 		err = fmt.Errorf("%v\n"+
-			"ERROR: TextDateFieldFormatDto parameter 'FieldLength' is INVALID!\n"+
+			"ERROR: TextFieldFormatDtoDate parameter 'FieldLength' is INVALID!\n"+
 			"txtDateFieldDto.FieldLength has a value greater than one-million (1,000,000)\n"+
 			"txtDateFieldDto.FieldLength = %v\n",
 			ePrefix.String(),
