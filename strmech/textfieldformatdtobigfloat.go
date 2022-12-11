@@ -8,9 +8,9 @@ import (
 	"sync"
 )
 
-// TextBigFloatFieldFormatDto
+// TextFieldFormatDtoBigFloat
 //
-// The TextBigFloatFieldFormatDto type encapsulates input
+// The TextFieldFormatDtoBigFloat type encapsulates input
 // specifications for a text field populated with a
 // big.Float floating point value formatted as a number
 // string.
@@ -19,7 +19,7 @@ import (
 // to facilitate easy data entry which creating and
 // configuring text lines strings for screen display,
 // file output or printing.
-type TextBigFloatFieldFormatDto struct {
+type TextFieldFormatDtoBigFloat struct {
 	LeftMarginStr string
 	//	One or more characters used to create a left
 	//	margin for the 'BigFloatNum' Text Field.
@@ -166,9 +166,9 @@ type TextBigFloatFieldFormatDto struct {
 // CopyIn
 //
 // Copies all the data fields from an incoming instance
-// of TextBigFloatFieldFormatDto
+// of TextFieldFormatDtoBigFloat
 // ('incomingTxtBigFloatFieldFmtDto') to the corresponding
-// data fields of the current TextBigFloatFieldFormatDto
+// data fields of the current TextFieldFormatDtoBigFloat
 // instance ('textBigFloatFieldFmtDto').
 //
 // ----------------------------------------------------------------
@@ -177,21 +177,21 @@ type TextBigFloatFieldFormatDto struct {
 //
 //	This method will delete and overwrite all
 //	pre-existing data values contained within the
-//	current instance of TextBigFloatFieldFormatDto
+//	current instance of TextFieldFormatDtoBigFloat
 //	('textBigFloatFieldFmtDto').
 //
 // ----------------------------------------------------------------
 //
 // # Input Parameters
 //
-//	incomingTxtBigFloatFieldFmtDto		*TextBigFloatFieldFormatDto
+//	incomingTxtBigFloatFieldFmtDto		*TextFieldFormatDtoBigFloat
 //
 //		A pointer to an instance of
-//		TextBigFloatFieldFormatDto.
+//		TextFieldFormatDtoBigFloat.
 //
 //		All the internal data field values in this
 //		instance will be copied to corresponding data
-//		fields of the current TextBigFloatFieldFormatDto
+//		fields of the current TextFieldFormatDtoBigFloat
 //		instance.
 //
 //		The data fields contained in
@@ -276,8 +276,8 @@ type TextBigFloatFieldFormatDto struct {
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (textBigFloatFieldFmtDto *TextBigFloatFieldFormatDto) CopyIn(
-	incomingTxtBigFloatFieldFmtDto *TextBigFloatFieldFormatDto,
+func (textBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat) CopyIn(
+	incomingTxtBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat,
 	errorPrefix interface{}) error {
 
 	if textBigFloatFieldFmtDto.lock == nil {
@@ -295,7 +295,7 @@ func (textBigFloatFieldFmtDto *TextBigFloatFieldFormatDto) CopyIn(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"TextBigFloatFieldFormatDto."+
+		"TextFieldFormatDtoBigFloat."+
 			"CopyIn()",
 		"")
 
@@ -314,9 +314,9 @@ func (textBigFloatFieldFmtDto *TextBigFloatFieldFormatDto) CopyIn(
 // CopyOut
 //
 // Returns a deep copy of the current
-// TextBigFloatFieldFormatDto instance.
+// TextFieldFormatDtoBigFloat instance.
 //
-// If the current TextBigFloatFieldFormatDto instance
+// If the current TextFieldFormatDtoBigFloat instance
 // contains invalid member variable data values, this
 // method will return an error.
 //
@@ -325,7 +325,7 @@ func (textBigFloatFieldFmtDto *TextBigFloatFieldFormatDto) CopyIn(
 // # BE ADVISED
 //
 //	The original member variable data values encapsulated
-//	within the current TextBigFloatFieldFormatDto
+//	within the current TextFieldFormatDtoBigFloat
 //	instance will NOT BE changed or modified.
 //
 // ----------------------------------------------------------------
@@ -395,12 +395,12 @@ func (textBigFloatFieldFmtDto *TextBigFloatFieldFormatDto) CopyIn(
 //
 // # Return Values
 //
-//	TextBigFloatFieldFormatDto
+//	TextFieldFormatDtoBigFloat
 //
 //		If this method completes successfully and no
 //		errors are encountered, this parameter will
 //		return a deep copy of the current
-//		TextBigFloatFieldFormatDto instance.
+//		TextFieldFormatDtoBigFloat instance.
 //
 //	error
 //
@@ -414,9 +414,9 @@ func (textBigFloatFieldFmtDto *TextBigFloatFieldFormatDto) CopyIn(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (textBigFloatFieldFmtDto *TextBigFloatFieldFormatDto) CopyOut(
+func (textBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat) CopyOut(
 	errorPrefix interface{}) (
-	TextBigFloatFieldFormatDto,
+	TextFieldFormatDtoBigFloat,
 	error) {
 
 	if textBigFloatFieldFmtDto.lock == nil {
@@ -431,12 +431,12 @@ func (textBigFloatFieldFmtDto *TextBigFloatFieldFormatDto) CopyOut(
 	var err error
 
 	newTxtBigFloatFieldFmtDto :=
-		TextBigFloatFieldFormatDto{}
+		TextFieldFormatDtoBigFloat{}
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"TextBigFloatFieldFormatDto."+
+		"TextFieldFormatDtoBigFloat."+
 			"CopyOut()",
 		"")
 
@@ -457,10 +457,10 @@ func (textBigFloatFieldFmtDto *TextBigFloatFieldFormatDto) CopyOut(
 // CopyOutITextFieldFormat
 //
 // Returns a deep copy of the current
-// TextBigFloatFieldFormatDto instance cast as an
+// TextFieldFormatDtoBigFloat instance cast as an
 // ITextFieldFormatDto interface object.
 //
-// If the current TextBigFloatFieldFormatDto instance
+// If the current TextFieldFormatDtoBigFloat instance
 // contains invalid member variable data values, this
 // method will return an error.
 //
@@ -472,7 +472,7 @@ func (textBigFloatFieldFmtDto *TextBigFloatFieldFormatDto) CopyOut(
 // # BE ADVISED
 //
 //	The original member variable data values encapsulated
-//	within the current TextBigFloatFieldFormatDto
+//	within the current TextFieldFormatDtoBigFloat
 //	instance will NOT BE changed or modified.
 //
 // ----------------------------------------------------------------
@@ -547,7 +547,7 @@ func (textBigFloatFieldFmtDto *TextBigFloatFieldFormatDto) CopyOut(
 //		If this method completes successfully and no
 //		errors are encountered, this parameter will
 //		return a deep copy of the current
-//		TextBigFloatFieldFormatDto instance cast as an
+//		TextFieldFormatDtoBigFloat instance cast as an
 //		ITextFieldFormatDto interface object.
 //
 //	error
@@ -562,7 +562,7 @@ func (textBigFloatFieldFmtDto *TextBigFloatFieldFormatDto) CopyOut(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (textBigFloatFieldFmtDto *TextBigFloatFieldFormatDto) CopyOutITextFieldFormat(
+func (textBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat) CopyOutITextFieldFormat(
 	errorPrefix interface{}) (
 	ITextFieldFormatDto,
 	error) {
@@ -579,12 +579,12 @@ func (textBigFloatFieldFmtDto *TextBigFloatFieldFormatDto) CopyOutITextFieldForm
 	var err error
 
 	newTxtBigFloatFieldFmtDto :=
-		TextBigFloatFieldFormatDto{}
+		TextFieldFormatDtoBigFloat{}
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"TextBigFloatFieldFormatDto."+
+		"TextFieldFormatDtoBigFloat."+
 			"CopyOut()",
 		"")
 
@@ -607,9 +607,9 @@ func (textBigFloatFieldFmtDto *TextBigFloatFieldFormatDto) CopyOutITextFieldForm
 // Empty
 //
 // Resets all internal member variables for the current
-// instance of TextBigFloatFieldFormatDto to their zero
+// instance of TextFieldFormatDtoBigFloat to their zero
 // or uninitialized states. This method will leave the
-// current instance of TextBigFloatFieldFormatDto in an
+// current instance of TextFieldFormatDtoBigFloat in an
 // invalid state and unavailable for immediate reuse.
 //
 // This method is required in order to implement the
@@ -621,7 +621,7 @@ func (textBigFloatFieldFmtDto *TextBigFloatFieldFormatDto) CopyOutITextFieldForm
 //
 // This method will delete all member variable data
 // values in the current instance of
-// TextBigFloatFieldFormatDto. All member variable data
+// TextFieldFormatDtoBigFloat. All member variable data
 // values will be reset to their zero or uninitialized
 // states.
 //
@@ -636,7 +636,7 @@ func (textBigFloatFieldFmtDto *TextBigFloatFieldFormatDto) CopyOutITextFieldForm
 // # Return Values
 //
 //	NONE
-func (textBigFloatFieldFmtDto *TextBigFloatFieldFormatDto) Empty() {
+func (textBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat) Empty() {
 
 	if textBigFloatFieldFmtDto.lock == nil {
 		textBigFloatFieldFmtDto.lock = new(sync.Mutex)
@@ -656,9 +656,9 @@ func (textBigFloatFieldFmtDto *TextBigFloatFieldFormatDto) Empty() {
 // Equal
 //
 // Receives a pointer to another instance of
-// TextBigFloatFieldFormatDto and proceeds to compare the
+// TextFieldFormatDtoBigFloat and proceeds to compare the
 // member variables to those contained in the current
-// TextBigFloatFieldFormatDto instance in order to
+// TextFieldFormatDtoBigFloat instance in order to
 // determine if they are equivalent.
 //
 // A boolean flag showing the result of this comparison
@@ -670,13 +670,13 @@ func (textBigFloatFieldFmtDto *TextBigFloatFieldFormatDto) Empty() {
 //
 // # Input Parameters
 //
-//	incomingTxtLabelFieldFmtDto		*TextBigFloatFieldFormatDto
+//	incomingTxtLabelFieldFmtDto		*TextFieldFormatDtoBigFloat
 //
 //		A pointer to an incoming instance of
-//		TextBigFloatFieldFormatDto. This method will
+//		TextFieldFormatDtoBigFloat. This method will
 //		compare all member variable data values in this
 //		instance against those contained in the current
-//		instance of TextBigFloatFieldFormatDto. If the
+//		instance of TextFieldFormatDtoBigFloat. If the
 //		data values in both instances are found to be
 //		equal in all respects, this method will return a
 //		boolean value of 'true'.
@@ -690,12 +690,12 @@ func (textBigFloatFieldFmtDto *TextBigFloatFieldFormatDto) Empty() {
 //		If the member variable data values contained in
 //		input parameter 'incomingBigFloatFieldFmtDto' are
 //		equal in all respects to those contained in the
-//		current instance of TextBigFloatFieldFormatDto,
+//		current instance of TextFieldFormatDtoBigFloat,
 //		this method will return a boolean value of
 //		'true'. Otherwise, a value of 'false' will be
 //		returned to the calling function.
-func (textBigFloatFieldFmtDto *TextBigFloatFieldFormatDto) Equal(
-	incomingBigFloatFieldFmtDto *TextBigFloatFieldFormatDto) bool {
+func (textBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat) Equal(
+	incomingBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat) bool {
 
 	if textBigFloatFieldFmtDto.lock == nil {
 		textBigFloatFieldFmtDto.lock = new(sync.Mutex)
@@ -713,7 +713,7 @@ func (textBigFloatFieldFmtDto *TextBigFloatFieldFormatDto) Equal(
 
 // GetFieldContentTextLabel
 //
-// Converts the current TextBigFloatFieldFormatDto instance
+// Converts the current TextFieldFormatDtoBigFloat instance
 // member variable, 'BigFloatNum', to an instance of
 // TextFieldSpecLabel.
 //
@@ -799,7 +799,7 @@ func (textBigFloatFieldFmtDto *TextBigFloatFieldFormatDto) Equal(
 //
 //		If this method completes successfully, the Text
 //		Field Contents extracted from the current
-//		instance of TextBigFloatFieldFormatDto, will be
+//		instance of TextFieldFormatDtoBigFloat, will be
 //		returned as text label of type
 //		TextFieldSpecLabel.
 //
@@ -819,7 +819,7 @@ func (textBigFloatFieldFmtDto *TextBigFloatFieldFormatDto) Equal(
 //		for input parameter 'errPrefDto' (error prefix)
 //		will be prefixed or attached at the beginning of
 //		the error message.
-func (textBigFloatFieldFmtDto *TextBigFloatFieldFormatDto) GetFieldContentTextLabel(
+func (textBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat) GetFieldContentTextLabel(
 	errorPrefix interface{}) (
 	TextFieldSpecLabel,
 	error) {
@@ -839,7 +839,7 @@ func (textBigFloatFieldFmtDto *TextBigFloatFieldFormatDto) GetFieldContentTextLa
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"TextBigFloatFieldFormatDto."+
+		"TextFieldFormatDtoBigFloat."+
 			"GetFieldContentTextLabel()",
 		"")
 
@@ -857,11 +857,11 @@ func (textBigFloatFieldFmtDto *TextBigFloatFieldFormatDto) GetFieldContentTextLa
 // GetFieldFormatDtoType
 //
 // Returns a string containing the name of this type
-// ('TextBigFloatFieldFormatDto').
+// ('TextFieldFormatDtoBigFloat').
 //
 // This method is required in order to implement the
 // ITextFieldFormatDto interface.
-func (textBigFloatFieldFmtDto *TextBigFloatFieldFormatDto) GetFieldFormatDtoType() string {
+func (textBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat) GetFieldFormatDtoType() string {
 
 	if textBigFloatFieldFmtDto.lock == nil {
 		textBigFloatFieldFmtDto.lock = new(sync.Mutex)
@@ -871,14 +871,14 @@ func (textBigFloatFieldFmtDto *TextBigFloatFieldFormatDto) GetFieldFormatDtoType
 
 	defer textBigFloatFieldFmtDto.lock.Unlock()
 
-	return "TextBigFloatFieldFormatDto"
+	return "TextFieldFormatDtoBigFloat"
 }
 
 // GetFormattedTextFieldStr
 //
 // Returns a string containing the formatted text field
 // generated from the current instance of
-// TextBigFloatFieldFormatDto.
+// TextFieldFormatDtoBigFloat.
 //
 // The returned formatted text field string contains the
 // left margin, field contents and right margin.
@@ -957,14 +957,14 @@ func (textBigFloatFieldFmtDto *TextBigFloatFieldFormatDto) GetFieldFormatDtoType
 //
 //		If this method completes successfully, the text
 //		field specifications contained in the current
-//		instance of TextBigFloatFieldFormatDto will be
+//		instance of TextFieldFormatDtoBigFloat will be
 //		converted to, and returned as, a formatted text
 //		field string.
 //
 //		The returned text field string will contain the
 //		left margin, text field contents and right margin
 //		as those elements are defined in the current
-//		instance of TextBigFloatFieldFormatDto.
+//		instance of TextFieldFormatDtoBigFloat.
 //
 //	error
 //
@@ -978,7 +978,7 @@ func (textBigFloatFieldFmtDto *TextBigFloatFieldFormatDto) GetFieldFormatDtoType
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (textBigFloatFieldFmtDto *TextBigFloatFieldFormatDto) GetFormattedTextFieldStr(
+func (textBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat) GetFormattedTextFieldStr(
 	errorPrefix interface{}) (
 	string,
 	error) {
@@ -998,7 +998,7 @@ func (textBigFloatFieldFmtDto *TextBigFloatFieldFormatDto) GetFormattedTextField
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"TextBigFloatFieldFormatDto."+
+		"TextFieldFormatDtoBigFloat."+
 			"GetFormattedTextFieldStr()",
 		"")
 
@@ -1020,7 +1020,7 @@ func (textBigFloatFieldFmtDto *TextBigFloatFieldFormatDto) GetFormattedTextField
 //
 // This method is required in order to implement the
 // ITextFieldFormatDto interface.
-func (textBigFloatFieldFmtDto *TextBigFloatFieldFormatDto) GetLeftMarginLength() int {
+func (textBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat) GetLeftMarginLength() int {
 
 	if textBigFloatFieldFmtDto.lock == nil {
 		textBigFloatFieldFmtDto.lock = new(sync.Mutex)
@@ -1039,7 +1039,7 @@ func (textBigFloatFieldFmtDto *TextBigFloatFieldFormatDto) GetLeftMarginLength()
 //
 // This method is required in order to implement the
 // ITextFieldFormatDto interface.
-func (textBigFloatFieldFmtDto *TextBigFloatFieldFormatDto) GetLeftMarginStr() string {
+func (textBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat) GetLeftMarginStr() string {
 
 	if textBigFloatFieldFmtDto.lock == nil {
 		textBigFloatFieldFmtDto.lock = new(sync.Mutex)
@@ -1056,7 +1056,7 @@ func (textBigFloatFieldFmtDto *TextBigFloatFieldFormatDto) GetLeftMarginStr() st
 //
 // Returns a pure number string representing the floating
 // point numeric value specified by the current instance
-// of TextBigFloatFieldFormatDto.
+// of TextFieldFormatDtoBigFloat.
 //
 // The floating point pure number string returned by
 // this method will:
@@ -1073,7 +1073,7 @@ func (textBigFloatFieldFmtDto *TextBigFloatFieldFormatDto) GetLeftMarginStr() st
 //
 // # BE ADVISED
 //
-// If the current instance of TextBigFloatFieldFormatDto
+// If the current instance of TextFieldFormatDtoBigFloat
 // contains invalid data elements, an error will be
 // returned.
 //
@@ -1150,7 +1150,7 @@ func (textBigFloatFieldFmtDto *TextBigFloatFieldFormatDto) GetLeftMarginStr() st
 //		string parameter will return a pure number string
 //		representation of the big.Float floating point
 //		value specified by the current instance of
-//		TextBigFloatFieldFormatDto.
+//		TextFieldFormatDtoBigFloat.
 //
 //		The returned floating point pure number string
 //		will:
@@ -1175,7 +1175,7 @@ func (textBigFloatFieldFmtDto *TextBigFloatFieldFormatDto) GetLeftMarginStr() st
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (textBigFloatFieldFmtDto *TextBigFloatFieldFormatDto) GetPureNumberStr(
+func (textBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat) GetPureNumberStr(
 	errorPrefix interface{}) (
 	string,
 	error) {
@@ -1217,7 +1217,7 @@ func (textBigFloatFieldFmtDto *TextBigFloatFieldFormatDto) GetPureNumberStr(
 //
 // This method is required in order to implement the
 // ITextFieldFormatDto interface.
-func (textBigFloatFieldFmtDto *TextBigFloatFieldFormatDto) GetRightMarginLength() int {
+func (textBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat) GetRightMarginLength() int {
 
 	if textBigFloatFieldFmtDto.lock == nil {
 		textBigFloatFieldFmtDto.lock = new(sync.Mutex)
@@ -1236,7 +1236,7 @@ func (textBigFloatFieldFmtDto *TextBigFloatFieldFormatDto) GetRightMarginLength(
 //
 // This method is required in order to implement the
 // ITextFieldFormatDto interface.
-func (textBigFloatFieldFmtDto *TextBigFloatFieldFormatDto) GetRightMarginStr() string {
+func (textBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat) GetRightMarginStr() string {
 
 	if textBigFloatFieldFmtDto.lock == nil {
 		textBigFloatFieldFmtDto.lock = new(sync.Mutex)
@@ -1252,7 +1252,7 @@ func (textBigFloatFieldFmtDto *TextBigFloatFieldFormatDto) GetRightMarginStr() s
 // IsValidInstance
 //
 // Performs a diagnostic review of the data values
-// encapsulated in the current TextBigFloatFieldFormatDto
+// encapsulated in the current TextFieldFormatDtoBigFloat
 // instance to determine if they are valid.
 //
 // If all data elements evaluate as valid, this method
@@ -1275,11 +1275,11 @@ func (textBigFloatFieldFmtDto *TextBigFloatFieldFormatDto) GetRightMarginStr() s
 //	isValid						bool
 //
 //		If all data elements encapsulated by the current
-//		instance of TextBigFloatFieldFormatDto are valid,
+//		instance of TextFieldFormatDtoBigFloat are valid,
 //		this returned boolean value is set to 'true'. If
 //		any data values are invalid, this return
 //		parameter is set to 'false'.
-func (textBigFloatFieldFmtDto *TextBigFloatFieldFormatDto) IsValidInstance() (
+func (textBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat) IsValidInstance() (
 	isValid bool) {
 
 	if textBigFloatFieldFmtDto.lock == nil {
@@ -1302,7 +1302,7 @@ func (textBigFloatFieldFmtDto *TextBigFloatFieldFormatDto) IsValidInstance() (
 // IsValidInstanceError
 //
 // Performs a diagnostic review of the data values
-// encapsulated in the current TextBigFloatFieldFormatDto
+// encapsulated in the current TextFieldFormatDtoBigFloat
 // instance to determine if they are valid.
 //
 // If any data element evaluates as invalid, this method
@@ -1382,7 +1382,7 @@ func (textBigFloatFieldFmtDto *TextBigFloatFieldFormatDto) IsValidInstance() (
 //
 //		If any of the internal member data variables
 //		contained in the current instance of
-//		TextBigFloatFieldFormatDto are found to be
+//		TextFieldFormatDtoBigFloat are found to be
 //		invalid, this method will return an error
 //		containing an appropriate error message.
 //
@@ -1391,7 +1391,7 @@ func (textBigFloatFieldFmtDto *TextBigFloatFieldFormatDto) IsValidInstance() (
 //		and text passed by input parameter, 'errorPrefix'.
 //		The 'errorPrefix' text will be attached to the
 //		beginning of the error message.
-func (textBigFloatFieldFmtDto *TextBigFloatFieldFormatDto) IsValidInstanceError(
+func (textBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat) IsValidInstanceError(
 	errorPrefix interface{}) error {
 
 	if textBigFloatFieldFmtDto.lock == nil {
@@ -1409,7 +1409,7 @@ func (textBigFloatFieldFmtDto *TextBigFloatFieldFormatDto) IsValidInstanceError(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"TextBigFloatFieldFormatDto."+
+		"TextFieldFormatDtoBigFloat."+
 			"CopyIn()",
 		"")
 
@@ -1429,7 +1429,7 @@ func (textBigFloatFieldFmtDto *TextBigFloatFieldFormatDto) IsValidInstanceError(
 
 // textBigFloatFieldFormatDtoNanobot
 //
-// Provides helper methods for TextBigFloatFieldFormatDto.
+// Provides helper methods for TextFieldFormatDtoBigFloat.
 type textBigFloatFieldFormatDtoNanobot struct {
 	lock *sync.Mutex
 }
@@ -1437,8 +1437,8 @@ type textBigFloatFieldFormatDtoNanobot struct {
 // copy
 //
 // Copies all data from a source instance of
-// TextBigFloatFieldFormatDto to a destination instance of
-// TextBigFloatFieldFormatDto.
+// TextFieldFormatDtoBigFloat to a destination instance of
+// TextFieldFormatDtoBigFloat.
 //
 // ----------------------------------------------------------------
 //
@@ -1446,16 +1446,16 @@ type textBigFloatFieldFormatDtoNanobot struct {
 //
 //	This method will delete and overwrite all
 //	pre-existing data values contained within the
-//	TextBigFloatFieldFormatDto instance passed as input
+//	TextFieldFormatDtoBigFloat instance passed as input
 //	parameter 'destinationTxtBigFloatFieldFmtDto'.
 //
 // ----------------------------------------------------------------
 //
 // # Input Parameters
 //
-//	destinationTxtBigFloatFieldFmtDto	*TextBigFloatFieldFormatDto
+//	destinationTxtBigFloatFieldFmtDto	*TextFieldFormatDtoBigFloat
 //
-//		A pointer to an instance of TextBigFloatFieldFormatDto.
+//		A pointer to an instance of TextFieldFormatDtoBigFloat.
 //
 //		Data extracted from input parameter
 //		'sourceTxtFieldFmtDto' will be copied to this
@@ -1475,11 +1475,11 @@ type textBigFloatFieldFormatDtoNanobot struct {
 //		'destinationTxtFieldFmtDto' will be overwritten
 //		and deleted.
 //
-//	sourceTxtBigFloatFieldFmtDto		*TextBigFloatFieldFormatDto
+//	sourceTxtBigFloatFieldFmtDto		*TextFieldFormatDtoBigFloat
 //
-//		A pointer to an instance of TextBigFloatFieldFormatDto.
+//		A pointer to an instance of TextFieldFormatDtoBigFloat.
 //
-//		All data values in this TextBigFloatFieldFormatDto
+//		All data values in this TextFieldFormatDtoBigFloat
 //		instance will be copied to input parameter
 //		'destinationTxtBigFloatFieldFmtDto'.
 //
@@ -1522,8 +1522,8 @@ type textBigFloatFieldFormatDtoNanobot struct {
 //		text will be attached to the beginning of the
 //		error message.
 func (txtBigFloatFieldFmtDtoNanobot *textBigFloatFieldFormatDtoNanobot) copy(
-	destinationTxtBigFloatFieldFmtDto *TextBigFloatFieldFormatDto,
-	sourceTxtBigFloatFieldFmtDto *TextBigFloatFieldFormatDto,
+	destinationTxtBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat,
+	sourceTxtBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat,
 	errPrefDto *ePref.ErrPrefixDto) error {
 
 	if txtBigFloatFieldFmtDtoNanobot.lock == nil {
@@ -1611,7 +1611,7 @@ func (txtBigFloatFieldFmtDtoNanobot *textBigFloatFieldFormatDtoNanobot) copy(
 
 // getFormattedTextFieldStr
 //
-// Converts an instance of TextBigFloatFieldFormatDto to a
+// Converts an instance of TextFieldFormatDtoBigFloat to a
 // formatted text field string.
 //
 // This formatted text field string contains the left
@@ -1621,10 +1621,10 @@ func (txtBigFloatFieldFmtDtoNanobot *textBigFloatFieldFormatDtoNanobot) copy(
 //
 // # Input Parameters
 //
-//	txtBigFloatFieldFmtDto		*TextBigFloatFieldFormatDto
+//	txtBigFloatFieldFmtDto		*TextFieldFormatDtoBigFloat
 //
 //		A pointer to an instance of
-//		TextBigFloatFieldFormatDto.
+//		TextFieldFormatDtoBigFloat.
 //
 //		The left and right margins as well as the member
 //		variable 'BigFloatNum' will be processed and
@@ -1677,7 +1677,7 @@ func (txtBigFloatFieldFmtDtoNanobot *textBigFloatFieldFormatDtoNanobot) copy(
 //		will be prefixed or attached at the beginning of
 //		the error message.
 func (txtBigFloatFieldFmtDtoNanobot *textBigFloatFieldFormatDtoNanobot) getFormattedTextFieldStr(
-	txtBigFloatFieldFmtDto *TextBigFloatFieldFormatDto,
+	txtBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat,
 	errPrefDto *ePref.ErrPrefixDto) (
 	string,
 	error) {
@@ -1749,18 +1749,18 @@ func (txtBigFloatFieldFmtDtoNanobot *textBigFloatFieldFormatDtoNanobot) getForma
 }
 
 // textBigFloatFieldFormatDtoMolecule - Provides helper methods for
-// TextBigFloatFieldFormatDto.
+// TextFieldFormatDtoBigFloat.
 type textBigFloatFieldFormatDtoMolecule struct {
 	lock *sync.Mutex
 }
 
 // getFieldContentTextLabel
 //
-// Converts a TextBigFloatFieldFormatDto instance member
+// Converts a TextFieldFormatDtoBigFloat instance member
 // variable, 'BigFloatNum', to an instance of
 // TextFieldSpecLabel.
 //
-// The TextBigFloatFieldFormatDto instance is passed as
+// The TextFieldFormatDtoBigFloat instance is passed as
 // input parameter, 'txtBigFloatFieldFmtDto'.
 //
 // The returned TextFieldSpecLabel will only contain
@@ -1772,16 +1772,16 @@ type textBigFloatFieldFormatDtoMolecule struct {
 // # BE ADVISED
 //
 //	If input parameter 'txtBigFloatFieldFmtDto', an
-//	instance of TextBigFloatFieldFormatDto, is found to
+//	instance of TextFieldFormatDtoBigFloat, is found to
 //	be invalid, an error will be returned.
 //
 // ----------------------------------------------------------------
 //
 // # Input Parameters
 //
-//	txtBigFloatFieldFmtDto		*TextBigFloatFieldFormatDto
+//	txtBigFloatFieldFmtDto		*TextFieldFormatDtoBigFloat
 //
-//		A pointer to an instance of TextBigFloatFieldFormatDto.
+//		A pointer to an instance of TextFieldFormatDtoBigFloat.
 //
 //		The member variable 'BigFloatNum' will be
 //		converted to a text label of type
@@ -1791,7 +1791,7 @@ type textBigFloatFieldFormatDtoMolecule struct {
 //		None of the data values in this instance will be
 //		changed or modified.
 //
-//		If this instance of TextBigFloatFieldFormatDto
+//		If this instance of TextFieldFormatDtoBigFloat
 //		contains invalid data elements, an error will be
 //		returned.
 //
@@ -1838,7 +1838,7 @@ type textBigFloatFieldFormatDtoMolecule struct {
 //		will be prefixed or attached at the beginning of
 //		the error message.
 func (txtBigFloatFieldFmtDtoMolecule *textBigFloatFieldFormatDtoMolecule) getFieldContentTextLabel(
-	txtBigFloatFieldFmtDto *TextBigFloatFieldFormatDto,
+	txtBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat,
 	errPrefDto *ePref.ErrPrefixDto) (
 	TextFieldSpecLabel,
 	error) {
@@ -1904,7 +1904,7 @@ func (txtBigFloatFieldFmtDtoMolecule *textBigFloatFieldFormatDtoMolecule) getFie
 }
 
 // textBigFloatFieldFormatDtoAtom - Provides helper methods for
-// TextBigFloatFieldFormatDto.
+// TextFieldFormatDtoBigFloat.
 type textBigFloatFieldFormatDtoAtom struct {
 	lock *sync.Mutex
 }
@@ -1912,7 +1912,7 @@ type textBigFloatFieldFormatDtoAtom struct {
 // empty
 //
 // Receives a pointer to an instance of
-// TextBigFloatFieldFormatDto and proceeds to set all the
+// TextFieldFormatDtoBigFloat and proceeds to set all the
 // member variables to their zero or uninitialized
 // states.
 //
@@ -1922,7 +1922,7 @@ type textBigFloatFieldFormatDtoAtom struct {
 //
 //	This method will delete and reset all pre-existing
 //	data values contained within the
-//	TextBigFloatFieldFormatDto instance passed as input
+//	TextFieldFormatDtoBigFloat instance passed as input
 //	parameter 'txtBigFloatFieldFmtDto' to their zero or
 //	uninitialized states.
 //
@@ -1930,9 +1930,9 @@ type textBigFloatFieldFormatDtoAtom struct {
 //
 // # Input Parameters
 //
-//	txtBigFloatFieldFmtDto		*TextBigFloatFieldFormatDto
+//	txtBigFloatFieldFmtDto		*TextFieldFormatDtoBigFloat
 //
-//		A pointer to an instance of TextBigFloatFieldFormatDto.
+//		A pointer to an instance of TextFieldFormatDtoBigFloat.
 //		All data values contained within this instance
 //		will be deleted and reset to their zero or
 //		uninitialized states.
@@ -1943,7 +1943,7 @@ type textBigFloatFieldFormatDtoAtom struct {
 //
 //	NONE
 func (txtBigFloatFieldFmtDtoAtom *textBigFloatFieldFormatDtoAtom) empty(
-	txtBigFloatFieldFmtDto *TextBigFloatFieldFormatDto) {
+	txtBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat) {
 
 	if txtBigFloatFieldFmtDtoAtom.lock == nil {
 		txtBigFloatFieldFmtDtoAtom.lock = new(sync.Mutex)
@@ -1978,36 +1978,36 @@ func (txtBigFloatFieldFmtDtoAtom *textBigFloatFieldFormatDtoAtom) empty(
 
 // equal
 //
-// Compares two instances of TextBigFloatFieldFormatDto
+// Compares two instances of TextFieldFormatDtoBigFloat
 // and returns a boolean value signaling whether the two
 // instances are equivalent in all respects.
 //
-// If the two instances of TextBigFloatFieldFormatDto are
+// If the two instances of TextFieldFormatDtoBigFloat are
 // equal, this method returns 'true'.
 //
 // ----------------------------------------------------------------
 //
 // # Input Parameters
 //
-//	txtBigFloatFieldFmtDtoOne		*TextBigFloatFieldFormatDto
+//	txtBigFloatFieldFmtDtoOne		*TextFieldFormatDtoBigFloat
 //
 //		A pointer to an instance of
-//		TextBigFloatFieldFormatDto.
+//		TextFieldFormatDtoBigFloat.
 //
 //		The data values contained within this instance
 //		will be compared to corresponding data values
 //		contained within a second
-//		TextBigFloatFieldFormatDto instance
+//		TextFieldFormatDtoBigFloat instance
 //		('txtBigFloatFieldFmtDtoTwo') in order to
 //		determine if they are equivalent.
 //
-//	txtBigFloatFieldFmtDtoTwo		*TextBigFloatFieldFormatDto
+//	txtBigFloatFieldFmtDtoTwo		*TextFieldFormatDtoBigFloat
 //
 //		A pointer to the second of two instances of
-//		TextBigFloatFieldFormatDto. The data values
+//		TextFieldFormatDtoBigFloat. The data values
 //		contained within this instance will be compared
 //		to corresponding data values contained within the
-//		first TextBigFloatFieldFormatDto instance
+//		first TextFieldFormatDtoBigFloat instance
 //		('txtBigFloatFieldFmtDtoOne') in order to
 //		determine if they are equivalent.
 //
@@ -2026,8 +2026,8 @@ func (txtBigFloatFieldFmtDtoAtom *textBigFloatFieldFormatDtoAtom) empty(
 //		If the compared data values are NOT equivalent,
 //		this method returns 'false'.
 func (txtBigFloatFieldFmtDtoAtom *textBigFloatFieldFormatDtoAtom) equal(
-	txtBigFloatFieldFmtDtoOne *TextBigFloatFieldFormatDto,
-	txtBigFloatFieldFmtDtoTwo *TextBigFloatFieldFormatDto) bool {
+	txtBigFloatFieldFmtDtoOne *TextFieldFormatDtoBigFloat,
+	txtBigFloatFieldFmtDtoTwo *TextFieldFormatDtoBigFloat) bool {
 
 	if txtBigFloatFieldFmtDtoAtom.lock == nil {
 		txtBigFloatFieldFmtDtoAtom.lock = new(sync.Mutex)
@@ -2112,7 +2112,7 @@ func (txtBigFloatFieldFmtDtoAtom *textBigFloatFieldFormatDtoAtom) equal(
 // testValidityOfTextLabelFieldFmtDto
 //
 // Receives a pointer to an instance of
-// TextBigFloatFieldFormatDto and performs a diagnostic
+// TextFieldFormatDtoBigFloat and performs a diagnostic
 // analysis to determine if the data values contained in
 // that instance are valid in all respects.
 //
@@ -2131,10 +2131,10 @@ func (txtBigFloatFieldFmtDtoAtom *textBigFloatFieldFormatDtoAtom) equal(
 //
 // # Input Parameters
 //
-//	txtBigFloatFieldFmtDto		*TextBigFloatFieldFormatDto
+//	txtBigFloatFieldFmtDto		*TextFieldFormatDtoBigFloat
 //
 //		A pointer to an instance of
-//		TextBigFloatFieldFormatDto.
+//		TextFieldFormatDtoBigFloat.
 //
 //		The data values contained in this instance will
 //		be reviewed and analyzed to determine if they
@@ -2188,7 +2188,7 @@ func (txtBigFloatFieldFmtDtoAtom *textBigFloatFieldFormatDtoAtom) equal(
 //		will be prefixed or attached at the beginning of
 //		the error message.
 func (txtBigFloatFieldFmtDtoAtom *textBigFloatFieldFormatDtoAtom) testValidityOfTxtBigFloatFieldFmtDto(
-	txtBigFloatFieldFmtDto *TextBigFloatFieldFormatDto,
+	txtBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat,
 	errPrefDto *ePref.ErrPrefixDto) (
 	isValid bool,
 	err error) {
@@ -2230,7 +2230,7 @@ func (txtBigFloatFieldFmtDtoAtom *textBigFloatFieldFormatDtoAtom) testValidityOf
 	if txtBigFloatFieldFmtDto.FieldLength < -1 {
 
 		err = fmt.Errorf("%v\n"+
-			"ERROR: TextBigFloatFieldFormatDto parameter 'FieldLength' is INVALID!\n"+
+			"ERROR: TextFieldFormatDtoBigFloat parameter 'FieldLength' is INVALID!\n"+
 			"txtBigFloatFieldFmtDto.FieldLength has a value less than minus one (-1)\n"+
 			"txtBigFloatFieldFmtDto.FieldLength = %v\n",
 			ePrefix.String(),
@@ -2242,7 +2242,7 @@ func (txtBigFloatFieldFmtDtoAtom *textBigFloatFieldFormatDtoAtom) testValidityOf
 	if txtBigFloatFieldFmtDto.FieldLength > 1000000 {
 
 		err = fmt.Errorf("%v\n"+
-			"ERROR: TextBigFloatFieldFormatDto parameter 'FieldLength' is INVALID!\n"+
+			"ERROR: TextFieldFormatDtoBigFloat parameter 'FieldLength' is INVALID!\n"+
 			"txtBigFloatFieldFmtDto.FieldLength has a value greater than one-million (1,000,000)\n"+
 			"txtBigFloatFieldFmtDto.FieldLength = %v\n",
 			ePrefix.String(),
@@ -2254,7 +2254,7 @@ func (txtBigFloatFieldFmtDtoAtom *textBigFloatFieldFormatDtoAtom) testValidityOf
 	if txtBigFloatFieldFmtDto.NumOfFractionalDigits < -1 {
 
 		err = fmt.Errorf("%v\n"+
-			"ERROR: TextBigFloatFieldFormatDto parameter 'NumOfFractionalDigits' is INVALID!\n"+
+			"ERROR: TextFieldFormatDtoBigFloat parameter 'NumOfFractionalDigits' is INVALID!\n"+
 			"txtBigFloatFieldFmtDto.NumOfFractionalDigits has a value less than minus one (-1)\n"+
 			"txtBigFloatFieldFmtDto.NumOfFractionalDigits = %v\n",
 			ePrefix.String(),
@@ -2269,7 +2269,7 @@ func (txtBigFloatFieldFmtDtoAtom *textBigFloatFieldFormatDtoAtom) testValidityOf
 }
 
 // textBigFloatFieldFormatDtoElectron - Provides helper
-// methods for TextBigFloatFieldFormatDto.
+// methods for TextFieldFormatDtoBigFloat.
 type textBigFloatFieldFormatDtoElectron struct {
 	lock *sync.Mutex
 }
@@ -2277,7 +2277,7 @@ type textBigFloatFieldFormatDtoElectron struct {
 // getBigFloatPureNumberStr
 //
 // Receives a pointer to an instance of
-// TextBigFloatFieldFormatDto and extracts the
+// TextFieldFormatDtoBigFloat and extracts the
 // specifications necessary to format and return a
 // floating, pure number string.
 //
@@ -2296,16 +2296,16 @@ type textBigFloatFieldFormatDtoElectron struct {
 //
 // # Input Parameters
 //
-//	txtBigFloatFieldFmtDto		*TextBigFloatFieldFormatDto
+//	txtBigFloatFieldFmtDto		*TextFieldFormatDtoBigFloat
 //
 //		A pointer to an instance of
-//		TextBigFloatFieldFormatDto.
+//		TextFieldFormatDtoBigFloat.
 //
-//		This instance of TextBigFloatFieldFormatDto will
+//		This instance of TextFieldFormatDtoBigFloat will
 //		be converted, formatted and returned as a
 //		floating point pure number string.
 //
-//		If this instance of TextBigFloatFieldFormatDto
+//		If this instance of TextFieldFormatDtoBigFloat
 //		contains invalid data elements, an error will
 //		be returned.
 //
@@ -2361,7 +2361,7 @@ type textBigFloatFieldFormatDtoElectron struct {
 //		will be prefixed or attached at the beginning of
 //		the error message.
 func (txtBigFloatFieldFmtDtoElectron *textBigFloatFieldFormatDtoElectron) getBigFloatPureNumberStr(
-	txtBigFloatFieldFmtDto *TextBigFloatFieldFormatDto,
+	txtBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat,
 	errPrefDto *ePref.ErrPrefixDto) (
 	string,
 	error) {

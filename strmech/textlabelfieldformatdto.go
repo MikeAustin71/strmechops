@@ -48,7 +48,7 @@ type TextLabelFieldFormatDto struct {
 	//		ITextLineSpecification
 	//		ITextFieldSpecification
 	//		ITextFieldFormatDto
-	//			TextBigFloatFieldFormatDto
+	//			TextFieldFormatDtoBigFloat
 	//			TextDateFieldFormatDto
 	//			TextLabelFieldFormatDto
 	//			TextFillerFieldFormatDto

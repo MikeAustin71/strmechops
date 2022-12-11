@@ -51,7 +51,7 @@ type textLineSpecStandardLineElectron struct {
 //		Examples of concrete types implementing the
 //		ITextFieldFormatDto interface are:
 //
-//				TextBigFloatFieldFormatDto
+//				TextFieldFormatDtoBigFloat
 //				TextDateFieldFormatDto
 //				TextLabelFieldFormatDto
 //				TextFillerFieldFormatDto
@@ -246,7 +246,7 @@ type textLineSpecStandardLineElectron struct {
 //		Examples of concrete types implementing the
 //		ITextFieldFormatDto interface are:
 //
-//			TextBigFloatFieldFormatDto
+//			TextFieldFormatDtoBigFloat
 //			TextDateFieldFormatDto
 //			TextLabelFieldFormatDto
 //			TextFillerFieldFormatDto

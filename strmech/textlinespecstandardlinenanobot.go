@@ -219,7 +219,7 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) addTextFields(
 //		Examples of concrete types implementing the
 //		ITextFieldFormatDto interface are:
 //
-//				TextBigFloatFieldFormatDto
+//				TextFieldFormatDtoBigFloat
 //				TextDateFieldFormatDto
 //				TextLabelFieldFormatDto
 //				TextFillerFieldFormatDto
@@ -411,7 +411,7 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) addTextFields(
 //		Examples of concrete types implementing the
 //		ITextFieldFormatDto interface are:
 //
-//			TextBigFloatFieldFormatDto
+//			TextFieldFormatDtoBigFloat
 //			TextDateFieldFormatDto
 //			TextLabelFieldFormatDto
 //			TextFillerFieldFormatDto
@@ -1094,7 +1094,7 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) insertTextFieldAtIndex
 //		Examples of concrete types implementing the
 //		ITextFieldFormatDto interface are:
 //
-//				TextBigFloatFieldFormatDto
+//				TextFieldFormatDtoBigFloat
 //				TextDateFieldFormatDto
 //				TextLabelFieldFormatDto
 //				TextFillerFieldFormatDto
@@ -1288,7 +1288,7 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) insertTextFieldAtIndex
 //		Examples of concrete types implementing the
 //		ITextFieldFormatDto interface are:
 //
-//			TextBigFloatFieldFormatDto
+//			TextFieldFormatDtoBigFloat
 //			TextDateFieldFormatDto
 //			TextLabelFieldFormatDto
 //			TextFillerFieldFormatDto

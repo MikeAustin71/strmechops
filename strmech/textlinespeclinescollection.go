@@ -50,7 +50,7 @@ type TextLineSpecLinesCollection struct {
 //		Examples of concrete types implementing the
 //		ITextFieldFormatDto interface are:
 //
-//				TextBigFloatFieldFormatDto
+//				TextFieldFormatDtoBigFloat
 //				TextDateFieldFormatDto
 //				TextLabelFieldFormatDto
 //				TextFillerFieldFormatDto
@@ -333,7 +333,7 @@ type TextLineSpecLinesCollection struct {
 //		Examples of concrete types implementing the
 //		ITextFieldFormatDto interface are:
 //
-//			TextBigFloatFieldFormatDto
+//			TextFieldFormatDtoBigFloat
 //			TextDateFieldFormatDto
 //			TextLabelFieldFormatDto
 //			TextFillerFieldFormatDto

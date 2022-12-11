@@ -518,7 +518,7 @@ func (stdLine *TextLineSpecStandardLine) AddTextField(
 //		Examples of concrete types implementing the
 //		ITextFieldFormatDto interface are:
 //
-//				TextBigFloatFieldFormatDto
+//				TextFieldFormatDtoBigFloat
 //				TextDateFieldFormatDto
 //				TextLabelFieldFormatDto
 //				TextFillerFieldFormatDto
@@ -700,7 +700,7 @@ func (stdLine *TextLineSpecStandardLine) AddTextField(
 //		Examples of concrete types implementing the
 //		ITextFieldFormatDto interface are:
 //
-//			TextBigFloatFieldFormatDto
+//			TextFieldFormatDtoBigFloat
 //			TextDateFieldFormatDto
 //			TextLabelFieldFormatDto
 //			TextFillerFieldFormatDto
@@ -867,7 +867,7 @@ func (stdLine *TextLineSpecStandardLine) AddTextFieldDtosMultiCol(
 //		Examples of concrete types implementing the
 //		ITextFieldFormatDto interface are:
 //
-//				TextBigFloatFieldFormatDto
+//				TextFieldFormatDtoBigFloat
 //				TextDateFieldFormatDto
 //				TextLabelFieldFormatDto
 //				TextFillerFieldFormatDto
@@ -1110,7 +1110,7 @@ func (stdLine *TextLineSpecStandardLine) AddTextFieldDtosMultiCol(
 //		Examples of concrete types implementing the
 //		ITextFieldFormatDto interface are:
 //
-//			TextBigFloatFieldFormatDto
+//			TextFieldFormatDtoBigFloat
 //			TextDateFieldFormatDto
 //			TextLabelFieldFormatDto
 //			TextFillerFieldFormatDto
@@ -5295,7 +5295,7 @@ func (stdLine TextLineSpecStandardLine) NewStandardLineAllParms(
 //		Examples of concrete types implementing the
 //		ITextFieldFormatDto interface are:
 //
-//				TextBigFloatFieldFormatDto
+//				TextFieldFormatDtoBigFloat
 //				TextDateFieldFormatDto
 //				TextLabelFieldFormatDto
 //				TextFillerFieldFormatDto
@@ -5578,7 +5578,7 @@ func (stdLine TextLineSpecStandardLine) NewStandardLineAllParms(
 //		Examples of concrete types implementing the
 //		ITextFieldFormatDto interface are:
 //
-//			TextBigFloatFieldFormatDto
+//			TextFieldFormatDtoBigFloat
 //			TextDateFieldFormatDto
 //			TextLabelFieldFormatDto
 //			TextFillerFieldFormatDto
@@ -5698,7 +5698,7 @@ func (stdLine TextLineSpecStandardLine) NewStdLineColumns(
 //		Examples of concrete types implementing the
 //		ITextFieldFormatDto interface are:
 //
-//				TextBigFloatFieldFormatDto
+//				TextFieldFormatDtoBigFloat
 //				TextDateFieldFormatDto
 //				TextLabelFieldFormatDto
 //				TextFillerFieldFormatDto
@@ -5880,7 +5880,7 @@ func (stdLine TextLineSpecStandardLine) NewStdLineColumns(
 //		Examples of concrete types implementing the
 //		ITextFieldFormatDto interface are:
 //
-//			TextBigFloatFieldFormatDto
+//			TextFieldFormatDtoBigFloat
 //			TextDateFieldFormatDto
 //			TextLabelFieldFormatDto
 //			TextFillerFieldFormatDto
