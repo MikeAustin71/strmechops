@@ -47,7 +47,11 @@ type TextLabelFieldFormatDto struct {
 	//		       (Converts date time to string)
 	//		ITextLineSpecification
 	//		ITextFieldSpecification
-	//		TextBigFloatFieldFormatDto - Formats big.Float numbers
+	//		ITextFieldFormatDto
+	//			TextBigFloatFieldFormatDto
+	//			TextDateFieldFormatDto
+	//			TextLabelFieldFormatDto
+	//			TextFillerFieldFormatDto
 	//
 	//		If the 'emptyIFace' object is not convertible to
 	//		one of the supported types, an error will be returned.
@@ -90,6 +94,16 @@ type TextLabelFieldFormatDto struct {
 	//			FieldContents String Length = 12
 	//			FieldLength = -1
 	//			FieldJustify = TxtJustify.Center() // Ignored
+	//			Text Field String =
+	//				"Hello World!"
+	//
+	//		Example-4
+	//          FieldContents = "Hello World!"
+	//			FieldContents String Length = 12
+	//			FieldLength = 2
+	//			FieldJustify = TxtJustify.Center()
+	//				Ignored, because FieldLength Less
+	//				Than FieldContents String Length.
 	//			Text Field String =
 	//				"Hello World!"
 
@@ -145,6 +159,16 @@ type TextLabelFieldFormatDto struct {
 	//			FieldContents String Length = 12
 	//			FieldLength = -1
 	//			FieldJustify = TxtJustify.Center() // Ignored
+	//			Text Field String =
+	//				"Hello World!"
+	//
+	//		Example-4
+	//          FieldContents = "Hello World!"
+	//			FieldContents String Length = 12
+	//			FieldLength = 2
+	//			FieldJustify = TxtJustify.Center()
+	//				Ignored, because FieldLength Less
+	//				Than FieldContents String Length.
 	//			Text Field String =
 	//				"Hello World!"
 

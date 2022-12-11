@@ -10,6 +10,423 @@ type textLineSpecStandardLineElectron struct {
 	lock *sync.Mutex
 }
 
+// addTextFieldDtosToArray
+//
+// This method will append multiple text fields to the
+// end of the internal array of text field objects
+// maintained by the instance of TextLineSpecStandardLine
+// passed as input parameter 'txtStdLine'.
+//
+// The text fields will be constructed using text field
+// specifications from the 'textFieldDtos' data transfer
+// object. Thereafter, the new constructed text fields
+// will be appended to the end of the internal text field
+// array contained within 'txtStdLine'.
+//
+// If the method completes successfully, the internal
+// array index of the last Text Field object will be
+// returned to the calling function.
+//
+// Remember that the last array index is equal the array
+// length minus one (array length - 1).
+//
+// This method performs low level operations which
+// actually constructs the text fields and appends them
+// to the end of the internal text field array contained
+// in 'txtStdLine'.
+//
+// ----------------------------------------------------------------
+//
+// # ITextFieldFormatDto Interface
+//
+//		This method processes objects implementing the
+//		ITextFieldFormatDto interface to define text field
+//		specifications used to generate multi-column lines of
+//		text.
+//
+//		These text fields are then bundled to configure a
+//		line of text returned as an instance of
+//		TextLineSpecStandardLine.
+//
+//		Examples of concrete types implementing the
+//		ITextFieldFormatDto interface are:
+//
+//				TextBigFloatFieldFormatDto
+//				TextDateFieldFormatDto
+//				TextLabelFieldFormatDto
+//				TextFillerFieldFormatDto
+//
+//		The most frequently used type is the
+//		TextLabelFieldFormatDto structure which is defined
+//		as follows:
+//
+//			type TextLabelFieldFormatDto struct {
+//
+//				LeftMarginStr string
+//					One or more characters used to create a left
+//					margin for this Text Field.
+//
+//					If this parameter is set to an empty string, no
+//					left margin will be configured for this Text
+//					Field.
+//
+//				FieldContents interface{}
+//					This parameter may contain one of several
+//					specific data types. This empty interface type
+//					will be converted to a string and configured as
+//					the text column content within a text line.
+//
+//					Supported types which may be submitted through
+//					this empty interface parameter are listed as
+//					follows:
+//
+//					   time.Time (Converted using default format)
+//					   string
+//					   bool
+//					   uint, uint8, uint16, uint32, uint64,
+//					   int, int8, int16, int32, int64
+//					   float32, float64
+//					   *big.Int *big.Float
+//					   fmt.Stringer (types that support this interface)
+//					   TextInputParamFieldDateTimeDto
+//					         (Converts date time to string. The best way
+//					          to transmit and configure date time values.)
+//
+//				 FieldLength int
+//					The length of the text field in which the
+//					'FieldContents' will be displayed. If
+//					'FieldLength' is less than the length of the
+//					'FieldContents' string, it will be automatically
+//					set equal to the 'FieldContents' string length.
+//
+//					To automatically set the value of 'FieldLength'
+//					to the length of 'FieldContents', set this
+//					parameter to a value of minus one (-1).
+//
+//					If this parameter is submitted with a value less
+//					than minus one (-1) or greater than 1-million
+//					(1,000,000), an error will be returned.
+//
+//					Field Length Examples
+//
+//						Example-1
+//	 			        FieldContents String = "Hello World!"
+//							FieldContents String Length = 12
+//							FieldLength = 18
+//							FieldJustify = TxtJustify.Center()
+//							Text Field String =
+//								"   Hello World!   "
+//
+//						Example-2
+//	 			        FieldContents = "Hello World!"
+//							FieldContents String Length = 12
+//							FieldLength = 18
+//							FieldJustify = TxtJustify.Left()
+//							Text Field String =
+//								"Hello World!      "
+//
+//						Example-3
+//	 			        FieldContents = "Hello World!"
+//							FieldContents String Length = 12
+//							FieldLength = -1
+//							FieldJustify = TxtJustify.Center() // Ignored
+//							Text Field String =
+//								"Hello World!"
+//
+//						Example-4
+//	 			        FieldContents = "Hello World!"
+//							FieldContents String Length = 12
+//							FieldLength = 2
+//							FieldJustify = TxtJustify.Center()
+//								Ignored, because FieldLength Less
+//								Than FieldContents String Length.
+//							Text Field String =
+//								"Hello World!"
+//
+//				 FieldJustify TextJustify
+//					An enumeration which specifies the justification
+//					of the 'FieldContents' string within the text
+//					field length specified by 'FieldLength'.
+//
+//					Text justification can only be evaluated in the
+//					context of a text label ('FieldContents'), field
+//					length ('FieldLength') and a Text Justification
+//					object of type TextJustify. This is because text
+//					labels with a field length equal to or less than
+//					the length of the text label string will never
+//					use text justification. In these cases, text
+//					justification is completely ignored.
+//
+//					If the field length is greater than the length of
+//					the text label string, text justification must be
+//					equal to one of these three valid values:
+//
+//					    TextJustify(0).Left()
+//					    TextJustify(0).Right()
+//					    TextJustify(0).Center()
+//
+//					Users can also specify the abbreviated text
+//					justification enumeration syntax as follows:
+//
+//					    TxtJustify.Left()
+//					    TxtJustify.Right()
+//					    TxtJustify.Center()
+//
+//					Text Justification Examples
+//
+//						Example-1
+//	 			        FieldContents String = "Hello World!"
+//							FieldContents String Length = 12
+//							FieldLength = 18
+//							FieldJustify = TxtJustify.Center()
+//							Text Field String =
+//								"   Hello World!   "
+//
+//						Example-2
+//	 			        FieldContents = "Hello World!"
+//							FieldContents String Length = 12
+//							FieldLength = 18
+//							FieldJustify = TxtJustify.Left()
+//							Text Field String =
+//								"Hello World!      "
+//
+//						Example-3
+//	 			        FieldContents = "Hello World!"
+//							FieldContents String Length = 12
+//							FieldLength = -1
+//							FieldJustify = TxtJustify.Center() // Ignored
+//							Text Field String =
+//								"Hello World!"
+//
+//						Example-4
+//	 			        FieldContents = "Hello World!"
+//							FieldContents String Length = 12
+//							FieldLength = 2
+//							FieldJustify = TxtJustify.Center()
+//								Ignored, because FieldLength Less
+//								Than FieldContents String Length.
+//							Text Field String =
+//								"Hello World!"
+//
+//				RightMarginStr string
+//					One or more characters used to create a right
+//					margin for this Text Field.
+//
+//					If this parameter is set to an empty string, no
+//					right margin will be configured for this Text
+//					Field.
+//			}
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	txtStdLine					*TextLineSpecStandardLine
+//
+//		A pointer to an instance of
+//		TextLineSpecStandardLine. Data extracted from the
+//		following input parameters will be used to
+//		completely reconfigure this instance of
+//		TextLineSpecStandardLine.
+//
+//		All pre-existing data values contained in this
+//		TextLineSpecStandardLine instance will be deleted
+//		and overwritten with new values.
+//
+//	txtFieldFmtDtos				[]ITextFieldFormatDto
+//
+//		An array of objects implementing the
+//		ITextFieldFormatDto interface. These Text Field
+//		formatting objects contain all the text field
+//		content and formatting specifications necessary
+//		to format multiple text field columns in the
+//		instance of TextLineSpecStandardLine passed as
+//		input parameter 'txtStdLine'.
+//
+//		Examples of concrete types implementing the
+//		ITextFieldFormatDto interface are:
+//
+//			TextBigFloatFieldFormatDto
+//			TextDateFieldFormatDto
+//			TextLabelFieldFormatDto
+//			TextFillerFieldFormatDto
+//
+//		For additional information on the
+//		ITextFieldFormatDto interface, see above
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	lastIndexId					int
+//
+//		If this method completes successfully, the
+//		internal array index of the last text field
+//		object for the current TextLineSpecStandardLine
+//		instance will be returned as an integer value.
+//
+//		Remember that the last array index is equal the
+//		array length minus one (array length - 1).
+//
+//		In the event of an error, 'lastIndexId' will be
+//		set to a value of minus one (-1).
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (txtStdLineElectron *textLineSpecStandardLineElectron) addTextFieldDtosToArray(
+	txtStdLine *TextLineSpecStandardLine,
+	textFieldDtos []ITextFieldFormatDto,
+	errPrefDto *ePref.ErrPrefixDto) (
+	lastIndexId int,
+	err error) {
+
+	if txtStdLineElectron.lock == nil {
+		txtStdLineElectron.lock = new(sync.Mutex)
+	}
+
+	txtStdLineElectron.lock.Lock()
+
+	defer txtStdLineElectron.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	lastIndexId = -1
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"textLineSpecStandardLineElectron."+
+			"addTextFieldDtosToArray()",
+		"")
+
+	if err != nil {
+		return lastIndexId, err
+	}
+
+	if txtStdLine == nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'txtStdLine' is a nil pointer!\n",
+			ePrefix.String())
+
+		return lastIndexId, err
+	}
+
+	if textFieldDtos == nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'textFieldDtos' is a nil pointer!\n",
+			ePrefix.String())
+
+		return lastIndexId, err
+	}
+
+	lenTextFieldFmtDtos := len(textFieldDtos)
+
+	if lenTextFieldFmtDtos == 0 {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'textFieldDtos' is invalid!\n"+
+			"'textFieldDtos' is an empty or zero length array.\n",
+			ePrefix.String())
+
+		return lastIndexId, err
+	}
+
+	var fieldContentsText string
+	var txtFieldSpecLabel TextFieldSpecLabel
+
+	for i := 0; i < lenTextFieldFmtDtos; i++ {
+
+		if textFieldDtos[i].GetLeftMarginLength() > 0 {
+
+			fieldContentsText =
+				textFieldDtos[i].GetLeftMarginStr()
+
+			txtFieldSpecLabel,
+				err = TextFieldSpecLabel{}.NewTextLabel(
+				fieldContentsText,
+				-1,
+				TxtJustify.Left(),
+				ePrefix.XCpy(
+					"Left Margin String"))
+
+			if err != nil {
+				return lastIndexId, err
+			}
+
+			txtStdLine.textFields =
+				append(txtStdLine.textFields,
+					&txtFieldSpecLabel)
+
+		}
+
+		txtFieldSpecLabel,
+			err = textFieldDtos[i].GetFieldContentTextLabel(
+			ePrefix.XCpy(
+				fmt.Sprintf("textFieldDtos[%v]."+
+					"FieldContents",
+					i)))
+
+		if err != nil {
+			return lastIndexId, err
+		}
+
+		txtStdLine.textFields =
+			append(txtStdLine.textFields,
+				&txtFieldSpecLabel)
+
+		if textFieldDtos[i].GetRightMarginLength() > 0 {
+
+			fieldContentsText =
+				textFieldDtos[i].GetRightMarginStr()
+
+			txtFieldSpecLabel,
+				err = TextFieldSpecLabel{}.NewTextLabel(
+				fieldContentsText,
+				-1,
+				TxtJustify.Left(),
+				ePrefix.XCpy(
+					"Right Margin String"))
+
+			if err != nil {
+				return lastIndexId, err
+			}
+
+			txtStdLine.textFields =
+				append(txtStdLine.textFields,
+					&txtFieldSpecLabel)
+
+		}
+	}
+
+	lastIndexId = len(txtStdLine.textFields) - 1
+
+	return lastIndexId, err
+}
+
 // deleteTextField - Deletes a member of the Text Fields
 // Collection. The array element to be deleted is designated by
 // input parameter 'indexId'.
