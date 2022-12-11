@@ -4,7 +4,6 @@ import "strings"
 
 // ITextLineSpecification - Types that support this interface
 // also support the io.Reader interface.
-//
 type ITextLineSpecification interface {
 	CopyOutITextLine(
 		errorPrefix interface{}) (
