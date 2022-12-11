@@ -458,7 +458,7 @@ func (txtLinesSpecCol *TextLineSpecLinesCollection) AddStdLineMultiCols(
 	var newStdLine TextLineSpecStandardLine
 
 	newStdLine,
-		err = TextLineSpecStandardLine{}.NewStdLineMultiColTextFieldDtos(
+		err = TextLineSpecStandardLine{}.NewStdLineMultipleColumns(
 		textFieldColumns,
 		lineTerminator,
 		turnLineTerminatorOff,

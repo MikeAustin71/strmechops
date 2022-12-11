@@ -5675,7 +5675,7 @@ func (stdLine TextLineSpecStandardLine) NewStdLineColumns(
 	return newStdLine, err
 }
 
-//	NewStdLineMultiColTextFieldDtos
+//	NewStdLineMultipleColumns
 //
 //	Configures and returns a new fully populated instance
 //	of TextLineSpecStandardLine consisting of multiple
@@ -6013,7 +6013,7 @@ func (stdLine TextLineSpecStandardLine) NewStdLineColumns(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (stdLine TextLineSpecStandardLine) NewStdLineMultiColTextFieldDtos(
+func (stdLine TextLineSpecStandardLine) NewStdLineMultipleColumns(
 	textFieldDtos []ITextFieldFormatDto,
 	lineTerminator string,
 	turnLineTerminatorOff bool,
@@ -6038,7 +6038,7 @@ func (stdLine TextLineSpecStandardLine) NewStdLineMultiColTextFieldDtos(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"TextLineSpecStandardLine."+
-			"NewStdLineMultiColTextFieldDtos()",
+			"NewStdLineMultipleColumns()",
 		"")
 
 	if err != nil {
