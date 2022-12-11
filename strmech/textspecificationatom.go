@@ -232,15 +232,15 @@ func (txtSpecAtom *textSpecificationAtom) convertParamEmptyInterfaceToString(
 
 		return convertedString, err
 
-	case TextFieldFormatDtoBigFloat:
+	case ITextFieldFormatDto:
 
-		bigFloatFmtDto,
-			ok := emptyIFace.(TextFieldFormatDtoBigFloat)
+		iTextFieldFormatDto,
+			ok := emptyIFace.(ITextFieldFormatDto)
 
 		if !ok {
 			err = fmt.Errorf("%v\n"+
 				"Error: Failed to convert empty interface\n"+
-				"(%v) TextFieldFormatDtoBigFloat!\n"+
+				"(%v) ITextFieldFormatDto!\n"+
 				"String Conversion Error.\n",
 				ePrefix.String(),
 				emptyIFaceParamName)
@@ -248,7 +248,10 @@ func (txtSpecAtom *textSpecificationAtom) convertParamEmptyInterfaceToString(
 			return convertedString, err
 		}
 
-		convertedString = bigFloatFmtDto.GetFormattedText()
+		convertedString,
+			err = iTextFieldFormatDto.GetFormattedTextFieldStr(
+			ePrefix.XCpy(
+				"convertedString"))
 
 		return convertedString, err
 
