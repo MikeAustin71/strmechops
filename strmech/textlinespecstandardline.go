@@ -4885,107 +4885,207 @@ func (stdLine TextLineSpecStandardLine) NewStandardLineAllParms(
 	return newStdLine, err
 }
 
-//	NewStdLine1Col
+// NewStdLineColumns
 //
-//	Configures and returns a new fully populated instance
-//	of TextLineSpecStandardLine consisting of a single text
-//	column. In other words the result is a single line of
-//	text containing only one text column.
+// Configures and returns a new fully populated instance
+// of TextLineSpecStandardLine. This standard line of
+// text will be constructed from one or more
+// ITextFieldFormatDto objects passed as a variadic
+// parameter.
+//
+// Variadic methods like this one accept a variable
+// number of arguments.
+//
+// Each ITextFieldFormatDto passed to this method will
+// constitute a separate text field in the new instance
+// of TextLineSpecStandardLine returned to the calling
+// function.
+//
+// ----------------------------------------------------------------
+//
+// # ITextFieldFormatDto Interface
+//
+//		This method processes objects implementing the
+//		ITextFieldFormatDto interface to define text
+//		field specifications used to generate
+//		multi-column lines of text.
+//
+//		These text fields are then bundled to configure a
+//		line of text returned as an instance of
+//		TextLineSpecStandardLine.
+//
+//		Examples of concrete types implementing the
+//		ITextFieldFormatDto interface are:
+//
+//				TextBigFloatFieldFormatDto
+//				TextDateFieldFormatDto
+//				TextLabelFieldFormatDto
+//				TextFillerFieldFormatDto
+//
+//		The most frequently used type is the
+//		TextLabelFieldFormatDto structure which is defined
+//		as follows:
+//
+//			type TextLabelFieldFormatDto struct {
+//
+//				LeftMarginStr string
+//					One or more characters used to create a left
+//					margin for this Text Field.
+//
+//					If this parameter is set to an empty string, no
+//					left margin will be configured for this Text
+//					Field.
+//
+//				FieldContents interface{}
+//					This parameter may contain one of several
+//					specific data types. This empty interface type
+//					will be converted to a string and configured as
+//					the text column content within a text line.
+//
+//					Supported types which may be submitted through
+//					this empty interface parameter are listed as
+//					follows:
+//
+//					   time.Time (Converted using default format)
+//					   string
+//					   bool
+//					   uint, uint8, uint16, uint32, uint64,
+//					   int, int8, int16, int32, int64
+//					   float32, float64
+//					   *big.Int *big.Float
+//					   fmt.Stringer (types that support this interface)
+//					   TextInputParamFieldDateTimeDto
+//					         (Converts date time to string. The best way
+//					          to transmit and configure date time values.)
+//
+//				 FieldLength int
+//					The length of the text field in which the
+//					'FieldContents' will be displayed. If
+//					'FieldLength' is less than the length of the
+//					'FieldContents' string, it will be automatically
+//					set equal to the 'FieldContents' string length.
+//
+//					To automatically set the value of 'FieldLength'
+//					to the length of 'FieldContents', set this
+//					parameter to a value of minus one (-1).
+//
+//					If this parameter is submitted with a value less
+//					than minus one (-1) or greater than 1-million
+//					(1,000,000), an error will be returned.
+//
+//					Field Length Examples
+//
+//						Example-1
+//	 			        FieldContents String = "Hello World!"
+//							FieldContents String Length = 12
+//							FieldLength = 18
+//							FieldJustify = TxtJustify.Center()
+//							Text Field String =
+//								"   Hello World!   "
+//
+//						Example-2
+//	 			        FieldContents = "Hello World!"
+//							FieldContents String Length = 12
+//							FieldLength = 18
+//							FieldJustify = TxtJustify.Left()
+//							Text Field String =
+//								"Hello World!      "
+//
+//						Example-3
+//	 			        FieldContents = "Hello World!"
+//							FieldContents String Length = 12
+//							FieldLength = -1
+//							FieldJustify = TxtJustify.Center() // Ignored
+//							Text Field String =
+//								"Hello World!"
+//
+//						Example-4
+//	 			        FieldContents = "Hello World!"
+//							FieldContents String Length = 12
+//							FieldLength = 2
+//							FieldJustify = TxtJustify.Center()
+//								Ignored, because FieldLength Less
+//								Than FieldContents String Length.
+//							Text Field String =
+//								"Hello World!"
+//
+//				 FieldJustify TextJustify
+//					An enumeration which specifies the justification
+//					of the 'FieldContents' string within the text
+//					field length specified by 'FieldLength'.
+//
+//					Text justification can only be evaluated in the
+//					context of a text label ('FieldContents'), field
+//					length ('FieldLength') and a Text Justification
+//					object of type TextJustify. This is because text
+//					labels with a field length equal to or less than
+//					the length of the text label string will never
+//					use text justification. In these cases, text
+//					justification is completely ignored.
+//
+//					If the field length is greater than the length of
+//					the text label string, text justification must be
+//					equal to one of these three valid values:
+//
+//					    TextJustify(0).Left()
+//					    TextJustify(0).Right()
+//					    TextJustify(0).Center()
+//
+//					Users can also specify the abbreviated text
+//					justification enumeration syntax as follows:
+//
+//					    TxtJustify.Left()
+//					    TxtJustify.Right()
+//					    TxtJustify.Center()
+//
+//					Text Justification Examples
+//
+//						Example-1
+//	 			        FieldContents String = "Hello World!"
+//							FieldContents String Length = 12
+//							FieldLength = 18
+//							FieldJustify = TxtJustify.Center()
+//							Text Field String =
+//								"   Hello World!   "
+//
+//						Example-2
+//	 			        FieldContents = "Hello World!"
+//							FieldContents String Length = 12
+//							FieldLength = 18
+//							FieldJustify = TxtJustify.Left()
+//							Text Field String =
+//								"Hello World!      "
+//
+//						Example-3
+//	 			        FieldContents = "Hello World!"
+//							FieldContents String Length = 12
+//							FieldLength = -1
+//							FieldJustify = TxtJustify.Center() // Ignored
+//							Text Field String =
+//								"Hello World!"
+//
+//						Example-4
+//	 			        FieldContents = "Hello World!"
+//							FieldContents String Length = 12
+//							FieldLength = 2
+//							FieldJustify = TxtJustify.Center()
+//								Ignored, because FieldLength Less
+//								Than FieldContents String Length.
+//							Text Field String =
+//								"Hello World!"
+//
+//				RightMarginStr string
+//					One or more characters used to create a right
+//					margin for this Text Field.
+//
+//					If this parameter is set to an empty string, no
+//					right margin will be configured for this Text
+//					Field.
+//			}
 //
 // ----------------------------------------------------------------
 //
 // # Input Parameters
-//
-//	oneColumnTextField			TextLabelFieldFormatDto
-//
-//		Contains all the text field content and
-//		formatting specifications necessary to format a
-//		one-column text field.
-//
-//		type TextLabelFieldFormatDto struct {
-//
-//			LeftMarginStr string
-//				One or more characters used to create a left
-//				margin for this Text Field.
-//
-//				If this parameter is set to an empty string, no
-//				left margin will be configured for this Text
-//				Field.
-//
-//			FieldContents interface{}
-//				This parameter may contain one of several
-//				specific data types. This empty interface type
-//				will be converted to a string and configured as
-//				the text column content within a text line.
-//
-//				Supported types which may be submitted through
-//				this empty interface parameter are listed as
-//				follows:
-//
-//				   time.Time (Converted using default format)
-//				   string
-//				   bool
-//				   uint, uint8, uint16, uint32, uint64,
-//				   int, int8, int16, int32, int64
-//				   float32, float64
-//				   *big.Int *big.Float
-//				   fmt.Stringer (types that support this interface)
-//				   TextInputParamFieldDateTimeDto
-//				         (Converts date time to string. The best way
-//				          to transmit and configure date time values.)
-//
-//			 FieldLength int
-//				The length of the text field in which the
-//				'FieldContents' will be displayed. If
-//				'FieldLength' is less than the length of the
-//				'FieldContents' string, it will be automatically
-//				set equal to the 'FieldContents' string length.
-//
-//				To automatically set the value of 'FieldLength'
-//				to the length of 'FieldContents', set this
-//				parameter to a value of minus one (-1).
-//
-//				If this parameter is submitted with a value less
-//				than minus one (-1) or greater than 1-million
-//				(1,000,000), an error will be returned.
-//
-//			 FieldJustify TextJustify
-//				An enumeration which specifies the justification
-//				of the 'FieldContents' string within the text
-//				field length specified by 'FieldLength'.
-//
-//				Text justification can only be evaluated in the
-//				context of a text label ('FieldContents'), field
-//				length ('FieldLength') and a Text Justification
-//				object of type TextJustify. This is because text
-//				labels with a field length equal to or less than
-//				the length of the text label string will never
-//				use text justification. In these cases, text
-//				justification is completely ignored.
-//
-//				If the field length is greater than the length of
-//				the text label string, text justification must be
-//				equal to one of these three valid values:
-//
-//				    TextJustify(0).Left()
-//				    TextJustify(0).Right()
-//				    TextJustify(0).Center()
-//
-//				Users can also specify the abbreviated text
-//				justification enumeration syntax as follows:
-//
-//				    TxtJustify.Left()
-//				    TxtJustify.Right()
-//				    TxtJustify.Center()
-//
-//			RightMarginStr string
-//				One or more characters used to create a right
-//				margin for this Text Field.
-//
-//				If this parameter is set to an empty string, no
-//				right margin will be configured for this Text
-//				Field.
-//		}
 //
 //	lineTerminator				string
 //
@@ -5031,7 +5131,7 @@ func (stdLine TextLineSpecStandardLine) NewStandardLineAllParms(
 //
 //		This object encapsulates error prefix text which
 //		is included in all returned error messages.
-//		Usually, it	contains the name of the calling
+//		Usually, it contains the name of the calling
 //		method or methods listed as a method or function
 //		chain of execution.
 //
@@ -5085,6 +5185,32 @@ func (stdLine TextLineSpecStandardLine) NewStandardLineAllParms(
 //		Types ErrPrefixDto and IBasicErrorPrefix are
 //		included in the 'errpref' software package:
 //			"github.com/MikeAustin71/errpref".
+//
+//	textFieldColumns			...ITextFieldFormatDto
+//
+//		This variadic parameter is used to pass one or
+//		more instances of objects implementing the
+//		ITextFieldFormatDto interface.
+//
+//		These ITextFieldFormatDto object contains all the
+//		text field content and formatting specifications
+//		necessary to format one or more text fields in
+//		a standard line of text.
+//
+//		Examples of concrete types implementing the
+//		ITextFieldFormatDto interface are:
+//
+//			TextBigFloatFieldFormatDto
+//			TextDateFieldFormatDto
+//			TextLabelFieldFormatDto
+//			TextFillerFieldFormatDto
+//
+//		For additional information on the
+//		ITextFieldFormatDto interface, see above.
+//
+//		Note: In the Go Programming language the
+//		variadic arguments must be positioned last
+//		in the parameter list.
 //
 // ----------------------------------------------------------------
 //
@@ -5112,11 +5238,11 @@ func (stdLine TextLineSpecStandardLine) NewStandardLineAllParms(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (stdLine TextLineSpecStandardLine) NewStdLine1Col(
-	oneColumnTextField ITextFieldFormatDto,
+func (stdLine TextLineSpecStandardLine) NewStdLineColumns(
 	lineTerminator string,
 	turnLineTerminatorOff bool,
-	errorPrefix interface{}) (
+	errorPrefix interface{},
+	textFieldColumns ...ITextFieldFormatDto) (
 	TextLineSpecStandardLine,
 	error) {
 
@@ -5137,7 +5263,7 @@ func (stdLine TextLineSpecStandardLine) NewStdLine1Col(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"TextLineSpecStandardLine."+
-			"NewStdLine1Col()",
+			"NewStdLineColumns()",
 		"")
 
 	if err != nil {
@@ -5148,312 +5274,20 @@ func (stdLine TextLineSpecStandardLine) NewStdLine1Col(
 		lineTerminator = "\n"
 	}
 
-	err = new(textLineSpecStandardLineNanobot).
-		setTextFieldDtosStdLine(
-			&newStdLine,
-			[]ITextFieldFormatDto{oneColumnTextField},
-			1,
-			[]rune(lineTerminator),
-			turnLineTerminatorOff,
-			ePrefix.XCpy(
-				"newStdLine<-"))
+	var iTextFieldFormatDtos []ITextFieldFormatDto
 
-	return newStdLine, err
-}
+	for _, txtCol := range textFieldColumns {
 
-//	NewStdLine2Col
-//
-//	Configures and returns a new fully populated instance
-//	of TextLineSpecStandardLine consisting of two text
-//	columns. In other words the result is a single line
-//	of text containing two text columns.
-//
-// ----------------------------------------------------------------
-//
-// # Type TextLabelFieldFormatDto
-//
-//	This method employs type TextLabelFieldFormatDto to define
-//	text fields for the two column layout configured for
-//	the returned instance of TextLineSpecStandardLine.
-//
-//	The type TextLabelFieldFormatDto structure is defined as
-//	follows:
-//
-//		type TextLabelFieldFormatDto struct {
-//
-//			LeftMarginStr string
-//				One or more characters used to create a left
-//				margin for this Text Field.
-//
-//				If this parameter is set to an empty string, no
-//				left margin will be configured for this Text
-//				Field.
-//
-//			FieldContents interface{}
-//				This parameter may contain one of several
-//				specific data types. This empty interface type
-//				will be converted to a string and configured as
-//				the text column content within a text line.
-//
-//				Supported types which may be submitted through
-//				this empty interface parameter are listed as
-//				follows:
-//
-//				   time.Time (Converted using default format)
-//				   string
-//				   bool
-//				   uint, uint8, uint16, uint32, uint64,
-//				   int, int8, int16, int32, int64
-//				   float32, float64
-//				   *big.Int *big.Float
-//				   fmt.Stringer (types that support this interface)
-//				   TextInputParamFieldDateTimeDto
-//				         (Converts date time to string. The best way
-//				          to transmit and configure date time values.)
-//
-//			 FieldLength int
-//				The length of the text field in which the
-//				'FieldContents' will be displayed. If
-//				'FieldLength' is less than the length of the
-//				'FieldContents' string, it will be automatically
-//				set equal to the 'FieldContents' string length.
-//
-//				To automatically set the value of 'FieldLength'
-//				to the length of 'FieldContents', set this
-//				parameter to a value of minus one (-1).
-//
-//				If this parameter is submitted with a value less
-//				than minus one (-1) or greater than 1-million
-//				(1,000,000), an error will be returned.
-//
-//			 FieldJustify TextJustify
-//				An enumeration which specifies the justification
-//				of the 'FieldContents' string within the text
-//				field length specified by 'FieldLength'.
-//
-//				Text justification can only be evaluated in the
-//				context of a text label ('FieldContents'), field
-//				length ('FieldLength') and a Text Justification
-//				object of type TextJustify. This is because text
-//				labels with a field length equal to or less than
-//				the length of the text label string will never
-//				use text justification. In these cases, text
-//				justification is completely ignored.
-//
-//				If the field length is greater than the length of
-//				the text label string, text justification must be
-//				equal to one of these three valid values:
-//
-//				    TextJustify(0).Left()
-//				    TextJustify(0).Right()
-//				    TextJustify(0).Center()
-//
-//				Users can also specify the abbreviated text
-//				justification enumeration syntax as follows:
-//
-//				    TxtJustify.Left()
-//				    TxtJustify.Right()
-//				    TxtJustify.Center()
-//
-//			RightMarginStr string
-//				One or more characters used to create a right
-//				margin for this Text Field.
-//
-//				If this parameter is set to an empty string, no
-//				right margin will be configured for this Text
-//				Field.
-//		}
-//
-// ----------------------------------------------------------------
-//
-// # Input Parameters
-//
-//	columnOneTextField			TextLabelFieldFormatDto
-//
-//		Contains all the text field content and
-//		formatting specifications necessary to format the
-//		first column text field.
-//
-//		For more information on Type TextLabelFieldFormatDto,
-//		see above.
-//
-//	columnTwoTextField			TextLabelFieldFormatDto
-//
-//		Contains all the text field content and
-//		formatting specifications necessary to format the
-//		second column text field.
-//
-//		For more information on Type TextLabelFieldFormatDto,
-//		see above.
-//
-//	lineTerminator				string
-//
-//		Also known as 'New Line characters'. This string
-//		contains the text characters which will be
-//		applied as line termination characters for each
-//		line of text produced by the returned instance of
-//		TextLineSpecStandardLine.
-//
-//		By default, each line of text generated by
-//		TextLineSpecStandardLine will be terminated with
-//		a new line character ('\n'). However, this
-//		parameter allows the user to specify the
-//		character or characters to be used as a line
-//		termination sequence for each line of text
-//		produced by the returned instance of
-//		TextLineSpecStandardLine.
-//
-//		If this parameter is submitted as an empty string
-//		with zero string length, this method will set
-//		'lineTerminator' to the default new line
-//		termination character ("\n").
-//
-//	turnLineTerminatorOff		bool
-//
-//		The 'turnLineTerminatorOff' flag controls whether
-//		a line termination character or characters will
-//		be automatically appended to each line of text
-//		produced by TextLineSpecStandardLine.
-//
-//		When the boolean flag 'turnLineTerminatorOff' is
-//		set to 'false', line terminators as defined by
-//		parameter 'lineTerminator' will be applied as a
-//		line termination sequence for each line of text
-//		produced by TextLineSpecStandardLine.
-//
-//		When this boolean value is set to 'true', it
-//		turns off or cancels the automatic generation of
-//		line terminators for each line of text produced
-//		by TextLineSpecStandardLine.
-//
-//	errorPrefix					interface{}
-//
-//		This object encapsulates error prefix text which
-//		is included in all returned error messages.
-//		Usually, it	contains the name of the calling
-//		method or methods listed as a method or function
-//		chain of execution.
-//
-//		If no error prefix information is needed, set this
-//		parameter to 'nil'.
-//
-//		This empty interface must be convertible to one of
-//		the following types:
-//
-//		1.	nil
-//				A nil value is valid and generates an
-//				empty collection of error prefix and
-//				error context information.
-//
-//		2.	string
-//				A string containing error prefix
-//				information.
-//
-//		3.	[]string
-//				A one-dimensional slice of strings
-//				containing error prefix information.
-//
-//		4.	[][2]string
-//				A two-dimensional slice of strings
-//		   		containing error prefix and error
-//		   		context information.
-//
-//		5.	ErrPrefixDto
-//				An instance of ErrPrefixDto.
-//				Information from this object will
-//				be copied for use in error and
-//				informational messages.
-//
-//		6.	*ErrPrefixDto
-//				A pointer to an instance of
-//				ErrPrefixDto. Information from
-//				this object will be copied for use
-//				in error and informational messages.
-//
-//		7.	IBasicErrorPrefix
-//				An interface to a method
-//				generating a two-dimensional slice
-//				of strings containing error prefix
-//				and error context information.
-//
-//		If parameter 'errorPrefix' is NOT convertible
-//		to one of the valid types listed above, it will
-//		be considered invalid and trigger the return of
-//		an error.
-//
-//		Types ErrPrefixDto and IBasicErrorPrefix are
-//		included in the 'errpref' software package:
-//			"github.com/MikeAustin71/errpref".
-//
-// ----------------------------------------------------------------
-//
-// # Return Values
-//
-//	TextLineSpecStandardLine
-//
-//		If this method completes successfully, it will
-//		create and return a new, populated concrete
-//		instance of TextLineSpecStandardLine which is
-//		fully configured with all the parameters
-//		necessary to generate a formatted, two-column
-//		text string for screen display, file output or
-//		printing.
-//
-//	error
-//
-//		If this method completes successfully, the
-//		returned error Type is set equal to 'nil'.
-//
-//		If errors are encountered during processing, the
-//		returned error Type will encapsulate an error
-//		message. This returned error message will
-//		incorporate the method chain and text passed by
-//		input parameter, 'errorPrefix'. The 'errorPrefix'
-//		text will be attached to the beginning of the
-//		error message.
-func (stdLine TextLineSpecStandardLine) NewStdLine2Col(
-	columnOneTextField ITextFieldFormatDto,
-	columnTwoTextField ITextFieldFormatDto,
-	lineTerminator string,
-	turnLineTerminatorOff bool,
-	errorPrefix interface{}) (
-	TextLineSpecStandardLine,
-	error) {
+		iTextFieldFormatDtos = append(
+			iTextFieldFormatDtos,
+			txtCol)
 
-	if stdLine.lock == nil {
-		stdLine.lock = new(sync.Mutex)
-	}
-
-	stdLine.lock.Lock()
-
-	defer stdLine.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-	var err error
-
-	newStdLine := TextLineSpecStandardLine{}
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
-		"TextLineSpecStandardLine."+
-			"NewStdLine2Col()",
-		"")
-
-	if err != nil {
-		return newStdLine, err
-	}
-
-	if len(lineTerminator) == 0 {
-		lineTerminator = "\n"
 	}
 
 	err = new(textLineSpecStandardLineNanobot).
 		setTextFieldDtosStdLine(
 			&newStdLine,
-			[]ITextFieldFormatDto{
-				columnOneTextField,
-				columnTwoTextField},
+			iTextFieldFormatDtos,
 			1,
 			[]rune(lineTerminator),
 			turnLineTerminatorOff,
