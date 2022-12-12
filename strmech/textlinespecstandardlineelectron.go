@@ -360,6 +360,12 @@ func (txtStdLineElectron *textLineSpecStandardLineElectron) addTextFieldDtosToAr
 
 	for i := 0; i < lenTextFieldFmtDtos; i++ {
 
+		err = textFieldDtos[i].
+			IsValidInstanceError(
+				ePrefix.XCpy(
+					fmt.Sprintf("textFieldDtos[%v]",
+						i)))
+
 		if textFieldDtos[i].GetLeftMarginLength() > 0 {
 
 			fieldContentsText =

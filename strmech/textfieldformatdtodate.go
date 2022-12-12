@@ -47,6 +47,15 @@ type TextFieldFormatDtoDate struct {
 	// Date/Time format string will be applied as
 	// follows:
 	//     "2006-01-02 15:04:05.000000000 -0700 MST"
+	//
+	// The Date/Time format is documented in the Golang
+	// time.Time package:
+	// 	https://pkg.go.dev/time
+	//
+	// The format operations are also documented at:
+	// 	https://pkg.go.dev/time#Time.Format
+	// 	https://www.golanglearn.com/golang-tutorials/go-date-and-time-formatting/
+	// 	https://gosamples.dev/date-time-format-cheatsheet/
 
 	FieldLength int
 	//	The length of the text field in which the
