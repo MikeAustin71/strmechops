@@ -251,6 +251,80 @@ func (txtLineTitleMarqueeMech *textLineSpecTitleMarqueeMechanics) setTxtLineTitl
 		if err != nil {
 			return err
 		}
+
+	}
+
+	if len(configSpecs.LeadingSolidLineChar) > 0 &&
+		configSpecs.NumLeadingSolidLines > 0 {
+
+		err = txtLineTitleMarquee.leadingMarqueeLines.AddSolidLine(
+			txtLineTitleMarquee.standardTitleLeftMargin,
+			configSpecs.LeadingSolidLineChar,
+			configSpecs.NumLeadingSolidLines,
+			txtLineTitleMarquee.standardTitleRightMargin,
+			"\n",
+			false,
+			ePrefix.XCpy(
+				"configSpecs.NumLeadingSolidLines"))
+
+		if err != nil {
+			return err
+		}
+	}
+
+	if configSpecs.NumTopTitleBlankLines > 0 {
+
+		err = txtLineTitleMarquee.leadingMarqueeLines.AddBlankLine(
+			configSpecs.NumTopTitleBlankLines,
+			ePrefix.XCpy(
+				"configSpecs.NumTopTitleBlankLines"))
+
+		if err != nil {
+			return err
+		}
+
+	}
+
+	if configSpecs.NumBottomTitleBlankLines > 0 {
+
+		err = txtLineTitleMarquee.trailingMarqueeLines.AddBlankLine(
+			configSpecs.NumBottomTitleBlankLines,
+			ePrefix.XCpy(
+				"configSpecs.NumBottomTitleBlankLines"))
+
+		if err != nil {
+			return err
+		}
+	}
+
+	if len(configSpecs.TrailingSolidLineChar) > 0 &&
+		configSpecs.NumTrailingSolidLines > 0 {
+
+		err = txtLineTitleMarquee.leadingMarqueeLines.AddSolidLine(
+			txtLineTitleMarquee.standardTitleLeftMargin,
+			configSpecs.TrailingSolidLineChar,
+			configSpecs.NumTrailingSolidLines,
+			txtLineTitleMarquee.standardTitleRightMargin,
+			"\n",
+			false,
+			ePrefix.XCpy(
+				"configSpecs.NumTrailingSolidLines"))
+
+		if err != nil {
+			return err
+		}
+	}
+
+	if configSpecs.NumTrailingBlankLines > 0 {
+
+		err = txtLineTitleMarquee.trailingMarqueeLines.AddBlankLine(
+			configSpecs.NumTrailingBlankLines,
+			ePrefix.XCpy(
+				"configSpecs.NumTrailingBlankLines"))
+
+		if err != nil {
+			return err
+		}
 	}
 
 	return err
