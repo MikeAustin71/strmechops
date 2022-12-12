@@ -51,11 +51,12 @@ type textLineSpecTitleMarqueeMechanics struct {
 //		to the configuration specifications contained in
 //		'configSpecs'.
 //
-//	configSpecs					TextLineTitleMarqueeDto
+//	configSpecs					*TextLineTitleMarqueeDto
 //
-//		An instance of TextLineTitleMarqueeDto containing
-//		configuration specifications for a
-//		TextLineSpecTitleMarquee object.
+//		A pointer to an instance of
+//		TextLineTitleMarqueeDto. This instance contains
+//		all the text specifications required for
+//		configuring a TextLineSpecTitleMarquee object.
 //
 //		The TextLineTitleMarqueeDto data transfer object
 //		(DTO) is designed to store and transfer all
@@ -169,7 +170,7 @@ type textLineSpecTitleMarqueeMechanics struct {
 //		the error message.
 func (txtLineTitleMarqueeMech *textLineSpecTitleMarqueeMechanics) setTxtLineTitleMarquee(
 	txtLineTitleMarquee *TextLineSpecTitleMarquee,
-	configSpecs TextLineTitleMarqueeDto,
+	configSpecs *TextLineTitleMarqueeDto,
 	errPrefDto *ePref.ErrPrefixDto) error {
 
 	if txtLineTitleMarqueeMech.lock == nil {
@@ -198,6 +199,15 @@ func (txtLineTitleMarqueeMech *textLineSpecTitleMarqueeMechanics) setTxtLineTitl
 
 		err = fmt.Errorf("%v\n"+
 			"Error: Input parameter 'txtLineTitleMarquee' is a nil pointer!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if configSpecs == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'configSpecs' is a nil pointer!\n",
 			ePrefix.String())
 
 		return err

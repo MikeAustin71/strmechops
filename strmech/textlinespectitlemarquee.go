@@ -59,7 +59,7 @@ type TextLineSpecTitleMarquee struct {
 //
 //		This object encapsulates error prefix text which
 //		is included in all returned error messages.
-//		Usually, it	contains the name of the calling
+//		Usually, it contains the name of the calling
 //		method or methods listed as a method or function
 //		chain of execution.
 //
@@ -181,7 +181,7 @@ func (txtLineSpecTitleMarquee *TextLineSpecTitleMarquee) CopyIn(
 //
 //		This object encapsulates error prefix text which
 //		is included in all returned error messages.
-//		Usually, it	contains the name of the calling
+//		Usually, it contains the name of the calling
 //		method or methods listed as a method or function
 //		chain of execution.
 //
@@ -314,7 +314,7 @@ func (txtLineSpecTitleMarquee *TextLineSpecTitleMarquee) CopyOut(
 //
 //		This object encapsulates error prefix text which
 //		is included in all returned error messages.
-//		Usually, it	contains the name of the calling
+//		Usually, it contains the name of the calling
 //		method or methods listed as a method or function
 //		chain of execution.
 //
@@ -449,7 +449,7 @@ func (txtLineSpecTitleMarquee *TextLineSpecTitleMarquee) CopyOutITextLine(
 //
 //		This object encapsulates error prefix text which
 //		is included in all returned error messages.
-//		Usually, it	contains the name of the calling
+//		Usually, it contains the name of the calling
 //		method or methods listed as a method or function
 //		chain of execution.
 //
@@ -751,7 +751,7 @@ func (txtLineSpecTitleMarquee *TextLineSpecTitleMarquee) EqualITextLine(
 //
 //		This object encapsulates error prefix text which
 //		is included in all returned error messages.
-//		Usually, it	contains the name of the calling
+//		Usually, it contains the name of the calling
 //		method or methods listed as a method or function
 //		chain of execution.
 //
@@ -936,7 +936,7 @@ func (txtLineSpecTitleMarquee *TextLineSpecTitleMarquee) IsValidInstance() (
 //
 //		This object encapsulates error prefix text which
 //		is included in all returned error messages.
-//		Usually, it	contains the name of the calling
+//		Usually, it contains the name of the calling
 //		method or methods listed as a method or function
 //		chain of execution.
 //
@@ -1187,7 +1187,7 @@ func (txtLineSpecTitleMarquee *TextLineSpecTitleMarquee) IsValidInstanceError(
 //
 //		This object encapsulates error prefix text which
 //		is included in all returned error messages.
-//		Usually, it	contains the name of the calling
+//		Usually, it contains the name of the calling
 //		method or methods listed as a method or function
 //		chain of execution.
 //
@@ -1249,8 +1249,8 @@ func (txtLineSpecTitleMarquee *TextLineSpecTitleMarquee) IsValidInstanceError(
 //	TextLineSpecTitleMarquee
 //
 //		If this method completes successfully, a new
-//		instance of TextLineSpecTitleMarquee will be
-//		returned.
+//		fully configured instance of
+//		TextLineSpecTitleMarquee will be returned.
 //
 //	error
 //
@@ -1291,7 +1291,8 @@ func (txtLineSpecTitleMarquee *TextLineSpecTitleMarquee) NewAllParams(
 
 	defer txtLineSpecTitleMarquee.lock.Unlock()
 
-	var newTxtLineTitle TextLineSpecTitleMarquee
+	var newTxtLineTitleMarquee TextLineSpecTitleMarquee
+
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
 
@@ -1303,7 +1304,7 @@ func (txtLineSpecTitleMarquee *TextLineSpecTitleMarquee) NewAllParams(
 		"")
 
 	if err != nil {
-		return newTxtLineTitle, err
+		return newTxtLineTitleMarquee, err
 	}
 
 	titleMarqueeDto := TextLineTitleMarqueeDto{
@@ -1333,19 +1334,347 @@ func (txtLineSpecTitleMarquee *TextLineSpecTitleMarquee) NewAllParams(
 			ePrefix.XCpy("<-titleLines"))
 
 		if err != nil {
-			return newTxtLineTitle, err
+			return newTxtLineTitleMarquee, err
 		}
 
 	}
 
 	err = new(textLineSpecTitleMarqueeMechanics).
 		setTxtLineTitleMarquee(
-			&newTxtLineTitle,
-			titleMarqueeDto,
+			&newTxtLineTitleMarquee,
+			&titleMarqueeDto,
 			ePrefix.XCpy(
-				"newTxtLineTitle"))
+				"newTxtLineTitleMarquee"))
 
-	return newTxtLineTitle, err
+	return newTxtLineTitleMarquee, err
+}
+
+// NewMarqueeDto
+//
+// Receives an instance of TextLineTitleMarqueeDto and
+// extracts the encapsulated Text Line Marquee
+// specifications to construct and return a fully
+// configured instance of TextLineTitleMarqueeDto.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	configSpecs					*TextLineTitleMarqueeDto
+//
+//		A pointer to an instance of
+//		TextLineTitleMarqueeDto. The Text Line Title
+//		Marquee Data Transfer Object (Dto) is designed to
+//		ease and facilitate the data entry operation for
+//		text specification parameters required to
+//		configure an instance of
+//		TextLineSpecTitleMarquee.
+//
+//		The TextLineTitleMarqueeDto data structure is
+//		defined as follows:
+//
+//		type TextLineTitleMarqueeDto struct {
+//
+//			StandardTitleLeftMargin string
+//				The standard left margin characters applied
+//				to all Text Title Lines in the 'TitleLines'
+//				array.
+//
+//			StandardTitleRightMargin string
+//				The standard left margin characters applied
+//				to all Text Title Lines in the 'TitleLines'
+//				array.
+//
+//			StandardMaxLineLen int
+//				The maximum number of characters allowed on
+//				a text title line.
+//
+//			StandardTextFieldLen int
+//				The standard field length applied to all
+//				Text Title Lines in the 'TitleLines' array.
+//
+//				'StandardTextFieldLen' defines the length of the
+//				text field in which the Title Line string will be
+//				displayed. If  'StandardTextFieldLen' is less
+//				than the length of the Title Line string, it will
+//				be automatically set equal to the Title Line
+//				string length.
+//
+//				To automatically set the value of
+//				'StandardTextFieldLen' to the length of the Title
+//				Line string, set this parameter to a value of
+//				minus one (-1).
+//
+//				Field Length Examples
+//
+//					Example-1
+//			          Title Line String = "Hello World!"
+//						Title Line String Length = 12
+//						StandardTextFieldLen = 18
+//						StandardTextJustification = TxtJustify.Center()
+//						Formatted Title Line String =
+//							"   Hello World!   "
+//
+//					Example-2
+//			          Title Line String = "Hello World!"
+//						Title Line String Length = 12
+//						StandardTextFieldLen = 18
+//						StandardTextJustification = TxtJustify.Left()
+//						Formatted Title Line String =
+//							"Hello World!      "
+//
+//					Example-3
+//			          Title Line String = "Hello World!"
+//						Title Line String Length = 12
+//						StandardTextFieldLen = -1
+//						StandardTextJustification = TxtJustify.Center()
+//							// Text Justification Ignored. Field
+//							// Length Equals Title Line String Length
+//						Formatted Title Line String =
+//							"Hello World!"
+//
+//					Example-4
+//			          Title Line String = "Hello World!"
+//						Title Line String Length = 12
+//						StandardTextFieldLen = 2
+//						StandardTextJustification = TxtJustify.Center()
+//							// Justification Ignored because Field
+//							// Length Less Than Title Line String Length.
+//						Formatted Title Line String =
+//							"Hello World!"
+//
+//			StandardTextJustification TextJustify
+//				The standard field length applied to all
+//				Text Title Lines in the 'TitleLines' array.
+//
+//				Type 'TextJustify' is an enumeration which
+//				specifies the justification of the text field
+//				contents string within the text	field length
+//				specified by 'StandardTextFieldLen'.
+//
+//				Text justification can only be evaluated in the
+//				context of a text label, field length and a Text
+//				Justification object of type TextJustify. This is
+//				because text labels with a field length equal to
+//				or less than the length of the text label string
+//				will never use text justification. In these cases,
+//				text justification is completely ignored.
+//
+//				If the field length is greater than the length of
+//				the text label string, text justification must be
+//				equal to one of these three valid values:
+//
+//				    TextJustify(0).Left()
+//				    TextJustify(0).Right()
+//				    TextJustify(0).Center()
+//
+//				Users can also specify the abbreviated text
+//				justification enumeration syntax as follows:
+//
+//				    TxtJustify.Left()
+//				    TxtJustify.Right()
+//				    TxtJustify.Center()
+//
+//				Text Justification Examples
+//
+//					Example-1
+//			          Title Line String = "Hello World!"
+//						Title Line String Length = 12
+//						StandardTextFieldLen = 18
+//						StandardTextJustification = TxtJustify.Center()
+//						Formatted Title Line String =
+//							"   Hello World!   "
+//
+//					Example-2
+//			          Title Line String = "Hello World!"
+//						Title Line String Length = 12
+//						StandardTextFieldLen = 18
+//						StandardTextJustification = TxtJustify.Left()
+//						Formatted Title Line String =
+//							"Hello World!      "
+//
+//					Example-3
+//			          Title Line String = "Hello World!"
+//						Title Line String Length = 12
+//						StandardTextFieldLen = -1
+//						StandardTextJustification = TxtJustify.Center()
+//							// Text Justification Ignored. Field
+//							// Length Equals Title Line String Length
+//						Formatted Title Line String =
+//							"Hello World!"
+//
+//					Example-4
+//			          Title Line String = "Hello World!"
+//						Title Line String Length = 12
+//						StandardTextFieldLen = 2
+//						StandardTextJustification = TxtJustify.Center()
+//							// Justification Ignored because Field
+//							// Length Less Than Title Line String Length.
+//						Formatted Title Line String =
+//							"Hello World!"
+//
+//			NumLeadingBlankLines int
+//				The number of blank lines or 'new lines'
+//				inserted above the Leading Solid Line.
+//
+//			LeadingSolidLineChar string
+//				The character used to create the Leading
+//				Solid Line displayed above the Title
+//				Lines.
+//
+//			NumLeadingSolidLines int
+//				The Number of Leading Solid Lines to
+//				display above the Title Lines.
+//
+//			NumTopTitleBlankLines int
+//				The number of blank lines or 'new lines' to
+//				insert immediately above the Title Lines
+//				Display.
+//
+//			TitleLines TextLineSpecLinesCollection
+//				A collection of text line objects containing
+//				all specifications necessary to display the
+//				Text Title Lines.
+//
+//			NumBottomTitleBlankLines int
+//				The number of blank lines or 'new lines' to
+//				insert immediately below the Title Lines
+//				Display.
+//
+//			TrailingSolidLineChar string
+//				The character used to create the Trailing
+//				Solid Line displayed below the Title
+//				Lines.
+//
+//			NumTrailingSolidLines int
+//				The Number of Trailing Solid Lines to
+//				display below the Title Lines.
+//
+//			NumTrailingBlankLines int
+//				The number of blank lines or 'new lines'
+//				inserted after the Trailing Solid Line.
+//		}
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	TextLineSpecTitleMarquee
+//
+//		If this method completes successfully, a new
+//		fully configured instance of
+//		TextLineSpecTitleMarquee will be returned.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (txtLineSpecTitleMarquee *TextLineSpecTitleMarquee) NewMarqueeDto(
+	configSpecs *TextLineTitleMarqueeDto,
+	errorPrefix interface{}) (
+	TextLineSpecTitleMarquee,
+	error) {
+
+	if txtLineSpecTitleMarquee.lock == nil {
+		txtLineSpecTitleMarquee.lock = new(sync.Mutex)
+	}
+
+	txtLineSpecTitleMarquee.lock.Lock()
+
+	defer txtLineSpecTitleMarquee.lock.Unlock()
+
+	var newTxtLineTitleMarquee TextLineSpecTitleMarquee
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecTitleMarquee."+
+			"NewMarqueeDto()",
+		"")
+
+	if err != nil {
+		return newTxtLineTitleMarquee, err
+	}
+
+	err = new(textLineSpecTitleMarqueeMechanics).
+		setTxtLineTitleMarquee(
+			&newTxtLineTitleMarquee,
+			configSpecs,
+			ePrefix.XCpy(
+				"newTxtLineTitleMarquee<-"+
+					"configSpecs"))
+
+	return newTxtLineTitleMarquee, err
 }
 
 //	Read
@@ -1725,7 +2054,7 @@ func (txtLineSpecTitleMarquee *TextLineSpecTitleMarquee) String() string {
 //
 //		This object encapsulates error prefix text which
 //		is included in all returned error messages.
-//		Usually, it	contains the name of the calling
+//		Usually, it contains the name of the calling
 //		method or methods listed as a method or function
 //		chain of execution.
 //
