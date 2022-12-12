@@ -211,6 +211,14 @@ type TextLineTitleMarqueeDto struct {
 //
 // ----------------------------------------------------------------
 //
+// # IMPORTANT
+//
+//	If any data field contained in the current instance
+//	of TextLineTitleMarqueeDto is judged to be invalid,
+//	an error will be returned.
+//
+// ----------------------------------------------------------------
+//
 //	# Terminology
 //
 //	Maximum Available Text Field Length =
@@ -624,6 +632,14 @@ func (txtLineTitleMarqueeDto *TextLineTitleMarqueeDto) AddTitleLineDateTimeFmtDt
 //
 // ----------------------------------------------------------------
 //
+// # IMPORTANT
+//
+//	If any data field contained in the current instance
+//	of TextLineTitleMarqueeDto is judged to be invalid,
+//	an error will be returned.
+//
+// ----------------------------------------------------------------
+//
 // # Input Parameters
 //
 //	dateTime					time.Time
@@ -774,6 +790,13 @@ func (txtLineTitleMarqueeDto *TextLineTitleMarqueeDto) AddTitleLineDateTimeStr(
 		return err
 	}
 
+	err = txtLineTitleMarqueeDto.IsValidInstanceError(
+		ePrefix.XCpy("txtLineTitleMarqueeDto"))
+
+	if err != nil {
+		return err
+	}
+
 	if len(dateTimeFormat) == 0 {
 
 		dateTimeFormat = new(textSpecificationMolecule).
@@ -815,6 +838,14 @@ func (txtLineTitleMarqueeDto *TextLineTitleMarqueeDto) AddTitleLineDateTimeStr(
 //	Be advised that the left and right margins for this
 //	Date Time Title field will automatically use the
 //	Text Line Title standard left and right margins.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	If any data field contained in the current instance
+//	of TextLineTitleMarqueeDto is judged to be invalid,
+//	an error will be returned.
 //
 // ----------------------------------------------------------------
 //
@@ -1088,10 +1119,18 @@ func (txtLineTitleMarqueeDto *TextLineTitleMarqueeDto) AddTitleLineLabel(
 
 	txtLabel := TextFieldFormatDtoLabel{
 		LeftMarginStr:  txtLineTitleMarqueeDto.StandardTitleLeftMargin,
-		FieldContents:  nil,
+		FieldContents:  textLabel,
 		FieldLength:    fieldLen,
 		FieldJustify:   textJustification,
 		RightMarginStr: txtLineTitleMarqueeDto.StandardTitleRightMargin,
+	}
+
+	err = txtLabel.IsValidInstanceError(
+		ePrefix.XCpy(
+			"txtLineTitleMarqueeDto"))
+
+	if err != nil {
+		return err
 	}
 
 	return new(textLineTitleMarqueeDtoNanobot).
@@ -1111,6 +1150,14 @@ func (txtLineTitleMarqueeDto *TextLineTitleMarqueeDto) AddTitleLineLabel(
 // text title line which will then be added to the
 // text title line collection for the current instance
 // of TextLineTitleMarqueeDto.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	If any data field contained in the current instance
+//	of TextLineTitleMarqueeDto is judged to be invalid,
+//	an error will be returned.
 //
 // ----------------------------------------------------------------
 //
@@ -1197,7 +1244,6 @@ func (txtLineTitleMarqueeDto *TextLineTitleMarqueeDto) AddTitleLineLabel(
 //			TextFieldFormatDtoDate
 //			TextFieldFormatDtoLabel
 //			TextFieldFormatDtoFiller
-//			"github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
@@ -1266,6 +1312,14 @@ func (txtLineTitleMarqueeDto *TextLineTitleMarqueeDto) AddTitleLineFmtDtos(
 //	lines array:
 //
 //		TextLineTitleMarqueeDto.TitleLines
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	If any data field contained in the current instance
+//	of TextLineTitleMarqueeDto is judged to be invalid,
+//	an error will be returned.
 //
 // ----------------------------------------------------------------
 //
@@ -1491,6 +1545,14 @@ func (txtLineTitleMarqueeDto *TextLineTitleMarqueeDto) AddTitleLineITextFields(
 //
 // ----------------------------------------------------------------
 //
+// # IMPORTANT
+//
+//	If any data field contained in the current instance
+//	of TextLineTitleMarqueeDto is judged to be invalid,
+//	an error will be returned.
+//
+// ----------------------------------------------------------------
+//
 //	# Input Parameters
 //
 //	stdTitleLine				*TextLineSpecStandardLine
@@ -1652,6 +1714,14 @@ func (txtLineTitleMarqueeDto *TextLineTitleMarqueeDto) AddStandardTitleLine(
 // by the current instance of TextLineTitleMarqueeDto:
 //
 //	TextLineTitleMarqueeDto.TitleLines
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	If any data field contained in the current instance
+//	of TextLineTitleMarqueeDto is judged to be invalid,
+//	an error will be returned.
 //
 // ----------------------------------------------------------------
 //
@@ -1820,7 +1890,7 @@ func (txtLineTitleMarqueeDto *TextLineTitleMarqueeDto) AddTitleLineStrArrayDto(
 //
 // ----------------------------------------------------------------
 //
-// # BE ADVISED
+// # IMPORTANT
 //
 //	If any data field contained in the current instance
 //	of TextLineTitleMarqueeDto is judged to be invalid,
@@ -1975,6 +2045,16 @@ func (txtLineTitleMarqueeDto *TextLineTitleMarqueeDto) AddTitleLineStrings(
 	for idx, titleStr := range titleLineStrings {
 
 		txtLabelFmtDto.FieldContents = titleStr
+
+		err = txtLabelFmtDto.IsValidInstanceError(
+			ePrefix.XCpy(
+				fmt.Sprintf("titleStr[%v]",
+					idx)))
+
+		if err != nil {
+
+			return err
+		}
 
 		err = txtLineMarqueeNanobot.
 			addTitleLineFmtDtos(
@@ -2215,6 +2295,226 @@ func (txtLineTitleMarqueeDto *TextLineTitleMarqueeDto) IsValidInstanceError(
 	return err
 }
 
+//	textLineTitleMarqueeDtoNanobot
+//
+//	Provides helper methods for type
+//	TextLineTitleMarqueeDto
+
+type textLineTitleMarqueeDtoNanobot struct {
+	lock *sync.Mutex
+}
+
+// copy
+//
+// Copies all data from a source instance of
+// TextLineTitleMarqueeDto to a destination instance of
+// TextLineTitleMarqueeDto.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will delete and overwrite all
+//	pre-existing data values contained within the
+//	TextLineTitleMarqueeDto instance passed as input
+//	parameter 'destinationTitleMarqueeDto'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	destinationTitleMarqueeDto		*TextLineTitleMarqueeDto
+//
+//		A pointer to an instance of
+//		TextLineTitleMarqueeDto.
+//
+//		Data extracted from input parameter
+//		'sourceTitleMarqueeDto' will be copied to this
+//		input parameter, 'destinationTitleMarqueeDto'.
+//
+//		'destinationTitleMarqueeDto' is the destination
+//		for this copy operation.
+//
+//		If this method completes successfully, all member
+//		data variables encapsulated in
+//		'destinationTitleMarqueeDto' will be identical to
+//		those contained in input parameter,
+//		'sourceTitleMarqueeDto'.
+//
+//		Be advised that the pre-existing data fields
+//		contained within input parameter
+//		'destinationTitleMarqueeDto' will be deleted and
+//		overwritten.
+//
+//	sourceTitleMarqueeDto			*TextLineTitleMarqueeDto
+//
+//		A pointer to an instance of
+//		TextLineTitleMarqueeDto.
+//
+//		All data values in this TextLineTitleMarqueeDto
+//		instance will be copied to input parameter
+//		'destinationTitleMarqueeDto'.
+//
+//		'sourceTitleMarqueeDto' is the source of the
+//		copy operation.
+//
+//		The original member variable data values
+//		encapsulated within 'sourceTitleMarqueeDto'
+//		will remain unchanged and unmodified.
+//
+//		If 'sourceTitleMarqueeDto' contains invalid
+//		member data variables, this method will return
+//		an error.
+//
+//	errPrefDto						*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (txtTitleMarqueeDtoAtom *textLineTitleMarqueeDtoNanobot) copy(
+	destinationTitleMarqueeDto *TextLineTitleMarqueeDto,
+	sourceTitleMarqueeDto *TextLineTitleMarqueeDto,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if txtTitleMarqueeDtoAtom.lock == nil {
+		txtTitleMarqueeDtoAtom.lock = new(sync.Mutex)
+	}
+
+	txtTitleMarqueeDtoAtom.lock.Lock()
+
+	defer txtTitleMarqueeDtoAtom.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"textLineTitleMarqueeDtoNanobot."+
+			"addTitleLineFmtDtos()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if destinationTitleMarqueeDto == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'destinationTitleMarqueeDto' is a nil pointer!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if sourceTitleMarqueeDto == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'sourceTitleMarqueeDto' is a nil pointer!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	txtLineMarqueeDtoAtom := textLineTitleMarqueeDtoAtom{}
+
+	_,
+		err = txtLineMarqueeDtoAtom.
+		testValidityOfTitleMarqueeDto(
+			sourceTitleMarqueeDto,
+			ePrefix.XCpy(
+				"sourceTitleMarqueeDto"))
+
+	if err != nil {
+		return err
+	}
+
+	txtLineMarqueeDtoAtom.empty(
+		destinationTitleMarqueeDto)
+
+	destinationTitleMarqueeDto.StandardTitleLeftMargin =
+		sourceTitleMarqueeDto.StandardTitleLeftMargin
+
+	destinationTitleMarqueeDto.StandardTitleRightMargin =
+		sourceTitleMarqueeDto.StandardTitleRightMargin
+
+	destinationTitleMarqueeDto.StandardMaxLineLen =
+		sourceTitleMarqueeDto.StandardMaxLineLen
+
+	destinationTitleMarqueeDto.StandardTextFieldLen =
+		sourceTitleMarqueeDto.StandardTextFieldLen
+
+	destinationTitleMarqueeDto.StandardTextJustification =
+		sourceTitleMarqueeDto.StandardTextJustification
+
+	destinationTitleMarqueeDto.NumLeadingBlankLines =
+		sourceTitleMarqueeDto.NumLeadingBlankLines
+
+	destinationTitleMarqueeDto.LeadingSolidLineChar =
+		sourceTitleMarqueeDto.LeadingSolidLineChar
+
+	destinationTitleMarqueeDto.NumLeadingSolidLines =
+		sourceTitleMarqueeDto.NumLeadingSolidLines
+
+	destinationTitleMarqueeDto.NumTopTitleBlankLines =
+		sourceTitleMarqueeDto.NumTopTitleBlankLines
+
+	if sourceTitleMarqueeDto.TitleLines.
+		GetNumberOfTextLines() > 0 {
+
+		err = destinationTitleMarqueeDto.TitleLines.
+			CopyIn(
+				&sourceTitleMarqueeDto.TitleLines,
+				ePrefix.XCpy(
+					"sourceTitleMarqueeDto.TitleLines"))
+
+		if err != nil {
+			return err
+		}
+
+	}
+
+	destinationTitleMarqueeDto.NumBottomTitleBlankLines =
+		sourceTitleMarqueeDto.NumBottomTitleBlankLines
+
+	destinationTitleMarqueeDto.TrailingSolidLineChar =
+		sourceTitleMarqueeDto.TrailingSolidLineChar
+
+	destinationTitleMarqueeDto.NumTrailingSolidLines =
+		sourceTitleMarqueeDto.NumTrailingSolidLines
+
+	destinationTitleMarqueeDto.NumTrailingBlankLines =
+		sourceTitleMarqueeDto.NumTrailingBlankLines
+
+	return err
+}
+
 // addTitleLineFmtDtos
 //
 // Receives one or more ITextFieldFormatDto objects
@@ -2280,7 +2580,6 @@ func (txtLineTitleMarqueeDto *TextLineTitleMarqueeDto) IsValidInstanceError(
 //			TextFieldFormatDtoDate
 //			TextFieldFormatDtoLabel
 //			TextFieldFormatDtoFiller
-//			"github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
@@ -2373,15 +2672,6 @@ func (txtTitleMarqueeDtoAtom *textLineTitleMarqueeDtoNanobot) addTitleLineFmtDto
 		&stdLine,
 		ePrefix.XCpy(
 			"stdLine"))
-}
-
-//	textLineTitleMarqueeDtoNanobot
-//
-//	Provides helper methods for type
-//	TextLineTitleMarqueeDto
-
-type textLineTitleMarqueeDtoNanobot struct {
-	lock *sync.Mutex
 }
 
 //	AddTitleLineLabel
