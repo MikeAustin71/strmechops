@@ -14,7 +14,7 @@ type textLineSpecTitleMarqueeMechanics struct {
 	lock *sync.Mutex
 }
 
-//	setTxtLineTitleMarquee
+//	setTxtLineTitleMarqueeDto
 //
 //	Receives Text Line Title configuration specifications
 //	and proceeds to copy those specifications to an
@@ -168,7 +168,7 @@ type textLineSpecTitleMarqueeMechanics struct {
 //		for input parameter 'errPrefDto' (error prefix)
 //		will be prefixed or attached at the beginning of
 //		the error message.
-func (txtLineTitleMarqueeMech *textLineSpecTitleMarqueeMechanics) setTxtLineTitleMarquee(
+func (txtLineTitleMarqueeMech *textLineSpecTitleMarqueeMechanics) setTxtLineTitleMarqueeDto(
 	txtLineTitleMarquee *TextLineSpecTitleMarquee,
 	configSpecs *TextLineTitleMarqueeDto,
 	errPrefDto *ePref.ErrPrefixDto) error {
@@ -188,7 +188,7 @@ func (txtLineTitleMarqueeMech *textLineSpecTitleMarqueeMechanics) setTxtLineTitl
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
 		"textLineSpecTitleMarqueeMechanics."+
-			"setTxtLineTitleMarquee()",
+			"setTxtLineTitleMarqueeDto()",
 		"")
 
 	if err != nil {
@@ -264,21 +264,24 @@ func (txtLineTitleMarqueeMech *textLineSpecTitleMarqueeMechanics) setTxtLineTitl
 
 	}
 
-	if len(configSpecs.LeadingSolidLineChar) > 0 &&
-		configSpecs.NumLeadingSolidLines > 0 {
+	if len(configSpecs.LeadingSolidLineChar) > 0 {
 
-		err = txtLineTitleMarquee.leadingMarqueeLines.AddSolidLine(
-			txtLineTitleMarquee.standardTitleLeftMargin,
-			configSpecs.LeadingSolidLineChar,
-			configSpecs.NumLeadingSolidLines,
-			txtLineTitleMarquee.standardTitleRightMargin,
-			"\n",
-			false,
-			ePrefix.XCpy(
-				"configSpecs.NumLeadingSolidLines"))
+		for i := 0; i < configSpecs.NumLeadingSolidLines; i++ {
 
-		if err != nil {
-			return err
+			err = txtLineTitleMarquee.leadingMarqueeLines.AddSolidLine(
+				txtLineTitleMarquee.standardTitleLeftMargin,
+				configSpecs.LeadingSolidLineChar,
+				configSpecs.StandardTextFieldLen,
+				txtLineTitleMarquee.standardTitleRightMargin,
+				"\n",
+				false,
+				ePrefix.XCpy(
+					"configSpecs.NumLeadingSolidLines"))
+
+			if err != nil {
+				return err
+			}
+
 		}
 	}
 
@@ -307,21 +310,24 @@ func (txtLineTitleMarqueeMech *textLineSpecTitleMarqueeMechanics) setTxtLineTitl
 		}
 	}
 
-	if len(configSpecs.TrailingSolidLineChar) > 0 &&
-		configSpecs.NumTrailingSolidLines > 0 {
+	if len(configSpecs.TrailingSolidLineChar) > 0 {
 
-		err = txtLineTitleMarquee.leadingMarqueeLines.AddSolidLine(
-			txtLineTitleMarquee.standardTitleLeftMargin,
-			configSpecs.TrailingSolidLineChar,
-			configSpecs.NumTrailingSolidLines,
-			txtLineTitleMarquee.standardTitleRightMargin,
-			"\n",
-			false,
-			ePrefix.XCpy(
-				"configSpecs.NumTrailingSolidLines"))
+		for i := 0; i < configSpecs.NumTrailingSolidLines; i++ {
 
-		if err != nil {
-			return err
+			err = txtLineTitleMarquee.trailingMarqueeLines.AddSolidLine(
+				txtLineTitleMarquee.standardTitleLeftMargin,
+				configSpecs.TrailingSolidLineChar,
+				configSpecs.StandardTextFieldLen,
+				txtLineTitleMarquee.standardTitleRightMargin,
+				"\n",
+				false,
+				ePrefix.XCpy(
+					"configSpecs.TrailingSolidLineChar"))
+
+			if err != nil {
+				return err
+			}
+
 		}
 	}
 

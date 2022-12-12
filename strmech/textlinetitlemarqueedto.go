@@ -790,8 +790,14 @@ func (txtLineTitleMarqueeDto *TextLineTitleMarqueeDto) AddTitleLineDateTimeStr(
 		return err
 	}
 
-	err = txtLineTitleMarqueeDto.IsValidInstanceError(
-		ePrefix.XCpy("txtLineTitleMarqueeDto"))
+	_,
+		err = new(textLineTitleMarqueeDtoAtom).
+		testValidityOfTitleMarqueeDto(
+			txtLineTitleMarqueeDto,
+			ePrefix.XCpy("txtLineTitleMarqueeDto"))
+
+	//err = txtLineTitleMarqueeDto.IsValidInstanceError(
+	//	ePrefix.XCpy("txtLineTitleMarqueeDto"))
 
 	if err != nil {
 		return err
