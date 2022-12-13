@@ -30,6 +30,79 @@ var mapTextTileLineTypeLwrCaseStringToCode = map[string]TextTileLineType{
 	"trailingmarqueeline": TextTileLineType(3),
 }
 
+// TextTileLineType
+//
+// An enumeration of Text Title Line Types. Title Lines
+// are typically used in generating Title Marquees.
+//
+// Tittle Marquee display are divided into three distinct
+// components. The first are leading marquee text lines
+// which usually consists of blank lines or solid lines.
+//
+// After leading marquee text lines, the actual text
+// title lines are displayed. These strings contain the
+// actual title text.
+//
+// Finally, the third component of trailing marquee lines
+// consists of trailing blank lines and/or solid lines.
+//
+// The Text Title Line Type enumeration is used to
+// classify Text Title Marquee lines of text.
+//
+// Since the Go Programming Language does not directly
+// support enumerations, the TextTileLineType has been
+// adapted to function in a manner similar to classic
+// enumerations.
+//
+// TextTileLineType is declared as a type 'int'. The method
+// names effectively represent an enumeration of numeric sign
+// value types. These methods are listed as follows:
+//
+// ----------------------------------------------------------------
+//
+// Method         		Integer
+//
+//	Name          		 Value
+//
+// ------        		-------
+//
+//	None           		  (0)	Signals that 'TextTileLineType' has
+//	                     		not been initialized and therefore
+//	                     		has no value. This is an error
+//	                     		condition.
+//
+//	LeadingMarqueeLine	  (1)	Signals that the text line is
+//								classified as a leading title
+//								marquee text line. This type of
+//								line usually consists of blank
+//								lines and solid lines.
+//
+//	TitleLine			  (2)	Signals that the text line is
+//								classified as Title Line typically
+//								displayed in the center of the Title
+//								Marquee.
+//
+//	TrailingMarqueeLine	  (3)	Classifies the line of text as a
+//								trailing title marquee text line.
+//								This type of line usually consists
+//								of blank lines and solid lines.
+//
+// For easy access to these enumeration values, use the
+// global constant TitleLineType.
+//
+//	Example: TitleLineType.TitleLine()
+//
+// Otherwise you will need to use the formal syntax.
+// Example: TextTileLineType(0).TitleLine()
+//
+// Depending on your editor, intellisense (a.k.a.
+// intelligent code completion) may not list the
+// TitleLineType methods in alphabetical order.
+//
+// Be advised that all TitleLineType methods beginning
+// with 'X', as well as the method 'String()', are
+// utility methods, and NOT part of the enumeration
+// values.
 type TextTileLineType int
 
 var lockTextTitleLineType sync.Mutex
@@ -335,6 +408,22 @@ func (txtTitleLineType TextTileLineType) XValue() TextTileLineType {
 	defer lockTextTitleLineType.Unlock()
 
 	return txtTitleLineType
+}
+
+// XValueInt
+//
+// This method returns the integer value of the current
+// TextTileLineType instance.
+//
+// This is a standard utility method and is not part of the valid
+// enumerations for this type.
+func (txtTitleLineType TextTileLineType) XValueInt() int {
+
+	lockTextTitleLineType.Lock()
+
+	defer lockTextTitleLineType.Unlock()
+
+	return int(txtTitleLineType)
 }
 
 // TitleLineType
