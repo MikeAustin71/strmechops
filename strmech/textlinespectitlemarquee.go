@@ -17,6 +17,221 @@ type TextLineSpecTitleMarquee struct {
 	lock *sync.Mutex
 }
 
+// AddBlankLine
+//
+// Adds a blank line to the Text Specification Lines
+// Collection maintained by the current instance of
+// TextLineSpecTitleMarquee.
+//
+// Type TextLineSpecTitleMarquee encapsulates three types
+// of text lines used in generating title marquees:
+//
+//  1. Leading Marquee Lines
+//     Usually consists of leading blank lines
+//     and solid lines.
+//
+//  2. Title Lines
+//     Consists entirely of text strings functioning
+//     as the main title lines.
+//
+//  3. Trailing Marquee Lines
+//     Usually consists of trailing blank lines
+//     and solid lines.
+//
+// This method will add the blank line to one of these
+// three collections as specified by parameter,
+// 'titleMarqueeLineType'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	numOfBlankLines				int
+//
+//		The number of blank lines which will be generated
+//		and added to one of the three Text Specification
+//		Lines Collections maintained by the current
+//		instance of TextLineSpecTitleMarquee
+//
+//		If input parameter 'numOfBlankLines' is less than
+//		one (1), it is invalid and an error will be
+//		returned.
+//
+//		If input parameter 'numOfBlankLines' is greater
+//		than one-million (1,000,000), it is invalid and
+//		an error will be returned.
+//
+//	titleMarqueeLineType		TextTileLineType
+//
+//		Type TextTileLineType is an enumeration of
+//		Title Marquee Text Line Types. This parameter
+//		determines which text line collection will
+//		receive the newly created blank line.
+//
+//		If this parameter is not set to one of the
+//		following valid values, an error will be
+//		returned.
+//
+//		Formal TextTileLineType Syntax
+//
+//			TextTileLineType(0).LeadingMarqueeLine()
+//			TextTileLineType(0).TitleLine()
+//			TextTileLineType(0).TrailingMarqueeLine()
+//
+//		Abbreviated TextTileLineType Syntax
+//
+//			TitleLineType.LeadingMarqueeLine()
+//			TitleLineType.TitleLine()
+//			TitleLineTypeTrailingMarqueeLine()
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (txtLineSpecTitleMarquee *TextLineSpecTitleMarquee) AddBlankLine(
+	numOfBlankLines int,
+	titleMarqueeLineType TextTileLineType,
+	errorPrefix interface{}) error {
+
+	if txtLineSpecTitleMarquee.lock == nil {
+		txtLineSpecTitleMarquee.lock = new(sync.Mutex)
+	}
+
+	txtLineSpecTitleMarquee.lock.Lock()
+
+	defer txtLineSpecTitleMarquee.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecTitleMarquee."+
+			"AddBlankLine()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	var txtLineCollection *TextLineSpecLinesCollection
+
+	var txtLineCollectionName string
+
+	switch titleMarqueeLineType {
+
+	case TitleLineType.LeadingMarqueeLine():
+
+		txtLineCollection = &txtLineSpecTitleMarquee.leadingMarqueeLines
+
+		txtLineCollectionName = "leadingMarqueeLines"
+
+	case TitleLineType.TitleLine():
+
+		txtLineCollection = &txtLineSpecTitleMarquee.titleLines
+
+		txtLineCollectionName = "titleLines"
+
+	case TitleLineType.TrailingMarqueeLine():
+
+		txtLineCollection = &txtLineSpecTitleMarquee.trailingMarqueeLines
+
+		txtLineCollectionName = "trailingMarqueeLines"
+
+	default:
+
+		err := fmt.Errorf("%v\n"+
+			"Error: Input parameter 'titleMarqueeLineType' is invalid!\n"+
+			" titleMarqueeLineType string value = '%v'\n"+
+			"titleMarqueeLineType integer value = '%v'\n",
+			ePrefix.String(),
+			titleMarqueeLineType.String(),
+			titleMarqueeLineType.XValueInt())
+
+		return err
+	}
+
+	err = txtLineCollection.
+		AddBlankLine(
+			numOfBlankLines,
+			ePrefix.XCpy(
+				fmt.Sprintf("txtLineSpecTitleMarquee.%v",
+					txtLineCollectionName)))
+
+	return err
+}
+
 // AddSolidLine
 //
 // Adds a solid line to the Text Specification Lines
