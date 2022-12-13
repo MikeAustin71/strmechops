@@ -746,7 +746,9 @@ func (txtLinesSpecCol *TextLineSpecLinesCollection) AddBlankLine(
 //		returned.
 //
 //		The parameter controls the number of solid lines
-//		which will be generated.
+//		which will be generated and added to the Text
+//		Specification Lines Collection for the current
+//		instance of TextLineSpecLinesCollection.
 //
 //	errorPrefix					interface{}
 //

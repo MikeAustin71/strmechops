@@ -166,6 +166,9 @@ type TextLineTitleMarqueeDto struct {
 	NumLeadingSolidLines int
 	//	The Number of Leading Solid Lines to
 	//	display above the Title Lines.
+	//
+	//	If this value is less than one (1), no
+	//	solid line will be created.
 
 	NumTopTitleBlankLines int
 	//	The number of blank lines or 'new lines' to
@@ -190,6 +193,9 @@ type TextLineTitleMarqueeDto struct {
 	NumTrailingSolidLines int
 	//	The Number of Trailing Solid Lines to
 	//	display below the Title Lines.
+	//
+	//	If this value is less than one (1), no
+	//	solid line will be created.
 
 	NumTrailingBlankLines int
 	//	The number of blank lines or 'new lines'

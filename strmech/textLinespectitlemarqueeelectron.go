@@ -71,6 +71,164 @@ func (txtLineTitleMarqueeElectron *textLineSpecTitleMarqueeElectron) empty(
 	return
 }
 
+// emptyLeadingMarqueeLines
+//
+// The type TextLineSpecTitleMarquee encapsulates three types
+// of text lines used in generating title marquees:
+//
+//  1. Leading Marquee Lines
+//     Usually consists of leading blank lines
+//     and solid lines.
+//
+//  2. Title Lines
+//     Consists entirely of text strings functioning
+//     as the main title lines.
+//
+//  3. Trailing Marquee Lines
+//     Usually consists of trailing blank lines
+//     and solid lines.
+//
+//     This method will delete all Leading Marquee Lines.
+//     The internal member variable to be deleted is:
+//     TextLineSpecTitleMarquee.leadingMarqueeLines
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	txtLineTitleMarquee			*TextLineSpecTitleMarquee
+//
+//		A pointer to an instance of
+//		TextLineSpecTitleMarquee. All Leading Marquee
+//		Lines in the internal member variable
+//		'txtLineTitleMarquee.leadingMarqueeLines' will be
+//		deleted.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	NONE
+func (txtLineTitleMarqueeElectron *textLineSpecTitleMarqueeElectron) emptyLeadingMarqueeLines(
+	txtLineTitleMarquee *TextLineSpecTitleMarquee) {
+
+	if txtLineTitleMarqueeElectron.lock == nil {
+		txtLineTitleMarqueeElectron.lock = new(sync.Mutex)
+	}
+
+	txtLineTitleMarqueeElectron.lock.Lock()
+
+	defer txtLineTitleMarqueeElectron.lock.Unlock()
+
+	txtLineTitleMarquee.leadingMarqueeLines.Empty()
+
+}
+
+// emptyTitleLines
+//
+// The type TextLineSpecTitleMarquee encapsulates three types
+// of text lines used in generating title marquees:
+//
+//  1. Leading Marquee Lines
+//     Usually consists of leading blank lines
+//     and solid lines.
+//
+//  2. Title Lines
+//     Consists entirely of text strings functioning
+//     as the main title lines.
+//
+//  3. Trailing Marquee Lines
+//     Usually consists of trailing blank lines
+//     and solid lines.
+//
+//     This method will delete all Title Lines. The internal
+//     member variable to be deleted is:
+//     txtLineTitleMarquee.titleLines
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	txtLineTitleMarquee			*TextLineSpecTitleMarquee
+//
+//		A pointer to an instance of
+//		TextLineSpecTitleMarquee. All Title Lines in the
+//		internal member variable
+//		'txtLineTitleMarquee.titleLines' will be deleted.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	NONE
+func (txtLineTitleMarqueeElectron *textLineSpecTitleMarqueeElectron) emptyTitleLines(
+	txtLineTitleMarquee *TextLineSpecTitleMarquee) {
+
+	if txtLineTitleMarqueeElectron.lock == nil {
+		txtLineTitleMarqueeElectron.lock = new(sync.Mutex)
+	}
+
+	txtLineTitleMarqueeElectron.lock.Lock()
+
+	defer txtLineTitleMarqueeElectron.lock.Unlock()
+
+	txtLineTitleMarquee.titleLines.Empty()
+
+}
+
+// emptyTrailingMarqueeLines
+//
+// The type TextLineSpecTitleMarquee encapsulates three types
+// of text lines used in generating title marquees:
+//
+//  1. Leading Marquee Lines
+//     Usually consists of leading blank lines
+//     and solid lines.
+//
+//  2. Title Lines
+//     Consists entirely of text strings functioning
+//     as the main title lines.
+//
+//  3. Trailing Marquee Lines
+//     Usually consists of trailing blank lines
+//     and solid lines.
+//
+//     This method will delete all Trailing Marquee Lines. The
+//     internal member variable to be deleted is:
+//     txtLineTitleMarquee.trailingMarqueeLines
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	txtLineTitleMarquee			*TextLineSpecTitleMarquee
+//
+//		A pointer to an instance of
+//		TextLineSpecTitleMarquee. All Trailing Marquee
+//		Lines in the internal member variable
+//		'txtLineTitleMarquee.trailingMarqueeLines' will be
+//		deleted.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	NONE
+func (txtLineTitleMarqueeElectron *textLineSpecTitleMarqueeElectron) emptyTrailingMarqueeLines(
+	txtLineTitleMarquee *TextLineSpecTitleMarquee) {
+
+	if txtLineTitleMarqueeElectron.lock == nil {
+		txtLineTitleMarqueeElectron.lock = new(sync.Mutex)
+	}
+
+	txtLineTitleMarqueeElectron.lock.Lock()
+
+	defer txtLineTitleMarqueeElectron.lock.Unlock()
+
+	txtLineTitleMarquee.trailingMarqueeLines.Empty()
+
+}
+
 // equal
 //
 // Receives a pointer to two instances of
