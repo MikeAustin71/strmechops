@@ -583,7 +583,7 @@ func (txtLinesColNanobot *textLineSpecLinesCollectionNanobot) getFormattedText(
 	}
 
 	_,
-		err = textLineSpecLinesCollectionAtom{}.ptr().
+		err = new(textLineSpecLinesCollectionAtom).
 		testValidityOfTextLinesCollection(
 			textLinesCol,
 			ePrefix.XCpy(
@@ -727,7 +727,7 @@ func (txtLinesColNanobot *textLineSpecLinesCollectionNanobot) getFormattedTextSt
 	}
 
 	_,
-		err = textLineSpecLinesCollectionAtom{}.ptr().
+		err = new(textLineSpecLinesCollectionAtom).
 		testValidityOfTextLinesCollection(
 			textLinesCol,
 			ePrefix.XCpy(
@@ -759,21 +759,4 @@ func (txtLinesColNanobot *textLineSpecLinesCollectionNanobot) getFormattedTextSt
 	}
 
 	return err
-}
-
-// ptr - Returns a pointer to a new instance of
-// textLineSpecLinesCollectionNanobot.
-func (txtLinesColNanobot textLineSpecLinesCollectionNanobot) ptr() *textLineSpecLinesCollectionNanobot {
-
-	if txtLinesColNanobot.lock == nil {
-		txtLinesColNanobot.lock = new(sync.Mutex)
-	}
-
-	txtLinesColNanobot.lock.Lock()
-
-	defer txtLinesColNanobot.lock.Unlock()
-
-	return &textLineSpecLinesCollectionNanobot{
-		lock: new(sync.Mutex),
-	}
 }

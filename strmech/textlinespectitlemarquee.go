@@ -8,6 +8,34 @@ import (
 	"sync"
 )
 
+// TextLineSpecTitleMarquee
+//
+// This Text Line Specification is designed to format
+// multiple text lines used in the presentation of title
+// marquees for screen displays, file output and
+// printing.
+//
+// Type TextLineSpecTitleMarquee encapsulates three types
+// of text lines used in generating title marquees:
+//
+//  1. Leading Marquee Lines
+//     Usually consists of leading blank lines
+//     and solid lines.
+//
+//  2. Title Lines
+//     Consists entirely of text strings functioning
+//     as the main title lines.
+//
+//  3. Trailing Marquee Lines
+//     Usually consists of trailing blank lines
+//     and solid lines.
+//
+// These text line types are consolidated to produce
+// the formatted text lines which comprise the Title
+// Marquee.
+//
+// Type TextLineSpecTitleMarquee implements the
+// ITextLineSpecification interface.
 type TextLineSpecTitleMarquee struct {
 	leadingMarqueeLines  TextLineSpecLinesCollection
 	titleLines           TextLineSpecLinesCollection
@@ -3116,6 +3144,254 @@ func (txtLineSpecTitleMarquee *TextLineSpecTitleMarquee) ReaderInitialize() {
 	txtLineSpecTitleMarquee.textLineReader = nil
 
 	return
+}
+
+// SetMarqueeLinesCollections
+//
+// Deletes and replaces one of the Marquee Line
+// Collections contained in the current instance of
+// TextLineSpecTitleMarquee.
+//
+// Type TextLineSpecTitleMarquee encapsulates three types
+// of text lines used in generating title marquees:
+//
+//  1. Leading Marquee Lines
+//     Usually consists of leading blank lines
+//     and solid lines.
+//
+//  2. Title Lines
+//     Consists entirely of text strings functioning
+//     as the main title lines.
+//
+//  3. Trailing Marquee Lines
+//     Usually consists of trailing blank lines
+//     and solid lines.
+//
+// This method replaces the pre-existing Leading Marquee
+// Lines, Title Lines or Trailing Marquee Lines
+// Collection depending on setting for input parameter
+// 'titleMarqueeLineType'.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will delete and replace one of the
+//	Marquee Line Collections contained in the current
+//	instance of TextLineSpecTitleMarquee. The precise
+//	collection to be deleted and replaced is determined
+//	by input parameter 'titleMarqueeLineType'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	leadingMarqueeLines			TextLineSpecLinesCollection
+//
+//		An instance of TextLineSpecLinesCollection
+//		containing specifications for creating text
+//		lines. The text lines will replace the
+//		pre-existing Leading Marquee Text Lines
+//		Collection encapsulated by the current instance
+//		of TextLineSpecTitleMarquee.
+//
+//		If 'leadingMarqueeLines' contains invalid data
+//		values, an error will be returned.
+//
+//	titleMarqueeLineType		TextTileLineType
+//
+//		Type TextTileLineType is an enumeration of
+//		Title Marquee Text Line Types. This parameter
+//		determines which text line collection will
+//		be deleted and reset with the new Marquee
+//		Text Collection passed by input parameter,
+//		'leadingMarqueeLines'.
+//
+//		If this parameter is not set to one of the
+//		following valid values, an error will be
+//		returned.
+//
+//		Formal TextTileLineType Syntax
+//
+//			TextTileLineType(0).LeadingMarqueeLine()
+//			TextTileLineType(0).TitleLine()
+//			TextTileLineType(0).TrailingMarqueeLine()
+//
+//		Abbreviated TextTileLineType Syntax
+//
+//			TitleLineType.LeadingMarqueeLine()
+//			TitleLineType.TitleLine()
+//			TitleLineTypeTrailingMarqueeLine()
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (txtLineSpecTitleMarquee *TextLineSpecTitleMarquee) SetMarqueeLinesCollections(
+	marqueeTextLines *TextLineSpecLinesCollection,
+	titleMarqueeLineType TextTileLineType,
+	errorPrefix interface{}) error {
+
+	if txtLineSpecTitleMarquee.lock == nil {
+		txtLineSpecTitleMarquee.lock = new(sync.Mutex)
+	}
+
+	txtLineSpecTitleMarquee.lock.Lock()
+
+	defer txtLineSpecTitleMarquee.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecTitleMarquee."+
+			"SetMarqueeLinesCollections()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if marqueeTextLines == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'marqueeTextLines' is a nil pointer!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	_,
+		err = new(textLineSpecLinesCollectionAtom).
+		testValidityOfTextLinesCollection(
+			marqueeTextLines,
+			ePrefix.XCpy(
+				"leadingMarqueeLines invalid!"))
+
+	if err != nil {
+		return err
+	}
+
+	var txtLineCollection *TextLineSpecLinesCollection
+
+	var txtLineCollectionName string
+
+	switch titleMarqueeLineType {
+
+	case TitleLineType.LeadingMarqueeLine():
+
+		txtLineCollection = &txtLineSpecTitleMarquee.leadingMarqueeLines
+
+		txtLineCollectionName = "leadingMarqueeLines"
+
+	case TitleLineType.TitleLine():
+
+		txtLineCollection = &txtLineSpecTitleMarquee.titleLines
+
+		txtLineCollectionName = "titleLines"
+
+	case TitleLineType.TrailingMarqueeLine():
+
+		txtLineCollection = &txtLineSpecTitleMarquee.trailingMarqueeLines
+
+		txtLineCollectionName = "trailingMarqueeLines"
+
+	default:
+
+		err := fmt.Errorf("%v\n"+
+			"Error: Input parameter 'titleMarqueeLineType' is invalid!\n"+
+			" titleMarqueeLineType string value = '%v'\n"+
+			"titleMarqueeLineType integer value = '%v'\n",
+			ePrefix.String(),
+			titleMarqueeLineType.String(),
+			titleMarqueeLineType.XValueInt())
+
+		return err
+	}
+
+	new(textLineSpecLinesCollectionAtom).
+		emptyCollection(txtLineCollection)
+
+	err = txtLineCollection.CopyIn(
+		marqueeTextLines,
+		ePrefix.XCpy(
+			fmt.Sprintf("txtLineSpecTitleMarquee.%v",
+				txtLineCollectionName)))
+
+	return err
 }
 
 //	String

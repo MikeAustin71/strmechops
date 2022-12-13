@@ -562,7 +562,7 @@ func (txtLinesColAtom *textLineSpecLinesCollectionAtom) peekPopTextLine(
 	}
 
 	err =
-		textLineSpecLinesCollectionElectron{}.ptr().
+		new(textLineSpecLinesCollectionElectron).
 			deleteTextLineElement(
 				textLinesCol,
 				zeroBasedIndex,
@@ -572,23 +572,6 @@ func (txtLinesColAtom *textLineSpecLinesCollectionAtom) peekPopTextLine(
 						zeroBasedIndex)))
 
 	return iTextLine, err
-}
-
-// ptr - Returns a pointer to a new instance of
-// textLineSpecLinesCollectionAtom.
-func (txtLinesColAtom textLineSpecLinesCollectionAtom) ptr() *textLineSpecLinesCollectionAtom {
-
-	if txtLinesColAtom.lock == nil {
-		txtLinesColAtom.lock = new(sync.Mutex)
-	}
-
-	txtLinesColAtom.lock.Lock()
-
-	defer txtLinesColAtom.lock.Unlock()
-
-	return &textLineSpecLinesCollectionAtom{
-		lock: new(sync.Mutex),
-	}
 }
 
 // testValidityOfTextLinesCollection - Receives a pointer to an

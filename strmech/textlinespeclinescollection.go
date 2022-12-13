@@ -1327,7 +1327,7 @@ func (txtLinesSpecCol *TextLineSpecLinesCollection) DeleteTextLineMember(
 		return err
 	}
 
-	err = textLineSpecLinesCollectionElectron{}.ptr().
+	err = new(textLineSpecLinesCollectionElectron).
 		deleteTextLineElement(
 			txtLinesSpecCol,
 			zeroBasedIndex,
@@ -1357,7 +1357,7 @@ func (txtLinesSpecCol *TextLineSpecLinesCollection) Empty() {
 
 	txtLinesSpecCol.lock.Lock()
 
-	textLineSpecLinesCollectionAtom{}.ptr().
+	new(textLineSpecLinesCollectionAtom).
 		emptyCollection(txtLinesSpecCol)
 
 	txtLinesSpecCol.lock.Unlock()
@@ -1384,7 +1384,7 @@ func (txtLinesSpecCol *TextLineSpecLinesCollection) EmptyTextLines() {
 
 	defer txtLinesSpecCol.lock.Unlock()
 
-	textLineSpecLinesCollectionAtom{}.ptr().
+	new(textLineSpecLinesCollectionAtom).
 		emptyCollection(txtLinesSpecCol)
 
 	return
@@ -1410,7 +1410,7 @@ func (txtLinesSpecCol *TextLineSpecLinesCollection) Equal(
 
 	defer txtLinesSpecCol.lock.Unlock()
 
-	return textLineSpecLinesCollectionAtom{}.ptr().
+	return new(textLineSpecLinesCollectionAtom).
 		equalCollections(
 			txtLinesSpecCol,
 			textLinesCol02)
@@ -1892,7 +1892,7 @@ func (txtLinesSpecCol *TextLineSpecLinesCollection) GetTextLine(
 	}
 
 	iTextLineSpec,
-		err = textLineSpecLinesCollectionAtom{}.ptr().
+		err = new(textLineSpecLinesCollectionAtom).
 		peekPopTextLine(
 			txtLinesSpecCol,
 			zeroBasedIndex,
@@ -2291,7 +2291,7 @@ func (txtLinesSpecCol *TextLineSpecLinesCollection) IsValidInstance() (
 	defer txtLinesSpecCol.lock.Unlock()
 
 	isValid,
-		_ = textLineSpecLinesCollectionAtom{}.ptr().
+		_ = new(textLineSpecLinesCollectionAtom).
 		testValidityOfTextLinesCollection(
 			txtLinesSpecCol,
 			nil)
@@ -2405,7 +2405,7 @@ func (txtLinesSpecCol *TextLineSpecLinesCollection) IsValidInstanceError(
 	}
 
 	_,
-		err = textLineSpecLinesCollectionAtom{}.ptr().
+		err = new(textLineSpecLinesCollectionAtom).
 		testValidityOfTextLinesCollection(
 			txtLinesSpecCol,
 			ePrefix.XCpy(
@@ -2576,7 +2576,7 @@ func (txtLinesSpecCol TextLineSpecLinesCollection) NewTextLine(
 		return newTextLineCol, err
 	}
 
-	err = textLineSpecLinesCollectionNanobot{}.ptr().
+	err = new(textLineSpecLinesCollectionNanobot).
 		addTextLine(
 			&newTextLineCol,
 			textLine,
@@ -2749,7 +2749,7 @@ func (txtLinesSpecCol TextLineSpecLinesCollection) NewPtrTextLine(
 		return newTextLineCol, err
 	}
 
-	err = textLineSpecLinesCollectionNanobot{}.ptr().
+	err = new(textLineSpecLinesCollectionNanobot).
 		addTextLine(
 			newTextLineCol,
 			textLine,
@@ -2917,7 +2917,7 @@ func (txtLinesSpecCol *TextLineSpecLinesCollection) PeekAtFirstTextLine(
 	}
 
 	iTextLineSpec,
-		err = textLineSpecLinesCollectionAtom{}.ptr().
+		err = new(textLineSpecLinesCollectionAtom).
 		peekPopTextLine(
 			txtLinesSpecCol,
 			0,
@@ -3097,7 +3097,7 @@ func (txtLinesSpecCol *TextLineSpecLinesCollection) PeekAtLastTextLine(
 	}
 
 	iTextLineSpec,
-		err = textLineSpecLinesCollectionAtom{}.ptr().
+		err = new(textLineSpecLinesCollectionAtom).
 		peekPopTextLine(
 			txtLinesSpecCol,
 			lastIdx,
@@ -3288,7 +3288,7 @@ func (txtLinesSpecCol *TextLineSpecLinesCollection) PeekAtTextLine(
 	}
 
 	iTextLineSpec,
-		err = textLineSpecLinesCollectionAtom{}.ptr().
+		err = new(textLineSpecLinesCollectionAtom).
 		peekPopTextLine(
 			txtLinesSpecCol,
 			zeroBasedIndex,
@@ -3486,7 +3486,7 @@ func (txtLinesSpecCol *TextLineSpecLinesCollection) PopFirstTextLine(
 	}
 
 	iTextLineSpec,
-		err = textLineSpecLinesCollectionAtom{}.ptr().
+		err = new(textLineSpecLinesCollectionAtom).
 		peekPopTextLine(
 			txtLinesSpecCol,
 			0,
@@ -3690,7 +3690,7 @@ func (txtLinesSpecCol *TextLineSpecLinesCollection) PopLastTextLine(
 	}
 
 	iTextLineSpec,
-		err = textLineSpecLinesCollectionAtom{}.ptr().
+		err = new(textLineSpecLinesCollectionAtom).
 		peekPopTextLine(
 			txtLinesSpecCol,
 			lastIdx,
@@ -3905,7 +3905,7 @@ func (txtLinesSpecCol *TextLineSpecLinesCollection) PopTextLine(
 	}
 
 	iTextLineSpec,
-		err = textLineSpecLinesCollectionAtom{}.ptr().
+		err = new(textLineSpecLinesCollectionAtom).
 		peekPopTextLine(
 			txtLinesSpecCol,
 			zeroBasedIndex,
