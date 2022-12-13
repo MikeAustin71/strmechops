@@ -739,6 +739,15 @@ func (txtLinesSpecCol *TextLineSpecLinesCollection) AddBlankLine(
 //		solid line text produced by this instance of
 //		TextLineSpecSolidLine.
 //
+//	numOfSolidLines				int
+//
+//		The number of solid lines to be created. If this
+//		value is less than one (1), an error will be
+//		returned.
+//
+//		The parameter controls the number of solid lines
+//		which will be generated.
+//
 //	errorPrefix					interface{}
 //
 //		This object encapsulates error prefix text which
@@ -821,6 +830,7 @@ func (txtLinesSpecCol *TextLineSpecLinesCollection) AddSolidLine(
 	rightMarginStr string,
 	newLineChars string,
 	turnAutoLineTerminationOff bool,
+	numOfSolidLines int,
 	errorPrefix interface{}) error {
 
 	if txtLinesSpecCol.lock == nil {
@@ -846,6 +856,20 @@ func (txtLinesSpecCol *TextLineSpecLinesCollection) AddSolidLine(
 		return err
 	}
 
+	if numOfSolidLines < 1 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'numOfSolidLines' is invalid!\n"+
+			"'numOfSolidLines' has a value less than one (1).\n"+
+			"'numOfSolidLines' controls the number of solid lines\n"+
+			"which will be generated.\n"+
+			"numOfSolidLines = '%v'\n",
+			ePrefix.String(),
+			numOfSolidLines)
+
+		return err
+	}
+
 	var txtSolidLine TextLineSpecSolidLine
 
 	txtSolidLine,
@@ -860,12 +884,24 @@ func (txtLinesSpecCol *TextLineSpecLinesCollection) AddSolidLine(
 			ePrefix.XCpy(
 				"txtSolidLine"))
 
-	err = new(textLineSpecLinesCollectionNanobot).
-		addTextLine(
-			txtLinesSpecCol,
-			&txtSolidLine,
+	for i := 0; i < numOfSolidLines; i++ {
+
+		var copyTxtSolidLine TextLineSpecSolidLine
+
+		copyTxtSolidLine,
+			err = txtSolidLine.CopyOut(
 			ePrefix.XCpy(
-				"txtLinesSpecCol<-txtSolidLine"))
+				fmt.Sprintf("txtSolildLine[%v]",
+					i)))
+
+		err = new(textLineSpecLinesCollectionNanobot).
+			addTextLine(
+				txtLinesSpecCol,
+				&copyTxtSolidLine,
+				ePrefix.XCpy(
+					"txtLinesSpecCol<-copyTxtSolidLine"))
+
+	}
 
 	return err
 }

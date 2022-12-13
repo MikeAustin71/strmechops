@@ -249,25 +249,24 @@ func (txtLineTitleMarqueeMech *textLineSpecTitleMarqueeMechanics) setTxtLineTitl
 
 	}
 
-	if len(configSpecs.LeadingSolidLineChar) > 0 {
+	if len(configSpecs.LeadingSolidLineChar) > 0 &&
+		configSpecs.NumLeadingSolidLines > 0 {
 
-		for i := 0; i < configSpecs.NumLeadingSolidLines; i++ {
+		err = txtLineTitleMarquee.leadingMarqueeLines.AddSolidLine(
+			configSpecs.StandardTitleLeftMargin,
+			configSpecs.LeadingSolidLineChar,
+			configSpecs.StandardTextFieldLen,
+			configSpecs.StandardTitleRightMargin,
+			"\n",
+			false,
+			configSpecs.NumLeadingSolidLines,
+			ePrefix.XCpy(
+				"configSpecs.NumLeadingSolidLines"))
 
-			err = txtLineTitleMarquee.leadingMarqueeLines.AddSolidLine(
-				configSpecs.StandardTitleLeftMargin,
-				configSpecs.LeadingSolidLineChar,
-				configSpecs.StandardTextFieldLen,
-				configSpecs.StandardTitleRightMargin,
-				"\n",
-				false,
-				ePrefix.XCpy(
-					"configSpecs.NumLeadingSolidLines"))
-
-			if err != nil {
-				return err
-			}
-
+		if err != nil {
+			return err
 		}
+
 	}
 
 	if configSpecs.NumTopTitleBlankLines > 0 {
@@ -295,25 +294,24 @@ func (txtLineTitleMarqueeMech *textLineSpecTitleMarqueeMechanics) setTxtLineTitl
 		}
 	}
 
-	if len(configSpecs.TrailingSolidLineChar) > 0 {
+	if len(configSpecs.TrailingSolidLineChar) > 0 &&
+		configSpecs.NumTrailingSolidLines > 0 {
 
-		for i := 0; i < configSpecs.NumTrailingSolidLines; i++ {
+		err = txtLineTitleMarquee.trailingMarqueeLines.AddSolidLine(
+			configSpecs.StandardTitleLeftMargin,
+			configSpecs.TrailingSolidLineChar,
+			configSpecs.StandardTextFieldLen,
+			configSpecs.StandardTitleRightMargin,
+			"\n",
+			false,
+			configSpecs.NumTrailingSolidLines,
+			ePrefix.XCpy(
+				"configSpecs.TrailingSolidLineChar"))
 
-			err = txtLineTitleMarquee.trailingMarqueeLines.AddSolidLine(
-				configSpecs.StandardTitleLeftMargin,
-				configSpecs.TrailingSolidLineChar,
-				configSpecs.StandardTextFieldLen,
-				configSpecs.StandardTitleRightMargin,
-				"\n",
-				false,
-				ePrefix.XCpy(
-					"configSpecs.TrailingSolidLineChar"))
-
-			if err != nil {
-				return err
-			}
-
+		if err != nil {
+			return err
 		}
+
 	}
 
 	if configSpecs.NumTrailingBlankLines > 0 {
