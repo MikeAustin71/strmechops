@@ -60,17 +60,6 @@ func (txtLineTitleMarqueeElectron *textLineSpecTitleMarqueeElectron) empty(
 		return
 	}
 
-	txtLineTitleMarquee.standardTitleLeftMargin = ""
-
-	txtLineTitleMarquee.standardTitleRightMargin = ""
-
-	txtLineTitleMarquee.standardMaxLineLen = 0
-
-	txtLineTitleMarquee.standardTextFieldLen = 0
-
-	txtLineTitleMarquee.standardTextFieldJustification =
-		TxtJustify.None()
-
 	txtLineTitleMarquee.leadingMarqueeLines.Empty()
 
 	txtLineTitleMarquee.titleLines.Empty()
@@ -104,36 +93,6 @@ func (txtLineTitleMarqueeElectron *textLineSpecTitleMarqueeElectron) equal(
 	txtLineTitleMarqueeElectron.lock.Lock()
 
 	defer txtLineTitleMarqueeElectron.lock.Unlock()
-
-	if txtLineTitleOne.standardTitleLeftMargin !=
-		txtLineTitleTwo.standardTitleLeftMargin {
-
-		return false
-	}
-
-	if txtLineTitleOne.standardTitleRightMargin !=
-		txtLineTitleTwo.standardTitleRightMargin {
-
-		return false
-	}
-
-	if txtLineTitleOne.standardMaxLineLen !=
-		txtLineTitleTwo.standardMaxLineLen {
-
-		return false
-	}
-
-	if txtLineTitleOne.standardTextFieldLen !=
-		txtLineTitleTwo.standardTextFieldLen {
-
-		return false
-	}
-
-	if txtLineTitleOne.standardTextFieldJustification !=
-		txtLineTitleTwo.standardTextFieldJustification {
-
-		return false
-	}
 
 	if !txtLineTitleOne.leadingMarqueeLines.Equal(
 		&txtLineTitleTwo.leadingMarqueeLines) {
@@ -269,124 +228,48 @@ func (txtLineTitleMarqueeElectron *textLineSpecTitleMarqueeElectron) testValidit
 		return isValid, err
 	}
 
-	if txtLineTitleMarquee.standardMaxLineLen < 1 {
+	numOfTxtLines :=
+		txtLineTitleMarquee.leadingMarqueeLines.GetNumberOfTextLines()
 
-		err = fmt.Errorf("%v\n"+
-			"Error: The TextLineSpecTitleMarquee object contains invalid data values!\n"+
-			"'standardMaxLineLen' has NOT been properly configured.\n"+
-			"'standardMaxLineLen' has a value less than one (1).\n"+
-			"standardMaxLineLen = %v\n",
-			ePrefix.String(),
-			txtLineTitleMarquee.standardMaxLineLen)
+	if numOfTxtLines > 0 {
 
-		return isValid, err
+		err = txtLineTitleMarquee.leadingMarqueeLines.IsValidInstanceError(
+			ePrefix.XCpy(
+				"txtLineTitleMarquee.leadingMarqueeLines"))
+
+		if err != nil {
+			return isValid, err
+		}
 	}
 
-	if txtLineTitleMarquee.standardTextFieldLen < 1 {
+	numOfTxtLines =
+		txtLineTitleMarquee.titleLines.GetNumberOfTextLines()
 
-		err = fmt.Errorf("%v\n"+
-			"Error: The TextLineSpecTitleMarquee object contains invalid data values!\n"+
-			"'standardTextFieldLen' has NOT been properly configured.\n"+
-			"'standardTextFieldLen' has a value less than one (1).\n"+
-			"standardTextFieldLen = %v\n",
-			ePrefix.String(),
-			txtLineTitleMarquee.standardTextFieldLen)
+	if numOfTxtLines > 0 {
 
-		return isValid, err
-	}
+		err = txtLineTitleMarquee.titleLines.IsValidInstanceError(
+			ePrefix.XCpy(
+				"txtLineTitleMarquee.titleLines"))
 
-	maxAvailableTextFieldLen :=
-		txtLineTitleMarquee.standardMaxLineLen -
-			1 -
-			len(txtLineTitleMarquee.standardTitleLeftMargin) -
-			len(txtLineTitleMarquee.standardTitleRightMargin)
-
-	if maxAvailableTextFieldLen < 1 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: The TextLineSpecTitleMarquee object contains invalid data values!\n"+
-			"Maximum Available Text Field Length produces a value less than one (1).\n"+
-			"maxAvailableTextFieldLen = \n"+
-			"	standardMaxLineLen - Left Margin Length - Right Margin Length -1\n"+
-			"standardMaxLineLen is probably invalid."+
-			"standardMaxLineLen  = %v\n"+
-			"Left Margin Length  = %v\n"+
-			"Right Margin Length = %v\n",
-			ePrefix.String(),
-			txtLineTitleMarquee.standardMaxLineLen,
-			len(txtLineTitleMarquee.standardTitleLeftMargin),
-			len(txtLineTitleMarquee.standardTitleRightMargin))
-
-		return isValid, err
-	}
-
-	if txtLineTitleMarquee.standardTextFieldLen > maxAvailableTextFieldLen {
-
-		txtLineTitleMarquee.standardTextFieldLen =
-			maxAvailableTextFieldLen
-	}
-
-	if txtLineTitleMarquee.leadingMarqueeLines.GetNumberOfTextLines() == 0 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: The TextLineSpecTitleMarquee object contains invalid data values!\n"+
-			"txtLineTitleMarquee.leadingMarqueeLines is empty.\n"+
-			"Configure leadingMarqueeLines before continuing.\n",
-			ePrefix.String())
-
-		return isValid, err
+		if err != nil {
+			return isValid, err
+		}
 
 	}
 
-	err = txtLineTitleMarquee.leadingMarqueeLines.IsValidInstanceError(
-		ePrefix.XCpy(
-			"txtLineTitleMarquee.leadingMarqueeLines invalid."))
+	numOfTxtLines =
+		txtLineTitleMarquee.trailingMarqueeLines.GetNumberOfTextLines()
 
-	if err != nil {
+	if numOfTxtLines > 0 {
 
-		return isValid, err
-	}
+		err = txtLineTitleMarquee.trailingMarqueeLines.IsValidInstanceError(
+			ePrefix.XCpy(
+				"txtLineTitleMarquee.trailingMarqueeLines"))
 
-	if txtLineTitleMarquee.titleLines.GetNumberOfTextLines() == 0 {
+		if err != nil {
+			return isValid, err
+		}
 
-		err = fmt.Errorf("%v\n"+
-			"Error: The TextLineSpecTitleMarquee object contains invalid data values!\n"+
-			"No Text Title Lines are configured for this TextLineSpecTitleMarquee object.\n"+
-			"The Text Title Lines array is empty.\n",
-			ePrefix.String())
-
-		return isValid, err
-
-	}
-
-	err = txtLineTitleMarquee.titleLines.IsValidInstanceError(
-		ePrefix.XCpy(
-			"txtLineTitleMarquee.titleLines invalid."))
-
-	if err != nil {
-
-		return isValid, err
-	}
-
-	if txtLineTitleMarquee.trailingMarqueeLines.GetNumberOfTextLines() == 0 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: The TextLineSpecTitleMarquee object contains invalid data values!\n"+
-			"txtLineTitleMarquee.trailingMarqueeLines is empty.\n"+
-			"Configure trailingMarqueeLines before continuing.\n",
-			ePrefix.String())
-
-		return isValid, err
-
-	}
-
-	err = txtLineTitleMarquee.trailingMarqueeLines.IsValidInstanceError(
-		ePrefix.XCpy(
-			"txtLineTitleMarquee.trailingMarqueeLines invalid."))
-
-	if err != nil {
-
-		return isValid, err
 	}
 
 	isValid = true

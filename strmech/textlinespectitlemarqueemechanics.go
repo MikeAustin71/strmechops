@@ -224,21 +224,6 @@ func (txtLineTitleMarqueeMech *textLineSpecTitleMarqueeMechanics) setTxtLineTitl
 	new(textLineSpecTitleMarqueeElectron).empty(
 		txtLineTitleMarquee)
 
-	txtLineTitleMarquee.standardTitleLeftMargin =
-		configSpecs.StandardTitleLeftMargin
-
-	txtLineTitleMarquee.standardTitleRightMargin =
-		configSpecs.StandardTitleRightMargin
-
-	txtLineTitleMarquee.standardMaxLineLen =
-		configSpecs.StandardMaxLineLen
-
-	txtLineTitleMarquee.standardTextFieldLen =
-		configSpecs.StandardTextFieldLen
-
-	txtLineTitleMarquee.standardTextFieldJustification =
-		configSpecs.StandardTextJustification
-
 	if configSpecs.TitleLines.GetNumberOfTextLines() > 0 {
 
 		err = txtLineTitleMarquee.titleLines.CopyIn(
@@ -269,10 +254,10 @@ func (txtLineTitleMarqueeMech *textLineSpecTitleMarqueeMechanics) setTxtLineTitl
 		for i := 0; i < configSpecs.NumLeadingSolidLines; i++ {
 
 			err = txtLineTitleMarquee.leadingMarqueeLines.AddSolidLine(
-				txtLineTitleMarquee.standardTitleLeftMargin,
+				configSpecs.StandardTitleLeftMargin,
 				configSpecs.LeadingSolidLineChar,
 				configSpecs.StandardTextFieldLen,
-				txtLineTitleMarquee.standardTitleRightMargin,
+				configSpecs.StandardTitleRightMargin,
 				"\n",
 				false,
 				ePrefix.XCpy(
@@ -315,10 +300,10 @@ func (txtLineTitleMarqueeMech *textLineSpecTitleMarqueeMechanics) setTxtLineTitl
 		for i := 0; i < configSpecs.NumTrailingSolidLines; i++ {
 
 			err = txtLineTitleMarquee.trailingMarqueeLines.AddSolidLine(
-				txtLineTitleMarquee.standardTitleLeftMargin,
+				configSpecs.StandardTitleLeftMargin,
 				configSpecs.TrailingSolidLineChar,
 				configSpecs.StandardTextFieldLen,
-				txtLineTitleMarquee.standardTitleRightMargin,
+				configSpecs.StandardTitleRightMargin,
 				"\n",
 				false,
 				ePrefix.XCpy(

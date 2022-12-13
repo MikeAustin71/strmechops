@@ -9,15 +9,10 @@ import (
 )
 
 type TextLineSpecTitleMarquee struct {
-	standardTitleLeftMargin        string
-	standardTitleRightMargin       string
-	standardMaxLineLen             int
-	standardTextFieldLen           int
-	standardTextFieldJustification TextJustify
-	leadingMarqueeLines            TextLineSpecLinesCollection
-	titleLines                     TextLineSpecLinesCollection
-	trailingMarqueeLines           TextLineSpecLinesCollection
-	textLineReader                 *strings.Reader
+	leadingMarqueeLines  TextLineSpecLinesCollection
+	titleLines           TextLineSpecLinesCollection
+	trailingMarqueeLines TextLineSpecLinesCollection
+	textLineReader       *strings.Reader
 
 	lock *sync.Mutex
 }

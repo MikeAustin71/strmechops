@@ -151,21 +151,6 @@ func (txtLineTitleMarqueeNanobot *textLineSpecTitleMarqueeNanobot) copy(
 	txtLineTitleMarqueeElectron.empty(
 		destinationTitleMarquee)
 
-	destinationTitleMarquee.standardTitleLeftMargin =
-		sourceTitleMarquee.standardTitleLeftMargin
-
-	destinationTitleMarquee.standardTitleRightMargin =
-		sourceTitleMarquee.standardTitleRightMargin
-
-	destinationTitleMarquee.standardMaxLineLen =
-		sourceTitleMarquee.standardMaxLineLen
-
-	destinationTitleMarquee.standardTextFieldLen =
-		sourceTitleMarquee.standardTextFieldLen
-
-	destinationTitleMarquee.standardTextFieldJustification =
-		sourceTitleMarquee.standardTextFieldJustification
-
 	if sourceTitleMarquee.leadingMarqueeLines.
 		GetNumberOfTextLines() > 0 {
 
