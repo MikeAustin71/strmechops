@@ -1,6 +1,10 @@
 package strmech
 
-import "sync"
+import (
+	"fmt"
+	"strings"
+	"sync"
+)
 
 // Lock lockTextTitleLineType before accessing these
 // 'maps'.
@@ -149,6 +153,188 @@ func (txtTitleLineType TextTileLineType) XIsValid() bool {
 	return new(textTileLineTypeNanobot).
 		isValidTextTitleLineType(
 			txtTitleLineType)
+}
+
+// XParseString
+//
+// Receives a string and attempts to match it with the
+// string value of a supported enumeration. If
+// successful, a new instance of TextTileLineType is
+// returned set to the value of the associated
+// enumeration.
+//
+// This is a standard utility method and is not part of
+// the valid enumerations for this type.
+//
+// ------------------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	valueString				string
+//
+//		A string which will be matched against the
+//		enumeration string values. If 'valueString'
+//		is equal to one of the enumeration names, this
+//		method will proceed to successful completion
+//		and return the correct enumeration value.
+//
+//	caseSensitive			bool
+//
+//		If 'true' the search for enumeration names will
+//		be case-sensitive and will require an exact
+//		match. Therefore, 'titleline' will NOT match the
+//		enumeration name, 'TitleLine'.
+//
+//		If 'false' a case-insensitive search is conducted
+//		for the enumeration name. In this case,
+//		'titleline' will match the enumeration name
+//		'TitleLine'.
+//
+// ------------------------------------------------------------------------
+//
+// # Return Values
+//
+//	TextTileLineType
+//
+//		Upon successful completion, this method will
+//		return a new instance of TextTileLineType set to
+//		the value of the enumeration matched by the
+//		string search performed on input parameter,
+//		'valueString'.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+//
+// ------------------------------------------------------------------------
+//
+// # Usage
+//
+// t, err :=
+//
+//		TextTileLineType(0).XParseString("TitleLine", true)
+//
+//	t is now equal to TextTileLineType(0).TitleLine()
+func (txtTitleLineType TextTileLineType) XParseString(
+	valueString string,
+	caseSensitive bool) (
+	TextTileLineType,
+	error) {
+
+	lockTextTitleLineType.Lock()
+
+	defer lockTextTitleLineType.Unlock()
+
+	ePrefix := "TextTileLineType.XParseString() "
+
+	if len(valueString) < 4 {
+		return TextTileLineType(0),
+			fmt.Errorf(ePrefix+"\n"+
+				"Input parameter 'valueString' is INVALID!\n"+
+				"String length is less than '4'.\n"+
+				"valueString='%v'\n", valueString)
+	}
+
+	var ok bool
+	var strTextTitleLineType TextTileLineType
+
+	if caseSensitive {
+
+		strTextTitleLineType, ok =
+			mapTextTileLineTypeStringToCode[valueString]
+
+		if !ok {
+			return TextTileLineType(0),
+				fmt.Errorf(ePrefix+
+					"\n'valueString' did NOT MATCH a valid TextTileLineType Value.\n"+
+					"valueString='%v'\n", valueString)
+		}
+
+	} else {
+
+		strTextTitleLineType, ok =
+			mapTextTileLineTypeLwrCaseStringToCode[strings.ToLower(valueString)]
+
+		if !ok {
+			return TextTileLineType(0),
+				fmt.Errorf(ePrefix+
+					"\n'valueString' did NOT MATCH a valid NumericSignValueType Value.\n"+
+					"valueString='%v'\n", valueString)
+		}
+	}
+
+	return strTextTitleLineType, nil
+}
+
+// XReturnNoneIfInvalid
+//
+// Provides a standardized value for invalid instances of
+// enumeration TextTileLineType.
+//
+// If the current instance of TextTileLineType is invalid,
+// this method will always return a value of
+// TextTileLineType(0).None().
+//
+// # Background
+//
+// Enumeration TextTileLineType has an underlying type of
+// integer (int). This means the type could conceivably
+// be set to any integer value. This method ensures that
+// all invalid TextTileLineType instances are
+// consistently classified as 'None'
+// (TextTileLineType(0).None()). Remember that 'None' is
+// considered an invalid value.
+//
+// For example, assume that TextTileLineType was set to an
+// integer value of -848972. Calling this method on a
+// TextTileLineType with this invalid integer value will
+// return an integer value of zero or the equivalent of
+// TextTileLineType(0).None(). This conversion is useful
+// in generating text strings for meaningful
+// informational and error messages.
+//
+// This is a standard utility method and is not part of
+// the valid enumerations for this type.
+func (txtTitleLineType TextTileLineType) XReturnNoneIfInvalid() TextTileLineType {
+
+	lockTextTitleLineType.Lock()
+
+	defer lockTextTitleLineType.Unlock()
+
+	isValid := new(textTileLineTypeNanobot).
+		isValidTextTitleLineType(
+			txtTitleLineType)
+
+	if !isValid {
+		return TextTileLineType(0)
+	}
+
+	return txtTitleLineType
+}
+
+// XValue
+//
+// This method returns the enumeration value of the
+// current TextTileLineType instance.
+//
+// This is a standard utility method and is not part
+// of the valid enumerations for this type.
+func (txtTitleLineType TextTileLineType) XValue() TextTileLineType {
+
+	lockTextTitleLineType.Lock()
+
+	defer lockTextTitleLineType.Unlock()
+
+	return txtTitleLineType
 }
 
 // TitleLineType
