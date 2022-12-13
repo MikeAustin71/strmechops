@@ -327,10 +327,13 @@ func (txtLineSpecTitleMarquee *TextLineSpecTitleMarquee) AddBlankLine(
 //		than one-million (1,000,000), an error will be
 //		returned.
 //
-//	newLineChars				string
+//	lineTerminator				string
 //
-//		This string contains one or more characters which
-//		will be used to terminate the solid text line.
+//		Also known as 'New Line characters'. This string
+//		contains one or more characters which will be
+//		used to terminate the solid text line added to
+//		the Text Specification Lines Collection for the
+//		current instance of TextLineSpecTitleMarquee.
 //
 //		Example:
 //			solidLineChars = "*"
@@ -347,18 +350,25 @@ func (txtLineSpecTitleMarquee *TextLineSpecTitleMarquee) AddBlankLine(
 //		'newLineChars' will be set to the default new
 //		line character ('\n').
 //
+//	turnLineTerminatorOff		bool
 //
-//	turnAutoLineTerminationOff	bool
+//		The 'turnLineTerminatorOff' flag controls whether
+//		a line termination character or characters will
+//		be automatically appended to each solid line of
+//		text added to the Text Specification Lines
+//		Collection maintained by the current instance of
+//		TextLineSpecTitleMarquee.
 //
-//		When set to 'true', line termination characters
-//		('newLineChars') will NOT be added to the end of
-//		the solid line text produced by this instance of
-//		TextLineSpecSolidLine.
+//		When the boolean flag 'turnLineTerminatorOff' is
+//		set to 'false', line terminators as defined by
+//		parameter 'lineTerminator' will be applied as a
+//		line termination sequence for each line of text
+//		added to the Text Specification	Lines Collection.
 //
-//		When set to 'false', line termination characters
-//		('newLineChars') WILL BE added  to the end of the
-//		solid line text produced by this instance of
-//		TextLineSpecSolidLine.
+//		When this boolean value is set to 'true', it
+//		turns off or cancels the automatic generation of
+//		line terminators for each line of text added to
+//		the Text Specification Lines Collection.
 //
 //	numOfSolidLines				int
 //
@@ -474,8 +484,8 @@ func (txtLineSpecTitleMarquee *TextLineSpecTitleMarquee) AddSolidLine(
 	solidLineChars string,
 	solidLineCharsRepeatCount int,
 	rightMarginStr string,
-	newLineChars string,
-	turnAutoLineTerminationOff bool,
+	lineTerminator string,
+	turnLineTerminatorOff bool,
 	numOfSolidLines int,
 	titleMarqueeLineType TextTileLineType,
 	errorPrefix interface{}) error {
@@ -545,12 +555,474 @@ func (txtLineSpecTitleMarquee *TextLineSpecTitleMarquee) AddSolidLine(
 			solidLineChars,
 			solidLineCharsRepeatCount,
 			rightMarginStr,
-			newLineChars,
-			turnAutoLineTerminationOff,
+			lineTerminator,
+			turnLineTerminatorOff,
 			numOfSolidLines,
 			ePrefix.XCpy(
 				fmt.Sprintf("txtLineSpecTitleMarquee.%v",
 					txtLineCollectionName)))
+
+	return err
+}
+
+// AddStdLineColumns
+//
+// Adds a standard text line to the Text Specification
+// Lines Collection maintained by the current instance of
+// TextLineSpecTitleMarquee.
+//
+// Type TextLineSpecTitleMarquee encapsulates three types
+// of text lines used in generating title marquees:
+//
+//  1. Leading Marquee Lines
+//     Usually consists of leading blank lines
+//     and solid lines.
+//
+//  2. Title Lines
+//     Consists entirely of text strings functioning
+//     as the main title lines.
+//
+//  3. Trailing Marquee Lines
+//     Usually consists of trailing blank lines
+//     and solid lines.
+//
+// This method will add the standard line to one of these
+// three collections as specified by parameter,
+// 'titleMarqueeLineType'.
+//
+// The standard text line created and added to the
+// collection will consist of one or more columns of text
+// as specified by input parameter 'textFieldColumns'.
+//
+// 'textFieldColumns' is a variadic parameter which
+// accepts a variable number of arguments of type
+// ITextFieldFormatDto. These ITextFieldFormatDto
+// objects contain all the specifications necessary to
+// construct a text field. Each ITextFieldFormatDto
+// object will be instantiated in the standard text line
+// as a separate text field.
+//
+// ----------------------------------------------------------------
+//
+// # ITextFieldFormatDto Interface
+//
+//		This method processes objects implementing the
+//		ITextFieldFormatDto interface to define text field
+//		specifications used to generate multi-column lines of
+//		text.
+//
+//		These text fields are then bundled to configure a
+//		line of text returned as an instance of
+//		TextLineSpecStandardLine.
+//
+//		Examples of concrete types implementing the
+//		ITextFieldFormatDto interface are:
+//
+//				TextFieldFormatDtoBigFloat
+//				TextFieldFormatDtoDate
+//				TextFieldFormatDtoLabel
+//				TextFieldFormatDtoFiller
+//
+//		The most frequently used type is the
+//		TextFieldFormatDtoLabel structure which is defined
+//		as follows:
+//
+//			type TextFieldFormatDtoLabel struct {
+//
+//				LeftMarginStr string
+//					One or more characters used to create a left
+//					margin for this Text Field.
+//
+//					If this parameter is set to an empty string, no
+//					left margin will be configured for this Text
+//					Field.
+//
+//				FieldContents interface{}
+//					This parameter may contain one of several
+//					specific data types. This empty interface type
+//					will be converted to a string and configured as
+//					the text column content within a text line.
+//
+//					Supported types which may be submitted through
+//					this empty interface parameter are listed as
+//					follows:
+//
+//					   time.Time (Converted using default format)
+//					   string
+//					   bool
+//					   uint, uint8, uint16, uint32, uint64,
+//					   int, int8, int16, int32, int64
+//					   float32, float64
+//					   *big.Int *big.Float
+//					   fmt.Stringer (types that support this interface)
+//					   TextInputParamFieldDateTimeDto
+//					         (Converts date time to string. The best way
+//					          to transmit and configure date time values.)
+//
+//				 FieldLength int
+//					The length of the text field in which the
+//					'FieldContents' will be displayed. If
+//					'FieldLength' is less than the length of the
+//					'FieldContents' string, it will be automatically
+//					set equal to the 'FieldContents' string length.
+//
+//					To automatically set the value of 'FieldLength'
+//					to the length of 'FieldContents', set this
+//					parameter to a value of minus one (-1).
+//
+//					If this parameter is submitted with a value less
+//					than minus one (-1) or greater than 1-million
+//					(1,000,000), an error will be returned.
+//
+//					Field Length Examples
+//
+//						Example-1
+//	 			        FieldContents String = "Hello World!"
+//							FieldContents String Length = 12
+//							FieldLength = 18
+//							FieldJustify = TxtJustify.Center()
+//							Text Field String =
+//								"   Hello World!   "
+//
+//						Example-2
+//	 			        FieldContents = "Hello World!"
+//							FieldContents String Length = 12
+//							FieldLength = 18
+//							FieldJustify = TxtJustify.Left()
+//							Text Field String =
+//								"Hello World!      "
+//
+//						Example-3
+//	 			        FieldContents = "Hello World!"
+//							FieldContents String Length = 12
+//							FieldLength = -1
+//							FieldJustify = TxtJustify.Center() // Ignored
+//							Text Field String =
+//								"Hello World!"
+//
+//						Example-4
+//	 			        FieldContents = "Hello World!"
+//							FieldContents String Length = 12
+//							FieldLength = 2
+//							FieldJustify = TxtJustify.Center()
+//								Ignored, because FieldLength Less
+//								Than FieldContents String Length.
+//							Text Field String =
+//								"Hello World!"
+//
+//				 FieldJustify TextJustify
+//					An enumeration which specifies the justification
+//					of the 'FieldContents' string within the text
+//					field length specified by 'FieldLength'.
+//
+//					Text justification can only be evaluated in the
+//					context of a text label ('FieldContents'), field
+//					length ('FieldLength') and a Text Justification
+//					object of type TextJustify. This is because text
+//					labels with a field length equal to or less than
+//					the length of the text label string will never
+//					use text justification. In these cases, text
+//					justification is completely ignored.
+//
+//					If the field length is greater than the length of
+//					the text label string, text justification must be
+//					equal to one of these three valid values:
+//
+//					    TextJustify(0).Left()
+//					    TextJustify(0).Right()
+//					    TextJustify(0).Center()
+//
+//					Users can also specify the abbreviated text
+//					justification enumeration syntax as follows:
+//
+//					    TxtJustify.Left()
+//					    TxtJustify.Right()
+//					    TxtJustify.Center()
+//
+//					Text Justification Examples
+//
+//						Example-1
+//	 			        FieldContents String = "Hello World!"
+//							FieldContents String Length = 12
+//							FieldLength = 18
+//							FieldJustify = TxtJustify.Center()
+//							Text Field String =
+//								"   Hello World!   "
+//
+//						Example-2
+//	 			        FieldContents = "Hello World!"
+//							FieldContents String Length = 12
+//							FieldLength = 18
+//							FieldJustify = TxtJustify.Left()
+//							Text Field String =
+//								"Hello World!      "
+//
+//						Example-3
+//	 			        FieldContents = "Hello World!"
+//							FieldContents String Length = 12
+//							FieldLength = -1
+//							FieldJustify = TxtJustify.Center() // Ignored
+//							Text Field String =
+//								"Hello World!"
+//
+//						Example-4
+//	 			        FieldContents = "Hello World!"
+//							FieldContents String Length = 12
+//							FieldLength = 2
+//							FieldJustify = TxtJustify.Center()
+//								Ignored, because FieldLength Less
+//								Than FieldContents String Length.
+//							Text Field String =
+//								"Hello World!"
+//
+//				RightMarginStr string
+//					One or more characters used to create a right
+//					margin for this Text Field.
+//
+//					If this parameter is set to an empty string, no
+//					right margin will be configured for this Text
+//					Field.
+//			}
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	lineTerminator				string
+//
+//		Also known as 'New Line characters'. This string
+//		contains the text characters which will be
+//		applied as line termination characters for each
+//		line of text added to the Text Specification
+//		Lines Collection maintained by the current
+//		instance of TextLineSpecTitleMarquee.
+//
+//		By default, each line of text generated will be
+//		terminated with	a new line character ('\n').
+//		However, this parameter allows the user to
+//		specify the character or characters to be used
+//		as a line termination sequence for each line of
+//		text added to the Text Specification Lines
+//		Collection.
+//
+//		If this parameter is submitted as an empty string
+//		with zero string length, this method will set
+//		'lineTerminator' to the default new line
+//		termination character ("\n").
+//
+//	turnLineTerminatorOff		bool
+//
+//		The 'turnLineTerminatorOff' flag controls whether
+//		a line termination character or characters will
+//		be automatically appended to each line of text
+//		added to the Text Specification Lines Collection
+//		maintained by the current instance of
+//		TextLineSpecTitleMarquee.
+//
+//		When the boolean flag 'turnLineTerminatorOff' is
+//		set to 'false', line terminators as defined by
+//		parameter 'lineTerminator' will be applied as a
+//		line termination sequence for each line of text
+//		added to the Text Specification Lines Collection.
+//
+//		When this boolean value is set to 'true', it
+//		turns off or cancels the automatic generation of
+//		line terminators for each line of text produced
+//		by TextLineSpecStandardLine.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+//	textFieldColumns			...ITextFieldFormatDto
+//
+//		This variadic parameter is used to pass one or
+//		more instances of objects implementing the
+//		ITextFieldFormatDto interface.
+//
+//		In the Go Programming language variadic
+//		parameters will accept a variable number of
+//		arguments.
+//
+//		These ITextFieldFormatDto object contains all the
+//		text field content and formatting specifications
+//		necessary to format one or more text fields in
+//		a standard line of text.
+//
+//		Examples of concrete types implementing the
+//		ITextFieldFormatDto interface are:
+//
+//			TextFieldFormatDtoBigFloat
+//			TextFieldFormatDtoDate
+//			TextFieldFormatDtoLabel
+//			TextFieldFormatDtoFiller
+//
+//		For additional information on the
+//		ITextFieldFormatDto interface, see above.
+//
+//		Note: In the Go Programming language the
+//		variadic arguments must be positioned last
+//		in the parameter list.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (txtLineSpecTitleMarquee *TextLineSpecTitleMarquee) AddStdLineColumns(
+	lineTerminator string,
+	turnLineTerminatorOff bool,
+	titleMarqueeLineType TextTileLineType,
+	errorPrefix interface{},
+	textFieldColumns ...ITextFieldFormatDto) error {
+
+	if txtLineSpecTitleMarquee.lock == nil {
+		txtLineSpecTitleMarquee.lock = new(sync.Mutex)
+	}
+
+	txtLineSpecTitleMarquee.lock.Lock()
+
+	defer txtLineSpecTitleMarquee.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecTitleMarquee."+
+			"AddStdLineColumns()",
+		"")
+
+	if err != nil {
+		return err
+	}
+	//
+	//var newStdLine TextLineSpecStandardLine
+	//
+	//newStdLine,
+	//	err = TextLineSpecStandardLine{}.NewStdLineColumns(
+	//	lineTerminator,
+	//	turnLineTerminatorOff,
+	//	ePrefix.XCpy(
+	//		"newStdLine<-textFieldColumns..."),
+	//	textFieldColumns...)
+
+	if err != nil {
+		return err
+	}
+
+	var txtLineCollection *TextLineSpecLinesCollection
+
+	var txtLineCollectionName string
+
+	switch titleMarqueeLineType {
+
+	case TitleLineType.LeadingMarqueeLine():
+
+		txtLineCollection = &txtLineSpecTitleMarquee.leadingMarqueeLines
+
+		txtLineCollectionName = "leadingMarqueeLines"
+
+	case TitleLineType.TitleLine():
+
+		txtLineCollection = &txtLineSpecTitleMarquee.titleLines
+
+		txtLineCollectionName = "titleLines"
+
+	case TitleLineType.TrailingMarqueeLine():
+
+		txtLineCollection = &txtLineSpecTitleMarquee.trailingMarqueeLines
+
+		txtLineCollectionName = "trailingMarqueeLines"
+
+	default:
+
+		err := fmt.Errorf("%v\n"+
+			"Error: Input parameter 'titleMarqueeLineType' is invalid!\n"+
+			" titleMarqueeLineType string value = '%v'\n"+
+			"titleMarqueeLineType integer value = '%v'\n",
+			ePrefix.String(),
+			titleMarqueeLineType.String(),
+			titleMarqueeLineType.XValueInt())
+
+		return err
+	}
+
+	err = txtLineCollection.
+		AddStdLineColumns(
+			lineTerminator,
+			turnLineTerminatorOff,
+			ePrefix.XCpy(
+				fmt.Sprintf("txtLineSpecTitleMarquee.%v",
+					txtLineCollectionName)),
+			textFieldColumns...)
 
 	return err
 }
