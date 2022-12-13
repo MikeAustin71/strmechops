@@ -17,6 +17,329 @@ type TextLineSpecTitleMarquee struct {
 	lock *sync.Mutex
 }
 
+// AddSolidLine
+//
+// Adds a solid line to the Text Specification Lines
+// Collection maintained by the current instance of
+// TextLineSpecTitleMarquee.
+//
+// Type TextLineSpecTitleMarquee encapsulates three types
+// of text lines used in generating title marquees:
+//
+//  1. Leading Marquee Lines
+//     Usually consists of leading blank lines
+//     and solid lines.
+//
+//  2. Title Lines
+//     Consists entirely of text strings functioning
+//     as the main title lines.
+//
+//  3. Trailing Marquee Lines
+//     Usually consists of trailing blank lines
+//     and solid lines.
+//
+// This method will add the solid line to one of these
+// three collections as specified by parameter,
+// 'titleMarqueeLineType'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	leftMarginStr				string
+//
+//		A string containing the text characters to be
+//		positioned on the left side of the Solid Line.
+//
+//		If no left margin is required, set this parameter
+//		to an empty string.
+//
+//		Example:
+//			leftMarginStr  = "   " // 3-spaces
+//			solidLineChars = "*"
+//			solidLineCharsRepeatCount = 5
+//			rightMarginStr = "" // Empty string
+//			Solid line = "   *****"
+//
+//		If the 'leftMarginStr' string length is greater
+//		than one-million (1,000,000), an error will be
+//		returned.
+//
+//	solidLineChars				string
+//
+//		This string specifies the character or characters
+//		which will comprise the solid line.
+//
+//		Example:
+//			solidLineChars = "*"
+//			solidLineCharsRepeatCount = 5
+//			Solid line = "*****"
+//
+//		If this parameter is submitted as a zero length
+//		string, an error will be returned.
+//
+//	solidLineCharsRepeatCount	int
+//
+//		This integer value specifies the number of times
+//		that parameter 'solidLineChars' will be repeated
+//		in constructing the solid line.
+//
+//		If this parameter is submitted with a value less
+//		than one (1), an error will be returned.
+//
+//		Example:
+//			solidLineChars = "*"
+//			solidLineCharsRepeatCount = 5
+//			Solid line = "*****"
+//
+//	rightMarginStr				string
+//
+//		A string containing the text characters to
+//		be positioned on the right side of the Solid
+//		Line.
+//
+//		If no right margin is required, set this
+//		parameter to an empty string.
+//
+//		Example:
+//			solidLineChars = "*"
+//			solidLineCharsRepeatCount = 5
+//			leftMarginStr = "" // Empty string
+//			rightMarginStr = "   " // 3-spaces
+//			Solid line = "*****   "
+//
+//		If the 'rightMarginStr' string length is greater
+//		than one-million (1,000,000), an error will be
+//		returned.
+//
+//	newLineChars				string
+//
+//		This string contains one or more characters which
+//		will be used to terminate the solid text line.
+//
+//		Example:
+//			solidLineChars = "*"
+//			solidLineCharsRepeatCount = 5
+//			newLineChars = "??\n\n"
+//			Solid line = "*****??\n\n"
+//
+//		If this parameter is submitted as a zero length
+//		string, 'newLineChars' will be set to the default
+//		new line character ("\n").
+//
+//		If this parameter is submitted with a string
+//		length greater than one-million (1,000,000),
+//		'newLineChars' will be set to the default new
+//		line character ('\n').
+//
+//
+//	turnAutoLineTerminationOff	bool
+//
+//		When set to 'true', line termination characters
+//		('newLineChars') will NOT be added to the end of
+//		the solid line text produced by this instance of
+//		TextLineSpecSolidLine.
+//
+//		When set to 'false', line termination characters
+//		('newLineChars') WILL BE added  to the end of the
+//		solid line text produced by this instance of
+//		TextLineSpecSolidLine.
+//
+//	numOfSolidLines				int
+//
+//		The number of solid lines to be created. If this
+//		value is less than one (1), an error will be
+//		returned.
+//
+//		The parameter controls the number of solid lines
+//		which will be generated and added to the Text
+//		Specification Lines Collection for the current
+//		instance of TextLineSpecLinesCollection.
+//
+//	titleMarqueeLineType		TextTileLineType
+//
+//		Type TextTileLineType is an enumeration of
+//		Title Marquee Text Line Types. This parameter
+//		determines which text line collection will
+//		receive the newly created solid line.
+//
+//		If this parameter is not set to one of the
+//		following valid values, an error will be
+//		returned.
+//
+//		Formal TextTileLineType Syntax
+//
+//			TextTileLineType(0).LeadingMarqueeLine()
+//			TextTileLineType(0).TitleLine()
+//			TextTileLineType(0).TrailingMarqueeLine()
+//
+//		Abbreviated TextTileLineType Syntax
+//
+//			TitleLineType.LeadingMarqueeLine()
+//			TitleLineType.TitleLine()
+//			TitleLineTypeTrailingMarqueeLine()
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (txtLineSpecTitleMarquee *TextLineSpecTitleMarquee) AddSolidLine(
+	leftMarginStr string,
+	solidLineChars string,
+	solidLineCharsRepeatCount int,
+	rightMarginStr string,
+	newLineChars string,
+	turnAutoLineTerminationOff bool,
+	numOfSolidLines int,
+	titleMarqueeLineType TextTileLineType,
+	errorPrefix interface{}) error {
+
+	if txtLineSpecTitleMarquee.lock == nil {
+		txtLineSpecTitleMarquee.lock = new(sync.Mutex)
+	}
+
+	txtLineSpecTitleMarquee.lock.Lock()
+
+	defer txtLineSpecTitleMarquee.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecTitleMarquee."+
+			"AddSolidLine()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	var txtLineCollection *TextLineSpecLinesCollection
+
+	var txtLineCollectionName string
+
+	switch titleMarqueeLineType {
+
+	case TitleLineType.LeadingMarqueeLine():
+
+		txtLineCollection = &txtLineSpecTitleMarquee.leadingMarqueeLines
+
+		txtLineCollectionName = "leadingMarqueeLines"
+
+	case TitleLineType.TitleLine():
+
+		txtLineCollection = &txtLineSpecTitleMarquee.titleLines
+
+		txtLineCollectionName = "titleLines"
+
+	case TitleLineType.TrailingMarqueeLine():
+
+		txtLineCollection = &txtLineSpecTitleMarquee.trailingMarqueeLines
+
+		txtLineCollectionName = "trailingMarqueeLines"
+
+	default:
+
+		err := fmt.Errorf("%v\n"+
+			"Error: Input parameter 'titleMarqueeLineType' is invalid!\n"+
+			" titleMarqueeLineType string value = '%v'\n"+
+			"titleMarqueeLineType integer value = '%v'\n",
+			ePrefix.String(),
+			titleMarqueeLineType.String(),
+			titleMarqueeLineType.XValueInt())
+
+		return err
+	}
+
+	err = txtLineCollection.
+		AddSolidLine(
+			leftMarginStr,
+			solidLineChars,
+			solidLineCharsRepeatCount,
+			rightMarginStr,
+			newLineChars,
+			turnAutoLineTerminationOff,
+			numOfSolidLines,
+			ePrefix.XCpy(
+				fmt.Sprintf("txtLineSpecTitleMarquee.%v",
+					txtLineCollectionName)))
+
+	return err
+}
+
 // CopyIn
 //
 //	Copies the data fields from an incoming instance of
@@ -619,11 +942,12 @@ func (txtLineSpecTitleMarquee *TextLineSpecTitleMarquee) Empty() {
 //     Usually consists of trailing blank lines
 //     and solid lines.
 //
-//     This method will delete all Leading Marquee Lines in
-//     the current instance of TextLineSpecTitleMarquee.
+// This method will delete all Leading Marquee Lines in
+// the current instance of TextLineSpecTitleMarquee.
 //
-//     The internal member variable to be deleted is:
-//     TextLineSpecTitleMarquee.leadingMarqueeLines
+// The internal member variable to be deleted is:
+//
+//	TextLineSpecTitleMarquee.leadingMarqueeLines
 //
 // ----------------------------------------------------------------
 //
@@ -669,9 +993,10 @@ func (txtLineSpecTitleMarquee *TextLineSpecTitleMarquee) EmptyLeadingMarqueeLine
 //     Usually consists of trailing blank lines
 //     and solid lines.
 //
-//     This method will delete all Title Lines. The internal
-//     member variable to be deleted is:
-//     TextLineSpecTitleMarquee.titleLines
+// This method will delete all Title Lines. The internal
+// member variable to be deleted is:
+//
+//	TextLineSpecTitleMarquee.titleLines
 //
 // ----------------------------------------------------------------
 //
@@ -717,11 +1042,12 @@ func (txtLineSpecTitleMarquee *TextLineSpecTitleMarquee) EmptyTitleLines() {
 //     Usually consists of trailing blank lines
 //     and solid lines.
 //
-//     This method will delete all Trailing Marquee Lines in
-//     the current instance of TextLineSpecTitleMarquee.
+// This method will delete all Trailing Marquee Lines in
+// the current instance of TextLineSpecTitleMarquee.
 //
-//     The internal member variable to be deleted is:
-//     TextLineSpecTitleMarquee.trailingMarqueeLines
+// The internal member variable to be deleted is:
+//
+//	TextLineSpecTitleMarquee.trailingMarqueeLines
 //
 // ----------------------------------------------------------------
 //

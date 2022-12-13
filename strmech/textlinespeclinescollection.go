@@ -16,6 +16,435 @@ type TextLineSpecLinesCollection struct {
 	lock      *sync.Mutex
 }
 
+//	AddBlankLine
+//
+//	Creates an instance of TextLineSpecBlankLines and
+//	adds it to the Text Line collection maintained by
+//	this instance of TextLineSpecLinesCollection.
+//
+//	The TextLineSpecBlankLines type is a specialized
+//	form of text line specification which is used to
+//	create one or more blank lines of text.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	numOfBlankLines				int
+//
+//		The number of blank lines which will be generated
+//		by the newly created instance of
+//		TextLineSpecBlankLines.
+//
+//		If input parameter 'numOfBlankLines' is less than
+//		one (1), it is invalid and an error will be
+//		returned.
+//
+//		If input parameter 'numOfBlankLines' is greater
+//		than one-million (1,000,000), it is invalid and
+//		an error will be returned.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it	contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (txtLinesSpecCol *TextLineSpecLinesCollection) AddBlankLine(
+	numOfBlankLines int,
+	errorPrefix interface{}) error {
+
+	if txtLinesSpecCol.lock == nil {
+		txtLinesSpecCol.lock = new(sync.Mutex)
+	}
+
+	txtLinesSpecCol.lock.Lock()
+
+	defer txtLinesSpecCol.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecLinesCollection."+
+			"AddBlankLine()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	var newBlankLine *TextLineSpecBlankLines
+
+	newBlankLine,
+		err = new(TextLineSpecBlankLines).
+		NewPtrDefaultBlankLines(
+			numOfBlankLines,
+			ePrefix.XCpy(
+				"newBlankLine<-"))
+
+	if err != nil {
+		return err
+	}
+
+	err = new(textLineSpecLinesCollectionNanobot).addTextLine(
+		txtLinesSpecCol,
+		newBlankLine,
+		ePrefix.XCpy(
+			"txtLinesSpecCol<-newBlankLine"))
+
+	return err
+}
+
+// AddSolidLine
+//
+// Adds a solid line to the Text Specification Lines
+// Collection maintained by the current instance of
+// TextLineSpecLinesCollection.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	leftMarginStr				string
+//
+//		A string containing the text characters to be
+//		positioned on the left side of the Solid Line.
+//
+//		If no left margin is required, set this parameter
+//		to an empty string.
+//
+//		Example:
+//			leftMarginStr  = "   " // 3-spaces
+//			solidLineChars = "*"
+//			solidLineCharsRepeatCount = 5
+//			rightMarginStr = "" // Empty string
+//			Solid line = "   *****"
+//
+//		If the 'leftMarginStr' string length is greater
+//		than one-million (1,000,000), an error will be
+//		returned.
+//
+//	solidLineChars				string
+//
+//		This string specifies the character or characters
+//		which will comprise the solid line.
+//
+//		Example:
+//			solidLineChars = "*"
+//			solidLineCharsRepeatCount = 5
+//			Solid line = "*****"
+//
+//		If this parameter is submitted as a zero length
+//		string, an error will be returned.
+//
+//	solidLineCharsRepeatCount	int
+//
+//		This integer value specifies the number of times
+//		that parameter 'solidLineChars' will be repeated
+//		in constructing the solid line.
+//
+//		If this parameter is submitted with a value less
+//		than one (1), an error will be returned.
+//
+//		Example:
+//			solidLineChars = "*"
+//			solidLineCharsRepeatCount = 5
+//			Solid line = "*****"
+//
+//	rightMarginStr				string
+//
+//		A string containing the text characters to
+//		be positioned on the right side of the Solid
+//		Line.
+//
+//		If no right margin is required, set this
+//		parameter to an empty string.
+//
+//		Example:
+//			solidLineChars = "*"
+//			solidLineCharsRepeatCount = 5
+//			leftMarginStr = "" // Empty string
+//			rightMarginStr = "   " // 3-spaces
+//			Solid line = "*****   "
+//
+//		If the 'rightMarginStr' string length is greater
+//		than one-million (1,000,000), an error will be
+//		returned.
+//
+//	newLineChars				string
+//
+//		This string contains one or more characters which
+//		will be used to terminate the solid text line.
+//
+//		Example:
+//			solidLineChars = "*"
+//			solidLineCharsRepeatCount = 5
+//			newLineChars = "??\n\n"
+//			Solid line = "*****??\n\n"
+//
+//		If this parameter is submitted as a zero length
+//		string, 'newLineChars' will be set to the default
+//		new line character ("\n").
+//
+//		If this parameter is submitted with a string
+//		length greater than one-million (1,000,000),
+//		'newLineChars' will be set to the default new
+//		line character ('\n').
+//
+//
+//	turnAutoLineTerminationOff	bool
+//
+//		When set to 'true', line termination characters
+//		('newLineChars') will NOT be added to the end of
+//		the solid line text produced by this instance of
+//		TextLineSpecSolidLine.
+//
+//		When set to 'false', line termination characters
+//		('newLineChars') WILL BE added  to the end of the
+//		solid line text produced by this instance of
+//		TextLineSpecSolidLine.
+//
+//	numOfSolidLines				int
+//
+//		The number of solid lines to be created. If this
+//		value is less than one (1), an error will be
+//		returned.
+//
+//		The parameter controls the number of solid lines
+//		which will be generated and added to the Text
+//		Specification Lines Collection for the current
+//		instance of TextLineSpecLinesCollection.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (txtLinesSpecCol *TextLineSpecLinesCollection) AddSolidLine(
+	leftMarginStr string,
+	solidLineChars string,
+	solidLineCharsRepeatCount int,
+	rightMarginStr string,
+	newLineChars string,
+	turnAutoLineTerminationOff bool,
+	numOfSolidLines int,
+	errorPrefix interface{}) error {
+
+	if txtLinesSpecCol.lock == nil {
+		txtLinesSpecCol.lock = new(sync.Mutex)
+	}
+
+	txtLinesSpecCol.lock.Lock()
+
+	defer txtLinesSpecCol.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecLinesCollection."+
+			"AddSolidLine()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if numOfSolidLines < 1 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'numOfSolidLines' is invalid!\n"+
+			"'numOfSolidLines' has a value less than one (1).\n"+
+			"'numOfSolidLines' controls the number of solid lines\n"+
+			"which will be generated.\n"+
+			"numOfSolidLines = '%v'\n",
+			ePrefix.String(),
+			numOfSolidLines)
+
+		return err
+	}
+
+	var txtSolidLine TextLineSpecSolidLine
+
+	txtSolidLine,
+		err = TextLineSpecSolidLine{}.
+		NewSolidLineAllParms(
+			leftMarginStr,
+			rightMarginStr,
+			solidLineChars,
+			solidLineCharsRepeatCount,
+			newLineChars,
+			turnAutoLineTerminationOff,
+			ePrefix.XCpy(
+				"txtSolidLine"))
+
+	for i := 0; i < numOfSolidLines; i++ {
+
+		var copyTxtSolidLine TextLineSpecSolidLine
+
+		copyTxtSolidLine,
+			err = txtSolidLine.CopyOut(
+			ePrefix.XCpy(
+				fmt.Sprintf("txtSolildLine[%v]",
+					i)))
+
+		err = new(textLineSpecLinesCollectionNanobot).
+			addTextLine(
+				txtLinesSpecCol,
+				&copyTxtSolidLine,
+				ePrefix.XCpy(
+					"txtLinesSpecCol<-copyTxtSolidLine"))
+
+	}
+
+	return err
+}
+
 // AddStdLineColumns
 //
 // Adds a standard text line to the Text Specification
@@ -477,435 +906,6 @@ func (txtLinesSpecCol *TextLineSpecLinesCollection) AddStdLineMultiCols(
 
 	return err
 
-}
-
-//	AddBlankLine
-//
-//	Creates an instance of TextLineSpecBlankLines and
-//	adds it to the Text Line collection maintained by
-//	this instance of TextLineSpecLinesCollection.
-//
-//	The TextLineSpecBlankLines type is a specialized
-//	form of text line specification which is used to
-//	create one or more blank lines of text.
-//
-// ----------------------------------------------------------------
-//
-// # Input Parameters
-//
-//	numOfBlankLines				int
-//
-//		The number of blank lines which will be generated
-//		by the newly created instance of
-//		TextLineSpecBlankLines.
-//
-//		If input parameter 'numOfBlankLines' is less than
-//		one (1), it is invalid and an error will be
-//		returned.
-//
-//		If input parameter 'numOfBlankLines' is greater
-//		than one-million (1,000,000), it is invalid and
-//		an error will be returned.
-//
-//	errorPrefix					interface{}
-//
-//		This object encapsulates error prefix text which
-//		is included in all returned error messages.
-//		Usually, it	contains the name of the calling
-//		method or methods listed as a method or function
-//		chain of execution.
-//
-//		If no error prefix information is needed, set this
-//		parameter to 'nil'.
-//
-//		This empty interface must be convertible to one of
-//		the following types:
-//
-//		1.	nil
-//				A nil value is valid and generates an
-//				empty collection of error prefix and
-//				error context information.
-//
-//		2.	string
-//				A string containing error prefix
-//				information.
-//
-//		3.	[]string
-//				A one-dimensional slice of strings
-//				containing error prefix information.
-//
-//		4.	[][2]string
-//				A two-dimensional slice of strings
-//		   		containing error prefix and error
-//		   		context information.
-//
-//		5.	ErrPrefixDto
-//				An instance of ErrPrefixDto.
-//				Information from this object will
-//				be copied for use in error and
-//				informational messages.
-//
-//		6.	*ErrPrefixDto
-//				A pointer to an instance of
-//				ErrPrefixDto. Information from
-//				this object will be copied for use
-//				in error and informational messages.
-//
-//		7.	IBasicErrorPrefix
-//				An interface to a method
-//				generating a two-dimensional slice
-//				of strings containing error prefix
-//				and error context information.
-//
-//		If parameter 'errorPrefix' is NOT convertible
-//		to one of the valid types listed above, it will
-//		be considered invalid and trigger the return of
-//		an error.
-//
-//		Types ErrPrefixDto and IBasicErrorPrefix are
-//		included in the 'errpref' software package:
-//			"github.com/MikeAustin71/errpref".
-//
-// ----------------------------------------------------------------
-//
-// # Return Values
-//
-//	error
-//
-//		If this method completes successfully, the
-//		returned error Type is set equal to 'nil'.
-//
-//		If errors are encountered during processing, the
-//		returned error Type will encapsulate an error
-//		message. This returned error message will
-//		incorporate the method chain and text passed by
-//		input parameter, 'errorPrefix'. The 'errorPrefix'
-//		text will be attached to the beginning of the
-//		error message.
-func (txtLinesSpecCol *TextLineSpecLinesCollection) AddBlankLine(
-	numOfBlankLines int,
-	errorPrefix interface{}) error {
-
-	if txtLinesSpecCol.lock == nil {
-		txtLinesSpecCol.lock = new(sync.Mutex)
-	}
-
-	txtLinesSpecCol.lock.Lock()
-
-	defer txtLinesSpecCol.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-	var err error
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
-		"TextLineSpecLinesCollection."+
-			"AddBlankLine()",
-		"")
-
-	if err != nil {
-		return err
-	}
-
-	var newBlankLine *TextLineSpecBlankLines
-
-	newBlankLine,
-		err = new(TextLineSpecBlankLines).
-		NewPtrDefaultBlankLines(
-			numOfBlankLines,
-			ePrefix.XCpy(
-				"newBlankLine<-"))
-
-	if err != nil {
-		return err
-	}
-
-	err = new(textLineSpecLinesCollectionNanobot).addTextLine(
-		txtLinesSpecCol,
-		newBlankLine,
-		ePrefix.XCpy(
-			"txtLinesSpecCol<-newBlankLine"))
-
-	return err
-}
-
-// AddSolidLine
-//
-// Adds a solid line to the Text Specification Lines
-// Collection maintained by the current instance of
-// TextLineSpecLinesCollection.
-//
-// ----------------------------------------------------------------
-//
-// # Input Parameters
-//
-//	leftMarginStr				string
-//
-//		A string containing the text characters to be
-//		positioned on the left side of the Solid Line.
-//
-//		If no left margin is required, set this parameter
-//		to an empty string.
-//
-//		Example:
-//			leftMarginStr  = "   " // 3-spaces
-//			solidLineChars = "*"
-//			solidLineCharsRepeatCount = 5
-//			rightMarginStr = "" // Empty string
-//			Solid line = "   *****"
-//
-//		If the 'leftMarginStr' string length is greater
-//		than one-million (1,000,000), an error will be
-//		returned.
-//
-//	solidLineChars				string
-//
-//		This string specifies the character or characters
-//		which will comprise the solid line.
-//
-//		Example:
-//			solidLineChars = "*"
-//			solidLineCharsRepeatCount = 5
-//			Solid line = "*****"
-//
-//		If this parameter is submitted as a zero length
-//		string, an error will be returned.
-//
-//	solidLineCharsRepeatCount	int
-//
-//		This integer value specifies the number of times
-//		that parameter 'solidLineChars' will be repeated
-//		in constructing the solid line.
-//
-//		If this parameter is submitted with a value less
-//		than one (1), an error will be returned.
-//
-//		Example:
-//			solidLineChars = "*"
-//			solidLineCharsRepeatCount = 5
-//			Solid line = "*****"
-//
-//	rightMarginStr				string
-//
-//		A string containing the text characters to
-//		be positioned on the right side of the Solid
-//		Line.
-//
-//		If no right margin is required, set this
-//		parameter to an empty string.
-//
-//		Example:
-//			solidLineChars = "*"
-//			solidLineCharsRepeatCount = 5
-//			leftMarginStr = "" // Empty string
-//			rightMarginStr = "   " // 3-spaces
-//			Solid line = "*****   "
-//
-//		If the 'rightMarginStr' string length is greater
-//		than one-million (1,000,000), an error will be
-//		returned.
-//
-//	newLineChars				string
-//
-//		This string contains one or more characters which
-//		will be used to terminate the solid text line.
-//
-//		Example:
-//			solidLineChars = "*"
-//			solidLineCharsRepeatCount = 5
-//			newLineChars = "??\n\n"
-//			Solid line = "*****??\n\n"
-//
-//		If this parameter is submitted as a zero length
-//		string, 'newLineChars' will be set to the default
-//		new line character ("\n").
-//
-//		If this parameter is submitted with a string
-//		length greater than one-million (1,000,000),
-//		'newLineChars' will be set to the default new
-//		line character ('\n').
-//
-//
-//	turnAutoLineTerminationOff	bool
-//
-//		When set to 'true', line termination characters
-//		('newLineChars') will NOT be added to the end of
-//		the solid line text produced by this instance of
-//		TextLineSpecSolidLine.
-//
-//		When set to 'false', line termination characters
-//		('newLineChars') WILL BE added  to the end of the
-//		solid line text produced by this instance of
-//		TextLineSpecSolidLine.
-//
-//	numOfSolidLines				int
-//
-//		The number of solid lines to be created. If this
-//		value is less than one (1), an error will be
-//		returned.
-//
-//		The parameter controls the number of solid lines
-//		which will be generated and added to the Text
-//		Specification Lines Collection for the current
-//		instance of TextLineSpecLinesCollection.
-//
-//	errorPrefix					interface{}
-//
-//		This object encapsulates error prefix text which
-//		is included in all returned error messages.
-//		Usually, it contains the name of the calling
-//		method or methods listed as a method or function
-//		chain of execution.
-//
-//		If no error prefix information is needed, set this
-//		parameter to 'nil'.
-//
-//		This empty interface must be convertible to one of
-//		the following types:
-//
-//		1.	nil
-//				A nil value is valid and generates an
-//				empty collection of error prefix and
-//				error context information.
-//
-//		2.	string
-//				A string containing error prefix
-//				information.
-//
-//		3.	[]string
-//				A one-dimensional slice of strings
-//				containing error prefix information.
-//
-//		4.	[][2]string
-//				A two-dimensional slice of strings
-//		   		containing error prefix and error
-//		   		context information.
-//
-//		5.	ErrPrefixDto
-//				An instance of ErrPrefixDto.
-//				Information from this object will
-//				be copied for use in error and
-//				informational messages.
-//
-//		6.	*ErrPrefixDto
-//				A pointer to an instance of
-//				ErrPrefixDto. Information from
-//				this object will be copied for use
-//				in error and informational messages.
-//
-//		7.	IBasicErrorPrefix
-//				An interface to a method
-//				generating a two-dimensional slice
-//				of strings containing error prefix
-//				and error context information.
-//
-//		If parameter 'errorPrefix' is NOT convertible
-//		to one of the valid types listed above, it will
-//		be considered invalid and trigger the return of
-//		an error.
-//
-//		Types ErrPrefixDto and IBasicErrorPrefix are
-//		included in the 'errpref' software package:
-//			"github.com/MikeAustin71/errpref".
-//
-// ----------------------------------------------------------------
-//
-// # Return Values
-//
-//	error
-//
-//		If this method completes successfully, the
-//		returned error Type is set equal to 'nil'.
-//
-//		If errors are encountered during processing, the
-//		returned error Type will encapsulate an error
-//		message. This returned error message will
-//		incorporate the method chain and text passed by
-//		input parameter, 'errorPrefix'. The 'errorPrefix'
-//		text will be attached to the beginning of the
-//		error message.
-func (txtLinesSpecCol *TextLineSpecLinesCollection) AddSolidLine(
-	leftMarginStr string,
-	solidLineChars string,
-	solidLineCharsRepeatCount int,
-	rightMarginStr string,
-	newLineChars string,
-	turnAutoLineTerminationOff bool,
-	numOfSolidLines int,
-	errorPrefix interface{}) error {
-
-	if txtLinesSpecCol.lock == nil {
-		txtLinesSpecCol.lock = new(sync.Mutex)
-	}
-
-	txtLinesSpecCol.lock.Lock()
-
-	defer txtLinesSpecCol.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-
-	var err error
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
-		"TextLineSpecLinesCollection."+
-			"AddSolidLine()",
-		"")
-
-	if err != nil {
-		return err
-	}
-
-	if numOfSolidLines < 1 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'numOfSolidLines' is invalid!\n"+
-			"'numOfSolidLines' has a value less than one (1).\n"+
-			"'numOfSolidLines' controls the number of solid lines\n"+
-			"which will be generated.\n"+
-			"numOfSolidLines = '%v'\n",
-			ePrefix.String(),
-			numOfSolidLines)
-
-		return err
-	}
-
-	var txtSolidLine TextLineSpecSolidLine
-
-	txtSolidLine,
-		err = TextLineSpecSolidLine{}.
-		NewSolidLineAllParms(
-			leftMarginStr,
-			rightMarginStr,
-			solidLineChars,
-			solidLineCharsRepeatCount,
-			newLineChars,
-			turnAutoLineTerminationOff,
-			ePrefix.XCpy(
-				"txtSolidLine"))
-
-	for i := 0; i < numOfSolidLines; i++ {
-
-		var copyTxtSolidLine TextLineSpecSolidLine
-
-		copyTxtSolidLine,
-			err = txtSolidLine.CopyOut(
-			ePrefix.XCpy(
-				fmt.Sprintf("txtSolildLine[%v]",
-					i)))
-
-		err = new(textLineSpecLinesCollectionNanobot).
-			addTextLine(
-				txtLinesSpecCol,
-				&copyTxtSolidLine,
-				ePrefix.XCpy(
-					"txtLinesSpecCol<-copyTxtSolidLine"))
-
-	}
-
-	return err
 }
 
 // AddTextLineSpec - Adds a ITextLineSpecification object to the
