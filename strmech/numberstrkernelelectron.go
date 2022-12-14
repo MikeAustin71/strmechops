@@ -73,6 +73,8 @@ func (numStrKernelElectron *numberStrKernelElectron) empty(
 	numStrKernel.numberSign = NumSignVal.None()
 
 	numStrKernel.isNonZeroValue = false
+
+	numStrKernel.numStrFormatSpec.Empty()
 }
 
 // equal - Receives a pointer to two instances of
@@ -127,6 +129,12 @@ func (numStrKernelElectron *numberStrKernelElectron) equal(
 
 	if numStrKernel1.isNonZeroValue !=
 		numStrKernel2.isNonZeroValue {
+
+		return false
+	}
+
+	if !numStrKernel1.numStrFormatSpec.Equal(
+		&numStrKernel2.numStrFormatSpec) {
 
 		return false
 	}

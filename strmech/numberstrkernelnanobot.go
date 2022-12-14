@@ -177,6 +177,12 @@ func (numStrKernelNanobot *numberStrKernelNanobot) copyIn(
 	targetNumStrKernel.isNonZeroValue =
 		incomingNumStrKernel.isNonZeroValue
 
+	err = targetNumStrKernel.numStrFormatSpec.CopyIn(
+		&incomingNumStrKernel.numStrFormatSpec,
+		ePrefix.XCpy(
+			"targetNumStrKernel<-"+
+				"incomingNumStrKernel.numStrFormatSpec"))
+
 	return err
 }
 
@@ -327,6 +333,12 @@ func (numStrKernelNanobot *numberStrKernelNanobot) copyOut(
 
 	deepCopyNumStrKernel.isNonZeroValue =
 		numStrKernel.isNonZeroValue
+
+	err = deepCopyNumStrKernel.numStrFormatSpec.CopyIn(
+		&numStrKernel.numStrFormatSpec,
+		ePrefix.XCpy(
+			"deepCopyNumStrKernel<-"+
+				"numStrKernel.numStrFormatSpec"))
 
 	return deepCopyNumStrKernel, err
 }
