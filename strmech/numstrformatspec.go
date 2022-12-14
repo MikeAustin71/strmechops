@@ -1736,6 +1736,187 @@ func (numStrFmtSpec *NumStrFormatSpec) GetZeroNumSymSpec(
 			"<-numStrFmtSpec.zeroNumberSign"))
 }
 
+//	IsValidInstance
+//
+//	Performs a diagnostic review of the data values
+//	encapsulated in the current NumStrFormatSpec
+//	instance to determine if they are valid.
+//
+//	If any data element evaluates as invalid, this
+//	method will return a boolean value of 'false'.
+//
+//	If all data elements are determined to be valid,
+//	this method returns a boolean value of 'true'.
+//
+//	This method is functionally equivalent to
+//	NumStrFormatSpec.IsValidInstanceError() with
+//	the sole exceptions being that this method takes
+//	no input parameters and returns a boolean value.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	-- NONE --
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	bool
+//
+//		If any of the internal member data variables contained
+//		in the current instance of DecimalSeparatorSpec are
+//		found to be invalid, this method will return a boolean
+//		value of 'false'.
+//
+//	     If all internal member data variables contained in the
+//	     current instance of DecimalSeparatorSpec are found to be
+//	     valid, this method returns a boolean value of 'true'.
+func (numStrFmtSpec *NumStrFormatSpec) IsValidInstance() bool {
+
+	if numStrFmtSpec.lock == nil {
+		numStrFmtSpec.lock = new(sync.Mutex)
+	}
+
+	numStrFmtSpec.lock.Lock()
+
+	defer numStrFmtSpec.lock.Unlock()
+
+	isValid,
+		_ := new(numStrFmtSpecAtom).
+		testValidityNumStrFormatSpec(
+			numStrFmtSpec,
+			nil)
+
+	return isValid
+}
+
+// IsValidInstanceError
+//
+//	Performs a diagnostic review of the data values
+//	encapsulated in the current NumStrFormatSpec
+//	instance to determine if they are valid.
+//
+//	If any data element evaluates as invalid, this
+//	method will return an error.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If any of the internal member data variables
+//		contained in the current instance of
+//		NumStrFormatSpec are found to be invalid, this
+//		method will return an error.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (numStrFmtSpec *NumStrFormatSpec) IsValidInstanceError(
+	errorPrefix interface{}) error {
+
+	if numStrFmtSpec.lock == nil {
+		numStrFmtSpec.lock = new(sync.Mutex)
+	}
+
+	numStrFmtSpec.lock.Lock()
+
+	defer numStrFmtSpec.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumStrFormatSpec."+
+			"IsValidInstanceError()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	_,
+		err = new(numStrFmtSpecAtom).
+		testValidityNumStrFormatSpec(
+			numStrFmtSpec,
+			ePrefix.XCpy(
+				"numStrFmtSpec"))
+
+	return err
+}
+
 //	NewCountryCurrencyNumFormat
 //
 //	Creates and returns a new, fully populated instance
@@ -16905,4 +17086,139 @@ func (numStrFmtSpecAtom *numStrFmtSpecAtom) setZeroNumberSignSpec(
 					"zeroNumberSign"))
 
 	return err
+}
+
+//	testValidityNumStrFormatSpec
+//
+//	Performs a diagnostic review of the data values
+//	encapsulated in an instance of NumStrFormatSpec
+//	to determine if they are valid.
+//
+//	If any data element evaluates as invalid, this
+//	method will return an error.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	numberStrFmtSpec			*NumStrFormatSpec
+//
+//		A pointer to an instance of NumStrFormatSpec.
+//		All member variable data values contained in
+//		this instance will be reviewed to determine if
+//		they are valid.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	isValid						bool
+//
+//		If any of the internal member data variables
+//		contained in 'numberStrFmtSpec' are found to be
+//		invalid, this method will return a boolean value
+//		of 'false'.
+//
+//		If all internal member data variables contained
+//		in 'numberStrFmtSpec' are found to be valid, this
+//		method returns a boolean value of 'true'.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (numStrFmtSpecAtom *numStrFmtSpecAtom) testValidityNumStrFormatSpec(
+	numberStrFmtSpec *NumStrFormatSpec,
+	errPrefDto *ePref.ErrPrefixDto) (
+	isValid bool,
+	err error) {
+
+	if numStrFmtSpecAtom.lock == nil {
+		numStrFmtSpecAtom.lock = new(sync.Mutex)
+	}
+
+	numStrFmtSpecAtom.lock.Lock()
+
+	defer numStrFmtSpecAtom.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	isValid = false
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"numStrFmtSpecAtom."+
+			"testValidityNumStrFormatSpec()",
+		"")
+
+	if err != nil {
+		return isValid, err
+	}
+
+	if numberStrFmtSpec == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'numberStrFmtSpec' is invalid!\n"+
+			"'numberStrFmtSpec' is a 'nil' pointer.\n",
+			ePrefix.String())
+
+		return isValid, err
+	}
+
+	err = numberStrFmtSpec.decSeparator.
+		IsValidInstanceError(
+			ePrefix.XCpy(
+				"numberStrFmtSpec.decSeparator"))
+
+	if err != nil {
+		return isValid, err
+	}
+
+	err = numberStrFmtSpec.intSeparatorSpec.
+		IsValidInstanceError(
+			ePrefix.XCpy(
+				"numberStrFmtSpec.intSeparatorSpec"))
+
+	if err != nil {
+		return isValid, err
+	}
+
+	if numberStrFmtSpec.numberSymbolsSpec.IsNOP() {
+
+		err = fmt.Errorf("%v\n"+
+			"'numberStrFmtSpec.numberSymbolsSpec' is not configured.\n"+
+			"'numberStrFmtSpec.numberSymbolsSpec' is NOP, Not Operational.\n",
+			ePrefix.String())
+
+		return isValid, err
+
+	}
+
+	isValid = true
+
+	return isValid, err
 }
