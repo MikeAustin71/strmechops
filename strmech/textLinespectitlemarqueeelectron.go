@@ -60,20 +60,30 @@ func (txtLineTitleMarqueeElectron *textLineSpecTitleMarqueeElectron) empty(
 		return
 	}
 
-	txtLineTitleMarquee.leadingMarqueeLines.Empty()
+	txtLinesColAtom := textLineSpecLinesCollectionAtom{}
 
-	txtLineTitleMarquee.titleLines.Empty()
+	txtLinesColAtom.
+		emptyCollection(
+			&txtLineTitleMarquee.leadingMarqueeLines)
 
-	txtLineTitleMarquee.trailingMarqueeLines.Empty()
+	txtLinesColAtom.
+		emptyCollection(
+			&txtLineTitleMarquee.titleLines)
+
+	txtLinesColAtom.
+		emptyCollection(
+			&txtLineTitleMarquee.trailingMarqueeLines)
 
 	txtLineTitleMarquee.textLineReader = nil
 
 	return
 }
 
-// emptyLeadingMarqueeLines
+// emptyOneMarqueeLinesCollection
 //
-// The type TextLineSpecTitleMarquee encapsulates three types
+// Empties or deletes a single Marquee Lines Collection.
+//
+// Type TextLineSpecTitleMarquee encapsulates three types
 // of text lines used in generating title marquees:
 //
 //  1. Leading Marquee Lines
@@ -88,9 +98,11 @@ func (txtLineTitleMarqueeElectron *textLineSpecTitleMarqueeElectron) empty(
 //     Usually consists of trailing blank lines
 //     and solid lines.
 //
-//     This method will delete all Leading Marquee Lines.
-//     The internal member variable to be deleted is:
-//     TextLineSpecTitleMarquee.leadingMarqueeLines
+// This method will delete all Leading Marquee Lines
+// member elements in one of the three collections
+// detailed above. The specific collection to be
+// deleted is designated by input parameter
+// titleMarqueeLineType.
 //
 // ----------------------------------------------------------------
 //
@@ -99,18 +111,71 @@ func (txtLineTitleMarqueeElectron *textLineSpecTitleMarqueeElectron) empty(
 //	txtLineTitleMarquee			*TextLineSpecTitleMarquee
 //
 //		A pointer to an instance of
-//		TextLineSpecTitleMarquee. All Leading Marquee
-//		Lines in the internal member variable
-//		'txtLineTitleMarquee.leadingMarqueeLines' will be
-//		deleted.
+//		TextLineSpecTitleMarquee. All member elements in
+//		one of the three Marquee Text Lines Collections
+//		will be deleted form this instance of
+//		TextLineSpecTitleMarquee. The specific Marquee
+//	 	Text Lines Collection to deleted is designated by
+//		input parameter 'titleMarqueeLineType'.
+//
+//	titleMarqueeLineType		TextTileLineType
+//
+//		Type TextTileLineType is an enumeration of
+//		Title Marquee Text Line Types. This parameter
+//		determines which text line collection will
+//		be deleted.
+//
+//		If this parameter is not set to one of the
+//		following valid values, an error will be
+//		returned.
+//
+//		Formal TextTileLineType Syntax
+//
+//			TextTileLineType(0).LeadingMarqueeLine()
+//			TextTileLineType(0).TitleLine()
+//			TextTileLineType(0).TrailingMarqueeLine()
+//
+//		Abbreviated TextTileLineType Syntax
+//
+//			TitleLineType.LeadingMarqueeLine()
+//			TitleLineType.TitleLine()
+//			TitleLineTypeTrailingMarqueeLine()
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // # Return Values
 //
-//	NONE
-func (txtLineTitleMarqueeElectron *textLineSpecTitleMarqueeElectron) emptyLeadingMarqueeLines(
-	txtLineTitleMarquee *TextLineSpecTitleMarquee) {
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (txtLineTitleMarqueeElectron *textLineSpecTitleMarqueeElectron) emptyOneMarqueeLinesCollection(
+	txtLineTitleMarquee *TextLineSpecTitleMarquee,
+	titleMarqueeLineType TextTileLineType,
+	errPrefDto *ePref.ErrPrefixDto) error {
 
 	if txtLineTitleMarqueeElectron.lock == nil {
 		txtLineTitleMarqueeElectron.lock = new(sync.Mutex)
@@ -120,113 +185,54 @@ func (txtLineTitleMarqueeElectron *textLineSpecTitleMarqueeElectron) emptyLeadin
 
 	defer txtLineTitleMarqueeElectron.lock.Unlock()
 
-	txtLineTitleMarquee.leadingMarqueeLines.Empty()
+	var ePrefix *ePref.ErrPrefixDto
 
-}
+	var err error
 
-// emptyTitleLines
-//
-// The type TextLineSpecTitleMarquee encapsulates three types
-// of text lines used in generating title marquees:
-//
-//  1. Leading Marquee Lines
-//     Usually consists of leading blank lines
-//     and solid lines.
-//
-//  2. Title Lines
-//     Consists entirely of text strings functioning
-//     as the main title lines.
-//
-//  3. Trailing Marquee Lines
-//     Usually consists of trailing blank lines
-//     and solid lines.
-//
-//     This method will delete all Title Lines. The internal
-//     member variable to be deleted is:
-//     txtLineTitleMarquee.titleLines
-//
-// ----------------------------------------------------------------
-//
-// # Input Parameters
-//
-//	txtLineTitleMarquee			*TextLineSpecTitleMarquee
-//
-//		A pointer to an instance of
-//		TextLineSpecTitleMarquee. All Title Lines in the
-//		internal member variable
-//		'txtLineTitleMarquee.titleLines' will be deleted.
-//
-// ----------------------------------------------------------------
-//
-// # Return Values
-//
-//	NONE
-func (txtLineTitleMarqueeElectron *textLineSpecTitleMarqueeElectron) emptyTitleLines(
-	txtLineTitleMarquee *TextLineSpecTitleMarquee) {
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"txtLineTitleMarqueeElectron."+
+			"emptyOneMarqueeLinesCollection()",
+		"")
 
-	if txtLineTitleMarqueeElectron.lock == nil {
-		txtLineTitleMarqueeElectron.lock = new(sync.Mutex)
+	if err != nil {
+		return err
 	}
 
-	txtLineTitleMarqueeElectron.lock.Lock()
+	var txtLineCollection *TextLineSpecLinesCollection
 
-	defer txtLineTitleMarqueeElectron.lock.Unlock()
+	switch titleMarqueeLineType {
 
-	txtLineTitleMarquee.titleLines.Empty()
+	case TitleLineType.LeadingMarqueeLine():
 
-}
+		txtLineCollection = &txtLineTitleMarquee.leadingMarqueeLines
 
-// emptyTrailingMarqueeLines
-//
-// The type TextLineSpecTitleMarquee encapsulates three types
-// of text lines used in generating title marquees:
-//
-//  1. Leading Marquee Lines
-//     Usually consists of leading blank lines
-//     and solid lines.
-//
-//  2. Title Lines
-//     Consists entirely of text strings functioning
-//     as the main title lines.
-//
-//  3. Trailing Marquee Lines
-//     Usually consists of trailing blank lines
-//     and solid lines.
-//
-//     This method will delete all Trailing Marquee Lines. The
-//     internal member variable to be deleted is:
-//     txtLineTitleMarquee.trailingMarqueeLines
-//
-// ----------------------------------------------------------------
-//
-// # Input Parameters
-//
-//	txtLineTitleMarquee			*TextLineSpecTitleMarquee
-//
-//		A pointer to an instance of
-//		TextLineSpecTitleMarquee. All Trailing Marquee
-//		Lines in the internal member variable
-//		'txtLineTitleMarquee.trailingMarqueeLines' will be
-//		deleted.
-//
-// ----------------------------------------------------------------
-//
-// # Return Values
-//
-//	NONE
-func (txtLineTitleMarqueeElectron *textLineSpecTitleMarqueeElectron) emptyTrailingMarqueeLines(
-	txtLineTitleMarquee *TextLineSpecTitleMarquee) {
+	case TitleLineType.TitleLine():
 
-	if txtLineTitleMarqueeElectron.lock == nil {
-		txtLineTitleMarqueeElectron.lock = new(sync.Mutex)
+		txtLineCollection = &txtLineTitleMarquee.titleLines
+
+	case TitleLineType.TrailingMarqueeLine():
+
+		txtLineCollection = &txtLineTitleMarquee.trailingMarqueeLines
+
+	default:
+
+		err := fmt.Errorf("%v\n"+
+			"Error: Input parameter 'titleMarqueeLineType' is invalid!\n"+
+			" titleMarqueeLineType string value = '%v'\n"+
+			"titleMarqueeLineType integer value = '%v'\n",
+			ePrefix.String(),
+			titleMarqueeLineType.String(),
+			titleMarqueeLineType.XValueInt())
+
+		return err
 	}
 
-	txtLineTitleMarqueeElectron.lock.Lock()
+	new(textLineSpecLinesCollectionAtom).
+		emptyCollection(txtLineCollection)
 
-	defer txtLineTitleMarqueeElectron.lock.Unlock()
-
-	txtLineTitleMarquee.trailingMarqueeLines.Empty()
-
+	return err
 }
 
 // equal

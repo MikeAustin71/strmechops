@@ -16,7 +16,7 @@ type textSpecificationAtom struct {
 // convertParamEmptyInterfaceToString
 //
 // Receives an object styled as an empty interface and
-// attempts to convert it to a string.
+// attempts to convert that object to a string.
 //
 // ----------------------------------------------------------------
 //
@@ -40,7 +40,9 @@ type textSpecificationAtom struct {
 //			uint, uint8, uint16, uint32, uint64,
 //			int, int8, int16, int32, int64
 //			float32, float64
-//			*big.Int *big.Float
+//			*big.Int, big.Int
+//			*big.Float, big.Float
+//			*big.Rat, big.Rat
 //			fmt.Stringer (types that support this interface)
 //			TextInputParamFieldDateTimeDto
 //	               (Converts date time to string)
@@ -110,6 +112,10 @@ func (txtSpecAtom *textSpecificationAtom) convertParamEmptyInterfaceToString(
 	var iStringer fmt.Stringer
 	var dateTimeInputDto TextInputParamFieldDateTimeDto
 	var dateTimeValue time.Time
+	var bFloat big.Float
+	var bFloatPtr *big.Float
+	var bInt big.Int
+	var bIntPtr *big.Int
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
@@ -124,6 +130,16 @@ func (txtSpecAtom *textSpecificationAtom) convertParamEmptyInterfaceToString(
 
 	if len(emptyIFaceParamName) == 0 {
 		emptyIFaceParamName = "emptyIFace"
+	}
+
+	if emptyIFace == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'emptyIFace' is INVALID!\n"+
+			"'emptyIFace' is a nil pointer.\n",
+			ePrefix.String())
+
+		return convertedString, err
 	}
 
 	defaultDateTimeFormat =
@@ -172,15 +188,132 @@ func (txtSpecAtom *textSpecificationAtom) convertParamEmptyInterfaceToString(
 
 		goto standardConversion
 
+	case big.Int:
+
+		bInt,
+			ok = emptyIFace.(big.Int)
+
+		if !ok {
+
+			err = fmt.Errorf("%v\n"+
+				"Error: Failed to convert empty interface\n"+
+				"to big.Int value!\n"+
+				"String Conversion Error.\n",
+				ePrefix.String())
+
+			return convertedString, err
+		}
+
+		convertedString = bInt.Text(10)
+
+		return convertedString, err
+
 	case *big.Int:
 
-		goto standardConversion
+		bIntPtr,
+			ok = emptyIFace.(*big.Int)
+
+		if !ok {
+
+			err = fmt.Errorf("%v\n"+
+				"Error: Failed to convert empty interface\n"+
+				"to *big.Int value!\n"+
+				"String Conversion Error.\n",
+				ePrefix.String())
+
+			return convertedString, err
+		}
+
+		convertedString = bIntPtr.Text(10)
+
+		return convertedString, err
+
+	case big.Float:
+
+		bFloat,
+			ok = emptyIFace.(big.Float)
+
+		if !ok {
+
+			err = fmt.Errorf("%v\n"+
+				"Error: Failed to convert empty interface\n"+
+				"to big.Float value!\n"+
+				"String Conversion Error.\n",
+				ePrefix.String())
+
+			return convertedString, err
+		}
+
+		convertedString = bFloat.Text('f', -1)
+
+		return convertedString, err
 
 	case *big.Float:
 
-		goto standardConversion
+		bFloatPtr,
+			ok = emptyIFace.(*big.Float)
+
+		if !ok {
+
+			err = fmt.Errorf("%v\n"+
+				"Error: Failed to convert empty interface\n"+
+				"to *big.Float value!\n"+
+				"String Conversion Error.\n",
+				ePrefix.String())
+
+			return convertedString, err
+		}
+
+		convertedString = bFloatPtr.Text('f', -1)
+
+		return convertedString, err
+
+	case big.Rat:
+
+		var bRat big.Rat
+
+		bRat,
+			ok = emptyIFace.(big.Rat)
+
+		if !ok {
+
+			err = fmt.Errorf("%v\n"+
+				"Error: Failed to convert empty interface\n"+
+				"to big.Rat value!\n"+
+				"String Conversion Error.\n",
+				ePrefix.String())
+
+			return convertedString, err
+		}
+
+		convertedString = bRat.String()
+
+		return convertedString, err
+
+	case *big.Rat:
+
+		var bRatPtr *big.Rat
+
+		bRatPtr,
+			ok = emptyIFace.(*big.Rat)
+
+		if !ok {
+
+			err = fmt.Errorf("%v\n"+
+				"Error: Failed to convert empty interface\n"+
+				"to *big.Rat value!\n"+
+				"String Conversion Error.\n",
+				ePrefix.String())
+
+			return convertedString, err
+		}
+
+		convertedString = bRatPtr.String()
+
+		return convertedString, err
 
 	case fmt.Stringer:
+
 		goto stringerConversion
 
 	case string:

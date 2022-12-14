@@ -1159,9 +1159,19 @@ func (txtLineTitleMarqueeDto *TextLineTitleMarqueeDto) AddTitleLineLabel(
 //
 // Each ITextFieldFormatDto passed to this method will
 // constitute a separate text field used to create a
-// text title line which will then be added to the
-// text title line collection for the current instance
-// of TextLineTitleMarqueeDto.
+// single text title line which will then be added to
+// the Text Title Line Collection for the current
+// instance of TextLineTitleMarqueeDto.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	Only one (1) title line will be created and added
+//	to the Text Title Line Collections. The
+//	ITextFieldFormatDto objects passed to this method
+//	represent one or more text fields which will be
+//	consolidated to form one line of text.
 //
 // ----------------------------------------------------------------
 //
@@ -1890,6 +1900,9 @@ func (txtLineTitleMarqueeDto *TextLineTitleMarqueeDto) AddTitleLineStrArrayDto(
 // Adds one or more strings to the Title Line Collection
 // maintained by the current instance of
 // TextLineTitleMarqueeDto.
+//
+// A separate title line will be created for each string
+// passed through input parameter 'titleLineStrings'.
 //
 // This method applies the Standard Left Margin, Right
 // Margin, Field Length and Field Justification values

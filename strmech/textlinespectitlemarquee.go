@@ -1055,6 +1055,205 @@ func (txtLineSpecTitleMarquee *TextLineSpecTitleMarquee) AddStdLineColumns(
 	return err
 }
 
+// AddTitleLines
+//
+// Receives one or more objects styled as an empty
+// interface and attempts to convert that object to
+// a string. If successful, the converted string is
+// used to construct a separate line of text which
+// will be added the Title Lines Collection maintained by
+// the current instance of TextLineSpecTitleMarquee.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	leftMarginStr				string
+//
+//		One or more characters used to create a left
+//		margin which will be applied to all Title Lines
+//		produced by this method and added to the Title
+//		Lines Collection maintained by the current
+//		instance of TextLineSpecTitleMarquee.
+//
+//		If this parameter is set to an empty string, no
+//		left margin will be configured for Title Lines
+//		produced by this method.
+//
+//	rightMarginStr				string
+//
+//		One or more characters used to create a left
+//		margin which will be applied to all Title Lines
+//		produced by this method and added to the Title
+//		Lines Collection maintained by the current
+//		instance of TextLineSpecTitleMarquee.
+//
+//		If this parameter is set to an empty string, no
+//		left margin will be configured for Title Lines
+//		produced by this method.
+//
+//	fieldLength					int
+//
+//
+//	fieldJustification			TextJustify
+//
+//
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (txtLineSpecTitleMarquee *TextLineSpecTitleMarquee) AddTitleLines(
+	leftMarginStr string,
+	rightMarginStr string,
+	fieldLength int,
+	fieldJustification TextJustify,
+	errorPrefix interface{},
+	titleLines ...interface{}) error {
+
+	if txtLineSpecTitleMarquee.lock == nil {
+		txtLineSpecTitleMarquee.lock = new(sync.Mutex)
+	}
+
+	txtLineSpecTitleMarquee.lock.Lock()
+
+	defer txtLineSpecTitleMarquee.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecTitleMarquee."+
+			"AddTitleLines()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if len(titleLines) == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'titleLines' is INVALID!\n"+
+			"'titleLines' are empty and have a zero (0) length.\n",
+			ePrefix.String())
+
+		return err
+
+	}
+
+	txtLabelDto := TextFieldFormatDtoLabel{
+		LeftMarginStr:  leftMarginStr,
+		FieldContents:  nil,
+		FieldLength:    fieldLength,
+		FieldJustify:   fieldJustification,
+		RightMarginStr: rightMarginStr,
+	}
+
+	for idx, titleLineObj := range titleLines {
+
+		txtLabelDto.FieldContents = titleLineObj
+
+		err = txtLabelDto.IsValidInstanceError(
+			ePrefix.XCpy(
+				fmt.Sprintf("txtLabelDto[%v]",
+					idx)))
+
+		if err != nil {
+			return err
+		}
+
+		err = txtLineSpecTitleMarquee.titleLines.
+			AddStdLineColumns(
+				"\n",
+				false,
+				ePrefix.XCpy(
+					fmt.Sprintf(
+						"txtLineSpecTitleMarquee.titleLines<-"+
+							"txtLabelDto[%v]",
+						idx)))
+
+		if err != nil {
+			return err
+		}
+	}
+
+	return err
+}
+
 // CopyIn
 //
 //	Copies the data fields from an incoming instance of
@@ -1657,8 +1856,9 @@ func (txtLineSpecTitleMarquee *TextLineSpecTitleMarquee) Empty() {
 //     Usually consists of trailing blank lines
 //     and solid lines.
 //
-// This method will delete all Leading Marquee Lines in
-// the current instance of TextLineSpecTitleMarquee.
+// This method will delete all Leading Marquee Lines
+// member elements in the current instance of
+// TextLineSpecTitleMarquee.
 //
 // The internal member variable to be deleted is:
 //
@@ -1685,8 +1885,11 @@ func (txtLineSpecTitleMarquee *TextLineSpecTitleMarquee) EmptyLeadingMarqueeLine
 
 	defer txtLineSpecTitleMarquee.lock.Unlock()
 
-	new(textLineSpecTitleMarqueeElectron).
-		emptyLeadingMarqueeLines(txtLineSpecTitleMarquee)
+	_ = new(textLineSpecTitleMarqueeElectron).
+		emptyOneMarqueeLinesCollection(
+			txtLineSpecTitleMarquee,
+			TitleLineType.LeadingMarqueeLine(),
+			nil)
 
 	return
 }
@@ -1734,8 +1937,11 @@ func (txtLineSpecTitleMarquee *TextLineSpecTitleMarquee) EmptyTitleLines() {
 
 	defer txtLineSpecTitleMarquee.lock.Unlock()
 
-	new(textLineSpecTitleMarqueeElectron).
-		emptyTitleLines(txtLineSpecTitleMarquee)
+	_ = new(textLineSpecTitleMarqueeElectron).
+		emptyOneMarqueeLinesCollection(
+			txtLineSpecTitleMarquee,
+			TitleLineType.TitleLine(),
+			nil)
 
 	return
 }
@@ -1785,8 +1991,11 @@ func (txtLineSpecTitleMarquee *TextLineSpecTitleMarquee) EmptyTrailingMarqueeLin
 
 	defer txtLineSpecTitleMarquee.lock.Unlock()
 
-	new(textLineSpecTitleMarqueeElectron).
-		emptyTrailingMarqueeLines(txtLineSpecTitleMarquee)
+	_ = new(textLineSpecTitleMarqueeElectron).
+		emptyOneMarqueeLinesCollection(
+			txtLineSpecTitleMarquee,
+			TitleLineType.TrailingMarqueeLine(),
+			nil)
 
 	return
 }
