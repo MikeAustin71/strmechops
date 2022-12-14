@@ -53,6 +53,12 @@ type NumberStrKernel struct {
 	// or less than zero ('0'). If 'false', the
 	// Numeric Value is equal to zero.
 
+	numStrFormatSpec NumStrFormatSpec
+	// The default Number String format. If
+	// this format is found to be empty or
+	// invalid, the United States Signed Number
+	// String Format will be used.
+
 	lock *sync.Mutex
 }
 
@@ -3262,8 +3268,11 @@ func (numStrKernel *NumberStrKernel) FmtCurrencyNumStrFrance(
 	numStrKernel.lock.Lock()
 
 	defer numStrKernel.lock.Unlock()
+
 	var ePrefix *ePref.ErrPrefixDto
+
 	var err error
+
 	var numStr string
 
 	ePrefix,
@@ -11815,6 +11824,86 @@ func (numStrKernel *NumberStrKernel) GetIntegerString() string {
 	return numStrKernel.integerDigits.GetCharacterString()
 }
 
+// GetInternalParameterDiagnostics
+//
+// Returns formatted text output detailing the
+// NumberStrKernel member variable names and their
+// corresponding values contained in the current instance
+// of NumberStrKernel.
+//
+// If an error is encountered, the error message is
+// included in the string returned by this method.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	NONE
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//
+//		Returns a formatted text string detailing all the
+//		internal member variable names and their
+//		corresponding values for the current instance of
+//		NumberStrKernel.
+func (numStrKernel *NumberStrKernel) GetInternalParameterDiagnostics() string {
+
+	if numStrKernel.lock == nil {
+		numStrKernel.lock = new(sync.Mutex)
+	}
+
+	numStrKernel.lock.Lock()
+
+	defer numStrKernel.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		nil,
+		"NumberStrKernel."+
+			"GetInternalParameterDiagnostics()",
+		"")
+
+	if err != nil {
+		errOut := fmt.Sprintf("%v\n"+
+			"Error Message:\n"+
+			"%v",
+			"NumberStrKernel."+
+				"GetInternalParameterDiagnostics()",
+			err.Error())
+
+		return errOut
+	}
+
+	strBuilder := strings.Builder{}
+
+	err = new(numberStrKernelNanobot).
+		getParameterTextListing(
+			&strBuilder,
+			false,
+			numStrKernel,
+			ePrefix.XCpy(
+				"numStrKernel"))
+
+	if err != nil {
+		errOut := fmt.Sprintf("%v\n"+
+			"Error Message:\n"+
+			"%v",
+			ePrefix.String(),
+			err.Error())
+
+		return errOut
+	}
+
+	return strBuilder.String()
+}
+
 //	GetIsNonZeroValue
 //
 //	Returns a boolean value signaling whether the
@@ -16188,6 +16277,151 @@ func (numStrKernel *NumberStrKernel) Round(
 		ePrefix)
 }
 
+// SetDefaultNumberStrFormatSpec
+//
+// Sets the default Number String Format to be applied in
+// formatting the number string for screen display,
+// file output or printing.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	defaultNumStrFmt			NumStrFormatSpec
+//
+//		An instance of Number String Format Specification
+//		('NumStrFormatSpec').
+//
+//		A deep copy of this instance will be stored in the
+//		current instance of NumberStrKernel. This format
+//		specification will be used to format the number
+//		string for screen displays, file output or
+//		printing.
+//
+//		If 'defaultNumStrFmt' is found to be invalid, an
+//		error will be returned.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (numStrKernel *NumberStrKernel) SetDefaultNumberStrFormatSpec(
+	defaultNumStrFmt NumStrFormatSpec,
+	errorPrefix interface{}) error {
+
+	if numStrKernel.lock == nil {
+		numStrKernel.lock = new(sync.Mutex)
+	}
+
+	numStrKernel.lock.Lock()
+
+	defer numStrKernel.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumberStrKernel."+
+			"SetDefaultNumberStrFormatSpec()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	_,
+		err = new(numStrFmtSpecAtom).
+		testValidityNumStrFormatSpec(
+			&defaultNumStrFmt,
+			ePrefix.XCpy(
+				"defaultNumStrFmt invalid!"))
+
+	if err != nil {
+		return err
+	}
+
+	err = numStrKernel.numStrFormatSpec.CopyIn(
+		&defaultNumStrFmt,
+		ePrefix.XCpy(
+			"numStrKernel.numStrFormatSpec<-defaultNumStrFmt"))
+
+	return err
+}
+
 //	SetFloatValue
 //
 //	Deletes resets the internal values for the current
@@ -17257,9 +17491,16 @@ func (numStrKernel *NumberStrKernel) SetUnsignedIntValue(
 	return err
 }
 
-// String - Returns a formatted text string detailing all the
-// internal member variable names and their corresponding values
-// for the current instance of NumberStrKernel.
+// String
+//
+// Returns a formatted number string using the numeric
+// value and the default Number String Format
+// Specification provided by the current instance of
+// NumberStrKernel.
+//
+// If the default Number String Format is invalid,
+// the US Number String format will be automatically
+// applied.
 //
 // If an error is encountered, the error message is included in the
 // string returned by this method.
@@ -17277,43 +17518,94 @@ func (numStrKernel NumberStrKernel) String() string {
 
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
+	var errOut string
+
+	funcName := "NumberStrKernel.String()"
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		nil,
-		"CharSearchNegativeNumberResultsDto."+
-			"String()",
+		funcName,
 		"")
 
 	if err != nil {
-		errOut := fmt.Sprintf("%v\n"+
+		errOut = fmt.Sprintf("%v\n"+
 			"Error Message:\n"+
 			"%v",
-			"CharSearchNegativeNumberResultsDto.String()",
+			funcName,
 			err.Error())
 
 		return errOut
 	}
 
-	strBuilder := strings.Builder{}
+	var tempNumStrFormatSpec NumStrFormatSpec
 
-	err = new(numberStrKernelNanobot).
-		getParameterTextListing(
-			&strBuilder,
-			false,
-			&numStrKernel,
+	numberFieldSpec := NumStrNumberFieldSpec{
+		fieldLength:        -1,
+		fieldJustification: TxtJustify.Right(),
+	}
+
+	if !numStrKernel.numStrFormatSpec.IsValidInstance() {
+
+		tempNumStrFormatSpec,
+			err = new(NumStrFormatSpec).NewCurrencyNumFmtUS(
+			numberFieldSpec,
 			ePrefix.XCpy(
-				"numStrKernel"))
+				"tempNumStrFormatSpec<-"))
 
-	if err != nil {
-		errOut := fmt.Sprintf("%v\n"+
-			"Error Message:\n"+
-			"%v",
-			ePrefix.String(),
-			err.Error())
+		if err != nil {
 
-		return errOut
+			errOut = fmt.Sprintf("%v\n"+
+				"Error Message:\n"+
+				"%v",
+				funcName,
+				err.Error())
+
+			return errOut
+		}
+
+	} else {
+
+		err = tempNumStrFormatSpec.CopyIn(
+			&numStrKernel.numStrFormatSpec,
+			ePrefix)
+
+		if err != nil {
+
+			errOut = fmt.Sprintf("%v\n"+
+				"Error Message:\n"+
+				"%v",
+				funcName,
+				err.Error())
+
+			return errOut
+		}
+
+		tempNumStrFormatSpec.numberFieldSpec.
+			fieldLength = -1
+
+		tempNumStrFormatSpec.numberFieldSpec.
+			fieldJustification = TxtJustify.Right()
+
 	}
 
-	return strBuilder.String()
+	var roundingSpec NumStrRoundingSpec
+
+	roundingSpec,
+		err = new(NumStrRoundingSpec).
+		NewRoundingSpec(
+			NumRoundType.NoRounding(),
+			0,
+			ePrefix.XCpy("roundingSpec"))
+
+	var numStr string
+
+	numStr,
+		err = new(numberStrKernelMolecule).formatNumStr(
+		&numStrKernel,
+		tempNumStrFormatSpec,
+		roundingSpec,
+		ePrefix.XCpy("numStrKernel"))
+
+	return numStr
 }
