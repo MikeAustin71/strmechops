@@ -10,7 +10,6 @@ import (
 
 // charSearchTargetInputParametersDtoNanobot - Provides helper methods for type
 // CharSearchTargetInputParametersDto.
-//
 type charSearchTargetInputParametersDtoNanobot struct {
 	lock *sync.Mutex
 }
@@ -20,7 +19,7 @@ type charSearchTargetInputParametersDtoNanobot struct {
 // 'destinationTargetInputParms'. Both instances are of type
 // CharSearchTargetInputParametersDto.
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // -----------------------------------------------------------------
 //
@@ -29,61 +28,58 @@ type charSearchTargetInputParametersDtoNanobot struct {
 //
 // Also, NO validation is performed on 'sourceTargetInputParms'.
 //
-//
 // -----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  destinationTargetInputParms     *CharSearchTargetInputParametersDto
-//     - A pointer to a CharSearchTargetInputParametersDto instance.
-//       All the member variable data fields in this object will be
-//       replaced by data values copied from input parameter
-//       'sourceTargetInputParms'.
+//	destinationTargetInputParms     *CharSearchTargetInputParametersDto
+//	   - A pointer to a CharSearchTargetInputParametersDto instance.
+//	     All the member variable data fields in this object will be
+//	     replaced by data values copied from input parameter
+//	     'sourceTargetInputParms'.
 //
-//       'destinationTargetInputParms' is the destination for this
-//       copy operation.
-//
-//
-//  sourceTargetInputParms          *CharSearchTargetInputParametersDto
-//     - A pointer to another CharSearchTargetInputParametersDto
-//       instance. All the member variable data values from this
-//       object will be copied to corresponding member variables in
-//       'destinationTargetInputParms'.
-//
-//       'sourceTargetInputParms' is the source for this copy
-//       operation.
-//
-//       No data validation is performed on
-//       'sourceTargetInputParms'.
+//	     'destinationTargetInputParms' is the destination for this
+//	     copy operation.
 //
 //
-//  errPrefDto          *ePref.ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//	sourceTargetInputParms          *CharSearchTargetInputParametersDto
+//	   - A pointer to another CharSearchTargetInputParametersDto
+//	     instance. All the member variable data values from this
+//	     object will be copied to corresponding member variables in
+//	     'destinationTargetInputParms'.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     'sourceTargetInputParms' is the source for this copy
+//	     operation.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
+//	     No data validation is performed on
+//	     'sourceTargetInputParms'.
 //
+//
+//	errPrefDto          *ePref.ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods listed
+//	     as a function chain.
+//
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
+//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If this method completes successfully, this returned error
-//       Type is set equal to 'nil'. If errors are encountered during
-//       processing, the returned error Type will encapsulate an error
-//       message.
+//	error
+//	   - If this method completes successfully, this returned error
+//	     Type is set equal to 'nil'. If errors are encountered during
+//	     processing, the returned error Type will encapsulate an error
+//	     message.
 //
-//       If an error message is returned, the text value for input
-//       parameter 'errPrefDto' (error prefix) will be prefixed or
-//       attached at the beginning of the error message.
-//
+//	     If an error message is returned, the text value for input
+//	     parameter 'errPrefDto' (error prefix) will be prefixed or
+//	     attached at the beginning of the error message.
 func (searchTargetInputParmsNanobot *charSearchTargetInputParametersDtoNanobot) copyIn(
 	destinationTargetInputParms *CharSearchTargetInputParametersDto,
 	sourceTargetInputParms *CharSearchTargetInputParametersDto,
@@ -220,8 +216,7 @@ func (searchTargetInputParmsNanobot *charSearchTargetInputParametersDtoNanobot) 
 //
 // ----------------------------------------------------------------
 //
-// IMPORTANT
-//
+// # IMPORTANT
 //
 // NO validation is performed on 'targetInputParms'.
 //
@@ -229,47 +224,45 @@ func (searchTargetInputParmsNanobot *charSearchTargetInputParametersDtoNanobot) 
 //
 // Input Parameters
 //
-//  targetInputParms                *CharSearchTargetInputParametersDto
-//     - A pointer to an instance of CharSearchTargetInputParametersDto. A
-//       deep copy of the internal member variables will be created
-//       and returned in a new instance of CharSearchTargetInputParametersDto.
+//	targetInputParms                *CharSearchTargetInputParametersDto
+//	   - A pointer to an instance of CharSearchTargetInputParametersDto. A
+//	     deep copy of the internal member variables will be created
+//	     and returned in a new instance of CharSearchTargetInputParametersDto.
 //
-//       No data validation is performed on 'targetInputParms'.
+//	     No data validation is performed on 'targetInputParms'.
 //
 //
-//  errPrefDto                      *ePref.ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//	errPrefDto                      *ePref.ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods listed
+//	     as a function chain.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
-//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  deepCopyTargetInputParms        CharSearchTargetInputParametersDto
-//     - If this method completes successfully, a deep copy of
-//       input parameter 'targetInputParms' will be created and
-//       returned in a new instance of CharSearchTargetInputParametersDto.
+//	deepCopyTargetInputParms        CharSearchTargetInputParametersDto
+//	   - If this method completes successfully, a deep copy of
+//	     input parameter 'targetInputParms' will be created and
+//	     returned in a new instance of CharSearchTargetInputParametersDto.
 //
 //
-//  err                             error
-//     - If this method completes successfully, this returned error
-//       Type is set equal to 'nil'. If errors are encountered during
-//       processing, the returned error Type will encapsulate an error
-//       message.
+//	err                             error
+//	   - If this method completes successfully, this returned error
+//	     Type is set equal to 'nil'. If errors are encountered during
+//	     processing, the returned error Type will encapsulate an error
+//	     message.
 //
-//       If an error message is returned, the text value for input
-//       parameter 'errPrefDto' (error prefix) will be prefixed or
-//       attached at the beginning of the error message.
-//
+//	     If an error message is returned, the text value for input
+//	     parameter 'errPrefDto' (error prefix) will be prefixed or
+//	     attached at the beginning of the error message.
 func (searchTargetInputParmsNanobot *charSearchTargetInputParametersDtoNanobot) copyOut(
 	targetInputParms *CharSearchTargetInputParametersDto,
 	errPrefDto *ePref.ErrPrefixDto) (
@@ -394,59 +387,56 @@ func (searchTargetInputParmsNanobot *charSearchTargetInputParametersDtoNanobot) 
 // contained in the 'targetInputParms' instance of
 // CharSearchTargetInputParametersDto.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  targetInputParms           *CharSearchTargetInputParametersDto
-//     - A pointer to an instance of
-//       CharSearchTargetInputParametersDto instance. Formatted
-//       text output will be generated listing the member variable
-//       names and their corresponding values. The formatted text
-//       can then be used for text displays, file output or
-//       printing.
+//	targetInputParms           *CharSearchTargetInputParametersDto
+//	   - A pointer to an instance of
+//	     CharSearchTargetInputParametersDto instance. Formatted
+//	     text output will be generated listing the member variable
+//	     names and their corresponding values. The formatted text
+//	     can then be used for text displays, file output or
+//	     printing.
 //
-//       No data validation is performed on this instance of
-//       CharSearchTargetInputParametersDto.
+//	     No data validation is performed on this instance of
+//	     CharSearchTargetInputParametersDto.
 //
 //
-//  errPrefDto          *ePref.ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//	errPrefDto          *ePref.ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods listed
+//	     as a function chain.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
-//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  strings.Builder
-//     - If this method completes successfully, an instance of
-//       strings.Builder will be returned. This instance contains
-//       the formatted text output listing the member variable
-//       names and their corresponding values for input parameter
-//       'targetInputParms' . This formatted text can them be used
-//       for text displays, file output or printing.
+//	strings.Builder
+//	   - If this method completes successfully, an instance of
+//	     strings.Builder will be returned. This instance contains
+//	     the formatted text output listing the member variable
+//	     names and their corresponding values for input parameter
+//	     'targetInputParms' . This formatted text can them be used
+//	     for text displays, file output or printing.
 //
 //
-//  error
-//     - If this method completes successfully, this returned error
-//       Type is set equal to 'nil'. If errors are encountered during
-//       processing, the returned error Type will encapsulate an error
-//       message.
+//	error
+//	   - If this method completes successfully, this returned error
+//	     Type is set equal to 'nil'. If errors are encountered during
+//	     processing, the returned error Type will encapsulate an error
+//	     message.
 //
-//       If an error message is returned, the text value for input
-//       parameter 'errPrefDto' (error prefix) will be prefixed or
-//       attached at the beginning of the error message.
-//
+//	     If an error message is returned, the text value for input
+//	     parameter 'errPrefDto' (error prefix) will be prefixed or
+//	     attached at the beginning of the error message.
 func (searchTargetInputParmsNanobot charSearchTargetInputParametersDtoNanobot) getParameterTextListing(
 	strBuilder *strings.Builder,
 	targetInputParms *CharSearchTargetInputParametersDto,
@@ -1054,7 +1044,6 @@ func (searchTargetInputParmsNanobot charSearchTargetInputParametersDtoNanobot) g
 
 // ptr - Returns a pointer to a new instance of
 // charSearchTargetInputParametersDtoNanobot.
-//
 func (searchTargetInputParmsNanobot charSearchTargetInputParametersDtoNanobot) ptr() *charSearchTargetInputParametersDtoNanobot {
 
 	if searchTargetInputParmsNanobot.lock == nil {

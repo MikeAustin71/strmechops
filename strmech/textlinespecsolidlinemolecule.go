@@ -17,66 +17,63 @@ type textLineSpecSolidLineMolecule struct {
 // Be advised that the pre-existing data fields in input parameter
 // 'targetTxtSolidLine' will be overwritten and deleted.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  targetTxtSolidLine         *TextLineSpecSolidLine
-//     - A pointer to an instance of TextLineSpecSolidLine. Data
-//       extracted from input parameter 'incomingTxtSolidLine' will
-//       be copied to this input parameter, 'targetTxtSolidLine'.
-//       If this method completes successfully, all member data
-//       variables encapsulated in 'targetTxtSolidLine' will be
-//       identical to those contained in input parameter,
-//       'incomingTxtSolidLine'.
+//	targetTxtSolidLine         *TextLineSpecSolidLine
+//	   - A pointer to an instance of TextLineSpecSolidLine. Data
+//	     extracted from input parameter 'incomingTxtSolidLine' will
+//	     be copied to this input parameter, 'targetTxtSolidLine'.
+//	     If this method completes successfully, all member data
+//	     variables encapsulated in 'targetTxtSolidLine' will be
+//	     identical to those contained in input parameter,
+//	     'incomingTxtSolidLine'.
 //
-//       Be advised that the pre-existing data fields in input
-//       parameter 'targetTxtSolidLine' will be overwritten and
-//       deleted.
-//
-//
-//  incomingTxtSolidLine       *TextLineSpecSolidLine
-//     - A pointer to an instance of TextLineSpecSolidLine.
-//
-//       All data values in this TextLineSpecSolidLine instance
-//       will be copied to input parameter 'targetTxtSolidLine'.
-//
-//       The original member variable data values encapsulated in
-//       'incomingTxtSolidLine' will remain unchanged and will NOT be
-//       overwritten or deleted.
-//
-//       If 'incomingTxtSolidLine' contains invalid member data
-//       variables, this method will return an error.
+//	     Be advised that the pre-existing data fields in input
+//	     parameter 'targetTxtSolidLine' will be overwritten and
+//	     deleted.
 //
 //
-//  errPrefDto                 *ePref.ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//	incomingTxtSolidLine       *TextLineSpecSolidLine
+//	   - A pointer to an instance of TextLineSpecSolidLine.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     All data values in this TextLineSpecSolidLine instance
+//	     will be copied to input parameter 'targetTxtSolidLine'.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
+//	     The original member variable data values encapsulated in
+//	     'incomingTxtSolidLine' will remain unchanged and will NOT be
+//	     overwritten or deleted.
 //
+//	     If 'incomingTxtSolidLine' contains invalid member data
+//	     variables, this method will return an error.
+//
+//
+//	errPrefDto                 *ePref.ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods listed
+//	     as a function chain.
+//
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
+//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  err                        error
-//     - If this method completes successfully, this returned error
-//       Type is set equal to 'nil'. If errors are encountered during
-//       processing, the returned error Type will encapsulate an error
-//       message.
+//	err                        error
+//	   - If this method completes successfully, this returned error
+//	     Type is set equal to 'nil'. If errors are encountered during
+//	     processing, the returned error Type will encapsulate an error
+//	     message.
 //
-//       If an error message is returned, the text value for input
-//       parameter 'errPrefDto' (error prefix) will be prefixed or
-//       attached at the beginning of the error message.
-//
+//	     If an error message is returned, the text value for input
+//	     parameter 'errPrefDto' (error prefix) will be prefixed or
+//	     attached at the beginning of the error message.
 func (txtSolidLineMolecule *textLineSpecSolidLineMolecule) copyIn(
 	targetTxtSolidLine *TextLineSpecSolidLine,
 	incomingTxtSolidLine *TextLineSpecSolidLine,
@@ -191,53 +188,50 @@ func (txtSolidLineMolecule *textLineSpecSolidLineMolecule) copyIn(
 // copyOut - Returns a deep copy of the TextLineSpecSolidLine
 // input parameter 'txtSolidLine'.
 //
-//
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  txtSolidLine               *TextLineSpecSolidLine
-//     - A pointer to an instance of TextLineSpecSolidLine. A deep
-//       copy of the internal member variables will be created
-//       and returned in a new instance of TextLineSpecSolidLine.
+//	txtSolidLine               *TextLineSpecSolidLine
+//	   - A pointer to an instance of TextLineSpecSolidLine. A deep
+//	     copy of the internal member variables will be created
+//	     and returned in a new instance of TextLineSpecSolidLine.
 //
-//       If the member variable data values encapsulated by this
-//       'txtSolidLine' parameter are found to be invalid, an error
-//       will be returned.
+//	     If the member variable data values encapsulated by this
+//	     'txtSolidLine' parameter are found to be invalid, an error
+//	     will be returned.
 //
 //
-//  errPrefDto                 *ePref.ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//	errPrefDto                 *ePref.ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods listed
+//	     as a function chain.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
-//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  TextLineSpecSolidLine
-//     - If this method completes successfully, a deep copy of
-//       input parameter 'txtSolidLine' will be created and
-//       returned in a new instance of TextLineSpecSolidLine.
+//	TextLineSpecSolidLine
+//	   - If this method completes successfully, a deep copy of
+//	     input parameter 'txtSolidLine' will be created and
+//	     returned in a new instance of TextLineSpecSolidLine.
 //
-//  error
-//     - If this method completes successfully, this returned error
-//       Type is set equal to 'nil'. If errors are encountered during
-//       processing, the returned error Type will encapsulate an error
-//       message.
+//	error
+//	   - If this method completes successfully, this returned error
+//	     Type is set equal to 'nil'. If errors are encountered during
+//	     processing, the returned error Type will encapsulate an error
+//	     message.
 //
-//       If an error message is returned, the text value for input
-//       parameter 'errPrefDto' (error prefix) will be prefixed or
-//       attached at the beginning of the error message.
-//
+//	     If an error message is returned, the text value for input
+//	     parameter 'errPrefDto' (error prefix) will be prefixed or
+//	     attached at the beginning of the error message.
 func (txtSolidLineMolecule *textLineSpecSolidLineMolecule) copyOut(
 	txtSolidLine *TextLineSpecSolidLine,
 	errPrefDto *ePref.ErrPrefixDto) (
@@ -346,55 +340,52 @@ func (txtSolidLineMolecule *textLineSpecSolidLineMolecule) copyOut(
 // information for generating a solid line of text for text output
 // display or printing.
 //
-//
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  txtSolidLine               *TextLineSpecSolidLine
-//     - A pointer to an instance of TextLineSpecSolidLine. The
-//       member variables encapsulated by this instance will be
-//       used to generate a solid line of text for text output
-//       display or printing.
+//	txtSolidLine               *TextLineSpecSolidLine
+//	   - A pointer to an instance of TextLineSpecSolidLine. The
+//	     member variables encapsulated by this instance will be
+//	     used to generate a solid line of text for text output
+//	     display or printing.
 //
-//       If the member variable data values encapsulated by this
-//       TextLineSpecSolidLine instance are found to be invalid,
-//       this method will return an error.
+//	     If the member variable data values encapsulated by this
+//	     TextLineSpecSolidLine instance are found to be invalid,
+//	     this method will return an error.
 //
 //
-//  errPrefDto                 *ePref.ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//	errPrefDto                 *ePref.ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods listed
+//	     as a function chain.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
-//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  formattedText              string
-//     - If this method completes successfully, a string of
-//       formatted text will be generated from the data provided by
-//       input parameter 'txtSolidLine'.
+//	formattedText              string
+//	   - If this method completes successfully, a string of
+//	     formatted text will be generated from the data provided by
+//	     input parameter 'txtSolidLine'.
 //
 //
-//  err                        error
-//     - If this method completes successfully, this returned error
-//       Type is set equal to 'nil'. If errors are encountered during
-//       processing, the returned error Type will encapsulate an error
-//       message.
+//	err                        error
+//	   - If this method completes successfully, this returned error
+//	     Type is set equal to 'nil'. If errors are encountered during
+//	     processing, the returned error Type will encapsulate an error
+//	     message.
 //
-//       If an error message is returned, the text value for input
-//       parameter 'errPrefDto' (error prefix) will be prefixed or
-//       attached at the beginning of the error message.
-//
+//	     If an error message is returned, the text value for input
+//	     parameter 'errPrefDto' (error prefix) will be prefixed or
+//	     attached at the beginning of the error message.
 func (txtSolidLineMolecule *textLineSpecSolidLineMolecule) getFormattedText(
 	txtSolidLine *TextLineSpecSolidLine,
 	errPrefDto *ePref.ErrPrefixDto) (
@@ -462,7 +453,6 @@ func (txtSolidLineMolecule *textLineSpecSolidLineMolecule) getFormattedText(
 
 // ptr - Returns a pointer to a new instance of
 // textLineSpecSolidLineMolecule.
-//
 func (txtSolidLineMolecule textLineSpecSolidLineMolecule) ptr() *textLineSpecSolidLineMolecule {
 
 	if txtSolidLineMolecule.lock == nil {
@@ -499,118 +489,117 @@ func (txtSolidLineMolecule textLineSpecSolidLineMolecule) ptr() *textLineSpecSol
 // character or characters may be customized by the calling
 // function.
 //
-//
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  txtSolidLine               *TextLineSpecSolidLine
-//     - A pointer to an instance of TextLineSpecSolidLine. The
-//       member variables data values encapsulated in this object
-//       will be set to new values extracted from the following
-//       input parameters.
+//	txtSolidLine               *TextLineSpecSolidLine
+//	   - A pointer to an instance of TextLineSpecSolidLine. The
+//	     member variables data values encapsulated in this object
+//	     will be set to new values extracted from the following
+//	     input parameters.
 //
 //
-//  leftMarginChars            []rune
-//     - A rune array. These text characters which will be inserted
-//       on the left side of the solid line.
+//	leftMarginChars            []rune
+//	   - A rune array. These text characters which will be inserted
+//	     on the left side of the solid line.
 //
-//       Example:
-//         solidLineChars = "*"
-//         solidLineCharsRepeatCount = 5
-//         leftMargin = []rune{' ', ' ',' '} // Three spaces
-//         Solid line = "   *****"
+//	     Example:
+//	       solidLineChars = "*"
+//	       solidLineCharsRepeatCount = 5
+//	       leftMargin = []rune{' ', ' ',' '} // Three spaces
+//	       Solid line = "   *****"
 //
-//       If leftMarginChars has a length greater than one-million
-//       (1,000,000), an error will be returned.
-//
-//
-//  rightMarginChars           []rune
-//     - A rune array. These text characters will be appended to
-//       the end, or right side, of the solid line.
-//
-//       Example:
-//         solidLineChars = "*"
-//         solidLineCharsRepeatCount = 5
-//         leftMargin = []rune{} // Empty Array
-//         rightMargin = []rune{' ',' ',' '} // Three spaces
-//         Solid line = "*****   "
-//
-//       If rightMarginChars has a length greater than one-million
-//       (1,000,000), an error will be returned.
+//	     If leftMarginChars has a length greater than one-million
+//	     (1,000,000), an error will be returned.
 //
 //
-//  solidLineChars             []rune
-//     - The array of runes specifies the character or characters
-//       which will comprise the solid line output for text display
-//       or printing.
+//	rightMarginChars           []rune
+//	   - A rune array. These text characters will be appended to
+//	     the end, or right side, of the solid line.
 //
-//       Example:
-//         solidLineChars = "*"
-//         solidLineCharsRepeatCount = 5
-//         Solid line = "*****"
-///
-//       If this parameter is submitted as a zero length rune
-//       array, an error will be returned.
+//	     Example:
+//	       solidLineChars = "*"
+//	       solidLineCharsRepeatCount = 5
+//	       leftMargin = []rune{} // Empty Array
+//	       rightMargin = []rune{' ',' ',' '} // Three spaces
+//	       Solid line = "*****   "
 //
-//
-//  solidLineCharsRepeatCount  int
-//     - This integer value specifies the number of times that
-//       parameter 'solidLineChars' will be repeated in
-//       constructing the solid line.
-//
-//       If this parameter is submitted with a value less than one
-//       (1), an error will be returned.
-//
-//       Example:
-//         solidLineChars = '*'
-//         solidLineCharsRepeatCount = 5
-//         Solid line = "*****"
+//	     If rightMarginChars has a length greater than one-million
+//	     (1,000,000), an error will be returned.
 //
 //
-//  newLineChars               []rune
-//     - This rune array contains one or more characters which will
-//       be used to terminate the solid text line.
+//	solidLineChars             []rune
+//	   - The array of runes specifies the character or characters
+//	     which will comprise the solid line output for text display
+//	     or printing.
 //
-//       Example:
-//         solidLineChars = '*'
-//         solidLineCharsRepeatCount = 5
-//         newLineChars = []rune{'??\n')
-//         Solid line = "*****??\n"
+//	     Example:
+//	       solidLineChars = "*"
+//	       solidLineCharsRepeatCount = 5
+//	       Solid line = "*****"
 //
-//       If this parameter is submitted as a zero length rune
-//       array, or if 'newLineChars' contains invalid zero value
-//       characters, it will be set to the default new line
-//       character ('\n').
+// /
+//
+//	     If this parameter is submitted as a zero length rune
+//	     array, an error will be returned.
 //
 //
-//  errPrefDto                 *ePref.ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//	solidLineCharsRepeatCount  int
+//	   - This integer value specifies the number of times that
+//	     parameter 'solidLineChars' will be repeated in
+//	     constructing the solid line.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     If this parameter is submitted with a value less than one
+//	     (1), an error will be returned.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
+//	     Example:
+//	       solidLineChars = '*'
+//	       solidLineCharsRepeatCount = 5
+//	       Solid line = "*****"
 //
+//
+//	newLineChars               []rune
+//	   - This rune array contains one or more characters which will
+//	     be used to terminate the solid text line.
+//
+//	     Example:
+//	       solidLineChars = '*'
+//	       solidLineCharsRepeatCount = 5
+//	       newLineChars = []rune{'??\n')
+//	       Solid line = "*****??\n"
+//
+//	     If this parameter is submitted as a zero length rune
+//	     array, or if 'newLineChars' contains invalid zero value
+//	     characters, it will be set to the default new line
+//	     character ('\n').
+//
+//
+//	errPrefDto                 *ePref.ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods listed
+//	     as a function chain.
+//
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
+//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  err                        error
-//     - If this method completes successfully, this returned error
-//       Type is set equal to 'nil'. If errors are encountered during
-//       processing, the returned error Type will encapsulate an error
-//       message.
+//	err                        error
+//	   - If this method completes successfully, this returned error
+//	     Type is set equal to 'nil'. If errors are encountered during
+//	     processing, the returned error Type will encapsulate an error
+//	     message.
 //
-//       If an error message is returned, the text value for input
-//       parameter 'errPrefDto' (error prefix) will be prefixed or
-//       attached at the beginning of the error message.
-//
+//	     If an error message is returned, the text value for input
+//	     parameter 'errPrefDto' (error prefix) will be prefixed or
+//	     attached at the beginning of the error message.
 func (txtSolidLineMolecule *textLineSpecSolidLineMolecule) setTxtSolidLine(
 	txtSolidLine *TextLineSpecSolidLine,
 	leftMarginChars []rune,

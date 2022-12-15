@@ -16,7 +16,7 @@ type textLineSpecPlainTextNanobot struct {
 //
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // The pre-existing data fields for input parameter
 // 'targetPlainTextLine' will be overwritten and deleted.
@@ -24,66 +24,63 @@ type textLineSpecPlainTextNanobot struct {
 // Member variable targetPlainTextLine.textLineReader will be set
 // to 'nil'.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  targetPlainTextLine        *TextLineSpecPlainText
-//     - A pointer to an instance of TextLineSpecPlainText. Data
-//       extracted from input parameter 'incomingPlainTextLine'
-//       will be copied to this input parameter,
-//       'targetPlainTextLine'. If this method completes
-//       successfully, all member data variables encapsulated in
-//       'targetPlainTextLine' will be identical to those contained
-//       in input parameter, 'incomingPlainTextLine'.
+//	targetPlainTextLine        *TextLineSpecPlainText
+//	   - A pointer to an instance of TextLineSpecPlainText. Data
+//	     extracted from input parameter 'incomingPlainTextLine'
+//	     will be copied to this input parameter,
+//	     'targetPlainTextLine'. If this method completes
+//	     successfully, all member data variables encapsulated in
+//	     'targetPlainTextLine' will be identical to those contained
+//	     in input parameter, 'incomingPlainTextLine'.
 //
-//       Be advised that the pre-existing data fields in input
-//       parameter 'targetPlainTextLine' will be overwritten and
-//       deleted.
-//
-//
-//  incomingPlainTextLine      *TextLineSpecPlainText
-//     - A pointer to an instance of TextLineSpecPlainText.
-//
-//       All data values in this TextLineSpecPlainText instance
-//       will be copied to input parameter 'targetPlainTextLine'.
-//
-//       The original member variable data values encapsulated in
-//       'incomingPlainTextLine' will remain unchanged and will NOT
-//       be overwritten or deleted.
-//
-//       If 'incomingPlainTextLine' contains invalid member
-//       variable data values, this method will return an error.
+//	     Be advised that the pre-existing data fields in input
+//	     parameter 'targetPlainTextLine' will be overwritten and
+//	     deleted.
 //
 //
-//  errPrefDto                 *ePref.ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//	incomingPlainTextLine      *TextLineSpecPlainText
+//	   - A pointer to an instance of TextLineSpecPlainText.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     All data values in this TextLineSpecPlainText instance
+//	     will be copied to input parameter 'targetPlainTextLine'.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
+//	     The original member variable data values encapsulated in
+//	     'incomingPlainTextLine' will remain unchanged and will NOT
+//	     be overwritten or deleted.
 //
+//	     If 'incomingPlainTextLine' contains invalid member
+//	     variable data values, this method will return an error.
+//
+//
+//	errPrefDto                 *ePref.ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods listed
+//	     as a function chain.
+//
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
+//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If this method completes successfully, this returned error
-//       Type is set equal to 'nil'. If errors are encountered during
-//       processing, the returned error Type will encapsulate an error
-//       message.
+//	error
+//	   - If this method completes successfully, this returned error
+//	     Type is set equal to 'nil'. If errors are encountered during
+//	     processing, the returned error Type will encapsulate an error
+//	     message.
 //
-//       If an error message is returned, the text value for input
-//       parameter 'errPrefDto' (error prefix) will be prefixed or
-//       attached at the beginning of the error message.
-//
+//	     If an error message is returned, the text value for input
+//	     parameter 'errPrefDto' (error prefix) will be prefixed or
+//	     attached at the beginning of the error message.
 func (txtLinePlainTextNanobot *textLineSpecPlainTextNanobot) copyIn(
 	targetPlainTextLine *TextLineSpecPlainText,
 	incomingPlainTextLine *TextLineSpecPlainText,
@@ -190,7 +187,7 @@ func (txtLinePlainTextNanobot *textLineSpecPlainTextNanobot) copyIn(
 //
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // The returned instance of TextLineSpecPlainText will always set
 // member variable 'textLineReader' to 'nil'.
@@ -199,49 +196,47 @@ func (txtLinePlainTextNanobot *textLineSpecPlainTextNanobot) copyIn(
 //
 // Input Parameters
 //
-//  plainTxtLine          *TextLineSpecPlainText
-//     - A pointer to an instance of TextLineSpecPlainText. A
-//       deep copy of the internal member variables will be created
-//       and returned in a new instance of TextLineSpecPlainText.
+//	plainTxtLine          *TextLineSpecPlainText
+//	   - A pointer to an instance of TextLineSpecPlainText. A
+//	     deep copy of the internal member variables will be created
+//	     and returned in a new instance of TextLineSpecPlainText.
 //
-//       If the member variable data values encapsulated by
-//       'plainTxtLine' are found to be invalid, this method will
-//       return an error
+//	     If the member variable data values encapsulated by
+//	     'plainTxtLine' are found to be invalid, this method will
+//	     return an error
 //
 //
-//  errPrefDto          *ePref.ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//	errPrefDto          *ePref.ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods listed
+//	     as a function chain.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
-//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  TextLineSpecPlainText
-//     - If this method completes successfully, a deep copy of
-//       input parameter 'plainTxtLine' will be created and returned
-//       in a new instance of TextLineSpecPlainText.
+//	TextLineSpecPlainText
+//	   - If this method completes successfully, a deep copy of
+//	     input parameter 'plainTxtLine' will be created and returned
+//	     in a new instance of TextLineSpecPlainText.
 //
 //
-//  error
-//     - If this method completes successfully, this returned error
-//       Type is set equal to 'nil'. If errors are encountered during
-//       processing, the returned error Type will encapsulate an error
-//       message.
+//	error
+//	   - If this method completes successfully, this returned error
+//	     Type is set equal to 'nil'. If errors are encountered during
+//	     processing, the returned error Type will encapsulate an error
+//	     message.
 //
-//       If an error message is returned, the text value for input
-//       parameter 'errPrefDto' (error prefix) will be prefixed or
-//       attached at the beginning of the error message.
-//
+//	     If an error message is returned, the text value for input
+//	     parameter 'errPrefDto' (error prefix) will be prefixed or
+//	     attached at the beginning of the error message.
 func (txtLinePlainTextNanobot *textLineSpecPlainTextNanobot) copyOut(
 	plainTxtLine *TextLineSpecPlainText,
 	errPrefDto *ePref.ErrPrefixDto) (
@@ -337,51 +332,48 @@ func (txtLinePlainTextNanobot *textLineSpecPlainTextNanobot) copyOut(
 // getFormattedText - Returns the formatted text generated by this
 // Text Line Specification, 'plainTxtLine', for output and printing.
 //
-//
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  plainTxtLine               *TextLineSpecPlainText
-//     - A pointer to an instance of TextLineSpecPlainText. The
-//       member variables encapsulated by this instance will be
-//       used to generate formatted text for text display, file
-//       output and printing.
+//	plainTxtLine               *TextLineSpecPlainText
+//	   - A pointer to an instance of TextLineSpecPlainText. The
+//	     member variables encapsulated by this instance will be
+//	     used to generate formatted text for text display, file
+//	     output and printing.
 //
 //
-//  errPrefDto                 *ePref.ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//	errPrefDto                 *ePref.ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods listed
+//	     as a function chain.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
-//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  formattedText              string
-//     - If this method completes successfully, a string of
-//       formatted text will be generated from the data provided by
-//       input parameter 'plainTxtLine'.
+//	formattedText              string
+//	   - If this method completes successfully, a string of
+//	     formatted text will be generated from the data provided by
+//	     input parameter 'plainTxtLine'.
 //
 //
-//  error
-//     - If this method completes successfully, this returned error
-//       Type is set equal to 'nil'. If errors are encountered during
-//       processing, the returned error Type will encapsulate an error
-//       message.
+//	error
+//	   - If this method completes successfully, this returned error
+//	     Type is set equal to 'nil'. If errors are encountered during
+//	     processing, the returned error Type will encapsulate an error
+//	     message.
 //
-//       If an error message is returned, the text value for input
-//       parameter 'errPrefDto' (error prefix) will be prefixed or
-//       attached at the beginning of the error message.
-//
+//	     If an error message is returned, the text value for input
+//	     parameter 'errPrefDto' (error prefix) will be prefixed or
+//	     attached at the beginning of the error message.
 func (txtLinePlainTextNanobot *textLineSpecPlainTextNanobot) getFormattedText(
 	plainTxtLine *TextLineSpecPlainText,
 	errPrefDto *ePref.ErrPrefixDto) (
@@ -451,7 +443,6 @@ func (txtLinePlainTextNanobot *textLineSpecPlainTextNanobot) getFormattedText(
 
 // ptr - Returns a pointer to a new instance of
 // textLineSpecPlainTextNanobot.
-//
 func (txtLinePlainTextNanobot textLineSpecPlainTextNanobot) ptr() *textLineSpecPlainTextNanobot {
 
 	if txtLinePlainTextNanobot.lock == nil {
@@ -498,114 +489,110 @@ func (txtLinePlainTextNanobot textLineSpecPlainTextNanobot) ptr() *textLineSpecP
 //
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // The pre-existing data fields for the TextLineSpecPlainText
 // parameter 'plainTxtLine' will be overwritten and deleted.
 //
-//
 // ------------------------------------------------------------------------
 //
-// Default Values
+// # Default Values
 //
 // This method will automatically set the following default values:
 //
-//  leftMarginChars
-//     - Defaults the left margin to the number of white space
-//       characters (' ') specified by the integer value passed
-//       through input parameter 'leftMarginSpaces'.
+//	leftMarginChars
+//	   - Defaults the left margin to the number of white space
+//	     characters (' ') specified by the integer value passed
+//	     through input parameter 'leftMarginSpaces'.
 //
 //
-//  rightMarginChars
-//     - Defaults the right margin to the number of white space
-//       characters (' ') specified by the integer value passed
-//       through input parameter 'rightMarginSpaces'.
+//	rightMarginChars
+//	   - Defaults the right margin to the number of white space
+//	     characters (' ') specified by the integer value passed
+//	     through input parameter 'rightMarginSpaces'.
 //
 //
-//  newLineChars
-//     - Defaults the new line character to '\n'.
+//	newLineChars
+//	   - Defaults the new line character to '\n'.
 //
 //
-//  turnLineTerminatorOff
-//     - Defaults to a value of 'false'. This means that the new
-//       line character ('\n') will be applied to each line of text
-//       produced by the returned instance of TextLineSpecPlainText.
-//
+//	turnLineTerminatorOff
+//	   - Defaults to a value of 'false'. This means that the new
+//	     line character ('\n') will be applied to each line of text
+//	     produced by the returned instance of TextLineSpecPlainText.
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  plainTxtLine               *TextLineSpecPlainText
-//     - A pointer to an instance of TextLineSpecPlainText.
-//       If this method completes successfully, all member data
-//       variables encapsulated in 'targetPlainTextLine' will be
-//       deleted and overwritten with new values extracted from the
-//       following input parameters.
+//	plainTxtLine               *TextLineSpecPlainText
+//	   - A pointer to an instance of TextLineSpecPlainText.
+//	     If this method completes successfully, all member data
+//	     variables encapsulated in 'targetPlainTextLine' will be
+//	     deleted and overwritten with new values extracted from the
+//	     following input parameters.
 //
 //
-//  leftMarginSpaces           int
-//     - Controls the number of white space characters (' ') which
-//       will comprise the left margin for TextLineSpecPlainText
-//       object, 'plainTxtLine'.
+//	leftMarginSpaces           int
+//	   - Controls the number of white space characters (' ') which
+//	     will comprise the left margin for TextLineSpecPlainText
+//	     object, 'plainTxtLine'.
 //
-//       If the value of 'leftMarginSpaces' is less than zero, an
-//       error will be returned.
+//	     If the value of 'leftMarginSpaces' is less than zero, an
+//	     error will be returned.
 //
-//       If the value of 'leftMarginSpaces' is greater than
-//       one-million (1,000,000), an error will be returned.
-//
-//
-//  rightMarginSpaces           int
-//     - Controls the number of white space characters (' ') which
-//       will comprise the right margin for TextLineSpecPlainText
-//       object, 'plainTxtLine'.
-//
-//       If the value of 'rightMarginSpaces' is less than zero, an
-//       error will be returned.
-//
-//       If the value of 'rightMarginSpaces' is greater than
-//       one-million (1,000,000), an error will be returned.
+//	     If the value of 'leftMarginSpaces' is greater than
+//	     one-million (1,000,000), an error will be returned.
 //
 //
-//  textString                 string
-//     - A string of text which will be used to configure the text
-//       characters generated by the current instance of
-//       TextLineSpecPlainText.
+//	rightMarginSpaces           int
+//	   - Controls the number of white space characters (' ') which
+//	     will comprise the right margin for TextLineSpecPlainText
+//	     object, 'plainTxtLine'.
 //
-//       If this parameter is submitted as a zero length or empty
-//       string, an error will be returned.
+//	     If the value of 'rightMarginSpaces' is less than zero, an
+//	     error will be returned.
 //
-//       If this string contains more than one-million characters,
-//       an error will be returned.
+//	     If the value of 'rightMarginSpaces' is greater than
+//	     one-million (1,000,000), an error will be returned.
 //
 //
-//  errPrefDto                 *ePref.ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//	textString                 string
+//	   - A string of text which will be used to configure the text
+//	     characters generated by the current instance of
+//	     TextLineSpecPlainText.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     If this parameter is submitted as a zero length or empty
+//	     string, an error will be returned.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
+//	     If this string contains more than one-million characters,
+//	     an error will be returned.
 //
+//
+//	errPrefDto                 *ePref.ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods listed
+//	     as a function chain.
+//
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
+//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If input parameter 'plainTextLine' is judged to be valid
-//       in all respects, this return parameter will be set to
-//       'nil'.
+//	error
+//	   - If input parameter 'plainTextLine' is judged to be valid
+//	     in all respects, this return parameter will be set to
+//	     'nil'.
 //
-//       If an error message is returned, the text value for input
-//       parameter 'errPrefDto' (error prefix) will be prefixed or
-//       attached at the beginning of the error message.
-//
+//	     If an error message is returned, the text value for input
+//	     parameter 'errPrefDto' (error prefix) will be prefixed or
+//	     attached at the beginning of the error message.
 func (txtLinePlainTextNanobot *textLineSpecPlainTextNanobot) setDefaultPlainTextSpec(
 	plainTxtLine *TextLineSpecPlainText,
 	leftMarginSpaces int,
@@ -772,121 +759,118 @@ func (txtLinePlainTextNanobot *textLineSpecPlainTextNanobot) setDefaultPlainText
 // exception being that this method receives input parameter
 // 'textRunes' as an array of runes instead of a string.
 //
-//
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  plainTxtLine               *TextLineSpecPlainText
-//     - A pointer to an instance of TextLineSpecPlainText.
-//       If this method completes successfully, all member data
-//       variables encapsulated in 'targetPlainTextLine' will be
-//       deleted and overwritten with new values extracted from the
-//       following input parameters.
+//	plainTxtLine               *TextLineSpecPlainText
+//	   - A pointer to an instance of TextLineSpecPlainText.
+//	     If this method completes successfully, all member data
+//	     variables encapsulated in 'targetPlainTextLine' will be
+//	     deleted and overwritten with new values extracted from the
+//	     following input parameters.
 //
 //
-//  leftMarginRunes            []rune
-//     - An array of runes containing the text characters which
-//       will be used to construct the left margin of the plain
-//       text line generated by the current instance of
-//       TextLineSpecPlainText.
+//	leftMarginRunes            []rune
+//	   - An array of runes containing the text characters which
+//	     will be used to construct the left margin of the plain
+//	     text line generated by the current instance of
+//	     TextLineSpecPlainText.
 //
-//       If this parameter is submitted as a zero length or empty
-//       array, NO error will be generated and the existing left
-//       margin will be effectively eliminated from the plain text
-//       line generated by this instance of TextLineSpecPlainText.
+//	     If this parameter is submitted as a zero length or empty
+//	     array, NO error will be generated and the existing left
+//	     margin will be effectively eliminated from the plain text
+//	     line generated by this instance of TextLineSpecPlainText.
 //
-//       If the 'leftMarginRunes' array exceeds a length of
-//       one-million array elements, an error will be returned. If
-//       any of the array elements has a rune value of zero ('0'),
-//       an error will be returned.
-//
-//
-//  rightMarginRunes           []rune
-//     - An array of runes containing the text characters which
-//       will be used to construct the right margin of the plain
-//       text line generated by the current instance of
-//       TextLineSpecPlainText.
-//
-//       If this parameter is submitted as a zero length or empty
-//       array, NO error will be generated and the existing left
-//       margin will be effectively eliminated from the plain text
-//       line generated by this instance of TextLineSpecPlainText.
-//
-//       If the 'rightMarginRunes' array exceeds a length of
-//       one-million array elements, an error will be returned. If
-//       any of the array elements has a rune value of zero ('0'),
-//       an error will be returned.
+//	     If the 'leftMarginRunes' array exceeds a length of
+//	     one-million array elements, an error will be returned. If
+//	     any of the array elements has a rune value of zero ('0'),
+//	     an error will be returned.
 //
 //
-//  textRunes                []rune
-//     - An array of runes which will be used to configure the text
-//       characters generated by the current instance of
-//       TextLineSpecPlainText.
+//	rightMarginRunes           []rune
+//	   - An array of runes containing the text characters which
+//	     will be used to construct the right margin of the plain
+//	     text line generated by the current instance of
+//	     TextLineSpecPlainText.
 //
-//       If this parameter is submitted as a zero length or empty
-//       array, an error will be returned.
+//	     If this parameter is submitted as a zero length or empty
+//	     array, NO error will be generated and the existing left
+//	     margin will be effectively eliminated from the plain text
+//	     line generated by this instance of TextLineSpecPlainText.
 //
-//       If this array contains more than one-million characters,
-//       an error will be returned.
-//
-//
-//  newLineChars               []rune
-//     - An array of runes containing the character or characters
-//       used to terminate each line of text generated by the
-//       current instance of TextLineSpecPlainText.
-//
-//       If this parameter is submitted as a zero length or empty
-//       rune array, it will be reset to the default new line value
-//       ('\n').
-//
-//       If the rune array contains invalid zero rune values, an
-//       error will be returned.
+//	     If the 'rightMarginRunes' array exceeds a length of
+//	     one-million array elements, an error will be returned. If
+//	     any of the array elements has a rune value of zero ('0'),
+//	     an error will be returned.
 //
 //
-//  turnLineTerminatorOff      bool
-//     - The 'turnLineTerminatorOff' flag controls whether a line
-//       termination character or characters will be automatically
-//       appended to each line of text produced by
-//       TextLineSpecPlainText.
+//	textRunes                []rune
+//	   - An array of runes which will be used to configure the text
+//	     characters generated by the current instance of
+//	     TextLineSpecPlainText.
 //
-//       When the boolean flag 'turnLineTerminatorOff' is set to
-//       'false', line terminators as defined by parameter
-//       'newLineChars' WILL BE applied as a line termination
-//       sequence for each line of text produced by
-//       TextLineSpecPlainText.
+//	     If this parameter is submitted as a zero length or empty
+//	     array, an error will be returned.
 //
-//       When this boolean value is set to 'true', it turns off or
-//       cancels the automatic generation of line terminators for
-//       each line of text produced by TextLineSpecStandardLine.
+//	     If this array contains more than one-million characters,
+//	     an error will be returned.
 //
 //
-//  errPrefDto                 *ePref.ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//	newLineChars               []rune
+//	   - An array of runes containing the character or characters
+//	     used to terminate each line of text generated by the
+//	     current instance of TextLineSpecPlainText.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     If this parameter is submitted as a zero length or empty
+//	     rune array, it will be reset to the default new line value
+//	     ('\n').
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
+//	     If the rune array contains invalid zero rune values, an
+//	     error will be returned.
 //
+//
+//	turnLineTerminatorOff      bool
+//	   - The 'turnLineTerminatorOff' flag controls whether a line
+//	     termination character or characters will be automatically
+//	     appended to each line of text produced by
+//	     TextLineSpecPlainText.
+//
+//	     When the boolean flag 'turnLineTerminatorOff' is set to
+//	     'false', line terminators as defined by parameter
+//	     'newLineChars' WILL BE applied as a line termination
+//	     sequence for each line of text produced by
+//	     TextLineSpecPlainText.
+//
+//	     When this boolean value is set to 'true', it turns off or
+//	     cancels the automatic generation of line terminators for
+//	     each line of text produced by TextLineSpecStandardLine.
+//
+//
+//	errPrefDto                 *ePref.ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods listed
+//	     as a function chain.
+//
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
+//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If input parameter 'plainTextLine' is judged to be valid
-//       in all respects, this return parameter will be set to
-//       'nil'.
+//	error
+//	   - If input parameter 'plainTextLine' is judged to be valid
+//	     in all respects, this return parameter will be set to
+//	     'nil'.
 //
-//       If an error message is returned, the text value for input
-//       parameter 'errPrefDto' (error prefix) will be prefixed or
-//       attached at the beginning of the error message.
-//
+//	     If an error message is returned, the text value for input
+//	     parameter 'errPrefDto' (error prefix) will be prefixed or
+//	     attached at the beginning of the error message.
 func (txtLinePlainTextNanobot *textLineSpecPlainTextNanobot) setPlainTextSpecRunes(
 	plainTxtLine *TextLineSpecPlainText,
 	leftMarginChars []rune,
@@ -1077,114 +1061,111 @@ func (txtLinePlainTextNanobot *textLineSpecPlainTextNanobot) setPlainTextSpecRun
 // exception being that this method receives input parameters
 // as strings instead of rune arrays.
 //
-//
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  plainTxtLine               *TextLineSpecPlainText
-//     - A pointer to an instance of TextLineSpecPlainText.
-//       If this method completes successfully, all member data
-//       variables encapsulated in 'targetPlainTextLine' will be
-//       deleted and overwritten with new values extracted from the
-//       following input parameters.
+//	plainTxtLine               *TextLineSpecPlainText
+//	   - A pointer to an instance of TextLineSpecPlainText.
+//	     If this method completes successfully, all member data
+//	     variables encapsulated in 'targetPlainTextLine' will be
+//	     deleted and overwritten with new values extracted from the
+//	     following input parameters.
 //
 //
-//  leftMarginChars            string
-//     - A string containing the text characters which will be used
-//       to construct the left margin of the plain text line
-//       generated by the current instance of
-//       TextLineSpecPlainText.
+//	leftMarginChars            string
+//	   - A string containing the text characters which will be used
+//	     to construct the left margin of the plain text line
+//	     generated by the current instance of
+//	     TextLineSpecPlainText.
 //
-//       If this parameter is submitted as a zero length or empty
-//       string, NO error will be generated and the existing left
-//       margin will be effectively eliminated from the plain text
-//       line generated by this instance of TextLineSpecPlainText.
+//	     If this parameter is submitted as a zero length or empty
+//	     string, NO error will be generated and the existing left
+//	     margin will be effectively eliminated from the plain text
+//	     line generated by this instance of TextLineSpecPlainText.
 //
-//       If the 'leftMarginChars' string length exceeds one-million
-//       characters, an error will be returned.
-//
-//
-//  rightMarginChars           string
-//     - A string containing the text characters which will be used
-//       to construct the right margin of the plain text line
-//       generated by the current instance of
-//       TextLineSpecPlainText.
-//
-//       If this parameter is submitted as a zero length or empty
-//       string, NO error will be generated and the existing right
-//       margin will be effectively eliminated from the plain text
-//       line generated by this instance of TextLineSpecPlainText.
-//
-//       If the 'rightMarginChars' string length exceeds one-million
-//       characters, an error will be returned.
+//	     If the 'leftMarginChars' string length exceeds one-million
+//	     characters, an error will be returned.
 //
 //
-//  textString                 string
-//     - A string of text which will be used to configure the text
-//       characters generated by the current instance of
-//       TextLineSpecPlainText.
+//	rightMarginChars           string
+//	   - A string containing the text characters which will be used
+//	     to construct the right margin of the plain text line
+//	     generated by the current instance of
+//	     TextLineSpecPlainText.
 //
-//       If this parameter is submitted as a zero length or empty
-//       string, an error will be returned.
+//	     If this parameter is submitted as a zero length or empty
+//	     string, NO error will be generated and the existing right
+//	     margin will be effectively eliminated from the plain text
+//	     line generated by this instance of TextLineSpecPlainText.
 //
-//       If this string contains more than one-million characters,
-//       an error will be returned.
-//
-//
-//  newLineChars               string
-//     - A string containing the one or more characters used to
-//       terminate each line of text generated by the current
-//       instance of TextLineSpecPlainText.
-//
-//       If this parameter is submitted as a zero length or empty
-//       string, it will be reset to the default new line value
-//       ("\n").
+//	     If the 'rightMarginChars' string length exceeds one-million
+//	     characters, an error will be returned.
 //
 //
-//  turnLineTerminatorOff      bool
-//     - The 'turnLineTerminatorOff' flag controls whether a line
-//       termination character or characters will be automatically
-//       appended to each line of text produced by
-//       TextLineSpecPlainText.
+//	textString                 string
+//	   - A string of text which will be used to configure the text
+//	     characters generated by the current instance of
+//	     TextLineSpecPlainText.
 //
-//       When the boolean flag 'turnLineTerminatorOff' is set to
-//       'false', line terminators as defined by parameter
-//       'newLineChars' WILL BE applied as a line termination
-//       sequence for each line of text produced by
-//       TextLineSpecPlainText.
+//	     If this parameter is submitted as a zero length or empty
+//	     string, an error will be returned.
 //
-//       When this boolean value is set to 'true', it turns off or
-//       cancels the automatic generation of line terminators for
-//       each line of text produced by TextLineSpecStandardLine.
+//	     If this string contains more than one-million characters,
+//	     an error will be returned.
 //
 //
-//  errPrefDto                 *ePref.ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//	newLineChars               string
+//	   - A string containing the one or more characters used to
+//	     terminate each line of text generated by the current
+//	     instance of TextLineSpecPlainText.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     If this parameter is submitted as a zero length or empty
+//	     string, it will be reset to the default new line value
+//	     ("\n").
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
 //
+//	turnLineTerminatorOff      bool
+//	   - The 'turnLineTerminatorOff' flag controls whether a line
+//	     termination character or characters will be automatically
+//	     appended to each line of text produced by
+//	     TextLineSpecPlainText.
+//
+//	     When the boolean flag 'turnLineTerminatorOff' is set to
+//	     'false', line terminators as defined by parameter
+//	     'newLineChars' WILL BE applied as a line termination
+//	     sequence for each line of text produced by
+//	     TextLineSpecPlainText.
+//
+//	     When this boolean value is set to 'true', it turns off or
+//	     cancels the automatic generation of line terminators for
+//	     each line of text produced by TextLineSpecStandardLine.
+//
+//
+//	errPrefDto                 *ePref.ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods listed
+//	     as a function chain.
+//
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
+//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If input parameter 'plainTextLine' is judged to be valid
-//       in all respects, this return parameter will be set to
-//       'nil'.
+//	error
+//	   - If input parameter 'plainTextLine' is judged to be valid
+//	     in all respects, this return parameter will be set to
+//	     'nil'.
 //
-//       If an error message is returned, the text value for input
-//       parameter 'errPrefDto' (error prefix) will be prefixed or
-//       attached at the beginning of the error message.
-//
+//	     If an error message is returned, the text value for input
+//	     parameter 'errPrefDto' (error prefix) will be prefixed or
+//	     attached at the beginning of the error message.
 func (txtLinePlainTextNanobot *textLineSpecPlainTextNanobot) setPlainTextSpecStrings(
 	plainTxtLine *TextLineSpecPlainText,
 	leftMarginChars string,

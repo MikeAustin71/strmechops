@@ -16,66 +16,63 @@ type textLineSpecBlankLinesMolecule struct {
 // Be advised that the pre-existing data fields in input parameter
 // 'targetBlkLines' will be overwritten and deleted.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  targetBlkLines             *TextLineSpecBlankLines
-//     - A pointer to an instance of TextLineSpecBlankLines. Data
-//       extracted from input parameter 'incomingBlkLines' will
-//       be copied to this input parameter, 'targetBlkLines'. If
-//       this method completes successfully, all member data
-//       variables encapsulated in 'targetBlkLines' will be
-//       identical to those contained in input parameter,
-//       'incomingTimerLines'.
+//	targetBlkLines             *TextLineSpecBlankLines
+//	   - A pointer to an instance of TextLineSpecBlankLines. Data
+//	     extracted from input parameter 'incomingBlkLines' will
+//	     be copied to this input parameter, 'targetBlkLines'. If
+//	     this method completes successfully, all member data
+//	     variables encapsulated in 'targetBlkLines' will be
+//	     identical to those contained in input parameter,
+//	     'incomingTimerLines'.
 //
-//       Be advised that the pre-existing data fields in input
-//       parameter 'targetBlkLines' will be overwritten and
-//       deleted.
-//
-//
-//  incomingBlkLines           *TextLineSpecBlankLines
-//     - A pointer to an instance of TextLineSpecBlankLines.
-//
-//       All data values in this TextLineSpecBlankLines instance
-//       will be copied to input parameter 'targetBlkLines'.
-//
-//       The original member variables data values encapsulated in
-//       'incomingBlkLines' will remain unchanged and will NOT be
-//       overwritten or deleted.
-//
-//       If 'incomingBlkLines' contains invalid member data
-//       variables, this method will return an error.
+//	     Be advised that the pre-existing data fields in input
+//	     parameter 'targetBlkLines' will be overwritten and
+//	     deleted.
 //
 //
-//  errPrefDto                 *ePref.ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//	incomingBlkLines           *TextLineSpecBlankLines
+//	   - A pointer to an instance of TextLineSpecBlankLines.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     All data values in this TextLineSpecBlankLines instance
+//	     will be copied to input parameter 'targetBlkLines'.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
+//	     The original member variables data values encapsulated in
+//	     'incomingBlkLines' will remain unchanged and will NOT be
+//	     overwritten or deleted.
 //
+//	     If 'incomingBlkLines' contains invalid member data
+//	     variables, this method will return an error.
+//
+//
+//	errPrefDto                 *ePref.ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods listed
+//	     as a function chain.
+//
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
+//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If this method completes successfully, this returned error
-//       Type is set equal to 'nil'. If errors are encountered during
-//       processing, the returned error Type will encapsulate an error
-//       message.
+//	error
+//	   - If this method completes successfully, this returned error
+//	     Type is set equal to 'nil'. If errors are encountered during
+//	     processing, the returned error Type will encapsulate an error
+//	     message.
 //
-//       If an error message is returned, the text value for input
-//       parameter 'errPrefDto' (error prefix) will be prefixed or
-//       attached at the beginning of the error message.
-//
+//	     If an error message is returned, the text value for input
+//	     parameter 'errPrefDto' (error prefix) will be prefixed or
+//	     attached at the beginning of the error message.
 func (txtBlankLinesMolecule *textLineSpecBlankLinesMolecule) copyIn(
 	targetBlkLines *TextLineSpecBlankLines,
 	incomingBlkLines *TextLineSpecBlankLines,
@@ -149,54 +146,51 @@ func (txtBlankLinesMolecule *textLineSpecBlankLinesMolecule) copyIn(
 // copyOut - Returns a deep copy of the TextLineSpecBlankLines
 // input parameter 'txtBlankLines'.
 //
-//
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  txtBlankLines              *TextLineSpecBlankLines
-//     - A pointer to an instance of TextLineSpecBlankLines. A deep
-//       copy of the internal member variables will be created
-//       and returned in a new instance of TextLineSpecBlankLines.
+//	txtBlankLines              *TextLineSpecBlankLines
+//	   - A pointer to an instance of TextLineSpecBlankLines. A deep
+//	     copy of the internal member variables will be created
+//	     and returned in a new instance of TextLineSpecBlankLines.
 //
-//       If the member variable data values encapsulated by this
-//       'txtBlankLines' are found to be invalid, this method will
-//       return an error
+//	     If the member variable data values encapsulated by this
+//	     'txtBlankLines' are found to be invalid, this method will
+//	     return an error
 //
 //
-//  errPrefDto                 *ePref.ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//	errPrefDto                 *ePref.ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods listed
+//	     as a function chain.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
-//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  TextLineSpecBlankLines
-//     - If this method completes successfully, a deep copy of
-//       input parameter 'txtBlankLines' will be created and
-//       returned in a new instance of TextLineSpecBlankLines.
+//	TextLineSpecBlankLines
+//	   - If this method completes successfully, a deep copy of
+//	     input parameter 'txtBlankLines' will be created and
+//	     returned in a new instance of TextLineSpecBlankLines.
 //
 //
-//  error
-//     - If this method completes successfully, this returned error
-//       Type is set equal to 'nil'. If errors are encountered during
-//       processing, the returned error Type will encapsulate an error
-//       message.
+//	error
+//	   - If this method completes successfully, this returned error
+//	     Type is set equal to 'nil'. If errors are encountered during
+//	     processing, the returned error Type will encapsulate an error
+//	     message.
 //
-//       If an error message is returned, the text value for input
-//       parameter 'errPrefDto' (error prefix) will be prefixed or
-//       attached at the beginning of the error message.
-//
+//	     If an error message is returned, the text value for input
+//	     parameter 'errPrefDto' (error prefix) will be prefixed or
+//	     attached at the beginning of the error message.
 func (txtBlankLinesMolecule *textLineSpecBlankLinesMolecule) copyOut(
 	txtBlankLines *TextLineSpecBlankLines,
 	errPrefDto *ePref.ErrPrefixDto) (
@@ -269,7 +263,6 @@ func (txtBlankLinesMolecule *textLineSpecBlankLinesMolecule) copyOut(
 // ----------------------------------------------------------------
 // The values of all member variables contained in input parameter
 // 'textSpecBlkLines' will be overwritten and deleted.
-//
 func (txtBlankLinesMolecule *textLineSpecBlankLinesMolecule) empty(
 	textSpecBlkLines *TextLineSpecBlankLines) {
 
@@ -302,7 +295,6 @@ func (txtBlankLinesMolecule *textLineSpecBlankLinesMolecule) empty(
 // 'incomingBlkLines' are equal in all respects, this method
 // returns a boolean value of 'true'. Otherwise, this method
 // returns 'false'.
-//
 func (txtBlankLinesMolecule *textLineSpecBlankLinesMolecule) equal(
 	txtBlankLinesOne *TextLineSpecBlankLines,
 	txtBlankLinesTwo *TextLineSpecBlankLines) bool {
@@ -347,51 +339,48 @@ func (txtBlankLinesMolecule *textLineSpecBlankLinesMolecule) equal(
 // The value of 'blkLines.newLineChars' will be replicated
 // multiple times as specified by 'blkLines.numBlankLines'.
 //
-//
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  txtBlankLines              *TextLineSpecBlankLines
-//     - A pointer to an instance of TextLineSpecBlankLines. The
-//       member variables encapsulated in this object will provide
-//       the data necessary to generate blank lines to text output
-//       display and printing.
+//	txtBlankLines              *TextLineSpecBlankLines
+//	   - A pointer to an instance of TextLineSpecBlankLines. The
+//	     member variables encapsulated in this object will provide
+//	     the data necessary to generate blank lines to text output
+//	     display and printing.
 //
 //
-//  errPrefDto                 *ePref.ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//	errPrefDto                 *ePref.ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods listed
+//	     as a function chain.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
-//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  formattedText              string
-//     - If this method completes successfully, formatted text from
-//       input parameter 'txtBlankLines' will be generated and
-//       returned in this parameter.
+//	formattedText              string
+//	   - If this method completes successfully, formatted text from
+//	     input parameter 'txtBlankLines' will be generated and
+//	     returned in this parameter.
 //
 //
-//  err                        error
-//     - If this method completes successfully, this returned error
-//       Type is set equal to 'nil'. If errors are encountered during
-//       processing, the returned error Type will encapsulate an error
-//       message.
+//	err                        error
+//	   - If this method completes successfully, this returned error
+//	     Type is set equal to 'nil'. If errors are encountered during
+//	     processing, the returned error Type will encapsulate an error
+//	     message.
 //
-//       If an error message is returned, the text value for input
-//       parameter 'errPrefDto' (error prefix) will be prefixed or
-//       attached at the beginning of the error message.
-//
+//	     If an error message is returned, the text value for input
+//	     parameter 'errPrefDto' (error prefix) will be prefixed or
+//	     attached at the beginning of the error message.
 func (txtBlankLinesMolecule *textLineSpecBlankLinesMolecule) getFormattedText(
 	txtBlankLines *TextLineSpecBlankLines,
 	errPrefDto *ePref.ErrPrefixDto) (
@@ -449,7 +438,6 @@ func (txtBlankLinesMolecule *textLineSpecBlankLinesMolecule) getFormattedText(
 
 // ptr - Returns a pointer to a new instance of
 // textLineSpecBlankLinesMolecule.
-//
 func (txtBlankLinesMolecule textLineSpecBlankLinesMolecule) ptr() *textLineSpecBlankLinesMolecule {
 
 	if txtBlankLinesMolecule.lock == nil {
@@ -473,65 +461,62 @@ func (txtBlankLinesMolecule textLineSpecBlankLinesMolecule) ptr() *textLineSpecB
 // Type TextLineSpecBlankLines is used to configure one or more
 // blank lines of text for display, printing for file output.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  txtBlankLines              *TextLineSpecBlankLines
-//     - A pointer to an instance of TextLineSpecBlankLines.
-//       Member data variables for this instance will be configured
-//       in accordance with the following input parameters.
+//	txtBlankLines              *TextLineSpecBlankLines
+//	   - A pointer to an instance of TextLineSpecBlankLines.
+//	     Member data variables for this instance will be configured
+//	     in accordance with the following input parameters.
 //
-//       All pre-existing member data variables in this instance
-//       will be deleted and overwritten with the new data values
-//       specified in the following input parameters.
-//
-//
-//  numOfBlankLines            int
-//     - The number of blank lines which will be generated by an
-//       instance of TextLineSpecBlankLines. This value will be
-//       tested for validity and configured for input parameter
-//       'txtBlankLines'.
+//	     All pre-existing member data variables in this instance
+//	     will be deleted and overwritten with the new data values
+//	     specified in the following input parameters.
 //
 //
-//  newLineRunes               []rune
-//     - This rune array holds the text character or characters
-//       which will be used as the line termination sequence for
-//       input parameter 'txtBlankLines', an instance of
-//       TextLineSpecBlankLines.
-//
-//       If this parameter is submitted as a 'nil' value or a zero
-//       length rune array, an error will be returned.
+//	numOfBlankLines            int
+//	   - The number of blank lines which will be generated by an
+//	     instance of TextLineSpecBlankLines. This value will be
+//	     tested for validity and configured for input parameter
+//	     'txtBlankLines'.
 //
 //
-//  errPrefDto                 *ePref.ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//	newLineRunes               []rune
+//	   - This rune array holds the text character or characters
+//	     which will be used as the line termination sequence for
+//	     input parameter 'txtBlankLines', an instance of
+//	     TextLineSpecBlankLines.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     If this parameter is submitted as a 'nil' value or a zero
+//	     length rune array, an error will be returned.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
 //
+//	errPrefDto                 *ePref.ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods listed
+//	     as a function chain.
+//
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
+//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If this method completes successfully, this returned error
-//       Type is set equal to 'nil'. If errors are encountered during
-//       processing, the returned error Type will encapsulate an error
-//       message.
+//	error
+//	   - If this method completes successfully, this returned error
+//	     Type is set equal to 'nil'. If errors are encountered during
+//	     processing, the returned error Type will encapsulate an error
+//	     message.
 //
-//       If an error message is returned, the text value for input
-//       parameter 'errPrefDto' (error prefix) will be prefixed or
-//       attached at the beginning of the error message.
-//
+//	     If an error message is returned, the text value for input
+//	     parameter 'errPrefDto' (error prefix) will be prefixed or
+//	     attached at the beginning of the error message.
 func (txtBlankLinesMolecule *textLineSpecBlankLinesMolecule) setTextLinesSpecBlankLines(
 	txtBlankLines *TextLineSpecBlankLines,
 	numOfBlankLines int,

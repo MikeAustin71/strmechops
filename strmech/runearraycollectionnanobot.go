@@ -8,7 +8,6 @@ import (
 
 // runeArrayCollectionNanobot - Provides helper methods for type
 // RuneArrayCollection.
-//
 type runeArrayCollectionNanobot struct {
 	lock *sync.Mutex
 }
@@ -18,7 +17,7 @@ type runeArrayCollectionNanobot struct {
 // 'destinationRuneArrayCol'. Both instances are of type
 // RuneArrayCollection.
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // ----------------------------------------------------------------
 //
@@ -28,68 +27,65 @@ type runeArrayCollectionNanobot struct {
 // Also, DATA VALIDATION IS PERFORMED on input parameter,
 // 'sourceRuneArrayCol'.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  destinationRuneArrayCol    *RuneArrayCollection
-//     - A pointer to a RuneArrayCollection instance. All the
-//       member variable data fields in this object will be
-//       replaced by data values copied from input parameter
-//       'sourceNegNumResults'.
+//	destinationRuneArrayCol    *RuneArrayCollection
+//	   - A pointer to a RuneArrayCollection instance. All the
+//	     member variable data fields in this object will be
+//	     replaced by data values copied from input parameter
+//	     'sourceNegNumResults'.
 //
-//       'destinationNegNumResults' is the destination for this
-//       copy operation.
-//
-//
-//  sourceRuneArrayCol         *RuneArrayCollection
-//     - A pointer to another RuneArrayCollection instance. All the
-//       member variable data values from this object will be
-//       copied to corresponding member variables in
-//       'destinationNegNumResults'.
-//
-//       'sourceRuneArrayCol' is the source for this copy
-//       operation.
-//
-//       If 'sourceRuneArrayCol' is empty an error will be
-//       returned.
-//
-//       If 'sourceRuneArrayCol' contains RuneArrayDto objects with
-//       zero length character arrays, an error will be returned.
-//
-//       If 'sourceRuneArrayCol' contains RuneArrayDto objects with
-//       invalid Character Search Type designations, an error will
-//       be returned.
+//	     'destinationNegNumResults' is the destination for this
+//	     copy operation.
 //
 //
-//  errPrefDto                   *ePref.ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//	sourceRuneArrayCol         *RuneArrayCollection
+//	   - A pointer to another RuneArrayCollection instance. All the
+//	     member variable data values from this object will be
+//	     copied to corresponding member variables in
+//	     'destinationNegNumResults'.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	     'sourceRuneArrayCol' is the source for this copy
+//	     operation.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
+//	     If 'sourceRuneArrayCol' is empty an error will be
+//	     returned.
 //
+//	     If 'sourceRuneArrayCol' contains RuneArrayDto objects with
+//	     zero length character arrays, an error will be returned.
+//
+//	     If 'sourceRuneArrayCol' contains RuneArrayDto objects with
+//	     invalid Character Search Type designations, an error will
+//	     be returned.
+//
+//
+//	errPrefDto                   *ePref.ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods listed
+//	     as a function chain.
+//
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
+//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If this method completes successfully, this returned error
-//       Type is set equal to 'nil'. If errors are encountered during
-//       processing, the returned error Type will encapsulate an error
-//       message.
+//	error
+//	   - If this method completes successfully, this returned error
+//	     Type is set equal to 'nil'. If errors are encountered during
+//	     processing, the returned error Type will encapsulate an error
+//	     message.
 //
-//       If an error message is returned, the text value for input
-//       parameter 'errPrefDto' (error prefix) will be prefixed or
-//       attached at the beginning of the error message.
-//
+//	     If an error message is returned, the text value for input
+//	     parameter 'errPrefDto' (error prefix) will be prefixed or
+//	     attached at the beginning of the error message.
 func (runeArrayColNanobot *runeArrayCollectionNanobot) copyIn(
 	destinationRuneArrayCol *RuneArrayCollection,
 	sourceRuneArrayCol *RuneArrayCollection,
@@ -184,67 +180,64 @@ func (runeArrayColNanobot *runeArrayCollectionNanobot) copyIn(
 //
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // DATA VALIDATION IS PERFORMED on 'runeArrayCol'.
-//
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  runeArrayCol               *RuneArrayCollection
-//     - A pointer to an instance of RuneArrayCollection. A deep
-//       copy of the internal member variables contained in this
-//       instance will be created and returned in a new instance of
-//       RuneArrayCollection.
+//	runeArrayCol               *RuneArrayCollection
+//	   - A pointer to an instance of RuneArrayCollection. A deep
+//	     copy of the internal member variables contained in this
+//	     instance will be created and returned in a new instance of
+//	     RuneArrayCollection.
 //
-//       DATA VALIDATION IS performed on 'runeArrayCol'.
+//	     DATA VALIDATION IS performed on 'runeArrayCol'.
 //
-//       If 'runeArrayCol' is empty with a length of zero,
-//       an error will be returned.
+//	     If 'runeArrayCol' is empty with a length of zero,
+//	     an error will be returned.
 //
-//       If 'runeArrayCol' contains RuneArrayDto objects with zero
-//       length character arrays, an error will be returned.
+//	     If 'runeArrayCol' contains RuneArrayDto objects with zero
+//	     length character arrays, an error will be returned.
 //
-//       If 'runeArrayCol' contains RuneArrayDto objects with
-//       invalid Character Search Type designations, an error will
-//       be returned.
+//	     If 'runeArrayCol' contains RuneArrayDto objects with
+//	     invalid Character Search Type designations, an error will
+//	     be returned.
 //
 //
-//  errPrefDto                 *ePref.ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//	errPrefDto                 *ePref.ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods listed
+//	     as a function chain.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
-//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  deepCopyRuneArrayCol       RuneArrayCollection
-//     - If this method completes successfully, a deep copy of
-//       input parameter 'runeArrayCol' will be created and
-//       returned in a new instance of RuneArrayCollection.
+//	deepCopyRuneArrayCol       RuneArrayCollection
+//	   - If this method completes successfully, a deep copy of
+//	     input parameter 'runeArrayCol' will be created and
+//	     returned in a new instance of RuneArrayCollection.
 //
 //
-//  err                        error
-//     - If this method completes successfully, this returned error
-//       Type is set equal to 'nil'. If errors are encountered during
-//       processing, the returned error Type will encapsulate an error
-//       message.
+//	err                        error
+//	   - If this method completes successfully, this returned error
+//	     Type is set equal to 'nil'. If errors are encountered during
+//	     processing, the returned error Type will encapsulate an error
+//	     message.
 //
-//       If an error message is returned, the text value for input
-//       parameter 'errPrefDto' (error prefix) will be prefixed or
-//       attached at the beginning of the error message.
-//
+//	     If an error message is returned, the text value for input
+//	     parameter 'errPrefDto' (error prefix) will be prefixed or
+//	     attached at the beginning of the error message.
 func (runeArrayColNanobot *runeArrayCollectionNanobot) copyOut(
 	runeArrayCol *RuneArrayCollection,
 	errPrefDto *ePref.ErrPrefixDto) (
@@ -325,7 +318,6 @@ func (runeArrayColNanobot *runeArrayCollectionNanobot) copyOut(
 
 // ptr - Returns a pointer to a new instance of
 // runeArrayCollectionNanobot.
-//
 func (runeArrayColNanobot runeArrayCollectionNanobot) ptr() *runeArrayCollectionNanobot {
 
 	if runeArrayColNanobot.lock == nil {

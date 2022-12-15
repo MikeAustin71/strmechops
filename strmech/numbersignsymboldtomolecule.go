@@ -20,7 +20,6 @@ type numberSignSymbolDtoMolecule struct {
 //
 // Be advised that the data fields in 'targetNumSignSymbol' will be
 // overwritten.
-//
 func (nSignSymMolecule *numberSignSymbolDtoMolecule) copyIn(
 	targetNumSignSymbol *NumberSignSymbolDto,
 	incomingNumSignSymbol *NumberSignSymbolDto,
@@ -136,7 +135,6 @@ func (nSignSymMolecule *numberSignSymbolDtoMolecule) copyIn(
 //
 // If input parameter 'incomingNumSignSymbol' is judged to be
 // invalid, this method will return an error.
-//
 func (nSignSymMolecule *numberSignSymbolDtoMolecule) copyOut(
 	incomingNumSignSymbol *NumberSignSymbolDto,
 	errPrefDto *ePref.ErrPrefixDto) (
@@ -232,7 +230,6 @@ func (nSignSymMolecule *numberSignSymbolDtoMolecule) copyOut(
 
 // ptr - Returns a pointer to a new instance of
 // numberSignSymbolDtoMolecule.
-//
 func (nSignSymMolecule numberSignSymbolDtoMolecule) ptr() *numberSignSymbolDtoMolecule {
 
 	if nSignSymMolecule.lock == nil {

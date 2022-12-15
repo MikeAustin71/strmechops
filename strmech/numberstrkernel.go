@@ -407,12 +407,12 @@ func (numStrKernel *NumberStrKernel) Compare(
 //	fields of the current NumberStrKernel instance
 //	('numStrKernel').
 //
-// # IMPORTANT
-//
 // ----------------------------------------------------------------
 //
+// # IMPORTANT
+//
 // All the data fields in current NumberStrKernel instance
-// ('numStrKernel') will be modified and overwritten.
+// ('numStrKernel') will be deleted and overwritten.
 //
 // ----------------------------------------------------------------
 //
@@ -522,7 +522,7 @@ func (numStrKernel *NumberStrKernel) CopyIn(
 	}
 
 	err =
-		new(numberStrKernelNanobot).copyIn(
+		new(numberStrKernelNanobot).copy(
 			numStrKernel,
 			incomingNumStrKernel,
 			ePrefix.XCpy(
@@ -539,7 +539,7 @@ func (numStrKernel *NumberStrKernel) CopyIn(
 //
 // ----------------------------------------------------------------
 //
-// Input Parameters
+// # Input Parameters
 //
 //	errorPrefix                interface{}
 //	   - This object encapsulates error prefix text which is
@@ -586,9 +586,9 @@ func (numStrKernel *NumberStrKernel) CopyIn(
 //	     Types ErrPrefixDto and IBasicErrorPrefix are included in
 //	     the 'errpref' software package, "github.com/MikeAustin71/errpref".
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
-// Return Values
+// # Return Values
 //
 //	deepCopyNumStrKernel       NumberStrKernel
 //	   - If this method completes successfully and no errors are
@@ -631,9 +631,9 @@ func (numStrKernel *NumberStrKernel) CopyOut(
 		return deepCopyNumStrKernel, err
 	}
 
-	deepCopyNumStrKernel,
-		err = new(numberStrKernelNanobot).
-		copyOut(
+	err = new(numberStrKernelNanobot).
+		copy(
+			&deepCopyNumStrKernel,
 			numStrKernel,
 			ePrefix.XCpy(
 				"deepCopyNumStrKernel<-"+

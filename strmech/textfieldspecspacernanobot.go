@@ -20,61 +20,58 @@ type textFieldSpecSpacerNanobot struct {
 // Be advised that the data fields in 'targetTxtFieldSpacer' will be
 // overwritten and replaced.
 //
-//
 // -----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  targetTxtFieldSpacer       *TextFieldSpecSpacer
-//     - A pointer to a TextFieldSpecSpacer instance. All the
-//       member variable data fields in this object will be
-//       replaced by data values extracted from input parameter
-//       'incomingTxtFieldSpacer'.
+//	targetTxtFieldSpacer       *TextFieldSpecSpacer
+//	   - A pointer to a TextFieldSpecSpacer instance. All the
+//	     member variable data fields in this object will be
+//	     replaced by data values extracted from input parameter
+//	     'incomingTxtFieldSpacer'.
 //
-//       'targetTxtFieldSpacer' is the target of this copy
-//       operation.
-//
-//
-//  incomingTxtFieldSpacer     *TextFieldSpecSpacer
-//     - A pointer to another TextFieldSpecSpacer instance. All
-//       the member variable data values from this object will
-//       be copied to corresponding member variables in
-//       'targetTxtFieldSpacer'.
-//
-//       'incomingTxtFieldSpacer' is the source for this copy
-//       operation.
-//
-//       If 'incomingTxtFieldSpacer' is determined to be invalid,
-//       an error will be returned.
+//	     'targetTxtFieldSpacer' is the target of this copy
+//	     operation.
 //
 //
-//  errPrefDto          *ePref.ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//	incomingTxtFieldSpacer     *TextFieldSpecSpacer
+//	   - A pointer to another TextFieldSpecSpacer instance. All
+//	     the member variable data values from this object will
+//	     be copied to corresponding member variables in
+//	     'targetTxtFieldSpacer'.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     'incomingTxtFieldSpacer' is the source for this copy
+//	     operation.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
+//	     If 'incomingTxtFieldSpacer' is determined to be invalid,
+//	     an error will be returned.
 //
+//
+//	errPrefDto          *ePref.ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods listed
+//	     as a function chain.
+//
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
+//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If this method completes successfully, this returned error
-//       Type is set equal to 'nil'. If errors are encountered during
-//       processing, the returned error Type will encapsulate an error
-//       message.
+//	error
+//	   - If this method completes successfully, this returned error
+//	     Type is set equal to 'nil'. If errors are encountered during
+//	     processing, the returned error Type will encapsulate an error
+//	     message.
 //
-//       If an error message is returned, the text value for input
-//       parameter 'errPrefDto' (error prefix) will be prefixed or
-//       attached at the beginning of the error message.
-//
+//	     If an error message is returned, the text value for input
+//	     parameter 'errPrefDto' (error prefix) will be prefixed or
+//	     attached at the beginning of the error message.
 func (txtFieldSpacerNanobot *textFieldSpecSpacerNanobot) copyIn(
 	targetTxtFieldSpacer *TextFieldSpecSpacer,
 	incomingTxtFieldSpacer *TextFieldSpecSpacer,
@@ -141,54 +138,51 @@ func (txtFieldSpacerNanobot *textFieldSpecSpacerNanobot) copyIn(
 // copyOut - Returns a deep copy of the input parameter
 // 'txtFieldSpacer'
 //
-//
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  txtFieldSpacer       *TextFieldSpecSpacer
-//     - A pointer to an instance of TextFieldSpecSpacer. A deep
-//       copy of the internal member variables will be created
-//       and returned in a new instance of TextFieldSpecSpacer.
+//	txtFieldSpacer       *TextFieldSpecSpacer
+//	   - A pointer to an instance of TextFieldSpecSpacer. A deep
+//	     copy of the internal member variables will be created
+//	     and returned in a new instance of TextFieldSpecSpacer.
 //
-//       If the member variable data values encapsulated by this
-//       'txtFieldSpacer' are found to be invalid, this method will
-//       return an error
+//	     If the member variable data values encapsulated by this
+//	     'txtFieldSpacer' are found to be invalid, this method will
+//	     return an error
 //
 //
-//  errPrefDto          *ePref.ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//	errPrefDto          *ePref.ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods listed
+//	     as a function chain.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
-//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  TextFieldSpecSpacer
-//     - If this method completes successfully, a deep copy of
-//       input parameter 'txtFieldSpacer' will be created and
-//       returned in a new instance of TextFieldSpecSpacer.
+//	TextFieldSpecSpacer
+//	   - If this method completes successfully, a deep copy of
+//	     input parameter 'txtFieldSpacer' will be created and
+//	     returned in a new instance of TextFieldSpecSpacer.
 //
 //
-//  error
-//     - If this method completes successfully, this returned error
-//       Type is set equal to 'nil'. If errors are encountered during
-//       processing, the returned error Type will encapsulate an error
-//       message.
+//	error
+//	   - If this method completes successfully, this returned error
+//	     Type is set equal to 'nil'. If errors are encountered during
+//	     processing, the returned error Type will encapsulate an error
+//	     message.
 //
-//       If an error message is returned, the text value for input
-//       parameter 'errPrefDto' (error prefix) will be prefixed or
-//       attached at the beginning of the error message.
-//
+//	     If an error message is returned, the text value for input
+//	     parameter 'errPrefDto' (error prefix) will be prefixed or
+//	     attached at the beginning of the error message.
 func (txtFieldSpacerNanobot *textFieldSpecSpacerNanobot) copyOut(
 	txtFieldSpacer *TextFieldSpecSpacer,
 	errPrefDto *ePref.ErrPrefixDto) (
@@ -254,7 +248,6 @@ func (txtFieldSpacerNanobot *textFieldSpecSpacerNanobot) copyOut(
 // ----------------------------------------------------------------
 // The values of all member variables contained in input parameter
 // 'txtFieldSpacer' will be overwritten and replaced.
-//
 func (txtFieldSpacerNanobot *textFieldSpecSpacerNanobot) empty(
 	txtFieldSpacer *TextFieldSpecSpacer) {
 
@@ -285,7 +278,6 @@ func (txtFieldSpacerNanobot *textFieldSpecSpacerNanobot) empty(
 // returned. If the member variables for both instances are equal
 // in all respects, this flag is set to 'true'. Otherwise, this
 // method returns 'false'.
-//
 func (txtFieldSpacerNanobot *textFieldSpecSpacerNanobot) equal(
 	txtFieldSpacer *TextFieldSpecSpacer,
 	incomingTxtFieldSpacer *TextFieldSpecSpacer) bool {
@@ -322,15 +314,13 @@ func (txtFieldSpacerNanobot *textFieldSpecSpacerNanobot) equal(
 // This method fulfills the requirements of the
 // ITextFieldSpecification interface.
 //
-//
 // ------------------------------------------------------------------------
 //
 // Example Usage
 //
-//  fieldLen = 1 produces text field " "
-//  fieldLen = 2 produces text field "  "
-//  fieldLen = 5 produces text field "     "
-//
+//	fieldLen = 1 produces text field " "
+//	fieldLen = 2 produces text field "  "
+//	fieldLen = 5 produces text field "     "
 func (txtFieldSpacerNanobot *textFieldSpecSpacerNanobot) getFormattedText(
 	txtFieldSpacer *TextFieldSpecSpacer,
 	errPrefDto *ePref.ErrPrefixDto) (
@@ -386,7 +376,6 @@ func (txtFieldSpacerNanobot *textFieldSpecSpacerNanobot) getFormattedText(
 
 // ptr - Returns a pointer to a new instance of
 // textFieldSpecSpacerNanobot.
-//
 func (txtFieldSpacerNanobot textFieldSpecSpacerNanobot) ptr() *textFieldSpecSpacerNanobot {
 
 	if txtFieldSpacerNanobot.lock == nil {
@@ -411,61 +400,58 @@ func (txtFieldSpacerNanobot textFieldSpecSpacerNanobot) ptr() *textFieldSpecSpac
 // Be advised that the data fields in 'txtFieldSpacer' will be
 // overwritten and replaced.
 //
-//
 // -----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  txtFieldSpacer             *TextFieldSpecSpacer
-//     - A pointer to an instance of TextFieldSpecSpacer. The
-//       member variable data values in this instance will be
-//       overwritten and replaced based on the following input
-//       parameters.
+//	txtFieldSpacer             *TextFieldSpecSpacer
+//	   - A pointer to an instance of TextFieldSpecSpacer. The
+//	     member variable data values in this instance will be
+//	     overwritten and replaced based on the following input
+//	     parameters.
 //
 //
-//  fieldLen                   int
-//     - An integer value which specifies the number of white space
-//       characters to be included in the spacer text field.
+//	fieldLen                   int
+//	   - An integer value which specifies the number of white space
+//	     characters to be included in the spacer text field.
 //
-//       Examples:
-//          fieldLen = 1 produces text field " "
-//          fieldLen = 2 produces text field "  "
-//          fieldLen = 5 produces text field "     "
+//	     Examples:
+//	        fieldLen = 1 produces text field " "
+//	        fieldLen = 2 produces text field "  "
+//	        fieldLen = 5 produces text field "     "
 //
-//       If 'fieldLen' is less than one (+1), an error will be
-//       returned.
+//	     If 'fieldLen' is less than one (+1), an error will be
+//	     returned.
 //
-//       If 'fieldLen' is greater than one-million (+1,000,000), an
-//       error will be returned.
+//	     If 'fieldLen' is greater than one-million (+1,000,000), an
+//	     error will be returned.
 //
 //
-//  errPrefDto          *ePref.ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//	errPrefDto          *ePref.ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods listed
+//	     as a function chain.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
-//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If this method completes successfully, this returned error
-//       Type is set equal to 'nil'. If errors are encountered during
-//       processing, the returned error Type will encapsulate an error
-//       message.
+//	error
+//	   - If this method completes successfully, this returned error
+//	     Type is set equal to 'nil'. If errors are encountered during
+//	     processing, the returned error Type will encapsulate an error
+//	     message.
 //
-//       If an error message is returned, the text value for input
-//       parameter 'errPrefDto' (error prefix) will be prefixed or
-//       attached at the beginning of the error message.
-//
+//	     If an error message is returned, the text value for input
+//	     parameter 'errPrefDto' (error prefix) will be prefixed or
+//	     attached at the beginning of the error message.
 func (txtFieldSpacerNanobot *textFieldSpecSpacerNanobot) setTextFieldSpacer(
 	txtFieldSpacer *TextFieldSpecSpacer,
 	fieldLen int,

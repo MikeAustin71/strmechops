@@ -8,7 +8,6 @@ import (
 
 // negNumSearchSpecCollectionNanobot - Provides helper methods for type
 // NegNumSearchSpecCollection.
-//
 type negNumSearchSpecCollectionNanobot struct {
 	lock *sync.Mutex
 }
@@ -120,7 +119,6 @@ func (negNumSearchColNanobot negNumSearchSpecCollectionNanobot) copyIn(
 
 // ptr - Returns a pointer to a new instance of
 // negNumSearchColNanobot.
-//
 func (negNumSearchColNanobot negNumSearchSpecCollectionNanobot) ptr() *negNumSearchSpecCollectionNanobot {
 
 	if negNumSearchColNanobot.lock == nil {
