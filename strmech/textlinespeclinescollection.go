@@ -784,6 +784,11 @@ func (txtLinesSpecCol *TextLineSpecLinesCollection) AddSolidLine(
 //		variadic arguments must be positioned last
 //		in the parameter list.
 //
+//		Be advised, 'textFieldColumns' must be
+//		entered as pointers.
+//
+//			Example: &textFieldColumns
+//
 // ----------------------------------------------------------------
 //
 // # Return Values

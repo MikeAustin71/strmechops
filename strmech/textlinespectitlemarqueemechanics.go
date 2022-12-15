@@ -249,69 +249,218 @@ func (txtLineTitleMarqueeMech *textLineSpecTitleMarqueeMechanics) setTxtLineTitl
 
 	}
 
+	var extraCharsCount, lenSolidLineChar, solidLineRepeatCount,
+		solidLineLength int
+
+	var extraChars string
+
+	var textFieldColumns []ITextFieldFormatDto
+
+	var fillerLineField TextFieldFormatDtoFiller
+	var extraCharsLabel TextFieldFormatDtoLabel
+
 	if len(configSpecs.LeadingSolidLineChar) > 0 &&
 		configSpecs.NumLeadingSolidLines > 0 {
+		// We have left and/or right margins
+		// Filler Lines are required.
 
-		err = txtLineTitleMarquee.leadingMarqueeLines.AddSolidLine(
-			configSpecs.StandardTitleLeftMargin,
-			configSpecs.LeadingSolidLineChar,
-			configSpecs.StandardTextFieldLen,
-			configSpecs.StandardTitleRightMargin,
-			"\n",
-			false,
-			configSpecs.NumLeadingSolidLines,
-			ePrefix.XCpy(
-				"configSpecs.NumLeadingSolidLines"))
+		lenSolidLineChar = len(configSpecs.LeadingSolidLineChar)
 
-		if err != nil {
-			return err
+		solidLineRepeatCount = configSpecs.StandardTextFieldLen
+
+		solidLineLength =
+			solidLineRepeatCount * lenSolidLineChar
+
+		if solidLineLength >
+			configSpecs.StandardTextFieldLen {
+
+			solidLineRepeatCount =
+				configSpecs.StandardTextFieldLen / lenSolidLineChar
 		}
 
+		extraCharsCount = 0
+		extraChars = ""
+
+		if lenSolidLineChar*solidLineRepeatCount <
+			configSpecs.StandardTextFieldLen {
+
+			extraCharsCount = configSpecs.StandardTextFieldLen -
+				(lenSolidLineChar * solidLineRepeatCount)
+
+			extraChars = configSpecs.LeadingSolidLineChar[0:extraCharsCount]
+		}
+
+		textFieldColumns = nil
+
+		fillerLineField = TextFieldFormatDtoFiller{
+			LeftMarginStr:          configSpecs.StandardTitleLeftMargin,
+			FillerChars:            configSpecs.LeadingSolidLineChar,
+			FillerCharsRepeatCount: solidLineRepeatCount,
+			RightMarginStr:         configSpecs.StandardTitleRightMargin,
+		}
+
+		textFieldColumns = append(
+			textFieldColumns,
+			&fillerLineField)
+
+		if len(extraChars) > 0 {
+
+			extraCharsLabel = TextFieldFormatDtoLabel{
+				LeftMarginStr:  "",
+				FieldContents:  extraChars,
+				FieldLength:    -1,
+				FieldJustify:   TxtJustify.Left(),
+				RightMarginStr: "",
+			}
+
+			textFieldColumns = append(
+				textFieldColumns,
+				&extraCharsLabel)
+
+		}
+
+		for i := 0; i < configSpecs.NumLeadingSolidLines; i++ {
+
+			err = txtLineTitleMarquee.leadingMarqueeLines.
+				AddStdLineColumns(
+					"\n",
+					false,
+					ePrefix.XCpy(""+
+						" txtLineTitleMarquee.leadingMarqueeLines<-LeadingSolidLine"),
+					textFieldColumns...)
+
+			if err != nil {
+				return err
+			}
+
+		}
 	}
 
 	if configSpecs.NumTopTitleBlankLines > 0 {
 
-		err = txtLineTitleMarquee.leadingMarqueeLines.AddBlankLine(
-			configSpecs.NumTopTitleBlankLines,
-			ePrefix.XCpy(
-				"configSpecs.NumTopTitleBlankLines"))
-
-		if err != nil {
-			return err
+		fillerLineField = TextFieldFormatDtoFiller{
+			LeftMarginStr:          configSpecs.StandardTitleLeftMargin,
+			FillerChars:            " ",
+			FillerCharsRepeatCount: configSpecs.StandardTextFieldLen,
+			RightMarginStr:         configSpecs.StandardTitleRightMargin,
 		}
 
+		for i := 0; i < configSpecs.NumTopTitleBlankLines; i++ {
+
+			err = txtLineTitleMarquee.leadingMarqueeLines.
+				AddStdLineColumns(
+					"\n",
+					false,
+					ePrefix.XCpy(""+
+						" txtLineTitleMarquee.leadingMarqueeLines<-TopTitleBlankLines"),
+					&fillerLineField)
+
+			if err != nil {
+				return err
+			}
+
+		}
 	}
 
 	if configSpecs.NumBottomTitleBlankLines > 0 {
 
-		err = txtLineTitleMarquee.trailingMarqueeLines.AddBlankLine(
-			configSpecs.NumBottomTitleBlankLines,
-			ePrefix.XCpy(
-				"configSpecs.NumBottomTitleBlankLines"))
+		fillerLineField = TextFieldFormatDtoFiller{
+			LeftMarginStr:          configSpecs.StandardTitleLeftMargin,
+			FillerChars:            " ",
+			FillerCharsRepeatCount: configSpecs.StandardTextFieldLen,
+			RightMarginStr:         configSpecs.StandardTitleRightMargin,
+		}
 
-		if err != nil {
-			return err
+		for i := 0; i < configSpecs.NumBottomTitleBlankLines; i++ {
+
+			err = txtLineTitleMarquee.trailingMarqueeLines.
+				AddStdLineColumns(
+					"\n",
+					false,
+					ePrefix.XCpy(""+
+						" txtLineTitleMarquee.trailingMarqueeLines<-BottomTitleBlankLines"),
+					&fillerLineField)
+
+			if err != nil {
+				return err
+			}
+
 		}
 	}
 
 	if len(configSpecs.TrailingSolidLineChar) > 0 &&
 		configSpecs.NumTrailingSolidLines > 0 {
 
-		err = txtLineTitleMarquee.trailingMarqueeLines.AddSolidLine(
-			configSpecs.StandardTitleLeftMargin,
-			configSpecs.TrailingSolidLineChar,
-			configSpecs.StandardTextFieldLen,
-			configSpecs.StandardTitleRightMargin,
-			"\n",
-			false,
-			configSpecs.NumTrailingSolidLines,
-			ePrefix.XCpy(
-				"configSpecs.TrailingSolidLineChar"))
+		lenSolidLineChar = len(configSpecs.TrailingSolidLineChar)
 
-		if err != nil {
-			return err
+		solidLineRepeatCount = configSpecs.StandardTextFieldLen
+
+		solidLineLength =
+			solidLineRepeatCount * lenSolidLineChar
+
+		if solidLineLength >
+			configSpecs.StandardTextFieldLen {
+
+			solidLineRepeatCount =
+				configSpecs.StandardTextFieldLen / lenSolidLineChar
 		}
 
+		extraCharsCount = 0
+		extraChars = ""
+
+		if lenSolidLineChar*solidLineRepeatCount <
+			configSpecs.StandardTextFieldLen {
+
+			extraCharsCount = configSpecs.StandardTextFieldLen -
+				(lenSolidLineChar * solidLineRepeatCount)
+
+			extraChars = configSpecs.LeadingSolidLineChar[0:extraCharsCount]
+		}
+
+		textFieldColumns = nil
+
+		fillerLineField = TextFieldFormatDtoFiller{
+			LeftMarginStr:          configSpecs.StandardTitleLeftMargin,
+			FillerChars:            configSpecs.TrailingSolidLineChar,
+			FillerCharsRepeatCount: solidLineRepeatCount,
+			RightMarginStr:         configSpecs.StandardTitleRightMargin,
+		}
+
+		textFieldColumns = append(
+			textFieldColumns,
+			&fillerLineField)
+
+		if len(extraChars) > 0 {
+
+			extraCharsLabel = TextFieldFormatDtoLabel{
+				LeftMarginStr:  "",
+				FieldContents:  extraChars,
+				FieldLength:    -1,
+				FieldJustify:   TxtJustify.Left(),
+				RightMarginStr: "",
+			}
+
+			textFieldColumns = append(
+				textFieldColumns,
+				&extraCharsLabel)
+
+		}
+
+		for i := 0; i < configSpecs.NumTrailingSolidLines; i++ {
+
+			err = txtLineTitleMarquee.trailingMarqueeLines.
+				AddStdLineColumns(
+					"\n",
+					false,
+					ePrefix.XCpy(""+
+						" txtLineTitleMarquee.trailingMarqueeLines<-TrailingSolidLines"),
+					textFieldColumns...)
+
+			if err != nil {
+				return err
+			}
+
+		}
 	}
 
 	if configSpecs.NumTrailingBlankLines > 0 {
