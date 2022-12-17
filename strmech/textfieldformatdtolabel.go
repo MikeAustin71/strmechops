@@ -16,6 +16,9 @@ import (
 //
 // Type TextFieldFormatDtoLabel contains all the format
 // parameters necessary format a single text label field.
+//
+// This type implements the ITextFieldFormatDto
+// interface.
 type TextFieldFormatDtoLabel struct {
 	LeftMarginStr string
 	//	One or more characters used to create a left
@@ -36,19 +39,21 @@ type TextFieldFormatDtoLabel struct {
 	//	follows:
 	//
 	//		time.Time (Converted using default format)
+	//		NumberStrKernel, *NumberStrKernel
 	//		string
 	//		bool
 	//		uint, uint8, uint16, uint32, uint64,
 	//		int, int8, int16, int32, int64
 	//		float32, float64
-	//		*big.Int *big.Float
+	//		*big.Int, big.Int
+	//		*big.Float, big.Float
+	//		*big.Rat, big.Rat
 	//		fmt.Stringer (types that support this interface)
 	//		TextInputParamFieldDateTimeDto
-	//		       (Converts date time to string)
+	//	              (Converts date time to string)
 	//		ITextLineSpecification
 	//		ITextFieldSpecification
-	//		ITextFieldFormatDto
-	//			TextFieldFormatDtoBigFloat
+	//			TextFieldFormatDtoBigFloat - Formats big.Float numbers
 	//			TextFieldFormatDtoDate
 	//			TextFieldFormatDtoLabel
 	//			TextFieldFormatDtoFiller

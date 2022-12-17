@@ -49,7 +49,10 @@ type textSpecificationAtom struct {
 //	               (Converts date time to string)
 //			ITextLineSpecification
 //			ITextFieldSpecification
-//			TextFieldFormatDtoBigFloat - Formats big.Float numbers
+//				TextFieldFormatDtoBigFloat - Formats big.Float numbers
+//				TextFieldFormatDtoDate
+//				TextFieldFormatDtoLabel
+//				TextFieldFormatDtoFiller
 //
 //		If the 'emptyIFace' object is not convertible to
 //		one of the supported types, an error will be

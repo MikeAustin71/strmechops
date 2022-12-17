@@ -19,6 +19,9 @@ import (
 // to facilitate easy data entry which creating and
 // configuring text lines strings for screen display,
 // file output or printing.
+//
+// This type implements the ITextFieldFormatDto
+// interface.
 type TextFieldFormatDtoBigFloat struct {
 	LeftMarginStr string
 	//	One or more characters used to create a left

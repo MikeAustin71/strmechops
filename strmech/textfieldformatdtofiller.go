@@ -47,6 +47,9 @@ import (
 // 'FillerCharsRepeatCount' value greater than zero.
 // 'FillerCharsRepeatCount' values less than or equal
 // to zero constitute an error condition.
+//
+// This type implements the ITextFieldFormatDto
+// interface.
 type TextFieldFormatDtoFiller struct {
 	LeftMarginStr string
 	//	One or more characters used to create a left
