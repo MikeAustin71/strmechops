@@ -37,7 +37,7 @@ type TextLineTitleMarqueeDto struct {
 	//
 	//	'StandardTextFieldLen' defines the length of the
 	//	text field in which the Title Line string will be
-	//	displayed. If  'StandardTextFieldLen' is less
+	//	displayed. If 'StandardTextFieldLen' is less
 	//	than the length of the Title Line string, it will
 	//	be automatically set equal to the Title Line
 	//	string length.
@@ -86,8 +86,8 @@ type TextLineTitleMarqueeDto struct {
 	//				"Hello World!"
 
 	StandardTextJustification TextJustify
-	//	The standard field length applied to all
-	//	Text Title Lines in the 'TitleLines' array.
+	//	The standard text field justification applied to
+	//	all Text Title Lines in the 'TitleLines' array.
 	//
 	//	Type 'TextJustify' is an enumeration which
 	//	specifies the justification of the text field
@@ -2725,6 +2725,261 @@ func (txtLineTitleMarqueeDto *TextLineTitleMarqueeDto) IsValidInstanceError(
 	return err
 }
 
+// NewBasicTitleMarqueeDto
+//
+// Creates and returns a fully populated instance of
+// TextLineTitleMarqueeDto using a basic Title Marquee
+// profile incorporating default text line
+// specifications.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	If the 'titleLines' paramter is submitted as an
+//	empty or nil value, no error will be returned.
+//
+//	However, the user will then be responsible for
+//	populating the title lines array using the 'Add'
+//	methods documented above.
+//
+// ----------------------------------------------------------------
+//
+// # Default Values
+//
+//	The returned instance of TextLineTitleMarqueeDto will
+//	be constructed as a basic Text Title Marquee
+//	incorporating the following default values.
+//
+//	StandardTitleLeftMargin = standardTitleLeftMargin
+//
+//	StandardTitleRightMargin = standardTitleRightMargin
+//
+//	StandardMaxLineLen = standardMaxLineLen
+//	StandardTextFieldLen =
+//		standardMaxLineLen -
+//		1 -
+//		len(standardTitleLeftMargin) -
+//		len(standardTitleRightMargin)
+//
+//	StandardTextJustification = TxtJustify.Center()
+//
+//	NumLeadingBlankLines = 1
+//
+//	LeadingSolidLineChar = solidLineChar
+//
+//	NumTopTitleBlankLines = 1
+//
+//	NumBottomTitleBlankLines = 1
+//
+//	TrailingSolidLineChar = solidLineChar
+//
+//	NumTrailingBlankLines = 1
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	standardTitleLeftMargin		string
+//
+//		The standard left margin characters applied
+//		to all solid lines and Text Title Lines in the
+//		Title Lines array
+//		(TextLineTitleMarqueeDto.TitleLines).
+//
+//	standardTitleRightMargin	string
+//
+//		The standard right margin characters applied
+//		to all solid lines and Text Title Lines in the
+//		Title Lines array
+//		(TextLineSpecTitleMarquee.titleLines).
+//
+//	standardMaxLineLen			int
+//
+//		The maximum number of characters allowed on
+//		a text title line. This maximum limit will be
+//		applied to the length of all text lines generated
+//		by the returned instance of
+//		TextLineSpecTitleMarquee.
+//
+//		In addition, this value will serve as the
+//		standard field length for all solid lines and
+//		text lines formatted for the Title Marquee.
+//
+//	solidLineChar				string
+//
+//		The character used to create the Leading
+//		Solid Line displayed above the Title
+//		Lines.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+//	titleLines					...interface{}
+//
+//		This is a variadic parameter which can accept a
+//		variable number of arguments.
+//
+//		Zero, one or more objects may be passed through
+//		this input parameter.
+//
+//		If one or more objects are passed through this
+//		parameter, they must be convertable to one of the
+//		following types:
+//
+//			time.Time (Converted using default format)
+//			string
+//			bool
+//			uint, uint8, uint16, uint32, uint64,
+//			int, int8, int16, int32, int64
+//			float32, float64
+//			*big.Int, big.Int
+//			*big.Float, big.Float
+//			*big.Rat, big.Rat
+//			fmt.Stringer (types that support this interface)
+//			TextInputParamFieldDateTimeDto
+//	               (Converts date time to string)
+//			ITextLineSpecification
+//			ITextFieldSpecification
+//			TextFieldFormatDtoBigFloat - Formats big.Float numbers
+//
+//		If the 'emptyIFace' object is not convertible to
+//		one of the supported types, an error will be
+//		returned.
+//
+//		Be advised. If this paramter is submitted as an
+//		empty or nil value, no error will be returned.
+//		However, the user will then be responsible for
+//		populating the title lines array using the 'Add'
+//		methods documented above.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	TextLineSpecTitleMarquee
+//
+//		If this method completes successfully, a new
+//		fully configured instance of
+//		TextLineTitleMarqueeDto will be returned.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (txtLineTitleMarqueeDto *TextLineTitleMarqueeDto) NewBasicTitleMarqueeDto(
+	standardTitleLeftMargin string,
+	standardTitleRightMargin string,
+	standardMaxLineLen int,
+	solidLineChar string,
+	errorPrefix interface{},
+	titleLines ...interface{}) (
+	TextLineTitleMarqueeDto,
+	error) {
+
+	if txtLineTitleMarqueeDto.lock == nil {
+		txtLineTitleMarqueeDto.lock = new(sync.Mutex)
+	}
+
+	txtLineTitleMarqueeDto.lock.Lock()
+
+	defer txtLineTitleMarqueeDto.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	var newTextLineTitleMarqueeDto TextLineTitleMarqueeDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineTitleMarqueeDto."+
+			"CopyIn()",
+		"")
+
+	if err != nil {
+		return newTextLineTitleMarqueeDto, err
+	}
+
+	err = new(textLineTitleMarqueeDtoNanobot).
+		configureBasicTitleMarqueeDto(
+			&newTextLineTitleMarqueeDto,
+			standardTitleLeftMargin,
+			standardTitleRightMargin,
+			standardMaxLineLen,
+			solidLineChar,
+			ePrefix.XCpy(
+				"newTextLineTitleMarqueeDto"),
+			titleLines...)
+
+	return newTextLineTitleMarqueeDto, err
+}
+
 //	textLineTitleMarqueeDtoNanobot
 //
 //	Provides helper methods for type
@@ -2827,18 +3082,18 @@ type textLineTitleMarqueeDtoNanobot struct {
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (txtTitleMarqueeDtoAtom *textLineTitleMarqueeDtoNanobot) copy(
+func (txtTitleMarqueeDtoNanobot *textLineTitleMarqueeDtoNanobot) copy(
 	destinationTitleMarqueeDto *TextLineTitleMarqueeDto,
 	sourceTitleMarqueeDto *TextLineTitleMarqueeDto,
 	errPrefDto *ePref.ErrPrefixDto) error {
 
-	if txtTitleMarqueeDtoAtom.lock == nil {
-		txtTitleMarqueeDtoAtom.lock = new(sync.Mutex)
+	if txtTitleMarqueeDtoNanobot.lock == nil {
+		txtTitleMarqueeDtoNanobot.lock = new(sync.Mutex)
 	}
 
-	txtTitleMarqueeDtoAtom.lock.Lock()
+	txtTitleMarqueeDtoNanobot.lock.Lock()
 
-	defer txtTitleMarqueeDtoAtom.lock.Unlock()
+	defer txtTitleMarqueeDtoNanobot.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
@@ -3027,18 +3282,18 @@ func (txtTitleMarqueeDtoAtom *textLineTitleMarqueeDtoNanobot) copy(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (txtTitleMarqueeDtoAtom *textLineTitleMarqueeDtoNanobot) addTitleLineFmtDtos(
+func (txtTitleMarqueeDtoNanobot *textLineTitleMarqueeDtoNanobot) addTitleLineFmtDtos(
 	txtTitleMarqueeDto *TextLineTitleMarqueeDto,
 	errPrefDto *ePref.ErrPrefixDto,
 	titleLineFmtDtos ...ITextFieldFormatDto) error {
 
-	if txtTitleMarqueeDtoAtom.lock == nil {
-		txtTitleMarqueeDtoAtom.lock = new(sync.Mutex)
+	if txtTitleMarqueeDtoNanobot.lock == nil {
+		txtTitleMarqueeDtoNanobot.lock = new(sync.Mutex)
 	}
 
-	txtTitleMarqueeDtoAtom.lock.Lock()
+	txtTitleMarqueeDtoNanobot.lock.Lock()
 
-	defer txtTitleMarqueeDtoAtom.lock.Unlock()
+	defer txtTitleMarqueeDtoNanobot.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
@@ -3342,20 +3597,20 @@ func (txtTitleMarqueeDtoAtom *textLineTitleMarqueeDtoNanobot) addTitleLineFmtDto
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (txtTitleMarqueeDtoAtom *textLineTitleMarqueeDtoNanobot) addTitleLineLabel(
+func (txtTitleMarqueeDtoNanobot *textLineTitleMarqueeDtoNanobot) addTitleLineLabel(
 	txtTitleMarqueeDto *TextLineTitleMarqueeDto,
 	textLabel string,
 	fieldLen int,
 	textJustification TextJustify,
 	errPrefDto *ePref.ErrPrefixDto) error {
 
-	if txtTitleMarqueeDtoAtom.lock == nil {
-		txtTitleMarqueeDtoAtom.lock = new(sync.Mutex)
+	if txtTitleMarqueeDtoNanobot.lock == nil {
+		txtTitleMarqueeDtoNanobot.lock = new(sync.Mutex)
 	}
 
-	txtTitleMarqueeDtoAtom.lock.Lock()
+	txtTitleMarqueeDtoNanobot.lock.Lock()
 
-	defer txtTitleMarqueeDtoAtom.lock.Unlock()
+	defer txtTitleMarqueeDtoNanobot.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
@@ -3478,6 +3733,216 @@ func (txtTitleMarqueeDtoAtom *textLineTitleMarqueeDtoNanobot) addTitleLineLabel(
 	return err
 }
 
+// configureBasicTitleMarqueeDto
+//
+// Reconfigures an instance of TextLineTitleMarqueeDto as
+// a basic Title Marquee using a standard profile
+// incorporating default text line specifications.
+//
+// ----------------------------------------------------------------
+//
+//	# Input Parameters
+//
+//	txtTitleMarqueeDto 			*TextLineTitleMarqueeDto
+//
+//		A pointer to an instance of TextLineTitleMarqueeDto.
+//		No data elements in this instance will be modified.
+//
+//		The internal member data elements contained in this
+//		instance will be analyzed to determine if they are
+//		valid in all respects.
+//
+//	standardTitleLeftMargin		string
+//
+//		The standard left margin characters applied
+//		to all solid lines and Text Title Lines in the
+//		Title Lines array
+//		(TextLineSpecTitleMarquee.titleLines).
+//
+//	standardTitleRightMargin	string
+//
+//		The standard right margin characters applied
+//		to all solid lines and Text Title Lines in the
+//		Title Lines array
+//		(TextLineSpecTitleMarquee.titleLines).
+//
+//	standardMaxLineLen			int
+//
+//		The maximum number of characters allowed on
+//		a text title line. This maximum limit will be
+//		applied to the length of all text lines generated
+//		by the returned instance of
+//		TextLineSpecTitleMarquee.
+//
+//		In addition, this value will serve as the
+//		standard field length for all solid lines and
+//		text lines formatted for the Title Marquee.
+//
+//	solidLineChar				string
+//
+//		The character used to create the Leading
+//		Solid Line displayed above the Title
+//		Lines.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+//	titleLines					...interface{}
+//
+//		This is a variadic parameter which can accept a
+//		variable number of arguments.
+//
+//		Zero, one or more objects may be passed through
+//		this input parameter.
+//
+//		If one or more objects are passed through this
+//		parameter, they must be convertable to one of the
+//		following types:
+//
+//			time.Time (Converted using default format)
+//			string
+//			bool
+//			uint, uint8, uint16, uint32, uint64,
+//			int, int8, int16, int32, int64
+//			float32, float64
+//			*big.Int, big.Int
+//			*big.Float, big.Float
+//			*big.Rat, big.Rat
+//			fmt.Stringer (types that support this interface)
+//			TextInputParamFieldDateTimeDto
+//	               (Converts date time to string)
+//			ITextLineSpecification
+//			ITextFieldSpecification
+//			TextFieldFormatDtoBigFloat - Formats big.Float numbers
+//
+//		If the 'emptyIFace' object is not convertible to
+//		one of the supported types, an error will be
+//		returned.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If input parameter 'txtTitleMarqueeDto' is judged
+//		to be valid in all respects, the returned error
+//		Type is set equal to 'nil'.
+//
+//		If input parameter 'txtTitleMarqueeDto' is found
+//		to be invalid, the returned error Type will
+//		encapsulate an appropriate error message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (txtTitleMarqueeDtoNanobot *textLineTitleMarqueeDtoNanobot) configureBasicTitleMarqueeDto(
+	txtTitleMarqueeDto *TextLineTitleMarqueeDto,
+	standardTitleLeftMargin string,
+	standardTitleRightMargin string,
+	standardMaxLineLen int,
+	solidLineChar string,
+	errPrefDto *ePref.ErrPrefixDto,
+	titleLines ...interface{}) error {
+
+	if txtTitleMarqueeDtoNanobot.lock == nil {
+		txtTitleMarqueeDtoNanobot.lock = new(sync.Mutex)
+	}
+
+	txtTitleMarqueeDtoNanobot.lock.Lock()
+
+	defer txtTitleMarqueeDtoNanobot.lock.Unlock()
+
+	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"textLineTitleMarqueeDtoAtom."+
+			"configureBasicTitleMarqueeDto()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	standardFieldLen := standardMaxLineLen -
+		1 -
+		len(standardTitleLeftMargin) -
+		len(standardTitleRightMargin)
+
+	txtTitleMarqueeDto = &TextLineTitleMarqueeDto{
+		StandardTitleLeftMargin:   standardTitleLeftMargin,
+		StandardTitleRightMargin:  standardTitleRightMargin,
+		StandardMaxLineLen:        standardMaxLineLen,
+		StandardTextFieldLen:      standardFieldLen,
+		StandardTextJustification: TxtJustify.Center(),
+		NumLeadingBlankLines:      1,
+		LeadingSolidLineChar:      solidLineChar,
+		NumLeadingSolidLines:      1,
+		NumTopTitleBlankLines:     1,
+		TitleLines:                TextLineSpecLinesCollection{},
+		NumBottomTitleBlankLines:  1,
+		TrailingSolidLineChar:     solidLineChar,
+		NumTrailingSolidLines:     1,
+		NumTrailingBlankLines:     1,
+	}
+
+	txtLabelDto := TextFieldFormatDtoLabel{
+		LeftMarginStr:  standardTitleLeftMargin,
+		FieldContents:  nil,
+		FieldLength:    standardFieldLen,
+		FieldJustify:   TxtJustify.Center(),
+		RightMarginStr: standardTitleRightMargin,
+	}
+
+	for idx, titleLineObj := range titleLines {
+
+		txtLabelDto.FieldContents = titleLineObj
+
+		err = txtLabelDto.IsValidInstanceError(
+			ePrefix.XCpy(
+				fmt.Sprintf("txtLabelDto[%v]",
+					idx)))
+
+		if err != nil {
+			return err
+		}
+
+		err = txtTitleMarqueeDto.TitleLines.
+			AddStdLineColumns(
+				"\n",
+				false,
+				ePrefix.XCpy(
+					fmt.Sprintf(
+						"txtTitleMarqueeDto.TitleLines<-"+
+							"txtLabelDto[%v]",
+						idx)),
+				&txtLabelDto)
+
+		if err != nil {
+			return err
+		}
+	}
+
+	return err
+}
+
 // getFormattedTitleMarquee
 //
 // Processes an instance of TextLineTitleMarqueeDto
@@ -3540,19 +4005,19 @@ func (txtTitleMarqueeDtoAtom *textLineTitleMarqueeDtoNanobot) addTitleLineLabel(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (txtTitleMarqueeDtoAtom *textLineTitleMarqueeDtoNanobot) getFormattedTitleMarquee(
+func (txtTitleMarqueeDtoNanobot *textLineTitleMarqueeDtoNanobot) getFormattedTitleMarquee(
 	titleMarqueeDto *TextLineTitleMarqueeDto,
 	errPrefDto *ePref.ErrPrefixDto) (
 	string,
 	error) {
 
-	if txtTitleMarqueeDtoAtom.lock == nil {
-		txtTitleMarqueeDtoAtom.lock = new(sync.Mutex)
+	if txtTitleMarqueeDtoNanobot.lock == nil {
+		txtTitleMarqueeDtoNanobot.lock = new(sync.Mutex)
 	}
 
-	txtTitleMarqueeDtoAtom.lock.Lock()
+	txtTitleMarqueeDtoNanobot.lock.Lock()
 
-	defer txtTitleMarqueeDtoAtom.lock.Unlock()
+	defer txtTitleMarqueeDtoNanobot.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 

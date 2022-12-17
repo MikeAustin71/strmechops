@@ -50,8 +50,9 @@ type textSpecificationAtom struct {
 //			ITextFieldSpecification
 //			TextFieldFormatDtoBigFloat - Formats big.Float numbers
 //
-//			If the 'emptyIFace' object is not convertible to
-//			one of the supported types, an error will be returned.
+//		If the 'emptyIFace' object is not convertible to
+//		one of the supported types, an error will be
+//		returned.
 //
 //	 emptyIFaceParamName        string
 //	    - This is the name or text label used to describe input
