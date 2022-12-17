@@ -181,11 +181,38 @@ func (numStrKernelNanobot *numberStrKernelNanobot) copy(
 	destinationNumStrKernel.isNonZeroValue =
 		sourceNumStrKernel.isNonZeroValue
 
-	err = destinationNumStrKernel.numStrFormatSpec.CopyIn(
-		&sourceNumStrKernel.numStrFormatSpec,
-		ePrefix.XCpy(
-			"destinationNumStrKernel<-"+
-				"sourceNumStrKernel.numStrFormatSpec"))
+	if sourceNumStrKernel.numStrFormatSpec.IsValidInstance() {
+
+		err = destinationNumStrKernel.numStrFormatSpec.CopyIn(
+			&sourceNumStrKernel.numStrFormatSpec,
+			ePrefix.XCpy(
+				"destinationNumStrKernel<-"+
+					"sourceNumStrKernel.numStrFormatSpec"))
+	} else {
+
+		destinationNumStrKernel.numStrFormatSpec,
+			err = new(NumStrFormatSpec).NewSignedNumFmtUS(
+			NumStrNumberFieldSpec{
+				fieldLength:        -1,
+				fieldJustification: TxtJustify.Right(),
+			},
+			ePrefix.XCpy("destinationNumStrKernel "+
+				"Default NumStrNumberFieldSpec"))
+
+		if err != nil {
+			return err
+		}
+
+		sourceNumStrKernel.numStrFormatSpec,
+			err = new(NumStrFormatSpec).NewSignedNumFmtUS(
+			NumStrNumberFieldSpec{
+				fieldLength:        -1,
+				fieldJustification: TxtJustify.Right(),
+			},
+			ePrefix.XCpy("sourceNumStrKernel "+
+				"Default NumStrNumberFieldSpec"))
+
+	}
 
 	return err
 }

@@ -3,6 +3,7 @@ package strmech
 import (
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
+	"strings"
 	"sync"
 )
 
@@ -213,9 +214,12 @@ func (txtLineTitleMarqueeMech *textLineSpecTitleMarqueeMechanics) setTxtLineTitl
 		return err
 	}
 
-	err = configSpecs.IsValidInstanceError(
-		ePrefix.XCpy(
-			"configSpecs"))
+	_,
+		err = new(textLineTitleMarqueeDtoAtom).
+		testValidityOfTitleMarqueeDto(
+			configSpecs,
+			ePrefix.XCpy(
+				"configSpecs"))
 
 	if err != nil {
 		return err
@@ -249,218 +253,300 @@ func (txtLineTitleMarqueeMech *textLineSpecTitleMarqueeMechanics) setTxtLineTitl
 
 	}
 
-	var extraCharsCount, lenSolidLineChar, solidLineRepeatCount,
-		solidLineLength int
+	var solidLineCharStr string
+	var textFieldSpecs []ITextFieldSpecification
+	var txtLeftMarginLabel, txtRightMarginLabel,
+		txtFieldLabel TextFieldSpecLabel
 
-	var extraChars string
+	var stdLine TextLineSpecStandardLine
 
-	var textFieldColumns []ITextFieldFormatDto
+	if len(configSpecs.StandardTitleLeftMargin) > 0 {
 
-	var fillerLineField TextFieldFormatDtoFiller
-	var extraCharsLabel TextFieldFormatDtoLabel
+		txtLeftMarginLabel,
+			err = TextFieldSpecLabel{}.NewTextLabel(
+			configSpecs.StandardTitleLeftMargin,
+			-1,
+			TxtJustify.Left(),
+			ePrefix.XCpy(
+				"txtLeftMarginLabel-leading solid line"))
+
+		if err != nil {
+			return err
+		}
+	}
+
+	if len(configSpecs.StandardTitleRightMargin) > 0 {
+
+		txtRightMarginLabel,
+			err = TextFieldSpecLabel{}.NewTextLabel(
+			configSpecs.StandardTitleRightMargin,
+			-1,
+			TxtJustify.Right(),
+			ePrefix.XCpy(
+				"txtRightMarginLabel-leading solid line"))
+
+		if err != nil {
+			return err
+		}
+	}
 
 	if len(configSpecs.LeadingSolidLineChar) > 0 &&
 		configSpecs.NumLeadingSolidLines > 0 {
-		// We have left and/or right margins
+		// If we have left and/or right margins
 		// Filler Lines are required.
 
-		lenSolidLineChar = len(configSpecs.LeadingSolidLineChar)
+		solidLineCharStr = strings.Repeat(
+			configSpecs.LeadingSolidLineChar,
+			configSpecs.StandardTextFieldLen)
 
-		solidLineRepeatCount = configSpecs.StandardTextFieldLen
-
-		solidLineLength =
-			solidLineRepeatCount * lenSolidLineChar
-
-		if solidLineLength >
-			configSpecs.StandardTextFieldLen {
-
-			solidLineRepeatCount =
-				configSpecs.StandardTextFieldLen / lenSolidLineChar
+		if len(solidLineCharStr) > configSpecs.StandardTextFieldLen {
+			solidLineCharStr = solidLineCharStr[0:configSpecs.StandardTextFieldLen]
 		}
 
-		extraCharsCount = 0
-		extraChars = ""
+		txtFieldLabel,
+			err = TextFieldSpecLabel{}.
+			NewTextLabel(
+				solidLineCharStr,
+				-1,
+				TxtJustify.Left(),
+				ePrefix.XCpy(
+					"txtFieldLabel-Leading Solid Line"))
 
-		if lenSolidLineChar*solidLineRepeatCount <
-			configSpecs.StandardTextFieldLen {
-
-			extraCharsCount = configSpecs.StandardTextFieldLen -
-				(lenSolidLineChar * solidLineRepeatCount)
-
-			extraChars = configSpecs.LeadingSolidLineChar[0:extraCharsCount]
+		if err != nil {
+			return err
 		}
 
-		textFieldColumns = nil
+		textFieldSpecs = nil
 
-		fillerLineField = TextFieldFormatDtoFiller{
-			LeftMarginStr:          configSpecs.StandardTitleLeftMargin,
-			FillerChars:            configSpecs.LeadingSolidLineChar,
-			FillerCharsRepeatCount: solidLineRepeatCount,
-			RightMarginStr:         configSpecs.StandardTitleRightMargin,
+		if len(configSpecs.StandardTitleLeftMargin) > 0 {
+			textFieldSpecs = append(
+				textFieldSpecs,
+				&txtLeftMarginLabel)
 		}
 
-		textFieldColumns = append(
-			textFieldColumns,
-			&fillerLineField)
+		textFieldSpecs = append(
+			textFieldSpecs,
+			&txtFieldLabel)
 
-		if len(extraChars) > 0 {
-
-			extraCharsLabel = TextFieldFormatDtoLabel{
-				LeftMarginStr:  "",
-				FieldContents:  extraChars,
-				FieldLength:    -1,
-				FieldJustify:   TxtJustify.Left(),
-				RightMarginStr: "",
-			}
-
-			textFieldColumns = append(
-				textFieldColumns,
-				&extraCharsLabel)
-
+		if len(configSpecs.StandardTitleRightMargin) > 0 {
+			textFieldSpecs = append(
+				textFieldSpecs,
+				&txtRightMarginLabel)
 		}
 
-		for i := 0; i < configSpecs.NumLeadingSolidLines; i++ {
+		stdLine,
+			err = TextLineSpecStandardLine{}.NewStandardLineAllParms(
+			configSpecs.NumLeadingSolidLines,
+			textFieldSpecs,
+			[]rune{'\n'},
+			false,
+			ePrefix.XCpy(
+				"configSpecs.NumLeadingSolidLines"))
 
-			err = txtLineTitleMarquee.leadingMarqueeLines.
-				AddStdLineColumns(
-					"\n",
-					false,
-					ePrefix.XCpy(""+
-						" txtLineTitleMarquee.leadingMarqueeLines<-LeadingSolidLine"),
-					textFieldColumns...)
-
-			if err != nil {
-				return err
-			}
-
+		if err != nil {
+			return err
 		}
+
+		err = txtLineTitleMarquee.leadingMarqueeLines.
+			AddTextLineSpec(
+				&stdLine,
+				ePrefix.XCpy(""+
+					" txtLineTitleMarquee.leadingMarqueeLines<-LeadingSolidLine"))
+
+		if err != nil {
+			return err
+		}
+
 	}
 
 	if configSpecs.NumTopTitleBlankLines > 0 {
 
-		fillerLineField = TextFieldFormatDtoFiller{
-			LeftMarginStr:          configSpecs.StandardTitleLeftMargin,
-			FillerChars:            " ",
-			FillerCharsRepeatCount: configSpecs.StandardTextFieldLen,
-			RightMarginStr:         configSpecs.StandardTitleRightMargin,
+		solidLineCharStr = strings.Repeat(
+			" ",
+			configSpecs.StandardTextFieldLen)
+
+		txtFieldLabel,
+			err = TextFieldSpecLabel{}.
+			NewTextLabel(
+				solidLineCharStr,
+				-1,
+				TxtJustify.Left(),
+				ePrefix.XCpy(
+					"txtFieldLabel-NumTopTitleBlankLines"))
+
+		if err != nil {
+			return err
 		}
 
-		for i := 0; i < configSpecs.NumTopTitleBlankLines; i++ {
+		textFieldSpecs = nil
 
-			err = txtLineTitleMarquee.leadingMarqueeLines.
-				AddStdLineColumns(
-					"\n",
-					false,
-					ePrefix.XCpy(""+
-						" txtLineTitleMarquee.leadingMarqueeLines<-TopTitleBlankLines"),
-					&fillerLineField)
-
-			if err != nil {
-				return err
-			}
-
+		if len(configSpecs.StandardTitleLeftMargin) > 0 {
+			textFieldSpecs = append(
+				textFieldSpecs,
+				&txtLeftMarginLabel)
 		}
+
+		textFieldSpecs = append(
+			textFieldSpecs,
+			&txtFieldLabel)
+
+		if len(configSpecs.StandardTitleRightMargin) > 0 {
+			textFieldSpecs = append(
+				textFieldSpecs,
+				&txtRightMarginLabel)
+		}
+
+		stdLine,
+			err = TextLineSpecStandardLine{}.NewStandardLineAllParms(
+			configSpecs.NumTopTitleBlankLines,
+			textFieldSpecs,
+			[]rune{'\n'},
+			false,
+			ePrefix.XCpy(
+				"configSpecs.NumTopTitleBlankLines"))
+
+		if err != nil {
+			return err
+		}
+
+		err = txtLineTitleMarquee.leadingMarqueeLines.
+			AddTextLineSpec(
+				&stdLine,
+				ePrefix.XCpy(""+
+					" txtLineTitleMarquee.leadingMarqueeLines<-LeadingSolidLine"))
+
+		if err != nil {
+			return err
+		}
+
 	}
 
 	if configSpecs.NumBottomTitleBlankLines > 0 {
 
-		fillerLineField = TextFieldFormatDtoFiller{
-			LeftMarginStr:          configSpecs.StandardTitleLeftMargin,
-			FillerChars:            " ",
-			FillerCharsRepeatCount: configSpecs.StandardTextFieldLen,
-			RightMarginStr:         configSpecs.StandardTitleRightMargin,
+		solidLineCharStr = strings.Repeat(
+			" ",
+			configSpecs.StandardTextFieldLen)
+
+		txtFieldLabel,
+			err = TextFieldSpecLabel{}.
+			NewTextLabel(
+				solidLineCharStr,
+				-1,
+				TxtJustify.Left(),
+				ePrefix.XCpy(
+					"txtFieldLabel-NumBottomTitleBlankLines"))
+
+		if err != nil {
+			return err
 		}
 
-		for i := 0; i < configSpecs.NumBottomTitleBlankLines; i++ {
+		textFieldSpecs = nil
 
-			err = txtLineTitleMarquee.trailingMarqueeLines.
-				AddStdLineColumns(
-					"\n",
-					false,
-					ePrefix.XCpy(""+
-						" txtLineTitleMarquee.trailingMarqueeLines<-BottomTitleBlankLines"),
-					&fillerLineField)
+		if len(configSpecs.StandardTitleLeftMargin) > 0 {
+			textFieldSpecs = append(
+				textFieldSpecs,
+				&txtLeftMarginLabel)
+		}
 
-			if err != nil {
-				return err
-			}
+		textFieldSpecs = append(
+			textFieldSpecs,
+			&txtFieldLabel)
 
+		if len(configSpecs.StandardTitleRightMargin) > 0 {
+			textFieldSpecs = append(
+				textFieldSpecs,
+				&txtRightMarginLabel)
+		}
+
+		stdLine,
+			err = TextLineSpecStandardLine{}.NewStandardLineAllParms(
+			configSpecs.NumBottomTitleBlankLines,
+			textFieldSpecs,
+			[]rune{'\n'},
+			false,
+			ePrefix.XCpy(
+				"configSpecs.NumTopTitleBlankLines"))
+
+		if err != nil {
+			return err
+		}
+
+		err = txtLineTitleMarquee.trailingMarqueeLines.
+			AddTextLineSpec(
+				&stdLine,
+				ePrefix.XCpy(""+
+					" txtLineTitleMarquee.trailingMarqueeLines<-LeadingSolidLine"))
+
+		if err != nil {
+			return err
 		}
 	}
 
 	if len(configSpecs.TrailingSolidLineChar) > 0 &&
 		configSpecs.NumTrailingSolidLines > 0 {
 
-		lenSolidLineChar = len(configSpecs.TrailingSolidLineChar)
+		solidLineCharStr = strings.Repeat(
+			configSpecs.TrailingSolidLineChar,
+			configSpecs.StandardTextFieldLen)
 
-		solidLineRepeatCount = configSpecs.StandardTextFieldLen
-
-		solidLineLength =
-			solidLineRepeatCount * lenSolidLineChar
-
-		if solidLineLength >
-			configSpecs.StandardTextFieldLen {
-
-			solidLineRepeatCount =
-				configSpecs.StandardTextFieldLen / lenSolidLineChar
+		if len(solidLineCharStr) > configSpecs.StandardTextFieldLen {
+			solidLineCharStr = solidLineCharStr[0:configSpecs.StandardTextFieldLen]
 		}
 
-		extraCharsCount = 0
-		extraChars = ""
+		txtFieldLabel,
+			err = TextFieldSpecLabel{}.
+			NewTextLabel(
+				solidLineCharStr,
+				-1,
+				TxtJustify.Left(),
+				ePrefix.XCpy(
+					"txtFieldLabel-Trailing Solid Line"))
 
-		if lenSolidLineChar*solidLineRepeatCount <
-			configSpecs.StandardTextFieldLen {
-
-			extraCharsCount = configSpecs.StandardTextFieldLen -
-				(lenSolidLineChar * solidLineRepeatCount)
-
-			extraChars = configSpecs.LeadingSolidLineChar[0:extraCharsCount]
+		if err != nil {
+			return err
 		}
 
-		textFieldColumns = nil
+		textFieldSpecs = nil
 
-		fillerLineField = TextFieldFormatDtoFiller{
-			LeftMarginStr:          configSpecs.StandardTitleLeftMargin,
-			FillerChars:            configSpecs.TrailingSolidLineChar,
-			FillerCharsRepeatCount: solidLineRepeatCount,
-			RightMarginStr:         configSpecs.StandardTitleRightMargin,
+		if len(configSpecs.StandardTitleLeftMargin) > 0 {
+			textFieldSpecs = append(
+				textFieldSpecs,
+				&txtLeftMarginLabel)
 		}
 
-		textFieldColumns = append(
-			textFieldColumns,
-			&fillerLineField)
+		textFieldSpecs = append(
+			textFieldSpecs,
+			&txtFieldLabel)
 
-		if len(extraChars) > 0 {
-
-			extraCharsLabel = TextFieldFormatDtoLabel{
-				LeftMarginStr:  "",
-				FieldContents:  extraChars,
-				FieldLength:    -1,
-				FieldJustify:   TxtJustify.Left(),
-				RightMarginStr: "",
-			}
-
-			textFieldColumns = append(
-				textFieldColumns,
-				&extraCharsLabel)
-
+		if len(configSpecs.StandardTitleRightMargin) > 0 {
+			textFieldSpecs = append(
+				textFieldSpecs,
+				&txtRightMarginLabel)
 		}
 
-		for i := 0; i < configSpecs.NumTrailingSolidLines; i++ {
+		stdLine,
+			err = TextLineSpecStandardLine{}.NewStandardLineAllParms(
+			configSpecs.NumTrailingSolidLines,
+			textFieldSpecs,
+			[]rune{'\n'},
+			false,
+			ePrefix.XCpy(
+				"configSpecs.NumTrailingSolidLines"))
 
-			err = txtLineTitleMarquee.trailingMarqueeLines.
-				AddStdLineColumns(
-					"\n",
-					false,
-					ePrefix.XCpy(""+
-						" txtLineTitleMarquee.trailingMarqueeLines<-TrailingSolidLines"),
-					textFieldColumns...)
-
-			if err != nil {
-				return err
-			}
-
+		if err != nil {
+			return err
 		}
+
+		err = txtLineTitleMarquee.trailingMarqueeLines.
+			AddTextLineSpec(
+				&stdLine,
+				ePrefix.XCpy(""+
+					" txtLineTitleMarquee.trailingMarqueeLines<-TrailingSolidLine"))
+
+		if err != nil {
+			return err
+		}
+
 	}
 
 	if configSpecs.NumTrailingBlankLines > 0 {

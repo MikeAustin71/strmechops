@@ -1337,7 +1337,7 @@ func TestNumberStrKernel_IsZeroValue_000100(t *testing.T) {
 func TestNumberStrKernel_GetBigRatNum_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestNumberStrKernel_GetScientificNotation_000100()",
+		"TestNumberStrKernel_GetBigRatNum_000100()",
 		"")
 
 	var origIntDigits, origFracDigits string

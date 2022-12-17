@@ -894,8 +894,8 @@ func (numStrKernelAtom *numberStrKernelAtom) convertKernelToBigFloat(
 
 	var newNumStrKernel NumberStrKernel
 
-	newNumStrKernel,
-		err = new(numberStrKernelNanobot).copyOut(
+	err = new(numberStrKernelNanobot).copy(
+		&newNumStrKernel,
 		numStrKernel,
 		ePrefix.XCpy(
 			"numStrKernel->newNumStrKernel"))
@@ -1338,8 +1338,8 @@ func (numStrKernelAtom *numberStrKernelAtom) convertKernelToBigInt(
 
 	var copyNStrKernel NumberStrKernel
 
-	copyNStrKernel,
-		err = new(numberStrKernelNanobot).copyOut(
+	err = new(numberStrKernelNanobot).copy(
+		&copyNStrKernel,
 		numStrKernel,
 		ePrefix.XCpy(
 			"copyNStrKernel<-numStrKernel"))
@@ -1796,11 +1796,11 @@ func (numStrKernelAtom *numberStrKernelAtom) convertKernelToBigRat(
 
 	var newNumStrKernel NumberStrKernel
 
-	newNumStrKernel,
-		err = new(numberStrKernelNanobot).copyOut(
+	err = new(numberStrKernelNanobot).copy(
+		&newNumStrKernel,
 		numStrKernel,
 		ePrefix.XCpy(
-			"numStrKernel->newNumStrKernel"))
+			"newNumStrKernel<-numStrKernel"))
 
 	if err != nil {
 
@@ -2322,8 +2322,8 @@ func (numStrKernelAtom *numberStrKernelAtom) formatNumStrComponents(
 
 	var newNumStrKernel NumberStrKernel
 
-	newNumStrKernel,
-		err = new(numberStrKernelNanobot).copyOut(
+	err = new(numberStrKernelNanobot).copy(
+		&newNumStrKernel,
 		numStrKernel,
 		ePrefix.XCpy(
 			"newNumStrKernel<-numStrKernel"))

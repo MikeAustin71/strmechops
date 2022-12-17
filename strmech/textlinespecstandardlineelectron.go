@@ -356,7 +356,6 @@ func (txtStdLineElectron *textLineSpecStandardLineElectron) addTextFieldDtosToAr
 	}
 
 	var fieldContentsText string
-	var txtFieldSpecLabel TextFieldSpecLabel
 
 	for i := 0; i < lenTextFieldFmtDtos; i++ {
 
@@ -371,7 +370,9 @@ func (txtStdLineElectron *textLineSpecStandardLineElectron) addTextFieldDtosToAr
 			fieldContentsText =
 				textFieldDtos[i].GetLeftMarginStr()
 
-			txtFieldSpecLabel,
+			var txtLeftMarginLabel TextFieldSpecLabel
+
+			txtLeftMarginLabel,
 				err = TextFieldSpecLabel{}.NewTextLabel(
 				fieldContentsText,
 				-1,
@@ -385,9 +386,11 @@ func (txtStdLineElectron *textLineSpecStandardLineElectron) addTextFieldDtosToAr
 
 			txtStdLine.textFields =
 				append(txtStdLine.textFields,
-					&txtFieldSpecLabel)
+					&txtLeftMarginLabel)
 
 		}
+
+		var txtFieldSpecLabel TextFieldSpecLabel
 
 		txtFieldSpecLabel,
 			err = textFieldDtos[i].GetFieldContentTextLabel(
@@ -409,7 +412,9 @@ func (txtStdLineElectron *textLineSpecStandardLineElectron) addTextFieldDtosToAr
 			fieldContentsText =
 				textFieldDtos[i].GetRightMarginStr()
 
-			txtFieldSpecLabel,
+			var txtRightMarginLabel TextFieldSpecLabel
+
+			txtRightMarginLabel,
 				err = TextFieldSpecLabel{}.NewTextLabel(
 				fieldContentsText,
 				-1,
@@ -423,7 +428,7 @@ func (txtStdLineElectron *textLineSpecStandardLineElectron) addTextFieldDtosToAr
 
 			txtStdLine.textFields =
 				append(txtStdLine.textFields,
-					&txtFieldSpecLabel)
+					&txtRightMarginLabel)
 
 		}
 	}
