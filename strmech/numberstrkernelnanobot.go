@@ -25,9 +25,23 @@ type numberStrKernelNanobot struct {
 //
 // -----------------------------------------------------------------
 //
-// Be advised that the data fields in
-// 'destinationNumStrKernel' will be deleted and
-// overwritten.
+//	All data field values in 'destinationNumStrKernel'
+//	will be deleted and overwritten.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	This method will NOT delete data values contained
+//	in input paramter 'sourceNumStrKernel'. However,
+//	if the 'sourceNumStrKernel' Number String Format
+//	Specification is invalid,
+//	'sourceNumStrKernel.numStrFormatSpec' will be set
+//	to the default US (United States) Number String
+//	Format Specification.
+//
+//	All other 'sourceNumStrKernel' data values will
+//	remain unchanged.
 //
 // -----------------------------------------------------------------
 //
@@ -50,6 +64,16 @@ type numberStrKernelNanobot struct {
 //
 //	     'sourceNumStrKernel' is the source for this copy
 //	     operation.
+//
+//		 This method will NOT delete data values contained
+//		 in input paramter 'sourceNumStrKernel'. However,
+//		 if the 'sourceNumStrKernel' Number String Format
+//		 Specification is invalid,
+//		 'sourceNumStrKernel.numStrFormatSpec' will be set
+//		 to the default US (United States) Number String
+//		 Format Specification. All other
+//		 'sourceNumStrKernel' data values will remain
+//		 unchanged.
 //
 //	     If 'sourceNumStrKernel' is determined to be invalid,
 //	     an error will be returned.
@@ -181,15 +205,10 @@ func (numStrKernelNanobot *numberStrKernelNanobot) copy(
 	destinationNumStrKernel.isNonZeroValue =
 		sourceNumStrKernel.isNonZeroValue
 
-	if sourceNumStrKernel.numStrFormatSpec.IsValidInstance() {
+	if new(numStrFmtSpecNanobot).isNOP(&sourceNumStrKernel.numStrFormatSpec) {
 
-		err = destinationNumStrKernel.numStrFormatSpec.CopyIn(
-			&sourceNumStrKernel.numStrFormatSpec,
-			ePrefix.XCpy(
-				"destinationNumStrKernel<-"+
-					"sourceNumStrKernel.numStrFormatSpec"))
-	} else {
-
+		// This is a NOP!
+		// sourceNumStrKernel.numStrFormatSpec is invalid.
 		destinationNumStrKernel.numStrFormatSpec,
 			err = new(NumStrFormatSpec).NewSignedNumFmtUS(
 			NumStrNumberFieldSpec{
@@ -211,6 +230,16 @@ func (numStrKernelNanobot *numberStrKernelNanobot) copy(
 			},
 			ePrefix.XCpy("sourceNumStrKernel "+
 				"Default NumStrNumberFieldSpec"))
+
+	} else {
+
+		// This is NOT a NOP.
+		// sourceNumStrKernel.numStrFormatSpec is Valid!
+		err = destinationNumStrKernel.numStrFormatSpec.CopyIn(
+			&sourceNumStrKernel.numStrFormatSpec,
+			ePrefix.XCpy(
+				"destinationNumStrKernel<-"+
+					"sourceNumStrKernel.numStrFormatSpec"))
 
 	}
 

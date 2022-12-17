@@ -411,8 +411,24 @@ func (numStrKernel *NumberStrKernel) Compare(
 //
 // # IMPORTANT
 //
-// All the data fields in current NumberStrKernel instance
-// ('numStrKernel') will be deleted and overwritten.
+//	All data field values in current NumberStrKernel
+//	instance ('numStrKernel') will be deleted and
+//	overwritten.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	This method will NOT delete data values contained
+//	in input paramter 'incomingNumStrKernel'. However,
+//	if the 'incomingNumStrKernel' Number String Format
+//	Specification is invalid,
+//	'incomingNumStrKernel.numStrFormatSpec' will be set
+//	to the default US (United States) Number String
+//	Format Specification.
+//
+//	All other 'incomingNumStrKernel' data values will
+//	remain unchanged.
 //
 // ----------------------------------------------------------------
 //
@@ -428,10 +444,19 @@ func (numStrKernel *NumberStrKernel) Compare(
 //		will be copied to the current NumberStrKernel
 //		instance ('numStrKernel').
 //
+//		This method will NOT delete data values contained
+//		in input paramter 'incomingNumStrKernel'. However,
+//		if the 'incomingNumStrKernel' Number String Format
+//		Specification is invalid,
+//		'incomingNumStrKernel.numStrFormatSpec' will be set
+//		to the default US (United States) Number String
+//		Format Specification.
+//
+//		All other 'incomingNumStrKernel' data values will
+//		remain unchanged.
+//
 //		If parameter 'incomingNumStrKernel' is determined to
 //		be invalid, an error will be returned.
-//
-//
 //
 //	 errorPrefix                interface{}
 //
@@ -487,6 +512,7 @@ func (numStrKernel *NumberStrKernel) Compare(
 // # Return Values
 //
 //	error
+//
 //		If this method completes successfully and no errors are
 //		encountered this return value is set to 'nil'. Otherwise,
 //		if errors are encountered, this return value will contain
@@ -536,6 +562,20 @@ func (numStrKernel *NumberStrKernel) CopyIn(
 //
 // If the current NumberStrKernel instance contains invalid member
 // variables, this method will return an error.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	This method will NOT delete data values contained
+//	in the current instance of NumberStrKernel. However,
+//	if the Number String Format Specification is invalid,
+//	'NumberStrKernel.numStrFormatSpec' will be set
+//	to the default US (United States) Number String
+//	Format Specification.
+//
+//	All other NumberStrKernel data values will remain
+//	unchanged.
 //
 // ----------------------------------------------------------------
 //
@@ -6406,84 +6446,34 @@ func (numStrKernel *NumberStrKernel) FmtNumStrCustom(
 //	of NumberStrKernel.
 //
 //	The number string format is taken from the Default
-//	Number String Format Specification configured for the
-//	instance of NumberStrKernel.
+//	Number String Format Specification previously
+//	configured for the current instance of
+//	NumberStrKernel.
 //
-//	To set the Default Number String Format
-//	Specification, use this method:
+//	To explicitly set the Default Number String Format
+//	Specification for the current NumberStrKernel
+//	instance, use the following method:
 //
 //		NumberStrKernel.SetDefaultNumberStrFormatSpec()
 //
 // ----------------------------------------------------------------
 //
+// # BE ADVISED
+//
+//	This method will NOT delete or modify data values
+//	contained in the current instance of NumberStrKernel.
+//	However, if the NumberStrKernel Number String Format
+//	Specification is invalid,
+//	'NumberStrKernel.numStrFormatSpec' will be set
+//	to the default US (United States) Signed Number
+//	String Format Specification.
+//
+//	All other NumberStrKernel data values will remain
+//	unchanged.
+//
+// ----------------------------------------------------------------
+//
 // # Input Parameters
-//
-//	numberFieldSpec				NumStrNumberFieldSpec
-//
-//		This Number Field Specification contains all
-//		parameters necessary to format a Number String
-//		within a larger Number Field. In addition to
-//		specifying the length of number field, this
-//		object contains justification specifications
-//		for centering, left justifying or right
-//		justifying a Number String within a Number
-//		Field.
-//
-//		type NumStrNumberFieldSpec struct {
-//
-//			fieldLength int
-//
-//				This parameter defines the length of the
-//				text field in which the numeric value will
-//				be displayed within a number string.
-//
-//				If 'fieldLength' is less than the length
-//				of the numeric value string, it will be
-//				automatically set equal to the length of
-//				that numeric value string.
-//
-//				To automatically set the value of
-//				'fieldLength' to the string length of the
-//				numeric value, set this parameter to a
-//				value of minus one (-1).
-//
-//				If this parameter is submitted with a
-//				value less than minus one (-1) or greater
-//				than 1-million (1,000,000), an error will
-//				be returned.
-//
-//			fieldJustification TextJustify
-//
-//				An enumeration which specifies the
-//				justification of the numeric value string
-//				within the number field length specified
-//				by data field 'fieldLength'.
-//
-//				Text justification can only be evaluated in
-//				the context of a number string, field length
-//				and a 'textJustification' object of type
-//				TextJustify. This is because number strings
-//				with a field length equal to or less than the
-//				length of the numeric value string never use
-//				text justification. In these cases, text
-//				justification is completely ignored.
-//
-//				If the field length parameter ('fieldLength')
-//				is greater than the length of the numeric
-//				value string, text justification must be equal
-//				to one of these three valid values:
-//
-//				          TextJustify(0).Left()
-//				          TextJustify(0).Right()
-//				          TextJustify(0).Center()
-//
-//				You can also use the abbreviated text
-//				justification enumeration syntax as follows:
-//
-//				          TxtJustify.Left()
-//				          TxtJustify.Right()
-//				          TxtJustify.Center()
-//		}
 //
 //	roundingSpec				NumStrRoundingSpec
 //
@@ -6800,7 +6790,6 @@ func (numStrKernel *NumberStrKernel) FmtNumStrCustom(
 //		text will be attached to the beginning of the
 //		error message.
 func (numStrKernel *NumberStrKernel) FmtNumStrDefaultFormat(
-	numberFieldSpec NumStrNumberFieldSpec,
 	roundingSpec NumStrRoundingSpec,
 	errorPrefix interface{}) (
 	string,
@@ -6831,11 +6820,17 @@ func (numStrKernel *NumberStrKernel) FmtNumStrDefaultFormat(
 
 	var tempNumStrFormatSpec NumStrFormatSpec
 
-	if !numStrKernel.numStrFormatSpec.IsValidInstance() {
+	if new(numStrFmtSpecNanobot).isNOP(
+		&numStrKernel.numStrFormatSpec) {
 
+		// The current Number String Format
+		// Specification is invalid.
 		tempNumStrFormatSpec,
-			err = new(NumStrFormatSpec).NewCurrencyNumFmtUS(
-			numberFieldSpec,
+			err = new(NumStrFormatSpec).NewSignedNumFmtUS(
+			NumStrNumberFieldSpec{
+				fieldLength:        -1,
+				fieldJustification: TxtJustify.Right(),
+			},
 			ePrefix.XCpy(
 				"tempNumStrFormatSpec<-"))
 
@@ -6846,6 +6841,9 @@ func (numStrKernel *NumberStrKernel) FmtNumStrDefaultFormat(
 
 	} else {
 
+		// The current Number String Format
+		// Specification is valid.
+
 		err = tempNumStrFormatSpec.CopyIn(
 			&numStrKernel.numStrFormatSpec,
 			ePrefix)
@@ -6854,14 +6852,6 @@ func (numStrKernel *NumberStrKernel) FmtNumStrDefaultFormat(
 
 			return numStr, err
 		}
-
-		tempNumStrFormatSpec.numberFieldSpec.
-			fieldLength = numberFieldSpec.
-			fieldLength
-
-		tempNumStrFormatSpec.numberFieldSpec.
-			fieldJustification = numberFieldSpec.
-			fieldJustification
 
 	}
 
@@ -18988,35 +18978,58 @@ func (numStrKernel *NumberStrKernel) SetUnsignedIntValue(
 //
 // Returns a formatted number string using the numeric
 // value and the default Number String Format
-// Specification provided by the current instance of
+// Specification configured for the current instance of
 // NumberStrKernel.
-//
-// ----------------------------------------------------------------
-//
-// # BE ADVISED
-//
-//	No rounding will be performed on the numeric value
-//	formatted as number string. If rounding is required
-//	in conjunction with the Default Format Specification,
-//	use this method:
-//
-//		NumberStrKernel.FmtNumStrDefaultFormat()
-//
-// ----------------------------------------------------------------
 //
 // To set the Default Number String Format Specification,
 // use this method:
 //
 //	NumberStrKernel.SetDefaultNumberStrFormatSpec()
 //
-// If the default Number String Format is invalid,
-// the US Number String format will be automatically
-// applied.
-//
 // If an error is encountered, the error message is
 // included in the string returned by this method.
 //
 // This method implements the Stringer Interface.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	(1)	No rounding will be performed on the numeric value
+//		formatted as number string. If rounding is required
+//		in conjunction with the Default Format Specification,
+//		use this method:
+//
+//			NumberStrKernel.FmtNumStrDefaultFormat()
+//
+//	(2)	This method will NOT delete or modify data values
+//		contained in the current instance of NumberStrKernel.
+//		However, if the NumberStrKernel Number String Format
+//		Specification is invalid,
+//		'NumberStrKernel.numStrFormatSpec' will be set
+//		to the default US (United States) Signed Number
+//		String Format Specification.
+//
+//		All other NumberStrKernel data values will remain
+//		unchanged.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	NONE
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//
+//		If this method completes successfully, a formatted
+//		Number String will be returned.
+//
+//		If errors are encountered, an error message will
+//		be formatted in the returned string.
 func (numStrKernel NumberStrKernel) String() string {
 
 	if numStrKernel.lock == nil {
@@ -19051,16 +19064,17 @@ func (numStrKernel NumberStrKernel) String() string {
 
 	var tempNumStrFormatSpec NumStrFormatSpec
 
-	numberFieldSpec := NumStrNumberFieldSpec{
-		fieldLength:        -1,
-		fieldJustification: TxtJustify.Right(),
-	}
+	if new(numStrFmtSpecNanobot).isNOP(
+		&numStrKernel.numStrFormatSpec) {
 
-	if !numStrKernel.numStrFormatSpec.IsValidInstance() {
-
+		// The current Number String Format
+		// Specification is invalid.
 		tempNumStrFormatSpec,
-			err = new(NumStrFormatSpec).NewCurrencyNumFmtUS(
-			numberFieldSpec,
+			err = new(NumStrFormatSpec).NewSignedNumFmtUS(
+			NumStrNumberFieldSpec{
+				fieldLength:        -1,
+				fieldJustification: TxtJustify.Right(),
+			},
 			ePrefix.XCpy(
 				"tempNumStrFormatSpec<-"))
 
@@ -19077,6 +19091,9 @@ func (numStrKernel NumberStrKernel) String() string {
 
 	} else {
 
+		// The current Number String Format
+		// Specification is valid.
+
 		err = tempNumStrFormatSpec.CopyIn(
 			&numStrKernel.numStrFormatSpec,
 			ePrefix)
@@ -19091,12 +19108,6 @@ func (numStrKernel NumberStrKernel) String() string {
 
 			return errOut
 		}
-
-		tempNumStrFormatSpec.numberFieldSpec.
-			fieldLength = -1
-
-		tempNumStrFormatSpec.numberFieldSpec.
-			fieldJustification = TxtJustify.Right()
 
 	}
 
