@@ -6462,8 +6462,8 @@ func (numStrKernel *NumberStrKernel) FmtNumStrCustom(
 //
 //	This method will NOT delete or modify data values
 //	contained in the current instance of NumberStrKernel.
-//	However, if the NumberStrKernel Number String Format
-//	Specification is invalid,
+//	However, if the NumberStrKernel Default Number String
+//	Format Specification is invalid,
 //	'NumberStrKernel.numStrFormatSpec' will be set
 //	to the default US (United States) Signed Number
 //	String Format Specification.
@@ -18977,12 +18977,12 @@ func (numStrKernel *NumberStrKernel) SetUnsignedIntValue(
 // String
 //
 // Returns a formatted number string using the numeric
-// value and the default Number String Format
+// value and the Default Number String Format
 // Specification configured for the current instance of
 // NumberStrKernel.
 //
 // To set the Default Number String Format Specification,
-// use this method:
+// use the following method:
 //
 //	NumberStrKernel.SetDefaultNumberStrFormatSpec()
 //
@@ -18996,18 +18996,19 @@ func (numStrKernel *NumberStrKernel) SetUnsignedIntValue(
 // # BE ADVISED
 //
 //	(1)	No rounding will be performed on the numeric value
-//		formatted as number string. If rounding is required
-//		in conjunction with the Default Format Specification,
-//		use this method:
+//		formatted as number string. If rounding is
+//		required in conjunction with the Default Format
+//		Specification, use the following method:
 //
 //			NumberStrKernel.FmtNumStrDefaultFormat()
 //
 //	(2)	This method will NOT delete or modify data values
-//		contained in the current instance of NumberStrKernel.
-//		However, if the NumberStrKernel Number String Format
+//		contained in the current instance of
+//		NumberStrKernel. However, if the Default
+//		NumberStrKernel Number String Format
 //		Specification is invalid,
-//		'NumberStrKernel.numStrFormatSpec' will be set
-//		to the default US (United States) Signed Number
+//		'NumberStrKernel.numStrFormatSpec' will be set to
+//		the default US (United States) Signed Number
 //		String Format Specification.
 //
 //		All other NumberStrKernel data values will remain

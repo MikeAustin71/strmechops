@@ -35,6 +35,7 @@ type textSpecificationAtom struct {
 //		interface parameter are listed as follows:
 //
 //			time.Time (Converted using default format)
+//			NumberStrKernel, *NumberStrKernel
 //			string
 //			bool
 //			uint, uint8, uint16, uint32, uint64,
@@ -310,6 +311,50 @@ func (txtSpecAtom *textSpecificationAtom) convertParamEmptyInterfaceToString(
 		}
 
 		convertedString = bRatPtr.String()
+
+		return convertedString, err
+
+	case NumberStrKernel:
+
+		var nStrKernel NumberStrKernel
+
+		nStrKernel,
+			ok = emptyIFace.(NumberStrKernel)
+
+		if !ok {
+
+			err = fmt.Errorf("%v\n"+
+				"Error: Failed to convert empty interface\n"+
+				"to NumberStrKernel value!\n"+
+				"String Conversion Error.\n",
+				ePrefix.String())
+
+			return convertedString, err
+		}
+
+		convertedString = nStrKernel.String()
+
+		return convertedString, err
+
+	case *NumberStrKernel:
+
+		var nStrKernelPtr *NumberStrKernel
+
+		nStrKernelPtr,
+			ok = emptyIFace.(*NumberStrKernel)
+
+		if !ok {
+
+			err = fmt.Errorf("%v\n"+
+				"Error: Failed to convert empty interface\n"+
+				"to *NumberStrKernel value!\n"+
+				"String Conversion Error.\n",
+				ePrefix.String())
+
+			return convertedString, err
+		}
+
+		convertedString = nStrKernelPtr.String()
 
 		return convertedString, err
 
