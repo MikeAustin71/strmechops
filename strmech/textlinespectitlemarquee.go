@@ -2140,6 +2140,11 @@ func (txtLineSpecTitleMarquee *TextLineSpecTitleMarquee) EqualITextLine(
 //
 // # Input Parameters
 //
+//	string
+//
+//		The formatted text lines generated from the
+//		current instance of TextLineSpecTitleMarquee.
+//
 //	errorPrefix					interface{}
 //
 //		This object encapsulates error prefix text which
