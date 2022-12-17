@@ -1736,6 +1736,49 @@ func (numStrFmtSpec *NumStrFormatSpec) GetZeroNumSymSpec(
 			"<-numStrFmtSpec.zeroNumberSign"))
 }
 
+// IsNOP
+//
+//	Stands for 'Is No Operation'. This method returns
+//	a boolean value signaling whether the current
+//	instance of NumStrFormatSpec is engaged, valid, fully
+//	configured and capable of performing number string
+//	formatting operations.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	NONE
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	bool
+//		If this method returns 'true', it signals
+//		that the current Number String Format
+//		Specification ('NumStrFormatSpec') is simply an
+//		empty placeholder and is NOT capable of
+//		performing number string formatting operations.
+//
+//		If this method returns 'false', it signals that
+//		the current 'NumStrFormatSpec' instance is fully
+//		populated, valid, functional and ready to perform
+//		number string formatting operations.
+func (numStrFmtSpec *NumStrFormatSpec) IsNOP() bool {
+
+	if numStrFmtSpec.lock == nil {
+		numStrFmtSpec.lock = new(sync.Mutex)
+	}
+
+	numStrFmtSpec.lock.Lock()
+
+	defer numStrFmtSpec.lock.Unlock()
+
+	return new(numStrFmtSpecNanobot).isNOP(
+		numStrFmtSpec)
+}
+
 //	IsValidInstance
 //
 //	Performs a diagnostic review of the data values
@@ -11805,6 +11848,66 @@ func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) copySignedNumberFormatSpec(
 				"<-sourceSignedNumFmtSpec"))
 
 	return err
+}
+
+// isNOP
+//
+//	Stands for 'Is No Operation'. This method returns
+//	a boolean value signaling whether the instance of
+//	NumStrFormatSpec passed as input parameter
+//	'numberStrFmtSpec' is engaged, valid, fully
+//	configured and capable of performing number string
+//	formatting operations.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	numberStrFmtSpec			*NumStrFormatSpec
+//
+//		A pointer to an instance of NumStrFormatSpec.
+//		This instance will be reviewed and analyzed to
+//		determine if it capable of performing number
+//		string formatting operations.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	bool
+//		If this method returns 'true', it signals
+//		that the Number String Format Specification
+//		('numberStrFmtSpec') is simply an empty
+//		placeholder and is NOT capable of performing
+//		number string formatting operations.
+//
+//		If this method returns 'false', it signals that
+//		the 'NumStrFormatSpec' instance
+//		('numberStrFmtSpec') is fully configured, valid,
+//		functional and ready to perform number string
+//		formatting operations.
+func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) isNOP(
+	numberStrFmtSpec *NumStrFormatSpec) bool {
+
+	if nStrFmtSpecNanobot.lock == nil {
+		nStrFmtSpecNanobot.lock = new(sync.Mutex)
+	}
+
+	nStrFmtSpecNanobot.lock.Lock()
+
+	defer nStrFmtSpecNanobot.lock.Unlock()
+
+	if numberStrFmtSpec == nil {
+		return true
+	}
+
+	isValid,
+		_ := new(numStrFmtSpecAtom).
+		testValidityNumStrFormatSpec(
+			numberStrFmtSpec,
+			nil)
+
+	return !isValid
 }
 
 //	setCurrencyNStrFmtFrance
