@@ -1015,7 +1015,7 @@ func (txtFieldFmtDtoFloat64Electron *textFieldFormatDtoFloat64Electron) getFloat
 	}
 
 	float64NumStr,
-		err = float64NumberStrKernel.FmtSimpleSignedNumber(
+		err = float64NumberStrKernel.FmtSignedSimpleNumber(
 		".",
 		",",
 		true,

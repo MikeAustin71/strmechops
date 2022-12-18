@@ -5870,6 +5870,221 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumFmtUS(
 	return newSignedNumFmtSpec, err
 }
 
+// NewSignedPureNumberStr
+//
+// Creates and returns and instance of NumStrFormatSpec
+// configured with specifications used in formatting
+// floating point pure number strings.
+//
+// A floating point pure number string is defined as
+// follows:
+//
+//  1. A pure number string consists entirely of numeric
+//     digit characters.
+//
+//  2. A pure number string will separate integer and
+//     fractional digits with a radix point. This
+//     could be, but is not limited to, a decimal point
+//     ('.').
+//
+//  3. A pure number string will designate negative values
+//     with a minus sign ('-'). This minus sign could be
+//     positioned as a leading or trailing minus sign.
+//
+//  4. A pure number string will NOT include integer
+//     separators such as commas (',') to separate
+//     integer digits by thousands.
+//
+//     NOT THIS: 1,000,000
+//     Pure Number String: 1000000
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	decSeparatorChars			string
+//
+//		This string contains the character or characters
+//		which will be configured as the Decimal Separator
+//		Symbol or Symbols for the returned instance of
+//		NumStrFormatSpec.
+//
+//		The decimal separator is also known as the radix
+//		point and is used to separate integer and
+//		fractional digits within a formatted floating
+//		point Number String.
+//
+//		In the US, UK, Australia and most of Canada, the
+//		decimal separator is the period character ('.')
+//		also known as the decimal point.
+//
+//		In France, Germany and many countries in the
+//		European Union, the Decimal Separator is the
+//		comma character (',').
+//
+//	leadingNumSymbols			bool
+//
+//		In Pure Number Strings, positive numeric values
+//		are NOT configured with leading or trailing plus
+//		signs ('+'). Negative values on the other hand,
+//		are always designated by leading or trailing
+//		minus sign ('-').
+//
+//		This parameter, 'leadingNumSymbols', controls
+//		the positioning of minus signs for negative
+//		numeric values within a	Number String.
+//
+//		When set to 'true', the returned NumStrFormatSpec
+//		instance will configure minus signs for negative
+//		numbers at the beginning of, or on the left side
+//		of, the numeric value. In these cases, the minus
+//		sign is said to be configured as a leading minus
+//		sign. This is the positioning format used in the
+//		US, UK, Australia and most of Canada. In
+//		addition, library functions in 'Go' and other
+//		programming languages generally expect leading
+//		minus signs for negative numbers.
+//
+//			Example Leading Minus Sign:
+//				"-123.456"
+//
+//		When parameter 'leadingNumSymbols' is set to
+//		'false', the returned instance of NumStrFormatSpec
+//		will configure minus signs for negative numbers
+//		at the end of, or on the right side of, the
+//		numeric value. With this positioning format, the
+//		minus sign is said to be configured as a trailing
+//		minus sign. This is the positioning format used
+//		in France, Germany and many countries in the
+//		European Union.
+//
+//			Example Trailing Minus Sign:
+//				"123.456-"
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	newNumStrFmtSpec			NumStrFormatSpec
+//
+//		If this method completes successfully, this parameter
+//		will return a new, fully populated instance of
+//		NumStrFormatSpec.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (numStrFmtSpec *NumStrFormatSpec) NewSignedPureNumberStr(
+	decSeparatorChars string,
+	leadingNumSymbols bool,
+	numFieldLength int,
+	numFieldJustification TextJustify,
+	errorPrefix interface{}) (
+	newNumStrFmtSpec NumStrFormatSpec,
+	err error) {
+
+	if numStrFmtSpec.lock == nil {
+		numStrFmtSpec.lock = new(sync.Mutex)
+	}
+
+	numStrFmtSpec.lock.Lock()
+
+	defer numStrFmtSpec.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumStrFormatSpec."+
+			"NewSignedPureNumberStr()",
+		"")
+
+	if err != nil {
+		return newNumStrFmtSpec, err
+	}
+
+	err = new(numStrFmtSpecNanobot).
+		setSignedPureNStrSpec(
+			&newNumStrFmtSpec,
+			decSeparatorChars,
+			leadingNumSymbols,
+			numFieldLength,
+			numFieldJustification,
+			ePrefix.XCpy(
+				"newNumStrFmtSpec"))
+
+	return newNumStrFmtSpec, err
+}
+
 //	NewSimpleCurrency
 //
 //	Creates and returns and instance of NumStrFormatSpec
@@ -5878,7 +6093,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumFmtUS(
 //	If currency number symbol formatting IS NOT
 //	required, see method:
 //
-//		NumStrFormatSpec.NewSimpleSignedNumber()
+//		NumStrFormatSpec.NewSignedSimpleNumber()
 //
 //	Type NumStrFormatSpec is used to convert numeric
 //	values to formatted Number Strings.
@@ -6217,7 +6432,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSimpleCurrency(
 	return newNumStrFmtSpec, err
 }
 
-//	NewSimpleSignedNumber
+//	NewSignedSimpleNumber
 //
 //	Creates and returns and instance of NumStrFormatSpec
 //	configured for Signed Number String formatting.
@@ -6499,7 +6714,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSimpleCurrency(
 //		and text passed by input parameter, 'errorPrefix'. The
 //		'errorPrefix' text will be attached to the beginning of
 //		the error message.
-func (numStrFmtSpec *NumStrFormatSpec) NewSimpleSignedNumber(
+func (numStrFmtSpec *NumStrFormatSpec) NewSignedSimpleNumber(
 	decSeparatorChars string,
 	intSeparatorChars string,
 	leadingNumSymbols bool,
@@ -6523,7 +6738,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSimpleSignedNumber(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumStrFormatSpec."+
-			"NewSimpleSignedNumber()",
+			"NewSignedSimpleNumber()",
 		"")
 
 	if err != nil {
@@ -10887,8 +11102,8 @@ func (numStrFmtSpec *NumStrFormatSpec) SetSignedNumFmtUS(
 // with specifications for generating a pure number
 // string.
 //
-// A floating point pure number string is defined as
-// follows:
+// A Signed Floating Point Pure Number String is defined
+// as follows:
 //
 //  1. A pure number string consists entirely of numeric
 //     digit characters.
@@ -10980,6 +11195,56 @@ func (numStrFmtSpec *NumStrFormatSpec) SetSignedNumFmtUS(
 //			Example Trailing Minus Sign:
 //				"123.456-"
 //
+//	numFieldLength					int
+//
+//		This parameter defines the length of the text
+//		field in which the numeric value will be displayed
+//		within a number string.
+//
+//		If 'numFieldLength' is less than the length of the
+//		numeric value string, it will be automatically set
+//		equal to the length of that numeric value string.
+//
+//		To automatically set the value of fieldLength to
+//		the string length of the numeric value, set this
+//		parameter to a value of minus one (-1).
+//
+//		If this parameter is submitted with a value less
+//		than minus one (-1) or greater than 1-million
+//		(1,000,000), an error will be returned.
+//
+//	numFieldJustification		TextJustify
+//
+//		An enumeration which specifies the justification
+//		of the numeric value within the number field
+//		length specified by input parameter
+//		'numFieldLength'.
+//
+//		Text justification can only be evaluated in the
+//		context of a number string, field length and a
+//		'textJustification' object of type TextJustify.
+//		This is because number strings with a field length
+//		equal to or less than the length of the numeric
+//		value string never use text justification. In
+//		these cases, text justification is completely
+//		ignored.
+//
+//		If the field length parameter ('numFieldLength')
+//		is greater than the length of the numeric value
+//		string, text justification must be equal to one
+//		of these three valid values:
+//
+//			TextJustify(0).Left()
+//			TextJustify(0).Right()
+//			TextJustify(0).Center()
+//
+//		You can also use the abbreviated text justification
+//		enumeration syntax as follows:
+//
+//			TxtJustify.Left()
+//			TxtJustify.Right()
+//			TxtJustify.Center()
+//
 //	errorPrefix					interface{}
 //
 //		This object encapsulates error prefix text which
@@ -11058,6 +11323,8 @@ func (numStrFmtSpec *NumStrFormatSpec) SetSignedNumFmtUS(
 func (numStrFmtSpec *NumStrFormatSpec) SetSignedPureNumberStr(
 	decSeparatorChars string,
 	leadingNumSymbols bool,
+	numFieldLength int,
+	numFieldJustification TextJustify,
 	errorPrefix interface{}) error {
 
 	if numStrFmtSpec.lock == nil {
@@ -11088,6 +11355,8 @@ func (numStrFmtSpec *NumStrFormatSpec) SetSignedPureNumberStr(
 			numStrFmtSpec,
 			decSeparatorChars,
 			leadingNumSymbols,
+			numFieldLength,
+			numFieldJustification,
 			ePrefix.XCpy(
 				"numStrFmtSpec"))
 }
@@ -11100,7 +11369,7 @@ func (numStrFmtSpec *NumStrFormatSpec) SetSignedPureNumberStr(
 //	If currency number symbol formatting IS NOT required,
 //	see method:
 //
-//		NumStrFormatSpec.SetSimpleSignedNumber()
+//		NumStrFormatSpec.SetSignedSimpleNumber()
 //
 //
 //	Type NumStrFormatSpec is used to convert numeric
@@ -11441,7 +11710,7 @@ func (numStrFmtSpec *NumStrFormatSpec) SetSimpleCurrency(
 
 }
 
-//	SetSimpleSignedNumber
+//	SetSignedSimpleNumber
 //
 //	Reconfigures the current instance of NumStrFormatSpec
 //	for Signed Number String formatting.
@@ -11727,7 +11996,7 @@ func (numStrFmtSpec *NumStrFormatSpec) SetSimpleCurrency(
 //		and text passed by input parameter, 'errorPrefix'. The
 //		'errorPrefix' text will be attached to the beginning of
 //		the error message.
-func (numStrFmtSpec *NumStrFormatSpec) SetSimpleSignedNumber(
+func (numStrFmtSpec *NumStrFormatSpec) SetSignedSimpleNumber(
 	decSeparatorChars string,
 	intSeparatorChars string,
 	leadingNumSymbols bool,
@@ -11750,7 +12019,7 @@ func (numStrFmtSpec *NumStrFormatSpec) SetSimpleSignedNumber(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumStrFormatSpec."+
-			"SetSimpleSignedNumber()",
+			"SetSignedSimpleNumber()",
 		"")
 
 	if err != nil {
@@ -15013,8 +15282,8 @@ func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtUS(
 // configures that instance with specifications for
 // generating a pure number string.
 //
-// The floating point pure number string returned by
-// this method is defined as follows:
+// In this context, a Signed Floating Point Pure Number
+// String is defined as follows:
 //
 //  1. A pure number string consists entirely of numeric
 //     digit characters.
@@ -15106,6 +15375,56 @@ func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtUS(
 //			Example Trailing Minus Sign:
 //				"123.456-"
 //
+//	numFieldLength					int
+//
+//		This parameter defines the length of the text
+//		field in which the numeric value will be displayed
+//		within a number string.
+//
+//		If 'numFieldLength' is less than the length of the
+//		numeric value string, it will be automatically set
+//		equal to the length of that numeric value string.
+//
+//		To automatically set the value of fieldLength to
+//		the string length of the numeric value, set this
+//		parameter to a value of minus one (-1).
+//
+//		If this parameter is submitted with a value less
+//		than minus one (-1) or greater than 1-million
+//		(1,000,000), an error will be returned.
+//
+//	numFieldJustification		TextJustify
+//
+//		An enumeration which specifies the justification
+//		of the numeric value within the number field
+//		length specified by input parameter
+//		'numFieldLength'.
+//
+//		Text justification can only be evaluated in the
+//		context of a number string, field length and a
+//		'textJustification' object of type TextJustify.
+//		This is because number strings with a field length
+//		equal to or less than the length of the numeric
+//		value string never use text justification. In
+//		these cases, text justification is completely
+//		ignored.
+//
+//		If the field length parameter ('numFieldLength')
+//		is greater than the length of the numeric value
+//		string, text justification must be equal to one
+//		of these three valid values:
+//
+//			TextJustify(0).Left()
+//			TextJustify(0).Right()
+//			TextJustify(0).Center()
+//
+//		You can also use the abbreviated text justification
+//		enumeration syntax as follows:
+//
+//			TxtJustify.Left()
+//			TxtJustify.Right()
+//			TxtJustify.Center()
+//
 //	errPrefDto					*ePref.ErrPrefixDto
 //
 //		This object encapsulates an error prefix string
@@ -15141,6 +15460,8 @@ func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setSignedPureNStrSpec(
 	numStrFmtSpec *NumStrFormatSpec,
 	decSeparatorChars string,
 	leadingNumSymbols bool,
+	numFieldLength int,
+	numFieldJustification TextJustify,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
 
@@ -15215,8 +15536,8 @@ func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setSignedPureNStrSpec(
 
 	nStrNumFieldSpec,
 		err = new(NumStrNumberFieldSpec).NewFieldSpec(
-		-1,
-		TxtJustify.Right(),
+		numFieldLength,
+		numFieldJustification,
 		ePrefix.XCpy(
 			"nStrNumFieldSpec<-"))
 

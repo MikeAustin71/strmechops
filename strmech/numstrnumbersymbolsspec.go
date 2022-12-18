@@ -67,7 +67,7 @@ import (
 //	Number Symbols creation process:
 //
 //		NumStrNumberSymbolsSpec.NewSimpleCurrency()
-//		NumStrNumberSymbolsSpec.NewSimpleSignedNumber()
+//		NumStrNumberSymbolsSpec.NewSignedSimpleNumber()
 //
 //	If more granular control is required to meet
 //	specialized requirements for multinational or
@@ -1548,7 +1548,7 @@ func (nStrNumSymSpec *NumStrNumberSymbolsSpec) NewNOP() NumStrNumberSymbolsSpec 
 //	If currency number symbol formatting is NOT
 //	required, see method:
 //
-//		NumStrNumberSymbolsSpec.NewSimpleSignedNumber()
+//		NumStrNumberSymbolsSpec.NewSignedSimpleNumber()
 //
 //	Type NumStrNumberSymbolsSpec is used to configure
 //	Number Symbols required in converting numeric
@@ -1795,7 +1795,7 @@ func (nStrNumSymSpec *NumStrNumberSymbolsSpec) NewSimpleCurrency(
 	return newNStrNumSymbols, err
 }
 
-//	NewSimpleSignedNumber
+//	NewSignedSimpleNumber
 //
 //	Creates and returns and instance of
 //	NumStrNumberSymbolsSpec configured for Signed
@@ -1958,7 +1958,7 @@ func (nStrNumSymSpec *NumStrNumberSymbolsSpec) NewSimpleSignedNumber(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumStrNumberSymbolsSpec."+
-			"NewSimpleSignedNumber()",
+			"NewSignedSimpleNumber()",
 		"")
 
 	if err != nil {
@@ -4749,7 +4749,7 @@ func (nStrNumSymSpec *NumStrNumberSymbolsSpec) SetPositiveSymbolsStrings(
 // If currency number symbol formatting is NOT required,
 // see method:
 //
-//	NumStrNumberSymbolsSpec.SetSimpleSignedNumber()
+//	NumStrNumberSymbolsSpec.SetSignedSimpleNumber()
 //
 // Type NumStrNumberSymbolsSpec is used to configure
 // Number Symbols required in converting numeric
@@ -4991,7 +4991,7 @@ func (nStrNumSymSpec *NumStrNumberSymbolsSpec) SetSimpleCurrency(
 			"nStrNumSymSpec<-"))
 }
 
-//	SetSimpleSignedNumber
+//	SetSignedSimpleNumber
 //
 //	Deletes and reconfigures the data values contained in
 //	the current instance of NumStrNumberSymbolsSpec with
@@ -5206,7 +5206,7 @@ func (nStrNumSymSpec *NumStrNumberSymbolsSpec) SetSimpleSignedNumber(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumStrNumberSymbolsSpec."+
-			"SetSimpleSignedNumber()",
+			"SetSignedSimpleNumber()",
 		"")
 
 	if err != nil {
