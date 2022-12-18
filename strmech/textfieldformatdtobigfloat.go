@@ -647,7 +647,7 @@ func (textBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat) Empty() {
 
 	textBigFloatFieldFmtDto.lock.Lock()
 
-	new(textBigFloatFieldFormatDtoAtom).empty(
+	new(textFieldFormatDtoBigFloatAtom).empty(
 		textBigFloatFieldFmtDto)
 
 	textBigFloatFieldFmtDto.lock.Unlock()
@@ -708,7 +708,7 @@ func (textBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat) Equal(
 
 	defer textBigFloatFieldFmtDto.lock.Unlock()
 
-	return new(textBigFloatFieldFormatDtoAtom).
+	return new(textFieldFormatDtoBigFloatAtom).
 		equal(
 			textBigFloatFieldFmtDto,
 			incomingBigFloatFieldFmtDto)
@@ -1294,7 +1294,7 @@ func (textBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat) IsValidInstance() (
 	defer textBigFloatFieldFmtDto.lock.Unlock()
 
 	isValid,
-		_ = new(textBigFloatFieldFormatDtoAtom).
+		_ = new(textFieldFormatDtoBigFloatAtom).
 		testValidityOfTxtBigFloatFieldFmtDto(
 			textBigFloatFieldFmtDto,
 			nil)
@@ -1421,7 +1421,7 @@ func (textBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat) IsValidInstanceError(
 	}
 
 	_,
-		err = new(textBigFloatFieldFormatDtoAtom).
+		err = new(textFieldFormatDtoBigFloatAtom).
 		testValidityOfTxtBigFloatFieldFmtDto(
 			textBigFloatFieldFmtDto,
 			ePrefix.XCpy(
@@ -1562,7 +1562,7 @@ func (txtBigFloatFieldFmtDtoNanobot *textBigFloatFieldFormatDtoNanobot) copy(
 		return err
 	}
 
-	txtBigFloatFieldFmtAtom := textBigFloatFieldFormatDtoAtom{}
+	txtBigFloatFieldFmtAtom := textFieldFormatDtoBigFloatAtom{}
 
 	_,
 		err = txtBigFloatFieldFmtAtom.
@@ -1906,9 +1906,9 @@ func (txtBigFloatFieldFmtDtoMolecule *textBigFloatFieldFormatDtoMolecule) getFie
 	return fieldContentsLabel, err
 }
 
-// textBigFloatFieldFormatDtoAtom - Provides helper methods for
+// textFieldFormatDtoBigFloatAtom - Provides helper methods for
 // TextFieldFormatDtoBigFloat.
-type textBigFloatFieldFormatDtoAtom struct {
+type textFieldFormatDtoBigFloatAtom struct {
 	lock *sync.Mutex
 }
 
@@ -1945,16 +1945,16 @@ type textBigFloatFieldFormatDtoAtom struct {
 // # Return Values
 //
 //	NONE
-func (txtBigFloatFieldFmtDtoAtom *textBigFloatFieldFormatDtoAtom) empty(
+func (txtFieldFmtDtoBigFloatAtom *textFieldFormatDtoBigFloatAtom) empty(
 	txtBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat) {
 
-	if txtBigFloatFieldFmtDtoAtom.lock == nil {
-		txtBigFloatFieldFmtDtoAtom.lock = new(sync.Mutex)
+	if txtFieldFmtDtoBigFloatAtom.lock == nil {
+		txtFieldFmtDtoBigFloatAtom.lock = new(sync.Mutex)
 	}
 
-	txtBigFloatFieldFmtDtoAtom.lock.Lock()
+	txtFieldFmtDtoBigFloatAtom.lock.Lock()
 
-	defer txtBigFloatFieldFmtDtoAtom.lock.Unlock()
+	defer txtFieldFmtDtoBigFloatAtom.lock.Unlock()
 
 	if txtBigFloatFieldFmtDto == nil {
 
@@ -1972,7 +1972,7 @@ func (txtBigFloatFieldFmtDtoAtom *textBigFloatFieldFormatDtoAtom) empty(
 
 	txtBigFloatFieldFmtDto.FieldLength = 0
 
-	txtBigFloatFieldFmtDto.FieldJustify = 0
+	txtBigFloatFieldFmtDto.FieldJustify = TxtJustify.None()
 
 	txtBigFloatFieldFmtDto.RightMarginStr = ""
 
@@ -2028,17 +2028,17 @@ func (txtBigFloatFieldFmtDtoAtom *textBigFloatFieldFormatDtoAtom) empty(
 //
 //		If the compared data values are NOT equivalent,
 //		this method returns 'false'.
-func (txtBigFloatFieldFmtDtoAtom *textBigFloatFieldFormatDtoAtom) equal(
+func (txtFieldFmtDtoBigFloatAtom *textFieldFormatDtoBigFloatAtom) equal(
 	txtBigFloatFieldFmtDtoOne *TextFieldFormatDtoBigFloat,
 	txtBigFloatFieldFmtDtoTwo *TextFieldFormatDtoBigFloat) bool {
 
-	if txtBigFloatFieldFmtDtoAtom.lock == nil {
-		txtBigFloatFieldFmtDtoAtom.lock = new(sync.Mutex)
+	if txtFieldFmtDtoBigFloatAtom.lock == nil {
+		txtFieldFmtDtoBigFloatAtom.lock = new(sync.Mutex)
 	}
 
-	txtBigFloatFieldFmtDtoAtom.lock.Lock()
+	txtFieldFmtDtoBigFloatAtom.lock.Lock()
 
-	defer txtBigFloatFieldFmtDtoAtom.lock.Unlock()
+	defer txtFieldFmtDtoBigFloatAtom.lock.Unlock()
 
 	if txtBigFloatFieldFmtDtoOne == nil ||
 		txtBigFloatFieldFmtDtoTwo == nil {
@@ -2190,19 +2190,19 @@ func (txtBigFloatFieldFmtDtoAtom *textBigFloatFieldFormatDtoAtom) equal(
 //		for input parameter 'errPrefDto' (error prefix)
 //		will be prefixed or attached at the beginning of
 //		the error message.
-func (txtBigFloatFieldFmtDtoAtom *textBigFloatFieldFormatDtoAtom) testValidityOfTxtBigFloatFieldFmtDto(
+func (txtFieldFmtDtoBigFloatAtom *textFieldFormatDtoBigFloatAtom) testValidityOfTxtBigFloatFieldFmtDto(
 	txtBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat,
 	errPrefDto *ePref.ErrPrefixDto) (
 	isValid bool,
 	err error) {
 
-	if txtBigFloatFieldFmtDtoAtom.lock == nil {
-		txtBigFloatFieldFmtDtoAtom.lock = new(sync.Mutex)
+	if txtFieldFmtDtoBigFloatAtom.lock == nil {
+		txtFieldFmtDtoBigFloatAtom.lock = new(sync.Mutex)
 	}
 
-	txtBigFloatFieldFmtDtoAtom.lock.Lock()
+	txtFieldFmtDtoBigFloatAtom.lock.Lock()
 
-	defer txtBigFloatFieldFmtDtoAtom.lock.Unlock()
+	defer txtFieldFmtDtoBigFloatAtom.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -2211,7 +2211,7 @@ func (txtBigFloatFieldFmtDtoAtom *textBigFloatFieldFormatDtoAtom) testValidityOf
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"textBigFloatFieldFormatDtoAtom."+
+		"textFieldFormatDtoBigFloatAtom."+
 			"testValidityOfTxtBigFloatFieldFmtDto()",
 		"")
 
@@ -2404,7 +2404,7 @@ func (txtBigFloatFieldFmtDtoElectron *textBigFloatFieldFormatDtoElectron) getBig
 	}
 
 	_,
-		err = new(textBigFloatFieldFormatDtoAtom).
+		err = new(textFieldFormatDtoBigFloatAtom).
 		testValidityOfTxtBigFloatFieldFmtDto(
 			txtBigFloatFieldFmtDto,
 			ePrefix.XCpy(
