@@ -10881,6 +10881,217 @@ func (numStrFmtSpec *NumStrFormatSpec) SetSignedNumFmtUS(
 		ePrefix.XCpy("numStrFmtSpec<-"))
 }
 
+// SetSignedPureNumberStr
+//
+// Reconfigures the current NumStrFormatSpec instance
+// with specifications for generating a pure number
+// string.
+//
+// A floating point pure number string is defined as
+// follows:
+//
+//  1. A pure number string consists entirely of numeric
+//     digit characters.
+//
+//  2. A pure number string will separate integer and
+//     fractional digits with a radix point. This
+//     could be, but is not limited to, a decimal point
+//     ('.').
+//
+//  3. A pure number string will designate negative values
+//     with a minus sign ('-'). This minus sign could be
+//     positioned as a leading or trailing minus sign.
+//
+//  4. A pure number string will NOT include integer
+//     separators such as commas (',') to separate
+//     integer digits by thousands.
+//
+//     NOT THIS: 1,000,000
+//     Pure Number String: 1000000
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will delete and overwrite all pre-existing
+//	data values in the current instance of
+//	NumStrFormatSpec.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	decSeparatorChars			string
+//
+//		This string contains the character or characters
+//		which will be configured as the Decimal Separator
+//		Symbol or Symbols for the current instance of
+//		NumStrFormatSpec.
+//
+//		The decimal separator is also known as the radix
+//		point and is used to separate integer and
+//		fractional digits within a formatted floating
+//		point Number String.
+//
+//		In the US, UK, Australia and most of Canada, the
+//		decimal separator is the period character ('.')
+//		also known as the decimal point.
+//
+//		In France, Germany and many countries in the
+//		European Union, the Decimal Separator is the
+//		comma character (',').
+//
+//	leadingNumSymbols			bool
+//
+//		In Pure Number Strings, positive numeric values
+//		are NOT configured with leading or trailing plus
+//		signs ('+'). Negative values on the other hand
+//		are always designated by leading or trailing
+//		minus sign ('-').
+//
+//		This parameter, 'leadingNumSymbols', controls
+//		the positioning of minus signs for negative
+//		numeric values within a	Number String.
+//
+//		When set to 'true', the current NumStrFormatSpec
+//		instance will configure minus signs for negative
+//		numbers at the beginning of, or on the left side
+//		of, the numeric value. In these cases, the minus
+//		sign is said to be configured as a leading minus
+//		sign. This is the positioning format used in the
+//		US, UK, Australia and most of Canada. In
+//		addition, library functions in 'Go' and other
+//		programming languages generally expect leading
+//		minus signs for negative numbers.
+//
+//			Example Leading Minus Sign:
+//				"-123.456"
+//
+//		When parameter 'leadingNumSymbols' is set to
+//		'false', the current instance of NumStrFormatSpec
+//		will configure minus signs for negative numbers
+//		at the end of, or on the right side of, the
+//		numeric value. With this positioning format, the
+//		minus sign is said to be configured as a trailing
+//		minus sign. This is the positioning format used
+//		in France, Germany and many countries in the
+//		European Union.
+//
+//			Example Trailing Minus Sign:
+//				"123.456-"
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (numStrFmtSpec *NumStrFormatSpec) SetSignedPureNumberStr(
+	decSeparatorChars string,
+	leadingNumSymbols bool,
+	errorPrefix interface{}) error {
+
+	if numStrFmtSpec.lock == nil {
+		numStrFmtSpec.lock = new(sync.Mutex)
+	}
+
+	numStrFmtSpec.lock.Lock()
+
+	defer numStrFmtSpec.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumStrFormatSpec."+
+			"SetSignedPureNumberStr()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	return new(numStrFmtSpecNanobot).
+		setSignedPureNStrSpec(
+			numStrFmtSpec,
+			decSeparatorChars,
+			leadingNumSymbols,
+			ePrefix.XCpy(
+				"numStrFmtSpec"))
+}
+
 //	SetSimpleCurrency
 //
 //	Reconfigures the current instance of NumStrFormatSpec
@@ -14823,6 +15034,109 @@ func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtUS(
 //
 //     NOT THIS: 1,000,000
 //     Pure Number String: 1000000
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+// numStrFmtSpec				*NumStrFormatSpec
+//
+//		A pointer to a NumStrFormatSpec instance. The
+//		data specifications contained in this instance
+//		will be reconfigured to format and generate a
+//		pure number string representation of a floating
+//		point numeric value.
+//
+//	decSeparatorChars			string
+//
+//		This string contains the character or characters
+//		which will be configured as the Decimal Separator
+//		Symbol or Symbols for the NumStrFormatSpec
+//		parameter, 'numStrFmtSpec'.
+//
+//		The decimal separator is also known as the radix
+//		point and is used to separate integer and
+//		fractional digits within a formatted floating
+//		point Number String.
+//
+//		In the US, UK, Australia and most of Canada, the
+//		decimal separator is the period character ('.')
+//		also known as the decimal point.
+//
+//		In France, Germany and many countries in the
+//		European Union, the Decimal Separator is the
+//		comma character (',').
+//
+//	leadingNumSymbols			bool
+//
+//		In Pure Number Strings, positive numeric values
+//		do NOT have leading or trailing plus signs ('+').
+//		Negative values on the other hand are always
+//		designated by leading or trailing minus sign
+//		('-').
+//
+//		This parameter, 'leadingNumSymbols', controls
+//		the positioning of minus signs for negative
+//		numeric values within a	Number String.
+//
+//		When set to 'true', the NumStrFormatSpec instance,
+//		'numStrFmtSpec', will configure minus signs for
+//		negative numbers at the beginning of, or on the
+//		left side of, the numeric value. In these cases,
+//		the minus sign is said to be configured as a
+//		leading minus sign. This is the positioning
+//		format used in the US, UK, Australia and most of
+//		Canada. In addition, library functions in 'Go'
+//		and other programming languages generally expect
+//		leading minus signs for negative numbers.
+//
+//			Example Leading Minus Sign:
+//				"-123.456"
+//
+//		When parameter 'leadingNumSymbols' is set to
+//		'false', the NumStrFormatSpec instance,
+//		'numStrFmtSpec', will configure minus signs for
+//		negative numbers at the end of, or on the right
+//		side of, the numeric value. With this positioning
+//		format, the minus sign is said to be configured
+//		as a trailing minus sign. This is the positioning
+//		format used in France, Germany and many countries
+//		in the European Union.
+//
+//			Example Trailing Minus Sign:
+//				"123.456-"
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
 func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setSignedPureNStrSpec(
 	numStrFmtSpec *NumStrFormatSpec,
 	decSeparatorChars string,
