@@ -14796,6 +14796,165 @@ func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtUS(
 		ePrefix.XCpy("numStrFmtSpec<-"))
 }
 
+// setSignedPureNStrSpec
+//
+// Receives an instance of NumStrFormatSpec and
+// configures that instance with specifications for
+// generating a pure number string.
+//
+// The floating point pure number string returned by
+// this method is defined as follows:
+//
+//  1. A pure number string consists entirely of numeric
+//     digit characters.
+//
+//  2. A pure number string will separate integer and
+//     fractional digits with a radix point. This
+//     could be, but is not limited to, a decimal point
+//     ('.').
+//
+//  3. A pure number string will designate negative values
+//     with a minus sign ('-'). This minus sign could be
+//     positioned as a leading or trailing minus sign.
+//
+//  4. A pure number string will NOT include integer
+//     separators such as commas (',') to separate
+//     integer digits by thousands.
+//
+//     NOT THIS: 1,000,000
+//     Pure Number String: 1000000
+func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setSignedPureNStrSpec(
+	numStrFmtSpec *NumStrFormatSpec,
+	decSeparatorChars string,
+	leadingNumSymbols bool,
+	errPrefDto *ePref.ErrPrefixDto) (
+	err error) {
+
+	if nStrFmtSpecNanobot.lock == nil {
+		nStrFmtSpecNanobot.lock = new(sync.Mutex)
+	}
+
+	nStrFmtSpecNanobot.lock.Lock()
+
+	defer nStrFmtSpecNanobot.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"numStrFmtSpecNanobot."+
+			"setSignedPureNStrSpec()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if numStrFmtSpec == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'numStrFmtSpec' is invalid!\n"+
+			"'numStrFmtSpec' is a 'nil' pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	var decSeparatorSpec DecimalSeparatorSpec
+
+	decSeparatorSpec,
+		err = new(DecimalSeparatorSpec).NewStr(
+		decSeparatorChars,
+		ePrefix.XCpy(
+			"decSeparatorSpec<-"))
+
+	if err != nil {
+
+		return err
+	}
+
+	var intSeparatorSpec IntegerSeparatorSpec
+
+	intSeparatorSpec =
+		new(IntegerSeparatorSpec).NewNoIntegerSeparation()
+
+	if err != nil {
+
+		return err
+	}
+
+	var numSymbolsSpec NumStrNumberSymbolsSpec
+
+	numSymbolsSpec,
+		err = new(NumStrNumberSymbolsSpec).NewSimpleSignedNumber(
+		leadingNumSymbols,
+		ePrefix.XCpy(
+			"numSymbolsSpec<-"))
+
+	if err != nil {
+
+		return err
+	}
+
+	var nStrNumFieldSpec NumStrNumberFieldSpec
+
+	nStrNumFieldSpec,
+		err = new(NumStrNumberFieldSpec).NewFieldSpec(
+		-1,
+		TxtJustify.Right(),
+		ePrefix.XCpy(
+			"nStrNumFieldSpec<-"))
+
+	if err != nil {
+
+		return err
+	}
+
+	nStrFmtSpecAtom := numStrFmtSpecAtom{}
+
+	err = nStrFmtSpecAtom.setDecimalSeparatorSpec(
+		numStrFmtSpec,
+		decSeparatorSpec,
+		ePrefix.XCpy(
+			"numStrFmtSpec<-"))
+
+	if err != nil {
+
+		return err
+	}
+
+	err = nStrFmtSpecAtom.setIntegerGroupingSpec(
+		numStrFmtSpec,
+		intSeparatorSpec,
+		ePrefix.XCpy(
+			""))
+
+	if err != nil {
+
+		return err
+	}
+
+	err = nStrFmtSpecAtom.setNumberFieldSpec(
+		numStrFmtSpec,
+		nStrNumFieldSpec,
+		ePrefix.XCpy(
+			"numStrFmtSpec<-nStrNumFieldSpec"))
+
+	if err != nil {
+
+		return err
+	}
+
+	err = nStrFmtSpecAtom.setNumberSymbolSpec(
+		numStrFmtSpec,
+		numSymbolsSpec,
+		ePrefix.XCpy(
+			"numStrFmtSpec<-numSymbolsSpec"))
+
+	return err
+}
+
 //	setSimpleFormatSpec
 //
 //	Deletes all the data values and reconfigures an

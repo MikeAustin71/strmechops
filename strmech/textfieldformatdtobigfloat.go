@@ -1206,7 +1206,7 @@ func (textBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat) GetPureNumberStr(
 		return "", err
 	}
 
-	return new(textBigFloatFieldFormatDtoElectron).
+	return new(textFieldFormatDtoBigFloatElectron).
 		getBigFloatPureNumberStr(
 			textBigFloatFieldFmtDto,
 			ePrefix.XCpy(
@@ -1295,7 +1295,7 @@ func (textBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat) IsValidInstance() (
 
 	isValid,
 		_ = new(textFieldFormatDtoBigFloatAtom).
-		testValidityOfTxtBigFloatFieldFmtDto(
+		testValidityOfTxtFieldFmtDtoBigFloat(
 			textBigFloatFieldFmtDto,
 			nil)
 
@@ -1422,7 +1422,7 @@ func (textBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat) IsValidInstanceError(
 
 	_,
 		err = new(textFieldFormatDtoBigFloatAtom).
-		testValidityOfTxtBigFloatFieldFmtDto(
+		testValidityOfTxtFieldFmtDtoBigFloat(
 			textBigFloatFieldFmtDto,
 			ePrefix.XCpy(
 				"textBigFloatFieldFmtDto"))
@@ -1566,7 +1566,7 @@ func (txtBigFloatFieldFmtDtoNanobot *textBigFloatFieldFormatDtoNanobot) copy(
 
 	_,
 		err = txtBigFloatFieldFmtAtom.
-		testValidityOfTxtBigFloatFieldFmtDto(
+		testValidityOfTxtFieldFmtDtoBigFloat(
 			sourceTxtBigFloatFieldFmtDto,
 			ePrefix.XCpy(
 				"sourceTxtBigFloatFieldFmtDto"))
@@ -1884,7 +1884,7 @@ func (txtBigFloatFieldFmtDtoMolecule *textBigFloatFieldFormatDtoMolecule) getFie
 	var pureNumStr string
 
 	pureNumStr,
-		err = new(textBigFloatFieldFormatDtoElectron).
+		err = new(textFieldFormatDtoBigFloatElectron).
 		getBigFloatPureNumberStr(
 			txtBigFloatFieldFmtDto,
 			ePrefix.XCpy(
@@ -2190,7 +2190,7 @@ func (txtFieldFmtDtoBigFloatAtom *textFieldFormatDtoBigFloatAtom) equal(
 //		for input parameter 'errPrefDto' (error prefix)
 //		will be prefixed or attached at the beginning of
 //		the error message.
-func (txtFieldFmtDtoBigFloatAtom *textFieldFormatDtoBigFloatAtom) testValidityOfTxtBigFloatFieldFmtDto(
+func (txtFieldFmtDtoBigFloatAtom *textFieldFormatDtoBigFloatAtom) testValidityOfTxtFieldFmtDtoBigFloat(
 	txtBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat,
 	errPrefDto *ePref.ErrPrefixDto) (
 	isValid bool,
@@ -2212,7 +2212,7 @@ func (txtFieldFmtDtoBigFloatAtom *textFieldFormatDtoBigFloatAtom) testValidityOf
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
 		"textFieldFormatDtoBigFloatAtom."+
-			"testValidityOfTxtBigFloatFieldFmtDto()",
+			"testValidityOfTxtFieldFmtDtoBigFloat()",
 		"")
 
 	if err != nil {
@@ -2271,9 +2271,9 @@ func (txtFieldFmtDtoBigFloatAtom *textFieldFormatDtoBigFloatAtom) testValidityOf
 	return isValid, err
 }
 
-// textBigFloatFieldFormatDtoElectron - Provides helper
+// textFieldFormatDtoBigFloatElectron - Provides helper
 // methods for TextFieldFormatDtoBigFloat.
-type textBigFloatFieldFormatDtoElectron struct {
+type textFieldFormatDtoBigFloatElectron struct {
 	lock *sync.Mutex
 }
 
@@ -2294,6 +2294,23 @@ type textBigFloatFieldFormatDtoElectron struct {
 //
 //  3. Designate negative values with a leading minus
 //     sign ('-').
+//
+//  4. NOT include integer separators such as commas
+//     (',') to separate integer digits by thousands.
+//
+//     NOT THIS: 1,000,000
+//     Pure Number String: 1000000
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	Pure number strings Do NOT include integer separators
+//	(i.e. commas ',') to separate integer number strings
+//	into thousands.
+//
+//					  NOT THIS: 1,000,000
+//			Pure Number String: 1000000
 //
 // ----------------------------------------------------------------
 //
@@ -2351,6 +2368,12 @@ type textBigFloatFieldFormatDtoElectron struct {
 //		3.	Designate negative values with a leading minus
 //			sign ('-').
 //
+//		4.	NOT include integer separators such as commas
+//			(',') to separate integer digits by thousands.
+//
+//						  NOT THIS: 1,000,000
+//				Pure Number String: 1000000
+//
 //	error
 //
 //		If this method completes successfully, the
@@ -2363,19 +2386,19 @@ type textBigFloatFieldFormatDtoElectron struct {
 //		for input parameter 'errPrefDto' (error prefix)
 //		will be prefixed or attached at the beginning of
 //		the error message.
-func (txtBigFloatFieldFmtDtoElectron *textBigFloatFieldFormatDtoElectron) getBigFloatPureNumberStr(
+func (txtFieldFmtDtoBigFloatElectron *textFieldFormatDtoBigFloatElectron) getBigFloatPureNumberStr(
 	txtBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat,
 	errPrefDto *ePref.ErrPrefixDto) (
 	string,
 	error) {
 
-	if txtBigFloatFieldFmtDtoElectron.lock == nil {
-		txtBigFloatFieldFmtDtoElectron.lock = new(sync.Mutex)
+	if txtFieldFmtDtoBigFloatElectron.lock == nil {
+		txtFieldFmtDtoBigFloatElectron.lock = new(sync.Mutex)
 	}
 
-	txtBigFloatFieldFmtDtoElectron.lock.Lock()
+	txtFieldFmtDtoBigFloatElectron.lock.Lock()
 
-	defer txtBigFloatFieldFmtDtoElectron.lock.Unlock()
+	defer txtFieldFmtDtoBigFloatElectron.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -2384,7 +2407,7 @@ func (txtBigFloatFieldFmtDtoElectron *textBigFloatFieldFormatDtoElectron) getBig
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"textBigFloatFieldFormatDtoElectron."+
+		"textFieldFormatDtoBigFloatElectron."+
 			"getBigFloatPureNumberStr()",
 		"")
 
@@ -2405,7 +2428,7 @@ func (txtBigFloatFieldFmtDtoElectron *textBigFloatFieldFormatDtoElectron) getBig
 
 	_,
 		err = new(textFieldFormatDtoBigFloatAtom).
-		testValidityOfTxtBigFloatFieldFmtDto(
+		testValidityOfTxtFieldFmtDtoBigFloat(
 			txtBigFloatFieldFmtDto,
 			ePrefix.XCpy(
 				"txtBigFloatFieldFmtDto"))
