@@ -18263,9 +18263,36 @@ func (numStrKernel *NumberStrKernel) Round(
 
 // SetDefaultNumberStrFormatSpec
 //
-// Sets the default Number String Format to be applied in
-// formatting the number string for screen display,
-// file output or printing.
+// Sets the default Number String Format Specification
+// for the current instance of to NumberStrKernel.
+//
+// The default Number String Format Specification is
+// used and applied in formatting the number string for
+// screen display, file output or printing.
+//
+// The internal member variable controlling default
+// number string formatting which will be modified
+// by this method is:
+//
+//	NumberStrKernel.numStrFormatSpec
+//
+// The default Number String Format Specification is
+// used and applied by the following methods:
+//
+//	NumberStrKernel.FmtSignedPureNumberStr()
+//	NumberStrKernel.String()
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	This method will NOT alter the numeric value
+//	configured for the current instance of
+//	NumberStrKernel. This method will only reconfigure
+//	the internal member variable controlling default
+//	number string formatting:
+//
+//		NumberStrKernel.numStrFormatSpec
 //
 // ----------------------------------------------------------------
 //
@@ -18402,6 +18429,270 @@ func (numStrKernel *NumberStrKernel) SetDefaultNumberStrFormatSpec(
 		&defaultNumStrFmt,
 		ePrefix.XCpy(
 			"numStrKernel.numStrFormatSpec<-defaultNumStrFmt"))
+
+	return err
+}
+
+// SetDefaultPureNumStrFormatSpec
+//
+// Sets the default Number String Format Specification
+// for the current instance of to NumberStrKernel.
+//
+// The default Number String Format Specification is
+// used and applied in formatting the number string for
+// screen display, file output or printing.
+//
+// The internal member variable controlling default
+// number string formatting which will be modified
+// by this method is:
+//
+//	NumberStrKernel.numStrFormatSpec
+//
+// The default Number String Format Specification is
+// used and applied by the following methods:
+//
+//	NumberStrKernel.FmtSignedPureNumberStr()
+//	NumberStrKernel.String()
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	This method will NOT alter the numeric value
+//	configured for the current instance of
+//	NumberStrKernel. This method will only reconfigure
+//	the internal member variable controlling default
+//	number string formatting:
+//
+//		NumberStrKernel.numStrFormatSpec
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	decSeparatorChars			string
+//
+//		This string contains the character or characters
+//		which will be configured as the Decimal Separator
+//		Symbol or Symbols for the returned number string.
+//
+//		The decimal separator is also known as the radix
+//		point and is used to separate integer and
+//		fractional digits within a formatted floating
+//		point number string.
+//
+//		In the US, UK, Australia and most of Canada, the
+//		decimal separator is the period character ('.')
+//		also known as the decimal point.
+//
+//		In France, Germany and many countries in the
+//		European Union, the Decimal Separator is the
+//		comma character (',').
+//
+//	leadingNumSymbols			bool
+//
+//		In Pure Number Strings, positive numeric values
+//		are NOT configured with leading or trailing plus
+//		signs ('+'). Negative values on the other hand,
+//		are always designated by leading or trailing
+//		minus sign ('-').
+//
+//		This parameter, 'leadingNumSymbols', controls
+//		the positioning of minus signs for negative
+//		numeric values within a	Number String.
+//
+//		When set to 'true', the returned number string
+//		will configure minus signs for negative numbers
+//		at the beginning of, or on the left side of, the
+//		numeric value. In these cases, the minus sign is
+//		said to be configured as a leading minus sign.
+//		This is the positioning format used in the US,
+//		UK, Australia and most of Canada. In addition,
+//		library functions in 'Go' and other programming
+//		languages generally expect leading minus signs
+//		for negative numbers.
+//
+//			Example Leading Minus Sign:
+//				"-123.456"
+//
+//		When parameter 'leadingNumSymbols' is set to
+//		'false', the returned number string will
+//		configure minus signs for negative numbers at the
+//		end of, or on the right side of, the numeric
+//		value. With this positioning format, the minus
+//		sign is said to be configured as a trailing minus
+//		sign. This is the positioning format used in
+//		France, Germany and many countries in the
+//		European Union.
+//
+//			Example Trailing Minus Sign:
+//				"123.456-"
+//
+//	numFieldLength					int
+//
+//		This parameter defines the length of the text
+//		field in which the numeric value will be
+//		displayed within a number string.
+//
+//		If 'numFieldLength' is less than the length of the
+//		numeric value string, it will be automatically set
+//		equal to the length of that numeric value string.
+//
+//		To automatically set the value of fieldLength to
+//		the string length of the numeric value, set this
+//		parameter to a value of minus one (-1).
+//
+//		If this parameter is submitted with a value less
+//		than minus one (-1) or greater than 1-million
+//		(1,000,000), an error will be returned.
+//
+//	numFieldJustification		TextJustify
+//
+//		An enumeration which specifies the justification
+//		of the numeric value within the number field
+//		length specified by input parameter
+//		'numFieldLength'.
+//
+//		Text justification can only be evaluated in the
+//		context of a number string, field length and a
+//		'textJustification' object of type TextJustify.
+//		This is because number strings with a field length
+//		equal to or less than the length of the numeric
+//		value string never use text justification. In
+//		these cases, text justification is completely
+//		ignored.
+//
+//		If the field length parameter ('numFieldLength')
+//		is greater than the length of the numeric value
+//		string, text justification must be equal to one
+//		of these three valid values:
+//
+//			TextJustify(0).Left()
+//			TextJustify(0).Right()
+//			TextJustify(0).Center()
+//
+//		You can also use the abbreviated text justification
+//		enumeration syntax as follows:
+//
+//			TxtJustify.Left()
+//			TxtJustify.Right()
+//			TxtJustify.Center()
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (numStrKernel *NumberStrKernel) SetDefaultPureNumStrFormatSpec(
+	decSeparatorChars string,
+	leadingNumSymbols bool,
+	numFieldLength int,
+	numFieldJustification TextJustify,
+	errorPrefix interface{}) error {
+
+	if numStrKernel.lock == nil {
+		numStrKernel.lock = new(sync.Mutex)
+	}
+
+	numStrKernel.lock.Lock()
+
+	defer numStrKernel.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumberStrKernel."+
+			"SetDefaultPureNumStrFormatSpec()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	numStrKernel.numStrFormatSpec.Empty()
+
+	numStrKernel.numStrFormatSpec,
+		err = new(NumStrFormatSpec).NewSignedPureNumberStr(
+		decSeparatorChars,
+		leadingNumSymbols,
+		numFieldLength,
+		numFieldJustification,
+		ePrefix.XCpy(
+			"numStrKernel.numStrFormatSpec<-"))
 
 	return err
 }
@@ -19483,9 +19774,10 @@ func (numStrKernel *NumberStrKernel) SetUnsignedIntValue(
 // NumberStrKernel.
 //
 // To set the Default Number String Format Specification,
-// use the following method:
+// use the following methods:
 //
 //	NumberStrKernel.SetDefaultNumberStrFormatSpec()
+//	NumberStrKernel.SetDefaultPureNumStrFormatSpec()
 //
 // If an error is encountered, the error message is
 // included in the string returned by this method.
@@ -19496,12 +19788,18 @@ func (numStrKernel *NumberStrKernel) SetUnsignedIntValue(
 //
 // # BE ADVISED
 //
-//	(1)	No rounding will be performed on the numeric value
-//		formatted as number string. If rounding is
-//		required in conjunction with the Default Format
-//		Specification, use the following method:
+//	(1)	No rounding will be performed on the numeric
+//		value formatted as a returned number string. If
+//		rounding is required in conjunction with the
+//		Default Format Number String Formatting
+//		Specification, the user has two options.
 //
-//			NumberStrKernel.FmtNumStrDefaultFormat()
+//		a.	Call method NumberStrKernel.Round() and
+//			then call this method,
+//			NumberStrKernel.String().
+//
+//		b.	Do not call this method. Instead, call
+//			method NumberStrKernel.FmtNumStrDefaultFormat().
 //
 //	(2)	This method will NOT delete or modify data values
 //		contained in the current instance of
