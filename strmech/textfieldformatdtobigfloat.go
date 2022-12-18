@@ -2047,37 +2047,37 @@ func (txtFieldFmtDtoBigFloatAtom *textFieldFormatDtoBigFloatAtom) equal(
 	}
 
 	if txtBigFloatFieldFmtDtoOne.LeftMarginStr !=
-		txtBigFloatFieldFmtDtoOne.LeftMarginStr {
+		txtBigFloatFieldFmtDtoTwo.LeftMarginStr {
 
 		return false
 	}
 
 	if txtBigFloatFieldFmtDtoOne.RoundingMode !=
-		txtBigFloatFieldFmtDtoOne.RoundingMode {
+		txtBigFloatFieldFmtDtoTwo.RoundingMode {
 
 		return false
 	}
 
 	if txtBigFloatFieldFmtDtoOne.NumOfFractionalDigits !=
-		txtBigFloatFieldFmtDtoOne.NumOfFractionalDigits {
+		txtBigFloatFieldFmtDtoTwo.NumOfFractionalDigits {
 
 		return false
 	}
 
 	if txtBigFloatFieldFmtDtoOne.FieldLength !=
-		txtBigFloatFieldFmtDtoOne.FieldLength {
+		txtBigFloatFieldFmtDtoTwo.FieldLength {
 
 		return false
 	}
 
 	if txtBigFloatFieldFmtDtoOne.FieldJustify !=
-		txtBigFloatFieldFmtDtoOne.FieldJustify {
+		txtBigFloatFieldFmtDtoTwo.FieldJustify {
 
 		return false
 	}
 
 	if txtBigFloatFieldFmtDtoOne.RightMarginStr !=
-		txtBigFloatFieldFmtDtoOne.RightMarginStr {
+		txtBigFloatFieldFmtDtoTwo.RightMarginStr {
 
 		return false
 	}

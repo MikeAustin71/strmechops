@@ -2,6 +2,7 @@ package strmech
 
 import (
 	"math/big"
+	"strconv"
 	"sync"
 )
 
@@ -245,4 +246,128 @@ func (txtFieldFmtFloat64DtoAtom *textFieldFormatDtoFloat64Atom) empty(
 	txtFieldFmtDtoFloat64.RightMarginStr = ""
 
 	return
+}
+
+// equal
+//
+// Compares two instances of TextFieldFormatDtoFloat64
+// and returns a boolean value signaling whether the two
+// instances are equivalent in all respects.
+//
+// If the two instances of TextFieldFormatDtoFloat64 are
+// equal, this method returns 'true'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	txtFloat64FieldFmtDtoOne		*TextFieldFormatDtoFloat64
+//
+//		A pointer to an instance of
+//		TextFieldFormatDtoFloat64.
+//
+//		The data values contained within this instance
+//		will be compared to corresponding data values
+//		contained within a second
+//		TextFieldFormatDtoFloat64 instance
+//		('txtFloat64FieldFmtDtoTwo') in order to
+//		determine if they are equivalent.
+//
+//	txtFloat64FieldFmtDtoTwo		*TextFieldFormatDtoFloat64
+//
+//		A pointer to the second of two instances of
+//		TextFieldFormatDtoFloat64. The data values
+//		contained within this instance will be compared
+//		to corresponding data values contained within the
+//		first TextFieldFormatDtoFloat64 instance
+//		('txtFloat64FieldFmtDtoOne') in order to
+//		determine if they are equivalent.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	bool
+//
+//		If all the data values within input parameters
+//		'txtFloat64FieldFmtDtoOne' and
+//		'txtFloat64FieldFmtDtoTwo' are found to be
+//		equivalent in all respects, this return parameter
+//		will be set to 'true'.
+//
+//		If the compared data values are NOT equivalent,
+//		this method returns 'false'.
+func (txtFieldFmtFloat64DtoAtom *textFieldFormatDtoFloat64Atom) equal(
+	txtFloat64FieldFmtDtoOne *TextFieldFormatDtoFloat64,
+	txtFloat64FieldFmtDtoTwo *TextFieldFormatDtoFloat64) bool {
+
+	if txtFieldFmtFloat64DtoAtom.lock == nil {
+		txtFieldFmtFloat64DtoAtom.lock = new(sync.Mutex)
+	}
+
+	txtFieldFmtFloat64DtoAtom.lock.Lock()
+
+	defer txtFieldFmtFloat64DtoAtom.lock.Unlock()
+
+	if txtFloat64FieldFmtDtoOne == nil ||
+		txtFloat64FieldFmtDtoTwo == nil {
+
+		return false
+	}
+
+	if txtFloat64FieldFmtDtoOne.LeftMarginStr !=
+		txtFloat64FieldFmtDtoTwo.LeftMarginStr {
+
+		return false
+	}
+
+	if txtFloat64FieldFmtDtoOne.RoundingMode !=
+		txtFloat64FieldFmtDtoTwo.RoundingMode {
+
+		return false
+	}
+
+	if txtFloat64FieldFmtDtoOne.NumOfFractionalDigits !=
+		txtFloat64FieldFmtDtoTwo.NumOfFractionalDigits {
+
+		return false
+	}
+
+	if txtFloat64FieldFmtDtoOne.FieldLength !=
+		txtFloat64FieldFmtDtoTwo.FieldLength {
+
+		return false
+	}
+
+	if txtFloat64FieldFmtDtoOne.FieldJustify !=
+		txtFloat64FieldFmtDtoTwo.FieldJustify {
+
+		return false
+	}
+
+	if txtFloat64FieldFmtDtoOne.RightMarginStr !=
+		txtFloat64FieldFmtDtoTwo.RightMarginStr {
+
+		return false
+	}
+
+	var float64NumStrOne, float64NumStrTwo string
+
+	float64NumStrOne = strconv.FormatFloat(
+		txtFloat64FieldFmtDtoOne.Float64Num,
+		'f',
+		txtFloat64FieldFmtDtoOne.NumOfFractionalDigits,
+		64)
+
+	float64NumStrTwo = strconv.FormatFloat(
+		txtFloat64FieldFmtDtoTwo.Float64Num,
+		'f',
+		txtFloat64FieldFmtDtoTwo.NumOfFractionalDigits,
+		64)
+
+	if float64NumStrOne != float64NumStrTwo {
+		return false
+	}
+
+	return true
 }
