@@ -576,59 +576,25 @@ func (txtFieldFmtDtoFloat64Atom *textFieldFormatDtoFloat64Atom) equal(
 
 	var float64NumStrOne, float64NumStrTwo string
 
-	var float64NumberStrKernelOne,
-		float64NumberStrKernelTwo NumberStrKernel
-
 	var err error
 
-	float64NumberStrKernelOne,
-		err = new(NumberStrKernel).NewFromFloatValue(
-		txtFloat64FieldFmtDtoOne.Float64Num,
-		nil)
-
-	if err != nil {
-		return false
-	}
-
-	float64NumberStrKernelTwo,
-		err = new(NumberStrKernel).NewFromFloatValue(
-		txtFloat64FieldFmtDtoTwo.Float64Num,
-		nil)
-
-	if err != nil {
-		return false
-	}
-
-	numberFieldSpec := NumStrNumberFieldSpec{
-		fieldLength:        -1,
-		fieldJustification: TxtJustify.Right(),
-	}
-
-	roundingSpecOne := NumStrRoundingSpec{
-		roundingType:            txtFloat64FieldFmtDtoOne.RoundingType,
-		roundToFractionalDigits: txtFloat64FieldFmtDtoOne.NumOfFractionalDigits,
-	}
+	txtFieldFmtDtoFloat64Electron := textFieldFormatDtoFloat64Electron{}
 
 	float64NumStrOne,
-		err = float64NumberStrKernelOne.FmtSignedNumStrUS(
-		numberFieldSpec,
-		roundingSpecOne,
-		nil)
+		err = txtFieldFmtDtoFloat64Electron.
+		getFloat64PureNumberStr(
+			txtFloat64FieldFmtDtoOne,
+			nil)
 
 	if err != nil {
 		return false
 	}
 
-	roundingSpecTwo := NumStrRoundingSpec{
-		roundingType:            txtFloat64FieldFmtDtoTwo.RoundingType,
-		roundToFractionalDigits: txtFloat64FieldFmtDtoTwo.NumOfFractionalDigits,
-	}
-
-	float64NumStrOne,
-		err = float64NumberStrKernelTwo.FmtSignedNumStrUS(
-		numberFieldSpec,
-		roundingSpecTwo,
-		nil)
+	float64NumStrTwo,
+		err = txtFieldFmtDtoFloat64Electron.
+		getFloat64PureNumberStr(
+			txtFloat64FieldFmtDtoTwo,
+			nil)
 
 	if err != nil {
 		return false
@@ -1015,9 +981,8 @@ func (txtFieldFmtDtoFloat64Electron *textFieldFormatDtoFloat64Electron) getFloat
 	}
 
 	float64NumStr,
-		err = float64NumberStrKernel.FmtSignedSimpleNumber(
+		err = float64NumberStrKernel.FmtSignedPureNumberStr(
 		".",
-		",",
 		true,
 		-1,
 		TxtJustify.Right(),
