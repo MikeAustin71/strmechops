@@ -16257,13 +16257,21 @@ func (numStrKernel *NumberStrKernel) NewFromSignedIntValue(
 //
 //		A string of numeric digits used to populate the
 //		integer part of the numeric value contained in the
-//		returned instance of NumberStrKernel
+//		returned instance of NumberStrKernel.
+//
+//		This string should contain only numeric digit
+//		characters. Do NOT include number signs such as
+//		minus signs.
 //
 //	fractionalDigits			string
 //
 //		A string of numeric digits used to populate the
 //		fractional part of the numeric value contained in
 //		the returned instance of NumberStrKernel
+//
+//		This string should contain only numeric digit
+//		characters. Do NOT include number signs such as
+//		minus signs.
 //
 //	numberSign					NumericSignValueType
 //

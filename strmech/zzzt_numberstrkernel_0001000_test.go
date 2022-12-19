@@ -3089,6 +3089,881 @@ func TestNumberStrKernel_RoundHalfToEven_000600(t *testing.T) {
 	return
 }
 
+func TestNumberStrKernel_RoundHalfToOdd_000700(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestNumberStrKernel_RoundHalfToOdd_000700",
+		"")
+
+	inputNumberStr := "7.5"
+	expectedNumberStr := "7"
+
+	var err error
+	var baseVal, nStr01, nStr02,
+		nStr03, nStr04 NumberStrKernel
+
+	baseVal,
+		err = new(NumberStrKernel).
+		NewParsePureNumberStr(
+			inputNumberStr,
+			".",
+			true,
+			ePrefix.XCpy(
+				"baseVal<-inputNumberStr"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = baseVal.IsValidInstanceError(
+		ePrefix.XCpy(
+			"baseVal"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = nStr01.CopyIn(
+		&baseVal,
+		ePrefix.XCpy(
+			"nStr01<-baseValueNStr"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = nStr02.CopyIn(
+		&baseVal,
+		ePrefix.XCpy(
+			"nStr02<-baseValueNStr"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = nStr02.SetNumberSign(
+		NumSignVal.Negative(),
+		ePrefix.XCpy(
+			"nStr02-NumSignVal.Negative()"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = nStr01.Round(
+		NumRoundType.HalfToOdd(),
+		0,
+		ePrefix.XCpy(
+			"nStr01-HalfToOdd"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	actualNumberStr := nStr01.GetPureNumberStr(
+		".",
+		true)
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if expectedNumberStr != actualNumberStr {
+
+		t.Errorf("%v\n"+
+			"Test#1 - Positive Test\n"+
+			"Error: actualNumberStr NOT EQUAL TO expectedNumberStr\n"+
+			"    actualNumberStr = '%v'\n"+
+			"expectedNumberStr   = '%v'\n",
+			ePrefix.String(),
+			actualNumberStr,
+			expectedNumberStr)
+
+		return
+	}
+
+	err = nStr02.Round(
+		NumRoundType.HalfToOdd(),
+		0,
+		ePrefix.XCpy(
+			"nStr02-HalfToOdd"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	actualNumberStr = nStr02.GetPureNumberStr(
+		".",
+		true)
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	expectedNumberStr = "-7"
+
+	if expectedNumberStr != actualNumberStr {
+
+		t.Errorf("%v\n"+
+			"Test#2 - Negative Test\n"+
+			"Error: actualNumberStr NOT EQUAL TO expectedNumberStr\n"+
+			"    actualNumberStr = '%v'\n"+
+			"expectedNumberStr   = '%v'\n",
+			ePrefix.String(),
+			actualNumberStr,
+			expectedNumberStr)
+
+		return
+	}
+
+	expectedNumberStr = "7"
+	inputNumberStr = "6.5"
+
+	nStr03,
+		err = new(NumberStrKernel).
+		NewParsePureNumberStr(
+			inputNumberStr,
+			".",
+			true,
+			ePrefix.XCpy(
+				"nStr03<-inputNumberStr"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = nStr03.Round(
+		NumRoundType.HalfToOdd(),
+		0,
+		ePrefix.XCpy(
+			"nStr03-HalfToOdd"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	actualNumberStr = nStr03.GetPureNumberStr(
+		".",
+		true)
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if expectedNumberStr != actualNumberStr {
+
+		t.Errorf("%v\n"+
+			"Test#3 - Postive Test\n"+
+			"Error: actualNumberStr NOT EQUAL TO expectedNumberStr\n"+
+			"    actualNumberStr = '%v'\n"+
+			"expectedNumberStr   = '%v'\n",
+			ePrefix.String(),
+			actualNumberStr,
+			expectedNumberStr)
+
+		return
+	}
+
+	expectedNumberStr = "-6"
+	inputNumberStr = "-6.4"
+
+	nStr04,
+		err = new(NumberStrKernel).
+		NewParsePureNumberStr(
+			inputNumberStr,
+			".",
+			true,
+			ePrefix.XCpy(
+				"nStr04<-inputNumberStr"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = nStr04.Round(
+		NumRoundType.HalfToOdd(),
+		0,
+		ePrefix.XCpy(
+			"nStr04-HalfToOdd"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	actualNumberStr = nStr04.GetPureNumberStr(
+		".",
+		true)
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if expectedNumberStr != actualNumberStr {
+
+		t.Errorf("%v\n"+
+			"Test#4 - Negative Test\n"+
+			"Error: actualNumberStr NOT EQUAL TO expectedNumberStr\n"+
+			"    actualNumberStr = '%v'\n"+
+			"expectedNumberStr   = '%v'\n",
+			ePrefix.String(),
+			actualNumberStr,
+			expectedNumberStr)
+
+		return
+	}
+
+	return
+}
+
+func TestNumberStrKernel_RoundRandomly_000800(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestNumberStrKernel_RoundRandomly_000800()",
+		"")
+
+	inputNumberIntStr := "7"
+	inputNumberFracStr := "5"
+	var numberSign = NumSignVal.Positive()
+	var loopCount = 50
+
+	upperVal := "8"
+	lowerVal := "7"
+	var actualNumberStr string
+
+	var upperValCount = 0
+	var lowerValCount = 0
+
+	var err error
+
+	for i := 0; i < loopCount; i++ {
+
+		var nStr01 NumberStrKernel
+
+		nStr01,
+			err = new(NumberStrKernel).NewFromStringDigits(
+			inputNumberIntStr,
+			inputNumberFracStr,
+			numberSign,
+			ePrefix.XCpy(
+				"nStr01<-"))
+
+		if err != nil {
+			fmt.Printf("\n%v\n",
+				err.Error())
+			return
+		}
+
+		err = nStr01.Round(
+			NumRoundType.Randomly(),
+			0,
+			ePrefix.XCpy(
+				"nStr01-Randomly"))
+
+		if err != nil {
+			fmt.Printf("\n%v\n",
+				err.Error())
+			return
+		}
+
+		actualNumberStr = nStr01.GetPureNumberStr(
+			".",
+			true)
+
+		if err != nil {
+			fmt.Printf("\n%v\n",
+				err.Error())
+			return
+		}
+
+		if actualNumberStr == upperVal {
+			upperValCount++
+		}
+
+		if actualNumberStr == lowerVal {
+			lowerValCount++
+		}
+
+	}
+
+	if upperValCount == loopCount {
+
+		t.Errorf("%v\n"+
+			"Test#1 - Random Rounding Test\n"+
+			"Error: upperValCount == loopCount\n"+
+			"Upper Value Rounding Result = '%v'"+
+			"Number of roundings = '%v'\n"+
+			"Number of results equal to Upper Value = '%v'\n",
+			ePrefix.String(),
+			upperVal,
+			loopCount,
+			upperValCount)
+
+		return
+
+	}
+
+	if lowerValCount == loopCount {
+
+		t.Errorf("%v\n"+
+			"Test#1 - Random Rounding Test\n"+
+			"Error: lowerValCount == loopCount\n"+
+			"Lower Value Rounding Result = '%v'"+
+			"Number of roundings = '%v'\n"+
+			"Number of results equal to Lower Value = '%v'\n",
+			ePrefix.String(),
+			lowerVal,
+			loopCount,
+			lowerValCount)
+
+		return
+
+	}
+
+	return
+}
+
+func TestNumberStrKernel_RoundFloor_000900(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestNumberStrKernel_RoundFloor_000900",
+		"")
+
+	inputNumberStr := "2.9"
+	expectedNumberStr := "2"
+
+	var err error
+	var baseVal, nStr01, nStr02,
+		nStr03, nStr04 NumberStrKernel
+
+	baseVal,
+		err = new(NumberStrKernel).
+		NewParsePureNumberStr(
+			inputNumberStr,
+			".",
+			true,
+			ePrefix.XCpy(
+				"baseVal<-inputNumberStr"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = baseVal.IsValidInstanceError(
+		ePrefix.XCpy(
+			"baseVal"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = nStr01.CopyIn(
+		&baseVal,
+		ePrefix.XCpy(
+			"nStr01<-baseValueNStr"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = nStr02.CopyIn(
+		&baseVal,
+		ePrefix.XCpy(
+			"nStr02<-baseValueNStr"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = nStr02.SetNumberSign(
+		NumSignVal.Negative(),
+		ePrefix.XCpy(
+			"nStr02-NumSignVal.Negative()"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = nStr01.Round(
+		NumRoundType.Floor(),
+		0,
+		ePrefix.XCpy(
+			"nStr01-Floor"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	actualNumberStr := nStr01.GetPureNumberStr(
+		".",
+		true)
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if expectedNumberStr != actualNumberStr {
+
+		t.Errorf("%v\n"+
+			"Test#1 - Positive Test\n"+
+			"Error: actualNumberStr NOT EQUAL TO expectedNumberStr\n"+
+			"    actualNumberStr = '%v'\n"+
+			"expectedNumberStr   = '%v'\n",
+			ePrefix.String(),
+			actualNumberStr,
+			expectedNumberStr)
+
+		return
+	}
+
+	err = nStr02.Round(
+		NumRoundType.Floor(),
+		0,
+		ePrefix.XCpy(
+			"nStr02-Floor"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	actualNumberStr = nStr02.GetPureNumberStr(
+		".",
+		true)
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	expectedNumberStr = "-3"
+
+	if expectedNumberStr != actualNumberStr {
+
+		t.Errorf("%v\n"+
+			"Test#2 - Negative Test\n"+
+			"Error: actualNumberStr NOT EQUAL TO expectedNumberStr\n"+
+			"    actualNumberStr = '%v'\n"+
+			"expectedNumberStr   = '%v'\n",
+			ePrefix.String(),
+			actualNumberStr,
+			expectedNumberStr)
+
+		return
+	}
+
+	expectedNumberStr = "2"
+	inputNumberStr = "2.4"
+
+	nStr03,
+		err = new(NumberStrKernel).
+		NewParsePureNumberStr(
+			inputNumberStr,
+			".",
+			true,
+			ePrefix.XCpy(
+				"nStr03<-inputNumberStr"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = nStr03.Round(
+		NumRoundType.Floor(),
+		0,
+		ePrefix.XCpy(
+			"nStr03-Floor"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	actualNumberStr = nStr03.GetPureNumberStr(
+		".",
+		true)
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if expectedNumberStr != actualNumberStr {
+
+		t.Errorf("%v\n"+
+			"Test#3 - Postive Test\n"+
+			"Error: actualNumberStr NOT EQUAL TO expectedNumberStr\n"+
+			"    actualNumberStr = '%v'\n"+
+			"expectedNumberStr   = '%v'\n",
+			ePrefix.String(),
+			actualNumberStr,
+			expectedNumberStr)
+
+		return
+	}
+
+	expectedNumberStr = "-2"
+	inputNumberStr = "-2"
+
+	nStr04,
+		err = new(NumberStrKernel).
+		NewParsePureNumberStr(
+			inputNumberStr,
+			".",
+			true,
+			ePrefix.XCpy(
+				"nStr04<-inputNumberStr"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = nStr04.Round(
+		NumRoundType.Floor(),
+		0,
+		ePrefix.XCpy(
+			"nStr04-Floor"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	actualNumberStr = nStr04.GetPureNumberStr(
+		".",
+		true)
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if expectedNumberStr != actualNumberStr {
+
+		t.Errorf("%v\n"+
+			"Test#4 - Negative Test\n"+
+			"Error: actualNumberStr NOT EQUAL TO expectedNumberStr\n"+
+			"    actualNumberStr = '%v'\n"+
+			"expectedNumberStr   = '%v'\n",
+			ePrefix.String(),
+			actualNumberStr,
+			expectedNumberStr)
+
+		return
+	}
+
+	return
+}
+
+func TestNumberStrKernel_RoundCeiling_001000(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestNumberStrKernel_RoundCeiling_001000",
+		"")
+
+	inputNumberStr := "2.9"
+	expectedNumberStr := "3"
+
+	var err error
+	var baseVal, nStr01, nStr02,
+		nStr03, nStr04 NumberStrKernel
+
+	baseVal,
+		err = new(NumberStrKernel).
+		NewParsePureNumberStr(
+			inputNumberStr,
+			".",
+			true,
+			ePrefix.XCpy(
+				"baseVal<-inputNumberStr"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = baseVal.IsValidInstanceError(
+		ePrefix.XCpy(
+			"baseVal"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = nStr01.CopyIn(
+		&baseVal,
+		ePrefix.XCpy(
+			"nStr01<-baseValueNStr"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = nStr02.CopyIn(
+		&baseVal,
+		ePrefix.XCpy(
+			"nStr02<-baseValueNStr"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = nStr02.SetNumberSign(
+		NumSignVal.Negative(),
+		ePrefix.XCpy(
+			"nStr02-NumSignVal.Negative()"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = nStr01.Round(
+		NumRoundType.Ceiling(),
+		0,
+		ePrefix.XCpy(
+			"nStr01-Ceiling"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	actualNumberStr := nStr01.GetPureNumberStr(
+		".",
+		true)
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if expectedNumberStr != actualNumberStr {
+
+		t.Errorf("%v\n"+
+			"Test#1 - Positive Test\n"+
+			"Error: actualNumberStr NOT EQUAL TO expectedNumberStr\n"+
+			"    actualNumberStr = '%v'\n"+
+			"expectedNumberStr   = '%v'\n",
+			ePrefix.String(),
+			actualNumberStr,
+			expectedNumberStr)
+
+		return
+	}
+
+	err = nStr02.Round(
+		NumRoundType.Ceiling(),
+		0,
+		ePrefix.XCpy(
+			"nStr02-Ceiling"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	actualNumberStr = nStr02.GetPureNumberStr(
+		".",
+		true)
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	expectedNumberStr = "-2"
+
+	if expectedNumberStr != actualNumberStr {
+
+		t.Errorf("%v\n"+
+			"Test#2 - Negative Test\n"+
+			"Error: actualNumberStr NOT EQUAL TO expectedNumberStr\n"+
+			"    actualNumberStr = '%v'\n"+
+			"expectedNumberStr   = '%v'\n",
+			ePrefix.String(),
+			actualNumberStr,
+			expectedNumberStr)
+
+		return
+	}
+
+	expectedNumberStr = "3"
+	inputNumberStr = "2.4"
+
+	nStr03,
+		err = new(NumberStrKernel).
+		NewParsePureNumberStr(
+			inputNumberStr,
+			".",
+			true,
+			ePrefix.XCpy(
+				"nStr03<-inputNumberStr"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = nStr03.Round(
+		NumRoundType.Ceiling(),
+		0,
+		ePrefix.XCpy(
+			"nStr03-Ceiling"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	actualNumberStr = nStr03.GetPureNumberStr(
+		".",
+		true)
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if expectedNumberStr != actualNumberStr {
+
+		t.Errorf("%v\n"+
+			"Test#3 - Postive Test\n"+
+			"Error: actualNumberStr NOT EQUAL TO expectedNumberStr\n"+
+			"    actualNumberStr = '%v'\n"+
+			"expectedNumberStr   = '%v'\n",
+			ePrefix.String(),
+			actualNumberStr,
+			expectedNumberStr)
+
+		return
+	}
+
+	expectedNumberStr = "-2"
+	inputNumberStr = "-2"
+
+	nStr04,
+		err = new(NumberStrKernel).
+		NewParsePureNumberStr(
+			inputNumberStr,
+			".",
+			true,
+			ePrefix.XCpy(
+				"nStr04<-inputNumberStr"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = nStr04.Round(
+		NumRoundType.Ceiling(),
+		0,
+		ePrefix.XCpy(
+			"nStr04-Ceiling"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	actualNumberStr = nStr04.GetPureNumberStr(
+		".",
+		true)
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if expectedNumberStr != actualNumberStr {
+
+		t.Errorf("%v\n"+
+			"Test#4 - Negative Test\n"+
+			"Error: actualNumberStr NOT EQUAL TO expectedNumberStr\n"+
+			"    actualNumberStr = '%v'\n"+
+			"expectedNumberStr   = '%v'\n",
+			ePrefix.String(),
+			actualNumberStr,
+			expectedNumberStr)
+
+		return
+	}
+
+	return
+}
+
 func TestNumberStrKernel_String_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
