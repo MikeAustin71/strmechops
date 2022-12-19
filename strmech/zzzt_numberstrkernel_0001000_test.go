@@ -4,6 +4,7 @@ import (
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
 	"math/big"
+	"strings"
 	"testing"
 )
 
@@ -2099,6 +2100,128 @@ func TestNumberStrKernel_RoundNoRounding_000100(t *testing.T) {
 		fmt.Printf("\n%v\n",
 			err.Error())
 		return
+	}
+
+	if baseVal.IsZeroValue() {
+
+		t.Errorf("%v\n"+
+			"Setup Test#1 - baseVal.IsZeroValue()\n"+
+			"Error: IsZeroValue returned 'true'.\n"+
+			"However baseVal = '%v'\n",
+			ePrefix.String(),
+			expectedNumberStr)
+
+		return
+	}
+
+	if !baseVal.IsFloatingPointValue() {
+
+		t.Errorf("%v\n"+
+			"Setup Test#2 - baseVal.IsFloatingPointValue()\n"+
+			"Error: IsZeroValue returned 'false'.\n"+
+			"However baseVal = '%v'\n",
+			ePrefix.String(),
+			expectedNumberStr)
+
+		return
+	}
+
+	var intNumSign = 0
+
+	intNumSign,
+		err = baseVal.GetNumberSignAsInt(
+		ePrefix.XCpy(
+			"baseVal"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if intNumSign != 1 {
+
+		t.Errorf("%v\n"+
+			"Setup Test#3 - baseVal.GetNumberSignAsInt()\n"+
+			"Error: Integer Number Sign should be '1'.\n"+
+			"However intNumSign = '%v'\n",
+			ePrefix.String(),
+			intNumSign)
+
+		return
+	}
+
+	strBuilder := &strings.Builder{}
+
+	err = baseVal.GetParameterTextListing(
+		strBuilder,
+		false,
+		ePrefix.XCpy(
+			""))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if strBuilder.Len() < 50 {
+
+		t.Errorf("%v\n"+
+			"Setup Test#4 - baseVal.GetParameterTextListing()\n"+
+			"Error: Returned string length should be greater than 50.\n"+
+			"However string length = '%v'\n",
+			ePrefix.String(),
+			strBuilder.Len())
+
+		return
+	}
+
+	var numOfFracDigits, numOfIntDigits, numOfDigits int
+
+	numOfFracDigits = baseVal.GetNumberOfFractionalDigits()
+
+	if numOfFracDigits != 1 {
+
+		t.Errorf("%v\n"+
+			"Setup Test#5 - baseVal.GetNumberOfFractionalDigits()\n"+
+			"Error: Returned number of fractional digits should be '1'.\n"+
+			"However actual number of fractional digits = '%v'\n",
+			ePrefix.String(),
+			numOfFracDigits)
+
+		return
+
+	}
+
+	numOfIntDigits = baseVal.GetNumberOfIntegerDigits()
+
+	if numOfIntDigits != 1 {
+
+		t.Errorf("%v\n"+
+			"Setup Test#6 - baseVal.GetNumberOfIntegerDigits()\n"+
+			"Error: Returned number of integer digits should be '1'.\n"+
+			"However actual number of integer digits = '%v'\n",
+			ePrefix.String(),
+			numOfIntDigits)
+
+		return
+
+	}
+
+	numOfDigits = baseVal.GetNumberOfNumericDigits()
+
+	if numOfDigits != 2 {
+
+		t.Errorf("%v\n"+
+			"Setup Test#6 - baseVal.GetNumberOfIntegerDigits()\n"+
+			"Error: Returned total number of numeric digits should be '2'.\n"+
+			"However actual total number of numeric digits = '%v'\n",
+			ePrefix.String(),
+			numOfDigits)
+
+		return
+
 	}
 
 	err = nStr01.CopyIn(
