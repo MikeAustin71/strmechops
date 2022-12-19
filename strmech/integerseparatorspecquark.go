@@ -99,6 +99,15 @@ func (nStrIntSepQuark *integerSeparatorSpecQuark) testValidityOfNumStrIntSeparat
 		return isValid, err
 	}
 
+	if len(nStrIntSep.intSeparatorChars) == 0 {
+		// This is a NOP Integer Separator
+		// Integer separation is turned off.
+
+		isValid = true
+
+		return isValid, err
+	}
+
 	isValid,
 		err = strMechPreon{}.ptr().
 		testValidityOfRuneCharArray(

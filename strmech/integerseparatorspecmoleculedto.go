@@ -24,14 +24,15 @@ type integerSeparatorSpecMolecule struct {
 // In the United States, the standard integer digits separator is
 // the single comma character (',').
 //
-//	  United States Example:  1,000,000,000
+//	United States Example:  1,000,000,000
 //
-//	In many European countries, a single period ('.') is used as
-//	the integer separator character.
-//	  European Example: 1.000.000.000
+// In many European countries, a single period ('.') is used as
+// the integer separator character.
 //
-//	Other countries and cultures use spaces, apostrophes or
-//	multiple characters to separate integers.
+//	European Example: 1.000.000.000
+//
+// Other countries and cultures use spaces, apostrophes or
+// multiple characters to separate integers.
 //
 // This method receives an array of runes which consists
 // entirely of integer digit characters '0' (0x30) to '9' (0x39)
@@ -65,83 +66,97 @@ type integerSeparatorSpecMolecule struct {
 // Input Parameters
 //
 //	nStrIntSeparator           *IntegerSeparatorSpec
-//	   - A pointer to an IntegerSeparatorSpec object which contains
-//	     the integer separation format parameters which will be
-//	     used to insert integer separators.
 //
-//	     Integer separators consist of a character, or series of
-//	     characters, used to separate integer digits in a number
-//	     string. These characters are commonly known as the
-//	     'thousands separator'. A 'thousands separator' is used to
-//	     separate groups of integer digits to the left of the
-//	     decimal separator (a.k.a. decimal point). In the United
-//	     States, the standard integer digits separator is the
-//	     single comma character (',').
-//	           United States Example:  1,000,000,000
+//		A pointer to an IntegerSeparatorSpec object which contains
+//		the integer separation format parameters which will be
+//		used to insert integer separators.
 //
-//	     In many European countries, a single period ('.') is used
-//	     as the integer separator character.
-//	           European Example: 1.000.000.000
+//		Integer separators consist of a character, or series of
+//		characters, used to separate integer digits in a number
+//		string. These characters are commonly known as the
+//		'thousands separator'. A 'thousands separator' is used to
+//		separate groups of integer digits to the left of the
+//		decimal separator (a.k.a. decimal point). In the United
+//		States, the standard integer digits separator is the
+//		single comma character (',').
 //
-//	     Other countries and cultures use spaces, apostrophes or
-//	     multiple characters to separate integers.
+//		      United States Example:  1,000,000,000
 //
-//	     The complexity inherent in the IntegerSeparatorSpec type is
-//	     necessary in order to provide support for multinational
-//	     and multicultural integer separation algorithms. For
-//	     additional details, reference the source code
-//	     documentation for type  IntegerSeparatorSpec.
+//		In many European countries, a single period ('.') is used
+//		as the integer separator character.
+//
+//		      European Example: 1.000.000.000
+//
+//		Other countries and cultures use spaces, apostrophes or
+//		multiple characters to separate integers.
+//
+//		The complexity inherent in the IntegerSeparatorSpec type is
+//		necessary in order to provide support for multinational
+//		and multicultural integer separation algorithms. For
+//		additional details, reference the source code
+//		documentation for type  IntegerSeparatorSpec.
+//
+//		If this input parameter contains a zero length
+//		string, no error will be returned and integer
+//		separation will be turned off. As a result,
+//		integer digits will be displayed as a single
+//		string of numeric digits:
+//
+//			Integer Separation Turned Off: 1000000000
 //
 //	     If 'nStrIntSeparator' is invalid, this method will return
 //	     an error.
 //
-//
 //	pureNumRunes               []rune
-//	   - An array of runes consisting entirely of integer digit
-//	     characters from '0' (0x30) to '9' (0x39) inclusive. If any
-//	     character within this array is NOT an integer digit, this
-//	     method will return an error.
+//
+//		An array of runes consisting entirely of integer digit
+//		characters from '0' (0x30) to '9' (0x39) inclusive. If any
+//		character within this array is NOT an integer digit, this
+//		method will return an error.
 //
 //
 //	errPrefDto                 *ErrPrefixDto
-//	   - This object encapsulates an error prefix string which is
-//	     included in all returned error messages. Usually, it
-//	     contains the names of the calling method or methods.
 //
-//	     Type ErrPrefixDto is included in the 'errpref' software
-//	     package, "github.com/MikeAustin71/errpref".
+//		This object encapsulates an error prefix string which is
+//		included in all returned error messages. Usually, it
+//		contains the names of the calling method or methods.
+//
+//		Type ErrPrefixDto is included in the 'errpref' software
+//		package, "github.com/MikeAustin71/errpref".
 //
 // -----------------------------------------------------------------
 //
 // Return Values
 //
 //	numStrWithIntSeps          []rune
-//	   - If this method completes successfully, an array of runes
-//	     will be returned containing the integer digits supplied by
-//	     input parameter 'pureNumRunes' properly formatted with
-//	     integer digit separators (a.k.a. thousands separators).
-//	     Example:
-//	       pureNumRunes = 123456789012345
-//	       integer separator character = ','
-//	       integer grouping for thousands = 3
-//	       numStrWithIntSeps = 123,456,789,012,345
 //
-//	     Be advised - This method will never return a number sign
-//	     for the formatted integer separated numeric value. The
-//	     numeric sign value (positive or negative) of this numeric
-//	     value must be tracked externally.
+//		If this method completes successfully, an array of runes
+//		will be returned containing the integer digits supplied by
+//		input parameter 'pureNumRunes' properly formatted with
+//		integer digit separators (a.k.a. thousands separators).
+//		Example:
+//		  pureNumRunes = 123456789012345
+//		  integer separator character = ','
+//		  integer grouping for thousands = 3
+//		  numStrWithIntSeps = 123,456,789,012,345
+//
+//		Be advised - This method will never return a number sign
+//		for the formatted integer separated numeric value. The
+//		numeric sign value (positive or negative) of this numeric
+//		value must be tracked externally.
 //
 //
 //	err                        error
-//	   - If this method completes successfully, the returned error
-//	     Type is set equal to 'nil'.
 //
-//	     If errors are encountered during processing, the returned
-//	     error Type will encapsulate an error message. This
-//	     returned error message will incorporate the method chain
-//	     and text passed by input parameter, 'errPrefDto'. The
-//	     'errPrefDto' text will be attached to the beginning of the
-//	     error message.
+//		If this method completes successfully, the returned error
+//		Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the returned
+//		error Type will encapsulate an error message. This
+//		returned error message will incorporate the method chain
+//		and text passed by input parameter, 'errPrefDto'. The
+//		'errPrefDto' text will be attached to the beginning of the
+//		error message.
 func (nStrIntSepMolecule *integerSeparatorSpecMolecule) applyIntSeparators(
 	nStrIntSeparator *IntegerSeparatorSpec,
 	pureNumRunes []rune,

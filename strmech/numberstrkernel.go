@@ -9502,7 +9502,12 @@ func (numStrKernel *NumberStrKernel) FmtSignedPureNumberStr(
 //		integers.
 //
 //		If this input parameter contains a zero length
-//		string, an error will be returned.
+//		string, no error will be returned and integer
+//		separation will be turned off. As a result,
+//		integer digits will be displayed as a single
+//		string of numeric digits:
+//
+//			Integer Separation Turned Off: 1000000000
 //
 //	leadingNumSymbols			bool
 //

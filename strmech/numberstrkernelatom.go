@@ -2191,9 +2191,15 @@ func (numStrKernelAtom *numberStrKernelAtom) emptyIntegerDigits(
 //			https://en.wikipedia.org/wiki/Chinese_numerals
 //			https://en.wikipedia.org/wiki/Decimal_separator
 //
-//		The IntegerSeparatorSpec type provides the flexibility
-//		necessary to process these complex number separation
-//		formats.
+//		The IntegerSeparatorSpec type provides the
+//		flexibility necessary to process these complex
+//		number separation formats.
+//
+//		If integer separation is turned off, no error
+//		will be returned and integer digits will be
+//		displayed as a single string of numeric digits:
+//
+//			Integer Separation Turned Off: 1000000000
 //
 //	roundingSpec 				NumStrRoundingSpec
 //
@@ -2313,8 +2319,9 @@ func (numStrKernelAtom *numberStrKernelAtom) formatNumStrComponents(
 		return numStr, err
 	}
 
-	if numStrKernel.GetNumberOfIntegerDigits() == 0 &&
-		numStrKernel.GetNumberOfFractionalDigits() == 0 {
+	if len(numStrKernel.integerDigits.CharsArray) == 0 &&
+		len(numStrKernel.fractionalDigits.CharsArray) == 0 {
+
 		numStr = "0"
 
 		return numStr, err

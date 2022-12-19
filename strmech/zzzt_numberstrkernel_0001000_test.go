@@ -1700,3 +1700,172 @@ func TestNumberStrKernel_NewFromBigRat_000100(t *testing.T) {
 
 	return
 }
+
+func TestNumberStrKernel_FmtSignedSimpleNumber_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestNumberStrKernel_FmtSignedSimpleNumber_000100()",
+		"")
+
+	origIntStr := "1234"
+	origFracStr := "5678"
+
+	origNumberStr := origIntStr +
+		"." +
+		origFracStr
+
+	expectedNumberStr := "1,234.5678"
+
+	var err error
+	var baseValueNStr NumberStrKernel
+
+	baseValueNStr,
+		err = new(NumberStrKernel).
+		NewParsePureNumberStr(
+			origNumberStr,
+			".",
+			true,
+			ePrefix.XCpy(
+				"baseValueNStr<-origNumberStr"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	roundingSpec := NumStrRoundingSpec{}
+
+	roundingSpec,
+		err = new(NumStrRoundingSpec).NewRoundingSpec(
+		NumRoundType.NoRounding(),
+		0,
+		ePrefix.XCpy(
+			"roundingSpec<-"+
+				"NumRoundType.NoRounding()"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var fmtNumberStr string
+
+	fmtNumberStr,
+		err = baseValueNStr.FmtSignedSimpleNumber(
+		".",
+		",",
+		true,
+		-1,
+		TxtJustify.Right(),
+		roundingSpec,
+		ePrefix.XCpy(
+			"fmtNumberStr<-baseValueNStr"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if expectedNumberStr != fmtNumberStr {
+
+		t.Errorf("%v\n"+
+			"Test#1\n"+
+			"Error: actualfmtNumberStr NOT EUQAL TO expectedNumberStr\n"+
+			" actualfmtNumberStr = '%v'\n"+
+			"expectedNumberStr   = '%v'\n",
+			ePrefix.String(),
+			fmtNumberStr,
+			expectedNumberStr)
+
+		return
+	}
+
+}
+
+func TestNumberStrKernel_FmtSignedSimpleNumber_000200(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestNumberStrKernel_FmtSignedSimpleNumber_000200()",
+		"")
+
+	origIntStr := "1234"
+	origFracStr := "5678"
+
+	origNumberStr := origIntStr +
+		"." +
+		origFracStr
+
+	expectedNumberStr := "1234.5678"
+
+	var err error
+	var baseValueNStr NumberStrKernel
+
+	baseValueNStr,
+		err = new(NumberStrKernel).
+		NewParsePureNumberStr(
+			origNumberStr,
+			".",
+			true,
+			ePrefix.XCpy(
+				"baseValueNStr<-origNumberStr"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	roundingSpec := NumStrRoundingSpec{}
+
+	roundingSpec,
+		err = new(NumStrRoundingSpec).NewRoundingSpec(
+		NumRoundType.NoRounding(),
+		0,
+		ePrefix.XCpy(
+			"roundingSpec<-"+
+				"NumRoundType.NoRounding()"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var fmtNumberStr string
+
+	fmtNumberStr,
+		err = baseValueNStr.FmtSignedSimpleNumber(
+		".",
+		"",
+		true,
+		-1,
+		TxtJustify.Right(),
+		roundingSpec,
+		ePrefix.XCpy(
+			"fmtNumberStr<-baseValueNStr"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if expectedNumberStr != fmtNumberStr {
+
+		t.Errorf("%v\n"+
+			"Test#1\n"+
+			"Error: actualfmtNumberStr NOT EUQAL TO expectedNumberStr\n"+
+			" actualfmtNumberStr = '%v'\n"+
+			"expectedNumberStr   = '%v'\n",
+			ePrefix.String(),
+			fmtNumberStr,
+			expectedNumberStr)
+
+		return
+	}
+
+	return
+}

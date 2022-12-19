@@ -15811,7 +15811,7 @@ func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setSimpleFormatSpec(
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
 		"numStrFmtSpecNanobot."+
-			"setSignedNStrFmtUS()",
+			"setSimpleFormatSpec()",
 		"")
 
 	if err != nil {
@@ -15843,15 +15843,23 @@ func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setSimpleFormatSpec(
 
 	var intSeparatorSpec IntegerSeparatorSpec
 
-	intSeparatorSpec,
-		err = new(IntegerSeparatorSpec).NewThousands(
-		intSeparatorChars,
-		ePrefix.XCpy(
-			"intSeparatorSpec<-"))
+	if len(intSeparatorChars) > 0 {
 
-	if err != nil {
+		intSeparatorSpec,
+			err = new(IntegerSeparatorSpec).NewThousands(
+			intSeparatorChars,
+			ePrefix.XCpy(
+				"intSeparatorSpec<-"))
 
-		return err
+		if err != nil {
+
+			return err
+		}
+
+	} else {
+
+		intSeparatorSpec = new(IntegerSeparatorSpec).
+			NewNoIntegerSeparation()
 	}
 
 	var numSymbolsSpec NumStrNumberSymbolsSpec
