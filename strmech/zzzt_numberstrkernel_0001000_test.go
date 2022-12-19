@@ -1773,7 +1773,7 @@ func TestNumberStrKernel_FmtSignedSimpleNumber_000100(t *testing.T) {
 
 		t.Errorf("%v\n"+
 			"Test#1\n"+
-			"Error: actualfmtNumberStr NOT EUQAL TO expectedNumberStr\n"+
+			"Error: actualfmtNumberStr NOT EQUAL TO expectedNumberStr\n"+
 			" actualfmtNumberStr = '%v'\n"+
 			"expectedNumberStr   = '%v'\n",
 			ePrefix.String(),
@@ -1857,7 +1857,7 @@ func TestNumberStrKernel_FmtSignedSimpleNumber_000200(t *testing.T) {
 
 		t.Errorf("%v\n"+
 			"Test#1\n"+
-			"Error: actualfmtNumberStr NOT EUQAL TO expectedNumberStr\n"+
+			"Error: actualfmtNumberStr NOT EQUAL TO expectedNumberStr\n"+
 			" actualfmtNumberStr = '%v'\n"+
 			"expectedNumberStr   = '%v'\n",
 			ePrefix.String(),
@@ -1919,9 +1919,9 @@ func TestNumberStrKernel_FmtSignedPureNumberStr_000100(t *testing.T) {
 		return
 	}
 
-	var fmtNumberStr string
+	var actualFmtNumberStr string
 
-	fmtNumberStr,
+	actualFmtNumberStr,
 		err = baseValueNStr.FmtSignedPureNumberStr(
 		".",
 		true,
@@ -1929,7 +1929,7 @@ func TestNumberStrKernel_FmtSignedPureNumberStr_000100(t *testing.T) {
 		TxtJustify.Right(),
 		roundingSpec,
 		ePrefix.XCpy(
-			"fmtNumberStr<-baseValueNStr"))
+			"actualFmtNumberStr<-baseValueNStr"))
 
 	if err != nil {
 		fmt.Printf("\n%v\n",
@@ -1937,15 +1937,103 @@ func TestNumberStrKernel_FmtSignedPureNumberStr_000100(t *testing.T) {
 		return
 	}
 
-	if expectedNumberStr != fmtNumberStr {
+	if expectedNumberStr != actualFmtNumberStr {
 
 		t.Errorf("%v\n"+
 			"Test#1\n"+
-			"Error: actualfmtNumberStr NOT EUQAL TO expectedNumberStr\n"+
+			"Error: actualfmtNumberStr NOT EQUAL TO expectedNumberStr\n"+
 			" actualfmtNumberStr = '%v'\n"+
 			"expectedNumberStr   = '%v'\n",
 			ePrefix.String(),
-			fmtNumberStr,
+			actualFmtNumberStr,
+			expectedNumberStr)
+
+		return
+	}
+
+	actualFmtNumberStr = baseValueNStr.GetPureNumberStr(
+		".",
+		true)
+
+	if expectedNumberStr != actualFmtNumberStr {
+
+		t.Errorf("%v\n"+
+			"Test#2\n"+
+			"baseValueNStr.GetPureNumberStr()\n"+
+			"Error: actualfmtNumberStr NOT EQUAL TO expectedNumberStr\n"+
+			" actualfmtNumberStr = '%v'\n"+
+			"expectedNumberStr   = '%v'\n",
+			ePrefix.String(),
+			actualFmtNumberStr,
+			expectedNumberStr)
+
+		return
+	}
+
+	err = baseValueNStr.SetNumberSign(
+		NumSignVal.Negative(),
+		ePrefix.XCpy(
+			"baseValueNStr"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var nStr03 NumberStrKernel
+
+	nStr03,
+		err = baseValueNStr.CopyOut(
+		ePrefix.XCpy(
+			"nStr03<-baseValueNStr"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = nStr03.Round(
+		NumRoundType.HalfAwayFromZero(),
+		3,
+		ePrefix.XCpy(
+			"nStr03<-HalfAwayFromZero"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	actualFmtNumberStr,
+		err = nStr03.FmtSignedPureNumberStr(
+		".",
+		false,
+		-1,
+		TxtJustify.Right(),
+		roundingSpec,
+		ePrefix.XCpy(
+			"actualFmtNumberStr<-baseValueNStr"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	expectedNumberStr = "1234.568-"
+
+	if expectedNumberStr != actualFmtNumberStr {
+
+		t.Errorf("%v\n"+
+			"Test#2\n"+
+			"baseValueNStr.GetPureNumberStr()\n"+
+			"Error: actualfmtNumberStr NOT EQUAL TO expectedNumberStr\n"+
+			" actualfmtNumberStr = '%v'\n"+
+			"expectedNumberStr   = '%v'\n",
+			ePrefix.String(),
+			actualFmtNumberStr,
 			expectedNumberStr)
 
 		return
@@ -2066,4 +2154,6 @@ func TestNumberStrKernel_String_000100(t *testing.T) {
 
 		return
 	}
+
+	return
 }

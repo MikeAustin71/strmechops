@@ -12,6 +12,178 @@ type MainNumStrTest005 struct {
 	input string
 }
 
+func (mainNumStrTest005 MainNumStrTest005) NumStrRound01() {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"MainNumStrTest005.NumStrFmtSignedSimple()",
+		"")
+
+	breakStr := strings.Repeat("=", 50)
+
+	fmt.Printf("\n\n" + breakStr + "\n")
+
+	fmt.Printf("\n Starting Run!\n"+
+		"Function: %v\n",
+		ePrefix.String())
+
+	fmt.Printf("\n" + breakStr + "\n")
+
+	origIntStr := "1234"
+	origFracStr := "5678"
+
+	origNumberStr := origIntStr +
+		"." +
+		origFracStr
+
+	expectedNumberStr := "1234.568"
+
+	var err error
+	var baseValueNStr strmech.NumberStrKernel
+
+	baseValueNStr,
+		err = new(strmech.NumberStrKernel).
+		NewParsePureNumberStr(
+			origNumberStr,
+			".",
+			true,
+			ePrefix.XCpy(
+				"baseValueNStr<-origNumberStr"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = baseValueNStr.Round(
+		strmech.NumRoundType.HalfAwayFromZero(),
+		3,
+		ePrefix.XCpy(
+			"baseValueNStr,HalfAwayFromZero,3-digits"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var intDigitsDto, fracDigitsDto strmech.RuneArrayDto
+
+	intDigitsDto,
+		err = baseValueNStr.GetIntegerDigits(
+		ePrefix.XCpy(
+			"baseValueNStr"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	fracDigitsDto,
+		err = baseValueNStr.GetFractionalDigits(
+		ePrefix.XCpy(
+			"baseValueNStr"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var numberSign strmech.NumericSignValueType
+
+	numberSign,
+		err = baseValueNStr.GetNumberSign(
+		ePrefix.XCpy(
+			"baseValueNStr"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	fmt.Printf("\n\n%v\n"+
+		"NumberStrKernel Digits After Rounding\n"+
+		"   Integer Digits: '%v'\n"+
+		"Fractional Digits: '%v'\n"+
+		"Number Sign: '%v'\n",
+		ePrefix.String(),
+		intDigitsDto.GetCharacterString(),
+		fracDigitsDto.GetCharacterString(),
+		numberSign.String())
+
+	roundingSpec := strmech.NumStrRoundingSpec{}
+
+	roundingSpec,
+		err = new(strmech.NumStrRoundingSpec).NewRoundingSpec(
+		strmech.NumRoundType.NoRounding(),
+		0,
+		ePrefix.XCpy(
+			"roundingSpec<-"+
+				"NumRoundType.NoRounding()"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var fmtNumberStr string
+
+	fmtNumberStr,
+		err = baseValueNStr.FmtSignedSimpleNumberStr(
+		".",
+		"",
+		true,
+		-1,
+		strmech.TxtJustify.Right(),
+		roundingSpec,
+		ePrefix.XCpy(
+			"fmtNumberStr<-baseValueNStr"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	fmt.Printf("\n\n" + breakStr + "\n")
+
+	fmt.Printf("%v\n"+
+		"Expected NumStr = '%v'\n"+
+		"  Actual NumStr = '%v'\n",
+		ePrefix.String(),
+		expectedNumberStr,
+		fmtNumberStr)
+
+	if expectedNumberStr != fmtNumberStr {
+
+		fmt.Printf("\n\n%v\n"+
+			"** Error **\n"+
+			"Expected Number String NOT EQUAL\n"+
+			"to Actual Number String!\n"+
+			"Expected NumStr = '%v'\n"+
+			"  Actual NumStr = '%v'\n",
+			ePrefix.String(),
+			expectedNumberStr,
+			fmtNumberStr)
+
+		return
+
+	}
+
+	fmt.Printf("\n\n" + breakStr + "\n")
+
+	fmt.Printf("\n Successful Completion!\n"+
+		"Function: %v\n",
+		ePrefix.String())
+
+	fmt.Printf("\n" + breakStr + "\n")
+
+}
+
 func (mainNumStrTest005 MainNumStrTest005) NumStrFmtSignedSimple() {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(

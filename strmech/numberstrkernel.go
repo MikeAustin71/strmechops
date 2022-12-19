@@ -14619,11 +14619,54 @@ func (numStrKernel *NumberStrKernel) GetParameterTextListing(
 				"numStrKernel"))
 }
 
-//	GetPureNumberStr
+// GetPureNumberStr
 //
-//	Extracts the numeric value from the current
-//	NumberStrKernel instance and returns it as
-//	a pure number string.
+// Extracts the numeric value from the current
+// NumberStrKernel instance and returns it as
+// a pure number string.
+//
+// A Signed Floating Point Pure Number String is defined
+// as follows:
+//
+//  1. A pure number string consists entirely of numeric
+//     digit characters (0-9).
+//
+//  2. A pure number string will separate integer and
+//     fractional digits with a radix point. This
+//     could be, but is not limited to, a decimal point
+//     ('.').
+//
+//  3. A pure number string will designate negative values
+//     with a minus sign ('-'). This minus sign could be
+//     positioned as a leading or trailing minus sign.
+//
+//  4. A pure number string will NOT include integer
+//     separators such as commas (',') to separate
+//     integer digits by thousands.
+//
+//     NOT THIS: 1,000,000
+//     Pure Number String: 1000000
+//
+// No rounding is performed on the returned numeric
+// value. All available fractional digits in the current
+// NumberStrKernel numeric value will be returned. If
+// rounding is required, round the internal numeric value
+// contained in the current NumberStrKernel instance
+// before calling this method. The following method will
+// round the current NumberStrKernel numeric value:
+//
+//	NumberStrKernel.Round()
+//
+// Notice also that returned number string consists of
+// numeric digits, a radix point and, if necessary, a
+// minus sign to designate negative numeric values. As
+// such there is no field length or text justification
+// allowed.
+//
+// This type of pure number string is generally used as
+// input for library functions provided by various
+// programming languages including the Go programming
+// language.
 //
 // ----------------------------------------------------------------
 //
@@ -14648,6 +14691,10 @@ func (numStrKernel *NumberStrKernel) GetParameterTextListing(
 //		In France, Germany and many countries in the
 //		European Union, the Decimal Separator is the
 //		comma character (',').
+//
+//		If this parameter is submitted as an empty or
+//		zero length string, it will be defaulted to the
+//		period character or decimal point ('.').
 //
 //	leadingMinusSign			bool
 //
@@ -14685,50 +14732,33 @@ func (numStrKernel *NumberStrKernel) GetParameterTextListing(
 //
 // # Return Values
 //
-//	string
+//		string
 //
-//		If this method completes successfully, a pure
-//		number string containing the numeric value
-//		extracted from the current instance of
-//		NumberStrKernel will be returned.
+//			If this method completes successfully, a pure
+//			number string containing the numeric value
+//			extracted from the current instance of
+//			NumberStrKernel will be returned.
 //
-//		A "Pure Number String" is defined as follows:
+//			A "Pure Number String" is defined as follows:
 //
-//			1.	Consists of numeric character digits
-//				zero through nine inclusive (0-9).
+//	 	1. A pure number string consists entirely of numeric
+//	 	   digit characters (0-9).
 //
-//			2.	Option: A Pure Number String may include
-//				a radix point or decimal separator.
-//				Decimal separators separate integer and
-//				fractional numeric digits in a pure
-//				number string. The decimal separator may
-//				consist of one or more text characters.
+//	 	2. A pure number string will separate integer and
+//	 	   fractional digits with a radix point. This
+//	 	   could be, but is not limited to, a decimal point
+//	 	   ('.').
 //
-//				In the US, UK, Australia, most of Canada
-//				and many other countries, the decimal
-//				separator is the period character ('.')
-//				known as the decimal point.
+//	 	3. A pure number string will designate negative values
+//	 	   with a minus sign ('-'). This minus sign could be
+//	 	   positioned as a leading or trailing minus sign.
 //
-//				In France, Germany and many countries in
-//				the European Union, the Decimal Separator
-//				is the comma character (',').
+//	 	4. A pure number string will NOT include integer
+//	 	   separators such as commas (',') to separate
+//	 	   integer digits by thousands.
 //
-//			3.	Optional: A Pure Number String may
-//				include a negative number sign symbol
-//				consisting of a minus sign ('-'). The
-//				minus sign will identify the numeric
-//				value contained in the pure number string
-//				as a negative number. Only the minus sign
-//				('-') classifies a numeric value as a
-//				negative number in a pure number string.
-//
-//				If a leading or trailing minus sign ('-')
-//				is NOT present,	the numeric value is
-//				positive.
-//
-//			4.	Only numeric characters, the decimal
-//				separator and the minus sign will be
-//				included in the pure number string.
+//	 	   NOT THIS: 1,000,000
+//	 	   Pure Number String: 1000000
 func (numStrKernel *NumberStrKernel) GetPureNumberStr(
 	decimalSeparatorChars string,
 	leadingMinusSign bool) string {
@@ -14742,6 +14772,11 @@ func (numStrKernel *NumberStrKernel) GetPureNumberStr(
 	defer numStrKernel.lock.Unlock()
 
 	numberStr := ""
+
+	if len(decimalSeparatorChars) == 0 {
+
+		decimalSeparatorChars = "."
+	}
 
 	if leadingMinusSign == true &&
 		numStrKernel.numberSign == NumSignVal.Negative() {
