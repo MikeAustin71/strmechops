@@ -67,7 +67,7 @@ import (
 //	Number Symbols creation process:
 //
 //		NumStrNumberSymbolsSpec.NewSimpleCurrency()
-//		NumStrNumberSymbolsSpec.NewSignedSimpleNumber()
+//		NumStrNumberSymbolsSpec.NewSignedSimpleNumberStr()
 //
 //	If more granular control is required to meet
 //	specialized requirements for multinational or
@@ -1548,7 +1548,7 @@ func (nStrNumSymSpec *NumStrNumberSymbolsSpec) NewNOP() NumStrNumberSymbolsSpec 
 //	If currency number symbol formatting is NOT
 //	required, see method:
 //
-//		NumStrNumberSymbolsSpec.NewSignedSimpleNumber()
+//		NumStrNumberSymbolsSpec.NewSignedSimpleNumberStr()
 //
 //	Type NumStrNumberSymbolsSpec is used to configure
 //	Number Symbols required in converting numeric
@@ -1795,7 +1795,7 @@ func (nStrNumSymSpec *NumStrNumberSymbolsSpec) NewSimpleCurrency(
 	return newNStrNumSymbols, err
 }
 
-//	NewSignedSimpleNumber
+//	NewSignedSimpleNumberStr
 //
 //	Creates and returns and instance of
 //	NumStrNumberSymbolsSpec configured for Signed
@@ -1958,7 +1958,7 @@ func (nStrNumSymSpec *NumStrNumberSymbolsSpec) NewSimpleSignedNumber(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumStrNumberSymbolsSpec."+
-			"NewSignedSimpleNumber()",
+			"NewSignedSimpleNumberStr()",
 		"")
 
 	if err != nil {

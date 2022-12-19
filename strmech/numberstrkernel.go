@@ -9942,7 +9942,7 @@ func (numStrKernel *NumberStrKernel) FmtSignedSimpleNumberStr(
 	var numStrFmtSpec NumStrFormatSpec
 
 	numStrFmtSpec,
-		err = new(NumStrFormatSpec).NewSignedSimpleNumber(
+		err = new(NumStrFormatSpec).NewSignedSimpleNumberStr(
 		decSeparatorChars,
 		intSeparatorChars,
 		leadingNumSymbols,
@@ -18986,7 +18986,7 @@ func (numStrKernel *NumberStrKernel) SetDefaultSimpleNumStrFormatSpec(
 	numStrKernel.numStrFormatSpec.Empty()
 
 	numStrKernel.numStrFormatSpec,
-		err = new(NumStrFormatSpec).NewSignedSimpleNumber(
+		err = new(NumStrFormatSpec).NewSignedSimpleNumberStr(
 		decSeparatorChars,
 		intSeparatorChars,
 		leadingNumSymbols,

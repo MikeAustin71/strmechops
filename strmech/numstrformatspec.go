@@ -6093,7 +6093,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedPureNumberStr(
 //	If currency number symbol formatting IS NOT
 //	required, see method:
 //
-//		NumStrFormatSpec.NewSignedSimpleNumber()
+//		NumStrFormatSpec.NewSignedSimpleNumberStr()
 //
 //	Type NumStrFormatSpec is used to convert numeric
 //	values to formatted Number Strings.
@@ -6432,7 +6432,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSimpleCurrency(
 	return newNumStrFmtSpec, err
 }
 
-//	NewSignedSimpleNumber
+//	NewSignedSimpleNumberStr
 //
 //	Creates and returns and instance of NumStrFormatSpec
 //	configured for Signed Number String formatting.
@@ -6714,7 +6714,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSimpleCurrency(
 //		and text passed by input parameter, 'errorPrefix'. The
 //		'errorPrefix' text will be attached to the beginning of
 //		the error message.
-func (numStrFmtSpec *NumStrFormatSpec) NewSignedSimpleNumber(
+func (numStrFmtSpec *NumStrFormatSpec) NewSignedSimpleNumberStr(
 	decSeparatorChars string,
 	intSeparatorChars string,
 	leadingNumSymbols bool,
@@ -6738,7 +6738,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedSimpleNumber(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumStrFormatSpec."+
-			"NewSignedSimpleNumber()",
+			"NewSignedSimpleNumberStr()",
 		"")
 
 	if err != nil {
