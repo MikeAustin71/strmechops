@@ -74,7 +74,7 @@ func (mainNumStrTest005 MainNumStrTest005) NumStrFmtSignedSimple() {
 	var fmtNumberStr string
 
 	fmtNumberStr,
-		err = baseValueNStr.FmtSignedSimpleNumber(
+		err = baseValueNStr.FmtSignedSimpleNumberStr(
 		".",
 		",",
 		true,

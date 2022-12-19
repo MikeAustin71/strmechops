@@ -1753,7 +1753,7 @@ func TestNumberStrKernel_FmtSignedSimpleNumber_000100(t *testing.T) {
 	var fmtNumberStr string
 
 	fmtNumberStr,
-		err = baseValueNStr.FmtSignedSimpleNumber(
+		err = baseValueNStr.FmtSignedSimpleNumberStr(
 		".",
 		",",
 		true,
@@ -1837,7 +1837,7 @@ func TestNumberStrKernel_FmtSignedSimpleNumber_000200(t *testing.T) {
 	var fmtNumberStr string
 
 	fmtNumberStr,
-		err = baseValueNStr.FmtSignedSimpleNumber(
+		err = baseValueNStr.FmtSignedSimpleNumberStr(
 		".",
 		"",
 		true,
