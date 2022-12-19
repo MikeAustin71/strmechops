@@ -1734,6 +1734,16 @@ func TestNumberStrKernel_FmtSignedSimpleNumber_000100(t *testing.T) {
 		return
 	}
 
+	err = baseValueNStr.IsValidInstanceError(
+		ePrefix.XCpy(
+			"baseValueNStr"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
 	roundingSpec := NumStrRoundingSpec{}
 
 	roundingSpec,
@@ -1815,6 +1825,18 @@ func TestNumberStrKernel_FmtSignedSimpleNumber_000200(t *testing.T) {
 	if err != nil {
 		fmt.Printf("\n%v\n",
 			err.Error())
+		return
+	}
+
+	isValid := baseValueNStr.IsValidInstance()
+
+	if !isValid {
+
+		t.Errorf("\n%v\n"+
+			"baseValueNStr.IsValidInstance()\n"+
+			"returned 'false'.\n",
+			ePrefix.String())
+
 		return
 	}
 

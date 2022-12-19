@@ -2941,24 +2941,30 @@ func (numStrKernelAtom *numberStrKernelAtom) testValidityOfNumStrKernel(
 		}
 	}
 
+	if new(numStrFmtSpecNanobot).isNOP(
+		&numStrKernel.numStrFormatSpec) {
+
+		// This is a NOP!
+		// numStrKernel.numStrFormatSpec is invalid.
+		// Set default numStrKernel.numStrFormatSpec
+		// to stand US Signed Number String Format
+		// Specification.
+		numStrKernel.numStrFormatSpec,
+			err = new(NumStrFormatSpec).NewSignedNumFmtUS(
+			NumStrNumberFieldSpec{
+				fieldLength:        -1,
+				fieldJustification: TxtJustify.Right(),
+			},
+			ePrefix.XCpy(
+				"numStrKernel.numStrFormatSpec "+
+					"Default US NumStrNumberFieldSpec"))
+
+		if err != nil {
+			return isValid, err
+		}
+	}
+
 	isValid = true
 
 	return isValid, err
-}
-
-// ptr - Returns a pointer to a new instance of
-// numberStrKernelAtom.
-func (numStrKernelAtom numberStrKernelAtom) ptr() *numberStrKernelAtom {
-
-	if numStrKernelAtom.lock == nil {
-		numStrKernelAtom.lock = new(sync.Mutex)
-	}
-
-	numStrKernelAtom.lock.Lock()
-
-	defer numStrKernelAtom.lock.Unlock()
-
-	return &numberStrKernelAtom{
-		lock: new(sync.Mutex),
-	}
 }

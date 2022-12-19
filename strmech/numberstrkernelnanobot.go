@@ -154,6 +154,10 @@ func (numStrKernelNanobot *numberStrKernelNanobot) copy(
 
 	numStrKernelAtom := numberStrKernelAtom{}
 
+	// If invalid, this will set
+	// sourceNumStrKernel.numStrFormatSpec to a
+	// default US Number String Format Specification.
+
 	_,
 		err2 =
 		numStrKernelAtom.testValidityOfNumStrKernel(
@@ -205,43 +209,19 @@ func (numStrKernelNanobot *numberStrKernelNanobot) copy(
 	destinationNumStrKernel.isNonZeroValue =
 		sourceNumStrKernel.isNonZeroValue
 
-	if new(numStrFmtSpecNanobot).isNOP(&sourceNumStrKernel.numStrFormatSpec) {
-
-		// This is a NOP!
-		// sourceNumStrKernel.numStrFormatSpec is invalid.
-		destinationNumStrKernel.numStrFormatSpec,
-			err = new(NumStrFormatSpec).NewSignedNumFmtUS(
-			NumStrNumberFieldSpec{
-				fieldLength:        -1,
-				fieldJustification: TxtJustify.Right(),
-			},
-			ePrefix.XCpy("destinationNumStrKernel "+
-				"Default NumStrNumberFieldSpec"))
-
-		if err != nil {
-			return err
-		}
-
-		sourceNumStrKernel.numStrFormatSpec,
-			err = new(NumStrFormatSpec).NewSignedNumFmtUS(
-			NumStrNumberFieldSpec{
-				fieldLength:        -1,
-				fieldJustification: TxtJustify.Right(),
-			},
-			ePrefix.XCpy("sourceNumStrKernel "+
-				"Default NumStrNumberFieldSpec"))
-
-	} else {
-
-		// This is NOT a NOP.
-		// sourceNumStrKernel.numStrFormatSpec is Valid!
-		err = destinationNumStrKernel.numStrFormatSpec.CopyIn(
-			&sourceNumStrKernel.numStrFormatSpec,
-			ePrefix.XCpy(
-				"destinationNumStrKernel<-"+
-					"sourceNumStrKernel.numStrFormatSpec"))
-
-	}
+	// This is NOT a NOP. Defaults were set in call to
+	// numStrKernelAtom.testValidityOfNumStrKernel(
+	//			sourceNumStrKernel,
+	//			nil)
+	//
+	// If invalid, sourceNumStrKernel.numStrFormatSpec
+	// was set to default US Number String Format
+	// Specification
+	err = destinationNumStrKernel.numStrFormatSpec.CopyIn(
+		&sourceNumStrKernel.numStrFormatSpec,
+		ePrefix.XCpy(
+			"destinationNumStrKernel<-"+
+				"sourceNumStrKernel.numStrFormatSpec"))
 
 	return err
 }
