@@ -1953,3 +1953,117 @@ func TestNumberStrKernel_FmtSignedPureNumberStr_000100(t *testing.T) {
 
 	return
 }
+
+func TestNumberStrKernel_String_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestNumberStrKernel_FmtSignedPureNumberStr_000100()",
+		"")
+
+	origIntStr := "1234"
+	origFracStr := "5678"
+
+	origNumberStr := origIntStr +
+		"." +
+		origFracStr
+
+	expectedNumberStr := "1234.5678"
+
+	var err error
+	var baseValueNStr, nStr02 NumberStrKernel
+
+	baseValueNStr,
+		err = new(NumberStrKernel).
+		NewParsePureNumberStr(
+			origNumberStr,
+			".",
+			true,
+			ePrefix.XCpy(
+				"baseValueNStr<-origNumberStr"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = nStr02.CopyIn(
+		&baseValueNStr,
+		ePrefix.XCpy(
+			"nStr02<-baseValueNStr"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if !nStr02.Equal(&baseValueNStr) {
+
+		t.Errorf("%v\n"+
+			"Test#1\n"+
+			"Error: nStr02 NOT EQUAL TO baseValueNStr\n"+
+			"After CopyIn() operation they were expected\n"+
+			"to be Equal. HOWEVER, THEY ARE NOT EQUAL!!!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	err = nStr02.SetDefaultPureNumStrFormatSpec(
+		".",
+		true,
+		-1,
+		TxtJustify.Right(),
+		ePrefix.XCpy(
+			"nStr02"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	actualFmtNumberStr := nStr02.String()
+
+	if expectedNumberStr != actualFmtNumberStr {
+
+		t.Errorf("%v\n"+
+			"Test#2\n"+
+			"Error: actualfmtNumberStr NOT EQUAL TO expectedNumberStr\n"+
+			" actualFmtNumberStr = '%v'\n"+
+			"expectedNumberStr   = '%v'\n",
+			ePrefix.String(),
+			actualFmtNumberStr,
+			expectedNumberStr)
+
+		return
+	}
+
+	expectedNumberStr = "1,234.5678"
+
+	err = nStr02.SetDefaultSimpleNumStrFormatSpec(
+		".",
+		",",
+		true,
+		-1,
+		TxtJustify.Right(),
+		ePrefix.XCpy(
+			"nStr02"))
+
+	actualFmtNumberStr = nStr02.String()
+
+	if expectedNumberStr != actualFmtNumberStr {
+
+		t.Errorf("%v\n"+
+			"Test#3\n"+
+			"Error: actualfmtNumberStr NOT EQUAL TO expectedNumberStr\n"+
+			" actualFmtNumberStr = '%v'\n"+
+			"expectedNumberStr   = '%v'\n",
+			ePrefix.String(),
+			actualFmtNumberStr,
+			expectedNumberStr)
+
+		return
+	}
+}
