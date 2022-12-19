@@ -1809,13 +1809,13 @@ func (numStrFmtSpec *NumStrFormatSpec) IsNOP() bool {
 //	bool
 //
 //		If any of the internal member data variables contained
-//		in the current instance of DecimalSeparatorSpec are
-//		found to be invalid, this method will return a boolean
-//		value of 'false'.
+//		in the current instance of NumStrFormatSpec are	found
+//		to be invalid, this method will return a boolean value
+//		of 'false'.
 //
-//	     If all internal member data variables contained in the
-//	     current instance of DecimalSeparatorSpec are found to be
-//	     valid, this method returns a boolean value of 'true'.
+//		If all internal member data values contained in the
+//		current instance of NumStrFormatSpec are found to be
+//		valid, this method returns a boolean value of 'true'.
 func (numStrFmtSpec *NumStrFormatSpec) IsValidInstance() bool {
 
 	if numStrFmtSpec.lock == nil {
@@ -1916,7 +1916,9 @@ func (numStrFmtSpec *NumStrFormatSpec) IsValidInstance() bool {
 //		If any of the internal member data variables
 //		contained in the current instance of
 //		NumStrFormatSpec are found to be invalid, this
-//		method will return an error.
+//		method will return an error with an appropriate
+//		message identifying the invalid member data
+//		variable.
 //
 //		If errors are encountered during processing, the
 //		returned error Type will encapsulate an error

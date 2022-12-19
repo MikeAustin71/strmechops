@@ -2777,7 +2777,7 @@ func (numStrKernelAtom *numberStrKernelAtom) testValidityOfNumStrKernel(
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
 		"negNumSearchSpecAtom."+
-			"testValidityOfNegNumSearchSpec()",
+			"testValidityOfNumStrKernel()",
 		"")
 
 	if err != nil {
