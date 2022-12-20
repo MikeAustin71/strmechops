@@ -1294,6 +1294,56 @@ func (txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64) GetRightMarginStr() stri
 	return txtFieldFmtDtoFloat64.RightMarginStr
 }
 
+// IsValidInstance
+//
+// Performs a diagnostic review of the data values
+// encapsulated in the current TextFieldFormatDtoFloat64
+// instance to determine if they are valid.
+//
+// If all data elements evaluate as valid, this method
+// returns 'true'. If any data element is invalid, this
+// method returns 'false'.
+//
+// This method is required in order to implement the
+// ITextFieldFormatDto interface.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	--- NONE ---
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	isValid						bool
+//
+//		If all data elements encapsulated by the current
+//		instance of TextFieldFormatDtoFloat64 are valid,
+//		this returned boolean value is set to 'true'. If
+//		any data values are invalid, this return
+//		parameter is set to 'false'.
+func (txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64) IsValidInstance() (
+	isValid bool) {
+
+	if txtFieldFmtDtoFloat64.lock == nil {
+		txtFieldFmtDtoFloat64.lock = new(sync.Mutex)
+	}
+
+	txtFieldFmtDtoFloat64.lock.Lock()
+
+	defer txtFieldFmtDtoFloat64.lock.Unlock()
+
+	isValid,
+		_ = new(textFieldFormatDtoFloat64Atom).
+		testValidityOfTxtFieldFmtDtoFloat64(
+			txtFieldFmtDtoFloat64,
+			nil)
+
+	return isValid
+}
+
 // textFieldFormatDtoFloat64Nanobot
 //
 // Provides helper methods for TextFieldFormatDtoFloat64.
