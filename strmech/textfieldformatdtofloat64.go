@@ -1086,6 +1086,26 @@ func (txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64) GetFormattedTextFieldStr
 				"<-txtFieldFmtDtoFloat64"))
 }
 
+// GetLeftMarginLength
+//
+// Returns the length of the Left Margin String as an
+// integer value.
+//
+// This method is required in order to implement the
+// ITextFieldFormatDto interface.
+func (txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64) GetLeftMarginLength() int {
+
+	if txtFieldFmtDtoFloat64.lock == nil {
+		txtFieldFmtDtoFloat64.lock = new(sync.Mutex)
+	}
+
+	txtFieldFmtDtoFloat64.lock.Lock()
+
+	defer txtFieldFmtDtoFloat64.lock.Unlock()
+
+	return len(txtFieldFmtDtoFloat64.LeftMarginStr)
+}
+
 // textFieldFormatDtoFloat64Nanobot
 //
 // Provides helper methods for TextFieldFormatDtoFloat64.
