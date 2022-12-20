@@ -170,7 +170,7 @@ type TextFieldFormatDtoBigFloat struct {
 //
 // Copies all the data fields from an incoming instance
 // of TextFieldFormatDtoBigFloat
-// ('incomingTxtBigFloatFieldFmtDto') to the corresponding
+// ('incomingTxtBigFloatFmtDto') to the corresponding
 // data fields of the current TextFieldFormatDtoBigFloat
 // instance ('textBigFloatFieldFmtDto').
 //
@@ -187,7 +187,7 @@ type TextFieldFormatDtoBigFloat struct {
 //
 // # Input Parameters
 //
-//	incomingTxtBigFloatFieldFmtDto		*TextFieldFormatDtoBigFloat
+//	incomingTxtBigFloatFmtDto		*TextFieldFormatDtoBigFloat
 //
 //		A pointer to an instance of
 //		TextFieldFormatDtoBigFloat.
@@ -201,8 +201,8 @@ type TextFieldFormatDtoBigFloat struct {
 //		'incomingTxtFieldFmtDto' will NOT be changed or
 //		modified.
 //
-//		If 'incomingTxtFieldFmtDto' contains invalid data
-//		values, an error will be returned.
+//		If 'incomingTxtBigFloatFmtDto' contains invalid
+//		data values, an error will be returned.
 //
 //	errorPrefix						interface{}
 //
@@ -280,7 +280,7 @@ type TextFieldFormatDtoBigFloat struct {
 //		text will be attached to the beginning of the
 //		error message.
 func (textBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat) CopyIn(
-	incomingTxtBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat,
+	incomingTxtBigFloatFmtDto *TextFieldFormatDtoBigFloat,
 	errorPrefix interface{}) error {
 
 	if textBigFloatFieldFmtDto.lock == nil {
@@ -308,10 +308,10 @@ func (textBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat) CopyIn(
 
 	return new(textBigFloatFieldFormatDtoNanobot).copy(
 		textBigFloatFieldFmtDto,
-		incomingTxtBigFloatFieldFmtDto,
+		incomingTxtBigFloatFmtDto,
 		ePrefix.XCpy(
 			"textBigFloatFieldFmtDto<-"+
-				"incomingTxtBigFloatFieldFmtDto"))
+				"incomingTxtBigFloatFmtDto"))
 }
 
 // CopyOut
