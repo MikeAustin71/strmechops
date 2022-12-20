@@ -766,6 +766,63 @@ func (txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64) Empty() {
 	txtFieldFmtDtoFloat64.lock = nil
 }
 
+// Equal
+//
+// Receives a pointer to another instance of
+// TextFieldFormatDtoFloat64 and proceeds to compare the
+// member variables to those contained in the current
+// TextFieldFormatDtoFloat64 instance in order to
+// determine if they are equivalent.
+//
+// A boolean flag showing the result of this comparison
+// is returned. If the member variables of both instances
+// are equal in all respects, this flag is set to 'true'.
+// Otherwise, this method returns 'false'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	incomingTxtFloat64FmtDto 	*TextFieldFormatDtoFloat64
+//
+//		A pointer to an incoming instance of
+//		TextFieldFormatDtoFloat64. This method will
+//		compare all member variable data values in this
+//		instance against those contained in the current
+//		instance of TextFieldFormatDtoFloat64. If the
+//		data values in both instances are found to be
+//		equal in all respects, this method will return a
+//		boolean value of 'true'.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	bool
+//
+//		If the member variable data values contained in
+//		input parameter 'incomingTxtFloat64FmtDto' are
+//		equal in all respects to those contained in the
+//		current instance of TextFieldFormatDtoFloat64,
+//		this method will return a boolean value of
+//		'true'. Otherwise, a value of 'false' will be
+//		returned to the calling function.
+func (txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64) Equal(
+	incomingTxtFloat64FmtDto *TextFieldFormatDtoFloat64) bool {
+
+	if txtFieldFmtDtoFloat64.lock == nil {
+		txtFieldFmtDtoFloat64.lock = new(sync.Mutex)
+	}
+
+	txtFieldFmtDtoFloat64.lock.Lock()
+
+	defer txtFieldFmtDtoFloat64.lock.Unlock()
+
+	return new(textFieldFormatDtoFloat64Atom).equal(
+		txtFieldFmtDtoFloat64,
+		incomingTxtFloat64FmtDto)
+}
+
 // textFieldFormatDtoFloat64Nanobot
 //
 // Provides helper methods for TextFieldFormatDtoFloat64.
