@@ -995,6 +995,97 @@ func (txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64) GetFieldFormatDtoType() 
 	return "TextFieldFormatDtoFloat64"
 }
 
+// GetFormattedTextFieldStr
+//
+// Converts an instance of TextFieldFormatDtoFloat64 to a
+// formatted text field string.
+//
+// This formatted text field string contains the left
+// margin, field contents and right margin.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//
+//		If this method completes successfully, the text
+//		field specifications contained in the current
+//		instance of TextFieldFormatDtoFloat64 will be
+//		converted to, and returned as, a formatted text
+//		field string.
+//
+//		The returned text field string will contain the
+//		left margin, text field contents and right margin
+//		as those elements are defined in the current
+//		instance of TextFieldFormatDtoFloat64.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64) GetFormattedTextFieldStr(
+	errorPrefix interface{}) (
+	string,
+	error) {
+
+	if txtFieldFmtDtoFloat64.lock == nil {
+		txtFieldFmtDtoFloat64.lock = new(sync.Mutex)
+	}
+
+	txtFieldFmtDtoFloat64.lock.Lock()
+
+	defer txtFieldFmtDtoFloat64.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextFieldFormatDtoFloat64."+
+			"GetFormattedTextFieldStr()",
+		"")
+
+	if err != nil {
+		return "", err
+	}
+
+	return new(textFieldFormatDtoFloat64Nanobot).
+		getFormattedTextFieldStr(
+			txtFieldFmtDtoFloat64,
+			ePrefix.XCpy(
+				"<-txtFieldFmtDtoFloat64"))
+}
+
 // textFieldFormatDtoFloat64Nanobot
 //
 // Provides helper methods for TextFieldFormatDtoFloat64.
