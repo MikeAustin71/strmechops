@@ -1255,6 +1255,26 @@ func (txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64) GetPureNumberStr(
 				"<-txtFieldFmtDtoFloat64"))
 }
 
+// GetRightMarginLength
+//
+// Returns the length of the Right Margin String as an
+// integer value.
+//
+// This method is required in order to implement the
+// ITextFieldFormatDto interface.
+func (txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64) GetRightMarginLength() int {
+
+	if txtFieldFmtDtoFloat64.lock == nil {
+		txtFieldFmtDtoFloat64.lock = new(sync.Mutex)
+	}
+
+	txtFieldFmtDtoFloat64.lock.Lock()
+
+	defer txtFieldFmtDtoFloat64.lock.Unlock()
+
+	return len(txtFieldFmtDtoFloat64.RightMarginStr)
+}
+
 // textFieldFormatDtoFloat64Nanobot
 //
 // Provides helper methods for TextFieldFormatDtoFloat64.
