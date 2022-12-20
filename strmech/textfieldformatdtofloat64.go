@@ -421,6 +421,213 @@ type TextFieldFormatDtoFloat64 struct {
 	lock *sync.Mutex
 }
 
+// textFieldFormatDtoFloat64Nanobot
+//
+// Provides helper methods for TextFieldFormatDtoFloat64.
+type textFieldFormatDtoFloat64Nanobot struct {
+	lock *sync.Mutex
+}
+
+// copy
+//
+// Copies all data from a source instance of
+// TextFieldFormatDtoFloat64 to a destination instance of
+// TextFieldFormatDtoFloat64.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will delete and overwrite all
+//	pre-existing data values contained within the
+//	TextFieldFormatDtoFloat64 instance passed as input
+//	parameter 'destinationTxtFloat64FmtDto'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	destinationTxtFloat64FmtDto		*TextFieldFormatDtoFloat64
+//
+//		A pointer to an instance of
+//		TextFieldFormatDtoFloat64.
+//
+//		Data extracted from input parameter
+//		'sourceTxtFloat64FmtDto' will be copied to this
+//		input parameter, 'destinationTxtFloat64FmtDto'.
+//
+//		'destinationTxtFloat64FmtDto' is the destination
+//		for this copy operation.
+//
+//		If this method completes successfully, all member
+//		data variables encapsulated in
+//		'destinationTxtFloat64FmtDto' will be identical to
+//		those contained in input parameter,
+//		'sourceTxtFloat64FmtDto'.
+//
+//		Be advised that the pre-existing data fields
+//		contained within input parameter
+//		'destinationTxtFloat64FmtDto' will be overwritten
+//		and deleted.
+//
+//	sourceTxtBigFloatFieldFmtDto		*TextFieldFormatDtoBigFloat
+//
+//		A pointer to an instance of TextFieldFormatDtoBigFloat.
+//
+//		All data values in this TextFieldFormatDtoBigFloat
+//		instance will be copied to input parameter
+//		'destinationTxtBigFloatFieldFmtDto'.
+//
+//		'sourceTxtBigFloatFieldFmtDto' is the source of
+//		the copy operation.
+//
+//		If 'sourceTxtBigFloatFieldFmtDto' contains
+//		invalid member data variables, an error will be
+//		returned.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (txtFloat64FmtDtoNanobot *textFieldFormatDtoFloat64Nanobot) copy(
+	destinationTxtFloat64FmtDto *TextFieldFormatDtoFloat64,
+	sourceTxtFloat64FmtDto *TextFieldFormatDtoFloat64,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if txtFloat64FmtDtoNanobot.lock == nil {
+		txtFloat64FmtDtoNanobot.lock = new(sync.Mutex)
+	}
+
+	txtFloat64FmtDtoNanobot.lock.Lock()
+
+	defer txtFloat64FmtDtoNanobot.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"textFieldFormatDtoFloat64Nanobot."+
+			"copy()",
+		"")
+
+	if err != nil {
+
+		return err
+
+	}
+
+	if destinationTxtFloat64FmtDto == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'destinationTxtFloat64FmtDto' is a nil pointer!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if sourceTxtFloat64FmtDto == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'sourceTxtFloat64FmtDto' is a nil pointer!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	_,
+		err = new(textFieldFormatDtoFloat64Atom).
+		testValidityOfTxtFieldFmtDtoFloat64(
+			sourceTxtFloat64FmtDto,
+			ePrefix.XCpy(
+				"sourceTxtFloat64FmtDto Invalid"))
+
+	if err != nil {
+
+		return err
+
+	}
+
+	new(textFieldFormatDtoFloat64Atom).
+		empty(
+			destinationTxtFloat64FmtDto)
+
+	destinationTxtFloat64FmtDto.LeftMarginStr =
+		sourceTxtFloat64FmtDto.LeftMarginStr
+
+	sourceNumStr := strconv.FormatFloat(
+		sourceTxtFloat64FmtDto.Float64Num,
+		'f',
+		-1,
+		64)
+
+	var err2 error
+
+	destinationTxtFloat64FmtDto.Float64Num,
+		err2 =
+		strconv.ParseFloat(
+			sourceNumStr,
+			64)
+
+	if err2 != nil {
+		err = fmt.Errorf("%v\n"+
+			"Error returned by strconv.ParseFloat(sourceNumStr)\n"+
+			"sourceNumStr = '%v'\n"+
+			"Error = \n%v\n",
+			ePrefix.String(),
+			sourceNumStr,
+			err2.Error())
+
+		return err
+	}
+
+	destinationTxtFloat64FmtDto.LeadingMinusSign =
+		sourceTxtFloat64FmtDto.LeadingMinusSign
+
+	destinationTxtFloat64FmtDto.RoundingType =
+		sourceTxtFloat64FmtDto.RoundingType
+
+	destinationTxtFloat64FmtDto.NumOfFractionalDigits =
+		sourceTxtFloat64FmtDto.NumOfFractionalDigits
+
+	destinationTxtFloat64FmtDto.FieldJustify =
+		sourceTxtFloat64FmtDto.FieldJustify
+
+	destinationTxtFloat64FmtDto.RightMarginStr =
+		sourceTxtFloat64FmtDto.RightMarginStr
+
+	return err
+}
+
 // textFieldFormatDtoFloat64Molecule
 //
 // Provides helper methods for TextFieldFormatDtoFloat64.

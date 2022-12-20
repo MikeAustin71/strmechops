@@ -1463,40 +1463,41 @@ type textBigFloatFieldFormatDtoNanobot struct {
 //
 // # Input Parameters
 //
-//	destinationTxtBigFloatFieldFmtDto	*TextFieldFormatDtoBigFloat
+//	destinationTxtBigFloatFmtDto	*TextFieldFormatDtoBigFloat
 //
 //		A pointer to an instance of TextFieldFormatDtoBigFloat.
 //
 //		Data extracted from input parameter
-//		'sourceTxtFieldFmtDto' will be copied to this
-//		input parameter, 'destinationTxtFieldFmtDto'.
+//		'sourceTxtBigFloatFmtDto' will be copied to this
+//		input parameter, 'destinationTxtBigFloatFmtDto'.
 //
 //		'destinationTxtFieldFmtDto' is the destination
-//		for the	copy operation.
+//		for this copy operation.
 //
 //		If this method completes successfully, all member
 //		data variables encapsulated in
-//		'destinationTxtFieldFmtDto' will be identical to
+//		'destinationTxtBigFloatFmtDto' will be identical to
 //		those contained in input parameter,
-//		'sourceTxtFieldFmtDto'.
+//		'sourceTxtBigFloatFmtDto'.
 //
 //		Be advised that the pre-existing data fields
 //		contained within input parameter
 //		'destinationTxtFieldFmtDto' will be overwritten
 //		and deleted.
 //
-//	sourceTxtBigFloatFieldFmtDto		*TextFieldFormatDtoBigFloat
+//	sourceTxtBigFloatFmtDto			*TextFieldFormatDtoBigFloat
 //
-//		A pointer to an instance of TextFieldFormatDtoBigFloat.
+//		A pointer to an instance of
+//		TextFieldFormatDtoBigFloat.
 //
 //		All data values in this TextFieldFormatDtoBigFloat
 //		instance will be copied to input parameter
-//		'destinationTxtBigFloatFieldFmtDto'.
+//		'destinationTxtBigFloatFmtDto'.
 //
-//		'sourceTxtBigFloatFieldFmtDto' is the source of
+//		'sourceTxtBigFloatFmtDto' is the source of
 //		the copy operation.
 //
-//		If 'sourceTxtBigFloatFieldFmtDto' contains
+//		If 'sourceTxtBigFloatFmtDto' contains
 //		invalid member data variables, an error will be
 //		returned.
 //
@@ -1532,8 +1533,8 @@ type textBigFloatFieldFormatDtoNanobot struct {
 //		text will be attached to the beginning of the
 //		error message.
 func (txtBigFloatFieldFmtDtoNanobot *textBigFloatFieldFormatDtoNanobot) copy(
-	destinationTxtBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat,
-	sourceTxtBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat,
+	destinationTxtBigFloatFmtDto *TextFieldFormatDtoBigFloat,
+	sourceTxtBigFloatFmtDto *TextFieldFormatDtoBigFloat,
 	errPrefDto *ePref.ErrPrefixDto) error {
 
 	if txtBigFloatFieldFmtDtoNanobot.lock == nil {
@@ -1560,10 +1561,19 @@ func (txtBigFloatFieldFmtDtoNanobot *textBigFloatFieldFormatDtoNanobot) copy(
 		return err
 	}
 
-	if sourceTxtBigFloatFieldFmtDto == nil {
+	if destinationTxtBigFloatFmtDto == nil {
 
 		err = fmt.Errorf("%v\n"+
-			"ERROR: Input parameter 'sourceTxtBigFloatFieldFmtDto' is a nil pointer!\n",
+			"ERROR: Input parameter 'destinationTxtBigFloatFmtDto' is a nil pointer!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if sourceTxtBigFloatFmtDto == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'sourceTxtBigFloatFmtDto' is a nil pointer!\n",
 			ePrefix.String())
 
 		return err
@@ -1574,47 +1584,38 @@ func (txtBigFloatFieldFmtDtoNanobot *textBigFloatFieldFormatDtoNanobot) copy(
 	_,
 		err = txtBigFloatFieldFmtAtom.
 		testValidityOfTxtFieldFmtDtoBigFloat(
-			sourceTxtBigFloatFieldFmtDto,
+			sourceTxtBigFloatFmtDto,
 			ePrefix.XCpy(
-				"sourceTxtBigFloatFieldFmtDto"))
+				"sourceTxtBigFloatFmtDto"))
 
 	if err != nil {
 
 		return err
 	}
 
-	if destinationTxtBigFloatFieldFmtDto == nil {
-
-		err = fmt.Errorf("%v\n"+
-			"ERROR: Input parameter 'destinationTxtBigFloatFieldFmtDto' is a nil pointer!\n",
-			ePrefix.String())
-
-		return err
-	}
-
 	txtBigFloatFieldFmtAtom.empty(
-		destinationTxtBigFloatFieldFmtDto)
+		destinationTxtBigFloatFmtDto)
 
-	destinationTxtBigFloatFieldFmtDto.LeftMarginStr =
-		sourceTxtBigFloatFieldFmtDto.LeftMarginStr
+	destinationTxtBigFloatFmtDto.LeftMarginStr =
+		sourceTxtBigFloatFmtDto.LeftMarginStr
 
-	destinationTxtBigFloatFieldFmtDto.BigFloatNum.
-		Copy(&sourceTxtBigFloatFieldFmtDto.BigFloatNum)
+	destinationTxtBigFloatFmtDto.BigFloatNum.
+		Copy(&sourceTxtBigFloatFmtDto.BigFloatNum)
 
-	destinationTxtBigFloatFieldFmtDto.RoundingMode =
-		sourceTxtBigFloatFieldFmtDto.RoundingMode
+	destinationTxtBigFloatFmtDto.RoundingMode =
+		sourceTxtBigFloatFmtDto.RoundingMode
 
-	destinationTxtBigFloatFieldFmtDto.NumOfFractionalDigits =
-		sourceTxtBigFloatFieldFmtDto.NumOfFractionalDigits
+	destinationTxtBigFloatFmtDto.NumOfFractionalDigits =
+		sourceTxtBigFloatFmtDto.NumOfFractionalDigits
 
-	destinationTxtBigFloatFieldFmtDto.FieldLength =
-		sourceTxtBigFloatFieldFmtDto.FieldLength
+	destinationTxtBigFloatFmtDto.FieldLength =
+		sourceTxtBigFloatFmtDto.FieldLength
 
-	destinationTxtBigFloatFieldFmtDto.FieldJustify =
-		sourceTxtBigFloatFieldFmtDto.FieldJustify
+	destinationTxtBigFloatFmtDto.FieldJustify =
+		sourceTxtBigFloatFmtDto.FieldJustify
 
-	destinationTxtBigFloatFieldFmtDto.RightMarginStr =
-		sourceTxtBigFloatFieldFmtDto.RightMarginStr
+	destinationTxtBigFloatFmtDto.RightMarginStr =
+		sourceTxtBigFloatFmtDto.RightMarginStr
 
 	return err
 }
