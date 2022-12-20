@@ -975,6 +975,26 @@ func (txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64) GetFieldContentTextLabel
 				"<-txtFieldFmtDtoFloat64"))
 }
 
+// GetFieldFormatDtoType
+//
+// Returns a string containing the name of this type
+// ('TextFieldFormatDtoFloat64').
+//
+// This method is required in order to implement the
+// ITextFieldFormatDto interface.
+func (txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64) GetFieldFormatDtoType() string {
+
+	if txtFieldFmtDtoFloat64.lock == nil {
+		txtFieldFmtDtoFloat64.lock = new(sync.Mutex)
+	}
+
+	txtFieldFmtDtoFloat64.lock.Lock()
+
+	defer txtFieldFmtDtoFloat64.lock.Unlock()
+
+	return "TextFieldFormatDtoFloat64"
+}
+
 // textFieldFormatDtoFloat64Nanobot
 //
 // Provides helper methods for TextFieldFormatDtoFloat64.
