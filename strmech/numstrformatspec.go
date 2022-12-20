@@ -3838,8 +3838,13 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtComponents(
 	return newSignedNumFmtSpec, err
 }
 
-// NewNumFmtParams - Creates and returns a new instance of
-// NumStrFormatSpec.
+// NewNumFmtParams - Creates and returns a new instance
+// of NumStrFormatSpec.
+//
+// The leading and trailing number sign input parameters
+// offer the option of configuring currency symbols.
+// Currency symbols can be combined with leading and
+// trailing number sign parameters.
 //
 // ----------------------------------------------------------------
 //
@@ -4273,7 +4278,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtComponents(
 //
 // # Return Values
 //
-//	newSignedNumFmtSpec			NumStrFormatSpec
+//	newNumFmtSpec				NumStrFormatSpec
 //
 //		If this method completes successfully, this parameter
 //		will return a new, fully populated instance of
@@ -4306,7 +4311,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtParams(
 	numFieldLength int,
 	numFieldJustification TextJustify,
 	errorPrefix interface{}) (
-	newSignedNumFmtSpec NumStrFormatSpec,
+	newNumFmtSpec NumStrFormatSpec,
 	err error) {
 
 	if numStrFmtSpec.lock == nil {
@@ -4327,12 +4332,12 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtParams(
 		"")
 
 	if err != nil {
-		return newSignedNumFmtSpec, err
+		return newNumFmtSpec, err
 	}
 
 	err = new(numStrFmtSpecNanobot).
 		setNStrNumberFieldSpec(
-			&newSignedNumFmtSpec,
+			&newNumFmtSpec,
 			[]rune(decSeparatorChars),
 			[]rune(intSeparatorChars),
 			intGroupingType,
@@ -4348,9 +4353,9 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtParams(
 			numFieldLength,
 			numFieldJustification,
 			ePrefix.XCpy(
-				"newSignedNumFmtSpec<-"))
+				"newNumFmtSpec<-"))
 
-	return newSignedNumFmtSpec, err
+	return newNumFmtSpec, err
 }
 
 // NewNumFmtParamsRunes - Creates and returns a new instance of
