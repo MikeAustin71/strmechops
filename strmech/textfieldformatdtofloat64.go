@@ -1125,6 +1125,136 @@ func (txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64) GetLeftMarginStr() strin
 	return txtFieldFmtDtoFloat64.LeftMarginStr
 }
 
+// GetPureNumberStr
+//
+// Extracts the specifications necessary to format and
+// return a rounded floating point pure number string
+// generated from a conversion performed by type
+// 'NumberStrKernel'.
+//
+// The rounded floating point pure number string returned
+// by this method will:
+//
+//  1. Consist entirely of numeric digit characters.
+//
+//  2. Separate integer and fractional digits with a
+//     decimal point ('.').
+//
+//  3. Designate negative values with a leading or
+//     trailing minus sign ('-').
+//
+//  4. NOT include integer separators such as commas
+//     (',') to separate integer digits by thousands.
+//
+//     NOT THIS: 1,000,000
+//     Pure Number String: 1000000
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	Pure number strings Do NOT include integer separators
+//	(i.e. commas ',') to separate integer number strings
+//	into thousands.
+//
+//					  NOT THIS: 1,000,000
+//			Pure Number String: 1000000
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//
+//		If this method completes successfully, this
+//		string parameter will return a floating point
+//		pure number string representation of the
+//		float64 value passed by input paramter,
+//		'txtFieldFmtDtoFloat64'.
+//
+//		The returned floating point pure number string
+//		will:
+//
+//		1.	Consist entirely of numeric digit characters.
+//
+//		2.	Separate integer and fractional digits with a
+//			decimal point ('.').
+//
+//		3.	Designate negative values with a leading or
+//			trailing minus sign ('-').
+//
+//		4.	NOT include integer separators such as commas
+//			(',') to separate integer digits by thousands.
+//
+//						  NOT THIS: 1,000,000
+//				Pure Number String: 1000000
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64) GetPureNumberStr(
+	errorPrefix interface{}) (
+	string,
+	error) {
+
+	if txtFieldFmtDtoFloat64.lock == nil {
+		txtFieldFmtDtoFloat64.lock = new(sync.Mutex)
+	}
+
+	txtFieldFmtDtoFloat64.lock.Lock()
+
+	defer txtFieldFmtDtoFloat64.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextFieldFormatDtoFloat64."+
+			"GetPureNumberStr()",
+		"")
+
+	if err != nil {
+		return "", err
+	}
+
+	return new(textFieldFormatDtoFloat64Electron).
+		getFloat64RoundedPureNumStr(
+			txtFieldFmtDtoFloat64,
+			ePrefix.XCpy(
+				"<-txtFieldFmtDtoFloat64"))
+}
+
 // textFieldFormatDtoFloat64Nanobot
 //
 // Provides helper methods for TextFieldFormatDtoFloat64.
@@ -2048,18 +2178,20 @@ type textFieldFormatDtoFloat64Electron struct {
 // Receives a pointer to an instance of
 // TextFieldFormatDtoFloat64 and extracts the
 // specifications necessary to format and return a
-// floating point, pure number string.
+// rounded floating point pure number string
+// generated from a conversion performed by type
+// 'NumberStrKernel'.
 //
-// The floating point pure number string returned by
-// this method will:
+// The rounded floating point pure number string returned
+// by this method will:
 //
 //  1. Consist entirely of numeric digit characters.
 //
 //  2. Separate integer and fractional digits with a
 //     decimal point ('.').
 //
-//  3. Designate negative values with a leading minus
-//     sign ('-').
+//  3. Designate negative values with a leading or
+//     trailing minus sign ('-').
 //
 //  4. NOT include integer separators such as commas
 //     (',') to separate integer digits by thousands.
@@ -2094,7 +2226,6 @@ type textFieldFormatDtoFloat64Electron struct {
 //		If this instance of TextFieldFormatDtoFloat64
 //		contains invalid data elements, an error will
 //		be returned.
-//
 //
 //	errPrefDto					*ePref.ErrPrefixDto
 //
@@ -2131,8 +2262,8 @@ type textFieldFormatDtoFloat64Electron struct {
 //		2.	Separate integer and fractional digits with a
 //			decimal point ('.').
 //
-//		3.	Designate negative values with a leading minus
-//			sign ('-').
+//		3.	Designate negative values with a leading or
+//			trailing minus sign ('-').
 //
 //		4.	NOT include integer separators such as commas
 //			(',') to separate integer digits by thousands.
