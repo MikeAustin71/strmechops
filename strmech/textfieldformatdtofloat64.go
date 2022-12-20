@@ -718,6 +718,54 @@ func (txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64) CopyOut(
 	return newTxtFloat64FmtDto, err
 }
 
+// Empty
+//
+// Resets all internal member variables for the current
+// instance of TextFieldFormatDtoFloat64 to their zero
+// or uninitialized states. This method will leave the
+// current instance of TextFieldFormatDtoFloat64 in an
+// invalid state and unavailable for immediate reuse.
+//
+// This method is required in order to implement the
+// ITextFieldFormatDto interface.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+// This method will delete all member variable data
+// values in the current instance of
+// TextFieldFormatDtoFloat64. All member variable data
+// values will be reset to their zero or uninitialized
+// states.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	NONE
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	NONE
+func (txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64) Empty() {
+
+	if txtFieldFmtDtoFloat64.lock == nil {
+		txtFieldFmtDtoFloat64.lock = new(sync.Mutex)
+	}
+
+	txtFieldFmtDtoFloat64.lock.Lock()
+
+	new(textFieldFormatDtoFloat64Atom).empty(
+		txtFieldFmtDtoFloat64)
+
+	txtFieldFmtDtoFloat64.lock.Unlock()
+
+	txtFieldFmtDtoFloat64.lock = nil
+}
+
 // textFieldFormatDtoFloat64Nanobot
 //
 // Provides helper methods for TextFieldFormatDtoFloat64.
