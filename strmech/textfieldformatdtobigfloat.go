@@ -1644,7 +1644,7 @@ func (txtBigFloatFieldFmtDtoNanobot *textBigFloatFieldFormatDtoNanobot) copy(
 //
 //		If input parameter 'txtBigFloatFieldFmtDto' is
 //		found to contain invalid data values, an error
-//		will be returned
+//		will be returned.
 //
 //		None of the data values in this instance will be
 //		changed or modified.

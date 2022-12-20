@@ -4,6 +4,7 @@ import (
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
 	"strconv"
+	"strings"
 	"sync"
 )
 
@@ -626,6 +627,145 @@ func (txtFloat64FmtDtoNanobot *textFieldFormatDtoFloat64Nanobot) copy(
 		sourceTxtFloat64FmtDto.RightMarginStr
 
 	return err
+}
+
+// getFormattedTextFieldStr
+//
+// Converts an instance of TextFieldFormatDtoFloat64 to a
+// formatted text field string.
+//
+// This formatted text field string contains the left
+// margin, field contents and right margin.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	txtFloat64FmtDto			*TextFieldFormatDtoFloat64
+//
+//		A pointer to an instance of
+//		TextFieldFormatDtoFloat64.
+//
+//		The left and right margins as well as the member
+//		variable 'Float64Num' will be processed and
+//		converted to a formatted text field for use in
+//		screen displays, file output and printing.
+//
+//		If input parameter 'txtFloat64FmtDto' is found to
+//		contain invalid data values, an error will be
+//		returned.
+//
+//		None of the data values in this instance will be
+//		changed or modified.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//
+//		If this method completes successfully, the input
+//		parameter, 'txtFloat64FmtDto', will be converted
+//		to, and returned as, a formatted string	of text.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (txtFloat64FmtDtoNanobot *textFieldFormatDtoFloat64Nanobot) getFormattedTextFieldStr(
+	txtFloat64FmtDto *TextFieldFormatDtoFloat64,
+	errPrefDto *ePref.ErrPrefixDto) (
+	string,
+	error) {
+
+	if txtFloat64FmtDtoNanobot.lock == nil {
+		txtFloat64FmtDtoNanobot.lock = new(sync.Mutex)
+	}
+
+	txtFloat64FmtDtoNanobot.lock.Lock()
+
+	defer txtFloat64FmtDtoNanobot.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"textFieldFormatDtoFloat64Nanobot."+
+			"getFormattedTextFieldStr()",
+		"")
+
+	if err != nil {
+
+		return "", err
+
+	}
+
+	if txtFloat64FmtDto == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'txtFloat64FmtDto' is a nil pointer!\n",
+			ePrefix.String())
+
+		return "", err
+	}
+
+	strBuilder := new(strings.Builder)
+
+	if len(txtFloat64FmtDto.LeftMarginStr) > 0 {
+
+		strBuilder.WriteString(txtFloat64FmtDto.LeftMarginStr)
+
+	}
+
+	var textLabel TextFieldSpecLabel
+
+	textLabel,
+		err = new(textFieldFormatDtoFloat64Molecule).
+		getFieldContentTextLabel(
+			txtFloat64FmtDto,
+			ePrefix.XCpy(
+				"txtFloat64FmtDto"))
+
+	if err != nil {
+
+		return "", err
+	}
+
+	strBuilder.WriteString(textLabel.GetTextLabel())
+
+	if len(txtFloat64FmtDto.RightMarginStr) > 0 {
+
+		strBuilder.WriteString(txtFloat64FmtDto.RightMarginStr)
+
+	}
+
+	return strBuilder.String(), err
 }
 
 // textFieldFormatDtoFloat64Molecule
