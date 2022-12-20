@@ -814,8 +814,9 @@ func (textBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat) Equal(
 //		TextFieldSpecLabel.
 //
 //		This returned text label will ONLY contain the
-//		Text Field Contents ('BigFloatNum'). It will
-//		NOT contain the left and right margin strings.
+//		Text Field Contents numeric value
+//		('BigFloatNum'). It will NOT contain the left and
+//		right margin strings.
 //
 //	error
 //

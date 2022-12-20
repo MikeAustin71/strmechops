@@ -823,6 +823,158 @@ func (txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64) Equal(
 		incomingTxtFloat64FmtDto)
 }
 
+// GetFieldContentTextLabel
+//
+// Converts the current TextFieldFormatDtoFloat64
+// instance member variable, 'Float64Num', to an
+// instance of TextFieldSpecLabel.
+//
+// The returned TextFieldSpecLabel will only contain
+// the member variable 'Float64Num'. It will NOT
+// contain the left and right margins. The returned
+// TextFieldSpecLabel will format the 'Float64Num'
+// numeric value as a rounded pure number string
+// generated from a conversion performed by type
+// 'NumberStrKernel'.
+//
+// This method is required in order to implement the
+// ITextFieldFormatDto interface.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+// The returned TextFieldSpecLabel will only contain
+// the member variable 'Float64Num'. It will NOT
+// contain the left and right margins.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it	contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	TextFieldSpecLabel
+//
+//		If this method completes successfully, the Text
+//		Field Contents extracted from the current
+//		instance of TextFieldFormatDtoFloat64, will be
+//		returned as text label of type
+//		TextFieldSpecLabel.
+//
+//		This returned text label will ONLY contain the
+//		Text Field Contents numeric value ('Float64Num').
+//		It will NOT contain the left and right margin
+//		strings.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64) GetFieldContentTextLabel(
+	errorPrefix interface{}) (
+	TextFieldSpecLabel,
+	error) {
+
+	if txtFieldFmtDtoFloat64.lock == nil {
+		txtFieldFmtDtoFloat64.lock = new(sync.Mutex)
+	}
+
+	txtFieldFmtDtoFloat64.lock.Lock()
+
+	defer txtFieldFmtDtoFloat64.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextFieldFormatDtoFloat64."+
+			"GetFieldContentTextLabel()",
+		"")
+
+	if err != nil {
+		return TextFieldSpecLabel{}, err
+	}
+
+	return new(textFieldFormatDtoFloat64Molecule).
+		getFieldContentTextLabel(
+			txtFieldFmtDtoFloat64,
+			ePrefix.XCpy(
+				"<-txtFieldFmtDtoFloat64"))
+}
+
 // textFieldFormatDtoFloat64Nanobot
 //
 // Provides helper methods for TextFieldFormatDtoFloat64.
