@@ -716,9 +716,16 @@ func (textBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat) Equal(
 
 // GetFieldContentTextLabel
 //
-// Converts the current TextFieldFormatDtoBigFloat instance
-// member variable, 'BigFloatNum', to an instance of
-// TextFieldSpecLabel.
+// Converts the current TextFieldFormatDtoBigFloat
+// instance member variable, 'BigFloatNum', to an
+// instance of TextFieldSpecLabel.
+//
+// The returned TextFieldSpecLabel will only contain
+// the member variable 'BigFloatNum'. It will NOT
+// contain the left and right margins. In addition, the
+// returned TextFieldSpecLabel will format the
+// 'BigFloatNum' numeric value as a pure number string
+// generated from a native number to string conversion.
 //
 // This method is required in order to implement the
 // ITextFieldFormatDto interface.
@@ -1207,7 +1214,7 @@ func (textBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat) GetPureNumberStr(
 	}
 
 	return new(textFieldFormatDtoBigFloatElectron).
-		getBigFloatPureNumberStr(
+		getNativeBigFloatPureNumStr(
 			textBigFloatFieldFmtDto,
 			ePrefix.XCpy(
 				"textBigFloatFieldFmtDto"))
@@ -1768,7 +1775,10 @@ type textBigFloatFieldFormatDtoMolecule struct {
 //
 // The returned TextFieldSpecLabel will only contain
 // the member variable 'BigFloatNum'. It will NOT
-// contain the left and right margins.
+// contain the left and right margins. The returned
+// TextFieldSpecLabel will format the 'BigFloatNum'
+// numeric value as a pure number string generated
+// from a native number to string conversion.
 //
 // ----------------------------------------------------------------
 //
@@ -1885,7 +1895,7 @@ func (txtBigFloatFieldFmtDtoMolecule *textBigFloatFieldFormatDtoMolecule) getFie
 
 	pureNumStr,
 		err = new(textFieldFormatDtoBigFloatElectron).
-		getBigFloatPureNumberStr(
+		getNativeBigFloatPureNumStr(
 			txtBigFloatFieldFmtDto,
 			ePrefix.XCpy(
 				"txtBigFloatFieldFmtDto"))
@@ -2277,7 +2287,7 @@ type textFieldFormatDtoBigFloatElectron struct {
 	lock *sync.Mutex
 }
 
-// getBigFloatPureNumberStr
+// getNativeBigFloatPureNumStr
 //
 // Receives a pointer to an instance of
 // TextFieldFormatDtoBigFloat and extracts the
@@ -2386,7 +2396,7 @@ type textFieldFormatDtoBigFloatElectron struct {
 //		for input parameter 'errPrefDto' (error prefix)
 //		will be prefixed or attached at the beginning of
 //		the error message.
-func (txtFieldFmtDtoBigFloatElectron *textFieldFormatDtoBigFloatElectron) getBigFloatPureNumberStr(
+func (txtFieldFmtDtoBigFloatElectron *textFieldFormatDtoBigFloatElectron) getNativeBigFloatPureNumStr(
 	txtBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat,
 	errPrefDto *ePref.ErrPrefixDto) (
 	string,
@@ -2408,7 +2418,7 @@ func (txtFieldFmtDtoBigFloatElectron *textFieldFormatDtoBigFloatElectron) getBig
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
 		"textFieldFormatDtoBigFloatElectron."+
-			"getBigFloatPureNumberStr()",
+			"getNativeBigFloatPureNumStr()",
 		"")
 
 	if err != nil {
