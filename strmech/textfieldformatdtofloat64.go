@@ -428,6 +428,163 @@ type textFieldFormatDtoFloat64Molecule struct {
 	lock *sync.Mutex
 }
 
+// getFieldContentTextLabel
+//
+// Converts a TextFieldFormatDtoFloat64 instance member
+// variable, 'Float64Num', to an instance of
+// TextFieldSpecLabel.
+//
+// The TextFieldFormatDtoFloat64 instance is passed as
+// input parameter, 'txtFieldFmtDtoFloat64'.
+//
+// The returned TextFieldSpecLabel will only contain
+// the member variable 'Float64Num'. It will NOT
+// contain the left and right margins. The returned
+// TextFieldSpecLabel will format the 'Float64Num'
+// numeric value as a rounded pure number string
+// generated from a conversion performed by type
+// 'NumberStrKernel'.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	If input parameter 'txtFieldFmtDtoFloat64', an
+//	instance of TextFieldFormatDtoFloat64, is found to
+//	be invalid, an error will be returned.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	txtFieldFmtDtoFloat64		*TextFieldFormatDtoFloat64
+//
+//		A pointer to an instance of
+//		TextFieldFormatDtoFloat64.
+//
+//		The member variable 'Float64Num' will be
+//		converted to a text label of type
+//		TextFieldSpecLabel and returned to the calling
+//		function.
+//
+//		None of the data values in this instance will be
+//		changed or modified.
+//
+//		If this instance of TextFieldFormatDtoFloat64
+//		contains invalid data elements, an error will be
+//		returned.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	TextFieldSpecLabel
+//
+//		If this method completes successfully, the Text
+//		Field Contents extracted from the input
+//		parameter, 'txtFieldFmtDtoFloat64', will be
+//		returned as an instance of TextFieldSpecLabel.
+//
+//		This returned text label will ONLY contain the
+//		float64 numeric value ('Float64Num'). It will
+//		NOT contain the left or right margin strings.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (txtFloat64FmtDtoMolecule *textFieldFormatDtoFloat64Molecule) getFieldContentTextLabel(
+	txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64,
+	errPrefDto *ePref.ErrPrefixDto) (
+	TextFieldSpecLabel,
+	error) {
+
+	if txtFloat64FmtDtoMolecule.lock == nil {
+		txtFloat64FmtDtoMolecule.lock = new(sync.Mutex)
+	}
+
+	txtFloat64FmtDtoMolecule.lock.Lock()
+
+	defer txtFloat64FmtDtoMolecule.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	fieldContentsLabel := TextFieldSpecLabel{}
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"textFieldFormatDtoFloat64Molecule."+
+			"getFieldContentTextLabel()",
+		"")
+
+	if err != nil {
+
+		return fieldContentsLabel, err
+
+	}
+
+	if txtFieldFmtDtoFloat64 == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'txtFieldFmtDtoFloat64' is a nil pointer!\n",
+			ePrefix.String())
+
+		return fieldContentsLabel, err
+	}
+
+	var pureNumStr string
+
+	pureNumStr,
+		err = new(textFieldFormatDtoFloat64Electron).
+		getFloat64RoundedPureNumStr(
+			txtFieldFmtDtoFloat64,
+			ePrefix.XCpy(
+				"pureNumStr"+
+					"<-txtFieldFmtDtoFloat64"))
+
+	if err != nil {
+
+		return fieldContentsLabel, err
+
+	}
+
+	fieldContentsLabel,
+		err = TextFieldSpecLabel{}.NewTextLabel(
+		pureNumStr,
+		txtFieldFmtDtoFloat64.FieldLength,
+		txtFieldFmtDtoFloat64.FieldJustify,
+		ePrefix.XCpy(
+			"fieldContentsLabel<-txtBigFloatFieldFmtDto"))
+
+	return fieldContentsLabel, err
+}
+
 // textFieldFormatDtoFloat64Atom
 //
 // Provides helper methods for TextFieldFormatDtoFloat64.
