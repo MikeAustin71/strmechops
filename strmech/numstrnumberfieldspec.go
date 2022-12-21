@@ -30,6 +30,44 @@ type NumStrNumberFieldSpec struct {
 	//	If this parameter is submitted with a value less
 	//	than minus one (-1) or greater than 1-million
 	//	(1,000,000), an error will be returned.
+	//
+	//	Field Length Examples
+	//
+	//		Example-1
+	//          FieldContents String = "Hello World!"
+	//			FieldContents String Length = 12
+	//			fieldLength = 18
+	//			FieldJustify = TxtJustify.Center()
+	//			Text Field String =
+	//				"   Hello World!   "
+	//
+	//		Example-2
+	//          FieldContents = "Hello World!"
+	//			FieldContents String Length = 12
+	//			FieldLength = 18
+	//			FieldJustify = TxtJustify.Left()
+	//			Text Field String =
+	//				"Hello World!      "
+	//
+	//		Example-3
+	//          FieldContents = "Hello World!"
+	//			FieldContents String Length = 12
+	//			FieldLength = -1
+	//			fieldJustification = TxtJustify.Center()
+	//				// Justification Ignored. Field Length
+	//				// Equal -1
+	//			Text Field String =
+	//				"Hello World!"
+	//
+	//		Example-4
+	//          FieldContents = "Hello World!"
+	//			FieldContents String Length = 12
+	//			FieldLength = 2
+	//			FieldJustify = TxtJustify.Center()
+	//				// Ignored, because FieldLength Less
+	//				// Than FieldContents String Length.
+	//			Text Field String =
+	//				"Hello World!"
 
 	fieldJustification TextJustify
 	//	An enumeration which specifies the
@@ -61,6 +99,44 @@ type NumStrNumberFieldSpec struct {
 	//	          TxtJustify.Left()
 	//	          TxtJustify.Right()
 	//	          TxtJustify.Center()
+	//
+	//	Text Justification Examples
+	//
+	//		Example-1
+	//          FieldContents String = "Hello World!"
+	//			FieldContents String Length = 12
+	//			fieldLength = 18
+	//			FieldJustify = TxtJustify.Center()
+	//			Text Field String =
+	//				"   Hello World!   "
+	//
+	//		Example-2
+	//          FieldContents = "Hello World!"
+	//			FieldContents String Length = 12
+	//			FieldLength = 18
+	//			FieldJustify = TxtJustify.Left()
+	//			Text Field String =
+	//				"Hello World!      "
+	//
+	//		Example-3
+	//          FieldContents = "Hello World!"
+	//			FieldContents String Length = 12
+	//			FieldLength = -1
+	//			fieldJustification = TxtJustify.Center()
+	//				// Justification Ignored. Field Length
+	//				// Equal -1
+	//			Text Field String =
+	//				"Hello World!"
+	//
+	//		Example-4
+	//          FieldContents = "Hello World!"
+	//			FieldContents String Length = 12
+	//			FieldLength = 2
+	//			FieldJustify = TxtJustify.Center()
+	//				// Ignored, because FieldLength Less
+	//				// Than FieldContents String Length.
+	//			Text Field String =
+	//				"Hello World!"
 
 	lock *sync.Mutex
 }
@@ -412,6 +488,55 @@ func (nStrNumberFieldSpec *NumStrNumberFieldSpec) GetNumFieldJustification() Tex
 	defer nStrNumberFieldSpec.lock.Unlock()
 
 	return nStrNumberFieldSpec.fieldJustification
+}
+
+//	IsNOP
+//
+//	Stands for 'Is No Operation'. This method returns
+//	a boolean value signaling whether this instance of
+//	NumStrNumberFieldSpec is engaged, valid and
+//	operational with respect to number string formatting
+//	operations.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	NONE
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	bool
+//		If the 'IsNOP' flag is set to 'true', it signals
+//		that the current Number String Number Field
+//	 	Specification (NumStrNumberFieldSpec) is simply
+//	 	an empty placeholder and performs no active role
+//	 	in, and is completely ignored by, number string
+//	 	formatting operations.
+//
+//		If this method returns 'false', it signals that
+//		the current instance of NumStrNumberFieldSpec is
+//		fully populated, valid, functional and ready to
+//		perform number string formatting operations.
+func (nStrNumberFieldSpec *NumStrNumberFieldSpec) IsNOP() bool {
+
+	if nStrNumberFieldSpec.lock == nil {
+		nStrNumberFieldSpec.lock = new(sync.Mutex)
+	}
+
+	nStrNumberFieldSpec.lock.Lock()
+
+	defer nStrNumberFieldSpec.lock.Unlock()
+
+	if !nStrNumberFieldSpec.fieldJustification.XIsValid() ||
+		nStrNumberFieldSpec.fieldLength == -1 {
+
+		return true
+	}
+
+	return false
 }
 
 // NewFieldSpec - Creates and returns new instance of
