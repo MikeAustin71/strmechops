@@ -2327,6 +2327,15 @@ func (numStrKernelAtom *numberStrKernelAtom) formatNumStrComponents(
 		return numStr, err
 	}
 
+	err = roundingSpec.IsValidInstanceError(
+		ePrefix.XCpy(
+			"roundingSpec"))
+
+	if err != nil {
+
+		return numStr, err
+	}
+
 	var newNumStrKernel NumberStrKernel
 
 	err = new(numberStrKernelNanobot).copy(

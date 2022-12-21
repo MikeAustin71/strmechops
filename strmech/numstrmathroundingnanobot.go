@@ -114,23 +114,17 @@ func (nStrMathRoundNanobot *numStrMathRoundingNanobot) roundNumStrKernel(
 		return err
 	}
 
+	err = numStrRoundingSpec.IsValidInstanceError(
+		ePrefix.XCpy(
+			"numStrRoundingSpec"))
+
+	if err != nil {
+		return err
+	}
+
 	var roundingType NumberRoundingType
 
 	roundingType = numStrRoundingSpec.roundingType
-
-	if !roundingType.XIsValid() {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'numStrRoundingSpec Rounding Type' is invalid!\n"+
-			"'roundingType' string  value = '%v'\n"+
-			"'roundingType' integer value = '%v'\n",
-			ePrefix.String(),
-			roundingType.String(),
-			roundingType.XValueInt())
-
-		return err
-
-	}
 
 	if roundingType == NumRoundType.NoRounding() {
 		// Nothing to do
@@ -142,18 +136,6 @@ func (nStrMathRoundNanobot *numStrMathRoundingNanobot) roundNumStrKernel(
 
 	roundToFractionalDigits =
 		numStrRoundingSpec.roundToFractionalDigits
-
-	if roundToFractionalDigits < 0 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'numStrRoundingSpec RoundToFractionalDigits' is invalid!\n"+
-			"'roundToFractionalDigits' has a value which is less than zero (0).\n"+
-			"roundToFractionalDigits = '%v'\n",
-			ePrefix.String(),
-			roundToFractionalDigits)
-
-		return err
-	}
 
 	numOfFracDigits := len(numStrKernel.fractionalDigits.CharsArray)
 

@@ -4904,14 +4904,15 @@ func (numStrKernel *NumberStrKernel) FmtCurrencyNumStrUS(
 //	numeric value provided by the current instance
 //	of NumberStrKernel.
 //
-//	Options include customizing for currency
-//	symbols, integer separation, number sign
-//	management, radix point symbol, and
-//	floating point number rounding.
+//	Input parameter 'numStrFmtSpec' provides options
+//	for customizing for currency symbols, integer
+//	separation, number sign management, radix point
+//	symbol. Input parameter 'roundingSpec' includes
+//	specifications for floating point number rounding.
 //
 //	If required, users have the options of
 //	implementing the India or Chinese Numbering
-//	Systems.
+//	Systems for integer separation.
 //
 // ----------------------------------------------------------------
 //

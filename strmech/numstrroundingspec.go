@@ -634,6 +634,177 @@ func (nStrRoundingSpec *NumStrRoundingSpec) GetRoundToFractionalDigits() int {
 	return nStrRoundingSpec.roundToFractionalDigits
 }
 
+// IsValidInstance
+//
+// Performs a diagnostic review of the data values
+// encapsulated in the current NumStrRoundingSpec
+// instance to determine if they are valid.
+//
+// If all data elements evaluate as valid, this method
+// returns 'true'. If any data element is invalid, this
+// method returns 'false'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	--- NONE ---
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	isValid						bool
+//
+//		If all data elements encapsulated by the current
+//		instance of NumStrRoundingSpec are valid, this
+//		returned boolean value is set to 'true'. If any
+//		data values are invalid, this return parameter is
+//		set to 'false'.
+func (nStrRoundingSpec *NumStrRoundingSpec) IsValidInstance() (
+	isValid bool) {
+
+	if nStrRoundingSpec.lock == nil {
+		nStrRoundingSpec.lock = new(sync.Mutex)
+	}
+
+	nStrRoundingSpec.lock.Lock()
+
+	defer nStrRoundingSpec.lock.Unlock()
+
+	isValid,
+		_ = new(numStrRoundingSpecElectron).
+		testValidityOfNumStrRoundingSpec(
+			nStrRoundingSpec,
+			nil)
+
+	return isValid
+}
+
+// IsValidInstanceError
+//
+// Performs a diagnostic review of the data values
+// encapsulated in the current NumStrRoundingSpec
+// instance to determine if they are valid.
+//
+// If any data element evaluates as invalid, this method
+// will return an error.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it	contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If any of the internal member data variables
+//		contained in the current instance of
+//		NumStrRoundingSpec are found to be invalid, this
+//		method will return an error containing an
+//		appropriate error message.
+//
+//		If an error message is returned, the returned
+//		error message will incorporate the method chain
+//		and text passed by input parameter, 'errorPrefix'.
+//		The 'errorPrefix' text will be attached to the
+//		beginning of the error message.
+func (nStrRoundingSpec *NumStrRoundingSpec) IsValidInstanceError(
+	errorPrefix interface{}) error {
+
+	if nStrRoundingSpec.lock == nil {
+		nStrRoundingSpec.lock = new(sync.Mutex)
+	}
+
+	nStrRoundingSpec.lock.Lock()
+
+	defer nStrRoundingSpec.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumStrRoundingSpec."+
+			"IsValidInstanceError()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	_,
+		err = new(numStrRoundingSpecElectron).
+		testValidityOfNumStrRoundingSpec(
+			nStrRoundingSpec,
+			ePrefix.XCpy(
+				"nStrRoundingSpec"))
+
+	return err
+}
+
 // NewRoundingSpec - Creates and returns a new instance of
 // NumStrRoundingSpec.
 //
@@ -1785,4 +1956,157 @@ func (nStrRoundingSpecAtom *numStrRoundingSpecAtom) setRoundToFractionalDigits(
 	nStrRoundingSpec.roundToFractionalDigits = roundToFractionalDigits
 
 	return err
+}
+
+// numStrRoundingSpecElectron - This type provides
+// helper methods for NumStrRoundingSpec
+type numStrRoundingSpecElectron struct {
+	lock *sync.Mutex
+}
+
+//	testValidityOfNumStrRoundingSpec
+//
+//	Receives a pointer to an instance of
+//	NumStrRoundingSpec and performs a diagnostic analysis
+//	to determine if the data values contained in
+//	that instance are valid in all respects.
+//
+//	If the NumStrRoundingSpec input parameter
+//	'nStrRoundingSpec' is determined to be invalid, this
+//	method will return a boolean flag ('isValid') of
+//	'false'. In addition, an instance of type error
+//	('err') will be returned configured with an
+//	appropriate error message.
+//
+//	If the input parameter 'nStrRoundingSpec' is
+//	valid, this method will return a boolean flag
+//	('isValid') of 'true' and the returned error type
+//	('err') will be set to 'nil'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	nStrRoundingSpec			*NumStrRoundingSpec
+//
+//		A pointer to an instance of
+//		NumStrRoundingSpec.
+//
+//		The data values contained in this instance will
+//		be reviewed and analyzed to determine if they
+//		are valid in all respects.
+//
+//		None of the data values in this instance will be
+//		changed or modified.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	isValid						bool
+//
+//		If all data elements contained within input
+//		parameter 'nStrRoundingSpec' are judged to be
+//		valid, this returned boolean value will be set
+//		to 'true'. If any data values are invalid, this
+//		return parameter will be set to 'false'.
+//
+//	error
+//
+//		If this method completes successfully and all the
+//		data values contained in input parameter
+//		'nStrRoundingSpec' are judged to be valid,
+//		the returned error Type will be set equal to
+//		'nil'.
+//
+//		If the data values contained in input parameter
+//		'nStrRoundingSpec' are invalid, the returned
+//		'error' will be non-nil and configured with an
+//		appropriate error message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (nStrRoundingSpecElectron *numStrRoundingSpecElectron) testValidityOfNumStrRoundingSpec(
+	nStrRoundingSpec *NumStrRoundingSpec,
+	errPrefDto *ePref.ErrPrefixDto) (
+	isValid bool,
+	err error) {
+
+	if nStrRoundingSpecElectron.lock == nil {
+		nStrRoundingSpecElectron.lock = new(sync.Mutex)
+	}
+
+	nStrRoundingSpecElectron.lock.Lock()
+
+	defer nStrRoundingSpecElectron.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	isValid = false
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"numStrRoundingSpecElectron."+
+			"testValidityOfNumStrRoundingSpec()",
+		"")
+
+	if err != nil {
+		return isValid, err
+	}
+
+	if nStrRoundingSpec == nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'nStrRoundingSpec' is invalid!\n"+
+			"'nStrRoundingSpec' is a 'nil' pointer.\n",
+			ePrefix.String())
+
+		return isValid, err
+	}
+
+	if nStrRoundingSpec.roundToFractionalDigits < 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Member variable 'NumStrRoundingSpec.roundToFractionalDigits' is invalid!\n"+
+			"'roundToFractionalDigits' has a value less than zero (0).\n"+
+			"'roundToFractionalDigits' = '%v'.\n",
+			ePrefix.String(),
+			nStrRoundingSpec.roundToFractionalDigits)
+
+		return isValid, err
+	}
+
+	if !nStrRoundingSpec.roundingType.XIsValid() {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Member variable 'NumStrRoundingSpec.roundingType' is invalid!\n"+
+			"'roundingType' String Value  = %v.\n"+
+			"'roundingType' Integer Value = '%v'.\n",
+			ePrefix.String(),
+			nStrRoundingSpec.roundingType.String(),
+			nStrRoundingSpec.roundingType.XValueInt())
+
+		return isValid, err
+	}
+
+	isValid = true
+
+	return isValid, err
 }
