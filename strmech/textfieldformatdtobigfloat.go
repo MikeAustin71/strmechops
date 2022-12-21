@@ -1063,7 +1063,7 @@ func (textBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat) GetLeftMarginStr() st
 	return textBigFloatFieldFmtDto.LeftMarginStr
 }
 
-// GetPureNumberStr
+// FmtPureNumberStr
 //
 // Returns a pure number string representing the floating
 // point numeric value specified by the current instance
@@ -1186,7 +1186,7 @@ func (textBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat) GetLeftMarginStr() st
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (textBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat) GetPureNumberStr(
+func (textBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat) FmtPureNumberStr(
 	errorPrefix interface{}) (
 	string,
 	error) {
@@ -1206,8 +1206,8 @@ func (textBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat) GetPureNumberStr(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"TextFieldFormatDtoFiller."+
-			"GetPureNumberStr()",
+		"TextFieldFormatDtoBigFloat."+
+			"FmtPureNumberStr()",
 		"")
 
 	if err != nil {

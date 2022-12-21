@@ -1982,7 +1982,7 @@ func TestNumberStrKernel_FmtSignedPureNumberStr_000100(t *testing.T) {
 
 		t.Errorf("%v\n"+
 			"Test#2\n"+
-			"baseValueNStr.GetPureNumberStr()\n"+
+			"baseValueNStr.FmtPureNumberStr()\n"+
 			"Error: actualfmtNumberStr NOT EQUAL TO expectedNumberStr\n"+
 			" actualfmtNumberStr = '%v'\n"+
 			"expectedNumberStr   = '%v'\n",
@@ -2051,7 +2051,7 @@ func TestNumberStrKernel_FmtSignedPureNumberStr_000100(t *testing.T) {
 
 		t.Errorf("%v\n"+
 			"Test#2\n"+
-			"baseValueNStr.GetPureNumberStr()\n"+
+			"baseValueNStr.FmtPureNumberStr()\n"+
 			"Error: actualfmtNumberStr NOT EQUAL TO expectedNumberStr\n"+
 			" actualfmtNumberStr = '%v'\n"+
 			"expectedNumberStr   = '%v'\n",
