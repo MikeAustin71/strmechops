@@ -1630,6 +1630,130 @@ func (txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64) GetLeftMarginStr() strin
 	return txtFieldFmtDtoFloat64.LeftMarginStr
 }
 
+// GetNumberStrKernel
+//
+// Returns an instance of NumberStrKernel configured with
+// the float64 numeric value contained in the current
+// instance of TextFieldFormatDtoFloat64.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	NumberStrKernel
+//
+//		If this method completes successfully, the
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64) GetNumberStrKernel(
+	errorPrefix interface{}) (
+	NumberStrKernel,
+	error) {
+
+	if txtFieldFmtDtoFloat64.lock == nil {
+		txtFieldFmtDtoFloat64.lock = new(sync.Mutex)
+	}
+
+	txtFieldFmtDtoFloat64.lock.Lock()
+
+	defer txtFieldFmtDtoFloat64.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextFieldFormatDtoFloat64."+
+			"GetNumberStrKernel()",
+		"")
+
+	if err != nil {
+		return NumberStrKernel{}, err
+	}
+
+	return new(textFieldFormatDtoFloat64Electron).
+		getNumberStrKernel(
+			txtFieldFmtDtoFloat64,
+			ePrefix.XCpy(
+				"txtFieldFmtDtoFloat64"))
+}
+
 // GetRightMarginLength
 //
 // Returns the length of the Right Margin String as an
@@ -3145,4 +3269,125 @@ func (txtFieldFmtDtoFloat64Electron *textFieldFormatDtoFloat64Electron) getFloat
 		64)
 
 	return float64NumStr, err
+}
+
+// GetNumberStrKernel
+//
+// Returns an instance of NumberStrKernel configured with
+// the float64 numeric value contained in the current
+// instance of TextFieldFormatDtoFloat64.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	txtFieldFmtDtoFloat64		*TextFieldFormatDtoFloat64
+//
+//		A pointer to an instance of
+//		TextFieldFormatDtoFloat64.
+//
+//		The float64 numeric value contained in this
+//		instance of TextFieldFormatDtoFloat64 will
+//		be used to populate the returned instance
+//		of NumberStrKernel.
+//
+//		If this instance of TextFieldFormatDtoFloat64
+//		contains invalid data elements, an error will
+//		be returned.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	NumberStrKernel
+//
+//		If this method completes successfully, an
+//		instance of NumberStrKernel will be returned
+//		configured with the numeric value contained
+//		within the TextFieldFormatDtoFloat64 input
+//		parameter, 'txtFieldFmtDtoFloat64'.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (txtFieldFmtDtoFloat64Electron *textFieldFormatDtoFloat64Electron) getNumberStrKernel(
+	txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64,
+	errPrefDto *ePref.ErrPrefixDto) (
+	NumberStrKernel,
+	error) {
+
+	if txtFieldFmtDtoFloat64Electron.lock == nil {
+		txtFieldFmtDtoFloat64Electron.lock = new(sync.Mutex)
+	}
+
+	txtFieldFmtDtoFloat64Electron.lock.Lock()
+
+	defer txtFieldFmtDtoFloat64Electron.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	newNumberStrKernel := NumberStrKernel{}
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"textFieldFormatDtoFloat64Electron."+
+			"getNumberStrKernel()",
+		"")
+
+	if err != nil {
+
+		return newNumberStrKernel, err
+
+	}
+
+	if txtFieldFmtDtoFloat64 == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'txtFieldFmtDtoFloat64' is a nil pointer!\n",
+			ePrefix.String())
+
+		return newNumberStrKernel, err
+	}
+
+	_,
+		err = new(textFieldFormatDtoFloat64Atom).
+		testValidityOfTxtFieldFmtDtoFloat64(
+			txtFieldFmtDtoFloat64,
+			ePrefix.XCpy(
+				"txtFieldFmtDtoFloat64 Invalid"))
+
+	newNumberStrKernel,
+		err = new(NumberStrKernel).NewFromFloatValue(
+		txtFieldFmtDtoFloat64.Float64Num,
+		ePrefix.XCpy(
+			"txtFieldFmtDtoFloat64.Float64Num"))
+
+	return newNumberStrKernel, err
 }
