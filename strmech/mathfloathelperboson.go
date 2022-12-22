@@ -4,6 +4,7 @@ import (
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
 	"math/big"
+	"strconv"
 	"sync"
 )
 
@@ -11,7 +12,7 @@ type mathFloatHelperBoson struct {
 	lock *sync.Mutex
 }
 
-//	bigFloatFromPureNumStr
+//	bigFloatDtoFromPureNumStr
 //
 //	Receives a Pure Number String containing a numeric
 //	value which will be converted and returned as a
@@ -362,7 +363,7 @@ type mathFloatHelperBoson struct {
 //		for input parameter 'errPrefDto' (error prefix)
 //		will be prefixed or attached at the beginning of
 //		the error message.
-func (floatHelperBoson *mathFloatHelperBoson) bigFloatFromPureNumStr(
+func (floatHelperBoson *mathFloatHelperBoson) bigFloatDtoFromPureNumStr(
 	pureNumberStr string,
 	decSeparatorChars string,
 	leadingMinusSign bool,
@@ -391,7 +392,7 @@ func (floatHelperBoson *mathFloatHelperBoson) bigFloatFromPureNumStr(
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
 		"mathFloatHelperBoson."+
-			"bigFloatFromPureNumStr()",
+			"bigFloatDtoFromPureNumStr()",
 		"")
 
 	if err != nil {
@@ -461,4 +462,345 @@ func (floatHelperBoson *mathFloatHelperBoson) bigFloatFromPureNumStr(
 	}
 
 	return bFloatDto, err
+}
+
+//	pureNumStrToBigFloat
+//
+//	Receives a pure number string ('pureNumStr') and then
+//	converts and returns that string as a big.Float
+//	floating point numeric value.
+//
+//	The input parameter 'pureNumStr' must be formatted
+//	as a pure number string which is defined as follows:
+//
+//		1.	The pure number string must consist entirely
+//			of numeric digit characters (0-9), with
+//			following exceptions.
+//
+//		2.	For floating point values, the pure number
+//			string must separate integer and fractional
+//			digits with a decimal point ('.').
+//
+//		3.	The pure number string must designate
+//			negative values with a leading minus sign
+//			('-').
+//
+//		4.	The pure number string must NOT include integer
+//			separators such as commas (',') to separate
+//			integer digits by thousands.
+//
+//						  NOT THIS: 1,000,000
+//				Pure Number String: 1000000
+//
+//	If the input parameter 'pureNumStr' does NOT meet these
+//	criteria, an error will be returned.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	pureNumStr					string
+//
+//		This string contains the pure number string which
+//		will be parsed to produce and return a big.Float
+//		value.
+//
+//		The input parameter 'pureNumStr' must be formatted
+//		as a pure number string which is defined as follows:
+//
+//			1.	The pure number string must consist entirely
+//				of numeric digit characters (0-9), with
+//				following exceptions.
+//
+//			2.	For floating point values, the pure number
+//				string must separate integer and fractional
+//				digits with a decimal point ('.').
+//
+//			3.	The pure number string must designate
+//				negative values with a leading minus sign
+//				('-').
+//
+//			4.	The pure number string must NOT include integer
+//				separators such as commas (',') to separate
+//				integer digits by thousands.
+//
+//							  NOT THIS: 1,000,000
+//					Pure Number String: 1000000
+//
+//		If the input parameter 'pureNumStr' does NOT meet
+//		these criteria, an error will be returned.
+//
+//	roundingMode 				big.RoundingMode
+//
+//		Specifies the rounding algorithm which will be
+//		used internally to configure the returned
+//		big.Float value.
+//
+//		Each instance of big.Float is configured with a
+//		rounding mode. Input parameter 'roundingMode'
+//		controls this configuration for the calculation
+//		and the big.Float value returned by this method.
+//
+//		The constant values available for big.Float
+//		rounding mode are listed as follows:
+//
+//		big.ToNearestEven  		// == IEEE 754-2008 roundTiesToEven
+//		big.ToNearestAway       // == IEEE 754-2008 roundTiesToAway
+//		big.ToZero              // == IEEE 754-2008 roundTowardZero
+//		big.AwayFromZero        // no IEEE 754-2008 equivalent
+//		big.ToNegativeInf       // == IEEE 754-2008 roundTowardNegative
+//		big.ToPositiveInf       // == IEEE 754-2008 roundTowardPositive
+//
+//		If in doubt as this setting, 'big.AwayFromZero'
+//		is a common selection for rounding mode. The
+//		default applied by Golang is big.ToNearestEven
+//		because in has an integer value of zero.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	big.Float
+//
+//		If this method completes successfully, the pure
+//		number string passed as input value 'pureNumStr'
+//		will be converted and returned as a big.Float
+//		floating point value.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (floatHelperBoson *mathFloatHelperBoson) pureNumStrToBigFloat(
+	pureNumStr string,
+	roundingMode big.RoundingMode,
+	errPrefDto *ePref.ErrPrefixDto) (
+	big.Float,
+	error) {
+
+	if floatHelperBoson.lock == nil {
+		floatHelperBoson.lock = new(sync.Mutex)
+	}
+
+	floatHelperBoson.lock.Lock()
+
+	defer floatHelperBoson.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"mathFloatHelperBoson."+
+			"pureNumStrToBigFloat()",
+		"")
+
+	if err != nil {
+		return big.Float{}, err
+	}
+
+	var bigFloatNum *big.Float
+
+	var ok bool
+
+	_,
+		ok = bigFloatNum.
+		SetMode(roundingMode).
+		SetString(pureNumStr)
+
+	if !ok {
+		err = fmt.Errorf("%v\n"+
+			"Error:  bigFloatNum.SetString(pureNumStr)\n"+
+			"SetString() FAILED to generate a valid big.Float value.\n"+
+			"pureNumStr = '%v'\n"+
+			"roundingMode = '%v'\n",
+			ePrefix.String(),
+			pureNumStr,
+			bigFloatNum.Mode())
+
+		return big.Float{}, err
+	}
+
+	return *bigFloatNum, err
+}
+
+//	pureNumStrToFloat64
+//
+//	Receives a pure number string and converts that
+//	string to a float64 floating point value.
+//
+//	The input parameter 'pureNumStr' must be formatted
+//	as a pure number string which is defined as follows:
+//
+//		1.	The pure number string must consist entirely
+//			of numeric digit characters (0-9), with
+//			following exceptions.
+//
+//		2.	For floating point values, the pure number
+//			string must separate integer and fractional
+//			digits with a decimal point ('.').
+//
+//		3.	The pure number string must designate
+//			negative values with a leading minus sign
+//			('-').
+//
+//		4.	The pure number string must NOT include integer
+//			separators such as commas (',') to separate
+//			integer digits by thousands.
+//
+//						  NOT THIS: 1,000,000
+//				Pure Number String: 1000000
+//
+//	If the input parameter 'pureNumStr' does NOT meet these
+//	criteria, an error will be returned.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	pureNumStr					string
+//
+//		This string contains the pure number string which
+//		will be parsed to produce and return a float64
+//		floating point value.
+//
+//		The input parameter 'pureNumStr' must be formatted
+//		as a pure number string which is defined as follows:
+//
+//			1.	The pure number string must consist entirely
+//				of numeric digit characters (0-9), with
+//				following exceptions.
+//
+//			2.	For floating point values, the pure number
+//				string must separate integer and fractional
+//				digits with a decimal point ('.').
+//
+//			3.	The pure number string must designate
+//				negative values with a leading minus sign
+//				('-').
+//
+//			4.	The pure number string must NOT include integer
+//				separators such as commas (',') to separate
+//				integer digits by thousands.
+//
+//							  NOT THIS: 1,000,000
+//					Pure Number String: 1000000
+//
+//		If the input parameter 'pureNumStr' does NOT meet these
+//		criteria, an error will be returned.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	float64
+//
+//		If this method completes successfully, the pure
+//		number string passed as input value 'pureNumStr'
+//		will be converted and returned as a float64
+//		floating point value.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (floatHelperBoson *mathFloatHelperBoson) pureNumStrToFloat64(
+	pureNumStr string,
+	errPrefDto *ePref.ErrPrefixDto) (
+	float64,
+	error) {
+
+	if floatHelperBoson.lock == nil {
+		floatHelperBoson.lock = new(sync.Mutex)
+	}
+
+	floatHelperBoson.lock.Lock()
+
+	defer floatHelperBoson.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"mathFloatHelperBoson."+
+			"pureNumStrToFloat64()",
+		"")
+
+	if err != nil {
+		return 0.0, err
+	}
+
+	var err2 error
+	var float64Num float64
+
+	float64Num,
+		err2 = strconv.ParseFloat(
+		pureNumStr,
+		64)
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error returned by strconv.ParseFloat(pureNumStr)\n"+
+			"pureNumStr = '%v'\n"+
+			"Error = \n'%v'\n",
+			ePrefix.String(),
+			pureNumStr,
+			err2.Error())
+
+		return 0.0, err
+	}
+
+	return float64Num, err
 }

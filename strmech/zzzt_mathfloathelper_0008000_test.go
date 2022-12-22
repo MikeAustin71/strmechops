@@ -291,7 +291,7 @@ func TestMathFloatHelper_RaiseToFloatPositiveExponent_000100(t *testing.T) {
 	var err error
 
 	bFloatDto,
-		err = floatHelper.BigFloatFromPureNumStr(
+		err = floatHelper.PureNumStrToBigFloatDto(
 		baseStr,
 		".",
 		true,
@@ -445,7 +445,7 @@ func TestMathFloatHelper_RaiseToFloatPositiveExponent_000200(t *testing.T) {
 	for i := 0; i < lenBaseStrs; i++ {
 
 		bFloatDto,
-			err = floatHelper.BigFloatFromPureNumStr(
+			err = floatHelper.PureNumStrToBigFloatDto(
 			baseStrs[i],
 			".",
 			true,
@@ -527,7 +527,7 @@ func TestMathFloatHelper_RaiseToIntPositiveExponent_000100(t *testing.T) {
 	for i := 0; i < lenBaseStrs; i++ {
 
 		bFloatDto,
-			err = floatHelper.BigFloatFromPureNumStr(
+			err = floatHelper.PureNumStrToBigFloatDto(
 			baseStrs[i],
 			".",
 			true,

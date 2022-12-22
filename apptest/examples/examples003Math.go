@@ -71,7 +71,7 @@ func (MainTest03) RaiseToExponent03() {
 	var bFloatDto strmech.BigFloatDto
 
 	bFloatDto,
-		err = floatHelper.BigFloatFromPureNumStr(
+		err = floatHelper.PureNumStrToBigFloatDto(
 		baseStr,
 		".",
 		true,
@@ -218,7 +218,7 @@ func (MainTest03) RaiseToExponent02() {
 	var bFloatDto strmech.BigFloatDto
 
 	bFloatDto,
-		err = floatHelper.BigFloatFromPureNumStr(
+		err = floatHelper.PureNumStrToBigFloatDto(
 		baseStr,
 		".",
 		true,
@@ -465,7 +465,7 @@ func (MainTest03) RaiseToExponent01() {
 	var bFloatDto strmech.BigFloatDto
 
 	bFloatDto,
-		err = floatHelper.BigFloatFromPureNumStr(
+		err = floatHelper.PureNumStrToBigFloatDto(
 		baseStr,
 		".",
 		true,

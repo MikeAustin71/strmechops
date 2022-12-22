@@ -514,7 +514,7 @@ func (mathFloatHelpMech *mathFloatHelperMechanics) raiseToFloatExponentConfig(
 
 	bFloatDto,
 		err = new(mathFloatHelperBoson).
-		bigFloatFromPureNumStr(
+		bigFloatDtoFromPureNumStr(
 			baseStr,
 			".",
 			true,

@@ -2263,6 +2263,199 @@ func (txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64) IsValidInstanceError(
 	return err
 }
 
+//	SetPureNumStr
+//
+//	Receives a pure number string and configures the
+//	internal floating point numeric value contained in
+//	the current instance of TextFieldFormatDtoFloat64.
+//
+//	The parsed float64 value extracted from the pure
+//	number string will be stored in the member variable:
+//
+//			TextFieldFormatDtoFloat64.Float64Num()
+//
+//	The input parameter 'pureNumStr' must be formatted
+//	as a pure number string which is defined as follows:
+//
+//		1.	The pure number string must consist entirely
+//			of numeric digit characters (0-9), with
+//			following exceptions.
+//
+//		2.	For floating point values, the pure number
+//			string must separate integer and fractional
+//			digits with a decimal point ('.').
+//
+//		3.	The pure number string must designate
+//			negative values with a leading minus sign
+//			('-').
+//
+//		4.	The pure number string must NOT include integer
+//			separators such as commas (',') to separate
+//			integer digits by thousands.
+//
+//						  NOT THIS: 1,000,000
+//				Pure Number String: 1000000
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	pureNumStr					string
+//
+//		This string contains the pure number string which
+//		will be parsed to produce and store a float64
+//		value in the current instance of
+//		TextFieldFormatDtoFloat64.
+//
+//		The parsed float64 value will be stored in the
+//		member variable:
+//
+//			TextFieldFormatDtoFloat64.Float64Num()
+//
+//		The input parameter 'pureNumStr' must be formatted
+//		as a pure number string which is defined as follows:
+//
+//			1.	The pure number string must consist entirely
+//				of numeric digit characters (0-9), with
+//				following exceptions.
+//
+//			2.	For floating point values, the pure number
+//				string must separate integer and fractional
+//				digits with a decimal point ('.').
+//
+//			3.	The pure number string must designate
+//				negative values with a leading minus sign
+//				('-').
+//
+//			4.	The pure number string must NOT include integer
+//				separators such as commas (',') to separate
+//				integer digits by thousands.
+//
+//							  NOT THIS: 1,000,000
+//					Pure Number String: 1000000
+//
+//		If the input parameter 'pureNumStr' does NOT meet these
+//		criteria, an error will be returned.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (txtFieldFmtDtoFloat64 TextFieldFormatDtoFloat64) SetPureNumStr(
+	pureNumStr string,
+	errorPrefix interface{}) error {
+
+	if txtFieldFmtDtoFloat64.lock == nil {
+		txtFieldFmtDtoFloat64.lock = new(sync.Mutex)
+	}
+
+	txtFieldFmtDtoFloat64.lock.Lock()
+
+	defer txtFieldFmtDtoFloat64.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextFieldFormatDtoFloat64."+
+			"SetPureNumStr()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	var floatNum64 float64
+
+	floatNum64,
+		err = new(MathFloatHelper).PureNumStrToFloat64(
+		pureNumStr,
+		ePrefix.XCpy(
+			"pureNumStr"))
+
+	if err != nil {
+		return err
+	}
+
+	txtFieldFmtDtoFloat64.Float64Num = floatNum64
+
+	return err
+}
+
 //	String
 //
 //	Returns a number string comprised of the floating
