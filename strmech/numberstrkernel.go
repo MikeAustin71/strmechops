@@ -21247,53 +21247,28 @@ func (numStrKernel NumberStrKernel) String() string {
 		return errOut
 	}
 
-	var tempNumStrFormatSpec NumStrFormatSpec
+	numfieldSpec := NumStrNumberFieldSpec{
+		fieldLength:        -1,
+		fieldJustification: TxtJustify.Right(),
+	}
 
-	if new(numStrFmtSpecNanobot).isNOP(
-		&numStrKernel.numStrFormatSpec) {
-
-		// The current Number String Format
-		// Specification is invalid.
-		tempNumStrFormatSpec,
-			err = new(NumStrFormatSpec).NewSignedNumFmtUS(
-			NumStrNumberFieldSpec{
-				fieldLength:        -1,
-				fieldJustification: TxtJustify.Right(),
-			},
-			ePrefix.XCpy(
-				"tempNumStrFormatSpec<-"))
-
-		if err != nil {
-
-			errOut = fmt.Sprintf("%v\n"+
-				"Error Message:\n"+
-				"%v",
-				funcName,
-				err.Error())
-
-			return errOut
-		}
-
-	} else {
-
-		// The current Number String Format
-		// Specification is valid.
-
-		err = tempNumStrFormatSpec.CopyIn(
+	err = new(numStrFmtSpecMechanics).
+		setUSDefaultSignedNumStrFmtIfNeeded(
 			&numStrKernel.numStrFormatSpec,
-			ePrefix)
+			numfieldSpec,
+			ePrefix.XCpy(
+				"numStrKernel.numStrFormatSpec"+
+					"<-numfieldSpec"))
 
-		if err != nil {
+	if err != nil {
 
-			errOut = fmt.Sprintf("%v\n"+
-				"Error Message:\n"+
-				"%v",
-				funcName,
-				err.Error())
+		errOut = fmt.Sprintf("%v\n"+
+			"Error Message:\n"+
+			"%v",
+			funcName,
+			err.Error())
 
-			return errOut
-		}
-
+		return errOut
 	}
 
 	var roundingSpec NumStrRoundingSpec
@@ -21310,7 +21285,7 @@ func (numStrKernel NumberStrKernel) String() string {
 	numStr,
 		err = new(numberStrKernelMolecule).formatNumStr(
 		&numStrKernel,
-		tempNumStrFormatSpec,
+		numStrKernel.numStrFormatSpec,
 		roundingSpec,
 		ePrefix.XCpy("numStrKernel"))
 
