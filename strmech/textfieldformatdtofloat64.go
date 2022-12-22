@@ -297,6 +297,71 @@ type TextFieldFormatDtoFloat64 struct {
 	// available fractional digits to the right of the
 	// decimal point will be displayed
 
+	DefaultNumStrFmt NumStrFormatSpec
+	// The default Number String Format Specification
+	// applied by this instance of
+	// TextFieldFormatDtoFloat64.
+	//
+	// The member variables contained in this structure
+	// provide the detail specifications required to
+	// support number string multinational and
+	// multicultural formatting requirements.
+	//
+	// If this 'DefaultNumStrFmt' is invalid or
+	// uninitialized, it will be set to the standard
+	// US (United States) Signed Number String Format
+	// Specification.
+	//
+	//		type NumStrFormatSpec struct {
+	//
+	//			decSeparator			DecimalSeparatorSpec
+	//
+	//				Contains the radix point or decimal
+	//				separator character(s) which will
+	//				separate integer and fractional
+	//				numeric digits in a floating point
+	//				number.
+	//
+	//			intSeparatorSpec 		IntegerSeparatorSpec
+	//
+	//				Integer Separator Specification. This
+	//				parameter specifies the type of integer
+	//				specifies the type of integer grouping and
+	//				integer separator characters which will be
+	//				applied to the number string formatting
+	//				operations.
+	//
+	//			positiveNumberSign		NumStrNumberSymbolSpec
+	//
+	//				Positive number signs are commonly implied
+	//				and not specified. However, the user as the
+	//				option to specify a positive number sign
+	//				character or characters for positive numeric
+	//				values using a Number String Positive Number
+	//				Sign Specification.
+	//
+	//				This specification can also be used to
+	//				configure currency symbols.
+	//
+	//			negativeNumberSign		NumStrNumberSymbolSpec
+	//
+	//				The Number String Negative Number Sign
+	//				Specification is used to configure negative
+	//				number sign symbols for negative numeric values
+	//				formatted and displayed in number stings.
+	//
+	//				This specification can also be used to
+	//				configured currency symbols.
+	//
+	//			numberFieldSpec			NumStrNumberFieldSpec
+	//
+	//				This Number String Number Field Specification
+	//				contains the field length and text
+	//				justification parameter necessary to display
+	//				a numeric value within a text number field
+	//				for display as a number string.
+	//		}
+
 	FieldLength int
 	//	The length of the text field in which the
 	//	'Float64Num' string will be displayed. If
@@ -1180,7 +1245,7 @@ func (txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64) FmtNativeNumberStr(
 //
 //	Returns a formatted number string using the
 //	numeric value provided by the current instance
-//	of NumberStrKernel.
+//	of TextFieldFormatDtoFloat64.
 //
 //	Input parameter 'numStrFmtSpec' provides options
 //	for customizing for currency symbols, integer
@@ -1204,6 +1269,20 @@ func (txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64) FmtNativeNumberStr(
 //
 //	If either of these rounding specifications are
 //	invalid, an error will be returned.
+//
+//	The Number String Formatting Specifications supplied
+//	by input parameter 'numStrFmtSpec' include field
+//	length and field justification specifications. These
+//	values will override those configured in the current
+//	instance of TextFieldFormatDtoFloat64. This means that
+//	the following member variables will be ignored:
+//
+//		TextFieldFormatDtoFloat64.FieldLength
+//						AND
+//		TextFieldFormatDtoFloat64.FieldJustify
+//
+//	Be sure to configure input parameter 'numStrFmtSpec'
+//	accordingly.
 //
 // ----------------------------------------------------------------
 //
@@ -1371,91 +1450,20 @@ func (txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64) FmtNumStr(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"TextFieldFormatDtoFloat64."+
-			"FmtNativeNumberStr()",
+			"FmtNumStr()",
 		"")
 
 	if err != nil {
 		return numStr, err
 	}
 
-	err2 := numStrFmtSpec.IsValidInstanceError(
-		ePrefix.XCpy(
-			"numStrFmtSpec"))
-
-	if err2 != nil {
-
-		err = fmt.Errorf("%v\n"+
-			"ERROR: Input parameter 'numStrFmtSpec' is improperly\n"+
-			"configured and Invalid!\n"+
-			"Error=\n%v\n",
-			ePrefix.String(),
-			err2.Error())
-
-		return numStr, err
-	}
-
-	_,
-		err2 = new(textFieldFormatDtoFloat64Atom).
-		testValidityOfTxtFieldFmtDtoFloat64(
-			txtFieldFmtDtoFloat64,
-			ePrefix.XCpy(
-				"txtFieldFmtDtoFloat64"))
-
-	if err2 != nil {
-
-		err = fmt.Errorf("%v\n"+
-			"ERROR: The current instance of TextFieldFormatDtoFloat64\n"+
-			"is improperly configured and Invalid!\n"+
-			"Error=\n%v\n",
-			ePrefix.String(),
-			err2.Error())
-
-		return numStr, err
-	}
-
-	var roundingSpec NumStrRoundingSpec
-
-	roundingSpec.roundToFractionalDigits =
-		txtFieldFmtDtoFloat64.NumOfFractionalDigits
-
-	roundingSpec.roundingType =
-		txtFieldFmtDtoFloat64.RoundingType
-
-	err2 = roundingSpec.IsValidInstanceError(
-		ePrefix.XCpy(
-			"numStrFmtSpec"))
-
-	if err2 != nil {
-
-		err = fmt.Errorf("%v\n"+
-			"ERROR: TextFieldFormatDtoFloat64 Rounding Specifications\n"+
-			"are improperly configured and Invalid!\n"+
-			"Error:\n%v\n",
-			ePrefix.String(),
-			err2.Error())
-
-		return numStr, err
-	}
-
-	var numStrKernel NumberStrKernel
-
-	numStrKernel,
-		err = new(textFieldFormatDtoFloat64Electron).
-		getNumberStrKernel(
-			txtFieldFmtDtoFloat64,
-			ePrefix.XCpy(
-				"txtFieldFmtDtoFloat64"))
-
-	if err != nil {
-		return numStr, err
-	}
-
 	numStr,
-		err = numStrKernel.FmtNumStr(
-		numStrFmtSpec,
-		roundingSpec,
-		ePrefix.XCpy(
-			"numStrKernel"))
+		err = new(textFieldFormatDtoFloat64Molecule).
+		fmtNumStrWithFormatSpec(
+			txtFieldFmtDtoFloat64,
+			numStrFmtSpec,
+			ePrefix.XCpy(
+				"txtFieldFmtDtoFloat64<-numStrFmtSpec"))
 
 	return numStr, err
 }
@@ -2255,6 +2263,88 @@ func (txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64) IsValidInstanceError(
 	return err
 }
 
+//	String
+//
+//	Returns a number string comprised of the floating
+//	point numeric value contained in the current
+//	instance of TextFieldFormatDtoFloat64.
+//
+//	The returned number string will be formatted
+//	using default Number String Formatting
+//	Specification contained in the current instance
+//	of TextFieldFormatDtoFloat64.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	NONE
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//
+//		If this method completes successfully, a
+//		formatted Number String will be returned. If
+//		errors are encountered, this string will contain
+//		an appropriate error message.
+func (txtFieldFmtDtoFloat64 TextFieldFormatDtoFloat64) String() string {
+
+	if txtFieldFmtDtoFloat64.lock == nil {
+		txtFieldFmtDtoFloat64.lock = new(sync.Mutex)
+	}
+
+	txtFieldFmtDtoFloat64.lock.Lock()
+
+	defer txtFieldFmtDtoFloat64.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+	var errOut string
+
+	funcName := "TextFieldFormatDtoFloat64.String()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		nil,
+		funcName,
+		"")
+
+	if err != nil {
+		errOut = fmt.Sprintf("%v\n"+
+			"Error Message:\n"+
+			"%v",
+			funcName,
+			err.Error())
+
+		return errOut
+	}
+
+	var numStr string
+
+	numStr,
+		err = new(textFieldFormatDtoFloat64Nanobot).
+		fmtDefaultNumStr(
+			&txtFieldFmtDtoFloat64,
+			ePrefix.XCpy(
+				"txtFieldFmtDtoFloat64"))
+
+	if err != nil {
+
+		errOut = fmt.Sprintf("%v\n"+
+			"Error Message:\n"+
+			"%v",
+			funcName,
+			err.Error())
+
+		return errOut
+	}
+
+	return numStr
+}
+
 // textFieldFormatDtoFloat64Nanobot
 //
 // Provides helper methods for TextFieldFormatDtoFloat64.
@@ -2453,6 +2543,16 @@ func (txtFloat64FmtDtoNanobot *textFieldFormatDtoFloat64Nanobot) copy(
 	destinationTxtFloat64FmtDto.NumOfFractionalDigits =
 		sourceTxtFloat64FmtDto.NumOfFractionalDigits
 
+	err = destinationTxtFloat64FmtDto.DefaultNumStrFmt.CopyIn(
+		&sourceTxtFloat64FmtDto.DefaultNumStrFmt,
+		ePrefix.XCpy(
+			"destinationTxtFloat64FmtDto.DefaultNumStrFmt<-"+
+				"sourceTxtFloat64FmtDto"))
+
+	if err != nil {
+		return err
+	}
+
 	destinationTxtFloat64FmtDto.FieldJustify =
 		sourceTxtFloat64FmtDto.FieldJustify
 
@@ -2460,6 +2560,168 @@ func (txtFloat64FmtDtoNanobot *textFieldFormatDtoFloat64Nanobot) copy(
 		sourceTxtFloat64FmtDto.RightMarginStr
 
 	return err
+}
+
+// fmtDefaultNumStr
+//
+//	Receives a pointer to an instance of
+//	TextFieldFormatDtoFloat64 ('txtFloat64FmtDto').
+//
+//	Using the default Number String Formatting
+//	Specification contained in this instance, this method
+//	will configure and return a fully formatted number
+//	string.
+//
+//	If the default Number String Formatting Specification
+//	contained in input parameter 'txtFloat64FmtDto' is
+//	invalid, it will be defaulted and automatically reset
+//	to the US (United States) Signed Number String
+//	Formatting Specification.
+//
+//	Note that Field Length and Field Justification
+//	specifications will be taken from the internal
+//	'txtFloat64FmtDto' member variables:
+//
+//		txtFloat64FmtDto.FieldLength
+//		txtFloat64FmtDto.FieldJustify
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	txtFieldFmtDtoFloat64		*TextFieldFormatDtoFloat64
+//
+//		A pointer to an instance of
+//		TextFieldFormatDtoFloat64.
+//
+//		The numeric value extracted from this instance
+//		'Float64Num' will supply floating point value
+//		included in the returned number string.
+//
+//		The member variable 'DefaultNumStrFmt' will be
+//		used to generate formatted number string. If
+//		'DefaultNumStrFmt' is invalid it will be
+//		defaulted and automatically reset to the US
+//		(United States) Signed Number String Formatting
+//		Specification.
+//
+//		None of the data values in this instance will be
+//		changed or modified.
+//
+//		If this instance of TextFieldFormatDtoFloat64
+//		contains invalid data elements, an error will be
+//		returned.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//
+//		If this method completes successfully, a formatted
+//		Number String will be returned.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (txtFloat64FmtDtoNanobot *textFieldFormatDtoFloat64Nanobot) fmtDefaultNumStr(
+	txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64,
+	errPrefDto *ePref.ErrPrefixDto) (
+	string,
+	error) {
+
+	if txtFloat64FmtDtoNanobot.lock == nil {
+		txtFloat64FmtDtoNanobot.lock = new(sync.Mutex)
+	}
+
+	txtFloat64FmtDtoNanobot.lock.Lock()
+
+	defer txtFloat64FmtDtoNanobot.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"textFieldFormatDtoFloat64Nanobot."+
+			"fmtDefaultNumStr()",
+		"")
+
+	if err != nil {
+
+		return "", err
+
+	}
+
+	if txtFieldFmtDtoFloat64 == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'txtFieldFmtDtoFloat64' is a nil pointer!\n",
+			ePrefix.String())
+
+		return "", err
+	}
+
+	_,
+		err = new(textFieldFormatDtoFloat64Atom).
+		testValidityOfTxtFieldFmtDtoFloat64(
+			txtFieldFmtDtoFloat64,
+			ePrefix.XCpy(
+				"txtFieldFmtDtoFloat64"))
+
+	if err != nil {
+
+		return "", err
+
+	}
+
+	var numStrFmtSpec NumStrFormatSpec
+
+	numStrFmtSpec,
+		err = txtFieldFmtDtoFloat64.DefaultNumStrFmt.
+		CopyOut(
+			ePrefix.XCpy(
+				"numStrFmtSpec<-" +
+					"txtFieldFmtDtoFloat64.DefaultNumStrFmt"))
+
+	if err != nil {
+
+		return "", err
+
+	}
+
+	return new(textFieldFormatDtoFloat64Molecule).
+		fmtNumStrWithFormatSpec(
+			txtFieldFmtDtoFloat64,
+			numStrFmtSpec,
+			ePrefix.XCpy(
+				"txtFieldFmtDtoFloat64.DefaultNumStrFmt"))
 }
 
 // getFormattedTextFieldStr
@@ -2765,6 +3027,268 @@ func (txtFloat64FmtDtoMolecule *textFieldFormatDtoFloat64Molecule) getFieldConte
 	return fieldContentsLabel, err
 }
 
+// fmtNumStrWithFormatSpec
+//
+//	Receives a pointer to an instance of
+//	TextFieldFormatDtoFloat64.
+//
+//	The numeric value contained in this instance is
+//	converted to a number string using the specifications
+//	contained in input parameter 'numStrFmtSpec', an
+//	instance  of 'NumStrFormatSpec'.
+//
+//	Input parameter 'numStrFmtSpec' provides options
+//	for customizing for currency symbols, integer
+//	separation, number sign management, radix point
+//	symbol.
+//
+//	If required, users also have the option of
+//	implementing the India or Chinese Numbering Systems
+//	for integer separation.
+//
+//	The numeric value used to generate the returned
+//	NumberStrKernel will be taken from the
+//	TextFieldFormatDtoFloat64 member variable,
+//	'Float64Num'. This floating point numeric value will
+//	be rounded according to the specifications contained
+//	in member variables:
+//
+//		TextFieldFormatDtoFloat64.RoundingType
+//						AND
+//		TextFieldFormatDtoFloat64.NumOfFractionalDigits
+//
+//	If either of these rounding specifications are
+//	invalid, an error will be returned.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	txtFieldFmtDtoFloat64		*TextFieldFormatDtoFloat64
+//
+//		A pointer to an instance of
+//		TextFieldFormatDtoFloat64.
+//
+//		The floating point numeric value contained in
+//		this instance will be converted to a number
+//		string using the Number String Formatting
+//		Specifications supplied by input paramter
+//		'numStrFmtSpec'.
+//
+//	numStrFmtSpec				NumStrFormatSpec
+//
+//		This structure includes all parameters
+//		necessary for formatting a number string.
+//		These customization options provide maximum
+//		granularity in controlling the formatting
+//		of the returned Number String.
+//
+//		type NumStrFormatSpec struct {
+//
+//			decSeparator			DecimalSeparatorSpec
+//
+//				Contains the radix point or decimal
+//				separator character(s) which will
+//				separate integer and fractional
+//				numeric digits in a floating point
+//				number.
+//
+//			intSeparatorSpec 		IntegerSeparatorSpec
+//
+//				Integer Separator Specification. This
+//				parameter specifies the type of integer
+//				specifies the type of integer grouping and
+//				integer separator characters which will be
+//				applied to the number string formatting
+//				operations.
+//
+//			positiveNumberSign		NumStrNumberSymbolSpec
+//
+//				Positive number signs are commonly implied
+//				and not specified. However, the user as the
+//				option to specify a positive number sign
+//				character or characters for positive numeric
+//				values using a Number String Positive Number
+//				Sign Specification.
+//
+//				This specification can also be used to
+//				configure currency symbols.
+//
+//			negativeNumberSign		NumStrNumberSymbolSpec
+//
+//				The Number String Negative Number Sign
+//				Specification is used to configure negative
+//				number sign symbols for negative numeric values
+//				formatted and displayed in number stings.
+//
+//				This specification can also be used to
+//				configured currency symbols.
+//
+//			numberFieldSpec			NumStrNumberFieldSpec
+//
+//				This Number String Number Field Specification
+//				contains the field length and text
+//				justification parameter necessary to display
+//				a numeric value within a text number field
+//				for display as a number string.
+//		}
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//
+//		If this method completes successfully, a formatted
+//		Number String will be returned.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (txtFloat64FmtDtoMolecule *textFieldFormatDtoFloat64Molecule) fmtNumStrWithFormatSpec(
+	txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64,
+	numStrFmtSpec NumStrFormatSpec,
+	errPrefDto *ePref.ErrPrefixDto) (
+	string,
+	error) {
+
+	if txtFloat64FmtDtoMolecule.lock == nil {
+		txtFloat64FmtDtoMolecule.lock = new(sync.Mutex)
+	}
+
+	txtFloat64FmtDtoMolecule.lock.Lock()
+
+	defer txtFloat64FmtDtoMolecule.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	var numStr string
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"textFieldFormatDtoFloat64Molecule."+
+			"fmtNumStrWithFormatSpec()",
+		"")
+
+	if err != nil {
+
+		return numStr, err
+
+	}
+
+	if txtFieldFmtDtoFloat64 == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'txtFieldFmtDtoFloat64' is a nil pointer!\n",
+			ePrefix.String())
+
+		return numStr, err
+	}
+
+	err = numStrFmtSpec.IsValidInstanceError(
+		ePrefix.XCpy(
+			"Input parameter numStrFmtSpec is invalid."))
+
+	if err != nil {
+
+		return numStr, err
+
+	}
+
+	var err2 error
+	_,
+		err2 = new(textFieldFormatDtoFloat64Atom).
+		testValidityOfTxtFieldFmtDtoFloat64(
+			txtFieldFmtDtoFloat64,
+			ePrefix.XCpy(
+				"txtFieldFmtDtoFloat64"))
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: The current instance of TextFieldFormatDtoFloat64\n"+
+			"is improperly configured and Invalid!\n"+
+			"Error=\n%v\n",
+			ePrefix.String(),
+			err2.Error())
+
+		return numStr, err
+	}
+
+	var roundingSpec NumStrRoundingSpec
+
+	roundingSpec.roundToFractionalDigits =
+		txtFieldFmtDtoFloat64.NumOfFractionalDigits
+
+	roundingSpec.roundingType =
+		txtFieldFmtDtoFloat64.RoundingType
+
+	err2 = roundingSpec.IsValidInstanceError(
+		ePrefix.XCpy(
+			"numStrFmtSpec"))
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: TextFieldFormatDtoFloat64 Rounding Specifications\n"+
+			"are improperly configured and Invalid!\n"+
+			"Error:\n%v\n",
+			ePrefix.String(),
+			err2.Error())
+
+		return numStr, err
+	}
+
+	var numStrKernel NumberStrKernel
+
+	numStrKernel,
+		err = new(textFieldFormatDtoFloat64Electron).
+		getNumberStrKernel(
+			txtFieldFmtDtoFloat64,
+			ePrefix.XCpy(
+				"txtFieldFmtDtoFloat64"))
+
+	if err != nil {
+		return numStr, err
+	}
+
+	numStr,
+		err = numStrKernel.FmtNumStr(
+		numStrFmtSpec,
+		roundingSpec,
+		ePrefix.XCpy(
+			"numStrKernel"))
+
+	return numStr, err
+}
+
 // textFieldFormatDtoFloat64Atom
 //
 // Provides helper methods for TextFieldFormatDtoFloat64.
@@ -2831,6 +3355,8 @@ func (txtFieldFmtDtoFloat64Atom *textFieldFormatDtoFloat64Atom) empty(
 		NumRoundType.None()
 
 	txtFieldFmtDtoFloat64.NumOfFractionalDigits = 0
+
+	txtFieldFmtDtoFloat64.DefaultNumStrFmt.Empty()
 
 	txtFieldFmtDtoFloat64.FieldLength = 0
 
@@ -2926,6 +3452,12 @@ func (txtFieldFmtDtoFloat64Atom *textFieldFormatDtoFloat64Atom) equal(
 		return false
 	}
 
+	if !txtFloat64FieldFmtDtoOne.DefaultNumStrFmt.Equal(
+		&txtFloat64FieldFmtDtoTwo.DefaultNumStrFmt) {
+
+		return false
+	}
+
 	if txtFloat64FieldFmtDtoOne.LeadingMinusSign !=
 		txtFloat64FieldFmtDtoTwo.LeadingMinusSign {
 
@@ -3014,8 +3546,13 @@ func (txtFieldFmtDtoFloat64Atom *textFieldFormatDtoFloat64Atom) equal(
 //		be reviewed and analyzed to determine if they
 //		are valid in all respects.
 //
-//		None of the data values in this instance will be
-//		changed or modified.
+//		If txtFieldFmtDtoFloat64.DefaultNumStrFmt is
+//		invalid, it will be reset to the standard US
+//		(United States) Signed Number String Formatting
+//		Specification.
+//
+//		All other data values in this instance will
+//		remain unchanged.
 //
 //	errPrefDto					*ePref.ErrPrefixDto
 //
@@ -3135,6 +3672,27 @@ func (txtFieldFmtDtoFloat64Atom *textFieldFormatDtoFloat64Atom) testValidityOfTx
 			txtFieldFmtDtoFloat64.NumOfFractionalDigits)
 
 		return isValid, err
+	}
+
+	var numberFieldSpec NumStrNumberFieldSpec
+
+	numberFieldSpec.fieldLength =
+		txtFieldFmtDtoFloat64.FieldLength
+
+	numberFieldSpec.fieldJustification =
+		txtFieldFmtDtoFloat64.FieldJustify
+
+	err = new(numStrFmtSpecMechanics).
+		setUSDefaultSignedNumStrFmtIfNeeded(
+			&txtFieldFmtDtoFloat64.DefaultNumStrFmt,
+			numberFieldSpec,
+			ePrefix.XCpy(
+				"txtFieldFmtDtoFloat64.DefaultNumStrFmt"))
+
+	if err != nil {
+
+		return isValid, err
+
 	}
 
 	if !txtFieldFmtDtoFloat64.RoundingType.XIsValid() {

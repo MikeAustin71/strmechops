@@ -34,40 +34,40 @@ type NumStrNumberFieldSpec struct {
 	//	Field Length Examples
 	//
 	//		Example-1
-	//          FieldContents String = "Hello World!"
-	//			FieldContents String Length = 12
+	//	        Number String = "5672.1234567"
+	//			Number String Length = 12
 	//			fieldLength = 18
-	//			FieldJustify = TxtJustify.Center()
+	//			fieldJustification = TxtJustify.Center()
 	//			Text Field String =
-	//				"   Hello World!   "
+	//				"   5672.1234567   "
 	//
 	//		Example-2
-	//          FieldContents = "Hello World!"
-	//			FieldContents String Length = 12
-	//			FieldLength = 18
-	//			FieldJustify = TxtJustify.Left()
+	//	        Number String = "5672.1234567"
+	//			Number String Length = 12
+	//			fieldLength = 18
+	//			fieldJustification = TxtJustify.Center()
 	//			Text Field String =
-	//				"Hello World!      "
+	//				"      5672.1234567"
 	//
 	//		Example-3
-	//          FieldContents = "Hello World!"
-	//			FieldContents String Length = 12
-	//			FieldLength = -1
+	//	        Number String = "5672.1234567"
+	//			Number String Length = 12
+	//			fieldLength = -1
 	//			fieldJustification = TxtJustify.Center()
-	//				// Justification Ignored. Field Length
-	//				// Equal -1
+	//				// Text Justification Ignored. Field
+	//				// Length Equals Title Line String Length
 	//			Text Field String =
-	//				"Hello World!"
+	//				"5672.1234567"
 	//
 	//		Example-4
-	//          FieldContents = "Hello World!"
-	//			FieldContents String Length = 12
-	//			FieldLength = 2
-	//			FieldJustify = TxtJustify.Center()
-	//				// Ignored, because FieldLength Less
-	//				// Than FieldContents String Length.
+	//	        Number String = "5672.1234567"
+	//			Number String Length = 12
+	//			fieldLength = 2
+	//			fieldJustification = TxtJustify.Center()
+	//				// Justification Ignored because Field
+	//				// Length Less Than Title Line String Length.
 	//			Text Field String =
-	//				"Hello World!"
+	//				"5672.1234567"
 
 	fieldJustification TextJustify
 	//	An enumeration which specifies the
@@ -103,40 +103,40 @@ type NumStrNumberFieldSpec struct {
 	//	Text Justification Examples
 	//
 	//		Example-1
-	//          FieldContents String = "Hello World!"
-	//			FieldContents String Length = 12
+	//	        Number String = "5672.1234567"
+	//			Number String Length = 12
 	//			fieldLength = 18
-	//			FieldJustify = TxtJustify.Center()
+	//			fieldJustification = TxtJustify.Center()
 	//			Text Field String =
-	//				"   Hello World!   "
+	//				"   5672.1234567   "
 	//
 	//		Example-2
-	//          FieldContents = "Hello World!"
-	//			FieldContents String Length = 12
-	//			FieldLength = 18
-	//			FieldJustify = TxtJustify.Left()
+	//	        Number String = "5672.1234567"
+	//			Number String Length = 12
+	//			fieldLength = 18
+	//			fieldJustification = TxtJustify.Center()
 	//			Text Field String =
-	//				"Hello World!      "
+	//				"      5672.1234567"
 	//
 	//		Example-3
-	//          FieldContents = "Hello World!"
-	//			FieldContents String Length = 12
-	//			FieldLength = -1
+	//	        Number String = "5672.1234567"
+	//			Number String Length = 12
+	//			fieldLength = -1
 	//			fieldJustification = TxtJustify.Center()
-	//				// Justification Ignored. Field Length
-	//				// Equal -1
+	//				// Text Justification Ignored. Field
+	//				// Length Equals Title Line String Length
 	//			Text Field String =
-	//				"Hello World!"
+	//				"5672.1234567"
 	//
 	//		Example-4
-	//          FieldContents = "Hello World!"
-	//			FieldContents String Length = 12
-	//			FieldLength = 2
-	//			FieldJustify = TxtJustify.Center()
-	//				// Ignored, because FieldLength Less
-	//				// Than FieldContents String Length.
+	//	        Number String = "5672.1234567"
+	//			Number String Length = 12
+	//			fieldLength = 2
+	//			fieldJustification = TxtJustify.Center()
+	//				// Justification Ignored because Field
+	//				// Length Less Than Title Line String Length.
 	//			Text Field String =
-	//				"Hello World!"
+	//				"5672.1234567"
 
 	lock *sync.Mutex
 }
