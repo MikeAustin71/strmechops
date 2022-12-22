@@ -1284,7 +1284,8 @@ func (mathFloatHelper *MathFloatHelper) PrecisionToDigitsFactor() *big.Float {
 //
 //		Specifies the rounding algorithm which will be
 //		used internally to configure the returned
-//		big.Float value.
+//		big.Float value. This parameter is referred to
+//		as 'Mode' in the big.Float documentation.
 //
 //		Each instance of big.Float is configured with a
 //		rounding mode. Input parameter 'roundingMode'
@@ -1301,11 +1302,11 @@ func (mathFloatHelper *MathFloatHelper) PrecisionToDigitsFactor() *big.Float {
 //		big.ToNegativeInf       // == IEEE 754-2008 roundTowardNegative
 //		big.ToPositiveInf       // == IEEE 754-2008 roundTowardPositive
 //
-//
 //		If in doubt as this setting, 'big.AwayFromZero'
 //		is a common selection for rounding mode. The
 //		default applied by Golang is big.ToNearestEven
-//		because in has an integer value of zero.
+//		simply because the Mode 'enumeration' integer
+//		value is zero.
 //
 // ----------------------------------------------------------------
 //
