@@ -1069,6 +1069,427 @@ func (textBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat) Equal(
 			incomingBigFloatFieldFmtDto)
 }
 
+//	FmtNativeNumberStr
+//
+//	Extracts the specifications necessary to format and
+//	return a floating point native number string from
+//	the current instance of TextFieldFormatDtoBigFloat.
+//
+//	A native number string is generated using the
+//	Text function from the Golang 'big' package or
+//	library ('big.Float.Text()'). Formatting options are
+//	therefore limited.
+//
+//	The floating point native number string returned
+//	by this method will therefore:
+//
+//	 1.	Consist entirely of numeric digit characters with
+//		the following exceptions.
+//
+//	 2.	Separate integer and fractional digits with a
+//		decimal point ('.').
+//
+//	 3.	Designate negative values with a leading minus
+//		sign ('-').
+//
+//	 4.	NOT include integer separators such as commas
+//		(',') to separate integer digits by thousands.
+//
+//							NOT THIS: 1,000,000
+//				Native Number String: 1000000
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//  1. Native number strings Do NOT include integer
+//     separators (i.e. commas ',') to separate integer
+//     number strings into thousands.
+//
+//     NOT THIS: 1,000,000
+//     Native Number String: 1000000
+//
+//  2. Note that the placement of the leading minus sign
+//     is fixed and completely controlled by the Golang
+//     'big' package. Trailing minus signs are therefore
+//     NOT supported. Only Leading minus signs will be
+//     presented for negative numeric values.
+//
+//  3. The type of Rounding algorithm applied when
+//     generating a native number string is controlled
+//     by the Mode parameter contained in the current
+//     instance of TextFieldFormatDtoBigFloat. The member variable
+//     is named:
+//
+//     TextFieldFormatDtoBigFloat.NativeRoundingMode
+//
+//  4. The number of decimal digits to the right of the
+//     decimal point returned in a native number string
+//     is controlled by the 'TextFieldFormatDtoBigFloat'
+//     parameter 'NumOfFractionalDigits'. If this
+//     parameter is set to minus one (-1), all available
+//     fractional digits in the big.Float numeric value
+//     will be returned in the native number string.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//
+//		If this method completes successfully, this
+//		string parameter will return a floating point
+//		native number string representation of the
+//		big.Float value contained in the current instance
+//		of TextFieldFormatDtoBigFloat.
+//
+//		The returned floating point native number string
+//		will:
+//
+//		1.	Consist entirely of numeric digit characters
+//			with the following exceptions.
+//
+//		2.	Separate integer and fractional digits with a
+//			decimal point ('.').
+//
+//		3.	Designate negative values with a leading minus
+//			sign ('-').
+//
+//		4.	NOT include integer separators such as commas
+//			(',') to separate integer digits by thousands.
+//
+//							NOT THIS: 1,000,000
+//				Native Number String: 1000000
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (textBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat) FmtNativeNumberStr(
+	errorPrefix interface{}) (
+	string,
+	error) {
+
+	if textBigFloatFieldFmtDto.lock == nil {
+		textBigFloatFieldFmtDto.lock = new(sync.Mutex)
+	}
+
+	textBigFloatFieldFmtDto.lock.Lock()
+
+	defer textBigFloatFieldFmtDto.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextFieldFormatDtoBigFloat."+
+			"FmtNativeNumberStr()",
+		"")
+
+	if err != nil {
+		return "", err
+	}
+
+	return new(textFieldFormatDtoBigFloatElectron).
+		getBigFloatNativeNumStr(
+			textBigFloatFieldFmtDto,
+			ePrefix.XCpy(
+				"textBigFloatFieldFmtDto"))
+}
+
+//	FmtPureNumberStr
+//
+//	Extracts the specifications necessary to format
+//	and return a rounded floating point pure number
+//	string from the current instance of
+//	TextFieldFormatDtoBigFloat. The returned rounded
+//	pure number string is generated from a conversion
+//	algorithm provided by type 'NumberStrKernel'.
+//
+//	A rounded pure number string differs from a
+//	'native' number string in that rounded pure number
+//	string uses the following TextFieldFormatDtoBigFloat
+//	member variables to generate a number string using
+//	the conversion algorithms provided by type
+//	'NumberStrKernel':
+//
+//		TextFieldFormatDtoBigFloat.LeadingMinusSign
+//		TextFieldFormatDtoBigFloat.RoundingType
+//		TextFieldFormatDtoBigFloat.NumOfFractionalDigits
+//
+//	Users will note that rounded pure number strings
+//	offer more flexibility than native strings when
+//	attempting to conform to multinational and
+//	multicultural number string formatting conventions.
+//
+//	The rounded floating point pure number string returned
+//	by this method will:
+//
+//	1.	Consist entirely of numeric digit characters
+//		with the following exceptions.
+//
+//	2.	Separate integer and fractional digits with a
+//	  	decimal point ('.').
+//
+//	3.	Designate negative values with a leading or
+//		trailing minus sign ('-'). Minus sign
+//		placement is controlled by member variable
+//		TextFieldFormatDtoFloat64.LeadingMinusSign.
+//
+//			Leading Minus Sign:		-1000000
+//					OR
+//			Trailing Minus Sign:	1000000-
+//
+//	 4.	NOT include integer separators such as commas
+//	    (',') to separate integer digits by thousands.
+//
+//	    			  NOT THIS: 1,000,000
+//	    	Pure Number String: 1000000
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//  1. Pure number strings Do NOT include integer separators
+//     (i.e. commas ',') to separate integer number strings
+//     into thousands.
+//
+//     NOT THIS: 1,000,000
+//     Pure Number String: 1000000
+//
+//  2. All negative numeric values processed by this method
+//     will return number strings containing either a
+//     leading minus sign ('-') or a trailing minus sign,
+//     depending on the value of member variable:
+//
+//     TextFieldFormatDtoFloat64.LeadingMinusSign
+//
+//     Leading Minus Sign:	-1000000
+//     OR
+//     Trailing Minus Sign:	1000000-
+//
+//  3. Field Length and Field Justification are NOT used
+//     when formatting rounded pure number strings.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//
+//		If this method completes successfully, this
+//		string parameter will return a pure number string
+//		representation of the big.Float floating point
+//		value specified by the current instance of
+//		TextFieldFormatDtoBigFloat.
+//
+//		The returned floating point pure number string
+//		will:
+//
+//		1.	Consist entirely of numeric digit characters.
+//
+//		2.	Separate integer and fractional digits with a
+//			decimal point ('.').
+//
+//		3.	Designate negative values with a leading or
+//			trailing minus sign ('-'). Minus sign
+//			placement is controlled by member variable
+//			TextFieldFormatDtoFloat64.LeadingMinusSign.
+//
+//				Leading Minus Sign:		-1000000
+//						OR
+//				Trailing Minus Sign:	1000000-
+//
+//		4.	NOT include integer separators such as commas
+//			(',') to separate integer digits by thousands.
+//
+//						  NOT THIS: 1,000,000
+//				Pure Number String: 1000000
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (textBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat) FmtPureNumberStr(
+	errorPrefix interface{}) (
+	string,
+	error) {
+
+	if textBigFloatFieldFmtDto.lock == nil {
+		textBigFloatFieldFmtDto.lock = new(sync.Mutex)
+	}
+
+	textBigFloatFieldFmtDto.lock.Lock()
+
+	defer textBigFloatFieldFmtDto.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextFieldFormatDtoBigFloat."+
+			"FmtPureNumberStr()",
+		"")
+
+	if err != nil {
+		return "", err
+	}
+
+	return new(textFieldFormatDtoBigFloatElectron).
+		getBigFloatRoundedPureNumStr(
+			textBigFloatFieldFmtDto,
+			ePrefix.XCpy(
+				"textBigFloatFieldFmtDto"))
+}
+
 // GetFieldContentTextLabel
 //
 // Converts the current TextFieldFormatDtoBigFloat
@@ -1416,225 +1837,6 @@ func (textBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat) GetLeftMarginStr() st
 	defer textBigFloatFieldFmtDto.lock.Unlock()
 
 	return textBigFloatFieldFmtDto.LeftMarginStr
-}
-
-//	FmtPureNumberStr
-//
-//	Extracts the specifications necessary to format
-//	and return a rounded floating point pure number
-//	string from the current instance of
-//	TextFieldFormatDtoBigFloat. The returned rounded
-//	pure number string is generated from a conversion
-//	algorithm provided by type 'NumberStrKernel'.
-//
-//	A rounded pure number string differs from a
-//	'native' number string in that rounded pure number
-//	string uses the following TextFieldFormatDtoBigFloat
-//	member variables to generate a number string using
-//	the conversion algorithms provided by type
-//	'NumberStrKernel':
-//
-//		TextFieldFormatDtoBigFloat.LeadingMinusSign
-//		TextFieldFormatDtoBigFloat.RoundingType
-//		TextFieldFormatDtoBigFloat.NumOfFractionalDigits
-//
-//	Users will note that rounded pure number strings
-//	offer more flexibility than native strings when
-//	attempting to conform to multinational and
-//	multicultural number string formatting conventions.
-//
-//	The rounded floating point pure number string returned
-//	by this method will:
-//
-//	1.	Consist entirely of numeric digit characters
-//		with the following exceptions.
-//
-//	2.	Separate integer and fractional digits with a
-//	  	decimal point ('.').
-//
-//	3.	Designate negative values with a leading or
-//		trailing minus sign ('-'). Minus sign
-//		placement is controlled by member variable
-//		TextFieldFormatDtoFloat64.LeadingMinusSign.
-//
-//			Leading Minus Sign:		-1000000
-//					OR
-//			Trailing Minus Sign:	1000000-
-//
-//	 4. NOT include integer separators such as commas
-//	    (',') to separate integer digits by thousands.
-//
-//	    		  NOT THIS: 1,000,000
-//	    Pure Number String: 1000000
-//
-// ----------------------------------------------------------------
-//
-// # BE ADVISED
-//
-//  1. Pure number strings Do NOT include integer separators
-//     (i.e. commas ',') to separate integer number strings
-//     into thousands.
-//
-//     NOT THIS: 1,000,000
-//     Pure Number String: 1000000
-//
-//  2. All negative numeric values processed by this method
-//     will return number strings containing either a
-//     leading minus sign ('-') or a trailing minus sign,
-//     depending on the value of member variable:
-//
-//     TextFieldFormatDtoFloat64.LeadingMinusSign
-//
-//     Leading Minus Sign:		-1000000
-//     OR
-//     Trailing Minus Sign:	1000000-
-//
-//  3. Field Length and Field Justification are NOT used
-//     when formatting rounded pure number strings.
-//
-// ----------------------------------------------------------------
-//
-// # Input Parameters
-//
-//	errorPrefix					interface{}
-//
-//		This object encapsulates error prefix text which
-//		is included in all returned error messages.
-//		Usually, it contains the name of the calling
-//		method or methods listed as a method or function
-//		chain of execution.
-//
-//		If no error prefix information is needed, set this
-//		parameter to 'nil'.
-//
-//		This empty interface must be convertible to one of
-//		the following types:
-//
-//		1.	nil
-//				A nil value is valid and generates an
-//				empty collection of error prefix and
-//				error context information.
-//
-//		2.	string
-//				A string containing error prefix
-//				information.
-//
-//		3.	[]string
-//				A one-dimensional slice of strings
-//				containing error prefix information.
-//
-//		4.	[][2]string
-//				A two-dimensional slice of strings
-//		   		containing error prefix and error
-//		   		context information.
-//
-//		5.	ErrPrefixDto
-//				An instance of ErrPrefixDto.
-//				Information from this object will
-//				be copied for use in error and
-//				informational messages.
-//
-//		6.	*ErrPrefixDto
-//				A pointer to an instance of
-//				ErrPrefixDto. Information from
-//				this object will be copied for use
-//				in error and informational messages.
-//
-//		7.	IBasicErrorPrefix
-//				An interface to a method
-//				generating a two-dimensional slice
-//				of strings containing error prefix
-//				and error context information.
-//
-//		If parameter 'errorPrefix' is NOT convertible
-//		to one of the valid types listed above, it will
-//		be considered invalid and trigger the return of
-//		an error.
-//
-//		Types ErrPrefixDto and IBasicErrorPrefix are
-//		included in the 'errpref' software package:
-//			"github.com/MikeAustin71/errpref".
-//
-// ----------------------------------------------------------------
-//
-// # Return Values
-//
-//	string
-//
-//		If this method completes successfully, this
-//		string parameter will return a pure number string
-//		representation of the big.Float floating point
-//		value specified by the current instance of
-//		TextFieldFormatDtoBigFloat.
-//
-//		The returned floating point pure number string
-//		will:
-//
-//		1.	Consist entirely of numeric digit characters.
-//
-//		2.	Separate integer and fractional digits with a
-//			decimal point ('.').
-//
-//		3.	Designate negative values with a leading or
-//			trailing minus sign ('-'). Minus sign
-//			placement is controlled by member variable
-//			TextFieldFormatDtoFloat64.LeadingMinusSign.
-//
-//				Leading Minus Sign:		-1000000
-//						OR
-//				Trailing Minus Sign:	1000000-
-//
-//		4.	NOT include integer separators such as commas
-//			(',') to separate integer digits by thousands.
-//
-//						  NOT THIS: 1,000,000
-//				Pure Number String: 1000000
-//
-//	error
-//
-//		If this method completes successfully, the
-//		returned error Type is set equal to 'nil'.
-//
-//		If errors are encountered during processing, the
-//		returned error Type will encapsulate an error
-//		message. This returned error message will
-//		incorporate the method chain and text passed by
-//		input parameter, 'errorPrefix'. The 'errorPrefix'
-//		text will be attached to the beginning of the
-//		error message.
-func (textBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat) FmtPureNumberStr(
-	errorPrefix interface{}) (
-	string,
-	error) {
-
-	if textBigFloatFieldFmtDto.lock == nil {
-		textBigFloatFieldFmtDto.lock = new(sync.Mutex)
-	}
-
-	textBigFloatFieldFmtDto.lock.Lock()
-
-	defer textBigFloatFieldFmtDto.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-
-	var err error
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
-		"TextFieldFormatDtoBigFloat."+
-			"FmtPureNumberStr()",
-		"")
-
-	if err != nil {
-		return "", err
-	}
-
-	return new(textFieldFormatDtoBigFloatElectron).
-		getBigFloatRoundedPureNumStr(
-			textBigFloatFieldFmtDto,
-			ePrefix.XCpy(
-				"textBigFloatFieldFmtDto"))
 }
 
 // GetRightMarginLength
@@ -3091,11 +3293,12 @@ func (txtFieldFmtDtoBigFloatElectron *textFieldFormatDtoBigFloatElectron) getBig
 //	Receives a pointer to an instance of
 //	TextFieldFormatDtoBigFloat and extracts the
 //	specifications necessary to format and return a
-//	floating, native number string.
+//	floating point, native number string.
 //
 //	A native number string is generated using the
 //	Text function from the Golang 'big' package or
-//	library. 'big.Float.Text()'
+//	library ('big.Float.Text()'). Formatting options are
+//	therefore limited.
 //
 //	The floating point native number string returned
 //	by this method will therefore:
@@ -3139,7 +3342,6 @@ func (txtFieldFmtDtoBigFloatElectron *textFieldFormatDtoBigFloatElectron) getBig
 //     TextFieldFormatDtoBigFloat. The member variable
 //     is named:
 //
-//     TextFieldFormatDtoBigFloat.
 //     txtBigFloatFieldFmtDto.NativeRoundingMode
 //
 //  4. The number of decimal digits to the right of the
