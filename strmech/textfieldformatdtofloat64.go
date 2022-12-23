@@ -1477,56 +1477,77 @@ func (txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64) FmtNumStr(
 	return numStr, err
 }
 
-// FmtPureNumberStr
+//	FmtPureNumberStr
 //
-// Extracts the specifications necessary to format and
-// return a rounded floating point pure number string
-// generated from a conversion performed by type
-// 'NumberStrKernel'.
+//	Extracts the specifications necessary to format and
+//	return a rounded floating point pure number string
+//	generated from a conversion performed by type
+//	'NumberStrKernel'.
 //
-// The rounded floating point pure number string returned
-// by this method will:
+//	A rounded pure number string differs from a
+//	'native' number string in that rounded pure number
+//	string uses the following TextFieldFormatDtoFloat64
+//	member variables to generate a number string using
+//	the conversion algorithms provided by type
+//	'NumberStrKernel':
 //
-//  1. Consist entirely of numeric digit characters.
+//		TextFieldFormatDtoFloat64.LeadingMinusSign
+//		TextFieldFormatDtoFloat64.RoundingType
+//		TextFieldFormatDtoFloat64.NumOfFractionalDigits
 //
-//  2. Separate integer and fractional digits with a
-//     decimal point ('.').
+//	Users will note that the rounded pure number strings
+//	offers more flexibility than native strings when
+//	attempting to conform to multinational and
+//	multicultural pure number string formatting
+//	conventions.
 //
-//  3. Designate negative values with a leading or
-//     trailing minus sign ('-'). Minus sign
-//     placement is controlled by member variable
-//     TextFieldFormatDtoFloat64.LeadingMinusSign.
+//	The rounded floating point pure number string returned
+//	by this method will:
 //
-//     Leading Minus Sign:		-1000000
-//     OR
-//     Trailing Minus Sign:	1000000-
+//	1.	Consist entirely of numeric digit characters.
 //
-//  4. NOT include integer separators such as commas
-//     (',') to separate integer digits by thousands.
+//	2.	Separate integer and fractional digits with a
+//	  	decimal point ('.').
 //
-//     NOT THIS: 1,000,000
-//     Pure Number String: 1000000
+//	3.	Designate negative values with a leading or
+//	  	trailing minus sign ('-'). Minus sign
+//	  	placement is controlled by member variable
+//	  	TextFieldFormatDtoFloat64.LeadingMinusSign.
+//
+//	  	Leading Minus Sign:		-1000000
+//	  			OR
+//	  	Trailing Minus Sign:	1000000-
+//
+//	4.	NOT include integer separators such as commas
+//	  	(',') to separate integer digits by thousands.
+//
+//	  	NOT THIS: 1,000,000
+//	  	Pure Number String: 1000000
 //
 // ----------------------------------------------------------------
 //
 // # BE ADVISED
 //
-//	Pure number strings Do NOT include integer separators
-//	(i.e. commas ',') to separate integer number strings
-//	into thousands.
+//  1. Pure number strings Do NOT include integer separators
+//     (i.e. commas ',') to separate integer number strings
+//     into thousands.
 //
-//					  NOT THIS: 1,000,000
-//			Pure Number String: 1000000
+//     NOT THIS: 1,000,000
+//     Pure Number String: 1000000
 //
-//	All negative numeric values processed by this method
-//	will return number strings containing either a
-//	leading minus sign ('-') or a trailing minus sign,
-//	depending on the value of member variable:
-//		TextFieldFormatDtoFloat64.LeadingMinusSign
+//  2. All negative numeric values processed by this method
+//     will return number strings containing either a
+//     leading minus sign ('-') or a trailing minus sign,
+//     depending on the value of member variable:
 //
-//		Leading Minus Sign:		-1000000
-//				OR
-//		Trailing Minus Sign:	1000000-
+//     TextFieldFormatDtoFloat64.LeadingMinusSign
+//
+//     Leading Minus Sign:		-1000000
+//     OR
+//     Trailing Minus Sign:	1000000-
+//
+//  3. Field Length and Field Justification are NOT used
+//     when formatting rounded pure number strings.
 //
 // ----------------------------------------------------------------
 //
@@ -1572,9 +1593,9 @@ func (txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64) FmtNumStr(
 //			placement is controlled by member variable
 //			TextFieldFormatDtoFloat64.LeadingMinusSign.
 //
-//			Leading Minus Sign:		-1000000
-//					OR
-//			Trailing Minus Sign:	1000000-
+//				Leading Minus Sign:		-1000000
+//						OR
+//				Trailing Minus Sign:	1000000-
 //
 //		4.	NOT include integer separators such as commas
 //			(',') to separate integer digits by thousands.
@@ -4127,31 +4148,53 @@ type textFieldFormatDtoFloat64Electron struct {
 	lock *sync.Mutex
 }
 
-// getFloat64RoundedPureNumStr
+//	getFloat64RoundedPureNumStr
 //
-// Receives a pointer to an instance of
-// TextFieldFormatDtoFloat64 and extracts the
-// specifications necessary to format and return a
-// rounded floating point pure number string
-// generated from a conversion performed by type
-// 'NumberStrKernel'.
+//	Receives a pointer to an instance of
+//	TextFieldFormatDtoFloat64 and extracts the
+//	specifications necessary to format and return a
+//	rounded floating point pure number string
+//	generated from a conversion performed by type
+//	'NumberStrKernel'.
 //
-// The rounded floating point pure number string returned
-// by this method will:
+//	A rounded pure number string differs from a
+//	'native' number string in that rounded pure number
+//	string uses the following TextFieldFormatDtoBigFloat
+//	member variables to generate a number string using
+//	the conversion algorithms provided by type
+//	'NumberStrKernel':
 //
-//  1. Consist entirely of numeric digit characters.
+//		txtFieldFmtDtoFloat64.LeadingMinusSign
+//		txtFieldFmtDtoFloat64.RoundingType
+//		txtFieldFmtDtoFloat64.NumOfFractionalDigits
 //
-//  2. Separate integer and fractional digits with a
-//     decimal point ('.').
+//	Users will note that the rounded pure number strings
+//	offers more flexibility than native strings when
+//	attempting to conform to multinational and
+//	multicultural number string formatting conventions.
 //
-//  3. Designate negative values with a leading or
-//     trailing minus sign ('-').
+//	The rounded floating point pure number string
+//	returned by this method will:
 //
-//  4. NOT include integer separators such as commas
-//     (',') to separate integer digits by thousands.
+//	1.	Consist entirely of numeric digit characters.
 //
-//     NOT THIS: 1,000,000
-//     Pure Number String: 1000000
+//	2.	Separate integer and fractional digits with a
+//		decimal point ('.').
+//
+//	3.	Designate negative values with a leading or
+//		trailing minus sign ('-'). Minus sign
+//		placement is controlled by member variable
+//		TextFieldFormatDtoFloat64.LeadingMinusSign.
+//
+//		Leading Minus Sign:		-1000000
+//				OR
+//		Trailing Minus Sign:	1000000-
+//
+//	 4.	NOT include integer separators such as commas
+//	   	(',') to separate integer digits by thousands.
+//
+//	   	NOT THIS: 1,000,000
+//	   	Pure Number String: 1000000
 //
 // ----------------------------------------------------------------
 //
@@ -4216,8 +4259,15 @@ type textFieldFormatDtoFloat64Electron struct {
 //		2.	Separate integer and fractional digits with a
 //			decimal point ('.').
 //
+//
 //		3.	Designate negative values with a leading or
-//			trailing minus sign ('-').
+//			trailing minus sign ('-'). Minus sign
+//			placement is controlled by member variable
+//			TextFieldFormatDtoFloat64.LeadingMinusSign.
+//
+//			Leading Minus Sign:		-1000000
+//					OR
+//			Trailing Minus Sign:	1000000-
 //
 //		4.	NOT include integer separators such as commas
 //			(',') to separate integer digits by thousands.
@@ -4356,18 +4406,18 @@ func (txtFieldFmtDtoFloat64Electron *textFieldFormatDtoFloat64Electron) getFloat
 //
 // # BE ADVISED
 //
-//	Native Number Strings DO NOT include integer
-//	separators (i.e. commas ',') to separate integer
-//	number strings into thousands.
+//  1. Native Number Strings DO NOT include integer
+//     separators (i.e. commas ',') to separate integer
+//     number strings into thousands.
 //
-//					  NOT THIS: 1,000,000 or -1,000,000
-//		  Native Number String: 1000000 or -1000000
+//     NOT THIS: 1,000,000 or -1,000,000
+//     Native Number String: 1000000 or -1000000
 //
-//	Note that the placement of the leading minus sign
-//	is fixed and completely controlled by the Golang
-//	'strconv' package. Trailing minus signs are therefore
-//	NOT supported. Only Leading minus signs will be
-//	presented for negative numeric values.
+//  2. Note that the placement of the leading minus sign
+//     is fixed and completely controlled by the Golang
+//     'strconv' package. Trailing minus signs are therefore
+//     NOT supported. Only Leading minus signs will be
+//     presented for negative numeric values.
 //
 // ----------------------------------------------------------------
 //
@@ -4419,7 +4469,8 @@ func (txtFieldFmtDtoFloat64Electron *textFieldFormatDtoFloat64Electron) getFloat
 //		The returned floating point native number string
 //		will:
 //
-//		1.	Consist entirely of numeric digit characters.
+//		1.	Consist entirely of numeric digit characters
+//			with the following exceptions.
 //
 //		2.	Separate integer and fractional digits with a
 //			decimal point ('.').
@@ -4430,8 +4481,8 @@ func (txtFieldFmtDtoFloat64Electron *textFieldFormatDtoFloat64Electron) getFloat
 //		4.	NOT include integer separators such as commas
 //			(',') to separate integer digits by thousands.
 //
-//						  NOT THIS: 1,000,000
-//				Pure Number String: 1000000
+//							NOT THIS: 1,000,000
+//				Native Number String: 1000000
 //
 //	error
 //
