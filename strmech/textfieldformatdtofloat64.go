@@ -1257,9 +1257,9 @@ func (txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64) FmtNativeNumberStr(
 //	of TextFieldFormatDtoFloat64.
 //
 //	Input parameter 'numStrFmtSpec' provides options
-//	for customizing for currency symbols, integer
-//	separation, number sign management, radix point
-//	symbol.
+//	for customizing number string currency symbols,
+//	integer separation, number sign management and radix
+//	point symbols.
 //
 //	If required, users also have the option of
 //	implementing the India or Chinese Numbering Systems
@@ -1280,7 +1280,7 @@ func (txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64) FmtNativeNumberStr(
 //	invalid, an error will be returned.
 //
 //	The Number String Formatting Specifications supplied
-//	by input parameter 'numStrFmtSpec' include field
+//	by input parameter 'numStrFmtSpec' includes field
 //	length and field justification specifications. These
 //	values will override those configured in the current
 //	instance of TextFieldFormatDtoFloat64. This means that
@@ -1299,11 +1299,15 @@ func (txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64) FmtNativeNumberStr(
 //
 //	numStrFmtSpec				NumStrFormatSpec
 //
-//		This structure includes all parameters
-//		necessary for formatting a number string.
-//		These customization options provide maximum
-//		granularity in controlling the formatting
-//		of the returned Number String.
+//		This structure contains all the parameters
+//		necessary for number string formatting. The
+//		customization options contained in
+//		'numStrFmtSpec' provide maximum granularity in
+//		controlling the formatting of the returned Number
+//		String.
+//
+//		The NumStrFormatSpec data structure is defined as
+//		follows:
 //
 //		type NumStrFormatSpec struct {
 //
