@@ -4560,11 +4560,11 @@ func (txtFieldFmtDtoFloat64Electron *textFieldFormatDtoFloat64Electron) getFloat
 	return float64NumStr, err
 }
 
-// GetNumberStrKernel
+//	getNumberStrKernel
 //
-// Returns an instance of NumberStrKernel configured with
-// the float64 numeric value contained in the current
-// instance of TextFieldFormatDtoFloat64.
+//	Returns an instance of NumberStrKernel configured with
+//	the float64 numeric value contained in the current
+//	instance of TextFieldFormatDtoFloat64.
 //
 // ----------------------------------------------------------------
 //

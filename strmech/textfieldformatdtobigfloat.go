@@ -1257,7 +1257,7 @@ func (textBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat) FmtNativeNumberStr(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"TextFieldFormatDtoBigFloat."+
-			"FmtNativeNumberStr()",
+			"FmtPureNumberStr()",
 		"")
 
 	if err != nil {
@@ -2578,6 +2578,267 @@ func (txtBigFloatFieldFmtDtoMolecule *textBigFloatFieldFormatDtoMolecule) getFie
 	return fieldContentsLabel, err
 }
 
+// fmtNumStrWithFormatSpec
+//
+//	Receives a pointer to an instance of
+//	TextFieldFormatDtoBigFloat.
+//
+//	The numeric value contained in this instance is
+//	converted to a number string using the specifications
+//	contained in input parameter 'numStrFmtSpec', an
+//	instance  of 'NumStrFormatSpec'.
+//
+//	Input parameter 'numStrFmtSpec' provides options
+//	for customizing for currency symbols, integer
+//	separation, number sign management, radix point
+//	symbol.
+//
+//	If required, users also have the option of
+//	implementing the India or Chinese Numbering Systems
+//	for integer separation.
+//
+//	The numeric value used to generate the returned
+//	NumberStrKernel will be taken from the
+//	TextFieldFormatDtoBigFloat member variable,
+//	'BigFloatNum'. This floating point numeric value will
+//	be rounded according to the specifications contained
+//	in member variables:
+//
+//		TextFieldFormatDtoBigFloat.RoundingType
+//						AND
+//		TextFieldFormatDtoBigFloat.NumOfFractionalDigits
+//
+//	If either of these rounding specifications are
+//	invalid, an error will be returned.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	txtBigFloatFieldFmtDto		*TextFieldFormatDtoBigFloat
+//
+//		A pointer to an instance of
+//		TextFieldFormatDtoBigFloat.
+//
+//		The floating point numeric value contained in
+//		this instance will be converted to a number
+//		string using the Number String Formatting
+//		Specifications supplied by input paramter
+//		'numStrFmtSpec'.
+//
+//	numStrFmtSpec				NumStrFormatSpec
+//
+//		This structure includes all parameters
+//		necessary for formatting a number string.
+//		These customization options provide maximum
+//		granularity in controlling the formatting
+//		of the returned Number String.
+//
+//		type NumStrFormatSpec struct {
+//
+//			decSeparator			DecimalSeparatorSpec
+//
+//				Contains the radix point or decimal
+//				separator character(s) which will
+//				separate integer and fractional
+//				numeric digits in a floating point
+//				number.
+//
+//			intSeparatorSpec 		IntegerSeparatorSpec
+//
+//				Integer Separator Specification. This
+//				parameter specifies the type of integer
+//				specifies the type of integer grouping and
+//				integer separator characters which will be
+//				applied to the number string formatting
+//				operations.
+//
+//			positiveNumberSign		NumStrNumberSymbolSpec
+//
+//				Positive number signs are commonly implied
+//				and not specified. However, the user as the
+//				option to specify a positive number sign
+//				character or characters for positive numeric
+//				values using a Number String Positive Number
+//				Sign Specification.
+//
+//				This specification can also be used to
+//				configure currency symbols.
+//
+//			negativeNumberSign		NumStrNumberSymbolSpec
+//
+//				The Number String Negative Number Sign
+//				Specification is used to configure negative
+//				number sign symbols for negative numeric values
+//				formatted and displayed in number stings.
+//
+//				This specification can also be used to
+//				configured currency symbols.
+//
+//			numberFieldSpec			NumStrNumberFieldSpec
+//
+//				This Number String Number Field Specification
+//				contains the field length and text
+//				justification parameter necessary to display
+//				a numeric value within a text number field
+//				for display as a number string.
+//		}
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a function chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//
+//		If this method completes successfully, a formatted
+//		Number String will be returned.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (txtBigFloatFieldFmtDtoMolecule *textBigFloatFieldFormatDtoMolecule) fmtNumStrWithFormatSpec(
+	txtBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat,
+	numStrFmtSpec NumStrFormatSpec,
+	errPrefDto *ePref.ErrPrefixDto) (
+	string,
+	error) {
+
+	if txtBigFloatFieldFmtDtoMolecule.lock == nil {
+		txtBigFloatFieldFmtDtoMolecule.lock = new(sync.Mutex)
+	}
+
+	txtBigFloatFieldFmtDtoMolecule.lock.Lock()
+
+	defer txtBigFloatFieldFmtDtoMolecule.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	numStr := ""
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"textBigFloatFieldFormatDtoMolecule."+
+			"fmtNumStrWithFormatSpec()",
+		"")
+
+	if err != nil {
+
+		return numStr, err
+	}
+
+	if txtBigFloatFieldFmtDto == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'txtBigFloatFieldFmtDto' is a nil pointer!\n",
+			ePrefix.String())
+
+		return "", err
+	}
+
+	err = numStrFmtSpec.IsValidInstanceError(
+		ePrefix.XCpy(
+			"Input parameter numStrFmtSpec is invalid."))
+
+	if err != nil {
+
+		return numStr, err
+
+	}
+
+	var err2 error
+
+	_,
+		err2 = new(textFieldFormatDtoBigFloatAtom).
+		testValidityOfTxtFieldFmtDtoBigFloat(
+			txtBigFloatFieldFmtDto,
+			ePrefix.XCpy(
+				"txtBigFloatFieldFmtDto"))
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: The current instance of TextFieldFormatDtoBigFloat\n"+
+			"is improperly configured and Invalid!\n"+
+			"Error=\n%v\n",
+			ePrefix.String(),
+			err2.Error())
+
+		return numStr, err
+	}
+
+	var roundingSpec NumStrRoundingSpec
+
+	roundingSpec.roundToFractionalDigits =
+		txtBigFloatFieldFmtDto.NumOfFractionalDigits
+
+	roundingSpec.roundingType =
+		txtBigFloatFieldFmtDto.RoundingType
+
+	err2 = roundingSpec.IsValidInstanceError(
+		ePrefix.XCpy(
+			"numStrFmtSpec"))
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: TextFieldFormatDtoFloat64 Rounding Specifications\n"+
+			"are improperly configured and Invalid!\n"+
+			"Error:\n%v\n",
+			ePrefix.String(),
+			err2.Error())
+
+		return numStr, err
+	}
+
+	var numStrKernel NumberStrKernel
+
+	numStrKernel,
+		err = new(textFieldFormatDtoBigFloatElectron).
+		getNumberStrKernel(
+			txtBigFloatFieldFmtDto,
+			ePrefix.XCpy(
+				"txtBigFloatFieldFmtDto"))
+
+	if err != nil {
+		return numStr, err
+	}
+
+	numStr,
+		err = numStrKernel.FmtNumStr(
+		numStrFmtSpec,
+		roundingSpec,
+		ePrefix.XCpy(
+			"numStrKernel"))
+
+	return numStr, err
+}
+
 // textFieldFormatDtoBigFloatAtom - Provides helper methods for
 // TextFieldFormatDtoBigFloat.
 type textFieldFormatDtoBigFloatAtom struct {
@@ -3488,4 +3749,132 @@ func (txtFieldFmtDtoBigFloatElectron *textFieldFormatDtoBigFloatElectron) getBig
 		txtBigFloatFieldFmtDto.NumOfFractionalDigits)
 
 	return numStr, err
+}
+
+//	getNumberStrKernel
+//
+//	Returns an instance of NumberStrKernel configured
+//	with the big.Float numeric value contained within
+//	input parameter 'txtBigFloatFieldFmtDto', an instance
+//	of type TextFieldFormatDtoBigFloat.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	txtBigFloatFieldFmtDto		*TextFieldFormatDtoBigFloat
+//
+//		A pointer to an instance of
+//		TextFieldFormatDtoBigFloat.
+//
+//		The big.Float numeric value contained in this
+//		instance of TextFieldFormatDtoBigFloat will
+//		be used to populate the returned instance
+//		of NumberStrKernel.
+//
+//		If this instance of TextFieldFormatDtoBigFloat
+//		contains invalid data elements, an error will
+//		be returned.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	NumberStrKernel
+//
+//		If this method completes successfully, an
+//		instance of NumberStrKernel will be returned
+//		configured with the numeric value contained
+//		within the TextFieldFormatDtoBigFloat input
+//		parameter, 'txtBigFloatFieldFmtDto'.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (txtFieldFmtDtoBigFloatElectron *textFieldFormatDtoBigFloatElectron) getNumberStrKernel(
+	txtBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat,
+	errPrefDto *ePref.ErrPrefixDto) (
+	NumberStrKernel,
+	error) {
+
+	if txtFieldFmtDtoBigFloatElectron.lock == nil {
+		txtFieldFmtDtoBigFloatElectron.lock = new(sync.Mutex)
+	}
+
+	txtFieldFmtDtoBigFloatElectron.lock.Lock()
+
+	defer txtFieldFmtDtoBigFloatElectron.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	newNumberStrKernel := NumberStrKernel{}
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"textFieldFormatDtoBigFloatElectron."+
+			"getBigFloatNativeNumStr()",
+		"")
+
+	if err != nil {
+
+		return newNumberStrKernel, err
+
+	}
+
+	if txtBigFloatFieldFmtDto == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'txtBigFloatFieldFmtDto' is a nil pointer!\n",
+			ePrefix.String())
+
+		return newNumberStrKernel, err
+	}
+
+	_,
+		err = new(textFieldFormatDtoBigFloatAtom).
+		testValidityOfTxtFieldFmtDtoBigFloat(
+			txtBigFloatFieldFmtDto,
+			ePrefix.XCpy(
+				"txtBigFloatFieldFmtDto"))
+
+	if err != nil {
+
+		return newNumberStrKernel, err
+
+	}
+
+	newNumberStrKernel,
+		err = new(NumberStrKernel).NewFromFloatValue(
+		txtBigFloatFieldFmtDto.BigFloatNum,
+		ePrefix.XCpy(
+			"txtBigFloatFieldFmtDto.BigFloatNum"))
+
+	return newNumberStrKernel, err
 }
