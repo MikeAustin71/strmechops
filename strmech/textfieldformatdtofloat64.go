@@ -2702,14 +2702,14 @@ func (txtFieldFmtDtoFloat64 TextFieldFormatDtoFloat64) SetPureNumStr(
 
 //	String
 //
-//	Returns a number string comprised of the floating
-//	point numeric value contained in the current
+//	Returns a number string comprised of the float64
+//	floating point numeric value contained in the current
 //	instance of TextFieldFormatDtoFloat64.
 //
-//	The returned number string will be formatted
-//	using default Number String Formatting
-//	Specification contained in the current instance
-//	of TextFieldFormatDtoFloat64.
+//	The returned number string will be formatted using
+//	the default Number String Formatting Specification
+//	contained in the current instance of
+//	TextFieldFormatDtoFloat64.
 //
 // ----------------------------------------------------------------
 //

@@ -2811,6 +2811,88 @@ func (textBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat) SetPureNumStr(
 	return err
 }
 
+//	String
+//
+//	Returns a number string comprised of the big.Float
+//	floating point numeric value contained in the current
+//	instance of TextFieldFormatDtoBigFloat.
+//
+//	The returned number string will be formatted using
+//	the default Number String Formatting Specification
+//	contained in the current instance of
+//	TextFieldFormatDtoBigFloat.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	NONE
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//
+//		If this method completes successfully, a
+//		formatted Number String will be returned. If
+//		errors are encountered, this string will contain
+//		an appropriate error message.
+func (textBigFloatFieldFmtDto TextFieldFormatDtoBigFloat) String() string {
+
+	if textBigFloatFieldFmtDto.lock == nil {
+		textBigFloatFieldFmtDto.lock = new(sync.Mutex)
+	}
+
+	textBigFloatFieldFmtDto.lock.Lock()
+
+	defer textBigFloatFieldFmtDto.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+	var errOut string
+
+	funcName := "TextFieldFormatDtoBigFloat.String()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		nil,
+		funcName,
+		"")
+
+	if err != nil {
+		errOut = fmt.Sprintf("%v\n"+
+			"Error Message:\n"+
+			"%v",
+			funcName,
+			err.Error())
+
+		return errOut
+	}
+
+	var numStr string
+
+	numStr,
+		err = new(textBigFloatFieldFormatDtoNanobot).
+		fmtDefaultNumStr(
+			&textBigFloatFieldFmtDto,
+			ePrefix.XCpy(
+				"textBigFloatFieldFmtDto"))
+
+	if err != nil {
+
+		errOut = fmt.Sprintf("%v\n"+
+			"Error Message:\n"+
+			"%v",
+			funcName,
+			err.Error())
+
+		return errOut
+	}
+
+	return numStr
+}
+
 // textBigFloatFieldFormatDtoNanobot
 //
 // Provides helper methods for TextFieldFormatDtoBigFloat.
