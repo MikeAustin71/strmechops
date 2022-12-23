@@ -160,6 +160,26 @@ func (mathFloatHelpAtom *mathFloatHelperAtom) floatNumToSignedPureNumStr(
 			return signedPureNumStr, err
 		}
 
+	case big.Float:
+
+		var bigFloatNum big.Float
+
+		bigFloatNum, ok = floatingPointNumber.(big.Float)
+
+		if !ok {
+
+			err = fmt.Errorf("%v\n"+
+				"ERROR: big.Float cast to 'bigFloatNum' failed!\n",
+				ePrefix.String())
+
+			return signedPureNumStr, err
+		}
+
+		signedPureNumStr = fmt.Sprintf("%v",
+			bigFloatNum.Text('f', -1))
+
+		goto skipNumStrConversion
+
 	case *big.Float:
 
 		var bigFloatNum *big.Float

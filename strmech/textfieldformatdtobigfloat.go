@@ -2151,7 +2151,8 @@ func (textBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat) GetLeftMarginStr() st
 //		Remember that these statistics and profiling data
 //		describe the rounded pure number string generated
 //		from the big.Float numeric value encapsulated by
-//		the current instance of TextFieldFormatDtoBigFloat
+//		the current instance of
+//		TextFieldFormatDtoBigFloat.
 //
 //		The NumberStrStatsDto data structure is defined
 //		as follows:
@@ -2255,11 +2256,32 @@ func (textBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat) GetNumberStats(
 		return numStatsDto, err
 	}
 
-	var pureRoundedNumStr string
+	var err2 error
 
-	pureRoundedNumStr,
+	_,
+		err2 = new(textFieldFormatDtoBigFloatAtom).
+		testValidityOfTxtFieldFmtDtoBigFloat(
+			textBigFloatFieldFmtDto,
+			ePrefix.XCpy(
+				"textBigFloatFieldFmtDto"))
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: The current instance of TextFieldFormatDtoBigFloat\n"+
+			"is improperly configured and Invalid!\n"+
+			"Error=\n%v\n",
+			ePrefix.String(),
+			err2.Error())
+
+		return numStatsDto, err
+	}
+
+	var numStrKernel NumberStrKernel
+
+	numStrKernel,
 		err = new(textFieldFormatDtoBigFloatElectron).
-		getBigFloatRoundedPureNumStr(
+		getNumberStrKernel(
 			textBigFloatFieldFmtDto,
 			ePrefix.XCpy(
 				"textBigFloatFieldFmtDto"))
@@ -2268,30 +2290,11 @@ func (textBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat) GetNumberStats(
 		return numStatsDto, err
 	}
 
-	var intDigits,
-		fracDigits RuneArrayDto
-
-	var radixPoint RuneArrayDto
-
-	radixPoint,
-		err = new(RuneArrayDto).NewString(
-		".",
-		CharSearchType.LinearTargetStartingIndex(),
-		ePrefix)
-
-	if err != nil {
-		return numStatsDto, err
-	}
-
 	numStatsDto,
-		err = new(numStrMathQuark).
-		pureNumStrToRunes(
-			pureRoundedNumStr,
-			&intDigits,
-			&fracDigits,
-			&radixPoint,
-			textBigFloatFieldFmtDto.LeadingMinusSign,
-			ePrefix)
+		err = numStrKernel.GetNumericValueStats(
+		ePrefix.XCpy(
+			"numStrKernel<-" +
+				"textBigFloatFieldFmtDto"))
 
 	return numStatsDto, err
 }
@@ -2419,6 +2422,27 @@ func (textBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat) GetNumberStrKernel(
 		"")
 
 	if err != nil {
+		return NumberStrKernel{}, err
+	}
+
+	var err2 error
+
+	_,
+		err2 = new(textFieldFormatDtoBigFloatAtom).
+		testValidityOfTxtFieldFmtDtoBigFloat(
+			textBigFloatFieldFmtDto,
+			ePrefix.XCpy(
+				"textBigFloatFieldFmtDto"))
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: The current instance of TextFieldFormatDtoBigFloat\n"+
+			"is improperly configured and Invalid!\n"+
+			"Error=\n%v\n",
+			ePrefix.String(),
+			err2.Error())
+
 		return NumberStrKernel{}, err
 	}
 
@@ -5047,7 +5071,7 @@ func (txtFieldFmtDtoBigFloatElectron *textFieldFormatDtoBigFloatElectron) getNum
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
 		"textFieldFormatDtoBigFloatElectron."+
-			"getBigFloatNativeNumStr()",
+			"getNumberStrKernel()",
 		"")
 
 	if err != nil {
@@ -5083,6 +5107,19 @@ func (txtFieldFmtDtoBigFloatElectron *textFieldFormatDtoBigFloatElectron) getNum
 		txtBigFloatFieldFmtDto.BigFloatNum,
 		ePrefix.XCpy(
 			"txtBigFloatFieldFmtDto.BigFloatNum"))
+
+	if err != nil {
+
+		return newNumberStrKernel, err
+
+	}
+
+	err = newNumberStrKernel.Round(
+		txtBigFloatFieldFmtDto.RoundingType,
+		txtBigFloatFieldFmtDto.NumOfFractionalDigits,
+		ePrefix.XCpy(
+			"newNumberStrKernel<-"+
+				"txtBigFloatFieldFmtDto"))
 
 	return newNumberStrKernel, err
 }
