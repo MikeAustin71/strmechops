@@ -1956,11 +1956,15 @@ func (txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64) GetLeftMarginStr() strin
 	return txtFieldFmtDtoFloat64.LeftMarginStr
 }
 
-// GetNumberStrKernel
+//	GetNumberStrKernel
 //
-// Returns an instance of NumberStrKernel configured with
-// the float64 numeric value contained in the current
-// instance of TextFieldFormatDtoFloat64.
+//	Returns an instance of NumberStrKernel configured
+//	with the float64 numeric value contained in the
+//	current instance of TextFieldFormatDtoFloat64.
+//
+//	Type NumberStrKernel contains all the specifications
+//	necessary to construct an integer or floating point
+//	number string.
 //
 // ----------------------------------------------------------------
 //
@@ -2031,7 +2035,14 @@ func (txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64) GetLeftMarginStr() strin
 //
 //	NumberStrKernel
 //
-//		If this method completes successfully, the
+//		If this method completes successfully, a fully
+//		populated instance of NumberStrKernel will be
+//		returned. This instance will encapsulate number
+//		string specifications configured for the float64
+//		numeric value contained in the current instance
+//		of TextFieldFormatDtoFloat64.
+//
+//
 //
 //	error
 //
@@ -2329,6 +2340,8 @@ func (txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64) IsValidInstanceError(
 //	Specification contained in the current instance of
 //	TextFieldFormatDtoFloat64.
 //
+//		TextFieldFormatDtoFloat64.DefaultNumStrFmt
+//
 // ----------------------------------------------------------------
 //
 // # Input Parameters
@@ -2345,9 +2358,15 @@ func (txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64) IsValidInstanceError(
 //
 //			TextFieldFormatDtoFloat64.DefaultNumStrFmt
 //
+//		Input parameter 'numStrFmtSpec' provides options
+//		for customizing number string currency symbols,
+//		integer separation, number sign management and
+//		radix point symbols.
+//
 //		The 'numStrFmtSpec' format specification will be
-//		used to format the float64 number string for
-//		screen displays, file output and printing.
+//		used to format the TextFieldFormatDtoFloat64
+//		float64 value in a number string for screen
+//		displays, file output and printing.
 //
 //		If 'numStrFmtSpec' is found to be invalid, an
 //		error will be returned.
