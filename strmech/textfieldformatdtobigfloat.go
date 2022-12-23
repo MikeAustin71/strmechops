@@ -2281,6 +2281,171 @@ func (txtBigFloatFieldFmtDtoNanobot *textBigFloatFieldFormatDtoNanobot) copy(
 	return err
 }
 
+// fmtDefaultNumStr
+//
+//	Receives a pointer to an instance of
+//	TextFieldFormatDtoBigFloat
+//	('txtBigFloatFieldFmtDto').
+//
+//	Using the default Number String Formatting
+//	Specification contained in this instance, this method
+//	will configure and return a fully formatted number
+//	string.
+//
+//	If the default Number String Formatting Specification
+//	contained in input parameter 'txtBigFloatFieldFmtDto'
+//	is invalid, it will be defaulted and automatically
+//	reset to the US (United States) Signed Number String
+//	Formatting Specification.
+//
+//	Note that Field Length and Field Justification
+//	specifications will be taken from the internal
+//	'txtBigFloatFieldFmtDto' member variables:
+//
+//		txtBigFloatFieldFmtDto.FieldLength
+//		txtBigFloatFieldFmtDto.FieldJustify
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	txtBigFloatFieldFmtDto		*TextFieldFormatDtoBigFloat
+//
+//		A pointer to an instance of
+//		TextFieldFormatDtoBigFloat.
+//
+//		The numeric value extracted from the instance
+//		member variable 'BigFloatNum' will supply the
+//		floating point value included in the returned
+//		number string.
+//
+//		The instance member variable 'DefaultNumStrFmt'
+//		will be used to generate the formatted number
+//		string. If 'DefaultNumStrFmt' is invalid it will
+//		be defaulted and automatically reset to the US
+//		(United States) Signed Number String Formatting
+//		Specification.
+//
+//		None of the other data values in this instance
+//		will be changed or modified.
+//
+//		If this instance of TextFieldFormatDtoBigFloat
+//		contains invalid data elements, an error will be
+//		returned.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//
+//		If this method completes successfully, a
+//		formatted Number String will be returned.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (txtBigFloatFieldFmtDtoNanobot *textBigFloatFieldFormatDtoNanobot) fmtDefaultNumStr(
+	txtBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat,
+	errPrefDto *ePref.ErrPrefixDto) (
+	string,
+	error) {
+
+	if txtBigFloatFieldFmtDtoNanobot.lock == nil {
+		txtBigFloatFieldFmtDtoNanobot.lock = new(sync.Mutex)
+	}
+
+	txtBigFloatFieldFmtDtoNanobot.lock.Lock()
+
+	defer txtBigFloatFieldFmtDtoNanobot.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	var numStr string
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"textBigFloatFieldFormatDtoNanobot."+
+			"fmtDefaultNumStr()",
+		"")
+
+	if err != nil {
+
+		return numStr, err
+	}
+
+	if txtBigFloatFieldFmtDto == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'txtBigFloatFieldFmtDto' is a nil pointer!\n",
+			ePrefix.String())
+
+		return numStr, err
+	}
+
+	_,
+		err = new(textFieldFormatDtoBigFloatAtom).
+		testValidityOfTxtFieldFmtDtoBigFloat(
+			txtBigFloatFieldFmtDto,
+			ePrefix.XCpy(
+				"txtBigFloatFieldFmtDto"))
+
+	if err != nil {
+
+		return "", err
+
+	}
+
+	var numStrFmtSpec NumStrFormatSpec
+
+	numStrFmtSpec,
+		err = txtBigFloatFieldFmtDto.DefaultNumStrFmt.
+		CopyOut(
+			ePrefix.XCpy(
+				"numStrFmtSpec<-" +
+					"txtBigFloatFieldFmtDto.DefaultNumStrFmt"))
+
+	if err != nil {
+
+		return "", err
+
+	}
+
+	return new(textBigFloatFieldFormatDtoMolecule).
+		fmtNumStrWithFormatSpec(
+			txtBigFloatFieldFmtDto,
+			numStrFmtSpec,
+			ePrefix.XCpy(
+				"txtBigFloatFieldFmtDto.DefaultNumStrFmt"))
+}
+
 // getFormattedTextFieldStr
 //
 // Converts an instance of TextFieldFormatDtoBigFloat to a

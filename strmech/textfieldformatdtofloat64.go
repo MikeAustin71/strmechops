@@ -3003,19 +3003,20 @@ func (txtFloat64FmtDtoNanobot *textFieldFormatDtoFloat64Nanobot) copy(
 //		A pointer to an instance of
 //		TextFieldFormatDtoFloat64.
 //
-//		The numeric value extracted from this instance
-//		'Float64Num' will supply floating point value
-//		included in the returned number string.
+//		The numeric value extracted from the instance
+//		member variable 'Float64Num' will supply the
+//		floating point value included in the returned
+//		number string.
 //
-//		The member variable 'DefaultNumStrFmt' will be
-//		used to generate formatted number string. If
-//		'DefaultNumStrFmt' is invalid it will be
-//		defaulted and automatically reset to the US
+//		The instance member variable 'DefaultNumStrFmt'
+//		will be used to generate the formatted number
+//		string. If 'DefaultNumStrFmt' is invalid it will
+//		be defaulted and automatically reset to the US
 //		(United States) Signed Number String Formatting
 //		Specification.
 //
-//		None of the data values in this instance will be
-//		changed or modified.
+//		None of the other data values in this instance
+//		will be changed or modified.
 //
 //		If this instance of TextFieldFormatDtoFloat64
 //		contains invalid data elements, an error will be
@@ -3042,8 +3043,8 @@ func (txtFloat64FmtDtoNanobot *textFieldFormatDtoFloat64Nanobot) copy(
 //
 //	string
 //
-//		If this method completes successfully, a formatted
-//		Number String will be returned.
+//		If this method completes successfully, a
+//		formatted Number String will be returned.
 //
 //	error
 //
