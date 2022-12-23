@@ -2504,20 +2504,22 @@ func (txtFieldFmtDtoFloat64 TextFieldFormatDtoFloat64) SetDefaultNumStrFmt(
 
 //	SetPureNumStr
 //
-//	Receives a pure number string and configures the
-//	internal floating point numeric value contained in
-//	the current instance of TextFieldFormatDtoFloat64.
+//	Receives and converts pure number string to a
+//	float64 floating point numeric value which is then
+//	assigned to the float64 value encapsulated in the
+//	current instance of TextFieldFormatDtoFloat64.
 //
 //	The parsed float64 value extracted from the pure
 //	number string will be stored in the member variable:
 //
-//			TextFieldFormatDtoFloat64.Float64Num()
+//		TextFieldFormatDtoFloat64.Float64Num
 //
-//	The input parameter 'pureNumStr' must be formatted
-//	as a pure number string which is defined as follows:
+//	The input parameter 'pureNumStr' must be formatted as
+//	a pure number string in accordance with the following
+//	criteria:
 //
 //		1.	The pure number string must consist entirely
-//			of numeric digit characters (0-9), with
+//			of numeric digit characters (0-9), with the
 //			following exceptions.
 //
 //		2.	For floating point values, the pure number
@@ -2526,7 +2528,8 @@ func (txtFieldFmtDtoFloat64 TextFieldFormatDtoFloat64) SetDefaultNumStrFmt(
 //
 //		3.	The pure number string must designate
 //			negative values with a leading minus sign
-//			('-').
+//			('-'). Trailing minus signs are NOT
+//			supported.
 //
 //		4.	The pure number string must NOT include integer
 //			separators such as commas (',') to separate
@@ -2549,10 +2552,11 @@ func (txtFieldFmtDtoFloat64 TextFieldFormatDtoFloat64) SetDefaultNumStrFmt(
 //		The parsed float64 value will be stored in the
 //		member variable:
 //
-//			TextFieldFormatDtoFloat64.Float64Num()
+//			TextFieldFormatDtoFloat64.Float64Num
 //
 //		The input parameter 'pureNumStr' must be formatted
-//		as a pure number string which is defined as follows:
+//		as a pure number in accordance with the following
+//		criteria:
 //
 //			1.	The pure number string must consist entirely
 //				of numeric digit characters (0-9), with
@@ -2564,7 +2568,8 @@ func (txtFieldFmtDtoFloat64 TextFieldFormatDtoFloat64) SetDefaultNumStrFmt(
 //
 //			3.	The pure number string must designate
 //				negative values with a leading minus sign
-//				('-').
+//				('-'). Trailing minus signs are NOT
+//				supported.
 //
 //			4.	The pure number string must NOT include integer
 //				separators such as commas (',') to separate

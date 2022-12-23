@@ -2610,6 +2610,207 @@ func (textBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat) SetDefaultNumStrFmt(
 	return err
 }
 
+//	SetPureNumStr
+//
+//	Receives and converts pure number string to a
+//	big.Float floating point numeric value which is then
+//	assigned to the big.Flat value encapsulated in the
+//	current instance of TextFieldFormatDtoFloat64.
+//
+//	The parsed big.Float value extracted from the pure
+//	number string will be stored in the member variable:
+//
+//		TextFieldFormatDtoBigFloat.BigFloatNum
+//
+//
+//	The input parameter 'pureNumStr' must be formatted as
+//	a pure number string in accordance with the following
+//	criteria:
+//
+//		1.	The pure number string must consist entirely
+//			of numeric digit characters (0-9), with the
+//			following exceptions.
+//
+//		2.	For floating point values, the pure number
+//			string must separate integer and fractional
+//			digits with a decimal point ('.').
+//
+//		3.	The pure number string must designate
+//			negative values with a leading minus sign
+//			('-'). Trailing minus signs are NOT
+//			supported.
+//
+//		4.	The pure number string must NOT include integer
+//			separators such as commas (',') to separate
+//			integer digits by thousands.
+//
+//						  NOT THIS: 1,000,000
+//				Pure Number String: 1000000
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	pureNumStr					string
+//
+//		This string contains the pure number string which
+//		will be parsed to produce and store a big.Float
+//		numeric value in the current instance of
+//		TextFieldFormatDtoBigFloat.
+//
+//		The parsed big.Float value will be stored in the
+//		member variable:
+//
+//			TextFieldFormatDtoBigFloat.BigFloatNum
+//
+//		The input parameter 'pureNumStr' must be formatted
+//		as a pure number in accordance with the following
+//		criteria:
+//
+//			1.	The pure number string must consist entirely
+//				of numeric digit characters (0-9), with
+//				following exceptions.
+//
+//			2.	For floating point values, the pure number
+//				string must separate integer and fractional
+//				digits with a decimal point ('.').
+//
+//			3.	The pure number string must designate
+//				negative values with a leading minus sign
+//				('-'). Trailing minus signs are NOT
+//				supported.
+//
+//			4.	The pure number string must NOT include integer
+//				separators such as commas (',') to separate
+//				integer digits by thousands.
+//
+//							  NOT THIS: 1,000,000
+//					Pure Number String: 1000000
+//
+//		If the input parameter 'pureNumStr' does NOT meet these
+//		criteria, an error will be returned.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (textBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat) SetPureNumStr(
+	pureNumStr string,
+	errorPrefix interface{}) error {
+
+	if textBigFloatFieldFmtDto.lock == nil {
+		textBigFloatFieldFmtDto.lock = new(sync.Mutex)
+	}
+
+	textBigFloatFieldFmtDto.lock.Lock()
+
+	defer textBigFloatFieldFmtDto.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextFieldFormatDtoBigFloat."+
+			"SetPureNumStr()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	var bFloat big.Float
+
+	bFloat,
+		err = new(MathFloatHelper).PureNumStrToBigFloat(
+		pureNumStr,
+		textBigFloatFieldFmtDto.NativeRoundingMode,
+		ePrefix.XCpy(
+			"bFloat<-pureNumStr"))
+
+	if err != nil {
+		return err
+	}
+
+	textBigFloatFieldFmtDto.BigFloatNum.Copy(
+		&bFloat)
+
+	return err
+}
+
 // textBigFloatFieldFormatDtoNanobot
 //
 // Provides helper methods for TextFieldFormatDtoBigFloat.
