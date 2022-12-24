@@ -3174,6 +3174,25 @@ func (textBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat) SetFromPureNumStr(
 	return err
 }
 
+/*
+func (textBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat) SetFromValue(
+	numericValue interface{},
+	errorPrefix interface{}) error {
+
+	if textBigFloatFieldFmtDto.lock == nil {
+		textBigFloatFieldFmtDto.lock = new(sync.Mutex)
+	}
+
+	textBigFloatFieldFmtDto.lock.Lock()
+
+	defer textBigFloatFieldFmtDto.lock.Unlock()
+
+
+
+}
+
+*/
+
 //	SetNumStrFmtDefault
 //
 //	Receives an instance of NumStrFormatSpec and proceeds

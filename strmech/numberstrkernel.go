@@ -7914,6 +7914,208 @@ func (numStrKernel *NumberStrKernel) FmtNumStrDefaultRound(
 	return numStr, err
 }
 
+//	FmtNumStrNative
+//
+//	Extracts the specifications necessary to format and
+//	return a native number string from the current
+//	instance of NumberStrKernel.
+//
+//	The native number string returned by this method will
+//	comply with the following criteria:
+//
+//	 1.	The native number string will consist entirely of
+//	 	numeric digit characters with the following
+//	 	exceptions.
+//
+//	 2.	The native number string will separate integer
+//	 	and fractional digits with a decimal point ('.').
+//
+//	 3.	The native number string will designate negative
+//	 	values with a leading minus sign ('-'). Positive
+//		numeric values will have no leading number sign.
+//
+//	 4.	The native number string will NOT include integer
+//	 	separators such as commas (',') to separate
+//	 	integer digits by thousands.
+//
+//							NOT THIS: 1,000,000
+//				Native Number String: 1000000
+//
+//	 5.	No rounding will be performed on the numeric
+//	 	value prior to native number string conversion.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//
+//		If this method completes successfully, this
+//		string parameter will return a native number
+//		string representation of the numeric value
+//		contained in the current instance of
+//		NumberStrKernel.
+//
+//		The native number string returned by this method
+//		will comply with the following criteria:
+//
+//		1.	The native number string will consist
+//			entirely of numeric digit characters with the
+//			following exceptions.
+//
+//		2.	The native number string will separate
+//			integer and fractional digits with a decimal
+//			point ('.').
+//
+//		3.	The native number string will designate
+//			negative values with a leading minus sign
+//			('-'). Positive numeric values will have no
+//			leading number sign.
+//
+//		4.	The native number string will NOT include
+//			integer separators such as commas (',') to
+//			separate integer digits by thousands.
+//
+//							NOT THIS: 1,000,000
+//				Native Number String: 1000000
+//
+//		5.	No rounding will be performed on the numeric
+//			value prior to native number string
+//			conversion.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (numStrKernel *NumberStrKernel) FmtNumStrNative(
+	errorPrefix interface{}) (
+	string,
+	error) {
+
+	if numStrKernel.lock == nil {
+		numStrKernel.lock = new(sync.Mutex)
+	}
+
+	numStrKernel.lock.Lock()
+
+	defer numStrKernel.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+	var numStr string
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumberStrKernel."+
+			"FmtNumStrDefaultRound()",
+		"")
+
+	if err != nil {
+		return numStr, err
+	}
+
+	var numStrFmtSpec NumStrFormatSpec
+
+	numStrFmtSpec,
+		err = new(NumStrFormatSpec).NewSignedSimpleNumberStr(
+		".",
+		"",
+		true,
+		-1,
+		TxtJustify.Right(),
+		ePrefix.XCpy(
+			"numStrFmtSpec<-"))
+
+	if err != nil {
+		return numStr, err
+	}
+
+	roundingSpec := NumStrRoundingSpec{
+		roundingType:            NumRoundType.NoRounding(),
+		roundToFractionalDigits: 0,
+	}
+
+	return new(numberStrKernelMolecule).
+		formatNumStr(
+			numStrKernel,
+			numStrFmtSpec,
+			roundingSpec,
+			ePrefix.XCpy("numStrKernel"))
+
+}
+
 //	FmtSignedNumStrFrance
 //
 //	Returns a formatted number string based on the
