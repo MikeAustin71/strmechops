@@ -12,6 +12,135 @@ type MainTest03 struct {
 	input string
 }
 
+func (MainTest03) PureNumStrToFloat64_01() {
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"MainTest03.PureNumStrToFloat64_01()",
+		"")
+
+	expectedStr := "1234.5678"
+
+	testName := fmt.Sprintf("Test #1 TextFieldFormatDtoFloat64 - txtFieldFmtDtoBFloat(%v)\n",
+		expectedStr)
+
+	txtFieldFmtDtoF64 := strmech.TextFieldFormatDtoFloat64{
+		LeftMarginStr:         "",
+		Float64Num:            0,
+		LeadingMinusSign:      true,
+		RoundingType:          strmech.NumRoundType.HalfAwayFromZero(),
+		NumOfFractionalDigits: -1,
+		DefaultNumStrFmt:      strmech.NumStrFormatSpec{},
+		FieldLength:           -1,
+		FieldJustify:          strmech.TxtJustify.Right(),
+		RightMarginStr:        "",
+	}
+
+	var err error
+
+	err = txtFieldFmtDtoF64.SetFromPureNumStr(
+		expectedStr,
+		ePrefix.XCpy(
+			"txtFieldFmtDtoF64<-expectedStr"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var actualNumStr string
+
+	actualNumStr,
+		err = new(strmech.MathHelper).NumericValueToPureNumStr(
+		txtFieldFmtDtoF64,
+		ePrefix.XCpy(
+			"actualNumStr<-txtFieldFmtDtoF64"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if actualNumStr != expectedStr {
+
+		fmt.Printf("\n%v\n"+
+			"%v\n"+
+			"Error: actualNumStr != expectedStr\n"+
+			"actualNumStr  = '%v'\n"+
+			"expectedStr   = '%v'\n",
+			ePrefix.String(),
+			testName,
+			actualNumStr,
+			expectedStr)
+
+		return
+
+	}
+
+	expectedStr = "-8761.123456"
+
+	testName = fmt.Sprintf("Test #2 *TextFieldFormatDtoFloat64 - ptrTxtFieldFmtDtoF64(%v)\n",
+		expectedStr)
+
+	txtFieldFmtDtoF642 := strmech.TextFieldFormatDtoFloat64{
+		LeftMarginStr:         "",
+		Float64Num:            0,
+		LeadingMinusSign:      true,
+		RoundingType:          strmech.NumRoundType.HalfAwayFromZero(),
+		NumOfFractionalDigits: -1,
+		DefaultNumStrFmt:      strmech.NumStrFormatSpec{},
+		FieldLength:           -1,
+		FieldJustify:          strmech.TxtJustify.Right(),
+		RightMarginStr:        "",
+	}
+
+	var ptrTxtFieldFmtDtoF64 *strmech.TextFieldFormatDtoFloat64
+
+	err = txtFieldFmtDtoF642.SetFromPureNumStr(
+		expectedStr,
+		ePrefix.XCpy(
+			"txtFieldFmtDtoF642<-expectedStr"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	ptrTxtFieldFmtDtoF64 = &txtFieldFmtDtoF642
+
+	actualNumStr,
+		err = new(strmech.MathHelper).NumericValueToPureNumStr(
+		ptrTxtFieldFmtDtoF64,
+		ePrefix.XCpy(
+			"actualNumStr<-txtFieldFmtDtoF64"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if actualNumStr != expectedStr {
+
+		fmt.Printf("\n%v\n"+
+			"%v\n"+
+			"Error: actualNumStr != expectedStr\n"+
+			"actualNumStr  = '%v'\n"+
+			"expectedStr   = '%v'\n",
+			ePrefix.String(),
+			testName,
+			actualNumStr,
+			expectedStr)
+
+		return
+
+	}
+
+	return
+
+}
+
 func (MainTest03) RaiseToExponent03() {
 	// Tests RaiseToIntExponent()
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(

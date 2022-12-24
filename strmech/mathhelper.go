@@ -25,8 +25,8 @@ type MathHelper struct {
 //
 // Packages and functions in the Go programming
 // language, as well as other programming languages,
-// typically use this type number string as input
-// parameters.
+// typically use this type number string as an input
+// parameter.
 //
 // A signed pure number string is defined as follows:
 //

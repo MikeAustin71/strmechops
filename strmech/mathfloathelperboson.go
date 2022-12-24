@@ -624,14 +624,11 @@ func (floatHelperBoson *mathFloatHelperBoson) pureNumStrToBigFloat(
 		return big.Float{}, err
 	}
 
-	var bigFloatNum *big.Float
-
+	bigFloatNum := big.Float{}
 	var ok bool
 
 	_,
-		ok = bigFloatNum.
-		SetMode(roundingMode).
-		SetString(pureNumStr)
+		ok = bigFloatNum.SetString(pureNumStr)
 
 	if !ok {
 		err = fmt.Errorf("%v\n"+
@@ -646,7 +643,9 @@ func (floatHelperBoson *mathFloatHelperBoson) pureNumStrToBigFloat(
 		return big.Float{}, err
 	}
 
-	return *bigFloatNum, err
+	bigFloatNum.SetMode(roundingMode)
+
+	return bigFloatNum, err
 }
 
 //	pureNumStrToFloat64
