@@ -1,7 +1,6 @@
 package strmech
 
 import (
-	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
 	"math/big"
 	"testing"
@@ -28,7 +27,7 @@ func TestMathBigRatHelper_RatToBigFloat_000100(t *testing.T) {
 		ePrefix)
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}

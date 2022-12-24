@@ -12,6 +12,146 @@ type MainNumStrTest005 struct {
 	input string
 }
 
+func (mainNumStrTest005 MainNumStrTest005) Float64Dto01() {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"MainNumStrTest005.Float64Dto01()",
+		"")
+
+	breakStr := strings.Repeat("=", 50)
+
+	fmt.Printf("\n\n" + breakStr + "\n")
+
+	fmt.Printf("\n Starting Run!\n"+
+		"Function: %v\n",
+		ePrefix.String())
+
+	fmt.Printf("\n" + breakStr + "\n")
+
+	var txtFmtFloat64 strmech.TextFieldFormatDtoFloat64
+
+	txtFmtFloat64 = strmech.TextFieldFormatDtoFloat64{
+		LeftMarginStr:         "",
+		Float64Num:            12345.123456789,
+		LeadingMinusSign:      true,
+		RoundingType:          strmech.NumRoundType.HalfAwayFromZero(),
+		NumOfFractionalDigits: 6,
+		DefaultNumStrFmt:      strmech.NumStrFormatSpec{},
+		FieldLength:           -1,
+		FieldJustify:          strmech.TxtJustify.Right(),
+		RightMarginStr:        "",
+	}
+
+	numStrFmtSpec,
+		err := new(strmech.NumStrFormatSpec).NewNumFmtParams(
+		".",
+		",",
+		strmech.IntGroupingType.Thousands(),
+		"",
+		"",
+		strmech.NumFieldSymPos.InsideNumField(),
+		"-",
+		"",
+		strmech.NumFieldSymPos.InsideNumField(),
+		"",
+		"",
+		strmech.NumFieldSymPos.InsideNumField(),
+		23,
+		strmech.TxtJustify.Center(),
+		ePrefix.XCpy(
+			"numStrFmtSpec<-"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	expectedStr := "     12,345.123457     "
+
+	sMech := strmech.StrMech{}
+
+	convertedExpectedStr := sMech.ConvertNonPrintableString(
+		expectedStr,
+		true)
+
+	err = txtFmtFloat64.SetDefaultNumStrFmt(
+		numStrFmtSpec,
+		ePrefix.XCpy(
+			"txtFmtFloat64<-numStrFmtSpec"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	testNumStrFmtSpec := txtFmtFloat64.GetDefaultNumStrFmtSpec()
+
+	var fieldSpec strmech.NumStrNumberFieldSpec
+
+	fieldSpec,
+		err = testNumStrFmtSpec.GetNumberFieldSpec(
+		ePrefix.XCpy(
+			"testNumStrFmtSpec"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	fmt.Printf("Field Length: %v\n"+
+		"Field Justification: %v\n",
+		fieldSpec.GetNumFieldLength(),
+		fieldSpec.GetNumFieldJustification().String())
+
+	var actualStr string
+
+	actualStr,
+		err = txtFmtFloat64.FmtDefaultNumStr(
+		ePrefix.XCpy(
+			""))
+
+	convertedActualStr := sMech.ConvertNonPrintableString(
+		actualStr,
+		true)
+
+	if convertedActualStr != convertedExpectedStr {
+
+		fmt.Printf("%v\n"+
+			"Test#1 - txtFmtFloat64.SetDefaultNumStrFmt()\n"+
+			"Error: convertedActualStr NOT EQUAL TO convertedExpectedStr\n"+
+			"    convertedActualStr = '%v'\n"+
+			"convertedExpectedStr   = '%v'\n",
+			ePrefix.String(),
+			convertedActualStr,
+			convertedExpectedStr)
+
+		return
+
+	}
+
+	fmt.Printf("%v\n"+
+		"Success: convertedActualStr EQUAL TO convertedExpectedStr\n"+
+		"    convertedActualStr = '%v'\n"+
+		"convertedExpectedStr   = '%v'\n",
+		ePrefix.String(),
+		convertedActualStr,
+		convertedExpectedStr)
+
+	fmt.Printf("\n\n" + breakStr + "\n")
+
+	fmt.Printf("\n Successful Completion!\n"+
+		"Function: %v\n",
+		ePrefix.String())
+
+	fmt.Printf("\n" + breakStr + "\n")
+
+	return
+
+}
+
 func (mainNumStrTest005 MainNumStrTest005) NumStrRound01() {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(

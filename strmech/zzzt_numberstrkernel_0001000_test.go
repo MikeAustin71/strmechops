@@ -1730,7 +1730,7 @@ func TestNumberStrKernel_FmtSignedSimpleNumber_000100(t *testing.T) {
 				"baseValueNStr<-origNumberStr"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -1740,7 +1740,7 @@ func TestNumberStrKernel_FmtSignedSimpleNumber_000100(t *testing.T) {
 			"baseValueNStr"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -1756,7 +1756,7 @@ func TestNumberStrKernel_FmtSignedSimpleNumber_000100(t *testing.T) {
 				"NumRoundType.NoRounding()"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -1775,7 +1775,7 @@ func TestNumberStrKernel_FmtSignedSimpleNumber_000100(t *testing.T) {
 			"fmtNumberStr<-baseValueNStr"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -1824,7 +1824,7 @@ func TestNumberStrKernel_FmtSignedSimpleNumber_000200(t *testing.T) {
 				"baseValueNStr<-origNumberStr"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -1852,7 +1852,7 @@ func TestNumberStrKernel_FmtSignedSimpleNumber_000200(t *testing.T) {
 				"NumRoundType.NoRounding()"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -1871,7 +1871,7 @@ func TestNumberStrKernel_FmtSignedSimpleNumber_000200(t *testing.T) {
 			"fmtNumberStr<-baseValueNStr"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -1921,7 +1921,7 @@ func TestNumberStrKernel_FmtSignedPureNumberStr_000100(t *testing.T) {
 				"baseValueNStr<-origNumberStr"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -1937,7 +1937,7 @@ func TestNumberStrKernel_FmtSignedPureNumberStr_000100(t *testing.T) {
 				"NumRoundType.NoRounding()"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -1955,7 +1955,7 @@ func TestNumberStrKernel_FmtSignedPureNumberStr_000100(t *testing.T) {
 			"actualFmtNumberStr<-baseValueNStr"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -1999,7 +1999,7 @@ func TestNumberStrKernel_FmtSignedPureNumberStr_000100(t *testing.T) {
 			"baseValueNStr"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -2012,7 +2012,7 @@ func TestNumberStrKernel_FmtSignedPureNumberStr_000100(t *testing.T) {
 			"nStr03<-baseValueNStr"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -2024,7 +2024,7 @@ func TestNumberStrKernel_FmtSignedPureNumberStr_000100(t *testing.T) {
 			"nStr03<-HalfAwayFromZero"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -2040,7 +2040,7 @@ func TestNumberStrKernel_FmtSignedPureNumberStr_000100(t *testing.T) {
 			"actualFmtNumberStr<-baseValueNStr"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -2087,7 +2087,7 @@ func TestNumberStrKernel_RoundNoRounding_000100(t *testing.T) {
 				"baseVal<-inputNumberStr"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -2097,7 +2097,7 @@ func TestNumberStrKernel_RoundNoRounding_000100(t *testing.T) {
 			"baseVal"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -2134,7 +2134,7 @@ func TestNumberStrKernel_RoundNoRounding_000100(t *testing.T) {
 			"baseVal"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -2160,7 +2160,7 @@ func TestNumberStrKernel_RoundNoRounding_000100(t *testing.T) {
 			""))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -2230,7 +2230,7 @@ func TestNumberStrKernel_RoundNoRounding_000100(t *testing.T) {
 			"nStr01<-baseValueNStr"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -2241,7 +2241,7 @@ func TestNumberStrKernel_RoundNoRounding_000100(t *testing.T) {
 			"nStr02<-baseValueNStr"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -2252,7 +2252,7 @@ func TestNumberStrKernel_RoundNoRounding_000100(t *testing.T) {
 			"nStr02-NumSignVal.Negative()"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -2264,7 +2264,7 @@ func TestNumberStrKernel_RoundNoRounding_000100(t *testing.T) {
 			"nStr01-NoRounding"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -2274,7 +2274,7 @@ func TestNumberStrKernel_RoundNoRounding_000100(t *testing.T) {
 		true)
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -2300,7 +2300,7 @@ func TestNumberStrKernel_RoundNoRounding_000100(t *testing.T) {
 			"nStr02-NoRounding"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -2310,7 +2310,7 @@ func TestNumberStrKernel_RoundNoRounding_000100(t *testing.T) {
 		true)
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -2356,7 +2356,7 @@ func TestNumberStrKernel_RoundHalfUpWithNegNums_000200(t *testing.T) {
 				"nStr01<-inputNumberStr"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -2367,7 +2367,7 @@ func TestNumberStrKernel_RoundHalfUpWithNegNums_000200(t *testing.T) {
 			"nStr02<-baseValueNStr"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -2378,7 +2378,7 @@ func TestNumberStrKernel_RoundHalfUpWithNegNums_000200(t *testing.T) {
 			"nStr02-NumSignVal.Negative()"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -2390,7 +2390,7 @@ func TestNumberStrKernel_RoundHalfUpWithNegNums_000200(t *testing.T) {
 			"nStr01-HalfUpWithNegNums"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -2400,7 +2400,7 @@ func TestNumberStrKernel_RoundHalfUpWithNegNums_000200(t *testing.T) {
 		true)
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -2426,7 +2426,7 @@ func TestNumberStrKernel_RoundHalfUpWithNegNums_000200(t *testing.T) {
 			"nStr02-HalfUpWithNegNums"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -2436,7 +2436,7 @@ func TestNumberStrKernel_RoundHalfUpWithNegNums_000200(t *testing.T) {
 		true)
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -2482,7 +2482,7 @@ func TestNumberStrKernel_RoundHalfDownWithNegNums_000300(t *testing.T) {
 				"baseVal<-inputNumberStr"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -2492,7 +2492,7 @@ func TestNumberStrKernel_RoundHalfDownWithNegNums_000300(t *testing.T) {
 			"baseVal"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -2503,7 +2503,7 @@ func TestNumberStrKernel_RoundHalfDownWithNegNums_000300(t *testing.T) {
 			"nStr01<-baseValueNStr"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -2514,7 +2514,7 @@ func TestNumberStrKernel_RoundHalfDownWithNegNums_000300(t *testing.T) {
 			"nStr02<-baseValueNStr"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -2525,7 +2525,7 @@ func TestNumberStrKernel_RoundHalfDownWithNegNums_000300(t *testing.T) {
 			"nStr02-NumSignVal.Negative()"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -2537,7 +2537,7 @@ func TestNumberStrKernel_RoundHalfDownWithNegNums_000300(t *testing.T) {
 			"nStr01-HalfDownWithNegNums"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -2547,7 +2547,7 @@ func TestNumberStrKernel_RoundHalfDownWithNegNums_000300(t *testing.T) {
 		true)
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -2573,7 +2573,7 @@ func TestNumberStrKernel_RoundHalfDownWithNegNums_000300(t *testing.T) {
 			"nStr02-HalfDownWithNegNums"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -2583,7 +2583,7 @@ func TestNumberStrKernel_RoundHalfDownWithNegNums_000300(t *testing.T) {
 		true)
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -2629,7 +2629,7 @@ func TestNumberStrKernel_RoundHalfAwayFromZero_000400(t *testing.T) {
 				"baseVal<-inputNumberStr"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -2639,7 +2639,7 @@ func TestNumberStrKernel_RoundHalfAwayFromZero_000400(t *testing.T) {
 			"baseVal"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -2650,7 +2650,7 @@ func TestNumberStrKernel_RoundHalfAwayFromZero_000400(t *testing.T) {
 			"nStr01<-baseValueNStr"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -2661,7 +2661,7 @@ func TestNumberStrKernel_RoundHalfAwayFromZero_000400(t *testing.T) {
 			"nStr02<-baseValueNStr"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -2672,7 +2672,7 @@ func TestNumberStrKernel_RoundHalfAwayFromZero_000400(t *testing.T) {
 			"nStr02-NumSignVal.Negative()"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -2684,7 +2684,7 @@ func TestNumberStrKernel_RoundHalfAwayFromZero_000400(t *testing.T) {
 			"nStr01-HalfAwayFromZero"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -2694,7 +2694,7 @@ func TestNumberStrKernel_RoundHalfAwayFromZero_000400(t *testing.T) {
 		true)
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -2720,7 +2720,7 @@ func TestNumberStrKernel_RoundHalfAwayFromZero_000400(t *testing.T) {
 			"nStr02-HalfAwayFromZero"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -2730,7 +2730,7 @@ func TestNumberStrKernel_RoundHalfAwayFromZero_000400(t *testing.T) {
 		true)
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -2777,7 +2777,7 @@ func TestNumberStrKernel_RoundHalfTowardsZero_000500(t *testing.T) {
 				"baseVal<-inputNumberStr"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -2787,7 +2787,7 @@ func TestNumberStrKernel_RoundHalfTowardsZero_000500(t *testing.T) {
 			"baseVal"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -2798,7 +2798,7 @@ func TestNumberStrKernel_RoundHalfTowardsZero_000500(t *testing.T) {
 			"nStr01<-baseValueNStr"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -2809,7 +2809,7 @@ func TestNumberStrKernel_RoundHalfTowardsZero_000500(t *testing.T) {
 			"nStr02<-baseValueNStr"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -2820,7 +2820,7 @@ func TestNumberStrKernel_RoundHalfTowardsZero_000500(t *testing.T) {
 			"nStr02-NumSignVal.Negative()"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -2832,7 +2832,7 @@ func TestNumberStrKernel_RoundHalfTowardsZero_000500(t *testing.T) {
 			"nStr01-HalfTowardsZero"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -2842,7 +2842,7 @@ func TestNumberStrKernel_RoundHalfTowardsZero_000500(t *testing.T) {
 		true)
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -2868,7 +2868,7 @@ func TestNumberStrKernel_RoundHalfTowardsZero_000500(t *testing.T) {
 			"nStr02-HalfTowardsZero"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -2878,7 +2878,7 @@ func TestNumberStrKernel_RoundHalfTowardsZero_000500(t *testing.T) {
 		true)
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -2912,7 +2912,7 @@ func TestNumberStrKernel_RoundHalfTowardsZero_000500(t *testing.T) {
 				"nStr03<-inputNumberStr"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -2924,7 +2924,7 @@ func TestNumberStrKernel_RoundHalfTowardsZero_000500(t *testing.T) {
 			"nStr03-HalfTowardsZero"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -2934,7 +2934,7 @@ func TestNumberStrKernel_RoundHalfTowardsZero_000500(t *testing.T) {
 		true)
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -2979,7 +2979,7 @@ func TestNumberStrKernel_RoundHalfToEven_000600(t *testing.T) {
 				"baseVal<-inputNumberStr"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -2989,7 +2989,7 @@ func TestNumberStrKernel_RoundHalfToEven_000600(t *testing.T) {
 			"baseVal"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -3000,7 +3000,7 @@ func TestNumberStrKernel_RoundHalfToEven_000600(t *testing.T) {
 			"nStr01<-baseValueNStr"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -3011,7 +3011,7 @@ func TestNumberStrKernel_RoundHalfToEven_000600(t *testing.T) {
 			"nStr02<-baseValueNStr"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -3022,7 +3022,7 @@ func TestNumberStrKernel_RoundHalfToEven_000600(t *testing.T) {
 			"nStr02-NumSignVal.Negative()"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -3034,7 +3034,7 @@ func TestNumberStrKernel_RoundHalfToEven_000600(t *testing.T) {
 			"nStr01-HalfToEven"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -3044,7 +3044,7 @@ func TestNumberStrKernel_RoundHalfToEven_000600(t *testing.T) {
 		true)
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -3070,7 +3070,7 @@ func TestNumberStrKernel_RoundHalfToEven_000600(t *testing.T) {
 			"nStr02-HalfToEven"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -3080,7 +3080,7 @@ func TestNumberStrKernel_RoundHalfToEven_000600(t *testing.T) {
 		true)
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -3114,7 +3114,7 @@ func TestNumberStrKernel_RoundHalfToEven_000600(t *testing.T) {
 				"nStr03<-inputNumberStr"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -3126,7 +3126,7 @@ func TestNumberStrKernel_RoundHalfToEven_000600(t *testing.T) {
 			"nStr03-HalfToEven"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -3136,7 +3136,7 @@ func TestNumberStrKernel_RoundHalfToEven_000600(t *testing.T) {
 		true)
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -3168,7 +3168,7 @@ func TestNumberStrKernel_RoundHalfToEven_000600(t *testing.T) {
 				"nStr04<-inputNumberStr"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -3180,7 +3180,7 @@ func TestNumberStrKernel_RoundHalfToEven_000600(t *testing.T) {
 			"nStr04-HalfToEven"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -3190,7 +3190,7 @@ func TestNumberStrKernel_RoundHalfToEven_000600(t *testing.T) {
 		true)
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -3235,7 +3235,7 @@ func TestNumberStrKernel_RoundHalfToOdd_000700(t *testing.T) {
 				"baseVal<-inputNumberStr"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -3245,7 +3245,7 @@ func TestNumberStrKernel_RoundHalfToOdd_000700(t *testing.T) {
 			"baseVal"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -3256,7 +3256,7 @@ func TestNumberStrKernel_RoundHalfToOdd_000700(t *testing.T) {
 			"nStr01<-baseValueNStr"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -3267,7 +3267,7 @@ func TestNumberStrKernel_RoundHalfToOdd_000700(t *testing.T) {
 			"nStr02<-baseValueNStr"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -3278,7 +3278,7 @@ func TestNumberStrKernel_RoundHalfToOdd_000700(t *testing.T) {
 			"nStr02-NumSignVal.Negative()"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -3290,7 +3290,7 @@ func TestNumberStrKernel_RoundHalfToOdd_000700(t *testing.T) {
 			"nStr01-HalfToOdd"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -3300,7 +3300,7 @@ func TestNumberStrKernel_RoundHalfToOdd_000700(t *testing.T) {
 		true)
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -3326,7 +3326,7 @@ func TestNumberStrKernel_RoundHalfToOdd_000700(t *testing.T) {
 			"nStr02-HalfToOdd"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -3336,7 +3336,7 @@ func TestNumberStrKernel_RoundHalfToOdd_000700(t *testing.T) {
 		true)
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -3370,7 +3370,7 @@ func TestNumberStrKernel_RoundHalfToOdd_000700(t *testing.T) {
 				"nStr03<-inputNumberStr"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -3382,7 +3382,7 @@ func TestNumberStrKernel_RoundHalfToOdd_000700(t *testing.T) {
 			"nStr03-HalfToOdd"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -3392,7 +3392,7 @@ func TestNumberStrKernel_RoundHalfToOdd_000700(t *testing.T) {
 		true)
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -3424,7 +3424,7 @@ func TestNumberStrKernel_RoundHalfToOdd_000700(t *testing.T) {
 				"nStr04<-inputNumberStr"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -3436,7 +3436,7 @@ func TestNumberStrKernel_RoundHalfToOdd_000700(t *testing.T) {
 			"nStr04-HalfToOdd"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -3446,7 +3446,7 @@ func TestNumberStrKernel_RoundHalfToOdd_000700(t *testing.T) {
 		true)
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -3501,7 +3501,7 @@ func TestNumberStrKernel_RoundRandomly_000800(t *testing.T) {
 				"nStr01<-"))
 
 		if err != nil {
-			fmt.Printf("\n%v\n",
+			t.Errorf("\n%v\n",
 				err.Error())
 			return
 		}
@@ -3513,7 +3513,7 @@ func TestNumberStrKernel_RoundRandomly_000800(t *testing.T) {
 				"nStr01-Randomly"))
 
 		if err != nil {
-			fmt.Printf("\n%v\n",
+			t.Errorf("\n%v\n",
 				err.Error())
 			return
 		}
@@ -3523,7 +3523,7 @@ func TestNumberStrKernel_RoundRandomly_000800(t *testing.T) {
 			true)
 
 		if err != nil {
-			fmt.Printf("\n%v\n",
+			t.Errorf("\n%v\n",
 				err.Error())
 			return
 		}
@@ -3598,7 +3598,7 @@ func TestNumberStrKernel_RoundFloor_000900(t *testing.T) {
 				"baseVal<-inputNumberStr"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -3608,7 +3608,7 @@ func TestNumberStrKernel_RoundFloor_000900(t *testing.T) {
 			"baseVal"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -3619,7 +3619,7 @@ func TestNumberStrKernel_RoundFloor_000900(t *testing.T) {
 			"nStr01<-baseValueNStr"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -3630,7 +3630,7 @@ func TestNumberStrKernel_RoundFloor_000900(t *testing.T) {
 			"nStr02<-baseValueNStr"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -3641,7 +3641,7 @@ func TestNumberStrKernel_RoundFloor_000900(t *testing.T) {
 			"nStr02-NumSignVal.Negative()"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -3653,7 +3653,7 @@ func TestNumberStrKernel_RoundFloor_000900(t *testing.T) {
 			"nStr01-Floor"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -3663,7 +3663,7 @@ func TestNumberStrKernel_RoundFloor_000900(t *testing.T) {
 		true)
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -3689,7 +3689,7 @@ func TestNumberStrKernel_RoundFloor_000900(t *testing.T) {
 			"nStr02-Floor"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -3699,7 +3699,7 @@ func TestNumberStrKernel_RoundFloor_000900(t *testing.T) {
 		true)
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -3733,7 +3733,7 @@ func TestNumberStrKernel_RoundFloor_000900(t *testing.T) {
 				"nStr03<-inputNumberStr"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -3745,7 +3745,7 @@ func TestNumberStrKernel_RoundFloor_000900(t *testing.T) {
 			"nStr03-Floor"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -3755,7 +3755,7 @@ func TestNumberStrKernel_RoundFloor_000900(t *testing.T) {
 		true)
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -3787,7 +3787,7 @@ func TestNumberStrKernel_RoundFloor_000900(t *testing.T) {
 				"nStr04<-inputNumberStr"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -3799,7 +3799,7 @@ func TestNumberStrKernel_RoundFloor_000900(t *testing.T) {
 			"nStr04-Floor"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -3809,7 +3809,7 @@ func TestNumberStrKernel_RoundFloor_000900(t *testing.T) {
 		true)
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -3854,7 +3854,7 @@ func TestNumberStrKernel_RoundCeiling_001000(t *testing.T) {
 				"baseVal<-inputNumberStr"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -3864,7 +3864,7 @@ func TestNumberStrKernel_RoundCeiling_001000(t *testing.T) {
 			"baseVal"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -3875,7 +3875,7 @@ func TestNumberStrKernel_RoundCeiling_001000(t *testing.T) {
 			"nStr01<-baseValueNStr"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -3886,7 +3886,7 @@ func TestNumberStrKernel_RoundCeiling_001000(t *testing.T) {
 			"nStr02<-baseValueNStr"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -3897,7 +3897,7 @@ func TestNumberStrKernel_RoundCeiling_001000(t *testing.T) {
 			"nStr02-NumSignVal.Negative()"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -3909,7 +3909,7 @@ func TestNumberStrKernel_RoundCeiling_001000(t *testing.T) {
 			"nStr01-Ceiling"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -3919,7 +3919,7 @@ func TestNumberStrKernel_RoundCeiling_001000(t *testing.T) {
 		true)
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -3945,7 +3945,7 @@ func TestNumberStrKernel_RoundCeiling_001000(t *testing.T) {
 			"nStr02-Ceiling"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -3955,7 +3955,7 @@ func TestNumberStrKernel_RoundCeiling_001000(t *testing.T) {
 		true)
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -3989,7 +3989,7 @@ func TestNumberStrKernel_RoundCeiling_001000(t *testing.T) {
 				"nStr03<-inputNumberStr"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -4001,7 +4001,7 @@ func TestNumberStrKernel_RoundCeiling_001000(t *testing.T) {
 			"nStr03-Ceiling"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -4011,7 +4011,7 @@ func TestNumberStrKernel_RoundCeiling_001000(t *testing.T) {
 		true)
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -4043,7 +4043,7 @@ func TestNumberStrKernel_RoundCeiling_001000(t *testing.T) {
 				"nStr04<-inputNumberStr"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -4055,7 +4055,7 @@ func TestNumberStrKernel_RoundCeiling_001000(t *testing.T) {
 			"nStr04-Ceiling"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -4065,7 +4065,7 @@ func TestNumberStrKernel_RoundCeiling_001000(t *testing.T) {
 		true)
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -4115,7 +4115,7 @@ func TestNumberStrKernel_String_000100(t *testing.T) {
 				"baseValueNStr<-origNumberStr"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -4126,7 +4126,7 @@ func TestNumberStrKernel_String_000100(t *testing.T) {
 			"nStr02<-baseValueNStr"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -4152,7 +4152,7 @@ func TestNumberStrKernel_String_000100(t *testing.T) {
 			"nStr02"))
 
 	if err != nil {
-		fmt.Printf("\n%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
