@@ -75,7 +75,7 @@ func (mainNumStrTest005 MainNumStrTest005) Float64Dto01() {
 		expectedStr,
 		true)
 
-	err = txtFmtFloat64.SetDefaultNumStrFmt(
+	err = txtFmtFloat64.SetNumStrFmtDefault(
 		numStrFmtSpec,
 		ePrefix.XCpy(
 			"txtFmtFloat64<-numStrFmtSpec"))
@@ -109,7 +109,7 @@ func (mainNumStrTest005 MainNumStrTest005) Float64Dto01() {
 	var actualStr string
 
 	actualStr,
-		err = txtFmtFloat64.FmtDefaultNumStr(
+		err = txtFmtFloat64.FmtNumStrDefault(
 		ePrefix.XCpy(
 			""))
 
@@ -120,7 +120,7 @@ func (mainNumStrTest005 MainNumStrTest005) Float64Dto01() {
 	if convertedActualStr != convertedExpectedStr {
 
 		fmt.Printf("%v\n"+
-			"Test#1 - txtFmtFloat64.SetDefaultNumStrFmt()\n"+
+			"Test#1 - txtFmtFloat64.SetNumStrFmtDefault()\n"+
 			"Error: convertedActualStr NOT EQUAL TO convertedExpectedStr\n"+
 			"    convertedActualStr = '%v'\n"+
 			"convertedExpectedStr   = '%v'\n",
@@ -273,7 +273,7 @@ func (mainNumStrTest005 MainNumStrTest005) NumStrRound01() {
 	var fmtNumberStr string
 
 	fmtNumberStr,
-		err = baseValueNStr.FmtSignedSimpleNumberStr(
+		err = baseValueNStr.FmtSignedNumStrSimple(
 		".",
 		"",
 		true,
@@ -386,7 +386,7 @@ func (mainNumStrTest005 MainNumStrTest005) NumStrFmtSignedSimple() {
 	var fmtNumberStr string
 
 	fmtNumberStr,
-		err = baseValueNStr.FmtSignedSimpleNumberStr(
+		err = baseValueNStr.FmtSignedNumStrSimple(
 		".",
 		",",
 		true,

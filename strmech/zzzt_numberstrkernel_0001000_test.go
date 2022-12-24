@@ -1764,7 +1764,7 @@ func TestNumberStrKernel_FmtSignedSimpleNumber_000100(t *testing.T) {
 	var fmtNumberStr string
 
 	fmtNumberStr,
-		err = baseValueNStr.FmtSignedSimpleNumberStr(
+		err = baseValueNStr.FmtSignedNumStrSimple(
 		".",
 		",",
 		true,
@@ -1860,7 +1860,7 @@ func TestNumberStrKernel_FmtSignedSimpleNumber_000200(t *testing.T) {
 	var fmtNumberStr string
 
 	fmtNumberStr,
-		err = baseValueNStr.FmtSignedSimpleNumberStr(
+		err = baseValueNStr.FmtSignedNumStrSimple(
 		".",
 		"",
 		true,
@@ -1945,7 +1945,7 @@ func TestNumberStrKernel_FmtSignedPureNumberStr_000100(t *testing.T) {
 	var actualFmtNumberStr string
 
 	actualFmtNumberStr,
-		err = baseValueNStr.FmtSignedPureNumberStr(
+		err = baseValueNStr.FmtSignedNumStrPure(
 		".",
 		true,
 		-1,
@@ -2030,7 +2030,7 @@ func TestNumberStrKernel_FmtSignedPureNumberStr_000100(t *testing.T) {
 	}
 
 	actualFmtNumberStr,
-		err = nStr03.FmtSignedPureNumberStr(
+		err = nStr03.FmtSignedNumStrPure(
 		".",
 		false,
 		-1,
@@ -4157,7 +4157,18 @@ func TestNumberStrKernel_String_000100(t *testing.T) {
 		return
 	}
 
-	actualFmtNumberStr := nStr02.String()
+	var actualFmtNumberStr string
+
+	actualFmtNumberStr,
+		err = nStr02.FmtNumStrDefault(
+		ePrefix.XCpy(
+			"actualFmtNumberStr<-nStr02"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
 
 	if expectedNumberStr != actualFmtNumberStr {
 
@@ -4184,7 +4195,16 @@ func TestNumberStrKernel_String_000100(t *testing.T) {
 		ePrefix.XCpy(
 			"nStr02"))
 
-	actualFmtNumberStr = nStr02.String()
+	actualFmtNumberStr,
+		err = nStr02.FmtNumStrDefault(
+		ePrefix.XCpy("actualFmtNumberStr" +
+			"<-nStr02"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
 
 	if expectedNumberStr != actualFmtNumberStr {
 

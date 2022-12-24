@@ -22,10 +22,10 @@ type TextFieldFormatDtoFloat64 struct {
 	// be formatted for output as a text string.
 
 	LeadingMinusSign bool
-	// When generating rounded pure number strings,
-	// setting this parameter to 'true' will ensure
-	// that negative numeric values will be prefixed
-	// with a leading minus sign ('-').
+	// When generating pure number strings, setting this
+	// parameter to 'true' will ensure that negative
+	// numeric values will be prefixed with a leading
+	// minus sign ('-').
 	//
 	//		Example: -123.456
 	//
@@ -316,7 +316,7 @@ type TextFieldFormatDtoFloat64 struct {
 	// Users can set the 'DefaultNumStrFmt' parameter
 	// by calling method:
 	//
-	//	TextFieldFormatDtoFloat64.SetDefaultNumStrFmt()
+	//	TextFieldFormatDtoFloat64.SetNumStrFmtDefault()
 	//
 	// The NumStrFormatSpec data structure is defined
 	// as follows:
@@ -1046,348 +1046,6 @@ func (txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64) Equal(
 		incomingTxtFloat64FmtDto)
 }
 
-//	FmtDefaultNumStr
-//
-//	Returns a number string comprised of the float64
-//	floating point numeric value contained in the current
-//	instance of TextFieldFormatDtoFloat64.
-//
-//	The returned number string will be formatted using
-//	the default Number String Formatting Specification
-//	configured in the current instance of
-//	TextFieldFormatDtoFloat64.
-//
-// ----------------------------------------------------------------
-//
-// # Input Parameters
-//
-//	errorPrefix					interface{}
-//
-//		This object encapsulates error prefix text which
-//		is included in all returned error messages.
-//		Usually, it contains the name of the calling
-//		method or methods listed as a method or function
-//		chain of execution.
-//
-//		If no error prefix information is needed, set this
-//		parameter to 'nil'.
-//
-//		This empty interface must be convertible to one of
-//		the following types:
-//
-//		1.	nil
-//				A nil value is valid and generates an
-//				empty collection of error prefix and
-//				error context information.
-//
-//		2.	string
-//				A string containing error prefix
-//				information.
-//
-//		3.	[]string
-//				A one-dimensional slice of strings
-//				containing error prefix information.
-//
-//		4.	[][2]string
-//				A two-dimensional slice of strings
-//		   		containing error prefix and error
-//		   		context information.
-//
-//		5.	ErrPrefixDto
-//				An instance of ErrPrefixDto.
-//				Information from this object will
-//				be copied for use in error and
-//				informational messages.
-//
-//		6.	*ErrPrefixDto
-//				A pointer to an instance of
-//				ErrPrefixDto. Information from
-//				this object will be copied for use
-//				in error and informational messages.
-//
-//		7.	IBasicErrorPrefix
-//				An interface to a method
-//				generating a two-dimensional slice
-//				of strings containing error prefix
-//				and error context information.
-//
-//		If parameter 'errorPrefix' is NOT convertible
-//		to one of the valid types listed above, it will
-//		be considered invalid and trigger the return of
-//		an error.
-//
-//		Types ErrPrefixDto and IBasicErrorPrefix are
-//		included in the 'errpref' software package:
-//			"github.com/MikeAustin71/errpref".
-//
-// ----------------------------------------------------------------
-//
-// # Return Values
-//
-//	string
-//
-//		If this method completes successfully, a
-//		formatted Number String will be returned.
-//
-//		The Number String format used in configuring
-//		this Number String is taken from the Default
-//		Number String Formatting Specification previously
-//		configured in the current instance of
-//		TextFieldFormatDtoFloat64.
-//
-//	error
-//
-//		If this method completes successfully, the
-//		returned error Type is set equal to 'nil'.
-//
-//		If errors are encountered during processing, the
-//		returned error Type will encapsulate an error
-//		message. This returned error message will
-//		incorporate the method chain and text passed by
-//		input parameter, 'errorPrefix'. The 'errorPrefix'
-//		text will be attached to the beginning of the
-//		error message.
-func (txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64) FmtDefaultNumStr(
-	errorPrefix interface{}) (
-	string,
-	error) {
-
-	if txtFieldFmtDtoFloat64.lock == nil {
-		txtFieldFmtDtoFloat64.lock = new(sync.Mutex)
-	}
-
-	txtFieldFmtDtoFloat64.lock.Lock()
-
-	defer txtFieldFmtDtoFloat64.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-
-	var err error
-
-	var numStr string
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
-		"TextFieldFormatDtoFloat64."+
-			"FmtDefaultNumStr()",
-		"")
-
-	if err != nil {
-		return numStr, err
-	}
-
-	return new(textFieldFormatDtoFloat64Nanobot).
-		fmtDefaultNumStr(
-			txtFieldFmtDtoFloat64,
-			ePrefix.XCpy(
-				"txtFieldFmtDtoFloat64"))
-}
-
-// FmtNativeNumberStr
-//
-// Returns a native number string containing the numeric
-// value specified by the current instance of
-// TextFieldFormatDtoFloat64.
-//
-// A native number string is generated using the native
-// "number to string" conversion provided by the Golang
-// 'strconv' package. All rounding is controlled
-// internally by the 'strconv' package and is therefore
-// NOT SUBJECT to user control.
-//
-// The number of fractional digits presented in the
-// native number string is specified by the member
-// variable, 'NumOfFractionalDigits' contained in the
-// current instance of TextFieldFormatDtoFloat64.
-//
-// If the TextFieldFormatDtoFloat64 member variable
-// 'NumOfFractionalDigits' is set to minus one (-1), the
-// maximum number of available fractional digits will be
-// formatted and returned in the number string.
-//
-// If additional customization is required in formatting
-// a pure number string, see method:
-//
-//	TextFieldFormatDtoFloat64.FmtPureNumberStr()
-//
-// The floating point native number string returned
-// by this method will:
-//
-//  1. Consist entirely of numeric digit characters.
-//
-//  2. Separate integer and fractional digits with a
-//     decimal point ('.').
-//
-//  3. Designate negative values with a leading minus
-//     sign ('-'). Trailing Minus Signs are NOT
-//     supported.
-//
-//     Leading Minus Sign:		-1000000
-//
-//  4. NOT include integer separators such as commas
-//     (',') to separate integer digits by thousands.
-//
-//     NOT THIS: 1,000,000
-//     Native Number String: 1000000
-//
-// ----------------------------------------------------------------
-//
-// # BE ADVISED
-//
-//	Native number strings Do NOT include integer
-//	separators (i.e. commas ',') to separate integer
-//	number strings into thousands.
-//
-//						NOT THIS: 1,000,000
-//			Native Number String: 1000000
-//
-//	All negative numeric values processed by this method
-//	will return native number strings containing leading
-//	minus signs ('-'). Trailing minus signs are NOT
-//	supported.
-//
-//		Leading Minus Sign:		-1000000
-//
-// ----------------------------------------------------------------
-//
-// # Input Parameters
-//
-//	errorPrefix					interface{}
-//
-//		This object encapsulates error prefix text which
-//		is included in all returned error messages.
-//		Usually, it contains the name of the calling
-//		method or methods listed as a method or function
-//		chain of execution.
-//
-//		If no error prefix information is needed, set this
-//		parameter to 'nil'.
-//
-//		This empty interface must be convertible to one of
-//		the following types:
-//
-//		1.	nil
-//				A nil value is valid and generates an
-//				empty collection of error prefix and
-//				error context information.
-//
-//		2.	string
-//				A string containing error prefix
-//				information.
-//
-//		3.	[]string
-//				A one-dimensional slice of strings
-//				containing error prefix information.
-//
-//		4.	[][2]string
-//				A two-dimensional slice of strings
-//		   		containing error prefix and error
-//		   		context information.
-//
-//		5.	ErrPrefixDto
-//				An instance of ErrPrefixDto.
-//				Information from this object will
-//				be copied for use in error and
-//				informational messages.
-//
-//		6.	*ErrPrefixDto
-//				A pointer to an instance of
-//				ErrPrefixDto. Information from
-//				this object will be copied for use
-//				in error and informational messages.
-//
-//		7.	IBasicErrorPrefix
-//				An interface to a method
-//				generating a two-dimensional slice
-//				of strings containing error prefix
-//				and error context information.
-//
-//		If parameter 'errorPrefix' is NOT convertible
-//		to one of the valid types listed above, it will
-//		be considered invalid and trigger the return of
-//		an error.
-//
-//		Types ErrPrefixDto and IBasicErrorPrefix are
-//		included in the 'errpref' software package:
-//			"github.com/MikeAustin71/errpref".
-//
-// ----------------------------------------------------------------
-//
-// # Return Values
-//
-//	string
-//
-//		If this method completes successfully, this
-//		string parameter will return a floating point
-//		native number string representation of the
-//		float64 value specified by the current instance
-//		of TextFieldFormatDtoFloat64.
-//
-//		The returned floating point native number string
-//		will:
-//
-//		1.	Consist entirely of numeric digit characters.
-//
-//		2.	Separate integer and fractional digits with a
-//			decimal point ('.').
-//
-//		3.	Designate negative values with a leading minus
-//			sign ('-').
-//
-//		4.	NOT include integer separators such as commas
-//			(',') to separate integer digits by thousands.
-//
-//						  NOT THIS: 1,000,000
-//				Pure Number String: 1000000
-//
-//	error
-//
-//		If this method completes successfully, the
-//		returned error Type is set equal to 'nil'.
-//
-//		If errors are encountered during processing, the
-//		returned error Type will encapsulate an error
-//		message. This returned error message will
-//		incorporate the method chain and text passed by
-//		input parameter, 'errorPrefix'. The 'errorPrefix'
-//		text will be attached to the beginning of the
-//		error message.
-func (txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64) FmtNativeNumberStr(
-	errorPrefix interface{}) (
-	string,
-	error) {
-
-	if txtFieldFmtDtoFloat64.lock == nil {
-		txtFieldFmtDtoFloat64.lock = new(sync.Mutex)
-	}
-
-	txtFieldFmtDtoFloat64.lock.Lock()
-
-	defer txtFieldFmtDtoFloat64.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-
-	var err error
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
-		"TextFieldFormatDtoFloat64."+
-			"FmtNativeNumberStr()",
-		"")
-
-	if err != nil {
-		return "", err
-	}
-
-	return new(textFieldFormatDtoFloat64Electron).
-		getFloat64NativeNumStr(
-			txtFieldFmtDtoFloat64,
-			ePrefix.XCpy(
-				"txtFieldFmtDtoFloat64"))
-}
-
 //	FmtNumStr
 //
 //	Returns a formatted number string using the
@@ -1619,7 +1277,373 @@ func (txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64) FmtNumStr(
 	return numStr, err
 }
 
-//	FmtPureNumberStr
+//	FmtNumStrDefault
+//
+//	Returns a number string comprised of the float64
+//	floating point numeric value contained in the current
+//	instance of TextFieldFormatDtoFloat64.
+//
+//	The returned number string will be formatted using
+//	the default Number String Formatting Specification
+//	configured in the current instance of
+//	TextFieldFormatDtoFloat64.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//  1. Rounding will be performed on the
+//     TextFieldFormatDtoFloat64 numeric value
+//     ('Float64Num) using Rounding Specifications
+//     previously configured with member variables:
+//
+//     TextFieldFormatDtoFloat64.RoundingType
+//     TextFieldFormatDtoFloat64.NumOfFractionalDigits
+//
+//  2. This method will NOT delete or modify data values
+//     contained in the current instance of
+//     TextFieldFormatDtoFloat64. However, if the
+//     Default TextFieldFormatDtoFloat64 Number String
+//     Format Specification is invalid, the Default
+//     Number String Format Specification
+//     ('DefaultNumStrFmt') will be automatically reset
+//     to the default US (United States) Signed Number
+//     String Format Specification. All other
+//     TextFieldFormatDtoFloat64 data values will remain
+//     unchanged.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//
+//		If this method completes successfully, a
+//		formatted Number String will be returned.
+//
+//		The Number String format used in configuring
+//		this Number String is taken from the Default
+//		Number String Formatting Specification previously
+//		configured in the current instance of
+//		TextFieldFormatDtoFloat64.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64) FmtNumStrDefault(
+	errorPrefix interface{}) (
+	string,
+	error) {
+
+	if txtFieldFmtDtoFloat64.lock == nil {
+		txtFieldFmtDtoFloat64.lock = new(sync.Mutex)
+	}
+
+	txtFieldFmtDtoFloat64.lock.Lock()
+
+	defer txtFieldFmtDtoFloat64.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	var numStr string
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextFieldFormatDtoFloat64."+
+			"FmtNumStrDefault()",
+		"")
+
+	if err != nil {
+		return numStr, err
+	}
+
+	return new(textFieldFormatDtoFloat64Nanobot).
+		fmtDefaultNumStr(
+			txtFieldFmtDtoFloat64,
+			ePrefix.XCpy(
+				"txtFieldFmtDtoFloat64"))
+}
+
+// FmtNumStrNative
+//
+// Returns a native number string containing the numeric
+// value specified by the current instance of
+// TextFieldFormatDtoFloat64.
+//
+// A native number string is generated using the native
+// "number to string" conversion provided by the Golang
+// 'strconv' package. All rounding is controlled
+// internally by the 'strconv' package and is therefore
+// NOT SUBJECT to user control.
+//
+// The number of fractional digits presented in the
+// native number string is specified by the member
+// variable, 'NumOfFractionalDigits' contained in the
+// current instance of TextFieldFormatDtoFloat64.
+//
+// If the TextFieldFormatDtoFloat64 member variable
+// 'NumOfFractionalDigits' is set to minus one (-1), the
+// maximum number of available fractional digits will be
+// formatted and returned in the number string.
+//
+// If additional customization is required in formatting
+// a pure number string, see method:
+//
+//	TextFieldFormatDtoFloat64.FmtNumStrPure()
+//
+// The floating point native number string returned
+// by this method will:
+//
+//  1. Consist entirely of numeric digit characters.
+//
+//  2. Separate integer and fractional digits with a
+//     decimal point ('.').
+//
+//  3. Designate negative values with a leading minus
+//     sign ('-'). Trailing Minus Signs are NOT
+//     supported.
+//
+//     Leading Minus Sign:		-1000000
+//
+//  4. NOT include integer separators such as commas
+//     (',') to separate integer digits by thousands.
+//
+//     NOT THIS: 1,000,000
+//     Native Number String: 1000000
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	Native number strings Do NOT include integer
+//	separators (i.e. commas ',') to separate integer
+//	number strings into thousands.
+//
+//						NOT THIS: 1,000,000
+//			Native Number String: 1000000
+//
+//	All negative numeric values processed by this method
+//	will return native number strings containing leading
+//	minus signs ('-'). Trailing minus signs are NOT
+//	supported.
+//
+//		Leading Minus Sign:		-1000000
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//
+//		If this method completes successfully, this
+//		string parameter will return a floating point
+//		native number string representation of the
+//		float64 value specified by the current instance
+//		of TextFieldFormatDtoFloat64.
+//
+//		The returned floating point native number string
+//		will:
+//
+//		1.	Consist entirely of numeric digit characters.
+//
+//		2.	Separate integer and fractional digits with a
+//			decimal point ('.').
+//
+//		3.	Designate negative values with a leading minus
+//			sign ('-').
+//
+//		4.	NOT include integer separators such as commas
+//			(',') to separate integer digits by thousands.
+//
+//						  NOT THIS: 1,000,000
+//				Pure Number String: 1000000
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64) FmtNumStrNative(
+	errorPrefix interface{}) (
+	string,
+	error) {
+
+	if txtFieldFmtDtoFloat64.lock == nil {
+		txtFieldFmtDtoFloat64.lock = new(sync.Mutex)
+	}
+
+	txtFieldFmtDtoFloat64.lock.Lock()
+
+	defer txtFieldFmtDtoFloat64.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextFieldFormatDtoFloat64."+
+			"FmtNumStrNative()",
+		"")
+
+	if err != nil {
+		return "", err
+	}
+
+	return new(textFieldFormatDtoFloat64Electron).
+		getFloat64NativeNumStr(
+			txtFieldFmtDtoFloat64,
+			ePrefix.XCpy(
+				"txtFieldFmtDtoFloat64"))
+}
+
+//	FmtNumStrPure
 //
 //	Extracts the specifications necessary to format and
 //	return a rounded floating point pure number string
@@ -1757,7 +1781,7 @@ func (txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64) FmtNumStr(
 //		for input parameter 'errPrefDto' (error prefix)
 //		will be prefixed or attached at the beginning of
 //		the error message.
-func (txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64) FmtPureNumberStr(
+func (txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64) FmtNumStrPure(
 	errorPrefix interface{}) (
 	string,
 	error) {
@@ -1778,7 +1802,7 @@ func (txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64) FmtPureNumberStr(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"TextFieldFormatDtoFloat64."+
-			"FmtPureNumberStr()",
+			"FmtNumStrPure()",
 		"")
 
 	if err != nil {
@@ -2746,179 +2770,9 @@ func (txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64) IsValidInstanceError(
 	return err
 }
 
-//	SetDefaultNumStrFmt
+//	SetFromPureNumStr
 //
-//	Receives an instance of NumStrFormatSpec and proceeds
-//	to copy that Number String Format Specification to
-//	the internal default Number String Format
-//	Specification contained in the current instance of
-//	TextFieldFormatDtoFloat64.
-//
-//		TextFieldFormatDtoFloat64.DefaultNumStrFmt
-//
-// ----------------------------------------------------------------
-//
-// # Input Parameters
-//
-//	numStrFmtSpec				NumStrFormatSpec
-//
-//		An instance of Number String Format Specification
-//		('NumStrFormatSpec').
-//
-//		A deep copy of this instance will be copied to,
-//		and stored in, the default Number String Format
-//		Specification maintained by the current instance
-//		of TextFieldFormatDtoFloat64:
-//
-//			TextFieldFormatDtoFloat64.DefaultNumStrFmt
-//
-//		Input parameter 'numStrFmtSpec' provides options
-//		for customizing number string currency symbols,
-//		integer separation, number sign management and
-//		radix point symbols.
-//
-//		The 'numStrFmtSpec' format specification will be
-//		used to format the TextFieldFormatDtoFloat64
-//		float64 value in a number string for screen
-//		displays, file output and printing.
-//
-//		If 'numStrFmtSpec' is found to be invalid, an
-//		error will be returned.
-//
-//	errorPrefix					interface{}
-//
-//		This object encapsulates error prefix text which
-//		is included in all returned error messages.
-//		Usually, it contains the name of the calling
-//		method or methods listed as a method or function
-//		chain of execution.
-//
-//		If no error prefix information is needed, set this
-//		parameter to 'nil'.
-//
-//		This empty interface must be convertible to one of
-//		the following types:
-//
-//		1.	nil
-//				A nil value is valid and generates an
-//				empty collection of error prefix and
-//				error context information.
-//
-//		2.	string
-//				A string containing error prefix
-//				information.
-//
-//		3.	[]string
-//				A one-dimensional slice of strings
-//				containing error prefix information.
-//
-//		4.	[][2]string
-//				A two-dimensional slice of strings
-//		   		containing error prefix and error
-//		   		context information.
-//
-//		5.	ErrPrefixDto
-//				An instance of ErrPrefixDto.
-//				Information from this object will
-//				be copied for use in error and
-//				informational messages.
-//
-//		6.	*ErrPrefixDto
-//				A pointer to an instance of
-//				ErrPrefixDto. Information from
-//				this object will be copied for use
-//				in error and informational messages.
-//
-//		7.	IBasicErrorPrefix
-//				An interface to a method
-//				generating a two-dimensional slice
-//				of strings containing error prefix
-//				and error context information.
-//
-//		If parameter 'errorPrefix' is NOT convertible
-//		to one of the valid types listed above, it will
-//		be considered invalid and trigger the return of
-//		an error.
-//
-//		Types ErrPrefixDto and IBasicErrorPrefix are
-//		included in the 'errpref' software package:
-//			"github.com/MikeAustin71/errpref".
-//
-// ----------------------------------------------------------------
-//
-// # Return Values
-//
-//	error
-//
-//		If this method completes successfully, the
-//		returned error Type is set equal to 'nil'.
-//
-//		If errors are encountered during processing, the
-//		returned error Type will encapsulate an error
-//		message. This returned error message will
-//		incorporate the method chain and text passed by
-//		input parameter, 'errorPrefix'. The 'errorPrefix'
-//		text will be attached to the beginning of the
-//		error message.
-func (txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64) SetDefaultNumStrFmt(
-	numStrFmtSpec NumStrFormatSpec,
-	errorPrefix interface{}) error {
-
-	if txtFieldFmtDtoFloat64.lock == nil {
-		txtFieldFmtDtoFloat64.lock = new(sync.Mutex)
-	}
-
-	txtFieldFmtDtoFloat64.lock.Lock()
-
-	defer txtFieldFmtDtoFloat64.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-
-	var err error
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
-		"TextFieldFormatDtoFloat64."+
-			"SetDefaultNumStrFmt()",
-		"")
-
-	if err != nil {
-		return err
-	}
-
-	var err2 error
-
-	_,
-		err2 = new(numStrFmtSpecAtom).
-		testValidityNumStrFormatSpec(
-			&numStrFmtSpec,
-			ePrefix.XCpy(
-				"numStrFmtSpec"))
-
-	if err2 != nil {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'numStrFmtSpec' is invalid!\n"+
-			"Error = \n%v\n",
-			ePrefix.String(),
-			err2.Error())
-
-		return err
-	}
-
-	err = txtFieldFmtDtoFloat64.
-		DefaultNumStrFmt.CopyIn(
-		&numStrFmtSpec,
-		ePrefix.XCpy(
-			"txtFieldFmtDtoFloat64.DefaultNumStrFmt<-"+
-				"numStrFmtSpec"))
-
-	return err
-}
-
-//	SetPureNumStr
-//
-//	Receives and converts pure number string to a
+//	Receives and converts a pure number string to a
 //	float64 floating point numeric value which is then
 //	assigned to the float64 value encapsulated in the
 //	current instance of TextFieldFormatDtoFloat64.
@@ -2951,6 +2805,14 @@ func (txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64) SetDefaultNumStrFmt(
 //
 //						  NOT THIS: 1,000,000
 //				Pure Number String: 1000000
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will delete and overwrite the float64
+//	floating point numeric value previously configured in
+//	the current instance of TextFieldFormatDtoFloat64.
 //
 // ----------------------------------------------------------------
 //
@@ -3070,7 +2932,7 @@ func (txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64) SetDefaultNumStrFmt(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64) SetPureNumStr(
+func (txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64) SetFromPureNumStr(
 	pureNumStr string,
 	errorPrefix interface{}) error {
 
@@ -3090,7 +2952,7 @@ func (txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64) SetPureNumStr(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"TextFieldFormatDtoFloat64."+
-			"SetPureNumStr()",
+			"SetFromPureNumStr()",
 		"")
 
 	if err != nil {
@@ -3112,6 +2974,438 @@ func (txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64) SetPureNumStr(
 	txtFieldFmtDtoFloat64.Float64Num = floatNum64
 
 	return err
+}
+
+//	SetNumStrFmtDefault
+//
+//	Receives an instance of NumStrFormatSpec and proceeds
+//	to copy that Number String Format Specification to
+//	the internal default Number String Format
+//	Specification contained in the current instance of
+//	TextFieldFormatDtoFloat64.
+//
+//		TextFieldFormatDtoFloat64.DefaultNumStrFmt
+//
+//	The default Number String Format Specification is
+//	invoked and applied automatically by the following
+//	method:
+//
+//		TextFieldFormatDtoFloat64.FmtNumStrDefault()
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will delete and overwrite the
+//	pre-existing default Number String Format
+//	Specification encapsulated the current instance of
+//	TextFieldFormatDtoFloat64.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	numStrFmtSpec				NumStrFormatSpec
+//
+//		An instance of Number String Format Specification
+//		('NumStrFormatSpec').
+//
+//		A deep copy of this instance will be copied to,
+//		and stored in, the default Number String Format
+//		Specification maintained by the current instance
+//		of TextFieldFormatDtoFloat64:
+//
+//			TextFieldFormatDtoFloat64.DefaultNumStrFmt
+//
+//		Input parameter 'numStrFmtSpec' provides options
+//		for customizing number string currency symbols,
+//		integer separation, number sign management and
+//		radix point symbols.
+//
+//		The 'numStrFmtSpec' format specification will be
+//		used to format the TextFieldFormatDtoFloat64
+//		float64 value in a number string for screen
+//		displays, file output and printing.
+//
+//		If 'numStrFmtSpec' is found to be invalid, an
+//		error will be returned.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64) SetNumStrFmtDefault(
+	numStrFmtSpec NumStrFormatSpec,
+	errorPrefix interface{}) error {
+
+	if txtFieldFmtDtoFloat64.lock == nil {
+		txtFieldFmtDtoFloat64.lock = new(sync.Mutex)
+	}
+
+	txtFieldFmtDtoFloat64.lock.Lock()
+
+	defer txtFieldFmtDtoFloat64.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextFieldFormatDtoFloat64."+
+			"SetNumStrFmtDefault()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	var err2 error
+
+	_,
+		err2 = new(numStrFmtSpecAtom).
+		testValidityNumStrFormatSpec(
+			&numStrFmtSpec,
+			ePrefix.XCpy(
+				"numStrFmtSpec"))
+
+	if err2 != nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'numStrFmtSpec' is invalid!\n"+
+			"Error = \n%v\n",
+			ePrefix.String(),
+			err2.Error())
+
+		return err
+	}
+
+	return txtFieldFmtDtoFloat64.
+		DefaultNumStrFmt.CopyIn(
+		&numStrFmtSpec,
+		ePrefix.XCpy(
+			"txtFieldFmtDtoFloat64.DefaultNumStrFmt<-"+
+				"numStrFmtSpec"))
+}
+
+//	SetNumStrFmtDefaultSimple
+//
+//	Creates and configures a new default Number String
+//	Format Specification for the current instance of
+//	TextFieldFormatDtoFloat64.
+//
+//	The new default Number String Format Specification
+//	will be generated with a minimum number of input
+//	parameters and stored internally in the current
+//	TextFieldFormatDtoFloat64 member variable:
+//
+//		TextFieldFormatDtoFloat64.DefaultNumStrFmt
+//
+//	The default Number String Format Specification is
+//	invoked and applied automatically by the following
+//	method:
+//
+//		TextFieldFormatDtoFloat64.FmtNumStrDefault()
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	When creating the default Number String Format
+//	Specification, this method will apply the Field
+//	Length and Field Justification Parameters previously
+//	configured for the current instance of
+//	TextFieldFormatDtoFloat64:
+//
+//		TextFieldFormatDtoFloat64.FieldLength
+//		TextFieldFormatDtoFloat64.FieldJustify
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will delete and overwrite the
+//	pre-existing default Number String Format
+//	Specification encapsulated in the current instance of
+//	TextFieldFormatDtoFloat64.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	decSeparatorChars			string
+//
+//		This string contains the character or characters
+//		which will be configured as the Decimal Separator
+//		Symbol or Symbols for the returned instance of
+//		NumStrFormatSpec.
+//
+//		The decimal separator is also known as the radix
+//		point and is used to separate integer and
+//		fractional digits within a formatted Number
+//		String.
+//
+//		In the US, UK, Australia and most of Canada, the
+//		decimal separator is the period character ('.')
+//		known as the decimal point.
+//
+//			Decimal Point Example: 127.54
+//
+//		In various European countries, the comma (',') is
+//		used as a decimal separator.
+//
+//			European Example: 127,54
+//
+//	intSeparatorChars			string
+//
+//		One or more characters used to separate groups of
+//		integers. This separator is also known as the
+//		'thousands' separator. It is used to separate
+//		groups of integer digits to the left of the
+//		decimal separator (a.k.a. decimal point). In the
+//		United States, the standard integer digits
+//		separator is the comma (",").
+//
+//			United States Example:  1,000,000,000
+//
+//		In many European countries, a single period ('.')
+//		is used as the integer separator character.
+//
+//			European Example: 1.000.000.000
+//
+//		Other countries and cultures use spaces,
+//		apostrophes or multiple characters to separate
+//		integers.
+//
+//		If this input parameter contains a zero length
+//		string, no error will be returned and integer
+//		separation will be turned off. As a result,
+//		integer digits will be displayed as a single
+//		string of numeric digits:
+//
+//			Integer Separation Turned Off: 1000000000
+//
+//	leadingMinusSign			bool
+//
+//		When generating number strings, setting this
+//		parameter to 'true' will ensure that negative
+//		numeric values will be prefixed with a leading
+//		minus sign ('-').
+//
+//				Example: -123.456
+//
+//		Bear in mind that packages and parsing functions
+//		provided by the Go Programming Language, as well
+//		as many other programming languages, often require
+//		that negative numeric values be formatted with
+//		leading minus signs.
+//
+//		If this parameter is set to false, negative
+//		numeric values will be suffixed with a trailing
+//		minus sign ('-'). Trailing minus signs are used
+//		in Europe and many other countries around the
+//		world.
+//
+//				Example 123.456-
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64) SetNumStrFmtDefaultSimple(
+	decSeparatorChars string,
+	intSeparatorChars string,
+	leadingMinusSign bool,
+	errorPrefix interface{}) error {
+
+	if txtFieldFmtDtoFloat64.lock == nil {
+		txtFieldFmtDtoFloat64.lock = new(sync.Mutex)
+	}
+
+	txtFieldFmtDtoFloat64.lock.Lock()
+
+	defer txtFieldFmtDtoFloat64.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextFieldFormatDtoFloat64."+
+			"SetNumStrFmtDefaultSimple()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	var newNumStrFormatSpec NumStrFormatSpec
+
+	newNumStrFormatSpec,
+		err = new(NumStrFormatSpec).
+		NewSignedSimpleNumberStr(
+			decSeparatorChars,
+			intSeparatorChars,
+			leadingMinusSign,
+			txtFieldFmtDtoFloat64.FieldLength,
+			txtFieldFmtDtoFloat64.FieldJustify,
+			ePrefix.XCpy(
+				"newNumStrFormatSpec<-"))
+
+	if err != nil {
+		return err
+	}
+
+	return txtFieldFmtDtoFloat64.
+		DefaultNumStrFmt.CopyIn(
+		&newNumStrFormatSpec,
+		ePrefix.XCpy(
+			"txtFieldFmtDtoFloat64.DefaultNumStrFmt<-"+
+				"newNumStrFormatSpec"))
 }
 
 // textFieldFormatDtoFloat64Nanobot
@@ -4723,7 +5017,7 @@ func (txtFieldFmtDtoFloat64Electron *textFieldFormatDtoFloat64Electron) getFloat
 	}
 
 	float64NumStr,
-		err = float64NumberStrKernel.FmtSignedPureNumberStr(
+		err = float64NumberStrKernel.FmtSignedNumStrPure(
 		".",
 		txtFieldFmtDtoFloat64.LeadingMinusSign,
 		-1,

@@ -57,7 +57,7 @@ func TestTextFieldFormatDtoFloat64_FmtNumStr_000100(t *testing.T) {
 		expectedStr,
 		true)
 
-	err = txtFmtFloat64.SetDefaultNumStrFmt(
+	err = txtFmtFloat64.SetNumStrFmtDefault(
 		numStrFmtSpec,
 		ePrefix.XCpy(
 			"txtFmtFloat64<-numStrFmtSpec"))
@@ -71,7 +71,7 @@ func TestTextFieldFormatDtoFloat64_FmtNumStr_000100(t *testing.T) {
 	var actualStr string
 
 	actualStr,
-		err = txtFmtFloat64.FmtDefaultNumStr(
+		err = txtFmtFloat64.FmtNumStrDefault(
 		ePrefix.XCpy(
 			"txtFmtFloat64"))
 
@@ -88,7 +88,7 @@ func TestTextFieldFormatDtoFloat64_FmtNumStr_000100(t *testing.T) {
 	if convertedActualStr != convertedExpectedStr {
 
 		t.Errorf("%v\n"+
-			"Test#1 - txtFmtFloat64.SetDefaultNumStrFmt()\n"+
+			"Test#1 - txtFmtFloat64.SetNumStrFmtDefault()\n"+
 			"Error: convertedActualStr NOT EQUAL TO convertedExpectedStr\n"+
 			"    convertedActualStr = '%v'\n"+
 			"convertedExpectedStr   = '%v'\n",
