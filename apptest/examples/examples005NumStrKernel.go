@@ -86,7 +86,12 @@ func (mainNumStrTest005 MainNumStrTest005) Float64Dto01() {
 		return
 	}
 
-	testNumStrFmtSpec := txtFmtFloat64.GetDefaultNumStrFmtSpec()
+	var testNumStrFmtSpec strmech.NumStrFormatSpec
+
+	testNumStrFmtSpec,
+		err = txtFmtFloat64.GetDefaultNumStrFmtSpec(
+		ePrefix.XCpy(
+			"testNumStrFmtSpec<-"))
 
 	var fieldSpec strmech.NumStrNumberFieldSpec
 

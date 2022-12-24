@@ -1821,7 +1821,98 @@ func (txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64) FmtNumStrPure(
 // Returns the default Number String Formatting
 // Specification for the current instance of
 // TextFieldFormatDtoFloat64.
-func (txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64) GetDefaultNumStrFmtSpec() NumStrFormatSpec {
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	If the current instance of TextFieldFormatDtoFloat64
+//	contains invalid data values, an error will be
+//	returned.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64) GetDefaultNumStrFmtSpec(
+	errorPrefix interface{}) (
+	NumStrFormatSpec,
+	error) {
 
 	if txtFieldFmtDtoFloat64.lock == nil {
 		txtFieldFmtDtoFloat64.lock = new(sync.Mutex)
@@ -1831,13 +1922,40 @@ func (txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64) GetDefaultNumStrFmtSpec(
 
 	defer txtFieldFmtDtoFloat64.lock.Unlock()
 
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
 	var deepCopyNumStrFmt NumStrFormatSpec
 
-	deepCopyNumStrFmt,
-		_ = txtFieldFmtDtoFloat64.DefaultNumStrFmt.CopyOut(
-		nil)
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextFieldFormatDtoBigFloat."+
+			"GetDefaultNumStrFmtSpec()",
+		"")
 
-	return deepCopyNumStrFmt
+	if err != nil {
+		return deepCopyNumStrFmt, err
+	}
+
+	_,
+		err = new(textFieldFormatDtoFloat64Atom).
+		testValidityOfTxtFieldFmtDtoFloat64(
+			txtFieldFmtDtoFloat64,
+			ePrefix.XCpy(
+				"TextFieldFormatDtoFloat64 Invalid."))
+
+	if err != nil {
+		return deepCopyNumStrFmt, err
+	}
+
+	deepCopyNumStrFmt,
+		err = txtFieldFmtDtoFloat64.DefaultNumStrFmt.CopyOut(
+		ePrefix.XCpy("deepCopyNumStrFmt<-" +
+			"txtFieldFmtDtoFloat64.DefaultNumStrFmt"))
+
+	return deepCopyNumStrFmt, err
 }
 
 // GetFieldContentTextLabel
@@ -2991,6 +3109,23 @@ func (txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64) SetFromPureNumStr(
 //	method:
 //
 //		TextFieldFormatDtoFloat64.FmtNumStrDefault()
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	The default Number String Format Specification
+//	configured from input parameter 'numStrFmtSpec'
+//	will override the previously configured
+//	TextFieldFormatDtoFloat64 specifications for
+//	Field Length and Field Justification. These
+//	previously configured values will be overridden
+//	whenever the default Number String Format
+//	Specification is applied. The overridden member
+//	variables are listed as follows:
+//
+//		TextFieldFormatDtoFloat64.FieldLength
+//		TextFieldFormatDtoFloat64.FieldJustify
 //
 // ----------------------------------------------------------------
 //
