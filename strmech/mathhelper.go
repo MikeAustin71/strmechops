@@ -148,23 +148,23 @@ type MathHelper struct {
 //			follows:
 //
 //	 	1.	A number string consisting entirely of
-//				numeric digit characters with the following
-//				exceptions.
+//			numeric digit characters with the following
+//			exceptions.
 //
 //	 	2.	A number string which separates integer and
 //	 	  	fractional digits with a decimal point ('.').
 //
 //	 	3.	A number string which designates negative
-//				values with a leading minus sign ('-').
-//				Positive numeric values will have no leading
-//				number sign.
+//			values with a leading minus sign ('-').
+//			Positive numeric values will have no leading
+//			number sign.
 //
 //	 	4.	A number string which DOES NOT include
-//				integer separators such as commas (',') to
-//				separate integer digits by thousands.
+//			integer separators such as commas (',') to
+//			separate integer digits by thousands.
 //
-//	   							 NOT THIS: 1,000,000
-//	   			Signed Pure Number String: 1000000
+//	   						 NOT THIS: 1,000,000
+//	   		Signed Pure Number String: 1000000
 //
 //		err							error
 //
