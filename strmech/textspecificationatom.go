@@ -335,7 +335,10 @@ func (txtSpecAtom *textSpecificationAtom) convertParamEmptyInterfaceToString(
 			return convertedString, err
 		}
 
-		convertedString = nStrKernel.String()
+		convertedString,
+			err = nStrKernel.FmtNumStrDefault(
+			ePrefix.XCpy(
+				"convertedString<-nStrKernel"))
 
 		return convertedString, err
 
@@ -357,7 +360,10 @@ func (txtSpecAtom *textSpecificationAtom) convertParamEmptyInterfaceToString(
 			return convertedString, err
 		}
 
-		convertedString = nStrKernelPtr.String()
+		convertedString,
+			err = nStrKernelPtr.FmtNumStrDefault(
+			ePrefix.XCpy(
+				"convertedString<-nStrKernel"))
 
 		return convertedString, err
 

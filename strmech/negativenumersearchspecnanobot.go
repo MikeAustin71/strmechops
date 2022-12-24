@@ -751,7 +751,7 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) getParameterTextListing(
 	}
 
 	// Build negNumSearchSpec.negNumSignPosition
-	// negNumSignPosition NumSignSymbolPosition
+	//  - negNumSignPosition NumSignSymbolPosition
 
 	txtStrLabel := "Negative Number Sign Position"
 
