@@ -62,8 +62,7 @@ type MathHelper struct {
 //			of the supported types below.
 //
 //			Supported Numeric Value Types:
-//
-//	     	float32, float64, big.Float
+//	     		float32, float64, big.Float
 //				*float32, *float64, *big.Float
 //				*BigFloatDto, BigFloatDto
 //				int8, int16, int, int32, int64, big.Int
