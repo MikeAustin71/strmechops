@@ -649,6 +649,17 @@ func (nStrHelperQuark *numStrHelperQuark) extractNumericDigits(
 //
 //	requestRemainderRunesString		bool
 //
+//		If this parameter is set to 'true', the Number
+//		String Search Results ('searchResults')
+//		returned by this method	will include the
+//		remaining string characters	which were NOT
+//		included in the search operation.
+//
+//		This feature may be useful when either
+//		'breakOnCharSearchLength' or
+//		'breakOnCharDelimiters' parameters are used to
+//		arbitrarily terminate the search operation.
+//
 //	errorPrefix						interface{}
 //
 //		This object encapsulates error prefix text which
@@ -714,7 +725,39 @@ func (nStrHelperQuark *numStrHelperQuark) extractNumericDigits(
 //
 //	searchResults				CharSearchNumStrParseResultsDto
 //
+//		This structure contains public member variables
+//		containing operational data describing the
+//		success or failure of the number string parsing
+//		operation and the search for numeric digits in
+//		the Target Search String Rune Array,
+//		'targetSearchString'.
+//
+//		Users are advised to check the following member
+//		variable values after a number string parsing
+//		operation:
+//
+//			FoundNumericDigits		bool
+//
+//				Signals a successful Number String Parsing
+//				operation. When set to 'true', this means
+//				one or more numeric	digit characters ('0'
+//				through '9' inclusive) were	located in
+//				the Target Search String Rune Array,
+//				('targetSearchString').
+//
+//			FoundNonZeroValue		bool
+//
+//				When set to 'true' this signals that the
+//				search operation has detected one or more
+//				nonzero numeric digits.
+//
 //	numStrKernel				NumberStrKernel
+//
+//		If this method completes successfully, a new
+//		instance of NumberStrKernel will be returned
+//		configured with the numeric value parsed from the
+//		Target Search String Rune Array,
+//		('targetSearchString').
 //
 //	err							error
 //
