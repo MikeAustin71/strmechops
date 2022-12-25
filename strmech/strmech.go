@@ -1616,14 +1616,13 @@ func (sMech *StrMech) ExtractNumericDigits(
 		return NumStrProfileDto{}, err
 	}
 
-	return strMechAtom{}.ptr().
-		extractNumericDigits(
-			targetStr,
-			startIndex,
-			keepLeadingChars,
-			keepInteriorChars,
-			keepTrailingChars,
-			ePrefix)
+	return new(numStrHelperQuark).extractNumericDigits(
+		targetStr,
+		startIndex,
+		keepLeadingChars,
+		keepInteriorChars,
+		keepTrailingChars,
+		ePrefix)
 }
 
 // ExtractNumberRunes - Receives an array of runes
