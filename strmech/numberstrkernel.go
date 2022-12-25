@@ -16883,7 +16883,7 @@ func (numStrKernel *NumberStrKernel) NewFromBigRat(
 				"decSeparatorChars"))
 
 	newNumStrKernel,
-		err = new(numStrHelperQuark).parsePureNumStr(
+		err = new(numStrHelperAtom).parsePureNumStr(
 		runeArrayDto,
 		decSeparatorSpec,
 		true,
@@ -18727,7 +18727,7 @@ func (numStrKernel *NumberStrKernel) NewParsePureNumberStr(
 				"decSeparatorChars"))
 
 	newNumStrKernel,
-		err = new(numStrHelperQuark).parsePureNumStr(
+		err = new(numStrHelperAtom).parsePureNumStr(
 		runeArrayDto,
 		decSeparatorSpec,
 		leadingMinusSign,
