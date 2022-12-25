@@ -5135,7 +5135,7 @@ func (txtFieldFmtDtoFloat64Electron *textFieldFormatDtoFloat64Electron) getFloat
 	var float64NumberStrKernel NumberStrKernel
 
 	float64NumberStrKernel,
-		err = new(NumberStrKernel).NewFromFloatValue(
+		err = new(NumberStrKernel).NewFromNumericValue(
 		txtFieldFmtDtoFloat64.Float64Num,
 		ePrefix.XCpy(
 			"txtFieldFmtDtoFloat64.Float64Num"))
@@ -5463,7 +5463,7 @@ func (txtFieldFmtDtoFloat64Electron *textFieldFormatDtoFloat64Electron) getNumbe
 				"txtFieldFmtDtoFloat64 Invalid"))
 
 	newNumberStrKernel,
-		err = new(NumberStrKernel).NewFromFloatValue(
+		err = new(NumberStrKernel).NewFromNumericValue(
 		txtFieldFmtDtoFloat64.Float64Num,
 		ePrefix.XCpy(
 			"txtFieldFmtDtoFloat64.Float64Num"))

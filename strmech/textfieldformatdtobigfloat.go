@@ -5266,7 +5266,7 @@ func (txtFieldFmtDtoBigFloatElectron *textFieldFormatDtoBigFloatElectron) getBig
 	var float64NumberStrKernel NumberStrKernel
 
 	float64NumberStrKernel,
-		err = new(NumberStrKernel).NewFromFloatValue(
+		err = new(NumberStrKernel).NewFromNumericValue(
 		txtBigFloatFieldFmtDto.BigFloatNum,
 		ePrefix.XCpy(
 			"txtBigFloatFieldFmtDto.BigFloatNum"))
@@ -5617,7 +5617,7 @@ func (txtFieldFmtDtoBigFloatElectron *textFieldFormatDtoBigFloatElectron) getNum
 	}
 
 	newNumberStrKernel,
-		err = new(NumberStrKernel).NewFromFloatValue(
+		err = new(NumberStrKernel).NewFromNumericValue(
 		txtBigFloatFieldFmtDto.BigFloatNum,
 		ePrefix.XCpy(
 			"txtBigFloatFieldFmtDto.BigFloatNum"))

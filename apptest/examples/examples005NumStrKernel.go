@@ -538,7 +538,7 @@ func (mainNumStrTest005 MainNumStrTest005) NumberStrKernelCompare01() {
 	testBigFloat.SetPrec(minPrecision)
 
 	testNStrValue01,
-		err = new(strmech.NumberStrKernel).NewFromFloatValue(
+		err = new(strmech.NumberStrKernel).NewFromNumericValue(
 		testBigFloat,
 		ePrefix.XCpy(
 			"testNStrValue01<-testBigFloat"))
@@ -1266,7 +1266,7 @@ func (mainNumStrTest005 MainNumStrTest005) NumStrKernelSetSignedIntValue() {
 	bigIntNum := big.NewInt(1234567)
 
 	nStrKernel,
-		err := sMechNStrKernel.NewFromSignedIntValue(
+		err := sMechNStrKernel.NewFromNumericValue(
 		bigIntNum,
 		ePrefix)
 

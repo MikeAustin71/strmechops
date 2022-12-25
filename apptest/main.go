@@ -7,6 +7,6 @@ import "github.com/MikeAustin71/strmechops/apptest/examples"
 
 func main() {
 
-	examples.MainTest03{}.PureNumStrToFloat64_01()
+	examples.MainTest03{}.PureNumStrToFloat64()
 
 }

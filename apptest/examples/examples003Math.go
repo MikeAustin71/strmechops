@@ -12,7 +12,7 @@ type MainTest03 struct {
 	input string
 }
 
-func (MainTest03) PureNumStrToFloat64_01() {
+func (MainTest03) PureNumStrToFloat64() {
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
 		"MainTest03.PureNumStrToFloat64_01()",
 		"")

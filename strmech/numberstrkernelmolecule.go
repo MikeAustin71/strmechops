@@ -768,28 +768,33 @@ func (numStrKernelMolecule *numberStrKernelMolecule) convertKernelToNumber(
 	return numOfFractionalDigits, err
 }
 
-//	convertNumberToKernel
+//	convertNumericValueToKernel
 //
-//	Receives an empty interface which is assumed to be an
-//	integer numeric value configured as one of the following
-//	types:
+//	Receives an empty interface containing a numeric
+//	value configured as one of the following types:
 //
-//		int8
-//		int16
-//		int32
-//		int	(equivalent to int32)
-//		int64
+//		float32, float64, big.Float
+//		*float32, *float64, *big.Float
+//		*BigFloatDto, BigFloatDto
+//		int8, int16, int, int32, int64, big.Int
+//		*int8, *int16, *int, *int32, *int64, *big.Int
+//		uint8, uint16, uint, uint32, uint64
+//		*uint8, *uint16, *uint, *uint32, *uint64
+//		*TextFieldFormatDtoFloat64, TextFieldFormatDtoFloat64
+//		*TextFieldFormatDtoBigFloat, TextFieldFormatDtoBigFloat
+//		*NumberStrKernel, NumberStrKernel
 //
-//	This integer numeric value is then converted to a
-//	type of 'NumberStrKernel' and returned to the calling
-//	function.
-//
-// # IMPORTANT
+//	This numeric value is then converted to a type of
+//	'NumberStrKernel' and returned to the calling function.
 //
 // ----------------------------------------------------------------
 //
-//	Be advised that all data fields in 'numStrKernel' will be
-//	deleted and set to new values.
+// # IMPORTANT
+//
+//	This method will delete and reconfigure all
+//	pre-existing data values in the instance of
+//	NumberStrKernel passed as input parameter
+//	'numStrKernel'.
 //
 // ----------------------------------------------------------------
 //
@@ -797,367 +802,53 @@ func (numStrKernelMolecule *numberStrKernelMolecule) convertKernelToNumber(
 //
 //	numStrKernel				*NumberStrKernel
 //
-//		A pointer to an instance of NumberStrKernel. The data
-//		values for all internal member variables contained in
-//		this instance will be deleted and reset to new values.
-//		The new numeric value assigned to this instance will
-//		be extracted from parameter, 'numericValue'.
+//		A pointer to an instance of NumberStrKernel. The
+//		data values for all internal member variables
+//		contained in this instance will be deleted and
+//		reset to new values.
+//
+//		The numeric value assigned to this instance will
+//		be extracted from input parameter 'numericValue'.
 //
 //	numericValue				interface{}
-//
-//		This empty interface MUST contain of one of the following
-//		types:
-//
-//			int8
-//			int16
-//			int32
-//			int	(equivalent to int32)
-//			int64
-//			*big.Int
-//			uint8
-//			uint16
-//			uint
-//			uint32
-//			uint64
-//			float32
-//			float64
-//			*big.Float
-//
-//		This numeric value will be used to populate the instance
-//		of NumberStrKernel passed by parameter, 'numStrKernel'.
-//
-//		If the object passed by this empty interface is NOT one
-//		of the types listed above, an error will be returned.
-//
-//	numberSign					NumericSignValueType
-//
-//		This parameter only applies in cases where
-//		'numericValue' contains an unsigned integer
-//		comprised of one of the following types.
-//
-//			uint8
-//			uint16
-//			uint
-//			uint32
-//			uint64
-//
-//		If 'numericValue' is not convertible to one
-//		of the unsigned integer types listed above,
-//		the 'numberSign' parameter will be ignored.
-//
-//		The Number Sign is specified by means of a
-//		NumericSignValueType enumeration value.
-//
-//		Possible values are listed as follows:
-//
-//			NumSignVal.None()     = -2 - Infer From Number
-//			NumSignVal.Negative() = -1 - Valid Value
-//			NumSignVal.Zero()     =  0 - Valid Value
-//			NumSignVal.Positive() =  1 - Valid Value
-//
-//		Unsigned integer values are by default converted as
-//		positive numeric values. If this parameter is set
-//		to NumSignVal.Negative(), the numeric value returned
-//		through parameter 'numStrKernel' will be classified
-//		as a negative value.
-//
-//		If 'numberSign' is set to any value other than
-//		NumSignVal.Negative(), it will be ignored and
-//		the final number sign for the converted numeric
-//		value will be set to 'positive'.
-//
-//	errPrefDto          *ePref.ErrPrefixDto
-//
-//		This object encapsulates an error prefix string which
-//		is included in all returned error messages. Usually,
-//		it contains the name of the calling method or methods
-//		listed as a function chain.
-//
-//		If no error prefix information is needed, set this
-//		parameter to 'nil'.
-//
-//		Type ErrPrefixDto is included in the 'errpref'
-//		software package:
-//			github.com/MikeAustin71/errpref
-//
-// ----------------------------------------------------------------
-//
-// # Return Values
-//
-//	err							error
-//
-//		If this method completes successfully, this returned
-//		error Type is set equal to 'nil'. If errors are
-//		encountered during processing, the returned error
-//		Type will encapsulate an error message.
-//
-//		If an error message is returned, the text value for
-//		input parameter 'errPrefDto' (error prefix) will be
-//		prefixed or attached at the beginning of the error
-//		message.
-/*
-func (numStrKernelMolecule *numberStrKernelMolecule) convertNumberToKernel(
-	numStrKernel *NumberStrKernel,
-	numericValue interface{},
-	numberSign NumericSignValueType,
-	errPrefDto *ePref.ErrPrefixDto) (
-	err error) {
-
-	if numStrKernelMolecule.lock == nil {
-		numStrKernelMolecule.lock = new(sync.Mutex)
-	}
-
-	numStrKernelMolecule.lock.Lock()
-
-	defer numStrKernelMolecule.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
-		errPrefDto,
-		"numberStrKernelMolecule."+
-			"convertNumberToKernel()",
-		"")
-
-	if err != nil {
-
-		return err
-
-	}
-
-	if numStrKernel == nil {
-
-		err = fmt.Errorf("%v\n"+
-			"ERROR: Input parameter 'numStrKernel' is a nil pointer!\n",
-			ePrefix.String())
-
-		return err
-	}
-
-	var numberStr string
-
-	var isUnsignedInteger = false
-
-	var ok = false
-
-	switch numericValue.(type) {
-
-	case float32:
-
-		var float32Num float32
-
-		float32Num, ok = numericValue.(float32)
-
-		if !ok {
-
-			err = fmt.Errorf("%v\n"+
-				"ERROR: float32 cast to 'float32Num' failed!\n",
-				ePrefix.String())
-
-			return err
-
-		}
-
-		var float64Num float64
-
-		float64Num = float64(float32Num)
-
-		numberStr = strconv.FormatFloat(
-			float64Num, 'f', -1, 32)
-
-	case float64:
-
-		var float64Num float64
-
-		float64Num, ok = numericValue.(float64)
-
-		if !ok {
-
-			err = fmt.Errorf("%v\n"+
-				"ERROR: float64 cast to 'float64Num' failed!\n",
-				ePrefix.String())
-
-			return err
-
-		}
-
-		numberStr = strconv.FormatFloat(
-			float64Num, 'f', -1, 64)
-
-	case *big.Float:
-
-		var bigFloatNum *big.Float
-
-		bigFloatNum, ok = numericValue.(*big.Float)
-
-		if !ok {
-
-			err = fmt.Errorf("%v\n"+
-				"ERROR: *big.Float cast to 'bigFloatNum' failed!\n",
-				ePrefix.String())
-
-			return err
-
-		}
-
-		numberStr = fmt.Sprintf("%v",
-			bigFloatNum.Text('f', -1))
-
-	case int8, int16, int, int32, int64:
-
-		numberStr = fmt.Sprintf("%v",
-			numericValue)
-
-	case *big.Int:
-
-		var bigIntNum *big.Int
-
-		bigIntNum, ok = numericValue.(*big.Int)
-
-		if !ok {
-
-			err = fmt.Errorf("%v\n"+
-				"ERROR: *big.Int cast to 'bigIntNum' failed!\n",
-				ePrefix.String())
-
-			return err
-
-		}
-
-		numberStr = fmt.Sprintf("%v",
-			bigIntNum.Text(10))
-
-	case uint8, uint16, uint, uint32, uint64:
-
-		isUnsignedInteger = true
-
-		numberStr = fmt.Sprintf("%v",
-			numericValue)
-
-	default:
-
-		err = fmt.Errorf("%v\n"+
-			"ERROR: Input parameter 'numericValue' is an invalid type!\n"+
-			"'numericValue' is unsupported type '%T'\n",
-			ePrefix.String(),
-			numericValue)
-
-		return err
-
-	}
-
-	new(numberStrKernelElectron).empty(
-		numStrKernel)
-
-	runeArrayDto := RuneArrayDto{
-		CharsArray:     []rune(numberStr),
-		Description1:   "",
-		Description2:   "",
-		charSearchType: CharSearchType.LinearTargetStartingIndex(),
-	}
-
-	var decSeparatorSpec DecimalSeparatorSpec
-
-	decSeparatorSpec,
-		err = new(DecimalSeparatorSpec).NewUS(
-		ePrefix.XCpy(
-			"decSeparatorSpec<-"))
-
-	if err != nil {
-		return err
-	}
-
-	*numStrKernel,
-		err = new(numberStrKernelQuark).parsePureNumStr(
-		runeArrayDto,
-		decSeparatorSpec,
-		true,
-		ePrefix.XCpy(
-			numberStr))
-
-	if err != nil {
-		return err
-	}
-
-	if numStrKernel.numberSign == NumSignVal.Zero() {
-
-		return err
-	}
-
-	if numberSign == NumSignVal.Negative() &&
-		isUnsignedInteger == true {
-		numStrKernel.numberSign = NumSignVal.Negative()
-	}
-
-	return err
-}
-*/
-
-//	convertFloatNumberToKernel
-//
-//	Receives an empty interface which is assumed to be a
-//	floating point numeric value configured as one of the
-//	following types:
-//
-//			float32
-//			float64
-//			*big.Float
-//
-//	This floating point numeric value is then converted to
-//	a type of 'NumberStrKernel' and returned to the calling
-//	function.
-//
-// # IMPORTANT
-//
-// ----------------------------------------------------------------
-//
-//	Be advised that all data fields in 'numStrKernel' will be
-//	deleted and set to new values.
-//
-// ----------------------------------------------------------------
-//
-// # Input Parameters
-//
-//	numStrKernel				*NumberStrKernel
-//
-//		A pointer to an instance of NumberStrKernel. The data
-//		values for all internal member variables contained in
-//		this instance will be deleted and reset to new values.
-//		The new numeric value assigned to this instance will
-//		be extracted from parameter, 'floatingPointNumber'.
-//
-//	floatingPointNumber 		interface{}
 //
 //		Numeric values passed by means of this empty
 //		interface MUST BE convertible to one of the
 //		following types:
 //
-//			float32
-//			float64
-//			*big.Float
+//			float32, float64, big.Float
+//			*float32, *float64, *big.Float
+//			*BigFloatDto, BigFloatDto
+//			int8, int16, int, int32, int64, big.Int
+//			*int8, *int16, *int, *int32, *int64, *big.Int
+//			uint8, uint16, uint, uint32, uint64
+//			*uint8, *uint16, *uint, *uint32, *uint64
+//			*TextFieldFormatDtoFloat64, TextFieldFormatDtoFloat64
+//			*TextFieldFormatDtoBigFloat, TextFieldFormatDtoBigFloat
+//			*NumberStrKernel, NumberStrKernel
 //
-//		This numeric value will be used to populate the
-//		instance of NumberStrKernel passed by parameter,
-//		'numStrKernel'.
+//		This numeric value will be used to reconfigure
+//		the instance of NumberStrKernel passed by input
+//		parameter, 'numStrKernel'.
 //
-//		If 'floatingPointNumber' is NOT convertible to
-//		one of the types listed above, an error will be
+//		If 'numericValue' is NOT convertible to one of
+//		the types listed above, an error will be
 //		returned.
 //
-//	errPrefDto          *ePref.ErrPrefixDto
+//	errPrefDto					*ePref.ErrPrefixDto
 //
-//		This object encapsulates an error prefix string which
-//		is included in all returned error messages. Usually,
-//		it contains the name of the calling method or methods
-//		listed as a function chain.
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
 //
-//		If no error prefix information is needed, set this
-//		parameter to 'nil'.
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
 //
 //		Type ErrPrefixDto is included in the 'errpref'
 //		software package:
-//			github.com/MikeAustin71/errpref
+//			"github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
@@ -1165,18 +856,19 @@ func (numStrKernelMolecule *numberStrKernelMolecule) convertNumberToKernel(
 //
 //	err							error
 //
-//		If this method completes successfully, this returned
-//		error Type is set equal to 'nil'. If errors are
-//		encountered during processing, the returned error
-//		Type will encapsulate an error message.
-//
-//		If an error message is returned, the text value for
-//		input parameter 'errPrefDto' (error prefix) will be
-//		prefixed or attached at the beginning of the error
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
 //		message.
-func (numStrKernelMolecule *numberStrKernelMolecule) convertFloatNumberToKernel(
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (numStrKernelMolecule *numberStrKernelMolecule) convertNumericValueToKernel(
 	numStrKernel *NumberStrKernel,
-	floatingPointNumber interface{},
+	numericValue interface{},
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
 
@@ -1194,166 +886,7 @@ func (numStrKernelMolecule *numberStrKernelMolecule) convertFloatNumberToKernel(
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
 		"numberStrKernelMolecule."+
-			"convertFloatNumberToKernel()",
-		"")
-
-	if err != nil {
-
-		return err
-
-	}
-
-	if numStrKernel == nil {
-
-		err = fmt.Errorf("%v\n"+
-			"ERROR: Input parameter 'numStrKernel' is a nil pointer!\n",
-			ePrefix.String())
-
-		return err
-	}
-
-	new(numberStrKernelElectron).empty(
-		numStrKernel)
-
-	var numberStats NumberStrStatsDto
-
-	numberStats,
-		err = new(mathFloatHelperMechanics).
-		floatNumToIntFracRunes(
-			floatingPointNumber,
-			&numStrKernel.integerDigits,
-			&numStrKernel.fractionalDigits,
-			ePrefix.XCpy("numberStats<-"))
-
-	if err != nil {
-
-		return err
-
-	}
-
-	numStrKernel.numberSign = numberStats.NumberSign
-
-	numStrKernel.numberValueType = numberStats.NumberValueType
-
-	numStrKernel.isNonZeroValue = !numberStats.IsZeroValue
-
-	return err
-}
-
-//	convertIntNumberToKernel
-//
-//	Receives an empty interface which is assumed to be an
-//	integer numeric value configured as one of the
-//	following types:
-//
-//			int8
-//			int16
-//			int32
-//			int	(currently equivalent to int32)
-//			int64
-//			uint8
-//			uint16
-//			uint32
-//			uint (currently equivalent to uint32)
-//			uint64
-//			*big.Int
-//
-//	This integer numeric value is then converted to a
-//	type of 'NumberStrKernel' and returned to the calling
-//	function.
-//
-// ----------------------------------------------------------------
-//
-// # IMPORTANT
-//
-//	Be advised that all data fields in 'numStrKernel' will be
-//	deleted and set to new values.
-//
-// ----------------------------------------------------------------
-//
-// # Input Parameters
-//
-//	numStrKernel				*NumberStrKernel
-//
-//		A pointer to an instance of NumberStrKernel. The data
-//		values for all internal member variables contained in
-//		this instance will be deleted and reset to new values.
-//		The new numeric value assigned to this instance will
-//		be extracted from parameter, 'numericValue'.
-//
-//	intNumericValue				interface{}
-//
-//		This empty interface MUST contain of one of the following
-//		types:
-//
-//			int8
-//			int16
-//			int32
-//			int		(currently equivalent to int32)
-//			int64
-//			uint8
-//			uint16
-//			uint	(currently equivalent to uint32)
-//			uint32
-//			uint64
-//			*big.Int
-//
-//		This numeric value will be used to populate the instance
-//		of NumberStrKernel passed by parameter, 'numStrKernel'.
-//
-//		If the object passed by this empty interface is NOT one
-//		of the types listed above, an error will be returned.
-//
-//	errPrefDto          *ePref.ErrPrefixDto
-//
-//		This object encapsulates an error prefix string which
-//		is included in all returned error messages. Usually,
-//		it contains the name of the calling method or methods
-//		listed as a function chain.
-//
-//		If no error prefix information is needed, set this
-//		parameter to 'nil'.
-//
-//		Type ErrPrefixDto is included in the 'errpref'
-//		software package:
-//			github.com/MikeAustin71/errpref
-//
-// ----------------------------------------------------------------
-//
-// # Return Values
-//
-//	err							error
-//
-//		If this method completes successfully, this returned
-//		error Type is set equal to 'nil'. If errors are
-//		encountered during processing, the returned error
-//		Type will encapsulate an error message.
-//
-//		If an error message is returned, the text value for
-//		input parameter 'errPrefDto' (error prefix) will be
-//		prefixed or attached at the beginning of the error
-//		message.
-func (numStrKernelMolecule *numberStrKernelMolecule) convertIntNumberToKernel(
-	numStrKernel *NumberStrKernel,
-	intNumericValue interface{},
-	errPrefDto *ePref.ErrPrefixDto) (
-	err error) {
-
-	if numStrKernelMolecule.lock == nil {
-		numStrKernelMolecule.lock = new(sync.Mutex)
-	}
-
-	numStrKernelMolecule.lock.Lock()
-
-	defer numStrKernelMolecule.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
-		errPrefDto,
-		"numberStrKernelMolecule."+
-			"convertIntNumberToKernel()",
+			"convertNumericValueToKernel()",
 		"")
 
 	if err != nil {
@@ -1377,11 +910,10 @@ func (numStrKernelMolecule *numberStrKernelMolecule) convertIntNumberToKernel(
 	var signedPureNumStr string
 
 	signedPureNumStr,
-		err = new(mathIntHelperAtom).
-		intNumToSignedPureNumStr(
-			intNumericValue,
-			ePrefix.XCpy(
-				"intNumericValue"))
+		err = new(MathHelper).NumericValueToPureNumStr(
+		numericValue,
+		ePrefix.XCpy(
+			"signedPureNumStr<-numericValue"))
 
 	if err != nil {
 
@@ -1397,6 +929,12 @@ func (numStrKernelMolecule *numberStrKernelMolecule) convertIntNumberToKernel(
 		CharSearchType.LinearTargetStartingIndex(),
 		ePrefix)
 
+	if err != nil {
+
+		return err
+
+	}
+
 	var numberStats NumberStrStatsDto
 
 	numberStats,
@@ -1407,7 +945,8 @@ func (numStrKernelMolecule *numberStrKernelMolecule) convertIntNumberToKernel(
 			&numStrKernel.fractionalDigits,
 			&decSeparatorChars,
 			true,
-			ePrefix)
+			ePrefix.XCpy(
+				""))
 
 	if err != nil {
 
@@ -1421,7 +960,26 @@ func (numStrKernelMolecule *numberStrKernelMolecule) convertIntNumberToKernel(
 
 	numStrKernel.isNonZeroValue = !numberStats.IsZeroValue
 
+	var err2 error
+	_,
+		err2 = new(numberStrKernelAtom).
+		testValidityOfNumStrKernel(
+			numStrKernel,
+			ePrefix.XCpy(
+				"numStrKernel"))
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: The new NumberStrKernel configuration failed validity tests.\n"+
+			"One or more data values were classified as 'invalid'.\n"+
+			"Error=\n%v\n",
+			ePrefix.String(),
+			err2.Error())
+	}
+
 	return err
+
 }
 
 //	formatNumStr

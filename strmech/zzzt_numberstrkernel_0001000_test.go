@@ -91,7 +91,7 @@ func TestNumberStrKernel_Compare_000100(t *testing.T) {
 	testBigFloat.SetPrec(minPrecision)
 
 	testNStrValue01,
-		err = new(NumberStrKernel).NewFromFloatValue(
+		err = new(NumberStrKernel).NewFromNumericValue(
 		testBigFloat,
 		ePrefix.XCpy(
 			"testNStrValue01<-testBigFloat"))
@@ -1132,9 +1132,8 @@ func TestNumberStrKernel_IsZeroValue_000100(t *testing.T) {
 	origFracStr := ""
 
 	numStrKernel01,
-		err = new(NumberStrKernel).NewFromUnsignedIntValue(
+		err = new(NumberStrKernel).NewFromNumericValue(
 		origNum,
-		NumSignVal.Positive(),
 		&ePrefix)
 
 	if err != nil {
@@ -1195,9 +1194,8 @@ func TestNumberStrKernel_IsZeroValue_000100(t *testing.T) {
 	uintNum := uint(0)
 
 	numStrKernel02,
-		err = new(NumberStrKernel).NewFromUnsignedIntValue(
+		err = new(NumberStrKernel).NewFromNumericValue(
 		uintNum,
-		NumSignVal.Positive(),
 		&ePrefix)
 
 	if err != nil {
@@ -1263,9 +1261,8 @@ func TestNumberStrKernel_IsZeroValue_000100(t *testing.T) {
 		uint32Num)
 
 	numStrKernel03,
-		err = new(NumberStrKernel).NewFromUnsignedIntValue(
+		err = new(NumberStrKernel).NewFromNumericValue(
 		uint32Num,
-		NumSignVal.Positive(),
 		&ePrefix)
 
 	if err != nil {

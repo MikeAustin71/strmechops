@@ -16893,46 +16893,65 @@ func (numStrKernel *NumberStrKernel) NewFromBigRat(
 	return newNumStrKernel, err
 }
 
-//	NewFromFloatValue
+//	NewFromNumericValue
 //
 //	Creates a new instance of NumberStrKernel based on
-//	a floating point numeric value passed as an empty
-//	interface.
+//	a numeric value passed as an empty interface.
 //
-//	The floating point numeric value may be any one of
-//	the following types:
 //
-//		float32
-//		float64
-//		*big.Float
+//	The numeric value passed to this method by input
+//	parameter 'numericValue' MUST BE convertible to one
+//	of the types defined below:
+//
+//		float32, float64, big.Float
+//		*float32, *float64, *big.Float
+//		*BigFloatDto, BigFloatDto
+//		int8, int16, int, int32, int64, big.Int
+//		*int8, *int16, *int, *int32, *int64, *big.Int
+//		uint8, uint16, uint, uint32, uint64
+//		*uint8, *uint16, *uint, *uint32, *uint64
+//		*TextFieldFormatDtoFloat64, TextFieldFormatDtoFloat64
+//		*TextFieldFormatDtoBigFloat, TextFieldFormatDtoBigFloat
+//		*NumberStrKernel, NumberStrKernel
+//
+//	This numeric value is then used to configure and
+//	return a new instance of NumberStrKernel.
 //
 // ----------------------------------------------------------------
 //
 // # Input Parameters
 //
-//	floatingPointValue			interface{}
+//	numericValue				interface{}
 //
 //		Numeric values passed by means of this empty
 //		interface MUST BE convertible to one of the
 //		following types:
 //
-//			float32
-//			float64
-//			*big.Float
+//			float32, float64, big.Float
+//			*float32, *float64, *big.Float
+//			*BigFloatDto, BigFloatDto
+//			int8, int16, int, int32, int64, big.Int
+//			*int8, *int16, *int, *int32, *int64, *big.Int
+//			uint8, uint16, uint, uint32, uint64
+//			*uint8, *uint16, *uint, *uint32, *uint64
+//			*TextFieldFormatDtoFloat64, TextFieldFormatDtoFloat64
+//			*TextFieldFormatDtoBigFloat, TextFieldFormatDtoBigFloat
+//			*NumberStrKernel, NumberStrKernel
 //
-//		If 'floatingPointValue' is NOT convertible to
-//		one of the types listed above, an error will be
+//		This numeric value will be used to configure and
+//		return a new instance of NumberStrKernel.
+//
+//		If 'numericValue' is NOT convertible to one of
+//		the types listed above, an error will be
 //		returned.
 //
-//		This numeric value will be used to populate the
-//		returned instance of NumberStrKernel.
+//	errorPrefix					interface{}
 //
-//	 errorPrefix                interface{}
-//
-//		This object encapsulates error prefix text which is
-//		included in all returned error messages. Usually, it
-//		contains the name of the calling method or methods
-//		listed as a method or function chain of execution.
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
 //
 //		If no error prefix information is needed, set this
 //		parameter to 'nil'.
@@ -16940,41 +16959,50 @@ func (numStrKernel *NumberStrKernel) NewFromBigRat(
 //		This empty interface must be convertible to one of
 //		the following types:
 //
-//		1. nil - A nil value is valid and generates an empty
-//		   collection of error prefix and error context
-//		   information.
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
 //
-//		2. string - A string containing error prefix
-//			information.
+//		2.	string
+//				A string containing error prefix
+//				information.
 //
-//		3. []string A one-dimensional slice of strings
-//			containing error prefix information.
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
 //
-//		4. [][2]string A two-dimensional slice of strings
-//		   containing error prefix and error context
-//		   information.
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
 //
-//		5. ErrPrefixDto - An instance of ErrPrefixDto.
-//			Information from this object will be copied for use
-//			in error and informational messages.
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
 //
-//		6. *ErrPrefixDto - A pointer to an instance of
-//			ErrPrefixDto. Information from this object will be
-//			copied for use in error and informational messages.
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
 //
-//		7. IBasicErrorPrefix - An interface to a method
-//			generating a two-dimensional slice of strings
-//			containing error prefix and error context
-//			information.
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
 //
-//		If parameter 'errorPrefix' is NOT convertible to one
-//		of the valid types listed above, it will be
-//		considered invalid and trigger the return of an
-//		error.
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
 //
-//		Types ErrPrefixDto and IBasicErrorPrefix are included
-//		in the 'errpref' software package,
-//		"github.com/MikeAustin71/errpref".
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
@@ -16985,7 +17013,7 @@ func (numStrKernel *NumberStrKernel) NewFromBigRat(
 //		If this method completes successfully, a new instance
 //		of NumberStrKernel will be returned configured and
 //		populated with the numeric value passed in paramter,
-//		'floatingPointValue'.
+//		'numericValue'.
 //
 //	error
 //
@@ -16998,8 +17026,8 @@ func (numStrKernel *NumberStrKernel) NewFromBigRat(
 //	 	chain and text passed by input parameter, 'errorPrefix'.
 //	 	The 'errorPrefix' text will be attached to the beginning
 //	 	of the error message.
-func (numStrKernel *NumberStrKernel) NewFromFloatValue(
-	floatingPointValue interface{},
+func (numStrKernel *NumberStrKernel) NewFromNumericValue(
+	numericValue interface{},
 	errorPrefix interface{}) (
 	NumberStrKernel,
 	error) {
@@ -17021,17 +17049,18 @@ func (numStrKernel *NumberStrKernel) NewFromFloatValue(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumberStrKernel."+
-			"NewFromFloatValue()",
+			"NewFromNumericValue()",
 		"")
 
 	if err != nil {
 		return newNumStrKernel, err
 	}
 
-	err = new(numberStrKernelMolecule).convertFloatNumberToKernel(
-		&newNumStrKernel,
-		floatingPointValue,
-		ePrefix)
+	err = new(numberStrKernelMolecule).
+		convertNumericValueToKernel(
+			&newNumStrKernel,
+			numericValue,
+			ePrefix)
 
 	return newNumStrKernel, err
 }
@@ -17357,149 +17386,6 @@ func (numStrKernel *NumberStrKernel) NewFromRuneDigits(
 	return newNumStrKernel, err
 }
 
-//	NewFromSignedIntValue
-//
-//	Creates a new instance of NumberStrKernel based on a
-//	signed integer value passed as an empty interface.
-//
-//	This signed integer value may be any one of the
-//	following types:
-//
-//			int8
-//			int16
-//			int32
-//			int	(equivalent to int32)
-//			int64
-//			*big.Int
-//
-// ----------------------------------------------------------------
-//
-// # Input Parameters
-//
-//	signedIntValue				interface{}
-//
-//		Integer numeric values passed by means of this
-//		empty interface MUST BE convertible to one of the
-//		following types:
-//
-//			int8
-//			int16
-//			int32
-//			int	(equivalent to int32)
-//			int64
-//			*big.Int
-//
-//
-//	 errorPrefix                interface{}
-//
-//		This object encapsulates error prefix text which is
-//		included in all returned error messages. Usually, it
-//		contains the name of the calling method or methods
-//		listed as a method or function chain of execution.
-//
-//		If no error prefix information is needed, set this
-//		parameter to 'nil'.
-//
-//		This empty interface must be convertible to one of
-//		the following types:
-//
-//		1. nil - A nil value is valid and generates an empty
-//		   collection of error prefix and error context
-//		   information.
-//
-//		2. string - A string containing error prefix
-//			information.
-//
-//		3. []string A one-dimensional slice of strings
-//			containing error prefix information.
-//
-//		4. [][2]string A two-dimensional slice of strings
-//		   containing error prefix and error context
-//		   information.
-//
-//		5. ErrPrefixDto - An instance of ErrPrefixDto.
-//			Information from this object will be copied for use
-//			in error and informational messages.
-//
-//		6. *ErrPrefixDto - A pointer to an instance of
-//			ErrPrefixDto. Information from this object will be
-//			copied for use in error and informational messages.
-//
-//		7. IBasicErrorPrefix - An interface to a method
-//			generating a two-dimensional slice of strings
-//			containing error prefix and error context
-//			information.
-//
-//		If parameter 'errorPrefix' is NOT convertible to one
-//		of the valid types listed above, it will be
-//		considered invalid and trigger the return of an
-//		error.
-//
-//		Types ErrPrefixDto and IBasicErrorPrefix are included
-//		in the 'errpref' software package,
-//		"github.com/MikeAustin71/errpref".
-//
-// ----------------------------------------------------------------
-//
-// # Return Values
-//
-//	NumberStrKernel
-//
-//		If this method completes successfully, a new instance
-//		of NumberStrKernel will be returned configured and
-//		populated with the numeric value passed in paramter,
-//		'signedIntValue'.
-//
-//	error
-//
-//		If this method completes successfully, the returned
-//		error Type is set equal to 'nil'.
-//
-//		If errors are encountered during processing, the
-//		returned error Type will encapsulate an error message.
-//	 	This returned error message will incorporate the method
-//	 	chain and text passed by input parameter, 'errorPrefix'.
-//	 	The 'errorPrefix' text will be attached to the beginning
-//	 	of the error message.
-func (numStrKernel *NumberStrKernel) NewFromSignedIntValue(
-	signedIntValue interface{},
-	errorPrefix interface{}) (
-	NumberStrKernel,
-	error) {
-
-	if numStrKernel.lock == nil {
-		numStrKernel.lock = new(sync.Mutex)
-	}
-
-	numStrKernel.lock.Lock()
-
-	defer numStrKernel.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-	var err error
-
-	newNumStrKernel := NumberStrKernel{}
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
-		"NumberStrKernel."+
-			"NewFromSignedIntValue()",
-		"")
-
-	if err != nil {
-		return newNumStrKernel, err
-	}
-
-	err = new(numberStrKernelMolecule).
-		convertIntNumberToKernel(
-			&newNumStrKernel,
-			signedIntValue,
-			ePrefix)
-
-	return newNumStrKernel, err
-}
-
 //	NewFromStringDigits
 //
 //	Creates and returns a new instance of NumberStrKernel
@@ -17663,193 +17549,6 @@ func (numStrKernel *NumberStrKernel) NewFromStringDigits(
 		[]rune(fractionalDigits),
 		numberSign,
 		ePrefix)
-
-	return newNumStrKernel, err
-}
-
-//	NewFromUnsignedIntValue
-//
-//	Creates a new instance of NumberStrKernel based on
-//	an unsigned integer value passed as an empty
-//	interface through input parameter,
-//	'unsignedIntValue'.
-//
-//	Since 'unsignedIntValue' is an empty interface, the
-//	unsigned integer value may be any one of the
-//	following types:
-//
-//			uint8
-//			uint16
-//			uint32
-//			uint (equivalent to uint32)
-//			uint64
-//
-//	Unsigned integer numeric values always default to
-//	a positive number sign (+). With this method, the
-//	user has the option to specify the number sign
-//	(positive or negative) assigned to the converted
-//	numeric value using input parameter, 'numberSign'.
-//
-// ----------------------------------------------------------------
-//
-// # Input Parameters
-//
-//	unsignedIntValue			interface{}
-//
-//		Numeric values passed by means of this empty
-//		interface must match one of the following
-//		types:
-//
-//			uint8
-//			uint16
-//			uint32
-//			uint (equivalent to uint32)
-//			uint64
-//
-//
-//	numberSign					NumericSignValueType
-//
-//		The Number Sign is specified by means of a
-//		NumericSignValueType enumeration value.
-//
-//		Possible values are listed as follows:
-//
-//			NumSignVal.None()     = -2 - Set to positive for
-//											unsigned integer
-//											values
-//			NumSignVal.Negative() = -1 - Valid Value
-//			NumSignVal.Zero()     =  0 - Valid Value
-//			NumSignVal.Positive() =  1 - Valid Value
-//
-//		Unsigned integer values are by default converted as
-//		positive numeric values. If this parameter is set
-//		to NumSignVal.Negative(), the numeric value returned
-//		through parameter 'numStrKernel' will be classified
-//		as a negative value.
-//
-//		If 'numberSign' is set to any value other than
-//		NumSignVal.Negative(), it will be ignored and
-//		the final number sign for the converted numeric
-//		value will be set to 'positive'.
-//
-//	 errorPrefix                interface{}
-//
-//		This object encapsulates error prefix text which is
-//		included in all returned error messages. Usually, it
-//		contains the name of the calling method or methods
-//		listed as a method or function chain of execution.
-//
-//		If no error prefix information is needed, set this
-//		parameter to 'nil'.
-//
-//		This empty interface must be convertible to one of
-//		the following types:
-//
-//		1. nil - A nil value is valid and generates an empty
-//		   collection of error prefix and error context
-//		   information.
-//
-//		2. string - A string containing error prefix
-//			information.
-//
-//		3. []string A one-dimensional slice of strings
-//			containing error prefix information.
-//
-//		4. [][2]string A two-dimensional slice of strings
-//		   containing error prefix and error context
-//		   information.
-//
-//		5. ErrPrefixDto - An instance of ErrPrefixDto.
-//			Information from this object will be copied for use
-//			in error and informational messages.
-//
-//		6. *ErrPrefixDto - A pointer to an instance of
-//			ErrPrefixDto. Information from this object will be
-//			copied for use in error and informational messages.
-//
-//		7. IBasicErrorPrefix - An interface to a method
-//			generating a two-dimensional slice of strings
-//			containing error prefix and error context
-//			information.
-//
-//		If parameter 'errorPrefix' is NOT convertible to one
-//		of the valid types listed above, it will be
-//		considered invalid and trigger the return of an
-//		error.
-//
-//		Types ErrPrefixDto and IBasicErrorPrefix are included
-//		in the 'errpref' software package,
-//		"github.com/MikeAustin71/errpref".
-//
-// ----------------------------------------------------------------
-//
-// # Return Values
-//
-//	NumberStrKernel
-//
-//		If this method completes successfully, a new instance
-//		of NumberStrKernel will be returned configured and
-//		populated with the numeric value passed in paramter,
-//		'unsignedIntValue'.
-//
-//	error
-//
-//		If this method completes successfully, the returned
-//		error Type is set equal to 'nil'.
-//
-//		If errors are encountered during processing, the
-//		returned error Type will encapsulate an error message.
-//	 	This returned error message will incorporate the method
-//	 	chain and text passed by input parameter, 'errorPrefix'.
-//	 	The 'errorPrefix' text will be attached to the beginning
-//	 	of the error message.
-func (numStrKernel *NumberStrKernel) NewFromUnsignedIntValue(
-	unsignedIntValue interface{},
-	numberSign NumericSignValueType,
-	errorPrefix interface{}) (
-	NumberStrKernel,
-	error) {
-
-	if numStrKernel.lock == nil {
-		numStrKernel.lock = new(sync.Mutex)
-	}
-
-	numStrKernel.lock.Lock()
-
-	defer numStrKernel.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-	var err error
-
-	newNumStrKernel := NumberStrKernel{}
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
-		"NumberStrKernel."+
-			"NewFromUnsignedIntValue()",
-		"")
-
-	if err != nil {
-		return newNumStrKernel, err
-	}
-
-	err = new(numberStrKernelMolecule).
-		convertIntNumberToKernel(
-			&newNumStrKernel,
-			unsignedIntValue,
-			ePrefix)
-
-	if err != nil {
-		return newNumStrKernel, err
-	}
-
-	if numberSign == NumSignVal.Negative() {
-
-		newNumStrKernel.numberSign =
-			numberSign
-
-	}
 
 	return newNumStrKernel, err
 }
@@ -20483,151 +20182,6 @@ func (numStrKernel *NumberStrKernel) SetDefaultSimpleNumStrFormatSpec(
 	return err
 }
 
-//	SetFloatValue
-//
-//	Deletes resets the internal values for the current
-//	instance of	NumberStrKernel using the floating
-//	point numeric value passed as an empty interface.
-//
-//	The floating point numeric value passed to this
-//	method by input parameter '' MUST BE convertible
-//	to one of the floating point types defined below:
-//
-//		float32
-//		float64
-//		*big.Float
-//
-// ----------------------------------------------------------------
-//
-// # IMPORTANT
-//
-//	For the current instance of NumberStrKernel, all
-//	pre-existing data will be deleted and overwritten
-//	with new data generated from the numeric value
-//	passed as input parameter, 'floatingPointValue'.
-//
-// ----------------------------------------------------------------
-//
-// # Input Parameters
-//
-//	floatingPointValue			interface{}
-//
-//		Numeric values passed by means of this empty
-//		interface MUST BE convertible one of the
-//		following types:
-//
-//			float32
-//			float64
-//			*big.Float
-//
-//		This floating point numeric value will be used
-//		to configure and populate the current instance
-//		of NumberStrKernel.
-//
-//	 errorPrefix                interface{}
-//
-//		This object encapsulates error prefix text which is
-//		included in all returned error messages. Usually, it
-//		contains the name of the calling method or methods
-//		listed as a method or function chain of execution.
-//
-//		If no error prefix information is needed, set this
-//		parameter to 'nil'.
-//
-//		This empty interface must be convertible to one of
-//		the following types:
-//
-//		1. nil - A nil value is valid and generates an empty
-//		   collection of error prefix and error context
-//		   information.
-//
-//		2. string - A string containing error prefix
-//			information.
-//
-//		3. []string A one-dimensional slice of strings
-//			containing error prefix information.
-//
-//		4. [][2]string A two-dimensional slice of strings
-//		   containing error prefix and error context
-//		   information.
-//
-//		5. ErrPrefixDto - An instance of ErrPrefixDto.
-//			Information from this object will be copied for use
-//			in error and informational messages.
-//
-//		6. *ErrPrefixDto - A pointer to an instance of
-//			ErrPrefixDto. Information from this object will be
-//			copied for use in error and informational messages.
-//
-//		7. IBasicErrorPrefix - An interface to a method
-//			generating a two-dimensional slice of strings
-//			containing error prefix and error context
-//			information.
-//
-//		If parameter 'errorPrefix' is NOT convertible to one
-//		of the valid types listed above, it will be
-//		considered invalid and trigger the return of an
-//		error.
-//
-//		Types ErrPrefixDto and IBasicErrorPrefix are included
-//		in the 'errpref' software package,
-//		"github.com/MikeAustin71/errpref".
-//
-// ----------------------------------------------------------------
-//
-// # Return Values
-//
-//	NumberStrKernel
-//
-//		If this method completes successfully, a new instance
-//		of NumberStrKernel will be returned configured and
-//		populated with the numeric value passed in paramter,
-//		'floatingPointValue'.
-//
-//	error
-//
-//		If this method completes successfully, the returned
-//		error Type is set equal to 'nil'.
-//
-//		If errors are encountered during processing, the
-//		returned error Type will encapsulate an error message.
-//	 	This returned error message will incorporate the method
-//	 	chain and text passed by input parameter, 'errorPrefix'.
-//	 	The 'errorPrefix' text will be attached to the beginning
-//	 	of the error message.
-func (numStrKernel *NumberStrKernel) SetFloatValue(
-	floatingPointValue interface{},
-	errorPrefix interface{}) error {
-
-	if numStrKernel.lock == nil {
-		numStrKernel.lock = new(sync.Mutex)
-	}
-
-	numStrKernel.lock.Lock()
-
-	defer numStrKernel.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-	var err error
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
-		"NumberStrKernel."+
-			"SetFloatValue()",
-		"")
-
-	if err != nil {
-		return err
-	}
-
-	return new(numberStrKernelMolecule).
-		convertFloatNumberToKernel(
-			numStrKernel,
-			floatingPointValue,
-			ePrefix)
-}
-
 // SetNumberSign - Sets the Number Sign for the numeric value
 // represented by the current instance of NumberStrKernel.
 //
@@ -20750,6 +20304,175 @@ func (numStrKernel *NumberStrKernel) SetNumberSignInt(
 	numStrKernel.numberSign = NumericSignValueType(numberSign)
 
 	return err
+}
+
+// SetNumericValue
+//
+//	Deletes and resets the internal values for the
+//	current instance of NumberStrKernel using the
+//	numeric value passed as an empty interface.
+//
+//	The numeric value passed to this method by input
+//	parameter 'numericValue' MUST BE convertible to one
+//	of the types defined below:
+//
+//		float32, float64, big.Float
+//		*float32, *float64, *big.Float
+//		*BigFloatDto, BigFloatDto
+//		int8, int16, int, int32, int64, big.Int
+//		*int8, *int16, *int, *int32, *int64, *big.Int
+//		uint8, uint16, uint, uint32, uint64
+//		*uint8, *uint16, *uint, *uint32, *uint64
+//		*TextFieldFormatDtoFloat64, TextFieldFormatDtoFloat64
+//		*TextFieldFormatDtoBigFloat, TextFieldFormatDtoBigFloat
+//		*NumberStrKernel, NumberStrKernel
+//
+//	This numeric value is then used to reconfigure the
+//	current instance NumberStrKernel.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will delete and reconfigure all
+//	pre-existing data values contained in the current
+//	instance of NumberStrKernel.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	numericValue				interface{}
+//
+//		Numeric values passed by means of this empty
+//		interface MUST BE convertible to one of the
+//		following types:
+//
+//			float32, float64, big.Float
+//			*float32, *float64, *big.Float
+//			*BigFloatDto, BigFloatDto
+//			int8, int16, int, int32, int64, big.Int
+//			*int8, *int16, *int, *int32, *int64, *big.Int
+//			uint8, uint16, uint, uint32, uint64
+//			*uint8, *uint16, *uint, *uint32, *uint64
+//			*TextFieldFormatDtoFloat64, TextFieldFormatDtoFloat64
+//			*TextFieldFormatDtoBigFloat, TextFieldFormatDtoBigFloat
+//			*NumberStrKernel, NumberStrKernel
+//
+//		This numeric value will be used to reconfigure
+//		the current instance of NumberStrKernel.
+//
+//		If 'numericValue' is NOT convertible to one of
+//		the types listed above, an error will be
+//		returned.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (numStrKernel *NumberStrKernel) SetNumericValue(
+	numericValue interface{},
+	errorPrefix interface{}) error {
+
+	if numStrKernel.lock == nil {
+		numStrKernel.lock = new(sync.Mutex)
+	}
+
+	numStrKernel.lock.Lock()
+
+	defer numStrKernel.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumberStrKernel."+
+			"SetNumericValue()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	return new(numberStrKernelMolecule).
+		convertNumericValueToKernel(
+			numStrKernel,
+			numericValue,
+			ePrefix.XCpy(
+				"numStrKernel"))
 }
 
 //	SetRuneDigits
@@ -21068,150 +20791,6 @@ func (numStrKernel *NumberStrKernel) SetRuneDto(
 		ePrefix)
 }
 
-//	SetSignedIntegerValue
-//
-//	Deletes resets the internal values for the current
-//	instance of	NumberStrKernel using the integer
-//	numeric value passed as input parameter,
-//	'signedIntegerValue'.
-//
-//	'signedIntegerValue' is an empty interface. This
-//	object MUST BE convertible to one of the signed
-//	integer value types defined below:
-//
-//			int8
-//			int16
-//			int32
-//			int	(equivalent to int32)
-//			int64
-//			*big.Int
-//
-// ----------------------------------------------------------------
-//
-// # IMPORTANT
-//
-//	For the current instance of NumberStrKernel, all
-//	pre-existing data will be deleted and overwritten
-//	with new data generated from the signed numeric
-//	value passed as input parameter, 'signedIntValue'.
-//
-// ----------------------------------------------------------------
-//
-// # Input Parameters
-//
-//	signedIntegerValue			interface{}
-//
-//		Numeric values passed by means of this empty
-//		interface MUST BE convertible to one of the
-//		following types:
-//
-//			int8
-//			int16
-//			int32
-//			int	(equivalent to int32)
-//			int64
-//			*big.Int
-//
-//
-//	 errorPrefix                interface{}
-//
-//		This object encapsulates error prefix text which is
-//		included in all returned error messages. Usually, it
-//		contains the name of the calling method or methods
-//		listed as a method or function chain of execution.
-//
-//		If no error prefix information is needed, set this
-//		parameter to 'nil'.
-//
-//		This empty interface must be convertible to one of
-//		the following types:
-//
-//		1. nil - A nil value is valid and generates an empty
-//		   collection of error prefix and error context
-//		   information.
-//
-//		2. string - A string containing error prefix
-//			information.
-//
-//		3. []string A one-dimensional slice of strings
-//			containing error prefix information.
-//
-//		4. [][2]string A two-dimensional slice of strings
-//		   containing error prefix and error context
-//		   information.
-//
-//		5. ErrPrefixDto - An instance of ErrPrefixDto.
-//			Information from this object will be copied for use
-//			in error and informational messages.
-//
-//		6. *ErrPrefixDto - A pointer to an instance of
-//			ErrPrefixDto. Information from this object will be
-//			copied for use in error and informational messages.
-//
-//		7. IBasicErrorPrefix - An interface to a method
-//			generating a two-dimensional slice of strings
-//			containing error prefix and error context
-//			information.
-//
-//		If parameter 'errorPrefix' is NOT convertible to one
-//		of the valid types listed above, it will be
-//		considered invalid and trigger the return of an
-//		error.
-//
-//		Types ErrPrefixDto and IBasicErrorPrefix are included
-//		in the 'errpref' software package,
-//		"github.com/MikeAustin71/errpref".
-//
-// ----------------------------------------------------------------
-//
-// # Return Values
-//
-//	error
-//
-//		If this method completes successfully, the returned
-//		error Type is set equal to 'nil'.
-//
-//		If errors are encountered during processing, the
-//		returned error Type will encapsulate an error message.
-//	 	This returned error message will incorporate the method
-//	 	chain and text passed by input parameter, 'errorPrefix'.
-//	 	The 'errorPrefix' text will be attached to the beginning
-//	 	of the error message.
-func (numStrKernel *NumberStrKernel) SetSignedIntegerValue(
-	signedIntegerValue interface{},
-	errorPrefix interface{}) error {
-
-	if numStrKernel.lock == nil {
-		numStrKernel.lock = new(sync.Mutex)
-	}
-
-	numStrKernel.lock.Lock()
-
-	defer numStrKernel.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-	var err error
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
-		"NumberStrKernel."+
-			"SetSignedIntegerValue()",
-		"")
-
-	if err != nil {
-		return err
-	}
-
-	err = new(numberStrKernelMolecule).
-		convertIntNumberToKernel(
-			numStrKernel,
-			signedIntegerValue,
-			ePrefix)
-
-	return err
-}
-
 //	SetStringDigits
 //
 //	Deletes resets the internal values for the current
@@ -21368,186 +20947,4 @@ func (numStrKernel *NumberStrKernel) SetStringDigits(
 		[]rune(fractionalDigits),
 		numberSign,
 		ePrefix)
-}
-
-//	SetUnsignedIntValue
-//
-//	Deletes resets the internal values for the current
-//	instance of	NumberStrKernel using the unsigned
-//	integer	numeric value passed as input parameter,
-//	'unsignedIntValue'.
-//
-//	Since 'unsignedIntValue' is an empty interface, the
-//	unsigned integer value may be any one of the
-//	following types:
-//
-//			uint8
-//			uint16
-//			uint32
-//			uint (equivalent to uint32)
-//			uint64
-//
-//	Unsigned integer numeric values always default to
-//	a positive number sign (+). With this method, the
-//	user has the option to specify the number sign
-//	(positive or negative) assigned to the converted
-//	numeric value using input parameter, 'numberSign'.
-//
-// ----------------------------------------------------------------
-//
-// # IMPORTANT
-//
-//	For the current instance of NumberStrKernel, all
-//	pre-existing data will be deleted and overwritten
-//	with new data generated from the signed numeric
-//	value passed as input parameter, 'unsignedIntValue'.
-//
-// ----------------------------------------------------------------
-//
-// # Input Parameters
-//
-//	unsignedIntValue			interface{}
-//
-//		Numeric values passed by means of this empty
-//		interface must match one of the following
-//		types:
-//
-//			uint8
-//			uint16
-//			uint32
-//			uint (equivalent to uint32)
-//			uint64
-//
-//
-//	numberSign					NumericSignValueType
-//
-//		The Number Sign is specified by means of a
-//		NumericSignValueType enumeration value.
-//
-//		Possible values are listed as follows:
-//
-//			NumSignVal.None()     = -2 - Set to positive for
-//											unsigned integer
-//											values
-//			NumSignVal.Negative() = -1 - Valid Value
-//			NumSignVal.Zero()     =  0 - Valid Value
-//			NumSignVal.Positive() =  1 - Valid Value
-//
-//		Unsigned integer values are by default converted as
-//		positive numeric values. If this parameter is set
-//		to NumSignVal.Negative(), the converted numeric value
-//		will be classified as a negative value.
-//
-//		If 'numberSign' is set to any value other than
-//		NumSignVal.Negative(), it will be ignored and
-//		the final number sign for the converted numeric
-//		value will be set to 'positive'.
-//
-//	 errorPrefix                interface{}
-//
-//		This object encapsulates error prefix text which is
-//		included in all returned error messages. Usually, it
-//		contains the name of the calling method or methods
-//		listed as a method or function chain of execution.
-//
-//		If no error prefix information is needed, set this
-//		parameter to 'nil'.
-//
-//		This empty interface must be convertible to one of
-//		the following types:
-//
-//		1. nil - A nil value is valid and generates an empty
-//		   collection of error prefix and error context
-//		   information.
-//
-//		2. string - A string containing error prefix
-//			information.
-//
-//		3. []string A one-dimensional slice of strings
-//			containing error prefix information.
-//
-//		4. [][2]string A two-dimensional slice of strings
-//		   containing error prefix and error context
-//		   information.
-//
-//		5. ErrPrefixDto - An instance of ErrPrefixDto.
-//			Information from this object will be copied for use
-//			in error and informational messages.
-//
-//		6. *ErrPrefixDto - A pointer to an instance of
-//			ErrPrefixDto. Information from this object will be
-//			copied for use in error and informational messages.
-//
-//		7. IBasicErrorPrefix - An interface to a method
-//			generating a two-dimensional slice of strings
-//			containing error prefix and error context
-//			information.
-//
-//		If parameter 'errorPrefix' is NOT convertible to one
-//		of the valid types listed above, it will be
-//		considered invalid and trigger the return of an
-//		error.
-//
-//		Types ErrPrefixDto and IBasicErrorPrefix are included
-//		in the 'errpref' software package,
-//		"github.com/MikeAustin71/errpref".
-//
-// ----------------------------------------------------------------
-//
-// # Return Values
-//
-//	error
-//
-//		If this method completes successfully, the returned
-//		error Type is set equal to 'nil'.
-//
-//		If errors are encountered during processing, the
-//		returned error Type will encapsulate an error message.
-//	 	This returned error message will incorporate the method
-//	 	chain and text passed by input parameter, 'errorPrefix'.
-//	 	The 'errorPrefix' text will be attached to the beginning
-//	 	of the error message.
-func (numStrKernel *NumberStrKernel) SetUnsignedIntValue(
-	unsignedIntValue interface{},
-	numberSign NumericSignValueType,
-	errorPrefix interface{}) error {
-
-	if numStrKernel.lock == nil {
-		numStrKernel.lock = new(sync.Mutex)
-	}
-
-	numStrKernel.lock.Lock()
-
-	defer numStrKernel.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-	var err error
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
-		"NumberStrKernel."+
-			"SetUnsignedIntValue()",
-		"")
-
-	if err != nil {
-		return err
-	}
-
-	err = new(numberStrKernelMolecule).
-		convertIntNumberToKernel(
-			numStrKernel,
-			unsignedIntValue,
-			ePrefix)
-
-	if err != nil {
-		return err
-	}
-
-	if numberSign == NumSignVal.Negative() {
-
-		numStrKernel.numberSign = numberSign
-	}
-
-	return err
 }

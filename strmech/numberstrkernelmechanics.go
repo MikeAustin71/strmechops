@@ -809,7 +809,7 @@ func (numStrKernelMech *numberStrKernelMechanics) convertToSciNotation(
 		exponent = 0
 
 		err = nStrKernelMolecule.
-			convertIntNumberToKernel(
+			convertNumericValueToKernel(
 				&sciNotKernel.exponent,
 				exponent,
 				ePrefix.XCpy(
@@ -845,7 +845,7 @@ func (numStrKernelMech *numberStrKernelMechanics) convertToSciNotation(
 		exponent = int64(intArrayLen - 1)
 
 		err = nStrKernelMolecule.
-			convertIntNumberToKernel(
+			convertNumericValueToKernel(
 				&sciNotKernel.exponent,
 				exponent,
 				ePrefix.XCpy(
@@ -877,7 +877,7 @@ func (numStrKernelMech *numberStrKernelMechanics) convertToSciNotation(
 		exponent = 0
 
 		err = nStrKernelMolecule.
-			convertIntNumberToKernel(
+			convertNumericValueToKernel(
 				&sciNotKernel.exponent,
 				exponent,
 				ePrefix.XCpy(
@@ -935,7 +935,7 @@ func (numStrKernelMech *numberStrKernelMechanics) convertToSciNotation(
 			exponent = int64(zerosCount + 1)
 
 			err = nStrKernelMolecule.
-				convertIntNumberToKernel(
+				convertNumericValueToKernel(
 					&sciNotKernel.exponent,
 					exponent,
 					ePrefix.XCpy(
@@ -972,7 +972,7 @@ func (numStrKernelMech *numberStrKernelMechanics) convertToSciNotation(
 			exponent = int64(zerosCount + 1)
 
 			err = nStrKernelMolecule.
-				convertIntNumberToKernel(
+				convertNumericValueToKernel(
 					&sciNotKernel.exponent,
 					exponent,
 					ePrefix.XCpy(
