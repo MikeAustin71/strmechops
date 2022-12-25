@@ -157,7 +157,7 @@ func (sMech *StrMech) BreakTextAtLineLength(
 		return "", err
 	}
 
-	return strMechAtom{}.ptr().breakTextAtLineLength(
+	return new(strMechAtom).breakTextAtLineLength(
 		targetStr,
 		lineLength,
 		lineDelimiter,
@@ -682,7 +682,7 @@ func (sMech *StrMech) CopyIn(strops2 *StrMech) {
 		return
 	}
 
-	_ = strMechAtom{}.ptr().
+	_ = new(strMechAtom).
 		copyIn(
 			sMech,
 			strops2,
@@ -1318,7 +1318,7 @@ func (sMech *StrMech) ExtractDataField(
 		return DataFieldProfileDto{}, err
 	}
 
-	return strMechAtom{}.ptr().
+	return new(strMechAtom).
 		extractDataField(
 			targetStr,
 			leadingKeyWordDelimiters,

@@ -9,7 +9,6 @@ import (
 
 // textStrBuilderElectron - Provides helper methods for type
 // TextStrBuilder.
-//
 type textStrBuilderElectron struct {
 	lock *sync.Mutex
 }
@@ -17,73 +16,70 @@ type textStrBuilderElectron struct {
 // writeLeftMargin - Writes left margin string to the formatted
 // text stream.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  strBuilder                 *strings.Builder
-//     - A pointer to an instance of strings.Builder. The left
-//       margin characters will be written to this string builder.
+//	strBuilder                 *strings.Builder
+//	   - A pointer to an instance of strings.Builder. The left
+//	     margin characters will be written to this string builder.
 //
 //
-//  maxLineLength              int
-//     - The total length of the output line.
+//	maxLineLength              int
+//	   - The total length of the output line.
 //
 //
-//  currentLineLength          int
-//     - The number of characters previously written to the current
-//       line.
+//	currentLineLength          int
+//	   - The number of characters previously written to the current
+//	     line.
 //
 //
-//  leftMarginStr              string
-//     - The left margin string which will be written to
-//       'strBuilder'.
+//	leftMarginStr              string
+//	   - The left margin string which will be written to
+//	     'strBuilder'.
 //
 //
-//  lineTerminatorStr          string
-//     - The string of characters used to terminate a line of text.
+//	lineTerminatorStr          string
+//	   - The string of characters used to terminate a line of text.
 //
 //
-//  turnAutoLineBreaksOn       bool
-//  - When this parameter is set to 'true' it signals that
-//    automatic line breaks are engaged and will be applied. This
-//    means that if text exceeds the maximum line length, line
-//    termination characters will be automatically inserted.
+//	turnAutoLineBreaksOn       bool
+//	- When this parameter is set to 'true' it signals that
+//	  automatic line breaks are engaged and will be applied. This
+//	  means that if text exceeds the maximum line length, line
+//	  termination characters will be automatically inserted.
 //
 //
-//  errPrefDto                 *ePref.ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//	errPrefDto                 *ePref.ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods listed
+//	     as a function chain.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
-//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  newCurrentLineLength       int
-//     - The number of characters written to the current output
-//       line.
+//	newCurrentLineLength       int
+//	   - The number of characters written to the current output
+//	     line.
 //
 //
-//  err                        error
-//     - If this method completes successfully and no errors are
-//       encountered, this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	err                        error
+//	   - If this method completes successfully and no errors are
+//	     encountered, this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (txtBuilderElectron *textStrBuilderElectron) writeLeftMargin(
 	strBuilder *strings.Builder,
 	maxLineLength int,
@@ -259,68 +255,65 @@ func (txtBuilderElectron *textStrBuilderElectron) writeLeftMargin(
 // writeRightMargin - Writes right margin string to the formatted
 // text stream.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  strBuilder                 *strings.Builder
-//     - A pointer to an instance of strings.Builder. The right
-//       margin characters will be written to this string builder.
+//	strBuilder                 *strings.Builder
+//	   - A pointer to an instance of strings.Builder. The right
+//	     margin characters will be written to this string builder.
 //
 //
-//  maxLineLength              int
-//     - The total length of the output line.
+//	maxLineLength              int
+//	   - The total length of the output line.
 //
 //
-//  currentLineLength          int
-//     - The number of characters previously written to the current
-//       line.
+//	currentLineLength          int
+//	   - The number of characters previously written to the current
+//	     line.
 //
 //
-//  rightMarginStr             string
-//     - The right margin string which will be written to
-//       'strBuilder'.
+//	rightMarginStr             string
+//	   - The right margin string which will be written to
+//	     'strBuilder'.
 //
 //
-//  lineTerminatorStr          string
-//     - The string of characters used to terminate a line of text.
+//	lineTerminatorStr          string
+//	   - The string of characters used to terminate a line of text.
 //
 //
-//  turnAutoLineBreaksOn       bool
-//  - When this parameter is set to 'true' it signals that
-//    automatic line breaks are engaged and will be applied. This
-//    means that if text exceeds the maximum line length, line
-//    termination characters will be automatically inserted.
+//	turnAutoLineBreaksOn       bool
+//	- When this parameter is set to 'true' it signals that
+//	  automatic line breaks are engaged and will be applied. This
+//	  means that if text exceeds the maximum line length, line
+//	  termination characters will be automatically inserted.
 //
 //
-//  errPrefDto                 *ePref.ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//	errPrefDto                 *ePref.ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods listed
+//	     as a function chain.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
-//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  err                        error
-//     - If this method completes successfully and no errors are
-//       encountered, this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	err                        error
+//	   - If this method completes successfully and no errors are
+//	     encountered, this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (txtBuilderElectron *textStrBuilderElectron) writeRightMargin(
 	strBuilder *strings.Builder,
 	maxLineLength int,
@@ -533,92 +526,89 @@ func (txtBuilderElectron *textStrBuilderElectron) writeRightMargin(
 // writeText - Writes the text string to the formatted text
 // stream.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  strBuilder                 *strings.Builder
-//     - A pointer to an instance of strings.Builder. The text
-//       characters will be written to this string builder.
+//	strBuilder                 *strings.Builder
+//	   - A pointer to an instance of strings.Builder. The text
+//	     characters will be written to this string builder.
 //
 //
-//  maxLineLength              int
-//     - The total length of the output line.
+//	maxLineLength              int
+//	   - The total length of the output line.
 //
-//       It is assumed that maxLineLength has been previously
-//       validated.
-//
-//
-//  currentLineLength          int
-//     - The number of characters previously written to the current
-//       line.
+//	     It is assumed that maxLineLength has been previously
+//	     validated.
 //
 //
-//  leftMarginStr              string
-//     - The left margin string associated with this text.
-//       'leftMarginStr' is optional and may be passed as an empty
-//       string.
+//	currentLineLength          int
+//	   - The number of characters previously written to the current
+//	     line.
 //
 //
-//  textStr                    string
-//     - The text string which will be written to 'strBuilder'.
+//	leftMarginStr              string
+//	   - The left margin string associated with this text.
+//	     'leftMarginStr' is optional and may be passed as an empty
+//	     string.
 //
 //
-//  lineTerminatorStr          string
-//     - The string of characters used to terminate a line of text.
+//	textStr                    string
+//	   - The text string which will be written to 'strBuilder'.
 //
 //
-//  rightMarginStr             string
-//     - The right margin string associated with this line of text.
-//       'rightMarginStr' is optional and may be passed as an empty
-//       string.
+//	lineTerminatorStr          string
+//	   - The string of characters used to terminate a line of text.
 //
 //
-//  turnAutoLineBreaksOn       bool
-//  - When this parameter is set to 'true' it signals that
-//    automatic line breaks are engaged and will be applied. This
-//    means that if text exceeds the maximum line length, line
-//    termination characters will be automatically inserted.
+//	rightMarginStr             string
+//	   - The right margin string associated with this line of text.
+//	     'rightMarginStr' is optional and may be passed as an empty
+//	     string.
 //
 //
-//  errPrefDto                 *ePref.ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//	turnAutoLineBreaksOn       bool
+//	- When this parameter is set to 'true' it signals that
+//	  automatic line breaks are engaged and will be applied. This
+//	  means that if text exceeds the maximum line length, line
+//	  termination characters will be automatically inserted.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
+//	errPrefDto                 *ePref.ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods listed
+//	     as a function chain.
 //
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
+//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  newCurrentLineLength       int
-//     - The number of characters written to the current output
-//       line.
+//	newCurrentLineLength       int
+//	   - The number of characters written to the current output
+//	     line.
 //
 //
-//  lastWriteWasLineTerminator bool
-//     - When set to 'true', this signals that the last characters
-//       written to 'strBuilder' were line termination characters.
+//	lastWriteWasLineTerminator bool
+//	   - When set to 'true', this signals that the last characters
+//	     written to 'strBuilder' were line termination characters.
 //
 //
-//  err                        error
-//     - If this method completes successfully and no errors are
-//       encountered, this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	err                        error
+//	   - If this method completes successfully and no errors are
+//	     encountered, this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (txtBuilderElectron *textStrBuilderElectron) writeText(
 	strBuilder *strings.Builder,
 	maxLineLength int,
@@ -759,7 +749,7 @@ func (txtBuilderElectron *textStrBuilderElectron) writeText(
 
 		textStr,
 			err =
-			strMechAtom{}.ptr().breakTextAtLineLength(
+			new(strMechAtom).breakTextAtLineLength(
 				textStr,
 				longLineMaxLen,
 				'\n',

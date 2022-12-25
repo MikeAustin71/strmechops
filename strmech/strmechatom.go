@@ -968,20 +968,3 @@ exitMainTargetLoop:
 
 	return newDataDto, nil
 }
-
-// ptr - Returns a pointer to a new instance of
-// strMechAtom.
-func (sMechAtom strMechAtom) ptr() *strMechAtom {
-
-	if sMechAtom.lock == nil {
-		sMechAtom.lock = new(sync.Mutex)
-	}
-
-	sMechAtom.lock.Lock()
-
-	defer sMechAtom.lock.Unlock()
-
-	return &strMechAtom{
-		lock: new(sync.Mutex),
-	}
-}
