@@ -1690,10 +1690,15 @@ func (sMech *StrMech) ExtractNumericDigits(
 //		radix point or decimal separator which will
 //		separate integer and fractional digits in the
 //		Raw Number String Rune Array ('rawNumStrRunes').
-//		In the US, the period ('.'), or decimal point,
-//		separates integer and fractional digits within
-//		a floating point numeric value. In Europe, the
-//		comma (',') performs this function.
+//
+//		In the US, Canada and Australia, the period
+//		('.'), or decimal point, separates integer and
+//		fractional digits within a floating point numeric
+//		value.
+//
+//		Many countries in Europe use the comma (',') to
+//		separate integer and fractional digits within a
+//		number string.
 //
 //	numParsingTerminators		RuneArrayCollection
 //
@@ -1857,7 +1862,7 @@ func (sMech *StrMech) ExtractNumberRunes(
 
 	searchResults,
 		numStrKernel,
-		err = new(numberStrKernelQuark).extractNumRunes(
+		err = new(numStrHelperQuark).extractNumRunes(
 		rawNumStrRunes,
 		"numberStr",
 		startSearchIndex,

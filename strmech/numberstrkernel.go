@@ -17806,7 +17806,7 @@ func (numStrKernel *NumberStrKernel) NewParseCustomNumberStr(
 
 	numberStrSearchResults,
 		numberStrKernel,
-		err = new(numberStrKernelQuark).extractNumRunes(
+		err = new(numStrHelperQuark).extractNumRunes(
 		runeDto,
 		"rawNumStr",
 		startSearchIndex,
@@ -18116,7 +18116,7 @@ func (numStrKernel *NumberStrKernel) NewParseFrenchNumberStr(
 
 	numberStrSearchResults,
 		nStrKernel,
-		err = new(numberStrKernelQuark).extractNumRunes(
+		err = new(numStrHelperQuark).extractNumRunes(
 		runeDto,
 		"rawNumStr",
 		startSearchIndex,
@@ -18429,7 +18429,7 @@ func (numStrKernel *NumberStrKernel) NewParseGermanNumberStr(
 
 	numberStrSearchResults,
 		nStrKernel,
-		err = new(numberStrKernelQuark).extractNumRunes(
+		err = new(numStrHelperQuark).extractNumRunes(
 		runeDto,
 		"rawNumStr",
 		startSearchIndex,
@@ -19026,7 +19026,7 @@ func (numStrKernel *NumberStrKernel) NewParseUSNumberStr(
 
 	numberStrSearchResults,
 		nStrKernel,
-		err = new(numberStrKernelQuark).extractNumRunes(
+		err = new(numStrHelperQuark).extractNumRunes(
 		runeDto,
 		"rawNumStr",
 		startSearchIndex,

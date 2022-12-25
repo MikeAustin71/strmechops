@@ -556,6 +556,861 @@ func (nStrHelperQuark *numStrHelperQuark) extractNumericDigits(
 	return nStrDto, nil
 }
 
+// extractNumRunes
+//
+// Receives an array of runes and extracts the numeric
+// digits as text characters. Set
+// 'characterSearchLength' to minus one (-1) for
+// end-of-string search.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	targetSearchString				RuneArrayDto
+//
+//		A instance of RuneArrayDto. Type RuneArrayDto
+//		contains the string of text characters which will
+//		be searched for the presence of a numeric digit
+//		characters.
+//
+//			type RuneArrayDto struct {
+//				CharsArray []rune
+//			}
+//
+//	targetSearchStringName			string
+//
+//		The name of the target search string which will
+//		be displayed in error or informational messages
+//		returned by this method.
+//
+//	startingSearchIndex				int
+//
+//		The index in the target string rune array
+//		('targetSearchString') where the search for
+//		numeric digit characters will begin.
+//
+//	breakOnCharSearchLength			int
+//
+//		The actual number of characters within the Raw
+//		Number String Rune Array ('targetSearchString')
+//		that are included in the search for numeric
+//		character digits.
+//
+//		If this value is set to -1, the search length
+//		will be configured to include the last index in
+//		'targetSearchString'. In other words the search
+//		will proceed	to the end of
+//		'targetSearchString' array.
+//
+//	negativeNumSearchSpecsCol		NegNumSearchSpecCollection
+//
+//		Type NegNumSearchSpecCollection is a collection
+//		of NegativeNumberSearchSpec object. This
+//		collection represents all the negative number
+//		signs which might be located with the Target
+//		Search String ('targetSearchString').
+//
+//		This collection allows the flexibility for
+//		locating such negative number signs as leading
+//		minus signs ('-'), trailing minus signs ('-'),
+//		parentheses ('()') or any other negative number
+//		sign characters which might be associated with
+//		a particular national or cultural usage.
+//
+//	decimalSeparator				DecimalSeparatorSpec
+//
+//		Type DecimalSeparatorSpec is used to specify the
+//		radix point or decimal separator which will
+//		separate integer and fractional digits in the
+//		Target Number String Rune Array
+//		('targetSearchString').
+//
+//		In the US, Canada and Australia, the period
+//		('.'), or decimal point, separates integer and
+//		fractional digits within a floating point numeric
+//		value.
+//
+//		Many countries in Europe use the comma (',') to
+//		separate integer and fractional digits within a
+//		number string.
+//
+//	breakOnCharDelimiters			RuneArrayCollection
+//
+//		A collection of rune arrays used to specify
+//		text characters which will automatically trigger
+//		termination of the search and number parsing
+//		operation.
+//
+//		If any one of these Terminator characters are
+//		encountered while searching the Raw Number
+//		String Rune Array ('rawNumStrRunes'), the
+//		search operation will be immediately terminated.
+//
+//	requestRemainderRunesString		bool
+//
+//	errorPrefix						interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	searchResults				CharSearchNumStrParseResultsDto
+//
+//	numStrKernel				NumberStrKernel
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (nStrHelperQuark *numStrHelperQuark) extractNumRunes(
+	targetSearchString RuneArrayDto,
+	targetSearchStringName string,
+	startingSearchIndex int,
+	breakOnCharSearchLength int,
+	negativeNumSearchSpecsCol NegNumSearchSpecCollection,
+	decimalSeparator DecimalSeparatorSpec,
+	breakOnCharDelimiters RuneArrayCollection,
+	requestRemainderRunesString bool,
+	ePrefDto *ePref.ErrPrefixDto) (
+	searchResults CharSearchNumStrParseResultsDto,
+	numStrKernel NumberStrKernel,
+	err error) {
+
+	if nStrHelperQuark.lock == nil {
+		nStrHelperQuark.lock = new(sync.Mutex)
+	}
+
+	nStrHelperQuark.lock.Lock()
+
+	defer nStrHelperQuark.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		ePrefDto,
+		"numStrHelperQuark."+
+			"extractNumRunes()",
+		"")
+
+	if err != nil {
+
+		return searchResults,
+			numStrKernel,
+			err
+	}
+
+	targetInputParms := CharSearchTargetInputParametersDto{}.New()
+
+	targetInputParms.TargetString = &targetSearchString
+
+	targetInputParms.TargetStringLength = targetSearchString.GetRuneArrayLength()
+
+	if targetInputParms.TargetStringLength == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'targetSearchString' is invalid.\n"+
+			"'targetSearchString' has an array length of zero!\n",
+			ePrefix.String())
+
+		return searchResults,
+			numStrKernel,
+			err
+
+	}
+
+	sMechPreon := strMechPreon{}
+	var err2 error
+
+	_,
+		err2 = sMechPreon.testValidityOfRuneCharArray(
+		targetInputParms.TargetString.CharsArray,
+		nil)
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter '%v' is invalid.\n"+
+			"'%v' should contain valid characters.\n"+
+			"A validity test on this rune array produced the following error:\n"+
+			"%v\n",
+			ePrefix.String(),
+			targetSearchStringName,
+			targetSearchStringName,
+			err2.Error())
+
+		return searchResults,
+			numStrKernel,
+			err
+	}
+
+	targetInputParms.TargetInputParametersName = "Extract Number Runes"
+	targetInputParms.TargetStringDescription2 =
+		"strMechMolecule.extractNumRunes()"
+
+	if len(targetSearchStringName) == 0 {
+		targetInputParms.TargetStringName = "targetSearchString"
+	} else {
+		targetInputParms.TargetStringName = targetSearchStringName
+	}
+
+	targetInputParms.TargetStringLengthName =
+		targetInputParms.TargetStringName + "Length"
+
+	targetInputParms.TargetStringStartingSearchIndexName =
+		targetInputParms.TargetStringName + "StartingSearchIndex"
+
+	targetInputParms.TargetStringSearchLength = -1
+
+	targetInputParms.FoundFirstNumericDigitInNumStr = false
+
+	targetInputParms.TargetStringStartingSearchIndex =
+		startingSearchIndex
+
+	if targetInputParms.TargetStringStartingSearchIndex < 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'startingSearchIndex' is invalid.\n"+
+			"'startingSearchIndex' has a value less than zero!\n"+
+			"startingSearchIndex = '%v'\n",
+			ePrefix.String(),
+			targetInputParms.TargetStringStartingSearchIndex)
+
+		return searchResults,
+			numStrKernel,
+			err
+	}
+
+	if targetInputParms.TargetStringStartingSearchIndex >=
+		targetInputParms.TargetStringLength {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'startingSearchIndex' is invalid.\n"+
+			"'startingSearchIndex' has a value greater than the last index\n"+
+			"of %v!\n"+
+			"startingSearchIndex = '%v'\n"+
+			"%v last index = %v\n",
+			ePrefix.String(),
+			targetInputParms.TargetStringName,
+			targetInputParms.TargetStringStartingSearchIndex,
+			targetInputParms.TargetStringName,
+			targetInputParms.TargetStringLength-1)
+
+		return searchResults,
+			numStrKernel,
+			err
+	}
+
+	targetInputParms.TargetStringSearchLength = breakOnCharSearchLength
+
+	err = targetInputParms.ValidateTargetParameters(
+		ePrefix.XCpy(
+			"targetInputParms"))
+
+	if err != nil {
+
+		return searchResults,
+			numStrKernel,
+			err
+
+	}
+
+	err2 = negativeNumSearchSpecsCol.IsValidInstanceError(
+		nil)
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'negativeNumSearchSpecsCol' is invalid!\n"+
+			"The following validation error was returned:\n"+
+			"%v\n",
+			ePrefix.XCpy(
+				"negativeNumSearchSpecsCol"),
+			err2.Error())
+
+		return searchResults,
+			numStrKernel,
+			err
+	}
+
+	err2 = decimalSeparator.IsValidInstanceError(
+		nil)
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'decimalSeparator' is invalid!\n"+
+			"The following validation error was returned:\n"+
+			"%v\n",
+			ePrefix.XCpy(
+				"decimalSeparator"),
+			err2.Error())
+
+		return searchResults,
+			numStrKernel,
+			err
+	}
+
+	targetInputParms.RequestRemainderString = false
+	targetInputParms.RequestFoundTestCharacters = false
+	targetInputParms.RequestReplacementString = false
+
+	searchResults.Empty()
+
+	searchResults.SearchResultsName = "Number Runes Extraction Results"
+
+	searchResults.SearchResultsFunctionChain =
+		ePrefix.String()
+
+	searchResults.FoundNumericDigits = false
+	searchResults.FoundNonZeroValue = false
+	searchResults.FoundDecimalSeparatorSymbols = false
+	searchResults.FoundDecimalDigits = false
+	searchResults.NumSignValue = NumSignVal.Zero()
+	searchResults.NumValueType = NumValType.None()
+	searchResults.RemainderString.Empty()
+	searchResults.DecimalSeparatorSearchResults.Empty()
+	searchResults.NegativeNumberSymbolSearchResults.Empty()
+	searchResults.ParsingTerminatorSearchResults.Empty()
+
+	err = searchResults.TargetSearchString.CopyIn(
+		&targetSearchString,
+		ePrefix.XCpy(
+			"searchResults.TargetSearchString"+
+				"<-targetSearchString"))
+
+	if err != nil {
+
+		return searchResults,
+			numStrKernel,
+			err
+	}
+
+	searchResults.TargetStringSearchLength =
+		targetInputParms.TargetStringSearchLength
+
+	searchResults.TargetStringAdjustedSearchLength =
+		targetInputParms.TargetStringAdjustedSearchLength
+
+	searchResults.TargetStringStartingSearchIndex =
+		targetInputParms.TargetStringStartingSearchIndex
+
+	searchResults.TargetStringLastSearchIndex = -1
+
+	searchResults.TargetStringNextSearchIndex = -1
+
+	searchResults.ReasonForSearchTermination =
+		CharSearchTermType.ProcessError()
+
+	// Processing Flags
+
+	// Number Parsing Setup
+	searchResults.ParsingTerminatorSearchResults.IsNOP =
+		breakOnCharDelimiters.IsNOP()
+
+	searchResults.ParsingTerminatorSearchResults.SearchResultsName =
+		"Number Parsing Terminator Search Results"
+
+	numParsingTerminatorsIsNOP :=
+		searchResults.ParsingTerminatorSearchResults.IsNOP
+
+	// Decimal Separator Setup
+	searchResults.DecimalSeparatorSearchResults.IsNOP =
+		decimalSeparator.IsNOP()
+
+	searchResults.DecimalSeparatorSearchResults.SearchResultsName =
+		"Decimal Separator Search Results"
+
+	decSeparatorIsNOP :=
+		searchResults.DecimalSeparatorSearchResults.IsNOP
+
+	var nextIdx int
+	var tempDecSepSearchResults CharSearchDecimalSeparatorResultsDto
+
+	for i := targetInputParms.TargetStringStartingSearchIndex; i < targetInputParms.TargetStringAdjustedSearchLength; i++ {
+
+		targetInputParms.TargetStringCurrentSearchIndex = i
+
+		if targetSearchString.CharsArray[i] >= '0' &&
+			targetSearchString.CharsArray[i] <= '9' {
+
+			searchResults.FoundNumericDigits = true
+			targetInputParms.FoundFirstNumericDigitInNumStr = true
+
+			if targetSearchString.CharsArray[i] > '0' {
+
+				searchResults.FoundNonZeroValue = true
+				targetInputParms.FoundNonZeroValue = true
+
+				if searchResults.NumSignValue == NumSignVal.Zero() {
+					searchResults.NumSignValue = NumSignVal.Positive()
+				}
+			}
+
+			if !searchResults.DecimalSeparatorSearchResults.
+				FoundDecimalSeparatorSymbols {
+
+				err = numStrKernel.AddIntegerDigit(
+					targetSearchString.CharsArray[i],
+					ePrefix.XCpy(
+						fmt.Sprintf(
+							"targetSearchString.CharsArray[%v]",
+							i)))
+
+				if err != nil {
+					return searchResults,
+						numStrKernel,
+						err
+				}
+
+				searchResults.FoundIntegerDigits = true
+
+			} else {
+
+				err = numStrKernel.AddFractionalDigit(
+					targetSearchString.CharsArray[i],
+					ePrefix.XCpy(
+						fmt.Sprintf(
+							"targetSearchString.CharsArray[%v]",
+							i)))
+
+				if err != nil {
+					return searchResults,
+						numStrKernel,
+						err
+				}
+
+				searchResults.FoundDecimalDigits = true
+			}
+
+			continue
+		}
+
+		// Check for Parsing Terminators
+		// All Parsing Operations Cease if Delimiter is Found
+		if !numParsingTerminatorsIsNOP &&
+			targetInputParms.FoundFirstNumericDigitInNumStr {
+
+			searchResults.ParsingTerminatorSearchResults,
+				err = breakOnCharDelimiters.SearchForTextCharacters(
+				targetInputParms,
+				ePrefix.XCpy(
+					"breakOnCharDelimiters"))
+
+			if searchResults.ParsingTerminatorSearchResults.FoundSearchTarget {
+
+				i = searchResults.ParsingTerminatorSearchResults.
+					TargetStringCurrentSearchIndex
+
+				targetInputParms.TargetStringCurrentSearchIndex = i
+
+				searchResults.ReasonForSearchTermination = CharSearchTermType.TerminationDelimiters()
+
+				searchResults.ParsingTerminatorSearchResults.SearchResultsName =
+					"Number Parsing Terminator Search Results"
+
+				goto computeExitStats
+			}
+		}
+
+		// Check for Negative Number Sign Symbol
+		if !searchResults.NegativeNumberSymbolSearchResults.
+			FoundNegativeNumberSymbols {
+
+			searchResults.NegativeNumberSymbolSearchResults,
+				err = negativeNumSearchSpecsCol.
+				SearchForNegNumSignSymbols(
+					targetInputParms,
+					ePrefix.XCpy(
+						"negativeNumSearchSpecsCol"))
+
+			if searchResults.NegativeNumberSymbolSearchResults.
+				FoundNegativeNumberSymbols {
+
+				i =
+					searchResults.NegativeNumberSymbolSearchResults.
+						TargetStringCurrentSearchIndex
+
+				targetInputParms.TargetStringCurrentSearchIndex = i
+
+				targetInputParms.TargetStringNextSearchIndex = i + 1
+
+				if targetInputParms.TargetStringNextSearchIndex >=
+					targetInputParms.TargetStringLength {
+
+					targetInputParms.TargetStringNextSearchIndex = -1
+
+				}
+
+				searchResults.NumSignValue = NumSignVal.Negative()
+
+				if searchResults.NegativeNumberSymbolSearchResults.
+					PrimaryNumSignPosition == NumSignSymPos.BeforeAndAfter() ||
+					searchResults.NegativeNumberSymbolSearchResults.
+						PrimaryNumSignPosition == NumSignSymPos.After() {
+
+					goto computeExitStats
+				}
+
+				continue
+			}
+		}
+
+		// Check for Decimal Separators
+		if decSeparatorIsNOP == false &&
+			targetInputParms.FoundDecimalSeparatorSymbols == false {
+
+			if targetInputParms.FoundFirstNumericDigitInNumStr == false {
+
+				nextIdx = i + 1
+
+				if nextIdx < targetInputParms.TargetStringAdjustedSearchLength &&
+					targetSearchString.CharsArray[nextIdx] >= '0' &&
+					targetSearchString.CharsArray[nextIdx] <= '9' {
+
+					tempDecSepSearchResults,
+						err = decimalSeparator.SearchForDecimalSeparator(
+						targetInputParms,
+						ePrefix.XCpy(
+							"decimalSeparator"))
+
+					if err != nil {
+
+						return searchResults,
+							numStrKernel,
+							err
+
+					}
+
+					if tempDecSepSearchResults.FoundDecimalSeparatorSymbols == true {
+
+						err =
+							searchResults.DecimalSeparatorSearchResults.CopyIn(
+								&tempDecSepSearchResults,
+								ePrefix.XCpy(
+									"No Int Digits: "+
+										"searchResults<-tempDecSepSearchResults"))
+
+						if err != nil {
+
+							return searchResults,
+								numStrKernel,
+								err
+
+						}
+
+						searchResults.FoundDecimalSeparatorSymbols = true
+
+						targetInputParms.FoundDecimalSeparatorSymbols = true
+
+						i = searchResults.DecimalSeparatorSearchResults.
+							TargetStringLastSearchIndex
+
+						targetInputParms.TargetStringCurrentSearchIndex = i
+
+						targetInputParms.TargetStringNextSearchIndex = i + 1
+
+						if targetInputParms.TargetStringNextSearchIndex >=
+							targetInputParms.TargetStringLength {
+
+							targetInputParms.TargetStringNextSearchIndex = -1
+
+						}
+
+						err = numStrKernel.AddIntegerDigit(
+							'0',
+							ePrefix.XCpy(
+								fmt.Sprintf(
+									"targetSearchString.CharsArray[%v]",
+									i)))
+
+						if err != nil {
+							return searchResults,
+								numStrKernel,
+								err
+						}
+
+						searchResults.FoundNumericDigits = true
+						targetInputParms.FoundFirstNumericDigitInNumStr = true
+						searchResults.FoundIntegerDigits = true
+
+						continue
+					}
+
+				}
+
+			} else {
+				// MUST BE
+				// targetInputParms.FoundFirstNumericDigitInNumStr == true
+
+				tempDecSepSearchResults,
+					err = decimalSeparator.SearchForDecimalSeparator(
+					targetInputParms,
+					ePrefix.XCpy(
+						"decimalSeparator"))
+
+				if err != nil {
+
+					return searchResults,
+						numStrKernel,
+						err
+
+				}
+
+				if tempDecSepSearchResults.FoundDecimalSeparatorSymbols == true {
+
+					err =
+						searchResults.DecimalSeparatorSearchResults.CopyIn(
+							&tempDecSepSearchResults,
+							ePrefix.XCpy(
+								"Found1stNumDigit: "+
+									"searchResults<-tempDecSepSearchResults"))
+
+					if err != nil {
+
+						return searchResults,
+							numStrKernel,
+							err
+
+					}
+
+					searchResults.FoundDecimalSeparatorSymbols = true
+
+					targetInputParms.FoundDecimalSeparatorSymbols = true
+
+					i = searchResults.DecimalSeparatorSearchResults.
+						TargetStringLastSearchIndex
+
+					targetInputParms.TargetStringCurrentSearchIndex = i
+
+					targetInputParms.TargetStringNextSearchIndex = i + 1
+
+					if targetInputParms.TargetStringNextSearchIndex >=
+						targetInputParms.TargetStringLength {
+
+						targetInputParms.TargetStringNextSearchIndex = -1
+
+					}
+
+					continue
+				}
+
+			}
+		}
+	}
+
+	// End Of Target String Standard Loop Completion
+
+	if targetInputParms.TargetStringAdjustedSearchLength <
+		targetInputParms.TargetStringLength {
+
+		searchResults.ReasonForSearchTermination =
+			CharSearchTermType.SearchLengthLimit()
+
+	} else {
+
+		searchResults.ReasonForSearchTermination =
+			CharSearchTermType.EndOfTargetString()
+
+	}
+
+computeExitStats:
+
+	targetInputParms.TargetStringNextSearchIndex =
+		targetInputParms.TargetStringCurrentSearchIndex + 1
+
+	if targetInputParms.TargetStringNextSearchIndex >=
+		targetInputParms.TargetStringLength {
+
+		targetInputParms.TargetStringNextSearchIndex = -1
+
+		searchResults.TargetStringNextSearchIndex = -1
+
+		searchResults.TargetStringLastSearchIndex =
+			targetInputParms.TargetStringLength - 1
+
+	} else {
+		// targetInputParms.TargetStringNextSearchIndex <
+		// targetInputParms.TargetStringLength
+
+		searchResults.TargetStringNextSearchIndex =
+			targetInputParms.TargetStringNextSearchIndex
+
+		searchResults.TargetStringLastSearchIndex =
+			targetInputParms.TargetStringNextSearchIndex - 1
+
+	}
+
+	// Slice Examples
+	//arr := []int{1,2,3,4,5}
+	//
+	//fmt.Println(arr[:2])        // [1,2]
+	//
+	//fmt.Println(arr[2:])        // [3,4,5]
+	//
+	//fmt.Println(arr[2:3])        // [3]
+	//
+	//fmt.Println(arr[:])            // [1,2,3,4,5]
+
+	searchResults.RemainderString.Empty()
+
+	if searchResults.FoundNumericDigits == true {
+
+		if requestRemainderRunesString {
+
+			if targetInputParms.TargetStringNextSearchIndex == -1 {
+				// All characters have been searched.
+				// There is no Remainder String
+			} else {
+				// All characters HAVE NOT BEEN SEARCHED
+				// There is a Remainder String
+
+				searchResults.RemainderString.CharsArray =
+					append(
+						searchResults.RemainderString.CharsArray,
+						targetSearchString.
+							CharsArray[targetInputParms.TargetStringCurrentSearchIndex:]...)
+			}
+
+		}
+
+		if numStrKernel.GetNumberOfIntegerDigits() > 0 {
+
+			searchResults.IdentifiedIntegerDigits =
+				numStrKernel.GetIntegerString()
+		}
+
+		if numStrKernel.GetNumberOfFractionalDigits() > 0 {
+
+			searchResults.IdentifiedFractionalDigits =
+				numStrKernel.GetFractionalString()
+		}
+
+		if numStrKernel.GetNumberOfFractionalDigits() > 0 &&
+			numStrKernel.GetNumberOfIntegerDigits() == 0 {
+
+			// Rationalize Fractional Digits
+			err = numStrKernel.AddIntegerDigit(
+				'0',
+				ePrefix.XCpy("Add '0' int digit"))
+
+			if err != nil {
+
+				return searchResults,
+					numStrKernel,
+					err
+			}
+
+		}
+
+		if searchResults.FoundDecimalDigits {
+
+			searchResults.NumValueType = NumValType.FloatingPoint()
+
+		} else {
+
+			searchResults.NumValueType = NumValType.Integer()
+
+		}
+
+		if searchResults.FoundNonZeroValue == true {
+			// Value is Nonzero
+
+			if searchResults.NumSignValue == NumSignVal.Negative() {
+				numStrKernel.numberSign = NumSignVal.Negative()
+			} else {
+				numStrKernel.numberSign = NumSignVal.Positive()
+			}
+
+		} else {
+			// Value is Zero
+			numStrKernel.numberSign = NumSignVal.Zero()
+		}
+
+	} else {
+		// searchResults.FoundSearchTarget == false
+		// Didn't find any numeric digits!
+		numStrKernel.Empty()
+		searchResults.FoundNumericDigits = false
+		searchResults.FoundDecimalDigits = false
+		searchResults.FoundNonZeroValue = false
+
+		searchResults.RemainderString.CharsArray =
+			targetSearchString.CharsArray[:]
+
+	}
+
+	return searchResults,
+		numStrKernel,
+		err
+}
+
 //	parsePureNumStr
 //
 //	Receives a pure number string and proceeds to return the
