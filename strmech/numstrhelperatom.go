@@ -73,12 +73,13 @@ type numStrHelperAtom struct {
 //			1.	Consists of numeric character digits
 //				zero through nine inclusive (0-9).
 //
-//			2.	Option: A Pure Number String may include
-//				a radix point or decimal separator.
-//				Decimal separators separate integer and
-//				fractional numeric digits in a pure
-//				number string. The decimal separator may
-//				consist of one or more text characters.
+//			2.	Optional: A Pure Number String may
+//				include a radix point or decimal
+//				separator. Decimal separators separate
+//				integer and fractional numeric digits in
+//				a pure number string. The decimal
+//				separator may consist of one or more text
+//				characters.
 //
 //				In the US, UK, Australia, most of Canada
 //				and many other countries, the decimal
