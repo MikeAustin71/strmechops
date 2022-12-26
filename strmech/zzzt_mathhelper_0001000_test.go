@@ -38,7 +38,7 @@ func TestMathHelper_NumericValueToPureNumStr_000100(t *testing.T) {
 	var actualNumStr string
 
 	actualNumStr,
-		err = new(MathHelper).NumericValueToPureNumStr(
+		err = new(MathHelper).NumericValueToNativeNumStr(
 		bigFloatNum,
 		ePrefix.XCpy(
 			"actualNumStr<-bigFloatNum"))
@@ -97,7 +97,7 @@ func TestMathHelper_NumericValueToPureNumStr_000200(t *testing.T) {
 	var actualNumStr string
 
 	actualNumStr,
-		err = new(MathHelper).NumericValueToPureNumStr(
+		err = new(MathHelper).NumericValueToNativeNumStr(
 		float64Num,
 		ePrefix.XCpy(
 			"actualNumStr<-float64Num"))
@@ -160,7 +160,7 @@ func TestMathHelper_NumericValueToPureNumStr_000300(t *testing.T) {
 	var actualNumStr string
 
 	actualNumStr,
-		err = new(MathHelper).NumericValueToPureNumStr(
+		err = new(MathHelper).NumericValueToNativeNumStr(
 		baseValueNStr,
 		ePrefix.XCpy(
 			"actualNumStr<-baseValueNStr"))
@@ -205,7 +205,7 @@ func TestMathHelper_NumericValueToPureNumStr_000400(t *testing.T) {
 	var actualNumStr string
 
 	actualNumStr,
-		err = new(MathHelper).NumericValueToPureNumStr(
+		err = new(MathHelper).NumericValueToNativeNumStr(
 		int8Num,
 		ePrefix.XCpy(
 			"actualNumStr<-int8Num"))
@@ -238,7 +238,7 @@ func TestMathHelper_NumericValueToPureNumStr_000400(t *testing.T) {
 	int16Num := int16(137)
 
 	actualNumStr,
-		err = new(MathHelper).NumericValueToPureNumStr(
+		err = new(MathHelper).NumericValueToNativeNumStr(
 		int16Num,
 		ePrefix.XCpy(
 			"actualNumStr<-int16Num"))
@@ -272,7 +272,7 @@ func TestMathHelper_NumericValueToPureNumStr_000400(t *testing.T) {
 	intNum := int(152)
 
 	actualNumStr,
-		err = new(MathHelper).NumericValueToPureNumStr(
+		err = new(MathHelper).NumericValueToNativeNumStr(
 		intNum,
 		ePrefix.XCpy(
 			"actualNumStr<-intNum"))
@@ -306,7 +306,7 @@ func TestMathHelper_NumericValueToPureNumStr_000400(t *testing.T) {
 	int32Num := int32(1921)
 
 	actualNumStr,
-		err = new(MathHelper).NumericValueToPureNumStr(
+		err = new(MathHelper).NumericValueToNativeNumStr(
 		int32Num,
 		ePrefix.XCpy(
 			"actualNumStr<-int32Num"))
@@ -340,7 +340,7 @@ func TestMathHelper_NumericValueToPureNumStr_000400(t *testing.T) {
 	int64Num := int64(220005197)
 
 	actualNumStr,
-		err = new(MathHelper).NumericValueToPureNumStr(
+		err = new(MathHelper).NumericValueToNativeNumStr(
 		int64Num,
 		ePrefix.XCpy(
 			"actualNumStr<-int64Num"))
@@ -392,7 +392,7 @@ func TestMathHelper_NumericValueToPureNumStr_000400(t *testing.T) {
 	bigIntNum.Set(ptrBigIntNum)
 
 	actualNumStr,
-		err = new(MathHelper).NumericValueToPureNumStr(
+		err = new(MathHelper).NumericValueToNativeNumStr(
 		bigIntNum,
 		ePrefix.XCpy(
 			"actualNumStr<-bigIntNum"))
@@ -438,7 +438,7 @@ func TestMathHelper_NumericValueToPureNumStr_000400(t *testing.T) {
 	}
 
 	actualNumStr,
-		err = new(MathHelper).NumericValueToPureNumStr(
+		err = new(MathHelper).NumericValueToNativeNumStr(
 		ptrBigIntNum,
 		ePrefix.XCpy(
 			"actualNumStr<-ptrBigIntNum"))
@@ -490,7 +490,7 @@ func TestMathHelper_NumericValueToPureNumStr_000500(t *testing.T) {
 	var actualNumStr string
 
 	actualNumStr,
-		err = mathHelperUtil.NumericValueToPureNumStr(
+		err = mathHelperUtil.NumericValueToNativeNumStr(
 		ptrInt8Num,
 		ePrefix.XCpy(
 			"actualNumStr<-ptrInt8Num"))
@@ -527,7 +527,7 @@ func TestMathHelper_NumericValueToPureNumStr_000500(t *testing.T) {
 	ptrInt16Num = &int16Num
 
 	actualNumStr,
-		err = mathHelperUtil.NumericValueToPureNumStr(
+		err = mathHelperUtil.NumericValueToNativeNumStr(
 		ptrInt16Num,
 		ePrefix.XCpy(
 			"actualNumStr<-ptrInt16Num"))
@@ -563,7 +563,7 @@ func TestMathHelper_NumericValueToPureNumStr_000500(t *testing.T) {
 	ptrIntNum = &intNum
 
 	actualNumStr,
-		err = mathHelperUtil.NumericValueToPureNumStr(
+		err = mathHelperUtil.NumericValueToNativeNumStr(
 		ptrIntNum,
 		ePrefix.XCpy(
 			"actualNumStr<-ptrIntNum"))
@@ -601,7 +601,7 @@ func TestMathHelper_NumericValueToPureNumStr_000500(t *testing.T) {
 	ptrInt32Num = &int32Num
 
 	actualNumStr,
-		err = mathHelperUtil.NumericValueToPureNumStr(
+		err = mathHelperUtil.NumericValueToNativeNumStr(
 		ptrInt32Num,
 		ePrefix.XCpy(
 			"actualNumStr<-ptrInt32Num"))
@@ -639,7 +639,7 @@ func TestMathHelper_NumericValueToPureNumStr_000500(t *testing.T) {
 	ptrInt64Num = &int64Num
 
 	actualNumStr,
-		err = mathHelperUtil.NumericValueToPureNumStr(
+		err = mathHelperUtil.NumericValueToNativeNumStr(
 		ptrInt64Num,
 		ePrefix.XCpy(
 			"actualNumStr<-ptrInt64Num"))
@@ -669,7 +669,7 @@ func TestMathHelper_NumericValueToPureNumStr_000500(t *testing.T) {
 	ptrInt64Num = nil
 
 	actualNumStr,
-		err = mathHelperUtil.NumericValueToPureNumStr(
+		err = mathHelperUtil.NumericValueToNativeNumStr(
 		ptrInt64Num,
 		ePrefix.XCpy(
 			"actualNumStr<-ptrInt64Num"))
@@ -679,7 +679,7 @@ func TestMathHelper_NumericValueToPureNumStr_000500(t *testing.T) {
 		t.Errorf("\n%v\n"+
 			"Test#6 - Did NOT Receive Expected Error\n"+
 			"Expected to receive an error from:\n"+
-			"mathHelperUtil.NumericValueToPureNumStr(ptrInt64Num)\n"+
+			"mathHelperUtil.NumericValueToNativeNumStr(ptrInt64Num)\n"+
 			"because ptrInt64Num is a 'nil' pointer.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.String())
@@ -706,7 +706,7 @@ func TestMathHelper_NumericValueToPureNumStr_000600(t *testing.T) {
 	var actualNumStr string
 
 	actualNumStr,
-		err = new(MathHelper).NumericValueToPureNumStr(
+		err = new(MathHelper).NumericValueToNativeNumStr(
 		uint8Num,
 		ePrefix.XCpy(
 			"actualNumStr<-uint8Num"))
@@ -739,7 +739,7 @@ func TestMathHelper_NumericValueToPureNumStr_000600(t *testing.T) {
 	uint16Num := uint16(137)
 
 	actualNumStr,
-		err = new(MathHelper).NumericValueToPureNumStr(
+		err = new(MathHelper).NumericValueToNativeNumStr(
 		uint16Num,
 		ePrefix.XCpy(
 			"actualNumStr<-uint16Num"))
@@ -773,7 +773,7 @@ func TestMathHelper_NumericValueToPureNumStr_000600(t *testing.T) {
 	uintNum := uint(152)
 
 	actualNumStr,
-		err = new(MathHelper).NumericValueToPureNumStr(
+		err = new(MathHelper).NumericValueToNativeNumStr(
 		uintNum,
 		ePrefix.XCpy(
 			"actualNumStr<-uintNum"))
@@ -807,7 +807,7 @@ func TestMathHelper_NumericValueToPureNumStr_000600(t *testing.T) {
 	uint32Num := uint32(1921)
 
 	actualNumStr,
-		err = new(MathHelper).NumericValueToPureNumStr(
+		err = new(MathHelper).NumericValueToNativeNumStr(
 		uint32Num,
 		ePrefix.XCpy(
 			"actualNumStr<-uint32Num"))
@@ -841,7 +841,7 @@ func TestMathHelper_NumericValueToPureNumStr_000600(t *testing.T) {
 	uint64Num := uint64(220005197)
 
 	actualNumStr,
-		err = new(MathHelper).NumericValueToPureNumStr(
+		err = new(MathHelper).NumericValueToNativeNumStr(
 		uint64Num,
 		ePrefix.XCpy(
 			"actualNumStr<-uint64Num"))
@@ -891,7 +891,7 @@ func TestMathHelper_NumericValueToPureNumStr_000700(t *testing.T) {
 	var actualNumStr string
 
 	actualNumStr,
-		err = new(MathHelper).NumericValueToPureNumStr(
+		err = new(MathHelper).NumericValueToNativeNumStr(
 		ptrUint8Num,
 		ePrefix.XCpy(
 			"actualNumStr<-ptrUint8Num"))
@@ -928,7 +928,7 @@ func TestMathHelper_NumericValueToPureNumStr_000700(t *testing.T) {
 	ptrUint16Num = &uint16Num
 
 	actualNumStr,
-		err = new(MathHelper).NumericValueToPureNumStr(
+		err = new(MathHelper).NumericValueToNativeNumStr(
 		ptrUint16Num,
 		ePrefix.XCpy(
 			"actualNumStr<-ptrUint16Num"))
@@ -966,7 +966,7 @@ func TestMathHelper_NumericValueToPureNumStr_000700(t *testing.T) {
 	ptrUintNum = &uintNum
 
 	actualNumStr,
-		err = new(MathHelper).NumericValueToPureNumStr(
+		err = new(MathHelper).NumericValueToNativeNumStr(
 		ptrUintNum,
 		ePrefix.XCpy(
 			"actualNumStr<-ptrUintNum"))
@@ -1004,7 +1004,7 @@ func TestMathHelper_NumericValueToPureNumStr_000700(t *testing.T) {
 	ptrUint32Num = &uint32Num
 
 	actualNumStr,
-		err = new(MathHelper).NumericValueToPureNumStr(
+		err = new(MathHelper).NumericValueToNativeNumStr(
 		ptrUint32Num,
 		ePrefix.XCpy(
 			"actualNumStr<-ptrUint32Num"))
@@ -1042,7 +1042,7 @@ func TestMathHelper_NumericValueToPureNumStr_000700(t *testing.T) {
 	ptrUint64Num = &uint64Num
 
 	actualNumStr,
-		err = new(MathHelper).NumericValueToPureNumStr(
+		err = new(MathHelper).NumericValueToNativeNumStr(
 		ptrUint64Num,
 		ePrefix.XCpy(
 			"actualNumStr<-ptrUint64Num"))
@@ -1088,7 +1088,7 @@ func TestMathHelper_NumericValueToPureNumStr_000800(t *testing.T) {
 	var actualNumStr string
 
 	actualNumStr,
-		err = new(MathHelper).NumericValueToPureNumStr(
+		err = new(MathHelper).NumericValueToNativeNumStr(
 		int8Num,
 		ePrefix.XCpy(
 			"actualNumStr<-int8Num"))
@@ -1121,7 +1121,7 @@ func TestMathHelper_NumericValueToPureNumStr_000800(t *testing.T) {
 	int16Num := int16(-137)
 
 	actualNumStr,
-		err = new(MathHelper).NumericValueToPureNumStr(
+		err = new(MathHelper).NumericValueToNativeNumStr(
 		int16Num,
 		ePrefix.XCpy(
 			"actualNumStr<-int16Num"))
@@ -1155,7 +1155,7 @@ func TestMathHelper_NumericValueToPureNumStr_000800(t *testing.T) {
 	intNum := int(-152)
 
 	actualNumStr,
-		err = new(MathHelper).NumericValueToPureNumStr(
+		err = new(MathHelper).NumericValueToNativeNumStr(
 		intNum,
 		ePrefix.XCpy(
 			"actualNumStr<-intNum"))
@@ -1189,7 +1189,7 @@ func TestMathHelper_NumericValueToPureNumStr_000800(t *testing.T) {
 	int32Num := int32(-1921)
 
 	actualNumStr,
-		err = new(MathHelper).NumericValueToPureNumStr(
+		err = new(MathHelper).NumericValueToNativeNumStr(
 		int32Num,
 		ePrefix.XCpy(
 			"actualNumStr<-int32Num"))
@@ -1223,7 +1223,7 @@ func TestMathHelper_NumericValueToPureNumStr_000800(t *testing.T) {
 	int64Num := int64(-220005197)
 
 	actualNumStr,
-		err = new(MathHelper).NumericValueToPureNumStr(
+		err = new(MathHelper).NumericValueToNativeNumStr(
 		int64Num,
 		ePrefix.XCpy(
 			"actualNumStr<-int64Num"))
@@ -1275,7 +1275,7 @@ func TestMathHelper_NumericValueToPureNumStr_000800(t *testing.T) {
 	bigIntNum.Set(ptrBigIntNum)
 
 	actualNumStr,
-		err = new(MathHelper).NumericValueToPureNumStr(
+		err = new(MathHelper).NumericValueToNativeNumStr(
 		bigIntNum,
 		ePrefix.XCpy(
 			"actualNumStr<-bigIntNum"))
@@ -1321,7 +1321,7 @@ func TestMathHelper_NumericValueToPureNumStr_000800(t *testing.T) {
 	}
 
 	actualNumStr,
-		err = new(MathHelper).NumericValueToPureNumStr(
+		err = new(MathHelper).NumericValueToNativeNumStr(
 		ptrBigIntNum,
 		ePrefix.XCpy(
 			"actualNumStr<-ptrBigIntNum"))
@@ -1395,7 +1395,7 @@ func TestMathHelper_NumericValueToPureNumStr_000900(t *testing.T) {
 	var actualNumStr string
 
 	actualNumStr,
-		err = new(MathHelper).NumericValueToPureNumStr(
+		err = new(MathHelper).NumericValueToNativeNumStr(
 		baseValueNStr,
 		ePrefix.XCpy(
 			"actualNumStr<-baseValueNStr"))
@@ -1447,7 +1447,7 @@ func TestMathHelper_NumericValueToPureNumStr_000900(t *testing.T) {
 	ptrBaseValueNStr = &baseValueNStr
 
 	actualNumStr,
-		err = new(MathHelper).NumericValueToPureNumStr(
+		err = new(MathHelper).NumericValueToNativeNumStr(
 		ptrBaseValueNStr,
 		ePrefix.XCpy(
 			"actualNumStr<-ptrBaseValueNStr"))
@@ -1516,7 +1516,7 @@ func TestMathHelper_NumericValueToPureNumStr_001000(t *testing.T) {
 	var actualNumStr string
 
 	actualNumStr,
-		err = new(MathHelper).NumericValueToPureNumStr(
+		err = new(MathHelper).NumericValueToNativeNumStr(
 		txtFieldFmtDtoBFloat,
 		ePrefix.XCpy(
 			"actualNumStr<-txtFieldFmtDtoBFloat"))
@@ -1577,7 +1577,7 @@ func TestMathHelper_NumericValueToPureNumStr_001000(t *testing.T) {
 	ptrTxtFieldFmtDtoBFloat2 = &txtFieldFmtDtoBFloat2
 
 	actualNumStr,
-		err = new(MathHelper).NumericValueToPureNumStr(
+		err = new(MathHelper).NumericValueToNativeNumStr(
 		ptrTxtFieldFmtDtoBFloat2,
 		ePrefix.XCpy(
 			"actualNumStr<-ptrTxtFieldFmtDtoBFloat2"))
@@ -1646,7 +1646,7 @@ func TestMathHelper_NumericValueToPureNumStr_001100(t *testing.T) {
 	var actualNumStr string
 
 	actualNumStr,
-		err = new(MathHelper).NumericValueToPureNumStr(
+		err = new(MathHelper).NumericValueToNativeNumStr(
 		txtFieldFmtDtoF64,
 		ePrefix.XCpy(
 			"actualNumStr<-txtFieldFmtDtoF64"))
@@ -1706,7 +1706,7 @@ func TestMathHelper_NumericValueToPureNumStr_001100(t *testing.T) {
 	ptrTxtFieldFmtDtoF64 = &txtFieldFmtDtoF642
 
 	actualNumStr,
-		err = new(MathHelper).NumericValueToPureNumStr(
+		err = new(MathHelper).NumericValueToNativeNumStr(
 		ptrTxtFieldFmtDtoF64,
 		ePrefix.XCpy(
 			"actualNumStr<-txtFieldFmtDtoF64"))
@@ -1770,7 +1770,7 @@ func TestMathHelper_NumericValueToPureNumStr_001200(t *testing.T) {
 	var actualNumStr string
 
 	actualNumStr,
-		err = new(MathHelper).NumericValueToPureNumStr(
+		err = new(MathHelper).NumericValueToNativeNumStr(
 		bigFloatDto,
 		ePrefix.XCpy(
 			"actualNumStr<-bigFloatDto"))
@@ -1826,7 +1826,7 @@ func TestMathHelper_NumericValueToPureNumStr_001200(t *testing.T) {
 	ptrBigFloatDto = &bigFloatDto2
 
 	actualNumStr,
-		err = new(MathHelper).NumericValueToPureNumStr(
+		err = new(MathHelper).NumericValueToNativeNumStr(
 		ptrBigFloatDto,
 		ePrefix.XCpy(
 			"actualNumStr<-ptrBigFloatDto"))

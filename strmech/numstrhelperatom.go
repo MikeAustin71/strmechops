@@ -24,11 +24,21 @@ type numStrHelperAtom struct {
 // packages. Types like 'strconv', 'strings', 'math' and
 // 'big' (big.Int, big.Float, big.Rat) routinely parse
 // and convert this type of number string to numeric
-// values. Number strings which fail to implement this
-// standard formatting convention will generate errors.
+// values. In addition, Native Number Strings are
+// frequently consumed by external library functions such
+// as this one (String Mechanics 'strmech') to convert
+// strings to numeric values and numeric values to
+// strings.
 //
-// The returned 'Native' Number String implements a
-// standardized format defined as follows:
+// While this format is inconsistent with many national
+// and cultural formatting conventions, number strings
+// which fail to implement this standardized formatting
+// protocol will generate errors in some Golang library
+// functions.
+//
+// The 'Native' Number String returned by this method
+// therefore implements a standardized format defined as
+// follows:
 //
 //  1. A Native Number String Consists of numeric
 //     character digits zero through nine inclusive
@@ -38,13 +48,32 @@ type numStrHelperAtom struct {
 //     or decimal point ('.') to separate integer and
 //     fractional digits within a number string.
 //
-//  3. Negative numeric values will always be preceded
-//     by leading minus sign ('-').
+//     Native Number String Floating Point Value:
+//     123.1234
 //
-//  4. Native Number Strings will only consist of
-//     numeric digits (0-9), a decimal point ('.') for
-//     floating point numbers and a leading minus sign
-//     ('-') in the case of negative numeric values.
+//  3. A Native Number String will always format
+//     negative numeric values with a leading minus sign
+//     ('-').
+//
+//     Native Number String Negative Value:
+//     -123.2
+//
+//  4. A Native Number String WILL NEVER include integer
+//     separators such as commas (',') to separate
+//     integer digits by thousands.
+//
+//     NOT THIS: 1,000,000
+//     Native Number String: 1000000
+//
+//  5. Native Number Strings will only consist of:
+//
+//     (a)	Numeric digits zero through nine inclusive (0-9).
+//
+//     (b)	A decimal point ('.') for floating point
+//     numbers.
+//
+//     (c)	A leading minus sign ('-') in the case of
+//     negative numeric values.
 //
 // ----------------------------------------------------------------
 //
@@ -147,24 +176,44 @@ type numStrHelperAtom struct {
 //		If this method completes successfully, a Native
 //		Number String will be returned.
 //
-//		This returned Native Number String implements a
-//		standardized format defined as follows:
+//		The 'Native' Number String returned by this
+//		method implements a standardized format defined
+//		as follows:
 //
 //		1.	A Native Number String Consists of numeric
-//			character digits zero through nine inclusive
-//			(0-9).
+//		  	character digits zero through nine inclusive
+//		  	(0-9).
 //
 //		2.	A Native Number String will include a period
-//			or decimal point ('.') to separate integer and
-//			fractional digits within a number string.
+//		  	or decimal point ('.') to separate integer and
+//		  	fractional digits within a number string.
 //
-//		3.	Negative numeric values will always be preceded
-//			by leading minus sign ('-').
+//					Native Number String Floating Point Value:
+//									123.1234
 //
-//		4.	Native Number Strings will only consist of
-//			numeric digits (0-9), a decimal point ('.') for
-//			floating point numbers and a leading minus sign
-//			('-') in the case of negative numeric values.
+//		3.	A Native Number String will always format
+//				negative numeric values with a leading minus sign
+//				('-').
+//
+//				Native Number String Negative Value:
+//							-123.2
+//
+//		4.	A Native Number String WILL NEVER include integer
+//		  	separators such as commas (',') to separate
+//		  	integer digits by thousands.
+//
+//		    				NOT THIS: 1,000,000
+//				Native Number String: 1000000
+//
+//		5.	Native Number Strings will only consist of:
+//
+//			(a)	Numeric digits (0-9).
+//
+//			(b)	A decimal point ('.') for floating point
+//				numbers.
+//
+//			(c)	A leading minus sign ('-') in the case of
+//				negative numeric values.
 //
 //
 //	err							error

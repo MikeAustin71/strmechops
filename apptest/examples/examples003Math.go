@@ -50,7 +50,7 @@ func (MainTest03) PureNumStrToFloat64() {
 	var actualNumStr string
 
 	actualNumStr,
-		err = new(strmech.MathHelper).NumericValueToPureNumStr(
+		err = new(strmech.MathHelper).NumericValueToNativeNumStr(
 		txtFieldFmtDtoF64,
 		ePrefix.XCpy(
 			"actualNumStr<-txtFieldFmtDtoF64"))
@@ -110,7 +110,7 @@ func (MainTest03) PureNumStrToFloat64() {
 	ptrTxtFieldFmtDtoF64 = &txtFieldFmtDtoF642
 
 	actualNumStr,
-		err = new(strmech.MathHelper).NumericValueToPureNumStr(
+		err = new(strmech.MathHelper).NumericValueToNativeNumStr(
 		ptrTxtFieldFmtDtoF64,
 		ePrefix.XCpy(
 			"actualNumStr<-txtFieldFmtDtoF64"))

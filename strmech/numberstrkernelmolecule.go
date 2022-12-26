@@ -910,7 +910,7 @@ func (numStrKernelMolecule *numberStrKernelMolecule) convertNumericValueToKernel
 	var signedPureNumStr string
 
 	signedPureNumStr,
-		err = new(MathHelper).NumericValueToPureNumStr(
+		err = new(MathHelper).NumericValueToNativeNumStr(
 		numericValue,
 		ePrefix.XCpy(
 			"signedPureNumStr<-numericValue"))

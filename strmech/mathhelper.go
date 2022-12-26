@@ -15,37 +15,67 @@ type MathHelper struct {
 	lock *sync.Mutex
 }
 
-// NumericValueToPureNumStr
+// NumericValueToNativeNumStr
 //
 // Receives a numeric value as an empty interface and
-// converts that value to a signed pure number string.
-// This signed pure number string facilitates further
-// conversion to integer and floating point number
-// types.
+// converts that value to a Native Number String.
 //
-// Packages and functions in the Go programming
-// language, as well as other programming languages,
-// typically use this type number string as an input
-// parameter.
+// The term 'Native' applies in the sense that the number
+// string format is designed to interoperate with the
+// Golang programming language library functions and
+// packages. Types like 'strconv', 'strings', 'math' and
+// 'big' (big.Int, big.Float, big.Rat) routinely parse
+// and convert this type of number string to numeric
+// values. In addition, Native Number Strings are
+// frequently consumed by external library functions such
+// as this one (String Mechanics 'strmech') to convert
+// strings to numeric values and numeric values to
+// strings.
 //
-// A signed pure number string is defined as follows:
+// While this format is inconsistent with many national
+// and cultural formatting conventions, number strings
+// which fail to implement this standardized formatting
+// protocol will generate errors in some Golang library
+// functions.
 //
-//  1. A number string consisting entirely of numeric
-//     digit characters with the following exceptions.
+// The 'Native' Number String returned by this method
+// therefore implements a standardized format defined as
+// follows:
 //
-//  2. A number string which separates integer and
-//     fractional digits with a decimal point ('.').
+//  1. A Native Number String Consists of numeric
+//     character digits zero through nine inclusive
+//     (0-9).
 //
-//  3. A number string which designates negative values
-//     with a leading minus sign ('-'). Positive numeric
-//     values will have no leading number sign.
+//  2. A Native Number String will include a period
+//     or decimal point ('.') to separate integer and
+//     fractional digits within a number string.
 //
-//  4. A number string which DOES NOT include integer
+//     Native Number String Floating Point Value:
+//     123.1234
+//
+//  3. A Native Number String will always format
+//     negative numeric values with a leading minus sign
+//     ('-').
+//
+//     Native Number String Negative Value:
+//     -123.2
+//
+//  4. A Native Number String WILL NEVER include integer
 //     separators such as commas (',') to separate
 //     integer digits by thousands.
 //
 //     NOT THIS: 1,000,000
-//     Signed Pure Number String: 1000000
+//     Native Number String: 1000000
+//
+//  5. Native Number Strings will only consist of:
+//
+//     (a)	Numeric digits zero through nine inclusive (0-9).
+//
+//     (b)	A decimal point ('.') for floating point
+//     numbers.
+//
+//     (c)	A leading minus sign ('-') in the case of
+//     negative numeric values.
 //
 // ----------------------------------------------------------------
 //
@@ -54,14 +84,15 @@ type MathHelper struct {
 //		numericValue				interface{}
 //
 //			An empty interface containing the numeric value
-//			which will be converted and returned as signed
-//			pure number string.
+//			which will be converted and returned as a Native
+//			Number String.
 //
 //			An error will be returned if the concrete type
 //			passed through this parameter does not match one
 //			of the supported types below.
 //
-//			Supported Numeric Value Types:
+//			Supported Numeric Value ('numericValue') Types:
+//
 //	     		float32, float64, big.Float
 //				*float32, *float64, *big.Float
 //				*BigFloatDto, BigFloatDto
@@ -136,51 +167,68 @@ type MathHelper struct {
 //
 // # Return Values
 //
-//		signedPureNumStr			string
+//	nativeNumStr			string
 //
-//			If this method completes successfully, a signed
-//			pure number string representing the numeric value
-//			passed as input	parameter 'numericValue' will be
-//			returned.
+//		If this method completes successfully, a Native
+//		Number String representing the numeric value
+//		passed as input	parameter 'numericValue' will be
+//		returned.
 //
-//			A signed pure number string is defined as
-//			follows:
+//		The 'Native' Number String returned by this
+//		method implements a standardized format defined
+//		as follows:
 //
-//	 	1.	A number string consisting entirely of
-//			numeric digit characters with the following
-//			exceptions.
+//		1.	A Native Number String Consists of numeric
+//		  	character digits zero through nine inclusive
+//		  	(0-9).
 //
-//	 	2.	A number string which separates integer and
-//	 	  	fractional digits with a decimal point ('.').
+//		2.	A Native Number String will include a period
+//		  	or decimal point ('.') to separate integer and
+//		  	fractional digits within a number string.
 //
-//	 	3.	A number string which designates negative
-//			values with a leading minus sign ('-').
-//			Positive numeric values will have no leading
-//			number sign.
+//					Native Number String Floating Point Value:
+//									123.1234
 //
-//	 	4.	A number string which DOES NOT include
-//			integer separators such as commas (',') to
-//			separate integer digits by thousands.
+//		3.	A Native Number String will always format
+//				negative numeric values with a leading minus sign
+//				('-').
 //
-//	   						 NOT THIS: 1,000,000
-//	   		Signed Pure Number String: 1000000
+//				Native Number String Negative Value:
+//							-123.2
 //
-//		err							error
+//		4.	A Native Number String WILL NEVER include integer
+//		  	separators such as commas (',') to separate
+//		  	integer digits by thousands.
 //
-//			If this method completes successfully, the
-//			returned error Type is set equal to 'nil'.
+//		    				NOT THIS: 1,000,000
+//				Native Number String: 1000000
 //
-//			If errors are encountered during processing, the
-//			returned error Type will encapsulate an error
-//			message. This returned error message will
-//			incorporate the method chain and text passed by
-//			input parameter, 'errorPrefix'. The 'errorPrefix'
-//			text will be attached to the beginning of the
-//			error message.
-func (mathHelper *MathHelper) NumericValueToPureNumStr(
+//		5.	Native Number Strings will only consist of:
+//
+//			(a)	Numeric digits (0-9).
+//
+//			(b)	A decimal point ('.') for floating point
+//				numbers.
+//
+//			(c)	A leading minus sign ('-') in the case of
+//				negative numeric values.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (mathHelper *MathHelper) NumericValueToNativeNumStr(
 	numericValue interface{},
 	errorPrefix interface{}) (
-	signedPureNumStr string,
+	nativeNumStr string,
 	err error) {
 
 	if mathHelper.lock == nil {
@@ -197,12 +245,12 @@ func (mathHelper *MathHelper) NumericValueToPureNumStr(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"MathHelper."+
-			"NumericValueToPureNumStr()",
+			"NumericValueToNativeNumStr()",
 		"")
 
 	if err != nil {
 
-		return signedPureNumStr, err
+		return nativeNumStr, err
 	}
 
 	var ok bool
@@ -213,7 +261,7 @@ func (mathHelper *MathHelper) NumericValueToPureNumStr(
 			"ERROR: Input parameter 'numericValue' is a nil pointer!\n",
 			ePrefix.String())
 
-		return signedPureNumStr, err
+		return nativeNumStr, err
 	}
 
 	var int64Num int64
@@ -234,16 +282,16 @@ func (mathHelper *MathHelper) NumericValueToPureNumStr(
 				"ERROR: float32 cast to 'float32Num' failed!\n",
 				ePrefix.String())
 
-			return signedPureNumStr, err
+			return nativeNumStr, err
 		}
 
-		signedPureNumStr = strconv.FormatFloat(
+		nativeNumStr = strconv.FormatFloat(
 			float64(float32Num),
 			'f',
 			-1,
 			32)
 
-		return signedPureNumStr, err
+		return nativeNumStr, err
 
 	case *float32:
 
@@ -257,7 +305,7 @@ func (mathHelper *MathHelper) NumericValueToPureNumStr(
 				"ERROR: *float32 cast to 'ptrFloat32' failed!\n",
 				ePrefix.String())
 
-			return signedPureNumStr, err
+			return nativeNumStr, err
 		}
 
 		if ptrFloat32 == nil {
@@ -267,17 +315,17 @@ func (mathHelper *MathHelper) NumericValueToPureNumStr(
 				"ptrFloat32 is a nil pointer.",
 				ePrefix.String())
 
-			return signedPureNumStr, err
+			return nativeNumStr, err
 
 		}
 
-		signedPureNumStr = strconv.FormatFloat(
+		nativeNumStr = strconv.FormatFloat(
 			float64(*ptrFloat32),
 			'f',
 			-1,
 			32)
 
-		return signedPureNumStr, err
+		return nativeNumStr, err
 
 	case float64:
 
@@ -291,16 +339,16 @@ func (mathHelper *MathHelper) NumericValueToPureNumStr(
 				"ERROR: float64 cast to 'float64Num' failed!\n",
 				ePrefix.String())
 
-			return signedPureNumStr, err
+			return nativeNumStr, err
 		}
 
-		signedPureNumStr = strconv.FormatFloat(
+		nativeNumStr = strconv.FormatFloat(
 			float64Num,
 			'f',
 			-1,
 			64)
 
-		return signedPureNumStr, err
+		return nativeNumStr, err
 
 	case *float64:
 
@@ -314,7 +362,7 @@ func (mathHelper *MathHelper) NumericValueToPureNumStr(
 				"ERROR: *float64 cast to 'ptrFloat64' failed!\n",
 				ePrefix.String())
 
-			return signedPureNumStr, err
+			return nativeNumStr, err
 		}
 
 		if ptrFloat64 == nil {
@@ -324,17 +372,17 @@ func (mathHelper *MathHelper) NumericValueToPureNumStr(
 				"ptrFloat64 is a nil pointer.",
 				ePrefix.String())
 
-			return signedPureNumStr, err
+			return nativeNumStr, err
 
 		}
 
-		signedPureNumStr = strconv.FormatFloat(
+		nativeNumStr = strconv.FormatFloat(
 			*ptrFloat64,
 			'f',
 			-1,
 			64)
 
-		return signedPureNumStr, err
+		return nativeNumStr, err
 
 	case *BigFloatDto:
 
@@ -348,7 +396,7 @@ func (mathHelper *MathHelper) NumericValueToPureNumStr(
 				"ERROR: *BigFloatDto cast to 'ptrBigFloatDto' failed!\n",
 				ePrefix.String())
 
-			return signedPureNumStr, err
+			return nativeNumStr, err
 		}
 
 		if ptrBigFloatDto == nil {
@@ -358,14 +406,14 @@ func (mathHelper *MathHelper) NumericValueToPureNumStr(
 				"ptrBigFloatDto is a nil pointer.",
 				ePrefix.String())
 
-			return signedPureNumStr, err
+			return nativeNumStr, err
 
 		}
 
-		signedPureNumStr =
+		nativeNumStr =
 			ptrBigFloatDto.Value.Text('f', -1)
 
-		return signedPureNumStr, err
+		return nativeNumStr, err
 
 	case BigFloatDto:
 
@@ -379,13 +427,13 @@ func (mathHelper *MathHelper) NumericValueToPureNumStr(
 				"ERROR: BigFloatDto cast to 'bigFloatDto' failed!\n",
 				ePrefix.String())
 
-			return signedPureNumStr, err
+			return nativeNumStr, err
 		}
 
-		signedPureNumStr =
+		nativeNumStr =
 			bigFloatDto.Value.Text('f', -1)
 
-		return signedPureNumStr, err
+		return nativeNumStr, err
 
 	case *big.Float:
 
@@ -399,7 +447,7 @@ func (mathHelper *MathHelper) NumericValueToPureNumStr(
 				"ERROR: *big.Float cast to 'ptrBigFloatNum' failed!\n",
 				ePrefix.String())
 
-			return signedPureNumStr, err
+			return nativeNumStr, err
 		}
 
 		if ptrBigFloatNum == nil {
@@ -409,14 +457,14 @@ func (mathHelper *MathHelper) NumericValueToPureNumStr(
 				"ptrBigFloatNum is a nil pointer.",
 				ePrefix.String())
 
-			return signedPureNumStr, err
+			return nativeNumStr, err
 
 		}
 
-		signedPureNumStr =
+		nativeNumStr =
 			ptrBigFloatNum.Text('f', -1)
 
-		return signedPureNumStr, err
+		return nativeNumStr, err
 
 	case big.Float:
 
@@ -430,13 +478,13 @@ func (mathHelper *MathHelper) NumericValueToPureNumStr(
 				"ERROR: big.Float cast to 'bigFloatNum' failed!\n",
 				ePrefix.String())
 
-			return signedPureNumStr, err
+			return nativeNumStr, err
 		}
 
-		signedPureNumStr =
+		nativeNumStr =
 			bigFloatNum.Text('f', -1)
 
-		return signedPureNumStr, err
+		return nativeNumStr, err
 
 	case int8:
 
@@ -450,7 +498,7 @@ func (mathHelper *MathHelper) NumericValueToPureNumStr(
 				"ERROR: int8 cast to 'int8Num' failed!\n",
 				ePrefix.String())
 
-			return signedPureNumStr, err
+			return nativeNumStr, err
 		}
 
 		int64Num = int64(int8Num)
@@ -469,7 +517,7 @@ func (mathHelper *MathHelper) NumericValueToPureNumStr(
 				"ERROR: *int8 cast to 'ptrInt8Num' failed!\n",
 				ePrefix.String())
 
-			return signedPureNumStr, err
+			return nativeNumStr, err
 		}
 
 		if ptrInt8Num == nil {
@@ -479,7 +527,7 @@ func (mathHelper *MathHelper) NumericValueToPureNumStr(
 				"ptrInt8Num is a nil pointer.",
 				ePrefix.String())
 
-			return signedPureNumStr, err
+			return nativeNumStr, err
 
 		}
 
@@ -499,7 +547,7 @@ func (mathHelper *MathHelper) NumericValueToPureNumStr(
 				"ERROR: int16 cast to 'int16Num' failed!\n",
 				ePrefix.String())
 
-			return signedPureNumStr, err
+			return nativeNumStr, err
 		}
 
 		int64Num = int64(int16Num)
@@ -518,7 +566,7 @@ func (mathHelper *MathHelper) NumericValueToPureNumStr(
 				"ERROR: *int16 cast to 'ptrInt16Num' failed!\n",
 				ePrefix.String())
 
-			return signedPureNumStr, err
+			return nativeNumStr, err
 		}
 
 		if ptrInt16Num == nil {
@@ -528,7 +576,7 @@ func (mathHelper *MathHelper) NumericValueToPureNumStr(
 				"ptrInt16Num is a nil pointer.",
 				ePrefix.String())
 
-			return signedPureNumStr, err
+			return nativeNumStr, err
 
 		}
 
@@ -548,7 +596,7 @@ func (mathHelper *MathHelper) NumericValueToPureNumStr(
 				"ERROR: int cast to 'intNum' failed!\n",
 				ePrefix.String())
 
-			return signedPureNumStr, err
+			return nativeNumStr, err
 		}
 
 		int64Num = int64(intNum)
@@ -567,7 +615,7 @@ func (mathHelper *MathHelper) NumericValueToPureNumStr(
 				"ERROR: *int cast to 'ptrIntNum' failed!\n",
 				ePrefix.String())
 
-			return signedPureNumStr, err
+			return nativeNumStr, err
 		}
 
 		if ptrIntNum == nil {
@@ -577,7 +625,7 @@ func (mathHelper *MathHelper) NumericValueToPureNumStr(
 				"ptrIntNum is a nil pointer.",
 				ePrefix.String())
 
-			return signedPureNumStr, err
+			return nativeNumStr, err
 
 		}
 
@@ -597,7 +645,7 @@ func (mathHelper *MathHelper) NumericValueToPureNumStr(
 				"ERROR: int32 cast to 'int32Num' failed!\n",
 				ePrefix.String())
 
-			return signedPureNumStr, err
+			return nativeNumStr, err
 		}
 
 		int64Num = int64(int32Num)
@@ -616,7 +664,7 @@ func (mathHelper *MathHelper) NumericValueToPureNumStr(
 				"ERROR: *int32 cast to 'ptrInt32Num' failed!\n",
 				ePrefix.String())
 
-			return signedPureNumStr, err
+			return nativeNumStr, err
 		}
 
 		if ptrInt32Num == nil {
@@ -626,7 +674,7 @@ func (mathHelper *MathHelper) NumericValueToPureNumStr(
 				"ptrInt32Num is a nil pointer.",
 				ePrefix.String())
 
-			return signedPureNumStr, err
+			return nativeNumStr, err
 
 		}
 
@@ -644,7 +692,7 @@ func (mathHelper *MathHelper) NumericValueToPureNumStr(
 				"ERROR: int64 cast to 'int64Num' failed!\n",
 				ePrefix.String())
 
-			return signedPureNumStr, err
+			return nativeNumStr, err
 		}
 
 		goto conversionInteger
@@ -661,7 +709,7 @@ func (mathHelper *MathHelper) NumericValueToPureNumStr(
 				"ERROR: *int64 cast to 'ptrInt64Num' failed!\n",
 				ePrefix.String())
 
-			return signedPureNumStr, err
+			return nativeNumStr, err
 		}
 
 		if ptrInt64Num == nil {
@@ -671,7 +719,7 @@ func (mathHelper *MathHelper) NumericValueToPureNumStr(
 				"ptrInt64Num is a nil pointer.",
 				ePrefix.String())
 
-			return signedPureNumStr, err
+			return nativeNumStr, err
 
 		}
 
@@ -691,7 +739,7 @@ func (mathHelper *MathHelper) NumericValueToPureNumStr(
 				"ERROR: uint8 cast to 'uint8Num' failed!\n",
 				ePrefix.String())
 
-			return signedPureNumStr, err
+			return nativeNumStr, err
 		}
 
 		uint64Num = uint64(uint8Num)
@@ -710,7 +758,7 @@ func (mathHelper *MathHelper) NumericValueToPureNumStr(
 				"ERROR: *uint8 cast to 'ptrUint8Num' failed!\n",
 				ePrefix.String())
 
-			return signedPureNumStr, err
+			return nativeNumStr, err
 		}
 
 		if ptrUint8Num == nil {
@@ -720,7 +768,7 @@ func (mathHelper *MathHelper) NumericValueToPureNumStr(
 				"ptrUint8Num is a nil pointer.",
 				ePrefix.String())
 
-			return signedPureNumStr, err
+			return nativeNumStr, err
 
 		}
 
@@ -740,7 +788,7 @@ func (mathHelper *MathHelper) NumericValueToPureNumStr(
 				"ERROR: uint16 cast to 'uint16Num' failed!\n",
 				ePrefix.String())
 
-			return signedPureNumStr, err
+			return nativeNumStr, err
 		}
 
 		uint64Num = uint64(uint16Num)
@@ -759,7 +807,7 @@ func (mathHelper *MathHelper) NumericValueToPureNumStr(
 				"ERROR: *uint16 cast to 'ptrUint16Num' failed!\n",
 				ePrefix.String())
 
-			return signedPureNumStr, err
+			return nativeNumStr, err
 		}
 
 		if ptrUint16Num == nil {
@@ -769,7 +817,7 @@ func (mathHelper *MathHelper) NumericValueToPureNumStr(
 				"ptrUint16Num is a nil pointer.",
 				ePrefix.String())
 
-			return signedPureNumStr, err
+			return nativeNumStr, err
 
 		}
 
@@ -789,7 +837,7 @@ func (mathHelper *MathHelper) NumericValueToPureNumStr(
 				"ERROR: uint cast to 'uintNum' failed!\n",
 				ePrefix.String())
 
-			return signedPureNumStr, err
+			return nativeNumStr, err
 		}
 
 		uint64Num = uint64(uintNum)
@@ -808,7 +856,7 @@ func (mathHelper *MathHelper) NumericValueToPureNumStr(
 				"ERROR: *uint cast to 'ptrUintNum' failed!\n",
 				ePrefix.String())
 
-			return signedPureNumStr, err
+			return nativeNumStr, err
 		}
 
 		if ptrUintNum == nil {
@@ -818,7 +866,7 @@ func (mathHelper *MathHelper) NumericValueToPureNumStr(
 				"ptrUintNum is a nil pointer.",
 				ePrefix.String())
 
-			return signedPureNumStr, err
+			return nativeNumStr, err
 
 		}
 
@@ -838,7 +886,7 @@ func (mathHelper *MathHelper) NumericValueToPureNumStr(
 				"ERROR: uint32 cast to 'uint32Num' failed!\n",
 				ePrefix.String())
 
-			return signedPureNumStr, err
+			return nativeNumStr, err
 		}
 
 		uint64Num = uint64(uint32Num)
@@ -857,7 +905,7 @@ func (mathHelper *MathHelper) NumericValueToPureNumStr(
 				"ERROR: *uint32 cast to 'ptrUint32Num' failed!\n",
 				ePrefix.String())
 
-			return signedPureNumStr, err
+			return nativeNumStr, err
 		}
 
 		if ptrUint32Num == nil {
@@ -867,7 +915,7 @@ func (mathHelper *MathHelper) NumericValueToPureNumStr(
 				"ptrUint32Num is a nil pointer.",
 				ePrefix.String())
 
-			return signedPureNumStr, err
+			return nativeNumStr, err
 
 		}
 
@@ -885,7 +933,7 @@ func (mathHelper *MathHelper) NumericValueToPureNumStr(
 				"ERROR: uint64 cast to 'uint64Num' failed!\n",
 				ePrefix.String())
 
-			return signedPureNumStr, err
+			return nativeNumStr, err
 		}
 
 		goto conversionUnsignedInteger
@@ -902,7 +950,7 @@ func (mathHelper *MathHelper) NumericValueToPureNumStr(
 				"ERROR: *uint64 cast to 'ptrUint32Num' failed!\n",
 				ePrefix.String())
 
-			return signedPureNumStr, err
+			return nativeNumStr, err
 		}
 
 		if ptrUint32Num == nil {
@@ -912,7 +960,7 @@ func (mathHelper *MathHelper) NumericValueToPureNumStr(
 				"ptrUint32Num is a nil pointer.",
 				ePrefix.String())
 
-			return signedPureNumStr, err
+			return nativeNumStr, err
 
 		}
 
@@ -932,12 +980,12 @@ func (mathHelper *MathHelper) NumericValueToPureNumStr(
 				"ERROR: *big.Int cast to 'ptrBigIntNum' failed!\n",
 				ePrefix.String())
 
-			return signedPureNumStr, err
+			return nativeNumStr, err
 		}
 
-		signedPureNumStr = ptrBigIntNum.Text(10)
+		nativeNumStr = ptrBigIntNum.Text(10)
 
-		return signedPureNumStr, err
+		return nativeNumStr, err
 
 	case big.Int:
 
@@ -951,12 +999,12 @@ func (mathHelper *MathHelper) NumericValueToPureNumStr(
 				"ERROR: big.Int cast to 'bigIntNum' failed!\n",
 				ePrefix.String())
 
-			return signedPureNumStr, err
+			return nativeNumStr, err
 		}
 
-		signedPureNumStr = bigIntNum.Text(10)
+		nativeNumStr = bigIntNum.Text(10)
 
-		return signedPureNumStr, err
+		return nativeNumStr, err
 
 	case *TextFieldFormatDtoFloat64:
 
@@ -971,16 +1019,16 @@ func (mathHelper *MathHelper) NumericValueToPureNumStr(
 				"ERROR: *TextFieldFormatDtoFloat64 cast to 'ptrTxtFieldFmtDtoF64' failed!\n",
 				ePrefix.String())
 
-			return signedPureNumStr, err
+			return nativeNumStr, err
 		}
 
-		signedPureNumStr,
+		nativeNumStr,
 			err = ptrTxtFieldFmtDtoF64.FmtNumStrNative(
 			ePrefix.XCpy(
-				"signedPureNumStr<-" +
+				"nativeNumStr<-" +
 					"ptrTxtFieldFmtDtoF64"))
 
-		return signedPureNumStr, err
+		return nativeNumStr, err
 
 	case TextFieldFormatDtoFloat64:
 
@@ -995,16 +1043,16 @@ func (mathHelper *MathHelper) NumericValueToPureNumStr(
 				"ERROR: TextFieldFormatDtoFloat64 cast to 'txtFieldFmtDtoF64' failed!\n",
 				ePrefix.String())
 
-			return signedPureNumStr, err
+			return nativeNumStr, err
 		}
 
-		signedPureNumStr,
+		nativeNumStr,
 			err = txtFieldFmtDtoF64.FmtNumStrNative(
 			ePrefix.XCpy(
-				"signedPureNumStr<-" +
+				"nativeNumStr<-" +
 					"txtFieldFmtDtoF64"))
 
-		return signedPureNumStr, err
+		return nativeNumStr, err
 
 	case *TextFieldFormatDtoBigFloat:
 
@@ -1019,16 +1067,16 @@ func (mathHelper *MathHelper) NumericValueToPureNumStr(
 				"ERROR: *TextFieldFormatDtoBigFloat cast to 'ptrTxtFieldFmtDtoBigFloat' failed!\n",
 				ePrefix.String())
 
-			return signedPureNumStr, err
+			return nativeNumStr, err
 		}
 
-		signedPureNumStr,
+		nativeNumStr,
 			err = ptrTxtFieldFmtDtoBigFloat.FmtNumStrNative(
 			ePrefix.XCpy(
-				"signedPureNumStr<-" +
+				"nativeNumStr<-" +
 					"ptrTxtFieldFmtDtoBigFloat"))
 
-		return signedPureNumStr, err
+		return nativeNumStr, err
 
 	case TextFieldFormatDtoBigFloat:
 
@@ -1043,16 +1091,16 @@ func (mathHelper *MathHelper) NumericValueToPureNumStr(
 				"ERROR: TextFieldFormatDtoBigFloat cast to 'txtFieldFmtDtoBigFloat' failed!\n",
 				ePrefix.String())
 
-			return signedPureNumStr, err
+			return nativeNumStr, err
 		}
 
-		signedPureNumStr,
+		nativeNumStr,
 			err = txtFieldFmtDtoBigFloat.FmtNumStrNative(
 			ePrefix.XCpy(
-				"signedPureNumStr<-" +
+				"nativeNumStr<-" +
 					"txtFieldFmtDtoBigFloat"))
 
-		return signedPureNumStr, err
+		return nativeNumStr, err
 
 	case *NumberStrKernel:
 
@@ -1067,16 +1115,16 @@ func (mathHelper *MathHelper) NumericValueToPureNumStr(
 				"ERROR: *NumberStrKernel cast to 'ptrNumStrKernel' failed!\n",
 				ePrefix.String())
 
-			return signedPureNumStr, err
+			return nativeNumStr, err
 		}
 
-		signedPureNumStr,
+		nativeNumStr,
 			err = ptrNumStrKernel.FmtNumStrNative(
 			ePrefix.XCpy(
-				"signedPureNumStr<-" +
+				"nativeNumStr<-" +
 					"ptrNumStrKernel"))
 
-		return signedPureNumStr, err
+		return nativeNumStr, err
 
 	case NumberStrKernel:
 
@@ -1091,16 +1139,16 @@ func (mathHelper *MathHelper) NumericValueToPureNumStr(
 				"ERROR: NumberStrKernel cast to 'numStrKernel' failed!\n",
 				ePrefix.String())
 
-			return signedPureNumStr, err
+			return nativeNumStr, err
 		}
 
-		signedPureNumStr,
+		nativeNumStr,
 			err = numStrKernel.FmtNumStrNative(
 			ePrefix.XCpy(
-				"signedPureNumStr<-" +
+				"nativeNumStr<-" +
 					"numStrKernel"))
 
-		return signedPureNumStr, err
+		return nativeNumStr, err
 
 	default:
 
@@ -1110,20 +1158,20 @@ func (mathHelper *MathHelper) NumericValueToPureNumStr(
 			ePrefix.String(),
 			fmt.Sprintf("%T", numericValue))
 
-		return signedPureNumStr, err
+		return nativeNumStr, err
 
 	}
 
 conversionUnsignedInteger:
 
-	signedPureNumStr = strconv.FormatUint(uint64Num, 10)
+	nativeNumStr = strconv.FormatUint(uint64Num, 10)
 
-	return signedPureNumStr, err
+	return nativeNumStr, err
 
 conversionInteger:
 
-	signedPureNumStr = strconv.FormatInt(int64Num, 10)
+	nativeNumStr = strconv.FormatInt(int64Num, 10)
 
-	return signedPureNumStr, err
+	return nativeNumStr, err
 
 }
