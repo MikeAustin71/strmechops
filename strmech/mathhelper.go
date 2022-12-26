@@ -179,7 +179,7 @@ type MathHelper struct {
 //			error message.
 func (mathHelper *MathHelper) NumericValueToPureNumStr(
 	numericValue interface{},
-	errPrefDto *ePref.ErrPrefixDto) (
+	errorPrefix interface{}) (
 	signedPureNumStr string,
 	err error) {
 
@@ -194,10 +194,10 @@ func (mathHelper *MathHelper) NumericValueToPureNumStr(
 	var ePrefix *ePref.ErrPrefixDto
 
 	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
-		errPrefDto,
-		"mathFloatHelperAtom."+
-			"floatNumToSignedPureNumStr()",
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"MathHelper."+
+			"NumericValueToPureNumStr()",
 		"")
 
 	if err != nil {

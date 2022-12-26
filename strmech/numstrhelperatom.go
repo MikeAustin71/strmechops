@@ -13,6 +13,377 @@ type numStrHelperAtom struct {
 	lock *sync.Mutex
 }
 
+// dirtyToNativeNumRunes
+//
+// Converts a rune array containing numeric digits to a
+// well formatted native number string which can be
+// consumed by Golang parsing and number management
+// functions such as those found in 'strconv', 'strings',
+// 'math' and the 'big' math package.
+//
+// The returned 'Native' Number String implements a
+// standardized format defined as follows:
+//
+//  1. A Native Number String Consists of numeric
+//     character digits zero through nine inclusive
+//     (0-9).
+//
+//  2. A Native Number String will include a period
+//     or decimal point ('.') to separate integer and
+//     fractional digits within a number string.
+//
+//  3. Negative numeric values will always be preceded
+//     by leading minus sign ('-').
+//
+//  4. Native Number Strings will only consist of
+//     numeric digits (0-9), a decimal point ('.') for
+//     floating point numbers and a leading minus sign
+//     ('-') in the case of negative numeric values.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	dirtyNumberRunes			RuneArrayDto
+//
+//		This instance of RuneArrayDto encapsulates a rune
+//		array containing the numeric digits which will be
+//		converted and returned as a Native Number rune
+//		array.
+//
+//		The 'dirtyNumberRunes' rune array is expected to
+//		comply with the following requirements:
+//
+//		1.	The dirty number rune array must contain
+//			numeric digit characters zero to nine
+//			inclusive (0-9).
+//
+//		2.	The dirty number rune array must contain a
+//			radix point or decimal separator to separate
+//			integer and fractional digits in a floating
+//			point numeric value. This decimal separator
+//			is specified by input parameter,
+//			'decimalSeparator'.
+//
+//			If no decimal separator is identified in the
+//			dirty number string, the numeric value is
+//			assumed to be an integer value.
+//
+//		4.	The dirty number string must designate
+//			negative numeric values using one of the
+//			following three negative number symbols:
+//
+//			(a)	A Leading Minus Sign ('-').
+//				Example: -123.45
+//
+//			(b)	A Trailing Minus Sign ('-').
+//				Example: 123.45-
+//
+//			(c) A combination of leading and trailing
+//				Parentheses ('()').
+//				Example: (123.45)
+//
+//	decimalSeparator			DecimalSeparatorSpec
+//
+//		Type DecimalSeparatorSpec is used to specify the
+//		radix point or decimal separator which will
+//		separate integer and fractional digits in the
+//		dirty number string passed as input parameter
+//		'dirtyNumberStr'.
+//
+//		The decimal separator will typically consist of
+//		one or more non-numeric characters.
+//
+//		If 'decimalSeparator' consists of an empty
+//		or zero length rune array, it is assumed that
+//		the numeric value contained in input parameter
+//		'dirtyNumberRunes' is an integer value.
+//
+//		In the US, Australia, UK, most of Canada and many
+//		other countries the period ('.'), or decimal
+//		point, separates integer and fractional digits
+//		within a floating point numeric value.
+//
+//		Other countries, including many in the European
+//		Union, use the comma (',') to separate integer
+//		and fractional digits within a number string.
+//
+//		If 'decimalSeparator' contains any one of the
+//		following invalid characters, an error will be
+//		returned.
+//
+//			Invalid Decimal Separator Characters
+//							'-'
+//							'('
+//							')'
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	nativeNumStr				string
+//
+//		If this method completes successfully, a Native
+//		Number String will be returned.
+//
+//		This returned Native Number String implements a
+//		standardized format defined as follows:
+//
+//		1.	A Native Number String Consists of numeric
+//			character digits zero through nine inclusive
+//			(0-9).
+//
+//		2.	A Native Number String will include a period
+//			or decimal point ('.') to separate integer and
+//			fractional digits within a number string.
+//
+//		3.	Negative numeric values will always be preceded
+//			by leading minus sign ('-').
+//
+//		4.	Native Number Strings will only consist of
+//			numeric digits (0-9), a decimal point ('.') for
+//			floating point numbers and a leading minus sign
+//			('-') in the case of negative numeric values.
+//
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (nStrHelperAtom *numStrHelperAtom) dirtyToNativeNumRunes(
+	dirtyNumberRunes *RuneArrayDto,
+	dirtyNumberRunesLabel string,
+	decimalSeparator DecimalSeparatorSpec,
+	ePrefDto *ePref.ErrPrefixDto) (
+	nativeNumStr RuneArrayDto,
+	err error) {
+
+	if nStrHelperAtom.lock == nil {
+		nStrHelperAtom.lock = new(sync.Mutex)
+	}
+
+	nStrHelperAtom.lock.Lock()
+
+	defer nStrHelperAtom.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		ePrefDto,
+		"numStrHelperAtom."+
+			"dirtyToNativeNumRunes()",
+		"")
+
+	if err != nil {
+
+		return nativeNumStr, err
+	}
+
+	if dirtyNumberRunes == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'dirtyNumberRunes' is a nil pointer!\n",
+			ePrefix.String())
+
+		return nativeNumStr, err
+	}
+
+	lenOfDirtyNumRunes := len(dirtyNumberRunes.CharsArray)
+
+	if lenOfDirtyNumRunes == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter '%v' is empty\n"+
+			"with a length of zero!\n",
+			ePrefix.String(),
+			dirtyNumberRunesLabel)
+
+		return nativeNumStr, err
+	}
+
+	var decSepChars *RuneArrayDto
+
+	decSepChars = &decimalSeparator.decimalSeparatorChars
+
+	decSepIsNOP := false
+
+	lenOfDecSeps := len(decSepChars.CharsArray)
+
+	if lenOfDecSeps == 0 {
+
+		decSepIsNOP = true
+
+	}
+
+	for i := 0; i < lenOfDecSeps; i++ {
+
+		if decSepChars.CharsArray[i] == '-' ||
+			decSepChars.CharsArray[i] == '(' ||
+			decSepChars.CharsArray[i] == ')' {
+
+			err = fmt.Errorf("%v\n"+
+				"ERROR: Input parameter Decimal Separators is invalid.\n"+
+				"Decimal Separators contains an invalid character!\n"+
+				"The following three characters are invalid\n"+
+				"decimal separator characters: '-','(', ')'\n"+
+				"The Decimal Separators parameter contains\n"+
+				"invalid character '%v'\n",
+				ePrefix.String(),
+				string(decSepChars.CharsArray[i]))
+
+			return nativeNumStr, err
+		}
+	}
+
+	var foundNegNumSymbol, foundLeadingParen,
+		foundFirstNumericDigit, foundDecimalSep bool
+
+	for i := 0; i < lenOfDirtyNumRunes; i++ {
+
+		if dirtyNumberRunes.CharsArray[i] >= '0' &&
+			dirtyNumberRunes.CharsArray[i] <= '9' {
+
+			nativeNumStr.CharsArray =
+				append(
+					nativeNumStr.CharsArray,
+					dirtyNumberRunes.CharsArray[i])
+
+			foundFirstNumericDigit = true
+
+			continue
+		}
+
+		if foundNegNumSymbol == false &&
+			dirtyNumberRunes.CharsArray[i] == '-' {
+
+			if foundFirstNumericDigit == true {
+
+				if !foundNegNumSymbol {
+					foundNegNumSymbol = true
+				}
+
+			} else {
+				// MUST BE -
+				// Have NOT found first numeric digit yet
+
+				if !foundNegNumSymbol {
+					foundNegNumSymbol = true
+				}
+
+			}
+
+			continue
+		}
+
+		if foundNegNumSymbol == false &&
+			dirtyNumberRunes.CharsArray[i] == '(' {
+
+			if foundFirstNumericDigit == true {
+
+				continue
+
+			} else {
+				// MUST BE -
+				// Have NOT found first numeric digit yet
+
+				foundLeadingParen = true
+
+			}
+
+		}
+
+		if foundNegNumSymbol == false &&
+			foundLeadingParen == true &&
+			dirtyNumberRunes.CharsArray[i] == ')' {
+
+			if foundFirstNumericDigit == true {
+
+				if foundLeadingParen == true {
+					foundNegNumSymbol = true
+				}
+
+			} else {
+				// MUST BE -
+				// Have NOT found first numeric digit yet
+
+				continue
+
+			}
+
+		}
+
+		if decSepIsNOP == false &&
+			foundDecimalSep == false &&
+			dirtyNumberRunes.CharsArray[i] ==
+				decSepChars.CharsArray[0] {
+
+			if i+lenOfDecSeps > lenOfDirtyNumRunes {
+
+				continue
+
+			}
+
+			j := i
+
+			for k := 0; k < lenOfDecSeps; k++ {
+
+				if decSepChars.CharsArray[k] !=
+					dirtyNumberRunes.CharsArray[j] {
+
+					continue
+				}
+
+				j++
+
+			}
+
+			// Found Decimal Separator
+			nativeNumStr.CharsArray =
+				append(
+					nativeNumStr.CharsArray,
+					dirtyNumberRunes.CharsArray...)
+
+			foundDecimalSep = true
+
+			i = i + lenOfDecSeps - 1
+
+		}
+
+	}
+
+	if foundNegNumSymbol {
+		nativeNumStr.CharsArray = append(
+			[]rune{'-'},
+			nativeNumStr.CharsArray...)
+	}
+
+	return nativeNumStr, err
+}
+
 //	parsePureNumStr
 //
 //	Receives a pure number string and proceeds to return the

@@ -626,14 +626,17 @@ func (nStrHelperQuark *numStrHelperQuark) extractNumericDigits(
 //		Target Number String Rune Array
 //		('targetSearchString').
 //
-//		In the US, Canada and Australia, the period
-//		('.'), or decimal point, separates integer and
-//		fractional digits within a floating point numeric
-//		value.
+//		The decimal separator will consist of one or
+//		more non-numeric characters.
 //
-//		Many countries in Europe use the comma (',') to
-//		separate integer and fractional digits within a
-//		number string.
+//		In the US, Australia, UK, most of Canada and many
+//		other countries the period ('.'), or decimal
+//		point, separates integer and fractional digits
+//		within a floating point numeric value.
+//
+//		Other countries, including many in European
+//		Union, use the comma (',') to separate integer
+//		and fractional digits within a number string.
 //
 //	breakOnCharDelimiters			RuneArrayCollection
 //
