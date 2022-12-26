@@ -15,13 +15,20 @@ type NumStrHelper struct {
 // DirtyToNativeNumStr
 //
 // Converts a string containing numeric digits to a well
-// formatted native number string which can be consumed
-// by Golang parsing and number management functions such
-// as those found in 'strconv', 'strings', 'math' and the
-// 'big' math package.
+// formatted Native Number String.
 //
-// The returned 'Native' Number String implements a
-// standardized format defined as follows:
+// The term 'Native' applies in the sense that the number
+// string format is designed to interoperate with the
+// Golang programming language library functions and
+// packages. Types like 'strconv', 'strings', 'math' and
+// 'big' (big.Int, big.Float, big.Rat) routinely parse
+// and convert this type of number string to numeric
+// values. Number strings which fail to implement this
+// standard formatting convention will generate errors.
+//
+// The 'Native' Number String returned by this method
+// therefore implements a standardized format defined as
+// follows:
 //
 //  1. A Native Number String Consists of numeric
 //     character digits zero through nine inclusive
@@ -79,6 +86,9 @@ type NumStrHelper struct {
 //			(c) A combination of leading and trailing
 //				Parentheses ('()').
 //				Example: (123.45)
+//
+//		If 'dirtyNumberStr' does not contain any numeric
+//		digits, an error will be returned.
 //
 //	decimalSeparator			string
 //
