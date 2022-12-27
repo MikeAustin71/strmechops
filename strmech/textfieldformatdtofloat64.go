@@ -1445,11 +1445,23 @@ func (txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64) FmtNumStrDefault(
 // value specified by the current instance of
 // TextFieldFormatDtoFloat64.
 //
-// A native number string is generated using the native
-// "number to string" conversion provided by the Golang
-// 'strconv' package. All rounding is controlled
-// internally by the 'strconv' package and is therefore
-// NOT SUBJECT to user control.
+// The term 'Native' applies in the sense that the number
+// string format is designed to interoperate with the
+// Golang programming language library functions and
+// packages. Types like 'strconv', 'strings', 'math' and
+// 'big' (big.Int, big.Float, big.Rat) routinely parse
+// and convert this type of number string to numeric
+// values. In addition, Native Number Strings are
+// frequently consumed by external library functions such
+// as this one (String Mechanics 'strmech') to convert
+// strings to numeric values and numeric values to
+// strings.
+//
+// While this format is inconsistent with many national
+// and cultural formatting conventions, number strings
+// which fail to implement this standardized formatting
+// protocol will generate errors in some Golang library
+// functions.
 //
 // The number of fractional digits presented in the
 // native number string is specified by the member
@@ -1466,43 +1478,42 @@ func (txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64) FmtNumStrDefault(
 //
 //	TextFieldFormatDtoFloat64.FmtNumStrPure()
 //
-// The floating point native number string returned
-// by this method will:
+// The 'Native' Number String returned by this method
+// implements a standardized format defined as follows:
 //
-//  1. Consist entirely of numeric digit characters.
+//  1. A Native Number String Consists of numeric
+//     character digits zero through nine inclusive
+//     (0-9).
 //
-//  2. Separate integer and fractional digits with a
-//     decimal point ('.').
+//  2. A Native Number String will include a period
+//     or decimal point ('.') to separate integer and
+//     fractional digits within a number string.
 //
-//  3. Designate negative values with a leading minus
-//     sign ('-'). Trailing Minus Signs are NOT
-//     supported.
+//     Native Number String Floating Point Value:
+//     123.1234
 //
-//     Leading Minus Sign:		-1000000
+//  3. A Native Number String will always format
+//     negative numeric values with a leading minus sign
+//     ('-').
 //
-//  4. NOT include integer separators such as commas
-//     (',') to separate integer digits by thousands.
+//     Native Number String Negative Value:
+//     -123.2
+//
+//  4. A Native Number String WILL NEVER include integer
+//     separators such as commas (',') to separate
+//     integer digits by thousands.
 //
 //     NOT THIS: 1,000,000
 //     Native Number String: 1000000
 //
-// ----------------------------------------------------------------
+//  5. Native Number Strings will only consist of:
 //
-// # BE ADVISED
+//     (a)	Numeric digits zero through nine inclusive (0-9).
 //
-//	Native number strings Do NOT include integer
-//	separators (i.e. commas ',') to separate integer
-//	number strings into thousands.
+//     (b)	A decimal point ('.') for floating point
+//     numbers.
 //
-//						NOT THIS: 1,000,000
-//			Native Number String: 1000000
-//
-//	All negative numeric values processed by this method
-//	will return native number strings containing leading
-//	minus signs ('-'). Trailing minus signs are NOT
-//	supported.
-//
-//		Leading Minus Sign:		-1000000
+//     (c)	A leading minus sign ('-') in the case of
 //
 // ----------------------------------------------------------------
 //
@@ -1575,26 +1586,61 @@ func (txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64) FmtNumStrDefault(
 //
 //		If this method completes successfully, this
 //		string parameter will return a floating point
-//		native number string representation of the
+//		Native Number String representation of the
 //		float64 value specified by the current instance
 //		of TextFieldFormatDtoFloat64.
 //
+//		The term 'Native' applies in the sense that the
+//		number string format is designed to interoperate
+//		with the Golang programming language library
+//		functions and packages. Types like 'strconv',
+//		'strings', 'math' and 'big' (big.Int, big.Float,
+//		big.Rat) routinely parse and convert this type of
+//		number string to generate numeric values. In
+//		addition, Native Number Strings are frequently
+//		consumed by external library functions such	as
+//		this one (String Mechanics 'strmech') to convert
+//		strings to numeric values and numeric values to
+//		strings.
+//
 //		The returned floating point native number string
-//		will:
+//		will conform to the formatting criteria defined
+//		below:
 //
-//		1.	Consist entirely of numeric digit characters.
+//	 	1. A Native Number String Consists of numeric
+//	 	   character digits zero through nine inclusive
+//	 	   (0-9).
 //
-//		2.	Separate integer and fractional digits with a
-//			decimal point ('.').
+//	 	2. A Native Number String will include a period
+//	 	   or decimal point ('.') to separate integer and
+//	 	   fractional digits within a number string.
 //
-//		3.	Designate negative values with a leading minus
-//			sign ('-').
+//	 	   Native Number String Floating Point Value:
+//	 	   			123.1234
 //
-//		4.	NOT include integer separators such as commas
-//			(',') to separate integer digits by thousands.
+//	 	3. A Native Number String will always format
+//	 	   negative numeric values with a leading minus sign
+//	 	   ('-').
 //
-//						  NOT THIS: 1,000,000
-//				Pure Number String: 1000000
+//	 	   Native Number String Negative Value:
+//	 	   			-123.2
+//
+//	 	4. A Native Number String WILL NEVER include integer
+//	 	   separators such as commas (',') to separate
+//	 	   integer digits by thousands.
+//
+//	 	   					NOT THIS: 1,000,000
+//	 	   		Native Number String: 1000000
+//
+//	 	5. Native Number Strings will only consist of:
+//
+//	 	   (a)	Numeric digits zero through nine inclusive (0-9).
+//
+//	 	   (b)	A decimal point ('.') for floating point
+//	 	   		numbers.
+//
+//	 	   (c)	A leading minus sign ('-') in the case of
+//	 	   		negative numeric values.
 //
 //	error
 //
@@ -2888,15 +2934,15 @@ func (txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64) IsValidInstanceError(
 	return err
 }
 
-//	SetFromPureNumStr
+//	SetFromNativeNumStr
 //
-//	Receives and converts a pure number string to a
+//	Receives and converts a Native Number String to a
 //	float64 floating point numeric value which is then
 //	assigned to the float64 value encapsulated in the
 //	current instance of TextFieldFormatDtoFloat64.
 //
-//	The parsed float64 value extracted from the pure
-//	number string will be stored in the member variable:
+//	The parsed float64 value extracted from the Native
+//	Number String will be stored in the member variable:
 //
 //		TextFieldFormatDtoFloat64.Float64Num
 //
@@ -2936,11 +2982,11 @@ func (txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64) IsValidInstanceError(
 //
 // # Input Parameters
 //
-//	pureNumStr					string
+//	nativeNumStr				string
 //
-//		This string contains the pure number string which
-//		will be parsed to produce and store a float64
-//		value in the current instance of
+//		This string contains the Native Number String
+//		which will be parsed to produce and store a
+//		float64 value in the current instance of
 //		TextFieldFormatDtoFloat64.
 //
 //		The parsed float64 value will be stored in the
@@ -2948,7 +2994,7 @@ func (txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64) IsValidInstanceError(
 //
 //			TextFieldFormatDtoFloat64.Float64Num
 //
-//		The input parameter 'pureNumStr' must be formatted
+//		The input parameter 'nativeNumStr' must be formatted
 //		as a pure number in accordance with the following
 //		criteria:
 //
@@ -3050,8 +3096,8 @@ func (txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64) IsValidInstanceError(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64) SetFromPureNumStr(
-	pureNumStr string,
+func (txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64) SetFromNativeNumStr(
+	nativeNumStr string,
 	errorPrefix interface{}) error {
 
 	if txtFieldFmtDtoFloat64.lock == nil {
@@ -3070,7 +3116,7 @@ func (txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64) SetFromPureNumStr(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"TextFieldFormatDtoFloat64."+
-			"SetFromPureNumStr()",
+			"SetFromNativeNumStr()",
 		"")
 
 	if err != nil {
@@ -3080,10 +3126,10 @@ func (txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64) SetFromPureNumStr(
 	var floatNum64 float64
 
 	floatNum64,
-		err = new(MathFloatHelper).PureNumStrToFloat64(
-		pureNumStr,
+		err = new(MathFloatHelper).NativeNumStrToFloat64(
+		nativeNumStr,
 		ePrefix.XCpy(
-			"pureNumStr"))
+			"nativeNumStr"))
 
 	if err != nil {
 		return err

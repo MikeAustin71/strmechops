@@ -36,7 +36,7 @@ func (MainTest03) PureNumStrToFloat64() {
 
 	var err error
 
-	err = txtFieldFmtDtoF64.SetFromPureNumStr(
+	err = txtFieldFmtDtoF64.SetFromNativeNumStr(
 		expectedStr,
 		ePrefix.XCpy(
 			"txtFieldFmtDtoF64<-expectedStr"))
@@ -96,7 +96,7 @@ func (MainTest03) PureNumStrToFloat64() {
 
 	var ptrTxtFieldFmtDtoF64 *strmech.TextFieldFormatDtoFloat64
 
-	err = txtFieldFmtDtoF642.SetFromPureNumStr(
+	err = txtFieldFmtDtoF642.SetFromNativeNumStr(
 		expectedStr,
 		ePrefix.XCpy(
 			"txtFieldFmtDtoF642<-expectedStr"))

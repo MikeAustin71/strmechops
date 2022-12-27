@@ -1632,7 +1632,7 @@ func TestMathHelper_NumericValueToPureNumStr_001100(t *testing.T) {
 
 	var err error
 
-	err = txtFieldFmtDtoF64.SetFromPureNumStr(
+	err = txtFieldFmtDtoF64.SetFromNativeNumStr(
 		expectedStr,
 		ePrefix.XCpy(
 			"txtFieldFmtDtoF64<-expectedStr"))
@@ -1692,7 +1692,7 @@ func TestMathHelper_NumericValueToPureNumStr_001100(t *testing.T) {
 
 	var ptrTxtFieldFmtDtoF64 *TextFieldFormatDtoFloat64
 
-	err = txtFieldFmtDtoF642.SetFromPureNumStr(
+	err = txtFieldFmtDtoF642.SetFromNativeNumStr(
 		expectedStr,
 		ePrefix.XCpy(
 			"txtFieldFmtDtoF642<-expectedStr"))

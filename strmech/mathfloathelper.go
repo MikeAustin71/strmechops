@@ -1215,70 +1215,135 @@ func (mathFloatHelper *MathFloatHelper) PrecisionToDigitsFactor() *big.Float {
 		precisionToDigitsFactor()
 }
 
-//	PureNumStrToBigFloat
+// NativeNumStrToBigFloat
 //
-//	Receives a pure number string and converts that
-//	string to a big.Float value.
+// Receives a Native Number String and converts that
+// string to a big.Float value.
 //
-//	The input parameter 'pureNumStr' must be formatted
-//	as a pure number string which is defined as follows:
+// The term 'Native' applies in the sense that the number
+// string format is designed to interoperate with the
+// Golang programming language library functions and
+// packages. Types like 'strconv', 'strings', 'math' and
+// 'big' (big.Int, big.Float, big.Rat) routinely parse
+// and convert this type of number string to numeric
+// values. In addition, Native Number Strings are
+// frequently consumed by external library functions such
+// as this one (String Mechanics 'strmech') to convert
+// strings to numeric values and numeric values to
+// strings.
 //
-//		1.	The pure number string must consist entirely
-//			of numeric digit characters (0-9), with
-//			following exceptions.
+// While this format is inconsistent with many national
+// and cultural formatting conventions, number strings
+// which fail to implement this standardized formatting
+// protocol will generate errors in some Golang library
+// functions.
 //
-//		2.	For floating point values, the pure number
-//			string must separate integer and fractional
-//			digits with a decimal point ('.').
+// The input parameter 'nativeNumStr' must be formatted
+// as a Native Number String in accordance with the
+// following criteria:
 //
-//		3.	The pure number string must designate
-//			negative values with a leading minus sign
-//			('-').
+//  1. A Native Number String Consists of numeric
+//     character digits zero through nine inclusive
+//     (0-9).
 //
-//		4.	The pure number string must NOT include integer
-//			separators such as commas (',') to separate
-//			integer digits by thousands.
+//  2. A Native Number String will include a period
+//     or decimal point ('.') to separate integer and
+//     fractional digits within a number string.
 //
-//						  NOT THIS: 1,000,000
-//				Pure Number String: 1000000
+//     Native Number String Floating Point Value:
+//     123.1234
 //
-//	If the input parameter 'pureNumStr' does NOT meet these
-//	criteria, an error will be returned.
+//  3. A Native Number String will always format
+//     negative numeric values with a leading minus sign
+//     ('-').
+//
+//     Native Number String Negative Value:
+//     -123.2
+//
+//  4. A Native Number String WILL NEVER include integer
+//     separators such as commas (',') to separate
+//     integer digits by thousands.
+//
+//     NOT THIS: 1,000,000
+//     Native Number String: 1000000
+//
+//  5. Native Number Strings will only consist of:
+//
+//     (a)	Numeric digits zero through nine inclusive
+//     (0-9).
+//
+//     (b)	A decimal point ('.') for floating point
+//     numbers.
+//
+//     (c)	A leading minus sign ('-') in the case of
+//     negative numeric values.
+//
+//     If the input parameter 'nativeNumStr' does NOT meet
+//     these criteria, an error will be returned.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	If the Native Number String ('nativeNumStr') fails to
+//	comply with Native Number String formatting
+//	requirements try the following method as a means of
+//	converting a 'dirty' number string to a valid Native
+//	Number String:
+//
+//			NumStrHelper.DirtyToNativeNumStr()
 //
 // ----------------------------------------------------------------
 //
 // # Input Parameters
 //
-//	pureNumStr					string
+//	nativeNumStr				string
 //
-//		This string contains the pure number string which
+//		This string contains the Native Number String which
 //		will be parsed to produce and return a big.Float
 //		value.
 //
-//		The input parameter 'pureNumStr' must be formatted
-//		as a pure number string which is defined as follows:
+//		If 'nativeNumStr' fails to meet the criteria for
+//		a Native Number String, an error will be
+//		returned.
 //
-//			1.	The pure number string must consist entirely
-//				of numeric digit characters (0-9), with
-//				following exceptions.
+//		A valid Native Number String must conform to the
+//		standardized formatting criteria defined below:
 //
-//			2.	For floating point values, the pure number
-//				string must separate integer and fractional
-//				digits with a decimal point ('.').
+//	 	1. A Native Number String Consists of numeric
+//	 	   character digits zero through nine inclusive
+//	 	   (0-9).
 //
-//			3.	The pure number string must designate
-//				negative values with a leading minus sign
-//				('-').
+//	 	2. A Native Number String will include a period
+//	 	   or decimal point ('.') to separate integer and
+//	 	   fractional digits within a number string.
 //
-//			4.	The pure number string must NOT include integer
-//				separators such as commas (',') to separate
-//				integer digits by thousands.
+//	 	   Native Number String Floating Point Value:
+//	 	   				123.1234
 //
-//							  NOT THIS: 1,000,000
-//					Pure Number String: 1000000
+//	 	3. A Native Number String will always format
+//	 	   negative numeric values with a leading minus sign
+//	 	   ('-').
 //
-//		If the input parameter 'pureNumStr' does NOT meet these
-//		criteria, an error will be returned.
+//	 	   Native Number String Negative Value:
+//	 	   				-123.2
+//
+//	 	4. A Native Number String WILL NEVER include integer
+//	 	   separators such as commas (',') to separate
+//	 	   integer digits by thousands.
+//
+//	 	   					NOT THIS: 1,000,000
+//	 	   		Native Number String: 1000000
+//
+//	 	5. Native Number Strings will only consist of:
+//
+//	 	   (a)	Numeric digits zero through nine inclusive (0-9).
+//
+//	 	   (b)	A decimal point ('.') for floating point
+//	 	   		numbers.
+//
+//	 	   (c)	A leading minus sign ('-') in the case of
+//	 	   		negative numeric values.
 //
 //	roundingMode 				big.RoundingMode
 //
@@ -1331,8 +1396,8 @@ func (mathFloatHelper *MathFloatHelper) PrecisionToDigitsFactor() *big.Float {
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (mathFloatHelper *MathFloatHelper) PureNumStrToBigFloat(
-	pureNumStr string,
+func (mathFloatHelper *MathFloatHelper) NativeNumStrToBigFloat(
+	nativeNumStr string,
 	roundingMode big.RoundingMode,
 	errorPrefix interface{}) (
 	big.Float,
@@ -1354,7 +1419,7 @@ func (mathFloatHelper *MathFloatHelper) PureNumStrToBigFloat(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"MathFloatHelper."+
-			"PureNumStrToBigFloat()",
+			"NativeNumStrToBigFloat()",
 		"")
 
 	if err != nil {
@@ -1363,10 +1428,725 @@ func (mathFloatHelper *MathFloatHelper) PureNumStrToBigFloat(
 
 	return new(mathFloatHelperBoson).
 		pureNumStrToBigFloat(
-			pureNumStr,
+			nativeNumStr,
 			roundingMode,
 			ePrefix.XCpy(
-				"pureNumStr"))
+				"nativeNumStr"))
+}
+
+// NativeNumStrToBigFloatDto
+//
+// Receives a Native Number String containing a numeric
+// value which will be converted and returned as a
+// big.Float floating point value encapsulated within
+// an instance of BigFloatDto.
+//
+// The term 'Native' applies in the sense that the number
+// string format is designed to interoperate with the
+// Golang programming language library functions and
+// packages. Types like 'strconv', 'strings', 'math' and
+// 'big' (big.Int, big.Float, big.Rat) routinely parse
+// and convert this type of number string to numeric
+// values. In addition, Native Number Strings are
+// frequently consumed by external library functions such
+// as this one (String Mechanics 'strmech') to convert
+// strings to numeric values and numeric values to
+// strings.
+//
+// While this format is inconsistent with many national
+// and cultural formatting conventions, number strings
+// which fail to implement this standardized formatting
+// protocol will generate errors in some Golang library
+// functions.
+//
+// The input parameter 'nativeNumStr' must be formatted
+// as a Native Number String in accordance with the
+// following criteria:
+//
+//  1. A Native Number String Consists of numeric
+//     character digits zero through nine inclusive
+//     (0-9).
+//
+//  2. A Native Number String will include a period
+//     or decimal point ('.') to separate integer and
+//     fractional digits within a number string.
+//
+//     Native Number String Floating Point Value:
+//     123.1234
+//
+//  3. A Native Number String will always format
+//     negative numeric values with a leading minus sign
+//     ('-').
+//
+//     Native Number String Negative Value:
+//     -123.2
+//
+//  4. A Native Number String WILL NEVER include integer
+//     separators such as commas (',') to separate
+//     integer digits by thousands.
+//
+//     NOT THIS: 1,000,000
+//     Native Number String: 1000000
+//
+//  5. Native Number Strings will only consist of:
+//
+//     (a)	Numeric digits zero through nine inclusive
+//     (0-9).
+//
+//     (b)	A decimal point ('.') for floating point
+//     numbers.
+//
+//     (c)	A leading minus sign ('-') in the case of
+//     negative numeric values.
+//
+//     If the input parameter 'nativeNumStr' does NOT meet
+//     these criteria, an error will be returned.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	If the Native Number String ('nativeNumStr') fails to
+//	comply with Native Number String formatting
+//	requirements try the following method as a means of
+//	converting a 'dirty' number string to a valid Native
+//	Number String:
+//
+//			NumStrHelper.DirtyToNativeNumStr()
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	nativeNumStr				string
+//
+//		This Native Number String contains the numeric
+//		character digits which will be analyzed and
+//		converted to a big.Float value in the returned
+//		instance of 'BigFloatDto'.
+//
+//		If 'nativeNumStr' fails to meet the criteria for
+//		a Native Number String, an error will be
+//		returned.
+//
+//		A valid Native Number String must conform to the
+//		standardized formatting criteria defined below:
+//
+//	 	1. A Native Number String Consists of numeric
+//	 	   character digits zero through nine inclusive
+//	 	   (0-9).
+//
+//	 	2. A Native Number String will include a period
+//	 	   or decimal point ('.') to separate integer and
+//	 	   fractional digits within a number string.
+//
+//	 	   Native Number String Floating Point Value:
+//	 	   				123.1234
+//
+//	 	3. A Native Number String will always format
+//	 	   negative numeric values with a leading minus sign
+//	 	   ('-').
+//
+//	 	   Native Number String Negative Value:
+//	 	   				-123.2
+//
+//	 	4. A Native Number String WILL NEVER include integer
+//	 	   separators such as commas (',') to separate
+//	 	   integer digits by thousands.
+//
+//	 	   					NOT THIS: 1,000,000
+//	 	   		Native Number String: 1000000
+//
+//	 	5. Native Number Strings will only consist of:
+//
+//	 	   (a)	Numeric digits zero through nine inclusive (0-9).
+//
+//	 	   (b)	A decimal point ('.') for floating point
+//	 	   		numbers.
+//
+//	 	   (c)	A leading minus sign ('-') in the case of
+//	 	   		negative numeric values.
+//
+//	numOfExtraDigitsBuffer		int64
+//
+//		When configuring the big.Float numeric value
+//		returned by the BigFloatDto instance, the number
+//		of big.Float precision bits will be calculated
+//		based on the number of integer and fractional
+//		numeric digits contained in the Native Number
+//		String ('nativeNumStr'). To deal with
+//		contingencies and requirements often found in
+//		complex floating point operations, users have
+//		the option to arbitrarily increase the number
+//		of precision bits by specifying additional
+//		numeric digits via parameter,
+//		'numOfExtraDigitsBuffer'.
+//
+//		Note: The user has the option of overriding the
+//		automatic precision bits calculation by specifying
+//		a precision bits value directly through parameter,
+//		'precisionBitsOverride'.
+//
+//	precisionBitsOverride		uint
+//
+//		The term 'precision bits' refers to the number of
+//		bits in the mantissa of a big.Float floating point
+//		number. Effectively, 'precision bits' controls the
+//		precision, accuracy and numerical digit storage
+//		capacity for a big.Float floating point number.
+//
+//		Typically, this method will automatically
+//		calculate the value of big.Float precision bits
+//		using the parameter 'numOfExtraDigitsBuffer'
+//		listed above. However, if 'precisionBitsOverride'
+//		has a value greater than zero, the automatic
+//		precision bit calculation will be overridden and
+//		big.Float precision bits will be set to the value
+//		of this	precision bits specification
+//		('precisionBitsOverride').
+//
+//	roundingMode 				big.RoundingMode
+//
+//		Specifies the rounding algorithm which will be used
+//		internally to calculate the base value raised to the
+//		power of exponent.
+//
+//		Each instance of big.Float is configured with a
+//		rounding mode. Input parameter 'roundingMode'
+//		controls this configuration for the calculation
+//		and the big.Float value returned by this method.
+//
+//		The constant values available for big.Float
+//		rounding mode are listed as follows:
+//
+//		big.ToNearestEven  		// == IEEE 754-2008 roundTiesToEven
+//		big.ToNearestAway       // == IEEE 754-2008 roundTiesToAway
+//		big.ToZero              // == IEEE 754-2008 roundTowardZero
+//		big.AwayFromZero        // no IEEE 754-2008 equivalent
+//		big.ToNegativeInf       // == IEEE 754-2008 roundTowardNegative
+//		big.ToPositiveInf       // == IEEE 754-2008 roundTowardPositive
+//
+//		If in doubt as this setting, 'big.AwayFromZero' or
+//		'big.ToNearestEven' are common selections for rounding mode.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	BigFloatDto
+//
+//		If this method completes successfully, a fully
+//		populated instance of BigFloatDto will be
+//		returned containing the big.Float value
+//		generated from the Native Number String parameter,
+//		'nativeNumStr'.
+//
+//		type BigFloatDto struct {
+//			Value big.Float
+//				The actual value of the big.Float instance.
+//
+//			NumStrComponents PureNumberStrComponents
+//				This parameter profiles the actual big.Float
+//				floating point numeric value identified by
+//				structure element 'Value'.
+//
+//				type PureNumberStrComponents struct {
+//
+//					NumStrStats NumberStrStatsDto
+//
+//						This data transfer object will return key
+//						statistics on the numeric value encapsulated
+//						by the current instance of NumberStrKernel.
+//
+//							type NumberStrStatsDto struct {
+//
+//								NumOfIntegerDigits					uint64
+//
+//									The total number of integer digits to the
+//									left of the radix point or, decimal point, in
+//									the subject numeric value.
+//
+//								NumOfSignificantIntegerDigits		uint64
+//
+//									The number of nonzero integer digits to the
+//									left of the radix point or, decimal point, in
+//									the subject numeric value.
+//
+//								NumOfFractionalDigits				uint64
+//
+//									The total number of fractional digits to the
+//									right of the radix point or, decimal point,
+//									in the subject numeric value.
+//
+//								NumOfSignificantFractionalDigits	uint64
+//
+//									The number of nonzero fractional digits to
+//									the right of the radix point or, decimal
+//									point, in the subject numeric value.
+//
+//								NumberValueType 					NumericValueType
+//
+//									This enumeration value specifies whether the
+//									subject numeric value is classified either as
+//									an integer or a floating point number.
+//
+//									Possible enumeration values are listed as
+//									follows:
+//										NumValType.None()
+//										NumValType.FloatingPoint()
+//										NumValType.Integer()
+//
+//								NumberSign							NumericSignValueType
+//
+//									An enumeration specifying the number sign
+//									associated with the numeric value. Possible
+//									values are listed as follows:
+//										NumSignVal.None()		= Invalid Value
+//										NumSignVal.Negative()	= -1
+//										NumSignVal.Zero()		=  0
+//										NumSignVal.Positive()	=  1
+//
+//								IsZeroValue							bool
+//
+//									If 'true', the subject numeric value is equal
+//									to zero ('0').
+//
+//									If 'false', the subject numeric value is
+//									greater than or less than zero ('0').
+//							}
+//
+//
+//
+//					AbsoluteValueNumStr string
+//					The number string expressed as an absolute value.
+//
+//					AllIntegerDigitsNumStr string
+//					Integer and fractional digits are combined
+//					in a single number string without a decimal
+//					point separating integer and fractional digits.
+//					This string DOES NOT contain a leading number
+//					sign (a.k.a. minus sign ('-')
+//				}
+//
+//			EstimatedPrecisionBits BigFloatPrecisionDto
+//
+//			This structure stores the components and final
+//			results value for a precision bits calculation.
+//			The number of precision bits configured for a
+//			big.Float floating point numeric value determines
+//			the storage capacity for a specific floating
+//			point number. As such, the calculation of a
+//			correct and adequate precision bits value can
+//			affect the accuracy of floating point calculations.
+//
+//			type BigFloatPrecisionDto struct {
+//
+//					NumIntegerDigits			int64
+//
+//						The actual or estimated number of integer digits
+//						in a big.Float floating point numeric value. The
+//						number of integer digits in a floating point
+//						number is one of the elements used to calculate
+//						the precision bits required to store that
+//						floating point number.
+//
+//					NumFractionalDigits			int64
+//
+//						The actual or estimated number of fractional
+//						digits in a big.Float floating point numeric
+//						value. The number of fractional digits in a
+//						floating point number is one of the elements used
+//						to calculate the precision bits required to store
+//						that floating point number.
+//
+//					NumOfExtraDigitsBuffer		int64
+//
+//						When estimating the number of precision necessary
+//						to store or process big.Float floating point
+//						values, is generally a good idea to include a
+//						safety margin consisting of excess numeric digits.
+//
+//						This parameter stores the number of extra numeric
+//						digits used in a calculation of total require
+//						precision bits.
+//
+//					PrecisionBitsSpec uint
+//						This parameter represents the estimated number of
+//						bits required to store a specific floating point
+//						numeric value in an instance of type big.Float.
+//
+//						The 'PrecisionBitsSpec' value is usually generated
+//						by an internal calculation based on the estimated
+//						number of integer and fractional digits contained
+//						in a big.Float floating point number. However,
+//						users have the option to specify an arbitrary
+//						precision bits value.
+//			}
+//
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (mathFloatHelper *MathFloatHelper) NativeNumStrToBigFloatDto(
+	nativeNumStr string,
+	numOfExtraDigitsBuffer int64,
+	precisionBitsOverride uint,
+	roundingMode big.RoundingMode,
+	errorPrefix interface{}) (
+	BigFloatDto,
+	error) {
+
+	if mathFloatHelper.lock == nil {
+		mathFloatHelper.lock = new(sync.Mutex)
+	}
+
+	mathFloatHelper.lock.Lock()
+
+	defer mathFloatHelper.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"MathFloatHelper."+
+			"NativeNumStrToBigFloatDto()",
+		"")
+
+	if err != nil {
+		return BigFloatDto{}, err
+	}
+
+	return new(mathFloatHelperBoson).
+		bigFloatDtoFromPureNumStr(
+			nativeNumStr,
+			".",
+			true,
+			numOfExtraDigitsBuffer,
+			precisionBitsOverride,
+			roundingMode,
+			ePrefix)
+}
+
+// NativeNumStrToFloat64
+//
+// Receives a Native Number string and converts that
+// string to a float64 floating point value.
+//
+// The term 'Native' applies in the sense that the number
+// string format is designed to interoperate with the
+// Golang programming language library functions and
+// packages. Types like 'strconv', 'strings', 'math' and
+// 'big' (big.Int, big.Float, big.Rat) routinely parse
+// and convert this type of number string to numeric
+// values. In addition, Native Number Strings are
+// frequently consumed by external library functions such
+// as this one (String Mechanics 'strmech') to convert
+// strings to numeric values and numeric values to
+// strings.
+//
+// While this format is inconsistent with many national
+// and cultural formatting conventions, number strings
+// which fail to implement this standardized formatting
+// protocol will generate errors in some Golang library
+// functions.
+//
+// The input parameter 'nativeNumStr' must be formatted
+// as a Native Number String in accordance with the
+// following criteria:
+//
+//  1. A Native Number String Consists of numeric
+//     character digits zero through nine inclusive
+//     (0-9).
+//
+//  2. A Native Number String will include a period
+//     or decimal point ('.') to separate integer and
+//     fractional digits within a number string.
+//
+//     Native Number String Floating Point Value:
+//     123.1234
+//
+//  3. A Native Number String will always format
+//     negative numeric values with a leading minus sign
+//     ('-').
+//
+//     Native Number String Negative Value:
+//     -123.2
+//
+//  4. A Native Number String WILL NEVER include integer
+//     separators such as commas (',') to separate
+//     integer digits by thousands.
+//
+//     NOT THIS: 1,000,000
+//     Native Number String: 1000000
+//
+//  5. Native Number Strings will only consist of:
+//
+//     (a)	Numeric digits zero through nine inclusive
+//     (0-9).
+//
+//     (b)	A decimal point ('.') for floating point
+//     numbers.
+//
+//     (c)	A leading minus sign ('-') in the case of
+//     negative numeric values.
+//
+//     If the input parameter 'nativeNumStr' does NOT meet
+//     these criteria, an error will be returned.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	If the Native Number String ('nativeNumStr') fails to
+//	comply with Native Number String formatting
+//	requirements try the following method as a means of
+//	converting a 'dirty' number string to a valid Native
+//	Number String:
+//
+//			NumStrHelper.DirtyToNativeNumStr()
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	nativeNumStr				string
+//
+//		This string contains the Native Number String which
+//		will be parsed to produce and return a big.Float
+//		value.
+//
+//		If 'nativeNumStr' fails to meet the criteria for
+//		a Native Number String, an error will be
+//		returned.
+//
+//		A valid Native Number String must conform to the
+//		standardized formatting criteria defined below:
+//
+//	 	1. A Native Number String Consists of numeric
+//	 	   character digits zero through nine inclusive
+//	 	   (0-9).
+//
+//	 	2. A Native Number String will include a period
+//	 	   or decimal point ('.') to separate integer and
+//	 	   fractional digits within a number string.
+//
+//	 	   Native Number String Floating Point Value:
+//	 	   				123.1234
+//
+//	 	3. A Native Number String will always format
+//	 	   negative numeric values with a leading minus sign
+//	 	   ('-').
+//
+//	 	   Native Number String Negative Value:
+//	 	   				-123.2
+//
+//	 	4. A Native Number String WILL NEVER include integer
+//	 	   separators such as commas (',') to separate
+//	 	   integer digits by thousands.
+//
+//	 	   					NOT THIS: 1,000,000
+//	 	   		Native Number String: 1000000
+//
+//	 	5. Native Number Strings will only consist of:
+//
+//	 	   (a)	Numeric digits zero through nine inclusive (0-9).
+//
+//	 	   (b)	A decimal point ('.') for floating point
+//	 	   		numbers.
+//
+//	 	   (c)	A leading minus sign ('-') in the case of
+//	 	   		negative numeric values.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	float64
+//
+//		If this method completes successfully, the pure
+//		number string passed as input value 'pureNumStr'
+//		will be converted and returned as a float64
+//		floating point value.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (mathFloatHelper *MathFloatHelper) NativeNumStrToFloat64(
+	nativeNumStr string,
+	errorPrefix interface{}) (
+	float64,
+	error) {
+
+	if mathFloatHelper.lock == nil {
+		mathFloatHelper.lock = new(sync.Mutex)
+	}
+
+	mathFloatHelper.lock.Lock()
+
+	defer mathFloatHelper.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	var float64Num float64
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"MathFloatHelper."+
+			"NativeNumStrToFloat64()",
+		"")
+
+	if err != nil {
+
+		return float64Num, err
+	}
+
+	return new(mathFloatHelperBoson).
+		pureNumStrToFloat64(
+			nativeNumStr,
+			ePrefix.XCpy(
+				"nativeNumStr"))
 }
 
 //	PureNumStrToBigFloatDto
@@ -1763,192 +2543,6 @@ func (mathFloatHelper *MathFloatHelper) PureNumStrToBigFloatDto(
 			precisionBitsOverride,
 			roundingMode,
 			ePrefix)
-}
-
-//	PureNumStrToFloat64
-//
-//	Receives a pure number string and converts that
-//	string to a float64 floating point value.
-//
-//	The input parameter 'pureNumStr' must be formatted
-//	as a pure number string which is defined as follows:
-//
-//		1.	The pure number string must consist entirely
-//			of numeric digit characters (0-9), with
-//			following exceptions.
-//
-//		2.	For floating point values, the pure number
-//			string must separate integer and fractional
-//			digits with a decimal point ('.').
-//
-//		3.	The pure number string must designate
-//			negative values with a leading minus sign
-//			('-').
-//
-//		4.	The pure number string must NOT include integer
-//			separators such as commas (',') to separate
-//			integer digits by thousands.
-//
-//						  NOT THIS: 1,000,000
-//				Pure Number String: 1000000
-//
-//	If the input parameter 'pureNumStr' does NOT meet these
-//	criteria, an error will be returned.
-//
-// ----------------------------------------------------------------
-//
-// # Input Parameters
-//
-//	pureNumStr					string
-//
-//		This string contains the pure number string which
-//		will be parsed to produce and return a big.Float
-//		value.
-//
-//		The input parameter 'pureNumStr' must be formatted
-//		as a pure number string which is defined as follows:
-//
-//			1.	The pure number string must consist entirely
-//				of numeric digit characters (0-9), with
-//				following exceptions.
-//
-//			2.	For floating point values, the pure number
-//				string must separate integer and fractional
-//				digits with a decimal point ('.').
-//
-//			3.	The pure number string must designate
-//				negative values with a leading minus sign
-//				('-').
-//
-//			4.	The pure number string must NOT include integer
-//				separators such as commas (',') to separate
-//				integer digits by thousands.
-//
-//							  NOT THIS: 1,000,000
-//					Pure Number String: 1000000
-//
-//		If the input parameter 'pureNumStr' does NOT meet these
-//		criteria, an error will be returned.
-//
-//	errorPrefix					interface{}
-//
-//		This object encapsulates error prefix text which
-//		is included in all returned error messages.
-//		Usually, it contains the name of the calling
-//		method or methods listed as a method or function
-//		chain of execution.
-//
-//		If no error prefix information is needed, set this
-//		parameter to 'nil'.
-//
-//		This empty interface must be convertible to one of
-//		the following types:
-//
-//		1.	nil
-//				A nil value is valid and generates an
-//				empty collection of error prefix and
-//				error context information.
-//
-//		2.	string
-//				A string containing error prefix
-//				information.
-//
-//		3.	[]string
-//				A one-dimensional slice of strings
-//				containing error prefix information.
-//
-//		4.	[][2]string
-//				A two-dimensional slice of strings
-//		   		containing error prefix and error
-//		   		context information.
-//
-//		5.	ErrPrefixDto
-//				An instance of ErrPrefixDto.
-//				Information from this object will
-//				be copied for use in error and
-//				informational messages.
-//
-//		6.	*ErrPrefixDto
-//				A pointer to an instance of
-//				ErrPrefixDto. Information from
-//				this object will be copied for use
-//				in error and informational messages.
-//
-//		7.	IBasicErrorPrefix
-//				An interface to a method
-//				generating a two-dimensional slice
-//				of strings containing error prefix
-//				and error context information.
-//
-//		If parameter 'errorPrefix' is NOT convertible
-//		to one of the valid types listed above, it will
-//		be considered invalid and trigger the return of
-//		an error.
-//
-//		Types ErrPrefixDto and IBasicErrorPrefix are
-//		included in the 'errpref' software package:
-//			"github.com/MikeAustin71/errpref".
-//
-// ----------------------------------------------------------------
-//
-// # Return Values
-//
-//	float64
-//
-//		If this method completes successfully, the pure
-//		number string passed as input value 'pureNumStr'
-//		will be converted and returned as a float64
-//		floating point value.
-//
-//	error
-//
-//		If this method completes successfully, the
-//		returned error Type is set equal to 'nil'.
-//
-//		If errors are encountered during processing, the
-//		returned error Type will encapsulate an error
-//		message. This returned error message will
-//		incorporate the method chain and text passed by
-//		input parameter, 'errorPrefix'. The 'errorPrefix'
-//		text will be attached to the beginning of the
-//		error message.
-func (mathFloatHelper *MathFloatHelper) PureNumStrToFloat64(
-	pureNumStr string,
-	errorPrefix interface{}) (
-	float64,
-	error) {
-
-	if mathFloatHelper.lock == nil {
-		mathFloatHelper.lock = new(sync.Mutex)
-	}
-
-	mathFloatHelper.lock.Lock()
-
-	defer mathFloatHelper.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-
-	var err error
-
-	var float64Num float64
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
-		"MathFloatHelper."+
-			"PureNumStrToFloat64()",
-		"")
-
-	if err != nil {
-
-		return float64Num, err
-	}
-
-	return new(mathFloatHelperBoson).
-		pureNumStrToFloat64(
-			pureNumStr,
-			ePrefix.XCpy(
-				"pureNumStr"))
 }
 
 //	RaiseToFloatPositiveExponent

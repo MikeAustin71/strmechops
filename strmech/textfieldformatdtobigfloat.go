@@ -1432,53 +1432,78 @@ func (textBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat) FmtNumStrDefault(
 				"textBigFloatFieldFmtDto"))
 }
 
-//	FmtNumStrNative
+// FmtNumStrNative
 //
-//	Extracts the specifications necessary to format and
-//	return a floating point native number string from
-//	the current instance of TextFieldFormatDtoBigFloat.
+// Returns a native number string containing the numeric
+// value specified by the current instance of
+// TextFieldFormatDtoBigFloat.
 //
-//	A native number string is generated using the
-//	Text function from the Golang 'big' package or
-//	library ('big.Float.Text()'). Formatting options are
-//	therefore limited.
+// The term 'Native' applies in the sense that the number
+// string format is designed to interoperate with the
+// Golang programming language library functions and
+// packages. Types like 'strconv', 'strings', 'math' and
+// 'big' (big.Int, big.Float, big.Rat) routinely parse
+// and convert this type of number string to numeric
+// values. In addition, Native Number Strings are
+// frequently consumed by external library functions such
+// as this one (String Mechanics 'strmech') to convert
+// strings to numeric values and numeric values to
+// strings.
 //
-//	The floating point native number string returned
-//	by this method will therefore:
+// While this format is inconsistent with many national
+// and cultural formatting conventions, number strings
+// which fail to implement this standardized formatting
+// protocol will generate errors in some Golang library
+// functions.
 //
-//	 1.	Consist entirely of numeric digit characters with
-//		the following exceptions.
+// The 'Native' Number String returned by this method
+// implements a standardized format defined as follows:
 //
-//	 2.	Separate integer and fractional digits with a
-//		decimal point ('.').
+//  1. A Native Number String Consists of numeric
+//     character digits zero through nine inclusive
+//     (0-9).
 //
-//	 3.	Designate negative values with a leading minus
-//		sign ('-').
+//  2. A Native Number String will include a period
+//     or decimal point ('.') to separate integer and
+//     fractional digits within a number string.
 //
-//	 4.	NOT include integer separators such as commas
-//		(',') to separate integer digits by thousands.
+//     Native Number String Floating Point Value:
+//     123.1234
 //
-//							NOT THIS: 1,000,000
-//				Native Number String: 1000000
+//  3. A Native Number String will always format
+//     negative numeric values with a leading minus sign
+//     ('-').
+//
+//     Native Number String Negative Value:
+//     -123.2
+//
+//  4. A Native Number String WILL NEVER include integer
+//     separators such as commas (',') to separate
+//     integer digits by thousands.
+//
+//     NOT THIS: 1,000,000
+//     Native Number String: 1000000
+//
+//  5. Native Number Strings will only consist of:
+//
+//     (a)	Numeric digits zero through nine inclusive (0-9).
+//
+//     (b)	A decimal point ('.') for floating point
+//     numbers.
+//
+//     (c)	A leading minus sign ('-') in the case of
 //
 // ----------------------------------------------------------------
 //
 // # BE ADVISED
 //
-//  1. Native number strings Do NOT include integer
-//     separators (i.e. commas ',') to separate integer
-//     number strings into thousands.
-//
-//     NOT THIS: 1,000,000
-//     Native Number String: 1000000
-//
-//  2. Note that the placement of the leading minus sign
+//  1. Note that the placement of the leading minus sign
 //     is fixed and completely controlled by the Golang
 //     'big' package. Trailing minus signs are therefore
 //     NOT supported. Only Leading minus signs will be
 //     presented for negative numeric values.
 //
-//  3. The type of Rounding algorithm applied when
+//  2. The type of Rounding algorithm applied when
 //     generating a native number string is controlled
 //     by the Mode parameter contained in the current
 //     instance of TextFieldFormatDtoBigFloat. The member variable
@@ -1486,7 +1511,7 @@ func (textBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat) FmtNumStrDefault(
 //
 //     TextFieldFormatDtoBigFloat.NativeRoundingMode
 //
-//  4. The number of decimal digits to the right of the
+//  3. The number of decimal digits to the right of the
 //     decimal point returned in a native number string
 //     is controlled by the 'TextFieldFormatDtoBigFloat'
 //     parameter 'NumOfFractionalDigits'. If this
@@ -1565,27 +1590,61 @@ func (textBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat) FmtNumStrDefault(
 //
 //		If this method completes successfully, this
 //		string parameter will return a floating point
-//		native number string representation of the
+//		Native Number String representation of the
 //		big.Float value contained in the current instance
 //		of TextFieldFormatDtoBigFloat.
 //
+//		The term 'Native' applies in the sense that the
+//		number string format is designed to interoperate
+//		with the Golang programming language library
+//		functions and packages. Types like 'strconv',
+//		'strings', 'math' and 'big' (big.Int, big.Float,
+//		big.Rat) routinely parse and convert this type of
+//		number string to generate numeric values. In
+//		addition, Native Number Strings are frequently
+//		consumed by external library functions such	as
+//		this one (String Mechanics 'strmech') to convert
+//		strings to numeric values and numeric values to
+//		strings.
+//
 //		The returned floating point native number string
-//		will:
+//		will conform to the formatting criteria defined
+//		below:
 //
-//		1.	Consist entirely of numeric digit characters
-//			with the following exceptions.
+//	 	1. A Native Number String Consists of numeric
+//	 	   character digits zero through nine inclusive
+//	 	   (0-9).
 //
-//		2.	Separate integer and fractional digits with a
-//			decimal point ('.').
+//	 	2. A Native Number String will include a period
+//	 	   or decimal point ('.') to separate integer and
+//	 	   fractional digits within a number string.
 //
-//		3.	Designate negative values with a leading minus
-//			sign ('-').
+//	 	   Native Number String Floating Point Value:
+//	 	   			123.1234
 //
-//		4.	NOT include integer separators such as commas
-//			(',') to separate integer digits by thousands.
+//	 	3. A Native Number String will always format
+//	 	   negative numeric values with a leading minus sign
+//	 	   ('-').
 //
-//							NOT THIS: 1,000,000
-//				Native Number String: 1000000
+//	 	   Native Number String Negative Value:
+//	 	   			-123.2
+//
+//	 	4. A Native Number String WILL NEVER include integer
+//	 	   separators such as commas (',') to separate
+//	 	   integer digits by thousands.
+//
+//	 	   					NOT THIS: 1,000,000
+//	 	   		Native Number String: 1000000
+//
+//	 	5. Native Number Strings will only consist of:
+//
+//	 	   (a)	Numeric digits zero through nine inclusive (0-9).
+//
+//	 	   (b)	A decimal point ('.') for floating point
+//	 	   		numbers.
+//
+//	 	   (c)	A leading minus sign ('-') in the case of
+//	 	   		negative numeric values.
 //
 //	error
 //
@@ -2973,7 +3032,7 @@ func (textBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat) IsValidInstanceError(
 	return err
 }
 
-//	SetFromPureNumStr
+//	SetFromNativeNumStr
 //
 //	Receives and converts pure number string to a
 //	big.Float floating point numeric value which is then
@@ -3148,7 +3207,7 @@ func (textBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat) SetFromPureNumStr(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"TextFieldFormatDtoBigFloat."+
-			"SetFromPureNumStr()",
+			"SetFromNativeNumStr()",
 		"")
 
 	if err != nil {
@@ -3158,7 +3217,7 @@ func (textBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat) SetFromPureNumStr(
 	var bFloat big.Float
 
 	bFloat,
-		err = new(MathFloatHelper).PureNumStrToBigFloat(
+		err = new(MathFloatHelper).NativeNumStrToBigFloat(
 		pureNumStr,
 		textBigFloatFieldFmtDto.NativeRoundingMode,
 		ePrefix.XCpy(

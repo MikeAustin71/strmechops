@@ -261,8 +261,9 @@ func (nStrHelperAtom *numStrHelperAtom) dirtyToNativeNumRunes(
 	if dirtyNumberRunes == nil {
 
 		err = fmt.Errorf("%v\n"+
-			"ERROR: Input parameter 'dirtyNumberRunes' is a nil pointer!\n",
-			ePrefix.String())
+			"ERROR: Input parameter '%v' is a nil pointer!\n",
+			ePrefix.String(),
+			dirtyNumberRunesLabel)
 
 		return nativeNumStr, err
 	}
@@ -317,6 +318,8 @@ func (nStrHelperAtom *numStrHelperAtom) dirtyToNativeNumRunes(
 	var foundNegNumSymbol, foundLeadingParen,
 		foundFirstNumericDigit, foundDecimalSep bool
 
+	numOfNumericDigits := 0
+
 	for i := 0; i < lenOfDirtyNumRunes; i++ {
 
 		if dirtyNumberRunes.CharsArray[i] >= '0' &&
@@ -328,6 +331,8 @@ func (nStrHelperAtom *numStrHelperAtom) dirtyToNativeNumRunes(
 					dirtyNumberRunes.CharsArray[i])
 
 			foundFirstNumericDigit = true
+
+			numOfNumericDigits++
 
 			continue
 		}
@@ -428,6 +433,18 @@ func (nStrHelperAtom *numStrHelperAtom) dirtyToNativeNumRunes(
 
 		}
 
+	}
+
+	if numOfNumericDigits == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter '%v' contains zero numeric digits!\n"+
+			"%v must contain at least one numeric character digit (0-9).\n",
+			ePrefix.String(),
+			dirtyNumberRunesLabel,
+			dirtyNumberRunesLabel)
+
+		return nativeNumStr, err
 	}
 
 	if foundNegNumSymbol {

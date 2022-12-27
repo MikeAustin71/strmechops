@@ -457,7 +457,7 @@ func (nStrMathQuark *numStrMathQuark) pureNumStrToRunes(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"mathIntHelperAtom."+
+		"numStrMathQuark."+
 			"pureNumStrToRunes()",
 		"")
 
