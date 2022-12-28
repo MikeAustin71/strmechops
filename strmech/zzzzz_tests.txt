@@ -17,7 +17,7 @@
 === RUN   TestCharacterSearchType_XValueInt_000300
 --- PASS: TestCharacterSearchType_XValueInt_000300 (0.00s)
 === RUN   TestCharSearchTerminationType_XValueInt_000100
---- PASS: TestCharSearchTerminationType_XValueInt_000100 (0.01s)
+--- PASS: TestCharSearchTerminationType_XValueInt_000100 (0.00s)
 === RUN   TestCharSearchTerminationType_XReturnNoneIfInvalid_000200
 --- PASS: TestCharSearchTerminationType_XReturnNoneIfInvalid_000200 (0.00s)
 === RUN   TestCharSearchTerminationType_XValueInt_000300
@@ -149,7 +149,7 @@
 === RUN   TestMathHelper_NumericValueToNativeNumStr_000800
 --- PASS: TestMathHelper_NumericValueToNativeNumStr_000800 (0.00s)
 === RUN   TestMathHelper_NumericValueToNativeNumStr_000900
---- PASS: TestMathHelper_NumericValueToNativeNumStr_000900 (0.01s)
+--- PASS: TestMathHelper_NumericValueToNativeNumStr_000900 (0.00s)
 === RUN   TestMathHelper_NumericValueToNativeNumStr_001000
 --- PASS: TestMathHelper_NumericValueToNativeNumStr_001000 (0.00s)
 === RUN   TestMathHelper_NumericValueToNativeNumStr_001100
@@ -172,6 +172,8 @@
 --- PASS: TestMathHelper_NativeNumStrToNumericValue_0000600 (0.00s)
 === RUN   TestMathHelper_NativeNumStrToNumericValue_0000700
 --- PASS: TestMathHelper_NativeNumStrToNumericValue_0000700 (0.04s)
+=== RUN   TestMathHelper_NativeNumStrToNumericValue_0000800
+--- PASS: TestMathHelper_NativeNumStrToNumericValue_0000800 (0.00s)
 === RUN   TestNumberStrKernel_Compare_000100
 --- PASS: TestNumberStrKernel_Compare_000100 (0.00s)
 === RUN   TestNumberStrKernel_DeleteLeadingTrailingFractionalChars_000100
@@ -197,7 +199,7 @@
 === RUN   TestNumberStrKernel_FmtSignedSimpleNumber_000200
 --- PASS: TestNumberStrKernel_FmtSignedSimpleNumber_000200 (0.00s)
 === RUN   TestNumberStrKernel_FmtSignedPureNumberStr_000100
---- PASS: TestNumberStrKernel_FmtSignedPureNumberStr_000100 (0.01s)
+--- PASS: TestNumberStrKernel_FmtSignedPureNumberStr_000100 (0.00s)
 === RUN   TestNumberStrKernel_RoundNoRounding_000100
 --- PASS: TestNumberStrKernel_RoundNoRounding_000100 (0.01s)
 === RUN   TestNumberStrKernel_RoundHalfUpWithNegNums_000200
@@ -1753,7 +1755,7 @@
 === RUN   TestTextLineSpecLinesCollection_CopyIn_000100
 --- PASS: TestTextLineSpecLinesCollection_CopyIn_000100 (0.00s)
 === RUN   TestTextLineSpecLinesCollection_CopyOut_000100
---- PASS: TestTextLineSpecLinesCollection_CopyOut_000100 (0.01s)
+--- PASS: TestTextLineSpecLinesCollection_CopyOut_000100 (0.00s)
 === RUN   TestTextLineSpecLinesCollection_DeleteTextLineMember_000100
 --- PASS: TestTextLineSpecLinesCollection_DeleteTextLineMember_000100 (0.03s)
 === RUN   TestTextLineSpecLinesCollection_Empty_000100
@@ -1797,15 +1799,15 @@
 === RUN   TestTextLineSpecLinesCollection_PopFirstTextLine_000100
 --- PASS: TestTextLineSpecLinesCollection_PopFirstTextLine_000100 (0.03s)
 === RUN   TestTextLineSpecLinesCollection_PopLastTextLine_000100
---- PASS: TestTextLineSpecLinesCollection_PopLastTextLine_000100 (0.04s)
+--- PASS: TestTextLineSpecLinesCollection_PopLastTextLine_000100 (0.03s)
 === RUN   TestTextLineSpecLinesCollection_PopTextLine_000100
---- PASS: TestTextLineSpecLinesCollection_PopTextLine_000100 (0.10s)
+--- PASS: TestTextLineSpecLinesCollection_PopTextLine_000100 (0.08s)
 === RUN   TestTextLineSpecLinesCollection_ReplaceTextLine_000100
---- PASS: TestTextLineSpecLinesCollection_ReplaceTextLine_000100 (0.07s)
+--- PASS: TestTextLineSpecLinesCollection_ReplaceTextLine_000100 (0.05s)
 === RUN   TestTextLineSpecLinesCollection_SetTextLineCollection_000100
 --- PASS: TestTextLineSpecLinesCollection_SetTextLineCollection_000100 (0.09s)
 === RUN   TestTextLineSpecLinesCollectionAtom_emptyCollection_000100
---- PASS: TestTextLineSpecLinesCollectionAtom_emptyCollection_000100 (0.01s)
+--- PASS: TestTextLineSpecLinesCollectionAtom_emptyCollection_000100 (0.00s)
 === RUN   TestTextLineSpecLinesCollectionAtom_equalCollections_000100
 --- PASS: TestTextLineSpecLinesCollectionAtom_equalCollections_000100 (0.02s)
 === RUN   TestTextLineSpecLinesCollectionAtom_insertTextLine_000100
@@ -2065,7 +2067,7 @@
 === RUN   TestTextLineSpecSolidLine_getFormattedText_000100
 --- PASS: TestTextLineSpecSolidLine_getFormattedText_000100 (0.01s)
 === RUN   TestTextLineSpecSolidLine_testValidityOfTextSpecSolidLine_000100
---- PASS: TestTextLineSpecSolidLine_testValidityOfTextSpecSolidLine_000100 (0.00s)
+--- PASS: TestTextLineSpecSolidLine_testValidityOfTextSpecSolidLine_000100 (0.01s)
 === RUN   TestTextLineSpecSolidLine_setTxtSolidLine_000100
 --- PASS: TestTextLineSpecSolidLine_setTxtSolidLine_000100 (0.01s)
 === RUN   TestTextLineSpecSolidLine_setTxtSolidLine_000200
@@ -2243,7 +2245,7 @@
 === RUN   TestTextLineSpecStandardLine_SetStandardLineAllParms_000100
 --- PASS: TestTextLineSpecStandardLine_SetStandardLineAllParms_000100 (0.01s)
 === RUN   TestTextLineSpecStandardLine_SetTextFields_000100
---- PASS: TestTextLineSpecStandardLine_SetTextFields_000100 (0.00s)
+--- PASS: TestTextLineSpecStandardLine_SetTextFields_000100 (0.01s)
 === RUN   TestTextLineSpecStandardLine_String_000100
 --- PASS: TestTextLineSpecStandardLine_String_000100 (0.00s)
 === RUN   TestTextLineSpecStandardLine_TextBuilder_000100
@@ -2471,13 +2473,13 @@
 === RUN   TestTextLineSpecTimerLinesNanobot_copyIn_000100
 --- PASS: TestTextLineSpecTimerLinesNanobot_copyIn_000100 (0.00s)
 === RUN   TestTextLineSpecTimerLinesNanobot_copyOut_000100
---- PASS: TestTextLineSpecTimerLinesNanobot_copyOut_000100 (0.01s)
+--- PASS: TestTextLineSpecTimerLinesNanobot_copyOut_000100 (0.00s)
 === RUN   TestTextLineSpecTimerLinesPreon_getMaximumOutputTimerLineLen_000100
 --- PASS: TestTextLineSpecTimerLinesPreon_getMaximumOutputTimerLineLen_000100 (0.00s)
 === RUN   TestTextLineSpecTimerLinesPreon_getMaximumTimerLabelLen_000100
 --- PASS: TestTextLineSpecTimerLinesPreon_getMaximumTimerLabelLen_000100 (0.00s)
 === RUN   TestTextLineTitleMarqueeDto_AddTitleLineStrArrayDtos_000100
---- PASS: TestTextLineTitleMarqueeDto_AddTitleLineStrArrayDtos_000100 (0.04s)
+--- PASS: TestTextLineTitleMarqueeDto_AddTitleLineStrArrayDtos_000100 (0.02s)
 PASS
-coverage: 52.4% of statements
-ok  	github.com/MikeAustin71/strmechops/strmech	1.848s
+coverage: 52.5% of statements
+ok  	github.com/MikeAustin71/strmechops/strmech	2.215s

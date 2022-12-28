@@ -2916,3 +2916,102 @@ func TestMathHelper_NativeNumStrToNumericValue_0000700(t *testing.T) {
 
 	return
 }
+
+func TestMathHelper_NativeNumStrToNumericValue_0000800(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestMathHelper_NativeNumStrToNumericValue_0000800()",
+		"")
+
+	expectedStr := "122"
+
+	testName := fmt.Sprintf("Test #1 int8 - int8Num = (%v)\n",
+		expectedStr)
+
+	int8Num := int8(0)
+
+	var err error
+
+	err = new(MathHelper).NativeNumStrToNumericValue(
+		expectedStr,
+		&int8Num,
+		ePrefix.XCpy(
+			"#1 int8Num<-expectedStr"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var actualNumStr string
+
+	actualNumStr = strconv.FormatInt(int64(int8Num), 10)
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if actualNumStr != expectedStr {
+
+		t.Errorf("\n%v\n"+
+			"%v\n"+
+			"Error: actualNumStr != expectedStr\n"+
+			"actualNumStr  = '%v'\n"+
+			"expectedStr   = '%v'\n",
+			ePrefix.String(),
+			testName,
+			actualNumStr,
+			expectedStr)
+
+		return
+
+	}
+
+	expectedStr = "-122"
+	int8Num = 0
+
+	testName = fmt.Sprintf("Test #2 Negative Number int8 - "+
+		"int8Num = (%v)\n",
+		expectedStr)
+
+	err = new(MathHelper).NativeNumStrToNumericValue(
+		expectedStr,
+		&int8Num,
+		ePrefix.XCpy(
+			"#2 int8Num<-expectedStr"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	actualNumStr = strconv.FormatInt(int64(int8Num), 10)
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if actualNumStr != expectedStr {
+
+		t.Errorf("\n%v\n"+
+			"%v\n"+
+			"Error: actualNumStr != expectedStr\n"+
+			"actualNumStr  = '%v'\n"+
+			"expectedStr   = '%v'\n",
+			ePrefix.String(),
+			testName,
+			actualNumStr,
+			expectedStr)
+
+		return
+
+	}
+
+	return
+}
