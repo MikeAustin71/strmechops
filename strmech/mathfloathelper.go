@@ -2349,8 +2349,9 @@ func (mathFloatHelper *MathFloatHelper) NativeNumStrToFloat64(
 //		big.ToNegativeInf       // == IEEE 754-2008 roundTowardNegative
 //		big.ToPositiveInf       // == IEEE 754-2008 roundTowardPositive
 //
-//		If in doubt as this setting, 'big.AwayFromZero' or
-//		'big.ToNearestEven' are common selections for rounding mode.
+//		If in doubt as to this setting, 'big.ToNearestEven'
+//		is the default since its enumeration value is zero.
+//
 //
 //	errPrefDto					*ePref.ErrPrefixDto
 //

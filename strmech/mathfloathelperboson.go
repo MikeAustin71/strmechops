@@ -178,8 +178,8 @@ type mathFloatHelperBoson struct {
 //		big.ToNegativeInf       // == IEEE 754-2008 roundTowardNegative
 //		big.ToPositiveInf       // == IEEE 754-2008 roundTowardPositive
 //
-//		If in doubt as this setting, 'big.AwayFromZero' is a
-//		common selection for rounding mode.
+//		If in doubt as to this setting, 'big.ToNearestEven'
+//		is the default since its enumeration value is zero.
 //
 //	errPrefDto					*ePref.ErrPrefixDto
 //
