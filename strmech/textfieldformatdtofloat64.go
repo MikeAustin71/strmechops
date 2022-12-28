@@ -2934,41 +2934,68 @@ func (txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64) IsValidInstanceError(
 	return err
 }
 
-//	SetFromNativeNumStr
+// SetFromNativeNumStr
 //
-//	Receives and converts a Native Number String to a
-//	float64 floating point numeric value which is then
-//	assigned to the float64 value encapsulated in the
-//	current instance of TextFieldFormatDtoFloat64.
+// Receives and converts a Native Number String to a
+// float64 floating point numeric value which is then
+// assigned to the float64 value encapsulated in the
+// current instance of TextFieldFormatDtoFloat64.
 //
-//	The parsed float64 value extracted from the Native
-//	Number String will be stored in the member variable:
+// The parsed float64 value extracted from the Native
+// Number String will be stored in the member variable:
 //
-//		TextFieldFormatDtoFloat64.Float64Num
+//	TextFieldFormatDtoFloat64.Float64Num
 //
-//	The input parameter 'pureNumStr' must be formatted as
-//	a pure number string in accordance with the following
-//	criteria:
+// The input parameter 'nativeNumStr' must be formatted
+// as a Native Number String in accordance with the
+// following criteria:
 //
-//		1.	The pure number string must consist entirely
-//			of numeric digit characters (0-9), with the
-//			following exceptions.
+//  1. A Native Number String Consists of numeric
+//     character digits zero through nine inclusive
+//     (0-9).
 //
-//		2.	For floating point values, the pure number
-//			string must separate integer and fractional
-//			digits with a decimal point ('.').
+//  2. A Native Number String will include a period
+//     or decimal point ('.') to separate integer and
+//     fractional digits within a number string.
 //
-//		3.	The pure number string must designate
-//			negative values with a leading minus sign
-//			('-'). Trailing minus signs are NOT
-//			supported.
+//     Native Number String Floating Point Value:
+//     123.1234
 //
-//		4.	The pure number string must NOT include integer
-//			separators such as commas (',') to separate
-//			integer digits by thousands.
+//  3. A Native Number String will always format
+//     negative numeric values with a leading minus sign
+//     ('-').
 //
-//						  NOT THIS: 1,000,000
-//				Pure Number String: 1000000
+//     Native Number String Negative Value:
+//     -123.2
+//
+//  4. A Native Number String WILL NEVER include integer
+//     separators such as commas (',') to separate
+//     integer digits by thousands.
+//
+//     NOT THIS: 1,000,000
+//     Native Number String: 1000000
+//
+//  5. Native Number Strings will only consist of:
+//
+//     (a)	Numeric digits zero through nine inclusive (0-9).
+//
+//     (b)	A decimal point ('.') for floating point
+//     numbers.
+//
+//     (c)	A leading minus sign ('-') in the case of
+//     negative numeric values.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	If the Native Number String ('nativeNumStr') fails to
+//	comply with Native Number String formatting
+//	requirements try the following method as a means of
+//	converting a 'dirty' number string to a valid Native
+//	Number String:
+//
+//			NumStrHelper.DirtyToNativeNumStr()
 //
 // ----------------------------------------------------------------
 //
@@ -2994,32 +3021,59 @@ func (txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64) IsValidInstanceError(
 //
 //			TextFieldFormatDtoFloat64.Float64Num
 //
-//		The input parameter 'nativeNumStr' must be formatted
-//		as a pure number in accordance with the following
-//		criteria:
+//		The term 'Native' means that the number string
+//		format is designed to interoperate with the
+//		Golang programming language library functions and
+//		packages. Types like 'strconv', 'strings', 'math'
+//		and 'big' (big.Int, big.Float, big.Rat) routinely
+//		parse and convert this type of number string to
+//		generate numeric values. In addition, Native
+//		Number Strings are frequently consumed by
+//		external library functions such	as this one
+//		(String Mechanics 'strmech') to convert strings
+//		to numeric values and numeric values to strings.
 //
-//			1.	The pure number string must consist entirely
-//				of numeric digit characters (0-9), with
-//				following exceptions.
+//		If 'nativeNumStr' fails to meet the formatting
+//		criteria for a Native Number String, an error
+//		will be returned.
 //
-//			2.	For floating point values, the pure number
-//				string must separate integer and fractional
-//				digits with a decimal point ('.').
+//		A valid Native Number String must conform to the
+//		standardized formatting criteria defined below:
 //
-//			3.	The pure number string must designate
-//				negative values with a leading minus sign
-//				('-'). Trailing minus signs are NOT
-//				supported.
+//	 	1. A Native Number String Consists of numeric
+//	 	   character digits zero through nine inclusive
+//	 	   (0-9).
 //
-//			4.	The pure number string must NOT include integer
-//				separators such as commas (',') to separate
-//				integer digits by thousands.
+//	 	2. A Native Number String will include a period
+//	 	   or decimal point ('.') to separate integer and
+//	 	   fractional digits within a number string.
 //
-//							  NOT THIS: 1,000,000
-//					Pure Number String: 1000000
+//	 	   Native Number String Floating Point Value:
+//	 	   				123.1234
 //
-//		If the input parameter 'pureNumStr' does NOT meet these
-//		criteria, an error will be returned.
+//	 	3. A Native Number String will always format
+//	 	   negative numeric values with a leading minus sign
+//	 	   ('-').
+//
+//	 	   Native Number String Negative Value:
+//	 	   				-123.2
+//
+//	 	4. A Native Number String WILL NEVER include integer
+//	 	   separators such as commas (',') to separate
+//	 	   integer digits by thousands.
+//
+//	 	   					NOT THIS: 1,000,000
+//	 	   		Native Number String: 1000000
+//
+//	 	5. Native Number Strings will only consist of:
+//
+//	 	   (a)	Numeric digits zero through nine inclusive (0-9).
+//
+//	 	   (b)	A decimal point ('.') for floating point
+//	 	   		numbers.
+//
+//	 	   (c)	A leading minus sign ('-') in the case of
+//	 	   		negative numeric values.
 //
 //	errorPrefix					interface{}
 //

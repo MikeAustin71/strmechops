@@ -3032,85 +3032,138 @@ func (textBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat) IsValidInstanceError(
 	return err
 }
 
-//	SetFromNativeNumStr
+// SetFromNativeNumStr
 //
-//	Receives and converts pure number string to a
-//	big.Float floating point numeric value which is then
-//	assigned to the big.Flat value encapsulated in the
-//	current instance of TextFieldFormatDtoFloat64.
+// Receives and converts a Native Number String to a
+// big.Float floating point numeric value which is then
+// assigned to the big.Flat value encapsulated in the
+// current instance of TextFieldFormatDtoFloat64.
 //
-//	The parsed big.Float value extracted from the pure
-//	number string will be stored in the member variable:
+// The parsed big.Float value extracted from the pure
+// number string will be stored in the member variable:
 //
-//		TextFieldFormatDtoBigFloat.BigFloatNum
+//	TextFieldFormatDtoBigFloat.BigFloatNum
 //
+// The input parameter 'nativeNumStr' must be formatted
+// as a Native Number String in accordance with the
+// following criteria:
 //
-//	The input parameter 'pureNumStr' must be formatted as
-//	a pure number string in accordance with the following
-//	criteria:
+//  1. A Native Number String Consists of numeric
+//     character digits zero through nine inclusive
+//     (0-9).
 //
-//		1.	The pure number string must consist entirely
-//			of numeric digit characters (0-9), with the
-//			following exceptions.
+//  2. A Native Number String will include a period
+//     or decimal point ('.') to separate integer and
+//     fractional digits within a number string.
 //
-//		2.	For floating point values, the pure number
-//			string must separate integer and fractional
-//			digits with a decimal point ('.').
+//     Native Number String Floating Point Value:
+//     123.1234
 //
-//		3.	The pure number string must designate
-//			negative values with a leading minus sign
-//			('-'). Trailing minus signs are NOT
-//			supported.
+//  3. A Native Number String will always format
+//     negative numeric values with a leading minus sign
+//     ('-').
 //
-//		4.	The pure number string must NOT include integer
-//			separators such as commas (',') to separate
-//			integer digits by thousands.
+//     Native Number String Negative Value:
+//     -123.2
 //
-//						  NOT THIS: 1,000,000
-//				Pure Number String: 1000000
+//  4. A Native Number String WILL NEVER include integer
+//     separators such as commas (',') to separate
+//     integer digits by thousands.
+//
+//     NOT THIS: 1,000,000
+//     Native Number String: 1000000
+//
+//  5. Native Number Strings will only consist of:
+//
+//     (a)	Numeric digits zero through nine inclusive (0-9).
+//
+//     (b)	A decimal point ('.') for floating point
+//     numbers.
+//
+//     (c)	A leading minus sign ('-') in the case of
+//     negative numeric values.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	If the Native Number String ('nativeNumStr') fails to
+//	comply with Native Number String formatting
+//	requirements try the following method as a means of
+//	converting a 'dirty' number string to a valid Native
+//	Number String:
+//
+//			NumStrHelper.DirtyToNativeNumStr()
 //
 // ----------------------------------------------------------------
 //
 // # Input Parameters
 //
-//	pureNumStr					string
+//	nativeNumStr				string
 //
-//		This string contains the pure number string which
-//		will be parsed to produce and store a big.Float
-//		numeric value in the current instance of
-//		TextFieldFormatDtoBigFloat.
+//		This string contains the Native Number String
+//		which will be parsed to produce and store a
+//		big.Float numeric value in the current instance
+//		of TextFieldFormatDtoBigFloat.
 //
 //		The parsed big.Float value will be stored in the
 //		member variable:
 //
 //			TextFieldFormatDtoBigFloat.BigFloatNum
 //
-//		The input parameter 'pureNumStr' must be formatted
-//		as a pure number in accordance with the following
-//		criteria:
+//		The term 'Native' means that the number string
+//		format is designed to interoperate with the
+//		Golang programming language library functions and
+//		packages. Types like 'strconv', 'strings', 'math'
+//		and 'big' (big.Int, big.Float, big.Rat) routinely
+//		parse and convert this type of number string to
+//		generate numeric values. In addition, Native
+//		Number Strings are frequently consumed by
+//		external library functions such	as this one
+//		(String Mechanics 'strmech') to convert strings
+//		to numeric values and numeric values to strings.
 //
-//			1.	The pure number string must consist entirely
-//				of numeric digit characters (0-9), with
-//				following exceptions.
+//		If 'nativeNumStr' fails to meet the formatting
+//		criteria for a Native Number String, an error
+//		will be returned.
 //
-//			2.	For floating point values, the pure number
-//				string must separate integer and fractional
-//				digits with a decimal point ('.').
+//		A valid Native Number String must conform to the
+//		standardized formatting criteria defined below:
 //
-//			3.	The pure number string must designate
-//				negative values with a leading minus sign
-//				('-'). Trailing minus signs are NOT
-//				supported.
+//	 	1. A Native Number String Consists of numeric
+//	 	   character digits zero through nine inclusive
+//	 	   (0-9).
 //
-//			4.	The pure number string must NOT include integer
-//				separators such as commas (',') to separate
-//				integer digits by thousands.
+//	 	2. A Native Number String will include a period
+//	 	   or decimal point ('.') to separate integer and
+//	 	   fractional digits within a number string.
 //
-//							  NOT THIS: 1,000,000
-//					Pure Number String: 1000000
+//	 	   Native Number String Floating Point Value:
+//	 	   				123.1234
 //
-//		If the input parameter 'pureNumStr' does NOT meet these
-//		criteria, an error will be returned.
+//	 	3. A Native Number String will always format
+//	 	   negative numeric values with a leading minus sign
+//	 	   ('-').
+//
+//	 	   Native Number String Negative Value:
+//	 	   				-123.2
+//
+//	 	4. A Native Number String WILL NEVER include integer
+//	 	   separators such as commas (',') to separate
+//	 	   integer digits by thousands.
+//
+//	 	   					NOT THIS: 1,000,000
+//	 	   		Native Number String: 1000000
+//
+//	 	5. Native Number Strings will only consist of:
+//
+//	 	   (a)	Numeric digits zero through nine inclusive (0-9).
+//
+//	 	   (b)	A decimal point ('.') for floating point
+//	 	   		numbers.
+//
+//	 	   (c)	A leading minus sign ('-') in the case of
+//	 	   		negative numeric values.
 //
 //	errorPrefix					interface{}
 //
@@ -3187,8 +3240,8 @@ func (textBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat) IsValidInstanceError(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (textBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat) SetFromPureNumStr(
-	pureNumStr string,
+func (textBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat) SetFromNativeNumStr(
+	nativeNumStr string,
 	errorPrefix interface{}) error {
 
 	if textBigFloatFieldFmtDto.lock == nil {
@@ -3213,27 +3266,34 @@ func (textBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat) SetFromPureNumStr(
 	if err != nil {
 		return err
 	}
+	/*
+		lenNativeNumStr := len(nativeNumStr)
 
-	var bFloat big.Float
+		numOfExtraDigits := int64(2)
 
-	bFloat,
+		if lenNativeNumStr > 100 {
+
+			numOfExtraDigits = (int64(lenNativeNumStr) / 10) * 2
+		}
+	*/
+	textBigFloatFieldFmtDto.BigFloatNum,
 		err = new(MathFloatHelper).NativeNumStrToBigFloat(
-		pureNumStr,
-		textBigFloatFieldFmtDto.NativeRoundingMode,
+		nativeNumStr,
+		//numOfExtraDigits,
+		//0,
+		//textBigFloatFieldFmtDto.NativeRoundingMode,
 		ePrefix.XCpy(
-			"bFloat<-pureNumStr"))
+			"bFloat<-nativeNumStr"))
 
 	if err != nil {
 		return err
 	}
 
-	textBigFloatFieldFmtDto.BigFloatNum.Copy(
-		&bFloat)
-
 	return err
 }
 
 /*
+
 func (textBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat) SetFromValue(
 	numericValue interface{},
 	errorPrefix interface{}) error {

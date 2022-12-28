@@ -1345,33 +1345,64 @@ func (mathFloatHelper *MathFloatHelper) PrecisionToDigitsFactor() *big.Float {
 //	 	   (c)	A leading minus sign ('-') in the case of
 //	 	   		negative numeric values.
 //
-//	roundingMode 				big.RoundingMode
+//	errorPrefix					interface{}
 //
-//		Specifies the rounding algorithm which will be
-//		used internally to configure the returned
-//		big.Float value. This parameter is referred to
-//		as 'Mode' in the big.Float documentation.
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
 //
-//		Each instance of big.Float is configured with a
-//		rounding mode. Input parameter 'roundingMode'
-//		controls this configuration for the calculation
-//		and the big.Float value returned by this method.
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
 //
-//		The constant values available for big.Float
-//		rounding mode are listed as follows:
+//		This empty interface must be convertible to one of
+//		the following types:
 //
-//		big.ToNearestEven  		// == IEEE 754-2008 roundTiesToEven
-//		big.ToNearestAway       // == IEEE 754-2008 roundTiesToAway
-//		big.ToZero              // == IEEE 754-2008 roundTowardZero
-//		big.AwayFromZero        // no IEEE 754-2008 equivalent
-//		big.ToNegativeInf       // == IEEE 754-2008 roundTowardNegative
-//		big.ToPositiveInf       // == IEEE 754-2008 roundTowardPositive
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
 //
-//		If in doubt as this setting, 'big.AwayFromZero'
-//		is a common selection for rounding mode. The
-//		default applied by Golang is big.ToNearestEven
-//		simply because the Mode 'enumeration' integer
-//		value is zero.
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
@@ -1398,7 +1429,6 @@ func (mathFloatHelper *MathFloatHelper) PrecisionToDigitsFactor() *big.Float {
 //		error message.
 func (mathFloatHelper *MathFloatHelper) NativeNumStrToBigFloat(
 	nativeNumStr string,
-	roundingMode big.RoundingMode,
 	errorPrefix interface{}) (
 	big.Float,
 	error) {
@@ -1426,12 +1456,37 @@ func (mathFloatHelper *MathFloatHelper) NativeNumStrToBigFloat(
 		return big.Float{}, err
 	}
 
-	return new(mathFloatHelperBoson).
-		pureNumStrToBigFloat(
+	var bigFloatDto BigFloatDto
+
+	bigFloatDto,
+		err = new(mathFloatHelperBoson).
+		bigFloatDtoFromPureNumStr(
 			nativeNumStr,
-			roundingMode,
-			ePrefix.XCpy(
-				"nativeNumStr"))
+			".",
+			true,
+			2,
+			0,
+			big.ToNearestEven,
+			ePrefix)
+
+	if err != nil {
+		return big.Float{}, err
+	}
+
+	bigFloatNum := big.Float{}
+
+	bigFloatNum.Copy(&bigFloatDto.Value)
+
+	return bigFloatNum, err
+
+	/*
+		return new(mathFloatHelperNanobot).
+			nativeNumStrToBigFloat(
+				nativeNumStr,
+				ePrefix.XCpy(
+					"nativeNumStr"))
+	*/
+
 }
 
 // NativeNumStrToBigFloatDto
@@ -2268,13 +2323,16 @@ func (mathFloatHelper *MathFloatHelper) NativeNumStrToFloat64(
 //		complex floating point operations, users have
 //		the option to arbitrarily increase the number
 //		of precision bits by specifying additional
-//		numeric digits via parameter,
+//		precision bits via parameter,
 //		'numOfExtraDigitsBuffer'.
 //
 //		Note: The user has the option of overriding the
 //		automatic precision bits calculation by specifying
 //		a precision bits value directly through parameter,
 //		'precisionBitsOverride'.
+//
+//		Specifying a margin of 5-10 digits per 100-digits
+//		of string length is recommended.
 //
 //	precisionBitsOverride		uint
 //

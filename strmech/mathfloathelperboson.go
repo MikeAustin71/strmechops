@@ -464,71 +464,122 @@ func (floatHelperBoson *mathFloatHelperBoson) bigFloatDtoFromPureNumStr(
 	return bFloatDto, err
 }
 
-//	pureNumStrToBigFloat
+// nativeNumStrToBigFloat
 //
-//	Receives a pure number string ('pureNumStr') and then
-//	converts and returns that string as a big.Float
-//	floating point numeric value.
+// Receives a Native Number String ('nativeNumStr') and
+// then converts and returns that string as a big.Float
+// floating point numeric value.
 //
-//	The input parameter 'pureNumStr' must be formatted
-//	as a pure number string which is defined as follows:
+// The term 'Native' applies in the sense that the number
+// string format is designed to interoperate with the
+// Golang programming language library functions and
+// packages. Types like 'strconv', 'strings', 'math' and
+// 'big' (big.Int, big.Float, big.Rat) routinely parse
+// and convert this type of number string to numeric
+// values. In addition, Native Number Strings are
+// frequently consumed by external library functions such
+// as this one (String Mechanics 'strmech') to convert
+// strings to numeric values and numeric values to
+// strings.
 //
-//		1.	The pure number string must consist entirely
-//			of numeric digit characters (0-9), with
-//			following exceptions.
+// While this format is inconsistent with many national
+// and cultural formatting conventions, number strings
+// which fail to implement this standardized formatting
+// protocol will generate errors in some Golang library
+// functions.
 //
-//		2.	For floating point values, the pure number
-//			string must separate integer and fractional
-//			digits with a decimal point ('.').
+// The input parameter 'nativeNumStr' must be formatted
+// as a Native Number String which is defined as follows:
 //
-//		3.	The pure number string must designate
-//			negative values with a leading minus sign
-//			('-').
+//  1. A Native Number String Consists of numeric
+//     character digits zero through nine inclusive
+//     (0-9).
 //
-//		4.	The pure number string must NOT include integer
-//			separators such as commas (',') to separate
-//			integer digits by thousands.
+//  2. A Native Number String will include a period
+//     or decimal point ('.') to separate integer and
+//     fractional digits within a number string.
 //
-//						  NOT THIS: 1,000,000
-//				Pure Number String: 1000000
+//     Native Number String Floating Point Value:
+//     123.1234
 //
-//	If the input parameter 'pureNumStr' does NOT meet these
-//	criteria, an error will be returned.
+//  3. A Native Number String will always format
+//     negative numeric values with a leading minus sign
+//     ('-').
+//
+//     Native Number String Negative Value:
+//     -123.2
+//
+//  4. A Native Number String WILL NEVER include integer
+//     separators such as commas (',') to separate
+//     integer digits by thousands.
+//
+//     NOT THIS: 1,000,000
+//     Native Number String: 1000000
+//
+//  5. Native Number Strings will only consist of:
+//
+//     (a)	Numeric digits zero through nine inclusive (0-9).
+//
+//     (b)	A decimal point ('.') for floating point
+//     numbers.
+//
+//     (c)	A leading minus sign ('-') in the case of
+//     negative numeric values.
+//
+//     If the input parameter 'nativeNumStr' does NOT meet these
+//     criteria, an error will be returned.
 //
 // ----------------------------------------------------------------
 //
 // # Input Parameters
 //
-//	pureNumStr					string
+//	nativeNumStr					string
 //
-//		This string contains the pure number string which
+//		This string contains the Native Number String which
 //		will be parsed to produce and return a big.Float
 //		value.
 //
-//		The input parameter 'pureNumStr' must be formatted
-//		as a pure number string which is defined as follows:
+//		If 'nativeNumStr' fails to meet the formatting
+//		criteria for a Native Number String, an error
+//		will be returned.
 //
-//			1.	The pure number string must consist entirely
-//				of numeric digit characters (0-9), with
-//				following exceptions.
+//		A valid Native Number String must conform to the
+//		standardized formatting criteria defined below:
 //
-//			2.	For floating point values, the pure number
-//				string must separate integer and fractional
-//				digits with a decimal point ('.').
+//	 	1. A Native Number String Consists of numeric
+//	 	   character digits zero through nine inclusive
+//	 	   (0-9).
 //
-//			3.	The pure number string must designate
-//				negative values with a leading minus sign
-//				('-').
+//	 	2. A Native Number String will include a period
+//	 	   or decimal point ('.') to separate integer and
+//	 	   fractional digits within a number string.
 //
-//			4.	The pure number string must NOT include integer
-//				separators such as commas (',') to separate
-//				integer digits by thousands.
+//	 	   Native Number String Floating Point Value:
+//	 	   				123.1234
 //
-//							  NOT THIS: 1,000,000
-//					Pure Number String: 1000000
+//	 	3. A Native Number String will always format
+//	 	   negative numeric values with a leading minus sign
+//	 	   ('-').
 //
-//		If the input parameter 'pureNumStr' does NOT meet
-//		these criteria, an error will be returned.
+//	 	   Native Number String Negative Value:
+//	 	   				-123.2
+//
+//	 	4. A Native Number String WILL NEVER include integer
+//	 	   separators such as commas (',') to separate
+//	 	   integer digits by thousands.
+//
+//	 	   					NOT THIS: 1,000,000
+//	 	   		Native Number String: 1000000
+//
+//	 	5. Native Number Strings will only consist of:
+//
+//	 	   (a)	Numeric digits zero through nine inclusive (0-9).
+//
+//	 	   (b)	A decimal point ('.') for floating point
+//	 	   		numbers.
+//
+//	 	   (c)	A leading minus sign ('-') in the case of
+//	 	   		negative numeric values.
 //
 //	roundingMode 				big.RoundingMode
 //
@@ -578,7 +629,7 @@ func (floatHelperBoson *mathFloatHelperBoson) bigFloatDtoFromPureNumStr(
 //	big.Float
 //
 //		If this method completes successfully, the pure
-//		number string passed as input value 'pureNumStr'
+//		number string passed as input value 'nativeNumStr'
 //		will be converted and returned as a big.Float
 //		floating point value.
 //
@@ -594,8 +645,8 @@ func (floatHelperBoson *mathFloatHelperBoson) bigFloatDtoFromPureNumStr(
 //		for input parameter 'errPrefDto' (error prefix)
 //		will be prefixed or attached at the beginning of
 //		the error message.
-func (floatHelperBoson *mathFloatHelperBoson) pureNumStrToBigFloat(
-	pureNumStr string,
+func (floatHelperBoson *mathFloatHelperBoson) nativeNumStrToBigFloat(
+	nativeNumStr string,
 	roundingMode big.RoundingMode,
 	errPrefDto *ePref.ErrPrefixDto) (
 	big.Float,
@@ -617,7 +668,7 @@ func (floatHelperBoson *mathFloatHelperBoson) pureNumStrToBigFloat(
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
 		"mathFloatHelperBoson."+
-			"pureNumStrToBigFloat()",
+			"nativeNumStrToBigFloat()",
 		"")
 
 	if err != nil {
@@ -628,16 +679,16 @@ func (floatHelperBoson *mathFloatHelperBoson) pureNumStrToBigFloat(
 	var ok bool
 
 	_,
-		ok = bigFloatNum.SetString(pureNumStr)
+		ok = bigFloatNum.SetString(nativeNumStr)
 
 	if !ok {
 		err = fmt.Errorf("%v\n"+
-			"Error:  bigFloatNum.SetString(pureNumStr)\n"+
+			"Error:  bigFloatNum.SetString(nativeNumStr)\n"+
 			"SetString() FAILED to generate a valid big.Float value.\n"+
-			"pureNumStr = '%v'\n"+
+			"nativeNumStr = '%v'\n"+
 			"roundingMode = '%v'\n",
 			ePrefix.String(),
-			pureNumStr,
+			nativeNumStr,
 			bigFloatNum.Mode())
 
 		return big.Float{}, err

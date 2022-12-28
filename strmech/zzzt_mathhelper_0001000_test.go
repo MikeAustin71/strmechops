@@ -8,10 +8,10 @@ import (
 	"testing"
 )
 
-func TestMathHelper_NumericValueToPureNumStr_000100(t *testing.T) {
+func TestMathHelper_NumericValueToNativeNumStr_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestMathHelper_NumericValueToPureNumStr_000100()",
+		"TestMathHelper_NumericValueToNativeNumStr_000100()",
 		"")
 
 	expectedStr := "12345.123456"
@@ -67,10 +67,10 @@ func TestMathHelper_NumericValueToPureNumStr_000100(t *testing.T) {
 	return
 }
 
-func TestMathHelper_NumericValueToPureNumStr_000200(t *testing.T) {
+func TestMathHelper_NumericValueToNativeNumStr_000200(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestMathHelper_NumericValueToPureNumStr_000200()",
+		"TestMathHelper_NumericValueToNativeNumStr_000200()",
 		"")
 
 	expectedStr := "12345.12345"
@@ -127,10 +127,10 @@ func TestMathHelper_NumericValueToPureNumStr_000200(t *testing.T) {
 
 }
 
-func TestMathHelper_NumericValueToPureNumStr_000300(t *testing.T) {
+func TestMathHelper_NumericValueToNativeNumStr_000300(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestMathHelper_NumericValueToPureNumStr_000200()",
+		"TestMathHelper_NumericValueToNativeNumStr_000200()",
 		"")
 
 	origIntStr := "12345"
@@ -189,10 +189,10 @@ func TestMathHelper_NumericValueToPureNumStr_000300(t *testing.T) {
 	return
 }
 
-func TestMathHelper_NumericValueToPureNumStr_000400(t *testing.T) {
+func TestMathHelper_NumericValueToNativeNumStr_000400(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestMathHelper_NumericValueToPureNumStr_000400()",
+		"TestMathHelper_NumericValueToNativeNumStr_000400()",
 		"")
 
 	testName := "Test #1 - int8(123)"
@@ -468,10 +468,10 @@ func TestMathHelper_NumericValueToPureNumStr_000400(t *testing.T) {
 	return
 }
 
-func TestMathHelper_NumericValueToPureNumStr_000500(t *testing.T) {
+func TestMathHelper_NumericValueToNativeNumStr_000500(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestMathHelper_NumericValueToPureNumStr_000500()",
+		"TestMathHelper_NumericValueToNativeNumStr_000500()",
 		"")
 
 	testName := "Test #1 - *int8 ptrInt8Num(123)"
@@ -690,10 +690,10 @@ func TestMathHelper_NumericValueToPureNumStr_000500(t *testing.T) {
 	return
 }
 
-func TestMathHelper_NumericValueToPureNumStr_000600(t *testing.T) {
+func TestMathHelper_NumericValueToNativeNumStr_000600(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestMathHelper_NumericValueToPureNumStr_000600()",
+		"TestMathHelper_NumericValueToNativeNumStr_000600()",
 		"")
 
 	testName := "Test #1 - uint8(123)"
@@ -871,10 +871,10 @@ func TestMathHelper_NumericValueToPureNumStr_000600(t *testing.T) {
 	return
 }
 
-func TestMathHelper_NumericValueToPureNumStr_000700(t *testing.T) {
+func TestMathHelper_NumericValueToNativeNumStr_000700(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestMathHelper_NumericValueToPureNumStr_000700()",
+		"TestMathHelper_NumericValueToNativeNumStr_000700()",
 		"")
 
 	testName := "Test #1 - *uint8 ptrUint8Num(123)"
@@ -1072,10 +1072,10 @@ func TestMathHelper_NumericValueToPureNumStr_000700(t *testing.T) {
 	return
 }
 
-func TestMathHelper_NumericValueToPureNumStr_000800(t *testing.T) {
+func TestMathHelper_NumericValueToNativeNumStr_000800(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestMathHelper_NumericValueToPureNumStr_000800()",
+		"TestMathHelper_NumericValueToNativeNumStr_000800()",
 		"")
 
 	testName := "Test #1 - int8(-123)"
@@ -1351,10 +1351,10 @@ func TestMathHelper_NumericValueToPureNumStr_000800(t *testing.T) {
 	return
 }
 
-func TestMathHelper_NumericValueToPureNumStr_000900(t *testing.T) {
+func TestMathHelper_NumericValueToNativeNumStr_000900(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestMathHelper_NumericValueToPureNumStr_000900()",
+		"TestMathHelper_NumericValueToNativeNumStr_000900()",
 		"")
 
 	expectedStr := "-1234.5678"
@@ -1476,10 +1476,10 @@ func TestMathHelper_NumericValueToPureNumStr_000900(t *testing.T) {
 
 }
 
-func TestMathHelper_NumericValueToPureNumStr_001000(t *testing.T) {
+func TestMathHelper_NumericValueToNativeNumStr_001000(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestMathHelper_NumericValueToPureNumStr_001000()",
+		"TestMathHelper_NumericValueToNativeNumStr_001000()",
 		"")
 
 	expectedStr := "1234.5678"
@@ -1502,7 +1502,7 @@ func TestMathHelper_NumericValueToPureNumStr_001000(t *testing.T) {
 
 	var err error
 
-	err = txtFieldFmtDtoBFloat.SetFromPureNumStr(
+	err = txtFieldFmtDtoBFloat.SetFromNativeNumStr(
 		expectedStr,
 		ePrefix.XCpy(
 			"txtFieldFmtDtoBFloat<-expectedStr"))
@@ -1561,7 +1561,7 @@ func TestMathHelper_NumericValueToPureNumStr_001000(t *testing.T) {
 		RightMarginStr:        "",
 	}
 
-	err = txtFieldFmtDtoBFloat2.SetFromPureNumStr(
+	err = txtFieldFmtDtoBFloat2.SetFromNativeNumStr(
 		expectedStr,
 		ePrefix.XCpy(
 			"txtFieldFmtDtoBFloat2<-expectedStr"))
@@ -1572,13 +1572,9 @@ func TestMathHelper_NumericValueToPureNumStr_001000(t *testing.T) {
 		return
 	}
 
-	var ptrTxtFieldFmtDtoBFloat2 *TextFieldFormatDtoBigFloat
-
-	ptrTxtFieldFmtDtoBFloat2 = &txtFieldFmtDtoBFloat2
-
 	actualNumStr,
 		err = new(MathHelper).NumericValueToNativeNumStr(
-		ptrTxtFieldFmtDtoBFloat2,
+		&txtFieldFmtDtoBFloat2,
 		ePrefix.XCpy(
 			"actualNumStr<-ptrTxtFieldFmtDtoBFloat2"))
 
@@ -1607,10 +1603,10 @@ func TestMathHelper_NumericValueToPureNumStr_001000(t *testing.T) {
 	return
 }
 
-func TestMathHelper_NumericValueToPureNumStr_001100(t *testing.T) {
+func TestMathHelper_NumericValueToNativeNumStr_001100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestMathHelper_NumericValueToPureNumStr_001100()",
+		"TestMathHelper_NumericValueToNativeNumStr_001100()",
 		"")
 
 	expectedStr := "1234.5678"
@@ -1736,10 +1732,10 @@ func TestMathHelper_NumericValueToPureNumStr_001100(t *testing.T) {
 	return
 }
 
-func TestMathHelper_NumericValueToPureNumStr_001200(t *testing.T) {
+func TestMathHelper_NumericValueToNativeNumStr_001200(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestMathHelper_NumericValueToPureNumStr_001100()",
+		"TestMathHelper_NumericValueToNativeNumStr_001100()",
 		"")
 
 	expectedStr := "12345678.12345678902"
@@ -1830,6 +1826,589 @@ func TestMathHelper_NumericValueToPureNumStr_001200(t *testing.T) {
 		ptrBigFloatDto,
 		ePrefix.XCpy(
 			"actualNumStr<-ptrBigFloatDto"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if actualNumStr != expectedStr {
+
+		t.Errorf("\n%v\n"+
+			"%v\n"+
+			"Error: actualNumStr != expectedStr\n"+
+			"actualNumStr  = '%v'\n"+
+			"expectedStr   = '%v'\n",
+			ePrefix.String(),
+			testName,
+			actualNumStr,
+			expectedStr)
+
+		return
+
+	}
+
+	return
+}
+
+func TestMathHelper_NativeNumStrToNumericValue_0000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestMathHelper_NativeNumStrToNumericValue_0000100()",
+		"")
+
+	expectedStr := "12345678.12345678902"
+
+	testName := fmt.Sprintf("Test #1 big.Float - bigFloat = (%v)\n",
+		expectedStr)
+
+	bigFloat := new(big.Float)
+
+	var err error
+
+	err = new(MathHelper).NativeNumStrToNumericValue(
+		expectedStr,
+		bigFloat,
+		ePrefix.XCpy(
+			"bigFloat<-expectedStr"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	actualNumStr := bigFloat.Text('f', -1)
+
+	if actualNumStr != expectedStr {
+
+		t.Errorf("\n%v\n"+
+			"%v\n"+
+			"Error: actualNumStr != expectedStr\n"+
+			"actualNumStr  = '%v'\n"+
+			"expectedStr   = '%v'\n",
+			ePrefix.String(),
+			testName,
+			actualNumStr,
+			expectedStr)
+
+		return
+
+	}
+
+	expectedStr = "-12345678.12345678902"
+
+	testName = fmt.Sprintf("Test #2 Negative Number big.Float - bigFloat = (%v)\n",
+		expectedStr)
+
+	err = new(MathHelper).NativeNumStrToNumericValue(
+		expectedStr,
+		bigFloat,
+		ePrefix.XCpy(
+			"bigFloat<-expectedStr"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	actualNumStr = bigFloat.Text('f', -1)
+
+	if actualNumStr != expectedStr {
+
+		t.Errorf("\n%v\n"+
+			"%v\n"+
+			"Error: actualNumStr != expectedStr\n"+
+			"actualNumStr  = '%v'\n"+
+			"expectedStr   = '%v'\n",
+			ePrefix.String(),
+			testName,
+			actualNumStr,
+			expectedStr)
+
+		return
+
+	}
+
+	return
+}
+
+func TestMathHelper_NativeNumStrToNumericValue_0000200(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestMathHelper_NativeNumStrToNumericValue_0000200()",
+		"")
+
+	expectedStr := "123.456"
+
+	testName := fmt.Sprintf("Test #1 float32 - float32Num = (%v)\n",
+		expectedStr)
+
+	var float32Num float32
+
+	var err error
+
+	err = new(MathHelper).NativeNumStrToNumericValue(
+		expectedStr,
+		&float32Num,
+		ePrefix.XCpy(
+			"float32Num<-expectedStr"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	actualNumStr := strconv.FormatFloat(
+		float64(float32Num),
+		'f',
+		-1,
+		32)
+
+	if actualNumStr != expectedStr {
+
+		t.Errorf("\n%v\n"+
+			"%v\n"+
+			"Error: actualNumStr != expectedStr\n"+
+			"actualNumStr  = '%v'\n"+
+			"expectedStr   = '%v'\n",
+			ePrefix.String(),
+			testName,
+			actualNumStr,
+			expectedStr)
+
+		return
+
+	}
+
+	expectedStr = "-123.456"
+
+	testName = fmt.Sprintf("Test #2 Negative Number float32 - float32Num = (%v)\n",
+		expectedStr)
+
+	err = new(MathHelper).NativeNumStrToNumericValue(
+		expectedStr,
+		&float32Num,
+		ePrefix.XCpy(
+			"#2 float32Num<-expectedStr"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	actualNumStr = strconv.FormatFloat(
+		float64(float32Num),
+		'f',
+		-1,
+		32)
+
+	if actualNumStr != expectedStr {
+
+		t.Errorf("\n%v\n"+
+			"%v\n"+
+			"Error: actualNumStr != expectedStr\n"+
+			"actualNumStr  = '%v'\n"+
+			"expectedStr   = '%v'\n",
+			ePrefix.String(),
+			testName,
+			actualNumStr,
+			expectedStr)
+
+		return
+
+	}
+
+	return
+}
+
+func TestMathHelper_NativeNumStrToNumericValue_0000300(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestMathHelper_NativeNumStrToNumericValue_0000300()",
+		"")
+
+	expectedStr := "1234.56789012"
+
+	testName := fmt.Sprintf("Test #1 float64 - float64Num = (%v)\n",
+		expectedStr)
+
+	var float64Num float64
+
+	var err error
+
+	err = new(MathHelper).NativeNumStrToNumericValue(
+		expectedStr,
+		&float64Num,
+		ePrefix.XCpy(
+			"float64Num<-expectedStr"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	actualNumStr := strconv.FormatFloat(
+		float64Num,
+		'f',
+		-1,
+		64)
+
+	if actualNumStr != expectedStr {
+
+		t.Errorf("\n%v\n"+
+			"%v\n"+
+			"Error: actualNumStr != expectedStr\n"+
+			"actualNumStr  = '%v'\n"+
+			"expectedStr   = '%v'\n",
+			ePrefix.String(),
+			testName,
+			actualNumStr,
+			expectedStr)
+
+		return
+
+	}
+
+	expectedStr = "-1234.56789012"
+
+	testName = fmt.Sprintf("Test #2 Negative Number float64 - float64Num = (%v)\n",
+		expectedStr)
+
+	err = new(MathHelper).NativeNumStrToNumericValue(
+		expectedStr,
+		&float64Num,
+		ePrefix.XCpy(
+			"#2 float64Num<-expectedStr"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	actualNumStr = strconv.FormatFloat(
+		float64Num,
+		'f',
+		-1,
+		64)
+
+	if actualNumStr != expectedStr {
+
+		t.Errorf("\n%v\n"+
+			"%v\n"+
+			"Error: actualNumStr != expectedStr\n"+
+			"actualNumStr  = '%v'\n"+
+			"expectedStr   = '%v'\n",
+			ePrefix.String(),
+			testName,
+			actualNumStr,
+			expectedStr)
+
+		return
+
+	}
+
+	return
+}
+
+func TestMathHelper_NativeNumStrToNumericValue_0000400(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestMathHelper_NativeNumStrToNumericValue_0000400()",
+		"")
+
+	expectedStr := "1234.56789012"
+
+	testName := fmt.Sprintf("Test #1 BigFloatDto - bigFloatDto = (%v)\n",
+		expectedStr)
+
+	var bigFloatDto BigFloatDto
+
+	var err error
+
+	err = new(MathHelper).NativeNumStrToNumericValue(
+		expectedStr,
+		&bigFloatDto,
+		ePrefix.XCpy(
+			"#1 bigFloatDto<-expectedStr"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	actualNumStr :=
+		bigFloatDto.Value.Text('f', -1)
+
+	if actualNumStr != expectedStr {
+
+		t.Errorf("\n%v\n"+
+			"%v\n"+
+			"Error: actualNumStr != expectedStr\n"+
+			"actualNumStr  = '%v'\n"+
+			"expectedStr   = '%v'\n",
+			ePrefix.String(),
+			testName,
+			actualNumStr,
+			expectedStr)
+
+		return
+
+	}
+
+	expectedStr = "-1234.567890123456"
+
+	testName = fmt.Sprintf("Test #2 Negative Number BigFloatDto - bigFloatDto = (%v)\n",
+		expectedStr)
+
+	err = new(MathHelper).NativeNumStrToNumericValue(
+		expectedStr,
+		&bigFloatDto,
+		ePrefix.XCpy(
+			"#2 bigFloatDto<-expectedStr"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	actualNumStr =
+		bigFloatDto.Value.Text('f', -1)
+
+	if actualNumStr != expectedStr {
+
+		t.Errorf("\n%v\n"+
+			"%v\n"+
+			"Error: actualNumStr != expectedStr\n"+
+			"actualNumStr  = '%v'\n"+
+			"expectedStr   = '%v'\n",
+			ePrefix.String(),
+			testName,
+			actualNumStr,
+			expectedStr)
+
+		return
+
+	}
+
+	return
+}
+
+func TestMathHelper_NativeNumStrToNumericValue_0000500(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestMathHelper_NativeNumStrToNumericValue_0000500()",
+		"")
+
+	expectedStr := "1234.56789012"
+
+	testName := fmt.Sprintf("Test #1 TextFieldFormatDtoFloat64 - txtFieldFmtDtoF64 = (%v)\n",
+		expectedStr)
+
+	txtFieldFmtDtoF64 := TextFieldFormatDtoFloat64{
+		LeftMarginStr:         "",
+		Float64Num:            0,
+		LeadingMinusSign:      true,
+		RoundingType:          NumRoundType.HalfAwayFromZero(),
+		NumOfFractionalDigits: -1,
+		DefaultNumStrFmt:      NumStrFormatSpec{},
+		FieldLength:           -1,
+		FieldJustify:          TxtJustify.Right(),
+		RightMarginStr:        "",
+	}
+
+	var err error
+
+	err = new(MathHelper).NativeNumStrToNumericValue(
+		expectedStr,
+		&txtFieldFmtDtoF64,
+		ePrefix.XCpy(
+			"#1 txtFieldFmtDtoF64<-expectedStr"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var actualNumStr string
+
+	actualNumStr,
+		err = txtFieldFmtDtoF64.
+		FmtNumStrNative(
+			ePrefix.XCpy(
+				"#1 actualNumStr<-txtFieldFmtDtoF64"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if actualNumStr != expectedStr {
+
+		t.Errorf("\n%v\n"+
+			"%v\n"+
+			"Error: actualNumStr != expectedStr\n"+
+			"actualNumStr  = '%v'\n"+
+			"expectedStr   = '%v'\n",
+			ePrefix.String(),
+			testName,
+			actualNumStr,
+			expectedStr)
+
+		return
+
+	}
+
+	expectedStr = "-1234.567890123456"
+
+	testName = fmt.Sprintf("Test #2 Negative Number TextFieldFormatDtoFloat64 - txtFieldFmtDtoF64 = (%v)\n",
+		expectedStr)
+
+	err = new(MathHelper).NativeNumStrToNumericValue(
+		expectedStr,
+		&txtFieldFmtDtoF64,
+		ePrefix.XCpy(
+			"#2 txtFieldFmtDtoF64<-expectedStr"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	actualNumStr,
+		err = txtFieldFmtDtoF64.
+		FmtNumStrNative(
+			ePrefix.XCpy(
+				"#2 actualNumStr<-txtFieldFmtDtoF64"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if actualNumStr != expectedStr {
+
+		t.Errorf("\n%v\n"+
+			"%v\n"+
+			"Error: actualNumStr != expectedStr\n"+
+			"actualNumStr  = '%v'\n"+
+			"expectedStr   = '%v'\n",
+			ePrefix.String(),
+			testName,
+			actualNumStr,
+			expectedStr)
+
+		return
+
+	}
+
+	return
+}
+
+func TestMathHelper_NativeNumStrToNumericValue_0000600(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestMathHelper_NativeNumStrToNumericValue_0000600()",
+		"")
+
+	expectedStr := "1234567.890123456789992345678"
+
+	testName := fmt.Sprintf("Test #1 TextFieldFormatDtoBigFloat - txtFieldFmtDtoBFloat = (%v)\n",
+		expectedStr)
+
+	txtFieldFmtDtoBFloat := TextFieldFormatDtoBigFloat{
+		LeftMarginStr:         "",
+		BigFloatNum:           big.Float{},
+		LeadingMinusSign:      true,
+		NativeRoundingMode:    big.AwayFromZero,
+		RoundingType:          NumRoundType.HalfAwayFromZero(),
+		NumOfFractionalDigits: -1,
+		DefaultNumStrFmt:      NumStrFormatSpec{},
+		FieldLength:           -1,
+		FieldJustify:          TxtJustify.Right(),
+		RightMarginStr:        "",
+		lock:                  nil,
+	}
+
+	var err error
+
+	err = new(MathHelper).NativeNumStrToNumericValue(
+		expectedStr,
+		&txtFieldFmtDtoBFloat,
+		ePrefix.XCpy(
+			"#1 txtFieldFmtDtoBFloat<-expectedStr"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var actualNumStr string
+
+	actualNumStr,
+		err = txtFieldFmtDtoBFloat.
+		FmtNumStrNative(
+			ePrefix.XCpy(
+				"#1 actualNumStr<-txtFieldFmtDtoBFloat"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if actualNumStr != expectedStr {
+
+		t.Errorf("\n%v\n"+
+			"%v\n"+
+			"Error: actualNumStr != expectedStr\n"+
+			"actualNumStr  = '%v'\n"+
+			"expectedStr   = '%v'\n",
+			ePrefix.String(),
+			testName,
+			actualNumStr,
+			expectedStr)
+
+		return
+
+	}
+
+	expectedStr = "-1234567.890123456789012345678"
+
+	testName = fmt.Sprintf("Test #2 Negative Number TextFieldFormatDtoBigFloat - "+
+		"txtFieldFmtDtoBFloat = (%v)\n",
+		expectedStr)
+
+	err = new(MathHelper).NativeNumStrToNumericValue(
+		expectedStr,
+		&txtFieldFmtDtoBFloat,
+		ePrefix.XCpy(
+			"#2 txtFieldFmtDtoBFloat<-expectedStr"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	actualNumStr,
+		err = txtFieldFmtDtoBFloat.
+		FmtNumStrNative(
+			ePrefix.XCpy(
+				"#2 actualNumStr<-txtFieldFmtDtoBFloat"))
 
 	if err != nil {
 		t.Errorf("\n%v\n",
