@@ -7,6 +7,6 @@ import "github.com/MikeAustin71/strmechops/apptest/examples"
 
 func main() {
 
-	examples.MainNumStrTest006{}.BigFloatDto02()
+	examples.MainNumStrTest006{}.BigFloatDto03()
 
 }

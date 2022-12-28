@@ -425,7 +425,7 @@ func (nStrHelperAtom *numStrHelperAtom) dirtyToNativeNumRunes(
 			nativeNumStr.CharsArray =
 				append(
 					nativeNumStr.CharsArray,
-					dirtyNumberRunes.CharsArray...)
+					'.')
 
 			foundDecimalSep = true
 

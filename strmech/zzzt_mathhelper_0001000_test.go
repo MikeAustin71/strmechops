@@ -1852,6 +1852,245 @@ func TestMathHelper_NumericValueToNativeNumStr_001200(t *testing.T) {
 	return
 }
 
+func TestMathHelper_NumericValueToNativeNumStr_001400(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestMathHelper_NumericValueToNativeNumStr_001400()",
+		"")
+
+	testProfile := []testNativeNumStrProfile{
+		{
+			IntegerDigits:    1,
+			FractionalDigits: 0,
+			IsNegativeValue:  false,
+		},
+		{
+			IntegerDigits:    1,
+			FractionalDigits: 0,
+			IsNegativeValue:  true,
+		},
+		{
+			IntegerDigits:    8,
+			FractionalDigits: 12,
+			IsNegativeValue:  false,
+		},
+		{
+			IntegerDigits:    8,
+			FractionalDigits: 12,
+			IsNegativeValue:  true,
+		}, {
+			IntegerDigits:    5,
+			FractionalDigits: 19,
+			IsNegativeValue:  false,
+		}, {
+			IntegerDigits:    5,
+			FractionalDigits: 19,
+			IsNegativeValue:  true,
+		}, {
+			IntegerDigits:    50,
+			FractionalDigits: 0,
+			IsNegativeValue:  false,
+		}, {
+			IntegerDigits:    50,
+			FractionalDigits: 0,
+			IsNegativeValue:  true,
+		}, {
+			IntegerDigits:    14,
+			FractionalDigits: 157,
+			IsNegativeValue:  false,
+		}, {
+			IntegerDigits:    14,
+			FractionalDigits: 157,
+			IsNegativeValue:  true,
+		}, {
+			IntegerDigits:    1,
+			FractionalDigits: 283,
+			IsNegativeValue:  false,
+		}, {
+			IntegerDigits:    1,
+			FractionalDigits: 283,
+			IsNegativeValue:  true,
+		},
+		{
+			IntegerDigits:    276,
+			FractionalDigits: 14,
+			IsNegativeValue:  false,
+		},
+		{
+			IntegerDigits:    276,
+			FractionalDigits: 14,
+			IsNegativeValue:  true,
+		},
+		{
+			IntegerDigits:    383,
+			FractionalDigits: 512,
+			IsNegativeValue:  false,
+		}, {
+			IntegerDigits:    383,
+			FractionalDigits: 512,
+			IsNegativeValue:  true,
+		}, {
+			IntegerDigits:    9,
+			FractionalDigits: 902,
+			IsNegativeValue:  false,
+		}, {
+			IntegerDigits:    9,
+			FractionalDigits: 902,
+			IsNegativeValue:  true,
+		}, {
+			IntegerDigits:    23,
+			FractionalDigits: 704,
+			IsNegativeValue:  false,
+		}, {
+			IntegerDigits:    23,
+			FractionalDigits: 705,
+			IsNegativeValue:  true,
+		}, {
+			IntegerDigits:    2,
+			FractionalDigits: 1,
+			IsNegativeValue:  false,
+		}, {
+			IntegerDigits:    2,
+			FractionalDigits: 1,
+			IsNegativeValue:  true,
+		}, {
+			IntegerDigits:    57,
+			FractionalDigits: 0,
+			IsNegativeValue:  false,
+		},
+		{
+			IntegerDigits:    57,
+			FractionalDigits: 0,
+			IsNegativeValue:  true,
+		},
+		{
+			IntegerDigits:    0,
+			FractionalDigits: 1004,
+			IsNegativeValue:  false,
+		},
+		{
+			IntegerDigits:    0,
+			FractionalDigits: 1004,
+			IsNegativeValue:  true,
+		}, {
+			IntegerDigits:    75,
+			FractionalDigits: 1050,
+			IsNegativeValue:  false,
+		}, {
+			IntegerDigits:    75,
+			FractionalDigits: 1050,
+			IsNegativeValue:  true,
+		}, {
+			IntegerDigits:    1050,
+			FractionalDigits: 2,
+			IsNegativeValue:  false,
+		}, {
+			IntegerDigits:    1050,
+			FractionalDigits: 2,
+			IsNegativeValue:  true,
+		}, {
+			IntegerDigits:    1050,
+			FractionalDigits: 0,
+			IsNegativeValue:  false,
+		}, {
+			IntegerDigits:    1050,
+			FractionalDigits: 0,
+			IsNegativeValue:  true,
+		}, {
+			IntegerDigits:    1050,
+			FractionalDigits: 1050,
+			IsNegativeValue:  false,
+		}, {
+			IntegerDigits:    1050,
+			FractionalDigits: 1050,
+			IsNegativeValue:  true,
+		},
+	}
+
+	var expectedStr, testName,
+		actualNumStr, numberSignDescription string
+
+	lenTestProfile := len(testProfile)
+
+	var err error
+
+	for i := 0; i < lenTestProfile; i++ {
+
+		expectedStr = getTestNativeNumStr(
+			testProfile[i].IntegerDigits,
+			testProfile[i].FractionalDigits,
+			testProfile[i].IsNegativeValue)
+
+		if testProfile[i].IsNegativeValue == true {
+
+			numberSignDescription = "Negative Number"
+		} else {
+			numberSignDescription = "Positive Number"
+		}
+
+		testName = fmt.Sprintf("Test #%v TextFieldFormatDtoBigFloat\n"+
+			"InputStr = (%v)\n"+
+			"%v Test\n",
+			i+1,
+			expectedStr,
+			numberSignDescription)
+
+		txtFieldFmtDtoBFloat := TextFieldFormatDtoBigFloat{
+			LeftMarginStr:         "",
+			BigFloatNum:           big.Float{},
+			LeadingMinusSign:      true,
+			NativeRoundingMode:    big.AwayFromZero,
+			RoundingType:          NumRoundType.HalfAwayFromZero(),
+			NumOfFractionalDigits: -1,
+			DefaultNumStrFmt:      NumStrFormatSpec{},
+			FieldLength:           -1,
+			FieldJustify:          TxtJustify.Right(),
+			RightMarginStr:        "",
+			lock:                  nil,
+		}
+
+		err = txtFieldFmtDtoBFloat.SetFromNativeNumStr(
+			expectedStr,
+			ePrefix.XCpy(
+				"txtFieldFmtDtoBFloat<-expectedStr"))
+
+		if err != nil {
+			fmt.Printf("\n%v\n",
+				err.Error())
+			return
+		}
+
+		actualNumStr,
+			err = new(MathHelper).NumericValueToNativeNumStr(
+			txtFieldFmtDtoBFloat,
+			ePrefix.XCpy(
+				"actualNumStr<-txtFieldFmtDtoBFloat"))
+
+		if err != nil {
+			fmt.Printf("\n%v\n",
+				err.Error())
+			return
+		}
+
+		if actualNumStr != expectedStr {
+
+			fmt.Printf("\n%v\n"+
+				"%v\n"+
+				"Error: actualNumStr != expectedStr\n"+
+				"actualNumStr  = '%v'\n"+
+				"expectedStr   = '%v'\n",
+				ePrefix.String(),
+				testName,
+				actualNumStr,
+				expectedStr)
+
+			return
+
+		}
+
+	}
+}
+
 func TestMathHelper_NativeNumStrToNumericValue_0000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
@@ -2429,6 +2668,249 @@ func TestMathHelper_NativeNumStrToNumericValue_0000600(t *testing.T) {
 			expectedStr)
 
 		return
+
+	}
+
+	return
+}
+
+func TestMathHelper_NativeNumStrToNumericValue_0000700(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestMathHelper_NativeNumStrToNumericValue_0000700()",
+		"")
+
+	testProfile := []testNativeNumStrProfile{
+		{
+			IntegerDigits:    1,
+			FractionalDigits: 0,
+			IsNegativeValue:  false,
+		},
+		{
+			IntegerDigits:    1,
+			FractionalDigits: 0,
+			IsNegativeValue:  true,
+		},
+		{
+			IntegerDigits:    8,
+			FractionalDigits: 12,
+			IsNegativeValue:  false,
+		},
+		{
+			IntegerDigits:    8,
+			FractionalDigits: 12,
+			IsNegativeValue:  true,
+		}, {
+			IntegerDigits:    5,
+			FractionalDigits: 19,
+			IsNegativeValue:  false,
+		}, {
+			IntegerDigits:    5,
+			FractionalDigits: 19,
+			IsNegativeValue:  true,
+		}, {
+			IntegerDigits:    50,
+			FractionalDigits: 0,
+			IsNegativeValue:  false,
+		}, {
+			IntegerDigits:    50,
+			FractionalDigits: 0,
+			IsNegativeValue:  true,
+		}, {
+			IntegerDigits:    14,
+			FractionalDigits: 157,
+			IsNegativeValue:  false,
+		}, {
+			IntegerDigits:    14,
+			FractionalDigits: 157,
+			IsNegativeValue:  true,
+		}, {
+			IntegerDigits:    1,
+			FractionalDigits: 283,
+			IsNegativeValue:  false,
+		}, {
+			IntegerDigits:    1,
+			FractionalDigits: 283,
+			IsNegativeValue:  true,
+		},
+		{
+			IntegerDigits:    276,
+			FractionalDigits: 14,
+			IsNegativeValue:  false,
+		},
+		{
+			IntegerDigits:    276,
+			FractionalDigits: 14,
+			IsNegativeValue:  true,
+		},
+		{
+			IntegerDigits:    383,
+			FractionalDigits: 512,
+			IsNegativeValue:  false,
+		}, {
+			IntegerDigits:    383,
+			FractionalDigits: 512,
+			IsNegativeValue:  true,
+		}, {
+			IntegerDigits:    9,
+			FractionalDigits: 902,
+			IsNegativeValue:  false,
+		}, {
+			IntegerDigits:    9,
+			FractionalDigits: 902,
+			IsNegativeValue:  true,
+		}, {
+			IntegerDigits:    23,
+			FractionalDigits: 704,
+			IsNegativeValue:  false,
+		}, {
+			IntegerDigits:    23,
+			FractionalDigits: 705,
+			IsNegativeValue:  true,
+		}, {
+			IntegerDigits:    2,
+			FractionalDigits: 1,
+			IsNegativeValue:  false,
+		}, {
+			IntegerDigits:    2,
+			FractionalDigits: 1,
+			IsNegativeValue:  true,
+		}, {
+			IntegerDigits:    57,
+			FractionalDigits: 0,
+			IsNegativeValue:  false,
+		},
+		{
+			IntegerDigits:    57,
+			FractionalDigits: 0,
+			IsNegativeValue:  true,
+		},
+		{
+			IntegerDigits:    0,
+			FractionalDigits: 1004,
+			IsNegativeValue:  false,
+		},
+		{
+			IntegerDigits:    0,
+			FractionalDigits: 1004,
+			IsNegativeValue:  true,
+		}, {
+			IntegerDigits:    75,
+			FractionalDigits: 1050,
+			IsNegativeValue:  false,
+		}, {
+			IntegerDigits:    75,
+			FractionalDigits: 1050,
+			IsNegativeValue:  true,
+		}, {
+			IntegerDigits:    1050,
+			FractionalDigits: 2,
+			IsNegativeValue:  false,
+		}, {
+			IntegerDigits:    1050,
+			FractionalDigits: 2,
+			IsNegativeValue:  true,
+		}, {
+			IntegerDigits:    1050,
+			FractionalDigits: 0,
+			IsNegativeValue:  false,
+		}, {
+			IntegerDigits:    1050,
+			FractionalDigits: 0,
+			IsNegativeValue:  true,
+		}, {
+			IntegerDigits:    1050,
+			FractionalDigits: 1050,
+			IsNegativeValue:  false,
+		}, {
+			IntegerDigits:    1050,
+			FractionalDigits: 1050,
+			IsNegativeValue:  true,
+		},
+	}
+
+	var expectedStr, testName,
+		actualNumStr, numberSignDescription string
+
+	lenTestProfile := len(testProfile)
+
+	var err error
+
+	for i := 0; i < lenTestProfile; i++ {
+
+		expectedStr = getTestNativeNumStr(
+			testProfile[i].IntegerDigits,
+			testProfile[i].FractionalDigits,
+			testProfile[i].IsNegativeValue)
+
+		if testProfile[i].IsNegativeValue == true {
+
+			numberSignDescription = "Negative Number"
+		} else {
+			numberSignDescription = "Positive Number"
+		}
+
+		testName = fmt.Sprintf("Test #%v TextFieldFormatDtoBigFloat\n"+
+			"InputStr = (%v)\n"+
+			"%v Test\n",
+			i+1,
+			expectedStr,
+			numberSignDescription)
+
+		txtFieldFmtDtoBFloat := TextFieldFormatDtoBigFloat{
+			LeftMarginStr:         "",
+			BigFloatNum:           big.Float{},
+			LeadingMinusSign:      true,
+			NativeRoundingMode:    big.AwayFromZero,
+			RoundingType:          NumRoundType.HalfAwayFromZero(),
+			NumOfFractionalDigits: -1,
+			DefaultNumStrFmt:      NumStrFormatSpec{},
+			FieldLength:           -1,
+			FieldJustify:          TxtJustify.Right(),
+			RightMarginStr:        "",
+			lock:                  nil,
+		}
+
+		err = new(MathHelper).NativeNumStrToNumericValue(
+			expectedStr,
+			&txtFieldFmtDtoBFloat,
+			ePrefix.XCpy(
+				fmt.Sprintf("idx=%v txtFieldFmtDtoBFloat<-expectedStr",
+					i)))
+
+		if err != nil {
+			t.Errorf("\n%v\n",
+				err.Error())
+			return
+		}
+
+		actualNumStr,
+			err = txtFieldFmtDtoBFloat.
+			FmtNumStrNative(
+				ePrefix.XCpy(
+					"#1 actualNumStr<-txtFieldFmtDtoBFloat"))
+
+		if err != nil {
+			t.Errorf("\n%v\n",
+				err.Error())
+			return
+		}
+
+		if actualNumStr != expectedStr {
+
+			t.Errorf("\n%v\n"+
+				"%v\n"+
+				"Error: actualNumStr != expectedStr\n"+
+				"actualNumStr  = '%v'\n"+
+				"expectedStr   = '%v'\n",
+				ePrefix.String(),
+				testName,
+				actualNumStr,
+				expectedStr)
+
+			return
+
+		}
 
 	}
 

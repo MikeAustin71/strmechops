@@ -1456,37 +1456,13 @@ func (mathFloatHelper *MathFloatHelper) NativeNumStrToBigFloat(
 		return big.Float{}, err
 	}
 
-	var bigFloatDto BigFloatDto
-
-	bigFloatDto,
-		err = new(mathFloatHelperBoson).
-		bigFloatDtoFromPureNumStr(
+	return new(mathFloatHelperNanobot).
+		nativeNumStrToBigFloat(
 			nativeNumStr,
-			".",
-			true,
 			2,
 			0,
 			big.ToNearestEven,
 			ePrefix)
-
-	if err != nil {
-		return big.Float{}, err
-	}
-
-	bigFloatNum := big.Float{}
-
-	bigFloatNum.Copy(&bigFloatDto.Value)
-
-	return bigFloatNum, err
-
-	/*
-		return new(mathFloatHelperNanobot).
-			nativeNumStrToBigFloat(
-				nativeNumStr,
-				ePrefix.XCpy(
-					"nativeNumStr"))
-	*/
-
 }
 
 // NativeNumStrToBigFloatDto

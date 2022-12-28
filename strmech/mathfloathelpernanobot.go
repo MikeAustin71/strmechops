@@ -1,7 +1,6 @@
 package strmech
 
 import (
-	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
 	"math/big"
 	"sync"
@@ -131,6 +130,68 @@ type mathFloatHelperNanobot struct {
 //	 	   (c)	A leading minus sign ('-') in the case of
 //	 	   		negative numeric values.
 //
+//	numOfExtraDigitsBuffer		int64
+//
+//		When configuring the big.Float numeric value
+//		returned by the BigFloatDto instance,
+//		the number of big.Float precision bits will be
+//		calculated based on the number of integer and
+//		fractional numeric digits contained in the Pure
+//		Number String ('pureNumberStr'). To deal with
+//		contingencies and requirements often found in
+//		complex floating point operations, users have
+//		the option to arbitrarily increase the number
+//		of precision bits by specifying additional
+//		numeric digits via parameter,
+//		'numOfExtraDigitsBuffer'.
+//
+//		Note: The user has the option of overriding the
+//		automatic precision bits calculation by specifying
+//		a precision bits value directly through parameter,
+//		'precisionBitsOverride'.
+//
+//	precisionBitsOverride		uint
+//
+//		The term 'precision bits' refers to the number of
+//		bits in the mantissa of a big.Float floating point
+//		number. Effectively, 'precision bits' controls the
+//		precision, accuracy and numerical digit storage
+//		capacity for a big.Float floating point number.
+//
+//		Typically, this method will automatically
+//		calculate the value of big.Float precision bits
+//		using the parameter 'numOfExtraDigitsBuffer'
+//		listed above. However, if 'precisionBitsOverride'
+//		has a value greater than zero, the automatic
+//		precision bit calculation will be overridden and
+//		big.Float precision bits will be set to the value
+//		of this	precision bits specification
+//		('precisionBitsOverride').
+//
+//	roundingMode 				big.RoundingMode
+//
+//		Specifies the rounding algorithm which will be used
+//		internally to calculate the base value raised to the
+//		power of exponent.
+//
+//		Each instance of big.Float is configured with a
+//		rounding mode. Input parameter 'roundingMode'
+//		controls this configuration for the calculation
+//		and the big.Float value returned by this method.
+//
+//		The constant values available for big.Float
+//		rounding mode are listed as follows:
+//
+//		big.ToNearestEven  		// == IEEE 754-2008 roundTiesToEven
+//		big.ToNearestAway       // == IEEE 754-2008 roundTiesToAway
+//		big.ToZero              // == IEEE 754-2008 roundTowardZero
+//		big.AwayFromZero        // no IEEE 754-2008 equivalent
+//		big.ToNegativeInf       // == IEEE 754-2008 roundTowardNegative
+//		big.ToPositiveInf       // == IEEE 754-2008 roundTowardPositive
+//
+//		If in doubt as this setting, 'big.AwayFromZero' is a
+//		common selection for rounding mode.
+//
 //	errPrefDto					*ePref.ErrPrefixDto
 //
 //		This object encapsulates an error prefix string
@@ -171,6 +232,9 @@ type mathFloatHelperNanobot struct {
 //		the error message.
 func (mathFloatHelperNanobot *mathFloatHelperNanobot) nativeNumStrToBigFloat(
 	nativeNumStr string,
+	numOfExtraDigitsBuffer int64,
+	precisionBitsOverride uint,
+	roundingMode big.RoundingMode,
 	errPrefDto *ePref.ErrPrefixDto) (
 	big.Float,
 	error) {
@@ -198,22 +262,26 @@ func (mathFloatHelperNanobot *mathFloatHelperNanobot) nativeNumStrToBigFloat(
 		return big.Float{}, err
 	}
 
+	var bigFloatDto BigFloatDto
+
+	bigFloatDto,
+		err = new(mathFloatHelperBoson).
+		bigFloatDtoFromPureNumStr(
+			nativeNumStr,
+			".",
+			true,
+			numOfExtraDigitsBuffer,
+			precisionBitsOverride,
+			roundingMode,
+			ePrefix)
+
+	if err != nil {
+		return big.Float{}, err
+	}
+
 	bigFloatNum := big.Float{}
 
-	var ok bool
-
-	_,
-		ok = bigFloatNum.SetString(nativeNumStr)
-
-	if !ok {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: bigFloatNum.SetString(nativeNumStr)\n"+
-			"Parsing 'nativeNumStr' failed!\n"+
-			"nativeNumStr = '%v'\n",
-			ePrefix.String(),
-			nativeNumStr)
-	}
+	bigFloatNum.Copy(&bigFloatDto.Value)
 
 	return bigFloatNum, err
 }
