@@ -312,6 +312,24 @@ func (mathHelper *MathHelper) NativeNumStrToNumericValue(
 //     (c)	A leading minus sign ('-') in the case of
 //     negative numeric values.
 //
+// The numeric values passed through the empty interface
+// parameter 'numericValue' must be configured as one of
+// the supported types shown below:
+//
+//	Supported Numeric Value ('numericValue') Types:
+//
+//		float32, float64, big.Float
+//		*float32, *float64, *big.Float
+//		*BigFloatDto, BigFloatDto
+//		*big.Rat, big.Rat
+//		int8, int16, int, int32, int64, big.Int
+//		*int8, *int16, *int, *int32, *int64, *big.Int
+//		uint8, uint16, uint, uint32, uint64
+//		*uint8, *uint16, *uint, *uint32, *uint64
+//		*TextFieldFormatDtoFloat64, TextFieldFormatDtoFloat64
+//		*TextFieldFormatDtoBigFloat, TextFieldFormatDtoBigFloat
+//		*NumberStrKernel, NumberStrKernel
+//
 // ----------------------------------------------------------------
 //
 // # Input Parameters
