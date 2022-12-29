@@ -406,7 +406,7 @@ func (mathHelper *MathHelper) NativeNumStrToNumericValue(
 //
 //		If this method completes successfully, a Native
 //		Number String representing the numeric value
-//		passed as input	parameter 'numericValue' will be
+//		passed as input parameter 'numericValue' will be
 //		returned.
 //
 //		The 'Native' Number String returned by this
