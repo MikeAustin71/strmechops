@@ -113,7 +113,9 @@ type mathHelperNanobot struct {
 //				*BigFloatDto
 //				*TextFieldFormatDtoFloat64
 //				*TextFieldFormatDtoBigFloat
-//				*int8, *int16, *int, *int32, *int64, *big.Int
+//				*big.Rat
+//				*int8, *int16, *int, *int32, *int64,
+//				*big.Int
 //				*uint8, *uint16, *uint, *uint32, *uint64
 //				*NumberStrKernel
 //
@@ -450,6 +452,49 @@ func (mathHelpNanobot *mathHelperNanobot) nativeNumStrToNumericValue(
 				//ptrTxtFieldFmtBigFloat.NativeRoundingMode,
 				ePrefix.XCpy(
 					"bigFloatNum<-nativeNumStr"))
+
+		return err
+
+	case *big.Rat:
+
+		var ptrBigRatNum *big.Rat
+
+		ptrBigRatNum, ok = numericValue.(*big.Rat)
+
+		if !ok {
+
+			err = fmt.Errorf("%v\n"+
+				"ERROR: *big.Rat cast to 'ptrBigRatNum' failed!\n",
+				ePrefix.String())
+
+			return err
+		}
+
+		if ptrBigRatNum == nil {
+
+			err = fmt.Errorf("%v\n"+
+				"ERROR: Input parameter 'numericValue' is invalid!\n"+
+				"'numericValue' is a 'nil' big.Rat pointer (*int8).\n",
+				ePrefix.String())
+
+			return err
+
+		}
+
+		_,
+			ok = ptrBigRatNum.SetString(nativeNumStr)
+
+		if !ok {
+
+			err = fmt.Errorf("%v\n"+
+				"ERROR: ptrBigRatNum.SetString(nativeNumStr) failed!\n"+
+				"While attempting to convert 'nativeNumStr' to a *big.Rat\n"+
+				"number, an uspecified error occurred.\n"+
+				"nativeNumStr = %v\n",
+				ePrefix.String(),
+				nativeNumStr)
+
+		}
 
 		return err
 

@@ -132,7 +132,9 @@ type MathHelper struct {
 //				*BigFloatDto
 //				*TextFieldFormatDtoFloat64
 //				*TextFieldFormatDtoBigFloat
-//				*int8, *int16, *int, *int32, *int64, *big.Int
+//				*big.Rat
+//				*int8, *int16, *int, *int32, *int64,
+//				*big.Int
 //				*uint8, *uint16, *uint, *uint32, *uint64
 //				*NumberStrKernel
 //
