@@ -157,6 +157,9 @@ type mathFloatHelperBoson struct {
 //		of this	precision bits specification
 //		('precisionBitsOverride').
 //
+//		If in doubt, it recommended that this parameter
+//		be set to two ('2').
+//
 //	roundingMode 				big.RoundingMode
 //
 //		Specifies the rounding algorithm which will be used
@@ -399,14 +402,54 @@ func (floatHelperBoson *mathFloatHelperBoson) bigFloatDtoFromPureNumStr(
 		return bFloatDto, err
 	}
 
-	if len(pureNumberStr) == 0 {
+	lenPureNumStr := len(pureNumberStr)
+
+	if lenPureNumStr == 0 {
 
 		err = fmt.Errorf("\n\n%v\n"+
-			"Error: Input parameter 'pureNumberStr'\n"+
-			"is a zero length string and INVALID!\n",
+			"Error: Input parameter 'pureNumberStr' is invalid!\n"+
+			"'pureNumberStr' is a zero length string.\n",
 			ePrefix.String())
 
 		return bFloatDto, err
+	}
+
+	if numOfExtraDigitsBuffer < 0 {
+
+		err = fmt.Errorf("\n\n%v\n"+
+			"Error: Input parameter 'numOfExtraDigitsBuffer' is invalid!\n"+
+			"'numOfExtraDigitsBuffer' is a less than zero!\n"+
+			"numOfExtraDigitsBuffer = %v\n",
+			ePrefix.String(),
+			numOfExtraDigitsBuffer)
+
+		return bFloatDto, err
+
+	}
+
+	isValidPureNumStr := false
+
+	for i := 0; i < lenPureNumStr; i++ {
+
+		if pureNumberStr[i] >= '0' &&
+			pureNumberStr[i] <= '9' {
+
+			isValidPureNumStr = true
+
+			break
+		}
+
+	}
+
+	if !isValidPureNumStr {
+
+		err = fmt.Errorf("\n\n%v\n"+
+			"Error: Input parameter 'pureNumberStr' is INVALID!\n"+
+			"'pureNumberStr' contains NO Numeric Digit Characters.\n",
+			ePrefix.String())
+
+		return bFloatDto, err
+
 	}
 
 	bFloatDto.NumStrComponents,
@@ -430,15 +473,22 @@ func (floatHelperBoson *mathFloatHelperBoson) bigFloatDtoFromPureNumStr(
 			numOfExtraDigitsBuffer,
 			ePrefix)
 
+		if err != nil {
+			return bFloatDto, err
+		}
+
 	} else {
+		// MUST BE -
+		// precisionBitsOverride > 0
 
 		bFloatDto.EstimatedPrecisionBits.PrecisionBitsSpec =
 			precisionBitsOverride
 	}
 
+	bFloatDto.Value = big.Float{}
+
 	bFloatDto.Value.
-		SetPrec(bFloatDto.EstimatedPrecisionBits.PrecisionBitsSpec).
-		SetMode(roundingMode)
+		SetPrec(bFloatDto.EstimatedPrecisionBits.PrecisionBitsSpec)
 
 	var ok bool
 	_,
@@ -448,9 +498,11 @@ func (floatHelperBoson *mathFloatHelperBoson) bigFloatDtoFromPureNumStr(
 
 		err = fmt.Errorf("\n%v\n"+
 			"Error: bFloatDto.Value.SetString(pureNumberStr) Failed!\n"+
-			"pureNumberStr = %v\n",
+			"pureNumberStr = %v\n"+
+			"roundingMode = '%v'\n",
 			ePrefix.String(),
-			pureNumberStr)
+			pureNumberStr,
+			bFloatDto.Value.Mode())
 
 		return bFloatDto, err
 	}
@@ -460,6 +512,8 @@ func (floatHelperBoson *mathFloatHelperBoson) bigFloatDtoFromPureNumStr(
 		bFloatDto.Value.SetPrec(
 			bFloatDto.Value.MinPrec())
 	}
+
+	bFloatDto.Value.SetMode(roundingMode)
 
 	return bFloatDto, err
 }
@@ -581,6 +635,47 @@ func (floatHelperBoson *mathFloatHelperBoson) bigFloatDtoFromPureNumStr(
 //	 	   (c)	A leading minus sign ('-') in the case of
 //	 	   		negative numeric values.
 //
+//	numOfExtraDigitsBuffer		int64
+//
+//		When configuring the big.Float numeric value
+//		returned by the BigFloatDto instance,
+//		the number of big.Float precision bits will be
+//		calculated based on the number of integer and
+//		fractional numeric digits contained in the Pure
+//		Number String ('nativeNumStr'). To deal with
+//		contingencies and requirements often found in
+//		complex floating point operations, users have
+//		the option to arbitrarily increase the number
+//		of precision bits by specifying additional
+//		numeric digits via parameter,
+//		'numOfExtraDigitsBuffer'.
+//
+//		Note: The user has the option of overriding the
+//		automatic precision bits calculation by specifying
+//		a precision bits value directly through parameter,
+//		'precisionBitsOverride'.
+//
+//		If in doubt, it recommended that this parameter
+//		be set to two ('2').
+//
+//	precisionBitsOverride		uint
+//
+//		The term 'precision bits' refers to the number of
+//		bits in the mantissa of a big.Float floating point
+//		number. Effectively, 'precision bits' controls the
+//		precision, accuracy and numerical digit storage
+//		capacity for a big.Float floating point number.
+//
+//		Typically, this method will automatically
+//		calculate the value of big.Float precision bits
+//		using the parameter 'numOfExtraDigitsBuffer'
+//		listed above. However, if 'precisionBitsOverride'
+//		has a value greater than zero, the automatic
+//		precision bit calculation will be overridden and
+//		big.Float precision bits will be set to the value
+//		of this	precision bits specification
+//		('precisionBitsOverride').
+//
 //	roundingMode 				big.RoundingMode
 //
 //		Specifies the rounding algorithm which will be
@@ -602,10 +697,9 @@ func (floatHelperBoson *mathFloatHelperBoson) bigFloatDtoFromPureNumStr(
 //		big.ToNegativeInf       // == IEEE 754-2008 roundTowardNegative
 //		big.ToPositiveInf       // == IEEE 754-2008 roundTowardPositive
 //
-//		If in doubt as this setting, 'big.AwayFromZero'
-//		is a common selection for rounding mode. The
-//		default applied by Golang is big.ToNearestEven
-//		because in has an integer value of zero.
+//		If in doubt as to this setting, the default applied
+//		by Golang is big.ToNearestEven because in has an
+//		enumeration integer value of zero.
 //
 //	errPrefDto					*ePref.ErrPrefixDto
 //
@@ -647,6 +741,8 @@ func (floatHelperBoson *mathFloatHelperBoson) bigFloatDtoFromPureNumStr(
 //		the error message.
 func (floatHelperBoson *mathFloatHelperBoson) nativeNumStrToBigFloat(
 	nativeNumStr string,
+	numOfExtraDigitsBuffer int64,
+	precisionBitsOverride uint,
 	roundingMode big.RoundingMode,
 	errPrefDto *ePref.ErrPrefixDto) (
 	big.Float,
@@ -664,6 +760,8 @@ func (floatHelperBoson *mathFloatHelperBoson) nativeNumStrToBigFloat(
 
 	var err error
 
+	bigFloatNum := big.Float{}
+
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
@@ -672,16 +770,102 @@ func (floatHelperBoson *mathFloatHelperBoson) nativeNumStrToBigFloat(
 		"")
 
 	if err != nil {
-		return big.Float{}, err
+		return bigFloatNum, err
 	}
 
-	bigFloatNum := big.Float{}
+	lenNativeNumStr := len(nativeNumStr)
+
+	if lenNativeNumStr == 0 {
+
+		err = fmt.Errorf("\n\n%v\n"+
+			"Error: Input parameter 'nativeNumStr' is INVALID!\n"+
+			"'nativeNumStr' is a zero length string.\n",
+			ePrefix.String())
+
+		return bigFloatNum, err
+	}
+
+	if numOfExtraDigitsBuffer < 0 {
+
+		err = fmt.Errorf("\n\n%v\n"+
+			"Error: Input parameter 'numOfExtraDigitsBuffer' is invalid!\n"+
+			"'numOfExtraDigitsBuffer' is a less than zero!\n"+
+			"numOfExtraDigitsBuffer = %v\n",
+			ePrefix.String(),
+			numOfExtraDigitsBuffer)
+
+		return bigFloatNum, err
+	}
+
+	isValidNativeNumStr := false
+
+	for i := 0; i < lenNativeNumStr; i++ {
+
+		if nativeNumStr[i] >= '0' &&
+			nativeNumStr[i] <= '9' {
+
+			isValidNativeNumStr = true
+
+			break
+		}
+
+	}
+
+	if !isValidNativeNumStr {
+
+		err = fmt.Errorf("\n\n%v\n"+
+			"Error: Input parameter 'nativeNumStr' is INVALID!\n"+
+			"'nativeNumStr' contains NO Numeric Digit Characters.\n",
+			ePrefix.String())
+
+		return bigFloatNum, err
+
+	}
+
+	var pureNumStrComponents PureNumberStrComponents
+
+	pureNumStrComponents,
+		err = new(numStrMathAtom).
+		pureNumStrToComponents(
+			nativeNumStr,
+			".",
+			true,
+			ePrefix)
+
+	if err != nil {
+		return bigFloatNum, err
+	}
+
+	var precisionBitsSpec uint
+
+	if precisionBitsOverride == 0 {
+		precisionBitsSpec,
+			err = new(mathFloatHelperAtom).precisionBitsFromRequiredDigits(
+			int64(pureNumStrComponents.NumStrStats.NumOfIntegerDigits),
+			int64(pureNumStrComponents.NumStrStats.NumOfFractionalDigits),
+			numOfExtraDigitsBuffer,
+			ePrefix)
+
+		if err != nil {
+			return bigFloatNum, err
+		}
+
+	} else {
+		// MUST BE -
+		// precisionBitsOverride > 0
+
+		precisionBitsSpec = precisionBitsOverride
+	}
+
+	bigFloatNum.SetPrec(precisionBitsSpec)
+
 	var ok bool
 
 	_,
 		ok = bigFloatNum.SetString(nativeNumStr)
 
 	if !ok {
+
 		err = fmt.Errorf("%v\n"+
 			"Error:  bigFloatNum.SetString(nativeNumStr)\n"+
 			"SetString() FAILED to generate a valid big.Float value.\n"+
@@ -691,7 +875,13 @@ func (floatHelperBoson *mathFloatHelperBoson) nativeNumStrToBigFloat(
 			nativeNumStr,
 			bigFloatNum.Mode())
 
-		return big.Float{}, err
+		return bigFloatNum, err
+	}
+
+	if !bigFloatNum.IsInt() {
+
+		bigFloatNum.SetPrec(
+			bigFloatNum.MinPrec())
 	}
 
 	bigFloatNum.SetMode(roundingMode)

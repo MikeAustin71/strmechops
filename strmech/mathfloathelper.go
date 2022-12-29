@@ -1456,12 +1456,12 @@ func (mathFloatHelper *MathFloatHelper) NativeNumStrToBigFloat(
 		return big.Float{}, err
 	}
 
-	return new(mathFloatHelperNanobot).
+	return new(mathFloatHelperBoson).
 		nativeNumStrToBigFloat(
 			nativeNumStr,
 			2,
 			0,
-			big.ToNearestEven,
+			big.AwayFromZero,
 			ePrefix)
 }
 
@@ -2307,8 +2307,8 @@ func (mathFloatHelper *MathFloatHelper) NativeNumStrToFloat64(
 //		a precision bits value directly through parameter,
 //		'precisionBitsOverride'.
 //
-//		Specifying a margin of 5-10 digits per 100-digits
-//		of string length is recommended.
+//		If in doubt as to this parameter value,
+//		specifying a margin of 2 digits is recommended.
 //
 //	precisionBitsOverride		uint
 //

@@ -442,15 +442,6 @@ func (mathHelpNanobot *mathHelperNanobot) nativeNumStrToNumericValue(
 			return err
 
 		}
-		/*
-			numOfExtraDigits := int64(10)
-
-			if lenNativeNumStr > 100 {
-
-				numOfExtraDigits = (int64(lenNativeNumStr) / 10) * 10
-			}
-
-		*/
 
 		ptrTxtFieldFmtBigFloat.BigFloatNum,
 			err = new(MathFloatHelper).
