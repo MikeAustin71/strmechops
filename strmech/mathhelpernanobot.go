@@ -279,13 +279,13 @@ func (mathHelpNanobot *mathHelperNanobot) nativeNumStrToNumericValue(
 
 		}
 
-		float64Num,
+		*ptrFloat64Num,
 			err2 = strconv.ParseFloat(nativeNumStr, 64)
 
 		if err2 != nil {
 			err = fmt.Errorf("%v\n"+
 				"Error returned by strconv.ParseFloat(nativeNumStr, 32)!\n"+
-				"Receiver is type *float32\n"+
+				"Receiver is type *float64\n"+
 				"nativeNumStr = %v\n"+
 				"Error= \n%v\n",
 				ePrefix.String(),
@@ -294,8 +294,6 @@ func (mathHelpNanobot *mathHelperNanobot) nativeNumStrToNumericValue(
 
 			return err
 		}
-
-		*ptrFloat64Num = float64Num
 
 	case *big.Float:
 

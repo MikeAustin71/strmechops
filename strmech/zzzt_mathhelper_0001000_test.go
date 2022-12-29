@@ -3022,6 +3022,231 @@ func TestMathHelper_NativeNumStrToNumericValue_0000700(t *testing.T) {
 	return
 }
 
+func TestMathHelper_NativeNumStrToNumericValue_0000750(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestMathHelper_NativeNumStrToNumericValue_0000750()",
+		"")
+
+	testProfile := []testNativeNumStrProfile{
+		{
+			IntegerDigits:    1,
+			FractionalDigits: 0,
+			IsNegativeValue:  false,
+		},
+		{
+			IntegerDigits:    1,
+			FractionalDigits: 0,
+			IsNegativeValue:  true,
+		},
+		{
+			IntegerDigits:    8,
+			FractionalDigits: 8,
+			IsNegativeValue:  false,
+		},
+		{
+			IntegerDigits:    8,
+			FractionalDigits: 8,
+			IsNegativeValue:  true,
+		}, {
+			IntegerDigits:    5,
+			FractionalDigits: 11,
+			IsNegativeValue:  false,
+		}, {
+			IntegerDigits:    5,
+			FractionalDigits: 11,
+			IsNegativeValue:  true,
+		}, {
+			IntegerDigits:    2,
+			FractionalDigits: 0,
+			IsNegativeValue:  false,
+		}, {
+			IntegerDigits:    2,
+			FractionalDigits: 0,
+			IsNegativeValue:  true,
+		}, {
+			IntegerDigits:    14,
+			FractionalDigits: 0,
+			IsNegativeValue:  false,
+		}, {
+			IntegerDigits:    14,
+			FractionalDigits: 0,
+			IsNegativeValue:  true,
+		}, {
+			IntegerDigits:    1,
+			FractionalDigits: 15,
+			IsNegativeValue:  false,
+		}, {
+			IntegerDigits:    1,
+			FractionalDigits: 15,
+			IsNegativeValue:  true,
+		},
+		{
+			IntegerDigits:    8,
+			FractionalDigits: 8,
+			IsNegativeValue:  false,
+		},
+		{
+			IntegerDigits:    8,
+			FractionalDigits: 8,
+			IsNegativeValue:  true,
+		},
+		{
+			IntegerDigits:    10,
+			FractionalDigits: 6,
+			IsNegativeValue:  false,
+		}, {
+			IntegerDigits:    10,
+			FractionalDigits: 6,
+			IsNegativeValue:  true,
+		}, {
+			IntegerDigits:    9,
+			FractionalDigits: 3,
+			IsNegativeValue:  false,
+		}, {
+			IntegerDigits:    9,
+			FractionalDigits: 3,
+			IsNegativeValue:  true,
+		}, {
+			IntegerDigits:    10,
+			FractionalDigits: 4,
+			IsNegativeValue:  false,
+		}, {
+			IntegerDigits:    10,
+			FractionalDigits: 4,
+			IsNegativeValue:  true,
+		}, {
+			IntegerDigits:    5,
+			FractionalDigits: 10,
+			IsNegativeValue:  false,
+		}, {
+			IntegerDigits:    5,
+			FractionalDigits: 10,
+			IsNegativeValue:  true,
+		}, {
+			IntegerDigits:    15,
+			FractionalDigits: 0,
+			IsNegativeValue:  false,
+		},
+		{
+			IntegerDigits:    15,
+			FractionalDigits: 0,
+			IsNegativeValue:  true,
+		},
+		{
+			IntegerDigits:    16,
+			FractionalDigits: 0,
+			IsNegativeValue:  false,
+		},
+		{
+			IntegerDigits:    16,
+			FractionalDigits: 0,
+			IsNegativeValue:  true,
+		}, {
+			IntegerDigits:    1,
+			FractionalDigits: 12,
+			IsNegativeValue:  false,
+		}, {
+			IntegerDigits:    1,
+			FractionalDigits: 12,
+			IsNegativeValue:  true,
+		}, {
+			IntegerDigits:    1,
+			FractionalDigits: 0,
+			IsNegativeValue:  false,
+		}, {
+			IntegerDigits:    1,
+			FractionalDigits: 0,
+			IsNegativeValue:  true,
+		}, {
+			IntegerDigits:    6,
+			FractionalDigits: 7,
+			IsNegativeValue:  false,
+		}, {
+			IntegerDigits:    6,
+			FractionalDigits: 7,
+			IsNegativeValue:  true,
+		}, {
+			IntegerDigits:    0,
+			FractionalDigits: 15,
+			IsNegativeValue:  false,
+		}, {
+			IntegerDigits:    0,
+			FractionalDigits: 15,
+			IsNegativeValue:  true,
+		},
+	}
+
+	var expectedStr, testName,
+		actualNumStr, numberSignDescription string
+
+	lenTestProfile := len(testProfile)
+
+	var err error
+
+	for i := 0; i < lenTestProfile; i++ {
+
+		expectedStr = getTestNativeNumStr(
+			testProfile[i].IntegerDigits,
+			testProfile[i].FractionalDigits,
+			testProfile[i].IsNegativeValue)
+
+		if testProfile[i].IsNegativeValue == true {
+
+			numberSignDescription = "Negative Number"
+		} else {
+			numberSignDescription = "Positive Number"
+		}
+
+		testName = fmt.Sprintf("Test #%v float64\n"+
+			"InputStr = (%v)\n"+
+			"%v Test\n",
+			i+1,
+			expectedStr,
+			numberSignDescription)
+
+		var float64Num float64
+
+		err = new(MathHelper).NativeNumStrToNumericValue(
+			expectedStr,
+			&float64Num,
+			ePrefix.XCpy(
+				fmt.Sprintf("idx=%v float64Num<-expectedStr",
+					i)))
+
+		if err != nil {
+			t.Errorf("\n%v\n",
+				err.Error())
+			return
+		}
+
+		actualNumStr = strconv.FormatFloat(
+			float64Num,
+			'f',
+			-1,
+			64)
+
+		if actualNumStr != expectedStr {
+
+			t.Errorf("\n%v\n"+
+				"%v\n"+
+				"Error: actualNumStr != expectedStr\n"+
+				"actualNumStr  = '%v'\n"+
+				"expectedStr   = '%v'\n",
+				ePrefix.String(),
+				testName,
+				actualNumStr,
+				expectedStr)
+
+			return
+
+		}
+
+	}
+
+	return
+}
+
 func TestMathHelper_NativeNumStrToNumericValue_0000800(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
