@@ -1506,8 +1506,8 @@ func (textBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat) FmtNumStrDefault(
 //  2. The type of Rounding algorithm applied when
 //     generating a native number string is controlled
 //     by the Mode parameter contained in the current
-//     instance of TextFieldFormatDtoBigFloat. The member variable
-//     is named:
+//     instance of TextFieldFormatDtoBigFloat. The member
+//     variable is named:
 //
 //     TextFieldFormatDtoBigFloat.NativeRoundingMode
 //
