@@ -93,6 +93,8 @@ func TestNumberStrKernel_Compare_000100(t *testing.T) {
 	testNStrValue01,
 		err = new(NumberStrKernel).NewFromNumericValue(
 		testBigFloat,
+		NumRoundType.NoRounding(),
+		0,
 		ePrefix.XCpy(
 			"testNStrValue01<-testBigFloat"))
 
@@ -1134,6 +1136,8 @@ func TestNumberStrKernel_IsZeroValue_000100(t *testing.T) {
 	numStrKernel01,
 		err = new(NumberStrKernel).NewFromNumericValue(
 		origNum,
+		NumRoundType.NoRounding(),
+		0,
 		&ePrefix)
 
 	if err != nil {
@@ -1196,6 +1200,8 @@ func TestNumberStrKernel_IsZeroValue_000100(t *testing.T) {
 	numStrKernel02,
 		err = new(NumberStrKernel).NewFromNumericValue(
 		uintNum,
+		NumRoundType.NoRounding(),
+		0,
 		&ePrefix)
 
 	if err != nil {
@@ -1263,6 +1269,8 @@ func TestNumberStrKernel_IsZeroValue_000100(t *testing.T) {
 	numStrKernel03,
 		err = new(NumberStrKernel).NewFromNumericValue(
 		uint32Num,
+		NumRoundType.NoRounding(),
+		0,
 		&ePrefix)
 
 	if err != nil {
@@ -1666,8 +1674,9 @@ func TestNumberStrKernel_NewFromBigRat_000100(t *testing.T) {
 
 	numStrKernel01,
 		err = new(NumberStrKernel).
-		NewFromBigRat(
+		NewFromNumericValue(
 			newRat,
+			NumRoundType.HalfAwayFromZero(),
 			10,
 			ePrefix)
 

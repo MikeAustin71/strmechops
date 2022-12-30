@@ -5387,6 +5387,8 @@ func (txtFieldFmtDtoBigFloatElectron *textFieldFormatDtoBigFloatElectron) getBig
 	float64NumberStrKernel,
 		err = new(NumberStrKernel).NewFromNumericValue(
 		txtBigFloatFieldFmtDto.BigFloatNum,
+		NumRoundType.NoRounding(),
+		0,
 		ePrefix.XCpy(
 			"txtBigFloatFieldFmtDto.BigFloatNum"))
 
@@ -5738,6 +5740,8 @@ func (txtFieldFmtDtoBigFloatElectron *textFieldFormatDtoBigFloatElectron) getNum
 	newNumberStrKernel,
 		err = new(NumberStrKernel).NewFromNumericValue(
 		txtBigFloatFieldFmtDto.BigFloatNum,
+		NumRoundType.NoRounding(),
+		0,
 		ePrefix.XCpy(
 			"txtBigFloatFieldFmtDto.BigFloatNum"))
 

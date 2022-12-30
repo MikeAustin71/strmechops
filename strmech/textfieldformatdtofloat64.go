@@ -5237,6 +5237,8 @@ func (txtFieldFmtDtoFloat64Electron *textFieldFormatDtoFloat64Electron) getFloat
 	float64NumberStrKernel,
 		err = new(NumberStrKernel).NewFromNumericValue(
 		txtFieldFmtDtoFloat64.Float64Num,
+		txtFieldFmtDtoFloat64.RoundingType,
+		txtFieldFmtDtoFloat64.NumOfFractionalDigits,
 		ePrefix.XCpy(
 			"txtFieldFmtDtoFloat64.Float64Num"))
 
@@ -5247,8 +5249,8 @@ func (txtFieldFmtDtoFloat64Electron *textFieldFormatDtoFloat64Electron) getFloat
 	}
 
 	roundingSpecOne := NumStrRoundingSpec{
-		roundingType:            txtFieldFmtDtoFloat64.RoundingType,
-		roundToFractionalDigits: txtFieldFmtDtoFloat64.NumOfFractionalDigits,
+		roundingType:            NumRoundType.NoRounding(),
+		roundToFractionalDigits: 0,
 	}
 
 	float64NumStr,
@@ -5565,21 +5567,10 @@ func (txtFieldFmtDtoFloat64Electron *textFieldFormatDtoFloat64Electron) getNumbe
 	newNumberStrKernel,
 		err = new(NumberStrKernel).NewFromNumericValue(
 		txtFieldFmtDtoFloat64.Float64Num,
-		ePrefix.XCpy(
-			"txtFieldFmtDtoFloat64.Float64Num"))
-
-	if err != nil {
-
-		return newNumberStrKernel, err
-
-	}
-
-	err = newNumberStrKernel.Round(
 		txtFieldFmtDtoFloat64.RoundingType,
 		txtFieldFmtDtoFloat64.NumOfFractionalDigits,
 		ePrefix.XCpy(
-			"newNumberStrKernel<-"+
-				"txtFieldFmtDtoFloat64"))
+			"txtFieldFmtDtoFloat64.Float64Num"))
 
 	return newNumberStrKernel, err
 }
