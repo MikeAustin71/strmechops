@@ -12,6 +12,74 @@ type MainNumStrTest005 struct {
 	input string
 }
 
+func (mainNumStrTest005 MainNumStrTest005) NewFromNumericValue01() {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"MainNumStrTest005.NewFromNumericValue01()",
+		"")
+
+	breakStr := strings.Repeat("=", 50)
+
+	fmt.Printf("\n\n" + breakStr + "\n")
+
+	fmt.Printf("\n Starting Run!\n"+
+		"Function: %v\n",
+		ePrefix.String())
+
+	fmt.Printf("\n" + breakStr + "\n")
+
+	var err error
+	var numStrKernel01 strmech.NumberStrKernel
+
+	origNum := uint64(0)
+
+	expectedStr := fmt.Sprintf("%v",
+		origNum)
+
+	// origFracStr := ""
+
+	numStrKernel01,
+		err = new(strmech.NumberStrKernel).NewFromNumericValue(
+		origNum,
+		strmech.NumRoundType.NoRounding(),
+		0,
+		&ePrefix)
+
+	if err != nil {
+		fmt.Printf("%v\n",
+			err.Error())
+		return
+	}
+
+	var nativeNumStr string
+
+	nativeNumStr,
+		err = numStrKernel01.FmtNumStrNative(
+		ePrefix.XCpy("numStrKernel01"))
+
+	if err != nil {
+		fmt.Printf("%v\n",
+			err.Error())
+		return
+	}
+
+	fmt.Printf("\n%v\n"+
+		"Native Number String: %v\n"+
+		"     Expected String: %v\n",
+		ePrefix.String(),
+		nativeNumStr,
+		expectedStr)
+
+	fmt.Printf("\n\n" + breakStr + "\n")
+
+	fmt.Printf("  Successful Completion!\n"+
+		"Function: %v\n",
+		ePrefix.String())
+
+	fmt.Printf(breakStr + "\n\n")
+
+}
+
 func (mainNumStrTest005 MainNumStrTest005) NumStrRound01() {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(

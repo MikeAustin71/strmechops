@@ -2813,8 +2813,8 @@ func (numStrKernelAtom *numberStrKernelAtom) testValidityOfNumStrKernel(
 		lenFracDigits == 0 {
 
 		err = fmt.Errorf("%v\n"+
-			"Error: This instance of NumberStrKernel is invalid!"+
-			"Both Integer Digits and Fractional Digits are empty"+
+			"Error: This instance of NumberStrKernel is invalid!\n"+
+			"Both Integer Digits and Fractional Digits are empty\n"+
 			"and contain zero digits.\n",
 			ePrefix.String())
 
@@ -2836,7 +2836,7 @@ func (numStrKernelAtom *numberStrKernelAtom) testValidityOfNumStrKernel(
 	if !numStrKernel.numberSign.XIsValid() {
 
 		err = fmt.Errorf("%v\n"+
-			"Error: This instance of NumberStrKernel is invalid!"+
+			"Error: This instance of NumberStrKernel is invalid!\n"+
 			"The Number Sign Value is invalid.\n"+
 			"Valid Number Sign Values are:\n"+
 			"   NumSignVal.Negative()\n"+
@@ -2860,7 +2860,7 @@ func (numStrKernelAtom *numberStrKernelAtom) testValidityOfNumStrKernel(
 			numStrKernel.integerDigits.CharsArray[i] > '9' {
 
 			err = fmt.Errorf("%v\n"+
-				"Error: This instance of NumberStrKernel is invalid!"+
+				"Error: This instance of NumberStrKernel is invalid!\n"+
 				"The Integer Digits rune array contains non-numeric characters.\n",
 				ePrefix.String())
 
@@ -2883,7 +2883,7 @@ func (numStrKernelAtom *numberStrKernelAtom) testValidityOfNumStrKernel(
 			numStrKernel.fractionalDigits.CharsArray[j] > '9' {
 
 			err = fmt.Errorf("%v\n"+
-				"Error: This instance of NumberStrKernel is invalid!"+
+				"Error: This instance of NumberStrKernel is invalid!\n"+
 				"The Fractional Digits rune array contains non-numeric characters.\n",
 				ePrefix.String())
 
@@ -2910,7 +2910,7 @@ func (numStrKernelAtom *numberStrKernelAtom) testValidityOfNumStrKernel(
 		numStrKernel.numberSign == NumSignVal.Zero() {
 
 		err = fmt.Errorf("%v\n"+
-			"Error: This instance of NumberStrKernel is invalid!"+
+			"Error: This instance of NumberStrKernel is invalid!\n"+
 			"The Number Sign Value is invalid.\n"+
 			"NumberStrKernel has a non-zero numeric value.\n"+
 			"However, Number Sign is equal to Zero.\n"+
@@ -2926,10 +2926,10 @@ func (numStrKernelAtom *numberStrKernelAtom) testValidityOfNumStrKernel(
 			numStrKernel.isNonZeroValue == true {
 
 			err = fmt.Errorf("%v\n"+
-				"Error: This instance of NumberStrKernel is invalid!"+
+				"Error: This instance of NumberStrKernel is invalid!\n"+
 				"The Number Sign Value is invalid.\n"+
 				"NumberStrKernel has a zero numeric value.\n"+
-				"However, internal flag numStrKernel.getSetIsNonZeroValue\n"+
+				"However, internal flag numStrKernel.isNonZeroValue\n"+
 				"is set to 'true'.\n",
 				ePrefix.String())
 
@@ -2941,10 +2941,10 @@ func (numStrKernelAtom *numberStrKernelAtom) testValidityOfNumStrKernel(
 			numStrKernel.isNonZeroValue == false {
 
 			err = fmt.Errorf("%v\n"+
-				"Error: This instance of NumberStrKernel is invalid!"+
+				"Error: This instance of NumberStrKernel is invalid!\n"+
 				"The Number Sign Value is invalid.\n"+
 				"NumberStrKernel has a non-zero numeric value.\n"+
-				"However, internal flag numStrKernel.getSetIsNonZeroValue\n"+
+				"However, internal flag numStrKernel.isNonZeroValue\n"+
 				"is set to 'false'.\n",
 				ePrefix.String())
 

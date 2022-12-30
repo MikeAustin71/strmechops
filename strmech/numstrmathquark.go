@@ -514,7 +514,7 @@ func (nStrMathQuark *numStrMathQuark) nativeNumStrToRunes(
 
 	foundRadixPoint := false
 
-	isZero := false
+	isZero := true
 
 	for i := 0; i < lenNumberRunes; i++ {
 

@@ -1921,6 +1921,17 @@ func (numStrKernelQuark *numberStrKernelQuark) setNumStrKernelFromNativeNumStr(
 		return err
 	}
 
+	err = new(NumStrHelper).
+		IsValidNativeNumStrError(
+			nativeNumStr,
+			ePrefix.XCpy(
+				"nativeNumStr"))
+
+	if err != nil {
+
+		return err
+	}
+
 	var numberStats NumberStrStatsDto
 
 	numberStats,

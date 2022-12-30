@@ -9085,130 +9085,6 @@ func (numStrKernel *NumberStrKernel) SetDefaultSimpleNumStrFormatSpec(
 	return err
 }
 
-// SetNumberSign - Sets the Number Sign for the numeric value
-// represented by the current instance of NumberStrKernel.
-//
-// The Number Sign is specified by means of a
-// NumericSignValueType enumeration value.
-//
-// Possible values are listed as follows:
-//
-//	NumSignVal.None()     = -2 - Invalid Value
-//	NumSignVal.Negative() = -1 - Valid Value
-//	NumSignVal.Zero()     =  0 - Valid Value
-//	NumSignVal.Positive() =  1 - Valid Value
-func (numStrKernel *NumberStrKernel) SetNumberSign(
-	numberSign NumericSignValueType,
-	errorPrefix interface{}) (
-	err error) {
-
-	if numStrKernel.lock == nil {
-		numStrKernel.lock = new(sync.Mutex)
-	}
-
-	numStrKernel.lock.Lock()
-
-	defer numStrKernel.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
-		"NumberStrKernel."+
-			"SetNumberSign()",
-		"")
-
-	if err != nil {
-		return err
-	}
-
-	if !numberSign.XIsValid() {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'numberSign' is invalid\n"+
-			"Number Sign must be set to one of the following"+
-			"three valid values:\n"+
-			"  NumSignVal.Negative()\n"+
-			"  NumSignVal.Zero()\n"+
-			"  NumSignVal.Positive()"+
-			"Input parameter Number Sign Integer Value = '%v'\n"+
-			"Input parameter Number Sign  String Value = '%v'\n",
-			ePrefix.String(),
-			numberSign.XValueInt(),
-			numberSign.String())
-
-		return err
-	}
-
-	numStrKernel.numberSign = numberSign
-
-	return err
-}
-
-// SetNumberSignInt - Sets the Number Sign of the current
-// NumberStrKernel instance based on an integer input value.
-//
-// Possible valid integer input values are listed as follows:
-//
-//	-1 - Minus One
-//	 0 - Zero
-//	 1 - Plus One
-//
-// Invalid input value will generate an error.
-func (numStrKernel *NumberStrKernel) SetNumberSignInt(
-	numberSign int,
-	errorPrefix interface{}) (
-	err error) {
-
-	if numStrKernel.lock == nil {
-		numStrKernel.lock = new(sync.Mutex)
-	}
-
-	numStrKernel.lock.Lock()
-
-	defer numStrKernel.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
-		"NumberStrKernel."+
-			"SetNumberSignInt()",
-		"")
-
-	if err != nil {
-		return err
-	}
-
-	if numberSign > 1 ||
-		numberSign < -1 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'numberSign' is invalid!\n"+
-			"'numberSign' must be set to one of three values:"+
-			"     0 = Numeric Value of Zero ('0').\n"+
-			"     1 = + or positive number sign\n"+
-			"    -1 = - or negative number sign\n"+
-			"Input parameter 'numberSign' = '%v'\n",
-			ePrefix.String(),
-			numberSign)
-
-		return err
-	}
-
-	if numberSign == 0 {
-		numStrKernel.isNonZeroValue = false
-	} else {
-		numStrKernel.isNonZeroValue = true
-	}
-
-	numStrKernel.numberSign = NumericSignValueType(numberSign)
-
-	return err
-}
-
 // SetFromNumericValue
 //
 //	Deletes and resets the internal values for the
@@ -9658,6 +9534,130 @@ func (numStrKernel *NumberStrKernel) SetFromNumericValue(
 		numStrKernel,
 		numStrRoundingSpec,
 		ePrefix)
+}
+
+// SetNumberSign - Sets the Number Sign for the numeric value
+// represented by the current instance of NumberStrKernel.
+//
+// The Number Sign is specified by means of a
+// NumericSignValueType enumeration value.
+//
+// Possible values are listed as follows:
+//
+//	NumSignVal.None()     = -2 - Invalid Value
+//	NumSignVal.Negative() = -1 - Valid Value
+//	NumSignVal.Zero()     =  0 - Valid Value
+//	NumSignVal.Positive() =  1 - Valid Value
+func (numStrKernel *NumberStrKernel) SetNumberSign(
+	numberSign NumericSignValueType,
+	errorPrefix interface{}) (
+	err error) {
+
+	if numStrKernel.lock == nil {
+		numStrKernel.lock = new(sync.Mutex)
+	}
+
+	numStrKernel.lock.Lock()
+
+	defer numStrKernel.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumberStrKernel."+
+			"SetNumberSign()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if !numberSign.XIsValid() {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'numberSign' is invalid\n"+
+			"Number Sign must be set to one of the following"+
+			"three valid values:\n"+
+			"  NumSignVal.Negative()\n"+
+			"  NumSignVal.Zero()\n"+
+			"  NumSignVal.Positive()"+
+			"Input parameter Number Sign Integer Value = '%v'\n"+
+			"Input parameter Number Sign  String Value = '%v'\n",
+			ePrefix.String(),
+			numberSign.XValueInt(),
+			numberSign.String())
+
+		return err
+	}
+
+	numStrKernel.numberSign = numberSign
+
+	return err
+}
+
+// SetNumberSignInt - Sets the Number Sign of the current
+// NumberStrKernel instance based on an integer input value.
+//
+// Possible valid integer input values are listed as follows:
+//
+//	-1 - Minus One
+//	 0 - Zero
+//	 1 - Plus One
+//
+// Invalid input value will generate an error.
+func (numStrKernel *NumberStrKernel) SetNumberSignInt(
+	numberSign int,
+	errorPrefix interface{}) (
+	err error) {
+
+	if numStrKernel.lock == nil {
+		numStrKernel.lock = new(sync.Mutex)
+	}
+
+	numStrKernel.lock.Lock()
+
+	defer numStrKernel.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumberStrKernel."+
+			"SetNumberSignInt()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if numberSign > 1 ||
+		numberSign < -1 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'numberSign' is invalid!\n"+
+			"'numberSign' must be set to one of three values:"+
+			"     0 = Numeric Value of Zero ('0').\n"+
+			"     1 = + or positive number sign\n"+
+			"    -1 = - or negative number sign\n"+
+			"Input parameter 'numberSign' = '%v'\n",
+			ePrefix.String(),
+			numberSign)
+
+		return err
+	}
+
+	if numberSign == 0 {
+		numStrKernel.isNonZeroValue = false
+	} else {
+		numStrKernel.isNonZeroValue = true
+	}
+
+	numStrKernel.numberSign = NumericSignValueType(numberSign)
+
+	return err
 }
 
 //	SetRuneDigits
