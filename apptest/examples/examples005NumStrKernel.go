@@ -12,6 +12,88 @@ type MainNumStrTest005 struct {
 	input string
 }
 
+func (mainNumStrTest005 MainNumStrTest005) NewFromBigRatValue01() {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"MainNumStrTest005.NewFromBigRatValue01()",
+		"")
+
+	breakStr := strings.Repeat("=", 50)
+
+	fmt.Printf("\n\n" + breakStr + "\n")
+
+	fmt.Printf("\n Starting Run!\n"+
+		"Function: %v\n",
+		ePrefix.String())
+
+	fmt.Printf("\n" + breakStr + "\n")
+
+	newRat := big.NewRat(1, 3)
+
+	expectedNumberStr := "0.3333333333"
+
+	var numStrKernel01 strmech.NumberStrKernel
+
+	var err error
+
+	numStrKernel01,
+		err = new(strmech.NumberStrKernel).
+		NewFromNumericValue(
+			newRat,
+			strmech.NumRoundType.HalfAwayFromZero(),
+			10,
+			ePrefix)
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var actualNumberStr string
+
+	actualNumberStr,
+		err = numStrKernel01.FmtNumStrNative(
+		ePrefix.XCpy("actualNumberStr<-numStrKernel01"))
+
+	if err != nil {
+		fmt.Printf("%v\n",
+			err.Error())
+		return
+	}
+
+	if actualNumberStr != expectedNumberStr {
+
+		fmt.Printf("\n%v\n"+
+			"Test#1\n"+
+			"Error: actualNumberStr != expectedNumberStr\n"+
+			"actualNumberStr   = '%v'\n"+
+			"expectedNumberStr = '%v'\n",
+			ePrefix.String(),
+			actualNumberStr,
+			expectedNumberStr)
+
+		return
+
+	}
+
+	fmt.Printf("\n%v\n"+
+		"Native Number String: %v\n"+
+		"     Expected String: %v\n",
+		ePrefix.String(),
+		actualNumberStr,
+		expectedNumberStr)
+
+	fmt.Printf("\n\n" + breakStr + "\n")
+
+	fmt.Printf("  Successful Completion!\n"+
+		"Function: %v\n",
+		ePrefix.String())
+
+	fmt.Printf(breakStr + "\n\n")
+
+}
+
 func (mainNumStrTest005 MainNumStrTest005) NewFromNumericValue01() {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(

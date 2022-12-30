@@ -5518,6 +5518,194 @@ func (numStrKernel *NumberStrKernel) IsZeroValue() bool {
 	return !isNonZeroValue
 }
 
+//	NewFromBigRat
+//
+//	Creates a new instance of NumberStrKernel converted
+//	from a numeric value passed as a *big.Rat type
+//	through input parameter 'bigRatNum'.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	Before being converted to an instance of
+//	NumberStrKernel, the big.Rat numeric value will be
+//	rounded by the Golang 'big' package function:
+//
+//			func (*Rat) FloatString
+//
+//	The rounding algorithm used is described as:
+//
+//		The last digit is rounded to nearest, with halves
+//		rounded away from zero.
+//			https://pkg.go.dev/math/big#Rat
+//
+//	Input parameter 'roundToFractionalDigits' controls
+//	the number of fractional digits configured in the
+//	returned instance of NumberStrKernel.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	bigRatNum					*big.Rat
+//
+//		A pointer to an instance of the numeric value
+//		type big.Rat. This numeric value will be
+//		converted to, and returned as, a Native Number
+//		String.
+//
+//		Before being converted to a Native Number String,
+//		this numeric value will be rounded by the Golang
+//		'big' package functions as specified by input
+//		parameter, 'roundToFractionalDigits'.
+//
+//	roundToFractionalDigits		int
+//
+//		When set to a positive integer value, this
+//		parameter controls the number of digits to the
+//		right of the radix point or decimal separator
+//		(a.k.a. decimal point). Effectively this defines
+//		the number of fractional digits remaining after
+//		completion of the number rounding operation
+//		performed by the Golang package functions.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	NumberStrKernel
+//
+//		If this method completes successfully, a new instance
+//		of NumberStrKernel will be returned configured and
+//		populated with the numeric value passed in paramter,
+//		'numericValue'.
+//
+//	error
+//
+//		If this method completes successfully, the returned
+//		error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error message.
+//	 	This returned error message will incorporate the method
+//	 	chain and text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be attached to the beginning
+//	 	of the error message.
+func (numStrKernel *NumberStrKernel) NewFromBigRat(
+	bigRatNum *big.Rat,
+	roundToFractionalDigits int,
+	errorPrefix interface{}) (
+	NumberStrKernel,
+	error) {
+
+	if numStrKernel.lock == nil {
+		numStrKernel.lock = new(sync.Mutex)
+	}
+
+	numStrKernel.lock.Lock()
+
+	defer numStrKernel.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	newNumStrKernel := NumberStrKernel{}
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumberStrKernel."+
+			"NewFromBigRat()",
+		"")
+
+	if err != nil {
+		return newNumStrKernel, err
+	}
+
+	var nativeNumStr string
+
+	nativeNumStr,
+		err = new(MathHelper).
+		BigRatToNativeNumStr(
+			bigRatNum,
+			roundToFractionalDigits,
+			ePrefix)
+
+	if err != nil {
+
+		return newNumStrKernel, err
+	}
+
+	err = new(numberStrKernelQuark).
+		setNumStrKernelFromNativeNumStr(
+			&newNumStrKernel,
+			nativeNumStr,
+			ePrefix.XCpy(
+				"newNumStrKernel"))
+
+	return newNumStrKernel, err
+}
+
 //	NewFromNumericValue
 //
 //	Creates a new instance of NumberStrKernel based on
@@ -5541,6 +5729,15 @@ func (numStrKernel *NumberStrKernel) IsZeroValue() bool {
 //
 //	This numeric value is then used to configure and
 //	return a new instance of NumberStrKernel.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	big.Rat and *big.Rat values default to 2,000 decimal
+//	places of accuracy. Adjust rounding parameters as
+//	required or use method:
+//		NewFromNumericValue.NewFromBigRat()
 //
 // ----------------------------------------------------------------
 //
