@@ -2751,10 +2751,13 @@ func (numStrKernelAtom *numberStrKernelAtom) prepareCompareNumStrKernels(
 //
 //	err							error
 //
-//		If this method completes successfully, this returned
-//		error Type is set equal to 'nil'. If errors are
-//		encountered during processing, the returned error
-//		Type will encapsulate an error message.
+//		If this method completes successfully and
+//	 	'numStrKernel' evaluates as valid, this returned
+//		error Type is set equal to 'nil'.
+//
+//		If errors are encountered or if 'numStrKernel'
+//		evaluates as invalid, the returned error Type
+//		will encapsulate an error message.
 //
 //		If an error message is returned, the text value for
 //		input parameter 'errPrefDto' (error prefix) will be

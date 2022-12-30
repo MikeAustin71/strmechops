@@ -907,13 +907,13 @@ func (numStrKernelMolecule *numberStrKernelMolecule) convertNumericValueToKernel
 	new(numberStrKernelElectron).empty(
 		numStrKernel)
 
-	var signedPureNumStr string
+	var nativeNumStr string
 
-	signedPureNumStr,
+	nativeNumStr,
 		err = new(MathHelper).NumericValueToNativeNumStr(
 		numericValue,
 		ePrefix.XCpy(
-			"signedPureNumStr<-numericValue"))
+			"nativeNumStr<-numericValue"))
 
 	if err != nil {
 
@@ -921,65 +921,13 @@ func (numStrKernelMolecule *numberStrKernelMolecule) convertNumericValueToKernel
 
 	}
 
-	var decSeparatorChars RuneArrayDto
-
-	decSeparatorChars,
-		err = new(RuneArrayDto).NewString(
-		".",
-		CharSearchType.LinearTargetStartingIndex(),
-		ePrefix)
-
-	if err != nil {
-
-		return err
-
-	}
-
-	var numberStats NumberStrStatsDto
-
-	numberStats,
-		err = new(numStrMathQuark).
-		pureNumStrToRunes(
-			signedPureNumStr,
-			&numStrKernel.integerDigits,
-			&numStrKernel.fractionalDigits,
-			&decSeparatorChars,
-			true,
-			ePrefix.XCpy(
-				""))
-
-	if err != nil {
-
-		return err
-
-	}
-
-	numStrKernel.numberSign = numberStats.NumberSign
-
-	numStrKernel.numberValueType = numberStats.NumberValueType
-
-	numStrKernel.isNonZeroValue = !numberStats.IsZeroValue
-
-	var err2 error
-	_,
-		err2 = new(numberStrKernelAtom).
-		testValidityOfNumStrKernel(
+	err = new(numberStrKernelQuark).
+		setNumStrKernelFromNativeNumStr(
 			numStrKernel,
-			ePrefix.XCpy(
-				"numStrKernel"))
-
-	if err2 != nil {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: The new NumberStrKernel configuration failed validity tests.\n"+
-			"One or more data values were classified as 'invalid'.\n"+
-			"Error=\n%v\n",
-			ePrefix.String(),
-			err2.Error())
-	}
+			nativeNumStr,
+			ePrefix.XCpy("numStrKernel<-nativeNumStr"))
 
 	return err
-
 }
 
 //	formatNumStr

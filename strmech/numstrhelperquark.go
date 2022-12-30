@@ -1456,3 +1456,255 @@ computeExitStats:
 		numStrKernel,
 		err
 }
+
+// testValidityOfNativeNumStr
+//
+// Receives a Native Number String and performs a
+// diagnostic analysis to determine if string conforms
+// to the specifications required for a properly formed
+// Native Number String.
+//
+// The term 'Native' means that the number string format
+// is designed to interoperate with the Golang
+// programming language library functions and packages.
+// Types like 'strconv', 'strings', 'math' and 'big'
+// (big.Int, big.Float, big.Rat) routinely parse and
+// convert this type of number string to numeric values.
+// In addition, Native Number Strings are frequently
+// consumed by external library functions such as this
+// one (String Mechanics 'strmech') to convert strings to
+// numeric values and numeric values to strings.
+//
+// While this format is inconsistent with many national
+// and cultural formatting conventions, number strings
+// which fail to implement this standardized formatting
+// protocol will generate errors in some Golang library
+// functions.
+//
+//	Examples Of Native Number Strings
+//		1000000
+//		12.5483
+//		-1000000
+//		-12.5483
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	nativeNumStr	string
+//
+//		A string of characters formatted as a Native
+//		Number String.
+//
+//		The term 'Native Number String' means that the
+//		number string format is designed to interoperate
+//		with the Golang programming language library
+//		functions and packages. Types like 'strconv',
+//		'strings', 'math' and 'big' (big.Int, big.Float,
+//		big.Rat) routinely parse and convert this type of
+//		number string to generate numeric values. In
+//		addition, Native Number Strings are frequently
+//		consumed by external library functions such	as
+//		this one (String Mechanics 'strmech') to convert
+//		strings to numeric values and numeric values to
+//		strings.
+//
+//		This method will analyze the Native Number String
+//		passed through input parameter 'nativeNumStr' to
+//		determine if meets the required formatting
+//		criteria and is valid in all respects.
+//
+//		A valid Native Number String must conform to the
+//		standardized formatting criteria defined below:
+//
+//	 	1. A Native Number String Consists of numeric
+//	 	   character digits zero through nine inclusive
+//	 	   (0-9).
+//
+//	 	2. A Native Number String will include a period
+//	 	   or decimal point ('.') to separate integer and
+//	 	   fractional digits within a number string.
+//
+//	 	   Native Number String Floating Point Value:
+//	 	   				123.1234
+//
+//	 	3. A Native Number String will always format
+//	 	   negative numeric values with a leading minus sign
+//	 	   ('-').
+//
+//	 	   Native Number String Negative Value:
+//	 	   				-123.2
+//
+//	 	4. A Native Number String WILL NEVER include integer
+//	 	   separators such as commas (',') to separate
+//	 	   integer digits by thousands.
+//
+//	 	   					NOT THIS: 1,000,000
+//	 	   		Native Number String: 1000000
+//
+//	 	5. Native Number Strings will only consist of:
+//
+//	 	   (a)	Numeric digits zero through nine inclusive (0-9).
+//
+//	 	   (b)	A decimal point ('.') for floating point
+//	 	   		numbers.
+//
+//	 	   (c)	A leading minus sign ('-') in the case of
+//	 	   		negative numeric values.
+//
+//	nativeNumStrParamterName	string
+//
+//		The name or label associated with the Native
+//		Number String passed as input paramter
+//		'nativeNumStr'. This text name or label will
+//		be used to identify the Native Number String
+//		in error or informational messages returned by
+//		this method.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	isValid						bool
+//
+//		If input parameter 'nativeNumStr' is judged to be
+//		a valid Native Number String, this return
+//		parameter will be set to 'true'.
+//
+//		If input parameter 'nativeNumStr' fails to meet
+//		the criteria for a valid Native Number String,
+//		this return parameter will be set to 'false'.
+//
+//	err							error
+//
+//		If this method completes successfully and
+//		'nativeNumStr' is determined to be valid, this
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing or if
+//		'nativeNumStr' is determined to be invalid, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value for
+//		input parameter 'errPrefDto' (error prefix) will be
+//		prefixed or attached at the beginning of the error
+//		message.
+func (nStrHelperQuark *numStrHelperQuark) testValidityOfNativeNumStr(
+	nativeNumStr string,
+	nativeNumStrParamterName string,
+	ePrefDto *ePref.ErrPrefixDto) (
+	isValid bool,
+	err error) {
+
+	if nStrHelperQuark.lock == nil {
+		nStrHelperQuark.lock = new(sync.Mutex)
+	}
+
+	nStrHelperQuark.lock.Lock()
+
+	defer nStrHelperQuark.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	isValid = false
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		ePrefDto,
+		"numStrHelperQuark."+
+			"testValidityOfNativeNumStr()",
+		"")
+
+	if err != nil {
+
+		return isValid, err
+	}
+
+	if len(nativeNumStrParamterName) == 0 {
+		nativeNumStrParamterName = "nativeNumStr"
+	}
+
+	lenOfNativeNumStr := len(nativeNumStr)
+
+	if lenOfNativeNumStr == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: %v is invalid!\n"+
+			"%v is a zero length or emtpy string.\n",
+			ePrefix.String(),
+			nativeNumStrParamterName,
+			nativeNumStrParamterName)
+
+		return isValid, err
+	}
+
+	numOfNumericDigits := 0
+
+	for i := 0; i < lenOfNativeNumStr; i++ {
+
+		if nativeNumStr[i] == '-' &&
+			i != 0 {
+
+			err = fmt.Errorf("%v\n"+
+				"Error: %v is invalid!\n"+
+				"A minus sign ('-') was detected in\n"+
+				"array position %v of the Native Number\n"+
+				"String. Minus signs must be formatted as\n"+
+				"leading minus signs in array position zero,\n"+
+				"at the beginning of the Native Number String\n",
+				ePrefix.String(),
+				nativeNumStrParamterName,
+				i)
+
+			return isValid, err
+
+		} else if nativeNumStr[i] == '-' &&
+			i == 0 {
+
+			continue
+		}
+
+		if nativeNumStr[i] == '.' {
+			continue
+		}
+
+		if nativeNumStr[i] >= '0' &&
+			nativeNumStr[i] <= '9' {
+
+			numOfNumericDigits++
+
+			continue
+		}
+
+		err = fmt.Errorf("%v\n"+
+			"Error: %v is invalid!\n"+
+			"An invalid character was found in\n"+
+			"the Native Number String at array\n"+
+			"index %v. The invalid character is '%v'\n",
+			ePrefix.String(),
+			nativeNumStrParamterName,
+			i,
+			string(nativeNumStr[i]))
+
+		return isValid, err
+	}
+
+	isValid = true
+
+	return isValid, err
+}

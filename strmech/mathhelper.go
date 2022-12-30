@@ -18,23 +18,28 @@ type MathHelper struct {
 // numeric value passed as an empty interface through
 // input parameter 'numericValue'.
 //
-// The term 'Native' applies in the sense that the number
-// string format is designed to interoperate with the
-// Golang programming language library functions and
-// packages. Types like 'strconv', 'strings', 'math' and
-// 'big' (big.Int, big.Float, big.Rat) routinely parse
-// and convert this type of number string to numeric
-// values. In addition, Native Number Strings are
-// frequently consumed by external library functions such
-// as this one (String Mechanics 'strmech') to convert
-// strings to numeric values and numeric values to
-// strings.
+// The term 'Native' means that the number string format
+// is designed to interoperate with the Golang
+// programming language library functions and packages.
+// Types like 'strconv', 'strings', 'math' and 'big'
+// (big.Int, big.Float, big.Rat) routinely parse and
+// convert this type of number string to numeric values.
+// In addition, Native Number Strings are frequently
+// consumed by external library functions such as this
+// one (String Mechanics 'strmech') to convert strings to
+// numeric values and numeric values to strings.
 //
 // While this format is inconsistent with many national
 // and cultural formatting conventions, number strings
 // which fail to implement this standardized formatting
 // protocol will generate errors in some Golang library
 // functions.
+//
+//	Examples Of Native Number Strings
+//		1000000
+//		12.5483
+//		-1000000
+//		-12.5483
 //
 // The 'numericValue' input parameter supports pointers
 // to specific concrete types which will be configured
@@ -64,7 +69,7 @@ type MathHelper struct {
 //		stored in, the numeric value passed as input
 //		parameter 'numericValue'.
 //
-//		The term 'Native' applies in the sense that the
+//		The term 'Native Number String' means that the
 //		number string format is designed to interoperate
 //		with the Golang programming language library
 //		functions and packages. Types like 'strconv',
@@ -351,8 +356,10 @@ func (mathHelper *MathHelper) NativeNumStrToNumericValue(
 //	     		float32, float64, big.Float
 //				*float32, *float64, *big.Float
 //				*BigFloatDto, BigFloatDto
+//				*big.Rat, big.Rat
 //				int8, int16, int, int32, int64, big.Int
-//				*int8, *int16, *int, *int32, *int64, *big.Int
+//				*int8, *int16, *int, *int32, *int64,
+//				*big.Int, big.Int
 //				uint8, uint16, uint, uint32, uint64
 //				*uint8, *uint16, *uint, *uint32, *uint64
 //				*TextFieldFormatDtoFloat64, TextFieldFormatDtoFloat64

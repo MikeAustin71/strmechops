@@ -1758,3 +1758,209 @@ func (numStrKernelQuark *numberStrKernelQuark) roundNumStrKernel(
 
 	return err
 }
+
+// setNumStrKernelFromNativeNumStr
+//
+// Receives an instance of NumberStrKernel and proceeds
+// to reconfigure the internal data elements with the
+// numeric value extracted from the Native Number String
+// passed as input paramter, 'nativeNumStr'.
+//
+// The term 'Native' means that the number string format
+// is designed to interoperate with the Golang
+// programming language library functions and packages.
+// Types like 'strconv', 'strings', 'math' and 'big'
+// (big.Int, big.Float, big.Rat) routinely parse and
+// convert this type of number string to numeric values.
+// In addition, Native Number Strings are frequently
+// consumed by external library functions such as this
+// one (String Mechanics 'strmech') to convert strings to
+// numeric values and numeric values to strings.
+//
+// While this format is inconsistent with many national
+// and cultural formatting conventions, number strings
+// which fail to implement this standardized formatting
+// protocol will generate errors in some Golang library
+// functions.
+//
+//	Examples Of Native Number Strings
+//		1000000
+//		12.5483
+//		-1000000
+//		-12.5483
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	This method will delete and overwrite all
+//	pre-existing data values in the instance of
+//	NumberStrKernel passed as input parameter
+//	'numStrKernel'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	numStrKernel				*NumberStrKernel
+//
+//		A pointer to an instance of NumberStrKernel. This
+//		instance will be reconfigured using the numeric
+//		value extracted from input parameter, 'nativeNumStr'.
+//
+//	nativeNumStr				string
+//
+//		A Native Number String containing the numeric
+//		character digits which will be converted to the
+//		numeric value used to reconfigure the
+//		NumberStrKernel instance passed as input paramter,
+//		'numStrKernel'.
+//
+//		The term 'Native Number String' means that the
+//		number string format is designed to interoperate
+//		with the Golang programming language library
+//		functions and packages. Types like 'strconv',
+//		'strings', 'math' and 'big' (big.Int, big.Float,
+//		big.Rat) routinely parse and convert this type of
+//		number string to generate numeric values. In
+//		addition, Native Number Strings are frequently
+//		consumed by external library functions such	as
+//		this one (String Mechanics 'strmech') to convert
+//		strings to numeric values and numeric values to
+//		strings.
+//
+//		If 'nativeNumStr' fails to meet the formatting
+//		criteria for a Native Number String, an error
+//		will be returned.
+//
+//		A valid Native Number String must conform to the
+//		standardized formatting criteria defined below:
+//
+//	 	1. A Native Number String Consists of numeric
+//	 	   character digits zero through nine inclusive
+//	 	   (0-9).
+//
+//	 	2. A Native Number String will include a period
+//	 	   or decimal point ('.') to separate integer and
+//	 	   fractional digits within a number string.
+//
+//	 	   Native Number String Floating Point Value:
+//	 	   				123.1234
+//
+//	 	3. A Native Number String will always format
+//	 	   negative numeric values with a leading minus sign
+//	 	   ('-').
+//
+//	 	   Native Number String Negative Value:
+//	 	   				-123.2
+//
+//	 	4. A Native Number String WILL NEVER include integer
+//	 	   separators such as commas (',') to separate
+//	 	   integer digits by thousands.
+//
+//	 	   					NOT THIS: 1,000,000
+//	 	   		Native Number String: 1000000
+//
+//	 	5. Native Number Strings will only consist of:
+//
+//	 	   (a)	Numeric digits zero through nine inclusive (0-9).
+//
+//	 	   (b)	A decimal point ('.') for floating point
+//	 	   		numbers.
+//
+//	 	   (c)	A leading minus sign ('-') in the case of
+//	 	   		negative numeric values.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+func (numStrKernelQuark *numberStrKernelQuark) setNumStrKernelFromNativeNumStr(
+	numStrKernel *NumberStrKernel,
+	nativeNumStr string,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if numStrKernelQuark.lock == nil {
+		numStrKernelQuark.lock = new(sync.Mutex)
+	}
+
+	numStrKernelQuark.lock.Lock()
+
+	defer numStrKernelQuark.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"numberStrKernelQuark."+
+			"setNumStrKernelFromNativeNumStr()",
+		"")
+
+	if err != nil {
+
+		return err
+	}
+
+	if numStrKernel == nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'numStrKernel' is a nil pointer!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	var numberStats NumberStrStatsDto
+
+	numberStats,
+		err = new(numStrMathQuark).
+		nativeNumStrToRunes(
+			nativeNumStr,
+			&numStrKernel.integerDigits,
+			&numStrKernel.fractionalDigits,
+			ePrefix.XCpy(
+				""))
+
+	if err != nil {
+
+		return err
+
+	}
+
+	numStrKernel.numberSign = numberStats.NumberSign
+
+	numStrKernel.numberValueType = numberStats.NumberValueType
+
+	numStrKernel.isNonZeroValue = !numberStats.IsZeroValue
+
+	var err2 error
+	_,
+		err2 = new(numberStrKernelAtom).
+		testValidityOfNumStrKernel(
+			numStrKernel,
+			ePrefix.XCpy(
+				"numStrKernel"))
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: The new NumberStrKernel configuration failed validity tests.\n"+
+			"One or more data values were classified as 'invalid'.\n"+
+			"Error=\n%v\n",
+			ePrefix.String(),
+			err2.Error())
+	}
+
+	return err
+}

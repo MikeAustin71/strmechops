@@ -9136,11 +9136,13 @@ func (numStrKernel *NumberStrKernel) SetNumberSignInt(
 //		interface MUST BE convertible to one of the
 //		following types:
 //
-//			float32, float64, big.Float
+//	     	float32, float64, big.Float
 //			*float32, *float64, *big.Float
 //			*BigFloatDto, BigFloatDto
+//			*big.Rat, big.Rat
 //			int8, int16, int, int32, int64, big.Int
-//			*int8, *int16, *int, *int32, *int64, *big.Int
+//			*int8, *int16, *int, *int32, *int64,
+//			*big.Int, big.Int
 //			uint8, uint16, uint, uint32, uint64
 //			*uint8, *uint16, *uint, *uint32, *uint64
 //			*TextFieldFormatDtoFloat64, TextFieldFormatDtoFloat64

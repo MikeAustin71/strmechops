@@ -212,6 +212,409 @@ func (nStrMathQuark *numStrMathQuark) extendRunes(
 	return err
 }
 
+//	nativeNumStrToRunes
+//
+//	Receives a Native Number String and proceeds to return
+//	the extracted numeric value as integer and fractional
+//	rune arrays which taken together constitute the
+//	extracted numeric value.
+//
+// The term 'Native' means that the number string format
+// is designed to interoperate with the Golang
+// programming language library functions and packages.
+// Types like 'strconv', 'strings', 'math' and 'big'
+// (big.Int, big.Float, big.Rat) routinely parse and
+// convert this type of number string to numeric values.
+// In addition, Native Number Strings are frequently
+// consumed by external library functions such as this
+// one (String Mechanics 'strmech') to convert strings to
+// numeric values and numeric values to strings.
+//
+// While this format is inconsistent with many national
+// and cultural formatting conventions, number strings
+// which fail to implement this standardized formatting
+// protocol will generate errors in some Golang library
+// functions.
+//
+//	Examples Of Native Number Strings
+//		1000000
+//		12.5483
+//		-1000000
+//		-12.5483
+//
+// ----------------------------------------------------------------
+//
+//	# Input Parameters
+//
+//	nativeNumStr	string
+//
+//		A string of characters formatted as a Native
+//		Number String.
+//
+//		The term 'Native Number String' means that the
+//		number string format is designed to interoperate
+//		with the Golang programming language library
+//		functions and packages. Types like 'strconv',
+//		'strings', 'math' and 'big' (big.Int, big.Float,
+//		big.Rat) routinely parse and convert this type of
+//		number string to generate numeric values. In
+//		addition, Native Number Strings are frequently
+//		consumed by external library functions such	as
+//		this one (String Mechanics 'strmech') to convert
+//		strings to numeric values and numeric values to
+//		strings.
+//
+//		If 'nativeNumStr' fails to meet the formatting
+//		criteria for a Native Number String, an error
+//		will be returned.
+//
+//		A valid Native Number String must conform to the
+//		standardized formatting criteria defined below:
+//
+//	 	1. A Native Number String Consists of numeric
+//	 	   character digits zero through nine inclusive
+//	 	   (0-9).
+//
+//	 	2. A Native Number String will include a period
+//	 	   or decimal point ('.') to separate integer and
+//	 	   fractional digits within a number string.
+//
+//	 	   Native Number String Floating Point Value:
+//	 	   				123.1234
+//
+//	 	3. A Native Number String will always format
+//	 	   negative numeric values with a leading minus sign
+//	 	   ('-').
+//
+//	 	   Native Number String Negative Value:
+//	 	   				-123.2
+//
+//	 	4. A Native Number String WILL NEVER include integer
+//	 	   separators such as commas (',') to separate
+//	 	   integer digits by thousands.
+//
+//	 	   					NOT THIS: 1,000,000
+//	 	   		Native Number String: 1000000
+//
+//	 	5. Native Number Strings will only consist of:
+//
+//	 	   (a)	Numeric digits zero through nine inclusive (0-9).
+//
+//	 	   (b)	A decimal point ('.') for floating point
+//	 	   		numbers.
+//
+//	 	   (c)	A leading minus sign ('-') in the case of
+//	 	   		negative numeric values.
+//
+//	intDigits					*RuneArrayDto
+//
+//		A pointer to an instance of RuneArrayDto. The
+//		integer numeric digits extracted from
+//		'nativeNumStr' will be stored as text characters
+//		in the rune array encapsulated by this
+//		RuneArrayDto object.
+//
+//		The positive or negative number sign for the
+//		extracted integer digits, can be determined by
+//		examining the statistics returned by parameter
+//		'numberStats' (numberStats.NumberSign).
+//
+//	fracDigits					*RuneArrayDto
+//
+//		A pointer to an instance of RuneArrayDto. The
+//		fractional numeric digits extracted from
+//		'nativeNumStr' will be stored as text characters
+//		in the rune array encapsulated by this
+//		RuneArrayDto object.
+//
+//		The positive or negative number sign for the
+//		extracted integer digits, can be determined by
+//		examining the statistics returned by parameter
+//		'numberStats' (numberStats.NumberSign).
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	numberStats					NumberStrStatsDto
+//
+//		This data transfer object will return critical
+//		statistics on the numeric value represented
+//		by the integer and fractional digits extracted
+//		from 'pureNumberStr' and stored in the
+//		'intDigits' and 'fracDigits' RuneArrayDto
+//		objects.
+//
+//		type NumberStrStatsDto struct {
+//
+//		NumOfIntegerDigits					uint64
+//
+//			The total number of integer digits to the
+//			left of the radix point or, decimal point, in
+//			the subject numeric value.
+//
+//		NumOfSignificantIntegerDigits		uint64
+//
+//			The number of nonzero integer digits to the
+//			left of the radix point or, decimal point, in
+//			the subject numeric value.
+//
+//		NumOfFractionalDigits				uint64
+//
+//			The total number of fractional digits to the
+//			right of the radix point or, decimal point,
+//			in the subject numeric value.
+//
+//		NumOfSignificantFractionalDigits	uint64
+//
+//			The number of nonzero fractional digits to
+//			the right of the radix point or, decimal
+//			point, in the subject numeric value.
+//
+//		NumberValueType 					NumericValueType
+//
+//			This enumeration value specifies whether the
+//			subject numeric value is classified either as
+//			an integer or a floating point number.
+//
+//			Possible enumeration values are listed as
+//			follows:
+//				NumValType.None()
+//				NumValType.FloatingPoint()
+//				NumValType.Integer()
+//
+//		NumberSign							NumericSignValueType
+//
+//			An enumeration specifying the number sign
+//			associated with the numeric value. Possible
+//			values are listed as follows:
+//				NumSignVal.None()		= Invalid Value
+//				NumSignVal.Negative()	= -1
+//				NumSignVal.Zero()		=  0
+//				NumSignVal.Positive()	=  1
+//
+//		IsZeroValue							bool
+//
+//			If 'true', the subject numeric value is equal
+//			to zero ('0').
+//
+//			If 'false', the subject numeric value is
+//			greater than or less than zero ('0').
+//		}
+//
+//	err							error
+//
+//		If this method completes successfully, this
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (nStrMathQuark *numStrMathQuark) nativeNumStrToRunes(
+	nativeNumStr string,
+	intDigits *RuneArrayDto,
+	fracDigits *RuneArrayDto,
+	errPrefDto *ePref.ErrPrefixDto) (
+	numberStats NumberStrStatsDto,
+	err error) {
+
+	if nStrMathQuark.lock == nil {
+		nStrMathQuark.lock = new(sync.Mutex)
+	}
+
+	nStrMathQuark.lock.Lock()
+
+	defer nStrMathQuark.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	numberStats.NumberSign = NumSignVal.Zero()
+
+	numberStats.IsZeroValue = true
+
+	numberStats.NumberValueType = NumValType.Integer()
+
+	numberStats.NumOfIntegerDigits = 0
+
+	numberStats.NumOfSignificantIntegerDigits = 0
+
+	numberStats.NumOfFractionalDigits = 0
+
+	numberStats.NumOfSignificantFractionalDigits = 0
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"numStrMathQuark."+
+			"nativeNumStrToRunes()",
+		"")
+
+	if err != nil {
+
+		return numberStats, err
+	}
+
+	if intDigits == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'intDigits' is a nil pointer!\n",
+			ePrefix.String())
+
+		return numberStats, err
+	}
+
+	if fracDigits == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'fracDigits' is a nil pointer!\n",
+			ePrefix.String())
+
+		return numberStats, err
+	}
+
+	err = new(NumStrHelper).
+		IsValidNativeNumStrError(
+			nativeNumStr,
+			ePrefix.XCpy(
+				"nativeNumStr"))
+
+	if err != nil {
+
+		return numberStats, err
+	}
+
+	intDigits.CharsArray = nil
+
+	fracDigits.CharsArray = nil
+
+	numberRunes := []rune(nativeNumStr)
+
+	lenNumberRunes := len(numberRunes)
+
+	foundMinusSign := false
+
+	foundRadixPoint := false
+
+	isZero := false
+
+	for i := 0; i < lenNumberRunes; i++ {
+
+		if numberRunes[i] == '-' {
+
+			foundMinusSign = true
+
+			continue
+		}
+
+		if numberRunes[i] == '.' {
+
+			foundRadixPoint = true
+		}
+
+		// intDigits *RuneArrayDto,
+		// fracDigits *RuneArrayDto,
+
+		if numberRunes[i] >= '0' &&
+			numberRunes[i] <= '9' {
+
+			if numberRunes[i] > '0' {
+				isZero = false
+			}
+
+			if foundRadixPoint == false {
+
+				intDigits.CharsArray = append(
+					intDigits.CharsArray, numberRunes[i])
+
+			} else {
+				// MUST BE -
+				//	foundRadixPoint == true
+
+				fracDigits.CharsArray = append(
+					fracDigits.CharsArray, numberRunes[i])
+
+			}
+		}
+
+	}
+
+	numberStats.NumOfIntegerDigits =
+		uint64(len(intDigits.CharsArray))
+
+	numberStats.NumOfSignificantIntegerDigits =
+		numberStats.NumOfIntegerDigits -
+			intDigits.GetCountLeadingZeros()
+
+	numberStats.NumOfFractionalDigits =
+		uint64(len(fracDigits.CharsArray))
+
+	numberStats.NumOfSignificantFractionalDigits =
+		numberStats.NumOfFractionalDigits -
+			fracDigits.GetCountTrailingZeros()
+
+	if numberStats.NumOfFractionalDigits > 0 {
+
+		numberStats.NumberValueType =
+			NumValType.FloatingPoint()
+
+	} else if numberStats.NumOfIntegerDigits > 0 {
+
+		numberStats.NumberValueType =
+			NumValType.Integer()
+
+	} else {
+
+		numberStats.NumberValueType =
+			NumValType.None()
+	}
+
+	numberStats.IsZeroValue = isZero
+
+	if !numberStats.IsZeroValue {
+
+		if foundMinusSign {
+
+			numberStats.NumberSign =
+				NumSignVal.Negative()
+
+		} else {
+
+			numberStats.NumberSign =
+				NumSignVal.Positive()
+
+		}
+
+	} else {
+		// MUST BE -
+		// numberStats.IsZeroValue == true
+
+		numberStats.NumberSign =
+			NumSignVal.Zero()
+
+	}
+
+	return numberStats, err
+}
+
 //	pureNumStrToRunes
 //
 //	Receives a pure number string and proceeds to return
