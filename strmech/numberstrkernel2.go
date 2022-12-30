@@ -9094,11 +9094,11 @@ func (numStrKernel *NumberStrKernel) SetNumberSignInt(
 	return err
 }
 
-// SetNumericValue
+// SetFromNumericValue
 //
 //	Deletes and resets the internal values for the
-//	current instance of NumberStrKernel using the
-//	numeric value passed as an empty interface.
+//	current instance of NumberStrKernel using a numeric
+//	value passed as an empty interface.
 //
 //	The numeric value passed to this method by input
 //	parameter 'numericValue' MUST BE convertible to one
@@ -9107,8 +9107,9 @@ func (numStrKernel *NumberStrKernel) SetNumberSignInt(
 //		float32, float64, big.Float
 //		*float32, *float64, *big.Float
 //		*BigFloatDto, BigFloatDto
-//		int8, int16, int, int32, int64, big.Int
-//		*int8, *int16, *int, *int32, *int64, *big.Int
+//		int8, int16, int, int32, int64,
+//		big.Int, *big.Int
+//		*int8, *int16, *int, *int32, *int64,
 //		uint8, uint16, uint, uint32, uint64
 //		*uint8, *uint16, *uint, *uint32, *uint64
 //		*TextFieldFormatDtoFloat64, TextFieldFormatDtoFloat64
@@ -9231,7 +9232,7 @@ func (numStrKernel *NumberStrKernel) SetNumberSignInt(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (numStrKernel *NumberStrKernel) SetNumericValue(
+func (numStrKernel *NumberStrKernel) SetFromNumericValue(
 	numericValue interface{},
 	errorPrefix interface{}) error {
 
@@ -9250,7 +9251,7 @@ func (numStrKernel *NumberStrKernel) SetNumericValue(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumberStrKernel."+
-			"SetNumericValue()",
+			"SetFromNumericValue()",
 		"")
 
 	if err != nil {
