@@ -1708,6 +1708,63 @@ func TestNumberStrKernel_NewFromBigRat_000100(t *testing.T) {
 	return
 }
 
+func TestNumberStrKernel_NewFromBigRat_000200(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestNumberStrKernel_NewFromBigRat_000200()",
+		"")
+
+	newRat := big.NewRat(1, 3)
+
+	expectedNumberStr := "0.3333333333"
+
+	var numStrKernel01 NumberStrKernel
+
+	var err error
+
+	numStrKernel01,
+		err = new(NumberStrKernel).
+		NewFromBigRat(
+			newRat,
+			10,
+			ePrefix)
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var actualNumberStr string
+
+	actualNumberStr,
+		err = numStrKernel01.FmtNumStrNative(
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if actualNumberStr != expectedNumberStr {
+
+		t.Errorf("\n%v\n"+
+			"Test#1\n"+
+			"Error: actualNumberStr != expectedNumberStr\n"+
+			"actualNumberStr   = '%v'\n"+
+			"expectedNumberStr = '%v'\n",
+			ePrefix.String(),
+			actualNumberStr,
+			expectedNumberStr)
+
+		return
+
+	}
+
+	return
+}
+
 func TestNumberStrKernel_FmtSignedSimpleNumber_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(

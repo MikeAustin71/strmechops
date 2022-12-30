@@ -438,24 +438,24 @@ func (mathHelpNanobot *mathHelperNanobot) nativeNumStrToNumericValue(
 		return err
 	}
 
-	lenNativeNumStr := len(nativeNumStr)
-
-	if lenNativeNumStr == 0 {
-
-		err = fmt.Errorf("%v\n"+
-			"ERROR: Input parameter 'nativeNumStr' is empty\n"+
-			"with a string length of zero!\n",
-			ePrefix.String())
-
-		return err
-
-	}
-
 	if numericValue == nil {
 
 		err = fmt.Errorf("%v\n"+
 			"ERROR: Input parameter 'numericValue' is a nil pointer!\n",
 			ePrefix.String())
+
+		return err
+	}
+
+	_,
+		err = new(numStrHelperQuark).
+		testValidityOfNativeNumStr(
+			nativeNumStr,
+			"nativeNumStr",
+			ePrefix.XCpy(
+				"nativeNumStr"))
+
+	if err != nil {
 
 		return err
 	}
