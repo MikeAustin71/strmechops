@@ -221,6 +221,18 @@ func (mathHelpNanobot *mathHelperNanobot) nativeNumStrToNumericValue(
 		return err
 	}
 
+	nativeNumStr,
+		_,
+		err = new(NumStrHelper).NormalizeNativeNumStr(
+		nativeNumStr,
+		ePrefix.XCpy(
+			"<-nativeNumStr"))
+
+	if err != nil {
+
+		return err
+	}
+
 	var ok bool
 	var err2 error
 	var float64Num float64
@@ -499,20 +511,12 @@ func (mathHelpNanobot *mathHelperNanobot) nativeNumStrToNumericValue(
 
 		}
 
-		_,
-			ok = ptrBigRatNum.SetString(nativeNumStr)
-
-		if !ok {
-
-			err = fmt.Errorf("%v\n"+
-				"ERROR: ptrBigRatNum.SetString(nativeNumStr) failed!\n"+
-				"While attempting to convert 'nativeNumStr' to a *big.Rat\n"+
-				"number, an uspecified error occurred.\n"+
-				"nativeNumStr = %v\n",
-				ePrefix.String(),
-				nativeNumStr)
-
-		}
+		err = new(MathBigRatHelper).
+			NativeNumStrToBigRatValue(
+				nativeNumStr,
+				ptrBigRatNum,
+				ePrefix.XCpy(
+					"ptrBigRatNum<-nativeNumStr"))
 
 		return err
 

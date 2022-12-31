@@ -72,5 +72,6 @@ type PureNumberStrComponents struct {
 	//	in a single number string without a decimal
 	//	point separating integer and fractional digits.
 	//	This string DOES NOT contain a leading number
-	//	sign (a.k.a. minus sign ('-')
+	//	sign (a.k.a. minus sign ('-'). It is therefore
+	//	rendered as an absolute or positive value.
 }
