@@ -477,31 +477,20 @@ func (floatHelperQuark *mathFloatHelperQuark) raiseToIntPositiveExponent(
 
 	var ok bool
 
-	var numStr string
-
-	if pureNumStrStats.NumStrStats.NumberSign ==
-		NumSignVal.Negative() {
-
-		numStr += "-"
-
-	}
-
-	numStr += pureNumStrStats.AllIntegerDigitsNumStr
-
 	bigIntBase,
 		ok := big.NewInt(0).
 		SetString(
-			numStr,
+			pureNumStrStats.SignedAllIntegerDigitsNumStr,
 			10)
 
 	if !ok {
 
 		err = fmt.Errorf("\n%v\n"+
-			"Error: bigIntBase=SetString(numStr)\n"+
+			"Error: bigIntBase=SetString(SignedAllIntegerDigitsNumStr)\n"+
 			"SetString Failed!\n"+
-			"numStr = %v\n",
+			"SignedAllIntegerDigitsNumStr = %v\n",
 			ePrefix,
-			numStr)
+			pureNumStrStats.SignedAllIntegerDigitsNumStr)
 
 		return big.NewFloat(0), err
 	}
@@ -509,6 +498,8 @@ func (floatHelperQuark *mathFloatHelperQuark) raiseToIntPositiveExponent(
 	bigIntExponent := big.NewInt(0).SetInt64(exponent)
 
 	bigIntBase.Exp(bigIntBase, bigIntExponent, nil)
+
+	var numStr string
 
 	numStr =
 		bigIntBase.Text(10)

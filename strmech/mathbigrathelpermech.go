@@ -491,22 +491,11 @@ func (mathRatHelperMech *mathBigRatHelperMechanics) nativeNumStrToBigRatValue(
 
 	numerator := big.NewInt(0)
 
-	var allDigitNumStr string
-
-	if pureNumStrComponents.NumStrStats.NumberSign ==
-		NumSignVal.Negative() {
-
-		allDigitNumStr += "-"
-	}
-
-	allDigitNumStr +=
-		pureNumStrComponents.AllIntegerDigitsNumStr
-
 	var ok bool
 	_,
 		ok = numerator.
 		SetString(
-			allDigitNumStr,
+			pureNumStrComponents.SignedAllIntegerDigitsNumStr,
 			10)
 
 	if !ok {
@@ -514,9 +503,9 @@ func (mathRatHelperMech *mathBigRatHelperMechanics) nativeNumStrToBigRatValue(
 		err = fmt.Errorf("%v\n"+
 			"Error Converting All Integer Digit string to *big.Int!\n"+
 			"The following Integer Digits string generated an error.\n"+
-			"allDigitNumStr = '%v'\n",
+			"SignedAllIntegerDigitsNumStr = '%v'\n",
 			ePrefix.String(),
-			allDigitNumStr)
+			pureNumStrComponents.SignedAllIntegerDigitsNumStr)
 
 		return err
 	}

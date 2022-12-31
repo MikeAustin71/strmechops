@@ -66,12 +66,23 @@ type PureNumberStrComponents struct {
 
 	AbsoluteValueNumStr string
 	//	The number string expressed as an absolute value.
+	//	Be advised, this number string may be a floating
+	//	point number string containing fractional digits.
 
-	AllIntegerDigitsNumStr string
+	AbsoluteValAllIntegerDigitsNumStr string
 	//	Integer and fractional digits are combined
 	//	in a single number string without a decimal
 	//	point separating integer and fractional digits.
 	//	This string DOES NOT contain a leading number
 	//	sign (a.k.a. minus sign ('-'). It is therefore
 	//	rendered as an absolute or positive value.
+
+	SignedAllIntegerDigitsNumStr string
+	//	Integer and fractional digits are combined
+	//	in a single number string without a decimal
+	//	point separating integer and fractional digits.
+	//	If the numeric value is negative, a leading
+	//	minus sign will be prefixed at the beginning
+	//	of the number string.
+
 }

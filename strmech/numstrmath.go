@@ -556,7 +556,7 @@ func (nStrMath *NumStrMath) PureNumStrStats(
 //			AbsoluteValueNumStr string
 //			The number string expressed as an absolute value.
 //
-//			AllIntegerDigitsNumStr string
+//			AbsoluteValAllIntegerDigitsNumStr string
 //			Integer and fractional digits are combined
 //			in a single number string without a decimal
 //			point separating integer and fractional digits.

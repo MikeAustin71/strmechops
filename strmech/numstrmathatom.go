@@ -912,7 +912,7 @@ func (nStrMathAtom *numStrMathAtom) pureNumStrStats(
 //			AbsoluteValueNumStr string
 //			The number string expressed as an absolute value.
 //
-//			AllIntegerDigitsNumStr string
+//			AbsoluteValAllIntegerDigitsNumStr string
 //			Integer and fractional digits are combined
 //			in a single number string without a decimal
 //			point separating integer and fractional digits.
@@ -1010,14 +1010,21 @@ func (nStrMathAtom *numStrMathAtom) pureNumStrToComponents(
 			pureNumStrComponents.AbsoluteValueNumStr =
 				"0.0"
 
-			pureNumStrComponents.AllIntegerDigitsNumStr =
+			pureNumStrComponents.AbsoluteValAllIntegerDigitsNumStr =
 				"00"
 
-			pureNumStrComponents.NumStrStats.NumOfFractionalDigits = 1
+			pureNumStrComponents.SignedAllIntegerDigitsNumStr =
+				"00"
 
 		} else {
 
 			pureNumStrComponents.AbsoluteValueNumStr =
+				"0"
+
+			pureNumStrComponents.AbsoluteValAllIntegerDigitsNumStr =
+				"0"
+
+			pureNumStrComponents.SignedAllIntegerDigitsNumStr =
 				"0"
 
 			pureNumStrComponents.NumStrStats.NumOfIntegerDigits = 1
@@ -1031,9 +1038,20 @@ func (nStrMathAtom *numStrMathAtom) pureNumStrToComponents(
 				"." +
 				string(fracDigits.CharsArray)
 
-		pureNumStrComponents.AllIntegerDigitsNumStr =
+		pureNumStrComponents.AbsoluteValAllIntegerDigitsNumStr =
 			string(intDigits.CharsArray) +
 				string(fracDigits.CharsArray)
+
+		if pureNumStrComponents.NumStrStats.NumberSign ==
+			NumSignVal.Negative() {
+
+			pureNumStrComponents.SignedAllIntegerDigitsNumStr =
+				"-"
+
+		}
+
+		pureNumStrComponents.SignedAllIntegerDigitsNumStr +=
+			pureNumStrComponents.AbsoluteValAllIntegerDigitsNumStr
 
 	}
 
