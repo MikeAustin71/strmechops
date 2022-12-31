@@ -2240,9 +2240,12 @@ func (mathHelpNanobot *mathHelperNanobot) numericValueToNativeNumStr(
 		}
 
 		nativeNumStr,
+			_,
 			err = ptrNumStrKernel.FmtNumStrNative(
+			NumRoundType.NoRounding(),
+			0,
 			ePrefix.XCpy(
-				"nativeNumStr<-" +
+				"nativeNumStr<-"+
 					"ptrNumStrKernel"))
 
 		return nativeNumStr, err
@@ -2264,9 +2267,12 @@ func (mathHelpNanobot *mathHelperNanobot) numericValueToNativeNumStr(
 		}
 
 		nativeNumStr,
+			_,
 			err = numStrKernel.FmtNumStrNative(
+			NumRoundType.NoRounding(),
+			0,
 			ePrefix.XCpy(
-				"nativeNumStr<-" +
+				"nativeNumStr<-"+
 					"numStrKernel"))
 
 		return nativeNumStr, err

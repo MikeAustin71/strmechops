@@ -53,7 +53,10 @@ func (mainNumStrTest005 MainNumStrTest005) NewFromBigRatValue01() {
 	var actualNumberStr string
 
 	actualNumberStr,
+		_,
 		err = numStrKernel01.FmtNumStrNative(
+		strmech.NumRoundType.NoRounding(),
+		0,
 		ePrefix.XCpy("actualNumberStr<-numStrKernel01"))
 
 	if err != nil {
@@ -136,7 +139,10 @@ func (mainNumStrTest005 MainNumStrTest005) NewFromNumericValue01() {
 	var nativeNumStr string
 
 	nativeNumStr,
+		_,
 		err = numStrKernel01.FmtNumStrNative(
+		strmech.NumRoundType.NoRounding(),
+		0,
 		ePrefix.XCpy("numStrKernel01"))
 
 	if err != nil {

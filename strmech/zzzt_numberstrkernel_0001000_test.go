@@ -1738,7 +1738,10 @@ func TestNumberStrKernel_NewFromBigRat_000200(t *testing.T) {
 	var actualNumberStr string
 
 	actualNumberStr,
+		_,
 		err = numStrKernel01.FmtNumStrNative(
+		NumRoundType.NoRounding(),
+		0,
 		ePrefix)
 
 	if err != nil {
