@@ -928,63 +928,12 @@ func (numStrKernelAtom *numberStrKernelAtom) convertKernelToBigRat(
 
 	}
 
-	var pureNumStrComponents PureNumberStrComponents
-
-	pureNumStrComponents,
-		err = new(numStrMathAtom).
-		pureNumStrToComponents(
+	err = new(MathBigRatHelper).
+		NativeNumStrToBigRatValue(
 			nativeNumStr,
-			".",
-			true,
+			bigRatNum,
 			ePrefix.XCpy(
-				"<-base"))
-
-	if err != nil {
-
-		return bigRatNum, err
-
-	}
-
-	exponent := big.NewInt(
-		int64(pureNumStrComponents.NumStrStats.NumOfFractionalDigits))
-
-	denominator := big.NewInt(10)
-
-	denominator.Exp(denominator, exponent, nil)
-
-	numerator := big.NewInt(0)
-
-	var allDigitNumStr string
-
-	if pureNumStrComponents.NumStrStats.NumberSign ==
-		NumSignVal.Negative() {
-
-		allDigitNumStr += "-"
-	}
-
-	allDigitNumStr +=
-		pureNumStrComponents.AllIntegerDigitsNumStr
-
-	var ok bool
-	_,
-		ok = numerator.
-		SetString(
-			allDigitNumStr,
-			10)
-
-	if !ok {
-
-		err = fmt.Errorf("%v\n"+
-			"Error Converting Rounded Integer string to *big.Int!\n"+
-			"The following integerDigits string generated an error.\n"+
-			"allDigitNumStr = '%v'\n",
-			ePrefix.String(),
-			allDigitNumStr)
-
-		return bigRatNum, err
-	}
-
-	bigRatNum.SetFrac(numerator, denominator)
+				"bigRatNum"))
 
 	return bigRatNum, err
 }

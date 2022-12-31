@@ -18,16 +18,17 @@ type MathHelper struct {
 // numeric value passed as an empty interface through
 // input parameter 'numericValue'.
 //
-// The term 'Native' means that the number string format
-// is designed to interoperate with the Golang
-// programming language library functions and packages.
-// Types like 'strconv', 'strings', 'math' and 'big'
-// (big.Int, big.Float, big.Rat) routinely parse and
-// convert this type of number string to numeric values.
-// In addition, Native Number Strings are frequently
-// consumed by external library functions such as this
-// one (String Mechanics 'strmech') to convert strings to
-// numeric values and numeric values to strings.
+// The term 'Native Number String' means that the number
+// string format is designed to interoperate with the
+// Golang programming language library functions and
+// packages. Types like 'strconv', 'strings', 'math'
+// and 'big' (big.Int, big.Float, big.Rat) routinely
+// parse and convert this type of number string to
+// numeric values. In addition, Native Number Strings are
+// frequently consumed by external library functions such
+// as this one (String Mechanics 'strmech') to convert
+// strings to numeric values and numeric values to
+// strings.
 //
 // While this format is inconsistent with many national
 // and cultural formatting conventions, number strings
@@ -42,9 +43,10 @@ type MathHelper struct {
 //		-12.5483
 //
 // The 'numericValue' input parameter supports pointers
-// to specific concrete types which will be configured
-// with the numeric value extracted from the Native
-// Number String ('nativeNumStr').
+// to specific concrete types. The numeric value
+// extracted from the Native Number String
+// ('nativeNumStr') will be stored in the numeric value
+// types pointed to by 'numericValue' input parameter.
 //
 // ----------------------------------------------------------------
 //
