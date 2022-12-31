@@ -884,20 +884,6 @@ func (numStrKernelAtom *numberStrKernelAtom) convertKernelToBigRat(
 
 	}
 
-	err = new(numberStrKernelQuark).
-		roundNumStrKernel(
-			&newNumStrKernel,
-			roundingType,
-			roundToFactionalDigits,
-			ePrefix.XCpy(
-				"newNumStrKernel"))
-
-	if err != nil {
-
-		return bigRatNum, err
-
-	}
-
 	nStrKernelBoson := numberStrKernelBoson{}
 
 	err = nStrKernelBoson.
@@ -912,18 +898,55 @@ func (numStrKernelAtom *numberStrKernelAtom) convertKernelToBigRat(
 
 	}
 
+	err = new(numberStrKernelQuark).
+		roundNumStrKernel(
+			&newNumStrKernel,
+			roundingType,
+			roundToFactionalDigits,
+			ePrefix.XCpy(
+				"newNumStrKernel"))
+
+	if err != nil {
+
+		return bigRatNum, err
+
+	}
+
 	var nativeNumStr string
-	var nativeNumStrStats NumberStrStatsDto
 
 	nativeNumStr,
-		nativeNumStrStats,
+		_,
 		err = nStrKernelBoson.
 		createNativeNumStrFromNumStrKernel(
 			&newNumStrKernel,
 			ePrefix.XCpy(
 				"newNumStrKernel"))
 
-	exponent := big.NewInt(int64(nativeNumStrStats.NumOfFractionalDigits))
+	if err != nil {
+
+		return bigRatNum, err
+
+	}
+
+	var pureNumStrComponents PureNumberStrComponents
+
+	pureNumStrComponents,
+		err = new(numStrMathAtom).
+		pureNumStrToComponents(
+			nativeNumStr,
+			".",
+			true,
+			ePrefix.XCpy(
+				"<-base"))
+
+	if err != nil {
+
+		return bigRatNum, err
+
+	}
+
+	exponent := big.NewInt(
+		int64(pureNumStrComponents.NumStrStats.NumOfFractionalDigits))
 
 	denominator := big.NewInt(10)
 
@@ -931,11 +954,22 @@ func (numStrKernelAtom *numberStrKernelAtom) convertKernelToBigRat(
 
 	numerator := big.NewInt(0)
 
+	var allDigitNumStr string
+
+	if pureNumStrComponents.NumStrStats.NumberSign ==
+		NumSignVal.Negative() {
+
+		allDigitNumStr += "-"
+	}
+
+	allDigitNumStr +=
+		pureNumStrComponents.AllIntegerDigitsNumStr
+
 	var ok bool
 	_,
 		ok = numerator.
 		SetString(
-			nativeNumStr,
+			allDigitNumStr,
 			10)
 
 	if !ok {
@@ -943,9 +977,9 @@ func (numStrKernelAtom *numberStrKernelAtom) convertKernelToBigRat(
 		err = fmt.Errorf("%v\n"+
 			"Error Converting Rounded Integer string to *big.Int!\n"+
 			"The following integerDigits string generated an error.\n"+
-			"nativeNumStr = '%v'\n",
+			"allDigitNumStr = '%v'\n",
 			ePrefix.String(),
-			nativeNumStr)
+			allDigitNumStr)
 
 		return bigRatNum, err
 	}
