@@ -81,10 +81,11 @@ func (MainTest02) BigRat002() {
 		origNumStr,
 		pureNumStr)
 
-	var bigRatNum *big.Rat
+	bigRatNum := new(big.Rat)
 
-	bigRatNum,
-		err = numStrKernelBase.GetBigRatNum(
+	_,
+		err = numStrKernelBase.GetNumericValue(
+		bigRatNum,
 		strmech.NumRoundType.NoRounding(),
 		0,
 		ePrefix.XCpy(

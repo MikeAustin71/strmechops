@@ -1403,10 +1403,11 @@ func TestNumberStrKernel_GetBigRatNum_000100(t *testing.T) {
 
 	}
 
-	var bigRatNum *big.Rat
+	bigRatNum := new(big.Rat)
 
-	bigRatNum,
-		err = numStrKernelBase.GetBigRatNum(
+	_,
+		err = numStrKernelBase.GetNumericValue(
+		bigRatNum,
 		NumRoundType.NoRounding(),
 		0,
 		ePrefix.XCpy(
