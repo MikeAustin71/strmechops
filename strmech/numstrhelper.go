@@ -726,11 +726,11 @@ func (numStrHelper *NumStrHelper) IsValidNativeNumStrError(
 	return err
 }
 
-// RationalizeNativeNumStr
+// NormalizeNativeNumStr
 //
 // Removes leading integer zeros and trailing fractional
 // zeros from a Native Number String and returns a clean
-// or 'rationalized' version of the Native Number String.
+// or 'normalized' version of the Native Number String.
 //
 // The term 'Native Number String' means that the number
 // string format is designed to interoperate with the
@@ -744,7 +744,7 @@ func (numStrHelper *NumStrHelper) IsValidNativeNumStrError(
 // convert strings to numeric values and numeric values
 // to strings.
 //
-// A Native Number String which has been rationalized,
+// A Native Number String which has been normalized,
 // will contain no leading integer zeros and no trailing
 // fractional zeros.
 //
@@ -761,13 +761,13 @@ func (numStrHelper *NumStrHelper) IsValidNativeNumStrError(
 //
 // # Input Parameters
 //
-//	unRationalizedNativeNumStr		string
+//	nonStandardNativeNumStr		string
 //
-//		An Unrationalized Native Number String may
-//		contain leading integer zeros and or trailing
-//		fractional zeros.
+//		A raw Native Number String which may contain
+//		leading integer zeros and or trailing fractional
+//		zeros.
 //			Examples:
-//				Un-Rationalized Native Number Strings:
+//				Non-Standard Native Number Strings:
 //						0001234
 //						1234.56780000
 //						0001234.5678000
@@ -787,11 +787,11 @@ func (numStrHelper *NumStrHelper) IsValidNativeNumStrError(
 //
 //		This method will analyze input parameter
 //		'unRationalizedNativeNumStr' and return a
-//		clean or 'rationalized' version of the Native
+//		clean or 'normalized' version of the Native
 //		Number String by deleting all leading integer
 //		zeros and trailing fractional zeros.
 //
-//		If 'unRationalizedNativeNumStr' fails to meet the
+//		If 'nonStandardNativeNumStr' fails to meet the
 //		formatting criteria for a Native Number String,
 //		an error will be returned.
 //
@@ -851,14 +851,14 @@ func (numStrHelper *NumStrHelper) IsValidNativeNumStrError(
 //
 // # Return Values
 //
-//	rationalizedNativeNumStr		string
+//	normalizedNativeNumStr		string
 //
 //		If this method completes successfully, a
-//		rationalized Native Number String extracted
-//		from input parameter 'unRationalizedNativeNumStr'
+//		normalized Native Number String extracted
+//		from input parameter 'nonStandardNativeNumStr'
 //		will be returned.
 //
-//		A valid 'rationalized' Native Number String will
+//		A valid 'normalized' Native Number String will
 //		meet the following criteria:
 //
 //		1.	A Native Number String Consists of numeric
@@ -896,25 +896,25 @@ func (numStrHelper *NumStrHelper) IsValidNativeNumStrError(
 //			(c)	A leading minus sign ('-') in the case of
 //				negative numeric values.
 //
-//		6.	A 'Rationalized' Native Number String will
+//		6.	A 'Normalized' Native Number String will
 //			contain no leading integer zeros.
 //
 //										 NOT THIS: 0001234
 //				Rationalized Native Number String: 1234
 //
-//		7.	A 'Rationalized' Native Number String will
+//		7.	A 'Normalized' Native Number String will
 //			contain no trailing fractional zeros.
 //
-//										 NOT THIS: 12.34000
-//				Rationalized Native Number String: 12.34
+//								   NOT THIS: 12.34000
+//			Normalized Native Number String: 12.34
 //
-//	rationalizedNativeNumStrStats	NumberStrStatsDto
+//	normalizedNativeNumStrStats	NumberStrStatsDto
 //
 //		This data transfer object will return critical
 //		statistics on the numeric value represented
 //		by the integer and fractional digits contained
 //		in the return parameter
-//		'rationalizedNativeNumStr'.
+//		'normalizedNativeNumStr'.
 //
 //		type NumberStrStatsDto struct {
 //
@@ -984,11 +984,11 @@ func (numStrHelper *NumStrHelper) IsValidNativeNumStrError(
 //		input parameter 'errPrefDto' (error prefix) will be
 //		prefixed or attached at the beginning of the error
 //		message.
-func (numStrHelper *NumStrHelper) RationalizeNativeNumStr(
-	unRationalizedNativeNumStr string,
+func (numStrHelper *NumStrHelper) NormalizeNativeNumStr(
+	nonStandardNativeNumStr string,
 	errorPrefix interface{}) (
-	rationalizedNativeNumStr string,
-	rationalizedNativeNumStrStats NumberStrStatsDto,
+	normalizedNativeNumStr string,
+	normalizedNativeNumStrStats NumberStrStatsDto,
 	err error) {
 
 	if numStrHelper.lock == nil {
@@ -1005,25 +1005,25 @@ func (numStrHelper *NumStrHelper) RationalizeNativeNumStr(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumStrHelper."+
-			"RationalizeNativeNumStr()",
+			"NormalizeNativeNumStr()",
 		"")
 
 	if err != nil {
 
-		return rationalizedNativeNumStr,
-			rationalizedNativeNumStrStats,
+		return normalizedNativeNumStr,
+			normalizedNativeNumStrStats,
 			err
 	}
 
-	rationalizedNativeNumStr,
-		rationalizedNativeNumStrStats,
-		err = new(numStrHelperAtom).
-		rationalizeNativeNumStr(
-			unRationalizedNativeNumStr,
+	normalizedNativeNumStr,
+		normalizedNativeNumStrStats,
+		err = new(numStrHelperElectron).
+		normalizeNativeNumStr(
+			nonStandardNativeNumStr,
 			ePrefix.XCpy(
-				"unRationalizedNativeNumStr"))
+				"nonStandardNativeNumStr"))
 
-	return rationalizedNativeNumStr,
-		rationalizedNativeNumStrStats,
+	return normalizedNativeNumStr,
+		normalizedNativeNumStrStats,
 		err
 }

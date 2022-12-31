@@ -246,7 +246,7 @@ func (numStrKernelBoson *numberStrKernelBoson) createNativeNumStrFromNumStrKerne
 	nativeNumStr,
 		nativeNumStrStats,
 		err = new(NumStrHelper).
-		RationalizeNativeNumStr(
+		NormalizeNativeNumStr(
 			nativeNumStr,
 			ePrefix.XCpy(
 				"<-nativeNumStr"))
@@ -254,4 +254,87 @@ func (numStrKernelBoson *numberStrKernelBoson) createNativeNumStrFromNumStrKerne
 	return nativeNumStr,
 		nativeNumStrStats,
 		err
+}
+
+// normalizeNumericDigits
+//
+// Removes leading integer zeros and trailing fractional
+// zeros from an instance of NumberStrKernel.
+func (numStrKernelBoson *numberStrKernelBoson) normalizeNumericDigits(
+	numStrKernel *NumberStrKernel,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if numStrKernelBoson.lock == nil {
+		numStrKernelBoson.lock = new(sync.Mutex)
+	}
+
+	numStrKernelBoson.lock.Lock()
+
+	defer numStrKernelBoson.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"numberStrKernelBoson."+
+			"normalizeNumericDigits()",
+		"")
+
+	if err != nil {
+
+		return err
+	}
+
+	if numStrKernel == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'numStrKernel' is a nil pointer!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	badZerosCount :=
+		numStrKernel.integerDigits.GetCountLeadingZeros()
+
+	if badZerosCount > 0 {
+
+		err = numStrKernel.integerDigits.
+			DeleteLeadingTrailingChars(
+				badZerosCount,
+				false,
+				ePrefix.XCpy(
+					"numStrKernel.integerDigits"))
+
+		if err != nil {
+
+			return err
+
+		}
+	}
+
+	badZerosCount =
+		numStrKernel.fractionalDigits.GetCountTrailingZeros()
+
+	if badZerosCount > 0 {
+
+		err = numStrKernel.fractionalDigits.
+			DeleteLeadingTrailingChars(
+				badZerosCount,
+				true,
+				ePrefix.XCpy(
+					"numStrKernel.fractionalDigits"))
+
+		if err != nil {
+
+			return err
+
+		}
+
+	}
+
+	return err
 }
