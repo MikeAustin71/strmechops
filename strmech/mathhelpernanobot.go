@@ -363,8 +363,8 @@ func (mathHelpNanobot *mathHelperNanobot) bigRatToNativeNumStr(
 //		'nativeNumStr' will be stored in a numeric value
 //		type passed through this interface.
 //
-//		The supported Numeric Value Types are listed as
-//		follows:
+//		This empty interface parameter MUST be
+//		convertible to one of the following types:
 //
 //				*float32, *float64, *big.Float
 //				*BigFloatDto

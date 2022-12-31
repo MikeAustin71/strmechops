@@ -1358,10 +1358,11 @@ func (mainNumStrTest005 MainNumStrTest005) NumStrKernelToFloatConversion() {
 	var roundType = strmech.NumRoundType.NoRounding()
 	var numOfFractionalDigits int
 	var roundToFractionalDigits = 0
+	//var numberStats NumberStrStatsDto
 
-	bigFloatNumber,
-		numOfFractionalDigits,
-		err = numStrKernel.GetBigFloatNum(
+	_,
+		err = numStrKernel.GetNumericValue(
+		&bigFloatNumber,
 		roundType,
 		roundToFractionalDigits,
 		ePrefix)
@@ -1471,9 +1472,11 @@ func (mainNumStrTest005 MainNumStrTest005) NumStrKernelToIntConversion() {
 
 	var roundType = strmech.NumRoundType.HalfAwayFromZero()
 
-	bigIntNumber,
-		err = numStrKernel.GetBigIntNum(
+	_,
+		err = numStrKernel.GetNumericValue(
+		&bigIntNumber,
 		roundType,
+		0,
 		ePrefix)
 
 	if err != nil {

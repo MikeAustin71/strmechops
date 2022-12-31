@@ -8118,7 +8118,7 @@ func (numStrKernel *NumberStrKernel) FmtNumStrNative(
 
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
-	var numStr string
+	var nativeNumStr string
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
@@ -8128,15 +8128,20 @@ func (numStrKernel *NumberStrKernel) FmtNumStrNative(
 		"")
 
 	if err != nil {
-		return numStr, err
+		return nativeNumStr, err
 	}
 
-	return new(numberStrKernelQuark).
-		getNativeNumStr(
-			numStrKernel,
-			NumRoundType.NoRounding(),
-			0,
-			ePrefix.XCpy("numStrKernel"))
+	nativeNumStr,
+		_,
+		err =
+		new(numberStrKernelQuark).
+			getNativeNumStr(
+				numStrKernel,
+				NumRoundType.NoRounding(),
+				0,
+				ePrefix.XCpy("numStrKernel"))
+
+	return nativeNumStr, err
 }
 
 // FmtNumStrNativeRound
@@ -8203,13 +8208,18 @@ func (numStrKernel *NumberStrKernel) FmtNumStrNative(
 //     (c)	A leading minus sign ('-') in the case of
 //     negative numeric values.
 //
+// Note that this method will also return a statistical
+// profile of the returned Native Number String through
+// return parameter 'nativeNumStrStats'.
+//
 // ----------------------------------------------------------------
 //
 // # BE ADVISED
 //
 //	Number rounding will be performed on the numeric
 //	value returned in the Native Number String as
-//	specified by input parameters '' and ''.
+//	specified by input parameters 'roundingType' and
+//	'roundToFractionalDigits'.
 //
 // ----------------------------------------------------------------
 //
@@ -8522,7 +8532,7 @@ func (numStrKernel *NumberStrKernel) FmtNumStrNative(
 //
 // # Return Values
 //
-//	string
+//	nativeNumStr				string
 //
 //		If this method completes successfully, this
 //		string parameter will return a native number
@@ -8557,7 +8567,71 @@ func (numStrKernel *NumberStrKernel) FmtNumStrNative(
 //			value prior to native number string
 //			conversion.
 //
-//	error
+//	nativeNumStrStats			NumberStrStatsDto
+//
+//		This data transfer object will return critical
+//		statistics on the numeric value represented
+//		by the integer and fractional digits contained
+//		in the return parameter 'nativeNumStr'.
+//
+//		type NumberStrStatsDto struct {
+//
+//		NumOfIntegerDigits					uint64
+//
+//			The total number of integer digits to the
+//			left of the radix point or, decimal point, in
+//			the subject numeric value.
+//
+//		NumOfSignificantIntegerDigits		uint64
+//
+//			The number of nonzero integer digits to the
+//			left of the radix point or, decimal point, in
+//			the subject numeric value.
+//
+//		NumOfFractionalDigits				uint64
+//
+//			The total number of fractional digits to the
+//			right of the radix point or, decimal point,
+//			in the subject numeric value.
+//
+//		NumOfSignificantFractionalDigits	uint64
+//
+//			The number of nonzero fractional digits to
+//			the right of the radix point or, decimal
+//			point, in the subject numeric value.
+//
+//		NumberValueType 					NumericValueType
+//
+//			This enumeration value specifies whether the
+//			subject numeric value is classified either as
+//			an integer or a floating point number.
+//
+//			Possible enumeration values are listed as
+//			follows:
+//				NumValType.None()
+//				NumValType.FloatingPoint()
+//				NumValType.Integer()
+//
+//		NumberSign							NumericSignValueType
+//
+//			An enumeration specifying the number sign
+//			associated with the numeric value. Possible
+//			values are listed as follows:
+//				NumSignVal.None()		= Invalid Value
+//				NumSignVal.Negative()	= -1
+//				NumSignVal.Zero()		=  0
+//				NumSignVal.Positive()	=  1
+//
+//		IsZeroValue							bool
+//
+//			If 'true', the subject numeric value is equal
+//			to zero ('0').
+//
+//			If 'false', the subject numeric value is
+//			greater than or less than zero ('0').
+//		}
+//
+//	err							error
 //
 //		If this method completes successfully, the
 //		returned error Type is set equal to 'nil'.
@@ -8573,8 +8647,9 @@ func (numStrKernel *NumberStrKernel) FmtNumStrNativeRound(
 	roundingType NumberRoundingType,
 	roundToFractionalDigits int,
 	errorPrefix interface{}) (
-	string,
-	error) {
+	nativeNumStr string,
+	nativeNumStrStats NumberStrStatsDto,
+	err error) {
 
 	if numStrKernel.lock == nil {
 		numStrKernel.lock = new(sync.Mutex)
@@ -8585,8 +8660,6 @@ func (numStrKernel *NumberStrKernel) FmtNumStrNativeRound(
 	defer numStrKernel.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
-	var err error
-	var numStr string
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
@@ -8596,15 +8669,23 @@ func (numStrKernel *NumberStrKernel) FmtNumStrNativeRound(
 		"")
 
 	if err != nil {
-		return numStr, err
+		return nativeNumStr,
+			nativeNumStrStats,
+			err
 	}
 
-	return new(numberStrKernelQuark).
+	nativeNumStr,
+		nativeNumStrStats,
+		err = new(numberStrKernelQuark).
 		getNativeNumStr(
 			numStrKernel,
 			roundingType,
 			roundToFractionalDigits,
 			ePrefix.XCpy("numStrKernel"))
+
+	return nativeNumStr,
+		nativeNumStrStats,
+		err
 }
 
 //	FmtSignedNumStrFrance

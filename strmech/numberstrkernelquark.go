@@ -354,25 +354,10 @@ func (numStrKernelQuark *numberStrKernelQuark) compareNumStrKernelValues(
 //
 //	numStrKernel				*NumberStrKernel
 //
-//		A pointer to an instance of NumberStrKernel. This
-//		method will examine the internal member variables
-//		contained in this instance and set the correct
-//		value for Numeric Value Type.
-//
-//		NumericValueType is an enumeration value specifying
-//		the type of numeric value contained in the
-//		'numStrKernel' instance.
-//
-//		Possible NumericValueType enumeration values are
-//		listed as follows:
-//			NumValType.None()
-//			NumValType.FloatingPoint()
-//			NumValType.Integer()
-//
-//		The internal variable contained in 'numStrKernel'
-//		which will be configured is:
-//
-//			NumberStrKernel.numberValueType
+//		A pointer to an instance of NumberStrKernel.
+//		This instance contains the numeric value which
+//		will be used to generate and return a Native
+//		Number String.
 //
 //	roundingType				NumberRoundingType
 //
@@ -689,6 +674,70 @@ func (numStrKernelQuark *numberStrKernelQuark) compareNumStrKernelValues(
 //		by input parameters, 'roundingType' and
 //		'roundToFractionalDigits'.
 //
+//	nativeNumStrStats			NumberStrStatsDto
+//
+//		This data transfer object will return critical
+//		statistics on the numeric value represented
+//		by the integer and fractional digits contained
+//		in the return parameter 'nativeNumStr'.
+//
+//		type NumberStrStatsDto struct {
+//
+//		NumOfIntegerDigits					uint64
+//
+//			The total number of integer digits to the
+//			left of the radix point or, decimal point, in
+//			the subject numeric value.
+//
+//		NumOfSignificantIntegerDigits		uint64
+//
+//			The number of nonzero integer digits to the
+//			left of the radix point or, decimal point, in
+//			the subject numeric value.
+//
+//		NumOfFractionalDigits				uint64
+//
+//			The total number of fractional digits to the
+//			right of the radix point or, decimal point,
+//			in the subject numeric value.
+//
+//		NumOfSignificantFractionalDigits	uint64
+//
+//			The number of nonzero fractional digits to
+//			the right of the radix point or, decimal
+//			point, in the subject numeric value.
+//
+//		NumberValueType 					NumericValueType
+//
+//			This enumeration value specifies whether the
+//			subject numeric value is classified either as
+//			an integer or a floating point number.
+//
+//			Possible enumeration values are listed as
+//			follows:
+//				NumValType.None()
+//				NumValType.FloatingPoint()
+//				NumValType.Integer()
+//
+//		NumberSign							NumericSignValueType
+//
+//			An enumeration specifying the number sign
+//			associated with the numeric value. Possible
+//			values are listed as follows:
+//				NumSignVal.None()		= Invalid Value
+//				NumSignVal.Negative()	= -1
+//				NumSignVal.Zero()		=  0
+//				NumSignVal.Positive()	=  1
+//
+//		IsZeroValue							bool
+//
+//			If 'true', the subject numeric value is equal
+//			to zero ('0').
+//
+//			If 'false', the subject numeric value is
+//			greater than or less than zero ('0').
+//		}
+//
 //	err							error
 //
 //		If this method completes successfully, this returned
@@ -706,6 +755,7 @@ func (numStrKernelQuark *numberStrKernelQuark) getNativeNumStr(
 	roundToFractionalDigits int,
 	errPrefDto *ePref.ErrPrefixDto) (
 	nativeNumStr string,
+	nativeNumStrStats NumberStrStatsDto,
 	err error) {
 
 	if numStrKernelQuark.lock == nil {
@@ -727,7 +777,9 @@ func (numStrKernelQuark *numberStrKernelQuark) getNativeNumStr(
 
 	if err != nil {
 
-		return nativeNumStr, err
+		return nativeNumStr,
+			nativeNumStrStats,
+			err
 	}
 
 	if numStrKernel == nil {
@@ -735,7 +787,9 @@ func (numStrKernelQuark *numberStrKernelQuark) getNativeNumStr(
 			"Error: Input parameter 'numStrKernel' is a nil pointer!\n",
 			ePrefix.String())
 
-		return nativeNumStr, err
+		return nativeNumStr,
+			nativeNumStrStats,
+			err
 	}
 
 	var err2 error
@@ -755,34 +809,24 @@ func (numStrKernelQuark *numberStrKernelQuark) getNativeNumStr(
 			ePrefix.String(),
 			err2.Error())
 
-		return nativeNumStr, err
+		return nativeNumStr,
+			nativeNumStrStats,
+			err
 	}
 
 	if roundingType == NumRoundType.NoRounding() {
 
-		if numStrKernel.numberSign == NumSignVal.Negative() {
+		nativeNumStr,
+			nativeNumStrStats,
+			err = new(numberStrKernelBoson).
+			createNativeNumStrFromNumStrKernel(
+				numStrKernel,
+				ePrefix.XCpy(
+					"numStrKernel"))
 
-			nativeNumStr += "-"
-		}
-
-		if len(numStrKernel.integerDigits.CharsArray) > 0 {
-
-			nativeNumStr += string(numStrKernel.integerDigits.CharsArray)
-
-		} else {
-
-			nativeNumStr += "0"
-		}
-
-		if len(numStrKernel.fractionalDigits.CharsArray) > 0 {
-
-			nativeNumStr += "."
-
-			nativeNumStr +=
-				string(numStrKernel.fractionalDigits.CharsArray)
-		}
-
-		return nativeNumStr, err
+		return nativeNumStr,
+			nativeNumStrStats,
+			err
 	}
 
 	var deepCopyNumStrKernel NumberStrKernel
@@ -797,7 +841,9 @@ func (numStrKernelQuark *numberStrKernelQuark) getNativeNumStr(
 
 	if err != nil {
 
-		return nativeNumStr, err
+		return nativeNumStr,
+			nativeNumStrStats,
+			err
 	}
 
 	var numStrRoundingSpec NumStrRoundingSpec
@@ -811,7 +857,9 @@ func (numStrKernelQuark *numberStrKernelQuark) getNativeNumStr(
 
 	if err != nil {
 
-		return nativeNumStr, err
+		return nativeNumStr,
+			nativeNumStrStats,
+			err
 	}
 
 	err = new(numStrMathRoundingNanobot).roundNumStrKernel(
@@ -821,32 +869,22 @@ func (numStrKernelQuark *numberStrKernelQuark) getNativeNumStr(
 
 	if err != nil {
 
-		return nativeNumStr, err
+		return nativeNumStr,
+			nativeNumStrStats,
+			err
 	}
 
-	if deepCopyNumStrKernel.numberSign == NumSignVal.Negative() {
+	nativeNumStr,
+		nativeNumStrStats,
+		err = new(numberStrKernelBoson).
+		createNativeNumStrFromNumStrKernel(
+			&deepCopyNumStrKernel,
+			ePrefix.XCpy(
+				"deepCopyNumStrKernel"))
 
-		nativeNumStr += "-"
-	}
-
-	if len(deepCopyNumStrKernel.integerDigits.CharsArray) > 0 {
-
-		nativeNumStr += string(deepCopyNumStrKernel.integerDigits.CharsArray)
-
-	} else {
-
-		nativeNumStr += "0"
-	}
-
-	if len(deepCopyNumStrKernel.fractionalDigits.CharsArray) > 0 {
-
-		nativeNumStr += "."
-
-		nativeNumStr +=
-			string(deepCopyNumStrKernel.fractionalDigits.CharsArray)
-	}
-
-	return nativeNumStr, err
+	return nativeNumStr,
+		nativeNumStrStats,
+		err
 }
 
 //	getSetNumValueType
@@ -1941,7 +1979,7 @@ func (numStrKernelQuark *numberStrKernelQuark) setNumStrKernelFromNativeNumStr(
 			&numStrKernel.integerDigits,
 			&numStrKernel.fractionalDigits,
 			ePrefix.XCpy(
-				""))
+				"numberStats<-nativeNumStr"))
 
 	if err != nil {
 
