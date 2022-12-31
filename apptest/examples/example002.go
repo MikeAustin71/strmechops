@@ -152,7 +152,7 @@ func (MainTest02) BigRatHelper01() {
 	var err error
 
 	bigFloatNum,
-		err = new(strmech.MathBigRatHelper).RatToBigFloat(
+		err = new(strmech.MathBigRatHelper).BigRatToBigFloat(
 		newRat,
 		10,
 		ePrefix)

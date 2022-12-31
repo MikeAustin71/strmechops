@@ -21,7 +21,7 @@ func TestMathBigRatHelper_RatToBigFloat_000100(t *testing.T) {
 	var err error
 
 	bigFloatNum,
-		err = new(MathBigRatHelper).RatToBigFloat(
+		err = new(MathBigRatHelper).BigRatToBigFloat(
 		newRat,
 		10,
 		ePrefix)

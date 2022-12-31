@@ -507,7 +507,7 @@
 === RUN   TestNumStrMathRoundingRoundHalfToOdd_000200
 --- PASS: TestNumStrMathRoundingRoundHalfToOdd_000200 (0.00s)
 === RUN   TestNumStrMathRoundingRoundRandomly_000100
---- PASS: TestNumStrMathRoundingRoundRandomly_000100 (0.06s)
+--- PASS: TestNumStrMathRoundingRoundRandomly_000100 (0.05s)
 === RUN   TestNumStrMathRoundingRoundRandomly_000200
 --- PASS: TestNumStrMathRoundingRoundRandomly_000200 (0.00s)
 === RUN   TestNumStrMathRoundingTruncate_000100
@@ -725,7 +725,7 @@
 === RUN   TestStrMech_ExtractNumberRunes_03
 --- PASS: TestStrMech_ExtractNumberRunes_03 (0.00s)
 === RUN   TestStrMech_ExtractTextLines_000200
---- PASS: TestStrMech_ExtractTextLines_000200 (0.01s)
+--- PASS: TestStrMech_ExtractTextLines_000200 (0.02s)
 === RUN   TestStrMech_FindFirstNonSpaceChar_01
 --- PASS: TestStrMech_FindFirstNonSpaceChar_01 (0.00s)
 === RUN   TestStrMech_FindFirstNonSpaceChar_02
@@ -1797,7 +1797,7 @@
 === RUN   TestTextLineSpecLinesCollection_IsValidInstance_000100
 --- PASS: TestTextLineSpecLinesCollection_IsValidInstance_000100 (0.00s)
 === RUN   TestTextLineSpecLinesCollection_IsValidInstanceError_000100
---- PASS: TestTextLineSpecLinesCollection_IsValidInstanceError_000100 (0.01s)
+--- PASS: TestTextLineSpecLinesCollection_IsValidInstanceError_000100 (0.00s)
 === RUN   TestTextLineSpecLinesCollection_NewTextLine_000100
 --- PASS: TestTextLineSpecLinesCollection_NewTextLine_000100 (0.00s)
 === RUN   TestTextLineSpecLinesCollection_NewPtrTextLine_000100
@@ -1813,7 +1813,7 @@
 === RUN   TestTextLineSpecLinesCollection_PopFirstTextLine_000100
 --- PASS: TestTextLineSpecLinesCollection_PopFirstTextLine_000100 (0.03s)
 === RUN   TestTextLineSpecLinesCollection_PopLastTextLine_000100
---- PASS: TestTextLineSpecLinesCollection_PopLastTextLine_000100 (0.04s)
+--- PASS: TestTextLineSpecLinesCollection_PopLastTextLine_000100 (0.03s)
 === RUN   TestTextLineSpecLinesCollection_PopTextLine_000100
 --- PASS: TestTextLineSpecLinesCollection_PopTextLine_000100 (0.08s)
 === RUN   TestTextLineSpecLinesCollection_ReplaceTextLine_000100
@@ -2179,7 +2179,7 @@
 === RUN   TestTextLineSpecStandardLine_InsertTextField_000600
 --- PASS: TestTextLineSpecStandardLine_InsertTextField_000600 (0.00s)
 === RUN   TestTextLineSpecStandardLine_InsertTextField_000700
---- PASS: TestTextLineSpecStandardLine_InsertTextField_000700 (0.01s)
+--- PASS: TestTextLineSpecStandardLine_InsertTextField_000700 (0.02s)
 === RUN   TestTextLineSpecStandardLine_IsValidInstance_000100
 --- PASS: TestTextLineSpecStandardLine_IsValidInstance_000100 (0.00s)
 === RUN   TestTextLineSpecStandardLine_IsValidInstanceError_000100
@@ -2329,11 +2329,11 @@
 === RUN   TestTextLineSpecStandardLineNanobot_setTxtSpecStandardLine_000200
 --- PASS: TestTextLineSpecStandardLineNanobot_setTxtSpecStandardLine_000200 (0.00s)
 === RUN   TestTextLineSpecTimerLines_CopyIn_000100
---- PASS: TestTextLineSpecTimerLines_CopyIn_000100 (0.00s)
+--- PASS: TestTextLineSpecTimerLines_CopyIn_000100 (0.01s)
 === RUN   TestTextLineSpecTimerLines_CopyOut_000100
 --- PASS: TestTextLineSpecTimerLines_CopyOut_000100 (0.01s)
 === RUN   TestTextLineSpecTimerLines_CopyOutITextLine_000100
---- PASS: TestTextLineSpecTimerLines_CopyOutITextLine_000100 (0.01s)
+--- PASS: TestTextLineSpecTimerLines_CopyOutITextLine_000100 (0.00s)
 === RUN   TestTextLineSpecTimerLines_CopyOutPtr_000100
 --- PASS: TestTextLineSpecTimerLines_CopyOutPtr_000100 (0.01s)
 === RUN   TestTextLineSpecTimerLines_Empty_000100
@@ -2399,7 +2399,7 @@
 === RUN   TestTextLineSpecTimerLines_Read_000100
 --- PASS: TestTextLineSpecTimerLines_Read_000100 (0.01s)
 === RUN   TestTextLineSpecTimerLines_Read_000200
---- PASS: TestTextLineSpecTimerLines_Read_000200 (0.01s)
+--- PASS: TestTextLineSpecTimerLines_Read_000200 (0.02s)
 === RUN   TestTextLineSpecTimerLines_Read_000300
 --- PASS: TestTextLineSpecTimerLines_Read_000300 (0.01s)
 === RUN   TestTextLineSpecTimerLines_Read_000400
@@ -2409,7 +2409,7 @@
 === RUN   TestTextLineSpecTimerLines_Read_000600
 --- PASS: TestTextLineSpecTimerLines_Read_000600 (0.00s)
 === RUN   TestTextLineSpecTimerLines_ReaderInitialize_000100
---- PASS: TestTextLineSpecTimerLines_ReaderInitialize_000100 (0.02s)
+--- PASS: TestTextLineSpecTimerLines_ReaderInitialize_000100 (0.01s)
 === RUN   TestTextLineSpecTimerLines_SetDefaultFullTimerEvent_000100
 --- PASS: TestTextLineSpecTimerLines_SetDefaultFullTimerEvent_000100 (0.00s)
 === RUN   TestTextLineSpecTimerLines_SetDefaultShellTimerEvent_000100
@@ -2455,7 +2455,7 @@
 === RUN   TestTextLineSpecTimerLines_String_000300
 --- PASS: TestTextLineSpecTimerLines_String_000300 (0.00s)
 === RUN   TestTextLineSpecTimerLines_TextBuilder_000100
---- PASS: TestTextLineSpecTimerLines_TextBuilder_000100 (0.00s)
+--- PASS: TestTextLineSpecTimerLines_TextBuilder_000100 (0.01s)
 === RUN   TestTextLineSpecTimerLines_TextLineSpecName_000100
 --- PASS: TestTextLineSpecTimerLines_TextLineSpecName_000100 (0.00s)
 === RUN   TestTextLineSpecTimerLines_TextTypeName_000100
@@ -2496,4 +2496,4 @@
 --- PASS: TestTextLineTitleMarqueeDto_AddTitleLineStrArrayDtos_000100 (0.02s)
 PASS
 coverage: 53.1% of statements
-ok  	github.com/MikeAustin71/strmechops/strmech	2.256s
+ok  	github.com/MikeAustin71/strmechops/strmech	2.173s

@@ -3515,7 +3515,7 @@ func (numStrKernel *NumberStrKernel) NewFromBigRat(
 	var nativeNumStr string
 
 	nativeNumStr,
-		err = new(MathHelper).
+		err = new(MathBigRatHelper).
 		BigRatToNativeNumStr(
 			bigRatNum,
 			roundToFractionalDigits,
