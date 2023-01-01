@@ -1709,6 +1709,110 @@ func TestNumberStrKernel_NewFromBigRat_000100(t *testing.T) {
 	return
 }
 
+func TestNumberStrKernel_NewFromBigRat_000125(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestNumberStrKernel_NewFromBigRat_000125()",
+		"")
+
+	newRat := big.NewRat(1, 3)
+
+	expectedNumberStr := "0.3333333333"
+
+	var numStrKernel01 NumberStrKernel
+
+	var err error
+
+	numStrKernel01,
+		err = new(NumberStrKernel).
+		NewFromBigRat(
+			newRat,
+			10,
+			ePrefix.XCpy(
+				"numStrKernel01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var actualNumberStr string
+
+	actualNumberStr,
+		_,
+		err = numStrKernel01.FmtNumStrNative(
+		NumRoundType.NoRounding(),
+		0,
+		ePrefix.XCpy(
+			"actualNumberStr<-"+
+				"numStrKernel01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if actualNumberStr != expectedNumberStr {
+
+		t.Errorf("\n%v\n"+
+			"Test#1\n"+
+			"Error: actualNumberStr != expectedNumberStr\n"+
+			"actualNumberStr   = '%v'\n"+
+			"expectedNumberStr = '%v'\n",
+			ePrefix.String(),
+			actualNumberStr,
+			expectedNumberStr)
+
+		return
+
+	}
+
+	newRat = big.NewRat(25, 100)
+
+	expectedNumberStr = "0.25"
+
+	var numStrKernel02 NumberStrKernel
+
+	err = numStrKernel02.SetFromBigRat(
+		newRat,
+		2,
+		ePrefix.XCpy(
+			"numStrKernel02"))
+
+	actualNumberStr,
+		_,
+		err = numStrKernel02.FmtNumStrNative(
+		NumRoundType.NoRounding(),
+		0,
+		ePrefix.XCpy(
+			"actualNumberStr<-numStrKernel02"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if actualNumberStr != expectedNumberStr {
+
+		t.Errorf("\n%v\n"+
+			"Test#2\n"+
+			"Error: actualNumberStr != expectedNumberStr\n"+
+			"actualNumberStr   = '%v'\n"+
+			"expectedNumberStr = '%v'\n",
+			ePrefix.String(),
+			actualNumberStr,
+			expectedNumberStr)
+
+		return
+
+	}
+
+	return
+}
+
 func TestNumberStrKernel_NewFromBigRat_000200(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
