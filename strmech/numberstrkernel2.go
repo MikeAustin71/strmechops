@@ -3023,21 +3023,25 @@ func (numStrKernel *NumberStrKernel) IsZeroValue() bool {
 //
 // # BE ADVISED
 //
-//	Before being converted to an instance of
-//	NumberStrKernel, the big.Rat numeric value will be
-//	rounded by the Golang 'big' package function:
+//	(1)	big.Rat Rounding Algorithm
+//		Before being converted to an instance of
+//		NumberStrKernel, the big.Rat numeric value will
+//		be rounded by the Golang 'big' package function:
 //
-//			func (*Rat) FloatString
+//			(*Rat) FloatString
 //
-//	The rounding algorithm used is described as:
+//		The rounding algorithm used is described in the
+//		big.Rat documentation as:
 //
-//		The last digit is rounded to nearest, with halves
-//		rounded away from zero.
-//			https://pkg.go.dev/math/big#Rat
+//			The last digit is rounded to nearest, with
+//			halves rounded away from zero.
+//				https://pkg.go.dev/math/big#Rat
 //
-//	Input parameter 'roundToFractionalDigits' controls
-//	the number of fractional digits configured in the
-//	returned instance of NumberStrKernel.
+//	(2)	Number of fractional digits
+//		During the rounding operation, the number of
+//		fractional digits to the right of the radix point
+//		(decimal point) will be controlled by input
+//		paramter 'roundToFractionalDigits'.
 //
 // ----------------------------------------------------------------
 //
@@ -3229,10 +3233,27 @@ func (numStrKernel *NumberStrKernel) NewFromBigRat(
 //
 // # BE ADVISED
 //
-//	big.Rat and *big.Rat values default to 2,000 decimal
-//	places of accuracy. Adjust rounding parameters as
-//	required or use method:
-//		NewFromNumericValue.NewFromBigRat()
+//	(1)	big.Rat Accuracy
+//		This method will default big.Rat and *big.Rat
+//		values default to 2,000 decimal places of
+//		accuracy. Adjust rounding parameters as
+//		required or use the following method for more
+//		granular control over big.Rat rounding:
+//			NewFromNumericValue.NewFromBigRat()
+//
+//	(2) big.Rat Rounding Algorithm
+//		Before being converted to an instance of
+//		NumberStrKernel, the big.Rat numeric value will
+//		be rounded by the Golang 'big' package function:
+//
+//			(*Rat) FloatString
+//
+//		The rounding algorithm used is described in the
+//		big.Rat documentation as:
+//
+//			The last digit is rounded to nearest, with
+//			halves rounded away from zero.
+//				https://pkg.go.dev/math/big#Rat
 //
 // ----------------------------------------------------------------
 //
@@ -6777,6 +6798,198 @@ func (numStrKernel *NumberStrKernel) SetDefaultSimpleNumStrFormatSpec(
 	return err
 }
 
+// SetFromBigRat
+//
+// Deletes and resets the internal values for the
+// current instance of NumberStrKernel using a numeric
+// value passed as a pointer to a big.Rat number
+// (*big.Rat).
+//
+// The big.Rat numeric value passed through input
+// paramter 'roundToFractionalDigits' will be used
+// round that numeric value before it is converted
+// and used to configure the current instance of
+// NumberStrKernel.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	(1)	big.Rat Rounding Algorithm
+//		Before being converted to an instance of
+//		NumberStrKernel, the big.Rat numeric value will
+//		be rounded by the Golang 'big' package function:
+//
+//			(*Rat) FloatString
+//
+//		The rounding algorithm used is described in the
+//		big.Rat documentation as:
+//
+//			The last digit is rounded to nearest, with
+//			halves rounded away from zero.
+//				https://pkg.go.dev/math/big#Rat
+//
+//	(2)	Number of fractional digits
+//		During the rounding operation, the number of
+//		fractional digits to the right of the radix point
+//		(decimal point) will be controlled by input
+//		paramter 'roundToFractionalDigits'.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will delete and reconfigure all
+//	pre-existing data values contained in the current
+//	instance of NumberStrKernel.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	bigRatNum					*big.Rat
+//		A pointer to an instance of a big.Rat numeric
+//		value. This numeric value will be used to
+//		reconfigure the current instance of
+//		NumberStrKernel.
+//
+//	roundToFractionalDigits		int
+//
+//		When set to a positive integer value, this
+//		parameter controls the number of digits to the
+//		right of the radix point or decimal separator
+//		(a.k.a. decimal point). Effectively this defines
+//		the number of fractional digits remaining after
+//		completion of the number rounding operation
+//		performed by the Golang package function:
+//
+//			func (*Rat) FloatString
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the returned
+//		error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error message.
+//	 	This returned error message will incorporate the method
+//	 	chain and text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be attached to the beginning
+//	 	of the error message.
+func (numStrKernel *NumberStrKernel) SetFromBigRat(
+	bigRatNum *big.Rat,
+	roundToFractionalDigits int,
+	errorPrefix interface{}) error {
+
+	if numStrKernel.lock == nil {
+		numStrKernel.lock = new(sync.Mutex)
+	}
+
+	numStrKernel.lock.Lock()
+
+	defer numStrKernel.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumberStrKernel."+
+			"SetFromBigRat()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	var nativeNumStr string
+
+	nativeNumStr,
+		err = new(MathBigRatHelper).
+		BigRatToNativeNumStr(
+			bigRatNum,
+			roundToFractionalDigits,
+			ePrefix)
+
+	if err != nil {
+
+		return err
+	}
+
+	err = new(numberStrKernelQuark).
+		setNumStrKernelFromNativeNumStr(
+			numStrKernel,
+			nativeNumStr,
+			ePrefix.XCpy(
+				"numStrKernel"))
+
+	return err
+}
+
 // SetFromNumericValue
 //
 //	Deletes and resets the internal values for the
@@ -6801,6 +7014,32 @@ func (numStrKernel *NumberStrKernel) SetDefaultSimpleNumStrFormatSpec(
 //
 //	This numeric value is then used to reconfigure the
 //	current instance NumberStrKernel.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	(1)	big.Rat Accuracy
+//		This method will default big.Rat and *big.Rat
+//		values default to 2,000 decimal places of
+//		accuracy. Adjust rounding parameters as
+//		required or use the following method for more
+//		granular control over big.Rat rounding:
+//			NewFromNumericValue.SetFromBigRat()
+//
+//	(2) big.Rat Rounding Algorithm
+//		Before being converted to an instance of
+//		NumberStrKernel, the big.Rat numeric value will
+//		be rounded by the Golang 'big' package function:
+//
+//			(*Rat) FloatString
+//
+//		The rounding algorithm used is described in the
+//		big.Rat documentation as:
+//
+//			The last digit is rounded to nearest, with
+//			halves rounded away from zero.
+//				https://pkg.go.dev/math/big#Rat
 //
 // ----------------------------------------------------------------
 //
