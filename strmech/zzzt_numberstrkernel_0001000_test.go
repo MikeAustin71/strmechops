@@ -2465,9 +2465,18 @@ func TestNumberStrKernel_RoundNoRounding_000100(t *testing.T) {
 		return
 	}
 
-	actualNumberStr := nStr01.GetPureNumberStr(
+	var actualNumberStr string
+	var pureNumStrComponents PureNumberStrComponents
+
+	actualNumberStr,
+		pureNumStrComponents,
+		err = nStr01.FmtNumStrPure(
 		".",
-		true)
+		true,
+		NumRoundType.NoRounding(),
+		0,
+		ePrefix.XCpy(
+			"nStr01"))
 
 	if err != nil {
 		t.Errorf("\n%v\n",
@@ -2478,12 +2487,27 @@ func TestNumberStrKernel_RoundNoRounding_000100(t *testing.T) {
 	if expectedNumberStr != actualNumberStr {
 
 		t.Errorf("%v\n"+
-			"Test#1 - Positive Test\n"+
+			"Test#1A - Positive Test\n"+
 			"Error: actualNumberStr NOT EQUAL TO expectedNumberStr\n"+
 			"    actualNumberStr = '%v'\n"+
 			"expectedNumberStr   = '%v'\n",
 			ePrefix.String(),
 			actualNumberStr,
+			expectedNumberStr)
+
+		return
+	}
+
+	if pureNumStrComponents.NativeNumberStr != actualNumberStr {
+
+		t.Errorf("%v\n"+
+			"Test#1B - Positive Test\n"+
+			"pureNumStrComponents\n"+
+			"Error: actualNumberStr NOT EQUAL TO expectedNumberStr\n"+
+			"pureNumStrComponents.NativeNumStr = '%v'\n"+
+			"              expectedNumberStr   = '%v'\n",
+			ePrefix.String(),
+			pureNumStrComponents.NativeNumberStr,
 			expectedNumberStr)
 
 		return
@@ -2501,9 +2525,15 @@ func TestNumberStrKernel_RoundNoRounding_000100(t *testing.T) {
 		return
 	}
 
-	actualNumberStr = nStr02.GetPureNumberStr(
+	actualNumberStr,
+		_,
+		err = nStr02.FmtNumStrPure(
 		".",
-		true)
+		true,
+		NumRoundType.NoRounding(),
+		0,
+		ePrefix.XCpy(
+			"nStr02"))
 
 	if err != nil {
 		t.Errorf("\n%v\n",
@@ -2591,9 +2621,17 @@ func TestNumberStrKernel_RoundHalfUpWithNegNums_000200(t *testing.T) {
 		return
 	}
 
-	actualNumberStr := nStr01.GetPureNumberStr(
+	var actualNumberStr string
+
+	actualNumberStr,
+		_,
+		err = nStr01.FmtNumStrPure(
 		".",
-		true)
+		true,
+		NumRoundType.NoRounding(),
+		0,
+		ePrefix.XCpy(
+			"nStr01"))
 
 	if err != nil {
 		t.Errorf("\n%v\n",
@@ -2627,9 +2665,15 @@ func TestNumberStrKernel_RoundHalfUpWithNegNums_000200(t *testing.T) {
 		return
 	}
 
-	actualNumberStr = nStr02.GetPureNumberStr(
+	actualNumberStr,
+		_,
+		err = nStr02.FmtNumStrPure(
 		".",
-		true)
+		true,
+		NumRoundType.NoRounding(),
+		0,
+		ePrefix.XCpy(
+			"nStr02"))
 
 	if err != nil {
 		t.Errorf("\n%v\n",
@@ -2738,9 +2782,17 @@ func TestNumberStrKernel_RoundHalfDownWithNegNums_000300(t *testing.T) {
 		return
 	}
 
-	actualNumberStr := nStr01.GetPureNumberStr(
+	var actualNumberStr string
+
+	actualNumberStr,
+		_,
+		err = nStr01.FmtNumStrPure(
 		".",
-		true)
+		true,
+		NumRoundType.NoRounding(),
+		0,
+		ePrefix.XCpy(
+			"nStr01"))
 
 	if err != nil {
 		t.Errorf("\n%v\n",
@@ -2774,9 +2826,15 @@ func TestNumberStrKernel_RoundHalfDownWithNegNums_000300(t *testing.T) {
 		return
 	}
 
-	actualNumberStr = nStr02.GetPureNumberStr(
+	actualNumberStr,
+		_,
+		err = nStr02.FmtNumStrPure(
 		".",
-		true)
+		true,
+		NumRoundType.NoRounding(),
+		0,
+		ePrefix.XCpy(
+			"nStr02"))
 
 	if err != nil {
 		t.Errorf("\n%v\n",
@@ -2885,9 +2943,17 @@ func TestNumberStrKernel_RoundHalfAwayFromZero_000400(t *testing.T) {
 		return
 	}
 
-	actualNumberStr := nStr01.GetPureNumberStr(
+	var actualNumberStr string
+
+	actualNumberStr,
+		_,
+		err = nStr01.FmtNumStrPure(
 		".",
-		true)
+		true,
+		NumRoundType.NoRounding(),
+		0,
+		ePrefix.XCpy(
+			"nStr01"))
 
 	if err != nil {
 		t.Errorf("\n%v\n",
@@ -2921,9 +2987,15 @@ func TestNumberStrKernel_RoundHalfAwayFromZero_000400(t *testing.T) {
 		return
 	}
 
-	actualNumberStr = nStr02.GetPureNumberStr(
+	actualNumberStr,
+		_,
+		err = nStr02.FmtNumStrPure(
 		".",
-		true)
+		true,
+		NumRoundType.NoRounding(),
+		0,
+		ePrefix.XCpy(
+			"nStr02"))
 
 	if err != nil {
 		t.Errorf("\n%v\n",
@@ -3033,9 +3105,17 @@ func TestNumberStrKernel_RoundHalfTowardsZero_000500(t *testing.T) {
 		return
 	}
 
-	actualNumberStr := nStr01.GetPureNumberStr(
+	var actualNumberStr string
+
+	actualNumberStr,
+		_,
+		err = nStr01.FmtNumStrPure(
 		".",
-		true)
+		true,
+		NumRoundType.NoRounding(),
+		0,
+		ePrefix.XCpy(
+			"nStr01"))
 
 	if err != nil {
 		t.Errorf("\n%v\n",
@@ -3069,15 +3149,15 @@ func TestNumberStrKernel_RoundHalfTowardsZero_000500(t *testing.T) {
 		return
 	}
 
-	actualNumberStr = nStr02.GetPureNumberStr(
+	actualNumberStr,
+		_,
+		err = nStr02.FmtNumStrPure(
 		".",
-		true)
-
-	if err != nil {
-		t.Errorf("\n%v\n",
-			err.Error())
-		return
-	}
+		true,
+		NumRoundType.NoRounding(),
+		0,
+		ePrefix.XCpy(
+			"nStr02"))
 
 	expectedNumberStr = "-7"
 
@@ -3125,9 +3205,15 @@ func TestNumberStrKernel_RoundHalfTowardsZero_000500(t *testing.T) {
 		return
 	}
 
-	actualNumberStr = nStr03.GetPureNumberStr(
+	actualNumberStr,
+		_,
+		err = nStr03.FmtNumStrPure(
 		".",
-		true)
+		true,
+		NumRoundType.NoRounding(),
+		0,
+		ePrefix.XCpy(
+			"nStr03"))
 
 	if err != nil {
 		t.Errorf("\n%v\n",
@@ -3235,9 +3321,17 @@ func TestNumberStrKernel_RoundHalfToEven_000600(t *testing.T) {
 		return
 	}
 
-	actualNumberStr := nStr01.GetPureNumberStr(
+	var actualNumberStr string
+
+	actualNumberStr,
+		_,
+		err = nStr01.FmtNumStrPure(
 		".",
-		true)
+		true,
+		NumRoundType.NoRounding(),
+		0,
+		ePrefix.XCpy(
+			"nStr01"))
 
 	if err != nil {
 		t.Errorf("\n%v\n",
@@ -3271,9 +3365,15 @@ func TestNumberStrKernel_RoundHalfToEven_000600(t *testing.T) {
 		return
 	}
 
-	actualNumberStr = nStr02.GetPureNumberStr(
+	actualNumberStr,
+		_,
+		err = nStr02.FmtNumStrPure(
 		".",
-		true)
+		true,
+		NumRoundType.NoRounding(),
+		0,
+		ePrefix.XCpy(
+			"nStr02"))
 
 	if err != nil {
 		t.Errorf("\n%v\n",
@@ -3327,9 +3427,15 @@ func TestNumberStrKernel_RoundHalfToEven_000600(t *testing.T) {
 		return
 	}
 
-	actualNumberStr = nStr03.GetPureNumberStr(
+	actualNumberStr,
+		_,
+		err = nStr03.FmtNumStrPure(
 		".",
-		true)
+		true,
+		NumRoundType.NoRounding(),
+		0,
+		ePrefix.XCpy(
+			"nStr03"))
 
 	if err != nil {
 		t.Errorf("\n%v\n",
@@ -3381,9 +3487,15 @@ func TestNumberStrKernel_RoundHalfToEven_000600(t *testing.T) {
 		return
 	}
 
-	actualNumberStr = nStr04.GetPureNumberStr(
+	actualNumberStr,
+		_,
+		err = nStr04.FmtNumStrPure(
 		".",
-		true)
+		true,
+		NumRoundType.NoRounding(),
+		0,
+		ePrefix.XCpy(
+			"nStr04"))
 
 	if err != nil {
 		t.Errorf("\n%v\n",
@@ -3491,9 +3603,17 @@ func TestNumberStrKernel_RoundHalfToOdd_000700(t *testing.T) {
 		return
 	}
 
-	actualNumberStr := nStr01.GetPureNumberStr(
+	var actualNumberStr string
+
+	actualNumberStr,
+		_,
+		err = nStr01.FmtNumStrPure(
 		".",
-		true)
+		true,
+		NumRoundType.NoRounding(),
+		0,
+		ePrefix.XCpy(
+			"nStr01"))
 
 	if err != nil {
 		t.Errorf("\n%v\n",
@@ -3527,9 +3647,15 @@ func TestNumberStrKernel_RoundHalfToOdd_000700(t *testing.T) {
 		return
 	}
 
-	actualNumberStr = nStr02.GetPureNumberStr(
+	actualNumberStr,
+		_,
+		err = nStr02.FmtNumStrPure(
 		".",
-		true)
+		true,
+		NumRoundType.NoRounding(),
+		0,
+		ePrefix.XCpy(
+			"nStr02"))
 
 	if err != nil {
 		t.Errorf("\n%v\n",
@@ -3583,9 +3709,15 @@ func TestNumberStrKernel_RoundHalfToOdd_000700(t *testing.T) {
 		return
 	}
 
-	actualNumberStr = nStr03.GetPureNumberStr(
+	actualNumberStr,
+		_,
+		err = nStr03.FmtNumStrPure(
 		".",
-		true)
+		true,
+		NumRoundType.NoRounding(),
+		0,
+		ePrefix.XCpy(
+			"nStr03"))
 
 	if err != nil {
 		t.Errorf("\n%v\n",
@@ -3637,9 +3769,15 @@ func TestNumberStrKernel_RoundHalfToOdd_000700(t *testing.T) {
 		return
 	}
 
-	actualNumberStr = nStr04.GetPureNumberStr(
+	actualNumberStr,
+		_,
+		err = nStr04.FmtNumStrPure(
 		".",
-		true)
+		true,
+		NumRoundType.NoRounding(),
+		0,
+		ePrefix.XCpy(
+			"nStr04"))
 
 	if err != nil {
 		t.Errorf("\n%v\n",
@@ -3714,9 +3852,15 @@ func TestNumberStrKernel_RoundRandomly_000800(t *testing.T) {
 			return
 		}
 
-		actualNumberStr = nStr01.GetPureNumberStr(
+		actualNumberStr,
+			_,
+			err = nStr01.FmtNumStrPure(
 			".",
-			true)
+			true,
+			NumRoundType.NoRounding(),
+			0,
+			ePrefix.XCpy(
+				"nStr01"))
 
 		if err != nil {
 			t.Errorf("\n%v\n",
@@ -3854,9 +3998,17 @@ func TestNumberStrKernel_RoundFloor_000900(t *testing.T) {
 		return
 	}
 
-	actualNumberStr := nStr01.GetPureNumberStr(
+	var actualNumberStr string
+
+	actualNumberStr,
+		_,
+		err = nStr01.FmtNumStrPure(
 		".",
-		true)
+		true,
+		NumRoundType.NoRounding(),
+		0,
+		ePrefix.XCpy(
+			"nStr01"))
 
 	if err != nil {
 		t.Errorf("\n%v\n",
@@ -3890,9 +4042,15 @@ func TestNumberStrKernel_RoundFloor_000900(t *testing.T) {
 		return
 	}
 
-	actualNumberStr = nStr02.GetPureNumberStr(
+	actualNumberStr,
+		_,
+		err = nStr02.FmtNumStrPure(
 		".",
-		true)
+		true,
+		NumRoundType.NoRounding(),
+		0,
+		ePrefix.XCpy(
+			"nStr02"))
 
 	if err != nil {
 		t.Errorf("\n%v\n",
@@ -3946,9 +4104,15 @@ func TestNumberStrKernel_RoundFloor_000900(t *testing.T) {
 		return
 	}
 
-	actualNumberStr = nStr03.GetPureNumberStr(
+	actualNumberStr,
+		_,
+		err = nStr03.FmtNumStrPure(
 		".",
-		true)
+		true,
+		NumRoundType.NoRounding(),
+		0,
+		ePrefix.XCpy(
+			"nStr03"))
 
 	if err != nil {
 		t.Errorf("\n%v\n",
@@ -4000,9 +4164,15 @@ func TestNumberStrKernel_RoundFloor_000900(t *testing.T) {
 		return
 	}
 
-	actualNumberStr = nStr04.GetPureNumberStr(
+	actualNumberStr,
+		_,
+		err = nStr04.FmtNumStrPure(
 		".",
-		true)
+		true,
+		NumRoundType.NoRounding(),
+		0,
+		ePrefix.XCpy(
+			"nStr04"))
 
 	if err != nil {
 		t.Errorf("\n%v\n",
