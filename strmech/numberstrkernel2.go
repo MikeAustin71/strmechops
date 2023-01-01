@@ -2180,12 +2180,15 @@ func (numStrKernel *NumberStrKernel) GetParameterTextListing(
 //     with a minus sign ('-'). This minus sign could be
 //     positioned as a leading or trailing minus sign.
 //
-//  4. A pure number string will NOT include integer
+//  4. A pure number string will NEVER include integer
 //     separators such as commas (',') to separate
 //     integer digits by thousands.
 //
 //     NOT THIS: 1,000,000
 //     Pure Number String: 1000000
+//
+//  5. A pure number string will NEVER include currency
+//     symbols.
 //
 // No rounding is performed on the returned numeric
 // value. All available fractional digits in the current

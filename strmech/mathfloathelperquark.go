@@ -1036,9 +1036,21 @@ func (floatHelperQuark *mathFloatHelperQuark) roundBigFloat(
 
 	roundedNumber.SetPrec(precision)
 
-	pureNumberStr := numStrKernel.GetPureNumberStr(
+	var pureNumberStr string
+
+	pureNumberStr,
+		_,
+		err = numStrKernel.FmtNumStrPure(
 		".",
-		true)
+		true,
+		NumRoundType.NoRounding(),
+		0,
+		ePrefix.XCpy(
+			"numStrKernel"))
+
+	if err != nil {
+		return err
+	}
 
 	var ok bool
 	_,

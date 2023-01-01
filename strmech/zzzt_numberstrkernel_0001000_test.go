@@ -1384,9 +1384,21 @@ func TestNumberStrKernel_GetBigRatNum_000100(t *testing.T) {
 
 	var pureNumStr string
 
-	pureNumStr = numStrKernelBase.GetPureNumberStr(
+	pureNumStr,
+		_,
+		err = numStrKernelBase.FmtNumStrPure(
 		".",
-		true)
+		true,
+		NumRoundType.NoRounding(),
+		0,
+		ePrefix.XCpy(
+			"numStrKernelBase"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
 
 	if pureNumStr != origNumStr {
 
@@ -1687,9 +1699,16 @@ func TestNumberStrKernel_NewFromBigRat_000100(t *testing.T) {
 		return
 	}
 
-	actualNumberStr := numStrKernel01.GetPureNumberStr(
+	var actualNumberStr string
+
+	actualNumberStr,
+		_,
+		err = numStrKernel01.FmtNumStrPure(
 		".",
-		true)
+		true,
+		NumRoundType.NoRounding(),
+		0,
+		ePrefix.XCpy("numStrKernel01"))
 
 	if actualNumberStr != expectedNumberStr {
 
@@ -2145,9 +2164,15 @@ func TestNumberStrKernel_FmtSignedPureNumberStr_000100(t *testing.T) {
 		return
 	}
 
-	actualFmtNumberStr = baseValueNStr.GetPureNumberStr(
+	actualFmtNumberStr,
+		_,
+		err = baseValueNStr.FmtNumStrPure(
 		".",
-		true)
+		true,
+		NumRoundType.NoRounding(),
+		0,
+		ePrefix.XCpy(
+			"baseValueNStr"))
 
 	if expectedNumberStr != actualFmtNumberStr {
 
@@ -4085,9 +4110,17 @@ func TestNumberStrKernel_RoundCeiling_001000(t *testing.T) {
 		return
 	}
 
-	actualNumberStr := nStr01.GetPureNumberStr(
+	var actualNumberStr string
+
+	actualNumberStr,
+		_,
+		err = nStr01.FmtNumStrPure(
 		".",
-		true)
+		true,
+		NumRoundType.NoRounding(),
+		0,
+		ePrefix.XCpy(
+			"nStr01"))
 
 	if err != nil {
 		t.Errorf("\n%v\n",
@@ -4121,9 +4154,15 @@ func TestNumberStrKernel_RoundCeiling_001000(t *testing.T) {
 		return
 	}
 
-	actualNumberStr = nStr02.GetPureNumberStr(
+	actualNumberStr,
+		_,
+		err = nStr02.FmtNumStrPure(
 		".",
-		true)
+		true,
+		NumRoundType.NoRounding(),
+		0,
+		ePrefix.XCpy(
+			"nStr02"))
 
 	if err != nil {
 		t.Errorf("\n%v\n",
@@ -4177,9 +4216,15 @@ func TestNumberStrKernel_RoundCeiling_001000(t *testing.T) {
 		return
 	}
 
-	actualNumberStr = nStr03.GetPureNumberStr(
+	actualNumberStr,
+		_,
+		err = nStr03.FmtNumStrPure(
 		".",
-		true)
+		true,
+		NumRoundType.NoRounding(),
+		0,
+		ePrefix.XCpy(
+			"nStr01"))
 
 	if err != nil {
 		t.Errorf("\n%v\n",
@@ -4231,9 +4276,15 @@ func TestNumberStrKernel_RoundCeiling_001000(t *testing.T) {
 		return
 	}
 
-	actualNumberStr = nStr04.GetPureNumberStr(
+	actualNumberStr,
+		_,
+		err = nStr04.FmtNumStrPure(
 		".",
-		true)
+		true,
+		NumRoundType.NoRounding(),
+		0,
+		ePrefix.XCpy(
+			"nStr01"))
 
 	if err != nil {
 		t.Errorf("\n%v\n",

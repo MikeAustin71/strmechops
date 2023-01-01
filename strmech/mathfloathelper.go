@@ -680,12 +680,21 @@ func (mathFloatHelper *MathFloatHelper) PiTo20k(
 		}
 	}
 
+	var pureNumStr string
+
+	pureNumStr,
+		_,
+		err = numStrKernel.FmtNumStrPure(
+		".",
+		true,
+		NumRoundType.NoRounding(),
+		0,
+		ePrefix.XCpy(
+			"numStrKernel"))
+
 	var ok bool
 	_,
-		ok = pi20k.SetString(
-		numStrKernel.GetPureNumberStr(
-			".",
-			true))
+		ok = pi20k.SetString(pureNumStr)
 
 	if !ok {
 
@@ -696,9 +705,7 @@ func (mathFloatHelper *MathFloatHelper) PiTo20k(
 			"numStrKernel.GetPureNumberStr() = %v",
 			ePrefix.String(),
 			roundToFractionalDigits,
-			numStrKernel.GetPureNumberStr(
-				".",
-				true))
+			pureNumStr)
 	}
 
 	return pi20k, err

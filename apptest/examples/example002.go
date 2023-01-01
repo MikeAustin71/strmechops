@@ -70,9 +70,21 @@ func (MainTest02) BigRat002() {
 
 	var pureNumStr string
 
-	pureNumStr = numStrKernelBase.GetPureNumberStr(
+	pureNumStr,
+		_,
+		err = numStrKernelBase.FmtNumStrPure(
 		".",
-		true)
+		true,
+		strmech.NumRoundType.NoRounding(),
+		0,
+		ePrefix.XCpy(
+			"numStrKernelBase"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
 
 	fmt.Printf("%v\n"+
 		"Original NumStr    = '%v'\n"+

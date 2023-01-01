@@ -8231,11 +8231,17 @@ func (numStrKernel *NumberStrKernel) FmtNumStrDefaultRound(
 //
 //	roundToFractionalDigits		int
 //
-//		When set to a positive integer value, this parameter
-//		controls the number of digits to the right of the radix
-//		point or decimal separator (a.k.a. decimal point). This
-//		controls the number of fractional digits remaining after
-//		completion of the number rounding operation.
+//		When set to a positive integer value, this
+//		parameter controls the number of digits to the
+//		right of the radix point or decimal separator
+//		(a.k.a. decimal point). This controls the number
+//		of fractional digits remaining after completion
+//		of the number rounding operation.
+//
+//		If input parameter 'roundingType' is set to
+//		NumRoundType.NoRounding(),
+//		'roundToFractionalDigits' is ignored and no
+//		rounding operation is performed.
 //
 //	errorPrefix					interface{}
 //
@@ -8454,6 +8460,662 @@ func (numStrKernel *NumberStrKernel) FmtNumStrNative(
 	return nativeNumStr,
 		nativeNumStrStats,
 		err
+}
+
+// FmtNumStrPure
+//
+// Extracts the numeric value from the current instance
+// of NumberStrKernel and returns a formatted Pure Number
+// String.
+//
+// A Pure Number String differs from a Native Number
+// String in that it offers more options for
+// customization. Pure Number Strings are better able to
+// match multinational and multicultural number
+// formatting conventions. Users have the option to
+// specify custom radix points or decimal separator
+// characters as well as designating leading or trailing
+// minus signs for negative numbers.
+//
+// A Pure Number String is defined as follows:
+//
+//  1. A pure number string consists entirely of numeric
+//     digit characters (0-9).
+//
+//  2. A pure number string will separate integer and
+//     fractional digits with a radix point or decimal
+//     separator. This could be, but is not limited to,
+//     a decimal point ('.'). For example, many European
+//     countries use the comma (',') as a radix point.
+//
+//  3. A pure number string will designate negative values
+//     with a minus sign ('-'). This minus sign could be
+//     positioned as a leading or trailing minus sign.
+//
+//  4. A pure number string will NEVER include integer
+//     separators such as commas (',') to separate
+//     integer digits by thousands.
+//
+//     NOT THIS: 1,000,000
+//     Pure Number String: 1000000
+//
+//  5. A pure number string will NEVER include currency
+//     symbols.
+//
+// The numeric value extracted from the current instance
+// of NumberStrKernel will first be rounded according to
+// input parameter specifications before generating the
+// final Pure Number String.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	This method will NOT change or modify the data values
+//	contained in the current instance of NumberStrKernel.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	decSeparatorChars			string
+//
+//		This string contains the character or characters
+//		which will be configured as the Decimal Separator
+//		Symbol.
+//
+//		The Decimal Separator is also known as the radix
+//		point and is used to separate integer and
+//		fractional digits within a floating point number
+//		string.
+//
+//		In the US, UK, Australia, most of Canada and many
+//		other countries the Decimal Separator is the
+//		period character ('.') known as the decimal
+//		point.
+//
+//		In France, Germany and many countries in the
+//		European Union, the Decimal Separator is the
+//		comma character (',').
+//
+//		If this parameter is submitted as an empty or
+//		zero length string, an error will be returned.
+//
+//	leadingMinusSign			bool
+//
+//		In pure number strings, a minus sign ('-')
+//		identifies a number as a negative numeric value.
+//
+//		When 'leadingMinusSign' is set to 'true', the
+//		pure number string returned by this method will
+//		format negative numeric values with a leading
+//		minus sign ('-') at the beginning of the number
+//		string.
+//
+//		Leading minus signs represent the standard means
+//		for designating negative numeric values in the
+//		US, UK, Australia, most of Canada and many other
+//		countries.
+//
+//		Example Leading Minus Sign:
+//			"-123.456"
+//
+//		When 'leadingMinusSign' is set to 'false', the
+//		pure number string returned by this method will
+//		format negative numeric values with a trailing
+//		minus signs ('-') located at the end of the
+//		number string.
+//
+//		Trailing minus signs represent the standard for
+//		France, Germany and many countries in the
+//		European Union.
+//
+//		Example Trailing Number Symbols:
+//			"123.456-"
+//
+//	roundingType				NumberRoundingType
+//
+//		This enumeration parameter is used to specify the
+//		type of rounding algorithm that will be applied for
+//		the	rounding of fractional digits contained in the
+//		current instance of NumberStrKernel.
+//
+//		If in doubt as to a suitable rounding method,
+//		'HalfAwayFromZero' is recommended.
+//
+//		Possible values are listed as follows:
+//			NumRoundType.None()	- Invalid Value
+//			NumRoundType.NoRounding()
+//			NumRoundType.HalfUpWithNegNums()
+//			NumRoundType.HalfDownWithNegNums()
+//			NumRoundType.HalfAwayFromZero()
+//			NumRoundType.HalfTowardsZero()
+//			NumRoundType.HalfToEven()
+//			NumRoundType.HalfToOdd()
+//			NumRoundType.Randomly()
+//			NumRoundType.Floor()
+//			NumRoundType.Ceiling()
+//			NumRoundType.Truncate()
+//
+//		Definitions:
+//
+//			NoRounding
+//
+//				Signals that no rounding operation will be
+//				performed on fractional digits. The
+//				fractional digits will therefore remain
+//				unchanged.
+//
+//			HalfUpWithNegNums
+//
+//				Half Round Up Including Negative Numbers.
+//				This method is intuitive but may produce
+//				unexpected results when applied to negative
+//				numbers.
+//
+//				'HalfUpWithNegNums' rounds .5 up.
+//
+//					Examples of 'HalfUpWithNegNums'
+//					7.6 rounds up to 8
+//					7.5 rounds up to 8
+//					7.4 rounds down to 7
+//					-7.4 rounds up to -7
+//					-7.5 rounds up to -7
+//					-7.6 rounds down to -8
+//
+//			HalfDownWithNegNums
+//
+//			Half Round Down Including Negative Numbers. This
+//			method is also considered intuitive but may
+//			produce unexpected results when applied to
+//			negative numbers.
+//
+//			'HalfDownWithNegNums' rounds .5 down.
+//
+//				Examples of HalfDownWithNegNums
+//
+//				7.6 rounds up to 8
+//				7.5 rounds down to 7
+//				7.4 rounds down to 7
+//				-7.4 rounds up to -7
+//				-7.5 rounds down to -8
+//				-7.6 rounds down to -8
+//
+//			HalfAwayFromZero
+//
+//				The 'HalfAwayFromZero' method rounds .5 further
+//				away from zero.	It provides clear and consistent
+//				behavior when dealing with negative numbers.
+//
+//					Examples of HalfAwayFromZero
+//
+//					7.6 rounds away to 8
+//					7.5 rounds away to 8
+//					7.4 rounds to 7
+//					-7.4 rounds to -7
+//					-7.5 rounds away to -8
+//					-7.6 rounds away to -8
+//
+//			HalfTowardsZero
+//
+//				Round Half Towards Zero. 'HalfTowardsZero' rounds
+//				0.5	closer to zero. It provides clear and
+//				consistent behavior	when dealing with negative
+//				numbers.
+//
+//					Examples of HalfTowardsZero
+//
+//					7.6 rounds away to 8
+//					7.5 rounds to 7
+//					7.4 rounds to 7
+//					-7.4 rounds to -7
+//					-7.5 rounds to -7
+//					-7.6 rounds away to -8
+//
+//			HalfToEven
+//
+//				Round Half To Even Numbers. 'HalfToEven' is
+//				also called	Banker's Rounding. This method
+//				rounds 0.5 to the nearest even digit.
+//
+//					Examples of HalfToEven
+//
+//					7.5 rounds up to 8 (because 8 is an even
+//					number)	but 6.5 rounds down to 6 (because
+//					6 is an even number)
+//
+//					HalfToEven only applies to 0.5. Other
+//					numbers (not ending	in 0.5) round to
+//					nearest as usual, so:
+//
+//					7.6 rounds up to 8
+//					7.5 rounds up to 8 (because 8 is an even number)
+//					7.4 rounds down to 7
+//					6.6 rounds up to 7
+//					6.5 rounds down to 6 (because 6 is an even number)
+//					6.4 rounds down to 6
+//
+//			HalfToOdd
+//
+//				Round Half to Odd Numbers. Similar to 'HalfToEven',
+//				but in this case 'HalfToOdd' rounds 0.5 towards odd
+//				numbers.
+//
+//					Examples of HalfToOdd
+//
+//					HalfToOdd only applies to 0.5. Other numbers
+//					(not ending	in 0.5) round to nearest as usual.
+//
+//					7.5 rounds down to 7 (because 7 is an odd number)
+//
+//					6.5 rounds up to 7 (because 7 is an odd number)
+//
+//					7.6 rounds up to 8
+//					7.5 rounds down to 7 (because 7 is an odd number)
+//					7.4 rounds down to 7
+//					6.6 rounds up to 7
+//					6.5 rounds up to 7 (because 7 is an odd number)
+//					6.4 rounds down to 6
+//
+//			Randomly
+//
+//				Round Half Randomly. Uses a Random Number Generator
+//				to choose between rounding 0.5 up or down.
+//
+//				All numbers other than 0.5 round to the nearest as
+//				usual.
+//
+//			Floor
+//
+//				Yields the nearest integer down. Floor does not apply
+//				any	special treatment to 0.5.
+//
+//				Floor Function: The greatest integer that is less than
+//				or equal to x
+//
+//				Source:
+//					https://www.mathsisfun.com/sets/function-floor-ceiling.html
+//
+//				In mathematics and computer science, the floor function
+//				is the function that takes as input a real number x,
+//				and gives as output the greatest integer less than or
+//				equal to x,	denoted floor(x) or ⌊x⌋.
+//
+//				Source:
+//					https://en.wikipedia.org/wiki/Floor_and_ceiling_functions
+//
+//				Examples of Floor
+//
+//					Number     Floor
+//					 2           2
+//					 2.4         2
+//					 2.9         2
+//					-2.5        -3
+//					-2.7        -3
+//					-2          -2
+//
+//			Ceiling
+//
+//				Yields the nearest integer up. Ceiling does not
+//				apply any special treatment to 0.5.
+//
+//				Ceiling Function: The least integer that is
+//				greater than or	equal to x.
+//				Source:
+//					https://www.mathsisfun.com/sets/function-floor-ceiling.html
+//
+//				The ceiling function maps x to the least integer
+//				greater than or equal to x, denoted ceil(x) or
+//				⌈x⌉.[1]
+//
+//				Source:
+//					https://en.wikipedia.org/wiki/Floor_and_ceiling_functions
+//
+//					Examples of Ceiling
+//
+//						Number    Ceiling
+//						 2           2
+//						 2.4         3
+//						 2.9         3
+//						-2.5        -2
+//						-2.7        -2
+//						-2          -2
+//
+//			Truncate
+//
+//				Apply NO Rounding whatsoever. The Round From Digit
+//				is dropped or deleted. The Round To Digit is NEVER
+//				changed.
+//
+//				Examples of Truncate
+//
+//					Example-1
+//					Number: 23.14567
+//					Objective: Round to two decimal places to
+//					the right of the decimal point.
+//					Rounding Method: Truncate
+//					Round To Digit:   4
+//					Round From Digit: 5
+//					Rounded Number:   23.14 - The Round From Digit
+//					is dropped.
+//
+//					Example-2
+//					Number: -23.14567
+//					Objective: Round to two decimal places to
+//					the right of the decimal point.
+//					Rounding Method: Truncate
+//					Round To Digit:   4
+//					Round From Digit: 5
+//					Rounded Number:  -23.14 - The Round From Digit
+//					is dropped.
+//
+//	roundToFractionalDigits		int
+//
+//		When set to a positive integer value, this
+//		parameter controls the number of digits to the
+//		right of the radix point or decimal separator
+//		(a.k.a. decimal point). This controls the number
+//		of fractional digits remaining after completion
+//		of the number rounding operation.
+//
+//		If input parameter 'roundingType' is set to
+//		NumRoundType.NoRounding(),
+//		'roundToFractionalDigits' is ignored and no
+//		rounding operation is performed.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//		pureNumberStr				string
+//
+//			If this method completes successfully, a Pure
+//			number string containing the numeric value
+//			extracted from the current instance of
+//			NumberStrKernel will be returned.
+//
+//			A Pure Number String is defined as follows:
+//
+//	 	1.	A pure number string consists entirely of numeric
+//	 	  	digit characters (0-9).
+//
+//	 	2.	A pure number string will separate integer and
+//	 	  	fractional digits with a radix point or decimal
+//	 	  	separator. This could be, but is not limited to,
+//	 	  	a decimal point ('.'). For example, many European
+//	 	  	countries use the comma (',') as a radix point.
+//
+//	 	3.	A pure number string will designate negative values
+//	 	  	with a minus sign ('-'). This minus sign could be
+//	 	  	positioned as a leading or trailing minus sign.
+//
+//	 	4.	A pure number string will NEVER include integer
+//	 	  	separators such as commas (',') to separate
+//	 	  	integer digits by thousands.
+//
+//	 	  				  NOT THIS: 1,000,000
+//	 	  		Pure Number String: 1000000
+//
+//	 	5.	A pure number string will NEVER include currency
+//				symbols.
+//
+//		pureNumStrComponents		PureNumberStrComponents
+//
+//			If this method completes successfully, this
+//			parameter will return an instance of
+//			PureNumberStrComponents. This data structure
+//			contains an analysis and profile information on
+//			the Pure Number String returned by paramter,
+//			'pureNumberStr'.
+//
+//			type PureNumberStrComponents struct {
+//
+//				NumStrStats NumberStrStatsDto
+//
+//					This data transfer object will return key
+//					statistics on the numeric value encapsulated
+//					by the current instance of NumberStrKernel.
+//
+//					type NumberStrStatsDto struct {
+//
+//					NumOfIntegerDigits					uint64
+//
+//						The total number of integer digits to the
+//						left of the radix point or, decimal point, in
+//						the subject numeric value.
+//
+//					NumOfSignificantIntegerDigits		uint64
+//
+//						The number of nonzero integer digits to the
+//						left of the radix point or, decimal point, in
+//						the subject numeric value.
+//
+//					NumOfFractionalDigits				uint64
+//
+//						The total number of fractional digits to the
+//						right of the radix point or, decimal point,
+//						in the subject numeric value.
+//
+//					NumOfSignificantFractionalDigits	uint64
+//
+//						The number of nonzero fractional digits to
+//						the right of the radix point or, decimal
+//						point, in the subject numeric value.
+//
+//					NumberValueType 					NumericValueType
+//
+//						This enumeration value specifies whether the
+//						subject numeric value is classified either as
+//						an integer or a floating point number.
+//
+//						Possible enumeration values are listed as
+//						follows:
+//							NumValType.None()
+//							NumValType.FloatingPoint()
+//							NumValType.Integer()
+//
+//					NumberSign							NumericSignValueType
+//
+//						An enumeration specifying the number sign
+//						associated with the numeric value. Possible
+//						values are listed as follows:
+//							NumSignVal.None()		= Invalid Value
+//							NumSignVal.Negative()	= -1
+//							NumSignVal.Zero()		=  0
+//							NumSignVal.Positive()	=  1
+//
+//					IsZeroValue							bool
+//
+//						If 'true', the subject numeric value is equal
+//						to zero ('0').
+//
+//						If 'false', the subject numeric value is
+//						greater than or less than zero ('0').
+//					}
+//
+//
+//
+//				AbsoluteValueNumStr string
+//
+//				The number string expressed as an absolute value.
+//				Be advised, this number string may be a floating
+//				point number string containing fractional digits.
+//
+//				AbsoluteValAllIntegerDigitsNumStr string
+//
+//				Integer and fractional digits are combined
+//				in a single number string without a decimal
+//				point separating integer and fractional digits.
+//				This string DOES NOT contain a leading number
+//				sign (a.k.a. minus sign ('-')
+//
+//				SignedAllIntegerDigitsNumStr string
+//
+//				Integer and fractional digits are combined
+//				in a single number string without a decimal
+//				point separating integer and fractional digits.
+//				If the numeric value is negative, a leading
+//				minus sign will be prefixed at the beginning
+//				of the number string.
+//
+//				NativeNumberStr string
+//
+//				A Native Number String representing the base
+//				numeric value used to generate these profile
+//				number string statistics.
+//
+//				A valid Native Number String must conform to the
+//				standardized formatting criteria defined below:
+//
+//				 	1. A Native Number String Consists of numeric
+//				 	   character digits zero through nine inclusive
+//				 	   (0-9).
+//
+//				 	2. A Native Number String will include a period
+//				 	   or decimal point ('.') to separate integer and
+//				 	   fractional digits within a number string.
+//
+//				 	   Native Number String Floating Point Value:
+//				 	   				123.1234
+//
+//				 	3. A Native Number String will always format
+//				 	   negative numeric values with a leading minus sign
+//				 	   ('-').
+//
+//				 	   Native Number String Negative Value:
+//				 	   				-123.2
+//
+//				 	4. A Native Number String WILL NEVER include integer
+//				 	   separators such as commas (',') to separate
+//				 	   integer digits by thousands.
+//
+//				 	   					NOT THIS: 1,000,000
+//				 	   		Native Number String: 1000000
+//
+//				 	5. Native Number Strings will only consist of:
+//
+//				 	   (a)	Numeric digits zero through nine inclusive (0-9).
+//
+//				 	   (b)	A decimal point ('.') for floating point
+//				 	   		numbers.
+//
+//				 	   (c)	A leading minus sign ('-') in the case of
+//				 	   		negative numeric values.
+//
+//			}
+//
+//		err							error
+//
+//			If this method completes successfully, the
+//			returned error Type is set equal to 'nil'.
+//
+//			If errors are encountered during processing, the
+//			returned error Type will encapsulate an error
+//			message. This returned error message will
+//			incorporate the method chain and text passed by
+//			input parameter, 'errorPrefix'. The 'errorPrefix'
+//			text will be attached to the beginning of the
+//			error message.
+func (numStrKernel *NumberStrKernel) FmtNumStrPure(
+	decSeparatorChars string,
+	leadingMinusSign bool,
+	roundingType NumberRoundingType,
+	roundToFractionalDigits int,
+	errorPrefix interface{}) (
+	pureNumberStr string,
+	pureNumStrComponents PureNumberStrComponents,
+	err error) {
+
+	if numStrKernel.lock == nil {
+		numStrKernel.lock = new(sync.Mutex)
+	}
+
+	numStrKernel.lock.Lock()
+
+	defer numStrKernel.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumberStrKernel."+
+			"FmtNumStrNative()",
+		"")
+
+	if err != nil {
+		return pureNumberStr,
+			pureNumStrComponents,
+			err
+	}
+
+	return new(numberStrKernelQuark).getPureNumStr(
+		numStrKernel,
+		decSeparatorChars,
+		leadingMinusSign,
+		roundingType,
+		roundToFractionalDigits,
+		ePrefix.XCpy(
+			"numStrKernel"))
 }
 
 //	FmtSignedNumStrFrance
