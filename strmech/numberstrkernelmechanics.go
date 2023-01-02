@@ -2225,3 +2225,75 @@ func (numStrKernelMech *numberStrKernelMechanics) setNumStrKernelFromRoundedNati
 
 	return numStrStatsDto, err
 }
+
+func (numStrKernelMech *numberStrKernelMechanics) setNumStrKernelFromRoundedPureNumStr(
+	numStrKernel *NumberStrKernel,
+	pureNumStr string,
+	decSeparatorChars string,
+	leadingMinusSign bool,
+	roundingType NumberRoundingType,
+	roundToFractionalDigits int,
+	errPrefDto *ePref.ErrPrefixDto) (
+	pureNumStrComponents PureNumberStrComponents,
+	err error) {
+
+	if numStrKernelMech.lock == nil {
+		numStrKernelMech.lock = new(sync.Mutex)
+	}
+
+	numStrKernelMech.lock.Lock()
+
+	defer numStrKernelMech.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"numberStrKernelMechanics."+
+			"setNumStrKernelFromRoundedPureNumStr()",
+		"")
+
+	if err != nil {
+
+		return pureNumStrComponents, err
+	}
+
+	pureNumStrComponents,
+		err = new(numberStrKernelQuark).
+		setNumStrKernelFromPureNumStr(
+			numStrKernel,
+			pureNumStr,
+			decSeparatorChars,
+			leadingMinusSign,
+			ePrefix.XCpy(
+				"numStrKernel<-"+
+					"nativeNumStr"))
+
+	if err != nil {
+
+		return pureNumStrComponents, err
+
+	}
+
+	if roundingType != NumRoundType.NoRounding() {
+
+		pureNumStr,
+			pureNumStrComponents,
+			err = new(numberStrKernelQuark).getPureNumStr(
+			numStrKernel,
+			decSeparatorChars,
+			leadingMinusSign,
+			roundingType,
+			roundToFractionalDigits,
+			ePrefix)
+
+		if err != nil {
+
+			return pureNumStrComponents, err
+		}
+
+	}
+
+	return pureNumStrComponents, err
+}
