@@ -7122,6 +7122,9 @@ func (numStrKernel *NumberStrKernel) FmtNumStrDefaultRound(
 //     (c)	A leading minus sign ('-') in the case of
 //     negative numeric values.
 //
+//  6. A Native Number String will NEVER include
+//     currency symbols.
+//
 // Note that this method will also return a statistical
 // profile of the returned Native Number String through
 // return parameter 'nativeNumStrStats'.
@@ -7463,29 +7466,43 @@ func (numStrKernel *NumberStrKernel) FmtNumStrDefaultRound(
 //		The native number string returned by this method
 //		will comply with the following criteria:
 //
-//		1.	The native number string will consist
-//			entirely of numeric digit characters with the
-//			following exceptions.
+//	 	1.	A Native Number String Consists of numeric
+//	 	  	character digits zero through nine inclusive
+//	 	  	(0-9).
 //
-//		2.	The native number string will separate
-//			integer and fractional digits with a decimal
-//			point ('.').
+//	 	2.	A Native Number String will include a period
+//	 	  	or decimal point ('.') to separate integer and
+//	 	  	fractional digits within a number string.
 //
-//		3.	The native number string will designate
-//			negative values with a leading minus sign
-//			('-'). Positive numeric values will have no
-//			leading number sign.
+//	 	  	Native Number String Floating Point Value:
+//	 	   				123.1234
 //
-//		4.	The native number string will NOT include
-//			integer separators such as commas (',') to
-//			separate integer digits by thousands.
+//	 	3.	A Native Number String will always format
+//	 	  	negative numeric values with a leading minus sign
+//	 	  	('-').
 //
-//							NOT THIS: 1,000,000
-//				Native Number String: 1000000
+//	 	  	Native Number String Negative Value:
+//	 	  					-123.2
 //
-//		5.	No rounding will be performed on the numeric
-//			value prior to native number string
-//			conversion.
+//	 	4.	A Native Number String WILL NEVER include integer
+//			separators such as commas (',') to separate
+//			integer digits by thousands.
+//
+//	 	   					NOT THIS: 1,000,000
+//	 	   		Native Number String: 1000000
+//
+//	 	5.	Native Number Strings will only consist of:
+//
+//			(a)	Numeric digits zero through nine inclusive (0-9).
+//
+//			(b)	A decimal point ('.') for floating point
+//				numbers.
+//
+//			(c)	A leading minus sign ('-') in the case of
+//				negative numeric values.
+//
+//		6.	A Native Number String will NEVER include
+//			currency symbols.
 //
 //	nativeNumStrStats			NumberStrStatsDto
 //

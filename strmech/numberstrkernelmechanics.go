@@ -1084,6 +1084,14 @@ func (numStrKernelMech *numberStrKernelMechanics) convertToSciNotation(
 //
 // ----------------------------------------------------------------
 //
+// # IMPORTANT
+//
+//	This method will delete and overwrite all pre-existing
+//	data values in the NumberStrKernel instance passed as
+//	input parameter 'numStrKernel'.
+//
+// ----------------------------------------------------------------
+//
 // # Input Parameters
 //
 //	numStrKernel				*NumberStrKernel
@@ -1439,6 +1447,72 @@ func (numStrKernelMech *numberStrKernelMechanics) convertToSciNotation(
 //
 // # Return Values
 //
+//	numStrStatsDto				NumberStrStatsDto
+//
+//		If this method completes successfully, an
+//		instance of NumberStrStatsDto will be returned
+//		containing a profile and key statistics on the
+//		numeric value encapsulated in the
+//		NumberStrKernel instance passed as input
+//		parameter, 'nStrKernel'.
+//
+//		type NumberStrStatsDto struct {
+//
+//		NumOfIntegerDigits					uint64
+//
+//			The total number of integer digits to the
+//			left of the radix point or, decimal point, in
+//			the subject numeric value.
+//
+//		NumOfSignificantIntegerDigits		uint64
+//
+//			The number of nonzero integer digits to the
+//			left of the radix point or, decimal point, in
+//			the subject numeric value.
+//
+//		NumOfFractionalDigits				uint64
+//
+//			The total number of fractional digits to the
+//			right of the radix point or, decimal point,
+//			in the subject numeric value.
+//
+//		NumOfSignificantFractionalDigits	uint64
+//
+//			The number of nonzero fractional digits to
+//			the right of the radix point or, decimal
+//			point, in the subject numeric value.
+//
+//		NumberValueType 					NumericValueType
+//
+//			This enumeration value specifies whether the
+//			subject numeric value is classified either as
+//			an integer or a floating point number.
+//
+//			Possible enumeration values are listed as
+//			follows:
+//				NumValType.None()
+//				NumValType.FloatingPoint()
+//				NumValType.Integer()
+//
+//		NumberSign							NumericSignValueType
+//
+//			An enumeration specifying the number sign
+//			associated with the numeric value. Possible
+//			values are listed as follows:
+//				NumSignVal.None()		= Invalid Value
+//				NumSignVal.Negative()	= -1
+//				NumSignVal.Zero()		=  0
+//				NumSignVal.Positive()	=  1
+//
+//		IsZeroValue							bool
+//
+//			If 'true', the subject numeric value is equal
+//			to zero ('0').
+//
+//			If 'false', the subject numeric value is
+//			greater than or less than zero ('0').
+//		}
+//
 //	err							error
 //
 //		If this method completes successfully, the
@@ -1481,7 +1555,6 @@ func (numStrKernelMech *numberStrKernelMechanics) setNumStrKernelFromDirtyNumStr
 	if err != nil {
 
 		return nativeNumStrStats, err
-
 	}
 
 	var nativeNumStr string
@@ -1514,28 +1587,633 @@ func (numStrKernelMech *numberStrKernelMechanics) setNumStrKernelFromDirtyNumStr
 
 	}
 
-	var numStrRoundingSpec NumStrRoundingSpec
+	if roundingType != NumRoundType.NoRounding() {
 
-	numStrRoundingSpec,
-		err =
-		new(NumStrRoundingSpec).NewRoundingSpec(
-			roundingType,
-			roundToFractionalDigits,
+		var numStrRoundingSpec NumStrRoundingSpec
+
+		numStrRoundingSpec,
+			err =
+			new(NumStrRoundingSpec).NewRoundingSpec(
+				roundingType,
+				roundToFractionalDigits,
+				ePrefix)
+
+		if err != nil {
+
+			return nativeNumStrStats, err
+		}
+
+		err = new(numStrMathRoundingNanobot).roundNumStrKernel(
+			numStrKernel,
+			numStrRoundingSpec,
 			ePrefix)
+
+		if err != nil {
+
+			return nativeNumStrStats, err
+		}
+
+	}
+
+	nativeNumStrStats,
+		err = new(numberStrKernelAtom).
+		calcNumStrKernelStats(
+			numStrKernel,
+			ePrefix.XCpy(
+				"numStrKernel"))
+
+	return nativeNumStrStats, err
+}
+
+// setNumStrKernelFromRoundedNativeNumStr
+//
+// Receives a Native Number String, extracts the numeric
+// value contained therein and proceeds to reconfigure
+// the NumberStrKernel instance passed as input parameter
+// 'numStrKernel' with the that calculated numeric value.
+//
+// The term 'Native Number String' means that the number
+// string format is designed to interoperate with the
+// Golang programming language library functions and
+// packages. Types like 'strconv', 'strings', 'math'
+// and 'big' (big.Int, big.Float, big.Rat) routinely
+// parse and convert this type of number string to
+// numeric values. In addition, Native Number Strings are
+// frequently consumed by external library functions such
+// as this one (String Mechanics 'strmech') to convert
+// strings to numeric values and numeric values to
+// strings.
+//
+// While this format is inconsistent with many national
+// and cultural formatting conventions, number strings
+// which fail to implement this standardized formatting
+// protocol will generate errors in some Golang library
+// functions.
+//
+//	Examples Of Native Number Strings
+//		1000000
+//		12.5483
+//		-1000000
+//		-12.5483
+//
+// A valid Native Number String must conform to the
+// standardized formatting criteria defined below:
+//
+//  1. A Native Number String Consists of numeric
+//     character digits zero through nine inclusive
+//     (0-9).
+//
+//  2. A Native Number String will include a period
+//     or decimal point ('.') to separate integer and
+//     fractional digits within a number string.
+//
+//     Native Number String Floating Point Value:
+//     123.1234
+//
+//  3. A Native Number String will always format
+//     negative numeric values with a leading minus sign
+//     ('-').
+//
+//     Native Number String Negative Value:
+//     -123.2
+//
+//  4. A Native Number String WILL NEVER include integer
+//     separators such as commas (',') to separate
+//     integer digits by thousands.
+//
+//     NOT THIS: 1,000,000
+//     Native Number String: 1000000
+//
+//  5. Native Number Strings will only consist of:
+//
+//     (a)	Numeric digits zero through nine inclusive (0-9).
+//
+//     (b)	A decimal point ('.') for floating point
+//     numbers.
+//
+//     (c)	A leading minus sign ('-') in the case of
+//     negative numeric values.
+//
+//  6. A Native Number String will NEVER include
+//     currency symbols.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will delete and overwrite all pre-existing
+//	data values in the NumberStrKernel instance passed as
+//	input parameter 'numStrKernel'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	numStrKernel				*NumberStrKernel
+//
+//		A pointer to an instance of NumberStrKernel. This
+//		NumberStrKernel instance will be reconfigured
+//		with the numeric value extracted from input
+//		parameter 'nativeNumStr'.
+//
+//	nativeNumStr				string
+//
+//		A Native Number String containing the numeric
+//		character digits which will be converted to, and
+//		stored in, the NumberStrKernel object passed as
+//		input parameter 'numStrKernel'.
+//
+//		The term 'Native Number String' means that the
+//		number string format is designed to interoperate
+//		with the Golang programming language library
+//		functions and packages. Types like 'strconv',
+//		'strings', 'math' and 'big' (big.Int, big.Float,
+//		big.Rat) routinely parse and convert this type of
+//		number string to generate numeric values. In
+//		addition, Native Number Strings are frequently
+//		consumed by external library functions such	as
+//		this one (String Mechanics 'strmech') to convert
+//		strings to numeric values and numeric values to
+//		strings.
+//
+//		If 'nativeNumStr' fails to meet the formatting
+//		criteria for a Native Number String, an error
+//		will be returned.
+//
+//		A valid Native Number String must conform to the
+//		standardized formatting criteria defined below:
+//
+//	 	1.	A Native Number String Consists of numeric
+//	 	  	character digits zero through nine inclusive
+//	 	  	(0-9).
+//
+//	 	2.	A Native Number String will include a period
+//	 	  	or decimal point ('.') to separate integer and
+//	 	  	fractional digits within a number string.
+//
+//	 	  	Native Number String Floating Point Value:
+//	 	   				123.1234
+//
+//	 	3.	A Native Number String will always format
+//	 	  	negative numeric values with a leading minus sign
+//	 	  	('-').
+//
+//	 	  	Native Number String Negative Value:
+//	 	  					-123.2
+//
+//	 	4.	A Native Number String WILL NEVER include integer
+//			separators such as commas (',') to separate
+//			integer digits by thousands.
+//
+//	 	   					NOT THIS: 1,000,000
+//	 	   		Native Number String: 1000000
+//
+//	 	5.	Native Number Strings will only consist of:
+//
+//			(a)	Numeric digits zero through nine inclusive (0-9).
+//
+//			(b)	A decimal point ('.') for floating point
+//				numbers.
+//
+//			(c)	A leading minus sign ('-') in the case of
+//				negative numeric values.
+//
+//		6.	A Native Number String will NEVER include
+//			currency symbols.
+//
+//
+//	roundingType				NumberRoundingType
+//
+//		This enumeration parameter is used to specify the
+//		type of rounding algorithm that will be applied for
+//		the	rounding of fractional digits contained in the
+//		reconfigured instance of NumberStrKernel
+//		(numStrKernel).
+//
+//		If in doubt as to a suitable rounding method,
+//		'HalfAwayFromZero' is recommended.
+//
+//		Possible values are listed as follows:
+//			NumRoundType.None()	- Invalid Value
+//			NumRoundType.NoRounding()
+//			NumRoundType.HalfUpWithNegNums()
+//			NumRoundType.HalfDownWithNegNums()
+//			NumRoundType.HalfAwayFromZero()
+//			NumRoundType.HalfTowardsZero()
+//			NumRoundType.HalfToEven()
+//			NumRoundType.HalfToOdd()
+//			NumRoundType.Randomly()
+//			NumRoundType.Floor()
+//			NumRoundType.Ceiling()
+//			NumRoundType.Truncate()
+//
+//		Definitions:
+//
+//			NoRounding
+//
+//				Signals that no rounding operation will be
+//				performed on fractional digits. The
+//				fractional digits will therefore remain
+//				unchanged.
+//
+//			HalfUpWithNegNums
+//
+//				Half Round Up Including Negative Numbers.
+//				This method is intuitive but may produce
+//				unexpected results when applied to negative
+//				numbers.
+//
+//				'HalfUpWithNegNums' rounds .5 up.
+//
+//					Examples of 'HalfUpWithNegNums'
+//					7.6 rounds up to 8
+//					7.5 rounds up to 8
+//					7.4 rounds down to 7
+//					-7.4 rounds up to -7
+//					-7.5 rounds up to -7
+//					-7.6 rounds down to -8
+//
+//			HalfDownWithNegNums
+//
+//			Half Round Down Including Negative Numbers. This
+//			method is also considered intuitive but may
+//			produce unexpected results when applied to
+//			negative numbers.
+//
+//			'HalfDownWithNegNums' rounds .5 down.
+//
+//				Examples of HalfDownWithNegNums
+//
+//				7.6 rounds up to 8
+//				7.5 rounds down to 7
+//				7.4 rounds down to 7
+//				-7.4 rounds up to -7
+//				-7.5 rounds down to -8
+//				-7.6 rounds down to -8
+//
+//			HalfAwayFromZero
+//
+//				The 'HalfAwayFromZero' method rounds .5 further
+//				away from zero.	It provides clear and consistent
+//				behavior when dealing with negative numbers.
+//
+//					Examples of HalfAwayFromZero
+//
+//					7.6 rounds away to 8
+//					7.5 rounds away to 8
+//					7.4 rounds to 7
+//					-7.4 rounds to -7
+//					-7.5 rounds away to -8
+//					-7.6 rounds away to -8
+//
+//			HalfTowardsZero
+//
+//				Round Half Towards Zero. 'HalfTowardsZero' rounds
+//				0.5	closer to zero. It provides clear and
+//				consistent behavior	when dealing with negative
+//				numbers.
+//
+//					Examples of HalfTowardsZero
+//
+//					7.6 rounds away to 8
+//					7.5 rounds to 7
+//					7.4 rounds to 7
+//					-7.4 rounds to -7
+//					-7.5 rounds to -7
+//					-7.6 rounds away to -8
+//
+//			HalfToEven
+//
+//				Round Half To Even Numbers. 'HalfToEven' is
+//				also called	Banker's Rounding. This method
+//				rounds 0.5 to the nearest even digit.
+//
+//					Examples of HalfToEven
+//
+//					7.5 rounds up to 8 (because 8 is an even
+//					number)	but 6.5 rounds down to 6 (because
+//					6 is an even number)
+//
+//					HalfToEven only applies to 0.5. Other
+//					numbers (not ending	in 0.5) round to
+//					nearest as usual, so:
+//
+//					7.6 rounds up to 8
+//					7.5 rounds up to 8 (because 8 is an even number)
+//					7.4 rounds down to 7
+//					6.6 rounds up to 7
+//					6.5 rounds down to 6 (because 6 is an even number)
+//					6.4 rounds down to 6
+//
+//			HalfToOdd
+//
+//				Round Half to Odd Numbers. Similar to 'HalfToEven',
+//				but in this case 'HalfToOdd' rounds 0.5 towards odd
+//				numbers.
+//
+//					Examples of HalfToOdd
+//
+//					HalfToOdd only applies to 0.5. Other numbers
+//					(not ending	in 0.5) round to nearest as usual.
+//
+//					7.5 rounds down to 7 (because 7 is an odd number)
+//
+//					6.5 rounds up to 7 (because 7 is an odd number)
+//
+//					7.6 rounds up to 8
+//					7.5 rounds down to 7 (because 7 is an odd number)
+//					7.4 rounds down to 7
+//					6.6 rounds up to 7
+//					6.5 rounds up to 7 (because 7 is an odd number)
+//					6.4 rounds down to 6
+//
+//			Randomly
+//
+//				Round Half Randomly. Uses a Random Number Generator
+//				to choose between rounding 0.5 up or down.
+//
+//				All numbers other than 0.5 round to the nearest as
+//				usual.
+//
+//			Floor
+//
+//				Yields the nearest integer down. Floor does not apply
+//				any	special treatment to 0.5.
+//
+//				Floor Function: The greatest integer that is less than
+//				or equal to x
+//
+//				Source:
+//					https://www.mathsisfun.com/sets/function-floor-ceiling.html
+//
+//				In mathematics and computer science, the floor function
+//				is the function that takes as input a real number x,
+//				and gives as output the greatest integer less than or
+//				equal to x,	denoted floor(x) or ⌊x⌋.
+//
+//				Source:
+//					https://en.wikipedia.org/wiki/Floor_and_ceiling_functions
+//
+//				Examples of Floor
+//
+//					Number     Floor
+//					 2           2
+//					 2.4         2
+//					 2.9         2
+//					-2.5        -3
+//					-2.7        -3
+//					-2          -2
+//
+//			Ceiling
+//
+//				Yields the nearest integer up. Ceiling does not
+//				apply any special treatment to 0.5.
+//
+//				Ceiling Function: The least integer that is
+//				greater than or	equal to x.
+//				Source:
+//					https://www.mathsisfun.com/sets/function-floor-ceiling.html
+//
+//				The ceiling function maps x to the least integer
+//				greater than or equal to x, denoted ceil(x) or
+//				⌈x⌉.[1]
+//
+//				Source:
+//					https://en.wikipedia.org/wiki/Floor_and_ceiling_functions
+//
+//					Examples of Ceiling
+//
+//						Number    Ceiling
+//						 2           2
+//						 2.4         3
+//						 2.9         3
+//						-2.5        -2
+//						-2.7        -2
+//						-2          -2
+//
+//			Truncate
+//
+//				Apply NO Rounding whatsoever. The Round From Digit
+//				is dropped or deleted. The Round To Digit is NEVER
+//				changed.
+//
+//				Examples of Truncate
+//
+//					Example-1
+//					Number: 23.14567
+//					Objective: Round to two decimal places to
+//					the right of the decimal point.
+//					Rounding Method: Truncate
+//					Round To Digit:   4
+//					Round From Digit: 5
+//					Rounded Number:   23.14 - The Round From Digit
+//					is dropped.
+//
+//					Example-2
+//					Number: -23.14567
+//					Objective: Round to two decimal places to
+//					the right of the decimal point.
+//					Rounding Method: Truncate
+//					Round To Digit:   4
+//					Round From Digit: 5
+//					Rounded Number:  -23.14 - The Round From Digit
+//					is dropped.
+//
+//	roundToFractionalDigits		int
+//
+//		When set to a positive integer value, this
+//		parameter controls the number of digits to the
+//		right of the radix point or decimal separator
+//		(a.k.a. decimal point). This controls the number
+//		of fractional digits remaining after completion
+//		of the number rounding operation.
+//
+//		If input parameter 'roundingType' is set to
+//		NumRoundType.NoRounding(),
+//		'roundToFractionalDigits' is ignored and no
+//		rounding operation is performed.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	numStrStatsDto				NumberStrStatsDto
+//
+//		If this method completes successfully, an
+//		instance of NumberStrStatsDto will be returned
+//		containing a profile and key statistics on the
+//		numeric value encapsulated in the
+//		NumberStrKernel instance passed as input
+//		parameter, 'nStrKernel'.
+//
+//		type NumberStrStatsDto struct {
+//
+//		NumOfIntegerDigits					uint64
+//
+//			The total number of integer digits to the
+//			left of the radix point or, decimal point, in
+//			the subject numeric value.
+//
+//		NumOfSignificantIntegerDigits		uint64
+//
+//			The number of nonzero integer digits to the
+//			left of the radix point or, decimal point, in
+//			the subject numeric value.
+//
+//		NumOfFractionalDigits				uint64
+//
+//			The total number of fractional digits to the
+//			right of the radix point or, decimal point,
+//			in the subject numeric value.
+//
+//		NumOfSignificantFractionalDigits	uint64
+//
+//			The number of nonzero fractional digits to
+//			the right of the radix point or, decimal
+//			point, in the subject numeric value.
+//
+//		NumberValueType 					NumericValueType
+//
+//			This enumeration value specifies whether the
+//			subject numeric value is classified either as
+//			an integer or a floating point number.
+//
+//			Possible enumeration values are listed as
+//			follows:
+//				NumValType.None()
+//				NumValType.FloatingPoint()
+//				NumValType.Integer()
+//
+//		NumberSign							NumericSignValueType
+//
+//			An enumeration specifying the number sign
+//			associated with the numeric value. Possible
+//			values are listed as follows:
+//				NumSignVal.None()		= Invalid Value
+//				NumSignVal.Negative()	= -1
+//				NumSignVal.Zero()		=  0
+//				NumSignVal.Positive()	=  1
+//
+//		IsZeroValue							bool
+//
+//			If 'true', the subject numeric value is equal
+//			to zero ('0').
+//
+//			If 'false', the subject numeric value is
+//			greater than or less than zero ('0').
+//		}
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (numStrKernelMech *numberStrKernelMechanics) setNumStrKernelFromRoundedNativeNumStr(
+	numStrKernel *NumberStrKernel,
+	nativeNumStr string,
+	roundingType NumberRoundingType,
+	roundToFractionalDigits int,
+	errPrefDto *ePref.ErrPrefixDto) (
+	nativeNumStrStats NumberStrStatsDto,
+	err error) {
+
+	if numStrKernelMech.lock == nil {
+		numStrKernelMech.lock = new(sync.Mutex)
+	}
+
+	numStrKernelMech.lock.Lock()
+
+	defer numStrKernelMech.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"numberStrKernelMechanics."+
+			"setNumStrKernelFromRoundedNativeNumStr()",
+		"")
 
 	if err != nil {
 
 		return nativeNumStrStats, err
 	}
 
-	err = new(numStrMathRoundingNanobot).roundNumStrKernel(
-		numStrKernel,
-		numStrRoundingSpec,
-		ePrefix)
+	nativeNumStr,
+		_,
+		err = new(NumStrHelper).NormalizeNativeNumStr(
+		nativeNumStr,
+		ePrefix.XCpy(
+			"nativeNumStr<-nativeNumStr"))
 
 	if err != nil {
 
 		return nativeNumStrStats, err
+
+	}
+
+	err = new(numberStrKernelQuark).
+		setNumStrKernelFromNativeNumStr(
+			numStrKernel,
+			nativeNumStr,
+			ePrefix.XCpy(
+				"numStrKernel<-"+
+					"nativeNumStr"))
+
+	if err != nil {
+
+		return nativeNumStrStats, err
+
+	}
+
+	if roundingType != NumRoundType.NoRounding() {
+
+		var numStrRoundingSpec NumStrRoundingSpec
+
+		numStrRoundingSpec,
+			err =
+			new(NumStrRoundingSpec).NewRoundingSpec(
+				roundingType,
+				roundToFractionalDigits,
+				ePrefix)
+
+		if err != nil {
+
+			return nativeNumStrStats, err
+		}
+
+		err = new(numStrMathRoundingNanobot).roundNumStrKernel(
+			numStrKernel,
+			numStrRoundingSpec,
+			ePrefix)
+
+		if err != nil {
+
+			return nativeNumStrStats, err
+		}
+
 	}
 
 	nativeNumStrStats,
