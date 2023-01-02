@@ -1598,11 +1598,11 @@ func (numStrKernelQuark *numberStrKernelQuark) getPureNumStr(
 		pureNumStrComponents,
 		err = new(numberStrKernelBoson).
 		createPureNumStrFromNumStrKernel(
-			numStrKernel,
+			&deepCopyNumStrKernel,
 			decSeparatorChars,
 			leadingMinusSign,
 			ePrefix.XCpy(
-				"numStrKernel"))
+				"deepCopyNumStrKernel"))
 
 	return pureNumberStr,
 		pureNumStrComponents,
