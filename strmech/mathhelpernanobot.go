@@ -1069,11 +1069,14 @@ func (mathHelpNanobot *mathHelperNanobot) nativeNumStrToNumericValue(
 		var newNumStrKernel NumberStrKernel
 
 		newNumStrKernel,
+			_,
 			err = new(NumberStrKernel).
 			NewParsePureNumberStr(
 				nativeNumStr,
 				".",
 				true,
+				NumRoundType.NoRounding(),
+				0,
 				ePrefix.XCpy(
 					"newNumStrKernel<-nativeNumStr"))
 

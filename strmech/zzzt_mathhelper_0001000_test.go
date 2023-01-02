@@ -144,11 +144,14 @@ func TestMathHelper_NumericValueToNativeNumStr_000300(t *testing.T) {
 	var baseValueNStr NumberStrKernel
 
 	baseValueNStr,
+		_,
 		err = new(NumberStrKernel).
 		NewParsePureNumberStr(
 			expectedStr,
 			".",
 			true,
+			NumRoundType.NoRounding(),
+			0,
 			ePrefix.XCpy(
 				"baseValueNStr<-origNumberStr"))
 
@@ -1366,11 +1369,14 @@ func TestMathHelper_NumericValueToNativeNumStr_000900(t *testing.T) {
 	numberStrKernel := NumberStrKernel{}
 
 	baseValueNStr,
+		_,
 		err = numberStrKernel.
 		NewParsePureNumberStr(
 			expectedStr,
 			".",
 			true,
+			NumRoundType.NoRounding(),
+			0,
 			ePrefix.XCpy(
 				"baseValueNStr<-expectedNumberStr"))
 
@@ -1429,11 +1435,14 @@ func TestMathHelper_NumericValueToNativeNumStr_000900(t *testing.T) {
 		expectedStr)
 
 	baseValueNStr,
+		_,
 		err = numberStrKernel.
 		NewParsePureNumberStr(
 			expectedStr,
 			".",
 			true,
+			NumRoundType.NoRounding(),
+			0,
 			ePrefix.XCpy(
 				"baseValueNStr<-expectedNumberStr"))
 

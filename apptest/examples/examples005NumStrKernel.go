@@ -197,11 +197,14 @@ func (mainNumStrTest005 MainNumStrTest005) NumStrRound01() {
 	var baseValueNStr strmech.NumberStrKernel
 
 	baseValueNStr,
+		_,
 		err = new(strmech.NumberStrKernel).
 		NewParsePureNumberStr(
 			origNumberStr,
 			".",
 			true,
+			strmech.NumRoundType.NoRounding(),
+			0,
 			ePrefix.XCpy(
 				"baseValueNStr<-origNumberStr"))
 
@@ -369,11 +372,14 @@ func (mainNumStrTest005 MainNumStrTest005) NumStrFmtSignedSimple() {
 	var baseValueNStr strmech.NumberStrKernel
 
 	baseValueNStr,
+		_,
 		err = new(strmech.NumberStrKernel).
 		NewParsePureNumberStr(
 			origNumberStr,
 			".",
 			true,
+			strmech.NumRoundType.NoRounding(),
+			0,
 			ePrefix.XCpy(
 				"baseValueNStr<-origNumberStr"))
 
@@ -654,10 +660,13 @@ func (mainNumStrTest005 MainNumStrTest005) NumberStrKernelCompare01() {
 		testValueFracDigits
 
 	testNStrValue02,
+		_,
 		err = new(strmech.NumberStrKernel).NewParsePureNumberStr(
 		testValue,
 		".",
 		true,
+		strmech.NumRoundType.NoRounding(),
+		0,
 		ePrefix.XCpy(
 			"testNStrValue02<-testValue"))
 
@@ -753,10 +762,13 @@ func (mainNumStrTest005 MainNumStrTest005) NumberStrKernelCompare01() {
 		testValueFracDigits
 
 	testNStrValue03,
+		_,
 		err = new(strmech.NumberStrKernel).NewParsePureNumberStr(
 		testValue,
 		".",
 		true,
+		strmech.NumRoundType.NoRounding(),
+		0,
 		ePrefix.XCpy(
 			"testNStrValue03<-testValue"))
 
@@ -881,10 +893,13 @@ func (mainNumStrTest005 MainNumStrTest005) NumberStrKernelPureNumStr01() {
 	var numStrKernel01 strmech.NumberStrKernel
 
 	numStrKernel01,
+		_,
 		err = new(strmech.NumberStrKernel).NewParsePureNumberStr(
 		compositeNumStr,
 		".",
 		true,
+		strmech.NumRoundType.NoRounding(),
+		0,
 		ePrefix)
 
 	if err != nil {

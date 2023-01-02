@@ -197,10 +197,13 @@ func TestNumberStrKernel_Compare_000100(t *testing.T) {
 		testValueFracDigits
 
 	testNStrValue02,
+		_,
 		err = new(NumberStrKernel).NewParsePureNumberStr(
 		testValue,
 		".",
 		true,
+		NumRoundType.NoRounding(),
+		0,
 		ePrefix.XCpy(
 			"testNStrValue02<-testValue"))
 
@@ -296,10 +299,13 @@ func TestNumberStrKernel_Compare_000100(t *testing.T) {
 		testValueFracDigits
 
 	testNStrValue03,
+		_,
 		err = new(NumberStrKernel).NewParsePureNumberStr(
 		testValue,
 		".",
 		true,
+		NumRoundType.NoRounding(),
+		0,
 		ePrefix.XCpy(
 			"testNStrValue03<-testValue"))
 
@@ -395,10 +401,13 @@ func TestNumberStrKernel_Compare_000100(t *testing.T) {
 		origFracStr
 
 	baseValue,
+		_,
 		err = new(NumberStrKernel).NewParsePureNumberStr(
 		origValueStr,
 		".",
 		true,
+		NumRoundType.NoRounding(),
+		0,
 		ePrefix.XCpy(
 			"baseValue<-origValueStr"))
 
@@ -441,10 +450,13 @@ func TestNumberStrKernel_Compare_000100(t *testing.T) {
 		testValueFracDigits
 
 	testNStrValue04,
+		_,
 		err = new(NumberStrKernel).NewParsePureNumberStr(
 		testValue,
 		".",
 		true,
+		NumRoundType.NoRounding(),
+		0,
 		ePrefix.XCpy(
 			"testNStrValue04<-testValue"))
 
@@ -1472,10 +1484,13 @@ func TestNumberStrKernel_GetScientificNotation_000100(t *testing.T) {
 	var numStrKernel01 NumberStrKernel
 
 	numStrKernel01,
+		_,
 		err = new(NumberStrKernel).NewParsePureNumberStr(
 		compositeNumStr,
 		".",
 		true,
+		NumRoundType.NoRounding(),
+		0,
 		ePrefix)
 
 	if err != nil {
@@ -1909,11 +1924,14 @@ func TestNumberStrKernel_FmtNumStrPure_000100(t *testing.T) {
 	var nStr01 NumberStrKernel
 
 	nStr01,
+		_,
 		err = new(NumberStrKernel).
 		NewParsePureNumberStr(
 			inputNumberStr,
 			".",
 			true,
+			NumRoundType.NoRounding(),
+			0,
 			ePrefix.XCpy(
 				"nStr01<-inputNumberStr"))
 
@@ -2055,11 +2073,14 @@ func TestNumberStrKernel_FmtNumStrPure_000100(t *testing.T) {
 	var nStr02 NumberStrKernel
 
 	nStr02,
+		_,
 		err = new(NumberStrKernel).
 		NewParsePureNumberStr(
 			inputNumberStr,
 			".",
 			true,
+			NumRoundType.NoRounding(),
+			0,
 			ePrefix.XCpy(
 				"nStr02<-inputNumberStr"))
 
@@ -2189,11 +2210,14 @@ func TestNumberStrKernel_FmtSignedSimpleNumber_000100(t *testing.T) {
 	var baseValueNStr NumberStrKernel
 
 	baseValueNStr,
+		_,
 		err = new(NumberStrKernel).
 		NewParsePureNumberStr(
 			origNumberStr,
 			".",
 			true,
+			NumRoundType.NoRounding(),
+			0,
 			ePrefix.XCpy(
 				"baseValueNStr<-origNumberStr"))
 
@@ -2283,11 +2307,14 @@ func TestNumberStrKernel_FmtSignedSimpleNumber_000200(t *testing.T) {
 	var baseValueNStr NumberStrKernel
 
 	baseValueNStr,
+		_,
 		err = new(NumberStrKernel).
 		NewParsePureNumberStr(
 			origNumberStr,
 			".",
 			true,
+			NumRoundType.NoRounding(),
+			0,
 			ePrefix.XCpy(
 				"baseValueNStr<-origNumberStr"))
 
@@ -2380,11 +2407,14 @@ func TestNumberStrKernel_FmtSignedPureNumberStr_000100(t *testing.T) {
 	var baseValueNStr NumberStrKernel
 
 	baseValueNStr,
+		_,
 		err = new(NumberStrKernel).
 		NewParsePureNumberStr(
 			origNumberStr,
 			".",
 			true,
+			NumRoundType.NoRounding(),
+			0,
 			ePrefix.XCpy(
 				"baseValueNStr<-origNumberStr"))
 
@@ -2552,11 +2582,14 @@ func TestNumberStrKernel_RoundNoRounding_000100(t *testing.T) {
 	var baseVal, nStr01, nStr02 NumberStrKernel
 
 	baseVal,
+		_,
 		err = new(NumberStrKernel).
 		NewParsePureNumberStr(
 			inputNumberStr,
 			".",
 			true,
+			NumRoundType.NoRounding(),
+			0,
 			ePrefix.XCpy(
 				"baseVal<-inputNumberStr"))
 
@@ -2851,11 +2884,14 @@ func TestNumberStrKernel_RoundHalfUpWithNegNums_000200(t *testing.T) {
 	var nStr01, nStr02 NumberStrKernel
 
 	nStr01,
+		_,
 		err = new(NumberStrKernel).
 		NewParsePureNumberStr(
 			inputNumberStr,
 			".",
 			true,
+			NumRoundType.NoRounding(),
+			0,
 			ePrefix.XCpy(
 				"nStr01<-inputNumberStr"))
 
@@ -2991,11 +3027,14 @@ func TestNumberStrKernel_RoundHalfDownWithNegNums_000300(t *testing.T) {
 	var baseVal, nStr01, nStr02 NumberStrKernel
 
 	baseVal,
+		_,
 		err = new(NumberStrKernel).
 		NewParsePureNumberStr(
 			inputNumberStr,
 			".",
 			true,
+			NumRoundType.NoRounding(),
+			0,
 			ePrefix.XCpy(
 				"baseVal<-inputNumberStr"))
 
@@ -3152,11 +3191,14 @@ func TestNumberStrKernel_RoundHalfAwayFromZero_000400(t *testing.T) {
 	var baseVal, nStr01, nStr02 NumberStrKernel
 
 	baseVal,
+		_,
 		err = new(NumberStrKernel).
 		NewParsePureNumberStr(
 			inputNumberStr,
 			".",
 			true,
+			NumRoundType.NoRounding(),
+			0,
 			ePrefix.XCpy(
 				"baseVal<-inputNumberStr"))
 
@@ -3314,11 +3356,14 @@ func TestNumberStrKernel_RoundHalfTowardsZero_000500(t *testing.T) {
 		nStr03 NumberStrKernel
 
 	baseVal,
+		_,
 		err = new(NumberStrKernel).
 		NewParsePureNumberStr(
 			inputNumberStr,
 			".",
 			true,
+			NumRoundType.NoRounding(),
+			0,
 			ePrefix.XCpy(
 				"baseVal<-inputNumberStr"))
 
@@ -3457,11 +3502,14 @@ func TestNumberStrKernel_RoundHalfTowardsZero_000500(t *testing.T) {
 	inputNumberStr = "-7.6"
 
 	nStr03,
+		_,
 		err = new(NumberStrKernel).
 		NewParsePureNumberStr(
 			inputNumberStr,
 			".",
 			true,
+			NumRoundType.NoRounding(),
+			0,
 			ePrefix.XCpy(
 				"nStr03<-inputNumberStr"))
 
@@ -3530,11 +3578,14 @@ func TestNumberStrKernel_RoundHalfToEven_000600(t *testing.T) {
 		nStr03, nStr04 NumberStrKernel
 
 	baseVal,
+		_,
 		err = new(NumberStrKernel).
 		NewParsePureNumberStr(
 			inputNumberStr,
 			".",
 			true,
+			NumRoundType.NoRounding(),
+			0,
 			ePrefix.XCpy(
 				"baseVal<-inputNumberStr"))
 
@@ -3679,11 +3730,14 @@ func TestNumberStrKernel_RoundHalfToEven_000600(t *testing.T) {
 	inputNumberStr = "6.5"
 
 	nStr03,
+		_,
 		err = new(NumberStrKernel).
 		NewParsePureNumberStr(
 			inputNumberStr,
 			".",
 			true,
+			NumRoundType.NoRounding(),
+			0,
 			ePrefix.XCpy(
 				"nStr03<-inputNumberStr"))
 
@@ -3739,11 +3793,14 @@ func TestNumberStrKernel_RoundHalfToEven_000600(t *testing.T) {
 	inputNumberStr = "-6.5"
 
 	nStr04,
+		_,
 		err = new(NumberStrKernel).
 		NewParsePureNumberStr(
 			inputNumberStr,
 			".",
 			true,
+			NumRoundType.NoRounding(),
+			0,
 			ePrefix.XCpy(
 				"nStr04<-inputNumberStr"))
 
@@ -3812,11 +3869,14 @@ func TestNumberStrKernel_RoundHalfToOdd_000700(t *testing.T) {
 		nStr03, nStr04 NumberStrKernel
 
 	baseVal,
+		_,
 		err = new(NumberStrKernel).
 		NewParsePureNumberStr(
 			inputNumberStr,
 			".",
 			true,
+			NumRoundType.NoRounding(),
+			0,
 			ePrefix.XCpy(
 				"baseVal<-inputNumberStr"))
 
@@ -3961,11 +4021,14 @@ func TestNumberStrKernel_RoundHalfToOdd_000700(t *testing.T) {
 	inputNumberStr = "6.5"
 
 	nStr03,
+		_,
 		err = new(NumberStrKernel).
 		NewParsePureNumberStr(
 			inputNumberStr,
 			".",
 			true,
+			NumRoundType.NoRounding(),
+			0,
 			ePrefix.XCpy(
 				"nStr03<-inputNumberStr"))
 
@@ -4021,11 +4084,14 @@ func TestNumberStrKernel_RoundHalfToOdd_000700(t *testing.T) {
 	inputNumberStr = "-6.4"
 
 	nStr04,
+		_,
 		err = new(NumberStrKernel).
 		NewParsePureNumberStr(
 			inputNumberStr,
 			".",
 			true,
+			NumRoundType.NoRounding(),
+			0,
 			ePrefix.XCpy(
 				"nStr04<-inputNumberStr"))
 
@@ -4207,11 +4273,14 @@ func TestNumberStrKernel_RoundFloor_000900(t *testing.T) {
 		nStr03, nStr04 NumberStrKernel
 
 	baseVal,
+		_,
 		err = new(NumberStrKernel).
 		NewParsePureNumberStr(
 			inputNumberStr,
 			".",
 			true,
+			NumRoundType.NoRounding(),
+			0,
 			ePrefix.XCpy(
 				"baseVal<-inputNumberStr"))
 
@@ -4356,11 +4425,14 @@ func TestNumberStrKernel_RoundFloor_000900(t *testing.T) {
 	inputNumberStr = "2.4"
 
 	nStr03,
+		_,
 		err = new(NumberStrKernel).
 		NewParsePureNumberStr(
 			inputNumberStr,
 			".",
 			true,
+			NumRoundType.NoRounding(),
+			0,
 			ePrefix.XCpy(
 				"nStr03<-inputNumberStr"))
 
@@ -4416,11 +4488,14 @@ func TestNumberStrKernel_RoundFloor_000900(t *testing.T) {
 	inputNumberStr = "-2"
 
 	nStr04,
+		_,
 		err = new(NumberStrKernel).
 		NewParsePureNumberStr(
 			inputNumberStr,
 			".",
 			true,
+			NumRoundType.NoRounding(),
+			0,
 			ePrefix.XCpy(
 				"nStr04<-inputNumberStr"))
 
@@ -4489,11 +4564,14 @@ func TestNumberStrKernel_RoundCeiling_001000(t *testing.T) {
 		nStr03, nStr04 NumberStrKernel
 
 	baseVal,
+		_,
 		err = new(NumberStrKernel).
 		NewParsePureNumberStr(
 			inputNumberStr,
 			".",
 			true,
+			NumRoundType.NoRounding(),
+			0,
 			ePrefix.XCpy(
 				"baseVal<-inputNumberStr"))
 
@@ -4638,11 +4716,14 @@ func TestNumberStrKernel_RoundCeiling_001000(t *testing.T) {
 	inputNumberStr = "2.4"
 
 	nStr03,
+		_,
 		err = new(NumberStrKernel).
 		NewParsePureNumberStr(
 			inputNumberStr,
 			".",
 			true,
+			NumRoundType.NoRounding(),
+			0,
 			ePrefix.XCpy(
 				"nStr03<-inputNumberStr"))
 
@@ -4698,11 +4779,14 @@ func TestNumberStrKernel_RoundCeiling_001000(t *testing.T) {
 	inputNumberStr = "-2"
 
 	nStr04,
+		_,
 		err = new(NumberStrKernel).
 		NewParsePureNumberStr(
 			inputNumberStr,
 			".",
 			true,
+			NumRoundType.NoRounding(),
+			0,
 			ePrefix.XCpy(
 				"nStr04<-inputNumberStr"))
 
@@ -4776,11 +4860,14 @@ func TestNumberStrKernel_String_000100(t *testing.T) {
 	var baseValueNStr, nStr02 NumberStrKernel
 
 	baseValueNStr,
+		_,
 		err = new(NumberStrKernel).
 		NewParsePureNumberStr(
 			origNumberStr,
 			".",
 			true,
+			NumRoundType.NoRounding(),
+			0,
 			ePrefix.XCpy(
 				"baseValueNStr<-origNumberStr"))
 

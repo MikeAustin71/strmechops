@@ -7125,9 +7125,16 @@ func (numStrKernel *NumberStrKernel) FmtNumStrDefaultRound(
 //  6. A Native Number String will NEVER include
 //     currency symbols.
 //
-// Note that this method will also return a statistical
-// profile of the returned Native Number String through
-// return parameter 'nativeNumStrStats'.
+// Users also have the option of specifying rounding
+// parameters which will be used to round the numeric
+// value extracted from 'pureNumberStr' before it is
+// converted and returned as a new instance of
+// NumberStrKernel.
+//
+// Note that return parameter 'pureNumStrComponents'
+// will provide a statistical profile of the new
+// returned instance of NumberStrKernel,
+// 'newNumStrKernel'.
 //
 // ----------------------------------------------------------------
 //
