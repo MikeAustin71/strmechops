@@ -14,16 +14,68 @@ type NumStrHelper struct {
 
 // DirtyToNativeNumStr
 //
-// Converts a string containing numeric digits to a well
+// Converts a "dirty" or malformed string containing
+// numeric digits to a well-formed and properly
 // formatted Native Number String.
 //
-// The term 'Native' applies in the sense that the number
+// The 'Dirty Number String' passed as input parameter
+// 'dirtyNumberStr' is expected to comply with the
+// following requirements:
+//
+//  1. The dirty number string must contain numeric
+//     digit characters zero to nine inclusive (0-9).
+//
+//  2. The dirty number string must contain a radix
+//     point or decimal separator to separate
+//     integer and fractional digits in a floating
+//     point numeric value. This decimal separator
+//     is specified by input parameter,
+//     'decimalSeparator'.
+//
+//     If no decimal separator is identified in the
+//     dirty number string, the numeric value is
+//     assumed to be an integer value.
+//
+//  3. The dirty number string must designate
+//     negative numeric values using one of the
+//     following three negative number symbols:
+//
+//     (a)	A Leading Minus Sign ('-').
+//     Example: -123.45
+//
+//     (b)	A Trailing Minus Sign ('-').
+//     Example: 123.45-
+//
+//     (c) A combination of leading and trailing
+//     Parentheses ('()').
+//     Example: (123.45)
+//
+//     Examples Of Dirty Number Strings
+//
+//     $1,254.65
+//     1 000 000,00 €
+//     1.000.000,00 €
+//     6,78,90,00,00,00,00,000
+//     6,7890,0000,0000,0000
+//
+// All the examples shown above are valid number string
+// formats used by different countries and cultures.
+// There is nothing wrong with these formats. The term
+// "Dirty" simply distinguishes these formats from the
+// Native Number String format required by many
+// functions and packages in the Go Programming
+// Language. The Native Number String format is one
+// which is used as a standard format for numeric
+// conversions performed in the Go Programming Language
+// as well as many other programming languages.
+//
+// The term 'Native Number String' means that the number
 // string format is designed to interoperate with the
 // Golang programming language library functions and
-// packages. Types like 'strconv', 'strings', 'math' and
-// 'big' (big.Int, big.Float, big.Rat) routinely parse
-// and convert this type of number string to numeric
-// values. In addition, Native Number Strings are
+// packages. Types like 'strconv', 'strings', 'math'
+// and 'big' (big.Int, big.Float, big.Rat) routinely
+// parse and convert this type of number string to
+// numeric values. In addition, Native Number Strings are
 // frequently consumed by external library functions such
 // as this one (String Mechanics 'strmech') to convert
 // strings to numeric values and numeric values to
@@ -102,7 +154,7 @@ type NumStrHelper struct {
 //			dirty number string, the numeric value is
 //			assumed to be an integer value.
 //
-//		4.	The dirty number string must designate
+//		3.	The dirty number string must designate
 //			negative numeric values using one of the
 //			following three negative number symbols:
 //

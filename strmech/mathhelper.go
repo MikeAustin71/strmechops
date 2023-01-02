@@ -91,40 +91,43 @@ type MathHelper struct {
 //		A valid Native Number String must conform to the
 //		standardized formatting criteria defined below:
 //
-//	 	1. A Native Number String Consists of numeric
-//	 	   character digits zero through nine inclusive
-//	 	   (0-9).
+//	 	1.	A Native Number String Consists of numeric
+//	 	  	character digits zero through nine inclusive
+//	 	  	(0-9).
 //
-//	 	2. A Native Number String will include a period
-//	 	   or decimal point ('.') to separate integer and
-//	 	   fractional digits within a number string.
+//	 	2.	A Native Number String will include a period
+//	 	  	or decimal point ('.') to separate integer and
+//	 	  	fractional digits within a number string.
 //
-//	 	   Native Number String Floating Point Value:
+//	 	  	Native Number String Floating Point Value:
 //	 	   				123.1234
 //
-//	 	3. A Native Number String will always format
-//	 	   negative numeric values with a leading minus sign
-//	 	   ('-').
+//	 	3.	A Native Number String will always format
+//	 	  	negative numeric values with a leading minus sign
+//	 	  	('-').
 //
-//	 	   Native Number String Negative Value:
-//	 	   				-123.2
+//	 	  	Native Number String Negative Value:
+//	 	  					-123.2
 //
-//	 	4. A Native Number String WILL NEVER include integer
-//	 	   separators such as commas (',') to separate
-//	 	   integer digits by thousands.
+//	 	4.	A Native Number String WILL NEVER include integer
+//			separators such as commas (',') to separate
+//			integer digits by thousands.
 //
 //	 	   					NOT THIS: 1,000,000
 //	 	   		Native Number String: 1000000
 //
-//	 	5. Native Number Strings will only consist of:
+//	 	5.	Native Number Strings will only consist of:
 //
-//	 	   (a)	Numeric digits zero through nine inclusive (0-9).
+//			(a)	Numeric digits zero through nine inclusive (0-9).
 //
-//	 	   (b)	A decimal point ('.') for floating point
-//	 	   		numbers.
+//			(b)	A decimal point ('.') for floating point
+//				numbers.
 //
-//	 	   (c)	A leading minus sign ('-') in the case of
-//	 	   		negative numeric values.
+//			(c)	A leading minus sign ('-') in the case of
+//				negative numeric values.
+//
+//		6.	A Native Number String will NEVER include
+//			currency symbols.
 //
 //	numericValue				interface{}
 //
@@ -320,6 +323,9 @@ func (mathHelper *MathHelper) NativeNumStrToNumericValue(
 //
 //     (c)	A leading minus sign ('-') in the case of
 //     negative numeric values.
+//
+//  6. A Native Number String will NEVER include
+//     currency symbols.
 //
 // The numeric values passed through the empty interface
 // parameter 'numericValue' must be configured as one of
