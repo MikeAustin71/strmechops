@@ -6184,6 +6184,10 @@ func (numStrKernel *NumberStrKernel) NewParseNativeNumberStr(
 //		European Union, the Decimal Separator is the
 //		comma character (',').
 //
+//		The Decimal Separator is used to identify and
+//		separate integer and fractional digits while
+//		parsing the Pure Number String.
+//
 //	leadingMinusSign			bool
 //
 //		In pure number strings, a minus sign ('-')

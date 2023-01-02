@@ -900,6 +900,43 @@ func (nStrMathQuark *numStrMathQuark) pureNumStrToRunes(
 
 	}
 
+	lenPureNumStr := len(pureNumberStr)
+
+	if lenPureNumStr == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'pureNumberStr' is invalid!\n"+
+			"'pureNumberStr' is empty with a zero length!\n",
+			ePrefix.String())
+
+		return numberStats, err
+
+	}
+
+	pureNumStrIsValid := false
+
+	for i := 0; i < lenPureNumStr; i++ {
+
+		if pureNumberStr[i] >= '0' &&
+			pureNumberStr[i] <= '9' {
+
+			pureNumStrIsValid = true
+
+			break
+		}
+
+	}
+
+	if pureNumStrIsValid == false {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'pureNumberStr' is invalid!\n"+
+			"'pureNumberStr' contains Zero Numeric Digit Characters.\n",
+			ePrefix.String())
+
+		return numberStats, err
+	}
+
 	new(runeArrayDtoAtom).empty(
 		intDigits)
 

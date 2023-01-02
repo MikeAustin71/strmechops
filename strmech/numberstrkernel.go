@@ -8903,195 +8903,195 @@ func (numStrKernel *NumberStrKernel) FmtNumStrParams(
 //
 // # Return Values
 //
-//		pureNumberStr				string
+//	pureNumberStr				string
 //
-//			If this method completes successfully, a Pure
-//			number string containing the numeric value
-//			extracted from the current instance of
-//			NumberStrKernel will be returned.
+//		If this method completes successfully, a Pure
+//		number string containing the numeric value
+//		extracted from the current instance of
+//		NumberStrKernel will be returned.
 //
-//			A Pure Number String is defined as follows:
+//		A Pure Number String is defined as follows:
 //
-//	 	1.	A pure number string consists entirely of numeric
-//	 	  	digit characters (0-9).
+//		1.	A pure number string consists entirely of numeric
+//		  	digit characters (0-9).
 //
-//	 	2.	A pure number string will separate integer and
-//	 	  	fractional digits with a radix point or decimal
-//	 	  	separator. This could be, but is not limited to,
-//	 	  	a decimal point ('.'). For example, many European
-//	 	  	countries use the comma (',') as a radix point.
+//		2.	A pure number string will separate integer and
+//		  	fractional digits with a radix point or decimal
+//		  	separator. This could be, but is not limited to,
+//		  	a decimal point ('.'). For example, many European
+//		  	countries use the comma (',') as a radix point.
 //
-//	 	3.	A pure number string will designate negative values
-//	 	  	with a minus sign ('-'). This minus sign could be
-//	 	  	positioned as a leading or trailing minus sign.
+//		3.	A pure number string will designate negative values
+//		  	with a minus sign ('-'). This minus sign could be
+//		  	positioned as a leading or trailing minus sign.
 //
-//	 	4.	A pure number string will NEVER include integer
-//	 	  	separators such as commas (',') to separate
-//	 	  	integer digits by thousands.
+//		4.	A pure number string will NEVER include integer
+//		  	separators such as commas (',') to separate
+//		  	integer digits by thousands.
 //
-//	 	  				  NOT THIS: 1,000,000
-//	 	  		Pure Number String: 1000000
+//		  				  NOT THIS: 1,000,000
+//		  		Pure Number String: 1000000
 //
-//	 	5.	A pure number string will NEVER include currency
+//		5.	A pure number string will NEVER include currency
 //				symbols.
 //
-//		pureNumStrComponents		PureNumberStrComponents
+//	pureNumStrComponents		PureNumberStrComponents
 //
-//			If this method completes successfully, this
-//			parameter will return an instance of
-//			PureNumberStrComponents. This data structure
-//			contains an analysis and profile information on
-//			the Pure Number String returned by paramter,
-//			'pureNumberStr'.
+//		If this method completes successfully, this
+//		parameter will return an instance of
+//		PureNumberStrComponents. This data structure
+//		contains an analysis and profile information on
+//		the Pure Number String returned by paramter,
+//		'pureNumberStr'.
 //
-//			type PureNumberStrComponents struct {
+//		type PureNumberStrComponents struct {
 //
-//				NumStrStats NumberStrStatsDto
+//			NumStrStats NumberStrStatsDto
 //
-//					This data transfer object will return key
-//					statistics on the numeric value encapsulated
-//					by the current instance of NumberStrKernel.
+//				This data transfer object will return key
+//				statistics on the numeric value encapsulated
+//				by the current instance of NumberStrKernel.
 //
-//					type NumberStrStatsDto struct {
+//				type NumberStrStatsDto struct {
 //
-//					NumOfIntegerDigits					uint64
+//				NumOfIntegerDigits					uint64
 //
-//						The total number of integer digits to the
-//						left of the radix point or, decimal point, in
-//						the subject numeric value.
+//					The total number of integer digits to the
+//					left of the radix point or, decimal point, in
+//					the subject numeric value.
 //
-//					NumOfSignificantIntegerDigits		uint64
+//				NumOfSignificantIntegerDigits		uint64
 //
-//						The number of nonzero integer digits to the
-//						left of the radix point or, decimal point, in
-//						the subject numeric value.
+//					The number of nonzero integer digits to the
+//					left of the radix point or, decimal point, in
+//					the subject numeric value.
 //
-//					NumOfFractionalDigits				uint64
+//				NumOfFractionalDigits				uint64
 //
-//						The total number of fractional digits to the
-//						right of the radix point or, decimal point,
-//						in the subject numeric value.
+//					The total number of fractional digits to the
+//					right of the radix point or, decimal point,
+//					in the subject numeric value.
 //
-//					NumOfSignificantFractionalDigits	uint64
+//				NumOfSignificantFractionalDigits	uint64
 //
-//						The number of nonzero fractional digits to
-//						the right of the radix point or, decimal
-//						point, in the subject numeric value.
+//					The number of nonzero fractional digits to
+//					the right of the radix point or, decimal
+//					point, in the subject numeric value.
 //
-//					NumberValueType 					NumericValueType
+//				NumberValueType 					NumericValueType
 //
-//						This enumeration value specifies whether the
-//						subject numeric value is classified either as
-//						an integer or a floating point number.
+//					This enumeration value specifies whether the
+//					subject numeric value is classified either as
+//					an integer or a floating point number.
 //
-//						Possible enumeration values are listed as
-//						follows:
-//							NumValType.None()
-//							NumValType.FloatingPoint()
-//							NumValType.Integer()
+//					Possible enumeration values are listed as
+//					follows:
+//						NumValType.None()
+//						NumValType.FloatingPoint()
+//						NumValType.Integer()
 //
-//					NumberSign							NumericSignValueType
+//				NumberSign							NumericSignValueType
 //
-//						An enumeration specifying the number sign
-//						associated with the numeric value. Possible
-//						values are listed as follows:
-//							NumSignVal.None()		= Invalid Value
-//							NumSignVal.Negative()	= -1
-//							NumSignVal.Zero()		=  0
-//							NumSignVal.Positive()	=  1
+//					An enumeration specifying the number sign
+//					associated with the numeric value. Possible
+//					values are listed as follows:
+//						NumSignVal.None()		= Invalid Value
+//						NumSignVal.Negative()	= -1
+//						NumSignVal.Zero()		=  0
+//						NumSignVal.Positive()	=  1
 //
-//					IsZeroValue							bool
+//				IsZeroValue							bool
 //
-//						If 'true', the subject numeric value is equal
-//						to zero ('0').
+//					If 'true', the subject numeric value is equal
+//					to zero ('0').
 //
-//						If 'false', the subject numeric value is
-//						greater than or less than zero ('0').
-//					}
+//					If 'false', the subject numeric value is
+//					greater than or less than zero ('0').
+//				}
 //
 //
 //
-//				AbsoluteValueNumStr string
+//			AbsoluteValueNumStr string
 //
-//				The number string expressed as an absolute value.
-//				Be advised, this number string may be a floating
-//				point number string containing fractional digits.
+//			The number string expressed as an absolute value.
+//			Be advised, this number string may be a floating
+//			point number string containing fractional digits.
 //
-//				AbsoluteValAllIntegerDigitsNumStr string
+//			AbsoluteValAllIntegerDigitsNumStr string
 //
-//				Integer and fractional digits are combined
-//				in a single number string without a decimal
-//				point separating integer and fractional digits.
-//				This string DOES NOT contain a leading number
-//				sign (a.k.a. minus sign ('-')
+//			Integer and fractional digits are combined
+//			in a single number string without a decimal
+//			point separating integer and fractional digits.
+//			This string DOES NOT contain a leading number
+//			sign (a.k.a. minus sign ('-')
 //
-//				SignedAllIntegerDigitsNumStr string
+//			SignedAllIntegerDigitsNumStr string
 //
-//				Integer and fractional digits are combined
-//				in a single number string without a decimal
-//				point separating integer and fractional digits.
-//				If the numeric value is negative, a leading
-//				minus sign will be prefixed at the beginning
-//				of the number string.
+//			Integer and fractional digits are combined
+//			in a single number string without a decimal
+//			point separating integer and fractional digits.
+//			If the numeric value is negative, a leading
+//			minus sign will be prefixed at the beginning
+//			of the number string.
 //
-//				NativeNumberStr string
+//			NativeNumberStr string
 //
-//				A Native Number String representing the base
-//				numeric value used to generate these profile
-//				number string statistics.
+//			A Native Number String representing the base
+//			numeric value used to generate these profile
+//			number string statistics.
 //
-//				A valid Native Number String must conform to the
-//				standardized formatting criteria defined below:
+//			A valid Native Number String must conform to the
+//			standardized formatting criteria defined below:
 //
-//				 	1. A Native Number String Consists of numeric
-//				 	   character digits zero through nine inclusive
-//				 	   (0-9).
+//			 	1. A Native Number String Consists of numeric
+//			 	   character digits zero through nine inclusive
+//			 	   (0-9).
 //
-//				 	2. A Native Number String will include a period
-//				 	   or decimal point ('.') to separate integer and
-//				 	   fractional digits within a number string.
+//			 	2. A Native Number String will include a period
+//			 	   or decimal point ('.') to separate integer and
+//			 	   fractional digits within a number string.
 //
-//				 	   Native Number String Floating Point Value:
-//				 	   				123.1234
+//			 	   Native Number String Floating Point Value:
+//			 	   				123.1234
 //
-//				 	3. A Native Number String will always format
-//				 	   negative numeric values with a leading minus sign
-//				 	   ('-').
+//			 	3. A Native Number String will always format
+//			 	   negative numeric values with a leading minus sign
+//			 	   ('-').
 //
-//				 	   Native Number String Negative Value:
-//				 	   				-123.2
+//			 	   Native Number String Negative Value:
+//			 	   				-123.2
 //
-//				 	4. A Native Number String WILL NEVER include integer
-//				 	   separators such as commas (',') to separate
-//				 	   integer digits by thousands.
+//			 	4. A Native Number String WILL NEVER include integer
+//			 	   separators such as commas (',') to separate
+//			 	   integer digits by thousands.
 //
-//				 	   					NOT THIS: 1,000,000
-//				 	   		Native Number String: 1000000
+//			 	   					NOT THIS: 1,000,000
+//			 	   		Native Number String: 1000000
 //
-//				 	5. Native Number Strings will only consist of:
+//			 	5. Native Number Strings will only consist of:
 //
-//				 	   (a)	Numeric digits zero through nine inclusive (0-9).
+//			 	   (a)	Numeric digits zero through nine inclusive (0-9).
 //
-//				 	   (b)	A decimal point ('.') for floating point
-//				 	   		numbers.
+//			 	   (b)	A decimal point ('.') for floating point
+//			 	   		numbers.
 //
-//				 	   (c)	A leading minus sign ('-') in the case of
-//				 	   		negative numeric values.
+//			 	   (c)	A leading minus sign ('-') in the case of
+//			 	   		negative numeric values.
 //
-//			}
+//		}
 //
-//		err							error
+//	err							error
 //
-//			If this method completes successfully, the
-//			returned error Type is set equal to 'nil'.
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
 //
-//			If errors are encountered during processing, the
-//			returned error Type will encapsulate an error
-//			message. This returned error message will
-//			incorporate the method chain and text passed by
-//			input parameter, 'errorPrefix'. The 'errorPrefix'
-//			text will be attached to the beginning of the
-//			error message.
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
 func (numStrKernel *NumberStrKernel) FmtNumStrPure(
 	decSeparatorChars string,
 	leadingMinusSign bool,
