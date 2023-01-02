@@ -1532,7 +1532,7 @@ func (numStrKernelMech *numberStrKernelMechanics) setNumStrKernelFromRoundedDirt
 	roundingType NumberRoundingType,
 	roundToFractionalDigits int,
 	errPrefDto *ePref.ErrPrefixDto) (
-	nativeNumStrStats NumberStrStatsDto,
+	numStrStatsDto NumberStrStatsDto,
 	err error) {
 
 	if numStrKernelMech.lock == nil {
@@ -1554,7 +1554,7 @@ func (numStrKernelMech *numberStrKernelMechanics) setNumStrKernelFromRoundedDirt
 
 	if err != nil {
 
-		return nativeNumStrStats, err
+		return numStrStatsDto, err
 	}
 
 	var nativeNumStr string
@@ -1569,7 +1569,7 @@ func (numStrKernelMech *numberStrKernelMechanics) setNumStrKernelFromRoundedDirt
 
 	if err != nil {
 
-		return nativeNumStrStats, err
+		return numStrStatsDto, err
 
 	}
 
@@ -1583,7 +1583,7 @@ func (numStrKernelMech *numberStrKernelMechanics) setNumStrKernelFromRoundedDirt
 
 	if err != nil {
 
-		return nativeNumStrStats, err
+		return numStrStatsDto, err
 
 	}
 
@@ -1600,7 +1600,7 @@ func (numStrKernelMech *numberStrKernelMechanics) setNumStrKernelFromRoundedDirt
 
 		if err != nil {
 
-			return nativeNumStrStats, err
+			return numStrStatsDto, err
 		}
 
 		err = new(numStrMathRoundingNanobot).roundNumStrKernel(
@@ -1610,19 +1610,19 @@ func (numStrKernelMech *numberStrKernelMechanics) setNumStrKernelFromRoundedDirt
 
 		if err != nil {
 
-			return nativeNumStrStats, err
+			return numStrStatsDto, err
 		}
 
 	}
 
-	nativeNumStrStats,
+	numStrStatsDto,
 		err = new(numberStrKernelAtom).
 		calcNumStrKernelStats(
 			numStrKernel,
 			ePrefix.XCpy(
 				"numStrKernel"))
 
-	return nativeNumStrStats, err
+	return numStrStatsDto, err
 }
 
 // setNumStrKernelFromRoundedNativeNumStr
@@ -1737,8 +1737,8 @@ func (numStrKernelMech *numberStrKernelMechanics) setNumStrKernelFromRoundedDirt
 //		strings.
 //
 //		If 'nativeNumStr' fails to meet the formatting
-//		criteria for a Native Number String, an error
-//		will be returned.
+//		criteria for a Native Number String defined
+//		below, an error will be returned.
 //
 //		A valid Native Number String must conform to the
 //		standardized formatting criteria defined below:
@@ -2136,7 +2136,7 @@ func (numStrKernelMech *numberStrKernelMechanics) setNumStrKernelFromRoundedNati
 	roundingType NumberRoundingType,
 	roundToFractionalDigits int,
 	errPrefDto *ePref.ErrPrefixDto) (
-	nativeNumStrStats NumberStrStatsDto,
+	numStrStatsDto NumberStrStatsDto,
 	err error) {
 
 	if numStrKernelMech.lock == nil {
@@ -2158,7 +2158,7 @@ func (numStrKernelMech *numberStrKernelMechanics) setNumStrKernelFromRoundedNati
 
 	if err != nil {
 
-		return nativeNumStrStats, err
+		return numStrStatsDto, err
 	}
 
 	nativeNumStr,
@@ -2170,7 +2170,7 @@ func (numStrKernelMech *numberStrKernelMechanics) setNumStrKernelFromRoundedNati
 
 	if err != nil {
 
-		return nativeNumStrStats, err
+		return numStrStatsDto, err
 
 	}
 
@@ -2184,7 +2184,7 @@ func (numStrKernelMech *numberStrKernelMechanics) setNumStrKernelFromRoundedNati
 
 	if err != nil {
 
-		return nativeNumStrStats, err
+		return numStrStatsDto, err
 
 	}
 
@@ -2201,7 +2201,7 @@ func (numStrKernelMech *numberStrKernelMechanics) setNumStrKernelFromRoundedNati
 
 		if err != nil {
 
-			return nativeNumStrStats, err
+			return numStrStatsDto, err
 		}
 
 		err = new(numStrMathRoundingNanobot).roundNumStrKernel(
@@ -2211,17 +2211,17 @@ func (numStrKernelMech *numberStrKernelMechanics) setNumStrKernelFromRoundedNati
 
 		if err != nil {
 
-			return nativeNumStrStats, err
+			return numStrStatsDto, err
 		}
 
 	}
 
-	nativeNumStrStats,
+	numStrStatsDto,
 		err = new(numberStrKernelAtom).
 		calcNumStrKernelStats(
 			numStrKernel,
 			ePrefix.XCpy(
 				"numStrKernel"))
 
-	return nativeNumStrStats, err
+	return numStrStatsDto, err
 }
