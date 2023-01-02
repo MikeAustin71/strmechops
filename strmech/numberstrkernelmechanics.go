@@ -1019,7 +1019,7 @@ func (numStrKernelMech *numberStrKernelMechanics) convertToSciNotation(
 	return sciNotKernel, err
 }
 
-// setNumStrKernelFromDirtyNumStr
+// setNumStrKernelFromRoundedDirtyNumStr
 //
 // Receives a Dirty Number String, extracts a valid
 // Native Number String and proceeds to reconfigure the
@@ -1525,7 +1525,7 @@ func (numStrKernelMech *numberStrKernelMechanics) convertToSciNotation(
 //		for input parameter 'errPrefDto' (error prefix)
 //		will be prefixed or attached at the beginning of
 //		the error message.
-func (numStrKernelMech *numberStrKernelMechanics) setNumStrKernelFromDirtyNumStr(
+func (numStrKernelMech *numberStrKernelMechanics) setNumStrKernelFromRoundedDirtyNumStr(
 	numStrKernel *NumberStrKernel,
 	dirtyNumberStr string,
 	decimalSeparator string,
@@ -1549,7 +1549,7 @@ func (numStrKernelMech *numberStrKernelMechanics) setNumStrKernelFromDirtyNumStr
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
 		"numberStrKernelMechanics."+
-			"setNumStrKernelFromDirtyNumStr()",
+			"setNumStrKernelFromRoundedDirtyNumStr()",
 		"")
 
 	if err != nil {

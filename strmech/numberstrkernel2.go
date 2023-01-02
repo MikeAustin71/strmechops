@@ -4827,7 +4827,7 @@ func (numStrKernel *NumberStrKernel) NewParseDirtyNumberStr(
 
 	nativeNumStrStats,
 		err = new(numberStrKernelMechanics).
-		setNumStrKernelFromDirtyNumStr(
+		setNumStrKernelFromRoundedDirtyNumStr(
 			&newNumStrKernel,
 			dirtyNumberStr,
 			decimalSeparator,
@@ -8548,7 +8548,7 @@ func (numStrKernel *NumberStrKernel) SetFromDirtyNumberStr(
 
 	nativeNumStrStats,
 		err = new(numberStrKernelMechanics).
-		setNumStrKernelFromDirtyNumStr(
+		setNumStrKernelFromRoundedDirtyNumStr(
 			numStrKernel,
 			dirtyNumberStr,
 			decimalSeparator,
