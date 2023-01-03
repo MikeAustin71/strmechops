@@ -142,8 +142,8 @@ func (decSepSpecAtom *decimalSeparatorSpecAtom) testValidityOfDecSepSearchSpec(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"negNumSearchSpecAtom."+
-			"testValidityOfNegNumSearchSpec()",
+		"decimalSeparatorSpecAtom."+
+			"testValidityOfDecSepSearchSpec()",
 		"")
 
 	if err != nil {

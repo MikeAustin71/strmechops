@@ -2,6 +2,7 @@ package strmech
 
 import (
 	ePref "github.com/MikeAustin71/errpref"
+	"math/big"
 	"strings"
 	"testing"
 )
@@ -2543,6 +2544,322 @@ func TestNumberStrKernel_SetFromNativeNumberStr_000100(t *testing.T) {
 	}
 
 	testName = "Test #4 Negative Native Number String Comparison"
+
+	if expectedStr != actualFmtStr {
+
+		t.Errorf("%v\n"+
+			"%v\n"+
+			"Error: expectedStr != actualFmtStr\n"+
+			" expectedStr = %v\n"+
+			"actualFmtStr = %v\n",
+			ePrefix.String(),
+			testName,
+			expectedStr,
+			actualFmtStr)
+
+		return
+	}
+
+	return
+}
+
+func TestNumberStrKernel_SetFromNumericValue_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestNumberStrKernel_SetFromNumericValue_000100()",
+		"")
+
+	var actualFmtStr, expectedStr string
+	var numStats NumberStrStatsDto
+
+	inputStr := "Hello World (1123456.775) Goodbye World"
+
+	var nStrKernel01 NumberStrKernel
+
+	startSearchIndex := 11
+	characterSearchLength := -1
+
+	negativeNumSignSearchSpecs := NegNumSearchSpecCollection{}
+
+	var err error
+
+	err =
+		negativeNumSignSearchSpecs.AddLeadingAndTrailingNegNumSearchStr(
+			"(",
+			")",
+			ePrefix.XCpy(
+				"()"))
+
+	var decimalSeparator DecimalSeparatorSpec
+
+	decimalSeparator,
+		err = new(DecimalSeparatorSpec).NewRunes(
+		[]rune{'.'},
+		ePrefix)
+
+	numParsingTerminators := []string{
+		"oo",
+		"bye",
+	}
+
+	var requestRemainderString bool
+
+	requestRemainderString = true
+
+	var numberStrSearchResults CharSearchNumStrParseResultsDto
+
+	/*
+	   func (numStrKernel *NumberStrKernel) NewParseCustomNumberStr(
+	   	rawNumStr string,
+	   	startSearchIndex int,
+	   	characterSearchLength int,
+	   	negativeNumSignSearchSpecs NegNumSearchSpecCollection,
+	   	decimalSeparator DecimalSeparatorSpec,
+	   	numParsingTerminators []string,
+	   	requestRemainderString bool,
+	   	errorPrefix interface{}) (
+	   	numberStrSearchResults CharSearchNumStrParseResultsDto,
+	   	numberStrKernel NumberStrKernel,
+	   	err error) {
+
+
+	*/
+
+	numberStrSearchResults,
+		nStrKernel01,
+		err = new(NumberStrKernel).NewParseCustomNumberStr(
+		inputStr,
+		startSearchIndex,
+		characterSearchLength,
+		negativeNumSignSearchSpecs,
+		decimalSeparator,
+		numParsingTerminators,
+		requestRemainderString,
+		ePrefix.XCpy(
+			"nStrKernel01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	if !nStrKernel01.IsValidInstance() {
+
+		err = nStrKernel01.IsValidInstanceError(
+			ePrefix.XCpy(
+				"NewParseCustomNumberStr - nStrKernel01"))
+
+		if err != nil {
+
+			t.Errorf("Error return from nStrKernel01.IsValidInstanceError()\n"+
+				"Error= \n%v\n",
+				err.Error())
+
+			return
+		}
+	}
+
+	testName := "Test #1-A numberStrSearchResults.FoundNumericDigits"
+
+	if !numberStrSearchResults.FoundNumericDigits {
+
+		t.Errorf("%v\n"+
+			"%v\n"+
+			"Expected 'FoundNumericDigits' = 'true'\n"+
+			"Instead 'FoundNumericDigits' = 'false'\n",
+			ePrefix.String(),
+			testName)
+
+		return
+	}
+
+	testName = "Test #1-B numberStrSearchResults.RemainderString"
+
+	if numberStrSearchResults.RemainderString.GetRuneArrayLength() == 0 {
+
+		t.Errorf("%v\n"+
+			"%v\n"+
+			"Expected 'RemainderString' Length > 0 \n"+
+			"Instead 'RemainderString' Length == 0\n",
+			ePrefix.String(),
+			testName)
+
+		return
+	}
+
+	testName = "Test #1-C numberStrSearchResults.NumSignValue"
+
+	if numberStrSearchResults.NumSignValue != NumSignVal.Negative() {
+
+		t.Errorf("%v\n"+
+			"%v\n"+
+			"Expected 'NumSignValue' == NumSignVal.Negative() \n"+
+			"Instead 'NumSignValue' String = %v\n"+
+			" 'NumSignValue' Integer Value = %v\n",
+			ePrefix.String(),
+			testName,
+			numberStrSearchResults.NumSignValue.String(),
+			numberStrSearchResults.NumSignValue.XValueInt())
+
+		return
+	}
+
+	testName = "Test #1-D NumberStrStatsDtoNumberSign Should Be NumSignVal.Negative()"
+
+	actualFmtStr,
+		numStats,
+		err = nStrKernel01.FmtNumStrNative(
+		NumRoundType.NoRounding(),
+		0,
+		ePrefix.XCpy(
+			"1-D actualFmtStr<-"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	if numStats.NumberSign != NumSignVal.Negative() {
+
+		t.Errorf("%v\n"+
+			"%v\n"+
+			"Error: numStats.NumberSign != NumSignVal.Negative()\n"+
+			"Expected numStats.NumberSign = %v\n"+
+			"  Actual numStats.NumberSign = %v\n",
+			ePrefix.String(),
+			testName,
+			NumSignVal.Negative().String(),
+			numStats.NumberSign.String())
+
+		return
+
+	}
+
+	testName = "Test #1-E nStrKernel01.FmtNumStrNative()"
+
+	expectedStr = "-1123456.775"
+
+	if expectedStr != actualFmtStr {
+
+		t.Errorf("%v\n"+
+			"%v\n"+
+			"Error: expectedStr != actualFmtStr\n"+
+			" expectedStr = %v\n"+
+			"actualFmtStr = %v\n",
+			ePrefix.String(),
+			testName,
+			expectedStr,
+			actualFmtStr)
+
+		return
+	}
+
+	testName = "Test #2-A nStrKernel01.FmtSignedNumStrGermany()"
+
+	numberFieldSpec := NumStrNumberFieldSpec{
+		fieldLength:        -1,
+		fieldJustification: TxtJustify.Right(),
+	}
+
+	roundingSpec := NumStrRoundingSpec{
+		roundingType:            NumRoundType.NoRounding(),
+		roundToFractionalDigits: 0,
+		lock:                    nil,
+	}
+
+	actualFmtStr,
+		err = nStrKernel01.FmtSignedNumStrGermany(
+		numberFieldSpec,
+		roundingSpec,
+		ePrefix.XCpy(
+			"2-A nStrKernel01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	expectedStr = "1.123.456,775-"
+
+	if expectedStr != actualFmtStr {
+
+		t.Errorf("%v\n"+
+			"%v\n"+
+			"Error: expectedStr != actualFmtStr\n"+
+			" expectedStr = %v\n"+
+			"actualFmtStr = %v\n",
+			ePrefix.String(),
+			testName,
+			expectedStr,
+			actualFmtStr)
+
+		return
+	}
+
+	testName = "Test #3-A nStrKernel01.FmtSignedNumStrGermany()"
+
+	expectedStr = "576123.45678"
+
+	//inputStr := "1123456.775) Goodbye World"
+	var inputBigFloat big.Float
+
+	inputBigFloat,
+		err = new(MathFloatHelper).NativeNumStrToBigFloat(
+		expectedStr,
+		ePrefix.XCpy(
+			"3-A"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = nStrKernel01.SetFromNumericValue(
+		inputBigFloat,
+		NumRoundType.NoRounding(),
+		0,
+		ePrefix.XCpy(
+			"3-A nStrKernel01<-inputBigFloat"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if !nStrKernel01.IsValidInstance() {
+
+		err = nStrKernel01.IsValidInstanceError(
+			ePrefix.XCpy(
+				"nStrKernel01"))
+
+		if err != nil {
+
+			t.Errorf("Error return from nStrKernel01.IsValidInstanceError()\n"+
+				"Error= \n%v\n",
+				err.Error())
+
+			return
+		}
+	}
+
+	actualFmtStr,
+		_,
+		err = nStrKernel01.FmtNumStrNative(
+		NumRoundType.NoRounding(),
+		0,
+		ePrefix.XCpy(
+			"3-A actualFmtStr<-nStrKernel01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
 
 	if expectedStr != actualFmtStr {
 

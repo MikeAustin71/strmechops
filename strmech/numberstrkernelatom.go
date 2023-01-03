@@ -857,8 +857,8 @@ func (numStrKernelAtom *numberStrKernelAtom) formatNumStrComponents(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"negNumSearchSpecAtom."+
-			"testValidityOfNegNumSearchSpec()",
+		"numberStrKernelAtom."+
+			"formatNumStrComponents()",
 		"")
 
 	if err != nil {

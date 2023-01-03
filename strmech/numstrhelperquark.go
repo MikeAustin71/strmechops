@@ -600,8 +600,8 @@ func (nStrHelperQuark *numStrHelperQuark) extractNumericDigits(
 //		If this value is set to -1, the search length
 //		will be configured to include the last index in
 //		'targetSearchString'. In other words the search
-//		will proceed	to the end of
-//		'targetSearchString' array.
+//		will proceed to the end of 'targetSearchString'
+//		array.
 //
 //	negativeNumSearchSpecsCol		NegNumSearchSpecCollection
 //
