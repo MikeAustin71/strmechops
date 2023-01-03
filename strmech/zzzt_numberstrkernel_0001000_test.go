@@ -2424,31 +2424,15 @@ func TestNumberStrKernel_FmtSignedPureNumberStr_000100(t *testing.T) {
 		return
 	}
 
-	roundingSpec := NumStrRoundingSpec{}
-
-	roundingSpec,
-		err = new(NumStrRoundingSpec).NewRoundingSpec(
-		NumRoundType.NoRounding(),
-		0,
-		ePrefix.XCpy(
-			"roundingSpec<-"+
-				"NumRoundType.NoRounding()"))
-
-	if err != nil {
-		t.Errorf("\n%v\n",
-			err.Error())
-		return
-	}
-
 	var actualFmtNumberStr string
 
 	actualFmtNumberStr,
-		err = baseValueNStr.FmtSignedNumStrPure(
+		_,
+		err = baseValueNStr.FmtNumStrPure(
 		".",
 		true,
-		-1,
-		TxtJustify.Right(),
-		roundingSpec,
+		NumRoundType.NoRounding(),
+		0,
 		ePrefix.XCpy(
 			"actualFmtNumberStr<-baseValueNStr"))
 
@@ -2534,12 +2518,12 @@ func TestNumberStrKernel_FmtSignedPureNumberStr_000100(t *testing.T) {
 	}
 
 	actualFmtNumberStr,
-		err = nStr03.FmtSignedNumStrPure(
+		_,
+		err = nStr03.FmtNumStrPure(
 		".",
 		false,
-		-1,
-		TxtJustify.Right(),
-		roundingSpec,
+		NumRoundType.NoRounding(),
+		0,
 		ePrefix.XCpy(
 			"actualFmtNumberStr<-baseValueNStr"))
 
@@ -2598,31 +2582,15 @@ func TestNumberStrKernel_FmtSignedPureNumberStr_000120(t *testing.T) {
 		return
 	}
 
-	roundingSpec := NumStrRoundingSpec{}
-
-	roundingSpec,
-		err = new(NumStrRoundingSpec).NewRoundingSpec(
-		NumRoundType.NoRounding(),
-		2,
-		ePrefix.XCpy(
-			"roundingSpec<-"+
-				"NumRoundType.NoRounding()"))
-
-	if err != nil {
-		t.Errorf("\n%v\n",
-			err.Error())
-		return
-	}
-
 	var actualFmtNumberStr string
 
 	actualFmtNumberStr,
-		err = baseValueNStr.FmtSignedNumStrPure(
+		_,
+		err = baseValueNStr.FmtNumStrPure(
 		".",
 		true,
-		-1,
-		TxtJustify.Right(),
-		roundingSpec,
+		NumRoundType.NoRounding(),
+		0,
 		ePrefix.XCpy(
 			"#1 actualFmtNumberStr<-baseValueNStr"))
 
@@ -2638,7 +2606,7 @@ func TestNumberStrKernel_FmtSignedPureNumberStr_000120(t *testing.T) {
 
 		t.Errorf("%v\n"+
 			"%v\n"+
-			"baseValueNStr.FmtSignedNumStrPure()\n"+
+			"baseValueNStr.FmtNumStrPure()\n"+
 			"Error: actualfmtNumberStr NOT EQUAL TO origNumberStr\n"+
 			" actualFmtNumberStr = '%v'\n"+
 			"expectedNumberStr   = '%v'\n",

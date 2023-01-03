@@ -5398,18 +5398,13 @@ func (txtFieldFmtDtoBigFloatElectron *textFieldFormatDtoBigFloatElectron) getBig
 
 	}
 
-	roundingSpecOne := NumStrRoundingSpec{
-		roundingType:            txtBigFloatFieldFmtDto.RoundingType,
-		roundToFractionalDigits: txtBigFloatFieldFmtDto.NumOfFractionalDigits,
-	}
-
 	bigFloatNumStr,
-		err = float64NumberStrKernel.FmtSignedNumStrPure(
+		_,
+		err = float64NumberStrKernel.FmtNumStrPure(
 		".",
 		txtBigFloatFieldFmtDto.LeadingMinusSign,
-		-1,
-		TxtJustify.Right(),
-		roundingSpecOne,
+		txtBigFloatFieldFmtDto.RoundingType,
+		txtBigFloatFieldFmtDto.NumOfFractionalDigits,
 		ePrefix.XCpy(
 			"bigFloatNumStr<-float64NumberStrKernel"))
 

@@ -5248,18 +5248,13 @@ func (txtFieldFmtDtoFloat64Electron *textFieldFormatDtoFloat64Electron) getFloat
 
 	}
 
-	roundingSpecOne := NumStrRoundingSpec{
-		roundingType:            NumRoundType.NoRounding(),
-		roundToFractionalDigits: 0,
-	}
-
 	float64NumStr,
-		err = float64NumberStrKernel.FmtSignedNumStrPure(
+		_,
+		err = float64NumberStrKernel.FmtNumStrPure(
 		".",
 		txtFieldFmtDtoFloat64.LeadingMinusSign,
-		-1,
-		TxtJustify.Right(),
-		roundingSpecOne,
+		NumRoundType.NoRounding(),
+		0,
 		ePrefix.XCpy(
 			"float64NumStr<-float64NumberStrKernel"))
 
