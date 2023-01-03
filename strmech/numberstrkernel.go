@@ -6945,11 +6945,6 @@ func (numStrKernel *NumberStrKernel) FmtNumStrCustom(
 //	NumberStrKernel.SetDefaultPureNumStrFormatSpec()
 //	NumberStrKernel.SetDefaultSimpleNumStrFormatSpec()
 //
-// If an error is encountered, the error message is
-// included in the string returned by this method.
-//
-// This method implements the Stringer Interface.
-//
 // ----------------------------------------------------------------
 //
 // # BE ADVISED
@@ -6978,6 +6973,13 @@ func (numStrKernel *NumberStrKernel) FmtNumStrCustom(
 //
 //		All other NumberStrKernel data values will remain
 //		unchanged.
+//
+//	(3)	This method is very similar to method:
+//
+//			NumberStrKernel.String()
+//
+//		The only difference is that in case of error,
+//		this method returns a type 'error'.
 //
 // ----------------------------------------------------------------
 //

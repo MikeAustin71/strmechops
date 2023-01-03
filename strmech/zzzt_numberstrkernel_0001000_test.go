@@ -4912,28 +4912,21 @@ func TestNumberStrKernel_RoundCeiling_001000(t *testing.T) {
 func TestNumberStrKernel_String_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestNumberStrKernel_FmtSignedPureNumberStr_000100()",
+		"TestNumberStrKernel_String_000100()",
 		"")
 
-	origIntStr := "1234"
-	origFracStr := "5678"
+	origNumberStr := "1234.5678"
 
-	origNumberStr := origIntStr +
-		"." +
-		origFracStr
-
-	expectedNumberStr := "1234.5678"
+	expectedNumberStr := "1,234.5678"
 
 	var err error
-	var baseValueNStr, nStr02 NumberStrKernel
+	var baseValueNStr NumberStrKernel
 
 	baseValueNStr,
 		_,
 		err = new(NumberStrKernel).
-		NewParsePureNumberStr(
+		NewParseNativeNumberStr(
 			origNumberStr,
-			".",
-			true,
 			NumRoundType.NoRounding(),
 			0,
 			ePrefix.XCpy(
@@ -4945,85 +4938,65 @@ func TestNumberStrKernel_String_000100(t *testing.T) {
 		return
 	}
 
-	err = nStr02.CopyIn(
-		&baseValueNStr,
-		ePrefix.XCpy(
-			"nStr02<-baseValueNStr"))
-
-	if err != nil {
-		t.Errorf("\n%v\n",
-			err.Error())
-		return
-	}
-
-	if !nStr02.Equal(&baseValueNStr) {
-
-		t.Errorf("%v\n"+
-			"Test#1\n"+
-			"Error: nStr02 NOT EQUAL TO baseValueNStr\n"+
-			"After CopyIn() operation they were expected\n"+
-			"to be Equal. HOWEVER, THEY ARE NOT EQUAL!!!\n",
-			ePrefix.String())
-
-		return
-	}
-
-	err = nStr02.SetDefaultPureNumStrFormatSpec(
-		".",
-		true,
-		-1,
-		TxtJustify.Right(),
-		ePrefix.XCpy(
-			"nStr02"))
-
-	if err != nil {
-		t.Errorf("\n%v\n",
-			err.Error())
-		return
-	}
-
 	var actualFmtNumberStr string
 
-	actualFmtNumberStr,
-		err = nStr02.FmtNumStrDefault(
-		ePrefix.XCpy(
-			"actualFmtNumberStr<-nStr02"))
+	actualFmtNumberStr = baseValueNStr.String()
 
-	if err != nil {
-		t.Errorf("\n%v\n",
-			err.Error())
-		return
-	}
+	testName := "Test #1 - Default Format Spec"
 
 	if expectedNumberStr != actualFmtNumberStr {
 
 		t.Errorf("%v\n"+
-			"Test#2\n"+
-			"Error: actualfmtNumberStr NOT EQUAL TO expectedNumberStr\n"+
+			"%v\n"+
+			"Error: actualFmtNumberStr NOT EQUAL TO expectedNumberStr\n"+
 			" actualFmtNumberStr = '%v'\n"+
 			"expectedNumberStr   = '%v'\n",
 			ePrefix.String(),
+			testName,
 			actualFmtNumberStr,
 			expectedNumberStr)
 
 		return
 	}
 
-	expectedNumberStr = "1,234.5678"
+	testName = "Test #2 - Rounded Before Default Format Spec"
 
-	err = nStr02.SetDefaultSimpleNumStrFormatSpec(
-		".",
-		",",
-		true,
-		-1,
-		TxtJustify.Right(),
-		ePrefix.XCpy(
-			"nStr02"))
+	err = baseValueNStr.Round(
+		NumRoundType.HalfAwayFromZero(),
+		2,
+		ePrefix.XCpy("baseValueNStr<-2digits"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	expectedNumberStr = "1,234.57"
+
+	actualFmtNumberStr = baseValueNStr.String()
+
+	if expectedNumberStr != actualFmtNumberStr {
+
+		t.Errorf("%v\n"+
+			"%v\n"+
+			"Error: actualFmtNumberStr NOT EQUAL TO expectedNumberStr\n"+
+			" actualFmtNumberStr = '%v'\n"+
+			"expectedNumberStr   = '%v'\n",
+			ePrefix.String(),
+			testName,
+			actualFmtNumberStr,
+			expectedNumberStr)
+
+		return
+	}
+
+	testName = "Test #3 - Rounded Before Default Format Spec"
 
 	actualFmtNumberStr,
-		err = nStr02.FmtNumStrDefault(
-		ePrefix.XCpy("actualFmtNumberStr" +
-			"<-nStr02"))
+		err = baseValueNStr.FmtNumStrDefault(
+		ePrefix.XCpy(
+			"actualFmtNumberStr<=baseValueNStr"))
 
 	if err != nil {
 		t.Errorf("\n%v\n",
@@ -5034,11 +5007,48 @@ func TestNumberStrKernel_String_000100(t *testing.T) {
 	if expectedNumberStr != actualFmtNumberStr {
 
 		t.Errorf("%v\n"+
-			"Test#3\n"+
-			"Error: actualfmtNumberStr NOT EQUAL TO expectedNumberStr\n"+
+			"%v\n"+
+			"Error: actualFmtNumberStr NOT EQUAL TO expectedNumberStr\n"+
 			" actualFmtNumberStr = '%v'\n"+
 			"expectedNumberStr   = '%v'\n",
 			ePrefix.String(),
+			testName,
+			actualFmtNumberStr,
+			expectedNumberStr)
+
+		return
+	}
+
+	testName = "Test #3 - Rounded During Default Format Spec"
+
+	expectedNumberStr = "1,235"
+
+	roundingSpec := NumStrRoundingSpec{
+		roundingType:            NumRoundType.HalfAwayFromZero(),
+		roundToFractionalDigits: 0,
+	}
+
+	actualFmtNumberStr,
+		err = baseValueNStr.FmtNumStrDefaultRound(
+		roundingSpec,
+		ePrefix.XCpy(
+			"actualFmtNumberStr<=baseValueNStr"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if expectedNumberStr != actualFmtNumberStr {
+
+		t.Errorf("%v\n"+
+			"%v\n"+
+			"Error: actualFmtNumberStr NOT EQUAL TO expectedNumberStr\n"+
+			" actualFmtNumberStr = '%v'\n"+
+			"expectedNumberStr   = '%v'\n",
+			ePrefix.String(),
+			testName,
 			actualFmtNumberStr,
 			expectedNumberStr)
 

@@ -10547,3 +10547,152 @@ func (numStrKernel *NumberStrKernel) SetStringDigits(
 		numberSign,
 		ePrefix)
 }
+
+// String
+//
+// Returns a formatted number string using the numeric
+// value and the Default Number String Format
+// Specification configured for the current instance of
+// NumberStrKernel.
+//
+// To explicitly set the Default Number String Format
+// Specification, use the following methods:
+//
+//	NumberStrKernel.SetDefaultNumberStrFormatSpec()
+//	NumberStrKernel.SetDefaultPureNumStrFormatSpec()
+//	NumberStrKernel.SetDefaultSimpleNumStrFormatSpec()
+//
+// If the Default Number String Format is uninitialized
+// or invalid, it will be automatically set and defaulted
+// to the US (United States) Signed Number String Format
+// Specification.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	(1)	No rounding will be performed on the numeric
+//		value formatted as a returned number string. If
+//		rounding is required in conjunction with the
+//		Default Format Number String Formatting
+//		Specification, the user has two options.
+//
+//		a.	Call method NumberStrKernel.Round() and
+//			then call this method, NumberStrKernel.String().
+//
+//		b.	Do not call this method. Instead, call
+//			method NumberStrKernel.FmtNumStrDefaultRound().
+//
+//	(2)	This method will NOT delete or modify data values
+//		contained in the current instance of
+//		NumberStrKernel. However, if the Default
+//		NumberStrKernel Number String Format
+//		Specification is invalid, internal member
+//		variable 'NumberStrKernel.numStrFormatSpec' will
+//		be set to the default US (United States) Signed
+//		Number String Format Specification.
+//
+//		All other NumberStrKernel data values will remain
+//		unchanged.
+//
+//	(3)	If errors are encountered, the returned string
+//		will be configured with an appropriate error
+//		message.
+//
+//	(4)	This method is very similar to method:
+//
+//			NumberStrKernel.FmtNumStrDefault()
+//
+//		The only difference is that in case of error,
+//		this method DOES NOT return a type 'error'.
+//		Instead, the error message is configured in the
+//		returned 'string'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	None
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//
+//		If this method completes successfully, a
+//		formatted Number String will be returned.
+//
+//		The Number String format used in configuring
+//		this Number String is taken from the Default
+//		Number String Formatting Specification previously
+//		configured in the current instance of
+//		NumberStrKernel.
+//
+//		If errors are encountered, this returned string
+//		will be configured with an appropriate error
+//		message.
+func (numStrKernel *NumberStrKernel) String() string {
+
+	if numStrKernel.lock == nil {
+		numStrKernel.lock = new(sync.Mutex)
+	}
+
+	numStrKernel.lock.Lock()
+
+	defer numStrKernel.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+	var numStr string
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		nil,
+		"NumberStrKernel."+
+			"String()",
+		"")
+
+	if err != nil {
+
+		numStr = err.Error()
+
+		return numStr
+	}
+
+	_,
+		err = new(numberStrKernelAtom).
+		testValidityOfNumStrKernel(
+			numStrKernel,
+			ePrefix.XCpy(
+				"numStrKernel"))
+
+	if err != nil {
+
+		numStr = err.Error()
+		return numStr
+	}
+
+	var roundingSpec NumStrRoundingSpec
+
+	roundingSpec,
+		err = new(NumStrRoundingSpec).
+		NewRoundingSpec(
+			NumRoundType.NoRounding(),
+			0,
+			ePrefix.XCpy("roundingSpec"))
+
+	numStr,
+		err = new(numberStrKernelMolecule).formatNumStr(
+		numStrKernel,
+		numStrKernel.numStrFormatSpec,
+		roundingSpec,
+		ePrefix.XCpy("numStrKernel"))
+
+	if err != nil {
+
+		numStr = err.Error()
+	}
+
+	return numStr
+}
