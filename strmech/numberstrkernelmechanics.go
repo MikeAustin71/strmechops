@@ -2810,39 +2810,57 @@ func (numStrKernelMech *numberStrKernelMechanics) setNumStrKernelFromRoundedPure
 	}
 
 	pureNumStrComponents,
-		err = new(numberStrKernelQuark).
-		setNumStrKernelFromPureNumStr(
-			numStrKernel,
-			pureNumberStr,
-			decSeparatorChars,
-			leadingMinusSign,
-			ePrefix.XCpy(
-				"numStrKernel<-"+
-					"nativeNumStr"))
+		err = new(numberStrKernelQuark).setNumStrKernelFromPureNumStr(
+		numStrKernel,
+		pureNumberStr,
+		decSeparatorChars,
+		leadingMinusSign,
+		ePrefix)
 
 	if err != nil {
 
 		return pureNumStrComponents, err
-
 	}
 
 	if roundingType != NumRoundType.NoRounding() {
 
-		pureNumberStr,
-			pureNumStrComponents,
-			err = new(numberStrKernelQuark).getPureNumStr(
-			numStrKernel,
-			decSeparatorChars,
-			leadingMinusSign,
-			roundingType,
-			roundToFractionalDigits,
-			ePrefix)
+		var numStrRoundingSpec NumStrRoundingSpec
+
+		numStrRoundingSpec,
+			err =
+			new(NumStrRoundingSpec).NewRoundingSpec(
+				roundingType,
+				roundToFractionalDigits,
+				ePrefix)
 
 		if err != nil {
 
 			return pureNumStrComponents, err
 		}
 
+		err = new(numStrMathRoundingNanobot).roundNumStrKernel(
+			numStrKernel,
+			numStrRoundingSpec,
+			ePrefix)
+
+		if err != nil {
+
+			return pureNumStrComponents, err
+		}
+	}
+
+	_,
+		pureNumStrComponents,
+		err = new(numberStrKernelQuark).getPureNumStr(
+		numStrKernel,
+		decSeparatorChars,
+		leadingMinusSign,
+		NumRoundType.NoRounding(),
+		0,
+		ePrefix)
+
+	if err != nil {
+		return pureNumStrComponents, err
 	}
 
 	return pureNumStrComponents, err

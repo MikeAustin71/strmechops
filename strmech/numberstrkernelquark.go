@@ -802,11 +802,9 @@ func (numStrKernelQuark *numberStrKernelQuark) getNativeNumStr(
 
 	if err2 != nil {
 
-		err = fmt.Errorf("%v\n"+
-			"Error: 'numStrKernel' is invalid!\n"+
+		err = fmt.Errorf("Error: 'numStrKernel' is invalid!\n"+
 			"This instance of NumberStrKernel failed validity tests.\n"+
 			"Validation Error: \n%v\n",
-			ePrefix.String(),
 			err2.Error())
 
 		return nativeNumStr,

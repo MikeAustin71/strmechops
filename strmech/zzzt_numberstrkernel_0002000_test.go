@@ -2569,7 +2569,7 @@ func TestNumberStrKernel_SetFromNumericValue_000100(t *testing.T) {
 		"TestNumberStrKernel_SetFromNumericValue_000100()",
 		"")
 
-	var actualFmtStr, expectedStr string
+	var actualFmtStr, expectedStr, testName string
 	var numStats NumberStrStatsDto
 
 	inputStr := "Hello World (1123456.775) Goodbye World"
@@ -2577,7 +2577,7 @@ func TestNumberStrKernel_SetFromNumericValue_000100(t *testing.T) {
 	var nStrKernel01 NumberStrKernel
 
 	startSearchIndex := 11
-	characterSearchLength := -1
+	characterSearchLength := 26
 
 	negativeNumSignSearchSpecs := NegNumSearchSpecCollection{}
 
@@ -2660,7 +2660,7 @@ func TestNumberStrKernel_SetFromNumericValue_000100(t *testing.T) {
 		}
 	}
 
-	testName := "Test #1-A numberStrSearchResults.FoundNumericDigits"
+	testName = "Test #1-A numberStrSearchResults.FoundNumericDigits"
 
 	if !numberStrSearchResults.FoundNumericDigits {
 
@@ -2854,6 +2854,300 @@ func TestNumberStrKernel_SetFromNumericValue_000100(t *testing.T) {
 		0,
 		ePrefix.XCpy(
 			"3-A actualFmtStr<-nStrKernel01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if expectedStr != actualFmtStr {
+
+		t.Errorf("%v\n"+
+			"%v\n"+
+			"Error: expectedStr != actualFmtStr\n"+
+			" expectedStr = %v\n"+
+			"actualFmtStr = %v\n",
+			ePrefix.String(),
+			testName,
+			expectedStr,
+			actualFmtStr)
+
+		return
+	}
+
+	nStrKernel01.Empty()
+
+	return
+}
+
+func TestNumberStrKernel_SetFromPureNumberStr_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestNumberStrKernel_String_000100()",
+		"")
+
+	var actualFmtStr, expectedStr, testName string
+	var numStats1, numStats2 NumberStrStatsDto
+	var err error
+
+	inputStr := "$1 123 456,775 -"
+
+	var nStrKernel01 NumberStrKernel
+
+	nStrKernel01,
+		numStats1,
+		err = new(NumberStrKernel).
+		NewParseDirtyNumberStr(
+			inputStr,
+			",",
+			NumRoundType.HalfAwayFromZero(),
+			2,
+			ePrefix.XCpy(
+				"1-A nStrKernel01<-"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	if !nStrKernel01.IsValidInstance() {
+
+		err = nStrKernel01.IsValidInstanceError(
+			ePrefix.XCpy(
+				"1-A nStrKernel01"))
+
+		if err != nil {
+
+			t.Errorf("Error 1-A return from nStrKernel01.IsValidInstanceError()\n"+
+				"Error= \n%v\n",
+				err.Error())
+
+			return
+		}
+	}
+
+	testName = "Test 1-A NumberStrKernel.NewParseDirtyNumberStr() NumberStrStatsDto"
+
+	numStats2,
+		err = nStrKernel01.GetNumericValueStats(
+		ePrefix.XCpy(
+			""))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	if numStats1 != numStats2 {
+
+		t.Errorf("%v\n"+
+			"%v\n"+
+			"ERROR: numStats1 != numStats2 "+
+			"numStats1 = \n%v\n\n"+
+			"numStats2 = \n%v\n\n",
+			ePrefix.String(),
+			testName,
+			numStats1.String(),
+			numStats2.String())
+
+		return
+
+	}
+
+	testName = "Test #1-B nStrKernel01.FmtNumStrNative()"
+
+	expectedStr = "-1123456.78"
+
+	actualFmtStr,
+		numStats1,
+		err = nStrKernel01.FmtNumStrNative(
+		NumRoundType.NoRounding(),
+		0,
+		ePrefix.XCpy(
+			"1-D actualFmtStr<-"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	if expectedStr != actualFmtStr {
+
+		t.Errorf("%v\n"+
+			"%v\n"+
+			"Error: expectedStr != actualFmtStr\n"+
+			" expectedStr = %v\n"+
+			"actualFmtStr = %v\n",
+			ePrefix.String(),
+			testName,
+			expectedStr,
+			actualFmtStr)
+
+		return
+	}
+
+	testName = "Test #2-A nStrKernel01.SetFromPureNumberStr()\n" +
+		"French Currency Format"
+
+	nStrKernel01.Empty()
+
+	inputStr = "1234,9876-"
+	expectedStr = "-1234.988"
+
+	_,
+		err = nStrKernel01.SetFromPureNumberStr(
+		inputStr,
+		",",
+		false,
+		NumRoundType.HalfAwayFromZero(),
+		3,
+		ePrefix.XCpy(
+			"2-A nStrKernel01<-inputStr"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if !nStrKernel01.IsValidInstance() {
+
+		err = nStrKernel01.IsValidInstanceError(
+			ePrefix.XCpy(
+				"2-A - nStrKernel01"))
+
+		if err != nil {
+
+			t.Errorf("Error return from nStrKernel01.IsValidInstanceError()\n"+
+				"Test 2-A"+
+				"Error= \n%v\n",
+				err.Error())
+
+			return
+		}
+	}
+
+	numberFieldSpec := NumStrNumberFieldSpec{
+		fieldLength:        -1,
+		fieldJustification: TxtJustify.Right(),
+	}
+
+	roundingSpec := NumStrRoundingSpec{
+		roundingType:            NumRoundType.NoRounding(),
+		roundToFractionalDigits: 0,
+	}
+
+	actualFmtStr,
+		err = nStrKernel01.FmtCurrencyNumStrFrance(
+		numberFieldSpec,
+		roundingSpec,
+		ePrefix.XCpy("2-A nStrKernel01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	// expectedStr = "-1234.988"
+	expectedStr = "-1 234,988 €"
+
+	if expectedStr != actualFmtStr {
+
+		t.Errorf("%v\n"+
+			"%v\n"+
+			"Error: expectedStr != actualFmtStr\n"+
+			" expectedStr = %v\n"+
+			"actualFmtStr = %v\n",
+			ePrefix.String(),
+			testName,
+			expectedStr,
+			actualFmtStr)
+
+		return
+	}
+
+	testName = "Test #3-A nStrKernel01.FmtCurrencyNumStrGermany()\n" +
+		"German Currency Format"
+
+	// expectedStr = "-1234.988"
+	expectedStr = "1.234,988- €"
+
+	actualFmtStr,
+		err = nStrKernel01.FmtCurrencyNumStrGermany(
+		numberFieldSpec,
+		roundingSpec,
+		ePrefix.XCpy("3-A nStrKernel01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if expectedStr != actualFmtStr {
+
+		t.Errorf("%v\n"+
+			"%v\n"+
+			"Error: expectedStr != actualFmtStr\n"+
+			" expectedStr = %v\n"+
+			"actualFmtStr = %v\n",
+			ePrefix.String(),
+			testName,
+			expectedStr,
+			actualFmtStr)
+
+		return
+	}
+
+	testName = "Test #4-A nStrKernel01.FmtCurrencyNumStrUK()\n" +
+		"UK Currency Format"
+
+	// expectedStr = "-1234.988"
+	expectedStr = "-£ 1,234.988"
+
+	actualFmtStr,
+		err = nStrKernel01.FmtCurrencyNumStrUK(
+		numberFieldSpec,
+		roundingSpec,
+		ePrefix.XCpy("4-A nStrKernel01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if expectedStr != actualFmtStr {
+
+		t.Errorf("%v\n"+
+			"%v\n"+
+			"Error: expectedStr != actualFmtStr\n"+
+			" expectedStr = %v\n"+
+			"actualFmtStr = %v\n",
+			ePrefix.String(),
+			testName,
+			expectedStr,
+			actualFmtStr)
+
+		return
+	}
+
+	testName = "Test #5-A nStrKernel01.FmtCurrencyNumStrUS()\n" +
+		"US Currency Format"
+
+	// expectedStr = "-1234.988"
+	expectedStr = "$ (1,234.988)"
+
+	actualFmtStr,
+		err = nStrKernel01.FmtCurrencyNumStrUS(
+		numberFieldSpec,
+		roundingSpec,
+		ePrefix.XCpy("5-A nStrKernel01"))
 
 	if err != nil {
 		t.Errorf("\n%v\n",
