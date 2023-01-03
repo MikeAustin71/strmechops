@@ -96,7 +96,7 @@ func (MainTest02) BigRat002() {
 	bigRatNum := new(big.Rat)
 
 	_,
-		err = numStrKernelBase.GetNumericValue(
+		err = numStrKernelBase.FmtNumericValue(
 		bigRatNum,
 		strmech.NumRoundType.NoRounding(),
 		0,

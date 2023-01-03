@@ -273,32 +273,13 @@ func (mainNumStrTest005 MainNumStrTest005) NumStrRound01() {
 		fracDigitsDto.GetCharacterString(),
 		numberSign.String())
 
-	roundingSpec := strmech.NumStrRoundingSpec{}
-
-	roundingSpec,
-		err = new(strmech.NumStrRoundingSpec).NewRoundingSpec(
-		strmech.NumRoundType.NoRounding(),
-		0,
-		ePrefix.XCpy(
-			"roundingSpec<-"+
-				"NumRoundType.NoRounding()"))
-
-	if err != nil {
-		fmt.Printf("\n%v\n",
-			err.Error())
-		return
-	}
-
 	var fmtNumberStr string
 
 	fmtNumberStr,
-		err = baseValueNStr.FmtSignedNumStrSimple(
-		".",
-		"",
-		true,
-		-1,
-		strmech.TxtJustify.Right(),
-		roundingSpec,
+		_,
+		err = baseValueNStr.FmtNumStrNative(
+		strmech.NumRoundType.NoRounding(),
+		0,
 		ePrefix.XCpy(
 			"fmtNumberStr<-baseValueNStr"))
 
@@ -389,32 +370,13 @@ func (mainNumStrTest005 MainNumStrTest005) NumStrFmtSignedSimple() {
 		return
 	}
 
-	roundingSpec := strmech.NumStrRoundingSpec{}
-
-	roundingSpec,
-		err = new(strmech.NumStrRoundingSpec).NewRoundingSpec(
-		strmech.NumRoundType.NoRounding(),
-		0,
-		ePrefix.XCpy(
-			"roundingSpec<-"+
-				"NumRoundType.NoRounding()"))
-
-	if err != nil {
-		fmt.Printf("\n%v\n",
-			err.Error())
-		return
-	}
-
 	var fmtNumberStr string
 
 	fmtNumberStr,
-		err = baseValueNStr.FmtSignedNumStrSimple(
-		".",
-		",",
-		true,
-		-1,
-		strmech.TxtJustify.Right(),
-		roundingSpec,
+		_,
+		err = baseValueNStr.FmtNumStrNative(
+		strmech.NumRoundType.NoRounding(),
+		0,
 		ePrefix.XCpy(
 			"fmtNumberStr<-baseValueNStr"))
 
@@ -1468,7 +1430,7 @@ func (mainNumStrTest005 MainNumStrTest005) NumStrKernelToFloatConversion() {
 	//var numberStats NumberStrStatsDto
 
 	_,
-		err = numStrKernel.GetNumericValue(
+		err = numStrKernel.FmtNumericValue(
 		&bigFloatNumber,
 		roundType,
 		roundToFractionalDigits,
@@ -1580,7 +1542,7 @@ func (mainNumStrTest005 MainNumStrTest005) NumStrKernelToIntConversion() {
 	var roundType = strmech.NumRoundType.HalfAwayFromZero()
 
 	_,
-		err = numStrKernel.GetNumericValue(
+		err = numStrKernel.FmtNumericValue(
 		&bigIntNumber,
 		roundType,
 		0,

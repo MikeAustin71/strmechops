@@ -1430,7 +1430,7 @@ func TestNumberStrKernel_GetBigRatNum_000100(t *testing.T) {
 	bigRatNum := new(big.Rat)
 
 	_,
-		err = numStrKernelBase.GetNumericValue(
+		err = numStrKernelBase.FmtNumericValue(
 		bigRatNum,
 		NumRoundType.NoRounding(),
 		0,
@@ -2237,32 +2237,13 @@ func TestNumberStrKernel_FmtSignedSimpleNumber_000100(t *testing.T) {
 		return
 	}
 
-	roundingSpec := NumStrRoundingSpec{}
-
-	roundingSpec,
-		err = new(NumStrRoundingSpec).NewRoundingSpec(
-		NumRoundType.NoRounding(),
-		0,
-		ePrefix.XCpy(
-			"roundingSpec<-"+
-				"NumRoundType.NoRounding()"))
-
-	if err != nil {
-		t.Errorf("\n%v\n",
-			err.Error())
-		return
-	}
-
 	var fmtNumberStr string
 
 	fmtNumberStr,
-		err = baseValueNStr.FmtSignedNumStrSimple(
-		".",
-		",",
-		true,
-		-1,
-		TxtJustify.Right(),
-		roundingSpec,
+		_,
+		err = baseValueNStr.FmtNumStrNative(
+		NumRoundType.NoRounding(),
+		0,
 		ePrefix.XCpy(
 			"fmtNumberStr<-baseValueNStr"))
 
@@ -2336,32 +2317,13 @@ func TestNumberStrKernel_FmtSignedSimpleNumber_000200(t *testing.T) {
 		return
 	}
 
-	roundingSpec := NumStrRoundingSpec{}
-
-	roundingSpec,
-		err = new(NumStrRoundingSpec).NewRoundingSpec(
-		NumRoundType.NoRounding(),
-		0,
-		ePrefix.XCpy(
-			"roundingSpec<-"+
-				"NumRoundType.NoRounding()"))
-
-	if err != nil {
-		t.Errorf("\n%v\n",
-			err.Error())
-		return
-	}
-
 	var fmtNumberStr string
 
 	fmtNumberStr,
-		err = baseValueNStr.FmtSignedNumStrSimple(
-		".",
-		"",
-		true,
-		-1,
-		TxtJustify.Right(),
-		roundingSpec,
+		_,
+		err = baseValueNStr.FmtNumStrNative(
+		NumRoundType.NoRounding(),
+		0,
 		ePrefix.XCpy(
 			"fmtNumberStr<-baseValueNStr"))
 
