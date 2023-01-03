@@ -10214,9 +10214,13 @@ func (numStrKernel *NumberStrKernel) FmtSignedNumStrGermany(
 //
 // # BE ADVISED
 //
-//	This method differs from NumberStrKernel.FmtNumStrPure
-//	in that this method offers number field formatting
-//	options.
+//	(1)	This method will NOT change or modify the data
+//		values contained in the current instance of
+//		NumberStrKernel.
+//
+//	(2)	This method differs from NumberStrKernel.FmtNumStrPure
+//		in that this method offers number field formatting
+//		options.
 //
 // ----------------------------------------------------------------
 //

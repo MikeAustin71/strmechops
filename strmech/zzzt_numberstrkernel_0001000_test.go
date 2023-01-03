@@ -2634,12 +2634,13 @@ func TestNumberStrKernel_FmtSignedPureNumberStr_000120(t *testing.T) {
 
 	testName := "Test #1"
 
-	if expectedNumberStr != actualFmtNumberStr {
+	if origNumberStr != actualFmtNumberStr {
 
 		t.Errorf("%v\n"+
 			"%v\n"+
-			"Error: actualfmtNumberStr NOT EQUAL TO expectedNumberStr\n"+
-			" actualfmtNumberStr = '%v'\n"+
+			"baseValueNStr.FmtSignedNumStrPure()\n"+
+			"Error: actualfmtNumberStr NOT EQUAL TO origNumberStr\n"+
+			" actualFmtNumberStr = '%v'\n"+
 			"expectedNumberStr   = '%v'\n",
 			ePrefix.String(),
 			testName,
@@ -2665,7 +2666,7 @@ func TestNumberStrKernel_FmtSignedPureNumberStr_000120(t *testing.T) {
 
 		t.Errorf("%v\n"+
 			"%v\n"+
-			"baseValueNStr.FmtPureNumberStr()\n"+
+			"baseValueNStr.FmtNumStrPure()\n"+
 			"Error: actualfmtNumberStr NOT EQUAL TO origNumberStr\n"+
 			"actualfmtNumberStr = '%v'\n"+
 			"     origNumberStr = '%v'\n",
