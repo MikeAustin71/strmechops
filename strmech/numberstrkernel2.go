@@ -9313,12 +9313,11 @@ func (numStrKernel *NumberStrKernel) SetFromNumericValue(
 //
 // ----------------------------------------------------------------
 //
-// # BE ADVISED
+// # IMPORTANT
 //
-//	This method will delete and overwrite all
-//	pre-existing data values in the instance of
-//	NumberStrKernel passed as input parameter
-//	'numStrKernel'.
+//	This method will delete and reconfigure all
+//	pre-existing data values contained in the current
+//	instance of NumberStrKernel.
 //
 // ----------------------------------------------------------------
 //

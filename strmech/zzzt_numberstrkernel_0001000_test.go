@@ -2191,7 +2191,7 @@ func TestNumberStrKernel_FmtNumStrPure_000100(t *testing.T) {
 	return
 }
 
-func TestNumberStrKernel_FmtSignedSimpleNumber_000100(t *testing.T) {
+func TestNumberStrKernel_FmtNumStrNative_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
 		"TestNumberStrKernel_FmtSignedSimpleNumber_000100()",
@@ -2204,7 +2204,7 @@ func TestNumberStrKernel_FmtSignedSimpleNumber_000100(t *testing.T) {
 		"." +
 		origFracStr
 
-	expectedNumberStr := "1,234.5678"
+	expectedNumberStr := "1234.5678"
 
 	var err error
 	var baseValueNStr NumberStrKernel
@@ -2269,10 +2269,10 @@ func TestNumberStrKernel_FmtSignedSimpleNumber_000100(t *testing.T) {
 
 }
 
-func TestNumberStrKernel_FmtSignedSimpleNumber_000200(t *testing.T) {
+func TestNumberStrKernel_FmtNumStrNative_000200(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestNumberStrKernel_FmtSignedSimpleNumber_000200()",
+		"TestNumberStrKernel_FmtNumStrNative_000200()",
 		"")
 
 	origIntStr := "1234"

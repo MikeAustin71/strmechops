@@ -3887,7 +3887,7 @@ func TestMathHelper_NativeNumStrToNumericValue_0001400(t *testing.T) {
 
 	bigIntNum = big.Int{}
 
-	testName = fmt.Sprintf("Test #2 Negative Number int8 - "+
+	testName = fmt.Sprintf("Test #2 Negative Number big.Int - "+
 		"bigIntNum = (%v)\n",
 		expectedStr)
 
@@ -3932,6 +3932,689 @@ func TestMathHelper_NativeNumStrToNumericValue_0001400(t *testing.T) {
 		t.Errorf("\n%v\n"+
 			"Expected an error return from NativeNumStrToNumericValue()\n"+
 			"because input parameter bigIntNum is a concrete value and NOT\n"+
+			"a pointer. HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	return
+}
+
+func TestMathHelper_NativeNumStrToNumericValue_0001500(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestMathHelper_NativeNumStrToNumericValue_0001500()",
+		"")
+
+	expectedStr := "125"
+
+	testName := fmt.Sprintf("Test #1 uint8 - "+
+		"uint8Num = (%v)\n",
+		expectedStr)
+
+	var uint8Num uint8
+
+	var err error
+
+	err = new(MathHelper).NativeNumStrToNumericValue(
+		expectedStr,
+		&uint8Num,
+		ePrefix.XCpy(
+			"#1 uint8Num<-expectedStr"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var actualNumStr string
+
+	actualNumStr =
+		strconv.FormatUint(uint64(uint8Num), 10)
+
+	if actualNumStr != expectedStr {
+
+		t.Errorf("\n%v\n"+
+			"%v\n"+
+			"strconv.FormatUint(uint64(uint8Num), 10)\n"+
+			"Error: actualNumStr != expectedStr\n"+
+			"actualNumStr  = '%v'\n"+
+			"expectedStr   = '%v'\n",
+			ePrefix.String(),
+			testName,
+			actualNumStr,
+			expectedStr)
+
+		return
+
+	}
+
+	expectedStr = "0"
+
+	var uint8Num2 uint8
+
+	testName = fmt.Sprintf("Test #2 Zero Number uint8 - "+
+		"uint8Num2 = (%v)\n",
+		expectedStr)
+
+	err = new(MathHelper).NativeNumStrToNumericValue(
+		expectedStr,
+		&uint8Num2,
+		ePrefix.XCpy(
+			"#2 uint8Num2<-expectedStr"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	actualNumStr =
+		strconv.FormatUint(uint64(uint8Num2), 10)
+
+	if actualNumStr != expectedStr {
+
+		t.Errorf("\n%v\n"+
+			"%v\n"+
+			"strconv.FormatUint(uint64(uint8Num2), 10)\n"+
+			"Error: actualNumStr != expectedStr\n"+
+			"actualNumStr  = '%v'\n"+
+			"expectedStr   = '%v'\n",
+			ePrefix.String(),
+			testName,
+			actualNumStr,
+			expectedStr)
+
+		return
+
+	}
+
+	err = new(MathHelper).NativeNumStrToNumericValue(
+		expectedStr,
+		uint8Num2,
+		ePrefix.XCpy(
+			"#3 uint8Num2<-expectedStr"))
+
+	if err == nil {
+
+		t.Errorf("\n%v\n"+
+			"Expected an error return from NativeNumStrToNumericValue()\n"+
+			"because input parameter uint8Num2 is a concrete value and NOT\n"+
+			"a pointer. HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	return
+}
+
+func TestMathHelper_NativeNumStrToNumericValue_0001600(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestMathHelper_NativeNumStrToNumericValue_0001600()",
+		"")
+
+	expectedStr := "1225"
+
+	testName := fmt.Sprintf("Test #1 uint - "+
+		"uint16Num = (%v)\n",
+		expectedStr)
+
+	var uint16Num uint16
+
+	var err error
+
+	err = new(MathHelper).NativeNumStrToNumericValue(
+		expectedStr,
+		&uint16Num,
+		ePrefix.XCpy(
+			"#1 uint16Num<-expectedStr"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var actualNumStr string
+
+	actualNumStr =
+		strconv.FormatUint(uint64(uint16Num), 10)
+
+	if actualNumStr != expectedStr {
+
+		t.Errorf("\n%v\n"+
+			"%v\n"+
+			"strconv.FormatUint(uint64(uint16Num), 10)\n"+
+			"Error: actualNumStr != expectedStr\n"+
+			"actualNumStr  = '%v'\n"+
+			"expectedStr   = '%v'\n",
+			ePrefix.String(),
+			testName,
+			actualNumStr,
+			expectedStr)
+
+		return
+
+	}
+
+	expectedStr = "0"
+
+	var uint16Num2 uint
+
+	testName = fmt.Sprintf("Test #2 Zero Number uint16 - "+
+		"uint16Num2 = (%v)\n",
+		expectedStr)
+
+	err = new(MathHelper).NativeNumStrToNumericValue(
+		expectedStr,
+		&uint16Num2,
+		ePrefix.XCpy(
+			"#2 uint16Num2<-expectedStr"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	actualNumStr =
+		strconv.FormatUint(uint64(uint16Num2), 10)
+
+	if actualNumStr != expectedStr {
+
+		t.Errorf("\n%v\n"+
+			"%v\n"+
+			"strconv.FormatUint(uint64(uint16Num2), 10)\n"+
+			"Error: actualNumStr != expectedStr\n"+
+			"actualNumStr  = '%v'\n"+
+			"expectedStr   = '%v'\n",
+			ePrefix.String(),
+			testName,
+			actualNumStr,
+			expectedStr)
+
+		return
+
+	}
+
+	err = new(MathHelper).NativeNumStrToNumericValue(
+		expectedStr,
+		uint16Num2,
+		ePrefix.XCpy(
+			"#3 uint16Num2<-expectedStr"))
+
+	if err == nil {
+
+		t.Errorf("\n%v\n"+
+			"Expected an error return from NativeNumStrToNumericValue()\n"+
+			"because input parameter uint16Num2 is a concrete value and NOT\n"+
+			"a pointer. HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	return
+}
+
+func TestMathHelper_NativeNumStrToNumericValue_0001700(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestMathHelper_NativeNumStrToNumericValue_0001700()",
+		"")
+
+	expectedStr := "1225"
+
+	testName := fmt.Sprintf("Test #1 uint - uintNum = (%v)\n",
+		expectedStr)
+
+	var uintNum uint
+
+	var err error
+
+	err = new(MathHelper).NativeNumStrToNumericValue(
+		expectedStr,
+		&uintNum,
+		ePrefix.XCpy(
+			"#1 uintNum<-expectedStr"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var actualNumStr string
+
+	actualNumStr =
+		strconv.FormatUint(uint64(uintNum), 10)
+
+	if actualNumStr != expectedStr {
+
+		t.Errorf("\n%v\n"+
+			"%v\n"+
+			"strconv.FormatUint(uint64(uintNum), 10)\n"+
+			"Error: actualNumStr != expectedStr\n"+
+			"actualNumStr  = '%v'\n"+
+			"expectedStr   = '%v'\n",
+			ePrefix.String(),
+			testName,
+			actualNumStr,
+			expectedStr)
+
+		return
+
+	}
+
+	expectedStr = "0"
+
+	var uintNum2 uint
+
+	testName = fmt.Sprintf("Test #2 Zero Number uint - "+
+		"uintNum2 = (%v)\n",
+		expectedStr)
+
+	err = new(MathHelper).NativeNumStrToNumericValue(
+		expectedStr,
+		&uintNum2,
+		ePrefix.XCpy(
+			"#2 uintNum2<-expectedStr"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	actualNumStr =
+		strconv.FormatUint(uint64(uintNum2), 10)
+
+	if actualNumStr != expectedStr {
+
+		t.Errorf("\n%v\n"+
+			"%v\n"+
+			"strconv.FormatUint(uint64(uintNum2), 10)\n"+
+			"Error: actualNumStr != expectedStr\n"+
+			"actualNumStr  = '%v'\n"+
+			"expectedStr   = '%v'\n",
+			ePrefix.String(),
+			testName,
+			actualNumStr,
+			expectedStr)
+
+		return
+
+	}
+
+	err = new(MathHelper).NativeNumStrToNumericValue(
+		expectedStr,
+		uintNum2,
+		ePrefix.XCpy(
+			"#3 uintNum2<-expectedStr"))
+
+	if err == nil {
+
+		t.Errorf("\n%v\n"+
+			"Expected an error return from NativeNumStrToNumericValue()\n"+
+			"because input parameter uintNum2 is a concrete value and NOT\n"+
+			"a pointer. HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	return
+}
+
+func TestMathHelper_NativeNumStrToNumericValue_0001800(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestMathHelper_NativeNumStrToNumericValue_0001800()",
+		"")
+
+	expectedStr := "12254"
+
+	testName := fmt.Sprintf("Test #1 uint32 - "+
+		"uint32Num = (%v)\n",
+		expectedStr)
+
+	var uint32Num uint32
+
+	var err error
+
+	err = new(MathHelper).NativeNumStrToNumericValue(
+		expectedStr,
+		&uint32Num,
+		ePrefix.XCpy(
+			"#1 uint32Num<-expectedStr"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var actualNumStr string
+
+	actualNumStr =
+		strconv.FormatUint(uint64(uint32Num), 10)
+
+	if actualNumStr != expectedStr {
+
+		t.Errorf("\n%v\n"+
+			"%v\n"+
+			"strconv.FormatUint(uint64(uint32Num), 10)\n"+
+			"Error: actualNumStr != expectedStr\n"+
+			"actualNumStr  = '%v'\n"+
+			"expectedStr   = '%v'\n",
+			ePrefix.String(),
+			testName,
+			actualNumStr,
+			expectedStr)
+
+		return
+
+	}
+
+	expectedStr = "0"
+
+	var uint32Num2 uint32
+
+	testName = fmt.Sprintf("Test #2 Zero Number uint32 - "+
+		"uint32Num2 = (%v)\n",
+		expectedStr)
+
+	err = new(MathHelper).NativeNumStrToNumericValue(
+		expectedStr,
+		&uint32Num2,
+		ePrefix.XCpy(
+			"#2 uint32Num2<-expectedStr"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	actualNumStr =
+		strconv.FormatUint(uint64(uint32Num2), 10)
+
+	if actualNumStr != expectedStr {
+
+		t.Errorf("\n%v\n"+
+			"%v\n"+
+			"strconv.FormatUint(uint64(uint32Num2), 10)\n"+
+			"Error: actualNumStr != expectedStr\n"+
+			"actualNumStr  = '%v'\n"+
+			"expectedStr   = '%v'\n",
+			ePrefix.String(),
+			testName,
+			actualNumStr,
+			expectedStr)
+
+		return
+
+	}
+
+	err = new(MathHelper).NativeNumStrToNumericValue(
+		expectedStr,
+		uint32Num2,
+		ePrefix.XCpy(
+			"#3 uint32Num2<-expectedStr"))
+
+	if err == nil {
+
+		t.Errorf("\n%v\n"+
+			"Expected an error return from NativeNumStrToNumericValue()\n"+
+			"because input parameter uint32Num2 is a concrete value and NOT\n"+
+			"a pointer. HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	return
+}
+
+func TestMathHelper_NativeNumStrToNumericValue_0001900(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestMathHelper_NativeNumStrToNumericValue_0001900()",
+		"")
+
+	expectedStr := "12254564890123"
+
+	testName := fmt.Sprintf("Test #1 uint64 - "+
+		"uint64Num = (%v)\n",
+		expectedStr)
+
+	var uint64Num uint64
+
+	var err error
+
+	err = new(MathHelper).NativeNumStrToNumericValue(
+		expectedStr,
+		&uint64Num,
+		ePrefix.XCpy(
+			"#1 uint64Num<-expectedStr"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var actualNumStr string
+
+	actualNumStr =
+		strconv.FormatUint(uint64Num, 10)
+
+	if actualNumStr != expectedStr {
+
+		t.Errorf("\n%v\n"+
+			"%v\n"+
+			"strconv.FormatUint(uint64Num, 10)\n"+
+			"Error: actualNumStr != expectedStr\n"+
+			"actualNumStr  = '%v'\n"+
+			"expectedStr   = '%v'\n",
+			ePrefix.String(),
+			testName,
+			actualNumStr,
+			expectedStr)
+
+		return
+
+	}
+
+	expectedStr = "0"
+
+	var uint64Num2 uint64
+
+	testName = fmt.Sprintf("Test #2 Zero Number uint64 - "+
+		"uint64Num2 = (%v)\n",
+		expectedStr)
+
+	err = new(MathHelper).NativeNumStrToNumericValue(
+		expectedStr,
+		&uint64Num2,
+		ePrefix.XCpy(
+			"#2 uint64Num2<-expectedStr"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	actualNumStr =
+		strconv.FormatUint(uint64Num2, 10)
+
+	if actualNumStr != expectedStr {
+
+		t.Errorf("\n%v\n"+
+			"%v\n"+
+			"strconv.FormatUint(uint64Num2, 10), 10)\n"+
+			"Error: actualNumStr != expectedStr\n"+
+			"actualNumStr  = '%v'\n"+
+			"expectedStr   = '%v'\n",
+			ePrefix.String(),
+			testName,
+			actualNumStr,
+			expectedStr)
+
+		return
+
+	}
+
+	err = new(MathHelper).NativeNumStrToNumericValue(
+		expectedStr,
+		uint64Num2,
+		ePrefix.XCpy(
+			"#3 uint64Num2<-expectedStr"))
+
+	if err == nil {
+
+		t.Errorf("\n%v\n"+
+			"Expected an error return from NativeNumStrToNumericValue()\n"+
+			"because input parameter uint64Num2 is a concrete value and NOT\n"+
+			"a pointer. HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	return
+}
+
+func TestMathHelper_NativeNumStrToNumericValue_0002000(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestMathHelper_NativeNumStrToNumericValue_0002000()",
+		"")
+
+	expectedStr := "12254564890123.5678"
+
+	testName := fmt.Sprintf("Test #1 NumberStrKernel - "+
+		"nStrKernel01 = (%v)\n",
+		expectedStr)
+
+	var nStrKernel01 NumberStrKernel
+
+	var err error
+
+	err = new(MathHelper).NativeNumStrToNumericValue(
+		expectedStr,
+		&nStrKernel01,
+		ePrefix.XCpy(
+			"#1 nStrKernel01<-expectedStr"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var actualNumStr string
+
+	actualNumStr,
+		_,
+		err =
+		nStrKernel01.FmtNumStrNative(
+			NumRoundType.NoRounding(),
+			0,
+			ePrefix.XCpy(
+				"actualNumStr<-nStrKernel01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if actualNumStr != expectedStr {
+
+		t.Errorf("\n%v\n"+
+			"%v\n"+
+			"nStrKernel01.FmtNumStrNative()\n"+
+			"Error: actualNumStr != expectedStr\n"+
+			"actualNumStr  = '%v'\n"+
+			"expectedStr   = '%v'\n",
+			ePrefix.String(),
+			testName,
+			actualNumStr,
+			expectedStr)
+
+		return
+
+	}
+
+	expectedStr = "-12254564890123.5678"
+
+	var nStrKernel02 NumberStrKernel
+
+	testName = fmt.Sprintf("Test #2 Negative Number NumberStrKernel - "+
+		"nStrKernel02 = (%v)\n",
+		expectedStr)
+
+	err = new(MathHelper).NativeNumStrToNumericValue(
+		expectedStr,
+		&nStrKernel02,
+		ePrefix.XCpy(
+			"#2 nStrKernel02<-expectedStr"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	actualNumStr,
+		_,
+		err =
+		nStrKernel02.FmtNumStrNative(
+			NumRoundType.NoRounding(),
+			0,
+			ePrefix.XCpy(
+				"actualNumStr<-nStrKernel01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if actualNumStr != expectedStr {
+
+		t.Errorf("\n%v\n"+
+			"%v\n"+
+			"nStrKernel02.FmtNumStrNative()\n"+
+			"Error: actualNumStr != expectedStr\n"+
+			"actualNumStr  = '%v'\n"+
+			"expectedStr   = '%v'\n",
+			ePrefix.String(),
+			testName,
+			actualNumStr,
+			expectedStr)
+
+		return
+
+	}
+
+	err = new(MathHelper).NativeNumStrToNumericValue(
+		expectedStr,
+		nStrKernel02,
+		ePrefix.XCpy(
+			"#3 nStrKernel02<-expectedStr"))
+
+	if err == nil {
+
+		t.Errorf("\n%v\n"+
+			"Expected an error return from NativeNumStrToNumericValue()\n"+
+			"because input parameter nStrKernel02 is a concrete value and NOT\n"+
 			"a pointer. HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.String())
 
