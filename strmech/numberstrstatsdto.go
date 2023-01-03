@@ -442,6 +442,46 @@ func (numberStrStatsDto *NumberStrStatsDto) Equal(
 		incomingNumStrStatsDto)
 }
 
+// String
+//
+// Returns a list of member variables and their values
+// for the current instance of NumberStrStatsDto.
+func (numberStrStatsDto *NumberStrStatsDto) String() string {
+
+	if numberStrStatsDto.lock == nil {
+		numberStrStatsDto.lock = new(sync.Mutex)
+	}
+
+	numberStrStatsDto.lock.Lock()
+
+	defer numberStrStatsDto.lock.Unlock()
+
+	var currentValues string
+
+	currentValues += fmt.Sprintf(" NumOfIntegerDigits: %v\n",
+		numberStrStatsDto.NumOfIntegerDigits)
+
+	currentValues += fmt.Sprintf(" NumOfSignificantIntegerDigits: %v\n",
+		numberStrStatsDto.NumOfSignificantIntegerDigits)
+
+	currentValues += fmt.Sprintf(" NumOfFractionalDigits: %v\n",
+		numberStrStatsDto.NumOfFractionalDigits)
+
+	currentValues += fmt.Sprintf(" NumOfSignificantFractionalDigits: %v\n",
+		numberStrStatsDto.NumOfSignificantFractionalDigits)
+
+	currentValues += fmt.Sprintf(" NumberValueType: %v\n",
+		numberStrStatsDto.NumberValueType.String())
+
+	currentValues += fmt.Sprintf(" NumberSign: %v\n",
+		numberStrStatsDto.NumberSign.String())
+
+	currentValues += fmt.Sprintf(" IsZeroValue: %t\n",
+		numberStrStatsDto.IsZeroValue)
+
+	return currentValues
+}
+
 // numberStrStatsDtoNanobot
 //
 // Provides helper methods for type NumberStrStatsDto.

@@ -8535,8 +8535,14 @@ func (numStrKernel *NumberStrKernel) FmtNumStrParams(
 //
 // # BE ADVISED
 //
-//	This method will NOT change or modify the data values
-//	contained in the current instance of NumberStrKernel.
+//	(1)	This method will NOT change or modify the data
+//		values contained in the current instance of
+//		NumberStrKernel.
+//
+//	(2) This method differs from
+//		NumberStrKernel.FmtSignedNumStrPure in that this
+//		method does not offer number field formatting
+//		options.
 //
 // ----------------------------------------------------------------
 //
@@ -10203,6 +10209,14 @@ func (numStrKernel *NumberStrKernel) FmtSignedNumStrGermany(
 //
 //     NOT THIS: 1,000,000
 //     Pure Number String: 1000000
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	This method differs from NumberStrKernel.FmtNumStrPure
+//	in that this method offers number field formatting
+//	options.
 //
 // ----------------------------------------------------------------
 //

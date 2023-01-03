@@ -3123,27 +3123,6 @@ func (numStrKernelQuark *numberStrKernelQuark) setNumStrKernelFromPureNumStr(
 			err
 	}
 
-	var err2 error
-	_,
-		err2 = new(numberStrKernelAtom).
-		testValidityOfNumStrKernel(
-			numStrKernel,
-			ePrefix.XCpy(
-				"numStrKernel"))
-
-	if err2 != nil {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: 'numStrKernel' is invalid!\n"+
-			"This instance of NumberStrKernel failed validity tests.\n"+
-			"Validation Error: \n%v\n",
-			ePrefix.String(),
-			err2.Error())
-
-		return pureNumStrComponents,
-			err
-	}
-
 	var numberStats NumberStrStatsDto
 
 	var decSepCharsRuneArray RuneArrayDto
@@ -3172,11 +3151,79 @@ func (numStrKernelQuark *numberStrKernelQuark) setNumStrKernelFromPureNumStr(
 			ePrefix.XCpy(
 				"pureNumStr"))
 
-	numStrKernel.numberSign = numberStats.NumberSign
+	if err != nil {
 
-	numStrKernel.numberValueType = numberStats.NumberValueType
+		return pureNumStrComponents,
+			err
+	}
 
-	numStrKernel.isNonZeroValue = !numberStats.IsZeroValue
+	var nativeNumStr string
+
+	if numberStats.NumberSign == NumSignVal.Negative() {
+		nativeNumStr = "-"
+	}
+
+	nativeNumStr +=
+		string(numStrKernel.integerDigits.CharsArray)
+
+	if len(numStrKernel.fractionalDigits.CharsArray) > 0 {
+
+		nativeNumStr += "."
+
+		nativeNumStr +=
+			string(numStrKernel.fractionalDigits.CharsArray)
+
+	}
+
+	pureNumStrComponents,
+		err = new(NumStrMath).
+		PureNumStrToComponents(
+			nativeNumStr,
+			".",
+			true,
+			ePrefix.XCpy(
+				"<-base"))
+
+	if err != nil {
+
+		return pureNumStrComponents,
+			err
+	}
+
+	if !pureNumStrComponents.NumStrStats.Equal(&numberStats) {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Actual Number Stats NOT EQUAL to Computed Number Stats!\n"+
+			"numberStats = \n%v\n"+
+			"pureNumStrComponents = \n%v\n",
+			ePrefix.String(),
+			numberStats.String(),
+			pureNumStrComponents.String())
+
+		return pureNumStrComponents,
+			err
+
+	}
+
+	err = pureNumStrComponents.NumStrStats.CopyIn(
+		&numberStats,
+		ePrefix.XCpy(
+			"pureNumStrComponents.NumStrStats<-numberStats"))
+
+	if err != nil {
+
+		return pureNumStrComponents,
+			err
+	}
+
+	numStrKernel.numberSign = pureNumStrComponents.NumStrStats.NumberSign
+
+	numStrKernel.numberValueType = pureNumStrComponents.NumStrStats.NumberValueType
+
+	numStrKernel.isNonZeroValue =
+		!pureNumStrComponents.NumStrStats.IsZeroValue
+
+	var err2 error
 
 	_,
 		err2 = new(numberStrKernelAtom).
@@ -3194,92 +3241,6 @@ func (numStrKernelQuark *numberStrKernelQuark) setNumStrKernelFromPureNumStr(
 			ePrefix.String(),
 			err2.Error())
 	}
-
-	err = pureNumStrComponents.NumStrStats.CopyIn(
-		&numberStats,
-		ePrefix.XCpy(
-			"NumStrStats"))
-
-	if err != nil {
-
-		return pureNumStrComponents,
-			err
-	}
-
-	if pureNumStrComponents.NumStrStats.NumberSign ==
-		NumSignVal.Zero() {
-
-		if pureNumStrComponents.NumStrStats.NumOfFractionalDigits > 0 {
-
-			pureNumStrComponents.NumStrStats.NumOfIntegerDigits = 1
-
-			pureNumStrComponents.AbsoluteValueNumStr =
-				"0.0"
-
-			pureNumStrComponents.AbsoluteValAllIntegerDigitsNumStr =
-				"00"
-
-			pureNumStrComponents.SignedAllIntegerDigitsNumStr =
-				"00"
-
-			pureNumStrComponents.NativeNumberStr =
-				"0.0"
-
-		} else {
-
-			pureNumStrComponents.AbsoluteValueNumStr =
-				"0"
-
-			pureNumStrComponents.AbsoluteValAllIntegerDigitsNumStr =
-				"0"
-
-			pureNumStrComponents.SignedAllIntegerDigitsNumStr =
-				"0"
-
-			pureNumStrComponents.NativeNumberStr =
-				"0"
-
-			pureNumStrComponents.NumStrStats.NumOfIntegerDigits = 1
-
-		}
-
-	} else {
-
-		// MUST BE -
-		// pureNumStrComponents.NumStrStats.NumberSign is
-		//	NOT EQUAL TO ZERO.
-
-		pureNumStrComponents.AbsoluteValueNumStr =
-			string(numStrKernel.integerDigits.CharsArray) +
-				"." +
-				string(numStrKernel.fractionalDigits.CharsArray)
-
-		pureNumStrComponents.AbsoluteValAllIntegerDigitsNumStr =
-			string(numStrKernel.integerDigits.CharsArray) +
-				string(numStrKernel.fractionalDigits.CharsArray)
-
-		if pureNumStrComponents.NumStrStats.NumberSign ==
-			NumSignVal.Negative() {
-
-			pureNumStrComponents.SignedAllIntegerDigitsNumStr =
-				"-"
-
-			pureNumStrComponents.NativeNumberStr = "-"
-
-		}
-
-		pureNumStrComponents.SignedAllIntegerDigitsNumStr +=
-			pureNumStrComponents.AbsoluteValAllIntegerDigitsNumStr
-
-		pureNumStrComponents.NativeNumberStr +=
-			pureNumStrComponents.AbsoluteValueNumStr
-	}
-
-	pureNumStrComponents.NativeNumberStr,
-		_,
-		err = new(NumStrHelper).NormalizeNativeNumStr(
-		pureNumStrComponents.NativeNumberStr,
-		ePrefix.XCpy("pureNumStrComponents.NativeNumberStr"))
 
 	return pureNumStrComponents, err
 }

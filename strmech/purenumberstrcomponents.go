@@ -1,5 +1,14 @@
 package strmech
 
+import (
+	"fmt"
+	"sync"
+)
+
+// PureNumberStrComponents
+//
+// This type contains the profile and component
+// descriptions for a Pure Number String.
 type PureNumberStrComponents struct {
 	NumStrStats NumberStrStatsDto
 	//
@@ -129,4 +138,37 @@ type PureNumberStrComponents struct {
 	//	 	   		negative numeric values.
 	//
 
+	lock *sync.Mutex
+}
+
+func (pureNumStrComponents *PureNumberStrComponents) String() string {
+
+	if pureNumStrComponents.lock == nil {
+		pureNumStrComponents.lock = new(sync.Mutex)
+	}
+
+	pureNumStrComponents.lock.Lock()
+
+	defer pureNumStrComponents.lock.Unlock()
+
+	currentValues :=
+		pureNumStrComponents.NumStrStats.String()
+
+	currentValues +=
+		fmt.Sprintf(" AbsoluteValueNumStr: %v\n",
+			pureNumStrComponents.AbsoluteValueNumStr)
+
+	currentValues +=
+		fmt.Sprintf(" AbsoluteValAllIntegerDigitsNumStr: %v\n",
+			pureNumStrComponents.AbsoluteValAllIntegerDigitsNumStr)
+
+	currentValues +=
+		fmt.Sprintf(" SignedAllIntegerDigitsNumStr: %v\n",
+			pureNumStrComponents.SignedAllIntegerDigitsNumStr)
+
+	currentValues +=
+		fmt.Sprintf(" NativeNumberStr: %v\n",
+			pureNumStrComponents.NativeNumberStr)
+
+	return currentValues
 }

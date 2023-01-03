@@ -986,6 +986,92 @@ func (mainNumStrTest005 MainNumStrTest005) NumberStrKernelPureNumStr01() {
 
 }
 
+func (mainNumStrTest005 MainNumStrTest005) NumStrKernelPureNumStr02() {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"MainNumStrTest005.NumStrKernelPureNumStr02()",
+		"")
+
+	breakStr := strings.Repeat("=", 50)
+
+	fmt.Printf("\n\n" + breakStr + "\n")
+
+	fmt.Printf("\n Starting Run!\n"+
+		"Function: %v\n",
+		ePrefix.String())
+
+	fmt.Printf("\n" + breakStr + "\n")
+
+	origIntStr := "1234.5678"
+	expectedStr := "1234.57"
+
+	var err error
+
+	var numStrKernel01 strmech.NumberStrKernel
+
+	//var pureNumStrStats strmech.PureNumberStrComponents
+
+	numStrKernel01,
+		_,
+		err = new(strmech.NumberStrKernel).NewParsePureNumberStr(
+		origIntStr,
+		".",
+		true,
+		strmech.NumRoundType.HalfAwayFromZero(),
+		2,
+		ePrefix)
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var nativeNumStr string
+	//var numStats strmech.NumberStrStatsDto
+
+	nativeNumStr,
+		_,
+		err = numStrKernel01.FmtNumStrNative(
+		strmech.NumRoundType.NoRounding(),
+		0,
+		ePrefix.XCpy(
+			"nativeNumStr<-numStrKernel01"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	testName := "Test #1 Native Number String NOT EQUAL TO\nExpected Number String"
+
+	if nativeNumStr != expectedStr {
+
+		fmt.Printf("%v\n"+
+			"%v\n"+
+			"nativeNumStr = %v\n"+
+			"expectedStr  = %v\n",
+			ePrefix.String(),
+			testName,
+			nativeNumStr,
+			expectedStr)
+
+		return
+	}
+
+	fmt.Printf("\n\n" + breakStr + "\n")
+
+	fmt.Printf("\n Successful Completion!\n"+
+		"Function: %v\n",
+		ePrefix.String())
+
+	fmt.Printf("\n" + breakStr + "\n")
+
+	return
+
+}
+
 func (mainNumStrTest005 MainNumStrTest005) NumberStrKernelExtendArrays01() {
 
 	funcName := "\nMainNumStrTest005.NumberStrKernelExtendArrays01()"
