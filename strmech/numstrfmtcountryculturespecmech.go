@@ -814,6 +814,91 @@ func (nStrFmtCountryCultureMech *numStrFmtCountryCultureSpecMech) setCountryUS(
 
 	countryNStrFmtSpec.CountryCodeTwoChar = "US"
 	countryNStrFmtSpec.CountryCodeThreeChar = "USA"
+
+	/*
+	   	countryNStrFmtSpec.TelephoneNumberFormat = TelephoneNumStrSpec{
+	   		CountryName:                         "United States",
+	   		CountryCodeTwoChar:                  "US",
+	   		CountryCodeThreeChar:                "USA",
+	   		InternationalDirectDialingNo:        "011",
+	   		InternationalPrefix:                 "011",
+	   		TrunkPrefix:                         "1",
+	   		CountryTelephoneCode:                "1",
+	   		AreaCodeMaxNumOfDigits:              "3",
+	   		AreaCodeMinNumOfDigits:              "3",
+	   		SubscriberNumMaxNumOfDigitsExternal: "7",
+	   		SubscriberNumMinNumOfDigitsExternal: "7",
+	   		SubscriberNumMaxNumOfDigitsInternal: "7",
+	   		SubscriberNumMinNumOfDigitsInternal: "7",
+	   		MobileNumMaxNumOfDigitsExternal:     "7",
+	   		MobileNumMinNumOfDigitsExternal:     "7",
+	   		MobileNumMaxNumOfDigitsInternal:     "7",
+	   		MobileNumMinNumOfDigitsInternal:     "7",
+	   		DialingSubNumFmtFullExternal:        "1NNNNNNNNNN",
+	   		DisplaySubNumFmtFullExternal:        "1 (NNN) NNN-NNNN",
+	   		DialingMobileNumFmtFullExternal:     "1NNNNNNNNNN",
+	   		DisplayMobileNumFmtFullExternal:     "1 (NNN) NNN-NNNN",
+	   		DialingSubNumFmtFullInternal:        "1NNNNNNNNNN",
+	   		DisplaySubNumFmtFullInternal:        "1 (NNN) NNN-NNNN",
+	   		DialingMobileNumFmtFullInternal:     "1NNNNNNNNNN",
+	   		DisplayMobileNumFmtFullInternal:     "1 (NNN) NNN-NNNN",
+
+	   		DisplaySubNumFmtAbbrExternal:        "1 (NNN) NNN-NNNN",
+	   		DialingMobileNumFmtAbbrExternal:     "1 (NNN) NNN-NNNN",
+
+	   DisplayMobileNumFmtAbbrExternal:     "",
+	   		DialingPhoneExtFmtFullExternal:      "",
+	   		DisplayPhoneExtFmtFullExternal:      "",
+	   		DialingSubNumFmtAbbrInternal:        "",
+	   		DisplaySubNumFmtAbbrInternal:        "",
+	   		DialingMobileNumFmtAbbrInternal:     "",
+	   		DisplayMobileNumFmtAbbrInternal:     "",
+	   		DialingPhoneExtNumFmtAbbrInternal:   "",
+	   		DisplayPhoneExtNumFmtAbbrInternal:   "",
+	   	}
+	*/
+
+	countryNStrFmtSpec.TelephoneNumberFormat = TelephoneNumStrSpec{
+		CountryName:                         "United States",
+		CountryCodeTwoChar:                  "US",
+		CountryCodeThreeChar:                "USA",
+		InternationalDirectDialingNo:        "011",
+		InternationalPrefix:                 "011",
+		TrunkPrefix:                         "1",
+		CountryTelephoneCode:                "1",
+		AreaCodeMaxNumOfDigits:              "3",
+		AreaCodeMinNumOfDigits:              "3",
+		SubscriberNumMaxNumOfDigitsExternal: "7",
+		SubscriberNumMinNumOfDigitsExternal: "7",
+		SubscriberNumMaxNumOfDigitsInternal: "7",
+		SubscriberNumMinNumOfDigitsInternal: "7",
+		MobileNumMaxNumOfDigitsExternal:     "7",
+		MobileNumMinNumOfDigitsExternal:     "7",
+		MobileNumMaxNumOfDigitsInternal:     "7",
+		MobileNumMinNumOfDigitsInternal:     "7",
+		DialingSubNumFmtFullExternal:        "1NNNNNNNNNN",
+		DisplaySubNumFmtFullExternal:        "1 (NNN) NNN-NNNN",
+		DialingMobileNumFmtFullExternal:     "1NNNNNNNNNN",
+		DisplayMobileNumFmtFullExternal:     "1 (NNN) NNN-NNNN",
+		DialingSubNumFmtFullInternal:        "1NNNNNNNNNN",
+		DisplaySubNumFmtFullInternal:        "1 (NNN) NNN-NNNN",
+		DialingMobileNumFmtFullInternal:     "1NNNNNNNNNN",
+		DisplayMobileNumFmtFullInternal:     "1 (NNN) NNN-NNNN",
+		DialingSubNumFmtAbbrExternal:        "NNNNNNNNNN",
+		DisplaySubNumFmtAbbrExternal:        "(NNN) NNN-NNNN",
+		DialingMobileNumFmtAbbrExternal:     "NNNNNNNNNN",
+		DisplayMobileNumFmtAbbrExternal:     "(NNN) NNN-NNNN",
+		DialingPhoneExtFmtFullExternal:      "NNNN",
+		DisplayPhoneExtFmtFullExternal:      "-NNNN",
+		DialingSubNumFmtAbbrInternal:        "",
+		DisplaySubNumFmtAbbrInternal:        "",
+		DialingMobileNumFmtAbbrInternal:     "",
+		DisplayMobileNumFmtAbbrInternal:     "",
+		DialingPhoneExtNumFmtAbbrInternal:   "",
+		DisplayPhoneExtNumFmtAbbrInternal:   "",
+		lock:                                nil,
+	}
+
 	countryNStrFmtSpec.CountryCodeNumber = "840"
 	countryNStrFmtSpec.CurrencyDecimalDigits = 2
 	countryNStrFmtSpec.CurrencyCode = "USD"

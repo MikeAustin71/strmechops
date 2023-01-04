@@ -91,7 +91,7 @@ type NumStrFmtCountryCultureSpec struct {
 	//	The unique ISO 3166-1 alpha-3 Three Character code
 	//	identifying the country or culture associated with
 	//	the current Country Culture Specification instance.
-	//	ISO 3166-1 alpha-4 Wikipedia
+	//	ISO 3166-1 alpha-3 Wikipedia
 	//	https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3
 
 	CountryCodeNumber string

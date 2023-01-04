@@ -24,6 +24,14 @@ type TelephoneNumStrSpec struct {
 	//	ISO 3166-1 alpha-2 Wikipedia
 	//	https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2
 
+	CountryCodeThreeChar string
+	//	Optional
+	//	The unique ISO 3166-1 alpha-3 Three Character code
+	//	identifying the country or culture associated with
+	//	the current Country Culture Specification instance.
+	//	ISO 3166-1 alpha-3 Wikipedia
+	//	https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3
+
 	InternationalDirectDialingNo string
 	//	Usually the same as the InternationalPrefix
 
@@ -102,6 +110,16 @@ type TelephoneNumStrSpec struct {
 	//	Mobile Number when calling from inside
 	//	the host country.
 
+	PhoneExtNumMaxNumOfDigitsExternal string
+	//	The Maximum Number of numeric digits in the
+	//	Phone Extension Number when calling from outside
+	//	the host country.
+
+	PhoneExtNumMinNumOfDigitsExternal string
+	//	The Minimum Number of numeric digits in the
+	//	Phone Extension Number when calling from outside
+	//	the host country.
+
 	DialingSubNumFmtFullExternal string
 	//	The format used when dialing a Subscriber number.
 	//	The character 'N' is used as a placeholder for
@@ -166,6 +184,15 @@ type TelephoneNumStrSpec struct {
 	//	dialing a number from inside the country.
 	//	Example US: 1 (NNN) NNN-NNNN
 
+	DialingSubNumFmtAbbrExternal string
+	//	The format used when dialing an abbreviated
+	//	Subscriber number.
+	//
+	//	The character 'N' is used as a placeholder for
+	//	numeric digits. This is the format used when
+	//	dialing a number from inside the country.
+	//	Example US: "1 NNNNNNNNNN"
+
 	DisplaySubNumFmtAbbrExternal string
 	//	The format used to display an abbreviated
 	//	Subscriber phone number in text.
@@ -192,6 +219,24 @@ type TelephoneNumStrSpec struct {
 	//	numeric digits. This is the format used when
 	//	dialing in from outside the country.
 	//	Example US: 1 (NNN) NNN-NNNN
+
+	DialingPhoneExtFmtFullExternal string
+	//	The format used when dialing a Phone Extension
+	//	number.
+	//
+	//	The character 'N' is used as a placeholder for
+	//	numeric digits. This is the format used when
+	//	dialing in from outside the country.
+	//	Example US: "NNNN"
+
+	DisplayPhoneExtFmtFullExternal string
+	//	The format used to display a Subscriber phone
+	//	number in text.
+	//
+	//	The character 'N' is used as a placeholder for
+	//	numeric digits. This is the format used when
+	//	dialing in from outside the country.
+	//	Example US: -NNNN
 
 	DialingSubNumFmtAbbrInternal string
 	//	The format used when dialing an abbreviated
@@ -228,6 +273,24 @@ type TelephoneNumStrSpec struct {
 	//	numeric digits. This is the format used when
 	//	dialing a number from inside the country.
 	//	Example US: 1 (NNN) NNN-NNNN
+
+	DialingPhoneExtNumFmtAbbrInternal string
+	//	The format used when dialing an abbreviated
+	//	Phone Extension number.
+	//
+	//	The character 'N' is used as a placeholder for
+	//	numeric digits. This is the format used when
+	//	dialing a number from inside the country.
+	//	Example US: "NNNN"
+
+	DisplayPhoneExtNumFmtAbbrInternal string
+	//	The format used to display an abbreviated
+	//	Phone Extension phone number in text.
+	//
+	//	The character 'N' is used as a placeholder for
+	//	numeric digits. This is the format used when
+	//	dialing a number from inside the country.
+	//	Example US: -NNNN
 
 	lock *sync.Mutex
 }
