@@ -83,18 +83,26 @@ type NumStrFmtCountryCultureSpec struct {
 	//	identifying the country or culture associated
 	//	with the current Country Culture Specification
 	//	instance.
+	//	ISO 3166-1 alpha-2 Wikipedia
+	//	https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2
 
 	CountryCodeThreeChar string
 	//	Optional
 	//	The unique ISO 3166-1 alpha-3 Three Character code
 	//	identifying the country or culture associated with
 	//	the current Country Culture Specification instance.
+	//	ISO 3166-1 alpha-4 Wikipedia
+	//	https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3
 
 	CountryCodeNumber string
 	//	Optional
 	//	The official ISO 3166-1 numeric code identifier
 	//	for the country or culture associated with the
 	//	current Country Culture Specification instance.
+	//	ISO 3166-1 numeric
+	//	https://en.wikipedia.org/wiki/ISO_3166-1_numeric
+
+	TelephoneNumberFormat TelephoneNumStrSpec
 
 	CurrencyCode string
 	//	Optional
