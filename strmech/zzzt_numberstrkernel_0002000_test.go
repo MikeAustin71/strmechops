@@ -3170,6 +3170,51 @@ func TestNumberStrKernel_SetFromPureNumberStr_000100(t *testing.T) {
 		return
 	}
 
+	testName = "Test #6-A nStrKernel01.FmtCurrencyNumStrUSMinus()\n" +
+		"US Currency Format"
+
+	// expectedStr = "-1234.988"
+	expectedStr = "$ -1,234.99"
+
+	err = roundingSpec.SetRoundingSpec(
+		NumRoundType.HalfAwayFromZero(),
+		2,
+		ePrefix.XCpy(
+			""))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	actualFmtStr,
+		err = nStrKernel01.FmtCurrencyNumStrUSMinus(
+		numberFieldSpec,
+		roundingSpec,
+		ePrefix.XCpy("6-A nStrKernel01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if expectedStr != actualFmtStr {
+
+		t.Errorf("%v\n"+
+			"%v\n"+
+			"Error: expectedStr != actualFmtStr\n"+
+			" expectedStr = %v\n"+
+			"actualFmtStr = %v\n",
+			ePrefix.String(),
+			testName,
+			expectedStr,
+			actualFmtStr)
+
+		return
+	}
+
 	return
 }
 
