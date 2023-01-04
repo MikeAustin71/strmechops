@@ -3137,14 +3137,14 @@ func TestNumberStrKernel_SetFromPureNumberStr_000100(t *testing.T) {
 		return
 	}
 
-	testName = "Test #5-A nStrKernel01.FmtCurrencyNumStrUS()\n" +
+	testName = "Test #5-A nStrKernel01.FmtCurrencyNumStrUSParen()\n" +
 		"US Currency Format"
 
 	// expectedStr = "-1234.988"
 	expectedStr = "$ (1,234.988)"
 
 	actualFmtStr,
-		err = nStrKernel01.FmtCurrencyNumStrUS(
+		err = nStrKernel01.FmtCurrencyNumStrUSParen(
 		numberFieldSpec,
 		roundingSpec,
 		ePrefix.XCpy("5-A nStrKernel01"))

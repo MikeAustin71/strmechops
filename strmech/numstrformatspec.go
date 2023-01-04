@@ -44,7 +44,7 @@ import (
 //		NumStrFormatSpec.NewSignedNumFmtGermany()
 //		NumStrFormatSpec.NewCurrencyNumFmtUK()
 //		NumStrFormatSpec.NewSignedNumFmtUK()
-//		NumStrFormatSpec.NewCurrencyNumFmtUS()
+//		NumStrFormatSpec.NewCurrencyNumFmtUSParen()
 //		NumStrFormatSpec.NewSignedNumFmtUS()
 //
 //	If more granular control is required to meet
@@ -3322,11 +3322,275 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtUK(
 	return newUKCurrencyNumFmtSpec, err
 }
 
-//	NewCurrencyNumFmtUS
+//	NewCurrencyNumFmtUSParen
 //
 //	Returns a new instance of NumStrFormatSpec
-//	configured for US (United States) Currency
-//	Number String formatting conventions.
+//	configured for US (United States) Currency Number
+//	String formatting conventions.
+//
+//	Some prefer to surround negative currency values with
+//	Parentheses ('()'). Others prefer to use leading
+//	minus signs for negative currency values.
+//
+//	This format will display negative US Currency values
+//	using a leading minus sign ('-').
+//
+//		Negative Currency Example
+//			$ -1,000,000.00
+//
+//	If custom decimal separator, integer separators,
+//	negative number sign characters or currency
+//	symbols are required, see methods:
+//
+//		NumStrFormatSpec.NewNumFmtComponents()
+//		NumStrFormatSpec.NewNumFmtParams()
+//		NumStrFormatSpec.NewNumFmtParamsRunes()
+//
+// ----------------------------------------------------------------
+//
+// # Defaults
+//
+//	The radix point or decimal separator is set to the
+//	period character ('.').
+//
+//		United States Example-1
+//			123.45 (The fractional digits are "45")
+//
+//	The integer group specification is set to 'thousands'.
+//	This means that integer digits will be separated into
+//	'thousands' with each group containing three digits
+//	each:
+//
+//		United States Example-2
+//			1,000,000
+//
+//	The currency symbol used in the United States is the
+//	Dollar Sign symbol ('$').
+//
+//		United States Example-3
+//			$ 1,000,000.00
+//
+//	The negative number sign is set to a leading minus
+//	sign ("-").
+//
+//		United States Example-4
+//			$ -1,000,000.00
+//
+//	The positive number sign is set to a blank or empty
+//	string ("").
+//
+//		United States Example-5
+//			$ 1,000,000.00
+//
+//	The zero number format is set to a blank or empty
+//	string ("").
+//
+//		United States Example-6
+//			$ 0.00
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	numberFieldSpec				NumStrNumberFieldSpec
+//
+//		This Number Field Specification contains all
+//		parameters necessary to format a Number String
+//		within a larger Number Field. In addition to
+//		specifying the length of number field, this
+//		object contains justification specifications
+//		for centering, left justifying or right
+//		justifying a Number String within a Number
+//		Field.
+//
+//		type NumStrNumberFieldSpec struct {
+//
+//			fieldLength int
+//
+//				This parameter defines the length of the
+//				text field in which the numeric value will
+//				be displayed within a number string.
+//
+//				If 'fieldLength' is less than the length
+//				of the numeric value string, it will be
+//				automatically set equal to the length of
+//				that numeric value string.
+//
+//				To automatically set the value of
+//				'fieldLength' to the string length of the
+//				numeric value, set this parameter to a
+//				value of minus one (-1).
+//
+//				If this parameter is submitted with a
+//				value less than minus one (-1) or greater
+//				than 1-million (1,000,000), an error will
+//				be returned.
+//
+//			fieldJustification TextJustify
+//
+//				An enumeration which specifies the
+//				justification of the numeric value string
+//				within the number field length specified
+//				by data field 'fieldLength'.
+//
+//				Text justification can only be evaluated in
+//				the context of a number string, field length
+//				and a 'textJustification' object of type
+//				TextJustify. This is because number strings
+//				with a field length equal to or less than the
+//				length of the numeric value string never use
+//				text justification. In these cases, text
+//				justification is completely ignored.
+//
+//				If the field length parameter ('fieldLength')
+//				is greater than the length of the numeric
+//				value string, text justification must be equal
+//				to one of these three valid values:
+//
+//				          TextJustify(0).Left()
+//				          TextJustify(0).Right()
+//				          TextJustify(0).Center()
+//
+//				You can also use the abbreviated text
+//				justification enumeration syntax as follows:
+//
+//				          TxtJustify.Left()
+//				          TxtJustify.Right()
+//				          TxtJustify.Center()
+//		}
+//
+//	 errorPrefix                interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it	contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.  IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// -----------------------------------------------------------------
+//
+// # Return Values
+//
+//	newUSCurrencyNumFmtSpec		NumStrFormatSpec
+//
+//		If this method completes successfully, this
+//		parameter will return a new, fully populated
+//		instance of NumStrFormatSpec configured with
+//		Currency Number String formatting parameters
+//		typically applied in the United States.
+//
+//	err							error
+//
+//		If this method completes successfully, the returned error
+//		Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the returned
+//		error Type will encapsulate an error message. This
+//		returned error message will incorporate the method chain
+//		and text passed by input parameter, 'errorPrefix'. The
+//		'errorPrefix' text will be attached to the beginning of
+//		the error message.
+func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtUSMinus(
+	numberFieldSpec NumStrNumberFieldSpec,
+	errorPrefix interface{}) (
+	newUSCurrencyNumFmtSpec NumStrFormatSpec,
+	err error) {
+
+	if numStrFmtSpec.lock == nil {
+		numStrFmtSpec.lock = new(sync.Mutex)
+	}
+
+	numStrFmtSpec.lock.Lock()
+
+	defer numStrFmtSpec.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumStrFormatSpec."+
+			"NewCurrencyNumFmtUSMinus()",
+		"")
+
+	if err != nil {
+		return newUSCurrencyNumFmtSpec, err
+	}
+
+	err = new(numStrFmtSpecNanobot).setCurrencyNStrFmtUSMinus(
+		&newUSCurrencyNumFmtSpec,
+		numberFieldSpec,
+		ePrefix.XCpy("newUSCurrencyNumFmtSpec<-"))
+
+	return newUSCurrencyNumFmtSpec, err
+}
+
+//	NewCurrencyNumFmtUSParen
+//
+//	Returns a new instance of NumStrFormatSpec
+//	configured for US (United States) Currency Number
+//	String formatting conventions.
+//
+//	Some prefer to use leading minus signs for negative
+//	currency values. Others prefer to surround negative
+//	currency values with Parentheses ('()').
+//
+//	This format will display negative US Currency values
+//	using Parentheses ('()').
+//
+//		Negative Currency Example
+//			$ (1,000,000.00)
 //
 //	If custom decimal separator, integer separators,
 //	negative number sign characters or currency
@@ -3531,7 +3795,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtUK(
 //		and text passed by input parameter, 'errorPrefix'. The
 //		'errorPrefix' text will be attached to the beginning of
 //		the error message.
-func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtUS(
+func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtUSParen(
 	numberFieldSpec NumStrNumberFieldSpec,
 	errorPrefix interface{}) (
 	newUSCurrencyNumFmtSpec NumStrFormatSpec,
@@ -3551,14 +3815,14 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtUS(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumStrFormatSpec."+
-			"NewCurrencyNumFmtUS()",
+			"NewCurrencyNumFmtUSParen()",
 		"")
 
 	if err != nil {
 		return newUSCurrencyNumFmtSpec, err
 	}
 
-	err = new(numStrFmtSpecNanobot).setCurrencyNStrFmtUS(
+	err = new(numStrFmtSpecNanobot).setCurrencyNStrFmtUSParen(
 		&newUSCurrencyNumFmtSpec,
 		numberFieldSpec,
 		ePrefix.XCpy("newUSCurrencyNumFmtSpec<-"))
@@ -8410,7 +8674,7 @@ func (numStrFmtSpec *NumStrFormatSpec) SetCurrencyFmtUS(
 	}
 
 	return new(numStrFmtSpecNanobot).
-		setCurrencyNStrFmtUS(
+		setCurrencyNStrFmtUSParen(
 			numStrFmtSpec,
 			numberFieldSpec,
 			ePrefix.XCpy("numStrFmtSpec<-"))
@@ -13882,11 +14146,357 @@ func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setCurrencyNStrFmtUK(
 		ePrefix.XCpy("numStrFmtSpec<-"))
 }
 
-//	setCurrencyNStrFmtUS
+//	setCurrencyNStrFmtUSParen
 //
 //	Deletes and resets the member variable data values
 //	stored in the instance of NumStrFormatSpec passed
 //	as input parameter 'numStrFmtSpec'.
+//
+//	Negative currency values will be displayed with a
+//	leading minus sign.
+//
+//		Negative Currency Example
+//			$ -1,000,000.00
+//
+//	Reconfigures the current instance of NumStrFormatSpec
+//	using Currency Number String formatting conventions
+//	typically applied in the US (United States).
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	Be advised that the data fields contained in input
+//	parameter 'numStrFmtSpec' will be deleted and
+//	replaced by Currency Number String formatting
+//	parameters typically applied the in US (United
+//	States).
+//
+// ----------------------------------------------------------------
+//
+// # Defaults
+//
+//	The radix point or decimal separator is set to the
+//	period character ('.').
+//
+//		United States Example-1
+//		123.45 (The fractional digits are "45")
+//
+//	The integer group separator is a comma character
+//	(',').
+//
+//	The integer group specification is set to 'thousands'.
+//	This means that integer digits will be separated into
+//	'thousands' with each group containing three digits
+//	each:
+//
+//		United States Example-2
+//				1,000,000
+//
+//	The currency symbol used in the United States is the
+//	Dollar Sign symbol ('$').
+//
+//		United States Example-3
+//			$ 1,000,000.00
+//
+//	The negative number sign is set to a leading minus
+//	sign ("-").
+//
+//		United States Example-4
+//			$ -1,000,000.00
+//
+//	The positive number sign is set to a blank or empty
+//	string ("").
+//
+//		United States Example-5
+//			$ 1,000,000.00
+//
+//	The zero number format is set to a blank or empty
+//	string ("").
+//
+//		United States Example-6
+//				$ 0.00
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+// numStrFmtSpec				*NumStrFormatSpec
+//
+//		A pointer to a NumStrFormatSpec instance. All
+//		member variable data fields in this object will
+//		be replaced by data values configured from the
+//		input parameters described below.
+//
+//	numberFieldSpec				NumStrNumberFieldSpec
+//
+//		This Number Field Specification contains all
+//		parameters necessary to format a Number String
+//		within a larger Number Field. In addition to
+//		specifying the length of number field, this
+//		object contains justification specifications
+//		for centering, left justifying or right
+//		justifying a Number String within a Number
+//		Field.
+//
+//		type NumStrNumberFieldSpec struct {
+//
+//			fieldLength int
+//
+//				This parameter defines the length of the
+//				text field in which the numeric value will
+//				be displayed within a number string.
+//
+//				If 'fieldLength' is less than the length
+//				of the numeric value string, it will be
+//				automatically set equal to the length of
+//				that numeric value string.
+//
+//				To automatically set the value of
+//				'fieldLength' to the string length of the
+//				numeric value, set this parameter to a
+//				value of minus one (-1).
+//
+//				If this parameter is submitted with a
+//				value less than minus one (-1) or greater
+//				than 1-million (1,000,000), an error will
+//				be returned.
+//
+//			fieldJustification TextJustify
+//
+//				An enumeration which specifies the
+//				justification of the numeric value string
+//				within the number field length specified
+//				by data field 'fieldLength'.
+//
+//				Text justification can only be evaluated in
+//				the context of a number string, field length
+//				and a 'textJustification' object of type
+//				TextJustify. This is because number strings
+//				with a field length equal to or less than the
+//				length of the numeric value string never use
+//				text justification. In these cases, text
+//				justification is completely ignored.
+//
+//				If the field length parameter ('fieldLength')
+//				is greater than the length of the numeric
+//				value string, text justification must be equal
+//				to one of these three valid values:
+//
+//				          TextJustify(0).Left()
+//				          TextJustify(0).Right()
+//				          TextJustify(0).Center()
+//
+//				You can also use the abbreviated text
+//				justification enumeration syntax as follows:
+//
+//				          TxtJustify.Left()
+//				          TxtJustify.Right()
+//				          TxtJustify.Center()
+//		}
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// -----------------------------------------------------------------
+//
+// # Return Values
+//
+//	err							error
+//
+//		If this method completes successfully, this
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setCurrencyNStrFmtUSMinus(
+	numStrFmtSpec *NumStrFormatSpec,
+	numberFieldSpec NumStrNumberFieldSpec,
+	errPrefDto *ePref.ErrPrefixDto) (
+	err error) {
+
+	if nStrFmtSpecNanobot.lock == nil {
+		nStrFmtSpecNanobot.lock = new(sync.Mutex)
+	}
+
+	nStrFmtSpecNanobot.lock.Lock()
+
+	defer nStrFmtSpecNanobot.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"numStrFmtSpecNanobot."+
+			"setCurrencyNStrFmtUSMinus()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if numStrFmtSpec == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'numStrFmtSpec' is invalid!\n"+
+			"'numStrFmtSpec' is a 'nil' pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	var decSeparator DecimalSeparatorSpec
+
+	decSeparator,
+		err = new(DecimalSeparatorSpec).NewUS(
+		ePrefix.XCpy("decSeparator"))
+
+	if err != nil {
+		return err
+	}
+
+	var intSeparatorSpec IntegerSeparatorSpec
+
+	intSeparatorSpec,
+		err = new(IntegerSeparatorSpec).NewUnitedStatesDefaults(
+		ePrefix.XCpy("intSeparatorSpec"))
+
+	if err != nil {
+		return err
+	}
+
+	var negativeNumberSign NumStrNumberSymbolSpec
+
+	negativeNumberSign = NumStrNumberSymbolSpec{
+
+		leadingNumberSymbols: RuneArrayDto{
+			CharsArray:     []rune{'$', ' ', '-'},
+			Description1:   "",
+			Description2:   "",
+			charSearchType: CharSearchType.LinearTargetStartingIndex(),
+			lock:           nil,
+		},
+
+		leadingNumberFieldSymbolPosition: NumFieldSymPos.InsideNumField(),
+
+		trailingNumberSymbols: RuneArrayDto{
+			CharsArray:     []rune{},
+			Description1:   "",
+			Description2:   "",
+			charSearchType: CharSearchType.LinearTargetStartingIndex(),
+			lock:           nil,
+		},
+
+		trailingNumberFieldSymbolPosition: NumFieldSymPos.InsideNumField(),
+
+		lock: nil,
+	}
+
+	var positiveNumberSign NumStrNumberSymbolSpec
+
+	positiveNumberSign = NumStrNumberSymbolSpec{
+
+		leadingNumberSymbols: RuneArrayDto{
+			CharsArray:     []rune{'$', ' '},
+			Description1:   "",
+			Description2:   "",
+			charSearchType: CharSearchType.LinearTargetStartingIndex(),
+			lock:           nil,
+		},
+
+		leadingNumberFieldSymbolPosition: NumFieldSymPos.InsideNumField(),
+
+		trailingNumberSymbols:             RuneArrayDto{},
+		trailingNumberFieldSymbolPosition: 0,
+		lock:                              nil,
+	}
+
+	var zeroNumberSign NumStrNumberSymbolSpec
+
+	zeroNumberSign = NumStrNumberSymbolSpec{
+
+		leadingNumberSymbols: RuneArrayDto{
+			CharsArray:     []rune{'$', ' '},
+			Description1:   "",
+			Description2:   "",
+			charSearchType: CharSearchType.LinearTargetStartingIndex(),
+			lock:           nil,
+		},
+
+		leadingNumberFieldSymbolPosition: NumFieldSymPos.InsideNumField(),
+
+		trailingNumberSymbols:             RuneArrayDto{},
+		trailingNumberFieldSymbolPosition: 0,
+		lock:                              nil,
+	}
+
+	var numSymbols NumStrNumberSymbolsSpec
+
+	err = numSymbols.negativeNumberSign.CopyIn(
+		&negativeNumberSign,
+		ePrefix.XCpy(
+			"numSymbols.negativeNumberSign<-"))
+
+	if err != nil {
+		return err
+	}
+
+	err = numSymbols.positiveNumberSign.CopyIn(
+		&positiveNumberSign,
+		ePrefix.XCpy(
+			"numSymbols.positiveNumberSign<-"))
+
+	if err != nil {
+		return err
+	}
+
+	err = numSymbols.zeroNumberSign.CopyIn(
+		&zeroNumberSign,
+		ePrefix.XCpy(
+			"numSymbols.zeroNumberSign<-"))
+
+	if err != nil {
+		return err
+	}
+
+	return new(numStrFmtSpecAtom).setNStrFmtComponents(
+		numStrFmtSpec,
+		decSeparator,
+		intSeparatorSpec,
+		numSymbols,
+		numberFieldSpec,
+		ePrefix.XCpy("numStrFmtSpec<-"))
+}
+
+//	setCurrencyNStrFmtUSParen
+//
+//	Deletes and resets the member variable data values
+//	stored in the instance of NumStrFormatSpec passed
+//	as input parameter 'numStrFmtSpec'.
+//
+//	Negative currency values will be displayed
+//	surrounded by Parentheses ('()').
+//
+//		Negative Currency Example
+//			$ (1,000,000.00)
 //
 //	Reconfigures the current instance of NumStrFormatSpec
 //	using Currency Number String formatting conventions
@@ -14056,7 +14666,7 @@ func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setCurrencyNStrFmtUK(
 //		for input parameter 'errPrefDto' (error prefix)
 //		will be prefixed or attached at the beginning of
 //		the error message.
-func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setCurrencyNStrFmtUS(
+func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setCurrencyNStrFmtUSParen(
 	numStrFmtSpec *NumStrFormatSpec,
 	numberFieldSpec NumStrNumberFieldSpec,
 	errPrefDto *ePref.ErrPrefixDto) (
@@ -14076,7 +14686,7 @@ func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setCurrencyNStrFmtUS(
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
 		"numStrFmtSpecNanobot."+
-			"setCurrencyNStrFmtUS()",
+			"setCurrencyNStrFmtUSParen()",
 		"")
 
 	if err != nil {
