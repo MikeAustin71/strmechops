@@ -436,237 +436,6 @@ func (numStrKernel *NumberStrKernel) GetIntegerDigits(
 	return copyOfIntegerDigits, err
 }
 
-//	GetIntFracDigitsKernel
-//
-//	Returns a new instance of NumberStrKernel,
-//	'consolidatedIntegerKernel', containing integer
-//	digits representing a consolidation of the integer
-//	and fractional digits in the current NumberStrKernel
-//	instance.
-//
-//	NOTE: All leading integer zeros are deleted from
-//	the returned instance of 'consolidatedIntegerKernel'.
-//
-//	In addition, this method also returns an int64 value,
-//	(exponent) specifying the location of the radix
-//	point, or decimal point, in the integer digits.
-//
-//	The actual numeric value is there for equal to:
-//		consolidatedIntegerKernel x 10^exponent
-//
-// ----------------------------------------------------------------
-//
-// # Usage
-//
-//	Example-1
-//		 Current NumberStrKernel Value:	1234.5678
-//		Returned NumberStrKernel Value:	12345678
-//			 Returned 'exponent' Value: -4
-//
-//	Example-2
-//		 Current NumberStrKernel Value:	001234.5678
-//		Returned NumberStrKernel Value:	12345678
-//			 Returned 'exponent' Value: -4
-//		NOTE: Leading Integer Zeros are Deleted!
-//
-//	Example-3
-//		 Current NumberStrKernel Value:	1234
-//		Returned NumberStrKernel Value:	1234
-//			 Returned 'exponent' Value: 0
-//
-//	Example-4
-//		 Current NumberStrKernel Value:	-1234.5678
-//		Returned NumberStrKernel Value:	-12345678
-//			 Returned 'exponent' Value: -4
-//
-//	Example-5
-//		 Current NumberStrKernel Value:	-1234
-//		Returned NumberStrKernel Value:	-1234
-//			 Returned 'exponent' Value: 0
-//
-// ----------------------------------------------------------------
-//
-//	# Input Parameters
-//
-//	errorPrefix					interface{}
-//
-//		This object encapsulates error prefix text which
-//		is included in all returned error messages.
-//		Usually, it	contains the name of the calling
-//		method or methods listed as a method or function
-//		chain of execution.
-//
-//		If no error prefix information is needed, set this
-//		parameter to 'nil'.
-//
-//		This empty interface must be convertible to one of
-//		the following types:
-//
-//		1.	nil
-//				A nil value is valid and generates an
-//				empty collection of error prefix and
-//				error context information.
-//
-//		2.	string
-//				A string containing error prefix
-//				information.
-//
-//		3.	[]string
-//				A one-dimensional slice of strings
-//				containing error prefix information.
-//
-//		4.	[][2]string
-//				A two-dimensional slice of strings
-//		   		containing error prefix and error
-//		   		context information.
-//
-//		5.	ErrPrefixDto
-//				An instance of ErrPrefixDto.
-//				Information from this object will
-//				be copied for use in error and
-//				informational messages.
-//
-//		6.	*ErrPrefixDto
-//				A pointer to an instance of
-//				ErrPrefixDto. Information from
-//				this object will be copied for use
-//				in error and informational messages.
-//
-//		7.	IBasicErrorPrefix
-//				An interface to a method
-//				generating a two-dimensional slice
-//				of strings containing error prefix
-//				and error context information.
-//
-//		If parameter 'errorPrefix' is NOT convertible
-//		to one of the valid types listed above, it will
-//		be considered invalid and trigger the return of
-//		an error.
-//
-//		Types ErrPrefixDto and IBasicErrorPrefix are
-//		included in the 'errpref' software package:
-//			"github.com/MikeAustin71/errpref".
-//
-// ----------------------------------------------------------------
-//
-// # Return Values
-//
-//	consolidatedIntegerKernel	NumberStrKernel
-//
-//		This method returns an instance of
-//		NumberStrKernel which consolidates the integer
-//		and fractional digits of the current
-//		NumberStrKernel instance to form a single
-//		integer value.
-//
-//		Example-1:
-//		 	Current NumberStrKernel Value:	1234.5678
-//			Returned NumberStrKernel Value:	12345678
-//
-//		Example-2:
-//		 	Current NumberStrKernel Value:	0001234.5678
-//			Returned NumberStrKernel Value:	12345678
-//
-//		NOTE: All leading zeros are deleted in the
-//		returned instance of 'consolidatedIntegerKernel'.
-//
-//	exponent					int64
-//
-//		This returned exponent value identifies the
-//		location of the radix point, or decimal point,
-//		within the integer digits returned by parameter,
-//		'consolidatedIntegerKernel'.
-//
-//		Example-1
-//			 Current NumberStrKernel Value:	1234.5678
-//			Returned NumberStrKernel Value:	12345678
-//				 Returned 'exponent' Value: -4
-//
-//		Example-2
-//			 Current NumberStrKernel Value:	1234
-//			Returned NumberStrKernel Value:	1234
-//				 Returned 'exponent' Value: 0
-//
-//	err							error
-//
-//		If this method completes successfully, the
-//		returned error Type is set equal to 'nil'.
-//
-//		If errors are encountered during processing, the
-//		returned error Type will encapsulate an error
-//		message. This returned error message will
-//		incorporate the method chain and text passed by
-//		input parameter, 'errorPrefix'. The 'errorPrefix'
-//		text will be attached to the beginning of the
-//		error message.
-func (numStrKernel *NumberStrKernel) GetIntFracDigitsKernel(
-	errorPrefix interface{}) (
-	consolidatedIntegerKernel NumberStrKernel,
-	exponent int64,
-	err error) {
-
-	if numStrKernel.lock == nil {
-		numStrKernel.lock = new(sync.Mutex)
-	}
-
-	numStrKernel.lock.Lock()
-
-	defer numStrKernel.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
-		"NumberStrKernel."+
-			"GetIntFracDigitsKernel()",
-		"")
-
-	if err != nil {
-		return consolidatedIntegerKernel, exponent, err
-	}
-
-	var consolidatedRuneArrayDto RuneArrayDto
-
-	runeArrayDto := RuneArrayDto{}
-
-	consolidatedRuneArrayDto,
-		err = runeArrayDto.NewRuneArrayDtos(
-		ePrefix.XCpy(
-			"numStrKernel integer+fractional"),
-		numStrKernel.integerDigits,
-		numStrKernel.fractionalDigits)
-
-	if err != nil {
-		return consolidatedIntegerKernel, exponent, err
-	}
-
-	nopRuneArrayDto := runeArrayDto.NewNOP()
-
-	err = new(numberStrKernelNanobot).setWithRuneArrayDto(
-		&consolidatedIntegerKernel,
-		&consolidatedRuneArrayDto,
-		&nopRuneArrayDto,
-		numStrKernel.numberSign,
-		ePrefix)
-
-	leadingIntZeros :=
-		consolidatedIntegerKernel.GetIntegerLeadingZerosCount()
-
-	if leadingIntZeros > 0 {
-
-		err = consolidatedIntegerKernel.integerDigits.
-			DeleteLeadingTrailingChars(
-				leadingIntZeros,
-				false,
-				ePrefix.XCpy(
-					"numStrKernel.integerDigits<-"))
-
-	}
-
-	return consolidatedIntegerKernel, exponent, err
-}
-
 //	GetIntegerLeadingZerosCount
 //
 //	Returns the count of all integer leading zeros.
@@ -939,6 +708,720 @@ func (numStrKernel *NumberStrKernel) GetInternalParameterDiagnostics() string {
 	}
 
 	return strBuilder.String()
+}
+
+//	GetIntFracDigitsKernel
+//
+//	Returns a new instance of NumberStrKernel,
+//	'consolidatedIntegerKernel', containing integer
+//	digits representing a consolidation of the integer
+//	and fractional digits in the current NumberStrKernel
+//	instance.
+//
+//	NOTE: All leading integer zeros are deleted from
+//	the returned instance of 'consolidatedIntegerKernel'.
+//
+//	In addition, this method also returns an int64 value,
+//	(exponent) specifying the location of the radix
+//	point, or decimal point, in the integer digits.
+//
+//	The actual numeric value is there for equal to:
+//		consolidatedIntegerKernel x 10^exponent
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	(1) All leading zeros are deleted from the returned
+//		instance of 'consolidatedIntegerKernel'. Any
+//		trailing zeros are NOT deleted.
+//
+//	(2)	The number sign of the returned instance of
+//		'consolidatedIntegerKernel' is ALWAYS positive.
+//
+// ----------------------------------------------------------------
+//
+// # Usage
+//
+//	Example-1
+//		 Current NumberStrKernel Value:	1234.5678
+//		Returned NumberStrKernel Value:	12345678
+//			 Returned 'exponent' Value: -4
+//
+//	Example-2
+//		 Current NumberStrKernel Value:	001234.5678
+//		Returned NumberStrKernel Value:	12345678
+//			 Returned 'exponent' Value: -4
+//		NOTE: Leading Integer Zeros are Deleted!
+//
+//	Example-3
+//		 Current NumberStrKernel Value:	1234
+//		Returned NumberStrKernel Value:	1234
+//			 Returned 'exponent' Value: 0
+//
+//	Example-4
+//		 Current NumberStrKernel Value:	-1234.5678
+//		Returned NumberStrKernel Value:	-12345678
+//			 Returned 'exponent' Value: -4
+//
+//	Example-5
+//		 Current NumberStrKernel Value:	-1234
+//		Returned NumberStrKernel Value:	-1234
+//			 Returned 'exponent' Value: 0
+//
+// ----------------------------------------------------------------
+//
+//	# Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it	contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	consolidatedIntegerKernel	NumberStrKernel
+//
+//		This method returns an instance of
+//		NumberStrKernel which consolidates the integer
+//		and fractional digits of the current
+//		NumberStrKernel instance to form a single
+//		integer value.
+//
+//		Example-1:
+//		 	Current NumberStrKernel Value:	1234.5678
+//			Returned NumberStrKernel Value:	12345678
+//
+//		Example-2:
+//		 	Current NumberStrKernel Value:	0001234.5678
+//			Returned NumberStrKernel Value:	12345678
+//
+//		NOTE: All leading zeros are deleted in the
+//		returned instance of 'consolidatedIntegerKernel'.
+//
+//	exponent					int64
+//
+//		This returned exponent value identifies the
+//		location of the radix point, or decimal point,
+//		within the integer digits returned by parameter,
+//		'consolidatedIntegerKernel'.
+//
+//		Example-1
+//			 Current NumberStrKernel Value:	1234.5678
+//			Returned NumberStrKernel Value:	12345678
+//				 Returned 'exponent' Value: -4
+//
+//		Example-2
+//			 Current NumberStrKernel Value:	1234
+//			Returned NumberStrKernel Value:	1234
+//				 Returned 'exponent' Value: 0
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (numStrKernel *NumberStrKernel) GetIntFracDigitsKernel(
+	errorPrefix interface{}) (
+	consolidatedIntegerKernel NumberStrKernel,
+	exponent int64,
+	err error) {
+
+	if numStrKernel.lock == nil {
+		numStrKernel.lock = new(sync.Mutex)
+	}
+
+	numStrKernel.lock.Lock()
+
+	defer numStrKernel.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumberStrKernel."+
+			"GetIntFracDigitsKernel()",
+		"")
+
+	if err != nil {
+		return consolidatedIntegerKernel, exponent, err
+	}
+
+	var consolidatedRuneArrayDto RuneArrayDto
+
+	runeArrayDto := RuneArrayDto{}
+
+	consolidatedRuneArrayDto,
+		err = runeArrayDto.NewRuneArrayDtos(
+		ePrefix.XCpy(
+			"numStrKernel integer+fractional"),
+		numStrKernel.integerDigits,
+		numStrKernel.fractionalDigits)
+
+	if err != nil {
+		return consolidatedIntegerKernel, exponent, err
+	}
+
+	nopRuneArrayDto := runeArrayDto.NewNOP()
+
+	err = new(numberStrKernelNanobot).setWithRuneArrayDto(
+		&consolidatedIntegerKernel,
+		&consolidatedRuneArrayDto,
+		&nopRuneArrayDto,
+		numStrKernel.numberSign,
+		ePrefix)
+
+	leadingIntZeros :=
+		consolidatedIntegerKernel.GetIntegerLeadingZerosCount()
+
+	if leadingIntZeros > 0 {
+
+		err = consolidatedIntegerKernel.integerDigits.
+			DeleteLeadingTrailingChars(
+				leadingIntZeros,
+				false,
+				ePrefix.XCpy(
+					"numStrKernel.integerDigits<-"))
+
+	}
+
+	return consolidatedIntegerKernel, exponent, err
+}
+
+// GetIntFracDigitsStr
+//
+// Returns a string containing all the integer and
+// fractional numeric digits extracted from the current
+// instance of NumberStrKernel. These integer and
+// fractional digits are therefore concatenated and
+// returned as a single string.
+//
+// If the combined integer and fractional digits
+// represent a negative numeric value, a leading or
+// trailing minus sign may be included depending on
+// specifications contained in input parameters,
+// 'includeNegativeNumSign' and 'leadingMinusSign'.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	(1)	Depending on the rounding specifications
+//		contained in input parameters 'roundingType' and
+//		'roundToFractionalDigits', the numeric value
+//		represented by the current instance of
+//		NumberStrKernel will be rounded before being
+//		converted into a concatenated string of integer
+//		and fractional digits.
+//
+//	(2)	If the combined integer and fractional digits
+//		represent a negative numeric value, a leading or
+//		trailing minus sign may be included in the
+//		returned string depending on specifications
+//		contained in input parameters,
+//		'includeNegativeNumSign' and 'leadingMinusSign'.
+//
+//	(3)	This method will NOT alter, modify or change any
+//		data values contained in the current instance of
+//		NumberStrKernel.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	includeNegativeNumSign		bool
+//
+//		If this parameter is set to 'true' and the
+//		numeric value of the current NumberStrKernel
+//		instance is negative, a leading or trailing minus
+//		sign ('-') will be included in the returned
+//		string of integer and fractional digits.
+//
+//		The positioning of the minus sign as a leading or
+//		tailing minus sign is controlled by input
+//		parameter 'leadingMinusSign'.
+//
+//	leadingMinusSign			bool
+//
+//		If the numeric value of the current
+//		NumberStrKernel instance is negative and input
+//		parameter 'includeNegativeNumSign' is set to
+//		'true', 'leadingMinusSign' will control where
+//		the minus sign is included in the returned
+//		string of integer and fractional digits.
+//
+//		When this parameter is set to 'true', the
+//		minus sign will be prefixed at the beginning
+//		of the returned string.
+//
+//		If this parameter is set to 'false', the minus
+//		sign will be appended to the end of the returned
+//		string.
+//
+//		Again, if parameter 'includeNegativeNumSign' is
+//		set to 'false', or if the numeric value is
+//		positive, this parameter will be ignored and have
+//		no effect.
+//
+//	roundingType				NumberRoundingType
+//
+//		The 'roundingType' setting determines whether
+//		the numeric value contained in the current
+//		instance of NumberStrKernel will be rounded
+//		before it is converted into a concatenated
+//		string of integer and fractional digits.
+//
+//		If no rounding operation is required, set this
+//		parameter to NumRoundType.NoRounding().
+//
+//		'roundingType' is used to specify the type of
+//		rounding algorithm that will be applied for the
+//		rounding of fractional digits contained in the
+//		current instance of NumberStrKernel.
+//
+//		If in doubt as to a suitable rounding method,
+//		'HalfAwayFromZero' is recommended.
+//
+//		Possible values are listed as follows:
+//			NumRoundType.None()	- Invalid Value
+//			NumRoundType.NoRounding()
+//			NumRoundType.HalfUpWithNegNums()
+//			NumRoundType.HalfDownWithNegNums()
+//			NumRoundType.HalfAwayFromZero()
+//			NumRoundType.HalfTowardsZero()
+//			NumRoundType.HalfToEven()
+//			NumRoundType.HalfToOdd()
+//			NumRoundType.Randomly()
+//			NumRoundType.Floor()
+//			NumRoundType.Ceiling()
+//			NumRoundType.Truncate()
+//
+//		Definitions:
+//
+//			NoRounding
+//
+//				Signals that no rounding operation will be
+//				performed on fractional digits. The
+//				fractional digits will therefore remain
+//				unchanged.
+//
+//			HalfUpWithNegNums
+//
+//				Half Round Up Including Negative Numbers.
+//				This method is intuitive but may produce
+//				unexpected results when applied to negative
+//				numbers.
+//
+//				'HalfUpWithNegNums' rounds .5 up.
+//
+//					Examples of 'HalfUpWithNegNums'
+//					7.6 rounds up to 8
+//					7.5 rounds up to 8
+//					7.4 rounds down to 7
+//					-7.4 rounds up to -7
+//					-7.5 rounds up to -7
+//					-7.6 rounds down to -8
+//
+//			HalfDownWithNegNums
+//
+//			Half Round Down Including Negative Numbers. This
+//			method is also considered intuitive but may
+//			produce unexpected results when applied to
+//			negative numbers.
+//
+//			'HalfDownWithNegNums' rounds .5 down.
+//
+//				Examples of HalfDownWithNegNums
+//
+//				7.6 rounds up to 8
+//				7.5 rounds down to 7
+//				7.4 rounds down to 7
+//				-7.4 rounds up to -7
+//				-7.5 rounds down to -8
+//				-7.6 rounds down to -8
+//
+//			HalfAwayFromZero
+//
+//				The 'HalfAwayFromZero' method rounds .5 further
+//				away from zero.	It provides clear and consistent
+//				behavior when dealing with negative numbers.
+//
+//					Examples of HalfAwayFromZero
+//
+//					7.6 rounds away to 8
+//					7.5 rounds away to 8
+//					7.4 rounds to 7
+//					-7.4 rounds to -7
+//					-7.5 rounds away to -8
+//					-7.6 rounds away to -8
+//
+//			HalfTowardsZero
+//
+//				Round Half Towards Zero. 'HalfTowardsZero' rounds
+//				0.5	closer to zero. It provides clear and
+//				consistent behavior	when dealing with negative
+//				numbers.
+//
+//					Examples of HalfTowardsZero
+//
+//					7.6 rounds away to 8
+//					7.5 rounds to 7
+//					7.4 rounds to 7
+//					-7.4 rounds to -7
+//					-7.5 rounds to -7
+//					-7.6 rounds away to -8
+//
+//			HalfToEven
+//
+//				Round Half To Even Numbers. 'HalfToEven' is
+//				also called	Banker's Rounding. This method
+//				rounds 0.5 to the nearest even digit.
+//
+//					Examples of HalfToEven
+//
+//					7.5 rounds up to 8 (because 8 is an even
+//					number)	but 6.5 rounds down to 6 (because
+//					6 is an even number)
+//
+//					HalfToEven only applies to 0.5. Other
+//					numbers (not ending	in 0.5) round to
+//					nearest as usual, so:
+//
+//					7.6 rounds up to 8
+//					7.5 rounds up to 8 (because 8 is an even number)
+//					7.4 rounds down to 7
+//					6.6 rounds up to 7
+//					6.5 rounds down to 6 (because 6 is an even number)
+//					6.4 rounds down to 6
+//
+//			HalfToOdd
+//
+//				Round Half to Odd Numbers. Similar to 'HalfToEven',
+//				but in this case 'HalfToOdd' rounds 0.5 towards odd
+//				numbers.
+//
+//					Examples of HalfToOdd
+//
+//					HalfToOdd only applies to 0.5. Other numbers
+//					(not ending	in 0.5) round to nearest as usual.
+//
+//					7.5 rounds down to 7 (because 7 is an odd number)
+//
+//					6.5 rounds up to 7 (because 7 is an odd number)
+//
+//					7.6 rounds up to 8
+//					7.5 rounds down to 7 (because 7 is an odd number)
+//					7.4 rounds down to 7
+//					6.6 rounds up to 7
+//					6.5 rounds up to 7 (because 7 is an odd number)
+//					6.4 rounds down to 6
+//
+//			Randomly
+//
+//				Round Half Randomly. Uses a Random Number Generator
+//				to choose between rounding 0.5 up or down.
+//
+//				All numbers other than 0.5 round to the nearest as
+//				usual.
+//
+//			Floor
+//
+//				Yields the nearest integer down. Floor does not apply
+//				any	special treatment to 0.5.
+//
+//				Floor Function: The greatest integer that is less than
+//				or equal to x
+//
+//				Source:
+//					https://www.mathsisfun.com/sets/function-floor-ceiling.html
+//
+//				In mathematics and computer science, the floor function
+//				is the function that takes as input a real number x,
+//				and gives as output the greatest integer less than or
+//				equal to x,	denoted floor(x) or ⌊x⌋.
+//
+//				Source:
+//					https://en.wikipedia.org/wiki/Floor_and_ceiling_functions
+//
+//				Examples of Floor
+//
+//					Number     Floor
+//					 2           2
+//					 2.4         2
+//					 2.9         2
+//					-2.5        -3
+//					-2.7        -3
+//					-2          -2
+//
+//			Ceiling
+//
+//				Yields the nearest integer up. Ceiling does not
+//				apply any special treatment to 0.5.
+//
+//				Ceiling Function: The least integer that is
+//				greater than or	equal to x.
+//				Source:
+//					https://www.mathsisfun.com/sets/function-floor-ceiling.html
+//
+//				The ceiling function maps x to the least integer
+//				greater than or equal to x, denoted ceil(x) or
+//				⌈x⌉.[1]
+//
+//				Source:
+//					https://en.wikipedia.org/wiki/Floor_and_ceiling_functions
+//
+//					Examples of Ceiling
+//
+//						Number    Ceiling
+//						 2           2
+//						 2.4         3
+//						 2.9         3
+//						-2.5        -2
+//						-2.7        -2
+//						-2          -2
+//
+//			Truncate
+//
+//				Apply NO Rounding whatsoever. The Round From Digit
+//				is dropped or deleted. The Round To Digit is NEVER
+//				changed.
+//
+//				Examples of Truncate
+//
+//					Example-1
+//					Number: 23.14567
+//					Objective: Round to two decimal places to
+//					the right of the decimal point.
+//					Rounding Method: Truncate
+//					Round To Digit:   4
+//					Round From Digit: 5
+//					Rounded Number:   23.14 - The Round From Digit
+//					is dropped.
+//
+//					Example-2
+//					Number: -23.14567
+//					Objective: Round to two decimal places to
+//					the right of the decimal point.
+//					Rounding Method: Truncate
+//					Round To Digit:   4
+//					Round From Digit: 5
+//					Rounded Number:  -23.14 - The Round From Digit
+//					is dropped.
+//
+//	roundToFractionalDigits		int
+//
+//		When set to a positive integer value, this
+//		parameter controls the number of digits to the
+//		right of the radix point or decimal separator
+//		(a.k.a. decimal point). This controls the number
+//		of fractional digits remaining after completion
+//		of the number rounding operation.
+//
+//		If input parameter 'roundingType' is set to
+//		NumRoundType.NoRounding(),
+//		'roundToFractionalDigits' is ignored and no
+//		rounding operation is performed.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//
+//		If this method completes successfully, a string
+//		will be returned containing the concatenated
+//		integer and fractional digits extracted from the
+//		current instance of NumberStrKernel.
+//
+//		If the current instance of NumberStrKernel
+//		represents a negative numeric value, a leading
+//		or trailing minus sign may be included in the
+//		returned string depending on the settings for
+//		input parameters, 'includeNegativeNumSign' and
+//		'roundToFractionalDigits'.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (numStrKernel *NumberStrKernel) GetIntFracDigitsStr(
+	includeNegativeNumSign bool,
+	leadingMinusSign bool,
+	roundingType NumberRoundingType,
+	roundToFractionalDigits int,
+	errorPrefix interface{}) (
+	string,
+	error) {
+
+	if numStrKernel.lock == nil {
+		numStrKernel.lock = new(sync.Mutex)
+	}
+
+	numStrKernel.lock.Lock()
+
+	defer numStrKernel.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	var concatenatedIntFracDigits string
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumberStrKernel."+
+			"ExtendIntegerDigitsArray()",
+		"")
+
+	if err != nil {
+		return concatenatedIntFracDigits, err
+	}
+
+	var allIntFracDigits RuneArrayDto
+
+	allIntFracDigits,
+		err = new(numberStrKernelMolecule).getAllIntFracDigits(
+		numStrKernel,
+		includeNegativeNumSign,
+		leadingMinusSign,
+		roundingType,
+		roundToFractionalDigits,
+		ePrefix.XCpy(
+			""))
+
+	return allIntFracDigits.GetCharacterString(), err
 }
 
 //	GetIsNonZeroValue
@@ -6691,7 +7174,7 @@ func (numStrKernel *NumberStrKernel) Round(
 	return new(numStrMathRoundingNanobot).roundNumStrKernel(
 		numStrKernel,
 		numStrRoundingSpec,
-		ePrefix)
+		ePrefix.XCpy("numStrKernel"))
 }
 
 // SetDefaultNumberStrFormatSpec
