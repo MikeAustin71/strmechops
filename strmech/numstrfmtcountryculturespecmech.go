@@ -816,7 +816,7 @@ func (nStrFmtCountryCultureMech *numStrFmtCountryCultureSpecMech) setCountryUS(
 	countryNStrFmtSpec.CountryCodeThreeChar = "USA"
 
 	/*
-	   	countryNStrFmtSpec.TelephoneNumberFormat = TelephoneNumStrSpec{
+	   	countryNStrFmtSpec.TelephoneNumberFormat = NumStrFmtCountryTelephoneNumSpec{
 	   		CountryName:                         "United States",
 	   		CountryCodeTwoChar:                  "US",
 	   		CountryCodeThreeChar:                "USA",
@@ -858,46 +858,150 @@ func (nStrFmtCountryCultureMech *numStrFmtCountryCultureSpecMech) setCountryUS(
 	   	}
 	*/
 
-	countryNStrFmtSpec.TelephoneNumberFormat = TelephoneNumStrSpec{
-		CountryName:                         "United States",
-		CountryCodeTwoChar:                  "US",
-		CountryCodeThreeChar:                "USA",
-		InternationalDirectDialingNo:        "011",
-		InternationalPrefix:                 "011",
-		TrunkPrefix:                         "1",
-		CountryTelephoneCode:                "1",
-		AreaCodeMaxNumOfDigits:              "3",
-		AreaCodeMinNumOfDigits:              "3",
-		SubscriberNumMaxNumOfDigitsExternal: "7",
-		SubscriberNumMinNumOfDigitsExternal: "7",
-		SubscriberNumMaxNumOfDigitsInternal: "7",
-		SubscriberNumMinNumOfDigitsInternal: "7",
-		MobileNumMaxNumOfDigitsExternal:     "7",
-		MobileNumMinNumOfDigitsExternal:     "7",
-		MobileNumMaxNumOfDigitsInternal:     "7",
-		MobileNumMinNumOfDigitsInternal:     "7",
-		DialingSubNumFmtFullExternal:        "1NNNNNNNNNN",
-		DisplaySubNumFmtFullExternal:        "1 (NNN) NNN-NNNN",
-		DialingMobileNumFmtFullExternal:     "1NNNNNNNNNN",
-		DisplayMobileNumFmtFullExternal:     "1 (NNN) NNN-NNNN",
-		DialingSubNumFmtFullInternal:        "1NNNNNNNNNN",
-		DisplaySubNumFmtFullInternal:        "1 (NNN) NNN-NNNN",
-		DialingMobileNumFmtFullInternal:     "1NNNNNNNNNN",
-		DisplayMobileNumFmtFullInternal:     "1 (NNN) NNN-NNNN",
-		DialingSubNumFmtAbbrExternal:        "NNNNNNNNNN",
-		DisplaySubNumFmtAbbrExternal:        "(NNN) NNN-NNNN",
-		DialingMobileNumFmtAbbrExternal:     "NNNNNNNNNN",
-		DisplayMobileNumFmtAbbrExternal:     "(NNN) NNN-NNNN",
-		DialingPhoneExtFmtFullExternal:      "NNNN",
-		DisplayPhoneExtFmtFullExternal:      "-NNNN",
-		DialingSubNumFmtAbbrInternal:        "",
-		DisplaySubNumFmtAbbrInternal:        "",
-		DialingMobileNumFmtAbbrInternal:     "",
-		DisplayMobileNumFmtAbbrInternal:     "",
-		DialingPhoneExtNumFmtAbbrInternal:   "",
-		DisplayPhoneExtNumFmtAbbrInternal:   "",
-		lock:                                nil,
-	}
+	countryNStrFmtSpec.TelephoneNumberFormat =
+		NumStrFmtCountryTelephoneNumSpec{
+			CountryName:                         "United States",
+			CountryCodeTwoChar:                  "US",
+			CountryCodeThreeChar:                "USA",
+			InternationalDirectDialingNo:        "011",
+			InternationalPrefix:                 "011",
+			TrunkPrefix:                         "1",
+			CountryTelephoneCode:                "1",
+			AreaCodeMaxNumOfDigits:              "3",
+			AreaCodeMinNumOfDigits:              "3",
+			SubscriberNumMaxNumOfDigitsExternal: "7",
+			SubscriberNumMinNumOfDigitsExternal: "7",
+			SubscriberNumMaxNumOfDigitsInternal: "7",
+			SubscriberNumMinNumOfDigitsInternal: "7",
+			MobileNumMaxNumOfDigitsExternal:     "7",
+			MobileNumMinNumOfDigitsExternal:     "7",
+			MobileNumMaxNumOfDigitsInternal:     "7",
+			MobileNumMinNumOfDigitsInternal:     "7",
+			PhoneExtNumMaxNumOfDigitsExternal:   "4",
+			PhoneExtNumMinNumOfDigitsExternal:   "4",
+			PhoneExtNumMaxNumOfDigitsInternal:   "4",
+			PhoneExtNumMinNumOfDigitsInternal:   "4",
+			SubscriberFmtFullExternal: NumStrFmtTelephoneNumSpec{
+				PhoneNoDialFmt: NumStrFmtCharReplacementSpec{
+					NumberFormat:          "1NNNNNNNNNN",
+					NumFmtReplacementChar: 'N',
+				},
+				PhoneNoDisplayFmt: NumStrFmtCharReplacementSpec{
+					NumberFormat:          "1 (NNN) NNN-NNNN",
+					NumFmtReplacementChar: 'N',
+				},
+			},
+			SubscriberFmtAbbrExternal: NumStrFmtTelephoneNumSpec{
+				PhoneNoDialFmt: NumStrFmtCharReplacementSpec{
+					NumberFormat:          "1NNNNNNNNNN",
+					NumFmtReplacementChar: 'N',
+				},
+				PhoneNoDisplayFmt: NumStrFmtCharReplacementSpec{
+					NumberFormat:          "(NNN) NNN-NNNN",
+					NumFmtReplacementChar: 'N',
+				},
+			},
+			SubscriberFmtFullInternal: NumStrFmtTelephoneNumSpec{
+				PhoneNoDialFmt: NumStrFmtCharReplacementSpec{
+					NumberFormat:          "1NNNNNNNNNN",
+					NumFmtReplacementChar: 'N',
+				},
+				PhoneNoDisplayFmt: NumStrFmtCharReplacementSpec{
+					NumberFormat:          "1 (NNN) NNN-NNNN",
+					NumFmtReplacementChar: 'N',
+				},
+			},
+			SubscriberFmtAbbrInternal: NumStrFmtTelephoneNumSpec{
+				PhoneNoDialFmt: NumStrFmtCharReplacementSpec{
+					NumberFormat:          "1NNNNNNNNNN",
+					NumFmtReplacementChar: 'N',
+				},
+				PhoneNoDisplayFmt: NumStrFmtCharReplacementSpec{
+					NumberFormat:          "(NNN) NNN-NNNN",
+					NumFmtReplacementChar: 'N',
+				},
+			},
+			MobileFmtFullExternal: NumStrFmtTelephoneNumSpec{
+				PhoneNoDialFmt: NumStrFmtCharReplacementSpec{
+					NumberFormat:          "1NNNNNNNNNN",
+					NumFmtReplacementChar: 'N',
+				},
+				PhoneNoDisplayFmt: NumStrFmtCharReplacementSpec{
+					NumberFormat:          "1 (NNN) NNN-NNNN",
+					NumFmtReplacementChar: 'N',
+				},
+			},
+			MobileFmtAbbrExternal: NumStrFmtTelephoneNumSpec{
+				PhoneNoDialFmt: NumStrFmtCharReplacementSpec{
+					NumberFormat:          "1NNNNNNNNNN",
+					NumFmtReplacementChar: 'N',
+				},
+				PhoneNoDisplayFmt: NumStrFmtCharReplacementSpec{
+					NumberFormat:          "(NNN) NNN-NNNN",
+					NumFmtReplacementChar: 'N',
+				},
+			},
+			MobileFmtFullInternal: NumStrFmtTelephoneNumSpec{
+				PhoneNoDialFmt: NumStrFmtCharReplacementSpec{
+					NumberFormat:          "1NNNNNNNNNN",
+					NumFmtReplacementChar: 'N',
+				},
+				PhoneNoDisplayFmt: NumStrFmtCharReplacementSpec{
+					NumberFormat:          "1 (NNN) NNN-NNNN",
+					NumFmtReplacementChar: 'N',
+				},
+			},
+			MobileFmtAbbrInternal: NumStrFmtTelephoneNumSpec{
+				PhoneNoDialFmt: NumStrFmtCharReplacementSpec{
+					NumberFormat:          "1NNNNNNNNNN",
+					NumFmtReplacementChar: 'N',
+				},
+				PhoneNoDisplayFmt: NumStrFmtCharReplacementSpec{
+					NumberFormat:          "(NNN) NNN-NNNN",
+					NumFmtReplacementChar: 'N',
+				},
+			},
+			PhoneExtFmtFullExternal: NumStrFmtTelephoneNumSpec{
+				PhoneNoDialFmt: NumStrFmtCharReplacementSpec{
+					NumberFormat:          "NNNN",
+					NumFmtReplacementChar: 'N',
+				},
+				PhoneNoDisplayFmt: NumStrFmtCharReplacementSpec{
+					NumberFormat:          "NNNN",
+					NumFmtReplacementChar: 'N',
+				},
+			},
+			PhoneExtFmtAbbrExternal: NumStrFmtTelephoneNumSpec{
+				PhoneNoDialFmt: NumStrFmtCharReplacementSpec{
+					NumberFormat:          "NNNN",
+					NumFmtReplacementChar: 'N',
+				},
+				PhoneNoDisplayFmt: NumStrFmtCharReplacementSpec{
+					NumberFormat:          "NNNN",
+					NumFmtReplacementChar: 'N',
+				},
+			},
+			PhoneExtFmtFullInternal: NumStrFmtTelephoneNumSpec{
+				PhoneNoDialFmt: NumStrFmtCharReplacementSpec{
+					NumberFormat:          "NNNN",
+					NumFmtReplacementChar: 'N',
+				},
+				PhoneNoDisplayFmt: NumStrFmtCharReplacementSpec{
+					NumberFormat:          "NNNN",
+					NumFmtReplacementChar: 'N',
+				},
+			},
+			PhoneExtFmtAbbrInternal: NumStrFmtTelephoneNumSpec{
+				PhoneNoDialFmt: NumStrFmtCharReplacementSpec{
+					NumberFormat:          "NNNN",
+					NumFmtReplacementChar: 'N',
+				},
+				PhoneNoDisplayFmt: NumStrFmtCharReplacementSpec{
+					NumberFormat:          "NNNN",
+					NumFmtReplacementChar: 'N',
+				},
+			},
+		}
 
 	countryNStrFmtSpec.CountryCodeNumber = "840"
 	countryNStrFmtSpec.CurrencyDecimalDigits = 2

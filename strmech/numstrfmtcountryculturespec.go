@@ -102,7 +102,7 @@ type NumStrFmtCountryCultureSpec struct {
 	//	ISO 3166-1 numeric
 	//	https://en.wikipedia.org/wiki/ISO_3166-1_numeric
 
-	TelephoneNumberFormat TelephoneNumStrSpec
+	TelephoneNumberFormat NumStrFmtCountryTelephoneNumSpec
 
 	CurrencyCode string
 	//	Optional

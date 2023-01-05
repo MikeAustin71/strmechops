@@ -1872,6 +1872,72 @@ func (numStrKernel *NumberStrKernel) ExtendIntegerDigitsArray(
 			"numStrKernel.integerDigits"))
 }
 
+// FmtCharReplacementStr
+//
+// Formats character replacement in a format string
+// configured with a pattern for character replacement
+// by integer and fractional digits contained in the
+// current instance of NumberStrKernel.
+func (numStrKernel *NumberStrKernel) FmtCharReplacementStr(
+	numFmtSpec NumStrFmtCharReplacementSpec,
+	errorPrefix interface{}) (
+	formattedStr string,
+	err error) {
+
+	if numStrKernel.lock == nil {
+		numStrKernel.lock = new(sync.Mutex)
+	}
+
+	numStrKernel.lock.Lock()
+
+	defer numStrKernel.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumberStrKernel."+
+			"ExtendIntegerDigitsArray()",
+		"")
+
+	if err != nil {
+		return formattedStr, err
+	}
+
+	fmtRunes := []rune(numFmtSpec.NumberFormat)
+
+	lenFmtRunes := len(fmtRunes)
+
+	if lenFmtRunes == 0 {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'numFmtSpec' is invalid!\n"+
+			"numFmtSpec.NumberFormat is an empty string.\n",
+			ePrefix.String())
+
+		return formattedStr, err
+	}
+
+	formattedRunes := make([]rune, lenFmtRunes)
+
+	for i := 0; i < lenFmtRunes; i++ {
+
+		if fmtRunes[i] ==
+			numFmtSpec.NumFmtReplacementChar {
+
+			formattedRunes[i] =
+				numStrKernel.integerDigits.CharsArray[i]
+		} else {
+
+			formattedRunes[i] = fmtRunes[i]
+
+		}
+
+	}
+
+	return string(formattedRunes), err
+}
+
 //	FmtCountryCurrencyNumStr
 //
 //	Creates and returns a formatted number string based
