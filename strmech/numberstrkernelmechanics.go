@@ -13,6 +13,135 @@ type numberStrKernelMechanics struct {
 	lock *sync.Mutex
 }
 
+// characterReplacement
+//
+// Uses the integer and fractional numeric digits
+// contained in a NumberStrKernel instance to replace
+// the designated placeholder characters in a target
+// format string.
+func (numStrKernelMech *numberStrKernelMechanics) characterReplacement(
+	numStrKernel *NumberStrKernel,
+	numFmtSpec NumStrFmtCharReplacementSpec,
+	errPrefDto *ePref.ErrPrefixDto) (
+	formattedStr RuneArrayDto,
+	leftOverIntFracDigits RuneArrayDto,
+	err error) {
+
+	if numStrKernelMech.lock == nil {
+		numStrKernelMech.lock = new(sync.Mutex)
+	}
+
+	numStrKernelMech.lock.Lock()
+
+	defer numStrKernelMech.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"numberStrKernelMechanics."+
+			"characterReplacement()",
+		"")
+
+	if err != nil {
+
+		return formattedStr, leftOverIntFracDigits, err
+	}
+
+	if numStrKernel == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'numStrKernel' is a nil pointer!\n",
+			ePrefix.String())
+
+		return formattedStr, leftOverIntFracDigits, err
+	}
+
+	if numFmtSpec.NumFmtReplacementChar == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'numFmtSpec' is invalid!\n"+
+			"'numFmtSpec.NumFmtReplacementChar' has a value of zero ('0').\n"+
+			"Effectively there is no target character to replace.\n",
+			ePrefix.String())
+
+		return formattedStr, leftOverIntFracDigits, err
+
+	}
+
+	if len(numFmtSpec.NumberFormat) == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'numFmtSpec' is invalid!\n"+
+			"'numFmtSpec.NumberFormat' is empty with a string length of zero.\n",
+			ePrefix.String())
+
+		return formattedStr, leftOverIntFracDigits, err
+	}
+
+	var allIntFracDigits RuneArrayDto
+
+	allIntFracDigits,
+		err = new(numberStrKernelMolecule).
+		getAllIntFracDigits(
+			numStrKernel,
+			false,
+			false,
+			NumRoundType.NoRounding(),
+			0,
+			ePrefix.XCpy(
+				"allIntFracDigits<-"))
+
+	lenAllIntFracDigits := allIntFracDigits.GetRuneArrayLength()
+
+	fmtRunes := []rune(numFmtSpec.NumberFormat)
+
+	lenFmtRunes := len(fmtRunes)
+
+	formattedStr.CharsArray = make([]rune, lenFmtRunes)
+
+	nextDigitIndex := 0
+
+	for i := 0; i < lenFmtRunes; i++ {
+
+		if fmtRunes[i] ==
+			numFmtSpec.NumFmtReplacementChar {
+
+			if nextDigitIndex >= lenAllIntFracDigits {
+
+				err = fmt.Errorf("%v\n"+
+					"Error: The NumberFormat contains more numeric digits\n"+
+					"than those available in the NumberStrKernel instance.\n"+
+					"NumberStrKernel instance 'numStrKernel' only contains %v integer+fractional digits.\n",
+					ePrefix.String(),
+					lenAllIntFracDigits)
+
+			}
+
+			formattedStr.CharsArray[i] =
+				allIntFracDigits.CharsArray[nextDigitIndex]
+
+			nextDigitIndex++
+
+		} else {
+
+			formattedStr.CharsArray[i] = fmtRunes[i]
+
+		}
+
+	}
+
+	if nextDigitIndex < lenAllIntFracDigits {
+
+		leftOverIntFracDigits.CharsArray =
+			append(leftOverIntFracDigits.CharsArray,
+				allIntFracDigits.CharsArray[nextDigitIndex:]...)
+	}
+
+	return formattedStr, leftOverIntFracDigits, err
+}
+
 //	compareNumStrKernels
 //
 //	Receives pointers to two instances of NumberStrKernel,
