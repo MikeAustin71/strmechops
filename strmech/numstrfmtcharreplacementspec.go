@@ -13,7 +13,17 @@ import "sync"
 // numbers as telephone numbers, identification numbers
 // and inventory numbers.
 //
-//	Telephone Number Example: (555) 555-0101
+//	Telephone Number Example:
+//
+//		NumStrFmtCharReplacementSpec.NumberFormat =
+//			"(NNN) NNN-NNNN
+//
+//		NumStrFmtCharReplacementSpec.NumReplacementChar =
+//			'N'
+//
+//		Integer Digits: 0115550101
+//
+//		Formatted Number String: (011) 555-0101
 //
 // This type is used by type NumberStrKernel to generate
 // formatted number strings using the 'Character
@@ -24,16 +34,25 @@ type NumStrFmtCharReplacementSpec struct {
 	NumberFormat string
 	//	This string should contain the Number Replacement
 	//	Character defined in member variable
-	//	'NumFmtReplacementChar'. The Number Replacement
-	//	Character will be replaced by numbers.
+	//	'NumReplacementChar'. The Number Replacement
+	//	Character will be replaced by numeric digits
+	//	in the NumberFormat string.
 	//
 	//	Example:
-	//		NumberFormat = "(NNN) NNN-NNNN
-	//		'NumFmtReplacementChar' = 'N'
+	//		NumberFormat = "(NNN) NNN-NNNN"
+	//		'NumReplacementChar' = 'N'
+	//		Formatted Number String: "(NNN) NNN-NNNN"
 	//
 	//		The letter 'N' will be replaced with numeric
-	//		digits. See Type NumberStrKernel
-	NumFmtReplacementChar rune
+	//		digits. See Type NumberStrKernel, Method:
+	//			NumberStrKernel.FmtCharReplacementStr()
+	//
+
+	NumReplacementChar rune
+	//	This rune character will serve as a placeholder
+	//	in the NumberFormat string described above. Every
+	//	instance of this character will be replaced by a
+	//	numeric digit character.
 
 	lock *sync.Mutex
 }

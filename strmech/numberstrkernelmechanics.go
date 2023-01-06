@@ -18,13 +18,210 @@ type numberStrKernelMechanics struct {
 // Uses the integer and fractional numeric digits
 // contained in a NumberStrKernel instance to replace
 // the designated placeholder characters in a target
-// format string.
+// format string. The NumberStrKernel instance is passed
+// as input parameter 'numStrKernel'.
+//
+// The target format string is provided by input
+// parameter 'numFmtSpec', an instance of
+// NumStrFmtCharReplacementSpec.
+//
+// Input parameter 'numFmtSpec', provides both the target
+// string and the designated replacement character
+// placeholder. The NumStrFmtCharReplacementSpec type
+// consists of two data elements:
+//
+//	numFmtSpec.NumberFormat			string
+//	numFmtSpec.NumReplacementChar	rune
+//
+// 'NumberFormat' is a string of text characters. All
+// instances of the 'NumReplacementChar' character in the
+// target string, 'NumberFormat', will be replaced by the
+// integer and fractional numeric digits extracted from
+// the NumberStrKernel instance, 'numStrKernel'. The
+// replacement of all instances of the 'NumReplacementChar'
+// character in the 'NumberFormat' string will proceed
+// from left to right until all the integer and fractional
+// digits in the NumberStrKernel instance ('numStrKernel')
+// have been exhausted.
+//
+// This replacement algorithm is useful
+// in formatting such numbers as telephone numbers,
+// identification numbers and inventory numbers.
+//
+//	Telephone Number Example:
+//		NumStrFmtCharReplacementSpec.NumberFormat =
+//			"(NNN) NNN-NNNN
+//
+//		NumStrFmtCharReplacementSpec.NumReplacementChar =
+//			'N'
+//
+//		NumberStrKernel Digits: 0115550101
+//
+//		Formatted Number String: (011) 555-0101
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	numStrKernel				*NumberStrKernel
+//
+//		A pointer to an instance of NumberStrKernel. This
+//		NumberStrKernel instance contains the integer and
+//		fractional digits which will be used in the
+//		character replacement algorithm.
+//
+//	numFmtSpec					NumStrFmtCharReplacementSpec
+//
+//		An instance of NumStrFmtCharReplacementSpec. This
+//		type contains two data elements:
+//			NumberFormat		string
+//			NumReplacementChar	rune
+//
+//		Every instance of the 'NumReplacementChar'
+//		character in the 'NumberFormat' string will be
+//		replaced by numeric integer and fractional digits
+//		extracted from the NumberStrKernel instance
+//		passed as input parameter 'numStrKernel'.
+//
+//		If there are an insufficient number of integer
+//		and fractional digits in 'numStrKernel' to
+//		replace all instances of the 'NumReplacementChar'
+//		character in the 'NumberFormat' string, an error
+//		will be returned.
+//
+//		type NumStrFmtCharReplacementSpec struct {
+//
+//			NumberFormat string
+//
+//				This string should contain the Number Replacement
+//				Character defined in member variable
+//				'NumReplacementChar'. The Number Replacement
+//				Character will be replaced by numeric digits
+//				in the NumberFormat string.
+//
+//				Example:
+//					NumberFormat = "(NNN) NNN-NNNN"
+//					'NumReplacementChar' = 'N'
+//					Formatted Number String: "(NNN) NNN-NNNN"
+//
+//					The letter 'N' will be replaced with numeric
+//					digits. See Type NumberStrKernel, Method:
+//						NumberStrKernel.FmtCharReplacementStr()
+//
+//			NumReplacementChar rune
+//
+//				This rune character will serve as a placeholder
+//				in the NumberFormat string described above. Every
+//				instance of this character will be replaced by a
+//				numeric digit character.
+//				This rune character will serve as a placeholder
+//		}
+//
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	formattedStr				RuneArrayDto
+//
+//		If this method completes successfully, this
+//		parameter will return a rune array containing a
+//		formatted numeric characters.
+//
+//		This rune array will contain the results of the
+//		character replacement algorithm. This algorithm
+//		replaces all instances of the
+//		'numFmtSpec.NumReplacementChar' character in the
+//		'numFmtSpec.NumberFormat' string with the integer
+//		and fractional numeric digits extracted from
+//		input parameter 'numStrKernel'.
+//
+//	remainingIntFracDigits		string
+//
+//		If there are more integer and fractional digits
+//		then required to replace all instances of the
+//		'NumReplacementChar' character in the
+//		'NumberFormat' string, the surplus integer and
+//		fractional digits will be returned in this rune
+//		array parameter, 'remainingIntFracDigits'.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
 func (numStrKernelMech *numberStrKernelMechanics) characterReplacement(
 	numStrKernel *NumberStrKernel,
 	numFmtSpec NumStrFmtCharReplacementSpec,
 	errPrefDto *ePref.ErrPrefixDto) (
 	formattedStr RuneArrayDto,
-	leftOverIntFracDigits RuneArrayDto,
+	remainingIntFracDigits RuneArrayDto,
 	err error) {
 
 	if numStrKernelMech.lock == nil {
@@ -46,7 +243,7 @@ func (numStrKernelMech *numberStrKernelMechanics) characterReplacement(
 
 	if err != nil {
 
-		return formattedStr, leftOverIntFracDigits, err
+		return formattedStr, remainingIntFracDigits, err
 	}
 
 	if numStrKernel == nil {
@@ -55,18 +252,18 @@ func (numStrKernelMech *numberStrKernelMechanics) characterReplacement(
 			"ERROR: Input parameter 'numStrKernel' is a nil pointer!\n",
 			ePrefix.String())
 
-		return formattedStr, leftOverIntFracDigits, err
+		return formattedStr, remainingIntFracDigits, err
 	}
 
-	if numFmtSpec.NumFmtReplacementChar == 0 {
+	if numFmtSpec.NumReplacementChar == 0 {
 
 		err = fmt.Errorf("%v\n"+
 			"ERROR: Input parameter 'numFmtSpec' is invalid!\n"+
-			"'numFmtSpec.NumFmtReplacementChar' has a value of zero ('0').\n"+
+			"'numFmtSpec.NumReplacementChar' has a value of zero ('0').\n"+
 			"Effectively there is no target character to replace.\n",
 			ePrefix.String())
 
-		return formattedStr, leftOverIntFracDigits, err
+		return formattedStr, remainingIntFracDigits, err
 
 	}
 
@@ -77,7 +274,7 @@ func (numStrKernelMech *numberStrKernelMechanics) characterReplacement(
 			"'numFmtSpec.NumberFormat' is empty with a string length of zero.\n",
 			ePrefix.String())
 
-		return formattedStr, leftOverIntFracDigits, err
+		return formattedStr, remainingIntFracDigits, err
 	}
 
 	var allIntFracDigits RuneArrayDto
@@ -106,7 +303,7 @@ func (numStrKernelMech *numberStrKernelMechanics) characterReplacement(
 	for i := 0; i < lenFmtRunes; i++ {
 
 		if fmtRunes[i] ==
-			numFmtSpec.NumFmtReplacementChar {
+			numFmtSpec.NumReplacementChar {
 
 			if nextDigitIndex >= lenAllIntFracDigits {
 
@@ -134,12 +331,12 @@ func (numStrKernelMech *numberStrKernelMechanics) characterReplacement(
 
 	if nextDigitIndex < lenAllIntFracDigits {
 
-		leftOverIntFracDigits.CharsArray =
-			append(leftOverIntFracDigits.CharsArray,
+		remainingIntFracDigits.CharsArray =
+			append(remainingIntFracDigits.CharsArray,
 				allIntFracDigits.CharsArray[nextDigitIndex:]...)
 	}
 
-	return formattedStr, leftOverIntFracDigits, err
+	return formattedStr, remainingIntFracDigits, err
 }
 
 //	compareNumStrKernels

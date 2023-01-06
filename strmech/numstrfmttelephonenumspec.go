@@ -1,5 +1,11 @@
 package strmech
 
+// NumStrFmtTelephoneNumSpec
+//
+// Specifies the parameters for presentation of two types
+// of telephone numbers, a telephone number used in the
+// actual 'dialing' process and a telephone number
+// formatted for a text presentation.
 type NumStrFmtTelephoneNumSpec struct {
 	PhoneNoDialFmt NumStrFmtCharReplacementSpec
 	//	The format used when dialing a telephone
