@@ -1359,54 +1359,80 @@ func (numStrKernelMolecule *numberStrKernelMolecule) getAllIntFracDigits(
 			numStrRoundingSpec,
 			ePrefix)
 
+		if err != nil {
+
+			return allIntFracDigits, err
+		}
+
 	}
 
-	allIntFracDigits.charSearchType =
-		CharSearchType.LinearTargetStartingIndex()
+	charsArrayDto := RuneArrayDto{}
+	var negNumSymbolRuneArray RuneArrayDto
 
-	lenOfAllIntFracDigits :=
-		deepCopyNumStrKernel.integerDigits.GetRuneArrayLength() +
-			deepCopyNumStrKernel.fractionalDigits.GetRuneArrayLength()
+	negNumSymbolRuneArray,
+		err =
+		charsArrayDto.NewRunes(
+			[]rune{'-'},
+			CharSearchType.LinearTargetStartingIndex(),
+			ePrefix.XCpy(
+				"negNumSymbolRuneArray<='-'"))
 
-	startIndex := 0
+	if err != nil {
 
-	if includeNegativeNumSign &&
-		deepCopyNumStrKernel.numberSign == NumSignVal.Negative() {
+		return allIntFracDigits, err
+	}
 
-		allIntFracDigits.CharsArray = make([]rune, lenOfAllIntFracDigits+1)
+	if includeNegativeNumSign == true &&
+		deepCopyNumStrKernel.numberSign == NumSignVal.Negative() &&
+		leadingMinusSign == true {
 
-		if leadingMinusSign == true {
-			startIndex = 1
+		allIntFracDigits,
+			err = charsArrayDto.NewRuneArrayDtos(
+			ePrefix.XCpy(
+				"deepCopyNumStrKernel.integerDigits+"+
+					"fractionalDigits"),
+			negNumSymbolRuneArray,
+			deepCopyNumStrKernel.integerDigits,
+			deepCopyNumStrKernel.fractionalDigits)
 
-			allIntFracDigits.CharsArray[0] = '-'
+		if err != nil {
 
-		} else {
+			return allIntFracDigits, err
+		}
 
-			allIntFracDigits.CharsArray[lenOfAllIntFracDigits] =
-				'-'
-			startIndex = 0
+	} else if includeNegativeNumSign == true &&
+		deepCopyNumStrKernel.numberSign == NumSignVal.Negative() &&
+		leadingMinusSign == false {
+
+		allIntFracDigits,
+			err = charsArrayDto.NewRuneArrayDtos(
+			ePrefix.XCpy(
+				"deepCopyNumStrKernel.integerDigits+"+
+					"fractionalDigits"),
+			deepCopyNumStrKernel.integerDigits,
+			deepCopyNumStrKernel.fractionalDigits,
+			negNumSymbolRuneArray)
+
+		if err != nil {
+
+			return allIntFracDigits, err
 		}
 
 	} else {
 
-		allIntFracDigits.CharsArray = make([]rune, lenOfAllIntFracDigits)
+		allIntFracDigits,
+			err = charsArrayDto.NewRuneArrayDtos(
+			ePrefix.XCpy(
+				"deepCopyNumStrKernel.integerDigits+"+
+					"fractionalDigits"),
+			deepCopyNumStrKernel.integerDigits,
+			deepCopyNumStrKernel.fractionalDigits)
 
-	}
+		if err != nil {
 
-	for i := 0; i < len(deepCopyNumStrKernel.integerDigits.CharsArray); i++ {
+			return allIntFracDigits, err
+		}
 
-		allIntFracDigits.CharsArray[startIndex] =
-			deepCopyNumStrKernel.integerDigits.CharsArray[i]
-
-		startIndex++
-	}
-
-	for i := 0; i < len(deepCopyNumStrKernel.fractionalDigits.CharsArray); i++ {
-
-		allIntFracDigits.CharsArray[startIndex] =
-			deepCopyNumStrKernel.fractionalDigits.CharsArray[i]
-
-		startIndex++
 	}
 
 	return allIntFracDigits, err
