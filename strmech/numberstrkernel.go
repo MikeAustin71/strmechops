@@ -1933,6 +1933,14 @@ func (numStrKernel *NumberStrKernel) ExtendIntegerDigitsArray(
 //		string parameter labeled,
 //		'remainingIntFracDigits'.
 //
+//	(3) No rounding is performed on the numeric value
+//		contained in the current NumberStrKernel instance
+//		prior to initiating the character replacement
+//		algorithm. If rounding of the current
+//		NumberStrKernel numeric value is required,
+//		see method:
+//			NumberStrKernel.Round()
+//
 // ----------------------------------------------------------------
 //
 // # Input Parameters

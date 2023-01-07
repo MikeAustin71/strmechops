@@ -12,6 +12,104 @@ type MainNumStrTest005 struct {
 	input string
 }
 
+func (mainNumStrTest005 MainNumStrTest005) CharacterReplacement01() {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"MainNumStrTest005.CharacterReplacement01()",
+		"")
+
+	breakStr := strings.Repeat("=", 50)
+
+	fmt.Printf("\n\n" + breakStr + "\n")
+
+	fmt.Printf("\n Starting Run!\n"+
+		"Function: %v\n",
+		ePrefix.String())
+
+	fmt.Printf("\n" + breakStr + "\n")
+
+	var nStrKernel strmech.NumberStrKernel
+	var err error
+
+	intDigits := "0115550101"
+	expectedStr := "(011) 555-0101"
+
+	nStrKernel,
+		err = new(strmech.NumberStrKernel).
+		NewFromStringDigits(
+			intDigits,
+			"",
+			strmech.NumSignVal.Positive(),
+			ePrefix.XCpy(
+				"nStrKernel"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	testName := fmt.Sprintf("Test #1-1 FmtCharReplacementStr()\n"+
+		"Input Str(%v)",
+		intDigits)
+
+	numFmtSpec := strmech.NumStrFmtCharReplacementSpec{
+		NumberFormat:       "(NNN) NNN-NNNN",
+		NumReplacementChar: 'N',
+	}
+
+	var formattedNumStr, remainingIntFracDigits string
+
+	formattedNumStr,
+		remainingIntFracDigits,
+		err = nStrKernel.FmtCharReplacementStr(
+		numFmtSpec,
+		ePrefix.XCpy(
+			"Test#1 nStrKernel"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if formattedNumStr != expectedStr {
+
+		fmt.Printf("\n%v\n"+
+			"%v\n"+
+			"Error: formattedNumStr != expectedStr\n"+
+			"actualNumStr  = '%v'\n"+
+			"expectedStr   = '%v'\n",
+			ePrefix.String(),
+			testName,
+			formattedNumStr,
+			expectedStr)
+
+		return
+
+	}
+
+	fmt.Printf("\n%v\n"+
+		"             intDigits = %v\n"+
+		"           expectedStr = %v\n"+
+		"       formattedNumStr = %v\n"+
+		"remainingIntFracDigits = %v\n\n\n",
+		ePrefix.String(),
+		intDigits,
+		expectedStr,
+		formattedNumStr,
+		remainingIntFracDigits)
+
+	fmt.Printf("\n\n" + breakStr + "\n")
+
+	fmt.Printf("  Successful Completion!\n"+
+		"Function: %v\n",
+		ePrefix.String())
+
+	fmt.Printf(breakStr + "\n\n")
+
+}
+
 func (mainNumStrTest005 MainNumStrTest005) NewFromBigRatValue01() {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
