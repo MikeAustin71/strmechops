@@ -290,7 +290,24 @@ func (numStrKernelMech *numberStrKernelMechanics) characterReplacement(
 			ePrefix.XCpy(
 				"allIntFracDigits<-"))
 
+	if err != nil {
+
+		return formattedStr, remainingIntFracDigits, err
+	}
+
 	lenAllIntFracDigits := allIntFracDigits.GetRuneArrayLength()
+
+	if lenAllIntFracDigits == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'numStrKernel' is invalid!\n"+
+			"'numStrKernel' contains no integer or fractional numeric digits.\n"+
+			"    Number of Intger Digits = 0\n"+
+			"Number of Fractional Digits = 0\n",
+			ePrefix.String())
+
+		return formattedStr, remainingIntFracDigits, err
+	}
 
 	fmtRunes := []rune(numFmtSpec.NumberFormat)
 
@@ -299,6 +316,7 @@ func (numStrKernelMech *numberStrKernelMechanics) characterReplacement(
 	formattedStr.CharsArray = make([]rune, lenFmtRunes)
 
 	nextDigitIndex := 0
+	charsReplacedCnt := 0
 
 	for i := 0; i < lenFmtRunes; i++ {
 
@@ -314,11 +332,16 @@ func (numStrKernelMech *numberStrKernelMechanics) characterReplacement(
 					ePrefix.String(),
 					lenAllIntFracDigits)
 
+				if err != nil {
+
+					return formattedStr, remainingIntFracDigits, err
+				}
 			}
 
 			formattedStr.CharsArray[i] =
 				allIntFracDigits.CharsArray[nextDigitIndex]
 
+			charsReplacedCnt++
 			nextDigitIndex++
 
 		} else {
@@ -327,6 +350,20 @@ func (numStrKernelMech *numberStrKernelMechanics) characterReplacement(
 
 		}
 
+	}
+
+	if charsReplacedCnt == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'numFmtSpec' is invalid!\n"+
+			"No target characters could be located for replacement.\n"+
+			"      numFmtSpec.NumberFormat = %v\n"+
+			"numFmtSpec.NumReplacementChar = %v\n",
+			ePrefix.String(),
+			numFmtSpec.NumberFormat,
+			string(numFmtSpec.NumReplacementChar))
+
+		return formattedStr, remainingIntFracDigits, err
 	}
 
 	if nextDigitIndex < lenAllIntFracDigits {

@@ -1943,6 +1943,43 @@ func (numStrKernel *NumberStrKernel) ExtendIntegerDigitsArray(
 //
 // ----------------------------------------------------------------
 //
+// # Usage
+//
+//	intDigits := "0115550101"
+//
+//	nStrKernel,
+//	err = new(strmech.NumberStrKernel).
+//		NewFromStringDigits(
+//			intDigits,
+//			"",
+//			strmech.NumSignVal.Positive(),
+//			ePrefix.XCpy(
+//			"nStrKernel"))
+//
+//	if err != nil {
+//		return err
+//	}
+//
+//	numFmtSpec := strmech.NumStrFmtCharReplacementSpec{
+//		NumberFormat:       "(NNN) NNN-NNNN",
+//		NumReplacementChar: 'N',
+//	}
+//
+//	var formattedNumStr, remainingIntFracDigits string
+//
+//	formattedNumStr,
+//	remainingIntFracDigits,
+//	err = nStrKernel.FmtCharReplacementStr(
+//			numFmtSpec,
+//			ePrefix.XCpy(
+//			"Test#1 nStrKernel"))
+//
+//	if err != nil {
+//		return err
+//	}
+//
+// ----------------------------------------------------------------
+//
 // # Input Parameters
 //
 //	numFmtSpec					NumStrFmtCharReplacementSpec

@@ -1352,6 +1352,280 @@ func TestNumberStrKernel_IsZeroValue_000100(t *testing.T) {
 
 }
 
+func TestNumberStrKernel_FmtCharReplacementStr_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestNumberStrKernel_GetBigRatNum_000100()",
+		"")
+
+	var nStrKernel01 NumberStrKernel
+	var err error
+
+	intDigits := "0115550101"
+	expectedStr := "(011) 555-0101"
+
+	nStrKernel01,
+		err = new(NumberStrKernel).
+		NewFromStringDigits(
+			intDigits,
+			"",
+			NumSignVal.Positive(),
+			ePrefix.XCpy(
+				"Test #1-A: nStrKernel01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	testName := fmt.Sprintf("Test #1-A FmtCharReplacementStr()\n"+
+		"Input Str(%v)\n",
+		intDigits)
+
+	numFmtSpec := NumStrFmtCharReplacementSpec{
+		NumberFormat:       "(NNN) NNN-NNNN",
+		NumReplacementChar: 'N',
+	}
+
+	var formattedNumStr, remainingIntFracDigits string
+
+	formattedNumStr,
+		remainingIntFracDigits,
+		err = nStrKernel01.FmtCharReplacementStr(
+		numFmtSpec,
+		ePrefix.XCpy(
+			"Test#1-A nStrKernel01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	if formattedNumStr != expectedStr {
+
+		t.Errorf("\n%v\n"+
+			"%v\n"+
+			"Error: formattedNumStr != expectedStr\n"+
+			"formattedNumStr  = '%v'\n"+
+			"   expectedStr   = '%v'\n",
+			ePrefix.String(),
+			testName,
+			formattedNumStr,
+			expectedStr)
+
+		return
+
+	}
+
+	testName = fmt.Sprintf("Test #1-B remainingIntFracDigits()\n"+
+		"remainingIntFracDigits = '%v'\n",
+		remainingIntFracDigits)
+
+	if len(remainingIntFracDigits) != 0 {
+
+		t.Errorf("\n%v\n"+
+			"%v\n"+
+			"Error: len(remainingIntFracDigits) > 0\n"+
+			"formattedNumStr  = '%v'\n"+
+			"   expectedStr   = '%v'\n",
+			ePrefix.String(),
+			testName,
+			formattedNumStr,
+			expectedStr)
+
+		return
+
+	}
+
+	intDigits = "0115550101"
+	fracDigits := "4128"
+
+	var nStrKernel02 NumberStrKernel
+
+	nStrKernel02,
+		err = new(NumberStrKernel).
+		NewFromStringDigits(
+			intDigits,
+			fracDigits,
+			NumSignVal.Positive(),
+			ePrefix.XCpy(
+				"Test #2-A: nStrKernel02"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	testName = fmt.Sprintf("Test #2-A FmtCharReplacementStr()\n"+
+		" intDigits Str = %v\n"+
+		"fracDigits Str = %v\n",
+		intDigits,
+		fracDigits)
+
+	numFmtSpec.NumberFormat = "(ZZZ) ZZZ-ZZZZ"
+	numFmtSpec.NumReplacementChar = 'Z'
+
+	formattedNumStr = ""
+	remainingIntFracDigits = ""
+
+	formattedNumStr,
+		remainingIntFracDigits,
+		err = nStrKernel02.FmtCharReplacementStr(
+		numFmtSpec,
+		ePrefix.XCpy(
+			"Test#2-A nStrKernel02"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	if formattedNumStr != expectedStr {
+
+		t.Errorf("\n%v\n"+
+			"%v\n"+
+			"Error: formattedNumStr != expectedStr\n"+
+			"formattedNumStr  = '%v'\n"+
+			"   expectedStr   = '%v'\n",
+			ePrefix.String(),
+			testName,
+			formattedNumStr,
+			expectedStr)
+
+		return
+
+	}
+
+	testName = fmt.Sprintf("Test #2-B remainingIntFracDigits()\n"+
+		"remainingIntFracDigits = '%v'\n",
+		remainingIntFracDigits)
+
+	expectedStr = "4128"
+
+	if remainingIntFracDigits != expectedStr {
+
+		t.Errorf("\n%v\n"+
+			"%v\n"+
+			"Error: remainingIntFracDigits != expectedStr\n"+
+			"remainingIntFracDigits  = '%v'\n"+
+			"          expectedStr   = '%v'\n",
+			ePrefix.String(),
+			testName,
+			remainingIntFracDigits,
+			expectedStr)
+
+		return
+
+	}
+
+	var nStrKernel03 NumberStrKernel
+
+	intDigits = "011555010"
+	fracDigits = ""
+
+	nStrKernel03,
+		err = new(NumberStrKernel).
+		NewFromStringDigits(
+			intDigits,
+			"",
+			NumSignVal.Positive(),
+			ePrefix.XCpy(
+				"Test #3-A: nStrKernel03"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	testName = fmt.Sprintf("Test #2-A FmtCharReplacementStr()\n"+
+		"Insufficient Integer Digits\n"+
+		" intDigits Str = %v\n"+
+		"fracDigits Str = %v\n",
+		intDigits,
+		fracDigits)
+
+	numFmtSpec.NumberFormat = "(ZZZ) ZZZ-ZZZZ"
+	numFmtSpec.NumReplacementChar = 'Z'
+
+	formattedNumStr,
+		remainingIntFracDigits,
+		err = nStrKernel03.FmtCharReplacementStr(
+		numFmtSpec,
+		ePrefix.XCpy(
+			"Test#3-A nStrKernel03"))
+
+	if err == nil {
+		t.Errorf("\n%v\n"+
+			"%v\n"+
+			"Expected an error return from\n"+
+			"nStrKernel02.FmtCharReplacementStr()\n"+
+			"because there were insufficient numeric digits\n"+
+			"to fill the target string.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String(),
+			testName)
+
+		return
+	}
+
+	var nStrKernel04 NumberStrKernel
+
+	intDigits = "0115550101"
+	fracDigits = "4128"
+
+	nStrKernel04,
+		err = new(NumberStrKernel).
+		NewFromStringDigits(
+			intDigits,
+			fracDigits,
+			NumSignVal.Positive(),
+			ePrefix.XCpy(
+				"Test #4-A: nStrKernel04"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	numFmtSpec.NumberFormat = "(ZZZ) ZZZ-ZZZZ"
+	numFmtSpec.NumReplacementChar = 'X'
+
+	testName = fmt.Sprintf("Test #4-A: Invalid NumStrFmtCharReplacementSpec\n"+
+		" numFmtSpec.NumberFormat = %v\n"+
+		"numFmtSpec.NumReplacementChar = %v",
+		numFmtSpec.NumberFormat,
+		string(numFmtSpec.NumReplacementChar))
+
+	formattedNumStr,
+		remainingIntFracDigits,
+		err = nStrKernel04.FmtCharReplacementStr(
+		numFmtSpec,
+		ePrefix.XCpy(
+			"Test#4-A nStrKernel04"))
+
+	if err == nil {
+
+		t.Errorf("\n%v\n"+
+			"%v\n"+
+			"Expected an error return from\n"+
+			"nStrKernel04.FmtCharReplacementStr()\n"+
+			"because NumStrFmtCharReplacementSpec is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String(),
+			testName)
+
+		return
+	}
+
+	return
+}
+
 func TestNumberStrKernel_GetBigRatNum_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
