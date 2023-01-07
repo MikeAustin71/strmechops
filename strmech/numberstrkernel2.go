@@ -1402,7 +1402,7 @@ func (numStrKernel *NumberStrKernel) GetIntFracDigitsStr(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumberStrKernel."+
-			"ExtendIntegerDigitsArray()",
+			"GetIntFracDigitsStr()",
 		"")
 
 	if err != nil {

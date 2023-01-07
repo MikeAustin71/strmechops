@@ -1355,7 +1355,7 @@ func TestNumberStrKernel_IsZeroValue_000100(t *testing.T) {
 func TestNumberStrKernel_FmtCharReplacementStr_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestNumberStrKernel_GetBigRatNum_000100()",
+		"TestNumberStrKernel_FmtCharReplacementStr_000100()",
 		"")
 
 	var nStrKernel01 NumberStrKernel
@@ -1624,6 +1624,312 @@ func TestNumberStrKernel_FmtCharReplacementStr_000100(t *testing.T) {
 	}
 
 	return
+}
+
+func TestNumberStrKernelGetIntFracDigitsStr_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestNumberStrKernel_FmtCharReplacementStr_000100()",
+		"")
+
+	intDigits := "123456789"
+	fracDigits := "1234567890"
+
+	var err error
+	var nStrKernel01 NumberStrKernel
+
+	nStrKernel01,
+		err = new(NumberStrKernel).
+		NewFromStringDigits(
+			intDigits,
+			fracDigits,
+			NumSignVal.Positive(),
+			ePrefix.XCpy(
+				"Test #1-A: nStrKernel01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	testName := fmt.Sprintf("Test #1-A Positive Values - GetIntFracDigitsStr()\n"+
+		" intDigits = %v\n"+
+		"fracDigits = %v",
+		intDigits,
+		fracDigits)
+
+	var formattedNumStr string
+
+	formattedNumStr,
+		err = nStrKernel01.GetIntFracDigitsStr(
+		true,
+		true,
+		NumRoundType.NoRounding(),
+		0,
+		ePrefix.XCpy(
+			"Test #1-A nStrKernel01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	expectedStr := intDigits + fracDigits
+
+	if formattedNumStr != expectedStr {
+
+		t.Errorf("\n%v\n"+
+			"%v\n"+
+			"Error: formattedNumStr != expectedStr\n"+
+			"formattedNumStr  = '%v'\n"+
+			"   expectedStr   = '%v'\n",
+			ePrefix.String(),
+			testName,
+			formattedNumStr,
+			expectedStr)
+
+		return
+
+	}
+
+	testName = fmt.Sprintf("Test #2-A Negative Values - GetIntFracDigitsStr()\n"+
+		" intDigits = %v\n"+
+		"fracDigits = %v",
+		intDigits,
+		fracDigits)
+
+	var nStrKernel02 NumberStrKernel
+
+	nStrKernel02,
+		err = new(NumberStrKernel).
+		NewFromStringDigits(
+			intDigits,
+			fracDigits,
+			NumSignVal.Negative(),
+			ePrefix.XCpy(
+				"Test #2-A: nStrKernel02"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	formattedNumStr,
+		err = nStrKernel02.GetIntFracDigitsStr(
+		true,
+		true,
+		NumRoundType.NoRounding(),
+		0,
+		ePrefix.XCpy(
+			"Test #2-A nStrKernel02"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	expectedStr = "-" + intDigits + fracDigits
+
+	if formattedNumStr != expectedStr {
+
+		t.Errorf("\n%v\n"+
+			"%v\n"+
+			"Error: formattedNumStr != expectedStr\n"+
+			"formattedNumStr  = '%v'\n"+
+			"   expectedStr   = '%v'\n",
+			ePrefix.String(),
+			testName,
+			formattedNumStr,
+			expectedStr)
+
+		return
+
+	}
+
+	testName = fmt.Sprintf("Test #3-A Trailing Negative Values - GetIntFracDigitsStr()\n"+
+		" intDigits = %v\n"+
+		"fracDigits = %v",
+		intDigits,
+		fracDigits)
+
+	var nStrKernel03 NumberStrKernel
+
+	nStrKernel03,
+		err = new(NumberStrKernel).
+		NewFromStringDigits(
+			intDigits,
+			fracDigits,
+			NumSignVal.Negative(),
+			ePrefix.XCpy(
+				"Test #3-A: nStrKernel03"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	formattedNumStr,
+		err = nStrKernel03.GetIntFracDigitsStr(
+		true,
+		false,
+		NumRoundType.NoRounding(),
+		0,
+		ePrefix.XCpy(
+			"Test #3-A nStrKernel03"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	expectedStr = intDigits + fracDigits + "-"
+
+	if formattedNumStr != expectedStr {
+
+		t.Errorf("\n%v\n"+
+			"%v\n"+
+			"Error: formattedNumStr != expectedStr\n"+
+			"formattedNumStr  = '%v'\n"+
+			"   expectedStr   = '%v'\n",
+			ePrefix.String(),
+			testName,
+			formattedNumStr,
+			expectedStr)
+
+		return
+
+	}
+
+	intDigits = "0"
+	fracDigits = ""
+
+	testName = fmt.Sprintf("Test #4-A Zero Value - GetIntFracDigitsStr()\n"+
+		" intDigits = %v\n"+
+		"fracDigits = %v",
+		intDigits,
+		fracDigits)
+
+	var nStrKernel04 NumberStrKernel
+
+	nStrKernel04,
+		err = new(NumberStrKernel).
+		NewFromStringDigits(
+			intDigits,
+			fracDigits,
+			NumSignVal.Positive(),
+			ePrefix.XCpy(
+				"Test #4-A: nStrKernel04"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	formattedNumStr,
+		err = nStrKernel04.GetIntFracDigitsStr(
+		true,
+		false,
+		NumRoundType.NoRounding(),
+		0,
+		ePrefix.XCpy(
+			"Test #4-A nStrKernel04"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	expectedStr = intDigits
+
+	if formattedNumStr != expectedStr {
+
+		t.Errorf("\n%v\n"+
+			"%v\n"+
+			"Error: formattedNumStr != expectedStr\n"+
+			"formattedNumStr  = '%v'\n"+
+			"   expectedStr   = '%v'\n",
+			ePrefix.String(),
+			testName,
+			formattedNumStr,
+			expectedStr)
+
+		return
+
+	}
+
+	intDigits = "12345"
+	fracDigits = "5678"
+
+	testName = fmt.Sprintf("Test #5-A Rounded Value - GetIntFracDigitsStr()\n"+
+		" intDigits = %v\n"+
+		"fracDigits = %v",
+		intDigits,
+		fracDigits)
+
+	var nStrKernel05 NumberStrKernel
+
+	nStrKernel05,
+		err = new(NumberStrKernel).
+		NewFromStringDigits(
+			intDigits,
+			fracDigits,
+			NumSignVal.Positive(),
+			ePrefix.XCpy(
+				"Test #5-A: nStrKernel05"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	formattedNumStr,
+		err = nStrKernel05.GetIntFracDigitsStr(
+		true,
+		true,
+		NumRoundType.HalfAwayFromZero(),
+		2,
+		ePrefix.XCpy(
+			"Test #5-A nStrKernel05"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	/*
+		intDigits = "12345"
+			fracDigits = "5678"
+
+	*/
+
+	expectedStr = "1234557"
+
+	if formattedNumStr != expectedStr {
+
+		t.Errorf("\n%v\n"+
+			"%v\n"+
+			"Error: formattedNumStr != expectedStr\n"+
+			"formattedNumStr  = '%v'\n"+
+			"   expectedStr   = '%v'\n",
+			ePrefix.String(),
+			testName,
+			formattedNumStr,
+			expectedStr)
+
+		return
+
+	}
+
 }
 
 func TestNumberStrKernel_GetBigRatNum_000100(t *testing.T) {
