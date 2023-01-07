@@ -3370,7 +3370,7 @@ func (txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64) SetNumStrFmtDefault(
 	var err2 error
 
 	_,
-		err2 = new(numStrFmtSpecAtom).
+		err2 = new(numStrFmtSpecElectron).
 		testValidityNumStrFormatSpec(
 			&numStrFmtSpec,
 			ePrefix.XCpy(

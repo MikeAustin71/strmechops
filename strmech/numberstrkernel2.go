@@ -7331,7 +7331,7 @@ func (numStrKernel *NumberStrKernel) SetDefaultNumberStrFormatSpec(
 	}
 
 	_,
-		err = new(numStrFmtSpecAtom).
+		err = new(numStrFmtSpecElectron).
 		testValidityNumStrFormatSpec(
 			&defaultNumStrFmt,
 			ePrefix.XCpy(
