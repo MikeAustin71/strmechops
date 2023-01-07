@@ -1832,6 +1832,37 @@ func TestNumberStrKernelGetIntFracDigitsStr_000100(t *testing.T) {
 		return
 	}
 
+	testName = fmt.Sprintf("Test #4-A NumericSignValueType with Zero Value\n"+
+		" intDigits = %v\n"+
+		"fracDigits = %v",
+		intDigits,
+		fracDigits)
+
+	var numValue NumericSignValueType
+
+	numValue,
+		err = nStrKernel04.GetNumberSign(
+		ePrefix.XCpy("Test #4A nStrKernel04"))
+
+	if numValue != NumSignVal.Zero() {
+
+		t.Errorf("\n%v\n"+
+			"%v\n"+
+			"Error: Number Sign IS NOT EQUAL to Zero!\n"+
+			"Number Sign  = '%v'\n",
+			ePrefix.String(),
+			testName,
+			numValue.String())
+
+		return
+	}
+
+	testName = fmt.Sprintf("Test #4-B Zero Value - GetIntFracDigitsStr()\n"+
+		" intDigits = %v\n"+
+		"fracDigits = %v",
+		intDigits,
+		fracDigits)
+
 	formattedNumStr,
 		err = nStrKernel04.GetIntFracDigitsStr(
 		true,
@@ -1839,7 +1870,7 @@ func TestNumberStrKernelGetIntFracDigitsStr_000100(t *testing.T) {
 		NumRoundType.NoRounding(),
 		0,
 		ePrefix.XCpy(
-			"Test #4-A nStrKernel04"))
+			"Test #4-B nStrKernel04"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -1930,6 +1961,7 @@ func TestNumberStrKernelGetIntFracDigitsStr_000100(t *testing.T) {
 
 	}
 
+	return
 }
 
 func TestNumberStrKernel_GetBigRatNum_000100(t *testing.T) {
