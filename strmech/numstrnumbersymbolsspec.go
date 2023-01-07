@@ -66,7 +66,7 @@ import (
 //	methods provide defaults which greatly simplify the
 //	Number Symbols creation process:
 //
-//		NumStrNumberSymbolsSpec.NewSimpleCurrency()
+//		NumStrNumberSymbolsSpec.NewCurrencySimple()
 //		NumStrNumberSymbolsSpec.NewSignedSimpleNumberStr()
 //
 //	If more granular control is required to meet
@@ -1539,7 +1539,7 @@ func (nStrNumSymSpec *NumStrNumberSymbolsSpec) NewNOP() NumStrNumberSymbolsSpec 
 	return newNStrNumSym
 }
 
-//	NewSimpleCurrency
+//	NewCurrencySimple
 //
 //	Creates and returns and instance of
 //	NumStrNumberSymbolsSpec configured for currency
@@ -1778,7 +1778,7 @@ func (nStrNumSymSpec *NumStrNumberSymbolsSpec) NewSimpleCurrency(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumStrNumberSymbolsSpec."+
-			"NewSimpleCurrency()",
+			"NewCurrencySimple()",
 		"")
 
 	if err != nil {
@@ -1805,7 +1805,7 @@ func (nStrNumSymSpec *NumStrNumberSymbolsSpec) NewSimpleCurrency(
 //	If currency number symbol formatting IS
 //	required, see method:
 //
-//		NumStrNumberSymbolsSpec.NewSimpleCurrency()
+//		NumStrNumberSymbolsSpec.NewCurrencySimple()
 //
 //	Type NumStrNumberSymbolsSpec is used to configure
 //	Number Symbols required in converting numeric
