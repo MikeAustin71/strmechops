@@ -10476,7 +10476,7 @@ func (numStrKernel *NumberStrKernel) FmtNumStrPure(
 			"numStrKernel"))
 }
 
-// FmtSignedBasicNumStr
+// FmtSignedNumStrBasic
 //
 //	Returns a formatted number string based on the
 //	numeric value contained in the current instance
@@ -11047,7 +11047,7 @@ func (numStrKernel *NumberStrKernel) FmtNumStrPure(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (numStrKernel *NumberStrKernel) FmtSignedBasicNumStr(
+func (numStrKernel *NumberStrKernel) FmtSignedNumStrBasic(
 	decSeparatorChars string,
 	intSeparatorChars string,
 	intGroupingType IntegerGroupingType,
@@ -11076,7 +11076,7 @@ func (numStrKernel *NumberStrKernel) FmtSignedBasicNumStr(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumberStrKernel."+
-			"FmtCurrencyNumStrUSParen()",
+			"FmtSignedNumStrBasic()",
 		"")
 
 	if err != nil {
@@ -11086,7 +11086,7 @@ func (numStrKernel *NumberStrKernel) FmtSignedBasicNumStr(
 	var numStrFmtSpec NumStrFormatSpec
 
 	numStrFmtSpec,
-		err = new(NumStrFormatSpec).NewSignedBasicNumFmt(
+		err = new(NumStrFormatSpec).NewSignedNumFmtBasic(
 		decSeparatorChars,
 		intSeparatorChars,
 		intGroupingType,

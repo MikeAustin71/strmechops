@@ -5641,7 +5641,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtParamsRunes(
 	return newSignedNumFmtSpec, err
 }
 
-// NewSignedBasicNumFmt
+// NewSignedNumFmtBasic
 //
 // This method is one step above NewSignedSimpleNumFmt()
 // in terms of complexity and customization options.
@@ -5969,7 +5969,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtParamsRunes(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (numStrFmtSpec *NumStrFormatSpec) NewSignedBasicNumFmt(
+func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumFmtBasic(
 	decSeparatorChars string,
 	intSeparatorChars string,
 	intGroupingType IntegerGroupingType,
@@ -5995,7 +5995,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedBasicNumFmt(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumStrFormatSpec."+
-			"NewSignedBasicNumFmt()",
+			"NewSignedNumFmtBasic()",
 		"")
 
 	if err != nil {
