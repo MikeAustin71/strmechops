@@ -539,6 +539,209 @@ func (nStrNumberFieldSpec *NumStrNumberFieldSpec) IsNOP() bool {
 	return false
 }
 
+//	IsValidInstance
+//
+//	Performs a diagnostic review of the data values
+//	encapsulated in the current NumStrNumberFieldSpec
+//	instance to determine if they are valid.
+//
+//	If any data element evaluates as invalid, this
+//	method will return a boolean value of 'false'.
+//
+//	If all data elements are determined to be valid,
+//	this method returns a boolean value of 'true'.
+//
+//	This method is functionally equivalent to
+//	NumStrNumberFieldSpec.IsValidInstanceError() with
+//	the sole exceptions being that this method takes
+//	no input parameters and returns a boolean value.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	This method will suffice to test the validity of
+//	NumStrNumberFieldSpec data elements. However, the
+//	most complete test of data validity can only be
+//	performed using the actual text string to be
+//	displayed in the number field.
+//
+//	If the actual text string which will be used in
+//	conjunction with the current instance of
+//	data values in the current instance of
+//	NumStrNumberFieldSpec is available, consider using
+//	method:
+//		NumStrNumberFieldSpec.IsValidFieldSpecsWithString()
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	-- NONE --
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	bool
+//
+//		If any of the internal member data variables
+//		contained in the current instance of
+//		NumStrNumberFieldSpec are found to be invalid,
+//		this method will return a boolean value of
+//		'false'.
+//
+//		If all internal member data values contained in
+//		the current instance of NumStrNumberFieldSpec are
+//		found to be valid, this method returns a boolean
+//		value of 'true'.
+func (nStrNumberFieldSpec *NumStrNumberFieldSpec) IsValidInstance() bool {
+
+	if nStrNumberFieldSpec.lock == nil {
+		nStrNumberFieldSpec.lock = new(sync.Mutex)
+	}
+
+	nStrNumberFieldSpec.lock.Lock()
+
+	defer nStrNumberFieldSpec.lock.Unlock()
+
+	isValid,
+		_ := new(numStrNumberFieldSpecElectron).testValidityOfNStrNumFieldSpec(
+		nStrNumberFieldSpec,
+		nil)
+
+	return isValid
+}
+
+// IsValidInstanceError
+//
+//	Performs a diagnostic review of the data values
+//	encapsulated in the current NumStrNumberFieldSpec
+//	instance to determine if they are valid.
+//
+//	If any data element evaluates as invalid, this
+//	method will return an error.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully all data
+//		elements contained in the current instance of
+//		NumStrNumberFieldSpec are confirmed as valid, the
+//		returned error Type will be set equal to 'nil'.
+//
+//		If errors are encountered during processing, or
+//		if the current instance of NumStrNumberFieldSpec
+//		contains invalid data elements, an error will
+//		be returned. In this case, the returned error
+//		Type will encapsulate an appropriate error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (nStrNumberFieldSpec *NumStrNumberFieldSpec) IsValidInstanceError(
+	errorPrefix interface{}) error {
+
+	if nStrNumberFieldSpec.lock == nil {
+		nStrNumberFieldSpec.lock = new(sync.Mutex)
+	}
+
+	nStrNumberFieldSpec.lock.Lock()
+
+	defer nStrNumberFieldSpec.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumStrNumberFieldSpec."+
+			"IsValidInstanceError()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	_,
+		err = new(numStrNumberFieldSpecElectron).
+		testValidityOfNStrNumFieldSpec(
+			nStrNumberFieldSpec,
+			ePrefix.XCpy(
+				"nStrNumberFieldSpec"))
+
+	return err
+}
+
 // NewFieldSpec - Creates and returns new instance of
 // NumStrNumberFieldSpec.
 //
@@ -1802,8 +2005,8 @@ func (nStrNumFieldSpecAtom *numStrNumberFieldSpecAtom) setNStrNumberFieldJustifi
 		return err
 	}
 
-	if !fieldJustification.XIsValid() &&
-		fieldJustification != TxtJustify.None() {
+	if nStrNumFieldSpec.fieldLength > 0 &&
+		!fieldJustification.XIsValid() {
 
 		err = fmt.Errorf("%v\n"+
 			"Error: Input parameter 'fieldJustification' is invalid!\n"+
@@ -1821,4 +2024,360 @@ func (nStrNumFieldSpecAtom *numStrNumberFieldSpecAtom) setNStrNumberFieldJustifi
 		fieldJustification
 
 	return err
+}
+
+// numStrNumberFieldSpecElectron - This type provides
+// helper methods for NumStrNumberFieldSpec
+type numStrNumberFieldSpecElectron struct {
+	lock *sync.Mutex
+}
+
+// testValidityOfFieldSpecWithString
+//
+// The method will test the validity of field length and
+// field justification values using the actual string
+// which will be displayed in the number field.
+//
+// Evaluating field length and field justification in
+// conjunction with the actual text string to be
+// displayed in the number field is the best way to
+// validate field length and field justification values.
+//
+// If either of the field length or field justification
+// input values proves to be invalid, an error, along
+// with an appropriate error message, will be returned.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fieldStr					string
+//
+//		The actual text string to be displayed in a
+//		number field.
+//
+//		If 'fieldStr' is an empty zero length string,
+//		this method will take no action, exit and
+//		return no error.
+//
+//	fieldLength					int
+//
+//		The length of the field in which input parameter
+//		'fieldStr' will be displayed.
+//
+//		This parameter defines the length of the text
+//		field in which the numeric value will be displayed
+//		within a number string.
+//
+//		If 'fieldLength' is less than the length of the
+//		numeric value string ('fieldStr'), it will be
+//		automatically set equal to the length of that
+//		numeric value string.
+//
+//		To automatically set the value of fieldLength to
+//		the string length of the numeric value string,
+//		this parameter should be set to a value of minus
+//		one (-1).
+//
+//		If 'fieldLength' is submitted with a value less
+//		than minus one (-1) or greater than 1-million
+//		(1,000,000), an error will be returned.
+//
+//	fieldJustification			TextJustify
+//
+//		The Text Justification formatting which will be
+//		applied if the length of 'fieldStr' is less than
+//		the field length 'fieldLength'.
+//
+//		'TextJustify' is an enumeration which specifies
+//		the justification of the numeric value within the
+//		number field length specified by input parameter
+//		'fieldLength'.
+//
+//		Text justification can only be evaluated in the
+//		context of a number or text string ('fieldStr'),
+//		field length 'fieldLength' and an object of type
+//		TextJustify. This is because number strings	with
+//		a field length equal to or less than the length
+//		of the number string never use text justification.
+//		In these cases, text justification is completely
+//		ignored.
+//
+//		If the field length parameter ('fieldLength') is
+//		greater than the length of the numeric value
+//		string, text justification must be equal to one
+//		of these three valid values:
+//			TextJustify(0).Left()
+//			TextJustify(0).Right()
+//			TextJustify(0).Center()
+//
+//		You can also use the abbreviated text justification
+//		enumeration syntax as follows:
+//			TxtJustify.Left()
+//			TxtJustify.Right()
+//			TxtJustify.Center()
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, or
+//		if the input parameters contain invalid data
+//		elements, an error will be returned. In this
+//		case, the returned error Type will encapsulate an
+//		appropriate error message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (nStrNumFieldSpecElectron *numStrNumberFieldSpecElectron) testValidityOfFieldSpecWithString(
+	fieldStr string,
+	fieldLength int,
+	fieldJustification TextJustify,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if nStrNumFieldSpecElectron.lock == nil {
+		nStrNumFieldSpecElectron.lock = new(sync.Mutex)
+	}
+
+	nStrNumFieldSpecElectron.lock.Lock()
+
+	defer nStrNumFieldSpecElectron.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"numStrNumberFieldSpecElectron."+
+			"testValidityOfFieldSpecWithString()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if len(fieldStr) == 0 {
+
+		return err
+	}
+
+	if fieldLength < -1 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: The Field Length parameter 'fieldLength' is invalid!\n"+
+			"'fieldLength' has a value less than minus one (-1).\n"+
+			"fieldLength = %v\n",
+			ePrefix.String(),
+			fieldLength)
+
+		return err
+
+	}
+
+	if fieldLength > 1000000 {
+		err = fmt.Errorf("%v\n"+
+			"Error: The Field Length parameter 'fieldLength' is invalid!\n"+
+			"'fieldLength' has a value greater than one-million (1,000,000).\n"+
+			"fieldLength = %v\n",
+			ePrefix.String(),
+			fieldLength)
+
+		return err
+	}
+
+	if len(fieldStr) >= fieldLength {
+
+		return err
+	}
+
+	if !fieldJustification.XIsValid() {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: The Field Justification parameter is invalid!\n"+
+			"'fieldJustification' is set to an invalid value.\n"+
+			"The string to be displayed is: %v\n"+
+			"The Field Length is: %v\n"+
+			"fieldJustification Integer Value = %v\n"+
+			" fieldJustification String Value = %v\n",
+			ePrefix.String(),
+			fieldStr,
+			fieldLength,
+			fieldJustification.XValueInt(),
+			fieldJustification.String())
+	}
+
+	return err
+}
+
+//	testValidityNumStrFormatSpec
+//
+//	Performs a diagnostic review of the data values
+//	encapsulated in an instance of NumStrNumberFieldSpec
+//	to determine if they are valid.
+//
+//	If any data element evaluates as invalid, this
+//	method will return an error.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	nStrNumFieldSpec	*NumStrNumberFieldSpec
+//
+//		A pointer to an instance of NumStrNumberFieldSpec.
+//		All member variable data values contained in
+//		this instance will be reviewed to determine if
+//		they are valid.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	isValid						bool
+//
+//		If any of the internal member data variables
+//		contained in input parameter 'nStrNumFieldSpec'
+//		are found to be invalid, this method will return
+//		a boolean value of 'false'.
+//
+//		If all internal member data variables contained
+//		in 'nStrNumFieldSpec' are found to be valid, this
+//		method returns a boolean value of 'true'.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, or
+//		if input parameter 'nStrNumFieldSpec' contains
+//		invalid data elements, an error will be returned.
+//		 In this case, the returned error, the returned
+//		 error Type will encapsulate an	appropriate error
+//		 message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (nStrNumFieldSpecElectron *numStrNumberFieldSpecElectron) testValidityOfNStrNumFieldSpec(
+	nStrNumFieldSpec *NumStrNumberFieldSpec,
+	errPrefDto *ePref.ErrPrefixDto) (
+	isValid bool,
+	err error) {
+
+	if nStrNumFieldSpecElectron.lock == nil {
+		nStrNumFieldSpecElectron.lock = new(sync.Mutex)
+	}
+
+	nStrNumFieldSpecElectron.lock.Lock()
+
+	defer nStrNumFieldSpecElectron.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	isValid = false
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"numStrNumberFieldSpecElectron."+
+			"testValidityOfNStrNumFieldSpec()",
+		"")
+
+	if err != nil {
+		return isValid, err
+	}
+
+	if nStrNumFieldSpec == nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'nStrNumFieldSpec' is invalid!\n"+
+			"'nStrNumFieldSpec' is a 'nil' pointer.\n",
+			ePrefix.String())
+
+		return isValid, err
+	}
+
+	if nStrNumFieldSpec.fieldLength < -1 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: The NumStrNumberFieldSpec parameter 'nStrNumFieldSpec' is invalid!\n"+
+			"'nStrNumFieldSpec.fieldLength' has a value less than minus one (-1).\n"+
+			"nStrNumFieldSpec.fieldLength = %v\n",
+			ePrefix.String(),
+			nStrNumFieldSpec.fieldLength)
+
+		return isValid, err
+
+	}
+
+	if nStrNumFieldSpec.fieldLength > 1000000 {
+		err = fmt.Errorf("%v\n"+
+			"Error: The NumStrNumberFieldSpec parameter 'nStrNumFieldSpec' is invalid!\n"+
+			"'nStrNumFieldSpec.fieldLength' has a value greater than one-million (1,000,000).\n"+
+			"nStrNumFieldSpec.fieldLength = %v\n",
+			ePrefix.String(),
+			nStrNumFieldSpec.fieldLength)
+
+		return isValid, err
+	}
+
+	if nStrNumFieldSpec.fieldLength > 0 &&
+		!nStrNumFieldSpec.fieldJustification.XIsValid() {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: The NumStrNumberFieldSpec Field Justification parameter is invalid!\n"+
+			"'nStrNumFieldSpec.fieldJustification' is set to an invalid value.\n"+
+			"nStrNumFieldSpec.fieldJustification Integer Value = %v\n"+
+			" nStrNumFieldSpec.fieldJustification String Value = %v\n",
+			ePrefix.String(),
+			nStrNumFieldSpec.fieldJustification.XValueInt(),
+			nStrNumFieldSpec.fieldJustification.String())
+
+		return isValid, err
+
+	}
+
+	isValid = true
+
+	return isValid, err
 }

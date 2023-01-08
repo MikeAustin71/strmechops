@@ -65,9 +65,12 @@ type numStrFmtSpecElectron struct {
 //	err							error
 //
 //		If this method completes successfully, the
-//		returned error Type is set equal to 'nil'. If
-//		errors are encountered during processing, the
-//		returned error Type will encapsulate an error
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, or
+//		if input parameter 'numberStrFmtSpec' contains
+//		invalid data elements, an error will be returned.
+//		The returned error Type will encapsulate an error
 //		message.
 //
 //		If an error message is returned, the text value

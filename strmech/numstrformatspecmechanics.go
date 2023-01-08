@@ -12,6 +12,54 @@ type numStrFmtSpecMechanics struct {
 	lock *sync.Mutex
 }
 
+func (nStrFmtSpecMechanics *numStrFmtSpecMechanics) setSignedBasicNumStr(
+	numberStrFmtSpec *NumStrFormatSpec,
+	decSeparatorChars string,
+	intSeparatorChars string,
+	intGroupingType IntegerGroupingType,
+	leadingNegativeNumSign string,
+	trailingNegativeNumSign string,
+	fieldLength int,
+	fieldJustification TextJustify,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if nStrFmtSpecMechanics.lock == nil {
+		nStrFmtSpecMechanics.lock = new(sync.Mutex)
+	}
+
+	nStrFmtSpecMechanics.lock.Lock()
+
+	defer nStrFmtSpecMechanics.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"numStrFmtSpecMechanics."+
+			"setUSDefaultSignedNumStrFmtIfNeeded()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if numberStrFmtSpec == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'numberStrFmtSpec' is invalid!\n"+
+			"'numberStrFmtSpec' is a 'nil' pointer.\n",
+			ePrefix.String())
+
+		return err
+
+	}
+
+	return err
+}
+
 //	setUSDefaultSignedNumStrFmtIfNeeded
 //
 //	Receives a pointer to an instance of NumStrFormatSpec
@@ -251,16 +299,12 @@ func (nStrFmtSpecMechanics *numStrFmtSpecMechanics) setUSDefaultSignedNumStrFmtI
 
 	}
 
-	if !numberStrFmtSpec.IsValidInstance() {
-
-		err = new(numStrFmtSpecNanobot).
-			setSignedNStrFmtUS(
-				numberStrFmtSpec,
-				numberFieldSpec,
-				ePrefix.XCpy(
-					"numberStrFmtSpec<-Signed US Format"))
-
-	}
+	err = new(numStrFmtSpecNanobot).
+		setSignedNStrFmtUS(
+			numberStrFmtSpec,
+			numberFieldSpec,
+			ePrefix.XCpy(
+				"numberStrFmtSpec<-Signed US Format"))
 
 	return err
 }
