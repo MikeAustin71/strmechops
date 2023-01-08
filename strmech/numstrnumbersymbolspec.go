@@ -4301,9 +4301,9 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetTrailingNumberSymbol(
 //
 // Example-6: Trailing Number Symbols
 //
-//	 Leading Symbols: "("
-//		Trailing Symbols: ")"
-//		Number String:   "(123.456)"
+//	Leading Symbols: "("
+//	Trailing Symbols: ")"
+//	Number String:   "(123.456)"
 func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetTrailingNumberSymbolRunes(
 	trailingNumberSymbol []rune,
 	trailingNumFieldSymPosition NumberFieldSymbolPosition,
@@ -4729,7 +4729,7 @@ func (nStrNumSymSpecNanobot *numStrNumberSymbolSpecNanobot) setLeadingNStrNumSym
 //
 // Input Parameters
 //
-//	posNumSignSpec					*NumStrNumberSymbolSpec
+//	numSignSymbolSpec				*NumStrNumberSymbolSpec
 //		A pointer to a NumStrNumberSymbolSpec instance.
 //		The Trailing Number Symbol contained in this
 //		instance will be deleted and reset to the value
@@ -4824,7 +4824,7 @@ func (nStrNumSymSpecNanobot *numStrNumberSymbolSpecNanobot) setLeadingNStrNumSym
 //		parameter 'errPrefDto' (error prefix) will be prefixed or
 //		attached at the beginning of the error message.
 func (nStrNumSymSpecNanobot *numStrNumberSymbolSpecNanobot) setTrailingNStrNumSymbolSpec(
-	posNumSignSpec *NumStrNumberSymbolSpec,
+	numSignSymbolSpec *NumStrNumberSymbolSpec,
 	trailingNumberSymbol []rune,
 	trailingNumFieldSymPosition NumberFieldSymbolPosition,
 	errPrefDto *ePref.ErrPrefixDto) (
@@ -4851,11 +4851,11 @@ func (nStrNumSymSpecNanobot *numStrNumberSymbolSpecNanobot) setTrailingNStrNumSy
 		return err
 	}
 
-	if posNumSignSpec == nil {
+	if numSignSymbolSpec == nil {
 
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'posNumSignSpec' is invalid!\n"+
-			"'posNumSignSpec' is a 'nil' pointer.\n",
+			"Error: Input parameter 'numSignSymbolSpec' is invalid!\n"+
+			"'numSignSymbolSpec' is a 'nil' pointer.\n",
 			ePrefix.String())
 
 		return err
@@ -4876,14 +4876,14 @@ func (nStrNumSymSpecNanobot *numStrNumberSymbolSpecNanobot) setTrailingNStrNumSy
 	}
 
 	new(nStrNumberSymbolSpecAtom).emptyTrailingNStrNumSymbol(
-		posNumSignSpec)
+		numSignSymbolSpec)
 
 	if len(trailingNumberSymbol) > 0 {
 
-		err = posNumSignSpec.trailingNumberSymbols.SetRuneArray(
+		err = numSignSymbolSpec.trailingNumberSymbols.SetRuneArray(
 			trailingNumberSymbol,
 			ePrefix.XCpy(
-				"posNumSignSpec.trailingNumberSymbols"+
+				"numSignSymbolSpec.trailingNumberSymbols"+
 					"<-trailingNumberSymbols"))
 
 		if err != nil {
@@ -4891,7 +4891,7 @@ func (nStrNumSymSpecNanobot *numStrNumberSymbolSpecNanobot) setTrailingNStrNumSy
 		}
 	}
 
-	posNumSignSpec.trailingNumberFieldSymbolPosition =
+	numSignSymbolSpec.trailingNumberFieldSymbolPosition =
 		trailingNumFieldSymPosition
 
 	return err

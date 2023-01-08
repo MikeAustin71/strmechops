@@ -562,15 +562,13 @@ func (nStrNumberFieldSpec *NumStrNumberFieldSpec) IsNOP() bool {
 //
 //	This method will suffice to test the validity of
 //	NumStrNumberFieldSpec data elements. However, the
-//	most complete test of data validity can only be
-//	performed using the actual text string to be
-//	displayed in the number field.
+//	most complete test of number field specification
+//	data validity can only be performed using the actual
+//	text string to be displayed in the number field.
 //
-//	If the actual text string which will be used in
-//	conjunction with the current instance of
-//	data values in the current instance of
-//	NumStrNumberFieldSpec is available, consider using
-//	method:
+//	If the actual text string to be used in conjunction
+//	with the current NumStrNumberFieldSpec instance data
+//	values is available, consider using method:
 //		NumStrNumberFieldSpec.IsValidFieldSpecsWithString()
 //
 // ----------------------------------------------------------------
@@ -621,6 +619,21 @@ func (nStrNumberFieldSpec *NumStrNumberFieldSpec) IsValidInstance() bool {
 //
 //	If any data element evaluates as invalid, this
 //	method will return an error.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	This method will suffice to test the validity of
+//	NumStrNumberFieldSpec data elements. However, the
+//	most complete test of number field specification
+//	data validity can only be performed using the actual
+//	text string to be displayed in the number field.
+//
+//	If the actual text string to be used in conjunction
+//	with the current NumStrNumberFieldSpec instance data
+//	values is available, consider using method:
+//		NumStrNumberFieldSpec.IsValidFieldSpecsWithString()
 //
 // ----------------------------------------------------------------
 //
@@ -740,6 +753,244 @@ func (nStrNumberFieldSpec *NumStrNumberFieldSpec) IsValidInstanceError(
 				"nStrNumberFieldSpec"))
 
 	return err
+}
+
+// IsValidFieldSpecsWithString
+//
+// The method will test the validity of field length and
+// field justification values using the actual string
+// to be displayed in the number field.
+//
+// Evaluating field length and field justification in
+// conjunction with the actual text string is the best
+// way to fully validate field length and field
+// justification values.
+//
+// If either of the field length or field justification
+// input values proves to be invalid, an error, along
+// with an appropriate error message, will be returned.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fieldStr							string
+//
+//		The actual text string or number string to be
+//		displayed in a number field.
+//
+//		If 'fieldStr' is an empty zero length string,
+//		this method will take no action, exit and
+//		return no error.
+//
+//	fieldStrParameterName				string
+//
+//		The name or label of the 'fieldStr' parameter to
+//		be used in error or informational messages
+//		returned by this method.
+//
+//		If this parameter is submitted as an empty or
+//		zero length string, it will be automatically set
+//		to the default value of 'fieldStr'.
+//
+//	fieldLength							int
+//
+//		The length of the field in which input parameter
+//		'fieldStr' will be displayed.
+//
+//		This parameter defines the length of the text
+//		field in which the numeric value will be displayed
+//		within a number string.
+//
+//		If 'fieldLength' is less than the length of the
+//		numeric value string ('fieldStr'), it will be
+//		automatically set equal to the length of that
+//		numeric value string.
+//
+//		To automatically set the value of fieldLength to
+//		the string length of the numeric value string,
+//		this parameter should be set to a value of minus
+//		one (-1).
+//
+//		If 'fieldLength' is submitted with a value less
+//		than minus one (-1) or greater than 1-million
+//		(1,000,000), an error will be returned.
+//
+//	fieldLengthParameterName			string
+//
+//		The name or label of the 'fieldLength' parameter
+//		to be used in error or informational messages
+//		returned by this method.
+//
+//		If this parameter is submitted as an empty or
+//		zero length string, it will be automatically set
+//		to the default value of 'fieldLength'.
+//
+//	fieldJustification					TextJustify
+//
+//		The Text Justification formatting which will be
+//		applied if the length of 'fieldStr' is less than
+//		the field length 'fieldLength'.
+//
+//		'TextJustify' is an enumeration which specifies
+//		the justification of the numeric value within the
+//		number field length specified by input parameter
+//		'fieldLength'.
+//
+//		Text justification can only be evaluated in the
+//		context of a number or text string ('fieldStr'),
+//		field length 'fieldLength' and an object of type
+//		TextJustify. This is because number strings	with
+//		a field length equal to or less than the length
+//		of the number string never use text justification.
+//		In these cases, text justification is completely
+//		ignored.
+//
+//		If the field length parameter ('fieldLength') is
+//		greater than the length of the numeric value
+//		string, text justification must be equal to one
+//		of these three valid values:
+//			TextJustify(0).Left()
+//			TextJustify(0).Right()
+//			TextJustify(0).Center()
+//
+//		You can also use the abbreviated text
+//		justification enumeration syntax as follows:
+//			TxtJustify.Left()
+//			TxtJustify.Right()
+//			TxtJustify.Center()
+//
+//	fieldJustificationParameterName		string
+//
+//		The name or label of the 'fieldJustification'
+//		parameter to be used in error or informational
+//		messages returned by this method.
+//
+//		If this parameter is submitted as an empty or
+//		zero length string, it will be automatically set
+//		to the default value of 'fieldJustification'.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully and all the
+//		data elements contained in input parameters
+//		'fieldLength' and 'fieldJustification' are
+//		confirmed as valid, this returned error Type is
+//		set equal to 'nil'.
+//
+//		If errors are encountered during processing, or
+//		if the input parameters contain invalid data
+//		elements, an error will be returned. In this
+//		case, the returned error Type will encapsulate an
+//		appropriate error message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (nStrNumberFieldSpec *NumStrNumberFieldSpec) IsValidFieldSpecsWithString(
+	fieldStr string,
+	fieldStrParameterName string,
+	fieldLength int,
+	fieldLengthParameterName string,
+	fieldJustification TextJustify,
+	fieldJustificationParameterName string,
+	errorPrefix interface{}) error {
+
+	if nStrNumberFieldSpec.lock == nil {
+		nStrNumberFieldSpec.lock = new(sync.Mutex)
+	}
+
+	nStrNumberFieldSpec.lock.Lock()
+
+	defer nStrNumberFieldSpec.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumStrNumberFieldSpec."+
+			"IsValidFieldSpecsWithString()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	return new(numStrNumberFieldSpecElectron).
+		testValidityOfFieldSpecWithString(
+			fieldStr,
+			fieldStrParameterName,
+			fieldLength,
+			fieldLengthParameterName,
+			fieldJustification,
+			fieldJustificationParameterName,
+			ePrefix)
 }
 
 // NewFieldSpec - Creates and returns new instance of
@@ -2036,12 +2287,12 @@ type numStrNumberFieldSpecElectron struct {
 //
 // The method will test the validity of field length and
 // field justification values using the actual string
-// which will be displayed in the number field.
+// to be displayed in the number field.
 //
 // Evaluating field length and field justification in
-// conjunction with the actual text string to be
-// displayed in the number field is the best way to
-// validate field length and field justification values.
+// conjunction with the actual text string is the best
+// way to validate field length and field justification
+// values.
 //
 // If either of the field length or field justification
 // input values proves to be invalid, an error, along
@@ -2051,16 +2302,26 @@ type numStrNumberFieldSpecElectron struct {
 //
 // # Input Parameters
 //
-//	fieldStr					string
+//	fieldStr							string
 //
-//		The actual text string to be displayed in a
-//		number field.
+//		The actual text string or number string to be
+//		displayed in a number field.
 //
 //		If 'fieldStr' is an empty zero length string,
 //		this method will take no action, exit and
 //		return no error.
 //
-//	fieldLength					int
+//	fieldStrParameterName				string
+//
+//		The name or label of the 'fieldStr' parameter to
+//		be used in error or informational messages
+//		returned by this method.
+//
+//		If this parameter is submitted as an empty or
+//		zero length string, it will be automatically set
+//		to the default value of 'fieldStr'.
+//
+//	fieldLength							int
 //
 //		The length of the field in which input parameter
 //		'fieldStr' will be displayed.
@@ -2083,7 +2344,17 @@ type numStrNumberFieldSpecElectron struct {
 //		than minus one (-1) or greater than 1-million
 //		(1,000,000), an error will be returned.
 //
-//	fieldJustification			TextJustify
+//	fieldLengthParameterName			string
+//
+//		The name or label of the 'fieldLength' parameter
+//		to be used in error or informational messages
+//		returned by this method.
+//
+//		If this parameter is submitted as an empty or
+//		zero length string, it will be automatically set
+//		to the default value of 'fieldLength'.
+//
+//	fieldJustification					TextJustify
 //
 //		The Text Justification formatting which will be
 //		applied if the length of 'fieldStr' is less than
@@ -2111,13 +2382,23 @@ type numStrNumberFieldSpecElectron struct {
 //			TextJustify(0).Right()
 //			TextJustify(0).Center()
 //
-//		You can also use the abbreviated text justification
-//		enumeration syntax as follows:
+//		You can also use the abbreviated text
+//		justification enumeration syntax as follows:
 //			TxtJustify.Left()
 //			TxtJustify.Right()
 //			TxtJustify.Center()
 //
-//	errPrefDto					*ePref.ErrPrefixDto
+//	fieldJustificationParameterName		string
+//
+//		The name or label of the 'fieldJustification'
+//		parameter to be used in error or informational
+//		messages returned by this method.
+//
+//		If this parameter is submitted as an empty or
+//		zero length string, it will be automatically set
+//		to the default value of 'fieldJustification'.
+//
+//	errPrefDto							*ePref.ErrPrefixDto
 //
 //		This object encapsulates an error prefix string
 //		which is included in all returned error
@@ -2153,8 +2434,11 @@ type numStrNumberFieldSpecElectron struct {
 //		the error message.
 func (nStrNumFieldSpecElectron *numStrNumberFieldSpecElectron) testValidityOfFieldSpecWithString(
 	fieldStr string,
+	fieldStrParameterName string,
 	fieldLength int,
+	fieldLengthParameterName string,
 	fieldJustification TextJustify,
+	fieldJustificationParameterName string,
 	errPrefDto *ePref.ErrPrefixDto) error {
 
 	if nStrNumFieldSpecElectron.lock == nil {
@@ -2180,18 +2464,36 @@ func (nStrNumFieldSpecElectron *numStrNumberFieldSpecElectron) testValidityOfFie
 		return err
 	}
 
-	if len(fieldStr) == 0 {
+	lenFieldStr := len(fieldStr)
+
+	if lenFieldStr == 0 {
 
 		return err
+	}
+
+	if len(fieldStrParameterName) == 0 {
+		fieldStrParameterName = "fieldStr"
+	}
+
+	if len(fieldLengthParameterName) == 0 {
+		fieldLengthParameterName = "fieldLength"
+	}
+
+	if len(fieldJustificationParameterName) == 0 {
+		fieldJustificationParameterName =
+			"fieldJustification"
 	}
 
 	if fieldLength < -1 {
 
 		err = fmt.Errorf("%v\n"+
-			"Error: The Field Length parameter 'fieldLength' is invalid!\n"+
-			"'fieldLength' has a value less than minus one (-1).\n"+
-			"fieldLength = %v\n",
+			"Error: The Field Length parameter '%v' is invalid!\n"+
+			"'%v' has a value less than minus one (-1).\n"+
+			"%v = %v\n",
 			ePrefix.String(),
+			fieldLengthParameterName,
+			fieldLengthParameterName,
+			fieldLengthParameterName,
 			fieldLength)
 
 		return err
@@ -2200,16 +2502,19 @@ func (nStrNumFieldSpecElectron *numStrNumberFieldSpecElectron) testValidityOfFie
 
 	if fieldLength > 1000000 {
 		err = fmt.Errorf("%v\n"+
-			"Error: The Field Length parameter 'fieldLength' is invalid!\n"+
-			"'fieldLength' has a value greater than one-million (1,000,000).\n"+
-			"fieldLength = %v\n",
+			"Error: The Field Length parameter '%v' is invalid!\n"+
+			"'%v' has a value greater than one-million (1,000,000).\n"+
+			"%v = %v\n",
 			ePrefix.String(),
+			fieldLengthParameterName,
+			fieldLengthParameterName,
+			fieldLengthParameterName,
 			fieldLength)
 
 		return err
 	}
 
-	if len(fieldStr) >= fieldLength {
+	if lenFieldStr >= fieldLength {
 
 		return err
 	}
@@ -2217,16 +2522,25 @@ func (nStrNumFieldSpecElectron *numStrNumberFieldSpecElectron) testValidityOfFie
 	if !fieldJustification.XIsValid() {
 
 		err = fmt.Errorf("%v\n"+
-			"Error: The Field Justification parameter is invalid!\n"+
-			"'fieldJustification' is set to an invalid value.\n"+
-			"The string to be displayed is: %v\n"+
-			"The Field Length is: %v\n"+
-			"fieldJustification Integer Value = %v\n"+
-			" fieldJustification String Value = %v\n",
+			"Error: The Field Justification parameter '%v' is invalid!\n"+
+			"'%v' is set to an invalid value.\n"+
+			"The %v to be displayed is: %v\n"+
+			"%v has a length of: %v\n"+
+			"The Field Length ('%v') is: %v\n"+
+			"'%v' Integer Value = %v\n"+
+			" '%v' String Value = %v\n",
 			ePrefix.String(),
+			fieldJustificationParameterName,
+			fieldJustificationParameterName,
+			fieldStrParameterName,
+			fieldStrParameterName,
+			fieldLengthParameterName,
+			lenFieldStr,
 			fieldStr,
 			fieldLength,
+			fieldJustificationParameterName,
 			fieldJustification.XValueInt(),
+			fieldJustificationParameterName,
 			fieldJustification.String())
 	}
 

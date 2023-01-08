@@ -1282,6 +1282,19 @@ func (numStrFmtSpecAtom *numStrFmtSpecAtom) setNumberFieldParams(
 		return err
 	}
 
+	numFieldSpec := NumStrNumberFieldSpec{
+		fieldLength:        fieldLength,
+		fieldJustification: fieldJustification,
+	}
+
+	err = numFieldSpec.IsValidInstanceError(
+		ePrefix.XCpy(
+			"numFieldSpec"))
+
+	if err != nil {
+		return err
+	}
+
 	signedNumFmt.numberFieldSpec.Empty()
 
 	err = signedNumFmt.numberFieldSpec.SetFieldSpec(
@@ -1289,6 +1302,10 @@ func (numStrFmtSpecAtom *numStrFmtSpecAtom) setNumberFieldParams(
 		fieldJustification,
 		ePrefix.XCpy(
 			"signedNumFmt.numberFieldSpec<-"))
+
+	if err != nil {
+		return err
+	}
 
 	return err
 }
