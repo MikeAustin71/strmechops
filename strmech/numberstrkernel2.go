@@ -5216,6 +5216,55 @@ func (numStrKernel *NumberStrKernel) NewParseFrenchNumberStr(
 //	numbers with a negative value is assumed to
 //	be a trailing minus sign ('-').
 //
+// ----------------------------------------------------------------
+//
+// # German Number String Examples
+//
+//	The radix point or decimal separator is set to the
+//	comma character (','):
+//
+//		German Example-1
+//			123,45 (The fractional digits are "45")
+//
+//	The integer group separator is a space character
+//	('.').
+//
+//	The integer group specification is set to
+//	'thousands'. This means that integer digits will be
+//	separated into 'thousands' with each group containing
+//	three digits each:
+//
+//		German Example-2:
+//		1.000.000,00
+//
+//	The currency symbol used in the Germany is the
+//	Euro symbol ('€').
+//
+//		German Example-3
+//		1.000.000,00 €
+//
+//	The negative number sign is set to a trailing minus
+//	sign ('-').
+//
+//		German Example-4
+//		1.000.000,00- €
+//
+//	The positive number sign is set to a trailing
+//	Euro symbol.
+//
+//		German Example-5
+//		1.000.000,00 €
+//
+//	The zero number format is set to a trailing
+//	Euro symbol.
+//
+//		German Example-6
+//			0,00 €
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
 //	Within in the European Union many, if not
 //	most, of the member countries subscribe to
 //	the decimal separator and negative number
