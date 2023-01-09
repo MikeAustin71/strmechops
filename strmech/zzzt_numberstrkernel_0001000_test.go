@@ -2495,182 +2495,6 @@ func TestNumberStrKernel_FmtSignedNumStrBasic_000100(t *testing.T) {
 	return
 }
 
-func TestNumberStrKernel_FmtSignedNumStrUS_000100(t *testing.T) {
-
-	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestNumberStrKernel_FmtSignedNumStrUS_000100()",
-		"")
-
-	var expectedNumberStr, fmtNumberStr, testName,
-		origNumberStr string
-
-	origNumberStr = "1.234.567,89 €"
-
-	var err error
-	var nStrKernel01 NumberStrKernel
-	var numberStrSearchResults CharSearchNumStrParseResultsDto
-
-	numberStrSearchResults,
-		nStrKernel01,
-		err = new(NumberStrKernel).NewParseGermanNumberStr(
-		origNumberStr,
-		0,
-		-1,
-		nil,
-		false,
-		ePrefix.XCpy(
-			"Test 1-A nStrKernel01<-origNumberStr"))
-
-	if err != nil {
-		t.Errorf("\n%v\n",
-			err.Error())
-		return
-	}
-
-	testName = fmt.Sprintf("Test #1-A NewParseGermanNumberStr()\n"+
-		"Test Number String Search Results FoundNumericDigits\n"+
-		"origNumberStr  = %v",
-		origNumberStr)
-
-	if numberStrSearchResults.FoundNumericDigits == false {
-
-		t.Errorf("\n%v\n"+
-			"%v\n"+
-			"Error: numberStrSearchResults.FoundNumericDigits == false\n"+
-			"Failed To Find Numeric Digits while parsing German Number String.\n",
-			ePrefix.String(),
-			testName)
-
-		return
-	}
-
-	testName = fmt.Sprintf("Test #1-B NewParseGermanNumberStr()\n"+
-		"Test Number String Search Results FoundIntegerDigits\n"+
-		"origNumberStr  = %v",
-		origNumberStr)
-
-	if numberStrSearchResults.FoundIntegerDigits == false {
-
-		t.Errorf("\n%v\n"+
-			"%v\n"+
-			"Error: numberStrSearchResults.FoundIntegerDigits == false\n"+
-			"Failed To Find Integer Digits while parsing German Number String.\n",
-			ePrefix.String(),
-			testName)
-
-		return
-	}
-
-	testName = fmt.Sprintf("Test #1-C NewParseGermanNumberStr()\n"+
-		"Test Number String Search Results FoundDecimalDigits\n"+
-		"origNumberStr  = %v",
-		origNumberStr)
-
-	if numberStrSearchResults.FoundDecimalDigits == false {
-
-		t.Errorf("\n%v\n"+
-			"%v\n"+
-			"Error: numberStrSearchResults.FoundDecimalDigits == false\n"+
-			"Failed To Find Decimal (Fractional) Digits while parsing German Number String.\n",
-			ePrefix.String(),
-			testName)
-
-		return
-	}
-
-	testName = fmt.Sprintf("Test #2 NewParseGermanNumberStr()\n"+
-		"nStrKernel01.FmtNumStrNative()\n"+
-		"origNumberStr  = %v",
-		origNumberStr)
-
-	fmtNumberStr,
-		_,
-		err = nStrKernel01.FmtNumStrNative(
-		NumRoundType.NoRounding(),
-		0,
-		ePrefix.XCpy(
-			"Test #2 fmtNumberStr<-nStrKernel01"))
-
-	if err != nil {
-		t.Errorf("\n%v\n",
-			err.Error())
-		return
-	}
-
-	expectedNumberStr = "1234567.89"
-
-	if expectedNumberStr != fmtNumberStr {
-
-		t.Errorf("%v\n"+
-			"Test#1\n"+
-			"Error: fmtNumberStr NOT EQUAL TO expectedNumberStr\n"+
-			"       fmtNumberStr = '%v'\n"+
-			"expectedNumberStr   = '%v'\n",
-			ePrefix.String(),
-			fmtNumberStr,
-			expectedNumberStr)
-
-		return
-	}
-
-	var nStrKernel02 NumberStrKernel
-
-	origNumberStr = "1.234.567,89- €"
-
-	_,
-		nStrKernel02,
-		err = new(NumberStrKernel).NewParseGermanNumberStr(
-		origNumberStr,
-		0,
-		-1,
-		nil,
-		false,
-		ePrefix.XCpy(
-			"Test #3 nStrKernel01<-origNumberStr"))
-
-	if err != nil {
-		t.Errorf("\n%v\n",
-			err.Error())
-		return
-	}
-
-	testName = fmt.Sprintf("Test #3 NewParseGermanNumberStr()\n"+
-		"nStrKernel02.FmtNumStrNative()\n"+
-		"origNumberStr  = %v",
-		origNumberStr)
-
-	fmtNumberStr,
-		_,
-		err = nStrKernel02.FmtNumStrNative(
-		NumRoundType.NoRounding(),
-		0,
-		ePrefix.XCpy(
-			"Test #3 fmtNumberStr<-nStrKernel02"))
-
-	if err != nil {
-		t.Errorf("\n%v\n",
-			err.Error())
-		return
-	}
-
-	expectedNumberStr = "-1234567.89"
-
-	if expectedNumberStr != fmtNumberStr {
-
-		t.Errorf("%v\n"+
-			"Test#1\n"+
-			"Error: fmtNumberStr NOT EQUAL TO expectedNumberStr\n"+
-			"       fmtNumberStr = '%v'\n"+
-			"expectedNumberStr   = '%v'\n",
-			ePrefix.String(),
-			fmtNumberStr,
-			expectedNumberStr)
-
-		return
-	}
-
-}
-
 func TestNumberStrKernel_IsZeroValue_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
@@ -3785,6 +3609,273 @@ func TestNumberStrKernel_NewFromBigRat_000200(t *testing.T) {
 	}
 
 	return
+}
+
+func TestNumberStrKernel_NewParseGermanNumberStr_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestNumberStrKernel_NewParseGermanNumberStr_000100()",
+		"")
+
+	var expectedNumberStr, fmtNumberStr, testName,
+		origNumberStr string
+
+	origNumberStr = "1.234.567,89 €"
+
+	var err error
+	var nStrKernel01 NumberStrKernel
+	var numberStrSearchResults CharSearchNumStrParseResultsDto
+
+	numberStrSearchResults,
+		nStrKernel01,
+		err = new(NumberStrKernel).NewParseGermanNumberStr(
+		origNumberStr,
+		0,
+		-1,
+		nil,
+		false,
+		ePrefix.XCpy(
+			"Test 1-A nStrKernel01<-origNumberStr"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	testName = fmt.Sprintf("Test #1-A NewParseGermanNumberStr()\n"+
+		"Test Number String Search Results FoundNumericDigits\n"+
+		"origNumberStr  = %v",
+		origNumberStr)
+
+	if numberStrSearchResults.FoundNumericDigits == false {
+
+		t.Errorf("\n%v\n"+
+			"%v\n"+
+			"Error: numberStrSearchResults.FoundNumericDigits == false\n"+
+			"Failed To Find Numeric Digits while parsing German Number String.\n",
+			ePrefix.String(),
+			testName)
+
+		return
+	}
+
+	testName = fmt.Sprintf("Test #1-B NewParseGermanNumberStr()\n"+
+		"Test Number String Search Results FoundIntegerDigits\n"+
+		"origNumberStr  = %v",
+		origNumberStr)
+
+	if numberStrSearchResults.FoundIntegerDigits == false {
+
+		t.Errorf("\n%v\n"+
+			"%v\n"+
+			"Error: numberStrSearchResults.FoundIntegerDigits == false\n"+
+			"Failed To Find Integer Digits while parsing German Number String.\n",
+			ePrefix.String(),
+			testName)
+
+		return
+	}
+
+	testName = fmt.Sprintf("Test #1-C NewParseGermanNumberStr()\n"+
+		"Test Number String Search Results FoundDecimalDigits\n"+
+		"origNumberStr  = %v",
+		origNumberStr)
+
+	if numberStrSearchResults.FoundDecimalDigits == false {
+
+		t.Errorf("\n%v\n"+
+			"%v\n"+
+			"Error: numberStrSearchResults.FoundDecimalDigits == false\n"+
+			"Failed To Find Decimal (Fractional) Digits while parsing German Number String.\n",
+			ePrefix.String(),
+			testName)
+
+		return
+	}
+
+	testName = fmt.Sprintf("Test #2 NewParseGermanNumberStr()\n"+
+		"nStrKernel01.FmtNumStrNative()\n"+
+		"origNumberStr  = %v",
+		origNumberStr)
+
+	fmtNumberStr,
+		_,
+		err = nStrKernel01.FmtNumStrNative(
+		NumRoundType.NoRounding(),
+		0,
+		ePrefix.XCpy(
+			"Test #2 fmtNumberStr<-nStrKernel01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	expectedNumberStr = "1234567.89"
+
+	if expectedNumberStr != fmtNumberStr {
+
+		t.Errorf("\n%v\n"+
+			"%v\n"+
+			"Error: fmtNumberStr NOT EQUAL TO expectedNumberStr\n"+
+			"       fmtNumberStr = '%v'\n"+
+			"expectedNumberStr   = '%v'\n",
+			ePrefix.String(),
+			testName,
+			fmtNumberStr,
+			expectedNumberStr)
+
+		return
+	}
+
+	var nStrKernel02 NumberStrKernel
+
+	origNumberStr = "1.234.567,89- €"
+
+	_,
+		nStrKernel02,
+		err = new(NumberStrKernel).NewParseGermanNumberStr(
+		origNumberStr,
+		0,
+		-1,
+		nil,
+		false,
+		ePrefix.XCpy(
+			"Test #3 nStrKernel01<-origNumberStr"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	testName = fmt.Sprintf("Test #3 NewParseGermanNumberStr()\n"+
+		"nStrKernel02.FmtNumStrNative()\n"+
+		"origNumberStr  = %v",
+		origNumberStr)
+
+	fmtNumberStr,
+		_,
+		err = nStrKernel02.FmtNumStrNative(
+		NumRoundType.NoRounding(),
+		0,
+		ePrefix.XCpy(
+			"Test #3 fmtNumberStr<-nStrKernel02"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	expectedNumberStr = "-1234567.89"
+
+	if expectedNumberStr != fmtNumberStr {
+
+		t.Errorf("\n%v\n"+
+			"%v\n"+
+			"Error: fmtNumberStr NOT EQUAL TO expectedNumberStr\n"+
+			"       fmtNumberStr = '%v'\n"+
+			"expectedNumberStr   = '%v'\n",
+			ePrefix.String(),
+			testName,
+			fmtNumberStr,
+			expectedNumberStr)
+
+		return
+	}
+
+	testName = fmt.Sprintf("Test #4 FmtSignedNumStrUS()\n"+
+		"origNumberStr  = %v",
+		origNumberStr)
+
+	numberFieldSpec := NumStrNumberFieldSpec{
+		fieldLength:        17,
+		fieldJustification: TxtJustify.Center(),
+	}
+
+	roundingSpec := NumStrRoundingSpec{
+		roundingType:            NumRoundType.NoRounding(),
+		roundToFractionalDigits: 0,
+	}
+
+	fmtNumberStr,
+		err = nStrKernel02.FmtSignedNumStrUS(
+		numberFieldSpec,
+		roundingSpec,
+		ePrefix.XCpy(
+			"Test #4 fmtNumberStr<-nStrKernel02"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	expectedNumberStr = "  -1,234,567.89  "
+
+	if expectedNumberStr != fmtNumberStr {
+
+		t.Errorf("%v\n"+
+			"%v\n"+
+			"Error: fmtNumberStr NOT EQUAL TO expectedNumberStr\n"+
+			"       fmtNumberStr = '%v'\n"+
+			"expectedNumberStr   = '%v'\n",
+			ePrefix.String(),
+			testName,
+			fmtNumberStr,
+			expectedNumberStr)
+
+		return
+	}
+
+	testName = fmt.Sprintf("Test #5 FmtCurrencyNumStrUSMinus()\n"+
+		"origNumberStr  = %v",
+		origNumberStr)
+
+	err = numberFieldSpec.SetFieldJustification(
+		TxtJustify.Right(),
+		ePrefix.XCpy(
+			"Test #5 numberFieldSpec"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	fmtNumberStr,
+		err = nStrKernel02.FmtCurrencyNumStrUSMinus(
+		numberFieldSpec,
+		roundingSpec,
+		ePrefix.XCpy(
+			"Test #5 fmtNumberStr<-nStrKernel02"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	expectedNumberStr = "  $ -1,234,567.89"
+
+	if expectedNumberStr != fmtNumberStr {
+
+		t.Errorf("%v\n"+
+			"%v\n"+
+			"Error: fmtNumberStr NOT EQUAL TO expectedNumberStr\n"+
+			"       fmtNumberStr = '%v'\n"+
+			"expectedNumberStr   = '%v'\n",
+			ePrefix.String(),
+			testName,
+			fmtNumberStr,
+			expectedNumberStr)
+
+		return
+	}
+
 }
 
 func TestNumberStrKernel_NewParsePureNumberStr_000100(t *testing.T) {
