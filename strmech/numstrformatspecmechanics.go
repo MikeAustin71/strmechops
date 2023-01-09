@@ -606,6 +606,16 @@ func (nStrFmtSpecMechanics *numStrFmtSpecMechanics) setUSDefaultSignedNumStrFmtI
 
 	}
 
+	isValid,
+		_ := new(numStrFmtSpecElectron).
+		testValidityNumStrFormatSpec(
+			numberStrFmtSpec,
+			nil)
+
+	if isValid {
+		return err
+	}
+
 	err = new(numStrFmtSpecNanobot).
 		setSignedNStrFmtUS(
 			numberStrFmtSpec,

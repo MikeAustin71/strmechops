@@ -41,12 +41,50 @@ func TestTextFieldFormatDtoFloat64_FmtNumStr_000100(t *testing.T) {
 		23,
 		TxtJustify.Center(),
 		ePrefix.XCpy(
-			"numStrFmtSpec<-"))
+			"Test#1 numStrFmtSpec<-"))
 
 	if err != nil {
 		t.Errorf("\n%v\n",
 			err.Error())
 		return
+	}
+
+	var actualNumFieldSpec NumStrNumberFieldSpec
+
+	actualNumFieldSpec,
+		err = numStrFmtSpec.GetNumberFieldSpec(
+		ePrefix.XCpy("actualNumFieldSpec<-numStrFmtSpec"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if actualNumFieldSpec.GetNumFieldLength() != 23 {
+
+		t.Errorf("\n%v\n"+
+			"Test#1-A\n"+
+			"Error: NumStrNumberFieldSpec.fieldLength is NOT EQUAL TO '23'\n"+
+			"NumStrNumberFieldSpec.fieldLength = %v\n",
+			ePrefix.String(),
+			actualNumFieldSpec.GetNumFieldLength())
+
+		return
+	}
+
+	if actualNumFieldSpec.GetNumFieldJustification() !=
+		TxtJustify.Center() {
+
+		t.Errorf("\n%v\n"+
+			"Test#1-B"+
+			"Error: NumStrNumberFieldSpec.fieldJustification is NOT EQUAL TO 'Center'\n"+
+			"NumStrNumberFieldSpec.fieldJustification = %v\n",
+			ePrefix.String(),
+			actualNumFieldSpec.GetNumFieldJustification().XValueInt())
+
+		return
+
 	}
 
 	expectedStr := "     12,345.123457     "
@@ -60,12 +98,60 @@ func TestTextFieldFormatDtoFloat64_FmtNumStr_000100(t *testing.T) {
 	err = txtFmtFloat64.SetNumStrFmtDefault(
 		numStrFmtSpec,
 		ePrefix.XCpy(
-			"txtFmtFloat64<-numStrFmtSpec"))
+			"Test #2 txtFmtFloat64<-numStrFmtSpec"))
 
 	if err != nil {
 		t.Errorf("\n%v\n",
 			err.Error())
 		return
+	}
+
+	var actualDefaultFmt NumStrFormatSpec
+
+	actualDefaultFmt,
+		err = txtFmtFloat64.GetDefaultNumStrFmtSpec(
+		ePrefix.XCpy("Test #2"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	actualNumFieldSpec,
+		err = actualDefaultFmt.GetNumberFieldSpec(
+		ePrefix.XCpy("Test #2-A"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if actualNumFieldSpec.GetNumFieldLength() != 23 {
+
+		t.Errorf("\n%v\n"+
+			"Test#2-B\n"+
+			"Error: NumStrNumberFieldSpec.fieldLength is NOT EQUAL TO '23'\n"+
+			"NumStrNumberFieldSpec.fieldLength = %v\n",
+			ePrefix.String(),
+			actualNumFieldSpec.GetNumFieldLength())
+
+		return
+	}
+
+	if actualNumFieldSpec.GetNumFieldJustification() !=
+		TxtJustify.Center() {
+
+		t.Errorf("\n%v\n"+
+			"Test#2-C"+
+			"Error: NumStrNumberFieldSpec.fieldJustification is NOT EQUAL TO 'Center'\n"+
+			"NumStrNumberFieldSpec.fieldJustification = %v\n",
+			ePrefix.String(),
+			actualNumFieldSpec.GetNumFieldJustification().XValueInt())
+
+		return
+
 	}
 
 	var actualStr string

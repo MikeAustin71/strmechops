@@ -2962,6 +2962,138 @@ func TestNumberStrKernel_FmtNumStrNative_000200(t *testing.T) {
 	return
 }
 
+func TestNumberStrKernel_FmtSignedNumStrBasic_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestNumberStrKernel_SetFromNativeNumberStr_000100()",
+		"")
+
+	originalNumberStr := "1 123 456,775"
+
+	//expectedStr  "1,123,456.78"
+
+	var numberStrSearchResults CharSearchNumStrParseResultsDto
+	var nStrKernel01 NumberStrKernel
+	var err error
+
+	numberStrSearchResults,
+		nStrKernel01,
+		err = new(NumberStrKernel).NewParseFrenchNumberStr(
+		originalNumberStr,
+		0,
+		-1,
+		nil,
+		false,
+		ePrefix.XCpy(
+			"nStrKernel01<-"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if numberStrSearchResults.FoundNumericDigits == false {
+
+		t.Errorf("\n%v\n"+
+			"Error: Test #1 - NewParseFrenchNumberStr() Failed!\n"+
+			"No Numeric Digits were found in French Number String.\n",
+			ePrefix.String())
+
+		return
+	}
+
+	err = nStrKernel01.IsValidInstanceError(
+		ePrefix.XCpy(
+			"Test #1 - nStrKernel01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var actualNumStr, expectedStr string
+
+	actualNumStr,
+		_,
+		err = nStrKernel01.FmtNumStrNative(
+		NumRoundType.NoRounding(),
+		0,
+		ePrefix.XCpy(
+			"Test #1 actualNumStr<-"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	testName := "Test #1 Native Number String\n" +
+		"NewParseFrenchNumberStr()"
+
+	expectedStr = "1123456.775"
+
+	if expectedStr != actualNumStr {
+
+		t.Errorf("\n%v\n"+
+			"%v\n"+
+			"Error: expectedStr != actualFmtStr\n"+
+			" expectedStr = %v\n"+
+			"actualNumStr = %v\n",
+			ePrefix.String(),
+			testName,
+			expectedStr,
+			actualNumStr)
+
+		return
+	}
+
+	//expectedStr  "    1,123,456.78"
+
+	actualNumStr,
+		err = nStrKernel01.FmtSignedNumStrBasic(
+		".",
+		",",
+		IntGroupingType.Thousands(),
+		"(",
+		")",
+		16,
+		TxtJustify.Right(),
+		NumRoundType.HalfAwayFromZero(),
+		2,
+		ePrefix.XCpy(
+			"Test # 2 actualNumStr<-nStrKernel01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	testName = "Test #2 Native Number String\n" +
+		"FmtSignedNumStrBasic()"
+
+	expectedStr = "    1,123,456.78"
+
+	if expectedStr != actualNumStr {
+
+		t.Errorf("\n%v\n"+
+			"%v\n"+
+			"Error: expectedStr != actualFmtStr\n"+
+			" expectedStr = %v\n"+
+			"actualNumStr = %v\n",
+			ePrefix.String(),
+			testName,
+			expectedStr,
+			actualNumStr)
+
+		return
+	}
+
+	return
+}
+
 func TestNumberStrKernel_FmtSignedPureNumberStr_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(

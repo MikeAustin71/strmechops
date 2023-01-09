@@ -12,6 +12,95 @@ type MainNumStrTest005 struct {
 	input string
 }
 
+func (mainNumStrTest005 MainNumStrTest005) BasicNumStrFmt() {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"MainNumStrTest005.CharacterReplacement01()",
+		"")
+
+	breakStr := strings.Repeat("=", 50)
+
+	fmt.Printf("\n\n" + breakStr + "\n")
+
+	fmt.Printf("\n Starting Run!\n"+
+		"Function: %v\n",
+		ePrefix.String())
+
+	fmt.Printf("\n" + breakStr + "\n")
+
+	var err error
+	var nStrKernel01 strmech.NumberStrKernel
+
+	inputStr := "-123456.789"
+
+	nStrKernel01,
+		_,
+		err = new(strmech.NumberStrKernel).NewParseNativeNumberStr(
+		inputStr,
+		strmech.NumRoundType.NoRounding(),
+		0,
+		ePrefix.XCpy(
+			"nStrKernel01"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var actualNumStr, expectedNumStr string
+
+	expectedNumStr = "  [123,456.789]  "
+	// expected string length = 17
+	actualNumStr,
+		err = nStrKernel01.FmtSignedNumStrBasic(
+		".",
+		",",
+		strmech.IntGroupingType.Thousands(),
+		"[",
+		"]",
+		17,
+		strmech.TxtJustify.Center(),
+		strmech.NumRoundType.NoRounding(),
+		0,
+		ePrefix.XCpy(
+			"actualNumStr<-nStrKernel01"))
+
+	fmt.Printf("%v\n"+
+		"nStrKernel01.FmtSignedNumStrBasic() Results\n"+
+		"  actualNumStr = %v\n"+
+		"expectedNumStr = %v\n",
+		ePrefix.String(),
+		actualNumStr,
+		expectedNumStr)
+
+	var resultSuccess bool
+
+	if actualNumStr == expectedNumStr {
+		resultSuccess = true
+	} else {
+		resultSuccess = false
+	}
+
+	if resultSuccess {
+		fmt.Printf("************ YEA!!! SUCCESS!!! ************\n\n")
+	} else {
+
+		fmt.Printf("************ BOOO FAILURE ************\n\n")
+
+		return
+	}
+
+	fmt.Printf("\n\n" + breakStr + "\n")
+
+	fmt.Printf("  Successful Completion!\n"+
+		"Function: %v\n",
+		ePrefix.String())
+
+	fmt.Printf(breakStr + "\n\n")
+
+}
+
 func (mainNumStrTest005 MainNumStrTest005) CharacterReplacement01() {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(

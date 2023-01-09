@@ -4868,6 +4868,44 @@ func (numStrKernel *NumberStrKernel) NewParseDirtyNumberStr(
 //
 // ----------------------------------------------------------------
 //
+// # Examples of French Number Strings
+//
+//	The radix point or decimal separator is set to the
+//	comma character (','):
+//
+//		French Example-1
+//		123,45 (The fractional digits are "45")
+//
+//	The integer group separator is a space character
+//	(' ').
+//
+//	The integer group specification is set to 'thousands'.
+//	This means that integer digits will be separated into
+//	'thousands' with each group containing three digits each:
+//
+//		French Example-2
+//		1 000 000 000
+//
+//	The negative number sign is set to a leading minus sign
+//	('-').
+//
+//		French Example-3
+//		-1 000 000 000
+//
+//	The positive number sign is set to a blank or empty
+//	string ("").
+//
+//		French Example-4
+//		1 000 000 000
+//
+//	The zero number format is set to a blank or empty
+//	string ("").
+//
+//		French Example-5
+//			0,0
+//
+// ----------------------------------------------------------------
+//
 // # Reference
 //
 //	https://www.ibm.com/support/pages/english-and-french-currency-formats
