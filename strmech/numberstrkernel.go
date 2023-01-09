@@ -1941,6 +1941,14 @@ func (numStrKernel *NumberStrKernel) ExtendIntegerDigitsArray(
 //		see method:
 //			NumberStrKernel.Round()
 //
+//	(4)	When creating a new instance of NumberStrKernel
+//		with a numeric value containing leading integer
+//		zeros or trailing fractional zeros, use one of
+//		the following methods:
+//
+//			NumberStrKernel.NewFromRuneDigits()
+//			NumberStrKernel.NewFromStringDigits()
+//
 // ----------------------------------------------------------------
 //
 // # Usage
@@ -8455,6 +8463,10 @@ func (numStrKernel *NumberStrKernel) FmtNumStrDefaultRound(
 //  6. A Native Number String will NEVER include
 //     currency symbols.
 //
+//  7. A Native Number String will NEVER include
+//     leading integer zeros or trailing fractional
+//     zeros.
+//
 // Users also have the option of specifying rounding
 // parameters which will be used to round the numeric
 // value extracted from the current NumberStrKernel
@@ -8469,9 +8481,13 @@ func (numStrKernel *NumberStrKernel) FmtNumStrDefaultRound(
 //
 // # BE ADVISED
 //
-//	This method will NOT change or modify the data
-//	values contained in the current instance of
-//	NumberStrKernel.
+//	(1)	This method will NOT change or modify the data
+//		values contained in the current instance of
+//		NumberStrKernel.
+//
+//	(2) The returned Native Number String will never
+//		contain leading integer zeros or trailing
+//		fractional zeros.
 //
 // ----------------------------------------------------------------
 //
@@ -9867,10 +9883,10 @@ func (numStrKernel *NumberStrKernel) FmtNumStrParams(
 //		values contained in the current instance of
 //		NumberStrKernel.
 //
-//	(2) This method differs from
-//		NumberStrKernel.FmtSignedNumStrPure in that this
-//		method does not offer number field formatting
-//		options.
+//	(2) This is one of few format methods which will
+//		return a string including leading integer zeros
+//		and/or trailing fractional zeros assuming that
+//		no rounding operation is performed.
 //
 // ----------------------------------------------------------------
 //

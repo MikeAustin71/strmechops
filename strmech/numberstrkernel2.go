@@ -3654,6 +3654,15 @@ func (numStrKernel *NumberStrKernel) NewFromRuneDto(
 //
 // ----------------------------------------------------------------
 //
+// # BE ADVISED
+//
+//	This method will retain leading integer zeros.
+//		Example:
+//								Input String: 0012345.678
+//			Converted Internal Numeric Value: 0012345.678
+//
+// ----------------------------------------------------------------
+//
 // # Input Parameters
 //
 //	integerDigits				[]rune
@@ -3812,6 +3821,15 @@ func (numStrKernel *NumberStrKernel) NewFromRuneDigits(
 //	Creates and returns a new instance of NumberStrKernel
 //	generated from input parameters containing integer
 //	digit and fractional digit strings.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	This method will retain leading integer zeros.
+//		Example:
+//								Input String: 0012345.678
+//			Converted Internal Numeric Value: 0012345.678
 //
 // ----------------------------------------------------------------
 //
@@ -5564,384 +5582,403 @@ func (numStrKernel *NumberStrKernel) NewParseGermanNumberStr(
 //  6. A Native Number String will NEVER include
 //     currency symbols.
 //
+//  7. A Native Number String will NEVER include
+//     leading integer zeros or trailing fractional
+//     zeros.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	This method will delete any leading integer zero values
+//	or trailing fractional zeros.
+//
+//		Example:
+//			Input String:  00123.45600
+//			Converted Native Number String: 123.456
+//
 // ----------------------------------------------------------------
 //
 // # Input Parameters
 //
-//	nativeNumStr				string
+//		nativeNumStr				string
 //
-//		A Native Number String containing the numeric
-//		character digits which will be converted to, and
-//		stored in, the NumberStrKernel object passed as
-//		input parameter 'numStrKernel'.
+//			A Native Number String containing the numeric
+//			character digits which will be converted to, and
+//			stored in, the NumberStrKernel object passed as
+//			input parameter 'numStrKernel'.
 //
-//		The term 'Native Number String' means that the
-//		number string format is designed to interoperate
-//		with the Golang programming language library
-//		functions and packages. Types like 'strconv',
-//		'strings', 'math' and 'big' (big.Int, big.Float,
-//		big.Rat) routinely parse and convert this type of
-//		number string to generate numeric values. In
-//		addition, Native Number Strings are frequently
-//		consumed by external library functions such	as
-//		this one (String Mechanics 'strmech') to convert
-//		strings to numeric values and numeric values to
-//		strings.
+//			The term 'Native Number String' means that the
+//			number string format is designed to interoperate
+//			with the Golang programming language library
+//			functions and packages. Types like 'strconv',
+//			'strings', 'math' and 'big' (big.Int, big.Float,
+//			big.Rat) routinely parse and convert this type of
+//			number string to generate numeric values. In
+//			addition, Native Number Strings are frequently
+//			consumed by external library functions such	as
+//			this one (String Mechanics 'strmech') to convert
+//			strings to numeric values and numeric values to
+//			strings.
 //
-//		If 'nativeNumStr' fails to meet the formatting
-//		criteria for a Native Number String defined
-//		below, an error will be returned.
+//			If 'nativeNumStr' fails to meet the formatting
+//			criteria for a Native Number String defined
+//			below, an error will be returned.
 //
-//		A valid Native Number String must conform to the
-//		standardized formatting criteria defined below:
+//			A valid Native Number String must conform to the
+//			standardized formatting criteria defined below:
 //
-//	 	1.	A Native Number String Consists of numeric
-//	 	  	character digits zero through nine inclusive
-//	 	  	(0-9).
+//		 	1.	A Native Number String Consists of numeric
+//		 	  	character digits zero through nine inclusive
+//		 	  	(0-9).
 //
-//	 	2.	A Native Number String will include a period
-//	 	  	or decimal point ('.') to separate integer and
-//	 	  	fractional digits within a number string.
+//		 	2.	A Native Number String will include a period
+//		 	  	or decimal point ('.') to separate integer and
+//		 	  	fractional digits within a number string.
 //
-//	 	  	Native Number String Floating Point Value:
-//	 	   				123.1234
+//		 	  	Native Number String Floating Point Value:
+//		 	   				123.1234
 //
-//	 	3.	A Native Number String will always format
-//	 	  	negative numeric values with a leading minus sign
-//	 	  	('-').
+//		 	3.	A Native Number String will always format
+//		 	  	negative numeric values with a leading minus sign
+//		 	  	('-').
 //
-//	 	  	Native Number String Negative Value:
-//	 	  					-123.2
+//		 	  	Native Number String Negative Value:
+//		 	  					-123.2
 //
-//	 	4.	A Native Number String WILL NEVER include integer
-//			separators such as commas (',') to separate
-//			integer digits by thousands.
+//		 	4.	A Native Number String WILL NEVER include integer
+//				separators such as commas (',') to separate
+//				integer digits by thousands.
 //
-//	 	   					NOT THIS: 1,000,000
-//	 	   		Native Number String: 1000000
+//		 	   					NOT THIS: 1,000,000
+//		 	   		Native Number String: 1000000
 //
-//	 	5.	Native Number Strings will only consist of:
+//		 	5.	Native Number Strings will only consist of:
 //
-//			(a)	Numeric digits zero through nine inclusive (0-9).
+//				(a)	Numeric digits zero through nine inclusive (0-9).
 //
-//			(b)	A decimal point ('.') for floating point
-//				numbers.
+//				(b)	A decimal point ('.') for floating point
+//					numbers.
 //
-//			(c)	A leading minus sign ('-') in the case of
-//				negative numeric values.
+//				(c)	A leading minus sign ('-') in the case of
+//					negative numeric values.
 //
-//		6.	A Native Number String will NEVER include
-//			currency symbols.
+//			6.	A Native Number String will NEVER include
+//				currency symbols.
 //
-//	roundingType				NumberRoundingType
+//	 	7.	A Native Number String will NEVER include
+//				leading integer zeros or trailing fractional
+//				zeros.
 //
-//		This enumeration parameter is used to specify the
-//		type of rounding algorithm that will be applied for
-//		the	rounding of fractional digits contained in the
-//		new returned instance of NumberStrKernel
-//		(newNumStrKernel).
+//		roundingType				NumberRoundingType
 //
-//		If in doubt as to a suitable rounding method,
-//		'HalfAwayFromZero' is recommended.
+//			This enumeration parameter is used to specify the
+//			type of rounding algorithm that will be applied for
+//			the	rounding of fractional digits contained in the
+//			new returned instance of NumberStrKernel
+//			(newNumStrKernel).
 //
-//		Possible values are listed as follows:
-//			NumRoundType.None()	- Invalid Value
-//			NumRoundType.NoRounding()
-//			NumRoundType.HalfUpWithNegNums()
-//			NumRoundType.HalfDownWithNegNums()
-//			NumRoundType.HalfAwayFromZero()
-//			NumRoundType.HalfTowardsZero()
-//			NumRoundType.HalfToEven()
-//			NumRoundType.HalfToOdd()
-//			NumRoundType.Randomly()
-//			NumRoundType.Floor()
-//			NumRoundType.Ceiling()
-//			NumRoundType.Truncate()
+//			If in doubt as to a suitable rounding method,
+//			'HalfAwayFromZero' is recommended.
 //
-//		Definitions:
+//			Possible values are listed as follows:
+//				NumRoundType.None()	- Invalid Value
+//				NumRoundType.NoRounding()
+//				NumRoundType.HalfUpWithNegNums()
+//				NumRoundType.HalfDownWithNegNums()
+//				NumRoundType.HalfAwayFromZero()
+//				NumRoundType.HalfTowardsZero()
+//				NumRoundType.HalfToEven()
+//				NumRoundType.HalfToOdd()
+//				NumRoundType.Randomly()
+//				NumRoundType.Floor()
+//				NumRoundType.Ceiling()
+//				NumRoundType.Truncate()
 //
-//			NoRounding
+//			Definitions:
 //
-//				Signals that no rounding operation will be
-//				performed on fractional digits. The
-//				fractional digits will therefore remain
-//				unchanged.
+//				NoRounding
 //
-//			HalfUpWithNegNums
+//					Signals that no rounding operation will be
+//					performed on fractional digits. The
+//					fractional digits will therefore remain
+//					unchanged.
 //
-//				Half Round Up Including Negative Numbers.
-//				This method is intuitive but may produce
-//				unexpected results when applied to negative
-//				numbers.
+//				HalfUpWithNegNums
 //
-//				'HalfUpWithNegNums' rounds .5 up.
+//					Half Round Up Including Negative Numbers.
+//					This method is intuitive but may produce
+//					unexpected results when applied to negative
+//					numbers.
 //
-//					Examples of 'HalfUpWithNegNums'
+//					'HalfUpWithNegNums' rounds .5 up.
+//
+//						Examples of 'HalfUpWithNegNums'
+//						7.6 rounds up to 8
+//						7.5 rounds up to 8
+//						7.4 rounds down to 7
+//						-7.4 rounds up to -7
+//						-7.5 rounds up to -7
+//						-7.6 rounds down to -8
+//
+//				HalfDownWithNegNums
+//
+//				Half Round Down Including Negative Numbers. This
+//				method is also considered intuitive but may
+//				produce unexpected results when applied to
+//				negative numbers.
+//
+//				'HalfDownWithNegNums' rounds .5 down.
+//
+//					Examples of HalfDownWithNegNums
+//
 //					7.6 rounds up to 8
-//					7.5 rounds up to 8
+//					7.5 rounds down to 7
 //					7.4 rounds down to 7
 //					-7.4 rounds up to -7
-//					-7.5 rounds up to -7
+//					-7.5 rounds down to -8
 //					-7.6 rounds down to -8
 //
-//			HalfDownWithNegNums
+//				HalfAwayFromZero
 //
-//			Half Round Down Including Negative Numbers. This
-//			method is also considered intuitive but may
-//			produce unexpected results when applied to
-//			negative numbers.
+//					The 'HalfAwayFromZero' method rounds .5 further
+//					away from zero.	It provides clear and consistent
+//					behavior when dealing with negative numbers.
 //
-//			'HalfDownWithNegNums' rounds .5 down.
+//						Examples of HalfAwayFromZero
 //
-//				Examples of HalfDownWithNegNums
+//						7.6 rounds away to 8
+//						7.5 rounds away to 8
+//						7.4 rounds to 7
+//						-7.4 rounds to -7
+//						-7.5 rounds away to -8
+//						-7.6 rounds away to -8
 //
-//				7.6 rounds up to 8
-//				7.5 rounds down to 7
-//				7.4 rounds down to 7
-//				-7.4 rounds up to -7
-//				-7.5 rounds down to -8
-//				-7.6 rounds down to -8
+//				HalfTowardsZero
 //
-//			HalfAwayFromZero
+//					Round Half Towards Zero. 'HalfTowardsZero' rounds
+//					0.5	closer to zero. It provides clear and
+//					consistent behavior	when dealing with negative
+//					numbers.
 //
-//				The 'HalfAwayFromZero' method rounds .5 further
-//				away from zero.	It provides clear and consistent
-//				behavior when dealing with negative numbers.
+//						Examples of HalfTowardsZero
 //
-//					Examples of HalfAwayFromZero
+//						7.6 rounds away to 8
+//						7.5 rounds to 7
+//						7.4 rounds to 7
+//						-7.4 rounds to -7
+//						-7.5 rounds to -7
+//						-7.6 rounds away to -8
 //
-//					7.6 rounds away to 8
-//					7.5 rounds away to 8
-//					7.4 rounds to 7
-//					-7.4 rounds to -7
-//					-7.5 rounds away to -8
-//					-7.6 rounds away to -8
+//				HalfToEven
 //
-//			HalfTowardsZero
+//					Round Half To Even Numbers. 'HalfToEven' is
+//					also called	Banker's Rounding. This method
+//					rounds 0.5 to the nearest even digit.
 //
-//				Round Half Towards Zero. 'HalfTowardsZero' rounds
-//				0.5	closer to zero. It provides clear and
-//				consistent behavior	when dealing with negative
-//				numbers.
+//						Examples of HalfToEven
 //
-//					Examples of HalfTowardsZero
+//						7.5 rounds up to 8 (because 8 is an even
+//						number)	but 6.5 rounds down to 6 (because
+//						6 is an even number)
 //
-//					7.6 rounds away to 8
-//					7.5 rounds to 7
-//					7.4 rounds to 7
-//					-7.4 rounds to -7
-//					-7.5 rounds to -7
-//					-7.6 rounds away to -8
+//						HalfToEven only applies to 0.5. Other
+//						numbers (not ending	in 0.5) round to
+//						nearest as usual, so:
 //
-//			HalfToEven
+//						7.6 rounds up to 8
+//						7.5 rounds up to 8 (because 8 is an even number)
+//						7.4 rounds down to 7
+//						6.6 rounds up to 7
+//						6.5 rounds down to 6 (because 6 is an even number)
+//						6.4 rounds down to 6
 //
-//				Round Half To Even Numbers. 'HalfToEven' is
-//				also called	Banker's Rounding. This method
-//				rounds 0.5 to the nearest even digit.
+//				HalfToOdd
 //
-//					Examples of HalfToEven
+//					Round Half to Odd Numbers. Similar to 'HalfToEven',
+//					but in this case 'HalfToOdd' rounds 0.5 towards odd
+//					numbers.
 //
-//					7.5 rounds up to 8 (because 8 is an even
-//					number)	but 6.5 rounds down to 6 (because
-//					6 is an even number)
+//						Examples of HalfToOdd
 //
-//					HalfToEven only applies to 0.5. Other
-//					numbers (not ending	in 0.5) round to
-//					nearest as usual, so:
+//						HalfToOdd only applies to 0.5. Other numbers
+//						(not ending	in 0.5) round to nearest as usual.
 //
-//					7.6 rounds up to 8
-//					7.5 rounds up to 8 (because 8 is an even number)
-//					7.4 rounds down to 7
-//					6.6 rounds up to 7
-//					6.5 rounds down to 6 (because 6 is an even number)
-//					6.4 rounds down to 6
+//						7.5 rounds down to 7 (because 7 is an odd number)
 //
-//			HalfToOdd
+//						6.5 rounds up to 7 (because 7 is an odd number)
 //
-//				Round Half to Odd Numbers. Similar to 'HalfToEven',
-//				but in this case 'HalfToOdd' rounds 0.5 towards odd
-//				numbers.
+//						7.6 rounds up to 8
+//						7.5 rounds down to 7 (because 7 is an odd number)
+//						7.4 rounds down to 7
+//						6.6 rounds up to 7
+//						6.5 rounds up to 7 (because 7 is an odd number)
+//						6.4 rounds down to 6
 //
-//					Examples of HalfToOdd
+//				Randomly
 //
-//					HalfToOdd only applies to 0.5. Other numbers
-//					(not ending	in 0.5) round to nearest as usual.
+//					Round Half Randomly. Uses a Random Number Generator
+//					to choose between rounding 0.5 up or down.
 //
-//					7.5 rounds down to 7 (because 7 is an odd number)
+//					All numbers other than 0.5 round to the nearest as
+//					usual.
 //
-//					6.5 rounds up to 7 (because 7 is an odd number)
+//				Floor
 //
-//					7.6 rounds up to 8
-//					7.5 rounds down to 7 (because 7 is an odd number)
-//					7.4 rounds down to 7
-//					6.6 rounds up to 7
-//					6.5 rounds up to 7 (because 7 is an odd number)
-//					6.4 rounds down to 6
+//					Yields the nearest integer down. Floor does not apply
+//					any	special treatment to 0.5.
 //
-//			Randomly
+//					Floor Function: The greatest integer that is less than
+//					or equal to x
 //
-//				Round Half Randomly. Uses a Random Number Generator
-//				to choose between rounding 0.5 up or down.
+//					Source:
+//						https://www.mathsisfun.com/sets/function-floor-ceiling.html
 //
-//				All numbers other than 0.5 round to the nearest as
-//				usual.
+//					In mathematics and computer science, the floor function
+//					is the function that takes as input a real number x,
+//					and gives as output the greatest integer less than or
+//					equal to x,	denoted floor(x) or ⌊x⌋.
 //
-//			Floor
+//					Source:
+//						https://en.wikipedia.org/wiki/Floor_and_ceiling_functions
 //
-//				Yields the nearest integer down. Floor does not apply
-//				any	special treatment to 0.5.
+//					Examples of Floor
 //
-//				Floor Function: The greatest integer that is less than
-//				or equal to x
-//
-//				Source:
-//					https://www.mathsisfun.com/sets/function-floor-ceiling.html
-//
-//				In mathematics and computer science, the floor function
-//				is the function that takes as input a real number x,
-//				and gives as output the greatest integer less than or
-//				equal to x,	denoted floor(x) or ⌊x⌋.
-//
-//				Source:
-//					https://en.wikipedia.org/wiki/Floor_and_ceiling_functions
-//
-//				Examples of Floor
-//
-//					Number     Floor
-//					 2           2
-//					 2.4         2
-//					 2.9         2
-//					-2.5        -3
-//					-2.7        -3
-//					-2          -2
-//
-//			Ceiling
-//
-//				Yields the nearest integer up. Ceiling does not
-//				apply any special treatment to 0.5.
-//
-//				Ceiling Function: The least integer that is
-//				greater than or	equal to x.
-//				Source:
-//					https://www.mathsisfun.com/sets/function-floor-ceiling.html
-//
-//				The ceiling function maps x to the least integer
-//				greater than or equal to x, denoted ceil(x) or
-//				⌈x⌉.[1]
-//
-//				Source:
-//					https://en.wikipedia.org/wiki/Floor_and_ceiling_functions
-//
-//					Examples of Ceiling
-//
-//						Number    Ceiling
+//						Number     Floor
 //						 2           2
-//						 2.4         3
-//						 2.9         3
-//						-2.5        -2
-//						-2.7        -2
+//						 2.4         2
+//						 2.9         2
+//						-2.5        -3
+//						-2.7        -3
 //						-2          -2
 //
-//			Truncate
+//				Ceiling
 //
-//				Apply NO Rounding whatsoever. The Round From Digit
-//				is dropped or deleted. The Round To Digit is NEVER
-//				changed.
+//					Yields the nearest integer up. Ceiling does not
+//					apply any special treatment to 0.5.
 //
-//				Examples of Truncate
+//					Ceiling Function: The least integer that is
+//					greater than or	equal to x.
+//					Source:
+//						https://www.mathsisfun.com/sets/function-floor-ceiling.html
 //
-//					Example-1
-//					Number: 23.14567
-//					Objective: Round to two decimal places to
-//					the right of the decimal point.
-//					Rounding Method: Truncate
-//					Round To Digit:   4
-//					Round From Digit: 5
-//					Rounded Number:   23.14 - The Round From Digit
-//					is dropped.
+//					The ceiling function maps x to the least integer
+//					greater than or equal to x, denoted ceil(x) or
+//					⌈x⌉.[1]
 //
-//					Example-2
-//					Number: -23.14567
-//					Objective: Round to two decimal places to
-//					the right of the decimal point.
-//					Rounding Method: Truncate
-//					Round To Digit:   4
-//					Round From Digit: 5
-//					Rounded Number:  -23.14 - The Round From Digit
-//					is dropped.
+//					Source:
+//						https://en.wikipedia.org/wiki/Floor_and_ceiling_functions
 //
-//	roundToFractionalDigits		int
+//						Examples of Ceiling
 //
-//		When set to a positive integer value, this
-//		parameter controls the number of digits to the
-//		right of the radix point or decimal separator
-//		(a.k.a. decimal point). This controls the number
-//		of fractional digits remaining after completion
-//		of the number rounding operation.
+//							Number    Ceiling
+//							 2           2
+//							 2.4         3
+//							 2.9         3
+//							-2.5        -2
+//							-2.7        -2
+//							-2          -2
 //
-//		If input parameter 'roundingType' is set to
-//		NumRoundType.NoRounding(),
-//		'roundToFractionalDigits' is ignored and no
-//		rounding operation is performed.
+//				Truncate
 //
-//	errorPrefix					interface{}
+//					Apply NO Rounding whatsoever. The Round From Digit
+//					is dropped or deleted. The Round To Digit is NEVER
+//					changed.
 //
-//		This object encapsulates error prefix text which
-//		is included in all returned error messages.
-//		Usually, it contains the name of the calling
-//		method or methods listed as a method or function
-//		chain of execution.
+//					Examples of Truncate
 //
-//		If no error prefix information is needed, set this
-//		parameter to 'nil'.
+//						Example-1
+//						Number: 23.14567
+//						Objective: Round to two decimal places to
+//						the right of the decimal point.
+//						Rounding Method: Truncate
+//						Round To Digit:   4
+//						Round From Digit: 5
+//						Rounded Number:   23.14 - The Round From Digit
+//						is dropped.
 //
-//		This empty interface must be convertible to one of
-//		the following types:
+//						Example-2
+//						Number: -23.14567
+//						Objective: Round to two decimal places to
+//						the right of the decimal point.
+//						Rounding Method: Truncate
+//						Round To Digit:   4
+//						Round From Digit: 5
+//						Rounded Number:  -23.14 - The Round From Digit
+//						is dropped.
 //
-//		1.	nil
-//				A nil value is valid and generates an
-//				empty collection of error prefix and
-//				error context information.
+//		roundToFractionalDigits		int
 //
-//		2.	string
-//				A string containing error prefix
-//				information.
+//			When set to a positive integer value, this
+//			parameter controls the number of digits to the
+//			right of the radix point or decimal separator
+//			(a.k.a. decimal point). This controls the number
+//			of fractional digits remaining after completion
+//			of the number rounding operation.
 //
-//		3.	[]string
-//				A one-dimensional slice of strings
-//				containing error prefix information.
+//			If input parameter 'roundingType' is set to
+//			NumRoundType.NoRounding(),
+//			'roundToFractionalDigits' is ignored and no
+//			rounding operation is performed.
 //
-//		4.	[][2]string
-//				A two-dimensional slice of strings
-//		   		containing error prefix and error
-//		   		context information.
+//		errorPrefix					interface{}
 //
-//		5.	ErrPrefixDto
-//				An instance of ErrPrefixDto.
-//				Information from this object will
-//				be copied for use in error and
-//				informational messages.
+//			This object encapsulates error prefix text which
+//			is included in all returned error messages.
+//			Usually, it contains the name of the calling
+//			method or methods listed as a method or function
+//			chain of execution.
 //
-//		6.	*ErrPrefixDto
-//				A pointer to an instance of
-//				ErrPrefixDto. Information from
-//				this object will be copied for use
-//				in error and informational messages.
+//			If no error prefix information is needed, set this
+//			parameter to 'nil'.
 //
-//		7.	IBasicErrorPrefix
-//				An interface to a method
-//				generating a two-dimensional slice
-//				of strings containing error prefix
-//				and error context information.
+//			This empty interface must be convertible to one of
+//			the following types:
 //
-//		If parameter 'errorPrefix' is NOT convertible
-//		to one of the valid types listed above, it will
-//		be considered invalid and trigger the return of
-//		an error.
+//			1.	nil
+//					A nil value is valid and generates an
+//					empty collection of error prefix and
+//					error context information.
 //
-//		Types ErrPrefixDto and IBasicErrorPrefix are
-//		included in the 'errpref' software package:
-//			"github.com/MikeAustin71/errpref".
+//			2.	string
+//					A string containing error prefix
+//					information.
+//
+//			3.	[]string
+//					A one-dimensional slice of strings
+//					containing error prefix information.
+//
+//			4.	[][2]string
+//					A two-dimensional slice of strings
+//			   		containing error prefix and error
+//			   		context information.
+//
+//			5.	ErrPrefixDto
+//					An instance of ErrPrefixDto.
+//					Information from this object will
+//					be copied for use in error and
+//					informational messages.
+//
+//			6.	*ErrPrefixDto
+//					A pointer to an instance of
+//					ErrPrefixDto. Information from
+//					this object will be copied for use
+//					in error and informational messages.
+//
+//			7.	IBasicErrorPrefix
+//					An interface to a method
+//					generating a two-dimensional slice
+//					of strings containing error prefix
+//					and error context information.
+//
+//			If parameter 'errorPrefix' is NOT convertible
+//			to one of the valid types listed above, it will
+//			be considered invalid and trigger the return of
+//			an error.
+//
+//			Types ErrPrefixDto and IBasicErrorPrefix are
+//			included in the 'errpref' software package:
+//				"github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
