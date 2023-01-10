@@ -60,7 +60,7 @@ type NumberStrKernel struct {
 	// To set the Default Number String Format
 	// Specification, use this method:
 	//
-	//	NumberStrKernel.SetDefaultNumberStrFormatSpec()
+	//	NumberStrKernel.SetDefaultNumStrFormatSpec()
 
 	lock *sync.Mutex
 }
@@ -7784,7 +7784,7 @@ func (numStrKernel *NumberStrKernel) FmtNumStrCustom(
 // To explicitly set the Default Number String Format
 // Specification, use the following methods:
 //
-//	NumberStrKernel.SetDefaultNumberStrFormatSpec()
+//	NumberStrKernel.SetDefaultNumStrFormatSpec()
 //	NumberStrKernel.SetDefaultPureNumStrFormatSpec()
 //	NumberStrKernel.SetDefaultSimpleNumStrFormatSpec()
 //
@@ -7983,7 +7983,7 @@ func (numStrKernel *NumberStrKernel) FmtNumStrDefault(
 // To explicitly set the Default Number String Format
 // Specification, use the following methods:
 //
-//	NumberStrKernel.SetDefaultNumberStrFormatSpec()
+//	NumberStrKernel.SetDefaultNumStrFormatSpec()
 //	NumberStrKernel.SetDefaultPureNumStrFormatSpec()
 //	NumberStrKernel.SetDefaultSimpleNumStrFormatSpec()
 //

@@ -7706,7 +7706,7 @@ func (numStrKernel *NumberStrKernel) SetDefaultBasicSignedNumStrFmtSpec(
 	return err
 }
 
-// SetDefaultNumberStrFormatSpec
+// SetDefaultNumStrFormatSpec
 //
 // Sets the default Number String Format Specification
 // for the current instance of to NumberStrKernel.
@@ -7832,7 +7832,7 @@ func (numStrKernel *NumberStrKernel) SetDefaultBasicSignedNumStrFmtSpec(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (numStrKernel *NumberStrKernel) SetDefaultNumberStrFormatSpec(
+func (numStrKernel *NumberStrKernel) SetDefaultNumStrFormatSpec(
 	defaultNumStrFmt NumStrFormatSpec,
 	errorPrefix interface{}) error {
 
@@ -7852,7 +7852,7 @@ func (numStrKernel *NumberStrKernel) SetDefaultNumberStrFormatSpec(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumberStrKernel."+
-			"SetDefaultNumberStrFormatSpec()",
+			"SetDefaultNumStrFormatSpec()",
 		"")
 
 	if err != nil {
@@ -11570,7 +11570,7 @@ func (numStrKernel *NumberStrKernel) SetStringDigits(
 // To explicitly set the Default Number String Format
 // Specification, use the following methods:
 //
-//	NumberStrKernel.SetDefaultNumberStrFormatSpec()
+//	NumberStrKernel.SetDefaultNumStrFormatSpec()
 //	NumberStrKernel.SetDefaultPureNumStrFormatSpec()
 //	NumberStrKernel.SetDefaultSimpleNumStrFormatSpec()
 //
