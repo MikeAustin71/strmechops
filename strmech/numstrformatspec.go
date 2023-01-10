@@ -5643,6 +5643,10 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtParamsRunes(
 
 // NewSignedNumFmtBasic
 //
+// Returns a new instance of NumberStrKernel configured
+// with a Signed Number String Format using the basic
+// set of input parameters.
+//
 // This method is one step above NewSignedSimpleNumFmt()
 // in terms of complexity and customization options.
 //

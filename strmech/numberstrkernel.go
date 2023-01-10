@@ -10496,8 +10496,11 @@ func (numStrKernel *NumberStrKernel) FmtNumStrPure(
 //
 //	Returns a formatted number string based on the
 //	numeric value contained in the current instance
-//	of NumberStrKernel and the Signed Number String
-//	formatting input parameters.
+//	of NumberStrKernel using the 'basic' Signed
+//	Number String formatting input parameters.
+//
+// This Number String Format is designed to format
+// 'Signed' integer or floating point numeric values.
 //
 //	The returned number string will NOT contain
 //	currency symbols.
@@ -10567,7 +10570,21 @@ func (numStrKernel *NumberStrKernel) FmtNumStrPure(
 //				IntGroupingType.None() effectively turns
 //				off integer separation.
 //
-//	leadingNegNumSign				string
+//		Examples:
+//
+//			IntGroupingType.None()
+//				'1000000000'
+//
+//			IntGroupingType.Thousands()
+//					'1,000,000,000'
+//
+//			IntGroupingType.IndiaNumbering()
+//				'6,78,90,00,00,00,00,000'
+//
+//			IntGroupingType.ChineseNumbering()
+//				'6,7890,0000,0000,0000'
+//
+//	leadingNegativeNumSign			string
 //
 //		A string containing the leading negative number
 //		sign character or characters used to configure
@@ -10585,7 +10602,7 @@ func (numStrKernel *NumberStrKernel) FmtNumStrPure(
 //		negative numbers in parentheses.
 //			Example "(125.67)"
 //
-//	trailingNegNumSign				string
+//	trailingNegativeNumSign			string
 //
 //		A string containing the trailing negative number
 //		sign character or characters used to configure

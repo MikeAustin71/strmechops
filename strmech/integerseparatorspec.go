@@ -3896,6 +3896,20 @@ func (nStrIntSep *IntegerSeparatorSpec) NewIndiaNumberingRunes(
 //		IntGroupingType.IndiaNumbering()
 //		IntGroupingType.ChineseNumbering()
 //
+//		Examples:
+//
+//			IntGroupingType.None()
+//				'1000000000'
+//
+//			IntGroupingType.Thousands()
+//					'1,000,000,000'
+//
+//			IntGroupingType.IndiaNumbering()
+//				'6,78,90,00,00,00,00,000'
+//
+//			IntGroupingType.ChineseNumbering()
+//				'6,7890,0000,0000,0000'
+//
 //	If 'intGroupingType' is set to 'IntGroupingType.None()',
 //	an empty instance of IntegerSeparatorSpec will be
 //	returned. An empty instance of IntegerSeparatorSpec
@@ -3949,6 +3963,20 @@ func (nStrIntSep *IntegerSeparatorSpec) NewIndiaNumberingRunes(
 //		instance of IntegerSeparatorSpec means that no
 //		integer separation will be performed in
 //		subsequent number string formatting operations.
+//
+//		Examples:
+//
+//			IntGroupingType.None()
+//				'1000000000'
+//
+//			IntGroupingType.Thousands()
+//					'1,000,000,000'
+//
+//			IntGroupingType.IndiaNumbering()
+//				'6,78,90,00,00,00,00,000'
+//
+//			IntGroupingType.ChineseNumbering()
+//				'6,7890,0000,0000,0000'
 //
 //	intSeparatorChars			string
 //
@@ -4149,6 +4177,20 @@ func (nStrIntSep *IntegerSeparatorSpec) NewIntGroupEnum(
 //		IntGroupingType.IndiaNumbering()
 //		IntGroupingType.ChineseNumbering()
 //
+//		Examples:
+//
+//			IntGroupingType.None()
+//				'1000000000'
+//
+//			IntGroupingType.Thousands()
+//					'1,000,000,000'
+//
+//			IntGroupingType.IndiaNumbering()
+//				'6,78,90,00,00,00,00,000'
+//
+//			IntGroupingType.ChineseNumbering()
+//				'6,7890,0000,0000,0000'
+//
 //	If 'intGroupingType' is set to 'IntGroupingType.None()',
 //	an empty instance of IntegerSeparatorSpec will be
 //	returned. An empty instance of IntegerSeparatorSpec
@@ -4202,6 +4244,20 @@ func (nStrIntSep *IntegerSeparatorSpec) NewIntGroupEnum(
 //		instance of IntegerSeparatorSpec means that no
 //		integer separation will be performed in
 //		subsequent number string formatting operations.
+//
+//		Examples:
+//
+//			IntGroupingType.None()
+//				'1000000000'
+//
+//			IntGroupingType.Thousands()
+//					'1,000,000,000'
+//
+//			IntGroupingType.IndiaNumbering()
+//				'6,78,90,00,00,00,00,000'
+//
+//			IntGroupingType.ChineseNumbering()
+//				'6,7890,0000,0000,0000'
 //
 //	intSeparatorChars			[]rune
 //
@@ -6837,6 +6893,20 @@ func (nStrIntSep *IntegerSeparatorSpec) SetIndiaNumberingRunes(
 //		integer separation will be performed in
 //		subsequent number string formatting operations.
 //
+//		Examples:
+//
+//			IntGroupingType.None()
+//				'1000000000'
+//
+//			IntGroupingType.Thousands()
+//					'1,000,000,000'
+//
+//			IntGroupingType.IndiaNumbering()
+//				'6,78,90,00,00,00,00,000'
+//
+//			IntGroupingType.ChineseNumbering()
+//				'6,7890,0000,0000,0000'
+//
 //	intSeparatorChars			string
 //
 //		A character, or series of characters, used to separate
@@ -7021,6 +7091,20 @@ func (nStrIntSep *IntegerSeparatorSpec) SetIntGroupEnum(
 //		instance of IntegerSeparatorSpec means that no
 //		integer separation will be performed in
 //		subsequent number string formatting operations.
+//
+//		Examples:
+//
+//			IntGroupingType.None()
+//				'1000000000'
+//
+//			IntGroupingType.Thousands()
+//					'1,000,000,000'
+//
+//			IntGroupingType.IndiaNumbering()
+//				'6,78,90,00,00,00,00,000'
+//
+//			IntGroupingType.ChineseNumbering()
+//				'6,7890,0000,0000,0000'
 //
 //	intSeparatorChars			[]rune
 //

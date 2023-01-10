@@ -7301,6 +7301,411 @@ func (numStrKernel *NumberStrKernel) Round(
 		ePrefix.XCpy("numStrKernel"))
 }
 
+// SetDefaultBasicSignedNumStrFmtSpec
+//
+// Reconfigures the current instance of
+// NumberStrKernel with a new default Signed Number
+// String Format using the basic set of input parameters.
+//
+// This Number String Format is designed to format
+// 'Signed' integer or floating point numeric values.
+//
+// This method is one step above NewSignedSimpleNumFmt()
+// in terms of complexity and customization options.
+//
+// This method provides additional options for multiple
+// integer grouping types including India and Chinese
+// Numbering.
+//
+// Negative number sign symbols may be configured as
+// leading negative number signs, trailing negative
+// number signs or both. The combination of leading
+// and trailing negative number signs allows for the
+// configuration symbols like parentheses for the
+// formatting of negative numbers.
+//
+//	Example: (125.34)
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	This method will NOT alter the numeric value
+//	configured for the current instance of
+//	NumberStrKernel. This method will only reconfigure
+//	the internal member variable controlling default
+//	number string formatting:
+//
+//		NumberStrKernel.numStrFormatSpec
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	decSeparatorChars				string
+//
+//		This string contains the character or characters
+//		which will be configured as the Decimal Separator
+//		Symbol or Symbols for the returned instance of
+//		NumStrFormatSpec.
+//
+//		The decimal separator is also known as the radix
+//		point and is used to separate integer and fractional
+//		digits within a formatted Number String.
+//
+//		In the US, UK, Australia and most of Canada, the
+//		decimal separator is the period character ('.')
+//		known as the decimal point.
+//
+//		In France, Germany and many countries in the
+//		European Union, the Decimal Separator is the
+//		comma character (',').
+//
+//	intSeparatorChars				string
+//
+//		One or more characters used to separate groups of
+//		integers. This separator is also known as the
+//		'thousands' separator. It is used to separate
+//		groups of integer digits to the left of the
+//		decimal separator (a.k.a. decimal point). In the
+//		United States, the standard integer digits
+//		separator is the comma (",").
+//
+//			United States Example:  1,000,000,000
+//
+//		In many European countries, a single period ('.')
+//		is used as the integer separator character.
+//
+//			European Example: 1.000.000.000
+//
+//		Other countries and cultures use spaces,
+//		apostrophes or multiple characters to separate
+//		integers.
+//
+//		If this input parameter contains a zero length
+//		string and parameter 'intGroupingType' is NOT
+//		equal to 'IntGroupingType.None()', an error will
+//		be returned.
+//
+//	intGroupingType					IntegerGroupingType
+//
+//		This instance of IntegerGroupingType defines the type
+//		of IntegerSeparatorSpec which will be returned. The
+//		enumeration IntegerGroupingType must be set to one
+//		of the following values:
+//
+//			IntGroupingType.None()
+//			IntGroupingType.Thousands()
+//			IntGroupingType.IndiaNumbering()
+//			IntGroupingType.ChineseNumbering()
+//
+//		Note:	Setting 'intGroupingType' to a value of
+//				IntGroupingType.None() effectively turns
+//				off integer separation.
+//
+//		Examples:
+//
+//			IntGroupingType.None()
+//				'1000000000'
+//
+//			IntGroupingType.Thousands()
+//					'1,000,000,000'
+//
+//			IntGroupingType.IndiaNumbering()
+//				'6,78,90,00,00,00,00,000'
+//
+//			IntGroupingType.ChineseNumbering()
+//				'6,7890,0000,0000,0000'
+//
+//	leadingNegativeNumSign			string
+//
+//		A string containing the leading negative number
+//		sign character or characters used to configure
+//		Negative Number Sign Symbols in a number string
+//		with a negative numeric value.
+//
+//		The most common configuration for a leading
+//		negative number sign would be a leading minus
+//		sign ('-').
+//
+//		Another option is to configure a single
+//		parenthesis ("(") to be matched by a trailing
+//		negative number sign with the closing parenthesis
+//		(")"). This combination would effectively enclose
+//		negative numbers in parentheses.
+//			Example "(125.67)"
+//
+//	trailingNegativeNumSign			string
+//
+//		A string containing the trailing negative number
+//		sign character or characters used to configure
+//		Negative Number Sign Symbols in a number string
+//		with a negative numeric value.
+//
+//		The most common configuration for a trailing
+//		negative number sign would be a trailing minus
+//		sign ('-').
+//
+//		Another option is to configure a single
+//		closing parenthesis (")") to be matched by a
+//		leading negative number sign with the opening
+//		parenthesis ("("). This combination would
+//		effectively enclose negative numbers in
+//		parentheses.
+//			Example "(125.67)"
+//
+//	fieldLength						int
+//
+//		This parameter defines the length of the text
+//		field in which the numeric value will be
+//		displayed within a number string.
+//
+//		If 'fieldLength' is less than the length of
+//		the numeric value string, it will be
+//		automatically set equal to the length of that
+//		numeric value string.
+//
+//		To automatically set the value of 'fieldLength'
+//		to the string length of the numeric value, set
+//		this parameter to a value of minus one (-1).
+//
+//		If this parameter is submitted with a value less
+//		than minus one (-1) or greater than 1-million
+//		(1,000,000), an error will be returned.
+//
+//		Field Length Examples
+//
+//			Example-1
+//	         FieldContents String = "1234.5678"
+//				FieldContents String Length = 9
+//				fieldLength = 15
+//				fieldJustification = TxtJustify.Center()
+//				Text Field String =
+//					"   1234.5678   "
+//
+//			Example-2
+//	         FieldContents = "1234.5678"
+//				FieldContents String Length = 9
+//				fieldLength = 15
+//				fieldJustification = TxtJustify.Right()
+//				Text Field String =
+//					"      1234.5678"
+//
+//			Example-3
+//	         FieldContents = "1234.5678"
+//				FieldContents String Length = 9
+//				fieldLength = -1
+//				fieldJustification = TxtJustify.Center()
+//					// Justification Ignored. Field Length
+//					// Equals -1
+//				Text Field String =
+//					"1234.5678"
+//
+//			Example-4
+//	         FieldContents = "1234.5678"
+//				FieldContents String Length = 9
+//				fieldLength = 2
+//				fieldJustification = TxtJustify.Center()
+//					// Ignored, because FieldLength Less
+//					// Than FieldContents String Length.
+//				Text Field String =
+//					"1234.5678"
+//
+//	fieldJustification			TextJustify
+//
+//		An enumeration which specifies the justification
+//		of the numeric value within the number field
+//		length specified by input parameter
+//		'fieldLength'.
+//
+//		Text justification can only be evaluated in the
+//		context of a number string, field length and a
+//		'fieldJustification' object of type TextJustify.
+//		This is because number strings with a field
+//		length equal to or less than the length of the
+//		numeric value string never use text
+//		justification. In these cases, text justification
+//		is completely ignored.
+//
+//		If the field length parameter ('fieldLength')
+//		is greater than the length of the numeric value
+//		string, text justification must be equal to one
+//		of these three valid values:
+//
+//			TextJustify(0).Left()
+//			TextJustify(0).Right()
+//			TextJustify(0).Center()
+//
+//		You can also use the abbreviated text justification
+//		enumeration syntax as follows:
+//
+//			TxtJustify.Left()
+//			TxtJustify.Right()
+//			TxtJustify.Center()
+//
+//		Text Justification Examples
+//
+//			Example-1
+//	         FieldContents String = "1234.5678"
+//				FieldContents String Length = 9
+//				fieldLength = 15
+//				fieldJustification = TxtJustify.Center()
+//				Text Field String =
+//					"   1234.5678   "
+//
+//			Example-2
+//	         FieldContents = "1234.5678"
+//				FieldContents String Length = 9
+//				fieldLength = 15
+//				fieldJustification = TxtJustify.Right()
+//				Text Field String =
+//					"      1234.5678"
+//
+//			Example-3
+//	         FieldContents = "1234.5678"
+//				FieldContents String Length = 9
+//				fieldLength = -1
+//				fieldJustification = TxtJustify.Center()
+//					// Justification Ignored. Field Length
+//					// Equals -1
+//				Text Field String =
+//					"1234.5678"
+//
+//			Example-4
+//	         FieldContents = "1234.5678"
+//				FieldContents String Length = 9
+//				fieldLength = 2
+//				fieldJustification = TxtJustify.Center()
+//					// Ignored, because FieldLength Less
+//					// Than FieldContents String Length.
+//				Text Field String =
+//					"1234.5678"
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (numStrKernel *NumberStrKernel) SetDefaultBasicSignedNumStrFmtSpec(
+	decSeparatorChars string,
+	intSeparatorChars string,
+	intGroupingType IntegerGroupingType,
+	leadingNegativeNumSign string,
+	trailingNegativeNumSign string,
+	fieldLength int,
+	fieldJustification TextJustify,
+	errorPrefix interface{}) error {
+
+	if numStrKernel.lock == nil {
+		numStrKernel.lock = new(sync.Mutex)
+	}
+
+	numStrKernel.lock.Lock()
+
+	defer numStrKernel.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumberStrKernel."+
+			"SetDefaultBasicSignedNumStrFmtSpec()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	numStrKernel.numStrFormatSpec.Empty()
+
+	numStrKernel.numStrFormatSpec,
+		err = new(NumStrFormatSpec).NewSignedNumFmtBasic(
+		decSeparatorChars,
+		intSeparatorChars,
+		intGroupingType,
+		leadingNegativeNumSign,
+		trailingNegativeNumSign,
+		fieldLength,
+		fieldJustification,
+		ePrefix.XCpy(
+			"<-numStrKernel.numStrFormatSpec"))
+
+	return err
+}
+
 // SetDefaultNumberStrFormatSpec
 //
 // Sets the default Number String Format Specification
