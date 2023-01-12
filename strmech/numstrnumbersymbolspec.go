@@ -39,83 +39,51 @@ import (
 //	Example-2: Leading Number Symbols
 //		Leading Number Symbols for Positive Values
 //
-//		Leading Symbols: "$+"
-//		Number String:   "$+123.456"
+//		Leading Symbols: "+"
+//		Number String:   "+123.456"
 //
 //	Example-3: Leading Number Symbols
-//		Leading Number Symbols for Positive Values
-//
-//		Leading Symbols: "$"
-//		Number String:   "$123.456"
-//
-//	Example-4: Leading Number Symbols
 //		Leading Number Symbols for Negative Values
 //
 //		Leading Symbols: "- "
 //		Number String:   "- 123.456"
 //
-//	Example-5: Leading Number Symbols
+//	Example-4: Leading Number Symbols
 //		Leading Number Symbols for Negative Values
 //
-//		Leading Symbols: "$-"
-//		Number String:   "$-123.456"
+//		Leading Symbols: "-"
+//		Number String:   "-123.456"
 //
-//	Example-6: Leading Number Symbols
-//		Leading Number Symbols for Positive Values
-//
-//		Leading Symbols: "$"
-//		Number String:   "$123.456"
-//
-//	Example-7: Trailing Number Symbols
+//	Example-5: Trailing Number Symbols
 //		Trailing Number Symbols for Positive Values
 //
 //		Trailing Symbols: " +"
 //		Number String:   "123.456 +"
 //
-//	Example-8: Trailing Number Symbols
+//	Example-6: Trailing Number Symbols
 //		Trailing Number Symbols for Positive Values
 //
-//		Trailing Symbols: "+$"
-//		Number String:   "123.456+$"
+//		Trailing Symbols: "+"
+//		Number String:   "123.456+"
 //
-//	Example-9: Trailing Number Symbols
-//		Trailing Number Symbols for Positive Values
-//
-//		Trailing Symbols: "$"
-//		Number String:   "123.456$"
-//
-//	Example-10: Trailing Number Symbols
+//	Example-7: Trailing Number Symbols
 //		Trailing Number Symbols for Negative Values
 //
 //		Trailing Symbols: " -"
 //		Number String:   "123.456 -"
 //
-//	Example-11: Trailing Number Symbols
+//	Example-8: Trailing Number Symbols
 //		Trailing Number Symbols for Negative Values
 //
-//		Trailing Symbols: "-$"
-//		Number String:   "123.456-$"
+//		Trailing Symbols: "-"
+//		Number String:   "123.456-"
 //
-//	Example-12: Trailing Number Symbols
+//	Example-9: Trailing Number Symbols
 //		Trailing Number Symbols for Negative Values
 //
 //		Leading Symbols: "("
 //		Trailing Symbols: ")"
 //		Number String:   "(123.456)"
-//
-//	Example-13: Leading Number Symbols
-//		Leading Number Symbols for Zero Values
-//
-//		Leading Symbols: "$"
-//		Trailing Symbols: ""
-//		Number String:   "$0.00"
-//
-//	Example-14: Trailing Number Symbols
-//		Trailing Number Symbols for Zero Values
-//
-//		Leading Symbols: ""
-//		Trailing Symbols: " $"
-//		Number String:   "0.00 $"
 type NumStrNumberSymbolSpec struct {
 	leadingNumberSymbols RuneArrayDto
 	// Contains the character or characters which
@@ -4842,6 +4810,152 @@ func (nStrNumSymSpecNanobot *numStrNumberSymbolSpecNanobot) empty(
 	return
 }
 
+// setCurrencyNumSignRelPos
+//
+// Deletes and resets the value of the value of the
+// Currency Number Sign Relative Position member variable
+// contained in an instance of NumStrNumberSymbolSpec
+// passed as an input parameter.
+//
+// Currency Number Sign Relative Position controls the
+// positioning of currency symbols relative to number
+// signs associated with numeric values formatted in a
+// number string.
+//
+// ----------------------------------------------------------------
+//
+//	# Input Parameters
+//
+//	numSymbolSpec				*NumStrNumberSymbolSpec
+//
+//		A pointer to a NumStrNumberSymbolSpec instance.
+//		The Currency Number Sign Relative Position member
+//		variable contained in this instance
+//		(currencyNumSignRelativePosition) will be deleted
+//		and reset to the value specified by input parameter,
+//		'currencyNumSignRelativePosition'.
+//
+//	currencyNumSignRelPos		CurrencyNumSignRelativePosition
+//
+//		This parameter is used exclusively by Currency
+//		Symbol Specifications.
+//
+//		Type CurrencyNumSignRelativePosition is an
+//		enumeration which has three values, only two of
+//		which are valid:
+//
+//			CurrNumSignRelPos.None()			- Invalid
+//			CurrNumSignRelPos.OutsideNumSign()	- Valid
+//			CurrNumSignRelPos.InsideNumSign()	- Valid
+//
+//		Currency Symbols have the option of being
+//		positioned either inside or outside number sign
+//		symbols formatted with numeric values in a number
+//		string.
+//
+//		Examples CurrNumSignRelPos.OutsideNumSign()
+//				"$ -123.45"
+//				"123.45- €"
+//
+//		Examples CurrNumSignRelPos.InsideNumSign()
+//
+//			Examples:
+//				"- $123.45"
+//				"123.45€ -"
+//
+//		Be Advised -
+//			If the currency symbol is formatted Outside a
+//			Number Field and the number sign symbol is
+//			formatted Inside a Number Field, this
+//			parameter will be ignored.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (nStrNumSymSpecNanobot *numStrNumberSymbolSpecNanobot) setCurrencyNumSignRelPos(
+	numSymbolSpec *NumStrNumberSymbolSpec,
+	currencyNumSignRelPos CurrencyNumSignRelativePosition,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if nStrNumSymSpecNanobot.lock == nil {
+		nStrNumSymSpecNanobot.lock = new(sync.Mutex)
+	}
+
+	nStrNumSymSpecNanobot.lock.Lock()
+
+	defer nStrNumSymSpecNanobot.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"numStrNumberSymbolSpecNanobot."+
+			"setCurrencyNumSignRelPos()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if numSymbolSpec == nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'numSymbolSpec' is invalid!\n"+
+			"'numSymbolSpec' is a 'nil' pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if currencyNumSignRelPos.XIsValid() == false {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'currencyNumSignRelPos' is invalid!\n"+
+			" currencyNumSignRelativePosition String Value = %v\n"+
+			"currencyNumSignRelativePosition Integer Value = %v\n",
+			ePrefix.String(),
+			currencyNumSignRelPos.String(),
+			currencyNumSignRelPos.XValueInt())
+
+		return err
+	}
+
+	numSymbolSpec.currencyNumSignRelativePosition =
+		currencyNumSignRelPos
+
+	return err
+}
+
 // setLeadingNStrNumSymbolSpec - Deletes and resets the data
 // value of the Leading Number Symbol contained in an
 // instance of NumStrNumberSymbolSpec passed as an input
@@ -4851,11 +4965,12 @@ func (nStrNumSymSpecNanobot *numStrNumberSymbolSpecNanobot) empty(
 //
 //	# Input Parameters
 //
-//	posNumSignSpec				*NumStrNumberSymbolSpec
+//	numSymbolSpec				*NumStrNumberSymbolSpec
 //		A pointer to a NumStrNumberSymbolSpec instance.
 //		The Leading Number Symbol contained in this
 //		instance will be deleted and reset to the value
-//		specified by input parameter, ''.
+//		specified by input parameter,
+//		'leadingNumberSymbols'.
 //
 //	leadingNumberSymbols		[]rune
 //		An array of runes specifying the character or
@@ -4945,7 +5060,7 @@ func (nStrNumSymSpecNanobot *numStrNumberSymbolSpecNanobot) empty(
 //		parameter 'errPrefDto' (error prefix) will be prefixed or
 //		attached at the beginning of the error message.
 func (nStrNumSymSpecNanobot *numStrNumberSymbolSpecNanobot) setLeadingNStrNumSymbolSpec(
-	posNumSignSpec *NumStrNumberSymbolSpec,
+	numSymbolSpec *NumStrNumberSymbolSpec,
 	leadingNumberSymbol []rune,
 	leadingNumFieldSymPosition NumberFieldSymbolPosition,
 	errPrefDto *ePref.ErrPrefixDto) (
@@ -4972,10 +5087,10 @@ func (nStrNumSymSpecNanobot *numStrNumberSymbolSpecNanobot) setLeadingNStrNumSym
 		return err
 	}
 
-	if posNumSignSpec == nil {
+	if numSymbolSpec == nil {
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'posNumSignSpec' is invalid!\n"+
-			"'posNumSignSpec' is a 'nil' pointer.\n",
+			"Error: Input parameter 'numSymbolSpec' is invalid!\n"+
+			"'numSymbolSpec' is a 'nil' pointer.\n",
 			ePrefix.String())
 
 		return err
@@ -4996,14 +5111,14 @@ func (nStrNumSymSpecNanobot *numStrNumberSymbolSpecNanobot) setLeadingNStrNumSym
 	}
 
 	new(nStrNumberSymbolSpecAtom).emptyLeadingNStrNumSymbol(
-		posNumSignSpec)
+		numSymbolSpec)
 
 	if len(leadingNumberSymbol) > 0 {
 
-		err = posNumSignSpec.leadingNumberSymbols.SetRuneArray(
+		err = numSymbolSpec.leadingNumberSymbols.SetRuneArray(
 			leadingNumberSymbol,
 			ePrefix.XCpy(
-				"posNumSignSpec.leadingNumberSymbols"+
+				"numSymbolSpec.leadingNumberSymbols"+
 					"<-leadingNumberSymbols"))
 
 		if err != nil {
@@ -5011,7 +5126,7 @@ func (nStrNumSymSpecNanobot *numStrNumberSymbolSpecNanobot) setLeadingNStrNumSym
 		}
 	}
 
-	posNumSignSpec.leadingNumberFieldSymbolPosition =
+	numSymbolSpec.leadingNumberFieldSymbolPosition =
 		leadingNumFieldSymPosition
 
 	return err
