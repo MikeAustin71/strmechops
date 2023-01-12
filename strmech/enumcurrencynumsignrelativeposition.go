@@ -475,8 +475,10 @@ func (currencyNumSignRelPos CurrencyNumSignRelativePosition) XReturnNoneIfInvali
 	return currencyNumSignRelPos
 }
 
-// XValue - This method returns the enumeration value of
-// the current CurrencyNumSignRelativePosition instance.
+// XValue
+//
+// This method returns the enumeration value of the
+// current CurrencyNumSignRelativePosition instance.
 //
 // This is a standard utility method and is not part of
 // the valid enumerations for this type.
@@ -487,6 +489,22 @@ func (currencyNumSignRelPos CurrencyNumSignRelativePosition) XValue() CurrencyNu
 	defer lockCurrencyNumSignRelativePosition.Unlock()
 
 	return currencyNumSignRelPos
+}
+
+// XValueInt
+//
+// This method returns the integer value of the current
+// CurrencyNumSignRelativePosition instance.
+//
+// This is a standard utility method and is not part of
+// the valid enumerations for this type.
+func (currencyNumSignRelPos CurrencyNumSignRelativePosition) XValueInt() int {
+
+	lockCurrencyNumSignRelativePosition.Lock()
+
+	defer lockCurrencyNumSignRelativePosition.Unlock()
+
+	return int(currencyNumSignRelPos)
 }
 
 // CurrNumSignRelPos - Public global constant of type
