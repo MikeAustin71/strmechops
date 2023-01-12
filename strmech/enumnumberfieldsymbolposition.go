@@ -133,9 +133,10 @@ var mapNumFieldNumSymbolPosLwrCaseStringToCode = map[string]NumberFieldSymbolPos
 //	      and
 //	Utility Methods
 //
-// Enumeration methods have names which collectively represent
-// an enumeration of different rounding methodologies and procedures
-// which may be applied to numeric rounding operations.
+// Enumeration methods have names which collectively
+// represent an enumeration of different Number Field
+// Symbol positions which may be applied in formatting
+// numeric values in text strings.
 //
 //	  Examples Of Enumeration Method Names:
 //		NumberFieldSymbolPosition(0).None()
@@ -354,7 +355,7 @@ func (numFieldSymbolPos NumberFieldSymbolPosition) String() string {
 //
 // ------------------------------------------------------------------------
 //
-// Usage
+// # Usage
 //
 //	numFieldSymPos := NumberFieldSymbolPosition(0).InsideNumField()
 //
@@ -588,7 +589,7 @@ type NumberFieldSymbolPositionNanobot struct {
 // This is a standard utility method and is not part of the valid
 // NumberFieldSymbolPosition enumeration.
 func (numberFieldSymPosNanobot *NumberFieldSymbolPositionNanobot) isValidNumberFieldSymbolPosition(
-	textJustify NumberFieldSymbolPosition) bool {
+	numFldSymPosValue NumberFieldSymbolPosition) bool {
 
 	if numberFieldSymPosNanobot.lock == nil {
 		numberFieldSymPosNanobot.lock = new(sync.Mutex)
@@ -598,8 +599,8 @@ func (numberFieldSymPosNanobot *NumberFieldSymbolPositionNanobot) isValidNumberF
 
 	defer numberFieldSymPosNanobot.lock.Unlock()
 
-	if textJustify < 1 ||
-		textJustify > 2 {
+	if numFldSymPosValue < 1 ||
+		numFldSymPosValue > 2 {
 
 		return false
 	}

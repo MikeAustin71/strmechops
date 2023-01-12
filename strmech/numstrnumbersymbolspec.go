@@ -126,10 +126,21 @@ type NumStrNumberSymbolSpec struct {
 	// symbols.
 
 	leadingNumberFieldSymbolPosition NumberFieldSymbolPosition
-	// Defines the position of the Leading Number
-	// Symbol relative to a Number Field in which
-	// a number string is displayed. Possible valid
+	// NumberFieldSymbolPosition is an enumeration
+	// used to specify the position of a number symbol
+	// relative to number field in which the number
+	// string is formatted and displayed. Possible
 	// values are listed as follows:
+	//
+	//	NumFieldSymPos.None() - Invalid Value
+	// 	NumFieldSymPos.InsideNumField() - Valid Value
+	//	NumFieldSymPos.OutsideNumField() - Valid Value
+	//
+	// 'leadingNumberFieldSymbolPosition' defines the
+	// position of the Leading Number Symbol relative
+	// to a Number Field in which a number string is
+	// displayed. Valid values with examples are shown
+	// below:
 	//
 	//	NumFieldSymPos.InsideNumField()
 	//		Example-1:
@@ -185,10 +196,21 @@ type NumStrNumberSymbolSpec struct {
 	// symbols.
 
 	trailingNumberFieldSymbolPosition NumberFieldSymbolPosition
-	// Defines the position of the Trailing Number
-	// Symbol relative to a Number Field in which
-	// a number string is displayed. Possible valid
+	// NumberFieldSymbolPosition is an enumeration
+	// used to specify the position of a number symbol
+	// relative to number field in which the number
+	// string is formatted and displayed. Possible
 	// values are listed as follows:
+	//
+	//	NumFieldSymPos.None() - Invalid Value
+	// 	NumFieldSymPos.InsideNumField() - Valid Value
+	//	NumFieldSymPos.OutsideNumField() - Valid Value
+	//
+	// 'trailingNumberFieldSymbolPosition' defines the
+	// position of the Trailing Number Symbol relative
+	// to a Number Field in which  a number string is
+	// displayed. Valid values with examples are shown
+	// below:
 	//
 	//	NumFieldSymPos.InsideNumField()
 	//		Example-1:
