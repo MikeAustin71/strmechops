@@ -2989,23 +2989,191 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewUSSignedNumParenDefaults(
 		err
 }
 
-// SetLeadingNumberSymbol - Resets and configures a leading
-// number symbol character or characters for the current
-// instance of NumStrNumberSymbolSpec.
+// SetCurrencyNumSignRelPos
 //
-// Leading number symbol characters can include such symbols as
-// plus signs ('+'), minus signs ('-') and/or currency symbols
-// ('$').
+// Deletes and resets the value of the value of the
+// Currency Number Sign Relative Position member variable
+// contained in an instance of NumStrNumberSymbolSpec
+// passed as an input parameter.
 //
-// Leading number symbol characters are intended for use in
-// formatting numeric values displayed in number strings.
+// Currency Number Sign Relative Position controls the
+// positioning of currency symbols relative to number
+// signs associated with numeric values formatted in a
+// number string.
+//
+// ----------------------------------------------------------------
+//
+//	# Input Parameters
+//
+//	numSymbolSpec				*NumStrNumberSymbolSpec
+//
+//		A pointer to a NumStrNumberSymbolSpec instance.
+//		The Currency Number Sign Relative Position member
+//		variable contained in this instance
+//		(currencyNumSignRelativePosition) will be deleted
+//		and reset to the value specified by input parameter,
+//		'currencyNumSignRelativePosition'.
+//
+//	currencyNumSignRelPos		CurrencyNumSignRelativePosition
+//
+//		This parameter is used exclusively by Currency
+//		Symbol Specifications.
+//
+//		Type CurrencyNumSignRelativePosition is an
+//		enumeration which has three values, only two of
+//		which are valid:
+//
+//			CurrNumSignRelPos.None()			- Invalid
+//			CurrNumSignRelPos.OutsideNumSign()	- Valid
+//			CurrNumSignRelPos.InsideNumSign()	- Valid
+//
+//		Currency Symbols have the option of being
+//		positioned either inside or outside number sign
+//		symbols formatted with numeric values in a number
+//		string.
+//
+//		Examples CurrNumSignRelPos.OutsideNumSign()
+//				"$ -123.45"
+//				"123.45- €"
+//
+//		Examples CurrNumSignRelPos.InsideNumSign()
+//
+//			Examples:
+//				"- $123.45"
+//				"123.45€ -"
+//
+//		Be Advised -
+//			If the currency symbol is formatted Outside a
+//			Number Field and the number sign symbol is
+//			formatted Inside a Number Field, this
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetCurrencyNumSignRelPos(
+	currencyNumSignRelPos CurrencyNumSignRelativePosition,
+	errorPrefix interface{}) error {
+
+	if nStrNumberSymbolSpec.lock == nil {
+		nStrNumberSymbolSpec.lock = new(sync.Mutex)
+	}
+
+	nStrNumberSymbolSpec.lock.Lock()
+
+	defer nStrNumberSymbolSpec.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumStrNumberSymbolSpec."+
+			"SetCurrencyNumSignRelPos()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	return new(numStrNumberSymbolSpecNanobot).
+		setCurrencyNumSignRelPos(
+			nStrNumberSymbolSpec,
+			currencyNumSignRelPos,
+			ePrefix.XCpy(
+				"nStrNumberSymbolSpec"))
+}
+
+// SetLeadingNumberSymbol - Resets and configures a
+// leading number symbol character or characters for the
+// current instance of NumStrNumberSymbolSpec.
+//
+// Leading number symbol characters can include such
+// symbols as plus signs ('+'), minus signs ('-') and
+// currency symbols ('$').
+//
+// Leading number symbol characters are intended for use
+// in formatting numeric values displayed in number
+// strings.
 //
 // ----------------------------------------------------------------
 //
 // # IMPORTANT
 //
-// This method will delete and overwrite the leading number
-// symbol data value in the current instance of
+// This method will delete and overwrite the leading
+// number symbol data value in the current instance of
 // NumStrNumberSymbolSpec.
 //
 // ----------------------------------------------------------------
