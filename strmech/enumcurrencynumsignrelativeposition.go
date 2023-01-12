@@ -1,6 +1,10 @@
 package strmech
 
-import "sync"
+import (
+	"fmt"
+	"strings"
+	"sync"
+)
 
 // Lock lockCurrencyNumSignRelativePosition before
 // accessing these 'maps'.
@@ -165,7 +169,7 @@ var lockCurrencyNumSignRelativePosition sync.Mutex
 // This is an error condition.
 //
 // This method is part of the standard enumeration.
-func (currencyNumSingRelPos CurrencyNumSignRelativePosition) None() CurrencyNumSignRelativePosition {
+func (currencyNumSignRelPos CurrencyNumSignRelativePosition) None() CurrencyNumSignRelativePosition {
 
 	lockCurrencyNumSignRelativePosition.Lock()
 
@@ -188,7 +192,7 @@ func (currencyNumSingRelPos CurrencyNumSignRelativePosition) None() CurrencyNumS
 // CurrencyNumSignRelativePosition.
 //
 // This method is part of the standard enumeration.
-func (currencyNumSingRelPos CurrencyNumSignRelativePosition) OutsideNumSign() CurrencyNumSignRelativePosition {
+func (currencyNumSignRelPos CurrencyNumSignRelativePosition) OutsideNumSign() CurrencyNumSignRelativePosition {
 
 	lockCurrencyNumSignRelativePosition.Lock()
 
@@ -211,7 +215,7 @@ func (currencyNumSingRelPos CurrencyNumSignRelativePosition) OutsideNumSign() Cu
 // CurrencyNumSignRelativePosition.
 //
 // This method is part of the standard enumeration.
-func (currencyNumSingRelPos CurrencyNumSignRelativePosition) InsideNumSign() CurrencyNumSignRelativePosition {
+func (currencyNumSignRelPos CurrencyNumSignRelativePosition) InsideNumSign() CurrencyNumSignRelativePosition {
 
 	lockCurrencyNumSignRelativePosition.Lock()
 
@@ -250,14 +254,14 @@ func (currencyNumSingRelPos CurrencyNumSignRelativePosition) InsideNumSign() Cur
 //		str := t.String()
 //
 //		str is now equal to "OutsideNumSign"
-func (currencyNumSingRelPos CurrencyNumSignRelativePosition) String() string {
+func (currencyNumSignRelPos CurrencyNumSignRelativePosition) String() string {
 
 	lockCurrencyNumSignRelativePosition.Lock()
 
 	defer lockCurrencyNumSignRelativePosition.Unlock()
 
 	result, ok :=
-		mapCurrencyNumSignRelPosCodeToString[currencyNumSingRelPos]
+		mapCurrencyNumSignRelPosCodeToString[currencyNumSignRelPos]
 
 	if !ok {
 		return "Error: CurrencyNumSignRelativePosition code UNKNOWN!"
@@ -302,14 +306,187 @@ func (currencyNumSingRelPos CurrencyNumSignRelativePosition) String() string {
 //
 //		isValid := currSymRelPos.XIsValid()
 //			"isValid = false"
-func (currencyNumSingRelPos CurrencyNumSignRelativePosition) XIsValid() bool {
+func (currencyNumSignRelPos CurrencyNumSignRelativePosition) XIsValid() bool {
 
 	lockCurrencyNumSignRelativePosition.Lock()
 
 	defer lockCurrencyNumSignRelativePosition.Unlock()
 
 	return new(CurrencyNumSignRelativePositionNanobot).
-		isValidCurrNumSignRelPos(currencyNumSingRelPos)
+		isValidCurrNumSignRelPos(currencyNumSignRelPos)
+}
+
+// XParseString
+//
+// Receives a string and attempts to match it with the
+// string value of a supported enumeration. If
+// successful, a new instance of
+// CurrencyNumSignRelativePosition is returned set to the
+// value of the associated enumeration.
+//
+// This is a standard utility method and is not part of
+// the valid enumerations for this type.
+//
+// ------------------------------------------------------------------------
+//
+// # Input Parameters
+//
+// valueString			string
+//
+//	A string which will be matched against the
+//	enumeration string values. If 'valueString'
+//	is equal to one of the enumeration names, this
+//	method will proceed to successful completion
+//	and return the correct enumeration value.
+//
+// caseSensitive		bool
+//
+//	If 'true' the search for enumeration names
+//	will be case-sensitive and will require an
+//	exact match. Therefore, 'insidenumsign' will
+//	NOT	match the enumeration name, 'InsideNumSign'.
+//
+//	If 'false', a case-insensitive search is conducted
+//	for the enumeration name. In this case,
+//	'insidenumsign' will match the enumeration name
+//	'InsideNumSign'.
+//
+// ------------------------------------------------------------------------
+//
+// # Return Values
+//
+// CurrencyNumSignRelativePosition
+//
+//	Upon successful completion, this method will return a
+//	new instance of CurrencyNumSignRelativePosition set
+//	to the value of the enumeration matched by the string
+//	search performed on input parameter, 'valueString'.
+//
+// error
+//
+//	If this method completes successfully, the returned
+//	error Type is set equal to 'nil'. If an error
+//	condition is encountered, this method will return an
+//	error type which encapsulates an appropriate error
+//	message.
+//
+// ------------------------------------------------------------------------
+//
+// # Usage
+//
+// t, err :=
+//
+//		CurrencyNumSignRelativePosition(0).XParseString(
+//		"InsideNumSign", true)
+//
+//	t is now equal to
+//		CurrencyNumSignRelativePosition(0).InsideNumSign()
+func (currencyNumSignRelPos CurrencyNumSignRelativePosition) XParseString(
+	valueString string,
+	caseSensitive bool) (
+	CurrencyNumSignRelativePosition,
+	error) {
+
+	lockCurrencyNumSignRelativePosition.Lock()
+
+	defer lockCurrencyNumSignRelativePosition.Unlock()
+
+	ePrefix := "CurrencyNumSignRelativePosition.XParseString() "
+
+	var ok bool
+	var currSymNumSignRelPos CurrencyNumSignRelativePosition
+
+	if caseSensitive {
+
+		currSymNumSignRelPos,
+			ok =
+			mapCurrencyNumSignRelPosStringToCode[valueString]
+
+		if !ok {
+			return CurrencyNumSignRelativePosition(0),
+				fmt.Errorf(ePrefix+
+					"\n'valueString' did NOT MATCH a valid CurrencyNumSignRelativePosition Value.\n"+
+					"valueString='%v'\n", valueString)
+		}
+
+	} else {
+
+		currSymNumSignRelPos,
+			ok = mapCurrencyNumSignRelPosLwrCaseStringToCode[strings.
+			ToLower(valueString)]
+
+		if !ok {
+			return CurrencyNumSignRelativePosition(0),
+				fmt.Errorf(ePrefix+
+					"\n'valueString' did NOT MATCH a valid CurrencyNumSignRelativePosition Value.\n"+
+					"valueString='%v'\n", valueString)
+		}
+	}
+
+	return currSymNumSignRelPos, nil
+}
+
+// XReturnNoneIfInvalid
+//
+// Provides a standardized value for invalid instances of
+// enumeration CurrencyNumSignRelativePosition.
+//
+// If the current instance of
+// CurrencyNumSignRelativePosition is invalid, this
+// method will always return a value of
+// CurrencyNumSignRelativePosition(0).None().
+//
+// # Background
+//
+// Enumeration CurrencyNumSignRelativePosition has an
+// underlying type of integer (int). This means the type
+// could conceivably be set to any integer value. This
+// method ensures that all invalid
+// CurrencyNumSignRelativePosition instances are
+// consistently classified as 'None'
+// (CurrencyNumSignRelativePosition(0).None()). Remember
+// that 'None' is considered an invalid value.
+//
+// For example, assume that
+// CurrencyNumSignRelativePosition was set to an integer
+// value of -848972. Calling this method on a
+// CurrencyNumSignRelativePosition with this invalid
+// integer value will return an integer value of zero or
+// the equivalent of
+// CurrencyNumSignRelativePosition(0).None(). This
+// conversion is useful in generating text strings for
+// meaningful informational and error messages.
+//
+// This is a standard utility method and is not part of
+// the valid enumerations for this type.
+func (currencyNumSignRelPos CurrencyNumSignRelativePosition) XReturnNoneIfInvalid() CurrencyNumSignRelativePosition {
+
+	lockCurrencyNumSignRelativePosition.Lock()
+
+	defer lockCurrencyNumSignRelativePosition.Unlock()
+
+	isValid := new(CurrencyNumSignRelativePositionNanobot).
+		isValidCurrNumSignRelPos(currencyNumSignRelPos)
+
+	if !isValid {
+		return CurrencyNumSignRelativePosition(0)
+	}
+
+	return currencyNumSignRelPos
+}
+
+// XValue - This method returns the enumeration value of
+// the current CurrencyNumSignRelativePosition instance.
+//
+// This is a standard utility method and is not part of
+// the valid enumerations for this type.
+func (currencyNumSignRelPos CurrencyNumSignRelativePosition) XValue() CurrencyNumSignRelativePosition {
+
+	lockCurrencyNumSignRelativePosition.Lock()
+
+	defer lockCurrencyNumSignRelativePosition.Unlock()
+
+	return currencyNumSignRelPos
 }
 
 // CurrNumSignRelPos - Public global constant of type
