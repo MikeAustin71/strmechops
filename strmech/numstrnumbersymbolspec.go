@@ -260,6 +260,36 @@ type NumStrNumberSymbolSpec struct {
 	//		In this case the final length of the number string
 	//		is greater than the Number Field length.
 
+	currencyNumSignRelativePosition CurrencyNumSignRelativePosition
+	// This member variable is used exclusively by
+	// Currency Symbol Specifications. This enumeration
+	// has three values, only two of which are valid:
+	//
+	//	CurrNumSignRelPos.None()			- Invalid
+	//	CurrNumSignRelPos.OutsideNumSign()	- Valid
+	//	CurrNumSignRelPos.InsideNumSign()	- Valid
+	//
+	// Currency Symbols have the option of being
+	// positioned either inside or outside number sign
+	// symbols formatted with numeric values in a number
+	// string.
+	//
+	// Examples CurrNumSignRelPos.OutsideNumSign()
+	//		"$ -123.45"
+	//		"123.45- €"
+	//
+	// Examples CurrNumSignRelPos.InsideNumSign()
+	//
+	//	Examples:
+	//		"- $123.45"
+	//		"123.45€ -"
+	//
+	// Be Advised -
+	//	If the currency symbol is formatted Outside a
+	//	Number Field and the number sign symbol is
+	//	formatted Inside a Number Field, this
+	//	parameter will be ignored.
+
 	lock *sync.Mutex
 }
 
@@ -2584,20 +2614,30 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewTrailingNumberSymbolRunes
 	return newNStrNumberSymbolSpec, err
 }
 
-// NewUnitedStatesDefaults - Creates and returns
-// new instances of default positive signed number symbols and
-// negative signed number symbols in accordance with formatting
-// parameters commonly applied in the United States.
+// NewUSSignedNumMinusDefaults
 //
-// The positive signed number symbol is empty or blank because
-// under United States formatting standards, positive number signs
-// are implied and not specifically displayed. Therefore, no
-// leading plus ('+') symbol is required.
+// Creates and returns three new instances of default
+// positive signed number symbols, zero value symbols
+// and negative signed number symbols in accordance with
+// formatting parameters commonly applied in the United
+// States.
 //
-// The negative signed number symbol is configured with a leading
-// minus sign ('-') meaning that all negative numeric values will
-// be prefixed with a leading minus sign ('-'). The negative
-// number sign will be positioned inside the number field:
+// The positive signed number symbol is empty or blank
+// because under United States formatting standards,
+// positive number signs are implied and not specifically
+// displayed. Therefore, no leading plus ('+') symbol is
+// required.
+//
+// Likewise, the zero signed number symbol is also empty
+// or blank because under United States formatting
+// standards, zero numeric values have no number sign
+// symbols.
+//
+// The negative signed number symbol is configured with a
+// leading minus sign ('-') meaning that all negative
+// numeric values will be prefixed with a leading minus
+// sign ('-'). The negative number sign will be
+// positioned inside the number field:
 //
 //	NumFieldSymPos.InsideNumField()
 //		Example:
@@ -2664,11 +2704,19 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewTrailingNumberSymbolRunes
 //
 //	positiveSignedNumberSymbols		NumStrNumberSymbolSpec
 //
-//		One of two new returned instances of
+//		One of three new returned instances of
 //		NumStrNumberSymbolSpec. This instance is empty or
 //		blank because under United States' signed number
 //		formatting standards, the positive number sign ('+')
 //		is implied and not displayed.
+//
+//	zeroSignedNumberSymbols			NumStrNumberSymbolSpec
+//
+//		One of two three returned instances of
+//		NumStrNumberSymbolSpec. This instance is empty or
+//		blank because under United States' signed number
+//		formatting standards, zero numeric values do not
+//		have an associated number sign.
 //
 //	negativeSignedNumberSymbols		NumStrNumberSymbolSpec
 //
@@ -2699,9 +2747,10 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewTrailingNumberSymbolRunes
 //		If an error message is returned, the text value of input
 //		parameter 'errorPrefix' will be inserted or prefixed at
 //		the beginning of the error message.
-func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewUnitedStatesDefaults(
+func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewUSSignedNumMinusDefaults(
 	errorPrefix interface{}) (
 	positiveSignedNumberSymbols NumStrNumberSymbolSpec,
+	zeroSignedNumberSymbols NumStrNumberSymbolSpec,
 	negativeSignedNumberSymbols NumStrNumberSymbolSpec,
 	err error) {
 
@@ -2719,11 +2768,12 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewUnitedStatesDefaults(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumStrNumberSymbolSpec."+
-			"NewUnitedStatesDefaults()",
+			"NewUSSignedNumMinusDefaults()",
 		"")
 
 	if err != nil {
 		return positiveSignedNumberSymbols,
+			zeroSignedNumberSymbols,
 			negativeSignedNumberSymbols,
 			err
 
@@ -2733,6 +2783,9 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewUnitedStatesDefaults(
 
 	numStrNumSymSpecNanobot.empty(
 		&positiveSignedNumberSymbols)
+
+	numStrNumSymSpecNanobot.empty(
+		&zeroSignedNumberSymbols)
 
 	numStrNumSymSpecNanobot.empty(
 		&negativeSignedNumberSymbols)
@@ -2745,6 +2798,225 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewUnitedStatesDefaults(
 			"negativeSignedNumberSymbols"))
 
 	return positiveSignedNumberSymbols,
+		zeroSignedNumberSymbols,
+		negativeSignedNumberSymbols,
+		err
+}
+
+// NewUSSignedNumParenDefaults
+//
+// Creates and returns three new instances of default
+// positive signed number symbols, zero value symbols
+// and negative signed number symbols in accordance with
+// formatting parameters commonly applied in the United
+// States.
+//
+// The negative signed number symbols will be configured
+// with surrounding parentheses.
+//
+//	Example: (123.45)
+//
+// The positive signed number symbol is empty or blank
+// because under United States formatting standards,
+// positive number signs are implied and not specifically
+// displayed. Therefore, no leading plus ('+') symbol is
+// required.
+//
+// Likewise, the zero signed number symbol is also empty
+// or blank because under United States formatting
+// standards, zero numeric values have no number sign
+// symbols.
+//
+// The negative signed number symbols are configured with
+// surrounding parentheses ("()"). The negative number
+// sign will be positioned inside the number field:
+//
+//	NumFieldSymPos.InsideNumField()
+//		Example:
+//			Number Field Length: 9
+//			Numeric Value: -123.45
+//			Number Symbol:
+//				Leading and Trailing parenthesis ("()")
+//			Number Symbol Position: Inside Number Field
+//			Formatted Number String: " (123.45)"
+//			Number Field Index:       012345678
+//			Total Number String Length: 9
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix						interface{}
+//
+//		This object encapsulates error prefix text which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods
+//		listed as a method or function chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of the
+//		following types:
+//
+//		1. nil - A nil value is valid and generates an empty
+//		   collection of error prefix and error context
+//		   information.
+//
+//		2. string - A string containing error prefix information.
+//
+//		3. []string A one-dimensional slice of strings containing
+//		   error prefix information
+//
+//		4. [][2]string A two-dimensional slice of strings
+//		   containing error prefix and error context information.
+//
+//		5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		   from this object will be copied for use in error and
+//		   informational messages.
+//
+//		6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		   Information from this object will be copied for use in
+//		   error and informational messages.
+//
+//		7. IBasicErrorPrefix - An interface to a method generating
+//		   a two-dimensional slice of strings containing error
+//		   prefix and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible to one of
+//		the valid types listed above, it will be considered
+//		invalid and trigger the return of an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		the 'errpref' software package,
+//		"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	positiveSignedNumberSymbols		NumStrNumberSymbolSpec
+//
+//		One of three new returned instances of
+//		NumStrNumberSymbolSpec. This instance is empty or
+//		blank because under United States' signed number
+//		formatting standards, the positive number sign ('+')
+//		is implied and not displayed.
+//
+//	zeroSignedNumberSymbols			NumStrNumberSymbolSpec
+//
+//		One of three returned instances of
+//		NumStrNumberSymbolSpec. This instance is empty or
+//		blank because under United States' signed number
+//		formatting standards, zero numeric values do not
+//		have an associated number sign.
+//
+//	negativeSignedNumberSymbols		NumStrNumberSymbolSpec
+//
+//		One of three new returned instances of
+//		NumStrNumberSymbolSpec. This instance is
+//	 	configured with a leading and trailing
+//	  	parenthesis ("()") which will be formatted and
+//	  	displayed for all negative number values. The
+//	  	surrounding parentheses will be displayed
+//		inside the number field.
+//
+//			NumFieldSymPos.InsideNumField()
+//			Example:
+//				Number Field Length: 9
+//				Numeric Value: -123.45
+//				Number Symbol:
+//					Leading and Trailing parenthesis ("()")
+//				Number Symbol Position: Inside Number Field
+//				Formatted Number String: " (123.45)"
+//				Number Field Index:       012345678
+//				Total Number String Length: 9
+//
+//	err								error
+//
+//		If this method completes successfully and no errors are
+//		encountered this return value is set to 'nil'. Otherwise,
+//		if errors are encountered, this return value will contain
+//		an appropriate error message.
+//
+//		If an error message is returned, the text value of input
+//		parameter 'errorPrefix' will be inserted or prefixed at
+//		the beginning of the error message.
+func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewUSSignedNumParenDefaults(
+	errorPrefix interface{}) (
+	positiveSignedNumberSymbols NumStrNumberSymbolSpec,
+	zeroSignedNumberSymbols NumStrNumberSymbolSpec,
+	negativeSignedNumberSymbols NumStrNumberSymbolSpec,
+	err error) {
+
+	if nStrNumberSymbolSpec.lock == nil {
+		nStrNumberSymbolSpec.lock = new(sync.Mutex)
+	}
+
+	nStrNumberSymbolSpec.lock.Lock()
+
+	defer nStrNumberSymbolSpec.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumStrNumberSymbolSpec."+
+			"NewUSSignedNumParenDefaults()",
+		"")
+
+	if err != nil {
+		return positiveSignedNumberSymbols,
+			zeroSignedNumberSymbols,
+			negativeSignedNumberSymbols,
+			err
+
+	}
+
+	numStrNumSymSpecNanobot := numStrNumberSymbolSpecNanobot{}
+
+	numStrNumSymSpecNanobot.empty(
+		&positiveSignedNumberSymbols)
+
+	numStrNumSymSpecNanobot.empty(
+		&zeroSignedNumberSymbols)
+
+	numStrNumSymSpecNanobot.empty(
+		&negativeSignedNumberSymbols)
+
+	err = numStrNumSymSpecNanobot.setLeadingNStrNumSymbolSpec(
+		&negativeSignedNumberSymbols,
+		[]rune{'('},
+		NumFieldSymPos.InsideNumField(),
+		ePrefix.XCpy(
+			"negativeSignedNumberSymbols"))
+
+	if err != nil {
+		return positiveSignedNumberSymbols,
+			zeroSignedNumberSymbols,
+			negativeSignedNumberSymbols,
+			err
+
+	}
+
+	err = numStrNumSymSpecNanobot.setTrailingNStrNumSymbolSpec(
+		&negativeSignedNumberSymbols,
+		[]rune{')'},
+		NumFieldSymPos.InsideNumField(),
+		ePrefix.XCpy(
+			"negativeSignedNumberSymbols"))
+
+	if err != nil {
+		return positiveSignedNumberSymbols,
+			zeroSignedNumberSymbols,
+			negativeSignedNumberSymbols,
+			err
+
+	}
+
+	return positiveSignedNumberSymbols,
+		zeroSignedNumberSymbols,
 		negativeSignedNumberSymbols,
 		err
 }
@@ -4564,6 +4836,9 @@ func (nStrNumSymSpecNanobot *numStrNumberSymbolSpecNanobot) empty(
 	nStrNumSymSpecAtom.emptyTrailingNStrNumSymbol(
 		nStrNumSymbolSpec)
 
+	nStrNumSymSpecAtom.emptyCurrNumSignRelPos(
+		nStrNumSymbolSpec)
+
 	return
 }
 
@@ -5027,6 +5302,24 @@ func (nStrNumSymSpecAtom *nStrNumberSymbolSpecAtom) emptyTrailingNStrNumSymbol(
 
 	return
 }
+func (nStrNumSymSpecAtom *nStrNumberSymbolSpecAtom) emptyCurrNumSignRelPos(
+	nStrNumSymbolSpec *NumStrNumberSymbolSpec) {
+
+	if nStrNumSymSpecAtom.lock == nil {
+		nStrNumSymSpecAtom.lock = new(sync.Mutex)
+	}
+
+	nStrNumSymSpecAtom.lock.Lock()
+
+	defer nStrNumSymSpecAtom.lock.Unlock()
+
+	if nStrNumSymbolSpec == nil {
+		return
+	}
+
+	nStrNumSymbolSpec.currencyNumSignRelativePosition =
+		CurrNumSignRelPos.None()
+}
 
 // equal - Receives a pointer to two instances of
 // NumStrNumberSymbolSpec and proceeds to compare their
@@ -5106,6 +5399,12 @@ func (nStrNumSymSpecAtom *nStrNumberSymbolSpecAtom) equal(
 
 	if nStrNumSymbolSpec1.trailingNumberFieldSymbolPosition !=
 		nStrNumSymbolSpec2.trailingNumberFieldSymbolPosition {
+
+		return false
+	}
+
+	if nStrNumSymbolSpec1.currencyNumSignRelativePosition !=
+		nStrNumSymbolSpec2.currencyNumSignRelativePosition {
 
 		return false
 	}
