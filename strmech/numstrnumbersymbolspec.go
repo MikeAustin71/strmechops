@@ -3287,7 +3287,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewSignedNumDefaultsFrance(
 //
 //		One of three new returned instances of
 //		NumStrNumberSymbolSpec. This instance is empty or
-//		blank because under United States signed number
+//		blank because under the United States signed number
 //		formatting standards, the positive number sign ('+')
 //		is implied and not displayed.
 //
@@ -3295,7 +3295,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewSignedNumDefaultsFrance(
 //
 //		One of three returned instances of
 //		NumStrNumberSymbolSpec. This instance is empty or
-//		blank because under United States signed number
+//		blank because under the United States signed number
 //		formatting standards, zero numeric values do not
 //		have an associated number sign.
 //
@@ -3469,7 +3469,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewSignedNumDefaultsUSMinus(
 //
 //		One of three new returned instances of
 //		NumStrNumberSymbolSpec. This instance is empty or
-//		blank because under United States signed number
+//		blank because under the United States signed number
 //		formatting standards, the positive number sign ('+')
 //		is implied and not displayed.
 //
@@ -3477,7 +3477,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewSignedNumDefaultsUSMinus(
 //
 //		One of three returned instances of
 //		NumStrNumberSymbolSpec. This instance is empty or
-//		blank because under United States signed number
+//		blank because under the United States signed number
 //		formatting standards, zero numeric values do not
 //		have an associated number sign.
 //
