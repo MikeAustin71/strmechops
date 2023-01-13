@@ -3184,7 +3184,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewSignedNumUSMinusDefaults(
 	}
 
 	err = new(numStrNumberSymbolSpecMechanics).
-		setSignedNumUSMinusDefaults(
+		setSignedNumSymbolsDefaultUSMinus(
 			&positiveSignedNumberSymbols,
 			&zeroSignedNumberSymbols,
 			&negativeSignedNumberSymbols,
@@ -3368,7 +3368,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewSignedNumUSParenDefaults(
 	}
 
 	err = new(numStrNumberSymbolSpecMechanics).
-		setSignedNumUSParenDefaults(
+		setSignedNumSymbolsDefaultUSParen(
 			&positiveSignedNumberSymbols,
 			&zeroSignedNumberSymbols,
 			&negativeSignedNumberSymbols,
@@ -5664,7 +5664,7 @@ func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setSignedNumSymbolsDe
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
 		"numStrNumberSymbolSpecMechanics."+
-			"setSignedNumUSMinusDefaults()",
+			"setSignedNumSymbolsDefaultGermany()",
 		"")
 
 	if err != nil {
@@ -5723,7 +5723,7 @@ func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setSignedNumSymbolsDe
 
 }
 
-// setSignedNumUSMinusDefaults
+// setSignedNumSymbolsDefaultUSMinus
 //
 // Reconfigures three NumStrNumberSymbolSpec instances
 // with default signed number symbols commonly applied in
@@ -5841,7 +5841,7 @@ func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setSignedNumSymbolsDe
 //		for input parameter 'errPrefDto' (error prefix)
 //		will be prefixed or attached at the beginning of
 //		the error message.
-func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setSignedNumUSMinusDefaults(
+func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setSignedNumSymbolsDefaultUSMinus(
 	positiveSignedNumberSymbols *NumStrNumberSymbolSpec,
 	zeroSignedNumberSymbols *NumStrNumberSymbolSpec,
 	negativeSignedNumberSymbols *NumStrNumberSymbolSpec,
@@ -5863,7 +5863,7 @@ func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setSignedNumUSMinusDe
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
 		"numStrNumberSymbolSpecMechanics."+
-			"setSignedNumUSMinusDefaults()",
+			"setSignedNumSymbolsDefaultUSMinus()",
 		"")
 
 	if err != nil {
@@ -5921,7 +5921,7 @@ func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setSignedNumUSMinusDe
 	return err
 }
 
-// setSignedNumUSMinusDefaults
+// setSignedNumSymbolsDefaultUSParen
 //
 // Reconfigures three NumStrNumberSymbolSpec instances
 // with default signed number symbols commonly applied in
@@ -6040,7 +6040,7 @@ func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setSignedNumUSMinusDe
 //		for input parameter 'errPrefDto' (error prefix)
 //		will be prefixed or attached at the beginning of
 //		the error message.
-func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setSignedNumUSParenDefaults(
+func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setSignedNumSymbolsDefaultUSParen(
 	positiveSignedNumberSymbols *NumStrNumberSymbolSpec,
 	zeroSignedNumberSymbols *NumStrNumberSymbolSpec,
 	negativeSignedNumberSymbols *NumStrNumberSymbolSpec,
@@ -6062,7 +6062,7 @@ func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setSignedNumUSParenDe
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
 		"numStrNumberSymbolSpecMechanics."+
-			"setSignedNumUSParenDefaults()",
+			"setSignedNumSymbolsDefaultUSParen()",
 		"")
 
 	if err != nil {
