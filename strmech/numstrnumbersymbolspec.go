@@ -4863,6 +4863,242 @@ type numStrNumberSymbolSpecMechanics struct {
 	lock *sync.Mutex
 }
 
+// setCurrencyEUDefaults
+//
+// Receives an instance of NumStrNumberSymbolSpec and
+// configures it with the default European Union (EU)
+// currency symbol.
+//
+// The default EU currency symbol is a trailing Euro
+// symbol ('€').
+//
+//	Example:
+//		1.000.000,00 €
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	currencySymbols				*NumStrNumberSymbolSpec
+//
+//		A pointer to a NumStrNumberSymbolSpec instance.
+//		This instance will be reconfigured with the
+//		default European Union (EU) currency symbol.
+//
+//		The default EU currency symbol is a trailing
+//		Euro symbol.
+//
+//			Example:
+//				1.000.000,00 €
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setCurrencyEUDefaults(
+	currencySymbols *NumStrNumberSymbolSpec,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if nStrNumSymSpecMech.lock == nil {
+		nStrNumSymSpecMech.lock = new(sync.Mutex)
+	}
+
+	nStrNumSymSpecMech.lock.Lock()
+
+	defer nStrNumSymSpecMech.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"numStrNumberSymbolSpecMechanics."+
+			"setCurrencyEUDefaults()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if currencySymbols == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'currencySymbols' is invalid!\n"+
+			"'currencySymbols' is a nil pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	numStrNumSymSpecNanobot := numStrNumberSymbolSpecNanobot{}
+
+	numStrNumSymSpecNanobot.empty(
+		currencySymbols)
+
+	err = numStrNumSymSpecNanobot.setTrailingNStrNumSymbolSpec(
+		currencySymbols,
+		[]rune{' ', '€'},
+		NumFieldSymPos.InsideNumField(),
+		ePrefix.XCpy(
+			"currencySymbols"))
+
+	if err != nil {
+		return err
+	}
+
+	return numStrNumSymSpecNanobot.setCurrencyNumSignRelPos(
+		currencySymbols,
+		CurrNumSignRelPos.OutsideNumSign(),
+		ePrefix.XCpy(
+			"currencySymbols"))
+}
+
+// setCurrencyUKDefaults
+//
+// Receives an instance of NumStrNumberSymbolSpec and
+// configures it with the default UK (United Kingdom)
+// currency symbol. The default UK currency symbol is
+// a leading pound sign.
+//
+//	Example:
+//		£ 123.45
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	currencySymbols				*NumStrNumberSymbolSpec
+//
+//		A pointer to a NumStrNumberSymbolSpec instance.
+//		This instance will be reconfigured with the
+//		default UK (United Kingdom) currency symbol.
+//
+//		The default UK currency symbol is a leading
+//		pound sign.
+//
+//			Example:
+//				£ 123.45
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setCurrencyUKDefaults(
+	currencySymbols *NumStrNumberSymbolSpec,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if nStrNumSymSpecMech.lock == nil {
+		nStrNumSymSpecMech.lock = new(sync.Mutex)
+	}
+
+	nStrNumSymSpecMech.lock.Lock()
+
+	defer nStrNumSymSpecMech.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"numStrNumberSymbolSpecMechanics."+
+			"setCurrencyUKDefaults()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if currencySymbols == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'currencySymbols' is invalid!\n"+
+			"'currencySymbols' is a nil pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	numStrNumSymSpecNanobot := numStrNumberSymbolSpecNanobot{}
+
+	numStrNumSymSpecNanobot.empty(
+		currencySymbols)
+
+	err = numStrNumSymSpecNanobot.setLeadingNStrNumSymbolSpec(
+		currencySymbols,
+		[]rune{'£', ' '},
+		NumFieldSymPos.InsideNumField(),
+		ePrefix.XCpy(
+			"currencySymbols"))
+
+	if err != nil {
+		return err
+	}
+
+	return numStrNumSymSpecNanobot.setCurrencyNumSignRelPos(
+		currencySymbols,
+		CurrNumSignRelPos.OutsideNumSign(),
+		ePrefix.XCpy(
+			"currencySymbols"))
+}
+
 // setCurrencyUSDefaults
 //
 // Receives an instance of NumStrNumberSymbolSpec and
@@ -4875,7 +5111,7 @@ type numStrNumberSymbolSpecMechanics struct {
 //
 // ----------------------------------------------------------------
 //
-//	# Input Parameters
+// # Input Parameters
 //
 //	currencySymbols				*NumStrNumberSymbolSpec
 //
