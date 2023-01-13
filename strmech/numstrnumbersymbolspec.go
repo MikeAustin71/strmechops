@@ -3018,24 +3018,23 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewTrailingNumberSymbolRunes
 	return newNStrNumberSymbolSpec, err
 }
 
-// NewSignedNumDefaultsUSMinus
+// NewSignedNumDefaultsFrance
 //
 // Creates and returns three new instances of default
 // positive signed number symbols, zero value symbols
-// and negative signed number symbols in accordance with
-// formatting parameters commonly applied in the United
-// States.
+// and negative signed number symbols configured in
+// accordance with formatting standards commonly applied
+// in France.
 //
 // The positive signed number symbol is empty or blank
-// because under United States formatting standards,
-// positive number signs are implied and not specifically
+// because under French formatting standards, positive
+// number signs are implied and not explicitly
 // displayed. Therefore, no leading plus ('+') symbol is
 // required.
 //
 // Likewise, the zero signed number symbol is also empty
-// or blank because under United States formatting
-// standards, zero numeric values have no number sign
-// symbols.
+// or blank because under French formatting standards,
+// zero numeric values have no number sign symbols.
 //
 // The negative signed number symbol is configured with a
 // leading minus sign ('-') meaning that all negative
@@ -3046,11 +3045,11 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewTrailingNumberSymbolRunes
 //	NumFieldSymPos.InsideNumField()
 //		Example:
 //			Number Field Length: 8
-//			Numeric Value: 123.45
+//			Numeric Value: -123.45
 //			Number Symbol: leading minus sign ('-')
 //			Number Symbol Position: Inside Number Field
 //			Formatted Number String: " -123.45"
-//			Number Field Index:  01234567
+//			     Number Field Index:  01234567
 //			Total Number String Length: 8
 //
 // ----------------------------------------------------------------
@@ -3110,21 +3109,21 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewTrailingNumberSymbolRunes
 //
 //		One of three new returned instances of
 //		NumStrNumberSymbolSpec. This instance is empty or
-//		blank because under United States' signed number
-//		formatting standards, the positive number sign ('+')
-//		is implied and not displayed.
+//		blank because under French signed number
+//		formatting standards, the positive number sign
+//		('+') is implied and not explicitly displayed.
 //
 //	zeroSignedNumberSymbols			NumStrNumberSymbolSpec
 //
-//		One of two three returned instances of
+//		One of three new returned instances of
 //		NumStrNumberSymbolSpec. This instance is empty or
-//		blank because under United States' signed number
-//		formatting standards, zero numeric values do not
+//		blank because under French signed number
+//	 	formatting standards, zero numeric values do not
 //		have an associated number sign.
 //
 //	negativeSignedNumberSymbols		NumStrNumberSymbolSpec
 //
-//		One of two new returned instances of
+//		One of three new returned instances of
 //		NumStrNumberSymbolSpec. This instance is configured
 //		with a leading minus sign ('-') which will be
 //	 	formatted and displayed for all negative number
@@ -3138,7 +3137,185 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewTrailingNumberSymbolRunes
 //					Number Symbol: leading minus sign ('-')
 //					Number Symbol Position: Inside Number Field
 //					Formatted Number String: " -123.45"
-//					Number Field Index:  01234567
+//					     Number Field Index:  01234567
+//					Total Number String Length: 8
+//
+//	err								error
+//
+//		If this method completes successfully and no errors are
+//		encountered this return value is set to 'nil'. Otherwise,
+//		if errors are encountered, this return value will contain
+//		an appropriate error message.
+//
+//		If an error message is returned, the text value of input
+//		parameter 'errorPrefix' will be inserted or prefixed at
+//		the beginning of the error message.
+func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewSignedNumDefaultsFrance(
+	errorPrefix interface{}) (
+	positiveSignedNumberSymbols NumStrNumberSymbolSpec,
+	zeroSignedNumberSymbols NumStrNumberSymbolSpec,
+	negativeSignedNumberSymbols NumStrNumberSymbolSpec,
+	err error) {
+
+	if nStrNumberSymbolSpec.lock == nil {
+		nStrNumberSymbolSpec.lock = new(sync.Mutex)
+	}
+
+	nStrNumberSymbolSpec.lock.Lock()
+
+	defer nStrNumberSymbolSpec.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumStrNumberSymbolSpec."+
+			"NewSignedNumDefaultsFrance()",
+		"")
+
+	if err != nil {
+		return positiveSignedNumberSymbols,
+			zeroSignedNumberSymbols,
+			negativeSignedNumberSymbols,
+			err
+
+	}
+
+	err = new(numStrNumberSymbolSpecMechanics).
+		setSignedNumSymbolsDefaultFrance(
+			&positiveSignedNumberSymbols,
+			&zeroSignedNumberSymbols,
+			&negativeSignedNumberSymbols,
+			ePrefix)
+
+	return positiveSignedNumberSymbols,
+		zeroSignedNumberSymbols,
+		negativeSignedNumberSymbols,
+		err
+}
+
+// NewSignedNumDefaultsUSMinus
+//
+// Creates and returns three new instances of default
+// positive signed number symbols, zero value symbols
+// and negative signed number symbols in accordance with
+// formatting parameters commonly applied in the United
+// States.
+//
+// The positive signed number symbol is empty or blank
+// because under United States formatting standards,
+// positive number signs are implied and not specifically
+// displayed. Therefore, no leading plus ('+') symbol is
+// required.
+//
+// Likewise, the zero signed number symbol is also empty
+// or blank because under United States formatting
+// standards, zero numeric values have no number sign
+// symbols.
+//
+// The negative signed number symbol is configured with a
+// leading minus sign ('-') meaning that all negative
+// numeric values will be prefixed with a leading minus
+// sign ('-'). The negative number sign will be
+// positioned inside the number field:
+//
+//	NumFieldSymPos.InsideNumField()
+//		Example:
+//			Number Field Length: 8
+//			Numeric Value: 123.45
+//			Number Symbol: leading minus sign ('-')
+//			Number Symbol Position: Inside Number Field
+//			Formatted Number String: " -123.45"
+//			     Number Field Index:  01234567
+//			Total Number String Length: 8
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix						interface{}
+//
+//		This object encapsulates error prefix text which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods
+//		listed as a method or function chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of the
+//		following types:
+//
+//		1. nil - A nil value is valid and generates an empty
+//		   collection of error prefix and error context
+//		   information.
+//
+//		2. string - A string containing error prefix information.
+//
+//		3. []string A one-dimensional slice of strings containing
+//		   error prefix information
+//
+//		4. [][2]string A two-dimensional slice of strings
+//		   containing error prefix and error context information.
+//
+//		5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		   from this object will be copied for use in error and
+//		   informational messages.
+//
+//		6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		   Information from this object will be copied for use in
+//		   error and informational messages.
+//
+//		7. IBasicErrorPrefix - An interface to a method generating
+//		   a two-dimensional slice of strings containing error
+//		   prefix and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible to one of
+//		the valid types listed above, it will be considered
+//		invalid and trigger the return of an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		the 'errpref' software package,
+//		"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	positiveSignedNumberSymbols		NumStrNumberSymbolSpec
+//
+//		One of three new returned instances of
+//		NumStrNumberSymbolSpec. This instance is empty or
+//		blank because under United States signed number
+//		formatting standards, the positive number sign ('+')
+//		is implied and not displayed.
+//
+//	zeroSignedNumberSymbols			NumStrNumberSymbolSpec
+//
+//		One of three returned instances of
+//		NumStrNumberSymbolSpec. This instance is empty or
+//		blank because under United States signed number
+//		formatting standards, zero numeric values do not
+//		have an associated number sign.
+//
+//	negativeSignedNumberSymbols		NumStrNumberSymbolSpec
+//
+//		One of three new returned instances of
+//		NumStrNumberSymbolSpec. This instance is configured
+//		with a leading minus sign ('-') which will be
+//	 	formatted and displayed for all negative number
+//		values. This negative number sign will be displayed
+//		inside the number field.
+//
+//			NumFieldSymPos.InsideNumField()
+//				Example:
+//					Number Field Length: 8
+//					Numeric Value: 123.45
+//					Number Symbol: leading minus sign ('-')
+//					Number Symbol Position: Inside Number Field
+//					Formatted Number String: " -123.45"
+//					     Number Field Index:  01234567
 //					Total Number String Length: 8
 //
 //	err								error
@@ -3232,7 +3409,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewSignedNumDefaultsUSMinus(
 //				Leading and Trailing parenthesis ("()")
 //			Number Symbol Position: Inside Number Field
 //			Formatted Number String: " (123.45)"
-//			Number Field Index:       012345678
+//			     Number Field Index:  012345678
 //			Total Number String Length: 9
 //
 // ----------------------------------------------------------------
@@ -3292,7 +3469,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewSignedNumDefaultsUSMinus(
 //
 //		One of three new returned instances of
 //		NumStrNumberSymbolSpec. This instance is empty or
-//		blank because under United States' signed number
+//		blank because under United States signed number
 //		formatting standards, the positive number sign ('+')
 //		is implied and not displayed.
 //
@@ -3300,7 +3477,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewSignedNumDefaultsUSMinus(
 //
 //		One of three returned instances of
 //		NumStrNumberSymbolSpec. This instance is empty or
-//		blank because under United States' signed number
+//		blank because under United States signed number
 //		formatting standards, zero numeric values do not
 //		have an associated number sign.
 //
@@ -3322,7 +3499,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewSignedNumDefaultsUSMinus(
 //					Leading and Trailing parenthesis ("()")
 //				Number Symbol Position: Inside Number Field
 //				Formatted Number String: " (123.45)"
-//				Number Field Index:       012345678
+//				     Number Field Index:  012345678
 //				Total Number String Length: 9
 //
 //	err								error
@@ -5521,6 +5698,206 @@ func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setCurrencyDefaultsUS
 		CurrNumSignRelPos.OutsideNumSign(),
 		ePrefix.XCpy(
 			"currencySymbols"))
+}
+
+// setSignedNumSymbolsDefaultFrance
+//
+// Reconfigures three NumStrNumberSymbolSpec input
+// parameters with default signed number symbols
+// commonly applied in France.
+//
+// This method applies default number symbol
+// specifications configuring negative numeric values
+// with leading minus signs ('-').
+//
+//	Example: -123.34
+//
+// These number symbol specifications are designed to
+// format number strings containing signed numeric
+// values. Currency symbols ARE NOT included in these
+// configured number symbol specifications.
+//
+// The three configured NumStrNumberSymbolSpec instances
+// are therefore configured with French specifications
+// for positive signed number symbols, zero value
+// symbols, and negative signed number symbols.
+//
+// The positive signed number symbol is configured as
+// empty or blank because under French formatting
+// standards, positive number signs are implied and not
+// specifically displayed. Therefore, no leading plus
+// ('+') symbol is required.
+//
+// Likewise, the zero signed number symbol is also
+// configured as empty or blank because under French
+// formatting standards, zero numeric values have no
+// number sign symbols.
+//
+// The negative signed number symbol is configured with a
+// trailing minus sign ('-') meaning that all negative
+// numeric values will be suffixed with a trailing minus
+// sign ('-'). The negative number sign will be
+// positioned inside the number field:
+//
+//	NumFieldSymPos.InsideNumField()
+//		Example:
+//			Number Field Length: 9
+//			Numeric Value: -123.45
+//			Number Symbol: trailing minus sign ('-')
+//			Number Symbol Position: Inside Number Field
+//			Formatted Number String: "  -123.45"
+//			Number Field Index:       012345678
+//			Total Number String Length: 9
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	positiveSignedNumberSymbols *NumStrNumberSymbolSpec
+//
+//		This instance of NumStrNumberSymbolSpec will be
+//		configured with signed number symbols associated
+//		with positive numeric values.
+//
+//		The positive signed number symbol is configured
+//		as empty or blank because under French formatting
+//		standards, positive number signs are implied and
+//		not specifically displayed. Therefore, no leading
+//		plus ('+') symbol is required.
+//
+//	zeroSignedNumberSymbols		*NumStrNumberSymbolSpec
+//
+//		This instance of NumStrNumberSymbolSpec will be
+//		configured with signed number symbols associated
+//		with zero numeric values.
+//
+//		The zero signed number symbol is configured as
+//		empty or blank because under French formatting
+//		standards, zero numeric values have	no number
+//		sign symbols.
+//
+//	negativeSignedNumberSymbols *NumStrNumberSymbolSpec
+//
+//		This instance of NumStrNumberSymbolSpec will be
+//		configured with signed number symbols associated
+//		with negative numeric values.
+//
+//		Negative numeric values will be	configured with
+//		trailing minus signs ('-') in accordance with
+//		French number string formatting standards.
+//
+//			Example: 123.34-
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setSignedNumSymbolsDefaultFrance(
+	positiveSignedNumberSymbols *NumStrNumberSymbolSpec,
+	zeroSignedNumberSymbols *NumStrNumberSymbolSpec,
+	negativeSignedNumberSymbols *NumStrNumberSymbolSpec,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if nStrNumSymSpecMech.lock == nil {
+		nStrNumSymSpecMech.lock = new(sync.Mutex)
+	}
+
+	nStrNumSymSpecMech.lock.Lock()
+
+	defer nStrNumSymSpecMech.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"numStrNumberSymbolSpecMechanics."+
+			"setSignedNumSymbolsDefaultFrance()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if positiveSignedNumberSymbols == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'positiveSignedNumberSymbols' is invalid!\n"+
+			"'positiveSignedNumberSymbols' is a nil pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if zeroSignedNumberSymbols == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'zeroSignedNumberSymbols' is invalid!\n"+
+			"'zeroSignedNumberSymbols' is a nil pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if negativeSignedNumberSymbols == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'negativeSignedNumberSymbols' is invalid!\n"+
+			"'negativeSignedNumberSymbols' is a nil pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	numStrNumSymSpecNanobot := numStrNumberSymbolSpecNanobot{}
+
+	numStrNumSymSpecNanobot.empty(
+		positiveSignedNumberSymbols)
+
+	numStrNumSymSpecNanobot.empty(
+		zeroSignedNumberSymbols)
+
+	numStrNumSymSpecNanobot.empty(
+		negativeSignedNumberSymbols)
+
+	err = numStrNumSymSpecNanobot.setTrailingNStrNumSymbolSpec(
+		negativeSignedNumberSymbols,
+		[]rune{'-'},
+		NumFieldSymPos.InsideNumField(),
+		ePrefix.XCpy(
+			"negativeSignedNumberSymbols"))
+
+	return err
+
 }
 
 // setSignedNumSymbolsDefaultGermany
