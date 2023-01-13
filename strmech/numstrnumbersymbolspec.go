@@ -3018,7 +3018,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewTrailingNumberSymbolRunes
 	return newNStrNumberSymbolSpec, err
 }
 
-// NewSignedNumUSMinusDefaults
+// NewSignedNumDefaultsUSMinus
 //
 // Creates and returns three new instances of default
 // positive signed number symbols, zero value symbols
@@ -3151,7 +3151,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewTrailingNumberSymbolRunes
 //		If an error message is returned, the text value of input
 //		parameter 'errorPrefix' will be inserted or prefixed at
 //		the beginning of the error message.
-func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewSignedNumUSMinusDefaults(
+func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewSignedNumDefaultsUSMinus(
 	errorPrefix interface{}) (
 	positiveSignedNumberSymbols NumStrNumberSymbolSpec,
 	zeroSignedNumberSymbols NumStrNumberSymbolSpec,
@@ -3172,7 +3172,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewSignedNumUSMinusDefaults(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumStrNumberSymbolSpec."+
-			"NewSignedNumUSMinusDefaults()",
+			"NewSignedNumDefaultsUSMinus()",
 		"")
 
 	if err != nil {
@@ -3196,7 +3196,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewSignedNumUSMinusDefaults(
 		err
 }
 
-// NewSignedNumUSParenDefaults
+// NewSignedNumDefaultsUSParen
 //
 // Creates and returns three new instances of default
 // positive signed number symbols, zero value symbols
@@ -3335,7 +3335,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewSignedNumUSMinusDefaults(
 //		If an error message is returned, the text value of input
 //		parameter 'errorPrefix' will be inserted or prefixed at
 //		the beginning of the error message.
-func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewSignedNumUSParenDefaults(
+func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewSignedNumDefaultsUSParen(
 	errorPrefix interface{}) (
 	positiveSignedNumberSymbols NumStrNumberSymbolSpec,
 	zeroSignedNumberSymbols NumStrNumberSymbolSpec,
@@ -3356,7 +3356,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewSignedNumUSParenDefaults(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumStrNumberSymbolSpec."+
-			"NewSignedNumUSParenDefaults()",
+			"NewSignedNumDefaultsUSParen()",
 		"")
 
 	if err != nil {
