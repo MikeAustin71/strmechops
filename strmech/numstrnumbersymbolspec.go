@@ -1141,7 +1141,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewEUCurrencyDefaults(
 	}
 
 	err = new(numStrNumberSymbolSpecMechanics).
-		setCurrencyEUDefaults(
+		setCurrencyDefaultsEU(
 			&euCurrencySymbols,
 			ePrefix.XCpy(
 				"euCurrencySymbols"))
@@ -2881,7 +2881,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewUKCurrencyDefaults(
 	}
 
 	err = new(numStrNumberSymbolSpecMechanics).
-		setCurrencyUSDefaults(
+		setCurrencyDefaultsUS(
 			&usCurrencySymbols,
 			ePrefix.XCpy(
 				"usCurrencySymbols"))
@@ -3010,7 +3010,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewUSCurrencyDefaults(
 	}
 
 	err = new(numStrNumberSymbolSpecMechanics).
-		setCurrencyUSDefaults(
+		setCurrencyDefaultsUS(
 			&usCurrencySymbols,
 			ePrefix.XCpy(
 				"usCurrencySymbols"))
@@ -5170,7 +5170,7 @@ type numStrNumberSymbolSpecMechanics struct {
 	lock *sync.Mutex
 }
 
-// setCurrencyEUDefaults
+// setCurrencyDefaultsEU
 //
 // Receives an instance of NumStrNumberSymbolSpec and
 // configures it with the default European Union (EU)
@@ -5229,7 +5229,7 @@ type numStrNumberSymbolSpecMechanics struct {
 //		for input parameter 'errPrefDto' (error prefix)
 //		will be prefixed or attached at the beginning of
 //		the error message.
-func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setCurrencyEUDefaults(
+func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setCurrencyDefaultsEU(
 	currencySymbols *NumStrNumberSymbolSpec,
 	errPrefDto *ePref.ErrPrefixDto) error {
 
@@ -5249,7 +5249,7 @@ func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setCurrencyEUDefaults
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
 		"numStrNumberSymbolSpecMechanics."+
-			"setCurrencyEUDefaults()",
+			"setCurrencyDefaultsEU()",
 		"")
 
 	if err != nil {
@@ -5289,7 +5289,7 @@ func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setCurrencyEUDefaults
 			"currencySymbols"))
 }
 
-// setCurrencyUKDefaults
+// setCurrencyDefaultsUK
 //
 // Receives an instance of NumStrNumberSymbolSpec and
 // configures it with the default UK (United Kingdom)
@@ -5346,7 +5346,7 @@ func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setCurrencyEUDefaults
 //		for input parameter 'errPrefDto' (error prefix)
 //		will be prefixed or attached at the beginning of
 //		the error message.
-func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setCurrencyUKDefaults(
+func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setCurrencyDefaultsUK(
 	currencySymbols *NumStrNumberSymbolSpec,
 	errPrefDto *ePref.ErrPrefixDto) error {
 
@@ -5366,7 +5366,7 @@ func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setCurrencyUKDefaults
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
 		"numStrNumberSymbolSpecMechanics."+
-			"setCurrencyUKDefaults()",
+			"setCurrencyDefaultsUK()",
 		"")
 
 	if err != nil {
@@ -5406,7 +5406,7 @@ func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setCurrencyUKDefaults
 			"currencySymbols"))
 }
 
-// setCurrencyUSDefaults
+// setCurrencyDefaultsUS
 //
 // Receives an instance of NumStrNumberSymbolSpec and
 // configures it with the default US (United States)
@@ -5463,7 +5463,7 @@ func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setCurrencyUKDefaults
 //		for input parameter 'errPrefDto' (error prefix)
 //		will be prefixed or attached at the beginning of
 //		the error message.
-func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setCurrencyUSDefaults(
+func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setCurrencyDefaultsUS(
 	currencySymbols *NumStrNumberSymbolSpec,
 	errPrefDto *ePref.ErrPrefixDto) error {
 
@@ -5483,7 +5483,7 @@ func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setCurrencyUSDefaults
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
 		"numStrNumberSymbolSpecMechanics."+
-			"setCurrencyUSDefaults()",
+			"setCurrencyDefaultsUS()",
 		"")
 
 	if err != nil {
