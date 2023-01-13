@@ -1019,7 +1019,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) IsNOP() bool {
 	return false
 }
 
-// NewEUCurrencyDefaults
+// NewCurrencyDefaultsEU
 //
 // Creates and returns a new instance of
 // NumStrNumberSymbolSpec configured with the default
@@ -1113,7 +1113,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) IsNOP() bool {
 //		If an error message is returned, the text value of input
 //		parameter 'errorPrefix' will be inserted or prefixed at
 //		the beginning of the error message.
-func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewEUCurrencyDefaults(
+func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyDefaultsEU(
 	errorPrefix interface{}) (
 	euCurrencySymbols NumStrNumberSymbolSpec,
 	err error) {
@@ -1132,7 +1132,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewEUCurrencyDefaults(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumStrNumberSymbolSpec."+
-			"NewEUCurrencyDefaults()",
+			"NewCurrencyDefaultsEU()",
 		"")
 
 	if err != nil {
@@ -1147,6 +1147,264 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewEUCurrencyDefaults(
 				"euCurrencySymbols"))
 
 	return euCurrencySymbols, err
+}
+
+// NewCurrencyDefaultsUK
+//
+// Creates and returns a new instance of
+// NumStrNumberSymbolSpec configured with the default UK
+// (United Kingdom) currency symbol.
+//
+// The default Uk currency symbol is a leading pound
+// sign.
+//
+//	Example:
+//		£ 123.45
+//
+// The Number String Number Symbol Specification type
+// (NumStrNumberSymbolSpec) is designed to assist in
+// formatting numeric values as number strings for
+// screen displays, printing or file output.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix						interface{}
+//
+//		This object encapsulates error prefix text which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods
+//		listed as a method or function chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of the
+//		following types:
+//
+//		1. nil - A nil value is valid and generates an empty
+//		   collection of error prefix and error context
+//		   information.
+//
+//		2. string - A string containing error prefix information.
+//
+//		3. []string A one-dimensional slice of strings containing
+//		   error prefix information
+//
+//		4. [][2]string A two-dimensional slice of strings
+//		   containing error prefix and error context information.
+//
+//		5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		   from this object will be copied for use in error and
+//		   informational messages.
+//
+//		6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		   Information from this object will be copied for use in
+//		   error and informational messages.
+//
+//		7. IBasicErrorPrefix - An interface to a method generating
+//		   a two-dimensional slice of strings containing error
+//		   prefix and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible to one of
+//		the valid types listed above, it will be considered
+//		invalid and trigger the return of an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		the 'errpref' software package,
+//		"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	usCurrencySymbols			NumStrNumberSymbolSpec
+//
+//		If this method completes successfully, an
+//		instance of NumStrNumberSymbolSpec will be
+//		returned configured with the default US
+//		Currency Symbol.
+//
+//		The default US currency symbol is a leading
+//		dollar sign.
+//
+//			Example:
+//				$ 123.45
+//
+//	err								error
+//
+//		If this method completes successfully and no errors are
+//		encountered this return value is set to 'nil'. Otherwise,
+//		if errors are encountered, this return value will contain
+//		an appropriate error message.
+//
+//		If an error message is returned, the text value of input
+//		parameter 'errorPrefix' will be inserted or prefixed at
+//		the beginning of the error message.
+func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyDefaultsUK(
+	errorPrefix interface{}) (
+	usCurrencySymbols NumStrNumberSymbolSpec,
+	err error) {
+
+	if nStrNumberSymbolSpec.lock == nil {
+		nStrNumberSymbolSpec.lock = new(sync.Mutex)
+	}
+
+	nStrNumberSymbolSpec.lock.Lock()
+
+	defer nStrNumberSymbolSpec.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumStrNumberSymbolSpec."+
+			"NewCurrencyDefaultsUK()",
+		"")
+
+	if err != nil {
+		return usCurrencySymbols, err
+
+	}
+
+	err = new(numStrNumberSymbolSpecMechanics).
+		setCurrencyDefaultsUS(
+			&usCurrencySymbols,
+			ePrefix.XCpy(
+				"usCurrencySymbols"))
+
+	return usCurrencySymbols, err
+}
+
+// NewCurrencyDefaultsUS
+//
+// Creates and returns a new instance of
+// NumStrNumberSymbolSpec configured with the default US
+// (United States) currency symbol.
+//
+// The default US currency symbol is a leading dollar
+// sign.
+//
+//	Example:
+//		$ 123.45
+//
+// The Number String Number Symbol Specification type
+// (NumStrNumberSymbolSpec) is designed to assist in
+// formatting numeric values as number strings for
+// screen displays, printing or file output.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix						interface{}
+//
+//		This object encapsulates error prefix text which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods
+//		listed as a method or function chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of the
+//		following types:
+//
+//		1. nil - A nil value is valid and generates an empty
+//		   collection of error prefix and error context
+//		   information.
+//
+//		2. string - A string containing error prefix information.
+//
+//		3. []string A one-dimensional slice of strings containing
+//		   error prefix information
+//
+//		4. [][2]string A two-dimensional slice of strings
+//		   containing error prefix and error context information.
+//
+//		5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		   from this object will be copied for use in error and
+//		   informational messages.
+//
+//		6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		   Information from this object will be copied for use in
+//		   error and informational messages.
+//
+//		7. IBasicErrorPrefix - An interface to a method generating
+//		   a two-dimensional slice of strings containing error
+//		   prefix and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible to one of
+//		the valid types listed above, it will be considered
+//		invalid and trigger the return of an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		the 'errpref' software package,
+//		"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	usCurrencySymbols			NumStrNumberSymbolSpec
+//
+//		If this method completes successfully, an
+//		instance of NumStrNumberSymbolSpec will be
+//		returned configured with the default US
+//		Currency Symbol.
+//
+//		The default US currency symbol is a leading
+//		dollar sign.
+//
+//			Example:
+//				$ 123.45
+//
+//	err								error
+//
+//		If this method completes successfully and no errors are
+//		encountered this return value is set to 'nil'. Otherwise,
+//		if errors are encountered, this return value will contain
+//		an appropriate error message.
+//
+//		If an error message is returned, the text value of input
+//		parameter 'errorPrefix' will be inserted or prefixed at
+//		the beginning of the error message.
+func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyDefaultsUS(
+	errorPrefix interface{}) (
+	usCurrencySymbols NumStrNumberSymbolSpec,
+	err error) {
+
+	if nStrNumberSymbolSpec.lock == nil {
+		nStrNumberSymbolSpec.lock = new(sync.Mutex)
+	}
+
+	nStrNumberSymbolSpec.lock.Lock()
+
+	defer nStrNumberSymbolSpec.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumStrNumberSymbolSpec."+
+			"NewCurrencyDefaultsUS()",
+		"")
+
+	if err != nil {
+		return usCurrencySymbols, err
+
+	}
+
+	err = new(numStrNumberSymbolSpecMechanics).
+		setCurrencyDefaultsUS(
+			&usCurrencySymbols,
+			ePrefix.XCpy(
+				"usCurrencySymbols"))
+
+	return usCurrencySymbols, err
 }
 
 // NewLeadingNumberSymbol - Creates and returns a new instance
@@ -2758,264 +3016,6 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewTrailingNumberSymbolRunes
 					"trailingNumberSymbol"))
 
 	return newNStrNumberSymbolSpec, err
-}
-
-// NewUKCurrencyDefaults
-//
-// Creates and returns a new instance of
-// NumStrNumberSymbolSpec configured with the default UK
-// (United Kingdom) currency symbol.
-//
-// The default Uk currency symbol is a leading pound
-// sign.
-//
-//	Example:
-//		£ 123.45
-//
-// The Number String Number Symbol Specification type
-// (NumStrNumberSymbolSpec) is designed to assist in
-// formatting numeric values as number strings for
-// screen displays, printing or file output.
-//
-// ----------------------------------------------------------------
-//
-// # Input Parameters
-//
-//	errorPrefix						interface{}
-//
-//		This object encapsulates error prefix text which is
-//		included in all returned error messages. Usually, it
-//		contains the name of the calling method or methods
-//		listed as a method or function chain of execution.
-//
-//		If no error prefix information is needed, set this
-//		parameter to 'nil'.
-//
-//		This empty interface must be convertible to one of the
-//		following types:
-//
-//		1. nil - A nil value is valid and generates an empty
-//		   collection of error prefix and error context
-//		   information.
-//
-//		2. string - A string containing error prefix information.
-//
-//		3. []string A one-dimensional slice of strings containing
-//		   error prefix information
-//
-//		4. [][2]string A two-dimensional slice of strings
-//		   containing error prefix and error context information.
-//
-//		5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//		   from this object will be copied for use in error and
-//		   informational messages.
-//
-//		6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//		   Information from this object will be copied for use in
-//		   error and informational messages.
-//
-//		7. IBasicErrorPrefix - An interface to a method generating
-//		   a two-dimensional slice of strings containing error
-//		   prefix and error context information.
-//
-//		If parameter 'errorPrefix' is NOT convertible to one of
-//		the valid types listed above, it will be considered
-//		invalid and trigger the return of an error.
-//
-//		Types ErrPrefixDto and IBasicErrorPrefix are included in
-//		the 'errpref' software package,
-//		"github.com/MikeAustin71/errpref".
-//
-// ----------------------------------------------------------------
-//
-// # Return Values
-//
-//	usCurrencySymbols			NumStrNumberSymbolSpec
-//
-//		If this method completes successfully, an
-//		instance of NumStrNumberSymbolSpec will be
-//		returned configured with the default US
-//		Currency Symbol.
-//
-//		The default US currency symbol is a leading
-//		dollar sign.
-//
-//			Example:
-//				$ 123.45
-//
-//	err								error
-//
-//		If this method completes successfully and no errors are
-//		encountered this return value is set to 'nil'. Otherwise,
-//		if errors are encountered, this return value will contain
-//		an appropriate error message.
-//
-//		If an error message is returned, the text value of input
-//		parameter 'errorPrefix' will be inserted or prefixed at
-//		the beginning of the error message.
-func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewUKCurrencyDefaults(
-	errorPrefix interface{}) (
-	usCurrencySymbols NumStrNumberSymbolSpec,
-	err error) {
-
-	if nStrNumberSymbolSpec.lock == nil {
-		nStrNumberSymbolSpec.lock = new(sync.Mutex)
-	}
-
-	nStrNumberSymbolSpec.lock.Lock()
-
-	defer nStrNumberSymbolSpec.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
-		"NumStrNumberSymbolSpec."+
-			"NewUKCurrencyDefaults()",
-		"")
-
-	if err != nil {
-		return usCurrencySymbols, err
-
-	}
-
-	err = new(numStrNumberSymbolSpecMechanics).
-		setCurrencyDefaultsUS(
-			&usCurrencySymbols,
-			ePrefix.XCpy(
-				"usCurrencySymbols"))
-
-	return usCurrencySymbols, err
-}
-
-// NewUSCurrencyDefaults
-//
-// Creates and returns a new instance of
-// NumStrNumberSymbolSpec configured with the default US
-// (United States) currency symbol.
-//
-// The default US currency symbol is a leading dollar
-// sign.
-//
-//	Example:
-//		$ 123.45
-//
-// The Number String Number Symbol Specification type
-// (NumStrNumberSymbolSpec) is designed to assist in
-// formatting numeric values as number strings for
-// screen displays, printing or file output.
-//
-// ----------------------------------------------------------------
-//
-// # Input Parameters
-//
-//	errorPrefix						interface{}
-//
-//		This object encapsulates error prefix text which is
-//		included in all returned error messages. Usually, it
-//		contains the name of the calling method or methods
-//		listed as a method or function chain of execution.
-//
-//		If no error prefix information is needed, set this
-//		parameter to 'nil'.
-//
-//		This empty interface must be convertible to one of the
-//		following types:
-//
-//		1. nil - A nil value is valid and generates an empty
-//		   collection of error prefix and error context
-//		   information.
-//
-//		2. string - A string containing error prefix information.
-//
-//		3. []string A one-dimensional slice of strings containing
-//		   error prefix information
-//
-//		4. [][2]string A two-dimensional slice of strings
-//		   containing error prefix and error context information.
-//
-//		5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//		   from this object will be copied for use in error and
-//		   informational messages.
-//
-//		6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//		   Information from this object will be copied for use in
-//		   error and informational messages.
-//
-//		7. IBasicErrorPrefix - An interface to a method generating
-//		   a two-dimensional slice of strings containing error
-//		   prefix and error context information.
-//
-//		If parameter 'errorPrefix' is NOT convertible to one of
-//		the valid types listed above, it will be considered
-//		invalid and trigger the return of an error.
-//
-//		Types ErrPrefixDto and IBasicErrorPrefix are included in
-//		the 'errpref' software package,
-//		"github.com/MikeAustin71/errpref".
-//
-// ----------------------------------------------------------------
-//
-// # Return Values
-//
-//	usCurrencySymbols			NumStrNumberSymbolSpec
-//
-//		If this method completes successfully, an
-//		instance of NumStrNumberSymbolSpec will be
-//		returned configured with the default US
-//		Currency Symbol.
-//
-//		The default US currency symbol is a leading
-//		dollar sign.
-//
-//			Example:
-//				$ 123.45
-//
-//	err								error
-//
-//		If this method completes successfully and no errors are
-//		encountered this return value is set to 'nil'. Otherwise,
-//		if errors are encountered, this return value will contain
-//		an appropriate error message.
-//
-//		If an error message is returned, the text value of input
-//		parameter 'errorPrefix' will be inserted or prefixed at
-//		the beginning of the error message.
-func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewUSCurrencyDefaults(
-	errorPrefix interface{}) (
-	usCurrencySymbols NumStrNumberSymbolSpec,
-	err error) {
-
-	if nStrNumberSymbolSpec.lock == nil {
-		nStrNumberSymbolSpec.lock = new(sync.Mutex)
-	}
-
-	nStrNumberSymbolSpec.lock.Lock()
-
-	defer nStrNumberSymbolSpec.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
-		"NumStrNumberSymbolSpec."+
-			"NewUSCurrencyDefaults()",
-		"")
-
-	if err != nil {
-		return usCurrencySymbols, err
-
-	}
-
-	err = new(numStrNumberSymbolSpecMechanics).
-		setCurrencyDefaultsUS(
-			&usCurrencySymbols,
-			ePrefix.XCpy(
-				"usCurrencySymbols"))
-
-	return usCurrencySymbols, err
 }
 
 // NewSignedNumUSMinusDefaults
