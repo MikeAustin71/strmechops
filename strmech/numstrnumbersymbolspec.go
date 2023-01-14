@@ -754,9 +754,13 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) Equal(
 // This enumeration has three values, only two of
 // which are valid:
 //
-//	CurrNumSignRelPos.None()			- Invalid
-//	CurrNumSignRelPos.OutsideNumSign()	- Valid
-//	CurrNumSignRelPos.InsideNumSign()	- Valid
+//		CurrNumSignRelPos.None()			- Invalid
+//	 	If this value is returned it signals that
+//			the configured number symbol is NOT a
+//			Currency Symbol.
+//
+//		CurrNumSignRelPos.OutsideNumSign()	- Valid
+//		CurrNumSignRelPos.InsideNumSign()	- Valid
 //
 // Currency Symbols have the option of being
 // positioned either inside or outside number sign
@@ -822,7 +826,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) GetLeadingNumberSymbolStr() 
 //				Number Symbol: leading minus sign ('-')
 //				Number Symbol Position: Inside Number Field
 //				Formatted Number String: " -123.45"
-//				Number Field Index:       01234567
+//				Number Field Index:-------01234567
 //				Total Number String Length: 8
 //
 //			Example-2:
@@ -832,7 +836,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) GetLeadingNumberSymbolStr() 
 //				Number Symbol Position: Outside Number Field
 //	         Number Text Justification: Centered
 //				Formatted Number String: " (123.45) "
-//				Number Field Index:       0123456789
+//				Number Field Index:-------0123456789
 //				Total Number String Length: 10
 //
 //			In this case the final length of the number string
@@ -845,7 +849,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) GetLeadingNumberSymbolStr() 
 //		     	Number Symbol: leading minus sign ('-')
 //		     	Number Symbol Position: Outside Number Field
 //		     	Formatted Number String: "-  123.45"
-//				Number Field Index:  012345678
+//				Number Field Index:-------012345678
 //				Total Number String Length: 9
 //
 //			Example-4:
@@ -854,7 +858,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) GetLeadingNumberSymbolStr() 
 //				Number Symbol: before and after parentheses  ('()')
 //				Number Symbol Position: Outside Number Field
 //				Formatted Number String: "( 123.45 )"
-//				Number Field Index:  0123456789
+//				Number Field Index:-------0123456789
 //				Total Number String Length: 10
 //
 //			In this case the final length of the number string
@@ -885,6 +889,83 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) GetLeadingNumberSymbolPositi
 	defer nStrNumberSymbolSpec.lock.Unlock()
 
 	return nStrNumberSymbolSpec.leadingNumberFieldSymbolPosition
+}
+
+// GetNumStrSymbolPosition
+//
+// Returns an instance of NumSignSymbolPosition showing
+// the position or location of the Number Symbol in
+// relation to the numeric value configured in a number
+// string.
+//
+// The returned type, 'NumSignSymbolPosition' will be
+// set to one of four values:
+//
+//	NumSignSymPos.None()
+//		Signals that the current instance of
+//		NumStrNumberSymbolSpec is a NOP (No Operation)
+//		instance configured with empty or uninitialized
+//		values.
+//
+//	NumSignSymPos.Before()
+//		Signals that the number symbol configured for
+//		this current instance of NumStrNumberSymbolSpec
+//		is a leading number symbol positioned at the
+//		beginning of a number string.
+//
+//	NumSignSymPos.After()
+//		Signals that the number symbol configured for
+//		this current instance of NumStrNumberSymbolSpec
+//		is a trailing number symbol positioned at the end
+//		of a number string.
+//
+//	NumSignSymPos.BeforeAndAfter()
+//		Signals that this current instance of
+//		NumStrNumberSymbolSpec contains two number
+//		symbols. One configured as a leading number
+//		symbol and the other configured as a trailing
+//		number symbol. One example of this combination
+//		would be surrounding parentheses ("()") for
+//		negative numeric values.
+func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) GetNumStrSymbolPosition() NumSignSymbolPosition {
+
+	if nStrNumberSymbolSpec.lock == nil {
+		nStrNumberSymbolSpec.lock = new(sync.Mutex)
+	}
+
+	nStrNumberSymbolSpec.lock.Lock()
+
+	defer nStrNumberSymbolSpec.lock.Unlock()
+
+	lenLeadingSym :=
+		nStrNumberSymbolSpec.leadingNumberSymbols.GetRuneArrayLength()
+
+	lenTrailingSym :=
+		nStrNumberSymbolSpec.trailingNumberSymbols.GetRuneArrayLength()
+
+	if lenLeadingSym > 0 &&
+		lenTrailingSym > 0 {
+
+		return NumSignSymPos.BeforeAndAfter()
+	}
+
+	if lenLeadingSym > 0 &&
+		lenTrailingSym == 0 {
+
+		return NumSignSymPos.Before()
+	}
+
+	if lenLeadingSym == 0 &&
+		lenTrailingSym > 0 {
+
+		return NumSignSymPos.After()
+	}
+
+	// MUST BE
+	//  lenLeadingSym == 0 &&
+	//	lenTrailingSym == 0
+
+	return NumSignSymPos.None()
 }
 
 // GetTrailingNumberSymbolStr - Returns a string containing the
@@ -920,7 +1001,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) GetTrailingNumberSymbolStr()
 //				Number Symbol Position: Inside Number Field
 //	         Number Text Justification: Right
 //				Formatted Number String: " 123.45-"
-//				Number Field Index:       01234567
+//				Number Field Index:-------01234567
 //				Total Number String Length: 8
 //
 //			Example-2:
@@ -930,7 +1011,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) GetTrailingNumberSymbolStr()
 //				Number Symbol Position: Outside Number Field
 //	         Number Text Justification: Centered
 //				Formatted Number String: " (123.45) "
-//				Number Field Index:       0123456789
+//				Number Field Index:-------0123456789
 //				Total Number String Length: 10
 //
 //			In this case the final length of the number string
@@ -944,7 +1025,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) GetTrailingNumberSymbolStr()
 //		     	Number Symbol Position: Outside Number Field
 //	         Number Text Justification: Right
 //		     	Formatted Number String: "  123.45-"
-//				Number Field Index:       012345678
+//				Number Field Index:-------012345678
 //				Total Number String Length: 9
 //
 //			Example-4:
@@ -954,7 +1035,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) GetTrailingNumberSymbolStr()
 //				Number Symbol Position: Outside Number Field
 //	         Number Text Justification: Centered
 //				Formatted Number String: "( 123.45 )"
-//				Number Field Index:       0123456789
+//				Number Field Index:-------0123456789
 //				Total Number String Length: 10
 //
 //			In this case the final length of the number string
