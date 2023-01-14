@@ -1978,35 +1978,15 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewLeadingCurrencySymbol(
 //
 // # Usage
 //
-// Example-1: Leading Number Symbols
+// Example-1: Leading Number Sign Symbols
 //
 //	Leading Symbols: "+ "
 //	Number String:   "+ 123.456"
 //
-// Example-2: Leading Number Symbols
-//
-//	Leading Symbols: "$+"
-//	Number String:   "$+123.456"
-//
-// Example-3: Leading Number Symbols
-//
-//	Leading Symbols: "$"
-//	Number String:   "$123.456"
-//
-// Example-4: Leading Number Symbols
+// Example-2: Leading Number Sign Symbols
 //
 //	Leading Symbols: "- "
 //	Number String:   "- 123.456"
-//
-// Example-5: Leading Number Symbols
-//
-//	Leading Symbols: "$-"
-//	Number String:   "$-123.456"
-//
-// Example-6: Leading Number Symbols
-//
-//	Leading Symbols: "$"
-//	Number String:   "$123.456"
 func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewLeadingNumberSignSymbol(
 	leadingNumberSymbol string,
 	leadingNumFieldSymPosition NumberFieldSymbolPosition,
