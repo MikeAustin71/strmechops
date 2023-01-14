@@ -1884,7 +1884,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewLeadingCurrencySymbol(
 //
 //		Example-3:
 //			Number Field Length: 8
-//			Numeric Value: 123.45
+//			Numeric Value: -123.45
 //			Number Symbol: leading minus sign ('-')
 //			Number Symbol Position: Outside Number Field
 //			Number Text Justification: Right
@@ -1895,12 +1895,12 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewLeadingCurrencySymbol(
 //		Example-4:
 //			Number Field Length: 8
 //			Numeric Value: 123.45
-//			Number Symbol: before and after parentheses ("()")
+//			Number Symbol: leading plus sign ('+')
 //			Number Symbol Position: Outside Number Field
-//			Number Text Justification: Centered
-//			Formatted Number String: "( 123.45 )"
-//				 Number Field Index:  0123456789
-//			Total Number String Length: 10
+//			Number Text Justification: Right
+//			Formatted Number String: "+  123.45"
+//				 Number Field Index:  012345678
+//			Total Number String Length: 9
 //
 //			For the 'NumFieldSymPos.OutsideNumField()'
 //			specification, the final length of the number
@@ -2027,30 +2027,56 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewLeadingNumberSignSymbol(
 	return newNStrNumberSymbolSpec, err
 }
 
-// NewLeadingNumberSymbolRunes - Creates and returns a new
-// instance of NumStrNumberSymbolSpec configured with
-// a leading number symbol character or characters.
+// NewLeadingNumberSignSymbolRunes
 //
-// Leading number symbol characters can include such symbols as
-// plus signs ('+'), minus signs ('-') and/or currency symbols
-// ('$').
+// Creates and returns a new instance of
+// NumStrNumberSymbolSpec configured with a leading
+// number sign symbol character or characters.
 //
-// Leading number symbol characters are intended for use in
-// formatting numeric values displayed in number strings.
+// Leading number sign symbol characters can include such
+// symbols as plus signs ('+') or minus signs ('-').
+//
+// Leading number symbol characters are intended for use
+// in formatting numeric values displayed in number
+// strings.
+//
+// This method is similar to NewLeadingNumberSignSymbol()
+// with sole exception being that this method receives
+// rune array input parameters instead of strings.
 //
 // ----------------------------------------------------------------
 //
 // # Input Parameters
 //
-//	leadingNumberSymbol		[]rune
+//	leadingNumberSignSymbol			[]rune
 //
-//		An array of runes containing the leading number
-//	 	symbol character or characters used to configure
-//	  	the returned instance of NumStrNumberSymbolSpec.
+//		A rune array containing the leading number sign
+//		symbol character or characters used to configure
+//		the returned instance of NumStrNumberSymbolSpec.
 //
-//		Leading number symbol characters can include such
-//		symbols as plus signs ('+'), minus signs ('-')
-//	 	and/or currency symbols ('$').
+//		Leading number sign symbol characters can include
+//		such symbols as plus signs ('+') and minus signs
+//		('-').
+//
+//		Example-1:
+//			Numeric Value: -123.45
+//			Number Sign Symbol: leading minus sign ("-")
+//			Formatted Number String: "-123.45"
+//
+//		Example-2:
+//			Numeric Value: 123.45
+//			Number Sign Symbol: leading plus sign ("+")
+//			Formatted Number String: "+123.45"
+//
+//		Example-3:
+//			Numeric Value: -123.45
+//			Number Sign Symbol: leading minus sign ("- ")
+//			Formatted Number String: "- 123.45"
+//
+//		Example-4:
+//			Numeric Value: 123.45
+//			Number Sign Symbol: leading plus sign ("+ ")
+//			Formatted Number String: "+ 123.45"
 //
 //	leadingNumFieldSymPosition		NumberFieldSymbolPosition
 //
@@ -2060,56 +2086,69 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewLeadingNumberSignSymbol(
 //		values are listed as follows:
 //
 //			NumFieldSymPos.InsideNumField()
-//				Example-1:
-//					Number Field Length: 8
-//					Numeric Value: 123.45
-//					Number Symbol: leading minus sign ('-')
-//					Number Symbol Position: Inside Number Field
-//			     	Number Text Justification: Right
-//					Formatted Number String: " -123.45"
-//					Number Field Index:       01234567
-//					Total Number String Length: 8
-//
-//				Example-2:
-//					Number Field Length: 10
-//					Numeric Value: 123.45
-//					Number Symbol: before and after parentheses  ('()')
-//					Number Symbol Position: Outside Number Field
-//					Number Text Justification: Centered
-//					Formatted Number String: " (123.45) "
-//					Number Field Index:       0123456789
-//					Total Number String Length: 10
-//
-//				For the 'NumFieldSymPos.InsideNumField()' specification,
-//				the final length of the number string is defined by the
-//				Number Field length.
-//
 //			NumFieldSymPos.OutsideNumField()
-//				Example-3:
-//					Number Field Length: 8
-//			     	Numeric Value: 123.45
-//			     	Number Symbol: leading minus sign ('-')
-//			     	Number Symbol Position: Outside Number Field
-//			     	Number Text Justification: Right
-//			     	Formatted Number String: "-  123.45"
-//					Number Field Index:       012345678
-//					Total Number String Length: 9
 //
-//				Example-4:
-//					Number Field Length: 8
-//					Numeric Value: 123.45
-//					Number Symbol: before and after parentheses  ('()')
-//					Number Symbol Position: Outside Number Field
-//			     	Number Text Justification: Centered
-//					Formatted Number String: "( 123.45 )"
-//					Number Field Index:       0123456789
-//					Total Number String Length: 10
+//		'NumFieldSymPos' is global constant used to
+//		abbreviate the syntax for invoking these
+//		enumeration	values. The formal syntax is:
 //
-//				For the 'NumFieldSymPos.OutsideNumField()' specification,
-//				the final length of the number string is greater than
-//				the Number Field length.
+//			NumberFieldSymbolPosition(0).InsideNumField()
+//			NumberFieldSymbolPosition(0).OutsideNumField()
 //
-//	errorPrefix					interface{}
+//		Examples NumFieldSymPos.InsideNumField()
+//
+//		Example-1:
+//			Number Field Length: 8
+//			Numeric Value: -123.45
+//			Number Sign Symbol: leading minus sign ("-")
+//			Number Symbol Position: Inside Number Field
+//			   	Number Text Justification: Right
+//			Formatted Number String: " -123.45"
+//			     Number Field Index:  01234567
+//			Total Number String Length: 8
+//
+//		Example-2:
+//			Number Field Length: 8
+//			Numeric Value: 123.45
+//			Number Sign Symbol: leading plus sign ("+")
+//			Number Symbol Position: Inside Number Field
+//			   	Number Text Justification: Right
+//			Formatted Number String: " +123.45"
+//			     Number Field Index:  01234567
+//			Total Number String Length: 8
+//
+//			For the 'NumFieldSymPos.InsideNumField()'
+//			specification, the final length of the number
+//			string is defined by the Number Field length.
+//
+//		Examples NumFieldSymPos.OutsideNumField()
+//
+//		Example-3:
+//			Number Field Length: 8
+//			Numeric Value: -123.45
+//			Number Symbol: leading minus sign ('-')
+//			Number Symbol Position: Outside Number Field
+//			Number Text Justification: Right
+//			Formatted Number String: "-  123.45"
+//				 Number Field Index:  012345678
+//			Total Number String Length: 9
+//
+//		Example-4:
+//			Number Field Length: 8
+//			Numeric Value: 123.45
+//			Number Symbol: leading plus sign ('+')
+//			Number Symbol Position: Outside Number Field
+//			Number Text Justification: Right
+//			Formatted Number String: "+  123.45"
+//				 Number Field Index:  012345678
+//			Total Number String Length: 9
+//
+//			For the 'NumFieldSymPos.OutsideNumField()'
+//			specification, the final length of the number
+//			string is greater than the Number Field
+//			length.
+//
+//	errorPrefix						interface{}
 //
 //		This object encapsulates error prefix text which is
 //		included in all returned error messages. Usually, it
@@ -2158,60 +2197,39 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewLeadingNumberSignSymbol(
 //
 // # Return Values
 //
-//	newNStrNumberSymbolSpec		NumStrNumberSymbolSpec
+//	newNStrNumberSymbolSpec			NumStrNumberSymbolSpec
 //
 //		If this method completes successfully, a new instance of
 //		NumStrNumberSymbolSpec, configured with leading
 //		number symbol characters, will be returned through
 //		this parameter.
 //
-//	err							error
+//	err								error
 //
-//		If this method completes successfully, the returned error
-//		Type is set equal to 'nil'.
+//		If this method completes successfully and no errors are
+//		encountered this return value is set to 'nil'. Otherwise,
+//		if errors are encountered, this return value will contain
+//		an appropriate error message.
 //
-//		If errors are encountered during processing, the returned
-//		error Type will encapsulate an error message. This
-//		returned error message will incorporate the method chain
-//		and text passed by input parameter, 'errorPrefix'. The
-//		'errorPrefix' text will be attached to the beginning of
-//		the error message.
+//		If an error message is returned, the text value of input
+//		parameter 'errorPrefix' will be inserted or prefixed at
+//		the beginning of the error message.
 //
 // ----------------------------------------------------------------
 //
 // # Usage
 //
-// Example-1: Leading Number Symbols
+// Example-1: Leading Number Sign Symbols
 //
-//	Leading Symbols: "+ "
+//	Leading Symbols: []rune{'+',' '}
 //	Number String:   "+ 123.456"
 //
-// Example-2: Leading Number Symbols
+// Example-2: Leading Number Sign Symbols
 //
-//	Leading Symbols: "$+"
-//	Number String:   "$+123.456"
-//
-// Example-3: Leading Number Symbols
-//
-//	Leading Symbols: "$"
-//	Number String:   "$123.456"
-//
-// Example-4: Leading Number Symbols
-//
-//	Leading Symbols: "- "
+//	Leading Symbols: []rune{'-',' '}
 //	Number String:   "- 123.456"
-//
-// Example-5: Leading Number Symbols
-//
-//	Leading Symbols: "$-"
-//	Number String:   "$-123.456"
-//
-// Example-6: Leading Number Symbols
-//
-//	Leading Symbols: "$"
-//	Number String:   "$123.456"
-func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewLeadingNumberSymbolRunes(
-	leadingNumberSymbol []rune,
+func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewLeadingNumberSignSymbolRunes(
+	leadingNumberSignSymbol []rune,
 	leadingNumFieldSymPosition NumberFieldSymbolPosition,
 	errorPrefix interface{}) (
 	newNStrNumberSymbolSpec NumStrNumberSymbolSpec,
@@ -2231,7 +2249,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewLeadingNumberSymbolRunes(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumStrNumberSymbolSpec."+
-			"NewLeadingNumberSymbolRunes()",
+			"NewLeadingNumberSignSymbolRunes()",
 		"")
 
 	if err != nil {
@@ -2241,11 +2259,11 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewLeadingNumberSymbolRunes(
 	err = new(numStrNumberSymbolSpecMolecule).
 		setLeadingNStrNumSymbolSpec(
 			&newNStrNumberSymbolSpec,
-			leadingNumberSymbol,
+			leadingNumberSignSymbol,
 			leadingNumFieldSymPosition,
 			ePrefix.XCpy(
 				"newNStrNumberSymbolSpec<-"+
-					"leadingNumberSymbol"))
+					"leadingNumberSignSymbol"))
 
 	return newNStrNumberSymbolSpec, err
 }
