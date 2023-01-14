@@ -6,83 +6,109 @@ import (
 	"sync"
 )
 
-//	NumStrNumberSymbolSpec
+// NumStrNumberSymbolSpec
 //
-//	Contains one or more characters to be inserted and
-//	displayed in a number string.
+// The Number String Number Symbol Specification,
+// 'NumStrNumberSymbolSpec' contains specifications
+// used to construct and format numeric values in
+// number strings for screen displays, file output
+// and printing.
 //
 // # Background
 //
-//	The Number String Number Symbol Specification
-//	includes specifications for both leading and
-//	trailing characters.
+// The Number String Number Symbol Specification
+// (Type 'NumStrNumberSymbolSpec') typically defines
+// Currency Symbols or Number Sign Symbols.
 //
-//	As such, 'Number Symbols' can include plus signs
-//	('+'), minus signs ('-'), parentheses ('()') as
-//	well as currency ('$') and other symbols.
+// Examples of Currency Symbols include dollar signs
+// ('$'), Euro signs ('€') and pound signs ('£').
 //
-//	The user has the option to configure both leading and
-//	trailing number symbols, leading number symbols only
-//	or trailing number symbols only.
+// Examples of Number Sign Symbols include plus signs
+// ('+'), minus signs ('-'), and surrounding parentheses
+// ('()').
 //
-//	A Number Symbol is defined as one or more text
-//	characters.
+// Number String Number Symbols may be defined as leading
+// character symbols, trailing character symbols, or leading
+// and trailing symbols.
+//
+// Leading symbols are prepended at the beginning of a
+// number string while trailing symbols are appended to the
+// end of a number string.
 //
 // # Usage
 //
 //	Example-1:
-//		Leading Number Symbols for Positive Values
+//		Leading Number Sign Symbols for Positive Values
 //
-//		Leading Symbols: "+ "
+//		Leading Number Sign Symbols: "+ "
 //		Number String:   "+ 123.456"
 //
 //	Example-2: Leading Number Symbols
-//		Leading Number Symbols for Positive Values
+//		Leading Number Sign Symbols for Positive Values
 //
-//		Leading Symbols: "+"
+//		Leading Number Sign Symbols: "+"
 //		Number String:   "+123.456"
 //
 //	Example-3: Leading Number Symbols
-//		Leading Number Symbols for Negative Values
+//		Leading Number Sign Symbols for Negative Values
 //
-//		Leading Symbols: "- "
+//		Leading Number Sign Symbols: "- "
 //		Number String:   "- 123.456"
 //
 //	Example-4: Leading Number Symbols
-//		Leading Number Symbols for Negative Values
+//		Leading Number Sign Symbols for Negative Values
 //
-//		Leading Symbols: "-"
+//		Leading Number Sign Symbols: "-"
 //		Number String:   "-123.456"
 //
-//	Example-5: Trailing Number Symbols
-//		Trailing Number Symbols for Positive Values
+//	Example-5: Leading Currency Symbols
+//		Leading Currency Symbols for Positive Values
 //
-//		Trailing Symbols: " +"
-//		Number String:   "123.456 +"
+//		Leading Currency Symbols: "$ "
+//		Number String:   "$ 123.456"
 //
-//	Example-6: Trailing Number Symbols
-//		Trailing Number Symbols for Positive Values
+//	Example-6: Leading Currency Symbols
+//		Leading Currency Symbols for Positive Values
 //
-//		Trailing Symbols: "+"
-//		Number String:   "123.456+"
+//		Leading Currency Symbols: "$"
+//		Number String:   "$123.456"
 //
 //	Example-7: Trailing Number Symbols
-//		Trailing Number Symbols for Negative Values
+//		Trailing Number Sign Symbols for Positive Values
 //
-//		Trailing Symbols: " -"
-//		Number String:   "123.456 -"
+//		Trailing Number Sign Symbols: " +"
+//		Number String:   "123.456 +"
 //
 //	Example-8: Trailing Number Symbols
-//		Trailing Number Symbols for Negative Values
+//		Trailing Number Symbols for Positive Values
 //
-//		Trailing Symbols: "-"
-//		Number String:   "123.456-"
+//		Trailing Number Sign Symbols: "+"
+//		Number String:   "123.456+"
 //
 //	Example-9: Trailing Number Symbols
 //		Trailing Number Symbols for Negative Values
 //
-//		Leading Symbols: "("
-//		Trailing Symbols: ")"
+//		Trailing Number Sign Symbols: " -"
+//		Number String:   "123.456 -"
+//
+//	Example-10: Trailing Number Symbols
+//		Trailing Number Symbols for Negative Values
+//
+//		Trailing Number Sign Symbols: "-"
+//		Number String:   "123.456-"
+//
+//	Example-11: Trailing Currency Symbols
+//		Trailing Currency Symbols for Positive Values
+//
+//		Trailing Currency Symbols: "€"
+//		Number String:   "123.456€"
+//
+//	Example-12: Leading AND Trailing Number Symbols
+//		Leading AND Trailing Number Sign Symbols for
+//		Negative Values
+//
+//		Leading Number Sign Symbols: "("
+//		Trailing Number Sign Symbols: ")"
 //		Number String:   "(123.456)"
 type NumStrNumberSymbolSpec struct {
 	leadingNumberSymbols RuneArrayDto
@@ -230,13 +256,24 @@ type NumStrNumberSymbolSpec struct {
 
 	currencyNumSignRelativePosition CurrencyNumSignRelativePosition
 	// The Currency Number Sign Relative Position is used
-	// exclusively by Currency Symbol Specifications.
-	// This enumeration has three values, only two of
-	// which are valid:
+	// exclusively by Currency Symbol Specifications and
+	// only applies to currency symbols such as dollar
+	// signs ('$'), Euro signs ('€') or Pound signs
+	// ('£').
+	//
+	// This enumeration has three possible values, only
+	// two of which are valid:
 	//
 	//	CurrNumSignRelPos.None()			- Invalid
 	//	CurrNumSignRelPos.OutsideNumSign()	- Valid
 	//	CurrNumSignRelPos.InsideNumSign()	- Valid
+	//
+	//	CurrNumSignRelPos is global constant used to
+	//	abbreviate the syntax for invoking enumeration
+	//	values. The formal syntax is:
+	//
+	//		CurrencyNumSignRelativePosition(0).OutsideNumSign()
+	//		CurrencyNumSignRelativePosition(0).InsideNumSign()
 	//
 	// Currency Symbols have the option of being
 	// positioned either inside or outside number sign
@@ -1405,6 +1442,353 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyDefaultsUS(
 				"usCurrencySymbols"))
 
 	return usCurrencySymbols, err
+}
+
+// NewLeadingCurrencySymbol
+//
+// Creates and returns a new instance of
+// NumStrNumberSymbolSpec configured with a leading
+// currency symbol character or characters.
+//
+// Leading currency symbols are prefixed or prepended to
+// the beginning of number strings containing currency
+// numeric values.
+//
+// Leading currency symbol characters can include such
+// symbols as dollar signs ('$'), Euro signs ('€') and
+// pound signs ('£').
+//
+// Currency symbol characters are intended for use in
+// formatting currency numeric values displayed in number
+// strings.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	(1)	Interior Spaces
+//
+//		It may be advantageous to include spaces with the
+//		Leading Currency Symbol.
+//
+//		Example:
+//			Leading Currency Symbol: "$ "
+//			Formatted Number String: "$ 123.45"
+//
+//	(2)	NumberFieldSymbolPosition Conflicts
+//
+//		When formatting a number string, the
+//		NumberFieldSymbolPosition values for both the
+//		Currency Symbol and the Number Sign Symbol
+//		MUST BE EQUAL before the Currency Number Sign
+//		Relative Position parameter,
+//		('currencyNumSignRelPos'), will be activated
+//		and applied to the number string formatting
+//		algorithm.
+//
+//		If the NumberFieldSymbolPosition values for both
+//		the	Currency Symbol and the Number Sign Symbol
+//		ARE NOT EQUAL, the NumberFieldSymbolPosition
+//		parameter controls and the Currency Number Sign
+//		Relative Position parameter,
+//		('currencyNumSignRelPos'), will be ignored.
+//
+//		Example:
+//			-- NumberFieldSymbolPosition Values NOT EQUAL --
+//
+//			Number Field Length: 8
+//		  	Numeric Value: -123.45
+//			Minus Sign NumberFieldSymbolPosition:
+//				NumFieldSymPos.InsideNumField()
+//			Currency Number Symbol Position:
+//				NumFieldSymPos.OutsideNumField()
+//			Currency Number Sign Relative Position:
+//				CurrNumSignRelPos.InsideNumSign()
+//			Leading Currency Symbol: Dollar sign ('$')
+//			Number Text Justification: Right
+//			Formatted Number String: "$ -123.45"
+//				 Number Field Index:  012345678
+//			Total Number String Length: 9
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	leadingCurrencySymbol     		string
+//
+//		A string containing the Leading Currency Symbol
+//		character or characters used to configure the
+//		returned instance of NumStrNumberSymbolSpec.
+//
+//		Leading Currency Symbol characters can include
+//		such symbols as dollar signs ('$'), Euro signs
+//	 	('€') and Pound signs ('£').
+//
+//		Leading Currency Symbols are prefixed or
+//		prepended to the beginning of number strings
+//		containing currency numeric values.
+//
+//		If this parameter is submitted as an empty string,
+//		an error will be returned.
+//
+//	currencyFieldSymbolPosition		NumberFieldSymbolPosition
+//
+//		Defines the position of the Leading Currency
+//		Symbol ('leadingCurrencySymbol') relative to a
+//		Number Field in which a number string is
+//		displayed. Possible valid values are listed as
+//		follows:
+//
+//			NumFieldSymPos.InsideNumField()
+//			NumFieldSymPos.OutsideNumField()
+//
+//		Examples NumFieldSymPos.InsideNumField()
+//
+//				Example-1:
+//					Number Field Length: 10
+//					Numeric Value: 123.45
+//					Leading Currency Symbol: Dollar sign ('$')
+//					Number Symbol Position: Inside Number Field
+//			     	Number Text Justification: Right
+//					Formatted Number String: "  $123.45"
+//					     Number Field Index:  012345679
+//					Total Number String Length: 10
+//
+//				Example-2:
+//					Number Field Length: 11
+//					Numeric Value: 123.45
+//					Leading Currency Symbol: Dollar sign ('$')
+//					Number Symbol Position: Inside Number Field
+//					Number Text Justification: Centered
+//					Formatted Number String: "  $123.45  "
+//					     Number Field Index:  01234567890
+//					Total Number String Length: 11
+//
+//				For the 'NumFieldSymPos.InsideNumField()' specification,
+//				the final length of the number string is defined by the
+//				Number Field length.
+//
+//		Examples NumFieldSymPos.OutsideNumField()
+//
+//				Example-3:
+//					Number Field Length: 8
+//			     	Numeric Value: 123.45
+//					Leading Currency Symbol: Dollar sign ('$')
+//			     	Number Symbol Position: Outside Number Field
+//			     	Number Text Justification: Right
+//			     	Formatted Number String: "$  123.45"
+//					     Number Field Index:  012345678
+//					Total Number String Length: 9
+//
+//				Example-4:
+//					Number Field Length: 10
+//					Numeric Value: 123.45
+//					Leading Currency Symbol: Dollar sign ('$')
+//					Number Symbol Position: Outside Number Field
+//			     	Number Text Justification: Centered
+//					Formatted Number String: "$  123.45  "
+//					Number Field Index:       01234567890
+//					Total Number String Length: 11
+//
+//				For the 'NumFieldSymPos.OutsideNumField()' specification,
+//				the final length of the number string is greater than
+//				the Number Field length.
+//
+//	currencyNumSignRelPos			CurrencyNumSignRelativePosition
+//
+//		Currency Symbols have the option of being
+//		positioned either inside or outside number sign
+//		symbols formatted with numeric values in a
+//		number string.
+//
+//		Examples of number sign symbols include minus
+//		signs ('-'), plus signs ('+') and surrounding
+//		parentheses ("()").
+//
+//		Parameter 'currencyNumSignRelPos' is an instance
+//		of type CurrencyNumSignRelativePosition which
+//		serves as an enumeration. This enumeration has
+//		three possible values, only two of which are
+//		valid:
+//
+//			CurrNumSignRelPos.None()			- Invalid
+//			CurrNumSignRelPos.OutsideNumSign()	- Valid
+//			CurrNumSignRelPos.InsideNumSign()	- Valid
+//
+//		'CurrNumSignRelPos' is global constant used to
+//		abbreviate the syntax for invoking enumeration
+//		values. The formal syntax is:
+//
+//			CurrencyNumSignRelativePosition(0).OutsideNumSign()
+//			CurrencyNumSignRelativePosition(0).InsideNumSign()
+//
+//		Examples CurrNumSignRelPos.OutsideNumSign()
+//				"$ -123.45"
+//				"123.45- €"
+//				"£ -123.45"
+//
+//		Examples CurrNumSignRelPos.InsideNumSign()
+//
+//			Examples:
+//				"- $123.45"
+//				"123.45€ -"
+//				"- £123.45"
+//
+//		NumberFieldSymbolPosition Conflicts
+//
+//		When formatting a number string, the
+//		NumberFieldSymbolPosition values for both the
+//		Currency Symbol and the Number Sign Symbol
+//		MUST BE EQUAL before the Currency Number Sign
+//		Relative Position parameter,
+//		('currencyNumSignRelPos'), will be activated
+//		and applied to the number string formatting
+//		algorithm.
+//
+//		If the NumberFieldSymbolPosition values for both
+//		the	Currency Symbol and the Number Sign Symbol
+//		ARE NOT EQUAL, the NumberFieldSymbolPosition
+//		parameter controls and the Currency Number Sign
+//		Relative Position parameter,
+//		('currencyNumSignRelPos'), will be ignored.
+//
+//		Example:
+//			-- NumberFieldSymbolPosition Values NOT EQUAL --
+//
+//			Number Field Length: 8
+//		  	Numeric Value: -123.45
+//			Minus Sign NumberFieldSymbolPosition:
+//				NumFieldSymPos.InsideNumField()
+//			Currency Number Symbol Position:
+//				NumFieldSymPos.OutsideNumField()
+//			Currency Number Sign Relative Position:
+//				CurrNumSignRelPos.InsideNumSign()
+//			Leading Currency Symbol: Dollar sign ('$')
+//			Number Text Justification: Right
+//			Formatted Number String: "$ -123.45"
+//				 Number Field Index:  012345678
+//			Total Number String Length: 9
+//
+//	errorPrefix						interface{}
+//
+//		This object encapsulates error prefix text which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods
+//		listed as a method or function chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of the
+//		following types:
+//
+//		1. nil - A nil value is valid and generates an empty
+//		   collection of error prefix and error context
+//		   information.
+//
+//		2. string - A string containing error prefix information.
+//
+//		3. []string A one-dimensional slice of strings containing
+//		   error prefix information
+//
+//		4. [][2]string A two-dimensional slice of strings
+//		   containing error prefix and error context information.
+//
+//		5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		   from this object will be copied for use in error and
+//		   informational messages.
+//
+//		6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		   Information from this object will be copied for use in
+//		   error and informational messages.
+//
+//		7. IBasicErrorPrefix - An interface to a method generating
+//		   a two-dimensional slice of strings containing error
+//		   prefix and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible to one of
+//		the valid types listed above, it will be considered
+//		invalid and trigger the return of an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		the 'errpref' software package,
+//		"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	newNStrNumberSymbolSpec			NumStrNumberSymbolSpec
+//
+//		If this method completes successfully, a new instance of
+//		NumStrNumberSymbolSpec, configured with Leading
+//		Currency Symbols, will be returned.
+//
+//	err								error
+//
+//		If this method completes successfully and no errors are
+//		encountered this return value is set to 'nil'. Otherwise,
+//		if errors are encountered, this return value will contain
+//		an appropriate error message.
+//
+//		If an error message is returned, the text value of input
+//		parameter 'errorPrefix' will be inserted or prefixed at
+//		the beginning of the error message.
+//
+// ----------------------------------------------------------------
+//
+// # Usage
+//
+// Example-1: Leading Currency Symbols
+//
+//	Leading Currency Symbols: "$ "
+//	Number String:   "$ 123.456"
+//
+// Example-2: Leading Currency Symbols
+//
+//	Leading Currency Symbols: "$"
+//	Number String:   "$123.456"
+func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewLeadingCurrencySymbol(
+	leadingCurrencySymbol string,
+	currencyFieldSymbolPosition NumberFieldSymbolPosition,
+	currencyNumSignRelPos CurrencyNumSignRelativePosition,
+	errorPrefix interface{}) (
+	newNStrNumberSymbolSpec NumStrNumberSymbolSpec,
+	err error) {
+
+	if nStrNumberSymbolSpec.lock == nil {
+		nStrNumberSymbolSpec.lock = new(sync.Mutex)
+	}
+
+	nStrNumberSymbolSpec.lock.Lock()
+
+	defer nStrNumberSymbolSpec.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumStrNumberSymbolSpec."+
+			"NewLeadingCurrencySymbol()",
+		"")
+
+	if err != nil {
+		return newNStrNumberSymbolSpec, err
+	}
+
+	err = new(numStrNumberSymbolSpecNanobot).
+		setCurrencySymbols(
+			&newNStrNumberSymbolSpec,
+			[]rune(leadingCurrencySymbol),
+			nil,
+			currencyFieldSymbolPosition,
+			currencyNumSignRelPos,
+			ePrefix.XCpy(
+				"newNStrNumberSymbolSpec<-"+
+					"leadingCurrencySymbol"))
+
+	return newNStrNumberSymbolSpec, err
 }
 
 // NewLeadingNumberSymbol - Creates and returns a new instance
