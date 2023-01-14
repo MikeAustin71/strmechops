@@ -3195,6 +3195,183 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewSignedNumDefaultsFrance(
 		err
 }
 
+// NewSignedNumDefaultsGermany
+//
+// Creates and returns three new instances of default
+// positive signed number symbols, zero value symbols
+// and negative signed number symbols configured in
+// accordance with formatting standards commonly applied
+// in Germany.
+//
+// The positive signed number symbol is empty or blank
+// because under German formatting standards, positive
+// number signs are implied and not explicitly
+// displayed. Therefore, no leading plus ('+') symbol is
+// required.
+//
+// Likewise, the zero signed number symbol is also empty
+// or blank because under German formatting standards,
+// zero numeric values have no number sign symbols.
+//
+// The negative signed number symbol is configured with a
+// trailing minus sign ('-') meaning that all negative
+// numeric values will be suffixed with a trailing minus
+// sign ('-'). The negative number sign will be
+// positioned inside the number field:
+//
+//	NumFieldSymPos.InsideNumField()
+//		Example:
+//			Number Field Length: 11
+//			Numeric Value: -123.45
+//			Number Symbol: trailing minus sign ('-')
+//			Number Symbol Position: Inside Number Field
+//			Formatted Number String: " 1.000.000-"
+//			     Number Field Index:  01234567890
+//			Total Number String Length: 11
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix						interface{}
+//
+//		This object encapsulates error prefix text which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods
+//		listed as a method or function chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of the
+//		following types:
+//
+//		1. nil - A nil value is valid and generates an empty
+//		   collection of error prefix and error context
+//		   information.
+//
+//		2. string - A string containing error prefix information.
+//
+//		3. []string A one-dimensional slice of strings containing
+//		   error prefix information
+//
+//		4. [][2]string A two-dimensional slice of strings
+//		   containing error prefix and error context information.
+//
+//		5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		   from this object will be copied for use in error and
+//		   informational messages.
+//
+//		6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		   Information from this object will be copied for use in
+//		   error and informational messages.
+//
+//		7. IBasicErrorPrefix - An interface to a method generating
+//		   a two-dimensional slice of strings containing error
+//		   prefix and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible to one of
+//		the valid types listed above, it will be considered
+//		invalid and trigger the return of an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		the 'errpref' software package,
+//		"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	positiveSignedNumberSymbols		NumStrNumberSymbolSpec
+//
+//		One of three new returned instances of
+//		NumStrNumberSymbolSpec. This instance is empty or
+//		blank because under German signed number
+//		formatting standards, the positive number sign
+//		('+') is implied and not explicitly displayed.
+//
+//	zeroSignedNumberSymbols			NumStrNumberSymbolSpec
+//
+//		One of three new returned instances of
+//		NumStrNumberSymbolSpec. This instance is empty or
+//		blank because under German signed number
+//	 	formatting standards, zero numeric values do not
+//		have an associated number sign.
+//
+//	negativeSignedNumberSymbols		NumStrNumberSymbolSpec
+//
+//		One of three new returned instances of
+//		NumStrNumberSymbolSpec. This instance is configured
+//		with a leading minus sign ('-') which will be
+//	 	formatted and displayed for all negative number
+//		values. This negative number sign will be displayed
+//		inside the number field.
+//
+//			NumFieldSymPos.InsideNumField()
+//				Example:
+//					Number Field Length: 8
+//					Numeric Value: 123.45
+//					Number Symbol: leading minus sign ('-')
+//					Number Symbol Position: Inside Number Field
+//					Formatted Number String: " -123.45"
+//					     Number Field Index:  01234567
+//					Total Number String Length: 8
+//
+//	err								error
+//
+//		If this method completes successfully and no errors are
+//		encountered this return value is set to 'nil'. Otherwise,
+//		if errors are encountered, this return value will contain
+//		an appropriate error message.
+//
+//		If an error message is returned, the text value of input
+//		parameter 'errorPrefix' will be inserted or prefixed at
+//		the beginning of the error message.
+func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewSignedNumDefaultsGermany(
+	errorPrefix interface{}) (
+	positiveSignedNumberSymbols NumStrNumberSymbolSpec,
+	zeroSignedNumberSymbols NumStrNumberSymbolSpec,
+	negativeSignedNumberSymbols NumStrNumberSymbolSpec,
+	err error) {
+
+	if nStrNumberSymbolSpec.lock == nil {
+		nStrNumberSymbolSpec.lock = new(sync.Mutex)
+	}
+
+	nStrNumberSymbolSpec.lock.Lock()
+
+	defer nStrNumberSymbolSpec.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumStrNumberSymbolSpec."+
+			"NewSignedNumDefaultsGermany()",
+		"")
+
+	if err != nil {
+		return positiveSignedNumberSymbols,
+			zeroSignedNumberSymbols,
+			negativeSignedNumberSymbols,
+			err
+
+	}
+
+	err = new(numStrNumberSymbolSpecMechanics).
+		setSignedNumSymbolsDefaultGermany(
+			&positiveSignedNumberSymbols,
+			&zeroSignedNumberSymbols,
+			&negativeSignedNumberSymbols,
+			ePrefix)
+
+	return positiveSignedNumberSymbols,
+		zeroSignedNumberSymbols,
+		negativeSignedNumberSymbols,
+		err
+}
+
 // NewSignedNumDefaultsUSMinus
 //
 // Creates and returns three new instances of default
