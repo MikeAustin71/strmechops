@@ -377,7 +377,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) CopyIn(
 		return err
 	}
 
-	return new(numStrNumberSymbolSpecNanobot).copyNStrNumberSymbolSpec(
+	return new(numStrNumberSymbolSpecMolecule).copyNStrNumberSymbolSpec(
 		nStrNumberSymbolSpec,
 		incomingNStrNumSymSpec,
 		ePrefix.XCpy(
@@ -486,7 +486,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) CopyOut(
 		return deepCopyNStrNumSymSpec, err
 	}
 
-	err = new(numStrNumberSymbolSpecNanobot).copyNStrNumberSymbolSpec(
+	err = new(numStrNumberSymbolSpecMolecule).copyNStrNumberSymbolSpec(
 		&deepCopyNStrNumSymSpec,
 		nStrNumberSymbolSpec,
 		ePrefix.XCpy(
@@ -533,7 +533,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) Empty() {
 
 	nStrNumberSymbolSpec.lock.Lock()
 
-	new(numStrNumberSymbolSpecNanobot).empty(
+	new(numStrNumberSymbolSpecMolecule).empty(
 		nStrNumberSymbolSpec)
 
 	nStrNumberSymbolSpec.lock.Unlock()
@@ -1617,7 +1617,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewLeadingNumberSymbol(
 		return newNStrNumberSymbolSpec, err
 	}
 
-	err = new(numStrNumberSymbolSpecNanobot).
+	err = new(numStrNumberSymbolSpecMolecule).
 		setLeadingNStrNumSymbolSpec(
 			&newNStrNumberSymbolSpec,
 			[]rune(leadingNumberSymbol),
@@ -1840,7 +1840,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewLeadingNumberSymbolRunes(
 		return newNStrNumberSymbolSpec, err
 	}
 
-	err = new(numStrNumberSymbolSpecNanobot).
+	err = new(numStrNumberSymbolSpecMolecule).
 		setLeadingNStrNumSymbolSpec(
 			&newNStrNumberSymbolSpec,
 			leadingNumberSymbol,
@@ -2162,7 +2162,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewLeadingTrailingNumSymbol(
 		return newNStrNumberSymbolSpec, err
 	}
 
-	nStrNumSymSpecNanobot := numStrNumberSymbolSpecNanobot{}
+	nStrNumSymSpecNanobot := numStrNumberSymbolSpecMolecule{}
 
 	err = nStrNumSymSpecNanobot.
 		setLeadingNStrNumSymbolSpec(
@@ -2499,7 +2499,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewLeadingTrailingNumSymbolR
 		return newNStrNumberSymbolSpec, err
 	}
 
-	nStrNumSymSpecNanobot := numStrNumberSymbolSpecNanobot{}
+	nStrNumSymSpecNanobot := numStrNumberSymbolSpecMolecule{}
 
 	err = nStrNumSymSpecNanobot.
 		setLeadingNStrNumSymbolSpec(
@@ -2565,7 +2565,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewNOP() NumStrNumberSymbolS
 
 	newNOPNumSymSpec := NumStrNumberSymbolSpec{}
 
-	new(numStrNumberSymbolSpecNanobot).empty(
+	new(numStrNumberSymbolSpecMolecule).empty(
 		&newNOPNumSymSpec)
 
 	return newNOPNumSymSpec
@@ -2782,7 +2782,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewTrailingNumberSymbol(
 		return newNStrNumberSymbolSpec, err
 	}
 
-	err = new(numStrNumberSymbolSpecNanobot).
+	err = new(numStrNumberSymbolSpecMolecule).
 		setTrailingNStrNumSymbolSpec(
 			&newNStrNumberSymbolSpec,
 			[]rune(trailingNumberSymbol),
@@ -3006,7 +3006,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewTrailingNumberSymbolRunes
 		return newNStrNumberSymbolSpec, err
 	}
 
-	err = new(numStrNumberSymbolSpecNanobot).
+	err = new(numStrNumberSymbolSpecMolecule).
 		setTrailingNStrNumSymbolSpec(
 			&newNStrNumberSymbolSpec,
 			trailingNumberSymbol,
@@ -3716,7 +3716,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetCurrencyNumSignRelPos(
 		return err
 	}
 
-	return new(numStrNumberSymbolSpecNanobot).
+	return new(numStrNumberSymbolSpecMolecule).
 		setCurrencyNumSignRelPos(
 			nStrNumberSymbolSpec,
 			currencyNumSignRelPos,
@@ -3935,7 +3935,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetLeadingNumberSymbol(
 		return err
 	}
 
-	err = new(numStrNumberSymbolSpecNanobot).
+	err = new(numStrNumberSymbolSpecMolecule).
 		setLeadingNStrNumSymbolSpec(
 			nStrNumberSymbolSpec,
 			[]rune(leadingNumberSymbol),
@@ -4158,7 +4158,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetLeadingNumberSymbolRunes(
 		return err
 	}
 
-	err = new(numStrNumberSymbolSpecNanobot).
+	err = new(numStrNumberSymbolSpecMolecule).
 		setLeadingNStrNumSymbolSpec(
 			nStrNumberSymbolSpec,
 			leadingNumberSymbol,
@@ -4480,7 +4480,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetLeadingTrailingNumberSymb
 		return err
 	}
 
-	nStrNumSymSpecNanobot := numStrNumberSymbolSpecNanobot{}
+	nStrNumSymSpecNanobot := numStrNumberSymbolSpecMolecule{}
 
 	err = nStrNumSymSpecNanobot.
 		setLeadingNStrNumSymbolSpec(
@@ -4817,7 +4817,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetLeadingTrailingNumberSymb
 		return err
 	}
 
-	nStrNumSymSpecNanobot := numStrNumberSymbolSpecNanobot{}
+	nStrNumSymSpecNanobot := numStrNumberSymbolSpecMolecule{}
 
 	err = nStrNumSymSpecNanobot.
 		setLeadingNStrNumSymbolSpec(
@@ -4880,7 +4880,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetNOP() {
 
 	defer nStrNumberSymbolSpec.lock.Unlock()
 
-	new(numStrNumberSymbolSpecNanobot).empty(
+	new(numStrNumberSymbolSpecMolecule).empty(
 		nStrNumberSymbolSpec)
 
 	return
@@ -5098,7 +5098,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetTrailingNumberSymbol(
 		return err
 	}
 
-	err = new(numStrNumberSymbolSpecNanobot).
+	err = new(numStrNumberSymbolSpecMolecule).
 		setTrailingNStrNumSymbolSpec(
 			nStrNumberSymbolSpec,
 			[]rune(trailingNumberSymbol),
@@ -5329,7 +5329,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetTrailingNumberSymbolRunes
 		return err
 	}
 
-	err = new(numStrNumberSymbolSpecNanobot).
+	err = new(numStrNumberSymbolSpecMolecule).
 		setTrailingNStrNumSymbolSpec(
 			nStrNumberSymbolSpec,
 			trailingNumberSymbol,
@@ -5443,27 +5443,17 @@ func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setCurrencyDefaultsEU
 		return err
 	}
 
-	numStrNumSymSpecNanobot := numStrNumberSymbolSpecNanobot{}
-
-	numStrNumSymSpecNanobot.empty(
+	new(numStrNumberSymbolSpecMolecule).empty(
 		currencySymbols)
 
-	err = numStrNumSymSpecNanobot.setTrailingNStrNumSymbolSpec(
+	return new(numStrNumberSymbolSpecNanobot).setCurrencySymbols(
 		currencySymbols,
+		nil,
 		[]rune{' ', '€'},
 		NumFieldSymPos.InsideNumField(),
-		ePrefix.XCpy(
-			"currencySymbols"))
-
-	if err != nil {
-		return err
-	}
-
-	return numStrNumSymSpecNanobot.setCurrencyNumSignRelPos(
-		currencySymbols,
 		CurrNumSignRelPos.OutsideNumSign(),
 		ePrefix.XCpy(
-			"currencySymbols"))
+			"currencySymbols<-Trailing Euro Sign"))
 }
 
 // setCurrencyDefaultsUK
@@ -5560,27 +5550,17 @@ func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setCurrencyDefaultsUK
 		return err
 	}
 
-	numStrNumSymSpecNanobot := numStrNumberSymbolSpecNanobot{}
-
-	numStrNumSymSpecNanobot.empty(
+	new(numStrNumberSymbolSpecMolecule).empty(
 		currencySymbols)
 
-	err = numStrNumSymSpecNanobot.setLeadingNStrNumSymbolSpec(
+	return new(numStrNumberSymbolSpecNanobot).setCurrencySymbols(
 		currencySymbols,
 		[]rune{'£', ' '},
+		nil,
 		NumFieldSymPos.InsideNumField(),
-		ePrefix.XCpy(
-			"currencySymbols"))
-
-	if err != nil {
-		return err
-	}
-
-	return numStrNumSymSpecNanobot.setCurrencyNumSignRelPos(
-		currencySymbols,
 		CurrNumSignRelPos.InsideNumSign(),
 		ePrefix.XCpy(
-			"currencySymbols"))
+			"currencySymbols<-Leading Pound Sign"))
 }
 
 // setCurrencyDefaultsUS
@@ -5677,27 +5657,17 @@ func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setCurrencyDefaultsUS
 		return err
 	}
 
-	numStrNumSymSpecNanobot := numStrNumberSymbolSpecNanobot{}
-
-	numStrNumSymSpecNanobot.empty(
+	new(numStrNumberSymbolSpecMolecule).empty(
 		currencySymbols)
 
-	err = numStrNumSymSpecNanobot.setLeadingNStrNumSymbolSpec(
+	return new(numStrNumberSymbolSpecNanobot).setCurrencySymbols(
 		currencySymbols,
 		[]rune{'$', ' '},
+		nil,
 		NumFieldSymPos.InsideNumField(),
-		ePrefix.XCpy(
-			"currencySymbols"))
-
-	if err != nil {
-		return err
-	}
-
-	return numStrNumSymSpecNanobot.setCurrencyNumSignRelPos(
-		currencySymbols,
 		CurrNumSignRelPos.OutsideNumSign(),
 		ePrefix.XCpy(
-			"currencySymbols"))
+			"currencySymbols<-Leading Dollar Sign"))
 }
 
 // setSignedNumSymbolsDefaultFrance
@@ -5878,7 +5848,7 @@ func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setSignedNumSymbolsDe
 		return err
 	}
 
-	numStrNumSymSpecNanobot := numStrNumberSymbolSpecNanobot{}
+	numStrNumSymSpecNanobot := numStrNumberSymbolSpecMolecule{}
 
 	numStrNumSymSpecNanobot.empty(
 		positiveSignedNumberSymbols)
@@ -6078,7 +6048,7 @@ func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setSignedNumSymbolsDe
 		return err
 	}
 
-	numStrNumSymSpecNanobot := numStrNumberSymbolSpecNanobot{}
+	numStrNumSymSpecNanobot := numStrNumberSymbolSpecMolecule{}
 
 	numStrNumSymSpecNanobot.empty(
 		positiveSignedNumberSymbols)
@@ -6277,7 +6247,7 @@ func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setSignedNumSymbolsDe
 		return err
 	}
 
-	numStrNumSymSpecNanobot := numStrNumberSymbolSpecNanobot{}
+	numStrNumSymSpecNanobot := numStrNumberSymbolSpecMolecule{}
 
 	numStrNumSymSpecNanobot.empty(
 		positiveSignedNumberSymbols)
@@ -6476,7 +6446,7 @@ func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setSignedNumSymbolsDe
 		return err
 	}
 
-	numStrNumSymSpecNanobot := numStrNumberSymbolSpecNanobot{}
+	numStrNumSymSpecNanobot := numStrNumberSymbolSpecMolecule{}
 
 	numStrNumSymSpecNanobot.empty(
 		positiveSignedNumberSymbols)
@@ -6511,6 +6481,205 @@ func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setSignedNumSymbolsDe
 // numStrNumberSymbolSpecNanobot - This type provides
 // helper methods for NumStrNumberSymbolSpec
 type numStrNumberSymbolSpecNanobot struct {
+	lock *sync.Mutex
+}
+
+// setCurrencySymbols
+//
+// Sets the currency symbols for an instance of
+// NumStrNumberSymbolSpec.
+//
+// The Number String Number Symbol Specification type
+// (NumStrNumberSymbolSpec) is designed to assist in
+// formatting numeric values as number strings for
+// screen displays, printing or file output.
+//
+// This method will configure and store leading and/or
+// trailing currency symbols for the instance of
+// NumStrNumberSymbolSpec passed as input parameter,
+// 'currencySymbols'.
+//
+// Users have the option of configuring either leading
+// currency symbols, trailing currency symbols or both
+// leading and trailing currency symbols.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (nStrNumSymSpecNanobot *numStrNumberSymbolSpecNanobot) setCurrencySymbols(
+	currencySymbols *NumStrNumberSymbolSpec,
+	leadingCurrencySymbols []rune,
+	trailingCurrencySymbols []rune,
+	currencyFieldSymbolPosition NumberFieldSymbolPosition,
+	currencyNumSignRelativePosition CurrencyNumSignRelativePosition,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if nStrNumSymSpecNanobot.lock == nil {
+		nStrNumSymSpecNanobot.lock = new(sync.Mutex)
+	}
+
+	nStrNumSymSpecNanobot.lock.Lock()
+
+	defer nStrNumSymSpecNanobot.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"numStrNumberSymbolSpecNanobot."+
+			"setCurrencyDefaultsEU()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if currencySymbols == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'currencySymbols' is invalid!\n"+
+			"'currencySymbols' is a nil pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if currencyNumSignRelativePosition.XIsValid() == false {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'currencyNumSignRelativePosition' is invalid!\n"+
+			" currencyNumSignRelativePosition String Value = %v\n"+
+			"currencyNumSignRelativePosition Integer Value = %v\n",
+			ePrefix.String(),
+			currencyNumSignRelativePosition.String(),
+			currencyNumSignRelativePosition.XValueInt())
+
+		return err
+	}
+
+	if !currencyFieldSymbolPosition.XIsValid() {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'currencyFieldSymbolPosition' is invalid!\n"+
+			"'currencyFieldSymbolPosition' string value  = '%v'\n"+
+			"'currencyFieldSymbolPosition' integer value = '%v'\n",
+			ePrefix.String(),
+			currencyFieldSymbolPosition.String(),
+			currencyFieldSymbolPosition.XValueInt())
+
+		return err
+
+	}
+
+	lenLeadingCurrencySym := len(leadingCurrencySymbols)
+
+	lenTrailingCurrencySym := len(trailingCurrencySymbols)
+
+	if lenLeadingCurrencySym == 0 &&
+		lenTrailingCurrencySym == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameters leadingCurrencySymbols and\n"+
+			"trailingCurrencySymbols are invalid!\n Both parameters\n"+
+			"are empty and have a zero length.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if lenLeadingCurrencySym == 0 {
+
+		new(nStrNumberSymbolSpecAtom).emptyLeadingNStrNumSymbol(
+			currencySymbols)
+	}
+
+	if lenTrailingCurrencySym == 0 {
+
+		new(nStrNumberSymbolSpecAtom).emptyTrailingNStrNumSymbol(
+			currencySymbols)
+	}
+
+	nStrNumSymSpecMolecule := numStrNumberSymbolSpecMolecule{}
+
+	if lenLeadingCurrencySym > 0 {
+
+		err = nStrNumSymSpecMolecule.
+			setLeadingNStrNumSymbolSpec(
+				currencySymbols,
+				leadingCurrencySymbols,
+				currencyFieldSymbolPosition,
+				ePrefix.XCpy(
+					"currencySymbols<-leadingCurrencySymbols"))
+
+		if err != nil {
+			return err
+		}
+	}
+
+	if lenTrailingCurrencySym > 0 {
+
+		err = nStrNumSymSpecMolecule.
+			setTrailingNStrNumSymbolSpec(
+				currencySymbols,
+				trailingCurrencySymbols,
+				currencyFieldSymbolPosition,
+				ePrefix.XCpy(
+					"currencySymbols<-trailingCurrencySymbols"))
+
+		if err != nil {
+			return err
+		}
+	}
+
+	err = nStrNumSymSpecMolecule.
+		setCurrencyNumSignRelPos(
+			currencySymbols,
+			currencyNumSignRelativePosition,
+			ePrefix.XCpy(
+				"currencySymbols<-"+
+					"currencyNumSignRelativePosition"))
+
+	return err
+}
+
+// numStrNumberSymbolSpecMolecule - This type provides
+// helper methods for NumStrNumberSymbolSpec
+type numStrNumberSymbolSpecMolecule struct {
 	lock *sync.Mutex
 }
 
@@ -6584,26 +6753,26 @@ type numStrNumberSymbolSpecNanobot struct {
 //		If an error message is returned, the text value for input
 //		parameter 'errPrefDto' (error prefix) will be prefixed or
 //		attached at the beginning of the error message.
-func (nStrNumSymSpecNanobot *numStrNumberSymbolSpecNanobot) copyNStrNumberSymbolSpec(
+func (nStrNumSymSpecMolecule *numStrNumberSymbolSpecMolecule) copyNStrNumberSymbolSpec(
 	destinationNumSymbolSpec *NumStrNumberSymbolSpec,
 	sourceNumSymbolSpec *NumStrNumberSymbolSpec,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
 
-	if nStrNumSymSpecNanobot.lock == nil {
-		nStrNumSymSpecNanobot.lock = new(sync.Mutex)
+	if nStrNumSymSpecMolecule.lock == nil {
+		nStrNumSymSpecMolecule.lock = new(sync.Mutex)
 	}
 
-	nStrNumSymSpecNanobot.lock.Lock()
+	nStrNumSymSpecMolecule.lock.Lock()
 
-	defer nStrNumSymSpecNanobot.lock.Unlock()
+	defer nStrNumSymSpecMolecule.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"numStrNumberSymbolSpecNanobot."+
+		"numStrNumberSymbolSpecMolecule."+
 			"copyNStrNumberSymbolSpec()",
 		"")
 
@@ -6684,16 +6853,16 @@ func (nStrNumSymSpecNanobot *numStrNumberSymbolSpecNanobot) copyNStrNumberSymbol
 // # Return Values
 //
 //	NONE
-func (nStrNumSymSpecNanobot *numStrNumberSymbolSpecNanobot) empty(
+func (nStrNumSymSpecMolecule *numStrNumberSymbolSpecMolecule) empty(
 	nStrNumSymbolSpec *NumStrNumberSymbolSpec) {
 
-	if nStrNumSymSpecNanobot.lock == nil {
-		nStrNumSymSpecNanobot.lock = new(sync.Mutex)
+	if nStrNumSymSpecMolecule.lock == nil {
+		nStrNumSymSpecMolecule.lock = new(sync.Mutex)
 	}
 
-	nStrNumSymSpecNanobot.lock.Lock()
+	nStrNumSymSpecMolecule.lock.Lock()
 
-	defer nStrNumSymSpecNanobot.lock.Unlock()
+	defer nStrNumSymSpecMolecule.lock.Unlock()
 
 	if nStrNumSymbolSpec == nil {
 		return
@@ -6803,18 +6972,18 @@ func (nStrNumSymSpecNanobot *numStrNumberSymbolSpecNanobot) empty(
 //		for input parameter 'errPrefDto' (error prefix)
 //		will be prefixed or attached at the beginning of
 //		the error message.
-func (nStrNumSymSpecNanobot *numStrNumberSymbolSpecNanobot) setCurrencyNumSignRelPos(
+func (nStrNumSymSpecMolecule *numStrNumberSymbolSpecMolecule) setCurrencyNumSignRelPos(
 	numSymbolSpec *NumStrNumberSymbolSpec,
 	currencyNumSignRelPos CurrencyNumSignRelativePosition,
 	errPrefDto *ePref.ErrPrefixDto) error {
 
-	if nStrNumSymSpecNanobot.lock == nil {
-		nStrNumSymSpecNanobot.lock = new(sync.Mutex)
+	if nStrNumSymSpecMolecule.lock == nil {
+		nStrNumSymSpecMolecule.lock = new(sync.Mutex)
 	}
 
-	nStrNumSymSpecNanobot.lock.Lock()
+	nStrNumSymSpecMolecule.lock.Lock()
 
-	defer nStrNumSymSpecNanobot.lock.Unlock()
+	defer nStrNumSymSpecMolecule.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -6823,7 +6992,7 @@ func (nStrNumSymSpecNanobot *numStrNumberSymbolSpecNanobot) setCurrencyNumSignRe
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"numStrNumberSymbolSpecNanobot."+
+		"numStrNumberSymbolSpecMolecule."+
 			"setCurrencyNumSignRelPos()",
 		"")
 
@@ -6962,27 +7131,27 @@ func (nStrNumSymSpecNanobot *numStrNumberSymbolSpecNanobot) setCurrencyNumSignRe
 //		If an error message is returned, the text value for input
 //		parameter 'errPrefDto' (error prefix) will be prefixed or
 //		attached at the beginning of the error message.
-func (nStrNumSymSpecNanobot *numStrNumberSymbolSpecNanobot) setLeadingNStrNumSymbolSpec(
+func (nStrNumSymSpecMolecule *numStrNumberSymbolSpecMolecule) setLeadingNStrNumSymbolSpec(
 	numSymbolSpec *NumStrNumberSymbolSpec,
 	leadingNumberSymbol []rune,
 	leadingNumFieldSymPosition NumberFieldSymbolPosition,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
 
-	if nStrNumSymSpecNanobot.lock == nil {
-		nStrNumSymSpecNanobot.lock = new(sync.Mutex)
+	if nStrNumSymSpecMolecule.lock == nil {
+		nStrNumSymSpecMolecule.lock = new(sync.Mutex)
 	}
 
-	nStrNumSymSpecNanobot.lock.Lock()
+	nStrNumSymSpecMolecule.lock.Lock()
 
-	defer nStrNumSymSpecNanobot.lock.Unlock()
+	defer nStrNumSymSpecMolecule.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"numStrNumberSymbolSpecNanobot."+
+		"numStrNumberSymbolSpecMolecule."+
 			"setLeadingNStrNumSymbolSpec()",
 		"")
 
@@ -7138,27 +7307,27 @@ func (nStrNumSymSpecNanobot *numStrNumberSymbolSpecNanobot) setLeadingNStrNumSym
 //		If an error message is returned, the text value for input
 //		parameter 'errPrefDto' (error prefix) will be prefixed or
 //		attached at the beginning of the error message.
-func (nStrNumSymSpecNanobot *numStrNumberSymbolSpecNanobot) setTrailingNStrNumSymbolSpec(
+func (nStrNumSymSpecMolecule *numStrNumberSymbolSpecMolecule) setTrailingNStrNumSymbolSpec(
 	numSignSymbolSpec *NumStrNumberSymbolSpec,
 	trailingNumberSymbol []rune,
 	trailingNumFieldSymPosition NumberFieldSymbolPosition,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
 
-	if nStrNumSymSpecNanobot.lock == nil {
-		nStrNumSymSpecNanobot.lock = new(sync.Mutex)
+	if nStrNumSymSpecMolecule.lock == nil {
+		nStrNumSymSpecMolecule.lock = new(sync.Mutex)
 	}
 
-	nStrNumSymSpecNanobot.lock.Lock()
+	nStrNumSymSpecMolecule.lock.Lock()
 
-	defer nStrNumSymSpecNanobot.lock.Unlock()
+	defer nStrNumSymSpecMolecule.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"numStrNumberSymbolSpecNanobot."+
+		"numStrNumberSymbolSpecMolecule."+
 			"setTrailingNStrNumSymbolSpec()",
 		"")
 

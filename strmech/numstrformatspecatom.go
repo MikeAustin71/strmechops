@@ -924,7 +924,7 @@ func (numStrFmtSpecAtom *numStrFmtSpecAtom) setNegativeNumberSignSpec(
 		return err
 	}
 
-	err = new(numStrNumberSymbolSpecNanobot).
+	err = new(numStrNumberSymbolSpecMolecule).
 		copyNStrNumberSymbolSpec(
 			&signedNumFmt.numberSymbolsSpec.negativeNumberSign,
 			&negativeNumberSign,
@@ -1816,7 +1816,7 @@ func (numStrFmtSpecAtom *numStrFmtSpecAtom) setPositiveNumberSignSpec(
 		return err
 	}
 
-	err = new(numStrNumberSymbolSpecNanobot).
+	err = new(numStrNumberSymbolSpecMolecule).
 		copyNStrNumberSymbolSpec(
 			&signedNumFmt.numberSymbolsSpec.positiveNumberSign,
 			&positiveNumberSign,
@@ -2071,7 +2071,7 @@ func (numStrFmtSpecAtom *numStrFmtSpecAtom) setZeroNumberSignSpec(
 		return err
 	}
 
-	err = new(numStrNumberSymbolSpecNanobot).
+	err = new(numStrNumberSymbolSpecMolecule).
 		copyNStrNumberSymbolSpec(
 			&signedNumFmt.numberSymbolsSpec.zeroNumberSign,
 			&zeroNumberSign,
