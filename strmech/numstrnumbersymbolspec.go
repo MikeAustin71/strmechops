@@ -2238,7 +2238,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyLeadingSymbolRune
 	return newNStrNumberSymbolSpec, err
 }
 
-// NewTrailingCurrencySymbol
+// NewCurrencyTrailingSymbol
 //
 // Creates and returns a new instance of
 // NumStrNumberSymbolSpec configured with a Trailing
@@ -2550,7 +2550,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyLeadingSymbolRune
 //
 //	Trailing Currency Symbols: "€"
 //	Number String:   "123.456€"
-func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewTrailingCurrencySymbol(
+func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyTrailingSymbol(
 	trailingCurrencySymbol string,
 	currencyFieldSymbolPosition NumberFieldSymbolPosition,
 	currencyNumSignRelPos CurrencyNumSignRelativePosition,
@@ -2572,7 +2572,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewTrailingCurrencySymbol(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumStrNumberSymbolSpec."+
-			"NewTrailingCurrencySymbol()",
+			"NewCurrencyTrailingSymbol()",
 		"")
 
 	if err != nil {
