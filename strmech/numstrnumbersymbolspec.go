@@ -1881,7 +1881,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyLeadingSymbol(
 	return newNStrNumberSymbolSpec, err
 }
 
-// NewLeadingCurrencySymbolRunes
+// NewCurrencyLeadingSymbolRunes
 //
 // Creates and returns a new instance of
 // NumStrNumberSymbolSpec configured with a Leading
@@ -2196,7 +2196,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyLeadingSymbol(
 //
 //	Leading Currency Symbols: []rune{'$'}
 //	Number String:   "$123.456"
-func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewLeadingCurrencySymbolRunes(
+func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyLeadingSymbolRunes(
 	leadingCurrencySymbol []rune,
 	currencyFieldSymbolPosition NumberFieldSymbolPosition,
 	currencyNumSignRelPos CurrencyNumSignRelativePosition,
@@ -2218,7 +2218,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewLeadingCurrencySymbolRune
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumStrNumberSymbolSpec."+
-			"NewLeadingCurrencySymbolRunes()",
+			"NewCurrencyLeadingSymbolRunes()",
 		"")
 
 	if err != nil {
