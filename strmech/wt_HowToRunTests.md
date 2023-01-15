@@ -28,6 +28,7 @@ Run this in *strmech* directory:
 
 ### Windows Command With Coverage
 `go test -cover -v > zzzzz_tests.txt`
+`go test -cover -v --race > zzzzz_tests.txt`
 
 ### Linux Command With Coverage
 `go test -cover -v | tee zzzzz_tests.txt`
