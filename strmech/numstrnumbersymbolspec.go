@@ -1524,7 +1524,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyDefaultsUS(
 	return usCurrencySymbols, err
 }
 
-// NewLeadingCurrencySymbol
+// NewCurrencyLeadingSymbol
 //
 // Creates and returns a new instance of
 // NumStrNumberSymbolSpec configured with a Leading
@@ -1600,14 +1600,6 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyDefaultsUS(
 //			Formatted Number String: "$ -123.45"
 //			Number Field Index:-------012345678
 //			Total Number String Length: 9
-//
-// ----------------------------------------------------------------
-//
-// # IMPORTANT
-//
-//	This method will delete and overwrite all
-//	pre-existing data values in the current instance of
-//	NumStrNumberSymbolSpec.
 //
 // ----------------------------------------------------------------
 //
@@ -1847,7 +1839,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyDefaultsUS(
 //
 //	Leading Currency Symbols: "$"
 //	Number String:   "$123.456"
-func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewLeadingCurrencySymbol(
+func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyLeadingSymbol(
 	leadingCurrencySymbol string,
 	currencyFieldSymbolPosition NumberFieldSymbolPosition,
 	currencyNumSignRelPos CurrencyNumSignRelativePosition,
@@ -1869,7 +1861,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewLeadingCurrencySymbol(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumStrNumberSymbolSpec."+
-			"NewLeadingCurrencySymbol()",
+			"NewCurrencyLeadingSymbol()",
 		"")
 
 	if err != nil {
@@ -1965,14 +1957,6 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewLeadingCurrencySymbol(
 //			Formatted Number String: "$ -123.45"
 //			Number Field Index:-------012345678
 //			Total Number String Length: 9
-//
-// ----------------------------------------------------------------
-//
-// # IMPORTANT
-//
-//	This method will delete and overwrite all
-//	pre-existing data values in the current instance of
-//	NumStrNumberSymbolSpec.
 //
 // ----------------------------------------------------------------
 //
@@ -2332,14 +2316,6 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewLeadingCurrencySymbolRune
 //
 // ----------------------------------------------------------------
 //
-// # IMPORTANT
-//
-//	This method will delete and overwrite all
-//	pre-existing data values in the current instance of
-//	NumStrNumberSymbolSpec.
-//
-// ----------------------------------------------------------------
-//
 // # Input Parameters
 //
 //	trailingCurrencySymbol     		string
@@ -2691,14 +2667,6 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewTrailingCurrencySymbol(
 //			Formatted Number String: " 123.45-€"
 //			Number Field Index:-------012345678
 //			Total Number String Length: 9
-//
-// ----------------------------------------------------------------
-//
-// # IMPORTANT
-//
-//	This method will delete and overwrite all
-//	pre-existing data values in the current instance of
-//	NumStrNumberSymbolSpec.
 //
 // ----------------------------------------------------------------
 //
