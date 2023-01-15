@@ -108,17 +108,14 @@ func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setCurrencyDefaultsEU
 		return err
 	}
 
-	new(numStrNumberSymbolSpecMolecule).empty(
-		currencySymbols)
-
-	return new(numStrNumberSymbolSpecNanobot).setCurrencySymbols(
-		currencySymbols,
-		nil,
-		[]rune{' ', '€'},
-		NumFieldSymPos.InsideNumField(),
-		CurrNumSignRelPos.OutsideNumSign(),
-		ePrefix.XCpy(
-			"currencySymbols<-Trailing Euro Sign"))
+	return new(numStrNumberSymbolSpecNanobot).
+		setTrailingCurrencySymbol(
+			currencySymbols,
+			[]rune{' ', '€'},
+			NumFieldSymPos.InsideNumField(),
+			CurrNumSignRelPos.OutsideNumSign(),
+			ePrefix.XCpy(
+				"currencySymbols<-Trailing Euro Sign"))
 }
 
 // setCurrencyDefaultsUK
@@ -215,17 +212,14 @@ func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setCurrencyDefaultsUK
 		return err
 	}
 
-	new(numStrNumberSymbolSpecMolecule).empty(
-		currencySymbols)
-
-	return new(numStrNumberSymbolSpecNanobot).setCurrencySymbols(
-		currencySymbols,
-		[]rune{'£', ' '},
-		nil,
-		NumFieldSymPos.InsideNumField(),
-		CurrNumSignRelPos.InsideNumSign(),
-		ePrefix.XCpy(
-			"currencySymbols<-Leading Pound Sign"))
+	return new(numStrNumberSymbolSpecNanobot).
+		setLeadingCurrencySymbol(
+			currencySymbols,
+			[]rune{'£', ' '},
+			NumFieldSymPos.InsideNumField(),
+			CurrNumSignRelPos.InsideNumSign(),
+			ePrefix.XCpy(
+				"currencySymbols<-Leading Pound Sign"))
 }
 
 // setCurrencyDefaultsUS
@@ -322,17 +316,14 @@ func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setCurrencyDefaultsUS
 		return err
 	}
 
-	new(numStrNumberSymbolSpecMolecule).empty(
-		currencySymbols)
-
-	return new(numStrNumberSymbolSpecNanobot).setCurrencySymbols(
-		currencySymbols,
-		[]rune{'$', ' '},
-		nil,
-		NumFieldSymPos.InsideNumField(),
-		CurrNumSignRelPos.OutsideNumSign(),
-		ePrefix.XCpy(
-			"currencySymbols<-Leading Dollar Sign"))
+	return new(numStrNumberSymbolSpecNanobot).
+		setLeadingCurrencySymbol(
+			currencySymbols,
+			[]rune{'$', ' '},
+			NumFieldSymPos.InsideNumField(),
+			CurrNumSignRelPos.OutsideNumSign(),
+			ePrefix.XCpy(
+				"currencySymbols<-Leading Dollar Sign"))
 }
 
 // setSignedNumSymbolsDefaultFrance
