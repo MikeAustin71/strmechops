@@ -33,6 +33,10 @@ type numStrNumberSymbolSpecNanobot struct {
 //
 //	Example: $125.34
 //
+// Currency symbol characters are intended for use in
+// formatting currency numeric values displayed in number
+// strings.
+//
 // This method will configure and store Leading
 // Currency Symbols for the instance of
 // NumStrNumberSymbolSpec passed as input parameter,
