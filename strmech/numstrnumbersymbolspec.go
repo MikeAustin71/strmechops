@@ -4175,8 +4175,14 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewNOP() NumStrNumberSymbolS
 // Leading number sign symbol characters can include such
 // symbols as plus signs ('+') or minus signs ('-').
 //
-// Leading number symbol characters are intended for use in
-// formatting numeric values displayed in number strings.
+// Leading number symbol characters are intended for use
+// in formatting numeric values displayed in number
+// strings.
+//
+// This method is designed exclusively for configuring
+// Number Sign Symbols and NOT Currency Symbols.
+//
+// To configure Currency Symbols, use other methods.
 //
 // ----------------------------------------------------------------
 //
@@ -4189,7 +4195,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewNOP() NumStrNumberSymbolS
 //		the returned instance of NumStrNumberSymbolSpec.
 //
 //		Leading number sign symbol characters can include
-//		such symbols as plus signs ('+') and minus signs
+//		such symbols as plus signs ('+') or minus signs
 //		('-').
 //
 //		Example-1:
@@ -4284,48 +4290,62 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewNOP() NumStrNumberSymbolS
 //
 //	errorPrefix						interface{}
 //
-//		This object encapsulates error prefix text which is
-//		included in all returned error messages. Usually, it
-//		contains the name of the calling method or methods
-//		listed as a method or function chain of execution.
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
 //
 //		If no error prefix information is needed, set this
 //		parameter to 'nil'.
 //
-//		This empty interface must be convertible to one of the
-//		following types:
+//		This empty interface must be convertible to one of
+//		the following types:
 //
-//		1. nil - A nil value is valid and generates an empty
-//		   collection of error prefix and error context
-//		   information.
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
 //
-//		2. string - A string containing error prefix information.
+//		2.	string
+//				A string containing error prefix
+//				information.
 //
-//		3. []string A one-dimensional slice of strings containing
-//		   error prefix information
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
 //
-//		4. [][2]string A two-dimensional slice of strings
-//		   containing error prefix and error context information.
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
 //
-//		5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//		   from this object will be copied for use in error and
-//		   informational messages.
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
 //
-//		6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//		   Information from this object will be copied for use in
-//		   error and informational messages.
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
 //
-//		7. IBasicErrorPrefix - An interface to a method generating
-//		   a two-dimensional slice of strings containing error
-//		   prefix and error context information.
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
 //
-//		If parameter 'errorPrefix' is NOT convertible to one of
-//		the valid types listed above, it will be considered
-//		invalid and trigger the return of an error.
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
 //
-//		Types ErrPrefixDto and IBasicErrorPrefix are included in
-//		the 'errpref' software package,
-//		"github.com/MikeAustin71/errpref".
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
@@ -4333,21 +4353,23 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewNOP() NumStrNumberSymbolS
 //
 //	newNStrNumberSymbolSpec			NumStrNumberSymbolSpec
 //
-//		If this method completes successfully, a new instance of
-//		NumStrNumberSymbolSpec, configured with leading
-//		number symbol characters, will be returned through
-//		this parameter.
+//		If this method completes successfully, a new
+//		instance of	NumStrNumberSymbolSpec, configured
+//		with leading sign number symbol characters, will
+//		be returned through	this parameter.
 //
 //	err								error
 //
-//		If this method completes successfully and no errors are
-//		encountered this return value is set to 'nil'. Otherwise,
-//		if errors are encountered, this return value will contain
-//		an appropriate error message.
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
 //
-//		If an error message is returned, the text value of input
-//		parameter 'errorPrefix' will be inserted or prefixed at
-//		the beginning of the error message.
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
 //
 // ----------------------------------------------------------------
 //
@@ -4419,6 +4441,11 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewNumberSignLeadingSymbol(
 // with sole exception being that this method receives
 // rune array input parameters instead of strings.
 //
+// This method is designed exclusively for configuring
+// Number Sign Symbols and NOT Currency Symbols.
+//
+// To configure Currency Symbols, use other methods.
+//
 // ----------------------------------------------------------------
 //
 // # Input Parameters
@@ -4430,7 +4457,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewNumberSignLeadingSymbol(
 //		the returned instance of NumStrNumberSymbolSpec.
 //
 //		Leading number sign symbol characters can include
-//		such symbols as plus signs ('+') and minus signs
+//		such symbols as plus signs ('+') or minus signs
 //		('-').
 //
 //		Example-1:
@@ -4525,48 +4552,62 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewNumberSignLeadingSymbol(
 //
 //	errorPrefix						interface{}
 //
-//		This object encapsulates error prefix text which is
-//		included in all returned error messages. Usually, it
-//		contains the name of the calling method or methods
-//		listed as a method or function chain of execution.
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
 //
 //		If no error prefix information is needed, set this
 //		parameter to 'nil'.
 //
-//		This empty interface must be convertible to one of the
-//		following types:
+//		This empty interface must be convertible to one of
+//		the following types:
 //
-//		1. nil - A nil value is valid and generates an empty
-//		   collection of error prefix and error context
-//		   information.
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
 //
-//		2. string - A string containing error prefix information.
+//		2.	string
+//				A string containing error prefix
+//				information.
 //
-//		3. []string A one-dimensional slice of strings containing
-//		   error prefix information
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
 //
-//		4. [][2]string A two-dimensional slice of strings
-//		   containing error prefix and error context information.
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
 //
-//		5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//		   from this object will be copied for use in error and
-//		   informational messages.
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
 //
-//		6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//		   Information from this object will be copied for use in
-//		   error and informational messages.
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
 //
-//		7. IBasicErrorPrefix - An interface to a method generating
-//		   a two-dimensional slice of strings containing error
-//		   prefix and error context information.
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
 //
-//		If parameter 'errorPrefix' is NOT convertible to one of
-//		the valid types listed above, it will be considered
-//		invalid and trigger the return of an error.
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
 //
-//		Types ErrPrefixDto and IBasicErrorPrefix are included in
-//		the 'errpref' software package,
-//		"github.com/MikeAustin71/errpref".
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
@@ -4574,21 +4615,23 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewNumberSignLeadingSymbol(
 //
 //	newNStrNumberSymbolSpec			NumStrNumberSymbolSpec
 //
-//		If this method completes successfully, a new instance of
-//		NumStrNumberSymbolSpec, configured with leading
-//		number symbol characters, will be returned through
-//		this parameter.
+//		If this method completes successfully, a new
+//		instance of NumStrNumberSymbolSpec, configured
+//		with leading number sign symbol characters, will
+//		be returned through	this parameter.
 //
 //	err								error
 //
-//		If this method completes successfully and no errors are
-//		encountered this return value is set to 'nil'. Otherwise,
-//		if errors are encountered, this return value will contain
-//		an appropriate error message.
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
 //
-//		If an error message is returned, the text value of input
-//		parameter 'errorPrefix' will be inserted or prefixed at
-//		the beginning of the error message.
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
 //
 // ----------------------------------------------------------------
 //
@@ -4643,16 +4686,24 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewNumberSignLeadingSymbolRu
 	return newNStrNumberSymbolSpec, err
 }
 
-// NewNumberSignLeadingTrailingSymbol - Creates and returns a new
-// instance of NumStrNumberSymbolSpec configured with both
-// leading and trailing number symbols.
+// NewNumberSignLeadingTrailingSymbol
 //
-// Leading and Trailing number symbol characters can include
-// such symbols as plus signs ('+'), minus signs ('-') and/or
-// currency symbols ('$').
+// Creates and returns a new instance of
+// NumStrNumberSymbolSpec configured with both leading
+// and trailing number sign symbols.
 //
-// Leading and Trailing number symbols are intended for use
-// in formatting numeric values displayed in number strings.
+// Leading and Trailing number symbol characters can
+// include such symbols as plus signs ('+') or minus
+// signs ('-').
+//
+// Leading and Trailing number symbols are intended for
+// use in formatting numeric values displayed in number
+// strings.
+//
+// This method is designed exclusively for configuring
+// Number Sign Symbols and NOT Currency Symbols.
+//
+// To configure Currency Symbols, use other methods.
 //
 // ----------------------------------------------------------------
 //
@@ -4660,13 +4711,12 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewNumberSignLeadingSymbolRu
 //
 //	leadingNumberSymbol     		string
 //
-//		A string containing the leading number symbol
-//		character or characters used to configure the
-//		returned instance of NumStrNumberSymbolSpec.
+//		A string containing the leading number sign
+//		symbol character or characters used to configure
+//		the returned instance of NumStrNumberSymbolSpec.
 //
 //		Leading number symbol characters can include such
-//		symbols as plus signs ('+'), minus signs ('-')
-//		and/or currency symbols ('$').
+//		symbols as plus signs ('+') or minus signs ('-').
 //
 //	leadingNumFieldSymPosition		NumberFieldSymbolPosition
 //
@@ -4727,13 +4777,13 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewNumberSignLeadingSymbolRu
 //
 //	trailingNumberSymbol     		string
 //
-//		A string containing the trailing number symbol
-//		character or characters used to configure the returned
-//		instance of NumStrNumberSymbolSpec.
+//		A string containing the trailing number sign
+//		symbol character or characters used to configure
+//		the returned instance of NumStrNumberSymbolSpec.
 //
-//		Trailing number symbol characters can include such
-//		symbols as plus signs ('+'), minus signs ('-')
-//	 	and/or currency symbols ('$').
+//		Trailing number sign symbol characters can
+//		include such symbols as plus signs ('+') or minus
+//		signs ('-').
 //
 //	trailingNumFieldSymPosition		NumberFieldSymbolPosition
 //
@@ -4794,48 +4844,62 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewNumberSignLeadingSymbolRu
 //
 //	errorPrefix						interface{}
 //
-//		This object encapsulates error prefix text which is
-//		included in all returned error messages. Usually, it
-//		contains the name of the calling method or methods
-//		listed as a method or function chain of execution.
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
 //
 //		If no error prefix information is needed, set this
 //		parameter to 'nil'.
 //
-//		This empty interface must be convertible to one of the
-//		following types:
+//		This empty interface must be convertible to one of
+//		the following types:
 //
-//		1. nil - A nil value is valid and generates an empty
-//		   collection of error prefix and error context
-//		   information.
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
 //
-//		2. string - A string containing error prefix information.
+//		2.	string
+//				A string containing error prefix
+//				information.
 //
-//		3. []string A one-dimensional slice of strings containing
-//		   error prefix information
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
 //
-//		4. [][2]string A two-dimensional slice of strings
-//		   containing error prefix and error context information.
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
 //
-//		5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//		   from this object will be copied for use in error and
-//		   informational messages.
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
 //
-//		6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//		   Information from this object will be copied for use in
-//		   error and informational messages.
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
 //
-//		7. IBasicErrorPrefix - An interface to a method generating
-//		   a two-dimensional slice of strings containing error
-//		   prefix and error context information.
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
 //
-//		If parameter 'errorPrefix' is NOT convertible to one of
-//		the valid types listed above, it will be considered
-//		invalid and trigger the return of an error.
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
 //
-//		Types ErrPrefixDto and IBasicErrorPrefix are included in
-//		the 'errpref' software package,
-//		"github.com/MikeAustin71/errpref".
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
@@ -4843,82 +4907,60 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewNumberSignLeadingSymbolRu
 //
 //	newNStrNumberSymbolSpec			NumStrNumberSymbolSpec
 //
-//		If this method completes successfully, a new instance of
-//		NumStrNumberSymbolSpec, configured with both leading
-//		and trailing number symbol characters, will be returned
-//	 	through this parameter.
+//		If this method completes successfully, a new
+//		instance of NumStrNumberSymbolSpec, configured
+//		with both leading and trailing number sign symbol
+//		characters, will be returned through this
+//		parameter.
 //
 //	err								error
 //
-//		If this method completes successfully and no errors are
-//		encountered this return value is set to 'nil'. Otherwise,
-//		if errors are encountered, this return value will contain
-//		an appropriate error message.
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
 //
-//		If an error message is returned, the text value of input
-//		parameter 'errorPrefix' will be inserted or prefixed at
-//		the beginning of the error message.
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
 //
 // ----------------------------------------------------------------
 //
 // # Usage
 //
-// Example-1: Leading Number Symbols
+// Example-1: Leading Number Sign Symbols
 //
 //	Leading Symbols: "+ "
 //	Number String:   "+ 123.456"
 //
-// Example-2: Leading Number Symbols
+// Example-2: Leading Number Sign Symbols
 //
-//	Leading Symbols: "$+"
-//	Number String:   "$+123.456"
+//	Leading Symbols: "+"
+//	Number String:   "+123.456"
 //
-// Example-3: Leading Number Symbols
-//
-//	Leading Symbols: "$"
-//	Number String:   "$123.456"
-//
-// Example-4: Leading Number Symbols
+// Example-3: Leading Number Sign Symbols
 //
 //	Leading Symbols: "- "
 //	Number String:   "- 123.456"
 //
-// Example-5: Leading Number Symbols
-//
-//	Leading Symbols: "$-"
-//	Number String:   "$-123.456"
-//
-// Example-6: Leading Number Symbols
-//
-//	Leading Symbols: "$"
-//	Number String:   "$123.456"
-//
-// Example-7: Trailing Number Symbols
+// Example-4: Trailing Number Sign Symbols
 //
 //	Trailing Symbols: " +"
 //	Number String:   "123.456 +"
 //
-// Example-8: Trailing Number Symbols
-//
-//	Trailing Symbols: "+$"
-//	Number String:   "123.456+$"
-//
-// Example-9: Trailing Number Symbols
-//
-//	Trailing Symbols: "$"
-//	Number String:   "123.456$"
-//
-// Example-10: Trailing Number Symbols
+// Example-5: Trailing Number Sign Symbols
 //
 //	Trailing Symbols: " -"
 //	Number String:   "123.456 -"
 //
-// Example-11: Trailing Number Symbols
+// Example-6: Trailing Number Sign Symbols
 //
-//	Trailing Symbols: "-$"
-//	Number String:   "123.456-$"
+//	Trailing Symbols: "-"
+//	Number String:   "123.456-"
 //
-// Example-12: Trailing Number Symbols
+// Example-7: Trailing Number Sign Symbols
 //
 //	 Leading Symbols: "("
 //		Trailing Symbols: ")"
@@ -4980,16 +5022,24 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewNumberSignLeadingTrailing
 	return newNStrNumberSymbolSpec, err
 }
 
-// NewNumberSignLeadingTrailingSymbolRunes - Creates and returns a
-// new instance of NumStrNumberSymbolSpec configured with
-// both leading and trailing number symbols.
+// NewNumberSignLeadingTrailingSymbolRunes
 //
-// Leading and Trailing number symbol characters can include
-// such symbols as plus signs ('+'), minus signs ('-') and/or
-// currency symbols ('$').
+// Creates and returns a new instance of
+// NumStrNumberSymbolSpec configured with both leading
+// and trailing number sign symbols.
 //
-// Leading and Trailing number symbols are intended for use
-// in formatting numeric values displayed in number strings.
+// Leading and Trailing number sign symbol characters
+// can include such symbols as plus signs ('+') or minus
+// signs ('-').
+//
+// Leading and Trailing number symbols are intended for
+// use in formatting numeric values displayed in number
+// strings.
+//
+// This method is designed exclusively for configuring
+// Number Sign Symbols and NOT Currency Symbols.
+//
+// To configure Currency Symbols, use other methods.
 //
 // ----------------------------------------------------------------
 //
@@ -4998,12 +5048,12 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewNumberSignLeadingTrailing
 //	leadingNumberSymbol				[]rune
 //
 //		An array of runes containing the leading number
-//		symbol character or characters used to configure
-//		the returned instance of NumStrNumberSymbolSpec.
+//		sign symbol character or characters used to
+//		configure the returned instance of
+//		NumStrNumberSymbolSpec.
 //
 //		Leading number symbol characters can include such
-//		symbols as plus signs ('+'), minus signs ('-')
-//		and/or currency symbols ('$').
+//		symbols as plus signs ('+') or minus signs ('-').
 //
 //	leadingNumFieldSymPosition		NumberFieldSymbolPosition
 //
@@ -5064,13 +5114,13 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewNumberSignLeadingTrailing
 //
 //	trailingNumberSymbol			[]rune
 //
-//		An array of runes containing the trailing number symbol
-//		character or characters used to configure the returned
-//		instance of NumStrNumberSymbolSpec.
+//		An array of runes containing the trailing number
+//		sign symbol character or characters used to
+//		configure the returned instance of
+//		NumStrNumberSymbolSpec.
 //
 //		Trailing number symbol characters can include such
-//		symbols as plus signs ('+'), minus signs ('-')
-//	 	and/or currency symbols ('$').
+//		symbols as plus signs ('+') or minus signs ('-').
 //
 //	trailingNumFieldSymPosition		NumberFieldSymbolPosition
 //
@@ -5131,48 +5181,62 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewNumberSignLeadingTrailing
 //
 //	errorPrefix						interface{}
 //
-//		This object encapsulates error prefix text which is
-//		included in all returned error messages. Usually, it
-//		contains the name of the calling method or methods
-//		listed as a method or function chain of execution.
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
 //
 //		If no error prefix information is needed, set this
 //		parameter to 'nil'.
 //
-//		This empty interface must be convertible to one of the
-//		following types:
+//		This empty interface must be convertible to one of
+//		the following types:
 //
-//		1. nil - A nil value is valid and generates an empty
-//		   collection of error prefix and error context
-//		   information.
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
 //
-//		2. string - A string containing error prefix information.
+//		2.	string
+//				A string containing error prefix
+//				information.
 //
-//		3. []string A one-dimensional slice of strings containing
-//		   error prefix information
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
 //
-//		4. [][2]string A two-dimensional slice of strings
-//		   containing error prefix and error context information.
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
 //
-//		5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//		   from this object will be copied for use in error and
-//		   informational messages.
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
 //
-//		6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//		   Information from this object will be copied for use in
-//		   error and informational messages.
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
 //
-//		7. IBasicErrorPrefix - An interface to a method generating
-//		   a two-dimensional slice of strings containing error
-//		   prefix and error context information.
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
 //
-//		If parameter 'errorPrefix' is NOT convertible to one of
-//		the valid types listed above, it will be considered
-//		invalid and trigger the return of an error.
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
 //
-//		Types ErrPrefixDto and IBasicErrorPrefix are included in
-//		the 'errpref' software package,
-//		"github.com/MikeAustin71/errpref".
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
@@ -5180,82 +5244,60 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewNumberSignLeadingTrailing
 //
 //	newNStrNumberSymbolSpec			NumStrNumberSymbolSpec
 //
-//		If this method completes successfully, a new instance of
-//		NumStrNumberSymbolSpec, configured with both leading
-//		and trailing number symbol characters, will be returned
-//	 	through this parameter.
+//		If this method completes successfully, a new
+//		instance of NumStrNumberSymbolSpec, configured
+//		with both leading and trailing number sign symbol
+//		characters, will be returned through this
+//		parameter.
 //
 //	err								error
 //
-//		If this method completes successfully and no errors are
-//		encountered this return value is set to 'nil'. Otherwise,
-//		if errors are encountered, this return value will contain
-//		an appropriate error message.
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
 //
-//		If an error message is returned, the text value of input
-//		parameter 'errorPrefix' will be inserted or prefixed at
-//		the beginning of the error message.
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
 //
 // ----------------------------------------------------------------
 //
 // # Usage
 //
-// Example-1: Leading Number Symbols
+// Example-1: Leading Number Sign Symbols
 //
 //	Leading Symbols: "+ "
 //	Number String:   "+ 123.456"
 //
-// Example-2: Leading Number Symbols
+// Example-2: Leading Number Sign Symbols
 //
-//	Leading Symbols: "$+"
-//	Number String:   "$+123.456"
+//	Leading Symbols: "+"
+//	Number String:   "+123.456"
 //
-// Example-3: Leading Number Symbols
-//
-//	Leading Symbols: "$"
-//	Number String:   "$123.456"
-//
-// Example-4: Leading Number Symbols
+// Example-3: Leading Number Sign Symbols
 //
 //	Leading Symbols: "- "
 //	Number String:   "- 123.456"
 //
-// Example-5: Leading Number Symbols
-//
-//	Leading Symbols: "$-"
-//	Number String:   "$-123.456"
-//
-// Example-6: Leading Number Symbols
-//
-//	Leading Symbols: "$"
-//	Number String:   "$123.456"
-//
-// Example-7: Trailing Number Symbols
+// Example-4: Trailing Number Sign Symbols
 //
 //	Trailing Symbols: " +"
 //	Number String:   "123.456 +"
 //
-// Example-8: Trailing Number Symbols
-//
-//	Trailing Symbols: "+$"
-//	Number String:   "123.456+$"
-//
-// Example-9: Trailing Number Symbols
-//
-//	Trailing Symbols: "$"
-//	Number String:   "123.456$"
-//
-// Example-10: Trailing Number Symbols
+// Example-5: Trailing Number Sign Symbols
 //
 //	Trailing Symbols: " -"
 //	Number String:   "123.456 -"
 //
-// Example-11: Trailing Number Symbols
+// Example-6: Trailing Number Sign Symbols
 //
-//	Trailing Symbols: "-$"
-//	Number String:   "123.456-$"
+//	Trailing Symbols: "-"
+//	Number String:   "123.456-"
 //
-// Example-12: Trailing Number Symbols
+// Example-7: Trailing Number Sign Symbols
 //
 //	 Leading Symbols: "("
 //		Trailing Symbols: ")"
@@ -5317,16 +5359,23 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewNumberSignLeadingTrailing
 	return newNStrNumberSymbolSpec, err
 }
 
-// NewNumberSignTrailingSymbol - Creates and returns a new instance
-// of NumStrNumberSymbolSpec configured with a trailing
-// number symbol character or characters.
+// NewNumberSignTrailingSymbol
 //
-// Trailing number symbol characters can include such symbols as
-// plus signs ('+'), minus signs ('-') and/or currency symbols
-// ('$').
+// Creates and returns a new instance of
+// NumStrNumberSymbolSpec configured with a trailing
+// number sign symbol character or characters.
 //
-// Trailing number symbol characters are intended for use in
-// formatting numeric values displayed in number strings.
+// Trailing number symbol characters can include such
+// symbols as plus signs ('+') or minus signs ('-').
+//
+// Trailing number symbol characters are intended for
+// use in formatting numeric values displayed in number
+// strings.
+//
+// This method is designed exclusively for configuring
+// Number Sign Symbols and NOT Currency Symbols.
+//
+// To configure Currency Symbols, use other methods.
 //
 // ----------------------------------------------------------------
 //
@@ -5334,13 +5383,13 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewNumberSignLeadingTrailing
 //
 //	trailingNumberSymbol     		string
 //
-//		A string containing the trailing number symbol
-//		character or characters used to configure the returned
-//		instance of NumStrNumberSymbolSpec.
+//		A string containing the trailing number sign
+//		symbol character or characters used to configure
+//		the returned instance of NumStrNumberSymbolSpec.
 //
-//		Trailing number symbol characters can include such
-//		symbols as plus signs ('+'), minus signs ('-')
-//	 	and/or currency symbols ('$').
+//		Trailing number symbol characters can include
+//		such symbols as plus signs ('+') or minus signs
+//		('-').
 //
 //	trailingNumFieldSymPosition		NumberFieldSymbolPosition
 //
@@ -5401,48 +5450,62 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewNumberSignLeadingTrailing
 //
 //	errorPrefix						interface{}
 //
-//		This object encapsulates error prefix text which is
-//		included in all returned error messages. Usually, it
-//		contains the name of the calling method or methods
-//		listed as a method or function chain of execution.
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
 //
 //		If no error prefix information is needed, set this
 //		parameter to 'nil'.
 //
-//		This empty interface must be convertible to one of the
-//		following types:
+//		This empty interface must be convertible to one of
+//		the following types:
 //
-//		1. nil - A nil value is valid and generates an empty
-//		   collection of error prefix and error context
-//		   information.
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
 //
-//		2. string - A string containing error prefix information.
+//		2.	string
+//				A string containing error prefix
+//				information.
 //
-//		3. []string A one-dimensional slice of strings containing
-//		   error prefix information
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
 //
-//		4. [][2]string A two-dimensional slice of strings
-//		   containing error prefix and error context information.
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
 //
-//		5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//		   from this object will be copied for use in error and
-//		   informational messages.
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
 //
-//		6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//		   Information from this object will be copied for use in
-//		   error and informational messages.
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
 //
-//		7. IBasicErrorPrefix - An interface to a method generating
-//		   a two-dimensional slice of strings containing error
-//		   prefix and error context information.
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
 //
-//		If parameter 'errorPrefix' is NOT convertible to one of
-//		the valid types listed above, it will be considered
-//		invalid and trigger the return of an error.
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
 //
-//		Types ErrPrefixDto and IBasicErrorPrefix are included in
-//		the 'errpref' software package,
-//		"github.com/MikeAustin71/errpref".
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
@@ -5450,52 +5513,49 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewNumberSignLeadingTrailing
 //
 //	newNStrNumberSymbolSpec			NumStrNumberSymbolSpec
 //
-//		If this method completes successfully, a new instance of
-//		NumStrNumberSymbolSpec, configured with trailing
-//		number symbol characters, will be returned through this
-//		parameter.
+//		If this method completes successfully, a new
+//		instance ofNumStrNumberSymbolSpec, configured
+//		with trailing number sign symbol characters, will
+//		be returned through this parameter.
 //
 //	err								error
 //
-//		If this method completes successfully and no errors are
-//		encountered this return value is set to 'nil'. Otherwise,
-//		if errors are encountered, this return value will contain
-//		an appropriate error message.
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
 //
-//		If an error message is returned, the text value of input
-//		parameter 'errorPrefix' will be inserted or prefixed at
-//		the beginning of the error message.
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
 //
 // ----------------------------------------------------------------
 //
 // # Usage
 //
-// Example-1: Trailing Number Symbols
+// Example-1: Trailing Number Sign Symbols
 //
 //	Trailing Symbols: " +"
 //	Number String:   "123.456 +"
 //
-// Example-2: Trailing Number Symbols
+// Example-2: Trailing Number Sign Symbols
 //
-//	Trailing Symbols: "+$"
-//	Number String:   "123.456+$"
+//	Trailing Symbols: "+"
+//	Number String:   "123.456+"
 //
-// Example-3: Trailing Number Symbols
-//
-//	Trailing Symbols: "$"
-//	Number String:   "123.456$"
-//
-// Example-4: Trailing Number Symbols
+// Example-3: Trailing Number Sign Symbols
 //
 //	Trailing Symbols: " -"
 //	Number String:   "123.456 -"
 //
-// Example-5: Trailing Number Symbols
+// Example-4: Trailing Number Sign Symbols
 //
-//	Trailing Symbols: "-$"
-//	Number String:   "123.456-$"
+//	Trailing Symbols: "-"
+//	Number String:   "123.456-"
 //
-// Example-6: Trailing Number Symbols
+// Example-5: Trailing Number Sign Symbols
 //
 //	 Leading Symbols: "("
 //		Trailing Symbols: ")"
@@ -5540,16 +5600,23 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewNumberSignTrailingSymbol(
 	return newNStrNumberSymbolSpec, err
 }
 
-// NewNumberSignTrailingSymbolRunes - Creates and returns a new
-// instance of NumStrNumberSymbolSpec configured with a
-// trailing number symbol character or characters.
+// NewNumberSignTrailingSymbolRunes
 //
-// Trailing number symbol characters can include such symbols as
-// plus signs ('+'), minus signs ('-') and/or currency symbols
-// ('$').
+// Creates and returns a new instance of
+// NumStrNumberSymbolSpec configured with a trailing
+// number sign symbol character or characters.
 //
-// Trailing number symbol characters are intended for use in
-// formatting numeric values displayed in number strings.
+// Trailing number sign symbol characters can include
+// such symbols as plus signs ('+') or minus signs ('-').
+//
+// Trailing number sign symbol characters are intended
+// for use in formatting numeric values displayed in
+// number strings.
+//
+// This method is designed exclusively for configuring
+// Number Sign Symbols and NOT Currency Symbols.
+//
+// To configure Currency Symbols, use other methods.
 //
 // ----------------------------------------------------------------
 //
@@ -5557,13 +5624,14 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewNumberSignTrailingSymbol(
 //
 //	trailingNumberSymbol			[]rune
 //
-//		An array of runes containing the trailing number symbol
-//		character or characters used to configure the returned
-//		instance of NumStrNumberSymbolSpec.
+//		An array of runes containing the trailing number
+//		sign symbol character or characters used to
+//		configure the returned instance of
+//		NumStrNumberSymbolSpec.
 //
-//		Trailing number symbol characters can include such
-//		symbols as plus signs ('+'), minus signs ('-')
-//	 	and/or currency symbols ('$').
+//		Trailing number symbol characters can include
+//		such symbols as plus signs ('+') or minus signs
+//		('-').
 //
 //	trailingNumFieldSymPosition		NumberFieldSymbolPosition
 //
@@ -5624,48 +5692,62 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewNumberSignTrailingSymbol(
 //
 //	errorPrefix						interface{}
 //
-//		This object encapsulates error prefix text which is
-//		included in all returned error messages. Usually, it
-//		contains the name of the calling method or methods
-//		listed as a method or function chain of execution.
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
 //
 //		If no error prefix information is needed, set this
 //		parameter to 'nil'.
 //
-//		This empty interface must be convertible to one of the
-//		following types:
+//		This empty interface must be convertible to one of
+//		the following types:
 //
-//		1. nil - A nil value is valid and generates an empty
-//		   collection of error prefix and error context
-//		   information.
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
 //
-//		2. string - A string containing error prefix information.
+//		2.	string
+//				A string containing error prefix
+//				information.
 //
-//		3. []string A one-dimensional slice of strings containing
-//		   error prefix information
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
 //
-//		4. [][2]string A two-dimensional slice of strings
-//		   containing error prefix and error context information.
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
 //
-//		5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//		   from this object will be copied for use in error and
-//		   informational messages.
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
 //
-//		6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//		   Information from this object will be copied for use in
-//		   error and informational messages.
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
 //
-//		7. IBasicErrorPrefix - An interface to a method generating
-//		   a two-dimensional slice of strings containing error
-//		   prefix and error context information.
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
 //
-//		If parameter 'errorPrefix' is NOT convertible to one of
-//		the valid types listed above, it will be considered
-//		invalid and trigger the return of an error.
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
 //
-//		Types ErrPrefixDto and IBasicErrorPrefix are included in
-//		the 'errpref' software package,
-//		"github.com/MikeAustin71/errpref".
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
@@ -5673,53 +5755,49 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewNumberSignTrailingSymbol(
 //
 //	newNStrNumberSymbolSpec			NumStrNumberSymbolSpec
 //
-//		If this method completes successfully, a new instance of
-//		NumStrNumberSymbolSpec, configured with trailing
-//		number symbol characters, will be returned through this
-//		parameter.
+//		If this method completes successfully, a new
+//		instance of NumStrNumberSymbolSpec, configured
+//		with trailing number sign symbol characters, will
+//		be returned through this parameter.
 //
 //	err								error
 //
-//		If this method completes successfully, the returned error
-//		Type is set equal to 'nil'.
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
 //
-//		If errors are encountered during processing, the returned
-//		error Type will encapsulate an error message. This
-//		returned error message will incorporate the method chain
-//		and text passed by input parameter, 'errorPrefix'. The
-//		'errorPrefix' text will be attached to the beginning of
-//		the error message.
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
 //
 // ----------------------------------------------------------------
 //
 // # Usage
 //
-// Example-1: Trailing Number Symbols
+// Example-1: Trailing Number Sign Symbols
 //
 //	Trailing Symbols: " +"
 //	Number String:   "123.456 +"
 //
-// Example-2: Trailing Number Symbols
+// Example-2: Trailing Number Sign Symbols
 //
-//	Trailing Symbols: "+$"
-//	Number String:   "123.456+$"
+//	Trailing Symbols: "+"
+//	Number String:   "123.456+"
 //
-// Example-3: Trailing Number Symbols
-//
-//	Trailing Symbols: "$"
-//	Number String:   "123.456$"
-//
-// Example-4: Trailing Number Symbols
+// Example-3: Trailing Number Sign Symbols
 //
 //	Trailing Symbols: " -"
 //	Number String:   "123.456 -"
 //
-// Example-5: Trailing Number Symbols
+// Example-4: Trailing Number Sign Symbols
 //
-//	Trailing Symbols: "-$"
-//	Number String:   "123.456-$"
+//	Trailing Symbols: "-"
+//	Number String:   "123.456-"
 //
-// Example-6: Trailing Number Symbols
+// Example-5: Trailing Number Sign Symbols
 //
 //	 Leading Symbols: "("
 //		Trailing Symbols: ")"
