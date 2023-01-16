@@ -794,7 +794,7 @@ func (numStrFmtSpecAtom *numStrFmtSpecAtom) setNegativeNumberSign(
 	if lenLeadingNegNumSign > 0 {
 
 		err = signedNumFmt.numberSymbolsSpec.negativeNumberSign.
-			SetLeadingNumberSymbolRunes(
+			SetNumberSignLeadingSymbolRunes(
 				leadingNegNumSign,
 				leadingNumFieldSymPosition,
 				ePrefix.XCpy(
@@ -809,7 +809,7 @@ func (numStrFmtSpecAtom *numStrFmtSpecAtom) setNegativeNumberSign(
 	if lenTrailingNegNumSign > 0 {
 
 		err = signedNumFmt.numberSymbolsSpec.negativeNumberSign.
-			SetTrailingNumberSymbolRunes(
+			SetNumberSignTrailingSymbolRunes(
 				trailingNegNumSign,
 				trailingNumFieldSymPosition,
 				ePrefix.XCpy(
@@ -1690,7 +1690,7 @@ func (numStrFmtSpecAtom *numStrFmtSpecAtom) setPositiveNumberSign(
 	if lenLeadingPosNumSign > 0 {
 
 		err = signedNumFmt.numberSymbolsSpec.positiveNumberSign.
-			SetLeadingNumberSymbolRunes(
+			SetNumberSignLeadingSymbolRunes(
 				leadingPosNumSign,
 				leadingPosNumFieldSymPosition,
 				ePrefix.XCpy(
@@ -1705,7 +1705,7 @@ func (numStrFmtSpecAtom *numStrFmtSpecAtom) setPositiveNumberSign(
 	if lenTrailingPosNumSign > 0 {
 
 		err = signedNumFmt.numberSymbolsSpec.positiveNumberSign.
-			SetTrailingNumberSymbolRunes(
+			SetNumberSignTrailingSymbolRunes(
 				trailingPosNumSign,
 				trailingPosNumFieldSymPosition,
 				ePrefix.XCpy(
@@ -1940,7 +1940,7 @@ func (numStrFmtSpecAtom *numStrFmtSpecAtom) setZeroNumberSign(
 	if lenLeadingZeroNumSign > 0 {
 
 		err = signedNumFmt.numberSymbolsSpec.zeroNumberSign.
-			SetLeadingNumberSymbolRunes(
+			SetNumberSignLeadingSymbolRunes(
 				leadingZeroNumSign,
 				leadingZeroNumFieldSymPosition,
 				ePrefix.XCpy(
@@ -1956,7 +1956,7 @@ func (numStrFmtSpecAtom *numStrFmtSpecAtom) setZeroNumberSign(
 	if lenTrailingZeroNumSign > 0 {
 
 		err = signedNumFmt.numberSymbolsSpec.zeroNumberSign.
-			SetTrailingNumberSymbolRunes(
+			SetNumberSignTrailingSymbolRunes(
 				trailingZeroNumSign,
 				trailingZeroNumFieldSymPosition,
 				ePrefix.XCpy(

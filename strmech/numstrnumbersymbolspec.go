@@ -5969,7 +5969,49 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetCurrencyNumSignRelPos(
 				"nStrNumberSymbolSpec"))
 }
 
-// SetLeadingNumberSymbol - Resets and configures a
+// SetNOP - Resets and configures the current instance
+// of NumStrNumberSymbolSpec as a NOP.
+//
+// NOP is a computer science term which stands for 'No Operation'
+// meaning it performs no operations and serves an empty
+// placeholder.
+//
+// This method is often used to configure implied positive number
+// signs in number string formatting. The positive number sign,
+// plus ('+'), is often implied for positive numeric values and
+// is not displayed in the number string.
+//
+// Call this method when creating implied positive number signs
+// for number strings.
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//	NONE
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//	NONE
+func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetNOP() {
+
+	if nStrNumberSymbolSpec.lock == nil {
+		nStrNumberSymbolSpec.lock = new(sync.Mutex)
+	}
+
+	nStrNumberSymbolSpec.lock.Lock()
+
+	defer nStrNumberSymbolSpec.lock.Unlock()
+
+	new(numStrNumberSymbolSpecMolecule).empty(
+		nStrNumberSymbolSpec)
+
+	return
+}
+
+// SetNumberSignLeadingSymbol - Resets and configures a
 // leading number symbol character or characters for the
 // current instance of NumStrNumberSymbolSpec.
 //
@@ -6153,7 +6195,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetCurrencyNumSignRelPos(
 //
 //	Leading Symbols: "$"
 //	Number String:   "$123.456"
-func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetLeadingNumberSymbol(
+func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetNumberSignLeadingSymbol(
 	leadingNumberSymbol string,
 	leadingNumFieldSymPosition NumberFieldSymbolPosition,
 	errorPrefix interface{}) error {
@@ -6173,7 +6215,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetLeadingNumberSymbol(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumStrNumberSymbolSpec."+
-			"SetLeadingNumberSymbol()",
+			"SetNumberSignLeadingSymbol()",
 		"")
 
 	if err != nil {
@@ -6192,7 +6234,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetLeadingNumberSymbol(
 	return err
 }
 
-// SetLeadingNumberSymbolRunes - Resets and configures a leading
+// SetNumberSignLeadingSymbolRunes - Resets and configures a leading
 // number symbol character or characters for the current
 // instance of NumStrNumberSymbolSpec.
 //
@@ -6376,7 +6418,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetLeadingNumberSymbol(
 //
 //	Leading Symbols: "$"
 //	Number String:   "$123.456"
-func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetLeadingNumberSymbolRunes(
+func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetNumberSignLeadingSymbolRunes(
 	leadingNumberSymbol []rune,
 	leadingNumFieldSymPosition NumberFieldSymbolPosition,
 	errorPrefix interface{}) error {
@@ -6396,7 +6438,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetLeadingNumberSymbolRunes(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumStrNumberSymbolSpec."+
-			"SetLeadingNumberSymbolRunes()",
+			"SetNumberSignLeadingSymbolRunes()",
 		"")
 
 	if err != nil {
@@ -6415,7 +6457,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetLeadingNumberSymbolRunes(
 	return err
 }
 
-// SetLeadingTrailingNumberSymbol - Resets and configures
+// SetNumberSignLeadingTrailingSymbol - Resets and configures
 // both Leading and Trailing number symbol characters for
 // the current instance of NumStrNumberSymbolSpec.
 //
@@ -6696,7 +6738,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetLeadingNumberSymbolRunes(
 //	 Leading Symbols: "("
 //		Trailing Symbols: ")"
 //		Number String:   "(123.456)"
-func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetLeadingTrailingNumberSymbol(
+func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetNumberSignLeadingTrailingSymbol(
 	leadingNumberSymbol string,
 	leadingNumFieldSymPosition NumberFieldSymbolPosition,
 	trailingNumberSymbol string,
@@ -6718,7 +6760,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetLeadingTrailingNumberSymb
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumStrNumberSymbolSpec."+
-			"SetLeadingTrailingNumberSymbol()",
+			"SetNumberSignLeadingTrailingSymbol()",
 		"")
 
 	if err != nil {
@@ -6752,7 +6794,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetLeadingTrailingNumberSymb
 	return err
 }
 
-// SetLeadingTrailingNumberSymbolRunes - Resets and configures
+// SetNumberSignLeadingTrailingSymbolRunes - Resets and configures
 // both Leading and Trailing number symbol characters for the
 // current instance of NumStrNumberSymbolSpec.
 //
@@ -7033,7 +7075,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetLeadingTrailingNumberSymb
 //	 Leading Symbols: "("
 //		Trailing Symbols: ")"
 //		Number String:   "(123.456)"
-func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetLeadingTrailingNumberSymbolRunes(
+func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetNumberSignLeadingTrailingSymbolRunes(
 	leadingNumberSymbol []rune,
 	leadingNumFieldSymPosition NumberFieldSymbolPosition,
 	trailingNumberSymbol []rune,
@@ -7055,7 +7097,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetLeadingTrailingNumberSymb
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumStrNumberSymbolSpec."+
-			"SetLeadingTrailingNumberSymbolRunes()",
+			"SetNumberSignLeadingTrailingSymbolRunes()",
 		"")
 
 	if err != nil {
@@ -7089,49 +7131,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetLeadingTrailingNumberSymb
 	return err
 }
 
-// SetNOP - Resets and configures the current instance
-// of NumStrNumberSymbolSpec as a NOP.
-//
-// NOP is a computer science term which stands for 'No Operation'
-// meaning it performs no operations and serves an empty
-// placeholder.
-//
-// This method is often used to configure implied positive number
-// signs in number string formatting. The positive number sign,
-// plus ('+'), is often implied for positive numeric values and
-// is not displayed in the number string.
-//
-// Call this method when creating implied positive number signs
-// for number strings.
-//
-// ----------------------------------------------------------------
-//
-// Input Parameters
-//
-//	NONE
-//
-// ------------------------------------------------------------------------
-//
-// Return Values
-//
-//	NONE
-func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetNOP() {
-
-	if nStrNumberSymbolSpec.lock == nil {
-		nStrNumberSymbolSpec.lock = new(sync.Mutex)
-	}
-
-	nStrNumberSymbolSpec.lock.Lock()
-
-	defer nStrNumberSymbolSpec.lock.Unlock()
-
-	new(numStrNumberSymbolSpecMolecule).empty(
-		nStrNumberSymbolSpec)
-
-	return
-}
-
-// SetTrailingNumberSymbol - Resets and configures a trailing
+// SetNumberSignTrailingSymbol - Resets and configures a trailing
 // number symbol character or characters for the current
 // instance of NumStrNumberSymbolSpec
 //
@@ -7316,7 +7316,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetNOP() {
 //	 Leading Symbols: "("
 //		Trailing Symbols: ")"
 //		Number String:   "(123.456)"
-func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetTrailingNumberSymbol(
+func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetNumberSignTrailingSymbol(
 	trailingNumberSymbol string,
 	trailingNumFieldSymPosition NumberFieldSymbolPosition,
 	errorPrefix interface{}) (
@@ -7336,7 +7336,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetTrailingNumberSymbol(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumStrNumberSymbolSpec."+
-			"SetTrailingNumberSymbol()",
+			"SetNumberSignTrailingSymbol()",
 		"")
 
 	if err != nil {
@@ -7355,7 +7355,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetTrailingNumberSymbol(
 	return err
 }
 
-// SetTrailingNumberSymbolRunes - Resets and configures a
+// SetNumberSignTrailingSymbolRunes - Resets and configures a
 // trailing number symbol character or characters for the
 // current instance of NumStrNumberSymbolSpec.
 //
@@ -7547,7 +7547,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetTrailingNumberSymbol(
 //	Leading Symbols: "("
 //	Trailing Symbols: ")"
 //	Number String:   "(123.456)"
-func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetTrailingNumberSymbolRunes(
+func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetNumberSignTrailingSymbolRunes(
 	trailingNumberSymbol []rune,
 	trailingNumFieldSymPosition NumberFieldSymbolPosition,
 	errorPrefix interface{}) (
@@ -7567,7 +7567,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetTrailingNumberSymbolRunes
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumStrNumberSymbolSpec."+
-			"SetTrailingNumberSymbolRunes()",
+			"SetNumberSignTrailingSymbolRunes()",
 		"")
 
 	if err != nil {

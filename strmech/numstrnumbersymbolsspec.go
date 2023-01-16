@@ -8071,7 +8071,7 @@ func (nStrNumSymbolsSpecNanobot *numStrNumberSymbolsSpecNanobot) setNegativeNumS
 	}
 
 	err = nStrNumSymbols.negativeNumberSign.
-		SetLeadingTrailingNumberSymbolRunes(
+		SetNumberSignLeadingTrailingSymbolRunes(
 			leadingNegativeNumberSymbols,
 			negativeNumFieldSymPosition,
 			trailingNegativeNumberSymbols,
@@ -8431,7 +8431,7 @@ func (nStrNumSymbolsSpecNanobot *numStrNumberSymbolsSpecNanobot) setPositiveNumS
 	}
 
 	err = nStrNumSymbols.positiveNumberSign.
-		SetLeadingTrailingNumberSymbolRunes(
+		SetNumberSignLeadingTrailingSymbolRunes(
 			leadingPositiveNumberSymbols,
 			positiveNumFieldSymPosition,
 			trailingPositiveNumberSymbols,
@@ -8783,7 +8783,7 @@ func (nStrNumSymbolsSpecNanobot *numStrNumberSymbolsSpecNanobot) setZeroNumSignR
 	}
 
 	err = nStrNumSymbols.zeroNumberSign.
-		SetLeadingTrailingNumberSymbolRunes(
+		SetNumberSignLeadingTrailingSymbolRunes(
 			leadingZeroNumberSymbols,
 			zeroNumFieldSymPosition,
 			trailingZeroNumberSymbols,
