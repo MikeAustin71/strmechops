@@ -9150,12 +9150,14 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetNOP() {
 // Leading number sign symbol characters can include such
 // symbols as plus signs ('+') or minus signs ('-').
 //
-// Currency symbols are configured separately using other
-// methods.
-//
 // Leading number sign symbol characters are intended for
 // use in formatting numeric values displayed in number
 // strings.
+//
+// This method is designed exclusively for configuring
+// Number Sign Symbols and NOT Currency Symbols.
+//
+// To configure Currency Symbols, use other methods.
 //
 // ----------------------------------------------------------------
 //
@@ -9404,12 +9406,14 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetNumberSignLeadingSymbol(
 // Leading number sign symbol characters can include such
 // symbols as plus signs ('+') or minus signs ('-').
 //
-// Currency symbols are configured separately using other
-// methods.
-//
 // Leading number symbol characters are intended for use
 // in formatting numeric values displayed in number
 // strings.
+//
+// This method is designed exclusively for configuring
+// Number Sign Symbols and NOT Currency Symbols.
+//
+// To configure Currency Symbols, use other methods.
 //
 // ----------------------------------------------------------------
 //
@@ -9659,12 +9663,14 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetNumberSignLeadingSymbolRu
 // include such symbols as plus signs ('+') or minus
 // signs ('-').
 //
-// Currency symbols are configured separately using other
-// methods.
-//
 // Leading and Trailing number symbols are intended for
 // use in formatting numeric values displayed in number
 // strings.
+//
+// This method is designed exclusively for configuring
+// Number Sign Symbols and NOT Currency Symbols.
+//
+// To configure Currency Symbols, use other methods.
 //
 // ----------------------------------------------------------------
 //
@@ -10038,12 +10044,14 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetNumberSignLeadingTrailing
 // include such symbols as plus signs ('+') or minus
 // signs ('-').
 //
-// Currency symbols are configured separately using other
-// methods.
-//
 // Leading and Trailing number symbols are intended for
 // use in formatting numeric values displayed in number
 // strings.
+//
+// This method is designed exclusively for configuring
+// Number Sign Symbols and NOT Currency Symbols.
+//
+// To configure Currency Symbols, use other methods.
 //
 // ----------------------------------------------------------------
 //
@@ -10309,42 +10317,42 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetNumberSignLeadingTrailing
 //
 // Example-1: Leading Number Sign Symbols
 //
-//	Leading Symbols: "+ "
+//	Leading Symbols: []rune{'+', ' '}
 //	Number String:   "+ 123.456"
 //
 // Example-2: Leading Number Sign Symbols
 //
-//	Leading Symbols: "+"
+//	Leading Symbols: []rune{'+'}
 //	Number String:   "+123.456"
 //
 // Example-3: Leading Number Sign Symbols
 //
-//	Leading Symbols: "- "
+//	Leading Symbols: []rune{'-', ' '}
 //	Number String:   "- 123.456"
 //
 // Example-4: Leading Number Sign Symbols
 //
-//	Leading Symbols: "-"
+//	Leading Symbols: []rune{'-'}
 //	Number String:   "-123.456"
 //
 // Example-5: Trailing Number Sign Symbols
 //
-//	Trailing Symbols: " +"
+//	Trailing Symbols: []rune{' ', '+'}
 //	Number String:   "123.456 +"
 //
 // Example-6: Trailing Number Sign Symbols
 //
-//	Trailing Symbols: "+"
+//	Trailing Symbols: []rune{'+'}
 //	Number String:   "123.456+"
 //
 // Example-7: Trailing Number Sign Symbols
 //
-//	Trailing Symbols: " -"
+//	Trailing Symbols: []rune{' ', '-'}
 //	Number String:   "123.456 -"
 //
 // Example-8: Trailing Number Symbols
 //
-//	Trailing Symbols: "-"
+//	Trailing Symbols: []rune{'-'}
 //	Number String:   "123.456-"
 //
 // Example-9: Trailing Number Symbols
@@ -10417,12 +10425,14 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetNumberSignLeadingTrailing
 // Trailing number sign symbol characters can include
 // such symbols as plus signs ('+') or minus signs ('-').
 //
-// Currency symbols are configured separately using other
-// methods.
-//
 // Trailing number sign symbol characters are intended
 // for use in formatting numeric values displayed in
 // number strings.
+//
+// This method is designed exclusively for configuring
+// Number Sign Symbols and NOT Currency Symbols.
+//
+// To configure Currency Symbols, use other methods.
 //
 // ----------------------------------------------------------------
 //
@@ -10679,12 +10689,14 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetNumberSignTrailingSymbol(
 // Trailing number sign symbol characters can include
 // such symbols as plus signs ('+') or minus signs ('-').
 //
-// Currency symbols are configured separately using other
-// methods.
-//
 // Trailing number sign symbol characters are intended
 // for use in formatting numeric values displayed in
 // number strings.
+//
+// This method is designed exclusively for configuring
+// Number Sign Symbols and NOT Currency Symbols.
+//
+// To configure Currency Symbols, use other methods.
 //
 // ----------------------------------------------------------------
 //
