@@ -1376,22 +1376,34 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyDefaultsEU(
 	return euCurrencySymbols, err
 }
 
-// NewCurrencyDefaultsUK
+// NewCurrencyDefaultsUKMinusInside
 //
 // Creates and returns a new instance of
 // NumStrNumberSymbolSpec configured with the default UK
 // (United Kingdom) currency symbol.
 //
-// The default Uk currency symbol is a leading pound
-// sign.
-//
-//	Example:
-//		£ 123.45
-//
 // The Number String Number Symbol Specification type
 // (NumStrNumberSymbolSpec) is designed to assist in
 // formatting numeric values as number strings for
 // screen displays, printing or file output.
+//
+// The default Uk currency symbol is a leading pound
+// sign ('£').
+//
+//	Example:
+//		£ 123.45  Positive Value
+//
+// This method will configure the pound sign ('£')
+// such that any minus sign configured for negative
+// numeric values will be inside the pound sign ('£').
+//
+//	Example:
+//		£ -123.45  Negative Value
+//
+// To generate a default configuration where the minus
+// sign is outside the pound sign ('£'), use method:
+//
+//	NumStrNumberSymbolSpec.NewCurrencyDefaultsUKMinusOutside()
 //
 // ----------------------------------------------------------------
 //
@@ -1446,18 +1458,23 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyDefaultsEU(
 //
 // # Return Values
 //
-//	usCurrencySymbols			NumStrNumberSymbolSpec
+//	ukCurrencySymbols			NumStrNumberSymbolSpec
 //
 //		If this method completes successfully, an
 //		instance of NumStrNumberSymbolSpec will be
-//		returned configured with the default US
-//		Currency Symbol.
+//		returned configured with the default UK
+//		(United Kingdom) Currency Symbol.
 //
-//		The default US currency symbol is a leading
-//		dollar sign.
+//		The default UK currency symbol is a leading
+//		pound sign ('£').
 //
-//			Example:
-//				$ 123.45
+//		Minus signs configured in association with
+//		this currency symbol will be positioned
+//		inside the pound sign ('£').
+//
+//			Examples:
+//				£ 123.45 	Positive Value
+//				£ -123.45	Negative Value
 //
 //	err								error
 //
@@ -1469,9 +1486,9 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyDefaultsEU(
 //		If an error message is returned, the text value of input
 //		parameter 'errorPrefix' will be inserted or prefixed at
 //		the beginning of the error message.
-func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyDefaultsUK(
+func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyDefaultsUKMinusInside(
 	errorPrefix interface{}) (
-	usCurrencySymbols NumStrNumberSymbolSpec,
+	ukCurrencySymbols NumStrNumberSymbolSpec,
 	err error) {
 
 	if nStrNumberSymbolSpec.lock == nil {
@@ -1488,21 +1505,167 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyDefaultsUK(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumStrNumberSymbolSpec."+
-			"NewCurrencyDefaultsUK()",
+			"NewCurrencyDefaultsUKMinusInside()",
 		"")
 
 	if err != nil {
-		return usCurrencySymbols, err
+		return ukCurrencySymbols, err
 
 	}
 
 	err = new(numStrNumberSymbolSpecMechanics).
-		setCurrencyDefaultsUS(
-			&usCurrencySymbols,
+		setCurrencyDefaultsUKMinusInside(
+			&ukCurrencySymbols,
 			ePrefix.XCpy(
-				"usCurrencySymbols"))
+				"ukCurrencySymbols"))
 
-	return usCurrencySymbols, err
+	return ukCurrencySymbols, err
+}
+
+// NewCurrencyDefaultsUKMinusOutside
+//
+// Creates and returns a new instance of
+// NumStrNumberSymbolSpec configured with the default UK
+// (United Kingdom) currency symbol.
+//
+// The Number String Number Symbol Specification type
+// (NumStrNumberSymbolSpec) is designed to assist in
+// formatting numeric values as number strings for
+// screen displays, printing or file output.
+//
+// The default Uk currency symbol is a leading pound
+// sign ('£').
+//
+//	Example:
+//		£ 123.45 - Positive Value
+//
+// This method will configure the pound sign ('£')
+// such that any minus sign configured for negative
+// numeric values will be outside the pound sign ('£').
+//
+//	Example:
+//		-£ 123.45 - Negative Value
+//
+// To generate a default configuration where the minus
+// sign is inside the pound sign ('£'), use method:
+//
+//	NumStrNumberSymbolSpec.NewCurrencyDefaultsUKMinusInside()
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix						interface{}
+//
+//		This object encapsulates error prefix text which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods
+//		listed as a method or function chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of the
+//		following types:
+//
+//		1. nil - A nil value is valid and generates an empty
+//		   collection of error prefix and error context
+//		   information.
+//
+//		2. string - A string containing error prefix information.
+//
+//		3. []string A one-dimensional slice of strings containing
+//		   error prefix information
+//
+//		4. [][2]string A two-dimensional slice of strings
+//		   containing error prefix and error context information.
+//
+//		5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		   from this object will be copied for use in error and
+//		   informational messages.
+//
+//		6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		   Information from this object will be copied for use in
+//		   error and informational messages.
+//
+//		7. IBasicErrorPrefix - An interface to a method generating
+//		   a two-dimensional slice of strings containing error
+//		   prefix and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible to one of
+//		the valid types listed above, it will be considered
+//		invalid and trigger the return of an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		the 'errpref' software package,
+//		"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	ukCurrencySymbols			NumStrNumberSymbolSpec
+//
+//		If this method completes successfully, an
+//		instance of NumStrNumberSymbolSpec will be
+//		returned configured with the default UK
+//		(United Kingdom) Currency Symbol.
+//
+//		Minus signs configured in association with
+//		this currency symbol will be positioned
+//		outside the pound sign ('£').
+//
+//		The default US currency symbol is a leading
+//		dollar sign.
+//
+//			Examples:
+//				£ 123.45 	- Positive Value
+//				-£ 123.45	- Negative Value
+//
+//	err								error
+//
+//		If this method completes successfully and no errors are
+//		encountered this return value is set to 'nil'. Otherwise,
+//		if errors are encountered, this return value will contain
+//		an appropriate error message.
+//
+//		If an error message is returned, the text value of input
+//		parameter 'errorPrefix' will be inserted or prefixed at
+//		the beginning of the error message.
+func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyDefaultsUKMinusOutside(
+	errorPrefix interface{}) (
+	ukCurrencySymbols NumStrNumberSymbolSpec,
+	err error) {
+
+	if nStrNumberSymbolSpec.lock == nil {
+		nStrNumberSymbolSpec.lock = new(sync.Mutex)
+	}
+
+	nStrNumberSymbolSpec.lock.Lock()
+
+	defer nStrNumberSymbolSpec.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumStrNumberSymbolSpec."+
+			"NewCurrencyDefaultsUKMinusOutside()",
+		"")
+
+	if err != nil {
+		return ukCurrencySymbols, err
+
+	}
+
+	err = new(numStrNumberSymbolSpecMechanics).
+		setCurrencyDefaultsUKMinusOutside(
+			&ukCurrencySymbols,
+			ePrefix.XCpy(
+				"ukCurrencySymbols"))
+
+	return ukCurrencySymbols, err
 }
 
 // NewCurrencyDefaultsUS

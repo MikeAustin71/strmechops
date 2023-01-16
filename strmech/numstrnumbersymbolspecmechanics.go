@@ -118,15 +118,22 @@ func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setCurrencyDefaultsEU
 				"currencySymbols<-Trailing Euro Sign"))
 }
 
-// setCurrencyDefaultsUK
+// setCurrencyDefaultsUKMinusInside
 //
 // Receives an instance of NumStrNumberSymbolSpec and
 // configures it with the default UK (United Kingdom)
 // currency symbol. The default UK currency symbol is
-// a leading pound sign.
+// a leading pound sign ('£').
 //
 //	Example:
-//		£ 123.45
+//		£ 123.45 - Positive Value
+//
+// This method will configure the pound sign ('£')
+// such that any minus sign configured for negative
+// numeric values will be inside the pound sign ('£').
+//
+//	Example:
+//		£ -123.45 - Negative Value
 //
 // ----------------------------------------------------------------
 //
@@ -139,10 +146,18 @@ func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setCurrencyDefaultsEU
 //		default UK (United Kingdom) currency symbol.
 //
 //		The default UK currency symbol is a leading
-//		pound sign.
+//		pound sign ('£').
 //
 //			Example:
-//				£ 123.45
+//				£ 123.45 - Positive Value
+//
+//		This method will configure the pound sign ('£')
+//		such that any minus sign configured for negative
+//		numeric values will be positioned inside the
+//		pound sign ('£').
+//
+//			Example:
+//				£ -123.45 - Negative Value
 //
 //	errPrefDto					*ePref.ErrPrefixDto
 //
@@ -175,7 +190,7 @@ func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setCurrencyDefaultsEU
 //		for input parameter 'errPrefDto' (error prefix)
 //		will be prefixed or attached at the beginning of
 //		the error message.
-func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setCurrencyDefaultsUK(
+func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setCurrencyDefaultsUKMinusInside(
 	currencySymbols *NumStrNumberSymbolSpec,
 	errPrefDto *ePref.ErrPrefixDto) error {
 
@@ -195,7 +210,126 @@ func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setCurrencyDefaultsUK
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
 		"numStrNumberSymbolSpecMechanics."+
-			"setCurrencyDefaultsUK()",
+			"setCurrencyDefaultsUKMinusInside()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if currencySymbols == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'currencySymbols' is invalid!\n"+
+			"'currencySymbols' is a nil pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	return new(numStrNumberSymbolSpecNanobot).
+		setLeadingCurrencySymbol(
+			currencySymbols,
+			[]rune{'£', ' '},
+			NumFieldSymPos.InsideNumField(),
+			CurrNumSignRelPos.OutsideNumSign(),
+			ePrefix.XCpy(
+				"currencySymbols<-Leading Pound Sign"))
+}
+
+// setCurrencyDefaultsUKMinusOutside
+//
+// Receives an instance of NumStrNumberSymbolSpec and
+// configures it with the default UK (United Kingdom)
+// currency symbol. The default UK currency symbol is
+// a leading pound sign ('£').
+//
+//	Example:
+//		£ 123.45 - Positive Value
+//
+// This method will configure the pound sign ('£')
+// such that any minus sign configured for negative
+// numeric values will be outside the pound sign ('£').
+//
+//	Example:
+//		-£ 123.45 - Negative Value
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	currencySymbols				*NumStrNumberSymbolSpec
+//
+//		A pointer to a NumStrNumberSymbolSpec instance.
+//		This instance will be reconfigured with the
+//		default UK (United Kingdom) currency symbol.
+//
+//		The default UK currency symbol is a leading
+//		pound sign ('£').
+//
+//			Example:
+//				£ 123.45 - Positive Value
+//
+//		This method will configure the pound sign ('£')
+//		such that any minus sign configured for negative
+//		numeric values will be positioned outside the
+//		pound sign ('£').
+//
+//			Example:
+//				-£ 123.45 - Negative Value
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setCurrencyDefaultsUKMinusOutside(
+	currencySymbols *NumStrNumberSymbolSpec,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if nStrNumSymSpecMech.lock == nil {
+		nStrNumSymSpecMech.lock = new(sync.Mutex)
+	}
+
+	nStrNumSymSpecMech.lock.Lock()
+
+	defer nStrNumSymSpecMech.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"numStrNumberSymbolSpecMechanics."+
+			"setCurrencyDefaultsUKMinusOutside()",
 		"")
 
 	if err != nil {
