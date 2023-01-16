@@ -30,8 +30,8 @@ type SourceCodeComments struct {
 //
 // # IMPORTANT
 //
-//	This method will delete and overwrite all pre-existing
-//	data values in the current instance of
+//	This method will delete, overwrite and reset all
+//	pre-existing data values in the current instance of
 //	IntegerSeparatorSpec.
 //
 // ----------------------------------------------------------------
