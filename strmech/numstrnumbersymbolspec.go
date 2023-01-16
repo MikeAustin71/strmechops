@@ -794,8 +794,98 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) GetCurrencyNumSignRelativePo
 }
 
 // GetLeadingNumberSymbolRunesDto
-// Returns a RuneArrayDto containing the leading number symbol
-// character or characters.
+//
+// Returns a RuneArrayDto containing the leading number
+// symbol character or characters configured for the
+// current instance of NumStrNumberSymbolSpec.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	RuneArrayDto
+//
+//		If this method completes successfully, this
+//		parameter will be returned with an encapsulated
+//		rune array containing the Leading Number Symbol
+//		characters for the current instance of
+//		NumStrNumberSymbolSpec.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
 func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) GetLeadingNumberSymbolRunesDto(
 	errorPrefix interface{}) (
 	RuneArrayDto,
@@ -817,7 +907,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) GetLeadingNumberSymbolRunesD
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumStrNumberSymbolSpec."+
-			"NewCurrencyDefaultsEU()",
+			"GetLeadingNumberSymbolRunesDto()",
 		"")
 
 	if err != nil {
@@ -833,8 +923,10 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) GetLeadingNumberSymbolRunesD
 }
 
 // GetLeadingNumberSymbolRunes
-// Returns a rune array containing the leading number symbol
-// character or characters.
+//
+// Returns a rune array containing the leading number
+// symbol character or characters configured for the
+// current instance of NumStrNumberSymbolSpec.
 func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) GetLeadingNumberSymbolRunes() []rune {
 
 	if nStrNumberSymbolSpec.lock == nil {
@@ -848,8 +940,11 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) GetLeadingNumberSymbolRunes(
 	return nStrNumberSymbolSpec.leadingNumberSymbols.GetRuneArray()
 }
 
-// GetLeadingNumberSymbolStr - Returns a string containing the
-// leading number symbol character or characters.
+// GetLeadingNumberSymbolStr
+//
+// Returns a string containing the leading number symbol
+// character or characters configured for the current
+// instance of NumStrNumberSymbolSpec.
 func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) GetLeadingNumberSymbolStr() string {
 
 	if nStrNumberSymbolSpec.lock == nil {
@@ -863,60 +958,62 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) GetLeadingNumberSymbolStr() 
 	return nStrNumberSymbolSpec.leadingNumberSymbols.GetCharacterString()
 }
 
-//		GetLeadingNumberSymbolPosition
+// GetLeadingNumberSymbolPosition
 //
-//		Returns an instance of NumberFieldSymbolPosition.
+// Returns an instance of NumberFieldSymbolPosition.
 //
-//		This enumeration value defines the position
-//		of the Leading Number Symbol relative to a
-//		Number Field in which a number string is
-//		displayed. Possible valid values are listed
-//		as follows:
+// This enumeration value defines the position
+// of the Leading Number Symbol relative to a
+// Number Field in which a number string is
+// displayed. Possible valid values are listed
+// as follows:
 //
-//		NumFieldSymPos.InsideNumField()
-//			Example-1:
-//				Number Field Length: 8
-//				Numeric Value: 123.45
-//				Number Symbol: leading minus sign ('-')
-//				Number Symbol Position: Inside Number Field
-//				Formatted Number String: " -123.45"
-//				Number Field Index:-------01234567
-//				Total Number String Length: 8
+//	NumFieldSymPos.InsideNumField()
 //
-//			Example-2:
-//				Number Field Length: 10
-//				Numeric Value: 123.45
-//				Number Symbol: before and after parentheses  ('()')
-//				Number Symbol Position: Outside Number Field
-//	         Number Text Justification: Centered
-//				Formatted Number String: " (123.45) "
-//				Number Field Index:-------0123456789
-//				Total Number String Length: 10
+//		Example-1:
+//			Number Field Length: 8
+//			Numeric Value: 123.45
+//			Number Symbol: leading minus sign ('-')
+//			Number Symbol Position: Inside Number Field
+//			Formatted Number String: " -123.45"
+//			Number Field Index:-------01234567
+//			Total Number String Length: 8
 //
-//			In this case the final length of the number string
-//			is defined by the Number Field length.
+//		Example-2:
+//			Number Field Length: 10
+//			Numeric Value: 123.45
+//			Number Symbol: before and after parentheses  ('()')
+//			Number Symbol Position: Outside Number Field
+//	     	Number Text Justification: Centered
+//			Formatted Number String: " (123.45) "
+//			Number Field Index:-------0123456789
+//			Total Number String Length: 10
 //
-//		NumFieldSymPos.OutsideNumField()
-//			Example-3:
-//				Number Field Length: 8
-//		     	Numeric Value: 123.45
-//		     	Number Symbol: leading minus sign ('-')
-//		     	Number Symbol Position: Outside Number Field
-//		     	Formatted Number String: "-  123.45"
-//				Number Field Index:-------012345678
-//				Total Number String Length: 9
+//		In this case the final length of the number string
+//		is defined by the Number Field length.
 //
-//			Example-4:
-//				Number Field Length: 8
-//				Numeric Value: 123.45
-//				Number Symbol: before and after parentheses  ('()')
-//				Number Symbol Position: Outside Number Field
-//				Formatted Number String: "( 123.45 )"
-//				Number Field Index:-------0123456789
-//				Total Number String Length: 10
+//	NumFieldSymPos.OutsideNumField()
 //
-//			In this case the final length of the number string
-//			is greater than the Number Field length.
+//		Example-3:
+//			Number Field Length: 8
+//	     	Numeric Value: 123.45
+//	     	Number Symbol: leading minus sign ('-')
+//	     	Number Symbol Position: Outside Number Field
+//	     	Formatted Number String: "-  123.45"
+//			Number Field Index:-------012345678
+//			Total Number String Length: 9
+//
+//		Example-4:
+//			Number Field Length: 8
+//			Numeric Value: 123.45
+//			Number Symbol: before and after parentheses  ('()')
+//			Number Symbol Position: Outside Number Field
+//			Formatted Number String: "( 123.45 )"
+//			Number Field Index:-------0123456789
+//			Total Number String Length: 10
+//
+//		In this case the final length of the number string
+//		is greater than the Number Field length.
 //
 // ----------------------------------------------------------------
 //
@@ -1023,8 +1120,98 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) GetNumStrSymbolPosition() Nu
 }
 
 // GetTrailingNumberSymbolRunesDto
-// Returns a RuneArrayDto containing the trailing number symbol
-// character or characters.
+//
+// Returns a RuneArrayDto containing the trailing number
+// symbol character or characters configured for the
+// current instance of NumStrNumberSymbolSpec.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	RuneArrayDto
+//
+//		If this method completes successfully, this
+//		parameter will be returned with an encapsulated
+//		rune array containing the Trailing Number Symbol
+//		characters for the current instance of
+//		NumStrNumberSymbolSpec.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
 func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) GetTrailingNumberSymbolRunesDto(
 	errorPrefix interface{}) (
 	RuneArrayDto,
@@ -1062,8 +1249,9 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) GetTrailingNumberSymbolRunes
 }
 
 // GetTrailingNumberSymbolRunes
-// Returns a rune array containing the trailing number symbol
-// character or characters.
+// Returns a rune array containing the trailing number
+// symbol character or characters configured for the
+// current instance of NumStrNumberSymbolSpec.
 func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) GetTrailingNumberSymbolRunes() []rune {
 
 	if nStrNumberSymbolSpec.lock == nil {
@@ -1077,8 +1265,11 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) GetTrailingNumberSymbolRunes
 	return nStrNumberSymbolSpec.trailingNumberSymbols.GetRuneArray()
 }
 
-// GetTrailingNumberSymbolStr - Returns a string containing the
-// trailing number symbol character or characters.
+// GetTrailingNumberSymbolStr
+//
+// Returns a string containing the trailing number symbol
+// character or characters configured for the current
+// instance of NumStrNumberSymbolSpec.
 func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) GetTrailingNumberSymbolStr() string {
 
 	if nStrNumberSymbolSpec.lock == nil {
@@ -1092,63 +1283,65 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) GetTrailingNumberSymbolStr()
 	return nStrNumberSymbolSpec.trailingNumberSymbols.GetCharacterString()
 }
 
-//		GetTrailingNumberSymbolPosition
+// GetTrailingNumberSymbolPosition
 //
-//		Returns an instance of NumberFieldSymbolPosition.
+// Returns an instance of NumberFieldSymbolPosition.
 //
-//		This enumeration value defines the position
-//		of the Trailing Number Symbol relative to a
-//		Number Field in which a number string is
-//		displayed. Possible valid values are listed
-//		as follows:
+// This enumeration value defines the position
+// of the Trailing Number Symbol relative to a
+// Number Field in which a number string is
+// displayed. Possible valid values are listed
+// as follows:
 //
-//		NumFieldSymPos.InsideNumField()
-//			Example-1:
-//				Number Field Length: 8
-//				Numeric Value: 123.45
-//				Number Symbol: trailing minus sign ('-')
-//				Number Symbol Position: Inside Number Field
-//	         Number Text Justification: Right
-//				Formatted Number String: " 123.45-"
-//				Number Field Index:-------01234567
-//				Total Number String Length: 8
+//	NumFieldSymPos.InsideNumField()
 //
-//			Example-2:
-//				Number Field Length: 10
-//				Numeric Value: 123.45
-//				Number Symbol: before and after parentheses  ('()')
-//				Number Symbol Position: Outside Number Field
-//	         Number Text Justification: Centered
-//				Formatted Number String: " (123.45) "
-//				Number Field Index:-------0123456789
-//				Total Number String Length: 10
+//		Example-1:
+//			Number Field Length: 8
+//			Numeric Value: 123.45
+//			Number Symbol: trailing minus sign ('-')
+//			Number Symbol Position: Inside Number Field
+//	     Number Text Justification: Right
+//			Formatted Number String: " 123.45-"
+//			Number Field Index:-------01234567
+//			Total Number String Length: 8
 //
-//			In this case the final length of the number string
-//			is defined by the Number Field length.
+//		Example-2:
+//			Number Field Length: 10
+//			Numeric Value: 123.45
+//			Number Symbol: before and after parentheses  ('()')
+//			Number Symbol Position: Outside Number Field
+//	     Number Text Justification: Centered
+//			Formatted Number String: " (123.45) "
+//			Number Field Index:-------0123456789
+//			Total Number String Length: 10
 //
-//		NumFieldSymPos.OutsideNumField()
-//			Example-3:
-//				Number Field Length: 8
-//		     	Numeric Value: 123.45
-//		     	Number Symbol: trailing minus sign ('-')
-//		     	Number Symbol Position: Outside Number Field
-//	         Number Text Justification: Right
-//		     	Formatted Number String: "  123.45-"
-//				Number Field Index:-------012345678
-//				Total Number String Length: 9
+//		In this case the final length of the number string
+//		is defined by the Number Field length.
 //
-//			Example-4:
-//				Number Field Length: 8
-//				Numeric Value: 123.45
-//				Number Symbol: before and after parentheses  ('()')
-//				Number Symbol Position: Outside Number Field
-//	         Number Text Justification: Centered
-//				Formatted Number String: "( 123.45 )"
-//				Number Field Index:-------0123456789
-//				Total Number String Length: 10
+//	NumFieldSymPos.OutsideNumField()
 //
-//			In this case the final length of the number string
-//			is greater than the Number Field length.
+//		Example-3:
+//			Number Field Length: 8
+//	     	Numeric Value: 123.45
+//	     	Number Symbol: trailing minus sign ('-')
+//	     	Number Symbol Position: Outside Number Field
+//	     Number Text Justification: Right
+//	     	Formatted Number String: "  123.45-"
+//			Number Field Index:-------012345678
+//			Total Number String Length: 9
+//
+//		Example-4:
+//			Number Field Length: 8
+//			Numeric Value: 123.45
+//			Number Symbol: before and after parentheses  ('()')
+//			Number Symbol Position: Outside Number Field
+//	     Number Text Justification: Centered
+//			Formatted Number String: "( 123.45 )"
+//			Number Field Index:-------0123456789
+//			Total Number String Length: 10
+//
+//		In this case the final length of the number string
+//		is greater than the Number Field length.
 //
 // ----------------------------------------------------------------
 //
@@ -1184,6 +1377,10 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) GetTrailingNumberSymbolPosit
 //	NumStrNumberSymbolSpec is engaged, valid and
 //	operational with respect to the application of a
 //	number symbol.
+//
+//	NOP is a computer science term which stands for
+//	'No Operation' meaning it performs no operations
+//	and serves an empty placeholder.
 //
 //	If 'IsNOP' is set to 'true', it signals that this
 //	Number String Number Symbol Specification is simply
@@ -4122,20 +4319,21 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyTrailingSymbolRun
 }
 
 // NewNOP - Returns a new, empty instance of
-// NumStrNumberSymbolSpec. This instance is designed to serve as
-// an empty placeholder or NOP.
+// NumStrNumberSymbolSpec. This instance is designed to
+// serve as an empty placeholder or NOP.
 //
-// NOP is a computer science term which stands for 'No Operation'
-// meaning it performs no operations and serves an empty
-// placeholder.
+// NOP is a computer science term which stands for
+// 'No Operation' meaning it performs no operations and
+// serves an empty placeholder.
 //
-// This method is often used to configure implied positive number
-// signs in number string formatting. The positive number sign,
-// plus ('+'), is often implied for positive numeric values and
-// is not displayed in the number string.
+// This method is often used to configure implied
+// positive number signs in number string formatting. The
+// positive number sign, plus ('+'), is often implied for
+// positive numeric values and is not displayed in the
+// number string.
 //
-// Call this method when creating implied positive number signs
-// for number strings.
+// Call this method when creating implied positive number
+// signs for number strings.
 //
 // ----------------------------------------------------------------
 //
