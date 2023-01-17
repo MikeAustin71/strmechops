@@ -1313,6 +1313,70 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) IsNOP() bool {
 	return false
 }
 
+//	IsNOPCurrencySymbols
+//
+//	'NOP' stands for 'No Operation'.
+//
+//	This method returns a boolean value signaling whether
+//	the Currency Symbol Specification contained in the
+//	current NumStrNumberSymbolGroup instance is engaged,
+//	valid and fully operational with respect to Number
+//	String Formatting operations.
+//
+//	If this method returns 'true', it signals that the
+//	Currency Symbol Specification is simply an empty
+//	placeholder and performs no active role in, and is
+//	completely ignored by, Number String Formatting
+//	algorithms.
+//
+//	When 'NOP' is 'true', no Currency Symbols will be
+//	inserted or formatted as part of a Number String
+//	formatting operation.
+//
+//	If this method returns 'false', it signals that the
+//	Currency Symbol Specification is fully populated,
+//	valid and functional. When 'NOP' is 'false', Number
+//	String Formatting operations WILL INCLUDE Currency
+//	Symbols in formatted number strings.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	NONE
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	bool
+//
+//		If this method returns 'true', it signals that
+//		the Currency Symbol Specification is simply an
+//		empty placeholder and performs no active role in,
+//		and is completely ignored by, Number String
+//		Formatting algorithms. This means, no Negative
+//		Number Symbols will be inserted or formatted as
+//		part of a Number String formatting operation.
+//
+//		If this method returns 'false', it signals that
+//		the Currency Symbol Specification is fully
+//		populated, valid and functional. In this case,
+//		Number String Formatting WILL INCLUDE Currency
+//		Symbols in formatted number strings.
+func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) IsNOPCurrencySymbols() bool {
+
+	if nStrNumSymbolsGroup.lock == nil {
+		nStrNumSymbolsGroup.lock = new(sync.Mutex)
+	}
+
+	nStrNumSymbolsGroup.lock.Lock()
+
+	defer nStrNumSymbolsGroup.lock.Unlock()
+
+	return nStrNumSymbolsGroup.currencySymbol.IsNOP()
+}
+
 //	IsNOPNegativeNumSymbols
 //
 //	'NOP' stands for 'No Operation'.
@@ -3966,6 +4030,58 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetNOP() {
 	return
 }
 
+//	SetNOPCurrencySymbol
+//
+//	'NOP' stands for 'No Operation'.
+//
+//	When called, this method will convert the Currency
+//	Symbol Specification in the current instance of
+//	NumStrNumberSymbolGroup to a NOP or 'No Operation'.
+//	This means that the Currency Symbol Specification is
+//	simply an empty placeholder and performs no active
+//	role in, and is completely ignored by, Number String
+//	Formatting algorithms.
+//
+//	After conversion to NOP, no Currency Symbols will be
+//	inserted or formatted as part of a Number String
+//	formatting operation.
+//
+//	To determine the status of NOP for the current
+//	instance of NumStrNumberSymbolGroup, use the following
+//	methods:
+//
+//		NumStrNumberSymbolGroup.IsNOP()
+//		NumStrNumberSymbolGroup.IsNOPNegativeNumSymbols()
+//		NumStrNumberSymbolGroup.IsNOPPositiveNumSymbols()
+//		NumStrNumberSymbolGroup.IsNOPZeroNumSymbols()
+//		NumStrNumberSymbolGroup.IsNOPCurrencySymbol()
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	NONE
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	NONE
+func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetNOPCurrencySymbol() {
+
+	if nStrNumSymbolsGroup.lock == nil {
+		nStrNumSymbolsGroup.lock = new(sync.Mutex)
+	}
+
+	nStrNumSymbolsGroup.lock.Lock()
+
+	defer nStrNumSymbolsGroup.lock.Unlock()
+
+	nStrNumSymbolsGroup.currencySymbol.SetNOP()
+
+	return
+}
+
 //	SetNOPNegativeNumSymbol
 //
 //	'NOP' stands for 'No Operation'.
@@ -4118,58 +4234,6 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetNOPZeroNumSymbol() {
 	defer nStrNumSymbolsGroup.lock.Unlock()
 
 	nStrNumSymbolsGroup.zeroNumberSign.SetNOP()
-
-	return
-}
-
-//	SetNOPCurrencySymbol
-//
-//	'NOP' stands for 'No Operation'.
-//
-//	When called, this method will convert the Currency
-//	Symbol Specification in the current instance of
-//	NumStrNumberSymbolGroup to a NOP or 'No Operation'.
-//	This means that the Currency Symbol Specification is
-//	simply an empty placeholder and performs no active
-//	role in, and is completely ignored by, Number String
-//	Formatting algorithms.
-//
-//	After conversion to NOP, no Currency Symbols will be
-//	inserted or formatted as part of a Number String
-//	formatting operation.
-//
-//	To determine the status of NOP for the current
-//	instance of NumStrNumberSymbolGroup, use the following
-//	methods:
-//
-//		NumStrNumberSymbolGroup.IsNOP()
-//		NumStrNumberSymbolGroup.IsNOPNegativeNumSymbols()
-//		NumStrNumberSymbolGroup.IsNOPPositiveNumSymbols()
-//		NumStrNumberSymbolGroup.IsNOPZeroNumSymbols()
-//		NumStrNumberSymbolGroup.IsNOPCurrencySymbol()
-//
-// ----------------------------------------------------------------
-//
-// # Input Parameters
-//
-//	NONE
-//
-// ----------------------------------------------------------------
-//
-// # Return Values
-//
-//	NONE
-func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetNOPCurrencySymbol() {
-
-	if nStrNumSymbolsGroup.lock == nil {
-		nStrNumSymbolsGroup.lock = new(sync.Mutex)
-	}
-
-	nStrNumSymbolsGroup.lock.Lock()
-
-	defer nStrNumSymbolsGroup.lock.Unlock()
-
-	nStrNumSymbolsGroup.currencySymbol.SetNOP()
 
 	return
 }
@@ -7269,6 +7333,12 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) copyNumSymbols(
 
 	new(numStrNumberSymbolGroupNanobot).empty(destinationNumSymbols)
 
+	if sourceNumSymbols.IsNOP() {
+		// Nothing to do. All data values
+		// are set to their zero states.
+		return err
+	}
+
 	err = destinationNumSymbols.positiveNumberSign.CopyIn(
 		&sourceNumSymbols.positiveNumberSign,
 		ePrefix.XCpy(
@@ -7294,6 +7364,16 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) copyNumSymbols(
 		ePrefix.XCpy(
 			"destinationNumSymbols<-"+
 				"sourceNumSymbols.zeroNumberSign"))
+
+	if err != nil {
+		return err
+	}
+
+	err = destinationNumSymbols.currencySymbol.CopyIn(
+		&sourceNumSymbols.currencySymbol,
+		ePrefix.XCpy(
+			"destinationNumSymbols<-"+
+				"sourceNumSymbols.currencySymbol"))
 
 	return err
 }
@@ -7857,6 +7937,8 @@ func (nStrNumSymbolGroupNanobot *numStrNumberSymbolGroupNanobot) empty(
 	nStrNumSymbols.negativeNumberSign.Empty()
 
 	nStrNumSymbols.zeroNumberSign.Empty()
+
+	nStrNumSymbols.currencySymbol.Empty()
 }
 
 //	equal
@@ -7936,6 +8018,12 @@ func (nStrNumSymbolGroupNanobot *numStrNumberSymbolGroupNanobot) equal(
 
 	if !nNumSymbols1.zeroNumberSign.Equal(
 		&nNumSymbols2.zeroNumberSign) {
+
+		return false
+	}
+
+	if !nNumSymbols1.currencySymbol.Equal(
+		&nNumSymbols2.currencySymbol) {
 
 		return false
 	}
@@ -9160,4 +9248,56 @@ func (nStrNumSymbolGroupAtom *numStrNumberSymbolGroupAtom) emptyZeroNumSymbols(
 	}
 
 	nStrNumSymbols.zeroNumberSign.Empty()
+}
+
+//	emptyCurrencySymbols
+//
+//	Deletes and resets the Currency Symbol Specification
+//	to its zero or uninitialized state.
+//
+//	The Currency Symbol Specification object is a member
+//	variable in the 'nStrNumSymbols' instance passed as
+//	an input parameter.
+//
+//		nStrNumSymbols.currencySymbol
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	All data values contained in the Currency Symbol
+//	Specification will be deleted and reset to their
+//	zero or uninitialized values. This Currency Symbol
+//	Specification member variable is identified as:
+//
+//		nStrNumSymbols.currencySymbol
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	NONE
+//
+// -----------------------------------------------------------------
+//
+// # Return Values
+//
+//	NONE
+func (nStrNumSymbolGroupAtom *numStrNumberSymbolGroupAtom) emptyCurrencySymbols(
+	nStrNumSymbols *NumStrNumberSymbolGroup) {
+
+	if nStrNumSymbolGroupAtom.lock == nil {
+		nStrNumSymbolGroupAtom.lock = new(sync.Mutex)
+	}
+
+	nStrNumSymbolGroupAtom.lock.Lock()
+
+	defer nStrNumSymbolGroupAtom.lock.Unlock()
+
+	if nStrNumSymbols == nil {
+
+		return
+	}
+
+	nStrNumSymbols.currencySymbol.Empty()
 }

@@ -127,12 +127,7 @@ func (nStrNumSymSpecMolecule *numStrNumberSymbolSpecMolecule) copyNStrNumberSymb
 		return err
 	}
 
-	nStrNumSymSpecAtom := nStrNumberSymbolSpecAtom{}
-
-	nStrNumSymSpecAtom.emptyLeadingNStrNumSymbol(
-		destinationNumSymbolSpec)
-
-	nStrNumSymSpecAtom.emptyTrailingNStrNumSymbol(
+	new(numStrNumberSymbolSpecMolecule).empty(
 		destinationNumSymbolSpec)
 
 	err = destinationNumSymbolSpec.leadingNumberSymbols.
@@ -146,12 +141,21 @@ func (nStrNumSymSpecMolecule *numStrNumberSymbolSpecMolecule) copyNStrNumberSymb
 		return err
 	}
 
+	destinationNumSymbolSpec.leadingNumberFieldSymbolPosition =
+		sourceNumSymbolSpec.leadingNumberFieldSymbolPosition
+
 	err = destinationNumSymbolSpec.trailingNumberSymbols.
 		CopyIn(
 			&sourceNumSymbolSpec.trailingNumberSymbols,
 			ePrefix.XCpy(
 				"destinationNumSymbolSpec.trailingNumberSymbols<-"+
 					"sourceNumSymbolSpec"))
+
+	destinationNumSymbolSpec.trailingNumberFieldSymbolPosition =
+		sourceNumSymbolSpec.trailingNumberFieldSymbolPosition
+
+	destinationNumSymbolSpec.currencyNumSignRelativePos =
+		sourceNumSymbolSpec.currencyNumSignRelativePos
 
 	return err
 }
