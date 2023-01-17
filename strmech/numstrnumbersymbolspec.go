@@ -9,14 +9,29 @@ import (
 //
 // The Number String Number Symbol Specification,
 // 'NumStrNumberSymbolSpec' contains specifications
-// used to construct and format numeric values in
-// number strings for screen displays, file output
-// and printing.
+// for number symbols used to construct and format
+// numeric values in number strings for screen displays,
+// file output and printing.
+//
+// Each valid instance of 'NumStrNumberSymbolSpec'
+// will specify one of two types of number symbols:
+//
+//	(1)	Number Signs
+//
+//		Number signs such as the minus sign
+//		('-'), plus sign ('+') or surrounding
+//		parentheses ('()') used to designate negative
+//		numeric values.
+//
+//	(2)	Currency Symbols
+//
+//		Currency symbols such as the the Dollar sign
+//		('$'), Euro sign ('€') or Pound sign ('£').
 //
 // # Background
 //
 // The Number String Number Symbol Specification
-// (Type 'NumStrNumberSymbolSpec') typically defines
+// (Type 'NumStrNumberSymbolSpec') defines either
 // Currency Symbols or Number Sign Symbols.
 //
 // Examples of Currency Symbols include dollar signs
@@ -2946,7 +2961,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyLeadingSymbolRune
 // screen displays, printing or file output.
 //
 // Examples of Currency Symbol characters include such
-// symbols as the dollar sign ('$'), Euro sign ('€') or
+// symbols as the Dollar sign ('$'), Euro sign ('€') or
 // Pound sign ('£').
 //
 // Leading currency symbols are prefixed or prepended
