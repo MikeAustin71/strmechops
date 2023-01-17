@@ -1935,8 +1935,8 @@ func (numStrFmtSpec *NumStrFormatSpec) IsValidInstance() bool {
 //		If no error prefix information is needed, set this
 //		parameter to 'nil'.
 //
-//		This empty interface must be convertible to one of
-//		the following types:
+//		This empty interface must be convertible to one
+//		of the following types:
 //
 //		1.	nil
 //				A nil value is valid and generates an
