@@ -1443,6 +1443,63 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) IsNOP() bool {
 	return !isValid
 }
 
+//	IsValidInstance
+//
+//	Performs a diagnostic review of the data values
+//	encapsulated in the current NumStrNumberSymbolSpec
+//	instance to determine if they are valid.
+//
+//	If any data element evaluates as invalid, this
+//	method will return a boolean value of 'false'.
+//
+//	If all data elements are determined to be valid,
+//	this method returns a boolean value of 'true'.
+//
+//	This method is functionally equivalent to
+//	NumStrNumberSymbolSpec.IsValidInstanceError() with
+//	the sole exceptions being that this method takes
+//	no input parameters and returns a boolean value.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	-- NONE --
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	bool
+//
+//		If any of the internal data values contained in
+//		the current instance of NumStrNumberSymbolSpec
+//		are found to be invalid, this method will return
+//		a boolean value	of 'false'.
+//
+//		If all internal member data values contained in
+//		the current instance of NumStrNumberSymbolSpec
+//		are found to be valid, this method returns a
+//		boolean value of 'true'.
+func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) IsValidInstance() bool {
+
+	if nStrNumberSymbolSpec.lock == nil {
+		nStrNumberSymbolSpec.lock = new(sync.Mutex)
+	}
+
+	nStrNumberSymbolSpec.lock.Lock()
+
+	defer nStrNumberSymbolSpec.lock.Unlock()
+
+	isValid,
+		_ := new(nStrNumberSymbolSpecAtom).
+		testValidityNumStrNumberSymbolSpec(
+			nStrNumberSymbolSpec,
+			nil)
+
+	return isValid
+}
+
 // NewCurrencyDefaultsEU
 //
 // Creates and returns a new instance of
