@@ -539,6 +539,57 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) Empty() {
 	nStrNumSymbolsGroup.lock = nil
 }
 
+//	EmptyCurrencySymbols
+//
+//	Deletes and resets the Currency Symbol Specification
+//	to its zero or uninitialized state.
+//
+//	The target Currency Symbol Specification object is a
+//	member variable contained in the current instance of
+//	NumStrNumberSymbolGroup.
+//
+//	This action will put the Currency Symbol
+//	Specification into a NOP or No Operation state. In
+//	this state, the Currency Symbol Specification will be
+//	treated as an empty placeholder and ignored by Number
+//	String Formatting operations.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will modify the current instance of
+//	NumStrNumberSymbolGroup.
+//
+//	The Currency Symbol Specification member variable
+//	data values will be reset to their zero or
+//	uninitialized states.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	NONE
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	NONE
+func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) EmptyCurrencySymbols() {
+
+	if nStrNumSymbolsGroup.lock == nil {
+		nStrNumSymbolsGroup.lock = new(sync.Mutex)
+	}
+
+	nStrNumSymbolsGroup.lock.Lock()
+
+	defer nStrNumSymbolsGroup.lock.Unlock()
+
+	new(numStrNumberSymbolGroupAtom).emptyCurrencySymbols(
+		nStrNumSymbolsGroup)
+}
+
 //	EmptyNegativeNumSymbols
 //
 //	Deletes and resets the Negative Number Sign Symbol
