@@ -13,7 +13,7 @@ import (
 // numeric values in number strings for screen displays,
 // file output and printing.
 //
-// Each valid instance of 'NumStrNumberSymbolSpec'
+// Each valid instance of Type 'NumStrNumberSymbolSpec'
 // will specify one of two types of number symbols:
 //
 //	(1)	Number Signs
@@ -23,10 +23,18 @@ import (
 //		parentheses ('()') used to designate negative
 //		numeric values.
 //
+//		Number Sign Symbols are configured with methods
+//		labeled "Number Sign"
+//
+//						OR
+//
 //	(2)	Currency Symbols
 //
-//		Currency symbols such as the the Dollar sign
+//		Currency Symbols such as the the Dollar sign
 //		('$'), Euro sign ('€') or Pound sign ('£').
+//
+//		Currency Symbols are configured with methods
+//		labeled "Currency"
 //
 // # Background
 //
@@ -76,37 +84,35 @@ import (
 //		Number String:   "-123.456"
 //
 //	Example-5: Leading Currency Symbols
-//		Leading Currency Symbols for Positive Values
 //
 //		Leading Currency Symbols: "$ "
 //		Number String:   "$ 123.456"
 //
 //	Example-6: Leading Currency Symbols
-//		Leading Currency Symbols for Positive Values
 //
 //		Leading Currency Symbols: "$"
 //		Number String:   "$123.456"
 //
-//	Example-7: Trailing Number Symbols
+//	Example-7: Trailing Number Sign Symbols
 //		Trailing Number Sign Symbols for Positive Values
 //
 //		Trailing Number Sign Symbols: " +"
 //		Number String:   "123.456 +"
 //
 //	Example-8: Trailing Number Symbols
-//		Trailing Number Symbols for Positive Values
+//		Trailing Number Sign Symbols for Positive Values
 //
 //		Trailing Number Sign Symbols: "+"
 //		Number String:   "123.456+"
 //
 //	Example-9: Trailing Number Symbols
-//		Trailing Number Symbols for Negative Values
+//		Trailing Number Sign Symbols for Negative Values
 //
 //		Trailing Number Sign Symbols: " -"
 //		Number String:   "123.456 -"
 //
 //	Example-10: Trailing Number Symbols
-//		Trailing Number Symbols for Negative Values
+//		Trailing Number Sign Symbols for Negative Values
 //
 //		Trailing Number Sign Symbols: "-"
 //		Number String:   "123.456-"
@@ -117,7 +123,7 @@ import (
 //		Trailing Currency Symbols: "€"
 //		Number String:   "123.456€"
 //
-//	Example-12: Leading AND Trailing Number Symbols
+//	Example-12: Leading AND Trailing Number Sign Symbols
 //		Leading AND Trailing Number Sign Symbols for
 //		Negative Values
 //
@@ -157,7 +163,7 @@ type NumStrNumberSymbolSpec struct {
 	//			Number Symbol: leading minus sign ('-')
 	//			Number Symbol Position: Inside Number Field
 	//			Formatted Number String: " -123.45"
-	//			Number Field Index:       01234567
+	//			Number Field Index:-------01234567
 	//			Total Number String Length: 8
 	//
 	//		Example-2:
@@ -167,7 +173,7 @@ type NumStrNumberSymbolSpec struct {
 	//			Number Symbol Position: Outside Number Field
 	//          Number Text Justification: Centered
 	//			Formatted Number String: " (123.45) "
-	//			Number Field Index:       0123456789
+	//			Number Field Index:-------0123456789
 	//			Total Number String Length: 10
 	//
 	//		In this case the final length of the number string
@@ -180,7 +186,7 @@ type NumStrNumberSymbolSpec struct {
 	//	     	Number Symbol: leading minus sign ('-')
 	//	     	Number Symbol Position: Outside Number Field
 	//	     	Formatted Number String: "-  123.45"
-	//			Number Field Index:  012345678
+	//			Number Field Index:-------012345678
 	//			Total Number String Length: 9
 	//
 	//		Example-4:
@@ -189,7 +195,7 @@ type NumStrNumberSymbolSpec struct {
 	//			Number Symbol: before and after parentheses  ('()')
 	//			Number Symbol Position: Outside Number Field
 	//			Formatted Number String: "( 123.45 )"
-	//			Number Field Index:  0123456789
+	//			Number Field Index:-------0123456789
 	//			Total Number String Length: 10
 	//
 	//		In this case the final length of the number string
@@ -228,7 +234,7 @@ type NumStrNumberSymbolSpec struct {
 	//			Number Symbol Position: Inside Number Field
 	//          Number Text Justification: Right
 	//			Formatted Number String: " 123.45-"
-	//			Number Field Index:       01234567
+	//			Number Field Index:-------01234567
 	//			Total Number String Length: 8
 	//
 	//		Example-2:
@@ -238,7 +244,7 @@ type NumStrNumberSymbolSpec struct {
 	//			Number Symbol Position: Outside Number Field
 	//          Number Text Justification: Centered
 	//			Formatted Number String: " (123.45) "
-	//			Number Field Index:       0123456789
+	//			Number Field Index:-------0123456789
 	//			Total Number String Length: 10
 	//
 	//		In this case the final length of the number string
@@ -252,7 +258,7 @@ type NumStrNumberSymbolSpec struct {
 	//	     	Number Symbol Position: Outside Number Field
 	//          Number Text Justification: Right
 	//	     	Formatted Number String: "  123.45-"
-	//			Number Field Index:       012345678
+	//			Number Field Index:-------012345678
 	//			Total Number String Length: 9
 	//
 	//		Example-4:
@@ -262,13 +268,13 @@ type NumStrNumberSymbolSpec struct {
 	//			Number Symbol Position: Outside Number Field
 	//          Number Text Justification: Centered
 	//			Formatted Number String: "( 123.45 )"
-	//			Number Field Index:       0123456789
+	//			Number Field Index:-------0123456789
 	//			Total Number String Length: 10
 	//
 	//		In this case the final length of the number string
 	//		is greater than the Number Field length.
 
-	currencyNumSignRelativePosition CurrencyNumSignRelativePosition
+	currencyNumSignRelativePos CurrencyNumSignRelativePosition
 	// The Currency Number Sign Relative Position is used
 	// exclusively by Currency Symbol Specifications and
 	// only applies to currency symbols such as dollar
@@ -295,20 +301,60 @@ type NumStrNumberSymbolSpec struct {
 	// string.
 	//
 	// Examples CurrNumSignRelPos.OutsideNumSign()
+	//	Currency Symbol Outside of Number Sign
+	//
 	//		"$ -123.45"
 	//		"123.45- €"
 	//
 	// Examples CurrNumSignRelPos.InsideNumSign()
+	//	Currency Symbol Inside Of Number Sign
 	//
 	//	Examples:
 	//		"- $123.45"
 	//		"123.45€ -"
 	//
 	// Be Advised -
-	//	If the currency symbol is formatted Outside a
-	//	Number Field and the number sign symbol is
-	//	formatted Inside a Number Field, this
-	//	parameter will be ignored.
+	//
+	//		NumberFieldSymbolPosition Conflicts
+	//
+	//		When formatting a number string, the
+	//		NumberFieldSymbolPosition values for both the
+	//		Currency Symbol and the Number Sign Symbol
+	//		MUST BE EQUAL before the Currency Number Sign
+	//		Relative Position parameter,
+	//		('currencyNumSignRelativePos'), will be
+	//		activated and applied to the number string
+	//		formatting algorithm.
+	//
+	//		If the NumberFieldSymbolPosition values for
+	//		both the Currency Symbol and the Number Sign
+	//		Symbol ARE NOT EQUAL, the
+	//		NumberFieldSymbolPosition parameter controls
+	//		and the Currency Number Sign Relative
+	//		Position parameter,
+	//		('currencyNumSignRelativePos'), will be
+	//		ignored.
+	//
+	//		Example:
+	//
+	//			-- NumberFieldSymbolPosition Values NOT EQUAL --
+	//
+	//			Number Field Length: 8
+	//		  	Numeric Value: -123.45
+	//			Minus Sign Number Field Symbol Position:
+	//				NumFieldSymPos.InsideNumField()
+	//			Currency Number Field Symbol Position:
+	//				NumFieldSymPos.OutsideNumField()
+	//			Currency Number Sign Relative Position:
+	//				CurrNumSignRelPos.InsideNumSign()
+	//			Leading Currency Symbol: Dollar sign ('$')
+	//			Number Text Justification: Right
+	//			Formatted Number String: "$ -123.45"
+	//			Number Field Index:-------012345678
+	//			Total Number String Length: 9
+	//
+	//			Currency Symbol is Formatted OUTSIDE
+	//			the Number Field.
 
 	lock *sync.Mutex
 }
@@ -761,7 +807,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) Equal(
 //
 // Returns the current value of NumStrNumberSymbolSpec
 // internal member variable,
-// 'currencyNumSignRelativePosition'.
+// 'currencyNumSignRelativePos'.
 //
 // The Currency Number Sign Relative Position is used
 // exclusively by Currency Symbol Specifications.
@@ -805,7 +851,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) GetCurrencyNumSignRelativePo
 
 	defer nStrNumberSymbolSpec.lock.Unlock()
 
-	return nStrNumberSymbolSpec.currencyNumSignRelativePosition
+	return nStrNumberSymbolSpec.currencyNumSignRelativePos
 }
 
 // GetLeadingNumberSymbolRunesDto
@@ -2275,6 +2321,9 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyDefaultsUS(
 //			Number Field Index:-------012345678
 //			Total Number String Length: 9
 //
+//			Currency Symbol is Formatted OUTSIDE
+//			the Number Field.
+//
 // ----------------------------------------------------------------
 //
 // # Input Parameters
@@ -2433,6 +2482,9 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyDefaultsUS(
 //			Formatted Number String: "$ -123.45"
 //			Number Field Index:-------012345678
 //			Total Number String Length: 9
+//
+//			Currency Symbol is Formatted OUTSIDE
+//			the Number Field.
 //
 //	errorPrefix						interface{}
 //
@@ -2653,6 +2705,9 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyLeadingSymbol(
 //			Number Field Index:-------012345678
 //			Total Number String Length: 9
 //
+//			Currency Symbol is Formatted OUTSIDE
+//			the Number Field.
+//
 // ----------------------------------------------------------------
 //
 // # Input Parameters
@@ -2811,6 +2866,9 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyLeadingSymbol(
 //			Formatted Number String: "$ -123.45"
 //			Number Field Index:-------012345678
 //			Total Number String Length: 9
+//
+//			Currency Symbol is Formatted OUTSIDE
+//			the Number Field.
 //
 //	errorPrefix						interface{}
 //
@@ -3035,6 +3093,9 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyLeadingSymbolRune
 //			Number Field Index:-------012345678
 //			Total Number String Length: 9
 //
+//			Currency Symbol is Formatted OUTSIDE
+//			the Number Field.
+//
 // ----------------------------------------------------------------
 //
 // # Input Parameters
@@ -3216,6 +3277,9 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyLeadingSymbolRune
 //			Formatted Number String: "$ -123.45"
 //			Number Field Index:-------012345678
 //			Total Number String Length: 9
+//
+//			Currency Symbol is Formatted OUTSIDE
+//			the Number Field.
 //
 //	errorPrefix						interface{}
 //
@@ -3444,6 +3508,9 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyLeadingTrailingSy
 //			Number Field Index:-------012345678
 //			Total Number String Length: 9
 //
+//			Currency Symbol is Formatted OUTSIDE
+//			the Number Field.
+//
 // ----------------------------------------------------------------
 //
 // # Input Parameters
@@ -3625,6 +3692,9 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyLeadingTrailingSy
 //			Formatted Number String: "$ -123.45"
 //			Number Field Index:-------012345678
 //			Total Number String Length: 9
+//
+//			Currency Symbol is Formatted OUTSIDE
+//			the Number Field.
 //
 //	errorPrefix						interface{}
 //
@@ -3848,6 +3918,9 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyLeadingTrailingSy
 //			Number Field Index:-------012345678
 //			Total Number String Length: 9
 //
+//			Currency Symbol is Formatted OUTSIDE
+//			the Number Field.
+//
 // ----------------------------------------------------------------
 //
 // # Input Parameters
@@ -4004,6 +4077,9 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyLeadingTrailingSy
 //			Formatted Number String: "$ -123.45"
 //			Number Field Index:-------012345678
 //			Total Number String Length: 9
+//
+//			Currency Symbol is Formatted OUTSIDE
+//			the Number Field.
 //
 //	errorPrefix						interface{}
 //
@@ -4223,6 +4299,9 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyTrailingSymbol(
 //			Number Field Index:-------012345678
 //			Total Number String Length: 9
 //
+//			Currency Symbol is Formatted OUTSIDE
+//			the Number Field.
+//
 // ----------------------------------------------------------------
 //
 // # Input Parameters
@@ -4379,6 +4458,9 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyTrailingSymbol(
 //			Formatted Number String: "$ -123.45"
 //			Number Field Index:-------012345678
 //			Total Number String Length: 9
+//
+//			Currency Symbol is Formatted OUTSIDE
+//			the Number Field.
 //
 //	errorPrefix						interface{}
 //
@@ -7037,6 +7119,9 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewSignedNumDefaultsUSParen(
 //			Number Field Index:-------012345678
 //			Total Number String Length: 9
 //
+//			Currency Symbol is Formatted OUTSIDE
+//			the Number Field.
+//
 // ----------------------------------------------------------------
 //
 // # IMPORTANT
@@ -7203,6 +7288,9 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewSignedNumDefaultsUSParen(
 //			Formatted Number String: "$ -123.45"
 //			Number Field Index:-------012345678
 //			Total Number String Length: 9
+//
+//			Currency Symbol is Formatted OUTSIDE
+//			the Number Field.
 //
 //	errorPrefix						interface{}
 //
@@ -7415,6 +7503,9 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetCurrencyLeadingSymbol(
 //			Number Field Index:-------012345678
 //			Total Number String Length: 9
 //
+//			Currency Symbol is Formatted OUTSIDE
+//			the Number Field.
+//
 // ----------------------------------------------------------------
 //
 // # IMPORTANT
@@ -7581,6 +7672,9 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetCurrencyLeadingSymbol(
 //			Formatted Number String: "$ -123.45"
 //			Number Field Index:-------012345678
 //			Total Number String Length: 9
+//
+//			Currency Symbol is Formatted OUTSIDE
+//			the Number Field.
 //
 //	errorPrefix						interface{}
 //
@@ -7797,6 +7891,9 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetCurrencyLeadingSymbolRune
 //			Number Field Index:-------012345678
 //			Total Number String Length: 9
 //
+//			Currency Symbol is Formatted OUTSIDE
+//			the Number Field.
+//
 // ----------------------------------------------------------------
 //
 // # IMPORTANT
@@ -7986,6 +8083,9 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetCurrencyLeadingSymbolRune
 //			Formatted Number String: "$ -123.45"
 //			Number Field Index:-------012345678
 //			Total Number String Length: 9
+//
+//			Currency Symbol is Formatted OUTSIDE
+//			the Number Field.
 //
 //	errorPrefix						interface{}
 //
@@ -8206,6 +8306,9 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetCurrencyLeadingTrailingSy
 //			Number Field Index:-------012345678
 //			Total Number String Length: 9
 //
+//			Currency Symbol is Formatted OUTSIDE
+//			the Number Field.
+//
 // ----------------------------------------------------------------
 //
 // # IMPORTANT
@@ -8396,6 +8499,9 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetCurrencyLeadingTrailingSy
 //			Number Field Index:-------012345678
 //			Total Number String Length: 9
 //
+//			Currency Symbol is Formatted OUTSIDE
+//			the Number Field.
+//
 //	errorPrefix						interface{}
 //
 //		This object encapsulates error prefix text which
@@ -8550,9 +8656,9 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetCurrencyLeadingTrailingSy
 //		A pointer to a NumStrNumberSymbolSpec instance.
 //		The Currency Number Sign Relative Position member
 //		variable contained in this instance
-//		(currencyNumSignRelativePosition) will be deleted
+//		(currencyNumSignRelativePos) will be deleted
 //		and reset to the value specified by input parameter,
-//		'currencyNumSignRelativePosition'.
+//		'currencyNumSignRelPos'.
 //
 //	currencyNumSignRelPos		CurrencyNumSignRelativePosition
 //
@@ -8631,6 +8737,9 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetCurrencyLeadingTrailingSy
 //			Formatted Number String: "$ -123.45"
 //			Number Field Index:-------012345678
 //			Total Number String Length: 9
+//
+//			Currency Symbol is Formatted OUTSIDE
+//			the Number Field.
 //
 //	errorPrefix					interface{}
 //
@@ -8822,6 +8931,9 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetCurrencyNumSignRelPos(
 //			Number Field Index:-------012345678
 //			Total Number String Length: 9
 //
+//			Currency Symbol is Formatted OUTSIDE
+//			the Number Field.
+//
 // ----------------------------------------------------------------
 //
 // # IMPORTANT
@@ -8987,7 +9099,10 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetCurrencyNumSignRelPos(
 //			Number Field Index:-------012345678
 //			Total Number String Length: 9
 //
-// //
+//			Currency Symbol is Formatted OUTSIDE
+//			the Number Field.
+//
+//
 //
 //	errorPrefix						interface{}
 //
@@ -9200,6 +9315,9 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetCurrencyTrailingSymbol(
 //			Number Field Index:-------012345678
 //			Total Number String Length: 9
 //
+//			Currency Symbol is Formatted OUTSIDE
+//			the Number Field.
+//
 // ----------------------------------------------------------------
 //
 // # IMPORTANT
@@ -9364,6 +9482,9 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetCurrencyTrailingSymbol(
 //			Formatted Number String: "$ -123.45"
 //			Number Field Index:-------012345678
 //			Total Number String Length: 9
+//
+//			Currency Symbol is Formatted OUTSIDE
+//			the Number Field.
 //
 //	errorPrefix						interface{}
 //

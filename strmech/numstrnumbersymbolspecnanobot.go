@@ -338,7 +338,7 @@ func (nStrNumSymSpecNanobot *numStrNumberSymbolSpecNanobot) setLeadingCurrencySy
 		return err
 	}
 
-	currencySymbols.currencyNumSignRelativePosition =
+	currencySymbols.currencyNumSignRelativePos =
 		currencyNumSignRelPos
 
 	return err
@@ -728,7 +728,7 @@ func (nStrNumSymSpecNanobot *numStrNumberSymbolSpecNanobot) setLeadingTrailingCu
 		return err
 	}
 
-	currencySymbols.currencyNumSignRelativePosition =
+	currencySymbols.currencyNumSignRelativePos =
 		currencyNumSignRelPos
 
 	return err
@@ -1047,7 +1047,7 @@ func (nStrNumSymSpecNanobot *numStrNumberSymbolSpecNanobot) setTrailingCurrencyS
 		return err
 	}
 
-	currencySymbols.currencyNumSignRelativePosition =
+	currencySymbols.currencyNumSignRelativePos =
 		currencyNumSignRelPos
 
 	return err

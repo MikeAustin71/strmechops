@@ -129,7 +129,7 @@ func (nStrNumSymSpecAtom *nStrNumberSymbolSpecAtom) emptyCurrNumSignRelPos(
 		return
 	}
 
-	nStrNumSymbolSpec.currencyNumSignRelativePosition =
+	nStrNumSymbolSpec.currencyNumSignRelativePos =
 		CurrNumSignRelPos.None()
 }
 
@@ -215,8 +215,8 @@ func (nStrNumSymSpecAtom *nStrNumberSymbolSpecAtom) equal(
 		return false
 	}
 
-	if nStrNumSymbolSpec1.currencyNumSignRelativePosition !=
-		nStrNumSymbolSpec2.currencyNumSignRelativePosition {
+	if nStrNumSymbolSpec1.currencyNumSignRelativePos !=
+		nStrNumSymbolSpec2.currencyNumSignRelativePos {
 
 		return false
 	}

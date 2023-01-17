@@ -232,8 +232,8 @@ func (nStrNumSymSpecMolecule *numStrNumberSymbolSpecMolecule) empty(
 //		A pointer to a NumStrNumberSymbolSpec instance.
 //		The Currency Number Sign Relative Position value
 //		contained in this instance
-//		(currencyNumSignRelativePosition) will be deleted
-//		and reset to the value specified by input parameter,
+//		(currencyNumSignRelativePos) will be deleted and
+//		reset to the value specified by input parameter,
 //		'currencyNumSignRelPos'.
 //
 //	currencyNumSignRelPos		CurrencyNumSignRelativePosition
@@ -342,8 +342,8 @@ func (nStrNumSymSpecMolecule *numStrNumberSymbolSpecMolecule) setCurrencyNumSign
 
 		err = fmt.Errorf("%v\n"+
 			"Error: Input parameter 'currencyNumSignRelPos' is invalid!\n"+
-			" currencyNumSignRelativePosition String Value = %v\n"+
-			"currencyNumSignRelativePosition Integer Value = %v\n",
+			" currencyNumSignRelativePos String Value = %v\n"+
+			"currencyNumSignRelativePos Integer Value = %v\n",
 			ePrefix.String(),
 			currencyNumSignRelPos.String(),
 			currencyNumSignRelPos.XValueInt())
@@ -351,7 +351,7 @@ func (nStrNumSymSpecMolecule *numStrNumberSymbolSpecMolecule) setCurrencyNumSign
 		return err
 	}
 
-	numSymbolSpec.currencyNumSignRelativePosition =
+	numSymbolSpec.currencyNumSignRelativePos =
 		currencyNumSignRelPos
 
 	return err
