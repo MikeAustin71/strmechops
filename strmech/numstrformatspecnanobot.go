@@ -561,7 +561,7 @@ func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setCurrencyNStrFmtFrance(
 		lock:                              nil,
 	}
 
-	var numSymbols NumStrNumberSymbolsSpec
+	var numSymbols NumStrNumberSymbolGroup
 
 	err = numSymbols.negativeNumberSign.CopyIn(
 		&negativeNumberSign,
@@ -925,7 +925,7 @@ func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setCurrencyNStrFmtGermany(
 		lock:                              nil,
 	}
 
-	var numSymbols NumStrNumberSymbolsSpec
+	var numSymbols NumStrNumberSymbolGroup
 
 	err = numSymbols.negativeNumberSign.CopyIn(
 		&negativeNumberSign,
@@ -1265,7 +1265,7 @@ func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setCurrencyNStrFmtUK(
 		lock:                              nil,
 	}
 
-	var numSymbols NumStrNumberSymbolsSpec
+	var numSymbols NumStrNumberSymbolGroup
 
 	err = numSymbols.negativeNumberSign.CopyIn(
 		&negativeNumberSign,
@@ -1605,7 +1605,7 @@ func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setCurrencyNStrFmtUSMinus(
 		lock:                              nil,
 	}
 
-	var numSymbols NumStrNumberSymbolsSpec
+	var numSymbols NumStrNumberSymbolGroup
 
 	err = numSymbols.negativeNumberSign.CopyIn(
 		&negativeNumberSign,
@@ -1945,7 +1945,7 @@ func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setCurrencyNStrFmtUSParen(
 		lock:                              nil,
 	}
 
-	var numSymbols NumStrNumberSymbolsSpec
+	var numSymbols NumStrNumberSymbolGroup
 
 	err = numSymbols.negativeNumberSign.CopyIn(
 		&negativeNumberSign,
@@ -2813,7 +2813,7 @@ func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtFrance(
 		lock:                              nil,
 	}
 
-	var numSymbols NumStrNumberSymbolsSpec
+	var numSymbols NumStrNumberSymbolGroup
 
 	err = numSymbols.negativeNumberSign.CopyIn(
 		&negativeNumberSign,
@@ -3131,7 +3131,7 @@ func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtGermany(
 		lock:                              nil,
 	}
 
-	var numSymbols NumStrNumberSymbolsSpec
+	var numSymbols NumStrNumberSymbolGroup
 
 	err = numSymbols.negativeNumberSign.CopyIn(
 		&negativeNumberSign,
@@ -3428,7 +3428,7 @@ func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtUS(
 		lock:                              nil,
 	}
 
-	var numSymbols NumStrNumberSymbolsSpec
+	var numSymbols NumStrNumberSymbolGroup
 
 	err = numSymbols.negativeNumberSign.CopyIn(
 		&negativeNumberSign,
@@ -3709,10 +3709,10 @@ func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setSignedPureNStrSpec(
 		return err
 	}
 
-	var numSymbolsSpec NumStrNumberSymbolsSpec
+	var numSymbolsSpec NumStrNumberSymbolGroup
 
 	numSymbolsSpec,
-		err = new(NumStrNumberSymbolsSpec).NewSimpleSignedNumber(
+		err = new(NumStrNumberSymbolGroup).NewSimpleSignedNumber(
 		leadingNumSymbols,
 		ePrefix.XCpy(
 			"numSymbolsSpec<-"))
@@ -4052,10 +4052,10 @@ func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setSimpleFormatSpec(
 			NewNoIntegerSeparation()
 	}
 
-	var numSymbolsSpec NumStrNumberSymbolsSpec
+	var numSymbolsSpec NumStrNumberSymbolGroup
 
 	numSymbolsSpec,
-		err = new(NumStrNumberSymbolsSpec).NewSimpleCurrency(
+		err = new(NumStrNumberSymbolGroup).NewSimpleCurrency(
 		currencySymbols,
 		leadingNumSymbols,
 		ePrefix.XCpy(

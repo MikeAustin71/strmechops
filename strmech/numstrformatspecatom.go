@@ -984,9 +984,9 @@ func (numStrFmtSpecAtom *numStrFmtSpecAtom) setNegativeNumberSignSpec(
 //		integer grouping and separation within a Number
 //		String.
 //
-//	numberSymbolsSpec					NumStrNumberSymbolsSpec
+//	numberSymbolsSpec					NumStrNumberSymbolGroup
 //
-//		This instance of NumStrNumberSymbolsSpec contains the
+//		This instance of NumStrNumberSymbolGroup contains the
 //		Number Symbol Specifications for negative numeric
 //		values, positive numeric values and zero numeric
 //		values.
@@ -1088,7 +1088,7 @@ func (numStrFmtSpecAtom *numStrFmtSpecAtom) setNStrFmtComponents(
 	numStrFmtSpec *NumStrFormatSpec,
 	decSeparatorSpec DecimalSeparatorSpec,
 	intSeparatorSpec IntegerSeparatorSpec,
-	numberSymbolsSpec NumStrNumberSymbolsSpec,
+	numberSymbolsSpec NumStrNumberSymbolGroup,
 	numberFieldSpec NumStrNumberFieldSpec,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
@@ -1472,7 +1472,7 @@ func (numStrFmtSpecAtom *numStrFmtSpecAtom) setNumberFieldSpec(
 //	Receives a pointer to an instance of NumStrFormatSpec
 //	and proceeds to reconfigure all the internal member
 //	variable data values based on an instance of
-//	NumStrNumberSymbolsSpec passed as an input parameter.
+//	NumStrNumberSymbolGroup passed as an input parameter.
 //
 // ----------------------------------------------------------------
 //
@@ -1495,10 +1495,10 @@ func (numStrFmtSpecAtom *numStrFmtSpecAtom) setNumberFieldSpec(
 //		be replaced by data values configured from the
 //		input parameters described below.
 //
-//	numberSymbolSpec			NumStrNumberSymbolsSpec
+//	numberSymbolSpec			NumStrNumberSymbolGroup
 //
-//		An instance of NumStrNumberSymbolsSpec which is used
-//		to reconfigure the NumStrNumberSymbolsSpec member
+//		An instance of NumStrNumberSymbolGroup which is used
+//		to reconfigure the NumStrNumberSymbolGroup member
 //		variable contained in input parameter,
 //		'numStrFmtSpec'.
 //
@@ -1535,7 +1535,7 @@ func (numStrFmtSpecAtom *numStrFmtSpecAtom) setNumberFieldSpec(
 //		the error message.
 func (numStrFmtSpecAtom *numStrFmtSpecAtom) setNumberSymbolSpec(
 	numStrFmtSpec *NumStrFormatSpec,
-	numberSymbolSpec NumStrNumberSymbolsSpec,
+	numberSymbolSpec NumStrNumberSymbolGroup,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
 

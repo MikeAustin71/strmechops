@@ -123,7 +123,19 @@ import (
 //		Trailing Currency Symbols: "€"
 //		Number String:   "123.456€"
 //
-//	Example-12: Leading AND Trailing Number Sign Symbols
+//	Example-12: Trailing Currency Symbols
+//		Trailing Currency Symbols for Positive Values
+//
+//		Trailing Currency Symbols: " €"
+//		Number String:   "123.456 €"
+//
+//	Example-13: Trailing Currency Symbols
+//		Trailing Currency Symbols for Negative Values
+//
+//		Trailing Currency Symbols: " €"
+//		Number String:   "123.456- €"
+//
+//	Example-14: Leading AND Trailing Number Sign Symbols
 //		Leading AND Trailing Number Sign Symbols for
 //		Negative Values
 //

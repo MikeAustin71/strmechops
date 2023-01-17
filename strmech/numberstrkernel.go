@@ -6690,14 +6690,14 @@ func (numStrKernel *NumberStrKernel) FmtNumStr(
 //		integer grouping and separation within a Number
 //		String.
 //
-//	numberSymbolsSpec  			NumStrNumberSymbolsSpec
+//	numberSymbolsSpec  			NumStrNumberSymbolGroup
 //
-//		This instance of NumStrNumberSymbolsSpec contains the
+//		This instance of NumStrNumberSymbolGroup contains the
 //		Number Symbol Specifications for negative numeric
 //		values, positive numeric values and zero numeric
 //		values.
 //
-//		type NumStrNumberSymbolsSpec struct {
+//		type NumStrNumberSymbolGroup struct {
 //
 //			negativeNumberSign NumStrNumberSymbolSpec
 //
@@ -7200,7 +7200,7 @@ func (numStrKernel *NumberStrKernel) FmtNumStr(
 func (numStrKernel *NumberStrKernel) FmtNumStrComponents(
 	decSeparatorSpec DecimalSeparatorSpec,
 	intSeparatorSpec IntegerSeparatorSpec,
-	numberSymbolsSpec NumStrNumberSymbolsSpec,
+	numberSymbolsSpec NumStrNumberSymbolGroup,
 	numberFieldSpec NumStrNumberFieldSpec,
 	roundingSpec NumStrRoundingSpec,
 	errorPrefix interface{}) (

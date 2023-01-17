@@ -221,17 +221,17 @@ type NumStrFormatSpec struct {
 	//							"5672.1234567"
 	//		}
 
-	numberSymbolsSpec NumStrNumberSymbolsSpec
+	numberSymbolsSpec NumStrNumberSymbolGroup
 	//	This member variable is used to configure Number
 	//	Symbols required in converting numeric values to
 	//	Number Strings.
 	//
-	//	NumStrNumberSymbolsSpec contains three instances of
+	//	NumStrNumberSymbolGroup contains three instances of
 	//	NumStrNumberSymbolSpec defining the Number
 	//	Symbols to be used with positive numeric values,
 	//	negative numeric values and zero numeric values.
 	//
-	//	type NumStrNumberSymbolsSpec struct {
+	//	type NumStrNumberSymbolGroup struct {
 	//
 	//		negativeNumberSign NumStrNumberSymbolSpec
 	//
@@ -4768,14 +4768,14 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencySimple(
 //		integer grouping and separation within a Number
 //		String.
 //
-//	numberSymbolsSpec  				NumStrNumberSymbolsSpec
+//	numberSymbolsSpec  				NumStrNumberSymbolGroup
 //
-//		This instance of NumStrNumberSymbolsSpec contains the
+//		This instance of NumStrNumberSymbolGroup contains the
 //		Number Symbol Specifications for negative numeric
 //		values, positive numeric values and zero numeric
 //		values.
 //
-//		type NumStrNumberSymbolsSpec struct {
+//		type NumStrNumberSymbolGroup struct {
 //
 //			negativeNumberSign NumStrNumberSymbolSpec
 //
@@ -5046,7 +5046,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencySimple(
 func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtComponents(
 	decSeparatorSpec DecimalSeparatorSpec,
 	intSeparatorSpec IntegerSeparatorSpec,
-	numberSymbolsSpec NumStrNumberSymbolsSpec,
+	numberSymbolsSpec NumStrNumberSymbolGroup,
 	numberFieldSpec NumStrNumberFieldSpec,
 	errorPrefix interface{}) (
 	newSignedNumFmtSpec NumStrFormatSpec,
@@ -10576,7 +10576,7 @@ func (numStrFmtSpec *NumStrFormatSpec) SetNumFmtComponents(
 		return err
 	}
 
-	var numSymbols NumStrNumberSymbolsSpec
+	var numSymbols NumStrNumberSymbolGroup
 
 	err = numSymbols.negativeNumberSign.CopyIn(
 		&negativeNumberSign,

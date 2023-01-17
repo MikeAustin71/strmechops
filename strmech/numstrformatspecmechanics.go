@@ -829,7 +829,7 @@ func (nStrFmtSpecMechanics *numStrFmtSpecMechanics) setCurrencyNStrFmtBasic(
 
 	}
 
-	var numSymbols NumStrNumberSymbolsSpec
+	var numSymbols NumStrNumberSymbolGroup
 
 	err = numSymbols.negativeNumberSign.CopyIn(
 		&negativeNumberSign,
