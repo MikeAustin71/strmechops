@@ -798,63 +798,204 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) Equal(
 		incomingNumSymbols)
 }
 
-//	GetNegativeNumberSignSpec
+//	GetCurrencySymbolSpec
 //
-//	Returns a deep copy of the NumStrNumberSymbolSpec
-//	configured for negative number signs.
+//	Returns a deep copy of the Currency Symbol
+//	Specification configured for the current instance of
+//	NumStrNumberSymbolGroup.
 //
-//	The Number String Negative Number Sign
-//	Specification is used to configure negative
-//	number sign symbols for negative numeric
-//	values formatted and displayed in number
-//	stings.
+//	The Currency Symbol	Specification is used to define
+//	and format currency symbols in number strings.
 //
-//	For currency presentations, the currency
-//	symbol is combined with the negative number
-//	sign.
+//	Example-1: Leading Currency Symbols
 //
-//	Example-1: Leading Number Symbols
-//		Leading Number Symbols for Negative Values
+//		Leading Symbols: "$"
+//		Number String:   "$123.456"
 //
-//		Leading Symbols: "- "
-//		Number String:   "- 123.456"
+//	Example-2: Leading Currency Symbols
 //
-//	Example-2: Leading Number Symbols With Currency
-//		Leading Number Symbols for Negative Values
+//		Leading Symbols: "$ "
+//		Number String:   "$ 123.456"
 //
-//		Leading Symbols: "$-"
-//		Number String:   "$-123.456"
+//	Example-3: Trailing Currency Symbols
 //
+//		Trailing Symbols: "€"
+//		Number String:   "123.456€"
 //
-//	Example-3: Trailing Number Symbols
-//		Trailing Number Symbols for Negative Values
+//	Example-4: Trailing Currency Symbols
 //
-//		Trailing Symbols: " -"
-//		Number String:   "123.456 -"
-//
-//	Example-4: Trailing Number Symbols
-//		Trailing Number Symbols for Negative Values
-//
-//		Trailing Symbols: "-$"
-//		Number String:   "123.456-€"
+//		Trailing Symbols: " €"
+//		Number String:   "123.456 €"
 //
 // ----------------------------------------------------------------
 //
 // # Input Parameters
 //
-//	 errorPrefix                interface{}
+//	errorPrefix					interface{}
 //
 //		This object encapsulates error prefix text which
 //		is included in all returned error messages.
-//		Usually, it	contains the name of the calling
+//		Usually, it contains the name of the calling
 //		method or methods listed as a method or function
 //		chain of execution.
 //
-//		If no error prefix information is needed, set this
-//		parameter to 'nil'.
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
 //
-//		This empty interface must be convertible to one of
-//		the following types:
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	currencySymbolSpec			NumStrNumberSymbolSpec
+//
+//		If this method completes successfully, this
+//		parameter will return a deep copy of the
+//		Currency Symbol	Specification contained in the
+//		current instance of	NumStrNumberSymbolGroup.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) GetCurrencySymbolSpec(
+	errorPrefix interface{}) (
+	currencySymbolSpec NumStrNumberSymbolSpec,
+	err error) {
+
+	if nStrNumSymbolsGroup.lock == nil {
+		nStrNumSymbolsGroup.lock = new(sync.Mutex)
+	}
+
+	nStrNumSymbolsGroup.lock.Lock()
+
+	defer nStrNumSymbolsGroup.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumStrNumberSymbolGroup."+
+			"GetCurrencySymbolSpec()",
+		"")
+
+	if err != nil {
+		return currencySymbolSpec, err
+	}
+
+	currencySymbolSpec,
+		err = nStrNumSymbolsGroup.negativeNumberSign.CopyOut(
+		ePrefix.XCpy(
+			"currencySymbolSpec<-"))
+
+	return currencySymbolSpec, err
+}
+
+//	GetNegativeNumberSignSpec
+//
+//	Returns an instance of NumStrNumberSymbolSpec
+//	representing deep copy of the Negative Number Sign
+//	Specification contained in the current instance of
+//	NumStrNumberSymbolGroup.
+//
+//	The Negative Number Sign Specification is used to
+//	configure negative number sign symbols for negative
+//	numeric values formatted and displayed in number
+//	stings.
+//
+//	Example-1: Leading Negative Number Sign Symbols
+//
+//		Leading Symbols: "- "
+//		Number String:   "- 123.456"
+//
+//	Example-2: Leading Negative Number Sign Symbols
+//
+//		Leading Symbols: "-"
+//		Number String:   "-123.456"
+//
+//	Example-3: Trailing Negative Number Sign Symbols
+//
+//		Trailing Symbols: " -"
+//		Number String:   "123.456 -"
+//
+//	Example-4: Trailing Negative Number Sign Symbols
+//
+//		Trailing Symbols: "-"
+//		Number String:   "123.456-"
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
 //
 //		1.	nil
 //				A nil value is valid and generates an
@@ -908,11 +1049,9 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) Equal(
 //	negativeNumSignSpec			NumStrNumberSymbolSpec
 //
 //		If this method completes successfully, this
-//		parameter will return a new, fully populated
-//		instance of NumStrNumberSymbolSpec configured
-//		with the Negative Number Sign Symbol configured
-//		for the current instance of
-//		NumStrNumberSymbolGroup.
+//		parameter will return a deep copy of the Negative
+//		Number Sign Symbol Specification configured for
+//		the current instance of NumStrNumberSymbolGroup.
 //
 //	err							error
 //
@@ -962,73 +1101,53 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) GetNegativeNumberSignSpec(
 
 //	GetPositiveNumberSignSpec
 //
-//	Returns a deep copy of the NumStrNumberSymbolSpec
-//	configured for positive number signs.
+//	Returns a deep copy of the Positive Number Sign
+//	Specification contained in the current instance of
+//	NumStrNumberSymbolGroup.
 //
 //	Positive number signs are commonly implied
 //	and not specified. However, the user has
 //	the option to specify a positive number sign
 //	character or characters for positive numeric
-//	values using a Number String Positive Number
-//	Sign Specification.
+//	values using a Positive Number Sign Specification.
 //
-//	For currency presentations, the currency
-//	symbol is combined with the positive number
-//	sign.
-//
-//	Example-1: Leading Number Symbols
-//		Leading Number Symbols for Positive Values
+//	Example-1: Leading Positive Number Sign Symbols
 //
 //		Leading Symbols: "+ "
 //		Number String:   "+ 123.456"
 //
-//	Example-2: Leading Number Symbols
-//		Leading Number Symbols for Positive Values
+//	Example-2: Leading Positive Number Sign Symbols
 //
-//		Leading Symbols: "$+"
-//		Number String:   "$+123.456"
+//		Leading Symbols: "+"
+//		Number String:   "+123.456"
 //
-//	Example-3: Leading Number Symbols
-//		Leading Number Symbols for Positive Values
-//
-//		Leading Symbols: "$"
-//		Number String:   "$123.456"
-//
-//	Example-4: Trailing Number Symbols
-//		Trailing Number Symbols for Positive Values
+//	Example-3: Trailing Positive Number Sign Symbols
 //
 //		Trailing Symbols: " +"
 //		Number String:   "123.456 +"
 //
-//	Example-5: Trailing Number Symbols
-//		Trailing Number Symbols for Positive Values
+//	Example-4: Trailing Positive Number Sign Symbols
 //
-//		Trailing Symbols: "+€"
-//		Number String:   "123.456+€"
-//
-//	Example-6: Trailing Number Symbols
-//		Trailing Number Symbols for Positive Values
-//
-//		Trailing Symbols: " €"
-//		Number String:   "123.456 €"
+//		Trailing Symbols: "+"
+//		Number String:   "123.456+"
 //
 // ----------------------------------------------------------------
 //
 // # Input Parameters
 //
-//	 errorPrefix                interface{}
+//	errorPrefix					interface{}
 //
 //		This object encapsulates error prefix text which
 //		is included in all returned error messages.
-//		Usually, it	contains the name of the calling
+//		Usually, it contains the name of the calling
 //		method or methods listed as a method or function
 //		chain of execution.
 //
-//		If no error prefix information is needed, set this
-//		parameter to 'nil'.
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
 //
-//		This empty interface must be convertible to one of
-//		the following types:
+//		This empty interface must be convertible to one
+//		of the following types:
 //
 //		1.	nil
 //				A nil value is valid and generates an
@@ -1082,11 +1201,9 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) GetNegativeNumberSignSpec(
 //	positiveNumSignSpec			NumStrNumberSymbolSpec
 //
 //		If this method completes successfully, this
-//		parameter will return a new, fully populated
-//		instance of NumStrNumberSymbolSpec configured
-//		with the Positive Number Sign Symbol configured
-//		for the current instance of
-//		NumStrNumberSymbolGroup.
+//		parameter will return a deep copy of the Positive
+//		Number Sign	Symbol configured for the current
+//		instance of	NumStrNumberSymbolGroup.
 //
 //	err							error
 //
@@ -1136,56 +1253,60 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) GetPositiveNumberSignSpec(
 
 //	GetZeroNumberSignSpec
 //
-//	Returns a deep copy of the
-//	NumStrNumberSymbolSpec configured for zero
-//	number signs.
+//	Returns a deep copy of the Zero Number Sign
+//	Specification contained in the current instance
+//	of NumStrNumberSymbolSpec.
 //
-//	The Number String Zero Number Symbol
-//	Specification is used to configure number
-//	symbols for zero numeric values formatted
-//	and displayed in number stings. Zero number
-//	signs are commonly omitted because zero
-//	does not technically qualify as either a
-//	positive or negative value. However,
-//	currency symbols may be required for zero
-//	values.
+//	The Zero Number Sign Specification is used to
+//	configure number symbols for zero numeric values
+//	formatted and displayed in number stings. Zero
+//	number signs are commonly omitted because zero
+//	does not technically qualify as either a positive or
+//	negative value. However, the user does have the
+//	option to configure leading and/or trailing Zero
+//	Number Sign Symbols if needed.
 //
-//	For currency presentations, the currency
-//	symbol is often used as either a leading
-//	or trailing symbol for zero numeric
-//	values.
+//	Example-1: Leading Zero Number Sign Symbols
 //
-//	Example-1: Leading Number Symbols
-//		Leading Number Symbols for Zero Values
-//
-//		Leading Symbols: "$"
+//		Leading Symbols: "+"
 //		Trailing Symbols: ""
-//		Number String:   "$0.00"
+//		Number String:   "+0.00"
 //
-//	Example-2: Trailing Number Symbols
-//		Trailing Number Symbols for Zero Values
+//	Example-1: Leading Zero Number Sign Symbols
+//
+//		Leading Symbols: "+ "
+//		Trailing Symbols: ""
+//		Number String:   "+ 0.00"
+//
+//	Example-3: Trailing Zero Number Sign Symbols
 //
 //		Leading Symbols: ""
-//		Trailing Symbols: " €"
-//		Number String:   "0.00 €"
+//		Trailing Symbols: "+"
+//		Number String:   "0.00+"
+//
+//	Example-4: Trailing Zero Number Sign Symbols
+//
+//		Leading Symbols: ""
+//		Trailing Symbols: " +"
+//		Number String:   "0.00 +"
 //
 // ----------------------------------------------------------------
 //
 // # Input Parameters
 //
-//	 errorPrefix                interface{}
+//	errorPrefix					interface{}
 //
 //		This object encapsulates error prefix text which
 //		is included in all returned error messages.
-//		Usually, it	contains the name of the calling
+//		Usually, it contains the name of the calling
 //		method or methods listed as a method or function
 //		chain of execution.
 //
-//		If no error prefix information is needed, set this
-//		parameter to 'nil'.
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
 //
-//		This empty interface must be convertible to one of
-//		the following types:
+//		This empty interface must be convertible to one
+//		of the following types:
 //
 //		1.	nil
 //				A nil value is valid and generates an
@@ -1239,11 +1360,9 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) GetPositiveNumberSignSpec(
 //	zeroNumSignSpec			NumStrNumberSymbolSpec
 //
 //		If this method completes successfully, this
-//		parameter will return a new, fully populated
-//		instance of NumStrNumberSymbolSpec configured
-//		with the Zero Number Sign Symbol configured
-//		for the current instance of
-//		NumStrNumberSymbolGroup.
+//		parameter will return a deep copy of the Zero
+//		Number Sign Symbol Specification contained in the
+//		current instance of NumStrNumberSymbolGroup.
 //
 //	err							error
 //

@@ -66,8 +66,8 @@ type SourceCodeComments struct {
 //		method or methods listed as a method or function
 //		chain of execution.
 //
-//		If no error prefix information is needed, set this
-//		parameter to 'nil'.
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
 //
 //		This empty interface must be convertible to one
 //		of the following types:
