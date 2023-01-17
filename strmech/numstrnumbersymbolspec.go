@@ -1434,13 +1434,13 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) IsNOP() bool {
 
 	defer nStrNumberSymbolSpec.lock.Unlock()
 
-	if nStrNumberSymbolSpec.leadingNumberSymbols.GetRuneArrayLength() == 0 &&
-		nStrNumberSymbolSpec.trailingNumberSymbols.GetRuneArrayLength() == 0 {
+	isValid,
+		_ := new(nStrNumberSymbolSpecAtom).
+		testValidityNumStrNumberSymbolSpec(
+			nStrNumberSymbolSpec,
+			nil)
 
-		return true
-	}
-
-	return false
+	return !isValid
 }
 
 // NewCurrencyDefaultsEU
