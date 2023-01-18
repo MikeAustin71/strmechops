@@ -2074,7 +2074,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSimpleCurrency(
 		return newNStrNumSymbols, err
 	}
 
-	err = new(numStrNumberSymbolGroupMechanics).setSimpleNumSymbolsConfig(
+	err = new(numStrNumberSymbolGroupMechanics).setSimpleCurrencySymbolsConfig(
 		&newNStrNumSymbols,
 		currencySymbols,
 		leadingNumSymbols,
@@ -2254,12 +2254,12 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSimpleSignedNumber(
 		return newNStrNumSymbols, err
 	}
 
-	err = new(numStrNumberSymbolGroupMechanics).setSimpleNumSymbolsConfig(
-		&newNStrNumSymbols,
-		"",
-		leadingNumSymbols,
-		ePrefix.XCpy(
-			"newNStrNumSymbols<-"))
+	err = new(numStrNumberSymbolGroupMechanics).
+		setSimpleNumberSignSymbolsConfig(
+			&newNStrNumSymbols,
+			leadingNumSymbols,
+			ePrefix.XCpy(
+				"newNStrNumSymbols<-"))
 
 	return newNStrNumSymbols, err
 }
@@ -5335,7 +5335,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSimpleCurrency(
 		return err
 	}
 
-	return new(numStrNumberSymbolGroupMechanics).setSimpleNumSymbolsConfig(
+	return new(numStrNumberSymbolGroupMechanics).setSimpleCurrencySymbolsConfig(
 		nStrNumSymbolsGroup,
 		currencySymbols,
 		leadingNumSymbols,
@@ -5565,12 +5565,12 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSimpleSignedNumber(
 		return err
 	}
 
-	return new(numStrNumberSymbolGroupMechanics).setSimpleNumSymbolsConfig(
-		nStrNumSymbolsGroup,
-		"",
-		leadingNumSymbols,
-		ePrefix.XCpy(
-			"nStrNumSymbolsGroup<-"))
+	return new(numStrNumberSymbolGroupMechanics).
+		setSimpleNumberSignSymbolsConfig(
+			nStrNumSymbolsGroup,
+			leadingNumSymbols,
+			ePrefix.XCpy(
+				"nStrNumSymbolsGroup<-"))
 }
 
 //	SetSymbolsRunes
@@ -7721,28 +7721,40 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setNumSignSymbo
 	return err
 }
 
-//	setSimpleNumSymbolsConfig
+//	setSimpleCurrencySymbolsConfig
 //
 //	Receives a pointer to an instance of
-//	NumStrNumberSymbolGroup and proceeds to reconfigure that
-//	instance for currency number symbols or signed number
-//	symbols.
+//	NumStrNumberSymbolGroup and proceeds to reconfigure
+//	that instance for currency symbols.
 //
-//	Type NumStrNumberSymbolGroup is used to configure
-//	Number Symbols required in converting numeric
-//	values to formatted Number Strings.
+//	Examples of Currency Symbol characters include such
+//	symbols as the Dollar sign ('$'), Euro sign ('€') or
+//	Pound sign ('£').
 //
-//	NumStrNumberSymbolGroup contains three instances of
+//	The NumStrNumberSymbolGroup instance is passed as
+//	input parameter 'nStrNumSymbolGroup'. It is used
+//	to configure Number Symbols required in converting
+//	numeric values to formatted Number Strings.
+//
+//	NumStrNumberSymbolGroup contains four instances of
 //	type NumStrNumberSymbolSpec defining the Number
 //	Symbols to be used with positive numeric values,
-//	negative numeric values and zero numeric values.
+//	negative numeric values, zero numeric values and
+//	currency values.
 //
-//	This method provides a simplified means of
-//	configuring type NumStrNumberSymbolGroup using default
-//	values. The generated returned instance of
-//	NumStrNumberSymbolGroup will be configured for either
-//	Currency Number Symbols or Signed Number Symbols,
-//	depending on the input parameters.
+//	All Number Symbol data values contained in the
+//	'nStrNumSymbolGroup' instance will be deleted and
+//	reconfigured as currency symbol specifications. These
+//	specifications include Currency Symbols to be used
+//	with positive numeric values, negative numeric values
+//	and zero numeric values.
+//
+//	This method provides a simplified means for
+//	reconfiguring input parameter 'nStrNumSymbolGroup',
+//	with currency and number sign symbols. Using default
+//	values, this method will generate Currency Symbols to
+//	be used with positive numeric values, negative
+//	numeric values and zero numeric values.
 //
 // ----------------------------------------------------------------
 //
@@ -7750,13 +7762,37 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setNumSignSymbo
 //
 //	Be advised that this method will delete and
 //	reconfigure all data values contained in input
-//	parameter, 'nStrNumSymbols'.
+//	parameter, 'nStrNumSymbolGroup'.
+//
+//	All Number Symbol data values contained in
+//	'nStrNumSymbolGroup' will be deleted and
+//	reconfigured as currency symbol specifications.
+//	These specifications include Currency Symbols to be
+//	used with positive numeric values, negative numeric
+//	values and zero numeric values.
 //
 // ----------------------------------------------------------------
 //
 // # Currency Defaults
 //
-//	Currency-Negative Symbol Position:
+//	Currency Symbol Padding Space:
+//
+//		If Currency Symbol string does NOT include a
+//		blank space between the Currency Symbol and the
+//		Number Sign Symbol, one blank space will be
+//		added:
+//
+//		Examples:
+//			European Number Strings:
+//				"123.456- €"
+//				"123.456 €"
+//
+//			US Number Strings:
+//				"$ -123.456"
+//				"$ 123.456"
+//
+//	Currency Negative Value Symbol Position:
+//
 //		Currency Symbol defaults to 'outside' the
 //		minus sign.
 //
@@ -7765,6 +7801,7 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setNumSignSymbo
 //			US Number String: "$ -123.456"
 //
 //	Negative Number Symbol:
+//
 //		The default Negative Number Symbol is the
 //		minus sign ('-').
 //
@@ -7773,67 +7810,48 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setNumSignSymbo
 //			US Number String: "$ -123.456"
 //
 //	Positive Number Symbol:
+//
 //		No Positive Number Sign Symbol. Positive
-//		values are assumed.
+//		values are implicit and assumed. Therefore,
+//		no plus is formatted in the number string.
 //
 //		Positive Numeric Value Currency Examples:
+//
 //			European Number String: "123.456 €"
 //			US Number String: "$ 123.456"
 //
 //	Zero Number Symbol:
+//
 //		No Number Sign Symbol. Technically a zero value
-//		is neither positive nor negative.
+//		is neither positive nor negative. Therefore,
+//		no plus is formatted in the number string.
 //
 //		Zero Numeric Value Currency Examples:
+//
 //			European Number String: "0.00 €"
 //			US Number String: "$ 0.00"
 //
 //	Number Field Symbol Position:
+//
 //		Defaults to "Inside Number Field"
 //
-//		Example:
+//			A Number Field defines the length of a
+//			text string in which a numeric value is
+//			formatted. When applied, a Number Field
+//			is usually longer than the numeric value
+//			string and typically justifies that numeric
+//			value string as "Left", "Right" or "Centered".
+//
+//			Number Field Example (Centered):
+//				"  123.45  "
+//
+//		Example Number Field Symbol Position:
 //			Number Field Length: 8
 //			Numeric Value: 123.45
 //			Number Symbol: leading minus sign ('-')
 //			Number Symbol Position: Inside Number Field
 //			Formatted Number String: " -123.45"
-//			Number Field Index:       01234567
-//			Total Number String Length: 8
-//
-// ----------------------------------------------------------------
-//
-// # Signed Number Defaults
-//
-//	Negative Signed Number Symbol:
-//		The default Negative Number Symbol is the
-//		minus sign ('-').
-//
-//		Examples:
-//			European Number String: "123.456-"
-//			US Number String: "-123.456"
-//
-//	Positive Signed Number Symbol:
-//		No Positive Number Sign Symbol. Positive values
-//		are assumed.
-//
-//			Positive Value Number String: "123.456"
-//
-//	Zero Signed Number Symbol:
-//		No Number Sign Symbol. Technically a zero value
-//		is neither positive nor negative.
-//
-//			Zero Value Number String: "123.456"
-//
-//	Number Field Symbol Position:
-//		Defaults to "Inside Number Field"
-//
-//		Example:
-//			Number Field Length: 8
-//			Numeric Value: 123.45
-//			Number Symbol: leading minus sign ('-')
-//			Number Symbol Position: Inside Number Field
-//			Formatted Number String: " -123.45"
-//			Number Field Index:       01234567
+//			Number Field Index:-------01234567
 //			Total Number String Length: 8
 //
 // ----------------------------------------------------------------
@@ -7842,11 +7860,15 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setNumSignSymbo
 //
 //	nStrNumSymbolGroup			*NumStrNumberSymbolGroup
 //
-//		A pointer to an instance of NumStrNumberSymbolGroup.
+//		A pointer to an instance of
+//		NumStrNumberSymbolGroup.
+//
 //		All Number Symbol data values contained in this
-//		object will be deleted and reconfigured as either
-//		new currency symbol specifications or new signed
-//		number specifications.
+//		object will be deleted and reconfigured as
+//		currency symbol specifications. These
+//		specifications include Currency Symbols to be used
+//		with positive numeric values, negative numeric
+//		values and zero numeric values.
 //
 //	currencySymbols				string
 //
@@ -7855,10 +7877,12 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setNumSignSymbo
 //		reconfigure the NumStrNumberSymbolGroup instance
 //		passed by input parameter, 'nStrNumSymbols'.
 //
-//		If this string is empty, 'nStrNumSymbols' will be
-//		reconfigured with signed number symbols suitable
-//		for a number string containing a signed numeric
-//		value.
+//		Examples of Currency Symbol characters include
+//		such symbols as the Dollar sign ('$'), Euro sign
+//		('€') or Pound sign ('£').
+//
+//		If this string is empty, an error will be
+//		returned.
 //
 //	leadingNumSymbols			bool
 //
@@ -7868,29 +7892,31 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setNumSignSymbo
 //		When set to 'true', 'nStrNumSymbols' will be
 //		reconfigured with Number Symbols on the left side
 //		of the numeric value. Such Number Symbols are
-//		therefore configured as leading	Number Symbols.
+//		therefore configured as Leading Number Symbols.
 //		This is the positioning format used in the US,
 //		UK, Australia and most of Canada.
 //
 //		Example Number Strings:
 //			"$ -123.456"
 //
-//		NOTE:	A space is automatically inserted between
-//				the currency symbol and the minus sign.
+//		NOTE:	A space is automatically inserted after
+//				the currency symbol, between the currency
+//				symbol and the minus sign.
 //
 //		When set to 'false', the returned instance of
-//		NumStrNumberSymbolGroup will configure Number Symbols
-//		on the right side of the numeric value. Such
-//		Number Symbols are therefore configured as
-//		trailing Number Symbols. This is the positioning
-//		format used in France, Germany and many countries
-//		in the European Union.
+//		NumStrNumberSymbolGroup will configure Number
+//		Symbols on the right side of the numeric value.
+//		Such Number Symbols are therefore configured as
+//		Trailing Number Symbols. This is the positioning
+//		format used in France, Germany and many other
+//		countries in the European Union.
 //
 //		Example Number Strings:
 //			"123.456- €"
 //
-//		NOTE:	A space is automatically inserted between
-//				the minus sign and the currency symbol.
+//		NOTE:	A space is automatically inserted after
+//				the minus sign, between the minus sign
+//				and the currency symbol.
 //
 //	errPrefDto					*ePref.ErrPrefixDto
 //
@@ -7923,7 +7949,7 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setNumSignSymbo
 //		for input parameter 'errPrefDto' (error prefix)
 //		will be prefixed or attached at the beginning of
 //		the error message.
-func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setSimpleNumSymbolsConfig(
+func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setSimpleCurrencySymbolsConfig(
 	nStrNumSymbolGroup *NumStrNumberSymbolGroup,
 	currencySymbols string,
 	leadingNumSymbols bool,
@@ -7945,7 +7971,7 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setSimpleNumSym
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
 		"numStrNumberSymbolGroupMechanics."+
-			"setSimpleNumSymbolsConfig()",
+			"setSimpleCurrencySymbolsConfig()",
 		"")
 
 	if err != nil {
@@ -7962,9 +7988,35 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setSimpleNumSym
 		return err
 	}
 
-	nStrNumSymGroupNanobot := numStrNumberSymbolGroupNanobot{}
+	lenCurrencySymbols := len(currencySymbols)
 
-	nStrNumSymGroupNanobot.empty(
+	if lenCurrencySymbols == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'currencySymbols' is invalid!\n"+
+			"'currencySymbols' is an empty string with a zero\n"+
+			"character length.\n",
+			ePrefix.String())
+
+		return err
+
+	}
+
+	if leadingNumSymbols == true &&
+		currencySymbols[lenCurrencySymbols-1] != ' ' {
+
+		currencySymbols += " "
+
+	}
+
+	if leadingNumSymbols == false &&
+		currencySymbols[0] != ' ' {
+
+		currencySymbols = " " + currencySymbols
+
+	}
+
+	new(numStrNumberSymbolGroupNanobot).empty(
 		nStrNumSymbolGroup)
 
 	nStrNumSymbolGroup.positiveNumberSign.SetNOP()
@@ -7973,15 +8025,13 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setSimpleNumSym
 
 	var numSymStr string
 
+	numSymStr = "-"
+
 	if leadingNumSymbols {
 		// Leading Number Symbols
 
-		numSymStr = "-"
-
-		err = nStrNumSymGroupNanobot.setNegativeNumSignRunes(
-			nStrNumSymbolGroup,
+		err = nStrNumSymbolGroup.negativeNumberSign.SetNumberSignLeadingSymbolRunes(
 			[]rune(numSymStr),
-			nil,
 			NumFieldSymPos.InsideNumField(),
 			ePrefix.XCpy(
 				"nStrNumSymbolGroup"))
@@ -7990,14 +8040,14 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setSimpleNumSym
 			return err
 		}
 
-		nStrNumSymbolGroup.currencySymbol,
-			err = new(NumStrNumberSymbolSpec).
-			NewCurrencyLeadingSymbolRunes(
+		err = nStrNumSymbolGroup.currencySymbol.
+			SetCurrencyLeadingSymbolRunes(
 				[]rune(currencySymbols),
 				NumFieldSymPos.InsideNumField(),
 				CurrNumSignRelPos.OutsideNumSign(),
 				ePrefix.XCpy(
-					"nStrNumSymbolGroup.currencySymbol<-currencySymbols"))
+					"nStrNumSymbolGroup."+
+						"currencySymbol<-currencySymbols"))
 
 		if err != nil {
 			return err
@@ -8006,9 +8056,7 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setSimpleNumSym
 	} else {
 		// Trailing Number Symbols
 
-		err = nStrNumSymGroupNanobot.setNegativeNumSignRunes(
-			nStrNumSymbolGroup,
-			nil,
+		err = nStrNumSymbolGroup.negativeNumberSign.SetNumberSignTrailingSymbolRunes(
 			[]rune(numSymStr),
 			NumFieldSymPos.InsideNumField(),
 			ePrefix.XCpy(
@@ -8018,14 +8066,14 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setSimpleNumSym
 			return err
 		}
 
-		nStrNumSymbolGroup.currencySymbol,
-			err = new(NumStrNumberSymbolSpec).
-			NewCurrencyTrailingSymbolRunes(
+		err = nStrNumSymbolGroup.currencySymbol.
+			SetCurrencyTrailingSymbolRunes(
 				[]rune(currencySymbols),
 				NumFieldSymPos.InsideNumField(),
 				CurrNumSignRelPos.OutsideNumSign(),
 				ePrefix.XCpy(
-					"nStrNumSymbolGroup.currencySymbol<-currencySymbols"))
+					"nStrNumSymbolGroup."+
+						"currencySymbol<-currencySymbols"))
 
 		if err != nil {
 			return err
@@ -8094,21 +8142,36 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setSimpleNumSym
 //			US Number String: "-123.456"
 //
 //	Positive Signed Number Symbol:
-//		No Positive Number Sign Symbol. Positive values
-//		are assumed.
+//
+//		No Positive Number Sign Symbol. Positive
+//		values are implicit and assumed. Therefore,
+//		no plus is formatted in the number string.
 //
 //			Positive Value Number String: "123.456"
 //
 //	Zero Signed Number Symbol:
+//
 //		No Number Sign Symbol. Technically a zero value
-//		is neither positive nor negative.
+//		is neither positive nor negative. Therefore,
+//		no plus is formatted in the number string.
 //
 //			Zero Value Number String: "123.456"
 //
 //	Number Field Symbol Position:
+//
 //		Defaults to "Inside Number Field"
 //
-//		Example:
+//			A Number Field defines the length of a
+//			text string in which a numeric value is
+//			formatted. When applied, a Number Field
+//			is usually longer than the numeric value
+//			string and typically justifies that numeric
+//			value string as "Left", "Right" or "Centered".
+//
+//			Number Field Example (Centered):
+//				"  123.45  "
+//
+//		Example Number Field Symbol Position:
 //			Number Field Length: 8
 //			Numeric Value: 123.45
 //			Number Symbol: leading minus sign ('-')
@@ -8282,9 +8345,7 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setSimpleNumber
 		return err
 	}
 
-	nStrNumSymGroupNanobot := numStrNumberSymbolGroupNanobot{}
-
-	nStrNumSymGroupNanobot.empty(
+	new(numStrNumberSymbolGroupNanobot).empty(
 		nStrNumSymbolGroup)
 
 	nStrNumSymbolGroup.positiveNumberSign.SetNOP()
