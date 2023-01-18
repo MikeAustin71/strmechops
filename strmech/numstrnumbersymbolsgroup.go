@@ -3482,7 +3482,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSymbolsSpecs(
 	}
 
 	err = new(numStrNumberSymbolGroupMechanics).
-		setNumSymbolSpecs(
+		setNumSignSymbolSpecs(
 			&newNumberSymbols,
 			positiveNumberSign,
 			negativeNumberSign,
@@ -6234,7 +6234,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSymbolsSpecs(
 	}
 
 	return new(numStrNumberSymbolGroupMechanics).
-		setNumSymbolSpecs(
+		setNumSignSymbolSpecs(
 			nStrNumSymbolsGroup,
 			positiveNumberSign,
 			negativeNumberSign,
@@ -7572,7 +7572,7 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) copyNumSymbols(
 	return err
 }
 
-//	setNumSymbolSpecs
+//	setNumSignSymbolSpecs
 //
 //	Receives three NumStrNumberSymbolSpec objects and
 //	proceeds to reset the corresponding member variable
@@ -7652,7 +7652,7 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) copyNumSymbols(
 //		for input parameter 'errPrefDto' (error prefix)
 //		will be prefixed or attached at the beginning of
 //		the error message.
-func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setNumSymbolSpecs(
+func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setNumSignSymbolSpecs(
 	nStrNumSymbols *NumStrNumberSymbolGroup,
 	positiveNumberSign NumStrNumberSymbolSpec,
 	negativeNumberSign NumStrNumberSymbolSpec,
@@ -7675,7 +7675,7 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setNumSymbolSpe
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
 		"numStrNumberSymbolGroupMechanics."+
-			"setNumSymbolSpecs()",
+			"setNumSignSymbolSpecs()",
 		"")
 
 	if err != nil {
@@ -8030,6 +8030,289 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setSimpleNumSym
 		if err != nil {
 			return err
 		}
+
+	}
+
+	return err
+}
+
+//	setSimpleNumberSignSymbolsConfig
+//
+//	Deletes and reconfigures the input parameter instance
+//	of NumStrNumberSymbolGroup with a simple default
+//	number sign symbol configuration.
+//
+//	Examples of number sign symbols include the plus
+//	sign ('+') for positive numeric values and the minus sign
+//	('-') or parentheses ('()') for negative numeric values.
+//
+//	Number sign symbols Do NOT contain currency symbols.
+//
+//	If currency symbol formatting is required,	see method:
+//
+//	numStrNumberSymbolGroupMechanics.setSimpleCurrencyConfig()
+//
+//	Type NumStrNumberSymbolGroup is used to configure
+//	Number Symbols required in converting numeric values
+//	to formatted Number Strings.
+//
+//	NumStrNumberSymbolGroup contains four instances of
+//	type NumStrNumberSymbolSpec defining the Number
+//	Symbols to be used with positive numeric values,
+//	negative numeric values, zero numeric values and
+//	currency values.
+//
+//	This method provides a simplified means for
+//	reconfiguring input parameter 'nStrNumSymbolGroup',
+//	with number sign symbols. Using default values, this
+//	method will generate number sign symbols for positive
+//	numeric values, zero numeric values and negative
+//	numeric values.
+//
+//	Again, Number Sign Symbols DO NOT contain currency
+//	symbols.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	Be advised that this method will delete and
+//	reconfigure all data values contained in the instance
+//	of NumStrNumberSymbolGroup passed as input parameter
+//	'nStrNumSymbolGroup'.
+//
+// ----------------------------------------------------------------
+//
+// # Signed Number Defaults
+//
+//	Negative Signed Number Symbol:
+//		The default Negative Number Symbol is the
+//		minus sign ('-').
+//
+//		Examples:
+//			European Number String: "123.456-"
+//			US Number String: "-123.456"
+//
+//	Positive Signed Number Symbol:
+//		No Positive Number Sign Symbol. Positive values
+//		are assumed.
+//
+//			Positive Value Number String: "123.456"
+//
+//	Zero Signed Number Symbol:
+//		No Number Sign Symbol. Technically a zero value
+//		is neither positive nor negative.
+//
+//			Zero Value Number String: "123.456"
+//
+//	Number Field Symbol Position:
+//		Defaults to "Inside Number Field"
+//
+//		Example:
+//			Number Field Length: 8
+//			Numeric Value: 123.45
+//			Number Symbol: leading minus sign ('-')
+//			Number Symbol Position: Inside Number Field
+//			Formatted Number String: " -123.45"
+//			Number Field Index:-------01234567
+//			Total Number String Length: 8
+//
+// ----------------------------------------------------------------
+//
+//	# Input Parameters
+//
+//
+//	nStrNumSymbolGroup			*NumStrNumberSymbolGroup
+//
+//		A pointer to an instance of
+//		NumStrNumberSymbolGroup.
+//
+//		All Number Symbol data values contained in this
+//		object will be deleted and reconfigured as new
+//		Number Sign Symbol specifications.
+//
+//		Examples of number sign symbols include the plus
+//		sign ('+') for positive numeric values and the
+//		minus sign ('-') or parentheses ('()') for
+//		negative numeric values.
+//
+//	leadingNumSymbols			bool
+//
+//		Controls the positioning of Number Sign Symbols
+//		in a Number String Format.
+//
+//		Examples of number sign symbols include the plus
+//		sign ('+') for positive numeric values and the
+//		minus sign ('-') or parentheses ('()') for
+//		negative numeric values.
+//
+//		When set to 'true', the current instance of
+//		NumStrNumberSymbolGroup will configure Number
+//		Sign Symbols on the left side of the numeric
+//		value. Such Number Symbols are therefore
+//		configured as leading Number Symbols. This is the
+//		positioning format used in the US, UK, Australia
+//		and most of Canada.
+//
+//			Example Number Strings:
+//				"-123.456"
+//
+//		When 'leadingNumSymbols' is set to 'false', the
+//		current instance of NumStrNumberSymbolGroup will
+//		configure Number Sign Symbols on the right side
+//		of the numeric value. Such Number Sign Symbols
+//		are therefore configured as trailing Number Sign
+//		Symbols. This is the positioning format used in
+//		France, Germany and many other countries in the
+//		European Union.
+//
+//		Example Number Strings:
+//			"123.456-"
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setSimpleNumberSignSymbolsConfig(
+	nStrNumSymbolGroup *NumStrNumberSymbolGroup,
+	leadingNumSymbols bool,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if nStrNumSymbolsGroupMech.lock == nil {
+		nStrNumSymbolsGroupMech.lock = new(sync.Mutex)
+	}
+
+	nStrNumSymbolsGroupMech.lock.Lock()
+
+	defer nStrNumSymbolsGroupMech.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"numStrNumberSymbolGroupMechanics."+
+			"setSimpleNumberSignSymbolsConfig()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if nStrNumSymbolGroup == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'nStrNumSymbolGroup' is invalid!\n"+
+			"'nStrNumSymbolGroup' is a 'nil' pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	nStrNumSymGroupNanobot := numStrNumberSymbolGroupNanobot{}
+
+	nStrNumSymGroupNanobot.empty(
+		nStrNumSymbolGroup)
+
+	nStrNumSymbolGroup.positiveNumberSign.SetNOP()
+
+	nStrNumSymbolGroup.zeroNumberSign.SetNOP()
+
+	var numSymStr string
+
+	numSymStr = "-"
+
+	if leadingNumSymbols {
+		// Leading Number Sign Symbols
+
+		err = nStrNumSymbolGroup.negativeNumberSign.SetNumberSignLeadingSymbolRunes(
+			[]rune(numSymStr),
+			NumFieldSymPos.InsideNumField(),
+			ePrefix.XCpy(
+				"nStrNumSymbolGroup"))
+
+	} else {
+
+		// Trailing Number Sign Symbols
+
+		err = nStrNumSymbolGroup.negativeNumberSign.SetNumberSignTrailingSymbolRunes(
+			[]rune(numSymStr),
+			NumFieldSymPos.InsideNumField(),
+			ePrefix.XCpy(
+				"nStrNumSymbolGroup"))
 
 	}
 
