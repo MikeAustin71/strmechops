@@ -130,6 +130,16 @@ func (nStrNumSymSpecMolecule *numStrNumberSymbolSpecMolecule) copyNStrNumberSymb
 	new(numStrNumberSymbolSpecMolecule).empty(
 		destinationNumSymbolSpec)
 
+	isValid,
+		_ := new(nStrNumberSymbolSpecAtom).
+		testValidityNumStrNumberSymbolSpec(
+			sourceNumSymbolSpec,
+			nil)
+
+	if !isValid {
+		return err
+	}
+
 	err = destinationNumSymbolSpec.leadingNumberSymbols.
 		CopyIn(
 			&sourceNumSymbolSpec.leadingNumberSymbols,

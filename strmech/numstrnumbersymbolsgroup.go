@@ -3329,15 +3329,17 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSymbolsStrings(
 //	required in converting numeric values to Number
 //	Strings.
 //
-//	Type NumStrNumberSymbolGroup contains three instances of
-//	NumStrNumberSymbolSpec defining the Number Symbols to
-//	be used with positive numeric values, negative numeric
-//	values and zero numeric values.
+//
+//	Type NumStrNumberSymbolGroup contains four instances
+//	of type NumStrNumberSymbolSpec defining the Number
+//	Symbols to be used with positive numeric values,
+//	negative numeric values, zero numeric values and
+//	currency values.
 //
 //	This method generates a new instance of
-//	NumStrNumberSymbolGroup using Positive, Negative and Zero
-//	Number Sign Symbol Specification objects passed as
-//	input parameters.
+//	NumStrNumberSymbolGroup using Positive, Negative, Zero
+//	Number Sign Symbols and Currency Symbol Specification
+//	objects passed as input parameters.
 //
 // ----------------------------------------------------------------
 //
@@ -3363,6 +3365,13 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSymbolsStrings(
 //		will be copied to the corresponding Zero
 //		Symbol Specification in the new, returned
 //		instance of NumStrNumberSymbolGroup.
+//
+//	currencySymbols				NumStrNumberSymbolSpec
+//
+//		This Currency Symbols Specification	will be
+//		copied to the corresponding Currency Symbols
+//		Specification in the new, returned instance
+//		of NumStrNumberSymbolGroup.
 //
 //	 errorPrefix                interface{}
 //
@@ -3452,6 +3461,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSymbolsSpecs(
 	positiveNumberSign NumStrNumberSymbolSpec,
 	negativeNumberSign NumStrNumberSymbolSpec,
 	zeroNumberSign NumStrNumberSymbolSpec,
+	currencySymbols NumStrNumberSymbolSpec,
 	errorPrefix interface{}) (
 	NumStrNumberSymbolGroup,
 	error) {
@@ -3487,6 +3497,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSymbolsSpecs(
 			positiveNumberSign,
 			negativeNumberSign,
 			zeroNumberSign,
+			currencySymbols,
 			ePrefix.XCpy(
 				"newNumberSymbols"))
 
@@ -6090,9 +6101,9 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSymbolsRunes(
 //	SetSymbolsSpecs
 //
 //	Reconfigures the current instance of
-//	NumStrNumberSymbolGroup based on the Positive, Negative
-//	and Zero Number	Sign Symbol Specification objects
-//	passed as input parameters.
+//	NumStrNumberSymbolGroup based on the Positive,
+//	Negative Zero Number Sign and Currency Symbol
+//	Specification objects passed as input parameters.
 //
 // ----------------------------------------------------------------
 //
@@ -6101,8 +6112,8 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSymbolsRunes(
 //	Be advised that the data fields contained in the
 //	current instance of NumStrNumberSymbolGroup will be
 //	deleted and replaced with the Positive, Negative
-//	and Zero Number	Sign Symbol Specifications passed
-//	as input parameters.
+//	Zero Number Sign and Currency Symbol Specifications
+//	passed as input parameters.
 //
 // ----------------------------------------------------------------
 //
@@ -6112,22 +6123,29 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSymbolsRunes(
 //
 //		This Positive Number Sign Symbol Specification
 //		will be copied to the corresponding Positive
-//		Symbol Specification in the new, returned
+//		Number Sign Symbol Specification in the current
 //		instance of NumStrNumberSymbolGroup.
 //
 //	negativeNumberSign			NumStrNumberSymbolSpec
 //
 //		This Negative Number Sign Symbol Specification
 //		will be copied to the corresponding Negative
-//		Symbol Specification in the new, returned
+//		Number Sign Symbol Specification in the current
 //		instance of NumStrNumberSymbolGroup.
 //
-//	zeroNumberSign			NumStrNumberSymbolSpec
+//	zeroNumberSign				NumStrNumberSymbolSpec
 //
 //		This Zero Number Sign Symbol Specification
 //		will be copied to the corresponding Zero
-//		Symbol Specification in the new, returned
+//		Number Sign Symbol Specification in the current
 //		instance of NumStrNumberSymbolGroup.
+//
+//	currencySymbols				NumStrNumberSymbolSpec
+//
+//		This Currency Symbols Specification	will be
+//		copied to the corresponding Currency Symbols
+//		Specification in the current instance of
+//		NumStrNumberSymbolGroup.
 //
 //	 errorPrefix                interface{}
 //
@@ -6208,6 +6226,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSymbolsSpecs(
 	positiveNumberSign NumStrNumberSymbolSpec,
 	negativeNumberSign NumStrNumberSymbolSpec,
 	zeroNumberSign NumStrNumberSymbolSpec,
+	currencySymbols NumStrNumberSymbolSpec,
 	errorPrefix interface{}) error {
 
 	if nStrNumSymbolsGroup.lock == nil {
@@ -6239,6 +6258,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSymbolsSpecs(
 			positiveNumberSign,
 			negativeNumberSign,
 			zeroNumberSign,
+			currencySymbols,
 			ePrefix.XCpy(
 				"nStrNumSymbolsGroup"))
 
@@ -7657,6 +7677,7 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setNumSignSymbo
 	positiveNumberSign NumStrNumberSymbolSpec,
 	negativeNumberSign NumStrNumberSymbolSpec,
 	zeroNumberSign NumStrNumberSymbolSpec,
+	currencySymbols NumStrNumberSymbolSpec,
 	errPrefDto *ePref.ErrPrefixDto) error {
 
 	if nStrNumSymbolsGroupMech.lock == nil {
@@ -7717,6 +7738,16 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setNumSignSymbo
 		ePrefix.XCpy(
 			"nStrNumSymbols.zeroNumberSign<-"+
 				"zeroNumberSign"))
+
+	if err != nil {
+		return err
+	}
+
+	err = nStrNumSymbols.currencySymbol.CopyIn(
+		&currencySymbols,
+		ePrefix.XCpy(
+			"nStrNumSymbols.currencySymbol<-"+
+				"currencySymbols"))
 
 	return err
 }
