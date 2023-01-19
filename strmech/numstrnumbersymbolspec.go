@@ -36,6 +36,36 @@ import (
 //		Currency Symbols are configured with methods
 //		labeled "Currency"
 //
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	Radix points, or Decimal Separators, are used to
+//	separate integer and fractional digits in floating
+//	point numeric values.
+//
+//	In the United States, the decimal point or period
+//	('.') serves as the decimal separator.
+//
+//		United States Example: 127.54
+//
+//	In various European countries, the comma (',') is
+//	used as the decimal separator.
+//
+//		European Example: 127,54
+//
+//	Radix points or Decimal Separators are NOT considered
+//	legitimate Number String Number Symbol
+//	Specifications.
+//
+//	DO NOT USE Type NumStrNumberSymbolSpec to configure
+//	Radix Points or Decimal Separators.
+//
+//	Radix Points, or Decimal Separators, should be
+//	configured using Type DecimalSeparatorSpec.
+//
+// ----------------------------------------------------------------
+//
 // # Background
 //
 // The Number String Number Symbol Specification
@@ -56,6 +86,8 @@ import (
 // Leading symbols are prepended at the beginning of a
 // number string while trailing symbols are appended to the
 // end of a number string.
+//
+// ----------------------------------------------------------------
 //
 // # Usage
 //
@@ -7150,7 +7182,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewSignedNumDefaultsUSParen(
 //
 //		A string containing one or more Leading
 //		Currency Symbol characters used to configure
-//		the returned instance of NumStrNumberSymbolSpec.
+//		the current instance of NumStrNumberSymbolSpec.
 //
 //		Leading Currency Symbol characters can include
 //		such symbols as the dollar sign ('$'), Euro sign
@@ -7534,7 +7566,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetCurrencyLeadingSymbol(
 //
 //		A rune array containing one or more Leading
 //		Currency Symbol characters used to configure
-//		the returned instance of NumStrNumberSymbolSpec.
+//		the current instance of NumStrNumberSymbolSpec.
 //
 //		Leading Currency Symbol characters can include
 //		such symbols as the dollar sign ('$'), Euro sign
@@ -7922,7 +7954,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetCurrencyLeadingSymbolRune
 //
 //		A string containing one or more Leading
 //		Currency Symbol characters used to configure
-//		the returned instance of NumStrNumberSymbolSpec.
+//		the current instance of NumStrNumberSymbolSpec.
 //
 //		Leading Currency Symbol characters can include
 //		such symbols as the dollar sign ('$'), Euro sign
@@ -7939,7 +7971,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetCurrencyLeadingSymbolRune
 //
 //		A string containing one or more Trailing
 //		Currency Symbol characters used to configure
-//		the returned instance of NumStrNumberSymbolSpec.
+//		the current instance of NumStrNumberSymbolSpec.
 //
 //		Trailing Currency Symbol characters can include
 //		such symbols as the dollar sign ('$'), Euro sign
@@ -7957,10 +7989,11 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetCurrencyLeadingSymbolRune
 //	currencyFieldSymbolPosition		NumberFieldSymbolPosition
 //
 //		Defines the position of the Leading Currency
-//		Symbol ('leadingCurrencySymbol') relative to a
-//		Number Field in which a number string is
-//		displayed. Possible valid values are listed as
-//		follows:
+//		Symbol ('leadingCurrencySymbol') and the Trailing
+//		Currency Symbol ('trailingCurrencySymbol')
+//		relative to a Number Field in which a number
+//		string is displayed. Possible valid values are
+//		listed as follows:
 //
 //			NumFieldSymPos.InsideNumField()
 //			NumFieldSymPos.OutsideNumField()
@@ -8337,7 +8370,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetCurrencyLeadingTrailingSy
 //
 //		A string containing one or more Leading
 //		Currency Symbol characters used to configure
-//		the returned instance of NumStrNumberSymbolSpec.
+//		the current instance of NumStrNumberSymbolSpec.
 //
 //		Leading Currency Symbol characters can include
 //		such symbols as the dollar sign ('$'), Euro sign
@@ -8354,7 +8387,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetCurrencyLeadingTrailingSy
 //
 //		A string containing one or more Trailing
 //		Currency Symbol characters used to configure
-//		the returned instance of NumStrNumberSymbolSpec.
+//		the current instance of NumStrNumberSymbolSpec.
 //
 //		Trailing Currency Symbol characters can include
 //		such symbols as the dollar sign ('$'), Euro sign
@@ -8372,10 +8405,11 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetCurrencyLeadingTrailingSy
 //	currencyFieldSymbolPosition		NumberFieldSymbolPosition
 //
 //		Defines the position of the Leading Currency
-//		Symbol ('leadingCurrencySymbol') relative to a
-//		Number Field in which a number string is
-//		displayed. Possible valid values are listed as
-//		follows:
+//		Symbol ('leadingCurrencySymbol') and Trailing
+//		Currency Symbol ('trailingCurrencySymbol')
+//		relative to a Number Field in which a number
+//		string is displayed. Possible valid values are
+//		listed as follows:
 //
 //			NumFieldSymPos.InsideNumField()
 //			NumFieldSymPos.OutsideNumField()

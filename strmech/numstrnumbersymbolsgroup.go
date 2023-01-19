@@ -3492,7 +3492,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSymbolsSpecs(
 	}
 
 	err = new(numStrNumberSymbolGroupMechanics).
-		setNumSignSymbolSpecs(
+		setNumberSymbolSpecs(
 			&newNumberSymbols,
 			positiveNumberSign,
 			negativeNumberSign,
@@ -6253,7 +6253,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSymbolsSpecs(
 	}
 
 	return new(numStrNumberSymbolGroupMechanics).
-		setNumSignSymbolSpecs(
+		setNumberSymbolSpecs(
 			nStrNumSymbolsGroup,
 			positiveNumberSign,
 			negativeNumberSign,
@@ -7592,7 +7592,7 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) copyNumSymbols(
 	return err
 }
 
-//	setNumSignSymbolSpecs
+//	setNumberSymbolSpecs
 //
 //	Receives three NumStrNumberSymbolSpec objects and
 //	proceeds to reset the corresponding member variable
@@ -7672,7 +7672,7 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) copyNumSymbols(
 //		for input parameter 'errPrefDto' (error prefix)
 //		will be prefixed or attached at the beginning of
 //		the error message.
-func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setNumSignSymbolSpecs(
+func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setNumberSymbolSpecs(
 	nStrNumSymbols *NumStrNumberSymbolGroup,
 	positiveNumberSign NumStrNumberSymbolSpec,
 	negativeNumberSign NumStrNumberSymbolSpec,
@@ -7696,7 +7696,7 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setNumSignSymbo
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
 		"numStrNumberSymbolGroupMechanics."+
-			"setNumSignSymbolSpecs()",
+			"setNumberSymbolSpecs()",
 		"")
 
 	if err != nil {
@@ -8564,11 +8564,548 @@ func (nStrNumSymbolGroupNanobot *numStrNumberSymbolGroupNanobot) equal(
 	return true
 }
 
+//	setCurrencySymbolRunes
+//
+//	Receives two rune arrays used to configure leading
+//	currency symbols, trailing currency symbols or
+//	leading and trailing currency symbols.
+//
+//	Examples of Currency Symbol characters include such
+//	symbols as the Dollar sign ('$'), Euro sign ('€') or
+//	Pound sign ('£').
+//
+//	Input parameter 'nStrNumSymbols' is an instance of
+//	NumStrNumberSymbolGroup which will be configured with
+//	new data values for Currency Symbols.
+//
+//	NumStrNumberSymbolGroup contains four instances of
+//	type NumStrNumberSymbolSpec defining the Number
+//	Symbols to be used with positive numeric values,
+//	negative numeric values, zero numeric values and
+//	currency values.
+//
+//	This method configures currency symbols to be
+//	displayed with positive, negative and zero numeric
+//	values.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	Be advised that this method will delete and reset the
+//	Currency Symbol member variable data fields for
+//	'nStrNumSymbols' according to the Currency input
+//	parameters.
+//
+//	The nStrNumSymbols Currency Symbol member variable
+//	is:
+//
+//		nStrNumSymbols.currencySymbols
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	nStrNumSymbols					*NumStrNumberSymbolGroup
+//
+//		A pointer to an instance of NumStrNumberSymbolGroup.
+//		The Negative Number Sign Symbol Specifications
+//		for this instance will be deleted and reset to
+//		the values provided by the following input
+//		parameters.
+//
+//	leadingCurrencySymbol     		[]rune
+//
+//		A rune array containing one or more Leading
+//		Currency Symbol characters used to configure
+//		the NumStrNumberSymbolSpec instance,
+//		'nStrNumSymbols'.
+//
+//		Leading Currency Symbol characters can include
+//		such symbols as the dollar sign ('$'), Euro sign
+//	 	('€') and Pound sign ('£').
+//
+//		Leading Currency Symbols are prefixed or
+//		prepended to the beginning of number strings
+//		containing currency numeric values.
+//
+//		If 'leadingCurrencySymbol' and
+//		'trailingCurrencySymbols' parameters are both
+//		submitted as empty rune arrays with zero text
+//		characters, an error will be returned.
+//
+//	trailingCurrencySymbol			[]rune
+//
+//		A rune array containing one or more Trailing
+//		Currency Symbol characters used to configure
+//		the NumStrNumberSymbolSpec instance,
+//		'nStrNumSymbols'.
+//
+//		Trailing Currency Symbol characters can include
+//		such symbols as the dollar sign ('$'), Euro sign
+//	 	('€') and Pound sign ('£').
+//
+//		Trailing Currency Symbols are suffixed or
+//		appended to the end of number strings containing
+//		currency numeric values.
+//
+//				Example: 125.34€
+//
+//		If the 'leadingCurrencySymbol' and
+//		'trailingCurrencySymbols' parameters are both
+//		submitted as empty rune arrays with zero text
+//		characters, an error will be returned.
+//
+//	currencyNumFieldSymPosition 	NumberFieldSymbolPosition
+//
+//		Defines the position of the Currency Symbol
+//		('leadingCurrencySymbol' and 'trailingCurrencySymbols' ) relative to a
+//		Number Field in which a number string is
+//		displayed. Possible valid values are listed as
+//		follows:
+//
+//			NumFieldSymPos.InsideNumField()
+//			NumFieldSymPos.OutsideNumField()
+//
+//		Examples NumFieldSymPos.InsideNumField()
+//
+//			Example-1:
+//				Number Field Length: 10
+//				Numeric Value: 123.45
+//				Leading Currency Symbol: Dollar sign ('$')
+//				Number Symbol Position: Inside Number Field
+//			    Number Text Justification: Right
+//				Formatted Number String: "  $123.45"
+//				Number Field Index:-------012345679
+//				Total Number String Length: 10
+//
+//			Example-2:
+//				Number Field Length: 11
+//				Numeric Value: 123.45
+//				Leading Currency Symbol: Dollar sign ('$')
+//				Number Symbol Position: Inside Number Field
+//				Number Text Justification: Centered
+//				Formatted Number String: "  $123.45  "
+//				Number Field Index:-------01234567890
+//				Total Number String Length: 11
+//
+//			For the 'NumFieldSymPos.InsideNumField()' specification,
+//			the final length of the number string is defined by the
+//			Number Field length.
+//
+//		Examples NumFieldSymPos.OutsideNumField()
+//
+//			Example-3:
+//				Number Field Length: 8
+//			    Numeric Value: 123.45
+//				Leading Currency Symbol: Dollar sign ('$')
+//			    Number Symbol Position: Outside Number Field
+//			    Number Text Justification: Right
+//			    Formatted Number String: "$  123.45"
+//				Number Field Index:-------012345678
+//				Total Number String Length: 9
+//
+//			Example-4:
+//				Number Field Length: 10
+//				Numeric Value: 123.45
+//				Leading Currency Symbol: Dollar sign ('$')
+//				Number Symbol Position: Outside Number Field
+//			    Number Text Justification: Centered
+//				Formatted Number String: "$  123.45  "
+//				Number Field Index:-------01234567890
+//				Total Number String Length: 11
+//
+//			For the 'NumFieldSymPos.OutsideNumField()' specification,
+//			the final length of the number string is greater than
+//			the Number Field length.
+//
+//	currencyNumSignRelPos			CurrencyNumSignRelativePosition
+//
+//		Currency Symbols have the option of being
+//		positioned either inside or outside number sign
+//		symbols formatted with numeric values in a
+//		number string.
+//
+//		Examples of number sign symbols include minus
+//		signs ('-'), plus signs ('+') and surrounding
+//		parentheses ("()").
+//
+//		Parameter 'currencyNumSignRelPos' is an instance
+//		of type CurrencyNumSignRelativePosition which
+//		serves as an enumeration. This enumeration has
+//		three possible values, only two of which are
+//		valid:
+//
+//			CurrNumSignRelPos.None()			- Invalid
+//			CurrNumSignRelPos.OutsideNumSign()	- Valid
+//			CurrNumSignRelPos.InsideNumSign()	- Valid
+//
+//		'CurrNumSignRelPos' is global constant used to
+//		abbreviate the syntax for invoking these
+//		enumeration	values. The formal syntax is:
+//
+//			CurrencyNumSignRelativePosition(0).OutsideNumSign()
+//			CurrencyNumSignRelativePosition(0).InsideNumSign()
+//
+//		Examples CurrNumSignRelPos.OutsideNumSign()
+//				"$ -123.45"
+//				"123.45- €"
+//				"£ -123.45"
+//
+//		Examples CurrNumSignRelPos.InsideNumSign()
+//
+//			Examples:
+//				"- $123.45"
+//				"123.45€ -"
+//				"- £123.45"
+//
+//		NumberFieldSymbolPosition Conflicts
+//
+//		When formatting a number string, the
+//		NumberFieldSymbolPosition values for both the
+//		Currency Symbol and the Number Sign Symbol
+//		MUST BE EQUAL before the Currency Number Sign
+//		Relative Position parameter,
+//		('currencyNumSignRelPos'), will be activated
+//		and applied to the number string formatting
+//		algorithm.
+//
+//		If the NumberFieldSymbolPosition values for both
+//		the	Currency Symbol and the Number Sign Symbol
+//		ARE NOT EQUAL, the NumberFieldSymbolPosition
+//		parameter controls and the Currency Number Sign
+//		Relative Position parameter,
+//		('currencyNumSignRelPos'), will be ignored.
+//
+//		Example:
+//			-- NumberFieldSymbolPosition Values NOT EQUAL --
+//
+//			Number Field Length: 8
+//		  	Numeric Value: -123.45
+//			Minus Sign Number Field Symbol Position:
+//				NumFieldSymPos.InsideNumField()
+//			Currency Number Field Symbol Position:
+//				NumFieldSymPos.OutsideNumField()
+//			Currency Number Sign Relative Position:
+//				CurrNumSignRelPos.InsideNumSign()
+//			Leading Currency Symbol: Dollar sign ('$')
+//			Number Text Justification: Right
+//			Formatted Number String: "$ -123.45"
+//			Number Field Index:-------012345678
+//			Total Number String Length: 9
+//
+//			Currency Symbol is Formatted OUTSIDE
+//			the Number Field.
+//
+//	errorPrefix						interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (nStrNumSymbolGroupNanobot *numStrNumberSymbolGroupNanobot) setCurrencySymbolRunes(
+	nStrNumSymbols *NumStrNumberSymbolGroup,
+	leadingCurrencySymbols []rune,
+	trailingCurrencySymbol []rune,
+	currencyNumFieldSymPosition NumberFieldSymbolPosition,
+	currencyNumSignRelPos CurrencyNumSignRelativePosition,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if nStrNumSymbolGroupNanobot.lock == nil {
+		nStrNumSymbolGroupNanobot.lock = new(sync.Mutex)
+	}
+
+	nStrNumSymbolGroupNanobot.lock.Lock()
+
+	defer nStrNumSymbolGroupNanobot.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"numStrNumberSymbolGroupNanobot."+
+			"setCurrencySymbolRunes()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if nStrNumSymbols == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'nStrNumSymbols' is invalid!\n"+
+			"'nStrNumSymbols' is a 'nil' pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	lenLeadingCurrSyms := len(leadingCurrencySymbols)
+
+	lenTrailingCurrSyms := len(trailingCurrencySymbol)
+
+	if lenLeadingCurrSyms == 0 &&
+		lenTrailingCurrSyms == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameters 'leadingCurrencySymbols' and\n"+
+			"'trailingCurrencySymbol' are invalid!\n"+
+			"Both parameters are empty and contain zero text characters.\n",
+			ePrefix.String())
+
+		return err
+
+	}
+
+	if lenLeadingCurrSyms > 0 &&
+		lenTrailingCurrSyms > 0 {
+
+		err = nStrNumSymbols.currencySymbol.
+			SetCurrencyLeadingTrailingSymbolRunes(
+				leadingCurrencySymbols,
+				trailingCurrencySymbol,
+				currencyNumFieldSymPosition,
+				currencyNumSignRelPos,
+				ePrefix.XCpy(
+					"nStrNumSymbols.currencySymbol<-"))
+
+	} else if lenLeadingCurrSyms > 0 &&
+		lenTrailingCurrSyms == 0 {
+
+		err = nStrNumSymbols.currencySymbol.
+			SetCurrencyLeadingSymbolRunes(
+				leadingCurrencySymbols,
+				currencyNumFieldSymPosition,
+				currencyNumSignRelPos,
+				ePrefix.XCpy(
+					"nStrNumSymbols.currencySymbol<-"))
+
+	} else {
+		// MUST BE -
+		//  lenLeadingCurrSyms == 0  &&
+		//		lenTrailingCurrSyms > 0
+
+		err = nStrNumSymbols.currencySymbol.
+			SetCurrencyTrailingSymbolRunes(
+				trailingCurrencySymbol,
+				currencyNumFieldSymPosition,
+				currencyNumSignRelPos,
+				ePrefix.XCpy(
+					"nStrNumSymbols.currencySymbol<-"))
+	}
+
+	return err
+}
+
+//	setCurrencySymbolSpec
+//
+//	Receives a pointer to an instance of
+//	NumStrNumberSymbolSpec and proceeds to delete and
+//	reconfigure the internal Currency Symbols member
+//	variable:
+//
+//		NumStrNumberSymbolSpec.currencySymbol
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	Be advised that this method will delete and reset the
+//	Currency Symbols member variable data fields
+//	contained in input paramter, 'nStrNumSymbols'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	nStrNumSymbols				*NumStrNumberSymbolGroup
+//
+//		A pointer to an instance of
+//		NumStrNumberSymbolGroup.
+//
+//		The Currency Symbol Specifications for this
+//		instance will be deleted and reset to the values
+//		provided by input parameter 'currencySymbolSpec'.
+//
+//	currencySymbolSpec			NumStrNumberSymbolSpec
+//
+//		An instance of NumStrNumberSymbolSpec containing
+//		the Currency Symbol format specifications which
+//		will be copied to the Currency Symbol member
+//		variable contained in the NumStrNumberSymbolGroup
+//		instance, 'nStrNumSymbols'.
+//
+//		If this value is empty, np error will be returned
+//		and the 'nStrNumSymbols' will be set to a NOP.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// -----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (nStrNumSymbolGroupNanobot *numStrNumberSymbolGroupNanobot) setCurrencySymbolSpec(
+	nStrNumSymbols *NumStrNumberSymbolGroup,
+	currencySymbolSpec NumStrNumberSymbolSpec,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if nStrNumSymbolGroupNanobot.lock == nil {
+		nStrNumSymbolGroupNanobot.lock = new(sync.Mutex)
+	}
+
+	nStrNumSymbolGroupNanobot.lock.Lock()
+
+	defer nStrNumSymbolGroupNanobot.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"numStrNumberSymbolGroupNanobot."+
+			"setNegativeNumSignSpec()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if nStrNumSymbols == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'nStrNumSymbols' is invalid!\n"+
+			"'nStrNumSymbols' is a 'nil' pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if currencySymbolSpec.IsNOP() {
+
+		nStrNumSymbols.currencySymbol.SetNOP()
+
+		return err
+	}
+
+	err = nStrNumSymbols.currencySymbol.CopyIn(
+		&currencySymbolSpec,
+		ePrefix.XCpy(
+			"nStrNumSymbols.currencySymbol"))
+
+	return err
+}
+
 //	setNegativeNumSignRunes
 //
-//	Receives a series of rune arrays used to configure
-//	the input parameter 'nStrNumSymbols' with new data
-//	values for the Negative Number Sign Symbols.
+//	Receives two rune arrays used to configure
+//	leading negative number signs, trailing negative
+//	number signs or leading and trailing negative number
+//	signs.
+//
+//	Input parameter 'nStrNumSymbols' is an instance of
+//	NumStrNumberSymbolGroup. The Negative Number data
+//	in this instance will be configured with new
+//	data values for Negative Number Sign Symbols.
 //
 // ----------------------------------------------------------------
 //
@@ -8578,6 +9115,8 @@ func (nStrNumSymbolGroupNanobot *numStrNumberSymbolGroupNanobot) equal(
 //	Negative Number Sign Symbol member variable data fields
 //	as specified by the rune arrays passed as input
 //	parameters.
+//
+//		nStrNumSymbols.negativeNumberSign
 //
 // ----------------------------------------------------------------
 //
@@ -8600,7 +9139,7 @@ func (nStrNumSymbolGroupNanobot *numStrNumberSymbolGroupNanobot) equal(
 //
 //		Leading number symbols can include any
 //		combination of characters such as minus signs
-//		('-').
+//		('-') or leading and trailing parentheses ('()').
 //
 //		Example-1: Leading Number Symbols
 //			Leading Number Symbols for Negative Values
@@ -8608,7 +9147,7 @@ func (nStrNumSymbolGroupNanobot *numStrNumberSymbolGroupNanobot) equal(
 //			Leading Symbols: "- "
 //			Number String:   "- 123.456"
 //
-//		Example-2: Leading Number Symbols With Currency
+//		Example-2: Leading Number Symbols
 //			Leading Number Symbols for Negative Values
 //
 //			Leading Symbols: "-"
@@ -8623,7 +9162,7 @@ func (nStrNumSymbolGroupNanobot *numStrNumberSymbolGroupNanobot) equal(
 //
 //		Trailing number symbols can include any
 //		combination of characters such as minus signs
-//		('-').
+//		('-') or leading and trailing parentheses ('()').
 //
 //		Example-1: Trailing Number Symbols
 //			Trailing Number Symbols for Negative Values
@@ -8641,8 +9180,21 @@ func (nStrNumSymbolGroupNanobot *numStrNumberSymbolGroupNanobot) equal(
 //
 //		Defines the position of the Negative Number Sign
 //		relative to a Number Field in which a number
-//		string is displayed. Possible valid values are
-//		listed as follows:
+//		string is displayed.
+//
+//		A Number Field defines the length of a text
+//		string in which a numeric value is formatted.
+//		When applied, a Number Field is usually longer
+//		than the numeric value string and typically
+//		justifies that numeric value string as "Left",
+//		"Right" or "Centered".
+//
+//			Number Field Example (Centered):
+//				"  123.45  "
+//
+//
+//		Possible valid 'negativeNumFieldSymPosition'
+//		values are listed as follows:
 //
 //			NumFieldSymPos.InsideNumField()
 //				Example-1:
@@ -8652,7 +9204,7 @@ func (nStrNumSymbolGroupNanobot *numStrNumberSymbolGroupNanobot) equal(
 //					Number Symbol Position: Inside Number Field
 //			     	Number Text Justification: Right
 //					Formatted Number String: " -123.45"
-//					Number Field Index:  01234567
+//					Number Field Index:-------01234567
 //					Total Number String Length: 8
 //
 //				Example-2:
@@ -8662,7 +9214,7 @@ func (nStrNumSymbolGroupNanobot *numStrNumberSymbolGroupNanobot) equal(
 //					Number Symbol Position: Inside Number Field
 //			     	Number Text Justification: Right
 //					Formatted Number String: " 123.45-"
-//					Number Field Index:       01234567
+//					Number Field Index:-------01234567
 //					Total Number String Length: 8
 //
 //				Example-3:
@@ -8672,7 +9224,7 @@ func (nStrNumSymbolGroupNanobot *numStrNumberSymbolGroupNanobot) equal(
 //					Number Symbol Position: Inside Number Field
 //			     	Number Text Justification: Centered
 //					Formatted Number String: " (123.45) "
-//					Number Field Index:       0123456789
+//					Number Field Index:-------0123456789
 //					Total Number String Length: 10
 //
 //				For the 'NumFieldSymPos.InsideNumField()'
@@ -8687,7 +9239,7 @@ func (nStrNumSymbolGroupNanobot *numStrNumberSymbolGroupNanobot) equal(
 //			     	Number Symbol Position: Outside Number Field
 //			     	Number Text Justification: Right
 //			     	Formatted Number String: "-  123.45"
-//					Number Field Index:       012345678
+//					Number Field Index:-------012345678
 //					Total Number String Length: 9
 //
 //				Example-5:
@@ -8697,7 +9249,7 @@ func (nStrNumSymbolGroupNanobot *numStrNumberSymbolGroupNanobot) equal(
 //			     	Number Symbol Position: Outside Number Field
 //			     	Number Text Justification: Right
 //			     	Formatted Number String: "  123.45-"
-//					Number Field Index:       012345678
+//					Number Field Index:-------012345678
 //					Total Number String Length: 9
 //
 //				Example-6:
@@ -8707,7 +9259,7 @@ func (nStrNumSymbolGroupNanobot *numStrNumberSymbolGroupNanobot) equal(
 //					Number Symbol Position: Outside Number Field
 //			     	Number Text Justification: Centered
 //					Formatted Number String: "( 123.45 )"
-//					Number Field Index:       0123456789
+//					Number Field Index:-------0123456789
 //					Total Number String Length: 10
 //
 //				For the 'NumFieldSymPos.OutsideNumField()'
@@ -8785,27 +9337,70 @@ func (nStrNumSymbolGroupNanobot *numStrNumberSymbolGroupNanobot) setNegativeNumS
 		return err
 	}
 
-	err = nStrNumSymbols.negativeNumberSign.
-		SetNumberSignLeadingTrailingSymbolRunes(
-			leadingNegativeNumberSymbols,
-			negativeNumFieldSymPosition,
-			trailingNegativeNumberSymbols,
-			negativeNumFieldSymPosition,
-			ePrefix.XCpy(
-				"nStrNumSymbols.negativeNumberSign"))
+	lenLeadingNumSyms := len(leadingNegativeNumberSymbols)
+
+	lenTrailingNumSyms := len(trailingNegativeNumberSymbols)
+
+	if lenLeadingNumSyms == 0 &&
+		lenTrailingNumSyms == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameters 'leadingNegativeNumberSymbols' and\n"+
+			"'trailingNegativeNumberSymbols' are invalid!\n"+
+			"Both parameters are empty and contain zero text characters.\n",
+			ePrefix.String())
+
+		return err
+
+	}
+
+	if lenLeadingNumSyms > 0 &&
+		lenTrailingNumSyms > 0 {
+
+		err = nStrNumSymbols.negativeNumberSign.
+			SetNumberSignLeadingTrailingSymbolRunes(
+				leadingNegativeNumberSymbols,
+				negativeNumFieldSymPosition,
+				trailingNegativeNumberSymbols,
+				negativeNumFieldSymPosition,
+				ePrefix.XCpy(
+					"nStrNumSymbols.negativeNumberSign"))
+
+	} else if lenLeadingNumSyms > 0 &&
+		lenTrailingNumSyms == 0 {
+
+		err = nStrNumSymbols.negativeNumberSign.
+			SetNumberSignLeadingSymbolRunes(
+				leadingNegativeNumberSymbols,
+				negativeNumFieldSymPosition,
+				ePrefix.XCpy(
+					"nStrNumSymbols.negativeNumberSign"))
+
+	} else {
+		// MUST BE -
+		//  lenLeadingNumSyms == 0  &&
+		//		lenTrailingNumSyms > 0
+
+		err = nStrNumSymbols.negativeNumberSign.
+			SetNumberSignTrailingSymbolRunes(
+				trailingNegativeNumberSymbols,
+				negativeNumFieldSymPosition,
+				ePrefix.XCpy(
+					"nStrNumSymbols.negativeNumberSign"))
+
+	}
 
 	return err
 }
 
 //	setNegativeNumSignSpec
 //
-//	Receives a single NumStrNumberSymbolSpec object
-//	configured as a Negative Number Sign Symbol.
+//	Receives a pointer to an instance of
+//	NumStrNumberSymbolSpec and proceeds to delete and
+//	reconfigure the internal Negative Number Sign Symbol
+//	member variable:
 //
-//	This method then proceeds to reset the
-//	corresponding Negative Number Sign Symbol member
-//	variable data value for the NumStrNumberSymbolGroup
-//	input paramter 'nStrNumSymbols'.
+//		NumStrNumberSymbolSpec.negativeNumberSign
 //
 // ----------------------------------------------------------------
 //
