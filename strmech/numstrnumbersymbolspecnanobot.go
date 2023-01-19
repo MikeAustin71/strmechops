@@ -677,21 +677,18 @@ func (nStrNumSymSpecNanobot *numStrNumberSymbolSpecNanobot) setLeadingTrailingCu
 		return err
 	}
 
-	if len(leadingCurrencySymbol) == 0 {
+	lenLeadingCurrSym := len(leadingCurrencySymbol)
+
+	lenTrailingCurrSym := len(trailingCurrencySymbol)
+
+	if lenLeadingCurrSym == 0 &&
+		lenTrailingCurrSym == 0 {
 
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'leadingCurrencySymbol' is invalid!\n"+
-			"'leadingCurrencySymbol' is empty and has a character length of zero.\n",
-			ePrefix.String())
-
-		return err
-	}
-
-	if len(trailingCurrencySymbol) == 0 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'trailingCurrencySymbol' is invalid!\n"+
-			"'trailingCurrencySymbol' is empty and has a character length of zero.\n",
+			"Error: Input parameter 'leadingCurrencySymbol' and\n"+
+			"'trailingCurrencySymbol' are invalid!\n"+
+			"Both 'leadingCurrencySymbol' and 'trailingCurrencySymbol'\n"+
+			" are empty and have zero text characters.\n",
 			ePrefix.String())
 
 		return err
@@ -702,30 +699,36 @@ func (nStrNumSymSpecNanobot *numStrNumberSymbolSpecNanobot) setLeadingTrailingCu
 	nStrNumSymSpecMolecule.empty(
 		currencySymbols)
 
-	err = nStrNumSymSpecMolecule.
-		setLeadingNStrNumSymbolSpec(
-			currencySymbols,
-			leadingCurrencySymbol,
-			currencyFieldSymbolPosition,
-			ePrefix.XCpy(
-				"currencySymbols<-"+
-					"leadingCurrencySymbol"))
+	if lenLeadingCurrSym > 0 {
 
-	if err != nil {
-		return err
+		err = nStrNumSymSpecMolecule.
+			setLeadingNStrNumSymbolSpec(
+				currencySymbols,
+				leadingCurrencySymbol,
+				currencyFieldSymbolPosition,
+				ePrefix.XCpy(
+					"currencySymbols<-"+
+						"leadingCurrencySymbol"))
+
+		if err != nil {
+			return err
+		}
 	}
 
-	err = nStrNumSymSpecMolecule.
-		setTrailingNStrNumSymbolSpec(
-			currencySymbols,
-			trailingCurrencySymbol,
-			currencyFieldSymbolPosition,
-			ePrefix.XCpy(
-				"currencySymbols<-"+
-					"trailingCurrencySymbol"))
+	if lenTrailingCurrSym > 0 {
 
-	if err != nil {
-		return err
+		err = nStrNumSymSpecMolecule.
+			setTrailingNStrNumSymbolSpec(
+				currencySymbols,
+				trailingCurrencySymbol,
+				currencyFieldSymbolPosition,
+				ePrefix.XCpy(
+					"currencySymbols<-"+
+						"trailingCurrencySymbol"))
+
+		if err != nil {
+			return err
+		}
 	}
 
 	currencySymbols.currencyNumSignRelativePos =

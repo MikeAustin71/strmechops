@@ -7964,8 +7964,10 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetCurrencyLeadingSymbolRune
 //		prepended to the beginning of number strings
 //		containing currency numeric values.
 //
-//		If this parameter is submitted as an empty string,
-//		an error will be returned.
+//		If 'leadingCurrencySymbol' and
+//		'trailingCurrencySymbol' are both submitted as
+//		empty strings (zero character length), an error
+//		will be returned.
 //
 //	trailingCurrencySymbol     		string
 //
@@ -7983,8 +7985,11 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetCurrencyLeadingSymbolRune
 //
 //				Example: 125.34€
 //
-//		If this parameter is submitted as an empty string,
-//		an error will be returned.
+//
+//		If 'leadingCurrencySymbol' and
+//		'trailingCurrencySymbol' are both submitted as
+//		empty strings (zero character length), an error
+//		will be returned.
 //
 //	currencyFieldSymbolPosition		NumberFieldSymbolPosition
 //
@@ -8366,9 +8371,9 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetCurrencyLeadingTrailingSy
 //
 // # Input Parameters
 //
-//	leadingCurrencySymbol     		string
+//	leadingCurrencySymbol     		[]rune
 //
-//		A string containing one or more Leading
+//		A rune array containing one or more Leading
 //		Currency Symbol characters used to configure
 //		the current instance of NumStrNumberSymbolSpec.
 //
@@ -8380,12 +8385,16 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetCurrencyLeadingTrailingSy
 //		prepended to the beginning of number strings
 //		containing currency numeric values.
 //
-//		If this parameter is submitted as an empty string,
-//		an error will be returned.
+//				Example: $125.34
 //
-//	trailingCurrencySymbol     		string
+//		If both 'leadingCurrencySymbol' and
+//		'trailingCurrencySymbol' are submitted as empty
+//		or zero length rune arrays, an error will be
+//		returned.
 //
-//		A string containing one or more Trailing
+//	trailingCurrencySymbol     		[]rune
+//
+//		A rune array containing one or more Trailing
 //		Currency Symbol characters used to configure
 //		the current instance of NumStrNumberSymbolSpec.
 //
@@ -8399,8 +8408,11 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetCurrencyLeadingTrailingSy
 //
 //				Example: 125.34€
 //
-//		If this parameter is submitted as an empty string,
-//		an error will be returned.
+//
+//		If both 'leadingCurrencySymbol' and
+//		'trailingCurrencySymbol' are submitted as empty
+//		or zero length rune arrays, an error will be
+//		returned.
 //
 //	currencyFieldSymbolPosition		NumberFieldSymbolPosition
 //
