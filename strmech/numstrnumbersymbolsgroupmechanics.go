@@ -185,6 +185,61 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) copyNumSymbols(
 	return err
 }
 
+func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setCurrencyDefaultsFrance(
+	nStrNumSymbolGroup *NumStrNumberSymbolGroup,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if nStrNumSymbolsGroupMech.lock == nil {
+		nStrNumSymbolsGroupMech.lock = new(sync.Mutex)
+	}
+
+	nStrNumSymbolsGroupMech.lock.Lock()
+
+	defer nStrNumSymbolsGroupMech.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"numStrNumberSymbolGroupMechanics."+
+			"setCurrencyDefaultsFrance()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if nStrNumSymbolGroup == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'nStrNumSymbolGroup' is invalid!\n"+
+			"'nStrNumSymbolGroup' is a 'nil' pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	err = new(numStrNumberSymbolSpecMechanics).
+		setCurrencyDefaultsEU(
+			&nStrNumSymbolGroup.currencySymbol,
+			ePrefix.XCpy(
+				"nStrNumSymbolGroup.currencySymbol"))
+
+	if err != nil {
+		return err
+	}
+
+	return new(NumStrNumberSymbolSpec).
+		SetSignedNumDefaultsFrance(
+			&nStrNumSymbolGroup.positiveNumberSign,
+			&nStrNumSymbolGroup.zeroNumberSign,
+			&nStrNumSymbolGroup.negativeNumberSign,
+			ePrefix)
+}
+
 //	setNumberSymbolRunes
 //
 //	Receives a pointer to an instance of

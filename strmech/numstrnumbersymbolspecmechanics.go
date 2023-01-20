@@ -513,7 +513,7 @@ func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setCurrencyDefaultsUS
 //
 // # Input Parameters
 //
-//	positiveSignedNumberSymbols *NumStrNumberSymbolSpec
+//	positiveNumberSignSymbols	*NumStrNumberSymbolSpec
 //
 //		This instance of NumStrNumberSymbolSpec will be
 //		configured with signed number symbols associated
@@ -525,7 +525,7 @@ func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setCurrencyDefaultsUS
 //		not specifically displayed. Therefore, no leading
 //		plus ('+') symbol is required.
 //
-//	zeroSignedNumberSymbols		*NumStrNumberSymbolSpec
+//	zeroNumberSignSymbols		*NumStrNumberSymbolSpec
 //
 //		This instance of NumStrNumberSymbolSpec will be
 //		configured with signed number symbols associated
@@ -536,7 +536,7 @@ func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setCurrencyDefaultsUS
 //		standards, zero numeric values have	no number
 //		sign symbols.
 //
-//	negativeSignedNumberSymbols *NumStrNumberSymbolSpec
+//	negativeNumberSignSymbols	*NumStrNumberSymbolSpec
 //
 //		This instance of NumStrNumberSymbolSpec will be
 //		configured with signed number symbols associated
@@ -580,9 +580,9 @@ func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setCurrencyDefaultsUS
 //		will be prefixed or attached at the beginning of
 //		the error message.
 func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setSignedNumSymbolsDefaultFrance(
-	positiveSignedNumberSymbols *NumStrNumberSymbolSpec,
-	zeroSignedNumberSymbols *NumStrNumberSymbolSpec,
-	negativeSignedNumberSymbols *NumStrNumberSymbolSpec,
+	positiveNumberSignSymbols *NumStrNumberSymbolSpec,
+	zeroNumberSignSymbols *NumStrNumberSymbolSpec,
+	negativeNumberSignSymbols *NumStrNumberSymbolSpec,
 	errPrefDto *ePref.ErrPrefixDto) error {
 
 	if nStrNumSymSpecMech.lock == nil {
@@ -608,31 +608,31 @@ func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setSignedNumSymbolsDe
 		return err
 	}
 
-	if positiveSignedNumberSymbols == nil {
+	if positiveNumberSignSymbols == nil {
 
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'positiveSignedNumberSymbols' is invalid!\n"+
-			"'positiveSignedNumberSymbols' is a nil pointer.\n",
+			"Error: Input parameter 'positiveNumberSignSymbols' is invalid!\n"+
+			"'positiveNumberSignSymbols' is a nil pointer.\n",
 			ePrefix.String())
 
 		return err
 	}
 
-	if zeroSignedNumberSymbols == nil {
+	if zeroNumberSignSymbols == nil {
 
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'zeroSignedNumberSymbols' is invalid!\n"+
-			"'zeroSignedNumberSymbols' is a nil pointer.\n",
+			"Error: Input parameter 'zeroNumberSignSymbols' is invalid!\n"+
+			"'zeroNumberSignSymbols' is a nil pointer.\n",
 			ePrefix.String())
 
 		return err
 	}
 
-	if negativeSignedNumberSymbols == nil {
+	if negativeNumberSignSymbols == nil {
 
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'negativeSignedNumberSymbols' is invalid!\n"+
-			"'negativeSignedNumberSymbols' is a nil pointer.\n",
+			"Error: Input parameter 'negativeNumberSignSymbols' is invalid!\n"+
+			"'negativeNumberSignSymbols' is a nil pointer.\n",
 			ePrefix.String())
 
 		return err
@@ -641,20 +641,20 @@ func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setSignedNumSymbolsDe
 	numStrNumSymSpecNanobot := numStrNumberSymbolSpecMolecule{}
 
 	numStrNumSymSpecNanobot.empty(
-		positiveSignedNumberSymbols)
+		positiveNumberSignSymbols)
 
 	numStrNumSymSpecNanobot.empty(
-		zeroSignedNumberSymbols)
+		zeroNumberSignSymbols)
 
 	numStrNumSymSpecNanobot.empty(
-		negativeSignedNumberSymbols)
+		negativeNumberSignSymbols)
 
 	err = numStrNumSymSpecNanobot.setTrailingNStrNumSymbolSpec(
-		negativeSignedNumberSymbols,
+		negativeNumberSignSymbols,
 		[]rune{'-'},
 		NumFieldSymPos.InsideNumField(),
 		ePrefix.XCpy(
-			"negativeSignedNumberSymbols"))
+			"negativeNumberSignSymbols"))
 
 	return err
 

@@ -6452,7 +6452,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewNumberSignTrailingSymbolR
 //
 // # Return Values
 //
-//	positiveSignedNumberSymbols		NumStrNumberSymbolSpec
+//	positiveNumberSignSymbols		NumStrNumberSymbolSpec
 //
 //		One of three new returned instances of
 //		NumStrNumberSymbolSpec. This instance is empty or
@@ -6460,7 +6460,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewNumberSignTrailingSymbolR
 //		formatting standards, the positive number sign
 //		('+') is implied and not explicitly displayed.
 //
-//	zeroSignedNumberSymbols			NumStrNumberSymbolSpec
+//	zeroNumberSignSymbols			NumStrNumberSymbolSpec
 //
 //		One of three new returned instances of
 //		NumStrNumberSymbolSpec. This instance is empty or
@@ -6468,7 +6468,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewNumberSignTrailingSymbolR
 //	 	formatting standards, zero numeric values do not
 //		have an associated number sign.
 //
-//	negativeSignedNumberSymbols		NumStrNumberSymbolSpec
+//	negativeNumberSignSymbols		NumStrNumberSymbolSpec
 //
 //		One of three new returned instances of
 //		NumStrNumberSymbolSpec. This instance is configured
@@ -6499,9 +6499,9 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewNumberSignTrailingSymbolR
 //		the beginning of the error message.
 func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewSignedNumDefaultsFrance(
 	errorPrefix interface{}) (
-	positiveSignedNumberSymbols NumStrNumberSymbolSpec,
-	zeroSignedNumberSymbols NumStrNumberSymbolSpec,
-	negativeSignedNumberSymbols NumStrNumberSymbolSpec,
+	positiveNumberSignSymbols NumStrNumberSymbolSpec,
+	zeroNumberSignSymbols NumStrNumberSymbolSpec,
+	negativeNumberSignSymbols NumStrNumberSymbolSpec,
 	err error) {
 
 	if nStrNumberSymbolSpec.lock == nil {
@@ -6522,23 +6522,23 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewSignedNumDefaultsFrance(
 		"")
 
 	if err != nil {
-		return positiveSignedNumberSymbols,
-			zeroSignedNumberSymbols,
-			negativeSignedNumberSymbols,
+		return positiveNumberSignSymbols,
+			zeroNumberSignSymbols,
+			negativeNumberSignSymbols,
 			err
 
 	}
 
 	err = new(numStrNumberSymbolSpecMechanics).
 		setSignedNumSymbolsDefaultFrance(
-			&positiveSignedNumberSymbols,
-			&zeroSignedNumberSymbols,
-			&negativeSignedNumberSymbols,
+			&positiveNumberSignSymbols,
+			&zeroNumberSignSymbols,
+			&negativeNumberSignSymbols,
 			ePrefix)
 
-	return positiveSignedNumberSymbols,
-		zeroSignedNumberSymbols,
-		negativeSignedNumberSymbols,
+	return positiveNumberSignSymbols,
+		zeroNumberSignSymbols,
+		negativeNumberSignSymbols,
 		err
 }
 
@@ -7257,6 +7257,135 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewSignedNumDefaultsUSParen(
 		zeroSignedNumberSymbols,
 		negativeSignedNumberSymbols,
 		err
+}
+
+//	SetCurrencyDefaultEU
+//
+//	Deletes and reconfigures the data values in the
+//	current instance of NumStrNumberSymbolSpec with
+//	default currency specifications commonly applied
+//	in the European Union.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will delete, overwrite and reset all
+//	pre-existing data values in the current instance of
+//	NumStrNumberSymbolSpec. All data values will be
+//	configured with default currency specifications
+//	commonly applied in the European Union.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetCurrencyDefaultEU(
+	errorPrefix interface{}) error {
+
+	if nStrNumberSymbolSpec.lock == nil {
+		nStrNumberSymbolSpec.lock = new(sync.Mutex)
+	}
+
+	nStrNumberSymbolSpec.lock.Lock()
+
+	defer nStrNumberSymbolSpec.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumStrNumberSymbolSpec."+
+			"SetCurrencyDefaultEU()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	return new(numStrNumberSymbolSpecMechanics).
+		setCurrencyDefaultsEU(
+			nStrNumberSymbolSpec,
+			ePrefix.XCpy(
+				"nStrNumberSymbolSpec"))
 }
 
 // SetCurrencyLeadingSymbol
@@ -11697,4 +11826,181 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetNumberSignTrailingSymbolR
 					"trailingNumberSignSymbol"))
 
 	return err
+}
+
+//	SetSignedNumDefaultsFrance
+//
+//	Receives pointers to three instances of
+//	NumStrNumberSymbolSpec and proceeds to configure
+//	positive, zero and negative number sign symbols
+//	commonly applied to formatting signed number values
+//	according to French standards.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	positiveNumberSignSymbols		*NumStrNumberSymbolSpec
+//
+//		A pointer to an instance of
+//		NumStrNumberSymbolSpec.
+//
+//		This instance will be configured as empty or
+//		blank because under French signed number
+//		formatting standards, the positive number sign
+//		('+') is implied and not explicitly displayed.
+//
+//		All pre-existing data values in this instance
+//		will be deleted and reconfigured as an empty
+//		or NOP instance.
+//
+//	zeroNumberSignSymbols			*NumStrNumberSymbolSpec
+//
+//		A pointer to an instance of
+//		NumStrNumberSymbolSpec.
+//
+//		This instance is configured as empty or blank
+//		because under French signed number formatting
+//		standards, zero numeric values do not have an
+//		associated number sign.
+//
+//		All pre-existing data values in this instance
+//		will be deleted and reconfigured as an empty
+//		or NOP instance.
+//
+//	negativeNumberSignSymbols		*NumStrNumberSymbolSpec
+//
+//		A pointer to an instance of
+//		NumStrNumberSymbolSpec.
+//
+//		This instance is configured with a leading minus
+//		sign ('-') which will be formatted and displayed
+//		for all negative number	values. The negative
+//		number sign will be displayed inside the number
+//		field.
+//
+//			NumFieldSymPos.InsideNumField()
+//				Example:
+//					Number Field Length: 8
+//					Numeric Value: 123.45
+//					Number Symbol: leading minus sign ('-')
+//					Number Symbol Position: Inside Number Field
+//					Formatted Number String: " -123.45"
+//					Number Field Index:------>01234567
+//					Total Number String Length: 8
+//
+//		All pre-existing data values in this instance
+//		will be deleted and reconfigured as a leading
+//		minus sign ('-') in accordance with French
+//		Signed Number formatting standards.
+//
+//	errorPrefix						interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetSignedNumDefaultsFrance(
+	positiveNumberSignSymbols *NumStrNumberSymbolSpec,
+	zeroNumberSignSymbols *NumStrNumberSymbolSpec,
+	negativeNumberSignSymbols *NumStrNumberSymbolSpec,
+	errorPrefix interface{}) error {
+
+	if nStrNumberSymbolSpec.lock == nil {
+		nStrNumberSymbolSpec.lock = new(sync.Mutex)
+	}
+
+	nStrNumberSymbolSpec.lock.Lock()
+
+	defer nStrNumberSymbolSpec.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumStrNumberSymbolSpec."+
+			"SetSignedNumDefaultsFrance()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	return new(numStrNumberSymbolSpecMechanics).
+		setSignedNumSymbolsDefaultFrance(
+			positiveNumberSignSymbols,
+			zeroNumberSignSymbols,
+			negativeNumberSignSymbols,
+			ePrefix)
 }
