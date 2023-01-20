@@ -990,12 +990,18 @@ func (nStrNumSymbolGroupNanobot *numStrNumberSymbolGroupNanobot) setNegativeNumS
 
 //	setNegativeNumSignSpec
 //
-//	Receives a pointer to an instance of
-//	NumStrNumberSymbolSpec and proceeds to delete and
-//	reconfigure the internal Negative Number Sign Symbol
-//	member variable:
+//	Receives a single NumStrNumberSymbolSpec object
+//	configured as a Zero Number Sign Symbol.
 //
-//		NumStrNumberSymbolSpec.negativeNumberSign
+//	This method then proceeds to reset the
+//	corresponding Negative Number Sign Symbol member
+//	variable data value for the NumStrNumberSymbolGroup
+//	input paramter 'nStrNumSymbols'.
+//
+//	The Negative Number Sign Symbol internal member
+//	variable is:
+//
+//		nStrNumSymbols.negativeNumberSign
 //
 // ----------------------------------------------------------------
 //
@@ -1004,12 +1010,12 @@ func (nStrNumSymbolGroupNanobot *numStrNumberSymbolGroupNanobot) setNegativeNumS
 //	(1)	Be advised that this method will delete and reset
 //		the Negative Number Sign Symbol member variable
 //		data fields contained in input paramter,
-//		'nStrNumSymbols'.
+//		'nStrNumSymbols':
 //
-//	(2)	If input parameter 'negativeNumberSign' is invalid
-//		or a NOP, the internal Negative Number Sign Symbol,
-//		NumStrNumberSymbolSpec.negativeNumberSign, will be
-//		set to a NOP.
+//			nStrNumSymbols.negativeNumberSign
+//
+//	(2)	If input parameter 'negativeNumberSign' is
+//		invalid or a NOP, an error will be returned.
 //
 // ----------------------------------------------------------------
 //
@@ -1028,13 +1034,12 @@ func (nStrNumSymbolGroupNanobot *numStrNumberSymbolGroupNanobot) setNegativeNumS
 //		This Negative Number Sign Symbol Specification
 //		will be copied to the corresponding Negative
 //		Symbol Specification in input paramter,
-//		'nStrNumSymbols'.
+//		'nStrNumSymbols':
+//
+//			nStrNumSymbols.negativeNumberSign
 //
 //		If input parameter 'negativeNumberSign' is
-//		invalid or a NOP, the internal Negative Number
-//		Sign Symbol,
-//		NumStrNumberSymbolSpec.negativeNumberSign, will
-//		be set to a NOP.
+//		invalid or a NOP, an error will be returned.
 //
 //	errPrefDto					*ePref.ErrPrefixDto
 //
@@ -1105,10 +1110,18 @@ func (nStrNumSymbolGroupNanobot *numStrNumberSymbolGroupNanobot) setNegativeNumS
 		return err
 	}
 
-	if negativeNumberSign.IsNOP() {
+	err = negativeNumberSign.IsValidInstanceError(
+		ePrefix.XCpy("nStrNumSymbols.negativeNumberSign"))
 
-		nStrNumSymbols.negativeNumberSign.SetNOP()
+	if err != nil {
 
+		err2 := fmt.Errorf("numStrNumberSymbolGroupNanobot"+
+			"setNegativeNumSignSpec()\n"+
+			"Error: Input parameter 'negativeNumberSign' is invalid.\n\n"+
+			"%v\n",
+			err.Error())
+
+		return err2
 	}
 
 	err = nStrNumSymbols.negativeNumberSign.CopyIn(
@@ -1422,7 +1435,7 @@ func (nStrNumSymbolGroupNanobot *numStrNumberSymbolGroupNanobot) setPositiveNumS
 //	The Positive Number Sign Symbol internal member
 //	variable is:
 //
-//		NumStrNumberSymbolGroup.positiveNumberSign
+//		nStrNumSymbols.positiveNumberSign
 //
 // ----------------------------------------------------------------
 //
@@ -1431,12 +1444,12 @@ func (nStrNumSymbolGroupNanobot *numStrNumberSymbolGroupNanobot) setPositiveNumS
 //	(1)	Be advised that this method will delete and reset
 //		the Positive Number Sign Symbol member variable
 //		data fields contained in input paramter,
-//		'nStrNumSymbols'.
+//		'nStrNumSymbols':
+//
+//			nStrNumSymbols.positiveNumberSign
 //
 //	(2)	If input parameter 'positiveNumberSign' is invalid
-//		or a NOP, the internal Positive Number Sign Symbol,
-//		NumStrNumberSymbolSpec.positiveNumberSign, will be
-//		set to a NOP.
+//		or a NOP, an error will be returned.
 //
 // ----------------------------------------------------------------
 //
@@ -1455,13 +1468,12 @@ func (nStrNumSymbolGroupNanobot *numStrNumberSymbolGroupNanobot) setPositiveNumS
 //		This Positive Number Sign Symbol Specification
 //		will be copied to the corresponding Positive
 //		Symbol Specification in input paramter,
-//		'nStrNumSymbols'.
+//		'nStrNumSymbols':
+//
+//			nStrNumSymbols.zeroNumberSign
 //
 //		If input parameter 'positiveNumberSign' is
-//		invalid or a NOP, the internal Positive Number
-//		Sign Symbol,
-//		NumStrNumberSymbolSpec.positiveNumberSign, will
-//		be set to a NOP.
+//		invalid or a NOP, an error will be returned.
 //
 //	errPrefDto					*ePref.ErrPrefixDto
 //
@@ -1532,11 +1544,18 @@ func (nStrNumSymbolGroupNanobot *numStrNumberSymbolGroupNanobot) setPositiveNumS
 		return err
 	}
 
-	if positiveNumberSign.IsNOP() {
+	err = positiveNumberSign.IsValidInstanceError(
+		ePrefix.XCpy("nStrNumSymbols.positiveNumberSign"))
 
-		nStrNumSymbols.positiveNumberSign.SetNOP()
+	if err != nil {
 
-		return err
+		err2 := fmt.Errorf("numStrNumberSymbolGroupNanobot"+
+			"setPositiveNumSignSpec()\n"+
+			"Error: Input parameter 'positiveNumberSign' is invalid.\n\n"+
+			"%v\n",
+			err.Error())
+
+		return err2
 	}
 
 	err = nStrNumSymbols.positiveNumberSign.CopyIn(
@@ -1553,6 +1572,11 @@ func (nStrNumSymbolGroupNanobot *numStrNumberSymbolGroupNanobot) setPositiveNumS
 //	Receives a series of rune arrays used to configure
 //	the input parameter 'nStrNumSymbols' with new data
 //	values for the Zero Number Sign Symbols.
+//
+//	Then Zero Number Sign Symbols internal member
+//	variable is:
+//
+//		nStrNumSymbols.zeroNumberSign
 //
 // ----------------------------------------------------------------
 //
@@ -1584,21 +1608,20 @@ func (nStrNumSymbolGroupNanobot *numStrNumberSymbolGroupNanobot) setPositiveNumS
 //
 //		Zero number signs are commonly omitted because
 //		zero does not technically qualify as either a
-//		positive or negative value. However, currency
-//		symbols may be required for zero values.
-//		Therefore, Leading Zero Number Symbols almost
-//		always consist of currency symbols.
+//		positive or negative value. However, type
+//		NumStrNumberSymbolGroup gives the user the
+//		option to configure both leading and trailing
+//		Zero Number Sign Symbols.
 //
-//		Leading number symbols can include any
-//		combination of characters such as minus signs
-//		('-') and/or currency symbols ('$').
+//		Leading zero number sign symbols can include any
+//		combination of characters such as plus signs
+//		('+').
 //
-//		Example: Leading Number Symbols
-//			Leading Number Symbols for Zero Values
+//		Example: Leading Zero Number Sign Symbols
 //
-//			Leading Symbols: "$"
+//			Leading Symbols: "+"
 //			Trailing Symbols: ""
-//			Number String:   "$0.00"
+//			Number String:   "+0.00"
 //
 //	trailingZeroNumberSymbols	[]rune
 //
@@ -1609,25 +1632,24 @@ func (nStrNumSymbolGroupNanobot *numStrNumberSymbolGroupNanobot) setPositiveNumS
 //
 //		Zero number signs are commonly omitted because
 //		zero does not technically qualify as either a
-//		positive or negative value. However, currency
-//		symbols may be required for zero values.
-//		Therefore, Trailing Zero Number Symbols almost
-//		always consist of currency symbols.
+//		positive or negative value. However, type
+//		NumStrNumberSymbolGroup gives the user the
+//		option to configure both leading and trailing
+//		Zero Number Sign Symbols.
 //
 //		Trailing number symbols can include any
-//		combination of characters such as minus signs
-//		('-') and/or currency symbols ('$').
+//		combination of characters such as plus signs
+//		('+').
 //
-//		Example: Trailing Number Symbols
-//			Trailing Number Symbols for Zero Values
+//		Example: Trailing Zero Number Sign Symbols
 //
 //			Leading Symbols: ""
-//			Trailing Symbols: " $"
-//			Number String:   "0.00 $"
+//			Trailing Symbols: " +"
+//			Number String:   "0.00 +"
 //
 //	zeroNumFieldSymPosition		NumberFieldSymbolPosition
 //
-//		Defines the position of the Zero Number Sign
+//		Defines the position of the zero Number Sign
 //		relative to a Number Field in which a number
 //		string is displayed. Possible valid values are
 //		listed as follows:
@@ -1636,67 +1658,48 @@ func (nStrNumSymbolGroupNanobot *numStrNumberSymbolGroupNanobot) setPositiveNumS
 //				Example-1:
 //					Number Field Length: 8
 //					Numeric Value: 123.45
-//					Number Symbol: leading minus sign ('-')
+//					Number Symbol: leading plus sign ('+')
 //					Number Symbol Position: Inside Number Field
 //			     	Number Text Justification: Right
-//					Formatted Number String: " -123.45"
+//					Formatted Number String: " +123.45"
 //					Number Field Index:------>01234567
 //					Total Number String Length: 8
 //
 //				Example-2:
 //					Number Field Length: 8
 //					Numeric Value: 123.45
-//					Number Symbol: trailing minus sign ('-')
+//					Number Symbol: trailing plus sign ('+')
 //					Number Symbol Position: Inside Number Field
 //			     	Number Text Justification: Right
-//					Formatted Number String: " 123.45-"
+//					Formatted Number String: " 123.45+"
 //					Number Field Index:------>01234567
 //					Total Number String Length: 8
 //
-//				Example-3:
-//					Number Field Length: 10
-//					Numeric Value: 123.45
-//					Number Symbol: before and after parentheses  ('()')
-//					Number Symbol Position: Inside Number Field
-//			     	Number Text Justification: Centered
-//					Formatted Number String: " (123.45) "
-//					Number Field Index:------>0123456789
-//					Total Number String Length: 10
-//
 //				For the 'NumFieldSymPos.InsideNumField()'
-//				specification, the final length of the number
-//				string is defined by the Number Field length.
+//				specification, the final length of the
+//				number string is defined by the Number
+//				Field length.
 //
 //			NumFieldSymPos.OutsideNumField()
+//				Example-3:
+//					Number Field Length: 8
+//			     	Numeric Value: 123.45
+//			     	Number Symbol: leading plus sign ('+')
+//			     	Number Symbol Position: Outside Number Field
+//			     	Number Text Justification: Right
+//			     	Formatted Number String: "+  123.45"
+//					Number Field Index:------>012345678
+//					Total Number String Length: 9
+//
 //				Example-4:
 //					Number Field Length: 8
 //			     	Numeric Value: 123.45
-//			     	Number Symbol: leading minus sign ('-')
+//			     	Number Symbol: trailing plus sign ('+')
 //			     	Number Symbol Position: Outside Number Field
 //			     	Number Text Justification: Right
-//			     	Formatted Number String: "-  123.45"
+//			     	Formatted Number String: "  123.45+"
 //					Number Field Index:------>012345678
 //					Total Number String Length: 9
-//
-//				Example-5:
-//					Number Field Length: 8
-//			     	Numeric Value: 123.45
-//			     	Number Symbol: trailing minus sign ('-')
-//			     	Number Symbol Position: Outside Number Field
-//			     	Number Text Justification: Right
-//			     	Formatted Number String: "  123.45-"
-//					Number Field Index:------>012345678
-//					Total Number String Length: 9
-//
-//				Example-6:
-//					Number Field Length: 8
-//					Numeric Value: 123.45
-//					Number Symbol: before and after parentheses  ('()')
-//					Number Symbol Position: Outside Number Field
-//			     	Number Text Justification: Centered
-//					Formatted Number String: "( 123.45 )"
-//					Number Field Index:------>0123456789
-//					Total Number String Length: 10
 //
 //				For the 'NumFieldSymPos.OutsideNumField()'
 //				specification, the final length of the number
@@ -1773,14 +1776,58 @@ func (nStrNumSymbolGroupNanobot *numStrNumberSymbolGroupNanobot) setZeroNumSignR
 		return err
 	}
 
-	err = nStrNumSymbols.zeroNumberSign.
-		SetNumberSignLeadingTrailingSymbolRunes(
-			leadingZeroNumberSymbols,
-			zeroNumFieldSymPosition,
-			trailingZeroNumberSymbols,
-			zeroNumFieldSymPosition,
-			ePrefix.XCpy(
-				"nStrNumSymbols.zeroNumberSign"))
+	lenLeadingNumSyms := len(leadingZeroNumberSymbols)
+
+	lenTrailingNumSyms := len(trailingZeroNumberSymbols)
+
+	if lenLeadingNumSyms == 0 &&
+		lenTrailingNumSyms == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameters 'leadingZeroNumberSymbols' and\n"+
+			"'trailingZeroNumberSymbols' are invalid!\n"+
+			"Both parameters are empty and contain zero text characters.\n",
+			ePrefix.String())
+
+		return err
+
+	}
+
+	if lenLeadingNumSyms > 0 &&
+		lenTrailingNumSyms > 0 {
+
+		err = nStrNumSymbols.zeroNumberSign.
+			SetNumberSignLeadingTrailingSymbolRunes(
+				leadingZeroNumberSymbols,
+				zeroNumFieldSymPosition,
+				trailingZeroNumberSymbols,
+				zeroNumFieldSymPosition,
+				ePrefix.XCpy(
+					"nStrNumSymbols.zeroNumberSign"))
+
+	} else if lenLeadingNumSyms > 0 &&
+		lenTrailingNumSyms == 0 {
+
+		err = nStrNumSymbols.zeroNumberSign.
+			SetNumberSignLeadingSymbolRunes(
+				leadingZeroNumberSymbols,
+				zeroNumFieldSymPosition,
+				ePrefix.XCpy(
+					"nStrNumSymbols.zeroNumberSign"))
+
+	} else {
+		// MUST BE -
+		//  lenLeadingNumSyms == 0  &&
+		//		lenTrailingNumSyms > 0
+
+		err = nStrNumSymbols.zeroNumberSign.
+			SetNumberSignTrailingSymbolRunes(
+				trailingZeroNumberSymbols,
+				zeroNumFieldSymPosition,
+				ePrefix.XCpy(
+					"nStrNumSymbols.zeroNumberSign"))
+
+	}
 
 	return err
 }
@@ -1795,13 +1842,24 @@ func (nStrNumSymbolGroupNanobot *numStrNumberSymbolGroupNanobot) setZeroNumSignR
 //	variable data value for the NumStrNumberSymbolGroup
 //	input paramter 'nStrNumSymbols'.
 //
+//	The Zero Number Sign Symbol internal member
+//	variable is:
+//
+//		nStrNumSymbols.zeroNumberSign
+//
 // ----------------------------------------------------------------
 //
 // # IMPORTANT
 //
-//	Be advised that this method will delete and reset the
-//	Zero Number Sign Symbol member variable data fields
-//	contained in input paramter, 'nStrNumSymbols'.
+//	(1)	Be advised that this method will delete and reset
+//		the Zero Number Sign Symbol member variable
+//		data fields contained in input paramter,
+//		'nStrNumSymbols':
+//
+//			nStrNumSymbols.zeroNumberSign
+//
+//	(2)	If input parameter 'zeroNumberSign' is invalid
+//		or a NOP, an error will be returned.
 //
 // ----------------------------------------------------------------
 //
@@ -1814,12 +1872,18 @@ func (nStrNumSymbolGroupNanobot *numStrNumberSymbolGroupNanobot) setZeroNumSignR
 //		deleted and reset to the values	provided by input
 //		parameter 'zeroNumberSign'.
 //
-//	zeroNumberSign			NumStrNumberSymbolSpec
+//	zeroNumberSign				NumStrNumberSymbolSpec
 //
 //		This Zero Number Sign Symbol Specification
 //		will be copied to the corresponding Zero
 //		Symbol Specification in input paramter,
-//		'nStrNumSymbols'.
+//		'nStrNumSymbols':
+//
+//			nStrNumSymbols.zeroNumberSign
+//
+//		If input parameter 'zeroNumberSign' is invalid
+//		or a NOP, an error will be returned.
+//
 //
 //	errPrefDto					*ePref.ErrPrefixDto
 //
@@ -1888,6 +1952,20 @@ func (nStrNumSymbolGroupNanobot *numStrNumberSymbolGroupNanobot) setZeroNumSignS
 			ePrefix.String())
 
 		return err
+	}
+
+	err = zeroNumberSign.IsValidInstanceError(
+		ePrefix.XCpy("nStrNumSymbols.zeroNumberSign"))
+
+	if err != nil {
+
+		err2 := fmt.Errorf("numStrNumberSymbolGroupNanobot"+
+			"setZeroNumSignSpec()\n"+
+			"Error: Input parameter 'zeroNumberSign' is invalid.\n\n"+
+			"%v\n",
+			err.Error())
+
+		return err2
 	}
 
 	err = nStrNumSymbols.zeroNumberSign.CopyIn(

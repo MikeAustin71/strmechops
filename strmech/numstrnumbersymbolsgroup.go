@@ -4161,21 +4161,30 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetNegativeNumSignRunes(
 
 //	SetNegativeNumSignSpec
 //
-//	Reconfigures the current instance of
-//	NumStrNumberSymbolGroup based on the Negative Number
-//	Sign Symbol Specification object passed as an input
-//	parameter.
+//
+//	Receives a single NumStrNumberSymbolSpec object
+//	configured as a Negative Number Sign Symbol.
+//
+//	This method then proceeds to reset the
+//	corresponding Negative Number Sign Symbol member
+//	variable data value for the current instance of
+//	NumStrNumberSymbolGroup:
+//
+//		NumStrNumberSymbolGroup.negativeNumberSign
 //
 // ----------------------------------------------------------------
 //
 // # IMPORTANT
 //
-//	Be advised that this method will delete and reset the
-//	Negative Number Sign Symbol member variable data
-//	fields contained in the current instance of
-//	NumStrNumberSymbolGroup:
+//	(1)	Be advised that this method will delete and reset
+//		the Negative Number Sign Symbol member variable
+//		data fields contained in the current instance of
+//		NumStrNumberSymbolGroup:
 //
-//		NumStrNumberSymbolGroup.negativeNumberSign
+//			NumStrNumberSymbolGroup.negativeNumberSign
+//
+//	(2)	If input parameter 'negativeNumberSign' is
+//		invalid or a NOP, an error will be returned.
 //
 // ----------------------------------------------------------------
 //
@@ -4186,10 +4195,12 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetNegativeNumSignRunes(
 //		This Negative Number Sign Symbol Specification
 //		will be copied to the corresponding Negative
 //		Symbol Specification in the current instance of
-//		NumStrNumberSymbolGroup.
+//		NumStrNumberSymbolGroup:
 //
-//			negativeNumberSign ->
-//				NumStrNumberSymbolSpec.negativeNumberSign
+//			NumStrNumberSymbolSpec.negativeNumberSign
+//
+//		If input parameter 'negativeNumberSign' is
+//		invalid or a NOP, an error will be returned.
 //
 //	 errorPrefix                interface{}
 //
@@ -5149,12 +5160,15 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetPositiveNumSignRunes(
 //
 // # IMPORTANT
 //
-//	Be advised that this method will delete and reset the
-//	Positive Number Sign Symbol member variable data
-//	fields contained in the current instance of
-//	NumStrNumberSymbolGroup:
+//	(1)	Be advised that this method will delete and reset
+//		the Positive Number Sign Symbol member variable
+//		data fields contained in the current instance of
+//		NumStrNumberSymbolGroup:
 //
-//		NumStrNumberSymbolGroup.positiveNumberSign
+//			NumStrNumberSymbolGroup.positiveNumberSign
+//
+//	(2)	If input parameter 'positiveNumberSign' is invalid
+//		or a NOP, an error will be returned.
 //
 // ----------------------------------------------------------------
 //
@@ -5165,9 +5179,12 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetPositiveNumSignRunes(
 //		This Positive Number Sign Symbol Specification
 //		will be copied to the corresponding Positive
 //		Symbol Specification in the current instance of
-//		NumStrNumberSymbolGroup.
+//		NumStrNumberSymbolGroup:
 //
 //			NumStrNumberSymbolGroup.positiveNumberSign
+//
+//		If input parameter 'positiveNumberSign' is
+//		invalid or a NOP, an error will be returned.
 //
 //	 errorPrefix                interface{}
 //
@@ -7829,19 +7846,34 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetZeroNumSignRunes(
 
 //	SetZeroNumSignSpec
 //
-//	Reconfigures the current instance of
-//	NumStrNumberSymbolGroup based on the Zero Number
-//	Sign Symbol Specification object passed as an input
-//	parameter.
+//	Receives a  Zero Number Sign Symbol Specification
+//	object passed as an input parameter
+//	('zeroNumberSign').
+//
+//	This method then proceeds to reset the
+//	corresponding Zero Number Sign Symbol member
+//	variable data value for the current instance of
+//	NumStrNumberSymbolGroup.
+//
+//	The Zero Number Sign Symbol internal member
+//	variable for the current instance of
+//	NumStrNumberSymbolGroup is:
+//
+//		NumStrNumberSymbolGroup.zeroNumberSign
 //
 // ----------------------------------------------------------------
 //
 // # IMPORTANT
 //
-//	Be advised that this method will delete and reset the
-//	Zero Number Sign Symbol member variable data
-//	fields contained in the current instance of
-//	NumStrNumberSymbolGroup.
+//	(1)	Be advised that this method will delete and reset
+//		the Zero Number Sign Symbol member variable data
+//		fields contained in the current instance of
+//		NumStrNumberSymbolGroup:
+//
+//			NumStrNumberSymbolGroup.zeroNumberSign
+//
+//	(2)	If input parameter 'zeroNumberSign' is invalid
+//		or a NOP, an error will be returned.
 //
 // ----------------------------------------------------------------
 //
@@ -7852,7 +7884,12 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetZeroNumSignRunes(
 //		This Zero Number Sign Symbol Specification
 //		will be copied to the corresponding Zero
 //		Symbol Specification in the current instance of
-//		NumStrNumberSymbolGroup.
+//		NumStrNumberSymbolGroup:
+//
+//			NumStrNumberSymbolGroup.zeroNumberSign
+//
+//		If input parameter 'zeroNumberSign' is invalid
+//		or a NOP, an error will be returned.
 //
 //	 errorPrefix                interface{}
 //
@@ -7930,7 +7967,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetZeroNumSignRunes(
 //		text will be attached to the beginning of the
 //		error message.
 func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetZeroNumSignSpec(
-	positiveNumberSign NumStrNumberSymbolSpec,
+	zeroNumberSign NumStrNumberSymbolSpec,
 	errorPrefix interface{}) error {
 
 	if nStrNumSymbolsGroup.lock == nil {
@@ -7959,7 +7996,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetZeroNumSignSpec(
 	return new(numStrNumberSymbolGroupNanobot).
 		setZeroNumSignSpec(
 			nStrNumSymbolsGroup,
-			positiveNumberSign,
+			zeroNumberSign,
 			ePrefix.XCpy(
 				"nStrNumSymbolsGroup"))
 
