@@ -539,10 +539,11 @@ func (nStrNumSymSpecMolecule *numStrNumberSymbolSpecMolecule) setLeadingNStrNumS
 		if err != nil {
 			return err
 		}
-	}
 
-	numSymbolSpec.leadingNumberFieldSymbolPosition =
-		leadingNumFieldSymPosition
+		numSymbolSpec.leadingNumberFieldSymbolPosition =
+			leadingNumFieldSymPosition
+
+	}
 
 	return err
 }
@@ -716,10 +717,11 @@ func (nStrNumSymSpecMolecule *numStrNumberSymbolSpecMolecule) setTrailingNStrNum
 		if err != nil {
 			return err
 		}
-	}
 
-	numSignSymbolSpec.trailingNumberFieldSymbolPosition =
-		trailingNumFieldSymPosition
+		numSignSymbolSpec.trailingNumberFieldSymbolPosition =
+			trailingNumFieldSymPosition
+
+	}
 
 	return err
 }

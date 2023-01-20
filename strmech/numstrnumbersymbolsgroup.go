@@ -1912,9 +1912,9 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewNOP() NumStrNumberSymbolG
 //			Number Symbol: leading minus sign ('-')
 //			Number Symbol Position: Inside Number Field
 //			Formatted Number String: " -123.45"
-//			Number Field Index:-------01234567
+//			Number Field Index:------>01234567
 //			Total Number String Length: 8
-//		The minus sign is 'inside' the Number Field.
+//			The minus sign is 'inside' the Number Field.
 //
 // ----------------------------------------------------------------
 //
@@ -2113,19 +2113,18 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSimpleCurrency(
 //	currency values.
 //
 //	This method provides a simplified means of creating
-//	type NumStrNumberSymbolGroup using default values and
-//	generating number symbols suitable for signed numeric
-//	values.
+//	a new instance of type NumStrNumberSymbolGroup using
+//	default values and generating number symbols suitable
+//	in formatting signed numeric values.
 //
-//	Signed Number Symbols do NOT contain currency
+//	Again, signed Number Symbols do NOT contain currency
 //	symbols.
 //
 //	If the default configuration values fail to provide
 //	sufficient granular control over signed number symbol
 //	creation, use one of the more advanced constructor or
-//	'New' methods to achieve specialized multinational or
-//	multicultural signed number symbol formatting
-//	requirements:
+//	'New' methods to implement specialized multinational
+//	or multicultural signed number symbol formatting:
 //
 //		NumStrNumberSymbolGroup.NewSymbolsRunes()
 //		NumStrNumberSymbolGroup.NewSymbolsStrings()
@@ -2186,7 +2185,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSimpleCurrency(
 //			Number Symbol: leading minus sign ('-')
 //			Number Symbol Position: Inside Number Field
 //			Formatted Number String: " -123.45"
-//			Number Field Index:-------01234567
+//			Number Field Index:------>01234567
 //			Total Number String Length: 8
 //
 // ----------------------------------------------------------------
@@ -2210,12 +2209,12 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSimpleCurrency(
 //			"-123.456"
 //
 //		When set to 'false', the returned instance of
-//		NumStrNumberSymbolGroup will configure Number Symbols
-//		on the right side of the numeric value. Such
-//		Number Symbols are therefore configured as
+//		NumStrNumberSymbolGroup will configure Number
+//		Symbols on the right side of the numeric value.
+//		Such Number Symbols are therefore configured as
 //		trailing Number Symbols. This is the positioning
-//		format used in France, Germany and many countries
-//		in the European Union.
+//		format used in France, Germany and many other
+//		countries in the European Union.
 //
 //		Example Number String with Trailing Number Symbols:
 //			"123.456-"
@@ -2387,7 +2386,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSimpleSignedNumber(
 //					Number Symbol Position: Inside Number Field
 //			     	Number Text Justification: Right
 //					Formatted Number String: " +123.45"
-//					Number Field Index:-------01234567
+//					Number Field Index:------>01234567
 //					Total Number String Length: 8
 //
 //				Example-2:
@@ -2397,7 +2396,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSimpleSignedNumber(
 //					Number Symbol Position: Inside Number Field
 //			     	Number Text Justification: Right
 //					Formatted Number String: " 123.45+"
-//					Number Field Index:-------01234567
+//					Number Field Index:------>01234567
 //					Total Number String Length: 8
 //
 //				For the 'NumFieldSymPos.InsideNumField()'
@@ -2412,7 +2411,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSimpleSignedNumber(
 //			     	Number Symbol Position: Outside Number Field
 //			     	Number Text Justification: Right
 //			     	Formatted Number String: "+  123.45"
-//					Number Field Index:-------012345678
+//					Number Field Index:------>012345678
 //					Total Number String Length: 9
 //
 //				Example-4:
@@ -2422,7 +2421,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSimpleSignedNumber(
 //			     	Number Symbol Position: Outside Number Field
 //			     	Number Text Justification: Right
 //			     	Formatted Number String: "  123.45+"
-//					Number Field Index:-------012345678
+//					Number Field Index:------>012345678
 //					Total Number String Length: 9
 //
 //				For the 'NumFieldSymPos.OutsideNumField()'
@@ -2491,7 +2490,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSimpleSignedNumber(
 //					Number Symbol Position: Inside Number Field
 //			     	Number Text Justification: Right
 //					Formatted Number String: " -123.45"
-//					Number Field Index:-------01234567
+//					Number Field Index:------>01234567
 //					Total Number String Length: 8
 //
 //				Example-2:
@@ -2501,7 +2500,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSimpleSignedNumber(
 //					Number Symbol Position: Inside Number Field
 //			     	Number Text Justification: Right
 //					Formatted Number String: " 123.45-"
-//					Number Field Index:-------01234567
+//					Number Field Index:------>01234567
 //					Total Number String Length: 8
 //
 //				Example-3:
@@ -2511,7 +2510,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSimpleSignedNumber(
 //					Number Symbol Position: Inside Number Field
 //			     	Number Text Justification: Centered
 //					Formatted Number String: " (123.45) "
-//					Number Field Index:-------0123456789
+//					Number Field Index:------>0123456789
 //					Total Number String Length: 10
 //
 //				For the 'NumFieldSymPos.InsideNumField()'
@@ -2526,7 +2525,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSimpleSignedNumber(
 //			     	Number Symbol Position: Outside Number Field
 //			     	Number Text Justification: Right
 //			     	Formatted Number String: "-  123.45"
-//					Number Field Index:-------012345678
+//					Number Field Index:------>012345678
 //					Total Number String Length: 9
 //
 //				Example-5:
@@ -2536,7 +2535,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSimpleSignedNumber(
 //			     	Number Symbol Position: Outside Number Field
 //			     	Number Text Justification: Right
 //			     	Formatted Number String: "  123.45-"
-//					Number Field Index:-------012345678
+//					Number Field Index:------>012345678
 //					Total Number String Length: 9
 //
 //				Example-6:
@@ -2546,7 +2545,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSimpleSignedNumber(
 //					Number Symbol Position: Outside Number Field
 //			     	Number Text Justification: Centered
 //					Formatted Number String: "( 123.45 )"
-//					Number Field Index:-------0123456789
+//					Number Field Index:------>0123456789
 //					Total Number String Length: 10
 //
 //				For the 'NumFieldSymPos.OutsideNumField()'
@@ -2563,7 +2562,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSimpleSignedNumber(
 //		Zero number signs are commonly omitted because
 //		zero does not technically qualify as either a
 //		positive or negative value. However, users have
-//		the option of configure any combination of
+//		the option to configure any combination of
 //		symbols for zero numeric values.
 //
 //		Leading number symbols can include any
@@ -2624,7 +2623,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSimpleSignedNumber(
 //					Number Symbol Position: Inside Number Field
 //			     	Number Text Justification: Right
 //					Formatted Number String: " +123.45"
-//					Number Field Index:-------01234567
+//					Number Field Index:------>01234567
 //					Total Number String Length: 8
 //
 //				Example-2:
@@ -2634,7 +2633,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSimpleSignedNumber(
 //					Number Symbol Position: Inside Number Field
 //			     	Number Text Justification: Right
 //					Formatted Number String: " 123.45+"
-//					Number Field Index:-------01234567
+//					Number Field Index:------>01234567
 //					Total Number String Length: 8
 //
 //				For the 'NumFieldSymPos.InsideNumField()'
@@ -2650,7 +2649,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSimpleSignedNumber(
 //			     	Number Symbol Position: Outside Number Field
 //			     	Number Text Justification: Right
 //			     	Formatted Number String: "+  123.45"
-//					Number Field Index:-------012345678
+//					Number Field Index:------>012345678
 //					Total Number String Length: 9
 //
 //				Example-4:
@@ -2660,7 +2659,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSimpleSignedNumber(
 //			     	Number Symbol Position: Outside Number Field
 //			     	Number Text Justification: Right
 //			     	Formatted Number String: "  123.45+"
-//					Number Field Index:-------012345678
+//					Number Field Index:------>012345678
 //					Total Number String Length: 9
 //
 //				For the 'NumFieldSymPos.OutsideNumField()'
@@ -2729,7 +2728,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSimpleSignedNumber(
 //				Number Symbol Position: Inside Number Field
 //			    Number Text Justification: Right
 //				Formatted Number String: " $123.45$"
-//				Number Field Index:-------012345679
+//				Number Field Index:------>012345679
 //				Total Number String Length: 10
 //
 //			Example-2:
@@ -2740,7 +2739,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSimpleSignedNumber(
 //				Number Symbol Position: Inside Number Field
 //				Number Text Justification: Centered
 //				Formatted Number String: "  $123.45$  "
-//				Number Field Index:-------012345678901
+//				Number Field Index:------>012345678901
 //				Total Number String Length: 12
 //
 //			For the 'NumFieldSymPos.InsideNumField()' specification,
@@ -2757,7 +2756,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSimpleSignedNumber(
 //			    Number Symbol Position: Outside Number Field
 //			    Number Text Justification: Right
 //			    Formatted Number String: "$  123.45$"
-//				Number Field Index:-------0123456789
+//				Number Field Index:------>0123456789
 //				Total Number String Length: 10
 //
 //			Example-4:
@@ -2768,7 +2767,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSimpleSignedNumber(
 //				Number Symbol Position: Outside Number Field
 //			    Number Text Justification: Centered
 //				Formatted Number String: "$  123.45  $"
-//				Number Field Index:-------012345678901
+//				Number Field Index:------>012345678901
 //				Total Number String Length: 12
 //
 //			For the 'NumFieldSymPos.OutsideNumField()' specification,
@@ -2847,7 +2846,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSimpleSignedNumber(
 //			Leading Currency Symbol: Dollar sign ('$')
 //			Number Text Justification: Right
 //			Formatted Number String: "$ -123.45"
-//			Number Field Index:-------012345678
+//			Number Field Index:------>012345678
 //			Total Number String Length: 9
 //
 //			Currency Symbol is Formatted OUTSIDE
@@ -3286,7 +3285,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSymbolsRunes(
 //		Zero number signs are commonly omitted because
 //		zero does not technically qualify as either a
 //		positive or negative value. However, users have
-//		the option of configure any combination of
+//		the option to configure any combination of
 //		symbols for zero numeric values.
 //
 //		Leading number symbols can include any
@@ -3313,7 +3312,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSymbolsRunes(
 //		Zero number signs are commonly omitted because
 //		zero does not technically qualify as either a
 //		positive or negative value. However, users have
-//		the option of configure any combination of
+//		the option to configure any combination of
 //		symbols for zero numeric values.
 //
 //		Trailing number symbols can include any combination
@@ -3446,7 +3445,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSymbolsRunes(
 //				Number Symbol Position: Inside Number Field
 //			    Number Text Justification: Right
 //				Formatted Number String: " $123.45$"
-//				Number Field Index:-------012345679
+//				Number Field Index:------>012345679
 //				Total Number String Length: 10
 //
 //			Example-2:
@@ -3457,7 +3456,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSymbolsRunes(
 //				Number Symbol Position: Inside Number Field
 //				Number Text Justification: Centered
 //				Formatted Number String: "  $123.45$  "
-//				Number Field Index:-------012345678901
+//				Number Field Index:------>012345678901
 //				Total Number String Length: 12
 //
 //			For the 'NumFieldSymPos.InsideNumField()' specification,
@@ -3474,7 +3473,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSymbolsRunes(
 //			    Number Symbol Position: Outside Number Field
 //			    Number Text Justification: Right
 //			    Formatted Number String: "$  123.45$"
-//				Number Field Index:-------0123456789
+//				Number Field Index:------>0123456789
 //				Total Number String Length: 10
 //
 //			Example-4:
@@ -3485,7 +3484,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSymbolsRunes(
 //				Number Symbol Position: Outside Number Field
 //			    Number Text Justification: Centered
 //				Formatted Number String: "$  123.45  $"
-//				Number Field Index:-------012345678901
+//				Number Field Index:------>012345678901
 //				Total Number String Length: 12
 //
 //			For the 'NumFieldSymPos.OutsideNumField()' specification,
@@ -3564,7 +3563,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSymbolsRunes(
 //			Leading Currency Symbol: Dollar sign ('$')
 //			Number Text Justification: Right
 //			Formatted Number String: "$ -123.45"
-//			Number Field Index:-------012345678
+//			Number Field Index:------>012345678
 //			Total Number String Length: 9
 //
 //			Currency Symbol is Formatted OUTSIDE
@@ -3986,7 +3985,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSymbolsSpecs(
 //					Number Symbol Position: Inside Number Field
 //			     	Number Text Justification: Right
 //					Formatted Number String: " -123.45"
-//					Number Field Index:-------01234567
+//					Number Field Index:------>01234567
 //					Total Number String Length: 8
 //
 //				Example-2:
@@ -3996,7 +3995,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSymbolsSpecs(
 //					Number Symbol Position: Inside Number Field
 //			     	Number Text Justification: Right
 //					Formatted Number String: " 123.45-"
-//					Number Field Index:-------01234567
+//					Number Field Index:------>01234567
 //					Total Number String Length: 8
 //
 //				Example-3:
@@ -4006,7 +4005,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSymbolsSpecs(
 //					Number Symbol Position: Inside Number Field
 //			     	Number Text Justification: Centered
 //					Formatted Number String: " (123.45) "
-//					Number Field Index:-------0123456789
+//					Number Field Index:------>0123456789
 //					Total Number String Length: 10
 //
 //				For the 'NumFieldSymPos.InsideNumField()'
@@ -4021,7 +4020,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSymbolsSpecs(
 //			     	Number Symbol Position: Outside Number Field
 //			     	Number Text Justification: Right
 //			     	Formatted Number String: "-  123.45"
-//					Number Field Index:-------012345678
+//					Number Field Index:------>012345678
 //					Total Number String Length: 9
 //
 //				Example-5:
@@ -4031,7 +4030,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSymbolsSpecs(
 //			     	Number Symbol Position: Outside Number Field
 //			     	Number Text Justification: Right
 //			     	Formatted Number String: "  123.45-"
-//					Number Field Index:-------012345678
+//					Number Field Index:------>012345678
 //					Total Number String Length: 9
 //
 //				Example-6:
@@ -4041,7 +4040,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSymbolsSpecs(
 //					Number Symbol Position: Outside Number Field
 //			     	Number Text Justification: Centered
 //					Formatted Number String: "( 123.45 )"
-//					Number Field Index:-------0123456789
+//					Number Field Index:------>0123456789
 //					Total Number String Length: 10
 //
 //				For the 'NumFieldSymPos.OutsideNumField()'
@@ -4385,7 +4384,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetNegativeNumSignSpec(
 //					Number Symbol Position: Inside Number Field
 //			     	Number Text Justification: Right
 //					Formatted Number String: " -123.45"
-//					Number Field Index:-------01234567
+//					Number Field Index:------>01234567
 //					Total Number String Length: 8
 //
 //				Example-2:
@@ -4395,7 +4394,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetNegativeNumSignSpec(
 //					Number Symbol Position: Inside Number Field
 //			     	Number Text Justification: Right
 //					Formatted Number String: " 123.45-"
-//					Number Field Index:-------01234567
+//					Number Field Index:------>01234567
 //					Total Number String Length: 8
 //
 //				Example-3:
@@ -4405,7 +4404,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetNegativeNumSignSpec(
 //					Number Symbol Position: Inside Number Field
 //			     	Number Text Justification: Centered
 //					Formatted Number String: " (123.45) "
-//					Number Field Index:-------0123456789
+//					Number Field Index:------>0123456789
 //					Total Number String Length: 10
 //
 //				For the 'NumFieldSymPos.InsideNumField()'
@@ -4420,7 +4419,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetNegativeNumSignSpec(
 //			     	Number Symbol Position: Outside Number Field
 //			     	Number Text Justification: Right
 //			     	Formatted Number String: "-  123.45"
-//					Number Field Index:-------012345678
+//					Number Field Index:------>012345678
 //					Total Number String Length: 9
 //
 //				Example-5:
@@ -4430,7 +4429,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetNegativeNumSignSpec(
 //			     	Number Symbol Position: Outside Number Field
 //			     	Number Text Justification: Right
 //			     	Formatted Number String: "  123.45-"
-//					Number Field Index:-------012345678
+//					Number Field Index:------>012345678
 //					Total Number String Length: 9
 //
 //				Example-6:
@@ -4440,7 +4439,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetNegativeNumSignSpec(
 //					Number Symbol Position: Outside Number Field
 //			     	Number Text Justification: Centered
 //					Formatted Number String: "( 123.45 )"
-//					Number Field Index:-------0123456789
+//					Number Field Index:------>0123456789
 //					Total Number String Length: 10
 //
 //				For the 'NumFieldSymPos.OutsideNumField()'
@@ -4677,25 +4676,35 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetNOPCurrencySymbol() {
 	return
 }
 
-//	SetNOPNegativeNumSymbol
+//	SetNOPNegativeNumSignSymbol
 //
 //	'NOP' stands for 'No Operation'.
 //
 //	When called, this method will convert the Negative
-//	Number Symbol Specification in the current instance
-//	of NumStrNumberSymbolGroup to a NOP or
+//	Number Sign Symbol Specification in the current
+//	instance of NumStrNumberSymbolGroup to a NOP or
 //	'No Operation'. This means that the Negative Number
-//	Symbol Specification is simply an empty placeholder
-//	and performs no active role in, and is completely
-//	ignored by, Number String Formatting algorithms.
+//	Sign Symbol Specification is simply an empty
+//	placeholder and performs no active role in, and is
+//	completely ignored by, Number String Formatting
+//	algorithms.
 //
-//	After conversion to NOP, no Negative Number Symbols
-//	will be inserted or formatted as part of a Number
-//	String formatting operation.
+//	Examples of Negative Number Signs include the minus
+//	sign ('-') and surrounding parentheses ('()').
+//
+//		Example Negative Number Signs
+//
+//				"-123.45"
+//				"123.45-"
+//				"(123.45)"
+//
+//	After conversion to a NOP, no Negative Number Sign
+//	Symbols will be inserted or formatted as part of
+//	a Number String formatting operation.
 //
 //	To determine the status of NOP for the current
-//	instance of NumStrNumberSymbolGroup, use the following
-//	methods:
+//	instance of NumStrNumberSymbolGroup, use the
+//	following methods:
 //
 //		NumStrNumberSymbolGroup.IsNOP()
 //		NumStrNumberSymbolGroup.IsNOPNegativeNumSymbols()
@@ -4714,7 +4723,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetNOPCurrencySymbol() {
 // # Return Values
 //
 //	NONE
-func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetNOPNegativeNumSymbol() {
+func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetNOPNegativeNumSignSymbol() {
 
 	if nStrNumSymbolsGroup.lock == nil {
 		nStrNumSymbolsGroup.lock = new(sync.Mutex)
@@ -4729,21 +4738,35 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetNOPNegativeNumSymbol() {
 	return
 }
 
-//	SetNOPPositiveNumSymbol
+//	SetNOPPositiveNumSignSymbol
 //
 //	'NOP' stands for 'No Operation'.
 //
 //	When called, this method will convert the Positive
-//	Number Symbol Specification in the current instance
-//	of NumStrNumberSymbolGroup to a NOP or
+//	Number Sign Symbol Specification in the current
+//	instance of NumStrNumberSymbolGroup to a NOP or
 //	'No Operation'. This means that the Positive Number
-//	Symbol Specification is simply an empty placeholder
-//	and performs no active role in, and is completely
-//	ignored by, Number String Formatting algorithms.
+//	Sign Symbol Specification is simply an empty
+//	placeholder and performs no active role in, and is
+//	completely ignored by, Number String Formatting
+//	algorithms.
 //
-//	After conversion to NOP, no Positive Number Symbols
-//	will be inserted or formatted as part of a Number
-//	String formatting operation.
+//	Positive number signs are usually omitted from
+//	positive numeric values when displayed in number
+//	strings. The number sign is considered implicit
+//	or assumed for positive numeric values. However,
+//	Type NumStrNumberSymbolGroup allows users the option
+//	of configuring both leading and trailing positive
+//	number sign symbols.
+//
+//		Examples of Positive Number Sign Symbols
+//
+//				"+123.45"
+//				"123.45+"
+//
+//	After conversion to a NOP, no Positive Number Sign
+//	Symbols	will be inserted or formatted as part of a
+//	Number String formatting operation.
 //
 //	To determine the status of NOP for the current
 //	instance of NumStrNumberSymbolGroup, use the
@@ -4766,7 +4789,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetNOPNegativeNumSymbol() {
 // # Return Values
 //
 //	NONE
-func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetNOPPositiveNumSymbol() {
+func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetNOPPositiveNumSignSymbol() {
 
 	if nStrNumSymbolsGroup.lock == nil {
 		nStrNumSymbolsGroup.lock = new(sync.Mutex)
@@ -4781,21 +4804,35 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetNOPPositiveNumSymbol() {
 	return
 }
 
-//	SetNOPZeroNumSymbol
+//	SetNOPZeroNumSignSymbol
 //
 //	'NOP' stands for 'No Operation'.
 //
 //	When called, this method will convert the Zero
-//	Number Symbol Specification in the current instance
-//	of NumStrNumberSymbolGroup to a NOP or
+//	Number Sign Symbol Specification in the current
+//	instance of NumStrNumberSymbolGroup to a NOP or
 //	'No Operation'. This means that the Zero Number
-//	Symbol Specification is simply an empty placeholder
-//	and performs no active role in, and is completely
-//	ignored by, Number String Formatting algorithms.
+//	Sign Symbol Specification is simply an empty
+//	placeholder and performs no active role in, and is
+//	completely ignored by, Number String Formatting
+//	algorithms.
 //
-//	After conversion to NOP, no Zero Number Symbols will
-//	be inserted or formatted as part of a Number String
-//	formatting operation.
+//	Zero Number Sign Symbols are usually omitted from
+//	zero numeric values displayed in number strings.
+//	Technically, the value zero is neither positive nor
+//	negative and therefore number signs are unnecessary.
+//	However, for Type NumStrNumberSymbolGroup, users have
+//	the option of configuring both leading and trailing
+//	zero number sign symbols.
+//
+//		Example Zero Number Signs
+//
+//				"+0.00"
+//				"0.00+"
+//
+//	After conversion to a NOP, no Zero Number Sign
+//	Symbols will be inserted or formatted as part of a
+//	Number String formatting operation.
 //
 //	To determine the status of NOP for the current
 //	instance of NumStrNumberSymbolGroup, use the
@@ -4818,7 +4855,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetNOPPositiveNumSymbol() {
 // # Return Values
 //
 //	NONE
-func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetNOPZeroNumSymbol() {
+func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetNOPZeroNumSignSymbol() {
 
 	if nStrNumSymbolsGroup.lock == nil {
 		nStrNumSymbolsGroup.lock = new(sync.Mutex)
@@ -4831,6 +4868,275 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetNOPZeroNumSymbol() {
 	nStrNumSymbolsGroup.zeroNumberSign.SetNOP()
 
 	return
+}
+
+//	SetPositiveNumSignRunes
+//
+//	Deletes and resets the Positive Number Symbols data
+//	fields for the current instance of
+//	NumStrNumberSymbolGroup.
+//
+//	Positive number signs are usually omitted from
+//	positive numeric values when displayed in number
+//	strings. The number sign is considered implicit
+//	or assumed for positive numeric values. However,
+//	Type NumStrNumberSymbolGroup allows users the option
+//	of configuring both leading and trailing positive
+//	number sign symbols.
+//
+//		Examples of Positive Number Sign Symbols
+//
+//				"+123.45"
+//				"123.45+"
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	Be advised that this method will delete and reset the
+//	Positive Number Sign Symbol member variable data
+//	fields as specified by the Positive Number Sign
+//	Symbol input parameters passed as rune arrays.
+//
+//	The Positive Number Sign Symbol member variable for
+//	the current instance of NumStrNumberSymbolGroup is:
+//
+//		NumStrNumberSymbolGroup.positiveNumberSign
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	leadingPositiveNumberSymbols	[]rune
+//
+//		A rune array containing the leading positive
+//		number sign character or characters used to
+//		configure Positive Number Sign Symbols in a
+//		number string with a positive numeric value.
+//
+//		Leading positive number sign symbols can include
+//		any combination of characters such as plus signs
+//		('+').
+//
+//		Example-1: Leading Positive Number Sign Symbols
+//
+//			Leading Symbols: "+ "
+//			Number String:   "+ 123.456"
+//
+//		Example-2: Leading Positive Number Sign Symbols
+//
+//			Leading Symbols: "+"
+//			Number String:   "+123.456"
+//
+//	trailingPositiveNumberSymbols	[]rune
+//
+//		A rune array containing the trailing positive
+//		number sign character or characters used to
+//		configure Positive Number Sign Symbols in a
+//		number string with a positive numeric value.
+//
+//		Trailing positive number sign symbols can include
+//		any combination of characters such as plus signs
+//		('+').
+//
+//		Example-1: Trailing Positive Number Sign Symbols
+//
+//			Trailing Symbols: " +"
+//			Number String:   "123.456 +"
+//
+//		Example-2: Trailing Positive Number Sign Symbols
+//
+//			Trailing Symbols: "+"
+//			Number String:   "123.456+"
+//
+//	positiveNumFieldSymPosition		NumberFieldSymbolPosition
+//
+//		Defines the position of the Positive Number Sign
+//		relative to a Number Field in which a number
+//		string is displayed. Possible valid values are
+//		listed as follows:
+//
+//			NumFieldSymPos.InsideNumField()
+//				Example-1:
+//					Number Field Length: 8
+//					Numeric Value: 123.45
+//					Number Symbol: leading minus sign ('-')
+//					Number Symbol Position: Inside Number Field
+//			     	Number Text Justification: Right
+//					Formatted Number String: " -123.45"
+//					Number Field Index:------>01234567
+//					Total Number String Length: 8
+//
+//				Example-2:
+//					Number Field Length: 8
+//					Numeric Value: 123.45
+//					Number Symbol: trailing minus sign ('-')
+//					Number Symbol Position: Inside Number Field
+//			     	Number Text Justification: Right
+//					Formatted Number String: " 123.45-"
+//					Number Field Index:------>01234567
+//					Total Number String Length: 8
+//
+//				Example-3:
+//					Number Field Length: 10
+//					Numeric Value: 123.45
+//					Number Symbol: before and after parentheses  ('()')
+//					Number Symbol Position: Inside Number Field
+//			     	Number Text Justification: Centered
+//					Formatted Number String: " (123.45) "
+//					Number Field Index:------>0123456789
+//					Total Number String Length: 10
+//
+//				For the 'NumFieldSymPos.InsideNumField()'
+//				specification, the final length of the number
+//				string is defined by the Number Field length.
+//
+//			NumFieldSymPos.OutsideNumField()
+//				Example-4:
+//					Number Field Length: 8
+//			     	Numeric Value: 123.45
+//			     	Number Symbol: leading minus sign ('-')
+//			     	Number Symbol Position: Outside Number Field
+//			     	Number Text Justification: Right
+//			     	Formatted Number String: "-  123.45"
+//					Number Field Index:------>012345678
+//					Total Number String Length: 9
+//
+//				Example-5:
+//					Number Field Length: 8
+//			     	Numeric Value: 123.45
+//			     	Number Symbol: trailing minus sign ('-')
+//			     	Number Symbol Position: Outside Number Field
+//			     	Number Text Justification: Right
+//			     	Formatted Number String: "  123.45-"
+//					Number Field Index:------>012345678
+//					Total Number String Length: 9
+//
+//				Example-6:
+//					Number Field Length: 8
+//					Numeric Value: 123.45
+//					Number Symbol: before and after parentheses  ('()')
+//					Number Symbol Position: Outside Number Field
+//			     	Number Text Justification: Centered
+//					Formatted Number String: "( 123.45 )"
+//					Number Field Index:------>0123456789
+//					Total Number String Length: 10
+//
+//				For the 'NumFieldSymPos.OutsideNumField()'
+//				specification, the final length of the number
+//				string is greater than the Number Field length.
+//
+//	 errorPrefix                interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it	contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetPositiveNumSignRunes(
+	leadingPositiveNumberSymbols []rune,
+	trailingPositiveNumberSymbols []rune,
+	positiveNumFieldSymPosition NumberFieldSymbolPosition,
+	errorPrefix interface{}) error {
+
+	if nStrNumSymbolsGroup.lock == nil {
+		nStrNumSymbolsGroup.lock = new(sync.Mutex)
+	}
+
+	nStrNumSymbolsGroup.lock.Lock()
+
+	defer nStrNumSymbolsGroup.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumStrNumberSymbolGroup."+
+			"SetPositiveNumSignRunes()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	return new(numStrNumberSymbolGroupNanobot).setPositiveNumSignRunes(
+		nStrNumSymbolsGroup,
+		leadingPositiveNumberSymbols,
+		trailingPositiveNumberSymbols,
+		positiveNumFieldSymPosition,
+		ePrefix.XCpy(
+			"nuStrNumSym<-PositiveNumSyms"))
 }
 
 //	SetPositiveNumSignSpec
@@ -4847,7 +5153,9 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetNOPZeroNumSymbol() {
 //	Be advised that this method will delete and reset the
 //	Positive Number Sign Symbol member variable data
 //	fields contained in the current instance of
-//	NumStrNumberSymbolGroup.
+//	NumStrNumberSymbolGroup:
+//
+//		NumStrNumberSymbolGroup.positiveNumberSign
 //
 // ----------------------------------------------------------------
 //
@@ -4859,6 +5167,8 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetNOPZeroNumSymbol() {
 //		will be copied to the corresponding Positive
 //		Symbol Specification in the current instance of
 //		NumStrNumberSymbolGroup.
+//
+//			NumStrNumberSymbolGroup.positiveNumberSign
 //
 //	 errorPrefix                interface{}
 //
@@ -4971,281 +5281,24 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetPositiveNumSignSpec(
 
 }
 
-//	SetPositiveSymbolsRunes
+//	SetPositiveNumSignStrings
 //
-//	Deletes and resets the Positive Number Symbols data
-//	fields for the current instance of NumStrNumberSymbolGroup.
+//	Deletes and resets the Positive Number Sign Symbols
+//	data fields for the current instance of
+//	NumStrNumberSymbolGroup.
 //
-// ----------------------------------------------------------------
+//	Positive number signs are usually omitted from
+//	positive numeric values when displayed in number
+//	strings. The number sign is considered implicit
+//	or assumed for positive numeric values. However,
+//	Type NumStrNumberSymbolGroup allows users the option
+//	of configuring both leading and trailing positive
+//	number sign symbols.
 //
-// # IMPORTANT
+//		Examples of Positive Number Sign Symbols
 //
-//	Be advised that this method will delete and reset the
-//	Positive Number Sign Symbol member variable data
-//	fields as specified by the Positive Number Symbol
-//	input parameters passed as rune arrays.
-//
-//	The Positive Number Sign Symbol member variable for
-//	the current instance of NumStrNumberSymbolGroup is:
-//
-//		NumStrNumberSymbolGroup.positiveNumberSign
-//
-// ----------------------------------------------------------------
-//
-// # Input Parameters
-//
-//	leadingPositiveNumberSymbols	[]rune
-//
-//		A rune array containing the leading positive
-//		number sign character or characters used to
-//		configure Positive Number Sign Symbols in a
-//		number string with a positive numeric value.
-//
-//		Leading number symbols can include any
-//		combination of characters such as minus signs
-//		('-') and/or currency symbols ('$').
-//
-//		Example-1: Leading Number Symbols
-//			Leading Number Symbols for Positive Values
-//
-//			Leading Symbols: "+ "
-//			Number String:   "+ 123.456"
-//
-//		Example-2: Leading Number Symbols
-//			Leading Number Symbols for Positive Values
-//
-//			Leading Symbols: "$+"
-//			Number String:   "$+123.456"
-//
-//		Example-3: Leading Number Symbols
-//			Leading Number Symbols for Positive Values
-//
-//			Leading Symbols: "$"
-//			Number String:   "$123.456"
-//
-//	trailingPositiveNumberSymbols	[]rune
-//
-//		A rune array containing the trailing positive
-//		number sign character or characters used to
-//		configure Positive Number Sign Symbols in a
-//		number string with a positive numeric value.
-//
-//		Trailing number symbols can include any
-//		combination of characters such as minus signs
-//		('-') and/or currency symbols ('$').
-//
-//		Example-1: Trailing Number Symbols
-//			Trailing Number Symbols for Positive Values
-//
-//			Trailing Symbols: " +"
-//			Number String:   "123.456 +"
-//
-//		Example-2: Trailing Number Symbols
-//			Trailing Number Symbols for Positive Values
-//
-//			Trailing Symbols: "+$"
-//			Number String:   "123.456+$"
-//
-//		Example-3: Trailing Number Symbols
-//			Trailing Number Symbols for Positive Values
-//
-//			Trailing Symbols: "$"
-//			Number String:   "123.456$"
-//
-//	positiveNumFieldSymPosition		NumberFieldSymbolPosition
-//
-//		Defines the position of the Positive Number Sign
-//		relative to a Number Field in which a number
-//		string is displayed. Possible valid values are
-//		listed as follows:
-//
-//			NumFieldSymPos.InsideNumField()
-//				Example-1:
-//					Number Field Length: 8
-//					Numeric Value: 123.45
-//					Number Symbol: leading minus sign ('-')
-//					Number Symbol Position: Inside Number Field
-//			     	Number Text Justification: Right
-//					Formatted Number String: " -123.45"
-//					Number Field Index:  01234567
-//					Total Number String Length: 8
-//
-//				Example-2:
-//					Number Field Length: 8
-//					Numeric Value: 123.45
-//					Number Symbol: trailing minus sign ('-')
-//					Number Symbol Position: Inside Number Field
-//			     	Number Text Justification: Right
-//					Formatted Number String: " 123.45-"
-//					Number Field Index:       01234567
-//					Total Number String Length: 8
-//
-//				Example-3:
-//					Number Field Length: 10
-//					Numeric Value: 123.45
-//					Number Symbol: before and after parentheses  ('()')
-//					Number Symbol Position: Inside Number Field
-//			     	Number Text Justification: Centered
-//					Formatted Number String: " (123.45) "
-//					Number Field Index:       0123456789
-//					Total Number String Length: 10
-//
-//				For the 'NumFieldSymPos.InsideNumField()'
-//				specification, the final length of the number
-//				string is defined by the Number Field length.
-//
-//			NumFieldSymPos.OutsideNumField()
-//				Example-4:
-//					Number Field Length: 8
-//			     	Numeric Value: 123.45
-//			     	Number Symbol: leading minus sign ('-')
-//			     	Number Symbol Position: Outside Number Field
-//			     	Number Text Justification: Right
-//			     	Formatted Number String: "-  123.45"
-//					Number Field Index:       012345678
-//					Total Number String Length: 9
-//
-//				Example-5:
-//					Number Field Length: 8
-//			     	Numeric Value: 123.45
-//			     	Number Symbol: trailing minus sign ('-')
-//			     	Number Symbol Position: Outside Number Field
-//			     	Number Text Justification: Right
-//			     	Formatted Number String: "  123.45-"
-//					Number Field Index:       012345678
-//					Total Number String Length: 9
-//
-//				Example-6:
-//					Number Field Length: 8
-//					Numeric Value: 123.45
-//					Number Symbol: before and after parentheses  ('()')
-//					Number Symbol Position: Outside Number Field
-//			     	Number Text Justification: Centered
-//					Formatted Number String: "( 123.45 )"
-//					Number Field Index:       0123456789
-//					Total Number String Length: 10
-//
-//				For the 'NumFieldSymPos.OutsideNumField()'
-//				specification, the final length of the number
-//				string is greater than the Number Field length.
-//
-//	 errorPrefix                interface{}
-//
-//		This object encapsulates error prefix text which
-//		is included in all returned error messages.
-//		Usually, it	contains the name of the calling
-//		method or methods listed as a method or function
-//		chain of execution.
-//
-//		If no error prefix information is needed, set this
-//		parameter to 'nil'.
-//
-//		This empty interface must be convertible to one of
-//		the following types:
-//
-//		1.	nil
-//				A nil value is valid and generates an
-//				empty collection of error prefix and
-//				error context information.
-//
-//		2.	string
-//				A string containing error prefix
-//				information.
-//
-//		3.	[]string
-//				A one-dimensional slice of strings
-//				containing error prefix information.
-//
-//		4.	[][2]string
-//				A two-dimensional slice of strings
-//		   		containing error prefix and error
-//		   		context information.
-//
-//		5.	ErrPrefixDto
-//				An instance of ErrPrefixDto.
-//				Information from this object will
-//				be copied for use in error and
-//				informational messages.
-//
-//		6.	*ErrPrefixDto
-//				A pointer to an instance of
-//				ErrPrefixDto. Information from
-//				this object will be copied for use
-//				in error and informational messages.
-//
-//		7.	IBasicErrorPrefix
-//				An interface to a method
-//				generating a two-dimensional slice
-//				of strings containing error prefix
-//				and error context information.
-//
-//		If parameter 'errorPrefix' is NOT convertible
-//		to one of the valid types listed above, it will
-//		be considered invalid and trigger the return of
-//		an error.
-//
-//		Types ErrPrefixDto and IBasicErrorPrefix are
-//		included in the 'errpref' software package:
-//			"github.com/MikeAustin71/errpref".
-//
-// ----------------------------------------------------------------
-//
-// # Return Values
-//
-//	error
-//
-//		If this method completes successfully, the
-//		returned error Type is set equal to 'nil'.
-//
-//		If errors are encountered during processing, the
-//		returned error Type will encapsulate an error
-//		message. This returned error message will
-//		incorporate the method chain and text passed by
-//		input parameter, 'errorPrefix'. The 'errorPrefix'
-//		text will be attached to the beginning of the
-//		error message.
-func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetPositiveSymbolsRunes(
-	leadingPositiveNumberSymbols []rune,
-	trailingPositiveNumberSymbols []rune,
-	positiveNumFieldSymPosition NumberFieldSymbolPosition,
-	errorPrefix interface{}) error {
-
-	if nStrNumSymbolsGroup.lock == nil {
-		nStrNumSymbolsGroup.lock = new(sync.Mutex)
-	}
-
-	nStrNumSymbolsGroup.lock.Lock()
-
-	defer nStrNumSymbolsGroup.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-
-	var err error
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
-		"NumStrNumberSymbolGroup."+
-			"SetPositiveSymbolsRunes()",
-		"")
-
-	if err != nil {
-		return err
-	}
-
-	return new(numStrNumberSymbolGroupNanobot).setPositiveNumSignRunes(
-		nStrNumSymbolsGroup,
-		leadingPositiveNumberSymbols,
-		trailingPositiveNumberSymbols,
-		positiveNumFieldSymPosition,
-		ePrefix.XCpy(
-			"nuStrNumSym<-PositiveNumSyms"))
-}
-
-//	SetPositiveSymbolsStrings
-//
-//	Deletes and resets the Positive Number Symbols data
-//	fields for the current instance of NumStrNumberSymbolGroup.
+//				"+123.45"
+//				"123.45+"
 //
 // ----------------------------------------------------------------
 //
@@ -5272,27 +5325,19 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetPositiveSymbolsRunes(
 //		a Positive Number Sign Symbol in a number string
 //		with a positive numeric value.
 //
-//		Leading number symbols can include any combination
-//		of characters such as plus signs ('+') and/or
-//		currency symbols ('$').
+//		Leading positive number sign symbols can include
+//		any combination of characters such as plus signs
+//		('+').
 //
-//		Example-1: Leading Number Symbols
-//			Leading Number Symbols for Positive Values
+//		Example-1: Leading Positive Number Sign Symbols
 //
 //			Leading Symbols: "+ "
 //			Number String:   "+ 123.456"
 //
-//		Example-2: Leading Number Symbols
-//			Leading Number Symbols for Positive Values
+//		Example-2: Leading Positive Number Sign Symbols
 //
-//			Leading Symbols: "$+"
-//			Number String:   "$+123.456"
-//
-//		Example-3: Leading Number Symbols
-//			Leading Number Symbols for Positive Values
-//
-//			Leading Symbols: "$"
-//			Number String:   "$123.456"
+//			Leading Symbols: "+"
+//			Number String:   "+123.456"
 //
 //	trailingPositiveNumberSymbols	string
 //
@@ -5300,27 +5345,19 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetPositiveSymbolsRunes(
 //	 	sign character or characters used to configure a
 //	  	Positive Number Sign Symbol in a number string.
 //
-//		Trailing number symbols can include any combination
-//		of characters to include plus signs ('+') and/or
-//	 	currency symbols ('$').
+//		Trailing positive number sign symbols can include
+//		any combination of characters such as plus signs
+//		('+').
 //
-//		Example-1: Trailing Number Symbols
-//			Trailing Number Symbols for Positive Values
+//		Example-1: Trailing Positive Number Sign Symbols
 //
 //			Trailing Symbols: " +"
 //			Number String:   "123.456 +"
 //
-//		Example-2: Trailing Number Symbols
-//			Trailing Number Symbols for Positive Values
+//		Example-2: Trailing Positive Number Sign Symbols
 //
-//			Trailing Symbols: "+$"
-//			Number String:   "123.456+$"
-//
-//		Example-3: Trailing Number Symbols
-//			Trailing Number Symbols for Positive Values
-//
-//			Trailing Symbols: "$"
-//			Number String:   "123.456$"
+//			Trailing Symbols: "+"
+//			Number String:   "123.456+"
 //
 //	positiveNumFieldSymPosition		NumberFieldSymbolPosition
 //
@@ -5337,7 +5374,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetPositiveSymbolsRunes(
 //					Number Symbol Position: Inside Number Field
 //			     	Number Text Justification: Right
 //					Formatted Number String: " +123.45"
-//					Number Field Index:       01234567
+//					Number Field Index:------>01234567
 //					Total Number String Length: 8
 //
 //				Example-2:
@@ -5347,7 +5384,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetPositiveSymbolsRunes(
 //					Number Symbol Position: Inside Number Field
 //			     	Number Text Justification: Right
 //					Formatted Number String: " 123.45+"
-//					Number Field Index:       01234567
+//					Number Field Index:------>01234567
 //					Total Number String Length: 8
 //
 //				For the 'NumFieldSymPos.InsideNumField()'
@@ -5362,7 +5399,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetPositiveSymbolsRunes(
 //			     	Number Symbol Position: Outside Number Field
 //			     	Number Text Justification: Right
 //			     	Formatted Number String: "+  123.45"
-//					Number Field Index:       012345678
+//					Number Field Index:------>012345678
 //					Total Number String Length: 9
 //
 //				Example-4:
@@ -5372,7 +5409,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetPositiveSymbolsRunes(
 //			     	Number Symbol Position: Outside Number Field
 //			     	Number Text Justification: Right
 //			     	Formatted Number String: "  123.45+"
-//					Number Field Index:       012345678
+//					Number Field Index:------>012345678
 //					Total Number String Length: 9
 //
 //				For the 'NumFieldSymPos.OutsideNumField()'
@@ -5455,7 +5492,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetPositiveSymbolsRunes(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetPositiveSymbolsStrings(
+func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetPositiveNumSignStrings(
 	leadingPositiveNumberSymbols string,
 	trailingPositiveNumberSymbols string,
 	positiveNumFieldSymPosition NumberFieldSymbolPosition,
@@ -5477,7 +5514,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetPositiveSymbolsStrings(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumStrNumberSymbolGroup."+
-			"SetPositiveSymbolsStrings()",
+			"SetPositiveNumSignStrings()",
 		"")
 
 	if err != nil {
@@ -5497,7 +5534,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetPositiveSymbolsStrings(
 //
 // Deletes and reconfigures the data values contained in
 // the current instance of NumStrNumberSymbolGroup with
-// currency number symbol parameters.
+// currency symbol parameters.
 //
 // If currency number symbol formatting is NOT required,
 // see method:
@@ -5508,19 +5545,19 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetPositiveSymbolsStrings(
 // Number Symbols required in converting numeric
 // values to formatted Number Strings.
 //
-// NumStrNumberSymbolGroup contains three instances of
-// type NumStrNumberSymbolSpec defining the Number
-// Symbols to be used with positive numeric values,
-// negative numeric values and zero numeric values.
+//	NumStrNumberSymbolGroup contains four instances of
+//	type NumStrNumberSymbolSpec defining the Number
+//	Symbols to be used with positive numeric values,
+//	negative numeric values, zero numeric values and
+//	currency values.
 //
-// This method provides a simplified means of
-// reconfiguring the current instance of
-// NumStrNumberSymbolGroup with currency number symbols
-// using default values.
-//
-// Upon completion, this method will reconfigure the
-// current instance of NumStrNumberSymbolGroup with
-// currency number symbols.
+//	This method provides a simplified means for
+//	reconfiguring the current instance of
+//	NumStrNumberSymbolGroup with currency and number sign
+//	symbols. Using default values, this method will
+//	generate Currency Symbols to be used with positive
+//	numeric values, negative numeric values and zero
+//	numeric values.
 //
 //	If the default configuration values fail to provide
 //	sufficient granular control over currency number
@@ -5550,44 +5587,54 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetPositiveSymbolsStrings(
 //		minus sign.
 //
 //		Examples:
-//			European Number String: "123.456- €"
-//			US Number String: "$ -123.456"
+//			European Number String:	"123.456- €"
+//			US Number String:		"$ -123.456"
+//			UK Number String:		"£ -123.45"
 //
 //	Negative Number Symbol:
-//		The default Negative Number Symbol is the
-//		minus sign ('-').
+//		The default Negative Number Symbol is the minus
+//		sign ('-'). Negative numeric values will be
+//		designated with the minus sign ('-').
+//
+//		The minus sign will be configured as a leading or
+//		trailing minus sign depending on the value of
+//		input parameter 'leadingNumSymbols'.
 //
 //		Examples:
-//			European Number String: "123.456- €"
-//			US Number String: "$ -123.456"
+//
+//			Leading Minus Sign: "$ -123.456"
+//			Trailing Minus Sign: "123.456-"
 //
 //	Positive Number Symbol:
 //		No Positive Number Sign Symbol. Positive
-//		values are assumed.
+//		values number signs are assumed and implicit. No
+//		Number Signs will be formatted for positive
+//		numeric values
 //
-//		Positive Numeric Value Currency Examples:
-//			European Number String: "123.456 €"
-//			US Number String: "$ 123.456"
+//		Positive Numeric Value Example:
+//					"123.456"
 //
 //	Zero Number Symbol:
-//		No Number Sign Symbol. Technically a zero value
-//		is neither positive nor negative.
+//		No Zero Number Sign Symbol. Technically a zero
+//		value is neither positive nor negative.
+//		Consequently, no number sign is included with
+//		zero numeric values.
 //
-//		Zero Numeric Value Currency Examples:
-//			European Number String: "0.00 €"
-//			US Number String: "$ 0.00"
+//		Zero Numeric Value Example:
+//					"0.00"
 //
 //	Number Field Symbol Position:
 //		Defaults to "Inside Number Field"
 //
 //		Example:
 //			Number Field Length: 8
-//			Numeric Value: 123.45
+//			Numeric Value: -123.45
 //			Number Symbol: leading minus sign ('-')
 //			Number Symbol Position: Inside Number Field
 //			Formatted Number String: " -123.45"
-//			Number Field Index:       01234567
+//			Number Field Index:------>01234567
 //			Total Number String Length: 8
+//			The minus sign is 'inside' the Number Field.
 //
 // ----------------------------------------------------------------
 //
@@ -5625,7 +5672,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetPositiveSymbolsStrings(
 //		numeric value. Such Number Symbols are therefore
 //		configured as trailing Number Symbols. This is
 //		the positioning format used in France, Germany
-//		and many countries in the European Union.
+//		and many other countries in the European Union.
 //
 //		Example Number Strings:
 //			"123.456- €"
@@ -5736,12 +5783,13 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSimpleCurrency(
 		return err
 	}
 
-	return new(numStrNumberSymbolGroupMechanics).setSimpleCurrencySymbolsConfig(
-		nStrNumSymbolsGroup,
-		currencySymbols,
-		leadingNumSymbols,
-		ePrefix.XCpy(
-			"nStrNumSymbolsGroup<-"))
+	return new(numStrNumberSymbolGroupMechanics).
+		setSimpleCurrencySymbolsConfig(
+			nStrNumSymbolsGroup,
+			currencySymbols,
+			leadingNumSymbols,
+			ePrefix.XCpy(
+				"nStrNumSymbolsGroup<-"))
 }
 
 //	SetSignedSimpleNumber
@@ -5760,24 +5808,26 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSimpleCurrency(
 //	Symbols required in converting numeric values to
 //	formatted Number Strings.
 //
-//	NumStrNumberSymbolGroup contains three instances of type
-//	NumStrNumberSymbolSpec defining the Number Symbols to
-//	be used with positive numeric values, negative
-//	numeric values and zero numeric values.
+//	NumStrNumberSymbolGroup contains four instances of
+//	type NumStrNumberSymbolSpec defining the Number
+//	Symbols to be used with positive numeric values,
+//	negative numeric values, zero numeric values and
+//	currency values.
 //
 //	This method provides a simplified means for
 //	reconfiguring the current instance of
 //	NumStrNumberSymbolGroup using default values and
-//	generating number symbols suitable for signed numeric
-//	values. Signed Number Symbols do NOT contain currency
+//	generating number symbols suitable in formatting
+//	signed numeric values.
+//
+//	Again, Signed Number Symbols do NOT contain currency
 //	symbols.
 //
 //	If the default configuration values fail to provide
 //	sufficient granular control over signed number symbol
 //	creation, use one of the more advanced 'Setter'
-//	methods to achieve specialized multinational or
-//	multicultural signed number symbol formatting
-//	requirements:
+//	methods to implement specialized multinational or
+//	multicultural signed number symbol formatting:
 //
 //		NumStrNumberSymbolGroup.SetSymbolsRunes()
 //		NumStrNumberSymbolGroup.SetSymbolsStrings()
@@ -5804,27 +5854,42 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSimpleCurrency(
 //			US Number String: "-123.456"
 //
 //	Positive Signed Number Symbol:
-//		No Positive Number Sign Symbol. Positive values
-//		are assumed.
+//
+//		No Positive Number Sign Symbol. Positive
+//		values are implicit and assumed. Therefore,
+//		no plus is formatted in the number string.
 //
 //			Positive Value Number String: "123.456"
 //
 //	Zero Signed Number Symbol:
+//
 //		No Number Sign Symbol. Technically a zero value
-//		is neither positive nor negative.
+//		is neither positive nor negative. Therefore,
+//		no plus is formatted in the number string.
 //
 //			Zero Value Number String: "123.456"
 //
 //	Number Field Symbol Position:
+//
 //		Defaults to "Inside Number Field"
 //
-//		Example:
+//			A Number Field defines the length of a
+//			text string in which a numeric value is
+//			formatted. When applied, a Number Field
+//			is usually longer than the numeric value
+//			string and typically justifies that numeric
+//			value string as "Left", "Right" or "Centered".
+//
+//			Number Field Example (Centered):
+//				"  123.45  "
+//
+//		Example Number Field Symbol Position:
 //			Number Field Length: 8
 //			Numeric Value: 123.45
 //			Number Symbol: leading minus sign ('-')
 //			Number Symbol Position: Inside Number Field
 //			Formatted Number String: " -123.45"
-//			Number Field Index:       01234567
+//			Number Field Index:------>01234567
 //			Total Number String Length: 8
 //
 // ----------------------------------------------------------------
@@ -5833,36 +5898,30 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSimpleCurrency(
 //
 //	leadingNumSymbols			bool
 //
-//		Controls the positioning of Number Symbols in a
-//		Number String Format.
+//		Controls the positioning of Number Sign Symbols
+//		in a Number String Format.
 //
-//		When set to 'true', the current instance of
-//		NumStrNumberSymbolGroup will configure Number Symbols
-//		on the left side of the numeric value. Such
-//		Number Symbols are therefore configured as
-//		leading Number Symbols. This is the positioning
-//		format used in the US, UK, Australia and most of
-//		Canada.
+//		When set to 'true', the returned instance of
+//		NumStrNumberSymbolGroup will configure Number
+//		Sign Symbols on the left side of the numeric
+//		value. Such Number Symbols are therefore
+//		configured as leading Number Symbols. This is
+//		the positioning format used in the US, UK,
+//		Australia and most of Canada.
 //
-//		Example Number Strings:
-//			"$ -123.456"
+//		Example Number String with Leading Number Symbols:
+//			"-123.456"
 //
-//		NOTE:	A space is automatically inserted between
-//				the currency symbol and the minus sign.
+//		When set to 'false', the returned instance of
+//		NumStrNumberSymbolGroup will configure Number
+//		Symbols on the right side of the numeric value.
+//		Such Number Symbols are therefore configured as
+//		trailing Number Symbols. This is the positioning
+//		format used in France, Germany and many other
+//		countries in the European Union.
 //
-//		When 'leadingNumSymbols' is set to 'false', the
-//		current instance of NumStrNumberSymbolGroup will
-//		configure Number Symbols on the right side of the
-//		numeric value. Such Number Symbols are therefore
-//		configured as trailing Number Symbols. This is
-//		the positioning format used in France, Germany
-//		and many countries in the European Union.
-//
-//		Example Number Strings:
-//			"123.456- €"
-//
-//		NOTE:	A space is automatically inserted between
-//				the minus sign and the currency symbol.
+//		Example Number String with Trailing Number Symbols:
+//			"123.456-"
 //
 //	 errorPrefix                interface{}
 //
@@ -5959,7 +6018,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSimpleSignedNumber(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumStrNumberSymbolGroup."+
-			"SetSignedSimpleNumber()",
+			"SetSimpleSignedNumber()",
 		"")
 
 	if err != nil {
@@ -6065,7 +6124,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSimpleSignedNumber(
 //					Number Symbol Position: Inside Number Field
 //			     	Number Text Justification: Right
 //					Formatted Number String: " +123.45"
-//					Number Field Index:-------01234567
+//					Number Field Index:------>01234567
 //					Total Number String Length: 8
 //
 //				Example-2:
@@ -6075,7 +6134,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSimpleSignedNumber(
 //					Number Symbol Position: Inside Number Field
 //			     	Number Text Justification: Right
 //					Formatted Number String: " 123.45+"
-//					Number Field Index:-------01234567
+//					Number Field Index:------>01234567
 //					Total Number String Length: 8
 //
 //				For the 'NumFieldSymPos.InsideNumField()'
@@ -6090,7 +6149,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSimpleSignedNumber(
 //			     	Number Symbol Position: Outside Number Field
 //			     	Number Text Justification: Right
 //			     	Formatted Number String: "+  123.45"
-//					Number Field Index:-------012345678
+//					Number Field Index:------>012345678
 //					Total Number String Length: 9
 //
 //				Example-4:
@@ -6100,7 +6159,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSimpleSignedNumber(
 //			     	Number Symbol Position: Outside Number Field
 //			     	Number Text Justification: Right
 //			     	Formatted Number String: "  123.45+"
-//					Number Field Index:-------012345678
+//					Number Field Index:------>012345678
 //					Total Number String Length: 9
 //
 //				For the 'NumFieldSymPos.OutsideNumField()'
@@ -6169,7 +6228,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSimpleSignedNumber(
 //					Number Symbol Position: Inside Number Field
 //			     	Number Text Justification: Right
 //					Formatted Number String: " -123.45"
-//					Number Field Index:-------01234567
+//					Number Field Index:------>01234567
 //					Total Number String Length: 8
 //
 //				Example-2:
@@ -6179,7 +6238,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSimpleSignedNumber(
 //					Number Symbol Position: Inside Number Field
 //			     	Number Text Justification: Right
 //					Formatted Number String: " 123.45-"
-//					Number Field Index:-------01234567
+//					Number Field Index:------>01234567
 //					Total Number String Length: 8
 //
 //				Example-3:
@@ -6189,7 +6248,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSimpleSignedNumber(
 //					Number Symbol Position: Inside Number Field
 //			     	Number Text Justification: Centered
 //					Formatted Number String: " (123.45) "
-//					Number Field Index:-------0123456789
+//					Number Field Index:------>0123456789
 //					Total Number String Length: 10
 //
 //				For the 'NumFieldSymPos.InsideNumField()'
@@ -6204,7 +6263,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSimpleSignedNumber(
 //			     	Number Symbol Position: Outside Number Field
 //			     	Number Text Justification: Right
 //			     	Formatted Number String: "-  123.45"
-//					Number Field Index:-------012345678
+//					Number Field Index:------>012345678
 //					Total Number String Length: 9
 //
 //				Example-5:
@@ -6214,7 +6273,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSimpleSignedNumber(
 //			     	Number Symbol Position: Outside Number Field
 //			     	Number Text Justification: Right
 //			     	Formatted Number String: "  123.45-"
-//					Number Field Index:-------012345678
+//					Number Field Index:------>012345678
 //					Total Number String Length: 9
 //
 //				Example-6:
@@ -6224,7 +6283,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSimpleSignedNumber(
 //					Number Symbol Position: Outside Number Field
 //			     	Number Text Justification: Centered
 //					Formatted Number String: "( 123.45 )"
-//					Number Field Index:-------0123456789
+//					Number Field Index:------>0123456789
 //					Total Number String Length: 10
 //
 //				For the 'NumFieldSymPos.OutsideNumField()'
@@ -6302,7 +6361,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSimpleSignedNumber(
 //					Number Symbol Position: Inside Number Field
 //			     	Number Text Justification: Right
 //					Formatted Number String: " +123.45"
-//					Number Field Index:-------01234567
+//					Number Field Index:------>01234567
 //					Total Number String Length: 8
 //
 //				Example-2:
@@ -6312,7 +6371,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSimpleSignedNumber(
 //					Number Symbol Position: Inside Number Field
 //			     	Number Text Justification: Right
 //					Formatted Number String: " 123.45+"
-//					Number Field Index:-------01234567
+//					Number Field Index:------>01234567
 //					Total Number String Length: 8
 //
 //				For the 'NumFieldSymPos.InsideNumField()'
@@ -6328,7 +6387,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSimpleSignedNumber(
 //			     	Number Symbol Position: Outside Number Field
 //			     	Number Text Justification: Right
 //			     	Formatted Number String: "+  123.45"
-//					Number Field Index:-------012345678
+//					Number Field Index:------>012345678
 //					Total Number String Length: 9
 //
 //				Example-4:
@@ -6338,7 +6397,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSimpleSignedNumber(
 //			     	Number Symbol Position: Outside Number Field
 //			     	Number Text Justification: Right
 //			     	Formatted Number String: "  123.45+"
-//					Number Field Index:-------012345678
+//					Number Field Index:------>012345678
 //					Total Number String Length: 9
 //
 //				For the 'NumFieldSymPos.OutsideNumField()'
@@ -6372,7 +6431,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSimpleSignedNumber(
 //		the current instance of NumStrNumberSymbolSpec.
 //
 //		Trailing Currency Symbol characters can include
-//		such symbols as the dollar sign ('$'), Euro sign
+//		such symbols as the Dollar sign ('$'), Euro sign
 //	 	('€') and Pound sign ('£').
 //
 //		Trailing Currency Symbols are suffixed or
@@ -6407,7 +6466,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSimpleSignedNumber(
 //				Number Symbol Position: Inside Number Field
 //			    Number Text Justification: Right
 //				Formatted Number String: " $123.45$"
-//				Number Field Index:-------012345679
+//				Number Field Index:------>012345679
 //				Total Number String Length: 10
 //
 //			Example-2:
@@ -6418,7 +6477,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSimpleSignedNumber(
 //				Number Symbol Position: Inside Number Field
 //				Number Text Justification: Centered
 //				Formatted Number String: "  $123.45$  "
-//				Number Field Index:-------012345678901
+//				Number Field Index:------>012345678901
 //				Total Number String Length: 12
 //
 //			For the 'NumFieldSymPos.InsideNumField()' specification,
@@ -6435,7 +6494,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSimpleSignedNumber(
 //			    Number Symbol Position: Outside Number Field
 //			    Number Text Justification: Right
 //			    Formatted Number String: "$  123.45$"
-//				Number Field Index:-------0123456789
+//				Number Field Index:------>0123456789
 //				Total Number String Length: 10
 //
 //			Example-4:
@@ -6446,7 +6505,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSimpleSignedNumber(
 //				Number Symbol Position: Outside Number Field
 //			    Number Text Justification: Centered
 //				Formatted Number String: "$  123.45  $"
-//				Number Field Index:-------012345678901
+//				Number Field Index:------>012345678901
 //				Total Number String Length: 12
 //
 //			For the 'NumFieldSymPos.OutsideNumField()' specification,
@@ -6525,7 +6584,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSimpleSignedNumber(
 //			Leading Currency Symbol: Dollar sign ('$')
 //			Number Text Justification: Right
 //			Formatted Number String: "$ -123.45"
-//			Number Field Index:-------012345678
+//			Number Field Index:------>012345678
 //			Total Number String Length: 9
 //
 //			Currency Symbol is Formatted OUTSIDE
@@ -6663,6 +6722,172 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSymbolsRunes(
 			currencyNumSignRelPos,
 			ePrefix.XCpy(
 				"newNumberSymbols<-"))
+}
+
+//	SetSymbolsSpecs
+//
+//	Reconfigures the current instance of
+//	NumStrNumberSymbolGroup based on the Positive,
+//	Negative Zero Number Sign and Currency Symbol
+//	Specification objects passed as input parameters.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	Be advised that the data fields contained in the
+//	current instance of NumStrNumberSymbolGroup will be
+//	deleted and replaced with the Positive, Negative
+//	Zero Number Sign and Currency Symbol Specifications
+//	passed as input parameters.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	positiveNumberSign			NumStrNumberSymbolSpec
+//
+//		This Positive Number Sign Symbol Specification
+//		will be copied to the corresponding Positive
+//		Number Sign Symbol Specification in the current
+//		instance of NumStrNumberSymbolGroup.
+//
+//	negativeNumberSign			NumStrNumberSymbolSpec
+//
+//		This Negative Number Sign Symbol Specification
+//		will be copied to the corresponding Negative
+//		Number Sign Symbol Specification in the current
+//		instance of NumStrNumberSymbolGroup.
+//
+//	zeroNumberSign				NumStrNumberSymbolSpec
+//
+//		This Zero Number Sign Symbol Specification
+//		will be copied to the corresponding Zero
+//		Number Sign Symbol Specification in the current
+//		instance of NumStrNumberSymbolGroup.
+//
+//	currencySymbols				NumStrNumberSymbolSpec
+//
+//		This Currency Symbols Specification	will be
+//		copied to the corresponding Currency Symbols
+//		Specification in the current instance of
+//		NumStrNumberSymbolGroup.
+//
+//	 errorPrefix                interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it	contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSymbolsSpecs(
+	positiveNumberSign NumStrNumberSymbolSpec,
+	negativeNumberSign NumStrNumberSymbolSpec,
+	zeroNumberSign NumStrNumberSymbolSpec,
+	currencySymbols NumStrNumberSymbolSpec,
+	errorPrefix interface{}) error {
+
+	if nStrNumSymbolsGroup.lock == nil {
+		nStrNumSymbolsGroup.lock = new(sync.Mutex)
+	}
+
+	nStrNumSymbolsGroup.lock.Lock()
+
+	defer nStrNumSymbolsGroup.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumStrNumberSymbolGroup."+
+			"SetSymbolsSpecs()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	return new(numStrNumberSymbolGroupMechanics).
+		setNumberSymbolSpecs(
+			nStrNumSymbolsGroup,
+			positiveNumberSign,
+			negativeNumberSign,
+			zeroNumberSign,
+			currencySymbols,
+			ePrefix.XCpy(
+				"nStrNumSymbolsGroup"))
+
 }
 
 //	SetSymbolsStrings
@@ -6937,7 +7162,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSymbolsRunes(
 //		Zero number signs are commonly omitted because
 //		zero does not technically qualify as either a
 //		positive or negative value. However, users have
-//		the option of configure any combination of
+//		the option to configure any combination of
 //		symbols for zero numeric values.
 //
 //		Leading number symbols can include any
@@ -6964,7 +7189,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSymbolsRunes(
 //		Zero number signs are commonly omitted because
 //		zero does not technically qualify as either a
 //		positive or negative value. However, users have
-//		the option of configure any combination of
+//		the option to configure any combination of
 //		symbols for zero numeric values.
 //
 //		Trailing number symbols can include any combination
@@ -7097,7 +7322,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSymbolsRunes(
 //				Number Symbol Position: Inside Number Field
 //			    Number Text Justification: Right
 //				Formatted Number String: " $123.45$"
-//				Number Field Index:-------012345679
+//				Number Field Index:------>012345679
 //				Total Number String Length: 10
 //
 //			Example-2:
@@ -7108,7 +7333,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSymbolsRunes(
 //				Number Symbol Position: Inside Number Field
 //				Number Text Justification: Centered
 //				Formatted Number String: "  $123.45$  "
-//				Number Field Index:-------012345678901
+//				Number Field Index:------>012345678901
 //				Total Number String Length: 12
 //
 //			For the 'NumFieldSymPos.InsideNumField()' specification,
@@ -7125,7 +7350,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSymbolsRunes(
 //			    Number Symbol Position: Outside Number Field
 //			    Number Text Justification: Right
 //			    Formatted Number String: "$  123.45$"
-//				Number Field Index:-------0123456789
+//				Number Field Index:------>0123456789
 //				Total Number String Length: 10
 //
 //			Example-4:
@@ -7136,7 +7361,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSymbolsRunes(
 //				Number Symbol Position: Outside Number Field
 //			    Number Text Justification: Centered
 //				Formatted Number String: "$  123.45  $"
-//				Number Field Index:-------012345678901
+//				Number Field Index:------>012345678901
 //				Total Number String Length: 12
 //
 //			For the 'NumFieldSymPos.OutsideNumField()' specification,
@@ -7215,7 +7440,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSymbolsRunes(
 //			Leading Currency Symbol: Dollar sign ('$')
 //			Number Text Justification: Right
 //			Formatted Number String: "$ -123.45"
-//			Number Field Index:-------012345678
+//			Number Field Index:------>012345678
 //			Total Number String Length: 9
 //
 //			Currency Symbol is Formatted OUTSIDE
@@ -7355,185 +7580,25 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSymbolsStrings(
 				"newNumberSymbols<-"))
 }
 
-//	SetSymbolsSpecs
+//	SetZeroNumSignRunes
 //
-//	Reconfigures the current instance of
-//	NumStrNumberSymbolGroup based on the Positive,
-//	Negative Zero Number Sign and Currency Symbol
-//	Specification objects passed as input parameters.
+//	Deletes and resets the Zero Number Sign Symbols data
+//	fields for the current instance of
+//	NumStrNumberSymbolGroup.
 //
-// ----------------------------------------------------------------
+//	The Zero Number Sign Symbols member variable for the
+//	current instance of NumStrNumberSymbolGroup is:
 //
-// # IMPORTANT
-//
-//	Be advised that the data fields contained in the
-//	current instance of NumStrNumberSymbolGroup will be
-//	deleted and replaced with the Positive, Negative
-//	Zero Number Sign and Currency Symbol Specifications
-//	passed as input parameters.
-//
-// ----------------------------------------------------------------
-//
-// # Input Parameters
-//
-//	positiveNumberSign			NumStrNumberSymbolSpec
-//
-//		This Positive Number Sign Symbol Specification
-//		will be copied to the corresponding Positive
-//		Number Sign Symbol Specification in the current
-//		instance of NumStrNumberSymbolGroup.
-//
-//	negativeNumberSign			NumStrNumberSymbolSpec
-//
-//		This Negative Number Sign Symbol Specification
-//		will be copied to the corresponding Negative
-//		Number Sign Symbol Specification in the current
-//		instance of NumStrNumberSymbolGroup.
-//
-//	zeroNumberSign				NumStrNumberSymbolSpec
-//
-//		This Zero Number Sign Symbol Specification
-//		will be copied to the corresponding Zero
-//		Number Sign Symbol Specification in the current
-//		instance of NumStrNumberSymbolGroup.
-//
-//	currencySymbols				NumStrNumberSymbolSpec
-//
-//		This Currency Symbols Specification	will be
-//		copied to the corresponding Currency Symbols
-//		Specification in the current instance of
-//		NumStrNumberSymbolGroup.
-//
-//	 errorPrefix                interface{}
-//
-//		This object encapsulates error prefix text which
-//		is included in all returned error messages.
-//		Usually, it	contains the name of the calling
-//		method or methods listed as a method or function
-//		chain of execution.
-//
-//		If no error prefix information is needed, set this
-//		parameter to 'nil'.
-//
-//		This empty interface must be convertible to one of
-//		the following types:
-//
-//		1.	nil
-//				A nil value is valid and generates an
-//				empty collection of error prefix and
-//				error context information.
-//
-//		2.	string
-//				A string containing error prefix
-//				information.
-//
-//		3.	[]string
-//				A one-dimensional slice of strings
-//				containing error prefix information.
-//
-//		4.	[][2]string
-//				A two-dimensional slice of strings
-//		   		containing error prefix and error
-//		   		context information.
-//
-//		5.	ErrPrefixDto
-//				An instance of ErrPrefixDto.
-//				Information from this object will
-//				be copied for use in error and
-//				informational messages.
-//
-//		6.	*ErrPrefixDto
-//				A pointer to an instance of
-//				ErrPrefixDto. Information from
-//				this object will be copied for use
-//				in error and informational messages.
-//
-//		7.	IBasicErrorPrefix
-//				An interface to a method
-//				generating a two-dimensional slice
-//				of strings containing error prefix
-//				and error context information.
-//
-//		If parameter 'errorPrefix' is NOT convertible
-//		to one of the valid types listed above, it will
-//		be considered invalid and trigger the return of
-//		an error.
-//
-//		Types ErrPrefixDto and IBasicErrorPrefix are
-//		included in the 'errpref' software package:
-//			"github.com/MikeAustin71/errpref".
-//
-// ----------------------------------------------------------------
-//
-// # Return Values
-//
-//	error
-//
-//		If this method completes successfully, the
-//		returned error Type is set equal to 'nil'.
-//
-//		If errors are encountered during processing, the
-//		returned error Type will encapsulate an error
-//		message. This returned error message will
-//		incorporate the method chain and text passed by
-//		input parameter, 'errorPrefix'. The 'errorPrefix'
-//		text will be attached to the beginning of the
-//		error message.
-func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSymbolsSpecs(
-	positiveNumberSign NumStrNumberSymbolSpec,
-	negativeNumberSign NumStrNumberSymbolSpec,
-	zeroNumberSign NumStrNumberSymbolSpec,
-	currencySymbols NumStrNumberSymbolSpec,
-	errorPrefix interface{}) error {
-
-	if nStrNumSymbolsGroup.lock == nil {
-		nStrNumSymbolsGroup.lock = new(sync.Mutex)
-	}
-
-	nStrNumSymbolsGroup.lock.Lock()
-
-	defer nStrNumSymbolsGroup.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-
-	var err error
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
-		"NumStrNumberSymbolGroup."+
-			"SetSymbolsSpecs()",
-		"")
-
-	if err != nil {
-		return err
-	}
-
-	return new(numStrNumberSymbolGroupMechanics).
-		setNumberSymbolSpecs(
-			nStrNumSymbolsGroup,
-			positiveNumberSign,
-			negativeNumberSign,
-			zeroNumberSign,
-			currencySymbols,
-			ePrefix.XCpy(
-				"nStrNumSymbolsGroup"))
-
-}
-
-//	SetZeroSymbolsRunes
-//
-//	Deletes and resets the Zero Number Symbols data
-//	fields for the current instance of NumStrNumberSymbolGroup.
+//		NumStrNumberSymbolGroup.zeroNumberSign
 //
 // ----------------------------------------------------------------
 //
 // # IMPORTANT
 //
 //	Be advised that this method will delete and reset the
-//	Zero Number Sign Symbol member variable data
-//	fields as specified by the Zero Number Symbol
-//	input parameters passed as rune arrays.
+//	Zero Number Sign Symbol member variable data fields
+//	as specified by the Zero Number Sign Symbol input
+//	parameters passed as rune arrays.
 //
 //	The Zero Number Sign Symbol member variable for
 //	the current instance of NumStrNumberSymbolGroup is:
@@ -7553,21 +7618,20 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSymbolsSpecs(
 //
 //		Zero number signs are commonly omitted because
 //		zero does not technically qualify as either a
-//		positive or negative value. However, currency
-//		symbols may be required for zero values.
-//		Therefore, Leading Zero Number Symbols almost
-//		always consist of currency symbols.
+//		positive or negative value. However, type
+//		NumStrNumberSymbolGroup gives the user the
+//		option to configure both leading and trailing
+//		Zero Number Sign Symbols.
 //
-//		Leading number symbols can include any
-//		combination of characters such as minus signs
-//		('-') and/or currency symbols ('$').
+//		Leading zero number sign symbols can include any
+//		combination of characters such as plus signs
+//		('+').
 //
-//		Example: Leading Number Symbols
-//			Leading Number Symbols for Zero Values
+//		Example: Leading Zero Number Sign Symbols
 //
-//			Leading Symbols: "$"
+//			Leading Symbols: "+"
 //			Trailing Symbols: ""
-//			Number String:   "$0.00"
+//			Number String:   "+0.00"
 //
 //	trailingZeroNumberSymbols	[]rune
 //
@@ -7578,21 +7642,20 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSymbolsSpecs(
 //
 //		Zero number signs are commonly omitted because
 //		zero does not technically qualify as either a
-//		positive or negative value. However, currency
-//		symbols may be required for zero values.
-//		Therefore, Trailing Zero Number Symbols almost
-//		always consist of currency symbols.
+//		positive or negative value. However, type
+//		NumStrNumberSymbolGroup gives the user the
+//		option to configure both leading and trailing
+//		Zero Number Sign Symbols.
 //
 //		Trailing number symbols can include any
-//		combination of characters such as minus signs
-//		('-') and/or currency symbols ('$').
+//		combination of characters such as plus signs
+//		('+').
 //
-//		Example: Trailing Number Symbols
-//			Trailing Number Symbols for Zero Values
+//		Example: Trailing Zero Number Sign Symbols
 //
 //			Leading Symbols: ""
-//			Trailing Symbols: " $"
-//			Number String:   "0.00 $"
+//			Trailing Symbols: " +"
+//			Number String:   "0.00 +"
 //
 //	zeroNumFieldSymPosition			NumberFieldSymbolPosition
 //
@@ -7609,7 +7672,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSymbolsSpecs(
 //					Number Symbol Position: Inside Number Field
 //			     	Number Text Justification: Right
 //					Formatted Number String: " +123.45"
-//					Number Field Index:       01234567
+//					Number Field Index:------>01234567
 //					Total Number String Length: 8
 //
 //				Example-2:
@@ -7619,7 +7682,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSymbolsSpecs(
 //					Number Symbol Position: Inside Number Field
 //			     	Number Text Justification: Right
 //					Formatted Number String: " 123.45+"
-//					Number Field Index:       01234567
+//					Number Field Index:------>01234567
 //					Total Number String Length: 8
 //
 //				For the 'NumFieldSymPos.InsideNumField()'
@@ -7635,7 +7698,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSymbolsSpecs(
 //			     	Number Symbol Position: Outside Number Field
 //			     	Number Text Justification: Right
 //			     	Formatted Number String: "+  123.45"
-//					Number Field Index:       012345678
+//					Number Field Index:------>012345678
 //					Total Number String Length: 9
 //
 //				Example-4:
@@ -7645,7 +7708,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSymbolsSpecs(
 //			     	Number Symbol Position: Outside Number Field
 //			     	Number Text Justification: Right
 //			     	Formatted Number String: "  123.45+"
-//					Number Field Index:       012345678
+//					Number Field Index:------>012345678
 //					Total Number String Length: 9
 //
 //				For the 'NumFieldSymPos.OutsideNumField()'
@@ -7727,7 +7790,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSymbolsSpecs(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetZeroSymbolsRunes(
+func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetZeroNumSignRunes(
 	leadingZeroNumberSymbols []rune,
 	trailingZeroNumberSymbols []rune,
 	zeroNumFieldSymPosition NumberFieldSymbolPosition,
@@ -7749,7 +7812,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetZeroSymbolsRunes(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumStrNumberSymbolGroup."+
-			"SetZeroSymbolsRunes()",
+			"SetZeroNumSignRunes()",
 		"")
 
 	if err != nil {
@@ -7903,10 +7966,16 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetZeroNumSignSpec(
 
 }
 
-//	SetZeroSymbolsStrings
+//	SetZeroNumSignStrings
 //
-//	Deletes and resets the Zero Number Symbols data
-//	fields for the current instance of NumStrNumberSymbolGroup.
+//	Deletes and resets the Zero Number Sign Symbols data
+//	fields for the current instance of
+//	NumStrNumberSymbolGroup.
+//
+//	The Zero Number Sign Symbols member variable for the
+//	current instance of NumStrNumberSymbolGroup is:
+//
+//		NumStrNumberSymbolGroup.zeroNumberSign
 //
 // ----------------------------------------------------------------
 //
@@ -7914,7 +7983,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetZeroNumSignSpec(
 //
 //	Be advised that this method will delete and reset the
 //	Zero Number Sign Symbol member variable data
-//	fields as specified by the Zero Number Symbol
+//	fields as specified by the Zero Number Sign Symbol
 //	input parameters passed as strings.
 //
 //	The Zero Number Sign Symbol member variable for
@@ -7935,21 +8004,20 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetZeroNumSignSpec(
 //
 //		Zero number signs are commonly omitted because
 //		zero does not technically qualify as either a
-//		positive or negative value. However, currency
-//		symbols may be required for zero values.
-//		Therefore, Leading Zero Number Symbols almost
-//		always consist of currency symbols.
+//		positive or negative value. However, type
+//		NumStrNumberSymbolGroup gives the user the
+//		option to configure both leading and trailing
+//		Zero Number Sign Symbols.
 //
-//		Leading number symbols can include any combination
-//		of characters such as plus signs ('+') and/or
-//		currency symbols ('$').
+//		Leading zero number sign symbols can include any
+//		combination of characters such as plus signs
+//		('+').
 //
-//		Example: Leading Number Symbols
-//			Leading Number Symbols for Zero Values
+//		Example: Leading Zero Number Sign Symbols
 //
-//			Leading Symbols: "$"
+//			Leading Symbols: "+"
 //			Trailing Symbols: ""
-//			Number String:   "$0.00"
+//			Number String:   "+0.00"
 //
 //	trailingZeroNumberSymbols		string
 //
@@ -7960,21 +8028,20 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetZeroNumSignSpec(
 //
 //		Zero number signs are commonly omitted because
 //		zero does not technically qualify as either a
-//		positive or negative value. However, currency
-//		symbols may be required for zero values.
-//		Therefore, Trailing Zero Number Symbols almost
-//		always consist of currency symbols.
+//		positive or negative value. However, type
+//		NumStrNumberSymbolGroup gives the user the
+//		option to configure both leading and trailing
+//		Zero Number Sign Symbols.
 //
-//		Trailing number symbols can include any combination
-//		of characters such as plus signs ('+') and/or
-//	 	currency symbols ('$').
+//		Trailing number symbols can include any
+//		combination of characters such as plus signs
+//		('+').
 //
-//		Example: Trailing Number Symbols
-//			Trailing Number Symbols for Zero Values
+//		Example: Trailing Zero Number Sign Symbols
 //
 //			Leading Symbols: ""
-//			Trailing Symbols: " $"
-//			Number String:   "0.00 $"
+//			Trailing Symbols: " +"
+//			Number String:   "0.00 +"
 //
 //	zeroNumFieldSymPosition			NumberFieldSymbolPosition
 //
@@ -7991,7 +8058,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetZeroNumSignSpec(
 //					Number Symbol Position: Inside Number Field
 //			     	Number Text Justification: Right
 //					Formatted Number String: " +123.45"
-//					Number Field Index:       01234567
+//					Number Field Index:------>01234567
 //					Total Number String Length: 8
 //
 //				Example-2:
@@ -8001,7 +8068,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetZeroNumSignSpec(
 //					Number Symbol Position: Inside Number Field
 //			     	Number Text Justification: Right
 //					Formatted Number String: " 123.45+"
-//					Number Field Index:       01234567
+//					Number Field Index:------>01234567
 //					Total Number String Length: 8
 //
 //				For the 'NumFieldSymPos.InsideNumField()'
@@ -8017,7 +8084,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetZeroNumSignSpec(
 //			     	Number Symbol Position: Outside Number Field
 //			     	Number Text Justification: Right
 //			     	Formatted Number String: "+  123.45"
-//					Number Field Index:       012345678
+//					Number Field Index:------>012345678
 //					Total Number String Length: 9
 //
 //				Example-4:
@@ -8027,7 +8094,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetZeroNumSignSpec(
 //			     	Number Symbol Position: Outside Number Field
 //			     	Number Text Justification: Right
 //			     	Formatted Number String: "  123.45+"
-//					Number Field Index:       012345678
+//					Number Field Index:------>012345678
 //					Total Number String Length: 9
 //
 //				For the 'NumFieldSymPos.OutsideNumField()'
@@ -8109,7 +8176,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetZeroNumSignSpec(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetZeroSymbolsStrings(
+func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetZeroNumSignStrings(
 	leadingZeroNumberSymbols string,
 	trailingZeroNumberSymbols string,
 	zeroNumFieldSymPosition NumberFieldSymbolPosition,
@@ -8131,7 +8198,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetZeroSymbolsStrings(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumStrNumberSymbolGroup."+
-			"SetZeroSymbolsStrings()",
+			"SetZeroNumSignStrings()",
 		"")
 
 	if err != nil {
@@ -8419,7 +8486,7 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) copyNumSymbols(
 //					Number Symbol Position: Inside Number Field
 //			     	Number Text Justification: Right
 //					Formatted Number String: " +123.45"
-//					Number Field Index:-------01234567
+//					Number Field Index:------>01234567
 //					Total Number String Length: 8
 //
 //				Example-2:
@@ -8429,7 +8496,7 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) copyNumSymbols(
 //					Number Symbol Position: Inside Number Field
 //			     	Number Text Justification: Right
 //					Formatted Number String: " 123.45+"
-//					Number Field Index:-------01234567
+//					Number Field Index:------>01234567
 //					Total Number String Length: 8
 //
 //				For the 'NumFieldSymPos.InsideNumField()'
@@ -8444,7 +8511,7 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) copyNumSymbols(
 //			     	Number Symbol Position: Outside Number Field
 //			     	Number Text Justification: Right
 //			     	Formatted Number String: "+  123.45"
-//					Number Field Index:-------012345678
+//					Number Field Index:------>012345678
 //					Total Number String Length: 9
 //
 //				Example-4:
@@ -8454,7 +8521,7 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) copyNumSymbols(
 //			     	Number Symbol Position: Outside Number Field
 //			     	Number Text Justification: Right
 //			     	Formatted Number String: "  123.45+"
-//					Number Field Index:-------012345678
+//					Number Field Index:------>012345678
 //					Total Number String Length: 9
 //
 //				For the 'NumFieldSymPos.OutsideNumField()'
@@ -8523,7 +8590,7 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) copyNumSymbols(
 //					Number Symbol Position: Inside Number Field
 //			     	Number Text Justification: Right
 //					Formatted Number String: " -123.45"
-//					Number Field Index:-------01234567
+//					Number Field Index:------>01234567
 //					Total Number String Length: 8
 //
 //				Example-2:
@@ -8533,7 +8600,7 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) copyNumSymbols(
 //					Number Symbol Position: Inside Number Field
 //			     	Number Text Justification: Right
 //					Formatted Number String: " 123.45-"
-//					Number Field Index:-------01234567
+//					Number Field Index:------>01234567
 //					Total Number String Length: 8
 //
 //				Example-3:
@@ -8543,7 +8610,7 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) copyNumSymbols(
 //					Number Symbol Position: Inside Number Field
 //			     	Number Text Justification: Centered
 //					Formatted Number String: " (123.45) "
-//					Number Field Index:-------0123456789
+//					Number Field Index:------>0123456789
 //					Total Number String Length: 10
 //
 //				For the 'NumFieldSymPos.InsideNumField()'
@@ -8558,7 +8625,7 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) copyNumSymbols(
 //			     	Number Symbol Position: Outside Number Field
 //			     	Number Text Justification: Right
 //			     	Formatted Number String: "-  123.45"
-//					Number Field Index:-------012345678
+//					Number Field Index:------>012345678
 //					Total Number String Length: 9
 //
 //				Example-5:
@@ -8568,7 +8635,7 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) copyNumSymbols(
 //			     	Number Symbol Position: Outside Number Field
 //			     	Number Text Justification: Right
 //			     	Formatted Number String: "  123.45-"
-//					Number Field Index:-------012345678
+//					Number Field Index:------>012345678
 //					Total Number String Length: 9
 //
 //				Example-6:
@@ -8578,7 +8645,7 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) copyNumSymbols(
 //					Number Symbol Position: Outside Number Field
 //			     	Number Text Justification: Centered
 //					Formatted Number String: "( 123.45 )"
-//					Number Field Index:-------0123456789
+//					Number Field Index:------>0123456789
 //					Total Number String Length: 10
 //
 //				For the 'NumFieldSymPos.OutsideNumField()'
@@ -8648,7 +8715,7 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) copyNumSymbols(
 //					Number Symbol Position: Inside Number Field
 //			     	Number Text Justification: Right
 //					Formatted Number String: " +123.45"
-//					Number Field Index:-------01234567
+//					Number Field Index:------>01234567
 //					Total Number String Length: 8
 //
 //				Example-2:
@@ -8658,7 +8725,7 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) copyNumSymbols(
 //					Number Symbol Position: Inside Number Field
 //			     	Number Text Justification: Right
 //					Formatted Number String: " 123.45+"
-//					Number Field Index:-------01234567
+//					Number Field Index:------>01234567
 //					Total Number String Length: 8
 //
 //				For the 'NumFieldSymPos.InsideNumField()'
@@ -8674,7 +8741,7 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) copyNumSymbols(
 //			     	Number Symbol Position: Outside Number Field
 //			     	Number Text Justification: Right
 //			     	Formatted Number String: "+  123.45"
-//					Number Field Index:-------012345678
+//					Number Field Index:------>012345678
 //					Total Number String Length: 9
 //
 //				Example-4:
@@ -8684,7 +8751,7 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) copyNumSymbols(
 //			     	Number Symbol Position: Outside Number Field
 //			     	Number Text Justification: Right
 //			     	Formatted Number String: "  123.45+"
-//					Number Field Index:-------012345678
+//					Number Field Index:------>012345678
 //					Total Number String Length: 9
 //
 //				For the 'NumFieldSymPos.OutsideNumField()'
@@ -8753,7 +8820,7 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) copyNumSymbols(
 //				Number Symbol Position: Inside Number Field
 //			    Number Text Justification: Right
 //				Formatted Number String: " $123.45$"
-//				Number Field Index:-------012345679
+//				Number Field Index:------>012345679
 //				Total Number String Length: 10
 //
 //			Example-2:
@@ -8764,7 +8831,7 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) copyNumSymbols(
 //				Number Symbol Position: Inside Number Field
 //				Number Text Justification: Centered
 //				Formatted Number String: "  $123.45$  "
-//				Number Field Index:-------012345678901
+//				Number Field Index:------>012345678901
 //				Total Number String Length: 12
 //
 //			For the 'NumFieldSymPos.InsideNumField()' specification,
@@ -8781,7 +8848,7 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) copyNumSymbols(
 //			    Number Symbol Position: Outside Number Field
 //			    Number Text Justification: Right
 //			    Formatted Number String: "$  123.45$"
-//				Number Field Index:-------0123456789
+//				Number Field Index:------>0123456789
 //				Total Number String Length: 10
 //
 //			Example-4:
@@ -8792,7 +8859,7 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) copyNumSymbols(
 //				Number Symbol Position: Outside Number Field
 //			    Number Text Justification: Centered
 //				Formatted Number String: "$  123.45  $"
-//				Number Field Index:-------012345678901
+//				Number Field Index:------>012345678901
 //				Total Number String Length: 12
 //
 //			For the 'NumFieldSymPos.OutsideNumField()' specification,
@@ -8871,7 +8938,7 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) copyNumSymbols(
 //			Leading Currency Symbol: Dollar sign ('$')
 //			Number Text Justification: Right
 //			Formatted Number String: "$ -123.45"
-//			Number Field Index:-------012345678
+//			Number Field Index:------>012345678
 //			Total Number String Length: 9
 //
 //			Currency Symbol is Formatted OUTSIDE
@@ -9328,7 +9395,7 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setNumberSymbol
 //			Number Symbol: leading minus sign ('-')
 //			Number Symbol Position: Inside Number Field
 //			Formatted Number String: " -123.45"
-//			Number Field Index:-------01234567
+//			Number Field Index:------>01234567
 //			Total Number String Length: 8
 //
 // ----------------------------------------------------------------
@@ -9654,7 +9721,7 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setSimpleCurren
 //			Number Symbol: leading minus sign ('-')
 //			Number Symbol Position: Inside Number Field
 //			Formatted Number String: " -123.45"
-//			Number Field Index:-------01234567
+//			Number Field Index:------>01234567
 //			Total Number String Length: 8
 //
 // ----------------------------------------------------------------
@@ -10121,7 +10188,7 @@ func (nStrNumSymbolGroupNanobot *numStrNumberSymbolGroupNanobot) equal(
 //				Number Symbol Position: Inside Number Field
 //			    Number Text Justification: Right
 //				Formatted Number String: "  $123.45"
-//				Number Field Index:-------012345679
+//				Number Field Index:------>012345679
 //				Total Number String Length: 10
 //
 //			Example-2:
@@ -10131,7 +10198,7 @@ func (nStrNumSymbolGroupNanobot *numStrNumberSymbolGroupNanobot) equal(
 //				Number Symbol Position: Inside Number Field
 //				Number Text Justification: Centered
 //				Formatted Number String: "  $123.45  "
-//				Number Field Index:-------01234567890
+//				Number Field Index:------>01234567890
 //				Total Number String Length: 11
 //
 //			For the 'NumFieldSymPos.InsideNumField()' specification,
@@ -10147,7 +10214,7 @@ func (nStrNumSymbolGroupNanobot *numStrNumberSymbolGroupNanobot) equal(
 //			    Number Symbol Position: Outside Number Field
 //			    Number Text Justification: Right
 //			    Formatted Number String: "$  123.45"
-//				Number Field Index:-------012345678
+//				Number Field Index:------>012345678
 //				Total Number String Length: 9
 //
 //			Example-4:
@@ -10157,7 +10224,7 @@ func (nStrNumSymbolGroupNanobot *numStrNumberSymbolGroupNanobot) equal(
 //				Number Symbol Position: Outside Number Field
 //			    Number Text Justification: Centered
 //				Formatted Number String: "$  123.45  "
-//				Number Field Index:-------01234567890
+//				Number Field Index:------>01234567890
 //				Total Number String Length: 11
 //
 //			For the 'NumFieldSymPos.OutsideNumField()' specification,
@@ -10236,7 +10303,7 @@ func (nStrNumSymbolGroupNanobot *numStrNumberSymbolGroupNanobot) equal(
 //			Leading Currency Symbol: Dollar sign ('$')
 //			Number Text Justification: Right
 //			Formatted Number String: "$ -123.45"
-//			Number Field Index:-------012345678
+//			Number Field Index:------>012345678
 //			Total Number String Length: 9
 //
 //			Currency Symbol is Formatted OUTSIDE
@@ -10649,7 +10716,7 @@ func (nStrNumSymbolGroupNanobot *numStrNumberSymbolGroupNanobot) setCurrencySymb
 //					Number Symbol Position: Inside Number Field
 //			     	Number Text Justification: Right
 //					Formatted Number String: " -123.45"
-//					Number Field Index:-------01234567
+//					Number Field Index:------>01234567
 //					Total Number String Length: 8
 //
 //				Example-2:
@@ -10659,7 +10726,7 @@ func (nStrNumSymbolGroupNanobot *numStrNumberSymbolGroupNanobot) setCurrencySymb
 //					Number Symbol Position: Inside Number Field
 //			     	Number Text Justification: Right
 //					Formatted Number String: " 123.45-"
-//					Number Field Index:-------01234567
+//					Number Field Index:------>01234567
 //					Total Number String Length: 8
 //
 //				Example-3:
@@ -10669,7 +10736,7 @@ func (nStrNumSymbolGroupNanobot *numStrNumberSymbolGroupNanobot) setCurrencySymb
 //					Number Symbol Position: Inside Number Field
 //			     	Number Text Justification: Centered
 //					Formatted Number String: " (123.45) "
-//					Number Field Index:-------0123456789
+//					Number Field Index:------>0123456789
 //					Total Number String Length: 10
 //
 //				For the 'NumFieldSymPos.InsideNumField()'
@@ -10684,7 +10751,7 @@ func (nStrNumSymbolGroupNanobot *numStrNumberSymbolGroupNanobot) setCurrencySymb
 //			     	Number Symbol Position: Outside Number Field
 //			     	Number Text Justification: Right
 //			     	Formatted Number String: "-  123.45"
-//					Number Field Index:-------012345678
+//					Number Field Index:------>012345678
 //					Total Number String Length: 9
 //
 //				Example-5:
@@ -10694,7 +10761,7 @@ func (nStrNumSymbolGroupNanobot *numStrNumberSymbolGroupNanobot) setCurrencySymb
 //			     	Number Symbol Position: Outside Number Field
 //			     	Number Text Justification: Right
 //			     	Formatted Number String: "  123.45-"
-//					Number Field Index:-------012345678
+//					Number Field Index:------>012345678
 //					Total Number String Length: 9
 //
 //				Example-6:
@@ -10704,7 +10771,7 @@ func (nStrNumSymbolGroupNanobot *numStrNumberSymbolGroupNanobot) setCurrencySymb
 //					Number Symbol Position: Outside Number Field
 //			     	Number Text Justification: Centered
 //					Formatted Number String: "( 123.45 )"
-//					Number Field Index:-------0123456789
+//					Number Field Index:------>0123456789
 //					Total Number String Length: 10
 //
 //				For the 'NumFieldSymPos.OutsideNumField()'

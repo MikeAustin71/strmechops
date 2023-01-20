@@ -207,7 +207,7 @@ type NumStrNumberSymbolSpec struct {
 	//			Number Symbol: leading minus sign ('-')
 	//			Number Symbol Position: Inside Number Field
 	//			Formatted Number String: " -123.45"
-	//			Number Field Index:-------01234567
+	//			Number Field Index:------>01234567
 	//			Total Number String Length: 8
 	//
 	//		Example-2:
@@ -217,7 +217,7 @@ type NumStrNumberSymbolSpec struct {
 	//			Number Symbol Position: Outside Number Field
 	//          Number Text Justification: Centered
 	//			Formatted Number String: " (123.45) "
-	//			Number Field Index:-------0123456789
+	//			Number Field Index:------>0123456789
 	//			Total Number String Length: 10
 	//
 	//		In this case the final length of the number string
@@ -230,7 +230,7 @@ type NumStrNumberSymbolSpec struct {
 	//	     	Number Symbol: leading minus sign ('-')
 	//	     	Number Symbol Position: Outside Number Field
 	//	     	Formatted Number String: "-  123.45"
-	//			Number Field Index:-------012345678
+	//			Number Field Index:------>012345678
 	//			Total Number String Length: 9
 	//
 	//		Example-4:
@@ -239,7 +239,7 @@ type NumStrNumberSymbolSpec struct {
 	//			Number Symbol: before and after parentheses  ('()')
 	//			Number Symbol Position: Outside Number Field
 	//			Formatted Number String: "( 123.45 )"
-	//			Number Field Index:-------0123456789
+	//			Number Field Index:------>0123456789
 	//			Total Number String Length: 10
 	//
 	//		In this case the final length of the number string
@@ -278,7 +278,7 @@ type NumStrNumberSymbolSpec struct {
 	//			Number Symbol Position: Inside Number Field
 	//          Number Text Justification: Right
 	//			Formatted Number String: " 123.45-"
-	//			Number Field Index:-------01234567
+	//			Number Field Index:------>01234567
 	//			Total Number String Length: 8
 	//
 	//		Example-2:
@@ -288,7 +288,7 @@ type NumStrNumberSymbolSpec struct {
 	//			Number Symbol Position: Outside Number Field
 	//          Number Text Justification: Centered
 	//			Formatted Number String: " (123.45) "
-	//			Number Field Index:-------0123456789
+	//			Number Field Index:------>0123456789
 	//			Total Number String Length: 10
 	//
 	//		In this case the final length of the number string
@@ -302,7 +302,7 @@ type NumStrNumberSymbolSpec struct {
 	//	     	Number Symbol Position: Outside Number Field
 	//          Number Text Justification: Right
 	//	     	Formatted Number String: "  123.45-"
-	//			Number Field Index:-------012345678
+	//			Number Field Index:------>012345678
 	//			Total Number String Length: 9
 	//
 	//		Example-4:
@@ -312,7 +312,7 @@ type NumStrNumberSymbolSpec struct {
 	//			Number Symbol Position: Outside Number Field
 	//          Number Text Justification: Centered
 	//			Formatted Number String: "( 123.45 )"
-	//			Number Field Index:-------0123456789
+	//			Number Field Index:------>0123456789
 	//			Total Number String Length: 10
 	//
 	//		In this case the final length of the number string
@@ -394,7 +394,7 @@ type NumStrNumberSymbolSpec struct {
 	//			Leading Currency Symbol: Dollar sign ('$')
 	//			Number Text Justification: Right
 	//			Formatted Number String: "$ -123.45"
-	//			Number Field Index:-------012345678
+	//			Number Field Index:------>012345678
 	//			Total Number String Length: 9
 	//
 	//			Currency Symbol is Formatted OUTSIDE
@@ -1081,7 +1081,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) GetLeadingNumberSymbolStr() 
 //			Number Symbol: leading minus sign ('-')
 //			Number Symbol Position: Inside Number Field
 //			Formatted Number String: " -123.45"
-//			Number Field Index:-------01234567
+//			Number Field Index:------>01234567
 //			Total Number String Length: 8
 //
 //		Example-2:
@@ -1091,7 +1091,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) GetLeadingNumberSymbolStr() 
 //			Number Symbol Position: Outside Number Field
 //	     	Number Text Justification: Centered
 //			Formatted Number String: " (123.45) "
-//			Number Field Index:-------0123456789
+//			Number Field Index:------>0123456789
 //			Total Number String Length: 10
 //
 //		In this case the final length of the number string
@@ -1105,7 +1105,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) GetLeadingNumberSymbolStr() 
 //	     	Number Symbol: leading minus sign ('-')
 //	     	Number Symbol Position: Outside Number Field
 //	     	Formatted Number String: "-  123.45"
-//			Number Field Index:-------012345678
+//			Number Field Index:------>012345678
 //			Total Number String Length: 9
 //
 //		Example-4:
@@ -1114,7 +1114,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) GetLeadingNumberSymbolStr() 
 //			Number Symbol: before and after parentheses  ('()')
 //			Number Symbol Position: Outside Number Field
 //			Formatted Number String: "( 123.45 )"
-//			Number Field Index:-------0123456789
+//			Number Field Index:------>0123456789
 //			Total Number String Length: 10
 //
 //		In this case the final length of the number string
@@ -1407,7 +1407,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) GetTrailingNumberSymbolStr()
 //			Number Symbol Position: Inside Number Field
 //	     Number Text Justification: Right
 //			Formatted Number String: " 123.45-"
-//			Number Field Index:-------01234567
+//			Number Field Index:------>01234567
 //			Total Number String Length: 8
 //
 //		Example-2:
@@ -1417,7 +1417,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) GetTrailingNumberSymbolStr()
 //			Number Symbol Position: Outside Number Field
 //	     Number Text Justification: Centered
 //			Formatted Number String: " (123.45) "
-//			Number Field Index:-------0123456789
+//			Number Field Index:------>0123456789
 //			Total Number String Length: 10
 //
 //		In this case the final length of the number string
@@ -1432,7 +1432,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) GetTrailingNumberSymbolStr()
 //	     	Number Symbol Position: Outside Number Field
 //	     Number Text Justification: Right
 //	     	Formatted Number String: "  123.45-"
-//			Number Field Index:-------012345678
+//			Number Field Index:------>012345678
 //			Total Number String Length: 9
 //
 //		Example-4:
@@ -1442,7 +1442,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) GetTrailingNumberSymbolStr()
 //			Number Symbol Position: Outside Number Field
 //	     Number Text Justification: Centered
 //			Formatted Number String: "( 123.45 )"
-//			Number Field Index:-------0123456789
+//			Number Field Index:------>0123456789
 //			Total Number String Length: 10
 //
 //		In this case the final length of the number string
@@ -2362,7 +2362,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyDefaultsUS(
 //			Leading Currency Symbol: Dollar sign ('$')
 //			Number Text Justification: Right
 //			Formatted Number String: "$ -123.45"
-//			Number Field Index:-------012345678
+//			Number Field Index:------>012345678
 //			Total Number String Length: 9
 //
 //			Currency Symbol is Formatted OUTSIDE
@@ -2409,7 +2409,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyDefaultsUS(
 //				Number Symbol Position: Inside Number Field
 //			    Number Text Justification: Right
 //				Formatted Number String: "  $123.45"
-//				Number Field Index:-------012345679
+//				Number Field Index:------>012345679
 //				Total Number String Length: 10
 //
 //			Example-2:
@@ -2419,7 +2419,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyDefaultsUS(
 //				Number Symbol Position: Inside Number Field
 //				Number Text Justification: Centered
 //				Formatted Number String: "  $123.45  "
-//				Number Field Index:-------01234567890
+//				Number Field Index:------>01234567890
 //				Total Number String Length: 11
 //
 //			For the 'NumFieldSymPos.InsideNumField()' specification,
@@ -2435,7 +2435,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyDefaultsUS(
 //			    Number Symbol Position: Outside Number Field
 //			    Number Text Justification: Right
 //			    Formatted Number String: "$  123.45"
-//				Number Field Index:-------012345678
+//				Number Field Index:------>012345678
 //				Total Number String Length: 9
 //
 //			Example-4:
@@ -2445,7 +2445,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyDefaultsUS(
 //				Number Symbol Position: Outside Number Field
 //			    Number Text Justification: Centered
 //				Formatted Number String: "$  123.45  "
-//				Number Field Index:-------01234567890
+//				Number Field Index:------>01234567890
 //				Total Number String Length: 11
 //
 //			For the 'NumFieldSymPos.OutsideNumField()' specification,
@@ -2524,7 +2524,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyDefaultsUS(
 //			Leading Currency Symbol: Dollar sign ('$')
 //			Number Text Justification: Right
 //			Formatted Number String: "$ -123.45"
-//			Number Field Index:-------012345678
+//			Number Field Index:------>012345678
 //			Total Number String Length: 9
 //
 //			Currency Symbol is Formatted OUTSIDE
@@ -2746,7 +2746,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyLeadingSymbol(
 //			Leading Currency Symbol: Dollar sign ('$')
 //			Number Text Justification: Right
 //			Formatted Number String: "$ -123.45"
-//			Number Field Index:-------012345678
+//			Number Field Index:------>012345678
 //			Total Number String Length: 9
 //
 //			Currency Symbol is Formatted OUTSIDE
@@ -2793,7 +2793,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyLeadingSymbol(
 //				Number Symbol Position: Inside Number Field
 //			    Number Text Justification: Right
 //				Formatted Number String: "  $123.45"
-//				Number Field Index:-------012345679
+//				Number Field Index:------>012345679
 //				Total Number String Length: 10
 //
 //			Example-2:
@@ -2803,7 +2803,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyLeadingSymbol(
 //				Number Symbol Position: Inside Number Field
 //				Number Text Justification: Centered
 //				Formatted Number String: "  $123.45  "
-//				Number Field Index:-------01234567890
+//				Number Field Index:------>01234567890
 //				Total Number String Length: 11
 //
 //			For the 'NumFieldSymPos.InsideNumField()' specification,
@@ -2819,7 +2819,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyLeadingSymbol(
 //			    Number Symbol Position: Outside Number Field
 //			    Number Text Justification: Right
 //			    Formatted Number String: "$  123.45"
-//				Number Field Index:-------012345678
+//				Number Field Index:------>012345678
 //				Total Number String Length: 9
 //
 //			Example-4:
@@ -2829,7 +2829,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyLeadingSymbol(
 //				Number Symbol Position: Outside Number Field
 //			    Number Text Justification: Centered
 //				Formatted Number String: "$  123.45  "
-//				Number Field Index:-------01234567890
+//				Number Field Index:------>01234567890
 //				Total Number String Length: 11
 //
 //			For the 'NumFieldSymPos.OutsideNumField()' specification,
@@ -2908,7 +2908,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyLeadingSymbol(
 //			Leading Currency Symbol: Dollar sign ('$')
 //			Number Text Justification: Right
 //			Formatted Number String: "$ -123.45"
-//			Number Field Index:-------012345678
+//			Number Field Index:------>012345678
 //			Total Number String Length: 9
 //
 //			Currency Symbol is Formatted OUTSIDE
@@ -3134,7 +3134,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyLeadingSymbolRune
 //			Leading Currency Symbol: Dollar sign ('$')
 //			Number Text Justification: Right
 //			Formatted Number String: "$ -123.45"
-//			Number Field Index:-------012345678
+//			Number Field Index:------>012345678
 //			Total Number String Length: 9
 //
 //			Currency Symbol is Formatted OUTSIDE
@@ -3201,7 +3201,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyLeadingSymbolRune
 //				Number Symbol Position: Inside Number Field
 //			    Number Text Justification: Right
 //				Formatted Number String: " $123.45$"
-//				Number Field Index:-------012345679
+//				Number Field Index:------>012345679
 //				Total Number String Length: 10
 //
 //			Example-2:
@@ -3212,7 +3212,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyLeadingSymbolRune
 //				Number Symbol Position: Inside Number Field
 //				Number Text Justification: Centered
 //				Formatted Number String: "  $123.45$  "
-//				Number Field Index:-------012345678901
+//				Number Field Index:------>012345678901
 //				Total Number String Length: 12
 //
 //			For the 'NumFieldSymPos.InsideNumField()' specification,
@@ -3229,7 +3229,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyLeadingSymbolRune
 //			    Number Symbol Position: Outside Number Field
 //			    Number Text Justification: Right
 //			    Formatted Number String: "$  123.45$"
-//				Number Field Index:-------0123456789
+//				Number Field Index:------>0123456789
 //				Total Number String Length: 10
 //
 //			Example-4:
@@ -3240,7 +3240,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyLeadingSymbolRune
 //				Number Symbol Position: Outside Number Field
 //			    Number Text Justification: Centered
 //				Formatted Number String: "$  123.45  $"
-//				Number Field Index:-------012345678901
+//				Number Field Index:------>012345678901
 //				Total Number String Length: 12
 //
 //			For the 'NumFieldSymPos.OutsideNumField()' specification,
@@ -3319,7 +3319,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyLeadingSymbolRune
 //			Leading Currency Symbol: Dollar sign ('$')
 //			Number Text Justification: Right
 //			Formatted Number String: "$ -123.45"
-//			Number Field Index:-------012345678
+//			Number Field Index:------>012345678
 //			Total Number String Length: 9
 //
 //			Currency Symbol is Formatted OUTSIDE
@@ -3549,7 +3549,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyLeadingTrailingSy
 //			Leading Currency Symbol: Dollar sign ('$')
 //			Number Text Justification: Right
 //			Formatted Number String: "$ -123.45"
-//			Number Field Index:-------012345678
+//			Number Field Index:------>012345678
 //			Total Number String Length: 9
 //
 //			Currency Symbol is Formatted OUTSIDE
@@ -3616,7 +3616,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyLeadingTrailingSy
 //				Number Symbol Position: Inside Number Field
 //			    Number Text Justification: Right
 //				Formatted Number String: " $123.45$"
-//				Number Field Index:-------012345679
+//				Number Field Index:------>012345679
 //				Total Number String Length: 10
 //
 //			Example-2:
@@ -3627,7 +3627,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyLeadingTrailingSy
 //				Number Symbol Position: Inside Number Field
 //				Number Text Justification: Centered
 //				Formatted Number String: "  $123.45$  "
-//				Number Field Index:-------012345678901
+//				Number Field Index:------>012345678901
 //				Total Number String Length: 12
 //
 //			For the 'NumFieldSymPos.InsideNumField()' specification,
@@ -3644,7 +3644,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyLeadingTrailingSy
 //			    Number Symbol Position: Outside Number Field
 //			    Number Text Justification: Right
 //			    Formatted Number String: "$  123.45$"
-//				Number Field Index:-------0123456789
+//				Number Field Index:------>0123456789
 //				Total Number String Length: 10
 //
 //			Example-4:
@@ -3655,7 +3655,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyLeadingTrailingSy
 //				Number Symbol Position: Outside Number Field
 //			    Number Text Justification: Centered
 //				Formatted Number String: "$  123.45  $"
-//				Number Field Index:-------012345678901
+//				Number Field Index:------>012345678901
 //				Total Number String Length: 12
 //
 //			For the 'NumFieldSymPos.OutsideNumField()' specification,
@@ -3734,7 +3734,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyLeadingTrailingSy
 //			Leading Currency Symbol: Dollar sign ('$')
 //			Number Text Justification: Right
 //			Formatted Number String: "$ -123.45"
-//			Number Field Index:-------012345678
+//			Number Field Index:------>012345678
 //			Total Number String Length: 9
 //
 //			Currency Symbol is Formatted OUTSIDE
@@ -3959,7 +3959,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyLeadingTrailingSy
 //			Leading Currency Symbol: Dollar sign ('$')
 //			Number Text Justification: Right
 //			Formatted Number String: "$ -123.45"
-//			Number Field Index:-------012345678
+//			Number Field Index:------>012345678
 //			Total Number String Length: 9
 //
 //			Currency Symbol is Formatted OUTSIDE
@@ -4008,7 +4008,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyLeadingTrailingSy
 //				Number Symbol Position: Inside Number Field
 //			    Number Text Justification: Right
 //				Formatted Number String: "  123.45€"
-//				Number Field Index:-------012345679
+//				Number Field Index:------>012345679
 //				Total Number String Length: 10
 //
 //			Example-2:
@@ -4018,7 +4018,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyLeadingTrailingSy
 //				Number Symbol Position: Inside Number Field
 //				Number Text Justification: Centered
 //				Formatted Number String: "  123.45€  "
-//				Number Field Index:-------01234567890
+//				Number Field Index:------>01234567890
 //				Total Number String Length: 11
 //
 //			For the 'NumFieldSymPos.InsideNumField()' specification,
@@ -4034,7 +4034,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyLeadingTrailingSy
 //			    Number Symbol Position: Outside Number Field
 //			    Number Text Justification: Right
 //			    Formatted Number String: "  123.45€"
-//				Number Field Index:-------012345678
+//				Number Field Index:------>012345678
 //				Total Number String Length: 9
 //
 //			Example-4:
@@ -4044,7 +4044,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyLeadingTrailingSy
 //				Number Symbol Position: Outside Number Field
 //			    Number Text Justification: Centered
 //				Formatted Number String: "  123.45  €"
-//				Number Field Index:-------01234567890
+//				Number Field Index:------>01234567890
 //				Total Number String Length: 11
 //
 //			For the 'NumFieldSymPos.OutsideNumField()' specification,
@@ -4119,7 +4119,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyLeadingTrailingSy
 //			Leading Currency Symbol: Dollar sign ('$')
 //			Number Text Justification: Right
 //			Formatted Number String: "$ -123.45"
-//			Number Field Index:-------012345678
+//			Number Field Index:------>012345678
 //			Total Number String Length: 9
 //
 //			Currency Symbol is Formatted OUTSIDE
@@ -4340,7 +4340,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyTrailingSymbol(
 //			Leading Currency Symbol: Dollar sign ('$')
 //			Number Text Justification: Right
 //			Formatted Number String: "$ -123.45"
-//			Number Field Index:-------012345678
+//			Number Field Index:------>012345678
 //			Total Number String Length: 9
 //
 //			Currency Symbol is Formatted OUTSIDE
@@ -4389,7 +4389,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyTrailingSymbol(
 //				Number Symbol Position: Inside Number Field
 //			    Number Text Justification: Right
 //				Formatted Number String: "  123.45€"
-//				Number Field Index:-------012345679
+//				Number Field Index:------>012345679
 //				Total Number String Length: 10
 //
 //			Example-2:
@@ -4399,7 +4399,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyTrailingSymbol(
 //				Number Symbol Position: Inside Number Field
 //				Number Text Justification: Centered
 //				Formatted Number String: "  123.45€  "
-//				Number Field Index:-------01234567890
+//				Number Field Index:------>01234567890
 //				Total Number String Length: 11
 //
 //			For the 'NumFieldSymPos.InsideNumField()' specification,
@@ -4415,7 +4415,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyTrailingSymbol(
 //			    Number Symbol Position: Outside Number Field
 //			    Number Text Justification: Right
 //			    Formatted Number String: "  123.45€"
-//				Number Field Index:-------012345678
+//				Number Field Index:------>012345678
 //				Total Number String Length: 9
 //
 //			Example-4:
@@ -4425,7 +4425,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyTrailingSymbol(
 //				Number Symbol Position: Outside Number Field
 //			    Number Text Justification: Centered
 //				Formatted Number String: "  123.45  €"
-//				Number Field Index:-------01234567890
+//				Number Field Index:------>01234567890
 //				Total Number String Length: 11
 //
 //			For the 'NumFieldSymPos.OutsideNumField()' specification,
@@ -4500,7 +4500,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyTrailingSymbol(
 //			Leading Currency Symbol: Dollar sign ('$')
 //			Number Text Justification: Right
 //			Formatted Number String: "$ -123.45"
-//			Number Field Index:-------012345678
+//			Number Field Index:------>012345678
 //			Total Number String Length: 9
 //
 //			Currency Symbol is Formatted OUTSIDE
@@ -4767,7 +4767,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewNOP() NumStrNumberSymbolS
 //			Number Symbol Position: Inside Number Field
 //			Number Text Justification: Right
 //			Formatted Number String: " -123.45"
-//			Number Field Index:-------01234567
+//			Number Field Index:------>01234567
 //			Total Number String Length: 8
 //
 //		Example-2:
@@ -4777,7 +4777,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewNOP() NumStrNumberSymbolS
 //			Number Symbol Position: Inside Number Field
 //			Number Text Justification: Right
 //			Formatted Number String: " +123.45"
-//			Number Field Index:-------01234567
+//			Number Field Index:------>01234567
 //			Total Number String Length: 8
 //
 //			For the 'NumFieldSymPos.InsideNumField()'
@@ -4793,7 +4793,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewNOP() NumStrNumberSymbolS
 //			Number Symbol Position: Outside Number Field
 //			Number Text Justification: Right
 //			Formatted Number String: "-  123.45"
-//			Number Field Index:-------012345678
+//			Number Field Index:------>012345678
 //			Total Number String Length: 9
 //
 //		Example-4:
@@ -4803,7 +4803,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewNOP() NumStrNumberSymbolS
 //			Number Symbol Position: Outside Number Field
 //			Number Text Justification: Right
 //			Formatted Number String: "+  123.45"
-//			Number Field Index:-------012345678
+//			Number Field Index:------>012345678
 //			Total Number String Length: 9
 //
 //			For the 'NumFieldSymPos.OutsideNumField()'
@@ -5029,7 +5029,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewNumberSignLeadingSymbol(
 //			Number Symbol Position: Inside Number Field
 //			Number Text Justification: Right
 //			Formatted Number String: " -123.45"
-//			Number Field Index:-------01234567
+//			Number Field Index:------>01234567
 //			Total Number String Length: 8
 //
 //		Example-2:
@@ -5039,7 +5039,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewNumberSignLeadingSymbol(
 //			Number Symbol Position: Inside Number Field
 //		   	Number Text Justification: Right
 //			Formatted Number String: " +123.45"
-//		    Number Field Index:-------01234567
+//		    Number Field Index:------>01234567
 //			Total Number String Length: 8
 //
 //			For the 'NumFieldSymPos.InsideNumField()'
@@ -5055,7 +5055,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewNumberSignLeadingSymbol(
 //			Number Symbol Position: Outside Number Field
 //			Number Text Justification: Right
 //			Formatted Number String: "-  123.45"
-//			Number Field Index:-------012345678
+//			Number Field Index:------>012345678
 //			Total Number String Length: 9
 //
 //		Example-4:
@@ -5065,7 +5065,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewNumberSignLeadingSymbol(
 //			Number Symbol Position: Outside Number Field
 //			Number Text Justification: Right
 //			Formatted Number String: "+  123.45"
-//			Number Field Index:-------012345678
+//			Number Field Index:------>012345678
 //			Total Number String Length: 9
 //
 //			For the 'NumFieldSymPos.OutsideNumField()'
@@ -7160,7 +7160,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewSignedNumDefaultsUSParen(
 //			Leading Currency Symbol: Dollar sign ('$')
 //			Number Text Justification: Right
 //			Formatted Number String: "$ -123.45"
-//			Number Field Index:-------012345678
+//			Number Field Index:------>012345678
 //			Total Number String Length: 9
 //
 //			Currency Symbol is Formatted OUTSIDE
@@ -7215,7 +7215,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewSignedNumDefaultsUSParen(
 //				Number Symbol Position: Inside Number Field
 //			    Number Text Justification: Right
 //				Formatted Number String: "  $123.45"
-//				Number Field Index:-------012345679
+//				Number Field Index:------>012345679
 //				Total Number String Length: 10
 //
 //			Example-2:
@@ -7225,7 +7225,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewSignedNumDefaultsUSParen(
 //				Number Symbol Position: Inside Number Field
 //				Number Text Justification: Centered
 //				Formatted Number String: "  $123.45  "
-//				Number Field Index:-------01234567890
+//				Number Field Index:------>01234567890
 //				Total Number String Length: 11
 //
 //			For the 'NumFieldSymPos.InsideNumField()' specification,
@@ -7241,7 +7241,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewSignedNumDefaultsUSParen(
 //			    Number Symbol Position: Outside Number Field
 //			    Number Text Justification: Right
 //			    Formatted Number String: "$  123.45"
-//				Number Field Index:-------012345678
+//				Number Field Index:------>012345678
 //				Total Number String Length: 9
 //
 //			Example-4:
@@ -7251,7 +7251,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewSignedNumDefaultsUSParen(
 //				Number Symbol Position: Outside Number Field
 //			    Number Text Justification: Centered
 //				Formatted Number String: "$  123.45  "
-//				Number Field Index:-------01234567890
+//				Number Field Index:------>01234567890
 //				Total Number String Length: 11
 //
 //			For the 'NumFieldSymPos.OutsideNumField()' specification,
@@ -7330,7 +7330,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewSignedNumDefaultsUSParen(
 //			Leading Currency Symbol: Dollar sign ('$')
 //			Number Text Justification: Right
 //			Formatted Number String: "$ -123.45"
-//			Number Field Index:-------012345678
+//			Number Field Index:------>012345678
 //			Total Number String Length: 9
 //
 //			Currency Symbol is Formatted OUTSIDE
@@ -7544,7 +7544,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetCurrencyLeadingSymbol(
 //			Leading Currency Symbol: Dollar sign ('$')
 //			Number Text Justification: Right
 //			Formatted Number String: "$ -123.45"
-//			Number Field Index:-------012345678
+//			Number Field Index:------>012345678
 //			Total Number String Length: 9
 //
 //			Currency Symbol is Formatted OUTSIDE
@@ -7599,7 +7599,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetCurrencyLeadingSymbol(
 //				Number Symbol Position: Inside Number Field
 //			    Number Text Justification: Right
 //				Formatted Number String: "  $123.45"
-//				Number Field Index:-------012345679
+//				Number Field Index:------>012345679
 //				Total Number String Length: 10
 //
 //			Example-2:
@@ -7609,7 +7609,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetCurrencyLeadingSymbol(
 //				Number Symbol Position: Inside Number Field
 //				Number Text Justification: Centered
 //				Formatted Number String: "  $123.45  "
-//				Number Field Index:-------01234567890
+//				Number Field Index:------>01234567890
 //				Total Number String Length: 11
 //
 //			For the 'NumFieldSymPos.InsideNumField()' specification,
@@ -7625,7 +7625,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetCurrencyLeadingSymbol(
 //			    Number Symbol Position: Outside Number Field
 //			    Number Text Justification: Right
 //			    Formatted Number String: "$  123.45"
-//				Number Field Index:-------012345678
+//				Number Field Index:------>012345678
 //				Total Number String Length: 9
 //
 //			Example-4:
@@ -7635,7 +7635,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetCurrencyLeadingSymbol(
 //				Number Symbol Position: Outside Number Field
 //			    Number Text Justification: Centered
 //				Formatted Number String: "$  123.45  "
-//				Number Field Index:-------01234567890
+//				Number Field Index:------>01234567890
 //				Total Number String Length: 11
 //
 //			For the 'NumFieldSymPos.OutsideNumField()' specification,
@@ -7714,7 +7714,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetCurrencyLeadingSymbol(
 //			Leading Currency Symbol: Dollar sign ('$')
 //			Number Text Justification: Right
 //			Formatted Number String: "$ -123.45"
-//			Number Field Index:-------012345678
+//			Number Field Index:------>012345678
 //			Total Number String Length: 9
 //
 //			Currency Symbol is Formatted OUTSIDE
@@ -7932,7 +7932,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetCurrencyLeadingSymbolRune
 //			Leading Currency Symbol: Dollar sign ('$')
 //			Number Text Justification: Right
 //			Formatted Number String: "$ -123.45"
-//			Number Field Index:-------012345678
+//			Number Field Index:------>012345678
 //			Total Number String Length: 9
 //
 //			Currency Symbol is Formatted OUTSIDE
@@ -8013,7 +8013,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetCurrencyLeadingSymbolRune
 //				Number Symbol Position: Inside Number Field
 //			    Number Text Justification: Right
 //				Formatted Number String: " $123.45$"
-//				Number Field Index:-------012345679
+//				Number Field Index:------>012345679
 //				Total Number String Length: 10
 //
 //			Example-2:
@@ -8024,7 +8024,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetCurrencyLeadingSymbolRune
 //				Number Symbol Position: Inside Number Field
 //				Number Text Justification: Centered
 //				Formatted Number String: "  $123.45$  "
-//				Number Field Index:-------012345678901
+//				Number Field Index:------>012345678901
 //				Total Number String Length: 12
 //
 //			For the 'NumFieldSymPos.InsideNumField()' specification,
@@ -8041,7 +8041,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetCurrencyLeadingSymbolRune
 //			    Number Symbol Position: Outside Number Field
 //			    Number Text Justification: Right
 //			    Formatted Number String: "$  123.45$"
-//				Number Field Index:-------0123456789
+//				Number Field Index:------>0123456789
 //				Total Number String Length: 10
 //
 //			Example-4:
@@ -8052,7 +8052,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetCurrencyLeadingSymbolRune
 //				Number Symbol Position: Outside Number Field
 //			    Number Text Justification: Centered
 //				Formatted Number String: "$  123.45  $"
-//				Number Field Index:-------012345678901
+//				Number Field Index:------>012345678901
 //				Total Number String Length: 12
 //
 //			For the 'NumFieldSymPos.OutsideNumField()' specification,
@@ -8131,7 +8131,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetCurrencyLeadingSymbolRune
 //			Leading Currency Symbol: Dollar sign ('$')
 //			Number Text Justification: Right
 //			Formatted Number String: "$ -123.45"
-//			Number Field Index:-------012345678
+//			Number Field Index:------>012345678
 //			Total Number String Length: 9
 //
 //			Currency Symbol is Formatted OUTSIDE
@@ -8353,7 +8353,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetCurrencyLeadingTrailingSy
 //			Leading Currency Symbol: Dollar sign ('$')
 //			Number Text Justification: Right
 //			Formatted Number String: "$ -123.45"
-//			Number Field Index:-------012345678
+//			Number Field Index:------>012345678
 //			Total Number String Length: 9
 //
 //			Currency Symbol is Formatted OUTSIDE
@@ -8436,7 +8436,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetCurrencyLeadingTrailingSy
 //				Number Symbol Position: Inside Number Field
 //			    Number Text Justification: Right
 //				Formatted Number String: " $123.45$"
-//				Number Field Index:-------012345679
+//				Number Field Index:------>012345679
 //				Total Number String Length: 10
 //
 //			Example-2:
@@ -8447,7 +8447,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetCurrencyLeadingTrailingSy
 //				Number Symbol Position: Inside Number Field
 //				Number Text Justification: Centered
 //				Formatted Number String: "  $123.45$  "
-//				Number Field Index:-------012345678901
+//				Number Field Index:------>012345678901
 //				Total Number String Length: 12
 //
 //			For the 'NumFieldSymPos.InsideNumField()' specification,
@@ -8464,7 +8464,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetCurrencyLeadingTrailingSy
 //			    Number Symbol Position: Outside Number Field
 //			    Number Text Justification: Right
 //			    Formatted Number String: "$  123.45$"
-//				Number Field Index:-------0123456789
+//				Number Field Index:------>0123456789
 //				Total Number String Length: 10
 //
 //			Example-4:
@@ -8475,7 +8475,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetCurrencyLeadingTrailingSy
 //				Number Symbol Position: Outside Number Field
 //			    Number Text Justification: Centered
 //				Formatted Number String: "$  123.45  $"
-//				Number Field Index:-------012345678901
+//				Number Field Index:------>012345678901
 //				Total Number String Length: 12
 //
 //			For the 'NumFieldSymPos.OutsideNumField()' specification,
@@ -8554,7 +8554,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetCurrencyLeadingTrailingSy
 //			Leading Currency Symbol: Dollar sign ('$')
 //			Number Text Justification: Right
 //			Formatted Number String: "$ -123.45"
-//			Number Field Index:-------012345678
+//			Number Field Index:------>012345678
 //			Total Number String Length: 9
 //
 //			Currency Symbol is Formatted OUTSIDE
@@ -8793,7 +8793,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetCurrencyLeadingTrailingSy
 //			Leading Currency Symbol: Dollar sign ('$')
 //			Number Text Justification: Right
 //			Formatted Number String: "$ -123.45"
-//			Number Field Index:-------012345678
+//			Number Field Index:------>012345678
 //			Total Number String Length: 9
 //
 //			Currency Symbol is Formatted OUTSIDE
@@ -8986,7 +8986,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetCurrencyNumSignRelPos(
 //			Leading Currency Symbol: Dollar sign ('$')
 //			Number Text Justification: Right
 //			Formatted Number String: "$ -123.45"
-//			Number Field Index:-------012345678
+//			Number Field Index:------>012345678
 //			Total Number String Length: 9
 //
 //			Currency Symbol is Formatted OUTSIDE
@@ -9043,7 +9043,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetCurrencyNumSignRelPos(
 //				Number Symbol Position: Inside Number Field
 //			    Number Text Justification: Right
 //				Formatted Number String: "  123.45€"
-//				Number Field Index:-------012345679
+//				Number Field Index:------>012345679
 //				Total Number String Length: 10
 //
 //			Example-2:
@@ -9053,7 +9053,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetCurrencyNumSignRelPos(
 //				Number Symbol Position: Inside Number Field
 //				Number Text Justification: Centered
 //				Formatted Number String: "  123.45€  "
-//				Number Field Index:-------01234567890
+//				Number Field Index:------>01234567890
 //				Total Number String Length: 11
 //
 //			For the 'NumFieldSymPos.InsideNumField()' specification,
@@ -9069,7 +9069,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetCurrencyNumSignRelPos(
 //			    Number Symbol Position: Outside Number Field
 //			    Number Text Justification: Right
 //			    Formatted Number String: "  123.45€"
-//				Number Field Index:-------012345678
+//				Number Field Index:------>012345678
 //				Total Number String Length: 9
 //
 //			Example-4:
@@ -9079,7 +9079,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetCurrencyNumSignRelPos(
 //				Number Symbol Position: Outside Number Field
 //			    Number Text Justification: Centered
 //				Formatted Number String: "  123.45  €"
-//				Number Field Index:-------01234567890
+//				Number Field Index:------>01234567890
 //				Total Number String Length: 11
 //
 //			For the 'NumFieldSymPos.OutsideNumField()' specification,
@@ -9154,7 +9154,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetCurrencyNumSignRelPos(
 //			Leading Currency Symbol: Dollar sign ('$')
 //			Number Text Justification: Right
 //			Formatted Number String: "$ -123.45"
-//			Number Field Index:-------012345678
+//			Number Field Index:------>012345678
 //			Total Number String Length: 9
 //
 //			Currency Symbol is Formatted OUTSIDE
@@ -9370,7 +9370,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetCurrencyTrailingSymbol(
 //			Leading Currency Symbol: Dollar sign ('$')
 //			Number Text Justification: Right
 //			Formatted Number String: "$ -123.45"
-//			Number Field Index:-------012345678
+//			Number Field Index:------>012345678
 //			Total Number String Length: 9
 //
 //			Currency Symbol is Formatted OUTSIDE
@@ -9427,7 +9427,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetCurrencyTrailingSymbol(
 //				Number Symbol Position: Inside Number Field
 //			    Number Text Justification: Right
 //				Formatted Number String: "  123.45€"
-//				Number Field Index:-------012345679
+//				Number Field Index:------>012345679
 //				Total Number String Length: 10
 //
 //			Example-2:
@@ -9437,7 +9437,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetCurrencyTrailingSymbol(
 //				Number Symbol Position: Inside Number Field
 //				Number Text Justification: Centered
 //				Formatted Number String: "  123.45€  "
-//				Number Field Index:-------01234567890
+//				Number Field Index:------>01234567890
 //				Total Number String Length: 11
 //
 //			For the 'NumFieldSymPos.InsideNumField()' specification,
@@ -9453,7 +9453,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetCurrencyTrailingSymbol(
 //			    Number Symbol Position: Outside Number Field
 //			    Number Text Justification: Right
 //			    Formatted Number String: "  123.45€"
-//				Number Field Index:-------012345678
+//				Number Field Index:------>012345678
 //				Total Number String Length: 9
 //
 //			Example-4:
@@ -9463,7 +9463,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetCurrencyTrailingSymbol(
 //				Number Symbol Position: Outside Number Field
 //			    Number Text Justification: Centered
 //				Formatted Number String: "  123.45  €"
-//				Number Field Index:-------01234567890
+//				Number Field Index:------>01234567890
 //				Total Number String Length: 11
 //
 //			For the 'NumFieldSymPos.OutsideNumField()' specification,
@@ -9538,7 +9538,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetCurrencyTrailingSymbol(
 //			Leading Currency Symbol: Dollar sign ('$')
 //			Number Text Justification: Right
 //			Formatted Number String: "$ -123.45"
-//			Number Field Index:-------012345678
+//			Number Field Index:------>012345678
 //			Total Number String Length: 9
 //
 //			Currency Symbol is Formatted OUTSIDE
@@ -9793,7 +9793,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetNOP() {
 //				Number Symbol Position: Inside Number Field
 //		     	Number Text Justification: Right
 //				Formatted Number String: " -123.45"
-//				Number Field Index:-------01234567
+//				Number Field Index:------>01234567
 //				Total Number String Length: 8
 //
 //			Example-2:
@@ -9803,7 +9803,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetNOP() {
 //				Number Symbol Position: Outside Number Field
 //				Number Text Justification: Centered
 //				Formatted Number String: " (123.45) "
-//				Number Field Index:-------0123456789
+//				Number Field Index:------>0123456789
 //				Total Number String Length: 10
 //
 //			For the 'NumFieldSymPos.InsideNumField()' specification,
@@ -9818,7 +9818,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetNOP() {
 //		     	Number Symbol Position: Outside Number Field
 //		     	Number Text Justification: Right
 //		     	Formatted Number String: "-  123.45"
-//				Number Field Index:-------012345678
+//				Number Field Index:------>012345678
 //				Total Number String Length: 9
 //
 //			Example-4:
@@ -9828,7 +9828,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetNOP() {
 //				Number Symbol Position: Outside Number Field
 //		     	Number Text Justification: Centered
 //				Formatted Number String: "( 123.45 )"
-//				Number Field Index:-------0123456789
+//				Number Field Index:------>0123456789
 //				Total Number String Length: 10
 //
 //			For the 'NumFieldSymPos.OutsideNumField()' specification,
@@ -10049,7 +10049,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetNumberSignLeadingSymbol(
 //					Number Symbol Position: Inside Number Field
 //			     	Number Text Justification: Right
 //					Formatted Number String: " -123.45"
-//					Number Field Index:-------01234567
+//					Number Field Index:------>01234567
 //					Total Number String Length: 8
 //
 //				Example-2:
@@ -10059,7 +10059,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetNumberSignLeadingSymbol(
 //					Number Symbol Position: Outside Number Field
 //					Number Text Justification: Centered
 //					Formatted Number String: " (123.45) "
-//					Number Field Index:-------0123456789
+//					Number Field Index:------>0123456789
 //					Total Number String Length: 10
 //
 //				For the 'NumFieldSymPos.InsideNumField()' specification,
@@ -10074,7 +10074,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetNumberSignLeadingSymbol(
 //			     	Number Symbol Position: Outside Number Field
 //			     	Number Text Justification: Right
 //			     	Formatted Number String: "-  123.45"
-//					Number Field Index:-------012345678
+//					Number Field Index:------>012345678
 //					Total Number String Length: 9
 //
 //				Example-4:
@@ -10084,7 +10084,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetNumberSignLeadingSymbol(
 //					Number Symbol Position: Outside Number Field
 //			     	Number Text Justification: Centered
 //					Formatted Number String: "( 123.45 )"
-//					Number Field Index:-------0123456789
+//					Number Field Index:------>0123456789
 //					Total Number String Length: 10
 //
 //				For the 'NumFieldSymPos.OutsideNumField()' specification,
@@ -10310,7 +10310,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetNumberSignLeadingSymbolRu
 //				Number Symbol Position: Inside Number Field
 //		     	Number Text Justification: Right
 //				Formatted Number String: " -123.45"
-//				Number Field Index:-------01234567
+//				Number Field Index:------>01234567
 //				Total Number String Length: 8
 //
 //			Example-2:
@@ -10320,7 +10320,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetNumberSignLeadingSymbolRu
 //				Number Symbol Position: Outside Number Field
 //				Number Text Justification: Centered
 //				Formatted Number String: " (123.45) "
-//				Number Field Index:-------0123456789
+//				Number Field Index:------>0123456789
 //				Total Number String Length: 10
 //
 //			For the 'NumFieldSymPos.InsideNumField()' specification,
@@ -10336,7 +10336,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetNumberSignLeadingSymbolRu
 //		     	Number Symbol Position: Outside Number Field
 //		     	Number Text Justification: Right
 //		     	Formatted Number String: "-  123.45"
-//				Number Field Index:-------012345678
+//				Number Field Index:------>012345678
 //				Total Number String Length: 9
 //
 //			Example-4:
@@ -10346,7 +10346,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetNumberSignLeadingSymbolRu
 //				Number Symbol Position: Outside Number Field
 //		     	Number Text Justification: Centered
 //				Formatted Number String: "( 123.45 )"
-//				Number Field Index:-------0123456789
+//				Number Field Index:------>0123456789
 //				Total Number String Length: 10
 //
 //			For the 'NumFieldSymPos.OutsideNumField()' specification,
@@ -10386,7 +10386,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetNumberSignLeadingSymbolRu
 //				Number Symbol Position: Inside Number Field
 //		     	Number Text Justification: Right
 //				Formatted Number String: " 123.45-"
-//				Number Field Index:-------01234567
+//				Number Field Index:------>01234567
 //				Total Number String Length: 8
 //
 //			Example-2:
@@ -10396,7 +10396,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetNumberSignLeadingSymbolRu
 //				Number Symbol Position: Inside Number Field
 //		     	Number Text Justification: Centered
 //				Formatted Number String: " (123.45) "
-//				Number Field Index:-------0123456789
+//				Number Field Index:------>0123456789
 //				Total Number String Length: 10
 //
 //			For the 'NumFieldSymPos.InsideNumField()' specification,
@@ -10412,7 +10412,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetNumberSignLeadingSymbolRu
 //		     	Number Symbol Position: Outside Number Field
 //		     	Number Text Justification: Right
 //		     	Formatted Number String: "  123.45-"
-//				Number Field Index:-------012345678
+//				Number Field Index:------>012345678
 //				Total Number String Length: 9
 //
 //			Example-4:
@@ -10422,7 +10422,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetNumberSignLeadingSymbolRu
 //				Number Symbol Position: Outside Number Field
 //		     	Number Text Justification: Centered
 //				Formatted Number String: "( 123.45 )"
-//				Number Field Index:-------0123456789
+//				Number Field Index:------>0123456789
 //				Total Number String Length: 10
 //
 //			For the 'NumFieldSymPos.OutsideNumField()' specification,
@@ -10691,7 +10691,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetNumberSignLeadingTrailing
 //				Number Symbol Position: Inside Number Field
 //		     	Number Text Justification: Right
 //				Formatted Number String: " -123.45"
-//				Number Field Index:-------01234567
+//				Number Field Index:------>01234567
 //				Total Number String Length: 8
 //
 //			Example-2:
@@ -10701,7 +10701,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetNumberSignLeadingTrailing
 //				Number Symbol Position: Outside Number Field
 //				Number Text Justification: Centered
 //				Formatted Number String: " (123.45) "
-//				Number Field Index:-------0123456789
+//				Number Field Index:------>0123456789
 //				Total Number String Length: 10
 //
 //			For the 'NumFieldSymPos.InsideNumField()'
@@ -10717,7 +10717,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetNumberSignLeadingTrailing
 //		     	Number Symbol Position: Outside Number Field
 //		     	Number Text Justification: Right
 //		     	Formatted Number String: "-  123.45"
-//				Number Field Index:-------012345678
+//				Number Field Index:------>012345678
 //				Total Number String Length: 9
 //
 //			Example-4:
@@ -10727,7 +10727,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetNumberSignLeadingTrailing
 //				Number Symbol Position: Outside Number Field
 //		     	Number Text Justification: Centered
 //				Formatted Number String: "( 123.45 )"
-//				Number Field Index:-------0123456789
+//				Number Field Index:------>0123456789
 //				Total Number String Length: 10
 //
 //			For the 'NumFieldSymPos.OutsideNumField()'
@@ -10769,7 +10769,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetNumberSignLeadingTrailing
 //				Number Symbol Position: Inside Number Field
 //		     	Number Text Justification: Right
 //				Formatted Number String: " 123.45-"
-//				Number Field Index:-------01234567
+//				Number Field Index:------>01234567
 //				Total Number String Length: 8
 //
 //			Example-2:
@@ -10779,7 +10779,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetNumberSignLeadingTrailing
 //				Number Symbol Position: Inside Number Field
 //		     	Number Text Justification: Centered
 //				Formatted Number String: " (123.45) "
-//				Number Field Index:-------0123456789
+//				Number Field Index:------>0123456789
 //				Total Number String Length: 10
 //
 //			For the 'NumFieldSymPos.InsideNumField()'
@@ -10794,7 +10794,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetNumberSignLeadingTrailing
 //		     	Number Symbol Position: Outside Number Field
 //		     	Number Text Justification: Right
 //		     	Formatted Number String: "  123.45-"
-//				Number Field Index:-------012345678
+//				Number Field Index:------>012345678
 //				Total Number String Length: 9
 //
 //			Example-4:
@@ -10804,7 +10804,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetNumberSignLeadingTrailing
 //				Number Symbol Position: Outside Number Field
 //		     	Number Text Justification: Centered
 //				Formatted Number String: "( 123.45 )"
-//				Number Field Index:-------0123456789
+//				Number Field Index:------>0123456789
 //				Total Number String Length: 10
 //
 //			For the 'NumFieldSymPos.OutsideNumField()'
@@ -11068,7 +11068,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetNumberSignLeadingTrailing
 //				Number Symbol Position: Inside Number Field
 //		     	Number Text Justification: Right
 //				Formatted Number String: " 123.45-"
-//				Number Field Index:-------01234567
+//				Number Field Index:------>01234567
 //				Total Number String Length: 8
 //
 //			Example-2:
@@ -11078,7 +11078,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetNumberSignLeadingTrailing
 //				Number Symbol Position: Inside Number Field
 //		     	Number Text Justification: Centered
 //				Formatted Number String: " (123.45) "
-//				Number Field Index:-------0123456789
+//				Number Field Index:------>0123456789
 //				Total Number String Length: 10
 //
 //			For the 'NumFieldSymPos.InsideNumField()'
@@ -11094,7 +11094,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetNumberSignLeadingTrailing
 //		     	Number Symbol Position: Outside Number Field
 //		     	Number Text Justification: Right
 //		     	Formatted Number String: "  123.45-"
-//				Number Field Index:-------012345678
+//				Number Field Index:------>012345678
 //				Total Number String Length: 9
 //
 //			Example-4:
@@ -11104,7 +11104,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetNumberSignLeadingTrailing
 //				Number Symbol Position: Outside Number Field
 //		     	Number Text Justification: Centered
 //				Formatted Number String: "( 123.45 )"
-//				Number Field Index:-------0123456789
+//				Number Field Index:------>0123456789
 //				Total Number String Length: 10
 //
 //			For the 'NumFieldSymPos.OutsideNumField()'
@@ -11333,7 +11333,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetNumberSignTrailingSymbol(
 //				Number Symbol Position: Inside Number Field
 //		     	Number Text Justification: Right
 //				Formatted Number String: " 123.45-"
-//				Number Field Index:-------01234567
+//				Number Field Index:------>01234567
 //				Total Number String Length: 8
 //
 //			Example-2:
@@ -11343,7 +11343,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetNumberSignTrailingSymbol(
 //				Number Symbol Position: Inside Number Field
 //		     	Number Text Justification: Centered
 //				Formatted Number String: " (123.45) "
-//				Number Field Index:-------0123456789
+//				Number Field Index:------>0123456789
 //				Total Number String Length: 10
 //
 //			For the 'NumFieldSymPos.InsideNumField()'
@@ -11359,7 +11359,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetNumberSignTrailingSymbol(
 //		     	Number Symbol Position: Outside Number Field
 //		     	Number Text Justification: Right
 //		     	Formatted Number String: "  123.45-"
-//				Number Field Index:-------012345678
+//				Number Field Index:------>012345678
 //				Total Number String Length: 9
 //
 //			Example-4:
@@ -11369,7 +11369,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetNumberSignTrailingSymbol(
 //				Number Symbol Position: Outside Number Field
 //		     	Number Text Justification: Centered
 //				Formatted Number String: "( 123.45 )"
-//				Number Field Index:-------0123456789
+//				Number Field Index:------>0123456789
 //				Total Number String Length: 10
 //
 //			For the 'NumFieldSymPos.OutsideNumField()'
