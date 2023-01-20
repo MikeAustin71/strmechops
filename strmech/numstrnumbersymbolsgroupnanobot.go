@@ -1001,9 +1001,15 @@ func (nStrNumSymbolGroupNanobot *numStrNumberSymbolGroupNanobot) setNegativeNumS
 //
 // # IMPORTANT
 //
-//	Be advised that this method will delete and reset the
-//	Negative Number Sign Symbol member variable data fields
-//	contained in input paramter, 'nStrNumSymbols'.
+//	(1)	Be advised that this method will delete and reset
+//		the Negative Number Sign Symbol member variable
+//		data fields contained in input paramter,
+//		'nStrNumSymbols'.
+//
+//	(2)	If input parameter 'negativeNumberSign' is invalid
+//		or a NOP, the internal Negative Number Sign Symbol,
+//		NumStrNumberSymbolSpec.negativeNumberSign, will be
+//		set to a NOP.
 //
 // ----------------------------------------------------------------
 //
@@ -1023,6 +1029,12 @@ func (nStrNumSymbolGroupNanobot *numStrNumberSymbolGroupNanobot) setNegativeNumS
 //		will be copied to the corresponding Negative
 //		Symbol Specification in input paramter,
 //		'nStrNumSymbols'.
+//
+//		If input parameter 'negativeNumberSign' is
+//		invalid or a NOP, the internal Negative Number
+//		Sign Symbol,
+//		NumStrNumberSymbolSpec.negativeNumberSign, will
+//		be set to a NOP.
 //
 //	errPrefDto					*ePref.ErrPrefixDto
 //
@@ -1091,6 +1103,12 @@ func (nStrNumSymbolGroupNanobot *numStrNumberSymbolGroupNanobot) setNegativeNumS
 			ePrefix.String())
 
 		return err
+	}
+
+	if negativeNumberSign.IsNOP() {
+
+		nStrNumSymbols.negativeNumberSign.SetNOP()
+
 	}
 
 	err = nStrNumSymbols.negativeNumberSign.CopyIn(
@@ -1335,14 +1353,58 @@ func (nStrNumSymbolGroupNanobot *numStrNumberSymbolGroupNanobot) setPositiveNumS
 		return err
 	}
 
-	err = nStrNumSymbols.positiveNumberSign.
-		SetNumberSignLeadingTrailingSymbolRunes(
-			leadingPositiveNumberSymbols,
-			positiveNumFieldSymPosition,
-			trailingPositiveNumberSymbols,
-			positiveNumFieldSymPosition,
-			ePrefix.XCpy(
-				"nStrNumSymbols.positiveNumberSign"))
+	lenLeadingNumSyms := len(leadingPositiveNumberSymbols)
+
+	lenTrailingNumSyms := len(trailingPositiveNumberSymbols)
+
+	if lenLeadingNumSyms == 0 &&
+		lenTrailingNumSyms == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameters 'leadingPositiveNumberSymbols' and\n"+
+			"'trailingPositiveNumberSymbols' are invalid!\n"+
+			"Both parameters are empty and contain zero text characters.\n",
+			ePrefix.String())
+
+		return err
+
+	}
+
+	if lenLeadingNumSyms > 0 &&
+		lenTrailingNumSyms > 0 {
+
+		err = nStrNumSymbols.positiveNumberSign.
+			SetNumberSignLeadingTrailingSymbolRunes(
+				leadingPositiveNumberSymbols,
+				positiveNumFieldSymPosition,
+				trailingPositiveNumberSymbols,
+				positiveNumFieldSymPosition,
+				ePrefix.XCpy(
+					"nStrNumSymbols.positiveNumberSign"))
+
+	} else if lenLeadingNumSyms > 0 &&
+		lenTrailingNumSyms == 0 {
+
+		err = nStrNumSymbols.positiveNumberSign.
+			SetNumberSignLeadingSymbolRunes(
+				leadingPositiveNumberSymbols,
+				positiveNumFieldSymPosition,
+				ePrefix.XCpy(
+					"nStrNumSymbols.positiveNumberSign"))
+
+	} else {
+		// MUST BE -
+		//  lenLeadingNumSyms == 0  &&
+		//		lenTrailingNumSyms > 0
+
+		err = nStrNumSymbols.positiveNumberSign.
+			SetNumberSignTrailingSymbolRunes(
+				trailingPositiveNumberSymbols,
+				positiveNumFieldSymPosition,
+				ePrefix.XCpy(
+					"nStrNumSymbols.positiveNumberSign"))
+
+	}
 
 	return err
 }
@@ -1352,18 +1414,29 @@ func (nStrNumSymbolGroupNanobot *numStrNumberSymbolGroupNanobot) setPositiveNumS
 //	Receives a single NumStrNumberSymbolSpec object
 //	configured as a Positive Number Sign Symbol.
 //
-//	This method then proceeds to reset the
-//	corresponding Positive Number Sign Symbol member
-//	variable data value for the NumStrNumberSymbolGroup
-//	input paramter 'nStrNumSymbols'.
+//	This method then proceeds to reset the corresponding
+//	Positive Number Sign Symbol internal member variable
+//	data value for the NumStrNumberSymbolGroup input
+//	paramter 'nStrNumSymbols'.
+//
+//	The Positive Number Sign Symbol internal member
+//	variable is:
+//
+//		NumStrNumberSymbolGroup.positiveNumberSign
 //
 // ----------------------------------------------------------------
 //
 // # IMPORTANT
 //
-//	Be advised that this method will delete and reset the
-//	Positive Number Sign Symbol member variable data fields
-//	contained in input paramter, 'nStrNumSymbols'.
+//	(1)	Be advised that this method will delete and reset
+//		the Positive Number Sign Symbol member variable
+//		data fields contained in input paramter,
+//		'nStrNumSymbols'.
+//
+//	(2)	If input parameter 'positiveNumberSign' is invalid
+//		or a NOP, the internal Positive Number Sign Symbol,
+//		NumStrNumberSymbolSpec.positiveNumberSign, will be
+//		set to a NOP.
 //
 // ----------------------------------------------------------------
 //
@@ -1383,6 +1456,12 @@ func (nStrNumSymbolGroupNanobot *numStrNumberSymbolGroupNanobot) setPositiveNumS
 //		will be copied to the corresponding Positive
 //		Symbol Specification in input paramter,
 //		'nStrNumSymbols'.
+//
+//		If input parameter 'positiveNumberSign' is
+//		invalid or a NOP, the internal Positive Number
+//		Sign Symbol,
+//		NumStrNumberSymbolSpec.positiveNumberSign, will
+//		be set to a NOP.
 //
 //	errPrefDto					*ePref.ErrPrefixDto
 //
@@ -1449,6 +1528,13 @@ func (nStrNumSymbolGroupNanobot *numStrNumberSymbolGroupNanobot) setPositiveNumS
 			"Error: Input parameter 'nStrNumSymbols' is invalid!\n"+
 			"'nStrNumSymbols' is a 'nil' pointer.\n",
 			ePrefix.String())
+
+		return err
+	}
+
+	if positiveNumberSign.IsNOP() {
+
+		nStrNumSymbols.positiveNumberSign.SetNOP()
 
 		return err
 	}
