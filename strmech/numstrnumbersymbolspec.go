@@ -40,29 +40,34 @@ import (
 //
 // # BE ADVISED
 //
-//	Radix points, or Decimal Separators, are used to
-//	separate integer and fractional digits in floating
-//	point numeric values.
+//	(1)	Radix points, or Decimal Separators, are used to
+//		separate integer and fractional digits in floating
+//		point numeric values.
 //
-//	In the United States, the decimal point or period
-//	('.') serves as the decimal separator.
+//		In the United States, the decimal point or period
+//		('.') serves as the decimal separator.
 //
-//		United States Example: 127.54
+//			United States Example: 127.54
 //
-//	In various European countries, the comma (',') is
-//	used as the decimal separator.
+//		In various European countries, the comma (',') is
+//		used as the decimal separator.
 //
-//		European Example: 127,54
+//			European Example: 127,54
 //
-//	Radix points or Decimal Separators are NOT considered
-//	legitimate Number String Number Symbol
-//	Specifications.
+//		Radix points or Decimal Separators are NOT
+//		considered legitimate Number String Number Symbol
+//		Specifications.
 //
-//	DO NOT USE Type NumStrNumberSymbolSpec to configure
-//	Radix Points or Decimal Separators.
+//		DO NOT USE Type NumStrNumberSymbolSpec to
+//		configure Radix Points or Decimal Separators.
 //
-//	Radix Points, or Decimal Separators, should be
-//	configured using Type DecimalSeparatorSpec.
+//		Radix Points, or Decimal Separators, should be
+//		configured using Type DecimalSeparatorSpec.
+//
+//	(2)	To better understand the role of
+//		NumStrNumberSymbolSpec in number string
+//		formatting, reference Type
+//		NumStrNumberSymbolGroup.
 //
 // ----------------------------------------------------------------
 //
