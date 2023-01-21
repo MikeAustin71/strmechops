@@ -185,6 +185,114 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) copyNumSymbols(
 	return err
 }
 
+//	setCurrencyDefaultsFrance
+//
+//	Receives an instance of NumStrNumberSymbolGroup,
+//	deletes the pre-existing data values and proceeds to
+//	reconfigure the instance according to French currency
+//	formatting standards.
+//
+//	Default values will be used to reconfigure the
+//	NumStrNumberSymbolGroup input parameter,
+//	'nStrNumSymbolGroup', for French Currency formatting.
+//	New data values will be configured for the positive,
+//	zero and negative number sign symbols as well as the
+//	currency symbols.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will delete, overwrite and reset all
+//	pre-existing data values in the instance of
+//	NumStrNumberSymbolGroup passed as input parameter
+//	'nStrNumSymbolGroup'.
+//
+// ----------------------------------------------------------------
+//
+// # Reference:
+//
+//	https://www.ibm.com/support/pages/english-and-french-currency-formats
+//
+//	https://freeformatter.com/france-standards-code-snippets.html
+//
+//	https://docs.microsoft.com/en-us/globalization/locale/currency-formatting
+//
+// ----------------------------------------------------------------
+//
+// # Defaults
+//
+//	The currency symbol used in the France is the
+//	trailing Euro symbol ('€').
+//
+//		French Example-1
+//		1 000 000,00 €
+//
+//	The negative number sign is set to a leading minus sign
+//	('-').
+//
+//		French Example-2
+//		-1 000 000 000
+//
+//	The number sign is implied for positive numeric values.
+//	Therefore, the positive number sign symbol is set to a
+//	blank or empty string ("").
+//
+//		French Example-3
+//		1 000 000 000 €
+//
+//	The zero number format has no number sign. Therefore,
+//	the positive number sign symbol is set to a blank or
+//	empty string ("").
+//
+//		French Example-4
+//			0,0 €
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	nStrNumSymbolGroup			*NumStrNumberSymbolGroup
+//
+//		A pointer to an instance of
+//		NumStrNumberSymbolGroup.
+//
+//		All Number Symbol data values contained in this
+//		object will be deleted and reconfigured using
+//		the default parameters for French Currency number
+//		formatting standards.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
 func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setCurrencyDefaultsFrance(
 	nStrNumSymbolGroup *NumStrNumberSymbolGroup,
 	errPrefDto *ePref.ErrPrefixDto) error {
@@ -234,6 +342,175 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setCurrencyDefa
 
 	return new(NumStrNumberSymbolSpec).
 		SetSignedNumDefaultsFrance(
+			&nStrNumSymbolGroup.positiveNumberSign,
+			&nStrNumSymbolGroup.zeroNumberSign,
+			&nStrNumSymbolGroup.negativeNumberSign,
+			ePrefix)
+}
+
+//	setCurrencyDefaultsGermany
+//
+//	Receives an instance of NumStrNumberSymbolGroup,
+//	deletes the pre-existing data values and proceeds to
+//	reconfigure the instance according to German currency
+//	formatting standards.
+//
+//	Default values will be used to reconfigure the
+//	NumStrNumberSymbolGroup input parameter,
+//	'nStrNumSymbolGroup', for German Currency formatting.
+//	New data values will be configured for the positive,
+//	zero and negative number sign symbols as well as the
+//	currency symbols.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will delete, overwrite and reset all
+//	pre-existing data values in the instance of
+//	NumStrNumberSymbolGroup passed as input parameter
+//	'nStrNumSymbolGroup'.
+//
+// ----------------------------------------------------------------
+//
+// # Reference:
+//
+//	https://freeformatter.com/germany-standards-code-snippets.html
+//
+//	https://www.evertype.com/standards/euro/formats.html
+//
+//	https://docs.microsoft.com/en-us/globalization/locale/currency-formatting
+//
+//	https://www.thefinancials.com/Default.aspx?SubSectionID=curformat
+//
+//	https://www.codeproject.com/articles/78175/international-number-formats
+//
+//	https://docs.oracle.com/cd/E19455-01/806-0169/overview-9/index.html
+//
+// ----------------------------------------------------------------
+//
+// # Defaults
+//
+//	The currency symbol used in the Germany is the
+//	trailing Euro symbol ('€').
+//
+//		German Example-1
+//		1.000.000,00 €
+//
+//	The negative number sign is set to a trailing minus
+//	sign ('-').
+//
+//		German Example-2
+//		1.000.000- €
+//
+//	The positive number sign is implied for positive
+//	numeric values. Therefore, the positive number sign
+//	symbol is set to a blank or empty string ("").
+//
+//		German Example-3
+//		1.000.000 €
+//
+//	Zero numeric values have no number sign. Therefore,
+//	the zero number symbol is set to a blank or empty
+//	string ("").
+//
+//		German Example-4
+//			0,00 €
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	nStrNumSymbolGroup			*NumStrNumberSymbolGroup
+//
+//		A pointer to an instance of
+//		NumStrNumberSymbolGroup.
+//
+//		All Number Symbol data values contained in this
+//		object will be deleted and reconfigured using
+//		the default parameters for German Currency number
+//		formatting standards.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setCurrencyDefaultsGermany(
+	nStrNumSymbolGroup *NumStrNumberSymbolGroup,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if nStrNumSymbolsGroupMech.lock == nil {
+		nStrNumSymbolsGroupMech.lock = new(sync.Mutex)
+	}
+
+	nStrNumSymbolsGroupMech.lock.Lock()
+
+	defer nStrNumSymbolsGroupMech.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"numStrNumberSymbolGroupMechanics."+
+			"setCurrencyDefaultsGermany()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if nStrNumSymbolGroup == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'nStrNumSymbolGroup' is invalid!\n"+
+			"'nStrNumSymbolGroup' is a 'nil' pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	err = new(numStrNumberSymbolSpecMechanics).
+		setCurrencyDefaultsEU(
+			&nStrNumSymbolGroup.currencySymbol,
+			ePrefix.XCpy(
+				"nStrNumSymbolGroup.currencySymbol"))
+
+	if err != nil {
+		return err
+	}
+
+	return new(NumStrNumberSymbolSpec).
+		SetSignedNumDefaultsGermany(
 			&nStrNumSymbolGroup.positiveNumberSign,
 			&nStrNumSymbolGroup.zeroNumberSign,
 			&nStrNumSymbolGroup.negativeNumberSign,

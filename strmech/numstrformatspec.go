@@ -3138,7 +3138,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtBasic(
 //		1 000 000 000
 //
 //	The currency symbol used in the France is the
-//	Euro symbol ('€').
+//	trailing Euro symbol ('€').
 //
 //		French Example-3
 //		1 000 000,00 €
@@ -3411,7 +3411,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtFrance(
 //		1.000.000,00
 //
 //	The currency symbol used in the Germany is the
-//	Euro symbol ('€').
+//	trailing Euro symbol ('€').
 //
 //		German Example-3
 //		1.000.000,00 €

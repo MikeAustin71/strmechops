@@ -1919,6 +1919,185 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewCurrencyDefaultFrance(
 	return newNStrNumSymbols, err
 }
 
+//	NewCurrencyDefaultGermany
+//
+//	Creates and returns a new instance of
+//	NumStrNumberSymbolGroup configured for German
+//	Currency using default parameters.
+//
+// ----------------------------------------------------------------
+//
+// # Reference:
+//
+//	https://freeformatter.com/germany-standards-code-snippets.html
+//
+//	https://www.evertype.com/standards/euro/formats.html
+//
+//	https://docs.microsoft.com/en-us/globalization/locale/currency-formatting
+//
+//	https://www.thefinancials.com/Default.aspx?SubSectionID=curformat
+//
+//	https://www.codeproject.com/articles/78175/international-number-formats
+//
+//	https://docs.oracle.com/cd/E19455-01/806-0169/overview-9/index.html
+//
+// ----------------------------------------------------------------
+//
+// # Defaults
+//
+//	The currency symbol used in the Germany is the
+//	trailing Euro symbol ('€').
+//
+//		German Example-1
+//		1.000.000,00 €
+//
+//	The negative number sign is set to a trailing minus
+//	sign ('-').
+//
+//		German Example-2
+//		1.000.000- €
+//
+//	The positive number sign is implied for positive
+//	numeric values. Therefore, the positive number sign
+//	symbol is set to a blank or empty string ("").
+//
+//		German Example-3
+//		1.000.000 €
+//
+//	Zero numeric values have no number sign. Therefore,
+//	the zero number symbol is set to a blank or empty
+//	string ("").
+//
+//		German Example-4
+//			0,00 €
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	NumStrNumberSymbolGroup
+//
+//		If this method completes successfully, this
+//		parameter will return a new, fully populated
+//		instance of NumStrNumberSymbolGroup configured
+//		with Positive, Negative, Zero and Currency
+//		Specification objects in compliance with German
+//		Currency Formatting Standards.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewCurrencyDefaultGermany(
+	errorPrefix interface{}) (
+	NumStrNumberSymbolGroup,
+	error) {
+
+	if nStrNumSymbolsGroup.lock == nil {
+		nStrNumSymbolsGroup.lock = new(sync.Mutex)
+	}
+
+	nStrNumSymbolsGroup.lock.Lock()
+
+	defer nStrNumSymbolsGroup.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	var newNStrNumSymbols NumStrNumberSymbolGroup
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumStrNumberSymbolGroup."+
+			"NewCurrencyDefaultGermany()",
+		"")
+
+	if err != nil {
+		return newNStrNumSymbols, err
+	}
+
+	err = new(numStrNumberSymbolGroupMechanics).
+		setCurrencyDefaultsGermany(
+			&newNStrNumSymbols,
+			ePrefix.XCpy(
+				"newNStrNumSymbols"))
+
+	return newNStrNumSymbols, err
+}
+
 //	NewNOP Creates and returns a new instance of
 //	NumStrNumberSymbolGroup configured as a NOP.
 //
@@ -4098,6 +4277,53 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSymbolsSpecs(
 //
 // ----------------------------------------------------------------
 //
+// # Reference:
+//
+//	https://www.ibm.com/support/pages/english-and-french-currency-formats
+//
+//	https://freeformatter.com/france-standards-code-snippets.html
+//
+//	https://docs.microsoft.com/en-us/globalization/locale/currency-formatting
+//
+//	https://www.thefinancials.com/Default.aspx?SubSectionID=curformat
+//
+//	https://www.codeproject.com/articles/78175/international-number-formats
+//
+//	https://docs.oracle.com/cd/E19455-01/806-0169/overview-9/index.html
+//
+// ----------------------------------------------------------------
+//
+// # Defaults
+//
+//	The currency symbol used in the France is the
+//	trailing Euro Currency Symbol ('€').
+//
+//		French Example-1
+//		1 000 000,00 €
+//
+//	The positive number sign is implied. No positive
+//	number is applied, only the trailing Euro Currency
+//	Symbol.
+//
+//		French Example-2
+//		1 000 000,00 €
+//
+//	The zero number format has no number sign, but the
+//	currency symbol is set to a trailing Euro Currency
+//	Symbol.
+//
+//		French Example-3
+//			0,00 €
+//
+//	The negative number sign is set to leading minus
+//	sign ('-') and a trailing Euro Currency Symbol
+//	("€").
+//
+//		French Example-4
+//		-1 000 000,00 €
+//
+// ----------------------------------------------------------------
+//
 // # Input Parameters
 //
 //	errorPrefix					interface{}
@@ -4203,6 +4429,179 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencyDefaultFrance(
 
 	return new(numStrNumberSymbolGroupMechanics).
 		setCurrencyDefaultsFrance(
+			nStrNumSymbolsGroup,
+			ePrefix.XCpy(
+				"newNStrNumSymbols"))
+}
+
+//	SetCurrencyDefaultGermany
+//
+//	Deletes all data values in the current instance of
+//	NumStrNumberSymbolGroup and proceeds to reconfigure
+//	that instance with number sign and currency symbols
+//	commonly applied to German currency numeric values.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will delete, overwrite and reset all
+//	pre-existing data values in the current instance of
+//	NumStrNumberSymbolGroup.
+//
+// ----------------------------------------------------------------
+//
+// # Reference:
+//
+//	https://freeformatter.com/germany-standards-code-snippets.html
+//
+//	https://www.evertype.com/standards/euro/formats.html
+//
+//	https://docs.microsoft.com/en-us/globalization/locale/currency-formatting
+//
+//	https://www.thefinancials.com/Default.aspx?SubSectionID=curformat
+//
+//	https://www.codeproject.com/articles/78175/international-number-formats
+//
+//	https://docs.oracle.com/cd/E19455-01/806-0169/overview-9/index.html
+//
+// ----------------------------------------------------------------
+//
+// # Defaults
+//
+//	The currency symbol used in the Germany is the
+//	trailing Euro symbol ('€').
+//
+//		German Example-1
+//		1.000.000,00 €
+//
+//	The negative number sign is set to a trailing minus
+//	sign ('-').
+//
+//		German Example-2
+//		1.000.000- €
+//
+//	The positive number sign is implied for positive
+//	numeric values. Therefore, the positive number sign
+//	symbol is set to a blank or empty string ("").
+//
+//		German Example-3
+//		1.000.000 €
+//
+//	Zero numeric values have no number sign. Therefore,
+//	the zero number symbol is set to a blank or empty
+//	string ("").
+//
+//		German Example-4
+//			0,00 €
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencyDefaultGermany(
+	errorPrefix interface{}) error {
+
+	if nStrNumSymbolsGroup.lock == nil {
+		nStrNumSymbolsGroup.lock = new(sync.Mutex)
+	}
+
+	nStrNumSymbolsGroup.lock.Lock()
+
+	defer nStrNumSymbolsGroup.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumStrNumberSymbolGroup."+
+			"SetCurrencyDefaultGermany()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	return new(numStrNumberSymbolGroupMechanics).
+		setCurrencyDefaultsGermany(
 			nStrNumSymbolsGroup,
 			ePrefix.XCpy(
 				"newNStrNumSymbols"))
