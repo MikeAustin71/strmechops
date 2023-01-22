@@ -7862,7 +7862,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSignedNumDefaultsGermany(
 //	The reconfigured instance of
 //	NumStrNumberSymbolGroup will include signed number
 //	symbols for positive, zero and negative numeric
-//	values conforming to German formatting standards.
+//	values conforming to UK formatting standards.
 //
 //	Currency Symbols WILL NOT BE INCLUDED in the
 //	reconfigured number symbol specifications. The
@@ -8055,6 +8055,216 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSignedNumDefaultsUKMinus(
 
 	return new(numStrNumberSymbolGroupMechanics).
 		setSignedNumDefaultsUKMinus(
+			nStrNumSymbolsGroup,
+			ePrefix.XCpy(
+				"nStrNumSymbolsGroup<-"))
+
+}
+
+//	SetSignedNumDefaultsUSMinus
+//
+//	Deletes and reconfigures all the data values
+//	contained in the current instance of
+//	NumStrNumberSymbolGroup and the proceeds to
+//	reconfigure that instance with default Signed Number
+//	formatting specifications typically applied in
+//	the United States (US).
+//
+//	The word 'Minus' in the method name signals that
+//	negative numeric values will be configured with a
+//	leading minus sign ('-').
+//
+//		US Example: Negative Numeric Value
+//				-123
+//
+//	A signed number is a numeric value formatted in a
+//	number string which does NOT contain currency
+//	symbols.
+//
+//	The reconfigured instance of
+//	NumStrNumberSymbolGroup will include signed number
+//	symbols for positive, zero and negative numeric
+//	values conforming to US formatting standards.
+//
+//	Currency Symbols WILL NOT BE INCLUDED in the
+//	reconfigured number symbol specifications. The
+//	Currency member variable in NumStrNumberSymbolGroup
+//	will be configured as a 'NOP' or empty placeholder.
+//	'NOP' stands for 'No Operation'.
+//
+//	The positive signed number symbol is empty or blank
+//	because under US formatting standards, positive
+//	number signs are implied and not explicitly
+//	displayed. Therefore, no leading plus ('+') symbol is
+//	required.
+//
+//		US Example:	Positive Numeric Value
+//					123
+//
+//	Likewise, the zero signed number symbol is also empty
+//	or blank because under US formatting standards,
+//	zero numeric values have no number sign symbols.
+//
+//		US Example:	Zero Numeric Value
+//						0
+//
+//	The negative signed number symbol is configured with a
+//	leading minus sign ('-') meaning that all negative
+//	numeric values will be prefixed with a leading minus
+//	sign ('-'). The negative number sign will be
+//	positioned inside the number field:
+//
+//		NumFieldSymPos.InsideNumField()
+//			Example:
+//				Number Field Length: 8
+//				Numeric Value: -123.45
+//				Number Symbol: leading minus sign ('-')
+//				Number Symbol Position: Inside Number Field
+//				Formatted Number String: " -123.45"
+//				Number Field Index:------>01234567
+//				Total Number String Length: 8
+//
+// ----------------------------------------------------------------
+//
+// # Defaults
+//
+//	The negative signed number symbol is configured with a
+//	leading minus sign ('-') meaning that all negative
+//	numeric values will be prefixed with a leading minus
+//	sign ('-'). The negative number sign will be
+//	positioned inside the number field:
+//
+//		NumFieldSymPos.InsideNumField()
+//			Example:
+//				Number Field Length: 8
+//				Numeric Value: -123.45
+//				Number Symbol: leading minus sign ('-')
+//				Number Symbol Position: Inside Number Field
+//				Formatted Number String: " -123.45"
+//				Number Field Index:------>01234567
+//				Total Number String Length: 8
+//
+//	The positive number sign is implied for positive
+//	numeric values. Therefore, the positive number sign
+//	symbol is set to a blank or empty string ("").
+//
+//		US Example:	Positive Numeric Value
+//				1,000,000
+//
+//	Zero numeric values have no number sign. Therefore,
+//	the zero number symbol is set to a blank or empty
+//	string ("").
+//
+//		US Example:	Zero Numeric Value
+//						0
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSignedNumDefaultsUSMinus(
+	errorPrefix interface{}) error {
+
+	if nStrNumSymbolsGroup.lock == nil {
+		nStrNumSymbolsGroup.lock = new(sync.Mutex)
+	}
+
+	nStrNumSymbolsGroup.lock.Lock()
+
+	defer nStrNumSymbolsGroup.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumStrNumberSymbolGroup."+
+			"SetSignedNumDefaultsUSMinus()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	return new(numStrNumberSymbolGroupMechanics).
+		setSignedNumDefaultsUSMinus(
 			nStrNumSymbolsGroup,
 			ePrefix.XCpy(
 				"nStrNumSymbolsGroup<-"))
