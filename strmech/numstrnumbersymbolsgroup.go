@@ -6318,6 +6318,188 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencyDefaultsUKMinusIn
 
 }
 
+//	SetCurrencyDefaultsUKMinusOutside
+//
+//	Deletes all data values in the current instance of
+//	NumStrNumberSymbolGroup and proceeds to reconfigure
+//	that instance with number sign and currency symbols
+//	commonly applied to United Kingdom (UK) currency
+//	numeric values.
+//
+//	The default UK currency symbol is a leading Pound
+//	sign ('£').
+//
+//		UK Example:	Positive Numeric Currency Value
+//			£ 123.45  Positive Value
+//
+//
+//	The term "MinusOutside" in the method name means that
+//	the Pound sign ('£') configured for negative numeric
+//	values will be outside, or to the left of, the Pound
+//	sign ('£').
+//
+//	UK Example:	Negative Numeric Currency Value
+//		- £123.45  Negative Value
+//
+// To generate a default configuration where the minus
+// sign is inside the pound sign ('£'), use method:
+//
+//	NumStrNumberSymbolSpec.
+//		SetCurrencyDefaultsUKMinusInside()
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will delete, overwrite and reset all
+//	pre-existing data values in the current instance of
+//	NumStrNumberSymbolGroup.
+//
+// ----------------------------------------------------------------
+//
+// # Defaults
+//
+//	The default currency symbol used in the UK is the
+//	leading Pound symbol ('£').
+//
+//	The positive number sign is implied for positive
+//	numeric values. Therefore, the positive number sign
+//	symbol is set to a blank or empty string ("").
+//
+//		UK Example:	Positive Numeric Currency Value
+//			£ 123.45  Positive Value
+//
+//	The negative number sign is set to a leading minus
+//	sign ('-').
+//
+//	This method will configure the Pound sign ('£')
+//	such that any minus sign configured for negative
+//	numeric values will be outside, or to the left of,
+//	the Pound sign ('£').
+//
+//		UK Example:	Negative Numeric Currency Value
+//			- £123.45
+//
+//	Zero numeric values have no number sign. Therefore,
+//	the zero number symbol is set to a blank or empty
+//	string ("").
+//
+//		UK Example:	Zero Numeric Currency Value
+//			£ 0.00
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencyDefaultsUKMinusOutside(
+	errorPrefix interface{}) error {
+
+	if nStrNumSymbolsGroup.lock == nil {
+		nStrNumSymbolsGroup.lock = new(sync.Mutex)
+	}
+
+	nStrNumSymbolsGroup.lock.Lock()
+
+	defer nStrNumSymbolsGroup.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumStrNumberSymbolGroup."+
+			"SetCurrencyDefaultsUKMinusOutside()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	return new(numStrNumberSymbolGroupMechanics).
+		setCurrencyDefaultsUKMinusOutside(
+			nStrNumSymbolsGroup,
+			ePrefix.XCpy(
+				"newNStrNumSymbols"))
+
+}
+
 //	SetNegativeNumSignRunes
 //
 //	Deletes and resets the Negative Number Symbols data
