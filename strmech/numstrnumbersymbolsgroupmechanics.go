@@ -2314,37 +2314,37 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setSignedNumDef
 //	No Currency Symbols will be included in the final
 //	configuration.
 //
-// The positive signed number symbol is empty or blank
-// because under German formatting standards, positive
-// number signs are implied and not explicitly
-// displayed. Therefore, no leading plus ('+') symbol is
-// required.
+//	The positive signed number symbol is empty or blank
+//	because under German formatting standards, positive
+//	number signs are implied and not explicitly
+//	displayed. Therefore, no leading plus ('+') symbol is
+//	required.
 //
-//	German Example:	Positive Numeric Value
-//				1.000.000
+//		German Example:	Positive Numeric Value
+//					1.000.000
 //
-// Likewise, the zero signed number symbol is also empty
-// or blank because under German formatting standards,
-// zero numeric values have no number sign symbols.
+//	Likewise, the zero signed number symbol is also empty
+//	or blank because under German formatting standards,
+//	zero numeric values have no number sign symbols.
 //
-//	German Example:	Zero Numeric Value
-//					0
+//		German Example:	Zero Numeric Value
+//						0
 //
-// The negative signed number symbol is configured with a
-// trailing minus sign ('-') meaning that all negative
-// numeric values will be suffixed with a trailing minus
-// sign ('-'). The negative number sign will be
-// positioned inside the number field:
+//	The negative signed number symbol is configured with a
+//	trailing minus sign ('-') meaning that all negative
+//	numeric values will be suffixed with a trailing minus
+//	sign ('-'). The negative number sign will be
+//	positioned inside the number field:
 //
-//	NumFieldSymPos.InsideNumField()
-//		Example:
-//			Number Field Length: 11
-//			Numeric Value: -123.45
-//			Number Symbol: trailing minus sign ('-')
-//			Number Symbol Position: Inside Number Field
-//			Formatted Number String: " 1.000.000-"
-//			Number Field Index:------>01234567890
-//			Total Number String Length: 11
+//		NumFieldSymPos.InsideNumField()
+//			Example:
+//				Number Field Length: 11
+//				Numeric Value: -123.45
+//				Number Symbol: trailing minus sign ('-')
+//				Number Symbol Position: Inside Number Field
+//				Formatted Number String: " 1.000.000-"
+//				Number Field Index:------>01234567890
+//				Total Number String Length: 11
 //
 // ----------------------------------------------------------------
 //

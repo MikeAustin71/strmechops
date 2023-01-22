@@ -12556,9 +12556,15 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetSignedNumDefaultsFrance(
 //
 // # Reference:
 //
-// https://freeformatter.com/germany-standards-code-snippets.html
+//	https://freeformatter.com/germany-standards-code-snippets.html
 //
-// https://www.evertype.com/standards/euro/formats.html
+//	https://www.evertype.com/standards/euro/formats.html
+//
+//	https://www.thefinancials.com/Default.aspx?SubSectionID=curformat
+//
+//	https://www.codeproject.com/articles/78175/international-number-formats
+//
+//	https://docs.oracle.com/cd/E19455-01/806-0169/overview-9/index.html
 //
 // ----------------------------------------------------------------
 //
