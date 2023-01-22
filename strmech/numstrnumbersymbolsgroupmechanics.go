@@ -2126,6 +2126,144 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setNumberSymbol
 	return err
 }
 
+//	setSignedNumDefaultsFrance
+//
+//	Receives an instance of NumStrNumberSymbolGroup,
+//	deletes the pre-existing data values and proceeds to
+//	reconfigure the instance according to signed number
+//	formatting standards used in France.
+//
+//	Default values will be used to reconfigure the
+//	NumStrNumberSymbolGroup input parameter,
+//	'nStrNumSymbolGroup', for French Signed Number
+//	formatting. New data values will be configured for
+//	the positive, zero and negative number sign symbols.
+//
+//	No Currency Symbols will be included in the final
+//	configuration.
+//
+//	The positive signed number symbol is empty or blank
+//	because under French formatting standards, positive
+//	number signs are implied and not explicitly
+//	displayed. Therefore, no leading plus ('+') symbol is
+//	required.
+//
+//		French Example-1:	123
+//
+//	Likewise, the zero signed number symbol is also empty
+//	or blank because under French formatting standards,
+//	zero numeric values have no number sign symbols.
+//
+//		French Example-2:	0
+//
+//	The negative signed number symbol is configured with
+//	a leading minus sign ('-') meaning that all negative
+//	numeric values will be prefixed with a leading minus
+//	sign ('-'). The negative number sign will be
+//	positioned inside the number field:
+//
+//		NumFieldSymPos.InsideNumField()
+//			Example:
+//				Number Field Length: 8
+//				Numeric Value: -123.45
+//				Number Symbol: leading minus sign ('-')
+//				Number Symbol Position: Inside Number Field
+//				Formatted Number String: " -123.45"
+//				Number Field Index:------>01234567
+//				Total Number String Length: 8
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	nStrNumSymbolGroup			*NumStrNumberSymbolGroup
+//
+//		A pointer to an instance of
+//		NumStrNumberSymbolGroup.
+//
+//		All Number Symbol data values contained in this
+//		object will be deleted and reconfigured using
+//		the default parameters for French Signed Number
+//		formatting standards.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setSignedNumDefaultsFrance(
+	nStrNumSymbolGroup *NumStrNumberSymbolGroup,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if nStrNumSymbolsGroupMech.lock == nil {
+		nStrNumSymbolsGroupMech.lock = new(sync.Mutex)
+	}
+
+	nStrNumSymbolsGroupMech.lock.Lock()
+
+	defer nStrNumSymbolsGroupMech.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"numStrNumberSymbolGroupMechanics."+
+			"setSignedNumDefaultsFrance()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if nStrNumSymbolGroup == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'nStrNumSymbolGroup' is invalid!\n"+
+			"'nStrNumSymbolGroup' is a 'nil' pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	nStrNumSymbolGroup.currencySymbol.Empty()
+
+	return new(NumStrNumberSymbolSpec).
+		SetSignedNumDefaultsFrance(
+			&nStrNumSymbolGroup.positiveNumberSign,
+			&nStrNumSymbolGroup.zeroNumberSign,
+			&nStrNumSymbolGroup.negativeNumberSign,
+			ePrefix)
+}
+
 //	setSimpleCurrencySymbolsConfig
 //
 //	Receives a pointer to an instance of

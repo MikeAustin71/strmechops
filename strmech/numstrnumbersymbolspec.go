@@ -6370,39 +6370,47 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewNumberSignTrailingSymbolR
 	return newNStrNumberSymbolSpec, err
 }
 
-// NewSignedNumDefaultsFrance
+//	NewSignedNumDefaultsFrance
 //
-// Creates and returns three new instances of default
-// positive signed number symbols, zero value symbols
-// and negative signed number symbols configured in
-// accordance with formatting standards commonly applied
-// in France.
+//	Creates and returns three new instances of default
+//	positive signed number symbols, zero value symbols
+//	and negative signed number symbols configured in
+//	accordance with formatting standards commonly applied
+//	in France.
 //
-// The positive signed number symbol is empty or blank
-// because under French formatting standards, positive
-// number signs are implied and not explicitly
-// displayed. Therefore, no leading plus ('+') symbol is
-// required.
+//	A signed number is a numeric value formatted in a
+//	number string which does NOT contain currency
+//	symbols.
 //
-// Likewise, the zero signed number symbol is also empty
-// or blank because under French formatting standards,
-// zero numeric values have no number sign symbols.
+//	The positive signed number symbol is empty or blank
+//	because under French formatting standards, positive
+//	number signs are implied and not explicitly
+//	displayed. Therefore, no leading plus ('+') symbol is
+//	required.
 //
-// The negative signed number symbol is configured with a
-// leading minus sign ('-') meaning that all negative
-// numeric values will be prefixed with a leading minus
-// sign ('-'). The negative number sign will be
-// positioned inside the number field:
+//		French Example-1:	123
 //
-//	NumFieldSymPos.InsideNumField()
-//		Example:
-//			Number Field Length: 8
-//			Numeric Value: -123.45
-//			Number Symbol: leading minus sign ('-')
-//			Number Symbol Position: Inside Number Field
-//			Formatted Number String: " -123.45"
-//			Number Field Index:------>01234567
-//			Total Number String Length: 8
+//	Likewise, the zero signed number symbol is also empty
+//	or blank because under French formatting standards,
+//	zero numeric values have no number sign symbols.
+//
+//		French Example-2:	0
+//
+//	The negative signed number symbol is configured with
+//	a leading minus sign ('-') meaning that all negative
+//	numeric values will be prefixed with a leading minus
+//	sign ('-'). The negative number sign will be
+//	positioned inside the number field:
+//
+//		NumFieldSymPos.InsideNumField()
+//			Example:
+//				Number Field Length: 8
+//				Numeric Value: -123.45
+//				Number Symbol: leading minus sign ('-')
+//				Number Symbol Position: Inside Number Field
+//				Formatted Number String: " -123.45"
+//				Number Field Index:------>01234567
+//				Total Number String Length: 8
 //
 // ----------------------------------------------------------------
 //
