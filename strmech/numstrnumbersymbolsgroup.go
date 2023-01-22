@@ -3085,6 +3085,235 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSignedNumDefaultsUSMinus(
 	return newNStrNumSymbols, err
 }
 
+//	NewSignedNumDefaultsUSParen
+//
+//	Creates and returns and instance of
+//	NumStrNumberSymbolGroup configured for signed number
+//	formatting in accordance with number string
+//	formatting standards used in the United States (US).
+//
+//
+//	The term 'Paren' in the method name signals that
+//	negative numeric values will be configured with a
+//	surrounding parentheses ('()').
+//
+//		US Example: Negative Numeric Value
+//					(123)
+//
+//	A signed number is a numeric value formatted in a
+//	number string which does NOT contain currency
+//	symbols.
+//
+//	The new, returned instance of
+//	NumStrNumberSymbolGroup will include signed number
+//	symbols for positive, zero and negative numeric
+//	values.
+//
+//	Currency Symbols WILL NOT BE INCLUDED in the returned
+//	number symbol specifications. The Currency member
+//	variable in the returned NumStrNumberSymbolGroup will
+//	be empty and configured as a 'NOP' or empty
+//	placeholder. 'NOP' stands for 'No Operation'.
+//
+//	The positive signed number symbol is empty or blank
+//	because under US formatting standards, positive
+//	number signs are implied and not explicitly
+//	displayed. Therefore, no leading plus ('+') symbol is
+//	required.
+//
+//		US Example:	Positive Numeric Value
+//					123
+//
+//	Likewise, the zero signed number symbol is also empty
+//	or blank because under US formatting standards,
+//	zero numeric values have no number sign symbols.
+//
+//		US Example:	Zero Numeric Value
+//						0
+//
+//
+//	The negative signed number symbol is configured with
+//	surrounding parentheses ('()') meaning that all
+//	negative numeric values will be surrounded with a
+//	leading parenthesis sign ('(') and trailing closing
+//	parenthesis sing (')'). The negative number signs
+//	will be positioned inside the number field:
+//
+//		NumFieldSymPos.InsideNumField()
+//			Example:
+//				Number Field Length: 9
+//				Numeric Value: -123.45
+//				Number Symbol: Surrounding Parentheses ('()')
+//				Number Symbol Position: Inside Number Field
+//				Formatted Number String: " (123.45)"
+//				Number Field Index:------>012345678
+//				Total Number String Length: 9
+//
+// ----------------------------------------------------------------
+//
+// # Defaults
+//
+//	The negative signed number symbol is configured with
+//	surrounding parentheses ('()') meaning that all
+//	negative numeric values will be surrounded with a
+//	leading parenthesis sign ('(') and trailing closing
+//	parenthesis sing (')'). The negative number signs
+//	will be positioned inside the number field:
+//
+//		NumFieldSymPos.InsideNumField()
+//			Example:
+//				Number Field Length: 9
+//				Numeric Value: -123.45
+//				Number Symbol: Surrounding Parentheses ('()')
+//				Number Symbol Position: Inside Number Field
+//				Formatted Number String: " (123.45)"
+//				Number Field Index:------>012345678
+//				Total Number String Length: 9
+//
+//	The positive number sign is implied for positive
+//	numeric values. Therefore, the positive number sign
+//	symbol is set to a blank or empty string ("").
+//
+//		US Example:	Positive Numeric Value
+//				1,000,000
+//
+//	Zero numeric values have no number sign. Therefore,
+//	the zero number symbol is set to a blank or empty
+//	string ("").
+//
+//		US Example:	Zero Numeric Value
+//						0
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	NumStrNumberSymbolGroup
+//
+//		If this method completes successfully, this
+//		parameter will return a new, fully populated
+//		instance of NumStrNumberSymbolGroup configured
+//		with Positive, Negative and Zero Number Sign
+//		Symbol Specification objects conforming to the
+//		United States Signed Number formatting standards.
+//
+//		This returned instance WILL NOT INCLUDE
+//		Currency Symbols.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSignedNumDefaultsUSParen(
+	errorPrefix interface{}) (
+	NumStrNumberSymbolGroup,
+	error) {
+
+	if nStrNumSymbolsGroup.lock == nil {
+		nStrNumSymbolsGroup.lock = new(sync.Mutex)
+	}
+
+	nStrNumSymbolsGroup.lock.Lock()
+
+	defer nStrNumSymbolsGroup.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	var newNStrNumSymbols NumStrNumberSymbolGroup
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumStrNumberSymbolGroup."+
+			"NewSignedNumDefaultsUSParen()",
+		"")
+
+	if err != nil {
+		return newNStrNumSymbols, err
+	}
+
+	err = new(numStrNumberSymbolGroupMechanics).
+		setSignedNumDefaultsUSParen(
+			&newNStrNumSymbols,
+			ePrefix.XCpy(
+				"newNStrNumSymbols<-"))
+
+	return newNStrNumSymbols, err
+}
+
 //	NewCurrencySimple
 //
 //	Creates and returns and instance of

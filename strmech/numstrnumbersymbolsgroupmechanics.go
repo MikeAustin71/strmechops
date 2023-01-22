@@ -2867,7 +2867,7 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setSignedNumDef
 //	reconfigure the instance according to signed number
 //	formatting standards used in the United States (US).
 //
-//	The word 'Paren' in the method name signals that
+//	The term 'Paren' in the method name signals that
 //	negative numeric values will be configured with a
 //	surrounding parentheses ('()').
 //
