@@ -12341,6 +12341,9 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetNumberSignTrailingSymbolR
 //	commonly applied to formatting signed number values
 //	according to French standards.
 //
+//	The number sign symbols are configured using default
+//	French signed number formatting values.
+//
 // ----------------------------------------------------------------
 //
 // # Reference:
@@ -12355,24 +12358,34 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetNumberSignTrailingSymbolR
 //
 // # Defaults
 //
-//	The negative number sign is set to a leading minus sign
-//	('-').
+//	The negative signed number symbol is configured with a
+//	leading minus sign ('-') meaning that all negative
+//	numeric values will be prefixed with a leading minus
+//	sign ('-'). The negative number sign will be
+//	positioned inside the number field:
 //
-//		French Example-1
-//		-1 000 000 000
+//		NumFieldSymPos.InsideNumField()
+//			Example:
+//				Number Field Length: 8
+//				Numeric Value: -123,45
+//				Number Symbol: leading minus sign ('-')
+//				Number Symbol Position: Inside Number Field
+//				Formatted Number String: " -123,45"
+//				Number Field Index:------>01234567
+//				Total Number String Length: 8
 //
-//	The number sign is implied for positive numeric values.
-//	Therefore, the positive number sign symbol is set to a
-//	blank or empty string ("").
+//	The positive number sign is implied for positive
+//	numeric values. Therefore, the positive number sign
+//	symbol is set to a blank or empty string ("").
 //
-//		French Example-3
+//		French Example:	Positive Numeric Value
 //		1 000 000 000
 //
 //	The zero number format has no number sign. Therefore,
 //	the positive number sign symbol is set to a blank or
 //	empty string ("").
 //
-//		French Example-4
+//		French Example:	Zero Numeric Value
 //			0,0
 //
 // ----------------------------------------------------------------
@@ -12552,6 +12565,9 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetSignedNumDefaultsFrance(
 //	commonly applied to formatting signed number values
 //	according to German standards.
 //
+//	The number sign symbols are configured using default
+//	German signed number formatting values.
+//
 // ----------------------------------------------------------------
 //
 // # Reference:
@@ -12570,24 +12586,34 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetSignedNumDefaultsFrance(
 //
 // # Defaults
 //
-//	The negative number sign is set to a trailing minus
-//	sign ('-').
+//	The negative signed number symbol is configured with a
+//	trailing minus sign ('-') meaning that all negative
+//	numeric values will be suffixed with a trailing minus
+//	sign ('-'). The negative number sign will be
+//	positioned inside the number field:
 //
-//		German Example-1
-//		1.000.000-
+//		NumFieldSymPos.InsideNumField()
+//			Example:
+//				Number Field Length: 11
+//				Numeric Value: -123.45
+//				Number Symbol: trailing minus sign ('-')
+//				Number Symbol Position: Inside Number Field
+//				Formatted Number String: " 1.000.000-"
+//				Number Field Index:------>01234567890
+//				Total Number String Length: 11
 //
 //	The positive number sign is implied for positive
 //	numeric values. Therefore, the positive number sign
 //	symbol is set to a blank or empty string ("").
 //
-//		German Example-2
-//		1.000.000
+//		German Example:	Positive Numeric Value
+//			1.000.000
 //
 //	Zero numeric values have no number sign. Therefore,
 //	the zero number symbol is set to a blank or empty
 //	string ("").
 //
-//		German Example-3
+//		German Example:	Zero Numeric Value
 //			0,00
 //
 // ----------------------------------------------------------------
@@ -12771,10 +12797,10 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetSignedNumDefaultsGermany(
 //	negative numeric values will be configured with a
 //	leading minus sign ('-').
 //
-//		Example: -123
+//		Example: -123//
 //
-//	The number sign symbols are configured using default
-//	UK signed number formatting values.
+// //	The number sign symbols are configured using default
+// //	UK signed number formatting values.
 //
 //	The positive signed number symbol is empty or blank
 //	because under United Kingdom formatting standards,
@@ -12825,11 +12851,21 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetSignedNumDefaultsGermany(
 //
 // # Defaults
 //
-//	The negative number sign is set to a leading minus
-//	sign ('-').
+//	The negative signed number symbol is configured with a
+//	leading minus sign ('-') meaning that all negative
+//	numeric values will be prefixed with a leading minus
+//	sign ('-'). The negative number sign will be
+//	positioned inside the number field:
 //
-//		UK Example:	Negative Number Sign
-//				-1,000,000
+//		NumFieldSymPos.InsideNumField()
+//			Example:
+//				Number Field Length: 8
+//				Numeric Value: -123.45
+//				Number Symbol: leading minus sign ('-')
+//				Number Symbol Position: Inside Number Field
+//				Formatted Number String: " -123.45"
+//				Number Field Index:------>01234567
+//				Total Number String Length: 8
 //
 //	The positive number sign is implied for positive
 //	numeric values. Therefore, the positive number sign
@@ -13061,6 +13097,40 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetSignedNumDefaultsUKMinus(
 //
 // ----------------------------------------------------------------
 //
+// # Defaults
+//
+//	The negative signed number symbol is configured with a
+//	leading minus sign ('-') meaning that all negative
+//	numeric values will be prefixed with a leading minus
+//	sign ('-'). The negative number sign will be
+//	positioned inside the number field:
+//
+//		NumFieldSymPos.InsideNumField()
+//			Example:
+//				Number Field Length: 8
+//				Numeric Value: -123.45
+//				Number Symbol: leading minus sign ('-')
+//				Number Symbol Position: Inside Number Field
+//				Formatted Number String: " -123.45"
+//				Number Field Index:------>01234567
+//				Total Number String Length: 8
+//
+//	The positive number sign is implied for positive
+//	numeric values. Therefore, the positive number sign
+//	symbol is set to a blank or empty string ("").
+//
+//		US Example:	Positive Numeric Value
+//				1,000,000
+//
+//	Zero numeric values have no number sign. Therefore,
+//	the zero number symbol is set to a blank or empty
+//	string ("").
+//
+//		US Example:	Zero Numeric Value
+//						0
+//
+// ----------------------------------------------------------------
+//
 // # Input Parameters
 //
 //	positiveNumberSignSymbols		*NumStrNumberSymbolSpec
@@ -13273,6 +13343,41 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetSignedNumDefaultsUSMinus(
 //				Formatted Number String: " (123.45)"
 //				Number Field Index:------>012345678
 //				Total Number String Length: 9
+//
+// ----------------------------------------------------------------
+//
+// # Defaults
+//
+//	The negative signed number symbol is configured with
+//	surrounding parentheses ('()') meaning that all
+//	negative numeric values will be surrounded with a
+//	leading parenthesis sign ('(') and trailing closing
+//	parenthesis sing (')'). The negative number signs
+//	will be positioned inside the number field:
+//
+//		NumFieldSymPos.InsideNumField()
+//			Example:
+//				Number Field Length: 9
+//				Numeric Value: -123.45
+//				Number Symbol: Surrounding Parentheses ('()')
+//				Number Symbol Position: Inside Number Field
+//				Formatted Number String: " (123.45)"
+//				Number Field Index:------>012345678
+//				Total Number String Length: 9
+//
+//	The positive number sign is implied for positive
+//	numeric values. Therefore, the positive number sign
+//	symbol is set to a blank or empty string ("").
+//
+//		US Example:	Positive Numeric Value
+//				1,000,000
+//
+//	Zero numeric values have no number sign. Therefore,
+//	the zero number symbol is set to a blank or empty
+//	string ("").
+//
+//		US Example:	Zero Numeric Value
+//						0
 //
 // ----------------------------------------------------------------
 //
