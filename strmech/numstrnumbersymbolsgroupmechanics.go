@@ -529,9 +529,9 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setCurrencyDefa
 //	zero and negative number sign symbols as well as the
 //	currency symbols.
 //
-//	The Phrase 'Minus Inside' signals that for negative
-//	values, the minus sign ('-') will be to the right of,
-//	or inside, the currency symbol.
+//	The phrase 'Minus Inside' in the method name signals
+//	that for negative values, the minus sign ('-') will
+//	be to the right of, or inside, the currency symbol.
 //
 //		UK Example
 //			£ -123.45  Negative Value
@@ -567,24 +567,24 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setCurrencyDefa
 //
 // # Defaults
 //
-// The default UK currency symbol is a leading pound
-// sign ('£').
+//	The default UK currency symbol is a leading pound
+//	sign ('£').
 //
-//		UK Example-1:
-//			£ 123.45  Positive Value
+//			UK Example-1:
+//				£ 123.45  Positive Value
 //
-//	The negative number sign is set to a leading minus
-//	sign ('-').
+//		The negative number sign is set to a leading minus
+//		sign ('-').
 //
-//		UK Example-2
-//			-123.45  Negative Value
+//			UK Example-2
+//				-123.45  Negative Value
 //
-// This method will configure the pound sign ('£')
-// such that any minus sign configured for negative
-// numeric values will be inside the pound sign ('£').
+//	This method will configure the pound sign ('£')
+//	such that any minus sign configured for negative
+//	numeric values will be inside the pound sign ('£').
 //
-//		UK Example-3
-//			£ -123.45  Negative Value
+//			UK Example-3
+//				£ -123.45  Negative Value
 //
 //	The positive number sign is implied for positive
 //	numeric values. Therefore, the positive number sign
@@ -713,9 +713,9 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setCurrencyDefa
 //	zero and negative number sign symbols as well as the
 //	currency symbols.
 //
-//	The Phrase 'Minus Outside' signals that for negative
-//	values, the minus sign ('-') will be to the left of,
-//	or outside, the currency symbol.
+//	The phrase 'Minus Outside' in the method name signals
+//	that for negative values, the minus sign ('-') will
+//	be to the left of, or outside, the currency symbol.
 //
 //		UK Example
 //			- £123.45  Negative Value
@@ -751,25 +751,25 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setCurrencyDefa
 //
 // # Defaults
 //
-// The default UK currency symbol is a leading pound
-// sign ('£').
+//	The default UK currency symbol is a leading pound
+//	sign ('£').
 //
-//		UK Example-1:
-//			£ 123.45  Positive Value
+//			UK Example-1:
+//				£ 123.45  Positive Value
 //
-//	The negative number sign is set to a leading minus
-//	sign ('-').
+//		The negative number sign is set to a leading minus
+//		sign ('-').
 //
-//		UK Example-2
-//			-123.45  Negative Value
+//			UK Example-2
+//				-123.45  Negative Value
 //
-// This method will configure the pound sign ('£')
-// such that any minus sign configured for negative
-// numeric values will be outside or the left of the
-// pound sign ('£').
+//	This method will configure the pound sign ('£')
+//	such that any minus sign configured for negative
+//	numeric values will be outside or the left of the
+//	pound sign ('£').
 //
-//		UK Example-3
-//			- £123.45  Negative Value
+//			UK Example-3
+//				- £123.45  Negative Value
 //
 //	The positive number sign is implied for positive
 //	numeric values. Therefore, the positive number sign
@@ -878,6 +878,191 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setCurrencyDefa
 
 	return new(NumStrNumberSymbolSpec).
 		SetSignedNumDefaultsUKMinus(
+			&nStrNumSymbolGroup.positiveNumberSign,
+			&nStrNumSymbolGroup.zeroNumberSign,
+			&nStrNumSymbolGroup.negativeNumberSign,
+			ePrefix)
+}
+
+//	setCurrencyDefaultsUSMinus
+//
+//	Receives an instance of NumStrNumberSymbolGroup,
+//	deletes the pre-existing data values and proceeds to
+//	reconfigure the instance according to the United
+//	States (US) currency formatting standards.
+//
+//	Default values will be used to reconfigure the
+//	NumStrNumberSymbolGroup input parameter,
+//	'nStrNumSymbolGroup', for US Currency formatting.
+//	New data values will be configured for the positive,
+//	zero and negative number sign symbols as well as the
+//	currency symbols.
+//
+//	The term 'Minus' in the method name signals that a
+//	leading minus sign ('-') will be used to designate
+//	negative numeric values.
+//
+//		US Example
+//			 -123.45  Negative Value
+//
+//	To configure surrounding parentheses ('()') as the
+//	negative number symbol see method:
+//
+//		numStrNumberSymbolGroupMechanics.
+//			setCurrencyDefaultsUSParen()
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will delete, overwrite and reset all
+//	pre-existing data values in the instance of
+//	NumStrNumberSymbolGroup passed as input parameter
+//	'nStrNumSymbolGroup'.
+//
+// ----------------------------------------------------------------
+//
+// # Reference:
+//
+//	https://www.evertype.com/standards/euro/formats.html
+//
+//	https://docs.microsoft.com/en-us/globalization/locale/currency-formatting
+//
+//	https://www.thefinancials.com/Default.aspx?SubSectionID=curformat
+//
+//	https://www.codeproject.com/articles/78175/international-number-formats
+//
+// ----------------------------------------------------------------
+//
+// # Defaults
+//
+//	The default US currency symbol is a leading Dollar
+//	sign ('$').
+//
+//			US Example-1:
+//				$ 123.45  Positive Value
+//
+//	The negative number sign is set to a leading minus
+//	sign ('-').
+//
+//			US Example-2
+//				-123.45  Negative Value
+//
+//	This method will configure the leading Dollar sign
+//	('$') such that any minus sign configured for negative
+//	numeric values will be inside or to the left of the
+//	Dollar sign ('$').
+//
+//			US Example-3
+//				$ -123.45  Negative Value
+//
+//	The positive number sign is implied for positive
+//	numeric values. Therefore, the positive number sign
+//	symbol is set to a blank or empty string ("").
+//
+//		US Example-4
+//			$ 123.45
+//
+//	Zero numeric values have no number sign. Therefore,
+//	the zero number symbol is set to a blank or empty
+//	string ("").
+//
+//		US Example-5
+//			$ 0.00
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	nStrNumSymbolGroup			*NumStrNumberSymbolGroup
+//
+//		A pointer to an instance of
+//		NumStrNumberSymbolGroup.
+//
+//		All Number Symbol data values contained in this
+//		object will be deleted and reconfigured using
+//		the default parameters for US Currency number
+//		formatting standards.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setCurrencyDefaultsUSMinus(
+	nStrNumSymbolGroup *NumStrNumberSymbolGroup,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if nStrNumSymbolsGroupMech.lock == nil {
+		nStrNumSymbolsGroupMech.lock = new(sync.Mutex)
+	}
+
+	nStrNumSymbolsGroupMech.lock.Lock()
+
+	defer nStrNumSymbolsGroupMech.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"numStrNumberSymbolGroupMechanics."+
+			"setCurrencyDefaultsUSMinus()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if nStrNumSymbolGroup == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'nStrNumSymbolGroup' is invalid!\n"+
+			"'nStrNumSymbolGroup' is a 'nil' pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	err = nStrNumSymbolGroup.currencySymbol.
+		SetCurrencyDefaultsUS(
+			ePrefix.XCpy(
+				"nStrNumSymbolGroup.currencySymbol"))
+
+	if err != nil {
+		return err
+	}
+
+	return new(NumStrNumberSymbolSpec).
+		SetSignedNumDefaultsUSMinus(
 			&nStrNumSymbolGroup.positiveNumberSign,
 			&nStrNumSymbolGroup.zeroNumberSign,
 			&nStrNumSymbolGroup.negativeNumberSign,
