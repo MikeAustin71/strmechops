@@ -5789,7 +5789,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSymbolsSpecs(
 	return newNumberSymbols, err
 }
 
-//	SetCurrencyDefaultFrance
+//	SetCurrencyDefaultsFrance
 //
 //	Deletes all data values in the current instance of
 //	NumStrNumberSymbolGroup and proceeds to reconfigure
@@ -5930,7 +5930,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSymbolsSpecs(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencyDefaultFrance(
+func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencyDefaultsFrance(
 	errorPrefix interface{}) error {
 
 	if nStrNumSymbolsGroup.lock == nil {
@@ -5949,7 +5949,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencyDefaultFrance(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumStrNumberSymbolGroup."+
-			"SetCurrencyDefaultFrance()",
+			"SetCurrencyDefaultsFrance()",
 		"")
 
 	if err != nil {
@@ -5963,7 +5963,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencyDefaultFrance(
 				"newNStrNumSymbols"))
 }
 
-//	SetCurrencyDefaultGermany
+//	SetCurrencyDefaultsGermany
 //
 //	Deletes all data values in the current instance of
 //	NumStrNumberSymbolGroup and proceeds to reconfigure
@@ -6103,7 +6103,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencyDefaultFrance(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencyDefaultGermany(
+func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencyDefaultsGermany(
 	errorPrefix interface{}) error {
 
 	if nStrNumSymbolsGroup.lock == nil {
@@ -6122,7 +6122,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencyDefaultGermany(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumStrNumberSymbolGroup."+
-			"SetCurrencyDefaultGermany()",
+			"SetCurrencyDefaultsGermany()",
 		"")
 
 	if err != nil {
