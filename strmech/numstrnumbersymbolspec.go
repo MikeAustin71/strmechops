@@ -13307,7 +13307,8 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetSignedNumDefaultsUSMinus(
 //	negative numeric values will be configured with a
 //	surrounding parentheses ('()').
 //
-//		Example Signed Number Negative Value: (123)
+//		US Example: Negative Numeric Value
+//					(123)
 //
 //	The number sign symbols are configured using default
 //	US signed number formatting values.
