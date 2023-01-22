@@ -6414,6 +6414,40 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewNumberSignTrailingSymbolR
 //
 // ----------------------------------------------------------------
 //
+// # Reference:
+//
+//	https://www.ibm.com/support/pages/english-and-french-currency-formats
+//
+//	https://freeformatter.com/france-standards-code-snippets.html
+//
+//	https://docs.microsoft.com/en-us/globalization/locale/currency-formatting
+//
+// ----------------------------------------------------------------
+//
+// # Defaults
+//
+//	The negative number sign is set to a leading minus sign
+//	('-').
+//
+//		French Example-1
+//		-1 000 000 000
+//
+//	The number sign is implied for positive numeric values.
+//	Therefore, the positive number sign symbol is set to a
+//	blank or empty string ("").
+//
+//		French Example-3
+//		1 000 000 000
+//
+//	The zero number format has no number sign. Therefore,
+//	the positive number sign symbol is set to a blank or
+//	empty string ("").
+//
+//		French Example-4
+//			0,0
+//
+// ----------------------------------------------------------------
+//
 // # Input Parameters
 //
 //	errorPrefix						interface{}
@@ -6569,9 +6603,15 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewSignedNumDefaultsFrance(
 // displayed. Therefore, no leading plus ('+') symbol is
 // required.
 //
+//	German Example:	Positive Numeric Value
+//				1.000.000
+//
 // Likewise, the zero signed number symbol is also empty
 // or blank because under German formatting standards,
 // zero numeric values have no number sign symbols.
+//
+//	German Example:	Zero Numeric Value
+//					0
 //
 // The negative signed number symbol is configured with a
 // trailing minus sign ('-') meaning that all negative

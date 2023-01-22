@@ -2226,6 +2226,40 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewNOP() NumStrNumberSymbolG
 //
 // ----------------------------------------------------------------
 //
+// # Reference:
+//
+//	https://www.ibm.com/support/pages/english-and-french-currency-formats
+//
+//	https://freeformatter.com/france-standards-code-snippets.html
+//
+//	https://docs.microsoft.com/en-us/globalization/locale/currency-formatting
+//
+// ----------------------------------------------------------------
+//
+// # Defaults
+//
+//	The negative number sign is set to a leading minus sign
+//	('-').
+//
+//		French Example-1
+//		-1 000 000 000
+//
+//	The number sign is implied for positive numeric values.
+//	Therefore, the positive number sign symbol is set to a
+//	blank or empty string ("").
+//
+//		French Example-3
+//		1 000 000 000
+//
+//	The zero number format has no number sign. Therefore,
+//	the positive number sign symbol is set to a blank or
+//	empty string ("").
+//
+//		French Example-4
+//			0,0
+//
+// ----------------------------------------------------------------
+//
 // # Input Parameters
 //
 //	errorPrefix					interface{}
@@ -2347,6 +2381,222 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSignedNumDefaultsFrance(
 
 	err = new(numStrNumberSymbolGroupMechanics).
 		setSignedNumDefaultsFrance(
+			&newNStrNumSymbols,
+			ePrefix.XCpy(
+				"newNStrNumSymbols<-"))
+
+	return newNStrNumSymbols, err
+}
+
+//	NewSignedNumDefaultsGermany
+//
+//	Creates and returns and instance of
+//	NumStrNumberSymbolGroup configured for signed number
+//	formatting in accordance with number string
+//	formatting standards used in Germany.
+//
+//	A signed number is a numeric value formatted in a
+//	number string which does NOT contain currency
+//	symbols.
+//
+//	The new, returned instance of
+//	NumStrNumberSymbolGroup will include signed number
+//	symbols for positive, zero and negative numeric
+//	values.
+//
+//	Currency Symbols WILL NOT BE INCLUDED in the returned
+//	number symbol specifications. The Currency member
+//	variable in the returned NumStrNumberSymbolGroup will
+//	be empty and configured as a 'NOP' or empty
+//	placeholder. 'NOP' stands for 'No Operation'.
+//
+//	The positive signed number symbol is empty or blank
+//	because under German formatting standards, positive
+//	number signs are implied and not explicitly
+//	displayed. Therefore, no leading plus ('+') symbol is
+//	required.
+//
+//	Likewise, the zero signed number symbol is also empty
+//	or blank because under German formatting standards,
+//	zero numeric values have no number sign symbols.
+//
+//	The negative signed number symbol is configured with
+//	a leading minus sign ('-') meaning that all negative
+//	numeric values will be prefixed with a leading minus
+//	sign ('-'). The negative number sign will be
+//	positioned inside the number field:
+//
+//		NumFieldSymPos.InsideNumField()
+//			Example:
+//				Number Field Length: 8
+//				Numeric Value: -123.45
+//				Number Symbol: leading minus sign ('-')
+//				Number Symbol Position: Inside Number Field
+//				Formatted Number String: " -123.45"
+//				Number Field Index:------>01234567
+//				Total Number String Length: 8
+//
+// ----------------------------------------------------------------
+//
+// # Reference:
+//
+//	https://freeformatter.com/germany-standards-code-snippets.html
+//
+//	https://www.evertype.com/standards/euro/formats.html
+//
+//	https://www.thefinancials.com/Default.aspx?SubSectionID=curformat
+//
+//	https://www.codeproject.com/articles/78175/international-number-formats
+//
+//	https://docs.oracle.com/cd/E19455-01/806-0169/overview-9/index.html
+//
+// ----------------------------------------------------------------
+//
+// # Defaults
+//
+//	The negative number sign is set to a leading minus sign
+//	('-').
+//
+//		German Example-1
+//		-1 000 000 000
+//
+//	The number sign is implied for positive numeric values.
+//	Therefore, the positive number sign symbol is set to a
+//	blank or empty string ("").
+//
+//		German Example-3
+//		1 000 000 000
+//
+//	The zero number format has no number sign. Therefore,
+//	the positive number sign symbol is set to a blank or
+//	empty string ("").
+//
+//		German Example-4
+//			0,0
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	NumStrNumberSymbolGroup
+//
+//		If this method completes successfully, this
+//		parameter will return a new, fully populated
+//		instance of NumStrNumberSymbolGroup configured
+//		with Positive, Negative and Zero Number Sign
+//		Symbol Specification objects conforming to
+//		German Signed Number formatting standards.
+//
+//		This returned instance WILL NOT INCLUDE
+//		Currency Symbols.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSignedNumDefaultsGermany(
+	errorPrefix interface{}) (
+	NumStrNumberSymbolGroup,
+	error) {
+
+	if nStrNumSymbolsGroup.lock == nil {
+		nStrNumSymbolsGroup.lock = new(sync.Mutex)
+	}
+
+	nStrNumSymbolsGroup.lock.Lock()
+
+	defer nStrNumSymbolsGroup.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	var newNStrNumSymbols NumStrNumberSymbolGroup
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumStrNumberSymbolGroup."+
+			"NewSignedNumDefaultsGermany()",
+		"")
+
+	if err != nil {
+		return newNStrNumSymbols, err
+	}
+
+	err = new(numStrNumberSymbolGroupMechanics).
+		setSignedNumDefaultsGermany(
 			&newNStrNumSymbols,
 			ePrefix.XCpy(
 				"newNStrNumSymbols<-"))
