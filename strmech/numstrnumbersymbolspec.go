@@ -12782,10 +12782,16 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetSignedNumDefaultsGermany(
 //	displayed. Therefore, no leading plus ('+') symbol is
 //	required.
 //
+//		UK Example:	Positive Numeric Value
+//					123
+//
 //	Likewise, the zero signed number symbol is also empty
 //	or blank because under United Kingdom formatting
 //	standards, zero numeric values have no number sign
 //	symbols.
+//
+//		UK Example:	Zero Numeric Value
+//						0
 //
 //	The negative signed number symbol is configured with a
 //	leading minus sign ('-') meaning that all negative
@@ -12802,6 +12808,42 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetSignedNumDefaultsGermany(
 //				Formatted Number String: " -123.45"
 //				Number Field Index:------>01234567
 //				Total Number String Length: 8
+//
+// ----------------------------------------------------------------
+//
+// # Reference:
+//
+//	https://www.evertype.com/standards/euro/formats.html
+//
+//	https://www.thefinancials.com/Default.aspx?SubSectionID=curformat
+//
+//	https://www.codeproject.com/articles/78175/international-number-formats
+//
+//	https://docs.oracle.com/cd/E19455-01/806-0169/overview-9/index.html
+//
+// ----------------------------------------------------------------
+//
+// # Defaults
+//
+//	The negative number sign is set to a leading minus
+//	sign ('-').
+//
+//		UK Example:	Negative Number Sign
+//				-1,000,000
+//
+//	The positive number sign is implied for positive
+//	numeric values. Therefore, the positive number sign
+//	symbol is set to a blank or empty string ("").
+//
+//		UK Example:	Positive Numeric Value
+//				1,000,000
+//
+//	Zero numeric values have no number sign. Therefore,
+//	the zero number symbol is set to a blank or empty
+//	string ("").
+//
+//		UK Example:	Zero Numeric Value
+//						0
 //
 // ----------------------------------------------------------------
 //
