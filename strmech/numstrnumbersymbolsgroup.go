@@ -1786,6 +1786,8 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) IsNOPZeroNumSymbols() bool {
 //			Positive Numeric Currency Value
 //				1 000 000,00 €
 //
+//	Positive Numeric Values
+//
 //	The positive number sign is implied. No positive
 //	number is applied, only the trailing Euro Currency
 //	Symbol.
@@ -1794,6 +1796,8 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) IsNOPZeroNumSymbols() bool {
 //			Positive Numeric Currency Value
 //				1 000 000,00 €
 //
+//	Zero Numeric Values
+//
 //	The zero number format has no number sign, but the
 //	currency symbol is set to a trailing Euro Currency
 //	Symbol.
@@ -1801,6 +1805,8 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) IsNOPZeroNumSymbols() bool {
 //		French Example-3:
 //			Zero Numeric Currency Value
 //				0,00 €
+//
+//	Negative Numeric Values
 //
 //	The negative number sign is set to leading minus
 //	sign ('-') and a trailing Euro Currency Symbol
@@ -2000,6 +2006,8 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewCurrencyDefaultsFrance(
 //		German Example-1
 //		1.000.000,00 €
 //
+//	Positive Numeric Values
+//
 //	The positive number sign is implied for positive
 //	numeric values. Therefore, the positive number sign
 //	symbol is set to a blank or empty string ("").
@@ -2007,12 +2015,16 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewCurrencyDefaultsFrance(
 //		German Example-2
 //		1.000.000 €
 //
+//	Zero Numeric Values
+//
 //	Zero numeric values have no number sign. Therefore,
 //	the zero number symbol is set to a blank or empty
 //	string ("").
 //
 //		German Example-3
 //			0,00 €
+//
+//	Negative Numeric Values
 //
 //	The negative number sign is set to a trailing minus
 //	sign ('-').
@@ -2203,6 +2215,8 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewCurrencyDefaultsGermany(
 //	The default currency symbol used in the UK is the
 //	leading Pound symbol ('£').
 //
+//	Positive Numeric Values
+//
 //	The positive number sign is implied for positive
 //	numeric values. Therefore, the positive number sign
 //	symbol is set to a blank or empty string ("").
@@ -2211,6 +2225,8 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewCurrencyDefaultsGermany(
 //			Positive Numeric Currency Value
 //				£ 123.45
 //
+//	Zero Numeric Values
+//
 //	Zero numeric values have no number sign. Therefore,
 //	the zero number symbol is set to a blank or empty
 //	string ("").
@@ -2218,6 +2234,8 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewCurrencyDefaultsGermany(
 //		UK Example-2:
 //			Zero Numeric Currency Value
 //				£ 0.00
+//
+//	Negative Numeric Values
 //
 //	The negative number sign is set to a leading minus
 //	sign ('-').
@@ -2332,8 +2350,9 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewCurrencyDefaultsGermany(
 //		numeric values will be inside, or to the right of,
 //		the Pound sign ('£').
 //
-//			UK Example:	Negative Numeric Currency Value
-//				£ -123.45  Negative Value
+//			UK Example
+//				Negative Numeric Currency Value
+//					£ -123.45
 //
 //	error
 //
@@ -2396,7 +2415,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewCurrencyDefaultsUKMinusIn
 //	sign ('£').
 //
 //		UK Example:	Positive Numeric Currency Value
-//			£ 123.45  Positive Value
+//			£ 123.45
 //
 //	The term "MinusOutside" in the method name means that
 //	the Pound sign ('£') configured for negative numeric
@@ -2404,7 +2423,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewCurrencyDefaultsUKMinusIn
 //	sign ('£').
 //
 //	UK Example:	Negative Numeric Currency Value
-//		- £123.45  Negative Value
+//			- £123.45
 //
 //	Default values will be used to configure the returned
 //	instance of NumStrNumberSymbolGroup with UK Currency
@@ -2425,6 +2444,8 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewCurrencyDefaultsUKMinusIn
 //	The default currency symbol used in the UK is the
 //	leading Pound symbol ('£').
 //
+//	Positive Numeric Values
+//
 //	The positive number sign is implied for positive
 //	numeric values. Therefore, the positive number sign
 //	symbol is set to a blank or empty string ("").
@@ -2433,6 +2454,8 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewCurrencyDefaultsUKMinusIn
 //			Positive Numeric Currency Value
 //				£ 123.45  Positive Value
 //
+//	Zero Numeric Values
+//
 //	Zero numeric values have no number sign. Therefore,
 //	the zero number symbol is set to a blank or empty
 //	string ("").
@@ -2440,6 +2463,8 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewCurrencyDefaultsUKMinusIn
 //		UK Example-2:
 //			Zero Numeric Currency Value
 //				£ 0.00
+//
+//	Negative Numeric Values
 //
 //	The negative number sign is set to a leading minus
 //	sign ('-').
@@ -2649,6 +2674,8 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewCurrencyDefaultsUKMinusOu
 //	The default currency symbol used in the US is the
 //	leading Dollar symbol ('$').
 //
+//	Positive Numeric Values
+//
 //	The positive number sign is implied for positive
 //	numeric values. Therefore, the positive number sign
 //	symbol is set to a blank or empty string ("").
@@ -2657,6 +2684,8 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewCurrencyDefaultsUKMinusOu
 //			Positive Numeric Currency Value
 //				$ 123.45
 //
+//	Zero Numeric Values
+//
 //	Zero numeric values have no number sign. Therefore,
 //	the zero number symbol is set to a blank or empty
 //	string ("").
@@ -2664,6 +2693,8 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewCurrencyDefaultsUKMinusOu
 //		US Example-2:
 //			Zero Numeric Currency Value
 //				$ 0.00
+//
+//	Negative Numeric Values
 //
 //	The negative number sign is set to a leading minus
 //	sign ('-').
@@ -2770,16 +2801,16 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewCurrencyDefaultsUKMinusOu
 //		Specification objects in compliance with US
 //		Currency Formatting Standards.
 //
-//		The default US currency symbol is a leading Pound
-//		sign ('£').
+//		The default US currency symbol is a leading Dollar
+//		sign ('$').
 //
-//		This method will configure the Pound sign ('£')
+//		This method will configure the Dollar sign ('$')
 //		such that any minus sign configured for negative
 //		numeric values will be outside, or to the left of,
-//		the Pound sign ('£').
+//		the Dollar sign ('$').
 //
 //			US Example:	Negative Numeric Currency Value
-//				- £123.45
+//				- $123.45
 //
 //	error
 //
@@ -2825,6 +2856,239 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewCurrencyDefaultsUSMinus(
 
 	err = new(numStrNumberSymbolGroupMechanics).
 		setCurrencyDefaultsUSMinus(
+			&newNStrNumSymbols,
+			ePrefix.XCpy(
+				"newNStrNumSymbols"))
+
+	return newNStrNumSymbols, err
+}
+
+//	NewCurrencyDefaultsUSParen
+//
+//	Creates and returns a new instance of
+//	NumStrNumberSymbolGroup configured for the United
+//	States (US) Currency using default parameters.
+//
+//	The default US currency symbol is a leading Dollar
+//	sign ('$').
+//
+//		US Example
+//			Positive Numeric Currency Value
+//				$ 123.45
+//
+//
+//	The term 'Paren' in the method name signals that a
+//	surrounding parentheses ('()') will be used to designate
+//	negative numeric values.
+//
+//		US Example
+//			Negative Numeric Currency Value
+//				$ (123)
+//
+//	Default values will be used to configure the returned
+//	instance of NumStrNumberSymbolGroup with US Currency
+//	Number formatting specifications. New data values
+//	will be configured for the positive, zero and negative
+//	number sign symbols as well as the currency symbol.
+//
+//	To generate a default configuration with a leading
+//	minus sign ('-') for the negative number sign symbol,
+//	use method:
+//
+//		NumStrNumberSymbolSpec.
+//			NewCurrencyDefaultsUSMinus()
+//
+// ----------------------------------------------------------------
+//
+// # Defaults
+//
+//	The default currency symbol used in the US is the
+//	leading Dollar symbol ('$').
+//
+//	Positive Numeric Values
+//
+//	The positive number sign is implied for positive
+//	numeric values. Therefore, the positive number sign
+//	symbol is set to a blank or empty string ("").
+//
+//		US Example-1:
+//			Positive Numeric Currency Value
+//				$ 123.45
+//
+//	Zero Numeric Values
+//
+//	Zero numeric values have no number sign. Therefore,
+//	the zero number symbol is set to a blank or empty
+//	string ("").
+//
+//		US Example-2:
+//			Zero Numeric Currency Value
+//				$ 0.00
+//
+//	Negative Numeric Values
+//
+//	The negative number sign is set to surrounding
+//	parentheses ('()').
+//
+//	This method will configure the Dollar sign ('$')
+//	such that any parentheses configured for negative
+//	numeric values will be inside, or to the right of,
+//	the Dollar sign ('$').
+//
+//		US Example-3:
+//			Negative Numeric Currency Value
+//				$ (123.45)
+//
+//	The negative signed number symbol is configured with
+//	surrounding parentheses ('()') meaning that all
+//	negative numeric values prefixed with a leading
+//	parenthesis symbol ('(') and suffixed with a trailing,
+//	or closing, parenthesis symbol (')'). The negative
+//	number sign symbols and the currency symbol will be
+//	positioned inside the number field:
+//
+//		US Example-4:
+//			NumFieldSymPos.InsideNumField()
+//				Number Field Length: 11
+//				Numeric Value: -123.45
+//				Number Symbol: Surrounding Parentheses ('()')
+//				Number Symbol Position: Inside Number Field
+//				Number Text Justification: Right Justified
+//				Formatted Number String: " $ (123.45)"
+//				Number Field Index:------>01234567890
+//				Total Number String Length: 11
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	NumStrNumberSymbolGroup
+//
+//		If this method completes successfully, this
+//		parameter will return a new, fully populated
+//		instance of NumStrNumberSymbolGroup configured
+//		with Positive, Negative, Zero and Currency
+//		Specification objects in compliance with US
+//		Currency Formatting Standards.
+//
+//		The default US currency symbol is a leading
+//		Dollar sign ('$').
+//
+//		This method will configure the Dollar sign ('$')
+//		such that the leading parenthesis sign ('(')
+//		configured for negative numeric values will be
+//		inside, or to the right of, the Dollar sign ('$').
+//
+//			US Example:	Negative Numeric Currency Value
+//				$ (123.45)
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewCurrencyDefaultsUSParen(
+	errorPrefix interface{}) (
+	NumStrNumberSymbolGroup,
+	error) {
+
+	if nStrNumSymbolsGroup.lock == nil {
+		nStrNumSymbolsGroup.lock = new(sync.Mutex)
+	}
+
+	nStrNumSymbolsGroup.lock.Lock()
+
+	defer nStrNumSymbolsGroup.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	var newNStrNumSymbols NumStrNumberSymbolGroup
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumStrNumberSymbolGroup."+
+			"NewCurrencyDefaultsUSParen()",
+		"")
+
+	if err != nil {
+		return newNStrNumSymbols, err
+	}
+
+	err = new(numStrNumberSymbolGroupMechanics).
+		setCurrencyDefaultsUSParen(
 			&newNStrNumSymbols,
 			ePrefix.XCpy(
 				"newNStrNumSymbols"))
@@ -6198,6 +6462,8 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSymbolsSpecs(
 //			Positive Numeric Currency Value
 //				1 000 000,00 €
 //
+//	Positive Numeric Values
+//
 //	The positive number sign is implied. No positive
 //	number is applied, only the trailing Euro Currency
 //	Symbol.
@@ -6206,6 +6472,8 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSymbolsSpecs(
 //			Positive Numeric Currency Value
 //				1 000 000,00 €
 //
+//	Zero Numeric Values
+//
 //	The zero number format has no number sign, but the
 //	currency symbol is set to a trailing Euro Currency
 //	Symbol.
@@ -6213,6 +6481,8 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSymbolsSpecs(
 //		French Example-3:
 //			Zero Numeric Currency Value
 //				0,00 €
+//
+//	Negative Numeric Values
 //
 //	The negative number sign is set to leading minus
 //	sign ('-') and a trailing Euro Currency Symbol
@@ -6406,6 +6676,8 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencyDefaultsFrance(
 //		German Example-1
 //		1.000.000,00 €
 //
+//	Positive Numeric Values
+//
 //	The positive number sign is implied for positive
 //	numeric values. Therefore, the positive number sign
 //	symbol is set to a blank or empty string ("").
@@ -6413,12 +6685,16 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencyDefaultsFrance(
 //		German Example-2
 //		1.000.000 €
 //
+//	Zero Numeric Values
+//
 //	Zero numeric values have no number sign. Therefore,
 //	the zero number symbol is set to a blank or empty
 //	string ("").
 //
 //		German Example-3
 //			0,00 €
+//
+//	Negative Numeric Values
 //
 //	The negative number sign is set to a trailing minus
 //	sign ('-').
@@ -6607,6 +6883,8 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencyDefaultsGermany(
 //	The default currency symbol used in the UK is the
 //	leading Pound symbol ('£').
 //
+//	Positive Numeric Values
+//
 //	The positive number sign is implied for positive
 //	numeric values. Therefore, the positive number sign
 //	symbol is set to a blank or empty string ("").
@@ -6615,6 +6893,8 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencyDefaultsGermany(
 //			Positive Numeric Currency Value
 //				£ 123.45
 //
+//	Zero Numeric Values
+//
 //	Zero numeric values have no number sign. Therefore,
 //	the zero number symbol is set to a blank or empty
 //	string ("").
@@ -6622,6 +6902,8 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencyDefaultsGermany(
 //		UK Example-2:
 //			Zero Numeric Currency Value
 //				£ 0.00
+//
+//	Negative Numeric Values
 //
 //	The negative number sign is set to a leading minus
 //	sign ('-').
@@ -6809,6 +7091,8 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencyDefaultsUKMinusIn
 //	The default currency symbol used in the UK is the
 //	leading Pound symbol ('£').
 //
+//	Positive Numeric Values
+//
 //	The positive number sign is implied for positive
 //	numeric values. Therefore, the positive number sign
 //	symbol is set to a blank or empty string ("").
@@ -6817,6 +7101,8 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencyDefaultsUKMinusIn
 //			Positive Numeric Currency Value
 //				£ 123.45  Positive Value
 //
+//	Zero Numeric Values
+//
 //	Zero numeric values have no number sign. Therefore,
 //	the zero number symbol is set to a blank or empty
 //	string ("").
@@ -6824,6 +7110,8 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencyDefaultsUKMinusIn
 //		UK Example-2:
 //			Zero Numeric Currency Value
 //				£ 0.00
+//
+//	Negative Numeric Values
 //
 //	The negative number sign is set to a leading minus
 //	sign ('-').
@@ -6965,6 +7253,213 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencyDefaultsUKMinusOu
 			ePrefix.XCpy(
 				"newNStrNumSymbols"))
 
+}
+
+//	SetCurrencyDefaultsUSMinus
+//
+//
+//	Deletes all data values in the current instance of
+//	NumStrNumberSymbolGroup and proceeds to reconfigure
+//	that instance with number sign and currency symbols
+//	commonly applied to United States (US) currency
+//	numeric values.
+//
+//	The default US currency symbol is a leading Dollar
+//	sign ('$').
+//
+//		US Example
+//			Positive Numeric Currency Value
+//				$ 123.45
+//
+//	The word 'Minus' in the method name signals that
+//	negative numeric values will be configured with a
+//	leading minus sign ('-').
+//
+//		US Example
+//			Negative Numeric Currency Value
+//				$ -123
+//
+//	Default values will be used to configure the current
+//	instance of NumStrNumberSymbolGroup with US Currency
+//	Number formatting specifications. New data values
+//	will be configured for the positive, zero and negative
+//	number sign symbols as well as the currency symbol.
+//
+//	To generate a default configuration with surrounding
+//	parentheses ('()') for the negative number sign
+//	symbol, use method:
+//
+//		NumStrNumberSymbolSpec.
+//			SetCurrencyDefaultsUSParen()
+//
+// ----------------------------------------------------------------
+//
+// # Defaults
+//
+//	The default currency symbol used in the US is the
+//	leading Dollar symbol ('$').
+//
+//	Positive Numeric Values
+//
+//	The positive number sign is implied for positive
+//	numeric values. Therefore, the positive number sign
+//	symbol is set to a blank or empty string ("").
+//
+//		US Example-1:
+//			Positive Numeric Currency Value
+//				$ 123.45
+//
+//	Zero Numeric Values
+//
+//	Zero numeric values have no number sign. Therefore,
+//	the zero number symbol is set to a blank or empty
+//	string ("").
+//
+//		US Example-2:
+//			Zero Numeric Currency Value
+//				$ 0.00
+//
+//	Negative Numeric Values
+//
+//	The negative number sign is set to a leading minus
+//	sign ('-').
+//
+//	This method will configure the Dollar sign ('$')
+//	such that any minus sign configured for negative
+//	numeric values will be inside, or to the right of,
+//	the Dollar sign ('$').
+//
+//		US Example-3:
+//			Negative Numeric Currency Value
+//				$ -123.45
+//
+//	The negative signed number symbol is configured with a
+//	leading minus sign ('-') meaning that all negative
+//	numeric values will be prefixed with a leading minus
+//	sign ('-'). The negative number sign and the currency
+//	symbol will be positioned inside the number field:
+//
+//		US Example-4:
+//			NumFieldSymPos.InsideNumField()
+//				Number Field Length: 10
+//				Numeric Value: -123.45
+//				Number Symbol: leading minus sign ('-')
+//				Number Symbol Position: Inside Number Field
+//				Number Text Justification: Right Justified
+//				Formatted Number String: " $ -123.45"
+//				Number Field Index:------>0123456789
+//				Total Number String Length: 10
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencyDefaultsUSMinus(
+	errorPrefix interface{}) error {
+
+	if nStrNumSymbolsGroup.lock == nil {
+		nStrNumSymbolsGroup.lock = new(sync.Mutex)
+	}
+
+	nStrNumSymbolsGroup.lock.Lock()
+
+	defer nStrNumSymbolsGroup.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumStrNumberSymbolGroup."+
+			"SetCurrencyDefaultsUSMinus()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	return new(numStrNumberSymbolGroupMechanics).
+		setCurrencyDefaultsUSMinus(
+			nStrNumSymbolsGroup,
+			ePrefix.XCpy(
+				"nStrNumSymbolsGroup"))
 }
 
 //	SetNegativeNumSignRunes
