@@ -3144,68 +3144,13 @@ func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtGermany(
 		return err
 	}
 
-	var negativeNumberSign NumStrNumberSymbolSpec
+	var numSymbolsGroup NumStrNumberSymbolGroup
 
-	negativeNumberSign = NumStrNumberSymbolSpec{
-
-		leadingNumberSymbols:             RuneArrayDto{},
-		leadingNumberFieldSymbolPosition: 0,
-
-		trailingNumberSymbols: RuneArrayDto{
-			CharsArray:     []rune{'-'},
-			Description1:   "",
-			Description2:   "",
-			charSearchType: CharSearchType.LinearTargetStartingIndex(),
-			lock:           nil,
-		},
-		trailingNumberFieldSymbolPosition: NumFieldSymPos.InsideNumField(),
-		lock:                              nil,
-	}
-
-	var positiveNumberSign NumStrNumberSymbolSpec
-
-	positiveNumberSign = NumStrNumberSymbolSpec{
-		leadingNumberSymbols:              RuneArrayDto{},
-		leadingNumberFieldSymbolPosition:  0,
-		trailingNumberSymbols:             RuneArrayDto{},
-		trailingNumberFieldSymbolPosition: 0,
-		lock:                              nil,
-	}
-
-	var zeroNumberSign NumStrNumberSymbolSpec
-
-	zeroNumberSign = NumStrNumberSymbolSpec{
-		leadingNumberSymbols:              RuneArrayDto{},
-		leadingNumberFieldSymbolPosition:  0,
-		trailingNumberSymbols:             RuneArrayDto{},
-		trailingNumberFieldSymbolPosition: 0,
-		lock:                              nil,
-	}
-
-	var numSymbols NumStrNumberSymbolGroup
-
-	err = numSymbols.negativeNumberSign.CopyIn(
-		&negativeNumberSign,
-		ePrefix.XCpy(
-			"numSymbols.negativeNumberSign<-"))
-
-	if err != nil {
-		return err
-	}
-
-	err = numSymbols.positiveNumberSign.CopyIn(
-		&positiveNumberSign,
-		ePrefix.XCpy(
-			"numSymbols.positiveNumberSign<-"))
-
-	if err != nil {
-		return err
-	}
-
-	err = numSymbols.zeroNumberSign.CopyIn(
-		&zeroNumberSign,
-		ePrefix.XCpy(
-			"numSymbols.zeroNumberSign<-"))
+	numSymbolsGroup,
+		err = new(NumStrNumberSymbolGroup).
+		NewSignedNumDefaultsGermany(
+			ePrefix.XCpy(
+				"numSymbolsGroup<-"))
 
 	if err != nil {
 		return err
@@ -3215,7 +3160,7 @@ func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtGermany(
 		numStrFmtSpec,
 		decSeparator,
 		intSeparatorSpec,
-		numSymbols,
+		numSymbolsGroup,
 		numberFieldSpec,
 		ePrefix.XCpy("numStrFmtSpec<-"))
 }
