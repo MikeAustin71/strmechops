@@ -3412,9 +3412,9 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtFrance(
 //				1.000.000,00 €
 //
 //	Default values will be used to configure the current
-//	instance of NumStrNumberSymbolGroup with German
-//	Currency Number formatting specifications. New data
-//	values will be configured for the positive, zero and
+//	instance of NumStrFormatSpec with German Currency
+//	Number formatting specifications. New data values
+//	will be configured for the positive, zero and
 //	negative number sign symbols as well as the currency
 //	symbol.
 //
@@ -3737,11 +3737,10 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtGermany(
 //				£ -123.45  Negative Value
 //
 //	Default values will be used to configure the current
-//	instance of NumStrNumberSymbolGroup with UK Currency
-//	Number formatting specifications. New data values
-//	will be configured for the positive, zero and
-//	negative number sign symbols as well as the currency
-//	symbol.
+//	instance of NumStrFormatSpec with UK Currency Number
+//	formatting specifications. New data values will be
+//	configured for the positive, zero and negative number
+//	sign symbols as well as the currency symbol.
 //
 //	If custom decimal separator, integer separators,
 //	negative number sign characters or currency
@@ -4055,10 +4054,10 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtUKMinusInside(
 //			- £123.45
 //
 //	Default values will be used to configure the returned
-//	instance of NumStrNumberSymbolGroup with UK Currency
-//	Number formatting specifications. New data values
-//	will be configured for the positive, zero and negative
-//	number sign symbols as well as the currency symbol.
+//	instance of NumStrFormatSpec with UK Currency Number
+//	formatting specifications. New data values will be
+//	configured for the positive, zero and negative number
+//	sign symbols as well as the currency symbol.
 //
 //	If custom decimal separator, integer separators,
 //	negative number sign characters or currency
@@ -4364,10 +4363,10 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtUKMinusOutside(
 //				$ -123
 //
 //	Default values will be used to configure the current
-//	instance of NumStrNumberSymbolGroup with US Currency
-//	Number formatting specifications. New data values
-//	will be configured for the positive, zero and negative
-//	number sign symbols as well as the currency symbol.
+//	instance of NumStrFormatSpec with US Currency Number
+//	formatting specifications. New data values will be
+//	configured for the positive, zero and negative number
+//	sign symbols as well as the currency symbol.
 //
 //	If custom decimal separator, integer separators,
 //	negative number sign characters or currency
@@ -4647,19 +4646,30 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtUSMinus(
 
 //	NewCurrencyNumFmtUSParen
 //
-//	Returns a new instance of NumStrFormatSpec
-//	configured for US (United States) Currency Number
-//	String formatting conventions.
+//	Returns a new instance of NumStrFormatSpec configured
+//	for United States (US) Currency Number String
+//	formatting conventions.
 //
-//	Some prefer to use leading minus signs for negative
-//	currency values. Others prefer to surround negative
-//	currency values with Parentheses ('()').
+//	The default US currency symbol is a leading Dollar
+//	sign ('$').
 //
-//	This format will display negative US Currency values
-//	using Parentheses ('()').
+//		US Example
+//			Positive Numeric Currency Value
+//				$ 123.45
 //
-//		Negative Currency Example
-//			$ (1,000,000.00)
+//	The term 'Paren' in the method name signals that a
+//	surrounding parentheses ('()') will be used to designate
+//	negative numeric values.
+//
+//		US Example
+//			Negative Numeric Currency Value
+//				$ (123)
+//
+//	Default values will be used to configure the returned
+//	instance of NumStrFormatSpec with US Currency Number
+//	formatting specifications. New data values will be
+//	configured for the positive, zero and negative number
+//	sign symbols as well as the currency symbol.
 //
 //	If custom decimal separator, integer separators,
 //	negative number sign characters or currency
@@ -4673,43 +4683,81 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtUSMinus(
 //
 // # Defaults
 //
+//	Decimal Separators
+//
 //	The radix point or decimal separator is set to the
 //	period character ('.').
 //
-//		United States Example-1
+//		US Example-1
 //			123.45 (The fractional digits are "45")
+//
+//	Integer Separators
 //
 //	The integer group specification is set to 'thousands'.
 //	This means that integer digits will be separated into
 //	'thousands' with each group containing three digits
 //	each:
 //
-//		United States Example-2
+//		US Example-2
 //			1,000,000
 //
-//	The currency symbol used in the United States is the
-//	Dollar Sign symbol ('$').
+//	Currency Symbols
 //
-//		United States Example-3
-//			$ 1,000,000.00
+//	The default currency symbol used in the US is the
+//	leading Dollar symbol ('$').
 //
-//	The negative number sign is set to leading and
-//	trailing parentheses ("()").
+//	Positive Numeric Values
 //
-//		United States Example-4
-//			$ (1,000,000.00)
+//	The positive number sign is implied for positive
+//	numeric values. Therefore, the positive number sign
+//	symbol is set to a blank or empty string ("").
 //
-//	The positive number sign is set to a blank or empty
+//		US Example-3:
+//			Positive Numeric Currency Value
+//				$ 123.45
+//
+//	Zero Numeric Values
+//
+//	Zero numeric values have no number sign. Therefore,
+//	the zero number symbol is set to a blank or empty
 //	string ("").
 //
-//		United States Example-5
-//			$ 1,000,000.00
+//		US Example-4:
+//			Zero Numeric Currency Value
+//				$ 0.00
 //
-//	The zero number format is set to a blank or empty
-//	string ("").
+//	Negative Numeric Values
 //
-//		United States Example-6
-//			$ 0.00
+//	The negative number sign is set to surrounding
+//	parentheses ('()').
+//
+//	This method will configure the Dollar sign ('$')
+//	such that the leading parenthesis ('(') configured
+//	for negative numeric values will be inside, or to the
+//	right of, the Dollar sign ('$').
+//
+//		US Example-5:
+//			Negative Numeric Currency Value
+//				$ (123.45)
+//
+//	The negative signed number symbol is configured with
+//	surrounding parentheses ('()') meaning that all
+//	negative numeric values will be prefixed with a
+//	leading parenthesis symbol ('(') and suffixed with a
+//	trailing, or closing, parenthesis symbol (')'). The
+//	negative number sign symbols and the currency symbol
+//	will be positioned inside the number field:
+//
+//		US Example-6:
+//			NumFieldSymPos.InsideNumField()
+//				Number Field Length: 11
+//				Numeric Value: -123.45
+//				Number Symbol: Surrounding Parentheses ('()')
+//				Number Symbol Position: Inside Number Field
+//				Number Text Justification: Right Justified
+//				Formatted Number String: " $ (123.45)"
+//				Number Field Index:------>01234567890
+//				Total Number String Length: 11
 //
 // ----------------------------------------------------------------
 //
@@ -4852,6 +4900,18 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtUSMinus(
 //		instance of NumStrFormatSpec configured with
 //		Currency Number String formatting parameters
 //		typically applied in the United States.
+//
+//		The default US currency symbol is a leading
+//		Dollar sign ('$').
+//
+//		This method will configure the Dollar sign ('$')
+//		such that the leading parenthesis sign ('(')
+//		configured for negative numeric values will be
+//		inside, or to the right of, the Dollar sign ('$').
+//
+//			US Example:
+//				Negative Numeric Currency Value
+//					$ (123.45)
 //
 //	err							error
 //

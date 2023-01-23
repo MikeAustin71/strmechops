@@ -3041,8 +3041,9 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewCurrencyDefaultsUSMinus(
 //		configured for negative numeric values will be
 //		inside, or to the right of, the Dollar sign ('$').
 //
-//			US Example:	Negative Numeric Currency Value
-//				$ (123.45)
+//			US Example:
+//				Negative Numeric Currency Value
+//					$ (123.45)
 //
 //	error
 //
