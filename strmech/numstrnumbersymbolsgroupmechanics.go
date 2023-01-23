@@ -924,8 +924,6 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setCurrencyDefa
 //
 // # Reference:
 //
-//	https://www.evertype.com/standards/euro/formats.html
-//
 //	https://docs.microsoft.com/en-us/globalization/locale/currency-formatting
 //
 //	https://www.thefinancials.com/Default.aspx?SubSectionID=curformat
@@ -960,8 +958,8 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setCurrencyDefa
 //	numeric values. Therefore, the positive number sign
 //	symbol is set to a blank or empty string ("").
 //
-//		US Example-4
-//			$ 123.45
+//			US Example-4
+//				$ 123.45
 //
 //	Zero numeric values have no number sign. Therefore,
 //	the zero number symbol is set to a blank or empty
@@ -2686,16 +2684,22 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setSignedNumDef
 //	reconfigure the instance according to signed number
 //	formatting standards used in the United States (US).
 //
+//	The default US currency symbol is a leading Dollar
+//	sign ('$').
+//
+//		US Example:	Positive Numeric Currency Value
+//			$ 123.45  Positive Value
+//
 //	The word 'Minus' in the method name signals that
 //	negative numeric values will be configured with a
 //	leading minus sign ('-').
 //
-//		US Example: Negative Numeric Value
-//				-123
+//		US Example: Negative Numeric Currency Value
+//				$ -123
 //
 //	Default values will be used to reconfigure the
 //	NumStrNumberSymbolGroup input parameter,
-//	'nStrNumSymbolGroup', for US Signed Number
+//	'nStrNumSymbolGroup', for US Currency Number
 //	formatting. New data values will be configured for
 //	the positive, zero and negative number sign symbols.
 //
