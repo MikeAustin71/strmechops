@@ -1499,7 +1499,7 @@ func (nStrFmtSpecMechanics *numStrFmtSpecMechanics) setUSDefaultSignedNumStrFmtI
 	}
 
 	err = new(numStrFmtSpecNanobot).
-		setSignedNStrFmtUS(
+		setSignedNStrFmtUSMinus(
 			numberStrFmtSpec,
 			numberFieldSpec,
 			ePrefix.XCpy(

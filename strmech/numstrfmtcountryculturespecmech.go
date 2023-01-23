@@ -639,7 +639,7 @@ func (nStrFmtCountryCultureMech *numStrFmtCountryCultureSpecMech) setCountryUK(
 	}
 
 	countryNStrFmtSpec.SignedNumStrFormat,
-		err = numStrFmtSpec.NewSignedNumFmtUK(
+		err = numStrFmtSpec.NewSignedNumFmtUKMinus(
 		nopNumFieldSpec,
 		ePrefix.XCpy(
 			"countryNStrFmtSpec.SignedNumStrFormat"))

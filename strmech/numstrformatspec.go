@@ -42,7 +42,7 @@ import (
 //		NumStrFormatSpec.NewCurrencyNumFmtGermany()
 //		NumStrFormatSpec.NewSignedNumFmtGermany()
 //		NumStrFormatSpec.NewCurrencyNumFmtUKMinusOutside()
-//		NumStrFormatSpec.NewSignedNumFmtUK()
+//		NumStrFormatSpec.NewSignedNumFmtUKMinus()
 //		NumStrFormatSpec.NewCurrencyNumFmtUSParen()
 //		NumStrFormatSpec.NewSignedNumFmtUS()
 //
@@ -7158,6 +7158,20 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumFmtBasic(
 //	configured for a Signed Number using French
 //	Number String formatting conventions.
 //
+//	A signed number is a numeric value formatted in a
+//	number string which does NOT contain currency
+//	symbols.
+//
+//	The new, returned instance of NumStrFormatSpec will
+//	include signed number symbols for positive, zero and
+//	negative numeric values.
+//
+//	Currency Symbols WILL NOT BE INCLUDED in the returned
+//	number symbol specifications. The Currency member
+//	variable in the returned NumStrFormatSpec will be
+//	empty and configured as a 'NOP' or empty placeholder.
+//	'NOP' stands for 'No Operation'.
+//
 //	Within in the European Union many, if not
 //	most, of the member countries subscribe to
 //	the Signed Number String formatting standards
@@ -7417,6 +7431,20 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumFmtFrance(
 //	configured for a Signed Number using German
 //	Number String formatting conventions.
 //
+//	A signed number is a numeric value formatted in a
+//	number string which does NOT contain currency
+//	symbols.
+//
+//	The new, returned instance of NumStrFormatSpec will
+//	include signed number symbols for positive, zero and
+//	negative numeric values.
+//
+//	Currency Symbols WILL NOT BE INCLUDED in the returned
+//	number symbol specifications. The Currency member
+//	variable in the returned NumStrFormatSpec will be
+//	empty and configured as a 'NOP' or empty placeholder.
+//	'NOP' stands for 'No Operation'.
+//
 //	Within in the European Union many, if not
 //	most, of the member countries subscribe to
 //	the Signed Number String formatting standards
@@ -7669,12 +7697,28 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumFmtGermany(
 	return newSignedNumFmtSpec, err
 }
 
-//	NewSignedNumFmtUK
+//	NewSignedNumFmtUKMinus
 //
 //	Returns a new instance of NumStrFormatSpec
-//	configured for a Signed Number using UK
-//	(United Kingdom) Number String formatting
-//	conventions.
+//	configured for a Signed Number using United Kingdom
+//	(UK) Number String formatting conventions.
+//
+//	The word 'Minus' in the method name signals that
+//	negative numeric values will be configured with a
+//	leading minus sign ('-').
+//
+//		UK Example: Negative Numeric Value
+//				-123
+//
+//	The new, returned instance of NumStrFormatSpec will
+//	include signed number symbols for positive, zero and
+//	negative numeric values.
+//
+//	Currency Symbols WILL NOT BE INCLUDED in the returned
+//	number symbol specifications. The Currency member
+//	variable in the returned NumStrFormatSpec will
+//	be empty and configured as a 'NOP' or empty
+//	placeholder. 'NOP' stands for 'No Operation'.
 //
 //	If custom decimal separator, integer separators
 //	or negative number sign characters are required,
@@ -7881,7 +7925,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumFmtGermany(
 //		and text passed by input parameter, 'errorPrefix'. The
 //		'errorPrefix' text will be attached to the beginning of
 //		the error message.
-func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumFmtUK(
+func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumFmtUKMinus(
 	numberFieldSpec NumStrNumberFieldSpec,
 	errorPrefix interface{}) (
 	newSignedNumFmtSpec NumStrFormatSpec,
@@ -7901,14 +7945,14 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumFmtUK(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumStrFormatSpec."+
-			"NewSignedNumFmtUK()",
+			"NewSignedNumFmtUKMinus()",
 		"")
 
 	if err != nil {
 		return newSignedNumFmtSpec, err
 	}
 
-	err = new(numStrFmtSpecNanobot).setSignedNStrFmtUS(
+	err = new(numStrFmtSpecNanobot).setSignedNStrFmtUSMinus(
 		&newSignedNumFmtSpec,
 		numberFieldSpec,
 		ePrefix.XCpy("newSignedNumFmtSpec<-"))
@@ -8147,7 +8191,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumFmtUS(
 		return newSignedNumFmtSpec, err
 	}
 
-	err = new(numStrFmtSpecNanobot).setSignedNStrFmtUS(
+	err = new(numStrFmtSpecNanobot).setSignedNStrFmtUSMinus(
 		&newSignedNumFmtSpec,
 		numberFieldSpec,
 		ePrefix.XCpy("newSignedNumFmtSpec<-"))
@@ -12790,7 +12834,7 @@ func (numStrFmtSpec *NumStrFormatSpec) SetSignedNumFmtUK(
 		return err
 	}
 
-	return new(numStrFmtSpecNanobot).setSignedNStrFmtUS(
+	return new(numStrFmtSpecNanobot).setSignedNStrFmtUSMinus(
 		numStrFmtSpec,
 		numberFieldSpec,
 		ePrefix.XCpy("numStrFmtSpec<-"))
@@ -13028,7 +13072,7 @@ func (numStrFmtSpec *NumStrFormatSpec) SetSignedNumFmtUS(
 		return err
 	}
 
-	return new(numStrFmtSpecNanobot).setSignedNStrFmtUS(
+	return new(numStrFmtSpecNanobot).setSignedNStrFmtUSMinus(
 		numStrFmtSpec,
 		numberFieldSpec,
 		ePrefix.XCpy("numStrFmtSpec<-"))

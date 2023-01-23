@@ -12672,7 +12672,7 @@ func (numStrKernel *NumberStrKernel) FmtSignedNumStrUK(
 	var numStrFmtSpec NumStrFormatSpec
 
 	numStrFmtSpec,
-		err = new(NumStrFormatSpec).NewSignedNumFmtUK(
+		err = new(NumStrFormatSpec).NewSignedNumFmtUKMinus(
 		numberFieldSpec,
 		ePrefix.XCpy(
 			"newSignedNumFmtSpec<-"))

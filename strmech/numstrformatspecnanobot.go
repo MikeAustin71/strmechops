@@ -3165,15 +3165,37 @@ func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtGermany(
 		ePrefix.XCpy("numStrFmtSpec<-"))
 }
 
-// setSignedNStrFmtUS
+// setSignedNStrFmtUSMinus
 //
 // Deletes and resets the member variable data values
 // stored in the instance of NumStrFormatSpec passed
-// as input parameter 'signedNumFmtSpec'.
+// as input parameter 'numStrFmtSpec'.
 //
 //	Reconfigures the current instance of NumStrFormatSpec
 //	using Number String formatting conventions typically
-//	applied in the US (United States).
+//	applied in the United States (US).
+//
+//	The word 'Minus' in the method name signals that
+//	negative numeric values will be configured with a
+//	leading minus sign ('-').
+//
+//		US Example: Negative Numeric Value
+//				-123
+//
+//	A signed number is a numeric value formatted in a
+//	number string which does NOT contain currency
+//	symbols.
+//
+//	The instance of NumStrFormatSpec passed as input
+//	parameter 'numStrFmtSpec'  will be configured with
+//	signed number symbols for positive, zero and negative
+//	numeric values.
+//
+//	Currency Symbols WILL NOT BE INCLUDED in the
+//	configured number symbol specifications. The Currency
+//	member variable in 'numStrFmtSpec' will be empty and
+//	configured as a 'NOP' or empty placeholder. 'NOP'
+//	stands for 'No Operation'.
 //
 // ----------------------------------------------------------------
 //
@@ -3331,7 +3353,7 @@ func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtGermany(
 //		for input parameter 'errPrefDto' (error prefix)
 //		will be prefixed or attached at the beginning of
 //		the error message.
-func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtUS(
+func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtUSMinus(
 	numStrFmtSpec *NumStrFormatSpec,
 	numberFieldSpec NumStrNumberFieldSpec,
 	errPrefDto *ePref.ErrPrefixDto) (
@@ -3351,7 +3373,7 @@ func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtUS(
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
 		"numStrFmtSpecNanobot."+
-			"setSignedNStrFmtUS()",
+			"setSignedNStrFmtUSMinus()",
 		"")
 
 	if err != nil {
@@ -3388,66 +3410,13 @@ func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtUS(
 		return err
 	}
 
-	var negativeNumberSign NumStrNumberSymbolSpec
+	var numSymbolsGroup NumStrNumberSymbolGroup
 
-	negativeNumberSign = NumStrNumberSymbolSpec{
-		leadingNumberSymbols: RuneArrayDto{
-			CharsArray:     []rune{'-'},
-			Description1:   "",
-			Description2:   "",
-			charSearchType: CharSearchType.LinearTargetStartingIndex(),
-			lock:           nil,
-		},
-		leadingNumberFieldSymbolPosition:  NumFieldSymPos.InsideNumField(),
-		trailingNumberSymbols:             RuneArrayDto{},
-		trailingNumberFieldSymbolPosition: 0,
-		lock:                              nil,
-	}
-
-	var positiveNumberSign NumStrNumberSymbolSpec
-
-	positiveNumberSign = NumStrNumberSymbolSpec{
-		leadingNumberSymbols:              RuneArrayDto{},
-		leadingNumberFieldSymbolPosition:  0,
-		trailingNumberSymbols:             RuneArrayDto{},
-		trailingNumberFieldSymbolPosition: 0,
-		lock:                              nil,
-	}
-
-	var zeroNumberSign NumStrNumberSymbolSpec
-
-	zeroNumberSign = NumStrNumberSymbolSpec{
-		leadingNumberSymbols:              RuneArrayDto{},
-		leadingNumberFieldSymbolPosition:  0,
-		trailingNumberSymbols:             RuneArrayDto{},
-		trailingNumberFieldSymbolPosition: 0,
-		lock:                              nil,
-	}
-
-	var numSymbols NumStrNumberSymbolGroup
-
-	err = numSymbols.negativeNumberSign.CopyIn(
-		&negativeNumberSign,
-		ePrefix.XCpy(
-			"numSymbols.negativeNumberSign<-"))
-
-	if err != nil {
-		return err
-	}
-
-	err = numSymbols.positiveNumberSign.CopyIn(
-		&positiveNumberSign,
-		ePrefix.XCpy(
-			"numSymbols.positiveNumberSign<-"))
-
-	if err != nil {
-		return err
-	}
-
-	err = numSymbols.zeroNumberSign.CopyIn(
-		&zeroNumberSign,
-		ePrefix.XCpy(
-			"numSymbols.zeroNumberSign<-"))
+	numSymbolsGroup,
+		err = new(NumStrNumberSymbolGroup).
+		NewSignedNumDefaultsUSMinus(
+			ePrefix.XCpy(
+				"numSymbolsGroup<-"))
 
 	if err != nil {
 		return err
@@ -3457,7 +3426,7 @@ func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtUS(
 		numStrFmtSpec,
 		decSeparator,
 		intSeparatorSpec,
-		numSymbols,
+		numSymbolsGroup,
 		numberFieldSpec,
 		ePrefix.XCpy("numStrFmtSpec<-"))
 }
