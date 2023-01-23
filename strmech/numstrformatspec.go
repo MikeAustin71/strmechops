@@ -41,7 +41,7 @@ import (
 //		NumStrFormatSpec.NewSignedNumFmtFrance()
 //		NumStrFormatSpec.NewCurrencyNumFmtGermany()
 //		NumStrFormatSpec.NewSignedNumFmtGermany()
-//		NumStrFormatSpec.NewCurrencyNumFmtUK()
+//		NumStrFormatSpec.NewCurrencyNumFmtUKMinusOutside()
 //		NumStrFormatSpec.NewSignedNumFmtUK()
 //		NumStrFormatSpec.NewCurrencyNumFmtUSParen()
 //		NumStrFormatSpec.NewSignedNumFmtUS()
@@ -3121,11 +3121,15 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtBasic(
 //
 // # Defaults
 //
+//	Decimal Separator
+//
 //	The radix point or decimal separator is set to the
 //	comma character (','):
 //
-//		French Example-1
+//		French Example-1:
 //			123,45 (The fractional digits are "45")
+//
+//	Integer Separator
 //
 //	The integer group separator is a space character
 //	(' ').
@@ -3134,32 +3138,64 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtBasic(
 //	This means that integer digits will be separated into
 //	'thousands' with each group containing three digits each:
 //
-//		French Example-2
+//		French Example-2:
 //		1 000 000 000
 //
-//	The currency symbol used in the France is the
-//	trailing Euro symbol ('€').
+//	Currency Symbols
 //
-//		French Example-3
-//		1 000 000,00 €
+//	The currency symbol used in the France is the
+//	trailing Euro Currency Symbol ('€').
+//
+//		French Example-3:
+//			Positive Numeric Currency Value
+//				1 000 000,00 €
+//
+//	Positive Numeric Values
+//
+//	The positive number sign is implied. No positive
+//	number is applied, only the trailing Euro Currency
+//	Symbol.
+//
+//		French Example-4:
+//			Positive Numeric Currency Value
+//				1 000 000,00 €
+//
+//	Zero Numeric Values
+//
+//	The zero number format has no number sign, but the
+//	currency symbol is set to a trailing Euro Currency
+//	Symbol.
+//
+//		French Example-5:
+//			Zero Numeric Currency Value
+//				0,00 €
+//
+//	Negative Numeric Values
 //
 //	The negative number sign is set to leading minus
-//	sign ('-') and a trailing Euro symbol ("€").
+//	sign ('-') and a trailing Euro Currency Symbol
+//	("€").
 //
-//		French Example-4
-//		-1 000 000,00 €
+//		French Example-6:
+//			Negative Numeric Currency Value
+//				-1 000 000,00 €
 //
-//	The positive number sign is set to a trailing
-//	Euro symbol.
+//	The negative signed number symbol is configured with a
+//	leading minus sign ('-') meaning that all negative
+//	numeric values will be prefixed with a leading minus
+//	sign ('-'). The negative number sign and the currency
+//	symbol will be positioned inside the number field:
 //
-//		French Example-5
-//		1 000 000,00 €
-//
-//	The zero number format is set to a trailing
-//	Euro symbol.
-//
-//		French Example-6
-//			0,00 €
+//		French Example-7:
+//			NumFieldSymPos.InsideNumField()
+//				Number Field Length: 10
+//				Numeric Value: -123,45
+//				Number Symbol: leading minus sign ('-')
+//				Number Symbol Position: Inside Number Field
+//				Number Text Justification: Right Justified
+//				Formatted Number String: " -123,45 €"
+//				Number Field Index:------>0123456789
+//				Total Number String Length: 10
 //
 // ----------------------------------------------------------------
 //
@@ -3393,11 +3429,15 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtFrance(
 //
 // # Defaults
 //
+//	Decimal Separator
+//
 //	The radix point or decimal separator is set to the
 //	comma character (','):
 //
 //		German Example-1
 //			123,45 (The fractional digits are "45")
+//
+//	Integer Separator
 //
 //	The integer group separator is a space character
 //	('.').
@@ -3410,29 +3450,56 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtFrance(
 //		German Example-2:
 //		1.000.000,00
 //
+//	Currency Symbols
+//
 //	The currency symbol used in the Germany is the
 //	trailing Euro symbol ('€').
 //
-//		German Example-3
+//		German Example-3:
 //		1.000.000,00 €
+//
+//	Positive Numeric Values
+//
+//	The positive number sign is implied for positive
+//	numeric values. Therefore, the positive number sign
+//	symbol is set to a blank or empty string ("").
+//
+//		German Example-4:
+//		1.000.000 €
+//
+//	Zero Numeric Values
+//
+//	Zero numeric values have no number sign. Therefore,
+//	the zero number symbol is set to a blank or empty
+//	string ("").
+//
+//		German Example-5:
+//			0,00 €
+//
+//	Negative Numeric Values
 //
 //	The negative number sign is set to a trailing minus
 //	sign ('-').
 //
-//		German Example-4
-//		1.000.000,00- €
+//		German Example-6:
+//		1.000.000- €
 //
-//	The positive number sign is set to a trailing
-//	Euro symbol.
+//	The negative signed number symbol is configured with a
+//	trailing minus sign ('-') meaning that all negative
+//	numeric values will be prefixed with a trailing minus
+//	sign ('-'). The negative number sign and the currency
+//	symbol will be positioned inside the number field:
 //
-//		German Example-5
-//		1.000.000,00 €
-//
-//	The zero number format is set to a trailing
-//	Euro symbol.
-//
-//		German Example-6
-//			0,00 €
+//		German Example-5:
+//			NumFieldSymPos.InsideNumField()
+//				Number Field Length: 10
+//				Numeric Value: 123,45-
+//				Number Symbol: trailing minus sign ('-')
+//				Number Symbol Position: Inside Number Field
+//				Number Text Justification: Right Justified
+//				Formatted Number String: " 123,45- €"
+//				Number Field Index:------>0123456789
+//				Total Number String Length: 10
 //
 // ----------------------------------------------------------------
 //
@@ -3622,7 +3689,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtGermany(
 	return newGermanCurrencyNumFmtSpec, err
 }
 
-//	NewCurrencyNumFmtUK
+//	NewCurrencyNumFmtUKMinusOutside
 //
 //	Returns a new instance of NumStrFormatSpec
 //	configured for UK (United Kingdom) Currency
@@ -3652,11 +3719,15 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtGermany(
 //
 // # Defaults
 //
+//	Decimal Separator
+//
 //	The radix point or decimal separator is set to the
 //	period character ('.').
 //
-//		United Kingdom Example-1
-//		123.45 (The fractional digits are "45")
+//		UK Example-1:
+//			123.45 (The fractional digits are "45")
+//
+//	Integer Separator
 //
 //	The integer group separator is a comma character
 //	(',').
@@ -3666,32 +3737,64 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtGermany(
 //	'thousands' with each group containing three digits
 //	each:
 //
-//		United Kingdom Example-2
-//				1,000,000
+//		UK Example-2:
+//			1,000,000
 //
-//	The currency symbol used in the United Kingdom is the
-//	Pound Sterling symbol ('£').
+//	Currency Symbol
 //
-//		United Kingdom Example-3
-//			£ 1,000,000.00
+//	The default currency symbol used in the UK is the
+//	leading Pound symbol ('£').
 //
-//	The negative number sign is set to leading and
-//	trailing parentheses ("()").
+//	Positive Numeric Values
 //
-//		United Kingdom Example-4
-//			-£ 1,000,000.00
+//	The positive number sign is implied for positive
+//	numeric values. Therefore, the positive number sign
+//	symbol is set to a blank or empty string ("").
 //
-//	The positive number sign is set to a blank or empty
+//		UK Example-3:
+//			Positive Numeric Currency Value
+//				£ 123.45  Positive Value
+//
+//	Zero Numeric Values
+//
+//	Zero numeric values have no number sign. Therefore,
+//	the zero number symbol is set to a blank or empty
 //	string ("").
 //
-//		United Kingdom Example-5
-//			£ 1,000,000.00
-//
-//	The zero number format is set to a blank or empty
-//	string ("").
-//
-//		United Kingdom Example-6
+//		UK Example-4:
+//			Zero Numeric Currency Value
 //				£ 0.00
+//
+//	Negative Numeric Values
+//
+//	The negative number sign is set to a leading minus
+//	sign ('-').
+//
+//	This method will configure the Pound sign ('£')
+//	such that any minus sign configured for negative
+//	numeric values will be outside, or to the left of,
+//	the Pound sign ('£').
+//
+//		UK Example-5:
+//			Negative Numeric Currency Value
+//				- £123.45
+//
+//	The negative signed number symbol is configured with a
+//	leading minus sign ('-') meaning that all negative
+//	numeric values will be prefixed with a leading minus
+//	sign ('-'). The negative number sign and the currency
+//	symbol will be positioned inside the number field:
+//
+//		UK Example-6:
+//			NumFieldSymPos.InsideNumField()
+//				Number Field Length: 10
+//				Numeric Value: -123.45
+//				Number Symbol: leading minus sign ('-')
+//				Number Symbol Position: Inside Number Field
+//				Number Text Justification: Right Justified
+//				Formatted Number String: " - £123.45"
+//				Number Field Index:------>0123456789
+//				Total Number String Length: 10
 //
 // ----------------------------------------------------------------
 //
@@ -3846,7 +3949,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtGermany(
 //		and text passed by input parameter, 'errorPrefix'. The
 //		'errorPrefix' text will be attached to the beginning of
 //		the error message.
-func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtUK(
+func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtUKMinusOutside(
 	numberFieldSpec NumStrNumberFieldSpec,
 	errorPrefix interface{}) (
 	newUKCurrencyNumFmtSpec NumStrFormatSpec,
@@ -3866,14 +3969,14 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtUK(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumStrFormatSpec."+
-			"NewCurrencyNumFmtUK()",
+			"NewCurrencyNumFmtUKMinusOutside()",
 		"")
 
 	if err != nil {
 		return newUKCurrencyNumFmtSpec, err
 	}
 
-	err = new(numStrFmtSpecNanobot).setCurrencyNStrFmtUK(
+	err = new(numStrFmtSpecNanobot).setCurrencyNStrFmtUKMinusOutside(
 		&newUKCurrencyNumFmtSpec,
 		numberFieldSpec,
 		ePrefix.XCpy("newUKCurrencyNumFmtSpec<-"))
@@ -9376,7 +9479,7 @@ func (numStrFmtSpec *NumStrFormatSpec) SetCurrencyFmtUK(
 	}
 
 	return new(numStrFmtSpecNanobot).
-		setCurrencyNStrFmtUK(
+		setCurrencyNStrFmtUKMinusOutside(
 			numStrFmtSpec,
 			numberFieldSpec,
 			ePrefix.XCpy("numStrFmtSpec<-"))

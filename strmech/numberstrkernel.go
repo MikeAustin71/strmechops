@@ -4687,7 +4687,7 @@ func (numStrKernel *NumberStrKernel) FmtCurrencyNumStrUK(
 	var numStrFmtSpec NumStrFormatSpec
 
 	numStrFmtSpec,
-		err = new(NumStrFormatSpec).NewCurrencyNumFmtUK(
+		err = new(NumStrFormatSpec).NewCurrencyNumFmtUKMinusOutside(
 		numberFieldSpec,
 		ePrefix.XCpy(
 			"newSignedNumFmtSpec<-"))
