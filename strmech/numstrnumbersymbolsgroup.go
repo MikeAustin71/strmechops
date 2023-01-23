@@ -1822,6 +1822,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) IsNOPZeroNumSymbols() bool {
 //				Numeric Value: -123,45
 //				Number Symbol: leading minus sign ('-')
 //				Number Symbol Position: Inside Number Field
+//				Number Text Justification: Right Justified
 //				Formatted Number String: " -123,45 €"
 //				Number Field Index:------>0123456789
 //				Total Number String Length: 10
@@ -2031,6 +2032,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewCurrencyDefaultsFrance(
 //				Numeric Value: 123,45-
 //				Number Symbol: trailing minus sign ('-')
 //				Number Symbol Position: Inside Number Field
+//				Number Text Justification: Right Justified
 //				Formatted Number String: " 123,45- €"
 //				Number Field Index:------>0123456789
 //				Total Number String Length: 10
@@ -2241,6 +2243,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewCurrencyDefaultsGermany(
 //				Numeric Value: -123.45
 //				Number Symbol: leading minus sign ('-')
 //				Number Symbol Position: Inside Number Field
+//				Number Text Justification: Right Justified
 //				Formatted Number String: " £ -123.45"
 //				Number Field Index:------>0123456789
 //				Total Number String Length: 10
@@ -2462,6 +2465,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewCurrencyDefaultsUKMinusIn
 //				Numeric Value: -123.45
 //				Number Symbol: leading minus sign ('-')
 //				Number Symbol Position: Inside Number Field
+//				Number Text Justification: Right Justified
 //				Formatted Number String: " - £123.45"
 //				Number Field Index:------>0123456789
 //				Total Number String Length: 10
@@ -2685,6 +2689,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewCurrencyDefaultsUKMinusOu
 //				Numeric Value: -123.45
 //				Number Symbol: leading minus sign ('-')
 //				Number Symbol Position: Inside Number Field
+//				Number Text Justification: Right Justified
 //				Formatted Number String: " $ -123.45"
 //				Number Field Index:------>0123456789
 //				Total Number String Length: 10
@@ -2955,6 +2960,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewNOP() NumStrNumberSymbolG
 //				Numeric Value: -123.45
 //				Number Symbol: leading minus sign ('-')
 //				Number Symbol Position: Inside Number Field
+//				Number Text Justification: Right Justified
 //				Formatted Number String: " -123.45"
 //				Number Field Index:------>01234567
 //				Total Number String Length: 8
@@ -3179,6 +3185,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSignedNumDefaultsFrance(
 //				Numeric Value: -123.45
 //				Number Symbol: trailing minus sign ('-')
 //				Number Symbol Position: Inside Number Field
+//				Number Text Justification: Right Justified
 //				Formatted Number String: " 1.000.000-"
 //				Number Field Index:------>01234567890
 //				Total Number String Length: 11
@@ -3408,6 +3415,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSignedNumDefaultsGermany(
 //				Numeric Value: -123.45
 //				Number Symbol: leading minus sign ('-')
 //				Number Symbol Position: Inside Number Field
+//				Number Text Justification: Right Justified
 //				Formatted Number String: " -123.45"
 //				Number Field Index:------>01234567
 //				Total Number String Length: 8
@@ -3440,6 +3448,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSignedNumDefaultsGermany(
 //				Numeric Value: -123.45
 //				Number Symbol: leading minus sign ('-')
 //				Number Symbol Position: Inside Number Field
+//				Number Text Justification: Right Justified
 //				Formatted Number String: " -123.45"
 //				Number Field Index:------>01234567
 //				Total Number String Length: 8
@@ -3646,6 +3655,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSignedNumDefaultsUKMinus(
 //				Numeric Value: -123.45
 //				Number Symbol: leading minus sign ('-')
 //				Number Symbol Position: Inside Number Field
+//				Number Text Justification: Right Justified
 //				Formatted Number String: " -123.45"
 //				Number Field Index:------>01234567
 //				Total Number String Length: 8
@@ -3666,6 +3676,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSignedNumDefaultsUKMinus(
 //				Numeric Value: -123.45
 //				Number Symbol: leading minus sign ('-')
 //				Number Symbol Position: Inside Number Field
+//				Number Text Justification: Right Justified
 //				Formatted Number String: " -123.45"
 //				Number Field Index:------>01234567
 //				Total Number String Length: 8
@@ -3874,6 +3885,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSignedNumDefaultsUSMinus(
 //				Numeric Value: -123.45
 //				Number Symbol: Surrounding Parentheses ('()')
 //				Number Symbol Position: Inside Number Field
+//				Number Text Justification: Right Justified
 //				Formatted Number String: " (123.45)"
 //				Number Field Index:------>012345678
 //				Total Number String Length: 9
@@ -3895,6 +3907,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSignedNumDefaultsUSMinus(
 //				Numeric Value: -123.45
 //				Number Symbol: Surrounding Parentheses ('()')
 //				Number Symbol Position: Inside Number Field
+//				Number Text Justification: Right Justified
 //				Formatted Number String: " (123.45)"
 //				Number Field Index:------>012345678
 //				Total Number String Length: 9
@@ -4136,6 +4149,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSignedNumDefaultsUSParen(
 //			Numeric Value: -123.45
 //			Number Symbol: leading minus sign ('-')
 //			Number Symbol Position: Inside Number Field
+//			Number Text Justification: Right Justified
 //			Formatted Number String: " -123.45"
 //			Number Field Index:------>01234567
 //			Total Number String Length: 8
@@ -4409,6 +4423,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSimpleCurrency(
 //			Numeric Value: 123.45
 //			Number Symbol: leading minus sign ('-')
 //			Number Symbol Position: Inside Number Field
+//			Number Text Justification: Right Justified
 //			Formatted Number String: " -123.45"
 //			Number Field Index:------>01234567
 //			Total Number String Length: 8
@@ -4609,7 +4624,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSimpleSignedNumber(
 //					Numeric Value: 123.45
 //					Number Symbol: leading plus sign ('+')
 //					Number Symbol Position: Inside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //					Formatted Number String: " +123.45"
 //					Number Field Index:------>01234567
 //					Total Number String Length: 8
@@ -4619,7 +4634,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSimpleSignedNumber(
 //					Numeric Value: 123.45
 //					Number Symbol: trailing plus sign ('+')
 //					Number Symbol Position: Inside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //					Formatted Number String: " 123.45+"
 //					Number Field Index:------>01234567
 //					Total Number String Length: 8
@@ -4634,7 +4649,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSimpleSignedNumber(
 //			     	Numeric Value: 123.45
 //			     	Number Symbol: leading plus sign ('+')
 //			     	Number Symbol Position: Outside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //			     	Formatted Number String: "+  123.45"
 //					Number Field Index:------>012345678
 //					Total Number String Length: 9
@@ -4644,7 +4659,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSimpleSignedNumber(
 //			     	Numeric Value: 123.45
 //			     	Number Symbol: trailing plus sign ('+')
 //			     	Number Symbol Position: Outside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //			     	Formatted Number String: "  123.45+"
 //					Number Field Index:------>012345678
 //					Total Number String Length: 9
@@ -4713,7 +4728,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSimpleSignedNumber(
 //					Numeric Value: 123.45
 //					Number Symbol: leading minus sign ('-')
 //					Number Symbol Position: Inside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //					Formatted Number String: " -123.45"
 //					Number Field Index:------>01234567
 //					Total Number String Length: 8
@@ -4723,7 +4738,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSimpleSignedNumber(
 //					Numeric Value: 123.45
 //					Number Symbol: trailing minus sign ('-')
 //					Number Symbol Position: Inside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //					Formatted Number String: " 123.45-"
 //					Number Field Index:------>01234567
 //					Total Number String Length: 8
@@ -4748,7 +4763,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSimpleSignedNumber(
 //			     	Numeric Value: 123.45
 //			     	Number Symbol: leading minus sign ('-')
 //			     	Number Symbol Position: Outside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //			     	Formatted Number String: "-  123.45"
 //					Number Field Index:------>012345678
 //					Total Number String Length: 9
@@ -4758,7 +4773,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSimpleSignedNumber(
 //			     	Numeric Value: 123.45
 //			     	Number Symbol: trailing minus sign ('-')
 //			     	Number Symbol Position: Outside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //			     	Formatted Number String: "  123.45-"
 //					Number Field Index:------>012345678
 //					Total Number String Length: 9
@@ -4846,7 +4861,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSimpleSignedNumber(
 //					Numeric Value: 123.45
 //					Number Symbol: leading plus sign ('+')
 //					Number Symbol Position: Inside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //					Formatted Number String: " +123.45"
 //					Number Field Index:------>01234567
 //					Total Number String Length: 8
@@ -4856,7 +4871,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSimpleSignedNumber(
 //					Numeric Value: 123.45
 //					Number Symbol: trailing plus sign ('+')
 //					Number Symbol Position: Inside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //					Formatted Number String: " 123.45+"
 //					Number Field Index:------>01234567
 //					Total Number String Length: 8
@@ -4872,7 +4887,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSimpleSignedNumber(
 //			     	Numeric Value: 123.45
 //			     	Number Symbol: leading plus sign ('+')
 //			     	Number Symbol Position: Outside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //			     	Formatted Number String: "+  123.45"
 //					Number Field Index:------>012345678
 //					Total Number String Length: 9
@@ -4882,7 +4897,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSimpleSignedNumber(
 //			     	Numeric Value: 123.45
 //			     	Number Symbol: trailing plus sign ('+')
 //			     	Number Symbol Position: Outside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //			     	Formatted Number String: "  123.45+"
 //					Number Field Index:------>012345678
 //					Total Number String Length: 9
@@ -4951,7 +4966,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSimpleSignedNumber(
 //				Leading Currency Symbol: Dollar sign ('$')
 //				Trailing Currency Symbol: Dollar sign ('$')
 //				Number Symbol Position: Inside Number Field
-//			    Number Text Justification: Right
+//			    Number Text Justification: Right Justified
 //				Formatted Number String: " $123.45$"
 //				Number Field Index:------>012345679
 //				Total Number String Length: 10
@@ -4979,7 +4994,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSimpleSignedNumber(
 //				Leading Currency Symbol: Dollar sign ('$')
 //				Trailing Currency Symbol: Dollar sign ('$')
 //			    Number Symbol Position: Outside Number Field
-//			    Number Text Justification: Right
+//			    Number Text Justification: Right Justified
 //			    Formatted Number String: "$  123.45$"
 //				Number Field Index:------>0123456789
 //				Total Number String Length: 10
@@ -5069,7 +5084,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSimpleSignedNumber(
 //			Currency Number Sign Relative Position:
 //				CurrNumSignRelPos.InsideNumSign()
 //			Leading Currency Symbol: Dollar sign ('$')
-//			Number Text Justification: Right
+//			Number Text Justification: Right Justified
 //			Formatted Number String: "$ -123.45"
 //			Number Field Index:------>012345678
 //			Total Number String Length: 9
@@ -5332,7 +5347,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSymbolsRunes(
 //					Numeric Value: 123.45
 //					Number Symbol: leading plus sign ('+')
 //					Number Symbol Position: Inside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //					Formatted Number String: " +123.45"
 //					Number Field Index:       01234567
 //					Total Number String Length: 8
@@ -5342,7 +5357,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSymbolsRunes(
 //					Numeric Value: 123.45
 //					Number Symbol: trailing plus sign ('+')
 //					Number Symbol Position: Inside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //					Formatted Number String: " 123.45+"
 //					Number Field Index:       01234567
 //					Total Number String Length: 8
@@ -5357,7 +5372,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSymbolsRunes(
 //			     	Numeric Value: 123.45
 //			     	Number Symbol: leading plus sign ('+')
 //			     	Number Symbol Position: Outside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //			     	Formatted Number String: "+  123.45"
 //					Number Field Index:       012345678
 //					Total Number String Length: 9
@@ -5367,7 +5382,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSymbolsRunes(
 //			     	Numeric Value: 123.45
 //			     	Number Symbol: trailing plus sign ('+')
 //			     	Number Symbol Position: Outside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //			     	Formatted Number String: "  123.45+"
 //					Number Field Index:       012345678
 //					Total Number String Length: 9
@@ -5436,7 +5451,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSymbolsRunes(
 //					Numeric Value: 123.45
 //					Number Symbol: leading minus sign ('-')
 //					Number Symbol Position: Inside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //					Formatted Number String: " -123.45"
 //					Number Field Index:  01234567
 //					Total Number String Length: 8
@@ -5446,7 +5461,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSymbolsRunes(
 //					Numeric Value: 123.45
 //					Number Symbol: trailing minus sign ('-')
 //					Number Symbol Position: Inside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //					Formatted Number String: " 123.45-"
 //					Number Field Index:       01234567
 //					Total Number String Length: 8
@@ -5471,7 +5486,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSymbolsRunes(
 //			     	Numeric Value: 123.45
 //			     	Number Symbol: leading minus sign ('-')
 //			     	Number Symbol Position: Outside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //			     	Formatted Number String: "-  123.45"
 //					Number Field Index:       012345678
 //					Total Number String Length: 9
@@ -5481,7 +5496,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSymbolsRunes(
 //			     	Numeric Value: 123.45
 //			     	Number Symbol: trailing minus sign ('-')
 //			     	Number Symbol Position: Outside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //			     	Formatted Number String: "  123.45-"
 //					Number Field Index:       012345678
 //					Total Number String Length: 9
@@ -5566,7 +5581,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSymbolsRunes(
 //					Numeric Value: 123.45
 //					Number Symbol: leading plus sign ('+')
 //					Number Symbol Position: Inside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //					Formatted Number String: " +123.45"
 //					Number Field Index:       01234567
 //					Total Number String Length: 8
@@ -5576,7 +5591,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSymbolsRunes(
 //					Numeric Value: 123.45
 //					Number Symbol: trailing plus sign ('+')
 //					Number Symbol Position: Inside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //					Formatted Number String: " 123.45+"
 //					Number Field Index:       01234567
 //					Total Number String Length: 8
@@ -5592,7 +5607,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSymbolsRunes(
 //			     	Numeric Value: 123.45
 //			     	Number Symbol: leading plus sign ('+')
 //			     	Number Symbol Position: Outside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //			     	Formatted Number String: "+  123.45"
 //					Number Field Index:       012345678
 //					Total Number String Length: 9
@@ -5602,7 +5617,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSymbolsRunes(
 //			     	Numeric Value: 123.45
 //			     	Number Symbol: trailing plus sign ('+')
 //			     	Number Symbol Position: Outside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //			     	Formatted Number String: "  123.45+"
 //					Number Field Index:       012345678
 //					Total Number String Length: 9
@@ -5668,7 +5683,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSymbolsRunes(
 //				Leading Currency Symbol: Dollar sign ('$')
 //				Trailing Currency Symbol: Dollar sign ('$')
 //				Number Symbol Position: Inside Number Field
-//			    Number Text Justification: Right
+//			    Number Text Justification: Right Justified
 //				Formatted Number String: " $123.45$"
 //				Number Field Index:------>012345679
 //				Total Number String Length: 10
@@ -5696,7 +5711,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSymbolsRunes(
 //				Leading Currency Symbol: Dollar sign ('$')
 //				Trailing Currency Symbol: Dollar sign ('$')
 //			    Number Symbol Position: Outside Number Field
-//			    Number Text Justification: Right
+//			    Number Text Justification: Right Justified
 //			    Formatted Number String: "$  123.45$"
 //				Number Field Index:------>0123456789
 //				Total Number String Length: 10
@@ -5786,7 +5801,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSymbolsRunes(
 //			Currency Number Sign Relative Position:
 //				CurrNumSignRelPos.InsideNumSign()
 //			Leading Currency Symbol: Dollar sign ('$')
-//			Number Text Justification: Right
+//			Number Text Justification: Right Justified
 //			Formatted Number String: "$ -123.45"
 //			Number Field Index:------>012345678
 //			Total Number String Length: 9
@@ -6219,6 +6234,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSymbolsSpecs(
 //				Numeric Value: -123,45
 //				Number Symbol: leading minus sign ('-')
 //				Number Symbol Position: Inside Number Field
+//				Number Text Justification: Right Justified
 //				Formatted Number String: " -123,45 €"
 //				Number Field Index:------>0123456789
 //				Total Number String Length: 10
@@ -6422,6 +6438,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencyDefaultsFrance(
 //				Numeric Value: 123,45-
 //				Number Symbol: trailing minus sign ('-')
 //				Number Symbol Position: Inside Number Field
+//				Number Text Justification: Right Justified
 //				Formatted Number String: " 123,45- €"
 //				Number Field Index:------>0123456789
 //				Total Number String Length: 10
@@ -6630,6 +6647,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencyDefaultsGermany(
 //				Numeric Value: -123.45
 //				Number Symbol: leading minus sign ('-')
 //				Number Symbol Position: Inside Number Field
+//				Number Text Justification: Right Justified
 //				Formatted Number String: " £ -123.45"
 //				Number Field Index:------>0123456789
 //				Total Number String Length: 10
@@ -6831,6 +6849,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencyDefaultsUKMinusIn
 //				Numeric Value: -123.45
 //				Number Symbol: leading minus sign ('-')
 //				Number Symbol Position: Inside Number Field
+//				Number Text Justification: Right Justified
 //				Formatted Number String: " - £123.45"
 //				Number Field Index:------>0123456789
 //				Total Number String Length: 10
@@ -7029,7 +7048,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencyDefaultsUKMinusOu
 //					Numeric Value: 123.45
 //					Number Symbol: leading minus sign ('-')
 //					Number Symbol Position: Inside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //					Formatted Number String: " -123.45"
 //					Number Field Index:------>01234567
 //					Total Number String Length: 8
@@ -7039,7 +7058,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencyDefaultsUKMinusOu
 //					Numeric Value: 123.45
 //					Number Symbol: trailing minus sign ('-')
 //					Number Symbol Position: Inside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //					Formatted Number String: " 123.45-"
 //					Number Field Index:------>01234567
 //					Total Number String Length: 8
@@ -7064,7 +7083,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencyDefaultsUKMinusOu
 //			     	Numeric Value: 123.45
 //			     	Number Symbol: leading minus sign ('-')
 //			     	Number Symbol Position: Outside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //			     	Formatted Number String: "-  123.45"
 //					Number Field Index:------>012345678
 //					Total Number String Length: 9
@@ -7074,7 +7093,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencyDefaultsUKMinusOu
 //			     	Numeric Value: 123.45
 //			     	Number Symbol: trailing minus sign ('-')
 //			     	Number Symbol Position: Outside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //			     	Formatted Number String: "  123.45-"
 //					Number Field Index:------>012345678
 //					Total Number String Length: 9
@@ -7439,7 +7458,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetNegativeNumSignSpec(
 //					Numeric Value: 123.45
 //					Number Symbol: leading minus sign ('-')
 //					Number Symbol Position: Inside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //					Formatted Number String: " -123.45"
 //					Number Field Index:------>01234567
 //					Total Number String Length: 8
@@ -7449,7 +7468,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetNegativeNumSignSpec(
 //					Numeric Value: 123.45
 //					Number Symbol: trailing minus sign ('-')
 //					Number Symbol Position: Inside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //					Formatted Number String: " 123.45-"
 //					Number Field Index:------>01234567
 //					Total Number String Length: 8
@@ -7474,7 +7493,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetNegativeNumSignSpec(
 //			     	Numeric Value: 123.45
 //			     	Number Symbol: leading minus sign ('-')
 //			     	Number Symbol Position: Outside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //			     	Formatted Number String: "-  123.45"
 //					Number Field Index:------>012345678
 //					Total Number String Length: 9
@@ -7484,7 +7503,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetNegativeNumSignSpec(
 //			     	Numeric Value: 123.45
 //			     	Number Symbol: trailing minus sign ('-')
 //			     	Number Symbol Position: Outside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //			     	Formatted Number String: "  123.45-"
 //					Number Field Index:------>012345678
 //					Total Number String Length: 9
@@ -8019,7 +8038,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetNOPZeroNumSignSymbol() {
 //					Numeric Value: 123.45
 //					Number Symbol: leading minus sign ('-')
 //					Number Symbol Position: Inside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //					Formatted Number String: " -123.45"
 //					Number Field Index:------>01234567
 //					Total Number String Length: 8
@@ -8029,7 +8048,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetNOPZeroNumSignSymbol() {
 //					Numeric Value: 123.45
 //					Number Symbol: trailing minus sign ('-')
 //					Number Symbol Position: Inside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //					Formatted Number String: " 123.45-"
 //					Number Field Index:------>01234567
 //					Total Number String Length: 8
@@ -8054,7 +8073,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetNOPZeroNumSignSymbol() {
 //			     	Numeric Value: 123.45
 //			     	Number Symbol: leading minus sign ('-')
 //			     	Number Symbol Position: Outside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //			     	Formatted Number String: "-  123.45"
 //					Number Field Index:------>012345678
 //					Total Number String Length: 9
@@ -8064,7 +8083,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetNOPZeroNumSignSymbol() {
 //			     	Numeric Value: 123.45
 //			     	Number Symbol: trailing minus sign ('-')
 //			     	Number Symbol Position: Outside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //			     	Formatted Number String: "  123.45-"
 //					Number Field Index:------>012345678
 //					Total Number String Length: 9
@@ -8435,7 +8454,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetPositiveNumSignSpec(
 //					Numeric Value: 123.45
 //					Number Symbol: leading plus sign ('+')
 //					Number Symbol Position: Inside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //					Formatted Number String: " +123.45"
 //					Number Field Index:------>01234567
 //					Total Number String Length: 8
@@ -8445,7 +8464,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetPositiveNumSignSpec(
 //					Numeric Value: 123.45
 //					Number Symbol: trailing plus sign ('+')
 //					Number Symbol Position: Inside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //					Formatted Number String: " 123.45+"
 //					Number Field Index:------>01234567
 //					Total Number String Length: 8
@@ -8460,7 +8479,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetPositiveNumSignSpec(
 //			     	Numeric Value: 123.45
 //			     	Number Symbol: leading plus sign ('+')
 //			     	Number Symbol Position: Outside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //			     	Formatted Number String: "+  123.45"
 //					Number Field Index:------>012345678
 //					Total Number String Length: 9
@@ -8470,7 +8489,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetPositiveNumSignSpec(
 //			     	Numeric Value: 123.45
 //			     	Number Symbol: trailing plus sign ('+')
 //			     	Number Symbol Position: Outside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //			     	Formatted Number String: "  123.45+"
 //					Number Field Index:------>012345678
 //					Total Number String Length: 9
@@ -8907,6 +8926,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSimpleCurrency(
 //				Numeric Value: -123.45
 //				Number Symbol: leading minus sign ('-')
 //				Number Symbol Position: Inside Number Field
+//				Number Text Justification: Right Justified
 //				Formatted Number String: " -123.45"
 //				Number Field Index:------>01234567
 //				Total Number String Length: 8
@@ -9116,6 +9136,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSignedNumDefaultsFrance(
 //				Numeric Value: -123.45
 //				Number Symbol: trailing minus sign ('-')
 //				Number Symbol Position: Inside Number Field
+//				Number Text Justification: Right Justified
 //				Formatted Number String: " 1.000.000-"
 //				Number Field Index:------>01234567890
 //				Total Number String Length: 11
@@ -9330,6 +9351,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSignedNumDefaultsGermany(
 //				Numeric Value: -123.45
 //				Number Symbol: leading minus sign ('-')
 //				Number Symbol Position: Inside Number Field
+//				Number Text Justification: Right Justified
 //				Formatted Number String: " -123.45"
 //				Number Field Index:------>01234567
 //				Total Number String Length: 8
@@ -9362,6 +9384,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSignedNumDefaultsGermany(
 //				Numeric Value: -123.45
 //				Number Symbol: leading minus sign ('-')
 //				Number Symbol Position: Inside Number Field
+//				Number Text Justification: Right Justified
 //				Formatted Number String: " -123.45"
 //				Number Field Index:------>01234567
 //				Total Number String Length: 8
@@ -9552,6 +9575,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSignedNumDefaultsUKMinus(
 //				Numeric Value: -123.45
 //				Number Symbol: leading minus sign ('-')
 //				Number Symbol Position: Inside Number Field
+//				Number Text Justification: Right Justified
 //				Formatted Number String: " -123.45"
 //				Number Field Index:------>01234567
 //				Total Number String Length: 8
@@ -9572,6 +9596,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSignedNumDefaultsUKMinus(
 //				Numeric Value: -123.45
 //				Number Symbol: leading minus sign ('-')
 //				Number Symbol Position: Inside Number Field
+//				Number Text Justification: Right Justified
 //				Formatted Number String: " -123.45"
 //				Number Field Index:------>01234567
 //				Total Number String Length: 8
@@ -9764,6 +9789,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSignedNumDefaultsUSMinus(
 //				Numeric Value: -123.45
 //				Number Symbol: Surrounding Parentheses ('()')
 //				Number Symbol Position: Inside Number Field
+//				Number Text Justification: Right Justified
 //				Formatted Number String: " (123.45)"
 //				Number Field Index:------>012345678
 //				Total Number String Length: 9
@@ -9785,6 +9811,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSignedNumDefaultsUSMinus(
 //				Numeric Value: -123.45
 //				Number Symbol: Surrounding Parentheses ('()')
 //				Number Symbol Position: Inside Number Field
+//				Number Text Justification: Right Justified
 //				Formatted Number String: " (123.45)"
 //				Number Field Index:------>012345678
 //				Total Number String Length: 9
@@ -10246,7 +10273,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSimpleSignedNumber(
 //					Numeric Value: 123.45
 //					Number Symbol: leading plus sign ('+')
 //					Number Symbol Position: Inside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //					Formatted Number String: " +123.45"
 //					Number Field Index:------>01234567
 //					Total Number String Length: 8
@@ -10256,7 +10283,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSimpleSignedNumber(
 //					Numeric Value: 123.45
 //					Number Symbol: trailing plus sign ('+')
 //					Number Symbol Position: Inside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //					Formatted Number String: " 123.45+"
 //					Number Field Index:------>01234567
 //					Total Number String Length: 8
@@ -10271,7 +10298,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSimpleSignedNumber(
 //			     	Numeric Value: 123.45
 //			     	Number Symbol: leading plus sign ('+')
 //			     	Number Symbol Position: Outside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //			     	Formatted Number String: "+  123.45"
 //					Number Field Index:------>012345678
 //					Total Number String Length: 9
@@ -10281,7 +10308,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSimpleSignedNumber(
 //			     	Numeric Value: 123.45
 //			     	Number Symbol: trailing plus sign ('+')
 //			     	Number Symbol Position: Outside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //			     	Formatted Number String: "  123.45+"
 //					Number Field Index:------>012345678
 //					Total Number String Length: 9
@@ -10350,7 +10377,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSimpleSignedNumber(
 //					Numeric Value: 123.45
 //					Number Symbol: leading minus sign ('-')
 //					Number Symbol Position: Inside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //					Formatted Number String: " -123.45"
 //					Number Field Index:------>01234567
 //					Total Number String Length: 8
@@ -10360,7 +10387,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSimpleSignedNumber(
 //					Numeric Value: 123.45
 //					Number Symbol: trailing minus sign ('-')
 //					Number Symbol Position: Inside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //					Formatted Number String: " 123.45-"
 //					Number Field Index:------>01234567
 //					Total Number String Length: 8
@@ -10385,7 +10412,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSimpleSignedNumber(
 //			     	Numeric Value: 123.45
 //			     	Number Symbol: leading minus sign ('-')
 //			     	Number Symbol Position: Outside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //			     	Formatted Number String: "-  123.45"
 //					Number Field Index:------>012345678
 //					Total Number String Length: 9
@@ -10395,7 +10422,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSimpleSignedNumber(
 //			     	Numeric Value: 123.45
 //			     	Number Symbol: trailing minus sign ('-')
 //			     	Number Symbol Position: Outside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //			     	Formatted Number String: "  123.45-"
 //					Number Field Index:------>012345678
 //					Total Number String Length: 9
@@ -10483,7 +10510,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSimpleSignedNumber(
 //					Numeric Value: 123.45
 //					Number Symbol: leading plus sign ('+')
 //					Number Symbol Position: Inside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //					Formatted Number String: " +123.45"
 //					Number Field Index:------>01234567
 //					Total Number String Length: 8
@@ -10493,7 +10520,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSimpleSignedNumber(
 //					Numeric Value: 123.45
 //					Number Symbol: trailing plus sign ('+')
 //					Number Symbol Position: Inside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //					Formatted Number String: " 123.45+"
 //					Number Field Index:------>01234567
 //					Total Number String Length: 8
@@ -10509,7 +10536,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSimpleSignedNumber(
 //			     	Numeric Value: 123.45
 //			     	Number Symbol: leading plus sign ('+')
 //			     	Number Symbol Position: Outside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //			     	Formatted Number String: "+  123.45"
 //					Number Field Index:------>012345678
 //					Total Number String Length: 9
@@ -10519,7 +10546,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSimpleSignedNumber(
 //			     	Numeric Value: 123.45
 //			     	Number Symbol: trailing plus sign ('+')
 //			     	Number Symbol Position: Outside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //			     	Formatted Number String: "  123.45+"
 //					Number Field Index:------>012345678
 //					Total Number String Length: 9
@@ -10588,7 +10615,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSimpleSignedNumber(
 //				Leading Currency Symbol: Dollar sign ('$')
 //				Trailing Currency Symbol: Dollar sign ('$')
 //				Number Symbol Position: Inside Number Field
-//			    Number Text Justification: Right
+//			    Number Text Justification: Right Justified
 //				Formatted Number String: " $123.45$"
 //				Number Field Index:------>012345679
 //				Total Number String Length: 10
@@ -10616,7 +10643,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSimpleSignedNumber(
 //				Leading Currency Symbol: Dollar sign ('$')
 //				Trailing Currency Symbol: Dollar sign ('$')
 //			    Number Symbol Position: Outside Number Field
-//			    Number Text Justification: Right
+//			    Number Text Justification: Right Justified
 //			    Formatted Number String: "$  123.45$"
 //				Number Field Index:------>0123456789
 //				Total Number String Length: 10
@@ -10706,7 +10733,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSimpleSignedNumber(
 //			Currency Number Sign Relative Position:
 //				CurrNumSignRelPos.InsideNumSign()
 //			Leading Currency Symbol: Dollar sign ('$')
-//			Number Text Justification: Right
+//			Number Text Justification: Right Justified
 //			Formatted Number String: "$ -123.45"
 //			Number Field Index:------>012345678
 //			Total Number String Length: 9
@@ -11108,9 +11135,9 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSymbolsSpecs(
 //					Numeric Value: 123.45
 //					Number Symbol: leading plus sign ('+')
 //					Number Symbol Position: Inside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //					Formatted Number String: " +123.45"
-//					Number Field Index:       01234567
+//					Number Field Index:------>01234567
 //					Total Number String Length: 8
 //
 //				Example-2:
@@ -11118,9 +11145,9 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSymbolsSpecs(
 //					Numeric Value: 123.45
 //					Number Symbol: trailing plus sign ('+')
 //					Number Symbol Position: Inside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //					Formatted Number String: " 123.45+"
-//					Number Field Index:       01234567
+//					Number Field Index:------>01234567
 //					Total Number String Length: 8
 //
 //				For the 'NumFieldSymPos.InsideNumField()'
@@ -11133,9 +11160,9 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSymbolsSpecs(
 //			     	Numeric Value: 123.45
 //			     	Number Symbol: leading plus sign ('+')
 //			     	Number Symbol Position: Outside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //			     	Formatted Number String: "+  123.45"
-//					Number Field Index:       012345678
+//					Number Field Index:------>012345678
 //					Total Number String Length: 9
 //
 //				Example-4:
@@ -11143,9 +11170,9 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSymbolsSpecs(
 //			     	Numeric Value: 123.45
 //			     	Number Symbol: trailing plus sign ('+')
 //			     	Number Symbol Position: Outside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //			     	Formatted Number String: "  123.45+"
-//					Number Field Index:       012345678
+//					Number Field Index:------>012345678
 //					Total Number String Length: 9
 //
 //				For the 'NumFieldSymPos.OutsideNumField()'
@@ -11212,9 +11239,9 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSymbolsSpecs(
 //					Numeric Value: 123.45
 //					Number Symbol: leading minus sign ('-')
 //					Number Symbol Position: Inside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //					Formatted Number String: " -123.45"
-//					Number Field Index:  01234567
+//					Number Field Index:------>01234567
 //					Total Number String Length: 8
 //
 //				Example-2:
@@ -11222,9 +11249,9 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSymbolsSpecs(
 //					Numeric Value: 123.45
 //					Number Symbol: trailing minus sign ('-')
 //					Number Symbol Position: Inside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //					Formatted Number String: " 123.45-"
-//					Number Field Index:       01234567
+//					Number Field Index:------>01234567
 //					Total Number String Length: 8
 //
 //				Example-3:
@@ -11234,7 +11261,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSymbolsSpecs(
 //					Number Symbol Position: Inside Number Field
 //			     	Number Text Justification: Centered
 //					Formatted Number String: " (123.45) "
-//					Number Field Index:       0123456789
+//					Number Field Index:------>0123456789
 //					Total Number String Length: 10
 //
 //				For the 'NumFieldSymPos.InsideNumField()'
@@ -11247,9 +11274,9 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSymbolsSpecs(
 //			     	Numeric Value: 123.45
 //			     	Number Symbol: leading minus sign ('-')
 //			     	Number Symbol Position: Outside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //			     	Formatted Number String: "-  123.45"
-//					Number Field Index:       012345678
+//					Number Field Index:------>012345678
 //					Total Number String Length: 9
 //
 //				Example-5:
@@ -11257,7 +11284,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSymbolsSpecs(
 //			     	Numeric Value: 123.45
 //			     	Number Symbol: trailing minus sign ('-')
 //			     	Number Symbol Position: Outside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //			     	Formatted Number String: "  123.45-"
 //					Number Field Index:       012345678
 //					Total Number String Length: 9
@@ -11269,7 +11296,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSymbolsSpecs(
 //					Number Symbol Position: Outside Number Field
 //			     	Number Text Justification: Centered
 //					Formatted Number String: "( 123.45 )"
-//					Number Field Index:       0123456789
+//					Number Field Index:------>0123456789
 //					Total Number String Length: 10
 //
 //				For the 'NumFieldSymPos.OutsideNumField()'
@@ -11342,9 +11369,9 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSymbolsSpecs(
 //					Numeric Value: 123.45
 //					Number Symbol: leading plus sign ('+')
 //					Number Symbol Position: Inside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //					Formatted Number String: " +123.45"
-//					Number Field Index:       01234567
+//					Number Field Index:------>01234567
 //					Total Number String Length: 8
 //
 //				Example-2:
@@ -11352,9 +11379,9 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSymbolsSpecs(
 //					Numeric Value: 123.45
 //					Number Symbol: trailing plus sign ('+')
 //					Number Symbol Position: Inside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //					Formatted Number String: " 123.45+"
-//					Number Field Index:       01234567
+//					Number Field Index:------>01234567
 //					Total Number String Length: 8
 //
 //				For the 'NumFieldSymPos.InsideNumField()'
@@ -11368,9 +11395,9 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSymbolsSpecs(
 //			     	Numeric Value: 123.45
 //			     	Number Symbol: leading plus sign ('+')
 //			     	Number Symbol Position: Outside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //			     	Formatted Number String: "+  123.45"
-//					Number Field Index:       012345678
+//					Number Field Index:------>012345678
 //					Total Number String Length: 9
 //
 //				Example-4:
@@ -11378,9 +11405,9 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSymbolsSpecs(
 //			     	Numeric Value: 123.45
 //			     	Number Symbol: trailing plus sign ('+')
 //			     	Number Symbol Position: Outside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //			     	Formatted Number String: "  123.45+"
-//					Number Field Index:       012345678
+//					Number Field Index:------>012345678
 //					Total Number String Length: 9
 //
 //				For the 'NumFieldSymPos.OutsideNumField()'
@@ -11444,7 +11471,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSymbolsSpecs(
 //				Leading Currency Symbol: Dollar sign ('$')
 //				Trailing Currency Symbol: Dollar sign ('$')
 //				Number Symbol Position: Inside Number Field
-//			    Number Text Justification: Right
+//			    Number Text Justification: Right Justified
 //				Formatted Number String: " $123.45$"
 //				Number Field Index:------>012345679
 //				Total Number String Length: 10
@@ -11472,7 +11499,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSymbolsSpecs(
 //				Leading Currency Symbol: Dollar sign ('$')
 //				Trailing Currency Symbol: Dollar sign ('$')
 //			    Number Symbol Position: Outside Number Field
-//			    Number Text Justification: Right
+//			    Number Text Justification: Right Justified
 //			    Formatted Number String: "$  123.45$"
 //				Number Field Index:------>0123456789
 //				Total Number String Length: 10
@@ -11562,7 +11589,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSymbolsSpecs(
 //			Currency Number Sign Relative Position:
 //				CurrNumSignRelPos.InsideNumSign()
 //			Leading Currency Symbol: Dollar sign ('$')
-//			Number Text Justification: Right
+//			Number Text Justification: Right Justified
 //			Formatted Number String: "$ -123.45"
 //			Number Field Index:------>012345678
 //			Total Number String Length: 9
@@ -11794,7 +11821,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSymbolsStrings(
 //					Numeric Value: 123.45
 //					Number Symbol: leading plus sign ('+')
 //					Number Symbol Position: Inside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //					Formatted Number String: " +123.45"
 //					Number Field Index:------>01234567
 //					Total Number String Length: 8
@@ -11804,7 +11831,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSymbolsStrings(
 //					Numeric Value: 123.45
 //					Number Symbol: trailing plus sign ('+')
 //					Number Symbol Position: Inside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //					Formatted Number String: " 123.45+"
 //					Number Field Index:------>01234567
 //					Total Number String Length: 8
@@ -11820,7 +11847,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSymbolsStrings(
 //			     	Numeric Value: 123.45
 //			     	Number Symbol: leading plus sign ('+')
 //			     	Number Symbol Position: Outside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //			     	Formatted Number String: "+  123.45"
 //					Number Field Index:------>012345678
 //					Total Number String Length: 9
@@ -11830,7 +11857,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSymbolsStrings(
 //			     	Numeric Value: 123.45
 //			     	Number Symbol: trailing plus sign ('+')
 //			     	Number Symbol Position: Outside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //			     	Formatted Number String: "  123.45+"
 //					Number Field Index:------>012345678
 //					Total Number String Length: 9
@@ -12200,7 +12227,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetZeroNumSignSpec(
 //					Numeric Value: 123.45
 //					Number Symbol: leading plus sign ('+')
 //					Number Symbol Position: Inside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //					Formatted Number String: " +123.45"
 //					Number Field Index:------>01234567
 //					Total Number String Length: 8
@@ -12210,7 +12237,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetZeroNumSignSpec(
 //					Numeric Value: 123.45
 //					Number Symbol: trailing plus sign ('+')
 //					Number Symbol Position: Inside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //					Formatted Number String: " 123.45+"
 //					Number Field Index:------>01234567
 //					Total Number String Length: 8
@@ -12226,7 +12253,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetZeroNumSignSpec(
 //			     	Numeric Value: 123.45
 //			     	Number Symbol: leading plus sign ('+')
 //			     	Number Symbol Position: Outside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //			     	Formatted Number String: "+  123.45"
 //					Number Field Index:------>012345678
 //					Total Number String Length: 9
@@ -12236,7 +12263,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetZeroNumSignSpec(
 //			     	Numeric Value: 123.45
 //			     	Number Symbol: trailing plus sign ('+')
 //			     	Number Symbol Position: Outside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //			     	Formatted Number String: "  123.45+"
 //					Number Field Index:------>012345678
 //					Total Number String Length: 9
