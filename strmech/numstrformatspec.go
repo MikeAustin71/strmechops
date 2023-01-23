@@ -4349,21 +4349,25 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtUKMinusOutside(
 	return newUKCurrencyNumFmtSpec, err
 }
 
-//	NewCurrencyNumFmtUSParen
+//	NewCurrencyNumFmtUSMinus
 //
-//	Returns a new instance of NumStrFormatSpec
-//	configured for US (United States) Currency Number
-//	String formatting conventions.
+//	Returns a new instance of NumStrFormatSpec configured
+//	for the United States (US) Currency Number String
+//	formatting conventions.
 //
-//	Some prefer to surround negative currency values with
-//	Parentheses ('()'). Others prefer to use leading
-//	minus signs for negative currency values.
+//	The word 'Minus' in the method name signals that
+//	negative numeric values will be configured with a
+//	leading minus sign ('-').
 //
-//	This format will display negative US Currency values
-//	using a leading minus sign ('-').
+//		US Example
+//			Negative Numeric Currency Value
+//				$ -123
 //
-//		Negative Currency Example
-//			$ -1,000,000.00
+//	Default values will be used to configure the current
+//	instance of NumStrNumberSymbolGroup with US Currency
+//	Number formatting specifications. New data values
+//	will be configured for the positive, zero and negative
+//	number sign symbols as well as the currency symbol.
 //
 //	If custom decimal separator, integer separators,
 //	negative number sign characters or currency
@@ -4377,43 +4381,79 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtUKMinusOutside(
 //
 // # Defaults
 //
+//	Decimal Separator
+//
 //	The radix point or decimal separator is set to the
 //	period character ('.').
 //
-//		United States Example-1
+//		US Example-1:
 //			123.45 (The fractional digits are "45")
+//
+//	Integer Separator
 //
 //	The integer group specification is set to 'thousands'.
 //	This means that integer digits will be separated into
 //	'thousands' with each group containing three digits
 //	each:
 //
-//		United States Example-2
+//		US Example-2:
 //			1,000,000
 //
-//	The currency symbol used in the United States is the
-//	Dollar Sign symbol ('$').
+//	Currency Symbols
 //
-//		United States Example-3
-//			$ 1,000,000.00
+//	The default currency symbol used in the US is the
+//	leading Dollar symbol ('$').
+//
+//	Positive Numeric Values
+//
+//	The positive number sign is implied for positive
+//	numeric values. Therefore, the positive number sign
+//	symbol is set to a blank or empty string ("").
+//
+//		US Example-3:
+//			Positive Numeric Currency Value
+//				$ 123.45
+//
+//	Zero Numeric Values
+//
+//	Zero numeric values have no number sign. Therefore,
+//	the zero number symbol is set to a blank or empty
+//	string ("").
+//
+//		US Example-4:
+//			Zero Numeric Currency Value
+//				$ 0.00
+//
+//	Negative Numeric Values
 //
 //	The negative number sign is set to a leading minus
-//	sign ("-").
+//	sign ('-').
 //
-//		United States Example-4
-//			$ -1,000,000.00
+//	This method will configure the Dollar sign ('$')
+//	such that any minus sign configured for negative
+//	numeric values will be inside, or to the right of,
+//	the Dollar sign ('$').
 //
-//	The positive number sign is set to a blank or empty
-//	string ("").
+//		US Example-5:
+//			Negative Numeric Currency Value
+//				$ -123.45
 //
-//		United States Example-5
-//			$ 1,000,000.00
+//	The negative signed number symbol is configured with a
+//	leading minus sign ('-') meaning that all negative
+//	numeric values will be prefixed with a leading minus
+//	sign ('-'). The negative number sign and the currency
+//	symbol will be positioned inside the number field:
 //
-//	The zero number format is set to a blank or empty
-//	string ("").
-//
-//		United States Example-6
-//			$ 0.00
+//		US Example-6:
+//			NumFieldSymPos.InsideNumField()
+//				Number Field Length: 10
+//				Numeric Value: -123.45
+//				Number Symbol: leading minus sign ('-')
+//				Number Symbol Position: Inside Number Field
+//				Number Text Justification: Right Justified
+//				Formatted Number String: " $ -123.45"
+//				Number Field Index:------>0123456789
+//				Total Number String Length: 10
 //
 // ----------------------------------------------------------------
 //
@@ -4595,10 +4635,12 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtUSMinus(
 		return newUSCurrencyNumFmtSpec, err
 	}
 
-	err = new(numStrFmtSpecNanobot).setCurrencyNStrFmtUSMinus(
-		&newUSCurrencyNumFmtSpec,
-		numberFieldSpec,
-		ePrefix.XCpy("newUSCurrencyNumFmtSpec<-"))
+	err = new(numStrFmtSpecNanobot).
+		setCurrencyNStrFmtUSMinus(
+			&newUSCurrencyNumFmtSpec,
+			numberFieldSpec,
+			ePrefix.XCpy(
+				"newUSCurrencyNumFmtSpec<-"))
 
 	return newUSCurrencyNumFmtSpec, err
 }

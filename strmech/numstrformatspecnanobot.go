@@ -1484,21 +1484,29 @@ func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setCurrencyNStrFmtUKMinusOutside
 		ePrefix.XCpy("numStrFmtSpec<-"))
 }
 
-//	setCurrencyNStrFmtUSParen
+//	setCurrencyNStrFmtUSMinus
 //
 //	Deletes and resets the member variable data values
 //	stored in the instance of NumStrFormatSpec passed
 //	as input parameter 'numStrFmtSpec'.
 //
-//	Negative currency values will be displayed with a
-//	leading minus sign.
-//
-//		Negative Currency Example
-//			$ -1,000,000.00
-//
 //	Reconfigures the current instance of NumStrFormatSpec
 //	using Currency Number String formatting conventions
 //	typically applied in the US (United States).
+//
+//	The word 'Minus' in the method name signals that
+//	negative numeric values will be configured with a
+//	leading minus sign ('-').
+//
+//		US Example
+//			Negative Numeric Currency Value
+//				$ -123
+//
+//	Default values will be used to configure the current
+//	instance of NumStrNumberSymbolGroup with US Currency
+//	Number formatting specifications. New data values
+//	will be configured for the positive, zero and negative
+//	number sign symbols as well as the currency symbol.
 //
 // ----------------------------------------------------------------
 //
@@ -1514,46 +1522,79 @@ func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setCurrencyNStrFmtUKMinusOutside
 //
 // # Defaults
 //
+//	Decimal Separator
+//
 //	The radix point or decimal separator is set to the
 //	period character ('.').
 //
-//		United States Example-1
-//		123.45 (The fractional digits are "45")
+//		US Example-1:
+//			123.45 (The fractional digits are "45")
 //
-//	The integer group separator is a comma character
-//	(',').
+//	Integer Separator
 //
 //	The integer group specification is set to 'thousands'.
 //	This means that integer digits will be separated into
 //	'thousands' with each group containing three digits
 //	each:
 //
-//		United States Example-2
-//				1,000,000
+//		US Example-2:
+//			1,000,000
 //
-//	The currency symbol used in the United States is the
-//	Dollar Sign symbol ('$').
+//	Currency Symbols
 //
-//		United States Example-3
-//			$ 1,000,000.00
+//	The default currency symbol used in the US is the
+//	leading Dollar symbol ('$').
+//
+//	Positive Numeric Values
+//
+//	The positive number sign is implied for positive
+//	numeric values. Therefore, the positive number sign
+//	symbol is set to a blank or empty string ("").
+//
+//		US Example-3:
+//			Positive Numeric Currency Value
+//				$ 123.45
+//
+//	Zero Numeric Values
+//
+//	Zero numeric values have no number sign. Therefore,
+//	the zero number symbol is set to a blank or empty
+//	string ("").
+//
+//		US Example-4:
+//			Zero Numeric Currency Value
+//				$ 0.00
+//
+//	Negative Numeric Values
 //
 //	The negative number sign is set to a leading minus
-//	sign ("-").
+//	sign ('-').
 //
-//		United States Example-4
-//			$ -1,000,000.00
+//	This method will configure the Dollar sign ('$')
+//	such that any minus sign configured for negative
+//	numeric values will be inside, or to the right of,
+//	the Dollar sign ('$').
 //
-//	The positive number sign is set to a blank or empty
-//	string ("").
+//		US Example-5:
+//			Negative Numeric Currency Value
+//				$ -123.45
 //
-//		United States Example-5
-//			$ 1,000,000.00
+//	The negative signed number symbol is configured with a
+//	leading minus sign ('-') meaning that all negative
+//	numeric values will be prefixed with a leading minus
+//	sign ('-'). The negative number sign and the currency
+//	symbol will be positioned inside the number field:
 //
-//	The zero number format is set to a blank or empty
-//	string ("").
-//
-//		United States Example-6
-//				$ 0.00
+//		US Example-6:
+//			NumFieldSymPos.InsideNumField()
+//				Number Field Length: 10
+//				Numeric Value: -123.45
+//				Number Symbol: leading minus sign ('-')
+//				Number Symbol Position: Inside Number Field
+//				Number Text Justification: Right Justified
+//				Formatted Number String: " $ -123.45"
+//				Number Field Index:------>0123456789
+//				Total Number String Length: 10
 //
 // ----------------------------------------------------------------
 //
@@ -1721,95 +1762,13 @@ func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setCurrencyNStrFmtUSMinus(
 		return err
 	}
 
-	var negativeNumberSign NumStrNumberSymbolSpec
+	var numSymbolsGroup NumStrNumberSymbolGroup
 
-	negativeNumberSign = NumStrNumberSymbolSpec{
-
-		leadingNumberSymbols: RuneArrayDto{
-			CharsArray:     []rune{'$', ' ', '-'},
-			Description1:   "",
-			Description2:   "",
-			charSearchType: CharSearchType.LinearTargetStartingIndex(),
-			lock:           nil,
-		},
-
-		leadingNumberFieldSymbolPosition: NumFieldSymPos.InsideNumField(),
-
-		trailingNumberSymbols: RuneArrayDto{
-			CharsArray:     []rune{},
-			Description1:   "",
-			Description2:   "",
-			charSearchType: CharSearchType.LinearTargetStartingIndex(),
-			lock:           nil,
-		},
-
-		trailingNumberFieldSymbolPosition: NumFieldSymPos.InsideNumField(),
-
-		lock: nil,
-	}
-
-	var positiveNumberSign NumStrNumberSymbolSpec
-
-	positiveNumberSign = NumStrNumberSymbolSpec{
-
-		leadingNumberSymbols: RuneArrayDto{
-			CharsArray:     []rune{'$', ' '},
-			Description1:   "",
-			Description2:   "",
-			charSearchType: CharSearchType.LinearTargetStartingIndex(),
-			lock:           nil,
-		},
-
-		leadingNumberFieldSymbolPosition: NumFieldSymPos.InsideNumField(),
-
-		trailingNumberSymbols:             RuneArrayDto{},
-		trailingNumberFieldSymbolPosition: 0,
-		lock:                              nil,
-	}
-
-	var zeroNumberSign NumStrNumberSymbolSpec
-
-	zeroNumberSign = NumStrNumberSymbolSpec{
-
-		leadingNumberSymbols: RuneArrayDto{
-			CharsArray:     []rune{'$', ' '},
-			Description1:   "",
-			Description2:   "",
-			charSearchType: CharSearchType.LinearTargetStartingIndex(),
-			lock:           nil,
-		},
-
-		leadingNumberFieldSymbolPosition: NumFieldSymPos.InsideNumField(),
-
-		trailingNumberSymbols:             RuneArrayDto{},
-		trailingNumberFieldSymbolPosition: 0,
-		lock:                              nil,
-	}
-
-	var numSymbols NumStrNumberSymbolGroup
-
-	err = numSymbols.negativeNumberSign.CopyIn(
-		&negativeNumberSign,
-		ePrefix.XCpy(
-			"numSymbols.negativeNumberSign<-"))
-
-	if err != nil {
-		return err
-	}
-
-	err = numSymbols.positiveNumberSign.CopyIn(
-		&positiveNumberSign,
-		ePrefix.XCpy(
-			"numSymbols.positiveNumberSign<-"))
-
-	if err != nil {
-		return err
-	}
-
-	err = numSymbols.zeroNumberSign.CopyIn(
-		&zeroNumberSign,
-		ePrefix.XCpy(
-			"numSymbols.zeroNumberSign<-"))
+	numSymbolsGroup,
+		err = new(NumStrNumberSymbolGroup).
+		NewSignedNumDefaultsUSMinus(
+			ePrefix.XCpy(
+				"numSymbolsGroup<-"))
 
 	if err != nil {
 		return err
@@ -1819,7 +1778,7 @@ func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setCurrencyNStrFmtUSMinus(
 		numStrFmtSpec,
 		decSeparator,
 		intSeparatorSpec,
-		numSymbols,
+		numSymbolsGroup,
 		numberFieldSpec,
 		ePrefix.XCpy("numStrFmtSpec<-"))
 }
