@@ -841,6 +841,329 @@ func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setCurrencyNStrFmtGermany(
 		ePrefix.XCpy("numStrFmtSpec<-"))
 }
 
+//	setCurrencyNStrFmtUKMinusInside
+//
+//	Deletes and resets the member variable data values
+//	stored in the instance of NumStrFormatSpec passed
+//	as input parameter 'numStrFmtSpec'.
+//
+//	Reconfigures the current instance of NumStrFormatSpec
+//	using Currency Number String formatting conventions
+//	typically applied in the UK (United Kingdom).
+//
+//	The default UK currency symbol is a leading Pound
+//	sign ('£').
+//
+//		UK Example:
+//			Positive Numeric Currency Value
+//				£ 123.45  Positive Value
+//
+//	The term "MinusInside" in the method name means that
+//	the Pound sign ('£') configured for negative numeric
+//	values will be inside, or to the right of, the Pound
+//	sign ('£').
+//
+//		UK Example:
+//			Negative Numeric Currency Value
+//				£ -123.45  Negative Value
+//
+//	Default values will be used to configure the current
+//	instance of NumStrNumberSymbolGroup with UK Currency
+//	Number formatting specifications. New data values
+//	will be configured for the positive, zero and
+//	negative number sign symbols as well as the currency
+//	symbol.
+//
+// ----------------------------------------------------------------
+//
+// # Reference:
+//
+//	https://learn.microsoft.com/en-us/globalization/locale/currency-formatting
+//
+//	https://www.thefinancials.com/Default.aspx?SubSectionID=curformat
+//
+//	https://www.codeproject.com/articles/78175/international-number-formats
+//
+//	https://docs.oracle.com/cd/E19455-01/806-0169/overview-9/index.html
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	Be advised that the data fields contained in the
+//	instance of NumStrFormatSpec passed as an input
+//	parameter will be deleted and replaced by Currency
+//	Number String formatting parameters typically
+//	applied the in UK (United Kingdom).
+//
+// ----------------------------------------------------------------
+//
+// # Defaults
+//
+//	Decimal Separator
+//
+//	The radix point or decimal separator is set to the
+//	period character ('.').
+//
+//		UK Example-1:
+//			123.45 (The fractional digits are "45")
+//
+//	Integer Separator
+//
+//	The integer group separator is a comma character
+//	(',').
+//
+//	The integer group specification is set to 'thousands'.
+//	This means that integer digits will be separated into
+//	'thousands' with each group containing three digits
+//	each:
+//
+//		UK Example-2:
+//			1,000,000
+//
+//	Currency Symbol
+//
+//	The default currency symbol used in the UK is the
+//	leading Pound symbol ('£').
+//
+//	Positive Numeric Values
+//
+//	The positive number sign is implied for positive
+//	numeric values. Therefore, the positive number sign
+//	symbol is set to a blank or empty string ("").
+//
+//		UK Example-3:
+//			Positive Numeric Currency Value
+//				£ 123.45
+//
+//	Zero Numeric Values
+//
+//	Zero numeric values have no number sign. Therefore,
+//	the zero number symbol is set to a blank or empty
+//	string ("").
+//
+//		UK Example-4:
+//			Zero Numeric Currency Value
+//				£ 0.00
+//
+//	Negative Numeric Values
+//
+//	The negative number sign is set to a leading minus
+//	sign ('-').
+//
+//	This method will configure the Pound sign ('£')
+//	such that any minus sign configured for negative
+//	numeric values will be inside, or to the right of,
+//	the Pound sign ('£').
+//
+//		UK Example-5:
+//			Negative Numeric Currency Value
+//				£ -123.45  Negative Value
+//
+//	The negative signed number symbol is configured with a
+//	leading minus sign ('-') meaning that all negative
+//	numeric values will be prefixed with a leading minus
+//	sign ('-'). The negative number sign and the currency
+//	symbol will be positioned inside the number field:
+//
+//		UK Example-6:
+//			NumFieldSymPos.InsideNumField()
+//				Number Field Length: 10
+//				Numeric Value: -123.45
+//				Number Symbol: leading minus sign ('-')
+//				Number Symbol Position: Inside Number Field
+//				Number Text Justification: Right Justified
+//				Formatted Number String: " £ -123.45"
+//				Number Field Index:------>0123456789
+//				Total Number String Length: 10
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	numStrFmtSpec				*NumStrFormatSpec
+//
+//		A pointer to a NumStrFormatSpec instance. All
+//		member variable data fields in this object will
+//		be replaced by data values configured from the
+//		input parameters described below.
+//
+//	numberFieldSpec				NumStrNumberFieldSpec
+//
+//		This Number Field Specification contains all
+//		parameters necessary to format a Number String
+//		within a larger Number Field. In addition to
+//		specifying the length of number field, this
+//		object contains justification specifications
+//		for centering, left justifying or right
+//		justifying a Number String within a Number
+//		Field.
+//
+//		type NumStrNumberFieldSpec struct {
+//
+//			fieldLength int
+//
+//				This parameter defines the length of the
+//				text field in which the numeric value will
+//				be displayed within a number string.
+//
+//				If 'fieldLength' is less than the length
+//				of the numeric value string, it will be
+//				automatically set equal to the length of
+//				that numeric value string.
+//
+//				To automatically set the value of
+//				'fieldLength' to the string length of the
+//				numeric value, set this parameter to a
+//				value of minus one (-1).
+//
+//				If this parameter is submitted with a
+//				value less than minus one (-1) or greater
+//				than 1-million (1,000,000), an error will
+//				be returned.
+//
+//			fieldJustification TextJustify
+//
+//				An enumeration which specifies the
+//				justification of the numeric value string
+//				within the number field length specified
+//				by data field 'fieldLength'.
+//
+//				Text justification can only be evaluated in
+//				the context of a number string, field length
+//				and a 'textJustification' object of type
+//				TextJustify. This is because number strings
+//				with a field length equal to or less than the
+//				length of the numeric value string never use
+//				text justification. In these cases, text
+//				justification is completely ignored.
+//
+//				If the field length parameter ('fieldLength')
+//				is greater than the length of the numeric
+//				value string, text justification must be equal
+//				to one of these three valid values:
+//
+//				          TextJustify(0).Left()
+//				          TextJustify(0).Right()
+//				          TextJustify(0).Center()
+//
+//				You can also use the abbreviated text justification
+//				enumeration syntax as follows:
+//
+//				          TxtJustify.Left()
+//				          TxtJustify.Right()
+//				          TxtJustify.Center()
+//		}
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// -----------------------------------------------------------------
+//
+// # Return Values
+//
+//	err							error
+//
+//		If this method completes successfully, this
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setCurrencyNStrFmtUKMinusInside(
+	numStrFmtSpec *NumStrFormatSpec,
+	numberFieldSpec NumStrNumberFieldSpec,
+	errPrefDto *ePref.ErrPrefixDto) (
+	err error) {
+
+	if nStrFmtSpecNanobot.lock == nil {
+		nStrFmtSpecNanobot.lock = new(sync.Mutex)
+	}
+
+	nStrFmtSpecNanobot.lock.Lock()
+
+	defer nStrFmtSpecNanobot.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"numStrFmtSpecNanobot."+
+			"setCurrencyNStrFmtUKMinusInside()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if numStrFmtSpec == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'numStrFmtSpec' is invalid!\n"+
+			"'numStrFmtSpec' is a 'nil' pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	var decSeparator DecimalSeparatorSpec
+
+	decSeparator,
+		err = new(DecimalSeparatorSpec).NewUS(
+		ePrefix.XCpy("decSeparator"))
+
+	if err != nil {
+		return err
+	}
+
+	var intSeparatorSpec IntegerSeparatorSpec
+
+	intSeparatorSpec,
+		err = new(IntegerSeparatorSpec).NewUnitedStatesDefaults(
+		ePrefix.XCpy("intSeparatorSpec"))
+
+	if err != nil {
+		return err
+	}
+
+	var numSymbolsGroup NumStrNumberSymbolGroup
+
+	numSymbolsGroup,
+		err = new(NumStrNumberSymbolGroup).
+		NewCurrencyDefaultsUKMinusInside(
+			ePrefix.XCpy(
+				"numSymbolsGroup<-"))
+
+	if err != nil {
+		return err
+	}
+
+	return new(numStrFmtSpecAtom).setNStrFmtComponents(
+		numStrFmtSpec,
+		decSeparator,
+		intSeparatorSpec,
+		numSymbolsGroup,
+		numberFieldSpec,
+		ePrefix.XCpy("numStrFmtSpec<-"))
+}
+
 //	setCurrencyNStrFmtUKMinusOutside
 //
 //	Deletes and resets the member variable data values
