@@ -4096,7 +4096,6 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSignedNumDefaultsUSMinus(
 //	formatting in accordance with number string
 //	formatting standards used in the United States (US).
 //
-//
 //	The term 'Paren' in the method name signals that
 //	negative numeric values will be configured with a
 //	surrounding parentheses ('()').
