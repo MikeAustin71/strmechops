@@ -38,6 +38,10 @@ func TestTextFieldFormatDtoFloat64_FmtNumStr_000100(t *testing.T) {
 		"",
 		"",
 		NumFieldSymPos.InsideNumField(),
+		"",
+		"",
+		NumFieldSymPos.None(),
+		CurrNumSignRelPos.None(),
 		23,
 		TxtJustify.Center(),
 		ePrefix.XCpy(

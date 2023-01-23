@@ -2525,6 +2525,10 @@ func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setNStrNumberFieldSpec(
 	leadingZeroNumSign []rune,
 	trailingZeroNumSign []rune,
 	zeroNumFieldSymPosition NumberFieldSymbolPosition,
+	leadingCurrencySymbols []rune,
+	trailingCurrencySymbols []rune,
+	currencyNumFieldSymPosition NumberFieldSymbolPosition,
+	currencyNumSignRelPos CurrencyNumSignRelativePosition,
 	numFieldLength int,
 	numFieldJustification TextJustify,
 	errPrefDto *ePref.ErrPrefixDto) (
@@ -2589,43 +2593,24 @@ func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setNStrNumberFieldSpec(
 		return err
 	}
 
-	err = signedNumFmtSpecAtom.setPositiveNumberSign(
-		numStrFmtSpec,
-		leadingPosNumSign,
-		positiveNumFieldSymPosition,
-		trailingPosNumSign,
-		positiveNumFieldSymPosition,
-		ePrefix.XCpy(
-			"numStrFmtSpec<-"+
-				"Positive Number Sign Params"))
-
-	if err != nil {
-		return err
-	}
-
-	err = signedNumFmtSpecAtom.setNegativeNumberSign(
-		numStrFmtSpec,
-		leadingNegNumSign,
-		negativeNumFieldSymPosition,
-		trailingNegNumSign,
-		negativeNumFieldSymPosition,
-		ePrefix.XCpy(
-			"numStrFmtSpec<-"+
-				"Negative Number Sign Params"))
-
-	if err != nil {
-		return err
-	}
-
-	err = signedNumFmtSpecAtom.setZeroNumberSign(
-		numStrFmtSpec,
-		leadingZeroNumSign,
-		zeroNumFieldSymPosition,
-		trailingZeroNumSign,
-		zeroNumFieldSymPosition,
-		ePrefix.XCpy(
-			"numStrFmtSpec<-"+
-				"Zero Number Sign Params"))
+	numStrFmtSpec.numberSymbolsSpec,
+		err = new(NumStrNumberSymbolGroup).
+		NewSymbolsRunes(
+			leadingPosNumSign,
+			trailingPosNumSign,
+			positiveNumFieldSymPosition,
+			leadingNegNumSign,
+			trailingNegNumSign,
+			negativeNumFieldSymPosition,
+			leadingZeroNumSign,
+			trailingZeroNumSign,
+			zeroNumFieldSymPosition,
+			leadingCurrencySymbols,
+			trailingCurrencySymbols,
+			currencyNumFieldSymPosition,
+			currencyNumSignRelPos,
+			ePrefix.XCpy(
+				"numStrFmtSpec.numberSymbolsSpec"))
 
 	if err != nil {
 		return err

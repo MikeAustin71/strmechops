@@ -5985,6 +5985,189 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtComponents(
 //				specification, the final length of the number
 //				string is greater than the Number Field length.
 //
+//	leadingCurrencySymbol     		string
+//
+//		A string containing one or more Leading
+//		Currency Symbol characters used to configure
+//		the returned instance of NumStrNumberSymbolSpec.
+//
+//		Leading Currency Symbol characters can include
+//		such symbols as the dollar sign ('$'), Euro sign
+//	 	('€') and Pound sign ('£').
+//
+//		Leading Currency Symbols are prefixed or
+//		prepended to the beginning of number strings
+//		containing currency numeric values.
+//
+//		Currency Symbols are optional. If Currency
+//		Symbols are not required, set
+//		'leadingCurrencySymbol' to 'nil'.
+//
+//	trailingCurrencySymbol     		string
+//
+//		A string containing one or more Trailing
+//		Currency Symbol characters used to configure
+//		the returned instance of NumStrNumberSymbolSpec.
+//
+//		Trailing Currency Symbol characters can include
+//		such symbols as the dollar sign ('$'), Euro sign
+//	 	('€') and Pound sign ('£').
+//
+//		Trailing Currency Symbols are suffixed or
+//		appended to the end of number strings containing
+//		currency numeric values.
+//
+//				Example: 125.34€
+//
+//		Currency Symbols are optional. If Currency
+//		Symbols are not required, set
+//		'trailingCurrencySymbol' to 'nil'.
+//
+//	currencyNumFieldSymPosition		NumberFieldSymbolPosition
+//
+//		Defines the position of the Leading Currency
+//		Symbol ('leadingCurrencySymbol') relative to a
+//		Number Field in which a number string is
+//		displayed. Possible valid values are listed as
+//		follows:
+//
+//			NumFieldSymPos.InsideNumField()
+//			NumFieldSymPos.OutsideNumField()
+//
+//		Examples NumFieldSymPos.InsideNumField()
+//
+//			Example-1:
+//				Number Field Length: 10
+//				Numeric Value: 123.45
+//				Leading Currency Symbol: Dollar sign ('$')
+//				Trailing Currency Symbol: Dollar sign ('$')
+//				Number Symbol Position: Inside Number Field
+//			    Number Text Justification: Right Justified
+//				Formatted Number String: " $123.45$"
+//				Number Field Index:------>012345679
+//				Total Number String Length: 10
+//
+//			Example-2:
+//				Number Field Length: 12
+//				Numeric Value: 123.45
+//				Leading Currency Symbol: Dollar sign ('$')
+//				Trailing Currency Symbol: Dollar sign ('$')
+//				Number Symbol Position: Inside Number Field
+//				Number Text Justification: Centered
+//				Formatted Number String: "  $123.45$  "
+//				Number Field Index:------>012345678901
+//				Total Number String Length: 12
+//
+//			For the 'NumFieldSymPos.InsideNumField()' specification,
+//			the final length of the number string is defined by the
+//			Number Field length.
+//
+//		Examples NumFieldSymPos.OutsideNumField()
+//
+//			Example-3:
+//				Number Field Length: 8
+//			    Numeric Value: 123.45
+//				Leading Currency Symbol: Dollar sign ('$')
+//				Trailing Currency Symbol: Dollar sign ('$')
+//			    Number Symbol Position: Outside Number Field
+//			    Number Text Justification: Right Justified
+//			    Formatted Number String: "$  123.45$"
+//				Number Field Index:------>0123456789
+//				Total Number String Length: 10
+//
+//			Example-4:
+//				Number Field Length: 10
+//				Numeric Value: 123.45
+//				Leading Currency Symbol: Dollar sign ('$')
+//				Trailing Currency Symbol: Dollar sign ('$')
+//				Number Symbol Position: Outside Number Field
+//			    Number Text Justification: Centered
+//				Formatted Number String: "$  123.45  $"
+//				Number Field Index:------>012345678901
+//				Total Number String Length: 12
+//
+//			For the 'NumFieldSymPos.OutsideNumField()' specification,
+//			the final length of the number string is greater than
+//			the Number Field length.
+//
+//	currencyNumSignRelPos			CurrencyNumSignRelativePosition
+//
+//		Currency Symbols have the option of being
+//		positioned either inside or outside number sign
+//		symbols formatted with numeric values in a
+//		number string.
+//
+//		Examples of number sign symbols include minus
+//		signs ('-'), plus signs ('+') and surrounding
+//		parentheses ("()").
+//
+//		Parameter 'currencyNumSignRelPos' is an instance
+//		of type CurrencyNumSignRelativePosition which
+//		serves as an enumeration. This enumeration has
+//		three possible values, only two of which are
+//		valid:
+//
+//			CurrNumSignRelPos.None()			- Invalid
+//			CurrNumSignRelPos.OutsideNumSign()	- Valid
+//			CurrNumSignRelPos.InsideNumSign()	- Valid
+//
+//		'CurrNumSignRelPos' is global constant used to
+//		abbreviate the syntax for invoking these
+//		enumeration	values. The formal syntax is:
+//
+//			CurrencyNumSignRelativePosition(0).OutsideNumSign()
+//			CurrencyNumSignRelativePosition(0).InsideNumSign()
+//
+//		Examples CurrNumSignRelPos.OutsideNumSign()
+//				"$ -123.45"
+//				"123.45- €"
+//				"£ -123.45"
+//
+//		Examples CurrNumSignRelPos.InsideNumSign()
+//
+//			Examples:
+//				"- $123.45"
+//				"123.45€ -"
+//				"- £123.45"
+//
+//		NumberFieldSymbolPosition Conflicts
+//
+//		When formatting a number string, the
+//		NumberFieldSymbolPosition values for both the
+//		Currency Symbol and the Number Sign Symbol
+//		MUST BE EQUAL before the Currency Number Sign
+//		Relative Position parameter,
+//		('currencyNumSignRelPos'), will be activated
+//		and applied to the number string formatting
+//		algorithm.
+//
+//		If the NumberFieldSymbolPosition values for both
+//		the	Currency Symbol and the Number Sign Symbol
+//		ARE NOT EQUAL, the NumberFieldSymbolPosition
+//		parameter controls and the Currency Number Sign
+//		Relative Position parameter,
+//		('currencyNumSignRelPos'), will be ignored.
+//
+//		Example:
+//			-- NumberFieldSymbolPosition Values NOT EQUAL --
+//
+//			Number Field Length: 8
+//		  	Numeric Value: -123.45
+//			Minus Sign Number Field Symbol Position:
+//				NumFieldSymPos.InsideNumField()
+//			Currency Number Field Symbol Position:
+//				NumFieldSymPos.OutsideNumField()
+//			Currency Number Sign Relative Position:
+//				CurrNumSignRelPos.InsideNumSign()
+//			Leading Currency Symbol: Dollar sign ('$')
+//			Number Text Justification: Right Justified
+//			Formatted Number String: "$ -123.45"
+//			Number Field Index:------>012345678
+//			Total Number String Length: 9
+//
+//			Currency Symbol is Formatted OUTSIDE
+//			the Number Field.
+//
 //	numFieldLength					int
 //
 //		This parameter defines the length of the text
@@ -6205,6 +6388,10 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtParams(
 	leadingZeroNumSign string,
 	trailingZeroNumSign string,
 	zeroNumFieldSymPosition NumberFieldSymbolPosition,
+	leadingCurrencySymbols string,
+	trailingCurrencySymbols string,
+	currencyNumFieldSymPosition NumberFieldSymbolPosition,
+	currencyNumSignRelPos CurrencyNumSignRelativePosition,
 	numFieldLength int,
 	numFieldJustification TextJustify,
 	errorPrefix interface{}) (
@@ -6247,6 +6434,10 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtParams(
 			[]rune(leadingZeroNumSign),
 			[]rune(trailingZeroNumSign),
 			zeroNumFieldSymPosition,
+			[]rune(leadingCurrencySymbols),
+			[]rune(trailingCurrencySymbols),
+			currencyNumFieldSymPosition,
+			currencyNumSignRelPos,
 			numFieldLength,
 			numFieldJustification,
 			ePrefix.XCpy(
@@ -6578,6 +6769,192 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtParams(
 //				specification, the final length of the number
 //				string is greater than the Number Field length.
 //
+//	leadingCurrencySymbol     		[]rune
+//
+//		A rune array containing one or more Leading
+//		Currency Symbol characters used to configure
+//		the current instance of NumStrNumberSymbolSpec.
+//
+//		Leading Currency Symbol characters can include
+//		such symbols as the Dollar sign ('$'), Euro sign
+//	 	('€') and Pound sign ('£').
+//
+//		Leading Currency Symbols are prefixed or
+//		prepended to the beginning of number strings
+//		containing currency numeric values.
+//
+//				Example: $125.34
+//
+//		Currency Symbols are optional. If Currency
+//		Symbols are not required, set
+//		'leadingCurrencySymbol' to 'nil'.
+//
+//	trailingCurrencySymbol     		[]rune
+//
+//		A rune array containing one or more Trailing
+//		Currency Symbol characters used to configure
+//		the current instance of NumStrNumberSymbolSpec.
+//
+//		Trailing Currency Symbol characters can include
+//		such symbols as the dollar sign ('$'), Euro sign
+//	 	('€') and Pound sign ('£').
+//
+//		Trailing Currency Symbols are suffixed or
+//		appended to the end of number strings containing
+//		currency numeric values.
+//
+//				Example: 125.34€
+//
+//		Currency Symbols are optional. If Currency
+//		Symbols are not required, set
+//		'trailingCurrencySymbol' to 'nil'.
+//
+//	currencyNumFieldSymPosition		NumberFieldSymbolPosition
+//
+//		Defines the position of the Leading Currency
+//		Symbol ('leadingCurrencySymbol') and Trailing
+//		Currency Symbol ('trailingCurrencySymbol')
+//		relative to a Number Field in which a number
+//		string is displayed. Possible valid values are
+//		listed as follows:
+//
+//			NumFieldSymPos.InsideNumField()
+//			NumFieldSymPos.OutsideNumField()
+//
+//		Examples NumFieldSymPos.InsideNumField()
+//
+//			Example-1:
+//				Number Field Length: 10
+//				Numeric Value: 123.45
+//				Leading Currency Symbol: Dollar sign ('$')
+//				Trailing Currency Symbol: Dollar sign ('$')
+//				Number Symbol Position: Inside Number Field
+//			    Number Text Justification: Right Justified
+//				Formatted Number String: " $123.45$"
+//				Number Field Index:------>012345679
+//				Total Number String Length: 10
+//
+//			Example-2:
+//				Number Field Length: 12
+//				Numeric Value: 123.45
+//				Leading Currency Symbol: Dollar sign ('$')
+//				Trailing Currency Symbol: Dollar sign ('$')
+//				Number Symbol Position: Inside Number Field
+//				Number Text Justification: Centered
+//				Formatted Number String: "  $123.45$  "
+//				Number Field Index:------>012345678901
+//				Total Number String Length: 12
+//
+//			For the 'NumFieldSymPos.InsideNumField()' specification,
+//			the final length of the number string is defined by the
+//			Number Field length.
+//
+//		Examples NumFieldSymPos.OutsideNumField()
+//
+//			Example-3:
+//				Number Field Length: 8
+//			    Numeric Value: 123.45
+//				Leading Currency Symbol: Dollar sign ('$')
+//				Trailing Currency Symbol: Dollar sign ('$')
+//			    Number Symbol Position: Outside Number Field
+//			    Number Text Justification: Right Justified
+//			    Formatted Number String: "$  123.45$"
+//				Number Field Index:------>0123456789
+//				Total Number String Length: 10
+//
+//			Example-4:
+//				Number Field Length: 10
+//				Numeric Value: 123.45
+//				Leading Currency Symbol: Dollar sign ('$')
+//				Trailing Currency Symbol: Dollar sign ('$')
+//				Number Symbol Position: Outside Number Field
+//			    Number Text Justification: Centered
+//				Formatted Number String: "$  123.45  $"
+//				Number Field Index:------>012345678901
+//				Total Number String Length: 12
+//
+//			For the 'NumFieldSymPos.OutsideNumField()' specification,
+//			the final length of the number string is greater than
+//			the Number Field length.
+//
+//	currencyNumSignRelPos			CurrencyNumSignRelativePosition
+//
+//		Currency Symbols have the option of being
+//		positioned either inside or outside number sign
+//		symbols formatted with numeric values in a
+//		number string.
+//
+//		Examples of number sign symbols include minus
+//		signs ('-'), plus signs ('+') and surrounding
+//		parentheses ("()").
+//
+//		Parameter 'currencyNumSignRelPos' is an instance
+//		of type CurrencyNumSignRelativePosition which
+//		serves as an enumeration. This enumeration has
+//		three possible values, only two of which are
+//		valid:
+//
+//			CurrNumSignRelPos.None()			- Invalid
+//			CurrNumSignRelPos.OutsideNumSign()	- Valid
+//			CurrNumSignRelPos.InsideNumSign()	- Valid
+//
+//		'CurrNumSignRelPos' is global constant used to
+//		abbreviate the syntax for invoking these
+//		enumeration	values. The formal syntax is:
+//
+//			CurrencyNumSignRelativePosition(0).OutsideNumSign()
+//			CurrencyNumSignRelativePosition(0).InsideNumSign()
+//
+//		Examples CurrNumSignRelPos.OutsideNumSign()
+//				"$ -123.45"
+//				"123.45- €"
+//				"£ -123.45"
+//
+//		Examples CurrNumSignRelPos.InsideNumSign()
+//
+//			Examples:
+//				"- $123.45"
+//				"123.45€ -"
+//				"- £123.45"
+//
+//		NumberFieldSymbolPosition Conflicts
+//
+//		When formatting a number string, the
+//		NumberFieldSymbolPosition values for both the
+//		Currency Symbol and the Number Sign Symbol
+//		MUST BE EQUAL before the Currency Number Sign
+//		Relative Position parameter,
+//		('currencyNumSignRelPos'), will be activated
+//		and applied to the number string formatting
+//		algorithm.
+//
+//		If the NumberFieldSymbolPosition values for both
+//		the	Currency Symbol and the Number Sign Symbol
+//		ARE NOT EQUAL, the NumberFieldSymbolPosition
+//		parameter controls and the Currency Number Sign
+//		Relative Position parameter,
+//		('currencyNumSignRelPos'), will be ignored.
+//
+//		Example:
+//			-- NumberFieldSymbolPosition Values NOT EQUAL --
+//
+//			Number Field Length: 8
+//		  	Numeric Value: -123.45
+//			Minus Sign Number Field Symbol Position:
+//				NumFieldSymPos.InsideNumField()
+//			Currency Number Field Symbol Position:
+//				NumFieldSymPos.OutsideNumField()
+//			Currency Number Sign Relative Position:
+//				CurrNumSignRelPos.InsideNumSign()
+//			Leading Currency Symbol: Dollar sign ('$')
+//			Number Text Justification: Right Justified
+//			Formatted Number String: "$ -123.45"
+//			Number Field Index:------>012345678
+//			Total Number String Length: 9
+//
+//			Currency Symbol is Formatted OUTSIDE
+//			the Number Field.
+//
 //	numFieldLength				int
 //
 //		This parameter defines the length of the text
@@ -6605,7 +6982,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtParams(
 //
 //		Text justification can only be evaluated in the
 //		context of a number string, field length and a
-//		'textJustification' object of type TextJustify.
+//		'numFieldJustification' object of type TextJustify.
 //		This is because number strings with a field length
 //		equal to or less than the length of the numeric
 //		value string never use text justification. In
@@ -6721,6 +7098,10 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtParamsRunes(
 	leadingZeroNumSign []rune,
 	trailingZeroNumSign []rune,
 	zeroNumFieldSymPosition NumberFieldSymbolPosition,
+	leadingCurrencySymbols []rune,
+	trailingCurrencySymbols []rune,
+	currencyNumFieldSymPosition NumberFieldSymbolPosition,
+	currencyNumSignRelPos CurrencyNumSignRelativePosition,
 	numFieldLength int,
 	numFieldJustification TextJustify,
 	errorPrefix interface{}) (
@@ -6763,6 +7144,10 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtParamsRunes(
 			leadingZeroNumSign,
 			trailingZeroNumSign,
 			zeroNumFieldSymPosition,
+			leadingCurrencySymbols,
+			trailingCurrencySymbols,
+			currencyNumFieldSymPosition,
+			currencyNumSignRelPos,
 			numFieldLength,
 			numFieldJustification,
 			ePrefix.XCpy(
@@ -11494,13 +11879,307 @@ func (numStrFmtSpec *NumStrFormatSpec) SetNumFmtComponents(
 //				the final length of the number string is greater than
 //				the Number Field length.
 //
-//	fieldLength					int
+//	leadingZeroNumberSymbols		string
+//
+//		A string containing the leading zero number sign
+//		character or characters used to configure a	Number
+//		Sign Symbol in a number string with a zero
+//		numeric value.
+//
+//		Zero number signs are commonly omitted because
+//		zero does not technically qualify as either a
+//		positive or negative value. However, users have
+//		the option to configure any combination of
+//		symbols for zero numeric values.
+//
+//		Leading number symbols can include any
+//		combination of characters such as plus signs
+//		('+').
+//
+//		Example: Leading Number Symbols
+//			Leading Number Symbols for Zero Values
+//
+//			Leading Symbols: "$"
+//			Trailing Symbols: ""
+//			Number String:   "$0.00"
+//
+//		If leading zero number symbols are NOT required,
+//		set this parameter to empty an empty string.
+//
+//	trailingZeroNumberSymbols		string
+//
+//		A string containing the trailing zero number sign
+//		character or characters used to configure a Number
+//		Sign Symbol in a number string with a zero
+//		numeric value.
+//
+//		Zero number signs are commonly omitted because
+//		zero does not technically qualify as either a
+//		positive or negative value. However, users have
+//		the option to configure any combination of
+//		symbols for zero numeric values.
+//
+//		Trailing number symbols can include any combination
+//		of characters such as plus signs ('+').
+//
+//		Example: Trailing Number Symbols
+//			Trailing Number Symbols for Zero Values
+//
+//			Leading Symbols: ""
+//			Trailing Symbols: " +"
+//			Number String:   "0.00 +"
+//
+//		If trailing zero number symbols are NOT required,
+//		set this parameter to an empty string.
+//
+//	zeroNumFieldSymPosition			NumberFieldSymbolPosition
+//
+//		Defines the position of the zero Number Sign
+//		relative to a Number Field in which a number
+//		string is displayed. Possible valid values are
+//		listed as follows:
+//
+//			NumFieldSymPos.InsideNumField()
+//				Example-1:
+//					Number Field Length: 8
+//					Numeric Value: 123.45
+//					Number Symbol: leading plus sign ('+')
+//					Number Symbol Position: Inside Number Field
+//			     	Number Text Justification: Right Justified
+//					Formatted Number String: " +123.45"
+//					Number Field Index:       01234567
+//					Total Number String Length: 8
+//
+//				Example-2:
+//					Number Field Length: 8
+//					Numeric Value: 123.45
+//					Number Symbol: trailing plus sign ('+')
+//					Number Symbol Position: Inside Number Field
+//			     	Number Text Justification: Right Justified
+//					Formatted Number String: " 123.45+"
+//					Number Field Index:       01234567
+//					Total Number String Length: 8
+//
+//				For the 'NumFieldSymPos.InsideNumField()'
+//				specification, the final length of the
+//				number string is defined by the Number
+//				Field length.
+//
+//			NumFieldSymPos.OutsideNumField()
+//				Example-3:
+//					Number Field Length: 8
+//			     	Numeric Value: 123.45
+//			     	Number Symbol: leading plus sign ('+')
+//			     	Number Symbol Position: Outside Number Field
+//			     	Number Text Justification: Right Justified
+//			     	Formatted Number String: "+  123.45"
+//					Number Field Index:       012345678
+//					Total Number String Length: 9
+//
+//				Example-4:
+//					Number Field Length: 8
+//			     	Numeric Value: 123.45
+//			     	Number Symbol: trailing plus sign ('+')
+//			     	Number Symbol Position: Outside Number Field
+//			     	Number Text Justification: Right Justified
+//			     	Formatted Number String: "  123.45+"
+//					Number Field Index:       012345678
+//					Total Number String Length: 9
+//
+//				For the 'NumFieldSymPos.OutsideNumField()'
+//				specification, the final length of the number
+//				string is greater than the Number Field length.
+//
+//	leadingCurrencySymbol     		string
+//
+//		A string containing one or more Leading
+//		Currency Symbol characters used to configure
+//		the returned instance of NumStrNumberSymbolSpec.
+//
+//		Leading Currency Symbol characters can include
+//		such symbols as the dollar sign ('$'), Euro sign
+//	 	('€') and Pound sign ('£').
+//
+//		Leading Currency Symbols are prefixed or
+//		prepended to the beginning of number strings
+//		containing currency numeric values.
+//
+//		Currency Symbols are optional. If Currency
+//		Symbols are not required, set
+//		'leadingCurrencySymbol' to 'nil'.
+//
+//	trailingCurrencySymbol     		string
+//
+//		A string containing one or more Trailing
+//		Currency Symbol characters used to configure
+//		the returned instance of NumStrNumberSymbolSpec.
+//
+//		Trailing Currency Symbol characters can include
+//		such symbols as the dollar sign ('$'), Euro sign
+//	 	('€') and Pound sign ('£').
+//
+//		Trailing Currency Symbols are suffixed or
+//		appended to the end of number strings containing
+//		currency numeric values.
+//
+//				Example: 125.34€
+//
+//		Currency Symbols are optional. If Currency
+//		Symbols are not required, set
+//		'trailingCurrencySymbol' to 'nil'.
+//
+//	currencyNumFieldSymPosition		NumberFieldSymbolPosition
+//
+//		Defines the position of the Leading Currency
+//		Symbol ('leadingCurrencySymbol') relative to a
+//		Number Field in which a number string is
+//		displayed. Possible valid values are listed as
+//		follows:
+//
+//			NumFieldSymPos.InsideNumField()
+//			NumFieldSymPos.OutsideNumField()
+//
+//		Examples NumFieldSymPos.InsideNumField()
+//
+//			Example-1:
+//				Number Field Length: 10
+//				Numeric Value: 123.45
+//				Leading Currency Symbol: Dollar sign ('$')
+//				Trailing Currency Symbol: Dollar sign ('$')
+//				Number Symbol Position: Inside Number Field
+//			    Number Text Justification: Right Justified
+//				Formatted Number String: " $123.45$"
+//				Number Field Index:------>012345679
+//				Total Number String Length: 10
+//
+//			Example-2:
+//				Number Field Length: 12
+//				Numeric Value: 123.45
+//				Leading Currency Symbol: Dollar sign ('$')
+//				Trailing Currency Symbol: Dollar sign ('$')
+//				Number Symbol Position: Inside Number Field
+//				Number Text Justification: Centered
+//				Formatted Number String: "  $123.45$  "
+//				Number Field Index:------>012345678901
+//				Total Number String Length: 12
+//
+//			For the 'NumFieldSymPos.InsideNumField()' specification,
+//			the final length of the number string is defined by the
+//			Number Field length.
+//
+//		Examples NumFieldSymPos.OutsideNumField()
+//
+//			Example-3:
+//				Number Field Length: 8
+//			    Numeric Value: 123.45
+//				Leading Currency Symbol: Dollar sign ('$')
+//				Trailing Currency Symbol: Dollar sign ('$')
+//			    Number Symbol Position: Outside Number Field
+//			    Number Text Justification: Right Justified
+//			    Formatted Number String: "$  123.45$"
+//				Number Field Index:------>0123456789
+//				Total Number String Length: 10
+//
+//			Example-4:
+//				Number Field Length: 10
+//				Numeric Value: 123.45
+//				Leading Currency Symbol: Dollar sign ('$')
+//				Trailing Currency Symbol: Dollar sign ('$')
+//				Number Symbol Position: Outside Number Field
+//			    Number Text Justification: Centered
+//				Formatted Number String: "$  123.45  $"
+//				Number Field Index:------>012345678901
+//				Total Number String Length: 12
+//
+//			For the 'NumFieldSymPos.OutsideNumField()' specification,
+//			the final length of the number string is greater than
+//			the Number Field length.
+//
+//	currencyNumSignRelPos			CurrencyNumSignRelativePosition
+//
+//		Currency Symbols have the option of being
+//		positioned either inside or outside number sign
+//		symbols formatted with numeric values in a
+//		number string.
+//
+//		Examples of number sign symbols include minus
+//		signs ('-'), plus signs ('+') and surrounding
+//		parentheses ("()").
+//
+//		Parameter 'currencyNumSignRelPos' is an instance
+//		of type CurrencyNumSignRelativePosition which
+//		serves as an enumeration. This enumeration has
+//		three possible values, only two of which are
+//		valid:
+//
+//			CurrNumSignRelPos.None()			- Invalid
+//			CurrNumSignRelPos.OutsideNumSign()	- Valid
+//			CurrNumSignRelPos.InsideNumSign()	- Valid
+//
+//		'CurrNumSignRelPos' is global constant used to
+//		abbreviate the syntax for invoking these
+//		enumeration	values. The formal syntax is:
+//
+//			CurrencyNumSignRelativePosition(0).OutsideNumSign()
+//			CurrencyNumSignRelativePosition(0).InsideNumSign()
+//
+//		Examples CurrNumSignRelPos.OutsideNumSign()
+//				"$ -123.45"
+//				"123.45- €"
+//				"£ -123.45"
+//
+//		Examples CurrNumSignRelPos.InsideNumSign()
+//
+//			Examples:
+//				"- $123.45"
+//				"123.45€ -"
+//				"- £123.45"
+//
+//		NumberFieldSymbolPosition Conflicts
+//
+//		When formatting a number string, the
+//		NumberFieldSymbolPosition values for both the
+//		Currency Symbol and the Number Sign Symbol
+//		MUST BE EQUAL before the Currency Number Sign
+//		Relative Position parameter,
+//		('currencyNumSignRelPos'), will be activated
+//		and applied to the number string formatting
+//		algorithm.
+//
+//		If the NumberFieldSymbolPosition values for both
+//		the	Currency Symbol and the Number Sign Symbol
+//		ARE NOT EQUAL, the NumberFieldSymbolPosition
+//		parameter controls and the Currency Number Sign
+//		Relative Position parameter,
+//		('currencyNumSignRelPos'), will be ignored.
+//
+//		Example:
+//			-- NumberFieldSymbolPosition Values NOT EQUAL --
+//
+//			Number Field Length: 8
+//		  	Numeric Value: -123.45
+//			Minus Sign Number Field Symbol Position:
+//				NumFieldSymPos.InsideNumField()
+//			Currency Number Field Symbol Position:
+//				NumFieldSymPos.OutsideNumField()
+//			Currency Number Sign Relative Position:
+//				CurrNumSignRelPos.InsideNumSign()
+//			Leading Currency Symbol: Dollar sign ('$')
+//			Number Text Justification: Right Justified
+//			Formatted Number String: "$ -123.45"
+//			Number Field Index:------>012345678
+//			Total Number String Length: 9
+//
+//			Currency Symbol is Formatted OUTSIDE
+//			the Number Field.
+//
+//	numFieldLength				int
 //
 //		This parameter defines the length of the text field in
 //		which the numeric value will be displayed within a
 //		number string.
 //
-//		If 'fieldLength' is less than the length of the numeric
+//		If 'numFieldLength' is less than the length of the numeric
 //		value string, it will be automatically set equal to the
 //		length of that numeric value string.
 //
@@ -11512,20 +12191,20 @@ func (numStrFmtSpec *NumStrFormatSpec) SetNumFmtComponents(
 //		one (-1) or greater than 1-million (1,000,000), an error will
 //		be returned.
 //
-//	fieldJustification			TextJustify
+//	numFieldJustification		TextJustify
 //
 //		An enumeration which specifies the justification of the
 //		numeric value within the number field length specified
-//		by input parameter 'fieldLength'.
+//		by input parameter 'numFieldLength'.
 //
 //		Text justification can only be evaluated in the context of
-//		a number string, field length and a 'textJustification'
+//		a number string, field length and a 'numFieldJustification'
 //		object of type TextJustify. This is because number strings
 //		with a field length equal to or less than the length of the
 //		numeric value string never use text justification. In these
 //		cases, text justification is completely ignored.
 //
-//		If the field length parameter ('fieldLength') is greater
+//		If the field length parameter ('numFieldLength') is greater
 //		than the length of the numeric value string, text
 //		justification must be equal to one of these
 //		three valid values:
@@ -11626,6 +12305,10 @@ func (numStrFmtSpec *NumStrFormatSpec) SetNumFmtParams(
 	leadingZeroNumSign string,
 	trailingZeroNumSign string,
 	zeroNumFieldSymPosition NumberFieldSymbolPosition,
+	leadingCurrencySymbols string,
+	trailingCurrencySymbols string,
+	currencyNumFieldSymPosition NumberFieldSymbolPosition,
+	currencyNumSignRelPos CurrencyNumSignRelativePosition,
 	numFieldLength int,
 	numFieldJustification TextJustify,
 	errorPrefix interface{}) (
@@ -11667,6 +12350,10 @@ func (numStrFmtSpec *NumStrFormatSpec) SetNumFmtParams(
 			[]rune(leadingZeroNumSign),
 			[]rune(trailingZeroNumSign),
 			zeroNumFieldSymPosition,
+			[]rune(leadingCurrencySymbols),
+			[]rune(trailingCurrencySymbols),
+			currencyNumFieldSymPosition,
+			currencyNumSignRelPos,
 			numFieldLength,
 			numFieldJustification,
 			ePrefix.XCpy(
@@ -11918,13 +12605,313 @@ func (numStrFmtSpec *NumStrFormatSpec) SetNumFmtParams(
 //				the final length of the number string is greater than
 //				the Number Field length.
 //
-//	fieldLength					int
+//	leadingZeroNumberSymbols	[]rune
+//
+//		A rune array containing the leading zero
+//		number sign character or characters used to
+//		configure Zero Number Sign Symbols in a
+//		number string with a zero numeric value.
+//
+//		Zero number signs are commonly omitted because
+//		zero does not technically qualify as either a
+//		positive or negative value. However, users have
+//		the option to configure any combination of
+//		symbols for zero numeric values.
+//
+//		Leading number symbols can include any
+//		combination of characters such as plus signs
+//		('+').
+//
+//		Example: Leading Number Symbols
+//			Leading Number Symbols for Zero Values
+//
+//			Leading Symbols: "+"
+//			Trailing Symbols: ""
+//			Number String:   "+0.00"
+//
+//		If leading zero number symbols are NOT required,
+//		set this parameter to 'nil' for an empty rune
+//		array.
+//
+//	trailingZeroNumberSymbols	[]rune
+//
+//		A rune array containing the trailing zero
+//		number sign character or characters used to
+//		configure Zero Number Sign Symbols in a
+//		number string with a zero numeric value.
+//
+//		Zero number signs are commonly omitted because
+//		zero does not technically qualify as either a
+//		positive or negative value. However, user have
+//		the option to configure any combination of
+//		symbols.
+//
+//		Trailing number symbols can include any
+//		combination of characters such as plus signs
+//		('+').
+//
+//		Example: Trailing Number Symbols
+//			Trailing Number Symbols for Zero Values
+//
+//			Leading Symbols: ""
+//			Trailing Symbols: " +"
+//			Number String:   "0.00 +"
+//
+//		If trailing zero number symbols are NOT required,
+//		set this parameter to 'nil' for an empty rune
+//		array.
+//
+//	zeroNumFieldSymPosition			NumberFieldSymbolPosition
+//
+//		Defines the position of the zero Number Sign
+//		relative to a Number Field in which a number
+//		string is displayed. Possible valid values are
+//		listed as follows:
+//
+//			NumFieldSymPos.InsideNumField()
+//				Example-1:
+//					Number Field Length: 8
+//					Numeric Value: 123.45
+//					Number Symbol: leading plus sign ('+')
+//					Number Symbol Position: Inside Number Field
+//			     	Number Text Justification: Right Justified
+//					Formatted Number String: " +123.45"
+//					Number Field Index:------>01234567
+//					Total Number String Length: 8
+//
+//				Example-2:
+//					Number Field Length: 8
+//					Numeric Value: 123.45
+//					Number Symbol: trailing plus sign ('+')
+//					Number Symbol Position: Inside Number Field
+//			     	Number Text Justification: Right Justified
+//					Formatted Number String: " 123.45+"
+//					Number Field Index:------>01234567
+//					Total Number String Length: 8
+//
+//				For the 'NumFieldSymPos.InsideNumField()'
+//				specification, the final length of the
+//				number string is defined by the Number
+//				Field length.
+//
+//			NumFieldSymPos.OutsideNumField()
+//				Example-3:
+//					Number Field Length: 8
+//			     	Numeric Value: 123.45
+//			     	Number Symbol: leading plus sign ('+')
+//			     	Number Symbol Position: Outside Number Field
+//			     	Number Text Justification: Right Justified
+//			     	Formatted Number String: "+  123.45"
+//					Number Field Index:------>012345678
+//					Total Number String Length: 9
+//
+//				Example-4:
+//					Number Field Length: 8
+//			     	Numeric Value: 123.45
+//			     	Number Symbol: trailing plus sign ('+')
+//			     	Number Symbol Position: Outside Number Field
+//			     	Number Text Justification: Right Justified
+//			     	Formatted Number String: "  123.45+"
+//					Number Field Index:------>012345678
+//					Total Number String Length: 9
+//
+//				For the 'NumFieldSymPos.OutsideNumField()'
+//				specification, the final length of the number
+//				string is greater than the Number Field length.
+//
+//	leadingCurrencySymbol     		[]rune
+//
+//		A rune array containing one or more Leading
+//		Currency Symbol characters used to configure
+//		the current instance of NumStrNumberSymbolSpec.
+//
+//		Leading Currency Symbol characters can include
+//		such symbols as the Dollar sign ('$'), Euro sign
+//	 	('€') and Pound sign ('£').
+//
+//		Leading Currency Symbols are prefixed or
+//		prepended to the beginning of number strings
+//		containing currency numeric values.
+//
+//				Example: $125.34
+//
+//		Currency Symbols are optional. If Currency
+//		Symbols are not required, set
+//		'leadingCurrencySymbol' to 'nil'.
+//
+//	trailingCurrencySymbol     		[]rune
+//
+//		A rune array containing one or more Trailing
+//		Currency Symbol characters used to configure
+//		the current instance of NumStrNumberSymbolSpec.
+//
+//		Trailing Currency Symbol characters can include
+//		such symbols as the dollar sign ('$'), Euro sign
+//	 	('€') and Pound sign ('£').
+//
+//		Trailing Currency Symbols are suffixed or
+//		appended to the end of number strings containing
+//		currency numeric values.
+//
+//				Example: 125.34€
+//
+//		Currency Symbols are optional. If Currency
+//		Symbols are not required, set
+//		'trailingCurrencySymbol' to 'nil'.
+//
+//	currencyNumFieldSymPosition		NumberFieldSymbolPosition
+//
+//		Defines the position of the Leading Currency
+//		Symbol ('leadingCurrencySymbol') and Trailing
+//		Currency Symbol ('trailingCurrencySymbol')
+//		relative to a Number Field in which a number
+//		string is displayed. Possible valid values are
+//		listed as follows:
+//
+//			NumFieldSymPos.InsideNumField()
+//			NumFieldSymPos.OutsideNumField()
+//
+//		Examples NumFieldSymPos.InsideNumField()
+//
+//			Example-1:
+//				Number Field Length: 10
+//				Numeric Value: 123.45
+//				Leading Currency Symbol: Dollar sign ('$')
+//				Trailing Currency Symbol: Dollar sign ('$')
+//				Number Symbol Position: Inside Number Field
+//			    Number Text Justification: Right Justified
+//				Formatted Number String: " $123.45$"
+//				Number Field Index:------>012345679
+//				Total Number String Length: 10
+//
+//			Example-2:
+//				Number Field Length: 12
+//				Numeric Value: 123.45
+//				Leading Currency Symbol: Dollar sign ('$')
+//				Trailing Currency Symbol: Dollar sign ('$')
+//				Number Symbol Position: Inside Number Field
+//				Number Text Justification: Centered
+//				Formatted Number String: "  $123.45$  "
+//				Number Field Index:------>012345678901
+//				Total Number String Length: 12
+//
+//			For the 'NumFieldSymPos.InsideNumField()' specification,
+//			the final length of the number string is defined by the
+//			Number Field length.
+//
+//		Examples NumFieldSymPos.OutsideNumField()
+//
+//			Example-3:
+//				Number Field Length: 8
+//			    Numeric Value: 123.45
+//				Leading Currency Symbol: Dollar sign ('$')
+//				Trailing Currency Symbol: Dollar sign ('$')
+//			    Number Symbol Position: Outside Number Field
+//			    Number Text Justification: Right Justified
+//			    Formatted Number String: "$  123.45$"
+//				Number Field Index:------>0123456789
+//				Total Number String Length: 10
+//
+//			Example-4:
+//				Number Field Length: 10
+//				Numeric Value: 123.45
+//				Leading Currency Symbol: Dollar sign ('$')
+//				Trailing Currency Symbol: Dollar sign ('$')
+//				Number Symbol Position: Outside Number Field
+//			    Number Text Justification: Centered
+//				Formatted Number String: "$  123.45  $"
+//				Number Field Index:------>012345678901
+//				Total Number String Length: 12
+//
+//			For the 'NumFieldSymPos.OutsideNumField()' specification,
+//			the final length of the number string is greater than
+//			the Number Field length.
+//
+//	currencyNumSignRelPos			CurrencyNumSignRelativePosition
+//
+//		Currency Symbols have the option of being
+//		positioned either inside or outside number sign
+//		symbols formatted with numeric values in a
+//		number string.
+//
+//		Examples of number sign symbols include minus
+//		signs ('-'), plus signs ('+') and surrounding
+//		parentheses ("()").
+//
+//		Parameter 'currencyNumSignRelPos' is an instance
+//		of type CurrencyNumSignRelativePosition which
+//		serves as an enumeration. This enumeration has
+//		three possible values, only two of which are
+//		valid:
+//
+//			CurrNumSignRelPos.None()			- Invalid
+//			CurrNumSignRelPos.OutsideNumSign()	- Valid
+//			CurrNumSignRelPos.InsideNumSign()	- Valid
+//
+//		'CurrNumSignRelPos' is global constant used to
+//		abbreviate the syntax for invoking these
+//		enumeration	values. The formal syntax is:
+//
+//			CurrencyNumSignRelativePosition(0).OutsideNumSign()
+//			CurrencyNumSignRelativePosition(0).InsideNumSign()
+//
+//		Examples CurrNumSignRelPos.OutsideNumSign()
+//				"$ -123.45"
+//				"123.45- €"
+//				"£ -123.45"
+//
+//		Examples CurrNumSignRelPos.InsideNumSign()
+//
+//			Examples:
+//				"- $123.45"
+//				"123.45€ -"
+//				"- £123.45"
+//
+//		NumberFieldSymbolPosition Conflicts
+//
+//		When formatting a number string, the
+//		NumberFieldSymbolPosition values for both the
+//		Currency Symbol and the Number Sign Symbol
+//		MUST BE EQUAL before the Currency Number Sign
+//		Relative Position parameter,
+//		('currencyNumSignRelPos'), will be activated
+//		and applied to the number string formatting
+//		algorithm.
+//
+//		If the NumberFieldSymbolPosition values for both
+//		the	Currency Symbol and the Number Sign Symbol
+//		ARE NOT EQUAL, the NumberFieldSymbolPosition
+//		parameter controls and the Currency Number Sign
+//		Relative Position parameter,
+//		('currencyNumSignRelPos'), will be ignored.
+//
+//		Example:
+//			-- NumberFieldSymbolPosition Values NOT EQUAL --
+//
+//			Number Field Length: 8
+//		  	Numeric Value: -123.45
+//			Minus Sign Number Field Symbol Position:
+//				NumFieldSymPos.InsideNumField()
+//			Currency Number Field Symbol Position:
+//				NumFieldSymPos.OutsideNumField()
+//			Currency Number Sign Relative Position:
+//				CurrNumSignRelPos.InsideNumSign()
+//			Leading Currency Symbol: Dollar sign ('$')
+//			Number Text Justification: Right Justified
+//			Formatted Number String: "$ -123.45"
+//			Number Field Index:------>012345678
+//			Total Number String Length: 9
+//
+//			Currency Symbol is Formatted OUTSIDE
+//			the Number Field.
+//
+//	numFieldLength				int
 //
 //		This parameter defines the length of the text field in
 //		which the numeric value will be displayed within a
 //		number string.
 //
-//		If 'fieldLength' is less than the length of the numeric
+//		If 'numFieldLength' is less than the length of the numeric
 //		value string, it will be automatically set equal to the
 //		length of that numeric value string.
 //
@@ -11936,20 +12923,20 @@ func (numStrFmtSpec *NumStrFormatSpec) SetNumFmtParams(
 //		one (-1) or greater than 1-million (1,000,000), an error will
 //		be returned.
 //
-//	fieldJustification			TextJustify
+//	numFieldJustification		TextJustify
 //
 //		An enumeration which specifies the justification of the
 //		numeric value within the number field length specified
-//		by input parameter 'fieldLength'.
+//		by input parameter 'numFieldLength'.
 //
 //		Text justification can only be evaluated in the context of
-//		a number string, field length and a 'textJustification'
+//		a number string, field length and a 'numFieldJustification'
 //		object of type TextJustify. This is because number strings
 //		with a field length equal to or less than the length of the
 //		numeric value string never use text justification. In these
 //		cases, text justification is completely ignored.
 //
-//		If the field length parameter ('fieldLength') is greater
+//		If the field length parameter ('numFieldLength') is greater
 //		than the length of the numeric value string, text
 //		justification must be equal to one of these
 //		three valid values:
@@ -12050,6 +13037,10 @@ func (numStrFmtSpec *NumStrFormatSpec) SetNumFmtParamsRunes(
 	leadingZeroNumSign []rune,
 	trailingZeroNumSign []rune,
 	zeroNumFieldSymPosition NumberFieldSymbolPosition,
+	leadingCurrencySymbols []rune,
+	trailingCurrencySymbols []rune,
+	currencyNumFieldSymPosition NumberFieldSymbolPosition,
+	currencyNumSignRelPos CurrencyNumSignRelativePosition,
 	numFieldLength int,
 	numFieldJustification TextJustify,
 	errorPrefix interface{}) (
@@ -12091,6 +13082,10 @@ func (numStrFmtSpec *NumStrFormatSpec) SetNumFmtParamsRunes(
 			leadingZeroNumSign,
 			trailingZeroNumSign,
 			zeroNumFieldSymPosition,
+			leadingCurrencySymbols,
+			trailingCurrencySymbols,
+			currencyNumFieldSymPosition,
+			currencyNumSignRelPos,
 			numFieldLength,
 			numFieldJustification,
 			ePrefix.XCpy(

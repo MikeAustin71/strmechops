@@ -523,6 +523,10 @@ func (mainNumStrTest006 MainNumStrTest006) Float64Dto01() {
 		"",
 		"",
 		strmech.NumFieldSymPos.InsideNumField(),
+		"",
+		"",
+		strmech.NumFieldSymPos.None(),
+		strmech.CurrNumSignRelPos.None(),
 		23,
 		strmech.TxtJustify.Center(),
 		ePrefix.XCpy(
