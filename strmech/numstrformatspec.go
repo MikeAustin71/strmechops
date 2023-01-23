@@ -8389,7 +8389,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumFmtUKMinus(
 //	The radix point or decimal separator is set to the
 //	period character ('.').
 //
-//		United States Example-1
+//		US Example-1:
 //			123.45
 //
 //	The integer group separator is a comma character
@@ -8399,26 +8399,41 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumFmtUKMinus(
 //	This means that integer digits will be separated into
 //	'thousands' with each group containing three digits each:
 //
-//		United States Example-2
+//		US Example-2:
 //			1,000,000,000
 //
-//	The negative number sign is set to a leading minus sign
-//	('-').
+//	The negative signed number symbol is configured with a
+//	leading minus sign ('-') meaning that all negative
+//	numeric values will be prefixed with a leading minus
+//	sign ('-'). The negative number sign will be
+//	positioned inside the number field:
 //
-//		United States Example-3
-//			-1,000,000,000
+//		US Example-3:
+//		NumFieldSymPos.InsideNumField()
+//			Number Field Length: 8
+//			Numeric Value: -123.45
+//			Number Symbol: leading minus sign ('-')
+//			Number Symbol Position: Inside Number Field
+//			Number Text Justification: Right Justified
+//			Formatted Number String: " -123.45"
+//			Number Field Index:------>01234567
+//			Total Number String Length: 8
 //
-//	The positive number sign is set to a blank or empty
+//	The positive number sign is implied for positive
+//	numeric values. Therefore, the positive number sign
+//	symbol is set to a blank or empty string ("").
+//
+//		US Example-4:
+//			Positive Numeric Value
+//				1,000,000
+//
+//	Zero numeric values have no number sign. Therefore,
+//	the zero number symbol is set to a blank or empty
 //	string ("").
 //
-//		United States Example-4
-//			1,000,000,000
-//
-//	The zero number format is set to a blank or empty
-//	string ("").
-//
-//		United States Example-5
-//			0
+//		US Example-5:
+//			Zero Numeric Value
+//					0
 //
 // ----------------------------------------------------------------
 //
@@ -8491,19 +8506,19 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumFmtUKMinus(
 //				          TxtJustify.Center()
 //		}
 //
-//	 errorPrefix                interface{}
+//	errorPrefix					interface{}
 //
 //		This object encapsulates error prefix text which
 //		is included in all returned error messages.
-//		Usually, it	contains the name of the calling
+//		Usually, it contains the name of the calling
 //		method or methods listed as a method or function
 //		chain of execution.
 //
-//		If no error prefix information is needed, set this
-//		parameter to 'nil'.
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
 //
-//		This empty interface must be convertible to one of
-//		the following types:
+//		This empty interface must be convertible to one
+//		of the following types:
 //
 //		1.	nil
 //				A nil value is valid and generates an
@@ -8535,7 +8550,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumFmtUKMinus(
 //				this object will be copied for use
 //				in error and informational messages.
 //
-//		7.  IBasicErrorPrefix
+//		7.	IBasicErrorPrefix
 //				An interface to a method
 //				generating a two-dimensional slice
 //				of strings containing error prefix
@@ -8556,21 +8571,22 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumFmtUKMinus(
 //
 //	newSignedNumFmtSpec			NumStrFormatSpec
 //
-//		If this method completes successfully, this parameter
-//		will return a new, fully populated instance of
-//		NumStrFormatSpec.
+//		If this method completes successfully, this
+//		parameter will return a new, fully populated
+//		instance of NumStrFormatSpec.
 //
 //	err							error
 //
-//		If this method completes successfully, the returned error
-//		Type is set equal to 'nil'.
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
 //
-//		If errors are encountered during processing, the returned
-//		error Type will encapsulate an error message. This
-//		returned error message will incorporate the method chain
-//		and text passed by input parameter, 'errorPrefix'. The
-//		'errorPrefix' text will be attached to the beginning of
-//		the error message.
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
 func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumFmtUSMinus(
 	numberFieldSpec NumStrNumberFieldSpec,
 	errorPrefix interface{}) (
@@ -8599,6 +8615,282 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumFmtUSMinus(
 	}
 
 	err = new(numStrFmtSpecNanobot).setSignedNStrFmtUSMinus(
+		&newSignedNumFmtSpec,
+		numberFieldSpec,
+		ePrefix.XCpy("newSignedNumFmtSpec<-"))
+
+	return newSignedNumFmtSpec, err
+}
+
+//	NewSignedNumFmtUSParen
+//
+//	Returns a new instance of NumStrFormatSpec configured
+//	for a Signed Number using United States (US) Number
+//	String formatting conventions.
+//
+//	The term 'Paren' in the method name signals that
+//	negative numeric values will be configured with a
+//	surrounding parentheses ('()').
+//
+//		US Example: Negative Numeric Value
+//					(123)
+//
+//	A signed number is a numeric value formatted in a
+//	number string which does NOT contain currency
+//	symbols.
+//
+//	The new, returned instance of NumStrFormatSpec will
+//	include signed number symbols for positive, zero and
+//	negative numeric values.
+//
+//	Currency Symbols WILL NOT BE INCLUDED in the returned
+//	number symbol specifications. The Currency member
+//	variable in the returned NumStrFormatSpec will be
+//	empty and configured as a 'NOP' or empty placeholder.
+//	'NOP' stands for 'No Operation'.
+//
+//	If custom decimal separator, integer separators
+//	or negative number sign characters are required,
+//	see methods:
+//
+//		NumStrFormatSpec.NewNumFmtComponents()
+//		NumStrFormatSpec.NewNumFmtParams()
+//		NumStrFormatSpec.NewNumFmtParamsRunes()
+//
+// ----------------------------------------------------------------
+//
+// # Defaults
+//
+//	The radix point or decimal separator is set to the
+//	period character ('.').
+//
+//		US Example-1
+//			123.45 (The fractional digits are "45")
+//
+//	The integer group separator is a comma character
+//	(',').
+//
+//	The integer group specification is set to 'thousands'.
+//	This means that integer digits will be separated into
+//	'thousands' with each group containing three digits each:
+//
+//		US Example-2
+//			1,000,000,000
+//
+//	The negative signed number symbol is configured with
+//	surrounding parentheses ('()') meaning that all
+//	negative numeric values will be surrounded with a
+//	leading parenthesis sign ('(') and trailing closing
+//	parenthesis sing (')'). The negative number signs
+//	will be positioned inside the number field:
+//
+//		US Example-3
+//		NumFieldSymPos.InsideNumField()
+//				Number Field Length: 9
+//				Numeric Value: -123.45
+//				Number Symbol: Surrounding Parentheses ('()')
+//				Number Symbol Position: Inside Number Field
+//				Number Text Justification: Right Justified
+//				Formatted Number String: " (123.45)"
+//				Number Field Index:------>012345678
+//				Total Number String Length: 9
+//
+//	The positive number sign is implied for positive
+//	numeric values. Therefore, the positive number sign
+//	symbol is set to a blank or empty string ("").
+//
+//		US Example-4
+//			Positive Numeric Value
+//				1,000,000
+//
+//	Zero numeric values have no number sign. Therefore,
+//	the zero number symbol is set to a blank or empty
+//	string ("").
+//
+//		US Example-5
+//			Zero Numeric Value
+//					0
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	numberFieldSpec				NumStrNumberFieldSpec
+//
+//		This Number Field Specification contains all
+//		parameters necessary to format a Number String
+//		within a larger Number Field. In addition to
+//		specifying the length of number field, this
+//		object contains justification specifications
+//		for centering, left justifying or right
+//		justifying a Number String within a Number
+//		Field.
+//
+//		type NumStrNumberFieldSpec struct {
+//
+//			fieldLength int
+//
+//				This parameter defines the length of the
+//				text field in which the numeric value will
+//				be displayed within a number string.
+//
+//				If 'fieldLength' is less than the length
+//				of the numeric value string, it will be
+//				automatically set equal to the length of
+//				that numeric value string.
+//
+//				To automatically set the value of
+//				'fieldLength' to the string length of the
+//				numeric value, set this parameter to a
+//				value of minus one (-1).
+//
+//				If this parameter is submitted with a
+//				value less than minus one (-1) or greater
+//				than 1-million (1,000,000), an error will
+//				be returned.
+//
+//			fieldJustification TextJustify
+//
+//				An enumeration which specifies the
+//				justification of the numeric value string
+//				within the number field length specified
+//				by data field 'fieldLength'.
+//
+//				Text justification can only be evaluated in
+//				the context of a number string, field length
+//				and a 'textJustification' object of type
+//				TextJustify. This is because number strings
+//				with a field length equal to or less than the
+//				length of the numeric value string never use
+//				text justification. In these cases, text
+//				justification is completely ignored.
+//
+//				If the field length parameter ('fieldLength')
+//				is greater than the length of the numeric
+//				value string, text justification must be equal
+//				to one of these three valid values:
+//
+//				          TextJustify(0).Left()
+//				          TextJustify(0).Right()
+//				          TextJustify(0).Center()
+//
+//				You can also use the abbreviated text
+//				justification enumeration syntax as follows:
+//
+//				          TxtJustify.Left()
+//				          TxtJustify.Right()
+//				          TxtJustify.Center()
+//		}
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// -----------------------------------------------------------------
+//
+// # Return Values
+//
+//	newSignedNumFmtSpec			NumStrFormatSpec
+//
+//		If this method completes successfully, this
+//		parameter will return a new, fully populated
+//		instance of NumStrFormatSpec.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumFmtUSParen(
+	numberFieldSpec NumStrNumberFieldSpec,
+	errorPrefix interface{}) (
+	newSignedNumFmtSpec NumStrFormatSpec,
+	err error) {
+
+	if numStrFmtSpec.lock == nil {
+		numStrFmtSpec.lock = new(sync.Mutex)
+	}
+
+	numStrFmtSpec.lock.Lock()
+
+	defer numStrFmtSpec.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumStrFormatSpec."+
+			"NewSignedNumFmtUSParen()",
+		"")
+
+	if err != nil {
+		return newSignedNumFmtSpec, err
+	}
+
+	err = new(numStrFmtSpecNanobot).setSignedNStrFmtUSParen(
 		&newSignedNumFmtSpec,
 		numberFieldSpec,
 		ePrefix.XCpy("newSignedNumFmtSpec<-"))
