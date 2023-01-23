@@ -14883,19 +14883,19 @@ func (numStrFmtSpec *NumStrFormatSpec) SetSignedPureNumberStr(
 //			TxtJustify.Right()
 //			TxtJustify.Center()
 //
-//	 errorPrefix                interface{}
+//	errorPrefix					interface{}
 //
 //		This object encapsulates error prefix text which
 //		is included in all returned error messages.
-//		Usually, it	contains the name of the calling
+//		Usually, it contains the name of the calling
 //		method or methods listed as a method or function
 //		chain of execution.
 //
-//		If no error prefix information is needed, set this
-//		parameter to 'nil'.
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
 //
-//		This empty interface must be convertible to one of
-//		the following types:
+//		This empty interface must be convertible to one
+//		of the following types:
 //
 //		1.	nil
 //				A nil value is valid and generates an
@@ -14927,7 +14927,7 @@ func (numStrFmtSpec *NumStrFormatSpec) SetSignedPureNumberStr(
 //				this object will be copied for use
 //				in error and informational messages.
 //
-//		7.  IBasicErrorPrefix
+//		7.	IBasicErrorPrefix
 //				An interface to a method
 //				generating a two-dimensional slice
 //				of strings containing error prefix
@@ -14948,15 +14948,16 @@ func (numStrFmtSpec *NumStrFormatSpec) SetSignedPureNumberStr(
 //
 //	err							error
 //
-//		If this method completes successfully, the returned error
-//		Type is set equal to 'nil'.
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
 //
-//		If errors are encountered during processing, the returned
-//		error Type will encapsulate an error message. This
-//		returned error message will incorporate the method chain
-//		and text passed by input parameter, 'errorPrefix'. The
-//		'errorPrefix' text will be attached to the beginning of
-//		the error message.
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
 func (numStrFmtSpec *NumStrFormatSpec) SetSimpleCurrency(
 	decSeparatorChars string,
 	intSeparatorChars string,
