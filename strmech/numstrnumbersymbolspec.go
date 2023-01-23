@@ -1894,7 +1894,8 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyDefaultsEU(
 // To generate a default configuration where the minus
 // sign is outside the pound sign ('£'), use method:
 //
-//	NumStrNumberSymbolSpec.NewCurrencyDefaultsUKMinusOutside()
+//	NumStrNumberSymbolSpec.
+//		NewCurrencyDefaultsUKMinusOutside()
 //
 // ----------------------------------------------------------------
 //
