@@ -7292,6 +7292,14 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencyDefaultsUKMinusOu
 //
 // ----------------------------------------------------------------
 //
+// # IMPORTANT
+//
+//	This method will delete, overwrite and reset all
+//	pre-existing data values in the current instance of
+//	NumStrNumberSymbolGroup.
+//
+// ----------------------------------------------------------------
+//
 // # Defaults
 //
 //	The default currency symbol used in the US is the
@@ -7495,6 +7503,14 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencyDefaultsUSMinus(
 //
 //		NumStrNumberSymbolSpec.
 //			SetCurrencyDefaultsUSMinus()
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will delete, overwrite and reset all
+//	pre-existing data values in the current instance of
+//	NumStrNumberSymbolGroup.
 //
 // ----------------------------------------------------------------
 //

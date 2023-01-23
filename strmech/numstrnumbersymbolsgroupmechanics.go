@@ -223,30 +223,58 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) copyNumSymbols(
 // # Defaults
 //
 //	The currency symbol used in the France is the
-//	trailing Euro symbol ('€').
+//	trailing Euro Currency Symbol ('€').
 //
-//		French Example-1
-//		1 000 000,00 €
+//		French Example-1:
+//			Positive Numeric Currency Value
+//				1 000 000,00 €
 //
-//	The negative number sign is set to a leading minus sign
-//	('-').
+//	Positive Numeric Values
 //
-//		French Example-2
-//		-1 000 000 000
+//	The positive number sign is implied. No positive
+//	number is applied, only the trailing Euro Currency
+//	Symbol.
 //
-//	The number sign is implied for positive numeric values.
-//	Therefore, the positive number sign symbol is set to a
-//	blank or empty string ("").
+//		French Example-2:
+//			Positive Numeric Currency Value
+//				1 000 000,00 €
 //
-//		French Example-3
-//		1 000 000 000 €
+//	Zero Numeric Values
 //
-//	The zero number format has no number sign. Therefore,
-//	the positive number sign symbol is set to a blank or
-//	empty string ("").
+//	The zero number format has no number sign, but the
+//	currency symbol is set to a trailing Euro Currency
+//	Symbol.
 //
-//		French Example-4
-//			0,0 €
+//		French Example-3:
+//			Zero Numeric Currency Value
+//				0,00 €
+//
+//	Negative Numeric Values
+//
+//	The negative number sign is set to leading minus
+//	sign ('-') and a trailing Euro Currency Symbol
+//	("€").
+//
+//		French Example-4:
+//			Negative Numeric Currency Value
+//				-1 000 000,00 €
+//
+//	The negative signed number symbol is configured with a
+//	leading minus sign ('-') meaning that all negative
+//	numeric values will be prefixed with a leading minus
+//	sign ('-'). The negative number sign and the currency
+//	symbol will be positioned inside the number field:
+//
+//		French Example-5:
+//			NumFieldSymPos.InsideNumField()
+//				Number Field Length: 10
+//				Numeric Value: -123,45
+//				Number Symbol: leading minus sign ('-')
+//				Number Symbol Position: Inside Number Field
+//				Number Text Justification: Right Justified
+//				Formatted Number String: " -123,45 €"
+//				Number Field Index:------>0123456789
+//				Total Number String Length: 10
 //
 // ----------------------------------------------------------------
 //
@@ -396,25 +424,48 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setCurrencyDefa
 //		German Example-1
 //		1.000.000,00 €
 //
-//	The negative number sign is set to a trailing minus
-//	sign ('-').
-//
-//		German Example-2
-//		1.000.000- €
+//	Positive Numeric Values
 //
 //	The positive number sign is implied for positive
 //	numeric values. Therefore, the positive number sign
 //	symbol is set to a blank or empty string ("").
 //
-//		German Example-3
+//		German Example-2
 //		1.000.000 €
+//
+//	Zero Numeric Values
 //
 //	Zero numeric values have no number sign. Therefore,
 //	the zero number symbol is set to a blank or empty
 //	string ("").
 //
-//		German Example-4
+//		German Example-3
 //			0,00 €
+//
+//	Negative Numeric Values
+//
+//	The negative number sign is set to a trailing minus
+//	sign ('-').
+//
+//		German Example-4
+//		1.000.000- €
+//
+//	The negative signed number symbol is configured with a
+//	trailing minus sign ('-') meaning that all negative
+//	numeric values will be prefixed with a trailing minus
+//	sign ('-'). The negative number sign and the currency
+//	symbol will be positioned inside the number field:
+//
+//		German Example-5:
+//			NumFieldSymPos.InsideNumField()
+//				Number Field Length: 10
+//				Numeric Value: 123,45-
+//				Number Symbol: trailing minus sign ('-')
+//				Number Symbol Position: Inside Number Field
+//				Number Text Justification: Right Justified
+//				Formatted Number String: " 123,45- €"
+//				Number Field Index:------>0123456789
+//				Total Number String Length: 10
 //
 // ----------------------------------------------------------------
 //
@@ -567,38 +618,59 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setCurrencyDefa
 //
 // # Defaults
 //
-//	The default UK currency symbol is a leading pound
-//	sign ('£').
+//	The default currency symbol used in the UK is the
+//	leading Pound symbol ('£').
 //
-//			UK Example-1:
-//				£ 123.45  Positive Value
-//
-//		The negative number sign is set to a leading minus
-//		sign ('-').
-//
-//			UK Example-2
-//				-123.45  Negative Value
-//
-//	This method will configure the pound sign ('£')
-//	such that any minus sign configured for negative
-//	numeric values will be inside the pound sign ('£').
-//
-//			UK Example-3
-//				£ -123.45  Negative Value
+//	Positive Numeric Values
 //
 //	The positive number sign is implied for positive
 //	numeric values. Therefore, the positive number sign
 //	symbol is set to a blank or empty string ("").
 //
-//		UK Example-4
-//			£ 123.45
+//		UK Example-1:
+//			Positive Numeric Currency Value
+//				£ 123.45
+//
+//	Zero Numeric Values
 //
 //	Zero numeric values have no number sign. Therefore,
 //	the zero number symbol is set to a blank or empty
 //	string ("").
 //
-//		UK Example-5
-//			£ 0.00
+//		UK Example-2:
+//			Zero Numeric Currency Value
+//				£ 0.00
+//
+//	Negative Numeric Values
+//
+//	The negative number sign is set to a leading minus
+//	sign ('-').
+//
+//	This method will configure the Pound sign ('£')
+//	such that any minus sign configured for negative
+//	numeric values will be inside, or to the right of,
+//	the Pound sign ('£').
+//
+//		UK Example-3:
+//			Negative Numeric Currency Value
+//				£ -123.45  Negative Value
+//
+//	The negative signed number symbol is configured with a
+//	leading minus sign ('-') meaning that all negative
+//	numeric values will be prefixed with a leading minus
+//	sign ('-'). The negative number sign and the currency
+//	symbol will be positioned inside the number field:
+//
+//		UK Example-4:
+//			NumFieldSymPos.InsideNumField()
+//				Number Field Length: 10
+//				Numeric Value: -123.45
+//				Number Symbol: leading minus sign ('-')
+//				Number Symbol Position: Inside Number Field
+//				Number Text Justification: Right Justified
+//				Formatted Number String: " £ -123.45"
+//				Number Field Index:------>0123456789
+//				Total Number String Length: 10
 //
 // ----------------------------------------------------------------
 //
@@ -751,39 +823,59 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setCurrencyDefa
 //
 // # Defaults
 //
-//	The default UK currency symbol is a leading pound
-//	sign ('£').
+//	The default currency symbol used in the UK is the
+//	leading Pound symbol ('£').
 //
-//			UK Example-1:
-//				£ 123.45  Positive Value
-//
-//		The negative number sign is set to a leading minus
-//		sign ('-').
-//
-//			UK Example-2
-//				-123.45  Negative Value
-//
-//	This method will configure the pound sign ('£')
-//	such that any minus sign configured for negative
-//	numeric values will be outside or the left of the
-//	pound sign ('£').
-//
-//			UK Example-3
-//				- £123.45  Negative Value
+//	Positive Numeric Values
 //
 //	The positive number sign is implied for positive
 //	numeric values. Therefore, the positive number sign
 //	symbol is set to a blank or empty string ("").
 //
-//		UK Example-4
-//			£ 123.45
+//		UK Example-1:
+//			Positive Numeric Currency Value
+//				£ 123.45  Positive Value
+//
+//	Zero Numeric Values
 //
 //	Zero numeric values have no number sign. Therefore,
 //	the zero number symbol is set to a blank or empty
 //	string ("").
 //
-//		UK Example-5
-//			£ 0.00
+//		UK Example-2:
+//			Zero Numeric Currency Value
+//				£ 0.00
+//
+//	Negative Numeric Values
+//
+//	The negative number sign is set to a leading minus
+//	sign ('-').
+//
+//	This method will configure the Pound sign ('£')
+//	such that any minus sign configured for negative
+//	numeric values will be outside, or to the left of,
+//	the Pound sign ('£').
+//
+//		UK Example-3:
+//			Negative Numeric Currency Value
+//				- £123.45
+//
+//	The negative signed number symbol is configured with a
+//	leading minus sign ('-') meaning that all negative
+//	numeric values will be prefixed with a leading minus
+//	sign ('-'). The negative number sign and the currency
+//	symbol will be positioned inside the number field:
+//
+//		UK Example-4:
+//			NumFieldSymPos.InsideNumField()
+//				Number Field Length: 10
+//				Numeric Value: -123.45
+//				Number Symbol: leading minus sign ('-')
+//				Number Symbol Position: Inside Number Field
+//				Number Text Justification: Right Justified
+//				Formatted Number String: " - £123.45"
+//				Number Field Index:------>0123456789
+//				Total Number String Length: 10
 //
 // ----------------------------------------------------------------
 //
@@ -934,39 +1026,59 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setCurrencyDefa
 //
 // # Defaults
 //
-//	The default US currency symbol is a leading Dollar
-//	sign ('$').
+//	The default currency symbol used in the US is the
+//	leading Dollar symbol ('$').
 //
-//			US Example-1:
-//				$ 123.45  Positive Value
-//
-//	The negative number sign is set to a leading minus
-//	sign ('-').
-//
-//			US Example-2
-//				-123.45  Negative Value
-//
-//	This method will configure the leading Dollar sign
-//	('$') such that any minus sign configured for negative
-//	numeric values will be inside or to the left of the
-//	Dollar sign ('$').
-//
-//			US Example-3
-//				$ -123.45  Negative Value
+//	Positive Numeric Values
 //
 //	The positive number sign is implied for positive
 //	numeric values. Therefore, the positive number sign
 //	symbol is set to a blank or empty string ("").
 //
-//			US Example-4
+//		US Example-1:
+//			Positive Numeric Currency Value
 //				$ 123.45
+//
+//	Zero Numeric Values
 //
 //	Zero numeric values have no number sign. Therefore,
 //	the zero number symbol is set to a blank or empty
 //	string ("").
 //
-//		US Example-5
-//			$ 0.00
+//		US Example-2:
+//			Zero Numeric Currency Value
+//				$ 0.00
+//
+//	Negative Numeric Values
+//
+//	The negative number sign is set to a leading minus
+//	sign ('-').
+//
+//	This method will configure the Dollar sign ('$')
+//	such that any minus sign configured for negative
+//	numeric values will be inside, or to the right of,
+//	the Dollar sign ('$').
+//
+//		US Example-3:
+//			Negative Numeric Currency Value
+//				$ -123.45
+//
+//	The negative signed number symbol is configured with a
+//	leading minus sign ('-') meaning that all negative
+//	numeric values will be prefixed with a leading minus
+//	sign ('-'). The negative number sign and the currency
+//	symbol will be positioned inside the number field:
+//
+//		US Example-4:
+//			NumFieldSymPos.InsideNumField()
+//				Number Field Length: 10
+//				Numeric Value: -123.45
+//				Number Symbol: leading minus sign ('-')
+//				Number Symbol Position: Inside Number Field
+//				Number Text Justification: Right Justified
+//				Formatted Number String: " $ -123.45"
+//				Number Field Index:------>0123456789
+//				Total Number String Length: 10
 //
 // ----------------------------------------------------------------
 //
@@ -1119,39 +1231,61 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setCurrencyDefa
 //
 // # Defaults
 //
-//	The default US currency symbol is a leading Dollar
-//	sign ('$').
+//	The default currency symbol used in the US is the
+//	leading Dollar symbol ('$').
 //
-//			US Example-1:
-//				$ 123.45  Positive Value
-//
-//	The negative number sign is set to surrounding
-//	parentheses ('()').
-//
-//			US Example-2
-//				(123.45)  Negative Value
-//
-//	This method will configure the leading Dollar sign
-//	('$') such that any parentheses configured for
-//	negative numeric values will be inside or to the left
-//	of the Dollar sign ('$').
-//
-//			US Example-3
-//				$ (123.45)  Negative Value
+//	Positive Numeric Values
 //
 //	The positive number sign is implied for positive
 //	numeric values. Therefore, the positive number sign
 //	symbol is set to a blank or empty string ("").
 //
-//		US Example-4
-//			$ 123.45
+//		US Example-1:
+//			Positive Numeric Currency Value
+//				$ 123.45
+//
+//	Zero Numeric Values
 //
 //	Zero numeric values have no number sign. Therefore,
 //	the zero number symbol is set to a blank or empty
 //	string ("").
 //
-//		US Example-5
-//			$ 0.00
+//		US Example-2:
+//			Zero Numeric Currency Value
+//				$ 0.00
+//
+//	Negative Numeric Values
+//
+//	The negative number sign is set to surrounding
+//	parentheses ('()').
+//
+//	This method will configure the Dollar sign ('$')
+//	such that the leading parenthesis ('(') configured
+//	for negative numeric values will be inside, or to the
+//	right of, the Dollar sign ('$').
+//
+//		US Example-3:
+//			Negative Numeric Currency Value
+//				$ (123.45)
+//
+//	The negative signed number symbol is configured with
+//	surrounding parentheses ('()') meaning that all
+//	negative numeric values will be prefixed with a
+//	leading parenthesis symbol ('(') and suffixed with a
+//	trailing, or closing, parenthesis symbol (')'). The
+//	negative number sign symbols and the currency symbol
+//	will be positioned inside the number field:
+//
+//		US Example-4:
+//			NumFieldSymPos.InsideNumField()
+//				Number Field Length: 11
+//				Numeric Value: -123.45
+//				Number Symbol: Surrounding Parentheses ('()')
+//				Number Symbol Position: Inside Number Field
+//				Number Text Justification: Right Justified
+//				Formatted Number String: " $ (123.45)"
+//				Number Field Index:------>01234567890
+//				Total Number String Length: 11
 //
 // ----------------------------------------------------------------
 //
