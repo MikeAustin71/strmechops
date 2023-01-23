@@ -790,7 +790,7 @@ func (nStrFmtCountryCultureMech *numStrFmtCountryCultureSpecMech) setCountryUS(
 	}
 
 	countryNStrFmtSpec.SignedNumStrFormat,
-		err = numStrFmtSpec.NewSignedNumFmtUS(
+		err = numStrFmtSpec.NewSignedNumFmtUSMinus(
 		nopNumFieldSpec,
 		ePrefix.XCpy(
 			"countryNStrFmtSpec.SignedNumStrFormat"))

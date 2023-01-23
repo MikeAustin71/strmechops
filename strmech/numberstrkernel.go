@@ -8357,7 +8357,7 @@ func (numStrKernel *NumberStrKernel) FmtNumStrDefaultRound(
 		// The current Number String Format
 		// Specification is invalid.
 		tempNumStrFormatSpec,
-			err = new(NumStrFormatSpec).NewSignedNumFmtUS(
+			err = new(NumStrFormatSpec).NewSignedNumFmtUSMinus(
 			NumStrNumberFieldSpec{
 				fieldLength:        -1,
 				fieldJustification: TxtJustify.Right(),
@@ -13164,7 +13164,7 @@ func (numStrKernel *NumberStrKernel) FmtSignedNumStrUS(
 	var numStrFmtSpec NumStrFormatSpec
 
 	numStrFmtSpec,
-		err = new(NumStrFormatSpec).NewSignedNumFmtUS(
+		err = new(NumStrFormatSpec).NewSignedNumFmtUSMinus(
 		numberFieldSpec,
 		ePrefix.XCpy(
 			"newSignedNumFmtSpec<-"))

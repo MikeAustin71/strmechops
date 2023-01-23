@@ -44,7 +44,7 @@ import (
 //		NumStrFormatSpec.NewCurrencyNumFmtUKMinusOutside()
 //		NumStrFormatSpec.NewSignedNumFmtUKMinus()
 //		NumStrFormatSpec.NewCurrencyNumFmtUSParen()
-//		NumStrFormatSpec.NewSignedNumFmtUS()
+//		NumStrFormatSpec.NewSignedNumFmtUSMinus()
 //
 //	If more granular control is required to meet
 //	specialized requirements for multinational or
@@ -7961,12 +7961,33 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumFmtUKMinus(
 	return newSignedNumFmtSpec, err
 }
 
-//	NewSignedNumFmtUS
+//	NewSignedNumFmtUSMinus
 //
 //	Returns a new instance of NumStrFormatSpec
 //	configured for a Signed Number using US
 //	(United States) Number String formatting
 //	conventions.
+//
+//	The word 'Minus' in the method name signals that
+//	negative numeric values will be configured with a
+//	leading minus sign ('-').
+//
+//		US Example: Negative Numeric Value
+//				-123
+//
+//	A signed number is a numeric value formatted in a
+//	number string which does NOT contain currency
+//	symbols.
+//
+//	The new, returned instance of NumStrFormatSpec will
+//	include signed number symbols for positive, zero and
+//	negative numeric values.
+//
+//	Currency Symbols WILL NOT BE INCLUDED in the returned
+//	number symbol specifications. The Currency member
+//	variable in the returned NumStrFormatSpec will be
+//	empty and configured as a 'NOP' or empty placeholder.
+//	'NOP' stands for 'No Operation'.
 //
 //	If custom decimal separator, integer separators
 //	or negative number sign characters are required,
@@ -8165,7 +8186,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumFmtUKMinus(
 //		and text passed by input parameter, 'errorPrefix'. The
 //		'errorPrefix' text will be attached to the beginning of
 //		the error message.
-func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumFmtUS(
+func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumFmtUSMinus(
 	numberFieldSpec NumStrNumberFieldSpec,
 	errorPrefix interface{}) (
 	newSignedNumFmtSpec NumStrFormatSpec,
@@ -8185,7 +8206,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumFmtUS(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumStrFormatSpec."+
-			"NewSignedNumFmtUS()",
+			"NewSignedNumFmtUSMinus()",
 		"")
 
 	if err != nil {
