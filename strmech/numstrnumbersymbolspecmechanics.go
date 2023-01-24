@@ -21,9 +21,18 @@ type numStrNumberSymbolSpecMechanics struct {
 //
 // ----------------------------------------------------------------
 //
+// # IMPORTANT
+//
+//	This method will delete, overwrite and reset all
+//	pre-existing data values in the instance of
+//	NumStrNumberSymbolSpec passed as input parameter
+//	'currencySymbolSpecs'.
+//
+// ----------------------------------------------------------------
+//
 // # Input Parameters
 //
-//	currencySymbols				*NumStrNumberSymbolSpec
+//	currencySymbolSpecs			*NumStrNumberSymbolSpec
 //
 //		A pointer to a NumStrNumberSymbolSpec instance.
 //		This instance will be reconfigured with the
@@ -200,63 +209,20 @@ type numStrNumberSymbolSpecMechanics struct {
 //				specification, the final length of the
 //				number string is greater than the Number
 //				Field length.
-//	errorPrefix					interface{}
 //
-//		This object encapsulates error prefix text which
-//		is included in all returned error messages.
-//		Usually, it contains the name of the calling
-//		method or methods listed as a method or function
-//		chain of execution.
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
 //
 //		If no error prefix information is needed, set
 //		this parameter to 'nil'.
 //
-//		This empty interface must be convertible to one
-//		of the following types:
-//
-//		1.	nil
-//				A nil value is valid and generates an
-//				empty collection of error prefix and
-//				error context information.
-//
-//		2.	string
-//				A string containing error prefix
-//				information.
-//
-//		3.	[]string
-//				A one-dimensional slice of strings
-//				containing error prefix information.
-//
-//		4.	[][2]string
-//				A two-dimensional slice of strings
-//		   		containing error prefix and error
-//		   		context information.
-//
-//		5.	ErrPrefixDto
-//				An instance of ErrPrefixDto.
-//				Information from this object will
-//				be copied for use in error and
-//				informational messages.
-//
-//		6.	*ErrPrefixDto
-//				A pointer to an instance of
-//				ErrPrefixDto. Information from
-//				this object will be copied for use
-//				in error and informational messages.
-//
-//		7.	IBasicErrorPrefix
-//				An interface to a method
-//				generating a two-dimensional slice
-//				of strings containing error prefix
-//				and error context information.
-//
-//		If parameter 'errorPrefix' is NOT convertible
-//		to one of the valid types listed above, it will
-//		be considered invalid and trigger the return of
-//		an error.
-//
-//		Types ErrPrefixDto and IBasicErrorPrefix are
-//		included in the 'errpref' software package:
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
 //			"github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
@@ -276,7 +242,7 @@ type numStrNumberSymbolSpecMechanics struct {
 //		text will be attached to the beginning of the
 //		error message.
 func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setCurrencyBasic(
-	currencySymbols *NumStrNumberSymbolSpec,
+	currencySymbolSpecs *NumStrNumberSymbolSpec,
 	leadingCurrencySymbol []rune,
 	trailingCurrencySymbol []rune,
 	currencyInsideNumSymbol bool,
@@ -306,11 +272,11 @@ func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setCurrencyBasic(
 		return err
 	}
 
-	if currencySymbols == nil {
+	if currencySymbolSpecs == nil {
 
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'currencySymbols' is invalid!\n"+
-			"'currencySymbols' is a nil pointer.\n",
+			"Error: Input parameter 'currencySymbolSpecs' is invalid!\n"+
+			"'currencySymbolSpecs' is a nil pointer.\n",
 			ePrefix.String())
 
 		return err
@@ -351,11 +317,13 @@ func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setCurrencyBasic(
 
 	if currencyInsideNumSymbol == true {
 
-		currencyNumSignRelPos = CurrNumSignRelPos.InsideNumSign()
+		currencyNumSignRelPos =
+			CurrNumSignRelPos.InsideNumSign()
 
 	} else {
 
-		currencyNumSignRelPos = CurrNumSignRelPos.OutsideNumSign()
+		currencyNumSignRelPos =
+			CurrNumSignRelPos.OutsideNumSign()
 	}
 
 	nStrNumSymSpecNanobot := numStrNumberSymbolSpecNanobot{}
@@ -364,23 +332,23 @@ func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setCurrencyBasic(
 		lenTrailingCurrSym == 0 {
 
 		err = nStrNumSymSpecNanobot.setLeadingCurrencySymbol(
-			currencySymbols,
+			currencySymbolSpecs,
 			leadingCurrencySymbol,
 			numSymbolFieldPosition,
 			currencyNumSignRelPos,
 			ePrefix.XCpy(
-				"currencySymbols<-"))
+				"currencySymbolSpecs<-"))
 
 	} else if lenLeadingCurrSym == 0 &&
 		lenTrailingCurrSym > 0 {
 
 		err = nStrNumSymSpecNanobot.setTrailingCurrencySymbol(
-			currencySymbols,
+			currencySymbolSpecs,
 			leadingCurrencySymbol,
 			numSymbolFieldPosition,
 			currencyNumSignRelPos,
 			ePrefix.XCpy(
-				"currencySymbols<-"))
+				"currencySymbolSpecs<-"))
 
 	} else {
 		// MUST BE -
@@ -388,13 +356,13 @@ func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setCurrencyBasic(
 		//		lenTrailingCurrSym > 0
 
 		err = nStrNumSymSpecNanobot.setLeadingTrailingCurrencySymbols(
-			currencySymbols,
+			currencySymbolSpecs,
 			leadingCurrencySymbol,
 			trailingCurrencySymbol,
 			numSymbolFieldPosition,
 			currencyNumSignRelPos,
 			ePrefix.XCpy(
-				"currencySymbols<-"))
+				"currencySymbolSpecs<-"))
 
 	}
 
