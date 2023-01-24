@@ -2045,7 +2045,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyBasic(
 	return newCurrencySymbolsSpec, err
 }
 
-//	NewCurrencyBasic
+//	NewCurrencyBasicRunes
 //
 //	Creates and returns a new instance of
 //	NumStrNumberSymbolSpec configured with Currency
@@ -8262,6 +8262,313 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetCurrencyBasic(
 			nStrNumberSymbolSpec,
 			[]rune(leadingCurrencySymbol),
 			[]rune(trailingCurrencySymbol),
+			currencyInsideNumSymbol,
+			numSymbolFieldPosition,
+			ePrefix.XCpy(
+				"nStrNumberSymbolSpec<-"))
+}
+
+//	SetCurrencyBasicRunes
+//
+//	Deletes all internal data values in the current
+//	instance of NumStrNumberSymbolSpec and proceeds to
+//	reconfigure that instance with new Currency Symbol
+//	specifications extracted from basic currency input
+//	parameters.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will delete, overwrite and reset all
+//	pre-existing data values in the current instance of
+//	NumStrNumberSymbolSpec.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	leadingCurrencySymbol		[]rune
+//
+//		This rune array contains a character or
+//		characters which comprise the leading Currency
+//		Symbol. The leading Currency Symbol will be
+//		positioned at the beginning or left side of the
+//		number string.
+//
+//			Example: $ 123.45
+//
+//		If a space between the currency symbol and the
+//		first digit of the number string is required, be
+//		sure to include the space in the currency symbol
+//		input string.
+//			Example:
+//				Leading Currency Symbol: "$ "
+//				Formatted Number String: "$ 123.45"
+//
+//		If both the leading and trailing Currency Symbol
+//		input parameters are empty, an error will be
+//		returned.
+//
+//	trailingCurrencySymbol		[]rune
+//
+//		This rune array contains a character or
+//		characters which comprise the trailing Currency
+//		Symbol. The trailing Currency Symbol will be
+//		positioned at the end of, or right side of, the
+//		number string.
+//
+//			Example: 123.45 €
+//
+//		If a space between the last digit of the
+//		number string and the currency symbol
+//		is required, be sure to include the space
+//		in the currency symbol input string.
+//			Example:
+//				Trailing Currency Symbol: " €"
+//				Formatted Number String: "123.45 €"
+//
+//	currencyInsideNumSymbol			bool
+//
+//		This boolean parameter determines whether the
+//		currency symbol will be positioned inside or
+//		outside the negative number sign symbol.
+//
+//		If this parameter is set to 'false', the
+//		currency symbol will be positioned outside
+//		the negative number sign symbol.
+//
+//			Example-1 Outside:
+//				currencyInsideNumSymbol = false
+//				Number String = "$ -123.45"
+//
+//			Example-2 Outside:
+//				currencyInsideNumSymbol = false
+//				Number String = "  123.45- €"
+//
+//		If this parameter is set to 'true', the
+//		currency symbol will be positioned inside
+//		the negative number sign symbol.
+//
+//			Example - 3 Inside:
+//				currencyInsideNumSymbol = true
+//				Number String = " - $123.45"
+//
+//			Example - 4 Inside:
+//				currencyInsideNumSymbol = true
+//				Number String = "  123.45€ -"
+//
+//	numSymbolFieldPosition			NumberFieldSymbolPosition
+//
+//		Defines the position of the Currency symbols
+//		relative to a Number Field in which a number
+//		string is displayed.
+//
+//		Possible valid values are listed as follows:
+//
+//			NumFieldSymPos.InsideNumField()
+//
+//				Example-1 InsideNumField:
+//					Number Field Length: 9
+//					Numeric Value: 123.45
+//					Number Sign Symbol: leading minus sign ('-')
+//					Number Symbol Position: Inside Number Field
+//			     	Number Text Justification: Right
+//					Formatted Number String: "$ -123.45"
+//					Number Field Index:       012345678
+//					Total Number String Length: 9
+//
+//				Example-2 InsideNumField:
+//					Number Field Length: 10
+//					Numeric Value: 123.45
+//					Number Sign Symbol: trailing minus sign ('-')
+//					Number Symbol Position: Inside Number Field
+//			     	Number Text Justification: Right
+//					Formatted Number String: " 123.45- €"
+//					Number Field Index:       0123456789
+//					Total Number String Length: 10
+//
+//				Example-3 InsideNumField:
+//					Number Field Length: 9
+//					Numeric Value: 123.45
+//					Number Sign Symbol: None - Value is Positive
+//					Number Symbol Position: Inside Number Field
+//			     	Number Text Justification: Right
+//					Formatted Number String: "$  123.45"
+//					Number Field Index:       012345678
+//					Total Number String Length: 9
+//
+//				Example-4 InsideNumField:
+//					Number Field Length: 10
+//					Numeric Value: 123.45
+//					Number Sign Symbol: None - Value is Positive
+//					Number Symbol Position: Inside Number Field
+//			     	Number Text Justification: Right
+//					Formatted Number String: "  123.45 €"
+//					Number Field Index:       0123456789
+//					Total Number String Length: 10
+//
+//				For the 'NumFieldSymPos.InsideNumField()'
+//				specification, the final length of the number
+//				string is defined by the Number Field length.
+//
+//			NumFieldSymPos.OutsideNumField()
+//
+//				Example-5 OutsideNumField:
+//					Number Field Length: 8
+//			     	Numeric Value: 123.45
+//			     	Number Symbol: leading minus sign ('-')
+//			     	Number Symbol Position: Outside Number Field
+//			     	Number Text Justification: Right
+//			     	Formatted Number String: "$ -  123.45"
+//					Number Field Index:       01234567890
+//					Total Number String Length: 11
+//
+//				Example-6 OutsideNumField:
+//					Number Field Length: 8
+//			     	Numeric Value: 123.45
+//			     	Number Symbol: trailing minus sign ('-')
+//			     	Number Symbol Position: Outside Number Field
+//			     	Number Text Justification: Right
+//			     	Formatted Number String: "  123.45- €"
+//					Number Field Index:       01234567890
+//					Total Number String Length: 11
+//
+//				Example-7 OutsideNumField:
+//					Number Field Length: 8
+//			     	Numeric Value: 123.45
+//					Number Sign Symbol: None - Value is Positive
+//			     	Number Symbol Position: Outside Number Field
+//			     	Number Text Justification: Right
+//			     	Formatted Number String: "$  123.45"
+//					Number Field Index:       012345678
+//					Total Number String Length: 9
+//
+//				Example-8 OutsideNumField:
+//					Number Field Length: 8
+//			     	Numeric Value: 123.45
+//					Number Sign Symbol: None - Value is Positive
+//			     	Number Symbol Position: Outside Number Field
+//			     	Number Text Justification: Right
+//			     	Formatted Number String: "  123.45 €"
+//					Number Field Index:       0123456789
+//					Total Number String Length: 10
+//
+//				For the 'NumFieldSymPos.OutsideNumField()'
+//				specification, the final length of the
+//				number string is greater than the Number
+//				Field length.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetCurrencyBasicRunes(
+	leadingCurrencySymbol []rune,
+	trailingCurrencySymbol []rune,
+	numSymbolFieldPosition NumberFieldSymbolPosition,
+	currencyInsideNumSymbol bool,
+	errorPrefix interface{}) error {
+
+	if nStrNumberSymbolSpec.lock == nil {
+		nStrNumberSymbolSpec.lock = new(sync.Mutex)
+	}
+
+	nStrNumberSymbolSpec.lock.Lock()
+
+	defer nStrNumberSymbolSpec.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumStrNumberSymbolSpec."+
+			"SetCurrencyBasicRunes()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	return new(numStrNumberSymbolSpecMechanics).
+		setCurrencyBasic(
+			nStrNumberSymbolSpec,
+			leadingCurrencySymbol,
+			trailingCurrencySymbol,
 			currencyInsideNumSymbol,
 			numSymbolFieldPosition,
 			ePrefix.XCpy(
