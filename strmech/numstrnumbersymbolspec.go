@@ -1,6 +1,7 @@
 package strmech
 
 import (
+	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
 	"sync"
 )
@@ -1735,6 +1736,46 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) IsValidInstanceError(
 				"nStrNumberSymbolSpec"))
 
 	return err
+}
+
+func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyBasic(
+	leadingCurrencySymbol string,
+	trailingCurrencySymbol string,
+	numSymbolFieldPosition NumberFieldSymbolPosition,
+	currencyInsideNumSymbol bool,
+	errorPrefix interface{}) (
+	newCurrencySymbolsSpec NumStrNumberSymbolSpec,
+	err error) {
+
+	if nStrNumberSymbolSpec.lock == nil {
+		nStrNumberSymbolSpec.lock = new(sync.Mutex)
+	}
+
+	nStrNumberSymbolSpec.lock.Lock()
+
+	defer nStrNumberSymbolSpec.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumStrNumberSymbolSpec."+
+			"NewCurrencyBasic()",
+		"")
+
+	if err != nil {
+
+		return newCurrencySymbolsSpec, err
+
+	}
+
+	err = fmt.Errorf("%v\n"+
+		"Error Place Holder!\n",
+		ePrefix.XCpy(
+			"newCurrencySymbolsSpec<-"))
+
+	return newCurrencySymbolsSpec, err
 }
 
 // NewCurrencyDefaultsEU

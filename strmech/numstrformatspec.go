@@ -2653,11 +2653,11 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCountrySignedNumFormat(
 //		currency symbol will be positioned outside
 //		the negative number sign symbol.
 //
-//			Example Outside - 1
+//			Example-1 Outside:
 //				currencyInsideNumSymbol = false
 //				Number String = "$ -123.45"
 //
-//			Example Outside - 2
+//			Example-2 Outside:
 //				currencyInsideNumSymbol = false
 //				Number String = "  123.45- €"
 //
@@ -2665,11 +2665,11 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCountrySignedNumFormat(
 //		currency symbol will be positioned inside
 //		the negative number sign symbol.
 //
-//			Example - 1
+//			Example - 3 Inside:
 //				currencyInsideNumSymbol = true
 //				Number String = " - $123.45"
 //
-//			Example - 2
+//			Example - 4 Inside:
 //				currencyInsideNumSymbol = true
 //				Number String = "  123.45€ -"
 //
@@ -2719,7 +2719,8 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCountrySignedNumFormat(
 //		Possible valid values are listed as follows:
 //
 //			NumFieldSymPos.InsideNumField()
-//				Example InsideNumField - 1:
+//
+//				Example-1 InsideNumField:
 //					Number Field Length: 9
 //					Numeric Value: 123.45
 //					Number Sign Symbol: leading minus sign ('-')
@@ -2729,7 +2730,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCountrySignedNumFormat(
 //					Number Field Index:       012345678
 //					Total Number String Length: 9
 //
-//				Example InsideNumField - 2:
+//				Example-2 InsideNumField:
 //					Number Field Length: 10
 //					Numeric Value: 123.45
 //					Number Sign Symbol: trailing minus sign ('-')
@@ -2739,7 +2740,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCountrySignedNumFormat(
 //					Number Field Index:       0123456789
 //					Total Number String Length: 10
 //
-//				Example InsideNumField - 3:
+//				Example-3 InsideNumField:
 //					Number Field Length: 9
 //					Numeric Value: 123.45
 //					Number Sign Symbol: None - Value is Positive
@@ -2749,7 +2750,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCountrySignedNumFormat(
 //					Number Field Index:       012345678
 //					Total Number String Length: 9
 //
-//				Example InsideNumField - 4:
+//				Example-4 InsideNumField:
 //					Number Field Length: 10
 //					Numeric Value: 123.45
 //					Number Sign Symbol: None - Value is Positive
@@ -2764,7 +2765,8 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCountrySignedNumFormat(
 //				string is defined by the Number Field length.
 //
 //			NumFieldSymPos.OutsideNumField()
-//				Example OutsideNumField - 5:
+//
+//				Example-5 OutsideNumField:
 //					Number Field Length: 8
 //			     	Numeric Value: 123.45
 //			     	Number Symbol: leading minus sign ('-')
@@ -2774,7 +2776,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCountrySignedNumFormat(
 //					Number Field Index:       01234567890
 //					Total Number String Length: 11
 //
-//				Example OutsideNumField - 6:
+//				Example-6 OutsideNumField:
 //					Number Field Length: 8
 //			     	Numeric Value: 123.45
 //			     	Number Symbol: trailing minus sign ('-')
@@ -2784,7 +2786,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCountrySignedNumFormat(
 //					Number Field Index:       01234567890
 //					Total Number String Length: 11
 //
-//				Example OutsideNumField - 7:
+//				Example-7 OutsideNumField:
 //					Number Field Length: 8
 //			     	Numeric Value: 123.45
 //					Number Sign Symbol: None - Value is Positive
@@ -2794,7 +2796,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCountrySignedNumFormat(
 //					Number Field Index:       012345678
 //					Total Number String Length: 9
 //
-//				Example OutsideNumField - 6:
+//				Example-8 OutsideNumField:
 //					Number Field Length: 8
 //			     	Numeric Value: 123.45
 //					Number Sign Symbol: None - Value is Positive
@@ -2944,11 +2946,11 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCountrySignedNumFormat(
 //		method or methods listed as a method or function
 //		chain of execution.
 //
-//		If no error prefix information is needed, set this
-//		parameter to 'nil'.
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
 //
-//		This empty interface must be convertible to one of
-//		the following types:
+//		This empty interface must be convertible to one
+//		of the following types:
 //
 //		1.	nil
 //				A nil value is valid and generates an
