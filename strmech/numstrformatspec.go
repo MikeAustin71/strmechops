@@ -10447,15 +10447,45 @@ func (numStrFmtSpec *NumStrFormatSpec) SetCurrencyFmtGermany(
 			ePrefix.XCpy("numStrFmtSpec<-"))
 }
 
-//	SetCurrencyFmtUK
+//	SetCurrencyFmtUKMinusOutside
 //
 //	Reconfigures the current instance of NumStrFormatSpec
 //	using Currency Number String formatting conventions
 //	typically applied in the UK (United Kingdom).
 //
+//	The default UK currency symbol is a leading Pound
+//	sign ('£').
+//
+//		UK Example:	Positive Numeric Currency Value
+//			£ 123.45
+//
+//	The term "MinusOutside" in the method name means that
+//	the Pound sign ('£') configured for negative numeric
+//	values will be outside, or to the left of, the Pound
+//	sign ('£').
+//
+//	UK Example:	Negative Numeric Currency Value
+//			- £123.45
+//
+//	Default values will be used to configure the returned
+//	instance of NumStrFormatSpec with UK Currency Number
+//	formatting specifications. New data values will be
+//	configured for the positive, zero and negative number
+//	sign symbols as well as the currency symbol.
+//
+//	If custom decimal separator, integer separators,
+//	negative number sign characters or currency
+//	symbols are required, see methods:
+//
+//		NumStrFormatSpec.SetNumFmtComponents()
+//		NumStrFormatSpec.SetNumFmtParams()
+//		NumStrFormatSpec.SetNumFmtParamsRunes()
+//
 // ----------------------------------------------------------------
 //
 // # Reference:
+//
+//	https://learn.microsoft.com/en-us/globalization/locale/currency-formatting
 //
 //	https://www.thefinancials.com/Default.aspx?SubSectionID=curformat
 //
@@ -10474,13 +10504,15 @@ func (numStrFmtSpec *NumStrFormatSpec) SetCurrencyFmtGermany(
 //
 // ----------------------------------------------------------------
 //
-// # Defaults
+//	Decimal Separator
 //
 //	The radix point or decimal separator is set to the
 //	period character ('.').
 //
-//		United Kingdom Example-1
-//		123.45 (The fractional digits are "45")
+//		UK Example-1:
+//			123.45 (The fractional digits are "45")
+//
+//	Integer Separator
 //
 //	The integer group separator is a comma character
 //	(',').
@@ -10490,32 +10522,64 @@ func (numStrFmtSpec *NumStrFormatSpec) SetCurrencyFmtGermany(
 //	'thousands' with each group containing three digits
 //	each:
 //
-//		United Kingdom Example-2
-//				1,000,000
+//		UK Example-2:
+//			1,000,000
 //
-//	The currency symbol used in the United Kingdom is the
-//	Pound Sterling symbol ('£').
+//	Currency Symbol
 //
-//		United Kingdom Example-3
-//			£ 1,000,000.00
+//	The default currency symbol used in the UK is the
+//	leading Pound symbol ('£').
 //
-//	The negative number sign is set to leading and
-//	trailing parentheses ("()").
+//	Positive Numeric Values
 //
-//		United Kingdom Example-4
-//			£ -1,000,000.00
+//	The positive number sign is implied for positive
+//	numeric values. Therefore, the positive number sign
+//	symbol is set to a blank or empty string ("").
 //
-//	The positive number sign is set to a blank or empty
+//		UK Example-3:
+//			Positive Numeric Currency Value
+//				£ 123.45  Positive Value
+//
+//	Zero Numeric Values
+//
+//	Zero numeric values have no number sign. Therefore,
+//	the zero number symbol is set to a blank or empty
 //	string ("").
 //
-//		United Kingdom Example-5
-//			£ 1,000,000.00
-//
-//	The zero number format is set to a blank or empty
-//	string ("").
-//
-//		United Kingdom Example-6
+//		UK Example-4:
+//			Zero Numeric Currency Value
 //				£ 0.00
+//
+//	Negative Numeric Values
+//
+//	The negative number sign is set to a leading minus
+//	sign ('-').
+//
+//	This method will configure the Pound sign ('£')
+//	such that any minus sign configured for negative
+//	numeric values will be outside, or to the left of,
+//	the Pound sign ('£').
+//
+//		UK Example-5:
+//			Negative Numeric Currency Value
+//				- £123.45
+//
+//	The negative signed number symbol is configured with a
+//	leading minus sign ('-') meaning that all negative
+//	numeric values will be prefixed with a leading minus
+//	sign ('-'). The negative number sign and the currency
+//	symbol will be positioned inside the number field:
+//
+//		UK Example-6:
+//			NumFieldSymPos.InsideNumField()
+//				Number Field Length: 10
+//				Numeric Value: -123.45
+//				Number Symbol: leading minus sign ('-')
+//				Number Symbol Position: Inside Number Field
+//				Number Text Justification: Right Justified
+//				Formatted Number String: " - £123.45"
+//				Number Field Index:------>0123456789
+//				Total Number String Length: 10
 //
 // ----------------------------------------------------------------
 //
@@ -10588,19 +10652,19 @@ func (numStrFmtSpec *NumStrFormatSpec) SetCurrencyFmtGermany(
 //				          TxtJustify.Center()
 //		}
 //
-//	 errorPrefix                interface{}
+//	errorPrefix					interface{}
 //
 //		This object encapsulates error prefix text which
 //		is included in all returned error messages.
-//		Usually, it	contains the name of the calling
+//		Usually, it contains the name of the calling
 //		method or methods listed as a method or function
 //		chain of execution.
 //
-//		If no error prefix information is needed, set this
-//		parameter to 'nil'.
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
 //
-//		This empty interface must be convertible to one of
-//		the following types:
+//		This empty interface must be convertible to one
+//		of the following types:
 //
 //		1.	nil
 //				A nil value is valid and generates an
@@ -10632,7 +10696,7 @@ func (numStrFmtSpec *NumStrFormatSpec) SetCurrencyFmtGermany(
 //				this object will be copied for use
 //				in error and informational messages.
 //
-//		7.  IBasicErrorPrefix
+//		7.	IBasicErrorPrefix
 //				An interface to a method
 //				generating a two-dimensional slice
 //				of strings containing error prefix
@@ -10651,18 +10715,19 @@ func (numStrFmtSpec *NumStrFormatSpec) SetCurrencyFmtGermany(
 //
 // # Return Values
 //
-//	err							error
+//	error
 //
-//		If this method completes successfully, the returned error
-//		Type is set equal to 'nil'.
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
 //
-//		If errors are encountered during processing, the returned
-//		error Type will encapsulate an error message. This
-//		returned error message will incorporate the method chain
-//		and text passed by input parameter, 'errorPrefix'. The
-//		'errorPrefix' text will be attached to the beginning of
-//		the error message.
-func (numStrFmtSpec *NumStrFormatSpec) SetCurrencyFmtUK(
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (numStrFmtSpec *NumStrFormatSpec) SetCurrencyFmtUKMinusOutside(
 	numberFieldSpec NumStrNumberFieldSpec,
 	errorPrefix interface{}) (
 	err error) {
@@ -10681,7 +10746,7 @@ func (numStrFmtSpec *NumStrFormatSpec) SetCurrencyFmtUK(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumStrFormatSpec."+
-			"SetCurrencyFmtUK()",
+			"SetCurrencyFmtUKMinusOutside()",
 		"")
 
 	if err != nil {
