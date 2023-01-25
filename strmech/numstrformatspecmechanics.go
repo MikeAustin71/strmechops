@@ -1243,8 +1243,8 @@ func (nStrFmtSpecMechanics *numStrFmtSpecMechanics) setSignedBasicNumStr(
 			NumFieldSymPos.InsideNumField(),
 			[]rune{},
 			[]rune{},
+			false,
 			NumFieldSymPos.InsideNumField(),
-			CurrNumSignRelPos.None(),
 			numFieldLength,
 			numFieldJustification,
 			ePrefix.XCpy(

@@ -6024,6 +6024,36 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtComponents(
 //		Symbols are not required, set
 //		'trailingCurrencySymbol' to 'nil'.
 //
+//	currencyInsideNumSymbol			bool
+//
+//		This boolean parameter determines whether the
+//		currency symbol will be positioned inside or
+//		outside the negative number sign symbol.
+//
+//		If this parameter is set to 'false', the
+//		currency symbol will be positioned outside
+//		the negative number sign symbol.
+//
+//			Example-1 Outside:
+//				currencyInsideNumSymbol = false
+//				Number String = "$ -123.45"
+//
+//			Example-2 Outside:
+//				currencyInsideNumSymbol = false
+//				Number String = "  123.45- €"
+//
+//		If this parameter is set to 'true', the
+//		currency symbol will be positioned inside
+//		the negative number sign symbol.
+//
+//			Example - 3 Inside:
+//				currencyInsideNumSymbol = true
+//				Number String = " - $123.45"
+//
+//			Example - 4 Inside:
+//				currencyInsideNumSymbol = true
+//				Number String = "  123.45€ -"
+//
 //	currencyNumFieldSymPosition		NumberFieldSymbolPosition
 //
 //		Defines the position of the Leading Currency
@@ -6090,84 +6120,6 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtComponents(
 //			For the 'NumFieldSymPos.OutsideNumField()' specification,
 //			the final length of the number string is greater than
 //			the Number Field length.
-//
-//	currencyNumSignRelPos			CurrencyNumSignRelativePosition
-//
-//		Currency Symbols have the option of being
-//		positioned either inside or outside number sign
-//		symbols formatted with numeric values in a
-//		number string.
-//
-//		Examples of number sign symbols include minus
-//		signs ('-'), plus signs ('+') and surrounding
-//		parentheses ("()").
-//
-//		Parameter 'currencyNumSignRelPos' is an instance
-//		of type CurrencyNumSignRelativePosition which
-//		serves as an enumeration. This enumeration has
-//		three possible values, only two of which are
-//		valid:
-//
-//			CurrNumSignRelPos.None()			- Invalid
-//			CurrNumSignRelPos.OutsideNumSign()	- Valid
-//			CurrNumSignRelPos.InsideNumSign()	- Valid
-//
-//		'CurrNumSignRelPos' is global constant used to
-//		abbreviate the syntax for invoking these
-//		enumeration	values. The formal syntax is:
-//
-//			CurrencyNumSignRelativePosition(0).OutsideNumSign()
-//			CurrencyNumSignRelativePosition(0).InsideNumSign()
-//
-//		Examples CurrNumSignRelPos.OutsideNumSign()
-//				"$ -123.45"
-//				"123.45- €"
-//				"£ -123.45"
-//
-//		Examples CurrNumSignRelPos.InsideNumSign()
-//
-//			Examples:
-//				"- $123.45"
-//				"123.45€ -"
-//				"- £123.45"
-//
-//		NumberFieldSymbolPosition Conflicts
-//
-//		When formatting a number string, the
-//		NumberFieldSymbolPosition values for both the
-//		Currency Symbol and the Number Sign Symbol
-//		MUST BE EQUAL before the Currency Number Sign
-//		Relative Position parameter,
-//		('currencyNumSignRelPos'), will be activated
-//		and applied to the number string formatting
-//		algorithm.
-//
-//		If the NumberFieldSymbolPosition values for both
-//		the	Currency Symbol and the Number Sign Symbol
-//		ARE NOT EQUAL, the NumberFieldSymbolPosition
-//		parameter controls and the Currency Number Sign
-//		Relative Position parameter,
-//		('currencyNumSignRelPos'), will be ignored.
-//
-//		Example:
-//			-- NumberFieldSymbolPosition Values NOT EQUAL --
-//
-//			Number Field Length: 8
-//		  	Numeric Value: -123.45
-//			Minus Sign Number Field Symbol Position:
-//				NumFieldSymPos.InsideNumField()
-//			Currency Number Field Symbol Position:
-//				NumFieldSymPos.OutsideNumField()
-//			Currency Number Sign Relative Position:
-//				CurrNumSignRelPos.InsideNumSign()
-//			Leading Currency Symbol: Dollar sign ('$')
-//			Number Text Justification: Right Justified
-//			Formatted Number String: "$ -123.45"
-//			Number Field Index:------>012345678
-//			Total Number String Length: 9
-//
-//			Currency Symbol is Formatted OUTSIDE
-//			the Number Field.
 //
 //	numFieldLength					int
 //
@@ -6367,14 +6319,15 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtComponents(
 //
 //	err							error
 //
-//		If this method completes successfully, the returned error
-//		Type is set equal to 'nil'.
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
 //
-//		If errors are encountered during processing, the returned
-//		error Type will encapsulate an error message. This
-//		returned error message will incorporate the method chain
-//		and text passed by input parameter, 'errorPrefix'. The
-//		'errorPrefix' text will be attached to the beginning of
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
 //		the error message.
 func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtParams(
 	decSeparatorChars string,
@@ -6391,8 +6344,8 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtParams(
 	zeroNumFieldSymPosition NumberFieldSymbolPosition,
 	leadingCurrencySymbols string,
 	trailingCurrencySymbols string,
+	currencyInsideNumSymbol bool,
 	currencyNumFieldSymPosition NumberFieldSymbolPosition,
-	currencyNumSignRelPos CurrencyNumSignRelativePosition,
 	numFieldLength int,
 	numFieldJustification TextJustify,
 	errorPrefix interface{}) (
@@ -6437,8 +6390,8 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtParams(
 			zeroNumFieldSymPosition,
 			[]rune(leadingCurrencySymbols),
 			[]rune(trailingCurrencySymbols),
+			currencyInsideNumSymbol,
 			currencyNumFieldSymPosition,
-			currencyNumSignRelPos,
 			numFieldLength,
 			numFieldJustification,
 			ePrefix.XCpy(
@@ -6810,6 +6763,36 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtParams(
 //		Symbols are not required, set
 //		'trailingCurrencySymbol' to 'nil'.
 //
+//	currencyInsideNumSymbol			bool
+//
+//		This boolean parameter determines whether the
+//		currency symbol will be positioned inside or
+//		outside the negative number sign symbol.
+//
+//		If this parameter is set to 'false', the
+//		currency symbol will be positioned outside
+//		the negative number sign symbol.
+//
+//			Example-1 Outside:
+//				currencyInsideNumSymbol = false
+//				Number String = "$ -123.45"
+//
+//			Example-2 Outside:
+//				currencyInsideNumSymbol = false
+//				Number String = "  123.45- €"
+//
+//		If this parameter is set to 'true', the
+//		currency symbol will be positioned inside
+//		the negative number sign symbol.
+//
+//			Example - 3 Inside:
+//				currencyInsideNumSymbol = true
+//				Number String = " - $123.45"
+//
+//			Example - 4 Inside:
+//				currencyInsideNumSymbol = true
+//				Number String = "  123.45€ -"
+//
 //	currencyNumFieldSymPosition		NumberFieldSymbolPosition
 //
 //		Defines the position of the Leading Currency
@@ -6877,84 +6860,6 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtParams(
 //			For the 'NumFieldSymPos.OutsideNumField()' specification,
 //			the final length of the number string is greater than
 //			the Number Field length.
-//
-//	currencyNumSignRelPos			CurrencyNumSignRelativePosition
-//
-//		Currency Symbols have the option of being
-//		positioned either inside or outside number sign
-//		symbols formatted with numeric values in a
-//		number string.
-//
-//		Examples of number sign symbols include minus
-//		signs ('-'), plus signs ('+') and surrounding
-//		parentheses ("()").
-//
-//		Parameter 'currencyNumSignRelPos' is an instance
-//		of type CurrencyNumSignRelativePosition which
-//		serves as an enumeration. This enumeration has
-//		three possible values, only two of which are
-//		valid:
-//
-//			CurrNumSignRelPos.None()			- Invalid
-//			CurrNumSignRelPos.OutsideNumSign()	- Valid
-//			CurrNumSignRelPos.InsideNumSign()	- Valid
-//
-//		'CurrNumSignRelPos' is global constant used to
-//		abbreviate the syntax for invoking these
-//		enumeration	values. The formal syntax is:
-//
-//			CurrencyNumSignRelativePosition(0).OutsideNumSign()
-//			CurrencyNumSignRelativePosition(0).InsideNumSign()
-//
-//		Examples CurrNumSignRelPos.OutsideNumSign()
-//				"$ -123.45"
-//				"123.45- €"
-//				"£ -123.45"
-//
-//		Examples CurrNumSignRelPos.InsideNumSign()
-//
-//			Examples:
-//				"- $123.45"
-//				"123.45€ -"
-//				"- £123.45"
-//
-//		NumberFieldSymbolPosition Conflicts
-//
-//		When formatting a number string, the
-//		NumberFieldSymbolPosition values for both the
-//		Currency Symbol and the Number Sign Symbol
-//		MUST BE EQUAL before the Currency Number Sign
-//		Relative Position parameter,
-//		('currencyNumSignRelPos'), will be activated
-//		and applied to the number string formatting
-//		algorithm.
-//
-//		If the NumberFieldSymbolPosition values for both
-//		the	Currency Symbol and the Number Sign Symbol
-//		ARE NOT EQUAL, the NumberFieldSymbolPosition
-//		parameter controls and the Currency Number Sign
-//		Relative Position parameter,
-//		('currencyNumSignRelPos'), will be ignored.
-//
-//		Example:
-//			-- NumberFieldSymbolPosition Values NOT EQUAL --
-//
-//			Number Field Length: 8
-//		  	Numeric Value: -123.45
-//			Minus Sign Number Field Symbol Position:
-//				NumFieldSymPos.InsideNumField()
-//			Currency Number Field Symbol Position:
-//				NumFieldSymPos.OutsideNumField()
-//			Currency Number Sign Relative Position:
-//				CurrNumSignRelPos.InsideNumSign()
-//			Leading Currency Symbol: Dollar sign ('$')
-//			Number Text Justification: Right Justified
-//			Formatted Number String: "$ -123.45"
-//			Number Field Index:------>012345678
-//			Total Number String Length: 9
-//
-//			Currency Symbol is Formatted OUTSIDE
-//			the Number Field.
 //
 //	numFieldLength				int
 //
@@ -7101,8 +7006,8 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtParamsRunes(
 	zeroNumFieldSymPosition NumberFieldSymbolPosition,
 	leadingCurrencySymbols []rune,
 	trailingCurrencySymbols []rune,
+	currencyInsideNumSymbol bool,
 	currencyNumFieldSymPosition NumberFieldSymbolPosition,
-	currencyNumSignRelPos CurrencyNumSignRelativePosition,
 	numFieldLength int,
 	numFieldJustification TextJustify,
 	errorPrefix interface{}) (
@@ -7147,8 +7052,8 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtParamsRunes(
 			zeroNumFieldSymPosition,
 			leadingCurrencySymbols,
 			trailingCurrencySymbols,
+			currencyInsideNumSymbol,
 			currencyNumFieldSymPosition,
-			currencyNumSignRelPos,
 			numFieldLength,
 			numFieldJustification,
 			ePrefix.XCpy(
@@ -13160,6 +13065,36 @@ func (numStrFmtSpec *NumStrFormatSpec) SetNumFmtComponents(
 //		Symbols are not required, set
 //		'trailingCurrencySymbol' to 'nil'.
 //
+//	currencyInsideNumSymbol			bool
+//
+//		This boolean parameter determines whether the
+//		currency symbol will be positioned inside or
+//		outside the negative number sign symbol.
+//
+//		If this parameter is set to 'false', the
+//		currency symbol will be positioned outside
+//		the negative number sign symbol.
+//
+//			Example-1 Outside:
+//				currencyInsideNumSymbol = false
+//				Number String = "$ -123.45"
+//
+//			Example-2 Outside:
+//				currencyInsideNumSymbol = false
+//				Number String = "  123.45- €"
+//
+//		If this parameter is set to 'true', the
+//		currency symbol will be positioned inside
+//		the negative number sign symbol.
+//
+//			Example - 3 Inside:
+//				currencyInsideNumSymbol = true
+//				Number String = " - $123.45"
+//
+//			Example - 4 Inside:
+//				currencyInsideNumSymbol = true
+//				Number String = "  123.45€ -"
+//
 //	currencyNumFieldSymPosition		NumberFieldSymbolPosition
 //
 //		Defines the position of the Leading Currency
@@ -13226,84 +13161,6 @@ func (numStrFmtSpec *NumStrFormatSpec) SetNumFmtComponents(
 //			For the 'NumFieldSymPos.OutsideNumField()' specification,
 //			the final length of the number string is greater than
 //			the Number Field length.
-//
-//	currencyNumSignRelPos			CurrencyNumSignRelativePosition
-//
-//		Currency Symbols have the option of being
-//		positioned either inside or outside number sign
-//		symbols formatted with numeric values in a
-//		number string.
-//
-//		Examples of number sign symbols include minus
-//		signs ('-'), plus signs ('+') and surrounding
-//		parentheses ("()").
-//
-//		Parameter 'currencyNumSignRelPos' is an instance
-//		of type CurrencyNumSignRelativePosition which
-//		serves as an enumeration. This enumeration has
-//		three possible values, only two of which are
-//		valid:
-//
-//			CurrNumSignRelPos.None()			- Invalid
-//			CurrNumSignRelPos.OutsideNumSign()	- Valid
-//			CurrNumSignRelPos.InsideNumSign()	- Valid
-//
-//		'CurrNumSignRelPos' is global constant used to
-//		abbreviate the syntax for invoking these
-//		enumeration	values. The formal syntax is:
-//
-//			CurrencyNumSignRelativePosition(0).OutsideNumSign()
-//			CurrencyNumSignRelativePosition(0).InsideNumSign()
-//
-//		Examples CurrNumSignRelPos.OutsideNumSign()
-//				"$ -123.45"
-//				"123.45- €"
-//				"£ -123.45"
-//
-//		Examples CurrNumSignRelPos.InsideNumSign()
-//
-//			Examples:
-//				"- $123.45"
-//				"123.45€ -"
-//				"- £123.45"
-//
-//		NumberFieldSymbolPosition Conflicts
-//
-//		When formatting a number string, the
-//		NumberFieldSymbolPosition values for both the
-//		Currency Symbol and the Number Sign Symbol
-//		MUST BE EQUAL before the Currency Number Sign
-//		Relative Position parameter,
-//		('currencyNumSignRelPos'), will be activated
-//		and applied to the number string formatting
-//		algorithm.
-//
-//		If the NumberFieldSymbolPosition values for both
-//		the	Currency Symbol and the Number Sign Symbol
-//		ARE NOT EQUAL, the NumberFieldSymbolPosition
-//		parameter controls and the Currency Number Sign
-//		Relative Position parameter,
-//		('currencyNumSignRelPos'), will be ignored.
-//
-//		Example:
-//			-- NumberFieldSymbolPosition Values NOT EQUAL --
-//
-//			Number Field Length: 8
-//		  	Numeric Value: -123.45
-//			Minus Sign Number Field Symbol Position:
-//				NumFieldSymPos.InsideNumField()
-//			Currency Number Field Symbol Position:
-//				NumFieldSymPos.OutsideNumField()
-//			Currency Number Sign Relative Position:
-//				CurrNumSignRelPos.InsideNumSign()
-//			Leading Currency Symbol: Dollar sign ('$')
-//			Number Text Justification: Right Justified
-//			Formatted Number String: "$ -123.45"
-//			Number Field Index:------>012345678
-//			Total Number String Length: 9
-//
-//			Currency Symbol is Formatted OUTSIDE
-//			the Number Field.
 //
 //	numFieldLength				int
 //
@@ -13439,8 +13296,8 @@ func (numStrFmtSpec *NumStrFormatSpec) SetNumFmtParams(
 	zeroNumFieldSymPosition NumberFieldSymbolPosition,
 	leadingCurrencySymbols string,
 	trailingCurrencySymbols string,
+	currencyInsideNumSymbol bool,
 	currencyNumFieldSymPosition NumberFieldSymbolPosition,
-	currencyNumSignRelPos CurrencyNumSignRelativePosition,
 	numFieldLength int,
 	numFieldJustification TextJustify,
 	errorPrefix interface{}) (
@@ -13484,8 +13341,8 @@ func (numStrFmtSpec *NumStrFormatSpec) SetNumFmtParams(
 			zeroNumFieldSymPosition,
 			[]rune(leadingCurrencySymbols),
 			[]rune(trailingCurrencySymbols),
+			currencyInsideNumSymbol,
 			currencyNumFieldSymPosition,
-			currencyNumSignRelPos,
 			numFieldLength,
 			numFieldJustification,
 			ePrefix.XCpy(
@@ -13891,6 +13748,36 @@ func (numStrFmtSpec *NumStrFormatSpec) SetNumFmtParams(
 //		Symbols are not required, set
 //		'trailingCurrencySymbol' to 'nil'.
 //
+//	currencyInsideNumSymbol			bool
+//
+//		This boolean parameter determines whether the
+//		currency symbol will be positioned inside or
+//		outside the negative number sign symbol.
+//
+//		If this parameter is set to 'false', the
+//		currency symbol will be positioned outside
+//		the negative number sign symbol.
+//
+//			Example-1 Outside:
+//				currencyInsideNumSymbol = false
+//				Number String = "$ -123.45"
+//
+//			Example-2 Outside:
+//				currencyInsideNumSymbol = false
+//				Number String = "  123.45- €"
+//
+//		If this parameter is set to 'true', the
+//		currency symbol will be positioned inside
+//		the negative number sign symbol.
+//
+//			Example - 3 Inside:
+//				currencyInsideNumSymbol = true
+//				Number String = " - $123.45"
+//
+//			Example - 4 Inside:
+//				currencyInsideNumSymbol = true
+//				Number String = "  123.45€ -"
+//
 //	currencyNumFieldSymPosition		NumberFieldSymbolPosition
 //
 //		Defines the position of the Leading Currency
@@ -13958,84 +13845,6 @@ func (numStrFmtSpec *NumStrFormatSpec) SetNumFmtParams(
 //			For the 'NumFieldSymPos.OutsideNumField()' specification,
 //			the final length of the number string is greater than
 //			the Number Field length.
-//
-//	currencyNumSignRelPos			CurrencyNumSignRelativePosition
-//
-//		Currency Symbols have the option of being
-//		positioned either inside or outside number sign
-//		symbols formatted with numeric values in a
-//		number string.
-//
-//		Examples of number sign symbols include minus
-//		signs ('-'), plus signs ('+') and surrounding
-//		parentheses ("()").
-//
-//		Parameter 'currencyNumSignRelPos' is an instance
-//		of type CurrencyNumSignRelativePosition which
-//		serves as an enumeration. This enumeration has
-//		three possible values, only two of which are
-//		valid:
-//
-//			CurrNumSignRelPos.None()			- Invalid
-//			CurrNumSignRelPos.OutsideNumSign()	- Valid
-//			CurrNumSignRelPos.InsideNumSign()	- Valid
-//
-//		'CurrNumSignRelPos' is global constant used to
-//		abbreviate the syntax for invoking these
-//		enumeration	values. The formal syntax is:
-//
-//			CurrencyNumSignRelativePosition(0).OutsideNumSign()
-//			CurrencyNumSignRelativePosition(0).InsideNumSign()
-//
-//		Examples CurrNumSignRelPos.OutsideNumSign()
-//				"$ -123.45"
-//				"123.45- €"
-//				"£ -123.45"
-//
-//		Examples CurrNumSignRelPos.InsideNumSign()
-//
-//			Examples:
-//				"- $123.45"
-//				"123.45€ -"
-//				"- £123.45"
-//
-//		NumberFieldSymbolPosition Conflicts
-//
-//		When formatting a number string, the
-//		NumberFieldSymbolPosition values for both the
-//		Currency Symbol and the Number Sign Symbol
-//		MUST BE EQUAL before the Currency Number Sign
-//		Relative Position parameter,
-//		('currencyNumSignRelPos'), will be activated
-//		and applied to the number string formatting
-//		algorithm.
-//
-//		If the NumberFieldSymbolPosition values for both
-//		the	Currency Symbol and the Number Sign Symbol
-//		ARE NOT EQUAL, the NumberFieldSymbolPosition
-//		parameter controls and the Currency Number Sign
-//		Relative Position parameter,
-//		('currencyNumSignRelPos'), will be ignored.
-//
-//		Example:
-//			-- NumberFieldSymbolPosition Values NOT EQUAL --
-//
-//			Number Field Length: 8
-//		  	Numeric Value: -123.45
-//			Minus Sign Number Field Symbol Position:
-//				NumFieldSymPos.InsideNumField()
-//			Currency Number Field Symbol Position:
-//				NumFieldSymPos.OutsideNumField()
-//			Currency Number Sign Relative Position:
-//				CurrNumSignRelPos.InsideNumSign()
-//			Leading Currency Symbol: Dollar sign ('$')
-//			Number Text Justification: Right Justified
-//			Formatted Number String: "$ -123.45"
-//			Number Field Index:------>012345678
-//			Total Number String Length: 9
-//
-//			Currency Symbol is Formatted OUTSIDE
-//			the Number Field.
 //
 //	numFieldLength				int
 //
@@ -14171,8 +13980,8 @@ func (numStrFmtSpec *NumStrFormatSpec) SetNumFmtParamsRunes(
 	zeroNumFieldSymPosition NumberFieldSymbolPosition,
 	leadingCurrencySymbols []rune,
 	trailingCurrencySymbols []rune,
+	currencyInsideNumSymbol bool,
 	currencyNumFieldSymPosition NumberFieldSymbolPosition,
-	currencyNumSignRelPos CurrencyNumSignRelativePosition,
 	numFieldLength int,
 	numFieldJustification TextJustify,
 	errorPrefix interface{}) (
@@ -14216,8 +14025,8 @@ func (numStrFmtSpec *NumStrFormatSpec) SetNumFmtParamsRunes(
 			zeroNumFieldSymPosition,
 			leadingCurrencySymbols,
 			trailingCurrencySymbols,
+			currencyInsideNumSymbol,
 			currencyNumFieldSymPosition,
-			currencyNumSignRelPos,
 			numFieldLength,
 			numFieldJustification,
 			ePrefix.XCpy(

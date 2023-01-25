@@ -24,8 +24,8 @@ func TestNumStrNumberSymbolSpec_NewCurrencyLeadingSymbols_000100(t *testing.T) {
 	newNStrNumberSymbolSpec,
 		err := new(NumStrNumberSymbolSpec).NewCurrencyLeadingSymbol(
 		originalLeadingCurrencySymbol,
+		false,
 		originalCurrencyFieldSymbolPosition,
-		originalCurrencyNumSignRelPos,
 		ePrefix.XCpy(
 			"newNStrNumberSymbolSpec<-"))
 
@@ -191,8 +191,8 @@ func TestNumStrNumberSymbolSpec_NewCurrencyLeadingTrailingSymbols_000100(t *test
 		err := new(NumStrNumberSymbolSpec).NewCurrencyLeadingTrailingSymbols(
 		originalLeadingCurrencySymbol,
 		originalTrailingCurrencySymbol,
+		false,
 		originalCurrencyFieldSymbolPosition,
-		originalCurrencyNumSignRelPos,
 		ePrefix.XCpy(
 			"newNStrNumberSymbolSpec<-"))
 
@@ -452,8 +452,8 @@ func TestNumStrNumberSymbolSpec_NewCurrencyTrailingSymbols_000100(t *testing.T) 
 	newNStrNumberSymbolSpec,
 		err := new(NumStrNumberSymbolSpec).NewCurrencyTrailingSymbol(
 		originalTrailingCurrencySymbol,
+		false,
 		originalCurrencyFieldSymbolPosition,
-		originalCurrencyNumSignRelPos,
 		ePrefix.XCpy(
 			"newNStrNumberSymbolSpec<-"))
 

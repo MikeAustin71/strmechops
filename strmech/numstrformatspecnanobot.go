@@ -2435,6 +2435,144 @@ func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setCurrencyNStrFmtUSParen(
 //				specification, the final length of the number
 //				string is greater than the Number Field length.
 //
+//	leadingCurrencySymbol     		[]rune
+//
+//		A rune array containing one or more Leading
+//		Currency Symbol characters used to configure
+//		the current instance of NumStrNumberSymbolSpec.
+//
+//		Leading Currency Symbol characters can include
+//		such symbols as the Dollar sign ('$'), Euro sign
+//	 	('€') and Pound sign ('£').
+//
+//		Leading Currency Symbols are prefixed or
+//		prepended to the beginning of number strings
+//		containing currency numeric values.
+//
+//				Example: $125.34
+//
+//		Currency Symbols are optional. If Currency
+//		Symbols are not required, set
+//		'leadingCurrencySymbol' to 'nil'.
+//
+//	trailingCurrencySymbol     		[]rune
+//
+//		A rune array containing one or more Trailing
+//		Currency Symbol characters used to configure
+//		the current instance of NumStrNumberSymbolSpec.
+//
+//		Trailing Currency Symbol characters can include
+//		such symbols as the dollar sign ('$'), Euro sign
+//	 	('€') and Pound sign ('£').
+//
+//		Trailing Currency Symbols are suffixed or
+//		appended to the end of number strings containing
+//		currency numeric values.
+//
+//				Example: 125.34€
+//
+//		Currency Symbols are optional. If Currency
+//		Symbols are not required, set
+//		'trailingCurrencySymbol' to 'nil'.
+//
+//	currencyInsideNumSymbol			bool
+//
+//		This boolean parameter determines whether the
+//		currency symbol will be positioned inside or
+//		outside the negative number sign symbol.
+//
+//		If this parameter is set to 'false', the
+//		currency symbol will be positioned outside
+//		the negative number sign symbol.
+//
+//			Example-1 Outside:
+//				currencyInsideNumSymbol = false
+//				Number String = "$ -123.45"
+//
+//			Example-2 Outside:
+//				currencyInsideNumSymbol = false
+//				Number String = "  123.45- €"
+//
+//		If this parameter is set to 'true', the
+//		currency symbol will be positioned inside
+//		the negative number sign symbol.
+//
+//			Example - 3 Inside:
+//				currencyInsideNumSymbol = true
+//				Number String = " - $123.45"
+//
+//			Example - 4 Inside:
+//				currencyInsideNumSymbol = true
+//				Number String = "  123.45€ -"
+//
+//	currencyNumFieldSymPosition		NumberFieldSymbolPosition
+//
+//		Defines the position of the Leading Currency
+//		Symbol ('leadingCurrencySymbol') and Trailing
+//		Currency Symbol ('trailingCurrencySymbol')
+//		relative to a Number Field in which a number
+//		string is displayed. Possible valid values are
+//		listed as follows:
+//
+//			NumFieldSymPos.InsideNumField()
+//			NumFieldSymPos.OutsideNumField()
+//
+//		Examples NumFieldSymPos.InsideNumField()
+//
+//			Example-1:
+//				Number Field Length: 10
+//				Numeric Value: 123.45
+//				Leading Currency Symbol: Dollar sign ('$')
+//				Trailing Currency Symbol: Dollar sign ('$')
+//				Number Symbol Position: Inside Number Field
+//			    Number Text Justification: Right Justified
+//				Formatted Number String: " $123.45$"
+//				Number Field Index:------>012345679
+//				Total Number String Length: 10
+//
+//			Example-2:
+//				Number Field Length: 12
+//				Numeric Value: 123.45
+//				Leading Currency Symbol: Dollar sign ('$')
+//				Trailing Currency Symbol: Dollar sign ('$')
+//				Number Symbol Position: Inside Number Field
+//				Number Text Justification: Centered
+//				Formatted Number String: "  $123.45$  "
+//				Number Field Index:------>012345678901
+//				Total Number String Length: 12
+//
+//			For the 'NumFieldSymPos.InsideNumField()' specification,
+//			the final length of the number string is defined by the
+//			Number Field length.
+//
+//		Examples NumFieldSymPos.OutsideNumField()
+//
+//			Example-3:
+//				Number Field Length: 8
+//			    Numeric Value: 123.45
+//				Leading Currency Symbol: Dollar sign ('$')
+//				Trailing Currency Symbol: Dollar sign ('$')
+//			    Number Symbol Position: Outside Number Field
+//			    Number Text Justification: Right Justified
+//			    Formatted Number String: "$  123.45$"
+//				Number Field Index:------>0123456789
+//				Total Number String Length: 10
+//
+//			Example-4:
+//				Number Field Length: 10
+//				Numeric Value: 123.45
+//				Leading Currency Symbol: Dollar sign ('$')
+//				Trailing Currency Symbol: Dollar sign ('$')
+//				Number Symbol Position: Outside Number Field
+//			    Number Text Justification: Centered
+//				Formatted Number String: "$  123.45  $"
+//				Number Field Index:------>012345678901
+//				Total Number String Length: 12
+//
+//			For the 'NumFieldSymPos.OutsideNumField()' specification,
+//			the final length of the number string is greater than
+//			the Number Field length.
+//
 //	numFieldLength				int
 //
 //		This parameter defines the length of the text
@@ -2485,32 +2623,37 @@ func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setCurrencyNStrFmtUSParen(
 //			TxtJustify.Right()
 //			TxtJustify.Center()
 //
-//	errPrefDto						*ePref.ErrPrefixDto
-//		This object encapsulates an error prefix string which is
-//		included in all returned error messages. Usually, it
-//		contains the name of the calling method or methods listed
-//		as a function chain.
+//	errPrefDto					*ePref.ErrPrefixDto
 //
-//		If no error prefix information is needed, set this
-//		parameter to 'nil'.
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
 //
-//		Type ErrPrefixDto is included in the 'errpref' software
-//		package, "github.com/MikeAustin71/errpref".
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
 //
 // -----------------------------------------------------------------
 //
 // # Return Values
 //
-//	err								error
+//	err							error
 //
-//		If this method completes successfully, this returned error
-//		Type is set equal to 'nil'. If errors are encountered during
-//		processing, the returned error Type will encapsulate an error
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
 //		message.
 //
-//		If an error message is returned, the text value for input
-//		parameter 'errPrefDto' (error prefix) will be prefixed or
-//		attached at the beginning of the error message.
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
 func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setNStrNumberFieldSpec(
 	numStrFmtSpec *NumStrFormatSpec,
 	decSeparatorChars []rune,
@@ -2527,8 +2670,8 @@ func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setNStrNumberFieldSpec(
 	zeroNumFieldSymPosition NumberFieldSymbolPosition,
 	leadingCurrencySymbols []rune,
 	trailingCurrencySymbols []rune,
+	currencyInsideNumSymbol bool,
 	currencyNumFieldSymPosition NumberFieldSymbolPosition,
-	currencyNumSignRelPos CurrencyNumSignRelativePosition,
 	numFieldLength int,
 	numFieldJustification TextJustify,
 	errPrefDto *ePref.ErrPrefixDto) (
@@ -2607,8 +2750,8 @@ func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setNStrNumberFieldSpec(
 			zeroNumFieldSymPosition,
 			leadingCurrencySymbols,
 			trailingCurrencySymbols,
+			currencyInsideNumSymbol,
 			currencyNumFieldSymPosition,
-			currencyNumSignRelPos,
 			ePrefix.XCpy(
 				"numStrFmtSpec.numberSymbolsSpec"))
 

@@ -73,6 +73,36 @@ type numStrNumberSymbolSpecNanobot struct {
 //		If this parameter is submitted as an empty string,
 //		an error will be returned.
 //
+//	currencyInsideNumSymbol			bool
+//
+//		This boolean parameter determines whether the
+//		currency symbol will be positioned inside or
+//		outside the negative number sign symbol.
+//
+//		If this parameter is set to 'false', the
+//		currency symbol will be positioned outside
+//		the negative number sign symbol.
+//
+//			Example-1 Outside:
+//				currencyInsideNumSymbol = false
+//				Number String = "$ -123.45"
+//
+//			Example-2 Outside:
+//				currencyInsideNumSymbol = false
+//				Number String = "  123.45- €"
+//
+//		If this parameter is set to 'true', the
+//		currency symbol will be positioned inside
+//		the negative number sign symbol.
+//
+//			Example - 3 Inside:
+//				currencyInsideNumSymbol = true
+//				Number String = " - $123.45"
+//
+//			Example - 4 Inside:
+//				currencyInsideNumSymbol = true
+//				Number String = "  123.45€ -"
+//
 //	currencyFieldSymbolPosition		NumberFieldSymbolPosition
 //
 //		Defines the position of the Leading Currency
@@ -136,81 +166,6 @@ type numStrNumberSymbolSpecNanobot struct {
 //			the final length of the number string is greater than
 //			the Number Field length.
 //
-//	currencyNumSignRelPos			CurrencyNumSignRelativePosition
-//
-//		Currency Symbols have the option of being
-//		positioned either inside or outside number sign
-//		symbols formatted with numeric values in a
-//		number string.
-//
-//		Examples of number sign symbols include minus
-//		signs ('-'), plus signs ('+') and surrounding
-//		parentheses ("()").
-//
-//		Parameter 'currencyNumSignRelPos' is an instance
-//		of type CurrencyNumSignRelativePosition which
-//		serves as an enumeration. This enumeration has
-//		three possible values, only two of which are
-//		valid:
-//
-//			CurrNumSignRelPos.None()			- Invalid
-//			CurrNumSignRelPos.OutsideNumSign()	- Valid
-//			CurrNumSignRelPos.InsideNumSign()	- Valid
-//
-//		'CurrNumSignRelPos' is global constant used to
-//		abbreviate the syntax for invoking these
-//		enumeration	values. The formal syntax is:
-//
-//			CurrencyNumSignRelativePosition(0).OutsideNumSign()
-//			CurrencyNumSignRelativePosition(0).InsideNumSign()
-//
-//		Examples CurrNumSignRelPos.OutsideNumSign()
-//				"$ -123.45"
-//				"123.45- €"
-//				"£ -123.45"
-//
-//		Examples CurrNumSignRelPos.InsideNumSign()
-//
-//			Examples:
-//				"- $123.45"
-//				"123.45€ -"
-//				"- £123.45"
-//
-//		NumberFieldSymbolPosition Conflicts
-//
-//		When formatting a number string, the
-//		NumberFieldSymbolPosition values for both the
-//		Currency Symbol and the Number Sign Symbol
-//		MUST BE EQUAL before the Currency Number Sign
-//		Relative Position parameter,
-//		('currencyNumSignRelPos'), will be activated
-//		and applied to the number string formatting
-//		algorithm.
-//
-//		If the NumberFieldSymbolPosition values for both
-//		the	Currency Symbol and the Number Sign Symbol
-//		ARE NOT EQUAL, the NumberFieldSymbolPosition
-//		parameter controls and the Currency Number Sign
-//		Relative Position parameter,
-//		('currencyNumSignRelPos'), will be ignored.
-//
-//		Example:
-//			-- NumberFieldSymbolPosition Values NOT EQUAL --
-//
-//			Number Field Length: 8
-//		  	Numeric Value: -123.45
-//			Minus Sign NumberFieldSymbolPosition:
-//				NumFieldSymPos.InsideNumField()
-//			Currency Number Symbol Position:
-//				NumFieldSymPos.OutsideNumField()
-//			Currency Number Sign Relative Position:
-//				CurrNumSignRelPos.InsideNumSign()
-//			Leading Currency Symbol: Dollar sign ('$')
-//			Number Text Justification: Right
-//			Formatted Number String: "$ -123.45"
-//				 Number Field Index:  012345678
-//			Total Number String Length: 9
-//
 //	errPrefDto					*ePref.ErrPrefixDto
 //
 //		This object encapsulates an error prefix string
@@ -245,8 +200,8 @@ type numStrNumberSymbolSpecNanobot struct {
 func (nStrNumSymSpecNanobot *numStrNumberSymbolSpecNanobot) setLeadingCurrencySymbol(
 	currencySymbols *NumStrNumberSymbolSpec,
 	leadingCurrencySymbol []rune,
+	currencyInsideNumSymbol bool,
 	currencyFieldSymbolPosition NumberFieldSymbolPosition,
-	currencyNumSignRelPos CurrencyNumSignRelativePosition,
 	errPrefDto *ePref.ErrPrefixDto) error {
 
 	if nStrNumSymSpecNanobot.lock == nil {
@@ -296,20 +251,6 @@ func (nStrNumSymSpecNanobot *numStrNumberSymbolSpecNanobot) setLeadingCurrencySy
 
 	}
 
-	if currencyNumSignRelPos.XIsValid() == false {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: The Currency Number Sign Relative Position\n"+
-			"input parameter, 'currencyNumSignRelPos' is invalid!\n"+
-			" currencyNumSignRelPos String Value = %v\n"+
-			"currencyNumSignRelPos Integer Value = %v\n",
-			ePrefix.String(),
-			currencyNumSignRelPos.String(),
-			currencyNumSignRelPos.XValueInt())
-
-		return err
-	}
-
 	if len(leadingCurrencySymbol) == 0 {
 
 		err = fmt.Errorf("%v\n"+
@@ -325,60 +266,52 @@ func (nStrNumSymSpecNanobot *numStrNumberSymbolSpecNanobot) setLeadingCurrencySy
 	nStrNumSymSpecMolecule.empty(
 		currencySymbols)
 
-	err = nStrNumSymSpecMolecule.
-		setLeadingNStrNumSymbolSpec(
+	return nStrNumSymSpecMolecule.
+		setLeadingCurrencySymbolSpec(
 			currencySymbols,
 			leadingCurrencySymbol,
+			currencyInsideNumSymbol,
 			currencyFieldSymbolPosition,
 			ePrefix.XCpy(
 				"currencySymbols<-"+
 					"leadingCurrencySymbol"))
-
-	if err != nil {
-		return err
-	}
-
-	currencySymbols.currencyNumSignRelativePos =
-		currencyNumSignRelPos
-
-	return err
 }
 
-// setLeadingTrailingCurrencySymbols
+//	setLeadingTrailingCurrencySymbols
 //
-// Receives a pointer to an instance of
-// NumStrNumberSymbolSpec and reconfigures that instance
-// with a leading and trailing currency symbols.
+//	Receives a pointer to an instance of
+//	NumStrNumberSymbolSpec and reconfigures that instance
+//	with a leading and trailing currency symbols.
 //
-// The Number String Number Symbol Specification type
-// (NumStrNumberSymbolSpec) is designed to assist in
-// formatting numeric values as number strings for
-// screen displays, printing or file output.
+//	The Number String Number Symbol Specification type
+//	(NumStrNumberSymbolSpec) is designed to assist in
+//	formatting numeric values as number strings for
+//	screen displays, printing or file output.
 //
-// Examples of Currency Symbol characters include such
-// symbols as the dollar sign ('$'), Euro sign ('€') or
-// Pound sign ('£').
+//	Examples of Currency Symbol characters include such
+//	symbols as the dollar sign ('$'), Euro sign ('€') or
+//	Pound sign ('£').
 //
-// This method will configure and store leading and
-// trailing currency symbols for the instance of
-// NumStrNumberSymbolSpec passed as input parameter,
-// 'currencySymbols'.
+//	This method will configure and store leading and
+//	trailing currency symbols for the instance of
+//	NumStrNumberSymbolSpec passed as input parameter,
+//	'currencySymbols'.
 //
-// Leading currency symbols are prefixed or prepended
-// at the beginning of a number string while trailing
-// currency symbols are suffixed or appended at the end
-// of a number string.
+//	Leading currency symbols are prefixed or prepended
+//	at the beginning of a number string while trailing
+//	currency symbols are suffixed or appended at the end
+//	of a number string.
 //
-//	Example Leading Currency Sign : $123.45
-//	Example Trailing Currency Sign: 123.45€
+//		Example Leading Currency Sign : $123.45
+//		Example Trailing Currency Sign: 123.45€
 //
-// Although most currency symbols are configured as
-// either leading or trailing symbols, cases may arise
-// where currency symbols are required at both ends of
-// a number string. This method configures a Number
-// String Number Symbol Specification
-// (NumStrNumberSymbolSpec) with both Leading and
-// Trailing Currency Symbols.
+//	Although most currency symbols are configured as
+//	either leading or trailing symbols, cases may arise
+//	where currency symbols are required at both ends of
+//	a number string. This method configures a Number
+//	String Number Symbol Specification
+//	(NumStrNumberSymbolSpec) with both Leading and
+//	Trailing Currency Symbols.
 //
 // ----------------------------------------------------------------
 //
@@ -426,6 +359,36 @@ func (nStrNumSymSpecNanobot *numStrNumberSymbolSpecNanobot) setLeadingCurrencySy
 //
 //		If this parameter is submitted as an empty string,
 //		an error will be returned.
+//
+//	currencyInsideNumSymbol			bool
+//
+//		This boolean parameter determines whether the
+//		currency symbol will be positioned inside or
+//		outside the negative number sign symbol.
+//
+//		If this parameter is set to 'false', the
+//		currency symbol will be positioned outside
+//		the negative number sign symbol.
+//
+//			Example-1 Outside:
+//				currencyInsideNumSymbol = false
+//				Number String = "$ -123.45"
+//
+//			Example-2 Outside:
+//				currencyInsideNumSymbol = false
+//				Number String = "  123.45- €"
+//
+//		If this parameter is set to 'true', the
+//		currency symbol will be positioned inside
+//		the negative number sign symbol.
+//
+//			Example - 3 Inside:
+//				currencyInsideNumSymbol = true
+//				Number String = " - $123.45"
+//
+//			Example - 4 Inside:
+//				currencyInsideNumSymbol = true
+//				Number String = "  123.45€ -"
 //
 //	currencyFieldSymbolPosition		NumberFieldSymbolPosition
 //
@@ -495,88 +458,6 @@ func (nStrNumSymSpecNanobot *numStrNumberSymbolSpecNanobot) setLeadingCurrencySy
 //			the final length of the number string is greater than
 //			the Number Field length.
 //
-//	currencyNumSignRelPos			CurrencyNumSignRelativePosition
-//
-//		Currency Symbols have the option of being
-//		positioned either inside or outside number sign
-//		symbols formatted with numeric values in a
-//		number string.
-//
-//		Examples of number sign symbols include minus
-//		signs ('-'), plus signs ('+') and surrounding
-//		parentheses ("()").
-//
-//		The Currency Number Sign Relative Position
-//		('currencyNumSignRelPos') determines whether the
-//		leading and trailing currency symbols positioned
-//		inside or outside number signs formatted in
-//		the number string.
-//
-//		Parameter 'currencyNumSignRelPos' is an instance
-//		of type CurrencyNumSignRelativePosition which
-//		serves as an enumeration. This enumeration has
-//		three possible values, only two of which are
-//		valid:
-//
-//			CurrNumSignRelPos.None()			- Invalid
-//			CurrNumSignRelPos.OutsideNumSign()	- Valid
-//			CurrNumSignRelPos.InsideNumSign()	- Valid
-//
-//		'CurrNumSignRelPos' is global constant used to
-//		abbreviate the syntax for invoking these
-//		enumeration	values. The formal syntax is:
-//
-//			CurrencyNumSignRelativePosition(0).OutsideNumSign()
-//			CurrencyNumSignRelativePosition(0).InsideNumSign()
-//
-//		Examples CurrNumSignRelPos.OutsideNumSign()
-//				"$ -123.45$"
-//				"€123.45- €"
-//				"£ -123.45£"
-//
-//		Examples CurrNumSignRelPos.InsideNumSign()
-//
-//			Examples:
-//				"- $123.45$"
-//				"€123.45€ -"
-//				"- £123.45£"
-//
-//		NumberFieldSymbolPosition Conflicts
-//
-//		When formatting a number string, the
-//		NumberFieldSymbolPosition values for both the
-//		Leading and Trailing Currency Symbols and the
-//		Number Sign Symbol MUST BE EQUAL before the
-//		Currency Number Sign Relative Position parameter,
-//		('currencyNumSignRelPos'), will be activated and
-//		applied to the number string formatting
-//		algorithm.
-//
-//		If the NumberFieldSymbolPosition values for both
-//		the	Currency Symbol and the Number Sign Symbol
-//		ARE NOT EQUAL, the NumberFieldSymbolPosition
-//		parameter controls and the Currency Number Sign
-//		Relative Position parameter,
-//		('currencyNumSignRelPos'), will be ignored.
-//
-//		Example:
-//			-- NumberFieldSymbolPosition Values NOT EQUAL --
-//
-//			Number Field Length: 8
-//		  	Numeric Value: -123.45
-//			Minus Sign NumberFieldSymbolPosition:
-//				NumFieldSymPos.InsideNumField()
-//			Currency Number Symbol Position:
-//				NumFieldSymPos.OutsideNumField()
-//			Currency Number Sign Relative Position:
-//				CurrNumSignRelPos.InsideNumSign()
-//			Leading Currency Symbol: Dollar sign ('$')
-//			Trailing Currency Symbol: Dollar sign ("$")
-//			Number Text Justification: Right
-//			Formatted Number String: "$ -123.45$"
-//				 Number Field Index:  0123456789
-//			Total Number String Length: 10
-//
 //	errPrefDto					*ePref.ErrPrefixDto
 //
 //		This object encapsulates an error prefix string
@@ -612,8 +493,8 @@ func (nStrNumSymSpecNanobot *numStrNumberSymbolSpecNanobot) setLeadingTrailingCu
 	currencySymbols *NumStrNumberSymbolSpec,
 	leadingCurrencySymbol []rune,
 	trailingCurrencySymbol []rune,
+	currencyInsideNumSymbol bool,
 	currencyFieldSymbolPosition NumberFieldSymbolPosition,
-	currencyNumSignRelPos CurrencyNumSignRelativePosition,
 	errPrefDto *ePref.ErrPrefixDto) error {
 
 	if nStrNumSymSpecNanobot.lock == nil {
@@ -663,20 +544,6 @@ func (nStrNumSymSpecNanobot *numStrNumberSymbolSpecNanobot) setLeadingTrailingCu
 
 	}
 
-	if currencyNumSignRelPos.XIsValid() == false {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: The Currency Number Sign Relative Position\n"+
-			"input parameter, 'currencyNumSignRelPos' is invalid!\n"+
-			" currencyNumSignRelPos String Value = %v\n"+
-			"currencyNumSignRelPos Integer Value = %v\n",
-			ePrefix.String(),
-			currencyNumSignRelPos.String(),
-			currencyNumSignRelPos.XValueInt())
-
-		return err
-	}
-
 	lenLeadingCurrSym := len(leadingCurrencySymbol)
 
 	lenTrailingCurrSym := len(trailingCurrencySymbol)
@@ -699,12 +566,41 @@ func (nStrNumSymSpecNanobot *numStrNumberSymbolSpecNanobot) setLeadingTrailingCu
 	nStrNumSymSpecMolecule.empty(
 		currencySymbols)
 
-	if lenLeadingCurrSym > 0 {
+	if lenLeadingCurrSym > 0 &&
+		lenTrailingCurrSym == 0 {
 
 		err = nStrNumSymSpecMolecule.
-			setLeadingNStrNumSymbolSpec(
+			setLeadingCurrencySymbolSpec(
 				currencySymbols,
 				leadingCurrencySymbol,
+				currencyInsideNumSymbol,
+				currencyFieldSymbolPosition,
+				ePrefix.XCpy(
+					"currencySymbols<-"+
+						"leadingCurrencySymbol"))
+
+	} else if lenLeadingCurrSym == 0 &&
+		lenTrailingCurrSym > 0 {
+
+		err = nStrNumSymSpecMolecule.
+			setTrailingCurrencySymbolSpec(
+				currencySymbols,
+				trailingCurrencySymbol,
+				currencyInsideNumSymbol,
+				currencyFieldSymbolPosition,
+				ePrefix.XCpy(
+					"currencySymbols<-"+
+						"trailingCurrencySymbol"))
+	} else {
+		// MUST BE -
+		//  lenLeadingCurrSym > 0 &&
+		//		lenTrailingCurrSym > 0
+
+		err = nStrNumSymSpecMolecule.
+			setLeadingCurrencySymbolSpec(
+				currencySymbols,
+				leadingCurrencySymbol,
+				currencyInsideNumSymbol,
 				currencyFieldSymbolPosition,
 				ePrefix.XCpy(
 					"currencySymbols<-"+
@@ -713,26 +609,18 @@ func (nStrNumSymSpecNanobot *numStrNumberSymbolSpecNanobot) setLeadingTrailingCu
 		if err != nil {
 			return err
 		}
-	}
-
-	if lenTrailingCurrSym > 0 {
 
 		err = nStrNumSymSpecMolecule.
-			setTrailingNStrNumSymbolSpec(
+			setTrailingCurrencySymbolSpec(
 				currencySymbols,
 				trailingCurrencySymbol,
+				currencyInsideNumSymbol,
 				currencyFieldSymbolPosition,
 				ePrefix.XCpy(
 					"currencySymbols<-"+
 						"trailingCurrencySymbol"))
 
-		if err != nil {
-			return err
-		}
 	}
-
-	currencySymbols.currencyNumSignRelativePos =
-		currencyNumSignRelPos
 
 	return err
 }
@@ -788,6 +676,36 @@ func (nStrNumSymSpecNanobot *numStrNumberSymbolSpecNanobot) setLeadingTrailingCu
 //
 //		If this parameter is submitted as an empty string,
 //		an error will be returned.
+//
+//	currencyInsideNumSymbol			bool
+//
+//		This boolean parameter determines whether the
+//		currency symbol will be positioned inside or
+//		outside the negative number sign symbol.
+//
+//		If this parameter is set to 'false', the
+//		currency symbol will be positioned outside
+//		the negative number sign symbol.
+//
+//			Example-1 Outside:
+//				currencyInsideNumSymbol = false
+//				Number String = "$ -123.45"
+//
+//			Example-2 Outside:
+//				currencyInsideNumSymbol = false
+//				Number String = "  123.45- €"
+//
+//		If this parameter is set to 'true', the
+//		currency symbol will be positioned inside
+//		the negative number sign symbol.
+//
+//			Example - 3 Inside:
+//				currencyInsideNumSymbol = true
+//				Number String = " - $123.45"
+//
+//			Example - 4 Inside:
+//				currencyInsideNumSymbol = true
+//				Number String = "  123.45€ -"
 //
 //	currencyFieldSymbolPosition		NumberFieldSymbolPosition
 //
@@ -852,77 +770,6 @@ func (nStrNumSymSpecNanobot *numStrNumberSymbolSpecNanobot) setLeadingTrailingCu
 //			the final length of the number string is greater than
 //			the Number Field length.
 //
-//	currencyNumSignRelPos			CurrencyNumSignRelativePosition
-//
-//		Currency Symbols have the option of being
-//		positioned either inside or outside number sign
-//		symbols formatted with numeric values in a
-//		number string.
-//
-//		Examples of number sign symbols include minus
-//		signs ('-'), plus signs ('+') and surrounding
-//		parentheses ("()").
-//
-//		Parameter 'currencyNumSignRelPos' is an instance
-//		of type CurrencyNumSignRelativePosition which
-//		serves as an enumeration. This enumeration has
-//		three possible values, only two of which are
-//		valid:
-//
-//			CurrNumSignRelPos.None()			- Invalid
-//			CurrNumSignRelPos.OutsideNumSign()	- Valid
-//			CurrNumSignRelPos.InsideNumSign()	- Valid
-//
-//		'CurrNumSignRelPos' is global constant used to
-//		abbreviate the syntax for invoking these
-//		enumeration	values. The formal syntax is:
-//
-//			CurrencyNumSignRelativePosition(0).OutsideNumSign()
-//			CurrencyNumSignRelativePosition(0).InsideNumSign()
-//
-//		Examples CurrNumSignRelPos.OutsideNumSign()
-//				"123.45- €"
-//
-//		Examples CurrNumSignRelPos.InsideNumSign()
-//
-//			Examples:
-//				"123.45€ -"
-//
-//		NumberFieldSymbolPosition Conflicts
-//
-//		When formatting a number string, the
-//		NumberFieldSymbolPosition values for both the
-//		Currency Symbol and the Number Sign Symbol
-//		MUST BE EQUAL before the Currency Number Sign
-//		Relative Position parameter,
-//		('currencyNumSignRelPos'), will be activated
-//		and applied to the number string formatting
-//		algorithm.
-//
-//		If the NumberFieldSymbolPosition values for both
-//		the	Currency Symbol and the Number Sign Symbol
-//		ARE NOT EQUAL, the NumberFieldSymbolPosition
-//		parameter controls and the Currency Number Sign
-//		Relative Position parameter,
-//		('currencyNumSignRelPos'), will be ignored.
-//
-//		Example:
-//			-- NumberFieldSymbolPosition Values NOT EQUAL --
-//
-//			Number Field Length: 8
-//		  	Numeric Value: 123.45-
-//			Minus Sign NumberFieldSymbolPosition:
-//				NumFieldSymPos.InsideNumField()
-//			Currency Number Symbol Position:
-//				NumFieldSymPos.OutsideNumField()
-//			Currency Number Sign Relative Position:
-//				CurrNumSignRelPos.InsideNumSign()
-//			Trailing Currency Symbol: Euro sign ('€')
-//			Number Text Justification: Right
-//			Formatted Number String: " 123.45-€"
-//				 Number Field Index:  012345678
-//			Total Number String Length: 9
-//
 //	errPrefDto					*ePref.ErrPrefixDto
 //
 //		This object encapsulates an error prefix string
@@ -957,8 +804,8 @@ func (nStrNumSymSpecNanobot *numStrNumberSymbolSpecNanobot) setLeadingTrailingCu
 func (nStrNumSymSpecNanobot *numStrNumberSymbolSpecNanobot) setTrailingCurrencySymbol(
 	currencySymbols *NumStrNumberSymbolSpec,
 	trailingCurrencySymbol []rune,
+	currencyInsideNumSymbol bool,
 	currencyFieldSymbolPosition NumberFieldSymbolPosition,
-	currencyNumSignRelPos CurrencyNumSignRelativePosition,
 	errPrefDto *ePref.ErrPrefixDto) error {
 
 	if nStrNumSymSpecNanobot.lock == nil {
@@ -1008,20 +855,6 @@ func (nStrNumSymSpecNanobot *numStrNumberSymbolSpecNanobot) setTrailingCurrencyS
 
 	}
 
-	if currencyNumSignRelPos.XIsValid() == false {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: The Currency Number Sign Relative Position\n"+
-			"input parameter, 'currencyNumSignRelPos' is invalid!\n"+
-			" currencyNumSignRelPos String Value = %v\n"+
-			"currencyNumSignRelPos Integer Value = %v\n",
-			ePrefix.String(),
-			currencyNumSignRelPos.String(),
-			currencyNumSignRelPos.XValueInt())
-
-		return err
-	}
-
 	if len(trailingCurrencySymbol) == 0 {
 
 		err = fmt.Errorf("%v\n"+
@@ -1038,9 +871,10 @@ func (nStrNumSymSpecNanobot *numStrNumberSymbolSpecNanobot) setTrailingCurrencyS
 		currencySymbols)
 
 	err = nStrNumSymSpecMolecule.
-		setTrailingNStrNumSymbolSpec(
+		setTrailingCurrencySymbolSpec(
 			currencySymbols,
 			trailingCurrencySymbol,
+			currencyInsideNumSymbol,
 			currencyFieldSymbolPosition,
 			ePrefix.XCpy(
 				"currencySymbols<-"+
@@ -1049,9 +883,6 @@ func (nStrNumSymSpecNanobot *numStrNumberSymbolSpecNanobot) setTrailingCurrencyS
 	if err != nil {
 		return err
 	}
-
-	currencySymbols.currencyNumSignRelativePos =
-		currencyNumSignRelPos
 
 	return err
 }

@@ -185,6 +185,116 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) copyNumSymbols(
 	return err
 }
 
+//	setCurrencyBasic
+//
+//	Receives an instance of NumStrNumberSymbolGroup,
+//	deletes the pre-existing data values and proceeds to
+//	reconfigure positive, zero, negative and currency
+//	number symbols according to a basic set of default
+//	number format specifications passed as input parameters.
+//
+//	Under the basic signed number symbol formatting
+//	protocol, positive and zero number sign symbol
+//	specifications are, by default, assigned empty 'NOP'
+//	placeholder values. This is due to the fact that
+//	number sign symbols for positive and zero numeric
+//	values are implicit and therefore are not displayed
+//	in formatted number strings.
+//
+//	Only the negative number sign and currency symbol
+//	specifications are actively configured using
+//	leading and trailing strings passed as input
+//	parameters.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	(1)	If both leading and trailing negative number
+//		signs are required, be sure to populate both
+//		'leadingNegativeNumSign' and
+//		'trailingNegativeNumSign' input parameters.
+//
+//	(2)	If both leading and trailing negative currency
+//		symbols are required, be sure to populate both
+//		'leadingCurrencySymbol' and
+//		'trailingCurrencySymbol' input parameters.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will delete, overwrite and reset all
+//	pre-existing data values in the instance of
+//	NumStrNumberSymbolGroup passed as input parameter
+//	'nStrNumSymbolGroup'.
+
+/*
+func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setCurrencyBasic(
+	nStrNumSymbolGroup *NumStrNumberSymbolGroup,
+	leadingNegativeNumSign []rune,
+	trailingNegativeNumSign []rune,
+	leadingCurrencySymbol []rune,
+	trailingCurrencySymbol []rune,
+	currencyInsideNumSymbol bool,
+	numSymbolFieldPosition NumberFieldSymbolPosition,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if nStrNumSymbolsGroupMech.lock == nil {
+		nStrNumSymbolsGroupMech.lock = new(sync.Mutex)
+	}
+
+	nStrNumSymbolsGroupMech.lock.Lock()
+
+	defer nStrNumSymbolsGroupMech.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"numStrNumberSymbolGroupMechanics."+
+			"setCurrencyBasic()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if nStrNumSymbolGroup == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'nStrNumSymbolGroup' is invalid!\n"+
+			"'nStrNumSymbolGroup' is a 'nil' pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	new(numStrNumberSymbolGroupNanobot).empty(
+		nStrNumSymbolGroup)
+
+	nStrNumSymbolGroup.positiveNumberSign.SetNOP()
+
+	nStrNumSymbolGroup.zeroNumberSign.SetNOP()
+
+	err = new(numStrNumberSymbolGroupNanobot).setNegativeNumSignRunes(
+		nStrNumSymbolGroup,
+		leadingNegativeNumSign,
+		trailingNegativeNumSign,
+		numSymbolFieldPosition,
+		ePrefix.XCpy(
+			"nStrNumSymbolGroup<-"))
+
+	if err != nil {
+		return err
+	}
+
+}
+*/
+
 //	setCurrencyDefaultsFrance
 //
 //	Receives an instance of NumStrNumberSymbolGroup,
@@ -1791,6 +1901,36 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setCurrencyDefa
 //		Symbols are not required, set
 //		'trailingCurrencySymbol' to 'nil'.
 //
+//	currencyInsideNumSymbol			bool
+//
+//		This boolean parameter determines whether the
+//		currency symbol will be positioned inside or
+//		outside the negative number sign symbol.
+//
+//		If this parameter is set to 'false', the
+//		currency symbol will be positioned outside
+//		the negative number sign symbol.
+//
+//			Example-1 Outside:
+//				currencyInsideNumSymbol = false
+//				Number String = "$ -123.45"
+//
+//			Example-2 Outside:
+//				currencyInsideNumSymbol = false
+//				Number String = "  123.45- €"
+//
+//		If this parameter is set to 'true', the
+//		currency symbol will be positioned inside
+//		the negative number sign symbol.
+//
+//			Example - 3 Inside:
+//				currencyInsideNumSymbol = true
+//				Number String = " - $123.45"
+//
+//			Example - 4 Inside:
+//				currencyInsideNumSymbol = true
+//				Number String = "  123.45€ -"
+//
 //	currencyNumFieldSymPosition		NumberFieldSymbolPosition
 //
 //		Defines the position of the Leading Currency
@@ -1859,84 +1999,6 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setCurrencyDefa
 //			the final length of the number string is greater than
 //			the Number Field length.
 //
-//	currencyNumSignRelPos			CurrencyNumSignRelativePosition
-//
-//		Currency Symbols have the option of being
-//		positioned either inside or outside number sign
-//		symbols formatted with numeric values in a
-//		number string.
-//
-//		Examples of number sign symbols include minus
-//		signs ('-'), plus signs ('+') and surrounding
-//		parentheses ("()").
-//
-//		Parameter 'currencyNumSignRelPos' is an instance
-//		of type CurrencyNumSignRelativePosition which
-//		serves as an enumeration. This enumeration has
-//		three possible values, only two of which are
-//		valid:
-//
-//			CurrNumSignRelPos.None()			- Invalid
-//			CurrNumSignRelPos.OutsideNumSign()	- Valid
-//			CurrNumSignRelPos.InsideNumSign()	- Valid
-//
-//		'CurrNumSignRelPos' is global constant used to
-//		abbreviate the syntax for invoking these
-//		enumeration	values. The formal syntax is:
-//
-//			CurrencyNumSignRelativePosition(0).OutsideNumSign()
-//			CurrencyNumSignRelativePosition(0).InsideNumSign()
-//
-//		Examples CurrNumSignRelPos.OutsideNumSign()
-//				"$ -123.45"
-//				"123.45- €"
-//				"£ -123.45"
-//
-//		Examples CurrNumSignRelPos.InsideNumSign()
-//
-//			Examples:
-//				"- $123.45"
-//				"123.45€ -"
-//				"- £123.45"
-//
-//		NumberFieldSymbolPosition Conflicts
-//
-//		When formatting a number string, the
-//		NumberFieldSymbolPosition values for both the
-//		Currency Symbol and the Number Sign Symbol
-//		MUST BE EQUAL before the Currency Number Sign
-//		Relative Position parameter,
-//		('currencyNumSignRelPos'), will be activated
-//		and applied to the number string formatting
-//		algorithm.
-//
-//		If the NumberFieldSymbolPosition values for both
-//		the	Currency Symbol and the Number Sign Symbol
-//		ARE NOT EQUAL, the NumberFieldSymbolPosition
-//		parameter controls and the Currency Number Sign
-//		Relative Position parameter,
-//		('currencyNumSignRelPos'), will be ignored.
-//
-//		Example:
-//			-- NumberFieldSymbolPosition Values NOT EQUAL --
-//
-//			Number Field Length: 8
-//		  	Numeric Value: -123.45
-//			Minus Sign Number Field Symbol Position:
-//				NumFieldSymPos.InsideNumField()
-//			Currency Number Field Symbol Position:
-//				NumFieldSymPos.OutsideNumField()
-//			Currency Number Sign Relative Position:
-//				CurrNumSignRelPos.InsideNumSign()
-//			Leading Currency Symbol: Dollar sign ('$')
-//			Number Text Justification: Right
-//			Formatted Number String: "$ -123.45"
-//			Number Field Index:------>012345678
-//			Total Number String Length: 9
-//
-//			Currency Symbol is Formatted OUTSIDE
-//			the Number Field.
-//
 //	errPrefDto					*ePref.ErrPrefixDto
 //
 //		This object encapsulates an error prefix string
@@ -1981,8 +2043,8 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setNumberSymbol
 	zeroNumFieldSymPosition NumberFieldSymbolPosition,
 	leadingCurrencySymbols []rune,
 	trailingCurrencySymbols []rune,
+	currencyInsideNumSymbol bool,
 	currencyNumFieldSymPosition NumberFieldSymbolPosition,
-	currencyNumSignRelPos CurrencyNumSignRelativePosition,
 	errPrefDto *ePref.ErrPrefixDto) error {
 
 	if nStrNumSymbolsGroupMech.lock == nil {
@@ -2089,8 +2151,8 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setNumberSymbol
 			nStrNumSymbolGroup,
 			leadingCurrencySymbols,
 			trailingCurrencySymbols,
+			currencyInsideNumSymbol,
 			currencyNumFieldSymPosition,
-			currencyNumSignRelPos,
 			ePrefix.XCpy(
 				"nuStrNumSym<-ZeroNumSyms"))
 	}
@@ -3503,8 +3565,8 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setSimpleCurren
 		err = nStrNumSymbolGroup.currencySymbol.
 			SetCurrencyLeadingSymbolRunes(
 				[]rune(currencySymbols),
+				false,
 				NumFieldSymPos.InsideNumField(),
-				CurrNumSignRelPos.OutsideNumSign(),
 				ePrefix.XCpy(
 					"nStrNumSymbolGroup."+
 						"currencySymbol<-currencySymbols"))
@@ -3529,8 +3591,8 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setSimpleCurren
 		err = nStrNumSymbolGroup.currencySymbol.
 			SetCurrencyTrailingSymbolRunes(
 				[]rune(currencySymbols),
+				false,
 				NumFieldSymPos.InsideNumField(),
-				CurrNumSignRelPos.OutsideNumSign(),
 				ePrefix.XCpy(
 					"nStrNumSymbolGroup."+
 						"currencySymbol<-currencySymbols"))

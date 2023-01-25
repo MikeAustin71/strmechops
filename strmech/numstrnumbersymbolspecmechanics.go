@@ -313,19 +313,6 @@ func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setCurrencyBasic(
 
 	}
 
-	var currencyNumSignRelPos CurrencyNumSignRelativePosition
-
-	if currencyInsideNumSymbol == true {
-
-		currencyNumSignRelPos =
-			CurrNumSignRelPos.InsideNumSign()
-
-	} else {
-
-		currencyNumSignRelPos =
-			CurrNumSignRelPos.OutsideNumSign()
-	}
-
 	nStrNumSymSpecNanobot := numStrNumberSymbolSpecNanobot{}
 
 	if lenLeadingCurrSym > 0 &&
@@ -334,8 +321,8 @@ func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setCurrencyBasic(
 		err = nStrNumSymSpecNanobot.setLeadingCurrencySymbol(
 			currencySymbolSpecs,
 			leadingCurrencySymbol,
+			currencyInsideNumSymbol,
 			numSymbolFieldPosition,
-			currencyNumSignRelPos,
 			ePrefix.XCpy(
 				"currencySymbolSpecs<-"))
 
@@ -345,8 +332,8 @@ func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setCurrencyBasic(
 		err = nStrNumSymSpecNanobot.setTrailingCurrencySymbol(
 			currencySymbolSpecs,
 			leadingCurrencySymbol,
+			currencyInsideNumSymbol,
 			numSymbolFieldPosition,
-			currencyNumSignRelPos,
 			ePrefix.XCpy(
 				"currencySymbolSpecs<-"))
 
@@ -359,8 +346,8 @@ func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setCurrencyBasic(
 			currencySymbolSpecs,
 			leadingCurrencySymbol,
 			trailingCurrencySymbol,
+			currencyInsideNumSymbol,
 			numSymbolFieldPosition,
-			currencyNumSignRelPos,
 			ePrefix.XCpy(
 				"currencySymbolSpecs<-"))
 
@@ -469,8 +456,9 @@ func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setCurrencyDefaultsEU
 		setTrailingCurrencySymbol(
 			currencySymbols,
 			[]rune{' ', '€'},
+			false,
+			// currencyInsideNumSymbol = false
 			NumFieldSymPos.InsideNumField(),
-			CurrNumSignRelPos.OutsideNumSign(),
 			ePrefix.XCpy(
 				"currencySymbols<-Trailing Euro Sign"))
 }
@@ -588,8 +576,9 @@ func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setCurrencyDefaultsUK
 		setLeadingCurrencySymbol(
 			currencySymbols,
 			[]rune{'£', ' '},
+			false,
+			// currencyInsideNumSymbol = false
 			NumFieldSymPos.InsideNumField(),
-			CurrNumSignRelPos.OutsideNumSign(),
 			ePrefix.XCpy(
 				"currencySymbols<-Leading Pound Sign"))
 }
@@ -707,8 +696,9 @@ func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setCurrencyDefaultsUK
 		setLeadingCurrencySymbol(
 			currencySymbols,
 			[]rune{'£', ' '},
+			true,
+			// currencyInsideNumSymbol = true
 			NumFieldSymPos.InsideNumField(),
-			CurrNumSignRelPos.InsideNumSign(),
 			ePrefix.XCpy(
 				"currencySymbols<-Leading Pound Sign"))
 }
@@ -811,8 +801,9 @@ func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setCurrencyDefaultsUS
 		setLeadingCurrencySymbol(
 			currencySymbols,
 			[]rune{'$', ' '},
+			false,
+			// currencyInsideNumSymbol = false
 			NumFieldSymPos.InsideNumField(),
-			CurrNumSignRelPos.OutsideNumSign(),
 			ePrefix.XCpy(
 				"currencySymbols<-Leading Dollar Sign"))
 }

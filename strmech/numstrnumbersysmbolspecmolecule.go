@@ -371,16 +371,252 @@ func (nStrNumSymSpecMolecule *numStrNumberSymbolSpecMolecule) setCurrencyNumSign
 	return err
 }
 
-// setLeadingNStrNumSymbolSpec - Deletes and resets the data
-// value of the Leading Number Symbol contained in an
-// instance of NumStrNumberSymbolSpec passed as an input
-// parameter.
+//	setLeadingCurrencySymbolSpec
+//
+//	Deletes and resets the data value of the Leading
+//	Currency Symbol contained in an instance of
+//	NumStrNumberSymbolSpec passed as an input
+//	parameter.
+//
+// ----------------------------------------------------------------
+//
+//	# Input Parameters
+//
+//	numSymbolSpec					*NumStrNumberSymbolSpec
+//
+//		A pointer to a NumStrNumberSymbolSpec instance.
+//		The Leading Number Symbol contained in this
+//		instance will be deleted and reset to the value
+//		specified by input parameter,
+//		'leadingCurrencySymbols'.
+//
+//	leadingCurrencySymbols			[]rune
+//
+//		An array of runes specifying the currency
+//		character or characters which will be copied to
+//		the Leading Number Symbol contained in input
+//		parameter, 'numSymbolSpec'.
+//
+//	currencyInsideNumSymbol			bool
+//
+//		This boolean parameter determines whether the
+//		currency symbol will be positioned inside or
+//		outside the negative number sign symbol.
+//
+//		If this parameter is set to 'false', the
+//		currency symbol will be positioned outside
+//		the negative number sign symbol.
+//
+//			Example-1 Outside:
+//				currencyInsideNumSymbol = false
+//				Number String = "$ -123.45"
+//
+//			Example-2 Outside:
+//				currencyInsideNumSymbol = false
+//				Number String = "  123.45- €"
+//
+//		If this parameter is set to 'true', the
+//		currency symbol will be positioned inside
+//		the negative number sign symbol.
+//
+//			Example - 3 Inside:
+//				currencyInsideNumSymbol = true
+//				Number String = " - $123.45"
+//
+//			Example - 4 Inside:
+//				currencyInsideNumSymbol = true
+//				Number String = "  123.45€ -"
+//
+//	leadingNumFieldSymPosition		NumberFieldSymbolPosition
+//
+//		Defines the position of the Leading Currency
+//		Symbol relative to a Number Field in which
+//		a number string is displayed. Possible valid
+//		values are listed as follows:
+//
+//			NumFieldSymPos.InsideNumField()
+//				Example-1:
+//					Number Field Length: 8
+//					Numeric Value: -123.45
+//					Number Symbol: leading minus sign ('-')
+//					Number Symbol Position: Inside Number Field
+//			     	Number Text Justification: Right
+//					Formatted Number String: " -123.45"
+//					Number Field Index:------>01234567
+//					Total Number String Length: 8
+//
+//				Example-2:
+//					Number Field Length: 10
+//					Numeric Value: -123.45
+//					Number Symbol: before and after parentheses  ('()')
+//					Number Symbol Position: Outside Number Field
+//					Number Text Justification: Centered
+//					Formatted Number String: " (123.45) "
+//					Number Field Index:------>0123456789
+//					Total Number String Length: 10
+//
+//				For the 'NumFieldSymPos.InsideNumField()' specification,
+//				the final length of the number string is defined by the
+//				Number Field length.
+//
+//			NumFieldSymPos.OutsideNumField()
+//				Example-3:
+//					Number Field Length: 8
+//			     	Numeric Value: -123.45
+//			     	Number Symbol: leading minus sign ('-')
+//			     	Number Symbol Position: Outside Number Field
+//			     	Number Text Justification: Right
+//			     	Formatted Number String: "-  123.45"
+//					Number Field Index:------>012345678
+//					Total Number String Length: 9
+//
+//				Example-4:
+//					Number Field Length: 8
+//					Numeric Value: -123.45
+//					Number Symbol: before and after parentheses  ('()')
+//					Number Symbol Position: Outside Number Field
+//			     	Number Text Justification: Centered
+//					Formatted Number String: "( 123.45 )"
+//					Number Field Index:------>0123456789
+//					Total Number String Length: 10
+//
+//				For the 'NumFieldSymPos.OutsideNumField()' specification,
+//				the final length of the number string is greater than
+//				the Number Field length.
+//
+//	errPrefDto						*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	err								error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (nStrNumSymSpecMolecule *numStrNumberSymbolSpecMolecule) setLeadingCurrencySymbolSpec(
+	numSymbolSpec *NumStrNumberSymbolSpec,
+	leadingNumberSymbol []rune,
+	currencyInsideNumSymbol bool,
+	leadingNumFieldSymPosition NumberFieldSymbolPosition,
+	errPrefDto *ePref.ErrPrefixDto) (
+	err error) {
+
+	if nStrNumSymSpecMolecule.lock == nil {
+		nStrNumSymSpecMolecule.lock = new(sync.Mutex)
+	}
+
+	nStrNumSymSpecMolecule.lock.Lock()
+
+	defer nStrNumSymSpecMolecule.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"numStrNumberSymbolSpecMolecule."+
+			"setLeadingCurrencySymbolSpec()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if numSymbolSpec == nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'numSymbolSpec' is invalid!\n"+
+			"'numSymbolSpec' is a 'nil' pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if leadingNumFieldSymPosition.XIsValid() == false {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'leadingNumFieldSymPosition' is invalid!\n"+
+			"'leadingNumFieldSymPosition' string value  = '%v'\n"+
+			"'leadingNumFieldSymPosition' integer value = '%v'\n",
+			ePrefix.String(),
+			leadingNumFieldSymPosition.String(),
+			leadingNumFieldSymPosition.XValueInt())
+
+		return err
+
+	}
+
+	var currencyNumSignRelPos CurrencyNumSignRelativePosition
+
+	if currencyInsideNumSymbol == true {
+
+		currencyNumSignRelPos =
+			CurrNumSignRelPos.InsideNumSign()
+
+	} else {
+
+		currencyNumSignRelPos =
+			CurrNumSignRelPos.OutsideNumSign()
+	}
+
+	new(nStrNumberSymbolSpecAtom).emptyLeadingNStrNumSymbol(
+		numSymbolSpec)
+
+	if len(leadingNumberSymbol) > 0 {
+
+		err = numSymbolSpec.leadingNumberSymbols.SetRuneArray(
+			leadingNumberSymbol,
+			ePrefix.XCpy(
+				"numSymbolSpec.leadingCurrencySymbols"+
+					"<-leadingCurrencySymbols"))
+
+		if err != nil {
+			return err
+		}
+
+		numSymbolSpec.leadingNumberFieldSymbolPosition =
+			leadingNumFieldSymPosition
+
+		numSymbolSpec.currencyNumSignRelativePos =
+			currencyNumSignRelPos
+	}
+
+	return err
+}
+
+//	setLeadingNStrNumSymbolSpec
+//
+//	Deletes and resets the data value of the Leading
+//	Number Sign Symbol contained in an instance of
+//	NumStrNumberSymbolSpec passed as an input parameter.
 //
 // ----------------------------------------------------------------
 //
 //	# Input Parameters
 //
 //	numSymbolSpec				*NumStrNumberSymbolSpec
+//
 //		A pointer to a NumStrNumberSymbolSpec instance.
 //		The Leading Number Symbol contained in this
 //		instance will be deleted and reset to the value
@@ -450,30 +686,36 @@ func (nStrNumSymSpecMolecule *numStrNumberSymbolSpecMolecule) setCurrencyNumSign
 //				the Number Field length.
 //
 //	errPrefDto					*ePref.ErrPrefixDto
-//		This object encapsulates an error prefix string which is
-//		included in all returned error messages. Usually, it
-//		contains the name of the calling method or methods listed
-//		as a function chain.
 //
-//		If no error prefix information is needed, set this
-//		parameter to 'nil'.
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
 //
-//		Type ErrPrefixDto is included in the 'errpref' software
-//		package, "github.com/MikeAustin71/errpref".
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // # Return Values
 //
 //	err							error
-//		If this method completes successfully, this returned error
-//		Type is set equal to 'nil'. If errors are encountered during
-//		processing, the returned error Type will encapsulate an error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
 //		message.
 //
-//		If an error message is returned, the text value for input
-//		parameter 'errPrefDto' (error prefix) will be prefixed or
-//		attached at the beginning of the error message.
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
 func (nStrNumSymSpecMolecule *numStrNumberSymbolSpecMolecule) setLeadingNStrNumSymbolSpec(
 	numSymbolSpec *NumStrNumberSymbolSpec,
 	leadingNumberSymbol []rune,
@@ -548,53 +790,87 @@ func (nStrNumSymSpecMolecule *numStrNumberSymbolSpecMolecule) setLeadingNStrNumS
 	return err
 }
 
-// setTrailingNStrNumSymbolSpec - Deletes and resets the data
-// value of the Trailing Number Symbol contained in an
-// instance of NumStrNumberSymbolSpec passed as an input
-// parameter.
+//	setTrailingCurrencySymbolSpec
+//
+//	Deletes and resets the data value of the Trailing
+//	Currency Number Symbol contained in an instance of
+//	NumStrNumberSymbolSpec passed as an input parameter.
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//	numSignSymbolSpec				*NumStrNumberSymbolSpec
+//	numSymbolSpec					*NumStrNumberSymbolSpec
+//
 //		A pointer to a NumStrNumberSymbolSpec instance.
 //		The Trailing Number Symbol contained in this
 //		instance will be deleted and reset to the value
 //		specified by input parameter,
 //		'trailingNumberSymbols'.
 //
-//	trailingNumberSymbols			[]rune
-//		   - An array of runes specifying the character or
-//		     characters which will be copied to the Trailing
-//		     Number Symbol contained in input parameter,
-//	      'posNumSignSpec'.
+//	trailingCurrencySymbols			[]rune
+//
+//		An array of runes specifying the currency
+//		character or characters which will be copied to
+//		the Trailing Number Symbol contained in input
+//		parameter, 'numSymbolSpec'.
+//
+//	currencyInsideNumSymbol			bool
+//
+//		This boolean parameter determines whether the
+//		currency symbol will be positioned inside or
+//		outside the negative number sign symbol.
+//
+//		If this parameter is set to 'false', the
+//		currency symbol will be positioned outside
+//		the negative number sign symbol.
+//
+//			Example-1 Outside:
+//				currencyInsideNumSymbol = false
+//				Number String = "$ -123.45"
+//
+//			Example-2 Outside:
+//				currencyInsideNumSymbol = false
+//				Number String = "  123.45- €"
+//
+//		If this parameter is set to 'true', the
+//		currency symbol will be positioned inside
+//		the negative number sign symbol.
+//
+//			Example - 3 Inside:
+//				currencyInsideNumSymbol = true
+//				Number String = " - $123.45"
+//
+//			Example - 4 Inside:
+//				currencyInsideNumSymbol = true
+//				Number String = "  123.45€ -"
 //
 //	trailingNumFieldSymPosition		NumberFieldSymbolPosition
-//		Defines the position of the Trailing Number
-//		Symbol relative to a Number Field in which
+//
+//		Defines the position of the Trailing Currency
+//		Number Symbol relative to a Number Field in which
 //		a number string is displayed. Possible valid
 //		values are listed as follows:
 //
 //			NumFieldSymPos.InsideNumField()
 //				Example-1:
 //					Number Field Length: 8
-//					Numeric Value: 123.45
+//					Numeric Value: -123.45
 //					Number Symbol: trailing minus sign ('-')
 //					Number Symbol Position: Inside Number Field
 //			     	Number Text Justification: Right
 //					Formatted Number String: " 123.45-"
-//					Number Field Index:       01234567
+//					Number Field Index:------>01234567
 //					Total Number String Length: 8
 //
 //				Example-2:
 //					Number Field Length: 10
-//					Numeric Value: 123.45
+//					Numeric Value: -123.45
 //					Number Symbol: before and after parentheses  ('()')
 //					Number Symbol Position: Inside Number Field
 //			     	Number Text Justification: Centered
 //					Formatted Number String: " (123.45) "
-//					Number Field Index:       0123456789
+//					Number Field Index:------>0123456789
 //					Total Number String Length: 10
 //
 //				For the 'NumFieldSymPos.InsideNumField()' specification,
@@ -604,22 +880,220 @@ func (nStrNumSymSpecMolecule *numStrNumberSymbolSpecMolecule) setLeadingNStrNumS
 //			NumFieldSymPos.OutsideNumField()
 //				Example-3:
 //					Number Field Length: 8
-//			     	Numeric Value: 123.45
+//			     	Numeric Value: -123.45
 //			     	Number Symbol: trailing minus sign ('-')
 //			     	Number Symbol Position: Outside Number Field
 //			     	Number Text Justification: Right
 //			     	Formatted Number String: "  123.45-"
-//					Number Field Index:       012345678
+//					Number Field Index:------>012345678
 //					Total Number String Length: 9
 //
 //				Example-4:
 //					Number Field Length: 8
-//					Numeric Value: 123.45
+//					Numeric Value: -123.45
 //					Number Symbol: before and after parentheses  ('()')
 //					Number Symbol Position: Outside Number Field
 //			     	Number Text Justification: Centered
 //					Formatted Number String: "( 123.45 )"
-//					Number Field Index:       0123456789
+//					Number Field Index:------>0123456789
+//					Total Number String Length: 10
+//
+//				For the 'NumFieldSymPos.OutsideNumField()' specification,
+//				the final length of the number string is greater than
+//				the Number Field length.
+//
+//	errPrefDto						*ePref.ErrPrefixDto
+//		This object encapsulates an error prefix string which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods listed
+//		as a function chain.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref' software
+//		package, "github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//	err							error
+//		If this method completes successfully, this returned error
+//		Type is set equal to 'nil'. If errors are encountered during
+//		processing, the returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value for input
+//		parameter 'errPrefDto' (error prefix) will be prefixed or
+//		attached at the beginning of the error message.
+func (nStrNumSymSpecMolecule *numStrNumberSymbolSpecMolecule) setTrailingCurrencySymbolSpec(
+	numSymbolSpec *NumStrNumberSymbolSpec,
+	trailingNumberSymbol []rune,
+	currencyInsideNumSymbol bool,
+	trailingNumFieldSymPosition NumberFieldSymbolPosition,
+	errPrefDto *ePref.ErrPrefixDto) (
+	err error) {
+
+	if nStrNumSymSpecMolecule.lock == nil {
+		nStrNumSymSpecMolecule.lock = new(sync.Mutex)
+	}
+
+	nStrNumSymSpecMolecule.lock.Lock()
+
+	defer nStrNumSymSpecMolecule.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"numStrNumberSymbolSpecMolecule."+
+			"setTrailingCurrencySymbolSpec()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if numSymbolSpec == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'numSymbolSpec' is invalid!\n"+
+			"'numSymbolSpec' is a 'nil' pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if trailingNumFieldSymPosition.XIsValid() == false {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'trailingNumFieldSymPosition' is invalid!\n"+
+			"'trailingNumFieldSymPosition' string value  = '%v'\n"+
+			"'trailingNumFieldSymPosition' integer value = '%v'\n",
+			ePrefix.String(),
+			trailingNumFieldSymPosition.String(),
+			trailingNumFieldSymPosition.XValueInt())
+
+		return err
+
+	}
+
+	var currencyNumSignRelPos CurrencyNumSignRelativePosition
+
+	if currencyInsideNumSymbol == true {
+
+		currencyNumSignRelPos =
+			CurrNumSignRelPos.InsideNumSign()
+
+	} else {
+
+		currencyNumSignRelPos =
+			CurrNumSignRelPos.OutsideNumSign()
+	}
+
+	new(nStrNumberSymbolSpecAtom).emptyTrailingNStrNumSymbol(
+		numSymbolSpec)
+
+	if len(trailingNumberSymbol) > 0 {
+
+		err = numSymbolSpec.trailingNumberSymbols.SetRuneArray(
+			trailingNumberSymbol,
+			ePrefix.XCpy(
+				"numSymbolSpec.trailingCurrencySymbols"+
+					"<-trailingCurrencySymbols"))
+
+		if err != nil {
+			return err
+		}
+
+		numSymbolSpec.trailingNumberFieldSymbolPosition =
+			trailingNumFieldSymPosition
+
+		numSymbolSpec.currencyNumSignRelativePos =
+			currencyNumSignRelPos
+	}
+
+	return err
+}
+
+// setTrailingNStrNumSymbolSpec
+//
+//	Deletes and resets the data value of the Trailing
+//	Number Symbol contained in an instance of
+//	NumStrNumberSymbolSpec passed as an input parameter.
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//	numSymbolSpec				*NumStrNumberSymbolSpec
+//
+//		A pointer to a NumStrNumberSymbolSpec instance.
+//		The Trailing Number Symbol contained in this
+//		instance will be deleted and reset to the value
+//		specified by input parameter,
+//		'trailingNumberSymbols'.
+//
+//	trailingNumberSymbols			[]rune
+//
+//		An array of runes specifying the number sign
+//		character or characters which will be copied to
+//		the Trailing Number Symbol contained in input
+//		parameter, 'numSymbolSpec'.
+//
+//	trailingNumFieldSymPosition		NumberFieldSymbolPosition
+//
+//		Defines the position of the Trailing Number
+//		Symbol relative to a Number Field in which
+//		a number string is displayed. Possible valid
+//		values are listed as follows:
+//
+//			NumFieldSymPos.InsideNumField()
+//				Example-1:
+//					Number Field Length: 8
+//					Numeric Value: -123.45
+//					Number Symbol: trailing minus sign ('-')
+//					Number Symbol Position: Inside Number Field
+//			     	Number Text Justification: Right
+//					Formatted Number String: " 123.45-"
+//					Number Field Index:------>01234567
+//					Total Number String Length: 8
+//
+//				Example-2:
+//					Number Field Length: 10
+//					Numeric Value: -123.45
+//					Number Symbol: before and after parentheses  ('()')
+//					Number Symbol Position: Inside Number Field
+//			     	Number Text Justification: Centered
+//					Formatted Number String: " (123.45) "
+//					Number Field Index:------>0123456789
+//					Total Number String Length: 10
+//
+//				For the 'NumFieldSymPos.InsideNumField()' specification,
+//				the final length of the number string is defined by the
+//				Number Field length.
+//
+//			NumFieldSymPos.OutsideNumField()
+//				Example-3:
+//					Number Field Length: 8
+//			     	Numeric Value: -123.45
+//			     	Number Symbol: trailing minus sign ('-')
+//			     	Number Symbol Position: Outside Number Field
+//			     	Number Text Justification: Right
+//			     	Formatted Number String: "  123.45-"
+//					Number Field Index:------>012345678
+//					Total Number String Length: 9
+//
+//				Example-4:
+//					Number Field Length: 8
+//					Numeric Value: -123.45
+//					Number Symbol: before and after parentheses  ('()')
+//					Number Symbol Position: Outside Number Field
+//			     	Number Text Justification: Centered
+//					Formatted Number String: "( 123.45 )"
+//					Number Field Index:------>0123456789
 //					Total Number String Length: 10
 //
 //				For the 'NumFieldSymPos.OutsideNumField()' specification,
@@ -652,7 +1126,7 @@ func (nStrNumSymSpecMolecule *numStrNumberSymbolSpecMolecule) setLeadingNStrNumS
 //		parameter 'errPrefDto' (error prefix) will be prefixed or
 //		attached at the beginning of the error message.
 func (nStrNumSymSpecMolecule *numStrNumberSymbolSpecMolecule) setTrailingNStrNumSymbolSpec(
-	numSignSymbolSpec *NumStrNumberSymbolSpec,
+	numSymbolSpec *NumStrNumberSymbolSpec,
 	trailingNumberSymbol []rune,
 	trailingNumFieldSymPosition NumberFieldSymbolPosition,
 	errPrefDto *ePref.ErrPrefixDto) (
@@ -679,11 +1153,11 @@ func (nStrNumSymSpecMolecule *numStrNumberSymbolSpecMolecule) setTrailingNStrNum
 		return err
 	}
 
-	if numSignSymbolSpec == nil {
+	if numSymbolSpec == nil {
 
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'numSignSymbolSpec' is invalid!\n"+
-			"'numSignSymbolSpec' is a 'nil' pointer.\n",
+			"Error: Input parameter 'numSymbolSpec' is invalid!\n"+
+			"'numSymbolSpec' is a 'nil' pointer.\n",
 			ePrefix.String())
 
 		return err
@@ -704,21 +1178,21 @@ func (nStrNumSymSpecMolecule *numStrNumberSymbolSpecMolecule) setTrailingNStrNum
 	}
 
 	new(nStrNumberSymbolSpecAtom).emptyTrailingNStrNumSymbol(
-		numSignSymbolSpec)
+		numSymbolSpec)
 
 	if len(trailingNumberSymbol) > 0 {
 
-		err = numSignSymbolSpec.trailingNumberSymbols.SetRuneArray(
+		err = numSymbolSpec.trailingNumberSymbols.SetRuneArray(
 			trailingNumberSymbol,
 			ePrefix.XCpy(
-				"numSignSymbolSpec.trailingNumberSymbols"+
+				"numSymbolSpec.trailingNumberSymbols"+
 					"<-trailingNumberSymbols"))
 
 		if err != nil {
 			return err
 		}
 
-		numSignSymbolSpec.trailingNumberFieldSymbolPosition =
+		numSymbolSpec.trailingNumberFieldSymbolPosition =
 			trailingNumFieldSymPosition
 
 	}
