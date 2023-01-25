@@ -4353,7 +4353,7 @@ func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setSignedPureNStrSpec(
 	var numSymbolsSpec NumStrNumberSymbolGroup
 
 	numSymbolsSpec,
-		err = new(NumStrNumberSymbolGroup).NewSimpleSignedNumber(
+		err = new(NumStrNumberSymbolGroup).NewSignedNumSimple(
 		leadingNumSymbols,
 		ePrefix.XCpy(
 			"numSymbolsSpec<-"))

@@ -3113,6 +3113,279 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewCurrencyDefaultsUSParen(
 	return newNStrNumSymbols, err
 }
 
+//	NewCurrencySimple
+//
+//	Creates and returns and instance of
+//	NumStrNumberSymbolGroup configured for currency
+//	Number Symbol formatting.
+//
+//	If currency number symbol formatting is NOT
+//	required, see method:
+//
+//		NumStrNumberSymbolGroup.NewSignedSimpleNumber()
+//
+//	Type NumStrNumberSymbolGroup is used to configure
+//	Number Symbols required in converting numeric
+//	values to formatted Number Strings.
+//
+//	NumStrNumberSymbolGroup contains four instances of
+//	type NumStrNumberSymbolSpec defining the Number
+//	Symbols to be used with positive numeric values,
+//	negative numeric values, zero numeric values and
+//	currency values.
+//
+//	This method provides a simplified means for
+//	configuring the returned instance of
+//	NumStrNumberSymbolGroup with currency and number sign
+//	symbols. Using default values, this method will
+//	generate Currency Symbols to be used with positive
+//	numeric values, negative numeric values and zero
+//	numeric values.
+//
+//	If the default configuration values fail to provide
+//	sufficient granular control over currency number
+//	symbol creation, use one of the more granular
+//	constructor or 'New' methods to achieve specialized
+//	multinational or multicultural currency number
+//	symbol formatting requirements:
+//
+//		NumStrNumberSymbolGroup.NewSymbolsRunes()
+//		NumStrNumberSymbolGroup.NewSymbolsStrings()
+//		NumStrNumberSymbolGroup.NewSymbolsSpecs()
+//
+// ----------------------------------------------------------------
+//
+// # Currency Defaults
+//
+//	Currency-Negative Symbol Position:
+//		Currency Symbol defaults to 'outside' the
+//		minus sign.
+//
+//		Examples:
+//			European Number String:	"123.456- €"
+//			US Number String:		"$ -123.456"
+//			UK Number String:		"£ -123.45"
+//
+//	Negative Number Symbol:
+//		The default Negative Number Symbol is the minus
+//		sign ('-'). Negative numeric values will be
+//		designated with the minus sign ('-').
+//
+//		The minus sign will be configured as a leading or
+//		trailing minus sign depending on the value of
+//		input parameter 'leadingNumSymbols'.
+//
+//		Examples:
+//
+//			Leading Minus Sign: "$ -123.456"
+//			Trailing Minus Sign: "123.456-"
+//
+//	Positive Number Symbol:
+//		No Positive Number Sign Symbol. Positive
+//		values number signs are assumed and implicit. No
+//		Number Signs will be formatted for positive
+//		numeric values
+//
+//		Positive Numeric Value Example:
+//					"123.456"
+//
+//	Zero Number Symbol:
+//		No Zero Number Sign Symbol. Technically a zero
+//		value is neither positive nor negative.
+//		Consequently, no number sign is included with
+//		zero numeric values.
+//
+//		Zero Numeric Value Example:
+//					"0.00"
+//
+//	Number Field Symbol Position:
+//		Defaults to "Inside Number Field"
+//
+//		Example:
+//			Number Field Length: 8
+//			Numeric Value: -123.45
+//			Number Symbol: leading minus sign ('-')
+//			Number Symbol Position: Inside Number Field
+//			Number Text Justification: Right Justified
+//			Formatted Number String: " -123.45"
+//			Number Field Index:------>01234567
+//			Total Number String Length: 8
+//			The minus sign is 'inside' the Number Field.
+//
+// ----------------------------------------------------------------
+//
+//	# Input Parameters
+//
+//	currencySymbols				string
+//
+//		The symbol or symbols used to specify currency.
+//		This currency symbol will be configured in the
+//		new instance of NumStrNumberSymbolGroup returned
+//		by this method.
+//
+//	leadingNumSymbols			bool
+//
+//		Controls the positioning of Number Symbols in a
+//		Number String Format.
+//
+//		When set to 'true', the returned instance of
+//		NumStrNumberSymbolGroup will configure Number
+//		Symbols at the beginning or left side of the
+//		number string. Such Number Symbols are therefore
+//		configured as leading Number Symbols. This is the
+//		positioning format used in the US, UK, Australia
+//		and most of Canada.
+//
+//		Example Number Strings:
+//			"$ -123.456"
+//
+//		NOTE:	A space is automatically inserted between
+//				the currency symbol and the minus sign.
+//
+//		When 'leadingNumSymbols' is set to 'false', the
+//		returned instance of NumStrNumberSymbolGroup will
+//		configure Number Symbols on the right side of the
+//		number string. Such	Number Symbols are therefore
+//		configured as trailing Number Symbols. This is
+//		the positioning format used in France, Germany
+//		and many other countries in the European Union.
+//
+//			Example Number Strings:
+//				"123.456- €"
+//
+//		NOTE:	A space is automatically inserted between
+//				the minus sign and the currency symbol.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	NumStrNumberSymbolGroup
+//
+//		If this method completes successfully, this
+//		parameter will return a new, fully populated
+//		instance of NumStrNumberSymbolGroup configured
+//		with Positive, Negative, Zero and Currency
+//		Specification objects.
+//
+//		This returned NumStrNumberSymbolGroup instance
+//		will therefore be configured with currency
+//		symbols for inclusion in Number String
+//		formatting operations.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewCurrencySimple(
+	currencySymbols string,
+	leadingNumSymbols bool,
+	errorPrefix interface{}) (
+	NumStrNumberSymbolGroup,
+	error) {
+
+	if nStrNumSymbolsGroup.lock == nil {
+		nStrNumSymbolsGroup.lock = new(sync.Mutex)
+	}
+
+	nStrNumSymbolsGroup.lock.Lock()
+
+	defer nStrNumSymbolsGroup.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	var newNStrNumSymbols NumStrNumberSymbolGroup
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumStrNumberSymbolGroup."+
+			"NewCurrencySimple()",
+		"")
+
+	if err != nil {
+		return newNStrNumSymbols, err
+	}
+
+	err = new(numStrNumberSymbolGroupMechanics).setSimpleCurrencySymbolsConfig(
+		&newNStrNumSymbols,
+		currencySymbols,
+		leadingNumSymbols,
+		ePrefix.XCpy(
+			"newNStrNumSymbols<-"))
+
+	return newNStrNumSymbols, err
+}
+
 //	NewNOP Creates and returns a new instance of
 //	NumStrNumberSymbolGroup configured as a NOP.
 //
@@ -4336,279 +4609,6 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSignedNumDefaultsUSParen(
 	return newNStrNumSymbols, err
 }
 
-//	NewCurrencySimple
-//
-//	Creates and returns and instance of
-//	NumStrNumberSymbolGroup configured for currency
-//	Number Symbol formatting.
-//
-//	If currency number symbol formatting is NOT
-//	required, see method:
-//
-//		NumStrNumberSymbolGroup.NewSignedSimpleNumber()
-//
-//	Type NumStrNumberSymbolGroup is used to configure
-//	Number Symbols required in converting numeric
-//	values to formatted Number Strings.
-//
-//	NumStrNumberSymbolGroup contains four instances of
-//	type NumStrNumberSymbolSpec defining the Number
-//	Symbols to be used with positive numeric values,
-//	negative numeric values, zero numeric values and
-//	currency values.
-//
-//	This method provides a simplified means for
-//	configuring the returned instance of
-//	NumStrNumberSymbolGroup with currency and number sign
-//	symbols. Using default values, this method will
-//	generate Currency Symbols to be used with positive
-//	numeric values, negative numeric values and zero
-//	numeric values.
-//
-//	If the default configuration values fail to provide
-//	sufficient granular control over currency number
-//	symbol creation, use one of the more granular
-//	constructor or 'New' methods to achieve specialized
-//	multinational or multicultural currency number
-//	symbol formatting requirements:
-//
-//		NumStrNumberSymbolGroup.NewSymbolsRunes()
-//		NumStrNumberSymbolGroup.NewSymbolsStrings()
-//		NumStrNumberSymbolGroup.NewSymbolsSpecs()
-//
-// ----------------------------------------------------------------
-//
-// # Currency Defaults
-//
-//	Currency-Negative Symbol Position:
-//		Currency Symbol defaults to 'outside' the
-//		minus sign.
-//
-//		Examples:
-//			European Number String:	"123.456- €"
-//			US Number String:		"$ -123.456"
-//			UK Number String:		"£ -123.45"
-//
-//	Negative Number Symbol:
-//		The default Negative Number Symbol is the minus
-//		sign ('-'). Negative numeric values will be
-//		designated with the minus sign ('-').
-//
-//		The minus sign will be configured as a leading or
-//		trailing minus sign depending on the value of
-//		input parameter 'leadingNumSymbols'.
-//
-//		Examples:
-//
-//			Leading Minus Sign: "$ -123.456"
-//			Trailing Minus Sign: "123.456-"
-//
-//	Positive Number Symbol:
-//		No Positive Number Sign Symbol. Positive
-//		values number signs are assumed and implicit. No
-//		Number Signs will be formatted for positive
-//		numeric values
-//
-//		Positive Numeric Value Example:
-//					"123.456"
-//
-//	Zero Number Symbol:
-//		No Zero Number Sign Symbol. Technically a zero
-//		value is neither positive nor negative.
-//		Consequently, no number sign is included with
-//		zero numeric values.
-//
-//		Zero Numeric Value Example:
-//					"0.00"
-//
-//	Number Field Symbol Position:
-//		Defaults to "Inside Number Field"
-//
-//		Example:
-//			Number Field Length: 8
-//			Numeric Value: -123.45
-//			Number Symbol: leading minus sign ('-')
-//			Number Symbol Position: Inside Number Field
-//			Number Text Justification: Right Justified
-//			Formatted Number String: " -123.45"
-//			Number Field Index:------>01234567
-//			Total Number String Length: 8
-//			The minus sign is 'inside' the Number Field.
-//
-// ----------------------------------------------------------------
-//
-//	# Input Parameters
-//
-//	currencySymbols				string
-//
-//		The symbol or symbols used to specify currency.
-//		This currency symbol will be configured in the
-//		new instance of NumStrNumberSymbolGroup returned
-//		by this method.
-//
-//	leadingNumSymbols			bool
-//
-//		Controls the positioning of Number Symbols in a
-//		Number String Format.
-//
-//		When set to 'true', the returned instance of
-//		NumStrNumberSymbolGroup will configure Number
-//		Symbols at the beginning or left side of the
-//		number string. Such Number Symbols are therefore
-//		configured as leading Number Symbols. This is the
-//		positioning format used in the US, UK, Australia
-//		and most of Canada.
-//
-//		Example Number Strings:
-//			"$ -123.456"
-//
-//		NOTE:	A space is automatically inserted between
-//				the currency symbol and the minus sign.
-//
-//		When 'leadingNumSymbols' is set to 'false', the
-//		returned instance of NumStrNumberSymbolGroup will
-//		configure Number Symbols on the right side of the
-//		number string. Such	Number Symbols are therefore
-//		configured as trailing Number Symbols. This is
-//		the positioning format used in France, Germany
-//		and many other countries in the European Union.
-//
-//			Example Number Strings:
-//				"123.456- €"
-//
-//		NOTE:	A space is automatically inserted between
-//				the minus sign and the currency symbol.
-//
-//	errorPrefix					interface{}
-//
-//		This object encapsulates error prefix text which
-//		is included in all returned error messages.
-//		Usually, it contains the name of the calling
-//		method or methods listed as a method or function
-//		chain of execution.
-//
-//		If no error prefix information is needed, set
-//		this parameter to 'nil'.
-//
-//		This empty interface must be convertible to one
-//		of the following types:
-//
-//		1.	nil
-//				A nil value is valid and generates an
-//				empty collection of error prefix and
-//				error context information.
-//
-//		2.	string
-//				A string containing error prefix
-//				information.
-//
-//		3.	[]string
-//				A one-dimensional slice of strings
-//				containing error prefix information.
-//
-//		4.	[][2]string
-//				A two-dimensional slice of strings
-//		   		containing error prefix and error
-//		   		context information.
-//
-//		5.	ErrPrefixDto
-//				An instance of ErrPrefixDto.
-//				Information from this object will
-//				be copied for use in error and
-//				informational messages.
-//
-//		6.	*ErrPrefixDto
-//				A pointer to an instance of
-//				ErrPrefixDto. Information from
-//				this object will be copied for use
-//				in error and informational messages.
-//
-//		7.	IBasicErrorPrefix
-//				An interface to a method
-//				generating a two-dimensional slice
-//				of strings containing error prefix
-//				and error context information.
-//
-//		If parameter 'errorPrefix' is NOT convertible
-//		to one of the valid types listed above, it will
-//		be considered invalid and trigger the return of
-//		an error.
-//
-//		Types ErrPrefixDto and IBasicErrorPrefix are
-//		included in the 'errpref' software package:
-//			"github.com/MikeAustin71/errpref".
-//
-// ----------------------------------------------------------------
-//
-// # Return Values
-//
-//	NumStrNumberSymbolGroup
-//
-//		If this method completes successfully, this
-//		parameter will return a new, fully populated
-//		instance of NumStrNumberSymbolGroup configured
-//		with Positive, Negative, Zero and Currency
-//		Specification objects.
-//
-//		This returned NumStrNumberSymbolGroup instance
-//		will therefore be configured with currency
-//		symbols for inclusion in Number String
-//		formatting operations.
-//
-//	error
-//
-//		If this method completes successfully, the
-//		returned error Type is set equal to 'nil'.
-//
-//		If errors are encountered during processing, the
-//		returned error Type will encapsulate an error
-//		message. This returned error message will
-//		incorporate the method chain and text passed by
-//		input parameter, 'errorPrefix'. The 'errorPrefix'
-//		text will be attached to the beginning of the
-//		error message.
-func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewCurrencySimple(
-	currencySymbols string,
-	leadingNumSymbols bool,
-	errorPrefix interface{}) (
-	NumStrNumberSymbolGroup,
-	error) {
-
-	if nStrNumSymbolsGroup.lock == nil {
-		nStrNumSymbolsGroup.lock = new(sync.Mutex)
-	}
-
-	nStrNumSymbolsGroup.lock.Lock()
-
-	defer nStrNumSymbolsGroup.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-
-	var err error
-
-	var newNStrNumSymbols NumStrNumberSymbolGroup
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
-		"NumStrNumberSymbolGroup."+
-			"NewCurrencySimple()",
-		"")
-
-	if err != nil {
-		return newNStrNumSymbols, err
-	}
-
-	err = new(numStrNumberSymbolGroupMechanics).setSimpleCurrencySymbolsConfig(
-		&newNStrNumSymbols,
-		currencySymbols,
-		leadingNumSymbols,
-		ePrefix.XCpy(
-			"newNStrNumSymbols<-"))
-
-	return newNStrNumSymbols, err
-}
-
 //	NewSignedSimpleNumber
 //
 //	Creates and returns and instance of
@@ -4769,7 +4769,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewCurrencySimple(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSimpleSignedNumber(
+func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSignedNumSimple(
 	leadingNumSymbols bool,
 	errorPrefix interface{}) (
 	NumStrNumberSymbolGroup,
@@ -4793,7 +4793,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSimpleSignedNumber(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumStrNumberSymbolGroup."+
-			"NewSimpleSignedNumber()",
+			"NewSignedNumSimple()",
 		"")
 
 	if err != nil {
