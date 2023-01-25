@@ -4567,7 +4567,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSignedNumDefaultsUSParen(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSimpleCurrency(
+func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewCurrencySimple(
 	currencySymbols string,
 	leadingNumSymbols bool,
 	errorPrefix interface{}) (

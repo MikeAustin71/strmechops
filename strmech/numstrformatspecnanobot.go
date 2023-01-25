@@ -4696,7 +4696,7 @@ func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setSimpleFormatSpec(
 	var numSymbolsSpec NumStrNumberSymbolGroup
 
 	numSymbolsSpec,
-		err = new(NumStrNumberSymbolGroup).NewSimpleCurrency(
+		err = new(NumStrNumberSymbolGroup).NewCurrencySimple(
 		currencySymbols,
 		leadingNumSymbols,
 		ePrefix.XCpy(
