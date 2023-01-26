@@ -2574,6 +2574,276 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setNumberSymbol
 	return err
 }
 
+//	setSignedNumBasic
+//
+//	Receives an instance of NumStrNumberSymbolGroup,
+//	deletes the pre-existing data values and proceeds to
+//	reconfigure the instance using basic signed number
+//	formatting default values.
+//
+//	A signed number is an integer or floating point
+//	numeric value which does NOT contain currency
+//	symbols.
+//
+//	Under the basic signed number symbol formatting
+//	protocol, positive and zero number sign symbol
+//	specifications are, by default, assigned empty 'NOP'
+//	placeholder values. (The term 'NOP' means
+//	'No Operation'.) The 'NOP' assignment derives from
+//	the fact that number sign symbols for positive and
+//	zero numeric values are implicit and are therefore
+//	not displayed in formatted number strings.
+//
+//	Likewise, the currency symbol is also configured as
+//	an empty 'NOP' placeholder value since by definition,
+//	signed numbers do not contain a currency symbol.
+//
+//	Only the negative number sign symbol specification
+//	is actively configured using leading and trailing
+//	negative number sign strings passed as input
+//	parameters.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	If both leading and trailing negative number signs
+//	are required, be sure to populate both
+//	'leadingNegativeNumSign' and
+//	'trailingNegativeNumSign' input parameters.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will delete, overwrite and reset all
+//	pre-existing data values in the instance of
+//	NumStrNumberSymbolGroup passed as input parameter
+//	'nStrNumSymbolGroup'.
+//
+// ----------------------------------------------------------------
+//
+// # Defaults
+//
+//	Positive Numeric Values
+//
+//	The positive number sign is implied. No positive
+//	number sign is applied.
+//
+//		Example-1:
+//			Positive Numeric Signed Number Value
+//				123.456
+//
+//	Zero Numeric Values
+//
+//	The zero number value is neither positive nor
+//	negative. Therefore, no number sign is applied to
+//	zero numeric values.
+//
+//		Example-2:
+//			Zero Numeric Signed Number Value
+//				0
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	leadingNegativeNumSign		[]rune
+//
+//		This rune array contains a character or
+//		characters which comprise the leading Negative
+//		Number Sign Symbol. The leading Negative Number
+//		Sign Symbol will be positioned at the beginning
+//		or left side of the number string for negative
+//		numeric values.
+//
+//			Example: -123.45
+//
+//		If a space between the Negative Number Sign
+//		Symbol and the first digit of the number string
+//		is required, be sure to include the space
+//		in the 'leadingNegativeNumSign' rune array.
+//
+//			Example:
+//				Leading Currency Symbol: "- "
+//				Formatted Number String: "- 123.45"
+//
+//		If both the leading and trailing Negative Number
+//		Sign input parameters are empty, an error will be
+//		returned.
+//
+//	trailingNegativeNumSign		[]rune
+//
+//		This rune array contains a character or
+//		characters which comprise the trailing Negative
+//		Number Sign Symbol. The trailing Negative Number
+//		Sign Symbol will be positioned at the end or
+//		right side of the number string for negative
+//		numeric values.
+//
+//			Example: 123.45-
+//
+//		If a space between the Negative Number Sign
+//		Symbol and the first digit of the number string
+//		is required, be sure to include the space
+//		in the 'trailingNegativeNumSign' rune array.
+//
+//			Example:
+//				Leading Currency Symbol: " -"
+//				Formatted Number String: "123.45 -"
+//
+//		If both the leading and trailing Negative Number
+//		Sign input parameters are empty, an error will be
+//		returned.
+//
+//	numSymbolFieldPosition			NumberFieldSymbolPosition
+//
+//		Defines the position of the negative number sign
+//		symbols relative to a Number Field in which a number
+//		string is displayed.
+//
+//		Possible valid values for 'numSymbolFieldPosition'
+//		are listed as follows:
+//
+//			NumFieldSymPos.InsideNumField()
+//
+//				Example-1 InsideNumField:
+//					Number Field Length: 9
+//					Numeric Value: -123.45
+//					Number Sign Symbol: leading minus sign ('-')
+//					Number Symbol Position: Inside Number Field
+//			     	Number Text Justification: Right
+//					Formatted Number String: "$ -123.45"
+//					Number Field Index:------>012345678
+//					Total Number String Length: 9
+//
+//				Example-2 InsideNumField:
+//					Number Field Length: 10
+//					Numeric Value: -123.45
+//					Number Sign Symbol: trailing minus sign ('-')
+//					Number Symbol Position: Inside Number Field
+//			     	Number Text Justification: Right
+//					Formatted Number String: " 123.45- €"
+//					Number Field Index:------>0123456789
+//					Total Number String Length: 10
+//
+//				For the 'NumFieldSymPos.InsideNumField()'
+//				specification, the final length of the number
+//				string is defined by the Number Field length.
+//
+//			NumFieldSymPos.OutsideNumField()
+//
+//				Example-3 OutsideNumField:
+//					Number Field Length: 8
+//			     	Numeric Value: -123.45
+//			     	Number Symbol: leading minus sign ('-')
+//			     	Number Symbol Position: Outside Number Field
+//			     	Number Text Justification: Right
+//			     	Formatted Number String: "$ -  123.45"
+//					Number Field Index:------>01234567890
+//					Total Number String Length: 11
+//
+//				Example-4 OutsideNumField:
+//					Number Field Length: 8
+//			     	Numeric Value: -123.45
+//			     	Number Symbol: trailing minus sign ('-')
+//			     	Number Symbol Position: Outside Number Field
+//			     	Number Text Justification: Right
+//			     	Formatted Number String: "  123.45- €"
+//					Number Field Index:------>01234567890
+//					Total Number String Length: 11
+//
+//				For the 'NumFieldSymPos.OutsideNumField()'
+//				specification, the final length of the
+//				number string is greater than the Number
+//				Field length.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setSignedNumBasic(
+	nStrNumSymbolGroup *NumStrNumberSymbolGroup,
+	leadingNegativeNumSign []rune,
+	trailingNegativeNumSign []rune,
+	numSymbolFieldPosition NumberFieldSymbolPosition,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if nStrNumSymbolsGroupMech.lock == nil {
+		nStrNumSymbolsGroupMech.lock = new(sync.Mutex)
+	}
+
+	nStrNumSymbolsGroupMech.lock.Lock()
+
+	defer nStrNumSymbolsGroupMech.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"numStrNumberSymbolGroupMechanics."+
+			"setSignedNumBasic()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if nStrNumSymbolGroup == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'nStrNumSymbolGroup' is invalid!\n"+
+			"'nStrNumSymbolGroup' is a 'nil' pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	new(numStrNumberSymbolGroupNanobot).empty(
+		nStrNumSymbolGroup)
+
+	return new(NumStrNumberSymbolSpec).
+		SetSignedNumBasicRunes(
+			leadingNegativeNumSign,
+			trailingNegativeNumSign,
+			numSymbolFieldPosition,
+			&nStrNumSymbolGroup.positiveNumberSign,
+			&nStrNumSymbolGroup.zeroNumberSign,
+			&nStrNumSymbolGroup.negativeNumberSign,
+			ePrefix.XCpy(
+				"nStrNumSymbolGroup"))
+}
+
 //	setSignedNumDefaultsFrance
 //
 //	Receives an instance of NumStrNumberSymbolGroup,

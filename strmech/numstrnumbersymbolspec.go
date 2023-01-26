@@ -14959,10 +14959,15 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetNumberSignTrailingSymbolR
 //	Under the basic signed number symbol formatting
 //	protocol, positive and zero number sign symbol
 //	specifications are, by default, assigned empty 'NOP'
-//	placeholder values. This is due to the fact that
-//	number sign symbols for positive and zero numeric
-//	values are implicit and therefore are not displayed
-//	in formatted number strings.
+//	placeholder values. (The term 'NOP' means
+//	'No Operation'.) The 'NOP' assignment derives from
+//	the fact that number sign symbols for positive and
+//	zero numeric values are implicit and are therefore
+//	not displayed in formatted number strings.
+//
+//	Likewise, the currency symbol is ignored since by
+//	definition, signed numbers do not contain a
+//	currency symbol.
 //
 //	Only the negative number sign symbol specification
 //	is actively configured using leading and trailing
