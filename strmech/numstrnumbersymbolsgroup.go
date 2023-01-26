@@ -3116,13 +3116,14 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewCurrencyDefaultsUSParen(
 //	NewCurrencySimple
 //
 //	Creates and returns and instance of
-//	NumStrNumberSymbolGroup configured for currency
+//	NumStrNumberSymbolGroup configured for Currency
 //	Number Symbol formatting.
 //
-//	If currency number symbol formatting is NOT
+//	If Currency Number Symbol formatting is NOT
 //	required, see method:
 //
-//		NumStrNumberSymbolGroup.NewSignedSimpleNumber()
+//		NumStrNumberSymbolGroup.
+//			NewSignedSimpleNumber()
 //
 //	Type NumStrNumberSymbolGroup is used to configure
 //	Number Symbols required in converting numeric
@@ -3173,11 +3174,11 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewCurrencyDefaultsUSParen(
 //
 //		The minus sign will be configured as a leading or
 //		trailing minus sign depending on the value of
-//		input parameter 'leadingNumSymbols'.
+//		input parameter 'leadingMinusSign'.
 //
 //		Examples:
 //
-//			Leading Minus Sign: "$ -123.456"
+//			Leading Minus Sign: "-123.456"
 //			Trailing Minus Sign: "123.456-"
 //
 //	Positive Number Symbol:
@@ -3218,10 +3219,10 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewCurrencyDefaultsUSParen(
 //
 //	currencySymbols				string
 //
-//		The symbol or symbols used to specify currency.
-//		This currency symbol will be configured in the
-//		new instance of NumStrNumberSymbolGroup returned
-//		by this method.
+//		This string contains the symbol or symbols used
+//		to specify currency. This currency symbol will be
+//		configured in the new instance of
+//		NumStrNumberSymbolGroup returned by this method.
 //
 //	leadingCurrencySymbols		bool
 //
@@ -3238,7 +3239,6 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewCurrencyDefaultsUSParen(
 //
 //		Example Number Strings:
 //			"$ 123.456"
-//			"$ -123.456"
 //
 //		NOTE:	If a space is NOT present, a space will
 //				be automatically inserted between the
@@ -3256,12 +3256,40 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewCurrencyDefaultsUSParen(
 //
 //			Example Number Strings:
 //				"123.456 €"
-//				"123.456- €"
 //
 //		NOTE:	If a space is NOT present, a space will
 //				be automatically inserted between the
 //				currency symbol and the last digit or
 //				trailing minus sign.
+//
+//	leadingMinusSign			bool
+//
+//		Controls the positioning of the minus sign ('-')
+//		in a Number String Format configured with a
+//		negative numeric value.
+//
+//		For NumStrNumberSymbolGroup configured with the
+//		Simple Currency Number String formatting
+//		specification, the default negative number sign
+//		symbol is the minus sign ('-').
+//
+//		When set to 'true', the returned instance of
+//		NumStrNumberSymbolGroup will configure the minus
+//		sign at the beginning or left side of the number
+//		string. Such minus signs are therefore configured
+//		as leading minus signs.
+//
+//		Example Number Strings:
+//			" -123.456"
+//
+//		When 'leadingMinusSign' is set to 'false', the
+//		returned instance of NumStrNumberSymbolGroup will
+//		configure the minus sign ('-') on the right side
+//		of the number string. The minus sign is therefore
+//		configured as trailing minus sign.
+//
+//			Example Number Strings:
+//				"123.456-"
 //
 //	errorPrefix					interface{}
 //
@@ -3354,6 +3382,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewCurrencyDefaultsUSParen(
 func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewCurrencySimple(
 	currencySymbols string,
 	leadingCurrencySymbols bool,
+	leadingMinusSign bool,
 	errorPrefix interface{}) (
 	NumStrNumberSymbolGroup,
 	error) {
@@ -3387,6 +3416,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewCurrencySimple(
 		&newNStrNumSymbols,
 		[]rune(currencySymbols),
 		leadingCurrencySymbols,
+		leadingMinusSign,
 		ePrefix.XCpy(
 			"newNStrNumSymbols<-"))
 
@@ -3453,11 +3483,11 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewCurrencySimple(
 //
 //		The minus sign will be configured as a leading or
 //		trailing minus sign depending on the value of
-//		input parameter 'leadingNumSymbols'.
+//		input parameter 'leadingMinusSign'.
 //
 //		Examples:
 //
-//			Leading Minus Sign: "$ -123.456"
+//			Leading Minus Sign: "-123.456"
 //			Trailing Minus Sign: "123.456-"
 //
 //	Positive Number Symbol:
@@ -3518,7 +3548,6 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewCurrencySimple(
 //
 //		Example Number Strings:
 //			"$ 123.456"
-//			"$ -123.456"
 //
 //		NOTE:	If a space is NOT present, a space will
 //				be automatically inserted between the
@@ -3536,12 +3565,40 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewCurrencySimple(
 //
 //			Example Number Strings:
 //				"123.456 €"
-//				"123.456- €"
 //
 //		NOTE:	If a space is NOT present, a space will
 //				be automatically inserted between the
 //				currency symbol and the last digit or
 //				trailing minus sign.
+//
+//	leadingMinusSign			bool
+//
+//		Controls the positioning of the minus sign ('-')
+//		in a Number String Format configured with a
+//		negative numeric value.
+//
+//		For NumStrNumberSymbolGroup configured with the
+//		Simple Currency Number String formatting
+//		specification, the default negative number sign
+//		symbol is the minus sign ('-').
+//
+//		When set to 'true', the returned instance of
+//		NumStrNumberSymbolGroup will configure the minus
+//		sign at the beginning or left side of the number
+//		string. Such minus signs are therefore configured
+//		as leading minus signs.
+//
+//		Example Number Strings:
+//			" -123.456"
+//
+//		When 'leadingMinusSign' is set to 'false', the
+//		returned instance of NumStrNumberSymbolGroup will
+//		configure the minus sign ('-') on the right side
+//		of the number string. The minus sign is therefore
+//		configured as trailing minus sign.
+//
+//			Example Number Strings:
+//				"123.456-"
 //
 //	errorPrefix					interface{}
 //
@@ -3634,6 +3691,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewCurrencySimple(
 func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewCurrencySimpleRunes(
 	currencySymbols []rune,
 	leadingCurrencySymbols bool,
+	leadingMinusSign bool,
 	errorPrefix interface{}) (
 	NumStrNumberSymbolGroup,
 	error) {
@@ -3667,6 +3725,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewCurrencySimpleRunes(
 		&newNStrNumSymbols,
 		currencySymbols,
 		leadingCurrencySymbols,
+		leadingMinusSign,
 		ePrefix.XCpy(
 			"newNStrNumSymbols<-"))
 
@@ -7918,20 +7977,21 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencyDefaultsUSParen(
 	return newNStrNumSymbols, err
 }
 
-// SetCurrencySimple
+//	SetCurrencySimple
 //
-// Deletes and reconfigures the data values contained in
-// the current instance of NumStrNumberSymbolGroup with
-// currency symbol parameters.
+//	Deletes and reconfigures the data values contained in
+//	the current instance of NumStrNumberSymbolGroup for
+//	Currency Number Symbol formatting.
 //
-// If currency number symbol formatting is NOT required,
-// see method:
+//	If Currency Number Symbol formatting is NOT required,
+//	see method:
 //
-//	NumStrNumberSymbolGroup.SetSignedSimpleNumber()
+//		NumStrNumberSymbolGroup.
+//			SetSignedNumSimple()
 //
-// Type NumStrNumberSymbolGroup is used to configure
-// Number Symbols required in converting numeric
-// values to formatted Number Strings.
+//	Type NumStrNumberSymbolGroup is used to configure
+//	Number Symbols required in converting numeric
+//	values to formatted Number Strings.
 //
 //	NumStrNumberSymbolGroup contains four instances of
 //	type NumStrNumberSymbolSpec defining the Number
@@ -7986,11 +8046,11 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencyDefaultsUSParen(
 //
 //		The minus sign will be configured as a leading or
 //		trailing minus sign depending on the value of
-//		input parameter 'leadingNumSymbols'.
+//		input parameter 'leadingMinusSign'.
 //
 //		Examples:
 //
-//			Leading Minus Sign: "$ -123.456"
+//			Leading Minus Sign: "-123.456"
 //			Trailing Minus Sign: "123.456-"
 //
 //	Positive Number Symbol:
@@ -8019,6 +8079,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencyDefaultsUSParen(
 //			Numeric Value: -123.45
 //			Number Symbol: leading minus sign ('-')
 //			Number Symbol Position: Inside Number Field
+//			Number Text Justification: Right Justified
 //			Formatted Number String: " -123.45"
 //			Number Field Index:------>01234567
 //			Total Number String Length: 8
@@ -8030,10 +8091,11 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencyDefaultsUSParen(
 //
 //	currencySymbols				string
 //
-//		The symbol or symbols used to format currency. The
-//		current instance of NumStrNumberSymbolGroup will be
-//		reconfigured with the currency symbols contained
-//		in this input parameter.
+//		This string contains the symbol or symbols used
+//		to format currency. The current instance of
+//		NumStrNumberSymbolGroup will be reconfigured with
+//		the currency symbols contained in this input
+//		parameter.
 //
 //	leadingCurrencySymbols		bool
 //
@@ -8050,7 +8112,6 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencyDefaultsUSParen(
 //
 //		Example Number Strings:
 //			"$ 123.456"
-//			"$ -123.456"
 //
 //		NOTE:	If a space is NOT present, a space will
 //				be automatically inserted between the
@@ -8068,12 +8129,40 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencyDefaultsUSParen(
 //
 //			Example Number Strings:
 //				"123.456 €"
-//				"123.456- €"
 //
 //		NOTE:	If a space is NOT present, a space will
 //				be automatically inserted between the
 //				currency symbol and the last digit or
 //				trailing minus sign.
+//
+//	leadingMinusSign			bool
+//
+//		Controls the positioning of the minus sign ('-')
+//		in a Number String Format configured with a
+//		negative numeric value.
+//
+//		For NumStrNumberSymbolGroup configured with the
+//		Simple Currency Number String formatting
+//		specification, the default negative number sign
+//		symbol is the minus sign ('-').
+//
+//		When set to 'true', the returned instance of
+//		NumStrNumberSymbolGroup will configure the minus
+//		sign at the beginning or left side of the number
+//		string. Such minus signs are therefore configured
+//		as leading minus signs.
+//
+//		Example Number Strings:
+//			" -123.456"
+//
+//		When 'leadingMinusSign' is set to 'false', the
+//		returned instance of NumStrNumberSymbolGroup will
+//		configure the minus sign ('-') on the right side
+//		of the number string. The minus sign is therefore
+//		configured as trailing minus sign.
+//
+//			Example Number Strings:
+//				"123.456-"
 //
 //	 errorPrefix                interface{}
 //
@@ -8153,6 +8242,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencyDefaultsUSParen(
 func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencySimple(
 	currencySymbols string,
 	leadingCurrencySymbols bool,
+	leadingMinusSign bool,
 	errorPrefix interface{}) error {
 
 	if nStrNumSymbolsGroup.lock == nil {
@@ -8183,24 +8273,27 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencySimple(
 			nStrNumSymbolsGroup,
 			[]rune(currencySymbols),
 			leadingCurrencySymbols,
+			leadingMinusSign,
 			ePrefix.XCpy(
 				"nStrNumSymbolsGroup<-"))
 }
 
-// SetCurrencySimpleRunes
+//	SetCurrencySimpleRunes
 //
-// Deletes and reconfigures the data values contained in
-// the current instance of NumStrNumberSymbolGroup with
-// currency symbol parameters.
+//	Deletes and reconfigures the data values contained in
+//	the current instance of NumStrNumberSymbolGroup with
+//	currency symbol parameters.
 //
-// If currency number symbol formatting is NOT required,
-// see method:
 //
-//	NumStrNumberSymbolGroup.SetSignedSimpleNumber()
+//	If Currency Number Symbol formatting is NOT
+//	required, see method:
 //
-// Type NumStrNumberSymbolGroup is used to configure
-// Number Symbols required in converting numeric
-// values to formatted Number Strings.
+//		NumStrNumberSymbolGroup.
+//			SetSignedSimpleNumber()
+//
+//	Type NumStrNumberSymbolGroup is used to configure
+//	Number Symbols required in converting numeric
+//	values to formatted Number Strings.
 //
 //	NumStrNumberSymbolGroup contains four instances of
 //	type NumStrNumberSymbolSpec defining the Number
@@ -8255,11 +8348,11 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencySimple(
 //
 //		The minus sign will be configured as a leading or
 //		trailing minus sign depending on the value of
-//		input parameter 'leadingNumSymbols'.
+//		input parameter 'leadingMinusSign'.
 //
 //		Examples:
 //
-//			Leading Minus Sign: "$ -123.456"
+//			Leading Minus Sign: "-123.456"
 //			Trailing Minus Sign: "123.456-"
 //
 //	Positive Number Symbol:
@@ -8288,6 +8381,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencySimple(
 //			Numeric Value: -123.45
 //			Number Symbol: leading minus sign ('-')
 //			Number Symbol Position: Inside Number Field
+//			Number Text Justification: Right Justified
 //			Formatted Number String: " -123.45"
 //			Number Field Index:------>01234567
 //			Total Number String Length: 8
@@ -8320,7 +8414,6 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencySimple(
 //
 //		Example Number Strings:
 //			"$ 123.456"
-//			"$ -123.456"
 //
 //		NOTE:	If a space is NOT present, a space will
 //				be automatically inserted between the
@@ -8338,12 +8431,40 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencySimple(
 //
 //			Example Number Strings:
 //				"123.456 €"
-//				"123.456- €"
 //
 //		NOTE:	If a space is NOT present, a space will
 //				be automatically inserted between the
 //				currency symbol and the last digit or
 //				trailing minus sign.
+//
+//	leadingMinusSign			bool
+//
+//		Controls the positioning of the minus sign ('-')
+//		in a Number String Format configured with a
+//		negative numeric value.
+//
+//		For NumStrNumberSymbolGroup configured with the
+//		Simple Currency Number String formatting
+//		specification, the default negative number sign
+//		symbol is the minus sign ('-').
+//
+//		When set to 'true', the returned instance of
+//		NumStrNumberSymbolGroup will configure the minus
+//		sign at the beginning or left side of the number
+//		string. Such minus signs are therefore configured
+//		as leading minus signs.
+//
+//		Example Number Strings:
+//			" -123.456"
+//
+//		When 'leadingMinusSign' is set to 'false', the
+//		returned instance of NumStrNumberSymbolGroup will
+//		configure the minus sign ('-') on the right side
+//		of the number string. The minus sign is therefore
+//		configured as trailing minus sign.
+//
+//			Example Number Strings:
+//				"123.456-"
 //
 //	 errorPrefix                interface{}
 //
@@ -8423,6 +8544,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencySimple(
 func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencySimpleRunes(
 	currencySymbols []rune,
 	leadingCurrencySymbols bool,
+	leadingMinusSign bool,
 	errorPrefix interface{}) error {
 
 	if nStrNumSymbolsGroup.lock == nil {
@@ -8453,6 +8575,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencySimpleRunes(
 			nStrNumSymbolsGroup,
 			currencySymbols,
 			leadingCurrencySymbols,
+			leadingMinusSign,
 			ePrefix.XCpy(
 				"nStrNumSymbolsGroup<-"))
 }

@@ -3407,39 +3407,72 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setSignedNumDef
 //		If this string is empty, an error will be
 //		returned.
 //
-//	leadingNumSymbols			bool
+//	leadingCurrencySymbols		bool
 //
-//		Controls the positioning of Number Symbols in a
+//		Controls the positioning of Currency Symbols in a
 //		Number String Format.
 //
-//		When set to 'true', 'nStrNumSymbols' will be
-//		reconfigured with Number Symbols on the left side
-//		of the numeric value. Such Number Symbols are
-//		therefore configured as Leading Number Symbols.
-//		This is the positioning format used in the US,
-//		UK, Australia and most of Canada.
+//		When set to 'true', the returned instance of
+//		NumStrNumberSymbolGroup will configure Currency
+//		Symbols at the beginning or left side of the
+//		number string. Such Currency Symbols are therefore
+//		configured as leading Currency Symbols. This is
+//		the positioning format used in the US, UK,
+//		Australia and most of Canada.
 //
 //		Example Number Strings:
-//			"$ -123.456"
+//			"$ 123.456"
 //
-//		NOTE:	A space is automatically inserted after
-//				the currency symbol, between the currency
-//				symbol and the minus sign.
+//		NOTE:	If a space is NOT present, a space will
+//				be automatically inserted between the
+//				currency symbol and the first digit or
+//				leading minus sign.
 //
-//		When set to 'false', the returned instance of
-//		NumStrNumberSymbolGroup will configure Number
-//		Symbols on the right side of the numeric value.
-//		Such Number Symbols are therefore configured as
-//		Trailing Number Symbols. This is the positioning
-//		format used in France, Germany and many other
-//		countries in the European Union.
+//		When 'leadingNumSymbols' is set to 'false', the
+//		returned instance of NumStrNumberSymbolGroup will
+//		configure Currency Symbols on the right side of
+//		the number string. Currency Number Symbols are
+//		therefore configured as trailing Number Symbols.
+//		This is the positioning format used in France,
+//		Germany and many other countries in the European
+//		Union.
+//
+//			Example Number Strings:
+//				"123.456 €"
+//
+//		NOTE:	If a space is NOT present, a space will
+//				be automatically inserted between the
+//				currency symbol and the last digit or
+//				trailing minus sign.
+//
+//	leadingMinusSign			bool
+//
+//		Controls the positioning of the minus sign ('-')
+//		in a Number String Format configured with a
+//		negative numeric value.
+//
+//		For NumStrNumberSymbolGroup configured with the
+//		Simple Currency Number String formatting
+//		specification, the default negative number sign
+//		symbol is the minus sign ('-').
+//
+//		When set to 'true', the returned instance of
+//		NumStrNumberSymbolGroup will configure the minus
+//		sign at the beginning or left side of the number
+//		string. Such minus signs are therefore configured
+//		as leading minus signs.
 //
 //		Example Number Strings:
-//			"123.456- €"
+//			" -123.456"
 //
-//		NOTE:	A space is automatically inserted after
-//				the minus sign, between the minus sign
-//				and the currency symbol.
+//		When 'leadingMinusSign' is set to 'false', the
+//		returned instance of NumStrNumberSymbolGroup will
+//		configure the minus sign ('-') on the right side
+//		of the number string. The minus sign is therefore
+//		configured as trailing minus sign.
+//
+//			Example Number Strings:
+//				"123.456-"
 //
 //	errPrefDto					*ePref.ErrPrefixDto
 //
@@ -3475,7 +3508,8 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setSignedNumDef
 func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setSimpleCurrencySymbolsConfig(
 	nStrNumSymbolGroup *NumStrNumberSymbolGroup,
 	currencySymbols []rune,
-	leadingNumSymbols bool,
+	leadingCurrencySymbols bool,
+	leadingMinusSign bool,
 	errPrefDto *ePref.ErrPrefixDto) error {
 
 	if nStrNumSymbolsGroupMech.lock == nil {
@@ -3525,17 +3559,15 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setSimpleCurren
 
 	}
 
-	if leadingNumSymbols == true &&
+	if leadingCurrencySymbols == true &&
 		currencySymbols[lenCurrencySymbols-1] != ' ' {
-
-		//currencySymbols += " "
 
 		currencySymbols =
 			append(currencySymbols, ' ')
 
 	}
 
-	if leadingNumSymbols == false &&
+	if leadingCurrencySymbols == false &&
 		currencySymbols[0] != ' ' {
 
 		currencySymbols =
@@ -3554,18 +3586,8 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setSimpleCurren
 
 	numSymStr = "-"
 
-	if leadingNumSymbols {
+	if leadingCurrencySymbols == true {
 		// Leading Number Symbols
-
-		err = nStrNumSymbolGroup.negativeNumberSign.SetNumberSignLeadingSymbolRunes(
-			[]rune(numSymStr),
-			NumFieldSymPos.InsideNumField(),
-			ePrefix.XCpy(
-				"nStrNumSymbolGroup"))
-
-		if err != nil {
-			return err
-		}
 
 		err = nStrNumSymbolGroup.currencySymbol.
 			SetCurrencyLeadingSymbolRunes(
@@ -3576,22 +3598,9 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setSimpleCurren
 					"nStrNumSymbolGroup."+
 						"currencySymbol<-currencySymbols"))
 
-		if err != nil {
-			return err
-		}
-
 	} else {
 		// Trailing Number Symbols
-
-		err = nStrNumSymbolGroup.negativeNumberSign.SetNumberSignTrailingSymbolRunes(
-			[]rune(numSymStr),
-			NumFieldSymPos.InsideNumField(),
-			ePrefix.XCpy(
-				"nStrNumSymbolGroup"))
-
-		if err != nil {
-			return err
-		}
+		// leadingCurrencySymbols == false
 
 		err = nStrNumSymbolGroup.currencySymbol.
 			SetCurrencyTrailingSymbolRunes(
@@ -3602,9 +3611,31 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setSimpleCurren
 					"nStrNumSymbolGroup."+
 						"currencySymbol<-currencySymbols"))
 
-		if err != nil {
-			return err
-		}
+	}
+
+	if err != nil {
+		return err
+	}
+
+	if leadingMinusSign == true {
+
+		err = nStrNumSymbolGroup.negativeNumberSign.
+			SetNumberSignLeadingSymbolRunes(
+				[]rune(numSymStr),
+				NumFieldSymPos.InsideNumField(),
+				ePrefix.XCpy(
+					"nStrNumSymbolGroup"))
+
+	} else {
+		// MUST BE -
+		// leadingMinusSign == false
+
+		err = nStrNumSymbolGroup.negativeNumberSign.
+			SetNumberSignTrailingSymbolRunes(
+				[]rune(numSymStr),
+				NumFieldSymPos.InsideNumField(),
+				ePrefix.XCpy(
+					"nStrNumSymbolGroup"))
 
 	}
 
