@@ -3167,6 +3167,21 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewCurrencyDefaultsUSParen(
 //			US Number String:		"$ -123.456"
 //			UK Number String:		"£ -123.45"
 //
+//	Currency Symbol - Padding Space:
+//
+//		As a default, one space may be added as padding
+//		for the currency symbol.
+//
+//		If a space is NOT present, a space will be
+//		automatically inserted between the currency
+//		symbol and the first digit or minus sign.
+//
+//		Example Number Strings:
+//			"$ 123.456"
+//			"123.456 €"
+//			"$ -123.456"
+//			"123.456- €"
+//
 //	Negative Number Symbol:
 //		The default Negative Number Symbol is the minus
 //		sign ('-'). Negative numeric values will be
@@ -3475,6 +3490,21 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewCurrencySimple(
 //			European Number String:	"123.456- €"
 //			US Number String:		"$ -123.456"
 //			UK Number String:		"£ -123.45"
+//
+//	Currency Symbol - Padding Space:
+//
+//		As a default, one space may be added as padding
+//		for the currency symbol.
+//
+//		If a space is NOT present, a space will be
+//		automatically inserted between the currency
+//		symbol and the first digit or minus sign.
+//
+//		Example Number Strings:
+//			"$ 123.456"
+//			"123.456 €"
+//			"$ -123.456"
+//			"123.456- €"
 //
 //	Negative Number Symbol:
 //		The default Negative Number Symbol is the minus
@@ -8046,6 +8076,21 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencyDefaultsUSParen(
 //			US Number String:		"$ -123.456"
 //			UK Number String:		"£ -123.45"
 //
+//	Currency Symbol - Padding Space:
+//
+//		As a default, one space may be added as padding
+//		for the currency symbol.
+//
+//		If a space is NOT present, a space will be
+//		automatically inserted between the currency
+//		symbol and the first digit or minus sign.
+//
+//		Example Number Strings:
+//			"$ 123.456"
+//			"123.456 €"
+//			"$ -123.456"
+//			"123.456- €"
+//
 //	Negative Number Symbol:
 //		The default Negative Number Symbol is the minus
 //		sign ('-'). Negative numeric values will be
@@ -8347,6 +8392,21 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencySimple(
 //			European Number String:	"123.456- €"
 //			US Number String:		"$ -123.456"
 //			UK Number String:		"£ -123.45"
+//
+//	Currency Symbol - Padding Space:
+//
+//		As a default, one space may be added as padding
+//		for the currency symbol.
+//
+//		If a space is NOT present, a space will be
+//		automatically inserted between the currency
+//		symbol and the first digit or minus sign.
+//
+//		Example Number Strings:
+//			"$ 123.456"
+//			"123.456 €"
+//			"$ -123.456"
+//			"123.456- €"
 //
 //	Negative Number Symbol:
 //		The default Negative Number Symbol is the minus

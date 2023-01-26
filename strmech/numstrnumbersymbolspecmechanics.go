@@ -331,7 +331,7 @@ func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setCurrencyBasic(
 
 		err = nStrNumSymSpecNanobot.setTrailingCurrencySymbol(
 			currencySymbolSpecs,
-			leadingCurrencySymbol,
+			trailingCurrencySymbol,
 			currencyInsideNumSymbol,
 			numSymbolFieldPosition,
 			ePrefix.XCpy(
@@ -806,6 +806,257 @@ func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setCurrencyDefaultsUS
 			NumFieldSymPos.InsideNumField(),
 			ePrefix.XCpy(
 				"currencySymbols<-Leading Dollar Sign"))
+}
+
+//	setCurrencySimple
+//
+//	Receives an instance of NumStrNumberSymbolSpec,
+//	deletes all internal member data values and proceeds
+//	to configure that instance with simple currency
+//	symbol specifications.
+//
+//	This method provides a simplified means for
+//	configuring the input parameter 'currencySymbolSpecs'
+//	currency symbols using default values.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will delete, overwrite and reset all
+//	pre-existing data values in the instance of
+//	NumStrNumberSymbolSpec passed as input parameter
+//	'currencySymbolSpecs'.
+//
+// ----------------------------------------------------------------
+//
+// # Currency Defaults
+//
+//	Currency-Negative Symbol Position:
+//		Currency Symbol defaults to 'outside' the
+//		minus sign.
+//
+//		Examples:
+//			European Number String:	"123.456- €"
+//			US Number String:		"$ -123.456"
+//			UK Number String:		"£ -123.45"
+//
+//	Currency Symbol - Padding Space:
+//
+//		As a default, one space may be added as padding
+//		for the currency symbol.
+//
+//		If a space is NOT present, a space will be
+//		automatically inserted between the currency
+//		symbol and the first digit or minus sign.
+//
+//		Example Number Strings:
+//			"$ 123.456"
+//			"123.456 €"
+//			"$ -123.456"
+//			"123.456- €"
+//
+//	Number Field Symbol Position:
+//		Defaults to "Inside Number Field"
+//
+//		Example:
+//			Number Field Length: 9
+//			Numeric Value: 123.45
+//			Number Symbol: leading minus sign ('-')
+//			Number Symbol Position: Inside Number Field
+//			Number Text Justification: Right Justified
+//			Formatted Number String: " $ 123.45"
+//			Number Field Index:------>012345678
+//			Total Number String Length: 9
+//			The currency sign is 'inside' the Number Field.
+//
+// ----------------------------------------------------------------
+//
+//	# Input Parameters
+//
+//	currencySymbolSpecs			*NumStrNumberSymbolSpec
+//
+//		A pointer to a NumStrNumberSymbolSpec instance.
+//		This instance will be reconfigured with the
+//		simple currency symbol specifications extracted
+//		from the following input parameters.
+//
+//	currencySymbols				[]rune
+//
+//		This rune array contains the symbol or symbols
+//		used to specify currency. This currency symbol
+//		will be configured in the instance of
+//		NumStrNumberSymbolSpec passed as input parameter
+//		'currencySymbolSpecs'.
+//
+//	leadingCurrencySymbols		bool
+//
+//		Controls the positioning of Currency Symbols in a
+//		Number String Format.
+//
+//		When set to 'true', the NumStrNumberSymbolSpec
+//		instance 'currencySymbols' will configure
+//		Currency Symbols at the beginning or left side of
+//		the number string. Such Currency Symbols are
+//		therefore configured as leading Currency Symbols.
+//		This is the positioning format used in the US,
+//		UK, Australia and most of Canada.
+//
+//		Example Number String:
+//			"$ 123.456"
+//
+//		NOTE:	If a space is NOT present, a space will
+//				be automatically inserted between the
+//				currency symbol and the first digit or
+//				leading minus sign.
+//
+//		When 'leadingNumSymbols' is set to 'false', the
+//		returned instance of NumStrNumberSymbolGroup will
+//		configure Currency Symbols on the right side of
+//		the number string. Currency Number Symbols are
+//		therefore configured as trailing Number Symbols.
+//		This is the positioning format used in France,
+//		Germany and many other countries in the European
+//		Union.
+//
+//			Example Number Strings:
+//				"123.456 €"
+//
+//		NOTE:	If a space is NOT present, a space will
+//				be automatically inserted between the
+//				currency symbol and the last digit or
+//				minus sign.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setCurrencySimple(
+	currencySymbolSpecs *NumStrNumberSymbolSpec,
+	currencySymbols []rune,
+	leadingCurrencySymbols bool,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if nStrNumSymSpecMech.lock == nil {
+		nStrNumSymSpecMech.lock = new(sync.Mutex)
+	}
+
+	nStrNumSymSpecMech.lock.Lock()
+
+	defer nStrNumSymSpecMech.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"numStrNumberSymbolSpecMechanics."+
+			"setCurrencySimple()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if currencySymbolSpecs == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'currencySymbolSpecs' is invalid!\n"+
+			"'currencySymbolSpecs' is a nil pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	lenCurrencySymbols := len(currencySymbols)
+
+	if lenCurrencySymbols == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'currencySymbols' is invalid!\n"+
+			"'currencySymbols' is an empty string with a zero\n"+
+			"character length.\n",
+			ePrefix.String())
+
+		return err
+
+	}
+
+	if leadingCurrencySymbols == true &&
+		currencySymbols[lenCurrencySymbols-1] != ' ' {
+
+		currencySymbols =
+			append(currencySymbols, ' ')
+
+	}
+
+	if leadingCurrencySymbols == false &&
+		currencySymbols[0] != ' ' {
+
+		currencySymbols =
+			append([]rune{' '}, currencySymbols...)
+
+	}
+
+	new(numStrNumberSymbolSpecMolecule).empty(
+		currencySymbolSpecs)
+
+	nStrNumSymSpecNanobot := numStrNumberSymbolSpecNanobot{}
+
+	if leadingCurrencySymbols == true {
+
+		err = nStrNumSymSpecNanobot.setLeadingCurrencySymbol(
+			currencySymbolSpecs,
+			currencySymbols,
+			false,
+			NumFieldSymPos.InsideNumField(),
+			ePrefix.XCpy(
+				"currencySymbolSpecs<-"))
+
+	} else {
+		// MUST BE -
+		//  leadingCurrencySymbols == false
+
+		err = nStrNumSymSpecNanobot.setTrailingCurrencySymbol(
+			currencySymbolSpecs,
+			currencySymbols,
+			false,
+			NumFieldSymPos.InsideNumField(),
+			ePrefix.XCpy(
+				"currencySymbolSpecs<-"))
+
+	}
+
+	return err
 }
 
 //	setSignedNumSymbolsBasic
