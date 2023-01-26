@@ -1905,9 +1905,9 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) IsNOPZeroNumSymbols() bool {
 //
 //	numSymbolFieldPosition		NumberFieldSymbolPosition
 //
-//		Defines the position of the negative number sign
-//		symbols relative to a Number Field in which a number
-//		string is displayed.
+//		Defines the position of the currency and negative
+//		number sign symbols relative to a Number Field in
+//		which a number string is displayed.
 //
 //		Possible valid values for 'numSymbolFieldPosition'
 //		are listed as follows:
