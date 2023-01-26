@@ -7552,9 +7552,9 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewSignedNumBasic(
 	trailingNegativeNumSign string,
 	numSymbolFieldPosition NumberFieldSymbolPosition,
 	errorPrefix interface{}) (
-	positiveNumberSignSymbols NumStrNumberSymbolSpec,
-	zeroNumberSignSymbols NumStrNumberSymbolSpec,
-	negativeNumberSignSymbols NumStrNumberSymbolSpec,
+	positiveSignedNumberSymbols NumStrNumberSymbolSpec,
+	zeroSignedNumberSymbols NumStrNumberSymbolSpec,
+	negativeSignedNumberSymbols NumStrNumberSymbolSpec,
 	err error) {
 
 	if nStrNumberSymbolSpec.lock == nil {
@@ -7576,9 +7576,9 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewSignedNumBasic(
 
 	if err != nil {
 
-		return positiveNumberSignSymbols,
-			zeroNumberSignSymbols,
-			negativeNumberSignSymbols,
+		return positiveSignedNumberSymbols,
+			zeroSignedNumberSymbols,
+			negativeSignedNumberSymbols,
 			err
 	}
 
@@ -7587,14 +7587,14 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewSignedNumBasic(
 			[]rune(leadingNegativeNumSign),
 			[]rune(trailingNegativeNumSign),
 			numSymbolFieldPosition,
-			&positiveNumberSignSymbols,
-			&zeroNumberSignSymbols,
-			&negativeNumberSignSymbols,
+			&positiveSignedNumberSymbols,
+			&zeroSignedNumberSymbols,
+			&negativeSignedNumberSymbols,
 			ePrefix)
 
-	return positiveNumberSignSymbols,
-		zeroNumberSignSymbols,
-		negativeNumberSignSymbols,
+	return positiveSignedNumberSymbols,
+		zeroSignedNumberSymbols,
+		negativeSignedNumberSymbols,
 		err
 }
 
@@ -7876,9 +7876,9 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewSignedNumBasicRunes(
 	trailingNegativeNumSign []rune,
 	numSymbolFieldPosition NumberFieldSymbolPosition,
 	errorPrefix interface{}) (
-	positiveNumberSignSymbols NumStrNumberSymbolSpec,
-	zeroNumberSignSymbols NumStrNumberSymbolSpec,
-	negativeNumberSignSymbols NumStrNumberSymbolSpec,
+	positiveSignedNumberSymbols NumStrNumberSymbolSpec,
+	zeroSignedNumberSymbols NumStrNumberSymbolSpec,
+	negativeSignedNumberSymbols NumStrNumberSymbolSpec,
 	err error) {
 
 	if nStrNumberSymbolSpec.lock == nil {
@@ -7900,9 +7900,9 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewSignedNumBasicRunes(
 
 	if err != nil {
 
-		return positiveNumberSignSymbols,
-			zeroNumberSignSymbols,
-			negativeNumberSignSymbols,
+		return positiveSignedNumberSymbols,
+			zeroSignedNumberSymbols,
+			negativeSignedNumberSymbols,
 			err
 	}
 
@@ -7911,14 +7911,14 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewSignedNumBasicRunes(
 			leadingNegativeNumSign,
 			trailingNegativeNumSign,
 			numSymbolFieldPosition,
-			&positiveNumberSignSymbols,
-			&zeroNumberSignSymbols,
-			&negativeNumberSignSymbols,
+			&positiveSignedNumberSymbols,
+			&zeroSignedNumberSymbols,
+			&negativeSignedNumberSymbols,
 			ePrefix)
 
-	return positiveNumberSignSymbols,
-		zeroNumberSignSymbols,
-		negativeNumberSignSymbols,
+	return positiveSignedNumberSymbols,
+		zeroSignedNumberSymbols,
+		negativeSignedNumberSymbols,
 		err
 }
 
@@ -8937,10 +8937,10 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewSignedNumDefaultsUSParen(
 //	minus sing ('-') as specified by input parameter
 //	'leadingMinusSign'.
 //
-//	Leading and trailing minus signs ('-') cannot be
-//	configured using this method. The minus sign will
-//	either be a leading minus sign or a trailing minus
-//	sign as determined by input paramter
+//	A combination of leading and trailing minus signs
+//	('-') cannot be configured using this method. The
+//	minus sign will either be a leading minus sign or a
+//	trailing minus sign as determined by input paramter
 //	'leadingMinusSign'.
 //
 // ----------------------------------------------------------------
@@ -14984,8 +14984,9 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetNumberSignTrailingSymbolR
 //
 //	This method will delete, overwrite and reset all
 //	pre-existing data values in the input parameters,
-//	'positiveNumberSignSymbols', 'zeroNumberSignSymbols'
-//	and 'negativeNumberSignSymbols'.
+//	'positiveSignedNumberSymbols',
+//	'zeroSignedNumberSymbols'
+//	and 'negativeSignedNumberSymbols'.
 //
 // ----------------------------------------------------------------
 //
@@ -15014,7 +15015,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetNumberSignTrailingSymbolR
 //
 // # Input Parameters
 //
-//	leadingNegativeNumSign		string
+//	leadingNegativeNumSign			string
 //
 //		This string contains a character or characters
 //		which comprise the leading Negative Number Sign
@@ -15038,7 +15039,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetNumberSignTrailingSymbolR
 //		Sign input parameters are empty, an error will be
 //		returned.
 //
-//	trailingNegativeNumSign		string
+//	trailingNegativeNumSign			string
 //
 //		This string contains a character or characters
 //		which comprise the trailing Negative Number Sign
@@ -15061,7 +15062,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetNumberSignTrailingSymbolR
 //		Sign input parameters are empty, an error will be
 //		returned.
 //
-//	numSymbolFieldPosition		NumberFieldSymbolPosition
+//	numSymbolFieldPosition			NumberFieldSymbolPosition
 //
 //		Defines the position of the negative number sign
 //		symbols relative to a Number Field in which a number
@@ -15123,7 +15124,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetNumberSignTrailingSymbolR
 //				number string is greater than the Number
 //				Field length.
 //
-//	positiveNumberSignSymbols		*NumStrNumberSymbolSpec
+//	positiveSignedNumberSymbols		*NumStrNumberSymbolSpec
 //
 //		A pointer to an instance of
 //		NumStrNumberSymbolSpec.
@@ -15137,7 +15138,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetNumberSignTrailingSymbolR
 //		will be deleted and reconfigured as an empty
 //		or NOP instance.
 //
-//	zeroNumberSignSymbols			*NumStrNumberSymbolSpec
+//	zeroSignedNumberSymbols			*NumStrNumberSymbolSpec
 //
 //		A pointer to an instance of
 //		NumStrNumberSymbolSpec.
@@ -15151,7 +15152,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetNumberSignTrailingSymbolR
 //		will be deleted and reconfigured as an empty
 //		or NOP instance.
 //
-//	negativeNumberSignSymbols		*NumStrNumberSymbolSpec
+//	negativeSignedNumberSymbols		*NumStrNumberSymbolSpec
 //
 //		A pointer to an instance of
 //		NumStrNumberSymbolSpec.
@@ -15162,7 +15163,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetNumberSignTrailingSymbolR
 //		'leadingNegativeNumSign' and
 //		'trailingNegativeNumSign'.
 //
-//	errorPrefix					interface{}
+//	errorPrefix						interface{}
 //
 //		This object encapsulates error prefix text which
 //		is included in all returned error messages.
@@ -15241,9 +15242,9 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetSignedNumBasic(
 	leadingNegativeNumSign string,
 	trailingNegativeNumSign string,
 	numSymbolFieldPosition NumberFieldSymbolPosition,
-	positiveNumberSignSymbols *NumStrNumberSymbolSpec,
-	zeroNumberSignSymbols *NumStrNumberSymbolSpec,
-	negativeNumberSignSymbols *NumStrNumberSymbolSpec,
+	positiveSignedNumberSymbols *NumStrNumberSymbolSpec,
+	zeroSignedNumberSymbols *NumStrNumberSymbolSpec,
+	negativeSignedNumberSymbols *NumStrNumberSymbolSpec,
 	errorPrefix interface{}) error {
 
 	if nStrNumberSymbolSpec.lock == nil {
@@ -15275,9 +15276,9 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetSignedNumBasic(
 			[]rune(leadingNegativeNumSign),
 			[]rune(trailingNegativeNumSign),
 			numSymbolFieldPosition,
-			positiveNumberSignSymbols,
-			zeroNumberSignSymbols,
-			negativeNumberSignSymbols,
+			positiveSignedNumberSymbols,
+			zeroSignedNumberSymbols,
+			negativeSignedNumberSymbols,
 			ePrefix)
 }
 
@@ -15321,8 +15322,9 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetSignedNumBasic(
 //
 //	This method will delete, overwrite and reset all
 //	pre-existing data values in the input parameters,
-//	'positiveNumberSignSymbols', 'zeroNumberSignSymbols'
-//	and 'negativeNumberSignSymbols'.
+//	'positiveSignedNumberSymbols',
+//	'zeroSignedNumberSymbols'
+//	and 'negativeSignedNumberSymbols'.
 //
 // ----------------------------------------------------------------
 //
@@ -15461,7 +15463,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetSignedNumBasic(
 //				number string is greater than the Number
 //				Field length.
 //
-//	positiveNumberSignSymbols		*NumStrNumberSymbolSpec
+//	positiveSignedNumberSymbols		*NumStrNumberSymbolSpec
 //
 //		A pointer to an instance of
 //		NumStrNumberSymbolSpec.
@@ -15475,7 +15477,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetSignedNumBasic(
 //		will be deleted and reconfigured as an empty
 //		or NOP instance.
 //
-//	zeroNumberSignSymbols			*NumStrNumberSymbolSpec
+//	zeroSignedNumberSymbols			*NumStrNumberSymbolSpec
 //
 //		A pointer to an instance of
 //		NumStrNumberSymbolSpec.
@@ -15489,7 +15491,7 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetSignedNumBasic(
 //		will be deleted and reconfigured as an empty
 //		or NOP instance.
 //
-//	negativeNumberSignSymbols		*NumStrNumberSymbolSpec
+//	negativeSignedNumberSymbols		*NumStrNumberSymbolSpec
 //
 //		A pointer to an instance of
 //		NumStrNumberSymbolSpec.
@@ -15579,9 +15581,9 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetSignedNumBasicRunes(
 	leadingNegativeNumSign []rune,
 	trailingNegativeNumSign []rune,
 	numSymbolFieldPosition NumberFieldSymbolPosition,
-	positiveNumberSignSymbols *NumStrNumberSymbolSpec,
-	zeroNumberSignSymbols *NumStrNumberSymbolSpec,
-	negativeNumberSignSymbols *NumStrNumberSymbolSpec,
+	positiveSignedNumberSymbols *NumStrNumberSymbolSpec,
+	zeroSignedNumberSymbols *NumStrNumberSymbolSpec,
+	negativeSignedNumberSymbols *NumStrNumberSymbolSpec,
 	errorPrefix interface{}) error {
 
 	if nStrNumberSymbolSpec.lock == nil {
@@ -15613,9 +15615,9 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetSignedNumBasicRunes(
 			leadingNegativeNumSign,
 			trailingNegativeNumSign,
 			numSymbolFieldPosition,
-			positiveNumberSignSymbols,
-			zeroNumberSignSymbols,
-			negativeNumberSignSymbols,
+			positiveSignedNumberSymbols,
+			zeroSignedNumberSymbols,
+			negativeSignedNumberSymbols,
 			ePrefix)
 }
 
@@ -16894,5 +16896,285 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetSignedNumDefaultsUSParen(
 			positiveNumberSignSymbols,
 			zeroNumberSignSymbols,
 			negativeNumberSignSymbols,
+			ePrefix)
+}
+
+//	SetSignedNumSimple
+//
+//	Creates and returns three new instances of
+//	NumStrNumberSymbolSpec configured for positive,
+//	zero and negative number sign symbols according
+//	to a simple set of signed number format
+//	specification input parameters and default values.
+//
+//	A signed number is an integer or floating point
+//	numeric value which does NOT contain currency
+//	symbols.
+//
+//	Under the simple signed number symbol formatting
+//	protocol, positive and zero number sign symbol
+//	specifications are, by default, assigned empty 'NOP'
+//	placeholder values. This is due to the fact that
+//	number sign symbols for positive and zero numeric
+//	values are implicit and therefore are not displayed
+//	in formatted number strings.
+//
+//	Only the negative number sign symbol specification
+//	is actively configured using leading or trailing
+//	minus sing ('-') as specified by input parameter
+//	'leadingMinusSign'.
+//
+//	A combination of leading and trailing minus signs
+//	('-') cannot be configured using this method. The
+//	minus sign will either be a leading minus sign or a
+//	trailing minus sign as determined by input paramter
+//	'leadingMinusSign'.
+//
+// ----------------------------------------------------------------
+//
+// # Signed Number Defaults
+//
+//	Negative Signed Number Symbol:
+//		The default Negative Number Symbol is the
+//		minus sign ('-'). The placement of the minus sign
+//		as either a leading or trailing minus sign is
+//		determined by input parameter 'leadingMinusSign'.
+//
+//		Examples:
+//			European Number String: "123.456-"
+//			US Number String: "-123.456"
+//
+//	Positive Signed Number Symbol:
+//
+//		No Positive Number Sign Symbol. Positive
+//		values are implicit and assumed. Therefore,
+//		no plus is formatted in the number string.
+//
+//			Positive Value Number String: "123.456"
+//
+//	Zero Signed Number Symbol:
+//
+//		No Number Sign Symbol. Technically a zero value
+//		is neither positive nor negative. Therefore,
+//		no plus is formatted in the number string.
+//
+//			Zero Value Number String: "123.456"
+//
+//	Number Field Symbol Position:
+//
+//		Defaults to "Inside Number Field"
+//
+//			A Number Field defines the length of a
+//			text string in which a numeric value is
+//			formatted. When applied, a Number Field
+//			is usually longer than the numeric value
+//			string and typically justifies that numeric
+//			value string as "Left", "Right" or "Centered".
+//
+//			Number Field Example (Centered):
+//				"  123.45  "
+//
+//		Example Number Field Symbol Position:
+//			Number Field Length: 8
+//			Numeric Value: 123.45
+//			Number Symbol: leading minus sign ('-')
+//			Number Symbol Position: Inside Number Field
+//			Number Text Justification: Right Justified
+//			Formatted Number String: " -123.45"
+//			Number Field Index:------>01234567
+//			Total Number String Length: 8
+//
+// ----------------------------------------------------------------
+//
+//	# Input Parameters
+//
+//
+//	leadingMinusSign				bool
+//
+//		Controls the positioning of the minus sign ('-')
+//		in a Number String Format configured with a
+//		negative numeric value.
+//
+//		For NumStrNumberSymbolGroup configured with the
+//		Simple Signed Number String formatting
+//		specification, the default negative number sign
+//		symbol is the minus sign ('-').
+//
+//		When set to 'true', the returned instance of
+//		NumStrNumberSymbolGroup will configure the minus
+//		sign at the beginning or left side of the number
+//		string. Such minus signs are therefore configured
+//		as leading minus signs.
+//
+//		Example Number Strings:
+//			" -123.456"
+//
+//		When 'leadingMinusSign' is set to 'false', the
+//		returned instance of NumStrNumberSymbolGroup will
+//		configure the minus sign ('-') on the right side
+//		of the number string. The minus sign is therefore
+//		configured as trailing minus sign.
+//
+//			Example Number Strings:
+//				"123.456-"
+//
+//	positiveSignedNumberSymbols		*NumStrNumberSymbolSpec
+//
+//		This instance of NumStrNumberSymbolSpec will be
+//		configured as an empty or 'NOP' placeholder.
+//		'NOP' stands for 'No Operation.
+//
+//		The positive signed number symbol is configured
+//		as empty or blank because under the Simple Signed
+//		Number formatting protocol, positive number signs
+//		are implied and not specifically displayed for
+//		positive numeric values.
+//
+//	zeroSignedNumberSymbols			*NumStrNumberSymbolSpec
+//
+//		This instance of NumStrNumberSymbolSpec will be
+//		configured as an empty or 'NOP' placeholder.
+//		'NOP' stands for 'No Operation.
+//
+//		The zero signed number symbol is configured
+//		as empty or blank because under the Simple Signed
+//		Number formatting protocol, zero numeric values
+//		do not have number signs and therefore, number
+//		signs are not displayed for zero numeric values.
+//		Technically, zero numeric values are neither
+//		positive nor negative.
+//
+//	negativeSignedNumberSymbols		*NumStrNumberSymbolSpec
+//
+//		This instance of NumStrNumberSymbolSpec will be
+//		actively configured with the minus sign ('-').
+//
+//		As a result, minus signs ('-') will be displayed
+//		with negative numeric values displayed in number
+//		strings.
+//
+//		This minus sign will either be configured as a
+//		leading minus sign or a trailing minus sign
+//		as specified by input parameter
+//		'leadingMinusSign'.
+//
+//			Example Leading Minus Sign:
+//				-123.45
+//
+//			Example Trailing Minus Sign:
+//				123.45-
+//
+//	errorPrefix						interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetSignedNumSimple(
+	leadingMinusSign bool,
+	positiveSignedNumberSymbols *NumStrNumberSymbolSpec,
+	zeroSignedNumberSymbols *NumStrNumberSymbolSpec,
+	negativeSignedNumberSymbols *NumStrNumberSymbolSpec,
+	errorPrefix interface{}) error {
+
+	if nStrNumberSymbolSpec.lock == nil {
+		nStrNumberSymbolSpec.lock = new(sync.Mutex)
+	}
+
+	nStrNumberSymbolSpec.lock.Lock()
+
+	defer nStrNumberSymbolSpec.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumStrNumberSymbolSpec."+
+			"SetSignedNumSimple()",
+		"")
+
+	if err != nil {
+
+		return err
+	}
+
+	return new(numStrNumberSymbolSpecMechanics).
+		setSignedNumSymbolsSimple(
+			leadingMinusSign,
+			positiveSignedNumberSymbols,
+			zeroSignedNumberSymbols,
+			negativeSignedNumberSymbols,
 			ePrefix)
 }

@@ -1096,8 +1096,9 @@ func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setCurrencySimple(
 //	This method will delete, overwrite and reset all
 //	pre-existing data values in the
 //	NumStrNumberSymbolSpec input parameters
-//	'positiveNumberSignSymbols', 'zeroNumberSignSymbols'
-//	and 'negativeNumberSignSymbols'.
+//	'positiveSignedNumberSymbols',
+//	'zeroSignedNumberSymbols'
+//	and 'negativeSignedNumberSymbols'.
 //
 // ----------------------------------------------------------------
 //
@@ -1156,12 +1157,12 @@ func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setCurrencySimple(
 //		relative to a Number Field in which a number
 //		string is displayed.
 //
-//		Since input parameters 'positiveNumberSignSymbols'
-//		and 'zeroNumberSignSymbols' are set to empty,
+//		Since input parameters 'positiveSignedNumberSymbols'
+//		and 'zeroSignedNumberSymbols' are set to empty,
 //		'NOP' placeholders by default,
 //		'numSymbolFieldPosition' is used exclusively to
 //		configure NumStrNumberSymbolSpec instance
-//		'negativeNumberSignSymbols'.
+//		'negativeSignedNumberSymbols'.
 //
 //		Possible valid values for 'numSymbolFieldPosition'
 //		are listed as follows:
@@ -1259,7 +1260,7 @@ func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setCurrencySimple(
 //				number string is greater than the Number
 //				Field length.
 //
-//	positiveNumberSignSymbols	*NumStrNumberSymbolSpec
+//	positiveSignedNumberSymbols	*NumStrNumberSymbolSpec
 //
 //		This instance of NumStrNumberSymbolSpec will be
 //		configured as an empty or 'NOP' placeholder.
@@ -1271,7 +1272,7 @@ func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setCurrencySimple(
 //		are implied and not specifically displayed for
 //		positive numeric values.
 //
-//	zeroNumberSignSymbols		*NumStrNumberSymbolSpec
+//	zeroSignedNumberSymbols		*NumStrNumberSymbolSpec
 //
 //		This instance of NumStrNumberSymbolSpec will be
 //		configured as an empty or 'NOP' placeholder.
@@ -1283,7 +1284,7 @@ func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setCurrencySimple(
 //		are implied and not specifically displayed for
 //		zero numeric values.
 //
-//	negativeNumberSignSymbols	*NumStrNumberSymbolSpec
+//	negativeSignedNumberSymbols	*NumStrNumberSymbolSpec
 //
 //		This instance of NumStrNumberSymbolSpec will be
 //		actively configured with signed number symbols
@@ -1332,9 +1333,9 @@ func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setSignedNumSymbolsBa
 	leadingNegativeNumSign []rune,
 	trailingNegativeNumSign []rune,
 	numSymbolFieldPosition NumberFieldSymbolPosition,
-	positiveNumberSignSymbols *NumStrNumberSymbolSpec,
-	zeroNumberSignSymbols *NumStrNumberSymbolSpec,
-	negativeNumberSignSymbols *NumStrNumberSymbolSpec,
+	positiveSignedNumberSymbols *NumStrNumberSymbolSpec,
+	zeroSignedNumberSymbols *NumStrNumberSymbolSpec,
+	negativeSignedNumberSymbols *NumStrNumberSymbolSpec,
 	errPrefDto *ePref.ErrPrefixDto) error {
 
 	if nStrNumSymSpecMech.lock == nil {
@@ -1360,31 +1361,31 @@ func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setSignedNumSymbolsBa
 		return err
 	}
 
-	if positiveNumberSignSymbols == nil {
+	if positiveSignedNumberSymbols == nil {
 
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'positiveNumberSignSymbols' is invalid!\n"+
-			"'positiveNumberSignSymbols' is a nil pointer.\n",
+			"Error: Input parameter 'positiveSignedNumberSymbols' is invalid!\n"+
+			"'positiveSignedNumberSymbols' is a nil pointer.\n",
 			ePrefix.String())
 
 		return err
 	}
 
-	if zeroNumberSignSymbols == nil {
+	if zeroSignedNumberSymbols == nil {
 
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'zeroNumberSignSymbols' is invalid!\n"+
-			"'zeroNumberSignSymbols' is a nil pointer.\n",
+			"Error: Input parameter 'zeroSignedNumberSymbols' is invalid!\n"+
+			"'zeroSignedNumberSymbols' is a nil pointer.\n",
 			ePrefix.String())
 
 		return err
 	}
 
-	if negativeNumberSignSymbols == nil {
+	if negativeSignedNumberSymbols == nil {
 
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'negativeNumberSignSymbols' is invalid!\n"+
-			"'negativeNumberSignSymbols' is a nil pointer.\n",
+			"Error: Input parameter 'negativeSignedNumberSymbols' is invalid!\n"+
+			"'negativeSignedNumberSymbols' is a nil pointer.\n",
 			ePrefix.String())
 
 		return err
@@ -1393,13 +1394,13 @@ func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setSignedNumSymbolsBa
 	numStrNumSymSpecNanobot := numStrNumberSymbolSpecMolecule{}
 
 	numStrNumSymSpecNanobot.empty(
-		positiveNumberSignSymbols)
+		positiveSignedNumberSymbols)
 
 	numStrNumSymSpecNanobot.empty(
-		zeroNumberSignSymbols)
+		zeroSignedNumberSymbols)
 
 	numStrNumSymSpecNanobot.empty(
-		negativeNumberSignSymbols)
+		negativeSignedNumberSymbols)
 
 	lenLeadingNegNumSign := len(leadingNegativeNumSign)
 
@@ -1438,21 +1439,21 @@ func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setSignedNumSymbolsBa
 		lenTrailingNegNumSign == 0 {
 
 		err = nStrNumSymSpecMolecule.setLeadingNStrNumSymbolSpec(
-			negativeNumberSignSymbols,
+			negativeSignedNumberSymbols,
 			leadingNegativeNumSign,
 			numSymbolFieldPosition,
 			ePrefix.XCpy(
-				"negativeNumberSignSymbols<-"))
+				"negativeSignedNumberSymbols<-"))
 
 	} else if lenLeadingNegNumSign == 0 &&
 		lenTrailingNegNumSign > 0 {
 
 		err = nStrNumSymSpecMolecule.setTrailingNStrNumSymbolSpec(
-			negativeNumberSignSymbols,
+			negativeSignedNumberSymbols,
 			trailingNegativeNumSign,
 			numSymbolFieldPosition,
 			ePrefix.XCpy(
-				"negativeNumberSignSymbols<-"))
+				"negativeSignedNumberSymbols<-"))
 
 	} else {
 		// MUST BE -
@@ -1460,22 +1461,22 @@ func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setSignedNumSymbolsBa
 		//		lenTrailingCurrSym > 0
 
 		err = nStrNumSymSpecMolecule.setLeadingNStrNumSymbolSpec(
-			negativeNumberSignSymbols,
+			negativeSignedNumberSymbols,
 			leadingNegativeNumSign,
 			numSymbolFieldPosition,
 			ePrefix.XCpy(
-				"negativeNumberSignSymbols<-"))
+				"negativeSignedNumberSymbols<-"))
 
 		if err != nil {
 			return err
 		}
 
 		err = nStrNumSymSpecMolecule.setTrailingNStrNumSymbolSpec(
-			negativeNumberSignSymbols,
+			negativeSignedNumberSymbols,
 			trailingNegativeNumSign,
 			numSymbolFieldPosition,
 			ePrefix.XCpy(
-				"negativeNumberSignSymbols<-"))
+				"negativeSignedNumberSymbols<-"))
 
 	}
 
@@ -2384,7 +2385,7 @@ func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setSignedNumSymbolsDe
 //
 //	# Input Parameters
 //
-//	leadingMinusSign			bool
+//	leadingMinusSign				bool
 //
 //		Controls the positioning of the minus sign ('-')
 //		in a Number String Format configured with a
@@ -2413,7 +2414,7 @@ func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setSignedNumSymbolsDe
 //			Example Number Strings:
 //				"123.456-"
 //
-//	positiveSignedNumberSymbols	*NumStrNumberSymbolSpec
+//	positiveSignedNumberSymbols		*NumStrNumberSymbolSpec
 //
 //		This instance of NumStrNumberSymbolSpec will be
 //		configured as an empty or 'NOP' placeholder.
@@ -2425,7 +2426,7 @@ func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setSignedNumSymbolsDe
 //		are implied and not specifically displayed for
 //		positive numeric values.
 //
-//	zeroSignedNumberSymbols		*NumStrNumberSymbolSpec
+//	zeroSignedNumberSymbols			*NumStrNumberSymbolSpec
 //
 //		This instance of NumStrNumberSymbolSpec will be
 //		configured as an empty or 'NOP' placeholder.
@@ -2439,7 +2440,7 @@ func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setSignedNumSymbolsDe
 //		Technically, zero numeric values are neither
 //		positive nor negative.
 //
-//	negativeSignedNumberSymbols	*NumStrNumberSymbolSpec
+//	negativeSignedNumberSymbols		*NumStrNumberSymbolSpec
 //
 //		This instance of NumStrNumberSymbolSpec will be
 //		actively configured with the minus sign ('-').
@@ -2459,7 +2460,7 @@ func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setSignedNumSymbolsDe
 //			Example Trailing Minus Sign:
 //				123.45-
 //
-//	errPrefDto					*ePref.ErrPrefixDto
+//	errPrefDto						*ePref.ErrPrefixDto
 //
 //		This object encapsulates an error prefix string
 //		which is included in all returned error
