@@ -3817,8 +3817,8 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewNOP() NumStrNumberSymbolG
 //	formatting in accordance with number string
 //	formatting standards used in France.
 //
-//	A signed number is a numeric value formatted in a
-//	number string which does NOT contain currency
+//	A signed number is an integer or floating point
+//	numeric value which does NOT contain currency
 //	symbols.
 //
 //	The new, returned instance of
@@ -4042,8 +4042,8 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSignedNumDefaultsFrance(
 //	formatting in accordance with number string
 //	formatting standards used in Germany.
 //
-//	A signed number is a numeric value formatted in a
-//	number string which does NOT contain currency
+//	A signed number is an integer or floating point
+//	numeric value which does NOT contain currency
 //	symbols.
 //
 //	The new, returned instance of
@@ -4272,8 +4272,8 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSignedNumDefaultsGermany(
 //		UK Example: Negative Numeric Value
 //				-123
 //
-//	A signed number is a numeric value formatted in a
-//	number string which does NOT contain currency
+//	A signed number is an integer or floating point
+//	numeric value which does NOT contain currency
 //	symbols.
 //
 //	The new, returned instance of
@@ -4732,16 +4732,16 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSignedNumDefaultsUSMinus(
 //	formatting in accordance with number string
 //	formatting standards used in the United States (US).
 //
+//	A signed number is a numeric value formatted in a
+//	number string which does NOT contain currency
+//	symbols.
+//
 //	The term 'Paren' in the method name signals that
 //	negative numeric values will be configured with a
 //	surrounding parentheses ('()').
 //
 //		US Example: Negative Numeric Value
 //					(123)
-//
-//	A signed number is a numeric value formatted in a
-//	number string which does NOT contain currency
-//	symbols.
 //
 //	The new, returned instance of
 //	NumStrNumberSymbolGroup will include signed number
@@ -4955,17 +4955,21 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSignedNumDefaultsUSParen(
 	return newNStrNumSymbols, err
 }
 
-//	NewSignedSimpleNumber
+//	NewSignedNumSimple
 //
 //	Creates and returns and instance of
 //	NumStrNumberSymbolGroup configured for Signed
-//	Number formatting. Signed numbers do NOT
-//	contain currency symbols.
+//	Number formatting.
+//
+//	A signed number is an integer or floating point
+//	numeric value which does NOT contain currency
+//	symbols.
 //
 //	If currency number symbol formatting IS
 //	required, see method:
 //
-//		NumStrNumberSymbolGroup.NewCurrencySimple()
+//		NumStrNumberSymbolGroup.
+//			NewCurrencySimple()
 //
 //	Type NumStrNumberSymbolGroup is used to configure
 //	Number Symbols required in converting numeric
@@ -5058,32 +5062,35 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSignedNumDefaultsUSParen(
 //
 //	# Input Parameters
 //
-//	leadingNumSymbols			bool
 //
-//		Controls the positioning of Number Sign Symbols
-//		in a Number String Format.
+//	leadingMinusSign			bool
+//
+//		Controls the positioning of the minus sign ('-')
+//		in a Number String Format configured with a
+//		negative numeric value.
+//
+//		For NumStrNumberSymbolGroup configured with the
+//		Simple Signed Number String formatting
+//		specification, the default negative number sign
+//		symbol is the minus sign ('-').
 //
 //		When set to 'true', the returned instance of
-//		NumStrNumberSymbolGroup will configure Number
-//		Sign Symbols on the left side of the numeric
-//		value. Such Number Symbols are therefore
-//		configured as leading Number Symbols. This is
-//		the positioning format used in the US, UK,
-//		Australia and most of Canada.
+//		NumStrNumberSymbolGroup will configure the minus
+//		sign at the beginning or left side of the number
+//		string. Such minus signs are therefore configured
+//		as leading minus signs.
 //
-//		Example Number String with Leading Number Symbols:
-//			"-123.456"
+//		Example Number Strings:
+//			" -123.456"
 //
-//		When set to 'false', the returned instance of
-//		NumStrNumberSymbolGroup will configure Number
-//		Symbols on the right side of the numeric value.
-//		Such Number Symbols are therefore configured as
-//		trailing Number Symbols. This is the positioning
-//		format used in France, Germany and many other
-//		countries in the European Union.
+//		When 'leadingMinusSign' is set to 'false', the
+//		returned instance of NumStrNumberSymbolGroup will
+//		configure the minus sign ('-') on the right side
+//		of the number string. The minus sign is therefore
+//		configured as trailing minus sign.
 //
-//		Example Number String with Trailing Number Symbols:
-//			"123.456-"
+//			Example Number Strings:
+//				"123.456-"
 //
 // ----------------------------------------------------------------
 //
@@ -5116,7 +5123,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSignedNumDefaultsUSParen(
 //		text will be attached to the beginning of the
 //		error message.
 func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSignedNumSimple(
-	leadingNumSymbols bool,
+	leadingMinusSign bool,
 	errorPrefix interface{}) (
 	NumStrNumberSymbolGroup,
 	error) {
@@ -5149,7 +5156,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSignedNumSimple(
 	err = new(numStrNumberSymbolGroupMechanics).
 		setSimpleNumberSignSymbolsConfig(
 			&newNStrNumSymbols,
-			leadingNumSymbols,
+			leadingMinusSign,
 			ePrefix.XCpy(
 				"newNStrNumSymbols<-"))
 
@@ -11310,17 +11317,21 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSignedNumDefaultsUSParen(
 
 }
 
-//	SetSignedSimpleNumber
+//	SetSignedNumSimple
 //
 //	Deletes and reconfigures the data values contained in
 //	the current instance of NumStrNumberSymbolGroup with
-//	signed number symbol parameters. Signed numbers do
-//	NOT contain currency symbols.
+//	signed number symbol parameters.
+//
+//	A signed number is an integer or floating point
+//	numeric value which does NOT contain currency
+//	symbols.
 //
 //	If currency number symbol formatting IS required,
 //	see method:
 //
-//	NumStrNumberSymbolGroup.SetCurrencySimple()
+//		NumStrNumberSymbolGroup.
+//			SetCurrencySimple()
 //
 //	Type NumStrNumberSymbolGroup is used to configure Number
 //	Symbols required in converting numeric values to
@@ -11406,6 +11417,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSignedNumDefaultsUSParen(
 //			Numeric Value: 123.45
 //			Number Symbol: leading minus sign ('-')
 //			Number Symbol Position: Inside Number Field
+//			Number Text Justification: Right Justified
 //			Formatted Number String: " -123.45"
 //			Number Field Index:------>01234567
 //			Total Number String Length: 8
@@ -11414,32 +11426,34 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSignedNumDefaultsUSParen(
 //
 //	# Input Parameters
 //
-//	leadingNumSymbols			bool
+//	leadingMinusSign			bool
 //
-//		Controls the positioning of Number Sign Symbols
-//		in a Number String Format.
+//		Controls the positioning of the minus sign ('-')
+//		in a Number String Format configured with a
+//		negative numeric value.
+//
+//		For NumStrNumberSymbolGroup configured with the
+//		Simple Signed Number String formatting
+//		specification, the default negative number sign
+//		symbol is the minus sign ('-').
 //
 //		When set to 'true', the returned instance of
-//		NumStrNumberSymbolGroup will configure Number
-//		Sign Symbols on the left side of the numeric
-//		value. Such Number Symbols are therefore
-//		configured as leading Number Symbols. This is
-//		the positioning format used in the US, UK,
-//		Australia and most of Canada.
+//		NumStrNumberSymbolGroup will configure the minus
+//		sign at the beginning or left side of the number
+//		string. Such minus signs are therefore configured
+//		as leading minus signs.
 //
-//		Example Number String with Leading Number Symbols:
-//			"-123.456"
+//		Example Number Strings:
+//			" -123.456"
 //
-//		When set to 'false', the returned instance of
-//		NumStrNumberSymbolGroup will configure Number
-//		Symbols on the right side of the numeric value.
-//		Such Number Symbols are therefore configured as
-//		trailing Number Symbols. This is the positioning
-//		format used in France, Germany and many other
-//		countries in the European Union.
+//		When 'leadingMinusSign' is set to 'false', the
+//		returned instance of NumStrNumberSymbolGroup will
+//		configure the minus sign ('-') on the right side
+//		of the number string. The minus sign is therefore
+//		configured as trailing minus sign.
 //
-//		Example Number String with Trailing Number Symbols:
-//			"123.456-"
+//			Example Number Strings:
+//				"123.456-"
 //
 //	 errorPrefix                interface{}
 //
@@ -11516,7 +11530,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSignedNumDefaultsUSParen(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSimpleSignedNumber(
+func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSignedNumSimple(
 	leadingNumSymbols bool,
 	errorPrefix interface{}) error {
 
@@ -11536,7 +11550,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSimpleSignedNumber(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumStrNumberSymbolGroup."+
-			"SetSimpleSignedNumber()",
+			"SetSignedNumSimple()",
 		"")
 
 	if err != nil {
