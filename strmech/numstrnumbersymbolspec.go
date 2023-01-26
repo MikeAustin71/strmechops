@@ -12384,6 +12384,230 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetCurrencyTrailingSymbolRun
 
 }
 
+//	SetCurrencySimple
+//
+//	Deletes all internal data values in the current
+//	instance of NumStrNumberSymbolSpec and proceeds to
+//	reconfigure that instance with new Currency Symbol
+//	specifications extracted from simple currency symbol
+//	specifications.
+//
+//	This method provides a simplified means for
+//	configuring the current instance of
+//	NumStrNumberSymbolSpec with currency symbols using
+//	default values.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will delete, overwrite and reset all
+//	pre-existing data values in the current instance of
+//	NumStrNumberSymbolSpec.
+//
+// ----------------------------------------------------------------
+//
+// # Currency Defaults
+//
+//	Currency-Negative Symbol Position:
+//		Currency Symbol defaults to 'outside' the
+//		minus sign.
+//
+//		Examples:
+//			European Number String:	"123.456- €"
+//			US Number String:		"$ -123.456"
+//			UK Number String:		"£ -123.45"
+//
+//	Currency Symbol - Padding Space:
+//
+//		As a default, one space may be added as padding
+//		for the currency symbol.
+//
+//		If a space is NOT present, a space will be
+//		automatically inserted between the currency
+//		symbol and the first digit or minus sign.
+//
+//		Example Number Strings:
+//			"$ 123.456"
+//			"123.456 €"
+//			"$ -123.456"
+//			"123.456- €"
+//
+//	Number Field Symbol Position:
+//		Defaults to "Inside Number Field"
+//
+//		Example:
+//			Number Field Length: 9
+//			Numeric Value: 123.45
+//			Number Symbol: leading minus sign ('-')
+//			Number Symbol Position: Inside Number Field
+//			Number Text Justification: Right Justified
+//			Formatted Number String: " $ 123.45"
+//			Number Field Index:------>012345678
+//			Total Number String Length: 9
+//			The currency sign is 'inside' the Number Field.
+//
+// ----------------------------------------------------------------
+//
+//	# Input Parameters
+//
+//	currencySymbols				string
+//
+//		This string contains the symbol or symbols used
+//		to specify currency. This currency symbol will be
+//		configured in the instance of
+//		NumStrNumberSymbolSpec returned by this method.
+//
+//	leadingCurrencySymbols		bool
+//
+//		Controls the positioning of Currency Symbols in a
+//		Number String Format.
+//
+//		When set to 'true', the NumStrNumberSymbolSpec
+//		instance 'currencySymbols' will configure
+//		Currency Symbols at the beginning or left side of
+//		the number string. Such Currency Symbols are
+//		therefore configured as leading Currency Symbols.
+//		This is the positioning format used in the US,
+//		UK, Australia and most of Canada.
+//
+//		Example Number String:
+//			"$ 123.456"
+//
+//		NOTE:	If a space is NOT present, a space will
+//				be automatically inserted between the
+//				currency symbol and the first digit or
+//				leading minus sign.
+//
+//		When 'leadingNumSymbols' is set to 'false', the
+//		returned instance of NumStrNumberSymbolGroup will
+//		configure Currency Symbols on the right side of
+//		the number string. Currency Number Symbols are
+//		therefore configured as trailing Number Symbols.
+//		This is the positioning format used in France,
+//		Germany and many other countries in the European
+//		Union.
+//
+//			Example Number Strings:
+//				"123.456 €"
+//
+//		NOTE:	If a space is NOT present, a space will
+//				be automatically inserted between the
+//				currency symbol and the last digit or
+//				minus sign.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetCurrencySimple(
+	currencySymbols string,
+	leadingCurrencySymbols bool,
+	errorPrefix interface{}) error {
+
+	if nStrNumberSymbolSpec.lock == nil {
+		nStrNumberSymbolSpec.lock = new(sync.Mutex)
+	}
+
+	nStrNumberSymbolSpec.lock.Lock()
+
+	defer nStrNumberSymbolSpec.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumStrNumberSymbolSpec."+
+			"SetCurrencySimple()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	return new(numStrNumberSymbolSpecMechanics).
+		setCurrencySimple(
+			nStrNumberSymbolSpec,
+			[]rune(currencySymbols),
+			leadingCurrencySymbols,
+			ePrefix.XCpy(
+				"newNStrNumberSymbolSpec<-"))
+}
+
 // SetNOP - Resets and configures the current instance
 // of NumStrNumberSymbolSpec as a NOP.
 //
