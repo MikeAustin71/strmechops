@@ -7811,6 +7811,360 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencyBasic(
 				"nStrNumSymbolsGroup<-"))
 }
 
+//	SetCurrencyBasicRunes
+//
+//	Deletes all data values in the current instance of
+//	NumStrNumberSymbolGroup and proceeds to reconfigure
+//	that instance using basic currency and number symbol
+//	formatting default values.
+//
+//	Under the basic signed number symbol formatting
+//	protocol, positive and zero number sign symbol
+//	specifications are, by default, assigned empty 'NOP'
+//	placeholder values. This is due to the fact that
+//	number sign symbols for positive and zero numeric
+//	values are implicit and therefore are not displayed
+//	in formatted number strings.
+//
+//	Only the currency and negative number sign symbols
+//	are actively configured using input parameter
+//	specifications.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will delete, overwrite and reset all
+//	pre-existing data values in the current instance of
+//	NumStrNumberSymbolGroup.
+//
+// ----------------------------------------------------------------
+//
+// # Defaults
+//
+//	Positive Numeric Values
+//
+//	The positive number sign is implied. No positive
+//	number sign is applied.
+//
+//		Example-1:
+//			Positive Numeric Signed Number Value
+//				123.456
+//
+//	Zero Numeric Values
+//
+//	The zero number value is neither positive nor
+//	negative. Therefore, no number sign is applied to
+//	zero numeric values.
+//
+//		Example-2:
+//			Zero Numeric Signed Number Value
+//				0
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	leadingNegativeNumSign			[]rune
+//
+//		This rune array contains a character or
+//		characters which comprise the leading Negative
+//		Number Sign Symbol. The leading Negative Number
+//		Sign Symbol will be positioned at the beginning
+//		or left side of the number string for negative
+//		numeric values.
+//
+//			Example: -123.45
+//
+//		If a space between the Negative Number Sign
+//		Symbol and the first digit of the number string
+//		is required, be sure to include the space
+//		in the 'leadingNegativeNumSign' rune array.
+//
+//			Example:
+//				Leading Currency Symbol: "- "
+//				Formatted Number String: "- 123.45"
+//
+//		If both the leading and trailing Negative Number
+//		Sign input parameters are empty, an error will be
+//		returned.
+//
+//	trailingNegativeNumSign			[]rune
+//
+//		This rune array contains a character or
+//		characters which comprise the trailing Negative
+//		Number Sign Symbol. The trailing Negative Number
+//		Sign Symbol will be positioned at the end or
+//		right side of the number string for negative
+//		numeric values.
+//
+//			Example: 123.45-
+//
+//		If a space between the Negative Number Sign
+//		Symbol and the first digit of the number string
+//		is required, be sure to include the space
+//		in the 'trailingNegativeNumSign' rune array.
+//
+//			Example:
+//				Leading Currency Symbol: " -"
+//				Formatted Number String: "123.45 -"
+//
+//		If both the leading and trailing Negative Number
+//		Sign input parameters are empty, an error will be
+//		returned.
+//
+//	leadingCurrencySymbol			[]rune
+//
+//		This rune array contains a character or
+//		characters which comprise the leading Currency
+//		Symbol. The leading Currency Symbol will be
+//		positioned at the beginning or left side of the
+//		number string.
+//
+//			Example: $ 123.45
+//
+//		If a space between the currency symbol and the
+//		first digit of the number string is required, be
+//		sure to include the space in the currency symbol
+//		input string.
+//			Example:
+//				Leading Currency Symbol: "$ "
+//				Formatted Number String: "$ 123.45"
+//
+//		If both the leading and trailing Currency Symbol
+//		input parameters are empty, an error will be
+//		returned.
+//
+//	trailingCurrencySymbol			[]rune
+//
+//		This rune array contains a character or
+//		characters which comprise the trailing Currency
+//		Symbol. The trailing Currency Symbol will be
+//		positioned at the end of, or right side of, the
+//		number string.
+//
+//			Example: 123.45 €
+//
+//		If a space between the last digit of the
+//		number string and the currency symbol
+//		is required, be sure to include the space
+//		in the currency symbol input string.
+//			Example:
+//				Trailing Currency Symbol: " €"
+//				Formatted Number String: "123.45 €"
+//
+//	currencyInsideNumSymbol			bool
+//
+//		This boolean parameter determines whether the
+//		currency symbol will be positioned inside or
+//		outside the negative number sign symbol.
+//
+//		If this parameter is set to 'false', the
+//		currency symbol will be positioned outside
+//		the negative number sign symbol.
+//
+//			Example-1 Outside:
+//				currencyInsideNumSymbol = false
+//				Number String = "$ -123.45"
+//
+//			Example-2 Outside:
+//				currencyInsideNumSymbol = false
+//				Number String = "  123.45- €"
+//
+//		If this parameter is set to 'true', the
+//		currency symbol will be positioned inside
+//		the negative number sign symbol.
+//
+//			Example - 3 Inside:
+//				currencyInsideNumSymbol = true
+//				Number String = " - $123.45"
+//
+//			Example - 4 Inside:
+//				currencyInsideNumSymbol = true
+//				Number String = "  123.45€ -"
+//
+//	numSymbolFieldPosition			NumberFieldSymbolPosition
+//
+//		Defines the position of the currency and negative
+//		number sign symbols relative to a Number Field in
+//		which a number string is displayed.
+//
+//		Possible valid values for 'numSymbolFieldPosition'
+//		are listed as follows:
+//
+//			NumFieldSymPos.InsideNumField()
+//
+//				Example-1 InsideNumField:
+//					Number Field Length: 9
+//					Numeric Value: -123.45
+//					Number Sign Symbol: leading minus sign ('-')
+//					Number Symbol Position: Inside Number Field
+//			     	Number Text Justification: Right
+//					Formatted Number String: "$ -123.45"
+//					Number Field Index:------>012345678
+//					Total Number String Length: 9
+//
+//				Example-2 InsideNumField:
+//					Number Field Length: 10
+//					Numeric Value: -123.45
+//					Number Sign Symbol: trailing minus sign ('-')
+//					Number Symbol Position: Inside Number Field
+//			     	Number Text Justification: Right
+//					Formatted Number String: " 123.45- €"
+//					Number Field Index:------>0123456789
+//					Total Number String Length: 10
+//
+//				For the 'NumFieldSymPos.InsideNumField()'
+//				specification, the final length of the number
+//				string is defined by the Number Field length.
+//
+//			NumFieldSymPos.OutsideNumField()
+//
+//				Example-3 OutsideNumField:
+//					Number Field Length: 8
+//			     	Numeric Value: -123.45
+//			     	Number Symbol: leading minus sign ('-')
+//			     	Number Symbol Position: Outside Number Field
+//			     	Number Text Justification: Right
+//			     	Formatted Number String: "$ -  123.45"
+//					Number Field Index:------>01234567890
+//					Total Number String Length: 11
+//
+//				Example-4 OutsideNumField:
+//					Number Field Length: 8
+//			     	Numeric Value: -123.45
+//			     	Number Symbol: trailing minus sign ('-')
+//			     	Number Symbol Position: Outside Number Field
+//			     	Number Text Justification: Right
+//			     	Formatted Number String: "  123.45- €"
+//					Number Field Index:------>01234567890
+//					Total Number String Length: 11
+//
+//				For the 'NumFieldSymPos.OutsideNumField()'
+//				specification, the final length of the
+//				number string is greater than the Number
+//				Field length.
+//
+//	errorPrefix						interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencyBasicRunes(
+	leadingNegativeNumSign []rune,
+	trailingNegativeNumSign []rune,
+	leadingCurrencySymbol []rune,
+	trailingCurrencySymbol []rune,
+	currencyInsideNumSymbol bool,
+	numSymbolFieldPosition NumberFieldSymbolPosition,
+	errorPrefix interface{}) error {
+
+	if nStrNumSymbolsGroup.lock == nil {
+		nStrNumSymbolsGroup.lock = new(sync.Mutex)
+	}
+
+	nStrNumSymbolsGroup.lock.Lock()
+
+	defer nStrNumSymbolsGroup.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumStrNumberSymbolGroup."+
+			"SetCurrencyBasicRunes()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	return new(numStrNumberSymbolGroupMechanics).
+		setCurrencyBasic(
+			nStrNumSymbolsGroup,
+			leadingNegativeNumSign,
+			trailingNegativeNumSign,
+			leadingCurrencySymbol,
+			trailingCurrencySymbol,
+			currencyInsideNumSymbol,
+			numSymbolFieldPosition,
+			ePrefix.XCpy(
+				"nStrNumSymbolsGroup<-"))
+}
+
 //	SetCurrencyDefaultsFrance
 //
 //	Deletes all data values in the current instance of
