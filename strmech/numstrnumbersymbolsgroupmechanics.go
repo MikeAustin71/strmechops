@@ -228,8 +228,255 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) copyNumSymbols(
 //	pre-existing data values in the instance of
 //	NumStrNumberSymbolGroup passed as input parameter
 //	'nStrNumSymbolGroup'.
-
-/*
+//
+// ----------------------------------------------------------------
+//
+// # Defaults
+//
+//	Positive Numeric Values
+//
+//	The positive number sign is implied. No positive
+//	number sign is applied.
+//
+//		Example-1:
+//			Positive Numeric Signed Number Value
+//				123.456
+//
+//	Zero Numeric Values
+//
+//	The zero number value is neither positive nor
+//	negative. Therefore, no number sign is applied to
+//	zero numeric values.
+//
+//		Example-2:
+//			Zero Numeric Signed Number Value
+//				0
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	nStrNumSymbolGroup			*NumStrNumberSymbolGroup
+//
+//		A pointer to an instance of
+//		NumStrNumberSymbolGroup.
+//
+//		All Number Symbol data values contained in this
+//		object will be deleted and reconfigured using
+//		the default parameters for French Currency number
+//		formatting standards.
+//
+//	leadingNegativeNumSign		[]rune
+//
+//		This rune array contains a character or
+//		characters which comprise the leading Negative
+//		Number Sign Symbol. The leading Negative Number
+//		Sign Symbol will be positioned at the beginning
+//		or left side of the number string for negative
+//		numeric values.
+//
+//			Example: -123.45
+//
+//		If a space between the Negative Number Sign
+//		Symbol and the first digit of the number string
+//		is required, be sure to include the space
+//		in the 'leadingNegativeNumSign' rune array.
+//
+//			Example:
+//				Leading Currency Symbol: "- "
+//				Formatted Number String: "- 123.45"
+//
+//		If both the leading and trailing Negative Number
+//		Sign input parameters are empty, an error will be
+//		returned.
+//
+//	trailingNegativeNumSign		[]rune
+//
+//		This rune array contains a character or
+//		characters which comprise the trailing Negative
+//		Number Sign Symbol. The trailing Negative Number
+//		Sign Symbol will be positioned at the end or
+//		right side of the number string for negative
+//		numeric values.
+//
+//			Example: 123.45-
+//
+//		If a space between the Negative Number Sign
+//		Symbol and the first digit of the number string
+//		is required, be sure to include the space
+//		in the 'trailingNegativeNumSign' rune array.
+//
+//			Example:
+//				Leading Currency Symbol: " -"
+//				Formatted Number String: "123.45 -"
+//
+//		If both the leading and trailing Negative Number
+//		Sign input parameters are empty, an error will be
+//		returned.
+//
+//	leadingCurrencySymbol		[]rune
+//
+//		This rune array contains a character or
+//		characters which comprise the leading Currency
+//		Symbol. The leading Currency Symbol will be
+//		positioned at the beginning or left side of the
+//		number string.
+//
+//			Example: $ 123.45
+//
+//		If a space between the currency symbol and the
+//		first digit of the number string is required, be
+//		sure to include the space in the currency symbol
+//		input string.
+//			Example:
+//				Leading Currency Symbol: "$ "
+//				Formatted Number String: "$ 123.45"
+//
+//		If both the leading and trailing Currency Symbol
+//		input parameters are empty, an error will be
+//		returned.
+//
+//	trailingCurrencySymbol		[]rune
+//
+//		This rune array contains a character or
+//		characters which comprise the trailing Currency
+//		Symbol. The trailing Currency Symbol will be
+//		positioned at the end of, or right side of, the
+//		number string.
+//
+//			Example: 123.45 €
+//
+//		If a space between the last digit of the
+//		number string and the currency symbol
+//		is required, be sure to include the space
+//		in the currency symbol input string.
+//			Example:
+//				Trailing Currency Symbol: " €"
+//				Formatted Number String: "123.45 €"
+//
+//	currencyInsideNumSymbol			bool
+//
+//		This boolean parameter determines whether the
+//		currency symbol will be positioned inside or
+//		outside the negative number sign symbol.
+//
+//		If this parameter is set to 'false', the
+//		currency symbol will be positioned outside
+//		the negative number sign symbol.
+//
+//			Example-1 Outside:
+//				currencyInsideNumSymbol = false
+//				Number String = "$ -123.45"
+//
+//			Example-2 Outside:
+//				currencyInsideNumSymbol = false
+//				Number String = "  123.45- €"
+//
+//		If this parameter is set to 'true', the
+//		currency symbol will be positioned inside
+//		the negative number sign symbol.
+//
+//			Example - 3 Inside:
+//				currencyInsideNumSymbol = true
+//				Number String = " - $123.45"
+//
+//			Example - 4 Inside:
+//				currencyInsideNumSymbol = true
+//				Number String = "  123.45€ -"
+//
+//	numSymbolFieldPosition		NumberFieldSymbolPosition
+//
+//		Defines the position of the negative number sign
+//		symbols relative to a Number Field in which a number
+//		string is displayed.
+//
+//		Possible valid values for 'numSymbolFieldPosition'
+//		are listed as follows:
+//
+//			NumFieldSymPos.InsideNumField()
+//
+//				Example-1 InsideNumField:
+//					Number Field Length: 9
+//					Numeric Value: -123.45
+//					Number Sign Symbol: leading minus sign ('-')
+//					Number Symbol Position: Inside Number Field
+//			     	Number Text Justification: Right
+//					Formatted Number String: "$ -123.45"
+//					Number Field Index:------>012345678
+//					Total Number String Length: 9
+//
+//				Example-2 InsideNumField:
+//					Number Field Length: 10
+//					Numeric Value: -123.45
+//					Number Sign Symbol: trailing minus sign ('-')
+//					Number Symbol Position: Inside Number Field
+//			     	Number Text Justification: Right
+//					Formatted Number String: " 123.45- €"
+//					Number Field Index:------>0123456789
+//					Total Number String Length: 10
+//
+//				For the 'NumFieldSymPos.InsideNumField()'
+//				specification, the final length of the number
+//				string is defined by the Number Field length.
+//
+//			NumFieldSymPos.OutsideNumField()
+//
+//				Example-3 OutsideNumField:
+//					Number Field Length: 8
+//			     	Numeric Value: -123.45
+//			     	Number Symbol: leading minus sign ('-')
+//			     	Number Symbol Position: Outside Number Field
+//			     	Number Text Justification: Right
+//			     	Formatted Number String: "$ -  123.45"
+//					Number Field Index:------>01234567890
+//					Total Number String Length: 11
+//
+//				Example-4 OutsideNumField:
+//					Number Field Length: 8
+//			     	Numeric Value: -123.45
+//			     	Number Symbol: trailing minus sign ('-')
+//			     	Number Symbol Position: Outside Number Field
+//			     	Number Text Justification: Right
+//			     	Formatted Number String: "  123.45- €"
+//					Number Field Index:------>01234567890
+//					Total Number String Length: 11
+//
+//				For the 'NumFieldSymPos.OutsideNumField()'
+//				specification, the final length of the
+//				number string is greater than the Number
+//				Field length.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
 func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setCurrencyBasic(
 	nStrNumSymbolGroup *NumStrNumberSymbolGroup,
 	leadingNegativeNumSign []rune,
@@ -276,24 +523,31 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setCurrencyBasi
 	new(numStrNumberSymbolGroupNanobot).empty(
 		nStrNumSymbolGroup)
 
-	nStrNumSymbolGroup.positiveNumberSign.SetNOP()
-
-	nStrNumSymbolGroup.zeroNumberSign.SetNOP()
-
-	err = new(numStrNumberSymbolGroupNanobot).setNegativeNumSignRunes(
-		nStrNumSymbolGroup,
+	err = new(NumStrNumberSymbolSpec).SetSignedNumBasicRunes(
 		leadingNegativeNumSign,
 		trailingNegativeNumSign,
 		numSymbolFieldPosition,
+		&nStrNumSymbolGroup.positiveNumberSign,
+		&nStrNumSymbolGroup.zeroNumberSign,
+		&nStrNumSymbolGroup.negativeNumberSign,
 		ePrefix.XCpy(
-			"nStrNumSymbolGroup<-"))
+			"nStrNumSymbolGroup"))
 
 	if err != nil {
 		return err
 	}
 
+	err = nStrNumSymbolGroup.currencySymbol.
+		SetCurrencyBasicRunes(
+			leadingCurrencySymbol,
+			trailingCurrencySymbol,
+			numSymbolFieldPosition,
+			currencyInsideNumSymbol,
+			ePrefix.XCpy(
+				"nStrNumSymbolGroup"))
+
+	return err
 }
-*/
 
 //	setCurrencyDefaultsFrance
 //
