@@ -15301,7 +15301,7 @@ func (numStrFmtSpec *NumStrFormatSpec) SetSignedPureNumberStr(
 				"numStrFmtSpec"))
 }
 
-//	SetSimpleCurrency
+//	SetCurrencySimple
 //
 //	Reconfigures the current instance of NumStrFormatSpec
 //	for Currency Number String formatting.
@@ -15631,7 +15631,7 @@ func (numStrFmtSpec *NumStrFormatSpec) SetSimpleCurrency(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumStrFormatSpec."+
-			"SetSimpleCurrency()",
+			"SetCurrencySimple()",
 		"")
 
 	if err != nil {
@@ -15659,7 +15659,7 @@ func (numStrFmtSpec *NumStrFormatSpec) SetSimpleCurrency(
 //	If currency number symbol formatting IS REQUIRED,
 //	see method:
 //
-//		NumStrFormatSpec.SetSimpleCurrency()
+//		NumStrFormatSpec.SetCurrencySimple()
 //
 //
 //	Type NumStrFormatSpec is used to convert numeric

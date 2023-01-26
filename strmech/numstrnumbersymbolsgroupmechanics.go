@@ -3388,16 +3388,17 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setSignedNumDef
 //		All Number Symbol data values contained in this
 //		object will be deleted and reconfigured as
 //		currency symbol specifications. These
-//		specifications include Currency Symbols to be used
-//		with positive numeric values, negative numeric
-//		values and zero numeric values.
+//		specifications include Currency Symbols to be
+//		used with positive numeric values, negative
+//		numeric values and zero numeric values.
 //
-//	currencySymbols				string
+//	currencySymbols				[]rune
 //
-//		The symbol or symbols used to format currency.
-//		This currency formatting will be used to
-//		reconfigure the NumStrNumberSymbolGroup instance
-//		passed by input parameter, 'nStrNumSymbols'.
+//		This rune array contains the symbol or symbols
+//		used to format currency. This currency formatting
+//		will be used to reconfigure the
+//		NumStrNumberSymbolGroup instance passed by input
+//		parameter, 'nStrNumSymbols'.
 //
 //		Examples of Currency Symbol characters include
 //		such symbols as the Dollar sign ('$'), Euro sign
@@ -3473,7 +3474,7 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setSignedNumDef
 //		the error message.
 func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setSimpleCurrencySymbolsConfig(
 	nStrNumSymbolGroup *NumStrNumberSymbolGroup,
-	currencySymbols string,
+	currencySymbols []rune,
 	leadingNumSymbols bool,
 	errPrefDto *ePref.ErrPrefixDto) error {
 
@@ -3527,14 +3528,18 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setSimpleCurren
 	if leadingNumSymbols == true &&
 		currencySymbols[lenCurrencySymbols-1] != ' ' {
 
-		currencySymbols += " "
+		//currencySymbols += " "
+
+		currencySymbols =
+			append(currencySymbols, ' ')
 
 	}
 
 	if leadingNumSymbols == false &&
 		currencySymbols[0] != ' ' {
 
-		currencySymbols = " " + currencySymbols
+		currencySymbols =
+			append([]rune{' '}, currencySymbols...)
 
 	}
 
@@ -3564,7 +3569,7 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setSimpleCurren
 
 		err = nStrNumSymbolGroup.currencySymbol.
 			SetCurrencyLeadingSymbolRunes(
-				[]rune(currencySymbols),
+				currencySymbols,
 				false,
 				NumFieldSymPos.InsideNumField(),
 				ePrefix.XCpy(
@@ -3590,7 +3595,7 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setSimpleCurren
 
 		err = nStrNumSymbolGroup.currencySymbol.
 			SetCurrencyTrailingSymbolRunes(
-				[]rune(currencySymbols),
+				currencySymbols,
 				false,
 				NumFieldSymPos.InsideNumField(),
 				ePrefix.XCpy(
