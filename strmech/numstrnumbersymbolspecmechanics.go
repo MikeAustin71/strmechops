@@ -1259,7 +1259,6 @@ func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setCurrencySimple(
 //				number string is greater than the Number
 //				Field length.
 //
-//
 //	positiveNumberSignSymbols	*NumStrNumberSymbolSpec
 //
 //		This instance of NumStrNumberSymbolSpec will be
@@ -2287,6 +2286,304 @@ func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setSignedNumSymbolsDe
 		NumFieldSymPos.InsideNumField(),
 		ePrefix.XCpy(
 			"negativeSignedNumberSymbols"))
+
+	return err
+}
+
+//	setSignedNumSymbolsSimple
+//
+//
+//	Reconfigures three NumStrNumberSymbolSpec input
+//	parameters for positive, zero and negative number
+//	sign symbol specifications.
+//
+//	Under the simple signed number symbol configuration
+//	protocol, number signs for positive and zero numeric
+//	values are assumed to be implicit. Consequently,
+//	number sign symbols are not displayed in number
+//	strings for	positive and zero numeric values.
+//
+//	By default, the positive and zero input parameters
+//	are therefore set as empty or 'NOP' placeholder
+//	instances. 'NOP' stands for 'No	Operation'.
+//
+//	By default, the negative number sign is configured
+//	as the minus sign ('-') for the input parameter
+//	instance of NumStrNumberSymbolSpec,
+//	'negativeSignedNumberSymbols'. The placement of this
+//	minus sign ('-') as either a leading minus sign or a
+//	trailing minus is controlled by input parameter
+//	'leadingMinusSign'.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will delete, overwrite and reset all
+//	pre-existing data values in the
+//	NumStrNumberSymbolSpec input parameters
+//	'positiveSignedNumberSymbols',
+//	'zeroSignedNumberSymbols'
+//	and 'negativeSignedNumberSymbols'.
+//
+// ----------------------------------------------------------------
+//
+// # Signed Number Defaults
+//
+//	Negative Signed Number Symbol:
+//		The default Negative Number Symbol is the
+//		minus sign ('-'). The placement of the minus sign
+//		as either a leading or trailing minus sign is
+//		determined by input parameter 'leadingMinusSign'.
+//
+//		Examples:
+//			European Number String: "123.456-"
+//			US Number String: "-123.456"
+//
+//	Positive Signed Number Symbol:
+//
+//		No Positive Number Sign Symbol. Positive
+//		values are implicit and assumed. Therefore,
+//		no plus is formatted in the number string.
+//
+//			Positive Value Number String: "123.456"
+//
+//	Zero Signed Number Symbol:
+//
+//		No Number Sign Symbol. Technically a zero value
+//		is neither positive nor negative. Therefore,
+//		no plus is formatted in the number string.
+//
+//			Zero Value Number String: "123.456"
+//
+//	Number Field Symbol Position:
+//
+//		Defaults to "Inside Number Field"
+//
+//			A Number Field defines the length of a
+//			text string in which a numeric value is
+//			formatted. When applied, a Number Field
+//			is usually longer than the numeric value
+//			string and typically justifies that numeric
+//			value string as "Left", "Right" or "Centered".
+//
+//			Number Field Example (Centered):
+//				"  123.45  "
+//
+//		Example Number Field Symbol Position:
+//			Number Field Length: 8
+//			Numeric Value: 123.45
+//			Number Symbol: leading minus sign ('-')
+//			Number Symbol Position: Inside Number Field
+//			Number Text Justification: Right Justified
+//			Formatted Number String: " -123.45"
+//			Number Field Index:------>01234567
+//			Total Number String Length: 8
+//
+// ----------------------------------------------------------------
+//
+//	# Input Parameters
+//
+//	leadingMinusSign			bool
+//
+//		Controls the positioning of the minus sign ('-')
+//		in a Number String Format configured with a
+//		negative numeric value.
+//
+//		For NumStrNumberSymbolGroup configured with the
+//		Simple Signed Number String formatting
+//		specification, the default negative number sign
+//		symbol is the minus sign ('-').
+//
+//		When set to 'true', the returned instance of
+//		NumStrNumberSymbolGroup will configure the minus
+//		sign at the beginning or left side of the number
+//		string. Such minus signs are therefore configured
+//		as leading minus signs.
+//
+//		Example Number Strings:
+//			" -123.456"
+//
+//		When 'leadingMinusSign' is set to 'false', the
+//		returned instance of NumStrNumberSymbolGroup will
+//		configure the minus sign ('-') on the right side
+//		of the number string. The minus sign is therefore
+//		configured as trailing minus sign.
+//
+//			Example Number Strings:
+//				"123.456-"
+//
+//	positiveSignedNumberSymbols	*NumStrNumberSymbolSpec
+//
+//		This instance of NumStrNumberSymbolSpec will be
+//		configured as an empty or 'NOP' placeholder.
+//		'NOP' stands for 'No Operation.
+//
+//		The positive signed number symbol is configured
+//		as empty or blank because under the Simple Signed
+//		Number formatting protocol, positive number signs
+//		are implied and not specifically displayed for
+//		positive numeric values.
+//
+//	zeroSignedNumberSymbols		*NumStrNumberSymbolSpec
+//
+//		This instance of NumStrNumberSymbolSpec will be
+//		configured as an empty or 'NOP' placeholder.
+//		'NOP' stands for 'No Operation.
+//
+//		The zero signed number symbol is configured
+//		as empty or blank because under the Simple Signed
+//		Number formatting protocol, zero numeric values
+//		do not have number signs and therefore, number
+//		signs are not displayed for zero numeric values.
+//		Technically, zero numeric values are neither
+//		positive nor negative.
+//
+//	negativeSignedNumberSymbols	*NumStrNumberSymbolSpec
+//
+//		This instance of NumStrNumberSymbolSpec will be
+//		actively configured with the minus sign ('-').
+//
+//		As a result, minus signs ('-') will be displayed
+//		with negative numeric values displayed in number
+//		strings.
+//
+//		This minus sign will either be configured as a
+//		leading minus sign or a trailing minus sign
+//		as specified by input parameter
+//		'leadingMinusSign'.
+//
+//			Example Leading Minus Sign:
+//				-123.45
+//
+//			Example Trailing Minus Sign:
+//				123.45-
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setSignedNumSymbolsSimple(
+	leadingMinusSign bool,
+	positiveSignedNumberSymbols *NumStrNumberSymbolSpec,
+	zeroSignedNumberSymbols *NumStrNumberSymbolSpec,
+	negativeSignedNumberSymbols *NumStrNumberSymbolSpec,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if nStrNumSymSpecMech.lock == nil {
+		nStrNumSymSpecMech.lock = new(sync.Mutex)
+	}
+
+	nStrNumSymSpecMech.lock.Lock()
+
+	defer nStrNumSymSpecMech.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"numStrNumberSymbolSpecMechanics."+
+			"setSignedNumSymbolsBasic()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if positiveSignedNumberSymbols == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'positiveSignedNumberSymbols' is invalid!\n"+
+			"'positiveSignedNumberSymbols' is a nil pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if zeroSignedNumberSymbols == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'zeroSignedNumberSymbols' is invalid!\n"+
+			"'zeroSignedNumberSymbols' is a nil pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if negativeSignedNumberSymbols == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'negativeSignedNumberSymbols' is invalid!\n"+
+			"'negativeSignedNumberSymbols' is a nil pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	numStrNumSymSpecNanobot := numStrNumberSymbolSpecMolecule{}
+
+	numStrNumSymSpecNanobot.empty(
+		positiveSignedNumberSymbols)
+
+	numStrNumSymSpecNanobot.empty(
+		zeroSignedNumberSymbols)
+
+	numStrNumSymSpecNanobot.empty(
+		negativeSignedNumberSymbols)
+
+	nStrNumSymSpecMolecule := numStrNumberSymbolSpecMolecule{}
+
+	if leadingMinusSign == true {
+
+		err = nStrNumSymSpecMolecule.setLeadingNStrNumSymbolSpec(
+			negativeSignedNumberSymbols,
+			[]rune{'-'},
+			NumFieldSymPos.InsideNumField(),
+			ePrefix.XCpy(
+				"negativeSignedNumberSymbols<-"))
+
+	} else {
+		// MUST BE -
+		// leadingMinusSign == false
+
+		err = nStrNumSymSpecMolecule.setTrailingNStrNumSymbolSpec(
+			negativeSignedNumberSymbols,
+			[]rune{'-'},
+			NumFieldSymPos.InsideNumField(),
+			ePrefix.XCpy(
+				"negativeNumberSignSymbols<-"))
+
+	}
 
 	return err
 }

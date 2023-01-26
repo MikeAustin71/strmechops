@@ -8912,6 +8912,271 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewSignedNumDefaultsUSParen(
 		err
 }
 
+//	NewSignedNumSimple
+//
+//	Creates and returns three new instances of
+//	NumStrNumberSymbolSpec configured for positive,
+//	zero and negative number sign symbols according
+//	to a simple set of signed number format
+//	specification input parameters and default values.
+//
+//	A signed number is an integer or floating point
+//	numeric value which does NOT contain currency
+//	symbols.
+//
+//	Under the simple signed number symbol formatting
+//	protocol, positive and zero number sign symbol
+//	specifications are, by default, assigned empty 'NOP'
+//	placeholder values. This is due to the fact that
+//	number sign symbols for positive and zero numeric
+//	values are implicit and therefore are not displayed
+//	in formatted number strings.
+//
+//	Only the negative number sign symbol specification
+//	is actively configured using leading or trailing
+//	minus sing ('-') as specified by input parameter
+//	'leadingMinusSign'.
+//
+//	Leading and trailing minus signs ('-') cannot be
+//	configured using this method. The minus sign will
+//	either be a leading minus sign or a trailing minus
+//	sign as determined by input paramter
+//	'leadingMinusSign'.
+//
+// ----------------------------------------------------------------
+//
+// # Signed Number Defaults
+//
+//	Negative Signed Number Symbol:
+//		The default Negative Number Symbol is the
+//		minus sign ('-'). The placement of the minus sign
+//		as either a leading or trailing minus sign is
+//		determined by input parameter 'leadingMinusSign'.
+//
+//		Examples:
+//			European Number String: "123.456-"
+//			US Number String: "-123.456"
+//
+//	Positive Signed Number Symbol:
+//
+//		No Positive Number Sign Symbol. Positive
+//		values are implicit and assumed. Therefore,
+//		no plus is formatted in the number string.
+//
+//			Positive Value Number String: "123.456"
+//
+//	Zero Signed Number Symbol:
+//
+//		No Number Sign Symbol. Technically a zero value
+//		is neither positive nor negative. Therefore,
+//		no plus is formatted in the number string.
+//
+//			Zero Value Number String: "123.456"
+//
+//	Number Field Symbol Position:
+//
+//		Defaults to "Inside Number Field"
+//
+//			A Number Field defines the length of a
+//			text string in which a numeric value is
+//			formatted. When applied, a Number Field
+//			is usually longer than the numeric value
+//			string and typically justifies that numeric
+//			value string as "Left", "Right" or "Centered".
+//
+//			Number Field Example (Centered):
+//				"  123.45  "
+//
+//		Example Number Field Symbol Position:
+//			Number Field Length: 8
+//			Numeric Value: 123.45
+//			Number Symbol: leading minus sign ('-')
+//			Number Symbol Position: Inside Number Field
+//			Number Text Justification: Right Justified
+//			Formatted Number String: " -123.45"
+//			Number Field Index:------>01234567
+//			Total Number String Length: 8
+//
+// ----------------------------------------------------------------
+//
+//	# Input Parameters
+//
+//
+//	leadingMinusSign				bool
+//
+//		Controls the positioning of the minus sign ('-')
+//		in a Number String Format configured with a
+//		negative numeric value.
+//
+//		For NumStrNumberSymbolGroup configured with the
+//		Simple Signed Number String formatting
+//		specification, the default negative number sign
+//		symbol is the minus sign ('-').
+//
+//		When set to 'true', the returned instance of
+//		NumStrNumberSymbolGroup will configure the minus
+//		sign at the beginning or left side of the number
+//		string. Such minus signs are therefore configured
+//		as leading minus signs.
+//
+//		Example Number Strings:
+//			" -123.456"
+//
+//		When 'leadingMinusSign' is set to 'false', the
+//		returned instance of NumStrNumberSymbolGroup will
+//		configure the minus sign ('-') on the right side
+//		of the number string. The minus sign is therefore
+//		configured as trailing minus sign.
+//
+//			Example Number Strings:
+//				"123.456-"
+//
+//	errorPrefix						interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	positiveSignedNumberSymbols		NumStrNumberSymbolSpec
+//
+//		One of three new returned instances of
+//		NumStrNumberSymbolSpec. This instance is empty or
+//		blank because under the simple signed number
+//		formatting protocol, the positive number sign ('+')
+//		is implied and not displayed.
+//
+//	zeroSignedNumberSymbols			NumStrNumberSymbolSpec
+//
+//		One of three returned instances of
+//		NumStrNumberSymbolSpec. This instance is empty or
+//		blank because under the simple signed number
+//		formatting protocol, zero numeric values do not
+//		have an associated number sign.
+//
+//	negativeSignedNumberSymbols		NumStrNumberSymbolSpec
+//
+//		One of three new returned instances of
+//		NumStrNumberSymbolSpec. This instance will be
+//	 	configured with either a leading minus sign
+//	 	('-') or a trailing minus sign ('-') as specified
+//		by input parameter 'leadingMinusSign'.
+//
+//	err								error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewSignedNumSimple(
+	leadingMinusSign bool,
+	errorPrefix interface{}) (
+	positiveSignedNumberSymbols NumStrNumberSymbolSpec,
+	zeroSignedNumberSymbols NumStrNumberSymbolSpec,
+	negativeSignedNumberSymbols NumStrNumberSymbolSpec,
+	err error) {
+
+	if nStrNumberSymbolSpec.lock == nil {
+		nStrNumberSymbolSpec.lock = new(sync.Mutex)
+	}
+
+	nStrNumberSymbolSpec.lock.Lock()
+
+	defer nStrNumberSymbolSpec.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumStrNumberSymbolSpec."+
+			"NewSignedNumSimple()",
+		"")
+
+	if err != nil {
+
+		return positiveSignedNumberSymbols,
+			zeroSignedNumberSymbols,
+			negativeSignedNumberSymbols,
+			err
+	}
+
+	err = new(numStrNumberSymbolSpecMechanics).
+		setSignedNumSymbolsSimple(
+			leadingMinusSign,
+			&positiveSignedNumberSymbols,
+			&zeroSignedNumberSymbols,
+			&negativeSignedNumberSymbols,
+			ePrefix)
+
+	return positiveSignedNumberSymbols,
+		zeroSignedNumberSymbols,
+		negativeSignedNumberSymbols,
+		err
+}
+
 //	SetCurrencyBasic
 //
 //	Deletes all internal data values in the current
