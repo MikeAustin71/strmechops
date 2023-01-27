@@ -6690,7 +6690,7 @@ func (numStrKernel *NumberStrKernel) FmtNumStr(
 //		integer grouping and separation within a Number
 //		String.
 //
-//	numberSymbolsSpec  			NumStrNumberSymbolGroup
+//	numberSymbolsGroup  			NumStrNumberSymbolGroup
 //
 //		This instance of NumStrNumberSymbolGroup contains the
 //		Number Symbol Specifications for negative numeric

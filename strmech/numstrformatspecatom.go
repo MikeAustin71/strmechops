@@ -57,7 +57,7 @@ func (numStrFmtSpecAtom *numStrFmtSpecAtom) empty(
 
 	signedNumFmtSpec.intSeparatorSpec.Empty()
 
-	signedNumFmtSpec.numberSymbolsSpec.Empty()
+	signedNumFmtSpec.numberSymbolsGroup.Empty()
 
 	signedNumFmtSpec.numberFieldSpec.Empty()
 }
@@ -140,8 +140,8 @@ func (numStrFmtSpecAtom *numStrFmtSpecAtom) equal(
 		return false
 	}
 
-	if !signedNumFmtSpec1.numberSymbolsSpec.Equal(
-		&signedNumFmtSpec2.numberSymbolsSpec) {
+	if !signedNumFmtSpec1.numberSymbolsGroup.Equal(
+		&signedNumFmtSpec2.numberSymbolsGroup) {
 
 		return false
 	}
@@ -684,17 +684,17 @@ func (numStrFmtSpecAtom *numStrFmtSpecAtom) setNegativeNumberSignSpec(
 
 	if negativeNumberSign.IsNOP() {
 
-		signedNumFmt.numberSymbolsSpec.negativeNumberSign.SetNOP()
+		signedNumFmt.numberSymbolsGroup.negativeNumberSign.SetNOP()
 
 		return err
 	}
 
 	err = new(numStrNumberSymbolSpecMolecule).
 		copyNStrNumberSymbolSpec(
-			&signedNumFmt.numberSymbolsSpec.negativeNumberSign,
+			&signedNumFmt.numberSymbolsGroup.negativeNumberSign,
 			&negativeNumberSign,
 			ePrefix.XCpy(
-				"signedNumFmt.numberSymbolsSpec."+
+				"signedNumFmt.numberSymbolsGroup."+
 					"negativeNumberSign<-"+
 					"negativeNumberSign"))
 
@@ -749,7 +749,7 @@ func (numStrFmtSpecAtom *numStrFmtSpecAtom) setNegativeNumberSignSpec(
 //		integer grouping and separation within a Number
 //		String.
 //
-//	numberSymbolsSpec					NumStrNumberSymbolGroup
+//	numberSymbolsGroup					NumStrNumberSymbolGroup
 //
 //		This instance of NumStrNumberSymbolGroup contains the
 //		Number Symbol Specifications for negative numeric
@@ -916,7 +916,7 @@ func (numStrFmtSpecAtom *numStrFmtSpecAtom) setNStrFmtComponents(
 		return err
 	}
 
-	err = numStrFmtSpec.numberSymbolsSpec.CopyIn(
+	err = numStrFmtSpec.numberSymbolsGroup.CopyIn(
 		&numberSymbolsSpec,
 		ePrefix.XCpy(
 			"numStrFmtSpec.numberSymbols<-"+
@@ -1335,7 +1335,7 @@ func (numStrFmtSpecAtom *numStrFmtSpecAtom) setNumberSymbolGroup(
 		return err
 	}
 
-	err = numStrFmtSpec.numberSymbolsSpec.CopyIn(
+	err = numStrFmtSpec.numberSymbolsGroup.CopyIn(
 		&numberSymbolSpec,
 		ePrefix.XCpy(
 			"numStrFmtSpec.numberSymbols<-"))
@@ -1437,14 +1437,14 @@ func (numStrFmtSpecAtom *numStrFmtSpecAtom) setPositiveNumberSignSpec(
 
 	if positiveNumberSign.IsNOP() {
 
-		signedNumFmt.numberSymbolsSpec.positiveNumberSign.SetNOP()
+		signedNumFmt.numberSymbolsGroup.positiveNumberSign.SetNOP()
 
 		return err
 	}
 
 	err = new(numStrNumberSymbolSpecMolecule).
 		copyNStrNumberSymbolSpec(
-			&signedNumFmt.numberSymbolsSpec.positiveNumberSign,
+			&signedNumFmt.numberSymbolsGroup.positiveNumberSign,
 			&positiveNumberSign,
 			ePrefix.XCpy(
 				"signedNumFmt.numberSymbols"+
@@ -1548,14 +1548,14 @@ func (numStrFmtSpecAtom *numStrFmtSpecAtom) setZeroNumberSignSpec(
 
 	if zeroNumberSign.IsNOP() {
 
-		signedNumFmt.numberSymbolsSpec.zeroNumberSign.SetNOP()
+		signedNumFmt.numberSymbolsGroup.zeroNumberSign.SetNOP()
 
 		return err
 	}
 
 	err = new(numStrNumberSymbolSpecMolecule).
 		copyNStrNumberSymbolSpec(
-			&signedNumFmt.numberSymbolsSpec.zeroNumberSign,
+			&signedNumFmt.numberSymbolsGroup.zeroNumberSign,
 			&zeroNumberSign,
 			ePrefix.XCpy(
 				"signedNumFmt.zeroNumberSign<-"+

@@ -165,8 +165,8 @@ func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) copySignedNumberFormatSpec(
 		return err
 	}
 
-	err = destinationSignedNumFmtSpec.numberSymbolsSpec.CopyIn(
-		&sourceSignedNumFmtSpec.numberSymbolsSpec,
+	err = destinationSignedNumFmtSpec.numberSymbolsGroup.CopyIn(
+		&sourceSignedNumFmtSpec.numberSymbolsGroup,
 		ePrefix.XCpy(
 			" destinationSignedNumFmtSpec.numberSymbols"+
 				"<-sourceSignedNumFmtSpec"))
@@ -3212,7 +3212,7 @@ func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setNStrNumberFieldSpec(
 		return err
 	}
 
-	numStrFmtSpec.numberSymbolsSpec,
+	numStrFmtSpec.numberSymbolsGroup,
 		err = new(NumStrNumberSymbolGroup).
 		NewSymbolsRunes(
 			leadingPosNumSign,
@@ -3229,7 +3229,7 @@ func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setNStrNumberFieldSpec(
 			currencyInsideNumSymbol,
 			currencyNumFieldSymPosition,
 			ePrefix.XCpy(
-				"numStrFmtSpec.numberSymbolsSpec"))
+				"numStrFmtSpec.numberSymbolsGroup"))
 
 	if err != nil {
 		return err

@@ -222,7 +222,7 @@ type NumStrFormatSpec struct {
 	//							"5672.1234567"
 	//		}
 
-	numberSymbolsSpec NumStrNumberSymbolGroup
+	numberSymbolsGroup NumStrNumberSymbolGroup
 	//	This member variable is used to configure Number
 	//	Symbols required in converting numeric values to
 	//	Number Strings.
@@ -713,6 +713,131 @@ func (numStrFmtSpec *NumStrFormatSpec) Equal(
 	return new(numStrFmtSpecAtom).equal(
 		numStrFmtSpec,
 		incomingSignedNumFmt)
+}
+
+//	GetCurrencySymbolSpec
+//
+//	Returns the Currency Number Symbol Specification
+//	configured for the current instance of
+//	NumStrFormatSpec.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	 errorPrefix                interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	NumStrNumberSymbolSpec
+//
+//		If this method completes successfully, a deep
+//		copy of the currency number symbol specification
+//		configured for the current NumStrFormatSpec
+//		instance will be returned.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (numStrFmtSpec *NumStrFormatSpec) GetCurrencySymbolSpec(
+	errorPrefix interface{}) (
+	NumStrNumberSymbolSpec,
+	error) {
+
+	if numStrFmtSpec.lock == nil {
+		numStrFmtSpec.lock = new(sync.Mutex)
+	}
+
+	numStrFmtSpec.lock.Lock()
+
+	defer numStrFmtSpec.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumStrFormatSpec."+
+			"GetCurrencySymbolSpec()",
+		"")
+
+	if err != nil {
+		return NumStrNumberSymbolSpec{}, err
+	}
+
+	return numStrFmtSpec.numberSymbolsGroup.currencySymbol.CopyOut(
+		ePrefix.XCpy(
+			"<-numStrFmtSpec.numberSymbolsGroup" +
+				".currencySymbol"))
 }
 
 // GetDecSeparatorRunes - Returns an array of runes containing the
@@ -1277,15 +1402,15 @@ func (numStrFmtSpec *NumStrFormatSpec) GetIntSeparatorRunes() []rune {
 //
 //		This object encapsulates error prefix text which
 //		is included in all returned error messages.
-//		Usually, it	contains the name of the calling
+//		Usually, it contains the name of the calling
 //		method or methods listed as a method or function
 //		chain of execution.
 //
-//		If no error prefix information is needed, set this
-//		parameter to 'nil'.
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
 //
-//		This empty interface must be convertible to one of
-//		the following types:
+//		This empty interface must be convertible to one
+//		of the following types:
 //
 //		1.	nil
 //				A nil value is valid and generates an
@@ -1317,7 +1442,7 @@ func (numStrFmtSpec *NumStrFormatSpec) GetIntSeparatorRunes() []rune {
 //				this object will be copied for use
 //				in error and informational messages.
 //
-//		7.  IBasicErrorPrefix
+//		7.	IBasicErrorPrefix
 //				An interface to a method
 //				generating a two-dimensional slice
 //				of strings containing error prefix
@@ -1339,20 +1464,22 @@ func (numStrFmtSpec *NumStrFormatSpec) GetIntSeparatorRunes() []rune {
 //	NumStrNumberSymbolSpec
 //
 //		If this method completes successfully, a copy
-//		of the negative number sign specification configured
-//		for the current NumStrFormatSpec instance
-//		will be returned.
+//		of the negative number sign specification
+//		configured for the current NumStrFormatSpec
+//		instance will be returned.
 //
 //	error
 //
-//		If this method completes successfully and no errors are
-//		encountered this return value is set to 'nil'. Otherwise,
-//		if errors are encountered, this return value will contain
-//		an appropriate error message.
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
 //
-//		If an error message is returned, the text value of input
-//		parameter 'errorPrefix' will be inserted or prefixed at
-//		the beginning of the error message.
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
 func (numStrFmtSpec *NumStrFormatSpec) GetNegativeNumSymSpec(
 	errorPrefix interface{}) (
 	NumStrNumberSymbolSpec,
@@ -1380,7 +1507,7 @@ func (numStrFmtSpec *NumStrFormatSpec) GetNegativeNumSymSpec(
 		return NumStrNumberSymbolSpec{}, err
 	}
 
-	return numStrFmtSpec.numberSymbolsSpec.negativeNumberSign.CopyOut(
+	return numStrFmtSpec.numberSymbolsGroup.negativeNumberSign.CopyOut(
 		ePrefix.XCpy(
 			"<-numStrFmtSpec.numberSymbols" +
 				".negativeNumberSign"))
@@ -1687,9 +1814,9 @@ func (numStrFmtSpec *NumStrFormatSpec) GetPositiveNumSymSpec(
 		return NumStrNumberSymbolSpec{}, err
 	}
 
-	return numStrFmtSpec.numberSymbolsSpec.positiveNumberSign.CopyOut(
+	return numStrFmtSpec.numberSymbolsGroup.positiveNumberSign.CopyOut(
 		ePrefix.XCpy(
-			"<-numStrFmtSpec.numberSymbolsSpec.positiveNumberSign"))
+			"<-numStrFmtSpec.numberSymbolsGroup.positiveNumberSign"))
 }
 
 // GetZeroNumSymSpec - Returns the Zero Number Symbol
@@ -1807,7 +1934,7 @@ func (numStrFmtSpec *NumStrFormatSpec) GetZeroNumSymSpec(
 		return NumStrNumberSymbolSpec{}, err
 	}
 
-	return numStrFmtSpec.numberSymbolsSpec.zeroNumberSign.CopyOut(
+	return numStrFmtSpec.numberSymbolsGroup.zeroNumberSign.CopyOut(
 		ePrefix.XCpy(
 			"<-numStrFmtSpec.zeroNumberSign"))
 }
@@ -2268,7 +2395,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCountryCurrencyNumFormat(
 	}
 
 	if countryCultureFormat.CurrencyNumStrFormat.
-		numberSymbolsSpec.IsNOPCurrencySymbols() {
+		numberSymbolsGroup.IsNOPCurrencySymbols() {
 
 		err = fmt.Errorf("%v\n"+
 			"Error: Input parameter 'countryCultureFormat.CurrencyNumStrFormat'\n"+
@@ -2282,7 +2409,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCountryCurrencyNumFormat(
 		&newNumStrFmtSpec,
 		countryCultureFormat.CurrencyNumStrFormat.decSeparator,
 		countryCultureFormat.CurrencyNumStrFormat.intSeparatorSpec,
-		countryCultureFormat.CurrencyNumStrFormat.numberSymbolsSpec,
+		countryCultureFormat.CurrencyNumStrFormat.numberSymbolsGroup,
 		numberFieldSpec,
 		ePrefix.XCpy("newCurrencyNumFmtSpec<-"))
 
@@ -2521,7 +2648,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCountrySignedNumFormat(
 		&newNumStrFmtSpec,
 		countryCultureFormat.SignedNumStrFormat.decSeparator,
 		countryCultureFormat.SignedNumStrFormat.intSeparatorSpec,
-		countryCultureFormat.SignedNumStrFormat.numberSymbolsSpec,
+		countryCultureFormat.SignedNumStrFormat.numberSymbolsGroup,
 		numberFieldSpec,
 		ePrefix.XCpy("newSignedNumFmtSpec<-"))
 
@@ -6325,7 +6452,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencySimpleRunes(
 //		integer grouping and separation within a Number
 //		String.
 //
-//	numberSymbolsSpec  				NumStrNumberSymbolGroup
+//	numberSymbolsGroup  				NumStrNumberSymbolGroup
 //
 //		This instance of NumStrNumberSymbolGroup contains the
 //		Number Symbol Specifications for negative numeric
@@ -10952,7 +11079,7 @@ func (numStrFmtSpec *NumStrFormatSpec) SetCountryCurrencyNumFmt(
 		numStrFmtSpec,
 		countryCultureFormat.CurrencyNumStrFormat.decSeparator,
 		countryCultureFormat.CurrencyNumStrFormat.intSeparatorSpec,
-		countryCultureFormat.CurrencyNumStrFormat.numberSymbolsSpec,
+		countryCultureFormat.CurrencyNumStrFormat.numberSymbolsGroup,
 		numberFieldSpec,
 		ePrefix.XCpy("newCurrencyNumFmtSpec<-"))
 }
@@ -11183,7 +11310,7 @@ func (numStrFmtSpec *NumStrFormatSpec) SetCountrySignedNumFmt(
 		numStrFmtSpec,
 		countryCultureFormat.SignedNumStrFormat.decSeparator,
 		countryCultureFormat.SignedNumStrFormat.intSeparatorSpec,
-		countryCultureFormat.SignedNumStrFormat.numberSymbolsSpec,
+		countryCultureFormat.SignedNumStrFormat.numberSymbolsGroup,
 		numberFieldSpec,
 		ePrefix.XCpy("newSignedNumFmtSpec<-"))
 }

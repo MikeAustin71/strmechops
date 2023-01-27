@@ -134,11 +134,11 @@ func (nStrFmtSpecElectron *numStrFmtSpecElectron) testValidityNumStrFormatSpec(
 		return isValid, err
 	}
 
-	if numberStrFmtSpec.numberSymbolsSpec.IsNOP() {
+	if numberStrFmtSpec.numberSymbolsGroup.IsNOP() {
 
 		err = fmt.Errorf("%v\n"+
-			"'numberStrFmtSpec.numberSymbolsSpec' is not configured.\n"+
-			"'numberStrFmtSpec.numberSymbolsSpec' is NOP, Not Operational.\n",
+			"'numberStrFmtSpec.numberSymbolsGroup' is not configured.\n"+
+			"'numberStrFmtSpec.numberSymbolsGroup' is NOP, Not Operational.\n",
 			ePrefix.String())
 
 		return isValid, err
