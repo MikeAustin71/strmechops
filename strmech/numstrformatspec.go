@@ -1,6 +1,7 @@
 package strmech
 
 import (
+	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
 	"sync"
 )
@@ -2263,6 +2264,17 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCountryCurrencyNumFormat(
 		"")
 
 	if err != nil {
+		return newNumStrFmtSpec, err
+	}
+
+	if countryCultureFormat.CurrencyNumStrFormat.
+		numberSymbolsSpec.IsNOPCurrencySymbols() {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'countryCultureFormat.CurrencyNumStrFormat'\n"+
+			"is invalid. The Currency Symbols Specification is empty!\n",
+			ePrefix.String())
+
 		return newNumStrFmtSpec, err
 	}
 

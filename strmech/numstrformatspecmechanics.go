@@ -463,6 +463,7 @@ type numStrFmtSpecMechanics struct {
 //		for input parameter 'errPrefDto' (error prefix)
 //		will be prefixed or attached at the beginning of
 //		the error message.
+
 func (nStrFmtSpecMechanics *numStrFmtSpecMechanics) setCurrencyNStrFmtBasic(
 	numStrFmtSpec *NumStrFormatSpec,
 	decSeparatorChars string,
@@ -596,263 +597,18 @@ func (nStrFmtSpecMechanics *numStrFmtSpecMechanics) setCurrencyNStrFmtBasic(
 		return err
 	}
 
-	var negativeNumberSign NumStrNumberSymbolSpec
-
-	if currencyInsideNumSymbol == true {
-		// Currency Symbol is Inside Negative Number Symbol
-
-		if lenLeadingNegativeNumSign > 0 {
-
-			err = negativeNumberSign.
-				leadingNumberSymbols.AddRuneArrays(
-				ePrefix.XCpy("NegLeadingNumberSymbols"+
-					"<-leadingNegativeNumSign"),
-				[]rune(leadingNegativeNumSign))
-
-			if err != nil {
-				return err
-			}
-
-			negativeNumberSign.leadingNumberSymbols.charSearchType =
-				CharSearchType.LinearTargetStartingIndex()
-
-			negativeNumberSign.leadingNumberFieldSymbolPosition =
-				numSymbolFieldPosition
-		}
-
-		if lenLeadingCurrencySym > 0 {
-
-			err = negativeNumberSign.
-				leadingNumberSymbols.AddRuneArrays(
-				ePrefix.XCpy("NegLeadingNumberSymbols<-"+
-					"leadingCurrencySymbol"),
-				[]rune(leadingCurrencySymbol))
-
-			if err != nil {
-				return err
-			}
-
-			negativeNumberSign.leadingNumberSymbols.charSearchType =
-				CharSearchType.LinearTargetStartingIndex()
-		}
-
-		if lenTrailingCurrencySym > 0 {
-			err = negativeNumberSign.
-				trailingNumberSymbols.AddRuneArrays(
-				ePrefix.XCpy("NegLeadingNumberSymbols<-"+
-					"trailingCurrencySymbol"),
-				[]rune(trailingCurrencySymbol))
-
-			if err != nil {
-				return err
-			}
-
-			negativeNumberSign.trailingNumberSymbols.charSearchType =
-				CharSearchType.LinearTargetStartingIndex()
-		}
-
-		if lenTrailingNegativeNumSign > 0 {
-
-			err = negativeNumberSign.
-				trailingNumberSymbols.AddRuneArrays(
-				ePrefix.XCpy("NegLeadingNumberSymbols"+
-					"<-trailingNegativeNumSign"),
-				[]rune(trailingNegativeNumSign))
-
-			if err != nil {
-				return err
-			}
-
-			negativeNumberSign.trailingNumberFieldSymbolPosition =
-				numSymbolFieldPosition
-
-			negativeNumberSign.trailingNumberSymbols.charSearchType =
-				CharSearchType.LinearTargetStartingIndex()
-		}
-
-	} else {
-		// Currency Symbol is Outside Negative Number Symbol
-
-		if lenLeadingCurrencySym > 0 {
-
-			err = negativeNumberSign.
-				leadingNumberSymbols.AddRuneArrays(
-				ePrefix.XCpy("NegLeadingNumberSymbols<-"+
-					"leadingCurrencySymbol"),
-				[]rune(leadingCurrencySymbol))
-
-			if err != nil {
-				return err
-			}
-
-			negativeNumberSign.leadingNumberSymbols.charSearchType =
-				CharSearchType.LinearTargetStartingIndex()
-		}
-
-		if lenLeadingNegativeNumSign > 0 {
-
-			err = negativeNumberSign.
-				leadingNumberSymbols.AddRuneArrays(
-				ePrefix.XCpy("NegLeadingNumberSymbols"+
-					"<-leadingNegativeNumSign"),
-				[]rune(leadingNegativeNumSign))
-
-			if err != nil {
-				return err
-			}
-
-			negativeNumberSign.leadingNumberFieldSymbolPosition =
-				numSymbolFieldPosition
-
-			negativeNumberSign.leadingNumberSymbols.charSearchType =
-				CharSearchType.LinearTargetStartingIndex()
-		}
-
-		if lenTrailingNegativeNumSign > 0 {
-
-			err = negativeNumberSign.
-				trailingNumberSymbols.AddRuneArrays(
-				ePrefix.XCpy("NegLeadingNumberSymbols"+
-					"<-trailingNegativeNumSign"),
-				[]rune(trailingNegativeNumSign))
-
-			if err != nil {
-				return err
-			}
-
-			negativeNumberSign.trailingNumberFieldSymbolPosition =
-				numSymbolFieldPosition
-
-			negativeNumberSign.trailingNumberSymbols.charSearchType =
-				CharSearchType.LinearTargetStartingIndex()
-		}
-
-		if lenTrailingCurrencySym > 0 {
-
-			err = negativeNumberSign.
-				trailingNumberSymbols.AddRuneArrays(
-				ePrefix.XCpy("NegTrailingNumberSymbols<-"+
-					"trailingCurrencySymbol"),
-				[]rune(trailingCurrencySymbol))
-
-			if err != nil {
-				return err
-			}
-
-			negativeNumberSign.trailingNumberSymbols.charSearchType =
-				CharSearchType.LinearTargetStartingIndex()
-		}
-
-	}
-
-	var positiveNumberSign NumStrNumberSymbolSpec
-
-	if lenLeadingCurrencySym > 0 {
-
-		err = positiveNumberSign.
-			leadingNumberSymbols.AddRuneArrays(
-			ePrefix.XCpy("PositiveLeadingNumberSymbols<-"+
-				"leadingCurrencySymbol"),
-			[]rune(leadingCurrencySymbol))
-
-		if err != nil {
-			return err
-		}
-
-		positiveNumberSign.leadingNumberFieldSymbolPosition =
-			numSymbolFieldPosition
-
-		positiveNumberSign.leadingNumberSymbols.charSearchType =
-			CharSearchType.LinearTargetStartingIndex()
-
-	}
-
-	if lenTrailingCurrencySym > 0 {
-
-		err = positiveNumberSign.
-			trailingNumberSymbols.AddRuneArrays(
-			ePrefix.XCpy("PositiveTrailingNumberSymbols<-"+
-				"trailingCurrencySymbol"),
-			[]rune(trailingCurrencySymbol))
-
-		if err != nil {
-			return err
-		}
-
-		positiveNumberSign.trailingNumberFieldSymbolPosition =
-			numSymbolFieldPosition
-
-		positiveNumberSign.trailingNumberSymbols.charSearchType =
-			CharSearchType.LinearTargetStartingIndex()
-
-	}
-
-	var zeroNumberSign NumStrNumberSymbolSpec
-
-	if lenLeadingCurrencySym > 0 {
-
-		err = zeroNumberSign.
-			leadingNumberSymbols.AddRuneArrays(
-			ePrefix.XCpy("ZeroLeadingNumberSymbols<-"+
-				"leadingCurrencySymbol"),
-			[]rune(leadingCurrencySymbol))
-
-		if err != nil {
-			return err
-		}
-
-		zeroNumberSign.leadingNumberFieldSymbolPosition =
-			numSymbolFieldPosition
-
-		zeroNumberSign.leadingNumberSymbols.charSearchType =
-			CharSearchType.LinearTargetStartingIndex()
-
-	}
-
-	if lenTrailingCurrencySym > 0 {
-
-		err = zeroNumberSign.
-			trailingNumberSymbols.AddRuneArrays(
-			ePrefix.XCpy("ZeroTrailingNumberSymbols<-"+
-				"trailingCurrencySymbol"),
-			[]rune(trailingCurrencySymbol))
-
-		if err != nil {
-			return err
-		}
-
-		zeroNumberSign.trailingNumberFieldSymbolPosition =
-			numSymbolFieldPosition
-
-		zeroNumberSign.trailingNumberSymbols.charSearchType =
-			CharSearchType.LinearTargetStartingIndex()
-
-	}
-
-	var numSymbols NumStrNumberSymbolGroup
-
-	err = numSymbols.negativeNumberSign.CopyIn(
-		&negativeNumberSign,
+	var numSymbolsGroup NumStrNumberSymbolGroup
+
+	numSymbolsGroup,
+		err = new(NumStrNumberSymbolGroup).NewCurrencyBasic(
+		leadingNegativeNumSign,
+		trailingNegativeNumSign,
+		leadingCurrencySymbol,
+		trailingCurrencySymbol,
+		currencyInsideNumSymbol,
+		numSymbolFieldPosition,
 		ePrefix.XCpy(
-			"numSymbols.negativeNumberSign<-"))
-
-	if err != nil {
-		return err
-	}
-
-	err = numSymbols.positiveNumberSign.CopyIn(
-		&positiveNumberSign,
-		ePrefix.XCpy(
-			"numSymbols.positiveNumberSign<-"))
-
-	if err != nil {
-		return err
-	}
-
-	err = numSymbols.zeroNumberSign.CopyIn(
-		&zeroNumberSign,
-		ePrefix.XCpy(
-			"numSymbols.zeroNumberSign<-"))
+			"numSymbolsGroup<-"))
 
 	if err != nil {
 		return err
@@ -862,7 +618,7 @@ func (nStrFmtSpecMechanics *numStrFmtSpecMechanics) setCurrencyNStrFmtBasic(
 		numStrFmtSpec,
 		decSeparator,
 		intSeparatorSpec,
-		numSymbols,
+		numSymbolsGroup,
 		numberFieldSpec,
 		ePrefix.XCpy("numStrFmtSpec<-"))
 }
