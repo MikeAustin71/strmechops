@@ -3062,7 +3062,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyBasic(
 	}
 
 	err = new(numStrFmtSpecMechanics).
-		setCurrencyNStrFmtBasic(
+		setCurrencyBasic(
 			&newNumStrFmtSpec,
 			[]rune(decSeparatorChars),
 			[]rune(intSeparatorChars),
@@ -3619,7 +3619,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyBasicRunes(
 	}
 
 	err = new(numStrFmtSpecMechanics).
-		setCurrencyNStrFmtBasic(
+		setCurrencyBasic(
 			&newNumStrFmtSpec,
 			decSeparatorChars,
 			intSeparatorChars,
@@ -7660,11 +7660,15 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtParamsRunes(
 	return newSignedNumFmtSpec, err
 }
 
-// NewSignedNumFmtBasic
+// NewSignedNumBasic
 //
-// Returns a new instance of NumberStrKernel configured
-// with a Signed Number String Format using the basic
-// set of input parameters.
+// Returns a new instance of NumStrFormatSpec configured
+// with a Signed Number String Format using a basic set
+// Signed Number String Format Specification parameters.
+//
+//	A signed number is an integer or floating point
+//	numeric value which does NOT contain currency
+//	symbols.
 //
 // This method is one step above NewSignedNumSimple()
 // in terms of complexity and customization options.
@@ -7992,7 +7996,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtParamsRunes(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumFmtBasic(
+func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumBasic(
 	decSeparatorChars string,
 	intSeparatorChars string,
 	intGroupingType IntegerGroupingType,
@@ -8018,7 +8022,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumFmtBasic(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumStrFormatSpec."+
-			"NewSignedNumFmtBasic()",
+			"NewSignedNumBasic()",
 		"")
 
 	if err != nil {
@@ -8026,7 +8030,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumFmtBasic(
 	}
 
 	err = new(numStrFmtSpecMechanics).
-		setSignedBasicNumStr(
+		setSignedNumBasic(
 			&newSignedNumFmtSpec,
 			[]rune(decSeparatorChars),
 			[]rune(intSeparatorChars),
@@ -9741,15 +9745,16 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumSimple(
 		return newNumStrFmtSpec, err
 	}
 
-	err = new(numStrFmtSpecNanobot).setSignedNStrFmtSimple(
-		&newNumStrFmtSpec,
-		[]rune(decSeparatorChars),
-		[]rune(intSeparatorChars),
-		leadingMinusSign,
-		numFieldLength,
-		numFieldJustification,
-		ePrefix.XCpy(
-			"newNumStrFmtSpec<-"))
+	err = new(numStrFmtSpecMechanics).
+		setSignedNumSimple(
+			&newNumStrFmtSpec,
+			[]rune(decSeparatorChars),
+			[]rune(intSeparatorChars),
+			leadingMinusSign,
+			numFieldLength,
+			numFieldJustification,
+			ePrefix.XCpy(
+				"newNumStrFmtSpec<-"))
 
 	return newNumStrFmtSpec, err
 }
@@ -10967,7 +10972,7 @@ func (numStrFmtSpec *NumStrFormatSpec) SetCurrencyNumFmtBasic(
 	}
 
 	return new(numStrFmtSpecMechanics).
-		setCurrencyNStrFmtBasic(
+		setCurrencyBasic(
 			numStrFmtSpec,
 			[]rune(decSeparatorChars),
 			[]rune(intSeparatorChars),
@@ -11524,7 +11529,7 @@ func (numStrFmtSpec *NumStrFormatSpec) SetCurrencyNumFmtBasicRunes(
 	}
 
 	return new(numStrFmtSpecMechanics).
-		setCurrencyNStrFmtBasic(
+		setCurrencyBasic(
 			numStrFmtSpec,
 			decSeparatorChars,
 			intSeparatorChars,
@@ -17807,15 +17812,16 @@ func (numStrFmtSpec *NumStrFormatSpec) SetSignedNumSimple(
 		return err
 	}
 
-	return new(numStrFmtSpecNanobot).setSignedNStrFmtSimple(
-		numStrFmtSpec,
-		[]rune(decSeparatorChars),
-		[]rune(intSeparatorChars),
-		leadingMinusSign,
-		numFieldLength,
-		numFieldJustification,
-		ePrefix.XCpy(
-			"newNumStrFmtSpec<-"))
+	return new(numStrFmtSpecMechanics).
+		setSignedNumSimple(
+			numStrFmtSpec,
+			[]rune(decSeparatorChars),
+			[]rune(intSeparatorChars),
+			leadingMinusSign,
+			numFieldLength,
+			numFieldJustification,
+			ePrefix.XCpy(
+				"newNumStrFmtSpec<-"))
 
 }
 

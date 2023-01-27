@@ -11262,7 +11262,7 @@ func (numStrKernel *NumberStrKernel) FmtSignedNumStrBasic(
 	var numStrFmtSpec NumStrFormatSpec
 
 	numStrFmtSpec,
-		err = new(NumStrFormatSpec).NewSignedNumFmtBasic(
+		err = new(NumStrFormatSpec).NewSignedNumBasic(
 		decSeparatorChars,
 		intSeparatorChars,
 		intGroupingType,
