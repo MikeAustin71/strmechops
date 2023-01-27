@@ -3024,6 +3024,12 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setNumberSymbol
 //
 // # Defaults
 //
+//	No Currency Symbols
+//
+//	The Currency Symbol is configured as an empty
+//	'NOP' placeholder value because by definition,
+//	signed numbers do not contain currency symbols.
+//
 //	Positive Numeric Values
 //
 //	The positive number sign is implied. No positive
@@ -4215,6 +4221,12 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setSignedNumDef
 //
 // # Signed Number Defaults
 //
+//	No Currency Symbols
+//
+//	The Currency Symbol is configured as an empty
+//	'NOP' placeholder value because by definition,
+//	signed numbers do not contain currency symbols.
+//
 //	Negative Signed Number Symbol:
 //		The default Negative Number Symbol is the
 //		minus sign ('-').
@@ -4429,34 +4441,14 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setSignedNumSim
 	new(numStrNumberSymbolGroupNanobot).empty(
 		nStrNumSymbolGroup)
 
-	nStrNumSymbolGroup.positiveNumberSign.SetNOP()
+	nStrNumSymbolGroup.currencySymbol.SetNOP()
 
-	nStrNumSymbolGroup.zeroNumberSign.SetNOP()
-
-	var numSymStr string
-
-	numSymStr = "-"
-
-	if leadingNumSymbols {
-		// Leading Number Sign Symbols
-
-		err = nStrNumSymbolGroup.negativeNumberSign.SetNumberSignLeadingSymbolRunes(
-			[]rune(numSymStr),
-			NumFieldSymPos.InsideNumField(),
+	return new(NumStrNumberSymbolSpec).
+		SetSignedNumSimple(
+			leadingNumSymbols,
+			&nStrNumSymbolGroup.positiveNumberSign,
+			&nStrNumSymbolGroup.zeroNumberSign,
+			&nStrNumSymbolGroup.negativeNumberSign,
 			ePrefix.XCpy(
 				"nStrNumSymbolGroup"))
-
-	} else {
-
-		// Trailing Number Sign Symbols
-
-		err = nStrNumSymbolGroup.negativeNumberSign.SetNumberSignTrailingSymbolRunes(
-			[]rune(numSymStr),
-			NumFieldSymPos.InsideNumField(),
-			ePrefix.XCpy(
-				"nStrNumSymbolGroup"))
-
-	}
-
-	return err
 }
