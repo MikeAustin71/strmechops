@@ -4118,7 +4118,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewCurrencySimple(
 		return newNStrNumSymbols, err
 	}
 
-	err = new(numStrNumberSymbolGroupMechanics).setSimpleCurrencySymbolsConfig(
+	err = new(numStrNumberSymbolGroupMechanics).setCurrencySimple(
 		&newNStrNumSymbols,
 		[]rune(currencySymbols),
 		leadingCurrencySymbols,
@@ -4442,7 +4442,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewCurrencySimpleRunes(
 		return newNStrNumSymbols, err
 	}
 
-	err = new(numStrNumberSymbolGroupMechanics).setSimpleCurrencySymbolsConfig(
+	err = new(numStrNumberSymbolGroupMechanics).setCurrencySimple(
 		&newNStrNumSymbols,
 		currencySymbols,
 		leadingCurrencySymbols,
@@ -6559,7 +6559,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSignedNumSimple(
 	}
 
 	err = new(numStrNumberSymbolGroupMechanics).
-		setSimpleNumberSignSymbolsConfig(
+		setSignedNumSimple(
 			&newNStrNumSymbols,
 			leadingMinusSign,
 			ePrefix.XCpy(
@@ -10400,7 +10400,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencySimple(
 	}
 
 	return new(numStrNumberSymbolGroupMechanics).
-		setSimpleCurrencySymbolsConfig(
+		setCurrencySimple(
 			nStrNumSymbolsGroup,
 			[]rune(currencySymbols),
 			leadingCurrencySymbols,
@@ -10717,7 +10717,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencySimpleRunes(
 	}
 
 	return new(numStrNumberSymbolGroupMechanics).
-		setSimpleCurrencySymbolsConfig(
+		setCurrencySimple(
 			nStrNumSymbolsGroup,
 			currencySymbols,
 			leadingCurrencySymbols,
@@ -13699,7 +13699,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSignedNumSimple(
 	}
 
 	return new(numStrNumberSymbolGroupMechanics).
-		setSimpleNumberSignSymbolsConfig(
+		setSignedNumSimple(
 			nStrNumSymbolsGroup,
 			leadingNumSymbols,
 			ePrefix.XCpy(
