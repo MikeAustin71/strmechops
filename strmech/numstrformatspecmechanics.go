@@ -466,14 +466,14 @@ type numStrFmtSpecMechanics struct {
 
 func (nStrFmtSpecMechanics *numStrFmtSpecMechanics) setCurrencyNStrFmtBasic(
 	numStrFmtSpec *NumStrFormatSpec,
-	decSeparatorChars string,
-	intSeparatorChars string,
+	decSeparatorChars []rune,
+	intSeparatorChars []rune,
 	intGroupingType IntegerGroupingType,
-	leadingCurrencySymbol string,
-	trailingCurrencySymbol string,
+	leadingCurrencySymbol []rune,
+	trailingCurrencySymbol []rune,
 	currencyInsideNumSymbol bool,
-	leadingNegativeNumSign string,
-	trailingNegativeNumSign string,
+	leadingNegativeNumSign []rune,
+	trailingNegativeNumSign []rune,
 	numSymbolFieldPosition NumberFieldSymbolPosition,
 	numFieldLength int,
 	numFieldJustification TextJustify,
@@ -577,7 +577,7 @@ func (nStrFmtSpecMechanics *numStrFmtSpecMechanics) setCurrencyNStrFmtBasic(
 	var decSeparator DecimalSeparatorSpec
 
 	decSeparator,
-		err = new(DecimalSeparatorSpec).NewStr(
+		err = new(DecimalSeparatorSpec).NewRunes(
 		decSeparatorChars,
 		ePrefix.XCpy("decSeparator<-decSeparatorChars"))
 
@@ -588,7 +588,7 @@ func (nStrFmtSpecMechanics *numStrFmtSpecMechanics) setCurrencyNStrFmtBasic(
 	var intSeparatorSpec IntegerSeparatorSpec
 
 	intSeparatorSpec,
-		err = new(IntegerSeparatorSpec).NewIntGroupEnum(
+		err = new(IntegerSeparatorSpec).NewIntGroupEnumRunes(
 		intGroupingType,
 		intSeparatorChars,
 		ePrefix.XCpy("intSeparatorSpec<-intSeparatorChars"))
@@ -600,7 +600,7 @@ func (nStrFmtSpecMechanics *numStrFmtSpecMechanics) setCurrencyNStrFmtBasic(
 	var numSymbolsGroup NumStrNumberSymbolGroup
 
 	numSymbolsGroup,
-		err = new(NumStrNumberSymbolGroup).NewCurrencyBasic(
+		err = new(NumStrNumberSymbolGroup).NewCurrencyBasicRunes(
 		leadingNegativeNumSign,
 		trailingNegativeNumSign,
 		leadingCurrencySymbol,
