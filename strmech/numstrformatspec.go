@@ -38,13 +38,13 @@ import (
 //	the following methods provide defaults which greatly
 //	simplify the Number String Format creation process:
 //
-//		NumStrFormatSpec.NewCurrencyNumFmtFrance()
+//		NumStrFormatSpec.NewCurrencyDefaultsFrance()
 //		NumStrFormatSpec.NewSignedNumFmtFrance()
-//		NumStrFormatSpec.NewCurrencyNumFmtGermany()
+//		NumStrFormatSpec.NewCurrencyDefaultsGermany()
 //		NumStrFormatSpec.NewSignedNumFmtGermany()
-//		NumStrFormatSpec.NewCurrencyNumFmtUKMinusOutside()
+//		NumStrFormatSpec.NewCurrencyDefaultsUKMinusOutside()
 //		NumStrFormatSpec.NewSignedNumFmtUKMinus()
-//		NumStrFormatSpec.NewCurrencyNumFmtUSParen()
+//		NumStrFormatSpec.NewCurrencyDefaultsUSParen()
 //		NumStrFormatSpec.NewSignedNumFmtUSMinus()
 //
 //	If more granular control is required to meet
@@ -2260,7 +2260,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCountryCurrencyNumFormat(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumStrFormatSpec."+
-			"NewCurrencyNumFmtFrance()",
+			"NewCountryCurrencyNumFormat()",
 		"")
 
 	if err != nil {
@@ -2510,7 +2510,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCountrySignedNumFormat(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumStrFormatSpec."+
-			"NewCurrencyNumFmtFrance()",
+			"NewCountrySignedNumFormat()",
 		"")
 
 	if err != nil {
@@ -2528,7 +2528,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCountrySignedNumFormat(
 	return newNumStrFmtSpec, err
 }
 
-// NewCurrencyNumFmtBasic
+// NewCurrencyBasic
 //
 // Creates and returns a new instance of NumStrFormatSpec
 // configured using a 'basic' set of Number String Format
@@ -3024,7 +3024,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCountrySignedNumFormat(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtBasic(
+func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyBasic(
 	decSeparatorChars string,
 	intSeparatorChars string,
 	intGroupingType IntegerGroupingType,
@@ -3054,7 +3054,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtBasic(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumStrFormatSpec."+
-			"NewCurrencyNumFmtBasic()",
+			"NewCurrencyBasic()",
 		"")
 
 	if err != nil {
@@ -3081,7 +3081,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtBasic(
 	return newNumStrFmtSpec, err
 }
 
-// NewCurrencyNumFmtBasicRunes
+// NewCurrencyBasicRunes
 //
 // Creates and returns a new instance of NumStrFormatSpec
 // configured using a 'basic' set of Number String Format
@@ -3581,7 +3581,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtBasic(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtBasicRunes(
+func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyBasicRunes(
 	decSeparatorChars []rune,
 	intSeparatorChars []rune,
 	intGroupingType IntegerGroupingType,
@@ -3611,7 +3611,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtBasicRunes(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumStrFormatSpec."+
-			"NewCurrencyNumFmtBasicRunes()",
+			"NewCurrencyBasicRunes()",
 		"")
 
 	if err != nil {
@@ -3638,7 +3638,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtBasicRunes(
 	return newNumStrFmtSpec, err
 }
 
-//	NewCurrencyNumFmtFrance
+//	NewCurrencyDefaultsFrance
 //
 //	Returns a new instance of NumStrFormatSpec
 //	configured with Currency Number String formatting
@@ -3666,7 +3666,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtBasicRunes(
 //	For information on German Currency Number String
 //	formatting conventions, see method:
 //
-//		NumStrFormatSpec.NewCurrencyNumFmtGermany()
+//		NumStrFormatSpec.NewCurrencyDefaultsGermany()
 //
 //	If custom decimal separator, integer separators,
 //	negative number sign characters or currency
@@ -3925,7 +3925,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtBasicRunes(
 //		and text passed by input parameter, 'errorPrefix'. The
 //		'errorPrefix' text will be attached to the beginning of
 //		the error message.
-func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtFrance(
+func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyDefaultsFrance(
 	numberFieldSpec NumStrNumberFieldSpec,
 	errorPrefix interface{}) (
 	newFrenchCurrencyNumFmtSpec NumStrFormatSpec,
@@ -3945,7 +3945,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtFrance(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumStrFormatSpec."+
-			"NewCurrencyNumFmtFrance()",
+			"NewCurrencyDefaultsFrance()",
 		"")
 
 	if err != nil {
@@ -3960,7 +3960,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtFrance(
 	return newFrenchCurrencyNumFmtSpec, err
 }
 
-//	NewCurrencyNumFmtGermany
+//	NewCurrencyDefaultsGermany
 //
 //	Returns a new instance of NumStrFormatSpec
 //	configured with Currency Number String
@@ -3989,7 +3989,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtFrance(
 //	For information on French Currency Number String
 //	formatting conventions, see method:
 //
-//		NumStrFormatSpec.NewCurrencyNumFmtFrance()
+//		NumStrFormatSpec.NewCurrencyDefaultsFrance()
 //
 //	If custom decimal separator, integer separators,
 //	negative number sign characters or currency
@@ -4242,7 +4242,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtFrance(
 //		and text passed by input parameter, 'errorPrefix'. The
 //		'errorPrefix' text will be attached to the beginning of
 //		the error message.
-func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtGermany(
+func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyDefaultsGermany(
 	numberFieldSpec NumStrNumberFieldSpec,
 	errorPrefix interface{}) (
 	newGermanCurrencyNumFmtSpec NumStrFormatSpec,
@@ -4262,7 +4262,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtGermany(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumStrFormatSpec."+
-			"NewCurrencyNumFmtGermany()",
+			"NewCurrencyDefaultsGermany()",
 		"")
 
 	if err != nil {
@@ -4277,7 +4277,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtGermany(
 	return newGermanCurrencyNumFmtSpec, err
 }
 
-//	NewCurrencyNumFmtUKMinusInside
+//	NewCurrencyDefaultsUKMinusInside
 //
 //	Returns a new instance of NumStrFormatSpec configured
 //	for the United Kingdom (UK) Currency Number String
@@ -4559,7 +4559,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtGermany(
 //		and text passed by input parameter, 'errorPrefix'. The
 //		'errorPrefix' text will be attached to the beginning of
 //		the error message.
-func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtUKMinusInside(
+func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyDefaultsUKMinusInside(
 	numberFieldSpec NumStrNumberFieldSpec,
 	errorPrefix interface{}) (
 	newUKCurrencyNumFmtSpec NumStrFormatSpec,
@@ -4579,7 +4579,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtUKMinusInside(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumStrFormatSpec."+
-			"NewCurrencyNumFmtUKMinusInside()",
+			"NewCurrencyDefaultsUKMinusInside()",
 		"")
 
 	if err != nil {
@@ -4594,7 +4594,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtUKMinusInside(
 	return newUKCurrencyNumFmtSpec, err
 }
 
-//	NewCurrencyNumFmtUKMinusOutside
+//	NewCurrencyDefaultsUKMinusOutside
 //
 //	Returns a new instance of NumStrFormatSpec configured
 //	for the United Kingdom (UK) Currency Number String
@@ -4875,7 +4875,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtUKMinusInside(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtUKMinusOutside(
+func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyDefaultsUKMinusOutside(
 	numberFieldSpec NumStrNumberFieldSpec,
 	errorPrefix interface{}) (
 	newUKCurrencyNumFmtSpec NumStrFormatSpec,
@@ -4895,7 +4895,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtUKMinusOutside(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumStrFormatSpec."+
-			"NewCurrencyNumFmtUKMinusOutside()",
+			"NewCurrencyDefaultsUKMinusOutside()",
 		"")
 
 	if err != nil {
@@ -4910,7 +4910,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtUKMinusOutside(
 	return newUKCurrencyNumFmtSpec, err
 }
 
-//	NewCurrencyNumFmtUSMinus
+//	NewCurrencyDefaultsUSMinus
 //
 //	Returns a new instance of NumStrFormatSpec configured
 //	for the United States (US) Currency Number String
@@ -5169,7 +5169,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtUKMinusOutside(
 //		and text passed by input parameter, 'errorPrefix'. The
 //		'errorPrefix' text will be attached to the beginning of
 //		the error message.
-func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtUSMinus(
+func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyDefaultsUSMinus(
 	numberFieldSpec NumStrNumberFieldSpec,
 	errorPrefix interface{}) (
 	newUSCurrencyNumFmtSpec NumStrFormatSpec,
@@ -5189,7 +5189,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtUSMinus(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumStrFormatSpec."+
-			"NewCurrencyNumFmtUSMinus()",
+			"NewCurrencyDefaultsUSMinus()",
 		"")
 
 	if err != nil {
@@ -5206,7 +5206,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtUSMinus(
 	return newUSCurrencyNumFmtSpec, err
 }
 
-//	NewCurrencyNumFmtUSParen
+//	NewCurrencyDefaultsUSParen
 //
 //	Returns a new instance of NumStrFormatSpec configured
 //	for United States (US) Currency Number String
@@ -5486,7 +5486,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtUSMinus(
 //		and text passed by input parameter, 'errorPrefix'. The
 //		'errorPrefix' text will be attached to the beginning of
 //		the error message.
-func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtUSParen(
+func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyDefaultsUSParen(
 	numberFieldSpec NumStrNumberFieldSpec,
 	errorPrefix interface{}) (
 	newUSCurrencyNumFmtSpec NumStrFormatSpec,
@@ -5506,7 +5506,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyNumFmtUSParen(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumStrFormatSpec."+
-			"NewCurrencyNumFmtUSParen()",
+			"NewCurrencyDefaultsUSParen()",
 		"")
 
 	if err != nil {

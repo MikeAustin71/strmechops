@@ -330,7 +330,7 @@ func (nStrFmtCountryCultureMech *numStrFmtCountryCultureSpecMech) setCountryFran
 	nopNumFieldSpec := new(NumStrNumberFieldSpec).NewNOP()
 
 	countryNStrFmtSpec.CurrencyNumStrFormat,
-		err = numStrFmtSpec.NewCurrencyNumFmtFrance(
+		err = numStrFmtSpec.NewCurrencyDefaultsFrance(
 		nopNumFieldSpec,
 		ePrefix.XCpy(
 			"countryNStrFmtSpec.CurrencyNumStrFormat"))
@@ -479,7 +479,7 @@ func (nStrFmtCountryCultureMech *numStrFmtCountryCultureSpecMech) setCountryGerm
 	nopNumFieldSpec := new(NumStrNumberFieldSpec).NewNOP()
 
 	countryNStrFmtSpec.CurrencyNumStrFormat,
-		err = numStrFmtSpec.NewCurrencyNumFmtGermany(
+		err = numStrFmtSpec.NewCurrencyDefaultsGermany(
 		nopNumFieldSpec,
 		ePrefix.XCpy(
 			"countryNStrFmtSpec.CurrencyNumStrFormat"))
@@ -629,7 +629,7 @@ func (nStrFmtCountryCultureMech *numStrFmtCountryCultureSpecMech) setCountryUK(
 	nopNumFieldSpec := new(NumStrNumberFieldSpec).NewNOP()
 
 	countryNStrFmtSpec.CurrencyNumStrFormat,
-		err = numStrFmtSpec.NewCurrencyNumFmtUKMinusOutside(
+		err = numStrFmtSpec.NewCurrencyDefaultsUKMinusOutside(
 		nopNumFieldSpec,
 		ePrefix.XCpy(
 			"countryNStrFmtSpec.CurrencyNumStrFormat"))
@@ -780,7 +780,7 @@ func (nStrFmtCountryCultureMech *numStrFmtCountryCultureSpecMech) setCountryUS(
 	nopNumFieldSpec := new(NumStrNumberFieldSpec).NewNOP()
 
 	countryNStrFmtSpec.CurrencyNumStrFormat,
-		err = numStrFmtSpec.NewCurrencyNumFmtUSParen(
+		err = numStrFmtSpec.NewCurrencyDefaultsUSParen(
 		nopNumFieldSpec,
 		ePrefix.XCpy(
 			"countryNStrFmtSpec.CurrencyNumStrFormat"))

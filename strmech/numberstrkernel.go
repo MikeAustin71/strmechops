@@ -3647,7 +3647,7 @@ func (numStrKernel *NumberStrKernel) FmtCurrencyNumStrFrance(
 	var numStrFmtSpec NumStrFormatSpec
 
 	numStrFmtSpec,
-		err = new(NumStrFormatSpec).NewCurrencyNumFmtFrance(
+		err = new(NumStrFormatSpec).NewCurrencyDefaultsFrance(
 		numberFieldSpec,
 		ePrefix.XCpy(
 			"numStrFmtSpec<-"))
@@ -4173,7 +4173,7 @@ func (numStrKernel *NumberStrKernel) FmtCurrencyNumStrGermany(
 	var numStrFmtSpec NumStrFormatSpec
 
 	numStrFmtSpec,
-		err = new(NumStrFormatSpec).NewCurrencyNumFmtGermany(
+		err = new(NumStrFormatSpec).NewCurrencyDefaultsGermany(
 		numberFieldSpec,
 		ePrefix.XCpy(
 			"newSignedNumFmtSpec<-"))
@@ -4687,7 +4687,7 @@ func (numStrKernel *NumberStrKernel) FmtCurrencyNumStrUK(
 	var numStrFmtSpec NumStrFormatSpec
 
 	numStrFmtSpec,
-		err = new(NumStrFormatSpec).NewCurrencyNumFmtUKMinusOutside(
+		err = new(NumStrFormatSpec).NewCurrencyDefaultsUKMinusOutside(
 		numberFieldSpec,
 		ePrefix.XCpy(
 			"newSignedNumFmtSpec<-"))
@@ -5205,7 +5205,7 @@ func (numStrKernel *NumberStrKernel) FmtCurrencyNumStrUSMinus(
 	var numStrFmtSpec NumStrFormatSpec
 
 	numStrFmtSpec,
-		err = new(NumStrFormatSpec).NewCurrencyNumFmtUSMinus(
+		err = new(NumStrFormatSpec).NewCurrencyDefaultsUSMinus(
 		numberFieldSpec,
 		ePrefix.XCpy(
 			"newSignedNumFmtSpec<-"))
@@ -5722,7 +5722,7 @@ func (numStrKernel *NumberStrKernel) FmtCurrencyNumStrUSParen(
 	var numStrFmtSpec NumStrFormatSpec
 
 	numStrFmtSpec,
-		err = new(NumStrFormatSpec).NewCurrencyNumFmtUSParen(
+		err = new(NumStrFormatSpec).NewCurrencyDefaultsUSParen(
 		numberFieldSpec,
 		ePrefix.XCpy(
 			"numStrFmtSpec<-"))
