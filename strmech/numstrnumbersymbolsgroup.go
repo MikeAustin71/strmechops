@@ -10153,6 +10153,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencyDefaultsUSParen(
 // # Currency Defaults
 //
 //	Currency-Negative Symbol Position:
+//
 //		Currency Symbol defaults to 'outside' the
 //		minus sign.
 //
@@ -10177,6 +10178,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencyDefaultsUSParen(
 //			"123.456- €"
 //
 //	Negative Number Symbol:
+//
 //		The default Negative Number Symbol is the minus
 //		sign ('-'). Negative numeric values will be
 //		designated with the minus sign ('-').
@@ -10191,6 +10193,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencyDefaultsUSParen(
 //			Trailing Minus Sign: "123.456-"
 //
 //	Positive Number Symbol:
+//
 //		No Positive Number Sign Symbol. Positive
 //		values number signs are assumed and implicit. No
 //		Number Signs will be formatted for positive
@@ -10200,6 +10203,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencyDefaultsUSParen(
 //					"123.456"
 //
 //	Zero Number Symbol:
+//
 //		No Zero Number Sign Symbol. Technically a zero
 //		value is neither positive nor negative.
 //		Consequently, no number sign is included with
@@ -10209,6 +10213,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencyDefaultsUSParen(
 //					"0.00"
 //
 //	Number Field Symbol Position:
+//
 //		Defaults to "Inside Number Field"
 //
 //		Example:
@@ -10426,7 +10431,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencySimple(
 //	required, see method:
 //
 //		NumStrNumberSymbolGroup.
-//			SetSignedSimpleNumber()
+//			SetSignedNumSimple()
 //
 //	Type NumStrNumberSymbolGroup is used to configure
 //	Number Symbols required in converting numeric
@@ -14135,6 +14140,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSignedNumDefaultsUSParen(
 // # Signed Number Defaults
 //
 //	Negative Signed Number Symbol:
+//
 //		The default Negative Number Symbol is the
 //		minus sign ('-'). The placement of the minus sign
 //		as either a leading or trailing minus sign is

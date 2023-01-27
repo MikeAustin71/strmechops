@@ -3622,7 +3622,7 @@ func (txtFieldFmtDtoFloat64 *TextFieldFormatDtoFloat64) SetNumStrFmtDefaultSimpl
 
 	newNumStrFormatSpec,
 		err = new(NumStrFormatSpec).
-		NewSignedSimpleNumFmt(
+		NewSignedNumSimple(
 			decSeparatorChars,
 			intSeparatorChars,
 			leadingMinusSign,

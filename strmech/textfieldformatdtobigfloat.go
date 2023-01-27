@@ -3759,7 +3759,7 @@ func (textBigFloatFieldFmtDto *TextFieldFormatDtoBigFloat) SetNumStrFmtDefaultSi
 
 	newNumStrFormatSpec,
 		err = new(NumStrFormatSpec).
-		NewSignedSimpleNumFmt(
+		NewSignedNumSimple(
 			decSeparatorChars,
 			intSeparatorChars,
 			leadingMinusSign,

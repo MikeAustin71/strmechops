@@ -7310,7 +7310,7 @@ func (numStrKernel *NumberStrKernel) Round(
 // This Number String Format is designed to format
 // 'Signed' integer or floating point numeric values.
 //
-// This method is one step above NewSignedSimpleNumFmt()
+// This method is one step above NewSignedNumSimple()
 // in terms of complexity and customization options.
 //
 // This method provides additional options for multiple
@@ -8425,7 +8425,7 @@ func (numStrKernel *NumberStrKernel) SetDefaultSimpleNumStrFormatSpec(
 	numStrKernel.numStrFormatSpec.Empty()
 
 	numStrKernel.numStrFormatSpec,
-		err = new(NumStrFormatSpec).NewSignedSimpleNumFmt(
+		err = new(NumStrFormatSpec).NewSignedNumSimple(
 		decSeparatorChars,
 		intSeparatorChars,
 		leadingNumSymbols,

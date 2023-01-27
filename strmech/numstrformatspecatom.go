@@ -1232,7 +1232,7 @@ func (numStrFmtSpecAtom *numStrFmtSpecAtom) setNumberFieldSpec(
 					"numberFieldSpec"))
 }
 
-//	setNumberSymbolSpec
+//	setNumberSymbolGroup
 //
 //	Receives a pointer to an instance of NumStrFormatSpec
 //	and proceeds to reconfigure all the internal member
@@ -1298,7 +1298,7 @@ func (numStrFmtSpecAtom *numStrFmtSpecAtom) setNumberFieldSpec(
 //		for input parameter 'errPrefDto' (error prefix)
 //		will be prefixed or attached at the beginning of
 //		the error message.
-func (numStrFmtSpecAtom *numStrFmtSpecAtom) setNumberSymbolSpec(
+func (numStrFmtSpecAtom *numStrFmtSpecAtom) setNumberSymbolGroup(
 	numStrFmtSpec *NumStrFormatSpec,
 	numberSymbolSpec NumStrNumberSymbolGroup,
 	errPrefDto *ePref.ErrPrefixDto) (
