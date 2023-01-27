@@ -5554,7 +5554,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyDefaultsUSParen(
 //
 // ----------------------------------------------------------------
 //
-// # Currency Defaults
+// # Simple Currency Defaults
 //
 //	Integer Grouping
 //		Integers are grouped by thousands or groups
@@ -5895,6 +5895,394 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencySimple(
 		[]rune(decSeparatorChars),
 		[]rune(intSeparatorChars),
 		[]rune(currencySymbols),
+		leadingCurrencySymbols,
+		leadingMinusSign,
+		numFieldLength,
+		numFieldJustification,
+		ePrefix.XCpy(
+			"newNumStrFmtSpec<-"))
+
+	return newNumStrFmtSpec, err
+}
+
+//	NewCurrencySimpleRunes
+//
+//	Creates and returns and instance of NumStrFormatSpec
+//	configured for Currency Number String formatting.
+//
+//	If currency number symbol formatting IS NOT
+//	required, see method:
+//
+//		NumStrFormatSpec.
+//			NewSignedNumSimple()
+//
+//	Type NumStrFormatSpec is used to convert numeric
+//	values to formatted Number Strings.
+//
+//	This method provides a simplified means of creating
+//	type NumStrFormatSpec using default values. The
+//	generated returned instance of NumStrFormatSpec
+//	will be configured with currency number symbols.
+//
+//	If the default configuration values fail to provide
+//	sufficient granular control over currency number
+//	string formatting, use one of the more advanced
+//	constructor or 'New' methods to achieve specialized
+//	multinational or multicultural currency number
+//	symbol formatting requirements:
+//
+//		NumStrFormatSpec.NewCountryCurrencyNumFormat()
+//		NumStrFormatSpec.NewCountrySignedNumFormat()
+//		NumStrFormatSpec.NewNumFmtComponents()
+//		NumStrFormatSpec.NewNumFmtParams()
+//		NumStrFormatSpec.NewNumFmtParamsRunes()
+//
+// ----------------------------------------------------------------
+//
+// # Simple Currency Defaults
+//
+//	Integer Grouping
+//		Integers are grouped by thousands or groups
+//		of three integers.
+//
+//		Example: 1,000,000,000
+//
+//	Currency-Negative Symbol Position:
+//		Currency Symbol defaults to 'outside' the
+//		minus sign.
+//
+//		Examples:
+//			European Number String: "123.456- €"
+//			US Number String: "$ -123.456"
+//
+//	Negative Number Symbol:
+//		The default Negative Number Symbol is the
+//		minus sign ('-').
+//
+//		Examples:
+//			European Number String: "123.456- €"
+//			US Number String: "$ -123.456"
+//
+//	Positive Number Symbol:
+//		No Positive Number Sign Symbol. Positive
+//		values are assumed.
+//
+//		Positive Numeric Value Currency Examples:
+//			European Number String: "123.456 €"
+//			US Number String: "$ 123.456"
+//
+//	Zero Number Symbol:
+//		No Number Sign Symbol. Technically a zero value
+//		is neither positive nor negative.
+//
+//		Zero Numeric Value Currency Examples:
+//			European Number String: "0.00 €"
+//			US Number String: "$ 0.00"
+//
+//	Number Field Symbol Position:
+//		Defaults to "Inside Number Field"
+//
+//		Example:
+//			Number Field Length: 8
+//			Numeric Value: 123.45
+//			Number Symbol: leading minus sign ('-')
+//			Number Symbol Position: Inside Number Field
+//			Formatted Number String: " -123.45"
+//			Number Field Index:       01234567
+//			Total Number String Length: 8
+//
+// ----------------------------------------------------------------
+//
+//	# Input Parameters
+//
+//	decSeparator				[]rune
+//
+//		This rune array contains the character or
+//		characters which will be configured as the
+//		Decimal Separator Symbol or Symbols for the
+//		returned instance of NumStrFormatSpec.
+//
+//		The decimal separator is also known as the radix
+//		point and is used to separate integer and
+//		fractional digits within a formatted Number
+//		String.
+//
+//		In the US, UK, Australia and most of Canada, the
+//		decimal separator is the period character ('.')
+//		known as the decimal point.
+//
+//		In France, Germany and many countries in the
+//		European Union, the Decimal Separator is the
+//		comma character (',').
+//
+//	intSeparatorChars			[]rune
+//
+//		This rune array contains one or more characters
+//		used to separate groups of integers. This
+//		separator is also known as the 'thousands'
+//		separator. It is used to separate groups of
+//		integer digits to the left of the decimal
+//		separator (a.k.a. decimal point). In the United
+//		States, the standard integer digits separator is
+//		the comma (",").
+//
+//			United States Example:  1,000,000,000
+//
+//		In many European countries, a single period ('.')
+//		is used as the integer separator character.
+//
+//			European Example: 1.000.000.000
+//
+//		Other countries and cultures use spaces,
+//		apostrophes or multiple characters to separate
+//		integers.
+//
+//		If this input parameter contains a zero length
+//		string, an error will be returned.
+//
+//	currencySymbols				[]rune
+//
+//		This rune array contains the symbol or symbols
+//		used to format currency. This currency formatting
+//		will be configured in the new instance of
+//		NumStrFormatSpec returned by this method.
+//
+//	leadingCurrencySymbols		bool
+//
+//		Controls the positioning of Currency Symbols in a
+//		Number String Format.
+//
+//		When set to 'true', the returned instance of
+//		NumStrNumberSymbolGroup will configure Currency
+//		Symbols at the beginning or left side of the
+//		number string. Such Currency Symbols are therefore
+//		configured as leading Currency Symbols. This is
+//		the positioning format used in the US, UK,
+//		Australia and most of Canada.
+//
+//		Example Number Strings:
+//			"$ 123.456"
+//
+//		NOTE:	If a space is NOT present, a space will
+//				be automatically inserted between the
+//				currency symbol and the first digit or
+//				leading minus sign.
+//
+//		When 'leadingNumSymbols' is set to 'false', the
+//		returned instance of NumStrNumberSymbolGroup will
+//		configure Currency Symbols on the right side of
+//		the number string. Currency Number Symbols are
+//		therefore configured as trailing Number Symbols.
+//		This is the positioning format used in France,
+//		Germany and many other countries in the European
+//		Union.
+//
+//			Example Number Strings:
+//				"123.456 €"
+//
+//		NOTE:	If a space is NOT present, a space will
+//				be automatically inserted between the
+//				currency symbol and the last digit or
+//				trailing minus sign.
+//
+//	leadingMinusSign			bool
+//
+//		Controls the positioning of the minus sign ('-')
+//		in a Number String Format configured with a
+//		negative numeric value.
+//
+//		For NumStrNumberSymbolGroup configured with the
+//		Simple Currency Number String formatting
+//		specification, the default negative number sign
+//		symbol is the minus sign ('-').
+//
+//		When set to 'true', the returned instance of
+//		NumStrNumberSymbolGroup will configure the minus
+//		sign at the beginning or left side of the number
+//		string. Such minus signs are therefore configured
+//		as leading minus signs.
+//
+//		Example Number Strings:
+//			" -123.456"
+//
+//		When 'leadingMinusSign' is set to 'false', the
+//		returned instance of NumStrNumberSymbolGroup will
+//		configure the minus sign ('-') on the right side
+//		of the number string. The minus sign is therefore
+//		configured as trailing minus sign.
+//
+//			Example Number Strings:
+//				"123.456-"
+//
+//	numFieldLength				int
+//
+//		This parameter defines the length of the text
+//		field in which the numeric value will be displayed
+//		within a number string.
+//
+//		If 'numFieldLength' is less than the length of the
+//		numeric value string, it will be automatically set
+//		equal to the length of that numeric value string.
+//
+//		To automatically set the value of fieldLength to
+//		the string length of the numeric value, set this
+//		parameter to a value of minus one (-1).
+//
+//		If this parameter is submitted with a value less
+//		than minus one (-1) or greater than 1-million
+//		(1,000,000), an error will be returned.
+//
+//	numFieldJustification		TextJustify
+//
+//		An enumeration which specifies the justification
+//		of the numeric value within the number field
+//		length specified by input parameter
+//		'numFieldLength'.
+//
+//		Text justification can only be evaluated in the
+//		context of a number string, field length and a
+//		'textJustification' object of type TextJustify.
+//		This is because number strings with a field length
+//		equal to or less than the length of the numeric
+//		value string never use text justification. In
+//		these cases, text justification is completely
+//		ignored.
+//
+//		If the field length parameter ('numFieldLength')
+//		is greater than the length of the numeric value
+//		string, text justification must be equal to one
+//		of these three valid values:
+//
+//			TextJustify(0).Left()
+//			TextJustify(0).Right()
+//			TextJustify(0).Center()
+//
+//		You can also use the abbreviated text justification
+//		enumeration syntax as follows:
+//
+//			TxtJustify.Left()
+//			TxtJustify.Right()
+//			TxtJustify.Center()
+//
+//	 errorPrefix                interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// -----------------------------------------------------------------
+//
+// # Return Values
+//
+//	newNumStrFmtSpec			NumStrFormatSpec
+//
+//		If this method completes successfully, this parameter
+//		will return a new, fully populated instance of
+//		NumStrFormatSpec.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (numStrFmtSpec *NumStrFormatSpec) NewCurrencySimpleRunes(
+	decSeparatorChars []rune,
+	intSeparatorChars []rune,
+	currencySymbols []rune,
+	leadingCurrencySymbols bool,
+	leadingMinusSign bool,
+	numFieldLength int,
+	numFieldJustification TextJustify,
+	errorPrefix interface{}) (
+	newNumStrFmtSpec NumStrFormatSpec,
+	err error) {
+
+	if numStrFmtSpec.lock == nil {
+		numStrFmtSpec.lock = new(sync.Mutex)
+	}
+
+	numStrFmtSpec.lock.Lock()
+
+	defer numStrFmtSpec.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumStrFormatSpec."+
+			"NewCurrencySimpleRunes()",
+		"")
+
+	if err != nil {
+		return newNumStrFmtSpec, err
+	}
+
+	err = new(numStrFmtSpecNanobot).setCurrencyNStrFmtSimple(
+		&newNumStrFmtSpec,
+		decSeparatorChars,
+		intSeparatorChars,
+		currencySymbols,
 		leadingCurrencySymbols,
 		leadingMinusSign,
 		numFieldLength,
