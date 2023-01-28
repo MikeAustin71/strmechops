@@ -510,7 +510,7 @@ func (mainNumStrTest006 MainNumStrTest006) Float64Dto01() {
 	}
 
 	numStrFmtSpec,
-		err := new(strmech.NumStrFormatSpec).NewNumFmtParams(
+		err := new(strmech.NumStrFormatSpec).NewCurrencyParams(
 		".",
 		",",
 		strmech.IntGroupingType.Thousands(),

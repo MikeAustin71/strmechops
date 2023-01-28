@@ -11497,8 +11497,8 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencyDefaultsUSParen(
 //
 //	Reconfigures the current instance of
 //	NumStrNumberSymbolGroup based on the Positive,
-//	Negative, Zero and Currency symbol strings passed as
-//	input parameters.
+//	Negative, Zero and Currency symbol specifications
+//	passed as input parameters.
 //
 // ----------------------------------------------------------------
 //
@@ -11882,7 +11882,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencyDefaultsUSParen(
 //
 //		Currency Symbols are optional. If Currency
 //		Symbols are not required, set
-//		'leadingCurrencySymbol' to 'nil'.
+//		'leadingCurrencySymbol' to an empty string.
 //
 //	trailingCurrencySymbol     		string
 //
@@ -11902,7 +11902,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencyDefaultsUSParen(
 //
 //		Currency Symbols are optional. If Currency
 //		Symbols are not required, set
-//		'trailingCurrencySymbol' to 'nil'.
+//		'trailingCurrencySymbol' to an empty string.
 //
 //	currencyInsideNumSymbol			bool
 //

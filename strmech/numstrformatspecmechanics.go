@@ -1459,7 +1459,7 @@ func (nStrFmtSpecMechanics *numStrFmtSpecMechanics) setSignedNumBasic(
 	}
 
 	err = new(numStrFmtSpecNanobot).
-		setNumFmtParams(
+		setCurrencyParams(
 			numberStrFmtSpec,
 			decSeparatorChars,
 			intSeparatorChars,

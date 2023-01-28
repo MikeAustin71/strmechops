@@ -25,7 +25,7 @@ func TestTextFieldFormatDtoFloat64_FmtNumStr_000100(t *testing.T) {
 	}
 
 	numStrFmtSpec,
-		err := new(NumStrFormatSpec).NewNumFmtParams(
+		err := new(NumStrFormatSpec).NewCurrencyParams(
 		".",
 		",",
 		IntGroupingType.Thousands(),

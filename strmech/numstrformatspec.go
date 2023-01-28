@@ -55,7 +55,7 @@ import (
 //		NumStrFormatSpec.NewCountryCurrencyNumFormat()
 //		NumStrFormatSpec.NewCountrySignedNumFormat()
 //		NumStrFormatSpec.NewNumFmtComponents()
-//		NumStrFormatSpec.NewNumFmtParams()
+//		NumStrFormatSpec.NewCurrencyParams()
 //		NumStrFormatSpec.NewNumFmtParamsRunes()
 //		NumStrFormatSpec.SetCountryCurrencyNumFmt()
 //		NumStrFormatSpec.SetCountrySignedNumFmt()
@@ -3801,7 +3801,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyBasicRunes(
 //	symbols are required, see methods:
 //
 //		NumStrFormatSpec.NewNumFmtComponents()
-//		NumStrFormatSpec.NewNumFmtParams()
+//		NumStrFormatSpec.NewCurrencyParams()
 //		NumStrFormatSpec.NewNumFmtParamsRunes()
 //
 // ----------------------------------------------------------------
@@ -4124,7 +4124,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyDefaultsFrance(
 //	symbols are required, see methods:
 //
 //		NumStrFormatSpec.NewNumFmtComponents()
-//		NumStrFormatSpec.NewNumFmtParams()
+//		NumStrFormatSpec.NewCurrencyParams()
 //		NumStrFormatSpec.NewNumFmtParamsRunes()
 //
 // ----------------------------------------------------------------
@@ -4438,7 +4438,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyDefaultsGermany(
 //	symbols are required, see methods:
 //
 //		NumStrFormatSpec.NewNumFmtComponents()
-//		NumStrFormatSpec.NewNumFmtParams()
+//		NumStrFormatSpec.NewCurrencyParams()
 //		NumStrFormatSpec.NewNumFmtParamsRunes()
 //
 // ----------------------------------------------------------------
@@ -4753,7 +4753,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyDefaultsUKMinusInside(
 //	symbols are required, see methods:
 //
 //		NumStrFormatSpec.NewNumFmtComponents()
-//		NumStrFormatSpec.NewNumFmtParams()
+//		NumStrFormatSpec.NewCurrencyParams()
 //		NumStrFormatSpec.NewNumFmtParamsRunes()
 //
 // ----------------------------------------------------------------
@@ -5063,7 +5063,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyDefaultsUKMinusOutside(
 //	symbols are required, see methods:
 //
 //		NumStrFormatSpec.NewNumFmtComponents()
-//		NumStrFormatSpec.NewNumFmtParams()
+//		NumStrFormatSpec.NewCurrencyParams()
 //		NumStrFormatSpec.NewNumFmtParamsRunes()
 //
 // ----------------------------------------------------------------
@@ -5366,7 +5366,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyDefaultsUSMinus(
 //	symbols are required, see methods:
 //
 //		NumStrFormatSpec.NewNumFmtComponents()
-//		NumStrFormatSpec.NewNumFmtParams()
+//		NumStrFormatSpec.NewCurrencyParams()
 //		NumStrFormatSpec.NewNumFmtParamsRunes()
 //
 // ----------------------------------------------------------------
@@ -5677,7 +5677,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyDefaultsUSParen(
 //		NumStrFormatSpec.NewCountryCurrencyNumFormat()
 //		NumStrFormatSpec.NewCountrySignedNumFormat()
 //		NumStrFormatSpec.NewNumFmtComponents()
-//		NumStrFormatSpec.NewNumFmtParams()
+//		NumStrFormatSpec.NewCurrencyParams()
 //		NumStrFormatSpec.NewNumFmtParamsRunes()
 //
 // ----------------------------------------------------------------
@@ -6063,7 +6063,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencySimple(
 //		NumStrFormatSpec.NewCountryCurrencyNumFormat()
 //		NumStrFormatSpec.NewCountrySignedNumFormat()
 //		NumStrFormatSpec.NewNumFmtComponents()
-//		NumStrFormatSpec.NewNumFmtParams()
+//		NumStrFormatSpec.NewCurrencyParams()
 //		NumStrFormatSpec.NewNumFmtParamsRunes()
 //
 // ----------------------------------------------------------------
@@ -6753,7 +6753,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtComponents(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumStrFormatSpec."+
-			"NewNumFmtParams()",
+			"NewCurrencyParams()",
 		"")
 
 	if err != nil {
@@ -6771,13 +6771,12 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtComponents(
 	return newSignedNumFmtSpec, err
 }
 
-// NewNumFmtParams - Creates and returns a new instance
-// of NumStrFormatSpec.
+//	NewCurrencyParams
 //
-// The leading and trailing number sign input parameters
-// offer the option of configuring currency symbols.
-// Currency symbols can be combined with leading and
-// trailing number sign parameters.
+//	Creates and returns a new instance of
+//	NumStrFormatSpec based in the Positive,Negative, Zero
+//	and Currency symbol specifications passed as input
+//	parameters.
 //
 // ----------------------------------------------------------------
 //
@@ -6848,12 +6847,29 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtComponents(
 //
 //		A string containing the leading positive number
 //		sign character or characters used to configure
-//		a Positive Number Sign Symbol in a number string
+//		Positive Number Sign Symbols in a number string
 //		with a positive numeric value.
 //
-//		Leading number symbols can include any combination
-//		of characters such as plus signs ('+') and/or
-//		currency symbols ('$').
+//		Leading number symbols can include any
+//		combination of characters such as plus signs
+//		('+').
+//
+//		Example-1: Leading Number Symbols
+//			Leading Number Symbols for Positive Values
+//
+//			Leading Symbols: "+ "
+//			Number String:   "+ 123.456"
+//
+//		Example-2: Leading Number Symbols
+//			Leading Number Symbols for Positive Values
+//
+//			Leading Symbols: "+"
+//			Number String:   "+123.456"
+//
+//		Leading number symbols are often omitted for
+//		positive numeric values. If leading positive
+//		number symbols are NOT required, set this
+//		parameter to an empty string.
 //
 //	trailingPosNumSign				string
 //
@@ -6864,6 +6880,29 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtComponents(
 //		Trailing number symbols can include any combination
 //		of characters to include plus signs ('+') and/or
 //	 	currency symbols ('$').
+//
+//		Example-1: Trailing Number Symbols
+//			Trailing Number Symbols for Positive Values
+//
+//			Trailing Symbols: " +"
+//			Number String:   "123.456 +"
+//
+//		Example-2: Trailing Number Symbols
+//			Trailing Number Symbols for Positive Values
+//
+//			Trailing Symbols: "+$"
+//			Number String:   "123.456+$"
+//
+//		Example-3: Trailing Number Symbols
+//			Trailing Number Symbols for Positive Values
+//
+//			Trailing Symbols: "$"
+//			Number String:   "123.456$"
+//
+//		Trailing number symbols are often omitted for
+//		positive numeric values. If trailing positive
+//		number symbols are NOT required, set this
+//		parameter to an empty string.
 //
 //	positiveNumFieldSymPosition		NumberFieldSymbolPosition
 //
@@ -6878,9 +6917,9 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtComponents(
 //					Numeric Value: 123.45
 //					Number Symbol: leading plus sign ('+')
 //					Number Symbol Position: Inside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //					Formatted Number String: " +123.45"
-//					Number Field Index:       01234567
+//					Number Field Index:------>01234567
 //					Total Number String Length: 8
 //
 //				Example-2:
@@ -6888,9 +6927,9 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtComponents(
 //					Numeric Value: 123.45
 //					Number Symbol: trailing plus sign ('+')
 //					Number Symbol Position: Inside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //					Formatted Number String: " 123.45+"
-//					Number Field Index:       01234567
+//					Number Field Index:------>01234567
 //					Total Number String Length: 8
 //
 //				For the 'NumFieldSymPos.InsideNumField()'
@@ -6903,9 +6942,9 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtComponents(
 //			     	Numeric Value: 123.45
 //			     	Number Symbol: leading plus sign ('+')
 //			     	Number Symbol Position: Outside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //			     	Formatted Number String: "+  123.45"
-//					Number Field Index:       012345678
+//					Number Field Index:------>012345678
 //					Total Number String Length: 9
 //
 //				Example-4:
@@ -6913,9 +6952,9 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtComponents(
 //			     	Numeric Value: 123.45
 //			     	Number Symbol: trailing plus sign ('+')
 //			     	Number Symbol Position: Outside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //			     	Formatted Number String: "  123.45+"
-//					Number Field Index:       012345678
+//					Number Field Index:------>012345678
 //					Total Number String Length: 9
 //
 //				For the 'NumFieldSymPos.OutsideNumField()'
@@ -6932,7 +6971,19 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtComponents(
 //
 //		Leading number symbols can include any
 //		combination of characters such as minus signs
-//		('-') and/or currency symbols ('$').
+//		('-').
+//
+//		Example-1: Leading Number Symbols
+//			Leading Number Symbols for Negative Values
+//
+//			Leading Symbols: "- "
+//			Number String:   "- 123.456"
+//
+//		Example-2: Leading Number Symbols With Currency
+//			Leading Number Symbols for Negative Values
+//
+//			Leading Symbols: "-"
+//			Number String:   "-123.456"
 //
 //	trailingNegNumSign				string
 //
@@ -6943,7 +6994,19 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtComponents(
 //
 //		Trailing number symbols can include any
 //		combination of characters such as minus signs
-//		('-') and/or currency symbols ('$').
+//		('-').
+//
+//		Example-1: Trailing Number Symbols
+//			Trailing Number Symbols for Negative Values
+//
+//			Trailing Symbols: " -"
+//			Number String:   "123.456 -"
+//
+//		Example-2: Trailing Number Symbols
+//			Trailing Number Symbols for Negative Values
+//
+//			Trailing Symbols: "-"
+//			Number String:   "123.456-"
 //
 //	negativeNumFieldSymPosition		NumberFieldSymbolPosition
 //
@@ -6958,9 +7021,9 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtComponents(
 //					Numeric Value: 123.45
 //					Number Symbol: leading minus sign ('-')
 //					Number Symbol Position: Inside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //					Formatted Number String: " -123.45"
-//					Number Field Index:  01234567
+//					Number Field Index:------>01234567
 //					Total Number String Length: 8
 //
 //				Example-2:
@@ -6968,9 +7031,9 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtComponents(
 //					Numeric Value: 123.45
 //					Number Symbol: trailing minus sign ('-')
 //					Number Symbol Position: Inside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //					Formatted Number String: " 123.45-"
-//					Number Field Index:       01234567
+//					Number Field Index:------>01234567
 //					Total Number String Length: 8
 //
 //				Example-3:
@@ -6980,7 +7043,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtComponents(
 //					Number Symbol Position: Inside Number Field
 //			     	Number Text Justification: Centered
 //					Formatted Number String: " (123.45) "
-//					Number Field Index:       0123456789
+//					Number Field Index:------>0123456789
 //					Total Number String Length: 10
 //
 //				For the 'NumFieldSymPos.InsideNumField()'
@@ -6993,9 +7056,9 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtComponents(
 //			     	Numeric Value: 123.45
 //			     	Number Symbol: leading minus sign ('-')
 //			     	Number Symbol Position: Outside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //			     	Formatted Number String: "-  123.45"
-//					Number Field Index:       012345678
+//					Number Field Index:------>012345678
 //					Total Number String Length: 9
 //
 //				Example-5:
@@ -7003,9 +7066,9 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtComponents(
 //			     	Numeric Value: 123.45
 //			     	Number Symbol: trailing minus sign ('-')
 //			     	Number Symbol Position: Outside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //			     	Formatted Number String: "  123.45-"
-//					Number Field Index:       012345678
+//					Number Field Index:------>012345678
 //					Total Number String Length: 9
 //
 //				Example-6:
@@ -7015,7 +7078,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtComponents(
 //					Number Symbol Position: Outside Number Field
 //			     	Number Text Justification: Centered
 //					Formatted Number String: "( 123.45 )"
-//					Number Field Index:       0123456789
+//					Number Field Index:------>0123456789
 //					Total Number String Length: 10
 //
 //				For the 'NumFieldSymPos.OutsideNumField()'
@@ -7029,9 +7092,25 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtComponents(
 //		Sign Symbol in a number string with a zero
 //		numeric value.
 //
-//		Leading number symbols can include any combination
-//		of characters such as plus signs ('+') and/or
-//		currency symbols ('$').
+//		Zero number signs are commonly omitted because
+//		zero does not technically qualify as either a
+//		positive or negative value. However, users have
+//		the option to configure any combination of
+//		symbols for zero numeric values.
+//
+//		Leading number symbols can include any
+//		combination of characters such as plus signs
+//		('+').
+//
+//		Example: Leading Number Symbols
+//			Leading Number Symbols for Zero Values
+//
+//			Leading Symbols: "$"
+//			Trailing Symbols: ""
+//			Number String:   "$0.00"
+//
+//		If leading zero number symbols are NOT required,
+//		set this parameter to empty an empty string.
 //
 //	trailingZeroNumSign				string
 //
@@ -7040,9 +7119,24 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtComponents(
 //		Sign Symbol in a number string with a zero
 //		numeric value.
 //
+//		Zero number signs are commonly omitted because
+//		zero does not technically qualify as either a
+//		positive or negative value. However, users have
+//		the option to configure any combination of
+//		symbols for zero numeric values.
+//
 //		Trailing number symbols can include any combination
-//		of characters such as plus signs ('+') and/or
-//	 	currency symbols ('$').
+//		of characters such as plus signs ('+').
+//
+//		Example: Trailing Number Symbols
+//			Trailing Number Symbols for Zero Values
+//
+//			Leading Symbols: ""
+//			Trailing Symbols: " +"
+//			Number String:   "0.00 +"
+//
+//		If trailing zero number symbols are NOT required,
+//		set this parameter to an empty string.
 //
 //	zeroNumFieldSymPosition			NumberFieldSymbolPosition
 //
@@ -7057,9 +7151,9 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtComponents(
 //					Numeric Value: 123.45
 //					Number Symbol: leading plus sign ('+')
 //					Number Symbol Position: Inside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //					Formatted Number String: " +123.45"
-//					Number Field Index:       01234567
+//					Number Field Index:------>01234567
 //					Total Number String Length: 8
 //
 //				Example-2:
@@ -7067,9 +7161,9 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtComponents(
 //					Numeric Value: 123.45
 //					Number Symbol: trailing plus sign ('+')
 //					Number Symbol Position: Inside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //					Formatted Number String: " 123.45+"
-//					Number Field Index:       01234567
+//					Number Field Index:------>01234567
 //					Total Number String Length: 8
 //
 //				For the 'NumFieldSymPos.InsideNumField()'
@@ -7083,9 +7177,9 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtComponents(
 //			     	Numeric Value: 123.45
 //			     	Number Symbol: leading plus sign ('+')
 //			     	Number Symbol Position: Outside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //			     	Formatted Number String: "+  123.45"
-//					Number Field Index:       012345678
+//					Number Field Index:------>012345678
 //					Total Number String Length: 9
 //
 //				Example-4:
@@ -7093,9 +7187,9 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtComponents(
 //			     	Numeric Value: 123.45
 //			     	Number Symbol: trailing plus sign ('+')
 //			     	Number Symbol Position: Outside Number Field
-//			     	Number Text Justification: Right
+//			     	Number Text Justification: Right Justified
 //			     	Formatted Number String: "  123.45+"
-//					Number Field Index:       012345678
+//					Number Field Index:------>012345678
 //					Total Number String Length: 9
 //
 //				For the 'NumFieldSymPos.OutsideNumField()'
@@ -7118,7 +7212,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtComponents(
 //
 //		Currency Symbols are optional. If Currency
 //		Symbols are not required, set
-//		'leadingCurrencySymbol' to 'nil'.
+//		'leadingCurrencySymbol' to an empty string.
 //
 //	trailingCurrencySymbol     		string
 //
@@ -7138,7 +7232,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtComponents(
 //
 //		Currency Symbols are optional. If Currency
 //		Symbols are not required, set
-//		'trailingCurrencySymbol' to 'nil'.
+//		'trailingCurrencySymbol' to an empty string.
 //
 //	currencyInsideNumSymbol			bool
 //
@@ -7445,7 +7539,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtComponents(
 //		for input parameter 'errPrefDto' (error prefix)
 //		will be prefixed or attached at the beginning of
 //		the error message.
-func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtParams(
+func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyParams(
 	decSeparatorChars string,
 	intSeparatorChars string,
 	intGroupingType IntegerGroupingType,
@@ -7482,7 +7576,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtParams(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumStrFormatSpec."+
-			"NewNumFmtParams()",
+			"NewCurrencyParams()",
 		"")
 
 	if err != nil {
@@ -7490,7 +7584,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtParams(
 	}
 
 	err = new(numStrFmtSpecNanobot).
-		setNumFmtParams(
+		setCurrencyParams(
 			&newNumFmtSpec,
 			[]rune(decSeparatorChars),
 			[]rune(intSeparatorChars),
@@ -8152,7 +8246,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtParamsRunes(
 	}
 
 	err = new(numStrFmtSpecNanobot).
-		setNumFmtParams(
+		setCurrencyParams(
 			&newSignedNumFmtSpec,
 			decSeparatorChars,
 			intSeparatorChars,
@@ -9045,7 +9139,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumBasicRunes(
 //	see methods:
 //
 //		NumStrFormatSpec.NewNumFmtComponents()
-//		NumStrFormatSpec.NewNumFmtParams()
+//		NumStrFormatSpec.NewCurrencyParams()
 //		NumStrFormatSpec.NewNumFmtParamsRunes()
 //
 // ----------------------------------------------------------------
@@ -9318,7 +9412,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumDefaultsFrance(
 //	see methods:
 //
 //		NumStrFormatSpec.NewNumFmtComponents()
-//		NumStrFormatSpec.NewNumFmtParams()
+//		NumStrFormatSpec.NewCurrencyParams()
 //		NumStrFormatSpec.NewNumFmtParamsRunes()
 //
 // ----------------------------------------------------------------
@@ -9583,7 +9677,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumDefaultsGermany(
 //	see methods:
 //
 //		NumStrFormatSpec.NewNumFmtComponents()
-//		NumStrFormatSpec.NewNumFmtParams()
+//		NumStrFormatSpec.NewCurrencyParams()
 //		NumStrFormatSpec.NewNumFmtParamsRunes()
 //
 // ----------------------------------------------------------------
@@ -9852,7 +9946,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumDefaultsUKMinus(
 //	see methods:
 //
 //		NumStrFormatSpec.NewNumFmtComponents()
-//		NumStrFormatSpec.NewNumFmtParams()
+//		NumStrFormatSpec.NewCurrencyParams()
 //		NumStrFormatSpec.NewNumFmtParamsRunes()
 //
 // ----------------------------------------------------------------
@@ -10127,7 +10221,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumDefaultsUSMinus(
 //	see methods:
 //
 //		NumStrFormatSpec.NewNumFmtComponents()
-//		NumStrFormatSpec.NewNumFmtParams()
+//		NumStrFormatSpec.NewCurrencyParams()
 //		NumStrFormatSpec.NewNumFmtParamsRunes()
 //
 // ----------------------------------------------------------------
@@ -10403,7 +10497,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumDefaultsUSParen(
 //		NumStrFormatSpec.NewCountryCurrencyNumFormat()
 //		NumStrFormatSpec.NewCountrySignedNumFormat()
 //		NumStrFormatSpec.NewNumFmtComponents()
-//		NumStrFormatSpec.NewNumFmtParams()
+//		NumStrFormatSpec.NewCurrencyParams()
 //		NumStrFormatSpec.NewNumFmtParamsRunes()
 //
 // ----------------------------------------------------------------
@@ -10760,7 +10854,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumSimple(
 //		NumStrFormatSpec.NewCountryCurrencyNumFormat()
 //		NumStrFormatSpec.NewCountrySignedNumFormat()
 //		NumStrFormatSpec.NewNumFmtComponents()
-//		NumStrFormatSpec.NewNumFmtParams()
+//		NumStrFormatSpec.NewCurrencyParams()
 //		NumStrFormatSpec.NewNumFmtParamsRunes()
 //
 // ----------------------------------------------------------------
@@ -17251,7 +17345,7 @@ func (numStrFmtSpec *NumStrFormatSpec) SetNumFmtParams(
 	}
 
 	err = new(numStrFmtSpecNanobot).
-		setNumFmtParams(
+		setCurrencyParams(
 			numStrFmtSpec,
 			[]rune(decSeparatorChars),
 			[]rune(intGroupingChars),
@@ -17935,7 +18029,7 @@ func (numStrFmtSpec *NumStrFormatSpec) SetNumFmtParamsRunes(
 	}
 
 	err = new(numStrFmtSpecNanobot).
-		setNumFmtParams(
+		setCurrencyParams(
 			numStrFmtSpec,
 			decSeparatorChars,
 			intGroupingChars,

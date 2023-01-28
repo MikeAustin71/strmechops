@@ -9936,7 +9936,7 @@ func (numStrKernel *NumberStrKernel) FmtNumStrParams(
 	var numStrFmtSpec NumStrFormatSpec
 
 	numStrFmtSpec,
-		err = new(NumStrFormatSpec).NewNumFmtParams(
+		err = new(NumStrFormatSpec).NewCurrencyParams(
 		decSeparatorChars,
 		intSeparatorChars,
 		intGroupingType,
