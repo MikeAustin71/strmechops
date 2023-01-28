@@ -2456,17 +2456,16 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewCurrencyBasicRunes(
 //	required in converting numeric values to Number
 //	Strings.
 //
-//
 //	Type NumStrNumberSymbolGroup contains four instances
 //	of type NumStrNumberSymbolSpec defining the Number
 //	Symbols to be used with positive numeric values,
 //	negative numeric values, zero numeric values and
 //	currency values.
 //
-//	This method generates a new instance of
-//	NumStrNumberSymbolGroup using Positive, Negative, Zero
-//	Number Sign Symbols and Currency Symbol Specification
-//	objects passed as input parameters.
+//	This method configures the new returned instance of
+//	NumStrNumberSymbolGroup using Positive, Negative,
+//	Zero Number Sign Symbols and Currency Symbol
+//	specifications passed as input parameters.
 //
 // ----------------------------------------------------------------
 //
@@ -16760,6 +16759,171 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSignedNumDefaultsUSParen(
 			ePrefix.XCpy(
 				"nStrNumSymbolsGroup<-"))
 
+}
+
+//	SetSignedNumComponents
+//
+//	Deletes all data values in the current instance of
+//	NumStrNumberSymbolGroup and proceeds to reconfigure
+//	that instance with SignedNumber formatting
+//	specifications passed as input parameters.
+//
+//	A signed number is an integer or floating point
+//	numeric value which does NOT contain currency
+//	symbols.
+//
+//	The Positive Number Sign, Negative Number Sign and
+//	Zero Number Sign Symbol Specifications used to
+//	reconfigure the current NumStrNumberSymbolGroup
+//	instance are provided by input parameters
+//	'positiveNumberSign', 'negativeNumberSign' and
+//	'zeroNumberSign'.
+//
+//	The currency symbol is configured as an empty 'NOP'
+//	placeholder value since by definition, signed numbers
+//	do not contain a currency symbol.
+//
+//	The NumStrNumberSymbolGroup is used to configure
+//	Number Symbols required in converting numeric values
+//	to Number Strings.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	positiveNumberSign			NumStrNumberSymbolSpec
+//
+//		This Positive Number Sign Symbol Specification
+//		will be copied to the corresponding Positive
+//		Symbol Specification in the new, returned
+//		instance of NumStrNumberSymbolGroup.
+//
+//	negativeNumberSign			NumStrNumberSymbolSpec
+//
+//		This Negative Number Sign Symbol Specification
+//		will be copied to the corresponding Negative
+//		Symbol Specification in the new, returned
+//		instance of NumStrNumberSymbolGroup.
+//
+//	zeroNumberSign			NumStrNumberSymbolSpec
+//
+//		This Zero Number Sign Symbol Specification
+//		will be copied to the corresponding Zero
+//		Symbol Specification in the new, returned
+//		instance of NumStrNumberSymbolGroup.
+//
+//	 errorPrefix                interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it	contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSignedNumComponents(
+	positiveNumberSign NumStrNumberSymbolSpec,
+	negativeNumberSign NumStrNumberSymbolSpec,
+	zeroNumberSign NumStrNumberSymbolSpec,
+	errorPrefix interface{}) error {
+
+	if nStrNumSymbolsGroup.lock == nil {
+		nStrNumSymbolsGroup.lock = new(sync.Mutex)
+	}
+
+	nStrNumSymbolsGroup.lock.Lock()
+
+	defer nStrNumSymbolsGroup.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumStrNumberSymbolGroup."+
+			"SetSignedNumComponents()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	return new(numStrNumberSymbolGroupMechanics).
+		setSignedNumComponents(
+			nStrNumSymbolsGroup,
+			positiveNumberSign,
+			negativeNumberSign,
+			zeroNumberSign,
+			ePrefix.XCpy(
+				"nStrNumSymbolsGroup"))
 }
 
 //	SetSignedNumSimple
