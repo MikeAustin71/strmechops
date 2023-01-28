@@ -9217,7 +9217,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumDefaultsFrance(
 		return newSignedNumFmtSpec, err
 	}
 
-	err = new(numStrFmtSpecNanobot).setSignedNStrFmtFrance(
+	err = new(numStrFmtSpecNanobot).setSignedNumDefaultsFrance(
 		&newSignedNumFmtSpec,
 		numberFieldSpec,
 		ePrefix.XCpy("newSignedNumFmtSpec<-"))
@@ -9489,7 +9489,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumDefaultsGermany(
 		return newSignedNumFmtSpec, err
 	}
 
-	err = new(numStrFmtSpecNanobot).setSignedNStrFmtGermany(
+	err = new(numStrFmtSpecNanobot).setSignedNumDefaultsGermany(
 		&newSignedNumFmtSpec,
 		numberFieldSpec,
 		ePrefix.XCpy("newSignedNumFmtSpec<-"))
@@ -9753,7 +9753,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumDefaultsUKMinus(
 		return newSignedNumFmtSpec, err
 	}
 
-	err = new(numStrFmtSpecNanobot).setSignedNStrFmtUKMinus(
+	err = new(numStrFmtSpecNanobot).setSignedNumDefaultsUKMinus(
 		&newSignedNumFmtSpec,
 		numberFieldSpec,
 		ePrefix.XCpy("newSignedNumFmtSpec<-"))
@@ -10029,7 +10029,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumDefaultsUSMinus(
 		return newSignedNumFmtSpec, err
 	}
 
-	err = new(numStrFmtSpecNanobot).setSignedNStrFmtUSMinus(
+	err = new(numStrFmtSpecNanobot).setSignedNumDefaultsUSMinus(
 		&newSignedNumFmtSpec,
 		numberFieldSpec,
 		ePrefix.XCpy("newSignedNumFmtSpec<-"))
@@ -10305,7 +10305,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumDefaultsUSParen(
 		return newSignedNumFmtSpec, err
 	}
 
-	err = new(numStrFmtSpecNanobot).setSignedNStrFmtUSParen(
+	err = new(numStrFmtSpecNanobot).setSignedNumDefaultsUSParen(
 		&newSignedNumFmtSpec,
 		numberFieldSpec,
 		ePrefix.XCpy("newSignedNumFmtSpec<-"))
@@ -18156,7 +18156,7 @@ func (numStrFmtSpec *NumStrFormatSpec) SetSignedNumDefaultsFrance(
 		return err
 	}
 
-	return new(numStrFmtSpecNanobot).setSignedNStrFmtFrance(
+	return new(numStrFmtSpecNanobot).setSignedNumDefaultsFrance(
 		numStrFmtSpec,
 		numberFieldSpec,
 		ePrefix.XCpy("numStrFmtSpec<-"))
@@ -18414,7 +18414,7 @@ func (numStrFmtSpec *NumStrFormatSpec) SetSignedNumDefaultsGermany(
 		return err
 	}
 
-	return new(numStrFmtSpecNanobot).setSignedNStrFmtGermany(
+	return new(numStrFmtSpecNanobot).setSignedNumDefaultsGermany(
 		numStrFmtSpec,
 		numberFieldSpec,
 		ePrefix.XCpy("numStrFmtSpec<-"))
@@ -18660,7 +18660,7 @@ func (numStrFmtSpec *NumStrFormatSpec) SetSignedNumDefaultsUK(
 		return err
 	}
 
-	return new(numStrFmtSpecNanobot).setSignedNStrFmtUSMinus(
+	return new(numStrFmtSpecNanobot).setSignedNumDefaultsUSMinus(
 		numStrFmtSpec,
 		numberFieldSpec,
 		ePrefix.XCpy("numStrFmtSpec<-"))
@@ -18898,7 +18898,7 @@ func (numStrFmtSpec *NumStrFormatSpec) SetSignedNumDefaultsUS(
 		return err
 	}
 
-	return new(numStrFmtSpecNanobot).setSignedNStrFmtUSMinus(
+	return new(numStrFmtSpecNanobot).setSignedNumDefaultsUSMinus(
 		numStrFmtSpec,
 		numberFieldSpec,
 		ePrefix.XCpy("numStrFmtSpec<-"))

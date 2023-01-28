@@ -2770,7 +2770,7 @@ func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setNStrNumberFieldSpec(
 	return err
 }
 
-//	setSignedNStrFmtFrance
+//	setSignedNumDefaultsFrance
 //
 //	Deletes and resets the member variable data values
 //	stored in the instance of NumStrFormatSpec passed
@@ -2952,7 +2952,7 @@ func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setNStrNumberFieldSpec(
 //		If an error message is returned, the text value for input
 //		parameter 'errPrefDto' (error prefix) will be prefixed or
 //		attached at the beginning of the error message.
-func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtFrance(
+func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setSignedNumDefaultsFrance(
 	numStrFmtSpec *NumStrFormatSpec,
 	numberFieldSpec NumStrNumberFieldSpec,
 	errPrefDto *ePref.ErrPrefixDto) (
@@ -2972,7 +2972,7 @@ func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtFrance(
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
 		"numStrFmtSpecNanobot."+
-			"setSignedNStrFmtFrance()",
+			"setSignedNumDefaultsFrance()",
 		"")
 
 	if err != nil {
@@ -3030,7 +3030,7 @@ func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtFrance(
 		ePrefix.XCpy("numStrFmtSpec<-"))
 }
 
-//	setSignedNStrFmtGermany
+//	setSignedNumDefaultsGermany
 //
 //	Deletes and resets the member variable data values
 //	stored in the instance of NumStrFormatSpec passed
@@ -3215,7 +3215,7 @@ func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtFrance(
 //		If an error message is returned, the text value for input
 //		parameter 'errPrefDto' (error prefix) will be prefixed or
 //		attached at the beginning of the error message.
-func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtGermany(
+func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setSignedNumDefaultsGermany(
 	numStrFmtSpec *NumStrFormatSpec,
 	numberFieldSpec NumStrNumberFieldSpec,
 	errPrefDto *ePref.ErrPrefixDto) (
@@ -3235,7 +3235,7 @@ func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtGermany(
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
 		"numStrFmtSpecNanobot."+
-			"setSignedNStrFmtGermany()",
+			"setSignedNumDefaultsGermany()",
 		"")
 
 	if err != nil {
@@ -3293,7 +3293,7 @@ func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtGermany(
 		ePrefix.XCpy("numStrFmtSpec<-"))
 }
 
-//	setSignedNStrFmtUKMinus
+//	setSignedNumDefaultsUKMinus
 //
 //	Deletes and resets the member variable data values
 //	stored in the instance of NumStrFormatSpec passed
@@ -3481,7 +3481,7 @@ func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtGermany(
 //		for input parameter 'errPrefDto' (error prefix)
 //		will be prefixed or attached at the beginning of
 //		the error message.
-func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtUKMinus(
+func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setSignedNumDefaultsUKMinus(
 	numStrFmtSpec *NumStrFormatSpec,
 	numberFieldSpec NumStrNumberFieldSpec,
 	errPrefDto *ePref.ErrPrefixDto) (
@@ -3501,7 +3501,7 @@ func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtUKMinus(
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
 		"numStrFmtSpecNanobot."+
-			"setSignedNStrFmtUKMinus()",
+			"setSignedNumDefaultsUKMinus()",
 		"")
 
 	if err != nil {
@@ -3559,7 +3559,7 @@ func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtUKMinus(
 		ePrefix.XCpy("numStrFmtSpec<-"))
 }
 
-// setSignedNStrFmtUSMinus
+// setSignedNumDefaultsUSMinus
 //
 // Deletes and resets the member variable data values
 // stored in the instance of NumStrFormatSpec passed
@@ -3747,7 +3747,7 @@ func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtUKMinus(
 //		for input parameter 'errPrefDto' (error prefix)
 //		will be prefixed or attached at the beginning of
 //		the error message.
-func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtUSMinus(
+func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setSignedNumDefaultsUSMinus(
 	numStrFmtSpec *NumStrFormatSpec,
 	numberFieldSpec NumStrNumberFieldSpec,
 	errPrefDto *ePref.ErrPrefixDto) (
@@ -3767,7 +3767,7 @@ func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtUSMinus(
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
 		"numStrFmtSpecNanobot."+
-			"setSignedNStrFmtUSMinus()",
+			"setSignedNumDefaultsUSMinus()",
 		"")
 
 	if err != nil {
@@ -3825,7 +3825,7 @@ func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtUSMinus(
 		ePrefix.XCpy("numStrFmtSpec<-"))
 }
 
-// setSignedNStrFmtUSParen
+// setSignedNumDefaultsUSParen
 //
 // Deletes and resets the member variable data values
 // stored in the instance of NumStrFormatSpec passed
@@ -4029,7 +4029,7 @@ func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtUSMinus(
 //		for input parameter 'errPrefDto' (error prefix)
 //		will be prefixed or attached at the beginning of
 //		the error message.
-func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtUSParen(
+func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setSignedNumDefaultsUSParen(
 	numStrFmtSpec *NumStrFormatSpec,
 	numberFieldSpec NumStrNumberFieldSpec,
 	errPrefDto *ePref.ErrPrefixDto) (
@@ -4049,7 +4049,7 @@ func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setSignedNStrFmtUSParen(
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
 		"numStrFmtSpecNanobot."+
-			"setSignedNStrFmtUSParen()",
+			"setSignedNumDefaultsUSParen()",
 		"")
 
 	if err != nil {
