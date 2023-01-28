@@ -2149,7 +2149,7 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setCurrencySimp
 	return err
 }
 
-//	setNumberSymbolRunes
+//	setFmtParamsRunes
 //
 //	Receives a pointer to an instance of
 //	NumStrNumberSymbolGroup ('nStrNumSymbolGroup') and
@@ -2683,7 +2683,7 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setCurrencySimp
 //		for input parameter 'errPrefDto' (error prefix)
 //		will be prefixed or attached at the beginning of
 //		the error message.
-func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setNumberSymbolRunes(
+func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setFmtParamsRunes(
 	nStrNumSymbolGroup *NumStrNumberSymbolGroup,
 	leadingPositiveNumberSymbols []rune,
 	trailingPositiveNumberSymbols []rune,
@@ -2716,7 +2716,7 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setNumberSymbol
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
 		"numStrNumberSymbolGroupMechanics."+
-			"setNumberSymbolRunes()",
+			"setFmtParamsRunes()",
 		"")
 
 	if err != nil {
