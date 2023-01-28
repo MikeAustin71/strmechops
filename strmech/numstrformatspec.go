@@ -7490,7 +7490,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtParams(
 	}
 
 	err = new(numStrFmtSpecNanobot).
-		setNStrNumberFieldSpec(
+		setNumFmtParams(
 			&newNumFmtSpec,
 			[]rune(decSeparatorChars),
 			[]rune(intSeparatorChars),
@@ -8152,7 +8152,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtParamsRunes(
 	}
 
 	err = new(numStrFmtSpecNanobot).
-		setNStrNumberFieldSpec(
+		setNumFmtParams(
 			&newSignedNumFmtSpec,
 			decSeparatorChars,
 			intSeparatorChars,
@@ -17251,7 +17251,7 @@ func (numStrFmtSpec *NumStrFormatSpec) SetNumFmtParams(
 	}
 
 	err = new(numStrFmtSpecNanobot).
-		setNStrNumberFieldSpec(
+		setNumFmtParams(
 			numStrFmtSpec,
 			[]rune(decSeparatorChars),
 			[]rune(intGroupingChars),
@@ -17935,7 +17935,7 @@ func (numStrFmtSpec *NumStrFormatSpec) SetNumFmtParamsRunes(
 	}
 
 	err = new(numStrFmtSpecNanobot).
-		setNStrNumberFieldSpec(
+		setNumFmtParams(
 			numStrFmtSpec,
 			decSeparatorChars,
 			intGroupingChars,

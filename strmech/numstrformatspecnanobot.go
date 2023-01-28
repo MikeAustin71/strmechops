@@ -2091,7 +2091,7 @@ func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setCurrencyDefaultsUSParen(
 		ePrefix.XCpy("numStrFmtSpec<-"))
 }
 
-//	setNStrNumberFieldSpec
+//	setNumFmtParams
 //
 //	Deletes and resets the member variable data values
 //	stored in the instance of NumStrFormatSpec passed
@@ -2654,7 +2654,7 @@ func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setCurrencyDefaultsUSParen(
 //		for input parameter 'errPrefDto' (error prefix)
 //		will be prefixed or attached at the beginning of
 //		the error message.
-func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setNStrNumberFieldSpec(
+func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setNumFmtParams(
 	numStrFmtSpec *NumStrFormatSpec,
 	decSeparatorChars []rune,
 	intGroupingChars []rune,
@@ -2691,7 +2691,7 @@ func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setNStrNumberFieldSpec(
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
 		"numStrFmtSpecNanobot."+
-			"setNStrNumberFieldSpec()",
+			"setNumFmtParams()",
 		"")
 
 	if err != nil {
