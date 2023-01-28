@@ -2738,7 +2738,7 @@ func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setNumFmtParams(
 
 	numStrFmtSpec.numberSymbolsGroup,
 		err = new(NumStrNumberSymbolGroup).
-		NewFmtParamsRunes(
+		NewCurrencyParamsRunes(
 			leadingPosNumSign,
 			trailingPosNumSign,
 			positiveNumFieldSymPosition,
