@@ -3831,7 +3831,7 @@ func TestNumberStrKernel_NewParseGermanNumberStr_000100(t *testing.T) {
 		return
 	}
 
-	testName = fmt.Sprintf("Test #5 FmtCurrencyNumStrUSMinus()\n"+
+	testName = fmt.Sprintf("Test #5 FmtCurrencyDefaultsUSMinus()\n"+
 		"origNumberStr  = %v",
 		origNumberStr)
 
@@ -3847,7 +3847,7 @@ func TestNumberStrKernel_NewParseGermanNumberStr_000100(t *testing.T) {
 	}
 
 	fmtNumberStr,
-		err = nStrKernel02.FmtCurrencyNumStrUSMinus(
+		err = nStrKernel02.FmtCurrencyDefaultsUSMinus(
 		numberFieldSpec,
 		roundingSpec,
 		ePrefix.XCpy(

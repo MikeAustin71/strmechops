@@ -2633,7 +2633,7 @@ func (numStrKernel *NumberStrKernel) FmtCountryCurrencyNumStr(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumberStrKernel."+
-			"FmtCurrencyNumStrFrance()",
+			"FmtCountryCurrencyNumStr()",
 		"")
 
 	if err != nil {
@@ -3135,7 +3135,7 @@ func (numStrKernel *NumberStrKernel) FmtCountrySignedNumStr(
 			ePrefix.XCpy("numStrKernel"))
 }
 
-//	FmtCurrencyNumStrFrance
+//	FmtCurrencyDefaultsFrance
 //
 //	Returns a formatted number string based on the
 //	numeric value contained in the current instance
@@ -3155,7 +3155,7 @@ func (numStrKernel *NumberStrKernel) FmtCountrySignedNumStr(
 //	For information on German Number String
 //	formatting conventions, see method:
 //
-//		NumberStrKernel.FmtCurrencyNumStrGermany()
+//		NumberStrKernel.FmtCurrencyDefaultsGermany()
 //
 //	If custom decimal separator, integer separators,
 //	negative number sign characters or currency
@@ -3612,7 +3612,7 @@ func (numStrKernel *NumberStrKernel) FmtCountrySignedNumStr(
 //	 	chain and text passed by input parameter, 'errorPrefix'.
 //	 	The 'errorPrefix' text will be attached to the beginning
 //	 	of the error message.
-func (numStrKernel *NumberStrKernel) FmtCurrencyNumStrFrance(
+func (numStrKernel *NumberStrKernel) FmtCurrencyDefaultsFrance(
 	numberFieldSpec NumStrNumberFieldSpec,
 	roundingSpec NumStrRoundingSpec,
 	errorPrefix interface{}) (
@@ -3637,7 +3637,7 @@ func (numStrKernel *NumberStrKernel) FmtCurrencyNumStrFrance(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumberStrKernel."+
-			"FmtCurrencyNumStrFrance()",
+			"FmtCurrencyDefaultsFrance()",
 		"")
 
 	if err != nil {
@@ -3665,7 +3665,7 @@ func (numStrKernel *NumberStrKernel) FmtCurrencyNumStrFrance(
 
 }
 
-//	FmtCurrencyNumStrGermany
+//	FmtCurrencyDefaultsGermany
 //
 //	Returns a formatted number string based on the
 //	numeric value contained in the current instance
@@ -3685,7 +3685,7 @@ func (numStrKernel *NumberStrKernel) FmtCurrencyNumStrFrance(
 //	For information on French Number String
 //	formatting conventions, see method:
 //
-//		NumberStrKernel.FmtCurrencyNumStrFrance()
+//		NumberStrKernel.FmtCurrencyDefaultsFrance()
 //
 //	If custom decimal separator, integer separators,
 //	negative number sign characters or currency
@@ -4141,7 +4141,7 @@ func (numStrKernel *NumberStrKernel) FmtCurrencyNumStrFrance(
 //	 	chain and text passed by input parameter, 'errorPrefix'.
 //	 	The 'errorPrefix' text will be attached to the beginning
 //	 	of the error message.
-func (numStrKernel *NumberStrKernel) FmtCurrencyNumStrGermany(
+func (numStrKernel *NumberStrKernel) FmtCurrencyDefaultsGermany(
 	numberFieldSpec NumStrNumberFieldSpec,
 	roundingSpec NumStrRoundingSpec,
 	errorPrefix interface{}) (
@@ -4163,7 +4163,7 @@ func (numStrKernel *NumberStrKernel) FmtCurrencyNumStrGermany(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumberStrKernel."+
-			"FmtCurrencyNumStrGermany()",
+			"FmtCurrencyDefaultsGermany()",
 		"")
 
 	if err != nil {
@@ -4191,7 +4191,7 @@ func (numStrKernel *NumberStrKernel) FmtCurrencyNumStrGermany(
 
 }
 
-// FmtCurrencyNumStrUK
+// FmtCurrencyDefaultsUKMinus
 //
 //	Returns a formatted number string based on the
 //	numeric value contained in the current instance
@@ -4655,7 +4655,7 @@ func (numStrKernel *NumberStrKernel) FmtCurrencyNumStrGermany(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (numStrKernel *NumberStrKernel) FmtCurrencyNumStrUK(
+func (numStrKernel *NumberStrKernel) FmtCurrencyDefaultsUKMinus(
 	numberFieldSpec NumStrNumberFieldSpec,
 	roundingSpec NumStrRoundingSpec,
 	errorPrefix interface{}) (
@@ -4677,7 +4677,7 @@ func (numStrKernel *NumberStrKernel) FmtCurrencyNumStrUK(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumberStrKernel."+
-			"FmtCurrencyNumStrUK()",
+			"FmtCurrencyDefaultsUKMinus()",
 		"")
 
 	if err != nil {
@@ -4704,7 +4704,7 @@ func (numStrKernel *NumberStrKernel) FmtCurrencyNumStrUK(
 			ePrefix.XCpy("numStrKernel"))
 }
 
-//	FmtCurrencyNumStrUSMinus
+//	FmtCurrencyDefaultsUSMinus
 //
 //	Returns a formatted number string based on the
 //	numeric value contained in the current instance
@@ -5173,7 +5173,7 @@ func (numStrKernel *NumberStrKernel) FmtCurrencyNumStrUK(
 //	 	chain and text passed by input parameter, 'errorPrefix'.
 //	 	The 'errorPrefix' text will be attached to the beginning
 //	 	of the error message.
-func (numStrKernel *NumberStrKernel) FmtCurrencyNumStrUSMinus(
+func (numStrKernel *NumberStrKernel) FmtCurrencyDefaultsUSMinus(
 	numberFieldSpec NumStrNumberFieldSpec,
 	roundingSpec NumStrRoundingSpec,
 	errorPrefix interface{}) (
@@ -5195,7 +5195,7 @@ func (numStrKernel *NumberStrKernel) FmtCurrencyNumStrUSMinus(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumberStrKernel."+
-			"FmtCurrencyNumStrUSMinus()",
+			"FmtCurrencyDefaultsUSMinus()",
 		"")
 
 	if err != nil {
@@ -5222,7 +5222,7 @@ func (numStrKernel *NumberStrKernel) FmtCurrencyNumStrUSMinus(
 			ePrefix.XCpy("numStrKernel"))
 }
 
-//	FmtCurrencyNumStrUSParen
+//	FmtCurrencyDefaultsUSParen
 //
 //	Returns a formatted number string based on the
 //	numeric value contained in the current instance
@@ -5690,7 +5690,7 @@ func (numStrKernel *NumberStrKernel) FmtCurrencyNumStrUSMinus(
 //	 	chain and text passed by input parameter, 'errorPrefix'.
 //	 	The 'errorPrefix' text will be attached to the beginning
 //	 	of the error message.
-func (numStrKernel *NumberStrKernel) FmtCurrencyNumStrUSParen(
+func (numStrKernel *NumberStrKernel) FmtCurrencyDefaultsUSParen(
 	numberFieldSpec NumStrNumberFieldSpec,
 	roundingSpec NumStrRoundingSpec,
 	errorPrefix interface{}) (
@@ -5712,7 +5712,7 @@ func (numStrKernel *NumberStrKernel) FmtCurrencyNumStrUSParen(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumberStrKernel."+
-			"FmtCurrencyNumStrUSParen()",
+			"FmtCurrencyDefaultsUSParen()",
 		"")
 
 	if err != nil {
