@@ -6018,17 +6018,18 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencySimple(
 		return newNumStrFmtSpec, err
 	}
 
-	err = new(numStrFmtSpecNanobot).setCurrencyNStrFmtSimple(
-		&newNumStrFmtSpec,
-		[]rune(decSeparatorChars),
-		[]rune(intSeparatorChars),
-		[]rune(currencySymbols),
-		leadingCurrencySymbols,
-		leadingMinusSign,
-		numFieldLength,
-		numFieldJustification,
-		ePrefix.XCpy(
-			"newNumStrFmtSpec<-"))
+	err = new(numStrFmtSpecMechanics).
+		setCurrencyNStrFmtSimple(
+			&newNumStrFmtSpec,
+			[]rune(decSeparatorChars),
+			[]rune(intSeparatorChars),
+			[]rune(currencySymbols),
+			leadingCurrencySymbols,
+			leadingMinusSign,
+			numFieldLength,
+			numFieldJustification,
+			ePrefix.XCpy(
+				"newNumStrFmtSpec<-"))
 
 	return newNumStrFmtSpec, err
 }
@@ -6406,17 +6407,18 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencySimpleRunes(
 		return newNumStrFmtSpec, err
 	}
 
-	err = new(numStrFmtSpecNanobot).setCurrencyNStrFmtSimple(
-		&newNumStrFmtSpec,
-		decSeparatorChars,
-		intSeparatorChars,
-		currencySymbols,
-		leadingCurrencySymbols,
-		leadingMinusSign,
-		numFieldLength,
-		numFieldJustification,
-		ePrefix.XCpy(
-			"newNumStrFmtSpec<-"))
+	err = new(numStrFmtSpecMechanics).
+		setCurrencyNStrFmtSimple(
+			&newNumStrFmtSpec,
+			decSeparatorChars,
+			intSeparatorChars,
+			currencySymbols,
+			leadingCurrencySymbols,
+			leadingMinusSign,
+			numFieldLength,
+			numFieldJustification,
+			ePrefix.XCpy(
+				"newNumStrFmtSpec<-"))
 
 	return newNumStrFmtSpec, err
 }
@@ -15098,17 +15100,18 @@ func (numStrFmtSpec *NumStrFormatSpec) SetCurrencySimple(
 		return err
 	}
 
-	return new(numStrFmtSpecNanobot).setCurrencyNStrFmtSimple(
-		numStrFmtSpec,
-		[]rune(decSeparatorChars),
-		[]rune(intSeparatorChars),
-		[]rune(currencySymbols),
-		leadingCurrencySymbols,
-		leadingMinusSign,
-		numFieldLength,
-		numFieldJustification,
-		ePrefix.XCpy(
-			"newNumStrFmtSpec<-"))
+	return new(numStrFmtSpecMechanics).
+		setCurrencyNStrFmtSimple(
+			numStrFmtSpec,
+			[]rune(decSeparatorChars),
+			[]rune(intSeparatorChars),
+			[]rune(currencySymbols),
+			leadingCurrencySymbols,
+			leadingMinusSign,
+			numFieldLength,
+			numFieldJustification,
+			ePrefix.XCpy(
+				"newNumStrFmtSpec<-"))
 
 }
 
@@ -15528,17 +15531,18 @@ func (numStrFmtSpec *NumStrFormatSpec) SetCurrencySimpleRunes(
 		return err
 	}
 
-	return new(numStrFmtSpecNanobot).setCurrencyNStrFmtSimple(
-		numStrFmtSpec,
-		decSeparatorChars,
-		intSeparatorChars,
-		currencySymbols,
-		leadingCurrencySymbols,
-		leadingMinusSign,
-		numFieldLength,
-		numFieldJustification,
-		ePrefix.XCpy(
-			"newNumStrFmtSpec<-"))
+	return new(numStrFmtSpecMechanics).
+		setCurrencyNStrFmtSimple(
+			numStrFmtSpec,
+			decSeparatorChars,
+			intSeparatorChars,
+			currencySymbols,
+			leadingCurrencySymbols,
+			leadingMinusSign,
+			numFieldLength,
+			numFieldJustification,
+			ePrefix.XCpy(
+				"newNumStrFmtSpec<-"))
 
 }
 
