@@ -5050,7 +5050,8 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewCurrencyParams(
 //
 //		Currency Symbols are optional. If Currency
 //		Symbols are not required, set
-//		'leadingCurrencySymbol' to 'nil'.
+//		'leadingCurrencySymbol' to a 'nil' or empty
+//		rune array.
 //
 //	trailingCurrencySymbol     		[]rune
 //
@@ -5070,7 +5071,8 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewCurrencyParams(
 //
 //		Currency Symbols are optional. If Currency
 //		Symbols are not required, set
-//		'trailingCurrencySymbol' to 'nil'.
+//		'trailingCurrencySymbol' to a 'nil' or empty
+//		rune array.
 //
 //	currencyInsideNumSymbol			bool
 //
