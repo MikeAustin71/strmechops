@@ -77,7 +77,7 @@ import (
 //		NumStrNumberSymbolGroup.NewCurrencyParamsRunes()
 //		NumStrNumberSymbolGroup.NewCurrencyParams()
 //		NumStrNumberSymbolGroup.NewFmtComponents()
-//		NumStrNumberSymbolGroup.SetSymbolsRunes()
+//		NumStrNumberSymbolGroup.SetCurrencyParamsRunes()
 //		NumStrNumberSymbolGroup.SetSymbolsStrings()
 //		NumStrNumberSymbolGroup.SetSymbolsSpecs()
 type NumStrNumberSymbolGroup struct {
@@ -11186,7 +11186,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencyDefaultsUSParen(
 //	multinational or multicultural currency number
 //	symbol formatting requirements:
 //
-//		NumStrNumberSymbolGroup.SetSymbolsRunes()
+//		NumStrNumberSymbolGroup.SetCurrencyParamsRunes()
 //		NumStrNumberSymbolGroup.SetSymbolsStrings()
 //		NumStrNumberSymbolGroup.SetSymbolsSpecs()
 //
@@ -11508,7 +11508,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencySimple(
 //	multinational or multicultural currency number
 //	symbol formatting requirements:
 //
-//		NumStrNumberSymbolGroup.SetSymbolsRunes()
+//		NumStrNumberSymbolGroup.SetCurrencyParamsRunes()
 //		NumStrNumberSymbolGroup.SetSymbolsStrings()
 //		NumStrNumberSymbolGroup.SetSymbolsSpecs()
 //
@@ -15173,7 +15173,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSignedNumDefaultsUSParen(
 //	methods to implement specialized multinational or
 //	multicultural signed number symbol formatting:
 //
-//		NumStrNumberSymbolGroup.SetSymbolsRunes()
+//		NumStrNumberSymbolGroup.SetCurrencyParamsRunes()
 //		NumStrNumberSymbolGroup.SetSymbolsStrings()
 //		NumStrNumberSymbolGroup.SetSymbolsSpecs()
 //
@@ -15383,7 +15383,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSignedNumSimple(
 				"nStrNumSymbolsGroup<-"))
 }
 
-//	SetSymbolsRunes
+//	SetCurrencyParamsRunes
 //
 //	Reconfigures the current instance of
 //	NumStrNumberSymbolGroup based on the Positive,
@@ -15967,7 +15967,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSignedNumSimple(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSymbolsRunes(
+func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencyParamsRunes(
 	leadingPositiveNumberSymbols []rune,
 	trailingPositiveNumberSymbols []rune,
 	positiveNumFieldSymPosition NumberFieldSymbolPosition,
@@ -15999,7 +15999,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSymbolsRunes(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumStrNumberSymbolGroup."+
-			"SetSymbolsRunes()",
+			"SetCurrencyParamsRunes()",
 		"")
 
 	if err != nil {
