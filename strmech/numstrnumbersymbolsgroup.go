@@ -8330,7 +8330,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSignedNumParams(
 	}
 
 	err = new(numStrNumberSymbolGroupMechanics).
-		setSignedNumParamsRunes(
+		setSignedNumParams(
 			&newNumberSymbols,
 			[]rune(leadingPositiveNumberSymbols),
 			[]rune(trailingPositiveNumberSymbols),
@@ -8854,7 +8854,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSignedNumParamsRunes(
 	}
 
 	err = new(numStrNumberSymbolGroupMechanics).
-		setSignedNumParamsRunes(
+		setSignedNumParams(
 			&newNumberSymbols,
 			leadingPositiveNumberSymbols,
 			trailingPositiveNumberSymbols,
