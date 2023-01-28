@@ -5957,7 +5957,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewFmtComponents(
 	}
 
 	err = new(numStrNumberSymbolGroupMechanics).
-		setCurrencySymbolSpecs(
+		setCurrencyComponents(
 			&newNumberSymbols,
 			positiveNumberSign,
 			negativeNumberSign,
@@ -13227,7 +13227,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencyComponents(
 	}
 
 	return new(numStrNumberSymbolGroupMechanics).
-		setCurrencySymbolSpecs(
+		setCurrencyComponents(
 			nStrNumSymbolsGroup,
 			positiveNumberSign,
 			negativeNumberSign,
