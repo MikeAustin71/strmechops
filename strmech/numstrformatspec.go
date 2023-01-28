@@ -6019,7 +6019,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencySimple(
 	}
 
 	err = new(numStrFmtSpecMechanics).
-		setCurrencyNStrFmtSimple(
+		setCurrencySimple(
 			&newNumStrFmtSpec,
 			[]rune(decSeparatorChars),
 			[]rune(intSeparatorChars),
@@ -6408,7 +6408,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencySimpleRunes(
 	}
 
 	err = new(numStrFmtSpecMechanics).
-		setCurrencyNStrFmtSimple(
+		setCurrencySimple(
 			&newNumStrFmtSpec,
 			decSeparatorChars,
 			intSeparatorChars,
@@ -15101,7 +15101,7 @@ func (numStrFmtSpec *NumStrFormatSpec) SetCurrencySimple(
 	}
 
 	return new(numStrFmtSpecMechanics).
-		setCurrencyNStrFmtSimple(
+		setCurrencySimple(
 			numStrFmtSpec,
 			[]rune(decSeparatorChars),
 			[]rune(intSeparatorChars),
@@ -15532,7 +15532,7 @@ func (numStrFmtSpec *NumStrFormatSpec) SetCurrencySimpleRunes(
 	}
 
 	return new(numStrFmtSpecMechanics).
-		setCurrencyNStrFmtSimple(
+		setCurrencySimple(
 			numStrFmtSpec,
 			decSeparatorChars,
 			intSeparatorChars,

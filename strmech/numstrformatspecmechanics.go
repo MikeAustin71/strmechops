@@ -623,7 +623,7 @@ func (nStrFmtSpecMechanics *numStrFmtSpecMechanics) setCurrencyBasic(
 		ePrefix.XCpy("numStrFmtSpec<-"))
 }
 
-//	setCurrencyNStrFmtSimple
+//	setCurrencySimple
 //
 //	Deletes all the data values and reconfigures an
 //	instance of NumStrFormatSpec for Currency Number
@@ -949,7 +949,7 @@ func (nStrFmtSpecMechanics *numStrFmtSpecMechanics) setCurrencyBasic(
 //		for input parameter 'errPrefDto' (error prefix)
 //		will be prefixed or attached at the beginning of
 //		the error message.
-func (nStrFmtSpecMechanics *numStrFmtSpecMechanics) setCurrencyNStrFmtSimple(
+func (nStrFmtSpecMechanics *numStrFmtSpecMechanics) setCurrencySimple(
 	numStrFmtSpec *NumStrFormatSpec,
 	decSeparatorChars []rune,
 	intSeparatorChars []rune,
@@ -975,7 +975,7 @@ func (nStrFmtSpecMechanics *numStrFmtSpecMechanics) setCurrencyNStrFmtSimple(
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
 		"numStrFmtSpecNanobot."+
-			"setCurrencyNStrFmtSimple()",
+			"setCurrencySimple()",
 		"")
 
 	if err != nil {
