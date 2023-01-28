@@ -4080,7 +4080,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyDefaultsFrance(
 		return newFrenchCurrencyNumFmtSpec, err
 	}
 
-	err = new(numStrFmtSpecNanobot).setCurrencyNStrFmtFrance(
+	err = new(numStrFmtSpecNanobot).setCurrencyDefaultsFrance(
 		&newFrenchCurrencyNumFmtSpec,
 		numberFieldSpec,
 		ePrefix.XCpy("newFrenchCurrencyNumFmtSpec<-"))
@@ -4397,7 +4397,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyDefaultsGermany(
 		return newGermanCurrencyNumFmtSpec, err
 	}
 
-	err = new(numStrFmtSpecNanobot).setCurrencyNStrFmtGermany(
+	err = new(numStrFmtSpecNanobot).setCurrencyDefaultsGermany(
 		&newGermanCurrencyNumFmtSpec,
 		numberFieldSpec,
 		ePrefix.XCpy("newGermanCurrencyNumFmtSpec<-"))
@@ -4714,7 +4714,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyDefaultsUKMinusInside(
 		return newUKCurrencyNumFmtSpec, err
 	}
 
-	err = new(numStrFmtSpecNanobot).setCurrencyNStrFmtUKMinusInside(
+	err = new(numStrFmtSpecNanobot).setCurrencyDefaultsUKMinusInside(
 		&newUKCurrencyNumFmtSpec,
 		numberFieldSpec,
 		ePrefix.XCpy("newUKCurrencyNumFmtSpec<-"))
@@ -5030,7 +5030,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyDefaultsUKMinusOutside(
 		return newUKCurrencyNumFmtSpec, err
 	}
 
-	err = new(numStrFmtSpecNanobot).setCurrencyNStrFmtUKMinusOutside(
+	err = new(numStrFmtSpecNanobot).setCurrencyDefaultsMinusOutside(
 		&newUKCurrencyNumFmtSpec,
 		numberFieldSpec,
 		ePrefix.XCpy("newUKCurrencyNumFmtSpec<-"))
@@ -5325,7 +5325,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyDefaultsUSMinus(
 	}
 
 	err = new(numStrFmtSpecNanobot).
-		setCurrencyNStrFmtUSMinus(
+		setCurrencyDefaultsUSMinus(
 			&newUSCurrencyNumFmtSpec,
 			numberFieldSpec,
 			ePrefix.XCpy(
@@ -5641,7 +5641,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyDefaultsUSParen(
 		return newUSCurrencyNumFmtSpec, err
 	}
 
-	err = new(numStrFmtSpecNanobot).setCurrencyNStrFmtUSParen(
+	err = new(numStrFmtSpecNanobot).setCurrencyDefaultsUSParen(
 		&newUSCurrencyNumFmtSpec,
 		numberFieldSpec,
 		ePrefix.XCpy("newUSCurrencyNumFmtSpec<-"))
@@ -13134,7 +13134,7 @@ func (numStrFmtSpec *NumStrFormatSpec) SetCurrencyDefaultsFrance(
 	}
 
 	return new(numStrFmtSpecNanobot).
-		setCurrencyNStrFmtFrance(
+		setCurrencyDefaultsFrance(
 			numStrFmtSpec,
 			numberFieldSpec,
 			ePrefix.XCpy("numStrFmtSpec<-"))
@@ -13450,7 +13450,7 @@ func (numStrFmtSpec *NumStrFormatSpec) SetCurrencyDefaultsGermany(
 	}
 
 	return new(numStrFmtSpecNanobot).
-		setCurrencyNStrFmtGermany(
+		setCurrencyDefaultsGermany(
 			numStrFmtSpec,
 			numberFieldSpec,
 			ePrefix.XCpy("numStrFmtSpec<-"))
@@ -13767,7 +13767,7 @@ func (numStrFmtSpec *NumStrFormatSpec) SetCurrencyDefaultsUKMinusInside(
 	}
 
 	return new(numStrFmtSpecNanobot).
-		setCurrencyNStrFmtUKMinusInside(
+		setCurrencyDefaultsUKMinusInside(
 			numStrFmtSpec,
 			numberFieldSpec,
 			ePrefix.XCpy("numStrFmtSpec<-"))
@@ -14082,7 +14082,7 @@ func (numStrFmtSpec *NumStrFormatSpec) SetCurrencyDefaultsUKMinusOutside(
 	}
 
 	return new(numStrFmtSpecNanobot).
-		setCurrencyNStrFmtUKMinusOutside(
+		setCurrencyDefaultsMinusOutside(
 			numStrFmtSpec,
 			numberFieldSpec,
 			ePrefix.XCpy("numStrFmtSpec<-"))
@@ -14377,7 +14377,7 @@ func (numStrFmtSpec *NumStrFormatSpec) SetCurrencyDefaultsUSMinus(
 	}
 
 	return new(numStrFmtSpecNanobot).
-		setCurrencyNStrFmtUSMinus(
+		setCurrencyDefaultsUSMinus(
 			numStrFmtSpec,
 			numberFieldSpec,
 			ePrefix.XCpy("numStrFmtSpec<-"))
@@ -14681,7 +14681,7 @@ func (numStrFmtSpec *NumStrFormatSpec) SetCurrencyDefaultsUSParen(
 	}
 
 	return new(numStrFmtSpecNanobot).
-		setCurrencyNStrFmtUSParen(
+		setCurrencyDefaultsUSParen(
 			numStrFmtSpec,
 			numberFieldSpec,
 			ePrefix.XCpy("numStrFmtSpec<-"))
