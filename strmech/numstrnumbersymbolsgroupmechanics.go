@@ -551,10 +551,11 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setCurrencyBasi
 
 //	setCurrencyComponents
 //
-//	Receives three NumStrNumberSymbolSpec objects and
-//	proceeds to reset the corresponding member variable
-//	data values for the NumStrNumberSymbolGroup input
-//	paramter 'nStrNumSymbols'.
+//	Receives an instance of NumStrNumberSymbolGroup,
+//	deletes the pre-existing data values and proceeds to
+//	reconfigure positive, zero, negative and currency
+//	number symbols according to number format
+//	specifications passed as input parameters.
 //
 // ----------------------------------------------------------------
 //
@@ -575,7 +576,8 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setCurrencyBasi
 //		Zero Number Sign Symbol Specifications for this
 //		instance will be deleted and reset to the values
 //		provided by input parameters 'positiveNumberSign',
-//		'negativeNumberSign' and 'zeroNumberSign'.
+//		'negativeNumberSign', 'zeroNumberSign' and
+//		'currencySymbols'.
 //
 //	positiveNumberSign			NumStrNumberSymbolSpec
 //
@@ -676,6 +678,9 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setCurrencyComp
 
 		return err
 	}
+
+	new(numStrNumberSymbolGroupNanobot).empty(
+		nStrNumSymbols)
 
 	err = nStrNumSymbols.positiveNumberSign.CopyIn(
 		&positiveNumberSign,
@@ -3777,6 +3782,168 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setSignedNumBas
 			&nStrNumSymbolGroup.negativeNumberSign,
 			ePrefix.XCpy(
 				"nStrNumSymbolGroup"))
+}
+
+//	setSignedNumComponents
+//
+//	Receives an instance of NumStrNumberSymbolGroup,
+//	deletes the pre-existing data values and proceeds to
+//	reconfigure the instance using signed number
+//	formatting input parameter values.
+//
+//	A signed number is an integer or floating point
+//	numeric value which does NOT contain currency
+//	symbols.
+//
+//	The currency symbol is configured as an empty 'NOP'
+//	placeholder value since by definition, signed numbers
+//	do not contain a currency symbol.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	Be advised that this method will delete and reset all
+//	the member variable data fields in input paramter,
+//	'nStrNumSymbols'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	nStrNumSymbols				*NumStrNumberSymbolGroup
+//
+//		A pointer to an instance of NumStrNumberSymbolGroup.
+//		The Positive Number Sign, Negative Number Sign and
+//		Zero Number Sign Symbol Specifications for this
+//		instance will be deleted and reset to the values
+//		provided by input parameters 'positiveNumberSign',
+//		'negativeNumberSign' and 'zeroNumberSign'.
+//
+//	positiveNumberSign			NumStrNumberSymbolSpec
+//
+//		This Positive Number Sign Symbol Specification
+//		will be copied to the corresponding Positive
+//		Symbol Specification in input paramter,
+//		'nStrNumSymbols'.
+//
+//	negativeNumberSign			NumStrNumberSymbolSpec
+//
+//		This Negative Number Sign Symbol Specification
+//		will be copied to the corresponding Negative
+//		Symbol Specification in input paramter,
+//		'nStrNumSymbols'.
+//
+//	zeroNumberSign			NumStrNumberSymbolSpec
+//
+//		This Zero Number Sign Symbol Specification
+//		will be copied to the corresponding Zero
+//		Symbol Specification in input paramter,
+//		'nStrNumSymbols'.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// -----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, this
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setSignedNumComponents(
+	nStrNumSymbols *NumStrNumberSymbolGroup,
+	positiveNumberSign NumStrNumberSymbolSpec,
+	negativeNumberSign NumStrNumberSymbolSpec,
+	zeroNumberSign NumStrNumberSymbolSpec,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if nStrNumSymbolsGroupMech.lock == nil {
+		nStrNumSymbolsGroupMech.lock = new(sync.Mutex)
+	}
+
+	nStrNumSymbolsGroupMech.lock.Lock()
+
+	defer nStrNumSymbolsGroupMech.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"numStrNumberSymbolGroupMechanics."+
+			"setSignedNumComponents()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if nStrNumSymbols == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'nStrNumSymbols' is invalid!\n"+
+			"'nStrNumSymbols' is a 'nil' pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	new(numStrNumberSymbolGroupNanobot).empty(
+		nStrNumSymbols)
+
+	nStrNumSymbols.currencySymbol.SetNOP()
+
+	err = nStrNumSymbols.positiveNumberSign.CopyIn(
+		&positiveNumberSign,
+		ePrefix.XCpy(
+			"nStrNumSymbols.positiveNumberSign<-"+
+				"positiveNumberSign"))
+
+	if err != nil {
+		return err
+	}
+
+	err = nStrNumSymbols.negativeNumberSign.CopyIn(
+		&negativeNumberSign,
+		ePrefix.XCpy(
+			"nStrNumSymbols.negativeNumberSign<-"+
+				"negativeNumberSign"))
+
+	if err != nil {
+		return err
+	}
+
+	err = nStrNumSymbols.zeroNumberSign.CopyIn(
+		&zeroNumberSign,
+		ePrefix.XCpy(
+			"nStrNumSymbols.zeroNumberSign<-"+
+				"zeroNumberSign"))
+
+	return err
 }
 
 //	setSignedNumDefaultsFrance

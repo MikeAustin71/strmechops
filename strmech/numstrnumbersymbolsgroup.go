@@ -76,7 +76,7 @@ import (
 //
 //		NumStrNumberSymbolGroup.NewCurrencyParamsRunes()
 //		NumStrNumberSymbolGroup.NewCurrencyParams()
-//		NumStrNumberSymbolGroup.NewFmtComponents()
+//		NumStrNumberSymbolGroup.NewCurrencyComponents()
 //		NumStrNumberSymbolGroup.SetCurrencyParamsRunes()
 //		NumStrNumberSymbolGroup.SetCurrencyParams()
 //		NumStrNumberSymbolGroup.SetCurrencyComponents()
@@ -2445,6 +2445,190 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewCurrencyBasicRunes(
 				"newNStrNumSymbols<-"))
 
 	return newNStrNumSymbols, err
+}
+
+//	NewCurrencyComponents
+//
+//	Creates and returns and instance of
+//	NumStrNumberSymbolGroup.
+//
+//	This type is used to configure Number Symbols
+//	required in converting numeric values to Number
+//	Strings.
+//
+//
+//	Type NumStrNumberSymbolGroup contains four instances
+//	of type NumStrNumberSymbolSpec defining the Number
+//	Symbols to be used with positive numeric values,
+//	negative numeric values, zero numeric values and
+//	currency values.
+//
+//	This method generates a new instance of
+//	NumStrNumberSymbolGroup using Positive, Negative, Zero
+//	Number Sign Symbols and Currency Symbol Specification
+//	objects passed as input parameters.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	positiveNumberSign			NumStrNumberSymbolSpec
+//
+//		This Positive Number Sign Symbol Specification
+//		will be copied to the corresponding Positive
+//		Symbol Specification in the new, returned
+//		instance of NumStrNumberSymbolGroup.
+//
+//	negativeNumberSign			NumStrNumberSymbolSpec
+//
+//		This Negative Number Sign Symbol Specification
+//		will be copied to the corresponding Negative
+//		Symbol Specification in the new, returned
+//		instance of NumStrNumberSymbolGroup.
+//
+//	zeroNumberSign			NumStrNumberSymbolSpec
+//
+//		This Zero Number Sign Symbol Specification
+//		will be copied to the corresponding Zero
+//		Symbol Specification in the new, returned
+//		instance of NumStrNumberSymbolGroup.
+//
+//	currencySymbols				NumStrNumberSymbolSpec
+//
+//		This Currency Symbols Specification	will be
+//		copied to the corresponding Currency Symbols
+//		Specification in the new, returned instance
+//		of NumStrNumberSymbolGroup.
+//
+//	 errorPrefix                interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it	contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	NumStrNumberSymbolGroup
+//
+//		If this method completes successfully, this
+//		parameter will return a new, fully populated
+//		instance of NumStrNumberSymbolGroup configured
+//		with the Positive, Negative and Zero Number
+//		Sign Symbol Specification objects passed as
+//		input parameters.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewCurrencyComponents(
+	positiveNumberSign NumStrNumberSymbolSpec,
+	negativeNumberSign NumStrNumberSymbolSpec,
+	zeroNumberSign NumStrNumberSymbolSpec,
+	currencySymbols NumStrNumberSymbolSpec,
+	errorPrefix interface{}) (
+	NumStrNumberSymbolGroup,
+	error) {
+
+	if nStrNumSymbolsGroup.lock == nil {
+		nStrNumSymbolsGroup.lock = new(sync.Mutex)
+	}
+
+	nStrNumSymbolsGroup.lock.Lock()
+
+	defer nStrNumSymbolsGroup.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	var newNumberSymbols NumStrNumberSymbolGroup
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumStrNumberSymbolGroup."+
+			"NewCurrencyComponents()",
+		"")
+
+	if err != nil {
+		return newNumberSymbols, err
+	}
+
+	err = new(numStrNumberSymbolGroupMechanics).
+		setCurrencyComponents(
+			&newNumberSymbols,
+			positiveNumberSign,
+			negativeNumberSign,
+			zeroNumberSign,
+			currencySymbols,
+			ePrefix.XCpy(
+				"newNumberSymbols"))
+
+	return newNumberSymbols, err
 }
 
 //	NewCurrencyDefaultsFrance
@@ -5175,7 +5359,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewCurrencyParamsRunes(
 //
 //		NumStrNumberSymbolGroup.NewCurrencyParamsRunes()
 //		NumStrNumberSymbolGroup.NewCurrencyParams()
-//		NumStrNumberSymbolGroup.NewFmtComponents()
+//		NumStrNumberSymbolGroup.NewCurrencyComponents()
 //
 // ----------------------------------------------------------------
 //
@@ -5499,7 +5683,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewCurrencySimple(
 //
 //		NumStrNumberSymbolGroup.NewCurrencyParamsRunes()
 //		NumStrNumberSymbolGroup.NewCurrencyParams()
-//		NumStrNumberSymbolGroup.NewFmtComponents()
+//		NumStrNumberSymbolGroup.NewCurrencyComponents()
 //
 // ----------------------------------------------------------------
 //
@@ -5783,190 +5967,6 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewCurrencySimpleRunes(
 			"newNStrNumSymbols<-"))
 
 	return newNStrNumSymbols, err
-}
-
-//	NewFmtComponents
-//
-//	Creates and returns and instance of
-//	NumStrNumberSymbolGroup.
-//
-//	This type is used to configure Number Symbols
-//	required in converting numeric values to Number
-//	Strings.
-//
-//
-//	Type NumStrNumberSymbolGroup contains four instances
-//	of type NumStrNumberSymbolSpec defining the Number
-//	Symbols to be used with positive numeric values,
-//	negative numeric values, zero numeric values and
-//	currency values.
-//
-//	This method generates a new instance of
-//	NumStrNumberSymbolGroup using Positive, Negative, Zero
-//	Number Sign Symbols and Currency Symbol Specification
-//	objects passed as input parameters.
-//
-// ----------------------------------------------------------------
-//
-// # Input Parameters
-//
-//	positiveNumberSign			NumStrNumberSymbolSpec
-//
-//		This Positive Number Sign Symbol Specification
-//		will be copied to the corresponding Positive
-//		Symbol Specification in the new, returned
-//		instance of NumStrNumberSymbolGroup.
-//
-//	negativeNumberSign			NumStrNumberSymbolSpec
-//
-//		This Negative Number Sign Symbol Specification
-//		will be copied to the corresponding Negative
-//		Symbol Specification in the new, returned
-//		instance of NumStrNumberSymbolGroup.
-//
-//	zeroNumberSign			NumStrNumberSymbolSpec
-//
-//		This Zero Number Sign Symbol Specification
-//		will be copied to the corresponding Zero
-//		Symbol Specification in the new, returned
-//		instance of NumStrNumberSymbolGroup.
-//
-//	currencySymbols				NumStrNumberSymbolSpec
-//
-//		This Currency Symbols Specification	will be
-//		copied to the corresponding Currency Symbols
-//		Specification in the new, returned instance
-//		of NumStrNumberSymbolGroup.
-//
-//	 errorPrefix                interface{}
-//
-//		This object encapsulates error prefix text which
-//		is included in all returned error messages.
-//		Usually, it	contains the name of the calling
-//		method or methods listed as a method or function
-//		chain of execution.
-//
-//		If no error prefix information is needed, set this
-//		parameter to 'nil'.
-//
-//		This empty interface must be convertible to one of
-//		the following types:
-//
-//		1.	nil
-//				A nil value is valid and generates an
-//				empty collection of error prefix and
-//				error context information.
-//
-//		2.	string
-//				A string containing error prefix
-//				information.
-//
-//		3.	[]string
-//				A one-dimensional slice of strings
-//				containing error prefix information.
-//
-//		4.	[][2]string
-//				A two-dimensional slice of strings
-//		   		containing error prefix and error
-//		   		context information.
-//
-//		5.	ErrPrefixDto
-//				An instance of ErrPrefixDto.
-//				Information from this object will
-//				be copied for use in error and
-//				informational messages.
-//
-//		6.	*ErrPrefixDto
-//				A pointer to an instance of
-//				ErrPrefixDto. Information from
-//				this object will be copied for use
-//				in error and informational messages.
-//
-//		7.	IBasicErrorPrefix
-//				An interface to a method
-//				generating a two-dimensional slice
-//				of strings containing error prefix
-//				and error context information.
-//
-//		If parameter 'errorPrefix' is NOT convertible
-//		to one of the valid types listed above, it will
-//		be considered invalid and trigger the return of
-//		an error.
-//
-//		Types ErrPrefixDto and IBasicErrorPrefix are
-//		included in the 'errpref' software package:
-//			"github.com/MikeAustin71/errpref".
-//
-// ----------------------------------------------------------------
-//
-// # Return Values
-//
-//	NumStrNumberSymbolGroup
-//
-//		If this method completes successfully, this
-//		parameter will return a new, fully populated
-//		instance of NumStrNumberSymbolGroup configured
-//		with the Positive, Negative and Zero Number
-//		Sign Symbol Specification objects passed as
-//		input parameters.
-//
-//	error
-//
-//		If this method completes successfully, the
-//		returned error Type is set equal to 'nil'.
-//
-//		If errors are encountered during processing, the
-//		returned error Type will encapsulate an error
-//		message. This returned error message will
-//		incorporate the method chain and text passed by
-//		input parameter, 'errorPrefix'. The 'errorPrefix'
-//		text will be attached to the beginning of the
-//		error message.
-func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewFmtComponents(
-	positiveNumberSign NumStrNumberSymbolSpec,
-	negativeNumberSign NumStrNumberSymbolSpec,
-	zeroNumberSign NumStrNumberSymbolSpec,
-	currencySymbols NumStrNumberSymbolSpec,
-	errorPrefix interface{}) (
-	NumStrNumberSymbolGroup,
-	error) {
-
-	if nStrNumSymbolsGroup.lock == nil {
-		nStrNumSymbolsGroup.lock = new(sync.Mutex)
-	}
-
-	nStrNumSymbolsGroup.lock.Lock()
-
-	defer nStrNumSymbolsGroup.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-
-	var err error
-
-	var newNumberSymbols NumStrNumberSymbolGroup
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
-		"NumStrNumberSymbolGroup."+
-			"NewFmtComponents()",
-		"")
-
-	if err != nil {
-		return newNumberSymbols, err
-	}
-
-	err = new(numStrNumberSymbolGroupMechanics).
-		setCurrencyComponents(
-			&newNumberSymbols,
-			positiveNumberSign,
-			negativeNumberSign,
-			zeroNumberSign,
-			currencySymbols,
-			ePrefix.XCpy(
-				"newNumberSymbols"))
-
-	return newNumberSymbols, err
 }
 
 //	NewNOP Creates and returns a new instance of
@@ -8913,7 +8913,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewSignedNumParamsRunes(
 //
 //		NumStrNumberSymbolGroup.NewCurrencyParamsRunes()
 //		NumStrNumberSymbolGroup.NewCurrencyParams()
-//		NumStrNumberSymbolGroup.NewFmtComponents()
+//		NumStrNumberSymbolGroup.NewCurrencyComponents()
 //
 // ----------------------------------------------------------------
 //
@@ -9842,6 +9842,172 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencyBasicRunes(
 			numSymbolFieldPosition,
 			ePrefix.XCpy(
 				"nStrNumSymbolsGroup<-"))
+}
+
+//	SetCurrencyComponents
+//
+//	Reconfigures the current instance of
+//	NumStrNumberSymbolGroup based on the Positive,
+//	Negative Zero Number Sign and Currency Symbol
+//	Specification objects passed as input parameters.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	Be advised that the data fields contained in the
+//	current instance of NumStrNumberSymbolGroup will be
+//	deleted and replaced with the Positive, Negative
+//	Zero Number Sign and Currency Symbol Specifications
+//	passed as input parameters.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	positiveNumberSign			NumStrNumberSymbolSpec
+//
+//		This Positive Number Sign Symbol Specification
+//		will be copied to the corresponding Positive
+//		Number Sign Symbol Specification in the current
+//		instance of NumStrNumberSymbolGroup.
+//
+//	negativeNumberSign			NumStrNumberSymbolSpec
+//
+//		This Negative Number Sign Symbol Specification
+//		will be copied to the corresponding Negative
+//		Number Sign Symbol Specification in the current
+//		instance of NumStrNumberSymbolGroup.
+//
+//	zeroNumberSign				NumStrNumberSymbolSpec
+//
+//		This Zero Number Sign Symbol Specification
+//		will be copied to the corresponding Zero
+//		Number Sign Symbol Specification in the current
+//		instance of NumStrNumberSymbolGroup.
+//
+//	currencySymbols				NumStrNumberSymbolSpec
+//
+//		This Currency Symbols Specification	will be
+//		copied to the corresponding Currency Symbols
+//		Specification in the current instance of
+//		NumStrNumberSymbolGroup.
+//
+//	 errorPrefix                interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it	contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencyComponents(
+	positiveNumberSign NumStrNumberSymbolSpec,
+	negativeNumberSign NumStrNumberSymbolSpec,
+	zeroNumberSign NumStrNumberSymbolSpec,
+	currencySymbols NumStrNumberSymbolSpec,
+	errorPrefix interface{}) error {
+
+	if nStrNumSymbolsGroup.lock == nil {
+		nStrNumSymbolsGroup.lock = new(sync.Mutex)
+	}
+
+	nStrNumSymbolsGroup.lock.Lock()
+
+	defer nStrNumSymbolsGroup.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumStrNumberSymbolGroup."+
+			"SetCurrencyComponents()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	return new(numStrNumberSymbolGroupMechanics).
+		setCurrencyComponents(
+			nStrNumSymbolsGroup,
+			positiveNumberSign,
+			negativeNumberSign,
+			zeroNumberSign,
+			currencySymbols,
+			ePrefix.XCpy(
+				"nStrNumSymbolsGroup"))
+
 }
 
 //	SetCurrencyDefaultsFrance
@@ -13070,172 +13236,6 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencySimpleRunes(
 			leadingMinusSign,
 			ePrefix.XCpy(
 				"nStrNumSymbolsGroup<-"))
-}
-
-//	SetCurrencyComponents
-//
-//	Reconfigures the current instance of
-//	NumStrNumberSymbolGroup based on the Positive,
-//	Negative Zero Number Sign and Currency Symbol
-//	Specification objects passed as input parameters.
-//
-// ----------------------------------------------------------------
-//
-// # IMPORTANT
-//
-//	Be advised that the data fields contained in the
-//	current instance of NumStrNumberSymbolGroup will be
-//	deleted and replaced with the Positive, Negative
-//	Zero Number Sign and Currency Symbol Specifications
-//	passed as input parameters.
-//
-// ----------------------------------------------------------------
-//
-// # Input Parameters
-//
-//	positiveNumberSign			NumStrNumberSymbolSpec
-//
-//		This Positive Number Sign Symbol Specification
-//		will be copied to the corresponding Positive
-//		Number Sign Symbol Specification in the current
-//		instance of NumStrNumberSymbolGroup.
-//
-//	negativeNumberSign			NumStrNumberSymbolSpec
-//
-//		This Negative Number Sign Symbol Specification
-//		will be copied to the corresponding Negative
-//		Number Sign Symbol Specification in the current
-//		instance of NumStrNumberSymbolGroup.
-//
-//	zeroNumberSign				NumStrNumberSymbolSpec
-//
-//		This Zero Number Sign Symbol Specification
-//		will be copied to the corresponding Zero
-//		Number Sign Symbol Specification in the current
-//		instance of NumStrNumberSymbolGroup.
-//
-//	currencySymbols				NumStrNumberSymbolSpec
-//
-//		This Currency Symbols Specification	will be
-//		copied to the corresponding Currency Symbols
-//		Specification in the current instance of
-//		NumStrNumberSymbolGroup.
-//
-//	 errorPrefix                interface{}
-//
-//		This object encapsulates error prefix text which
-//		is included in all returned error messages.
-//		Usually, it	contains the name of the calling
-//		method or methods listed as a method or function
-//		chain of execution.
-//
-//		If no error prefix information is needed, set this
-//		parameter to 'nil'.
-//
-//		This empty interface must be convertible to one of
-//		the following types:
-//
-//		1.	nil
-//				A nil value is valid and generates an
-//				empty collection of error prefix and
-//				error context information.
-//
-//		2.	string
-//				A string containing error prefix
-//				information.
-//
-//		3.	[]string
-//				A one-dimensional slice of strings
-//				containing error prefix information.
-//
-//		4.	[][2]string
-//				A two-dimensional slice of strings
-//		   		containing error prefix and error
-//		   		context information.
-//
-//		5.	ErrPrefixDto
-//				An instance of ErrPrefixDto.
-//				Information from this object will
-//				be copied for use in error and
-//				informational messages.
-//
-//		6.	*ErrPrefixDto
-//				A pointer to an instance of
-//				ErrPrefixDto. Information from
-//				this object will be copied for use
-//				in error and informational messages.
-//
-//		7.	IBasicErrorPrefix
-//				An interface to a method
-//				generating a two-dimensional slice
-//				of strings containing error prefix
-//				and error context information.
-//
-//		If parameter 'errorPrefix' is NOT convertible
-//		to one of the valid types listed above, it will
-//		be considered invalid and trigger the return of
-//		an error.
-//
-//		Types ErrPrefixDto and IBasicErrorPrefix are
-//		included in the 'errpref' software package:
-//			"github.com/MikeAustin71/errpref".
-//
-// ----------------------------------------------------------------
-//
-// # Return Values
-//
-//	error
-//
-//		If this method completes successfully, the
-//		returned error Type is set equal to 'nil'.
-//
-//		If errors are encountered during processing, the
-//		returned error Type will encapsulate an error
-//		message. This returned error message will
-//		incorporate the method chain and text passed by
-//		input parameter, 'errorPrefix'. The 'errorPrefix'
-//		text will be attached to the beginning of the
-//		error message.
-func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencyComponents(
-	positiveNumberSign NumStrNumberSymbolSpec,
-	negativeNumberSign NumStrNumberSymbolSpec,
-	zeroNumberSign NumStrNumberSymbolSpec,
-	currencySymbols NumStrNumberSymbolSpec,
-	errorPrefix interface{}) error {
-
-	if nStrNumSymbolsGroup.lock == nil {
-		nStrNumSymbolsGroup.lock = new(sync.Mutex)
-	}
-
-	nStrNumSymbolsGroup.lock.Lock()
-
-	defer nStrNumSymbolsGroup.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-
-	var err error
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
-		"NumStrNumberSymbolGroup."+
-			"SetCurrencyComponents()",
-		"")
-
-	if err != nil {
-		return err
-	}
-
-	return new(numStrNumberSymbolGroupMechanics).
-		setCurrencyComponents(
-			nStrNumSymbolsGroup,
-			positiveNumberSign,
-			negativeNumberSign,
-			zeroNumberSign,
-			currencySymbols,
-			ePrefix.XCpy(
-				"nStrNumSymbolsGroup"))
-
 }
 
 //	SetNegativeNumSignRunes
