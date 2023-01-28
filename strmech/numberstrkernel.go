@@ -8357,7 +8357,7 @@ func (numStrKernel *NumberStrKernel) FmtNumStrDefaultRound(
 		// The current Number String Format
 		// Specification is invalid.
 		tempNumStrFormatSpec,
-			err = new(NumStrFormatSpec).NewSignedNumFmtUSMinus(
+			err = new(NumStrFormatSpec).NewSignedNumDefaultsUSMinus(
 			NumStrNumberFieldSpec{
 				fieldLength:        -1,
 				fieldJustification: TxtJustify.Right(),
@@ -11798,7 +11798,7 @@ func (numStrKernel *NumberStrKernel) FmtSignedNumStrFrance(
 	var numStrFmtSpec NumStrFormatSpec
 
 	numStrFmtSpec,
-		err = new(NumStrFormatSpec).NewSignedNumFmtFrance(
+		err = new(NumStrFormatSpec).NewSignedNumDefaultsFrance(
 		numberFieldSpec,
 		ePrefix.XCpy(
 			"newSignedNumFmtSpec<-"))
@@ -12315,7 +12315,7 @@ func (numStrKernel *NumberStrKernel) FmtSignedNumStrGermany(
 	var numStrFmtSpec NumStrFormatSpec
 
 	numStrFmtSpec,
-		err = new(NumStrFormatSpec).NewSignedNumFmtGermany(
+		err = new(NumStrFormatSpec).NewSignedNumDefaultsGermany(
 		numberFieldSpec,
 		ePrefix.XCpy(
 			"newSignedNumFmtSpec<-"))
@@ -12815,7 +12815,7 @@ func (numStrKernel *NumberStrKernel) FmtSignedNumStrUK(
 	var numStrFmtSpec NumStrFormatSpec
 
 	numStrFmtSpec,
-		err = new(NumStrFormatSpec).NewSignedNumFmtUKMinus(
+		err = new(NumStrFormatSpec).NewSignedNumDefaultsUKMinus(
 		numberFieldSpec,
 		ePrefix.XCpy(
 			"newSignedNumFmtSpec<-"))
@@ -13307,7 +13307,7 @@ func (numStrKernel *NumberStrKernel) FmtSignedNumStrUS(
 	var numStrFmtSpec NumStrFormatSpec
 
 	numStrFmtSpec,
-		err = new(NumStrFormatSpec).NewSignedNumFmtUSMinus(
+		err = new(NumStrFormatSpec).NewSignedNumDefaultsUSMinus(
 		numberFieldSpec,
 		ePrefix.XCpy(
 			"newSignedNumFmtSpec<-"))

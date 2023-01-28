@@ -39,13 +39,13 @@ import (
 //	simplify the Number String Format creation process:
 //
 //		NumStrFormatSpec.NewCurrencyDefaultsFrance()
-//		NumStrFormatSpec.NewSignedNumFmtFrance()
+//		NumStrFormatSpec.NewSignedNumDefaultsFrance()
 //		NumStrFormatSpec.NewCurrencyDefaultsGermany()
-//		NumStrFormatSpec.NewSignedNumFmtGermany()
+//		NumStrFormatSpec.NewSignedNumDefaultsGermany()
 //		NumStrFormatSpec.NewCurrencyDefaultsUKMinusOutside()
-//		NumStrFormatSpec.NewSignedNumFmtUKMinus()
+//		NumStrFormatSpec.NewSignedNumDefaultsUKMinus()
 //		NumStrFormatSpec.NewCurrencyDefaultsUSParen()
-//		NumStrFormatSpec.NewSignedNumFmtUSMinus()
+//		NumStrFormatSpec.NewSignedNumDefaultsUSMinus()
 //
 //	If more granular control is required to meet
 //	specialized requirements for multinational or
@@ -8950,7 +8950,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumBasicRunes(
 	return newSignedNumFmtSpec, err
 }
 
-//	NewSignedNumFmtFrance
+//	NewSignedNumDefaultsFrance
 //
 //	Returns a new instance of NumStrFormatSpec
 //	configured for a Signed Number using French
@@ -8978,7 +8978,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumBasicRunes(
 //	For information on German Signed Number
 //	String formatting conventions, see method:
 //
-//		NumStrFormatSpec.NewSignedNumFmtGermany()
+//		NumStrFormatSpec.NewSignedNumDefaultsGermany()
 //
 //	If custom decimal separator, integer separator
 //	and negative number sign characters are required,
@@ -9188,7 +9188,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumBasicRunes(
 //		and text passed by input parameter, 'errorPrefix'. The
 //		'errorPrefix' text will be attached to the beginning of
 //		the error message.
-func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumFmtFrance(
+func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumDefaultsFrance(
 	numberFieldSpec NumStrNumberFieldSpec,
 	errorPrefix interface{}) (
 	newSignedNumFmtSpec NumStrFormatSpec,
@@ -9208,7 +9208,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumFmtFrance(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumStrFormatSpec."+
-			"NewSignedNumFmtFrance()",
+			"NewSignedNumDefaultsFrance()",
 		"")
 
 	if err != nil {
@@ -9223,7 +9223,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumFmtFrance(
 	return newSignedNumFmtSpec, err
 }
 
-//	NewSignedNumFmtGermany
+//	NewSignedNumDefaultsGermany
 //
 //	Returns a new instance of NumStrFormatSpec
 //	configured for a Signed Number using German
@@ -9251,7 +9251,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumFmtFrance(
 //	For information on French Signed Number
 //	String formatting conventions, see method:
 //
-//		NumStrFormatSpec.NewSignedNumFmtFrance()
+//		NumStrFormatSpec.NewSignedNumDefaultsFrance()
 //
 //	If custom decimal separator, integer separator
 //	and negative number sign characters are required,
@@ -9460,7 +9460,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumFmtFrance(
 //		and text passed by input parameter, 'errorPrefix'. The
 //		'errorPrefix' text will be attached to the beginning of
 //		the error message.
-func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumFmtGermany(
+func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumDefaultsGermany(
 	numberFieldSpec NumStrNumberFieldSpec,
 	errorPrefix interface{}) (
 	newSignedNumFmtSpec NumStrFormatSpec,
@@ -9480,7 +9480,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumFmtGermany(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumStrFormatSpec."+
-			"NewSignedNumFmtGermany()",
+			"NewSignedNumDefaultsGermany()",
 		"")
 
 	if err != nil {
@@ -9495,7 +9495,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumFmtGermany(
 	return newSignedNumFmtSpec, err
 }
 
-//	NewSignedNumFmtUKMinus
+//	NewSignedNumDefaultsUKMinus
 //
 //	Returns a new instance of NumStrFormatSpec
 //	configured for a Signed Number using United Kingdom
@@ -9724,7 +9724,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumFmtGermany(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumFmtUKMinus(
+func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumDefaultsUKMinus(
 	numberFieldSpec NumStrNumberFieldSpec,
 	errorPrefix interface{}) (
 	newSignedNumFmtSpec NumStrFormatSpec,
@@ -9744,7 +9744,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumFmtUKMinus(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumStrFormatSpec."+
-			"NewSignedNumFmtUKMinus()",
+			"NewSignedNumDefaultsUKMinus()",
 		"")
 
 	if err != nil {
@@ -9759,7 +9759,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumFmtUKMinus(
 	return newSignedNumFmtSpec, err
 }
 
-//	NewSignedNumFmtUSMinus
+//	NewSignedNumDefaultsUSMinus
 //
 //	Returns a new instance of NumStrFormatSpec
 //	configured for a Signed Number using US
@@ -10000,7 +10000,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumFmtUKMinus(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumFmtUSMinus(
+func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumDefaultsUSMinus(
 	numberFieldSpec NumStrNumberFieldSpec,
 	errorPrefix interface{}) (
 	newSignedNumFmtSpec NumStrFormatSpec,
@@ -10020,7 +10020,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumFmtUSMinus(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumStrFormatSpec."+
-			"NewSignedNumFmtUSMinus()",
+			"NewSignedNumDefaultsUSMinus()",
 		"")
 
 	if err != nil {
@@ -10035,7 +10035,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumFmtUSMinus(
 	return newSignedNumFmtSpec, err
 }
 
-//	NewSignedNumFmtUSParen
+//	NewSignedNumDefaultsUSParen
 //
 //	Returns a new instance of NumStrFormatSpec configured
 //	for a Signed Number using United States (US) Number
@@ -10276,7 +10276,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumFmtUSMinus(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumFmtUSParen(
+func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumDefaultsUSParen(
 	numberFieldSpec NumStrNumberFieldSpec,
 	errorPrefix interface{}) (
 	newSignedNumFmtSpec NumStrFormatSpec,
@@ -10296,7 +10296,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumFmtUSParen(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumStrFormatSpec."+
-			"NewSignedNumFmtUSParen()",
+			"NewSignedNumDefaultsUSParen()",
 		"")
 
 	if err != nil {

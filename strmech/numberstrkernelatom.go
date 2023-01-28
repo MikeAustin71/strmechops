@@ -1517,7 +1517,7 @@ func (numStrKernelAtom *numberStrKernelAtom) testValidityOfNumStrKernel(
 		// to stand US Signed Number String Format
 		// Specification.
 		numStrKernel.numStrFormatSpec,
-			err = new(NumStrFormatSpec).NewSignedNumFmtUSMinus(
+			err = new(NumStrFormatSpec).NewSignedNumDefaultsUSMinus(
 			NumStrNumberFieldSpec{
 				fieldLength:        -1,
 				fieldJustification: TxtJustify.Right(),

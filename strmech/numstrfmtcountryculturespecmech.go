@@ -340,7 +340,7 @@ func (nStrFmtCountryCultureMech *numStrFmtCountryCultureSpecMech) setCountryFran
 	}
 
 	countryNStrFmtSpec.SignedNumStrFormat,
-		err = numStrFmtSpec.NewSignedNumFmtFrance(
+		err = numStrFmtSpec.NewSignedNumDefaultsFrance(
 		nopNumFieldSpec,
 		ePrefix.XCpy(
 			"countryNStrFmtSpec.SignedNumStrFormat"))
@@ -489,7 +489,7 @@ func (nStrFmtCountryCultureMech *numStrFmtCountryCultureSpecMech) setCountryGerm
 	}
 
 	countryNStrFmtSpec.SignedNumStrFormat,
-		err = numStrFmtSpec.NewSignedNumFmtGermany(
+		err = numStrFmtSpec.NewSignedNumDefaultsGermany(
 		nopNumFieldSpec,
 		ePrefix.XCpy(
 			"countryNStrFmtSpec.SignedNumStrFormat"))
@@ -639,7 +639,7 @@ func (nStrFmtCountryCultureMech *numStrFmtCountryCultureSpecMech) setCountryUK(
 	}
 
 	countryNStrFmtSpec.SignedNumStrFormat,
-		err = numStrFmtSpec.NewSignedNumFmtUKMinus(
+		err = numStrFmtSpec.NewSignedNumDefaultsUKMinus(
 		nopNumFieldSpec,
 		ePrefix.XCpy(
 			"countryNStrFmtSpec.SignedNumStrFormat"))
@@ -790,7 +790,7 @@ func (nStrFmtCountryCultureMech *numStrFmtCountryCultureSpecMech) setCountryUS(
 	}
 
 	countryNStrFmtSpec.SignedNumStrFormat,
-		err = numStrFmtSpec.NewSignedNumFmtUSMinus(
+		err = numStrFmtSpec.NewSignedNumDefaultsUSMinus(
 		nopNumFieldSpec,
 		ePrefix.XCpy(
 			"countryNStrFmtSpec.SignedNumStrFormat"))
