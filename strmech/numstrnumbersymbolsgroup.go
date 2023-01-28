@@ -79,7 +79,7 @@ import (
 //		NumStrNumberSymbolGroup.NewFmtComponents()
 //		NumStrNumberSymbolGroup.SetCurrencyParamsRunes()
 //		NumStrNumberSymbolGroup.SetCurrencyParams()
-//		NumStrNumberSymbolGroup.SetCurrencySymbols()
+//		NumStrNumberSymbolGroup.SetCurrencyComponents()
 type NumStrNumberSymbolGroup struct {
 	negativeNumberSign NumStrNumberSymbolSpec
 	//	The Number String Negative Number Sign
@@ -12473,7 +12473,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencyParamsRunes(
 //
 //		NumStrNumberSymbolGroup.SetCurrencyParamsRunes()
 //		NumStrNumberSymbolGroup.SetCurrencyParams()
-//		NumStrNumberSymbolGroup.SetCurrencySymbols()
+//		NumStrNumberSymbolGroup.SetCurrencyComponents()
 //
 // ----------------------------------------------------------------
 //
@@ -12795,7 +12795,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencySimple(
 //
 //		NumStrNumberSymbolGroup.SetCurrencyParamsRunes()
 //		NumStrNumberSymbolGroup.SetCurrencyParams()
-//		NumStrNumberSymbolGroup.SetCurrencySymbols()
+//		NumStrNumberSymbolGroup.SetCurrencyComponents()
 //
 // ----------------------------------------------------------------
 //
@@ -13072,7 +13072,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencySimpleRunes(
 				"nStrNumSymbolsGroup<-"))
 }
 
-//	SetCurrencySymbols
+//	SetCurrencyComponents
 //
 //	Reconfigures the current instance of
 //	NumStrNumberSymbolGroup based on the Positive,
@@ -13196,7 +13196,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencySimpleRunes(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencySymbols(
+func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencyComponents(
 	positiveNumberSign NumStrNumberSymbolSpec,
 	negativeNumberSign NumStrNumberSymbolSpec,
 	zeroNumberSign NumStrNumberSymbolSpec,
@@ -13219,7 +13219,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencySymbols(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumStrNumberSymbolGroup."+
-			"SetCurrencySymbols()",
+			"SetCurrencyComponents()",
 		"")
 
 	if err != nil {
@@ -16626,7 +16626,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetSignedNumDefaultsUSParen(
 //
 //		NumStrNumberSymbolGroup.SetCurrencyParamsRunes()
 //		NumStrNumberSymbolGroup.SetCurrencyParams()
-//		NumStrNumberSymbolGroup.SetCurrencySymbols()
+//		NumStrNumberSymbolGroup.SetCurrencyComponents()
 //
 // ----------------------------------------------------------------
 //
