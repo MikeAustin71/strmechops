@@ -4636,7 +4636,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewCurrencyParams(
 	}
 
 	err = new(numStrNumberSymbolGroupMechanics).
-		setCurrencyParamsRunes(
+		setCurrencyParams(
 			&newNumberSymbols,
 			[]rune(leadingPositiveNumberSymbols),
 			[]rune(trailingPositiveNumberSymbols),
@@ -5299,7 +5299,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewCurrencyParamsRunes(
 	}
 
 	err = new(numStrNumberSymbolGroupMechanics).
-		setCurrencyParamsRunes(
+		setCurrencyParams(
 			&newNumberSymbols,
 			leadingPositiveNumberSymbols,
 			trailingPositiveNumberSymbols,
@@ -11938,7 +11938,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencyParams(
 	}
 
 	return new(numStrNumberSymbolGroupMechanics).
-		setCurrencyParamsRunes(
+		setCurrencyParams(
 			nStrNumSymbolsGroup,
 			[]rune(leadingPositiveNumberSymbols),
 			[]rune(trailingPositiveNumberSymbols),
@@ -12581,7 +12581,7 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) SetCurrencyParamsRunes(
 	}
 
 	return new(numStrNumberSymbolGroupMechanics).
-		setCurrencyParamsRunes(
+		setCurrencyParams(
 			nStrNumSymbolsGroup,
 			leadingPositiveNumberSymbols,
 			trailingPositiveNumberSymbols,
