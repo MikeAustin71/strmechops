@@ -56,12 +56,16 @@ import (
 //		NumStrFormatSpec.NewCountrySignedNumFormat()
 //		NumStrFormatSpec.NewNumFmtComponents()
 //		NumStrFormatSpec.NewCurrencyParams()
-//		NumStrFormatSpec.NewCurrencyParamsRunes()
 //		NumStrFormatSpec.SetCountryCurrencyNumFmt()
 //		NumStrFormatSpec.SetCountrySignedNumFmt()
 //		NumStrFormatSpec.SetNumFmtComponents()
 //		NumStrFormatSpec.SetNumFmtParams()
-//		NumStrFormatSpec.SetNumFmtParamsRunes()
+//
+//	These granular methods involve more complexity
+//	and a greater number of input parameters, but
+//	they do provide greater flexibility and
+//	customization in formatting number symbols for
+//	number string.
 type NumStrFormatSpec struct {
 	decSeparator DecimalSeparatorSpec
 	//	Contains the decimal separator character
