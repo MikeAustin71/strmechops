@@ -924,7 +924,7 @@ func (numStrKernelAtom *numberStrKernelAtom) formatNumStrComponents(
 		err = fmt.Errorf("%v\n"+
 			"Error: This is a floating point number and the number\n"+
 			"of decimal separator characters specified is zero.\n"+
-			"Input parameter 'nStrFormatSpec.DecSeparator'\n"+
+			"Input parameter 'decSeparator'\n"+
 			"is invalid!\n",
 			ePrefix.String())
 
