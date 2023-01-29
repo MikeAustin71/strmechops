@@ -49,37 +49,49 @@ import (
 //	necessarily requires a complex series of parameters
 //	and specifications.
 //
-//	Configuring the Number Symbols which comprise part of
-//	the Number String formatting process also involves
-//	complexity.
-//
 //	Typically, instances of NumStrNumberSymbolGroup are
 //	created, or constructed, using the 'New' methods
 //	documented below. Many of these methods provide
-//	input parameters capable of detailing all the
-//	Number Symbol features required to support
-//	any multinational and multicultural Number Symbol
-//	formatting requirement.
+//	input parameters capable of supporting Number Symbol
+//	features for all national or cultural Number Symbol
+//	formatting requirements.
+//
+//	(Exception: Number Symbol Formatting for the Klingon
+//	Empire is not currently supported.)
 //
 //	For those only interested in a quick and simple means
 //	of generating Number Symbol formatting, the following
 //	methods provide defaults which greatly simplify the
 //	Number Symbols creation process:
 //
+//		NumStrNumberSymbolGroup.NewCurrencyBasic()
 //		NumStrNumberSymbolGroup.NewCurrencySimple()
-//		NumStrNumberSymbolGroup.NewSignedSimpleNumber()
+//		NumStrNumberSymbolGroup.NewSignedNumBasic()
+//		NumStrNumberSymbolGroup.NewSignedNumSimple()
+//
+//	The "Basic" and "Simple" methods require fewer
+//	input parameters and meet the majority of national
+//	and cultural number symbol formatting requirements.
 //
 //	If more granular control is required to meet
-//	specialized requirements for multinational or
-//	multicultural number symbol formatting, consider
-//	using one of the following methods:
+//	specialized or complex national or cultural number
+//	symbol formatting requirements, consider using one
+//	of the following methods:
 //
-//		NumStrNumberSymbolGroup.NewCurrencyParamsRunes()
 //		NumStrNumberSymbolGroup.NewCurrencyParams()
 //		NumStrNumberSymbolGroup.NewCurrencyComponents()
-//		NumStrNumberSymbolGroup.SetCurrencyParamsRunes()
+//		NumStrNumberSymbolGroup.NewSignedNumParams()
+//		NumStrNumberSymbolGroup.NewSignedNumComponents()
 //		NumStrNumberSymbolGroup.SetCurrencyParams()
 //		NumStrNumberSymbolGroup.SetCurrencyComponents()
+//		NumStrNumberSymbolGroup.SetSignedNumParams()
+//		NumStrNumberSymbolGroup.SetSignedNumComponents()
+//
+//	The methods involve more complexity and a greater
+//	number of input parameters, but they do provide
+//	greater flexibility and customization in formatting
+//	number symbols used in number string formatting
+//	operations.
 type NumStrNumberSymbolGroup struct {
 	negativeNumberSign NumStrNumberSymbolSpec
 	//	The Number String Negative Number Sign
@@ -1757,6 +1769,17 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) IsNOPZeroNumSymbols() bool {
 //	Only the currency and negative number sign symbols
 //	are actively configured using input parameter
 //	specifications.
+//
+//	If the default configuration values fail to provide
+//	sufficient control over currency number symbol
+//	creation, use one of the more granular constructor
+//	or 'New' methods to achieve specialized national or
+//	cultural currency number symbol formatting
+//	requirements:
+//
+//		NumStrNumberSymbolGroup.NewCurrencyParamsRunes()
+//		NumStrNumberSymbolGroup.NewCurrencyParams()
+//		NumStrNumberSymbolGroup.NewCurrencyComponents()
 //
 // ----------------------------------------------------------------
 //

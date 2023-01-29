@@ -179,6 +179,103 @@ import (
 //		Leading Number Sign Symbols: "("
 //		Trailing Number Sign Symbols: ")"
 //		Number String:   "(123.456)"
+//
+//	Configuring Number Sign and Currency Symbols while
+//	supporting multinational and multicultural number
+//	string formatting standards necessarily requires a
+//	complex series of parameters and specifications.
+//
+//	Typically, instances of NumStrNumberSymbolSpec are
+//	created, or constructed, using the 'New' methods
+//	documented below. Many of these methods provide
+//	input parameters capable of supporting Number Symbol
+//	features for all national or cultural Number Symbol
+//	formatting requirements.
+//
+//	(Exception: Number Sign and Currency Symbol
+//	Formatting for the Klingon Empire is not currently
+//	supported.)
+//
+//	For those only interested in a quick and simple means
+//	of generating Number Sign and Currency Symbol
+//	formatting, the following methods provide defaults
+//	which greatly simplify the Number Symbols creation
+//	process:
+//
+//		NumStrNumberSymbolSpec.NewCurrencyBasic()
+//		NumStrNumberSymbolSpec.NewCurrencySimple()
+//		NumStrNumberSymbolSpec.NewSignedNumBasic()
+//		NumStrNumberSymbolSpec.NewSignedNumSimple()
+//		NumStrNumberSymbolSpec.SetCurrencyBasic()
+//		NumStrNumberSymbolSpec.SetCurrencySimple()
+//		NumStrNumberSymbolSpec.SetSignedNumBasic()
+//		NumStrNumberSymbolSpec.SetSignedNumSimple()
+//
+//	The "Basic" and "Simple" methods require fewer
+//	input parameters and meet the majority of national
+//	and cultural number symbol formatting requirements.
+//
+//	Another quick and simple approach is to use one of
+//	the country specific methods:
+//
+//		NumStrNumberSymbolSpec.NewCurrencyDefaultsEU()
+//			Euro Currency Formatting
+//
+//		NumStrNumberSymbolSpec.NewCurrencyDefaultsUKMinusInside()
+//			UK Pound Sign ('£') Currency Formatting inside
+//			minus sign ('-') for negative values (£ -123.45).
+//
+//		NumStrNumberSymbolSpec.NewCurrencyDefaultsUKMinusOutside()
+//			UK Pound Sign ('£') Currency Formatting outsided
+//			minus sign ('-') for negative values (-£ 123.45).
+//
+//
+//	If more granular control is required to meet
+//	specialized or complex national or cultural number
+//	symbol formatting requirements, consider using one
+//	of the following methods:
+//
+//		NumStrNumberSymbolSpec.
+//			NewCurrencyLeadingSymbol()
+//
+//		NumStrNumberSymbolSpec.
+//			NewCurrencyTrailingSymbol()
+//
+//		NumStrNumberSymbolSpec.
+//			NewCurrencyLeadingTrailingSymbols()
+//
+//		NumStrNumberSymbolSpec.
+//			NewNumberSignLeadingSymbol()
+//
+//		NumStrNumberSymbolSpec.
+//			NewNumberSignTrailingSymbol()
+//
+//		NumStrNumberSymbolSpec.
+//			NewNumberSignLeadingTrailingSymbol()
+//
+//		NumStrNumberSymbolSpec.
+//			SetCurrencyLeadingSymbol()
+//
+//		NumStrNumberSymbolSpec.
+//			SetCurrencyTrailingSymbol()
+//
+//		NumStrNumberSymbolSpec.
+//			SetCurrencyLeadingTrailingSymbols()
+//
+//		NumStrNumberSymbolSpec.
+//			SetNumberSignLeadingSymbol()
+//
+//		NumStrNumberSymbolSpec.
+//			SetNumberSignTrailingSymbol()
+//
+//		NumStrNumberSymbolSpec.
+//			SetNumberSignLeadingTrailingSymbol()
+//
+//	The methods involve more complexity and a greater
+//	number of input parameters, but they do provide
+//	greater flexibility and customization in formatting
+//	number symbols used in number string formatting
+//	operations.
 type NumStrNumberSymbolSpec struct {
 	leadingNumberSymbols RuneArrayDto
 	// Contains the character or characters which
@@ -2598,8 +2695,8 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyDefaultsEU(
 //		inside the pound sign ('£').
 //
 //			Examples:
-//				£ 123.45 	Positive Value
-//				£ -123.45	Negative Value
+//				££ -123.45 123.45 	Positive Value
+//					Negative Value
 //
 //	err								error
 //

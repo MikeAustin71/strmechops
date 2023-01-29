@@ -777,3 +777,14 @@ type sourceCodeCommentQuark struct {
 //			Currency Symbol is Formatted OUTSIDE
 //			the Number Field.
 //
+//
+//	If the default configuration values fail to provide
+//	sufficient control over currency number symbol
+//	creation, use one of the more granular constructor
+//	or 'New' methods to achieve specialized national or
+//	cultural currency number symbol formatting
+//	requirements:
+//
+//		NumStrNumberSymbolGroup.NewCurrencyParamsRunes()
+//		NumStrNumberSymbolGroup.NewCurrencyParams()
+//		NumStrNumberSymbolGroup.NewCurrencyComponents()
