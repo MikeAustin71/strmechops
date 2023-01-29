@@ -5741,6 +5741,20 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyDefaultsUSParen(
 //				IntGroupingType.None() effectively turns
 //				off integer separation.
 //
+//		Examples:
+//
+//			IntGroupingType.None()
+//				'1000000000'
+//
+//			IntGroupingType.Thousands()
+//					'1,000,000,000'
+//
+//			IntGroupingType.IndiaNumbering()
+//				'6,78,90,00,00,00,00,000'
+//
+//			IntGroupingType.ChineseNumbering()
+//				'6,7890,0000,0000,0000'
+//
 //	leadingPosNumSign				string
 //
 //		A string containing the leading positive number
@@ -6577,6 +6591,24 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencyParams(
 //			IntGroupingType.Thousands()
 //			IntGroupingType.IndiaNumbering()
 //			IntGroupingType.ChineseNumbering()
+//
+//		Note:	Setting 'intGroupingType' to a value of
+//				IntGroupingType.None() effectively turns
+//				off integer separation.
+//
+//		Examples:
+//
+//			IntGroupingType.None()
+//				'1000000000'
+//
+//			IntGroupingType.Thousands()
+//					'1,000,000,000'
+//
+//			IntGroupingType.IndiaNumbering()
+//				'6,78,90,00,00,00,00,000'
+//
+//			IntGroupingType.ChineseNumbering()
+//				'6,7890,0000,0000,0000'
 //
 //	leadingPosNumSign				[]rune
 //
@@ -8545,6 +8577,20 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtComponents(
 //				IntGroupingType.None() effectively turns
 //				off integer separation.
 //
+//		Examples:
+//
+//			IntGroupingType.None()
+//				'1000000000'
+//
+//			IntGroupingType.Thousands()
+//					'1,000,000,000'
+//
+//			IntGroupingType.IndiaNumbering()
+//				'6,78,90,00,00,00,00,000'
+//
+//			IntGroupingType.ChineseNumbering()
+//				'6,7890,0000,0000,0000'
+//
 //	leadingNegNumSign				string
 //
 //		A string containing the leading negative number
@@ -8960,6 +9006,20 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumBasic(
 //		Note:	Setting 'intGroupingType' to a value of
 //				IntGroupingType.None() effectively turns
 //				off integer separation.
+//
+//		Examples:
+//
+//			IntGroupingType.None()
+//				'1000000000'
+//
+//			IntGroupingType.Thousands()
+//					'1,000,000,000'
+//
+//			IntGroupingType.IndiaNumbering()
+//				'6,78,90,00,00,00,00,000'
+//
+//			IntGroupingType.ChineseNumbering()
+//				'6,7890,0000,0000,0000'
 //
 //	leadingNegNumSign				[]rune
 //
@@ -10734,6 +10794,20 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumDefaultsUSParen(
 //				IntGroupingType.None() effectively turns
 //				off integer separation.
 //
+//		Examples:
+//
+//			IntGroupingType.None()
+//				'1000000000'
+//
+//			IntGroupingType.Thousands()
+//					'1,000,000,000'
+//
+//			IntGroupingType.IndiaNumbering()
+//				'6,78,90,00,00,00,00,000'
+//
+//			IntGroupingType.ChineseNumbering()
+//				'6,7890,0000,0000,0000'
+//
 //	leadingPosNumSign				string
 //
 //		A string containing the leading positive number
@@ -11441,6 +11515,24 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumParams(
 //			IntGroupingType.Thousands()
 //			IntGroupingType.IndiaNumbering()
 //			IntGroupingType.ChineseNumbering()
+//
+//		Note:	Setting 'intGroupingType' to a value of
+//				IntGroupingType.None() effectively turns
+//				off integer separation.
+//
+//		Examples:
+//
+//			IntGroupingType.None()
+//				'1000000000'
+//
+//			IntGroupingType.Thousands()
+//					'1,000,000,000'
+//
+//			IntGroupingType.IndiaNumbering()
+//				'6,78,90,00,00,00,00,000'
+//
+//			IntGroupingType.ChineseNumbering()
+//				'6,7890,0000,0000,0000'
 //
 //	leadingPosNumSign				[]rune
 //
@@ -16525,6 +16617,20 @@ func (numStrFmtSpec *NumStrFormatSpec) SetCurrencyDefaultsUSParen(
 //				IntGroupingType.None() effectively turns
 //				off integer separation.
 //
+//		Examples:
+//
+//			IntGroupingType.None()
+//				'1000000000'
+//
+//			IntGroupingType.Thousands()
+//					'1,000,000,000'
+//
+//			IntGroupingType.IndiaNumbering()
+//				'6,78,90,00,00,00,00,000'
+//
+//			IntGroupingType.ChineseNumbering()
+//				'6,7890,0000,0000,0000'
+//
 //	leadingPosNumSign				string
 //
 //		A string containing the leading positive number
@@ -17361,6 +17467,24 @@ func (numStrFmtSpec *NumStrFormatSpec) SetCurrencyParams(
 //			IntGroupingType.Thousands()
 //			IntGroupingType.IndiaNumbering()
 //			IntGroupingType.ChineseNumbering()
+//
+//		Note:	Setting 'intGroupingType' to a value of
+//				IntGroupingType.None() effectively turns
+//				off integer separation.
+//
+//		Examples:
+//
+//			IntGroupingType.None()
+//				'1000000000'
+//
+//			IntGroupingType.Thousands()
+//					'1,000,000,000'
+//
+//			IntGroupingType.IndiaNumbering()
+//				'6,78,90,00,00,00,00,000'
+//
+//			IntGroupingType.ChineseNumbering()
+//				'6,7890,0000,0000,0000'
 //
 //	leadingPosNumSign				[]rune
 //
@@ -20021,6 +20145,20 @@ func (numStrFmtSpec *NumStrFormatSpec) SetNumFmtComponents(
 //				IntGroupingType.None() effectively turns
 //				off integer separation.
 //
+//		Examples:
+//
+//			IntGroupingType.None()
+//				'1000000000'
+//
+//			IntGroupingType.Thousands()
+//					'1,000,000,000'
+//
+//			IntGroupingType.IndiaNumbering()
+//				'6,78,90,00,00,00,00,000'
+//
+//			IntGroupingType.ChineseNumbering()
+//				'6,7890,0000,0000,0000'
+//
 //	leadingNegNumSign				string
 //
 //		A string containing the leading negative number
@@ -20429,6 +20567,20 @@ func (numStrFmtSpec *NumStrFormatSpec) SetSignedNumBasic(
 //		Note:	Setting 'intGroupingType' to a value of
 //				IntGroupingType.None() effectively turns
 //				off integer separation.
+//
+//		Examples:
+//
+//			IntGroupingType.None()
+//				'1000000000'
+//
+//			IntGroupingType.Thousands()
+//					'1,000,000,000'
+//
+//			IntGroupingType.IndiaNumbering()
+//				'6,78,90,00,00,00,00,000'
+//
+//			IntGroupingType.ChineseNumbering()
+//				'6,7890,0000,0000,0000'
 //
 //	leadingNegNumSign				[]rune
 //
@@ -22118,6 +22270,20 @@ func (numStrFmtSpec *NumStrFormatSpec) SetSignedNumDefaultsUSParen(
 //				IntGroupingType.None() effectively turns
 //				off integer separation.
 //
+//		Examples:
+//
+//			IntGroupingType.None()
+//				'1000000000'
+//
+//			IntGroupingType.Thousands()
+//					'1,000,000,000'
+//
+//			IntGroupingType.IndiaNumbering()
+//				'6,78,90,00,00,00,00,000'
+//
+//			IntGroupingType.ChineseNumbering()
+//				'6,7890,0000,0000,0000'
+//
 //	leadingPosNumSign				string
 //
 //		A string containing the leading positive number
@@ -22816,6 +22982,24 @@ func (numStrFmtSpec *NumStrFormatSpec) SetSignedNumParams(
 //			IntGroupingType.Thousands()
 //			IntGroupingType.IndiaNumbering()
 //			IntGroupingType.ChineseNumbering()
+//
+//		Note:	Setting 'intGroupingType' to a value of
+//				IntGroupingType.None() effectively turns
+//				off integer separation.
+//
+//		Examples:
+//
+//			IntGroupingType.None()
+//				'1000000000'
+//
+//			IntGroupingType.Thousands()
+//					'1,000,000,000'
+//
+//			IntGroupingType.IndiaNumbering()
+//				'6,78,90,00,00,00,00,000'
+//
+//			IntGroupingType.ChineseNumbering()
+//				'6,7890,0000,0000,0000'
 //
 //	leadingPosNumSign				[]rune
 //

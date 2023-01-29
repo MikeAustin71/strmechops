@@ -9050,9 +9050,23 @@ func (numStrKernel *NumberStrKernel) FmtNumStrNative(
 //				IntGroupingType.IndiaNumbering()
 //				IntGroupingType.ChineseNumbering()
 //
-//			Note:	Setting 'intGroupingType' to a value of
-//					IntGroupingType.None() effectively turns
-//					off integer separation.
+//		Note:	Setting 'intGroupingType' to a value of
+//				IntGroupingType.None() effectively turns
+//				off integer separation.
+//
+//		Examples:
+//
+//			IntGroupingType.None()
+//				'1000000000'
+//
+//			IntGroupingType.Thousands()
+//					'1,000,000,000'
+//
+//			IntGroupingType.IndiaNumbering()
+//				'6,78,90,00,00,00,00,000'
+//
+//			IntGroupingType.ChineseNumbering()
+//				'6,7890,0000,0000,0000'
 //
 //		leadingPosNumSign				string
 //
