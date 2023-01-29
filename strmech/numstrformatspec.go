@@ -38,6 +38,14 @@ import (
 //	the following methods provide defaults which greatly
 //	simplify the Number String Format creation process:
 //
+//		NumStrFormatSpec.NewCurrencyBasic()
+//		NumStrFormatSpec.SetCurrencyBasic()
+//		NumStrFormatSpec.NewSignedNumBasic()
+//		NumStrFormatSpec.SetSignedNumBasic()
+//		NumStrFormatSpec.SetCurrencySimple()
+//		NumStrFormatSpec.NewSignedNumSimple()
+//		NumStrFormatSpec.SetSignedNumSimple()
+//		NumStrFormatSpec.NewCurrencyDefaultsFrance()
 //		NumStrFormatSpec.NewCurrencyDefaultsFrance()
 //		NumStrFormatSpec.NewSignedNumDefaultsFrance()
 //		NumStrFormatSpec.NewCurrencyDefaultsGermany()
@@ -45,7 +53,13 @@ import (
 //		NumStrFormatSpec.NewCurrencyDefaultsUKMinusOutside()
 //		NumStrFormatSpec.NewSignedNumDefaultsUKMinus()
 //		NumStrFormatSpec.NewCurrencyDefaultsUSParen()
+//		NumStrFormatSpec.NewSignedNumDefaultsUSParen()
 //		NumStrFormatSpec.NewSignedNumDefaultsUSMinus()
+//		NumStrFormatSpec.NewSignedNumDefaultsUSMinus()
+//
+//		The 'Basic' and 'Simple' should suffice for the
+//		majority of national and cultural number symbol
+//		formatting requirements.
 //
 //	If more granular control is required to meet
 //	specialized requirements for multinational or
