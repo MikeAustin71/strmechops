@@ -218,17 +218,27 @@ import (
 //	Another quick and simple approach is to use one of
 //	the country specific methods:
 //
-//		NumStrNumberSymbolSpec.NewCurrencyDefaultsEU()
-//			Euro Currency Formatting
+//		NumStrNumberSymbolSpec.
+//			NewCurrencyDefaultsEU()
+//				Euro Currency Formatting
 //
-//		NumStrNumberSymbolSpec.NewCurrencyDefaultsUKMinusInside()
-//			UK Pound Sign ('£') Currency Formatting inside
-//			minus sign ('-') for negative values (£ -123.45).
+//		NumStrNumberSymbolSpec.
+//			NewCurrencyDefaultsUKMinusInside()
+//				UK Pound Sign ('£') Currency Formatting.
+//				Minus sign ('-') inside currency symbol
+//				for negative values (£ -123.45).
 //
-//		NumStrNumberSymbolSpec.NewCurrencyDefaultsUKMinusOutside()
-//			UK Pound Sign ('£') Currency Formatting outsided
-//			minus sign ('-') for negative values (-£ 123.45).
+//		NumStrNumberSymbolSpec.
+//			NewCurrencyDefaultsUKMinusOutside()
+//				UK Pound Sign ('£') Currency Formatting.
+//				Minus sign ('-') outside currency symbol
+//				for negative values (-£ 123.45).
 //
+//		NumStrNumberSymbolSpec.
+//			NewCurrencyDefaultsUS()
+//				US Dollar Sign ('$') Currency Formatting.
+//				Minus sign ('-') inside currency symbol
+//				for negative values ($ -123.45).
 //
 //	If more granular control is required to meet
 //	specialized or complex national or cultural number
@@ -271,11 +281,11 @@ import (
 //		NumStrNumberSymbolSpec.
 //			SetNumberSignLeadingTrailingSymbol()
 //
-//	The methods involve more complexity and a greater
-//	number of input parameters, but they do provide
-//	greater flexibility and customization in formatting
-//	number symbols used in number string formatting
-//	operations.
+//	These granular methods involve more complexity
+//	and a greater number of input parameters, but
+//	they do provide greater flexibility and
+//	customization in formatting number symbols for
+//	number string.
 type NumStrNumberSymbolSpec struct {
 	leadingNumberSymbols RuneArrayDto
 	// Contains the character or characters which
@@ -2890,22 +2900,26 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyDefaultsUKMinusOu
 	return ukCurrencySymbols, err
 }
 
-// NewCurrencyDefaultsUS
+//	NewCurrencyDefaultsUS
 //
-// Creates and returns a new instance of
-// NumStrNumberSymbolSpec configured with the default US
-// (United States) currency symbol.
+//	Creates and returns a new instance of
+//	NumStrNumberSymbolSpec configured with the default US
+//	(United States) currency symbol.
 //
-// The default US currency symbol is a leading dollar
-// sign.
+//	The default US currency symbol is a leading
+//	Dollar sign. Negative values are formatted
+//	with the minus sign ('-') inside the currency
+//	symbol.
 //
-//	Example:
-//		$ 123.45
+//		Examples:
+//			$ 123.45
+//			$ -123.45	Currency Symbol is outside
+//						minus sign.
 //
-// The Number String Number Symbol Specification type
-// (NumStrNumberSymbolSpec) is designed to assist in
-// formatting numeric values as number strings for
-// screen displays, printing or file output.
+//	The Number String Number Symbol Specification type
+//	(NumStrNumberSymbolSpec) is designed to assist in
+//	formatting numeric values as number strings for
+//	screen displays, printing or file output.
 //
 // ----------------------------------------------------------------
 //
@@ -2968,10 +2982,15 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyDefaultsUKMinusOu
 //		Currency Symbol.
 //
 //		The default US currency symbol is a leading
-//		dollar sign.
+//		Dollar sign. Negative values are formatted
+//		with the minus sign ('-') inside the currency
+//		symbol.
 //
-//			Example:
+//			Examples:
 //				$ 123.45
+//				$ -123.45	Currency Symbol is outside
+//							minus sign.
+//
 //
 //	err								error
 //
@@ -10298,18 +10317,19 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) SetCurrencyDefaultsUKMinusOu
 				"nStrNumberSymbolSpec"))
 }
 
-// SetCurrencyDefaultsUS
+//	SetCurrencyDefaultsUS
 //
-// Deletes and reconfigures the data values in the
-// current instance of NumStrNumberSymbolSpec with
-// default currency specifications commonly applied
-// in the United States (US).
+//	Deletes and reconfigures the data values in the
+//	current instance of NumStrNumberSymbolSpec with
+//	default currency specifications commonly applied
+//	in the United States (US).
 //
-// The currency symbol used in the United States is
-// the leading Dollar sign symbol ('$').
+//	The default US currency symbol is a leading
+//	Dollar sign ('$').
 //
-//	Example:
-//		$ 125
+//		Examples:
+//			$ 123.45
+//			$ -123.45	Currency Symbol is outside
 //
 // ----------------------------------------------------------------
 //
