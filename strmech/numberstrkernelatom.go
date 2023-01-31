@@ -837,10 +837,10 @@ func (numStrKernelAtom *numberStrKernelAtom) formatNumStrComponents(
 	decSeparator DecimalSeparatorSpec,
 	intSeparatorDto IntegerSeparatorSpec,
 	roundingSpec NumStrRoundingSpec,
-	currencySymbol NumStrNumberSymbolSpec,
 	negativeNumberSign NumStrNumberSymbolSpec,
 	positiveNumberSign NumStrNumberSymbolSpec,
 	zeroNumberSign NumStrNumberSymbolSpec,
+	currencySymbol NumStrNumberSymbolSpec,
 	numberFieldSpec NumStrNumberFieldSpec,
 	errPrefDto *ePref.ErrPrefixDto) (
 	numStr string,

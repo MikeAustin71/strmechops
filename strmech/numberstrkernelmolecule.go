@@ -897,6 +897,17 @@ func (numStrKernelMolecule *numberStrKernelMolecule) formatNumStr(
 		return numStr, err
 	}
 
+	var currencySymbol NumStrNumberSymbolSpec
+
+	currencySymbol,
+		err = nStrFormatSpec.GetCurrencySymbolSpec(
+		ePrefix.XCpy(
+			"currencySymbol<-nStrFormatSpec"))
+
+	if err != nil {
+		return numStr, err
+	}
+
 	var numberFieldSpec NumStrNumberFieldSpec
 
 	numberFieldSpec,
@@ -916,6 +927,7 @@ func (numStrKernelMolecule *numberStrKernelMolecule) formatNumStr(
 		negativeNumberSign,
 		positiveNumberSign,
 		zeroNumberSign,
+		currencySymbol,
 		numberFieldSpec,
 		ePrefix.XCpy(
 			"numStrKernel->"))

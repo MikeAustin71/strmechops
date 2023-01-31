@@ -380,7 +380,10 @@ func (nStrHelperNanobot *numStrHelperNanobot) formatNumStrComponents(
 	numberSign NumericSignValueType,
 	decSeparator DecimalSeparatorSpec,
 	intSeparatorDto IntegerSeparatorSpec,
-	numberSymbolsGroup NumStrNumberSymbolGroup,
+	negativeNumberSign NumStrNumberSymbolSpec,
+	positiveNumberSign NumStrNumberSymbolSpec,
+	zeroNumberSign NumStrNumberSymbolSpec,
+	currencySymbol NumStrNumberSymbolSpec,
 	numberFieldSpec NumStrNumberFieldSpec,
 	errPrefDto *ePref.ErrPrefixDto) (
 	numStr string,
@@ -465,7 +468,7 @@ func (nStrHelperNanobot *numStrHelperNanobot) formatNumStrComponents(
 	}
 
 	if numberSign == NumSignVal.Negative() &&
-		numberSymbolsGroup.negativeNumberSign.IsNOP() {
+		negativeNumberSign.IsNOP() {
 
 		err = fmt.Errorf("%v\n"+
 			"Error: The numeric value is negative however\n"+
@@ -514,7 +517,6 @@ func (nStrHelperNanobot *numStrHelperNanobot) formatNumStrComponents(
 	}
 
 	numOfFracDigits := fractionalDigits.GetRuneArrayLength()
-	numOfIntDigits := integerDigits.GetRuneArrayLength()
 
 	if numOfFracDigits > 0 &&
 		decSeparator.GetNumberOfSeparatorChars() == 0 {
@@ -531,6 +533,8 @@ func (nStrHelperNanobot *numStrHelperNanobot) formatNumStrComponents(
 	}
 
 	var numStrWithIntSeps []rune
+
+	numOfIntDigits := integerDigits.GetRuneArrayLength()
 
 	if numOfIntDigits > 0 {
 
@@ -567,13 +571,7 @@ func (nStrHelperNanobot *numStrHelperNanobot) formatNumStrComponents(
 	var leadingNumFieldSymPos,
 		trailingNumFieldSymPos NumberFieldSymbolPosition
 
-	var currencySymbolSpec,
-		numSignSymbolSpec NumStrNumberSymbolSpec
-
-	currencySymbolSpec,
-		err = numberSymbolsGroup.GetCurrencySymbolSpec(
-		ePrefix.XCpy(
-			"currencySymbolSpec<-numberSymbolsGroup"))
+	var numSignSymbolSpec NumStrNumberSymbolSpec
 
 	if err != nil {
 
@@ -582,13 +580,13 @@ func (nStrHelperNanobot *numStrHelperNanobot) formatNumStrComponents(
 
 	if numberSign == NumSignVal.Negative() {
 
-		if numberSymbolsGroup.IsNOPNegativeNumSymbols() == true {
+		if negativeNumberSign.IsNOP() == true {
 
 			err = fmt.Errorf("%v\n"+
 				"Error: The Negative Number Sign Symbol Specification is invalid!\n"+
 				"'numberSign' specifies a negative numeric value, but no negative\n"+
 				"number sign symbols have been configured in input parameter,\n"+
-				"'numberSymbolsGroup'.\n",
+				"'negativeNumberSign'.\n",
 				ePrefix.String())
 
 			return numStr, err
@@ -596,9 +594,9 @@ func (nStrHelperNanobot *numStrHelperNanobot) formatNumStrComponents(
 		}
 
 		numSignSymbolSpec,
-			err = numberSymbolsGroup.GetNegativeNumberSignSpec(
+			err = negativeNumberSign.CopyOut(
 			ePrefix.XCpy(
-				"numSignSymbolSpec<-numSignSymbolSpec-Negative"))
+				"numSignSymbolSpec<-negativeNumberSign"))
 
 		if err != nil {
 
@@ -607,16 +605,16 @@ func (nStrHelperNanobot *numStrHelperNanobot) formatNumStrComponents(
 
 	} else if numberSign == NumSignVal.Positive() {
 
-		if numberSymbolsGroup.IsNOPPositiveNumSymbols() == true {
+		if positiveNumberSign.IsNOP() == true {
 
 			numSignSymbolSpec.SetNOP()
 
 		} else {
 
 			numSignSymbolSpec,
-				err = numberSymbolsGroup.GetPositiveNumberSignSpec(
+				err = positiveNumberSign.CopyOut(
 				ePrefix.XCpy(
-					"numSignSymbolSpec<-numSignSymbolSpec-Positive"))
+					"numSignSymbolSpec<-positiveNumberSign"))
 
 			if err != nil {
 
@@ -628,16 +626,16 @@ func (nStrHelperNanobot *numStrHelperNanobot) formatNumStrComponents(
 		// MUST BE !
 		//	numberSign == NumSignVal.Zero()
 
-		if numberSymbolsGroup.IsNOPZeroNumSymbols() == true {
+		if zeroNumberSign.IsNOP() == true {
 
 			numSignSymbolSpec.SetNOP()
 
 		} else {
 
 			numSignSymbolSpec,
-				err = numberSymbolsGroup.GetZeroNumberSignSpec(
+				err = zeroNumberSign.CopyOut(
 				ePrefix.XCpy(
-					"numSignSymbolSpec<-numSignSymbolSpec-Zero"))
+					"numSignSymbolSpec<-zeroNumberSign"))
 
 			if err != nil {
 
@@ -735,39 +733,65 @@ func (nStrHelperNanobot *numStrHelperNanobot) formatNumStrComponents(
 
 	var currencySymbolStr string
 
-	if currencySymbolSpec.IsNOP() == false {
+	if currencySymbol.IsNOP() == false {
 		// Currency Symbols are configured
 
-		if currencySymbolSpec.
+		if currencySymbol.
 			leadingNumberSymbols.
 			GetRuneArrayLength() > 0 {
 
+			// We have a leading currency symbol
+			//	$ 123.45
 			currencySymbolStr =
-				numberSymbolsGroup.currencySymbol.
+				currencySymbol.
 					leadingNumberSymbols.
 					GetCharacterString()
 
 			if leadingNumFieldSymPos ==
-				currencySymbolSpec.
+				currencySymbol.
 					leadingNumberFieldSymbolPosition {
-				// Number sign and Currency Field Positions
-				//	are EQUAL
+				// Both Leading Number sign and Leading
+				//	Currency Symbol Field Positions
+				//	are EQUAL!
 
 				if leadingNumFieldSymPos ==
 					NumFieldSymPos.InsideNumField() {
+					// We have a Leading Number sign and a
+					// Leading Currency Symbol.
+					//
+					// Both Symbols will go inside the Number Field
 
-					if currencySymbolSpec.
+					if currencySymbol.
 						currencyNumSignRelativePos ==
 						CurrNumSignRelPos.InsideNumSign() {
 
+						// We have a Leading Number sign and a
+						// Leading Currency Symbol.
+						//
+						// Both Symbols will go inside the
+						//	Number Field.
+						//
+						// Leading Currency Symbol goes inside
+						// the Leading Number sign '-$'
+
+						// " - $123.45"
 						insideNumFieldLeadingSymbols =
 							insideNumFieldLeadingSymbols +
 								currencySymbolStr
 
-					} else if currencySymbolSpec.
+					} else if currencySymbol.
 						currencyNumSignRelativePos ==
 						CurrNumSignRelPos.OutsideNumSign() {
+						// We have a Leading Number sign and a
+						// Leading Currency Symbol.
+						//
+						// Both Symbols will go inside the
+						// Number Field
+						//
+						// Leading Currency Symbol goes outside
+						// the Leading Number sign '$-'
 
+						//  " $ -123.45"
 						outsideNumFieldLeadingSymbols =
 							currencySymbolStr +
 								outsideNumFieldLeadingSymbols
@@ -776,31 +800,57 @@ func (nStrHelperNanobot *numStrHelperNanobot) formatNumStrComponents(
 
 						err = fmt.Errorf("%v\n"+
 							"Error: Currency Number Sign Relative Position is invalid!\n"+
-							"numberSymbolsGroup.currencySymbol.currencyNumSignRelativePos  String Value = %v\n"+
-							"numberSymbolsGroup.currencySymbol.currencyNumSignRelativePos Integer Value = %v\n",
+							"currencySymbol.currencyNumSignRelativePos  String Value = %v\n"+
+							"currencySymbol.currencyNumSignRelativePos Integer Value = %v\n",
 							ePrefix.String(),
-							currencySymbolSpec.currencyNumSignRelativePos.String(),
-							currencySymbolSpec.currencyNumSignRelativePos.XValueInt())
+							currencySymbol.currencyNumSignRelativePos.String(),
+							currencySymbol.currencyNumSignRelativePos.XValueInt())
 
 						return numStr, err
 					}
 
 				} else {
-					// MUST BE!
 					// leadingNumFieldSymPos ==
-					//	 NumFieldSymPos.OutsideNumField()
+					//	NumFieldSymPos.OutsideNumField()
+					//
+					// We have a Leading Number sign and
+					//	a Leading Currency Symbol.
+					//
+					// Both Leading Currency Symbol and
+					//	Leading Number Sign Symbols will go
+					//	outside the Number Field
+					//		$- " 123.45"
 
-					if currencySymbolSpec.
+					if currencySymbol.
 						currencyNumSignRelativePos ==
 						CurrNumSignRelPos.InsideNumSign() {
-
+						// We have a Leading Number sign and
+						//	a Leading Currency Symbol.
+						//
+						// Both Leading Currency Symbol and
+						//	Leading Number Sign Symbols will go
+						//	outside the Number Field
+						//
+						// Leading Currency Symbol is inside
+						//	the Leading Number Sign
+						//	-$" 123.45"
 						outsideNumFieldLeadingSymbols =
 							outsideNumFieldLeadingSymbols +
 								currencySymbolStr
 
-					} else if currencySymbolSpec.
+					} else if currencySymbol.
 						currencyNumSignRelativePos ==
 						CurrNumSignRelPos.OutsideNumSign() {
+						// We have a Leading Number sign and
+						//	a Leading Currency Symbol.
+						//
+						// Both Leading Currency Symbol and
+						//	Leading Number Sign Symbols will go
+						//	outside the Number Field
+						//
+						// Leading Currency Symbol is outside
+						//	the Leading Number Sign
+						//	$-" 123.45"
 
 						outsideNumFieldLeadingSymbols =
 							currencySymbolStr +
@@ -810,11 +860,11 @@ func (nStrHelperNanobot *numStrHelperNanobot) formatNumStrComponents(
 
 						err = fmt.Errorf("%v\n"+
 							"Error: Currency Number Sign Relative Position is invalid!\n"+
-							"numberSymbolsGroup.currencySymbol.currencyNumSignRelativePos  String Value = %v\n"+
-							"numberSymbolsGroup.currencySymbol.currencyNumSignRelativePos Integer Value = %v\n",
+							"currencySymbol.currencyNumSignRelativePos  String Value = %v\n"+
+							"currencySymbol.currencyNumSignRelativePos Integer Value = %v\n",
 							ePrefix.String(),
-							currencySymbolSpec.currencyNumSignRelativePos.String(),
-							currencySymbolSpec.currencyNumSignRelativePos.XValueInt())
+							currencySymbol.currencyNumSignRelativePos.String(),
+							currencySymbol.currencyNumSignRelativePos.XValueInt())
 
 						return numStr, err
 
@@ -826,17 +876,35 @@ func (nStrHelperNanobot *numStrHelperNanobot) formatNumStrComponents(
 				// MUST BE !
 				// leadingNumFieldSymPos NOT EQUAL TO
 				//	currencySymbol.leadingNumberFieldSymbolPosition
+				//
+				// Currency and Number Sign Field Positions
+				//	ARE NOT EQUAL!
 
-				if currencySymbolSpec.
+				if currencySymbol.
 					leadingNumberFieldSymbolPosition ==
 					NumFieldSymPos.InsideNumField() {
 
+					// Currency and Number Sign Field Positions
+					//	ARE NOT EQUAL!
+					//
+					// Leading Currency Symbol is inside the
+					//	Number Field. Leading Number Sign is
+					//	outside the Number Field.
+					//		-" $123.45"
 					insideNumFieldLeadingSymbols +=
 						currencySymbolStr
 
-				} else if currencySymbolSpec.
+				} else if currencySymbol.
 					leadingNumberFieldSymbolPosition ==
 					NumFieldSymPos.OutsideNumField() {
+
+					// Currency and Number Sign Field Positions
+					//	ARE NOT EQUAL!
+					//
+					// Leading Currency Symbol is outside the
+					//	Number Field. Leading Number Sign is
+					//	inside the Number Field.
+					//		$" -123.45"
 
 					outsideNumFieldLeadingSymbols +=
 						currencySymbolStr
@@ -845,11 +913,11 @@ func (nStrHelperNanobot *numStrHelperNanobot) formatNumStrComponents(
 
 					err = fmt.Errorf("%v\n"+
 						"Error: Currency Symbol Leading Field Symbol Position is invalid!\n"+
-						"numberSymbolsGroup.currencySymbol.leadingNumberFieldSymbolPosition  String Value = %v\n"+
-						"numberSymbolsGroup.currencySymbol.leadingNumberFieldSymbolPosition Integer Value = %v\n",
+						"currencySymbol.leadingNumberFieldSymbolPosition  String Value = %v\n"+
+						"currencySymbol.leadingNumberFieldSymbolPosition Integer Value = %v\n",
 						ePrefix.String(),
-						currencySymbolSpec.leadingNumberFieldSymbolPosition.String(),
-						currencySymbolSpec.leadingNumberFieldSymbolPosition.XValueInt())
+						currencySymbol.leadingNumberFieldSymbolPosition.String(),
+						currencySymbol.leadingNumberFieldSymbolPosition.XValueInt())
 
 					return numStr, err
 				}
@@ -857,83 +925,156 @@ func (nStrHelperNanobot *numStrHelperNanobot) formatNumStrComponents(
 
 		}
 
-		if currencySymbolSpec.
+		if currencySymbol.
 			trailingNumberSymbols.
 			GetRuneArrayLength() > 0 {
 
 			currencySymbolStr =
-				numberSymbolsGroup.currencySymbol.
+				currencySymbol.
 					trailingNumberSymbols.
 					GetCharacterString()
 
+			// We have a trailing currency symbol
+			// 	123.45 €
+
 			if trailingNumFieldSymPos ==
-				currencySymbolSpec.
+				currencySymbol.
 					trailingNumberFieldSymbolPosition {
-				// Number sign and Currency Field Positions
-				//	are EQUAL
+				// Both Trailing Number sign and Trailing
+				//	Currency Symbol Field Positions
+				//	are EQUAL!
 
 				if trailingNumFieldSymPos ==
 					NumFieldSymPos.InsideNumField() {
+					// We have a Trailing Number Sign and a
+					// Trailing Currency Symbol.
+					//
+					// Both Symbols will go inside the Number Field
 
-					if currencySymbolSpec.
+					if currencySymbol.
 						currencyNumSignRelativePos ==
 						CurrNumSignRelPos.InsideNumSign() {
 
-						insideNumFieldTrailingSymbols =
-							insideNumFieldTrailingSymbols +
-								currencySymbolStr
+						// We have a Trailing Number sign and a
+						// Trailing Currency Symbol.
+						//
+						// Both Symbols will go inside the Number Field
+						//
+						// Trailing Currency Symbol goes inside
+						// the Trailing Number sign '€-'
 
-					} else if currencySymbolSpec.
+						//  "123.45 € -"
+						insideNumFieldTrailingSymbols =
+							currencySymbolStr +
+								insideNumFieldTrailingSymbols
+
+					} else if currencySymbol.
 						currencyNumSignRelativePos ==
 						CurrNumSignRelPos.OutsideNumSign() {
+						// We have a Trailing Number sign and a
+						// Trailing Currency Symbol.
+						//
+						// Both Symbols will go inside the
+						// Number Field
+						//
+						// Trailing Currency Symbol goes outside
+						// the Trailing Number sign '-€'
 
+						//  "123.45 - €"
 						outsideNumFieldTrailingSymbols =
-							currencySymbolStr +
-								outsideNumFieldTrailingSymbols
+							outsideNumFieldTrailingSymbols +
+								currencySymbolStr
 
 					} else {
 
 						err = fmt.Errorf("%v\n"+
 							"Error: Currency Number Sign Relative Position is invalid!\n"+
-							"numberSymbolsGroup.currencySymbol.currencyNumSignRelativePos  String Value = %v\n"+
-							"numberSymbolsGroup.currencySymbol.currencyNumSignRelativePos Integer Value = %v\n",
+							"currencySymbol.currencyNumSignRelativePos  String Value = %v\n"+
+							"currencySymbol.currencyNumSignRelativePos Integer Value = %v\n",
 							ePrefix.String(),
-							currencySymbolSpec.currencyNumSignRelativePos.String(),
-							currencySymbolSpec.currencyNumSignRelativePos.XValueInt())
+							currencySymbol.currencyNumSignRelativePos.String(),
+							currencySymbol.currencyNumSignRelativePos.XValueInt())
 
 						return numStr, err
 					}
 
 				} else {
 					// MUST BE!
+					//
+					// Both Trailing Number sign and Trailing
+					//	Currency Symbol Field Positions
+					//	are EQUAL!
+					//
 					// trailingNumFieldSymPos ==
 					//	 NumFieldSymPos.OutsideNumField()
+					//
+					// We have a Trailing Number sign and
+					//	a Trailing Currency Symbol.
+					//
+					// Both Trailing Currency Symbol and
+					//	Trailing Number Sign Symbols will go
+					//	outside the Number Field
+					//		" 123.45" € -
 
-					if currencySymbolSpec.
+					if currencySymbol.
 						currencyNumSignRelativePos ==
 						CurrNumSignRelPos.InsideNumSign() {
-
-						outsideNumFieldTrailingSymbols =
-							outsideNumFieldTrailingSymbols +
-								currencySymbolStr
-
-					} else if currencySymbolSpec.
-						currencyNumSignRelativePos ==
-						CurrNumSignRelPos.OutsideNumSign() {
+						// Both Trailing Number sign and Trailing
+						//	Currency Symbol Field Positions
+						//	are EQUAL!
+						//
+						// trailingNumFieldSymPos ==
+						//	 NumFieldSymPos.OutsideNumField()
+						//
+						// We have a Trailing Number sign and
+						//	a Trailing Currency Symbol.
+						//
+						// Both Trailing Currency Symbol and
+						//	Trailing Number Sign Symbols will go
+						//	outside the Number Field
+						//
+						// The Trailing Currency symbol goes
+						//	inside the Trailing Number Sign
+						// "123.45" € -
 
 						outsideNumFieldTrailingSymbols =
 							currencySymbolStr +
 								outsideNumFieldTrailingSymbols
 
+					} else if currencySymbol.
+						currencyNumSignRelativePos ==
+						CurrNumSignRelPos.OutsideNumSign() {
+						// Both Trailing Number sign and Trailing
+						//	Currency Symbol Field Positions
+						//	are EQUAL!
+						//
+						// trailingNumFieldSymPos ==
+						//	 NumFieldSymPos.OutsideNumField()
+						//
+						// We have a Trailing Number sign and
+						//	a Trailing Currency Symbol.
+						//
+						// Both Trailing Currency Symbol and
+						//	Trailing Number Sign Symbols will go
+						//	outside the Number Field
+						//
+						// The Trailing Currency symbol goes
+						//	outside the Trailing Number Sign
+						// "123.45"  - €
+
+						outsideNumFieldTrailingSymbols =
+							outsideNumFieldTrailingSymbols +
+								currencySymbolStr
+
 					} else {
 
 						err = fmt.Errorf("%v\n"+
 							"Error: Currency Number Sign Relative Position is invalid!\n"+
-							"numberSymbolsGroup.currencySymbol.currencyNumSignRelativePos  String Value = %v\n"+
-							"numberSymbolsGroup.currencySymbol.currencyNumSignRelativePos Integer Value = %v\n",
+							"currencySymbol.currencyNumSignRelativePos  String Value = %v\n"+
+							"currencySymbol.currencyNumSignRelativePos Integer Value = %v\n",
 							ePrefix.String(),
-							currencySymbolSpec.currencyNumSignRelativePos.String(),
-							currencySymbolSpec.currencyNumSignRelativePos.XValueInt())
+							currencySymbol.currencyNumSignRelativePos.String(),
+							currencySymbol.currencyNumSignRelativePos.XValueInt())
 
 						return numStr, err
 
@@ -945,17 +1086,35 @@ func (nStrHelperNanobot *numStrHelperNanobot) formatNumStrComponents(
 				// MUST BE !
 				// trailingNumFieldSymPos NOT EQUAL TO
 				//	currencySymbol.trailingNumberFieldSymbolPosition
+				//
+				// Currency and Number Sign Field Positions
+				//	ARE NOT EQUAL!
 
-				if currencySymbolSpec.
+				if currencySymbol.
 					trailingNumberFieldSymbolPosition ==
 					NumFieldSymPos.InsideNumField() {
 
+					// Currency and Number Sign Field Positions
+					//	ARE NOT EQUAL!
+					//
+					// Trailing Currency Symbol is inside the
+					//	Number Field. Trailing Number Sign is
+					//	outside the Number Field.
+					//		" $123.45€" -
 					insideNumFieldTrailingSymbols +=
 						currencySymbolStr
 
-				} else if currencySymbolSpec.
+				} else if currencySymbol.
 					trailingNumberFieldSymbolPosition ==
 					NumFieldSymPos.OutsideNumField() {
+
+					// Currency and Number Sign Field Positions
+					//	ARE NOT EQUAL!
+					//
+					// Trailing Currency Symbol is outside the
+					//	Number Field. Trailing Number Sign is
+					//	inside the Number Field.
+					//		" 123.45-" €
 
 					outsideNumFieldTrailingSymbols +=
 						currencySymbolStr
@@ -964,11 +1123,11 @@ func (nStrHelperNanobot *numStrHelperNanobot) formatNumStrComponents(
 
 					err = fmt.Errorf("%v\n"+
 						"Error: Currency Symbol Trailing Field Symbol Position is invalid!\n"+
-						"numberSymbolsGroup.currencySymbol.trailingNumberFieldSymbolPosition  String Value = %v\n"+
-						"numberSymbolsGroup.currencySymbol.trailingNumberFieldSymbolPosition Integer Value = %v\n",
+						"currencySymbol.trailingNumberFieldSymbolPosition  String Value = %v\n"+
+						"currencySymbol.trailingNumberFieldSymbolPosition Integer Value = %v\n",
 						ePrefix.String(),
-						currencySymbolSpec.trailingNumberFieldSymbolPosition.String(),
-						currencySymbolSpec.trailingNumberFieldSymbolPosition.XValueInt())
+						currencySymbol.trailingNumberFieldSymbolPosition.String(),
+						currencySymbol.trailingNumberFieldSymbolPosition.XValueInt())
 
 					return numStr, err
 				}
