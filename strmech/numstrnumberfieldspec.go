@@ -1148,14 +1148,17 @@ func (nStrNumberFieldSpec *NumStrNumberFieldSpec) NewFieldSpec(
 //	NewNOP
 //
 //	'NOP' is a computer science term that stands for
-//	"No Operation". In this context, it means that
-//	method 'NewNOP' is returning an instance of
-//	NumStrNumberFieldSpec which will NOT construct
-//	a number field within which a number string
-//	is displayed. This means the length of the
-//	number field will be equal to the length of
-//	the number string and no text justification
-//	will be applied.
+//	"No Operation". In this context, it means that method
+//	'NewNOP' is returning an instance of
+//	NumStrNumberFieldSpec which will NOT construct a
+//	number field within which a number string is
+//	displayed. This means the length of the number field
+//	will be set equal to the length of the number string
+//	and no text justification will be applied.
+//
+//	In summary, any instance of NumStrNumberFieldSpec
+//	which is configured as a 'NOP' will be completely
+//	ignored by number string formatting algorithms.
 //
 // ----------------------------------------------------------------
 //
@@ -1187,7 +1190,8 @@ func (nStrNumberFieldSpec *NumStrNumberFieldSpec) NewFieldSpec(
 //			newNumberField.fieldLength = -1
 //
 //			newNumberField.fieldJustification = TxtJustify.None()
-func (nStrNumberFieldSpec *NumStrNumberFieldSpec) NewNOP() (newNumberField NumStrNumberFieldSpec) {
+func (nStrNumberFieldSpec *NumStrNumberFieldSpec) NewNOP() (
+	newNumberField NumStrNumberFieldSpec) {
 
 	if nStrNumberFieldSpec.lock == nil {
 		nStrNumberFieldSpec.lock = new(sync.Mutex)
@@ -1197,9 +1201,8 @@ func (nStrNumberFieldSpec *NumStrNumberFieldSpec) NewNOP() (newNumberField NumSt
 
 	defer nStrNumberFieldSpec.lock.Unlock()
 
-	newNumberField.fieldLength = -1
-
-	newNumberField.fieldJustification = TxtJustify.None()
+	new(numStrNumberFieldSpecAtom).setNOP(
+		&newNumberField)
 
 	return newNumberField
 }
@@ -1618,6 +1621,60 @@ func (nStrNumberFieldSpec *NumStrNumberFieldSpec) SetFieldJustification(
 					"<-fieldJustification"))
 }
 
+//	SetNOP
+//
+//	Reconfigures the current instance of
+//	NumStrNumberFieldSpec as a NOP. 'NOP' is a computer
+//	science term which stands for 'No Operation'.
+//
+//	In this context, it signals that the current instance
+//	of NumStrNumberFieldSpec has been configured as an
+//	empty placeholder which will not be used to construct
+//	a number field within which a number string is
+//	displayed. This means the length of the number field
+//	will be set equal to the length of the number string
+//	and no text justification will be applied.
+//
+//	In summary, after being configured as a 'NOP', the
+//	current instance of NumStrNumberFieldSpec will be
+//	completely ignored by number string formatting
+//	algorithms.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will delete, overwrite and reset all
+//	pre-existing data values in the current instance of
+//	NumStrNumberFieldSpec.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	NONE
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	NONE
+func (nStrNumberFieldSpec *NumStrNumberFieldSpec) SetNOP() {
+
+	if nStrNumberFieldSpec.lock == nil {
+		nStrNumberFieldSpec.lock = new(sync.Mutex)
+	}
+
+	nStrNumberFieldSpec.lock.Lock()
+
+	defer nStrNumberFieldSpec.lock.Unlock()
+
+	new(numStrNumberFieldSpecAtom).setNOP(
+		nStrNumberFieldSpec)
+
+	return
+}
+
 // numStrNumberFieldSpecNanobot - This type provides
 // helper methods for NumStrNumberFieldSpec
 type numStrNumberFieldSpecNanobot struct {
@@ -2012,6 +2069,77 @@ func (nStrNumFieldSpecAtom *numStrNumberFieldSpecAtom) equal(
 	return true
 }
 
+//	setNOP
+//
+//	Receives an instance of NumStrNumberFieldSpec and
+//	reconfigures that instance as a NOP. 'NOP' is a
+//	computer science term which stands for
+//	'No Operation'.
+//
+//	In this context, it signals that the subject instance
+//	of NumStrNumberFieldSpec has been configured as an
+//	empty placeholder which will not be used to construct
+//	a number field within which a number string
+//	is displayed. This means the length of the number
+//	field will be equal to the length of the number
+//	string and no text justification will be applied.
+//
+//	In summary, any instance of NumStrNumberFieldSpec
+//	which is configured as a 'NOP' will be completely
+//	ignored by number string formatting algorithms.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will delete, overwrite and reset all
+//	pre-existing data values in the instance of
+//	NumStrNumberFieldSpec passed as input parameter
+//	'nStrNumFieldSpec'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	nStrNumFieldSpec           *NumStrNumberFieldSpec
+//
+//		A pointer to an instance of NumStrNumberFieldSpec.
+//		'nStrNumFieldSpec' will be reconfigured as a 'NOP'
+//		or empty placeholder which will not be used to
+//		construct a number field within which a number
+//		string is displayed.
+//
+//		This means the length of the number field will be
+//		set equal to the length of the number string and
+//		no text justification will be applied.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	NONE
+func (nStrNumFieldSpecAtom *numStrNumberFieldSpecAtom) setNOP(
+	nStrNumFieldSpec *NumStrNumberFieldSpec) {
+
+	if nStrNumFieldSpecAtom.lock == nil {
+		nStrNumFieldSpecAtom.lock = new(sync.Mutex)
+	}
+
+	nStrNumFieldSpecAtom.lock.Lock()
+
+	defer nStrNumFieldSpecAtom.lock.Unlock()
+
+	if nStrNumFieldSpec == nil {
+		return
+	}
+
+	nStrNumFieldSpec.fieldLength = -1
+
+	nStrNumFieldSpec.fieldJustification = TxtJustify.None()
+
+	return
+}
+
 // setNStrNumberFieldLength - Deletes and resets the member
 // variable data value for 'NumStrNumberFieldSpec.fieldLength'
 // contained in the instance of NumStrNumberFieldSpec passed
@@ -2098,7 +2226,7 @@ func (nStrNumFieldSpecAtom *numStrNumberFieldSpecAtom) setNStrNumberFieldLength(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"numStrNumberFieldSpecNanobot."+
+		"numStrNumberFieldSpecAtom."+
 			"setNStrNumberFieldLength()",
 		"")
 
@@ -2239,7 +2367,7 @@ func (nStrNumFieldSpecAtom *numStrNumberFieldSpecAtom) setNStrNumberFieldJustifi
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"numStrNumberFieldSpecNanobot."+
+		"numStrNumberFieldSpecAtom."+
 			"setNStrNumberFieldJustification()",
 		"")
 

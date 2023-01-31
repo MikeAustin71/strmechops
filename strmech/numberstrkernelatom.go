@@ -1042,6 +1042,11 @@ func (numStrKernelAtom *numberStrKernelAtom) formatNumStrComponents(
 		numberFieldSpec.GetNumFieldJustification(),
 		ePrefix.XCpy("numStr<-tempNumStr"))
 
+	if err != nil {
+
+		return numStr, err
+	}
+
 	if lenLeadingNumSymbol > 0 &&
 		leadingNumSymPosition == NumFieldSymPos.OutsideNumField() {
 

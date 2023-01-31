@@ -6690,7 +6690,7 @@ func (numStrKernel *NumberStrKernel) FmtNumStr(
 //		integer grouping and separation within a Number
 //		String.
 //
-//	numberSymbolsGroup  			NumStrNumberSymbolGroup
+//	numberSymbolGroup  			NumStrNumberSymbolGroup
 //
 //		This instance of NumStrNumberSymbolGroup contains the
 //		Number Symbol Specifications for negative numeric
@@ -6707,34 +6707,33 @@ func (numStrKernel *NumberStrKernel) FmtNumStr(
 //				values formatted and displayed in number
 //				stings.
 //
-//				For currency presentations, the currency
-//				symbol is combined with the negative number
-//				sign.
-//
-//				Example-1: Leading Number Symbols
-//					Leading Number Symbols for Negative Values
+//				Example-1: Leading Number Sign Symbols
+//					Leading Number Sign Symbols for Negative
+//					Values
 //
 //					Leading Symbols: "- "
 //					Number String:   "- 123.456"
 //
-//				Example-2: Leading Number Symbols With Currency
-//					Leading Number Symbols for Negative Values
+//				Example-2: Leading Number Sign Symbols
+//					Leading Number Sign Symbols for Negative
+//					Values
 //
-//					Leading Symbols: "$-"
-//					Number String:   "$-123.456"
+//					Leading Symbols: "-"
+//					Number String:   "-123.456"
 //
-//
-//				Example-3: Trailing Number Symbols
-//					Trailing Number Symbols for Negative Values
+//				Example-3: Trailing Number Sign Symbols
+//					Trailing Number Sign Symbols for Negative
+//					Values
 //
 //					Trailing Symbols: " -"
 //					Number String:   "123.456 -"
 //
-//				Example-4: Trailing Number Symbols
-//					Trailing Number Symbols for Negative Values
+//				Example-4: Trailing Number Sign Symbols
+//					Trailing Number Sign Symbols for Negative
+//					Values
 //
-//					Trailing Symbols: "-$"
-//					Number String:   "123.456-€"
+//					Trailing Symbols: "-"
+//					Number String:   "123.456-"
 //
 //			positiveNumberSign NumStrNumberSymbolSpec
 //
@@ -6745,76 +6744,108 @@ func (numStrKernel *NumberStrKernel) FmtNumStr(
 //				values using a Number String Positive Number
 //				Sign Specification.
 //
-//				For currency presentations, the currency
-//				symbol is combined with the positive number
-//				sign.
-//
-//				Example-1: Leading Number Symbols
-//					Leading Number Symbols for Positive Values
+//				Example-1: Leading Number Sign Symbols
+//					Leading Number Sign Symbols for Positive
+//					Values
 //
 //					Leading Symbols: "+ "
 //					Number String:   "+ 123.456"
 //
-//				Example-2: Leading Number Symbols
-//					Leading Number Symbols for Positive Values
+//				Example-2: Leading Number Sign Symbols
+//					Leading Number Sign Symbols for Positive
+//					Values
 //
-//					Leading Symbols: "$+"
-//					Number String:   "$+123.456"
+//					Leading Symbols: "+"
+//					Number String:   "+123.456"
 //
-//				Example-3: Leading Number Symbols
-//					Leading Number Symbols for Positive Values
-//
-//					Leading Symbols: "$"
-//					Number String:   "$123.456"
-//
-//				Example-4: Trailing Number Symbols
-//					Trailing Number Symbols for Positive Values
+//				Example-3: Trailing Number Sign Symbols
+//					Trailing Number Sign Symbols for Positive
+//					Values
 //
 //					Trailing Symbols: " +"
 //					Number String:   "123.456 +"
 //
-//				Example-5: Trailing Number Symbols
-//					Trailing Number Symbols for Positive Values
+//				Example-4: Trailing Number Sign Symbols
+//					Trailing Number Sign Symbols for Positive
+//					Values
 //
-//					Trailing Symbols: "+€"
-//					Number String:   "123.456+€"
-//
-//				Example-6: Trailing Number Symbols
-//					Trailing Number Symbols for Positive Values
-//
-//					Trailing Symbols: " €"
-//					Number String:   "123.456 €"
+//					Trailing Symbols: "+"
+//					Number String:   "123.456+"
 //
 //			zeroNumberSign NumStrNumberSymbolSpec
 //
-//				The Number String Zero Number Symbol
+//				The Number String Zero Number Sign
 //				Specification is used to configure number
-//				symbols for zero numeric values formatted
+//				sign symbols for zero numeric values formatted
 //				and displayed in number stings. Zero number
 //				signs are commonly omitted because zero
 //				does not technically qualify as either a
 //				positive or negative value. However,
-//				currency symbols may be required for zero
-//				values.
+//				the user has the option to configure number
+//				sign symbols for zero values if necessary.
 //
-//				For currency presentations, the currency
-//				symbol is often used as either a leading
-//				or trailing symbol for zero numeric
-//				values.
+//				Example-1: Leading Number Sign Symbols
+//					Leading Number Sign Symbols for Zero Values
 //
-//				Example-1: Leading Number Symbols
-//					Leading Number Symbols for Zero Values
-//
-//					Leading Symbols: "$"
+//					Leading Symbols: "+"
 //					Trailing Symbols: ""
-//					Number String:   "$0.00"
+//					Number String:   "+0.00"
 //
-//				Example-2: Trailing Number Symbols
-//					Trailing Number Symbols for Zero Values
+//				Example-2: Leading Number Sign Symbols
+//					Leading Number Sign Symbols for Zero Values
+//
+//					Leading Symbols: "+ "
+//					Trailing Symbols: ""
+//					Number String:   "+ 0.00"
+//
+//				Example-3: Trailing Number Sign Symbols
+//					Trailing Number Sign Symbols for Zero Values
 //
 //					Leading Symbols: ""
-//					Trailing Symbols: " €"
-//					Number String:   "0.00 €"
+//					Trailing Symbols: " +"
+//					Number String:   "0.00 +"
+//
+//				Example-4: Trailing Number Sign Symbols
+//					Trailing Number Sign Symbols for Zero Values
+//
+//					Leading Symbols: ""
+//					Trailing Symbols: "+"
+//					Number String:   "0.00+"
+//
+//			currencySymbol NumStrNumberSymbolSpec
+//
+//				A Currency Symbol next to a number shows the
+//				number is a monetary amount.
+//
+//				Examples of Currency Symbols include the Dollar
+//				sign ('$'), Euro sign ('€') or Pound sign ('£').
+//
+//				This instance of NumStrNumberSymbolSpec is used
+//				to configure leading Currency Symbols, trailing
+//				Currency Symbols or both leading and trailing
+//				Currency Symbols.
+//
+//				Example-1: Leading Currency Symbols
+//
+//					Leading Currency Symbols: "$ "
+//					Number String:   "$ 123.456"
+//
+//				Example-2: Leading Currency Symbols
+//
+//					Leading Currency Symbols: "$"
+//					Number String:   "$123.456"
+//
+//				Example-3: Trailing Currency Symbols
+//					Trailing Currency Symbols for Positive Values
+//
+//					Trailing Currency Symbols: "€"
+//					Number String:   "123.456€"
+//
+//				Example-4: Trailing Currency Symbols
+//					Trailing Currency Symbols for Positive Values
+//
+//					Trailing Currency Symbols: " €"
+//					Number String:   "123.456 €"
 //		}
 //
 //	numberFieldSpec				NumStrNumberFieldSpec
@@ -7200,7 +7231,7 @@ func (numStrKernel *NumberStrKernel) FmtNumStr(
 func (numStrKernel *NumberStrKernel) FmtNumStrComponents(
 	decSeparatorSpec DecimalSeparatorSpec,
 	intSeparatorSpec IntegerSeparatorSpec,
-	numberSymbolsSpec NumStrNumberSymbolGroup,
+	numberSymbolGroup NumStrNumberSymbolGroup,
 	numberFieldSpec NumStrNumberFieldSpec,
 	roundingSpec NumStrRoundingSpec,
 	errorPrefix interface{}) (
@@ -7234,7 +7265,7 @@ func (numStrKernel *NumberStrKernel) FmtNumStrComponents(
 		err = new(NumStrFormatSpec).NewNumFmtComponents(
 		decSeparatorSpec,
 		intSeparatorSpec,
-		numberSymbolsSpec,
+		numberSymbolGroup,
 		numberFieldSpec,
 		ePrefix.XCpy(
 			"numStrFmtSpec<-"))
