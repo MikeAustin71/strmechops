@@ -6690,7 +6690,7 @@ func (numStrKernel *NumberStrKernel) FmtNumStr(
 //		integer grouping and separation within a Number
 //		String.
 //
-//	numberSymbolGroup  			NumStrNumberSymbolGroup
+//	numberSymbolsGroup  		NumStrNumberSymbolGroup
 //
 //		This instance of NumStrNumberSymbolGroup contains the
 //		Number Symbol Specifications for negative numeric
@@ -7231,7 +7231,7 @@ func (numStrKernel *NumberStrKernel) FmtNumStr(
 func (numStrKernel *NumberStrKernel) FmtNumStrComponents(
 	decSeparatorSpec DecimalSeparatorSpec,
 	intSeparatorSpec IntegerSeparatorSpec,
-	numberSymbolGroup NumStrNumberSymbolGroup,
+	numberSymbolsGroup NumStrNumberSymbolGroup,
 	numberFieldSpec NumStrNumberFieldSpec,
 	roundingSpec NumStrRoundingSpec,
 	errorPrefix interface{}) (
@@ -7265,7 +7265,7 @@ func (numStrKernel *NumberStrKernel) FmtNumStrComponents(
 		err = new(NumStrFormatSpec).NewNumFmtComponents(
 		decSeparatorSpec,
 		intSeparatorSpec,
-		numberSymbolGroup,
+		numberSymbolsGroup,
 		numberFieldSpec,
 		ePrefix.XCpy(
 			"numStrFmtSpec<-"))
