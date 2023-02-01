@@ -3163,6 +3163,7 @@ func (numStrKernel *NumberStrKernel) FmtCountrySignedNumStr(
 //
 //		NumberStrKernel.FmtNumStr()
 //		NumberStrKernel.FmtNumStrElements()
+//		NumberStrKernel.FmtNumStrParams()
 //
 // ----------------------------------------------------------------
 //
@@ -3693,6 +3694,7 @@ func (numStrKernel *NumberStrKernel) FmtCurrencyDefaultsFrance(
 //
 //		NumberStrKernel.FmtNumStr()
 //		NumberStrKernel.FmtNumStrElements()
+//		NumberStrKernel.FmtNumStrParams()
 //
 // ----------------------------------------------------------------
 //
@@ -4208,6 +4210,7 @@ func (numStrKernel *NumberStrKernel) FmtCurrencyDefaultsGermany(
 //
 //		NumberStrKernel.FmtNumStr()
 //		NumberStrKernel.FmtNumStrElements()
+//		NumberStrKernel.FmtNumStrParams()
 //
 // ----------------------------------------------------------------
 //
@@ -4732,6 +4735,7 @@ func (numStrKernel *NumberStrKernel) FmtCurrencyDefaultsUKMinus(
 //
 //		NumberStrKernel.FmtNumStr()
 //		NumberStrKernel.FmtNumStrElements()
+//		NumberStrKernel.FmtNumStrParams()
 //
 // ----------------------------------------------------------------
 //
@@ -5249,6 +5253,7 @@ func (numStrKernel *NumberStrKernel) FmtCurrencyDefaultsUSMinus(
 //
 //		NumberStrKernel.FmtNumStr()
 //		NumberStrKernel.FmtNumStrElements()
+//		NumberStrKernel.FmtNumStrParams()
 //
 // ----------------------------------------------------------------
 //
@@ -11539,6 +11544,7 @@ func (numStrKernel *NumberStrKernel) FmtSignedNumStrBasic(
 //
 //		NumberStrKernel.FmtNumStr()
 //		NumberStrKernel.FmtNumStrElements()
+//		NumberStrKernel.FmtNumStrParams()
 //
 // ----------------------------------------------------------------
 //
@@ -11560,11 +11566,15 @@ func (numStrKernel *NumberStrKernel) FmtSignedNumStrBasic(
 //
 // # Defaults
 //
+//	Decimal Separator
+//
 //	The radix point or decimal separator is set to the
 //	comma character (','):
 //
 //		French Example-1
 //		123,45 (The fractional digits are "45")
+//
+//	Integer Separator
 //
 //	The integer group separator is a space character
 //	(' ').
@@ -11576,17 +11586,23 @@ func (numStrKernel *NumberStrKernel) FmtSignedNumStrBasic(
 //		French Example-2
 //		1 000 000 000
 //
+//	Negative Number Formatting
+//
 //	The negative number sign is set to a leading minus sign
 //	('-').
 //
 //		French Example-3
 //		-1 000 000 000
 //
+//	Positive Number Formatting
+//
 //	The positive number sign is set to a blank or empty
 //	string ("").
 //
 //		French Example-4
 //		1 000 000 000
+//
+//	Zero Number Formatting
 //
 //	The zero number format is set to a blank or empty
 //	string ("").
@@ -12057,6 +12073,7 @@ func (numStrKernel *NumberStrKernel) FmtSignedNumStrFrance(
 //
 //		NumberStrKernel.FmtNumStr()
 //		NumberStrKernel.FmtNumStrElements()
+//		NumberStrKernel.FmtNumStrParams()
 //
 // ----------------------------------------------------------------
 //
@@ -12076,11 +12093,15 @@ func (numStrKernel *NumberStrKernel) FmtSignedNumStrFrance(
 //
 // # Defaults
 //
+//	Decimal Separator
+//
 //	The radix point or decimal separator is set to the
 //	comma character (','):
 //
 //		German Example-1
 //		123,45 (The fractional digits are "45")
+//
+//	Integer Separator
 //
 //	The integer group separator is a space character
 //	('.').
@@ -12093,17 +12114,23 @@ func (numStrKernel *NumberStrKernel) FmtSignedNumStrFrance(
 //		German Example-2
 //		1.000.000.000
 //
+//	Negative Number Formatting
+//
 //	The negative number sign is set to a trailing minus
 //	sign ('-').
 //
 //		German Example-3
 //		1.000.000-
 //
+//	Positive Number Formatting
+//
 //	The positive number sign is set to a blank or empty
 //	string ("").
 //
 //		German Example-4
 //		1.000.000
+//
+//	Zero Number Formatting
 //
 //	The zero number format is set to a blank or empty
 //	string ("").
@@ -12547,7 +12574,7 @@ func (numStrKernel *NumberStrKernel) FmtSignedNumStrGermany(
 			ePrefix.XCpy("numStrKernel"))
 }
 
-//	FmtSignedNumStrUK
+//	FmtSignedNumStrUKMinus
 //
 //	Returns a formatted number string based on the
 //	numeric value contained in the current instance
@@ -12564,6 +12591,7 @@ func (numStrKernel *NumberStrKernel) FmtSignedNumStrGermany(
 //
 //		NumberStrKernel.FmtNumStr()
 //		NumberStrKernel.FmtNumStrElements()
+//		NumberStrKernel.FmtNumStrParams()
 //
 // ----------------------------------------------------------------
 //
@@ -12577,11 +12605,15 @@ func (numStrKernel *NumberStrKernel) FmtSignedNumStrGermany(
 //
 // # Defaults
 //
+//	Decimal Separator
+//
 //	The radix point or decimal separator is set to the
 //	period character ('.').
 //
 //		United Kingdom Example-1
 //			123.45 (The fractional digits are "45")
+//
+//	Integer Separator
 //
 //	The integer group separator is a comma character
 //	(',').
@@ -12593,17 +12625,23 @@ func (numStrKernel *NumberStrKernel) FmtSignedNumStrGermany(
 //		United Kingdom Example-2
 //			1,000,000,000
 //
+//	Negative Number Formatting
+//
 //	The negative number sign is set to a leading minus sign
 //	('-').
 //
 //		United Kingdom Example-3
 //			-1,000,000,000
 //
+//	Positive Number Formatting
+//
 //	The positive number sign is set to a blank or empty
 //	string ("").
 //
 //		United Kingdom Example-4
 //			1,000,000,000
+//
+//	Zero Number Formatting
 //
 //	The zero number format is set to a blank or empty
 //	string ("").
@@ -12998,7 +13036,7 @@ func (numStrKernel *NumberStrKernel) FmtSignedNumStrGermany(
 //	 	chain and text passed by input parameter, 'errorPrefix'.
 //	 	The 'errorPrefix' text will be attached to the beginning
 //	 	of the error message.
-func (numStrKernel *NumberStrKernel) FmtSignedNumStrUK(
+func (numStrKernel *NumberStrKernel) FmtSignedNumStrUKMinus(
 	numberFieldSpec NumStrNumberFieldSpec,
 	roundingSpec NumStrRoundingSpec,
 	errorPrefix interface{}) (
@@ -13020,7 +13058,7 @@ func (numStrKernel *NumberStrKernel) FmtSignedNumStrUK(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumberStrKernel."+
-			"FmtSignedNumStrUK()",
+			"FmtSignedNumStrUKMinus()",
 		"")
 
 	if err != nil {
@@ -13047,7 +13085,7 @@ func (numStrKernel *NumberStrKernel) FmtSignedNumStrUK(
 			ePrefix.XCpy("numStrKernel"))
 }
 
-//	FmtSignedNumStrUS
+//	FmtSignedNumStrUSMinus
 //
 //	Returns a formatted number string based on the
 //	numeric value contained in the current instance
@@ -13055,8 +13093,17 @@ func (numStrKernel *NumberStrKernel) FmtSignedNumStrUK(
 //	formatting parameters typically applied in the
 //	US (United States).
 //
-//	The returned number string will NOT contain
-//	currency symbols.
+//	The word 'Minus' in the method name signals that
+//	negative numeric values will be configured with a
+//	leading minus sign ('-').
+//
+//		US Example: Negative Numeric Value
+//				-123
+//
+//	A signed number is a numeric value formatted in a
+//	number string which does NOT contain currency
+//	symbols. Therefore, the number string returned by
+//	this method will NOT contain currency symbols.
 //
 //	If custom decimal separator, integer separators,
 //	or negative number sign characters are required,
@@ -13064,16 +13111,21 @@ func (numStrKernel *NumberStrKernel) FmtSignedNumStrUK(
 //
 //		NumberStrKernel.FmtNumStr()
 //		NumberStrKernel.FmtNumStrElements()
+//		NumberStrKernel.FmtNumStrParams()
 //
 // ----------------------------------------------------------------
 //
 // # Defaults
+//
+//	Decimal Separator
 //
 //	The radix point or decimal separator is set to the
 //	period character ('.').
 //
 //		United States Example-1
 //			123.45
+//
+//	Integer Separator
 //
 //	The integer group separator is a comma character
 //	(',').
@@ -13085,17 +13137,23 @@ func (numStrKernel *NumberStrKernel) FmtSignedNumStrUK(
 //		United States Example-2
 //			1,000,000,000
 //
+//	Negative Number Formatting
+//
 //	The negative number sign is set to a leading minus sign
 //	('-').
 //
 //		United States Example-3
 //			-1,000,000,000
 //
+//	Positive Number Formatting
+//
 //	The positive number sign is set to a blank or empty
 //	string ("").
 //
 //		United States Example-4
 //			1,000,000,000
+//
+//	Zero Number Formatting
 //
 //	The zero number format is set to a blank or empty
 //	string ("").
@@ -13490,7 +13548,7 @@ func (numStrKernel *NumberStrKernel) FmtSignedNumStrUK(
 //	 	chain and text passed by input parameter, 'errorPrefix'.
 //	 	The 'errorPrefix' text will be attached to the beginning
 //	 	of the error message.
-func (numStrKernel *NumberStrKernel) FmtSignedNumStrUS(
+func (numStrKernel *NumberStrKernel) FmtSignedNumStrUSMinus(
 	numberFieldSpec NumStrNumberFieldSpec,
 	roundingSpec NumStrRoundingSpec,
 	errorPrefix interface{}) (
@@ -13512,7 +13570,7 @@ func (numStrKernel *NumberStrKernel) FmtSignedNumStrUS(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumberStrKernel."+
-			"FmtSignedNumStrUS()",
+			"FmtSignedNumStrUSMinus()",
 		"")
 
 	if err != nil {
@@ -13523,6 +13581,536 @@ func (numStrKernel *NumberStrKernel) FmtSignedNumStrUS(
 
 	numStrFmtSpec,
 		err = new(NumStrFormatSpec).NewSignedNumDefaultsUSMinus(
+		numberFieldSpec,
+		ePrefix.XCpy(
+			"newSignedNumFmtSpec<-"))
+
+	if err != nil {
+		return numStr, err
+	}
+
+	return new(numberStrKernelMolecule).
+		formatNumStr(
+			numStrKernel,
+			roundingSpec,
+			numStrFmtSpec,
+			ePrefix.XCpy("numStrKernel"))
+}
+
+//	FmtSignedNumStrUSParen
+//
+//	Returns a formatted number string based on the
+//	numeric value contained in the current instance
+//	of NumberStrKernel and the Signed Number String
+//	formatting parameters typically applied in the
+//	US (United States).
+//
+//	The term 'Paren' in the method name signals that
+//	negative numeric values will be configured with a
+//	surrounding parentheses ('()').
+//
+//		US Example: Negative Numeric Value
+//					(123.456)
+//
+//	A signed number is a numeric value formatted in a
+//	number string which does NOT contain currency
+//	symbols. Therefore, the returned number string
+//	returned by this method will NOT contain currency
+//	symbols.
+//
+//	If custom decimal separator, integer separators,
+//	or negative number sign characters are required,
+//	see methods:
+//
+//		NumberStrKernel.FmtNumStr()
+//		NumberStrKernel.FmtNumStrElements()
+//		NumberStrKernel.FmtNumStrParams()
+//
+// ----------------------------------------------------------------
+//
+// # Defaults
+//
+//	Decimal Separator:
+//
+//	The radix point or decimal separator is set to the
+//	period character ('.').
+//
+//		US Example-1
+//			123.45 (The fractional digits are "45")
+//
+//	Integer Group Separator:
+//
+//	The integer group separator is a comma character
+//	(',').
+//
+//	The integer group specification is set to
+//	'thousands'. This means that integer digits will be
+//	separated into 'thousands' with each group containing
+//	three digits each:
+//
+//		US Example-2
+//			1,000,000,000
+//
+//	Negative Number Formatting:
+//
+//	The negative signed number symbol is configured with
+//	surrounding parentheses ('()') meaning that all
+//	negative numeric values will be surrounded with a
+//	leading parenthesis sign ('(') and trailing closing
+//	parenthesis sing (')'). The negative number signs
+//	will be positioned inside the number field:
+//
+//		US Example-3
+//		NumFieldSymPos.InsideNumField()
+//				Number Field Length: 9
+//				Numeric Value: -123.45
+//				Number Symbol: Surrounding Parentheses ('()')
+//				Number Symbol Position: Inside Number Field
+//				Number Text Justification: Right Justified
+//				Formatted Number String: " (123.45)"
+//				Number Field Index:------>012345678
+//				Total Number String Length: 9
+//
+//	Positive Number Formatting:
+//
+//	The positive number sign is implied for positive
+//	numeric values. Therefore, the positive number sign
+//	symbol is set to a blank or empty string ("").
+//
+//		US Example-4
+//			Positive Numeric Value
+//				1,000,000
+//
+//	Zero Number Formatting:
+//
+//	Zero numeric values have no number sign. Therefore,
+//	the zero number symbol is set to a blank or empty
+//	string ("").
+//
+//		US Example-5
+//			Zero Numeric Value
+//					0
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	numberFieldSpec				NumStrNumberFieldSpec
+//
+//		This Number Field Specification contains all
+//		parameters necessary to format a Number String
+//		within a larger Number Field. In addition to
+//		specifying the length of number field, this
+//		object contains justification specifications
+//		for centering, left justifying or right
+//		justifying a Number String within a Number
+//		Field.
+//
+//		type NumStrNumberFieldSpec struct {
+//
+//			fieldLength int
+//
+//				This parameter defines the length of the
+//				text field in which the numeric value will
+//				be displayed within a number string.
+//
+//				If 'fieldLength' is less than the length
+//				of the numeric value string, it will be
+//				automatically set equal to the length of
+//				that numeric value string.
+//
+//				To automatically set the value of
+//				'fieldLength' to the string length of the
+//				numeric value, set this parameter to a
+//				value of minus one (-1).
+//
+//				If this parameter is submitted with a
+//				value less than minus one (-1) or greater
+//				than 1-million (1,000,000), an error will
+//				be returned.
+//
+//			fieldJustification TextJustify
+//
+//				An enumeration which specifies the
+//				justification of the numeric value string
+//				within the number field length specified
+//				by data field 'fieldLength'.
+//
+//				Text justification can only be evaluated in
+//				the context of a number string, field length
+//				and a 'textJustification' object of type
+//				TextJustify. This is because number strings
+//				with a field length equal to or less than the
+//				length of the numeric value string never use
+//				text justification. In these cases, text
+//				justification is completely ignored.
+//
+//				If the field length parameter ('fieldLength')
+//				is greater than the length of the numeric
+//				value string, text justification must be equal
+//				to one of these three valid values:
+//
+//				          TextJustify(0).Left()
+//				          TextJustify(0).Right()
+//				          TextJustify(0).Center()
+//
+//				You can also use the abbreviated text
+//				justification enumeration syntax as follows:
+//
+//				          TxtJustify.Left()
+//				          TxtJustify.Right()
+//				          TxtJustify.Center()
+//		}
+//
+//	roundingSpec 				NumStrRoundingSpec
+//
+//		The Number String Rounding Specification
+//		contains all the parameters required to
+//		configure a rounding algorithm for a
+//		floating point number string.
+//
+//		type NumStrRoundingSpec struct {
+//
+//			roundingType NumberRoundingType
+//
+//			This enumeration parameter is used to specify the type
+//			of rounding algorithm that will be applied for the
+//			rounding of fractional digits in a number string.
+//
+//			Possible values are listed as follows:
+//				NumRoundType.None()
+//				NumRoundType.NoRounding()
+//				NumRoundType.HalfUpWithNegNums()
+//				NumRoundType.HalfDownWithNegNums()
+//				NumRoundType.HalfAwayFromZero()
+//				NumRoundType.HalfTowardsZero()
+//				NumRoundType.HalfToEven()
+//				NumRoundType.HalfToOdd()
+//				NumRoundType.Randomly()
+//				NumRoundType.Floor()
+//				NumRoundType.Ceiling()
+//				NumRoundType.Truncate()
+//
+//			NoRounding
+//
+//				Signals that no rounding operation will be performed
+//				on fractional digits contained in a number string.
+//				The fractional digits will therefore remain unchanged.
+//
+//			HalfUpWithNegNums
+//
+//				Half Round Up Including Negative Numbers. This method
+//				is intuitive but may produce unexpected results when
+//				applied to negative numbers.
+//
+//				'HalfUpWithNegNums' rounds .5 up.
+//
+//					Examples of 'HalfUpWithNegNums'
+//					7.6 rounds up to 8
+//					7.5 rounds up to 8
+//					7.4 rounds down to 7
+//					-7.4 rounds up to -7
+//					-7.5 rounds up to -7
+//					-7.6 rounds down to -8
+//
+//			HalfDownWithNegNums
+//
+//				Half Round Down Including Negative Numbers. This method
+//				is also considered intuitive but may produce unexpected
+//				results when applied to negative numbers.
+//
+//				'HalfDownWithNegNums' rounds .5 down.
+//
+//					Examples of HalfDownWithNegNums
+//
+//					7.6 rounds up to 8
+//					7.5 rounds down to 7
+//					7.4 rounds down to 7
+//					-7.4 rounds up to -7
+//					-7.5 rounds down to -8
+//					-7.6 rounds down to -8
+//
+//			HalfAwayFromZero
+//
+//				Round Half Away From Zero. This rounding method is treated
+//				as the default and this value is returned by method:
+//				NumberRoundingType(0).XGetDefaultRoundingType()
+//
+//				The 'HalfAwayFromZero' method rounds .5 further away from zero.
+//				It provides clear and consistent behavior when dealing with
+//				negative numbers.
+//
+//					Examples of HalfAwayFromZero
+//
+//					7.6 rounds away to 8
+//					7.5 rounds away to 8
+//					7.4 rounds to 7
+//					-7.4 rounds to -7
+//					-7.5 rounds away to -8
+//					-7.6 rounds away to -8
+//
+//			HalfTowardsZero
+//
+//				Round Half Towards Zero. 'HalfTowardsZero' rounds 0.5
+//				closer to zero. It provides clear and consistent behavior
+//				when dealing with negative numbers.
+//
+//					Examples of HalfTowardsZero
+//
+//					7.6 rounds away to 8
+//					7.5 rounds to 7
+//					7.4 rounds to 7
+//					-7.4 rounds to -7
+//					-7.5 rounds to -7
+//					-7.6 rounds away to -8
+//
+//			HalfToEven
+//
+//				Round Half To Even Numbers. 'HalfToEven' is also called
+//				Banker's Rounding. This method rounds 0.5 to the nearest
+//				even digit.
+//
+//					Examples of HalfToEven
+//
+//					7.5 rounds up to 8 (because 8 is an even number)
+//					but 6.5 rounds down to 6 (because 6 is an even number)
+//
+//					HalfToEven only applies to 0.5. Other numbers (not ending
+//					in 0.5) round to nearest as usual, so:
+//
+//					7.6 rounds up to 8
+//					7.5 rounds up to 8 (because 8 is an even number)
+//					7.4 rounds down to 7
+//					6.6 rounds up to 7
+//					6.5 rounds down to 6 (because 6 is an even number)
+//					6.4 rounds down to 6
+//
+//			HalfToOdd
+//
+//				Round Half to Odd Numbers. Similar to 'HalfToEven', but
+//				in this case 'HalfToOdd' rounds 0.5 towards odd numbers.
+//
+//					Examples of HalfToOdd
+//
+//					HalfToOdd only applies to 0.5. Other numbers (not ending
+//					in 0.5) round to nearest as usual.
+//
+//					7.5 rounds down to 7 (because 7 is an odd number)
+//
+//					6.5 rounds up to 7 (because 7 is an odd number)
+//
+//					7.6 rounds up to 8
+//					7.5 rounds down to 7 (because 7 is an odd number)
+//					7.4 rounds down to 7
+//					6.6 rounds up to 7
+//					6.5 rounds up to 7 (because 7 is an odd number)
+//					6.4 rounds down to 6
+//
+//			Randomly
+//
+//				Round Half Randomly. Uses a Random Number Generator to choose
+//				between rounding 0.5 up or down.
+//
+//				All numbers other than 0.5 round to the nearest as usual.
+//
+//			Floor
+//
+//				Yields the nearest integer down. Floor does not apply any
+//				special treatment to 0.5.
+//
+//				Floor Function: The greatest integer that is less than or
+//				equal to x
+//				Source: https://www.mathsisfun.com/sets/function-floor-ceiling.html
+//
+//				In mathematics and computer science, the floor function is
+//				the function that takes as input a real number x, and gives
+//				as output the greatest integer less than or equal to x,
+//				denoted floor(x) or ⌊x⌋.
+//				Source: https://en.wikipedia.org/wiki/Floor_and_ceiling_functions
+//
+//					Examples of Floor
+//
+//					Number     Floor
+//					2           2
+//					2.4         2
+//					2.9         2
+//					-2.5        -3
+//					-2.7        -3
+//					-2          -2
+//
+//			Ceiling
+//
+//				Yields the nearest integer up. Ceiling does not apply any
+//				special treatment to 0.5.
+//
+//				Ceiling Function: The least integer that is greater than or
+//				equal to x.
+//				Source: https://www.mathsisfun.com/sets/function-floor-ceiling.html
+//
+//				The ceiling function maps x to the least integer greater than
+//				or equal to x, denoted ceil(x) or ⌈x⌉.[1]
+//				Source: https://en.wikipedia.org/wiki/Floor_and_ceiling_functions
+//
+//					Examples of Ceiling
+//
+//					Number    Ceiling
+//					2           2
+//					2.4         3
+//					2.9         3
+//					-2.5        -2
+//					-2.7        -2
+//					-2          -2
+//
+//			Truncate
+//
+//				Apply NO Rounding whatsoever. The Round From Digit is dropped
+//				or deleted. The Round To Digit is NEVER changed.
+//
+//					Examples of Truncate
+//
+//					Example-1
+//					Number: 23.14567
+//					Objective: Round to two decimal places to
+//					the right of the decimal point.
+//					Rounding Method: Truncate
+//					Round To Digit:   4
+//					Round From Digit: 5
+//					Rounded Number:   23.14 - The Round From Digit is dropped.
+//
+//					Example-2
+//					Number: -23.14567
+//					Objective: Round to two decimal places to
+//					the right of the decimal point.
+//					Rounding Method: Truncate
+//					Round To Digit:   4
+//					Round From Digit: 5
+//					Rounded Number:  -23.14 - The Round From Digit is dropped.
+//
+//			roundToFractionalDigits int
+//
+//				When set to a positive integer value, this
+//				parameter controls the number of digits to
+//				the right of the radix point or decimal
+//				separator (a.k.a. decimal point) which will
+//				remain after completion of the number rounding
+//				operation.
+//		}
+//
+//	 errorPrefix                interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it	contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//
+//		If this method completes successfully, this
+//		parameter will return a Signed Number String
+//		containing the numeric value of	the current
+//		NumberStrKernel instance and the formatting
+//		typically applied in the US (United States).
+//
+//	error
+//
+//		If this method completes successfully, the returned
+//		error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error message.
+//	 	This returned error message will incorporate the method
+//	 	chain and text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be attached to the beginning
+//	 	of the error message.
+func (numStrKernel *NumberStrKernel) FmtSignedNumStrUSParen(
+	numberFieldSpec NumStrNumberFieldSpec,
+	roundingSpec NumStrRoundingSpec,
+	errorPrefix interface{}) (
+	string,
+	error) {
+
+	if numStrKernel.lock == nil {
+		numStrKernel.lock = new(sync.Mutex)
+	}
+
+	numStrKernel.lock.Lock()
+
+	defer numStrKernel.lock.Unlock()
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+	var numStr string
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumberStrKernel."+
+			"FmtSignedNumStrUSParen()",
+		"")
+
+	if err != nil {
+		return numStr, err
+	}
+
+	var numStrFmtSpec NumStrFormatSpec
+
+	numStrFmtSpec,
+		err = new(NumStrFormatSpec).NewSignedNumDefaultsUSParen(
 		numberFieldSpec,
 		ePrefix.XCpy(
 			"newSignedNumFmtSpec<-"))

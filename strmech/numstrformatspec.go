@@ -10529,11 +10529,15 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumDefaultsGermany(
 //
 // # Defaults
 //
+//	Decimal Separator
+//
 //	The radix point or decimal separator is set to the
 //	period character ('.').
 //
 //		United Kingdom Example-1
 //			123.45 (The fractional digits are "45")
+//
+//	Integer Separator
 //
 //	The integer group separator is a comma character
 //	(',').
@@ -10545,17 +10549,23 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumDefaultsGermany(
 //		United Kingdom Example-2
 //			1,000,000,000
 //
+//	Negative Number Formatting
+//
 //	The negative number sign is set to a leading minus sign
 //	('-').
 //
 //		United Kingdom Example-3
 //			-1,000,000,000
 //
+//	Positive Number Formatting
+//
 //	The positive number sign is set to a blank or empty
 //	string ("").
 //
 //		United Kingdom Example-4
 //			1,000,000,000
+//
+//	Zero Number Formatting
 //
 //	The zero number format is set to a blank or empty
 //	string ("").
