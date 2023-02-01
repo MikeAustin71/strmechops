@@ -11672,6 +11672,9 @@ func (numStrKernel *NumberStrKernel) String() string {
 		return numStr
 	}
 
+	// If numStrKernel.numStrFormatSpec
+	// is a NOP, it will be set to default
+	// US Signed Number Minus Format Spec
 	_,
 		err = new(numberStrKernelAtom).
 		testValidityOfNumStrKernel(
@@ -11700,29 +11703,6 @@ func (numStrKernel *NumberStrKernel) String() string {
 		return numStr
 	}
 
-	if numStrKernel.numStrFormatSpec.IsNOP() {
-
-		// The current Number String Format
-		// Specification is invalid. Set the
-		// Default US Minus Specification
-
-		err = numStrKernel.numStrFormatSpec.
-			SetSignedNumDefaultsUSMinus(
-				NumStrNumberFieldSpec{
-					fieldLength:        -1,
-					fieldJustification: TxtJustify.Right(),
-				},
-				ePrefix.XCpy(
-					"numStrKernel.numStrFormatSpec<-"))
-
-		if err != nil {
-
-			numStr = err.Error()
-			return numStr
-		}
-
-	}
-
 	var tempNumStrFormatSpec NumStrFormatSpec
 
 	err = tempNumStrFormatSpec.CopyIn(
@@ -11739,7 +11719,7 @@ func (numStrKernel *NumberStrKernel) String() string {
 		err = new(numberStrKernelMolecule).formatNumStr(
 		numStrKernel,
 		roundingSpec,
-		tempNumStrFormatSpec,
+		numStrKernel.numStrFormatSpec,
 		ePrefix.XCpy("numStrKernel"))
 
 	if err != nil {

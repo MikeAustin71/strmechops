@@ -215,7 +215,7 @@ func (numStrKernelNanobot *numberStrKernelNanobot) copy(
 	//			nil)
 	//
 	// If invalid, sourceNumStrKernel.numStrFormatSpec
-	// was set to default US Number String Format
+	// was set to default US Signed Number Minus Format
 	// Specification
 	err = destinationNumStrKernel.numStrFormatSpec.CopyIn(
 		&sourceNumStrKernel.numStrFormatSpec,

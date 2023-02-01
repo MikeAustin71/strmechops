@@ -1417,240 +1417,6 @@ func (numStrKernelAtom *numberStrKernelAtom) formatNumStrElements(
 			"<-newNumStrKernel"))
 }
 
-/*
-func (numStrKernelAtom *numberStrKernelAtom) formatNumStrElements(
-	numStrKernel *NumberStrKernel,
-	decSeparator DecimalSeparatorSpec,
-	intSeparatorDto IntegerSeparatorSpec,
-	roundingSpec NumStrRoundingSpec,
-	negativeNumberSign NumStrNumberSymbolSpec,
-	positiveNumberSign NumStrNumberSymbolSpec,
-	zeroNumberSign NumStrNumberSymbolSpec,
-	numberFieldSpec NumStrNumberFieldSpec,
-	errPrefDto *ePref.ErrPrefixDto) (
-	numStr string,
-	err error) {
-
-	if numStrKernelAtom.lock == nil {
-		numStrKernelAtom.lock = new(sync.Mutex)
-	}
-
-	numStrKernelAtom.lock.Lock()
-
-	defer numStrKernelAtom.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
-		errPrefDto,
-		"numberStrKernelAtom."+
-			"formatNumStrElements()",
-		"")
-
-	if err != nil {
-
-		return numStr, err
-	}
-
-	if numStrKernel == nil {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'numStrKernel' is a nil pointer!\n",
-			ePrefix.String())
-
-		return numStr, err
-	}
-
-	if len(numStrKernel.integerDigits.CharsArray) == 0 &&
-		len(numStrKernel.fractionalDigits.CharsArray) == 0 {
-
-		numStr = "0"
-
-		return numStr, err
-	}
-
-	err = roundingSpec.IsValidInstanceError(
-		ePrefix.XCpy(
-			"roundingSpec"))
-
-	if err != nil {
-
-		return numStr, err
-	}
-
-	var newNumStrKernel NumberStrKernel
-
-	err = new(numberStrKernelNanobot).copy(
-		&newNumStrKernel,
-		numStrKernel,
-		ePrefix.XCpy(
-			"newNumStrKernel<-numStrKernel"))
-
-	if err != nil {
-		return numStr, err
-	}
-
-	// Performing fractional digit rounding
-	err = new(numStrMathRoundingNanobot).roundNumStrKernel(
-		&newNumStrKernel,
-		roundingSpec,
-		ePrefix.XCpy(
-			"newNumStrKernel Rounding"))
-
-	if err != nil {
-		return numStr, err
-	}
-
-	var numOfFracDigits int
-
-	numOfFracDigits = newNumStrKernel.GetNumberOfFractionalDigits()
-
-	if numOfFracDigits > 0 &&
-		decSeparator.GetNumberOfSeparatorChars() == 0 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: This is a floating point number and the number\n"+
-			"of decimal separator characters specified is zero.\n"+
-			"Input parameter 'decSeparator'\n"+
-			"is invalid!\n",
-			ePrefix.String())
-
-		return numStr, err
-	}
-
-	var numStrWithIntSeps []rune
-
-	numStrWithIntSeps,
-		err = new(integerSeparatorSpecMolecule).applyIntSeparators(
-		&intSeparatorDto,
-		newNumStrKernel.GetIntegerRuneArray(),
-		ePrefix.XCpy("intSeparatorDto"))
-
-	if err != nil {
-		return numStr, err
-	}
-
-	tempNumStr := string(numStrWithIntSeps)
-
-	if numOfFracDigits > 0 {
-
-		tempNumStr += decSeparator.GetDecimalSeparatorStr()
-
-		tempNumStr += newNumStrKernel.GetFractionalString()
-
-	}
-
-	leadingNumSym := ""
-
-	trailingNumSym := ""
-
-	var leadingNumSymPosition, trailingNumSymPosition NumberFieldSymbolPosition
-
-	if newNumStrKernel.numberSign == NumSignVal.Negative() {
-
-		if !negativeNumberSign.IsNOP() {
-
-			leadingNumSym =
-				negativeNumberSign.GetLeadingNumberSymbolStr()
-
-			leadingNumSymPosition =
-				negativeNumberSign.GetLeadingNumberSymbolPosition()
-
-			trailingNumSym =
-				negativeNumberSign.GetTrailingNumberSymbolStr()
-
-			trailingNumSymPosition =
-				negativeNumberSign.GetTrailingNumberSymbolPosition()
-
-		}
-
-	}
-
-	if newNumStrKernel.numberSign == NumSignVal.Positive() {
-
-		if !positiveNumberSign.IsNOP() {
-
-			leadingNumSym =
-				positiveNumberSign.GetLeadingNumberSymbolStr()
-
-			leadingNumSymPosition =
-				positiveNumberSign.GetLeadingNumberSymbolPosition()
-
-			trailingNumSym =
-				positiveNumberSign.GetTrailingNumberSymbolStr()
-
-			trailingNumSymPosition =
-				positiveNumberSign.GetTrailingNumberSymbolPosition()
-
-		}
-
-	}
-
-	if newNumStrKernel.numberSign == NumSignVal.Zero() {
-
-		if !zeroNumberSign.IsNOP() {
-
-			leadingNumSym =
-				zeroNumberSign.GetLeadingNumberSymbolStr()
-
-			leadingNumSymPosition =
-				zeroNumberSign.GetLeadingNumberSymbolPosition()
-
-			trailingNumSym =
-				zeroNumberSign.GetTrailingNumberSymbolStr()
-
-			trailingNumSymPosition =
-				zeroNumberSign.GetTrailingNumberSymbolPosition()
-
-		}
-
-	}
-
-	lenLeadingNumSymbol := len(leadingNumSym)
-	lenTrailingNumSymbol := len(trailingNumSym)
-
-	if lenLeadingNumSymbol > 0 &&
-		leadingNumSymPosition == NumFieldSymPos.InsideNumField() {
-
-		tempNumStr = leadingNumSym + tempNumStr
-	}
-
-	if lenTrailingNumSymbol > 0 &&
-		trailingNumSymPosition == NumFieldSymPos.InsideNumField() {
-
-		tempNumStr = tempNumStr + trailingNumSym
-
-	}
-
-	numStr,
-		err = new(strMechNanobot).justifyTextInStrField(
-		tempNumStr,
-		numberFieldSpec.GetNumFieldLength(),
-		numberFieldSpec.GetNumFieldJustification(),
-		ePrefix.XCpy("numStr<-tempNumStr"))
-
-	if err != nil {
-
-		return numStr, err
-	}
-
-	if lenLeadingNumSymbol > 0 &&
-		leadingNumSymPosition == NumFieldSymPos.OutsideNumField() {
-
-		numStr = leadingNumSym + numStr
-	}
-
-	if lenTrailingNumSymbol > 0 &&
-		trailingNumSymPosition == NumFieldSymPos.OutsideNumField() {
-
-		numStr = numStr + trailingNumSym
-
-	}
-
-	return numStr, err
-}
-*/
-
 //	prepareCompareNumStrKernels
 //
 //	This method receives pointers to two instances of
@@ -1847,18 +1613,34 @@ func (numStrKernelAtom *numberStrKernelAtom) prepareCompareNumStrKernels(
 	return comparisonValue, err
 }
 
-// testValidityOfNumStrKernel - Receives a pointer to an instance
-// of NumberStrKernel and performs a diagnostic analysis to
-// determine if that instance is valid in all respects.
+//	testValidityOfNumStrKernel
 //
-// If the input parameter 'numStrKernel' is determined to be
-// invalid, this method will return a boolean flag ('isValid') of
-// 'false'. In addition, an instance of type error ('err') will be
-// returned configured with an appropriate error message.
+//	Receives a pointer to an instance of NumberStrKernel
+//	and performs a diagnostic analysis to determine if
+//	that instance is valid in all respects.
 //
-// If the input parameter 'numStrKernel' is valid, this method will
-// return a boolean flag ('isValid') of 'true' and the returned
-// error type ('err') will be set to 'nil'.
+//	If the input parameter 'numStrKernel' is determined
+//	to be invalid, this method will return a boolean
+//	flag ('isValid') of 'false'. In addition, an instance
+//	of type error ('err') will be returned configured
+//	with an appropriate error message.
+//
+//	If the input parameter 'numStrKernel' is valid, this
+//	method will return a boolean flag ('isValid') of
+//	'true' and the returned error type ('err') will be set
+//	to 'nil'.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	If the Number Sting Format object is empty or
+//	invalid, this method will automatically set that
+//	object to the standard US Signed Number Minus Format
+//	Specification.
+//
+//		numStrKernel.numStrFormatSpec =
+//			new(NumStrFormatSpec).NewSignedNumDefaultsUSMinus()
 //
 // ------------------------------------------------------------------------
 //
@@ -2107,7 +1889,7 @@ func (numStrKernelAtom *numberStrKernelAtom) testValidityOfNumStrKernel(
 		// This is a NOP!
 		// numStrKernel.numStrFormatSpec is invalid.
 		// Set default numStrKernel.numStrFormatSpec
-		// to stand US Signed Number String Format
+		// to stand US Signed Number Minus Format
 		// Specification.
 		numStrKernel.numStrFormatSpec,
 			err = new(NumStrFormatSpec).NewSignedNumDefaultsUSMinus(
