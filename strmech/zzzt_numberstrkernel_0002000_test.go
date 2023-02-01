@@ -3104,14 +3104,14 @@ func TestNumberStrKernel_SetFromPureNumberStr_000100(t *testing.T) {
 		return
 	}
 
-	testName = "Test #4-A nStrKernel01.FmtCurrencyDefaultsUKMinus()\n" +
+	testName = "Test #4-A nStrKernel01.FmtCurrencyDefaultsUKMinusOutside()\n" +
 		"UK Currency Format"
 
 	// expectedStr = "-1234.988"
 	expectedStr = "-£ 1,234.988"
 
 	actualFmtStr,
-		err = nStrKernel01.FmtCurrencyDefaultsUKMinus(
+		err = nStrKernel01.FmtCurrencyDefaultsUKMinusOutside(
 		numberFieldSpec,
 		roundingSpec,
 		ePrefix.XCpy("4-A nStrKernel01"))

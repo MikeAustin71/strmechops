@@ -10503,11 +10503,15 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumDefaultsGermany(
 //	include signed number symbols for positive, zero and
 //	negative numeric values.
 //
-//	Currency Symbols WILL NOT BE INCLUDED in the returned
-//	number symbol specifications. The Currency member
-//	variable in the returned NumStrFormatSpec will
-//	be empty and configured as a 'NOP' or empty
-//	placeholder. 'NOP' stands for 'No Operation'.
+//	A signed number is a numeric value formatted in a
+//	number string which does NOT contain currency
+//	symbols. Therefore, Currency Symbols WILL NOT BE
+//	INCLUDED in the returned number symbol
+//	specifications. The Currency member variable in the
+//	returned NumStrFormatSpec will be empty and
+//	configured as a 'NOP' or empty placeholder. 'NOP' is
+//	a computer science term which stands for
+//	'No Operation'.
 //
 //	If custom decimal separator, integer separators
 //	or negative number sign characters are required,
