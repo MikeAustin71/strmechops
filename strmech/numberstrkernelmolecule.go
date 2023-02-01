@@ -919,11 +919,11 @@ func (numStrKernelMolecule *numberStrKernelMolecule) formatNumStr(
 		return numStr, err
 	}
 
-	return new(numberStrKernelAtom).formatNumStrComponents(
+	return new(numberStrKernelAtom).formatNumStrElements(
 		numStrKernel,
+		roundingSpec,
 		decSeparator,
 		intSeparatorDto,
-		roundingSpec,
 		negativeNumberSign,
 		positiveNumberSign,
 		zeroNumberSign,

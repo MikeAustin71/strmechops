@@ -14,7 +14,7 @@ type numStrHelperNanobot struct {
 	lock *sync.Mutex
 }
 
-//	formatNumStrComponents
+//	formatNumStrElements
 //
 //	Creates and returns a fully formatted Number String
 //	generated from Number String formatting components
@@ -66,12 +66,12 @@ type numStrHelperNanobot struct {
 //	 	NumSignVal.Zero()     =  0
 //	 	NumSignVal.Positive() =  1
 //
-//	decSeparator				DecimalSeparatorSpec
+//	decSeparatorSpec				DecimalSeparatorSpec
 //
-//		This structure contains the radix point or decimal
-//		separator character(s) (a.k.a. decimal point)
-//		which be used to separate integer and fractional
-//		digits within a formatted Number String.
+//		This structure contains the radix point or
+//		decimal separator character(s) which will be used
+//		to separate integer and fractional digits within
+//		a formatted Number String.
 //
 //		In the US, UK, Australia and most of Canada, the
 //		decimal separator is the period character ('.')
@@ -81,7 +81,7 @@ type numStrHelperNanobot struct {
 //		European Union, the Decimal Separator is the
 //		comma character (',').
 //
-//	intSeparatorDto				IntegerSeparatorSpec
+//	intSeparatorSpec				IntegerSeparatorSpec
 //
 //		Number String Integer Separator Specification. This
 //		type encapsulates the parameters required to format
@@ -99,7 +99,20 @@ type numStrHelperNanobot struct {
 //		numbers are often separated by commas thereby
 //		grouping the number into thousands.
 //
-//		Example: 1,000,000,000
+//		Examples:
+//
+//			IntGroupingType.None()
+//			(a.k.a Integer Separation Turned Off)
+//				'1000000000'
+//
+//			IntGroupingType.Thousands()
+//					'1,000,000,000'
+//
+//			IntGroupingType.IndiaNumbering()
+//				'6,78,90,00,00,00,00,000'
+//
+//			IntGroupingType.ChineseNumbering()
+//				'6,7890,0000,0000,0000'
 //
 //		Other countries and cultures use characters other
 //		than the comma to separate integers into thousands.
@@ -125,163 +138,185 @@ type numStrHelperNanobot struct {
 //
 //			Integer Separation Turned Off: 1000000000
 //
-//	numberSymbolsGroup	NumStrNumberSymbolGroup
+//	negativeNumberSign				NumStrNumberSymbolSpec
 //
-//	This instance of NumStrNumberSymbolGroup contains the
-//	Number Symbol Specifications for negative numeric
-//	values, positive numeric values and zero numeric
-//	values.
+//		The Number String Negative Number Sign
+//		Specification is used to configure negative
+//		number sign symbols for negative numeric
+//		values formatted and displayed in number
+//		stings.
 //
-//	type NumStrNumberSymbolGroup struct {
+//		If this parameter is submitted as an empty or
+//		invalid Negative Number Sign Specification, it
+//		will be automatically converted to a 'NOP' or
+//		empty placeholder which will be ignored by Number
+//		String formatting algorithms. 'NOP' is a computer
+//		science term meaning 'No Operation'.
 //
-//		negativeNumberSign NumStrNumberSymbolSpec
+//		Example-1: Leading Number Sign Symbols
+//			Leading Number Sign Symbols for Negative
+//			Values
 //
-//			The Number String Negative Number Sign
-//			Specification is used to configure negative
-//			number sign symbols for negative numeric
-//			values formatted and displayed in number
-//			stings.
+//			Leading Symbols: "- "
+//			Number String:   "- 123.456"
 //
-//			Example-1: Leading Number Sign Symbols
-//				Leading Number Sign Symbols for Negative
-//				Values
+//		Example-2: Leading Number Sign Symbols
+//			Leading Number Sign Symbols for Negative
+//			Values
 //
-//				Leading Symbols: "- "
-//				Number String:   "- 123.456"
+//			Leading Symbols: "-"
+//			Number String:   "-123.456"
 //
-//			Example-2: Leading Number Sign Symbols
-//				Leading Number Sign Symbols for Negative
-//				Values
+//		Example-3: Trailing Number Sign Symbols
+//			Trailing Number Sign Symbols for Negative
+//			Values
 //
-//				Leading Symbols: "-"
-//				Number String:   "-123.456"
+//			Trailing Symbols: " -"
+//			Number String:   "123.456 -"
 //
-//			Example-3: Trailing Number Sign Symbols
-//				Trailing Number Sign Symbols for Negative
-//				Values
+//		Example-4: Trailing Number Sign Symbols
+//			Trailing Number Sign Symbols for Negative
+//			Values
 //
-//				Trailing Symbols: " -"
-//				Number String:   "123.456 -"
+//			Trailing Symbols: "-"
+//			Number String:   "123.456-"
 //
-//			Example-4: Trailing Number Sign Symbols
-//				Trailing Number Sign Symbols for Negative
-//				Values
+//	positiveNumberSign 				NumStrNumberSymbolSpec
 //
-//				Trailing Symbols: "-"
-//				Number String:   "123.456-"
+//		Positive number signs are commonly implied
+//		and not specified. However, the user has
+//		the option to specify a positive number sign
+//		character or characters for positive numeric
+//		values using this input parameter.
 //
-//		positiveNumberSign NumStrNumberSymbolSpec
+//		If this parameter is submitted as an empty or
+//		invalid Positive Number Sign Specification, it
+//		will be automatically converted to a 'NOP' or
+//		empty placeholder which will be ignored by Number
+//		String formatting algorithms. 'NOP' is a computer
+//		science term meaning 'No Operation'.
 //
-//			Positive number signs are commonly implied
-//			and not specified. However, the user has
-//			the option to specify a positive number sign
-//			character or characters for positive numeric
-//			values using a Number String Positive Number
-//			Sign Specification.
+//		Example-1: Leading Number Sign Symbols
+//			Leading Number Sign Symbols for Positive
+//			Values
 //
-//			Example-1: Leading Number Sign Symbols
-//				Leading Number Sign Symbols for Positive
-//				Values
+//			Leading Symbols: "+ "
+//			Number String:   "+ 123.456"
 //
-//				Leading Symbols: "+ "
-//				Number String:   "+ 123.456"
+//		Example-2: Leading Number Sign Symbols
+//			Leading Number Sign Symbols for Positive
+//			Values
 //
-//			Example-2: Leading Number Sign Symbols
-//				Leading Number Sign Symbols for Positive
-//				Values
+//			Leading Symbols: "+"
+//			Number String:   "+123.456"
 //
-//				Leading Symbols: "+"
-//				Number String:   "+123.456"
+//		Example-3: Trailing Number Sign Symbols
+//			Trailing Number Sign Symbols for Positive
+//			Values
 //
-//			Example-3: Trailing Number Sign Symbols
-//				Trailing Number Sign Symbols for Positive
-//				Values
+//			Trailing Symbols: " +"
+//			Number String:   "123.456 +"
 //
-//				Trailing Symbols: " +"
-//				Number String:   "123.456 +"
+//		Example-4: Trailing Number Sign Symbols
+//			Trailing Number Sign Symbols for Positive
+//			Values
 //
-//			Example-4: Trailing Number Sign Symbols
-//				Trailing Number Sign Symbols for Positive
-//				Values
+//			Trailing Symbols: "+"
+//			Number String:   "123.456+"
 //
-//				Trailing Symbols: "+"
-//				Number String:   "123.456+"
+//	zeroNumberSign					NumStrNumberSymbolSpec
 //
-//		zeroNumberSign NumStrNumberSymbolSpec
+//		The Number String Zero Number Sign
+//		Specification is used to configure number
+//		sign symbols for zero numeric values formatted
+//		and displayed in number stings. Zero number signs
+//		are commonly omitted because zero does not
+//		technically qualify as either a positive or
+//		negative value. However, the user has the option
+//		to configure number sign symbols for zero values
+//		if necessary.
 //
-//			The Number String Zero Number Sign
-//			Specification is used to configure number
-//			sign symbols for zero numeric values formatted
-//			and displayed in number stings. Zero number
-//			signs are commonly omitted because zero
-//			does not technically qualify as either a
-//			positive or negative value. However,
-//			the user has the option to configure number
-//			sign symbols for zero values if necessary.
+//		If this parameter is submitted as an empty or
+//		invalid Zero Number Sign Specification, it will
+//		be automatically converted to a 'NOP' or empty
+//		placeholder which will be ignored by Number
+//		String formatting algorithms. 'NOP' is a computer
+//		science term meaning 'No Operation'.
 //
-//			Example-1: Leading Number Sign Symbols
-//				Leading Number Sign Symbols for Zero Values
+//		Example-1: Leading Number Sign Symbols
+//			Leading Number Sign Symbols for Zero Values
 //
-//				Leading Symbols: "+"
-//				Trailing Symbols: ""
-//				Number String:   "+0.00"
+//			Leading Symbols: "+"
+//			Trailing Symbols: ""
+//			Number String:   "+0.00"
 //
-//			Example-2: Leading Number Sign Symbols
-//				Leading Number Sign Symbols for Zero Values
+//		Example-2: Leading Number Sign Symbols
+//			Leading Number Sign Symbols for Zero Values
 //
-//				Leading Symbols: "+ "
-//				Trailing Symbols: ""
-//				Number String:   "+ 0.00"
+//			Leading Symbols: "+ "
+//			Trailing Symbols: ""
+//			Number String:   "+ 0.00"
 //
-//			Example-3: Trailing Number Sign Symbols
-//				Trailing Number Sign Symbols for Zero Values
+//		Example-3: Trailing Number Sign Symbols
+//			Trailing Number Sign Symbols for Zero Values
 //
-//				Leading Symbols: ""
-//				Trailing Symbols: " +"
-//				Number String:   "0.00 +"
+//			Leading Symbols: ""
+//			Trailing Symbols: " +"
+//			Number String:   "0.00 +"
 //
-//			Example-4: Trailing Number Sign Symbols
-//				Trailing Number Sign Symbols for Zero Values
+//		Example-4: Trailing Number Sign Symbols
+//			Trailing Number Sign Symbols for Zero Values
 //
-//				Leading Symbols: ""
-//				Trailing Symbols: "+"
-//				Number String:   "0.00+"
+//			Leading Symbols: ""
+//			Trailing Symbols: "+"
+//			Number String:   "0.00+"
 //
-//		currencySymbol NumStrNumberSymbolSpec
+//	currencySymbol					NumStrNumberSymbolSpec
 //
-//			A Currency Symbol next to a number shows the
-//			number is a monetary amount.
+//		A Currency Symbol next to a number shows the
+//		number is a monetary amount.
 //
-//			Examples of Currency Symbols include the Dollar
-//			sign ('$'), Euro sign ('€') or Pound sign ('£').
+//		The Number String Currency Symbol Specification
+//		is used to configure currency symbols for
+//		positive, negative and zero numeric values
+//		formatted and displayed in number stings.
 //
-//			This instance of NumStrNumberSymbolSpec is used
-//			to configure leading Currency Symbols, trailing
-//			Currency Symbols or both leading and trailing
-//			Currency Symbols.
+//		If this parameter is submitted as an empty or
+//		invalid Currency Symbol Specification, it will
+//		be automatically converted to a 'NOP' or empty
+//		placeholder which will be ignored by Number
+//		String formatting algorithms. 'NOP' is a computer
+//		science term meaning 'No Operation'.
 //
-//			Example-1: Leading Currency Symbols
+//		Examples of Currency Symbols include the Dollar
+//		sign ('$'), Euro sign ('€') or Pound sign ('£').
 //
-//				Leading Currency Symbols: "$ "
-//				Number String:   "$ 123.456"
+//		This instance of NumStrNumberSymbolSpec is used
+//		to configure leading Currency Symbols, trailing
+//		Currency Symbols or both leading and trailing
+//		Currency Symbols.
 //
-//			Example-2: Leading Currency Symbols
+//		Example-1: Leading Currency Symbols
 //
-//				Leading Currency Symbols: "$"
-//				Number String:   "$123.456"
+//			Leading Currency Symbols: "$ "
+//			Number String:   "$ 123.456"
 //
-//			Example-3: Trailing Currency Symbols
-//				Trailing Currency Symbols for Positive Values
+//		Example-2: Leading Currency Symbols
 //
-//				Trailing Currency Symbols: "€"
-//				Number String:   "123.456€"
+//			Leading Currency Symbols: "$"
+//			Number String:   "$123.456"
 //
-//			Example-4: Trailing Currency Symbols
-//				Trailing Currency Symbols for Positive Values
+//		Example-3: Trailing Currency Symbols
+//			Trailing Currency Symbols for Positive Values
 //
-//				Trailing Currency Symbols: " €"
-//				Number String:   "123.456 €"
-//	}
+//			Trailing Currency Symbols: "€"
+//			Number String:   "123.456€"
+//
+//		Example-4: Trailing Currency Symbols
+//			Trailing Currency Symbols for Positive Values
+//
+//			Trailing Currency Symbols: " €"
+//			Number String:   "123.456 €"
 //
 //	numberFieldSpec				NumStrNumberFieldSpec
 //
@@ -378,21 +413,22 @@ type numStrHelperNanobot struct {
 //
 //	err							error
 //
-//		If this method completes successfully, this
-//		returned error Type is set equal to 'nil'. If errors
-//		are	encountered during processing, the returned
-//		error Type will encapsulate an error message.
-//
-//		If an error message is returned, the text value for
-//		input parameter 'errPrefDto' (error prefix) will be
-//		prefixed or attached at the beginning of the error
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
 //		message.
-func (nStrHelperNanobot *numStrHelperNanobot) formatNumStrComponents(
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (nStrHelperNanobot *numStrHelperNanobot) formatNumStrElements(
 	integerDigits *RuneArrayDto,
 	fractionalDigits *RuneArrayDto,
 	numberSign NumericSignValueType,
 	decSeparator DecimalSeparatorSpec,
-	intSeparatorDto IntegerSeparatorSpec,
+	intSeparatorSpec IntegerSeparatorSpec,
 	negativeNumberSign NumStrNumberSymbolSpec,
 	positiveNumberSign NumStrNumberSymbolSpec,
 	zeroNumberSign NumStrNumberSymbolSpec,
@@ -416,7 +452,7 @@ func (nStrHelperNanobot *numStrHelperNanobot) formatNumStrComponents(
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
 		"numberStrKernelAtom."+
-			"formatNumStrComponents()",
+			"formatNumStrElements()",
 		"")
 
 	if err != nil {
@@ -553,9 +589,9 @@ func (nStrHelperNanobot *numStrHelperNanobot) formatNumStrComponents(
 
 		numStrWithIntSeps,
 			err = new(integerSeparatorSpecMolecule).applyIntSeparators(
-			&intSeparatorDto,
+			&intSeparatorSpec,
 			integerDigits.GetRuneArray(),
-			ePrefix.XCpy("intSeparatorDto<-integerDigits"))
+			ePrefix.XCpy("intSeparatorSpec<-integerDigits"))
 
 		if err != nil {
 			return numStr, err
@@ -1175,7 +1211,7 @@ func (nStrHelperNanobot *numStrHelperNanobot) formatNumStrComponents(
 	return numStr, err
 }
 
-//	formatNumStrComponents
+//	formatNumStrElements
 //
 //	Creates and returns a fully formatted Number String
 //	generated from Number String formatting components
@@ -1314,7 +1350,7 @@ func (nStrHelperNanobot *numStrHelperNanobot) formatNumStrComponents(
 //		message.
 
 /*
-func (nStrHelperNanobot *numStrHelperNanobot) formatNumStrComponents(
+func (nStrHelperNanobot *numStrHelperNanobot) formatNumStrElements(
 	numStrKernel *NumberStrKernel,
 	decSeparator DecimalSeparatorSpec,
 	intSeparatorDto IntegerSeparatorSpec,
@@ -1341,7 +1377,7 @@ func (nStrHelperNanobot *numStrHelperNanobot) formatNumStrComponents(
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
 		"numberStrKernelAtom."+
-			"formatNumStrComponents()",
+			"formatNumStrElements()",
 		"")
 
 	if err != nil {

@@ -694,7 +694,7 @@ func (numStrKernelAtom *numberStrKernelAtom) emptyIntegerDigits(
 	return err
 }
 
-//	formatNumStrComponents
+//	formatNumStrElements
 //
 //	Creates and returns a fully formatted Number String
 //	generated from Number String formatting components
@@ -710,14 +710,261 @@ func (numStrKernelAtom *numberStrKernelAtom) emptyIntegerDigits(
 //		numeric value contained in this instance will be
 //		formatted and returned as a Number String.
 //
-//	decSeparator				DecimalSeparatorSpec
+//	roundingSpec 				NumStrRoundingSpec
 //
-//		This structure contains the radix point or decimal
-//		separator character(s) (a.k.a. decimal point)
-//		which be used to separate integer and fractional
-//		digits within a formatted Number String.
+//		The Number String Rounding Specification
+//		contains all the parameters required to
+//		configure a rounding algorithm for a
+//		floating point number string.
 //
-//	intSeparatorDto				IntegerSeparatorSpec
+//		type NumStrRoundingSpec struct {
+//
+//			roundingType NumberRoundingType
+//
+//			This enumeration parameter is used to specify the type
+//			of rounding algorithm that will be applied for the
+//			rounding of fractional digits in a number string.
+//
+//			Possible values are listed as follows:
+//				NumRoundType.None()
+//				NumRoundType.NoRounding()
+//				NumRoundType.HalfUpWithNegNums()
+//				NumRoundType.HalfDownWithNegNums()
+//				NumRoundType.HalfAwayFromZero()
+//				NumRoundType.HalfTowardsZero()
+//				NumRoundType.HalfToEven()
+//				NumRoundType.HalfToOdd()
+//				NumRoundType.Randomly()
+//				NumRoundType.Floor()
+//				NumRoundType.Ceiling()
+//				NumRoundType.Truncate()
+//
+//			NoRounding
+//
+//				Signals that no rounding operation will be performed
+//				on fractional digits contained in a number string.
+//				The fractional digits will therefore remain unchanged.
+//
+//			HalfUpWithNegNums
+//
+//				Half Round Up Including Negative Numbers. This method
+//				is intuitive but may produce unexpected results when
+//				applied to negative numbers.
+//
+//				'HalfUpWithNegNums' rounds .5 up.
+//
+//					Examples of 'HalfUpWithNegNums'
+//					7.6 rounds up to 8
+//					7.5 rounds up to 8
+//					7.4 rounds down to 7
+//					-7.4 rounds up to -7
+//					-7.5 rounds up to -7
+//					-7.6 rounds down to -8
+//
+//			HalfDownWithNegNums
+//
+//				Half Round Down Including Negative Numbers. This method
+//				is also considered intuitive but may produce unexpected
+//				results when applied to negative numbers.
+//
+//				'HalfDownWithNegNums' rounds .5 down.
+//
+//					Examples of HalfDownWithNegNums
+//
+//					7.6 rounds up to 8
+//					7.5 rounds down to 7
+//					7.4 rounds down to 7
+//					-7.4 rounds up to -7
+//					-7.5 rounds down to -8
+//					-7.6 rounds down to -8
+//
+//			HalfAwayFromZero
+//
+//				Round Half Away From Zero. This rounding method is treated
+//				as the default and this value is returned by method:
+//				NumberRoundingType(0).XGetDefaultRoundingType()
+//
+//				The 'HalfAwayFromZero' method rounds .5 further away from zero.
+//				It provides clear and consistent behavior when dealing with
+//				negative numbers.
+//
+//					Examples of HalfAwayFromZero
+//
+//					7.6 rounds away to 8
+//					7.5 rounds away to 8
+//					7.4 rounds to 7
+//					-7.4 rounds to -7
+//					-7.5 rounds away to -8
+//					-7.6 rounds away to -8
+//
+//			HalfTowardsZero
+//
+//				Round Half Towards Zero. 'HalfTowardsZero' rounds 0.5
+//				closer to zero. It provides clear and consistent behavior
+//				when dealing with negative numbers.
+//
+//					Examples of HalfTowardsZero
+//
+//					7.6 rounds away to 8
+//					7.5 rounds to 7
+//					7.4 rounds to 7
+//					-7.4 rounds to -7
+//					-7.5 rounds to -7
+//					-7.6 rounds away to -8
+//
+//			HalfToEven
+//
+//				Round Half To Even Numbers. 'HalfToEven' is also called
+//				Banker's Rounding. This method rounds 0.5 to the nearest
+//				even digit.
+//
+//					Examples of HalfToEven
+//
+//					7.5 rounds up to 8 (because 8 is an even number)
+//					but 6.5 rounds down to 6 (because 6 is an even number)
+//
+//					HalfToEven only applies to 0.5. Other numbers (not ending
+//					in 0.5) round to nearest as usual, so:
+//
+//					7.6 rounds up to 8
+//					7.5 rounds up to 8 (because 8 is an even number)
+//					7.4 rounds down to 7
+//					6.6 rounds up to 7
+//					6.5 rounds down to 6 (because 6 is an even number)
+//					6.4 rounds down to 6
+//
+//			HalfToOdd
+//
+//				Round Half to Odd Numbers. Similar to 'HalfToEven', but
+//				in this case 'HalfToOdd' rounds 0.5 towards odd numbers.
+//
+//					Examples of HalfToOdd
+//
+//					HalfToOdd only applies to 0.5. Other numbers (not ending
+//					in 0.5) round to nearest as usual.
+//
+//					7.5 rounds down to 7 (because 7 is an odd number)
+//
+//					6.5 rounds up to 7 (because 7 is an odd number)
+//
+//					7.6 rounds up to 8
+//					7.5 rounds down to 7 (because 7 is an odd number)
+//					7.4 rounds down to 7
+//					6.6 rounds up to 7
+//					6.5 rounds up to 7 (because 7 is an odd number)
+//					6.4 rounds down to 6
+//
+//			Randomly
+//
+//				Round Half Randomly. Uses a Random Number Generator to choose
+//				between rounding 0.5 up or down.
+//
+//				All numbers other than 0.5 round to the nearest as usual.
+//
+//			Floor
+//
+//				Yields the nearest integer down. Floor does not apply any
+//				special treatment to 0.5.
+//
+//				Floor Function: The greatest integer that is less than or
+//				equal to x
+//				Source: https://www.mathsisfun.com/sets/function-floor-ceiling.html
+//
+//				In mathematics and computer science, the floor function is
+//				the function that takes as input a real number x, and gives
+//				as output the greatest integer less than or equal to x,
+//				denoted floor(x) or ⌊x⌋.
+//				Source: https://en.wikipedia.org/wiki/Floor_and_ceiling_functions
+//
+//					Examples of Floor
+//
+//					Number     Floor
+//					2           2
+//					2.4         2
+//					2.9         2
+//					-2.5        -3
+//					-2.7        -3
+//					-2          -2
+//
+//			Ceiling
+//
+//				Yields the nearest integer up. Ceiling does not apply any
+//				special treatment to 0.5.
+//
+//				Ceiling Function: The least integer that is greater than or
+//				equal to x.
+//				Source: https://www.mathsisfun.com/sets/function-floor-ceiling.html
+//
+//				The ceiling function maps x to the least integer greater than
+//				or equal to x, denoted ceil(x) or ⌈x⌉.[1]
+//				Source: https://en.wikipedia.org/wiki/Floor_and_ceiling_functions
+//
+//					Examples of Ceiling
+//
+//					Number    Ceiling
+//					2           2
+//					2.4         3
+//					2.9         3
+//					-2.5        -2
+//					-2.7        -2
+//					-2          -2
+//
+//			Truncate
+//
+//				Apply NO Rounding whatsoever. The Round From Digit is dropped
+//				or deleted. The Round To Digit is NEVER changed.
+//
+//					Examples of Truncate
+//
+//					Example-1
+//					Number: 23.14567
+//					Objective: Round to two decimal places to
+//					the right of the decimal point.
+//					Rounding Method: Truncate
+//					Round To Digit:   4
+//					Round From Digit: 5
+//					Rounded Number:   23.14 - The Round From Digit is dropped.
+//
+//					Example-2
+//					Number: -23.14567
+//					Objective: Round to two decimal places to
+//					the right of the decimal point.
+//					Rounding Method: Truncate
+//					Round To Digit:   4
+//					Round From Digit: 5
+//					Rounded Number:  -23.14 - The Round From Digit is dropped.
+//
+//			roundToFractionalDigits int
+//
+//				When set to a positive integer value, this
+//				parameter controls the number of digits to
+//				the right of the radix point or decimal
+//				separator (a.k.a. decimal point) which will
+//				remain after completion of the number rounding
+//				operation.
+//		}
+//
+//	decSeparatorSpec				DecimalSeparatorSpec
+//
+//		This structure contains the radix point or
+//		decimal separator character(s) which will be used
+//		to separate integer and fractional digits within
+//		a formatted Number String.
+//
+//		In the US, UK, Australia and most of Canada, the
+//		decimal separator is the period character ('.')
+//		known as the decimal point.
+//
+//		In France, Germany and many countries in the
+//		European Union, the Decimal Separator is the
+//		comma character (',').
+//
+//	intSeparatorSpec				IntegerSeparatorSpec
+//
+//		Number String Integer Separator Specification. This
+//		type encapsulates the parameters required to format
+//		integer grouping and separation within a Number
+//		String.
 //
 //		Type IntegerSeparatorSpec is designed to manage
 //		integer separators, primarily thousands separators,
@@ -730,7 +977,20 @@ func (numStrKernelAtom *numberStrKernelAtom) emptyIntegerDigits(
 //		numbers are often separated by commas thereby
 //		grouping the number into thousands.
 //
-//		Example: 1,000,000,000
+//		Examples:
+//
+//			IntGroupingType.None()
+//			(a.k.a Integer Separation Turned Off)
+//				'1000000000'
+//
+//			IntGroupingType.Thousands()
+//					'1,000,000,000'
+//
+//			IntGroupingType.IndiaNumbering()
+//				'6,78,90,00,00,00,00,000'
+//
+//			IntGroupingType.ChineseNumbering()
+//				'6,7890,0000,0000,0000'
 //
 //		Other countries and cultures use characters other
 //		than the comma to separate integers into thousands.
@@ -756,35 +1016,187 @@ func (numStrKernelAtom *numberStrKernelAtom) emptyIntegerDigits(
 //
 //			Integer Separation Turned Off: 1000000000
 //
-//	roundingSpec 				NumStrRoundingSpec
+//	negativeNumberSign				NumStrNumberSymbolSpec
 //
-//		Numeric Value Rounding Specification. This
-//		specification contains all the parameters
-//		required to configure and apply a rounding
-//		algorithm for floating point Number Strings.
+//		The Number String Negative Number Sign
+//		Specification is used to configure negative
+//		number sign symbols for negative numeric
+//		values formatted and displayed in number
+//		stings.
 //
-//	negativeNumberSign			NumStrNumberSymbolSpec
+//		If this parameter is submitted as an empty or
+//		invalid Negative Number Sign Specification, it
+//		will be automatically converted to a 'NOP' or
+//		empty placeholder which will be ignored by Number
+//		String formatting algorithms. 'NOP' is a computer
+//		science term meaning 'No Operation'.
 //
-//		This Number String Symbol Specification contains
-//		all the characters used to format number sign
-//		symbols and currency symbols for Number Strings
-//		with negative numeric values.
+//		Example-1: Leading Number Sign Symbols
+//			Leading Number Sign Symbols for Negative
+//			Values
 //
-//	positiveNumberSign			NumStrNumberSymbolSpec
+//			Leading Symbols: "- "
+//			Number String:   "- 123.456"
 //
-//		This Number String Symbol Specification contains
-//		all the characters used to format number sign
-//		symbols and currency symbols for Number Strings
-//		with positive numeric values.
+//		Example-2: Leading Number Sign Symbols
+//			Leading Number Sign Symbols for Negative
+//			Values
 //
-//	zeroNumberSign			NumStrNumberSymbolSpec
+//			Leading Symbols: "-"
+//			Number String:   "-123.456"
 //
-//		This Number String Symbol Specification contains
-//		all the characters used to format number sign
-//		symbols and currency symbols for Number Strings
-//		with zero numeric values.
+//		Example-3: Trailing Number Sign Symbols
+//			Trailing Number Sign Symbols for Negative
+//			Values
 //
-//	numberFieldSpec			NumStrNumberFieldSpec
+//			Trailing Symbols: " -"
+//			Number String:   "123.456 -"
+//
+//		Example-4: Trailing Number Sign Symbols
+//			Trailing Number Sign Symbols for Negative
+//			Values
+//
+//			Trailing Symbols: "-"
+//			Number String:   "123.456-"
+//
+//	positiveNumberSign 				NumStrNumberSymbolSpec
+//
+//		Positive number signs are commonly implied
+//		and not specified. However, the user has
+//		the option to specify a positive number sign
+//		character or characters for positive numeric
+//		values using this input parameter.
+//
+//		If this parameter is submitted as an empty or
+//		invalid Positive Number Sign Specification, it
+//		will be automatically converted to a 'NOP' or
+//		empty placeholder which will be ignored by Number
+//		String formatting algorithms. 'NOP' is a computer
+//		science term meaning 'No Operation'.
+//
+//		Example-1: Leading Number Sign Symbols
+//			Leading Number Sign Symbols for Positive
+//			Values
+//
+//			Leading Symbols: "+ "
+//			Number String:   "+ 123.456"
+//
+//		Example-2: Leading Number Sign Symbols
+//			Leading Number Sign Symbols for Positive
+//			Values
+//
+//			Leading Symbols: "+"
+//			Number String:   "+123.456"
+//
+//		Example-3: Trailing Number Sign Symbols
+//			Trailing Number Sign Symbols for Positive
+//			Values
+//
+//			Trailing Symbols: " +"
+//			Number String:   "123.456 +"
+//
+//		Example-4: Trailing Number Sign Symbols
+//			Trailing Number Sign Symbols for Positive
+//			Values
+//
+//			Trailing Symbols: "+"
+//			Number String:   "123.456+"
+//
+//	zeroNumberSign					NumStrNumberSymbolSpec
+//
+//		The Number String Zero Number Sign
+//		Specification is used to configure number
+//		sign symbols for zero numeric values formatted
+//		and displayed in number stings. Zero number signs
+//		are commonly omitted because zero does not
+//		technically qualify as either a positive or
+//		negative value. However, the user has the option
+//		to configure number sign symbols for zero values
+//		if necessary.
+//
+//		If this parameter is submitted as an empty or
+//		invalid Zero Number Sign Specification, it will
+//		be automatically converted to a 'NOP' or empty
+//		placeholder which will be ignored by Number
+//		String formatting algorithms. 'NOP' is a computer
+//		science term meaning 'No Operation'.
+//
+//		Example-1: Leading Number Sign Symbols
+//			Leading Number Sign Symbols for Zero Values
+//
+//			Leading Symbols: "+"
+//			Trailing Symbols: ""
+//			Number String:   "+0.00"
+//
+//		Example-2: Leading Number Sign Symbols
+//			Leading Number Sign Symbols for Zero Values
+//
+//			Leading Symbols: "+ "
+//			Trailing Symbols: ""
+//			Number String:   "+ 0.00"
+//
+//		Example-3: Trailing Number Sign Symbols
+//			Trailing Number Sign Symbols for Zero Values
+//
+//			Leading Symbols: ""
+//			Trailing Symbols: " +"
+//			Number String:   "0.00 +"
+//
+//		Example-4: Trailing Number Sign Symbols
+//			Trailing Number Sign Symbols for Zero Values
+//
+//			Leading Symbols: ""
+//			Trailing Symbols: "+"
+//			Number String:   "0.00+"
+//
+//	currencySymbol					NumStrNumberSymbolSpec
+//
+//		A Currency Symbol next to a number shows the
+//		number is a monetary amount.
+//
+//		The Number String Currency Symbol Specification
+//		is used to configure currency symbols for
+//		positive, negative and zero numeric values
+//		formatted and displayed in number stings.
+//
+//		If this parameter is submitted as an empty or
+//		invalid Currency Symbol Specification, it will
+//		be automatically converted to a 'NOP' or empty
+//		placeholder which will be ignored by Number
+//		String formatting algorithms. 'NOP' is a computer
+//		science term meaning 'No Operation'.
+//
+//		Examples of Currency Symbols include the Dollar
+//		sign ('$'), Euro sign ('€') or Pound sign ('£').
+//
+//		This instance of NumStrNumberSymbolSpec is used
+//		to configure leading Currency Symbols, trailing
+//		Currency Symbols or both leading and trailing
+//		Currency Symbols.
+//
+//		Example-1: Leading Currency Symbols
+//
+//			Leading Currency Symbols: "$ "
+//			Number String:   "$ 123.456"
+//
+//		Example-2: Leading Currency Symbols
+//
+//			Leading Currency Symbols: "$"
+//			Number String:   "$123.456"
+//
+//		Example-3: Trailing Currency Symbols
+//			Trailing Currency Symbols for Positive Values
+//
+//			Trailing Currency Symbols: "€"
+//			Number String:   "123.456€"
+//
+//		Example-4: Trailing Currency Symbols
+//			Trailing Currency Symbols for Positive Values
+//
+//			Trailing Currency Symbols: " €"
+//			Number String:   "123.456 €"
+//
+//	numberFieldSpec				NumStrNumberFieldSpec
 //
 //		This Number Field Specification contains all
 //		parameters necessary to format a Number String
@@ -795,15 +1207,72 @@ func (numStrKernelAtom *numberStrKernelAtom) emptyIntegerDigits(
 //		justifying a Number String within a Number
 //		Field.
 //
+//		type NumStrNumberFieldSpec struct {
+//
+//			fieldLength int
+//
+//				This parameter defines the length of the
+//				text field in which the numeric value will
+//				be displayed within a number string.
+//
+//				If 'fieldLength' is less than the length
+//				of the numeric value string, it will be
+//				automatically set equal to the length of
+//				that numeric value string.
+//
+//				To automatically set the value of
+//				'fieldLength' to the string length of the
+//				numeric value, set this parameter to a
+//				value of minus one (-1).
+//
+//				If this parameter is submitted with a
+//				value less than minus one (-1) or greater
+//				than 1-million (1,000,000), an error will
+//				be returned.
+//
+//			fieldJustification TextJustify
+//
+//				An enumeration which specifies the
+//				justification of the numeric value string
+//				within the number field length specified
+//				by data field 'fieldLength'.
+//
+//				Text justification can only be evaluated in
+//				the context of a number string, field length
+//				and a 'textJustification' object of type
+//				TextJustify. This is because number strings
+//				with a field length equal to or less than the
+//				length of the numeric value string never use
+//				text justification. In these cases, text
+//				justification is completely ignored.
+//
+//				If the field length parameter ('fieldLength')
+//				is greater than the length of the numeric
+//				value string, text justification must be equal
+//				to one of these three valid values:
+//
+//				          TextJustify(0).Left()
+//				          TextJustify(0).Right()
+//				          TextJustify(0).Center()
+//
+//				You can also use the abbreviated text
+//				justification enumeration syntax as follows:
+//
+//				          TxtJustify.Left()
+//				          TxtJustify.Right()
+//				          TxtJustify.Center()
+//		}
+//
 //	errPrefDto					*ePref.ErrPrefixDto
 //
 //		This object encapsulates an error prefix string
-//		which is included in all returned error messages.
-//		Usually, it contains the name of the calling method
-//		or methods listed as a function chain.
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
 //
-//		If no error prefix information is needed, set this
-//		parameter to 'nil'.
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
 //
 //		Type ErrPrefixDto is included in the 'errpref'
 //		software package:
@@ -816,27 +1285,27 @@ func (numStrKernelAtom *numberStrKernelAtom) emptyIntegerDigits(
 //	numStr						string
 //
 //		If this method completes successfully, the
-//		numeric	value represented by the NumberStrKernel
-//		instance, 'numStrKernel', will be returned as a
-//		formatted Number String, 'numStr'.
+//		numeric	value represented by input parameters
+//		'integerDigits' and 'fractionalDigits' will be
+//		returned as a formatted Number String, 'numStr'.
 //
 //	err							error
 //
-//		If this method completes successfully, this
-//		returned error Type is set equal to 'nil'. If errors
-//		are	encountered during processing, the returned
-//		error Type will encapsulate an error message.
-//
-//		If an error message is returned, the text value for
-//		input parameter 'errPrefDto' (error prefix) will be
-//		prefixed or attached at the beginning of the error
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
 //		message.
-
-func (numStrKernelAtom *numberStrKernelAtom) formatNumStrComponents(
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (numStrKernelAtom *numberStrKernelAtom) formatNumStrElements(
 	numStrKernel *NumberStrKernel,
-	decSeparator DecimalSeparatorSpec,
-	intSeparatorDto IntegerSeparatorSpec,
 	roundingSpec NumStrRoundingSpec,
+	decSeparator DecimalSeparatorSpec,
+	intSeparatorSpec IntegerSeparatorSpec,
 	negativeNumberSign NumStrNumberSymbolSpec,
 	positiveNumberSign NumStrNumberSymbolSpec,
 	zeroNumberSign NumStrNumberSymbolSpec,
@@ -860,7 +1329,7 @@ func (numStrKernelAtom *numberStrKernelAtom) formatNumStrComponents(
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
 		"numberStrKernelAtom."+
-			"formatNumStrComponents()",
+			"formatNumStrElements()",
 		"")
 
 	if err != nil {
@@ -933,140 +1402,23 @@ func (numStrKernelAtom *numberStrKernelAtom) formatNumStrComponents(
 		return numStr, err
 	}
 
-	var numStrWithIntSeps []rune
-
-	numStrWithIntSeps,
-		err = new(integerSeparatorSpecMolecule).applyIntSeparators(
-		&intSeparatorDto,
-		newNumStrKernel.GetIntegerRuneArray(),
-		ePrefix.XCpy("intSeparatorDto"))
-
-	if err != nil {
-		return numStr, err
-	}
-
-	tempNumStr := string(numStrWithIntSeps)
-
-	if numOfFracDigits > 0 {
-
-		tempNumStr += decSeparator.GetDecimalSeparatorStr()
-
-		tempNumStr += newNumStrKernel.GetFractionalString()
-
-	}
-
-	leadingNumSym := ""
-
-	trailingNumSym := ""
-
-	var leadingNumSymPosition, trailingNumSymPosition NumberFieldSymbolPosition
-
-	if newNumStrKernel.numberSign == NumSignVal.Negative() {
-
-		if !negativeNumberSign.IsNOP() {
-
-			leadingNumSym =
-				negativeNumberSign.GetLeadingNumberSymbolStr()
-
-			leadingNumSymPosition =
-				negativeNumberSign.GetLeadingNumberSymbolPosition()
-
-			trailingNumSym =
-				negativeNumberSign.GetTrailingNumberSymbolStr()
-
-			trailingNumSymPosition =
-				negativeNumberSign.GetTrailingNumberSymbolPosition()
-
-		}
-
-	}
-
-	if newNumStrKernel.numberSign == NumSignVal.Positive() {
-
-		if !positiveNumberSign.IsNOP() {
-
-			leadingNumSym =
-				positiveNumberSign.GetLeadingNumberSymbolStr()
-
-			leadingNumSymPosition =
-				positiveNumberSign.GetLeadingNumberSymbolPosition()
-
-			trailingNumSym =
-				positiveNumberSign.GetTrailingNumberSymbolStr()
-
-			trailingNumSymPosition =
-				positiveNumberSign.GetTrailingNumberSymbolPosition()
-
-		}
-
-	}
-
-	if newNumStrKernel.numberSign == NumSignVal.Zero() {
-
-		if !zeroNumberSign.IsNOP() {
-
-			leadingNumSym =
-				zeroNumberSign.GetLeadingNumberSymbolStr()
-
-			leadingNumSymPosition =
-				zeroNumberSign.GetLeadingNumberSymbolPosition()
-
-			trailingNumSym =
-				zeroNumberSign.GetTrailingNumberSymbolStr()
-
-			trailingNumSymPosition =
-				zeroNumberSign.GetTrailingNumberSymbolPosition()
-
-		}
-
-	}
-
-	lenLeadingNumSymbol := len(leadingNumSym)
-	lenTrailingNumSymbol := len(trailingNumSym)
-
-	if lenLeadingNumSymbol > 0 &&
-		leadingNumSymPosition == NumFieldSymPos.InsideNumField() {
-
-		tempNumStr = leadingNumSym + tempNumStr
-	}
-
-	if lenTrailingNumSymbol > 0 &&
-		trailingNumSymPosition == NumFieldSymPos.InsideNumField() {
-
-		tempNumStr = tempNumStr + trailingNumSym
-
-	}
-
-	numStr,
-		err = new(strMechNanobot).justifyTextInStrField(
-		tempNumStr,
-		numberFieldSpec.GetNumFieldLength(),
-		numberFieldSpec.GetNumFieldJustification(),
-		ePrefix.XCpy("numStr<-tempNumStr"))
-
-	if err != nil {
-
-		return numStr, err
-	}
-
-	if lenLeadingNumSymbol > 0 &&
-		leadingNumSymPosition == NumFieldSymPos.OutsideNumField() {
-
-		numStr = leadingNumSym + numStr
-	}
-
-	if lenTrailingNumSymbol > 0 &&
-		trailingNumSymPosition == NumFieldSymPos.OutsideNumField() {
-
-		numStr = numStr + trailingNumSym
-
-	}
-
-	return numStr, err
+	return new(numStrHelperNanobot).formatNumStrElements(
+		&newNumStrKernel.integerDigits,
+		&newNumStrKernel.fractionalDigits,
+		newNumStrKernel.numberSign,
+		decSeparator,
+		intSeparatorSpec,
+		negativeNumberSign,
+		positiveNumberSign,
+		zeroNumberSign,
+		currencySymbol,
+		numberFieldSpec,
+		ePrefix.XCpy(
+			"<-newNumStrKernel"))
 }
 
 /*
-func (numStrKernelAtom *numberStrKernelAtom) formatNumStrComponents(
+func (numStrKernelAtom *numberStrKernelAtom) formatNumStrElements(
 	numStrKernel *NumberStrKernel,
 	decSeparator DecimalSeparatorSpec,
 	intSeparatorDto IntegerSeparatorSpec,
@@ -1093,7 +1445,7 @@ func (numStrKernelAtom *numberStrKernelAtom) formatNumStrComponents(
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
 		"numberStrKernelAtom."+
-			"formatNumStrComponents()",
+			"formatNumStrElements()",
 		"")
 
 	if err != nil {

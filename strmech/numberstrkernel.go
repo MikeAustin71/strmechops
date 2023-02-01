@@ -3162,7 +3162,7 @@ func (numStrKernel *NumberStrKernel) FmtCountrySignedNumStr(
 //	symbols are required, see methods:
 //
 //		NumberStrKernel.FmtNumStr()
-//		NumberStrKernel.FmtNumStrCustom()
+//		NumberStrKernel.FmtNumStrElements()
 //
 // ----------------------------------------------------------------
 //
@@ -3692,7 +3692,7 @@ func (numStrKernel *NumberStrKernel) FmtCurrencyDefaultsFrance(
 //	symbols are required, see methods:
 //
 //		NumberStrKernel.FmtNumStr()
-//		NumberStrKernel.FmtNumStrCustom()
+//		NumberStrKernel.FmtNumStrElements()
 //
 // ----------------------------------------------------------------
 //
@@ -4207,7 +4207,7 @@ func (numStrKernel *NumberStrKernel) FmtCurrencyDefaultsGermany(
 //	symbols are required, see methods:
 //
 //		NumberStrKernel.FmtNumStr()
-//		NumberStrKernel.FmtNumStrCustom()
+//		NumberStrKernel.FmtNumStrElements()
 //
 // ----------------------------------------------------------------
 //
@@ -4731,7 +4731,7 @@ func (numStrKernel *NumberStrKernel) FmtCurrencyDefaultsUKMinus(
 //	symbols are required, see methods:
 //
 //		NumberStrKernel.FmtNumStr()
-//		NumberStrKernel.FmtNumStrCustom()
+//		NumberStrKernel.FmtNumStrElements()
 //
 // ----------------------------------------------------------------
 //
@@ -5248,7 +5248,7 @@ func (numStrKernel *NumberStrKernel) FmtCurrencyDefaultsUSMinus(
 //	symbols are required, see methods:
 //
 //		NumberStrKernel.FmtNumStr()
-//		NumberStrKernel.FmtNumStrCustom()
+//		NumberStrKernel.FmtNumStrElements()
 //
 // ----------------------------------------------------------------
 //
@@ -7282,7 +7282,7 @@ func (numStrKernel *NumberStrKernel) FmtNumStrComponents(
 			ePrefix.XCpy("numStrKernel"))
 }
 
-//	FmtNumStrCustom
+//	FmtNumStrElements
 //
 //	Creates and returns a fully formatted Number
 //	String generated from Number String formatting
@@ -7307,141 +7307,6 @@ func (numStrKernel *NumberStrKernel) FmtNumStrComponents(
 // ----------------------------------------------------------------
 //
 // # Input Parameters
-//
-//	numStrKernel				*NumberStrKernel
-//
-//		A pointer to an instance of NumberStrKernel. The
-//		numeric value contained in this instance will be
-//		formatted and returned as a Number String.
-//
-//	decSeparatorSpec			DecimalSeparatorSpec
-//
-//		This structure contains the radix point or
-//		decimal separator character(s) which will be used
-//		to separate integer and fractional digits within
-//		a formatted Number String.
-//
-//		In the US, UK, Australia and most of Canada, the
-//		decimal separator is the period character ('.')
-//		known as the decimal point.
-//
-//	intSeparatorSpec			IntegerSeparatorSpec
-//
-//		Type IntegerSeparatorSpec is designed to manage
-//		integer separators, primarily thousands separators,
-//		for different countries and cultures. The term
-//		'integer separators' is used because this type
-//		manages both integer grouping and the characters
-//		used to separate integer groups.
-//
-//		In the USA and many other countries, integer
-//		numbers are often separated by commas thereby
-//		grouping the number into thousands.
-//
-//		Example: 1,000,000,000
-//
-//		Other countries and cultures use characters other
-//		than the comma to separate integers into thousands.
-//		Some countries and cultures do not use thousands
-//		separation and instead rely on multiple integer
-//		separation characters and grouping sequences for a
-//		single integer number. Notable examples of this
-//		are found in the 'India Number System' and
-//		'Chinese Numerals'.
-//
-//		Reference:
-//			https://en.wikipedia.org/wiki/Indian_numbering_system
-//			https://en.wikipedia.org/wiki/Chinese_numerals
-//			https://en.wikipedia.org/wiki/Decimal_separator
-//
-//		The IntegerSeparatorSpec type provides the flexibility
-//		necessary to process these complex number separation
-//		formats.
-//
-//	negativeNumberSign			NumStrNumberSymbolSpec
-//
-//		This Number String Symbol Specification contains
-//		all the characters used to format number sign
-//		symbols and currency symbols for Number Strings
-//		with negative numeric values.
-//
-//	positiveNumberSign			NumStrNumberSymbolSpec
-//
-//		This Number String Symbol Specification contains
-//		all the characters used to format number sign
-//		symbols and currency symbols for Number Strings
-//		with positive numeric values.
-//
-//	zeroNumberSign			NumStrNumberSymbolSpec
-//
-//		This Number String Symbol Specification contains
-//		all the characters used to format number sign
-//		symbols and currency symbols for Number Strings
-//		with zero numeric values.
-//
-//	numberFieldSpec			NumStrNumberFieldSpec
-//
-//		This Number Field Specification contains all
-//		parameters necessary to format a Number String
-//		within a larger Number Field. In addition to
-//		specifying the length of number field, this
-//		object contains justification specifications
-//		for centering, left justifying or right
-//		justifying a Number String within a Number
-//		Field.
-//
-//		type NumStrNumberFieldSpec struct {
-//
-//			fieldLength int
-//
-//				This parameter defines the length of the
-//				text field in which the numeric value will
-//				be displayed within a number string.
-//
-//				If 'fieldLength' is less than the length
-//				of the numeric value string, it will be
-//				automatically set equal to the length of
-//				that numeric value string.
-//
-//				To automatically set the value of
-//				'fieldLength' to the string length of the
-//				numeric value, set this parameter to a
-//				value of minus one (-1).
-//
-//				If this parameter is submitted with a
-//				value less than minus one (-1) or greater
-//				than 1-million (1,000,000), an error will
-//				be returned.
-//
-//			fieldJustification TextJustify
-//
-//				An enumeration which specifies the
-//				justification of the numeric value string
-//				within the number field length specified
-//				by data field 'fieldLength'.
-//
-//				Text justification can only be evaluated in the context of
-//				a number string, field length and a 'textJustification'
-//				object of type TextJustify. This is because number strings
-//				with a field length equal to or less than the length of the
-//				numeric value string never use text justification. In these
-//				cases, text justification is completely ignored.
-//
-//				If the field length parameter ('fieldLength') is greater
-//				than the length of the numeric value string, text
-//				justification must be equal to one of these
-//				three valid values:
-//				          TextJustify(0).Left()
-//				          TextJustify(0).Right()
-//				          TextJustify(0).Center()
-//
-//				You can also use the abbreviated text justification
-//				enumeration syntax as follows:
-//
-//				          TxtJustify.Left()
-//				          TxtJustify.Right()
-//				          TxtJustify.Center()
-//		}
 //
 //	roundingSpec 				NumStrRoundingSpec
 //
@@ -7677,6 +7542,325 @@ func (numStrKernel *NumberStrKernel) FmtNumStrComponents(
 //				operation.
 //		}
 //
+//	decSeparatorSpec				DecimalSeparatorSpec
+//
+//		This structure contains the radix point or
+//		decimal separator character(s) which will be used
+//		to separate integer and fractional digits within
+//		a formatted Number String.
+//
+//		In the US, UK, Australia and most of Canada, the
+//		decimal separator is the period character ('.')
+//		known as the decimal point.
+//
+//		In France, Germany and many countries in the
+//		European Union, the Decimal Separator is the
+//		comma character (',').
+//
+//	intSeparatorSpec				IntegerSeparatorSpec
+//
+//		Number String Integer Separator Specification. This
+//		type encapsulates the parameters required to format
+//		integer grouping and separation within a Number
+//		String.
+//
+//		Type IntegerSeparatorSpec is designed to manage
+//		integer separators, primarily thousands separators,
+//		for different countries and cultures. The term
+//		'integer separators' is used because this type
+//		manages both integer grouping and the characters
+//		used to separate integer groups.
+//
+//		In the USA and many other countries, integer
+//		numbers are often separated by commas thereby
+//		grouping the number into thousands.
+//
+//		Examples:
+//
+//			IntGroupingType.None()
+//			(a.k.a Integer Separation Turned Off)
+//				'1000000000'
+//
+//			IntGroupingType.Thousands()
+//					'1,000,000,000'
+//
+//			IntGroupingType.IndiaNumbering()
+//				'6,78,90,00,00,00,00,000'
+//
+//			IntGroupingType.ChineseNumbering()
+//				'6,7890,0000,0000,0000'
+//
+//		Other countries and cultures use characters other
+//		than the comma to separate integers into thousands.
+//		Some countries and cultures do not use thousands
+//		separation and instead rely on multiple integer
+//		separation characters and grouping sequences for a
+//		single integer number. Notable examples of this
+//		are found in the 'India Number System' and
+//		'Chinese Numerals'.
+//
+//		Reference:
+//			https://en.wikipedia.org/wiki/Indian_numbering_system
+//			https://en.wikipedia.org/wiki/Chinese_numerals
+//			https://en.wikipedia.org/wiki/Decimal_separator
+//
+//		The IntegerSeparatorSpec type provides the
+//		flexibility necessary to process these complex
+//		number separation formats.
+//
+//		If integer separation is turned off, no error
+//		will be returned and integer digits will be
+//		displayed as a single string of numeric digits:
+//
+//			Integer Separation Turned Off: 1000000000
+//
+//	negativeNumberSign				NumStrNumberSymbolSpec
+//
+//		The Number String Negative Number Sign
+//		Specification is used to configure negative
+//		number sign symbols for negative numeric
+//		values formatted and displayed in number
+//		stings.
+//
+//		If this parameter is submitted as an empty or
+//		invalid Negative Number Sign Specification, it
+//		will be automatically converted to a 'NOP' or
+//		empty placeholder which will be ignored by Number
+//		String formatting algorithms. 'NOP' is a computer
+//		science term meaning 'No Operation'.
+//
+//		Example-1: Leading Number Sign Symbols
+//			Leading Number Sign Symbols for Negative
+//			Values
+//
+//			Leading Symbols: "- "
+//			Number String:   "- 123.456"
+//
+//		Example-2: Leading Number Sign Symbols
+//			Leading Number Sign Symbols for Negative
+//			Values
+//
+//			Leading Symbols: "-"
+//			Number String:   "-123.456"
+//
+//		Example-3: Trailing Number Sign Symbols
+//			Trailing Number Sign Symbols for Negative
+//			Values
+//
+//			Trailing Symbols: " -"
+//			Number String:   "123.456 -"
+//
+//		Example-4: Trailing Number Sign Symbols
+//			Trailing Number Sign Symbols for Negative
+//			Values
+//
+//			Trailing Symbols: "-"
+//			Number String:   "123.456-"
+//
+//	positiveNumberSign 				NumStrNumberSymbolSpec
+//
+//		Positive number signs are commonly implied
+//		and not specified. However, the user has
+//		the option to specify a positive number sign
+//		character or characters for positive numeric
+//		values using this input parameter.
+//
+//		If this parameter is submitted as an empty or
+//		invalid Positive Number Sign Specification, it
+//		will be automatically converted to a 'NOP' or
+//		empty placeholder which will be ignored by Number
+//		String formatting algorithms. 'NOP' is a computer
+//		science term meaning 'No Operation'.
+//
+//		Example-1: Leading Number Sign Symbols
+//			Leading Number Sign Symbols for Positive
+//			Values
+//
+//			Leading Symbols: "+ "
+//			Number String:   "+ 123.456"
+//
+//		Example-2: Leading Number Sign Symbols
+//			Leading Number Sign Symbols for Positive
+//			Values
+//
+//			Leading Symbols: "+"
+//			Number String:   "+123.456"
+//
+//		Example-3: Trailing Number Sign Symbols
+//			Trailing Number Sign Symbols for Positive
+//			Values
+//
+//			Trailing Symbols: " +"
+//			Number String:   "123.456 +"
+//
+//		Example-4: Trailing Number Sign Symbols
+//			Trailing Number Sign Symbols for Positive
+//			Values
+//
+//			Trailing Symbols: "+"
+//			Number String:   "123.456+"
+//
+//	zeroNumberSign					NumStrNumberSymbolSpec
+//
+//		The Number String Zero Number Sign
+//		Specification is used to configure number
+//		sign symbols for zero numeric values formatted
+//		and displayed in number stings. Zero number signs
+//		are commonly omitted because zero does not
+//		technically qualify as either a positive or
+//		negative value. However, the user has the option
+//		to configure number sign symbols for zero values
+//		if necessary.
+//
+//		If this parameter is submitted as an empty or
+//		invalid Zero Number Sign Specification, it will
+//		be automatically converted to a 'NOP' or empty
+//		placeholder which will be ignored by Number
+//		String formatting algorithms. 'NOP' is a computer
+//		science term meaning 'No Operation'.
+//
+//		Example-1: Leading Number Sign Symbols
+//			Leading Number Sign Symbols for Zero Values
+//
+//			Leading Symbols: "+"
+//			Trailing Symbols: ""
+//			Number String:   "+0.00"
+//
+//		Example-2: Leading Number Sign Symbols
+//			Leading Number Sign Symbols for Zero Values
+//
+//			Leading Symbols: "+ "
+//			Trailing Symbols: ""
+//			Number String:   "+ 0.00"
+//
+//		Example-3: Trailing Number Sign Symbols
+//			Trailing Number Sign Symbols for Zero Values
+//
+//			Leading Symbols: ""
+//			Trailing Symbols: " +"
+//			Number String:   "0.00 +"
+//
+//		Example-4: Trailing Number Sign Symbols
+//			Trailing Number Sign Symbols for Zero Values
+//
+//			Leading Symbols: ""
+//			Trailing Symbols: "+"
+//			Number String:   "0.00+"
+//
+//	currencySymbol					NumStrNumberSymbolSpec
+//
+//		A Currency Symbol next to a number shows the
+//		number is a monetary amount.
+//
+//		The Number String Currency Symbol Specification
+//		is used to configure currency symbols for
+//		positive, negative and zero numeric values
+//		formatted and displayed in number stings.
+//
+//		If this parameter is submitted as an empty or
+//		invalid Currency Symbol Specification, it will
+//		be automatically converted to a 'NOP' or empty
+//		placeholder which will be ignored by Number
+//		String formatting algorithms. 'NOP' is a computer
+//		science term meaning 'No Operation'.
+//
+//		Examples of Currency Symbols include the Dollar
+//		sign ('$'), Euro sign ('€') or Pound sign ('£').
+//
+//		This instance of NumStrNumberSymbolSpec is used
+//		to configure leading Currency Symbols, trailing
+//		Currency Symbols or both leading and trailing
+//		Currency Symbols.
+//
+//		Example-1: Leading Currency Symbols
+//
+//			Leading Currency Symbols: "$ "
+//			Number String:   "$ 123.456"
+//
+//		Example-2: Leading Currency Symbols
+//
+//			Leading Currency Symbols: "$"
+//			Number String:   "$123.456"
+//
+//		Example-3: Trailing Currency Symbols
+//			Trailing Currency Symbols for Positive Values
+//
+//			Trailing Currency Symbols: "€"
+//			Number String:   "123.456€"
+//
+//		Example-4: Trailing Currency Symbols
+//			Trailing Currency Symbols for Positive Values
+//
+//			Trailing Currency Symbols: " €"
+//			Number String:   "123.456 €"
+//
+//	numberFieldSpec				NumStrNumberFieldSpec
+//
+//		This Number Field Specification contains all
+//		parameters necessary to format a Number String
+//		within a larger Number Field. In addition to
+//		specifying the length of number field, this
+//		object contains justification specifications
+//		for centering, left justifying or right
+//		justifying a Number String within a Number
+//		Field.
+//
+//		type NumStrNumberFieldSpec struct {
+//
+//			fieldLength int
+//
+//				This parameter defines the length of the
+//				text field in which the numeric value will
+//				be displayed within a number string.
+//
+//				If 'fieldLength' is less than the length
+//				of the numeric value string, it will be
+//				automatically set equal to the length of
+//				that numeric value string.
+//
+//				To automatically set the value of
+//				'fieldLength' to the string length of the
+//				numeric value, set this parameter to a
+//				value of minus one (-1).
+//
+//				If this parameter is submitted with a
+//				value less than minus one (-1) or greater
+//				than 1-million (1,000,000), an error will
+//				be returned.
+//
+//			fieldJustification TextJustify
+//
+//				An enumeration which specifies the
+//				justification of the numeric value string
+//				within the number field length specified
+//				by data field 'fieldLength'.
+//
+//				Text justification can only be evaluated in
+//				the context of a number string, field length
+//				and a 'textJustification' object of type
+//				TextJustify. This is because number strings
+//				with a field length equal to or less than the
+//				length of the numeric value string never use
+//				text justification. In these cases, text
+//				justification is completely ignored.
+//
+//				If the field length parameter ('fieldLength')
+//				is greater than the length of the numeric
+//				value string, text justification must be equal
+//				to one of these three valid values:
+//
+//				          TextJustify(0).Left()
+//				          TextJustify(0).Right()
+//				          TextJustify(0).Center()
+//
+//				You can also use the abbreviated text
+//				justification enumeration syntax as follows:
+//
+//				          TxtJustify.Left()
+//				          TxtJustify.Right()
+//				          TxtJustify.Center()
+//		}
+//
 //	 errorPrefix                interface{}
 //
 //		This object encapsulates error prefix text which
@@ -7756,14 +7940,15 @@ func (numStrKernel *NumberStrKernel) FmtNumStrComponents(
 //	 	chain and text passed by input parameter, 'errorPrefix'.
 //	 	The 'errorPrefix' text will be attached to the beginning
 //	 	of the error message.
-func (numStrKernel *NumberStrKernel) FmtNumStrCustom(
+func (numStrKernel *NumberStrKernel) FmtNumStrElements(
+	roundingSpec NumStrRoundingSpec,
 	decSeparatorSpec DecimalSeparatorSpec,
 	intSeparatorSpec IntegerSeparatorSpec,
 	negativeNumberSign NumStrNumberSymbolSpec,
 	positiveNumberSign NumStrNumberSymbolSpec,
 	zeroNumberSign NumStrNumberSymbolSpec,
 	numberFieldSpec NumStrNumberFieldSpec,
-	roundingSpec NumStrRoundingSpec,
+	currencySymbol NumStrNumberSymbolSpec,
 	errorPrefix interface{}) (
 	string,
 	error) {
@@ -7792,14 +7977,15 @@ func (numStrKernel *NumberStrKernel) FmtNumStrCustom(
 	}
 
 	return new(numberStrKernelAtom).
-		formatNumStrComponents(
+		formatNumStrElements(
 			numStrKernel,
+			roundingSpec,
 			decSeparatorSpec,
 			intSeparatorSpec,
-			roundingSpec,
 			negativeNumberSign,
 			positiveNumberSign,
 			zeroNumberSign,
+			currencySymbol,
 			numberFieldSpec,
 			ePrefix.XCpy(
 				"numStrKernel->"))
@@ -11368,7 +11554,7 @@ func (numStrKernel *NumberStrKernel) FmtSignedNumStrBasic(
 //	see methods:
 //
 //		NumberStrKernel.FmtNumStr()
-//		NumberStrKernel.FmtNumStrCustom()
+//		NumberStrKernel.FmtNumStrElements()
 //
 // ----------------------------------------------------------------
 //
@@ -11886,7 +12072,7 @@ func (numStrKernel *NumberStrKernel) FmtSignedNumStrFrance(
 //	see methods:
 //
 //		NumberStrKernel.FmtNumStr()
-//		NumberStrKernel.FmtNumStrCustom()
+//		NumberStrKernel.FmtNumStrElements()
 //
 // ----------------------------------------------------------------
 //
@@ -12393,7 +12579,7 @@ func (numStrKernel *NumberStrKernel) FmtSignedNumStrGermany(
 //	see methods:
 //
 //		NumberStrKernel.FmtNumStr()
-//		NumberStrKernel.FmtNumStrCustom()
+//		NumberStrKernel.FmtNumStrElements()
 //
 // ----------------------------------------------------------------
 //
@@ -12893,7 +13079,7 @@ func (numStrKernel *NumberStrKernel) FmtSignedNumStrUK(
 //	see methods:
 //
 //		NumberStrKernel.FmtNumStr()
-//		NumberStrKernel.FmtNumStrCustom()
+//		NumberStrKernel.FmtNumStrElements()
 //
 // ----------------------------------------------------------------
 //
