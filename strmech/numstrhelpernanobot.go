@@ -73,7 +73,20 @@ type numStrHelperNanobot struct {
 //		which be used to separate integer and fractional
 //		digits within a formatted Number String.
 //
+//		In the US, UK, Australia and most of Canada, the
+//		decimal separator is the period character ('.')
+//		known as the decimal point.
+//
+//		In France, Germany and many countries in the
+//		European Union, the Decimal Separator is the
+//		comma character (',').
+//
 //	intSeparatorDto				IntegerSeparatorSpec
+//
+//		Number String Integer Separator Specification. This
+//		type encapsulates the parameters required to format
+//		integer grouping and separation within a Number
+//		String.
 //
 //		Type IntegerSeparatorSpec is designed to manage
 //		integer separators, primarily thousands separators,

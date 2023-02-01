@@ -705,7 +705,7 @@ func (numStrFmtSpecAtom *numStrFmtSpecAtom) setNegativeNumberSignSpec(
 //
 // Deletes and resets the member variable data values
 // stored in the instance of NumStrFormatSpec passed
-// as input parameter 'signedNumFmtSpec'.
+// as input parameter 'numStrFmtSpec'.
 //
 // ----------------------------------------------------------------
 //
@@ -720,12 +720,12 @@ func (numStrFmtSpecAtom *numStrFmtSpecAtom) setNegativeNumberSignSpec(
 //
 // # Input Parameters
 //
-// numStrFmtSpec					*NumStrFormatSpec
+//	numStrFmtSpec					*NumStrFormatSpec
 //
-//	A pointer to a NumStrFormatSpec instance. All  member
-//	variable data fields in this object will be replaced
-//	by data values configured from the input parameter
-//	described below.
+//		A pointer to a NumStrFormatSpec instance. All
+//		member variable data fields in this object will
+//		be replaced by data values configured from the
+//		input parameters described below.
 //
 //	decSeparatorSpec				DecimalSeparatorSpec
 //
@@ -748,6 +748,56 @@ func (numStrFmtSpecAtom *numStrFmtSpecAtom) setNegativeNumberSignSpec(
 //		type encapsulates the parameters required to format
 //		integer grouping and separation within a Number
 //		String.
+//
+//		Type IntegerSeparatorSpec is designed to manage
+//		integer separators, primarily thousands separators,
+//		for different countries and cultures. The term
+//		'integer separators' is used because this type
+//		manages both integer grouping and the characters
+//		used to separate integer groups.
+//
+//		In the USA and many other countries, integer
+//		numbers are often separated by commas thereby
+//		grouping the number into thousands.
+//
+//		Examples:
+//
+//			IntGroupingType.None()
+//			(a.k.a Integer Separation Turned Off)
+//				'1000000000'
+//
+//			IntGroupingType.Thousands()
+//					'1,000,000,000'
+//
+//			IntGroupingType.IndiaNumbering()
+//				'6,78,90,00,00,00,00,000'
+//
+//			IntGroupingType.ChineseNumbering()
+//				'6,7890,0000,0000,0000'
+//
+//		Other countries and cultures use characters other
+//		than the comma to separate integers into thousands.
+//		Some countries and cultures do not use thousands
+//		separation and instead rely on multiple integer
+//		separation characters and grouping sequences for a
+//		single integer number. Notable examples of this
+//		are found in the 'India Number System' and
+//		'Chinese Numerals'.
+//
+//		Reference:
+//			https://en.wikipedia.org/wiki/Indian_numbering_system
+//			https://en.wikipedia.org/wiki/Chinese_numerals
+//			https://en.wikipedia.org/wiki/Decimal_separator
+//
+//		The IntegerSeparatorSpec type provides the
+//		flexibility necessary to process these complex
+//		number separation formats.
+//
+//		If integer separation is turned off, no error
+//		will be returned and integer digits will be
+//		displayed as a single string of numeric digits:
+//
+//			Integer Separation Turned Off: 1000000000
 //
 //	numberSymbolsGroup					NumStrNumberSymbolGroup
 //
@@ -849,6 +899,7 @@ func (numStrFmtSpecAtom *numStrFmtSpecAtom) setNegativeNumberSignSpec(
 //		If an error message is returned, the text value for input
 //		parameter 'errPrefDto' (error prefix) will be prefixed or
 //		attached at the beginning of the error message.
+
 func (numStrFmtSpecAtom *numStrFmtSpecAtom) setNStrFmtComponents(
 	numStrFmtSpec *NumStrFormatSpec,
 	decSeparatorSpec DecimalSeparatorSpec,
@@ -921,6 +972,519 @@ func (numStrFmtSpecAtom *numStrFmtSpecAtom) setNStrFmtComponents(
 		ePrefix.XCpy(
 			"numStrFmtSpec.numberSymbols<-"+
 				"numberSymbols"))
+
+	return err
+}
+
+//	setNStrFmtElements
+//
+// Deletes and resets the member variable data values
+// stored in the instance of NumStrFormatSpec passed
+// as input parameter 'numStrFmtSpec'.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	Be advised that the data fields contained in the
+//	NumStrFormatSpec instance passed by input parameter
+//	'numStrFmtSpec'  will be deleted and replaced by
+//	values generated from the other input parameters.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	numStrFmtSpec					*NumStrFormatSpec
+//
+//		A pointer to a NumStrFormatSpec instance. All
+//		member variable data fields in this object will
+//		be replaced by data values configured from the
+//		input parameter described below.
+//
+//	decSeparatorSpec				DecimalSeparatorSpec
+//
+//		This structure contains the radix point or
+//		decimal separator character(s) which will be used
+//		to separate integer and fractional digits within
+//		a formatted Number String.
+//
+//		In the US, UK, Australia and most of Canada, the
+//		decimal separator is the period character ('.')
+//		known as the decimal point.
+//
+//		In France, Germany and many countries in the
+//		European Union, the Decimal Separator is the
+//		comma character (',').
+//
+//	intSeparatorSpec				IntegerSeparatorSpec
+//
+//		Number String Integer Separator Specification. This
+//		type encapsulates the parameters required to format
+//		integer grouping and separation within a Number
+//		String.
+//
+//		Type IntegerSeparatorSpec is designed to manage
+//		integer separators, primarily thousands separators,
+//		for different countries and cultures. The term
+//		'integer separators' is used because this type
+//		manages both integer grouping and the characters
+//		used to separate integer groups.
+//
+//		In the USA and many other countries, integer
+//		numbers are often separated by commas thereby
+//		grouping the number into thousands.
+//
+//		Examples:
+//
+//			IntGroupingType.None()
+//			(a.k.a Integer Separation Turned Off)
+//				'1000000000'
+//
+//			IntGroupingType.Thousands()
+//					'1,000,000,000'
+//
+//			IntGroupingType.IndiaNumbering()
+//				'6,78,90,00,00,00,00,000'
+//
+//			IntGroupingType.ChineseNumbering()
+//				'6,7890,0000,0000,0000'
+//
+//		Other countries and cultures use characters other
+//		than the comma to separate integers into thousands.
+//		Some countries and cultures do not use thousands
+//		separation and instead rely on multiple integer
+//		separation characters and grouping sequences for a
+//		single integer number. Notable examples of this
+//		are found in the 'India Number System' and
+//		'Chinese Numerals'.
+//
+//		Reference:
+//			https://en.wikipedia.org/wiki/Indian_numbering_system
+//			https://en.wikipedia.org/wiki/Chinese_numerals
+//			https://en.wikipedia.org/wiki/Decimal_separator
+//
+//		The IntegerSeparatorSpec type provides the
+//		flexibility necessary to process these complex
+//		number separation formats.
+//
+//		If integer separation is turned off, no error
+//		will be returned and integer digits will be
+//		displayed as a single string of numeric digits:
+//
+//			Integer Separation Turned Off: 1000000000
+//
+//	negativeNumberSign				NumStrNumberSymbolSpec
+//
+//		The Number String Negative Number Sign
+//		Specification is used to configure negative
+//		number sign symbols for negative numeric
+//		values formatted and displayed in number
+//		stings.
+//
+//		If this parameter is submitted as an empty or
+//		invalid Negative Number Sign Specification, it
+//		will be automatically converted to a 'NOP' or
+//		empty placeholder which will be ignored by Number
+//		String formatting algorithms. 'NOP' is a computer
+//		science term meaning 'No Operation'.
+//
+//		Example-1: Leading Number Sign Symbols
+//			Leading Number Sign Symbols for Negative
+//			Values
+//
+//			Leading Symbols: "- "
+//			Number String:   "- 123.456"
+//
+//		Example-2: Leading Number Sign Symbols
+//			Leading Number Sign Symbols for Negative
+//			Values
+//
+//			Leading Symbols: "-"
+//			Number String:   "-123.456"
+//
+//		Example-3: Trailing Number Sign Symbols
+//			Trailing Number Sign Symbols for Negative
+//			Values
+//
+//			Trailing Symbols: " -"
+//			Number String:   "123.456 -"
+//
+//		Example-4: Trailing Number Sign Symbols
+//			Trailing Number Sign Symbols for Negative
+//			Values
+//
+//			Trailing Symbols: "-"
+//			Number String:   "123.456-"
+//
+//	positiveNumberSign 				NumStrNumberSymbolSpec
+//
+//		Positive number signs are commonly implied
+//		and not specified. However, the user has
+//		the option to specify a positive number sign
+//		character or characters for positive numeric
+//		values using this input parameter.
+//
+//		If this parameter is submitted as an empty or
+//		invalid Positive Number Sign Specification, it
+//		will be automatically converted to a 'NOP' or
+//		empty placeholder which will be ignored by Number
+//		String formatting algorithms. 'NOP' is a computer
+//		science term meaning 'No Operation'.
+//
+//		Example-1: Leading Number Sign Symbols
+//			Leading Number Sign Symbols for Positive
+//			Values
+//
+//			Leading Symbols: "+ "
+//			Number String:   "+ 123.456"
+//
+//		Example-2: Leading Number Sign Symbols
+//			Leading Number Sign Symbols for Positive
+//			Values
+//
+//			Leading Symbols: "+"
+//			Number String:   "+123.456"
+//
+//		Example-3: Trailing Number Sign Symbols
+//			Trailing Number Sign Symbols for Positive
+//			Values
+//
+//			Trailing Symbols: " +"
+//			Number String:   "123.456 +"
+//
+//		Example-4: Trailing Number Sign Symbols
+//			Trailing Number Sign Symbols for Positive
+//			Values
+//
+//			Trailing Symbols: "+"
+//			Number String:   "123.456+"
+//
+//	zeroNumberSign					NumStrNumberSymbolSpec
+//
+//		The Number String Zero Number Sign
+//		Specification is used to configure number
+//		sign symbols for zero numeric values formatted
+//		and displayed in number stings. Zero number signs
+//		are commonly omitted because zero does not
+//		technically qualify as either a positive or
+//		negative value. However, the user has the option
+//		to configure number sign symbols for zero values
+//		if necessary.
+//
+//		If this parameter is submitted as an empty or
+//		invalid Zero Number Sign Specification, it will
+//		be automatically converted to a 'NOP' or empty
+//		placeholder which will be ignored by Number
+//		String formatting algorithms. 'NOP' is a computer
+//		science term meaning 'No Operation'.
+//
+//		Example-1: Leading Number Sign Symbols
+//			Leading Number Sign Symbols for Zero Values
+//
+//			Leading Symbols: "+"
+//			Trailing Symbols: ""
+//			Number String:   "+0.00"
+//
+//		Example-2: Leading Number Sign Symbols
+//			Leading Number Sign Symbols for Zero Values
+//
+//			Leading Symbols: "+ "
+//			Trailing Symbols: ""
+//			Number String:   "+ 0.00"
+//
+//		Example-3: Trailing Number Sign Symbols
+//			Trailing Number Sign Symbols for Zero Values
+//
+//			Leading Symbols: ""
+//			Trailing Symbols: " +"
+//			Number String:   "0.00 +"
+//
+//		Example-4: Trailing Number Sign Symbols
+//			Trailing Number Sign Symbols for Zero Values
+//
+//			Leading Symbols: ""
+//			Trailing Symbols: "+"
+//			Number String:   "0.00+"
+//
+//	currencySymbol					NumStrNumberSymbolSpec
+//
+//		A Currency Symbol next to a number shows the
+//		number is a monetary amount.
+//
+//		The Number String Currency Symbol Specification
+//		is used to configure currency symbols for
+//		positive, negative and zero numeric values
+//		formatted and displayed in number stings.
+//
+//		If this parameter is submitted as an empty or
+//		invalid Currency Symbol Specification, it will
+//		be automatically converted to a 'NOP' or empty
+//		placeholder which will be ignored by Number
+//		String formatting algorithms. 'NOP' is a computer
+//		science term meaning 'No Operation'.
+//
+//		Examples of Currency Symbols include the Dollar
+//		sign ('$'), Euro sign ('€') or Pound sign ('£').
+//
+//		This instance of NumStrNumberSymbolSpec is used
+//		to configure leading Currency Symbols, trailing
+//		Currency Symbols or both leading and trailing
+//		Currency Symbols.
+//
+//		Example-1: Leading Currency Symbols
+//
+//			Leading Currency Symbols: "$ "
+//			Number String:   "$ 123.456"
+//
+//		Example-2: Leading Currency Symbols
+//
+//			Leading Currency Symbols: "$"
+//			Number String:   "$123.456"
+//
+//		Example-3: Trailing Currency Symbols
+//			Trailing Currency Symbols for Positive Values
+//
+//			Trailing Currency Symbols: "€"
+//			Number String:   "123.456€"
+//
+//		Example-4: Trailing Currency Symbols
+//			Trailing Currency Symbols for Positive Values
+//
+//			Trailing Currency Symbols: " €"
+//			Number String:   "123.456 €"
+//
+//	numberFieldSpec				NumStrNumberFieldSpec
+//
+//		This Number Field Specification contains all
+//		parameters necessary to format a Number String
+//		within a larger Number Field. In addition to
+//		specifying the length of number field, this
+//		object contains justification specifications
+//		for centering, left justifying or right
+//		justifying a Number String within a Number
+//		Field.
+//
+//		type NumStrNumberFieldSpec struct {
+//
+//			fieldLength int
+//
+//				This parameter defines the length of the
+//				text field in which the numeric value will
+//				be displayed within a number string.
+//
+//				If 'fieldLength' is less than the length
+//				of the numeric value string, it will be
+//				automatically set equal to the length of
+//				that numeric value string.
+//
+//				To automatically set the value of
+//				'fieldLength' to the string length of the
+//				numeric value, set this parameter to a
+//				value of minus one (-1).
+//
+//				If this parameter is submitted with a
+//				value less than minus one (-1) or greater
+//				than 1-million (1,000,000), an error will
+//				be returned.
+//
+//			fieldJustification TextJustify
+//
+//				An enumeration which specifies the
+//				justification of the numeric value string
+//				within the number field length specified
+//				by data field 'fieldLength'.
+//
+//				Text justification can only be evaluated in
+//				the context of a number string, field length
+//				and a 'textJustification' object of type
+//				TextJustify. This is because number strings
+//				with a field length equal to or less than the
+//				length of the numeric value string never use
+//				text justification. In these cases, text
+//				justification is completely ignored.
+//
+//				If the field length parameter ('fieldLength')
+//				is greater than the length of the numeric
+//				value string, text justification must be equal
+//				to one of these three valid values:
+//
+//				          TextJustify(0).Left()
+//				          TextJustify(0).Right()
+//				          TextJustify(0).Center()
+//
+//				You can also use the abbreviated text
+//				justification enumeration syntax as follows:
+//
+//				          TxtJustify.Left()
+//				          TxtJustify.Right()
+//				          TxtJustify.Center()
+//		}
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	err							error
+//
+//		If this method completes successfully, this
+//		returned error Type is set equal to 'nil'. If errors
+//		are	encountered during processing, the returned
+//		error Type will encapsulate an error message.
+//
+//		If an error message is returned, the text value for
+//		input parameter 'errPrefDto' (error prefix) will be
+//		prefixed or attached at the beginning of the error
+//		message.
+func (numStrFmtSpecAtom *numStrFmtSpecAtom) setNStrFmtElements(
+	numStrFmtSpec *NumStrFormatSpec,
+	decSeparatorSpec DecimalSeparatorSpec,
+	intSeparatorSpec IntegerSeparatorSpec,
+	negativeNumberSign NumStrNumberSymbolSpec,
+	positiveNumberSign NumStrNumberSymbolSpec,
+	zeroNumberSign NumStrNumberSymbolSpec,
+	currencySymbol NumStrNumberSymbolSpec,
+	numberFieldSpec NumStrNumberFieldSpec,
+	errPrefDto *ePref.ErrPrefixDto) (
+	err error) {
+
+	if numStrFmtSpecAtom.lock == nil {
+		numStrFmtSpecAtom.lock = new(sync.Mutex)
+	}
+
+	numStrFmtSpecAtom.lock.Lock()
+
+	defer numStrFmtSpecAtom.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"numStrFmtSpecAtom."+
+			"setNStrFmtElements()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if numStrFmtSpec == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'numStrFmtSpec' is invalid!\n"+
+			"'numStrFmtSpec' is a 'nil' pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	err = numStrFmtSpec.decSeparator.CopyIn(
+		&decSeparatorSpec,
+		ePrefix.XCpy(
+			"decSeparatorSpec->"))
+
+	if err != nil {
+		return err
+	}
+
+	err = numStrFmtSpec.intSeparatorSpec.CopyIn(
+		&intSeparatorSpec,
+		ePrefix.XCpy(
+			"intSeparatorSpec->"))
+
+	if err != nil {
+		return err
+	}
+
+	if negativeNumberSign.IsNOP() == false {
+
+		err = numStrFmtSpec.numberSymbolsGroup.negativeNumberSign.CopyIn(
+			&negativeNumberSign,
+			ePrefix.XCpy(
+				"numberSymbolsGroup.negativeNumberSign<-"+
+					"negativeNumberSign"))
+
+		if err != nil {
+			return err
+		}
+
+	} else {
+
+		numStrFmtSpec.numberSymbolsGroup.negativeNumberSign.SetNOP()
+	}
+
+	if positiveNumberSign.IsNOP() == false {
+
+		err = numStrFmtSpec.numberSymbolsGroup.positiveNumberSign.CopyIn(
+			&positiveNumberSign,
+			ePrefix.XCpy(
+				"numberSymbolsGroup.positiveNumberSign<-"+
+					"positiveNumberSign"))
+
+		if err != nil {
+			return err
+		}
+
+	} else {
+
+		numStrFmtSpec.numberSymbolsGroup.positiveNumberSign.SetNOP()
+	}
+
+	if zeroNumberSign.IsNOP() == false {
+
+		err = numStrFmtSpec.numberSymbolsGroup.zeroNumberSign.CopyIn(
+			&zeroNumberSign,
+			ePrefix.XCpy(
+				"numberSymbolsGroup.zeroNumberSign<-"+
+					"zeroNumberSign"))
+
+		if err != nil {
+			return err
+		}
+
+	} else {
+
+		numStrFmtSpec.numberSymbolsGroup.zeroNumberSign.SetNOP()
+	}
+
+	if currencySymbol.IsNOP() == false {
+
+		err = numStrFmtSpec.numberSymbolsGroup.currencySymbol.CopyIn(
+			&currencySymbol,
+			ePrefix.XCpy(
+				"numberSymbolsGroup.currencySymbol<-"+
+					"currencySymbolSpecSpec"))
+
+		if err != nil {
+			return err
+		}
+
+	} else {
+
+		numStrFmtSpec.numberSymbolsGroup.currencySymbol.SetNOP()
+	}
+
+	err = numStrFmtSpec.numberFieldSpec.CopyIn(
+		&numberFieldSpec,
+		ePrefix.XCpy(
+			"numStrFmtSpec.numberFieldSpec<-"+
+				"numberFieldSpec"))
 
 	return err
 }
