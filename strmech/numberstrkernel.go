@@ -55,7 +55,7 @@ type NumberStrKernel struct {
 	// The default Number String format. If
 	// this format is found to be empty or
 	// invalid, the United States Signed Number
-	// String Format will be used.
+	// Minus Format will be used.
 	//
 	// To set the Default Number String Format
 	// Specification, use this method:
@@ -422,7 +422,7 @@ func (numStrKernel *NumberStrKernel) Compare(
 //	if the 'incomingNumStrKernel' Number String Format
 //	Specification is invalid,
 //	'incomingNumStrKernel.numStrFormatSpec' will be set
-//	to the default US (United States) Number String
+//	to the default US (United States) Signed Number Minus
 //	Format Specification.
 //
 //	All other 'incomingNumStrKernel' data values will
@@ -447,8 +447,8 @@ func (numStrKernel *NumberStrKernel) Compare(
 //		if the 'incomingNumStrKernel' Number String Format
 //		Specification is invalid,
 //		'incomingNumStrKernel.numStrFormatSpec' will be set
-//		to the default US (United States) Number String
-//		Format Specification.
+//		to the default US (United States) Signed Number
+//		Minus Format Specification.
 //
 //		All other 'incomingNumStrKernel' data values will
 //		remain unchanged.
@@ -2656,8 +2656,8 @@ func (numStrKernel *NumberStrKernel) FmtCountryCurrencyNumStr(
 	return new(numberStrKernelMolecule).
 		formatNumStr(
 			numStrKernel,
-			numStrFmtSpec,
 			roundingSpec,
+			numStrFmtSpec,
 			ePrefix.XCpy("numStrKernel"))
 }
 
@@ -3130,8 +3130,8 @@ func (numStrKernel *NumberStrKernel) FmtCountrySignedNumStr(
 	return new(numberStrKernelMolecule).
 		formatNumStr(
 			numStrKernel,
-			numStrFmtSpec,
 			roundingSpec,
+			numStrFmtSpec,
 			ePrefix.XCpy("numStrKernel"))
 }
 
@@ -3659,8 +3659,8 @@ func (numStrKernel *NumberStrKernel) FmtCurrencyDefaultsFrance(
 	return new(numberStrKernelMolecule).
 		formatNumStr(
 			numStrKernel,
-			numStrFmtSpec,
 			roundingSpec,
+			numStrFmtSpec,
 			ePrefix.XCpy("numStrKernel"))
 
 }
@@ -4185,8 +4185,8 @@ func (numStrKernel *NumberStrKernel) FmtCurrencyDefaultsGermany(
 	return new(numberStrKernelMolecule).
 		formatNumStr(
 			numStrKernel,
-			numStrFmtSpec,
 			roundingSpec,
+			numStrFmtSpec,
 			ePrefix.XCpy("numStrKernel"))
 
 }
@@ -4699,8 +4699,8 @@ func (numStrKernel *NumberStrKernel) FmtCurrencyDefaultsUKMinus(
 	return new(numberStrKernelMolecule).
 		formatNumStr(
 			numStrKernel,
-			numStrFmtSpec,
 			roundingSpec,
+			numStrFmtSpec,
 			ePrefix.XCpy("numStrKernel"))
 }
 
@@ -5217,8 +5217,8 @@ func (numStrKernel *NumberStrKernel) FmtCurrencyDefaultsUSMinus(
 	return new(numberStrKernelMolecule).
 		formatNumStr(
 			numStrKernel,
-			numStrFmtSpec,
 			roundingSpec,
+			numStrFmtSpec,
 			ePrefix.XCpy("numStrKernel"))
 }
 
@@ -5734,8 +5734,8 @@ func (numStrKernel *NumberStrKernel) FmtCurrencyDefaultsUSParen(
 	return new(numberStrKernelMolecule).
 		formatNumStr(
 			numStrKernel,
-			numStrFmtSpec,
 			roundingSpec,
+			numStrFmtSpec,
 			ePrefix.XCpy("numStrKernel"))
 }
 
@@ -6657,8 +6657,8 @@ func (numStrKernel *NumberStrKernel) FmtNumStr(
 	return new(numberStrKernelMolecule).
 		formatNumStr(
 			numStrKernel,
-			numStrFmtSpec,
 			roundingSpec,
+			numStrFmtSpec,
 			ePrefix.XCpy("numStrKernel"))
 }
 
@@ -7277,8 +7277,8 @@ func (numStrKernel *NumberStrKernel) FmtNumStrComponents(
 	return new(numberStrKernelMolecule).
 		formatNumStr(
 			numStrKernel,
-			numStrFmtSpec,
 			roundingSpec,
+			numStrFmtSpec,
 			ePrefix.XCpy("numStrKernel"))
 }
 
@@ -8179,10 +8179,47 @@ func (numStrKernel *NumberStrKernel) FmtNumStrDefault(
 			0,
 			ePrefix.XCpy("roundingSpec"))
 
+	if err != nil {
+		return numStr, err
+	}
+
+	if numStrKernel.numStrFormatSpec.IsNOP() {
+
+		// The current Number String Format
+		// Specification is invalid. Set the
+		// Default US Minus Specification
+
+		err = numStrKernel.numStrFormatSpec.
+			SetSignedNumDefaultsUSMinus(
+				NumStrNumberFieldSpec{
+					fieldLength:        -1,
+					fieldJustification: TxtJustify.Right(),
+				},
+				ePrefix.XCpy(
+					"numStrKernel.numStrFormatSpec<-"))
+
+		if err != nil {
+
+			return numStr, err
+		}
+
+	}
+
+	var tempNumStrFormatSpec NumStrFormatSpec
+
+	err = tempNumStrFormatSpec.CopyIn(
+		&numStrKernel.numStrFormatSpec,
+		ePrefix)
+
+	if err != nil {
+
+		return numStr, err
+	}
+
 	return new(numberStrKernelMolecule).formatNumStr(
 		numStrKernel,
-		numStrKernel.numStrFormatSpec,
 		roundingSpec,
+		tempNumStrFormatSpec,
 		ePrefix.XCpy("numStrKernel"))
 }
 
@@ -8566,35 +8603,20 @@ func (numStrKernel *NumberStrKernel) FmtNumStrDefaultRound(
 		return numStr, err
 	}
 
-	var tempNumStrFormatSpec NumStrFormatSpec
-
-	if new(numStrFmtSpecNanobot).isNOP(
-		&numStrKernel.numStrFormatSpec) {
+	if numStrKernel.numStrFormatSpec.IsNOP() {
 
 		// The current Number String Format
-		// Specification is invalid.
-		tempNumStrFormatSpec,
-			err = new(NumStrFormatSpec).NewSignedNumDefaultsUSMinus(
-			NumStrNumberFieldSpec{
-				fieldLength:        -1,
-				fieldJustification: TxtJustify.Right(),
-			},
-			ePrefix.XCpy(
-				"tempNumStrFormatSpec<-"))
+		// Specification is invalid. Set the
+		// Default US Minus Specification
 
-		if err != nil {
-
-			return numStr, err
-		}
-
-	} else {
-
-		// The current Number String Format
-		// Specification is valid.
-
-		err = tempNumStrFormatSpec.CopyIn(
-			&numStrKernel.numStrFormatSpec,
-			ePrefix)
+		err = numStrKernel.numStrFormatSpec.
+			SetSignedNumDefaultsUSMinus(
+				NumStrNumberFieldSpec{
+					fieldLength:        -1,
+					fieldJustification: TxtJustify.Right(),
+				},
+				ePrefix.XCpy(
+					"numStrKernel.numStrFormatSpec<-"))
 
 		if err != nil {
 
@@ -8603,11 +8625,22 @@ func (numStrKernel *NumberStrKernel) FmtNumStrDefaultRound(
 
 	}
 
+	var tempNumStrFormatSpec NumStrFormatSpec
+
+	err = tempNumStrFormatSpec.CopyIn(
+		&numStrKernel.numStrFormatSpec,
+		ePrefix)
+
+	if err != nil {
+
+		return numStr, err
+	}
+
 	numStr,
 		err = new(numberStrKernelMolecule).formatNumStr(
 		numStrKernel,
-		tempNumStrFormatSpec,
 		roundingSpec,
+		tempNumStrFormatSpec,
 		ePrefix.XCpy("numStrKernel"))
 
 	return numStr, err
@@ -10197,8 +10230,8 @@ func (numStrKernel *NumberStrKernel) FmtNumStrParams(
 		err = new(numberStrKernelMolecule).
 		formatNumStr(
 			numStrKernel,
-			numStrFmtSpec,
 			roundingSpec,
+			numStrFmtSpec,
 			ePrefix.XCpy("numStrKernel"))
 
 	return numberString, err
@@ -11523,8 +11556,8 @@ func (numStrKernel *NumberStrKernel) FmtSignedNumStrBasic(
 	return new(numberStrKernelMolecule).
 		formatNumStr(
 			numStrKernel,
-			numStrFmtSpec,
 			roundingSpec,
+			numStrFmtSpec,
 			ePrefix.XCpy("numStrKernel"))
 }
 
@@ -12041,8 +12074,8 @@ func (numStrKernel *NumberStrKernel) FmtSignedNumStrFrance(
 	return new(numberStrKernelMolecule).
 		formatNumStr(
 			numStrKernel,
-			numStrFmtSpec,
 			roundingSpec,
+			numStrFmtSpec,
 			ePrefix.XCpy("numStrKernel"))
 }
 
@@ -12558,8 +12591,8 @@ func (numStrKernel *NumberStrKernel) FmtSignedNumStrGermany(
 	return new(numberStrKernelMolecule).
 		formatNumStr(
 			numStrKernel,
-			numStrFmtSpec,
 			roundingSpec,
+			numStrFmtSpec,
 			ePrefix.XCpy("numStrKernel"))
 }
 
@@ -13058,8 +13091,8 @@ func (numStrKernel *NumberStrKernel) FmtSignedNumStrUK(
 	return new(numberStrKernelMolecule).
 		formatNumStr(
 			numStrKernel,
-			numStrFmtSpec,
 			roundingSpec,
+			numStrFmtSpec,
 			ePrefix.XCpy("numStrKernel"))
 }
 
@@ -13550,7 +13583,7 @@ func (numStrKernel *NumberStrKernel) FmtSignedNumStrUS(
 	return new(numberStrKernelMolecule).
 		formatNumStr(
 			numStrKernel,
-			numStrFmtSpec,
 			roundingSpec,
+			numStrFmtSpec,
 			ePrefix.XCpy("numStrKernel"))
 }

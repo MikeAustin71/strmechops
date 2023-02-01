@@ -11694,11 +11694,52 @@ func (numStrKernel *NumberStrKernel) String() string {
 			0,
 			ePrefix.XCpy("roundingSpec"))
 
+	if err != nil {
+
+		numStr = err.Error()
+		return numStr
+	}
+
+	if numStrKernel.numStrFormatSpec.IsNOP() {
+
+		// The current Number String Format
+		// Specification is invalid. Set the
+		// Default US Minus Specification
+
+		err = numStrKernel.numStrFormatSpec.
+			SetSignedNumDefaultsUSMinus(
+				NumStrNumberFieldSpec{
+					fieldLength:        -1,
+					fieldJustification: TxtJustify.Right(),
+				},
+				ePrefix.XCpy(
+					"numStrKernel.numStrFormatSpec<-"))
+
+		if err != nil {
+
+			numStr = err.Error()
+			return numStr
+		}
+
+	}
+
+	var tempNumStrFormatSpec NumStrFormatSpec
+
+	err = tempNumStrFormatSpec.CopyIn(
+		&numStrKernel.numStrFormatSpec,
+		ePrefix)
+
+	if err != nil {
+
+		numStr = err.Error()
+		return numStr
+	}
+
 	numStr,
 		err = new(numberStrKernelMolecule).formatNumStr(
 		numStrKernel,
-		numStrKernel.numStrFormatSpec,
 		roundingSpec,
+		tempNumStrFormatSpec,
 		ePrefix.XCpy("numStrKernel"))
 
 	if err != nil {
