@@ -4580,8 +4580,8 @@ func (txtFloat64FmtDtoMolecule *textFieldFormatDtoFloat64Molecule) fmtNumStrWith
 
 	numStr,
 		err = numStrKernel.FmtNumStr(
-		numStrFmtSpec,
 		roundingSpec,
+		numStrFmtSpec,
 		ePrefix.XCpy(
 			"numStrKernel"))
 

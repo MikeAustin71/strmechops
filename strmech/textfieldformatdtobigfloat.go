@@ -4696,8 +4696,8 @@ func (txtBigFloatFieldFmtDtoMolecule *textBigFloatFieldFormatDtoMolecule) fmtNum
 
 	numStr,
 		err = numStrKernel.FmtNumStr(
-		numStrFmtSpec,
 		roundingSpec,
+		numStrFmtSpec,
 		ePrefix.XCpy(
 			"numStrKernel"))
 

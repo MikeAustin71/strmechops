@@ -6761,73 +6761,6 @@ func (numStrKernel *NumberStrKernel) FmtCurrencyDefaultsUSMinus(
 //
 // # Input Parameters
 //
-//	numberFieldSpec				NumStrNumberFieldSpec
-//
-//		This Number Field Specification contains all
-//		parameters necessary to format a Number String
-//		within a larger Number Field. In addition to
-//		specifying the length of number field, this
-//		object contains justification specifications
-//		for centering, left justifying or right
-//		justifying a Number String within a Number
-//		Field.
-//
-//		type NumStrNumberFieldSpec struct {
-//
-//			fieldLength int
-//
-//				This parameter defines the length of the
-//				text field in which the numeric value will
-//				be displayed within a number string.
-//
-//				If 'fieldLength' is less than the length
-//				of the numeric value string, it will be
-//				automatically set equal to the length of
-//				that numeric value string.
-//
-//				To automatically set the value of
-//				'fieldLength' to the string length of the
-//				numeric value, set this parameter to a
-//				value of minus one (-1).
-//
-//				If this parameter is submitted with a
-//				value less than minus one (-1) or greater
-//				than 1-million (1,000,000), an error will
-//				be returned.
-//
-//			fieldJustification TextJustify
-//
-//				An enumeration which specifies the
-//				justification of the numeric value string
-//				within the number field length specified
-//				by data field 'fieldLength'.
-//
-//				Text justification can only be evaluated in
-//				the context of a number string, field length
-//				and a 'textJustification' object of type
-//				TextJustify. This is because number strings
-//				with a field length equal to or less than the
-//				length of the numeric value string never use
-//				text justification. In these cases, text
-//				justification is completely ignored.
-//
-//				If the field length parameter ('fieldLength')
-//				is greater than the length of the numeric
-//				value string, text justification must be equal
-//				to one of these three valid values:
-//
-//				          TextJustify(0).Left()
-//				          TextJustify(0).Right()
-//				          TextJustify(0).Center()
-//
-//				You can also use the abbreviated text
-//				justification enumeration syntax as follows:
-//
-//				          TxtJustify.Left()
-//				          TxtJustify.Right()
-//				          TxtJustify.Center()
-//		}
-//
 //	roundingSpec 				NumStrRoundingSpec
 //
 //		The Number String Rounding Specification
@@ -7062,6 +6995,73 @@ func (numStrKernel *NumberStrKernel) FmtCurrencyDefaultsUSMinus(
 //				operation.
 //		}
 //
+//	numberFieldSpec				NumStrNumberFieldSpec
+//
+//		This Number Field Specification contains all
+//		parameters necessary to format a Number String
+//		within a larger Number Field. In addition to
+//		specifying the length of number field, this
+//		object contains justification specifications
+//		for centering, left justifying or right
+//		justifying a Number String within a Number
+//		Field.
+//
+//		type NumStrNumberFieldSpec struct {
+//
+//			fieldLength int
+//
+//				This parameter defines the length of the
+//				text field in which the numeric value will
+//				be displayed within a number string.
+//
+//				If 'fieldLength' is less than the length
+//				of the numeric value string, it will be
+//				automatically set equal to the length of
+//				that numeric value string.
+//
+//				To automatically set the value of
+//				'fieldLength' to the string length of the
+//				numeric value, set this parameter to a
+//				value of minus one (-1).
+//
+//				If this parameter is submitted with a
+//				value less than minus one (-1) or greater
+//				than 1-million (1,000,000), an error will
+//				be returned.
+//
+//			fieldJustification TextJustify
+//
+//				An enumeration which specifies the
+//				justification of the numeric value string
+//				within the number field length specified
+//				by data field 'fieldLength'.
+//
+//				Text justification can only be evaluated in
+//				the context of a number string, field length
+//				and a 'textJustification' object of type
+//				TextJustify. This is because number strings
+//				with a field length equal to or less than the
+//				length of the numeric value string never use
+//				text justification. In these cases, text
+//				justification is completely ignored.
+//
+//				If the field length parameter ('fieldLength')
+//				is greater than the length of the numeric
+//				value string, text justification must be equal
+//				to one of these three valid values:
+//
+//				          TextJustify(0).Left()
+//				          TextJustify(0).Right()
+//				          TextJustify(0).Center()
+//
+//				You can also use the abbreviated text
+//				justification enumeration syntax as follows:
+//
+//				          TxtJustify.Left()
+//				          TxtJustify.Right()
+//				          TxtJustify.Center()
+//		}
+//
 //	errorPrefix					interface{}
 //
 //		This object encapsulates error prefix text which
@@ -7147,8 +7147,8 @@ func (numStrKernel *NumberStrKernel) FmtCurrencyDefaultsUSMinus(
 //		text will be attached to the beginning of the
 //		error message.
 func (numStrKernel *NumberStrKernel) FmtCurrencyDefaultsUSParen(
-	numberFieldSpec NumStrNumberFieldSpec,
 	roundingSpec NumStrRoundingSpec,
+	numberFieldSpec NumStrNumberFieldSpec,
 	errorPrefix interface{}) (
 	string,
 	error) {
@@ -7195,25 +7195,79 @@ func (numStrKernel *NumberStrKernel) FmtCurrencyDefaultsUSParen(
 			ePrefix.XCpy("numStrKernel"))
 }
 
-// FmtNumericValue
+//	FmtNumericValue
 //
-// Converts the numeric value encapsulated by the current
-// instance of NumberStrKernel to one of several numeric
-// value types.
+//	Converts the numeric value encapsulated by the current
+//	instance of NumberStrKernel to one of several numeric
+//	value types.
 //
-// The converted numeric value is returned through input
-// parameter 'numericValue' defined as an empty interface
-// (type interface{}).
+//	The converted numeric value is returned through input
+//	parameter 'numericValue' defined as an empty interface
+//	(type interface{}).
 //
-// The user has only to pass a pointer to one of the
-// supported numeric value types through input parameter
-// 'numericValue'. Thereafter, the NumberStrKernel numeric
-// value will be stored in the concrete numeric value type
-// designated by parameter 'numericValue'.
+//	The user has only to pass a pointer to one of the
+//	supported numeric value types through input parameter
+//	'numericValue'. Thereafter, the NumberStrKernel numeric
+//	value will be stored in the concrete numeric value type
+//	designated by parameter 'numericValue'.
 //
-// The user also has the option of specifying a rounded
-// numeric value return using input parameters
-// 'roundingType' and 'roundToFactionalDigits'.
+//	The user also has the option of specifying a rounded
+//	numeric value return using input parameters
+//	'roundingType' and 'roundToFactionalDigits'.
+//
+// ----------------------------------------------------------------
+//
+// # Usage
+//
+//		intDigits := "12345"
+//		fracDigits := ""
+//
+//		sMechNStrKernel := strmech.NumberStrKernel{}
+//		numberSign := strmech.NumSignVal.None()
+//
+//		numStrKernel,
+//		err := sMechNStrKernel.NewFromStringDigits(
+//					intDigits,
+//					fracDigits,
+//					numberSign,
+//					ePrefix.XCpy(
+//					fmt.Sprintf(
+//					"intDigits=%v",
+//					intDigits)))
+//
+//		if err != nil {
+//			fmt.Println(
+//			fmt.Sprintf("%v",
+//			err.Error()))
+//
+//			return
+//		}
+//
+//		var bigIntNumber *big.Int
+//
+//		var roundType = strmech.NumRoundType.HalfAwayFromZero()
+//
+//		***************************************************
+//
+//		After returning from this method call,
+//	 'bigIntNumber' will be populated with
+//		the value of the NumberStrKernel value,
+//		'12345'.
+//		_,
+//		err = numStrKernel.FmtNumericValue(
+//				&bigIntNumber,
+//				roundType,
+//				0,
+//				ePrefix)
+//
+//		if err != nil {
+//			fmt.Println(
+//			fmt.Sprintf("%v",
+//			err.Error()))
+//			return
+//		}
+//
+//		***************************************************
 //
 // ----------------------------------------------------------------
 //
@@ -7708,64 +7762,6 @@ func (numStrKernel *NumberStrKernel) FmtNumericValue(
 //
 // # Input Parameters
 //
-//	numStrFmtSpec				NumStrFormatSpec
-//
-//		This structure includes all parameters
-//		necessary for formatting a number string.
-//		These customization options provide maximum
-//		granularity in controlling the formatting
-//		of the returned Number String.
-//
-//		type NumStrFormatSpec struct {
-//
-//			decSeparator			DecimalSeparatorSpec
-//
-//				Contains the radix point or decimal
-//				separator character(s) which will
-//				separate integer and fractional
-//				numeric digits in a floating point
-//				number.
-//
-//			intSeparatorSpec 		IntegerSeparatorSpec
-//
-//				Integer Separator Specification. This
-//				parameter specifies the type of integer
-//				specifies the type of integer grouping and
-//				integer separator characters which will be
-//				applied to the number string formatting
-//				operations.
-//
-//			positiveNumberSign		NumStrNumberSymbolSpec
-//
-//				Positive number signs are commonly implied
-//				and not specified. However, the user as the
-//				option to specify a positive number sign
-//				character or characters for positive numeric
-//				values using a Number String Positive Number
-//				Sign Specification.
-//
-//				This specification can also be used to
-//				configure currency symbols.
-//
-//			negativeNumberSign		NumStrNumberSymbolSpec
-//
-//				The Number String Negative Number Sign
-//				Specification is used to configure negative
-//				number sign symbols for negative numeric values
-//				formatted and displayed in number stings.
-//
-//				This specification can also be used to
-//				configured currency symbols.
-//
-//			numberFieldSpec			NumStrNumberFieldSpec
-//
-//				This Number String Number Field Specification
-//				contains the field length and text
-//				justification parameter necessary to display
-//				a numeric value within a text number field
-//				for display as a number string.
-//		}
-//
 //	roundingSpec				NumStrRoundingSpec
 //
 //		The Number String Rounding Specification
@@ -8000,6 +7996,64 @@ func (numStrKernel *NumberStrKernel) FmtNumericValue(
 //				operation.
 //		}
 //
+//	numStrFmtSpec				NumStrFormatSpec
+//
+//		This structure includes all parameters
+//		necessary for formatting a number string.
+//		These customization options provide maximum
+//		granularity in controlling the formatting
+//		of the returned Number String.
+//
+//		type NumStrFormatSpec struct {
+//
+//			decSeparator			DecimalSeparatorSpec
+//
+//				Contains the radix point or decimal
+//				separator character(s) which will
+//				separate integer and fractional
+//				numeric digits in a floating point
+//				number.
+//
+//			intSeparatorSpec 		IntegerSeparatorSpec
+//
+//				Integer Separator Specification. This
+//				parameter specifies the type of integer
+//				specifies the type of integer grouping and
+//				integer separator characters which will be
+//				applied to the number string formatting
+//				operations.
+//
+//			positiveNumberSign		NumStrNumberSymbolSpec
+//
+//				Positive number signs are commonly implied
+//				and not specified. However, the user as the
+//				option to specify a positive number sign
+//				character or characters for positive numeric
+//				values using a Number String Positive Number
+//				Sign Specification.
+//
+//				This specification can also be used to
+//				configure currency symbols.
+//
+//			negativeNumberSign		NumStrNumberSymbolSpec
+//
+//				The Number String Negative Number Sign
+//				Specification is used to configure negative
+//				number sign symbols for negative numeric values
+//				formatted and displayed in number stings.
+//
+//				This specification can also be used to
+//				configured currency symbols.
+//
+//			numberFieldSpec			NumStrNumberFieldSpec
+//
+//				This Number String Number Field Specification
+//				contains the field length and text
+//				justification parameter necessary to display
+//				a numeric value within a text number field
+//				for display as a number string.
+//		}
+//
 //	 errorPrefix                interface{}
 //
 //		This object encapsulates error prefix text which
@@ -8081,8 +8135,8 @@ func (numStrKernel *NumberStrKernel) FmtNumericValue(
 //		text will be attached to the beginning of the
 //		error message.
 func (numStrKernel *NumberStrKernel) FmtNumStr(
-	numStrFmtSpec NumStrFormatSpec,
 	roundingSpec NumStrRoundingSpec,
+	numStrFmtSpec NumStrFormatSpec,
 	errorPrefix interface{}) (
 	string,
 	error) {
