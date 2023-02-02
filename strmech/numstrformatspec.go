@@ -2792,11 +2792,11 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCountrySignedNumFormat(
 	return newNumStrFmtSpec, err
 }
 
-// NewCurrencyBasic
+//	NewCurrencyBasic
 //
-// Creates and returns a new instance of NumStrFormatSpec
-// configured using a 'basic' set of Number String Format
-// Specification parameters.
+//	Creates and returns a new instance of NumStrFormatSpec
+//	configured using a 'basic' set of Number String Format
+//	Specification parameters.
 //
 // ----------------------------------------------------------------
 //
