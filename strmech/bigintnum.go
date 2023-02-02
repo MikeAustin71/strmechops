@@ -5,18 +5,10 @@ import (
 	"sync"
 )
 
-type BigIntValue struct {
-	significand *big.Int
-
-	exponent *big.Int
-
-	lock *sync.Mutex
-}
-
 type BigIntNum struct {
-	significand BigIntValue
+	significand big.Int
 
-	exponent BigIntValue
+	exponent big.Int
 
 	lock *sync.Mutex
 }

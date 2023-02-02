@@ -520,6 +520,123 @@ func (mainNumStrTest005 MainNumStrTest005) NumStrRound01() {
 
 }
 
+func (mainNumStrTest005 MainNumStrTest005) NumStrFmtCurrencyBasic() {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"MainNumStrTest005.NumStrFmtCurrencyBasic()",
+		"")
+
+	breakStr := strings.Repeat("=", 50)
+
+	fmt.Printf("\n\n" + breakStr + "\n")
+
+	fmt.Printf("\n Starting Run!\n"+
+		"Function: %v\n",
+		ePrefix.String())
+
+	fmt.Printf("\n" + breakStr + "\n")
+
+	origIntStr := "-1234"
+	origFracStr := "56"
+
+	origNumberStr := origIntStr +
+		"." +
+		origFracStr
+
+	expectedNumberStr := "$-   1,234.56"
+	// Field Len = 11
+	var err error
+	var baseValueNStr strmech.NumberStrKernel
+
+	baseValueNStr,
+		_,
+		err = new(strmech.NumberStrKernel).
+		NewParsePureNumberStr(
+			origNumberStr,
+			".",
+			true,
+			strmech.NumRoundType.NoRounding(),
+			0,
+			ePrefix.XCpy(
+				"baseValueNStr<-origNumberStr"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var fmtNumberStr string
+
+	var roundingSpec strmech.NumStrRoundingSpec
+
+	roundingSpec,
+		err = new(strmech.NumStrRoundingSpec).NewRoundingSpec(
+		strmech.NumRoundType.NoRounding(),
+		0,
+		ePrefix.XCpy(
+			"roundingSpec<-"))
+
+	fmtNumberStr,
+		err = baseValueNStr.FmtCurrencyBasic(
+		roundingSpec,
+		".",
+		",",
+		strmech.IntGroupingType.Thousands(),
+		"$",
+		"",
+		false,
+		"-",
+		"",
+		strmech.NumFieldSymPos.OutsideNumField(),
+		11,
+		strmech.TxtJustify.Right(),
+		ePrefix.XCpy(
+			"fmtNumberStr<-baseValueNStr"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	fmt.Printf("\n\n" + breakStr + "\n")
+
+	fmt.Printf("%v\n"+
+		"Expected NumStr = '%v'\n"+
+		"  Actual NumStr = '%v'\n",
+		ePrefix.String(),
+		expectedNumberStr,
+		fmtNumberStr)
+
+	fmt.Printf(breakStr + "\n\n")
+
+	if expectedNumberStr != fmtNumberStr {
+
+		fmt.Printf("\n\n%v\n"+
+			"** Error **\n"+
+			"Expected Number String NOT EQUAL\n"+
+			"to Actual Number String!\n"+
+			"Expected NumStr = '%v'\n"+
+			"  Actual NumStr = '%v'\n",
+			ePrefix.String(),
+			expectedNumberStr,
+			fmtNumberStr)
+
+		return
+
+	}
+
+	fmt.Printf("\n\n" + breakStr + "\n")
+
+	fmt.Printf("\n Successful Completion!\n"+
+		"Function: %v\n",
+		ePrefix.String())
+
+	fmt.Printf("\n" + breakStr + "\n")
+
+}
+
 func (mainNumStrTest005 MainNumStrTest005) NumStrFmtCurrencySimple() {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(

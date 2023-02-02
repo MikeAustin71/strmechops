@@ -2080,6 +2080,10 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewCurrencyBasic(
 	newCurrencySymbolsGroup NumStrNumberSymbolGroup,
 	err error) {
 
+	if nStrNumSymbolsGroup.lock == nil {
+		nStrNumSymbolsGroup.lock = new(sync.Mutex)
+	}
+
 	nStrNumSymbolsGroup.lock.Lock()
 
 	defer nStrNumSymbolsGroup.lock.Unlock()
@@ -2435,6 +2439,10 @@ func (nStrNumSymbolsGroup *NumStrNumberSymbolGroup) NewCurrencyBasicRunes(
 	errorPrefix interface{}) (
 	newCurrencySymbolsGroup NumStrNumberSymbolGroup,
 	err error) {
+
+	if nStrNumSymbolsGroup.lock == nil {
+		nStrNumSymbolsGroup.lock = new(sync.Mutex)
+	}
 
 	nStrNumSymbolsGroup.lock.Lock()
 
