@@ -3079,8 +3079,8 @@ func TestNumberStrKernel_SetFromPureNumberStr_000100(t *testing.T) {
 
 	actualFmtStr,
 		err = nStrKernel01.FmtCurrencyDefaultsGermany(
-		numberFieldSpec,
 		roundingSpec,
+		numberFieldSpec,
 		ePrefix.XCpy("3-A nStrKernel01"))
 
 	if err != nil {

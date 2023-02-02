@@ -5020,7 +5020,7 @@ func (numStrKernel *NumberStrKernel) FmtCurrencyDefaultsGermany(
 
 }
 
-// FmtCurrencyDefaultsUKMinusInside
+//	FmtCurrencyDefaultsUKMinusInside
 //
 //	Returns a formatted number string based on the
 //	numeric value contained in the current instance
@@ -5155,73 +5155,6 @@ func (numStrKernel *NumberStrKernel) FmtCurrencyDefaultsGermany(
 // ----------------------------------------------------------------
 //
 // # Input Parameters
-//
-//	numberFieldSpec				NumStrNumberFieldSpec
-//
-//		This Number Field Specification contains all
-//		parameters necessary to format a Number String
-//		within a larger Number Field. In addition to
-//		specifying the length of number field, this
-//		object contains justification specifications
-//		for centering, left justifying or right
-//		justifying a Number String within a Number
-//		Field.
-//
-//		type NumStrNumberFieldSpec struct {
-//
-//			fieldLength int
-//
-//				This parameter defines the length of the
-//				text field in which the numeric value will
-//				be displayed within a number string.
-//
-//				If 'fieldLength' is less than the length
-//				of the numeric value string, it will be
-//				automatically set equal to the length of
-//				that numeric value string.
-//
-//				To automatically set the value of
-//				'fieldLength' to the string length of the
-//				numeric value, set this parameter to a
-//				value of minus one (-1).
-//
-//				If this parameter is submitted with a
-//				value less than minus one (-1) or greater
-//				than 1-million (1,000,000), an error will
-//				be returned.
-//
-//			fieldJustification TextJustify
-//
-//				An enumeration which specifies the
-//				justification of the numeric value string
-//				within the number field length specified
-//				by data field 'fieldLength'.
-//
-//				Text justification can only be evaluated in
-//				the context of a number string, field length
-//				and a 'textJustification' object of type
-//				TextJustify. This is because number strings
-//				with a field length equal to or less than the
-//				length of the numeric value string never use
-//				text justification. In these cases, text
-//				justification is completely ignored.
-//
-//				If the field length parameter ('fieldLength')
-//				is greater than the length of the numeric
-//				value string, text justification must be equal
-//				to one of these three valid values:
-//
-//				          TextJustify(0).Left()
-//				          TextJustify(0).Right()
-//				          TextJustify(0).Center()
-//
-//				You can also use the abbreviated text
-//				justification enumeration syntax as follows:
-//
-//				          TxtJustify.Left()
-//				          TxtJustify.Right()
-//				          TxtJustify.Center()
-//		}
 //
 //	roundingSpec 				NumStrRoundingSpec
 //
@@ -5457,6 +5390,73 @@ func (numStrKernel *NumberStrKernel) FmtCurrencyDefaultsGermany(
 //				operation.
 //		}
 //
+//	numberFieldSpec				NumStrNumberFieldSpec
+//
+//		This Number Field Specification contains all
+//		parameters necessary to format a Number String
+//		within a larger Number Field. In addition to
+//		specifying the length of number field, this
+//		object contains justification specifications
+//		for centering, left justifying or right
+//		justifying a Number String within a Number
+//		Field.
+//
+//		type NumStrNumberFieldSpec struct {
+//
+//			fieldLength int
+//
+//				This parameter defines the length of the
+//				text field in which the numeric value will
+//				be displayed within a number string.
+//
+//				If 'fieldLength' is less than the length
+//				of the numeric value string, it will be
+//				automatically set equal to the length of
+//				that numeric value string.
+//
+//				To automatically set the value of
+//				'fieldLength' to the string length of the
+//				numeric value, set this parameter to a
+//				value of minus one (-1).
+//
+//				If this parameter is submitted with a
+//				value less than minus one (-1) or greater
+//				than 1-million (1,000,000), an error will
+//				be returned.
+//
+//			fieldJustification TextJustify
+//
+//				An enumeration which specifies the
+//				justification of the numeric value string
+//				within the number field length specified
+//				by data field 'fieldLength'.
+//
+//				Text justification can only be evaluated in
+//				the context of a number string, field length
+//				and a 'textJustification' object of type
+//				TextJustify. This is because number strings
+//				with a field length equal to or less than the
+//				length of the numeric value string never use
+//				text justification. In these cases, text
+//				justification is completely ignored.
+//
+//				If the field length parameter ('fieldLength')
+//				is greater than the length of the numeric
+//				value string, text justification must be equal
+//				to one of these three valid values:
+//
+//				          TextJustify(0).Left()
+//				          TextJustify(0).Right()
+//				          TextJustify(0).Center()
+//
+//				You can also use the abbreviated text
+//				justification enumeration syntax as follows:
+//
+//				          TxtJustify.Left()
+//				          TxtJustify.Right()
+//				          TxtJustify.Center()
+//		}
+//
 //	 errorPrefix                interface{}
 //
 //		This object encapsulates error prefix text which
@@ -5542,8 +5542,8 @@ func (numStrKernel *NumberStrKernel) FmtCurrencyDefaultsGermany(
 //		text will be attached to the beginning of the
 //		error message.
 func (numStrKernel *NumberStrKernel) FmtCurrencyDefaultsUKMinusInside(
-	numberFieldSpec NumStrNumberFieldSpec,
 	roundingSpec NumStrRoundingSpec,
+	numberFieldSpec NumStrNumberFieldSpec,
 	errorPrefix interface{}) (
 	string,
 	error) {
