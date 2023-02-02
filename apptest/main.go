@@ -7,6 +7,6 @@ import "github.com/MikeAustin71/strmechops/apptest/examples"
 
 func main() {
 
-	examples.MainNumStrTest005{}.BasicNumStrFmt()
+	examples.MainNumStrTest005{}.NumStrFmtSignedSimple()
 
 }

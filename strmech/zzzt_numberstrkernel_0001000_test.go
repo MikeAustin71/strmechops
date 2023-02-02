@@ -2451,9 +2451,24 @@ func TestNumberStrKernel_FmtSignedNumStrBasic_000100(t *testing.T) {
 	}
 
 	//expectedStr  "    1,123,456.78"
+	var roundingSpec NumStrRoundingSpec
+
+	roundingSpec,
+		err = new(NumStrRoundingSpec).NewRoundingSpec(
+		NumRoundType.HalfAwayFromZero(),
+		2,
+		ePrefix.XCpy(
+			"roundingSpec"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
 
 	actualNumStr,
 		err = nStrKernel01.FmtSignedNumStrBasic(
+		roundingSpec,
 		".",
 		",",
 		IntGroupingType.Thousands(),
@@ -2461,8 +2476,6 @@ func TestNumberStrKernel_FmtSignedNumStrBasic_000100(t *testing.T) {
 		")",
 		16,
 		TxtJustify.Right(),
-		NumRoundType.HalfAwayFromZero(),
-		2,
 		ePrefix.XCpy(
 			"Test # 2 actualNumStr<-nStrKernel01"))
 

@@ -7457,7 +7457,7 @@ func (numStrKernel *NumberStrKernel) FmtCurrencyDefaultsUSParen(
 //				operation.
 //		}
 //
-//	decSeparatorChars				string
+//	decSeparator				string
 //
 //		This string contains the character or characters
 //		which will be configured as the Decimal Separator
@@ -7476,7 +7476,7 @@ func (numStrKernel *NumberStrKernel) FmtCurrencyDefaultsUSParen(
 //		European Union, the Decimal Separator is the
 //		comma character (',').
 //
-//	intSeparatorChars				string
+//	intSeparatorChars			string
 //
 //		One or more characters used to separate groups of
 //		integers. This separator is also known as the
@@ -7498,298 +7498,99 @@ func (numStrKernel *NumberStrKernel) FmtCurrencyDefaultsUSParen(
 //		integers.
 //
 //		If this input parameter contains a zero length
-//		string and parameter 'intGroupingType' is NOT
-//		equal to 'IntGroupingType.None()', an error will
-//		be returned.
+//		string, an error will be returned.
 //
-//	intGroupingType					IntegerGroupingType
+//	currencySymbols				string
 //
-//		This instance of IntegerGroupingType defines the type
-//		of IntegerSeparatorSpec which will be returned. The
-//		enumeration IntegerGroupingType must be set to one
-//		of the following values:
+//		The symbol or symbols used to format currency.
+//		This currency formatting will be configured in
+//		the new instance of NumStrFormatSpec returned by
+//		this method.
 //
-//			IntGroupingType.None()
-//			IntGroupingType.Thousands()
-//			IntGroupingType.IndiaNumbering()
-//			IntGroupingType.ChineseNumbering()
+//	leadingCurrencySymbols		bool
 //
-//		Note:	Setting 'intGroupingType' to a value of
-//				IntGroupingType.None() effectively turns
-//				off integer separation.
+//		Controls the positioning of Currency Symbols in a
+//		Number String Format.
 //
-//		Examples:
+//		When set to 'true', the returned instance of
+//		NumStrNumberSymbolGroup will configure Currency
+//		Symbols at the beginning or left side of the
+//		number string. Such Currency Symbols are therefore
+//		configured as leading Currency Symbols. This is
+//		the positioning format used in the US, UK,
+//		Australia and most of Canada.
 //
-//			IntGroupingType.None()
-//				'1000000000'
+//		Example Number Strings:
+//			"$ 123.456"
 //
-//			IntGroupingType.Thousands()
-//					'1,000,000,000'
+//		NOTE:	If a space is NOT present, a space will
+//				be automatically inserted between the
+//				currency symbol and the first digit or
+//				leading minus sign.
 //
-//			IntGroupingType.IndiaNumbering()
-//				'6,78,90,00,00,00,00,000'
+//		When 'leadingNumSymbols' is set to 'false', the
+//		returned instance of NumStrNumberSymbolGroup will
+//		configure Currency Symbols on the right side of
+//		the number string. Currency Number Symbols are
+//		therefore configured as trailing Number Symbols.
+//		This is the positioning format used in France,
+//		Germany and many other countries in the European
+//		Union.
 //
-//			IntGroupingType.ChineseNumbering()
-//				'6,7890,0000,0000,0000'
+//			Example Number Strings:
+//				"123.456 €"
 //
-//	leadingCurrencySymbol			string
+//		NOTE:	If a space is NOT present, a space will
+//				be automatically inserted between the
+//				currency symbol and the last digit or
+//				trailing minus sign.
 //
-//		The character or characters which comprise the
-//		leading Currency Symbol. The leading Currency
-//		Symbol will be positioned at the beginning or
-//		left side of the number string.
+//	leadingMinusSign			bool
 //
-//			Example: $ 123.45
+//		Controls the positioning of the minus sign ('-')
+//		in a Number String Format configured with a
+//		negative numeric value.
 //
-//		If a space between the currency symbol
-//		and the first digit of the number string
-//		is required, be sure to include the space
-//		in the currency symbol string.
-//			Example:
-//				Leading Currency Symbol: "$ "
-//				Formatted Number String: "$ 123.45"
+//		For NumStrNumberSymbolGroup configured with the
+//		Simple Currency Number String formatting
+//		specification, the default negative number sign
+//		symbol is the minus sign ('-').
 //
-//	trailingCurrencySymbol			string
+//		When set to 'true', the returned instance of
+//		NumStrNumberSymbolGroup will configure the minus
+//		sign at the beginning or left side of the number
+//		string. Such minus signs are therefore configured
+//		as leading minus signs.
 //
-//		The character or characters which comprise the
-//		trailing Currency Symbol. The trailing Currency
-//		Symbol will be positioned at the end of, or
-//		right side of, the number string.
+//		Example Number Strings:
+//			" -123.456"
 //
-//			Example: 123.45 €
+//		When 'leadingMinusSign' is set to 'false', the
+//		returned instance of NumStrNumberSymbolGroup will
+//		configure the minus sign ('-') on the right side
+//		of the number string. The minus sign is therefore
+//		configured as trailing minus sign.
 //
-//		If a space between the last digit of the
-//		number string and the currency symbol
-//		is required, be sure to include the space
-//		in the currency symbol string.
-//			Example:
-//				Trailing Currency Symbol: " €"
-//				Formatted Number String: "123.45 €"
+//			Example Number Strings:
+//				"123.456-"
 //
-//	currencyInsideNumSymbol			bool
-//
-//		This parameter determines whether the currency
-//		symbol will be positioned inside or outside
-//		the negative number sign symbol.
-//
-//		If this parameter is set to 'false', the
-//		currency symbol will be positioned outside
-//		the negative number sign symbol.
-//
-//			Example-1 Outside:
-//				currencyInsideNumSymbol = false
-//				Number String = "$ -123.45"
-//
-//			Example-2 Outside:
-//				currencyInsideNumSymbol = false
-//				Number String = "  123.45- €"
-//
-//		If this parameter is set to 'true', the
-//		currency symbol will be positioned inside
-//		the negative number sign symbol.
-//
-//			Example - 3 Inside:
-//				currencyInsideNumSymbol = true
-//				Number String = " - $123.45"
-//
-//			Example - 4 Inside:
-//				currencyInsideNumSymbol = true
-//				Number String = "  123.45€ -"
-//
-//	leadingNegNumSign				string
-//
-//		A string containing the leading negative number
-//		sign character or characters used to configure
-//		Negative Number Sign Symbols in a number string
-//		with a negative numeric value.
-//
-//		The most common configuration for a leading
-//		negative number sign would be a leading minus
-//		sign ('-').
-//
-//		Another option is to configure a single
-//		parenthesis ("(") to be matched by a trailing
-//		negative number sign with the closing parenthesis
-//		(")"). This combination would effectively enclose
-//		negative numbers in parentheses.
-//			Example "(125.67)"
-//
-//	trailingNegNumSign				string
-//
-//		A string containing the trailing negative number
-//		sign character or characters used to configure
-//		Negative Number Sign Symbols in a number string
-//		with a negative numeric value.
-//
-//		The most common configuration for a trailing
-//		negative number sign would be a trailing minus
-//		sign ('-').
-//
-//		Another option is to configure a single
-//		closing parenthesis (")") to be matched by a
-//		leading negative number sign with the opening
-//		parenthesis ("("). This combination would
-//		effectively enclose negative numbers in
-//		parentheses.
-//			Example "(125.67)"
-//
-//	numSymbolFieldPosition			NumberFieldSymbolPosition
-//
-//		Defines the position of the Currency and number
-//		sign characters relative to a Number Field in
-//		which a number string is displayed.
-//
-//		Possible valid values are listed as follows:
-//
-//			NumFieldSymPos.InsideNumField()
-//
-//				Example-1 InsideNumField:
-//					Number Field Length: 9
-//					Numeric Value: 123.45
-//					Number Sign Symbol: leading minus sign ('-')
-//					Number Symbol Position: Inside Number Field
-//			     	Number Text Justification: Right
-//					Formatted Number String: "$ -123.45"
-//					Number Field Index:------>012345678
-//					Total Number String Length: 9
-//
-//				Example-2 InsideNumField:
-//					Number Field Length: 10
-//					Numeric Value: 123.45
-//					Number Sign Symbol: trailing minus sign ('-')
-//					Number Symbol Position: Inside Number Field
-//			     	Number Text Justification: Right
-//					Formatted Number String: " 123.45- €"
-//					Number Field Index:------>0123456789
-//					Total Number String Length: 10
-//
-//				Example-3 InsideNumField:
-//					Number Field Length: 9
-//					Numeric Value: 123.45
-//					Number Sign Symbol: None - Value is Positive
-//					Number Symbol Position: Inside Number Field
-//			     	Number Text Justification: Right
-//					Formatted Number String: "$  123.45"
-//					Number Field Index:------>012345678
-//					Total Number String Length: 9
-//
-//				Example-4 InsideNumField:
-//					Number Field Length: 10
-//					Numeric Value: 123.45
-//					Number Sign Symbol: None - Value is Positive
-//					Number Symbol Position: Inside Number Field
-//			     	Number Text Justification: Right
-//					Formatted Number String: "  123.45 €"
-//					Number Field Index:------>0123456789
-//					Total Number String Length: 10
-//
-//				For the 'NumFieldSymPos.InsideNumField()'
-//				specification, the final length of the number
-//				string is defined by the Number Field length.
-//
-//			NumFieldSymPos.OutsideNumField()
-//
-//				Example-5 OutsideNumField:
-//					Number Field Length: 8
-//			     	Numeric Value: 123.45
-//			     	Number Symbol: leading minus sign ('-')
-//			     	Number Symbol Position: Outside Number Field
-//			     	Number Text Justification: Right
-//			     	Formatted Number String: "$ -  123.45"
-//					Number Field Index:------>01234567890
-//					Total Number String Length: 11
-//
-//				Example-6 OutsideNumField:
-//					Number Field Length: 8
-//			     	Numeric Value: 123.45
-//			     	Number Symbol: trailing minus sign ('-')
-//			     	Number Symbol Position: Outside Number Field
-//			     	Number Text Justification: Right
-//			     	Formatted Number String: "  123.45- €"
-//					Number Field Index:------>01234567890
-//					Total Number String Length: 11
-//
-//				Example-7 OutsideNumField:
-//					Number Field Length: 8
-//			     	Numeric Value: 123.45
-//					Number Sign Symbol: None - Value is Positive
-//			     	Number Symbol Position: Outside Number Field
-//			     	Number Text Justification: Right
-//			     	Formatted Number String: "$  123.45"
-//					Number Field Index:------>012345678
-//					Total Number String Length: 9
-//
-//				Example-8 OutsideNumField:
-//					Number Field Length: 8
-//			     	Numeric Value: 123.45
-//					Number Sign Symbol: None - Value is Positive
-//			     	Number Symbol Position: Outside Number Field
-//			     	Number Text Justification: Right
-//			     	Formatted Number String: "  123.45 €"
-//					Number Field Index:------>0123456789
-//					Total Number String Length: 10
-//
-//				For the 'NumFieldSymPos.OutsideNumField()'
-//				specification, the final length of the
-//				number string is greater than the Number
-//				Field length.
-//
-//	numFieldLength					int
+//	numFieldLength				int
 //
 //		This parameter defines the length of the text
-//		field in which the numeric value will be
-//		displayed within a number string.
+//		field in which the numeric value will be displayed
+//		within a number string.
 //
-//		If 'numFieldLength' is less than the length of
-//		the numeric value string, it will be
-//		automatically set equal to the length of that
-//		numeric value string.
+//		If 'numFieldLength' is less than the length of the
+//		numeric value string, it will be automatically set
+//		equal to the length of that numeric value string.
 //
-//		To automatically set the value of numFieldLength
-//		to the string length of the numeric value, set
-//		this parameter to a value of minus one (-1).
+//		To automatically set the value of fieldLength to
+//		the string length of the numeric value, set this
+//		parameter to a value of minus one (-1).
 //
 //		If this parameter is submitted with a value less
 //		than minus one (-1) or greater than 1-million
 //		(1,000,000), an error will be returned.
-//
-//		Field Length Examples
-//
-//			Example-1
-//	         FieldContents String = "1234.5678"
-//				FieldContents String Length = 9
-//				numFieldLength = 15
-//				numFieldJustification = TxtJustify.Center()
-//				Text Field String =
-//					"   1234.5678   "
-//
-//			Example-2
-//	         FieldContents = "1234.5678"
-//				FieldContents String Length = 9
-//				numFieldLength = 15
-//				numFieldJustification = TxtJustify.Right()
-//				Text Field String =
-//					"      1234.5678"
-//
-//			Example-3
-//	         FieldContents = "1234.5678"
-//				FieldContents String Length = 9
-//				numFieldLength = -1
-//				numFieldJustification = TxtJustify.Center()
-//					// Justification Ignored. Field Length
-//					// Equals -1
-//				Text Field String =
-//					"1234.5678"
-//
-//			Example-4
-//	         FieldContents = "1234.5678"
-//				FieldContents String Length = 9
-//				numFieldLength = 2
-//				numFieldJustification = TxtJustify.Center()
-//					// Ignored, because FieldLength Less
-//					// Than FieldContents String Length.
-//				Text Field String =
-//					"1234.5678"
 //
 //	numFieldJustification		TextJustify
 //
@@ -7801,11 +7602,11 @@ func (numStrKernel *NumberStrKernel) FmtCurrencyDefaultsUSParen(
 //		Text justification can only be evaluated in the
 //		context of a number string, field length and a
 //		'textJustification' object of type TextJustify.
-//		This is because number strings with a field
-//		length equal to or less than the length of the
-//		numeric value string never use text
-//		justification. In these cases, text justification
-//		is completely ignored.
+//		This is because number strings with a field length
+//		equal to or less than the length of the numeric
+//		value string never use text justification. In
+//		these cases, text justification is completely
+//		ignored.
 //
 //		If the field length parameter ('numFieldLength')
 //		is greater than the length of the numeric value
@@ -7822,44 +7623,6 @@ func (numStrKernel *NumberStrKernel) FmtCurrencyDefaultsUSParen(
 //			TxtJustify.Left()
 //			TxtJustify.Right()
 //			TxtJustify.Center()
-//
-//		Text Justification Examples
-//
-//			Example-1
-//	         FieldContents String = "1234.5678"
-//				FieldContents String Length = 9
-//				numFieldLength = 15
-//				numFieldJustification = TxtJustify.Center()
-//				Text Field String =
-//					"   1234.5678   "
-//
-//			Example-2
-//	         FieldContents = "1234.5678"
-//				FieldContents String Length = 9
-//				numFieldLength = 15
-//				numFieldJustification = TxtJustify.Right()
-//				Text Field String =
-//					"      1234.5678"
-//
-//			Example-3
-//	         FieldContents = "1234.5678"
-//				FieldContents String Length = 9
-//				numFieldLength = -1
-//				numFieldJustification = TxtJustify.Center()
-//					// Justification Ignored. Field Length
-//					// Equals -1
-//				Text Field String =
-//					"1234.5678"
-//
-//			Example-4
-//	         FieldContents = "1234.5678"
-//				FieldContents String Length = 9
-//				numFieldLength = 2
-//				numFieldJustification = TxtJustify.Center()
-//					// Ignored, because FieldLength Less
-//					// Than FieldContents String Length.
-//				Text Field String =
-//					"1234.5678"
 //
 //	errorPrefix					interface{}
 //
@@ -13228,6 +12991,240 @@ func (numStrKernel *NumberStrKernel) FmtNumStrPure(
 //
 // # Input Parameters
 //
+//	roundingSpec 				NumStrRoundingSpec
+//
+//		The Number String Rounding Specification
+//		contains all the parameters required to
+//		configure a rounding algorithm for a
+//		floating point number string.
+//
+//		type NumStrRoundingSpec struct {
+//
+//			roundingType NumberRoundingType
+//
+//			This enumeration parameter is used to specify the type
+//			of rounding algorithm that will be applied for the
+//			rounding of fractional digits in a number string.
+//
+//			Possible values are listed as follows:
+//				NumRoundType.None()
+//				NumRoundType.NoRounding()
+//				NumRoundType.HalfUpWithNegNums()
+//				NumRoundType.HalfDownWithNegNums()
+//				NumRoundType.HalfAwayFromZero()
+//				NumRoundType.HalfTowardsZero()
+//				NumRoundType.HalfToEven()
+//				NumRoundType.HalfToOdd()
+//				NumRoundType.Randomly()
+//				NumRoundType.Floor()
+//				NumRoundType.Ceiling()
+//				NumRoundType.Truncate()
+//
+//			NoRounding
+//
+//				Signals that no rounding operation will be performed
+//				on fractional digits contained in a number string.
+//				The fractional digits will therefore remain unchanged.
+//
+//			HalfUpWithNegNums
+//
+//				Half Round Up Including Negative Numbers. This method
+//				is intuitive but may produce unexpected results when
+//				applied to negative numbers.
+//
+//				'HalfUpWithNegNums' rounds .5 up.
+//
+//					Examples of 'HalfUpWithNegNums'
+//					7.6 rounds up to 8
+//					7.5 rounds up to 8
+//					7.4 rounds down to 7
+//					-7.4 rounds up to -7
+//					-7.5 rounds up to -7
+//					-7.6 rounds down to -8
+//
+//			HalfDownWithNegNums
+//
+//				Half Round Down Including Negative Numbers. This method
+//				is also considered intuitive but may produce unexpected
+//				results when applied to negative numbers.
+//
+//				'HalfDownWithNegNums' rounds .5 down.
+//
+//					Examples of HalfDownWithNegNums
+//
+//					7.6 rounds up to 8
+//					7.5 rounds down to 7
+//					7.4 rounds down to 7
+//					-7.4 rounds up to -7
+//					-7.5 rounds down to -8
+//					-7.6 rounds down to -8
+//
+//			HalfAwayFromZero
+//
+//				Round Half Away From Zero. This rounding method is treated
+//				as the default and this value is returned by method:
+//				NumberRoundingType(0).XGetDefaultRoundingType()
+//
+//				The 'HalfAwayFromZero' method rounds .5 further away from zero.
+//				It provides clear and consistent behavior when dealing with
+//				negative numbers.
+//
+//					Examples of HalfAwayFromZero
+//
+//					7.6 rounds away to 8
+//					7.5 rounds away to 8
+//					7.4 rounds to 7
+//					-7.4 rounds to -7
+//					-7.5 rounds away to -8
+//					-7.6 rounds away to -8
+//
+//			HalfTowardsZero
+//
+//				Round Half Towards Zero. 'HalfTowardsZero' rounds 0.5
+//				closer to zero. It provides clear and consistent behavior
+//				when dealing with negative numbers.
+//
+//					Examples of HalfTowardsZero
+//
+//					7.6 rounds away to 8
+//					7.5 rounds to 7
+//					7.4 rounds to 7
+//					-7.4 rounds to -7
+//					-7.5 rounds to -7
+//					-7.6 rounds away to -8
+//
+//			HalfToEven
+//
+//				Round Half To Even Numbers. 'HalfToEven' is also called
+//				Banker's Rounding. This method rounds 0.5 to the nearest
+//				even digit.
+//
+//					Examples of HalfToEven
+//
+//					7.5 rounds up to 8 (because 8 is an even number)
+//					but 6.5 rounds down to 6 (because 6 is an even number)
+//
+//					HalfToEven only applies to 0.5. Other numbers (not ending
+//					in 0.5) round to nearest as usual, so:
+//
+//					7.6 rounds up to 8
+//					7.5 rounds up to 8 (because 8 is an even number)
+//					7.4 rounds down to 7
+//					6.6 rounds up to 7
+//					6.5 rounds down to 6 (because 6 is an even number)
+//					6.4 rounds down to 6
+//
+//			HalfToOdd
+//
+//				Round Half to Odd Numbers. Similar to 'HalfToEven', but
+//				in this case 'HalfToOdd' rounds 0.5 towards odd numbers.
+//
+//					Examples of HalfToOdd
+//
+//					HalfToOdd only applies to 0.5. Other numbers (not ending
+//					in 0.5) round to nearest as usual.
+//
+//					7.5 rounds down to 7 (because 7 is an odd number)
+//
+//					6.5 rounds up to 7 (because 7 is an odd number)
+//
+//					7.6 rounds up to 8
+//					7.5 rounds down to 7 (because 7 is an odd number)
+//					7.4 rounds down to 7
+//					6.6 rounds up to 7
+//					6.5 rounds up to 7 (because 7 is an odd number)
+//					6.4 rounds down to 6
+//
+//			Randomly
+//
+//				Round Half Randomly. Uses a Random Number Generator to choose
+//				between rounding 0.5 up or down.
+//
+//				All numbers other than 0.5 round to the nearest as usual.
+//
+//			Floor
+//
+//				Yields the nearest integer down. Floor does not apply any
+//				special treatment to 0.5.
+//
+//				Floor Function: The greatest integer that is less than or
+//				equal to x
+//				Source: https://www.mathsisfun.com/sets/function-floor-ceiling.html
+//
+//				In mathematics and computer science, the floor function is
+//				the function that takes as input a real number x, and gives
+//				as output the greatest integer less than or equal to x,
+//				denoted floor(x) or ⌊x⌋.
+//				Source: https://en.wikipedia.org/wiki/Floor_and_ceiling_functions
+//
+//					Examples of Floor
+//
+//					Number     Floor
+//					2           2
+//					2.4         2
+//					2.9         2
+//					-2.5        -3
+//					-2.7        -3
+//					-2          -2
+//
+//			Ceiling
+//
+//				Yields the nearest integer up. Ceiling does not apply any
+//				special treatment to 0.5.
+//
+//				Ceiling Function: The least integer that is greater than or
+//				equal to x.
+//				Source: https://www.mathsisfun.com/sets/function-floor-ceiling.html
+//
+//				The ceiling function maps x to the least integer greater than
+//				or equal to x, denoted ceil(x) or ⌈x⌉.[1]
+//				Source: https://en.wikipedia.org/wiki/Floor_and_ceiling_functions
+//
+//					Examples of Ceiling
+//
+//					Number    Ceiling
+//					2           2
+//					2.4         3
+//					2.9         3
+//					-2.5        -2
+//					-2.7        -2
+//					-2          -2
+//
+//			Truncate
+//
+//				Apply NO Rounding whatsoever. The Round From Digit is dropped
+//				or deleted. The Round To Digit is NEVER changed.
+//
+//					Examples of Truncate
+//
+//					Example-1
+//					Number: 23.14567
+//					Objective: Round to two decimal places to
+//					the right of the decimal point.
+//					Rounding Method: Truncate
+//					Round To Digit:   4
+//					Round From Digit: 5
+//					Rounded Number:   23.14 - The Round From Digit is dropped.
+//
+//					Example-2
+//					Number: -23.14567
+//					Objective: Round to two decimal places to
+//					the right of the decimal point.
+//					Rounding Method: Truncate
+//					Round To Digit:   4
+//					Round From Digit: 5
+//					Rounded Number:  -23.14 - The Round From Digit is dropped.
+//
+//			roundToFractionalDigits int
+//
+//				When set to a positive integer value, this
+//				parameter controls the number of digits to
+//				the right of the radix point or decimal
+//				separator (a.k.a. decimal point) which will
+//				remain after completion of the number rounding
+//				operation.
+//		}
+//
 //	decSeparatorChars				string
 //
 //		This string contains the character or characters
@@ -13340,18 +13337,18 @@ func (numStrKernel *NumberStrKernel) FmtNumStrPure(
 //		parentheses.
 //			Example "(125.67)"
 //
-//	fieldLength						int
+//	numFieldLength					int
 //
 //		This parameter defines the length of the text
 //		field in which the numeric value will be
 //		displayed within a number string.
 //
-//		If 'fieldLength' is less than the length of
+//		If 'numFieldLength' is less than the length of
 //		the numeric value string, it will be
 //		automatically set equal to the length of that
 //		numeric value string.
 //
-//		To automatically set the value of 'fieldLength'
+//		To automatically set the value of numFieldLength
 //		to the string length of the numeric value, set
 //		this parameter to a value of minus one (-1).
 //
@@ -13364,24 +13361,24 @@ func (numStrKernel *NumberStrKernel) FmtNumStrPure(
 //			Example-1
 //	         FieldContents String = "1234.5678"
 //				FieldContents String Length = 9
-//				fieldLength = 15
-//				fieldJustification = TxtJustify.Center()
+//				numFieldLength = 15
+//				numFieldJustification = TxtJustify.Center()
 //				Text Field String =
 //					"   1234.5678   "
 //
 //			Example-2
 //	         FieldContents = "1234.5678"
 //				FieldContents String Length = 9
-//				fieldLength = 15
-//				fieldJustification = TxtJustify.Right()
+//				numFieldLength = 15
+//				numFieldJustification = TxtJustify.Right()
 //				Text Field String =
 //					"      1234.5678"
 //
 //			Example-3
 //	         FieldContents = "1234.5678"
 //				FieldContents String Length = 9
-//				fieldLength = -1
-//				fieldJustification = TxtJustify.Center()
+//				numFieldLength = -1
+//				numFieldJustification = TxtJustify.Center()
 //					// Justification Ignored. Field Length
 //					// Equals -1
 //				Text Field String =
@@ -13390,30 +13387,30 @@ func (numStrKernel *NumberStrKernel) FmtNumStrPure(
 //			Example-4
 //	         FieldContents = "1234.5678"
 //				FieldContents String Length = 9
-//				fieldLength = 2
-//				fieldJustification = TxtJustify.Center()
+//				numFieldLength = 2
+//				numFieldJustification = TxtJustify.Center()
 //					// Ignored, because FieldLength Less
 //					// Than FieldContents String Length.
 //				Text Field String =
 //					"1234.5678"
 //
-//	fieldJustification			TextJustify
+//	numFieldJustification		TextJustify
 //
 //		An enumeration which specifies the justification
 //		of the numeric value within the number field
 //		length specified by input parameter
-//		'fieldLength'.
+//		'numFieldLength'.
 //
 //		Text justification can only be evaluated in the
 //		context of a number string, field length and a
-//		'fieldJustification' object of type TextJustify.
+//		'textJustification' object of type TextJustify.
 //		This is because number strings with a field
 //		length equal to or less than the length of the
 //		numeric value string never use text
 //		justification. In these cases, text justification
 //		is completely ignored.
 //
-//		If the field length parameter ('fieldLength')
+//		If the field length parameter ('numFieldLength')
 //		is greater than the length of the numeric value
 //		string, text justification must be equal to one
 //		of these three valid values:
@@ -13434,24 +13431,24 @@ func (numStrKernel *NumberStrKernel) FmtNumStrPure(
 //			Example-1
 //	         FieldContents String = "1234.5678"
 //				FieldContents String Length = 9
-//				fieldLength = 15
-//				fieldJustification = TxtJustify.Center()
+//				numFieldLength = 15
+//				numFieldJustification = TxtJustify.Center()
 //				Text Field String =
 //					"   1234.5678   "
 //
 //			Example-2
 //	         FieldContents = "1234.5678"
 //				FieldContents String Length = 9
-//				fieldLength = 15
-//				fieldJustification = TxtJustify.Right()
+//				numFieldLength = 15
+//				numFieldJustification = TxtJustify.Right()
 //				Text Field String =
 //					"      1234.5678"
 //
 //			Example-3
 //	         FieldContents = "1234.5678"
 //				FieldContents String Length = 9
-//				fieldLength = -1
-//				fieldJustification = TxtJustify.Center()
+//				numFieldLength = -1
+//				numFieldJustification = TxtJustify.Center()
 //					// Justification Ignored. Field Length
 //					// Equals -1
 //				Text Field String =
@@ -13460,262 +13457,12 @@ func (numStrKernel *NumberStrKernel) FmtNumStrPure(
 //			Example-4
 //	         FieldContents = "1234.5678"
 //				FieldContents String Length = 9
-//				fieldLength = 2
-//				fieldJustification = TxtJustify.Center()
+//				numFieldLength = 2
+//				numFieldJustification = TxtJustify.Center()
 //					// Ignored, because FieldLength Less
 //					// Than FieldContents String Length.
 //				Text Field String =
 //					"1234.5678"
-//
-//	roundingType				NumberRoundingType
-//
-//		This enumeration parameter is used to specify the
-//		type of rounding algorithm that will be applied for
-//		the	rounding of fractional digits contained in the
-//		current instance of NumberStrKernel.
-//
-//		If in doubt as to a suitable rounding method,
-//		'HalfAwayFromZero' is recommended.
-//
-//		Possible values are listed as follows:
-//			NumRoundType.None()	- Invalid Value
-//			NumRoundType.NoRounding()
-//			NumRoundType.HalfUpWithNegNums()
-//			NumRoundType.HalfDownWithNegNums()
-//			NumRoundType.HalfAwayFromZero()
-//			NumRoundType.HalfTowardsZero()
-//			NumRoundType.HalfToEven()
-//			NumRoundType.HalfToOdd()
-//			NumRoundType.Randomly()
-//			NumRoundType.Floor()
-//			NumRoundType.Ceiling()
-//			NumRoundType.Truncate()
-//
-//		Definitions:
-//
-//			NoRounding
-//
-//				Signals that no rounding operation will be
-//				performed on fractional digits. The
-//				fractional digits will therefore remain
-//				unchanged.
-//
-//			HalfUpWithNegNums
-//
-//				Half Round Up Including Negative Numbers.
-//				This method is intuitive but may produce
-//				unexpected results when applied to negative
-//				numbers.
-//
-//				'HalfUpWithNegNums' rounds .5 up.
-//
-//					Examples of 'HalfUpWithNegNums'
-//					7.6 rounds up to 8
-//					7.5 rounds up to 8
-//					7.4 rounds down to 7
-//					-7.4 rounds up to -7
-//					-7.5 rounds up to -7
-//					-7.6 rounds down to -8
-//
-//			HalfDownWithNegNums
-//
-//			Half Round Down Including Negative Numbers. This
-//			method is also considered intuitive but may
-//			produce unexpected results when applied to
-//			negative numbers.
-//
-//			'HalfDownWithNegNums' rounds .5 down.
-//
-//				Examples of HalfDownWithNegNums
-//
-//				7.6 rounds up to 8
-//				7.5 rounds down to 7
-//				7.4 rounds down to 7
-//				-7.4 rounds up to -7
-//				-7.5 rounds down to -8
-//				-7.6 rounds down to -8
-//
-//			HalfAwayFromZero
-//
-//				The 'HalfAwayFromZero' method rounds .5 further
-//				away from zero.	It provides clear and consistent
-//				behavior when dealing with negative numbers.
-//
-//					Examples of HalfAwayFromZero
-//
-//					7.6 rounds away to 8
-//					7.5 rounds away to 8
-//					7.4 rounds to 7
-//					-7.4 rounds to -7
-//					-7.5 rounds away to -8
-//					-7.6 rounds away to -8
-//
-//			HalfTowardsZero
-//
-//				Round Half Towards Zero. 'HalfTowardsZero' rounds
-//				0.5	closer to zero. It provides clear and
-//				consistent behavior	when dealing with negative
-//				numbers.
-//
-//					Examples of HalfTowardsZero
-//
-//					7.6 rounds away to 8
-//					7.5 rounds to 7
-//					7.4 rounds to 7
-//					-7.4 rounds to -7
-//					-7.5 rounds to -7
-//					-7.6 rounds away to -8
-//
-//			HalfToEven
-//
-//				Round Half To Even Numbers. 'HalfToEven' is
-//				also called	Banker's Rounding. This method
-//				rounds 0.5 to the nearest even digit.
-//
-//					Examples of HalfToEven
-//
-//					7.5 rounds up to 8 (because 8 is an even
-//					number)	but 6.5 rounds down to 6 (because
-//					6 is an even number)
-//
-//					HalfToEven only applies to 0.5. Other
-//					numbers (not ending	in 0.5) round to
-//					nearest as usual, so:
-//
-//					7.6 rounds up to 8
-//					7.5 rounds up to 8 (because 8 is an even number)
-//					7.4 rounds down to 7
-//					6.6 rounds up to 7
-//					6.5 rounds down to 6 (because 6 is an even number)
-//					6.4 rounds down to 6
-//
-//			HalfToOdd
-//
-//				Round Half to Odd Numbers. Similar to 'HalfToEven',
-//				but in this case 'HalfToOdd' rounds 0.5 towards odd
-//				numbers.
-//
-//					Examples of HalfToOdd
-//
-//					HalfToOdd only applies to 0.5. Other numbers
-//					(not ending	in 0.5) round to nearest as usual.
-//
-//					7.5 rounds down to 7 (because 7 is an odd number)
-//
-//					6.5 rounds up to 7 (because 7 is an odd number)
-//
-//					7.6 rounds up to 8
-//					7.5 rounds down to 7 (because 7 is an odd number)
-//					7.4 rounds down to 7
-//					6.6 rounds up to 7
-//					6.5 rounds up to 7 (because 7 is an odd number)
-//					6.4 rounds down to 6
-//
-//			Randomly
-//
-//				Round Half Randomly. Uses a Random Number Generator
-//				to choose between rounding 0.5 up or down.
-//
-//				All numbers other than 0.5 round to the nearest as
-//				usual.
-//
-//			Floor
-//
-//				Yields the nearest integer down. Floor does not apply
-//				any	special treatment to 0.5.
-//
-//				Floor Function: The greatest integer that is less than
-//				or equal to x
-//
-//				Source:
-//					https://www.mathsisfun.com/sets/function-floor-ceiling.html
-//
-//				In mathematics and computer science, the floor function
-//				is the function that takes as input a real number x,
-//				and gives as output the greatest integer less than or
-//				equal to x,	denoted floor(x) or ⌊x⌋.
-//
-//				Source:
-//					https://en.wikipedia.org/wiki/Floor_and_ceiling_functions
-//
-//				Examples of Floor
-//
-//					Number     Floor
-//					 2           2
-//					 2.4         2
-//					 2.9         2
-//					-2.5        -3
-//					-2.7        -3
-//					-2          -2
-//
-//			Ceiling
-//
-//				Yields the nearest integer up. Ceiling does not
-//				apply any special treatment to 0.5.
-//
-//				Ceiling Function: The least integer that is
-//				greater than or	equal to x.
-//				Source:
-//					https://www.mathsisfun.com/sets/function-floor-ceiling.html
-//
-//				The ceiling function maps x to the least integer
-//				greater than or equal to x, denoted ceil(x) or
-//				⌈x⌉.[1]
-//
-//				Source:
-//					https://en.wikipedia.org/wiki/Floor_and_ceiling_functions
-//
-//					Examples of Ceiling
-//
-//						Number    Ceiling
-//						 2           2
-//						 2.4         3
-//						 2.9         3
-//						-2.5        -2
-//						-2.7        -2
-//						-2          -2
-//
-//			Truncate
-//
-//				Apply NO Rounding whatsoever. The Round From Digit
-//				is dropped or deleted. The Round To Digit is NEVER
-//				changed.
-//
-//				Examples of Truncate
-//
-//					Example-1
-//					Number: 23.14567
-//					Objective: Round to two decimal places to
-//					the right of the decimal point.
-//					Rounding Method: Truncate
-//					Round To Digit:   4
-//					Round From Digit: 5
-//					Rounded Number:   23.14 - The Round From Digit
-//					is dropped.
-//
-//					Example-2
-//					Number: -23.14567
-//					Objective: Round to two decimal places to
-//					the right of the decimal point.
-//					Rounding Method: Truncate
-//					Round To Digit:   4
-//					Round From Digit: 5
-//					Rounded Number:  -23.14 - The Round From Digit
-//					is dropped.
-//
-//	roundToFractionalDigits		int
-//
-//		When set to a positive integer value, this
-//		parameter controls the number of digits to the
-//		right of the radix point or decimal separator
-//		(a.k.a. decimal point). This controls the number
-//		of fractional digits remaining after completion
-//		of the number rounding operation.
-//
-//		If input parameter 'roundingType' is set to
-//		NumRoundType.NoRounding(),
-//		'roundToFractionalDigits' is ignored and no
-//		rounding operation is performed.
 //
 //	errorPrefix					interface{}
 //
@@ -13800,6 +13547,7 @@ func (numStrKernel *NumberStrKernel) FmtNumStrPure(
 //		text will be attached to the beginning of the
 //		error message.
 func (numStrKernel *NumberStrKernel) FmtSignedNumStrBasic(
+	roundingSpec NumStrRoundingSpec,
 	decSeparatorChars string,
 	intSeparatorChars string,
 	intGroupingType IntegerGroupingType,
@@ -13807,8 +13555,6 @@ func (numStrKernel *NumberStrKernel) FmtSignedNumStrBasic(
 	trailingNegativeNumSign string,
 	numFieldLength int,
 	numFieldJustification TextJustify,
-	roundingType NumberRoundingType,
-	roundToFractionalDigits int,
 	errorPrefix interface{}) (
 	string,
 	error) {
@@ -13848,18 +13594,6 @@ func (numStrKernel *NumberStrKernel) FmtSignedNumStrBasic(
 		numFieldJustification,
 		ePrefix.XCpy(
 			"numStrFmtSpec<-"))
-
-	if err != nil {
-		return numStr, err
-	}
-
-	roundingSpec := NumStrRoundingSpec{
-		roundingType:            roundingType,
-		roundToFractionalDigits: roundToFractionalDigits,
-	}
-
-	err = roundingSpec.IsValidInstanceError(
-		ePrefix.XCpy("roundingSpec"))
 
 	if err != nil {
 		return numStr, err
