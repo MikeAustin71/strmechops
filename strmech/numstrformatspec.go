@@ -2798,6 +2798,11 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCountrySignedNumFormat(
 //	configured using a 'basic' set of Number String Format
 //	Specification parameters.
 //
+//	The returned NumStrFormatSpec instance will include
+//	format specifications for currency, positive numeric
+//	values, zero numeric values and negative numeric
+//	values based on the input parameters described below.
+//
 // ----------------------------------------------------------------
 //
 // # Input Parameters
