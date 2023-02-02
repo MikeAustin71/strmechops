@@ -9114,7 +9114,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtElements(
 //
 // ----------------------------------------------------------------
 //
-// # Defaults
+// # Signed Number Basic Defaults
 //
 //	No Currency Symbols Included:
 //
@@ -9542,7 +9542,7 @@ func (numStrFmtSpec *NumStrFormatSpec) NewSignedNumBasic(
 //
 // ----------------------------------------------------------------
 //
-// # Defaults
+// # Signed Number Basic Defaults
 //
 //	No Currency Symbols Included:
 //
@@ -21317,7 +21317,7 @@ func (numStrFmtSpec *NumStrFormatSpec) SetNumFmtElements(
 //
 // ----------------------------------------------------------------
 //
-// # Defaults
+// # Signed Number Basic Defaults
 //
 //	No Currency Symbols Included:
 //
@@ -21738,7 +21738,7 @@ func (numStrFmtSpec *NumStrFormatSpec) SetSignedNumBasic(
 //
 // ----------------------------------------------------------------
 //
-// # Defaults
+// # Signed Number Basic Defaults
 //
 //	No Currency Symbols Included:
 //
