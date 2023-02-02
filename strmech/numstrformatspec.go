@@ -22134,6 +22134,10 @@ func (numStrFmtSpec *NumStrFormatSpec) SetSignedNumBasicRunes(
 //	formatting conventions typically
 //	applied in France.
 //
+//	A signed number is an integer or floating point
+//	numeric value which does NOT contain currency
+//	symbols.
+//
 //	Within in the European Union many, if not
 //	most, of the member countries subscribe to
 //	the Signed Number String formatting standards

@@ -2771,8 +2771,8 @@ func TestNumberStrKernel_SetFromNumericValue_000100(t *testing.T) {
 
 	actualFmtStr,
 		err = nStrKernel01.FmtSignedNumStrGermany(
-		numberFieldSpec,
 		roundingSpec,
+		numberFieldSpec,
 		ePrefix.XCpy(
 			"2-A nStrKernel01"))
 
