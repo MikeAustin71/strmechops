@@ -330,43 +330,6 @@ func (numStrKernel *NumberStrKernel) GetFractionalRuneArray() []rune {
 	return numStrKernel.fractionalDigits.GetRuneArray()
 }
 
-//	GetFractionalString
-//
-//	Converts the fractional rune array contained in the
-//	current instance of NumberStrKernel to a string
-//	and returns it to the calling function.
-//
-// ----------------------------------------------------------------
-//
-// # Input Parameters
-//
-//	NONE
-//
-// ------------------------------------------------------------------------
-//
-// # Return Values
-//
-//	string
-//
-//		This method returns a string consisting of the
-//		fractional digits portion of the numeric value
-//		represented by the current instance of
-//		NumberStrKernel. This source of these fractional
-//		digits is identified as internal member variable
-//		'NumberStrKernel.fractionalDigits'.
-func (numStrKernel *NumberStrKernel) GetFractionalString() string {
-
-	if numStrKernel.lock == nil {
-		numStrKernel.lock = new(sync.Mutex)
-	}
-
-	numStrKernel.lock.Lock()
-
-	defer numStrKernel.lock.Unlock()
-
-	return numStrKernel.fractionalDigits.GetCharacterString()
-}
-
 //	GetFractionalRuneArrayDto
 //
 //	Returns a deep copy of the fractional digits
@@ -422,6 +385,121 @@ func (numStrKernel *NumberStrKernel) GetFractionalRuneArrayDto(
 		errorPrefix)
 
 	return runeArrayDto, err
+}
+
+//	GetFractionalString
+//
+//	Converts the fractional rune array contained in the
+//	current instance of NumberStrKernel to a string
+//	and returns it to the calling function.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	NONE
+//
+// ------------------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//
+//		This method returns a string consisting of the
+//		fractional digits portion of the numeric value
+//		represented by the current instance of
+//		NumberStrKernel. This source of these fractional
+//		digits is identified as internal member variable
+//		'NumberStrKernel.fractionalDigits'.
+func (numStrKernel *NumberStrKernel) GetFractionalString() string {
+
+	if numStrKernel.lock == nil {
+		numStrKernel.lock = new(sync.Mutex)
+	}
+
+	numStrKernel.lock.Lock()
+
+	defer numStrKernel.lock.Unlock()
+
+	return numStrKernel.fractionalDigits.GetCharacterString()
+}
+
+//	GetFractionalTrailingZerosCount
+//
+//	Returns the count of all fractional digit trailing
+//	zeros.
+//
+//	This method differs significantly from method:
+//
+//		NumberStrKernel.GetExcessFractionalTrailingZerosCount()
+//
+// ----------------------------------------------------------------
+//
+// # Usage
+//
+//	Example-1
+//		Numeric Value:  1.000
+//		Count of Total Fractional Trailing Zeros: 3
+//
+//	Example-2
+//		Numeric Value:  0.000
+//		Count of Total Fractional Trailing Zeros: 3
+//
+//	Example-3
+//		Numeric Value:  0.0
+//		Count of Total Fractional Trailing Zeros: 1
+//
+//	Example-4
+//		Numeric Value:  050.3200
+//		Count of Total Fractional Trailing Zeros: 2
+//
+//	Example-5
+//		Numeric Value:  50.32
+//		Count of Total Fractional Trailing Zeros: 0
+//
+//	Example-6
+//		Numeric Value:  97
+//		Count of Total Fractional Trailing Zeros: 0
+//
+// ----------------------------------------------------------------
+//
+//	# Input Parameters
+//
+//	NONE
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	uint64
+//
+//		Returns the number of total trailing zeros for
+//		the fractional part of the numeric value represented
+//		by this instance of NumberStrKernel.
+func (numStrKernel *NumberStrKernel) GetFractionalTrailingZerosCount() uint64 {
+
+	if numStrKernel.lock == nil {
+		numStrKernel.lock = new(sync.Mutex)
+	}
+
+	numStrKernel.lock.Lock()
+
+	defer numStrKernel.lock.Unlock()
+
+	var totalFracTrailingZeros uint64 = 0
+
+	lenFracChars :=
+		uint64(len(numStrKernel.fractionalDigits.CharsArray))
+
+	if lenFracChars == 0 {
+
+		return totalFracTrailingZeros
+	}
+
+	totalFracTrailingZeros =
+		numStrKernel.fractionalDigits.GetCountTrailingZeros()
+
+	return totalFracTrailingZeros
 }
 
 // GetIntegerDigits - Returns an instance of RuneArrayDto
