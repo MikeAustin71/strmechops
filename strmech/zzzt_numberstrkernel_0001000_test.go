@@ -3848,8 +3848,8 @@ func TestNumberStrKernel_NewParseGermanNumberStr_000100(t *testing.T) {
 
 	fmtNumberStr,
 		err = nStrKernel02.FmtCurrencyDefaultsUSMinus(
-		numberFieldSpec,
 		roundingSpec,
+		numberFieldSpec,
 		ePrefix.XCpy(
 			"Test #5 fmtNumberStr<-nStrKernel02"))
 
