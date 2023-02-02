@@ -8,6 +8,100 @@ import (
 	"sync"
 )
 
+//	GetExcessFractionalTrailingZerosCount
+//
+//	Returns the count of excess fractional trailing
+//	zeros for the numeric value contained in the current
+//	instance of NumberStrKernel.
+//
+//	If the fractional digits value is zero, the count
+//	will NOT include the first zero to the right of the
+//	decimal point.
+//
+//	This method differs significantly from method:
+//
+//		NumberStrKernel.GetFractionalTrailingZerosCount()
+//
+// ----------------------------------------------------------------
+//
+// # Usage
+//
+//	Example-1
+//		Numeric Value:  5.1000
+//		Count of Excess Fractional Trailing Zeros: 3
+//
+//	Example-2
+//		Numeric Value:  5.000
+//		Count of Excess Fractional Trailing Zeros: 2
+//
+//	Example-3
+//		Numeric Value:  50.320
+//		Count of Excess Fractional Trailing Zeros: 1
+//
+//	Example-4
+//		Numeric Value:  0.000
+//		Count of Excess Fractional Trailing Zeros: 2
+//
+// ----------------------------------------------------------------
+//
+//	# Input Parameters
+//
+//	NONE
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	uint64
+//
+//		Returns the number of excess trailing zeros for
+//		the fractional part of the numeric value
+//		contained in the current instance of
+//		NumberStrKernel.
+//
+//		NOTE: If the fractional value is zero, the
+//		returned count of excess leading zeros will NOT
+//		include the first zero to the right of the
+//		decimal point.
+//
+//			Example
+//				Numeric Value:  000
+//
+//				Count of Excess Fractional Trailing Zeros:
+//								2
+func (numStrKernel *NumberStrKernel) GetExcessFractionalTrailingZerosCount() uint64 {
+
+	if numStrKernel.lock == nil {
+		numStrKernel.lock = new(sync.Mutex)
+	}
+
+	numStrKernel.lock.Lock()
+
+	defer numStrKernel.lock.Unlock()
+
+	var excessFracTrailingZeros uint64 = 0
+
+	lenFracChars :=
+		uint64(len(numStrKernel.fractionalDigits.CharsArray))
+
+	if lenFracChars == 0 {
+
+		return excessFracTrailingZeros
+	}
+
+	excessFracTrailingZeros =
+		numStrKernel.fractionalDigits.GetCountTrailingZeros()
+
+	if excessFracTrailingZeros < lenFracChars {
+
+		return excessFracTrailingZeros
+	}
+
+	excessFracTrailingZeros--
+
+	return excessFracTrailingZeros
+}
+
 //	GetExcessIntegerLeadingZerosCount
 //
 //	Returns the count of excess integer leading zeros.

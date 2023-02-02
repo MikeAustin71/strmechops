@@ -13805,8 +13805,8 @@ func (numStrKernel *NumberStrKernel) FmtSignedNumStrBasic(
 	intGroupingType IntegerGroupingType,
 	leadingNegativeNumSign string,
 	trailingNegativeNumSign string,
-	fieldLength int,
-	fieldJustification TextJustify,
+	numFieldLength int,
+	numFieldJustification TextJustify,
 	roundingType NumberRoundingType,
 	roundToFractionalDigits int,
 	errorPrefix interface{}) (
@@ -13844,8 +13844,8 @@ func (numStrKernel *NumberStrKernel) FmtSignedNumStrBasic(
 		intGroupingType,
 		leadingNegativeNumSign,
 		trailingNegativeNumSign,
-		fieldLength,
-		fieldJustification,
+		numFieldLength,
+		numFieldJustification,
 		ePrefix.XCpy(
 			"numStrFmtSpec<-"))
 
