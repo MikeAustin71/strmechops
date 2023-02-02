@@ -1641,8 +1641,10 @@ func (numStrKernel *NumberStrKernel) GetIsNonZeroValue() (
 	return isNonZeroValue
 }
 
-// GetNumberOfFractionalDigits - Returns the number of fractional
-// digits in the current instance of NumberStrKernel.
+// GetNumberOfFractionalDigits
+//
+// Returns the number of fractional digits in the
+// current instance of NumberStrKernel.
 func (numStrKernel *NumberStrKernel) GetNumberOfFractionalDigits() int {
 
 	if numStrKernel.lock == nil {
@@ -1656,8 +1658,10 @@ func (numStrKernel *NumberStrKernel) GetNumberOfFractionalDigits() int {
 	return len(numStrKernel.fractionalDigits.CharsArray)
 }
 
-// GetNumberOfIntegerDigits - Returns the number of integer
-// digits in the current instance of NumberStrKernel.
+// GetNumberOfIntegerDigits
+//
+// Returns the number of integer digits in the current
+// instance of NumberStrKernel.
 func (numStrKernel *NumberStrKernel) GetNumberOfIntegerDigits() int {
 
 	if numStrKernel.lock == nil {
@@ -1671,26 +1675,32 @@ func (numStrKernel *NumberStrKernel) GetNumberOfIntegerDigits() int {
 	return len(numStrKernel.integerDigits.CharsArray)
 }
 
-// GetNumberOfNumericDigits - Returns the number of numeric digits
-// contained in this instance of NumberStrKernel.
+//	GetNumberOfNumericDigits
 //
-// The number of numeric digits is computed by adding the number of
-// integer digits plus the number of fractional digits.
+//	Returns the number of numeric digits contained in
+//	the current instance of NumberStrKernel.
+//
+//	The number of numeric digits is computed by adding
+//	the number of integer digits plus the number of
+//	fractional digits contained in the current instance
+//	of NumberStrKernel.
 //
 // ----------------------------------------------------------------
 //
-// Input Parameters
+// # Input Parameters
 //
 //	NONE
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
-// Return Values
+// # Return Values
 //
 //	int
-//	   - This method returns the number of integer digits plus the
-//	     number of fractional digits currently residing in this
-//	     instance of NumberStrKernel.
+//
+//		This method returns the number of integer digits
+//		plus the number of fractional digits currently
+//		residing in the current instance of
+//		NumberStrKernel.
 func (numStrKernel *NumberStrKernel) GetNumberOfNumericDigits() int {
 
 	if numStrKernel.lock == nil {
