@@ -3803,8 +3803,8 @@ func TestNumberStrKernel_NewParseGermanNumberStr_000100(t *testing.T) {
 
 	fmtNumberStr,
 		err = nStrKernel02.FmtSignedNumStrUSMinus(
-		numberFieldSpec,
 		roundingSpec,
+		numberFieldSpec,
 		ePrefix.XCpy(
 			"Test #4 fmtNumberStr<-nStrKernel02"))
 
