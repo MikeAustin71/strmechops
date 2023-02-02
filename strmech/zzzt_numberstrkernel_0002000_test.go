@@ -2756,7 +2756,7 @@ func TestNumberStrKernel_SetFromNumericValue_000100(t *testing.T) {
 		return
 	}
 
-	testName = "Test #2-A nStrKernel01.FmtSignedNumStrGermany()"
+	testName = "Test #2-A nStrKernel01.FmtSignedNumStrDefaultsGermany()"
 
 	numberFieldSpec := NumStrNumberFieldSpec{
 		fieldLength:        -1,
@@ -2770,7 +2770,7 @@ func TestNumberStrKernel_SetFromNumericValue_000100(t *testing.T) {
 	}
 
 	actualFmtStr,
-		err = nStrKernel01.FmtSignedNumStrGermany(
+		err = nStrKernel01.FmtSignedNumStrDefaultsGermany(
 		roundingSpec,
 		numberFieldSpec,
 		ePrefix.XCpy(
@@ -2799,7 +2799,7 @@ func TestNumberStrKernel_SetFromNumericValue_000100(t *testing.T) {
 		return
 	}
 
-	testName = "Test #3-A nStrKernel01.FmtSignedNumStrGermany()"
+	testName = "Test #3-A nStrKernel01.FmtSignedNumStrDefaultsGermany()"
 
 	expectedStr = "576123.45678"
 

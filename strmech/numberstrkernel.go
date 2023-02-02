@@ -3107,7 +3107,7 @@ func (numStrKernel *NumberStrKernel) FmtCountrySignedNumStr(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumberStrKernel."+
-			"FmtSignedNumStrFrance()",
+			"FmtCountrySignedNumStr()",
 		"")
 
 	if err != nil {
@@ -13840,7 +13840,7 @@ func (numStrKernel *NumberStrKernel) FmtSignedNumStrBasic(
 			ePrefix.XCpy("numStrKernel"))
 }
 
-//	FmtSignedNumStrFrance
+//	FmtSignedNumStrDefaultsFrance
 //
 //	Returns a formatted number string based on the
 //	numeric value contained in the current instance
@@ -13861,7 +13861,7 @@ func (numStrKernel *NumberStrKernel) FmtSignedNumStrBasic(
 //	For information on German Signed Number
 //	String formatting conventions, see method:
 //
-//		NumberStrKernel.FmtSignedNumStrGermany()
+//		NumberStrKernel.FmtSignedNumStrDefaultsGermany()
 //
 //	If custom decimal separator, integer separators,
 //	or negative number sign characters are required,
@@ -14322,7 +14322,7 @@ func (numStrKernel *NumberStrKernel) FmtSignedNumStrBasic(
 //	 	chain and text passed by input parameter, 'errorPrefix'.
 //	 	The 'errorPrefix' text will be attached to the beginning
 //	 	of the error message.
-func (numStrKernel *NumberStrKernel) FmtSignedNumStrFrance(
+func (numStrKernel *NumberStrKernel) FmtSignedNumStrDefaultsFrance(
 	roundingSpec NumStrRoundingSpec,
 	numberFieldSpec NumStrNumberFieldSpec,
 	errorPrefix interface{}) (
@@ -14344,7 +14344,7 @@ func (numStrKernel *NumberStrKernel) FmtSignedNumStrFrance(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumberStrKernel."+
-			"FmtSignedNumStrFrance()",
+			"FmtSignedNumStrDefaultsFrance()",
 		"")
 
 	if err != nil {
@@ -14371,7 +14371,7 @@ func (numStrKernel *NumberStrKernel) FmtSignedNumStrFrance(
 			ePrefix.XCpy("numStrKernel"))
 }
 
-//	FmtSignedNumStrGermany
+//	FmtSignedNumStrDefaultsGermany
 //
 //	Returns a formatted number string based on the
 //	numeric value contained in the current instance
@@ -14392,7 +14392,7 @@ func (numStrKernel *NumberStrKernel) FmtSignedNumStrFrance(
 //	For information on French Signed Number
 //	String formatting conventions, see method:
 //
-//		NumberStrKernel.FmtSignedNumStrFrance()
+//		NumberStrKernel.FmtSignedNumStrDefaultsFrance()
 //
 //	If custom decimal separator, integer separators,
 //	or negative number sign characters are required,
@@ -14852,7 +14852,7 @@ func (numStrKernel *NumberStrKernel) FmtSignedNumStrFrance(
 //	 	chain and text passed by input parameter, 'errorPrefix'.
 //	 	The 'errorPrefix' text will be attached to the beginning
 //	 	of the error message.
-func (numStrKernel *NumberStrKernel) FmtSignedNumStrGermany(
+func (numStrKernel *NumberStrKernel) FmtSignedNumStrDefaultsGermany(
 	roundingSpec NumStrRoundingSpec,
 	numberFieldSpec NumStrNumberFieldSpec,
 	errorPrefix interface{}) (
@@ -14874,7 +14874,7 @@ func (numStrKernel *NumberStrKernel) FmtSignedNumStrGermany(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumberStrKernel."+
-			"FmtSignedNumStrGermany()",
+			"FmtSignedNumStrDefaultsGermany()",
 		"")
 
 	if err != nil {
@@ -14901,7 +14901,7 @@ func (numStrKernel *NumberStrKernel) FmtSignedNumStrGermany(
 			ePrefix.XCpy("numStrKernel"))
 }
 
-//	FmtSignedNumStrUKMinus
+//	FmtSignedNumStrDefaultsUKMinus
 //
 //	Returns a formatted number string based on the
 //	numeric value contained in the current instance
@@ -15372,7 +15372,7 @@ func (numStrKernel *NumberStrKernel) FmtSignedNumStrGermany(
 //	 	chain and text passed by input parameter, 'errorPrefix'.
 //	 	The 'errorPrefix' text will be attached to the beginning
 //	 	of the error message.
-func (numStrKernel *NumberStrKernel) FmtSignedNumStrUKMinus(
+func (numStrKernel *NumberStrKernel) FmtSignedNumStrDefaultsUKMinus(
 	roundingSpec NumStrRoundingSpec,
 	numberFieldSpec NumStrNumberFieldSpec,
 	errorPrefix interface{}) (
@@ -15394,7 +15394,7 @@ func (numStrKernel *NumberStrKernel) FmtSignedNumStrUKMinus(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumberStrKernel."+
-			"FmtSignedNumStrUKMinus()",
+			"FmtSignedNumStrDefaultsUKMinus()",
 		"")
 
 	if err != nil {
@@ -15421,7 +15421,7 @@ func (numStrKernel *NumberStrKernel) FmtSignedNumStrUKMinus(
 			ePrefix.XCpy("numStrKernel"))
 }
 
-//	FmtSignedNumStrUSMinus
+//	FmtSignedNumStrDefaultsUSMinus
 //
 //	Returns a formatted number string based on the
 //	numeric value contained in the current instance
@@ -15884,7 +15884,7 @@ func (numStrKernel *NumberStrKernel) FmtSignedNumStrUKMinus(
 //	 	chain and text passed by input parameter, 'errorPrefix'.
 //	 	The 'errorPrefix' text will be attached to the beginning
 //	 	of the error message.
-func (numStrKernel *NumberStrKernel) FmtSignedNumStrUSMinus(
+func (numStrKernel *NumberStrKernel) FmtSignedNumStrDefaultsUSMinus(
 	roundingSpec NumStrRoundingSpec,
 	numberFieldSpec NumStrNumberFieldSpec,
 	errorPrefix interface{}) (
@@ -15906,7 +15906,7 @@ func (numStrKernel *NumberStrKernel) FmtSignedNumStrUSMinus(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumberStrKernel."+
-			"FmtSignedNumStrUSMinus()",
+			"FmtSignedNumStrDefaultsUSMinus()",
 		"")
 
 	if err != nil {
@@ -15933,7 +15933,7 @@ func (numStrKernel *NumberStrKernel) FmtSignedNumStrUSMinus(
 			ePrefix.XCpy("numStrKernel"))
 }
 
-//	FmtSignedNumStrUSParen
+//	FmtSignedNumStrDefaultsUSParen
 //
 //	Returns a formatted number string based on the
 //	numeric value contained in the current instance
@@ -16414,7 +16414,7 @@ func (numStrKernel *NumberStrKernel) FmtSignedNumStrUSMinus(
 //	 	chain and text passed by input parameter, 'errorPrefix'.
 //	 	The 'errorPrefix' text will be attached to the beginning
 //	 	of the error message.
-func (numStrKernel *NumberStrKernel) FmtSignedNumStrUSParen(
+func (numStrKernel *NumberStrKernel) FmtSignedNumStrDefaultsUSParen(
 	roundingSpec NumStrRoundingSpec,
 	numberFieldSpec NumStrNumberFieldSpec,
 	errorPrefix interface{}) (
@@ -16436,7 +16436,7 @@ func (numStrKernel *NumberStrKernel) FmtSignedNumStrUSParen(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumberStrKernel."+
-			"FmtSignedNumStrUSParen()",
+			"FmtSignedNumStrDefaultsUSParen()",
 		"")
 
 	if err != nil {
