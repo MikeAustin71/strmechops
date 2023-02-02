@@ -677,17 +677,25 @@ func (mainNumStrTest005 MainNumStrTest005) NumStrFmtSignedSimple() {
 		return
 	}
 
+	var roundingSpec strmech.NumStrRoundingSpec
+
+	roundingSpec,
+		err = new(strmech.NumStrRoundingSpec).NewRoundingSpec(
+		strmech.NumRoundType.NoRounding(),
+		0,
+		ePrefix.XCpy(
+			"roundingSpec<-"))
+
 	var fmtNumberStr string
 
 	fmtNumberStr,
 		err = baseValueNStr.FmtSignedNumStrSimple(
+		roundingSpec,
 		".",
 		",",
 		true,
 		-1,
 		strmech.TxtJustify.None(),
-		strmech.NumRoundType.NoRounding(),
-		0,
 		ePrefix.XCpy(
 			"fmtNumberStr<-baseValueNStr"))
 
