@@ -856,9 +856,9 @@ func (nStrHelperNanobot *numStrHelperNanobot) formatNumStrElements(
 						// the Leading Number sign '$-'
 
 						//  " $ -123.45"
-						outsideNumFieldLeadingSymbols =
+						insideNumFieldLeadingSymbols =
 							currencySymbolStr +
-								outsideNumFieldLeadingSymbols
+								insideNumFieldLeadingSymbols
 
 					} else {
 
