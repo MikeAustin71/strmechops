@@ -1085,21 +1085,21 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setCurrencyDefa
 		return err
 	}
 
-	err = nStrNumSymbolGroup.currencySymbol.
-		SetCurrencyDefaultEU(
-			ePrefix.XCpy(
-				"nStrNumSymbolGroup.currencySymbol"))
-
-	if err != nil {
-		return err
-	}
-
-	return new(NumStrNumberSymbolSpec).
+	err = new(NumStrNumberSymbolSpec).
 		SetSignedNumDefaultsGermany(
 			&nStrNumSymbolGroup.positiveNumberSign,
 			&nStrNumSymbolGroup.zeroNumberSign,
 			&nStrNumSymbolGroup.negativeNumberSign,
 			ePrefix)
+
+	if err != nil {
+		return err
+	}
+
+	return nStrNumSymbolGroup.currencySymbol.
+		SetCurrencyDefaultEU(
+			ePrefix.XCpy(
+				"nStrNumSymbolGroup.currencySymbol"))
 }
 
 //	setCurrencyDefaultsUKMinusInside
@@ -1290,21 +1290,21 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setCurrencyDefa
 		return err
 	}
 
-	err = nStrNumSymbolGroup.currencySymbol.
-		SetCurrencyDefaultsUKMinusInside(
-			ePrefix.XCpy(
-				"nStrNumSymbolGroup.currencySymbol"))
-
-	if err != nil {
-		return err
-	}
-
-	return new(NumStrNumberSymbolSpec).
+	err = new(NumStrNumberSymbolSpec).
 		SetSignedNumDefaultsUKMinus(
 			&nStrNumSymbolGroup.positiveNumberSign,
 			&nStrNumSymbolGroup.zeroNumberSign,
 			&nStrNumSymbolGroup.negativeNumberSign,
 			ePrefix)
+
+	if err != nil {
+		return err
+	}
+
+	return nStrNumSymbolGroup.currencySymbol.
+		SetCurrencyDefaultsUKMinusInside(
+			ePrefix.XCpy(
+				"nStrNumSymbolGroup.currencySymbol"))
 }
 
 //	setCurrencyDefaultsUKMinusOutside
@@ -1495,21 +1495,21 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setCurrencyDefa
 		return err
 	}
 
-	err = nStrNumSymbolGroup.currencySymbol.
-		SetCurrencyDefaultsUKMinusOutside(
-			ePrefix.XCpy(
-				"nStrNumSymbolGroup.currencySymbol"))
-
-	if err != nil {
-		return err
-	}
-
-	return new(NumStrNumberSymbolSpec).
+	err = new(NumStrNumberSymbolSpec).
 		SetSignedNumDefaultsUKMinus(
 			&nStrNumSymbolGroup.positiveNumberSign,
 			&nStrNumSymbolGroup.zeroNumberSign,
 			&nStrNumSymbolGroup.negativeNumberSign,
 			ePrefix)
+
+	if err != nil {
+		return err
+	}
+
+	return nStrNumSymbolGroup.currencySymbol.
+		SetCurrencyDefaultsUKMinusOutside(
+			ePrefix.XCpy(
+				"nStrNumSymbolGroup.currencySymbol"))
 }
 
 //	setCurrencyDefaultsUSMinus
