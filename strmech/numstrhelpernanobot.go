@@ -469,6 +469,31 @@ func (nStrHelperNanobot *numStrHelperNanobot) formatNumStrElements(
 		return numStr, err
 	}
 
+	if fractionalDigits == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'integerDigits' is a nil pointer!\n",
+			ePrefix.String())
+
+		return numStr, err
+	}
+
+	numOfIntDigits := integerDigits.GetRuneArrayLength()
+
+	if numOfIntDigits == 0 {
+
+		err = integerDigits.AddChar('0',
+			true,
+			ePrefix.XCpy("integerDigits"))
+
+		if err != nil {
+
+			return numStr, err
+		}
+	}
+
+	numOfFracDigits := fractionalDigits.GetRuneArrayLength()
+
 	if integerDigits.IsAllNumericDigits() == false {
 
 		err = fmt.Errorf("%v\n"+
@@ -482,16 +507,8 @@ func (nStrHelperNanobot *numStrHelperNanobot) formatNumStrElements(
 
 	}
 
-	if fractionalDigits == nil {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'integerDigits' is a nil pointer!\n",
-			ePrefix.String())
-
-		return numStr, err
-	}
-
-	if fractionalDigits.IsAllNumericDigits() == false {
+	if numOfFracDigits > 0 &&
+		fractionalDigits.IsAllNumericDigits() == false {
 
 		err = fmt.Errorf("%v\n"+
 			"Error: Input parameter 'fractionalDigits' is invalid!\n"+
@@ -565,8 +582,6 @@ func (nStrHelperNanobot *numStrHelperNanobot) formatNumStrElements(
 
 	}
 
-	numOfFracDigits := fractionalDigits.GetRuneArrayLength()
-
 	if numOfFracDigits > 0 &&
 		decSeparator.GetNumberOfSeparatorChars() == 0 {
 
@@ -583,7 +598,7 @@ func (nStrHelperNanobot *numStrHelperNanobot) formatNumStrElements(
 
 	var numStrWithIntSeps []rune
 
-	numOfIntDigits := integerDigits.GetRuneArrayLength()
+	numOfIntDigits = integerDigits.GetRuneArrayLength()
 
 	if numOfIntDigits > 0 {
 

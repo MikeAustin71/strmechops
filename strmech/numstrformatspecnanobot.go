@@ -1766,7 +1766,7 @@ func (nStrFmtSpecNanobot *numStrFmtSpecNanobot) setCurrencyDefaultsUSMinus(
 
 	numSymbolsGroup,
 		err = new(NumStrNumberSymbolGroup).
-		NewSignedNumDefaultsUSMinus(
+		NewCurrencyDefaultsUSMinus(
 			ePrefix.XCpy(
 				"numSymbolsGroup<-"))
 

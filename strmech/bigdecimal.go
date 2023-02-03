@@ -6,7 +6,7 @@ import (
 
 // BigDecimal
 //
-// Contains a representing of integer or floating
+// Contains a representation of integer or floating
 // point numeric values.
 //
 // This type incorporates integer math routines to
@@ -18,7 +18,7 @@ import (
 // The encapsulated numeric value is maintained
 // internally as form of scientific notation.
 type BigDecimal struct {
-	significand SciNotationKernel
+	significand BigIntNum
 	//	The significand is also known as the mantissa or
 	//	coefficient in scientific notation. It represents
 	//	the significant digits in the base number shown
@@ -31,7 +31,7 @@ type BigDecimal struct {
 	//		significand: '2.652'
 	//		exponent: 8
 
-	exponent SciNotationKernel
+	exponent BigIntNum
 	//	The component of scientific notation known as the
 	//	'exponent' is illustrated in the following example:
 	//
