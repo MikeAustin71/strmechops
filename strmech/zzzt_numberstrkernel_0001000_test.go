@@ -1496,6 +1496,177 @@ func TestNumberStrKernel_FmtCharReplacementStr_000200(t *testing.T) {
 	return
 }
 
+func TestNumberStrKernel_FmtCurrencyBasic_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestNumberStrKernel_FmtCurrencyDefaultsUKMinusInside_000100()",
+		"")
+
+	dirtyNumStr := "(1234.563)"
+	origNumStrValue := "-1234.56"
+
+	var err error
+	var numStrKernel NumberStrKernel
+
+	numStrKernel,
+		_,
+		err = new(NumberStrKernel).NewParseDirtyNumberStr(
+		dirtyNumStr,
+		".",
+		NumRoundType.HalfAwayFromZero(),
+		2,
+		ePrefix.XCpy(
+			""))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	expectedNumberStr := origNumStrValue
+
+	var actualNumberStr string
+
+	actualNumberStr,
+		_,
+		err = numStrKernel.FmtNumStrNative(
+		NumRoundType.NoRounding(),
+		0,
+		ePrefix.XCpy(
+			"numStrKernel Test#1"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	testName := fmt.Sprintf("Test #1 Original Number String Setup Verification\n"+
+		"Original Native Number String Value = %v\n",
+		origNumStrValue)
+
+	if expectedNumberStr != actualNumberStr {
+
+		t.Errorf("\n%v\n"+
+			"%v\n"+
+			"Error: actualNumberStr NOT EQUAL TO expectedNumberStr\n"+
+			"    actualNumberStr = '%v'\n"+
+			"expectedNumberStr   = '%v'\n",
+			ePrefix.String(),
+			testName,
+			actualNumberStr,
+			expectedNumberStr)
+
+		return
+	}
+
+	testName = fmt.Sprintf("Test #2 Basic Currency\n"+
+		"Original Native Number String Value = %v\n",
+		origNumStrValue)
+
+	expectedNumberStr = "£-    1,234.56"
+
+	roundingSpec := NumStrRoundingSpec{
+		roundingType:            NumRoundType.NoRounding(),
+		roundToFractionalDigits: 0,
+		lock:                    nil,
+	}
+
+	actualNumberStr,
+		err = numStrKernel.FmtCurrencyBasic(
+		roundingSpec,
+		".",
+		",",
+		IntGroupingType.Thousands(),
+		"£",
+		"",
+		false,
+		"-",
+		"",
+		NumFieldSymPos.OutsideNumField(),
+		12,
+		TxtJustify.Right(),
+		ePrefix.XCpy(
+			"numStrKernel Test#2"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if expectedNumberStr != actualNumberStr {
+
+		t.Errorf("\n%v\n"+
+			"%v\n"+
+			"Error: actualNumberStr NOT EQUAL TO expectedNumberStr\n"+
+			"    actualNumberStr = '%v'\n"+
+			"expectedNumberStr   = '%v'\n",
+			ePrefix.String(),
+			testName,
+			actualNumberStr,
+			expectedNumberStr)
+
+		return
+	}
+
+	err = numStrKernel.SetNumberSignInt(
+		1,
+		ePrefix.XCpy("numStrKernel"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	testName = fmt.Sprintf("Test #3 Basic Currency Positive Value\n"+
+		"Original Native Number String Value = %v\n",
+		origNumStrValue)
+
+	expectedNumberStr = "£    1,234.56"
+
+	actualNumberStr,
+		err = numStrKernel.FmtCurrencyBasic(
+		roundingSpec,
+		".",
+		",",
+		IntGroupingType.Thousands(),
+		"£",
+		"",
+		false,
+		"-",
+		"",
+		NumFieldSymPos.OutsideNumField(),
+		12,
+		TxtJustify.Right(),
+		ePrefix.XCpy(
+			"numStrKernel Test#2"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if expectedNumberStr != actualNumberStr {
+
+		t.Errorf("\n%v\n"+
+			"%v\n"+
+			"Error: actualNumberStr NOT EQUAL TO expectedNumberStr\n"+
+			"    actualNumberStr = '%v'\n"+
+			"expectedNumberStr   = '%v'\n",
+			ePrefix.String(),
+			testName,
+			actualNumberStr,
+			expectedNumberStr)
+
+		return
+	}
+
+}
+
 func TestNumberStrKernel_FmtCurrencyDefaultsFrance_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
