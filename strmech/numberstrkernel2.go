@@ -11717,8 +11717,6 @@ func (numStrKernel *NumberStrKernel) SetStringDigits(
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
 
-	newNumStrKernel := NumberStrKernel{}
-
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
@@ -11731,7 +11729,7 @@ func (numStrKernel *NumberStrKernel) SetStringDigits(
 	}
 
 	return new(numberStrKernelNanobot).setWithRunes(
-		&newNumStrKernel,
+		numStrKernel,
 		[]rune(integerDigits),
 		[]rune(fractionalDigits),
 		numberSign,
