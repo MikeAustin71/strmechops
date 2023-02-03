@@ -11275,13 +11275,13 @@ func (numStrKernel *NumberStrKernel) SetNumberSignInt(
 //	containing integer digit and fractional digit
 //	rune arrays.
 //
-// # IMPORTANT
-//
 // ----------------------------------------------------------------
 //
-//	Be advised that all the data fields within the
-//	current instance of NumberStrKernel will be
-//	deleted and reset to new values.
+// # IMPORTANT
+//
+//	This method will delete, overwrite and reset all
+//	pre-existing data values in the current instance of
+//	NumberStrKernel.
 //
 // ----------------------------------------------------------------
 //
@@ -11405,8 +11405,6 @@ func (numStrKernel *NumberStrKernel) SetRuneDigits(
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
 
-	newNumStrKernel := NumberStrKernel{}
-
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
@@ -11419,7 +11417,7 @@ func (numStrKernel *NumberStrKernel) SetRuneDigits(
 	}
 
 	return new(numberStrKernelNanobot).setWithRunes(
-		&newNumStrKernel,
+		numStrKernel,
 		integerDigits,
 		fractionalDigits,
 		numberSign,
@@ -11433,13 +11431,13 @@ func (numStrKernel *NumberStrKernel) SetRuneDigits(
 //	containing integer digits and fractional digits
 //	formatted as Rune Array Data Transfer Objects.
 //
-// # IMPORTANT
-//
 // ----------------------------------------------------------------
 //
-//	Be advised that all the data fields within the
-//	current instance of NumberStrKernel will be
-//	deleted and reset to new values.
+// # IMPORTANT
+//
+//	This method will delete, overwrite and reset all
+//	pre-existing data values in the current instance of
+//	NumberStrKernel.
 //
 // ----------------------------------------------------------------
 //
@@ -11563,8 +11561,6 @@ func (numStrKernel *NumberStrKernel) SetRuneDto(
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
 
-	newNumStrKernel := NumberStrKernel{}
-
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
@@ -11577,7 +11573,7 @@ func (numStrKernel *NumberStrKernel) SetRuneDto(
 	}
 
 	return new(numberStrKernelNanobot).setWithRuneArrayDto(
-		&newNumStrKernel,
+		numStrKernel,
 		integerDigits,
 		fractionalDigits,
 		numberSign,
@@ -11591,13 +11587,13 @@ func (numStrKernel *NumberStrKernel) SetRuneDto(
 //	containing integer digit and fractional digit
 //	strings.
 //
-// # IMPORTANT
-//
 // ----------------------------------------------------------------
 //
-//	Be advised that all the data fields within the
-//	current instance of NumberStrKernel will be
-//	deleted and reset to new values.
+// # IMPORTANT
+//
+//	This method will delete, overwrite and reset all
+//	pre-existing data values in the current instance of
+//	NumberStrKernel.
 //
 // ----------------------------------------------------------------
 //

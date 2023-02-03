@@ -5579,7 +5579,7 @@ func (numStrKernel *NumberStrKernel) FmtCurrencyDefaultsUKMinusInside(
 	var numStrFmtSpec NumStrFormatSpec
 
 	numStrFmtSpec,
-		err = new(NumStrFormatSpec).NewCurrencyDefaultsUKMinusOutside(
+		err = new(NumStrFormatSpec).NewCurrencyDefaultsUKMinusInside(
 		numberFieldSpec,
 		ePrefix.XCpy(
 			"newSignedNumFmtSpec<-"))
