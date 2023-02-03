@@ -485,9 +485,9 @@ func (sMechNanobot *strMechNanobot) strCenterInStrLeft(
 //
 //	 --------------------------------------------------------
 //	                                 1234567890
-//	 'strJustified' is now equal to "    £12345"
-//	 The string length of 'strJustified' is 11,
-//		but the string consists of 10-printable characters.
+//	'strJustified' is now equal to "    £12345"
+//	The string length of 'strJustified' is 11,
+//	but the string consists of 10-printable characters.
 func (sMechNanobot *strMechNanobot) justifyTextInStrField(
 	strToJustify string,
 	fieldLen int,
