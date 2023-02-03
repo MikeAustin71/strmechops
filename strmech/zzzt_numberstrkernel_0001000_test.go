@@ -1496,6 +1496,145 @@ func TestNumberStrKernel_FmtCharReplacementStr_000200(t *testing.T) {
 	return
 }
 
+func TestNumberStrKernel_FmtCurrencyDefaultsGermany_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestNumberStrKernel_FmtCurrencyDefaultsGermany_000100()",
+		"")
+
+	var intDigits, fracDigits RuneArrayDto
+
+	var err error
+
+	intDigits,
+		err = new(RuneArrayDto).NewRunes(
+		[]rune("1234"),
+		CharSearchType.LinearTargetStartingIndex(),
+		ePrefix.XCpy(
+			"intDigits"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	fracDigits,
+		err = new(RuneArrayDto).NewRunes(
+		[]rune("56"),
+		CharSearchType.LinearTargetStartingIndex(),
+		ePrefix.XCpy(
+			"intDigits"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	numSign := NumSignVal.Negative()
+
+	var numStrKernel NumberStrKernel
+
+	err = numStrKernel.SetRuneDto(
+		&intDigits,
+		&fracDigits,
+		numSign,
+		ePrefix.XCpy(
+			"numStrKernel"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	origNumStrValue := "-1234.56"
+
+	expectedNumberStr := origNumStrValue
+
+	var actualNumberStr string
+
+	actualNumberStr,
+		_,
+		err = numStrKernel.FmtNumStrNative(
+		NumRoundType.NoRounding(),
+		0,
+		ePrefix.XCpy(
+			"numStrKernel Test#1"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	testName := fmt.Sprintf("Test #1 Original Number String Setup Verification\n"+
+		"Original Native Number String Value = %v\n",
+		origNumStrValue)
+
+	if expectedNumberStr != actualNumberStr {
+
+		t.Errorf("\n%v\n"+
+			"%v\n"+
+			"Error: actualNumberStr NOT EQUAL TO expectedNumberStr\n"+
+			"    actualNumberStr = '%v'\n"+
+			"expectedNumberStr   = '%v'\n",
+			ePrefix.String(),
+			testName,
+			actualNumberStr,
+			expectedNumberStr)
+
+		return
+	}
+
+	testName = fmt.Sprintf("Test #2 German Default Currency\n"+
+		"Original Native Number String Value = %v\n",
+		origNumStrValue)
+
+	expectedNumberStr = "    1.234,56- €"
+
+	roundingSpec := NumStrRoundingSpec{
+		roundingType:            NumRoundType.NoRounding(),
+		roundToFractionalDigits: 0,
+		lock:                    nil,
+	}
+
+	numberFieldSpec := NumStrNumberFieldSpec{
+		fieldLength:        15,
+		fieldJustification: TxtJustify.Right(),
+		lock:               nil,
+	}
+
+	actualNumberStr,
+		err = numStrKernel.FmtCurrencyDefaultsGermany(
+		roundingSpec,
+		numberFieldSpec,
+		ePrefix.XCpy(
+			"numStrKernel Test#2"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if expectedNumberStr != actualNumberStr {
+
+		t.Errorf("\n%v\n"+
+			"%v\n"+
+			"Error: actualNumberStr NOT EQUAL TO expectedNumberStr\n"+
+			"    actualNumberStr = '%v'\n"+
+			"expectedNumberStr   = '%v'\n",
+			ePrefix.String(),
+			testName,
+			actualNumberStr,
+			expectedNumberStr)
+
+		return
+	}
+}
+
 func TestNumberStrKernel_FmtCurrencyDefaultsUKMinusInside_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
@@ -1589,6 +1728,12 @@ func TestNumberStrKernel_FmtCurrencyDefaultsUKMinusInside_000100(t *testing.T) {
 		ePrefix.XCpy(
 			"numStrKernel Test#2"))
 
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
 	if expectedNumberStr != actualNumberStr {
 
 		t.Errorf("\n%v\n"+
@@ -1604,6 +1749,41 @@ func TestNumberStrKernel_FmtCurrencyDefaultsUKMinusInside_000100(t *testing.T) {
 		return
 	}
 
+	testName = fmt.Sprintf("Test #3 UK Minus Outside\n"+
+		"Original Native Number String Value = %v\n",
+		origNumStrValue)
+
+	expectedNumberStr = "    -£ 1,234.56"
+
+	actualNumberStr,
+		err = numStrKernel.FmtCurrencyDefaultsUKMinusOutside(
+		roundingSpec,
+		numberFieldSpec,
+		ePrefix.XCpy(
+			"numStrKernel Test#3"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if expectedNumberStr != actualNumberStr {
+
+		t.Errorf("\n%v\n"+
+			"%v\n"+
+			"Error: actualNumberStr NOT EQUAL TO expectedNumberStr\n"+
+			"    actualNumberStr = '%v'\n"+
+			"expectedNumberStr   = '%v'\n",
+			ePrefix.String(),
+			testName,
+			actualNumberStr,
+			expectedNumberStr)
+
+		return
+	}
+
+	return
 }
 
 func TestNumberStrKernel_FmtNumStrPure_000100(t *testing.T) {

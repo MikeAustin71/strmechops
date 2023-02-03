@@ -1045,8 +1045,9 @@ func (nStrHelperNanobot *numStrHelperNanobot) formatNumStrElements(
 						// the Trailing Number sign '-€'
 
 						//  "123.45 - €"
-						outsideNumFieldTrailingSymbols =
-							outsideNumFieldTrailingSymbols +
+
+						insideNumFieldTrailingSymbols =
+							insideNumFieldTrailingSymbols +
 								currencySymbolStr
 
 					} else {
