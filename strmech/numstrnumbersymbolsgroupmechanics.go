@@ -894,21 +894,21 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setCurrencyDefa
 		return err
 	}
 
-	err = nStrNumSymbolGroup.currencySymbol.
-		SetCurrencyDefaultEU(
-			ePrefix.XCpy(
-				"nStrNumSymbolGroup.currencySymbol"))
-
-	if err != nil {
-		return err
-	}
-
-	return new(NumStrNumberSymbolSpec).
+	err = new(NumStrNumberSymbolSpec).
 		SetSignedNumDefaultsFrance(
 			&nStrNumSymbolGroup.positiveNumberSign,
 			&nStrNumSymbolGroup.zeroNumberSign,
 			&nStrNumSymbolGroup.negativeNumberSign,
 			ePrefix)
+
+	if err != nil {
+		return err
+	}
+
+	return nStrNumSymbolGroup.currencySymbol.
+		SetCurrencyDefaultEU(
+			ePrefix.XCpy(
+				"nStrNumSymbolGroup.currencySymbol"))
 }
 
 //	setCurrencyDefaultsGermany
@@ -1698,21 +1698,17 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setCurrencyDefa
 		return err
 	}
 
-	err = nStrNumSymbolGroup.currencySymbol.
-		SetCurrencyDefaultsUS(
-			ePrefix.XCpy(
-				"nStrNumSymbolGroup.currencySymbol"))
-
-	if err != nil {
-		return err
-	}
-
-	return new(NumStrNumberSymbolSpec).
+	err = new(NumStrNumberSymbolSpec).
 		SetSignedNumDefaultsUSMinus(
 			&nStrNumSymbolGroup.positiveNumberSign,
 			&nStrNumSymbolGroup.zeroNumberSign,
 			&nStrNumSymbolGroup.negativeNumberSign,
 			ePrefix)
+
+	return nStrNumSymbolGroup.currencySymbol.
+		SetCurrencyDefaultsUS(
+			ePrefix.XCpy(
+				"nStrNumSymbolGroup.currencySymbol"))
 }
 
 //	setCurrencyDefaultsUSParen
@@ -1905,21 +1901,17 @@ func (nStrNumSymbolsGroupMech *numStrNumberSymbolGroupMechanics) setCurrencyDefa
 		return err
 	}
 
-	err = nStrNumSymbolGroup.currencySymbol.
-		SetCurrencyDefaultsUS(
-			ePrefix.XCpy(
-				"nStrNumSymbolGroup.currencySymbol"))
-
-	if err != nil {
-		return err
-	}
-
-	return new(NumStrNumberSymbolSpec).
+	err = new(NumStrNumberSymbolSpec).
 		SetSignedNumDefaultsUSParen(
 			&nStrNumSymbolGroup.positiveNumberSign,
 			&nStrNumSymbolGroup.zeroNumberSign,
 			&nStrNumSymbolGroup.negativeNumberSign,
 			ePrefix)
+
+	return nStrNumSymbolGroup.currencySymbol.
+		SetCurrencyDefaultsUS(
+			ePrefix.XCpy(
+				"nStrNumSymbolGroup.currencySymbol"))
 }
 
 //	setCurrencyParams

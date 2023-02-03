@@ -1672,7 +1672,7 @@ func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setSignedNumSymbolsDe
 	numStrNumSymSpecNanobot.empty(
 		negativeNumberSignSymbols)
 
-	err = numStrNumSymSpecNanobot.setTrailingNStrNumSymbolSpec(
+	err = numStrNumSymSpecNanobot.setLeadingNStrNumSymbolSpec(
 		negativeNumberSignSymbols,
 		[]rune{'-'},
 		NumFieldSymPos.InsideNumField(),
