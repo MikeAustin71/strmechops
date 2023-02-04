@@ -2322,13 +2322,13 @@ func TestNumberStrKernel_FmtNumStrElements_000100(t *testing.T) {
 		ePrefix.XCpy(
 			"numStrKernel02<-Test #3"))
 
-	actualNumberStr = numStrKernel02.String()
-
 	if err != nil {
 		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
+
+	actualNumberStr = numStrKernel02.String()
 
 	if expectedNumberStr != actualNumberStr {
 

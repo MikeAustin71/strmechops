@@ -1,6 +1,7 @@
 package strmech
 
 import (
+	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
 	"math/big"
 	"strings"
@@ -1979,6 +1980,172 @@ func TestNumberStrKernel_RoundFloor_000900(t *testing.T) {
 			"    actualNumberStr = '%v'\n"+
 			"expectedNumberStr   = '%v'\n",
 			ePrefix.String(),
+			actualNumberStr,
+			expectedNumberStr)
+
+		return
+	}
+
+	return
+}
+
+func TestNumberStrKernel_SetDefaultNumStrFmtSpecElements_001000(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestNumberStrKernel_SetDefaultNumStrFmtSpecElements_001000()",
+		"")
+
+	origNumStrValue := "-1234456.78"
+
+	var err error
+	var numStrKernel NumberStrKernel
+
+	numStrKernel,
+		_,
+		err = new(NumberStrKernel).NewParseNativeNumberStr(
+		origNumStrValue,
+		NumRoundType.NoRounding(),
+		0,
+		ePrefix.XCpy(
+			""))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	expectedNumberStr := origNumStrValue
+
+	var actualNumberStr string
+
+	actualNumberStr,
+		_,
+		err = numStrKernel.FmtNumStrNative(
+		NumRoundType.NoRounding(),
+		0,
+		ePrefix.XCpy(
+			"numStrKernel Test#1"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	testName := fmt.Sprintf("Test #1 Original Number String Setup Verification\n"+
+		"Original Native Number String Value = %v\n",
+		origNumStrValue)
+
+	if expectedNumberStr != actualNumberStr {
+
+		t.Errorf("\n%v\n"+
+			"%v\n"+
+			"Error: actualNumberStr NOT EQUAL TO expectedNumberStr\n"+
+			"    actualNumberStr = '%v'\n"+
+			"expectedNumberStr   = '%v'\n",
+			ePrefix.String(),
+			testName,
+			actualNumberStr,
+			expectedNumberStr)
+
+		return
+	}
+
+	testName = fmt.Sprintf("Test #2 SetDefaultNumStrFmtSpecElements()\n"+
+		"Default Format has NO Currency Symbols.\n"+
+		"Original Native Number String Value = %v\n",
+		origNumStrValue)
+
+	expectedNumberStr = "  1.234.456,78-"
+
+	numberFieldSpec := NumStrNumberFieldSpec{
+		fieldLength:        15,
+		fieldJustification: TxtJustify.Right(),
+		lock:               nil,
+	}
+
+	var decSepSpec DecimalSeparatorSpec
+
+	decSepSpec,
+		err = new(DecimalSeparatorSpec).NewStr(
+		",",
+		ePrefix.XCpy(
+			"decSepSpec<-"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var intSepSpec IntegerSeparatorSpec
+
+	intSepSpec,
+		err = new(IntegerSeparatorSpec).NewThousands(
+		".",
+		ePrefix.XCpy(
+			"intSepSpec"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var negativeNumberSign,
+		positiveNumberSign,
+		zeroNumberSign,
+		currencySymbol NumStrNumberSymbolSpec
+
+	negativeNumberSign,
+		err = new(NumStrNumberSymbolSpec).
+		NewNumberSignTrailingSymbol(
+			"-",
+			NumFieldSymPos.InsideNumField(),
+			ePrefix.XCpy(
+				"negativeNumberSign<-"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	positiveNumberSign = new(NumStrNumberSymbolSpec).NewNOP()
+
+	zeroNumberSign = new(NumStrNumberSymbolSpec).NewNOP()
+
+	currencySymbol = new(NumStrNumberSymbolSpec).NewNOP()
+
+	err = numStrKernel.SetDefaultNumStrFmtSpecElements(
+		decSepSpec,
+		intSepSpec,
+		negativeNumberSign,
+		positiveNumberSign,
+		zeroNumberSign,
+		currencySymbol,
+		numberFieldSpec,
+		ePrefix.XCpy(
+			"numStrKernel02<-Test #3"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	actualNumberStr = numStrKernel.String()
+
+	if expectedNumberStr != actualNumberStr {
+
+		t.Errorf("\n%v\n"+
+			"%v\n"+
+			"Error: actualNumberStr NOT EQUAL TO expectedNumberStr\n"+
+			"    actualNumberStr = '%v'\n"+
+			"expectedNumberStr   = '%v'\n",
+			ePrefix.String(),
+			testName,
 			actualNumberStr,
 			expectedNumberStr)
 
