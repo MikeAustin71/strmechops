@@ -1,8 +1,11 @@
 package strmech
 
 import (
+	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
+	"io"
 	"math/big"
+	"strings"
 	"sync"
 )
 
@@ -21,6 +24,7 @@ import (
 type TextLineSpecAverageTime struct {
 	numberOfDurationEvents big.Int
 	totalDurationNanoSecs  big.Int
+	textLineReader         *strings.Reader
 	lock                   *sync.Mutex
 }
 
@@ -287,6 +291,141 @@ func (txtLineAvgTime *TextLineSpecAverageTime) CopyOut(
 	return deepCopyTxtLineAvgTimer, err
 }
 
+//	CopyOutITextLine
+//
+//	Returns a deep copy of the current
+//	TextLineSpecAverageTime instance cast as a type
+//	ITextLineSpecification.
+//
+//	This method fulfills requirements of interface
+//	ITextLineSpecification.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	ITextLineSpecification
+//
+//		If this method completes successfully and no
+//		errors are encountered, this parameter will
+//		return a deep copy of the current
+//		TextLineSpecAverageTime instance cast as an
+//		ITextLineSpecification object.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (txtLineAvgTime *TextLineSpecAverageTime) CopyOutITextLine(
+	errorPrefix interface{}) (
+	ITextLineSpecification,
+	error) {
+
+	if txtLineAvgTime.lock == nil {
+		txtLineAvgTime.lock = new(sync.Mutex)
+	}
+
+	txtLineAvgTime.lock.Lock()
+
+	defer txtLineAvgTime.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	deepCopyTxtLineAvgTimer := TextLineSpecAverageTime{}
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecAverageTime.CopyOutITextLine()",
+		"")
+
+	if err != nil {
+		return ITextLineSpecification(&deepCopyTxtLineAvgTimer),
+			err
+	}
+
+	err = new(textLineSpecAverageTimeNanobot).copy(
+		&deepCopyTxtLineAvgTimer,
+		txtLineAvgTime,
+		ePrefix.XCpy("deepCopyTxtLineAvgTimer<-"+
+			"txtLineAvgTime"))
+
+	return ITextLineSpecification(&deepCopyTxtLineAvgTimer),
+		err
+}
+
 //	CopyOutPtr
 //
 //	Returns a pointer to a deep copy of the current
@@ -514,6 +653,371 @@ func (txtLineAvgTime *TextLineSpecAverageTime) Equal(
 		incomingAvgTimer)
 }
 
+// EqualITextLine
+//
+// Receives an object implementing the
+// ITextLineSpecification interface and proceeds to
+// compare the member variables to those of the current
+// TextLineSpecAverageTime instance in order to
+// determine if they are equivalent.
+//
+// A boolean flag showing the result of this comparison
+// is returned. If the member variables from both
+// instances are equal in all respects, this flag is set
+// to 'true'. Otherwise, this method returns 'false'.
+//
+// This method is required by interface
+// ITextLineSpecification.
+func (txtLineAvgTime *TextLineSpecAverageTime) EqualITextLine(
+	iTextLine ITextLineSpecification) bool {
+
+	if txtLineAvgTime.lock == nil {
+		txtLineAvgTime.lock = new(sync.Mutex)
+	}
+
+	txtLineAvgTime.lock.Lock()
+
+	defer txtLineAvgTime.lock.Unlock()
+
+	avgTimer, ok := iTextLine.(*TextLineSpecAverageTime)
+
+	if !ok {
+		return false
+	}
+
+	return new(textLineSpecAverageTimeElectron).equal(
+		txtLineAvgTime,
+		avgTimer)
+}
+
+//	GetFormattedText
+//
+//	Returns the calculated average time for the subject
+//	operation as formatted text for screen display, file
+//	output or printing.
+//
+//	This method is similar to method:
+//		TextLineSpecAverageTime.String()
+//
+//	The sole difference being that method and this is the
+//	return type. This method returns an error.
+//
+//	This method fulfills requirements of interface
+//	ITextLineSpecification.
+//
+//	Methods which return formatted text are listed as
+//	follows:
+//
+//		TextLineSpecAverageTime.String()
+//		TextLineSpecAverageTime.TextBuilder()
+//		TextLineSpecAverageTime.GetFormattedText()
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//
+//		The formatted text line output generated by the
+//		current instance of TextLineSpecAverageTime.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (txtLineAvgTime *TextLineSpecAverageTime) GetFormattedText(
+	errorPrefix interface{}) (
+	string,
+	error) {
+
+	if txtLineAvgTime.lock == nil {
+		txtLineAvgTime.lock = new(sync.Mutex)
+	}
+
+	txtLineAvgTime.lock.Lock()
+
+	defer txtLineAvgTime.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecAverageTime.GetFormattedText()",
+		"")
+
+	if err != nil {
+		return "", err
+	}
+
+	return new(textLineSpecAverageTimeMechanics).
+		getFormattedText(
+			txtLineAvgTime,
+			ePrefix.XCpy(
+				"<-txtLineAvgTime Formatted Text"))
+}
+
+//	IsValidInstance
+//
+//	Performs a diagnostic review of the data values
+//	encapsulated in the current TextLineSpecAverageTime
+//	instance to determine if they are valid.
+//
+//	If any data element evaluates as invalid, this method
+//	will return a boolean value of 'false'.
+//
+//	If all data elements are determined to be valid, this
+//	method returns a boolean value of 'true'.
+//
+//	This method is functionally equivalent to method:
+//
+//		TextLineSpecAverageTime.IsValidInstanceError()
+//
+//	The difference between that method and this is that
+//	this method takes no input parameters and returns a
+//	boolean value.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	-- NONE --
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	bool
+//
+//		If any of the internal member data variables
+//		contained in the current instance of
+//		TextLineSpecAverageTime are found to be invalid,
+//		this method will return a boolean value of
+//		'false'.
+//
+//		Conversely, if all internal member data variables
+//		contained in the current instance of
+//		TextLineSpecAverageTime are found to be valid,
+//		this method returns a boolean value of 'true'.
+func (txtLineAvgTime *TextLineSpecAverageTime) IsValidInstance() bool {
+
+	if txtLineAvgTime.lock == nil {
+		txtLineAvgTime.lock = new(sync.Mutex)
+	}
+
+	txtLineAvgTime.lock.Lock()
+
+	defer txtLineAvgTime.lock.Unlock()
+
+	isValid,
+		_ := new(textLineSpecAverageTimeElectron).
+		testValidityOfTxtLineAvgTimer(
+			txtLineAvgTime,
+			nil)
+
+	return isValid
+}
+
+//	IsValidInstanceError
+//
+//	Performs a diagnostic review of the data values
+//	encapsulated in the current instance of
+//	TextLineSpecAverageTime to determine if they are
+//	valid.
+//
+//	If any data element evaluates as invalid, this
+//	method will return an error containing an appropriate
+//	error message.
+//
+//	This method fulfills requirements of interface
+//	ITextLineSpecification.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If any of the internal member data variables
+//		contained in the current instance of
+//		TextLineSpecAverageTime are found to be invalid,
+//		this method will return an error containing an
+//		appropriate error message.
+//
+//		If an error message is returned, the text value
+//		of input parameter 'errorPrefix' (error prefix)
+//		will be inserted or prefixed at the beginning of
+//		the error message.
+func (txtLineAvgTime *TextLineSpecAverageTime) IsValidInstanceError(
+	errorPrefix interface{}) error {
+
+	if txtLineAvgTime.lock == nil {
+		txtLineAvgTime.lock = new(sync.Mutex)
+	}
+
+	txtLineAvgTime.lock.Lock()
+
+	defer txtLineAvgTime.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecAverageTime."+
+			"IsValidInstanceError()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	_,
+		err = new(textLineSpecAverageTimeElectron).
+		testValidityOfTxtLineAvgTimer(
+			txtLineAvgTime,
+			ePrefix.XCpy(
+				"txtLineAvgTime"))
+
+	return err
+}
+
 //	New
 //
 //	Returns an initialized instance of
@@ -564,6 +1068,269 @@ func (txtLineAvgTime *TextLineSpecAverageTime) New() TextLineSpecAverageTime {
 	return newAvgTimer
 }
 
+//	Read
+//
+//	Implements the io.Reader interface for type
+//	TextLineSpecAverageTime.
+//
+//	The formatted text line string generated by the
+//	current instance of TextLineSpecAverageTime will be
+//	written to the byte buffer 'p'. If the length of 'p'
+//	is less than the length of the formatted text line
+//	string, multiple calls to this method will write the
+//	remaining unread characters to the byte buffer 'p'.
+//
+//	Read() supports buffered 'read' operations.
+//
+//	This method reads up to len(p) bytes into p. It
+//	returns the number of bytes read (0 <= n <= len(p))
+//	and any error encountered. Even if read returns
+//	n < len(p), it may use all of p as scratch space
+//	during the call.
+//
+//	If some data is available but not len(p) bytes,
+//	readBytes() conventionally returns what is available
+//	instead of waiting for more.
+//
+//	When this method encounters an error or end-of-file
+//	condition after successfully reading n > 0 bytes, it
+//	returns the number of bytes read. It may return the
+//	(non-nil) error from the same call or return the
+//	error (and n == 0) from a subsequent call.
+//
+//	An instance of this general case is that a Reader
+//	returning a non-zero number of bytes at the end of
+//	the input stream may return either 'err == EOF' or
+//	'err == nil'. The next read operation should return
+//	'0, EOF'.
+//
+//	Callers should always process the n > 0 bytes
+//	returned before considering the error 'err'. Doing so
+//	correctly handles I/O errors that happen after reading
+//	some bytes and also both of the allowed EOF behaviors.
+//
+//	The last read operation performed on the formatted
+//	text string will always return 'n==0' and
+//	'err==io.EOF'.
+//
+//	This method fulfills requirements of interface
+//	ITextLineSpecification.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	p							[]byte
+//
+//		The byte buffer into which the formatted text line string
+//		generated by the current TextLineSpecAverageTime instance
+//		will be written.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	n							int
+//
+//		The number of bytes written to byte buffer 'p'.
+//
+//		Read() reads up to len(p) bytes into p. It returns
+//		the number of bytes read (0 <= n <= len(p)) and any error
+//		encountered. Even if Read() returns n < len(p), it may use
+//		all of 'p' as scratch space during the call. If some
+//		data is available but not len(p) bytes, Read()
+//		conventionally returns what is available instead of
+//		waiting for more.
+//
+//
+//	err							error
+//
+//		If this method completes successfully, this returned error
+//		Type is set equal to 'nil'. If errors are encountered
+//		during processing, the returned error Type will
+//		encapsulate an error message.
+//
+//		When Read() encounters an error or end-of-file condition
+//		after successfully reading n > 0 bytes, it returns the
+//		number of bytes read. It may return the (non-nil) error
+//		from the same call or return the error (and n == 0) from
+//		a subsequent call. An instance of this general case is
+//		that a Reader returning a non-zero number of bytes at the
+//		end of the input stream may return either err == EOF or
+//		err == nil. The next read operation should return 0, EOF.
+//
+// ----------------------------------------------------------------
+//
+// # Usage
+//
+//	Example # 1
+//
+//		p := make([]byte, 50)
+//
+//		var n, readBytesCnt int
+//		sb := strings.Builder{}
+//
+//		for {
+//
+//		  n,
+//		  err = avgTimer01.Read(p)
+//
+//		  if n == 0 {
+//		    break
+//		  }
+//
+//		  sb.Write(p[:n])
+//		  readBytesCnt += n
+//		}
+//
+//		if err != nil &&
+//		  err != io.EOF {
+//		   return fmt.Errorf(
+//		    "Error Returned From avgTimer01.Read(p)\n"+
+//		    "Error = \n%v\n",
+//		     err.Error())
+//		}
+//
+//		fmt.Printf("Text Line String: %s\n",
+//		              sb.String())
+//
+//		fmt.Printf("Number of bytes Read: %v\n",
+//		              readBytesCnt)
+//
+//	Example # 2
+//
+//		p := make([]byte, 50)
+//
+//		var n, readBytesCnt int
+//		var actualStr string
+//
+//		for {
+//
+//		  n,
+//		  err = avgTimer01.Read(p)
+//
+//		  if n == 0 {
+//		    break
+//		  }
+//
+//		  actualStr += string(p[:n])
+//		  readBytesCnt += n
+//		}
+//
+//		if err != nil &&
+//		  err != io.EOF {
+//		   return fmt.Errorf(
+//		    "Error Returned From avgTimer01.Read(p)\n"+
+//		    "Error = \n%v\n",
+//		     err.Error())
+//		}
+//
+//		fmt.Printf("Text Line String: %v\n",
+//		              actualStr)
+//
+//		fmt.Printf("Number of bytes Read: %v\n",
+//		              readBytesCnt)
+func (txtLineAvgTime *TextLineSpecAverageTime) Read(
+	p []byte) (
+	n int,
+	err error) {
+
+	if txtLineAvgTime.lock == nil {
+		txtLineAvgTime.lock = new(sync.Mutex)
+	}
+
+	txtLineAvgTime.lock.Lock()
+
+	defer txtLineAvgTime.lock.Unlock()
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TextLineSpecBlankLines.Read()",
+		"")
+
+	if txtLineAvgTime.textLineReader == nil {
+
+		var formattedText string
+
+		formattedText,
+			err = new(textLineSpecAverageTimeMechanics).
+			getFormattedText(
+				txtLineAvgTime,
+				ePrefix.XCpy(
+					"<-txtLineAvgTime Formatted Text"))
+
+		if err != nil {
+			return n, err
+		}
+
+		txtLineAvgTime.textLineReader =
+			strings.NewReader(formattedText)
+
+		if txtLineAvgTime.textLineReader == nil {
+			err = fmt.Errorf("%v\n"+
+				"Error: strings.NewReader(formattedText)\n"+
+				"returned a nil pointer.\n"+
+				"txtLineAvgTime.textLineReader == nil\n",
+				ePrefix.String())
+
+			return n, err
+		}
+	}
+
+	n,
+		err = new(textSpecificationAtom).
+		readBytes(
+			txtLineAvgTime.textLineReader,
+			p,
+			ePrefix.XCpy(
+				"p -> txtLineAvgTime.textLineReader"))
+
+	if err == io.EOF {
+
+		txtLineAvgTime.textLineReader = nil
+
+	}
+
+	return n, err
+}
+
+// ReaderInitialize
+//
+// This method will reset the internal member variable
+// 'TextLineSpecAverageTime.textLineReader' to its
+// initial zero state of 'nil'.
+//
+// This method is rarely used. It provides a means of
+// reinitializing the internal strings.Reader in case an
+// error occurs during a read operation initiated by
+// method TextLineSpecAverageTime.Read().
+//
+// Calling this method cleans up the residue from an
+// aborted read operation and allows the calling
+// function to start a new read operation.
+//
+// If any errors are returned by method
+// TextLineSpecAverageTime.Read() which are NOT equal to
+// io.EOF, call this method,
+// TextLineSpecAverageTime.ReaderInitialize(), to reset
+// the internal reader for future read operations.
+//
+// This method fulfills requirements of interface
+// ITextLineSpecification.
+func (txtLineAvgTime *TextLineSpecAverageTime) ReaderInitialize() {
+
+	if txtLineAvgTime.lock == nil {
+		txtLineAvgTime.lock = new(sync.Mutex)
+	}
+
+	txtLineAvgTime.lock.Lock()
+
+	defer txtLineAvgTime.lock.Unlock()
+
+	txtLineAvgTime.textLineReader = nil
+
+	return
+}
+
 //	SetInitializeTimerToZero
 //
 //	Reinitializes the internal timers to zero for the
@@ -578,7 +1345,7 @@ func (txtLineAvgTime *TextLineSpecAverageTime) New() TextLineSpecAverageTime {
 //
 // # IMPORTANT
 //
-//	All previously collected time event duration data
+//	All previously collected time duration and event data
 //	will be deleted by this method.
 //
 // ----------------------------------------------------------------
@@ -606,4 +1373,304 @@ func (txtLineAvgTime *TextLineSpecAverageTime) SetInitializeTimerToZero() {
 	txtLineAvgTime.totalDurationNanoSecs.SetInt64(0)
 
 	return
+}
+
+//	String
+//
+//	Returns the formatted text for output and printing.
+//
+//	The value of 'blkLines.newLineChars' will be
+//	replicated multiple times as specified by
+//	'blkLines.numBlankLines'.
+//
+//	If an error occurs, the error message will be
+//	included in the returned string.
+//
+//	This method is similar to
+//	TextLineSpecAverageTime.GetFormattedText() with the
+//	sole difference being that this method does not
+//	return an error.
+//
+//	This method fulfills requirements of interface
+//	ITextLineSpecification.
+//
+//	This method also fulfills the requirements of the
+//	'Stringer' interface defined in the Golang package
+//	'fmt'. Reference:
+//
+//		https://pkg.go.dev/fmt#Stringer
+//
+//	Methods which return formatted text are listed as
+//	follows:
+//
+//		TextLineSpecAverageTime.String()
+//		TextLineSpecAverageTime.TextBuilder()
+//		TextLineSpecAverageTime.GetFormattedText()
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	--- NONE ---
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//
+//		If this method completes successfully, this
+//		string will contain the formatted text generated
+//		by the current instance of
+//		TextLineSpecAverageTime.
+//
+//		If an error condition is encountered, this string
+//		will contain an appropriate error message. This
+//		error message will contain the word 'Error'.
+func (txtLineAvgTime TextLineSpecAverageTime) String() string {
+
+	if txtLineAvgTime.lock == nil {
+		txtLineAvgTime.lock = new(sync.Mutex)
+	}
+
+	txtLineAvgTime.lock.Lock()
+
+	defer txtLineAvgTime.lock.Unlock()
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TextLineSpecAverageTime.String()",
+		"")
+
+	formattedText,
+		err := new(textLineSpecAverageTimeMechanics).
+		getFormattedText(
+			&txtLineAvgTime,
+			ePrefix.XCpy(
+				"formattedText<-txtLineAvgTime Formatted Text"))
+
+	if err != nil {
+		formattedText = fmt.Sprintf("%v\n",
+			err.Error())
+	}
+
+	return formattedText
+}
+
+//	TextBuilder
+//
+//	Configures the line of text produced by this instance
+//	of TextLineSpecAverageTime, and writes it to an
+//	instance of strings.Builder.
+//
+//	This method fulfills requirements of interface
+//	ITextLineSpecification.
+//
+//	Methods which return formatted text are listed as
+//	follows:
+//
+//		TextLineSpecAverageTime.String()
+//		TextLineSpecAverageTime.GetFormattedText()
+//		TextLineSpecAverageTime.TextBuilder()
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	strBuilder					*strings.Builder
+//
+//		A pointer to an instance of *strings.Builder. The
+//		formatted text characters produced by this method
+//		will be written to this instance of
+//		strings.Builder.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (txtLineAvgTime *TextLineSpecAverageTime) TextBuilder(
+	strBuilder *strings.Builder,
+	errorPrefix interface{}) error {
+
+	if txtLineAvgTime.lock == nil {
+		txtLineAvgTime.lock = new(sync.Mutex)
+	}
+
+	txtLineAvgTime.lock.Lock()
+
+	defer txtLineAvgTime.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecAverageTime.TextBuilder()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if strBuilder == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'strBuilder' is invalid!\n"+
+			"'strBuilder' is a nil pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	formattedText,
+		err := new(textLineSpecAverageTimeMechanics).
+		getFormattedText(
+			txtLineAvgTime,
+			ePrefix.XCpy(
+				"formattedText<-txtLineAvgTime Formatted Text"))
+
+	if err != nil {
+		return err
+	}
+
+	lenFormattedText := len(formattedText)
+
+	netCapacityStrBuilder :=
+		strBuilder.Cap() -
+			strBuilder.Len()
+
+	requiredCapacity :=
+		lenFormattedText - netCapacityStrBuilder
+
+	if requiredCapacity > 0 {
+
+		strBuilder.Grow(requiredCapacity + 16)
+	}
+
+	var err2 error
+
+	_,
+		err2 = strBuilder.WriteString(formattedText)
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error returned by sBuilder.WriteString(formattedTxtStr)\n"+
+			"%v\n",
+			ePrefix.String(),
+			err2.Error())
+	}
+
+	return err
+}
+
+// TextLineSpecName
+//
+// Returns Text Line Specification Name.
+//
+// This method fulfills requirements of interface
+// ITextLineSpecification.
+func (txtLineAvgTime *TextLineSpecAverageTime) TextLineSpecName() string {
+
+	if txtLineAvgTime.lock == nil {
+		txtLineAvgTime.lock = new(sync.Mutex)
+	}
+
+	txtLineAvgTime.lock.Lock()
+
+	defer txtLineAvgTime.lock.Unlock()
+
+	return "AverageTime"
+}
+
+// TextTypeName
+//
+// Returns a string specifying the type of Text Line
+// specification.
+//
+// This method fulfills requirements of interface
+// ITextLineSpecification.
+func (txtLineAvgTime *TextLineSpecAverageTime) TextTypeName() string {
+
+	if txtLineAvgTime.lock == nil {
+		txtLineAvgTime.lock = new(sync.Mutex)
+	}
+
+	txtLineAvgTime.lock.Lock()
+
+	defer txtLineAvgTime.lock.Unlock()
+
+	return "TextLineSpecAverageTime"
+
 }

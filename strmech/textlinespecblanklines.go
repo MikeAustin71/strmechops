@@ -20,8 +20,7 @@ import (
 // To override the default line termination character
 // (newline '\n'), see method:
 //
-//      TextLineSpecBlankLines.SetNewLineChars()
-//
+//	TextLineSpecBlankLines.SetNewLineChars()
 type TextLineSpecBlankLines struct {
 	numBlankLines  int
 	newLineChars   []rune
@@ -37,84 +36,81 @@ type TextLineSpecBlankLines struct {
 // All the data fields in current TextLineSpecBlankLines
 // instance ('blkLines') will be modified and overwritten.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  incomingBlkLines    *TextLineSpecBlankLines
-//     - A pointer to an instance of TextLineSpecBlankLines. This
-//       method will NOT change the values of internal member
-//       variables contained in this instance.
+//	incomingBlkLines    *TextLineSpecBlankLines
+//	   - A pointer to an instance of TextLineSpecBlankLines. This
+//	     method will NOT change the values of internal member
+//	     variables contained in this instance.
 //
-//       All data values in this TextLineSpecBlankLines instance
-//       will be copied to current TextLineSpecBlankLines
-//       instance ('blkLines').
+//	     All data values in this TextLineSpecBlankLines instance
+//	     will be copied to current TextLineSpecBlankLines
+//	     instance ('blkLines').
 //
-//       If 'incomingBlkLines' contains invalid member data
-//       variables, this method will return an error.
-//
-//
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
-//
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
-//
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     If 'incomingBlkLines' contains invalid member data
+//	     variables, this method will return an error.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       2. string - A string containing error prefix information.
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     2. string - A string containing error prefix information.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     4. [][2]string A two-dimensional slice of strings containing
+//	                    error prefix and error context information.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	                        ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (blkLines *TextLineSpecBlankLines) CopyIn(
 	incomingBlkLines *TextLineSpecBlankLines,
 	errorPrefix interface{}) error {
@@ -153,77 +149,74 @@ func (blkLines *TextLineSpecBlankLines) CopyIn(
 // If the current TextLineSpecBlankLines instance contains invalid
 // member variables, this method will return an error.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       2. string - A string containing error prefix information.
+//	     2. string - A string containing error prefix information.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//	     4. [][2]string A two-dimensional slice of strings containing
+//	                    error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	                        ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
-//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  TextLineSpecBlankLines
-//     - If this method completes successfully and no errors are
-//       encountered, this parameter will return a deep copy of the
-//       current TextLineSpecBlankLines instance.
+//	TextLineSpecBlankLines
+//	   - If this method completes successfully and no errors are
+//	     encountered, this parameter will return a deep copy of the
+//	     current TextLineSpecBlankLines instance.
 //
 //
-//  error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (blkLines *TextLineSpecBlankLines) CopyOut(
 	errorPrefix interface{}) (
 	TextLineSpecBlankLines,
@@ -261,85 +254,102 @@ func (blkLines *TextLineSpecBlankLines) CopyOut(
 	return newBlankLinesSpec, err
 }
 
-// CopyOutITextLine - Returns a deep copy of the current
-// TextLineSpecBlankLines instance cast as a type
-// ITextLineSpecification.
+//	CopyOutITextLine
 //
-// This method fulfills requirements of ITextLineSpecification
-// interface.
+//	Returns a deep copy of the current
+//	TextLineSpecBlankLines instance cast as a type
+//	ITextLineSpecification.
 //
+//	This method fulfills requirements of interface
+//	ITextLineSpecification.
 //
 // ----------------------------------------------------------------
 //
-// Input Parameters
+// # Input Parameters
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	errorPrefix					interface{}
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
 //
+//		This empty interface must be convertible to one
+//		of the following types:
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
 //
-//       2. string - A string containing error prefix information.
+//		2.	string
+//				A string containing error prefix
+//				information.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
 //
+// ----------------------------------------------------------------
 //
-// ------------------------------------------------------------------------
+// # Return Values
 //
-// Return Values
+//	ITextLineSpecification
 //
-//  ITextLineSpecification
-//     - If this method completes successfully and no errors are
-//       encountered, this parameter will return a deep copy of the
-//       current TextLineSpecBlankLines instance cast as an
-//       ITextLineSpecification object.
+//		If this method completes successfully and no
+//		errors are encountered, this parameter will
+//		return a deep copy of the current
+//		TextLineSpecBlankLines instance cast as an
+//		ITextLineSpecification object.
 //
+//	error
 //
-//  error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
 func (blkLines *TextLineSpecBlankLines) CopyOutITextLine(
 	errorPrefix interface{}) (
 	ITextLineSpecification,
@@ -381,77 +391,74 @@ func (blkLines *TextLineSpecBlankLines) CopyOutITextLine(
 // CopyOutPtr - Returns a pointer to a deep copy of the current
 // TextLineSpecBlankLines instance.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       2. string - A string containing error prefix information.
+//	     2. string - A string containing error prefix information.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//	     4. [][2]string A two-dimensional slice of strings containing
+//	                    error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	                        ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
-//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  *TextLineSpecBlankLines
-//     - If this method completes successfully and no errors are
-//       encountered, this parameter will return a pointer to a
-//       deep copy of the current TextLineSpecBlankLines instance.
+//	*TextLineSpecBlankLines
+//	   - If this method completes successfully and no errors are
+//	     encountered, this parameter will return a pointer to a
+//	     deep copy of the current TextLineSpecBlankLines instance.
 //
 //
-//  error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (blkLines *TextLineSpecBlankLines) CopyOutPtr(
 	errorPrefix interface{}) (
 	*TextLineSpecBlankLines,
@@ -491,7 +498,6 @@ func (blkLines *TextLineSpecBlankLines) CopyOutPtr(
 
 // Empty - Resets all internal member variables to their initial
 // or zero states.
-//
 func (blkLines *TextLineSpecBlankLines) Empty() {
 
 	if blkLines.lock == nil {
@@ -516,7 +522,6 @@ func (blkLines *TextLineSpecBlankLines) Empty() {
 // returned. If the member variables of both instances are equal in
 // all respects, this flag is set to 'true'. Otherwise, this method
 // returns 'false'.
-//
 func (blkLines *TextLineSpecBlankLines) Equal(
 	incomingBlkLines *TextLineSpecBlankLines) bool {
 
@@ -533,19 +538,21 @@ func (blkLines *TextLineSpecBlankLines) Equal(
 		incomingBlkLines)
 }
 
-// EqualITextLine - Receives an object implementing the
-// ITextLineSpecification interface and proceeds to compare
-// the member variables to those of the current
-// TextLineSpecBlankLines instance in order to determine if
-// they are equivalent.
+// EqualITextLine
 //
-// A boolean flag showing the result of this comparison is
-// returned. If the member variables from both instances are equal
-// in all respects, this flag is set to 'true'. Otherwise, this
-// method returns 'false'.
+// Receives an object implementing the
+// ITextLineSpecification interface and proceeds to
+// compare the member variables to those of the current
+// TextLineSpecBlankLines instance in order to determine
+// if they are equivalent.
 //
-// This method is required by interface ITextLineSpecification.
+// A boolean flag showing the result of this comparison
+// is returned. If the member variables from both
+// instances are equal in all respects, this flag is set
+// to 'true'. Otherwise, this method returns 'false'.
 //
+// This method is required by interface
+// ITextLineSpecification.
 func (blkLines *TextLineSpecBlankLines) EqualITextLine(
 	iTextLine ITextLineSpecification) bool {
 
@@ -568,95 +575,112 @@ func (blkLines *TextLineSpecBlankLines) EqualITextLine(
 		txtBlkLine)
 }
 
-// GetFormattedText - Returns the formatted text for output and
-// printing.
+//	GetFormattedText
 //
-// The value of 'blkLines.newLineChars' will be replicated
-// multiple times as specified by 'blkLines.numBlankLines'.
+//	Returns the calculated average time for the subject
+//	operation as formatted text for screen display, file
+//	output or printing.
 //
-// This method is similar to TextLineSpecBlankLines.String() with
-// the sole difference being that this method returns an error.
+//	This method is similar to method:
+//		TextLineSpecBlankLines.String()
 //
-// This method fulfills requirements of the ITextLineSpecification
-// interface.
+//	The sole difference being that method and this is the
+//	return type. This method returns an error.
 //
-// Methods which return formatted text are listed as follows:
-//  TextLineSpecBlankLines.String()
-//  TextLineSpecBlankLines.TextBuilder()
-//  TextLineSpecBlankLines.GetFormattedText()
+//	This method fulfills requirements of interface
+//	ITextLineSpecification.
 //
+//	Methods which return formatted text are listed as
+//	follows:
+//
+//		TextLineSpecBlankLines.String()
+//		TextLineSpecBlankLines.TextBuilder()
+//		TextLineSpecBlankLines.GetFormattedText()
 //
 // ----------------------------------------------------------------
 //
-// Input Parameters
+// # Input Parameters
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	errorPrefix					interface{}
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
 //
+//		This empty interface must be convertible to one
+//		of the following types:
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
 //
-//       2. string - A string containing error prefix information.
+//		2.	string
+//				A string containing error prefix
+//				information.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
 //
-//       4. [][2]string A two-dimensional slice of strings
-//                      containing error prefix and error context
-//                      information.
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
 //
+// ----------------------------------------------------------------
 //
-// ------------------------------------------------------------------------
+// # Return Values
 //
-// Return Values
+//	string
 //
-//  string
-//     - The formatted text line generated by the current instance
-//       of TextLineSpecBlankLines.
+//		The formatted text line output generated by the
+//		current instance of TextLineSpecBlankLines.
 //
+//	error
 //
-//  error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
 func (blkLines *TextLineSpecBlankLines) GetFormattedText(
 	errorPrefix interface{}) (
 	string,
@@ -696,7 +720,6 @@ func (blkLines *TextLineSpecBlankLines) GetFormattedText(
 // All blank lines produced by the current instance of
 // TextLineSpecBlankLines will be terminated with this character
 // string.
-//
 func (blkLines *TextLineSpecBlankLines) GetNewLineChars() string {
 
 	if blkLines.lock == nil {
@@ -721,7 +744,6 @@ func (blkLines *TextLineSpecBlankLines) GetNewLineChars() string {
 // All blank lines produced by the current instance of
 // TextLineSpecBlankLines will be terminated with the character
 // or characters contained in this rune array.
-//
 func (blkLines *TextLineSpecBlankLines) GetNewLineRunes() []rune {
 
 	if blkLines.lock == nil {
@@ -742,7 +764,6 @@ func (blkLines *TextLineSpecBlankLines) GetNewLineRunes() []rune {
 // GetNumOfBlankLines - Returns an integer value signifying the
 // number of blank lines which will be produced by this
 // TextLineSpecBlankLines instance.
-//
 func (blkLines *TextLineSpecBlankLines) GetNumOfBlankLines() int {
 
 	if blkLines.lock == nil {
@@ -760,44 +781,48 @@ func (blkLines *TextLineSpecBlankLines) GetNumOfBlankLines() int {
 	return blkLines.numBlankLines
 }
 
-// IsValidInstance - Performs a diagnostic review of the data
-// values encapsulated in the current TextLineSpecBlankLines
-// instance to determine if they are valid.
+//	IsValidInstance
 //
-// If any data element evaluates as invalid, this method will
-// return a boolean value of 'false'.
+//	Performs a diagnostic review of the data values
+//	encapsulated in the current TextLineSpecBlankLines
+//	instance to determine if they are valid.
 //
-// If all data elements are determined to be valid, this method
-// returns a boolean value of 'true'.
+//	If any data element evaluates as invalid, this method
+//	will return a boolean value of 'false'.
 //
-// This method is functionally equivalent to
-// TextLineSpecBlankLines.IsValidInstanceError() with the sole
-// exceptions being that this method takes no input parameters and
-// returns a boolean value.
+//	If all data elements are determined to be valid, this
+//	method returns a boolean value of 'true'.
 //
+//	This method is functionally equivalent to method:
 //
-// ------------------------------------------------------------------------
+//		TextLineSpecBlankLines.IsValidInstanceError()
 //
-// Input Parameters
+//	The difference between that method and this is that
+//	this method takes no input parameters and returns a
+//	boolean value.
 //
-//  -- NONE --
+// ----------------------------------------------------------------
 //
+// # Input Parameters
 //
-// ------------------------------------------------------------------------
+//	-- NONE --
 //
-// Return Values
+// ----------------------------------------------------------------
 //
-//  bool
-//     - If any of the internal member data variables contained in
-//       the current instance of TextLineSpecBlankLines are found
-//       to be invalid, this method will return a boolean value of
-//       'false'.
+// # Return Values
 //
-//       Conversely, if all internal member data variables
-//       contained in the current instance of
-//       TextLineSpecBlankLines are found to be valid, this method
-//       returns a boolean value of 'true'.
+//	bool
 //
+//		If any of the internal member data variables
+//		contained in the current instance of
+//		TextLineSpecBlankLines are found to be invalid,
+//		this method will return a boolean value of
+//		'false'.
+//
+//		Conversely, if all internal member data variables
+//		contained in the current instance of
+//		TextLineSpecBlankLines are found to be valid,
+//		this method returns a boolean value of 'true'.
 func (blkLines *TextLineSpecBlankLines) IsValidInstance() bool {
 
 	if blkLines.lock == nil {
@@ -817,85 +842,104 @@ func (blkLines *TextLineSpecBlankLines) IsValidInstance() bool {
 	return isValid
 }
 
-// IsValidInstanceError - Performs a diagnostic review of the data
-// values encapsulated in the current TextLineSpecStandardLine
-// instance to determine if they are valid.
+//	IsValidInstanceError
 //
-// If any data element evaluates as invalid, this method will
-// return an error.
+//	Performs a diagnostic review of the data values
+//	encapsulated in the current instance of
+//	TextLineSpecStandardLine to determine if they are
+//	valid.
 //
-// If the number of standard lines for the current
-// TextLineSpecBlankLines is set to a value less than one, this
-// method will consider the current TextLineSpecBlankLines instance
-// invalid and return an error.
+//	If any data element evaluates as invalid, this
+//	method will return an error.
 //
-// This method fulfills requirements of ITextLineSpecification
-// interface.
+//	If the number of standard lines for the current
+//	TextLineSpecBlankLines is set to a value less than
+//	one, this method will consider the current
+//	TextLineSpecBlankLines instance invalid and return an
+//	error.
 //
+//	This method fulfills requirements of interface
+//	ITextLineSpecification.
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
-// Input Parameters
+// # Input Parameters
 //
-//  errorPrefix         interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	errorPrefix					interface{}
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
 //
+//		This empty interface must be convertible to one
+//		of the following types:
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
 //
-//       2. string - A string containing error prefix information.
+//		2.	string
+//				A string containing error prefix
+//				information.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
 //
+// ----------------------------------------------------------------
 //
-// ------------------------------------------------------------------------
+// # Return Values
 //
-// Return Values
+//	error
 //
-//  error
-//     - If any of the internal member data variables contained in
-//       the current instance of TextLineSpecBlankLines are found
-//       to be invalid, this method will return an error.
+//		If any of the internal member data variables
+//		contained in the current instance of
+//		TextLineSpecBlankLines are found to be invalid,
+//		this method will return an error containing an
+//		appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' (error prefix) will be inserted or
-//       prefixed at the beginning of the error message.
-//
+//		If an error message is returned, the text value
+//		of input parameter 'errorPrefix' (error prefix)
+//		will be inserted or prefixed at the beginning of
+//		the error message.
 func (blkLines *TextLineSpecBlankLines) IsValidInstanceError(
 	errorPrefix interface{}) error {
 
@@ -938,97 +982,94 @@ func (blkLines *TextLineSpecBlankLines) IsValidInstanceError(
 // character or characters configured for the returned instance
 // of TextLineSpecBlankLines.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  numOfBlankLines            int
-//     - The number of blank lines which will be generated by the
-//       returned instance of TextLineSpecBlankLines.
+//	numOfBlankLines            int
+//	   - The number of blank lines which will be generated by the
+//	     returned instance of TextLineSpecBlankLines.
 //
-//       If input parameter 'numOfBlankLines' is less than one (1),
-//       it is invalid and an error will be returned.
+//	     If input parameter 'numOfBlankLines' is less than one (1),
+//	     it is invalid and an error will be returned.
 //
-//       If input parameter 'numOfBlankLines' is greater than
-//       one-million (1,000,000), it is invalid and an error will
-//       be returned.
-//
-//
-//  newLineChars               string
-//     - The line termination character or characters which will be
-//       applied to every blank line produced by the returned
-//       instance of TextLineSpecBlankLines.
-//
-//       If this parameter is submitted as a zero length string, an
-//       error will be returned.
+//	     If input parameter 'numOfBlankLines' is greater than
+//	     one-million (1,000,000), it is invalid and an error will
+//	     be returned.
 //
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	newLineChars               string
+//	   - The line termination character or characters which will be
+//	     applied to every blank line produced by the returned
+//	     instance of TextLineSpecBlankLines.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     If this parameter is submitted as a zero length string, an
+//	     error will be returned.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       2. string - A string containing error prefix information.
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     2. string - A string containing error prefix information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     4. [][2]string A two-dimensional slice of strings containing
+//	                    error prefix and error context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	                        ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  TextLineSpecBlankLines
-//     - If this method completes successfully, a valid and fully
-//       populated concrete instance of TextLineSpecBlankLines will
-//       be returned.
+//	TextLineSpecBlankLines
+//	   - If this method completes successfully, a valid and fully
+//	     populated concrete instance of TextLineSpecBlankLines will
+//	     be returned.
 //
 //
-//  error
-//     - If this method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If this method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (blkLines TextLineSpecBlankLines) NewBlankLines(
 	numOfBlankLines int,
 	newLineChars string,
@@ -1080,98 +1121,95 @@ func (blkLines TextLineSpecBlankLines) NewBlankLines(
 // character or characters configured for the returned instance
 // of TextLineSpecBlankLines.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  numOfBlankLines            int
-//     - The number of blank lines which will be generated by the
-//       returned instance of TextLineSpecBlankLines.
+//	numOfBlankLines            int
+//	   - The number of blank lines which will be generated by the
+//	     returned instance of TextLineSpecBlankLines.
 //
-//       If input parameter 'numOfBlankLines' is less than one (1),
-//       it is invalid and an error will be returned.
+//	     If input parameter 'numOfBlankLines' is less than one (1),
+//	     it is invalid and an error will be returned.
 //
-//       If input parameter 'numOfBlankLines' is greater than
-//       one-million (1,000,000), it is invalid and an error will
-//       be returned.
-//
-//
-//  newLineRunes               []rune
-//     - This rune array holds the text character or characters
-//       which will be used as the line termination sequence for
-//       all blank lines generated by the returned instance of
-//       TextLineSpecBlankLines.
-//
-//       If this parameter is submitted as a 'nil' value or a zero
-//       length rune array, an error will be returned.
+//	     If input parameter 'numOfBlankLines' is greater than
+//	     one-million (1,000,000), it is invalid and an error will
+//	     be returned.
 //
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	newLineRunes               []rune
+//	   - This rune array holds the text character or characters
+//	     which will be used as the line termination sequence for
+//	     all blank lines generated by the returned instance of
+//	     TextLineSpecBlankLines.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     If this parameter is submitted as a 'nil' value or a zero
+//	     length rune array, an error will be returned.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       2. string - A string containing error prefix information.
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     2. string - A string containing error prefix information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     4. [][2]string A two-dimensional slice of strings containing
+//	                    error prefix and error context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	                        ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  TextLineSpecBlankLines
-//     - If this method completes successfully, a valid, fully
-//       populated, concrete instance of TextLineSpecBlankLines will
-//       be returned.
+//	TextLineSpecBlankLines
+//	   - If this method completes successfully, a valid, fully
+//	     populated, concrete instance of TextLineSpecBlankLines will
+//	     be returned.
 //
 //
-//  error
-//     - If this method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If this method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (blkLines TextLineSpecBlankLines) NewBlankLineRunes(
 	numOfBlankLines int,
 	newLineRunes []rune,
@@ -1223,95 +1261,93 @@ func (blkLines TextLineSpecBlankLines) NewBlankLineRunes(
 // line character '\n'. However, users have the option to
 // substitute one or more text characters for use as the line
 // termination sequence by calling one of the following methods:
-//  TextLineSpecBlankLines.NewBlankLines()
-//  TextLineSpecBlankLines.NewPtrBlankLines()
-//  TextLineSpecBlankLines.NewBlankLineRunes()
-//  TextLineSpecBlankLines.SetSpecBlankLines()
-//  TextLineSpecBlankLines.SetSpecBlankLineRunes()
-//  TextLineSpecBlankLines.SetNewLineChars()
 //
+//	TextLineSpecBlankLines.NewBlankLines()
+//	TextLineSpecBlankLines.NewPtrBlankLines()
+//	TextLineSpecBlankLines.NewBlankLineRunes()
+//	TextLineSpecBlankLines.SetSpecBlankLines()
+//	TextLineSpecBlankLines.SetSpecBlankLineRunes()
+//	TextLineSpecBlankLines.SetNewLineChars()
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  numOfBlankLines            int
-//     - The number of blank lines which will be generated by the
-//       returned instance of TextLineSpecBlankLines.
+//	numOfBlankLines            int
+//	   - The number of blank lines which will be generated by the
+//	     returned instance of TextLineSpecBlankLines.
 //
-//       If input parameter 'numOfBlankLines' is less than one (1),
-//       it is invalid and an error will be returned.
+//	     If input parameter 'numOfBlankLines' is less than one (1),
+//	     it is invalid and an error will be returned.
 //
-//       If input parameter 'numOfBlankLines' is greater than
-//       one-million (1,000,000), it is invalid and an error will
-//       be returned.
+//	     If input parameter 'numOfBlankLines' is greater than
+//	     one-million (1,000,000), it is invalid and an error will
+//	     be returned.
 //
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       2. string - A string containing error prefix information.
+//	     2. string - A string containing error prefix information.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//	     4. [][2]string A two-dimensional slice of strings containing
+//	                    error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	                        ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
-//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  TextLineSpecBlankLines
-//     - If this method completes successfully, a valid and fully
-//       populated concrete instance of TextLineSpecBlankLines will
-//       be returned.
+//	TextLineSpecBlankLines
+//	   - If this method completes successfully, a valid and fully
+//	     populated concrete instance of TextLineSpecBlankLines will
+//	     be returned.
 //
 //
-//  error
-//     - If this method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If this method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (blkLines TextLineSpecBlankLines) NewDefaultBlankLines(
 	numOfBlankLines int,
 	errorPrefix interface{}) (
@@ -1362,97 +1398,94 @@ func (blkLines TextLineSpecBlankLines) NewDefaultBlankLines(
 // character or characters configured for the returned instance
 // of TextLineSpecBlankLines.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  numOfBlankLines            int
-//     - The number of blank lines which will be generated by the
-//       returned instance of TextLineSpecBlankLines.
+//	numOfBlankLines            int
+//	   - The number of blank lines which will be generated by the
+//	     returned instance of TextLineSpecBlankLines.
 //
-//       If input parameter 'numOfBlankLines' is less than one (1),
-//       it is invalid and an error will be returned.
+//	     If input parameter 'numOfBlankLines' is less than one (1),
+//	     it is invalid and an error will be returned.
 //
-//       If input parameter 'numOfBlankLines' is greater than
-//       one-million (1,000,000), it is invalid and an error will
-//       be returned.
-//
-//
-//  newLineChars               string
-//     - The line termination character or characters which will be
-//       applied to every blank line produced by the returned
-//       instance of TextLineSpecBlankLines.
-//
-//       If this parameter is submitted as a zero length string, an
-//       error will be returned.
+//	     If input parameter 'numOfBlankLines' is greater than
+//	     one-million (1,000,000), it is invalid and an error will
+//	     be returned.
 //
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	newLineChars               string
+//	   - The line termination character or characters which will be
+//	     applied to every blank line produced by the returned
+//	     instance of TextLineSpecBlankLines.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     If this parameter is submitted as a zero length string, an
+//	     error will be returned.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       2. string - A string containing error prefix information.
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     2. string - A string containing error prefix information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     4. [][2]string A two-dimensional slice of strings containing
+//	                    error prefix and error context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	                        ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  *TextLineSpecBlankLines
-//     - If this method completes successfully, a pointer to a
-//       valid and fully populated instance of
-//       TextLineSpecBlankLines will be returned.
+//	*TextLineSpecBlankLines
+//	   - If this method completes successfully, a pointer to a
+//	     valid and fully populated instance of
+//	     TextLineSpecBlankLines will be returned.
 //
 //
-//  error
-//     - If this method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If this method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (blkLines TextLineSpecBlankLines) NewPtrBlankLines(
 	numOfBlankLines int,
 	newLineChars string,
@@ -1504,98 +1537,95 @@ func (blkLines TextLineSpecBlankLines) NewPtrBlankLines(
 // character or characters configured for the returned instance
 // of TextLineSpecBlankLines.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  numOfBlankLines            int
-//     - The number of blank lines which will be generated by the
-//       returned instance of TextLineSpecBlankLines.
+//	numOfBlankLines            int
+//	   - The number of blank lines which will be generated by the
+//	     returned instance of TextLineSpecBlankLines.
 //
-//       If input parameter 'numOfBlankLines' is less than one (1),
-//       it is invalid and an error will be returned.
+//	     If input parameter 'numOfBlankLines' is less than one (1),
+//	     it is invalid and an error will be returned.
 //
-//       If input parameter 'numOfBlankLines' is greater than
-//       one-million (1,000,000), it is invalid and an error will
-//       be returned.
-//
-//
-//  newLineRunes               []rune
-//     - This rune array holds the text character or characters
-//       which will be used as the line termination sequence for
-//       input parameter 'txtBlankLines', an instance of
-//       TextLineSpecBlankLines.
-//
-//       If this parameter is submitted as a 'nil' value or a zero
-//       length rune array, an error will be returned.
+//	     If input parameter 'numOfBlankLines' is greater than
+//	     one-million (1,000,000), it is invalid and an error will
+//	     be returned.
 //
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	newLineRunes               []rune
+//	   - This rune array holds the text character or characters
+//	     which will be used as the line termination sequence for
+//	     input parameter 'txtBlankLines', an instance of
+//	     TextLineSpecBlankLines.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     If this parameter is submitted as a 'nil' value or a zero
+//	     length rune array, an error will be returned.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       2. string - A string containing error prefix information.
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     2. string - A string containing error prefix information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     4. [][2]string A two-dimensional slice of strings containing
+//	                    error prefix and error context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	                        ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  *TextLineSpecBlankLines
-//     - If this method completes successfully, a pointer to a
-//       valid and fully populated instance of
-//       TextLineSpecBlankLines will be returned.
+//	*TextLineSpecBlankLines
+//	   - If this method completes successfully, a pointer to a
+//	     valid and fully populated instance of
+//	     TextLineSpecBlankLines will be returned.
 //
 //
-//  error
-//     - If this method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If this method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (blkLines TextLineSpecBlankLines) NewPtrBlankLineRunes(
 	numOfBlankLines int,
 	newLineRunes []rune,
@@ -1647,95 +1677,93 @@ func (blkLines TextLineSpecBlankLines) NewPtrBlankLineRunes(
 // line character '\n'. However, users have the option to
 // substitute one or more text characters for use as the line
 // termination sequence by calling one of the following methods:
-//  TextLineSpecBlankLines.NewBlankLines()
-//  TextLineSpecBlankLines.NewPtrBlankLines()
-//  TextLineSpecBlankLines.NewBlankLineRunes()
-//  TextLineSpecBlankLines.SetSpecBlankLines()
-//  TextLineSpecBlankLines.SetSpecBlankLineRunes()
-//  TextLineSpecBlankLines.SetNewLineChars()
 //
+//	TextLineSpecBlankLines.NewBlankLines()
+//	TextLineSpecBlankLines.NewPtrBlankLines()
+//	TextLineSpecBlankLines.NewBlankLineRunes()
+//	TextLineSpecBlankLines.SetSpecBlankLines()
+//	TextLineSpecBlankLines.SetSpecBlankLineRunes()
+//	TextLineSpecBlankLines.SetNewLineChars()
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  numOfBlankLines            int
-//     - The number of blank lines which will be generated by the
-//       returned instance of TextLineSpecBlankLines.
+//	numOfBlankLines            int
+//	   - The number of blank lines which will be generated by the
+//	     returned instance of TextLineSpecBlankLines.
 //
-//       If input parameter 'numOfBlankLines' is less than one (1),
-//       it is invalid and an error will be returned.
+//	     If input parameter 'numOfBlankLines' is less than one (1),
+//	     it is invalid and an error will be returned.
 //
-//       If input parameter 'numOfBlankLines' is greater than
-//       one-million (1,000,000), it is invalid and an error will
-//       be returned.
+//	     If input parameter 'numOfBlankLines' is greater than
+//	     one-million (1,000,000), it is invalid and an error will
+//	     be returned.
 //
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       2. string - A string containing error prefix information.
+//	     2. string - A string containing error prefix information.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//	     4. [][2]string A two-dimensional slice of strings containing
+//	                    error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	                        ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
-//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  *TextLineSpecBlankLines
-//     - If this method completes successfully, a pointer to a
-//       valid and fully populated instance of
-//       TextLineSpecBlankLines will be returned.
+//	*TextLineSpecBlankLines
+//	   - If this method completes successfully, a pointer to a
+//	     valid and fully populated instance of
+//	     TextLineSpecBlankLines will be returned.
 //
 //
-//  error
-//     - If this method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If this method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (blkLines TextLineSpecBlankLines) NewPtrDefaultBlankLines(
 	numOfBlankLines int,
 	errorPrefix interface{}) (
@@ -1777,162 +1805,168 @@ func (blkLines TextLineSpecBlankLines) NewPtrDefaultBlankLines(
 	return &newBlankLinesSpec, err
 }
 
-// Read - Implements the io.Reader interface for type
-// TextLineSpecBlankLines.
+//	Read
 //
-// The formatted text line string generated by the current
-// instance of TextLineSpecBlankLines will be written to the
-// byte buffer 'p'. If the length of 'p' is less than the length
-// of the formatted text line string, multiple calls to this method
-// will write the remaining unread characters to the byte buffer
-// 'p'.
+//	Implements the io.Reader interface for type
+//	TextLineSpecBlankLines.
 //
-// Read() supports buffered 'read' operations.
+//	The formatted text line string generated by the
+//	current instance of TextLineSpecBlankLines will be
+//	written to the byte buffer 'p'. If the length of 'p'
+//	is less than the length of the formatted text line
+//	string, multiple calls to this method will write the
+//	remaining unread characters to the byte buffer 'p'.
 //
-// This method reads up to len(p) bytes into p. It returns the
-// number of bytes read (0 <= n <= len(p)) and any error
-// encountered. Even if read returns n < len(p), it may use all
-// of p as scratch space during the call.
+//	Read() supports buffered 'read' operations.
 //
-// If some data is available but not len(p) bytes, readBytes()
-// conventionally returns what is available instead of waiting
-// for more.
+//	This method reads up to len(p) bytes into p. It
+//	returns the number of bytes read (0 <= n <= len(p))
+//	and any error encountered. Even if read returns
+//	n < len(p), it may use all of p as scratch space
+//	during the call.
 //
-// When this method encounters an error or end-of-file condition
-// after successfully reading n > 0 bytes, it returns the number
-// of bytes read. It may return the (non-nil) error from the same
-// call or return the error (and n == 0) from a subsequent call.
-// An instance of this general case is that a Reader returning
-// a non-zero number of bytes at the end of the input stream may
-// return either err == EOF or err == nil. The next read operation
-// should return 0, EOF.
+//	If some data is available but not len(p) bytes,
+//	readBytes() conventionally returns what is available
+//	instead of waiting for more.
 //
-// Callers should always process the n > 0 bytes returned before
-// considering the error err. Doing so correctly handles I/O errors
-// that happen after reading some bytes and also both of the
-// allowed EOF behaviors.
+//	When this method encounters an error or end-of-file
+//	condition after successfully reading n > 0 bytes, it
+//	returns the number of bytes read. It may return the
+//	(non-nil) error from the same call or return the
+//	error (and n == 0) from a subsequent call.
 //
-// The last read operation performed on the formatted text string
-// will always return n==0 and err==io.EOF.
+//	An instance of this general case is that a Reader
+//	returning a non-zero number of bytes at the end of
+//	the input stream may return either 'err == EOF' or
+//	'err == nil'. The next read operation should return
+//	'0, EOF'.
 //
-// This method fulfills requirements of the ITextLineSpecification
-// interface.
+//	Callers should always process the n > 0 bytes
+//	returned before considering the error 'err'. Doing so
+//	correctly handles I/O errors that happen after reading
+//	some bytes and also both of the allowed EOF behaviors.
 //
+//	The last read operation performed on the formatted
+//	text string will always return 'n==0' and
+//	'err==io.EOF'.
+//
+//	This method fulfills requirements of interface
+//	ITextLineSpecification.
 //
 // ----------------------------------------------------------------
 //
-// Input Parameters
+// # Input Parameters
 //
-//  p                          []byte
-//     - The byte buffer into which the formatted text line string
-//       generated by the current TextLineSpecBlankLines instance
-//       will be written.
+//	p							[]byte
 //
+//		The byte buffer into which the formatted text line string
+//		generated by the current TextLineSpecBlankLines instance
+//		will be written.
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
-// Return Values
+// # Return Values
 //
-//  n                          int
-//     - The number of bytes written to byte buffer 'p'.
+//	n							int
 //
-//       Read() reads up to len(p) bytes into p. It returns
-//       the number of bytes read (0 <= n <= len(p)) and any error
-//       encountered. Even if Read() returns n < len(p), it may use
-//       all of 'p' as scratch space during the call. If some
-//       data is available but not len(p) bytes, Read()
-//       conventionally returns what is available instead of
-//       waiting for more.
+//		The number of bytes written to byte buffer 'p'.
 //
-//
-//  err                        error
-//     - If this method completes successfully, this returned error
-//       Type is set equal to 'nil'. If errors are encountered
-//       during processing, the returned error Type will
-//       encapsulate an error message.
-//
-//       When Read() encounters an error or end-of-file condition
-//       after successfully reading n > 0 bytes, it returns the
-//       number of bytes read. It may return the (non-nil) error
-//       from the same call or return the error (and n == 0) from
-//       a subsequent call. An instance of this general case is
-//       that a Reader returning a non-zero number of bytes at the
-//       end of the input stream may return either err == EOF or
-//       err == nil. The next read operation should return 0, EOF.
+//		Read() reads up to len(p) bytes into p. It returns
+//		the number of bytes read (0 <= n <= len(p)) and any error
+//		encountered. Even if Read() returns n < len(p), it may use
+//		all of 'p' as scratch space during the call. If some
+//		data is available but not len(p) bytes, Read()
+//		conventionally returns what is available instead of
+//		waiting for more.
 //
 //
-// ------------------------------------------------------------------------
+//	err							error
 //
-// Usage Examples:
+//		If this method completes successfully, this returned error
+//		Type is set equal to 'nil'. If errors are encountered
+//		during processing, the returned error Type will
+//		encapsulate an error message.
 //
-//  Example # 1
+//		When Read() encounters an error or end-of-file condition
+//		after successfully reading n > 0 bytes, it returns the
+//		number of bytes read. It may return the (non-nil) error
+//		from the same call or return the error (and n == 0) from
+//		a subsequent call. An instance of this general case is
+//		that a Reader returning a non-zero number of bytes at the
+//		end of the input stream may return either err == EOF or
+//		err == nil. The next read operation should return 0, EOF.
 //
-//  p := make([]byte, 50)
+// ----------------------------------------------------------------
 //
-//  var n, readBytesCnt int
-//  sb := strings.Builder{}
+// # Usage
 //
-//  for {
+//	Example # 1
 //
-//    n,
-//    err = blkLines01.Read(p)
+//		p := make([]byte, 50)
 //
-//    if n == 0 {
-//      break
-//    }
+//		var n, readBytesCnt int
+//		sb := strings.Builder{}
 //
-//    sb.Write(p[:n])
-//    readBytesCnt += n
-//  }
+//		for {
 //
-//  if err != nil &&
-//    err != io.EOF {
-//     return fmt.Errorf(
-//      "Error Returned From blkLines01.Read(p)\n"+
-//      "Error = \n%v\n",
-//       err.Error())
-//  }
+//		  n,
+//		  err = blkLines01.Read(p)
 //
-//  fmt.Printf("Text Line String: %s\n",
-//                sb.String())
+//		  if n == 0 {
+//		    break
+//		  }
 //
-//  fmt.Printf("Number of bytes Read: %v\n",
-//                readBytesCnt)
+//		  sb.Write(p[:n])
+//		  readBytesCnt += n
+//		}
 //
-//  Example # 2
+//		if err != nil &&
+//		  err != io.EOF {
+//		   return fmt.Errorf(
+//		    "Error Returned From blkLines01.Read(p)\n"+
+//		    "Error = \n%v\n",
+//		     err.Error())
+//		}
 //
-//  p := make([]byte, 50)
+//		fmt.Printf("Text Line String: %s\n",
+//		              sb.String())
 //
-//  var n, readBytesCnt int
-//  var actualStr string
+//		fmt.Printf("Number of bytes Read: %v\n",
+//		              readBytesCnt)
 //
-//  for {
+//	Example # 2
 //
-//    n,
-//    err = blkLines01.Read(p)
+//		p := make([]byte, 50)
 //
-//    if n == 0 {
-//      break
-//    }
+//		var n, readBytesCnt int
+//		var actualStr string
 //
-//    actualStr += string(p[:n])
-//    readBytesCnt += n
-//  }
+//		for {
 //
-//  if err != nil &&
-//    err != io.EOF {
-//     return fmt.Errorf(
-//      "Error Returned From blkLines01.Read(p)\n"+
-//      "Error = \n%v\n",
-//       err.Error())
-//  }
+//		  n,
+//		  err = blkLines01.Read(p)
 //
-//  fmt.Printf("Text Line String: %v\n",
-//                actualStr)
+//		  if n == 0 {
+//		    break
+//		  }
 //
-//  fmt.Printf("Number of bytes Read: %v\n",
-//                readBytesCnt)
+//		  actualStr += string(p[:n])
+//		  readBytesCnt += n
+//		}
 //
+//		if err != nil &&
+//		  err != io.EOF {
+//		   return fmt.Errorf(
+//		    "Error Returned From blkLines01.Read(p)\n"+
+//		    "Error = \n%v\n",
+//		     err.Error())
+//		}
+//
+//		fmt.Printf("Text Line String: %v\n",
+//		              actualStr)
+//
+//		fmt.Printf("Number of bytes Read: %v\n",
+//		              readBytesCnt)
 func (blkLines *TextLineSpecBlankLines) Read(
 	p []byte) (
 	n int,
@@ -1979,7 +2013,7 @@ func (blkLines *TextLineSpecBlankLines) Read(
 	}
 
 	n,
-		err = textSpecificationAtom{}.ptr().
+		err = new(textSpecificationAtom).
 		readBytes(
 			blkLines.textLineReader,
 			p,
@@ -1995,27 +2029,29 @@ func (blkLines *TextLineSpecBlankLines) Read(
 	return n, err
 }
 
-// ReaderInitialize - This method will reset the internal member
-// variable 'TextLineSpecBlankLines.textLineReader' to its initial
-// zero state of 'nil'.
+// ReaderInitialize
+//
+// This method will reset the internal member variable
+// 'TextLineSpecBlankLines.textLineReader' to its
+// initial zero state of 'nil'.
 //
 // This method is rarely used. It provides a means of
-// reinitializing the internal strings.Reader in case an error
-// occurs during a read operation initiated by method
-// TextLineSpecBlankLines.Read().
+// reinitializing the internal strings.Reader in case an
+// error occurs during a read operation initiated by
+// method TextLineSpecBlankLines.Read().
 //
-// Calling this method cleans up the residue from an aborted read
-// operation and allows the calling function to start a new read
-// operation.
+// Calling this method cleans up the residue from an
+// aborted read operation and allows the calling
+// function to start a new read operation.
 //
 // If any errors are returned by method
-// TextLineSpecBlankLines.Read() which are NOT equal to io.EOF, call
-// this method, TextLineSpecBlankLines.ReaderInitialize(), to reset
+// TextLineSpecBlankLines.Read() which are NOT equal to
+// io.EOF, call this method,
+// TextLineSpecBlankLines.ReaderInitialize(), to reset
 // the internal reader for future read operations.
 //
-// This method fulfills requirements of the ITextLineSpecification
-// interface.
-//
+// This method fulfills requirements of interface
+// ITextLineSpecification.
 func (blkLines *TextLineSpecBlankLines) ReaderInitialize() {
 
 	if blkLines.lock == nil {
@@ -2055,86 +2091,83 @@ func (blkLines *TextLineSpecBlankLines) ReaderInitialize() {
 // while TextLineSpecBlankLines.SetNewLineRunes() receives a rune
 // array as an input parameter.
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // This method will overwrite and delete the existing "new line
 // characters" value ('TextLineSpecBlankLines.newLineChars') for
 // the current TextLineSpecBlankLines instance (blkLines).
 //
-//
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  newLineChars               string
-//     - The line termination character or characters which will be
-//       applied to every blank line produced by the current
-//       instance of TextLineSpecBlankLines.
+//	newLineChars               string
+//	   - The line termination character or characters which will be
+//	     applied to every blank line produced by the current
+//	     instance of TextLineSpecBlankLines.
 //
-//       If this parameter is submitted as a zero length string, an
-//       error will be returned.
-//
-//
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
-//
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
-//
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     If this parameter is submitted as a zero length string, an
+//	     error will be returned.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       2. string - A string containing error prefix information.
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     2. string - A string containing error prefix information.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     4. [][2]string A two-dimensional slice of strings containing
+//	                    error prefix and error context information.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	                        ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (blkLines *TextLineSpecBlankLines) SetNewLineChars(
 	newLineChars string,
 	errorPrefix interface{}) error {
@@ -2220,86 +2253,83 @@ func (blkLines *TextLineSpecBlankLines) SetNewLineChars(
 // while TextLineSpecBlankLines.SetNewLineChars() receives a string
 // as an input parameter.
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // This method will overwrite and delete the existing "new line
 // characters" value ('TextLineSpecBlankLines.newLineChars') for
 // the current TextLineSpecBlankLines instance (blkLines).
 //
-//
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  newLineRunes               []rune
-//     - This rune array holds the line termination character or
-//       characters which will be applied to every blank line
-//       produced by the current instance of TextLineSpecBlankLines.
+//	newLineRunes               []rune
+//	   - This rune array holds the line termination character or
+//	     characters which will be applied to every blank line
+//	     produced by the current instance of TextLineSpecBlankLines.
 //
-//       If this parameter is submitted as a nil value or a zero
-//       length array, an error will be returned.
-//
-//
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
-//
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
-//
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     If this parameter is submitted as a nil value or a zero
+//	     length array, an error will be returned.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       2. string - A string containing error prefix information.
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     2. string - A string containing error prefix information.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     4. [][2]string A two-dimensional slice of strings containing
+//	                    error prefix and error context information.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	                        ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (blkLines *TextLineSpecBlankLines) SetNewLineRunes(
 	newLineRunes []rune,
 	errorPrefix interface{}) error {
@@ -2373,7 +2403,7 @@ func (blkLines *TextLineSpecBlankLines) SetNewLineRunes(
 // termination sequence for each blank line produced by the current
 // instance of TextLineSpecBlankLines.
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // This method will overwrite and delete the existing "number of
 // blank lines" value for the current TextLineSpecBlankLines instance
@@ -2385,84 +2415,81 @@ func (blkLines *TextLineSpecBlankLines) SetNewLineRunes(
 // If input parameter 'numOfBlankLines' is greater than one-million
 // (1,000,000), it is invalid and an error will be returned.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  numOfBlankLines            int
-//     - The number of blank lines which will be generated by an
-//       instance of TextLineSpecBlankLines. This value will be
-//       tested for validity.
+//	numOfBlankLines            int
+//	   - The number of blank lines which will be generated by an
+//	     instance of TextLineSpecBlankLines. This value will be
+//	     tested for validity.
 //
-//       If input parameter 'numOfBlankLines' is less than one (1),
-//       it is invalid and an error will be returned.
+//	     If input parameter 'numOfBlankLines' is less than one (1),
+//	     it is invalid and an error will be returned.
 //
-//       If input parameter 'numOfBlankLines' is greater than
-//       one-million (1,000,000), it is invalid and an error will
-//       be returned.
+//	     If input parameter 'numOfBlankLines' is greater than
+//	     one-million (1,000,000), it is invalid and an error will
+//	     be returned.
 //
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       2. string - A string containing error prefix information.
+//	     2. string - A string containing error prefix information.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//	     4. [][2]string A two-dimensional slice of strings containing
+//	                    error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	                        ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
-//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If input parameter 'numOfBlankLines' is evaluated as a
-//       valid value, this returned error Type will be set equal to
-//       'nil'. If input parameter 'numOfBlankLines' is found to be
-//       invalid, the returned error Type will encapsulate an error
-//       message.
+//	error
+//	   - If input parameter 'numOfBlankLines' is evaluated as a
+//	     valid value, this returned error Type will be set equal to
+//	     'nil'. If input parameter 'numOfBlankLines' is found to be
+//	     invalid, the returned error Type will encapsulate an error
+//	     message.
 //
-//       If an error message is returned, the text value for input
-//       parameter 'errPrefDto' (error prefix) will be prefixed or
-//       attached at the beginning of the error message.
-//
+//	     If an error message is returned, the text value for input
+//	     parameter 'errPrefDto' (error prefix) will be prefixed or
+//	     attached at the beginning of the error message.
 func (blkLines *TextLineSpecBlankLines) SetNumberOfBlankLines(
 	numOfBlankLines int,
 	errorPrefix interface{}) error {
@@ -2516,98 +2543,95 @@ func (blkLines *TextLineSpecBlankLines) SetNumberOfBlankLines(
 // TextLineSpecBlankLines.SetSpecBlankLineRunes() in that the
 // "new line characters" parameter is submitted as string.
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // This method will overwrite and delete all the existing internal
 // member data values for the current TextLineSpecBlankLines
 // instance (blkLines).
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  numOfBlankLines            int
-//     - The number of blank lines which will be generated by an
-//       instance of TextLineSpecBlankLines. This value will be
-//       tested for validity.
+//	numOfBlankLines            int
+//	   - The number of blank lines which will be generated by an
+//	     instance of TextLineSpecBlankLines. This value will be
+//	     tested for validity.
 //
-//       If input parameter 'numOfBlankLines' is less than one (1),
-//       it is invalid and an error will be returned.
+//	     If input parameter 'numOfBlankLines' is less than one (1),
+//	     it is invalid and an error will be returned.
 //
-//       If input parameter 'numOfBlankLines' is greater than
-//       one-million (1,000,000), it is invalid and an error will
-//       be returned.
-//
-//
-//  newLineChars               string
-//     - The line termination character or characters which will be
-//       applied to every blank line generated by current instance
-//       of TextLineSpecBlankLines.
-//
-//       If this parameter is submitted as a zero length string, an
-//       error will be returned.
+//	     If input parameter 'numOfBlankLines' is greater than
+//	     one-million (1,000,000), it is invalid and an error will
+//	     be returned.
 //
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	newLineChars               string
+//	   - The line termination character or characters which will be
+//	     applied to every blank line generated by current instance
+//	     of TextLineSpecBlankLines.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     If this parameter is submitted as a zero length string, an
+//	     error will be returned.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       2. string - A string containing error prefix information.
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     2. string - A string containing error prefix information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     4. [][2]string A two-dimensional slice of strings containing
+//	                    error prefix and error context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	                        ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If this method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If this method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (blkLines *TextLineSpecBlankLines) SetSpecBlankLines(
 	numOfBlankLines int,
 	newLineChars string,
@@ -2658,86 +2682,84 @@ func (blkLines *TextLineSpecBlankLines) SetSpecBlankLines(
 // Users have the option to substitute one or more text characters
 // for use as the line termination sequence by calling one of the
 // following methods:
-//  TextLineSpecBlankLines.NewBlankLines()
-//  TextLineSpecBlankLines.NewPtrBlankLines()
-//  TextLineSpecBlankLines.NewBlankLineRunes()
-//  TextLineSpecBlankLines.SetSpecBlankLines()
-//  TextLineSpecBlankLines.SetSpecBlankLineRunes()
-//  TextLineSpecBlankLines.SetNewLineChars()
 //
-// IMPORTANT
+//	TextLineSpecBlankLines.NewBlankLines()
+//	TextLineSpecBlankLines.NewPtrBlankLines()
+//	TextLineSpecBlankLines.NewBlankLineRunes()
+//	TextLineSpecBlankLines.SetSpecBlankLines()
+//	TextLineSpecBlankLines.SetSpecBlankLineRunes()
+//	TextLineSpecBlankLines.SetNewLineChars()
+//
+// # IMPORTANT
 //
 // This method will overwrite and delete all the existing internal
 // member data values for the current TextLineSpecBlankLines
 // instance (blkLines).
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  numOfBlankLines            int
-//     - The number of blank lines which will be generated by an
-//       instance of TextLineSpecBlankLines. This value will be
-//       tested for validity.
+//	numOfBlankLines            int
+//	   - The number of blank lines which will be generated by an
+//	     instance of TextLineSpecBlankLines. This value will be
+//	     tested for validity.
 //
-//       If input parameter 'numOfBlankLines' is less than one (1),
-//       it is invalid and an error will be returned.
+//	     If input parameter 'numOfBlankLines' is less than one (1),
+//	     it is invalid and an error will be returned.
 //
-//       If input parameter 'numOfBlankLines' is greater than
-//       one-million (1,000,000), it is invalid and an error will
-//       be returned.
+//	     If input parameter 'numOfBlankLines' is greater than
+//	     one-million (1,000,000), it is invalid and an error will
+//	     be returned.
 //
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       2. string - A string containing error prefix information.
+//	     2. string - A string containing error prefix information.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//	     4. [][2]string A two-dimensional slice of strings containing
+//	                    error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	                        ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
-//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
-//
 func (blkLines *TextLineSpecBlankLines) SetSpecDefaultBlankLines(
 	numOfBlankLines int,
 	errorPrefix interface{}) error {
@@ -2786,99 +2808,96 @@ func (blkLines *TextLineSpecBlankLines) SetSpecDefaultBlankLines(
 // "new line characters" parameter is submitted as an array of
 // runes.
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // This method will overwrite and delete all the existing internal
 // member data values for the current TextLineSpecBlankLines
 // instance (blkLines).
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  numOfBlankLines            int
-//     - The number of blank lines which will be generated by an
-//       instance of TextLineSpecBlankLines. This value will be
-//       tested for validity.
+//	numOfBlankLines            int
+//	   - The number of blank lines which will be generated by an
+//	     instance of TextLineSpecBlankLines. This value will be
+//	     tested for validity.
 //
-//       If input parameter 'numOfBlankLines' is less than one (1),
-//       it is invalid and an error will be returned.
+//	     If input parameter 'numOfBlankLines' is less than one (1),
+//	     it is invalid and an error will be returned.
 //
-//       If input parameter 'numOfBlankLines' is greater than
-//       one-million (1,000,000), it is invalid and an error will
-//       be returned.
-//
-//
-//  newLineRunes               []rune
-//     - This rune array holds the text character or characters
-//       which will be used as the line termination sequence for
-//       all blank lines generated by the current instance of
-//       TextLineSpecBlankLines.
-//
-//       If this parameter is submitted as a 'nil' value or a zero
-//       length rune array, an error will be returned.
+//	     If input parameter 'numOfBlankLines' is greater than
+//	     one-million (1,000,000), it is invalid and an error will
+//	     be returned.
 //
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	newLineRunes               []rune
+//	   - This rune array holds the text character or characters
+//	     which will be used as the line termination sequence for
+//	     all blank lines generated by the current instance of
+//	     TextLineSpecBlankLines.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     If this parameter is submitted as a 'nil' value or a zero
+//	     length rune array, an error will be returned.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       2. string - A string containing error prefix information.
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     2. string - A string containing error prefix information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     4. [][2]string A two-dimensional slice of strings containing
+//	                    error prefix and error context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	                        ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If this method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If this method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (blkLines *TextLineSpecBlankLines) SetSpecBlankLineRunes(
 	numOfBlankLines int,
 	newLineRunes []rune,
@@ -2915,31 +2934,58 @@ func (blkLines *TextLineSpecBlankLines) SetSpecBlankLineRunes(
 				"->blkLines"))
 }
 
-// String - Returns the formatted text for output and
-// printing.
+//	String
 //
-// The value of 'blkLines.newLineChars' will be replicated
-// multiple times as specified by 'blkLines.numBlankLines'.
+//	Returns the formatted text for output and printing.
 //
-// If an error occurs, the error message will be included in the
-// returned string.
+//	The value of 'blkLines.newLineChars' will be
+//	replicated multiple times as specified by
+//	'blkLines.numBlankLines'.
 //
-// This method is similar to
-// TextLineSpecBlankLines.GetFormattedText() with the sole
-// difference being that this method does not return an error.
+//	If an error occurs, the error message will be
+//	included in the returned string.
 //
-// This method fulfills requirements of the ITextLineSpecification
-// interface.
+//	This method is similar to
+//	TextLineSpecBlankLines.GetFormattedText() with the
+//	sole difference being that this method does not
+//	return an error.
 //
-// This method also fulfills the requirements of the 'Stringer'
-// interface defined in the Golang package 'fmt'. Reference:
-//   https://pkg.go.dev/fmt#Stringer
+//	This method fulfills requirements of interface
+//	ITextLineSpecification.
 //
-// Methods which return formatted text are listed as follows:
-//  TextLineSpecBlankLines.String()
-//  TextLineSpecBlankLines.TextBuilder()
-//  TextLineSpecBlankLines.GetFormattedText()
+//	This method also fulfills the requirements of the
+//	'Stringer' interface defined in the Golang package
+//	'fmt'. Reference:
 //
+//		https://pkg.go.dev/fmt#Stringer
+//
+//	Methods which return formatted text are listed as
+//	follows:
+//
+//		TextLineSpecBlankLines.String()
+//		TextLineSpecBlankLines.TextBuilder()
+//		TextLineSpecBlankLines.GetFormattedText()
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	--- NONE ---
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//
+//		If this method completes successfully, this
+//		string will contain the formatted text generated
+//		by the current instance of
+//		TextLineSpecBlankLines.
+//
+//		If an error condition is encountered, this string
+//		will contain an appropriate error message. This
+//		error message will contain the word 'Error'.
 func (blkLines TextLineSpecBlankLines) String() string {
 
 	if blkLines.lock == nil {
@@ -2951,11 +2997,11 @@ func (blkLines TextLineSpecBlankLines) String() string {
 	defer blkLines.lock.Unlock()
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TextLineSpecBlankLines.GetFormattedText()",
+		"TextLineSpecBlankLines.String()",
 		"")
 
 	formattedText,
-		err := textLineSpecBlankLinesMolecule{}.ptr().
+		err := new(textLineSpecBlankLinesMolecule).
 		getFormattedText(
 			&blkLines,
 			&ePrefix)
@@ -2968,88 +3014,108 @@ func (blkLines TextLineSpecBlankLines) String() string {
 	return formattedText
 }
 
-// TextBuilder - Configures the line of text produced by this
-// instance of TextLineSpecBlankLines, and writes it to an instance
-// of strings.Builder.
+//	TextBuilder
 //
-// This method fulfills requirements of the ITextLineSpecification
-// interface.
+//	Configures the line of text produced by this instance
+//	of TextLineSpecBlankLines, and writes it to an
+//	instance of strings.Builder.
 //
-// Methods which return formatted text are listed as follows:
-//  TextLineSpecBlankLines.String()
-//  TextLineSpecBlankLines.GetFormattedText()
-//  TextLineSpecBlankLines.TextBuilder()
+//	This method fulfills requirements of interface
+//	ITextLineSpecification.
 //
+//	Methods which return formatted text are listed as
+//	follows:
+//
+//		TextLineSpecBlankLines.String()
+//		TextLineSpecBlankLines.GetFormattedText()
+//		TextLineSpecBlankLines.TextBuilder()
 //
 // ----------------------------------------------------------------
 //
-// Input Parameters
+// # Input Parameters
 //
-//  strBuilder                 *strings.Builder
-//     - A pointer to an instance of *strings.Builder. The
-//       formatted text characters produced by this method will be
-//       written to this instance of strings.Builder.
+//	strBuilder					*strings.Builder
 //
+//		A pointer to an instance of *strings.Builder. The
+//		formatted text characters produced by this method
+//		will be written to this instance of
+//		strings.Builder.
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	errorPrefix					interface{}
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//		This empty interface must be convertible to one
+//		of the following types:
 //
-//       2. string - A string containing error prefix information.
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//		2.	string
+//				A string containing error prefix
+//				information.
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
 //
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
-// Return Values
+// # Return Values
 //
-//  error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
 //
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
 func (blkLines *TextLineSpecBlankLines) TextBuilder(
 	strBuilder *strings.Builder,
 	errorPrefix interface{}) error {
@@ -3127,11 +3193,12 @@ func (blkLines *TextLineSpecBlankLines) TextBuilder(
 	return err
 }
 
-// TextLineSpecName - returns Text Line Specification Name.
+// TextLineSpecName
 //
-// This method fulfills requirements of ITextLineSpecification
-// interface.
+// Returns Text Line Specification Name.
 //
+// This method fulfills requirements of interface
+// ITextLineSpecification.
 func (blkLines TextLineSpecBlankLines) TextLineSpecName() string {
 
 	if blkLines.lock == nil {
@@ -3145,12 +3212,13 @@ func (blkLines TextLineSpecBlankLines) TextLineSpecName() string {
 	return "BlankLines"
 }
 
-// TextTypeName - returns a string specifying the type
-// of Text Line specification.
+// TextTypeName
 //
-// This method fulfills requirements of ITextLineSpecification
-// interface.
+// Returns a string specifying the type of Text Line
+// specification.
 //
+// This method fulfills requirements of interface
+// ITextLineSpecification.
 func (blkLines TextLineSpecBlankLines) TextTypeName() string {
 
 	if blkLines.lock == nil {

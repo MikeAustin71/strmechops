@@ -268,3 +268,48 @@ func (txtLineAvgTimeMech *textLineSpecAverageTimeMechanics) addStartStopEvent(
 
 	return err
 }
+
+func (txtLineAvgTimeMech *textLineSpecAverageTimeMechanics) getFormattedText(
+	txtLineAvgTimer *TextLineSpecAverageTime,
+	errPrefDto *ePref.ErrPrefixDto) (
+	string,
+	error) {
+
+	if txtLineAvgTimeMech.lock == nil {
+		txtLineAvgTimeMech.lock = new(sync.Mutex)
+	}
+
+	txtLineAvgTimeMech.lock.Lock()
+
+	defer txtLineAvgTimeMech.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	var fmtOutputStr string
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"textLineSpecAverageTimeMechanics."+
+			"getFormattedText()",
+		"")
+
+	if err != nil {
+		return fmtOutputStr, err
+	}
+
+	if txtLineAvgTimer == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'txtLineAvgTimer' is a nil pointer!\n",
+			ePrefix.String())
+
+		return fmtOutputStr, err
+	}
+
+	fmtOutputStr = "Empty Placeholder!"
+
+	return fmtOutputStr, err
+}
