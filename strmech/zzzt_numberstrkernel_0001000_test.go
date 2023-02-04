@@ -2074,6 +2074,637 @@ func TestNumberStrKernel_FmtCurrencyDefaultsUKMinusInside_000100(t *testing.T) {
 	return
 }
 
+func TestNumberStrKernel_FmtNumStrElements_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestNumberStrKernel_FmtNumStrElements_000100()",
+		"")
+
+	dirtyNumStr := "-1234.556"
+	origNumStrValue := "-1234.56"
+
+	var err error
+	var numStrKernel NumberStrKernel
+
+	numStrKernel,
+		_,
+		err = new(NumberStrKernel).NewParsePureNumberStr(
+		dirtyNumStr,
+		".",
+		true,
+		NumRoundType.HalfAwayFromZero(),
+		2,
+		ePrefix.XCpy(
+			""))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	expectedNumberStr := origNumStrValue
+
+	var actualNumberStr string
+
+	actualNumberStr,
+		_,
+		err = numStrKernel.FmtNumStrNative(
+		NumRoundType.NoRounding(),
+		0,
+		ePrefix.XCpy(
+			"numStrKernel Test#1"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	testName := fmt.Sprintf("Test #1 Original Number String Setup Verification\n"+
+		"Original Native Number String Value = %v\n",
+		origNumStrValue)
+
+	if expectedNumberStr != actualNumberStr {
+
+		t.Errorf("\n%v\n"+
+			"%v\n"+
+			"Error: actualNumberStr NOT EQUAL TO expectedNumberStr\n"+
+			"    actualNumberStr = '%v'\n"+
+			"expectedNumberStr   = '%v'\n",
+			ePrefix.String(),
+			testName,
+			actualNumberStr,
+			expectedNumberStr)
+
+		return
+	}
+
+	testName = fmt.Sprintf("Test #2 FmtNumStrElements()\n"+
+		"Original Native Number String Value = %v\n",
+		origNumStrValue)
+
+	expectedNumberStr = "-    1 234,56 €"
+
+	roundingSpec := NumStrRoundingSpec{
+		roundingType:            NumRoundType.NoRounding(),
+		roundToFractionalDigits: 0,
+		lock:                    nil,
+	}
+
+	numberFieldSpec := NumStrNumberFieldSpec{
+		fieldLength:        12,
+		fieldJustification: TxtJustify.Right(),
+		lock:               nil,
+	}
+
+	var decSepSpec DecimalSeparatorSpec
+
+	decSepSpec,
+		err = new(DecimalSeparatorSpec).NewStr(
+		",",
+		ePrefix.XCpy(
+			"decSepSpec<-"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var intSepSpec IntegerSeparatorSpec
+
+	intSepSpec,
+		err = new(IntegerSeparatorSpec).NewThousands(
+		" ",
+		ePrefix.XCpy(
+			"intSepSpec"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var negativeNumberSign,
+		positiveNumberSign,
+		zeroNumberSign,
+		currencySymbol NumStrNumberSymbolSpec
+
+	negativeNumberSign,
+		err = new(NumStrNumberSymbolSpec).
+		NewNumberSignLeadingSymbol(
+			"-",
+			NumFieldSymPos.OutsideNumField(),
+			ePrefix.XCpy(
+				"negativeNumberSign<-"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	positiveNumberSign = new(NumStrNumberSymbolSpec).NewNOP()
+
+	zeroNumberSign = new(NumStrNumberSymbolSpec).NewNOP()
+
+	currencySymbol,
+		err = new(NumStrNumberSymbolSpec).
+		NewCurrencyTrailingSymbol(" €",
+			false,
+			NumFieldSymPos.OutsideNumField(),
+			ePrefix.XCpy(
+				"currencySymbol"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	actualNumberStr,
+		err = numStrKernel.FmtNumStrElements(
+		roundingSpec,
+		decSepSpec,
+		intSepSpec,
+		negativeNumberSign,
+		positiveNumberSign,
+		zeroNumberSign,
+		currencySymbol,
+		numberFieldSpec,
+		ePrefix.XCpy(
+			"actualNumberStr<-Test #2"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if expectedNumberStr != actualNumberStr {
+
+		t.Errorf("\n%v\n"+
+			"%v\n"+
+			"Error: actualNumberStr NOT EQUAL TO expectedNumberStr\n"+
+			"    actualNumberStr = '%v'\n"+
+			"expectedNumberStr   = '%v'\n",
+			ePrefix.String(),
+			testName,
+			actualNumberStr,
+			expectedNumberStr)
+
+		return
+	}
+
+	testName = fmt.Sprintf("Test #3 SetNumFmtElements\n"+
+		"Original Native Number String Value = %v\n",
+		origNumStrValue)
+
+	var defaultNumStrFmt NumStrFormatSpec
+
+	defaultNumStrFmt,
+		err = new(NumStrFormatSpec).NewNumFmtElements(
+		decSepSpec,
+		intSepSpec,
+		negativeNumberSign,
+		positiveNumberSign,
+		zeroNumberSign,
+		currencySymbol,
+		numberFieldSpec,
+		ePrefix.XCpy(
+			"defaultNumStrFmt<-"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = numStrKernel.SetDefaultNumStrFmtSpec(
+		defaultNumStrFmt,
+		ePrefix.XCpy(
+			"numStrKernel<-defaultNumStrFmt"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var numStrKernel02 NumberStrKernel
+
+	// 	origNumStrValue := "-1234.56"
+	expectedNumberStr = "-    1 234,56 €"
+
+	_,
+		err = numStrKernel02.SetFromNativeNumberStr(
+		origNumStrValue,
+		NumRoundType.NoRounding(),
+		0,
+		ePrefix.XCpy(
+			"numStrKernel02-Test#3"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = numStrKernel02.SetDefaultNumStrFmtSpecElements(
+		decSepSpec,
+		intSepSpec,
+		negativeNumberSign,
+		positiveNumberSign,
+		zeroNumberSign,
+		currencySymbol,
+		numberFieldSpec,
+		ePrefix.XCpy(
+			"numStrKernel02<-Test #3"))
+
+	actualNumberStr = numStrKernel02.String()
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if expectedNumberStr != actualNumberStr {
+
+		t.Errorf("\n%v\n"+
+			"%v\n"+
+			"Error: actualNumberStr NOT EQUAL TO expectedNumberStr\n"+
+			"    actualNumberStr = '%v'\n"+
+			"expectedNumberStr   = '%v'\n",
+			ePrefix.String(),
+			testName,
+			actualNumberStr,
+			expectedNumberStr)
+
+		return
+	}
+
+	testName = fmt.Sprintf("Test #4 \n"+
+		"numStrKernel Default Format Spec SHOULD EQUAL\n"+
+		"numStrKernel02 Default Format Spec.\n"+
+		"Original Native Number String Value = %v\n",
+		origNumStrValue)
+
+	var numStrFmtSpec01, numStrFmtSpec02 NumStrFormatSpec
+
+	numStrFmtSpec01,
+		err = numStrKernel.GetDefaultNumStrFmtSpec(
+		ePrefix.XCpy("numStrFmtSpec01<-numStrKernel"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	numStrFmtSpec02,
+		err = numStrKernel02.GetDefaultNumStrFmtSpec(
+		ePrefix.XCpy("numStrFmtSpec02<-numStrKernel02"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if !numStrFmtSpec01.Equal(&numStrFmtSpec02) {
+
+		t.Errorf("\n%v\n"+
+			"%v\n"+
+			"Error: numStrKernel Default Format Spec\n"+
+			"------- IS NOT EQUAL TO -------\n"+
+			"numStrKernel02 Default Format Spec.\n",
+			ePrefix.String(),
+			testName)
+
+		return
+
+	}
+
+	testName = fmt.Sprintf("Test #5 \n"+
+		"numStrKernel SHOULD EQUAL TO numStrKernel02.\n"+
+		"Original Native Number String Value = %v\n",
+		origNumStrValue)
+
+	if !numStrKernel.Equal(&numStrKernel02) {
+
+		t.Errorf("\n%v\n"+
+			"%v\n"+
+			"Error:  numStrKernel \n"+
+			"------- IS NOT EQUAL TO -------\n"+
+			"        numStrKernel02\n",
+			ePrefix.String(),
+			testName)
+
+		return
+
+	}
+
+	return
+}
+
+func TestNumberStrKernel_FmtNumStrNative_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestNumberStrKernel_FmtSignedSimpleNumber_000100()",
+		"")
+
+	origIntStr := "1234"
+	origFracStr := "5678"
+
+	origNumberStr := origIntStr +
+		"." +
+		origFracStr
+
+	expectedNumberStr := "1234.5678"
+
+	var err error
+	var baseValueNStr NumberStrKernel
+
+	baseValueNStr,
+		_,
+		err = new(NumberStrKernel).
+		NewParsePureNumberStr(
+			origNumberStr,
+			".",
+			true,
+			NumRoundType.NoRounding(),
+			0,
+			ePrefix.XCpy(
+				"baseValueNStr<-origNumberStr"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = baseValueNStr.IsValidInstanceError(
+		ePrefix.XCpy(
+			"baseValueNStr"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var fmtNumberStr string
+
+	fmtNumberStr,
+		_,
+		err = baseValueNStr.FmtNumStrNative(
+		NumRoundType.NoRounding(),
+		0,
+		ePrefix.XCpy(
+			"fmtNumberStr<-baseValueNStr"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if expectedNumberStr != fmtNumberStr {
+
+		t.Errorf("%v\n"+
+			"Test#1\n"+
+			"Error: actualfmtNumberStr NOT EQUAL TO expectedNumberStr\n"+
+			" actualfmtNumberStr = '%v'\n"+
+			"expectedNumberStr   = '%v'\n",
+			ePrefix.String(),
+			fmtNumberStr,
+			expectedNumberStr)
+
+		return
+	}
+
+}
+
+func TestNumberStrKernel_FmtNumStrNative_000200(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestNumberStrKernel_FmtNumStrNative_000200()",
+		"")
+
+	origIntStr := "1234"
+	origFracStr := "5678"
+
+	origNumberStr := origIntStr +
+		"." +
+		origFracStr
+
+	expectedNumberStr := "1234.5678"
+
+	var err error
+	var baseValueNStr NumberStrKernel
+
+	baseValueNStr,
+		_,
+		err = new(NumberStrKernel).
+		NewParsePureNumberStr(
+			origNumberStr,
+			".",
+			true,
+			NumRoundType.NoRounding(),
+			0,
+			ePrefix.XCpy(
+				"baseValueNStr<-origNumberStr"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	isValid := baseValueNStr.IsValidInstance()
+
+	if !isValid {
+
+		t.Errorf("\n%v\n"+
+			"baseValueNStr.IsValidInstance()\n"+
+			"returned 'false'.\n",
+			ePrefix.String())
+
+		return
+	}
+
+	var fmtNumberStr string
+
+	fmtNumberStr,
+		_,
+		err = baseValueNStr.FmtNumStrNative(
+		NumRoundType.NoRounding(),
+		0,
+		ePrefix.XCpy(
+			"fmtNumberStr<-baseValueNStr"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if expectedNumberStr != fmtNumberStr {
+
+		t.Errorf("%v\n"+
+			"Test#1\n"+
+			"Error: actualfmtNumberStr NOT EQUAL TO expectedNumberStr\n"+
+			" actualfmtNumberStr = '%v'\n"+
+			"expectedNumberStr   = '%v'\n",
+			ePrefix.String(),
+			fmtNumberStr,
+			expectedNumberStr)
+
+		return
+	}
+
+	return
+}
+
+func TestNumberStrKernel_FmtNumStrNative_000300(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestNumberStrKernel_FmtNumStrNative_000300()",
+		"")
+
+	origIntStr := "001234"
+	origFracStr := "567800"
+
+	origNumberStr := origIntStr +
+		"." +
+		origFracStr
+
+	var expectedNumberStr, fmtNumberStr, testName string
+
+	var err error
+	var nStrKernel01 NumberStrKernel
+
+	nStrKernel01,
+		_,
+		err = new(NumberStrKernel).
+		NewParsePureNumberStr(
+			origNumberStr,
+			".",
+			true,
+			NumRoundType.NoRounding(),
+			0,
+			ePrefix.XCpy(
+				"Test #1-A nStrKernel01<-origNumberStr"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	isValid := nStrKernel01.IsValidInstance()
+
+	if !isValid {
+
+		t.Errorf("\n%v\n"+
+			"nStrKernel01.IsValidInstance()\n"+
+			"returned 'false'.\n",
+			ePrefix.String())
+
+		return
+	}
+
+	intRuneArray := nStrKernel01.GetIntegerRuneArray()
+
+	expectedNumberStr = origIntStr
+
+	testName = fmt.Sprintf("Test #1-A NewParsePureNumberStr()\n"+
+		"Test Integer Rune Array\n"+
+		"origIntStr  = %v",
+		origIntStr)
+
+	if string(intRuneArray) != expectedNumberStr {
+
+		t.Errorf("\n%v\n"+
+			"%v\n"+
+			"Error: string(intRuneArray) != expectedNumberStr\n"+
+			"string(intRuneArray)  = '%v'\n"+
+			"   expectedNumberStr  = '%v'\n",
+			ePrefix.String(),
+			testName,
+			string(intRuneArray),
+			expectedNumberStr)
+
+		return
+
+	}
+
+	fracArray := nStrKernel01.GetFractionalRuneArray()
+
+	testName = fmt.Sprintf("Test #1-B NewParsePureNumberStr()\n"+
+		"Test Fractional Rune Array\n"+
+		"origNumberStr = %v",
+		origNumberStr)
+
+	expectedNumberStr = origFracStr
+
+	if string(fracArray) != expectedNumberStr {
+
+		t.Errorf("\n%v\n"+
+			"%v\n"+
+			"Error: string(fracArray) != expectedNumberStr\n"+
+			"string(fracArray)  = '%v'\n"+
+			"expectedNumberStr  = '%v'\n",
+			ePrefix.String(),
+			testName,
+			string(fracArray),
+			expectedNumberStr)
+
+		return
+
+	}
+
+	fmtNumberStr,
+		_,
+		err = nStrKernel01.FmtNumStrNative(
+		NumRoundType.NoRounding(),
+		0,
+		ePrefix.XCpy(
+			"Test #2 fmtNumberStr<-nStrKernel01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	expectedNumberStr = "1234.5678"
+
+	testName = fmt.Sprintf("Test #2 FmtNumStrNative()\n"+
+		"Test Returned Native Number String\n"+
+		"origNumberStr = %v",
+		origNumberStr)
+
+	if expectedNumberStr != fmtNumberStr {
+
+		t.Errorf("%v\n"+
+			"%v\n"+
+			"Error: fmtNumberStr NOT EQUAL TO expectedNumberStr\n"+
+			" fmtNumberStr = '%v'\n"+
+			"expectedNumberStr   = '%v'\n",
+			ePrefix.String(),
+			testName,
+			fmtNumberStr,
+			expectedNumberStr)
+
+		return
+	}
+
+	return
+}
+
 func TestNumberStrKernel_FmtNumStrPure_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
@@ -2637,302 +3268,6 @@ func TestNumberStrKernel_FmtNumStrPure_000300(t *testing.T) {
 			ePrefix.String(),
 			testName,
 			actualFmtNumberStr,
-			expectedNumberStr)
-
-		return
-	}
-
-	return
-}
-
-func TestNumberStrKernel_FmtNumStrNative_000100(t *testing.T) {
-
-	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestNumberStrKernel_FmtSignedSimpleNumber_000100()",
-		"")
-
-	origIntStr := "1234"
-	origFracStr := "5678"
-
-	origNumberStr := origIntStr +
-		"." +
-		origFracStr
-
-	expectedNumberStr := "1234.5678"
-
-	var err error
-	var baseValueNStr NumberStrKernel
-
-	baseValueNStr,
-		_,
-		err = new(NumberStrKernel).
-		NewParsePureNumberStr(
-			origNumberStr,
-			".",
-			true,
-			NumRoundType.NoRounding(),
-			0,
-			ePrefix.XCpy(
-				"baseValueNStr<-origNumberStr"))
-
-	if err != nil {
-		t.Errorf("\n%v\n",
-			err.Error())
-		return
-	}
-
-	err = baseValueNStr.IsValidInstanceError(
-		ePrefix.XCpy(
-			"baseValueNStr"))
-
-	if err != nil {
-		t.Errorf("\n%v\n",
-			err.Error())
-		return
-	}
-
-	var fmtNumberStr string
-
-	fmtNumberStr,
-		_,
-		err = baseValueNStr.FmtNumStrNative(
-		NumRoundType.NoRounding(),
-		0,
-		ePrefix.XCpy(
-			"fmtNumberStr<-baseValueNStr"))
-
-	if err != nil {
-		t.Errorf("\n%v\n",
-			err.Error())
-		return
-	}
-
-	if expectedNumberStr != fmtNumberStr {
-
-		t.Errorf("%v\n"+
-			"Test#1\n"+
-			"Error: actualfmtNumberStr NOT EQUAL TO expectedNumberStr\n"+
-			" actualfmtNumberStr = '%v'\n"+
-			"expectedNumberStr   = '%v'\n",
-			ePrefix.String(),
-			fmtNumberStr,
-			expectedNumberStr)
-
-		return
-	}
-
-}
-
-func TestNumberStrKernel_FmtNumStrNative_000200(t *testing.T) {
-
-	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestNumberStrKernel_FmtNumStrNative_000200()",
-		"")
-
-	origIntStr := "1234"
-	origFracStr := "5678"
-
-	origNumberStr := origIntStr +
-		"." +
-		origFracStr
-
-	expectedNumberStr := "1234.5678"
-
-	var err error
-	var baseValueNStr NumberStrKernel
-
-	baseValueNStr,
-		_,
-		err = new(NumberStrKernel).
-		NewParsePureNumberStr(
-			origNumberStr,
-			".",
-			true,
-			NumRoundType.NoRounding(),
-			0,
-			ePrefix.XCpy(
-				"baseValueNStr<-origNumberStr"))
-
-	if err != nil {
-		t.Errorf("\n%v\n",
-			err.Error())
-		return
-	}
-
-	isValid := baseValueNStr.IsValidInstance()
-
-	if !isValid {
-
-		t.Errorf("\n%v\n"+
-			"baseValueNStr.IsValidInstance()\n"+
-			"returned 'false'.\n",
-			ePrefix.String())
-
-		return
-	}
-
-	var fmtNumberStr string
-
-	fmtNumberStr,
-		_,
-		err = baseValueNStr.FmtNumStrNative(
-		NumRoundType.NoRounding(),
-		0,
-		ePrefix.XCpy(
-			"fmtNumberStr<-baseValueNStr"))
-
-	if err != nil {
-		t.Errorf("\n%v\n",
-			err.Error())
-		return
-	}
-
-	if expectedNumberStr != fmtNumberStr {
-
-		t.Errorf("%v\n"+
-			"Test#1\n"+
-			"Error: actualfmtNumberStr NOT EQUAL TO expectedNumberStr\n"+
-			" actualfmtNumberStr = '%v'\n"+
-			"expectedNumberStr   = '%v'\n",
-			ePrefix.String(),
-			fmtNumberStr,
-			expectedNumberStr)
-
-		return
-	}
-
-	return
-}
-
-func TestNumberStrKernel_FmtNumStrNative_000300(t *testing.T) {
-
-	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestNumberStrKernel_FmtNumStrNative_000300()",
-		"")
-
-	origIntStr := "001234"
-	origFracStr := "567800"
-
-	origNumberStr := origIntStr +
-		"." +
-		origFracStr
-
-	var expectedNumberStr, fmtNumberStr, testName string
-
-	var err error
-	var nStrKernel01 NumberStrKernel
-
-	nStrKernel01,
-		_,
-		err = new(NumberStrKernel).
-		NewParsePureNumberStr(
-			origNumberStr,
-			".",
-			true,
-			NumRoundType.NoRounding(),
-			0,
-			ePrefix.XCpy(
-				"Test #1-A nStrKernel01<-origNumberStr"))
-
-	if err != nil {
-		t.Errorf("\n%v\n",
-			err.Error())
-		return
-	}
-
-	isValid := nStrKernel01.IsValidInstance()
-
-	if !isValid {
-
-		t.Errorf("\n%v\n"+
-			"nStrKernel01.IsValidInstance()\n"+
-			"returned 'false'.\n",
-			ePrefix.String())
-
-		return
-	}
-
-	intRuneArray := nStrKernel01.GetIntegerRuneArray()
-
-	expectedNumberStr = origIntStr
-
-	testName = fmt.Sprintf("Test #1-A NewParsePureNumberStr()\n"+
-		"Test Integer Rune Array\n"+
-		"origIntStr  = %v",
-		origIntStr)
-
-	if string(intRuneArray) != expectedNumberStr {
-
-		t.Errorf("\n%v\n"+
-			"%v\n"+
-			"Error: string(intRuneArray) != expectedNumberStr\n"+
-			"string(intRuneArray)  = '%v'\n"+
-			"   expectedNumberStr  = '%v'\n",
-			ePrefix.String(),
-			testName,
-			string(intRuneArray),
-			expectedNumberStr)
-
-		return
-
-	}
-
-	fracArray := nStrKernel01.GetFractionalRuneArray()
-
-	testName = fmt.Sprintf("Test #1-B NewParsePureNumberStr()\n"+
-		"Test Fractional Rune Array\n"+
-		"origNumberStr = %v",
-		origNumberStr)
-
-	expectedNumberStr = origFracStr
-
-	if string(fracArray) != expectedNumberStr {
-
-		t.Errorf("\n%v\n"+
-			"%v\n"+
-			"Error: string(fracArray) != expectedNumberStr\n"+
-			"string(fracArray)  = '%v'\n"+
-			"expectedNumberStr  = '%v'\n",
-			ePrefix.String(),
-			testName,
-			string(fracArray),
-			expectedNumberStr)
-
-		return
-
-	}
-
-	fmtNumberStr,
-		_,
-		err = nStrKernel01.FmtNumStrNative(
-		NumRoundType.NoRounding(),
-		0,
-		ePrefix.XCpy(
-			"Test #2 fmtNumberStr<-nStrKernel01"))
-
-	if err != nil {
-		t.Errorf("\n%v\n",
-			err.Error())
-		return
-	}
-
-	expectedNumberStr = "1234.5678"
-
-	testName = fmt.Sprintf("Test #2 FmtNumStrNative()\n"+
-		"Test Returned Native Number String\n"+
-		"origNumberStr = %v",
-		origNumberStr)
-
-	if expectedNumberStr != fmtNumberStr {
-
-		t.Errorf("%v\n"+
-			"%v\n"+
-			"Error: fmtNumberStr NOT EQUAL TO expectedNumberStr\n"+
-			" fmtNumberStr = '%v'\n"+
-			"expectedNumberStr   = '%v'\n",
-			ePrefix.String(),
-			testName,
-			fmtNumberStr,
 			expectedNumberStr)
 
 		return

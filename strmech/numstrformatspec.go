@@ -8635,6 +8635,34 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtComponents(
 //	generated from Number String formatting data
 //	specifications passed as input parameters.
 //
+//	Options include customizing for currency symbols,
+//	integer separation, number sign	management, radix
+//	point symbols, and floating point number rounding.
+//
+//	If required, users have the options of
+//	implementing the India or Chinese Numbering
+//	Systems for integer separation.
+//
+//	This method offers the maximum degree of granular
+//	control over all aspects of the Number String
+//	formatting operation.
+//
+//	In particular, it offers maximum flexibility in
+//	configuring integer separator characters and
+//	integer grouping sequences.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	If Currency Symbol formatting is NOT required,
+//	set the Currency Symbol parameter to a 'NOP'.
+//	'NOP' is a computer science term for
+//	'No Operation'.
+//
+//		currencySymbol :=
+//			new(NumStrNumberSymbolSpec).NewNOP()
+//
 // ----------------------------------------------------------------
 //
 // # Input Parameters
@@ -8853,6 +8881,13 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtComponents(
 //		is used to configure currency symbols for
 //		positive, negative and zero numeric values
 //		formatted and displayed in number stings.
+//
+//		If Currency Symbol formatting is NOT required,
+//		set this parameter to a 'NOP'. 'NOP' is a
+//		computer science term for 'No Operation'.
+//
+//			currencySymbol :=
+//				new(NumStrNumberSymbolSpec).NewNOP()
 //
 //		If this parameter is submitted as an empty or
 //		invalid Currency Symbol Specification, it will
@@ -20830,6 +20865,34 @@ func (numStrFmtSpec *NumStrFormatSpec) SetNumFmtComponents(
 //	based on Number String formatting specifications
 //	passed as input parameters.
 //
+//	Options include customizing for currency symbols,
+//	integer separation, number sign	management, radix
+//	point symbols, and floating point number rounding.
+//
+//	If required, users have the options of
+//	implementing the India or Chinese Numbering
+//	Systems for integer separation.
+//
+//	This method offers the maximum degree of granular
+//	control over all aspects of the Number String
+//	formatting operation.
+//
+//	In particular, it offers maximum flexibility in
+//	configuring integer separator characters and
+//	integer grouping sequences.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	If Currency Symbol formatting is NOT required,
+//	set the Currency Symbol parameter to a 'NOP'.
+//	'NOP' is a computer science term for
+//	'No Operation'.
+//
+//		currencySymbol :=
+//			new(NumStrNumberSymbolSpec).NewNOP()
+//
 // ----------------------------------------------------------------
 //
 // # IMPORTANT
@@ -21057,6 +21120,13 @@ func (numStrFmtSpec *NumStrFormatSpec) SetNumFmtComponents(
 //		is used to configure currency symbols for
 //		positive, negative and zero numeric values
 //		formatted and displayed in number stings.
+//
+//		If Currency Symbol formatting is NOT required,
+//		set this parameter to a 'NOP'. 'NOP' is a
+//		computer science term for 'No Operation'.
+//
+//			currencySymbol :=
+//				new(NumStrNumberSymbolSpec).NewNOP()
 //
 //		If this parameter is submitted as an empty or
 //		invalid Currency Symbol Specification, it will

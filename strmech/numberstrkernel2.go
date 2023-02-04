@@ -8,6 +8,154 @@ import (
 	"sync"
 )
 
+//	GetDefaultNumStrFmtSpec
+//
+//	Returns a deep copy of the default Number String
+//	Formatting specifications ('NumStrFormatSpec')
+//	configured for the current instance of
+//	NumberStrKernel.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	NumStrFormatSpec
+//
+//		If this method completes successfully, a deep
+//		copy of the default Number String Formatting
+//		specifications configured for the current
+//		instance of NumberStrKernel will be returned.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (numStrKernel *NumberStrKernel) GetDefaultNumStrFmtSpec(
+	errorPrefix interface{}) (
+	NumStrFormatSpec,
+	error) {
+
+	if numStrKernel.lock == nil {
+		numStrKernel.lock = new(sync.Mutex)
+	}
+
+	numStrKernel.lock.Lock()
+
+	defer numStrKernel.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumberStrKernel."+
+			"GetDefaultNumStrFmtSpec()",
+		"")
+
+	if err != nil {
+		return NumStrFormatSpec{}, err
+	}
+
+	if new(numStrFmtSpecNanobot).isNOP(
+		&numStrKernel.numStrFormatSpec) {
+
+		// This is a NOP!
+		// numStrKernel.numStrFormatSpec is invalid.
+		// Set default numStrKernel.numStrFormatSpec
+		// to stand US Signed Number Minus Format
+		// Specification.
+		numStrKernel.numStrFormatSpec,
+			err = new(NumStrFormatSpec).NewSignedNumDefaultsUSMinus(
+			NumStrNumberFieldSpec{
+				fieldLength:        -1,
+				fieldJustification: TxtJustify.Right(),
+			},
+			ePrefix.XCpy(
+				"numStrKernel.numStrFormatSpec "+
+					"Default US NumStrNumberFieldSpec"))
+
+		if err != nil {
+			return NumStrFormatSpec{}, err
+		}
+	}
+
+	return numStrKernel.numStrFormatSpec.CopyOut(
+		ePrefix.XCpy("<-numStrKernel.numStrFormatSpec"))
+}
+
 //	GetExcessFractionalTrailingZerosCount
 //
 //	Returns the count of excess fractional trailing
@@ -7483,30 +7631,960 @@ func (numStrKernel *NumberStrKernel) Round(
 		ePrefix.XCpy("numStrKernel"))
 }
 
-// SetDefaultBasicSignedNumStrFmtSpec
+// SetDefaultNumStrFmtSpec
 //
-// Reconfigures the current instance of
-// NumberStrKernel with a new default Signed Number
-// String Format using the basic set of input parameters.
+// Sets the default Number String Format Specification
+// for the current instance of to NumberStrKernel.
 //
-// This Number String Format is designed to format
-// 'Signed' integer or floating point numeric values.
+// The default Number String Format Specification is
+// used and applied in formatting the number string for
+// screen display, file output or printing.
 //
-// This method is one step above NewSignedNumSimple()
-// in terms of complexity and customization options.
+// The internal member variable controlling default
+// number string formatting which will be modified
+// by this method is:
 //
-// This method provides additional options for multiple
-// integer grouping types including India and Chinese
-// Numbering.
+//	NumberStrKernel.numStrFormatSpec
 //
-// Negative number sign symbols may be configured as
-// leading negative number signs, trailing negative
-// number signs or both. The combination of leading
-// and trailing negative number signs allows for the
-// configuration symbols like parentheses for the
-// formatting of negative numbers.
+// The default Number String Format Specification is
+// used and applied by the following methods:
 //
-//	Example: (125.34)
+//	NumberStrKernel.FmtSignedNumStrPure()
+//	NumberStrKernel.String()
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	This method will NOT alter the numeric value
+//	configured for the current instance of
+//	NumberStrKernel. This method will only reconfigure
+//	the internal member variable controlling default
+//	number string formatting:
+//
+//		NumberStrKernel.numStrFormatSpec
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	defaultNumStrFmt			NumStrFormatSpec
+//
+//		An instance of Number String Format Specification
+//		('NumStrFormatSpec').
+//
+//		A deep copy of this instance will be stored in the
+//		current instance of NumberStrKernel. This format
+//		specification will be used to format the number
+//		string for screen displays, file output or
+//		printing.
+//
+//		If 'defaultNumStrFmt' is found to be invalid, an
+//		error will be returned.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (numStrKernel *NumberStrKernel) SetDefaultNumStrFmtSpec(
+	defaultNumStrFmt NumStrFormatSpec,
+	errorPrefix interface{}) error {
+
+	if numStrKernel.lock == nil {
+		numStrKernel.lock = new(sync.Mutex)
+	}
+
+	numStrKernel.lock.Lock()
+
+	defer numStrKernel.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumberStrKernel."+
+			"SetDefaultNumStrFmtSpec()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	_,
+		err = new(numStrFmtSpecElectron).
+		testValidityNumStrFormatSpec(
+			&defaultNumStrFmt,
+			ePrefix.XCpy(
+				"defaultNumStrFmt invalid!"))
+
+	if err != nil {
+		return err
+	}
+
+	err = numStrKernel.numStrFormatSpec.CopyIn(
+		&defaultNumStrFmt,
+		ePrefix.XCpy(
+			"numStrKernel.numStrFormatSpec<-defaultNumStrFmt"))
+
+	return err
+}
+
+//	SetDefaultNumStrFmtSpecElements
+//
+//	Sets the default Number String Format Specification
+//	for the current instance of to NumberStrKernel.
+//
+//	Options include customizing for currency symbols,
+//	integer separation, number sign	management, radix
+//	point symbols, and floating point number rounding.
+//
+//	If required, users have the options of
+//	implementing the India or Chinese Numbering
+//	Systems for integer separation.
+//
+//	This method offers the maximum degree of granular
+//	control over all aspects of the Number String
+//	formatting operation.
+//
+//	In particular, it offers maximum flexibility in
+//	configuring integer separator characters and
+//	integer grouping sequences.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	(1)	If Currency Symbol formatting is NOT required,
+//		set the Currency Symbol parameter to a 'NOP'.
+//		'NOP' is a computer science term for
+//		'No Operation'.
+//
+//			currencySymbol :=
+//				new(NumStrNumberSymbolSpec).NewNOP()
+//
+//	(2)	This method will NOT alter the numeric value
+//		configured for the current instance of
+//		NumberStrKernel. This method will only
+//		reconfigure the internal member variable
+//		controlling default number string formatting:
+//
+//			NumberStrKernel.numStrFormatSpec
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	decSeparatorSpec				DecimalSeparatorSpec
+//
+//		This structure contains the radix point or
+//		decimal separator character(s) which will be used
+//		to separate integer and fractional digits within
+//		a formatted Number String.
+//
+//		In the US, UK, Australia and most of Canada, the
+//		decimal separator is the period character ('.')
+//		known as the decimal point.
+//
+//		In France, Germany and many countries in the
+//		European Union, the Decimal Separator is the
+//		comma character (',').
+//
+//	intSeparatorSpec				IntegerSeparatorSpec
+//
+//		Number String Integer Separator Specification. This
+//		type encapsulates the parameters required to format
+//		integer grouping and separation within a Number
+//		String.
+//
+//		Type IntegerSeparatorSpec is designed to manage
+//		integer separators, primarily thousands separators,
+//		for different countries and cultures. The term
+//		'integer separators' is used because this type
+//		manages both integer grouping and the characters
+//		used to separate integer groups.
+//
+//		In the USA and many other countries, integer
+//		numbers are often separated by commas thereby
+//		grouping the number into thousands.
+//
+//		Examples:
+//
+//			IntGroupingType.None()
+//			(a.k.a Integer Separation Turned Off)
+//				'1000000000'
+//
+//			IntGroupingType.Thousands()
+//					'1,000,000,000'
+//
+//			IntGroupingType.IndiaNumbering()
+//				'6,78,90,00,00,00,00,000'
+//
+//			IntGroupingType.ChineseNumbering()
+//				'6,7890,0000,0000,0000'
+//
+//		Other countries and cultures use characters other
+//		than the comma to separate integers into thousands.
+//		Some countries and cultures do not use thousands
+//		separation and instead rely on multiple integer
+//		separation characters and grouping sequences for a
+//		single integer number. Notable examples of this
+//		are found in the 'India Number System' and
+//		'Chinese Numerals'.
+//
+//		Reference:
+//			https://en.wikipedia.org/wiki/Indian_numbering_system
+//			https://en.wikipedia.org/wiki/Chinese_numerals
+//			https://en.wikipedia.org/wiki/Decimal_separator
+//
+//		The IntegerSeparatorSpec type provides the
+//		flexibility necessary to process these complex
+//		number separation formats.
+//
+//		If integer separation is turned off, no error
+//		will be returned and integer digits will be
+//		displayed as a single string of numeric digits:
+//
+//			Integer Separation Turned Off: 1000000000
+//
+//	negativeNumberSign				NumStrNumberSymbolSpec
+//
+//		The Number String Negative Number Sign
+//		Specification is used to configure negative
+//		number sign symbols for negative numeric
+//		values formatted and displayed in number
+//		stings.
+//
+//		If this parameter is submitted as an empty or
+//		invalid Negative Number Sign Specification, it
+//		will be automatically converted to a 'NOP' or
+//		empty placeholder which will be ignored by Number
+//		String formatting algorithms. 'NOP' is a computer
+//		science term meaning 'No Operation'.
+//
+//		Example-1: Leading Number Sign Symbols
+//			Leading Number Sign Symbols for Negative
+//			Values
+//
+//			Leading Symbols: "- "
+//			Number String:   "- 123.456"
+//
+//		Example-2: Leading Number Sign Symbols
+//			Leading Number Sign Symbols for Negative
+//			Values
+//
+//			Leading Symbols: "-"
+//			Number String:   "-123.456"
+//
+//		Example-3: Trailing Number Sign Symbols
+//			Trailing Number Sign Symbols for Negative
+//			Values
+//
+//			Trailing Symbols: " -"
+//			Number String:   "123.456 -"
+//
+//		Example-4: Trailing Number Sign Symbols
+//			Trailing Number Sign Symbols for Negative
+//			Values
+//
+//			Trailing Symbols: "-"
+//			Number String:   "123.456-"
+//
+//	positiveNumberSign 				NumStrNumberSymbolSpec
+//
+//		Positive number signs are commonly implied
+//		and not specified. However, the user has
+//		the option to specify a positive number sign
+//		character or characters for positive numeric
+//		values using this input parameter.
+//
+//		If this parameter is submitted as an empty or
+//		invalid Positive Number Sign Specification, it
+//		will be automatically converted to a 'NOP' or
+//		empty placeholder which will be ignored by Number
+//		String formatting algorithms. 'NOP' is a computer
+//		science term meaning 'No Operation'.
+//
+//		Example-1: Leading Number Sign Symbols
+//			Leading Number Sign Symbols for Positive
+//			Values
+//
+//			Leading Symbols: "+ "
+//			Number String:   "+ 123.456"
+//
+//		Example-2: Leading Number Sign Symbols
+//			Leading Number Sign Symbols for Positive
+//			Values
+//
+//			Leading Symbols: "+"
+//			Number String:   "+123.456"
+//
+//		Example-3: Trailing Number Sign Symbols
+//			Trailing Number Sign Symbols for Positive
+//			Values
+//
+//			Trailing Symbols: " +"
+//			Number String:   "123.456 +"
+//
+//		Example-4: Trailing Number Sign Symbols
+//			Trailing Number Sign Symbols for Positive
+//			Values
+//
+//			Trailing Symbols: "+"
+//			Number String:   "123.456+"
+//
+//	zeroNumberSign					NumStrNumberSymbolSpec
+//
+//		The Number String Zero Number Sign
+//		Specification is used to configure number
+//		sign symbols for zero numeric values formatted
+//		and displayed in number stings. Zero number signs
+//		are commonly omitted because zero does not
+//		technically qualify as either a positive or
+//		negative value. However, the user has the option
+//		to configure number sign symbols for zero values
+//		if necessary.
+//
+//		If this parameter is submitted as an empty or
+//		invalid Zero Number Sign Specification, it will
+//		be automatically converted to a 'NOP' or empty
+//		placeholder which will be ignored by Number
+//		String formatting algorithms. 'NOP' is a computer
+//		science term meaning 'No Operation'.
+//
+//		Example-1: Leading Number Sign Symbols
+//			Leading Number Sign Symbols for Zero Values
+//
+//			Leading Symbols: "+"
+//			Trailing Symbols: ""
+//			Number String:   "+0.00"
+//
+//		Example-2: Leading Number Sign Symbols
+//			Leading Number Sign Symbols for Zero Values
+//
+//			Leading Symbols: "+ "
+//			Trailing Symbols: ""
+//			Number String:   "+ 0.00"
+//
+//		Example-3: Trailing Number Sign Symbols
+//			Trailing Number Sign Symbols for Zero Values
+//
+//			Leading Symbols: ""
+//			Trailing Symbols: " +"
+//			Number String:   "0.00 +"
+//
+//		Example-4: Trailing Number Sign Symbols
+//			Trailing Number Sign Symbols for Zero Values
+//
+//			Leading Symbols: ""
+//			Trailing Symbols: "+"
+//			Number String:   "0.00+"
+//
+//	currencySymbol					NumStrNumberSymbolSpec
+//
+//		A Currency Symbol next to a number shows the
+//		number is a monetary amount.
+//
+//		The Number String Currency Symbol Specification
+//		is used to configure currency symbols for
+//		positive, negative and zero numeric values
+//		formatted and displayed in number stings.
+//
+//		If Currency Symbol formatting is NOT required,
+//		set this parameter to a 'NOP'. 'NOP' is a
+//		computer science term for 'No Operation'.
+//
+//			currencySymbol :=
+//				new(NumStrNumberSymbolSpec).NewNOP()
+//
+//		If this parameter is submitted as an empty or
+//		invalid Currency Symbol Specification, it will
+//		be automatically converted to a 'NOP' or empty
+//		placeholder which will be ignored by Number
+//		String formatting algorithms. 'NOP' is a computer
+//		science term meaning 'No Operation'.
+//
+//		Examples of Currency Symbols include the Dollar
+//		sign ('$'), Euro sign ('€') or Pound sign ('£').
+//
+//		This instance of NumStrNumberSymbolSpec is used
+//		to configure leading Currency Symbols, trailing
+//		Currency Symbols or both leading and trailing
+//		Currency Symbols.
+//
+//		Example-1: Leading Currency Symbols
+//
+//			Leading Currency Symbols: "$ "
+//			Number String:   "$ 123.456"
+//
+//		Example-2: Leading Currency Symbols
+//
+//			Leading Currency Symbols: "$"
+//			Number String:   "$123.456"
+//
+//		Example-3: Trailing Currency Symbols
+//			Trailing Currency Symbols for Positive Values
+//
+//			Trailing Currency Symbols: "€"
+//			Number String:   "123.456€"
+//
+//		Example-4: Trailing Currency Symbols
+//			Trailing Currency Symbols for Positive Values
+//
+//			Trailing Currency Symbols: " €"
+//			Number String:   "123.456 €"
+//
+//	numberFieldSpec				NumStrNumberFieldSpec
+//
+//		This Number Field Specification contains all
+//		parameters necessary to format a Number String
+//		within a larger Number Field. In addition to
+//		specifying the length of number field, this
+//		object contains justification specifications
+//		for centering, left justifying or right
+//		justifying a Number String within a Number
+//		Field.
+//
+//		type NumStrNumberFieldSpec struct {
+//
+//			fieldLength int
+//
+//				This parameter defines the length of the
+//				text field in which the numeric value will
+//				be displayed within a number string.
+//
+//				If 'fieldLength' is less than the length
+//				of the numeric value string, it will be
+//				automatically set equal to the length of
+//				that numeric value string.
+//
+//				To automatically set the value of
+//				'fieldLength' to the string length of the
+//				numeric value, set this parameter to a
+//				value of minus one (-1).
+//
+//				If this parameter is submitted with a
+//				value less than minus one (-1) or greater
+//				than 1-million (1,000,000), an error will
+//				be returned.
+//
+//			fieldJustification TextJustify
+//
+//				An enumeration which specifies the
+//				justification of the numeric value string
+//				within the number field length specified
+//				by data field 'fieldLength'.
+//
+//				Text justification can only be evaluated in
+//				the context of a number string, field length
+//				and a 'textJustification' object of type
+//				TextJustify. This is because number strings
+//				with a field length equal to or less than the
+//				length of the numeric value string never use
+//				text justification. In these cases, text
+//				justification is completely ignored.
+//
+//				If the field length parameter ('fieldLength')
+//				is greater than the length of the numeric
+//				value string, text justification must be equal
+//				to one of these three valid values:
+//
+//				          TextJustify(0).Left()
+//				          TextJustify(0).Right()
+//				          TextJustify(0).Center()
+//
+//				You can also use the abbreviated text
+//				justification enumeration syntax as follows:
+//
+//				          TxtJustify.Left()
+//				          TxtJustify.Right()
+//				          TxtJustify.Center()
+//		}
+//
+//	 errorPrefix                interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it	contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the returned
+//		error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error message.
+//	 	This returned error message will incorporate the method
+//	 	chain and text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be attached to the beginning
+//	 	of the error message.
+func (numStrKernel *NumberStrKernel) SetDefaultNumStrFmtSpecElements(
+	decSeparatorSpec DecimalSeparatorSpec,
+	intSeparatorSpec IntegerSeparatorSpec,
+	negativeNumberSign NumStrNumberSymbolSpec,
+	positiveNumberSign NumStrNumberSymbolSpec,
+	zeroNumberSign NumStrNumberSymbolSpec,
+	currencySymbol NumStrNumberSymbolSpec,
+	numberFieldSpec NumStrNumberFieldSpec,
+	errorPrefix interface{}) error {
+
+	if numStrKernel.lock == nil {
+		numStrKernel.lock = new(sync.Mutex)
+	}
+
+	numStrKernel.lock.Lock()
+
+	defer numStrKernel.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumberStrKernel."+
+			"SetDefaultNumStrFmtSpecElements()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	return numStrKernel.numStrFormatSpec.
+		SetNumFmtElements(
+			decSeparatorSpec,
+			intSeparatorSpec,
+			negativeNumberSign,
+			positiveNumberSign,
+			zeroNumberSign,
+			currencySymbol,
+			numberFieldSpec,
+			ePrefix.XCpy(
+				"numStrKernel->"))
+}
+
+// SetDefaultNumStrFmtSpecPure
+//
+// Sets the default Number String Format Specification
+// for the current instance of to NumberStrKernel.
+//
+// The default Number String Format Specification is
+// used and applied in formatting the number string for
+// screen display, file output or printing.
+//
+// The internal member variable controlling default
+// number string formatting which will be modified
+// by this method is:
+//
+//	NumberStrKernel.numStrFormatSpec
+//
+// The default Number String Format Specification is
+// used and applied by the following methods:
+//
+//	NumberStrKernel.FmtNumStrDefaultRound()
+//	NumberStrKernel.String()
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	This method will NOT alter the numeric value
+//	configured for the current instance of
+//	NumberStrKernel. This method will only reconfigure
+//	the internal member variable controlling default
+//	number string formatting:
+//
+//		NumberStrKernel.numStrFormatSpec
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	decSeparatorChars			string
+//
+//		This string contains the character or characters
+//		which will be configured as the Decimal Separator
+//		Symbol or Symbols for the returned number string.
+//
+//		The decimal separator is also known as the radix
+//		point and is used to separate integer and
+//		fractional digits within a formatted floating
+//		point number string.
+//
+//		In the US, UK, Australia and most of Canada, the
+//		decimal separator is the period character ('.')
+//		also known as the decimal point.
+//
+//		In France, Germany and many countries in the
+//		European Union, the Decimal Separator is the
+//		comma character (',').
+//
+//	leadingNumSymbols			bool
+//
+//		In Pure Number Strings, positive numeric values
+//		are NOT configured with leading or trailing plus
+//		signs ('+'). Negative values on the other hand,
+//		are always designated by leading or trailing
+//		minus sign ('-').
+//
+//		This parameter, 'leadingNumSymbols', controls
+//		the positioning of minus signs for negative
+//		numeric values within a	Number String.
+//
+//		When set to 'true', the returned number string
+//		will configure minus signs for negative numbers
+//		at the beginning of, or on the left side of, the
+//		numeric value. In these cases, the minus sign is
+//		said to be configured as a leading minus sign.
+//		This is the positioning format used in the US,
+//		UK, Australia and most of Canada. In addition,
+//		library functions in 'Go' and other programming
+//		languages generally expect leading minus signs
+//		for negative numbers.
+//
+//			Example Leading Minus Sign:
+//				"-123.456"
+//
+//		When parameter 'leadingNumSymbols' is set to
+//		'false', the returned number string will
+//		configure minus signs for negative numbers at the
+//		end of, or on the right side of, the numeric
+//		value. With this positioning format, the minus
+//		sign is said to be configured as a trailing minus
+//		sign. This is the positioning format used in
+//		France, Germany and many countries in the
+//		European Union.
+//
+//			Example Trailing Minus Sign:
+//				"123.456-"
+//
+//	numFieldLength					int
+//
+//		This parameter defines the length of the text
+//		field in which the numeric value will be
+//		displayed within a number string.
+//
+//		If 'numFieldLength' is less than the length of the
+//		numeric value string, it will be automatically set
+//		equal to the length of that numeric value string.
+//
+//		To automatically set the value of fieldLength to
+//		the string length of the numeric value, set this
+//		parameter to a value of minus one (-1).
+//
+//		If this parameter is submitted with a value less
+//		than minus one (-1) or greater than 1-million
+//		(1,000,000), an error will be returned.
+//
+//	numFieldJustification		TextJustify
+//
+//		An enumeration which specifies the justification
+//		of the numeric value within the number field
+//		length specified by input parameter
+//		'numFieldLength'.
+//
+//		Text justification can only be evaluated in the
+//		context of a number string, field length and a
+//		'textJustification' object of type TextJustify.
+//		This is because number strings with a field length
+//		equal to or less than the length of the numeric
+//		value string never use text justification. In
+//		these cases, text justification is completely
+//		ignored.
+//
+//		If the field length parameter ('numFieldLength')
+//		is greater than the length of the numeric value
+//		string, text justification must be equal to one
+//		of these three valid values:
+//
+//			TextJustify(0).Left()
+//			TextJustify(0).Right()
+//			TextJustify(0).Center()
+//
+//		You can also use the abbreviated text justification
+//		enumeration syntax as follows:
+//
+//			TxtJustify.Left()
+//			TxtJustify.Right()
+//			TxtJustify.Center()
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (numStrKernel *NumberStrKernel) SetDefaultNumStrFmtSpecPure(
+	decSeparatorChars string,
+	leadingNumSymbols bool,
+	numFieldLength int,
+	numFieldJustification TextJustify,
+	errorPrefix interface{}) error {
+
+	if numStrKernel.lock == nil {
+		numStrKernel.lock = new(sync.Mutex)
+	}
+
+	numStrKernel.lock.Lock()
+
+	defer numStrKernel.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumberStrKernel."+
+			"SetDefaultNumStrFmtSpecPure()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	numStrKernel.numStrFormatSpec.Empty()
+
+	numStrKernel.numStrFormatSpec,
+		err = new(NumStrFormatSpec).NewSignedPureNumberStr(
+		decSeparatorChars,
+		leadingNumSymbols,
+		numFieldLength,
+		numFieldJustification,
+		ePrefix.XCpy(
+			"numStrKernel.numStrFormatSpec<-"))
+
+	return err
+}
+
+//	SetDefaultSignedNumStrFmtSpecBasic
+//
+//	Reconfigures the current instance of
+//	NumberStrKernel with a new default Signed Number
+//	String Format using the basic set of input parameters.
+//
+//	This Number String Format is designed to format
+//	'Signed' integer or floating point numeric values.
+//
+//	A signed number is an integer or floating point
+//	numeric value which does NOT contain currency
+//	symbols.
+//
+//	This method is one step above NewSignedNumSimple()
+//	in terms of complexity and customization options.
+//
+//	This method provides additional options for multiple
+//	integer grouping types including India and Chinese
+//	Numbering.
+//
+//	Negative number sign symbols may be configured as
+//	leading negative number signs, trailing negative
+//	number signs or both. The combination of leading
+//	and trailing negative number signs allows for the
+//	configuration symbols like parentheses for the
+//	formatting of negative numbers.
+//
+//		Example: (125.34)
 //
 // ----------------------------------------------------------------
 //
@@ -7838,7 +8916,7 @@ func (numStrKernel *NumberStrKernel) Round(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (numStrKernel *NumberStrKernel) SetDefaultBasicSignedNumStrFmtSpec(
+func (numStrKernel *NumberStrKernel) SetDefaultSignedNumStrFmtSpecBasic(
 	decSeparatorChars string,
 	intSeparatorChars string,
 	intGroupingType IntegerGroupingType,
@@ -7864,7 +8942,7 @@ func (numStrKernel *NumberStrKernel) SetDefaultBasicSignedNumStrFmtSpec(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumberStrKernel."+
-			"SetDefaultBasicSignedNumStrFmtSpec()",
+			"SetDefaultSignedNumStrFmtSpecBasic()",
 		"")
 
 	if err != nil {
@@ -7888,443 +8966,7 @@ func (numStrKernel *NumberStrKernel) SetDefaultBasicSignedNumStrFmtSpec(
 	return err
 }
 
-// SetDefaultNumStrFormatSpec
-//
-// Sets the default Number String Format Specification
-// for the current instance of to NumberStrKernel.
-//
-// The default Number String Format Specification is
-// used and applied in formatting the number string for
-// screen display, file output or printing.
-//
-// The internal member variable controlling default
-// number string formatting which will be modified
-// by this method is:
-//
-//	NumberStrKernel.numStrFormatSpec
-//
-// The default Number String Format Specification is
-// used and applied by the following methods:
-//
-//	NumberStrKernel.FmtSignedNumStrPure()
-//	NumberStrKernel.String()
-//
-// ----------------------------------------------------------------
-//
-// # BE ADVISED
-//
-//	This method will NOT alter the numeric value
-//	configured for the current instance of
-//	NumberStrKernel. This method will only reconfigure
-//	the internal member variable controlling default
-//	number string formatting:
-//
-//		NumberStrKernel.numStrFormatSpec
-//
-// ----------------------------------------------------------------
-//
-// # Input Parameters
-//
-//	defaultNumStrFmt			NumStrFormatSpec
-//
-//		An instance of Number String Format Specification
-//		('NumStrFormatSpec').
-//
-//		A deep copy of this instance will be stored in the
-//		current instance of NumberStrKernel. This format
-//		specification will be used to format the number
-//		string for screen displays, file output or
-//		printing.
-//
-//		If 'defaultNumStrFmt' is found to be invalid, an
-//		error will be returned.
-//
-//	errorPrefix					interface{}
-//
-//		This object encapsulates error prefix text which
-//		is included in all returned error messages.
-//		Usually, it contains the name of the calling
-//		method or methods listed as a method or function
-//		chain of execution.
-//
-//		If no error prefix information is needed, set this
-//		parameter to 'nil'.
-//
-//		This empty interface must be convertible to one of
-//		the following types:
-//
-//		1.	nil
-//				A nil value is valid and generates an
-//				empty collection of error prefix and
-//				error context information.
-//
-//		2.	string
-//				A string containing error prefix
-//				information.
-//
-//		3.	[]string
-//				A one-dimensional slice of strings
-//				containing error prefix information.
-//
-//		4.	[][2]string
-//				A two-dimensional slice of strings
-//		   		containing error prefix and error
-//		   		context information.
-//
-//		5.	ErrPrefixDto
-//				An instance of ErrPrefixDto.
-//				Information from this object will
-//				be copied for use in error and
-//				informational messages.
-//
-//		6.	*ErrPrefixDto
-//				A pointer to an instance of
-//				ErrPrefixDto. Information from
-//				this object will be copied for use
-//				in error and informational messages.
-//
-//		7.	IBasicErrorPrefix
-//				An interface to a method
-//				generating a two-dimensional slice
-//				of strings containing error prefix
-//				and error context information.
-//
-//		If parameter 'errorPrefix' is NOT convertible
-//		to one of the valid types listed above, it will
-//		be considered invalid and trigger the return of
-//		an error.
-//
-//		Types ErrPrefixDto and IBasicErrorPrefix are
-//		included in the 'errpref' software package:
-//			"github.com/MikeAustin71/errpref".
-//
-// ----------------------------------------------------------------
-//
-// # Return Values
-//
-//	error
-//
-//		If this method completes successfully, the
-//		returned error Type is set equal to 'nil'.
-//
-//		If errors are encountered during processing, the
-//		returned error Type will encapsulate an error
-//		message. This returned error message will
-//		incorporate the method chain and text passed by
-//		input parameter, 'errorPrefix'. The 'errorPrefix'
-//		text will be attached to the beginning of the
-//		error message.
-func (numStrKernel *NumberStrKernel) SetDefaultNumStrFormatSpec(
-	defaultNumStrFmt NumStrFormatSpec,
-	errorPrefix interface{}) error {
-
-	if numStrKernel.lock == nil {
-		numStrKernel.lock = new(sync.Mutex)
-	}
-
-	numStrKernel.lock.Lock()
-
-	defer numStrKernel.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-
-	var err error
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
-		"NumberStrKernel."+
-			"SetDefaultNumStrFormatSpec()",
-		"")
-
-	if err != nil {
-		return err
-	}
-
-	_,
-		err = new(numStrFmtSpecElectron).
-		testValidityNumStrFormatSpec(
-			&defaultNumStrFmt,
-			ePrefix.XCpy(
-				"defaultNumStrFmt invalid!"))
-
-	if err != nil {
-		return err
-	}
-
-	err = numStrKernel.numStrFormatSpec.CopyIn(
-		&defaultNumStrFmt,
-		ePrefix.XCpy(
-			"numStrKernel.numStrFormatSpec<-defaultNumStrFmt"))
-
-	return err
-}
-
-// SetDefaultPureNumStrFormatSpec
-//
-// Sets the default Number String Format Specification
-// for the current instance of to NumberStrKernel.
-//
-// The default Number String Format Specification is
-// used and applied in formatting the number string for
-// screen display, file output or printing.
-//
-// The internal member variable controlling default
-// number string formatting which will be modified
-// by this method is:
-//
-//	NumberStrKernel.numStrFormatSpec
-//
-// The default Number String Format Specification is
-// used and applied by the following methods:
-//
-//	NumberStrKernel.FmtNumStrDefaultRound()
-//	NumberStrKernel.String()
-//
-// ----------------------------------------------------------------
-//
-// # BE ADVISED
-//
-//	This method will NOT alter the numeric value
-//	configured for the current instance of
-//	NumberStrKernel. This method will only reconfigure
-//	the internal member variable controlling default
-//	number string formatting:
-//
-//		NumberStrKernel.numStrFormatSpec
-//
-// ----------------------------------------------------------------
-//
-// # Input Parameters
-//
-//	decSeparatorChars			string
-//
-//		This string contains the character or characters
-//		which will be configured as the Decimal Separator
-//		Symbol or Symbols for the returned number string.
-//
-//		The decimal separator is also known as the radix
-//		point and is used to separate integer and
-//		fractional digits within a formatted floating
-//		point number string.
-//
-//		In the US, UK, Australia and most of Canada, the
-//		decimal separator is the period character ('.')
-//		also known as the decimal point.
-//
-//		In France, Germany and many countries in the
-//		European Union, the Decimal Separator is the
-//		comma character (',').
-//
-//	leadingNumSymbols			bool
-//
-//		In Pure Number Strings, positive numeric values
-//		are NOT configured with leading or trailing plus
-//		signs ('+'). Negative values on the other hand,
-//		are always designated by leading or trailing
-//		minus sign ('-').
-//
-//		This parameter, 'leadingNumSymbols', controls
-//		the positioning of minus signs for negative
-//		numeric values within a	Number String.
-//
-//		When set to 'true', the returned number string
-//		will configure minus signs for negative numbers
-//		at the beginning of, or on the left side of, the
-//		numeric value. In these cases, the minus sign is
-//		said to be configured as a leading minus sign.
-//		This is the positioning format used in the US,
-//		UK, Australia and most of Canada. In addition,
-//		library functions in 'Go' and other programming
-//		languages generally expect leading minus signs
-//		for negative numbers.
-//
-//			Example Leading Minus Sign:
-//				"-123.456"
-//
-//		When parameter 'leadingNumSymbols' is set to
-//		'false', the returned number string will
-//		configure minus signs for negative numbers at the
-//		end of, or on the right side of, the numeric
-//		value. With this positioning format, the minus
-//		sign is said to be configured as a trailing minus
-//		sign. This is the positioning format used in
-//		France, Germany and many countries in the
-//		European Union.
-//
-//			Example Trailing Minus Sign:
-//				"123.456-"
-//
-//	numFieldLength					int
-//
-//		This parameter defines the length of the text
-//		field in which the numeric value will be
-//		displayed within a number string.
-//
-//		If 'numFieldLength' is less than the length of the
-//		numeric value string, it will be automatically set
-//		equal to the length of that numeric value string.
-//
-//		To automatically set the value of fieldLength to
-//		the string length of the numeric value, set this
-//		parameter to a value of minus one (-1).
-//
-//		If this parameter is submitted with a value less
-//		than minus one (-1) or greater than 1-million
-//		(1,000,000), an error will be returned.
-//
-//	numFieldJustification		TextJustify
-//
-//		An enumeration which specifies the justification
-//		of the numeric value within the number field
-//		length specified by input parameter
-//		'numFieldLength'.
-//
-//		Text justification can only be evaluated in the
-//		context of a number string, field length and a
-//		'textJustification' object of type TextJustify.
-//		This is because number strings with a field length
-//		equal to or less than the length of the numeric
-//		value string never use text justification. In
-//		these cases, text justification is completely
-//		ignored.
-//
-//		If the field length parameter ('numFieldLength')
-//		is greater than the length of the numeric value
-//		string, text justification must be equal to one
-//		of these three valid values:
-//
-//			TextJustify(0).Left()
-//			TextJustify(0).Right()
-//			TextJustify(0).Center()
-//
-//		You can also use the abbreviated text justification
-//		enumeration syntax as follows:
-//
-//			TxtJustify.Left()
-//			TxtJustify.Right()
-//			TxtJustify.Center()
-//
-//	errorPrefix					interface{}
-//
-//		This object encapsulates error prefix text which
-//		is included in all returned error messages.
-//		Usually, it contains the name of the calling
-//		method or methods listed as a method or function
-//		chain of execution.
-//
-//		If no error prefix information is needed, set this
-//		parameter to 'nil'.
-//
-//		This empty interface must be convertible to one of
-//		the following types:
-//
-//		1.	nil
-//				A nil value is valid and generates an
-//				empty collection of error prefix and
-//				error context information.
-//
-//		2.	string
-//				A string containing error prefix
-//				information.
-//
-//		3.	[]string
-//				A one-dimensional slice of strings
-//				containing error prefix information.
-//
-//		4.	[][2]string
-//				A two-dimensional slice of strings
-//		   		containing error prefix and error
-//		   		context information.
-//
-//		5.	ErrPrefixDto
-//				An instance of ErrPrefixDto.
-//				Information from this object will
-//				be copied for use in error and
-//				informational messages.
-//
-//		6.	*ErrPrefixDto
-//				A pointer to an instance of
-//				ErrPrefixDto. Information from
-//				this object will be copied for use
-//				in error and informational messages.
-//
-//		7.	IBasicErrorPrefix
-//				An interface to a method
-//				generating a two-dimensional slice
-//				of strings containing error prefix
-//				and error context information.
-//
-//		If parameter 'errorPrefix' is NOT convertible
-//		to one of the valid types listed above, it will
-//		be considered invalid and trigger the return of
-//		an error.
-//
-//		Types ErrPrefixDto and IBasicErrorPrefix are
-//		included in the 'errpref' software package:
-//			"github.com/MikeAustin71/errpref".
-//
-// ----------------------------------------------------------------
-//
-// # Return Values
-//
-//	error
-//
-//		If this method completes successfully, the
-//		returned error Type is set equal to 'nil'.
-//
-//		If errors are encountered during processing, the
-//		returned error Type will encapsulate an error
-//		message. This returned error message will
-//		incorporate the method chain and text passed by
-//		input parameter, 'errorPrefix'. The 'errorPrefix'
-//		text will be attached to the beginning of the
-//		error message.
-func (numStrKernel *NumberStrKernel) SetDefaultPureNumStrFormatSpec(
-	decSeparatorChars string,
-	leadingNumSymbols bool,
-	numFieldLength int,
-	numFieldJustification TextJustify,
-	errorPrefix interface{}) error {
-
-	if numStrKernel.lock == nil {
-		numStrKernel.lock = new(sync.Mutex)
-	}
-
-	numStrKernel.lock.Lock()
-
-	defer numStrKernel.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-
-	var err error
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
-		"NumberStrKernel."+
-			"SetDefaultPureNumStrFormatSpec()",
-		"")
-
-	if err != nil {
-		return err
-	}
-
-	numStrKernel.numStrFormatSpec.Empty()
-
-	numStrKernel.numStrFormatSpec,
-		err = new(NumStrFormatSpec).NewSignedPureNumberStr(
-		decSeparatorChars,
-		leadingNumSymbols,
-		numFieldLength,
-		numFieldJustification,
-		ePrefix.XCpy(
-			"numStrKernel.numStrFormatSpec<-"))
-
-	return err
-}
-
-// SetDefaultSimpleNumStrFormatSpec
+// SetDefaultSignedNumStrFmtSpecSimple
 //
 // Sets the default Number String Format Specification
 // for the current instance of to NumberStrKernel.
@@ -8573,7 +9215,7 @@ func (numStrKernel *NumberStrKernel) SetDefaultPureNumStrFormatSpec(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (numStrKernel *NumberStrKernel) SetDefaultSimpleNumStrFormatSpec(
+func (numStrKernel *NumberStrKernel) SetDefaultSignedNumStrFmtSpecSimple(
 	decSeparatorChars string,
 	intSeparatorChars string,
 	leadingNumSymbols bool,
@@ -8597,7 +9239,7 @@ func (numStrKernel *NumberStrKernel) SetDefaultSimpleNumStrFormatSpec(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NumberStrKernel."+
-			"SetDefaultSimpleNumStrFormatSpec()",
+			"SetDefaultSignedNumStrFmtSpecSimple()",
 		"")
 
 	if err != nil {
@@ -11746,9 +12388,9 @@ func (numStrKernel *NumberStrKernel) SetStringDigits(
 // To explicitly set the Default Number String Format
 // Specification, use the following methods:
 //
-//	NumberStrKernel.SetDefaultNumStrFormatSpec()
-//	NumberStrKernel.SetDefaultPureNumStrFormatSpec()
-//	NumberStrKernel.SetDefaultSimpleNumStrFormatSpec()
+//	NumberStrKernel.SetDefaultNumStrFmtSpec()
+//	NumberStrKernel.SetDefaultNumStrFmtSpecPure()
+//	NumberStrKernel.SetDefaultSignedNumStrFmtSpecSimple()
 //
 // If the Default Number String Format is uninitialized
 // or invalid, it will be automatically set and defaulted
