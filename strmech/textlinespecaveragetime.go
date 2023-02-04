@@ -458,6 +458,62 @@ func (txtLineAvgTime *TextLineSpecAverageTime) Empty() {
 	return
 }
 
+//	Equal
+//
+//	Receives a pointer to another instance of
+//	TextLineSpecAverageTime and proceeds to compare the
+//	member variables to those of the current
+//	TextLineSpecAverageTime instance in order to
+//	determine if they are equivalent.
+//
+//	A boolean flag showing the result of this comparison
+//	is returned. If the member variables of both
+//	instances are equal in all respects, this flag is set
+//	to 'true'. Otherwise, this method returns 'false'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	incomingAvgTimer			*TextLineSpecAverageTime
+//
+//		A pointer to an incoming instance of
+//		TextLineSpecAverageTime. This method will compare
+//		all member variable data values in this instance
+//		against those contained in the current instance
+//		of TextLineSpecAverageTime. If the data values in
+//		both instances are found to be equal in all
+//		respects, this method will return a boolean value
+//		of 'true'.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	bool
+//
+//		If the member variable data values contained in
+//		input parameter 'incomingAvgTimer' are equal
+//		in all respects to those contained in the current
+//		instance of TextLineSpecAverageTime, this method
+//		will return a boolean value of 'true'. Otherwise,
+//		a value of 'false' will be returned.
+func (txtLineAvgTime *TextLineSpecAverageTime) Equal(
+	incomingAvgTimer *TextLineSpecAverageTime) bool {
+
+	if txtLineAvgTime.lock == nil {
+		txtLineAvgTime.lock = new(sync.Mutex)
+	}
+
+	txtLineAvgTime.lock.Lock()
+
+	defer txtLineAvgTime.lock.Unlock()
+
+	return new(textLineSpecAverageTimeElectron).equal(
+		txtLineAvgTime,
+		incomingAvgTimer)
+}
+
 //	New
 //
 //	Returns an initialized instance of
