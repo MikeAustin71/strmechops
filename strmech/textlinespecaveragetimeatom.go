@@ -15,11 +15,13 @@ type textLineSpecAverageTimeAtom struct {
 //	calcAverageDuration
 //
 //	Calculates the average duration of a timer event
-//	encapsulated in an instance of TextLineSpecAverageTime
-//	passed as input parameter 'txtLineAvgTimer'.
+//	series encapsulated in an instance of
+//	TextLineSpecAverageTime passed as input parameter
+//	'txtLineAvgTimer'.
 //
-//	Average duration is calculated by dividing the total
-//	time duration by the number of separate timing events.
+//	Average time duration is calculated by dividing the
+//	total time duration by the number of separate timing
+//	events.
 //
 //	In addition to Average Duration, this method also
 //	returns the minimum and maximum time duration for
@@ -29,6 +31,13 @@ type textLineSpecAverageTimeAtom struct {
 // ----------------------------------------------------------------
 //
 // # Input Parameters
+//
+//	txtLineAvgTimer				*TextLineSpecAverageTime
+//
+//		A pointer to an instance of TextLineSpecAverageTime.
+//		The internal average time counters maintained by
+//		this instance will be used to produce an average
+//		time duration for all recorded timing events.
 //
 //	errPrefDto					*ePref.ErrPrefixDto
 //

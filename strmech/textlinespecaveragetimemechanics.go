@@ -269,6 +269,69 @@ func (txtLineAvgTimeMech *textLineSpecAverageTimeMechanics) addStartStopEvent(
 	return err
 }
 
+//	getFormattedText
+//
+//	Receives an instance of TextLineSpecAverageTime and,
+//	using the internal timing counters, calculates the
+//	average time duration for all recorded events.
+//
+//	Average time duration data including the minimum and
+//	maximum time duration for this series of timing
+//	events is compiled as text and reported to the
+//	calling function.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	txtLineAvgTimer				*TextLineSpecAverageTime
+//
+//		A pointer to an instance of TextLineSpecAverageTime.
+//		The internal average time counters maintained by
+//		this instance will be used to produce an average
+//		time duration for all recorded timing events.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//
+//		If this method completes successfully, this
+//		string will contain a report of average time
+//		duration, minimum time duration and maximum
+//		time duration for the series of timing events
+//		recorded in the instance of
+//		TextLineSpecAverageTime passed as input parameter
+//		'txtLineAvgTimer'.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
 func (txtLineAvgTimeMech *textLineSpecAverageTimeMechanics) getFormattedText(
 	txtLineAvgTimer *TextLineSpecAverageTime,
 	errPrefDto *ePref.ErrPrefixDto) (

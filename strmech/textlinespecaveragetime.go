@@ -30,6 +30,170 @@ type TextLineSpecAverageTime struct {
 	lock                   *sync.Mutex
 }
 
+//	CalcAvgTimeDuration
+//
+//	Calculates the average duration of a timer event
+//	series encapsulated in the current instance of
+//	TextLineSpecAverageTime.
+//	passed as input parameter 'txtLineAvgTimer'.
+//
+//	Average time duration is calculated by dividing the
+//	total time duration by the number of separate timing
+//	events.
+//
+//	In addition to Average Duration, this method also
+//	returns the minimum and maximum time duration for
+//	all timing events included in the average time
+//	calculation.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	avgDuration					int64
+//
+//		If this method completes successfully, this
+//		parameter will return the average time duration
+//		for all recorded timing events in the current
+//		instance of TextLineSpecAverageTime. Average
+//		duration is calculated by dividing the total
+//		time duration by the number of separate timing
+//		events.
+//
+//	maximumTimeDuration			int64
+//
+//		If this method completes successfully, this
+//		parameter will return the maximum time duration
+//		from all recorded timing events.
+//
+//	minimumTimeDuration			int64
+//
+//		If this method completes successfully, this
+//		parameter will return the minimum time duration
+//		from all recorded timing events.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (txtLineAvgTime *TextLineSpecAverageTime) CalcAvgTimeDuration(
+	errorPrefix interface{}) (
+	avgDuration int64,
+	maximumTimeDuration int64,
+	minimumTimeDuration int64,
+	err error) {
+
+	if txtLineAvgTime.lock == nil {
+		txtLineAvgTime.lock = new(sync.Mutex)
+	}
+
+	txtLineAvgTime.lock.Lock()
+
+	defer txtLineAvgTime.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecAverageTime."+
+			"CalcAvgTimeDuration()",
+		"")
+
+	if err != nil {
+
+		return avgDuration,
+			maximumTimeDuration,
+			minimumTimeDuration,
+			err
+	}
+
+	avgDuration,
+		maximumTimeDuration,
+		minimumTimeDuration,
+		err = new(textLineSpecAverageTimeAtom).
+		calcAverageDuration(
+			txtLineAvgTime,
+			ePrefix.XCpy(
+				"txtLineAvgTime"))
+
+	return avgDuration,
+		maximumTimeDuration,
+		minimumTimeDuration,
+		err
+}
+
 //	CopyIn
 //
 //	Copies all the data fields from an incoming instance
@@ -694,15 +858,35 @@ func (txtLineAvgTime *TextLineSpecAverageTime) EqualITextLine(
 
 //	GetFormattedText
 //
-//	Returns the calculated average time for the subject
-//	operation as formatted text for screen display, file
-//	output or printing.
+//	Returns the calculated average time duration for all
+//	the timing events currently recorded by the current
+//	instance of TextLineSpecAverageTime.
+//
+//	This method will compile the calculated timing data
+//	as formatted text for screen displays, file output or
+//	printing.
 //
 //	This method is similar to method:
+//
 //		TextLineSpecAverageTime.String()
 //
-//	The sole difference being that method and this is the
-//	return type. This method returns an error.
+//	The sole difference between that method and this is
+//	the return type. This method returns an error.
+//
+//	In addition to average time duration data for all
+//	timing events, this text report also documents the
+//	minimum and maximum time durations recorded for this
+//	time series.
+//
+//	If the text report format produced by this method is
+//	unsuitable, the user should call method:
+//
+//		TextLineSpecAverageTime.CalculateAvgDuration()
+//
+//	This method provides the average time duration in
+//	numerical format. Thereafter, the user can use the
+//	'TextLineSpec' types to format a customized text
+//	report of timing data.
 //
 //	This method fulfills requirements of interface
 //	ITextLineSpecification.
