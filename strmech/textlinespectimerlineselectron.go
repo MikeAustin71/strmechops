@@ -195,27 +195,29 @@ func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) computeTimeDuration
 
 		return timeDurationStrs, err
 	}
+	/*
+		// MicroSecondNanoseconds - Number of Nanoseconds in a Microsecond.
+		// 	A MicroSecond is 1/1,000,000 or 1 one-millionth of a second
+		MicroSecondNanoseconds := int64(time.Microsecond)
 
-	// MicroSecondNanoseconds - Number of Nanoseconds in a Microsecond.
-	// 	A MicroSecond is 1/1,000,000 or 1 one-millionth of a second
-	MicroSecondNanoseconds := int64(time.Microsecond)
+		// MilliSecondNanoseconds - Number of Nanoseconds in a MilliSecond.
+		//	 A millisecond is 1/1,000 or 1 one-thousandth of a second
+		MilliSecondNanoseconds := int64(time.Millisecond)
 
-	// MilliSecondNanoseconds - Number of Nanoseconds in a MilliSecond.
-	//	 A millisecond is 1/1,000 or 1 one-thousandth of a second
-	MilliSecondNanoseconds := int64(time.Millisecond)
+		// SecondNanoseconds - Number of Nanoseconds in a Second
+		SecondNanoseconds := int64(time.Second)
 
-	// SecondNanoseconds - Number of Nanoseconds in a Second
-	SecondNanoseconds := int64(time.Second)
+		// MinuteNanoseconds - Number of Nanoseconds in a minute
+		MinuteNanoseconds := int64(time.Minute)
 
-	// MinuteNanoseconds - Number of Nanoseconds in a minute
-	MinuteNanoseconds := int64(time.Minute)
+		// HourNanoseconds - Number of Nanoseconds in an hour
+		HourNanoseconds := int64(time.Hour)
 
-	// HourNanoseconds - Number of Nanoseconds in an hour
-	HourNanoseconds := int64(time.Hour)
+		// DayNanoseconds - Number of Nanoseconds in a standard
+		// 24-hour day.
+		DayNanoseconds := int64(time.Hour) * int64(24)
 
-	// DayNanoseconds - Number of Nanoseconds in a standard
-	// 24-hour day.
-	DayNanoseconds := int64(time.Hour) * int64(24)
+	*/
 
 	t2Dur := endTime.Sub(startTime)
 
@@ -229,39 +231,52 @@ func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) computeTimeDuration
 	numOfMilliseconds := int64(0)
 	numOfMicroseconds := int64(0)
 	numOfNanoseconds := int64(0)
+	/*
+		if totalNanoseconds >= DayNanoseconds {
+			numOfDays = totalNanoseconds / DayNanoseconds
+			totalNanoseconds =
+				totalNanoseconds - (numOfDays * DayNanoseconds)
+		}
 
-	if totalNanoseconds >= DayNanoseconds {
-		numOfDays = totalNanoseconds / DayNanoseconds
-		totalNanoseconds =
-			totalNanoseconds - (numOfDays * DayNanoseconds)
-	}
+		if totalNanoseconds >= HourNanoseconds {
+			numOfHours = totalNanoseconds / HourNanoseconds
+			totalNanoseconds = totalNanoseconds - (numOfHours * HourNanoseconds)
+		}
 
-	if totalNanoseconds >= HourNanoseconds {
-		numOfHours = totalNanoseconds / HourNanoseconds
-		totalNanoseconds = totalNanoseconds - (numOfHours * HourNanoseconds)
-	}
+		if totalNanoseconds >= MinuteNanoseconds {
+			numOfMinutes = totalNanoseconds / MinuteNanoseconds
+			totalNanoseconds = totalNanoseconds - (numOfMinutes * MinuteNanoseconds)
+		}
 
-	if totalNanoseconds >= MinuteNanoseconds {
-		numOfMinutes = totalNanoseconds / MinuteNanoseconds
-		totalNanoseconds = totalNanoseconds - (numOfMinutes * MinuteNanoseconds)
-	}
+		if totalNanoseconds >= SecondNanoseconds {
+			numOfSeconds = totalNanoseconds / SecondNanoseconds
+			totalNanoseconds = totalNanoseconds - (numOfSeconds * SecondNanoseconds)
+		}
 
-	if totalNanoseconds >= SecondNanoseconds {
-		numOfSeconds = totalNanoseconds / SecondNanoseconds
-		totalNanoseconds = totalNanoseconds - (numOfSeconds * SecondNanoseconds)
-	}
+		if totalNanoseconds >= MilliSecondNanoseconds {
+			numOfMilliseconds = totalNanoseconds / MilliSecondNanoseconds
+			totalNanoseconds = totalNanoseconds - (numOfMilliseconds * MilliSecondNanoseconds)
+		}
 
-	if totalNanoseconds >= MilliSecondNanoseconds {
-		numOfMilliseconds = totalNanoseconds / MilliSecondNanoseconds
-		totalNanoseconds = totalNanoseconds - (numOfMilliseconds * MilliSecondNanoseconds)
-	}
+		if totalNanoseconds >= MicroSecondNanoseconds {
+			numOfMicroseconds = totalNanoseconds / MicroSecondNanoseconds
+			totalNanoseconds = totalNanoseconds - (numOfMicroseconds * MicroSecondNanoseconds)
+		}
 
-	if totalNanoseconds >= MicroSecondNanoseconds {
-		numOfMicroseconds = totalNanoseconds / MicroSecondNanoseconds
-		totalNanoseconds = totalNanoseconds - (numOfMicroseconds * MicroSecondNanoseconds)
-	}
+		numOfNanoseconds = totalNanoseconds
 
-	numOfNanoseconds = totalNanoseconds
+	*/
+	numOfDays,
+		numOfHours,
+		numOfMinutes,
+		numOfSeconds,
+		numOfMilliseconds,
+		numOfMicroseconds,
+		numOfNanoseconds,
+		err = new(DateTimeHelper).AllocateTimeDuration(
+		totalNanoseconds,
+		ePrefix.XCpy(
+			"totalNanoseconds"))
 
 	var nStrIntSeparator IntegerSeparatorSpec
 
