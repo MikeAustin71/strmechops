@@ -24,6 +24,8 @@ import (
 type TextLineSpecAverageTime struct {
 	numberOfDurationEvents big.Int
 	totalDurationNanoSecs  big.Int
+	maximumTimeDuration    big.Int
+	minimumTimeDuration    big.Int
 	textLineReader         *strings.Reader
 	lock                   *sync.Mutex
 }
@@ -1369,8 +1371,8 @@ func (txtLineAvgTime *TextLineSpecAverageTime) SetInitializeTimerToZero() {
 
 	defer txtLineAvgTime.lock.Unlock()
 
-	txtLineAvgTime.numberOfDurationEvents.SetInt64(0)
-	txtLineAvgTime.totalDurationNanoSecs.SetInt64(0)
+	new(textLineSpecAverageTimeElectron).empty(
+		txtLineAvgTime)
 
 	return
 }
