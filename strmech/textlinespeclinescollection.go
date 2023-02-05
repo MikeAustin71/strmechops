@@ -167,6 +167,188 @@ func (txtLinesSpecCol *TextLineSpecLinesCollection) AddBlankLine(
 	return err
 }
 
+//	AddPlainTextLine
+//
+//	Receives input parameters containing the components
+//	necessary to construct a line of plain text. That
+//	plain text line is then added to the Text
+//	Specification Lines Collection maintained by the
+//	current instance of TextLineSpecLinesCollection.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	leftMarginStr				string
+//
+//		A string containing the text characters to be
+//		positioned on the left side of the text string
+//		(textString).
+//
+//		If no left margin is required, set this parameter
+//		to an empty string.
+//
+//		Example:
+//			leftMarginStr  = "   " // 3-spaces
+//			Text String = "Hello World"
+//			rightMarginStr = "" // Empty string
+//			Plain Text line = "   Hello World"
+//
+//		If the 'leftMarginStr' string length is greater
+//		than one-million (1,000,000), an error will be
+//		returned.
+//
+//	rightMarginStr				string
+//
+//		A string containing the text characters to be
+//		positioned on the right side of the text string
+//		(textString).
+//
+//		If no right margin is required, set this
+//		parameter to an empty string.
+//
+//		Example:
+//			leftMarginStr  = "" // Empty string
+//			Text String = "Hello World"
+//			rightMarginStr = " **" // Right Margin Characters
+//			Plain Text line = "Hello World **"
+//
+//		If the 'rightMarginStr' string length is greater
+//		than one-million (1,000,000), an error will be
+//		returned.
+//
+//	textString					string
+//
+//		A string of text which will be inserted between
+//		the left ('') and right ('') margin strings to
+//		construct the plain text line which will be added
+//		to the Text Specification Lines Collection
+//		maintained by the current instance of
+//		TextLineSpecLinesCollection.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (txtLinesSpecCol *TextLineSpecLinesCollection) AddPlainTextLine(
+	leftMarginStr string,
+	rightMarginStr string,
+	textString string,
+	errorPrefix interface{}) error {
+
+	txtLinesSpecCol.lock.Lock()
+
+	defer txtLinesSpecCol.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecLinesCollection."+
+			"AddPlainTextLine()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	var plainTextLine TextLineSpecPlainText
+
+	plainTextLine,
+		err = TextLineSpecPlainText{}.NewPlainTextStrings(
+		leftMarginStr,
+		rightMarginStr,
+		textString,
+		"\n",
+		false,
+		ePrefix.XCpy("plainTextLine<-"))
+
+	if err != nil {
+		return err
+	}
+
+	return new(textLineSpecLinesCollectionNanobot).
+		addTextLine(
+			txtLinesSpecCol,
+			&plainTextLine,
+			ePrefix.XCpy(
+				"txtLinesSpecCol<-plainTextLine"))
+}
+
 // AddSolidLine
 //
 // Adds a solid line to the Text Specification Lines

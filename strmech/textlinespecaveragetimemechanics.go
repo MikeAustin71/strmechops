@@ -372,6 +372,52 @@ func (txtLineAvgTimeMech *textLineSpecAverageTimeMechanics) getFormattedText(
 		return fmtOutputStr, err
 	}
 
+	var avgDuration, maximumTimeDuration,
+		minimumTimeDuration int64
+
+	avgDuration,
+		maximumTimeDuration,
+		minimumTimeDuration,
+		err = new(textLineSpecAverageTimeAtom).
+		calcAverageDuration(
+			txtLineAvgTimer,
+			ePrefix.XCpy(
+				"txtLineAvgTimer"))
+
+	if err != nil {
+		return fmtOutputStr, err
+	}
+
+	var numOfDays,
+		numOfHours,
+		numOfMinutes,
+		numOfSeconds,
+		numOfMilliseconds,
+		numOfMicroseconds,
+		numOfNanoseconds int64
+
+	numOfDays,
+		numOfHours,
+		numOfMinutes,
+		numOfSeconds,
+		numOfMilliseconds,
+		numOfMicroseconds,
+		numOfNanoseconds,
+		err = new(DateTimeHelper).AllocateTimeDuration(
+		avgDuration,
+		ePrefix.XCpy(
+			"avgDuration"))
+
+	if err != nil {
+		return fmtOutputStr, err
+	}
+
+	textLines := new(TextLineSpecLinesCollection).New()
+
+	err = textLines.AddBlankLine(
+		1,
+		ePrefix.XCpy("textLines 1"))
+
 	fmtOutputStr = "Empty Placeholder!"
 
 	return fmtOutputStr, err
