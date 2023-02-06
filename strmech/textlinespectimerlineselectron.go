@@ -231,52 +231,26 @@ func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) computeTimeDuration
 	numOfMilliseconds := int64(0)
 	numOfMicroseconds := int64(0)
 	numOfNanoseconds := int64(0)
-	/*
-		if totalNanoseconds >= DayNanoseconds {
-			numOfDays = totalNanoseconds / DayNanoseconds
-			totalNanoseconds =
-				totalNanoseconds - (numOfDays * DayNanoseconds)
-		}
 
-		if totalNanoseconds >= HourNanoseconds {
-			numOfHours = totalNanoseconds / HourNanoseconds
-			totalNanoseconds = totalNanoseconds - (numOfHours * HourNanoseconds)
-		}
+	var allocDuration TimeDurationDto
 
-		if totalNanoseconds >= MinuteNanoseconds {
-			numOfMinutes = totalNanoseconds / MinuteNanoseconds
-			totalNanoseconds = totalNanoseconds - (numOfMinutes * MinuteNanoseconds)
-		}
-
-		if totalNanoseconds >= SecondNanoseconds {
-			numOfSeconds = totalNanoseconds / SecondNanoseconds
-			totalNanoseconds = totalNanoseconds - (numOfSeconds * SecondNanoseconds)
-		}
-
-		if totalNanoseconds >= MilliSecondNanoseconds {
-			numOfMilliseconds = totalNanoseconds / MilliSecondNanoseconds
-			totalNanoseconds = totalNanoseconds - (numOfMilliseconds * MilliSecondNanoseconds)
-		}
-
-		if totalNanoseconds >= MicroSecondNanoseconds {
-			numOfMicroseconds = totalNanoseconds / MicroSecondNanoseconds
-			totalNanoseconds = totalNanoseconds - (numOfMicroseconds * MicroSecondNanoseconds)
-		}
-
-		numOfNanoseconds = totalNanoseconds
-
-	*/
-	numOfDays,
-		numOfHours,
-		numOfMinutes,
-		numOfSeconds,
-		numOfMilliseconds,
-		numOfMicroseconds,
-		numOfNanoseconds,
+	allocDuration,
 		err = new(DateTimeHelper).AllocateTimeDuration(
 		totalNanoseconds,
 		ePrefix.XCpy(
 			"totalNanoseconds"))
+
+	if err != nil {
+		return timeDurationStrs, err
+	}
+
+	numOfDays = allocDuration.NumberOfDays
+	numOfHours = allocDuration.NumberOfHours
+	numOfMinutes = allocDuration.NumberOfMinutes
+	numOfSeconds = allocDuration.NumberOfSeconds
+	numOfMilliseconds = allocDuration.NumberOfMilliseconds
+	numOfMicroseconds = allocDuration.NumberOfMicroseconds
+	numOfNanoseconds = allocDuration.NumberOfNanoseconds
 
 	var nStrIntSeparator IntegerSeparatorSpec
 
@@ -295,6 +269,7 @@ func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) computeTimeDuration
 	outputValStr := ""
 	var numStrWithIntSeps []rune
 	var foundFirstValue = false
+
 	maxSummaryLineLen :=
 		maxOutputLineLen - summaryTextLineLeftMargin
 

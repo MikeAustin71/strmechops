@@ -130,14 +130,7 @@ func (dateTimeHelpAtom *dateTimeHelperAtom) allocateInt64TimeDuration(
 		"")
 
 	if err != nil {
-		return numOfDays,
-			numOfHours,
-			numOfMinutes,
-			numOfSeconds,
-			numOfMilliseconds,
-			numOfMicroseconds,
-			numOfNanoseconds,
-			err
+		return allocatedTimeDuration, err
 	}
 
 	if totalTimeDuration < 0 {
@@ -149,26 +142,12 @@ func (dateTimeHelpAtom *dateTimeHelperAtom) allocateInt64TimeDuration(
 			ePrefix.String(),
 			totalTimeDuration)
 
-		return numOfDays,
-			numOfHours,
-			numOfMinutes,
-			numOfSeconds,
-			numOfMilliseconds,
-			numOfMicroseconds,
-			numOfNanoseconds,
-			err
+		return allocatedTimeDuration, err
 	}
 
 	if totalTimeDuration == 0 {
 
-		return numOfDays,
-			numOfHours,
-			numOfMinutes,
-			numOfSeconds,
-			numOfMilliseconds,
-			numOfMicroseconds,
-			numOfNanoseconds,
-			err
+		return allocatedTimeDuration, err
 	}
 
 	// microsecondNanoseconds - Number of Nanoseconds in a Microsecond.
@@ -192,49 +171,67 @@ func (dateTimeHelpAtom *dateTimeHelperAtom) allocateInt64TimeDuration(
 	// 24-hour day.
 	dayNanoseconds := int64(time.Hour) * int64(24)
 
+	allocatedTimeDuration.TotalNanoseconds = totalTimeDuration
+
 	if totalTimeDuration >= dayNanoseconds {
-		numOfDays = totalTimeDuration / dayNanoseconds
+
+		allocatedTimeDuration.NumberOfDays =
+			totalTimeDuration / dayNanoseconds
+
 		totalTimeDuration =
-			totalTimeDuration - (numOfDays * dayNanoseconds)
+			totalTimeDuration -
+				(allocatedTimeDuration.NumberOfDays * dayNanoseconds)
 	}
 
 	if totalTimeDuration >= hourNanoseconds {
-		numOfHours = totalTimeDuration / hourNanoseconds
+
+		allocatedTimeDuration.NumberOfHours =
+			totalTimeDuration / hourNanoseconds
+
 		totalTimeDuration =
-			totalTimeDuration - (numOfHours * hourNanoseconds)
+			totalTimeDuration -
+				(allocatedTimeDuration.NumberOfHours * hourNanoseconds)
 	}
 
 	if totalTimeDuration >= minuteNanoseconds {
-		numOfMinutes = totalTimeDuration / minuteNanoseconds
+
+		allocatedTimeDuration.NumberOfMinutes =
+			totalTimeDuration / minuteNanoseconds
+
 		totalTimeDuration =
-			totalTimeDuration - (numOfMinutes * minuteNanoseconds)
+			totalTimeDuration -
+				(allocatedTimeDuration.NumberOfMinutes * minuteNanoseconds)
 	}
 
 	if totalTimeDuration >= secondNanoseconds {
-		numOfSeconds = totalTimeDuration / secondNanoseconds
-		totalTimeDuration = totalTimeDuration - (numOfSeconds * secondNanoseconds)
+
+		allocatedTimeDuration.NumberOfSeconds =
+			totalTimeDuration / secondNanoseconds
+
+		totalTimeDuration = totalTimeDuration -
+			(allocatedTimeDuration.NumberOfSeconds * secondNanoseconds)
 	}
 
 	if totalTimeDuration >= millisecondNanoseconds {
-		numOfMilliseconds = totalTimeDuration / millisecondNanoseconds
+
+		allocatedTimeDuration.NumberOfMilliseconds =
+			totalTimeDuration / millisecondNanoseconds
+
 		totalTimeDuration =
-			totalTimeDuration - (numOfMilliseconds * millisecondNanoseconds)
+			totalTimeDuration -
+				(allocatedTimeDuration.NumberOfMilliseconds * millisecondNanoseconds)
 	}
 
 	if totalTimeDuration >= microsecondNanoseconds {
-		numOfMicroseconds = totalTimeDuration / microsecondNanoseconds
+		allocatedTimeDuration.NumberOfMicroseconds =
+			totalTimeDuration / microsecondNanoseconds
+
 		totalTimeDuration =
-			totalTimeDuration - (numOfMicroseconds * microsecondNanoseconds)
+			totalTimeDuration -
+				(allocatedTimeDuration.NumberOfMicroseconds * microsecondNanoseconds)
 	}
 
-	numOfNanoseconds = totalTimeDuration
+	allocatedTimeDuration.NumberOfNanoseconds = totalTimeDuration
 
-	return numOfDays,
-		numOfHours,
-		numOfMinutes,
-		numOfSeconds,
-		numOfMilliseconds,
-		numOfMicroseconds,
-		numOfNanoseconds,
-		err
+	return allocatedTimeDuration, err
 }
