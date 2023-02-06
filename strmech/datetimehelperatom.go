@@ -50,40 +50,49 @@ type dateTimeHelperAtom struct {
 //
 // # Return Values
 //
-//	numOfDays					int64
+//	allocatedTimeDuration	TimeDurationDto
 //
-//		The number Days represented by input parameter
-//		'totalTimeDuration'.
 //
-//	numOfHours					int64
+//		If this method completes successfully, an
+//		instance of TimeDurationDto will be returned
+//		containing the allocated time broken down by
+//		days, hours, minutes, seconds, milliseconds,
+//		microseconds and nanoseconds.
 //
-//		The number Hours represented by input parameter
-//		'totalTimeDuration'.
+//		type TimeDurationDto struct {
 //
-//	numOfMinutes				int64
+//			TotalNanoseconds int64
+//				The total number of Nanoseconds to
+//				be allocated.
 //
-//		The number of Minutes represented by input
-//		parameter 'totalTimeDuration'.
+//			NumberOfDays int64
+//				The number Days represented by
+//				'TotalNanoseconds'.
 //
-//	numOfSeconds				int64
+//			NumberOfHours int64
+//				The number Hours represented by
+//				'TotalNanoseconds'.
 //
-//		The number of Seconds represented by input
-//		parameter 'totalTimeDuration'.
+//			NumberOfMinutes int64
+//				The number Minutes represented by
+//				'TotalNanoseconds'.
 //
-//	numOfMilliseconds			int64
+//			NumberOfSeconds int64
+//				The number Seconds represented by
+//				'TotalNanoseconds'.
 //
-//		The number of Milliseconds represented by input
-//		parameter 'totalTimeDuration'.
+//			NumberOfMilliseconds int64
+//				The number Milliseconds represented by
+//				'TotalNanoseconds'.
 //
-//	numOfMicroseconds			int64
+//			NumberOfMicroseconds int64
+//				The number Microseconds represented by
+//				'TotalNanoseconds'.
 //
-//		The number Microseconds represented by input
-//		parameter 'totalTimeDuration'.
-//
-//	numOfNanoseconds			int64
-//
-//		The number of remaining Nanoseconds represented
-//		by input parameter 'totalTimeDuration'.
+//			NumberOfNanoseconds int64
+//				The number Nanoseconds remaining after
+//				the allocation of Microseconds.
+//		}
 //
 //	err							error
 //
@@ -100,13 +109,7 @@ type dateTimeHelperAtom struct {
 func (dateTimeHelpAtom *dateTimeHelperAtom) allocateInt64TimeDuration(
 	totalTimeDuration int64,
 	errPrefDto *ePref.ErrPrefixDto) (
-	numOfDays int64,
-	numOfHours int64,
-	numOfMinutes int64,
-	numOfSeconds int64,
-	numOfMilliseconds int64,
-	numOfMicroseconds int64,
-	numOfNanoseconds int64,
+	allocatedTimeDuration TimeDurationDto,
 	err error) {
 
 	if dateTimeHelpAtom.lock == nil {

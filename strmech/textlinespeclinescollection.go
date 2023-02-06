@@ -4900,9 +4900,9 @@ func (txtLinesSpecCol *TextLineSpecLinesCollection) SetTextLineCollection(
 //	TextLineSpecLinesCollection.
 //
 //	If an error condition is encountered, an appropriate
-//	error message will formatted in the returned string.
-//	The error message will always include the word
-//	"Error".
+//	error message will be formatted in the returned
+//	string. This error message will always include the
+//	word, "Error".
 //
 // ----------------------------------------------------------------
 //

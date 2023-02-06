@@ -166,13 +166,7 @@ type DateTimeHelper struct {
 func (dateTimeHelper *DateTimeHelper) AllocateTimeDuration(
 	totalTimeDuration interface{},
 	errorPrefix interface{}) (
-	numOfDays int64,
-	numOfHours int64,
-	numOfMinutes int64,
-	numOfSeconds int64,
-	numOfMilliseconds int64,
-	numOfMicroseconds int64,
-	numOfNanoseconds int64,
+	allocatedTimeDuration TimeDurationDto,
 	err error) {
 
 	if dateTimeHelper.lock == nil {
@@ -194,13 +188,7 @@ func (dateTimeHelper *DateTimeHelper) AllocateTimeDuration(
 
 	if err != nil {
 
-		return numOfDays,
-			numOfHours,
-			numOfMinutes,
-			numOfSeconds,
-			numOfMilliseconds,
-			numOfMicroseconds,
-			numOfNanoseconds,
+		return allocatedTimeDuration,
 			err
 	}
 
@@ -220,14 +208,7 @@ func (dateTimeHelper *DateTimeHelper) AllocateTimeDuration(
 				"ERROR: int64 cast to 'int64Value' failed!\n",
 				ePrefix.String())
 
-			return numOfDays,
-				numOfHours,
-				numOfMinutes,
-				numOfSeconds,
-				numOfMilliseconds,
-				numOfMicroseconds,
-				numOfNanoseconds,
-				err
+			return allocatedTimeDuration, err
 		}
 
 	case *int64:
@@ -242,14 +223,7 @@ func (dateTimeHelper *DateTimeHelper) AllocateTimeDuration(
 				"ERROR: *int64 cast to 'ptrInt64' failed!\n",
 				ePrefix.String())
 
-			return numOfDays,
-				numOfHours,
-				numOfMinutes,
-				numOfSeconds,
-				numOfMilliseconds,
-				numOfMicroseconds,
-				numOfNanoseconds,
-				err
+			return allocatedTimeDuration, err
 		}
 
 		int64Value = *ptrInt64
@@ -266,14 +240,7 @@ func (dateTimeHelper *DateTimeHelper) AllocateTimeDuration(
 				"ERROR: time.Duration cast to 'timeDurationVal' failed!\n",
 				ePrefix.String())
 
-			return numOfDays,
-				numOfHours,
-				numOfMinutes,
-				numOfSeconds,
-				numOfMilliseconds,
-				numOfMicroseconds,
-				numOfNanoseconds,
-				err
+			return allocatedTimeDuration, err
 		}
 
 		int64Value = int64(timeDurationVal)
@@ -290,14 +257,7 @@ func (dateTimeHelper *DateTimeHelper) AllocateTimeDuration(
 				"ERROR: *time.Duration cast to 'ptrTimeDuration' failed!\n",
 				ePrefix.String())
 
-			return numOfDays,
-				numOfHours,
-				numOfMinutes,
-				numOfSeconds,
-				numOfMilliseconds,
-				numOfMicroseconds,
-				numOfNanoseconds,
-				err
+			return allocatedTimeDuration, err
 		}
 
 		int64Value = int64(*ptrTimeDuration)
@@ -310,14 +270,7 @@ func (dateTimeHelper *DateTimeHelper) AllocateTimeDuration(
 			ePrefix.String(),
 			totalTimeDuration)
 
-		return numOfDays,
-			numOfHours,
-			numOfMinutes,
-			numOfSeconds,
-			numOfMilliseconds,
-			numOfMicroseconds,
-			numOfNanoseconds,
-			err
+		return allocatedTimeDuration, err
 	}
 
 	numOfDays,
@@ -342,3 +295,13 @@ func (dateTimeHelper *DateTimeHelper) AllocateTimeDuration(
 		numOfNanoseconds,
 		err
 }
+
+func (dateTimeHelper *DateTimeHelper) GetFmtAllocatedDurationText(
+	numOfDays int64,
+	numOfHours int64,
+	numOfMinutes int64,
+	numOfSeconds int64,
+	numOfMilliseconds int64,
+	numOfMicroseconds int64,
+	numOfNanoseconds int64,
+)
