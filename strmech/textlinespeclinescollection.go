@@ -4891,3 +4891,71 @@ func (txtLinesSpecCol *TextLineSpecLinesCollection) SetTextLineCollection(
 
 	return err
 }
+
+//	String
+//
+//	Generates a formatted text string for all member
+//	elements in the Text Line Specification Collection
+//	maintained by the current instance of
+//	TextLineSpecLinesCollection.
+//
+//	If an error condition is encountered, an appropriate
+//	error message will formatted in the returned string.
+//	The error message will always include the word
+//	"Error".
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	--- NONE ---
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//
+//		A formatted string containing all the individual
+//		text lines in the Text Line Specification
+//		Collection maintained by the current instance of
+//		TextLineSpecLinesCollection.
+func (txtLinesSpecCol *TextLineSpecLinesCollection) String() string {
+
+	if txtLinesSpecCol.lock == nil {
+		txtLinesSpecCol.lock = new(sync.Mutex)
+	}
+
+	txtLinesSpecCol.lock.Lock()
+
+	defer txtLinesSpecCol.lock.Unlock()
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TextLineSpecLinesCollection.String()",
+		"")
+
+	var strBuilder strings.Builder
+
+	var err error
+
+	var formattedStr string
+
+	_,
+		err = new(textLineSpecLinesCollectionNanobot).
+		getFormattedText(
+			&strBuilder,
+			txtLinesSpecCol,
+			ePrefix.XCpy(
+				"txtLinesSpecCol"))
+
+	if err != nil {
+
+		formattedStr = fmt.Sprintf(
+			"%v\n", err.Error())
+	} else {
+
+		strBuilder.WriteString(formattedStr)
+	}
+
+	return formattedStr
+}
