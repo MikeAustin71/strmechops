@@ -330,6 +330,8 @@ func TestTextLineSpecStandardLine_EqualITextLine_000100(t *testing.T) {
 		expectedLeftMarginChars,
 		expectedRightMarginChars,
 		expectedTextString,
+		-1,
+		TxtJustify.None(),
 		expectedNewLineChars,
 		false,
 		ePrefix.XCpy("plainTextLine01"))

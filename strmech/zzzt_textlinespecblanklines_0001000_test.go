@@ -984,6 +984,8 @@ func TestTextLineSpecBlankLines_EqualITextLine_000100(t *testing.T) {
 		leftMargin,
 		rightMargin,
 		textString,
+		-1,
+		TxtJustify.None(),
 		ePrefix.XCpy("plainTextLine01"))
 
 	if err != nil {

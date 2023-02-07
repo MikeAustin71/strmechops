@@ -844,6 +844,8 @@ func (mTxt04 MainTextFormatTest04) TextLineSpecPlainText01() {
 		leftMarginChars,
 		rightMarginChars,
 		textString,
+		-1,
+		strmech.TxtJustify.None(),
 		newLineChars,
 		false,
 		strmech.StrMech{})

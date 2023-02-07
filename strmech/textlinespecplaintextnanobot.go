@@ -568,6 +568,133 @@ func (txtLinePlainTextNanobot textLineSpecPlainTextNanobot) ptr() *textLineSpecP
 //	     If this string contains more than one-million characters,
 //	     an error will be returned.
 //
+//	textFieldLength				int
+//
+//		This parameter defines the length of the text
+//		field in which the numeric value will be
+//		displayed within a number string.
+//
+//		If 'textFieldLength' is less than the length of
+//		the text string ('textString'), it will be
+//		automatically set equal to the length of that
+//		numeric value string.
+//
+//		To automatically set the value of 'textFieldLength'
+//		to the string length of text string
+//		('textString'), set this parameter to a value of
+//		minus one (-1).
+//
+//		If this parameter is submitted with a value less
+//		than minus one (-1) or greater than 1-million
+//		(1,000,000), an error will be returned.
+//
+//		Text Field Length Examples
+//
+//			Example-1
+//	         FieldContents String = "1234.5678"
+//				FieldContents String Length = 9
+//				textFieldLength = 15
+//				textFieldJustification = TxtJustify.Center()
+//				Text Field String =
+//					"   1234.5678   "
+//
+//			Example-2
+//	         FieldContents = "1234.5678"
+//				FieldContents String Length = 9
+//				textFieldLength = 15
+//				textFieldJustification = TxtJustify.Right()
+//				Text Field String =
+//					"      1234.5678"
+//
+//			Example-3
+//	         FieldContents = "1234.5678"
+//				FieldContents String Length = 9
+//				textFieldLength = -1
+//				textFieldJustification = TxtJustify.Center()
+//					// Justification Ignored. Field Length
+//					// Equals -1
+//				Text Field String =
+//					"1234.5678"
+//
+//			Example-4
+//	         FieldContents = "1234.5678"
+//				FieldContents String Length = 9
+//				textFieldLength = 2
+//				textFieldJustification = TxtJustify.Center()
+//					// Ignored, because FieldLength Less
+//					// Than FieldContents String Length.
+//				Text Field String =
+//					"1234.5678"
+//
+//	textFieldJustification		TextJustify
+//
+//		An enumeration which specifies the justification
+//		of the text string ('textString') within the text
+//		field length specified by input parameter
+//		'textFieldLength'.
+//
+//		Text justification can only be evaluated in the
+//		context of a number string, field length and a
+//		'textJustification' object of type TextJustify.
+//		This is because text strings with a field length
+//		equal to or less than the length of the text string
+//		('textString') never use text justification. In
+//		these cases, text justification is completely
+//		ignored.
+//
+//		If the field length parameter ('textFieldLength')
+//		is greater than the length of the numeric value
+//		string, text justification must be equal to one
+//		of these three valid values:
+//
+//			TextJustify(0).Left()
+//			TextJustify(0).Right()
+//			TextJustify(0).Center()
+//
+//		You can also use the abbreviated text justification
+//		enumeration syntax as follows:
+//
+//			TxtJustify.Left()
+//			TxtJustify.Right()
+//			TxtJustify.Center()
+//
+//		Text Justification Examples
+//
+//			Example-1
+//	         FieldContents String = "1234.5678"
+//				FieldContents String Length = 9
+//				textFieldLength = 15
+//				textFieldJustification = TxtJustify.Center()
+//				Text Field String =
+//					"   1234.5678   "
+//
+//			Example-2
+//	         FieldContents = "1234.5678"
+//				FieldContents String Length = 9
+//				textFieldLength = 15
+//				textFieldJustification = TxtJustify.Right()
+//				Text Field String =
+//					"      1234.5678"
+//
+//			Example-3
+//	         FieldContents = "1234.5678"
+//				FieldContents String Length = 9
+//				textFieldLength = -1
+//				textFieldJustification = TxtJustify.Center()
+//					// Justification Ignored. Field Length
+//					// Equals -1
+//				Text Field String =
+//					"1234.5678"
+//
+//			Example-4
+//	         FieldContents = "1234.5678"
+//				FieldContents String Length = 9
+//				textFieldLength = 2
+//				textFieldJustification = TxtJustify.Center()
+//					// Ignored, because FieldLength Less
+//					// Than FieldContents String Length.
+//				Text Field String =
+//					"1234.5678"
 //
 //	errPrefDto                 *ePref.ErrPrefixDto
 //	   - This object encapsulates an error prefix string which is
@@ -598,6 +725,8 @@ func (txtLinePlainTextNanobot *textLineSpecPlainTextNanobot) setDefaultPlainText
 	leftMarginSpaces int,
 	rightMarginSpaces int,
 	textString string,
+	textFieldLength int,
+	textFieldJustification TextJustify,
 	errPrefDto *ePref.ErrPrefixDto) error {
 
 	if txtLinePlainTextNanobot.lock == nil {
@@ -726,12 +855,14 @@ func (txtLinePlainTextNanobot *textLineSpecPlainTextNanobot) setDefaultPlainText
 
 	newLinChars := []rune{'\n'}
 
-	return textLineSpecPlainTextAtom{}.ptr().
+	return new(textLineSpecPlainTextAtom).
 		setPlainTextSpec(
 			plainTxtLine,
 			leftMarginChars,
 			rightMarginChars,
 			textString,
+			textFieldLength,
+			textFieldJustification,
 			newLinChars,
 			false,
 			ePrefix)
@@ -816,6 +947,133 @@ func (txtLinePlainTextNanobot *textLineSpecPlainTextNanobot) setDefaultPlainText
 //	     If this array contains more than one-million characters,
 //	     an error will be returned.
 //
+//	textFieldLength				int
+//
+//		This parameter defines the length of the text
+//		field in which the numeric value will be
+//		displayed within a number string.
+//
+//		If 'textFieldLength' is less than the length of
+//		the text string ('textString'), it will be
+//		automatically set equal to the length of that
+//		numeric value string.
+//
+//		To automatically set the value of 'textFieldLength'
+//		to the string length of text string
+//		('textString'), set this parameter to a value of
+//		minus one (-1).
+//
+//		If this parameter is submitted with a value less
+//		than minus one (-1) or greater than 1-million
+//		(1,000,000), an error will be returned.
+//
+//		Text Field Length Examples
+//
+//			Example-1
+//	         FieldContents String = "1234.5678"
+//				FieldContents String Length = 9
+//				textFieldLength = 15
+//				textFieldJustification = TxtJustify.Center()
+//				Text Field String =
+//					"   1234.5678   "
+//
+//			Example-2
+//	         FieldContents = "1234.5678"
+//				FieldContents String Length = 9
+//				textFieldLength = 15
+//				textFieldJustification = TxtJustify.Right()
+//				Text Field String =
+//					"      1234.5678"
+//
+//			Example-3
+//	         FieldContents = "1234.5678"
+//				FieldContents String Length = 9
+//				textFieldLength = -1
+//				textFieldJustification = TxtJustify.Center()
+//					// Justification Ignored. Field Length
+//					// Equals -1
+//				Text Field String =
+//					"1234.5678"
+//
+//			Example-4
+//	         FieldContents = "1234.5678"
+//				FieldContents String Length = 9
+//				textFieldLength = 2
+//				textFieldJustification = TxtJustify.Center()
+//					// Ignored, because FieldLength Less
+//					// Than FieldContents String Length.
+//				Text Field String =
+//					"1234.5678"
+//
+//	textFieldJustification		TextJustify
+//
+//		An enumeration which specifies the justification
+//		of the text string ('textString') within the text
+//		field length specified by input parameter
+//		'textFieldLength'.
+//
+//		Text justification can only be evaluated in the
+//		context of a number string, field length and a
+//		'textJustification' object of type TextJustify.
+//		This is because text strings with a field length
+//		equal to or less than the length of the text string
+//		('textString') never use text justification. In
+//		these cases, text justification is completely
+//		ignored.
+//
+//		If the field length parameter ('textFieldLength')
+//		is greater than the length of the numeric value
+//		string, text justification must be equal to one
+//		of these three valid values:
+//
+//			TextJustify(0).Left()
+//			TextJustify(0).Right()
+//			TextJustify(0).Center()
+//
+//		You can also use the abbreviated text justification
+//		enumeration syntax as follows:
+//
+//			TxtJustify.Left()
+//			TxtJustify.Right()
+//			TxtJustify.Center()
+//
+//		Text Justification Examples
+//
+//			Example-1
+//	         FieldContents String = "1234.5678"
+//				FieldContents String Length = 9
+//				textFieldLength = 15
+//				textFieldJustification = TxtJustify.Center()
+//				Text Field String =
+//					"   1234.5678   "
+//
+//			Example-2
+//	         FieldContents = "1234.5678"
+//				FieldContents String Length = 9
+//				textFieldLength = 15
+//				textFieldJustification = TxtJustify.Right()
+//				Text Field String =
+//					"      1234.5678"
+//
+//			Example-3
+//	         FieldContents = "1234.5678"
+//				FieldContents String Length = 9
+//				textFieldLength = -1
+//				textFieldJustification = TxtJustify.Center()
+//					// Justification Ignored. Field Length
+//					// Equals -1
+//				Text Field String =
+//					"1234.5678"
+//
+//			Example-4
+//	         FieldContents = "1234.5678"
+//				FieldContents String Length = 9
+//				textFieldLength = 2
+//				textFieldJustification = TxtJustify.Center()
+//					// Ignored, because FieldLength Less
+//					// Than FieldContents String Length.
+//				Text Field String =
+//					"1234.5678"
 //
 //	newLineChars               []rune
 //	   - An array of runes containing the character or characters
@@ -876,6 +1134,8 @@ func (txtLinePlainTextNanobot *textLineSpecPlainTextNanobot) setPlainTextSpecRun
 	leftMarginChars []rune,
 	rightMarginChars []rune,
 	textRunes []rune,
+	textFieldLength int,
+	textFieldJustification TextJustify,
 	newLineChars []rune,
 	turnLineTerminatorOff bool,
 	errPrefDto *ePref.ErrPrefixDto) error {
@@ -1034,6 +1294,8 @@ func (txtLinePlainTextNanobot *textLineSpecPlainTextNanobot) setPlainTextSpecRun
 			leftMarginChars,
 			rightMarginChars,
 			textString,
+			textFieldLength,
+			textFieldJustification,
 			newLineChars,
 			turnLineTerminatorOff,
 			ePrefix)
@@ -1102,18 +1364,145 @@ func (txtLinePlainTextNanobot *textLineSpecPlainTextNanobot) setPlainTextSpecRun
 //	     If the 'rightMarginChars' string length exceeds one-million
 //	     characters, an error will be returned.
 //
+//	textString					string
 //
-//	textString                 string
-//	   - A string of text which will be used to configure the text
-//	     characters generated by the current instance of
-//	     TextLineSpecPlainText.
+//		A string of text which will be used to configure
+//		the text characters generated by the current
+//		instance of TextLineSpecPlainText.
 //
-//	     If this parameter is submitted as a zero length or empty
-//	     string, an error will be returned.
+//		If this parameter is submitted as a zero length
+//		or empty string, an error will be returned.
 //
-//	     If this string contains more than one-million characters,
-//	     an error will be returned.
+//		If this string contains more than one-million
+//		characters, an error will be returned.
 //
+//	textFieldLength				int
+//
+//		This parameter defines the length of the text
+//		field in which the numeric value will be
+//		displayed within a number string.
+//
+//		If 'textFieldLength' is less than the length of
+//		the text string ('textString'), it will be
+//		automatically set equal to the length of that
+//		numeric value string.
+//
+//		To automatically set the value of 'textFieldLength'
+//		to the string length of text string
+//		('textString'), set this parameter to a value of
+//		minus one (-1).
+//
+//		If this parameter is submitted with a value less
+//		than minus one (-1) or greater than 1-million
+//		(1,000,000), an error will be returned.
+//
+//		Text Field Length Examples
+//
+//			Example-1
+//	         FieldContents String = "1234.5678"
+//				FieldContents String Length = 9
+//				textFieldLength = 15
+//				textFieldJustification = TxtJustify.Center()
+//				Text Field String =
+//					"   1234.5678   "
+//
+//			Example-2
+//	         FieldContents = "1234.5678"
+//				FieldContents String Length = 9
+//				textFieldLength = 15
+//				textFieldJustification = TxtJustify.Right()
+//				Text Field String =
+//					"      1234.5678"
+//
+//			Example-3
+//	         FieldContents = "1234.5678"
+//				FieldContents String Length = 9
+//				textFieldLength = -1
+//				textFieldJustification = TxtJustify.Center()
+//					// Justification Ignored. Field Length
+//					// Equals -1
+//				Text Field String =
+//					"1234.5678"
+//
+//			Example-4
+//	         FieldContents = "1234.5678"
+//				FieldContents String Length = 9
+//				textFieldLength = 2
+//				textFieldJustification = TxtJustify.Center()
+//					// Ignored, because FieldLength Less
+//					// Than FieldContents String Length.
+//				Text Field String =
+//					"1234.5678"
+//
+//	textFieldJustification		TextJustify
+//
+//		An enumeration which specifies the justification
+//		of the text string ('textString') within the text
+//		field length specified by input parameter
+//		'textFieldLength'.
+//
+//		Text justification can only be evaluated in the
+//		context of a number string, field length and a
+//		'textJustification' object of type TextJustify.
+//		This is because text strings with a field length
+//		equal to or less than the length of the text string
+//		('textString') never use text justification. In
+//		these cases, text justification is completely
+//		ignored.
+//
+//		If the field length parameter ('textFieldLength')
+//		is greater than the length of the numeric value
+//		string, text justification must be equal to one
+//		of these three valid values:
+//
+//			TextJustify(0).Left()
+//			TextJustify(0).Right()
+//			TextJustify(0).Center()
+//
+//		You can also use the abbreviated text justification
+//		enumeration syntax as follows:
+//
+//			TxtJustify.Left()
+//			TxtJustify.Right()
+//			TxtJustify.Center()
+//
+//		Text Justification Examples
+//
+//			Example-1
+//	         FieldContents String = "1234.5678"
+//				FieldContents String Length = 9
+//				textFieldLength = 15
+//				textFieldJustification = TxtJustify.Center()
+//				Text Field String =
+//					"   1234.5678   "
+//
+//			Example-2
+//	         FieldContents = "1234.5678"
+//				FieldContents String Length = 9
+//				textFieldLength = 15
+//				textFieldJustification = TxtJustify.Right()
+//				Text Field String =
+//					"      1234.5678"
+//
+//			Example-3
+//	         FieldContents = "1234.5678"
+//				FieldContents String Length = 9
+//				textFieldLength = -1
+//				textFieldJustification = TxtJustify.Center()
+//					// Justification Ignored. Field Length
+//					// Equals -1
+//				Text Field String =
+//					"1234.5678"
+//
+//			Example-4
+//	         FieldContents = "1234.5678"
+//				FieldContents String Length = 9
+//				textFieldLength = 2
+//				textFieldJustification = TxtJustify.Center()
+//					// Ignored, because FieldLength Less
+//					// Than FieldContents String Length.
+//				Text Field String =
+//					"1234.5678"
 //
 //	newLineChars               string
 //	   - A string containing the one or more characters used to
@@ -1171,6 +1560,8 @@ func (txtLinePlainTextNanobot *textLineSpecPlainTextNanobot) setPlainTextSpecStr
 	leftMarginChars string,
 	rightMarginChars string,
 	textString string,
+	textFieldLength int,
+	textFieldJustification TextJustify,
 	newLineChars string,
 	turnLineTerminatorOff bool,
 	errPrefDto *ePref.ErrPrefixDto) error {
@@ -1253,6 +1644,8 @@ func (txtLinePlainTextNanobot *textLineSpecPlainTextNanobot) setPlainTextSpecStr
 			leftMarginRunes,
 			rightMarginRunes,
 			textString,
+			textFieldLength,
+			textFieldJustification,
 			newLineRunes,
 			turnLineTerminatorOff,
 			ePrefix)

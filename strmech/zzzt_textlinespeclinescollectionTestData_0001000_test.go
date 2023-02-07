@@ -130,6 +130,8 @@ func createTestTextLineSpecCollection01(
 		leftMargin,
 		rightMargin,
 		textString,
+		-1,
+		TxtJustify.None(),
 		ePrefix.XCpy(
 			"plainTextLine01"))
 
@@ -159,6 +161,8 @@ func createTestTextLineSpecCollection01(
 		leftMargin,
 		rightMargin,
 		textString,
+		-1,
+		TxtJustify.None(),
 		ePrefix.XCpy(
 			"plainTextLine02"))
 
@@ -226,6 +230,8 @@ func createTestTextLineSpecCollection02(
 		leftMargin,
 		rightMargin,
 		textString,
+		-1,
+		TxtJustify.None(),
 		ePrefix.XCpy(
 			"plainTextLine01"))
 
@@ -321,6 +327,8 @@ func createTestTextLineSpecCollection03(
 		leftMargin,
 		rightMargin,
 		textString,
+		-1,
+		TxtJustify.None(),
 		ePrefix.XCpy(
 			"plainTextLine01"))
 

@@ -1048,6 +1048,8 @@ func TestTextLineSpecLinesCollection_PeekAtTextLine_000200(t *testing.T) {
 		leftMargin,
 		rightMargin,
 		textString,
+		-1,
+		TxtJustify.None(),
 		ePrefix.XCpy(
 			"plainTextLine01"))
 
@@ -1100,6 +1102,8 @@ func TestTextLineSpecLinesCollection_PopFirstTextLine_000100(t *testing.T) {
 		leftMargin,
 		rightMargin,
 		textString,
+		-1,
+		TxtJustify.None(),
 		ePrefix.XCpy(
 			"plainTextLine01"))
 
@@ -1717,6 +1721,8 @@ func TestTextLineSpecLinesCollection_PopTextLine_000100(t *testing.T) {
 		leftMargin,
 		rightMargin,
 		textString,
+		-1,
+		TxtJustify.None(),
 		ePrefix.XCpy(
 			"plainTextLine01"))
 
@@ -2148,6 +2154,8 @@ func TestTextLineSpecLinesCollection_ReplaceTextLine_000100(t *testing.T) {
 		leftMargin,
 		rightMargin,
 		textString,
+		-1,
+		TxtJustify.None(),
 		ePrefix.XCpy(
 			"plainTextLine01"))
 

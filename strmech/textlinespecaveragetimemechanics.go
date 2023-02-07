@@ -371,53 +371,102 @@ func (txtLineAvgTimeMech *textLineSpecAverageTimeMechanics) getFormattedText(
 
 		return fmtOutputStr, err
 	}
+	/*
+		var avgDuration, maximumTimeDuration,
+			minimumTimeDuration int64
 
-	var avgDuration, maximumTimeDuration,
-		minimumTimeDuration int64
-
-	avgDuration,
-		maximumTimeDuration,
-		minimumTimeDuration,
-		err = new(textLineSpecAverageTimeAtom).
-		calcAverageDuration(
-			txtLineAvgTimer,
-			ePrefix.XCpy(
-				"txtLineAvgTimer"))
-
-	if err != nil {
-		return fmtOutputStr, err
-	}
-
-	var numOfDays,
-		numOfHours,
-		numOfMinutes,
-		numOfSeconds,
-		numOfMilliseconds,
-		numOfMicroseconds,
-		numOfNanoseconds int64
-
-	numOfDays,
-		numOfHours,
-		numOfMinutes,
-		numOfSeconds,
-		numOfMilliseconds,
-		numOfMicroseconds,
-		numOfNanoseconds,
-		err = new(DateTimeHelper).AllocateTimeDuration(
 		avgDuration,
-		ePrefix.XCpy(
-			"avgDuration"))
+			maximumTimeDuration,
+			minimumTimeDuration,
+			err = new(textLineSpecAverageTimeAtom).
+			calcAverageDuration(
+				txtLineAvgTimer,
+				ePrefix.XCpy(
+					"txtLineAvgTimer"))
 
-	if err != nil {
-		return fmtOutputStr, err
-	}
+		if err != nil {
+			return fmtOutputStr, err
+		}
 
-	textLines := new(TextLineSpecLinesCollection).New()
+		var allocatedAvgDuration, allocatedMaxDuration,
+			allocatedMinDuration TimeDurationDto
 
-	err = textLines.AddBlankLine(
-		1,
-		ePrefix.XCpy("textLines 1"))
+		allocatedAvgDuration,
+			err = new(DateTimeHelper).AllocateTimeDuration(
+			avgDuration,
+			ePrefix.XCpy(
+				"avgDuration"))
 
+		if err != nil {
+			return fmtOutputStr, err
+		}
+
+		allocatedMaxDuration,
+			err = new(DateTimeHelper).AllocateTimeDuration(
+			maximumTimeDuration,
+			ePrefix.XCpy(
+				"maximumTimeDuration"))
+
+		if err != nil {
+			return fmtOutputStr, err
+		}
+
+		txtLineCollection := new(TextLineSpecLinesCollection).New()
+		breakLineLeftMargin := " "
+		titleLineLeftMargin := "  "
+		maxLineLength := 60
+
+		err = txtLineCollection.AddBlankLine(
+			2,
+			ePrefix.XCpy("Top Line #1"))
+
+		if err != nil {
+			return fmtOutputStr, err
+		}
+
+		err = txtLineCollection.AddSolidLine(
+			breakLineLeftMargin,
+			"=",
+			maxLineLength,
+			"",
+			"",
+			false,
+			1,
+			ePrefix.XCpy("Top Solid Line #1"))
+
+		if err != nil {
+			return fmtOutputStr, err
+		}
+
+		err = txtLineCollection.AddPlainTextLine(
+			" ",
+			"",
+			"Average Time Duration",
+			maxLineLength,
+			TxtJustify.Center(),
+			ePrefix.XCpy(
+				"Text Title Top Line #1"))
+
+		if err != nil {
+			return fmtOutputStr, err
+		}
+
+		allocatedMinDuration,
+			err = new(DateTimeHelper).AllocateTimeDuration(
+			minimumTimeDuration,
+			ePrefix.XCpy(
+				"minimumTimeDuration"))
+
+		if err != nil {
+			return fmtOutputStr, err
+		}
+
+		textLines := new(TextLineSpecLinesCollection).New()
+
+		err = textLines.AddBlankLine(
+			1,
+			ePrefix.XCpy("textLines 1"))
+	*/
 	fmtOutputStr = "Empty Placeholder!"
 
 	return fmtOutputStr, err

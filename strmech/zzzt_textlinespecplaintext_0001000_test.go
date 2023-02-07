@@ -27,6 +27,8 @@ func TestTextLineSpecPlainText_CopyIn_000100(t *testing.T) {
 		leftMargin,
 		rightMargin,
 		textString,
+		-1,
+		TxtJustify.None(),
 		ePrefix.XCpy("plainTextLine01"))
 
 	if err != nil {
@@ -200,6 +202,8 @@ func TestTextLineSpecPlainText_CopyIn_000100(t *testing.T) {
 		leftMargin,
 		rightMargin,
 		textString,
+		-1,
+		TxtJustify.None(),
 		ePrefix.XCpy("plainTextLine05"))
 
 	if err != nil {
@@ -255,6 +259,8 @@ func TestTextLineSpecPlainText_CopyOut_000100(t *testing.T) {
 		expectedLeftMarginChars,
 		expectedRightMarginChars,
 		expectedTextString,
+		-1,
+		TxtJustify.None(),
 		expectedNewLineChars,
 		false,
 		ePrefix.XCpy("plainTextLine01"))
@@ -450,6 +456,8 @@ func TestTextLineSpecPlainText_CopyOut_000100(t *testing.T) {
 		expectedLeftMarginChars,
 		expectedRightMarginChars,
 		expectedTextString,
+		-1,
+		TxtJustify.None(),
 		expectedNewLineChars,
 		false,
 		ePrefix.XCpy("plainTextLine04"))
@@ -505,6 +513,8 @@ func TestTextLineSpecPlainText_CopyOutITextLine_000100(t *testing.T) {
 		expectedLeftMarginChars,
 		expectedRightMarginChars,
 		expectedTextString,
+		-1,
+		TxtJustify.None(),
 		expectedNewLineChars,
 		false,
 		ePrefix.XCpy(
@@ -606,6 +616,8 @@ func TestTextLineSpecPlainText_CopyOutITextLine_000100(t *testing.T) {
 		expectedLeftMarginChars,
 		expectedRightMarginChars,
 		expectedTextString,
+		-1,
+		TxtJustify.None(),
 		expectedNewLineChars,
 		false,
 		ePrefix.XCpy(
@@ -660,6 +672,8 @@ func TestTextLineSpecPlainText_CopyOutPtr_000100(t *testing.T) {
 		leftMargin,
 		rightMargin,
 		textString,
+		-1,
+		TxtJustify.None(),
 		ePrefix.XCpy("plainTextLine01"))
 
 	if err != nil {
@@ -751,6 +765,8 @@ func TestTextLineSpecPlainText_CopyOutPtr_000100(t *testing.T) {
 		leftMargin,
 		rightMargin,
 		textString,
+		-1,
+		TxtJustify.None(),
 		ePrefix.XCpy("plainTextLine04"))
 
 	if err != nil {
@@ -802,6 +818,8 @@ func TestTextLineSpecPlainText_Empty_000100(t *testing.T) {
 		expectedLeftMarginChars,
 		expectedRightMarginChars,
 		expectedTextString,
+		-1,
+		TxtJustify.None(),
 		expectedNewLineChars,
 		false,
 		ePrefix.XCpy(
@@ -906,6 +924,8 @@ func TestTextLineSpecPlainText_Empty_000200(t *testing.T) {
 		expectedLeftMarginChars,
 		expectedRightMarginChars,
 		expectedTextString,
+		-1,
+		TxtJustify.None(),
 		expectedNewLineChars,
 		false,
 		ePrefix.XCpy(
@@ -1004,6 +1024,8 @@ func TestTextLineSpecPlainText_EqualITextLine_000100(t *testing.T) {
 		expectedLeftMarginChars,
 		expectedRightMarginChars,
 		expectedTextString,
+		-1,
+		TxtJustify.None(),
 		expectedNewLineChars,
 		false,
 		ePrefix.XCpy("plainTextLine01"))
@@ -1105,6 +1127,8 @@ func TestTextLineSpecPlainText_GetFormattedText_000100(t *testing.T) {
 		expectedLeftMarginRunes,
 		expectedRightMarginRunes,
 		expectedTextString,
+		-1,
+		TxtJustify.None(),
 		expectedNewLineRunes,
 		false,
 		ePrefix.XCpy("plainTextLine01"))
@@ -1224,6 +1248,8 @@ func TestTextLineSpecPlainText_GetLeftMarginStr_000100(t *testing.T) {
 		expectedLeftMarginChars,
 		expectedRightMarginChars,
 		expectedTextString,
+		-1,
+		TxtJustify.None(),
 		expectedNewLineChars,
 		false,
 		ePrefix.XCpy("plainTextLine01"))
@@ -1305,6 +1331,8 @@ func TestTextLineSpecPlainText_GetLeftMarginRunes_000100(t *testing.T) {
 		expectedLeftMarginRunes,
 		expectedRightMarginRunes,
 		[]rune(expectedTextString),
+		-1,
+		TxtJustify.None(),
 		expectedNewLineRunes,
 		false,
 		ePrefix.XCpy("plainTextLine01"))
@@ -1387,6 +1415,8 @@ func TestTextLineSpecPlainText_GetLineTerminationChars_000100(t *testing.T) {
 		expectedLeftMarginRunes,
 		expectedRightMarginRune,
 		expectedTextString,
+		-1,
+		TxtJustify.None(),
 		expectedNewLineRunes,
 		false,
 		ePrefix.XCpy("plainTextLine01"))
@@ -1485,6 +1515,8 @@ func TestTextLineSpecPlainText_GetLineTerminationRunes_000100(t *testing.T) {
 		expectedLeftMarginRunes,
 		expectedRightMarginRune,
 		expectedTextString,
+		-1,
+		TxtJustify.None(),
 		expectedNewLineRunes,
 		false,
 		ePrefix.XCpy("plainTextLine01"))
@@ -1627,6 +1659,8 @@ func TestTextLineSpecPlainText_GetRightMarginStr_000100(t *testing.T) {
 		expectedLeftMarginRunes,
 		expectedRightMarginRunes,
 		expectedTextString,
+		-1,
+		TxtJustify.None(),
 		expectedNewLineRunes,
 		false,
 		ePrefix.XCpy("plainTextLine01"))
@@ -1708,6 +1742,8 @@ func TestTextLineSpecPlainText_GetRightMarginRunes_000100(t *testing.T) {
 		expectedLeftMarginRunes,
 		expectedRightMarginRunes,
 		[]rune(expectedTextString),
+		-1,
+		TxtJustify.None(),
 		expectedNewLineRunes,
 		false,
 		ePrefix.XCpy("plainTextLine01"))
@@ -1790,6 +1826,8 @@ func TestTextLineSpecPlainText_GetTextString_000100(t *testing.T) {
 		expectedLeftMarginRunes,
 		expectedRightMarginRunes,
 		expectedTextString,
+		-1,
+		TxtJustify.None(),
 		expectedNewLineRunes,
 		false,
 		ePrefix.XCpy("plainTextLine01"))
@@ -1868,6 +1906,8 @@ func TestTextLineSpecPlainText_GetTurnLineTerminatorOff_000100(t *testing.T) {
 		expectedLeftMarginChars,
 		expectedRightMarginChars,
 		expectedTextString,
+		-1,
+		TxtJustify.None(),
 		expectedNewLineChars,
 		false,
 		ePrefix.XCpy("plainTextLine01"))
@@ -2121,6 +2161,8 @@ func TestTextLineSpecPlainText_IsValidInstance_000100(t *testing.T) {
 		expectedLeftMarginRunes,
 		expectedRightMarginRunes,
 		expectedTextString,
+		-1,
+		TxtJustify.None(),
 		expectedNewLineRunes,
 		false,
 		ePrefix.XCpy("plainTextLine02"))
@@ -2185,6 +2227,8 @@ func TestTextLineSpecPlainText_IsValidInstanceError_000100(t *testing.T) {
 		expectedLeftMarginRunes,
 		expectedRightMarginRunes,
 		expectedTextString,
+		-1,
+		TxtJustify.None(),
 		expectedNewLineRunes,
 		false,
 		ePrefix.XCpy("plainTextLine02"))
@@ -2318,6 +2362,8 @@ func TestTextLineSpecPlainText_IsValidInstanceError_000100(t *testing.T) {
 		expectedLeftMarginRunes,
 		expectedRightMarginRunes,
 		expectedTextString,
+		-1,
+		TxtJustify.None(),
 		expectedNewLineRunes,
 		false,
 		ePrefix.XCpy("plainTextLine02"))
@@ -2360,6 +2406,8 @@ func TestTextLineSpecPlainText_NewDefault_000100(t *testing.T) {
 		leftMarginSpaces,
 		rightMarginSpaces,
 		textString,
+		-1,
+		TxtJustify.None(),
 		ePrefix.XCpy(
 			"plainTextLine01"))
 
@@ -2383,6 +2431,8 @@ func TestTextLineSpecPlainText_NewDefault_000100(t *testing.T) {
 		leftMarginSpaces,
 		rightMarginSpaces,
 		textString,
+		-1,
+		TxtJustify.None(),
 		StrMech{})
 
 	if err == nil {
@@ -2402,6 +2452,8 @@ func TestTextLineSpecPlainText_NewDefault_000100(t *testing.T) {
 		1000001,
 		rightMarginSpaces,
 		textString,
+		-1,
+		TxtJustify.None(),
 		ePrefix.XCpy(
 			"Invalid Left Margin Spaces"))
 
@@ -2422,6 +2474,8 @@ func TestTextLineSpecPlainText_NewDefault_000100(t *testing.T) {
 		3,
 		1000001,
 		textString,
+		-1,
+		TxtJustify.None(),
 		ePrefix.XCpy(
 			"Invalid Right Margin Spaces"))
 
@@ -2444,6 +2498,8 @@ func TestTextLineSpecPlainText_NewDefault_000100(t *testing.T) {
 		3,
 		3,
 		textString,
+		-1,
+		TxtJustify.None(),
 		ePrefix.XCpy(
 			"Invalid Right Margin Spaces"))
 
@@ -2480,6 +2536,8 @@ func TestTextLineSpecPlainText_NewPlainText_000100(t *testing.T) {
 		expectedLeftMarginRunes,
 		expectedRightMarginRunes,
 		expectedTextString,
+		-1,
+		TxtJustify.None(),
 		expectedNewLineRunes,
 		false,
 		ePrefix.XCpy("plainTextLine01"))
@@ -2504,6 +2562,8 @@ func TestTextLineSpecPlainText_NewPlainText_000100(t *testing.T) {
 		expectedLeftMarginRunes,
 		expectedRightMarginRunes,
 		expectedTextString,
+		-1,
+		TxtJustify.None(),
 		expectedNewLineRunes,
 		false,
 		StrMech{})
@@ -2541,6 +2601,8 @@ func TestTextLineSpecPlainText_NewPlainTextRunes_000100(t *testing.T) {
 		expectedLeftMarginChars,
 		expectedRightMarginChars,
 		expectedTextChars,
+		-1,
+		TxtJustify.None(),
 		expectedNewLineChars,
 		true,
 		ePrefix.XCpy(
@@ -2571,6 +2633,8 @@ func TestTextLineSpecPlainText_NewPlainTextRunes_000100(t *testing.T) {
 		expectedLeftMarginChars,
 		expectedRightMarginChars,
 		expectedTextChars,
+		-1,
+		TxtJustify.None(),
 		expectedNewLineChars,
 		true,
 		StrMech{})
@@ -2606,6 +2670,8 @@ func TestTextLineSpecPlainText_NewPlainTextStrings_000100(t *testing.T) {
 		expectedLeftMarginChars,
 		expectedRightMarginChars,
 		expectedTextString,
+		-1,
+		TxtJustify.None(),
 		expectedNewLineChars,
 		false,
 		ePrefix.XCpy(
@@ -2631,6 +2697,8 @@ func TestTextLineSpecPlainText_NewPlainTextStrings_000100(t *testing.T) {
 		expectedLeftMarginChars,
 		expectedRightMarginChars,
 		expectedTextString,
+		-1,
+		TxtJustify.None(),
 		expectedNewLineChars,
 		false,
 		StrMech{})
@@ -2664,6 +2732,8 @@ func TestTextLineSpecPlainText_NewPtrDefault_000100(t *testing.T) {
 		leftMargin,
 		rightMargin,
 		textString,
+		-1,
+		TxtJustify.None(),
 		ePrefix.XCpy("plainTextLine01"))
 
 	if err != nil {
@@ -2695,6 +2765,8 @@ func TestTextLineSpecPlainText_NewPtrDefault_000100(t *testing.T) {
 		expectedLeftMarginChars,
 		expectedRightMarginChars,
 		expectedTextChars,
+		-1,
+		TxtJustify.None(),
 		expectedNewLineChars,
 		false,
 		ePrefix.XCpy(
@@ -2722,6 +2794,8 @@ func TestTextLineSpecPlainText_NewPtrDefault_000100(t *testing.T) {
 		leftMargin,
 		rightMargin,
 		textString,
+		-1,
+		TxtJustify.None(),
 		StrMech{})
 
 	if err == nil {
@@ -2756,6 +2830,8 @@ func TestTextLineSpecPlainText_NewPtrPlainText_000100(t *testing.T) {
 		expectedLeftMarginChars,
 		expectedRightMarginChars,
 		expectedTextString,
+		-1,
+		TxtJustify.None(),
 		expectedNewLineChars,
 		false,
 		ePrefix.XCpy("plainTextLine01"))
@@ -2780,6 +2856,8 @@ func TestTextLineSpecPlainText_NewPtrPlainText_000100(t *testing.T) {
 		expectedLeftMarginChars,
 		expectedRightMarginChars,
 		expectedTextString,
+		-1,
+		TxtJustify.None(),
 		expectedNewLineChars,
 		false,
 		StrMech{})
@@ -2815,6 +2893,8 @@ func TestTextLineSpecPlainText_NewPtrPlainTextRunes_000100(t *testing.T) {
 		expectedLeftMarginRunes,
 		expectedRightMarginRunes,
 		[]rune(expectedTextString),
+		-1,
+		TxtJustify.None(),
 		expectedNewLineRunes,
 		false,
 		ePrefix.XCpy("plainTextLine01"))
@@ -2839,6 +2919,8 @@ func TestTextLineSpecPlainText_NewPtrPlainTextRunes_000100(t *testing.T) {
 		expectedLeftMarginRunes,
 		expectedRightMarginRunes,
 		[]rune(expectedTextString),
+		-1,
+		TxtJustify.None(),
 		expectedNewLineRunes,
 		false,
 		StrMech{})
@@ -2874,6 +2956,8 @@ func TestTextLineSpecPlainText_NewPtrPlainTextStrings_000100(t *testing.T) {
 		expectedLeftMarginRunes,
 		expectedRightMarginRunes,
 		expectedTextString,
+		-1,
+		TxtJustify.None(),
 		expectedNewLineRunes,
 		false,
 		ePrefix.XCpy("plainTextLine01"))
@@ -2898,6 +2982,8 @@ func TestTextLineSpecPlainText_NewPtrPlainTextStrings_000100(t *testing.T) {
 		expectedLeftMarginRunes,
 		expectedRightMarginRunes,
 		expectedTextString,
+		-1,
+		TxtJustify.None(),
 		expectedNewLineRunes,
 		false,
 		StrMech{})
@@ -2942,6 +3028,8 @@ func TestTextLineSpecPlainText_Read_000100(t *testing.T) {
 			leftMarginSpaces,
 			rightMarginSpaces,
 			textString,
+			-1,
+			TxtJustify.None(),
 			ePrefix.XCpy(
 				"plainTextLine01"))
 
@@ -3076,6 +3164,8 @@ func TestTextLineSpecPlainText_Read_000200(t *testing.T) {
 			leftMarginSpaces,
 			rightMarginSpaces,
 			textString,
+			-1,
+			TxtJustify.None(),
 			ePrefix.XCpy(
 				"plainTextLine01"))
 
@@ -3269,6 +3359,8 @@ func TestTextLineSpecPlainText_Read_000300(t *testing.T) {
 			[]rune(strings.Repeat(" ", leftMarginSpaces)),
 			[]rune(strings.Repeat(" ", rightMarginSpaces)),
 			textString,
+			-1,
+			TxtJustify.None(),
 			[]rune{'\n'},
 			false,
 			ePrefix.XCpy(
@@ -3445,6 +3537,8 @@ func TestTextLineSpecPlainText_Read_000400(t *testing.T) {
 		leftMargin,
 		rightMargin,
 		textString,
+		-1,
+		TxtJustify.None(),
 		newLineTerminator,
 		false,
 		ePrefix.XCpy("plainTextLine01"))
@@ -3566,6 +3660,8 @@ func TestTextLineSpecPlainText_Read_000500(t *testing.T) {
 		leftMargin,
 		rightMargin,
 		textString,
+		-1,
+		TxtJustify.None(),
 		newLineTerminator,
 		false,
 		ePrefix.XCpy("plainTextLine01"))
@@ -3633,6 +3729,8 @@ func TestTextLineSpecPlainText_ReaderInitialize_000100(t *testing.T) {
 			leftMarginSpaces,
 			rightMarginSpaces,
 			textString,
+			-1,
+			TxtJustify.None(),
 			ePrefix.XCpy(
 				"plainTextLine01"))
 
@@ -3914,6 +4012,8 @@ func TestTextLineSpecPlainText_SetLeftMarginChars_000100(t *testing.T) {
 		expectedLeftMarginStr,
 		expectedRightMarginStr,
 		expectedTextString,
+		-1,
+		TxtJustify.None(),
 		expectedNewLineStr,
 		false,
 		ePrefix.XCpy("plainTextLine01"))
@@ -3989,6 +4089,8 @@ func TestTextLineSpecPlainText_SetLeftMarginChars_000100(t *testing.T) {
 		expectedLeftMarginStr,
 		expectedRightMarginStr,
 		expectedTextString,
+		-1,
+		TxtJustify.None(),
 		expectedNewLineStr,
 		false,
 		ePrefix.XCpy("plainTextLine02"))
@@ -4050,6 +4152,8 @@ func TestTextLineSpecPlainText_SetLeftMarginChars_000100(t *testing.T) {
 		expectedLeftMarginStr,
 		expectedRightMarginStr,
 		expectedTextString,
+		-1,
+		TxtJustify.None(),
 		expectedNewLineStr,
 		false,
 		ePrefix.XCpy("plainTextLine03"))
@@ -4145,6 +4249,8 @@ func TestTextLineSpecPlainText_SetLeftMarginRunes_000100(t *testing.T) {
 		expectedLeftMarginRunes,
 		expectedRightMarginRunes,
 		expectedTextString,
+		-1,
+		TxtJustify.None(),
 		expectedNewLineRunes,
 		false,
 		ePrefix.XCpy("plainTextLine01"))
@@ -4221,6 +4327,8 @@ func TestTextLineSpecPlainText_SetLeftMarginRunes_000100(t *testing.T) {
 		expectedLeftMarginRunes,
 		expectedRightMarginRunes,
 		expectedTextString,
+		-1,
+		TxtJustify.None(),
 		expectedNewLineRunes,
 		false,
 		ePrefix.XCpy("plainTextLine02"))
@@ -4284,6 +4392,8 @@ func TestTextLineSpecPlainText_SetLeftMarginRunes_000100(t *testing.T) {
 		expectedLeftMarginRunes,
 		expectedRightMarginRunes,
 		expectedTextString,
+		-1,
+		TxtJustify.None(),
 		expectedNewLineRunes,
 		false,
 		ePrefix.XCpy("plainTextLine03"))
@@ -4400,6 +4510,8 @@ func TestTextLineSpecPlainText_SetLineTerminationChars_000100(t *testing.T) {
 		expectedLeftMarginStr,
 		expectedRightMarginStr,
 		expectedTextString,
+		-1,
+		TxtJustify.None(),
 		expectedNewLineStr,
 		false,
 		ePrefix.XCpy("plainTextLine01"))
@@ -4485,6 +4597,8 @@ func TestTextLineSpecPlainText_SetLineTerminationChars_000100(t *testing.T) {
 		expectedLeftMarginStr,
 		expectedRightMarginStr,
 		expectedTextString,
+		-1,
+		TxtJustify.None(),
 		expectedNewLineStr,
 		false,
 		ePrefix.XCpy("plainTextLine02"))
@@ -4608,6 +4722,8 @@ func TestTextLineSpecPlainText_SetLineTerminationRunes_000100(t *testing.T) {
 		expectedLeftMarginRunes,
 		expectedRightMarginRunes,
 		expectedTextString,
+		-1,
+		TxtJustify.None(),
 		expectedNewLineRunes,
 		false,
 		ePrefix.XCpy("plainTextLine01"))
@@ -4692,6 +4808,8 @@ func TestTextLineSpecPlainText_SetLineTerminationRunes_000100(t *testing.T) {
 		expectedLeftMarginRunes,
 		expectedRightMarginRunes,
 		expectedTextString,
+		-1,
+		TxtJustify.None(),
 		expectedNewLineRunes,
 		false,
 		ePrefix.XCpy("plainTextLine02"))
@@ -4740,6 +4858,8 @@ func TestTextLineSpecPlainText_SetLineTerminationRunes_000100(t *testing.T) {
 		expectedLeftMarginRunes,
 		expectedRightMarginRunes,
 		expectedTextString,
+		-1,
+		TxtJustify.None(),
 		expectedNewLineRunes,
 		false,
 		ePrefix.XCpy("plainTextLine03"))
@@ -4815,6 +4935,8 @@ func TestTextLineSpecPlainText_SetPlainTextDefault_000100(t *testing.T) {
 		leftMarginSpaces,
 		rightMarginSpaces,
 		textString,
+		-1,
+		TxtJustify.None(),
 		StrMech{})
 
 	if err == nil {
@@ -4849,6 +4971,8 @@ func TestTextLineSpecPlainText_SetPlainTextSpec_000100(t *testing.T) {
 			[]rune(strings.Repeat(" ", leftMarginSpaces)),
 			[]rune(strings.Repeat(" ", rightMarginSpaces)),
 			textString,
+			-1,
+			TxtJustify.None(),
 			[]rune{'\n'},
 			false,
 			StrMech{})
@@ -4887,6 +5011,8 @@ func TestTextLineSpecPlainText_SetPlainTextSpecRunes_000100(t *testing.T) {
 			[]rune(leftMargin),
 			[]rune(rightMargin),
 			[]rune(textString),
+			-1,
+			TxtJustify.None(),
 			[]rune{'\n'},
 			false,
 			StrMech{})
@@ -4971,6 +5097,8 @@ func TestTextLineSpecPlainText_SetRightMarginChars_000100(t *testing.T) {
 		expectedLeftMarginChars,
 		expectedRightMarginChars,
 		expectedTextString,
+		-1,
+		TxtJustify.None(),
 		expectedNewLineChars,
 		false,
 		ePrefix.XCpy(
@@ -5102,6 +5230,8 @@ func TestTextLineSpecPlainText_SetRightMarginRunes_000100(t *testing.T) {
 		expectedLeftMarginChars,
 		expectedRightMarginChars,
 		expectedTextString,
+		-1,
+		TxtJustify.None(),
 		expectedNewLineChars,
 		false,
 		ePrefix.XCpy(
@@ -5241,6 +5371,8 @@ func TestTextLineSpecPlainText_SetTextRunes_000100(t *testing.T) {
 		expectedLeftMarginChars,
 		expectedRightMarginChars,
 		expectedTextString,
+		-1,
+		TxtJustify.None(),
 		expectedNewLineChars,
 		false,
 		ePrefix.XCpy(
@@ -5379,6 +5511,8 @@ func TestTextLineSpecPlainText_SetTextString_000100(t *testing.T) {
 		expectedLeftMarginChars,
 		expectedRightMarginChars,
 		expectedTextString,
+		-1,
+		TxtJustify.None(),
 		expectedNewLineChars,
 		false,
 		ePrefix.XCpy(
@@ -5470,6 +5604,8 @@ func TestTextLineSpecPlainText_String_000100(t *testing.T) {
 			[]rune(leftMargin),
 			[]rune(rightMargin),
 			[]rune(textString),
+			-1,
+			TxtJustify.None(),
 			[]rune{'\n'},
 			false,
 			ePrefix.XCpy(
@@ -5553,6 +5689,8 @@ func TestTextLineSpecPlainText_TextBuilder_000100(t *testing.T) {
 			[]rune(leftMargin),
 			[]rune(rightMargin),
 			[]rune(textString),
+			-1,
+			TxtJustify.None(),
 			[]rune{'\n'},
 			false,
 			ePrefix.XCpy(
@@ -5648,6 +5786,8 @@ func TestTextLineSpecPlainText_TextBuilder_000200(t *testing.T) {
 			[]rune(leftMargin),
 			[]rune(rightMargin),
 			[]rune(textString),
+			-1,
+			TxtJustify.None(),
 			[]rune{'\n'},
 			false,
 			ePrefix.XCpy(
@@ -5785,6 +5925,8 @@ func TestTextLineSpecPlainText_TurnAutoLineTerminationOff_000100(t *testing.T) {
 		expectedLeftMarginChars,
 		expectedRightMarginChars,
 		expectedTextString,
+		-1,
+		TxtJustify.None(),
 		expectedNewLineChars,
 		false,
 		ePrefix.XCpy("plainTextLine01"))
@@ -5863,6 +6005,8 @@ func TestTextLineSpecPlainText_TurnAutoLineTerminationOn_000100(t *testing.T) {
 		expectedLeftMarginChars,
 		expectedRightMarginChars,
 		expectedTextString,
+		-1,
+		TxtJustify.None(),
 		expectedNewLineChars,
 		false,
 		ePrefix.XCpy("plainTextLine01"))
