@@ -1,6 +1,7 @@
 package strmech
 
 import (
+	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
 	"io"
 	"strings"
@@ -2996,6 +2997,107 @@ func TestTextLineSpecPlainText_NewPtrPlainTextStrings_000100(t *testing.T) {
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.String())
+
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecPlainText_NewPtrPlainTextStrings_000200(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecPlainText_NewPtrPlainTextStrings_000200()",
+		"")
+
+	expectedLeftMarginRunes := ""
+	expectedRightMarginRunes := ""
+	expectedNewLineRunes := "\n"
+	originalTextString := "How now brown cow!"
+	var expectedTextString string
+
+	fieldLen := 24
+
+	plainTextLine01,
+		err := TextLineSpecPlainText{}.NewPtrPlainTextStrings(
+		expectedLeftMarginRunes,
+		expectedRightMarginRunes,
+		originalTextString,
+		fieldLen,
+		TxtJustify.Center(),
+		expectedNewLineRunes,
+		false,
+		ePrefix.XCpy("plainTextLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = plainTextLine01.IsValidInstanceError(
+		ePrefix.XCpy("plainTextLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	var actualPlainTextStr string
+
+	actualPlainTextStr = plainTextLine01.GetTextString()
+
+	testName := fmt.Sprintf("Test #1 Test Base Text String\n"+
+		"Original Text String = %v\n",
+		originalTextString)
+
+	expectedTextString = "   How now brown cow!   "
+
+	if expectedTextString != actualPlainTextStr {
+
+		t.Errorf("\n%v\n"+
+			"%v\n"+
+			"Error: actualPlainTextStr NOT EQUAL TO expectedTextString\n"+
+			"actualPlainTextStr = '%v'\n"+
+			"expectedTextString = '%v'\n",
+			ePrefix.String(),
+			testName,
+			actualPlainTextStr,
+			expectedTextString)
+
+		return
+	}
+
+	testName = fmt.Sprintf("Test #2 Test Field Length and Justification Centering\n"+
+		"Original Text String = %v\n",
+		originalTextString)
+
+	expectedTextString = "   How now brown cow!   \n"
+
+	expectedTextString = new(StrMech).ConvertNonPrintableString(
+		expectedTextString,
+		true)
+
+	actualPlainTextStr,
+		err = plainTextLine01.GetFormattedText(
+		ePrefix.XCpy("plainTextLine01"))
+
+	actualPlainTextStr = new(StrMech).ConvertNonPrintableString(
+		actualPlainTextStr,
+		true)
+
+	if expectedTextString != actualPlainTextStr {
+
+		t.Errorf("\n%v\n"+
+			"%v\n"+
+			"Error: actualPlainTextStr NOT EQUAL TO expectedTextString\n"+
+			"  actualPlainTextStr = '%v'\n"+
+			"expectedTextString   = '%v'\n",
+			ePrefix.String(),
+			testName,
+			actualPlainTextStr,
+			expectedTextString)
 
 		return
 	}
