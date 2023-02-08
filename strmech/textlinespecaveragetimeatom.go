@@ -5,7 +5,9 @@ import (
 	ePref "github.com/MikeAustin71/errpref"
 	"math"
 	"math/big"
+	"strings"
 	"sync"
+	"time"
 )
 
 type textLineSpecAverageTimeAtom struct {
@@ -259,4 +261,206 @@ func (txtLineAvgTimeAtom *textLineSpecAverageTimeAtom) calcAverageDuration(
 		maximumTimeDuration,
 		minimumTimeDuration,
 		err
+}
+
+// getDurationReport
+//
+// Receives time duration allocation data broken down by
+// days, hours, minutes, seconds, milliseconds,
+// microseconds and nanoseconds.
+//
+// This method then proceeds to prepare and return a text
+// report presentation of the data.
+func (txtLineAvgTimeAtom *textLineSpecAverageTimeAtom) getDurationReport(
+	strBuilder *strings.Builder,
+	allocatedDuration TimeDurationDto,
+	timeDurationTitle string,
+	maxLineLength int,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if txtLineAvgTimeAtom.lock == nil {
+		txtLineAvgTimeAtom.lock = new(sync.Mutex)
+	}
+
+	txtLineAvgTimeAtom.lock.Lock()
+
+	defer txtLineAvgTimeAtom.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"textLineSpecAverageTimeAtom."+
+			"getDurationReport()",
+		"")
+
+	if err != nil {
+
+		return err
+	}
+	solidLineLeftMargin := " "
+	titleLineLeftMargin := "  "
+
+	originalMaxLineLength := maxLineLength
+	lenTitleLineLeftMargin := len(titleLineLeftMargin)
+	maxLineLength -= lenTitleLineLeftMargin
+
+	if maxLineLength < 1 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'maxLineLength' is invalid!\n"+
+			"'maxLineLength' has a length less than one ('1').\n"+
+			"Original maxLineLength = %v\n"+
+			"Adjusted Maximum Line Length = maxLineLength - %v \n"+
+			"Adjusted Maximum Line Length = %v\n",
+			ePrefix.String(),
+			originalMaxLineLength,
+			lenTitleLineLeftMargin,
+			maxLineLength)
+
+		return err
+	}
+
+	txtLineCollection := new(TextLineSpecLinesCollection).New()
+
+	err = txtLineCollection.AddBlankLine(
+		2,
+		ePrefix.XCpy("Top Line #1"))
+
+	if err != nil {
+		return err
+	}
+
+	err = txtLineCollection.AddSolidLine(
+		solidLineLeftMargin,
+		"=",
+		maxLineLength,
+		"",
+		"",
+		false,
+		1,
+		ePrefix.XCpy("Top Solid Line #1"))
+
+	if err != nil {
+		return err
+	}
+
+	err = txtLineCollection.AddPlainTextLine(
+		titleLineLeftMargin,
+		"",
+		timeDurationTitle,
+		maxLineLength,
+		TxtJustify.Center(),
+		ePrefix.XCpy(
+			"Text Title Top Line #1"))
+
+	if err != nil {
+		return err
+	}
+
+	err = txtLineCollection.AddDateTimeLine(
+		titleLineLeftMargin,
+		"",
+		time.Now(),
+		"",
+		maxLineLength,
+		TxtJustify.Center(),
+		ePrefix)
+
+	if err != nil {
+		return err
+	}
+
+	var allocatedDurationStrs StringArrayDto
+
+	allocatedDurationStrs,
+		err = new(DateTimeHelper).GetFmtAllocatedDurationText(
+		allocatedDuration,
+		maxLineLength,
+		ePrefix.XCpy("allocatedDurationStrs<-"))
+
+	if err != nil {
+		return err
+	}
+
+	var summaryTotalStr string
+
+	summaryTotalStr,
+		_,
+		err = allocatedDurationStrs.PopLastStr(
+		ePrefix.XCpy("summaryTotalStr<-"))
+
+	if err != nil {
+		return err
+	}
+
+	err = txtLineCollection.AddPlainTextStrArray(
+		titleLineLeftMargin+"  ",
+		"",
+		allocatedDurationStrs,
+		maxLineLength-2,
+		TxtJustify.Left(),
+		ePrefix)
+
+	if err != nil {
+		return err
+	}
+
+	err = txtLineCollection.AddSolidLine(
+		solidLineLeftMargin,
+		"-",
+		maxLineLength,
+		"",
+		"",
+		false,
+		1,
+		ePrefix.XCpy("Summary Total Solid Line"))
+
+	if err != nil {
+		return err
+	}
+
+	err = txtLineCollection.AddPlainTextLine(
+		titleLineLeftMargin,
+		"",
+		summaryTotalStr,
+		maxLineLength,
+		TxtJustify.Center(),
+		ePrefix.XCpy("summaryTotalStr"))
+
+	if err != nil {
+		return err
+	}
+
+	err = txtLineCollection.AddSolidLine(
+		solidLineLeftMargin,
+		"=",
+		maxLineLength,
+		"",
+		"",
+		false,
+		1,
+		ePrefix.XCpy("Summary Total Solid Line"))
+
+	if err != nil {
+		return err
+	}
+
+	err = txtLineCollection.AddBlankLine(
+		2,
+		ePrefix.XCpy("Bottom-Ending Blank Lines"))
+
+	if err != nil {
+		return err
+	}
+
+	_,
+		err = txtLineCollection.GetFormattedText(
+		strBuilder,
+		ePrefix.XCpy("strBuilder<-"))
+
+	return err
 }

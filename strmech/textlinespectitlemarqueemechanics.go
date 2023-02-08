@@ -256,7 +256,6 @@ func (txtLineTitleMarqueeMech *textLineSpecTitleMarqueeMechanics) setTxtLineTitl
 	var solidLineCharStr string
 	var textFieldSpecs []ITextFieldSpecification
 	var solidLeftMarginLabel, solidRightMarginLabel,
-		//txtLeftMarginLabel, txtRightMarginLabel,
 		txtFieldLabel TextFieldSpecLabel
 
 	var stdLine TextLineSpecStandardLine
@@ -291,37 +290,6 @@ func (txtLineTitleMarqueeMech *textLineSpecTitleMarqueeMechanics) setTxtLineTitl
 		}
 	}
 
-	/*
-		if len(configSpecs.StandardTitleLeftMargin) > 0 {
-
-			txtLeftMarginLabel,
-				err = TextFieldSpecLabel{}.NewTextLabel(
-				configSpecs.StandardTitleLeftMargin,
-				-1,
-				TxtJustify.Left(),
-				ePrefix.XCpy(
-					"txtLeftMarginLabel-leading solid line"))
-
-			if err != nil {
-				return err
-			}
-		}
-
-		if len(configSpecs.StandardTitleRightMargin) > 0 {
-
-			txtRightMarginLabel,
-				err = TextFieldSpecLabel{}.NewTextLabel(
-				configSpecs.StandardTitleRightMargin,
-				-1,
-				TxtJustify.Right(),
-				ePrefix.XCpy(
-					"txtRightMarginLabel-leading solid line"))
-
-			if err != nil {
-				return err
-			}
-		}
-	*/
 	if len(configSpecs.LeadingSolidLineChar) > 0 &&
 		configSpecs.NumLeadingSolidLines > 0 {
 		// If we have left and/or right margins

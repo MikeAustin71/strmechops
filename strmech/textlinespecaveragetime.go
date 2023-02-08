@@ -1008,11 +1008,20 @@ func (txtLineAvgTime *TextLineSpecAverageTime) GetFormattedText(
 		return "", err
 	}
 
-	return new(textLineSpecAverageTimeMechanics).
+	strBuilder := strings.Builder{}
+
+	err = new(textLineSpecAverageTimeMechanics).
 		getFormattedText(
 			txtLineAvgTime,
+			&strBuilder,
 			ePrefix.XCpy(
-				"<-txtLineAvgTime Formatted Text"))
+				"strBuilder<-txtLineAvgTime"))
+
+	if err != nil {
+		return "", err
+	}
+
+	return strBuilder.String(), err
 }
 
 //	IsValidInstance
@@ -1435,25 +1444,25 @@ func (txtLineAvgTime *TextLineSpecAverageTime) Read(
 
 	if txtLineAvgTime.textLineReader == nil {
 
-		var formattedText string
+		strBuilder := strings.Builder{}
 
-		formattedText,
-			err = new(textLineSpecAverageTimeMechanics).
+		err = new(textLineSpecAverageTimeMechanics).
 			getFormattedText(
 				txtLineAvgTime,
+				&strBuilder,
 				ePrefix.XCpy(
-					"<-txtLineAvgTime Formatted Text"))
+					"strBuilder<-txtLineAvgTime"))
 
 		if err != nil {
 			return n, err
 		}
 
 		txtLineAvgTime.textLineReader =
-			strings.NewReader(formattedText)
+			strings.NewReader(strBuilder.String())
 
 		if txtLineAvgTime.textLineReader == nil {
 			err = fmt.Errorf("%v\n"+
-				"Error: strings.NewReader(formattedText)\n"+
+				"Error: strings.NewReader(strBuilder.String())\n"+
 				"returned a nil pointer.\n"+
 				"txtLineAvgTime.textLineReader == nil\n",
 				ePrefix.String())
@@ -1623,20 +1632,27 @@ func (txtLineAvgTime TextLineSpecAverageTime) String() string {
 
 	defer txtLineAvgTime.lock.Unlock()
 
+	var formattedText string
+
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
 		"TextLineSpecAverageTime.String()",
 		"")
 
-	formattedText,
-		err := new(textLineSpecAverageTimeMechanics).
+	strBuilder := strings.Builder{}
+
+	err := new(textLineSpecAverageTimeMechanics).
 		getFormattedText(
 			&txtLineAvgTime,
+			&strBuilder,
 			ePrefix.XCpy(
 				"formattedText<-txtLineAvgTime Formatted Text"))
 
 	if err != nil {
+
 		formattedText = fmt.Sprintf("%v\n",
 			err.Error())
+
+		return formattedText
 	}
 
 	return formattedText
@@ -1779,43 +1795,15 @@ func (txtLineAvgTime *TextLineSpecAverageTime) TextBuilder(
 		return err
 	}
 
-	formattedText,
-		err := new(textLineSpecAverageTimeMechanics).
+	err = new(textLineSpecAverageTimeMechanics).
 		getFormattedText(
 			txtLineAvgTime,
+			strBuilder,
 			ePrefix.XCpy(
-				"formattedText<-txtLineAvgTime Formatted Text"))
+				"strBuilder<-txtLineAvgTime Formatted Text"))
 
 	if err != nil {
 		return err
-	}
-
-	lenFormattedText := len(formattedText)
-
-	netCapacityStrBuilder :=
-		strBuilder.Cap() -
-			strBuilder.Len()
-
-	requiredCapacity :=
-		lenFormattedText - netCapacityStrBuilder
-
-	if requiredCapacity > 0 {
-
-		strBuilder.Grow(requiredCapacity + 16)
-	}
-
-	var err2 error
-
-	_,
-		err2 = strBuilder.WriteString(formattedText)
-
-	if err2 != nil {
-
-		err = fmt.Errorf("%v\n"+
-			"Error returned by sBuilder.WriteString(formattedTxtStr)\n"+
-			"%v\n",
-			ePrefix.String(),
-			err2.Error())
 	}
 
 	return err
