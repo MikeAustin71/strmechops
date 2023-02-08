@@ -17,6 +17,16 @@ import (
 // This type is compatible with and used by type
 // TextLineSpecTitleMarquee
 type TextLineTitleMarqueeDto struct {
+	StandardSolidLineLeftMargin string
+	//	The standard left margin characters applied
+	//	to all Solid Lines created for this Title
+	//	Marquee
+
+	StandardSolidLineRightMargin string
+	//	The standard right margin characters applied
+	//	to all Solid Lines created for this Title
+	//	Marquee
+
 	StandardTitleLeftMargin string
 	//	The standard left margin characters applied
 	//	to all Text Title Lines in the 'TitleLines'
@@ -3131,6 +3141,8 @@ func (txtLineTitleMarqueeDto *TextLineTitleMarqueeDto) IsValidInstanceError(
 //		text will be attached to the beginning of the
 //		error message.
 func (txtLineTitleMarqueeDto *TextLineTitleMarqueeDto) NewBasicTitleMarqueeDto(
+	standardSolidLineLeftMargin string,
+	standardSolidLineRightMargin string,
 	standardTitleLeftMargin string,
 	standardTitleRightMargin string,
 	standardMaxLineLen int,
@@ -3168,6 +3180,8 @@ func (txtLineTitleMarqueeDto *TextLineTitleMarqueeDto) NewBasicTitleMarqueeDto(
 	err = new(textLineTitleMarqueeDtoNanobot).
 		configureBasicTitleMarqueeDto(
 			&newTextLineTitleMarqueeDto,
+			standardSolidLineLeftMargin,
+			standardSolidLineRightMargin,
 			standardTitleLeftMargin,
 			standardTitleRightMargin,
 			standardMaxLineLen,
@@ -3352,6 +3366,12 @@ func (txtTitleMarqueeDtoNanobot *textLineTitleMarqueeDtoNanobot) copy(
 
 	txtLineMarqueeDtoAtom.empty(
 		destinationTitleMarqueeDto)
+
+	destinationTitleMarqueeDto.StandardSolidLineLeftMargin =
+		sourceTitleMarqueeDto.StandardSolidLineLeftMargin
+
+	destinationTitleMarqueeDto.StandardSolidLineRightMargin =
+		sourceTitleMarqueeDto.StandardSolidLineRightMargin
 
 	destinationTitleMarqueeDto.StandardTitleLeftMargin =
 		sourceTitleMarqueeDto.StandardTitleLeftMargin
@@ -3962,19 +3982,39 @@ func (txtTitleMarqueeDtoNanobot *textLineTitleMarqueeDtoNanobot) addTitleLineLab
 //		instance will be analyzed to determine if they are
 //		valid in all respects.
 //
+//	standardSolidLineLeftMargin		string
+//
+//		The standard left margin characters applied to
+//		all Solid Lines created for this Title Marquee
+//
+//		If no solid line left margin is required, set
+//		this parameter to an empty string.
+//
+//	standardSolidLineRightMargin	string
+//
+//		The standard right margin characters applied to
+//		all Solid Lines created for this Title Marquee
+//
+//		If no solid line left margin is required, set
+//		this parameter to an empty string.
+//
 //	standardTitleLeftMargin		string
 //
 //		The standard left margin characters applied
-//		to all solid lines and Text Title Lines in the
-//		Title Lines array
-//		(TextLineSpecTitleMarquee.titleLines).
+//		to all Text Title Lines in the Title Lines array,
+//		TextLineSpecTitleMarquee.titleLines.
+//
+//		If no Title Line left margin is required, set
+//		this parameter to an empty string.
 //
 //	standardTitleRightMargin	string
 //
 //		The standard right margin characters applied
-//		to all solid lines and Text Title Lines in the
-//		Title Lines array
-//		(TextLineSpecTitleMarquee.titleLines).
+//		to all Text Title Lines in the Title Lines array,
+//		TextLineSpecTitleMarquee.titleLines.
+//
+//		If no Title Line right margin is required, set
+//		this parameter to an empty string.
 //
 //	standardMaxLineLen			int
 //
@@ -4061,6 +4101,8 @@ func (txtTitleMarqueeDtoNanobot *textLineTitleMarqueeDtoNanobot) addTitleLineLab
 //		the error message.
 func (txtTitleMarqueeDtoNanobot *textLineTitleMarqueeDtoNanobot) configureBasicTitleMarqueeDto(
 	txtTitleMarqueeDto *TextLineTitleMarqueeDto,
+	standardSolidLineLeftMargin string,
+	standardSolidLineRightMargin string,
 	standardTitleLeftMargin string,
 	standardTitleRightMargin string,
 	standardMaxLineLen int,
@@ -4097,20 +4139,22 @@ func (txtTitleMarqueeDtoNanobot *textLineTitleMarqueeDtoNanobot) configureBasicT
 		len(standardTitleRightMargin)
 
 	txtTitleMarqueeDto = &TextLineTitleMarqueeDto{
-		StandardTitleLeftMargin:   standardTitleLeftMargin,
-		StandardTitleRightMargin:  standardTitleRightMargin,
-		StandardMaxLineLen:        standardMaxLineLen,
-		StandardTextFieldLen:      standardFieldLen,
-		StandardTextJustification: TxtJustify.Center(),
-		NumLeadingBlankLines:      1,
-		LeadingSolidLineChar:      solidLineChar,
-		NumLeadingSolidLines:      1,
-		NumTopTitleBlankLines:     1,
-		TitleLines:                TextLineSpecLinesCollection{},
-		NumBottomTitleBlankLines:  1,
-		TrailingSolidLineChar:     solidLineChar,
-		NumTrailingSolidLines:     1,
-		NumTrailingBlankLines:     1,
+		StandardSolidLineLeftMargin:  standardSolidLineLeftMargin,
+		StandardSolidLineRightMargin: standardSolidLineRightMargin,
+		StandardTitleLeftMargin:      standardTitleLeftMargin,
+		StandardTitleRightMargin:     standardTitleRightMargin,
+		StandardMaxLineLen:           standardMaxLineLen,
+		StandardTextFieldLen:         standardFieldLen,
+		StandardTextJustification:    TxtJustify.Center(),
+		NumLeadingBlankLines:         1,
+		LeadingSolidLineChar:         solidLineChar,
+		NumLeadingSolidLines:         1,
+		NumTopTitleBlankLines:        1,
+		TitleLines:                   TextLineSpecLinesCollection{},
+		NumBottomTitleBlankLines:     1,
+		TrailingSolidLineChar:        solidLineChar,
+		NumTrailingSolidLines:        1,
+		NumTrailingBlankLines:        1,
 	}
 
 	txtLabelDto := TextFieldFormatDtoLabel{
@@ -4587,6 +4631,10 @@ func (txtTitleMarqueeDtoAtom *textLineTitleMarqueeDtoAtom) empty(
 	if txtTitleMarqueeDto == nil {
 		return
 	}
+
+	txtTitleMarqueeDto.StandardSolidLineLeftMargin = ""
+
+	txtTitleMarqueeDto.StandardSolidLineRightMargin = ""
 
 	txtTitleMarqueeDto.StandardTitleLeftMargin = ""
 

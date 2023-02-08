@@ -255,41 +255,73 @@ func (txtLineTitleMarqueeMech *textLineSpecTitleMarqueeMechanics) setTxtLineTitl
 
 	var solidLineCharStr string
 	var textFieldSpecs []ITextFieldSpecification
-	var txtLeftMarginLabel, txtRightMarginLabel,
+	var solidLeftMarginLabel, solidRightMarginLabel,
+		//txtLeftMarginLabel, txtRightMarginLabel,
 		txtFieldLabel TextFieldSpecLabel
 
 	var stdLine TextLineSpecStandardLine
 
-	if len(configSpecs.StandardTitleLeftMargin) > 0 {
+	if len(configSpecs.StandardSolidLineLeftMargin) > 0 {
 
-		txtLeftMarginLabel,
+		solidLeftMarginLabel,
 			err = TextFieldSpecLabel{}.NewTextLabel(
-			configSpecs.StandardTitleLeftMargin,
+			configSpecs.StandardSolidLineLeftMargin,
 			-1,
 			TxtJustify.Left(),
 			ePrefix.XCpy(
-				"txtLeftMarginLabel-leading solid line"))
+				"solidLeftMarginLabel-leading solid line"))
 
 		if err != nil {
 			return err
 		}
 	}
 
-	if len(configSpecs.StandardTitleRightMargin) > 0 {
+	if len(configSpecs.StandardSolidLineRightMargin) > 0 {
 
-		txtRightMarginLabel,
+		solidRightMarginLabel,
 			err = TextFieldSpecLabel{}.NewTextLabel(
-			configSpecs.StandardTitleRightMargin,
+			configSpecs.StandardSolidLineRightMargin,
 			-1,
 			TxtJustify.Right(),
 			ePrefix.XCpy(
-				"txtRightMarginLabel-leading solid line"))
+				"solidRightMarginLabel-leading solid line"))
 
 		if err != nil {
 			return err
 		}
 	}
 
+	/*
+		if len(configSpecs.StandardTitleLeftMargin) > 0 {
+
+			txtLeftMarginLabel,
+				err = TextFieldSpecLabel{}.NewTextLabel(
+				configSpecs.StandardTitleLeftMargin,
+				-1,
+				TxtJustify.Left(),
+				ePrefix.XCpy(
+					"txtLeftMarginLabel-leading solid line"))
+
+			if err != nil {
+				return err
+			}
+		}
+
+		if len(configSpecs.StandardTitleRightMargin) > 0 {
+
+			txtRightMarginLabel,
+				err = TextFieldSpecLabel{}.NewTextLabel(
+				configSpecs.StandardTitleRightMargin,
+				-1,
+				TxtJustify.Right(),
+				ePrefix.XCpy(
+					"txtRightMarginLabel-leading solid line"))
+
+			if err != nil {
+				return err
+			}
+		}
+	*/
 	if len(configSpecs.LeadingSolidLineChar) > 0 &&
 		configSpecs.NumLeadingSolidLines > 0 {
 		// If we have left and/or right margins
@@ -318,20 +350,20 @@ func (txtLineTitleMarqueeMech *textLineSpecTitleMarqueeMechanics) setTxtLineTitl
 
 		textFieldSpecs = nil
 
-		if len(configSpecs.StandardTitleLeftMargin) > 0 {
+		if len(configSpecs.StandardSolidLineLeftMargin) > 0 {
 			textFieldSpecs = append(
 				textFieldSpecs,
-				&txtLeftMarginLabel)
+				&solidLeftMarginLabel)
 		}
 
 		textFieldSpecs = append(
 			textFieldSpecs,
 			&txtFieldLabel)
 
-		if len(configSpecs.StandardTitleRightMargin) > 0 {
+		if len(configSpecs.StandardSolidLineRightMargin) > 0 {
 			textFieldSpecs = append(
 				textFieldSpecs,
-				&txtRightMarginLabel)
+				&solidRightMarginLabel)
 		}
 
 		stdLine,
@@ -380,20 +412,20 @@ func (txtLineTitleMarqueeMech *textLineSpecTitleMarqueeMechanics) setTxtLineTitl
 
 		textFieldSpecs = nil
 
-		if len(configSpecs.StandardTitleLeftMargin) > 0 {
+		if len(configSpecs.StandardSolidLineLeftMargin) > 0 {
 			textFieldSpecs = append(
 				textFieldSpecs,
-				&txtLeftMarginLabel)
+				&solidLeftMarginLabel)
 		}
 
 		textFieldSpecs = append(
 			textFieldSpecs,
 			&txtFieldLabel)
 
-		if len(configSpecs.StandardTitleRightMargin) > 0 {
+		if len(configSpecs.StandardSolidLineRightMargin) > 0 {
 			textFieldSpecs = append(
 				textFieldSpecs,
-				&txtRightMarginLabel)
+				&solidRightMarginLabel)
 		}
 
 		stdLine,
@@ -442,20 +474,20 @@ func (txtLineTitleMarqueeMech *textLineSpecTitleMarqueeMechanics) setTxtLineTitl
 
 		textFieldSpecs = nil
 
-		if len(configSpecs.StandardTitleLeftMargin) > 0 {
+		if len(configSpecs.StandardSolidLineLeftMargin) > 0 {
 			textFieldSpecs = append(
 				textFieldSpecs,
-				&txtLeftMarginLabel)
+				&solidLeftMarginLabel)
 		}
 
 		textFieldSpecs = append(
 			textFieldSpecs,
 			&txtFieldLabel)
 
-		if len(configSpecs.StandardTitleRightMargin) > 0 {
+		if len(configSpecs.StandardSolidLineRightMargin) > 0 {
 			textFieldSpecs = append(
 				textFieldSpecs,
-				&txtRightMarginLabel)
+				&solidRightMarginLabel)
 		}
 
 		stdLine,
@@ -508,20 +540,20 @@ func (txtLineTitleMarqueeMech *textLineSpecTitleMarqueeMechanics) setTxtLineTitl
 
 		textFieldSpecs = nil
 
-		if len(configSpecs.StandardTitleLeftMargin) > 0 {
+		if len(configSpecs.StandardSolidLineLeftMargin) > 0 {
 			textFieldSpecs = append(
 				textFieldSpecs,
-				&txtLeftMarginLabel)
+				&solidLeftMarginLabel)
 		}
 
 		textFieldSpecs = append(
 			textFieldSpecs,
 			&txtFieldLabel)
 
-		if len(configSpecs.StandardTitleRightMargin) > 0 {
+		if len(configSpecs.StandardSolidLineRightMargin) > 0 {
 			textFieldSpecs = append(
 				textFieldSpecs,
-				&txtRightMarginLabel)
+				&solidRightMarginLabel)
 		}
 
 		stdLine,

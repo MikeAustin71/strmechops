@@ -3299,21 +3299,41 @@ func (txtLineSpecTitleMarquee *TextLineSpecTitleMarquee) NewMarqueeDto(
 //
 // # Input Parameters
 //
-//	standardTitleLeftMargin		string
+//	standardSolidLineLeftMargin		string
+//
+//		The standard left margin characters applied to
+//		all Solid Lines created for this Title Marquee
+//
+//		If no solid line left margin is required, set
+//		this parameter to an empty string.
+//
+//	standardSolidLineRightMargin	string
+//
+//		The standard right margin characters applied to
+//		all Solid Lines created for this Title Marquee
+//
+//		If no solid line left margin is required, set
+//		this parameter to an empty string.
+//
+//	standardTitleLeftMargin			string
 //
 //		The standard left margin characters applied
-//		to all solid lines and Text Title Lines in the
-//		Title Lines array
-//		(TextLineSpecTitleMarquee.titleLines).
+//		to all Text Title Lines in the Title Lines array,
+//		TextLineSpecTitleMarquee.titleLines.
 //
-//	standardTitleRightMargin	string
+//		If no Title Line left margin is required, set
+//		this parameter to an empty string.
+//
+//	standardTitleRightMargin		string
 //
 //		The standard right margin characters applied
-//		to all solid lines and Text Title Lines in the
-//		Title Lines array
-//		(TextLineSpecTitleMarquee.titleLines).
+//		to all Text Title Lines in the Title Lines array,
+//		TextLineSpecTitleMarquee.titleLines.
 //
-//	standardMaxLineLen			int
+//		If no Title Line right margin is required, set
+//		this parameter to an empty string.
+//
+//	standardMaxLineLen				int
 //
 //		The maximum number of characters allowed on
 //		a text title line. This maximum limit will be
@@ -3325,13 +3345,13 @@ func (txtLineSpecTitleMarquee *TextLineSpecTitleMarquee) NewMarqueeDto(
 //		standard field length for all solid lines and
 //		text lines formatted for the Title Marquee.
 //
-//	solidLineChar				string
+//	solidLineChar					string
 //
 //		The character used to create the Leading
 //		Solid Line displayed above the Title
 //		Lines.
 //
-//	errorPrefix					interface{}
+//	errorPrefix						interface{}
 //
 //		This object encapsulates error prefix text which
 //		is included in all returned error messages.
@@ -3390,7 +3410,7 @@ func (txtLineSpecTitleMarquee *TextLineSpecTitleMarquee) NewMarqueeDto(
 //		included in the 'errpref' software package:
 //			"github.com/MikeAustin71/errpref".
 //
-//	titleLines					...interface{}
+//	titleLines						...interface{}
 //
 //		This is a variadic parameter which can accept a
 //		variable number of arguments.
@@ -3451,6 +3471,8 @@ func (txtLineSpecTitleMarquee *TextLineSpecTitleMarquee) NewMarqueeDto(
 //		text will be attached to the beginning of the
 //		error message.
 func (txtLineSpecTitleMarquee *TextLineSpecTitleMarquee) NewBasicTitleMarquee(
+	standardSolidLineLeftMargin string,
+	standardSolidLineRightMargin string,
 	standardTitleLeftMargin string,
 	standardTitleRightMargin string,
 	standardMaxLineLen int,
@@ -3489,6 +3511,8 @@ func (txtLineSpecTitleMarquee *TextLineSpecTitleMarquee) NewBasicTitleMarquee(
 	err = new(textLineTitleMarqueeDtoNanobot).
 		configureBasicTitleMarqueeDto(
 			&configSpecs,
+			standardSolidLineLeftMargin,
+			standardSolidLineRightMargin,
 			standardTitleLeftMargin,
 			standardTitleRightMargin,
 			standardMaxLineLen,
