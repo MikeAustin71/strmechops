@@ -859,6 +859,353 @@ func (txtLinesSpecCol *TextLineSpecLinesCollection) AddPlainTextLine(
 				"txtLinesSpecCol<-plainTextLine"))
 }
 
+//	AddPlainTextLines
+//
+//	Receives a series of strings used to construct a
+//	multiple new lines of formatted text. These new text
+//	lines are then added to the Text Specification Lines
+//	Collection maintained by the current instance of
+//	TextLineSpecLinesCollection.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	leftMarginStr				string
+//
+//		A string containing the text characters to be
+//		positioned on the left side of the text string
+//		(textString).
+//
+//		If no left margin is required, set this parameter
+//		to an empty string.
+//
+//		Example:
+//			leftMarginStr  = "   " // 3-spaces
+//			Text String = "Hello World"
+//			rightMarginStr = "" // Empty string
+//			Plain Text line = "   Hello World"
+//
+//		If the 'leftMarginStr' string length is greater
+//		than one-million (1,000,000), an error will be
+//		returned.
+//
+//	rightMarginStr				string
+//
+//		A string containing the text characters to be
+//		positioned on the right side of the text string
+//		(textString).
+//
+//		If no right margin is required, set this
+//		parameter to an empty string.
+//
+//		Example:
+//			leftMarginStr  = "" // Empty string
+//			Text String = "Hello World"
+//			rightMarginStr = " **" // Right Margin Characters
+//			Plain Text line = "Hello World **"
+//
+//		If the 'rightMarginStr' string length is greater
+//		than one-million (1,000,000), an error will be
+//		returned.
+//
+//	textFieldLength				int
+//
+//		This parameter defines the length of the text
+//		field in which the text sting will be displayed.
+//
+//		If 'textFieldLength' is less than the length of
+//		the text string ('textString'), it will be
+//		automatically set equal to the length of that
+//		numeric value string.
+//
+//		To automatically set the value of 'textFieldLength'
+//		to the string length of text string
+//		('textString'), set this parameter to a value of
+//		minus one (-1).
+//
+//		If this parameter is submitted with a value less
+//		than minus one (-1) or greater than 1-million
+//		(1,000,000), an error will be returned.
+//
+//		Text Field Length Examples
+//
+//			Example-1
+//	         FieldContents String = "1234.5678"
+//				FieldContents String Length = 9
+//				textFieldLength = 15
+//				textFieldJustification = TxtJustify.Center()
+//				Text Field String =
+//					"   1234.5678   "
+//
+//			Example-2
+//	         FieldContents = "1234.5678"
+//				FieldContents String Length = 9
+//				textFieldLength = 15
+//				textFieldJustification = TxtJustify.Right()
+//				Text Field String =
+//					"      1234.5678"
+//
+//			Example-3
+//	         FieldContents = "1234.5678"
+//				FieldContents String Length = 9
+//				textFieldLength = -1
+//				textFieldJustification = TxtJustify.Center()
+//					// Justification Ignored. Field Length
+//					// Equals -1
+//				Text Field String =
+//					"1234.5678"
+//
+//			Example-4
+//	         FieldContents = "1234.5678"
+//				FieldContents String Length = 9
+//				textFieldLength = 2
+//				textFieldJustification = TxtJustify.Center()
+//					// Ignored, because FieldLength Less
+//					// Than FieldContents String Length.
+//				Text Field String =
+//					"1234.5678"
+//
+//	textFieldJustification		TextJustify
+//
+//		An enumeration which specifies the justification
+//		of the text string ('textString') within the text
+//		field length specified by input parameter
+//		'textFieldLength'.
+//
+//		Text justification can only be evaluated in the
+//		context of a number string, field length and a
+//		'textJustification' object of type TextJustify.
+//		This is because text strings with a field length
+//		equal to or less than the length of the text
+//		string ('textString') never use text
+//		justification. In these cases, text justification
+//		is completely ignored.
+//
+//		If the field length parameter ('textFieldLength')
+//		is greater than the length of the numeric value
+//		string, text justification must be equal to one
+//		of these three valid values:
+//
+//			TextJustify(0).Left()
+//			TextJustify(0).Right()
+//			TextJustify(0).Center()
+//
+//		You can also use the abbreviated text justification
+//		enumeration syntax as follows:
+//
+//			TxtJustify.Left()
+//			TxtJustify.Right()
+//			TxtJustify.Center()
+//
+//		Text Justification Examples
+//
+//			Example-1
+//	         FieldContents String = "1234.5678"
+//				FieldContents String Length = 9
+//				textFieldLength = 15
+//				textFieldJustification = TxtJustify.Center()
+//				Text Field String =
+//					"   1234.5678   "
+//
+//			Example-2
+//	         FieldContents = "1234.5678"
+//				FieldContents String Length = 9
+//				textFieldLength = 15
+//				textFieldJustification = TxtJustify.Right()
+//				Text Field String =
+//					"      1234.5678"
+//
+//			Example-3
+//	         FieldContents = "1234.5678"
+//				FieldContents String Length = 9
+//				textFieldLength = -1
+//				textFieldJustification = TxtJustify.Center()
+//					// Justification Ignored. Field Length
+//					// Equals -1
+//				Text Field String =
+//					"1234.5678"
+//
+//			Example-4
+//	         FieldContents = "1234.5678"
+//				FieldContents String Length = 9
+//				textFieldLength = 2
+//				textFieldJustification = TxtJustify.Center()
+//					// Ignored, because FieldLength Less
+//					// Than FieldContents String Length.
+//				Text Field String =
+//					"1234.5678"
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+//	textStrings					... string
+//
+//		A series of text strings. This variadic
+//		parameter is used to pass one or more text
+//		strings. Each text string will be converted
+//		to a plain text line and added the Text
+//		Specification Lines Collection maintained by
+//		the current instance of
+//		TextLineSpecLinesCollection.
+//
+//		Each text string which will be inserted between
+//		the left ('') and right ('') margin strings to
+//		construct the plain text line.
+//
+//		If this variadic paramter contains zero strings,
+//		an error will be returned.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (txtLinesSpecCol *TextLineSpecLinesCollection) AddPlainTextLines(
+	leftMarginStr string,
+	rightMarginStr string,
+	textFieldLength int,
+	textFieldJustification TextJustify,
+	errorPrefix interface{},
+	textStrings ...string) error {
+
+	txtLinesSpecCol.lock.Lock()
+
+	defer txtLinesSpecCol.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecLinesCollection."+
+			"AddPlainTextLines()",
+		"")
+
+	if err != nil {
+		return err
+	}
+	var plainTextLine TextLineSpecPlainText
+
+	txtLineColNanobot := textLineSpecLinesCollectionNanobot{}
+
+	lenTextStrs := len(textStrings)
+
+	if lenTextStrs == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'textStrings' is invalid!\n"+
+			"'textStrings' contains is empty and contains zero strings.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	for idx, textString := range textStrings {
+
+		plainTextLine,
+			err = TextLineSpecPlainText{}.NewPlainTextStrings(
+			leftMarginStr,
+			rightMarginStr,
+			textString,
+			textFieldLength,
+			textFieldJustification,
+			"\n",
+			false,
+			ePrefix.XCpy(fmt.Sprintf(
+				"plainTextLine<-textStrings[%v]",
+				idx)))
+
+		if err != nil {
+			return err
+		}
+
+		err = txtLineColNanobot.
+			addTextLine(
+				txtLinesSpecCol,
+				&plainTextLine,
+				ePrefix.XCpy(fmt.Sprintf(
+					"plainTextLine<-plainTextLine[%v]",
+					idx)))
+
+		if err != nil {
+			return err
+		}
+
+	}
+
+	return err
+}
+
 //	AddPlainTextStrArray
 //
 //	Receives a type StringArrayDto and uses the internal
