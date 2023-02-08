@@ -7,26 +7,39 @@ import (
 )
 
 func TestTextLineTitleMarqueeDto_AddTitleLineStrArrayDtos_000100(t *testing.T) {
-
+	/*
+	**************************************************************************** *
+	**************************************************************************** *
+	*                                                                            *
+	*                               Title Line #1                                *
+	*                               Title Line #2                                *
+	*                               Title Line #3                                *
+	*                  2022-12-16 14:19:03.000000000 -0600 CST                   *
+	*                                                                            *
+	**************************************************************************** *
+	**************************************************************************** *
+	 */
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestNumStrMathQuarkExtendRunes_000100()",
+		"TestTextLineTitleMarqueeDto_AddTitleLineStrArrayDtos_000100()",
 		"")
 
 	marqueeDto := TextLineTitleMarqueeDto{
-		StandardTitleLeftMargin:   " *",
-		StandardTitleRightMargin:  "*",
-		StandardMaxLineLen:        80,
-		StandardTextFieldLen:      99,
-		StandardTextJustification: TxtJustify.Center(),
-		NumLeadingBlankLines:      1,
-		LeadingSolidLineChar:      "*",
-		NumLeadingSolidLines:      2,
-		NumTopTitleBlankLines:     1,
-		TitleLines:                TextLineSpecLinesCollection{},
-		NumBottomTitleBlankLines:  1,
-		TrailingSolidLineChar:     "*",
-		NumTrailingSolidLines:     2,
-		NumTrailingBlankLines:     1,
+		StandardSolidLineLeftMargin:  " *",
+		StandardSolidLineRightMargin: "*",
+		StandardTitleLeftMargin:      " *",
+		StandardTitleRightMargin:     "*",
+		StandardMaxLineLen:           80,
+		StandardTextFieldLen:         99,
+		StandardTextJustification:    TxtJustify.Center(),
+		NumLeadingBlankLines:         1,
+		LeadingSolidLineChar:         "*",
+		NumLeadingSolidLines:         2,
+		NumTopTitleBlankLines:        1,
+		TitleLines:                   TextLineSpecLinesCollection{},
+		NumBottomTitleBlankLines:     1,
+		TrailingSolidLineChar:        "*",
+		NumTrailingSolidLines:        2,
+		NumTrailingBlankLines:        1,
 	}
 
 	strArrayDto := StringArrayDto{}
