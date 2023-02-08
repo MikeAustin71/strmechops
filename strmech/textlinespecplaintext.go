@@ -1301,8 +1301,7 @@ func (plainTextLine *TextLineSpecPlainText) IsValidInstanceError(
 //	textFieldLength				int
 //
 //		This parameter defines the length of the text
-//		field in which the numeric value will be
-//		displayed within a number string.
+//		field in which the text sting will be displayed.
 //
 //		If 'textFieldLength' is less than the length of
 //		the text string ('textString'), it will be
@@ -1626,8 +1625,7 @@ func (plainTextLine TextLineSpecPlainText) NewDefault(
 //	textFieldLength				int
 //
 //		This parameter defines the length of the text
-//		field in which the numeric value will be
-//		displayed within a number string.
+//		field in which the text sting will be displayed.
 //
 //		If 'textFieldLength' is less than the length of
 //		the text string ('textString'), it will be
@@ -1985,8 +1983,7 @@ func (plainTextLine TextLineSpecPlainText) NewPlainTextAllParms(
 //	textFieldLength				int
 //
 //		This parameter defines the length of the text
-//		field in which the numeric value will be
-//		displayed within a number string.
+//		field in which the text sting will be displayed.
 //
 //		If 'textFieldLength' is less than the length of
 //		the text string ('textString'), it will be
@@ -2336,8 +2333,7 @@ func (plainTextLine TextLineSpecPlainText) NewPlainTextRunes(
 //	textFieldLength				int
 //
 //		This parameter defines the length of the text
-//		field in which the numeric value will be
-//		displayed within a number string.
+//		field in which the text sting will be displayed.
 //
 //		If 'textFieldLength' is less than the length of
 //		the text string ('textString'), it will be
@@ -2721,8 +2717,7 @@ func (plainTextLine TextLineSpecPlainText) NewPlainTextStrings(
 //	textFieldLength				int
 //
 //		This parameter defines the length of the text
-//		field in which the numeric value will be
-//		displayed within a number string.
+//		field in which the text sting will be displayed.
 //
 //		If 'textFieldLength' is less than the length of
 //		the text string ('textString'), it will be
@@ -3048,8 +3043,7 @@ func (plainTextLine TextLineSpecPlainText) NewPtrDefault(
 //	textFieldLength				int
 //
 //		This parameter defines the length of the text
-//		field in which the numeric value will be
-//		displayed within a number string.
+//		field in which the text sting will be displayed.
 //
 //		If 'textFieldLength' is less than the length of
 //		the text string ('textString'), it will be
@@ -3407,8 +3401,7 @@ func (plainTextLine TextLineSpecPlainText) NewPtrPlainText(
 //	textFieldLength				int
 //
 //		This parameter defines the length of the text
-//		field in which the numeric value will be
-//		displayed within a number string.
+//		field in which the text sting will be displayed.
 //
 //		If 'textFieldLength' is less than the length of
 //		the text string ('textString'), it will be
@@ -3762,8 +3755,7 @@ func (plainTextLine TextLineSpecPlainText) NewPtrPlainTextRunes(
 //	textFieldLength				int
 //
 //		This parameter defines the length of the text
-//		field in which the numeric value will be
-//		displayed within a number string.
+//		field in which the text sting will be displayed.
 //
 //		If 'textFieldLength' is less than the length of
 //		the text string ('textString'), it will be
@@ -5113,8 +5105,7 @@ func (plainTextLine *TextLineSpecPlainText) SetLineTerminationRunes(
 //	textFieldLength				int
 //
 //		This parameter defines the length of the text
-//		field in which the numeric value will be
-//		displayed within a number string.
+//		field in which the text sting will be displayed.
 //
 //		If 'textFieldLength' is less than the length of
 //		the text string ('textString'), it will be
@@ -5433,8 +5424,7 @@ func (plainTextLine *TextLineSpecPlainText) SetPlainTextDefault(
 //	textFieldLength				int
 //
 //		This parameter defines the length of the text
-//		field in which the numeric value will be
-//		displayed within a number string.
+//		field in which the text sting will be displayed.
 //
 //		If 'textFieldLength' is less than the length of
 //		the text string ('textString'), it will be
@@ -5789,8 +5779,7 @@ func (plainTextLine *TextLineSpecPlainText) SetPlainTextSpec(
 //	textFieldLength				int
 //
 //		This parameter defines the length of the text
-//		field in which the numeric value will be
-//		displayed within a number string.
+//		field in which the text sting will be displayed.
 //
 //		If 'textFieldLength' is less than the length of
 //		the text string ('textString'), it will be

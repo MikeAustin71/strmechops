@@ -1579,8 +1579,8 @@ func (txtDateTimeField TextFieldSpecDateTime) NewPtr() *TextFieldSpecDateTime {
 //	textFieldLength				int
 //
 //		This parameter defines the length of the text
-//		field in which the numeric value will be
-//		displayed within a number string.
+//		field in which the date time string will be
+//		displayed.
 //
 //		If 'textFieldLength' is less than the length of
 //		the text string ('textString'), it will be
