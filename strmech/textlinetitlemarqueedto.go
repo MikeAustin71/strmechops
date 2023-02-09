@@ -2624,12 +2624,20 @@ func (txtLineTitleMarqueeDto *TextLineTitleMarqueeDto) GetFormattedTitleMarquee(
 		return "", err
 	}
 
-	return new(textLineTitleMarqueeDtoNanobot).
+	var strBuilder strings.Builder
+
+	err = new(textLineTitleMarqueeDtoNanobot).
 		getFormattedTitleMarquee(
 			txtLineTitleMarqueeDto,
+			&strBuilder,
 			ePrefix.XCpy(
 				"txtLineTitleMarqueeDto"))
 
+	if err != nil {
+		return "", err
+	}
+
+	return strBuilder.String(), err
 }
 
 // GetTitleLines
@@ -3203,6 +3211,145 @@ func (txtLineTitleMarqueeDto *TextLineTitleMarqueeDto) NewBasicTitleMarqueeDto(
 				"newTextLineTitleMarqueeDto"))
 
 	return newTextLineTitleMarqueeDto, err
+}
+
+// TextBuilder
+//
+//	Returns lines of text comprising the entire Title
+//	Marquee. This text is generated from the
+//	specifications contained in the current instance of
+//	TextLineTitleMarqueeDto.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	strBuilder                 *strings.Builder
+//
+//		An instance of strings.Builder. The line of text
+//		produced by the current instance of
+//		TextLineTitleMarqueeDto will be written to
+//		'sBuilder'.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (txtLineTitleMarqueeDto *TextLineTitleMarqueeDto) TextBuilder(
+	strBuilder *strings.Builder,
+	errorPrefix interface{}) error {
+
+	if txtLineTitleMarqueeDto.lock == nil {
+		txtLineTitleMarqueeDto.lock = new(sync.Mutex)
+	}
+
+	txtLineTitleMarqueeDto.lock.Lock()
+
+	defer txtLineTitleMarqueeDto.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineTitleMarqueeDto."+
+			"TextBuilder()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	_,
+		err = new(textLineTitleMarqueeDtoAtom).
+		testValidityOfTitleMarqueeDto(
+			txtLineTitleMarqueeDto,
+			ePrefix.XCpy(
+				"txtLineTitleMarqueeDto"))
+
+	if err != nil {
+		return err
+	}
+
+	return new(textLineTitleMarqueeDtoNanobot).
+		getFormattedTitleMarquee(
+			txtLineTitleMarqueeDto,
+			strBuilder,
+			ePrefix.XCpy(
+				"txtLineTitleMarqueeDto"))
+
 }
 
 //	textLineTitleMarqueeDtoNanobot
@@ -4222,6 +4369,13 @@ func (txtTitleMarqueeDtoNanobot *textLineTitleMarqueeDtoNanobot) configureBasicT
 //		If 'txtTitleMarqueeDto' contains invalid data
 //		elements, an error will be returned.
 //
+//	strBuilder                 *strings.Builder
+//
+//		An instance of strings.Builder. The line of text
+//		produced by the current instance of
+//		TextLineTitleMarqueeDto will be written to
+//		'sBuilder'.
+//
 //	errPrefDto					*ePref.ErrPrefixDto
 //
 //		This object encapsulates an error prefix string
@@ -4241,13 +4395,6 @@ func (txtTitleMarqueeDtoNanobot *textLineTitleMarqueeDtoNanobot) configureBasicT
 //
 // # Return Values
 //
-//	string
-//
-//		This parameter returns the formatted text lines
-//		generated from the instance of
-//		TextLineSpecTitleMarquee passed as input parameter
-//		'txtTitleMarqueeDto'.
-//
 //	error
 //
 //		If this method completes successfully, the
@@ -4262,9 +4409,8 @@ func (txtTitleMarqueeDtoNanobot *textLineTitleMarqueeDtoNanobot) configureBasicT
 //		error message.
 func (txtTitleMarqueeDtoNanobot *textLineTitleMarqueeDtoNanobot) getFormattedTitleMarquee(
 	titleMarqueeDto *TextLineTitleMarqueeDto,
-	errPrefDto *ePref.ErrPrefixDto) (
-	string,
-	error) {
+	strBuilder *strings.Builder,
+	errPrefDto *ePref.ErrPrefixDto) error {
 
 	if txtTitleMarqueeDtoNanobot.lock == nil {
 		txtTitleMarqueeDtoNanobot.lock = new(sync.Mutex)
@@ -4286,7 +4432,7 @@ func (txtTitleMarqueeDtoNanobot *textLineTitleMarqueeDtoNanobot) getFormattedTit
 		"")
 
 	if err != nil {
-		return "", err
+		return err
 	}
 
 	if titleMarqueeDto == nil {
@@ -4295,7 +4441,16 @@ func (txtTitleMarqueeDtoNanobot *textLineTitleMarqueeDtoNanobot) getFormattedTit
 			"Error: Input parameter 'titleMarqueeDto' is a nil pointer!\n",
 			ePrefix.String())
 
-		return "", err
+		return err
+	}
+
+	if strBuilder == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'strBuilder' is a nil pointer!\n",
+			ePrefix.String())
+
+		return err
 	}
 
 	_,
@@ -4306,7 +4461,7 @@ func (txtTitleMarqueeDtoNanobot *textLineTitleMarqueeDtoNanobot) getFormattedTit
 				"titleMarqueeDto"))
 
 	if err != nil {
-		return "", err
+		return err
 	}
 
 	txtLineSpecTitleMarquee := TextLineSpecTitleMarquee{}
@@ -4320,20 +4475,19 @@ func (txtTitleMarqueeDtoNanobot *textLineTitleMarqueeDtoNanobot) getFormattedTit
 					"titleMarqueeDto"))
 
 	if err != nil {
-		return "", err
+		return err
 	}
 
-	strBuilder := strings.Builder{}
 	_,
 		_,
 		err = new(textLineSpecTitleMarqueeMolecule).
 		getFormattedText(
-			&strBuilder,
+			strBuilder,
 			&txtLineSpecTitleMarquee,
 			ePrefix.XCpy(
 				"txtLineSpecTitleMarquee"))
 
-	return strBuilder.String(), err
+	return err
 }
 
 //	textLineTitleMarqueeDtoAtom

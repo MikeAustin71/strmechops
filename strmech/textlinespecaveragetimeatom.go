@@ -365,7 +365,7 @@ func (txtLineAvgTimeAtom *textLineSpecAverageTimeAtom) getDurationReport(
 		titleLineLeftMargin,
 		"",
 		time.Now(),
-		"",
+		new(DateTimeHelper).GetDateTimeFormat(4),
 		maxLineLength,
 		TxtJustify.Center(),
 		ePrefix)
