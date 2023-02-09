@@ -293,12 +293,92 @@ func (dateTimeHelper *DateTimeHelper) AllocateTimeDuration(
 	return allocatedTimeDuration, err
 }
 
-// GetDefaultDateTimeFormat
+// GetDateTimeFormat
 //
-// # Returns a string containing a default Date Time Format
+//		Returns a string containing a Date Time Format. The
+//		Date Time Format is used in conjunction with type
+//		time.Time.
 //
-// "2006-01-02 15:04:05.000000000 -0700 MST"
-func (dateTimeHelper *DateTimeHelper) GetDefaultDateTimeFormat() string {
+//		Date Time Format is selected based on an integer
+//		value passed as an input parameter, 'formatCode'.
+//		Thereafter, the Date Time Format is returned as
+//		a string.
+//
+//		Choose a format string from one of the following
+//		Date Time Formats using the associated code number as
+//		the format code.
+//
+//	  Format
+//		  Code			Format
+//		------- ----------------------------------------
+//			1:	"2006-01-02"
+//			2:	"2006-01-02 Monday 15:04:05 -0700 MST"
+//			3:	"2006-01-02 Mon 15:04:05 -0700 MST"
+//			4:	"2006-01-02 15:04:05 -0700 MST"
+//			5:	"2006-01-02 15:04:05.000000000 -0700 MST"
+//			6:	"Monday 2006-01-02 15:04:05 -0700 MST"
+//			7:	"Mon 2006-01-02 15:04:05 -0700 MST"
+//			8:	"01/02/2006"
+//			9:	"01/02/2006 Monday 15:04:05 -0700 MST"
+//			10:	"01/02/2006 Mon 15:04:05 -0700 MST"
+//			11:	"01/02/2006 15:04:05 -0700 MST"
+//			12:	"01/02/2006 15:04:05.000000000 -0700 MST"
+//			13:	"Monday 01/02/2006 15:04:05 -0700 MST"
+//			14:	"Mon 01/02/2006 15:04:05 -0700 MST"
+//			15:	"01-02-2006"
+//			16:	"01-02-2006 Monday 15:04:05 -0700 MST"
+//			17:	"01-02-2006 Mon 15:04:05 -0700 MST"
+//			18:	"01-02-2006 15:04:05 -0700 MST"
+//			19:	"01-02-2006 15:04:05.000000000 -0700 MST"
+//			20:	"Monday 01-02-2006 15:04:05 -0700 MST"
+//			21:	"Mon 01-02-2006 15:04:05 -0700 MST"
+//			22:	"January 2, 2006"
+//			23:	"January 2, 2006 Monday 15:04:05 -0700 MST"
+//			24:	"January 2, 2006 Mon 15:04:05 -0700 MST"
+//			25:	"January 2, 2006 15:04:05 -0700 MST"
+//			26:	"January 2, 2006 15:04:05.000000000 -0700 MST"
+//			27:	"Monday January 2, 2006 15:04:05 -0700 MST"
+//			28:	"Mon January 2, 2006 15:04:05 -0700 MST"
+//			29: "021504Z 06"
+//			30:	"20060102150405"
+//			31:	"20060102150405000000000"
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	If input parameter 'formatCode' is submitted as a
+//	zero value or if 'formatCode' is otherwise invalid,
+//	a default format string will be returned. The default
+//	format is:
+//
+//		"2006-01-02 15:04:05.000000000 -0700 MST"
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	formatCode					int
+//
+//		An integer with a value between 1 and 31,
+//		inclusive.
+//
+//		If input parameter 'formatCode' is submitted as a
+//		zero value or if 'formatCode' is otherwise
+//		invalid, a default format string will be
+//		returned. The default format is:
+//
+//			"2006-01-02 15:04:05.000000000 -0700 MST"
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//
+//		The date time format code.
+func (dateTimeHelper *DateTimeHelper) GetDateTimeFormat(
+	formatCode int) string {
 
 	if dateTimeHelper.lock == nil {
 		dateTimeHelper.lock = new(sync.Mutex)
@@ -308,8 +388,52 @@ func (dateTimeHelper *DateTimeHelper) GetDefaultDateTimeFormat() string {
 
 	defer dateTimeHelper.lock.Unlock()
 
-	return new(textSpecificationMolecule).
-		getDefaultDateTimeFormat()
+	var mapDateTimeFormat = map[int]string{
+		1:  "2006-01-02",
+		2:  "2006-01-02 Monday 15:04:05 -0700 MST",
+		3:  "2006-01-02 Mon 15:04:05 -0700 MST",
+		4:  "2006-01-02 15:04:05 -0700 MST",
+		5:  "2006-01-02 15:04:05.000000000 -0700 MST",
+		6:  "Monday 2006-01-02 15:04:05 -0700 MST",
+		7:  "Mon 2006-01-02 15:04:05 -0700 MST",
+		8:  "01/02/2006",
+		9:  "01/02/2006 Monday 15:04:05 -0700 MST",
+		10: "01/02/2006 Mon 15:04:05 -0700 MST",
+		11: "01/02/2006 15:04:05 -0700 MST",
+		12: "01/02/2006 15:04:05.000000000 -0700 MST",
+		13: "Monday 01/02/2006 15:04:05 -0700 MST",
+		14: "Mon 01/02/2006 15:04:05 -0700 MST",
+		15: "01-02-2006",
+		16: "01-02-2006 Monday 15:04:05 -0700 MST",
+		17: "01-02-2006 Mon 15:04:05 -0700 MST",
+		18: "01-02-2006 15:04:05 -0700 MST",
+		19: "01-02-2006 15:04:05.000000000 -0700 MST",
+		20: "Monday 01-02-2006 15:04:05 -0700 MST",
+		21: "Mon 01-02-2006 15:04:05 -0700 MST",
+		22: "January 2, 2006",
+		23: "January 2, 2006 Monday 15:04:05 -0700 MST",
+		24: "January 2, 2006 Mon 15:04:05 -0700 MST",
+		25: "January 2, 2006 15:04:05 -0700 MST",
+		26: "January 2, 2006 15:04:05.000000000 -0700 MST",
+		27: "Monday January 2, 2006 15:04:05 -0700 MST",
+		28: "Mon January 2, 2006 15:04:05 -0700 MST",
+		29: "021504Z 06",
+		30: "20060102150405",
+		31: "20060102150405000000000",
+	}
+
+	var formatStr string
+	var ok bool
+
+	formatStr, ok = mapDateTimeFormat[formatCode]
+
+	if !ok {
+
+		formatStr = new(textSpecificationMolecule).
+			getDefaultDateTimeFormat()
+	}
+
+	return formatStr
 }
 
 // GetFmtAllocatedDurationText
