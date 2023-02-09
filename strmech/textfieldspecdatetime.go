@@ -1923,7 +1923,7 @@ func (txtDateTimeField TextFieldSpecDateTime) NewDateTimeField(
 		return newTextDateTime, err
 	}
 
-	err = textFieldSpecDateTimeMechanics{}.ptr().
+	err = new(textFieldSpecDateTimeMechanics).
 		setTextFieldDateTime(
 			&newTextDateTime,
 			dateTime,

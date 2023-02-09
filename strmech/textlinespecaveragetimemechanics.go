@@ -34,13 +34,16 @@ type textLineSpecAverageTimeMechanics struct {
 //		passed as input parameter, 'eventDuration'.
 //
 //	eventDuration				time.Duration
+//
 //		The time duration associated with an event. This
 //		duration value will be added to the internal
 //		average time counters maintained by the
 //		TextLineSpecAverageTime instance passed as input
-//		parameter, 'txtLineAvgTimer'. This data is
-//		recorded for purposes of later generating an
-//		average time duration for a series of events.
+//		parameter, 'txtLineAvgTimer'.
+//
+//		This time duration data is recorded for purposes
+//		of later generating an average time duration
+//		report for a series of timing events.
 //
 //	errPrefDto					*ePref.ErrPrefixDto
 //
@@ -239,7 +242,7 @@ func (txtLineAvgTimeMech *textLineSpecAverageTimeMechanics) addStartStopEvent(
 	}
 
 	timeFormat :=
-		textSpecificationMolecule{}.ptr().
+		new(textSpecificationMolecule).
 			getDefaultDateTimeFormat()
 
 	if !startTime.Before(endTime) {

@@ -56,7 +56,7 @@ func (mTxt04 MainTextFormatTest04) TxtLineSpecAvgTimer01() {
 
 	err = titleMarquee.AddTitleLineDateTimeStr(
 		time.Now(), "", ePrefix.XCpy(
-			"titleMarquee"))
+			"titleMarquee Leading Marquee"))
 
 	if err != nil {
 
@@ -72,7 +72,7 @@ func (mTxt04 MainTextFormatTest04) TxtLineSpecAvgTimer01() {
 
 	err = textLines.AddTitleMarqueeDto(
 		&titleMarquee,
-		ePrefix.XCpy(""))
+		ePrefix.XCpy("Leading Marquee"))
 
 	if err != nil {
 
@@ -89,12 +89,77 @@ func (mTxt04 MainTextFormatTest04) TxtLineSpecAvgTimer01() {
 	titleStr,
 		_,
 		err = textLines.GetFormattedText(
-		ePrefix.XCpy("textLines"))
+		ePrefix.XCpy("textLines Leading Marquee"))
+
+	if err != nil {
+
+		fmt.Printf("\n\n%v\n"+
+			"%v\n",
+			ePrefix.String(),
+			err.Error())
+
+		return
+	}
 
 	fmt.Printf(titleStr)
 	// ------------------------------------------------
 
 	var startTime, endTime time.Time
+	var avgTimer strmech.TextLineSpecAverageTime
+	var sleepSeconds int64
+
+	for i := 0; i < 50; i++ {
+
+		if i%2 == 0 {
+			sleepSeconds = 3
+
+		} else {
+
+			sleepSeconds = 2
+		}
+
+		startTime = time.Now()
+
+		time.Sleep(time.Duration(sleepSeconds) * time.Millisecond)
+
+		endTime = time.Now()
+
+		err = avgTimer.AddStartStopEvent(
+			startTime,
+			endTime,
+			ePrefix.XCpy(
+				fmt.Sprintf("i= %v sleepSeconds= %v\n",
+					i, sleepSeconds)))
+
+		if err != nil {
+
+			fmt.Printf("\n\n%v\n"+
+				"%v\n",
+				ePrefix.String(),
+				err.Error())
+
+			return
+		}
+
+	}
+
+	var avgTimeTxt string
+
+	avgTimeTxt,
+		err = avgTimer.GetFormattedText(
+		ePrefix.XCpy("avgTimeTxt<-avgTimer"))
+
+	if err != nil {
+
+		fmt.Printf("\n\n%v\n"+
+			"%v\n",
+			ePrefix.String(),
+			err.Error())
+
+		return
+	}
+
+	fmt.Printf(avgTimeTxt)
 
 	// ------------------------------------------------
 	textLines.EmptyTextLines()
@@ -119,9 +184,23 @@ func (mTxt04 MainTextFormatTest04) TxtLineSpecAvgTimer01() {
 	}
 
 	err = titleMarquee.AddTitleLineStrings(
-		ePrefix.XCpy("titleMarquee"),
+		ePrefix.XCpy("titleMarquee Trailing Marquee"),
 		ePrefix.String(),
 		"SUCCESSFUL COMPLETION!!")
+
+	if err != nil {
+
+		fmt.Printf("\n\n%v\n"+
+			"%v\n",
+			ePrefix.String(),
+			err.Error())
+
+		return
+	}
+
+	err = textLines.AddTitleMarqueeDto(
+		&titleMarquee,
+		ePrefix.XCpy("Trailing Marquee"))
 
 	if err != nil {
 
@@ -136,7 +215,17 @@ func (mTxt04 MainTextFormatTest04) TxtLineSpecAvgTimer01() {
 	titleStr,
 		_,
 		err = textLines.GetFormattedText(
-		ePrefix.XCpy("textLines"))
+		ePrefix.XCpy("textLines Trailing Marquee"))
+
+	if err != nil {
+
+		fmt.Printf("\n\n%v\n"+
+			"%v\n",
+			ePrefix.String(),
+			err.Error())
+
+		return
+	}
 
 	fmt.Printf(titleStr)
 }

@@ -2150,7 +2150,8 @@ func (txtLineTitleMarqueeDto *TextLineTitleMarqueeDto) AddTitleLineStrings(
 				txtLineTitleMarqueeDto,
 				ePrefix.XCpy(
 					fmt.Sprintf("titleStr[%v]",
-						idx)))
+						idx)),
+				&txtLabelFmtDto)
 
 		if err != nil {
 

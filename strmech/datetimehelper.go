@@ -293,6 +293,25 @@ func (dateTimeHelper *DateTimeHelper) AllocateTimeDuration(
 	return allocatedTimeDuration, err
 }
 
+// GetDefaultDateTimeFormat
+//
+// # Returns a string containing a default Date Time Format
+//
+// "2006-01-02 15:04:05.000000000 -0700 MST"
+func (dateTimeHelper *DateTimeHelper) GetDefaultDateTimeFormat() string {
+
+	if dateTimeHelper.lock == nil {
+		dateTimeHelper.lock = new(sync.Mutex)
+	}
+
+	dateTimeHelper.lock.Lock()
+
+	defer dateTimeHelper.lock.Unlock()
+
+	return new(textSpecificationMolecule).
+		getDefaultDateTimeFormat()
+}
+
 // GetFmtAllocatedDurationText
 //
 // Receives time duration broken down by int64 values
