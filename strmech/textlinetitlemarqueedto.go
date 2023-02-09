@@ -2494,7 +2494,7 @@ func (txtLineTitleMarqueeDto *TextLineTitleMarqueeDto) Empty() {
 	return
 }
 
-// GetFormattedTitleMarquee
+// GetFormattedText
 //
 //	Returns lines of text comprising the entire Title
 //	Marquee. This text is generated from the
@@ -2586,7 +2586,7 @@ func (txtLineTitleMarqueeDto *TextLineTitleMarqueeDto) Empty() {
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (txtLineTitleMarqueeDto *TextLineTitleMarqueeDto) GetFormattedTitleMarquee(
+func (txtLineTitleMarqueeDto *TextLineTitleMarqueeDto) GetFormattedText(
 	errorPrefix interface{}) (
 	string,
 	error) {
@@ -2606,7 +2606,7 @@ func (txtLineTitleMarqueeDto *TextLineTitleMarqueeDto) GetFormattedTitleMarquee(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"TextLineTitleMarqueeDto."+
-			"GetFormattedTitleMarquee()",
+			"GetFormattedText()",
 		"")
 
 	if err != nil {

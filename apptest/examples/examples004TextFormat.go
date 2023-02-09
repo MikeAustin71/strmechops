@@ -55,24 +55,10 @@ func (mTxt04 MainTextFormatTest04) TxtLineSpecAvgTimer01() {
 	}
 
 	err = titleMarquee.AddTitleLineDateTimeStr(
-		time.Now(), "", ePrefix.XCpy(
+		time.Now(),
+		new(strmech.DateTimeHelper).GetDateTimeFormat(2),
+		ePrefix.XCpy(
 			"titleMarquee Leading Marquee"))
-
-	if err != nil {
-
-		fmt.Printf("\n\n%v\n"+
-			"%v\n",
-			ePrefix.String(),
-			err.Error())
-
-		return
-	}
-
-	var textLines strmech.TextLineSpecLinesCollection
-
-	err = textLines.AddTitleMarqueeDto(
-		&titleMarquee,
-		ePrefix.XCpy("Leading Marquee"))
 
 	if err != nil {
 
@@ -87,8 +73,7 @@ func (mTxt04 MainTextFormatTest04) TxtLineSpecAvgTimer01() {
 	var titleStr string
 
 	titleStr,
-		_,
-		err = textLines.GetFormattedText(
+		err = titleMarquee.GetFormattedText(
 		ePrefix.XCpy("textLines Leading Marquee"))
 
 	if err != nil {
@@ -162,15 +147,18 @@ func (mTxt04 MainTextFormatTest04) TxtLineSpecAvgTimer01() {
 	fmt.Printf(avgTimeTxt)
 
 	// ------------------------------------------------
-	textLines.EmptyTextLines()
+
+	lenMethodName := len(ePrefix.String())
+
+	lenMethodName += 9
 
 	titleMarquee = strmech.TextLineTitleMarqueeDto{
 		StandardSolidLineLeftMargin:  "  ",
 		StandardSolidLineRightMargin: "",
 		StandardTitleLeftMargin:      "  ",
 		StandardTitleRightMargin:     "",
-		StandardMaxLineLen:           40,
-		StandardTextFieldLen:         40,
+		StandardMaxLineLen:           lenMethodName,
+		StandardTextFieldLen:         lenMethodName,
 		StandardTextJustification:    strmech.TxtJustify.Center(),
 		NumLeadingBlankLines:         1,
 		LeadingSolidLineChar:         "-",
@@ -198,23 +186,8 @@ func (mTxt04 MainTextFormatTest04) TxtLineSpecAvgTimer01() {
 		return
 	}
 
-	err = textLines.AddTitleMarqueeDto(
-		&titleMarquee,
-		ePrefix.XCpy("Trailing Marquee"))
-
-	if err != nil {
-
-		fmt.Printf("\n\n%v\n"+
-			"%v\n",
-			ePrefix.String(),
-			err.Error())
-
-		return
-	}
-
 	titleStr,
-		_,
-		err = textLines.GetFormattedText(
+		err = titleMarquee.GetFormattedText(
 		ePrefix.XCpy("textLines Trailing Marquee"))
 
 	if err != nil {
