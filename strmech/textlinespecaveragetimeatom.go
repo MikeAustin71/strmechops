@@ -458,7 +458,7 @@ func (txtLineAvgTimeAtom *textLineSpecAverageTimeAtom) getDurationReport(
 	}
 
 	_,
-		err = txtLineCollection.GetFormattedText(
+		err = txtLineCollection.TextBuilder(
 		strBuilder,
 		ePrefix.XCpy("strBuilder<-"))
 

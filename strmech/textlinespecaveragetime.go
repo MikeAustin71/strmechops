@@ -7,6 +7,7 @@ import (
 	"math/big"
 	"strings"
 	"sync"
+	"time"
 )
 
 // TextLineSpecAverageTime
@@ -28,6 +29,12 @@ type TextLineSpecAverageTime struct {
 	minimumTimeDuration    big.Int
 	textLineReader         *strings.Reader
 	lock                   *sync.Mutex
+}
+
+func (txtLineAvgTime *TextLineSpecAverageTime) AddDurationEvent(
+	eventDuration time.Duration,
+	errorPrefix interface{}) error {
+
 }
 
 //	CalcAvgTimeDuration

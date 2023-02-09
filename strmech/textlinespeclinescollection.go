@@ -3198,144 +3198,6 @@ func (txtLinesSpecCol *TextLineSpecLinesCollection) GetNumberOfTextLines() int {
 	return len(txtLinesSpecCol.textLines)
 }
 
-//	GetFormattedText
-//
-//	Generates formatted text strings for all member
-//	elements in the Text Line Specification Collection
-//	maintained by the current instance of
-//	TextLineSpecLinesCollection. These formatted text
-//	strings are then written to a String Builder
-//	(strBuilder) passed as an input parameter.
-//
-// ----------------------------------------------------------------
-//
-// # Input Parameters
-//
-//	strBuilder					*strings.Builder
-//
-//			A pointer to an instance of strings.Builder.
-//			The formatted text strings generated from
-//			the current instance of
-//			TextLineSpecLinesCollection
-//			('txtLinesSpecCol') will be written to this
-//			instance of strings.Builder.
-//
-//	errorPrefix					interface{}
-//
-//		This object encapsulates error prefix text which
-//		is included in all returned error messages.
-//		Usually, it	contains the name of the calling
-//		method or methods listed as a method or function
-//		chain of execution.
-//
-//		If no error prefix information is needed, set this
-//		parameter to 'nil'.
-//
-//		This empty interface must be convertible to one of
-//		the following types:
-//
-//		1.	nil
-//				A nil value is valid and generates an
-//				empty collection of error prefix and
-//				error context information.
-//
-//		2.	string
-//				A string containing error prefix
-//				information.
-//
-//		3.	[]string
-//				A one-dimensional slice of strings
-//				containing error prefix information.
-//
-//		4.	[][2]string
-//				A two-dimensional slice of strings
-//		   		containing error prefix and error
-//		   		context information.
-//
-//		5.	ErrPrefixDto
-//				An instance of ErrPrefixDto.
-//				Information from this object will
-//				be copied for use in error and
-//				informational messages.
-//
-//		6.	*ErrPrefixDto
-//				A pointer to an instance of
-//				ErrPrefixDto. Information from
-//				this object will be copied for use
-//				in error and informational messages.
-//
-//		7.	IBasicErrorPrefix
-//				An interface to a method
-//				generating a two-dimensional slice
-//				of strings containing error prefix
-//				and error context information.
-//
-//		If parameter 'errorPrefix' is NOT convertible
-//		to one of the valid types listed above, it will
-//		be considered invalid and trigger the return of
-//		an error.
-//
-//		Types ErrPrefixDto and IBasicErrorPrefix are
-//		included in the 'errpref' software package:
-//			"github.com/MikeAustin71/errpref".
-//
-// ----------------------------------------------------------------
-//
-// # Return Values
-//
-//	maxLineLen					int
-//
-//		This parameter returns the length of the longest
-//		text line generated from this collection of Text
-//		Line Specifications ('textLinesCol').
-//
-//	err							error
-//
-//		If this method completes successfully, the
-//		returned error Type is set equal to 'nil'.
-//
-//		If errors are encountered during processing, the
-//		returned error Type will encapsulate an error
-//		message. This returned error message will
-//		incorporate the method chain and text passed by
-//		input parameter, 'errorPrefix'. The 'errorPrefix'
-//		text will be attached to the beginning of the
-//		error message.
-func (txtLinesSpecCol *TextLineSpecLinesCollection) GetFormattedText(
-	strBuilder *strings.Builder,
-	errorPrefix interface{}) (
-	maxLineLen int,
-	err error) {
-
-	if txtLinesSpecCol.lock == nil {
-		txtLinesSpecCol.lock = new(sync.Mutex)
-	}
-
-	txtLinesSpecCol.lock.Lock()
-
-	defer txtLinesSpecCol.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
-		"TextLineSpecLinesCollection."+
-			"GetFormattedText()",
-		"")
-
-	if err != nil {
-		return maxLineLen, err
-	}
-
-	return new(textLineSpecLinesCollectionNanobot).
-		getFormattedText(
-			strBuilder,
-			txtLinesSpecCol,
-			ePrefix.XCpy(
-				"txtLinesSpecCol"))
-}
-
 //	GetFmtTextStrArray
 //
 //	Generates formatted text strings from the Text Line
@@ -3472,6 +3334,159 @@ func (txtLinesSpecCol *TextLineSpecLinesCollection) GetFmtTextStrArray(
 				"txtLinesSpecCol"))
 
 	return strArrayDto, err
+}
+
+//	GetFormattedText
+//
+//	Generates and returns a formatted text string for all
+//	member elements in the Text Line Specification
+//	Collection maintained by the current instance of
+//	TextLineSpecLinesCollection.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it	contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	textStr						string
+//
+//		The formatted text strings generated from the
+//		current instance of TextLineSpecLinesCollection.
+//
+//	maxLineLen					int
+//
+//		This parameter returns the length of the longest
+//		text line generated from this collection of Text
+//		Line Specifications and returned in parameter,
+//		'textStr'.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (txtLinesSpecCol *TextLineSpecLinesCollection) GetFormattedText(
+	errorPrefix interface{}) (
+	textStr string,
+	maxLineLen int,
+	err error) {
+
+	if txtLinesSpecCol.lock == nil {
+		txtLinesSpecCol.lock = new(sync.Mutex)
+	}
+
+	txtLinesSpecCol.lock.Lock()
+
+	defer txtLinesSpecCol.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecLinesCollection."+
+			"TextBuilder()",
+		"")
+
+	if err != nil {
+
+		return textStr,
+			maxLineLen,
+			err
+	}
+
+	strBuilder := strings.Builder{}
+
+	maxLineLen,
+		err = new(textLineSpecLinesCollectionNanobot).
+		getFormattedText(
+			&strBuilder,
+			txtLinesSpecCol,
+			ePrefix.XCpy(
+				"txtLinesSpecCol"))
+
+	if err != nil {
+
+		return textStr,
+			maxLineLen,
+			err
+
+	}
+
+	textStr = strBuilder.String()
+
+	return textStr,
+		maxLineLen,
+		err
 }
 
 // GetTextLine - Returns a deep copy of the Text Line Collection
@@ -6160,4 +6175,142 @@ func (txtLinesSpecCol *TextLineSpecLinesCollection) String() string {
 	}
 
 	return formattedStr
+}
+
+//	TextBuilder
+//
+//	Generates formatted text strings for all member
+//	elements in the Text Line Specification Collection
+//	maintained by the current instance of
+//	TextLineSpecLinesCollection. These formatted text
+//	strings are then written to a String Builder
+//	(strBuilder) passed as an input parameter.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	strBuilder					*strings.Builder
+//
+//			A pointer to an instance of strings.Builder.
+//			The formatted text strings generated from
+//			the current instance of
+//			TextLineSpecLinesCollection
+//			('txtLinesSpecCol') will be written to this
+//			instance of strings.Builder.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it	contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	maxLineLen					int
+//
+//		This parameter returns the length of the longest
+//		text line generated from this collection of Text
+//		Line Specifications ('textLinesCol').
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (txtLinesSpecCol *TextLineSpecLinesCollection) TextBuilder(
+	strBuilder *strings.Builder,
+	errorPrefix interface{}) (
+	maxLineLen int,
+	err error) {
+
+	if txtLinesSpecCol.lock == nil {
+		txtLinesSpecCol.lock = new(sync.Mutex)
+	}
+
+	txtLinesSpecCol.lock.Lock()
+
+	defer txtLinesSpecCol.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecLinesCollection."+
+			"TextBuilder()",
+		"")
+
+	if err != nil {
+		return maxLineLen, err
+	}
+
+	return new(textLineSpecLinesCollectionNanobot).
+		getFormattedText(
+			strBuilder,
+			txtLinesSpecCol,
+			ePrefix.XCpy(
+				"txtLinesSpecCol"))
 }

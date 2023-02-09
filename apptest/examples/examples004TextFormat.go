@@ -12,6 +12,135 @@ type MainTextFormatTest04 struct {
 	input string
 }
 
+func (mTxt04 MainTextFormatTest04) TxtLineSpecAvgTimer01() {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"MainTextFormatTest04.TxtLineMarquee001()",
+		"")
+
+	titleMarquee := strmech.TextLineTitleMarqueeDto{
+		StandardSolidLineLeftMargin:  " *",
+		StandardSolidLineRightMargin: "*",
+		StandardTitleLeftMargin:      " *",
+		StandardTitleRightMargin:     "*",
+		StandardMaxLineLen:           65,
+		StandardTextFieldLen:         65,
+		StandardTextJustification:    strmech.TxtJustify.Center(),
+		NumLeadingBlankLines:         1,
+		LeadingSolidLineChar:         "*",
+		NumLeadingSolidLines:         2,
+		NumTopTitleBlankLines:        1,
+		TitleLines:                   strmech.TextLineSpecLinesCollection{},
+		NumBottomTitleBlankLines:     1,
+		TrailingSolidLineChar:        "*",
+		NumTrailingSolidLines:        2,
+		NumTrailingBlankLines:        1,
+	}
+
+	var err error
+
+	err = titleMarquee.AddTitleLineStrings(
+		ePrefix.XCpy("titleMarquee"),
+		ePrefix.String(),
+		"Starting Execution")
+
+	if err != nil {
+
+		fmt.Printf("\n\n%v\n"+
+			"%v\n",
+			ePrefix.String(),
+			err.Error())
+
+		return
+	}
+
+	err = titleMarquee.AddTitleLineDateTimeStr(
+		time.Now(), "", ePrefix.XCpy(
+			"titleMarquee"))
+
+	if err != nil {
+
+		fmt.Printf("\n\n%v\n"+
+			"%v\n",
+			ePrefix.String(),
+			err.Error())
+
+		return
+	}
+
+	var textLines strmech.TextLineSpecLinesCollection
+
+	err = textLines.AddTitleMarqueeDto(
+		&titleMarquee,
+		ePrefix.XCpy(""))
+
+	if err != nil {
+
+		fmt.Printf("\n\n%v\n"+
+			"%v\n",
+			ePrefix.String(),
+			err.Error())
+
+		return
+	}
+
+	var titleStr string
+
+	titleStr,
+		_,
+		err = textLines.GetFormattedText(
+		ePrefix.XCpy("textLines"))
+
+	fmt.Printf(titleStr)
+	// ------------------------------------------------
+
+	var startTime, endTime time.Time
+
+	// ------------------------------------------------
+	textLines.EmptyTextLines()
+
+	titleMarquee = strmech.TextLineTitleMarqueeDto{
+		StandardSolidLineLeftMargin:  "  ",
+		StandardSolidLineRightMargin: "",
+		StandardTitleLeftMargin:      "  ",
+		StandardTitleRightMargin:     "",
+		StandardMaxLineLen:           40,
+		StandardTextFieldLen:         40,
+		StandardTextJustification:    strmech.TxtJustify.Center(),
+		NumLeadingBlankLines:         1,
+		LeadingSolidLineChar:         "-",
+		NumLeadingSolidLines:         2,
+		NumTopTitleBlankLines:        1,
+		TitleLines:                   strmech.TextLineSpecLinesCollection{},
+		NumBottomTitleBlankLines:     1,
+		TrailingSolidLineChar:        "-",
+		NumTrailingSolidLines:        2,
+		NumTrailingBlankLines:        1,
+	}
+
+	err = titleMarquee.AddTitleLineStrings(
+		ePrefix.XCpy("titleMarquee"),
+		ePrefix.String(),
+		"SUCCESSFUL COMPLETION!!")
+
+	if err != nil {
+
+		fmt.Printf("\n\n%v\n"+
+			"%v\n",
+			ePrefix.String(),
+			err.Error())
+
+		return
+	}
+
+	titleStr,
+		_,
+		err = textLines.GetFormattedText(
+		ePrefix.XCpy("textLines"))
+
+	fmt.Printf(titleStr)
+}
+
 func (mTxt04 MainTextFormatTest04) TxtLineMarquee001() {
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
 		"MainTextFormatTest04.TxtLineMarquee001()",
@@ -28,20 +157,22 @@ func (mTxt04 MainTextFormatTest04) TxtLineMarquee001() {
 	fmt.Printf("\n" + breakStr + "\n")
 
 	marqueeDto := strmech.TextLineTitleMarqueeDto{
-		StandardTitleLeftMargin:   " *",
-		StandardTitleRightMargin:  "*",
-		StandardMaxLineLen:        80,
-		StandardTextFieldLen:      99,
-		StandardTextJustification: strmech.TxtJustify.Center(),
-		NumLeadingBlankLines:      1,
-		LeadingSolidLineChar:      "*",
-		NumLeadingSolidLines:      2,
-		NumTopTitleBlankLines:     1,
-		TitleLines:                strmech.TextLineSpecLinesCollection{},
-		NumBottomTitleBlankLines:  1,
-		TrailingSolidLineChar:     "*",
-		NumTrailingSolidLines:     2,
-		NumTrailingBlankLines:     1,
+		StandardSolidLineLeftMargin:  " *",
+		StandardSolidLineRightMargin: "*",
+		StandardTitleLeftMargin:      " *",
+		StandardTitleRightMargin:     "*",
+		StandardMaxLineLen:           80,
+		StandardTextFieldLen:         99,
+		StandardTextJustification:    strmech.TxtJustify.Center(),
+		NumLeadingBlankLines:         1,
+		LeadingSolidLineChar:         "*",
+		NumLeadingSolidLines:         2,
+		NumTopTitleBlankLines:        1,
+		TitleLines:                   strmech.TextLineSpecLinesCollection{},
+		NumBottomTitleBlankLines:     1,
+		TrailingSolidLineChar:        "*",
+		NumTrailingSolidLines:        2,
+		NumTrailingBlankLines:        1,
 	}
 
 	strArrayDto := strmech.StringArrayDto{}

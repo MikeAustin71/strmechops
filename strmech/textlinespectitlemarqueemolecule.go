@@ -151,7 +151,7 @@ func (txtLineTitleMolecule *textLineSpecTitleMarqueeMolecule) getFormattedText(
 
 	collectionMaxLineLen,
 		err = txtLineTitleMarquee.leadingMarqueeLines.
-		GetFormattedText(
+		TextBuilder(
 			strBuilder,
 			ePrefix.XCpy(
 				"txtLineTitleMarquee.leadingMarqueeLines"))
@@ -166,7 +166,7 @@ func (txtLineTitleMolecule *textLineSpecTitleMarqueeMolecule) getFormattedText(
 
 	collectionMaxLineLen,
 		err = txtLineTitleMarquee.titleLines.
-		GetFormattedText(
+		TextBuilder(
 			strBuilder,
 			ePrefix.XCpy(
 				"txtLineTitleMarquee.titleLines"))
@@ -181,7 +181,7 @@ func (txtLineTitleMolecule *textLineSpecTitleMarqueeMolecule) getFormattedText(
 
 	collectionMaxLineLen,
 		err = txtLineTitleMarquee.trailingMarqueeLines.
-		GetFormattedText(
+		TextBuilder(
 			strBuilder,
 			ePrefix.XCpy(
 				"txtLineTitleMarquee.trailingMarqueeLines"))
