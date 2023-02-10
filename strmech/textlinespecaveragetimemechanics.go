@@ -116,9 +116,38 @@ func (txtLineAvgTimeMech *textLineSpecAverageTimeMechanics) addDurationEvent(
 		&txtLineAvgTimer.numberOfDurationEvents,
 		big.NewInt(1))
 
+	bigDuration := big.NewInt(int64(eventDuration))
+
 	_ = txtLineAvgTimer.totalDurationNanoSecs.Add(
 		&txtLineAvgTimer.totalDurationNanoSecs,
-		big.NewInt(int64(eventDuration)))
+		bigDuration)
+
+	var comparison int
+
+	comparison = txtLineAvgTimer.maximumTimeDuration.Cmp(
+		bigDuration)
+
+	if comparison == -1 {
+		txtLineAvgTimer.maximumTimeDuration.Set(bigDuration)
+	}
+
+	comparison = txtLineAvgTimer.minimumTimeDuration.Cmp(
+		big.NewInt(0))
+
+	if comparison < 1 {
+
+		txtLineAvgTimer.minimumTimeDuration.Set(bigDuration)
+
+	} else {
+
+		comparison = txtLineAvgTimer.minimumTimeDuration.Cmp(bigDuration)
+
+		if comparison == 1 {
+
+			txtLineAvgTimer.minimumTimeDuration.Set(bigDuration)
+		}
+
+	}
 
 	return err
 }
@@ -260,15 +289,45 @@ func (txtLineAvgTimeMech *textLineSpecAverageTimeMechanics) addStartStopEvent(
 
 	}
 
-	duration := endTime.Sub(startTime)
+	eventDuration := endTime.Sub(startTime)
 
 	_ = txtLineAvgTimer.numberOfDurationEvents.Add(
 		&txtLineAvgTimer.numberOfDurationEvents,
 		big.NewInt(1))
 
+	bigDuration := big.NewInt(int64(eventDuration))
+
 	_ = txtLineAvgTimer.totalDurationNanoSecs.Add(
 		&txtLineAvgTimer.totalDurationNanoSecs,
-		big.NewInt(int64(duration)))
+		bigDuration)
+
+	var comparison int
+
+	comparison = txtLineAvgTimer.maximumTimeDuration.Cmp(
+		bigDuration)
+
+	if comparison == -1 {
+		txtLineAvgTimer.maximumTimeDuration.Set(bigDuration)
+	}
+
+	comparison = txtLineAvgTimer.minimumTimeDuration.Cmp(
+		big.NewInt(0))
+
+	if comparison < 1 {
+
+		txtLineAvgTimer.minimumTimeDuration.Set(big.NewInt(0))
+
+	} else {
+		// minimum vs zero == 1
+
+		comparison = txtLineAvgTimer.minimumTimeDuration.Cmp(bigDuration)
+
+		if comparison == 1 {
+
+			txtLineAvgTimer.minimumTimeDuration.Set(bigDuration)
+		}
+
+	}
 
 	return err
 }
@@ -406,9 +465,11 @@ func (txtLineAvgTimeMech *textLineSpecAverageTimeMechanics) getFormattedText(
 
 	maxLineLength := 60
 
-	err = txtLineAvgTimeAtom.getDurationReport(
+	err = txtLineAvgTimeAtom.getFullDurationReport(
+		txtLineAvgTimer,
 		strBuilder,
 		allocatedAvgDuration,
+		true,
 		"Average Duration",
 		maxLineLength,
 		ePrefix.XCpy(
@@ -428,9 +489,11 @@ func (txtLineAvgTimeMech *textLineSpecAverageTimeMechanics) getFormattedText(
 		return err
 	}
 
-	err = txtLineAvgTimeAtom.getDurationReport(
+	err = txtLineAvgTimeAtom.getFullDurationReport(
+		txtLineAvgTimer,
 		strBuilder,
 		allocatedMaxDuration,
+		false,
 		"Maximum Duration",
 		maxLineLength,
 		ePrefix.XCpy(
@@ -450,9 +513,11 @@ func (txtLineAvgTimeMech *textLineSpecAverageTimeMechanics) getFormattedText(
 		return err
 	}
 
-	err = txtLineAvgTimeAtom.getDurationReport(
+	err = txtLineAvgTimeAtom.getFullDurationReport(
+		txtLineAvgTimer,
 		strBuilder,
 		allocatedMinDuration,
+		false,
 		"Minimum Duration",
 		maxLineLength,
 		ePrefix.XCpy(

@@ -263,7 +263,7 @@ func (txtLineAvgTimeAtom *textLineSpecAverageTimeAtom) calcAverageDuration(
 		err
 }
 
-// getDurationReport
+// getFullDurationReport
 //
 // Receives time duration allocation data broken down by
 // days, hours, minutes, seconds, milliseconds,
@@ -271,9 +271,11 @@ func (txtLineAvgTimeAtom *textLineSpecAverageTimeAtom) calcAverageDuration(
 //
 // This method then proceeds to prepare and return a text
 // report presentation of the data.
-func (txtLineAvgTimeAtom *textLineSpecAverageTimeAtom) getDurationReport(
+func (txtLineAvgTimeAtom *textLineSpecAverageTimeAtom) getFullDurationReport(
+	txtLineAvgTimer *TextLineSpecAverageTime,
 	strBuilder *strings.Builder,
 	allocatedDuration TimeDurationDto,
+	isAllocatedAvgDuration bool,
 	timeDurationTitle string,
 	maxLineLength int,
 	errPrefDto *ePref.ErrPrefixDto) error {
@@ -294,7 +296,7 @@ func (txtLineAvgTimeAtom *textLineSpecAverageTimeAtom) getDurationReport(
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
 		"textLineSpecAverageTimeAtom."+
-			"getDurationReport()",
+			"getFullDurationReport()",
 		"")
 
 	if err != nil {
@@ -428,11 +430,29 @@ func (txtLineAvgTimeAtom *textLineSpecAverageTimeAtom) getDurationReport(
 		"",
 		summaryTotalStr,
 		maxLineLength,
-		TxtJustify.Center(),
+		TxtJustify.Left(),
 		ePrefix.XCpy("summaryTotalStr"))
 
 	if err != nil {
 		return err
+	}
+
+	if isAllocatedAvgDuration == true {
+
+		err = txtLineCollection.AddPlainTextLine(
+			titleLineLeftMargin+"  ",
+			"",
+			fmt.Sprintf("Total Timing Cycles: %v",
+				txtLineAvgTimer.
+					numberOfDurationEvents.Text(10)),
+			maxLineLength,
+			TxtJustify.Left(),
+			ePrefix.XCpy("summaryTotalStr"))
+
+		if err != nil {
+			return err
+		}
+
 	}
 
 	err = txtLineCollection.AddSolidLine(

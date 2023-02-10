@@ -488,6 +488,7 @@ func (dateTimeHelper *DateTimeHelper) GetFmtAllocatedDurationText(
 
 	nStrIntSepMolecule := integerSeparatorSpecMolecule{}
 
+	// Days
 	if allocDuration.NumberOfDays > 0 {
 
 		tLine =
@@ -544,6 +545,7 @@ func (dateTimeHelper *DateTimeHelper) GetFmtAllocatedDurationText(
 
 	}
 
+	// Hours
 	if allocDuration.NumberOfHours > 0 ||
 		foundFirstValue == true {
 
@@ -618,6 +620,7 @@ func (dateTimeHelper *DateTimeHelper) GetFmtAllocatedDurationText(
 
 	}
 
+	// Minutes
 	if allocDuration.NumberOfMinutes > 0 ||
 		foundFirstValue == true {
 
@@ -692,141 +695,149 @@ func (dateTimeHelper *DateTimeHelper) GetFmtAllocatedDurationText(
 
 	}
 
-	// Always display Seconds
+	// Seconds
 
-	tLine =
-		strconv.FormatInt(
-			allocDuration.NumberOfSeconds, 10)
+	if allocDuration.NumberOfSeconds > 0 ||
+		foundFirstValue == true {
 
-	numStrWithIntSeps,
-		err =
-		nStrIntSepMolecule.applyIntSeparators(
-			&nStrIntSeparator,
-			[]rune(tLine),
-			ePrefix.XCpy("NumberOfSeconds"))
+		tLine =
+			strconv.FormatInt(
+				allocDuration.NumberOfSeconds, 10)
 
-	if err != nil {
-		return allocatedDurationStrs, err
-	}
+		numStrWithIntSeps,
+			err =
+			nStrIntSepMolecule.applyIntSeparators(
+				&nStrIntSeparator,
+				[]rune(tLine),
+				ePrefix.XCpy("NumberOfSeconds"))
 
-	newOutputLine = fmt.Sprintf(
-		"%v Seconds ",
-		string(numStrWithIntSeps))
-
-	lenNewOutputLine = len(newOutputLine)
-
-	lenFinalOutputLine = len(finalOutputLine)
-
-	if lenNewOutputLine+lenFinalOutputLine >=
-		maxLineLength {
-
-		if lenFinalOutputLine > 0 {
-
-			finalOutputLine += "\n"
-
-			allocatedDurationStrs.AddString(
-				finalOutputLine)
-
-			finalOutputLine = ""
-
-			lenFinalOutputLine = 0
-
+		if err != nil {
+			return allocatedDurationStrs, err
 		}
 
-		if lenNewOutputLine >= maxLineLength {
+		newOutputLine = fmt.Sprintf(
+			"%v Seconds ",
+			string(numStrWithIntSeps))
 
-			newOutputLine += "\n"
+		lenNewOutputLine = len(newOutputLine)
 
-			allocatedDurationStrs.AddString(
-				newOutputLine)
+		lenFinalOutputLine = len(finalOutputLine)
 
-			newOutputLine = ""
+		if lenNewOutputLine+lenFinalOutputLine >=
+			maxLineLength {
 
-			lenNewOutputLine = 0
+			if lenFinalOutputLine > 0 {
+
+				finalOutputLine += "\n"
+
+				allocatedDurationStrs.AddString(
+					finalOutputLine)
+
+				finalOutputLine = ""
+
+				lenFinalOutputLine = 0
+
+			}
+
+			if lenNewOutputLine >= maxLineLength {
+
+				newOutputLine += "\n"
+
+				allocatedDurationStrs.AddString(
+					newOutputLine)
+
+				newOutputLine = ""
+
+				lenNewOutputLine = 0
+
+			} else {
+
+				finalOutputLine += newOutputLine
+
+			}
 
 		} else {
 
+			// MUST BE -
+			// lenNewOutputLine + lenFinalOutputLine
+			//	LESS THAN maxLineLen
+
 			finalOutputLine += newOutputLine
 
+			lenFinalOutputLine = len(finalOutputLine)
+		}
+	}
+
+	//	Milliseconds
+	if allocDuration.NumberOfMilliseconds > 0 ||
+		foundFirstValue == true {
+
+		tLine =
+			strconv.FormatInt(
+				allocDuration.NumberOfMilliseconds, 10)
+
+		numStrWithIntSeps,
+			err =
+			nStrIntSepMolecule.applyIntSeparators(
+				&nStrIntSeparator,
+				[]rune(tLine),
+				ePrefix.XCpy("NumberOfMilliseconds"))
+
+		if err != nil {
+			return allocatedDurationStrs, err
 		}
 
-	} else {
+		newOutputLine = fmt.Sprintf(
+			"%v Milliseconds ",
+			string(numStrWithIntSeps))
 
-		// MUST BE -
-		// lenNewOutputLine + lenFinalOutputLine
-		//	LESS THAN maxLineLen
-
-		finalOutputLine += newOutputLine
+		lenNewOutputLine = len(newOutputLine)
 
 		lenFinalOutputLine = len(finalOutputLine)
-	}
 
-	// Always display Milliseconds
-	tLine =
-		strconv.FormatInt(
-			allocDuration.NumberOfMilliseconds, 10)
+		if lenNewOutputLine+lenFinalOutputLine >=
+			maxLineLength {
 
-	numStrWithIntSeps,
-		err =
-		nStrIntSepMolecule.applyIntSeparators(
-			&nStrIntSeparator,
-			[]rune(tLine),
-			ePrefix.XCpy("NumberOfMilliseconds"))
+			if lenFinalOutputLine > 0 {
 
-	if err != nil {
-		return allocatedDurationStrs, err
-	}
+				finalOutputLine += "\n"
 
-	newOutputLine = fmt.Sprintf(
-		"%v Milliseconds ",
-		string(numStrWithIntSeps))
+				allocatedDurationStrs.AddString(
+					finalOutputLine)
 
-	lenNewOutputLine = len(newOutputLine)
+				finalOutputLine = ""
 
-	lenFinalOutputLine = len(finalOutputLine)
+				lenFinalOutputLine = 0
 
-	if lenNewOutputLine+lenFinalOutputLine >=
-		maxLineLength {
+			}
 
-		if lenFinalOutputLine > 0 {
+			if lenNewOutputLine >= maxLineLength {
 
-			finalOutputLine += "\n"
+				newOutputLine += "\n"
 
-			allocatedDurationStrs.AddString(
-				finalOutputLine)
+				allocatedDurationStrs.AddString(
+					newOutputLine)
 
-			finalOutputLine = ""
+				newOutputLine = ""
 
-			lenFinalOutputLine = 0
+				lenNewOutputLine = 0
 
-		}
+			} else {
 
-		if lenNewOutputLine >= maxLineLength {
+				finalOutputLine += newOutputLine
 
-			newOutputLine += "\n"
-
-			allocatedDurationStrs.AddString(
-				newOutputLine)
-
-			newOutputLine = ""
-
-			lenNewOutputLine = 0
+			}
 
 		} else {
 
+			// MUST BE -
+			// lenNewOutputLine + lenFinalOutputLine
+			//	LESS THAN maxLineLen
+
 			finalOutputLine += newOutputLine
 
+			lenFinalOutputLine = len(finalOutputLine)
 		}
-
-	} else {
-
-		// MUST BE -
-		// lenNewOutputLine + lenFinalOutputLine
-		//	LESS THAN maxLineLen
-
-		finalOutputLine += newOutputLine
-
-		lenFinalOutputLine = len(finalOutputLine)
 	}
 
 	// Always display Microseconds
@@ -980,6 +991,7 @@ func (dateTimeHelper *DateTimeHelper) GetFmtAllocatedDurationText(
 
 	}
 
+	// Always display Nanoseconds
 	finalOutputLine = fmt.Sprintf(
 		"Total Nanoseconds: %v\n",
 		string(numStrWithIntSeps))
