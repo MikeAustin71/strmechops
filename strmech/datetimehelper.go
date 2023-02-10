@@ -445,6 +445,144 @@ func (dateTimeHelper *DateTimeHelper) GetDateTimeFormat(
 // formatted text strings and returned as an array of
 // strings encapsulated in an instance of type
 // StringArrayDto.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	allocDuration				TimeDurationDto
+//
+//		Allocated time duration values. Type
+//		TimeDurationDto contains time duration numerical
+//		values broken down by Days, Hours, Minutes,
+//		Seconds, Milliseconds, Microseconds and
+//		Nanoseconds. These items are referred to as time
+//		duration elements. The duration element values
+//		are converted to text strings for the creation
+//		of time duration reports.
+//
+//		type TimeDurationDto struct {
+//
+//			TotalNanoseconds int64
+//				The total number of Nanoseconds to
+//				be allocated.
+//
+//			NumberOfDays int64
+//				The number Days represented by
+//				'TotalNanoseconds'.
+//
+//			NumberOfHours int64
+//				The number Hours represented by
+//				'TotalNanoseconds'.
+//
+//			NumberOfMinutes int64
+//				The number Minutes represented by
+//				'TotalNanoseconds'.
+//
+//			NumberOfSeconds int64
+//				The number Seconds represented by
+//				'TotalNanoseconds'.
+//
+//			NumberOfMilliseconds int64
+//				The number Milliseconds represented by
+//				'TotalNanoseconds'.
+//
+//			NumberOfMicroseconds int64
+//				The number Microseconds represented by
+//				'TotalNanoseconds'.
+//
+//			NumberOfNanoseconds int64
+//				The number Nanoseconds remaining after
+//				the allocation of Microseconds.
+//		}
+//
+//	maxLineLength				int
+//
+//		Defines the maximum text line length used in the
+//		creation and formatted of time duration reports.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	allocatedDurationStrs		StringArrayDto
+//
+//		If this method completes successfully, this
+//		parameter will return a string array contains
+//		all the lines of text required for a time
+//		duration report.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
 func (dateTimeHelper *DateTimeHelper) GetFmtAllocatedDurationText(
 	allocDuration TimeDurationDto,
 	maxLineLength int,
