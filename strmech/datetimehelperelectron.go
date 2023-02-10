@@ -192,10 +192,8 @@ func (dateTimeHelpElectron *dateTimeHelperElectron) allocateDurationToTimeElemen
 		return err
 	}
 
-	nStrIntSepMolecule := integerSeparatorSpecMolecule{}
-
 	var tLine, newOutputLine string
-	var numStrWithIntSeps []rune
+	var numStrWithIntSeps string
 	var lenNewOutputLine, lenFinalOutputLine int
 
 	if allocDurationElement > 0 ||
@@ -210,9 +208,8 @@ func (dateTimeHelpElectron *dateTimeHelperElectron) allocateDurationToTimeElemen
 
 		numStrWithIntSeps,
 			err =
-			nStrIntSepMolecule.applyIntSeparators(
-				&nStrIntSeparator,
-				[]rune(tLine),
+			nStrIntSeparator.GetFmtIntSeparatedNumStr(
+				tLine,
 				ePrefix.XCpy(
 					fmt.Sprintf("numStrWithIntSeps<-Element Name: %v",
 						allocDurationElementName)))
@@ -226,13 +223,13 @@ func (dateTimeHelpElectron *dateTimeHelperElectron) allocateDurationToTimeElemen
 			newOutputLine = fmt.Sprintf(
 				"%v %v ",
 				allocDurationElementName,
-				string(numStrWithIntSeps))
+				numStrWithIntSeps)
 
 		} else {
 
 			newOutputLine = fmt.Sprintf(
 				"%v %v ",
-				string(numStrWithIntSeps),
+				numStrWithIntSeps,
 				allocDurationElementName)
 
 		}
