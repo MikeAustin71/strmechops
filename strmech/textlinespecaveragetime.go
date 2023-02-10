@@ -1140,9 +1140,18 @@ func (txtLineAvgTime *TextLineSpecAverageTime) EqualITextLine(
 
 //	GetFormattedText
 //
+//	Configures the lines of text produced by this instance
+//	of TextLineSpecAverageTime, and writes it to an
+//	instance of strings.Builder.
+//
 //	Returns the calculated average time duration for all
 //	the timing events currently recorded by the current
 //	instance of TextLineSpecAverageTime.
+//
+//	In addition to average time duration data for all
+//	timing events, this text report also documents the
+//	minimum and maximum time durations recorded for this
+//	time series.
 //
 //	This method will compile the calculated timing data
 //	as formatted text for screen displays, file output or
@@ -1154,11 +1163,6 @@ func (txtLineAvgTime *TextLineSpecAverageTime) EqualITextLine(
 //
 //	The sole difference between that method and this is
 //	the return type. This method returns an error.
-//
-//	In addition to average time duration data for all
-//	timing events, this text report also documents the
-//	minimum and maximum time durations recorded for this
-//	time series.
 //
 //	If the text report format produced by this method is
 //	unsuitable, the user should call method:
@@ -1179,6 +1183,14 @@ func (txtLineAvgTime *TextLineSpecAverageTime) EqualITextLine(
 //		TextLineSpecAverageTime.String()
 //		TextLineSpecAverageTime.TextBuilder()
 //		TextLineSpecAverageTime.GetFormattedText()
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	This method creates and returns a full report average
+//	timing data to include average time duration, maximum
+//	time duration and minimum time duration.
 //
 // ----------------------------------------------------------------
 //
@@ -1854,35 +1866,42 @@ func (txtLineAvgTime *TextLineSpecAverageTime) SetInitializeTimerToZero() {
 
 //	String
 //
-//	Returns the formatted text for output and printing.
+//	Configures the lines of text produced by this
+//	instance of TextLineSpecAverageTime, and writes it to
+//	an instance of strings.Builder.
 //
-//	The value of 'blkLines.newLineChars' will be
-//	replicated multiple times as specified by
-//	'blkLines.numBlankLines'.
+//	Returns the calculated average time duration for all
+//	the timing events currently recorded by the current
+//	instance of TextLineSpecAverageTime.
 //
-//	If an error occurs, the error message will be
-//	included in the returned string.
+//	In addition to average time duration data for all
+//	timing events, this text report also documents the
+//	minimum and maximum time durations recorded for this
+//	time series.
 //
-//	This method is similar to
-//	TextLineSpecAverageTime.GetFormattedText() with the
-//	sole difference being that this method does not
-//	return an error.
+//	This method will compile the calculated timing data
+//	as formatted text for screen displays, file output or
+//	printing.
+//
+//	If the text report format produced by this method is
+//	unsuitable, the user should call method:
+//
+//		TextLineSpecAverageTime.CalculateAvgDuration()
+//
+//	This method provides the average time duration in
+//	numerical format. Thereafter, the user can use the
+//	'TextLineSpec' types to format a customized text
+//	report of timing data.
 //
 //	This method fulfills requirements of interface
 //	ITextLineSpecification.
-//
-//	This method also fulfills the requirements of the
-//	'Stringer' interface defined in the Golang package
-//	'fmt'. Reference:
-//
-//		https://pkg.go.dev/fmt#Stringer
 //
 //	Methods which return formatted text are listed as
 //	follows:
 //
 //		TextLineSpecAverageTime.String()
-//		TextLineSpecAverageTime.TextBuilder()
 //		TextLineSpecAverageTime.GetFormattedText()
+//		TextLineSpecAverageTime.TextBuilder()
 //
 // ----------------------------------------------------------------
 //
@@ -1942,9 +1961,39 @@ func (txtLineAvgTime TextLineSpecAverageTime) String() string {
 
 //	TextBuilder
 //
-//	Configures the line of text produced by this instance
-//	of TextLineSpecAverageTime, and writes it to an
-//	instance of strings.Builder.
+//	Configures the lines of text produced by this
+//	instance of TextLineSpecAverageTime, and writes it to
+//	an instance of strings.Builder.
+//
+//	Returns the calculated average time duration for all
+//	the timing events currently recorded by the current
+//	instance of TextLineSpecAverageTime.
+//
+//	In addition to average time duration data for all
+//	timing events, this text report also documents the
+//	minimum and maximum time durations recorded for this
+//	time series.
+//
+//	This method will compile the calculated timing data
+//	as formatted text for screen displays, file output or
+//	printing.
+//
+//	This method is similar to method:
+//
+//		TextLineSpecAverageTime.String()
+//
+//	The sole difference between that method and this is
+//	the return type. This method returns an error.
+//
+//	If the text report format produced by this method is
+//	unsuitable, the user should call method:
+//
+//		TextLineSpecAverageTime.CalculateAvgDuration()
+//
+//	This method provides the average time duration in
+//	numerical format. Thereafter, the user can use the
+//	'TextLineSpec' types to format a customized text
+//	report of timing data.
 //
 //	This method fulfills requirements of interface
 //	ITextLineSpecification.
@@ -1955,6 +2004,14 @@ func (txtLineAvgTime TextLineSpecAverageTime) String() string {
 //		TextLineSpecAverageTime.String()
 //		TextLineSpecAverageTime.GetFormattedText()
 //		TextLineSpecAverageTime.TextBuilder()
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	This method creates and returns a full report average
+//	timing data to include average time duration, maximum
+//	time duration and minimum time duration.
 //
 // ----------------------------------------------------------------
 //
