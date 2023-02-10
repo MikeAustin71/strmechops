@@ -473,12 +473,33 @@ func (txtLineAvgTimeAtom *textLineSpecAverageTimeAtom) getFullDurationReport(
 
 	if isAllocatedAvgDuration == true {
 
+		var nStrIntSeparator IntegerSeparatorSpec
+
+		nStrIntSeparator,
+			err = new(IntegerSeparatorSpec).NewUnitedStatesDefaults(
+			ePrefix.XCpy(
+				"nStrIntSeparator<-"))
+
+		if err != nil {
+			return err
+		}
+
+		var tLine string
+
+		tLine,
+			err = nStrIntSeparator.GetFmtIntSeparatedNumStr(
+			txtLineAvgTimer.numberOfDurationEvents.Text(10),
+			ePrefix.XCpy("tLine<-"))
+
+		if err != nil {
+			return err
+		}
+
 		err = txtLineCollection.AddPlainTextLine(
 			titleLineLeftMargin+"  ",
 			"",
 			fmt.Sprintf("Total Timing Cycles: %v",
-				txtLineAvgTimer.
-					numberOfDurationEvents.Text(10)),
+				tLine),
 			maxLineLength,
 			TxtJustify.Left(),
 			ePrefix.XCpy("summaryTotalStr"))
