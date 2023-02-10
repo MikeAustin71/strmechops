@@ -3,7 +3,6 @@ package strmech
 import (
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
-	"strconv"
 	"sync"
 	"time"
 )
@@ -475,529 +474,174 @@ func (dateTimeHelper *DateTimeHelper) GetFmtAllocatedDurationText(
 		return allocatedDurationStrs, err
 	}
 
-	var tLine, newOutputLine, finalOutputLine string
-	var numStrWithIntSeps []rune
-	var lenNewOutputLine, lenFinalOutputLine int
 	var foundFirstValue = false
+	var finalOutputLineText = ""
 
-	// Reduce Max Line Length by 1
-	// to account for new line character.
-	maxLineLength--
-
-	var nStrIntSeparator IntegerSeparatorSpec
-
-	nStrIntSepMolecule := integerSeparatorSpecMolecule{}
+	dateTimeHelpElectron := dateTimeHelperElectron{}
 
 	// Days
-	if allocDuration.NumberOfDays > 0 {
 
-		tLine =
-			strconv.FormatInt(
-				allocDuration.NumberOfDays, 10)
+	err =
+		dateTimeHelpElectron.allocateDurationToTimeElement(
+			allocDuration.NumberOfDays,
+			"Days",
+			false,
+			&foundFirstValue,
+			&finalOutputLineText,
+			maxLineLength,
+			&allocatedDurationStrs,
+			ePrefix.XCpy(
+				"Days"))
 
-		numStrWithIntSeps,
-			err =
-			nStrIntSepMolecule.applyIntSeparators(
-				&nStrIntSeparator,
-				[]rune(tLine),
-				ePrefix.XCpy("NumberOfDays"))
+	if err != nil {
 
-		if err != nil {
-			return allocatedDurationStrs, err
-		}
-
-		newOutputLine = fmt.Sprintf(
-			"%v Days ",
-			string(numStrWithIntSeps))
-
-		lenNewOutputLine = len(newOutputLine)
-
-		lenFinalOutputLine = len(finalOutputLine)
-
-		if lenNewOutputLine >= maxLineLength {
-
-			newOutputLine += "\n"
-
-			allocatedDurationStrs.AddString(
-				newOutputLine)
-
-			newOutputLine = ""
-			lenNewOutputLine = 0
-
-		} else {
-
-			finalOutputLine += newOutputLine
-		}
-
-		foundFirstValue = true
-	}
-
-	if len(finalOutputLine) >= maxLineLength {
-
-		finalOutputLine += "\n"
-
-		allocatedDurationStrs.AddString(
-			finalOutputLine)
-
-		finalOutputLine = ""
-
-		lenFinalOutputLine = 0
-
+		return allocatedDurationStrs, err
 	}
 
 	// Hours
-	if allocDuration.NumberOfHours > 0 ||
-		foundFirstValue == true {
 
-		tLine =
-			strconv.FormatInt(
-				allocDuration.NumberOfHours, 10)
+	err =
+		dateTimeHelpElectron.allocateDurationToTimeElement(
+			allocDuration.NumberOfHours,
+			"Hours",
+			false,
+			&foundFirstValue,
+			&finalOutputLineText,
+			maxLineLength,
+			&allocatedDurationStrs,
+			ePrefix.XCpy(
+				"Hours"))
 
-		numStrWithIntSeps,
-			err =
-			nStrIntSepMolecule.applyIntSeparators(
-				&nStrIntSeparator,
-				[]rune(tLine),
-				ePrefix.XCpy("NumberOfHours"))
+	if err != nil {
 
-		if err != nil {
-			return allocatedDurationStrs, err
-		}
-
-		newOutputLine = fmt.Sprintf(
-			"%v Hours ",
-			string(numStrWithIntSeps))
-
-		lenNewOutputLine = len(newOutputLine)
-
-		lenFinalOutputLine = len(finalOutputLine)
-
-		if lenNewOutputLine+lenFinalOutputLine >=
-			maxLineLength {
-
-			if lenFinalOutputLine > 0 {
-
-				finalOutputLine += "\n"
-
-				allocatedDurationStrs.AddString(
-					finalOutputLine)
-
-				finalOutputLine = ""
-
-				lenFinalOutputLine = 0
-
-			}
-
-			if lenNewOutputLine >= maxLineLength {
-
-				newOutputLine += "\n"
-
-				allocatedDurationStrs.AddString(
-					newOutputLine)
-
-				newOutputLine = ""
-
-				lenNewOutputLine = 0
-
-			} else {
-
-				finalOutputLine += newOutputLine
-
-			}
-
-		} else {
-
-			// MUST BE -
-			// lenNewOutputLine + lenFinalOutputLine
-			//	LESS THAN maxLineLen
-
-			finalOutputLine += newOutputLine
-
-			lenFinalOutputLine = len(finalOutputLine)
-		}
-
-		foundFirstValue = true
-
+		return allocatedDurationStrs, err
 	}
 
 	// Minutes
-	if allocDuration.NumberOfMinutes > 0 ||
-		foundFirstValue == true {
 
-		tLine =
-			strconv.FormatInt(
-				allocDuration.NumberOfMinutes, 10)
+	err =
+		dateTimeHelpElectron.allocateDurationToTimeElement(
+			allocDuration.NumberOfMinutes,
+			"Minutes",
+			false,
+			&foundFirstValue,
+			&finalOutputLineText,
+			maxLineLength,
+			&allocatedDurationStrs,
+			ePrefix.XCpy(
+				"Minutes"))
 
-		numStrWithIntSeps,
-			err =
-			nStrIntSepMolecule.applyIntSeparators(
-				&nStrIntSeparator,
-				[]rune(tLine),
-				ePrefix.XCpy("NumberOfMinutes"))
+	if err != nil {
 
-		if err != nil {
-			return allocatedDurationStrs, err
-		}
-
-		newOutputLine = fmt.Sprintf(
-			"%v Minutes ",
-			string(numStrWithIntSeps))
-
-		lenNewOutputLine = len(newOutputLine)
-
-		lenFinalOutputLine = len(finalOutputLine)
-
-		if lenNewOutputLine+lenFinalOutputLine >=
-			maxLineLength {
-
-			if lenFinalOutputLine > 0 {
-
-				finalOutputLine += "\n"
-
-				allocatedDurationStrs.AddString(
-					finalOutputLine)
-
-				finalOutputLine = ""
-
-				lenFinalOutputLine = 0
-
-			}
-
-			if lenNewOutputLine >= maxLineLength {
-
-				newOutputLine += "\n"
-
-				allocatedDurationStrs.AddString(
-					newOutputLine)
-
-				newOutputLine = ""
-
-				lenNewOutputLine = 0
-
-			} else {
-
-				finalOutputLine += newOutputLine
-
-			}
-
-		} else {
-
-			// MUST BE -
-			// lenNewOutputLine + lenFinalOutputLine
-			//	LESS THAN maxLineLen
-
-			finalOutputLine += newOutputLine
-
-			lenFinalOutputLine = len(finalOutputLine)
-		}
-
-		foundFirstValue = true
-
+		return allocatedDurationStrs, err
 	}
 
 	// Seconds
 
-	if allocDuration.NumberOfSeconds > 0 ||
-		foundFirstValue == true {
+	err =
+		dateTimeHelpElectron.allocateDurationToTimeElement(
+			allocDuration.NumberOfSeconds,
+			"Seconds",
+			false,
+			&foundFirstValue,
+			&finalOutputLineText,
+			maxLineLength,
+			&allocatedDurationStrs,
+			ePrefix.XCpy(
+				"Seconds"))
 
-		tLine =
-			strconv.FormatInt(
-				allocDuration.NumberOfSeconds, 10)
+	if err != nil {
 
-		numStrWithIntSeps,
-			err =
-			nStrIntSepMolecule.applyIntSeparators(
-				&nStrIntSeparator,
-				[]rune(tLine),
-				ePrefix.XCpy("NumberOfSeconds"))
-
-		if err != nil {
-			return allocatedDurationStrs, err
-		}
-
-		newOutputLine = fmt.Sprintf(
-			"%v Seconds ",
-			string(numStrWithIntSeps))
-
-		lenNewOutputLine = len(newOutputLine)
-
-		lenFinalOutputLine = len(finalOutputLine)
-
-		if lenNewOutputLine+lenFinalOutputLine >=
-			maxLineLength {
-
-			if lenFinalOutputLine > 0 {
-
-				finalOutputLine += "\n"
-
-				allocatedDurationStrs.AddString(
-					finalOutputLine)
-
-				finalOutputLine = ""
-
-				lenFinalOutputLine = 0
-
-			}
-
-			if lenNewOutputLine >= maxLineLength {
-
-				newOutputLine += "\n"
-
-				allocatedDurationStrs.AddString(
-					newOutputLine)
-
-				newOutputLine = ""
-
-				lenNewOutputLine = 0
-
-			} else {
-
-				finalOutputLine += newOutputLine
-
-			}
-
-		} else {
-
-			// MUST BE -
-			// lenNewOutputLine + lenFinalOutputLine
-			//	LESS THAN maxLineLen
-
-			finalOutputLine += newOutputLine
-
-			lenFinalOutputLine = len(finalOutputLine)
-		}
+		return allocatedDurationStrs, err
 	}
 
-	//	Milliseconds
-	if allocDuration.NumberOfMilliseconds > 0 ||
-		foundFirstValue == true {
+	//	Always Display Milliseconds
 
-		tLine =
-			strconv.FormatInt(
-				allocDuration.NumberOfMilliseconds, 10)
+	err =
+		dateTimeHelpElectron.allocateDurationToTimeElement(
+			allocDuration.NumberOfMilliseconds,
+			"Milliseconds",
+			true,
+			&foundFirstValue,
+			&finalOutputLineText,
+			maxLineLength,
+			&allocatedDurationStrs,
+			ePrefix.XCpy(
+				"Milliseconds"))
 
-		numStrWithIntSeps,
-			err =
-			nStrIntSepMolecule.applyIntSeparators(
-				&nStrIntSeparator,
-				[]rune(tLine),
-				ePrefix.XCpy("NumberOfMilliseconds"))
+	if err != nil {
 
-		if err != nil {
-			return allocatedDurationStrs, err
-		}
-
-		newOutputLine = fmt.Sprintf(
-			"%v Milliseconds ",
-			string(numStrWithIntSeps))
-
-		lenNewOutputLine = len(newOutputLine)
-
-		lenFinalOutputLine = len(finalOutputLine)
-
-		if lenNewOutputLine+lenFinalOutputLine >=
-			maxLineLength {
-
-			if lenFinalOutputLine > 0 {
-
-				finalOutputLine += "\n"
-
-				allocatedDurationStrs.AddString(
-					finalOutputLine)
-
-				finalOutputLine = ""
-
-				lenFinalOutputLine = 0
-
-			}
-
-			if lenNewOutputLine >= maxLineLength {
-
-				newOutputLine += "\n"
-
-				allocatedDurationStrs.AddString(
-					newOutputLine)
-
-				newOutputLine = ""
-
-				lenNewOutputLine = 0
-
-			} else {
-
-				finalOutputLine += newOutputLine
-
-			}
-
-		} else {
-
-			// MUST BE -
-			// lenNewOutputLine + lenFinalOutputLine
-			//	LESS THAN maxLineLen
-
-			finalOutputLine += newOutputLine
-
-			lenFinalOutputLine = len(finalOutputLine)
-		}
+		return allocatedDurationStrs, err
 	}
 
 	// Always display Microseconds
-	tLine =
-		strconv.FormatInt(
-			allocDuration.NumberOfMicroseconds, 10)
 
-	numStrWithIntSeps,
-		err =
-		nStrIntSepMolecule.applyIntSeparators(
-			&nStrIntSeparator,
-			[]rune(tLine),
-			ePrefix.XCpy("NumberOfMicroseconds"))
+	err =
+		dateTimeHelpElectron.allocateDurationToTimeElement(
+			allocDuration.NumberOfMicroseconds,
+			"Microseconds",
+			true,
+			&foundFirstValue,
+			&finalOutputLineText,
+			maxLineLength,
+			&allocatedDurationStrs,
+			ePrefix.XCpy(
+				"Microseconds"))
 
 	if err != nil {
+
 		return allocatedDurationStrs, err
 	}
 
-	newOutputLine = fmt.Sprintf(
-		"%v Microseconds ",
-		string(numStrWithIntSeps))
-
-	lenNewOutputLine = len(newOutputLine)
-
-	lenFinalOutputLine = len(finalOutputLine)
-
-	if lenNewOutputLine+lenFinalOutputLine >=
-		maxLineLength {
-
-		if lenFinalOutputLine > 0 {
-
-			finalOutputLine += "\n"
-
-			allocatedDurationStrs.AddString(
-				finalOutputLine)
-
-			finalOutputLine = ""
-
-			lenFinalOutputLine = 0
-
-		}
-
-		if lenNewOutputLine >= maxLineLength {
-
-			newOutputLine += "\n"
-
-			allocatedDurationStrs.AddString(
-				newOutputLine)
-
-			newOutputLine = ""
-
-			lenNewOutputLine = 0
-
-		} else {
-
-			finalOutputLine += newOutputLine
-
-		}
-
-	} else {
-
-		// MUST BE -
-		// lenNewOutputLine + lenFinalOutputLine
-		//	LESS THAN maxLineLen
-
-		finalOutputLine += newOutputLine
-
-		lenFinalOutputLine = len(finalOutputLine)
-	}
-
 	// Always display Nanoseconds
-	tLine =
-		strconv.FormatInt(
-			allocDuration.NumberOfNanoseconds, 10)
 
-	numStrWithIntSeps,
-		err =
-		nStrIntSepMolecule.applyIntSeparators(
-			&nStrIntSeparator,
-			[]rune(tLine),
-			ePrefix.XCpy("NumberOfNanoseconds"))
+	err =
+		dateTimeHelpElectron.allocateDurationToTimeElement(
+			allocDuration.NumberOfNanoseconds,
+			"Nanoseconds",
+			true,
+			&foundFirstValue,
+			&finalOutputLineText,
+			maxLineLength,
+			&allocatedDurationStrs,
+			ePrefix.XCpy(
+				"Microseconds"))
 
 	if err != nil {
+
 		return allocatedDurationStrs, err
 	}
 
-	newOutputLine = fmt.Sprintf(
-		"%v Nanoseconds ",
-		string(numStrWithIntSeps))
+	if len(finalOutputLineText) > 0 {
 
-	lenNewOutputLine = len(newOutputLine)
+		finalOutputLineText += "\n"
 
-	lenFinalOutputLine = len(finalOutputLine)
+		allocatedDurationStrs.AddString(finalOutputLineText)
 
-	if lenNewOutputLine+lenFinalOutputLine >=
-		maxLineLength {
-
-		if lenFinalOutputLine > 0 {
-
-			finalOutputLine += "\n"
-
-			allocatedDurationStrs.AddString(
-				finalOutputLine)
-
-			finalOutputLine = ""
-
-			lenFinalOutputLine = 0
-
-		}
-
-		if lenNewOutputLine >= maxLineLength {
-
-			newOutputLine += "\n"
-
-			allocatedDurationStrs.AddString(
-				newOutputLine)
-
-			newOutputLine = ""
-
-			lenNewOutputLine = 0
-
-		} else {
-
-			finalOutputLine += newOutputLine
-
-		}
-
-	} else {
-
-		// MUST BE -
-		// lenNewOutputLine + lenFinalOutputLine
-		//	LESS THAN maxLineLen
-
-		finalOutputLine += newOutputLine
-
-		lenFinalOutputLine = len(finalOutputLine)
+		finalOutputLineText = ""
 	}
 
-	lenFinalOutputLine = len(finalOutputLine)
+	//	Summary: Total Nanoseconds
+	err =
+		dateTimeHelpElectron.allocateDurationToTimeElement(
+			allocDuration.TotalNanoseconds,
+			"Total Nanoseconds",
+			true,
+			&foundFirstValue,
+			&finalOutputLineText,
+			maxLineLength,
+			&allocatedDurationStrs,
+			ePrefix.XCpy(
+				"Total Nanoseconds"))
 
-	if lenFinalOutputLine > 0 {
+	if err != nil {
 
-		finalOutputLine += "\n"
-
-		allocatedDurationStrs.AddString(
-			finalOutputLine)
-
-		finalOutputLine = ""
-
-		lenFinalOutputLine = 0
-
+		return allocatedDurationStrs, err
 	}
 
-	// Always display Nanoseconds
-	finalOutputLine = fmt.Sprintf(
-		"Total Nanoseconds: %v\n",
-		string(numStrWithIntSeps))
+	finalOutputLineText += "\n"
 
-	allocatedDurationStrs.AddString(
-		finalOutputLine)
+	allocatedDurationStrs.AddString(finalOutputLineText)
 
 	return allocatedDurationStrs, err
 }
