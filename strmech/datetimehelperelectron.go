@@ -47,6 +47,16 @@ type dateTimeHelperElectron struct {
 //		converted to a string and stored in parameter
 //		'allocatedDurationStrs'.
 //
+//	labelNameFirst					bool
+//
+//		When the boolean value is set to 'true' the
+//		label 'allocDurationElementName' is positioned
+//		before the numerical value.
+//
+//		When this parameter is set to 'false', the
+//		label 'allocDurationElementName' is positioned
+//		after the numerical value.
+//
 //	alwaysDisplayDurationElement	bool
 //
 //		This formatting specification determines
@@ -136,6 +146,7 @@ type dateTimeHelperElectron struct {
 func (dateTimeHelpElectron *dateTimeHelperElectron) allocateDurationToTimeElement(
 	allocDurationElement int64,
 	allocDurationElementName string,
+	labelNameFirst bool,
 	alwaysDisplayDurationElement bool,
 	foundFirstElementValue *bool,
 	finalOutputLineText *string,
@@ -172,6 +183,15 @@ func (dateTimeHelpElectron *dateTimeHelperElectron) allocateDurationToTimeElemen
 
 	var nStrIntSeparator IntegerSeparatorSpec
 
+	nStrIntSeparator,
+		err = new(IntegerSeparatorSpec).NewUnitedStatesDefaults(
+		ePrefix.XCpy(
+			"nStrIntSeparator<-"))
+
+	if err != nil {
+		return err
+	}
+
 	nStrIntSepMolecule := integerSeparatorSpecMolecule{}
 
 	var tLine, newOutputLine string
@@ -201,10 +221,21 @@ func (dateTimeHelpElectron *dateTimeHelperElectron) allocateDurationToTimeElemen
 			return err
 		}
 
-		newOutputLine = fmt.Sprintf(
-			"%v %v ",
-			string(numStrWithIntSeps),
-			allocDurationElementName)
+		if labelNameFirst == true {
+
+			newOutputLine = fmt.Sprintf(
+				"%v %v ",
+				allocDurationElementName,
+				string(numStrWithIntSeps))
+
+		} else {
+
+			newOutputLine = fmt.Sprintf(
+				"%v %v ",
+				string(numStrWithIntSeps),
+				allocDurationElementName)
+
+		}
 
 		lenNewOutputLine = len(newOutputLine)
 

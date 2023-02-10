@@ -624,6 +624,7 @@ func (dateTimeHelper *DateTimeHelper) GetFmtAllocatedDurationText(
 			allocDuration.NumberOfDays,
 			"Days",
 			false,
+			false,
 			&foundFirstValue,
 			&finalOutputLineText,
 			maxLineLength,
@@ -642,6 +643,7 @@ func (dateTimeHelper *DateTimeHelper) GetFmtAllocatedDurationText(
 		dateTimeHelpElectron.allocateDurationToTimeElement(
 			allocDuration.NumberOfHours,
 			"Hours",
+			false,
 			false,
 			&foundFirstValue,
 			&finalOutputLineText,
@@ -662,6 +664,7 @@ func (dateTimeHelper *DateTimeHelper) GetFmtAllocatedDurationText(
 			allocDuration.NumberOfMinutes,
 			"Minutes",
 			false,
+			false,
 			&foundFirstValue,
 			&finalOutputLineText,
 			maxLineLength,
@@ -681,6 +684,7 @@ func (dateTimeHelper *DateTimeHelper) GetFmtAllocatedDurationText(
 			allocDuration.NumberOfSeconds,
 			"Seconds",
 			false,
+			false,
 			&foundFirstValue,
 			&finalOutputLineText,
 			maxLineLength,
@@ -699,6 +703,7 @@ func (dateTimeHelper *DateTimeHelper) GetFmtAllocatedDurationText(
 		dateTimeHelpElectron.allocateDurationToTimeElement(
 			allocDuration.NumberOfMilliseconds,
 			"Milliseconds",
+			false,
 			true,
 			&foundFirstValue,
 			&finalOutputLineText,
@@ -718,6 +723,7 @@ func (dateTimeHelper *DateTimeHelper) GetFmtAllocatedDurationText(
 		dateTimeHelpElectron.allocateDurationToTimeElement(
 			allocDuration.NumberOfMicroseconds,
 			"Microseconds",
+			false,
 			true,
 			&foundFirstValue,
 			&finalOutputLineText,
@@ -737,6 +743,7 @@ func (dateTimeHelper *DateTimeHelper) GetFmtAllocatedDurationText(
 		dateTimeHelpElectron.allocateDurationToTimeElement(
 			allocDuration.NumberOfNanoseconds,
 			"Nanoseconds",
+			false,
 			true,
 			&foundFirstValue,
 			&finalOutputLineText,
@@ -763,7 +770,8 @@ func (dateTimeHelper *DateTimeHelper) GetFmtAllocatedDurationText(
 	err =
 		dateTimeHelpElectron.allocateDurationToTimeElement(
 			allocDuration.TotalNanoseconds,
-			"Total Nanoseconds",
+			"   Total Nanoseconds: ",
+			true,
 			true,
 			&foundFirstValue,
 			&finalOutputLineText,

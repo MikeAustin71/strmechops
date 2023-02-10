@@ -2095,10 +2095,14 @@ func (strArrayDto *StringArrayDto) PopLastStr(
 		return lastArrayStr, newArrayLength, err
 	}
 
+	lastStrArrayIdx := len(strArrayDto.StrArray)
+
+	lastStrArrayIdx--
+
 	lastArrayStr,
 		err = new(stringArrayDtoAtom).peekPopStringArray(
 		strArrayDto,
-		0,
+		lastStrArrayIdx,
 		true,
 		ePrefix.XCpy(
 			"strArrayDto[0]"))

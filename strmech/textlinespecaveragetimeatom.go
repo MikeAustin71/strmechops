@@ -252,9 +252,9 @@ func (txtLineAvgTimeAtom *textLineSpecAverageTimeAtom) calcAverageDuration(
 	avgDuration = bigZero.Int64()
 
 	minimumTimeDuration =
-		txtLineAvgTimer.maximumTimeDuration.Int64()
+		txtLineAvgTimer.minimumTimeDuration.Int64()
 
-	minimumTimeDuration =
+	maximumTimeDuration =
 		txtLineAvgTimer.maximumTimeDuration.Int64()
 
 	return avgDuration,
@@ -376,6 +376,28 @@ func (txtLineAvgTimeAtom *textLineSpecAverageTimeAtom) getFullDurationReport(
 		return err
 	}
 
+	err = txtLineCollection.AddSolidLine(
+		solidLineLeftMargin,
+		"-",
+		maxLineLength,
+		"",
+		"",
+		false,
+		1,
+		ePrefix.XCpy("Leading After Date Solid Line"))
+
+	if err != nil {
+		return err
+	}
+
+	err = txtLineCollection.AddBlankLine(
+		1,
+		ePrefix.XCpy("Before Data Blank Line"))
+
+	if err != nil {
+		return err
+	}
+
 	var allocatedDurationStrs StringArrayDto
 
 	allocatedDurationStrs,
@@ -389,7 +411,10 @@ func (txtLineAvgTimeAtom *textLineSpecAverageTimeAtom) getFullDurationReport(
 	}
 
 	var summaryTotalStr string
-
+	/*
+		fmt.Printf("Initial String Array Length: '%v'\n\n",
+			allocatedDurationStrs.GetStringArrayLength())
+	*/
 	summaryTotalStr,
 		_,
 		err = allocatedDurationStrs.PopLastStr(
@@ -399,12 +424,21 @@ func (txtLineAvgTimeAtom *textLineSpecAverageTimeAtom) getFullDurationReport(
 		return err
 	}
 
+	/*
+		fmt.Printf("\nThis is summaryTotalStr: %v\n\n",
+			summaryTotalStr)
+
+		fmt.Printf("Final String Array Length: '%v'\n\n",
+			allocatedDurationStrs.GetStringArrayLength())
+
+	*/
+
 	err = txtLineCollection.AddPlainTextStrArray(
 		titleLineLeftMargin+"  ",
 		"",
 		allocatedDurationStrs,
 		maxLineLength-2,
-		TxtJustify.Left(),
+		TxtJustify.Center(),
 		ePrefix)
 
 	if err != nil {
