@@ -263,15 +263,143 @@ func (txtLineAvgTimeAtom *textLineSpecAverageTimeAtom) calcAverageDuration(
 		err
 }
 
-// getFullDurationReport
+//	getDurationElementReport
 //
-// Receives time duration allocation data broken down by
-// days, hours, minutes, seconds, milliseconds,
-// microseconds and nanoseconds.
+//	Receives time duration allocation data broken down by
+//	days, hours, minutes, seconds, milliseconds,
+//	microseconds and nanoseconds.
 //
-// This method then proceeds to prepare and return a text
-// report presentation of the data.
-func (txtLineAvgTimeAtom *textLineSpecAverageTimeAtom) getFullDurationReport(
+//	This method is used to produce reports for average
+//	time duration, maximum time duration and minimum time
+//	duration.
+//
+//	The text lines contained in the time duration report
+//	created by this method will be stored in input
+//	parameter, 'strBuilder'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	txtLineAvgTimer				*TextLineSpecAverageTime
+//
+//		A pointer to an instance of TextLineSpecAverageTime.
+//		The internal average time counters maintained by
+//		this instance will be used to produce an average
+//		time duration for all recorded timing events.
+//
+//	strBuilder					*strings.Builder
+//
+//		A pointer to an instance of *strings.Builder. The
+//		formatted text characters produced by this method
+//		will be written to this instance of
+//		strings.Builder.
+//
+//	allocatedDuration			TimeDurationDto
+//
+//		Allocated time duration values. Type
+//		TimeDurationDto contains time duration numerical
+//		values broken down by Days, Hours, Minutes,
+//		Seconds, Milliseconds, Microseconds and
+//		Nanoseconds. These items are referred to as time
+//		duration elements. The duration element values
+//		are converted to text strings for the creation
+//		of time duration reports.
+//
+//		type TimeDurationDto struct {
+//
+//			TotalNanoseconds int64
+//				The total number of Nanoseconds to
+//				be allocated.
+//
+//			NumberOfDays int64
+//				The number Days represented by
+//				'TotalNanoseconds'.
+//
+//			NumberOfHours int64
+//				The number Hours represented by
+//				'TotalNanoseconds'.
+//
+//			NumberOfMinutes int64
+//				The number Minutes represented by
+//				'TotalNanoseconds'.
+//
+//			NumberOfSeconds int64
+//				The number Seconds represented by
+//				'TotalNanoseconds'.
+//
+//			NumberOfMilliseconds int64
+//				The number Milliseconds represented by
+//				'TotalNanoseconds'.
+//
+//			NumberOfMicroseconds int64
+//				The number Microseconds represented by
+//				'TotalNanoseconds'.
+//
+//			NumberOfNanoseconds int64
+//				The number Nanoseconds remaining after
+//				the allocation of Microseconds.
+//		}
+//
+//	isAllocatedAvgDuration		bool
+//
+//		This boolean value selects the report format to
+//		be applied.
+//
+//		When set to 'true', this parameter specifies the
+//		Average Duration Report Format which includes
+//		the number of timing cycles used to compute the
+//		average time duration.
+//
+//		When set to 'false', this parameter specifies the
+//		Standard Time Duration report. This report format
+//		details an absolute time duration value as
+//		opposed to an 'average' of time durations. This
+//		format is used to report maximum and minimum time
+//		duration values.
+//
+//	timeDurationTitle			string
+//
+//		The title or label applied to this time duration
+//		report.
+//
+//	maxLineLength				int
+//
+//		This integer value specifies the maximum length of
+//		the line in which the report text will be formatted.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (txtLineAvgTimeAtom *textLineSpecAverageTimeAtom) getDurationElementReport(
 	txtLineAvgTimer *TextLineSpecAverageTime,
 	strBuilder *strings.Builder,
 	allocatedDuration TimeDurationDto,
@@ -296,7 +424,7 @@ func (txtLineAvgTimeAtom *textLineSpecAverageTimeAtom) getFullDurationReport(
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
 		"textLineSpecAverageTimeAtom."+
-			"getFullDurationReport()",
+			"getDurationElementReport()",
 		"")
 
 	if err != nil {

@@ -340,8 +340,8 @@ func (txtLineAvgTimeMech *textLineSpecAverageTimeMechanics) addStartStopEvent(
 //
 //	Average time duration data including the minimum and
 //	maximum time duration for this series of timing
-//	events is compiled as text and reported to the
-//	calling function.
+//	events is compiled as text and stored in the input
+//	parameter 'strBuilder'.
 //
 // ----------------------------------------------------------------
 //
@@ -353,6 +353,27 @@ func (txtLineAvgTimeMech *textLineSpecAverageTimeMechanics) addStartStopEvent(
 //		The internal average time counters maintained by
 //		this instance will be used to produce an average
 //		time duration for all recorded timing events.
+//
+//	strBuilder					*strings.Builder
+//
+//		A pointer to an instance of *strings.Builder. The
+//		formatted text characters produced by this method
+//		will be written to this instance of
+//		strings.Builder.
+//
+//	getAbbreviatedReport		bool
+//
+//		This boolean parameter specifies whether a full
+//		or abbreviated report of average time duration
+//		will be compiled.
+//
+//		A full average time report includes separate
+//		presentations for average time duration, maximum
+//		time duration and minimum time duration
+//		associated with the timing event series.
+//
+//		An abbreviated report includes only the average
+//		time report.
 //
 //	errPrefDto					*ePref.ErrPrefixDto
 //
@@ -373,16 +394,6 @@ func (txtLineAvgTimeMech *textLineSpecAverageTimeMechanics) addStartStopEvent(
 //
 // # Return Values
 //
-//	string
-//
-//		If this method completes successfully, this
-//		string will contain a report of average time
-//		duration, minimum time duration and maximum
-//		time duration for the series of timing events
-//		recorded in the instance of
-//		TextLineSpecAverageTime passed as input parameter
-//		'txtLineAvgTimer'.
-//
 //	err							error
 //
 //		If this method completes successfully, the
@@ -398,6 +409,7 @@ func (txtLineAvgTimeMech *textLineSpecAverageTimeMechanics) addStartStopEvent(
 func (txtLineAvgTimeMech *textLineSpecAverageTimeMechanics) getFormattedText(
 	txtLineAvgTimer *TextLineSpecAverageTime,
 	strBuilder *strings.Builder,
+	getAbbreviatedReport bool,
 	errPrefDto *ePref.ErrPrefixDto) error {
 
 	if txtLineAvgTimeMech.lock == nil {
@@ -465,7 +477,7 @@ func (txtLineAvgTimeMech *textLineSpecAverageTimeMechanics) getFormattedText(
 
 	maxLineLength := 60
 
-	err = txtLineAvgTimeAtom.getFullDurationReport(
+	err = txtLineAvgTimeAtom.getDurationElementReport(
 		txtLineAvgTimer,
 		strBuilder,
 		allocatedAvgDuration,
@@ -479,6 +491,11 @@ func (txtLineAvgTimeMech *textLineSpecAverageTimeMechanics) getFormattedText(
 		return err
 	}
 
+	if getAbbreviatedReport == true {
+
+		return err
+	}
+
 	allocatedMaxDuration,
 		err = new(DateTimeHelper).AllocateTimeDuration(
 		maximumTimeDuration,
@@ -489,7 +506,7 @@ func (txtLineAvgTimeMech *textLineSpecAverageTimeMechanics) getFormattedText(
 		return err
 	}
 
-	err = txtLineAvgTimeAtom.getFullDurationReport(
+	err = txtLineAvgTimeAtom.getDurationElementReport(
 		txtLineAvgTimer,
 		strBuilder,
 		allocatedMaxDuration,
@@ -513,7 +530,7 @@ func (txtLineAvgTimeMech *textLineSpecAverageTimeMechanics) getFormattedText(
 		return err
 	}
 
-	err = txtLineAvgTimeAtom.getFullDurationReport(
+	err = txtLineAvgTimeAtom.getDurationElementReport(
 		txtLineAvgTimer,
 		strBuilder,
 		allocatedMinDuration,

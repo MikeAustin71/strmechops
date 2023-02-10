@@ -1308,6 +1308,7 @@ func (txtLineAvgTime *TextLineSpecAverageTime) GetFormattedText(
 		getFormattedText(
 			txtLineAvgTime,
 			&strBuilder,
+			false,
 			ePrefix.XCpy(
 				"strBuilder<-txtLineAvgTime"))
 
@@ -1744,6 +1745,7 @@ func (txtLineAvgTime *TextLineSpecAverageTime) Read(
 			getFormattedText(
 				txtLineAvgTime,
 				&strBuilder,
+				false,
 				ePrefix.XCpy(
 					"strBuilder<-txtLineAvgTime"))
 
@@ -1945,6 +1947,7 @@ func (txtLineAvgTime TextLineSpecAverageTime) String() string {
 		getFormattedText(
 			&txtLineAvgTime,
 			&strBuilder,
+			false,
 			ePrefix.XCpy(
 				"formattedText<-txtLineAvgTime Formatted Text"))
 
@@ -2138,6 +2141,7 @@ func (txtLineAvgTime *TextLineSpecAverageTime) TextBuilder(
 		getFormattedText(
 			txtLineAvgTime,
 			strBuilder,
+			false,
 			ePrefix.XCpy(
 				"strBuilder<-txtLineAvgTime Formatted Text"))
 
