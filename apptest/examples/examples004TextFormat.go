@@ -131,7 +131,7 @@ func (mTxt04 MainTextFormatTest04) TxtLineSpecAvgTimer01() {
 	var avgTimeTxt string
 
 	avgTimeTxt,
-		err = avgTimer.GetFormattedText(
+		err = avgTimer.GetAbbreviatedTextReport(
 		ePrefix.XCpy("avgTimeTxt<-avgTimer"))
 
 	if err != nil {
