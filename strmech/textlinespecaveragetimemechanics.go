@@ -134,19 +134,20 @@ func (txtLineAvgTimeMech *textLineSpecAverageTimeMechanics) addDurationEvent(
 	comparison = txtLineAvgTimer.minimumTimeDuration.Cmp(
 		big.NewInt(0))
 
-	if comparison < 1 {
+	if comparison == 0 {
 
 		txtLineAvgTimer.minimumTimeDuration.Set(bigDuration)
 
 	} else {
 
-		comparison = txtLineAvgTimer.minimumTimeDuration.Cmp(bigDuration)
+		comparison = txtLineAvgTimer.minimumTimeDuration.Cmp(
+			bigDuration)
 
 		if comparison == 1 {
 
 			txtLineAvgTimer.minimumTimeDuration.Set(bigDuration)
-		}
 
+		}
 	}
 
 	return err

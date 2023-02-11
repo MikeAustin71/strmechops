@@ -595,6 +595,8 @@ func (txtFieldType TextFieldType) XIsValid() bool {
 //     "linecolumns"
 //     "timerstartstop"
 //     "textadhoc"
+//     "texttitlemarquee"
+//     "averagetimeevents"
 //
 // ----------------------------------------------------------------
 //
