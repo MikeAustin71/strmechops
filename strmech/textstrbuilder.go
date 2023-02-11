@@ -308,6 +308,18 @@ func (txtStrBuildr *TextStrBuilder) BuildText(
 				return err
 			}
 
+		} else if txtFmtSpecs.fmtCollection[i].FormatType ==
+			TxtFieldType.TextTitleMarquee() {
+
+			err =
+				txtFmtSpecs.fmtCollection[i].TitleMarquee.TextBuilder(
+					strBuilder,
+					ePrefix.XCpy("TitleMarquee"))
+
+			if err != nil {
+				return err
+			}
+
 		} else {
 
 			continue

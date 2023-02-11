@@ -576,6 +576,8 @@ func (txtFieldType TextFieldType) XIsValid() bool {
 //     "LineColumns"
 //     "TimerStartStop"
 //     "TextAdHoc"
+//     "TextTitleMarquee"
+//     "AverageTimeEvents"
 //
 //     If 'false', a case-insensitive search is conducted for the
 //     enumeration name. In this example, 'label'
