@@ -22,6 +22,11 @@ import (
 // average duration for code executions, this type
 // may be used to compute average time for any series
 // of events.
+//
+// Two types or text reports are provided. One type
+// presents the average time duration along with the
+// maximum and minimum time durations in the timing
+// event series.
 type TextLineSpecAverageTime struct {
 	numberOfDurationEvents big.Int
 	totalDurationNanoSecs  big.Int

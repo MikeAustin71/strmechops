@@ -24,6 +24,8 @@ type TextFormatterDto struct {
 	//  TxtFieldType.SolidLine()
 	//  TxtFieldType.LineColumns()
 	//  TxtFieldType.TextAdHoc()
+	//	TxtFieldType.TextTitleMarquee()
+	//	TxtFieldType.AverageTimeEvents()
 
 	DateTime TextFieldDateTimeDto
 	// A structure containing data elements necessary for the
@@ -79,6 +81,27 @@ type TextFormatterDto struct {
 	// no additional formatting is performed on this text, and it is
 	// inserted "as is" in to the final output of formatted text.
 	//
+
+	TitleMarquee TextLineTitleMarqueeDto
+	// Identifies an instance of TextLineTitleMarqueeDto
+	// inserted into the stream of formatted text as is,
+	// without any additional formatting being applied.
+	//
+	// The Text Title Marquee type provides a fast,
+	// efficient means of constructing title lines.
+
+	AverageTimeEvents TextLineSpecAverageTime
+	// Identifies an instance of TextLineSpecAverageTime
+	// inserted into the stream of formatted text as is,
+	// without any additional formatting being applied.
+	//
+	// The Text Line Average Time Specification is
+	// primarily used for timing code execution.
+	//
+	// While the primary usage is envisioned as computing
+	// average duration for code executions, this type
+	// may be used to compute average time for any series
+	// of events.
 
 	lock *sync.Mutex
 }

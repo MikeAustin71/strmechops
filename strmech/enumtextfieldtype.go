@@ -10,46 +10,52 @@ import (
 // the lock on 'lockTextFieldType'.
 
 var mTextFieldTypeCodeToString = map[TextFieldType]string{
-	TextFieldType(0): "None",
-	TextFieldType(1): "Label",
-	TextFieldType(2): "DateTime",
-	TextFieldType(3): "Filler",
-	TextFieldType(4): "Spacer",
-	TextFieldType(5): "BlankLine",
-	TextFieldType(6): "SolidLine",
-	TextFieldType(7): "LineColumns",
-	TextFieldType(8): "TimerStartStop",
-	TextFieldType(9): "TextAdHoc",
+	TextFieldType(0):  "None",
+	TextFieldType(1):  "Label",
+	TextFieldType(2):  "DateTime",
+	TextFieldType(3):  "Filler",
+	TextFieldType(4):  "Spacer",
+	TextFieldType(5):  "BlankLine",
+	TextFieldType(6):  "SolidLine",
+	TextFieldType(7):  "LineColumns",
+	TextFieldType(8):  "TimerStartStop",
+	TextFieldType(9):  "TextAdHoc",
+	TextFieldType(10): "TextTitleMarquee",
+	TextFieldType(11): "AverageTimeEvents",
 }
 
 var mTextFieldTypeStringToCode = map[string]TextFieldType{
-	"None":           TextFieldType(0),
-	"Label":          TextFieldType(1),
-	"DateTime":       TextFieldType(2),
-	"Date Time":      TextFieldType(2),
-	"Date":           TextFieldType(2),
-	"Filler":         TextFieldType(3),
-	"Spacer":         TextFieldType(4),
-	"BlankLine":      TextFieldType(5),
-	"SolidLine":      TextFieldType(6),
-	"LineColumns":    TextFieldType(7),
-	"TimerStartStop": TextFieldType(8),
-	"TextAdHoc":      TextFieldType(9),
+	"None":              TextFieldType(0),
+	"Label":             TextFieldType(1),
+	"DateTime":          TextFieldType(2),
+	"Date Time":         TextFieldType(2),
+	"Date":              TextFieldType(2),
+	"Filler":            TextFieldType(3),
+	"Spacer":            TextFieldType(4),
+	"BlankLine":         TextFieldType(5),
+	"SolidLine":         TextFieldType(6),
+	"LineColumns":       TextFieldType(7),
+	"TimerStartStop":    TextFieldType(8),
+	"TextAdHoc":         TextFieldType(9),
+	"TextTitleMarquee":  TextFieldType(10),
+	"AverageTimeEvents": TextFieldType(11),
 }
 
 var mTextFieldTypeLwrCaseStringToCode = map[string]TextFieldType{
-	"none":           TextFieldType(0),
-	"label":          TextFieldType(1),
-	"datetime":       TextFieldType(2),
-	"date time":      TextFieldType(2),
-	"date":           TextFieldType(2),
-	"filler":         TextFieldType(3),
-	"spacer":         TextFieldType(4),
-	"blankline":      TextFieldType(5),
-	"solidline":      TextFieldType(6),
-	"linecolumns":    TextFieldType(7),
-	"timerstartstop": TextFieldType(8),
-	"textadhoc":      TextFieldType(9),
+	"none":              TextFieldType(0),
+	"label":             TextFieldType(1),
+	"datetime":          TextFieldType(2),
+	"date time":         TextFieldType(2),
+	"date":              TextFieldType(2),
+	"filler":            TextFieldType(3),
+	"spacer":            TextFieldType(4),
+	"blankline":         TextFieldType(5),
+	"solidline":         TextFieldType(6),
+	"linecolumns":       TextFieldType(7),
+	"timerstartstop":    TextFieldType(8),
+	"textadhoc":         TextFieldType(9),
+	"texttitlemarquee":  TextFieldType(10),
+	"averagetimeevents": TextFieldType(11),
 }
 
 // TextFieldType - The 'Text Field Type' is an enumeration of type
@@ -126,95 +132,125 @@ var mTextFieldTypeLwrCaseStringToCode = map[string]TextFieldType{
 //
 // The TextFieldType enumeration methods are described below:
 //
-// Method                   Integer
+//	Method                   Integer
 //
-//	Name                     Value
+//	 Name                     Value
 //
-// ------                   -------
+//	------                   -------
 //
-// None                     Zero (0)
-//   - Signals that the Text Field Type is empty and not
-//     initialized. This is an invalid or error condition.
+//	None					Zero (0)
 //
-// Label                        1
+//		Signals that the Text Field Type is empty and not
+//		initialized. This is an invalid or error condition.
 //
-//   - Identifies the Text Field Specification as a type
-//     TextFieldSpecLabel.
+//	Label                        1
 //
-//     The Label Text Field Specification is used to generate a text
-//     label string. The text label is positioned inside a text
-//     field with a given field length. Text Justification within
-//     this text field is controlled by the Text Justification
-//     specification value which may be set to 'Left', 'Right' or
-//     'Center'. A text label contains a string of text characters.
+//		Identifies the Text Field Specification as a type
+//		TextFieldSpecLabel.
 //
-// DateTime                     2
+//		The Label Text Field Specification is used to generate a
+//		text label string. The text label is positioned inside a
+//		text field with a given field length. Text Justification
+//		within this text field is controlled by the Text
+//		Justification specification value which may be set to
+//		'Left', 'Right' or 'Center'. A text label contains a
+//		string of text characters.
 //
-//   - Identifies the Text Field Specification as a type
-//     TextFieldSpecDateTime.
+//	DateTime                     2
 //
-//     The Date Time Text Field specification is used to produce a
-//     formatted text string from a date/time value.
+//		Identifies the Text Field Specification as a type
+//		TextFieldSpecDateTime.
 //
-// Filler                       3
+//		The Date Time Text Field specification is used to produce
+//		a formatted text string from a date/time value.
 //
-//   - Identifies the Text Field Specification as a type
-//     TextFieldSpecFiller.
+//	Filler                       3
 //
-//     A Filler Text Field Specification is a single character or
-//     character sequence which is replicated multiple times to
-//     create the entire length of the Filler Text Field.
+//		Identifies the Text Field Specification as a type
+//		TextFieldSpecFiller.
 //
-// Spacer                       4
+//		A Filler Text Field Specification is a single character
+//		or character sequence which is replicated multiple
+//		times to create the entire length of the Filler Text
+//		Field.
 //
-//   - Identifies the Text Field Specification as a type
-//     TextFieldSpecSpacer.
+//	Spacer                       4
 //
-//     The Spacer Text Field Specification is used to create a Text
-//     Field consisting of one or more white space characters (" ").
+//		Identifies the Text Field Specification as a type
+//		TextFieldSpecSpacer.
 //
-// BlankLine                    5
-//   - Identifies a type TextLineSpecBlankLines which is used to
-//     generate Blank Lines of text.
+//		The Spacer Text Field Specification is used to create a
+//		Text Field consisting of one or more white space
+//		characters (" ").
 //
-// SolidLine                    6
+//	BlankLine                    5
 //
-//   - Identifies a Solid Line Specification consisting of a left
-//     margin, a 'Filler' field made up of a single or repeating
-//     character sequence, a right margin and a line termination
-//     character sequence. This type of line is implemented using
-//     the TextLineSpecSolidLine Specification.
+//		Identifies a type TextLineSpecBlankLines which is used to
+//		generate Blank Lines of text.
 //
-//     LineColumns                 7
+//	SolidLine                    6
 //
-//   - Identifies a Text Line consisting of one or more text fields
-//     or text columns.
+//		Identifies a Solid Line Specification consisting of a left
+//		margin, a 'Filler' field made up of a single or repeating
+//		character sequence, a right margin and a line termination
+//		character sequence. This type of line is implemented using
+//		the TextLineSpecSolidLine Specification.
 //
-//     The line/column architecture differs from single text fields
-//     in that text lines includes margins on both sides of the
-//     column in addition to providing input parameters for
-//     line-termination characters such as new line characters
-//     ('\n').
+//	LineColumns                 7
 //
-//     TimerStartStop              8
+//		Identifies a Text Line consisting of one or more text
+//		fields or text columns.
 //
-//   - Identifies a display of four text lines presenting the
-//     results of a timer event. This timer event is described with
-//     a start time, stop time and time duration or elapsed time.
+//		The line/column architecture differs from single text
+//		fields in that text lines includes margins on both sides
+//		of the column in addition to providing input parameters
+//		for line-termination characters such as new line
+//		characters ('\n').
 //
-//     The first line of text shows the Starting Time. The second
-//     line shows the Ending Time. The third line displays the time
-//     duration or the difference between starting time and ending
-//     time. The fourth line displays the total elapsed time in
-//     nanoseconds.
+//	TimerStartStop				8
 //
-//     For more information reference type TextLineSpecTimerLines.
+//		Identifies a display of four text lines presenting the
+//		results of a timer event. This timer event is described
+//		with a start time, stop time and time duration or elapsed
+//		time.
 //
-//     TextAdHoc                   9
+//		The first line of text shows the Starting Time. The second
+//		line shows the Ending Time. The third line displays the
+//		time duration or the difference between starting time and
+//		ending time. The fourth line displays the total elapsed
+//		time in nanoseconds.
 //
-//   - Identifies a string of ad hoc text which will be inserted
-//     into the stream of formatted text as is, without any
-//     additional formatting being applied.
+//		For more information, reference type
+//		TextLineSpecTimerLines.
+//
+//	TextAdHoc					9
+//
+//		Identifies a string of ad hoc text which will be inserted
+//		into the stream of formatted text as is, without any
+//		additional formatting being applied.
+//
+//	TextTitleMarquee			10
+//
+//		Identifies an instance of TextLineTitleMarqueeDto
+//		inserted into the stream of formatted text as is,
+//		without any additional formatting being applied.
+//
+//		The Text Title Marquee type provides a fast,
+//		efficient means of constructing title lines.
+//
+//	AverageTimeEvents			11
+//
+//		Identifies an instance of TextLineSpecAverageTime
+//		inserted into the stream of formatted text as is,
+//		without any additional formatting being applied.
+//
+//		The Text Line Average Time Specification is
+//		primarily used for timing code execution.
+//
+//		While the primary usage is envisioned as computing
+//		average duration for code executions, this type
+//		may be used to compute average time for any series
+//		of events.
 //
 // ----------------------------------------------------------------
 //
@@ -397,6 +433,45 @@ func (txtFieldType TextFieldType) TextAdHoc() TextFieldType {
 	defer lockTextFieldType.Unlock()
 
 	return TextFieldType(9)
+}
+
+// TextTitleMarquee
+//
+// Identifies an instance of TextLineTitleMarqueeDto
+// inserted into the stream of formatted text as is,
+// without any additional formatting being applied.
+//
+// The Text Title Marquee type provides a fast,
+// efficient means of constructing title lines.
+func (txtFieldType TextFieldType) TextTitleMarquee() TextFieldType {
+
+	lockTextFieldType.Lock()
+
+	defer lockTextFieldType.Unlock()
+
+	return TextFieldType(10)
+}
+
+// AverageTimeEvents
+//
+// Identifies an instance of TextLineSpecAverageTime
+// inserted into the stream of formatted text as is,
+// without any additional formatting being applied.
+//
+// The Text Line Average Time Specification is
+// primarily used for timing code execution.
+//
+// While the primary usage is envisioned as computing
+// average duration for code executions, this type
+// may be used to compute average time for any series
+// of events.
+func (txtFieldType TextFieldType) AverageTimeEvents() TextFieldType {
+
+	lockTextFieldType.Lock()
+
+	defer lockTextFieldType.Unlock()
+
+	return TextFieldType(11)
 }
 
 // String - Returns a string with the name of the enumeration
@@ -690,6 +765,8 @@ func (txtFieldType TextFieldType) XValueInt() int {
 //	TxtFieldType.LineColumns()
 //	TxtFieldType.TimerStartStop()
 //	TxtFieldType.TextAdHoc()
+//	TxtFieldType.TextTitleMarquee()
+//	TxtFieldType.AverageTimeEvents()
 const TxtFieldType = TextFieldType(0)
 
 // textFieldTypeNanobot - Provides helper methods for
@@ -722,7 +799,7 @@ func (textFieldNanobot *textFieldTypeNanobot) isValidTextField(
 	defer textFieldNanobot.lock.Unlock()
 
 	if textFieldType < 1 ||
-		textFieldType > 9 {
+		textFieldType > 11 {
 
 		return false
 	}
