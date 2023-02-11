@@ -1921,6 +1921,64 @@ func (txtLineAvgTime *TextLineSpecAverageTime) ReaderInitialize() {
 	return
 }
 
+// SetAbbreviatedReportFormat
+//
+// Calling this method will set the default report format
+// to the "Abbreviated Report Format".
+//
+// TextLineSpecAverageTime produces two types reports.
+//
+//	(1)	A "Full" report presents timing data on average
+//		time duration, minimum time duration and maximum
+//		time duration.
+//
+//	(2)	The second type of report is an "Abbreviated"
+//		report which only presents timing data on average
+//		duration. It does NOT include timing data on
+//		minimum time duration and maximum time duration.
+//
+// The type of report prepared by this method will depend
+// on the current default report format setting.
+//
+// This method will set the default report format to the
+// "Abbreviated Report Format". This means that future
+// calls to the following methods will yield a timing
+// report presented with the Abbreviated Report Format:
+//
+//	TextLineSpecAverageTime.String()
+//	TextLineSpecAverageTime.GetFormattedText()
+//	TextLineSpecAverageTime.TextBuilder()
+//
+// By default, all instances of TextLineSpecAverageTime
+// are initially created with a default of "Full Report
+// Format". However, users have the option to designate
+// the "Abbreviated Report Format" as the default report
+// format by calling this method.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	--- NONE ---
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	--- NONE ---
+func (txtLineAvgTime *TextLineSpecAverageTime) SetAbbreviatedReportFormat() {
+
+	if txtLineAvgTime.lock == nil {
+		txtLineAvgTime.lock = new(sync.Mutex)
+	}
+
+	txtLineAvgTime.lock.Lock()
+
+	defer txtLineAvgTime.lock.Unlock()
+
+	txtLineAvgTime.applyAbbreviatedReportFormat = true
+}
+
 // SetFullReportFormat
 //
 // Calling this method will set the default report format
@@ -1948,6 +2006,12 @@ func (txtLineAvgTime *TextLineSpecAverageTime) ReaderInitialize() {
 //	TextLineSpecAverageTime.String()
 //	TextLineSpecAverageTime.GetFormattedText()
 //	TextLineSpecAverageTime.TextBuilder()
+//
+// By default, all instances of TextLineSpecAverageTime
+// are initially created with a default of "Full Report
+// Format". However, users may find it necessary to
+// reinstate the "Full Report Format" as the default
+// report format by calling this method.
 //
 // ----------------------------------------------------------------
 //
