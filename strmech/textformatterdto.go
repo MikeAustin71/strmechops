@@ -25,7 +25,7 @@ type TextFormatterDto struct {
 	//  TxtFieldType.LineColumns()
 	//  TxtFieldType.TextAdHoc()
 	//	TxtFieldType.TextTitleMarquee()
-	//	TxtFieldType.AverageTimeEvents()
+	//	TxtFieldType.AverageEventsTimer()
 
 	DateTime TextFieldDateTimeDto
 	// A structure containing data elements necessary for the
@@ -90,7 +90,7 @@ type TextFormatterDto struct {
 	// The Text Title Marquee type provides a fast,
 	// efficient means of constructing title lines.
 
-	AverageTimeEvents TextLineSpecAverageTime
+	AverageEventsTimer TextLineSpecAverageTime
 	// Identifies an instance of TextLineSpecAverageTime
 	// inserted into the stream of formatted text as is,
 	// without any additional formatting being applied.

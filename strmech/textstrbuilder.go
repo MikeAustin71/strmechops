@@ -309,12 +309,30 @@ func (txtStrBuildr *TextStrBuilder) BuildText(
 			}
 
 		} else if txtFmtSpecs.fmtCollection[i].FormatType ==
+			TxtFieldType.AverageEventsTimer() {
+
+			err =
+				txtFmtSpecs.fmtCollection[i].AverageEventsTimer.TextBuilder(
+					strBuilder,
+					ePrefix.XCpy(fmt.Sprintf(
+						"strBuilder<-"+
+							"txtFmtSpecs.fmtCollection[%v].AverageEventsTimer",
+						i)))
+
+			if err != nil {
+				return err
+			}
+
+		} else if txtFmtSpecs.fmtCollection[i].FormatType ==
 			TxtFieldType.TextTitleMarquee() {
 
 			err =
 				txtFmtSpecs.fmtCollection[i].TitleMarquee.TextBuilder(
 					strBuilder,
-					ePrefix.XCpy("TitleMarquee"))
+					ePrefix.XCpy(fmt.Sprintf(
+						"strBuilder"+
+							"<-txtFmtSpecs.fmtCollection[%v].TitleMarquee",
+						i)))
 
 			if err != nil {
 				return err

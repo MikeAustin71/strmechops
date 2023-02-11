@@ -21,41 +21,41 @@ var mTextFieldTypeCodeToString = map[TextFieldType]string{
 	TextFieldType(8):  "TimerStartStop",
 	TextFieldType(9):  "TextAdHoc",
 	TextFieldType(10): "TextTitleMarquee",
-	TextFieldType(11): "AverageTimeEvents",
+	TextFieldType(11): "AverageEventsTimer",
 }
 
 var mTextFieldTypeStringToCode = map[string]TextFieldType{
-	"None":              TextFieldType(0),
-	"Label":             TextFieldType(1),
-	"DateTime":          TextFieldType(2),
-	"Date Time":         TextFieldType(2),
-	"Date":              TextFieldType(2),
-	"Filler":            TextFieldType(3),
-	"Spacer":            TextFieldType(4),
-	"BlankLine":         TextFieldType(5),
-	"SolidLine":         TextFieldType(6),
-	"LineColumns":       TextFieldType(7),
-	"TimerStartStop":    TextFieldType(8),
-	"TextAdHoc":         TextFieldType(9),
-	"TextTitleMarquee":  TextFieldType(10),
-	"AverageTimeEvents": TextFieldType(11),
+	"None":               TextFieldType(0),
+	"Label":              TextFieldType(1),
+	"DateTime":           TextFieldType(2),
+	"Date Time":          TextFieldType(2),
+	"Date":               TextFieldType(2),
+	"Filler":             TextFieldType(3),
+	"Spacer":             TextFieldType(4),
+	"BlankLine":          TextFieldType(5),
+	"SolidLine":          TextFieldType(6),
+	"LineColumns":        TextFieldType(7),
+	"TimerStartStop":     TextFieldType(8),
+	"TextAdHoc":          TextFieldType(9),
+	"TextTitleMarquee":   TextFieldType(10),
+	"AverageEventsTimer": TextFieldType(11),
 }
 
 var mTextFieldTypeLwrCaseStringToCode = map[string]TextFieldType{
-	"none":              TextFieldType(0),
-	"label":             TextFieldType(1),
-	"datetime":          TextFieldType(2),
-	"date time":         TextFieldType(2),
-	"date":              TextFieldType(2),
-	"filler":            TextFieldType(3),
-	"spacer":            TextFieldType(4),
-	"blankline":         TextFieldType(5),
-	"solidline":         TextFieldType(6),
-	"linecolumns":       TextFieldType(7),
-	"timerstartstop":    TextFieldType(8),
-	"textadhoc":         TextFieldType(9),
-	"texttitlemarquee":  TextFieldType(10),
-	"averagetimeevents": TextFieldType(11),
+	"none":               TextFieldType(0),
+	"label":              TextFieldType(1),
+	"datetime":           TextFieldType(2),
+	"date time":          TextFieldType(2),
+	"date":               TextFieldType(2),
+	"filler":             TextFieldType(3),
+	"spacer":             TextFieldType(4),
+	"blankline":          TextFieldType(5),
+	"solidline":          TextFieldType(6),
+	"linecolumns":        TextFieldType(7),
+	"timerstartstop":     TextFieldType(8),
+	"textadhoc":          TextFieldType(9),
+	"texttitlemarquee":   TextFieldType(10),
+	"averageeventstimer": TextFieldType(11),
 }
 
 // TextFieldType - The 'Text Field Type' is an enumeration of type
@@ -238,7 +238,7 @@ var mTextFieldTypeLwrCaseStringToCode = map[string]TextFieldType{
 //		The Text Title Marquee type provides a fast,
 //		efficient means of constructing title lines.
 //
-//	AverageTimeEvents			11
+//	AverageEventsTimer			11
 //
 //		Identifies an instance of TextLineSpecAverageTime
 //		inserted into the stream of formatted text as is,
@@ -452,7 +452,7 @@ func (txtFieldType TextFieldType) TextTitleMarquee() TextFieldType {
 	return TextFieldType(10)
 }
 
-// AverageTimeEvents
+// AverageEventsTimer
 //
 // Identifies an instance of TextLineSpecAverageTime
 // inserted into the stream of formatted text as is,
@@ -465,7 +465,7 @@ func (txtFieldType TextFieldType) TextTitleMarquee() TextFieldType {
 // average duration for code executions, this type
 // may be used to compute average time for any series
 // of events.
-func (txtFieldType TextFieldType) AverageTimeEvents() TextFieldType {
+func (txtFieldType TextFieldType) AverageEventsTimer() TextFieldType {
 
 	lockTextFieldType.Lock()
 
@@ -577,7 +577,7 @@ func (txtFieldType TextFieldType) XIsValid() bool {
 //     "TimerStartStop"
 //     "TextAdHoc"
 //     "TextTitleMarquee"
-//     "AverageTimeEvents"
+//     "AverageEventsTimer"
 //
 //     If 'false', a case-insensitive search is conducted for the
 //     enumeration name. In this example, 'label'
@@ -598,7 +598,7 @@ func (txtFieldType TextFieldType) XIsValid() bool {
 //     "timerstartstop"
 //     "textadhoc"
 //     "texttitlemarquee"
-//     "averagetimeevents"
+//     "averageeventstimer"
 //
 // ----------------------------------------------------------------
 //
@@ -770,7 +770,7 @@ func (txtFieldType TextFieldType) XValueInt() int {
 //	TxtFieldType.TimerStartStop()
 //	TxtFieldType.TextAdHoc()
 //	TxtFieldType.TextTitleMarquee()
-//	TxtFieldType.AverageTimeEvents()
+//	TxtFieldType.AverageEventsTimer()
 const TxtFieldType = TextFieldType(0)
 
 // textFieldTypeNanobot - Provides helper methods for
