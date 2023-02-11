@@ -4,6 +4,7 @@ import (
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
 	"io"
+	"math"
 	"math/big"
 	"strings"
 	"sync"
@@ -321,9 +322,8 @@ func (txtLineAvgTime *TextLineSpecAverageTime) AddStartStopEvent(
 //	CalcAvgTimeDuration
 //
 //	Calculates the average duration of a timer event
-//	series encapsulated in the current instance of
+//	series recorded in the current instance of
 //	TextLineSpecAverageTime.
-//	passed as input parameter 'txtLineAvgTimer'.
 //
 //	Average time duration is calculated by dividing the
 //	total time duration by the number of separate timing
@@ -423,6 +423,15 @@ func (txtLineAvgTime *TextLineSpecAverageTime) AddStartStopEvent(
 //		parameter will return the minimum time duration
 //		from all recorded timing events.
 //
+//	numberOfTimingEvents		int64
+//
+//		The number of timing events recorded in the
+//		current instance of TextLineSpecAverageTime.
+//
+//		The number of timing events is used to
+//		calculate average time duration for the time
+//		series.
+//
 //	err							error
 //
 //		If this method completes successfully, the
@@ -440,6 +449,7 @@ func (txtLineAvgTime *TextLineSpecAverageTime) CalcAvgTimeDuration(
 	avgDuration int64,
 	maximumTimeDuration int64,
 	minimumTimeDuration int64,
+	numberOfTimingEvents int64,
 	err error) {
 
 	if txtLineAvgTime.lock == nil {
@@ -464,6 +474,7 @@ func (txtLineAvgTime *TextLineSpecAverageTime) CalcAvgTimeDuration(
 		return avgDuration,
 			maximumTimeDuration,
 			minimumTimeDuration,
+			numberOfTimingEvents,
 			err
 	}
 
@@ -476,9 +487,362 @@ func (txtLineAvgTime *TextLineSpecAverageTime) CalcAvgTimeDuration(
 			ePrefix.XCpy(
 				"txtLineAvgTime"))
 
+	if err != nil {
+
+		return avgDuration,
+			maximumTimeDuration,
+			minimumTimeDuration,
+			numberOfTimingEvents,
+			err
+	}
+
+	maxInt64Value := big.NewInt(
+		math.MaxInt64)
+
+	comparison := txtLineAvgTime.
+		numberOfDurationEvents.Cmp(maxInt64Value)
+
+	if comparison == 1 {
+		err = fmt.Errorf("%v\n"+
+			"Error: The number of timing events exceeds\n"+
+			"the maximum value for a 64-bit integer (int64).\n"+
+			"Number Of Timing Events = %v\n",
+			ePrefix.String(),
+			txtLineAvgTime.numberOfDurationEvents.Text(10))
+
+		return avgDuration,
+			maximumTimeDuration,
+			minimumTimeDuration,
+			numberOfTimingEvents,
+			err
+	}
+
+	numberOfTimingEvents =
+		txtLineAvgTime.numberOfDurationEvents.Int64()
+
 	return avgDuration,
 		maximumTimeDuration,
 		minimumTimeDuration,
+		numberOfTimingEvents,
+		err
+}
+
+//	CalcAvgTimeDurationDetail
+//
+//	Calculates and returns a detailed breakdown of the
+//	average duration, maximum duration and minimum
+//	duration for a timer event series recorded in the
+//	current instance of TextLineSpecAverageTime.
+//
+//	Average time duration is calculated by dividing the
+//	total time duration by the number of separate timing
+//	events.
+//
+//	The data returned by this method breaks down
+//	average time duration, maximum time duration and
+//	minimum time duration by days, hours, minutes,
+//	seconds, milliseconds, microseconds and nanoseconds.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	The detail data for average time duration, maximum
+//	time duration and minimum time duration is returned
+//	as a type TimeDurationDto. This structure provides
+//	a breakdown of time duration data by days, hours,
+//	minutes, seconds, milliseconds, microseconds and
+//	nanoseconds.
+//
+//		type TimeDurationDto struct {
+//
+//			TotalNanoseconds int64
+//				The total number of Nanoseconds to
+//				be allocated.
+//
+//			NumberOfDays int64
+//				The number Days represented by
+//				'TotalNanoseconds'.
+//
+//			NumberOfHours int64
+//				The number Hours represented by
+//				'TotalNanoseconds'.
+//
+//			NumberOfMinutes int64
+//				The number Minutes represented by
+//				'TotalNanoseconds'.
+//
+//			NumberOfSeconds int64
+//				The number Seconds represented by
+//				'TotalNanoseconds'.
+//
+//			NumberOfMilliseconds int64
+//				The number Milliseconds represented by
+//				'TotalNanoseconds'.
+//
+//			NumberOfMicroseconds int64
+//				The number Microseconds represented by
+//				'TotalNanoseconds'.
+//
+//			NumberOfNanoseconds int64
+//				The number Nanoseconds remaining after
+//				the allocation of Microseconds.
+//		}
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	allocatedAvgDuration		TimeDurationDto
+//
+//		If this method completes successfully, this
+//		parameter will return the average time duration
+//		for all recorded timing events in the current
+//		instance of TextLineSpecAverageTime. Average
+//		duration is calculated by dividing the total
+//		time duration by the number of separate timing
+//		events.
+//
+//		Type TimeDurationDto will present average time
+//		duration by days, hours, minutes, seconds,
+//		milliseconds, microseconds and nanoseconds.
+//
+//	allocatedMaxDuration		TimeDurationDto
+//
+//		If this method completes successfully, this
+//		parameter will return the maximum time duration
+//		for all recorded timing events in the current
+//		instance of TextLineSpecAverageTime.
+//
+//		Type TimeDurationDto will present maximum time
+//		duration by days, hours, minutes, seconds,
+//		milliseconds, microseconds and nanoseconds.
+//
+//	allocatedMinDuration		TimeDurationDto
+//
+//		If this method completes successfully, this
+//		parameter will return the minimum time duration
+//		for all recorded timing events in the current
+//		instance of TextLineSpecAverageTime.
+//
+//		Type TimeDurationDto will present minimum time
+//		duration by days, hours, minutes, seconds,
+//		milliseconds, microseconds and nanoseconds.
+//
+//	numberOfTimingEvents		int64
+//
+//		The number of timing events recorded in the
+//		current instance of TextLineSpecAverageTime.
+//
+//		The number of timing events is used to
+//		calculate average time duration for the time
+//		series.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (txtLineAvgTime *TextLineSpecAverageTime) CalcAvgTimeDurationDetail(
+	errorPrefix interface{}) (
+	allocatedAvgDuration TimeDurationDto,
+	allocatedMaxDuration TimeDurationDto,
+	allocatedMinDuration TimeDurationDto,
+	numberOfTimingEvents int64,
+	err error) {
+
+	if txtLineAvgTime.lock == nil {
+		txtLineAvgTime.lock = new(sync.Mutex)
+	}
+
+	txtLineAvgTime.lock.Lock()
+
+	defer txtLineAvgTime.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecAverageTime."+
+			"CalcAvgTimeDurationDetail()",
+		"")
+
+	if err != nil {
+
+		return allocatedAvgDuration,
+			allocatedMaxDuration,
+			allocatedMinDuration,
+			numberOfTimingEvents,
+			err
+	}
+
+	var avgDuration, maximumTimeDuration,
+		minimumTimeDuration int64
+
+	avgDuration,
+		maximumTimeDuration,
+		minimumTimeDuration,
+		err = new(textLineSpecAverageTimeAtom).
+		calcAverageDuration(
+			txtLineAvgTime,
+			ePrefix.XCpy(
+				"txtLineAvgTime"))
+
+	if err != nil {
+
+		return allocatedAvgDuration,
+			allocatedMaxDuration,
+			allocatedMinDuration,
+			numberOfTimingEvents,
+			err
+	}
+
+	dateTimeHelper := new(DateTimeHelper)
+
+	allocatedAvgDuration,
+		err = dateTimeHelper.AllocateTimeDuration(
+		avgDuration,
+		ePrefix.XCpy(
+			"allocatedAvgDuration<-avgDuration"))
+
+	if err != nil {
+
+		return allocatedAvgDuration,
+			allocatedMaxDuration,
+			allocatedMinDuration,
+			numberOfTimingEvents,
+			err
+	}
+
+	allocatedMaxDuration,
+		err = dateTimeHelper.AllocateTimeDuration(
+		maximumTimeDuration,
+		ePrefix.XCpy(
+			"allocatedMaxDuration<-maximumTimeDuration"))
+
+	if err != nil {
+
+		return allocatedAvgDuration,
+			allocatedMaxDuration,
+			allocatedMinDuration,
+			numberOfTimingEvents,
+			err
+	}
+
+	allocatedMinDuration,
+		err = dateTimeHelper.AllocateTimeDuration(
+		minimumTimeDuration,
+		ePrefix.XCpy(
+			"allocatedMinDuration<-minimumTimeDuration"))
+
+	if err != nil {
+
+		return allocatedAvgDuration,
+			allocatedMaxDuration,
+			allocatedMinDuration,
+			numberOfTimingEvents,
+			err
+	}
+
+	maxInt64Value := big.NewInt(
+		math.MaxInt64)
+
+	comparison := txtLineAvgTime.
+		numberOfDurationEvents.Cmp(maxInt64Value)
+
+	if comparison == 1 {
+		err = fmt.Errorf("%v\n"+
+			"Error: The number of timing events exceeds\n"+
+			"the maximum value for a 64-bit integer (int64).\n"+
+			"Number Of Timing Events = %v\n",
+			ePrefix.String(),
+			txtLineAvgTime.numberOfDurationEvents.Text(10))
+
+		return allocatedAvgDuration,
+			allocatedMaxDuration,
+			allocatedMinDuration,
+			numberOfTimingEvents,
+			err
+	}
+
+	numberOfTimingEvents =
+		txtLineAvgTime.numberOfDurationEvents.Int64()
+
+	return allocatedAvgDuration,
+		allocatedMaxDuration,
+		allocatedMinDuration,
+		numberOfTimingEvents,
 		err
 }
 

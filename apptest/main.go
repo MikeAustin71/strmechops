@@ -7,6 +7,6 @@ import "github.com/MikeAustin71/strmechops/apptest/examples"
 
 func main() {
 
-	examples.MainTextFormatTest04{}.TxtLineSpecAvgTimer01()
+	examples.MainTextFormatTest04{}.TxtLineSpecAvgTimer02()
 
 }

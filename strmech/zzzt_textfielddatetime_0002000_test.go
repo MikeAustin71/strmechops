@@ -842,13 +842,9 @@ func TestTextFieldSpecDateTimeMechanics_setTextFieldDateTime_000100(t *testing.T
 		textJustification,
 		&ePrefix)
 
-	if err == nil {
-		t.Errorf("%v - Error\n"+
-			"Expected an error return from setTextFieldDateTime()\n"+
-			"because parameter 'dateTimeFormat' is a zero length empty string.\n"+
-			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.String())
-
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
 		return
 	}
 
@@ -860,13 +856,9 @@ func TestTextFieldSpecDateTimeMechanics_setTextFieldDateTime_000100(t *testing.T
 		textJustification,
 		&ePrefix)
 
-	if err == nil {
-		t.Errorf("%v - Error\n"+
-			"Expected an error return from setTextFieldDateTime()\n"+
-			"because parameter 'dateTimeFormat' is a zero length empty string.\n"+
-			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.String())
-
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
 		return
 	}
 

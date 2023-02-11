@@ -15,7 +15,7 @@ type MainTextFormatTest04 struct {
 func (mTxt04 MainTextFormatTest04) TxtLineSpecAvgTimer01() {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"MainTextFormatTest04.TxtLineMarquee001()",
+		"MainTextFormatTest04.TxtLineSpecAvgTimer01()",
 		"")
 
 	titleMarquee := strmech.TextLineTitleMarqueeDto{
@@ -115,6 +115,191 @@ func (mTxt04 MainTextFormatTest04) TxtLineSpecAvgTimer01() {
 			ePrefix.XCpy(
 				fmt.Sprintf("i= %v sleepSeconds= %v\n",
 					i, sleepSeconds)))
+
+		if err != nil {
+
+			fmt.Printf("\n\n%v\n"+
+				"%v\n",
+				ePrefix.String(),
+				err.Error())
+
+			return
+		}
+
+	}
+
+	avgTimer.SetAbbreviatedReportFormat()
+
+	var avgTimeTxt string
+
+	avgTimeTxt,
+		err = avgTimer.GetFormattedText(
+		ePrefix.XCpy("avgTimeTxt<-avgTimer"))
+
+	if err != nil {
+
+		fmt.Printf("\n\n%v\n"+
+			"%v\n",
+			ePrefix.String(),
+			err.Error())
+
+		return
+	}
+
+	fmt.Printf(avgTimeTxt)
+
+	// ------------------------------------------------
+
+	lenMethodName := len(ePrefix.String())
+
+	lenMethodName += 9
+
+	titleMarquee = strmech.TextLineTitleMarqueeDto{
+		StandardSolidLineLeftMargin:  "  ",
+		StandardSolidLineRightMargin: "",
+		StandardTitleLeftMargin:      "  ",
+		StandardTitleRightMargin:     "",
+		StandardMaxLineLen:           lenMethodName,
+		StandardTextFieldLen:         lenMethodName,
+		StandardTextJustification:    strmech.TxtJustify.Center(),
+		NumLeadingBlankLines:         1,
+		LeadingSolidLineChar:         "-",
+		NumLeadingSolidLines:         2,
+		NumTopTitleBlankLines:        1,
+		TitleLines:                   strmech.TextLineSpecLinesCollection{},
+		NumBottomTitleBlankLines:     1,
+		TrailingSolidLineChar:        "-",
+		NumTrailingSolidLines:        2,
+		NumTrailingBlankLines:        1,
+	}
+
+	err = titleMarquee.AddTitleLineStrings(
+		ePrefix.XCpy("titleMarquee Trailing Marquee"),
+		ePrefix.String(),
+		"SUCCESSFUL COMPLETION!!")
+
+	if err != nil {
+
+		fmt.Printf("\n\n%v\n"+
+			"%v\n",
+			ePrefix.String(),
+			err.Error())
+
+		return
+	}
+
+	titleStr,
+		err = titleMarquee.GetFormattedText(
+		ePrefix.XCpy("textLines Trailing Marquee"))
+
+	if err != nil {
+
+		fmt.Printf("\n\n%v\n"+
+			"%v\n",
+			ePrefix.String(),
+			err.Error())
+
+		return
+	}
+
+	fmt.Printf(titleStr)
+}
+
+func (mTxt04 MainTextFormatTest04) TxtLineSpecAvgTimer02() {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"MainTextFormatTest04.TxtLineSpecAvgTimer02()",
+		"")
+
+	titleMarquee := strmech.TextLineTitleMarqueeDto{
+		StandardSolidLineLeftMargin:  " *",
+		StandardSolidLineRightMargin: "*",
+		StandardTitleLeftMargin:      " *",
+		StandardTitleRightMargin:     "*",
+		StandardMaxLineLen:           65,
+		StandardTextFieldLen:         65,
+		StandardTextJustification:    strmech.TxtJustify.Center(),
+		NumLeadingBlankLines:         1,
+		LeadingSolidLineChar:         "*",
+		NumLeadingSolidLines:         2,
+		NumTopTitleBlankLines:        1,
+		TitleLines:                   strmech.TextLineSpecLinesCollection{},
+		NumBottomTitleBlankLines:     1,
+		TrailingSolidLineChar:        "*",
+		NumTrailingSolidLines:        2,
+		NumTrailingBlankLines:        1,
+	}
+
+	var err error
+
+	err = titleMarquee.AddTitleLineStrings(
+		ePrefix.XCpy("titleMarquee"),
+		ePrefix.String(),
+		"Starting Execution")
+
+	if err != nil {
+
+		fmt.Printf("\n\n%v\n"+
+			"%v\n",
+			ePrefix.String(),
+			err.Error())
+
+		return
+	}
+
+	err = titleMarquee.AddTitleLineDateTimeStr(
+		time.Now(),
+		new(strmech.DateTimeHelper).GetDateTimeFormat(2),
+		ePrefix.XCpy(
+			"titleMarquee Leading Marquee"))
+
+	if err != nil {
+
+		fmt.Printf("\n\n%v\n"+
+			"%v\n",
+			ePrefix.String(),
+			err.Error())
+
+		return
+	}
+
+	var titleStr string
+
+	titleStr,
+		err = titleMarquee.GetFormattedText(
+		ePrefix.XCpy("textLines Leading Marquee"))
+
+	if err != nil {
+
+		fmt.Printf("\n\n%v\n"+
+			"%v\n",
+			ePrefix.String(),
+			err.Error())
+
+		return
+	}
+
+	fmt.Printf(titleStr)
+
+	// ------------------------------------------------
+
+	var avgTimer strmech.TextLineSpecAverageTime
+
+	mockDurations := make([]int64, 5)
+
+	mockDurations[0] = 15415462
+	mockDurations[1] = 13605311
+	mockDurations[2] = 17321123
+	mockDurations[3] = 18681792
+	mockDurations[4] = 16415443
+
+	for i := 0; i < len(mockDurations); i++ {
+
+		err = avgTimer.AddDurationEvent(
+			time.Duration(mockDurations[i]),
+			ePrefix.XCpy(
+				fmt.Sprintf("mockDurations[%v]= %v\n",
+					i, mockDurations[i])))
 
 		if err != nil {
 
