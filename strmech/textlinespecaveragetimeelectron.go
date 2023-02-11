@@ -367,6 +367,8 @@ func (txtLineAvgTimeElectron *textLineSpecAverageTimeElectron) empty(
 
 	txtLineAvgTimer.minimumTimeDuration.SetInt64(0)
 
+	txtLineAvgTimer.applyAbbreviatedReportFormat = false
+
 	return
 }
 
@@ -460,6 +462,12 @@ func (txtLineAvgTimeElectron *textLineSpecAverageTimeElectron) equal(
 
 	if txtLineAvgTimerOne.minimumTimeDuration.Cmp(
 		&txtLineAvgTimerTwo.minimumTimeDuration) != 0 {
+
+		return false
+	}
+
+	if txtLineAvgTimerOne.applyAbbreviatedReportFormat !=
+		txtLineAvgTimerTwo.applyAbbreviatedReportFormat {
 
 		return false
 	}

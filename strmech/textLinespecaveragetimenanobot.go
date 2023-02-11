@@ -149,5 +149,14 @@ func (txtLineAvgTimeNanobot *textLineSpecAverageTimeNanobot) copy(
 	destinationAvgTimer.totalDurationNanoSecs.Set(
 		&sourceAvgTimer.totalDurationNanoSecs)
 
+	destinationAvgTimer.maximumTimeDuration.Set(
+		&sourceAvgTimer.maximumTimeDuration)
+
+	destinationAvgTimer.minimumTimeDuration.Set(
+		&sourceAvgTimer.minimumTimeDuration)
+
+	destinationAvgTimer.applyAbbreviatedReportFormat =
+		sourceAvgTimer.applyAbbreviatedReportFormat
+
 	return err
 }

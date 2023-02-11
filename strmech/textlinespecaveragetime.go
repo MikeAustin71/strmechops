@@ -28,12 +28,13 @@ import (
 // maximum and minimum time durations in the timing
 // event series.
 type TextLineSpecAverageTime struct {
-	numberOfDurationEvents big.Int
-	totalDurationNanoSecs  big.Int
-	maximumTimeDuration    big.Int
-	minimumTimeDuration    big.Int
-	textLineReader         *strings.Reader
-	lock                   *sync.Mutex
+	numberOfDurationEvents       big.Int
+	totalDurationNanoSecs        big.Int
+	maximumTimeDuration          big.Int
+	minimumTimeDuration          big.Int
+	applyAbbreviatedReportFormat bool
+	textLineReader               *strings.Reader
+	lock                         *sync.Mutex
 }
 
 //	AddDurationEvent
@@ -1143,149 +1144,79 @@ func (txtLineAvgTime *TextLineSpecAverageTime) EqualITextLine(
 		avgTimer)
 }
 
-//	GetAbbreviatedTextReport
+// GetDefaultReportFormat
 //
-//	Configures the lines of text produced by this instance
-//	of TextLineSpecAverageTime, and writes it to an
-//	instance of strings.Builder.
+// Returns a boolean value specifying the default report
+// format type.
 //
-//	Returns the calculated average time duration for all
-//	the timing events currently recorded by the current
-//	instance of TextLineSpecAverageTime.
+// TextLineSpecAverageTime produces two types reports.
 //
-//	This abbreviated report does NOT include the minimum
-//	or maximum time durations recorded for this timing
-//	event series.
+//	(1)	A "Full" report presents timing data on average
+//		time duration, minimum time duration and maximum
+//		time duration.
 //
-//	This method will compile the calculated timing data
-//	as formatted text for screen displays, file output or
-//	printing.
+//	(2)	The second type of report is an "Abbreviated"
+//		report which only presents timing data on average
+//		duration. It does NOT include timing data on
+//		minimum time duration and maximum time duration.
 //
-//	This method is similar to method:
+// If the returned boolean value is set to 'true', it
+// signals that all reporting methods will return timing
+// reports using the Full Report Format.
 //
-//		TextLineSpecAverageTime.String()
+// If the returned boolean value is set to 'false', it
+// signals that all reporting methods will return timing
+// reports using the Abbreviated Report Format.
 //
-//	The sole difference between that method and this is
-//	the return type. This method returns an error.
+// By default, all instances of TextLineSpecAverageTime
+// are initially created with a default of "Full Report
+// Format".
 //
-//	If the text report format produced by this method is
-//	unsuitable, the user should call method:
+// Users have the option to control the report format
+// applied by the current instance of
+// TextLineSpecAverageTime. The default report format
+// is controlled by calling the following methods:
 //
-//		TextLineSpecAverageTime.CalculateAvgDuration()
+//	TextLineSpecAverageTime.SetFullReportFormat()
+//	TextLineSpecAverageTime.SetAbbreviatedReportFormat()
 //
-//	This method provides the average time duration in
-//	numerical format. Thereafter, the user can use the
-//	'TextLineSpec' types to format a customized text
-//	report of timing data.
+// When the instances of TextLineSpecAverageTime are first
+// created, the default report format is set to the Full
+// Report Format.
 //
-//	This method fulfills requirements of interface
-//	ITextLineSpecification.
-//
-//	Methods which return formatted text are listed as
-//	follows:
-//
-//		TextLineSpecAverageTime.String()
-//		TextLineSpecAverageTime.GetFormattedText()
-//		TextLineSpecAverageTime.GetAbbreviatedTextReport()
-//		TextLineSpecAverageTime.TextBuilder()
-//		TextLineSpecAverageTime.TextBuilderAbbreviatedReport()
-//
-// ----------------------------------------------------------------
-//
-// # BE ADVISED
-//
-//	This method creates and returns a full report average
-//	timing data to include average time duration, maximum
-//	time duration and minimum time duration.
+// To generate a text report of timing data, call one of
+// the following methods:
 //
 // ----------------------------------------------------------------
 //
 // # Input Parameters
 //
-//	errorPrefix					interface{}
-//
-//		This object encapsulates error prefix text which
-//		is included in all returned error messages.
-//		Usually, it contains the name of the calling
-//		method or methods listed as a method or function
-//		chain of execution.
-//
-//		If no error prefix information is needed, set
-//		this parameter to 'nil'.
-//
-//		This empty interface must be convertible to one
-//		of the following types:
-//
-//		1.	nil
-//				A nil value is valid and generates an
-//				empty collection of error prefix and
-//				error context information.
-//
-//		2.	string
-//				A string containing error prefix
-//				information.
-//
-//		3.	[]string
-//				A one-dimensional slice of strings
-//				containing error prefix information.
-//
-//		4.	[][2]string
-//				A two-dimensional slice of strings
-//		   		containing error prefix and error
-//		   		context information.
-//
-//		5.	ErrPrefixDto
-//				An instance of ErrPrefixDto.
-//				Information from this object will
-//				be copied for use in error and
-//				informational messages.
-//
-//		6.	*ErrPrefixDto
-//				A pointer to an instance of
-//				ErrPrefixDto. Information from
-//				this object will be copied for use
-//				in error and informational messages.
-//
-//		7.	IBasicErrorPrefix
-//				An interface to a method
-//				generating a two-dimensional slice
-//				of strings containing error prefix
-//				and error context information.
-//
-//		If parameter 'errorPrefix' is NOT convertible
-//		to one of the valid types listed above, it will
-//		be considered invalid and trigger the return of
-//		an error.
-//
-//		Types ErrPrefixDto and IBasicErrorPrefix are
-//		included in the 'errpref' software package:
-//			"github.com/MikeAustin71/errpref".
+//	--- NONE ---
 //
 // ----------------------------------------------------------------
 //
 // # Return Values
 //
-//	string
+//	isFullReportFormat			bool
 //
-//		The formatted text line output generated by the
-//		current instance of TextLineSpecAverageTime.
+//		If the returned boolean value is set to 'true',
+//		it signals that all reporting methods will return
+//		timing reports using the Full Report Format.
 //
-//	error
+//		If the returned boolean value is set to 'false',
+//		it signals that all reporting methods will return
+//		timing reports using the Abbreviated Report Format.
 //
-//		If this method completes successfully, the
-//		returned error Type is set equal to 'nil'.
+//		TextLineSpecAverageTime produces two types reports.
 //
-//		If errors are encountered during processing, the
-//		returned error Type will encapsulate an error
-//		message. This returned error message will
-//		incorporate the method chain and text passed by
-//		input parameter, 'errorPrefix'. The 'errorPrefix'
-//		text will be attached to the beginning of the
-//		error message.
-func (txtLineAvgTime *TextLineSpecAverageTime) GetAbbreviatedTextReport(
-	errorPrefix interface{}) (
-	string,
-	error) {
+//		A "Full" report presents timing data on average time
+//		duration, minimum time duration and maximum time
+//		duration.
+//
+//		An "Abbreviated" report presents timing data only on
+//		average duration. It does NOT include timing data on
+//		minimum time duration and maximum time duration.
+func (txtLineAvgTime *TextLineSpecAverageTime) GetDefaultReportFormat() (isFullReportFormat bool) {
 
 	if txtLineAvgTime.lock == nil {
 		txtLineAvgTime.lock = new(sync.Mutex)
@@ -1295,92 +1226,70 @@ func (txtLineAvgTime *TextLineSpecAverageTime) GetAbbreviatedTextReport(
 
 	defer txtLineAvgTime.lock.Unlock()
 
-	var ePrefix *ePref.ErrPrefixDto
-	var err error
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
-		"TextLineSpecAverageTime."+
-			"GetAbbreviatedTextReport()",
-		"")
-
-	if err != nil {
-		return "", err
-	}
-
-	strBuilder := strings.Builder{}
-
-	err = new(textLineSpecAverageTimeMechanics).
-		getFormattedText(
-			txtLineAvgTime,
-			&strBuilder,
-			true,
-			ePrefix.XCpy(
-				"strBuilder<-txtLineAvgTime"))
-
-	if err != nil {
-		return "", err
-	}
-
-	return strBuilder.String(), err
+	return !txtLineAvgTime.applyAbbreviatedReportFormat
 }
 
-//	GetFormattedText
+// GetFormattedText
 //
-//	Configures the lines of text produced by this instance
-//	of TextLineSpecAverageTime, and writes it to an
-//	instance of strings.Builder.
+// Configures the lines of text produced by this instance
+// of TextLineSpecAverageTime and returns them as a
+// single string.
 //
-//	Returns the calculated average time duration for all
-//	the timing events currently recorded by the current
-//	instance of TextLineSpecAverageTime.
+// This method will compile the calculated timing data
+// as formatted text for screen displays, file output or
+// printing.
 //
-//	In addition to average time duration data for all
-//	timing events, this text report also documents the
-//	minimum and maximum time durations recorded for this
-//	time series.
+// TextLineSpecAverageTime produces two types reports.
 //
-//	This method will compile the calculated timing data
-//	as formatted text for screen displays, file output or
-//	printing.
+//	(1)	A "Full" report presents timing data on average
+//		time duration, minimum time duration and maximum
+//		time duration.
 //
-//	This method is similar to method:
+//	(2)	The second type of report is an "Abbreviated"
+//		report which only presents timing data on average
+//		duration. It does NOT include timing data on
+//		minimum time duration and maximum time duration.
 //
-//		TextLineSpecAverageTime.String()
+// The type of report prepared by this method will depend
+// on the current default report format setting.
 //
-//	The sole difference between that method and this is
-//	the return type. This method returns an error.
+// By default, all instances of TextLineSpecAverageTime
+// are initially created with a default of "Full Report
+// Format".
 //
-//	If the text report format produced by this method is
-//	unsuitable, the user should call method:
+// Users have the option to control the report format
+// applied by the current instance of
+// TextLineSpecAverageTime. The default report format
+// is controlled by calling the following methods:
 //
-//		TextLineSpecAverageTime.CalculateAvgDuration()
+//	TextLineSpecAverageTime.SetFullReportFormat()
+//	TextLineSpecAverageTime.SetAbbreviatedReportFormat()
 //
-//	This method provides the average time duration in
-//	numerical format. Thereafter, the user can use the
-//	'TextLineSpec' types to format a customized text
-//	report of timing data.
+// If the text report format produced by this method is
+// unsuitable, the user may acquire the raw numerical
+// data and create a custom report format. This
+// statistical timing data can be acquired by calling
+// the following method:
 //
-//	This method fulfills requirements of interface
-//	ITextLineSpecification.
+//	TextLineSpecAverageTime.CalculateAvgDuration()
 //
-//	Methods which return formatted text are listed as
-//	follows:
+// This method fulfills requirements of interface
+// ITextLineSpecification.
 //
-//		TextLineSpecAverageTime.String()
-//		TextLineSpecAverageTime.GetFormattedText()
-//		TextLineSpecAverageTime.GetAbbreviatedTextReport()
-//		TextLineSpecAverageTime.TextBuilder()
-//		TextLineSpecAverageTime.TextBuilderAbbreviatedReport()
+// Methods which return formatted text are listed as
+// follows:
+//
+//	TextLineSpecAverageTime.String()
+//	TextLineSpecAverageTime.GetFormattedText()
+//	TextLineSpecAverageTime.TextBuilder()
 //
 // ----------------------------------------------------------------
 //
 // # BE ADVISED
 //
-//	This method creates and returns a full report average
-//	timing data to include average time duration, maximum
-//	time duration and minimum time duration.
+//	The report format generated by this method is
+//	controlled by the current default report format
+//	setting.
 //
 // ----------------------------------------------------------------
 //
@@ -1498,7 +1407,7 @@ func (txtLineAvgTime *TextLineSpecAverageTime) GetFormattedText(
 		getFormattedText(
 			txtLineAvgTime,
 			&strBuilder,
-			false,
+			txtLineAvgTime.applyAbbreviatedReportFormat,
 			ePrefix.XCpy(
 				"strBuilder<-txtLineAvgTime"))
 
@@ -2012,6 +1921,58 @@ func (txtLineAvgTime *TextLineSpecAverageTime) ReaderInitialize() {
 	return
 }
 
+// SetFullReportFormat
+//
+// Calling this method will set the default report format
+// to the "Full Report Format".
+//
+// TextLineSpecAverageTime produces two types reports.
+//
+//	(1)	A "Full" report presents timing data on average
+//		time duration, minimum time duration and maximum
+//		time duration.
+//
+//	(2)	The second type of report is an "Abbreviated"
+//		report which only presents timing data on average
+//		duration. It does NOT include timing data on
+//		minimum time duration and maximum time duration.
+//
+// The type of report prepared by this method will depend
+// on the current default report format setting.
+//
+// This method will set the default report format to the
+// "Full Report Format". This means that future calls to
+// the following methods will yield a timing report
+// presented with the Full Report Format:
+//
+//	TextLineSpecAverageTime.String()
+//	TextLineSpecAverageTime.GetFormattedText()
+//	TextLineSpecAverageTime.TextBuilder()
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	--- NONE ---
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	--- NONE ---
+func (txtLineAvgTime *TextLineSpecAverageTime) SetFullReportFormat() {
+
+	if txtLineAvgTime.lock == nil {
+		txtLineAvgTime.lock = new(sync.Mutex)
+	}
+
+	txtLineAvgTime.lock.Lock()
+
+	defer txtLineAvgTime.lock.Unlock()
+
+	txtLineAvgTime.applyAbbreviatedReportFormat = false
+}
+
 //	SetInitializeTimerToZero
 //
 //	Reinitializes the internal timers to zero for the
@@ -2056,44 +2017,67 @@ func (txtLineAvgTime *TextLineSpecAverageTime) SetInitializeTimerToZero() {
 	return
 }
 
-//	String
+// String
 //
-//	Configures the lines of text produced by this
-//	instance of TextLineSpecAverageTime, and writes it to
-//	an instance of strings.Builder.
+// Configures the lines of text produced by this instance
+// of TextLineSpecAverageTime and returns them as a
+// single string.
 //
-//	Returns the calculated average time duration for all
-//	the timing events currently recorded by the current
-//	instance of TextLineSpecAverageTime.
+// This method will compile the calculated timing data
+// as formatted text for screen displays, file output or
+// printing.
 //
-//	In addition to average time duration data for all
-//	timing events, this text report also documents the
-//	minimum and maximum time durations recorded for this
-//	time series.
+// TextLineSpecAverageTime produces two types reports.
 //
-//	This method will compile the calculated timing data
-//	as formatted text for screen displays, file output or
-//	printing.
+//	(1)	A "Full" report presents timing data on average
+//		time duration, minimum time duration and maximum
+//		time duration.
 //
-//	If the text report format produced by this method is
-//	unsuitable, the user should call method:
+//	(2)	The second type of report is an "Abbreviated"
+//		report which only presents timing data on average
+//		duration. It does NOT include timing data on
+//		minimum time duration and maximum time duration.
 //
-//		TextLineSpecAverageTime.CalculateAvgDuration()
+// The type of report prepared by this method will depend
+// on the current default report format setting.
 //
-//	This method provides the average time duration in
-//	numerical format. Thereafter, the user can use the
-//	'TextLineSpec' types to format a customized text
-//	report of timing data.
+// By default, all instances of TextLineSpecAverageTime
+// are initially created with a default of "Full Report
+// Format".
 //
-//	This method fulfills requirements of interface
-//	ITextLineSpecification.
+// Users have the option to control the report format
+// applied by the current instance of
+// TextLineSpecAverageTime. The default report format
+// is controlled by calling the following methods:
 //
-//	Methods which return formatted text are listed as
-//	follows:
+//	TextLineSpecAverageTime.SetFullReportFormat()
+//	TextLineSpecAverageTime.SetAbbreviatedReportFormat()
 //
-//		TextLineSpecAverageTime.String()
-//		TextLineSpecAverageTime.GetFormattedText()
-//		TextLineSpecAverageTime.TextBuilder()
+// If the text report format produced by this method is
+// unsuitable, the user may acquire the raw numerical
+// data and create a custom report format. This
+// statistical timing data can be acquired by calling
+// the following method:
+//
+//	TextLineSpecAverageTime.CalculateAvgDuration()
+//
+// This method fulfills requirements of interface
+// ITextLineSpecification.
+//
+// Methods which return formatted text are listed as
+// follows:
+//
+//	TextLineSpecAverageTime.GetFormattedText()
+//	TextLineSpecAverageTime.TextBuilder()
+//	TextLineSpecAverageTime.String()
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	The report format generated by this method is
+//	controlled by the current default report format
+//	setting.
 //
 // ----------------------------------------------------------------
 //
@@ -2107,10 +2091,17 @@ func (txtLineAvgTime *TextLineSpecAverageTime) SetInitializeTimerToZero() {
 //
 //	string
 //
-//		If this method completes successfully, this
-//		string will contain the formatted text generated
+//		The formatted text line output generated by the
+//		current instance of TextLineSpecAverageTime.
+//
+//		These text lines comprise a report of the
+//		recorded average duration timing data collected
 //		by the current instance of
 //		TextLineSpecAverageTime.
+//
+//		The data format used in the preparation of this
+//		report is controlled by the current default
+//		report format.
 //
 //		If an error condition is encountered, this string
 //		will contain an appropriate error message. This
@@ -2137,7 +2128,7 @@ func (txtLineAvgTime TextLineSpecAverageTime) String() string {
 		getFormattedText(
 			&txtLineAvgTime,
 			&strBuilder,
-			false,
+			txtLineAvgTime.applyAbbreviatedReportFormat,
 			ePrefix.XCpy(
 				"formattedText<-txtLineAvgTime Formatted Text"))
 
@@ -2152,61 +2143,67 @@ func (txtLineAvgTime TextLineSpecAverageTime) String() string {
 	return formattedText
 }
 
-//	TextBuilder
+// TextBuilder
 //
-//	Configures the lines of text produced by this
-//	instance of TextLineSpecAverageTime, and writes it to
-//	an instance of strings.Builder.
+// Configures the lines of text produced by this
+// instance of TextLineSpecAverageTime, and writes it to
+// an instance of strings.Builder.
 //
-//	Returns the calculated average time duration for all
-//	the timing events currently recorded by the current
-//	instance of TextLineSpecAverageTime.
+// This method will compile the calculated timing data
+// as formatted text for screen displays, file output or
+// printing.
 //
-//	In addition to average time duration data for all
-//	timing events, this text report also documents the
-//	minimum and maximum time durations recorded for this
-//	time series.
+// TextLineSpecAverageTime produces two types reports.
 //
-//	This method will compile the calculated timing data
-//	as formatted text for screen displays, file output or
-//	printing.
+//	(1)	A "Full" report presents timing data on average
+//		time duration, minimum time duration and maximum
+//		time duration.
 //
-//	This method is similar to method:
+//	(2)	The second type of report is an "Abbreviated"
+//		report which only presents timing data on average
+//		duration. It does NOT include timing data on
+//		minimum time duration and maximum time duration.
 //
-//		TextLineSpecAverageTime.String()
+// The type of report prepared by this method will depend
+// on the current default report format setting.
 //
-//	The sole difference between that method and this is
-//	the return type. This method returns an error.
+// By default, all instances of TextLineSpecAverageTime
+// are initially created with a default of "Full Report
+// Format".
 //
-//	If the text report format produced by this method is
-//	unsuitable, the user should call method:
+// Users have the option to control the report format
+// applied by the current instance of
+// TextLineSpecAverageTime. The default report format
+// is controlled by calling the following methods:
 //
-//		TextLineSpecAverageTime.CalculateAvgDuration()
+//	TextLineSpecAverageTime.SetFullReportFormat()
+//	TextLineSpecAverageTime.SetAbbreviatedReportFormat()
 //
-//	This method provides the average time duration in
-//	numerical format. Thereafter, the user can use the
-//	'TextLineSpec' types to format a customized text
-//	report of timing data.
+// If the text report format produced by this method is
+// unsuitable, the user may acquire the raw numerical
+// data and create a custom report format. This
+// statistical timing data can be acquired by calling
+// the following method:
 //
-//	This method fulfills requirements of interface
-//	ITextLineSpecification.
+//	TextLineSpecAverageTime.CalculateAvgDuration()
 //
-//	Methods which return formatted text are listed as
-//	follows:
+// This method fulfills requirements of interface
+// ITextLineSpecification.
 //
-//		TextLineSpecAverageTime.String()
-//		TextLineSpecAverageTime.GetFormattedText()
-//		TextLineSpecAverageTime.GetAbbreviatedTextReport()
-//		TextLineSpecAverageTime.TextBuilder()
-//		TextLineSpecAverageTime.TextBuilderAbbreviatedReport()
+// Methods which return formatted text are listed as
+// follows:
+//
+//	TextLineSpecAverageTime.String()
+//	TextLineSpecAverageTime.GetFormattedText()
+//	TextLineSpecAverageTime.TextBuilder()
 //
 // ----------------------------------------------------------------
 //
 // # BE ADVISED
 //
-//	This method creates and returns a full report average
-//	timing data to include average time duration, maximum
-//	time duration and minimum time duration.
+//	The report format generated by this method is
+//	controlled by the current default report format
+//	setting.
 //
 // ----------------------------------------------------------------
 //
@@ -2333,198 +2330,7 @@ func (txtLineAvgTime *TextLineSpecAverageTime) TextBuilder(
 		getFormattedText(
 			txtLineAvgTime,
 			strBuilder,
-			false,
-			ePrefix.XCpy(
-				"strBuilder<-txtLineAvgTime Formatted Text"))
-
-	if err != nil {
-		return err
-	}
-
-	return err
-}
-
-//	TextBuilderAbbreviatedReport
-//
-//	Configures the lines of text produced by this
-//	instance of TextLineSpecAverageTime, and writes it to
-//	an instance of strings.Builder.
-//
-//	Returns the calculated average time duration for all
-//	the timing events currently recorded by the current
-//	instance of TextLineSpecAverageTime.
-//
-//	This abbreviated report does NOT include the minimum
-//	or maximum time durations recorded for this timing
-//	event series.
-//
-//	This method will compile the calculated timing data
-//	as formatted text for screen displays, file output or
-//	printing.
-//
-//	This method is similar to method:
-//
-//		TextLineSpecAverageTime.String()
-//
-//	The sole difference between that method and this is
-//	the return type. This method returns an error.
-//
-//	If the text report format produced by this method is
-//	unsuitable, the user should call method:
-//
-//		TextLineSpecAverageTime.CalculateAvgDuration()
-//
-//	This method provides the average time duration in
-//	numerical format. Thereafter, the user can use the
-//	'TextLineSpec' types to format a customized text
-//	report of timing data.
-//
-//	This method fulfills requirements of interface
-//	ITextLineSpecification.
-//
-//	Methods which return formatted text are listed as
-//	follows:
-//
-//		TextLineSpecAverageTime.String()
-//		TextLineSpecAverageTime.GetFormattedText()
-//		TextLineSpecAverageTime.GetAbbreviatedTextReport()
-//		TextLineSpecAverageTime.TextBuilder()
-//		TextLineSpecAverageTime.TextBuilderAbbreviatedReport()
-//
-// ----------------------------------------------------------------
-//
-// # BE ADVISED
-//
-//	This method creates and returns a full report average
-//	timing data to include average time duration, maximum
-//	time duration and minimum time duration.
-//
-// ----------------------------------------------------------------
-//
-// # Input Parameters
-//
-//	strBuilder					*strings.Builder
-//
-//		A pointer to an instance of *strings.Builder. The
-//		formatted text characters produced by this method
-//		will be written to this instance of
-//		strings.Builder.
-//
-//	errorPrefix					interface{}
-//
-//		This object encapsulates error prefix text which
-//		is included in all returned error messages.
-//		Usually, it contains the name of the calling
-//		method or methods listed as a method or function
-//		chain of execution.
-//
-//		If no error prefix information is needed, set
-//		this parameter to 'nil'.
-//
-//		This empty interface must be convertible to one
-//		of the following types:
-//
-//		1.	nil
-//				A nil value is valid and generates an
-//				empty collection of error prefix and
-//				error context information.
-//
-//		2.	string
-//				A string containing error prefix
-//				information.
-//
-//		3.	[]string
-//				A one-dimensional slice of strings
-//				containing error prefix information.
-//
-//		4.	[][2]string
-//				A two-dimensional slice of strings
-//		   		containing error prefix and error
-//		   		context information.
-//
-//		5.	ErrPrefixDto
-//				An instance of ErrPrefixDto.
-//				Information from this object will
-//				be copied for use in error and
-//				informational messages.
-//
-//		6.	*ErrPrefixDto
-//				A pointer to an instance of
-//				ErrPrefixDto. Information from
-//				this object will be copied for use
-//				in error and informational messages.
-//
-//		7.	IBasicErrorPrefix
-//				An interface to a method
-//				generating a two-dimensional slice
-//				of strings containing error prefix
-//				and error context information.
-//
-//		If parameter 'errorPrefix' is NOT convertible
-//		to one of the valid types listed above, it will
-//		be considered invalid and trigger the return of
-//		an error.
-//
-//		Types ErrPrefixDto and IBasicErrorPrefix are
-//		included in the 'errpref' software package:
-//			"github.com/MikeAustin71/errpref".
-//
-// ----------------------------------------------------------------
-//
-// # Return Values
-//
-//	error
-//
-//		If this method completes successfully, the
-//		returned error Type is set equal to 'nil'.
-//
-//		If errors are encountered during processing, the
-//		returned error Type will encapsulate an error
-//		message. This returned error message will
-//		incorporate the method chain and text passed by
-//		input parameter, 'errorPrefix'. The 'errorPrefix'
-//		text will be attached to the beginning of the
-//		error message.
-func (txtLineAvgTime *TextLineSpecAverageTime) TextBuilderAbbreviatedReport(
-	strBuilder *strings.Builder,
-	errorPrefix interface{}) error {
-
-	if txtLineAvgTime.lock == nil {
-		txtLineAvgTime.lock = new(sync.Mutex)
-	}
-
-	txtLineAvgTime.lock.Lock()
-
-	defer txtLineAvgTime.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-	var err error
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
-		"TextLineSpecAverageTime.TextBuilderAbbreviatedReport()",
-		"")
-
-	if err != nil {
-		return err
-	}
-
-	if strBuilder == nil {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'strBuilder' is invalid!\n"+
-			"'strBuilder' is a nil pointer.\n",
-			ePrefix.String())
-
-		return err
-	}
-
-	err = new(textLineSpecAverageTimeMechanics).
-		getFormattedText(
-			txtLineAvgTime,
-			strBuilder,
-			true,
+			txtLineAvgTime.applyAbbreviatedReportFormat,
 			ePrefix.XCpy(
 				"strBuilder<-txtLineAvgTime Formatted Text"))
 
