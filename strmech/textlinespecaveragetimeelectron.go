@@ -535,16 +535,20 @@ func (txtLineAvgTimeElectron *textLineSpecAverageTimeElectron) equal(
 //
 //	err							error
 //
-//		If this method completes successfully, the
-//		returned error Type is set equal to 'nil'. If
-//		errors are encountered during processing, the
-//		returned error Type will encapsulate an error
-//		message.
+//		If errors are encountered during processing or
+//		if input parameter 'txtLineAvgTimer' is found to
+//		be invalid, this returned error Type will
+//		encapsulate an appropriate error message.
 //
 //		If an error message is returned, the text value
 //		for input parameter 'errPrefDto' (error prefix)
 //		will be prefixed or attached at the beginning of
 //		the error message.
+//
+//		If input parameter 'txtLineAvgTimer' is found to
+//		be valid and no errors are encountered during
+//		processing, this returned error parameter is set
+//		to 'nil'.
 func (txtLineAvgTimeElectron *textLineSpecAverageTimeElectron) testValidityOfTxtLineAvgTimer(
 	txtLineAvgTimer *TextLineSpecAverageTime,
 	errPrefDto *ePref.ErrPrefixDto) (
