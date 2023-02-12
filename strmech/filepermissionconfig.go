@@ -525,17 +525,10 @@ func (fPerm *FilePermissionConfig) GetCompositePermissionMode(
 		return os.FileMode(0), err
 	}
 
-	_,
-		err = new(filePermissionConfigElectron).
-		testValidityOfFilePermissionConfig(
+	return new(filePermissionConfigMechanics).
+		getCompositePermissionMode(
 			fPerm,
-			ePrefix)
-
-	if err != nil {
-		return os.FileMode(0), err
-	}
-
-	return fPerm.fileMode, nil
+			ePrefix.XCpy("<-fPerm"))
 }
 
 // GetIsRegular
@@ -816,28 +809,156 @@ func (fPerm *FilePermissionConfig) GetPermissionComponents(
 	return osMode, permissionBits, err
 }
 
-// GetPermissionFileModeValueText - Returns the Permission File Mode numeric
-// value as text. The text presents the octal value of the File Mode.
+// GetPermissionFileModeValueText
+//
+// Returns the Permission File Mode numeric value as
+// text. The text presents the octal value of the File
+// Mode.
 //
 //	Example:
 //	      -rw-rw-rw- = returned value 0666
 //	      drwxrwxrwx = returned value 020000000777
-func (fPerm *FilePermissionConfig) GetPermissionFileModeValueText() string {
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//
+//		If this method completes successfully, the
+//		Permission File Mode numeric value will be
+//		returned as text. This text presents the
+//		octal value of the File Mode.
+//
+//		Example:
+//			-rw-rw-rw- = returned value 0666
+//			drwxrwxrwx = returned value 020000000777
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (fPerm *FilePermissionConfig) GetPermissionFileModeValueText(
+	errorPrefix interface{}) (
+	string,
+	error) {
+
+	if fPerm.lock == nil {
+		fPerm.lock = new(sync.Mutex)
+	}
+
+	fPerm.lock.Lock()
+
+	defer fPerm.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FilePermissionConfig."+
+			"GetPermissionFileModeValueText()",
+		"")
+
+	if err != nil {
+		return "", err
+	}
 
 	sb := strings.Builder{}
 	sb.Grow(300)
 
-	err := fPerm.IsValid()
+	_,
+		err = new(filePermissionConfigElectron).
+		testValidityOfFilePermissionConfig(
+			fPerm,
+			ePrefix)
 
 	if err != nil {
-		sb.WriteString("This FilePermissionConfig instance is INVALID! " + err.Error())
-		return sb.String()
+
+		return "", err
 	}
 
-	fileMode, err := fPerm.GetCompositePermissionMode()
+	fileMode, err := new(filePermissionConfigMechanics).
+		getCompositePermissionMode(
+			fPerm,
+			ePrefix)
 
 	if err != nil {
-		sb.WriteString("Permission File Mode Value: INVALID!")
+
+		return "", err
+
 	} else {
 
 		octalValStr := "0" + fmt.Sprintf("%d",
@@ -850,7 +971,7 @@ func (fPerm *FilePermissionConfig) GetPermissionFileModeValueText() string {
 
 	}
 
-	return sb.String()
+	return sb.String(), err
 }
 
 // GetPermissionNarrativeText - Returns a string containing a narrative

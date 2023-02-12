@@ -56,7 +56,6 @@ type filePermissionConfigMolecule struct {
 //		software package:
 //			"github.com/MikeAustin71/errpref".
 //
-// /
 // ----------------------------------------------------------------
 //
 // # Return Values
@@ -198,17 +197,15 @@ func (fPermConfigMolecule *filePermissionConfigMolecule) getEntryTypeComponent(
 //
 // # Return Values
 //
-//		os.FileMode
+//	os.FileMode
 //
-//			Holds the consolidated file permission value
-//			which consists of the two elements making up a
-//			permission value:
-//	     	(1)	Entry Type
-//	     	(2) Permission Bits
+//		This parameter returns a FileMode containing only
+//		the least significant 9-bits of the encapsulated
+//		FileMode representing the unix permission bits.
 //
-//			The os.FileMode contained in input parameter
-//			'fPerm' will be extracted and returned through
-//			this parameter.
+//		The os.FileMode value contained in input
+//		parameter 'fPerm' will be used to produce this
+//		permission bits value return as os.FileMode.
 //
 //		error
 //
