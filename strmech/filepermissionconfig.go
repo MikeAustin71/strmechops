@@ -179,6 +179,34 @@ func (fPerm *FilePermissionConfig) Empty() {
 // Returns 'true' if the incoming FilePermissionConfig
 // instance is equal in all respects to the current
 // FilePermissionConfig instance.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fPerm2						*FilePermissionConfig
+//
+//		A pointer to an external instance of
+//		FilePermissionConfig. The internal member
+//		variable data values in this instance will be
+//		compared to those in the current instance of
+//		FilePermissionConfig. The results of this
+//		comparison will be returned to the calling
+//		function as a boolean value.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	boolean
+//
+//		If the internal member variable data values
+//		contained in input parameter 'fPerm2' are
+//		equivalent in all respects to those contained in
+//		the current instance of FilePermissionConfig,
+//		this return value will be set to 'true'.
+//
+//		Otherwise, this method will return 'false'.
 func (fPerm *FilePermissionConfig) Equal(fPerm2 *FilePermissionConfig) bool {
 
 	if fPerm.lock == nil {
@@ -278,6 +306,15 @@ func (fPerm *FilePermissionConfig) Equal(fPerm2 *FilePermissionConfig) bool {
 // ----------------------------------------------------------------
 //
 // # Return Values
+//
+//	bool
+//
+//		This returned boolean value signals whether the
+//		FileMode contained in the current instance of
+//		FilePermissionConfig is a directory or not.
+//
+//		A returned value of 'true' signals that the
+//		FileMode represents a directory.
 //
 //	error
 //
@@ -414,10 +451,11 @@ func (fPerm *FilePermissionConfig) GetIsDir(
 //
 //	OsFilePermissionCode
 //
-//		The OsFilePermissionCode type is set to the value
-//		of the os.FileMode constant representing the
-//		Entry Type associated with the permission value
-//		encapsulated by this FilePermissionConfig instance.
+//		This returned OsFilePermissionCode type is set to
+//		the value of the os.FileMode constant
+//		representing the Entry Type associated with the
+//		permission value encapsulated by the current
+//		FilePermissionConfig instance.
 //
 //	error
 //
@@ -599,7 +637,7 @@ func (fPerm *FilePermissionConfig) GetCompositePermissionMode(
 
 // GetIsRegular
 //
-// Return a bool indicating whether the encapsulated
+// Returns a 'bool' indicating whether the encapsulated
 // FileMode is a file or not.
 //
 // A returned value of 'true' signals that the FileMode
@@ -608,6 +646,95 @@ func (fPerm *FilePermissionConfig) GetCompositePermissionMode(
 // This method serves as a wrapper for:
 //
 //	os.FileMode.IsRegular()
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	bool
+//
+//		This returned boolean value signals whether the
+//		FileMode encapsulated in the current instance of
+//		FilePermissionConfig is a file or not.
+//
+//		A returned value of 'true' signals that the
+//		FileMode represents a file.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
 func (fPerm *FilePermissionConfig) GetIsRegular(
 	errorPrefix interface{}) (bool, error) {
 
@@ -669,6 +796,96 @@ func (fPerm *FilePermissionConfig) GetIsRegular(
 // string use method:
 //
 //	FilePermissionConfig.GetPermissionTextCode()
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	os.FileMode
+//
+//		This parameter returns a FileMode containing only
+//		the least significant 9-bits of the encapsulated
+//		FileMode representing the unix permission bits.
+//
+//		The os.FileMode value contained in input
+//		parameter 'fPerm' will be used to produce the
+//		permission bits value returned as os.FileMode.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
 func (fPerm *FilePermissionConfig) GetFileMode(
 	errorPrefix interface{}) (os.FileMode, error) {
 
@@ -701,8 +918,13 @@ func (fPerm *FilePermissionConfig) GetFileMode(
 // GetPermissionComponents
 //
 // Returns the two components of a permission
-// configuration - The Entry Type and the Permission
-// bits.
+// configuration:
+//
+//	(1)	Entry Type
+//
+//		AND
+//
+//	(2)	Permission Bits
 //
 // ----------------------------------------------------------------
 //
@@ -1398,29 +1620,40 @@ func (fPerm *FilePermissionConfig) IsValid(
 	return err
 }
 
-// New - Creates and returns a new FilePermissionConfig instance initialized with
-// an os.FileMode value generated from the input parameter 'modeStr'.
+// New
 //
-// 'modeStr' is a 10-character string containing the read, write and execute permissions
-// for the three groups, 'Owner', 'Group' and 'Other'.
+// Creates and returns a new FilePermissionConfig
+// instance initialized with an os.FileMode value
+// generated from the input parameter 'modeStr'.
 //
-// The text codes used in the 'modeStr' mimic the Unix permission codes.
+// 'modeStr' is a 10-character string containing the
+// read, write and execute permissions for the three
+// groups, 'Owner', 'Group' and 'Other'.
 //
-//	Reference:
-//	  https://www.cyberciti.biz/faq/explain-the-nine-permissions-bits-on-files/.
-//	  https://en.wikipedia.org/wiki/File_system_permissions
+// The text codes used in the 'modeStr' mimic the Unix
+// permission codes.
 //
-// The first character of the 'modeStr' designates the 'Entry Type'. Currently,
-// only two 'Entry Type' characters are supported. Therefore, the first character
-// in the 10-character input parameter 'modeStr' MUST be either a "-" indicating
-// a file, or a "d" indicating a directory.
+// Reference:
 //
-// The remaining nine characters in the 'modeStr' represent unix permission bits
-// and consist of three group fields each containing 3-characters. Each character
-// in the three group fields may consist of 'r' (Read-Permission), 'w'
-// (Write-Permission), 'x' (Execute-Permission) or '-' signaling no permission
-// or no access allowed. A typical 'modeStr' authorizing permission for full access
-// to a file would be styled as:
+//	https://www.cyberciti.biz/faq/explain-the-nine-permissions-bits-on-files/.
+//	https://en.wikipedia.org/wiki/File_system_permissions
+//
+// The first character of the 'modeStr' designates the
+// 'Entry Type'. Currently, only two 'Entry Type'
+// characters are supported. Therefore, the first
+// character in the 10-character input parameter
+// 'modeStr' MUST be either a "-" indicating a file, or
+// a "d" indicating a directory.
+//
+// The remaining nine characters in the 'modeStr'
+// represent unix permission bits and consist of three
+// group fields each containing 3-characters. Each
+// character in the three group fields may consist of
+// 'r' (Read-Permission), 'w' (Write-Permission), 'x'
+// (Execute-Permission) or '-' signaling no permission or
+// no access allowed. A typical 'modeStr' authorizing
+// permission for full access to a file would be styled
+// as:
 //
 //	Example: "-rwxrwxrwx"
 //

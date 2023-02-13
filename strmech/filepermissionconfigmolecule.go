@@ -204,21 +204,21 @@ func (fPermConfigMolecule *filePermissionConfigMolecule) getEntryTypeComponent(
 //		FileMode representing the unix permission bits.
 //
 //		The os.FileMode value contained in input
-//		parameter 'fPerm' will be used to produce this
-//		permission bits value return as os.FileMode.
+//		parameter 'fPerm' will be used to produce the
+//		permission bits value returned as os.FileMode.
 //
-//		error
+//	error
 //
-//			If this method completes successfully, the
-//			returned error Type is set equal to 'nil'. If
-//			errors are encountered during processing, the
-//			returned error Type will encapsulate an error
-//			message.
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
 //
-//			If an error message is returned, the text value
-//			for input parameter 'errPrefDto' (error prefix)
-//			will be prefixed or attached at the beginning of
-//			the error message.
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
 func (fPermConfigMolecule *filePermissionConfigMolecule) getFileMode(
 	fPerm *FilePermissionConfig,
 	errPrefDto *ePref.ErrPrefixDto) (

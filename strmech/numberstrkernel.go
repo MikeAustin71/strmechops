@@ -1244,26 +1244,31 @@ func (numStrKernel *NumberStrKernel) EmptyIntegerDigits() {
 //
 // ----------------------------------------------------------------
 //
-// Input Parameters
+// # Input Parameters
 //
 //	incomingNumStrKernel       *NumberStrKernel
-//	   - A pointer to an external instance of NumberStrKernel. The
-//	     internal member variable data values in this instance will
-//	     be compared to those in the current instance of
-//	     NumberStrKernel. The results of this comparison will
-//	     be returned to the calling function as a boolean value.
 //
-// ------------------------------------------------------------------------
+//		A pointer to an external instance of
+//		NumberStrKernel. The internal member variable
+//		data values in this instance will be compared to
+//		those in the current instance of NumberStrKernel.
+//		The results of this comparison will be returned to
+//		the calling function as a boolean value.
 //
-// Return Values
+// ----------------------------------------------------------------
+//
+// # Return Values
 //
 //	bool
-//	   - If the internal member variable data values contained in
-//	     input parameter 'incomingNumStrKernel' are equivalent in
-//	     all respects to those contained in the current instance of
-//	     NumberStrKernel, this return value will be set to 'true'.
 //
-//	     Otherwise, this method will return 'false'.
+//		If the internal member variable data values
+//		contained in input parameter
+//		'incomingNumStrKernel' are equivalent in all
+//		respects to those contained in the current
+//		instance of NumberStrKernel, this return value
+//		will be set to 'true'.
+//
+//		Otherwise, this method will return 'false'.
 func (numStrKernel *NumberStrKernel) Equal(
 	incomingNumStrKernel *NumberStrKernel) bool {
 
