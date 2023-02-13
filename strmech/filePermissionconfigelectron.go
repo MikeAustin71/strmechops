@@ -109,6 +109,16 @@ func (filePermCfgElectron *filePermissionConfigElectron) testValidityOfFilePermi
 		return isValid, err
 	}
 
+	if !filePermConfig.isInitialized {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: This FilePermissionConfig instance has\n"+
+			"NOT been initialized and is INVALID!\n",
+			ePrefix.String())
+
+		return isValid, err
+	}
+
 	fMode := filePermConfig.fileMode &^ os.FileMode(0777)
 
 	isValid = false
@@ -129,9 +139,11 @@ func (filePermCfgElectron *filePermissionConfigElectron) testValidityOfFilePermi
 		err = fmt.Errorf("%v\n"+
 			"Error: This instance of FilePermissionConfig is invalid!\n"+
 			"The Entry Type File Mode value is invalid!\n"+
-			"FilePermissionConfig File Mode = %v\n",
+			"FilePermissionConfig File Mode Value  = %v\n"+
+			"FilePermissionConfig File Mode String = %v\n",
 			ePrefix.String(),
-			filePermConfig.fileMode)
+			filePermConfig.fileMode,
+			filePermConfig.fileMode.String())
 	}
 
 	return isValid, err

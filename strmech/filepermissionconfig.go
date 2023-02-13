@@ -1,7 +1,6 @@
 package strmech
 
 import (
-	"errors"
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
 	"os"
@@ -48,11 +47,34 @@ type FilePermissionConfig struct {
 	lock *sync.Mutex
 }
 
-// CopyIn - Receives a FilePermissionConfig instance and copies all
-// data fields to the current FilePermissionConfig instance. When
-// complete, both the incoming and current FilePermissionConfig
-// instances will be identical. The type of copy operation performed
-// is a 'deep copy'.
+// CopyIn
+//
+// Receives a FilePermissionConfig instance and copies
+// all data fields to the current FilePermissionConfig
+// instance. When complete, both the incoming and current
+// FilePermissionConfig instances will be identical. The
+// type of copy operation performed is a 'deep copy'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fPerm2						*FilePermissionConfig
+//
+//		A pointer to an incoming instance of
+//		FilePermissionConfig. All the internal data
+//		fields contained in this instance will be copied
+//		to corresponding data fields in the current
+//		FilePermissionConfig instance.
+//
+//		When the deep copy operation is completed, both
+//		instances will contain identical data values.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	--- NONE ---
 func (fPerm *FilePermissionConfig) CopyIn(fPerm2 *FilePermissionConfig) {
 
 	if fPerm.lock == nil {
@@ -64,13 +86,36 @@ func (fPerm *FilePermissionConfig) CopyIn(fPerm2 *FilePermissionConfig) {
 	defer fPerm.lock.Unlock()
 
 	fPerm.isInitialized = fPerm2.isInitialized
+
 	fPerm.fileMode = fPerm2.fileMode
 
 }
 
-// CopyOut - Returns a new instance of FilePermissionConfig which is
-// in all respects an exact duplicate of the current FilePermissionConfig
-// instance. The type of copy operation performed  is a 'deep copy'.
+// CopyOut
+//
+// Returns a new instance of FilePermissionConfig which
+// is in all respects an exact duplicate of the current
+// FilePermissionConfig instance. The type of copy
+// operation performed  is a 'deep copy'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	--- NONE ---
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	FilePermissionConfig
+//
+//		Returns a new instance of FilePermissionConfig
+//		which is identical in all respects to the current
+//		instance of FilePermissionConfig.
+//
+//		The type of copy operation performed  is a
+//		'deep copy'.
 func (fPerm *FilePermissionConfig) CopyOut() FilePermissionConfig {
 
 	if fPerm.lock == nil {
@@ -93,6 +138,27 @@ func (fPerm *FilePermissionConfig) CopyOut() FilePermissionConfig {
 //
 // ReInitializes the current FilePermissionConfig
 // instance to empty or zero values.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will delete, overwrite and reset all
+//	pre-existing data values in the current instance of
+//	FilePermissionConfig to their uninitialized or zero
+//	values.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	--- NONE ---
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	--- NONE ---
 func (fPerm *FilePermissionConfig) Empty() {
 
 	if fPerm.lock == nil {
@@ -974,37 +1040,105 @@ func (fPerm *FilePermissionConfig) GetPermissionFileModeValueText(
 	return sb.String(), err
 }
 
-// GetPermissionNarrativeText - Returns a string containing a narrative
-// text description of the current permission codes.
+// GetPermissionNarrativeText
 //
-//	Example Return Value
-//	    "Entry Type: ModeFile  -Permission Code: -rwxrwxrwx   -File Mode Value: 0777"
+// Returns a string containing a narrative text
+// description of the current permission codes contained
+// in the current instance of FilePermissionConfig.
+//
+// Example Return Value
+//
+//	"Entry Type: ModeFile  -Permission Code: -rwxrwxrwx -File Mode Value: 0777"
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	--- NONE ---
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//
+//		Returns a narrative text description of the
+//		permission codes contained in the current
+//		instance of FilePermissionConfig.
+//
+//		Example Return Value
+//		"Entry Type: ModeFile  -Permission Code: -rwxrwxrwx -File Mode Value: 0777"
 func (fPerm *FilePermissionConfig) GetPermissionNarrativeText() string {
+
+	if fPerm.lock == nil {
+		fPerm.lock = new(sync.Mutex)
+	}
+
+	fPerm.lock.Lock()
+
+	defer fPerm.lock.Unlock()
+
+	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
 
 	sb := strings.Builder{}
 	sb.Grow(300)
 
-	err := fPerm.IsValid()
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		nil,
+		"NumberStrKernel."+
+			"String()",
+		"")
 
 	if err != nil {
-		sb.WriteString("This FilePermissionConfig instance is INVALID! " + err.Error())
+
+		sb.WriteString(err.Error())
+
 		return sb.String()
 	}
 
-	osMode, err := fPerm.GetEntryTypeComponent()
+	_,
+		err = new(filePermissionConfigElectron).
+		testValidityOfFilePermissionConfig(
+			fPerm,
+			ePrefix)
 
 	if err != nil {
-		sb.WriteString("Entry Type: INVALID!")
-	} else {
-
-		osModeStr := osMode.String()
-
-		osModeStr = strings.Replace(osModeStr, "ModeNone", "ModeFile", 1)
-
-		sb.WriteString(fmt.Sprintf("Entry Type: %s", osModeStr))
+		sb.WriteString(err.Error())
+		return sb.String()
 	}
 
-	txtCode, err := fPerm.GetPermissionTextCode()
+	osMode,
+		err := new(filePermissionConfigMolecule).
+		getEntryTypeComponent(
+			fPerm,
+			ePrefix)
+
+	if err != nil {
+		sb.WriteString("Entry Type: INVALID!\n" +
+			err.Error() + "\n")
+
+		return sb.String()
+	}
+
+	osModeStr := osMode.String()
+
+	osModeStr =
+		strings.Replace(
+			osModeStr,
+			"ModeNone",
+			"ModeFile", 1)
+
+	sb.WriteString(fmt.Sprintf("Entry Type: %s", osModeStr))
+
+	var txtCode string
+
+	txtCode,
+		err = new(filePermissionConfigMechanics).getPermissionTextCode(
+		fPerm,
+		ePrefix.XCpy("txtCode<-"))
 
 	if err != nil {
 		sb.WriteString("  -Permission Code: INVALID!")
@@ -1012,10 +1146,18 @@ func (fPerm *FilePermissionConfig) GetPermissionNarrativeText() string {
 		sb.WriteString("  -Permission Code: " + txtCode + " ")
 	}
 
-	fileMode, err := fPerm.GetCompositePermissionMode()
+	var fileMode os.FileMode
+
+	fileMode,
+		err = new(filePermissionConfigMechanics).
+		getCompositePermissionMode(
+			fPerm,
+			ePrefix.XCpy("fileMode<-"))
 
 	if err != nil {
+
 		sb.WriteString("  -File Mode Value: INVALID!")
+
 	} else {
 
 		octalValStr := "0" + fmt.Sprintf("%d",
@@ -1031,65 +1173,229 @@ func (fPerm *FilePermissionConfig) GetPermissionNarrativeText() string {
 	return sb.String()
 }
 
-// GetPermissionTextCode - Returns the file mode permissions expressed as
-// a text string. The returned string includes the full and complete
-// 10-character permission code.
+// GetPermissionTextCode
+//
+// Returns the file mode permissions expressed as a text
+// string. The returned string includes the full and
+// complete 10-character permission code.
 //
 //	Example Return Values:
 //	      -rwxrwxrwx
 //	      -rw-rw-rw-
 //	      drwxrwxrwx
-func (fPerm *FilePermissionConfig) GetPermissionTextCode() (string, error) {
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fPerm						*FilePermissionConfig
+//
+//		A pointer to an instance of FilePermissionConfig.
+//		The file mode permissions expressed as a text
+//		will be extracted from this instance and returned
+//		to the calling function.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//
+//		If this method completes successfully, this
+//		parameter returns the file mode permissions
+//		contained in 'fPerm' expressed as a text
+//		string. The returned string includes the full
+//		and complete 10-character permission code.
+//
+//			Example Return Values:
+//	      		-rwxrwxrwx
+//				-rw-rw-rw-
+//				drwxrwxrwx
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (fPerm *FilePermissionConfig) GetPermissionTextCode(
+	errorPrefix interface{}) (
+	string,
+	error) {
 
-	ePrefix := "FilePermissionConfig.GetPermissionTextCode() "
+	if fPerm.lock == nil {
+		fPerm.lock = new(sync.Mutex)
+	}
 
-	err := fPerm.IsValid()
+	fPerm.lock.Lock()
+
+	defer fPerm.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FilePermissionConfig."+
+			"GetPermissionTextCode()",
+		"")
 
 	if err != nil {
-		return "",
-			fmt.Errorf(ePrefix+
-				"Error: This FilePermissionConfig instance is INVALID! %v ", err.Error())
+		return "", err
 	}
 
-	return fPerm.fileMode.String(), nil
+	return new(filePermissionConfigMechanics).
+		getPermissionTextCode(
+			fPerm,
+			ePrefix)
 }
 
-// IsValid - If the current FilePermissionConfig instance is judged to be
-// 'Invalid', this method will return an error.
+// IsValid
 //
-// Otherwise, if the current instance of FilePermissionConfig evaluates as
-// 'Valid', the method will return 'nil'.
-func (fPerm *FilePermissionConfig) IsValid() error {
+// If the current FilePermissionConfig instance is judged
+// to be 'Invalid', this method will return an error.
+//
+// Otherwise, if the current instance of
+// FilePermissionConfig evaluates as 'Valid', this method
+// will return 'nil'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If errors are encountered during processing or
+//		if the current instance of FilePermissionConfig
+//		is found to be invalid, this returned error Type
+//		will encapsulate an appropriate error message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+//
+//		If the current instance of FilePermissionConfig
+//		is found to be valid and no errors are
+//		encountered during processing, this returned
+//		error parameter is set to 'nil'.
+func (fPerm *FilePermissionConfig) IsValid(
+	errorPrefix interface{}) error {
 
-	ePrefix := "FilePermissionConfig.IsValid() "
-
-	if !fPerm.isInitialized {
-		return errors.New(ePrefix +
-			"Error: This FilePermissionConfig instance has NOT been\n" +
-			"initialized and is INVALID!")
+	if fPerm.lock == nil {
+		fPerm.lock = new(sync.Mutex)
 	}
 
-	fMode := fPerm.fileMode &^ os.FileMode(0777)
+	fPerm.lock.Lock()
 
-	isEntryTypeValid := false
+	defer fPerm.lock.Unlock()
 
-	for idx := range mOsPermissionCodeToString {
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
 
-		if fMode == idx {
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FilePermissionConfig."+
+			"IsValid()",
+		"")
 
-			isEntryTypeValid = true
-
-			break
-		}
-
+	if err != nil {
+		return err
 	}
 
-	if !isEntryTypeValid {
-		return errors.New(ePrefix +
-			"Error: Entry Type File Mode value is INVALID!\n")
-	}
+	_,
+		err = new(filePermissionConfigElectron).
+		testValidityOfFilePermissionConfig(
+			fPerm,
+			ePrefix.XCpy("fPerm"))
 
-	return nil
+	return err
 }
 
 // New - Creates and returns a new FilePermissionConfig instance initialized with
