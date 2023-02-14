@@ -1829,6 +1829,7 @@ func (fPerm *FilePermissionConfig) IsValid(
 //		fully populated instance of FilePermissionConfig
 //		will be returned configured with the permission
 //		codes contained in input parameter 'modeStr'.
+//
 //	error
 //
 //		If this method completes successfully, the
@@ -1882,56 +1883,16 @@ func (fPerm *FilePermissionConfig) New(
 	return fPerm2, nil
 }
 
-// NewByComponents - Creates and returns a new instance of FilePermissionConfig using
-// two input parameters, 'entryType' and 'unixPermissionTextStr'.
+// NewByComponents
 //
-// For additional documentation see method FilePermissionConfig.SetFileModeByComponents()
-// which is called by this method.
-//
-// ------------------------------------------------------------------------
-//
-// Input Parameters:
-//
-//	entryType OsFilePermissionCode - The code which makes up the first character in
-//	                                 a 10-digit unix permission character string.
-//	                                 This a wrapper for os.FileMode constants.
-//	                                   Reference:
-//	                                      https://golang.org/pkg/os/#FileMode
-//
-//	                                 Select this value with caution. See the warning below.
-//
-//	unixPermissionTextStr string   - A 9-character string containing the unix permission
-//	                                 bits expressed as three groups of 3-characters each.
-//	                                 Note: if the string is the standard 10-character string,
-//	                                 only the last 9-characters will be used.
-//
-//	                                 The 9-characters are constituents of the three Symbolic
-//	                                 Groups: Owners/Users, Groups & Others. Each group has three
-//	                                 characters which may be 'r', 'w', 'x'. If a permission is not
-//	                                 set, that character position contains a '-'.
-//
-//	 'unixPermissionTextStr'
-//	      9-Character          File Access
-//	      Notation             Permission Descriptions
-//	      ---------            File - no permissions
-//	      rwx------            File - read, write, & execute only for owner
-//	      rwxrwx---            File - read, write, & execute for owner and group
-//	      rwxrwxrwx            File - read, write, & execute for owner, group and others
-//	      --x--x--x            File - execute
-//	      -w--w--w-            File - write
-//	      -wx-wx-wx            File - write & execute
-//	      r--r--r--            File - read
-//	      r-xr-xr-x            File - read & execute
-//	      rw-rw-rw-            File - read & write
-//	      rwxr-----            File - Owner can read, write, & execute. Group can only read;
-//
-//
-//	Note: drwxrwxrwx - identifies permissions for directory
-//	                    value = 020000000777
+// Creates and returns a new instance of
+// FilePermissionConfig using permission value supplied
+// by two input parameters, 'entryType' and
+// 'unixPermissionTextStr'.
 //
 // ------------------------------------------------------------------------
 //
-// Warning:
+// # Warning
 //
 // Incorrect or invalid File Permissions can cause extensive damage. If you
 // don't know what you are doing, you would be well advised to use one of
@@ -1941,7 +1902,146 @@ func (fPerm *FilePermissionConfig) New(
 //
 //	"Be always sure you are right - then go ahead."
 //
-// TODO - Add comments
+// ----------------------------------------------------------------
+//
+// # Reference:
+//
+//	https://golang.org/pkg/os/#FileMode
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//		entryType					OsFilePermissionCode
+//
+//			The code which makes up the first character in a
+//			10-digit unix permission character string.
+//
+//			This a wrapper for os.FileMode constants.
+//			Reference:
+//				https://golang.org/pkg/os/#FileMode
+//
+//			Select this value with caution.
+//			See the warning above.
+//
+//		unixPermissionStr			string
+//
+//			A 9-character string containing the unix
+//			permission bits expressed as three groups of
+//		 	3-characters each.
+//
+//			The 9-characters are constituents of the three
+//			Symbolic Groups or User Classes:
+//				(1) Owners/Users
+//				(2) Groups
+//				(3) Others.
+//			Each group has three characters which may be 'r',
+//			'w', 'x'. If a permission is not set, that
+//			character position contains a '-'.
+//
+//		 	Unix Permission String Options:
+//
+//		      9-Character          File Access
+//		      Notation             Permission Descriptions
+//		-----------------------------------------------------------
+//		      ---------            File - no permissions
+//		      rwx------            File - read, write, & execute only for owner
+//		      rwxrwx---            File - read, write, & execute for owner and group
+//		      rwxrwxrwx            File - read, write, & execute for owner, group and others
+//		      --x--x--x            File - execute
+//		      -w--w--w-            File - write
+//		      -wx-wx-wx            File - write & execute
+//		      r--r--r--            File - read
+//		      r-xr-xr-x            File - read & execute
+//		      rw-rw-rw-            File - read & write
+//		      rwxr-----            File - Owner can read, write, & execute. Group can only read;
+//
+//
+//			Note: drwxrwxrwx - identifies permissions for
+//	                        directory
+//
+//		errorPrefix					interface{}
+//
+//			This object encapsulates error prefix text which
+//			is included in all returned error messages.
+//			Usually, it contains the name of the calling
+//			method or methods listed as a method or function
+//			chain of execution.
+//
+//			If no error prefix information is needed, set
+//			this parameter to 'nil'.
+//
+//			This empty interface must be convertible to one
+//			of the following types:
+//
+//			1.	nil
+//					A nil value is valid and generates an
+//					empty collection of error prefix and
+//					error context information.
+//
+//			2.	string
+//					A string containing error prefix
+//					information.
+//
+//			3.	[]string
+//					A one-dimensional slice of strings
+//					containing error prefix information.
+//
+//			4.	[][2]string
+//					A two-dimensional slice of strings
+//			   		containing error prefix and error
+//			   		context information.
+//
+//			5.	ErrPrefixDto
+//					An instance of ErrPrefixDto.
+//					Information from this object will
+//					be copied for use in error and
+//					informational messages.
+//
+//			6.	*ErrPrefixDto
+//					A pointer to an instance of
+//					ErrPrefixDto. Information from
+//					this object will be copied for use
+//					in error and informational messages.
+//
+//			7.	IBasicErrorPrefix
+//					An interface to a method
+//					generating a two-dimensional slice
+//					of strings containing error prefix
+//					and error context information.
+//
+//			If parameter 'errorPrefix' is NOT convertible
+//			to one of the valid types listed above, it will
+//			be considered invalid and trigger the return of
+//			an error.
+//
+//			Types ErrPrefixDto and IBasicErrorPrefix are
+//			included in the 'errpref' software package:
+//				"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	FilePermissionConfig
+//
+//		If this method completes successfully, a new,
+//		fully populated instance of FilePermissionConfig
+//		will be returned configured with the permission
+//		codes contained in input parameter 'modeStr'.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
 func (fPerm FilePermissionConfig) NewByComponents(
 	entryType OsFilePermissionCode,
 	unixPermissionTextStr string,
@@ -2070,66 +2170,160 @@ func (fPerm FilePermissionConfig) NewByOctalDigits(
 	return fPerm2, nil
 }
 
-// SetFileModeByComponents - Sets the value of the current FilePermissionConfig
-// instance by initializing the internal FileMode data field
-// (FilePermissionConfig.fileMode). The final FileMode value is computed by
-// integrating the 'entryType' FileMode with the unix permission symbolic
-// values provided by the input parameter, 'unixPermissionStr'. This approach
-// allows the caller to created custom File Permissions.
+// SetFileModeByComponents
+//
+// Sets the value of the current FilePermissionConfig
+// instance by initializing the internal FileMode data
+// field (FilePermissionConfig.fileMode).
+//
+// The final FileMode value is computed by integrating
+// the 'entryType' FileMode with the unix permission
+// symbolic values provided by the input parameter,
+// 'unixPermissionStr'. This approach allows the caller
+// to created custom File Permissions.
 //
 // ------------------------------------------------------------------------
 //
-// Input Parameters:
+// # Warning
 //
-//	entryType OsFilePermissionCode - The code which makes up the first character in
-//	                                 a 10-digit unix permission character string.
-//	                                 This a wrapper for os.FileMode constants.
-//	                                   Reference:
-//	                                      https://golang.org/pkg/os/#FileMode
+// Incorrect or invalid File Permissions can cause
+// extensive damage. If you don't know what you are
+// doing, you would be well advised to use one of the
+// other methods in this type which provide additional
+// safeguards.
 //
-//	                                 Select this value with caution. See the warning below.
-//
-//	unixPermissionStr string - A 9-character string containing the unix permission
-//	                           bits expressed as three groups of 3-characters each.
-//
-//	                           The 9-characters are constituents of the three Symbolic
-//	                           Groups: Owners/Users, Groups & Others. Each group has three
-//	                           characters which may be 'r', 'w', 'x'. If a permission is not
-//	                           set, that character position contains a '-'.
-//
-//	 'unixPermissionTextStr'
-//
-//	      9-Character          File Access
-//	      Notation             Permission Descriptions
-//	-----------------------------------------------------------
-//	      ---------            File - no permissions
-//	      rwx------            File - read, write, & execute only for owner
-//	      rwxrwx---            File - read, write, & execute for owner and group
-//	      rwxrwxrwx            File - read, write, & execute for owner, group and others
-//	      --x--x--x            File - execute
-//	      -w--w--w-            File - write
-//	      -wx-wx-wx            File - write & execute
-//	      r--r--r--            File - read
-//	      r-xr-xr-x            File - read & execute
-//	      rw-rw-rw-            File - read & write
-//	      rwxr-----            File - Owner can read, write, & execute. Group can only read;
-//
-//
-//	Note: drwxrwxrwx - identifies permissions for directory
-//
-// ------------------------------------------------------------------------
-//
-// Warning:
-//
-// Incorrect or invalid File Permissions can cause extensive damage. If you
-// don't know what you are doing, you would be well advised to use one of
-// the other methods in this type which provide additional safeguards.
-//
-// If you decide to proceed, be guided by the wisdom of Davy Crockett:
+// If you decide to proceed, be guided by the wisdom of
+// Davy Crockett:
 //
 //	"Be always sure you are right - then go ahead."
 //
-// TODO - Add comments
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//		entryType					OsFilePermissionCode
+//
+//			The code which makes up the first character in a
+//			10-digit unix permission character string.
+//
+//			This a wrapper for os.FileMode constants.
+//			Reference:
+//				https://golang.org/pkg/os/#FileMode
+//
+//			Select this value with caution.
+//			See the warning above.
+//
+//		unixPermissionStr			string
+//
+//			A 9-character string containing the unix
+//			permission bits expressed as three groups of
+//		 	3-characters each.
+//
+//			The 9-characters are constituents of the three
+//			Symbolic Groups or User Classes:
+//				(1) Owners/Users
+//				(2) Groups
+//				(3) Others.
+//			Each group has three characters which may be 'r',
+//			'w', 'x'. If a permission is not set, that
+//			character position contains a '-'.
+//
+//		 	Unix Permission String Options:
+//
+//		      9-Character          File Access
+//		      Notation             Permission Descriptions
+//		-----------------------------------------------------------
+//		      ---------            File - no permissions
+//		      rwx------            File - read, write, & execute only for owner
+//		      rwxrwx---            File - read, write, & execute for owner and group
+//		      rwxrwxrwx            File - read, write, & execute for owner, group and others
+//		      --x--x--x            File - execute
+//		      -w--w--w-            File - write
+//		      -wx-wx-wx            File - write & execute
+//		      r--r--r--            File - read
+//		      r-xr-xr-x            File - read & execute
+//		      rw-rw-rw-            File - read & write
+//		      rwxr-----            File - Owner can read, write, & execute. Group can only read;
+//
+//
+//			Note: drwxrwxrwx - identifies permissions for
+//	                        directory
+//
+//		errorPrefix					interface{}
+//
+//			This object encapsulates error prefix text which
+//			is included in all returned error messages.
+//			Usually, it contains the name of the calling
+//			method or methods listed as a method or function
+//			chain of execution.
+//
+//			If no error prefix information is needed, set
+//			this parameter to 'nil'.
+//
+//			This empty interface must be convertible to one
+//			of the following types:
+//
+//			1.	nil
+//					A nil value is valid and generates an
+//					empty collection of error prefix and
+//					error context information.
+//
+//			2.	string
+//					A string containing error prefix
+//					information.
+//
+//			3.	[]string
+//					A one-dimensional slice of strings
+//					containing error prefix information.
+//
+//			4.	[][2]string
+//					A two-dimensional slice of strings
+//			   		containing error prefix and error
+//			   		context information.
+//
+//			5.	ErrPrefixDto
+//					An instance of ErrPrefixDto.
+//					Information from this object will
+//					be copied for use in error and
+//					informational messages.
+//
+//			6.	*ErrPrefixDto
+//					A pointer to an instance of
+//					ErrPrefixDto. Information from
+//					this object will be copied for use
+//					in error and informational messages.
+//
+//			7.	IBasicErrorPrefix
+//					An interface to a method
+//					generating a two-dimensional slice
+//					of strings containing error prefix
+//					and error context information.
+//
+//			If parameter 'errorPrefix' is NOT convertible
+//			to one of the valid types listed above, it will
+//			be considered invalid and trigger the return of
+//			an error.
+//
+//			Types ErrPrefixDto and IBasicErrorPrefix are
+//			included in the 'errpref' software package:
+//				"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
 func (fPerm *FilePermissionConfig) SetFileModeByComponents(
 	entryType OsFilePermissionCode,
 	unixPermissionTextStr string,
