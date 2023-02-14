@@ -4,7 +4,6 @@ import (
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
 	"os"
-	"strconv"
 	"strings"
 	"sync"
 )
@@ -29,6 +28,29 @@ import (
 //	Example: -rwxrwxrwx - Identifies permissions for a regular file
 //	         drwxrwxrwx - Identifies permissions for directory
 //	                      value = 020000000777
+//
+// ----------------------------------------------------------------
+//
+//	Symbolic and Numeric Notation
+//
+// Permission codes may be designated with Symbolic
+// Notation or Numeric Octal Notation.
+//
+//	            Numeric
+//		Symbolic   English
+//		notation   notation
+//		----------	0000	no permissions
+//		-rwx------	0700	read, write, & execute only for owner
+//		-rwxrwx---	0770	read, write, & execute for owner and group
+//		-rwxrwxrwx	0777	read, write, & execute for owner, group and others
+//		---x--x--x	0111	execute
+//		--w--w--w-	0222	write
+//		--wx-wx-wx	0333	write & execute
+//		-r--r--r--	0444	read
+//		-r-xr-xr-x	0555	read & execute
+//		-rw-rw-rw-	0666	read & write
+//		-rwxr-----	0740	owner can read, write, & execute; group can only read;
+//	                       others have no permissions
 //
 // Internal private member variable stores the consolidated permission as a numerical
 // value in 'FilePermissionConfig.fileMode'.
@@ -75,7 +97,8 @@ type FilePermissionConfig struct {
 // # Return Values
 //
 //	--- NONE ---
-func (fPerm *FilePermissionConfig) CopyIn(fPerm2 *FilePermissionConfig) {
+func (fPerm *FilePermissionConfig) CopyIn(
+	fPerm2 *FilePermissionConfig) {
 
 	if fPerm.lock == nil {
 		fPerm.lock = new(sync.Mutex)
@@ -1310,8 +1333,8 @@ func (fPerm *FilePermissionConfig) GetPermissionNarrativeText() string {
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		nil,
-		"NumberStrKernel."+
-			"String()",
+		"FilePermissionConfig."+
+			"GetPermissionNarrativeText()",
 		"")
 
 	if err != nil {
@@ -1633,10 +1656,15 @@ func (fPerm *FilePermissionConfig) IsValid(
 // The text codes used in the 'modeStr' mimic the Unix
 // permission codes.
 //
-// Reference:
+// ----------------------------------------------------------------
+//
+// # Reference:
 //
 //	https://www.cyberciti.biz/faq/explain-the-nine-permissions-bits-on-files/.
 //	https://en.wikipedia.org/wiki/File_system_permissions
+//	https://linuxconfig.org/how-to-use-special-permissions-the-setuid-setgid-and-sticky-bits
+//
+// ----------------------------------------------------------------
 //
 // The first character of the 'modeStr' designates the
 // 'Entry Type'. Currently, only two 'Entry Type'
@@ -1655,16 +1683,24 @@ func (fPerm *FilePermissionConfig) IsValid(
 // permission for full access to a file would be styled
 // as:
 //
-//	Example: "-rwxrwxrwx"
+//		Example: "-rwxrwxrwx"
 //
-//	Groups: - Owner/User, Group, Other
-//	From left to right
-//	First Characters is Entry Type index 0 ("-")
+//		Groups: - Owner/User, Group, Other
+//		From left to right
+//		First Characters is Entry Type index 0 ("-")
 //
-//	First Char index 0 =      "-"    Designates a file
-//	Char indexes 1-3 = Owner  "rwx"  Authorizing 'Read', 'Write' & Execute Permissions for 'Owner'
-//	Char indexes 4-6 = Group  "rwx"  Authorizing 'Read', 'Write' & Execute Permissions for 'Group'
-//	Char indexes 7-9 = Other  "rwx"  Authorizing 'Read', 'Write' & Execute Permissions for 'Other'
+//		First Char index 0 =     "-"   Designates a file
+//
+//		First Char index 0 =     "d"   Designates a directory
+//
+//		Char indexes 1-3 = Owner "rwx" Authorizing 'Read',
+//	                                  Write' & Execute Permissions for 'Owner'
+//
+//		Char indexes 4-6 = Group "rwx" Authorizing 'Read', 'Write' & Execute
+//	                                  Permissions for 'Group'
+//
+//		Char indexes 7-9 = Other "rwx" Authorizing 'Read', 'Write' & Execute
+//	                                  Permissions for 'Other'
 //
 // The Symbolic notation provided by input parameter 'modeStr' MUST conform to
 // the options presented below. The first character or 'Entry Type' is listed as
@@ -1695,33 +1731,153 @@ func (fPerm *FilePermissionConfig) IsValid(
 //	                             others have no permissions
 //
 //	Note: drwxrwxrwx - identifies permissions for directory
-//	                   value = 020000000777
 //
 // ----------------------------------------------------------------
 //
-// Input Parameter:
+// # Input Parameters
 //
-//	modeStr  string - 'modeStr' must conform to the symbolic notation options shown
-//	                  above. Failure to comply with this requirement will generate an
-//	                  error. As indicated, 'modeStr' must consist of 10-characters.
-//	                  The first character in 'modeStr' may be '-' specifying a fle or
-//	                  'd' specifying a directory.
+//	modeStr						string
 //
-//	                  Reference:
-//	                  How to use special permissions: the setuid, setgid and sticky bits
-//	                  https://linuxconfig.org/how-to-use-special-permissions-the-setuid-setgid-and-sticky-bits
-func (fPerm *FilePermissionConfig) New(modeStr string) (FilePermissionConfig, error) {
+//		'modeStr' is a 10-character string containing the
+//		read, write and execute permissions for the three
+//		groups or user classes:
+//
+//			(1)	'Owner/User'
+//
+//			(2)	'Group'
+//
+//			(3)	'Other'
+//
+//		This 10-character string will be used to
+//		configure the internal FileMode data field for
+//		the new returned instance of FilePermissionConfig.
+//
+//		'modeStr' must conform to the symbolic notation
+//		options shown above. Failure to comply with this
+//		requirement will generate an error. As indicated,
+//		'modeStr' must consist of 10-characters.
+//
+//		The first character in 'modeStr' may be '-'
+//		specifying a fle or 'd' specifying a directory.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	FilePermissionConfig
+//
+//		If this method completes successfully, a new,
+//		fully populated instance of FilePermissionConfig
+//		will be returned configured with the permission
+//		codes contained in input parameter 'modeStr'.
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (fPerm *FilePermissionConfig) New(
+	modeStr string,
+	errorPrefix interface{}) (
+	FilePermissionConfig,
+	error) {
 
-	ePrefix := "FilePermissionConfig.New()"
+	if fPerm.lock == nil {
+		fPerm.lock = new(sync.Mutex)
+	}
+
+	fPerm.lock.Lock()
+
+	defer fPerm.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
 
 	fPerm2 := FilePermissionConfig{}
 
-	err := fPerm2.SetFileModeByTextCode(modeStr)
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FilePermissionConfig."+
+			"New()",
+		"")
 
 	if err != nil {
-		return FilePermissionConfig{},
-			fmt.Errorf(ePrefix+"%v", err.Error())
+		return fPerm2, err
 	}
+
+	err = new(filePermissionConfigNanobot).
+		setFileModeByTextCode(
+			&fPerm2,
+			modeStr,
+			ePrefix.XCpy(
+				"fPerm2<-modeStr"))
 
 	return fPerm2, nil
 }
@@ -1784,21 +1940,47 @@ func (fPerm *FilePermissionConfig) New(modeStr string) (FilePermissionConfig, er
 // If you decide to proceed, be guided by the wisdom of Davy Crockett:
 //
 //	"Be always sure you are right - then go ahead."
+//
+// TODO - Add comments
 func (fPerm FilePermissionConfig) NewByComponents(
 	entryType OsFilePermissionCode,
-	unixPermissionTextStr string) (FilePermissionConfig, error) {
+	unixPermissionTextStr string,
+	errorPrefix interface{}) (FilePermissionConfig, error) {
+
+	if fPerm.lock == nil {
+		fPerm.lock = new(sync.Mutex)
+	}
+
+	fPerm.lock.Lock()
+
+	defer fPerm.lock.Unlock()
 
 	fPerm2 := FilePermissionConfig{}
 
-	err := fPerm2.SetFileModeByComponents(entryType, unixPermissionTextStr)
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FilePermissionConfig."+
+			"NewByComponents()",
+		"")
 
 	if err != nil {
-		ePrefix := "FilePermissionConfig.NewByComponents() "
-		return FilePermissionConfig{},
-			fmt.Errorf(ePrefix+"%v", err.Error())
+		return fPerm2, err
 	}
 
-	return fPerm2, nil
+	err = new(filePermissionConfigNanobot).
+		setFileModeByComponents(
+			&fPerm2,
+			entryType,
+			unixPermissionTextStr,
+			ePrefix.XCpy(
+				"fPerm2<-"))
+
+	return fPerm2, err
 }
 
 // NewByFileMode - Creates and returns a new instance of FilePermissionConfig. The instance
@@ -1934,7 +2116,6 @@ func (fPerm FilePermissionConfig) NewByOctalDigits(
 //
 //
 //	Note: drwxrwxrwx - identifies permissions for directory
-//	                   value = 020000000777
 //
 // ------------------------------------------------------------------------
 //
@@ -1947,64 +2128,43 @@ func (fPerm FilePermissionConfig) NewByOctalDigits(
 // If you decide to proceed, be guided by the wisdom of Davy Crockett:
 //
 //	"Be always sure you are right - then go ahead."
+//
+// TODO - Add comments
 func (fPerm *FilePermissionConfig) SetFileModeByComponents(
 	entryType OsFilePermissionCode,
-	unixPermissionTextStr string) error {
+	unixPermissionTextStr string,
+	errorPrefix interface{}) error {
 
-	ePrefix := "FilePermissionConfig.SetFileModeByComponents() "
-
-	if len(unixPermissionTextStr) == 10 {
-		unixPermissionTextStr = unixPermissionTextStr[1:]
+	if fPerm.lock == nil {
+		fPerm.lock = new(sync.Mutex)
 	}
 
-	if len(unixPermissionTextStr) != 9 {
-		return fmt.Errorf(ePrefix+
-			"Error: Input parameter 'unixPermissionTextStr' must contain 9-Characters. "+
-			"This unixPermissionTextStr contains %v-characters. unixPermissionTextStr='%v'. ",
-			len(unixPermissionTextStr), unixPermissionTextStr)
-	}
+	fPerm.lock.Lock()
 
-	fModeEntryType := os.FileMode(entryType)
+	defer fPerm.lock.Unlock()
 
-	_, ok := mOsPermissionCodeToString[fModeEntryType]
+	var ePrefix *ePref.ErrPrefixDto
 
-	if !ok {
-		return fmt.Errorf(ePrefix+
-			"Input parameter 'entryType' is an INVALID os.FileMode! entryType decimal value='%s' "+
-			"octal value='%s' ", strconv.FormatInt(int64(entryType), 10),
-			strconv.FormatInt(int64(entryType), 8))
-	}
+	var err error
 
-	ownerInt, err := fPerm.convertGroupToDecimal(unixPermissionTextStr[0:3], "owner")
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FilePermissionConfig."+
+			"SetFileModeByComponents()",
+		"")
 
 	if err != nil {
-		return fmt.Errorf(ePrefix+"'ownerInt' Error: %v", err.Error())
+		return err
 	}
 
-	groupInt, err := fPerm.convertGroupToDecimal(unixPermissionTextStr[3:6], "group")
-
-	if err != nil {
-		return fmt.Errorf(ePrefix+"groupInt Error: %v", err.Error())
-	}
-
-	otherInt, err := fPerm.convertGroupToDecimal(unixPermissionTextStr[6:], "other")
-
-	if err != nil {
-		return fmt.Errorf(ePrefix+"otherInt Error: %v", err.Error())
-	}
-
-	ownerInt *= 100
-	groupInt *= 10
-	permission := ownerInt + groupInt + otherInt
-
-	fMode := os.FileMode(
-		new(NumberConversions).
-			ConvertOctalToDecimal(permission))
-
-	fPerm.fileMode = fModeEntryType | fMode
-	fPerm.isInitialized = true
-
-	return nil
+	return new(filePermissionConfigNanobot).
+		setFileModeByComponents(
+			fPerm,
+			entryType,
+			unixPermissionTextStr,
+			ePrefix.XCpy(
+				"fPerm<-"))
 }
 
 // SetByFileMode - Sets the permission codes for this FilePermissionConfig
@@ -2123,199 +2283,239 @@ func (fPerm *FilePermissionConfig) SetFileModeByOctalDigits(
 	return nil
 }
 
-// SetFileModeByTextCode - Sets the internal FileMode data field using input
-// parameter 'modeStr'. 'modeStr' is a 10-character string containing the read,
-// write and execute permissions for the three groups, 'Owner/User', 'Group' and
-// 'Other'.
+// SetFileModeByTextCode
 //
-// The text codes used in the 'modeStr' mimic the Unix permission codes.
+// Sets the internal FileMode data field for the current
+// instance of FilePermissionConfig using input parameter
+// 'modeStr'. 'modeStr' is a 10-character string
+// containing the read, write and execute permissions for
+// the three groups or user classes:
 //
-//	Reference:
-//	  https://www.cyberciti.biz/faq/explain-the-nine-permissions-bits-on-files/.
-//	  https://en.wikipedia.org/wiki/File_system_permissions
+//	(1)	'Owner/User'
 //
-// The first character of the 'modeStr' designates the 'Entry Type'. Currently,
-// only two 'Entry Type' characters are supported. Therefore, the first character
-// in 'modeStr' must consist of a hyphen ("-") designating a file, or a "d"
-// designating a directory.
+//	(2)	'Group'
 //
-// The remaining nine characters in the 'modeStr' are styled as unix permission bits.
-// These nine characters are divided into three group fields each containing 3-permission
-// characters. Each character field may be populated with a 'r' (Read-Permission),
-// 'w' (Write-Permission), 'x' (Execute-Permission) or '-' signaling no permission
-// or no access allowed. A typical 'modeStr' authorizing permission for full access
-// to a file would be styled as:
+//	(3)	'Other'
+//
+// The text codes used in the 'modeStr' mimic the Unix
+// permission codes.
+//
+// ----------------------------------------------------------------
+//
+// # Reference:
+//
+//	https://www.cyberciti.biz/faq/explain-the-nine-permissions-bits-on-files/.
+//	https://en.wikipedia.org/wiki/File_system_permissions
+//	https://linuxconfig.org/how-to-use-special-permissions-the-setuid-setgid-and-sticky-bits
+//
+// ----------------------------------------------------------------
+//
+// The first character of the 'modeStr' designates the
+// 'Entry Type'. Currently, only two 'Entry Type'
+// characters are supported. Therefore, the first
+// character in 'modeStr' must consist of a hyphen ("-")
+// designating a file, or a "d" designating a directory.
+//
+// The remaining nine characters in the 'modeStr' are
+// styled as unix permission bits. These nine characters
+// are divided into three group fields each containing
+// 3-permission characters. Each character field may be
+// populated with one of the following characters:
+//
+//	'r' (Read-Permission)
+//
+//	'w' (Write-Permission)
+//
+//	'x' (Execute-Permission)
+//		or
+//	'-' signaling no permission or no access allowed
+//
+// A typical 'modeStr' authorizing permission for full
+// access to a file would therefore be styled as:
 //
 //	"-rwxrwxrwx"
 //
-//	Groups: - Owner, Group, Other
+//	Groups or User Classes: - Owner, Group, Other
+//	** Note: 'Owner' is also referred to as User/Owner
+//
 //	From left to right
 //
 //	Char index 0     = Entry Type. Must be either a "-" or a "d"
-//	Char indexes 4-6 = Group  "rwx"  Authorizing 'Read', 'Write' & Execute Permissions for 'Group'
 //	Char indexes 1-3 = Owner  "rwx"  Authorizing 'Read', 'Write' & Execute Permissions for 'Owner'
+//	Char indexes 4-6 = Group  "rwx"  Authorizing 'Read', 'Write' & Execute Permissions for 'Group'
 //	Char indexes 7-9 = Other  "rwx"  Authorizing 'Read', 'Write' & Execute Permissions for 'Other'
 //
-// The Symbolic notation provided by input parameter 'modeStr' MUST conform to
-// the options presented below. The first character or 'Entry Type' is listed as
-// "-". However, in practice, the caller may set the first character as either a
-// "-", specifying a file, or a "d", specifying a directory. No other first character
+// The Symbolic notation provided by input parameter
+// 'modeStr' MUST conform to the options presented below.
+// The first character or 'Entry Type' is listed as "-".
+// However, in practice, the caller may set the first
+// character as either a "-", specifying a file, or a
+// "d", specifying a directory. No other first character
 // types are currently supported.
 //
-// After the first character, the remaining 9-characters are constituents of the
-// three Symbolic Groups: Owners/Users, Groups & Others. Each group has three characters
-// which may be 'r', 'w', 'x'. If a permission is not set, the character position contains
-// a '-'.
+// After the first character, the remaining 9-characters
+// are constituents of the three Symbolic User Classes:
 //
-//	'modeStr'
-//	Symbolic    Octal           File Access
-//	Format     Notation        Permission Descriptions
-//	------------------------------------------------------------
+//	Owners/Users
+//	Groups
+//	Others
 //
-//	----------   0000           File - no permissions
-//	-rwx------   0700           File - read, write, & execute only for owner
-//	-rwxrwx---   0770           File - read, write, & execute for owner and group
-//	-rwxrwxrwx   0777           File - read, write, & execute for owner, group and others
-//	---x--x--x   0111           File - execute
-//	--w--w--w-   0222           File - write only
-//	--wx-wx-wx   0333           File - write & execute
-//	-r--r--r--   0444           File - read only
-//	-r-xr-xr-x   0555           File - read & execute
-//	-rw-rw-rw-   0666           File - read & write
-//	-rwxr-----   0740           File - Owner can read, write, & execute. Group can only read;
-//	                            File - others have no permissions
-//	drwxrwxrwx   20000000777    File - Directory - read, write, & execute for owner, group and others
+// Each group has three characters which may be 'r',
+// 'w', 'x'. If a permission is not set, the character
+// position contains a '-'.
 //
-// ------------------------------------------------------------------------
+//		'modeStr'
+//		Symbolic    Octal           File Access
+//		Format     Notation        Permission Descriptions
+//		------------------------------------------------------------
 //
-// Input Parameter:
+//		----------   0000           File - no permissions
+//		-rwx------   0700           File - read, write, & execute only for owner
+//		-rwxrwx---   0770           File - read, write, & execute for owner and group
+//		-rwxrwxrwx   0777           File - read, write, & execute for owner, group and others
+//		---x--x--x   0111           File - execute
+//		--w--w--w-   0222           File - write only
+//		--wx-wx-wx   0333           File - write & execute
+//		-r--r--r--   0444           File - read only
+//		-r-xr-xr-x   0555           File - read & execute
+//		-rw-rw-rw-   0666           File - read & write
+//		-rwxr-----   0740           File - Owner can read, write, & execute. Group can only read;
+//	                                     others have no permissions
 //
-//	modeStr  string - 'modeStr' must conform to the symbolic notation options shown
-//	                  above. Failure to comply with this requirement will generate an
-//	                  error. As indicated, 'modeStr' must consist of 10-characters.
-//	                  The first character in 'modeStr' may be '-' specifying a fle or
-//	                  'd' specifying a directory.
+//		Note: drwxrwxrwx - identifies permissions for directory
 //
-//	Reference:
-//	How to use special permissions: the setuid, setgid and sticky bits
-//	https://linuxconfig.org/how-to-use-special-permissions-the-setuid-setgid-and-sticky-bits
-func (fPerm *FilePermissionConfig) SetFileModeByTextCode(modeStr string) error {
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	modeStr						string
+//
+//		'modeStr' is a 10-character string containing the
+//		read, write and execute permissions for the three
+//		groups or user classes:
+//
+//			(1)	'Owner/User'
+//
+//			(2)	'Group'
+//
+//			(3)	'Other'
+//
+//		This 10-character string will be used to
+//		configure the internal FileMode data field for
+//		the current instance of FilePermissionConfig.
+//
+//		'modeStr' must conform to the symbolic notation
+//		options shown above. Failure to comply with this
+//		requirement will generate an error. As indicated,
+//		'modeStr' must consist of 10-characters.
+//
+//		The first character in 'modeStr' may be '-'
+//		specifying a fle or 'd' specifying a directory.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (fPerm *FilePermissionConfig) SetFileModeByTextCode(
+	modeStr string,
+	errorPrefix interface{}) error {
 
-	ePrefix := "FilePermissionConfig.StringToMode() "
-
-	if len(modeStr) != 10 {
-		return fmt.Errorf(ePrefix+
-			"Error: Input parameter 'modeStr' MUST contain 10-characters. This 'modeStr' "+
-			"contains %v-characters. modeStr='%v' ", len(modeStr), modeStr)
+	if fPerm.lock == nil {
+		fPerm.lock = new(sync.Mutex)
 	}
 
-	firstChar := string(modeStr[0])
+	fPerm.lock.Lock()
 
-	if firstChar != "-" &&
-		firstChar != "d" {
-		return fmt.Errorf(ePrefix+
-			"Error: First character of input parameter, 'modeStr' MUST BE 'd' or '-'. "+
-			"This first character = '%v'", firstChar)
-	}
+	defer fPerm.lock.Unlock()
 
-	ownerInt, err := fPerm.convertGroupToDecimal(modeStr[1:4], "owner")
-
-	if err != nil {
-		return fmt.Errorf(ePrefix+"'ownerInt' Error: %v", err.Error())
-	}
-
-	groupInt, err := fPerm.convertGroupToDecimal(modeStr[4:7], "group")
-
-	if err != nil {
-		return fmt.Errorf(ePrefix+"groupInt Error: %v", err.Error())
-	}
-
-	otherInt, err := fPerm.convertGroupToDecimal(modeStr[7:], "other")
-
-	if err != nil {
-		return fmt.Errorf(ePrefix+"otherInt Error: %v", err.Error())
-	}
-
-	ownerInt *= 100
-	groupInt *= 10
-	permission := ownerInt + groupInt + otherInt
-
-	entryType := 0
-
-	fMode := permission
-
-	if firstChar == "d" {
-
-		entryType = new(NumberConversions).
-			ConvertDecimalToOctal(int(os.ModeDir))
-
-		fMode = entryType | permission
-	}
-
-	fPerm.fileMode = os.FileMode(
-		new(NumberConversions).ConvertOctalToDecimal(fMode))
-
-	fPerm.isInitialized = true
-
-	return nil
-}
-
-// convertGroupToDecimal - Expecting to receive a 3-character permission string
-// for an 'owner', 'group' or 'other' 'groupType'.
-//
-// 3-character permission letter group must be formatted as one of the following:
-//
-//	"rwx"
-//	"rw-"
-//	"r--"
-//	"---"
-//	"--x"
-//	"-wx"
-//	"-w-"
-//	"r-x"
-//
-// If input parameter 'groupStr' does not match one of the letter groups shown above, an
-// error will be returned.
-//
-// If successful, this method will return an integer representing the octal digits comprising
-// this group code. For example, groupStr="rwx" will return an integer value of '7' which can
-// be treated as octal digit '7' for purposes of creating an os.FileMode.
-func (fPerm *FilePermissionConfig) convertGroupToDecimal(groupStr, groupType string) (int, error) {
-
-	ePrefix := "FilePermissionConfig.convertGroupToDecimal() "
+	var ePrefix *ePref.ErrPrefixDto
 	var err error
-	intVal := 0
 
-	if len(groupStr) != 3 {
-		return -1, fmt.Errorf(ePrefix+
-			"Error: input parameter groupStr must be exactly 3-characters in length. "+
-			"This groupStr is %v-characters in length. groupStr='%v' groupType='%v' ",
-			len(groupStr), groupStr, groupType)
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FilePermissionConfig."+
+			"SetFileModeByTextCode()",
+		"")
+
+	if err != nil {
+		return err
 	}
 
-	tstLetters := strings.ToLower(groupStr)
-
-	switch tstLetters {
-	case "rwx":
-		intVal = 7
-	case "rw-":
-		intVal = 6
-	case "r--":
-		intVal = 4
-	case "---":
-		intVal = 0
-	case "--x":
-		intVal = 1
-	case "-wx":
-		intVal = 3
-	case "-w-":
-		intVal = 2
-	case "r-x":
-		intVal = 5
-	default:
-		err = fmt.Errorf(ePrefix+"Error: Invalid 3-Letter "+groupType+
-			" String. 3-Letter Block='%v'", tstLetters)
-	}
-
-	return intVal, err
+	return new(filePermissionConfigNanobot).setFileModeByTextCode(
+		fPerm,
+		modeStr,
+		ePrefix.XCpy(
+			"fPerm<-modeStr"))
 }

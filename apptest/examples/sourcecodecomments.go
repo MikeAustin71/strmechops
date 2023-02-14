@@ -2,6 +2,7 @@ package examples
 
 import (
 	"fmt"
+	ePref "github.com/MikeAustin71/errpref"
 )
 
 type SourceCodeComments struct {
@@ -146,8 +147,28 @@ type SourceCodeComments struct {
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (srcCodeComments *SourceCodeComments) testPrimaryComments() {
-	fmt.Println("HELLO WORLD!")
+func (srcCodeComments *SourceCodeComments) testPrimaryComments(
+	errorPrefix interface{}) error {
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FilePermissionConfig."+
+			"GetEntryTypeComponent()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	fmt.Printf("HELLO WORLD!\n"+
+		"%v",
+		ePrefix.String())
+
+	return err
 }
 
 // testSubsidiaryComments
@@ -210,9 +231,54 @@ func (srcCodeComments *SourceCodeComments) testPrimaryComments() {
 //		for input parameter 'errPrefDto' (error prefix)
 //		will be prefixed or attached at the beginning of
 //		the error message.
-func (srcCodeComments *SourceCodeComments) testSubsidiaryComments() {
+func (srcCodeComments *SourceCodeComments) testSubsidiaryComments(
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"filePermissionConfigElectron."+
+			"testValidityOfFilePermissionConfig()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	fmt.Printf("HELLO WORLD!\n"+
+		"%v\n",
+		ePrefix.String())
+
+	return err
+}
+
+// newIEmpty
+func (srcCodeComments *SourceCodeComments) newIEmpty() error {
 	fmt.Println("HELLO WORLD!")
 
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		nil,
+		"FilePermissionConfig."+
+			"GetPermissionNarrativeText()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	fmt.Printf("%v\n",
+		ePrefix.String())
+
+	return err
 }
 
 //	testRoundingComments
