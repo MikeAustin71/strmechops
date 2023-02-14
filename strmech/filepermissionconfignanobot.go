@@ -188,8 +188,8 @@ func (fPermConfigNanobot *filePermissionConfigNanobot) setFileModeByComponents(
 	if !ok {
 		err = fmt.Errorf("%v\n"+
 			"Input parameter 'entryType' is an INVALID os.FileMode!\n"+
-			"entryType decimal value='%s' "+
-			"octal value='%s' ",
+			"entryType decimal value='%s' \n"+
+			"octal value='%s' \n",
 			ePrefix.String(),
 			strconv.FormatInt(int64(entryType), 10),
 			strconv.FormatInt(int64(entryType), 8))
@@ -249,6 +249,328 @@ func (fPermConfigNanobot *filePermissionConfigNanobot) setFileModeByComponents(
 	fPerm.isInitialized = true
 
 	return err
+}
+
+// setByFileMode
+//
+// Sets the permission codes for the FilePermissionConfig
+// instance passed as input parameter 'fPerm'.
+//
+// Using input parameter 'fMode' of type 'os.FileMode'.
+// If the value does not include a valid os mode
+// constant, an error will be returned.
+//
+// If successful, this method will assign the os.FileMode
+// input value to the internal data field,
+// 'fPerm.fileMode'.
+//
+// ----------------------------------------------------------------
+//
+// # Reference:
+//
+//	https://pkg.go.dev/os#FileMode
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fPerm						*FilePermissionConfig
+//
+//		A pointer to an instance of FilePermissionConfig.
+//		The internal FileMode data field for this
+//		instance will be reset using the permission codes
+//		contained in input parameter 'modeStr'.
+//
+//	fMode						os.FileMode
+//
+//		An instance of os.FileMode containing file or
+//		directory permission codes. These permission
+//		codes will be used to reset the internal
+//		FileMode data field in the 'fPerm' instance of
+//		FilePermissionConfig.
+//
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (fPermConfigNanobot *filePermissionConfigNanobot) setByFileMode(
+	fPerm *FilePermissionConfig,
+	fMode os.FileMode,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if fPermConfigNanobot.lock == nil {
+		fPermConfigNanobot.lock = new(sync.Mutex)
+	}
+
+	fPermConfigNanobot.lock.Lock()
+
+	defer fPermConfigNanobot.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"filePermissionConfigNanobot."+
+			"setByFileMode()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if fPerm == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'fPerm' is a nil pointer!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	tFMode := fMode
+
+	mask := os.FileMode(0777)
+
+	// The &^ operator is bit clear (AND NOT):
+	// in the expression z = x &^ y, each bit of z is 0
+	// if the corresponding bit of y is 1; otherwise it
+	// equals the corresponding bit of x
+	entryType := tFMode &^ mask
+
+	osPermissionCodeMapLock.Lock()
+
+	defer osPermissionCodeMapLock.Unlock()
+
+	_, ok := mOsPermissionCodeToString[entryType]
+
+	if !ok {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'fMode' contains an invalid\n"+
+			"'EntryType' otherwise known as an os mode constant.\n"+
+			"'fMode' value  = %v\n"+
+			"'fMode' string = %v\n",
+			ePrefix.String(),
+			fMode,
+			fMode.String())
+
+		return err
+	}
+
+	fPerm.fileMode = fMode
+	fPerm.isInitialized = true
+
+	return nil
+}
+
+// setFileModeByOctalDigits
+//
+// Sets the permissions value of the FilePermissionConfig
+// instance passed as input parameter 'fPerm'. The
+// internal FileMode data field (fPerm.fileMode) is reset
+// to the value represented by input parameter,
+// 'octalFileModeCode'. Any previous internal FileMode
+// value is overwritten.
+//
+// ------------------------------------------------------------------------
+//
+// # Warning
+//
+// In the Go Programming Language, if you initialize an
+// integer with a leading zero (e.g. x:= int(0777)), than
+// number ('0777') is treated as an octal value and
+// converted to a decimal value. Therefore, x:= int(0777)
+// will mean that 'x' is set equal to 511. If you set
+// x:= int(777), x will be set equal to '777'. For purposes
+// of this method enter the octal code as x:= int(777).
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fPerm						*FilePermissionConfig
+//
+//		A pointer to an instance of FilePermissionConfig.
+//		The internal FileMode data field for this
+//		instance will be reset using the permission codes
+//		contained in input parameter 'modeStr'.
+//
+//	octalFileModeCode			int
+//
+//		This parameter contains the integer value of the
+//		of the permission code which will be used to
+//		initialize the 'fPerm' FilePermissionConfig
+//		instance (fPerm.fileMode). The integer digits in
+//		'octalFileModeCode' represent the octal value for
+//		the file permissions.
+//
+//		If the input parameter 'octalFileModeCode'
+//		contains an invalid Entry Type, an error will be
+//		returned.
+//
+//		A partial list of valid file permission value
+//	 	examples are shown as follows:
+//
+//	 ____________________________________________________________________________
+//
+//	          Input Parameter
+//	              integer            Equivalent
+//	 Octal    'octalFileModeCode'    Symbolic      File Access
+//	 Digits        value             Notation      Permission Descriptions
+//	 0000 	         0               ----------    File - no permissions
+//	 0700 	       700               -rwx------    File - read, write, & execute only for owner
+//	 0770 	       770               -rwxrwx---    File - read, write, & execute for owner and group
+//	 0777 	       777               -rwxrwxrwx    File - read, write, & execute for owner, group and others
+//	 0111 	       111               ---x--x--x    File - execute
+//	 0222 	       222               --w--w--w-    File - write
+//	 0333 	       333               --wx-wx-wx    File - write & execute
+//	 0444 	       444               -r--r--r--    File - read
+//	 0555 	       555               -r-xr-xr-x    File - read & execute
+//	 0666 	       666               -rw-rw-rw-    File - read & write
+//	 0740 	       740               -rwxr-----    File - Owner can read, write, & execute. Group can only read;
+//	                                                      others have no permissions
+//
+//	 drwxrwxrwx    Directory - read, write, & execute for owner, group and others
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+//
+//		If the input parameter 'octalFileModeCode'
+//		contains an invalid Entry Type, an error will be
+//		returned.
+func (fPermConfigNanobot *filePermissionConfigNanobot) setFileModeByOctalDigits(
+	fPerm *FilePermissionConfig,
+	octalFileModeCode int,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if fPermConfigNanobot.lock == nil {
+		fPermConfigNanobot.lock = new(sync.Mutex)
+	}
+
+	fPermConfigNanobot.lock.Lock()
+
+	defer fPermConfigNanobot.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"filePermissionConfigNanobot."+
+			"setFileModeByOctalDigits()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if fPerm == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'fPerm' is a nil pointer!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	decimalVal := new(NumberConversions).ConvertOctalToDecimal(octalFileModeCode)
+
+	tFMode := os.FileMode(decimalVal)
+
+	mask := os.FileMode(0777)
+
+	entryType := tFMode &^ mask
+
+	osPermissionCodeMapLock.Lock()
+
+	defer osPermissionCodeMapLock.Unlock()
+
+	_, ok := mOsPermissionCodeToString[entryType]
+
+	if !ok {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'octalFileModeCode' contains an invalid\n"+
+			"'EntryType' otherwise known as an os mode constant.\n"+
+			"entryType decimal value='%s' \n"+
+			"entryType octal value='%s' \n"+
+			"'octalFileModeCode' decimal value  = %s\n"+
+			"'octalFileModeCode' decimal value  = %s\n",
+			ePrefix.String(),
+			strconv.FormatInt(int64(entryType), 10),
+			strconv.FormatInt(int64(entryType), 8),
+			strconv.FormatInt(int64(octalFileModeCode), 10),
+			strconv.FormatInt(int64(octalFileModeCode), 8))
+
+		return err
+	}
+
+	fPerm.fileMode = tFMode
+	fPerm.isInitialized = true
+
+	return nil
 }
 
 // setFileModeByTextCode

@@ -162,6 +162,6 @@ func (numConvertMolecule *numberConversionsMolecule) convertOctalToDecimal(
 		octalNumber = octalNumber / 10
 		counter++
 	}
-	return decimalNumber
 
+	return decimalNumber
 }
