@@ -43,15 +43,7 @@ type fileHelperElectron struct {
 //	            3. 'testStr'     = ""
 //	               return string = ""
 //
-// ------------------------------------------------------------------------
-//
-// Return Values:
-//
-//	int - Integer Values Returned:
-//	      -1 = string is empty
-//	      -2 = string consists entirely of spaces
-//	       0 = string contains non-space characters
-//
+// /
 // ----------------------------------------------------------------
 //
 // # Input Parameters
@@ -86,8 +78,11 @@ type fileHelperElectron struct {
 //
 //		If 'testStr' consists of non-white space
 //		characters, this method will delete leading
-//		and trailing white spaces. If 'errCode' is set
-//		to error
+//		and trailing white spaces.
+//
+//		If 'testStr' consists entirely of white space
+//		characters, 'newStr' will be returned as an empty
+//		string ("").
 func (fHelpElectron *fileHelperElectron) isStringEmptyOrBlank(
 	testStr string) (
 	errCode int,

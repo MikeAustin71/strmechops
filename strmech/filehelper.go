@@ -8,6 +8,7 @@ import (
 	"math"
 	"os"
 	"path"
+	fp "path/filepath"
 	"strings"
 	"sync"
 	"time"
@@ -235,50 +236,93 @@ func (fh *FileHelper) AddPathSeparatorToEndOfPathStr(
 	return newPathStr, nil
 }
 
-// AdjustPathSlash will standardize path
-// separators according to operating system
+// AdjustPathSlash will standardize path separators
+// according to operating system.
+//
+// If input parameter 'path' contains invalid file path
+// separators for the current operating system, this
+// method will apply standard, compatible file path
+// separator characters.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	path				string
+//
+//		This 'path' string will be examined for
+//		non-standard path separator characters in the
+//		context of the current operating system. If
+//		path separator characters are found to be
+//		incompatible with the current operating system,
+//		they will be replaced and a valid path string
+//		will be returned to the calling function.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//
+//		This method will replace invalid path separators
+//		found in input parameter 'path' and return a
+//		string containing valid path separator characters
+//		for the current operating system.
 func (fh FileHelper) AdjustPathSlash(path string) string {
-	errCode := 0
 
-	errCode, _, path = fh.isStringEmptyOrBlank(path)
-
-	if errCode == -1 {
-		return ""
+	if fh.lock == nil {
+		fh.lock = new(sync.Mutex)
 	}
 
-	if errCode == -2 {
-		return ""
-	}
-
-	if os.PathSeparator != '\\' {
-		return strings.ReplaceAll(path, "\\", string(os.PathSeparator))
-	}
-
-	if os.PathSeparator != '/' {
-		return strings.ReplaceAll(path, "/", string(os.PathSeparator))
-	}
-
-	return fp.FromSlash(path)
+	return new(fileHelperAtom).adjustPathSlash(
+		path)
 }
 
-// AreSameFile - Compares two paths or path/file names to determine if they are
-// the same and equivalent.
+// AreSameFile
 //
-// An error will be triggered if one or both of the input parameters, 'pathFile1'
-// and 'pathFile2' are empty/blank strings.
+// Compares two paths or path/file names to determine if
+// they are the same and equivalent.
 //
-// If the path file input parameters identify the same file, this method returns
-// 'true'.
+// An error will be triggered if one or both of the input
+// parameters, 'pathFile1' and 'pathFile2' are empty or
+// zero length strings.
 //
-// The two input parameters 'pathFile1' and 'pathFile2' will be converted to their
-// absolute paths before comparisons are applied.
-func (fh FileHelper) AreSameFile(pathFile1, pathFile2 string) (bool, error) {
+// If the path file input parameters identify the same
+// file, this method returns 'true'.
+//
+// The two input parameters 'pathFile1' and 'pathFile2'
+// will be converted to their absolute paths before
+// comparisons are applied.
+func (fh FileHelper) AreSameFile(pathFile1,
+	pathFile2 string,
+	errorPrefix interface{}) (
+	bool,
+	error) {
 
-	ePrefix := "FileHelper.AreSameFile() "
+	if fh.lock == nil {
+		fh.lock = new(sync.Mutex)
+	}
+
+	fh.lock.Lock()
+
+	defer fh.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileHelper."+
+			"AreSameFile()",
+		"")
+
+	if err != nil {
+		return false, err
+	}
 
 	var pathFile1DoesExist, pathFile2DoesExist bool
 	var fInfoPathFile1, fInfoPathFile2 FileInfoPlus
-	var err error
 
 	pathFile1,
 		pathFile1DoesExist,
@@ -4613,6 +4657,100 @@ func (fh FileHelper) IsPathString(
 	return isPathStr, cannotDetermine, testPathStr, err
 }
 
+// IsStringEmptyOrBlank
+//
+// Analyzes a string to determine if the string is
+// 'empty' or if the string consists of all blanks
+// (spaces).
+//
+// In addition, if the string contains characters,
+// all leading and trailing spaces are 'trimmed' or
+// deleted.
+//
+// If the string consists entirely of blank spaces or
+// white space (" "), it will be reset to an empty
+// string, ("").
+//
+// ----------------------------------------------------------------
+//
+// # Usage
+//
+//	testStr string
+//
+//	The original input parameter string ('testStr') from
+//	which the leading and trailing spaces will be deleted.
+//
+//	         Examples:
+//
+//	            1. 'testStr'     = "  a string   "
+//	               return string = "a string"
+//
+//	            2. 'testStr'     = "    "
+//	               return string = ""
+//
+//	            3. 'testStr'     = ""
+//	               return string = ""
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	testStr						string
+//
+//		This string will be analyzed to determine if
+//		is empty (zero length) or consists entirely of
+//		blank or white spaces (" ").
+//
+//		This string will be returned as return parameter
+//		'newStr'.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	errCode			int
+//
+//		This method will analyze input parameter
+//		'testStr' and return one of the following status
+//		codes
+//
+//		Integer Codes Returned:
+//			-1 = string is empty
+//			-2 = string consists entirely of spaces
+//			 0 = string contains non-white space
+//			 	 characters.
+//
+//	strLen			int
+//
+//		The length of 'newStr' returned by this method.
+//
+//	newStr			string
+//
+//		If 'testStr' consists of non-white space
+//		characters, this method will delete leading
+//		and trailing white spaces.
+//
+//		If 'testStr' consists entirely of white space
+//		characters, 'newStr' will be returned as an empty
+//		string ("").
+func (fh *FileHelper) IsStringEmptyOrBlank(testStr string) (
+	errCode int,
+	strLen int,
+	newStr string) {
+
+	if fh.lock == nil {
+		fh.lock = new(sync.Mutex)
+	}
+
+	fh.lock.Lock()
+
+	defer fh.lock.Unlock()
+
+	return new(fileHelperElectron).
+		isStringEmptyOrBlank(
+			testStr)
+}
+
 // JoinPathsAdjustSeparators - Joins two
 // path strings and standardizes the
 // path separators according to the
@@ -4658,45 +4796,35 @@ func (fh FileHelper) JoinPaths(p1 string, p2 string) string {
 // MakeAbsolutePath - Supply a relative path or any path
 // string and resolve that path to an Absolute path.
 // Note: Clean() is called on result by fp.Abs().
-func (fh FileHelper) MakeAbsolutePath(relPath string) (string, error) {
+func (fh FileHelper) MakeAbsolutePath(
+	relPath string,
+	errorPrefix interface{}) (string, error) {
 
-	ePrefix := "FileHelper.MakeAbsolutePath() "
-
-	errCode := 0
-
-	errCode, _, relPath = fh.isStringEmptyOrBlank(relPath)
-
-	if errCode == -1 {
-		return "",
-			errors.New(ePrefix +
-				"Error: Input parameter 'relPath' is an empty string!\n")
+	if fh.lock == nil {
+		fh.lock = new(sync.Mutex)
 	}
 
-	if errCode == -2 {
-		return "",
-			errors.New(ePrefix +
-				"Error: Input parameter 'relPath' consists of blank spaces!\n")
-	}
+	fh.lock.Lock()
 
-	testRelPath := fh.AdjustPathSlash(relPath)
+	defer fh.lock.Unlock()
 
-	errCode, _, testRelPath = fh.isStringEmptyOrBlank(testRelPath)
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
 
-	if errCode < 0 {
-		return "", errors.New(ePrefix +
-			"Error: Input Parameter 'relPath' adjusted for path Separators is an EMPTY string!\n")
-	}
-
-	p, err := fp.Abs(testRelPath)
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileHelper."+
+			"MakeAbsolutePath()",
+		"")
 
 	if err != nil {
-		return "", fmt.Errorf(ePrefix+
-			"Error returned from fp.Abs(testRelPath).\n"+
-			"testRelPath='%v'\nError='%v'\n",
-			testRelPath, err.Error())
+		return "", err
 	}
 
-	return p, nil
+	return new(fileHelperProton).makeAbsolutePath(
+		relPath,
+		ePrefix.XCpy("<-relPath"))
 }
 
 // MakeDirAll - creates a directory named path, along with any necessary

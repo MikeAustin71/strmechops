@@ -3,6 +3,7 @@ package strmech
 import (
 	"errors"
 	"fmt"
+	ePref "github.com/MikeAustin71/errpref"
 	"io"
 	"os"
 	pf "path/filepath"
@@ -4505,27 +4506,36 @@ func (dMgrHlpr *dirMgrHelper) lowLevelDoesDirectoryExist(
 func (dMgrHlpr *dirMgrHelper) lowLevelDirMgrFieldConfig(
 	dMgr *DirMgr,
 	validPathDto ValidPathStrDto,
-	ePrefix string,
+	errorPrefix string,
 	dMgrLabel string) (isEmpty bool, err error) {
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"dirMgrHelper."+
+			"lowLevelDirMgrFieldConfig()",
+		"")
+
+	if err != nil {
+		return false, err
+	}
 
 	isEmpty = false
 	err = nil
 
-	ePrefixCurrMethod := "dirMgrHelper.lowLevelDirMgrFieldConfig() "
-
-	if len(ePrefix) == 0 {
-		ePrefix = ePrefixCurrMethod
-	} else {
-		ePrefix = ePrefix + "- " + ePrefixCurrMethod
-	}
-
 	if dMgr == nil {
-		err = fmt.Errorf(ePrefix+
-			"\nError: Input parameter %v pointer is 'nil'!\n", dMgrLabel)
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter %v pointer is 'nil'!\n",
+			ePrefix.String(),
+			dMgrLabel)
+
 		return isEmpty, err
 	}
 
-	err = validPathDto.IsDtoValid(ePrefix)
+	err = validPathDto.IsDtoValid(ePrefix.String())
 
 	if err != nil {
 		return isEmpty, err
@@ -4565,16 +4575,16 @@ func (dMgrHlpr *dirMgrHelper) lowLevelDirMgrFieldConfig(
 			dirPathDoesExist,
 			pathFInfoPlus,
 			err =
-			fh.doesPathFileExist(
+			new(fileHelperMolecule).doesPathFileExist(
 				dMgr.path,
 				PreProcPathCode.None(),
-				ePrefix,
-				dMgrLabel+".path")
+				dMgrLabel+".path",
+				ePrefix)
 
 		if err != nil {
 			_ = dMgrHlpr.empty(
 				dMgr,
-				ePrefix,
+				ePrefix.String(),
 				dMgrLabel)
 
 			isEmpty = true
@@ -4595,7 +4605,7 @@ func (dMgrHlpr *dirMgrHelper) lowLevelDirMgrFieldConfig(
 
 			_ = dMgrHlpr.empty(
 				dMgr,
-				ePrefix,
+				ePrefix.String(),
 				dMgrLabel)
 
 			isEmpty = true
@@ -4611,12 +4621,13 @@ func (dMgrHlpr *dirMgrHelper) lowLevelDirMgrFieldConfig(
 		if !pathFInfoPlus.IsDir() {
 			_ = dMgrHlpr.empty(
 				dMgr,
-				ePrefix,
+				ePrefix.String(),
 				dMgrLabel)
 
-			err = fmt.Errorf(ePrefix+
-				"\nERROR: Directory path exists, but it is a File - NOT a directory!\n"+
+			err = fmt.Errorf("%v\n"+
+				"ERROR: Directory path exists, but it is a File - NOT a directory!\n"+
 				"%v='%v'\n",
+				ePrefix.String(),
 				dMgrLabel,
 				dMgr.path)
 
@@ -4628,13 +4639,14 @@ func (dMgrHlpr *dirMgrHelper) lowLevelDirMgrFieldConfig(
 
 			_ = dMgrHlpr.empty(
 				dMgr,
-				ePrefix,
+				ePrefix.String(),
 				dMgrLabel)
 
-			err = fmt.Errorf(ePrefix+
-				"\nError: Directory path exists, but "+
+			err = fmt.Errorf("%v\n"+
+				"Error: Directory path exists, but\n"+
 				"it is classified as as a Regular File!\n"+
 				"%v='%v'\n",
+				ePrefix.String(),
 				dMgrLabel,
 				dMgr.path)
 
@@ -4650,12 +4662,13 @@ func (dMgrHlpr *dirMgrHelper) lowLevelDirMgrFieldConfig(
 		if !absPathFInfoPlus.IsDir() {
 			_ = dMgrHlpr.empty(
 				dMgr,
-				ePrefix,
+				ePrefix.String(),
 				dMgrLabel)
 
-			err = fmt.Errorf(ePrefix+
-				"\nThe Directory Manager absolute path exists and IS NOT A DIRECTORY!.\n"+
+			err = fmt.Errorf("%v\n"+
+				"The Directory Manager absolute path exists and IS NOT A DIRECTORY!.\n"+
 				"%v Path='%v'\n",
+				ePrefix.String(),
 				dMgrLabel,
 				dMgr.absolutePath)
 
@@ -4667,13 +4680,14 @@ func (dMgrHlpr *dirMgrHelper) lowLevelDirMgrFieldConfig(
 
 			_ = dMgrHlpr.empty(
 				dMgr,
-				ePrefix,
+				ePrefix.String(),
 				dMgrLabel)
 
-			err = fmt.Errorf(ePrefix+
-				"\nError: Directory absolute path exists, but "+
+			err = fmt.Errorf("%v\n"+
+				"Error: Directory absolute path exists, but\n"+
 				"it is classified as as a Regular File!\n"+
 				"%v='%v'\n",
+				ePrefix.String(),
 				dMgrLabel,
 				dMgr.absolutePath)
 
@@ -4735,18 +4749,24 @@ func (dMgrHlpr *dirMgrHelper) lowLevelDirMgrFieldConfig(
 // 'dMgr'.
 func (dMgrHlpr *dirMgrHelper) lowLevelMakeDir(
 	dMgr *DirMgr,
-	ePrefix string,
+	errorPrefix string,
 	dMgrLabel string) (dirCreated bool, err error) {
 
-	ePrefixCurrMethod := "dirMgrHelper.lowLevelMakeDir() "
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"dirMgrHelper."+
+			"lowLevelMakeDir()",
+		"")
+
+	if err != nil {
+		return false, err
+	}
+
 	dirCreated = false
 	err = nil
-
-	if len(ePrefix) == 0 {
-		ePrefix = ePrefixCurrMethod
-	} else {
-		ePrefix = ePrefix + "- " + ePrefixCurrMethod
-	}
 
 	dMgrPathDoesExist,
 		_,
@@ -4754,7 +4774,7 @@ func (dMgrHlpr *dirMgrHelper) lowLevelMakeDir(
 		dMgrHlpr.doesDirectoryExist(
 			dMgr,
 			PreProcPathCode.None(),
-			ePrefix,
+			ePrefix.String(),
 			dMgrLabel)
 
 	if err != nil {
@@ -4767,32 +4787,44 @@ func (dMgrHlpr *dirMgrHelper) lowLevelMakeDir(
 		return dirCreated, err
 	}
 
-	fPermCfg, err2 := new(FilePermissionConfig).New("drwxrwxrwx")
+	var fPermCfg FilePermissionConfig
 
-	if err2 != nil {
-		err = fmt.Errorf(ePrefix+
-			"\nError returned by FilePermissionConfig{}.New(\"drwxrwxrwx\")\n"+
-			"Error='%v'\n", err2.Error())
+	fPermCfg, err =
+		new(FilePermissionConfig).New(
+			"drwxrwxrwx",
+			ePrefix)
+
+	if err != nil {
 
 		return dirCreated, err
 	}
 
-	modePerm, err2 := fPermCfg.GetCompositePermissionMode()
+	var modePerm os.FileMode
 
-	if err2 != nil {
-		err = fmt.Errorf(ePrefix+
-			"\nError returned by fPermCfg.GetCompositePermissionMode().\n"+
-			"Error='%v\n", err2.Error())
+	modePerm,
+		err = fPermCfg.GetCompositePermissionMode(
+		ePrefix.XCpy(
+			"modePerm<-fPermCfg"))
+
+	if err != nil {
+
 		return dirCreated, err
 	}
+
+	var err2 error
 
 	err2 = os.MkdirAll(dMgr.absolutePath, modePerm)
 
 	if err2 != nil {
-		err = fmt.Errorf(ePrefix+
-			"\nError returned by os.MkdirAll(%v.absolutePath, modePerm).\n"+
-			"%v.absolutePath='%v'\nmodePerm=\"drwxrwxrwx\"\n"+
-			"Error='%v'\n", err2.Error())
+
+		err = fmt.Errorf("%v\n"+
+			"Error returned by os.MkdirAll(dMgr.absolutePath, modePerm).\n"+
+			"dMgr.absolutePath='%v'\n"+
+			"modePerm=\"drwxrwxrwx\"\n"+
+			"Error='%v'\n",
+			ePrefix.String(),
+			dMgr.absolutePath,
+			err2.Error())
 
 		return dirCreated, err
 	}
@@ -4803,7 +4835,7 @@ func (dMgrHlpr *dirMgrHelper) lowLevelMakeDir(
 		dMgrHlpr.doesDirectoryExist(
 			dMgr,
 			PreProcPathCode.None(),
-			ePrefix,
+			ePrefix.String(),
 			dMgrLabel)
 
 	if err2 != nil {
