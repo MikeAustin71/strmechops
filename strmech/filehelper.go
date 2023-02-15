@@ -249,8 +249,132 @@ func (fh FileHelper) AdjustPathSlash(path string) string {
 // The two input parameters 'pathFile1' and 'pathFile2'
 // will be converted to their absolute paths before
 // comparisons are applied.
-// TODO - Create sub-method
-func (fh FileHelper) AreSameFile(pathFile1,
+//
+// This path/file comparison is not affected by the fact
+// one file exists and the other does not.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	pathFile1					string
+//
+//		The first of two path file strings passed to this
+//		method. 'pathFile1' will be compared to
+//		determined if they are in fact pointing at the
+//		same file.
+//
+//		Both 'pathFile1' and 'pathFile2' will be
+//		converted to their absolute paths being subjected
+//		to comparison.
+//
+//		If 'pathFile1' is submitted as an empty or zero
+//		length string, an error will be returned.
+//
+//	pathFile2					string
+//
+//		The first of two path file strings passed to this
+//		method. 'pathFile1' will be compared to determined
+//		if they are in fact pointing at the same file.
+//
+//		Both 'pathFile1' and 'pathFile2' will be
+//		converted to their absolute paths being subjected
+//		to comparison.
+//
+//		If 'pathFile2' is submitted as an empty or zero
+//		length string, an error will be returned.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	bool
+//
+//		If this return parameter is set to 'true' it
+//		signals that input parameters 'pathFile1' and
+//		'pathFile2' are pointing at the same file.
+//		Effectively, the two path/file specifications
+//		are the same or equivalent.
+//
+//		If this return parameter is set to 'false' it
+//		signals that input parameters 'pathFile1' and
+//		'pathFile2' are NOT pointing at the same file.
+//		Effectively, the two path/file specifications
+//		are NOT equivalent.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (fh FileHelper) AreSameFile(
+	pathFile1,
 	pathFile2 string,
 	errorPrefix interface{}) (
 	bool,
@@ -278,56 +402,10 @@ func (fh FileHelper) AreSameFile(pathFile1,
 		return false, err
 	}
 
-	var pathFile1DoesExist, pathFile2DoesExist bool
-	var fInfoPathFile1, fInfoPathFile2 FileInfoPlus
-
-	pathFile1,
-		pathFile1DoesExist,
-		fInfoPathFile1,
-		err = new(fileHelperMolecule).doesPathFileExist(
+	return new(fileHelperNanobot).areSameFile(
 		pathFile1,
-		PreProcPathCode.AbsolutePath(), // Convert To Absolute Path
-		ePrefix,
-		"pathFile1")
-
-	if err != nil {
-		return false, err
-	}
-
-	pathFile2,
-		pathFile2DoesExist,
-		fInfoPathFile2,
-		err = new(fileHelperMolecule).doesPathFileExist(pathFile2,
-		PreProcPathCode.AbsolutePath(), // Convert To Absolute Path
-		ePrefix,
-		"pathFile2")
-
-	if err != nil {
-		return false, err
-	}
-
-	pathFile1 = strings.ToLower(pathFile1)
-	pathFile2 = strings.ToLower(pathFile2)
-
-	if pathFile1DoesExist && pathFile2DoesExist {
-
-		if os.SameFile(fInfoPathFile1.GetOriginalFileInfo(), fInfoPathFile2.GetOriginalFileInfo()) ||
-			pathFile1 == pathFile2 {
-			// pathFile1 and pathFile2 are the same
-			// path and file name.
-
-			return true, nil
-
-		}
-
-		return false, nil
-	}
-
-	if pathFile1 == pathFile2 {
-		return true, nil
-	}
-
-	return false, nil
+		pathFile2,
+		ePrefix)
 }
 
 // ChangeFileMode changes the file mode of an existing file designated by input
@@ -338,7 +416,10 @@ func (fh FileHelper) AreSameFile(pathFile1,
 //
 // If the method succeeds and the file's mode is changed, an error value of 'nil' is
 // returned.
-func (fh FileHelper) ChangeFileMode(pathFileName string, filePermission FilePermissionConfig) error {
+func (fh FileHelper) ChangeFileMode(
+	pathFileName string,
+	filePermission FilePermissionConfig) error {
+
 	ePrefix := "FileHelper.ChangeFileMode() "
 	var err error
 	var filePathDoesExist bool
@@ -380,7 +461,9 @@ func (fh FileHelper) ChangeFileMode(pathFileName string, filePermission FilePerm
 	err = os.Chmod(pathFileName, newOsFileMode)
 
 	if err != nil {
+
 		changeModeTxt, _ := filePermission.GetPermissionTextCode()
+
 		changeModeValue := filePermission.GetPermissionFileModeValueText()
 		return fmt.Errorf(ePrefix+
 			"Error returned by os.Chmod(pathFileName, newOsFileMode).\n"+
@@ -1335,8 +1418,27 @@ func (fh FileHelper) CopyFileByLinkByIo(src, dst string) (err error) {
 // exists, it will first be deleted and a new linked file will be crated.
 func (fh FileHelper) CopyFileByLink(src, dst string) (err error) {
 
-	ePrefix := "FileHelper.CopyFileByLink() "
-	err = nil
+	if fh.lock == nil {
+		fh.lock = new(sync.Mutex)
+	}
+
+	fh.lock.Lock()
+
+	defer fh.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		nil,
+		"FileHelper."+
+			"CopyFileByLink()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
 	var err2 error
 	var srcFileDoesExist, dstFileDoesExist bool
 	var srcFInfo, dstFInfo FileInfoPlus
@@ -1345,12 +1447,11 @@ func (fh FileHelper) CopyFileByLink(src, dst string) (err error) {
 	src,
 		srcFileDoesExist,
 		srcFInfo,
-		err = fHelpMolecule.
-		doesPathFileExist(
-			src,
-			PreProcPathCode.AbsolutePath(), // Covert to Absolute Path
-			ePrefix,
-			"src")
+		err = fHelpMolecule.doesPathFileExist(
+		src,
+		PreProcPathCode.AbsolutePath(), // Covert to Absolute Path
+		ePrefix,
+		"src")
 
 	if err != nil {
 		return err
@@ -1359,57 +1460,85 @@ func (fh FileHelper) CopyFileByLink(src, dst string) (err error) {
 	dst,
 		dstFileDoesExist,
 		dstFInfo,
-		err = fHelpMolecule.
-		doesPathFileExist(
-			dst,
-			PreProcPathCode.AbsolutePath(), // Convert to Absolute Path
-			ePrefix,
-			"dst")
+		err = fHelpMolecule.doesPathFileExist(
+		dst,
+		PreProcPathCode.AbsolutePath(), // Convert to Absolute Path
+		ePrefix,
+		"dst")
 
 	if err != nil {
 		return err
 	}
 
-	areSameFile, err2 := fh.AreSameFile(src, dst)
+	areSameFile, err2 :=
+		new(fileHelperNanobot).areSameFile(
+			src,
+			dst,
+			ePrefix.XCpy("areSameFile<-"))
 
 	if err2 != nil {
-		err = fmt.Errorf(ePrefix+"Error occurred during path file name comparison.\n"+
+
+		err = fmt.Errorf("%v\n"+
+			"Error occurred during path file name comparison.\n"+
 			"Source File:'%v'\n"+
 			"Destination File:'%v'\n"+
 			"Error='%v'\n",
-			src, dst, err2.Error())
+			ePrefix,
+			src,
+			dst,
+			err2.Error())
+
 		return err
 	}
 
 	if areSameFile {
-		err = fmt.Errorf(ePrefix+"Error: The source and destination file"+
+
+		err = fmt.Errorf("%v\n"+
+			"Error: The source and destination file"+
 			" are the same - equivalent.\n"+
-			"Source File:'%v'\nDestination File:'%v'\n",
-			src, dst)
+			"Source File:'%v'\n"+
+			"Destination File:'%v'\n",
+			ePrefix.String(),
+			src,
+			dst)
+
 		return err
 	}
 
 	if !srcFileDoesExist {
-		err = fmt.Errorf(ePrefix+
+
+		err = fmt.Errorf("%v\n"+
 			"Error: Input parameter 'src' file DOES NOT EXIST!\n"+
-			"src='%v'\n", src)
+			"src='%v'\n",
+			ePrefix.String(),
+			src)
+
 		return err
 	}
 
 	if srcFInfo.IsDir() {
-		err = fmt.Errorf(ePrefix+"ERROR: Source File (src) is a 'Directory' NOT A FILE!\n"+
-			"Source File (src)='%v'\n", src)
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Source File (src) is a 'Directory' NOT A FILE!\n"+
+			"Source File (src)='%v'\n",
+			ePrefix.String(),
+			src)
+
 		return err
 	}
 
 	if !srcFInfo.Mode().IsRegular() {
 		// cannot copy non-regular files (e.g., directories,
 		// symlinks, devices, etc.)
-		err = fmt.Errorf(ePrefix+
+
+		err = fmt.Errorf("%v\n"+
 			"Error: Non-regular source file.\n"+
 			"Source File Name='%v'\n"+
 			"Source File Mode='%v'\n",
-			srcFInfo.Name(), srcFInfo.Mode().String())
+			ePrefix.String(),
+			srcFInfo.Name(),
+			srcFInfo.Mode().String())
+
 		return err
 	}
 
@@ -1421,28 +1550,40 @@ func (fh FileHelper) CopyFileByLink(src, dst string) (err error) {
 		// fail when attempting to create a link to an existing file.
 
 		if dstFInfo.IsDir() {
-			err = fmt.Errorf(ePrefix+
+
+			err = fmt.Errorf("%v\n"+
 				"Error: The destination file ('dst') is NOT A FILE.\n"+
 				"It is a DIRECTORY!\n"+
 				"Destination File ('dst') = '%v'\n",
+				ePrefix.String(),
 				dst)
+
 			return err
 		}
 
 		if !dstFInfo.Mode().IsRegular() {
-			err = fmt.Errorf(ePrefix+
+
+			err = fmt.Errorf("%v\n"+
 				"Error: The destination file ('dst') is NOT A REGULAR FILE.\n"+
 				"Destination File ('dst') = '%v'\n",
+				ePrefix.String(),
 				dst)
+
 			return err
 		}
 
 		err2 = os.Remove(dst)
 
 		if err2 != nil {
-			err = fmt.Errorf(ePrefix+
-				"Error: The target destination file exists and could NOT be deleted! \n"+
-				"destination file='%v'\nError='%v'\n", dst, err2.Error())
+
+			err = fmt.Errorf("%v\n"+
+				"Error: The target destination file exists and could NOT be deleted!\n"+
+				"destination file='%v'\n"+
+				"Error='%v'\n",
+				ePrefix.String(),
+				dst,
+				err2.Error())
+
 			return err
 		}
 
@@ -1461,10 +1602,15 @@ func (fh FileHelper) CopyFileByLink(src, dst string) (err error) {
 		}
 
 		if dstFileDoesExist {
-			err = fmt.Errorf(ePrefix+"Error: Deletion of preexisting "+
+
+			err = fmt.Errorf("%v\n"+
+				"Error: Deletion of preexisting "+
 				"destination file failed!\n"+
 				"The copy link operation cannot proceed!\n"+
-				"destination file='%v' ", dst)
+				"destination file='%v' ",
+				ePrefix.String(),
+				dst)
+
 			return err
 		}
 	}
@@ -1472,9 +1618,17 @@ func (fh FileHelper) CopyFileByLink(src, dst string) (err error) {
 	err2 = os.Link(src, dst)
 
 	if err2 != nil {
-		err = fmt.Errorf(ePrefix+"- os.Link(src, dst) FAILED!\n"+
-			"src='%v'\ndst='%v'\nError='%v'\n",
-			src, dst, err2.Error())
+
+		err = fmt.Errorf("%v\n"+
+			"os.Link(src, dst) FAILED!\n"+
+			"src='%v'\n"+
+			"dst='%v'\n"+
+			"Error='%v'\n",
+			ePrefix.String(),
+			src,
+			dst,
+			err2.Error())
+
 		return err
 	}
 
@@ -1489,16 +1643,24 @@ func (fh FileHelper) CopyFileByLink(src, dst string) (err error) {
 			"dst")
 
 	if err2 != nil {
-		err = fmt.Errorf(ePrefix+
+
+		err = fmt.Errorf("%v\n"+
 			"Error: After Copy By Link Operation, a non-path error was returned on 'dst'.\n"+
-			"Error='%v'", err2.Error())
+			"Error='%v'",
+			ePrefix,
+			err2.Error())
+
 		return err
 	}
 
 	if !dstFileDoesExist {
-		err = fmt.Errorf(ePrefix+
+
+		err = fmt.Errorf("%v\n"+
 			"Error: After Copy By Link Operation, the destination file DOES NOT EXIST!\n"+
-			"Destination File= dst = %v", dst)
+			"Destination File= dst = %v",
+			ePrefix.String(),
+			dst)
+
 		return err
 	}
 
@@ -1528,7 +1690,28 @@ func (fh FileHelper) CopyFileByLink(src, dst string) (err error) {
 // destination directory does NOT exist, this method will abort
 // the copy operation and return an error.
 func (fh FileHelper) CopyFileByIo(src, dst string) (err error) {
-	ePrefix := "FileHelper.CopyFileByIo() "
+
+	if fh.lock == nil {
+		fh.lock = new(sync.Mutex)
+	}
+
+	fh.lock.Lock()
+
+	defer fh.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		nil,
+		"FileHelper."+
+			"CopyFileByIo()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
 	err = nil
 
 	var err2, err3 error
@@ -1552,8 +1735,14 @@ func (fh FileHelper) CopyFileByIo(src, dst string) (err error) {
 	}
 
 	if !srcFileDoesExist {
-		err = fmt.Errorf(ePrefix+"Error: Source File DOES NOT EXIST!\n"+
-			"src='%v'\n", src)
+
+		err = fmt.Errorf(
+			"%v\n"+
+				"Error: Source File DOES NOT EXIST!\n"+
+				"src='%v'\n",
+			ePrefix.String(),
+			src)
+
 		return err
 	}
 
@@ -1571,49 +1760,86 @@ func (fh FileHelper) CopyFileByIo(src, dst string) (err error) {
 		return err
 	}
 
-	areSameFile, err2 := fh.AreSameFile(src, dst)
+	var areSameFile bool
+
+	areSameFile,
+		err2 = new(fileHelperNanobot).areSameFile(
+		src,
+		dst,
+		ePrefix.XCpy(
+			"areSameFile<-"))
 
 	if err2 != nil {
-		err = fmt.Errorf(ePrefix+"Error occurred during path file name comparison.\n"+
-			"Source File:'%v'\nDestination File:'%v'\nError='%v'\n",
-			src, dst, err2.Error())
+
+		err = fmt.Errorf("%v\n"+
+			"Error occurred during path file name comparison.\n"+
+			"Source File:'%v'\n"+
+			"Destination File:'%v'\n"+
+			"Error='%v'\n",
+			ePrefix.String(),
+			src, dst,
+			err2.Error())
+
 		return err
 	}
 
 	if areSameFile {
-		err = fmt.Errorf(ePrefix+"Error: The source and destination file "+
-			"are the same - equivalent.\n"+
-			"Source File:'%v'\nDestination File:'%v'\n",
-			src, dst)
+
+		err = fmt.Errorf("%v\n"+
+			"Error: The source and destination file\n"+
+			"are the same. They are equivalent.\n"+
+			"Source File:'%v'\n"+
+			"Destination File:'%v'\n",
+			ePrefix.String(),
+			src,
+			dst)
+
 		return err
 	}
 
 	if srcFInfo.IsDir() {
-		err = fmt.Errorf(ePrefix+"Error: Source File is 'Directory' and NOT a file!\n"+
-			"Source File='%v'\n", src)
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Source File is 'Directory' and NOT a file!\n"+
+			"Source File='%v'\n",
+			ePrefix.String(),
+			src)
+
 		return err
 	}
 
 	if !srcFInfo.Mode().IsRegular() {
 		// cannot copy non-regular files (e.g., directories,
 		// symlinks, devices, etc.)
-		err = fmt.Errorf(ePrefix+"Error non-regular source file ='%v'\n"+
+
+		err = fmt.Errorf("%v\n"+
+			"Error non-regular source file ='%v'\n"+
 			"source file Mode='%v'\n",
-			srcFInfo.Name(), srcFInfo.Mode().String())
+			ePrefix.String(),
+			srcFInfo.Name(),
+			srcFInfo.Mode().String())
+
 		return err
 	}
 
 	if dstFileDoesExist && dstFileInfo.Mode().IsDir() {
-		err = fmt.Errorf(ePrefix+
+
+		err = fmt.Errorf("%v\n"+
 			"Error: 'dst' is a Directory and NOT a File!\n"+
-			"dst='%v'", dst)
+			"dst='%v'",
+			ePrefix.String(),
+			dst)
+
 		return err
 	}
 
 	if dstFileDoesExist && !dstFileInfo.Mode().IsRegular() {
-		err = fmt.Errorf(ePrefix+
+		err = fmt.Errorf("%v\n"+
 			"Error: 'dst' is NOT a 'Regular' File!\n"+
-			"dst='%v'\n", dst)
+			"dst='%v'\n",
+			ePrefix.String(),
+			dst)
+
 		return err
 	}
 
@@ -1628,9 +1854,12 @@ func (fh FileHelper) CopyFileByIo(src, dst string) (err error) {
 	inSrcPtr, err2 := os.Open(src)
 
 	if err2 != nil {
-		err = fmt.Errorf(ePrefix+
-			"Error returned from os.Open(src) src='%v'  Error='%v'",
-			src, err2.Error())
+		err = fmt.Errorf("%v\n"+
+			"Error returned from os.Open(src) src='%v'\n"+
+			"Error='%v'",
+			ePrefix.String(),
+			src,
+			err2.Error())
 		return err
 	}
 
@@ -1640,10 +1869,13 @@ func (fh FileHelper) CopyFileByIo(src, dst string) (err error) {
 	outDestPtr, err2 := os.Create(dst)
 
 	if err2 != nil {
-		err = fmt.Errorf(ePrefix+
+		err = fmt.Errorf("%v\n"+
 			"Error returned from os.Create(destinationFile)\n"+
-			"destinationFile='%v'\nError='%v'\n",
-			dst, err2.Error())
+			"destinationFile='%v'\n"+
+			"Error='%v'\n",
+			ePrefix.String(),
+			dst,
+			err2.Error())
 
 		_ = inSrcPtr.Close()
 
@@ -1653,13 +1885,21 @@ func (fh FileHelper) CopyFileByIo(src, dst string) (err error) {
 	bytesCopied, err2 := io.Copy(outDestPtr, inSrcPtr)
 
 	if err2 != nil {
+
 		_ = inSrcPtr.Close()
+
 		_ = outDestPtr.Close()
-		err = fmt.Errorf(ePrefix+
-			"Error returned from io.Copy(destination, source) \n"+
+
+		err = fmt.Errorf("%v\n"+
+			"Error returned from io.Copy(destination, source)\n"+
 			"destination='%v'\n"+
-			"source='%v'\nError='%v'\n",
-			dst, src, err2.Error())
+			"source='%v'\n"+
+			"Error='%v'\n",
+			ePrefix.String(),
+			dst,
+			src,
+			err2.Error())
+
 		return err
 	}
 
@@ -1669,20 +1909,27 @@ func (fh FileHelper) CopyFileByIo(src, dst string) (err error) {
 	err2 = outDestPtr.Sync()
 
 	if err2 != nil {
-		err3 = fmt.Errorf(ePrefix+
+
+		err3 = fmt.Errorf("%v\n"+
 			"Error returned from outDestPtr.Sync()\n"+
-			"outDestPtr=destination='%v'\nError='%v'\n",
+			"outDestPtr=destination='%v'\n"+
+			"Error='%v'\n",
+			ePrefix.String(),
 			dst, err2.Error())
+
 		errs = append(errs, err3)
 	}
 
 	err2 = inSrcPtr.Close()
 
 	if err2 != nil {
-		err3 = fmt.Errorf(ePrefix+
+
+		err3 = fmt.Errorf("%v\n"+
 			"Error returned from inSrcPtr.Close()\n"+
 			"inSrcPtr=source='%v'\nError='%v'\n",
-			src, err2.Error())
+			ePrefix.String(),
+			src,
+			err2.Error())
 
 		errs = append(errs, err3)
 	}
@@ -1693,9 +1940,13 @@ func (fh FileHelper) CopyFileByIo(src, dst string) (err error) {
 
 	if err2 != nil {
 
-		err3 = fmt.Errorf(ePrefix+
-			"Error returned from outDestPtr.Close()\noutDestPtr=destination='%v'\nError='%v'\n",
-			dst, err2.Error())
+		err3 = fmt.Errorf("%v\n"+
+			"Error returned from outDestPtr.Close()\n"+
+			"outDestPtr=destination='%v'\n"+
+			"Error='%v'\n",
+			ePrefix.String(),
+			dst,
+			err2.Error())
 
 		errs = append(errs, err3)
 	}
@@ -1717,18 +1968,26 @@ func (fh FileHelper) CopyFileByIo(src, dst string) (err error) {
 			"dst")
 
 	if err2 != nil {
-		err = fmt.Errorf(ePrefix+
+
+		err = fmt.Errorf("%v\n"+
 			"Error: After Copy IO operation, dst "+
 			"generated non-path error!\n"+
-			"dst='%v'\nError='%v'\n",
-			dst, err2.Error())
+			"dst='%v'\n"+
+			"Error='%v'\n",
+			ePrefix.String(),
+			dst,
+			err2.Error())
+
 		return err
 	}
 
 	if !dstFileDoesExist {
-		err = fmt.Errorf(ePrefix+
+
+		err = fmt.Errorf("%v\n"+
 			"ERROR: After Copy IO operation, the destination file DOES NOT EXIST!\n"+
-			"Destination File = 'dst' = '%v'\n", dst)
+			"Destination File = 'dst' = '%v'\n",
+			ePrefix.String(),
+			dst)
 
 		return err
 	}
@@ -1736,13 +1995,19 @@ func (fh FileHelper) CopyFileByIo(src, dst string) (err error) {
 	srcFileSize := srcFInfo.Size()
 
 	if bytesCopied != srcFileSize {
-		err = fmt.Errorf(ePrefix+
+
+		err = fmt.Errorf("%v\n"+
 			"Error: Bytes Copied does NOT equal bytes "+
 			"in source file!\n"+
-			"Source File Bytes='%v'   Bytes Coped='%v'\n"+
-			"Source File=src='%v'\nDestination File=dst='%v'\n",
-			srcFileSize, bytesCopied,
-			src, dst)
+			"Source File Bytes='%v'\n"+
+			"Bytes Coped='%v'\n"+
+			"Source File=src='%v'\n"+
+			"Destination File=dst='%v'\n",
+			ePrefix.String(),
+			srcFileSize,
+			bytesCopied,
+			src,
+			dst)
 
 		return err
 	}
@@ -1750,13 +2015,20 @@ func (fh FileHelper) CopyFileByIo(src, dst string) (err error) {
 	err = nil
 
 	if dstFileInfo.Size() != srcFileSize {
-		err = fmt.Errorf(ePrefix+
-			"\nError: Bytes is source file do NOT equal bytes "+
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Bytes is source file do NOT equal bytes "+
 			"in destination file!\n"+
-			"Source File Bytes='%v'   Destination File Bytes='%v'\n"+
-			"Source File=src='%v'\nDestination File=dst='%v'\n",
-			srcFileSize, dstFileInfo.Size(),
-			src, dst)
+			"Source File Bytes='%v'\n"+
+			"Destination File Bytes='%v'\n"+
+			"Source File=src='%v'\n"+
+			"Destination File=dst='%v'\n",
+			ePrefix.String(),
+			srcFileSize,
+			dstFileInfo.Size(),
+			src,
+			dst)
+
 		return err
 	}
 
