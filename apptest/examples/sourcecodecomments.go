@@ -3,10 +3,12 @@ package examples
 import (
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
+	"sync"
 )
 
 type SourceCodeComments struct {
 	input string
+	lock  *sync.Mutex
 }
 
 // testPrimaryComments
@@ -149,6 +151,14 @@ type SourceCodeComments struct {
 //		error message.
 func (srcCodeComments *SourceCodeComments) testPrimaryComments(
 	errorPrefix interface{}) error {
+
+	if srcCodeComments.lock == nil {
+		srcCodeComments.lock = new(sync.Mutex)
+	}
+
+	srcCodeComments.lock.Lock()
+
+	defer srcCodeComments.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 	var err error

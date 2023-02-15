@@ -662,9 +662,11 @@ func (osPerm OsFilePermissionCode) ParseString(
 
 		if !ok {
 			return result,
-				fmt.Errorf(ePrefix+
+				fmt.Errorf("%v\n"+
 					"Error: Invalid Permission Code!\n"+
-					"valueString='%v'\n", valueString)
+					"valueString='%v'\n",
+					ePrefix,
+					valueString)
 		}
 
 		result = OsFilePermissionCode(permCode)
