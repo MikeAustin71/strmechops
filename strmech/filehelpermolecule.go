@@ -40,8 +40,8 @@ type fileHelperMolecule struct {
 func (fHelpMolecule *fileHelperMolecule) doesPathFileExist(
 	filePath string,
 	preProcessCode PreProcessPathCode,
-	filePathTitle string,
-	errPrefDto *ePref.ErrPrefixDto) (
+	errorPrefix interface{},
+	filePathTitle string) (
 	absFilePath string,
 	filePathDoesExist bool,
 	fInfo FileInfoPlus,
@@ -54,16 +54,14 @@ func (fHelpMolecule *fileHelperMolecule) doesPathFileExist(
 	fHelpMolecule.lock.Lock()
 
 	defer fHelpMolecule.lock.Unlock()
-
 	var ePrefix *ePref.ErrPrefixDto
-
 	var err error
 
 	ePrefix,
-		nonPathError = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
-		errPrefDto,
-		"fileHelperAtom."+
-			"doesPathFileExist()",
+		nonPathError = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileHelper."+
+			"AreSameFile()",
 		"")
 
 	if nonPathError != nil {
@@ -159,8 +157,8 @@ func (fHelpMolecule *fileHelperMolecule) doesPathFileExist(
 			}
 
 			// err == nil and err != os.IsNotExist(err)
-			// This is a non-path error. The non-path error will be test
-			// up to 3-times before it is returned.
+			// This is a non-path error. The non-path error will be
+			// tested up to 3-times before it is returned.
 			nonPathError =
 				fmt.Errorf("%v\n"+
 					"Non-Path error returned by os.Stat(%v)\n"+

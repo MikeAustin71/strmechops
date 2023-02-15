@@ -226,6 +226,10 @@ func (fh FileHelper) AdjustPathSlash(path string) string {
 		fh.lock = new(sync.Mutex)
 	}
 
+	fh.lock.Lock()
+
+	defer fh.lock.Unlock()
+
 	return new(fileHelperAtom).adjustPathSlash(
 		path)
 }
@@ -279,7 +283,8 @@ func (fh FileHelper) AreSameFile(pathFile1,
 	pathFile1,
 		pathFile1DoesExist,
 		fInfoPathFile1,
-		err = fh.doesPathFileExist(pathFile1,
+		err = new(fileHelperMolecule).doesPathFileExist(
+		pathFile1,
 		PreProcPathCode.AbsolutePath(), // Convert To Absolute Path
 		ePrefix,
 		"pathFile1")
@@ -291,7 +296,7 @@ func (fh FileHelper) AreSameFile(pathFile1,
 	pathFile2,
 		pathFile2DoesExist,
 		fInfoPathFile2,
-		err = fh.doesPathFileExist(pathFile2,
+		err = new(fileHelperMolecule).doesPathFileExist(pathFile2,
 		PreProcPathCode.AbsolutePath(), // Convert To Absolute Path
 		ePrefix,
 		"pathFile2")
@@ -340,7 +345,7 @@ func (fh FileHelper) ChangeFileMode(pathFileName string, filePermission FilePerm
 	pathFileName,
 		filePathDoesExist,
 		_,
-		err = fh.doesPathFileExist(
+		err = new(fileHelperMolecule).doesPathFileExist(
 		pathFileName,
 		PreProcPathCode.AbsolutePath(), // Convert to Absolute Path
 		ePrefix,
@@ -402,7 +407,7 @@ func (fh FileHelper) ChangeFileTimes(pathFileName string, newAccessTime, newModT
 	pathFileName,
 		filePathDoesExist,
 		fInfo,
-		err = fh.doesPathFileExist(pathFileName,
+		err = new(fileHelperMolecule).doesPathFileExist(pathFileName,
 		PreProcPathCode.AbsolutePath(), // Convert to Absolute Path
 		ePrefix,
 		"pathFileName")
@@ -516,7 +521,7 @@ func (fh FileHelper) CleanDirStr(dirNameStr string) (returnedDirName string, isE
 	adjustedDirName,
 		pathDoesExist,
 		fInfo,
-		err = fh.doesPathFileExist(dirNameStr,
+		err = new(fileHelperMolecule).doesPathFileExist(dirNameStr,
 		PreProcPathCode.PathSeparator(), // Convert to os Path Separators
 		ePrefix,
 		"dirNameStr")
@@ -869,10 +874,12 @@ func (fh FileHelper) CleanFileNameExtStr(
 	adjustedFileNameExt,
 		pathDoesExist,
 		fInfo,
-		err = fh.doesPathFileExist(fileNameExtStr,
-		PreProcPathCode.PathSeparator(), // Convert to os Path Separators
-		ePrefix,
-		"fileNameExtStr")
+		err = new(fileHelperMolecule).
+		doesPathFileExist(
+			fileNameExtStr,
+			PreProcPathCode.PathSeparator(), // Convert to os Path Separators
+			ePrefix,
+			"fileNameExtStr")
 
 	if err != nil {
 		returnedFileNameExt = ""
@@ -1333,13 +1340,16 @@ func (fh FileHelper) CopyFileByLink(src, dst string) (err error) {
 	var srcFileDoesExist, dstFileDoesExist bool
 	var srcFInfo, dstFInfo FileInfoPlus
 
+	fHelpMolecule := fileHelperMolecule{}
 	src,
 		srcFileDoesExist,
 		srcFInfo,
-		err = fh.doesPathFileExist(src,
-		PreProcPathCode.AbsolutePath(), // Covert to Absolute Path
-		ePrefix,
-		"src")
+		err = fHelpMolecule.
+		doesPathFileExist(
+			src,
+			PreProcPathCode.AbsolutePath(), // Covert to Absolute Path
+			ePrefix,
+			"src")
 
 	if err != nil {
 		return err
@@ -1348,10 +1358,12 @@ func (fh FileHelper) CopyFileByLink(src, dst string) (err error) {
 	dst,
 		dstFileDoesExist,
 		dstFInfo,
-		err = fh.doesPathFileExist(dst,
-		PreProcPathCode.AbsolutePath(), // Convert to Absolute Path
-		ePrefix,
-		"dst")
+		err = fHelpMolecule.
+		doesPathFileExist(
+			dst,
+			PreProcPathCode.AbsolutePath(), // Convert to Absolute Path
+			ePrefix,
+			"dst")
 
 	if err != nil {
 		return err
@@ -1436,10 +1448,12 @@ func (fh FileHelper) CopyFileByLink(src, dst string) (err error) {
 		dst,
 			dstFileDoesExist,
 			_,
-			err = fh.doesPathFileExist(dst,
-			PreProcPathCode.None(), // Apply no pre-processing conversion to 'dst'
-			ePrefix,
-			"dst")
+			err = fHelpMolecule.
+			doesPathFileExist(
+				dst,
+				PreProcPathCode.None(), // Apply no pre-processing conversion to 'dst'
+				ePrefix,
+				"dst")
 
 		if err != nil {
 			return err
@@ -1466,10 +1480,12 @@ func (fh FileHelper) CopyFileByLink(src, dst string) (err error) {
 	dst,
 		dstFileDoesExist,
 		_,
-		err2 = fh.doesPathFileExist(dst,
-		PreProcPathCode.AbsolutePath(), // Convert to Absolute Path
-		ePrefix,
-		"dst")
+		err2 = fHelpMolecule.
+		doesPathFileExist(
+			dst,
+			PreProcPathCode.AbsolutePath(), // Convert to Absolute Path
+			ePrefix,
+			"dst")
 
 	if err2 != nil {
 		err = fmt.Errorf(ePrefix+
@@ -1518,13 +1534,17 @@ func (fh FileHelper) CopyFileByIo(src, dst string) (err error) {
 	var srcFileDoesExist, dstFileDoesExist bool
 	var srcFInfo, dstFileInfo FileInfoPlus
 
+	fhMolecule := new(fileHelperMolecule)
+
 	src,
 		srcFileDoesExist,
 		srcFInfo,
-		err = fh.doesPathFileExist(src,
-		PreProcPathCode.AbsolutePath(), // Convert to Absolute Path
-		ePrefix,
-		"src")
+		err = fhMolecule.
+		doesPathFileExist(
+			src,
+			PreProcPathCode.AbsolutePath(), // Convert to Absolute Path
+			ePrefix,
+			"src")
 
 	if err != nil {
 		return err
@@ -1539,10 +1559,12 @@ func (fh FileHelper) CopyFileByIo(src, dst string) (err error) {
 	dst,
 		dstFileDoesExist,
 		dstFileInfo,
-		err = fh.doesPathFileExist(dst,
-		PreProcPathCode.AbsolutePath(), // Convert to Absolute Path
-		ePrefix,
-		"dst")
+		err = fhMolecule.
+		doesPathFileExist(
+			dst,
+			PreProcPathCode.AbsolutePath(), // Convert to Absolute Path
+			ePrefix,
+			"dst")
 
 	if err != nil {
 		return err
@@ -1686,10 +1708,12 @@ func (fh FileHelper) CopyFileByIo(src, dst string) (err error) {
 	_,
 		dstFileDoesExist,
 		dstFileInfo,
-		err2 = fh.doesPathFileExist(dst,
-		PreProcPathCode.None(), // Do NOT alter path
-		ePrefix,
-		"dst")
+		err2 = fhMolecule.
+		doesPathFileExist(
+			dst,
+			PreProcPathCode.None(), // Do NOT alter path
+			ePrefix,
+			"dst")
 
 	if err2 != nil {
 		err = fmt.Errorf(ePrefix+
@@ -1794,7 +1818,12 @@ func (fh FileHelper) DeleteDirFile(pathFile string) error {
 	var fileDoesExist bool
 	var err error
 
-	pathFile, fileDoesExist, _, err = fh.doesPathFileExist(
+	fHelpMolecule := fileHelperMolecule{}
+
+	pathFile,
+		fileDoesExist,
+		_,
+		err = fHelpMolecule.doesPathFileExist(
 		pathFile,
 		PreProcPathCode.AbsolutePath(), // Convert to Absolute File Path
 		ePrefix,
@@ -1818,7 +1847,10 @@ func (fh FileHelper) DeleteDirFile(pathFile string) error {
 			pathFile, err.Error())
 	}
 
-	_, fileDoesExist, _, err = fh.doesPathFileExist(
+	_,
+		fileDoesExist,
+		_,
+		err = fHelpMolecule.doesPathFileExist(
 		pathFile,
 		PreProcPathCode.None(), // Apply No Pre-Processing. Take no action
 		ePrefix,
@@ -1866,10 +1898,13 @@ func (fh FileHelper) DeleteDirPathAll(pathDir string) error {
 	var err, err2 error
 	var pathFileDoesExist bool
 
+	fHelpMolecule := fileHelperMolecule{}
+
 	pathDir,
 		pathFileDoesExist,
 		_,
-		err = fh.doesPathFileExist(pathDir,
+		err = fHelpMolecule.doesPathFileExist(
+		pathDir,
 		PreProcPathCode.AbsolutePath(), // Convert To Absolute Path
 		ePrefix,
 		"pathDir")
@@ -1910,7 +1945,8 @@ func (fh FileHelper) DeleteDirPathAll(pathDir string) error {
 	pathDir,
 		pathFileDoesExist,
 		_,
-		err = fh.doesPathFileExist(pathDir,
+		err = fHelpMolecule.doesPathFileExist(
+		pathDir,
 		PreProcPathCode.None(), // Apply No Pre-Processing. Take No Action.
 		ePrefix,
 		"pathDir")
@@ -1944,11 +1980,12 @@ func (fh FileHelper) DeleteDirPathAll(pathDir string) error {
 func (fh FileHelper) DoesFileExist(pathFileName string) bool {
 
 	_, pathFileDoesExist, _, nonPathError :=
-		fh.doesPathFileExist(
-			pathFileName,
-			PreProcPathCode.AbsolutePath(), // Convert to Absolute Path
-			"",
-			"pathFileName")
+		new(fileHelperMolecule).
+			doesPathFileExist(
+				pathFileName,
+				PreProcPathCode.AbsolutePath(), // Convert to Absolute Path
+				"FileHelper.DoesFileExist()",
+				"pathFileName")
 
 	if !pathFileDoesExist || nonPathError != nil {
 		return false
@@ -2231,11 +2268,12 @@ func (fh FileHelper) DoesFileInfoExist(
 	pathFileName,
 		doesFInfoExist,
 		fInfoPlus,
-		err = fh.doesPathFileExist(
-		pathFileName,
-		PreProcPathCode.AbsolutePath(), // Convert to Absolute Path
-		ePrefix,
-		"pathFileName")
+		err = new(fileHelperMolecule).
+		doesPathFileExist(
+			pathFileName,
+			PreProcPathCode.AbsolutePath(), // Convert to Absolute Path
+			ePrefix,
+			"pathFileName")
 
 	if err != nil {
 		doesFInfoExist = false
@@ -2288,7 +2326,7 @@ func (fh FileHelper) DoesThisFileExist(pathFileName string) (pathFileNameDoesExi
 	nonPathError = nil
 
 	_, pathFileNameDoesExist, _, nonPathError =
-		fh.doesPathFileExist(
+		new(fileHelperMolecule).doesPathFileExist(
 			pathFileName,
 			PreProcPathCode.AbsolutePath(), // Skip Absolute Path Conversion
 			ePrefix,
@@ -2500,7 +2538,8 @@ func (fh FileHelper) FindFilesInPath(pathName, fileSearchPattern string) ([]stri
 	pathName,
 		pathDoesExist,
 		fInfo,
-		err = fh.doesPathFileExist(pathName,
+		err = new(fileHelperMolecule).doesPathFileExist(
+		pathName,
 		PreProcPathCode.AbsolutePath(), // Convert to Absolute Path
 		ePrefix,
 		"pathName")
@@ -2509,7 +2548,8 @@ func (fh FileHelper) FindFilesInPath(pathName, fileSearchPattern string) ([]stri
 		return []string{}, err
 	}
 
-	errCode, _, fileSearchPattern = fh.isStringEmptyOrBlank(fileSearchPattern)
+	errCode, _, fileSearchPattern =
+		new(fileHelperElectron).isStringEmptyOrBlank(fileSearchPattern)
 
 	if errCode == -1 {
 		return []string{},
@@ -3124,7 +3164,8 @@ func (fh FileHelper) GetFileInfo(pathFileName string) (os.FileInfo, error) {
 	pathFileName,
 		pathDoesExist,
 		fInfo,
-		err = fh.doesPathFileExist(pathFileName,
+		err = new(fileHelperMolecule).doesPathFileExist(
+		pathFileName,
 		PreProcPathCode.AbsolutePath(), // Convert to Absolute Path
 		ePrefix,
 		"pathFileName")
@@ -3166,7 +3207,8 @@ func (fh FileHelper) GetFileLastModificationDate(
 	pathFileName,
 		pathFileNameDoesExist,
 		fInfo,
-		err = fh.doesPathFileExist(pathFileName,
+		err = new(fileHelperMolecule).doesPathFileExist(
+		pathFileName,
 		PreProcPathCode.AbsolutePath(), // Skip Convert to Absolute Path
 		ePrefix,
 		"pathFileName")
@@ -3208,7 +3250,8 @@ func (fh FileHelper) GetFileMode(pathFileName string) (FilePermissionConfig, err
 	pathFileName,
 		pathFileNameDoesExist,
 		fInfo,
-		err = fh.doesPathFileExist(pathFileName,
+		err = new(fileHelperMolecule).doesPathFileExist(
+		pathFileName,
 		PreProcPathCode.AbsolutePath(), // Convert to Absolute Path
 		ePrefix,
 		"pathFileName")
@@ -4225,7 +4268,8 @@ func (fh FileHelper) IsPathFileString(
 	correctedPathFileStr,
 		pathFileDoesExist,
 		fInfo,
-		err = fh.doesPathFileExist(pathFileStr,
+		err = new(fileHelperMolecule).doesPathFileExist(
+		pathFileStr,
 		PreProcPathCode.PathSeparator(), // Convert Path Separators to os default Path Separators
 		ePrefix,
 		"pathFileStr")
@@ -4911,7 +4955,8 @@ func (fh FileHelper) MakeDirAllPerm(dirPath string, permission FilePermissionCon
 	_,
 		pathDoesExist,
 		_,
-		err2 = fh.doesPathFileExist(dirPath,
+		err2 = new(fileHelperMolecule).doesPathFileExist(
+		dirPath,
 		PreProcPathCode.None(), // Take no Pre-Processing Action
 		ePrefix,
 		"dirPath")
@@ -5001,7 +5046,8 @@ func (fh FileHelper) MakeDirPerm(dirPath string, permission FilePermissionConfig
 	_,
 		pathDoesExist,
 		_,
-		err2 = fh.doesPathFileExist(dirPath,
+		err2 = new(fileHelperMolecule).doesPathFileExist(
+		dirPath,
 		PreProcPathCode.None(), // Take no Pre-Processing action
 		ePrefix,
 		"dirPath")
@@ -5042,10 +5088,13 @@ func (fh FileHelper) MoveFile(src, dst string) error {
 	var srcFileDoesExist, dstFileDoesExist bool
 	var srcFInfo, dstFInfo FileInfoPlus
 
+	fHelpMolecule := fileHelperMolecule{}
+
 	src,
 		srcFileDoesExist,
 		srcFInfo,
-		err = fh.doesPathFileExist(src,
+		err = fHelpMolecule.doesPathFileExist(
+		src,
 		PreProcPathCode.AbsolutePath(), // Convert to Absolute Path
 		ePrefix,
 		"src")
@@ -5071,7 +5120,8 @@ func (fh FileHelper) MoveFile(src, dst string) error {
 	dst,
 		dstFileDoesExist,
 		dstFInfo,
-		err = fh.doesPathFileExist(dst,
+		err = fHelpMolecule.doesPathFileExist(
+		dst,
 		PreProcPathCode.AbsolutePath(), // Convert to Absolute Path
 		ePrefix,
 		"dst")
@@ -5108,7 +5158,8 @@ func (fh FileHelper) MoveFile(src, dst string) error {
 	_,
 		dstFileDoesExist,
 		_,
-		err = fh.doesPathFileExist(dst,
+		err = fHelpMolecule.doesPathFileExist(
+		dst,
 		PreProcPathCode.None(), // Take no Pre-Processing action
 		ePrefix,
 		"dst")
@@ -5138,7 +5189,8 @@ func (fh FileHelper) MoveFile(src, dst string) error {
 	_,
 		srcFileDoesExist,
 		_,
-		err = fh.doesPathFileExist(src,
+		err = fHelpMolecule.doesPathFileExist(
+		src,
 		PreProcPathCode.None(), // Take No Pre-Processing Action
 		ePrefix,
 		"src")
@@ -5226,10 +5278,13 @@ func (fh FileHelper) OpenDirectory(
 	var directoryPathDoesExist bool
 	var dirPathFInfo FileInfoPlus
 
+	fHelpMolecule := fileHelperMolecule{}
+
 	directoryPath,
 		directoryPathDoesExist,
 		dirPathFInfo,
-		err = fh.doesPathFileExist(directoryPath,
+		err = fHelpMolecule.doesPathFileExist(
+		directoryPath,
 		PreProcPathCode.AbsolutePath(), // Convert to Absolute Path
 		ePrefix,
 		"directoryPath")
@@ -5279,7 +5334,8 @@ func (fh FileHelper) OpenDirectory(
 		_,
 			directoryPathDoesExist,
 			dirPathFInfo,
-			err = fh.doesPathFileExist(directoryPath,
+			err = fHelpMolecule.doesPathFileExist(
+			directoryPath,
 			PreProcPathCode.None(), // Take No Pre-Processing Action
 			ePrefix,
 			"directoryPath")
@@ -5393,7 +5449,7 @@ func (fh FileHelper) OpenFile(
 	pathFileName,
 		pathFileNameDoesExist,
 		fInfoPlus,
-		err = fh.doesPathFileExist(
+		err = new(fileHelperMolecule).doesPathFileExist(
 		pathFileName,
 		PreProcPathCode.AbsolutePath(), // Convert to Absolute Path
 		ePrefix,
@@ -5526,7 +5582,7 @@ func (fh FileHelper) OpenFileReadOnly(pathFileName string) (filePtr *os.File, er
 	pathFileName,
 		pathFileNameDoesExist,
 		fInfoPlus,
-		err = fh.doesPathFileExist(
+		err = new(fileHelperMolecule).doesPathFileExist(
 		pathFileName,
 		PreProcPathCode.AbsolutePath(), // Convert to Absolute Path
 		ePrefix,
@@ -5690,7 +5746,7 @@ func (fh FileHelper) OpenFileReadWrite(
 	pathFileName,
 		pathFileNameDoesExist,
 		fInfoPlus,
-		err = fh.doesPathFileExist(
+		err = new(fileHelperMolecule).doesPathFileExist(
 		pathFileName,
 		PreProcPathCode.AbsolutePath(), // Convert to Absolute Path
 		ePrefix,
@@ -5867,7 +5923,7 @@ func (fh FileHelper) OpenFileWriteOnly(
 	pathFileName,
 		pathFileNameDoesExist,
 		fInfoPlus,
-		err = fh.doesPathFileExist(
+		err = new(fileHelperMolecule).doesPathFileExist(
 		pathFileName,
 		PreProcPathCode.AbsolutePath(), // Convert to Absolute Path
 		ePrefix,
@@ -6324,11 +6380,7 @@ func (fh FileHelper) SwapBasePath(
 	return newBasePath + targetPath[oldBaseLen:], nil
 }
 
-/*
-  FileHelper private methods
-*/
-
-// doesPathFileExist - A helper method which public methods use to determine whether a
+// DoesPathFileExist - A helper method which public methods use to determine whether a
 // path and file does or does not exist.
 //
 // This method calls os.Stat(dirPath) which returns an error which is one of two types:
@@ -6345,25 +6397,45 @@ func (fh FileHelper) SwapBasePath(
 //
 // To deal with these types of errors, this method will test path existence up to three times before
 // returning a non-path error.
-func (fh FileHelper) doesPathFileExist(
+func (fh FileHelper) DoesPathFileExist(
 	filePath string,
 	preProcessCode PreProcessPathCode,
-	errorPrefix string,
-	filePathTitle string) (absFilePath string,
+	errorPrefix interface{},
+	filePathTitle string) (
+	absFilePath string,
 	filePathDoesExist bool,
 	fInfo FileInfoPlus,
 	nonPathError error) {
 
-	ePrefix := "FileHelper.doesDirPathExist() "
+	if fh.lock == nil {
+		fh.lock = new(sync.Mutex)
+	}
+
+	fh.lock.Lock()
+
+	defer fh.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		nonPathError = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileHelper."+
+			"DoesPathFileExist()",
+		"")
+
+	if nonPathError != nil {
+
+		return absFilePath, filePathDoesExist, fInfo, nonPathError
+	}
 
 	absFilePath = ""
-	filePathDoesExist = false
-	fInfo = FileInfoPlus{}
-	nonPathError = nil
 
-	if len(errorPrefix) > 0 {
-		ePrefix = errorPrefix
-	}
+	filePathDoesExist = false
+
+	fInfo = FileInfoPlus{}
+
+	nonPathError = nil
 
 	if len(filePathTitle) == 0 {
 		filePathTitle = "filePath"
@@ -6375,14 +6447,22 @@ func (fh FileHelper) doesPathFileExist(
 		isStringEmptyOrBlank(filePath)
 
 	if errCode == -1 {
-		nonPathError = fmt.Errorf(ePrefix+
-			"Error: Input parameter '%v' is an empty string!", filePathTitle)
+
+		nonPathError = fmt.Errorf("%v\n"+
+			"Error: Input parameter '%v' is an empty string!\n",
+			ePrefix.String(),
+			filePathTitle)
+
 		return absFilePath, filePathDoesExist, fInfo, nonPathError
 	}
 
 	if errCode == -2 {
-		nonPathError = fmt.Errorf(ePrefix+
-			"Error: Input parameter '%v' consists of blank spaces!", filePathTitle)
+
+		nonPathError = fmt.Errorf("%v\n"+
+			"Error: Input parameter '%v' consists of blank spaces!\n",
+			ePrefix.String(),
+			filePathTitle)
+
 		return absFilePath, filePathDoesExist, fInfo, nonPathError
 	}
 
@@ -6390,19 +6470,24 @@ func (fh FileHelper) doesPathFileExist(
 
 	if preProcessCode == PreProcPathCode.PathSeparator() {
 
-		absFilePath = fh.AdjustPathSlash(filePath)
+		absFilePath = new(fileHelperAtom).adjustPathSlash(filePath)
 
 	} else if preProcessCode == PreProcPathCode.AbsolutePath() {
 
-		absFilePath, err = new(fileHelperProton).
-			makeAbsolutePath(filePath)
+		absFilePath,
+			nonPathError = new(fileHelperProton).
+			makeAbsolutePath(
+				filePath,
+				ePrefix.XCpy(
+					"absFilePath<-filePath"))
 
-		if err != nil {
+		if nonPathError != nil {
+
 			absFilePath = ""
-			nonPathError = fmt.Errorf(ePrefix+"fh.MakeAbsolutePath() FAILED!\n"+
-				"%v", err.Error())
+
 			return absFilePath, filePathDoesExist, fInfo, nonPathError
 		}
+
 	} else {
 		// For any other PreProcPathCode value, apply no pre-processing to
 		absFilePath = filePath
@@ -6430,9 +6515,17 @@ func (fh FileHelper) doesPathFileExist(
 			// err == nil and err != os.IsNotExist(err)
 			// This is a non-path error. The non-path error will be test
 			// up to 3-times before it is returned.
-			nonPathError = fmt.Errorf(ePrefix+"Non-Path error returned by os.Stat(%v)\n"+
-				"%v='%v'\nError='%v'\n",
-				filePathTitle, filePathTitle, filePath, err.Error())
+			nonPathError = fmt.Errorf(
+				"%v\n"+
+					"Non-Path error returned by os.Stat(%v)\n"+
+					"%v='%v'\n"+
+					"Error='%v'\n",
+				ePrefix.String(),
+				filePathTitle,
+				filePathTitle,
+				filePath,
+				err.Error())
+
 			fInfo = FileInfoPlus{}
 			filePathDoesExist = false
 
@@ -6441,7 +6534,7 @@ func (fh FileHelper) doesPathFileExist(
 			// The path really does exist!
 			filePathDoesExist = true
 			nonPathError = nil
-			fInfo = FileInfoPlus{}.NewFromFileInfo(info)
+			fInfo = new(FileInfoPlus).NewFromFileInfo(info)
 			return absFilePath, filePathDoesExist, fInfo, nonPathError
 		}
 

@@ -2384,8 +2384,8 @@ func (fMgrHlpr *fileMgrHelper) setFileMgrDirMgrFileName(
 		new(fileHelperMolecule).doesPathFileExist(
 			fMgr.absolutePathFileName,
 			PreProcPathCode.None(), // Do NOT perform pre-processing on path
-			"fMgr.absolutePathFileName",
-			ePrefix)
+			ePrefix,
+			"fMgr.absolutePathFileName")
 
 	if filePathDoesExist && nonPathError == nil {
 		fMgr.doesAbsolutePathFileNameExist = true

@@ -4598,8 +4598,8 @@ func (dMgrHlpr *dirMgrHelper) lowLevelDirMgrFieldConfig(
 			new(fileHelperMolecule).doesPathFileExist(
 				dMgr.path,
 				PreProcPathCode.None(),
-				dMgrLabel+".path",
-				ePrefix)
+				ePrefix,
+				dMgrLabel+".path")
 
 		if err != nil {
 			_ = dMgrHlpr.empty(
@@ -4618,9 +4618,9 @@ func (dMgrHlpr *dirMgrHelper) lowLevelDirMgrFieldConfig(
 			new(fileHelperMolecule).doesPathFileExist(
 				dMgr.absolutePath,
 				PreProcPathCode.None(),
-				dMgrLabel+".absolutePath",
 				ePrefix.XCpy(
-					"dirAbsPathDoesExist<-dMgr.absolutePath"))
+					"dirAbsPathDoesExist<-dMgr.absolutePath"),
+				dMgrLabel+".absolutePath")
 
 		if err != nil {
 
