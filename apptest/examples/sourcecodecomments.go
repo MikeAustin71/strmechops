@@ -270,9 +270,9 @@ func (srcCodeComments *SourceCodeComments) testSubsidiaryComments(
 func (srcCodeComments *SourceCodeComments) newIEmpty() error {
 	fmt.Println("HELLO WORLD!")
 
-	var ePrefix *ePref.ErrPrefixDto
-
 	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(

@@ -1639,18 +1639,26 @@ func (dMgrHlpr *dirMgrHelper) deleteDirectoryTreeStats(
 func (dMgrHlpr *dirMgrHelper) deleteFilesByNamePattern(
 	dMgr *DirMgr,
 	fileSearchPattern string,
-	ePrefix string,
+	errorPrefix string,
 	dMgrLabel string,
 	fileSearchLabel string) (deleteDirStats DeleteDirFilesStats, errs []error) {
 
-	ePrefixCurrMethod := "dirMgrHelper.deleteFilesByNamePattern() "
-
 	errs = make([]error, 0, 300)
 
-	if len(ePrefix) == 0 {
-		ePrefix = ePrefixCurrMethod
-	} else {
-		ePrefix = ePrefix + "- " + ePrefixCurrMethod
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"dirMgrHelper."+
+			"deleteFilesByNamePattern()",
+		"")
+
+	if err != nil {
+		errs = append(errs, err)
+		return deleteDirStats, errs
 	}
 
 	dirPathDoesExist,
@@ -1658,7 +1666,7 @@ func (dMgrHlpr *dirMgrHelper) deleteFilesByNamePattern(
 		err := dMgrHlpr.doesDirectoryExist(
 		dMgr,
 		PreProcPathCode.None(),
-		ePrefix,
+		errorPrefix,
 		dMgrLabel)
 
 	if err != nil {
@@ -1667,9 +1675,10 @@ func (dMgrHlpr *dirMgrHelper) deleteFilesByNamePattern(
 	}
 
 	if !dirPathDoesExist {
-		err = fmt.Errorf(ePrefix+
-			"\nERROR: %v Directory Path DOES NOT EXIST!\n"+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: %v Directory Path DOES NOT EXIST!\n"+
 			"%v='%v'\n",
+			ePrefix.String(),
 			dMgrLabel, dMgrLabel,
 			dMgr.absolutePath)
 
@@ -1680,14 +1689,13 @@ func (dMgrHlpr *dirMgrHelper) deleteFilesByNamePattern(
 
 	var err2, err3 error
 
-	fh := FileHelper{}
-
 	errCode := 0
 
-	errCode, _, fileSearchPattern = fh.isStringEmptyOrBlank(fileSearchPattern)
+	errCode, _, fileSearchPattern =
+		new(fileHelperElectron).isStringEmptyOrBlank(fileSearchPattern)
 
 	if errCode == -1 {
-		err2 = fmt.Errorf(ePrefix+
+		err2 = fmt.Errorf(errorPrefix+
 			"\nError: Input parameter '%v' is an empty string!\n",
 			fileSearchLabel)
 
@@ -1696,8 +1704,10 @@ func (dMgrHlpr *dirMgrHelper) deleteFilesByNamePattern(
 	}
 
 	if errCode == -2 {
-		err2 = fmt.Errorf(ePrefix+
-			"\nError: Input parameter '%v' consists of blank spaces!\n",
+
+		err2 = fmt.Errorf("%v\n"+
+			"Error: Input parameter '%v' consists of blank spaces!\n",
+			ePrefix.String(),
 			fileSearchLabel)
 
 		errs = append(errs, err2)
@@ -1708,9 +1718,10 @@ func (dMgrHlpr *dirMgrHelper) deleteFilesByNamePattern(
 
 	if err != nil {
 
-		err2 = fmt.Errorf(ePrefix+
-			"\nError return by os.Open(%v.absolutePath).\n"+
+		err2 = fmt.Errorf("%v\n"+
+			"Error return by os.Open(%v.absolutePath).\n"+
 			"%v.absolutePath='%v'\nError='%v'\n",
+			ePrefix.String(),
 			dMgrLabel, dMgrLabel,
 			dMgr.absolutePath, err.Error())
 
@@ -1735,11 +1746,14 @@ func (dMgrHlpr *dirMgrHelper) deleteFilesByNamePattern(
 				_ = dirPtr.Close()
 			}
 
-			err2 = fmt.Errorf(ePrefix+
-				"\nError returned by dirPtr.Readdirnames(1000).\n"+
-				"#v.absolutePath='%v'\nError='%v'\n",
+			err2 = fmt.Errorf("%v\n"+
+				"Error returned by dirPtr.Readdirnames(1000).\n"+
+				"%v.absolutePath='%v'\n"+
+				"Error='%v'\n",
+				ePrefix.String(),
 				dMgrLabel,
-				dMgr.absolutePath, err3.Error())
+				dMgr.absolutePath,
+				err3.Error())
 
 			errs = append(errs, err2)
 			return deleteDirStats, errs
@@ -1757,9 +1771,12 @@ func (dMgrHlpr *dirMgrHelper) deleteFilesByNamePattern(
 
 				if err != nil {
 
-					err2 = fmt.Errorf(ePrefix+
-						"\nError returned by (path/filepath) pf.Match(%v, fileName).\n"+
-						"\n%v Directory Searched='%v'\n%v='%v' fileName='%v'\nError='%v'\n\n",
+					err2 = fmt.Errorf("%v\n"+
+						"Error returned by (path/filepath) pf.Match(%v, fileName).\n"+
+						"%v Directory Searched='%v'\n"+
+						"%v='%v' fileName='%v'\n"+
+						"Error='%v'\n\n",
+						ePrefix.String(),
 						fileSearchLabel,
 						dMgrLabel,
 						dMgr.absolutePath,
@@ -1784,9 +1801,10 @@ func (dMgrHlpr *dirMgrHelper) deleteFilesByNamePattern(
 					err = os.Remove(dMgr.absolutePath + osPathSepStr + nameFInfo.Name())
 
 					if err != nil {
-						err2 = fmt.Errorf(ePrefix+
-							"\nError returned by os.Remove(pathFileName).\n"+
+						err2 = fmt.Errorf("%v\n"+
+							"Error returned by os.Remove(pathFileName).\n"+
 							"pathFileName='%v'\nError='%v'\n\n",
+							ePrefix.String(),
 							dMgr.absolutePath+osPathSepStr+nameFInfo.Name(),
 							err.Error())
 
@@ -1809,11 +1827,13 @@ func (dMgrHlpr *dirMgrHelper) deleteFilesByNamePattern(
 		err = dirPtr.Close()
 
 		if err != nil {
-			err2 = fmt.Errorf(ePrefix+
-				"\nError returned by dirPtr.Close().\n"+
+			err2 = fmt.Errorf("%v\n"+
+				"Error returned by dirPtr.Close().\n"+
 				"%v='%v'\nError='%v'\n\n",
+				ePrefix.String(),
 				dMgrLabel,
 				dMgr.absolutePath, err.Error())
+
 			errs = append(errs, err2)
 		}
 	}
@@ -4595,11 +4615,12 @@ func (dMgrHlpr *dirMgrHelper) lowLevelDirMgrFieldConfig(
 			dirAbsPathDoesExist,
 			absPathFInfoPlus,
 			err =
-			fh.doesPathFileExist(
+			new(fileHelperMolecule).doesPathFileExist(
 				dMgr.absolutePath,
 				PreProcPathCode.None(),
-				ePrefix,
-				dMgrLabel+".absolutePath")
+				dMgrLabel+".absolutePath",
+				ePrefix.XCpy(
+					"dirAbsPathDoesExist<-dMgr.absolutePath"))
 
 		if err != nil {
 
@@ -4903,7 +4924,7 @@ func (dMgrHlpr *dirMgrHelper) lowLevelMakeDirWithPermission(
 		return dirCreated, err
 	}
 
-	err2 := fPermCfg.IsValid()
+	err2 := fPermCfg.IsValid(ePrefix)
 
 	if err2 != nil {
 		err = fmt.Errorf("Input Parameter 'fPermCfg' is INVALID!\n"+
@@ -4913,7 +4934,7 @@ func (dMgrHlpr *dirMgrHelper) lowLevelMakeDirWithPermission(
 		return dirCreated, err
 	}
 
-	modePerm, err2 := fPermCfg.GetCompositePermissionMode()
+	modePerm, err2 := fPermCfg.GetCompositePermissionMode(ePrefix)
 
 	if err2 != nil {
 		err = fmt.Errorf(ePrefix+
@@ -5664,7 +5685,7 @@ func (dMgrHlpr *dirMgrHelper) setDirMgrFromKnownPathDirName(
 	dMgr *DirMgr,
 	pathStr string,
 	dirName string,
-	ePrefix string,
+	errorPrefix string,
 	dMgrLabel string,
 	pathStrLabel string,
 	dirNameLabel string) (isEmpty bool, err error) {
@@ -5672,18 +5693,25 @@ func (dMgrHlpr *dirMgrHelper) setDirMgrFromKnownPathDirName(
 	err = nil
 	isEmpty = true
 
-	ePrefixCurrMethod := "dirMgrHelper.setDirMgrFromKnownPathDirName() "
+	var ePrefix *ePref.ErrPrefixDto
 
-	if len(ePrefix) == 0 {
-		ePrefix = ePrefixCurrMethod
-	} else {
-		ePrefix = ePrefix + "- " + ePrefixCurrMethod
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"dirMgrHelper."+
+			"setDirMgrFromKnownPathDirName()",
+		"")
+
+	if err != nil {
+		return false, err
 	}
 
 	if dMgr == nil {
 
-		err = fmt.Errorf(ePrefix+
-			"\nError: Input parameter %v pointer is 'nil' !\n", dirNameLabel)
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter %v pointer is 'nil' !\n",
+			ePrefix.String(),
+			dirNameLabel)
 
 		return isEmpty, err
 	}
@@ -5694,7 +5722,7 @@ func (dMgrHlpr *dirMgrHelper) setDirMgrFromKnownPathDirName(
 		strLen,
 		err = dMgrHlpr.lowLevelScreenPathStrForInvalidChars(
 		pathStr,
-		ePrefix,
+		errorPrefix,
 		pathStrLabel)
 
 	if err != nil {
@@ -5709,7 +5737,7 @@ func (dMgrHlpr *dirMgrHelper) setDirMgrFromKnownPathDirName(
 		lDirName,
 		err = dMgrHlpr.lowLevelScreenPathStrForInvalidChars(
 		dirName,
-		ePrefix,
+		errorPrefix,
 		dirNameLabel)
 
 	if err != nil {
@@ -5758,10 +5786,13 @@ func (dMgrHlpr *dirMgrHelper) setDirMgrFromKnownPathDirName(
 	validPathDto.pathStr = finalPathStr
 
 	validPathDto.absPathStr,
-		err2 = fh.MakeAbsolutePath(validPathDto.pathStr)
+		err2 = new(fileHelperProton).
+		makeAbsolutePath(
+			validPathDto.pathStr,
+			ePrefix.XCpy("validPathDto.absPathStr<-"))
 
 	if err2 != nil {
-		err = fmt.Errorf(ePrefix+
+		err = fmt.Errorf(errorPrefix+
 			"\nError returned by fh.MakeAbsolutePath(pathStr).\n"+
 			"Directory Path='%v'\nError='%v'\n",
 			validPathDto.pathStr,
@@ -5783,7 +5814,7 @@ func (dMgrHlpr *dirMgrHelper) setDirMgrFromKnownPathDirName(
 	validPathDto.isInitialized = true
 	validPathDto.pathIsValid = PathValidStatus.Valid()
 
-	err = validPathDto.IsDtoValid(ePrefix)
+	err = validPathDto.IsDtoValid(errorPrefix)
 
 	if err != nil {
 
@@ -5793,7 +5824,7 @@ func (dMgrHlpr *dirMgrHelper) setDirMgrFromKnownPathDirName(
 
 	err = dMgrHlpr.empty(
 		dMgr,
-		ePrefix,
+		errorPrefix,
 		dMgrLabel)
 
 	if err != nil {
@@ -5805,7 +5836,7 @@ func (dMgrHlpr *dirMgrHelper) setDirMgrFromKnownPathDirName(
 		err = dMgrHlpr.lowLevelDirMgrFieldConfig(
 		dMgr,
 		validPathDto,
-		ePrefix,
+		errorPrefix,
 		dMgrLabel)
 
 	return isEmpty, err
@@ -5924,26 +5955,34 @@ func (dMgrHlpr *dirMgrHelper) setDirMgrWithPathDirectoryName(
 func (dMgrHlpr *dirMgrHelper) setPermissions(
 	dMgr *DirMgr,
 	permissionConfig FilePermissionConfig,
-	ePrefix string,
+	errorPrefix string,
 	dMgrLabel string,
 	permissionConfigLabel string) error {
 
-	ePrefixCurrMethod := "dirMgrHelper.setPermissions() "
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
 
-	if len(ePrefix) == 0 {
-		ePrefix = ePrefixCurrMethod
-	} else {
-		ePrefix = ePrefix + "- " + ePrefixCurrMethod
-	}
-
-	err := permissionConfig.IsValid()
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		nil,
+		"dirMgrHelper."+
+			"setPermissions()",
+		"")
 
 	if err != nil {
-		return fmt.Errorf(ePrefix+
-			"\nInput parameter '%v' is INVALID!\n"+
+		return err
+	}
+
+	err = permissionConfig.IsValid(ePrefix.XCpy(
+		"permissionConfig"))
+
+	if err != nil {
+		return fmt.Errorf("%v\n"+
+			"Input parameter '%v' is INVALID!\n"+
 			"Error returned by %v.IsValid()\n"+
 			"%v='%v'\n"+
 			"Error='%v'\n\n",
+			ePrefix.String(),
 			permissionConfigLabel,
 			permissionConfigLabel,
 			permissionConfigLabel,
@@ -5956,7 +5995,7 @@ func (dMgrHlpr *dirMgrHelper) setPermissions(
 		err := dMgrHlpr.doesDirectoryExist(
 		dMgr,
 		PreProcPathCode.None(),
-		ePrefix,
+		errorPrefix,
 		dMgrLabel)
 
 	if err != nil {
@@ -5964,10 +6003,12 @@ func (dMgrHlpr *dirMgrHelper) setPermissions(
 	}
 
 	if !dirPathDoesExist {
-		err = fmt.Errorf(ePrefix+
-			"\nERROR: %v Directory Path DOES NOT EXIST!\n"+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: %v Directory Path DOES NOT EXIST!\n"+
 			"%v='%v'\n",
-			dMgrLabel, dMgrLabel,
+			ePrefix.String(),
+			dMgrLabel,
+			dMgrLabel,
 			dMgr.absolutePath)
 
 		return err
@@ -5978,12 +6019,13 @@ func (dMgrHlpr *dirMgrHelper) setPermissions(
 		permissionConfig)
 
 	if err != nil {
-		return fmt.Errorf(ePrefix+
-			"\nError retrned by FileHelper{}.ChangeFileMode("+
+		return fmt.Errorf("%v\n"+
+			"Error retrned by FileHelper{}.ChangeFileMode("+
 			"%v.absolutePath, %v)\n"+
 			"%v.absolutePath=%v\n"+
 			"%v='%v'"+
 			"Error='%v'\n\n",
+			ePrefix.String(),
 			dMgrLabel,
 			permissionConfigLabel,
 			dMgrLabel,

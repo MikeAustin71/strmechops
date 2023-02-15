@@ -6419,7 +6419,8 @@ func (fh FileHelper) doesPathFileExist(
 
 	errCode := 0
 
-	errCode, _, filePath = fh.isStringEmptyOrBlank(filePath)
+	errCode, _, filePath = new(fileHelperElectron).
+		isStringEmptyOrBlank(filePath)
 
 	if errCode == -1 {
 		nonPathError = fmt.Errorf(ePrefix+
@@ -6441,7 +6442,8 @@ func (fh FileHelper) doesPathFileExist(
 
 	} else if preProcessCode == PreProcPathCode.AbsolutePath() {
 
-		absFilePath, err = fh.MakeAbsolutePath(filePath)
+		absFilePath, err = new(fileHelperProton).
+			makeAbsolutePath(filePath)
 
 		if err != nil {
 			absFilePath = ""
