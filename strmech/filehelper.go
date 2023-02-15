@@ -180,64 +180,16 @@ func (fh *FileHelper) AddPathSeparatorToEndOfPathStr(
 		return "", err
 	}
 
-	var errCode, lStr int
-
-	errCode,
-		lStr,
-		pathStr = new(fileHelperElectron).
-		isStringEmptyOrBlank(pathStr)
-
-	if errCode == -1 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'pathStr' is an empty string!\n",
-			ePrefix.String())
-
-		return "", err
-
-	}
-
-	if errCode == -2 {
-
-		err = fmt.Errorf(
-			"%v\n"+
-				"Error: Input parameter 'pathStr' consists of blank spaces!\n",
-			ePrefix.String())
-
-		return "", err
-	}
-
-	if pathStr[lStr-1] == os.PathSeparator {
-		return pathStr, nil
-	}
-
-	var newPathStr string
-
-	if pathStr[lStr-1] == '/' && '/' != os.PathSeparator {
-
-		newPathStr = pathStr[0 : lStr-1]
-
-		newPathStr += string(os.PathSeparator)
-
-		return newPathStr, nil
-	}
-
-	if pathStr[lStr-1] == '\\' && '\\' != os.PathSeparator {
-
-		newPathStr = pathStr[0 : lStr-1]
-
-		newPathStr += string(os.PathSeparator)
-
-		return newPathStr, nil
-	}
-
-	newPathStr = pathStr + string(os.PathSeparator)
-
-	return newPathStr, nil
+	return new(fileHelperProton).
+		addPathSeparatorToEndOfPathStr(
+			pathStr,
+			ePrefix.XCpy("pathStr"))
 }
 
-// AdjustPathSlash will standardize path separators
-// according to operating system.
+// AdjustPathSlash
+//
+// This method will standardize path separators according to
+// operating system.
 //
 // If input parameter 'path' contains invalid file path
 // separators for the current operating system, this
