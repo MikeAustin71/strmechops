@@ -220,7 +220,7 @@ func (fh *FileHelper) AddPathSeparatorToEndOfPathStr(
 //		found in input parameter 'path' and return a
 //		string containing valid path separator characters
 //		for the current operating system.
-func (fh FileHelper) AdjustPathSlash(path string) string {
+func (fh *FileHelper) AdjustPathSlash(path string) string {
 
 	if fh.lock == nil {
 		fh.lock = new(sync.Mutex)
@@ -420,8 +420,28 @@ func (fh FileHelper) ChangeFileMode(
 	pathFileName string,
 	filePermission FilePermissionConfig) error {
 
-	ePrefix := "FileHelper.ChangeFileMode() "
+	if fh.lock == nil {
+		fh.lock = new(sync.Mutex)
+	}
+
+	fh.lock.Lock()
+
+	defer fh.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
 	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		"",
+		"FileHelper."+
+			"ChangeFileMode()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
 	var filePathDoesExist bool
 
 	pathFileName,
@@ -2459,27 +2479,60 @@ func (fh FileHelper) DoesFileExist(pathFileName string) bool {
 //	        be returned as an 'error' type. Also, see the comment on 'DirectoryDeleteFileInfo.ErrReturns',
 //	        above.
 func (fh FileHelper) DeleteFilesWalkDirectory(
-	startPath string, fileSelectCriteria FileSelectionCriteria) (DirectoryDeleteFileInfo, error) {
+	startPath string,
+	fileSelectCriteria FileSelectionCriteria,
+	errorPrefix interface{}) (
+	DirectoryDeleteFileInfo,
+	error) {
 
-	ePrefix := "FileHelper.DeleteFilesWalkDirectory() "
+	if fh.lock == nil {
+		fh.lock = new(sync.Mutex)
+	}
+
+	fh.lock.Lock()
+
+	defer fh.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
 
 	deleteFilesInfo := DirectoryDeleteFileInfo{}
 
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileHelper."+
+			"DeleteFilesWalkDirectory()",
+		"")
+
+	if err != nil {
+		return deleteFilesInfo, err
+	}
+
 	errCode := 0
 
-	errCode, _, startPath = fh.isStringEmptyOrBlank(startPath)
+	errCode, _, startPath =
+		new(fileHelperElectron).isStringEmptyOrBlank(startPath)
 
 	if errCode == -1 {
-		return deleteFilesInfo,
-			errors.New(ePrefix + "Error: Input parameter 'startPath' is an empty string!")
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'startPath' is an empty string!",
+			ePrefix.String())
+
+		return deleteFilesInfo, err
 	}
 
 	if errCode == -2 {
-		return deleteFilesInfo,
-			errors.New(ePrefix + "Error: Input parameter 'startPath' consists of blank spaces!")
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'startPath' consists of blank spaces!\n",
+			ePrefix.String())
+
+		return deleteFilesInfo, err
 	}
 
-	startPath = fh.AdjustPathSlash(startPath)
+	startPath = new(fileHelperAtom).adjustPathSlash(startPath)
 
 	strLen := len(startPath)
 
@@ -2487,37 +2540,59 @@ func (fh FileHelper) DeleteFilesWalkDirectory(
 		startPath = startPath[0 : strLen-1]
 	}
 
-	var err error
-
-	startPath, err = fh.MakeAbsolutePath(startPath)
+	startPath,
+		err = new(fileHelperProton).makeAbsolutePath(
+		startPath,
+		ePrefix.XCpy("startPath<-"))
 
 	if err != nil {
-		return deleteFilesInfo,
-			fmt.Errorf(ePrefix+"Error returned by fh.MakeAbsolutePath(startPath). "+
-				"startPath='%v' Error='%v' ", startPath, err.Error())
+
+		err = fmt.Errorf("%v\n"+
+			"Error returned by fh.MakeAbsolutePath(startPath).\n"+
+			"startPath='%v'\n"+
+			"Error='%v'\n",
+			ePrefix.String(),
+			startPath,
+			err.Error())
+
+		return deleteFilesInfo, err
 	}
 
-	if !fh.DoesFileExist(startPath) {
-		return deleteFilesInfo, fmt.Errorf(ePrefix+
-			"Error - startPath DOES NOT EXIST! startPath='%v'", startPath)
+	if !new(fileHelperNanobot).doesFileExist(startPath) {
+
+		err = fmt.Errorf("%v\n"+
+			"Error - startPath DOES NOT EXIST!\n"+
+			"startPath='%v'",
+			ePrefix.String(),
+			startPath)
+
+		return deleteFilesInfo, err
 	}
 
 	deleteFilesInfo.StartPath = startPath
 
 	deleteFilesInfo.DeleteFileSelectCriteria = fileSelectCriteria
 
-	err = fp.Walk(deleteFilesInfo.StartPath, fh.makeFileHelperWalkDirDeleteFilesFunc(&deleteFilesInfo))
+	var err2 error
 
-	if err != nil {
+	err2 = fp.Walk(deleteFilesInfo.StartPath, fh.makeFileHelperWalkDirDeleteFilesFunc(&deleteFilesInfo))
 
-		return deleteFilesInfo,
-			fmt.Errorf(ePrefix+
-				"Error returned from fp.Walk(deleteFilesInfo.StartPath, fh.makeFileHelperWalkDirFindFilesFunc"+
-				"(&deleteFilesInfo)). startPath='%v' Error='%v'", startPath, err.Error())
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error returned from fp.Walk(deleteFilesInfo.StartPath - \n"+
+			"fh.makeFileHelperWalkDirFindFilesFunc"+
+			"(&deleteFilesInfo)).\n"+
+			"startPath='%v'\n"+
+			"Error='%v'\n",
+			ePrefix.String(),
+			startPath,
+			err.Error())
+
+		return deleteFilesInfo, err
 	}
 
 	return deleteFilesInfo, nil
-
 }
 
 // DoesFileInfoExist - returns a boolean value indicating
@@ -3131,42 +3206,99 @@ func (fh FileHelper) GetAbsCurrDir() (string, error) {
 
 // GetAbsPathFromFilePath - Supply a string containing both the path file name and extension.
 // This method will then return the absolute value of that path, file name and file extension.
-func (fh FileHelper) GetAbsPathFromFilePath(filePath string) (string, error) {
+func (fh FileHelper) GetAbsPathFromFilePath(
+	filePath string) (
+	string,
+	error) {
 
-	ePrefix := "FileHelper.GetAbsPathFromFilePath() "
+	if fh.lock == nil {
+		fh.lock = new(sync.Mutex)
+	}
+
+	fh.lock.Lock()
+
+	defer fh.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		nil,
+		"FileHelper."+
+			"GetAbsPathFromFilePath()",
+		"")
+
+	if err != nil {
+		return "", err
+	}
 
 	errCode := 0
 
-	errCode, _, filePath = fh.isStringEmptyOrBlank(filePath)
+	fHelperElectron := new(fileHelperElectron)
+
+	errCode,
+		_,
+		filePath = fHelperElectron.isStringEmptyOrBlank(filePath)
 
 	if errCode == -1 {
-		return "",
-			errors.New(ePrefix + "Error: Input parameter 'filePath' is an empty string!")
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'filePath' is an empty string!\n",
+			ePrefix.String())
+
+		return "", err
+
 	}
 
 	if errCode == -2 {
-		return "",
-			errors.New(ePrefix + "Error: Input parameter 'filePath' consists of blank spaces!")
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'filePath' consists of blank spaces!\n",
+			ePrefix.String())
+
+		return "", err
+
 	}
 
-	testFilePath := fh.AdjustPathSlash(filePath)
+	testFilePath := new(fileHelperAtom).adjustPathSlash(filePath)
 
-	errCode, _, testFilePath = fh.isStringEmptyOrBlank(testFilePath)
+	errCode,
+		_,
+		testFilePath =
+		fHelperElectron.
+			isStringEmptyOrBlank(
+				testFilePath)
 
 	if errCode < 0 {
-		return "",
-			errors.New(ePrefix +
-				"Error: After adjusting path Separators, filePath resolves to an empty string!")
+
+		err = fmt.Errorf("%v\n"+
+			"Error: After adjusting path Separators,\n"+
+			"'filePath' resolves to an empty string!\n",
+			ePrefix.String())
+
+		return "", err
 	}
 
-	absPath, err := fh.MakeAbsolutePath(testFilePath)
+	var absPath string
+	var err2 error
 
-	if err != nil {
-		return "",
-			fmt.Errorf(ePrefix+
-				"Error returned from fh.MakeAbsolutePath(testFilePath). "+
-				"testFilePath='%v' Error='%v' ",
-				testFilePath, err.Error())
+	absPath,
+		err2 = new(fileHelperProton).
+		makeAbsolutePath(
+			testFilePath,
+			ePrefix.XCpy("absPath<-"))
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error returned from fh.MakeAbsolutePath(testFilePath).\n"+
+			"testFilePath='%v'\nError='%v'\n",
+			ePrefix.String(),
+			testFilePath,
+			err.Error())
+
+		return "", err
 	}
 
 	return absPath, nil
@@ -3265,58 +3397,104 @@ func (fh FileHelper) GetExecutablePathFileName() (string, error) {
 	return ex, err
 }
 
-// GetFileExt - Returns the File Extension with
-// the dot. If there is no File Extension an empty
-// string is returned (NO dot included). If the returned
-// File Extension is an empty string, the returned
-// parameter 'isEmpty' is set equal to 'true'.
+// GetFileExtension
 //
-// When an extension is returned in the 'ext' variable, this
-// extension includes a leading dot. Example: '.txt'
+// Returns the File Extension with the dot. If there is
+// no File Extension an empty string is returned (NO dot
+// included). If the returned File Extension is an empty
+// string, the returned parameter 'isEmpty' is set equal
+// to 'true'.
 //
-//	Example:
+// When an extension is returned in the 'ext' variable,
+// this extension includes a leading dot.
 //
-//	 Actual File Name Plus Extension: "newerFileForTest_01.txt"
-//	         Returned File Extension: "txt"
+//	Example: '.txt'
 //
-//	 Actual File Name Plus Extension: "newerFileForTest_01"
-//	         Returned File Extension: ""
+// ----------------------------------------------------------------
 //
-//	 Actual File Name Plus Extension: ".gitignore"
-//	         Returned File Extension: ""
+// # Usage
+//
+//	Actual File Name Plus Extension: "newerFileForTest_01.txt"
+//	        Returned File Extension: "txt"
+//
+//	Actual File Name Plus Extension: "newerFileForTest_01"
+//	        Returned File Extension: ""
+//
+//	Actual File Name Plus Extension: ".gitignore"
+//	        Returned File Extension: ""
 func (fh FileHelper) GetFileExtension(
-	pathFileNameExt string) (ext string, isEmpty bool, err error) {
-	ePrefix := "FileHelper.GetFileExt() "
+	pathFileNameExt string,
+	errorPrefix interface{}) (
+	ext string,
+	isEmpty bool,
+	err error) {
+
+	if fh.lock == nil {
+		fh.lock = new(sync.Mutex)
+	}
+
+	fh.lock.Lock()
+
+	defer fh.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
 
 	ext = ""
+
 	isEmpty = true
-	err = nil
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileHelper."+
+			"GetFileExtension()",
+		"")
+
+	if err != nil {
+		return ext, isEmpty, err
+	}
+
+	fHelperElectron := new(fileHelperElectron)
 
 	errCode := 0
 
-	errCode, _, pathFileNameExt = fh.isStringEmptyOrBlank(pathFileNameExt)
+	errCode,
+		_,
+		pathFileNameExt = fHelperElectron.
+		isStringEmptyOrBlank(pathFileNameExt)
 
 	if errCode == -1 {
-		err =
-			errors.New(ePrefix + "Error: Input parameter 'pathFileNameExt' is an empty string!")
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'pathFileNameExt' is an empty string!\n",
+			ePrefix.String())
 
 		return ext, isEmpty, err
 	}
 
 	if errCode == -2 {
-		err =
-			errors.New(ePrefix + "Error: Input parameter 'pathFileNameExt' consists of blank spaces!")
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'pathFileNameExt' consists of blank spaces!\n",
+			ePrefix.String())
 
 		return ext, isEmpty, err
 	}
 
-	testPathFileNameExt := fh.AdjustPathSlash(pathFileNameExt)
+	testPathFileNameExt := new(fileHelperAtom).
+		adjustPathSlash(pathFileNameExt)
 
-	errCode, _, testPathFileNameExt = fh.isStringEmptyOrBlank(testPathFileNameExt)
+	errCode,
+		_,
+		testPathFileNameExt =
+		fHelperElectron.isStringEmptyOrBlank(testPathFileNameExt)
 
 	if errCode < 0 {
-		err = errors.New(ePrefix +
-			"Error: Cleaned version of 'pathFileNameExt', 'testPathFileNameExt' is an empty string!")
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Cleaned version of 'pathFileNameExt', 'testPathFileNameExt'\n"+
+			"is an empty string!\n",
+			ePrefix.String())
 
 		return ext, isEmpty, err
 	}
@@ -3324,11 +3502,19 @@ func (fh FileHelper) GetFileExtension(
 	dotIdxs, err2 := fh.GetDotSeparatorIndexesInPathStr(testPathFileNameExt)
 
 	if err2 != nil {
+
 		ext = ""
+
 		isEmpty = true
-		err = fmt.Errorf(ePrefix+
+
+		err = fmt.Errorf("%v\n"+
 			"Error returned from fh.GetDotSeparatorIndexesInPathStr(testPathFileNameExt).\n"+
-			"testPathFileNameExt='%v'\nError='%v'\n", testPathFileNameExt, err2)
+			"testPathFileNameExt='%v'\n"+
+			"Error='%v'\n",
+			ePrefix.String(),
+			testPathFileNameExt,
+			err2)
+
 		return ext, isEmpty, err
 	}
 
@@ -3344,16 +3530,26 @@ func (fh FileHelper) GetFileExtension(
 
 	}
 
-	firstGoodCharIdx, lastGoodCharIdx, err2 :=
-		fh.GetFirstLastNonSeparatorCharIndexInPathStr(testPathFileNameExt)
+	firstGoodCharIdx,
+		lastGoodCharIdx,
+		err2 :=
+		fh.GetFirstLastNonSeparatorCharIndexInPathStr(
+			testPathFileNameExt)
 
 	if err2 != nil {
+
 		ext = ""
+
 		isEmpty = true
-		err = fmt.Errorf(ePrefix+
+
+		err = fmt.Errorf("%v\n"+
 			"Error returned from fh.GetFirstLastNonSeparatorCharIndexInPathStr(testPathFileNameExt).\n"+
-			"testPathFileNameExt='%v'\nError='%v'\n",
-			testPathFileNameExt, err2)
+			"testPathFileNameExt='%v'\n"+
+			"Error='%v'\n",
+			ePrefix.String(),
+			testPathFileNameExt,
+			err2)
+
 		return ext, isEmpty, err
 	}
 
@@ -3369,11 +3565,19 @@ func (fh FileHelper) GetFileExtension(
 	slashIdxs, err2 := fh.GetPathSeparatorIndexesInPathStr(testPathFileNameExt)
 
 	if err2 != nil {
+
 		ext = ""
+
 		isEmpty = true
-		err = fmt.Errorf(ePrefix+
-			"Error returned from fh.GetPathSeparatorIndexesInPathStr(testPathFileNameExt). "+
-			"testPathFileNameExt='%v'  Error='%v'", testPathFileNameExt, err2)
+
+		err = fmt.Errorf("%v\n"+
+			"Error returned from fh.GetPathSeparatorIndexesInPathStr(testPathFileNameExt).\n"+
+			"testPathFileNameExt='%v'\n"+
+			"Error='%v'",
+			ePrefix.String(),
+			testPathFileNameExt,
+			err2)
+
 		return ext, isEmpty, err
 	}
 
@@ -3408,8 +3612,11 @@ func (fh FileHelper) GetFileExtension(
 	}
 
 	ext = ""
+
 	isEmpty = true
+
 	err = nil
+
 	return ext, isEmpty, err
 }
 

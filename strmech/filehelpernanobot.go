@@ -230,3 +230,37 @@ func (fHelperNanobot *fileHelperNanobot) areSameFile(
 
 	return false, nil
 }
+
+// DoesFileExist - Returns a boolean value designating whether the passed
+// file name exists.
+//
+// This method does not differentiate between Path Errors and Non-Path
+// Errors returned by os.Stat(). The method only returns a boolean
+// value.
+//
+// If a Non-Path Error is returned by os.Stat(), this method will
+// classify the file as "Does NOT Exist" and return a value of
+// false.
+//
+// For a more granular test of whether a file exists, see method
+// FileHelper.DoesThisFileExist().
+func (fHelperNanobot *fileHelperNanobot) doesFileExist(
+	pathFileName string) bool {
+
+	_,
+		pathFileDoesExist,
+		_,
+		nonPathError :=
+		new(fileHelperMolecule).
+			doesPathFileExist(
+				pathFileName,
+				PreProcPathCode.AbsolutePath(), // Convert to Absolute Path
+				"fileHelperNanobot.doesFileExist()",
+				"pathFileName")
+
+	if !pathFileDoesExist || nonPathError != nil {
+		return false
+	}
+
+	return true
+}
