@@ -249,6 +249,7 @@ func (fh FileHelper) AdjustPathSlash(path string) string {
 // The two input parameters 'pathFile1' and 'pathFile2'
 // will be converted to their absolute paths before
 // comparisons are applied.
+// TODO - Create sub-method
 func (fh FileHelper) AreSameFile(pathFile1,
 	pathFile2 string,
 	errorPrefix interface{}) (
@@ -5437,97 +5438,38 @@ func (fh FileHelper) OpenDirectory(
 func (fh FileHelper) OpenFile(
 	pathFileName string,
 	fileOpenCfg FileOpenConfig,
-	filePermissionCfg FilePermissionConfig) (filePtr *os.File, err error) {
+	filePermissionCfg FilePermissionConfig,
+	errorPrefix interface{}) (
+	filePtr *os.File,
+	err error) {
 
-	filePtr = nil
-	err = nil
-	ePrefix := "FileHelper.OpenFile() "
+	if fh.lock == nil {
+		fh.lock = new(sync.Mutex)
+	}
 
-	var pathFileNameDoesExist bool
-	var fInfoPlus FileInfoPlus
+	fh.lock.Lock()
 
-	pathFileName,
-		pathFileNameDoesExist,
-		fInfoPlus,
-		err = new(fileHelperMolecule).doesPathFileExist(
-		pathFileName,
-		PreProcPathCode.AbsolutePath(), // Convert to Absolute Path
-		ePrefix,
-		"pathFileName")
+	defer fh.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileHelper."+
+			"OpenFile()",
+		"")
 
 	if err != nil {
-		return nil, err
-	}
-
-	if !pathFileNameDoesExist {
-		err = fmt.Errorf(ePrefix+
-			"ERROR: Input parameter 'pathFileName' DOES NOT EXIST!\n"+
-			"pathFileName='%v'\n", pathFileName)
 
 		return filePtr, err
 	}
 
-	if fInfoPlus.IsDir() {
-		err =
-			fmt.Errorf(ePrefix+
-				"ERROR: Input parameter 'pathFileName' is "+
-				"a 'Directory' - NOT a file!\n"+
-				"pathFileName='%v'\n", pathFileName)
-
-		return filePtr, err
-	}
-
-	err2 := fileOpenCfg.IsValid()
-
-	if err2 != nil {
-		err = fmt.Errorf(ePrefix+
-			"Input Parameter 'fileOpenCfg' is INVALID!\n"+
-			"Error='%v'\n", err2.Error())
-		return filePtr, err
-	}
-
-	fOpenCode, err2 := fileOpenCfg.GetCompositeFileOpenCode()
-
-	if err2 != nil {
-		err = fmt.Errorf(ePrefix+"%v\n", err2.Error())
-		return filePtr, err
-	}
-
-	err2 = filePermissionCfg.IsValid()
-
-	if err2 != nil {
-		err = fmt.Errorf(ePrefix+
-			"Input Parameter 'filePermissionCfg' is INVALID!\n"+
-			"Error='%v'\n", err2.Error())
-		return filePtr, err
-	}
-
-	fileMode, err2 := filePermissionCfg.GetCompositePermissionMode()
-
-	if err2 != nil {
-		err = fmt.Errorf(ePrefix+"%v\n", err2.Error())
-		return filePtr, err
-	}
-
-	filePtr, err2 = os.OpenFile(pathFileName, fOpenCode, fileMode)
-
-	if err2 != nil {
-		err = fmt.Errorf(ePrefix+
-			"Error returned by os.OpenFile(pathFileName, fOpenCode, fileMode).\n"+
-			"pathFileName='%v'\nError='%v'\n", pathFileName, err2.Error())
-
-		return filePtr, err
-	}
-
-	if filePtr == nil {
-		err = errors.New(ePrefix +
-			"ERROR: os.OpenFile() returned a 'nil' file pointer!\n")
-		return filePtr, err
-	}
-
-	err = nil
-
-	return filePtr, err
+	return new(fileHelperMechanics).openFile(
+		pathFileName,
+		fileOpenCfg,
+		filePermissionCfg,
+		ePrefix)
 }
 
 // OpenFileReadOnly - Opens the designated path file name for reading
