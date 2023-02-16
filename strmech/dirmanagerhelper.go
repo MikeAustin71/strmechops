@@ -3664,7 +3664,9 @@ func (dMgrHlpr *dirMgrHelper) getValidPathStr(
 		_,
 		volNameStr = fh.GetVolumeNameIndex(pathStr)
 
-	slashIdxs, err2 = fh.GetPathSeparatorIndexesInPathStr(pathStr)
+	slashIdxs, err2 = fh.GetPathSeparatorIndexesInPathStr(
+		pathStr,
+		ePrefix)
 
 	if err2 != nil {
 		err = fmt.Errorf("%v\n"+
@@ -3682,8 +3684,12 @@ func (dMgrHlpr *dirMgrHelper) getValidPathStr(
 
 	lSlashIdxs = len(slashIdxs)
 
-	firstCharIdx, lastCharIdx, err2 =
-		fh.GetFirstLastNonSeparatorCharIndexInPathStr(pathStr)
+	firstCharIdx,
+		lastCharIdx,
+		err2 =
+		fh.GetFirstLastNonSeparatorCharIndexInPathStr(
+			pathStr,
+			ePrefix)
 
 	if err2 != nil {
 		err = fmt.Errorf("%v\n"+

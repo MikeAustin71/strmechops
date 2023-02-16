@@ -240,3 +240,141 @@ func (fHelperAtom *fileHelperAtom) changeWorkingDir(
 
 	return err
 }
+
+// getPathSeparatorIndexesInPathStr
+//
+// Returns an array containing the indexes of path Separators
+// (Forward slashes or backward slashes depending on operating
+// system).
+//
+// The returned integer array identifies the indexes of the
+// forward or backward slashes within input paramter string,
+// 'pathStr'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	pathStr						string
+//
+//		'pathStr' is a string specifying a directory or
+//		file path. Depending on the operating system, the
+//		directories will be delimited by forward or
+//		backward slashes.
+//
+//		'pathStr' will be examined and the indexes of the
+//		forward or backward slashes will be recorded and
+//		returned in an integer array.
+//
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	[]int
+//
+//		This array contains the string indexes of the
+//		forward or backward slashes contained in input
+//		paramter string, 'pathStr'.
+//
+//		'pathStr' is a string specifying a directory or
+//		file path. Depending on the operating system the
+//		directories will be delimited by forward or
+//		backward slashes.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (fHelperAtom *fileHelperAtom) getPathSeparatorIndexesInPathStr(
+	pathStr string,
+	errPrefDto *ePref.ErrPrefixDto) (
+	[]int,
+	error) {
+
+	if fHelperAtom.lock == nil {
+		fHelperAtom.lock = new(sync.Mutex)
+	}
+
+	fHelperAtom.lock.Lock()
+
+	defer fHelperAtom.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"fileHelperAtom."+
+			"getPathSeparatorIndexesInPathStr()",
+		"")
+
+	if err != nil {
+		return []int{}, err
+	}
+	errCode := 0
+	lPathStr := 0
+
+	errCode, lPathStr, pathStr =
+		new(fileHelperElectron).isStringEmptyOrBlank(pathStr)
+
+	if errCode == -1 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'pathStr' consists of blank spaces!\n",
+			ePrefix.String())
+
+		return []int{}, err
+	}
+
+	if errCode == -2 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'pathStr' consists of blank spaces!\n",
+			ePrefix.String())
+
+		return []int{}, err
+	}
+
+	var slashIdxs []int
+
+	for i := 0; i < lPathStr; i++ {
+
+		rChar := pathStr[i]
+
+		if rChar == os.PathSeparator ||
+			rChar == '\\' ||
+			rChar == '/' {
+
+			slashIdxs = append(slashIdxs, i)
+		}
+
+	}
+
+	return slashIdxs, err
+}

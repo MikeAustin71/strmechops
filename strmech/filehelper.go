@@ -841,9 +841,34 @@ func (fh *FileHelper) ChangeWorkingDir(
 //	  dirName = '../dir1/dir2/.git'             returns "../dir1/dir2"
 //
 //	  dirName = 'somevalidcharacters'           returns "./somevalidchracters"
-func (fh FileHelper) CleanDirStr(dirNameStr string) (returnedDirName string, isEmpty bool, err error) {
+func (fh FileHelper) CleanDirStr(
+	dirNameStr string,
+	errorPrefix interface{}) (
+	returnedDirName string,
+	isEmpty bool,
+	err error) {
 
-	ePrefix := "FileHelper.CleanDirStr() "
+	if fh.lock == nil {
+		fh.lock = new(sync.Mutex)
+	}
+
+	fh.lock.Lock()
+
+	defer fh.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileHelper."+
+			"CleanDirStr()",
+		"")
+
+	if err != nil {
+		return returnedDirName, isEmpty, err
+	}
+
 	returnedDirName = ""
 	isEmpty = true
 	err = nil
@@ -870,36 +895,56 @@ func (fh FileHelper) CleanDirStr(dirNameStr string) (returnedDirName string, isE
 	osPathSepStr := string(os.PathSeparator)
 
 	if strings.Contains(adjustedDirName, osPathSepStr+osPathSepStr) {
+
 		returnedDirName = ""
+
 		isEmpty = true
-		err = fmt.Errorf(ePrefix+
+
+		err = fmt.Errorf("%v\n"+
 			"Error: Invalid Directory string.\n"+
 			"Directory string contains invalid Path Separators.\n"+
 			"adjustedDirName='%v'\n",
+			ePrefix.String(),
 			adjustedDirName)
+
 		return returnedDirName, isEmpty, err
 	}
 
 	if strings.Contains(adjustedDirName, "...") {
+
 		returnedDirName = ""
+
 		isEmpty = true
-		err = fmt.Errorf(ePrefix+
+
+		err = fmt.Errorf("%v\n"+
 			"Error: Invalid Directory string.\n"+
 			"Directory string contains invalid dots.\n"+
 			"adjustedDirName='%v'\n",
+			ePrefix.String(),
 			adjustedDirName)
+
 		return returnedDirName, isEmpty, err
 	}
 
-	absPath, err := fh.MakeAbsolutePath(adjustedDirName)
+	absPath, err := new(fileHelperProton).
+		makeAbsolutePath(adjustedDirName,
+			ePrefix)
 
 	if err != nil {
-		err = fmt.Errorf(ePrefix+"Error occurred while convert path "+
+
+		err = fmt.Errorf("%v\n"+
+			"Error occurred while converting path\n"+
 			"to absolute path!\n"+
-			"dirPath='%v'\nError='%v'\n",
-			adjustedDirName, err.Error())
+			"dirPath='%v'\n"+
+			"Error='%v'\n",
+			ePrefix.String(),
+			adjustedDirName,
+			err.Error())
+
 		returnedDirName = ""
+
 		isEmpty = true
+
 		return returnedDirName, isEmpty, err
 	}
 
@@ -1006,41 +1051,72 @@ func (fh FileHelper) CleanDirStr(dirNameStr string) (returnedDirName string, isE
 	} // End of pathDoesExist == true
 
 	// The Path DOES NOT EXIST ON DISK
-	firstCharIdx, lastCharIdx, err2 :=
-		fh.GetFirstLastNonSeparatorCharIndexInPathStr(adjustedDirName)
+	var firstCharIdx, lastCharIdx int
+	var err2 error
+
+	firstCharIdx,
+		lastCharIdx,
+		err2 = new(fileHelperMolecule).
+		getFirstLastNonSeparatorCharIndexInPathStr(
+			adjustedDirName,
+			ePrefix)
 
 	if err2 != nil {
-		err = fmt.Errorf(ePrefix+
+		err = fmt.Errorf("%v\n"+
 			"Error returned by fh."+
 			"GetFirstLastNonSeparatorCharIndexInPathStr(adjustedDirName).\n"+
-			"adjustedDirName='%v'\nError='%v'\n",
-			adjustedDirName, err2.Error())
+			"adjustedDirName='%v'\n"+
+			"Error='%v'\n",
+			ePrefix.String(),
+			adjustedDirName,
+			err2.Error())
+
 		returnedDirName = ""
+
 		isEmpty = true
+
 		return returnedDirName, isEmpty, err
 	}
 
 	interiorDotPathIdx := strings.LastIndex(adjustedDirName, "."+string(os.PathSeparator))
 
 	if interiorDotPathIdx > firstCharIdx {
-		err = fmt.Errorf(ePrefix+
+
+		err = fmt.Errorf("%v\n"+
 			"Error: INVALID PATH. Invalid interior relative path detected!\n"+
 			"adjustedDirName='%v'\n",
+			ePrefix.String(),
 			adjustedDirName)
+
 		returnedDirName = ""
+
 		isEmpty = true
+
 		return returnedDirName, isEmpty, err
 	}
 
-	slashIdxs, err2 := fh.GetPathSeparatorIndexesInPathStr(adjustedDirName)
+	var slashIdxs []int
+
+	slashIdxs, err2 = new(fileHelperAtom).
+		getPathSeparatorIndexesInPathStr(
+			adjustedDirName,
+			ePrefix)
 
 	if err2 != nil {
-		err = fmt.Errorf("Error returned by fh."+
+
+		err = fmt.Errorf("%v\n"+
+			"Error returned by fh."+
 			"GetPathSeparatorIndexesInPathStr(adjustedDirName).\n"+
-			"adjusteDirName='%v'\nError='%v'\n",
-			adjustedDirName, err2.Error())
+			"adjusteDirName='%v'\n"+
+			"Error='%v'\n",
+			ePrefix.String(),
+			adjustedDirName,
+			err2.Error())
+
 		returnedDirName = ""
+
 		isEmpty = true
+
 		return returnedDirName, isEmpty, err
 	}
 
@@ -1193,12 +1269,36 @@ func (fh FileHelper) CleanDirStr(dirNameStr string) (returnedDirName string, isE
 //	  fileNameExt = '../filesfortest/newfilesfortest/.gitignore'
 //	                returns ".gitignore" and isEmpty=false
 func (fh FileHelper) CleanFileNameExtStr(
-	fileNameExtStr string) (returnedFileNameExt string, isEmpty bool, err error) {
+	fileNameExtStr string,
+	errorPrefix interface{}) (
+	returnedFileNameExt string,
+	isEmpty bool,
+	err error) {
 
-	ePrefix := "FileHelper.CleanFileNameExtStr() "
+	if fh.lock == nil {
+		fh.lock = new(sync.Mutex)
+	}
+
+	fh.lock.Lock()
+
+	defer fh.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
 	returnedFileNameExt = ""
+
 	isEmpty = true
-	err = nil
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileHelper."+
+			"CleanFileNameExtStr()",
+		"")
+
+	if err != nil {
+		return returnedFileNameExt, isEmpty, err
+	}
 
 	var pathDoesExist bool
 	var fInfo FileInfoPlus
@@ -1223,20 +1323,30 @@ func (fh FileHelper) CleanFileNameExtStr(
 	osPathSepStr := string(os.PathSeparator)
 
 	if strings.Contains(adjustedFileNameExt, osPathSepStr+osPathSepStr) {
+
 		returnedFileNameExt = ""
+
 		isEmpty = true
-		err = fmt.Errorf(ePrefix+
+
+		err = fmt.Errorf("%v\n"+
 			"Error: Invalid Directory string.\n"+
 			"Directory string contains invalid Path Separators.\n"+
-			"adjustedFileNameExt='%v' ",
+			"adjustedFileNameExt='%v'\n",
+			ePrefix.String(),
 			adjustedFileNameExt)
+
 		return returnedFileNameExt, isEmpty, err
 	}
 
 	if strings.Contains(adjustedFileNameExt, "...") {
-		err = fmt.Errorf(ePrefix+"Error: Invalid Directory string. Contains invalid dots.\n"+
-			"adjustedFileNameExt='%v'\n", adjustedFileNameExt)
-		return
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Invalid Directory string. Contains invalid dots.\n"+
+			"adjustedFileNameExt='%v'\n",
+			ePrefix.String(),
+			adjustedFileNameExt)
+
+		return returnedFileNameExt, isEmpty, err
 	}
 
 	// Find out if the file name extension path
@@ -1264,15 +1374,23 @@ func (fh FileHelper) CleanFileNameExtStr(
 		}
 	} // End of if pathDoesExist
 
-	firstCharIdx, lastCharIdx, err :=
-		fh.GetFirstLastNonSeparatorCharIndexInPathStr(adjustedFileNameExt)
+	firstCharIdx,
+		lastCharIdx,
+		err := new(fileHelperMolecule).
+		getFirstLastNonSeparatorCharIndexInPathStr(
+			adjustedFileNameExt,
+			ePrefix)
 
 	if firstCharIdx == -1 || lastCharIdx == -1 {
-		err = fmt.Errorf(ePrefix+"File Name Extension string contains no "+
+
+		err = fmt.Errorf("%v\n"+
+			"File Name Extension string contains no "+
 			"valid file name characters!\n"+
 			"adjustedFileNameExt='%v'\n",
+			ePrefix.String(),
 			adjustedFileNameExt)
-		return
+
+		return returnedFileNameExt, isEmpty, err
 	}
 
 	// The file name extension path does not exist
@@ -1286,34 +1404,58 @@ func (fh FileHelper) CleanFileNameExtStr(
 		return
 	}
 
-	slashIdxs, err := fh.GetPathSeparatorIndexesInPathStr(adjustedFileNameExt)
+	var slashIdxs []int
+	var err2 error
 
-	if err != nil {
-		err = fmt.Errorf(ePrefix+"Error returned from fh.GetPathSeparatorIndexesInPathStr"+
+	slashIdxs,
+		err2 = new(fileHelperAtom).
+		getPathSeparatorIndexesInPathStr(
+			adjustedFileNameExt,
+			ePrefix)
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error returned from fh.GetPathSeparatorIndexesInPathStr"+
 			"(adjustedFileNameExt).\n"+
-			"adustedFileNameExt='%v'\nError='%v'\n",
-			adjustedFileNameExt, err.Error())
-		return
+			"adustedFileNameExt='%v'\n"+
+			"Error='%v'\n",
+			ePrefix.String(),
+			adjustedFileNameExt,
+			err2.Error())
+
+		return returnedFileNameExt, isEmpty, err
 	}
 
 	lSlashIdxs := len(slashIdxs)
 
 	if lSlashIdxs == 0 {
+
 		returnedFileNameExt = adjustedFileNameExt
+
 		isEmpty = false
+
 		err = nil
-		return
+
+		return returnedFileNameExt, isEmpty, err
 	}
 
 	dotIdxs, err2 := fh.GetDotSeparatorIndexesInPathStr(adjustedFileNameExt)
 
 	if err2 != nil {
-		err = fmt.Errorf("Error returned by fh."+
-			"GetDotSeparatorIndexesInPathStr(adjustedDirName).\n"+
-			"adjustedFileNameExt='%v'\nError='%v'\n",
-			adjustedFileNameExt, err2.Error())
+
+		err = fmt.Errorf("%v\n"+
+			"Error returned by GetDotSeparatorIndexesInPathStr(adjustedDirName).\n"+
+			"adjustedFileNameExt='%v'\n"+
+			"Error='%v'\n",
+			ePrefix.String(),
+			adjustedFileNameExt,
+			err2.Error())
+
 		returnedFileNameExt = ""
+
 		isEmpty = true
+
 		return returnedFileNameExt, isEmpty, err
 	}
 
@@ -1380,7 +1522,6 @@ func (fh FileHelper) CleanFileNameExtStr(
 			// slash. There is no file name here.
 			returnedFileNameExt = ""
 		}
-
 	}
 
 	if len(returnedFileNameExt) == 0 {
@@ -1390,7 +1531,8 @@ func (fh FileHelper) CleanFileNameExtStr(
 	}
 
 	err = nil
-	return
+
+	return returnedFileNameExt, isEmpty, err
 }
 
 // CleanPathStr - Wrapper Function for filepath.Clean()
@@ -3761,9 +3903,10 @@ func (fh FileHelper) GetFileExtension(
 
 	firstGoodCharIdx,
 		lastGoodCharIdx,
-		err2 :=
-		fh.GetFirstLastNonSeparatorCharIndexInPathStr(
-			testPathFileNameExt)
+		err2 := new(fileHelperMolecule).
+		getFirstLastNonSeparatorCharIndexInPathStr(
+			testPathFileNameExt,
+			ePrefix)
 
 	if err2 != nil {
 
@@ -4027,25 +4170,57 @@ func (fh FileHelper) GetFileMode(pathFileName string) (FilePermissionConfig, err
 //	                         'isEmpty' will be set to 'true' and 'err' return 'nil'. In this situation, no
 //	                         error will be returned.
 func (fh FileHelper) GetFileNameWithExt(
-	pathFileNameExt string) (fNameExt string, isEmpty bool, err error) {
+	pathFileNameExt string,
+	errorPrefix interface{}) (
+	fNameExt string,
+	isEmpty bool,
+	err error) {
 
-	ePrefix := "FileHelper.GetFileNameWithExt "
+	if fh.lock == nil {
+		fh.lock = new(sync.Mutex)
+	}
+
+	fh.lock.Lock()
+
+	defer fh.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
 	fNameExt = ""
 	isEmpty = true
-	err = nil
 	errCode := 0
 
-	errCode, _, pathFileNameExt = fh.isStringEmptyOrBlank(pathFileNameExt)
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileHelper."+
+			"GetFileNameWithExt()",
+		"")
+
+	if err != nil {
+		return fNameExt, isEmpty, err
+	}
+
+	errCode,
+		_,
+		pathFileNameExt =
+		new(fileHelperElectron).isStringEmptyOrBlank(
+			pathFileNameExt)
 
 	if errCode == -1 {
-		err =
-			errors.New(ePrefix + "Error: Input parameter 'pathFileNameExt' is an empty string!")
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'pathFileNameExt' is an empty string!\n",
+			ePrefix.String())
+
 		return fNameExt, isEmpty, err
 	}
 
 	if errCode == -2 {
-		err =
-			errors.New(ePrefix + "Error: Input parameter 'pathFileNameExt' consists of blank spaces!")
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'pathFileNameExt' consists of blank spaces!",
+			ePrefix.String())
+
 		return fNameExt, isEmpty, err
 	}
 
@@ -4059,24 +4234,40 @@ func (fh FileHelper) GetFileNameWithExt(
 
 	lTestPathFileNameExt := 0
 
-	errCode, lTestPathFileNameExt, testPathFileNameExt = fh.isStringEmptyOrBlank(testPathFileNameExt)
+	errCode,
+		lTestPathFileNameExt,
+		testPathFileNameExt =
+		new(fileHelperElectron).
+			isStringEmptyOrBlank(testPathFileNameExt)
 
 	if errCode < 0 {
-		err = errors.New(ePrefix +
-			"Error: Cleaned version of 'pathFileNameExt', 'testPathFileNameExt' is an empty string!")
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Cleaned version of 'pathFileNameExt', 'testPathFileNameExt' is an empty string!\n",
+			ePrefix.String())
+
 		return fNameExt, isEmpty, err
 	}
 
-	firstCharIdx, lastCharIdx, err2 := fh.GetFirstLastNonSeparatorCharIndexInPathStr(testPathFileNameExt)
+	firstCharIdx, lastCharIdx, err2 := new(fileHelperMolecule).
+		getFirstLastNonSeparatorCharIndexInPathStr(
+			testPathFileNameExt,
+			ePrefix)
 
 	if err2 != nil {
-		err = fmt.Errorf(ePrefix+
-			"Error returned by fh.GetFirstLastNonSeparatorCharIndexInPathStr(testPathFileNameExt). "+
-			"testPathFileNameExt='%v'  Error='%v'", testPathFileNameExt, err2.Error())
+
+		err = fmt.Errorf("%v\n"+
+			"Error returned by fh.GetFirstLastNonSeparatorCharIndexInPathStr(testPathFileNameExt).\n"+
+			"testPathFileNameExt='%v'\n"+
+			"Error='%v'\n",
+			ePrefix.String(),
+			testPathFileNameExt,
+			err2.Error())
+
 		return fNameExt, isEmpty, err
 	}
 
-	// There are no alpha numeric characters present.
+	// There are no alphanumeric characters present.
 	// Therefore, there is no file name and extension
 	if firstCharIdx == -1 || lastCharIdx == -1 {
 		isEmpty = true
@@ -4084,21 +4275,35 @@ func (fh FileHelper) GetFileNameWithExt(
 		return fNameExt, isEmpty, err
 	}
 
-	slashIdxs, err2 := fh.GetPathSeparatorIndexesInPathStr(testPathFileNameExt)
+	slashIdxs,
+		err2 := new(fileHelperAtom).
+		getPathSeparatorIndexesInPathStr(
+			testPathFileNameExt,
+			ePrefix)
 
 	if err2 != nil {
-		err = fmt.Errorf(ePrefix+
-			"Error returned by fh.GetPathSeparatorIndexesInPathStr(testPathFileNameExt). "+
-			"testPathFileNameExt='%v'  Error='%v'", testPathFileNameExt, err2.Error())
+		err = fmt.Errorf("%v\n"+
+			"Error returned by GetPathSeparatorIndexesInPathStr(testPathFileNameExt).\n"+
+			"testPathFileNameExt='%v'\n"+
+			"Error='%v'\n",
+			ePrefix.String(),
+			testPathFileNameExt,
+			err2.Error())
+
 		return fNameExt, isEmpty, err
 	}
 
 	dotIdxs, err2 := fh.GetDotSeparatorIndexesInPathStr(testPathFileNameExt)
 
 	if err2 != nil {
-		err = fmt.Errorf(ePrefix+
-			"Error returned by fh.GetDotSeparatorIndexesInPathStr(testPathFileNameExt). "+
-			"testPathFileNameExt='%v'  Error='%v'", testPathFileNameExt, err2.Error())
+		err = fmt.Errorf("%v\n"+
+			"Error returned by fh.GetDotSeparatorIndexesInPathStr(testPathFileNameExt).\n"+
+			"testPathFileNameExt='%v'\n"+
+			"Error='%v'\n",
+			ePrefix.String(),
+			testPathFileNameExt,
+			err2.Error())
+
 		return fNameExt, isEmpty, err
 	}
 
@@ -4291,132 +4496,181 @@ func (fh FileHelper) GetFileNameWithoutExt(
 	return fName, isEmpty, err
 }
 
-// GetFirstLastNonSeparatorCharIndexInPathStr - Basically this method returns
-// the first index of the first alpha numeric character in a path string.
+// GetFirstLastNonSeparatorCharIndexInPathStr
 //
-// Specifically, the character must not be a path Separator ('\', '/') and
-// it must not be a dot ('.').
+// Basically, this method returns the first index of the
+// first alphanumeric character in a path string
+// (reading from left to right).
 //
-// If the first Non-Separator char is found, this method will return
-// an integer index which is greater than or equal to zero plus an
-// error value of nil.
+// Specifically, the character must not be a path
+// Separator ('\', '/') and it must not be a dot ('.').
 //
-// The first character found will never be part of the volume name.
-// Example On Windows: "D:\fDir1\fDir2" - first character index will
-// be 3 denoting character 'f'.
-func (fh FileHelper) GetFirstLastNonSeparatorCharIndexInPathStr(
-	pathStr string) (firstIdx, lastIdx int, err error) {
+// If the first Non-Separator char is found, this method
+// will return an integer index which is greater than or
+// equal to zero plus an error value of nil.
+//
+// The first character found will never be part of the
+// volume name.
+//
+// Example On Windows:
+//
+//	"D:\fDir1\fDir2" - first character index will
+//						be 3 denoting character 'f'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	pathStr						string
+//
+//		A string specifying a file or directory path.
+//		Basically, this method returns the first index
+//		of the first alphanumeric character in this path
+//		string. See the example above.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//		firstIdx					int
+//
+//			The string index in input parameter 'pathStr'
+//			identifying the first alphanumeric character.
+//
+//			The character identified by this index will not
+//			be a path Separator ('\', '/') and or a dot ('.').
+//
+//			If this returned value is less than zero, it signals
+//			that no valid first character was found.
+//
+//			The first character found will never be part of the
+//			volume name.
+//
+//			Example On Windows:
+//
+//			"D:\fDir1\fDir2" - first character index will
+//	                         be 3 denoting character 'f'.
+//
+//		lastIdx						int
+//
+//			The string index in input parameter 'pathStr'
+//			identifying the last alphanumeric character.
+//
+//			The character identified by this index will not
+//			be a path Separator ('\', '/') and or a dot ('.').
+//
+//			The last character found will never be part of the
+//			volume name.
+//
+//		error
+//
+//			If this method completes successfully, the
+//			returned error Type is set equal to 'nil'.
+//
+//			If errors are encountered during processing, the
+//			returned error Type will encapsulate an error
+//			message. This returned error message will
+//			incorporate the method chain and text passed by
+//			input parameter, 'errorPrefix'. The 'errorPrefix'
+//			text will be attached to the beginning of the
+//			error message.
+func (fh *FileHelper) GetFirstLastNonSeparatorCharIndexInPathStr(
+	pathStr string,
+	errorPrefix interface{}) (
+	firstIdx,
+	lastIdx int,
+	err error) {
 
-	ePrefix := "FileHelper.GetFirstNonSeparatorCharIndexInPathStr() "
+	if fh.lock == nil {
+		fh.lock = new(sync.Mutex)
+	}
+
+	fh.lock.Lock()
+
+	defer fh.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
 	firstIdx = -1
+
 	lastIdx = -1
-	errCode := 0
 
-	errCode, _, pathStr = fh.isStringEmptyOrBlank(pathStr)
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileHelper."+
+			"GetFirstLastNonSeparatorCharIndexInPathStr()",
+		"")
 
-	if errCode == -1 {
-
-		err = errors.New(ePrefix +
-			"Error: Input parameter 'pathStr' is an empty string!\n")
-
+	if err != nil {
 		return firstIdx, lastIdx, err
 	}
 
-	if errCode == -2 {
-		err = errors.New(ePrefix + "Error: Input parameter 'pathStr' consists of blank spaces!\n")
-
-		return firstIdx, lastIdx, err
-	}
-
-	pathStr = new(fileHelperAtom).adjustPathSlash(pathStr)
-
-	lPathStr := 0
-
-	errCode, lPathStr, pathStr = new(fileHelperElectron).isStringEmptyOrBlank(pathStr)
-
-	if errCode < 0 {
-
-		err = fmt.Errorf(ePrefix +
-			"Error: After path Separator adjustment, 'pathStr' is an empty string!\n")
-
-		return firstIdx, lastIdx, err
-	}
-
-	// skip the volume name. Don't count
-	// first characters in the volume name
-	volName := fp.VolumeName(pathStr)
-	lVolName := len(volName)
-
-	startIdx := 0
-
-	if lVolName > 0 {
-		startIdx = lVolName
-	}
-
-	var rChar rune
-
-	forbiddenTextChars := []rune{os.PathSeparator,
-		'\\',
-		'/',
-		'|',
-		'.',
-		'&',
-		'!',
-		'%',
-		'$',
-		'#',
-		'@',
-		'^',
-		'*',
-		'(',
-		')',
-		'-',
-		'_',
-		'+',
-		'=',
-		'[',
-		'{',
-		']',
-		'}',
-		'|',
-		'<',
-		'>',
-		',',
-		'~',
-		'`',
-		':',
-		';',
-		'"',
-		'\'',
-		'\n',
-		'\t',
-		'\r'}
-
-	lForbiddenTextChars := len(forbiddenTextChars)
-
-	for i := startIdx; i < lPathStr; i++ {
-		rChar = rune(pathStr[i])
-		isForbidden := false
-
-		for j := 0; j < lForbiddenTextChars; j++ {
-			if rChar == forbiddenTextChars[j] {
-				isForbidden = true
-			}
-
-		}
-
-		if isForbidden == false {
-
-			if firstIdx == -1 {
-				firstIdx = i
-			}
-
-			lastIdx = i
-		}
-
-	}
-
-	err = nil
+	firstIdx,
+		lastIdx,
+		err = new(fileHelperMolecule).
+		getFirstLastNonSeparatorCharIndexInPathStr(
+			pathStr,
+			ePrefix)
 
 	return firstIdx, lastIdx, err
 }
@@ -4606,37 +4860,75 @@ func (fh FileHelper) GetPathAndFileNameExt(
 //	pathFileNameExt = "..\dir1\dir2\.git" returns "..\dir1\dir2"
 //	                                       '.git' is assumed to be a file.
 func (fh FileHelper) GetPathFromPathFileName(
-	pathFileNameExt string) (dirPath string, isEmpty bool, err error) {
+	pathFileNameExt string,
+	errorPrefix interface{}) (
+	dirPath string,
+	isEmpty bool,
+	err error) {
 
-	ePrefix := "FileHelper.GetPathFromPathFileName() "
+	if fh.lock == nil {
+		fh.lock = new(sync.Mutex)
+	}
+
+	fh.lock.Lock()
+
+	defer fh.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
 	dirPath = ""
 	isEmpty = true
-	err = nil
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileHelper."+
+			"GetPathFromPathFileName()",
+		"")
+
+	if err != nil {
+		return dirPath, isEmpty, err
+	}
+
 	errCode := 0
 
-	errCode, _, pathFileNameExt = fh.isStringEmptyOrBlank(pathFileNameExt)
+	errCode,
+		_,
+		pathFileNameExt =
+		new(fileHelperElectron).isStringEmptyOrBlank(
+			pathFileNameExt)
 
 	if errCode == -1 {
-		err = errors.New(ePrefix +
-			"Error: Input parameter 'pathFileNameExt' is an empty string!\n")
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'pathFileNameExt' is an empty string!\n",
+			ePrefix.String())
 
 		return dirPath, isEmpty, err
 	}
 
 	if errCode == -2 {
-		err =
-			errors.New(ePrefix +
-				"Error: Input parameter 'pathFileNameExt' consists of blank spaces!\n")
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'pathFileNameExt' consists of blank spaces!\n",
+			ePrefix.String())
 
 		return dirPath, isEmpty, err
 	}
 
-	testPathStr, isDirEmpty, err2 := fh.CleanDirStr(pathFileNameExt)
+	testPathStr, isDirEmpty, err2 :=
+		fh.CleanDirStr(
+			pathFileNameExt,
+			ePrefix)
 
 	if err2 != nil {
-		err = fmt.Errorf(ePrefix+"Error returned by fh.CleanDirStr(pathFileNameExt).\n"+
-			"pathFileNameExt='%v'\nError='%v'\n",
-			pathFileNameExt, err2.Error())
+		err = fmt.Errorf("%v\n"+
+			"Error returned by fh.CleanDirStr(pathFileNameExt).\n"+
+			"pathFileNameExt='%v'\n"+
+			"Error='%v'\n",
+			ePrefix.String(),
+			pathFileNameExt,
+			err2.Error())
+
 		return dirPath, isEmpty, err
 	}
 
@@ -4650,43 +4942,68 @@ func (fh FileHelper) GetPathFromPathFileName(
 	lTestPathStr := len(testPathStr)
 
 	if lTestPathStr == 0 {
-		err = errors.New(ePrefix +
-			"Error: AdjustPathSlash was applied to 'pathStr'.\n" +
-			"The 'testPathStr' string is a Zero Length string!\n")
+
+		err = fmt.Errorf("%v\n"+
+			"Error: AdjustPathSlash was applied to 'pathStr'.\n"+
+			"The 'testPathStr' string is a Zero Length string!\n",
+			ePrefix.String())
+
 		return dirPath, isEmpty, err
 	}
 
-	slashIdxs, err2 := fh.GetPathSeparatorIndexesInPathStr(testPathStr)
+	slashIdxs,
+		err2 := new(fileHelperAtom).
+		getPathSeparatorIndexesInPathStr(
+			testPathStr,
+			ePrefix)
 
 	if err2 != nil {
-		err = fmt.Errorf(ePrefix+
+
+		err = fmt.Errorf("%v\n"+
 			"Error returned by fh.GetPathSeparatorIndexesInPathStr(testPathStr).\n"+
-			"testPathStr='%v'\nError='%v'\n",
-			testPathStr, err2.Error())
+			"testPathStr='%v'\n"+
+			"Error='%v'\n",
+			ePrefix.String(),
+			testPathStr,
+			err2.Error())
+
 		return dirPath, isEmpty, err
 	}
 
 	lSlashIdxs := len(slashIdxs)
 
 	firstGoodChar, lastGoodChar, err2 :=
-		fh.GetFirstLastNonSeparatorCharIndexInPathStr(testPathStr)
+		new(fileHelperMolecule).
+			getFirstLastNonSeparatorCharIndexInPathStr(
+				testPathStr,
+				ePrefix)
 
 	if err2 != nil {
-		err = fmt.Errorf(ePrefix+
+		err = fmt.Errorf("%v\n"+
 			"Error returned by fh.GetFirstLastNonSeparatorCharIndexInPathStr("+
 			"testPathStr).\n"+
-			"testPathStr='%v'\nError='%v'\n",
-			testPathStr, err2.Error())
+			"testPathStr='%v'\n"+
+			"Error='%v'\n",
+			ePrefix.String(),
+			testPathStr,
+			err2.Error())
+
 		return dirPath, isEmpty, err
 	}
 
-	dotIdxs, err2 := fh.GetDotSeparatorIndexesInPathStr(testPathStr)
+	dotIdxs, err2 := fh.
+		GetDotSeparatorIndexesInPathStr(
+			testPathStr)
 
 	if err2 != nil {
-		err = fmt.Errorf(ePrefix+
+		err = fmt.Errorf("%v\n"+
 			"Error returned by fh.GetDotSeparatorIndexesInPathStr(testPathStr).\n"+
-			"testPathStr='%v'\nError='%v'\n",
-			testPathStr, err2.Error())
+			"testPathStr='%v'\n"+
+			"Error='%v'\n",
+			ePrefix.String(),
+			testPathStr,
+			err2.Error())
+
 		return dirPath, isEmpty, err
 	}
 
@@ -4702,36 +5019,48 @@ func (fh FileHelper) GetPathFromPathFileName(
 
 	} else if strings.Contains(testPathStr, "...") {
 
-		err = fmt.Errorf(ePrefix+
+		err = fmt.Errorf("%v\n"+
 			"Error: PATH CONTAINS INVALID Dot Characters!\n"+
-			"testPathStr='%v'\n", testPathStr)
+			"testPathStr='%v'\n",
+			ePrefix.String(),
+			testPathStr)
+
 		return dirPath, isEmpty, err
 
 	} else if firstGoodChar == -1 || lastGoodChar == -1 {
 
-		absPath, err2 := fh.MakeAbsolutePath(testPathStr)
+		absPath, err2 := new(fileHelperProton).
+			makeAbsolutePath(
+				testPathStr,
+				ePrefix)
 
 		if err2 != nil {
-			err = fmt.Errorf(ePrefix+
+			err = fmt.Errorf("%v\n"+
 				"Error returned from fh.MakeAbsolutePath(testPathStr).\n"+
-				"testPathStr='%v'\nError='%v'\n",
-				testPathStr, err2.Error())
+				"testPathStr='%v'\n"+
+				"Error='%v'\n",
+				ePrefix.String(),
+				testPathStr,
+				err2.Error())
 
 			return dirPath, isEmpty, err
 		}
 
 		if absPath == "" {
-			err = fmt.Errorf(ePrefix+
+
+			err = fmt.Errorf("%v\n"+
 				"Error: Could not convert 'testPathStr' to Absolute path!\n"+
 				"testPathStr='%v'\n",
+				ePrefix.String(),
 				testPathStr)
+
 			return dirPath, isEmpty, err
 		}
 
 		finalPathStr = testPathStr
 
 	} else if lSlashIdxs == 0 {
-		// No path separators but alpha numeric chars are present
+		// No path separators but alphanumeric chars are present
 		dirPath = ""
 		isEmpty = true
 		err = nil
@@ -4756,15 +5085,20 @@ func (fh FileHelper) GetPathFromPathFileName(
 		finalPathStr = testPathStr
 
 	} else {
-		err = fmt.Errorf(ePrefix+
+		err = fmt.Errorf("%v\n"+
 			"Error: INVALID PATH STRING.\n"+
-			"testPathStr='%v'\n", testPathStr)
+			"testPathStr='%v'\n",
+			ePrefix.String(),
+			testPathStr)
 
 		return dirPath, isEmpty, err
 	}
 
 	if len(finalPathStr) == 0 {
-		err = fmt.Errorf(ePrefix + "Error: Processed path is a Zero Length String!\n")
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Processed path is a Zero Length String!\n",
+			ePrefix.String())
 
 		return dirPath, isEmpty, err
 	}
@@ -4784,46 +5118,106 @@ func (fh FileHelper) GetPathFromPathFileName(
 	return dirPath, isEmpty, err
 }
 
-// GetPathSeparatorIndexesInPathStr - Returns an array containing the indexes of
-// path Separators (Forward slashes or backward slashes depending on operating
+// GetPathSeparatorIndexesInPathStr
+//
+// Returns an array containing the indexes of path Separators
+// (Forward slashes or backward slashes depending on operating
 // system).
+//
+// The returned integer array identifies the indexes of the
+// forward or backward slashes within input paramter string,
+// 'pathStr'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	pathStr						string
+//
+//		'pathStr' is a string specifying a directory or
+//		file path. Depending on the operating system, the
+//		directories will be delimited by forward or
+//		backward slashes.
+//
+//		'pathStr' will be examined and the indexes of the
+//		forward or backward slashes will be recorded and
+//		returned in an integer array.
+//
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	[]int
+//
+//		This array contains the string indexes of the
+//		forward or backward slashes contained in input
+//		paramter string, 'pathStr'.
+//
+//		'pathStr' is a string specifying a directory or
+//		file path. Depending on the operating system the
+//		directories will be delimited by forward or
+//		backward slashes.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
 func (fh FileHelper) GetPathSeparatorIndexesInPathStr(
-	pathStr string) ([]int, error) {
+	pathStr string,
+	errorPrefix interface{}) (
+	[]int,
+	error) {
 
-	ePrefix := "FileHelper.GetPathSeparatorIndexesInPathStr() "
-	errCode := 0
-	lPathStr := 0
-
-	errCode, lPathStr, pathStr = fh.isStringEmptyOrBlank(pathStr)
-
-	if errCode == -1 {
-		return []int{},
-			errors.New(ePrefix +
-				"Error: Input parameter 'pathStr' is an empty string!\n")
+	if fh.lock == nil {
+		fh.lock = new(sync.Mutex)
 	}
 
-	if errCode == -2 {
-		return []int{},
-			errors.New(ePrefix +
-				"Error: Input parameter 'pathStr' consists of blank spaces!\n")
+	fh.lock.Lock()
+
+	defer fh.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileHelper."+
+			"GetPathSeparatorIndexesInPathStr()",
+		"")
+
+	if err != nil {
+		return []int{}, err
 	}
 
-	var slashIdxs []int
-
-	for i := 0; i < lPathStr; i++ {
-
-		rChar := pathStr[i]
-
-		if rChar == os.PathSeparator ||
-			rChar == '\\' ||
-			rChar == '/' {
-
-			slashIdxs = append(slashIdxs, i)
-		}
-
-	}
-
-	return slashIdxs, nil
+	return new(fileHelperAtom).getPathSeparatorIndexesInPathStr(
+		pathStr,
+		ePrefix.XCpy("<-pathStr"))
 }
 
 // GetVolumeName - Returns the volume name of associated with
@@ -4987,15 +5381,36 @@ func (fh FileHelper) IsAbsolutePath(pathStr string) bool {
 //	                                occurs, 'err' is set to 'nil'. An error will be triggered if the input parameter
 //	                                'pathFileStr' cannot no alpa numeric characters.
 func (fh FileHelper) IsPathFileString(
-	pathFileStr string) (pathFileType PathFileTypeCode,
+	pathFileStr string,
+	errorPrefix interface{}) (
+	pathFileType PathFileTypeCode,
 	absolutePathFile string,
 	err error) {
 
-	ePrefix := "FileHelper.IsPathFileString() "
+	if fh.lock == nil {
+		fh.lock = new(sync.Mutex)
+	}
+
+	fh.lock.Lock()
+
+	defer fh.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	absolutePathFile = ""
 
 	pathFileType = PathFileType.None()
-	absolutePathFile = ""
-	err = nil
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileHelper."+
+			"IsPathFileString()",
+		"")
+
+	if err != nil {
+		return pathFileType, absolutePathFile, err
+	}
 
 	var pathFileDoesExist bool
 	var fInfo FileInfoPlus
@@ -5015,11 +5430,16 @@ func (fh FileHelper) IsPathFileString(
 	}
 
 	if strings.Contains(correctedPathFileStr, "...") {
+
 		pathFileType = PathFileType.None()
+
 		absolutePathFile = ""
-		err = fmt.Errorf(ePrefix+
+
+		err = fmt.Errorf("%v\n"+
 			"Error: INVALID PATH STRING!\n"+
-			"pathFileStr='%v'\n", correctedPathFileStr)
+			"pathFileStr='%v'\n",
+			ePrefix.String(),
+			correctedPathFileStr)
 
 		return pathFileType, absolutePathFile, err
 	}
@@ -5027,18 +5447,25 @@ func (fh FileHelper) IsPathFileString(
 	osPathSepStr := string(os.PathSeparator)
 
 	if strings.Contains(correctedPathFileStr, osPathSepStr+osPathSepStr) {
+
 		pathFileType = PathFileType.None()
+
 		absolutePathFile = ""
-		err = fmt.Errorf(ePrefix+
+
+		err = fmt.Errorf("%v\n"+
 			"Error: Invalid Path File string.\n"+
 			"Path File string contains invalid Path Separators.\n"+
 			"pathFileStr='%v'\n",
+			ePrefix.String(),
 			correctedPathFileStr)
 
 		return pathFileType, absolutePathFile, err
 	}
 
-	testAbsPathFileStr, err2 := fh.MakeAbsolutePath(correctedPathFileStr)
+	testAbsPathFileStr, err2 := new(fileHelperProton).
+		makeAbsolutePath(
+			correctedPathFileStr,
+			ePrefix)
 
 	if err2 != nil {
 		err = fmt.Errorf("Error converting pathFileStr to absolute path.\n"+
@@ -5086,53 +5513,88 @@ func (fh FileHelper) IsPathFileString(
 
 	// Ok - We know the testPathFileStr does NOT exist on disk
 
-	firstCharIdx, lastCharIdx, err2 :=
-		fh.GetFirstLastNonSeparatorCharIndexInPathStr(correctedPathFileStr)
+	firstCharIdx,
+		lastCharIdx,
+		err2 :=
+		new(fileHelperMolecule).
+			getFirstLastNonSeparatorCharIndexInPathStr(
+				correctedPathFileStr,
+				ePrefix)
 
 	if err2 != nil {
+
 		pathFileType = PathFileType.None()
+
 		absolutePathFile = ""
-		err = fmt.Errorf(ePrefix+
-			"Error returned from fh.GetFirstLastNonSeparatorCharIndexInPathStr"+
+
+		err = fmt.Errorf("%v\n"+
+			"Error returned from GetFirstLastNonSeparatorCharIndexInPathStr"+
 			"(correctedPathFileStr)\n"+
-			"correctedPathFileStr='%v'\nError='%v'\n",
-			correctedPathFileStr, err2.Error())
+			"correctedPathFileStr='%v'\n"+
+			"Error='%v'\n",
+			ePrefix.String(),
+			correctedPathFileStr,
+			err2.Error())
+
 		return pathFileType, absolutePathFile, err
 	}
 
 	interiorDotPathIdx := strings.LastIndex(correctedPathFileStr, "."+string(os.PathSeparator))
 
 	if interiorDotPathIdx > firstCharIdx {
+
 		pathFileType = PathFileType.None()
+
 		absolutePathFile = ""
-		err = fmt.Errorf(ePrefix+
+
+		err = fmt.Errorf("%v\n"+
 			"Error: INVALID PATH. Invalid interior relative path detected!\n"+
 			"correctedPathFileStr='%v'\n",
+			ePrefix.String(),
 			correctedPathFileStr)
+
 		return pathFileType, absolutePathFile, err
 	}
 
-	slashIdxs, err2 := fh.GetPathSeparatorIndexesInPathStr(correctedPathFileStr)
+	slashIdxs,
+		err2 := new(fileHelperAtom).
+		getPathSeparatorIndexesInPathStr(
+			correctedPathFileStr,
+			ePrefix)
 
 	if err2 != nil {
+
 		pathFileType = PathFileType.None()
+
 		absolutePathFile = ""
-		err = fmt.Errorf(ePrefix+
-			"fh.GetPathSeparatorIndexesInPathStr(correctedPathFileStr) returned error.\n"+
-			"testAbsPathFileStr='%v'\nError='%v'\n",
-			correctedPathFileStr, err2.Error())
+
+		err = fmt.Errorf("%v\n"+
+			"GetPathSeparatorIndexesInPathStr(correctedPathFileStr) returned error.\n"+
+			"testAbsPathFileStr='%v'\n"+
+			"Error='%v'\n",
+			ePrefix.String(),
+			correctedPathFileStr,
+			err2.Error())
+
 		return pathFileType, absolutePathFile, err
 	}
 
 	dotIdxs, err2 := fh.GetDotSeparatorIndexesInPathStr(correctedPathFileStr)
 
 	if err2 != nil {
+
 		pathFileType = PathFileType.None()
+
 		absolutePathFile = ""
-		err = fmt.Errorf(ePrefix+
+
+		err = fmt.Errorf("%v\n"+
 			"fh.GetDotSeparatorIndexesInPathStr(correctedPathFileStr) retured error.\n"+
-			"correctedPathFileStr='%v'\nError='%v'\n",
-			correctedPathFileStr, err2.Error())
+			"correctedPathFileStr='%v'\n"+
+			"Error='%v'\n",
+			ePrefix.String(),
+			correctedPathFileStr,
+			err2.Error())
+
 		return pathFileType, absolutePathFile, err
 	}
 
@@ -5144,10 +5606,14 @@ func (fh FileHelper) IsPathFileString(
 		// Option # 1
 		// There are no valid characters in the string
 		pathFileType = PathFileType.None()
+
 		absolutePathFile = ""
-		err = fmt.Errorf(ePrefix+
+
+		err = fmt.Errorf("%v\n"+
 			"No valid characters in parameter 'pathFileStr'\n"+
-			"pathFileStr='%v'\n", correctedPathFileStr)
+			"pathFileStr='%v'\n",
+			ePrefix.String(),
+			correctedPathFileStr)
 
 	} else if lDotIdxs == 0 && lSlashIdxs == 0 && lastCharIdx > -1 {
 		// Option # 2
@@ -5168,12 +5634,16 @@ func (fh FileHelper) IsPathFileString(
 		// slashes
 
 		if lSlashIdxs > 1 {
+
 			pathFileType = PathFileType.None()
+
 			absolutePathFile = ""
-			err = fmt.Errorf(ePrefix+
+
+			err = fmt.Errorf("%v\n"+
 				"Invalid parameter 'pathFileStr'!\n"+
 				"'pathFileStr' consists entirely of path separators!\n"+
 				"pathFileStr='%v'\n",
+				ePrefix.String(),
 				correctedPathFileStr)
 
 		} else {
@@ -5534,7 +6004,9 @@ func (fh FileHelper) JoinPaths(p1 string, p2 string) string {
 // Note: Clean() is called on result by fp.Abs().
 func (fh FileHelper) MakeAbsolutePath(
 	relPath string,
-	errorPrefix interface{}) (string, error) {
+	errorPrefix interface{}) (
+	string,
+	error) {
 
 	if fh.lock == nil {
 		fh.lock = new(sync.Mutex)
