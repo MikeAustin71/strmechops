@@ -373,7 +373,7 @@ func (fh *FileHelper) AdjustPathSlash(path string) string {
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (fh FileHelper) AreSameFile(
+func (fh *FileHelper) AreSameFile(
 	pathFile1,
 	pathFile2 string,
 	errorPrefix interface{}) (
@@ -515,7 +515,7 @@ func (fh FileHelper) AreSameFile(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (fh FileHelper) ChangeFileMode(
+func (fh *FileHelper) ChangeFileMode(
 	pathFileName string,
 	filePermission FilePermissionConfig,
 	errorPrefix interface{}) error {
@@ -660,7 +660,7 @@ func (fh FileHelper) ChangeFileMode(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (fh FileHelper) ChangeFileTimes(
+func (fh *FileHelper) ChangeFileTimes(
 	pathFileName string,
 	newAccessTime,
 	newModTime time.Time,
@@ -1118,7 +1118,7 @@ func (fh *FileHelper) CleanDirStr(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (fh FileHelper) CleanFileNameExtStr(
+func (fh *FileHelper) CleanFileNameExtStr(
 	fileNameExtStr string,
 	errorPrefix interface{}) (
 	returnedFileNameExt string,
@@ -1216,7 +1216,7 @@ func (fh FileHelper) CleanFileNameExtStr(
 //
 //		For a detail explanation of the path 'cleaning'
 //		process, see above.
-func (fh FileHelper) CleanPathStr(pathStr string) string {
+func (fh *FileHelper) CleanPathStr(pathStr string) string {
 
 	if fh.lock == nil {
 		fh.lock = new(sync.Mutex)
@@ -1229,50 +1229,53 @@ func (fh FileHelper) CleanPathStr(pathStr string) string {
 	return fp.Clean(pathStr)
 }
 
-// ConsolidateErrors - Receives an array of errors and converts them
-// to a single error which is returned to the caller. Multiple errors
-// are separated by a new line character.
+// ConsolidateErrors
 //
-// If the length of the error array is zero, this method returns nil.
-func (fh FileHelper) ConsolidateErrors(errs []error) error {
+// Receives an array of type error and converts the
+// individual error elements to a consolidated single
+// instance of type 'error' which is returned to the
+// caller.
+//
+// Multiple errors are separated by a new line character
+// when returned as single consolidate 'error'.
+//
+// If the length of the error array is zero, this method
+// returns nil.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errs						[]error
+//
+//		An array to type 'error'. The errors contained in
+//		this array are consolidated and returned as a single
+//		instance of type 'error'. Each 'error' element in this
+//		array is automatically separated by a new line
+//		character when returned as a single type of 'error'.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		A single instance of type 'error' is returned containing
+//		all the consolidated individual errors contained in the
+//		input parameter 'errs'. 'errs' is an array of type
+//		'error'.
+func (fh *FileHelper) ConsolidateErrors(errs []error) error {
 
-	lErrs := len(errs)
-
-	if lErrs == 0 {
-		return nil
+	if fh.lock == nil {
+		fh.lock = new(sync.Mutex)
 	}
 
-	errStr := ""
+	fh.lock.Lock()
 
-	for i := 0; i < lErrs; i++ {
+	defer fh.lock.Unlock()
 
-		if errs[i] == nil {
-			continue
-		}
-
-		tempStr := fmt.Sprintf("%v", errs[i].Error())
-
-		tempStr = strings.TrimLeft(strings.TrimRight(tempStr, " "), " ")
-
-		strLen := len(tempStr)
-
-		for strings.HasSuffix(tempStr, "\n") &&
-			strLen > 1 {
-
-			tempStr = tempStr[0 : strLen-1]
-			strLen--
-		}
-
-		if i == (lErrs - 1) {
-			errStr += fmt.Sprintf("%v", tempStr)
-		} else if i == 0 {
-			errStr = fmt.Sprintf("\n%v\n\n", tempStr)
-		} else {
-			errStr += fmt.Sprintf("%v\n\n", tempStr)
-		}
-	}
-
-	return fmt.Errorf("%v", errStr)
+	return new(strMechPreon).
+		consolidateErrors(errs)
 }
 
 // ConvertDecimalToOctal - Utility routine to convert a decimal (base 10)
@@ -2012,7 +2015,8 @@ func (fh FileHelper) CopyFileByIo(src, dst string) (err error) {
 	outDestPtr = nil
 
 	if len(errs) > 0 {
-		return fh.ConsolidateErrors(errs)
+
+		return new(StrMech).ConsolidateErrors(errs)
 	}
 
 	_,

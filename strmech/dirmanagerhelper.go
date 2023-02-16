@@ -3341,7 +3341,7 @@ func (dMgrHlpr *dirMgrHelper) findFilesByNamePattern(
 		}
 	}
 
-	return fileMgrCol, fh.ConsolidateErrors(errs)
+	return fileMgrCol, new(StrMech).ConsolidateErrors(errs)
 }
 
 // getAbsolutePathElements - Returns all of the directories and drive
@@ -4389,8 +4389,10 @@ func (dMgrHlpr *dirMgrHelper) lowLevelCopyFile(
 	outDestPtr = nil
 
 	if len(errs) > 0 {
-		return FileHelper{}.ConsolidateErrors(errs)
+
+		return new(StrMech).ConsolidateErrors(errs)
 	}
+
 	var dstFileDoesExist bool
 	var dstFileInfo FileInfoPlus
 

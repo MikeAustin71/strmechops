@@ -193,7 +193,7 @@ func (fMgrHlpr *fileMgrHelper) doesFileMgrPathFileExist(
 	_ = fileMgr.dMgr.DoesAbsolutePathExist()
 
 	if len(errs) > 0 {
-		nonPathError = FileHelper{}.ConsolidateErrors(errs)
+		nonPathError = new(StrMech).ConsolidateErrors(errs)
 	}
 
 	return filePathDoesExist, nonPathError

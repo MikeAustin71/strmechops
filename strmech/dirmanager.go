@@ -52,9 +52,9 @@ type DirMgr struct {
 
 // ConsolidateErrors - Consolidates an array of errors into a
 // single error.
-func (dMgr DirMgr) ConsolidateErrors(errors []error) error {
+func (dMgr DirMgr) ConsolidateErrors(errs []error) error {
 
-	return FileHelper{}.ConsolidateErrors(errors)
+	return new(StrMech).ConsolidateErrors(errs)
 }
 
 // CopyDirectory - Copies files from the directory identified by

@@ -164,6 +164,55 @@ func (sMech *StrMech) BreakTextAtLineLength(
 		ePrefix)
 }
 
+// ConsolidateErrors
+//
+// Receives an array of type error and converts the
+// individual error elements to a consolidated single
+// instance of type 'error' which is returned to the
+// caller.
+//
+// Multiple errors are separated by a new line character
+// when returned as single consolidate 'error'.
+//
+// If the length of the error array is zero, this method
+// returns nil.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errs						[]error
+//
+//		An array to type 'error'. The errors contained in
+//		this array are consolidated and returned as a single
+//		instance of type 'error'. Each 'error' element in this
+//		array is automatically separated by a new line
+//		character when returned as a single type of 'error'.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		A single instance of type 'error' is returned containing
+//		all the consolidated individual errors contained in the
+//		input parameter 'errs'. 'errs' is an array of type
+//		'error'.
+func (sMech *StrMech) ConsolidateErrors(errs []error) error {
+
+	if sMech.stringDataMutex == nil {
+		sMech.stringDataMutex = new(sync.Mutex)
+	}
+
+	sMech.stringDataMutex.Lock()
+
+	defer sMech.stringDataMutex.Unlock()
+
+	return new(strMechPreon).
+		consolidateErrors(errs)
+}
+
 // ConvertNonPrintableChars - An array of runes containing
 // non-printable characters is passed to this method. The method
 // then converts the non-printable characters to 'printable'
