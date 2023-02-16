@@ -1847,39 +1847,52 @@ func (dMgrHlpr *dirMgrHelper) deleteFilesByNamePattern(
 func (dMgrHlpr *dirMgrHelper) doesDirectoryExist(
 	dMgr *DirMgr,
 	preProcessCode PreProcessPathCode,
-	ePrefix string,
+	errorPrefix string,
 	dMgrLabel string) (dirPathDoesExist bool, fInfo FileInfoPlus, err error) {
 
-	ePrefixCurrMethod := "dirMgrHelper.doesDirectoryExist() "
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"dirMgrHelper."+
+			"doesDirectoryExist()",
+		"")
+
+	if err != nil {
+		return dirPathDoesExist, fInfo, err
+	}
 
 	dirPathDoesExist = false
 	fInfo = FileInfoPlus{}
 	err = nil
 
-	if len(ePrefix) == 0 {
-		ePrefix = ePrefixCurrMethod
-	} else {
-		ePrefix = ePrefix + "- " + ePrefixCurrMethod
-	}
-
 	if dMgr == nil {
-		err = fmt.Errorf(ePrefix+
-			"\nError: %v pointer is 'nil'!\n", dMgrLabel)
+
+		err = fmt.Errorf("%v\n"+
+			"Error: %v pointer is 'nil'!\n",
+			ePrefix.String(),
+			dMgrLabel)
+
 		return dirPathDoesExist, fInfo, err
 	}
 
 	if !dMgr.isInitialized {
-		err = errors.New(ePrefix +
-			"\nError: DirMgr is NOT Initialized.\n")
+
+		err = fmt.Errorf(
+			"%v\n"+
+				"Error: DirMgr is NOT Initialized.\n",
+			ePrefix.String())
+
 		return dirPathDoesExist, fInfo, err
 	}
 
-	fh := FileHelper{}
+	fh := new(FileHelper)
 
 	errCode := 0
 
 	errCode, _, dMgr.absolutePath =
-		fh.isStringEmptyOrBlank(dMgr.absolutePath)
+		fh.IsStringEmptyOrBlank(dMgr.absolutePath)
 
 	if errCode == -1 {
 		dMgr.isInitialized = false
@@ -1889,7 +1902,7 @@ func (dMgrHlpr *dirMgrHelper) doesDirectoryExist(
 		dMgr.doesPathExist = false
 		dMgr.actualDirFileInfo = FileInfoPlus{}
 		dirPathDoesExist = false
-		err = fmt.Errorf(ePrefix+
+		err = fmt.Errorf(errorPrefix+
 			"\nError: Input parameter '%v'.absolutePath is an empty string!\n\n",
 			dMgrLabel)
 		return dirPathDoesExist, fInfo, err
@@ -1903,7 +1916,7 @@ func (dMgrHlpr *dirMgrHelper) doesDirectoryExist(
 		dMgr.doesPathExist = false
 		dMgr.actualDirFileInfo = FileInfoPlus{}
 		dirPathDoesExist = false
-		err = fmt.Errorf(ePrefix+
+		err = fmt.Errorf(errorPrefix+
 			"\nError: Input parameter '%v' consists of blank spaces!\n\n",
 			dMgrLabel)
 
@@ -1918,20 +1931,30 @@ func (dMgrHlpr *dirMgrHelper) doesDirectoryExist(
 
 	} else if preProcessCode == PreProcPathCode.AbsolutePath() {
 
-		dMgr.absolutePath, err2 = fh.MakeAbsolutePath(dMgr.absolutePath)
+		dMgr.absolutePath,
+			err2 =
+			fh.MakeAbsolutePath(
+				dMgr.absolutePath,
+				ePrefix.XCpy("dMgr.absolutePath<-"))
 
 		if err2 != nil {
-			err = fmt.Errorf(ePrefix+
-				"\nError: fh.MakeAbsolutePath(%v.absolutePath) FAILED!\n"+
-				"%v.absolutePath='%v'\nError='%v'\n\n",
-				dMgrLabel, dMgrLabel, err2.Error())
+
+			err = fmt.Errorf("%v\n"+
+				"Error: fh.MakeAbsolutePath(%v.absolutePath) FAILED!\n"+
+				"%v.absolutePath='%v'\n"+
+				"Error='%v'\n\n",
+				ePrefix.String(),
+				dMgrLabel,
+				dMgrLabel,
+				dMgr.absolutePath,
+				err2.Error())
 
 			return dirPathDoesExist, fInfo, err
 		}
 	}
 
 	errCode, _, dMgr.path =
-		fh.isStringEmptyOrBlank(dMgr.path)
+		fh.IsStringEmptyOrBlank(dMgr.path)
 
 	if errCode < 0 {
 		dMgr.path = dMgr.absolutePath
@@ -1960,7 +1983,7 @@ func (dMgrHlpr *dirMgrHelper) doesDirectoryExist(
 	}
 
 	errCode, _, dMgr.path =
-		fh.isStringEmptyOrBlank(dMgr.path)
+		fh.IsStringEmptyOrBlank(dMgr.path)
 
 	if dMgr.path != dMgr.absolutePath {
 		dMgr.isAbsolutePathDifferentFromPath = true
@@ -1986,7 +2009,7 @@ func (dMgrHlpr *dirMgrHelper) doesDirectoryExist(
 		absFInfo,
 		err = dMgrHlpr.lowLevelDoesDirectoryExist(
 		dMgr.absolutePath,
-		ePrefix,
+		errorPrefix,
 		dMgrLabel+".absolutePath")
 
 	if err != nil {
@@ -2010,7 +2033,7 @@ func (dMgrHlpr *dirMgrHelper) doesDirectoryExist(
 		dMgr.doesAbsolutePathExist = false
 		dMgr.doesPathExist = false
 		dMgr.actualDirFileInfo = FileInfoPlus{}
-		err = fmt.Errorf(ePrefix+
+		err = fmt.Errorf(errorPrefix+
 			"\nError: Directory absolute path exists, but "+
 			"it is a file - NOT A DIRECTORY!\n"+
 			"%v='%v'\n\n",
@@ -2024,7 +2047,7 @@ func (dMgrHlpr *dirMgrHelper) doesDirectoryExist(
 		dMgr.doesAbsolutePathExist = false
 		dMgr.doesPathExist = false
 		dMgr.actualDirFileInfo = FileInfoPlus{}
-		err = fmt.Errorf(ePrefix+
+		err = fmt.Errorf(errorPrefix+
 			"\nError: Directory absolute path exists, but "+
 			"it is classified as as a Regular File!\n"+
 			"%v='%v'\n\n",
@@ -2038,7 +2061,7 @@ func (dMgrHlpr *dirMgrHelper) doesDirectoryExist(
 		pathFInfo,
 		err = dMgrHlpr.lowLevelDoesDirectoryExist(
 		dMgr.path,
-		ePrefix,
+		errorPrefix,
 		dMgrLabel+".path")
 
 	if err != nil {
@@ -2050,7 +2073,7 @@ func (dMgrHlpr *dirMgrHelper) doesDirectoryExist(
 	}
 
 	if !dMgr.doesPathExist {
-		err = fmt.Errorf(ePrefix+
+		err = fmt.Errorf(errorPrefix+
 			"\nError: Directory absolute path exists, "+
 			"but original directory 'path' DOES NOT "+
 			"EXIST!\n"+
@@ -2070,7 +2093,7 @@ func (dMgrHlpr *dirMgrHelper) doesDirectoryExist(
 	}
 
 	if !pathFInfo.Mode().IsDir() {
-		err = fmt.Errorf(ePrefix+
+		err = fmt.Errorf(errorPrefix+
 			"\nError: Directory path absolute path exists, "+
 			"but original directory 'path' is NOT A DIRECTORY!!\n"+
 			"%v.absolutePath='%v'\n"+
@@ -2088,7 +2111,7 @@ func (dMgrHlpr *dirMgrHelper) doesDirectoryExist(
 	}
 
 	if pathFInfo.Mode().IsRegular() {
-		err = fmt.Errorf(ePrefix+
+		err = fmt.Errorf(errorPrefix+
 			"\nError: Directory path exists, "+
 			"but original directory 'path' is classified "+
 			"as a Regular File!!\n"+
@@ -3205,11 +3228,11 @@ func (dMgrHlpr *dirMgrHelper) findFilesByNamePattern(
 		return fileMgrCol, err
 	}
 
-	fh := FileHelper{}
+	fh := new(FileHelper)
 
 	errCode := 0
 
-	errCode, _, fileSearchPattern = fh.isStringEmptyOrBlank(fileSearchPattern)
+	errCode, _, fileSearchPattern = fh.IsStringEmptyOrBlank(fileSearchPattern)
 
 	if errCode < 0 {
 		return fileMgrCol,
@@ -3596,7 +3619,7 @@ func (dMgrHlpr *dirMgrHelper) getValidPathStr(
 		ePrefix = ePrefix + "- " + ePrefixCurrMethod
 	}
 
-	fh := FileHelper{}
+	fh := new(FileHelper)
 	validPathDto = ValidPathStrDto{}.New()
 	pathSepStr := string(os.PathSeparator)
 	dotSeparator := "." + pathSepStr
@@ -3719,7 +3742,7 @@ func (dMgrHlpr *dirMgrHelper) getValidPathStr(
 	// Check conversion to absolute path
 	validPathDto.absPathStr,
 		err2 =
-		fh.MakeAbsolutePath(pathStr)
+		fh.MakeAbsolutePath(pathStr, ePrefix)
 
 	if err2 != nil {
 		err = fmt.Errorf(ePrefix+
@@ -4156,7 +4179,7 @@ func (dMgrHlpr *dirMgrHelper) isPathStringEmptyOrBlank(
 		return pathFileNameExt, strLen, err
 	}
 
-	fh := FileHelper{}
+	fh := new(FileHelper)
 
 	pathFileNameExt = fh.AdjustPathSlash(pathFileNameExt)
 
@@ -4463,7 +4486,8 @@ func (dMgrHlpr *dirMgrHelper) lowLevelDoesDirectoryExist(
 
 	errCode,
 		_,
-		dirPath = FileHelper{}.isStringEmptyOrBlank(dirPath)
+		dirPath = new(FileHelper).
+		IsStringEmptyOrBlank(dirPath)
 
 	if errCode < 0 {
 		err = fmt.Errorf(ePrefix+

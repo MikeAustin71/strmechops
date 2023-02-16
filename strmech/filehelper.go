@@ -3820,7 +3820,7 @@ func (fh FileHelper) GetFileNameWithExt(
 		return fNameExt, isEmpty, err
 	}
 
-	testPathFileNameExt := fh.AdjustPathSlash(pathFileNameExt)
+	testPathFileNameExt := new(fileHelperAtom).adjustPathSlash(pathFileNameExt)
 
 	volName := fh.GetVolumeName(testPathFileNameExt)
 
@@ -4099,11 +4099,11 @@ func (fh FileHelper) GetFirstLastNonSeparatorCharIndexInPathStr(
 		return firstIdx, lastIdx, err
 	}
 
-	pathStr = fh.AdjustPathSlash(pathStr)
+	pathStr = new(fileHelperAtom).adjustPathSlash(pathStr)
 
 	lPathStr := 0
 
-	errCode, lPathStr, pathStr = fh.isStringEmptyOrBlank(pathStr)
+	errCode, lPathStr, pathStr = new(fileHelperElectron).isStringEmptyOrBlank(pathStr)
 
 	if errCode < 0 {
 
@@ -4220,7 +4220,7 @@ func (fh FileHelper) GetLastPathElement(pathName string) (string, error) {
 				"Error: Input parameter 'pathName' consists of blank spaces!\n")
 	}
 
-	adjustedPath := fh.AdjustPathSlash(pathName)
+	adjustedPath := new(fileHelperAtom).adjustPathSlash(pathName)
 
 	resultAry := strings.Split(adjustedPath, string(os.PathSeparator))
 
@@ -4669,9 +4669,33 @@ func (fh FileHelper) GetVolumeNameIndex(
 // whether 'pathStr' represents an absolute path.
 func (fh FileHelper) IsAbsolutePath(pathStr string) bool {
 
+	if fh.lock == nil {
+		fh.lock = new(sync.Mutex)
+	}
+
+	fh.lock.Lock()
+
+	defer fh.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		nil,
+		"FileHelper."+
+			"IsAbsolutePath()",
+		"")
+
+	if err != nil {
+		return false
+	}
+
 	errCode := 0
 
-	errCode, _, pathStr = fh.isStringEmptyOrBlank(pathStr)
+	errCode, _, pathStr =
+		new(fileHelperElectron).
+			isStringEmptyOrBlank(pathStr)
 
 	if errCode < 0 {
 		return false
@@ -4679,9 +4703,12 @@ func (fh FileHelper) IsAbsolutePath(pathStr string) bool {
 
 	// Adjust the path separators for the current operating
 	// system.
-	correctDelimPathStr := strings.ToLower(fh.AdjustPathSlash(pathStr))
+	correctDelimPathStr := strings.ToLower(
+		new(fileHelperAtom).adjustPathSlash(pathStr))
 
-	absPath, err := fh.MakeAbsolutePath(pathStr)
+	absPath, err := new(fileHelperProton).makeAbsolutePath(
+		pathStr,
+		ePrefix)
 
 	if err != nil {
 		return false
@@ -4696,7 +4723,7 @@ func (fh FileHelper) IsAbsolutePath(pathStr string) bool {
 	return false
 }
 
-// IsPathFileString - Returns 'true' if the it is determined that
+// IsPathFileString - Returns 'true' if it is determined that
 // input parameter, 'pathFileStr', represents a directory path,
 // file name and optionally, a file extension.
 //
@@ -5104,7 +5131,7 @@ func (fh FileHelper) IsPathString(
 		return isPathStr, cannotDetermine, testPathStr, err
 	}
 
-	testPathStr = fh.AdjustPathSlash(pathStr)
+	testPathStr = new(fileHelperAtom).adjustPathSlash(pathStr)
 
 	pathFileType, _, err2 := fh.IsPathFileString(testPathStr)
 
@@ -5209,7 +5236,8 @@ func (fh FileHelper) IsPathString(
 //		If 'testStr' consists entirely of white space
 //		characters, 'newStr' will be returned as an empty
 //		string ("").
-func (fh *FileHelper) IsStringEmptyOrBlank(testStr string) (
+func (fh *FileHelper) IsStringEmptyOrBlank(
+	testStr string) (
 	errCode int,
 	strLen int,
 	newStr string) {
@@ -5254,9 +5282,12 @@ func (fh FileHelper) JoinPathsAdjustSeparators(
 		return ""
 	}
 
-	ps1 := fh.AdjustPathSlash(fp.Clean(p1))
-	ps2 := fh.AdjustPathSlash(fp.Clean(p2))
-	return fp.Clean(fh.AdjustPathSlash(path.Join(ps1, ps2)))
+	fHelperAtom := new(fileHelperAtom)
+
+	ps1 := fHelperAtom.adjustPathSlash(fp.Clean(p1))
+	ps2 := fHelperAtom.adjustPathSlash(fp.Clean(p2))
+	return fp.Clean(
+		fHelperAtom.adjustPathSlash(path.Join(ps1, ps2)))
 
 }
 
@@ -6671,7 +6702,7 @@ func (fh *FileHelper) SearchFilePatternMatch(
 //	".." + PathSeparator
 func (fh FileHelper) StripLeadingDotSeparatorChars(pathName string) (string, int) {
 
-	pathName = fh.AdjustPathSlash(pathName)
+	pathName = fHelperAtom.adjustPathSlash(pathName)
 
 	pathSeparatorStr := string(os.PathSeparator)
 

@@ -90,7 +90,9 @@ func (fMgrHlpr *fileMgrHelper) doesFileMgrPathFileExist(
 
 	if preProcessCode == PreProcPathCode.PathSeparator() {
 
-		fileMgr.absolutePathFileName = FileHelper{}.AdjustPathSlash(fileMgr.absolutePathFileName)
+		fileMgr.absolutePathFileName =
+			new(FileHelper).
+				AdjustPathSlash(fileMgr.absolutePathFileName)
 
 	} else if preProcessCode == PreProcPathCode.AbsolutePath() {
 
@@ -2323,7 +2325,11 @@ func (fMgrHlpr *fileMgrHelper) setFileMgrDirMgrFileName(
 	fMgr.isFileNamePopulated = true
 	fMgr.fileName = s
 
-	s, extIsEmpty, err2 := fh.GetFileExtension(adjustedFileNameExt)
+	s,
+		extIsEmpty,
+		err2 := fh.GetFileExtension(
+		adjustedFileNameExt,
+		ePrefix)
 
 	if err2 != nil {
 		err = fmt.Errorf("%v\n"+
@@ -2445,8 +2451,6 @@ func (fMgrHlpr *fileMgrHelper) setFileMgrPathFileName(
 		return isEmpty, err
 	}
 
-	fh := new(FileHelper)
-
 	errCode := 0
 
 	errCode, _, pathFileNameExt =
@@ -2465,9 +2469,14 @@ func (fMgrHlpr *fileMgrHelper) setFileMgrPathFileName(
 		return isEmpty, err
 	}
 
+	fh := new(FileHelper)
+
 	adjustedPathFileNameExt := fh.AdjustPathSlash(pathFileNameExt)
 
-	adjustedFileNameExt, isEmptyFileName, err2 := fh.CleanFileNameExtStr(adjustedPathFileNameExt)
+	adjustedFileNameExt,
+		isEmptyFileName,
+		err2 :=
+		fh.CleanFileNameExtStr(adjustedPathFileNameExt)
 
 	if err2 != nil {
 		err = fmt.Errorf(ePrefix+
