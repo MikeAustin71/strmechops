@@ -450,6 +450,377 @@ func (fHelperNanobot *fileHelperNanobot) changeFileMode(
 	return err
 }
 
+// cleanFileNameExtStr
+//
+// Cleans up a file name extension string and returns a
+// string which contains only the file name and extension.
+//
+// ----------------------------------------------------------------
+//
+// # Usage
+//
+//	fileNameExt =	'../dir1/dir2/fileName.ext'
+//	Method Returns:	"fileName.ext" and isEmpty=false
+//
+//	fileNameExt =	'fileName.ext"
+//	Method Returns:	"fileName.ext" and isEmpty=false
+//
+//	fileNameExt =	"../filesfortest/newfilesfortest/" (actually exists on disk)
+//	Method Returns:	"" and isEmpty=true and error = nil
+//
+//	fileNameExt =	'../dir1/dir2/'
+//	Method Returns:	"" and isEmpty=true
+//
+//	fileNameExt =	'../filesfortest/newfilesfortest/newerFileForTest_01'
+//	Method Returns:	"newerFileForTest_01" and isEmpty=false
+//
+//	fileNameExt =	'../filesfortest/newfilesfortest/.gitignore'
+//	Method Returns:	".gitignore" and isEmpty=false
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fileNameExtStr				string
+//
+//		Typically, this string contains a directory/folder
+//		string or a file path string. This method will
+//		extract the file name and extension from this
+//		string returning it through return parameter,
+//		'returnedFileNameExt'.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	returnedFileNameExt			string
+//
+//		This method receives a directory or file path
+//		string and extracts the file name and extension.
+//		Only the file name and extension is extracted and
+//		returned through this parameter.
+//
+//	isEmpty						bool
+//
+//		If the returned file name and extension string
+//		('returnedFileNameExt') is an empty, or zero
+//		length string, this returned boolean value is
+//		set to true.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (fHelperNanobot *fileHelperNanobot) cleanFileNameExtStr(
+	fileNameExtStr string,
+	errPrefDto *ePref.ErrPrefixDto) (
+	returnedFileNameExt string,
+	isEmpty bool,
+	err error) {
+
+	if fHelperNanobot.lock == nil {
+		fHelperNanobot.lock = new(sync.Mutex)
+	}
+
+	fHelperNanobot.lock.Lock()
+
+	defer fHelperNanobot.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	isEmpty = true
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"fileHelperNanobot."+
+			"cleanFileNameExtStr()",
+		"")
+
+	if err != nil {
+		return returnedFileNameExt, isEmpty, err
+	}
+
+	var pathDoesExist bool
+	var fInfo FileInfoPlus
+	var adjustedFileNameExt string
+
+	fHelperMolecule := new(fileHelperMolecule)
+
+	adjustedFileNameExt,
+		pathDoesExist,
+		fInfo,
+		err = fHelperMolecule.
+		doesPathFileExist(
+			fileNameExtStr,
+			PreProcPathCode.PathSeparator(), // Convert to os Path Separators
+			ePrefix,
+			"fileNameExtStr")
+
+	if err != nil {
+
+		returnedFileNameExt = ""
+
+		isEmpty = true
+
+		return returnedFileNameExt, isEmpty, err
+	}
+
+	osPathSepStr := string(os.PathSeparator)
+
+	if strings.Contains(adjustedFileNameExt, osPathSepStr+osPathSepStr) {
+
+		returnedFileNameExt = ""
+
+		isEmpty = true
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Invalid Directory string.\n"+
+			"Directory string contains invalid Path Separators.\n"+
+			"adjustedFileNameExt='%v'\n",
+			ePrefix.String(),
+			adjustedFileNameExt)
+
+		return returnedFileNameExt, isEmpty, err
+	}
+
+	if strings.Contains(adjustedFileNameExt, "...") {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Invalid Directory string. Contains invalid dots.\n"+
+			"adjustedFileNameExt='%v'\n",
+			ePrefix.String(),
+			adjustedFileNameExt)
+
+		return returnedFileNameExt, isEmpty, err
+	}
+
+	// Find out if the file name extension path
+	// actually exists.
+
+	if pathDoesExist {
+		// The path exists
+
+		if fInfo.IsDir() {
+			// The path exists and it is a directory.
+			// There is no File Name present.
+			returnedFileNameExt = ""
+			isEmpty = true
+			err = nil
+			return
+
+		} else {
+			// The path exists, and it is a valid
+			// file name.
+			returnedFileNameExt = fInfo.Name()
+			isEmpty = false
+
+			err = nil
+			return
+		}
+	} // End of if pathDoesExist
+
+	firstCharIdx,
+		lastCharIdx,
+		err := fHelperMolecule.
+		getFirstLastNonSeparatorCharIndexInPathStr(
+			adjustedFileNameExt,
+			ePrefix)
+
+	if firstCharIdx == -1 || lastCharIdx == -1 {
+
+		err = fmt.Errorf("%v\n"+
+			"File Name Extension string contains no "+
+			"valid file name characters!\n"+
+			"adjustedFileNameExt='%v'\n",
+			ePrefix.String(),
+			adjustedFileNameExt)
+
+		return returnedFileNameExt, isEmpty, err
+	}
+
+	// The file name extension path does not exist
+
+	interiorDotPathIdx := strings.LastIndex(adjustedFileNameExt, "."+string(os.PathSeparator))
+
+	if interiorDotPathIdx > firstCharIdx {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: INVALID PATH.\n"+
+			"Invalid interior relative path detected!\n"+
+			"adjustedFileNameExt='%v'\n",
+			ePrefix,
+			adjustedFileNameExt)
+
+		return returnedFileNameExt, isEmpty, err
+	}
+
+	var slashIdxs []int
+	var err2 error
+
+	fHelperAtom := new(fileHelperAtom)
+
+	slashIdxs,
+		err2 = fHelperAtom.
+		getPathSeparatorIndexesInPathStr(
+			adjustedFileNameExt,
+			ePrefix)
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error returned from fh.GetPathSeparatorIndexesInPathStr"+
+			"(adjustedFileNameExt).\n"+
+			"adustedFileNameExt='%v'\n"+
+			"Error='%v'\n",
+			ePrefix.String(),
+			adjustedFileNameExt,
+			err2.Error())
+
+		return returnedFileNameExt, isEmpty, err
+	}
+
+	lSlashIdxs := len(slashIdxs)
+
+	if lSlashIdxs == 0 {
+
+		returnedFileNameExt = adjustedFileNameExt
+
+		isEmpty = false
+
+		err = nil
+
+		return returnedFileNameExt, isEmpty, err
+	}
+
+	var dotIdxs []int
+
+	dotIdxs,
+		err2 = fHelperAtom.
+		getDotSeparatorIndexesInPathStr(
+			adjustedFileNameExt,
+			ePrefix)
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error returned by GetDotSeparatorIndexesInPathStr(adjustedDirName).\n"+
+			"adjustedFileNameExt='%v'\n"+
+			"Error='%v'\n",
+			ePrefix.String(),
+			adjustedFileNameExt,
+			err2.Error())
+
+		returnedFileNameExt = ""
+
+		isEmpty = true
+
+		return returnedFileNameExt, isEmpty, err
+	}
+
+	lDotIdxs := len(dotIdxs)
+
+	// Option # 1
+	if lDotIdxs == 0 && lSlashIdxs == 0 && lastCharIdx == -1 {
+		// There are no valid characters in the string
+		returnedFileNameExt = ""
+
+	} else if lDotIdxs == 0 && lSlashIdxs == 0 && lastCharIdx > -1 {
+		// Option # 2
+		// String consists only of eligible alphanumeric characters
+		// "sometextstring"
+		returnedFileNameExt = adjustedFileNameExt
+
+	} else if lDotIdxs == 0 && lSlashIdxs > 0 && lastCharIdx == -1 {
+		// Option # 3
+		// There no dots no characters but string does contain
+		// slashes
+		returnedFileNameExt = ""
+
+	} else if lDotIdxs == 0 && lSlashIdxs > 0 && lastCharIdx > -1 {
+		// Option # 4
+		// strings contains slashes and characters but no dots.
+
+		if lastCharIdx < slashIdxs[lSlashIdxs-1] {
+			// Example: ../dir1/dir2/
+			returnedFileNameExt = ""
+		} else {
+			// Must be  lastCharIdx > slashIdxs[lSlashIdxs-1]
+			// Example: ../dir1/dir2/filename
+			returnedFileNameExt = adjustedFileNameExt[slashIdxs[lSlashIdxs-1]+1:]
+		}
+
+	} else if lDotIdxs > 0 && lSlashIdxs == 0 && lastCharIdx == -1 {
+		// Option # 5
+		// dots only. Must be "." or ".."
+		// The is no file name
+		returnedFileNameExt = ""
+
+	} else if lDotIdxs > 0 && lSlashIdxs == 0 && lastCharIdx > -1 {
+		// Option # 6
+		// Dots and characters only. No slashes.
+		// Maybe 'fileName.ext'
+		returnedFileNameExt = adjustedFileNameExt
+
+	} else if lDotIdxs > 0 && lSlashIdxs > 0 && lastCharIdx == -1 {
+		// Option # 7
+		// Dots and slashes, but no characters.
+		returnedFileNameExt = ""
+
+	} else {
+		// Option # 8
+		// MUST BE lDotIdxs > 0 && lSlashIdxs > 0 && lastCharIdx > -1
+		// We have dots, slashes and characters
+
+		if lastCharIdx > slashIdxs[lSlashIdxs-1] {
+			// The last char comes after the last slash.
+			// Take everything after the last slash
+			returnedFileNameExt = adjustedFileNameExt[slashIdxs[lSlashIdxs-1]+1:]
+		} else {
+			// The last character comes before the last
+			// slash. There is no file name here.
+			returnedFileNameExt = ""
+		}
+	}
+
+	if len(returnedFileNameExt) == 0 {
+
+		isEmpty = true
+
+	} else {
+
+		isEmpty = false
+
+	}
+
+	err = nil
+
+	return returnedFileNameExt, isEmpty, err
+}
+
 // changeFileTimes
 //
 // This method is a wrapper for "os.Chtimes()". New

@@ -990,26 +990,134 @@ func (fh *FileHelper) CleanDirStr(
 	return returnedDirName, isEmpty, err
 }
 
-// CleanFileNameExtStr - Cleans up a file name extension string.
+// CleanFileNameExtStr
 //
-//	Example:
-//	  fileNameExt = '../dir1/dir2/fileName.ext'
-//	                returns "fileName.ext" and isEmpty=false
+// Cleans up a file name extension string and returns a
+// string which contains only the file name and extension.
 //
-//	  fileNameExt = 'fileName.ext"
-//	                 returns "fileName.ext" and isEmpty=false
+// ----------------------------------------------------------------
 //
-//	  fileNameExt = "../filesfortest/newfilesfortest/" (actually exists on disk)
-//	                returns "" and isEmpty=true and error = nil
+// # Usage
 //
-//	  fileNameExt = '../dir1/dir2/'
-//	                 returns "" and isEmpty=true
+//	fileNameExt =	'../dir1/dir2/fileName.ext'
+//	Method Returns:	"fileName.ext" and isEmpty=false
 //
-//	  fileNameExt = '../filesfortest/newfilesfortest/newerFileForTest_01'
-//	                returns "newerFileForTest_01" and isEmpty=false
+//	fileNameExt =	'fileName.ext"
+//	Method Returns:	"fileName.ext" and isEmpty=false
 //
-//	  fileNameExt = '../filesfortest/newfilesfortest/.gitignore'
-//	                returns ".gitignore" and isEmpty=false
+//	fileNameExt =	"../filesfortest/newfilesfortest/" (actually exists on disk)
+//	Method Returns:	"" and isEmpty=true and error = nil
+//
+//	fileNameExt =	'../dir1/dir2/'
+//	Method Returns:	"" and isEmpty=true
+//
+//	fileNameExt =	'../filesfortest/newfilesfortest/newerFileForTest_01'
+//	Method Returns:	"newerFileForTest_01" and isEmpty=false
+//
+//	fileNameExt =	'../filesfortest/newfilesfortest/.gitignore'
+//	Method Returns:	".gitignore" and isEmpty=false
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fileNameExtStr				string
+//
+//		Typically, this string contains a directory/folder
+//		string or a file path string. This method will
+//		extract the file name and extension from this
+//		string returning it through return parameter,
+//		'returnedFileNameExt'.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	returnedFileNameExt			string
+//
+//		This method receives a directory or file path
+//		string and extracts the file name and extension.
+//		Only the file name and extension is extracted and
+//		returned through this parameter.
+//
+//	isEmpty						bool
+//
+//		If the returned file name and extension string
+//		('returnedFileNameExt') is an empty, or zero
+//		length string, this returned boolean value is
+//		set to true.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
 func (fh FileHelper) CleanFileNameExtStr(
 	fileNameExtStr string,
 	errorPrefix interface{}) (
@@ -1027,8 +1135,6 @@ func (fh FileHelper) CleanFileNameExtStr(
 
 	var ePrefix *ePref.ErrPrefixDto
 
-	returnedFileNameExt = ""
-
 	isEmpty = true
 
 	ePrefix,
@@ -1042,255 +1148,13 @@ func (fh FileHelper) CleanFileNameExtStr(
 		return returnedFileNameExt, isEmpty, err
 	}
 
-	var pathDoesExist bool
-	var fInfo FileInfoPlus
-	var adjustedFileNameExt string
-
-	fHelperMolecule := new(fileHelperMolecule)
-
-	adjustedFileNameExt,
-		pathDoesExist,
-		fInfo,
-		err = fHelperMolecule.
-		doesPathFileExist(
+	returnedFileNameExt,
+		isEmpty,
+		err = new(fileHelperNanobot).
+		cleanFileNameExtStr(
 			fileNameExtStr,
-			PreProcPathCode.PathSeparator(), // Convert to os Path Separators
-			ePrefix,
-			"fileNameExtStr")
-
-	if err != nil {
-
-		returnedFileNameExt = ""
-
-		isEmpty = true
-
-		return returnedFileNameExt, isEmpty, err
-	}
-
-	osPathSepStr := string(os.PathSeparator)
-
-	if strings.Contains(adjustedFileNameExt, osPathSepStr+osPathSepStr) {
-
-		returnedFileNameExt = ""
-
-		isEmpty = true
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Invalid Directory string.\n"+
-			"Directory string contains invalid Path Separators.\n"+
-			"adjustedFileNameExt='%v'\n",
-			ePrefix.String(),
-			adjustedFileNameExt)
-
-		return returnedFileNameExt, isEmpty, err
-	}
-
-	if strings.Contains(adjustedFileNameExt, "...") {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Invalid Directory string. Contains invalid dots.\n"+
-			"adjustedFileNameExt='%v'\n",
-			ePrefix.String(),
-			adjustedFileNameExt)
-
-		return returnedFileNameExt, isEmpty, err
-	}
-
-	// Find out if the file name extension path
-	// actually exists.
-
-	if pathDoesExist {
-		// The path exists
-
-		if fInfo.IsDir() {
-			// The path exists and it is a directory.
-			// There is no File Name present.
-			returnedFileNameExt = ""
-			isEmpty = true
-			err = nil
-			return
-
-		} else {
-			// The path exists, and it is a valid
-			// file name.
-			returnedFileNameExt = fInfo.Name()
-			isEmpty = false
-
-			err = nil
-			return
-		}
-	} // End of if pathDoesExist
-
-	firstCharIdx,
-		lastCharIdx,
-		err := fHelperMolecule.
-		getFirstLastNonSeparatorCharIndexInPathStr(
-			adjustedFileNameExt,
-			ePrefix)
-
-	if firstCharIdx == -1 || lastCharIdx == -1 {
-
-		err = fmt.Errorf("%v\n"+
-			"File Name Extension string contains no "+
-			"valid file name characters!\n"+
-			"adjustedFileNameExt='%v'\n",
-			ePrefix.String(),
-			adjustedFileNameExt)
-
-		return returnedFileNameExt, isEmpty, err
-	}
-
-	// The file name extension path does not exist
-
-	interiorDotPathIdx := strings.LastIndex(adjustedFileNameExt, "."+string(os.PathSeparator))
-
-	if interiorDotPathIdx > firstCharIdx {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: INVALID PATH.\n"+
-			"Invalid interior relative path detected!\n"+
-			"adjustedFileNameExt='%v'\n",
-			ePrefix,
-			adjustedFileNameExt)
-
-		return returnedFileNameExt, isEmpty, err
-	}
-
-	var slashIdxs []int
-	var err2 error
-
-	fHelperAtom := new(fileHelperAtom)
-
-	slashIdxs,
-		err2 = fHelperAtom.
-		getPathSeparatorIndexesInPathStr(
-			adjustedFileNameExt,
-			ePrefix)
-
-	if err2 != nil {
-
-		err = fmt.Errorf("%v\n"+
-			"Error returned from fh.GetPathSeparatorIndexesInPathStr"+
-			"(adjustedFileNameExt).\n"+
-			"adustedFileNameExt='%v'\n"+
-			"Error='%v'\n",
-			ePrefix.String(),
-			adjustedFileNameExt,
-			err2.Error())
-
-		return returnedFileNameExt, isEmpty, err
-	}
-
-	lSlashIdxs := len(slashIdxs)
-
-	if lSlashIdxs == 0 {
-
-		returnedFileNameExt = adjustedFileNameExt
-
-		isEmpty = false
-
-		err = nil
-
-		return returnedFileNameExt, isEmpty, err
-	}
-
-	var dotIdxs []int
-
-	dotIdxs,
-		err2 = fHelperAtom.
-		getDotSeparatorIndexesInPathStr(
-			adjustedFileNameExt,
-			ePrefix)
-
-	if err2 != nil {
-
-		err = fmt.Errorf("%v\n"+
-			"Error returned by GetDotSeparatorIndexesInPathStr(adjustedDirName).\n"+
-			"adjustedFileNameExt='%v'\n"+
-			"Error='%v'\n",
-			ePrefix.String(),
-			adjustedFileNameExt,
-			err2.Error())
-
-		returnedFileNameExt = ""
-
-		isEmpty = true
-
-		return returnedFileNameExt, isEmpty, err
-	}
-
-	lDotIdxs := len(dotIdxs)
-
-	// Option # 1
-	if lDotIdxs == 0 && lSlashIdxs == 0 && lastCharIdx == -1 {
-		// There are no valid characters in the string
-		returnedFileNameExt = ""
-
-	} else if lDotIdxs == 0 && lSlashIdxs == 0 && lastCharIdx > -1 {
-		// Option # 2
-		// String consists only of eligible alphanumeric characters
-		// "sometextstring"
-		returnedFileNameExt = adjustedFileNameExt
-
-	} else if lDotIdxs == 0 && lSlashIdxs > 0 && lastCharIdx == -1 {
-		// Option # 3
-		// There no dots no characters but string does contain
-		// slashes
-		returnedFileNameExt = ""
-
-	} else if lDotIdxs == 0 && lSlashIdxs > 0 && lastCharIdx > -1 {
-		// Option # 4
-		// strings contains slashes and characters but no dots.
-
-		if lastCharIdx < slashIdxs[lSlashIdxs-1] {
-			// Example: ../dir1/dir2/
-			returnedFileNameExt = ""
-		} else {
-			// Must be  lastCharIdx > slashIdxs[lSlashIdxs-1]
-			// Example: ../dir1/dir2/filename
-			returnedFileNameExt = adjustedFileNameExt[slashIdxs[lSlashIdxs-1]+1:]
-		}
-
-	} else if lDotIdxs > 0 && lSlashIdxs == 0 && lastCharIdx == -1 {
-		// Option # 5
-		// dots only. Must be "." or ".."
-		// The is no file name
-		returnedFileNameExt = ""
-
-	} else if lDotIdxs > 0 && lSlashIdxs == 0 && lastCharIdx > -1 {
-		// Option # 6
-		// Dots and characters only. No slashes.
-		// Maybe 'fileName.ext'
-		returnedFileNameExt = adjustedFileNameExt
-
-	} else if lDotIdxs > 0 && lSlashIdxs > 0 && lastCharIdx == -1 {
-		// Option # 7
-		// Dots and slashes, but no characters.
-		returnedFileNameExt = ""
-
-	} else {
-		// Option # 8
-		// MUST BE lDotIdxs > 0 && lSlashIdxs > 0 && lastCharIdx > -1
-		// We have dots, slashes and characters
-
-		if lastCharIdx > slashIdxs[lSlashIdxs-1] {
-			// The last char comes after the last slash.
-			// Take everything after the last slash
-			returnedFileNameExt = adjustedFileNameExt[slashIdxs[lSlashIdxs-1]+1:]
-		} else {
-			// The last character comes before the last
-			// slash. There is no file name here.
-			returnedFileNameExt = ""
-		}
-	}
-
-	if len(returnedFileNameExt) == 0 {
-		isEmpty = true
-	} else {
-		isEmpty = false
-	}
-
-	err = nil
+			ePrefix.XCpy(
+				"returnedFileNameExt<-fileNameExtStr"))
 
 	return returnedFileNameExt, isEmpty, err
 }
