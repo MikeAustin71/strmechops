@@ -3706,7 +3706,10 @@ func (dMgrHlpr *dirMgrHelper) getValidPathStr(
 		goto errorExit
 	}
 
-	dotIdxs, err2 = fh.GetDotSeparatorIndexesInPathStr(pathStr)
+	dotIdxs,
+		err2 = fh.GetDotSeparatorIndexesInPathStr(
+		pathStr,
+		ePrefix)
 
 	if err2 != nil {
 

@@ -241,6 +241,260 @@ func (fHelperAtom *fileHelperAtom) changeWorkingDir(
 	return err
 }
 
+// getAbsCurrDir
+//
+// Returns the absolute path of the current working
+// directory.
+//
+// The current work directory is determined by a call to
+// 'os.Getwd()'. 'os.Getwd()' returns a rooted path name
+// corresponding to the current directory.
+//
+// If the current directory can be reached via multiple
+// paths (due to symbolic links), 'os.Getwd()' may return
+// any one of them.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//
+//		Returns the absolute path of the current working
+//		directory.
+//
+//		The current work directory is determined by a
+//		call to 'os.Getwd()'. 'os.Getwd()' returns a
+//		rooted path name corresponding to the current
+//		directory.
+//
+//		If the current working directory can be reached
+//		via multiple paths (due to symbolic links),
+//		'os.Getwd()' may return any one of them.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (fHelperAtom *fileHelperAtom) getAbsCurrDir(
+	errPrefDto *ePref.ErrPrefixDto) (
+	string,
+	error) {
+
+	if fHelperAtom.lock == nil {
+		fHelperAtom.lock = new(sync.Mutex)
+	}
+
+	fHelperAtom.lock.Lock()
+
+	defer fHelperAtom.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"fileHelperAtom."+
+			"getAbsCurrDir()",
+		"")
+
+	if err != nil {
+		return "", err
+	}
+
+	var dir string
+	var err2 error
+
+	dir, err2 = os.Getwd()
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error returned from os.Getwd().\n"+
+			"Error='%v'\n",
+			ePrefix.String(),
+			err2.Error())
+
+		return "", err
+	}
+
+	var absDir string
+
+	absDir,
+		err = new(fileHelperProton).
+		makeAbsolutePath(
+			dir,
+			ePrefix.XCpy(
+				"absDir<-dir"))
+
+	if err != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error returned by fh.MakeAbsolutePath(dir).\n"+
+			"Error='%v'\n",
+			ePrefix.String(),
+			err.Error())
+
+	}
+
+	return absDir, err
+}
+
+// getDotSeparatorIndexesInPathStr
+//
+// Returns an array of integers representing the indexes
+// of dot ('.') characters located in input parameter
+// 'pathStr'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	pathStr						string
+//
+//		Typically, this is a file path or directory path
+//		string. This method will analyze this string and
+//		report all the identified dot ('.') characters
+//		in an integer array of string indexes returned by
+//		this method.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	[]int
+//
+//		An array of integers specifying the string
+//		indexes of the dot ('.') characters located in
+//		input parameter string 'pathStr'.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (fHelperAtom *fileHelperAtom) getDotSeparatorIndexesInPathStr(
+	pathStr string,
+	errPrefDto *ePref.ErrPrefixDto) (
+	[]int,
+	error) {
+
+	if fHelperAtom.lock == nil {
+		fHelperAtom.lock = new(sync.Mutex)
+	}
+
+	fHelperAtom.lock.Lock()
+
+	defer fHelperAtom.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	var dotIdxs []int
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"fileHelperAtom."+
+			"getDotSeparatorIndexesInPathStr()",
+		"")
+
+	if err != nil {
+		return dotIdxs, err
+	}
+
+	errCode := 0
+
+	lPathStr := 0
+
+	errCode,
+		lPathStr,
+		pathStr = new(fileHelperElectron).
+		isStringEmptyOrBlank(pathStr)
+
+	if errCode == -1 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'pathStr' is an empty string!\n",
+			ePrefix.String())
+
+		return dotIdxs, err
+	}
+
+	if errCode == -2 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'pathStr' consists of blank spaces!\n",
+			ePrefix.String())
+
+		return dotIdxs, err
+	}
+
+	for i := 0; i < lPathStr; i++ {
+
+		rChar := pathStr[i]
+
+		if rChar == '.' {
+
+			dotIdxs = append(dotIdxs, i)
+		}
+
+	}
+
+	return dotIdxs, nil
+}
+
 // getPathSeparatorIndexesInPathStr
 //
 // Returns an array containing the indexes of path Separators
