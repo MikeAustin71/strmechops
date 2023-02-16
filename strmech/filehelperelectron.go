@@ -1,12 +1,83 @@
 package strmech
 
 import (
+	fp "path/filepath"
 	"strings"
 	"sync"
 )
 
 type fileHelperElectron struct {
 	lock *sync.Mutex
+}
+
+// cleanPathStr
+//
+// Wrapper Function for filepath.Clean().
+//
+// See: https://golang.org/pkg/path/filepath/#Clean
+//
+// This method returns the shortest path name equivalent
+// to path by purely lexical processing. It applies the
+// following rules iteratively until no further
+// processing can be done:
+//
+//  1. Replace multiple Separator elements with a single
+//     one.
+//
+//  2. Eliminate each '.' path name element (the current
+//     directory).
+//
+//  3. Eliminate each inner '..' path name element (the
+//     parent directory) along with the 'non-..' element
+//     that precedes it.
+//
+//  4. Eliminate '..' elements that begin a rooted path;
+//     that is, replace '/..' with '/' at the beginning
+//     of a path, assuming Separator is '/'.
+//
+// The returned path ends in a slash only if it
+// represents a root directory, such as "/" on Unix or
+// `C:\` on Windows.
+//
+// Finally, any occurrences of slash are replaced by
+// Separator.
+//
+// If the result of this process is an empty string,
+// Clean returns the string ".".
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	pathStr						string
+//
+//		The path or directory/folder string to be
+//		cleaned. For a detail explanation of the
+//		cleaning process, see above.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//
+//		This method returns a 'cleaned' version of the
+//		file path or directory/folder string passed as
+//		input parameter, 'pathStr'.
+//
+//		For a detail explanation of the path 'cleaning'
+//		process, see above.
+func (fHelpElectron *fileHelperElectron) cleanPathStr(pathStr string) string {
+
+	if fHelpElectron.lock == nil {
+		fHelpElectron.lock = new(sync.Mutex)
+	}
+
+	fHelpElectron.lock.Lock()
+
+	defer fHelpElectron.lock.Unlock()
+
+	return fp.Clean(pathStr)
 }
 
 // isStringEmptyOrBlank
