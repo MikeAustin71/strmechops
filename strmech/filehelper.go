@@ -408,17 +408,117 @@ func (fh FileHelper) AreSameFile(
 		ePrefix)
 }
 
-// ChangeFileMode changes the file mode of an existing file designated by input
-// parameter 'pathFileName'. The os.FileMode value to which the mode will be changed
-// is extracted from input parameter 'filePermission'.
+// ChangeFileMode
 //
-// If the file does Not exist, an error is triggered.
+// This method changes the file mode of an existing file
+// designated by input parameter 'pathFileName'.
 //
-// If the method succeeds and the file's mode is changed, an error value of 'nil' is
+// The new os.FileMode value to which the mode will be
+// changed is extracted from input parameter
+// 'filePermission'.
+//
+// If the target file does Not exist, an error will be
 // returned.
+//
+// If the method succeeds and the file's mode is changed,
+// an error value of 'nil' is returned.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	pathFileName				string
+//
+//		The file mode for the file identified by
+//		'pathFileName' will be modified using the new
+//		file permissions provided by input parameter
+//		'filePermission'.
+//
+//	filePermission				FilePermissionConfig
+//
+//		This parameter contains the new permissions which
+//		will be applied to the file identified by input
+//		paramter 'pathFileName'.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
 func (fh FileHelper) ChangeFileMode(
 	pathFileName string,
-	filePermission FilePermissionConfig) error {
+	filePermission FilePermissionConfig,
+	errorPrefix interface{}) error {
 
 	if fh.lock == nil {
 		fh.lock = new(sync.Mutex)
@@ -433,7 +533,7 @@ func (fh FileHelper) ChangeFileMode(
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		"",
+		errorPrefix,
 		"FileHelper."+
 			"ChangeFileMode()",
 		"")
@@ -442,125 +542,158 @@ func (fh FileHelper) ChangeFileMode(
 		return err
 	}
 
-	var filePathDoesExist bool
-
-	pathFileName,
-		filePathDoesExist,
-		_,
-		err = new(fileHelperMolecule).doesPathFileExist(
+	return new(fileHelperNanobot).changeFileMode(
 		pathFileName,
-		PreProcPathCode.AbsolutePath(), // Convert to Absolute Path
-		ePrefix,
-		"pathFileName")
-
-	if err != nil {
-		return err
-	}
-
-	if !filePathDoesExist {
-		return fmt.Errorf("ERROR: 'pathFileName' DOES NOT EXIST!\n"+
-			"pathFileName='%v'\n", pathFileName)
-	}
-
-	err = filePermission.IsValid()
-
-	if err != nil {
-		return fmt.Errorf(ePrefix+
-			"ERROR: Input parameter 'filePermission' is INVALID!\n"+
-			"Error='%v'\n", err.Error())
-	}
-
-	newOsFileMode, err := filePermission.GetFileMode()
-
-	if err != nil {
-		return fmt.Errorf(ePrefix+
-			"Error returned by filePermission.GetFileMode().\nError='%v'\n",
-			err.Error())
-	}
-
-	err = os.Chmod(pathFileName, newOsFileMode)
-
-	if err != nil {
-
-		changeModeTxt, _ := filePermission.GetPermissionTextCode()
-
-		changeModeValue := filePermission.GetPermissionFileModeValueText()
-		return fmt.Errorf(ePrefix+
-			"Error returned by os.Chmod(pathFileName, newOsFileMode).\n"+
-			"pathFileName='%v'\nnewOsFileMode Text='%v'\nnewOsFileModeValue='%v'\nError='%v'",
-			pathFileName, changeModeTxt, changeModeValue, err.Error())
-	}
-
-	return nil
+		filePermission,
+		ePrefix.XCpy("pathFileName"))
 }
 
-// ChangeFileTimes - is a wrapper for os.Chtimes(). This method will set new access and
-// modification times for a designated file.
+// ChangeFileTimes
 //
-// If the path and file name do not exist, this method will return an error.
+// This method is a wrapper for "os.Chtimes()". New
+// access and modification times will be set for a
+// designated file.
 //
-// If successful, the access and modification times for the target file will be changed to
-// to those specified by input parameters, 'newAccessTime' and 'newModTime'.
-func (fh FileHelper) ChangeFileTimes(pathFileName string, newAccessTime, newModTime time.Time) error {
+// If the path and file name do not exist, this method
+// will return an error.
+//
+// If successful, the access and modification times for
+// the target file will be changed to those specified by
+// input parameters, 'newAccessTime' and 'newModTime'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	pathFileName				string
+//
+//		This string specifies the path and file name of
+//		the file whose access and modification times will
+//		be modified.
+//
+//	newAccessTime				time.Time
+//
+//		The file identified by input parameter
+//		'pathFileName' will have its access time reset to
+//		the time specified by this parameter
+//		('newAccessTime').
+//
+//	newModTime					time.Time
+//
+//		The file identified by input parameter
+//		'pathFileName' will have its modification time
+//		reset to the time specified by this parameter
+//		('newModTime').
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (fh FileHelper) ChangeFileTimes(
+	pathFileName string,
+	newAccessTime,
+	newModTime time.Time,
+	errorPrefix interface{}) error {
 
-	ePrefix := "FileHelper.ChangeFileTimes() "
+	if fh.lock == nil {
+		fh.lock = new(sync.Mutex)
+	}
+
+	fh.lock.Lock()
+
+	defer fh.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
 	var err error
-	var filePathDoesExist bool
-	var fInfo FileInfoPlus
 
-	pathFileName,
-		filePathDoesExist,
-		fInfo,
-		err = new(fileHelperMolecule).doesPathFileExist(pathFileName,
-		PreProcPathCode.AbsolutePath(), // Convert to Absolute Path
-		ePrefix,
-		"pathFileName")
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileHelper."+
+			"ChangeFileTimes()",
+		"")
 
 	if err != nil {
 		return err
 	}
 
-	if !filePathDoesExist {
-		return fmt.Errorf(ePrefix+
-			"ERROR: 'pathFileName' DOES NOT EXIST!\n"+
-			"pathFileName='%v'\n", pathFileName)
-	}
-
-	if fInfo.IsDir() {
-		return fmt.Errorf(ePrefix+
-			"ERROR: 'pathFileName' is a directory path and NOT a file!\n"+
-			"pathFileName='%v'\n", pathFileName)
-	}
-
-	tDefault := time.Time{}
-
-	if newAccessTime == tDefault {
-
-		return fmt.Errorf(ePrefix+
-			"Error: Input parameter 'newAccessTime' is INVALID!\nnewAccessTime='%v'",
-			newAccessTime)
-
-	}
-
-	if newModTime == tDefault {
-		return fmt.Errorf(ePrefix+
-			"Error: Input parameter 'newModTime' is INVALID!\nnewModTime='%v'",
-			newModTime)
-	}
-
-	err = os.Chtimes(pathFileName, newAccessTime, newModTime)
-
-	if err != nil {
-
-		return fmt.Errorf(ePrefix+
-			"ERROR returned by os.Chtimes(pathFileName,newAccessTime, newModTime)\n"+
-			"newAccessTime='%v'\nnewModTime='%v'\nError='%v'\n",
-			newAccessTime.Format("2006-01-02 15:04:05.000000000 -0700 MST"),
-			newModTime.Format("2006-01-02 15:04:05.000000000 -0700 MST"),
-			err.Error())
-	}
-
-	return nil
+	return new(fileHelperNanobot).
+		changeFileTimes(
+			pathFileName,
+			newAccessTime,
+			newModTime,
+			ePrefix)
 }
 
 // ChangeWorkingDir - Changes the current working directory to the
@@ -6702,7 +6835,15 @@ func (fh *FileHelper) SearchFilePatternMatch(
 //	".." + PathSeparator
 func (fh FileHelper) StripLeadingDotSeparatorChars(pathName string) (string, int) {
 
-	pathName = fHelperAtom.adjustPathSlash(pathName)
+	if fh.lock == nil {
+		fh.lock = new(sync.Mutex)
+	}
+
+	fh.lock.Lock()
+
+	defer fh.lock.Unlock()
+
+	pathName = new(fileHelperAtom).adjustPathSlash(pathName)
 
 	pathSeparatorStr := string(os.PathSeparator)
 
