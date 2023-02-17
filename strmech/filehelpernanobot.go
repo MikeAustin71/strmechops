@@ -1586,3 +1586,189 @@ func (fHelperNanobot *fileHelperNanobot) doesFileExist(
 
 	return true
 }
+
+// deleteDirFile
+//
+// Wrapper function for os.Remove.
+//
+// os.Remove removes the named file or an empty directory.
+// If there is an error, it will be of type *PathError,
+// and it will be returned in parameter 'lowLevelErr'.
+//
+// ----------------------------------------------------------------
+//
+// # WARNING!
+//
+//	Be careful. This method will delete files and
+//	empty directories.
+//
+// ----------------------------------------------------------------
+//
+// # Reference:
+//
+//	https://pkg.go.dev/os#Remove
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	pathFile					string
+//
+//		This string holds the path and/or file name
+//		identifying the file or directory to be deleted.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates error prefix text which
+//		is included in the error message returned by
+//		'msgError'.
+//
+//		Usually, 'errPrefDto' contains the name of the
+//	 	calling method or methods listed as a method or
+//	  	function chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	msgError					error
+//
+//		'msgError' is a standard error containing
+//		a brief high level message explaining the
+//		error condition in narrative text.
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If 'msgError' is returned with a value of
+//		'nil', it signals that the deletion operation
+//		succeeded.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+//
+//		NOTE: Not all returned errors have associated
+//		low level errors ('lowLevelErr'). Always check
+//		'msgError'. 'msgError' could be non-nil while
+//		'lowLevelErr' is 'nil'.
+//
+//	lowLevelErr					error
+//
+//		If the call to os.Create fails it will return an
+//		error of type *PathError. This error may be
+//		unpacked to reveal additional technical details
+//		regarding the failure to create a file.
+//
+//		If an error is returned by os.Create it will be
+//		returned in its original form through parameter,
+//		'lowLevelErr'.
+//
+//		If no *PathError occurs, 'lowLevelErr' will be set
+//		to 'nil'.
+func (fHelperNanobot *fileHelperNanobot) deleteDirFile(
+	pathFile string,
+	errPrefDto *ePref.ErrPrefixDto) (
+	msgError error,
+	lowLevelErr error) {
+
+	if fHelperNanobot.lock == nil {
+		fHelperNanobot.lock = new(sync.Mutex)
+	}
+
+	fHelperNanobot.lock.Lock()
+
+	defer fHelperNanobot.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		msgError = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"fileHelperNanobot."+
+			"deleteDirFile()",
+		"")
+
+	if msgError != nil {
+		return msgError, lowLevelErr
+	}
+
+	var fileDoesExist bool
+
+	fHelpMolecule := fileHelperMolecule{}
+
+	pathFile,
+		fileDoesExist,
+		_,
+		msgError = fHelpMolecule.doesPathFileExist(
+		pathFile,
+		PreProcPathCode.AbsolutePath(), // Convert to Absolute File Path
+		ePrefix,
+		"pathFile")
+
+	if msgError != nil {
+		return msgError, lowLevelErr
+	}
+
+	if !fileDoesExist {
+		// Doesn't exist. Nothing to do.
+		return msgError, lowLevelErr
+	}
+
+	lowLevelErr = os.Remove(pathFile)
+
+	if lowLevelErr != nil {
+		msgError = fmt.Errorf("%v\n"+
+			"Error returned from os.Remove(pathFile).\n"+
+			"pathFile='%v'\nError= \n%v\n",
+			ePrefix.String(),
+			pathFile,
+			lowLevelErr.Error())
+
+		return msgError, lowLevelErr
+	}
+
+	var err2 error
+	_,
+		fileDoesExist,
+		_,
+		err2 = fHelpMolecule.doesPathFileExist(
+		pathFile,
+		PreProcPathCode.None(), // Apply No Pre-Processing. Take no action
+		ePrefix,
+		"pathFile")
+
+	if err2 != nil {
+
+		msgError = fmt.Errorf(
+			"After attempted deletion, file error occurred!\n"+
+				"pathFile='%v'\n"+
+				"Error = \n%v\n",
+			pathFile, err2.Error())
+
+		return msgError, lowLevelErr
+	}
+
+	if fileDoesExist {
+
+		// File STILL Exists! ERROR!
+		msgError = fmt.Errorf("%v\n"+
+			"ERROR: After attempted deletion, file still exists!\n"+
+			"pathFile='%v'\n",
+			ePrefix.String(),
+			pathFile)
+	}
+
+	return msgError, lowLevelErr
+}

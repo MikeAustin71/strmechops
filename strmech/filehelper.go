@@ -423,6 +423,14 @@ func (fh *FileHelper) AreSameFile(
 //
 // ----------------------------------------------------------------
 //
+// # Reference:
+//
+//	os.FileMode https://pkg.go.dev/os#FileMode
+//	https://stackoverflow.com/questions/28969455/how-to-properly-instantiate-os-filemode
+//	https://www.includehelp.com/golang/os-filemode-constants-with-examples.aspx
+//
+// ----------------------------------------------------------------
+//
 // # Input Parameters
 //
 //	pathFileName				string
@@ -1663,7 +1671,7 @@ func (fh *FileHelper) CopyFileByIoByLink(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (fh FileHelper) CopyFileByLinkByIo(
+func (fh *FileHelper) CopyFileByLinkByIo(
 	src,
 	dst string,
 	errorPrefix interface{}) error {
@@ -1853,7 +1861,7 @@ func (fh FileHelper) CopyFileByLinkByIo(
 //		for input parameter 'errPrefDto' (error prefix)
 //		will be prefixed or attached at the beginning of
 //		the error message.
-func (fh FileHelper) CopyFileByLink(
+func (fh *FileHelper) CopyFileByLink(
 	src string,
 	dst string,
 	errorPrefix interface{}) error {
@@ -2006,7 +2014,7 @@ func (fh FileHelper) CopyFileByLink(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (fh FileHelper) CopyFileByIo(
+func (fh *FileHelper) CopyFileByIo(
 	sourceFile string,
 	destinationFile string,
 	errorPrefix interface{}) error {
@@ -2061,6 +2069,14 @@ func (fh FileHelper) CopyFileByIo(
 // to the new file (type 'os.File') and an error value of
 // 'nil'.
 //
+// os.Create creates or truncates the named file. If the
+// file already exists, it is truncated. If the file does
+// not exist, it is created with mode 0666 (before umask).
+// If successful, methods on the returned File can be used
+// for I/O; the associated file descriptor has mode O_RDWR.
+// If there is an os.Create error, it will be of type
+// *PathError.
+//
 // ----------------------------------------------------------------
 //
 // # Reference:
@@ -2068,6 +2084,13 @@ func (fh FileHelper) CopyFileByIo(
 //	os.File:	https://pkg.go.dev/os#File
 //	os.Create:	https://pkg.go.dev/os#Create
 //	PathError:	https://pkg.go.dev/os#PathError
+//
+// ----------------------------------------------------------------
+//
+// # WARNING
+//
+//	If the file identified by 'pathFileName' previously
+//	exists, it will be truncated.
 //
 // ----------------------------------------------------------------
 //
@@ -2166,6 +2189,14 @@ func (fh FileHelper) CopyFileByIo(
 //		text will be attached to the beginning of the
 //		error message.
 //
+//		If 'msgError' is 'nil' it signals that the
+//		file creation operation succeeded.
+//
+//		NOTE: Not all returned errors have associated
+//		low level errors ('lowLevelErr'). Always check
+//		'msgError'. 'msgError' could be non-nil while
+//		'lowLevelErr' is 'nil'.
+//
 //	lowLevelErr					error
 //
 //		If the call to os.Create fails it will return an
@@ -2177,8 +2208,8 @@ func (fh FileHelper) CopyFileByIo(
 //		returned in its original form through parameter,
 //		'lowLevelErr'.
 //
-//		If no error occurs, 'lowLevelErr' will be set to
-//		'nil'.
+//		If no *PathError occurs, 'lowLevelErr' will be set
+//	 	to 'nil'.
 func (fh *FileHelper) CreateFile(
 	pathFileName string,
 	errorPrefix interface{}) (
@@ -2220,65 +2251,175 @@ func (fh *FileHelper) CreateFile(
 	return ptrOsFile, msgError, lowLevelErr
 }
 
-// DeleteDirFile - Wrapper function for Remove.
-// Remove removes the named file or directory.
-// If there is an error, it will be a Non-Path Error.
-func (fh FileHelper) DeleteDirFile(pathFile string) error {
-	ePrefix := "FileHelper.DeleteDirFile() "
-	var fileDoesExist bool
-	var err error
+// DeleteDirFile
+//
+// Wrapper function for os.Remove.
+//
+// os.Remove removes the named file or an empty directory.
+// If there is an error, it will be of type *PathError,
+// and it will be returned in parameter 'lowLevelErr'.
+//
+// ----------------------------------------------------------------
+//
+// # WARNING!
+//
+//	Be careful. This method will delete files and
+//	empty directories.
+//
+// ----------------------------------------------------------------
+//
+// # Reference:
+//
+//	https://pkg.go.dev/os#Remove
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	pathFile					string
+//
+//		This string holds the path and/or file name
+//		identifying the file or directory to be deleted.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in the error message returned by
+//		'msgError'.
+//
+//		Usually, 'errorPrefix' contains the name of the
+//	 	calling method or methods listed as a method or
+//	  	function chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	msgError					error
+//
+//		'msgError' is a standard error containing
+//		a brief high level message explaining the
+//		error condition in narrative text.
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If 'msgError' is returned with a value of
+//		'nil', it signals that the deletion operation
+//		succeeded.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+//
+//		NOTE: Not all returned errors have associated
+//		low level errors ('lowLevelErr'). Always check
+//		'msgError'. 'msgError' could be non-nil while
+//		'lowLevelErr' is 'nil'.
+//
+//	lowLevelErr					error
+//
+//		If the call to os.Create fails it will return an
+//		error of type *PathError. This error may be
+//		unpacked to reveal additional technical details
+//		regarding the failure to create a file.
+//
+//		If an error is returned by os.Create it will be
+//		returned in its original form through parameter,
+//		'lowLevelErr'.
+//
+//		If no *PathError occurs, 'lowLevelErr' will be set
+//		to 'nil'.
+func (fh *FileHelper) DeleteDirFile(
+	pathFile string,
+	errorPrefix interface{}) (
+	msgError error,
+	lowLevelErr error) {
 
-	fHelpMolecule := fileHelperMolecule{}
-
-	pathFile,
-		fileDoesExist,
-		_,
-		err = fHelpMolecule.doesPathFileExist(
-		pathFile,
-		PreProcPathCode.AbsolutePath(), // Convert to Absolute File Path
-		ePrefix,
-		"pathFile")
-
-	if err != nil {
-		return err
+	if fh.lock == nil {
+		fh.lock = new(sync.Mutex)
 	}
 
-	if !fileDoesExist {
-		// Doesn't exist. Nothing to do.
-		return nil
+	fh.lock.Lock()
+
+	defer fh.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		msgError = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileHelper."+
+			"DeleteDirFile()",
+		"")
+
+	if msgError != nil {
+		return msgError, lowLevelErr
 	}
 
-	err = os.Remove(pathFile)
+	msgError,
+		lowLevelErr = new(fileHelperNanobot).
+		deleteDirFile(
+			pathFile,
+			ePrefix.XCpy(
+				"pathFile"))
 
-	if err != nil {
-		return fmt.Errorf(ePrefix+
-			"Error returned from os.Remove(pathFile).\n"+
-			"pathFile='%v'\nError='%v'",
-			pathFile, err.Error())
-	}
-
-	_,
-		fileDoesExist,
-		_,
-		err = fHelpMolecule.doesPathFileExist(
-		pathFile,
-		PreProcPathCode.None(), // Apply No Pre-Processing. Take no action
-		ePrefix,
-		"pathFile")
-
-	if err != nil {
-		return fmt.Errorf("After attempted deletion, file error occurred!\n"+
-			"pathFile='%v'\n"+
-			"%v", pathFile, err.Error())
-	}
-
-	if fileDoesExist {
-		// File STILL Exists! ERROR!
-		return fmt.Errorf("ERROR: After attempted deletion, file still exists!\n"+
-			"pathFile='%v'\n", pathFile)
-	}
-
-	return nil
+	return msgError, lowLevelErr
 }
 
 // DeleteDirPathAll - Wrapper function for RemoveAll. This method removes path

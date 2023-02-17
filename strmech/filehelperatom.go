@@ -101,6 +101,14 @@ func (fHelperAtom *fileHelperAtom) adjustPathSlash(
 // to the new file (type 'os.File') and an error value of
 // 'nil'.
 //
+// os.Create creates or truncates the named file. If the
+// file already exists, it is truncated. If the file does
+// not exist, it is created with mode 0666 (before umask).
+// If successful, methods on the returned File can be used
+// for I/O; the associated file descriptor has mode O_RDWR.
+// If there is an os.Create error, it will be of type
+// *PathError.
+//
 // ----------------------------------------------------------------
 //
 // # Reference:
@@ -108,6 +116,13 @@ func (fHelperAtom *fileHelperAtom) adjustPathSlash(
 //	os.File:	https://pkg.go.dev/os#File
 //	os.Create:	https://pkg.go.dev/os#Create
 //	PathError:	https://pkg.go.dev/os#PathError
+//
+// ----------------------------------------------------------------
+//
+// # WARNING
+//
+//	If the file identified by 'pathFileName' previously
+//	exists, it will be truncated.
 //
 // ----------------------------------------------------------------
 //
@@ -120,11 +135,13 @@ func (fHelperAtom *fileHelperAtom) adjustPathSlash(
 //
 //	errPrefDto					*ePref.ErrPrefixDto
 //
-//		This object encapsulates an error prefix string
-//		which is included in all returned error
-//		messages. Usually, it contains the name of the
-//		calling method or methods listed as a function
-//		chain.
+//		This object encapsulates error prefix text which
+//		is included in the error message returned by
+//		'msgError'.
+//
+//		Usually, 'errPrefDto' contains the name of the
+//	 	calling method or methods listed as a method or
+//	  	function chain of execution.
 //
 //		If no error prefix information is needed, set
 //		this parameter to 'nil'.
@@ -171,8 +188,8 @@ func (fHelperAtom *fileHelperAtom) adjustPathSlash(
 //		returned in its original form through parameter,
 //		'lowLevelErr'.
 //
-//		If no error occurs, 'lowLevelErr' will be set to
-//		'nil'.
+//		If no *PathError occurs, 'lowLevelErr' will be set
+//		to 'nil'.
 func (fHelperAtom *fileHelperAtom) createFile(
 	pathFileName string,
 	errPrefDto *ePref.ErrPrefixDto) (
