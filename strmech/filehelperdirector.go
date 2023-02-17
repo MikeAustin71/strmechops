@@ -27,11 +27,8 @@ type fileHelperDirector struct {
 // file. The second, 'hard link', attempt will call
 // method, 'CopyFileByLink()'.
 //
-// If that 'hard link' operation fails, this method will call
-// 'CopyFileByIo()'.
-//
-// If both attempted file copy operations fail, an error will be
-// returned.
+// If both attempted file copy operations fail, an error
+// will be returned.
 //
 // See: https://stackoverflow.com/questions/21060945/simple-way-to-copy-a-file-in-golang
 //
@@ -152,10 +149,10 @@ func (fHelpDirector *fileHelperDirector) copyFileByIoByLink(
 	return err
 }
 
-// CopyFileByLinkByIo
+// copyFileByLinkByIo
 //
-// Copies a file from source to destination
-// using one of two techniques.
+// Copies a file from source to destination using one of
+// two techniques.
 //
 // First, this method will attempt to copy the designated
 // file by means of creating a 'hard link' to the source file.
@@ -172,27 +169,77 @@ func (fHelpDirector *fileHelperDirector) copyFileByIoByLink(
 // returned.
 //
 // See: https://stackoverflow.com/questions/21060945/simple-way-to-copy-a-file-in-golang
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	src							string
+//
+//		This string holds the file name and path for the
+//		source file which will be copied to the
+//		destination file identified by input parameter,
+//		'dst'.
+//
+//	dst							string
+//
+//		This string holds the file name and path for the
+//		destination file. The source file identified by
+//		input parameter 'src' will be copied to this
+//		destination file ('dst').
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
 func (fHelpDirector *fileHelperDirector) copyFileByLinkByIo(
-	src,
+	src string,
 	dst string,
-	errorPrefix interface{}) error {
+	errPrefDto *ePref.ErrPrefixDto) error {
 
-	if fh.lock == nil {
-		fh.lock = new(sync.Mutex)
+	if fHelpDirector.lock == nil {
+		fHelpDirector.lock = new(sync.Mutex)
 	}
 
-	fh.lock.Lock()
+	fHelpDirector.lock.Lock()
 
-	defer fh.lock.Unlock()
+	defer fHelpDirector.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
 
 	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
-		"FileHelper."+
-			"CopyFileByLinkByIo()",
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"fileHelperDirector."+
+			"copyFileByLinkByIo()",
 		"")
 
 	if err != nil {
