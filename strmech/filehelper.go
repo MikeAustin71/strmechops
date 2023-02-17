@@ -2786,34 +2786,57 @@ func (fh FileHelper) DeleteDirPathAll(
 	return msgError, lowLevelErr
 }
 
-// DoesFileExist - Returns a boolean value designating whether the passed
+// DoesFileExist
+//
+// Returns a boolean value designating whether the passed
 // file name exists.
 //
-// This method does not differentiate between Path Errors and Non-Path
-// Errors returned by os.Stat(). The method only returns a boolean
-// value.
+// This method does not differentiate between Path Errors
+// and Non-Path Errors returned by os.Stat(). The method
+// only returns a boolean value.
 //
-// If a Non-Path Error is returned by os.Stat(), this method will
-// classify the file as "Does NOT Exist" and return a value of
-// false.
+// If a Non-Path Error is returned by os.Stat(), this
+// method will classify the file as "Does NOT Exist" and
+// return a value of 'false'.
 //
-// For a more granular test of whether a file exists, see method
-// FileHelper.DoesThisFileExist().
+// For a more granular test of whether a file exists, see
+// method FileHelper.DoesThisFileExist().
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	pathFileName				string
+//
+//		This string holds the name of a path and file
+//		name. This method will determine this path and
+//		file name actually exists.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	bool
+//
+//		If the path and file name passed by input
+//		parameter 'pathFileName' is verified to actually
+//		exist, this return parameter will be set to 'true'.
+//
+//		If the path and file name do not exist or if an
+//		error occurs, this method returns 'false'.
 func (fh FileHelper) DoesFileExist(pathFileName string) bool {
 
-	_, pathFileDoesExist, _, nonPathError :=
-		new(fileHelperMolecule).
-			doesPathFileExist(
-				pathFileName,
-				PreProcPathCode.AbsolutePath(), // Convert to Absolute Path
-				"FileHelper.DoesFileExist()",
-				"pathFileName")
-
-	if !pathFileDoesExist || nonPathError != nil {
-		return false
+	if fh.lock == nil {
+		fh.lock = new(sync.Mutex)
 	}
 
-	return true
+	fh.lock.Lock()
+
+	defer fh.lock.Unlock()
+
+	return new(fileHelperNanobot).
+		doesFileExist(
+			pathFileName)
 }
 
 // DeleteFilesWalkDirectory - This method 'walks' the directory tree searching
@@ -2952,17 +2975,17 @@ func (fh FileHelper) DoesFileExist(pathFileName string) bool {
 // IMPORTANT:
 //
 //	If all of the file selection criterion in the FileSelectionCriteria object are
-//	'Inactive' or 'Not Set' (set to their zero or default values), then all of
-//	the files processed in the directory tree will be deleted and returned in the
-//	the file manager collection, DirectoryDeleteFileInfo.DeletedFiles.
+//	'Inactive' or 'Not Set' (set to their zero or default values), then all the
+//	files processed in the directory tree will be deleted and returned in the
+//	file manager collection, DirectoryDeleteFileInfo.DeletedFiles.
 //
 //	  Example:
 //	     FileNamePatterns  = ZERO Length Array
 //	     filesOlderThan    = time.Time{}
 //	     filesNewerThan    = time.Time{}
 //
-//	  In this example, all of the selection criterion are
-//	  'Inactive' and therefore all of the files encountered
+//	  In this example, all the selection criterion are
+//	  'Inactive' and therefore all the files encountered
 //	  in the target directory will be selected and returned
 //	  as 'Found Files'.
 //
@@ -3195,14 +3218,18 @@ func (fh FileHelper) DoesStringEndWithPathSeparator(pathStr string) bool {
 //
 // Non-Path errors may arise for a variety of reasons, but the most common is associated
 // with 'access denied' situations.
-func (fh FileHelper) DoesThisFileExist(pathFileName string) (pathFileNameDoesExist bool,
+func (fh FileHelper) DoesThisFileExist(pathFileName string) (
+	pathFileNameDoesExist bool,
 	nonPathError error) {
 
 	ePrefix := "FileHelper.DoesThisFileExist() "
 	pathFileNameDoesExist = false
 	nonPathError = nil
 
-	_, pathFileNameDoesExist, _, nonPathError =
+	_,
+		pathFileNameDoesExist,
+		_,
+		nonPathError =
 		new(fileHelperMolecule).doesPathFileExist(
 			pathFileName,
 			PreProcPathCode.AbsolutePath(), // Skip Absolute Path Conversion

@@ -47,7 +47,7 @@ type FileSelectionCriteria struct {
 }
 
 // ArePatternsActive - surveys the FileNamePatterns string
-// array to determine if there currently any active search
+// array to determine if there are currently any active search
 // file pattern string.
 //
 // A search file pattern is considered active if the string

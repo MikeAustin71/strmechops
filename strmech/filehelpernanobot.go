@@ -1553,21 +1553,54 @@ func (fHelperNanobot *fileHelperNanobot) cleanDirStr(
 	return returnedDirName, isEmpty, err
 }
 
-// doesFileExist - Returns a boolean value designating whether the passed
+// doesFileExist
+//
+// Returns a boolean value designating whether the passed
 // file name exists.
 //
-// This method does not differentiate between Path Errors and Non-Path
-// Errors returned by os.Stat(). The method only returns a boolean
-// value.
+// This method does not differentiate between Path Errors
+// and Non-Path Errors returned by os.Stat(). The method
+// only returns a boolean value.
 //
-// If a Non-Path Error is returned by os.Stat(), this method will
-// classify the file as "Does NOT Exist" and return a value of
-// false.
+// If a Non-Path Error is returned by os.Stat(), this
+// method will classify the file as "Does NOT Exist" and
+// return a value of 'false'.
 //
-// For a more granular test of whether a file exists, see method
-// FileHelper.DoesThisFileExist().
+// For a more granular test of whether a file exists, see
+// method FileHelper.DoesThisFileExist().
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	pathFileName				string
+//
+//		This string holds the name of a path and file
+//		name. This method will determine this path and
+//		file name actually exists.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	bool
+//
+//		If the path and file name passed by input
+//		parameter 'pathFileName' is verified to actually
+//		exist, this return parameter will be set to 'true'.
+//
+//		If the path and file name do not exist or if an
+//		error occurs, this method returns 'false'.
 func (fHelperNanobot *fileHelperNanobot) doesFileExist(
 	pathFileName string) bool {
+
+	if fHelperNanobot.lock == nil {
+		fHelperNanobot.lock = new(sync.Mutex)
+	}
+
+	fHelperNanobot.lock.Lock()
+
+	defer fHelperNanobot.lock.Unlock()
 
 	_,
 		pathFileDoesExist,
