@@ -3,6 +3,7 @@ package strmech
 import (
 	"errors"
 	"fmt"
+	ePref "github.com/MikeAustin71/errpref"
 	"os"
 	"strings"
 	"sync"
@@ -3477,9 +3478,10 @@ func (dMgr *DirMgr) GetFileInfoPlus() (FileInfoPlus, error) {
 //
 // If the current Directory does NOT exist, this method will return an
 // error.
-func (dMgr *DirMgr) GetDirPermissionCodes() (FilePermissionConfig, error) {
+func (dMgr *DirMgr) GetDirPermissionCodes() (
+	FilePermissionConfig,
+	error) {
 
-	ePrefix := "GetDirPermissionCodes() "
 	fileInfoPlus := FileInfoPlus{}
 	var err error
 	var dirDoesExist bool
@@ -3488,27 +3490,45 @@ func (dMgr *DirMgr) GetDirPermissionCodes() (FilePermissionConfig, error) {
 
 	dMgr.dataMutex.Lock()
 
+	defer dMgr.dataMutex.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		nil,
+		"DirMgr."+
+			"GetDirPermissionCodes()",
+		"")
+
+	if err != nil {
+		return fPermCfg, err
+	}
+
 	dirDoesExist,
 		fileInfoPlus,
 		err = dMgrHlpr.doesDirectoryExist(
 		dMgr,
 		PreProcPathCode.None(),
-		ePrefix,
+		ePrefix.String(),
 		"dMgr")
 
 	if err == nil && !dirDoesExist {
 
-		err = fmt.Errorf(ePrefix+
+		err = fmt.Errorf("%v\n"+
 			"DirMgr Path DOES NOT EXIST!\n"+
 			"DirMgr Path='%v'\n",
+			ePrefix.String(),
 			dMgr.absolutePath)
 
 	} else if err == nil && dirDoesExist {
 
-		fPermCfg, err = FilePermissionConfig{}.NewByFileMode(fileInfoPlus.Mode())
+		fPermCfg,
+			err = new(FilePermissionConfig).
+			NewByFileMode(
+				fileInfoPlus.Mode(),
+				ePrefix)
 	}
-
-	dMgr.dataMutex.Unlock()
 
 	return fPermCfg, err
 }
