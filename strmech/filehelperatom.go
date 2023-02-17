@@ -82,6 +82,181 @@ func (fHelperAtom *fileHelperAtom) adjustPathSlash(
 	return fp.FromSlash(path)
 }
 
+// createFile
+//
+// This method will 'create' the file designated by input
+// parameter 'pathFileName'. 'pathFileName' should
+// consist of a valid path and file name. The file name
+// may consist of a file name and file extension or simply
+// a file name.
+//
+// If the path component of input parameter 'pathFileName'
+// does not exist or invalid, the call to low level method
+// os.Create() will a type *PathError. This *PathError
+// will be returned through the return parameter
+// 'lowLevelErr' for detailed review by the calling
+// function.
+//
+// If successful, this method will return a valid pointer
+// to the new file (type 'os.File') and an error value of
+// 'nil'.
+//
+// ----------------------------------------------------------------
+//
+// # Reference:
+//
+//	os.File:	https://pkg.go.dev/os#File
+//	os.Create:	https://pkg.go.dev/os#Create
+//	PathError:	https://pkg.go.dev/os#PathError
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	pathFileName				string
+//
+//		This string holds the path and file name for the
+//		file which will be created by this method.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	ptrOsFile					*os.File
+//
+//	If this method completes successfully, a pointer to
+//	the newly created file will be returned by parameter
+//	'ptrOsFile'.
+//
+//	msgError					error
+//
+//		'msgError' is a standard error containing
+//		a brief high level message explaining the
+//		error condition in narrative text.
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+//
+//	lowLevelErr					error
+//
+//		If the call to os.Create fails it will return an
+//		error of type *PathError. This error may be
+//		unpacked to reveal additional technical details
+//		regarding the failure to create a file.
+//
+//		If an error is returned by os.Create it will be
+//		returned in its original form through parameter,
+//		'lowLevelErr'.
+//
+//		If no error occurs, 'lowLevelErr' will be set to
+//		'nil'.
+func (fHelperAtom *fileHelperAtom) createFile(
+	pathFileName string,
+	errPrefDto *ePref.ErrPrefixDto) (
+	ptrOsFile *os.File,
+	msgError error,
+	lowLevelErr error) {
+
+	if fHelperAtom.lock == nil {
+		fHelperAtom.lock = new(sync.Mutex)
+	}
+
+	fHelperAtom.lock.Lock()
+
+	defer fHelperAtom.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ptrOsFile = nil
+
+	ePrefix,
+		msgError = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"fileHelperAtom."+
+			"createFile()",
+		"")
+
+	if msgError != nil {
+		return ptrOsFile, msgError, lowLevelErr
+	}
+
+	var errCode int
+
+	errCode,
+		_,
+		pathFileName = new(fileHelperElectron).
+		isStringEmptyOrBlank(pathFileName)
+
+	if errCode == -1 {
+
+		msgError = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'pathFileName' is an empty string!\n",
+			ePrefix)
+
+		return ptrOsFile, msgError, lowLevelErr
+	}
+
+	if errCode == -2 {
+
+		msgError = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'pathFileName' consists of blank spaces!\n",
+			ePrefix)
+
+		return ptrOsFile, msgError, lowLevelErr
+	}
+
+	pathFileName,
+		msgError = new(fileHelperProton).
+		makeAbsolutePath(
+			pathFileName,
+			ePrefix)
+
+	if msgError != nil {
+
+		return ptrOsFile, msgError, lowLevelErr
+
+	}
+
+	ptrOsFile,
+		lowLevelErr = os.Create(pathFileName)
+
+	if lowLevelErr != nil {
+
+		msgError = fmt.Errorf("%v\n"+
+			"Error returned from os.Create(pathFileName)\n"+
+			"pathFileName='%v'\n"+
+			"Error='%v'\n",
+			ePrefix.String(),
+			pathFileName,
+			lowLevelErr.Error())
+	}
+
+	return ptrOsFile, msgError, lowLevelErr
+}
+
 // changeWorkingDir
 //
 // Changes the current working directory to the named

@@ -1556,7 +1556,7 @@ func (fh *FileHelper) CopyFileByIoByLink(
 //
 // First, this method will attempt to copy the designated
 // file by means of creating a 'hard link' to the source file.
-// The 'hard link' attempt will call 'FileHelper.CopyFileByLink()'.
+// The 'hard link' attempt will call 'CopyFileByLink()'.
 //
 // If that 'hard link' operation fails, this method will call
 // 'CopyFileByIo()'.
@@ -2040,52 +2040,184 @@ func (fh FileHelper) CopyFileByIo(
 		ePrefix)
 }
 
-// CreateFile - Wrapper function for os.Create. If the path component of input
-// parameter 'pathFileName' does not exist, a type *PathError will be returned.
+// CreateFile
 //
-// This method will 'create' the file designated by input parameter 'pathFileName'.
-// 'pathFileName' should consist of a valid path, file name. The file name may consist
-// of a file name and file extension or simply a file name.
+// A wrapper function for os.Create().
 //
-// If successful, this method will return a valid pointer to a type 'os.File' and
-// an error value of 'nil'.
-func (fh FileHelper) CreateFile(pathFileName string) (*os.File, error) {
+// This method will 'create' the file designated by input
+// parameter 'pathFileName'. 'pathFileName' should
+// consist of a valid path and file name. The file name
+// may consist of a file name and file extension or simply
+// a file name.
+//
+// If the path component of input parameter 'pathFileName'
+// does not exist or invalid, the call to low level method
+// os.Create() will a type *PathError. This *PathError
+// will be returned through the return parameter
+// 'lowLevelErr' for detailed review by the calling
+// function.
+//
+// If successful, this method will return a valid pointer
+// to the new file (type 'os.File') and an error value of
+// 'nil'.
+//
+// ----------------------------------------------------------------
+//
+// # Reference:
+//
+//	os.File:	https://pkg.go.dev/os#File
+//	os.Create:	https://pkg.go.dev/os#Create
+//	PathError:	https://pkg.go.dev/os#PathError
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	pathFileName				string
+//
+//		This string holds the path and file name for the
+//		file which will be created by this method.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in the error message returned by
+//		'msgError'.
+//
+//		Usually, 'errorPrefix' contains the name of the
+//	 	calling method or methods listed as a method or
+//	  	function chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	ptrOsFile					*os.File
+//
+//	If this method completes successfully, a pointer to
+//	the newly created file will be returned by parameter
+//	'ptrOsFile'.
+//
+//	msgError					error
+//
+//		'msgError' is a standard error containing
+//		a brief high level message explaining the
+//		error condition in narrative text.
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+//
+//	lowLevelErr					error
+//
+//		If the call to os.Create fails it will return an
+//		error of type *PathError. This error may be
+//		unpacked to reveal additional technical details
+//		regarding the failure to create a file.
+//
+//		If an error is returned by os.Create it will be
+//		returned in its original form through parameter,
+//		'lowLevelErr'.
+//
+//		If no error occurs, 'lowLevelErr' will be set to
+//		'nil'.
+func (fh *FileHelper) CreateFile(
+	pathFileName string,
+	errorPrefix interface{}) (
+	ptrOsFile *os.File,
+	msgError error,
+	lowLevelErr error) {
 
-	ePrefix := "FileHelper.CreateFile() "
-	errCode := 0
-
-	errCode, _, pathFileName = fh.isStringEmptyOrBlank(pathFileName)
-
-	if errCode == -1 {
-		return nil, errors.New(ePrefix + "Error: Input parameter 'pathFileName' is an empty string!")
+	if fh.lock == nil {
+		fh.lock = new(sync.Mutex)
 	}
 
-	if errCode == -2 {
-		return nil, errors.New(ePrefix + "Error: Input parameter 'pathFileName' consists of blank spaces!")
+	fh.lock.Lock()
+
+	defer fh.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ptrOsFile = nil
+
+	ePrefix,
+		msgError = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileHelper."+
+			"CreateFile()",
+		"")
+
+	if msgError != nil {
+		return ptrOsFile, msgError, lowLevelErr
 	}
 
-	var err error
+	ptrOsFile,
+		msgError,
+		lowLevelErr = new(fileHelperAtom).
+		createFile(
+			pathFileName,
+			ePrefix.XCpy(
+				"pathFileName"))
 
-	pathFileName, err = fh.MakeAbsolutePath(pathFileName)
-
-	if err != nil {
-		return nil,
-			fmt.Errorf(ePrefix+
-				"Error returned by fh.MakeAbsolutePath(pathFileName)\n"+
-				"pathFileName='%v'\nError='%v'\n",
-				pathFileName, err.Error())
-	}
-
-	filePtr, err := os.Create(pathFileName)
-
-	if err != nil {
-		return nil, fmt.Errorf(ePrefix+
-			"Error returned from os.Create(pathFileName)\n"+
-			"pathFileName='%v'\nError='%v'\n",
-			pathFileName, err.Error())
-	}
-
-	return filePtr, nil
+	return ptrOsFile, msgError, lowLevelErr
 }
 
 // DeleteDirFile - Wrapper function for Remove.
