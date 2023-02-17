@@ -1666,12 +1666,12 @@ func (fHelperNanobot *fileHelperNanobot) doesFileExist(
 //
 //	lowLevelErr					error
 //
-//		If the call to os.Create fails it will return an
+//		If the call to os.Remove fails it will return an
 //		error of type *PathError. This error may be
 //		unpacked to reveal additional technical details
 //		regarding the failure to create a file.
 //
-//		If an error is returned by os.Create it will be
+//		If an error is returned by os.Remove it will be
 //		returned in its original form through parameter,
 //		'lowLevelErr'.
 //
@@ -1768,6 +1768,231 @@ func (fHelperNanobot *fileHelperNanobot) deleteDirFile(
 			"pathFile='%v'\n",
 			ePrefix.String(),
 			pathFile)
+	}
+
+	return msgError, lowLevelErr
+}
+
+// deleteDirPathAll
+//
+// Wrapper function for os.RemoveAll.
+//
+// os.RemoveAll removes path and any children it
+// contains. It removes everything it can but returns the
+// first error it encounters. If the path does not exist,
+// os.RemoveAll takes no action and returns 'nil'
+// (no error). If os.RemoveAll does return an error, it
+// will be of type *PathError.
+//
+// ----------------------------------------------------------------
+//
+// # Reference:
+//
+//	https://www.geeksforgeeks.org/how-to-remove-all-directories-and-files-in-golang/
+//	https://thedeveloperblog.com/go/os-remove-go
+//	https://pkg.go.dev/os#RemoveAll
+//
+// ----------------------------------------------------------------
+//
+// # Examples
+//
+//		(1)	D:\T08\x294_1\x394_1\x494_1  is a directory path
+//			that currently exists and contains files.
+//
+//		(2) Call DeleteDirPathAll("D:\\T08\\x294_1")
+//
+//	 	(3) Upon return from method DeleteDirPathAll():
+//			a.	Deletion Results:
+//	    		Directory D:\T08\x294_1\x394_1\x494_1 and any
+//	   			files in the 'x494_1' directory are deleted
+//
+//	    		Directory D:\T08\x294_1\x394_1\ and any files
+//	   			in the 'x394_1' directory are deleted
+//
+//	    		Directory D:\T08\x294_1\ and any files in the
+//	   			'x294_1' directory are deleted
+//
+//			b.	The Parent Path 'D:\T08' and any files in that
+//				parent path 'D:\T08' directory are unaffected
+//				and continue to exist.
+//
+// ----------------------------------------------------------------
+//
+// # WARNING
+//
+//	This method has the capability to delete entire
+//	directory trees.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	pathDir						string
+//
+//		This strings holds the path and directory where
+//		the deletion operation will occur.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates error prefix text which
+//		is included in the error message returned by
+//		'msgError'.
+//
+//		Usually, 'errPrefDto' contains the name of the
+//	 	calling method or methods listed as a method or
+//	  	function chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	msgError					error
+//
+//		'msgError' is a standard error containing
+//		a brief high level message explaining the
+//		error condition in narrative text.
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If 'msgError' is returned with a value of
+//		'nil', it signals that the deletion operation
+//		succeeded.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+//
+//		NOTE: Not all returned errors have associated
+//		low level errors ('lowLevelErr'). Always check
+//		'msgError'. 'msgError' could be non-nil while
+//		'lowLevelErr' is 'nil'.
+//
+//	lowLevelErr					error
+//
+//		If the call to os.RemoveAll fails it will return
+//		an error of type *PathError. This error may be
+//		unpacked to reveal additional technical details
+//		regarding the failure to create a file.
+//
+//		If an error is returned by os.RemoveAll it will
+//	 	be returned in its original form through parameter,
+//		'lowLevelErr'.
+//
+//		If no *PathError occurs, 'lowLevelErr' will be set
+//		to 'nil'.
+func (fHelperNanobot *fileHelperNanobot) deleteDirPathAll(
+	pathDir string,
+	errPrefDto *ePref.ErrPrefixDto) (
+	msgError error,
+	lowLevelErr error) {
+
+	if fHelperNanobot.lock == nil {
+		fHelperNanobot.lock = new(sync.Mutex)
+	}
+
+	fHelperNanobot.lock.Lock()
+
+	defer fHelperNanobot.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		msgError = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"fileHelperNanobot."+
+			"deleteDirPathAll()",
+		"")
+
+	if msgError != nil {
+		return msgError, lowLevelErr
+	}
+
+	var pathFileDoesExist bool
+
+	fHelpMolecule := fileHelperMolecule{}
+
+	pathDir,
+		pathFileDoesExist,
+		_,
+		msgError = fHelpMolecule.doesPathFileExist(
+		pathDir,
+		PreProcPathCode.AbsolutePath(), // Convert To Absolute Path
+		ePrefix,
+		"pathDir")
+
+	if msgError != nil {
+		return msgError, lowLevelErr
+	}
+
+	if !pathFileDoesExist {
+		// Doesn't exist. Nothing to do.
+		return msgError, lowLevelErr
+	}
+
+	// Make 3-attempts to delete the
+	// directory path.
+	for i := 0; i < 3; i++ {
+
+		lowLevelErr = nil
+
+		msgError = nil
+
+		lowLevelErr = os.RemoveAll(pathDir)
+
+		if lowLevelErr != nil {
+
+			msgError = fmt.Errorf("%v\n"+
+				"Error returned by os.RemoveAll(pathDir).\n"+
+				"pathDir='%v'\nError=\n%v\n",
+				ePrefix.String(),
+				pathDir,
+				lowLevelErr.Error())
+		}
+
+		if lowLevelErr == nil {
+			break
+		}
+
+		time.Sleep(50 * time.Millisecond)
+	}
+
+	if lowLevelErr != nil {
+		return msgError, lowLevelErr
+	}
+
+	pathDir,
+		pathFileDoesExist,
+		_,
+		msgError = fHelpMolecule.doesPathFileExist(
+		pathDir,
+		PreProcPathCode.None(), // Apply No Pre-Processing. Take No Action.
+		ePrefix,
+		"pathDir")
+
+	if msgError != nil {
+		return msgError, lowLevelErr
+	}
+
+	if pathFileDoesExist {
+
+		// Path still exists. Something is wrong.
+		msgError = fmt.Errorf("%v\n"+
+			"Delete Failed! 'pathDir' still exists!\n"+
+			"pathDir='%v'\n",
+			ePrefix.String(),
+			pathDir)
 	}
 
 	return msgError, lowLevelErr
