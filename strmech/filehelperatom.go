@@ -433,6 +433,223 @@ func (fHelperAtom *fileHelperAtom) changeWorkingDir(
 	return err
 }
 
+// deleteAllFilesInDirectory
+//
+// Deletes every file in a single directory.
+//
+// Only files in the target directory are deleted. Files
+// is subdirectories or parent directories are NOT
+// deleted.
+//
+// ----------------------------------------------------------------
+//
+// # WARNING!
+//
+//	Be careful. This method will delete all files in a
+//	single directory.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	directoryPath				string
+//
+//		This string holds the target path or directory
+//		name. All files residing in the directory will be
+//		deleted.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates error prefix text which
+//		is included in the error message returned by
+//		'msgError'.
+//
+//		Usually, 'errPrefDto' contains the name of the
+//	 	calling method or methods listed as a method or
+//	  	function chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	msgError					error
+//
+//		'msgError' is a standard error containing
+//		a brief high level message explaining the
+//		error condition in narrative text.
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If 'msgError' is returned with a value of
+//		'nil', it signals that the deletion operation
+//		succeeded.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+//
+//		NOTE: Not all returned errors have associated
+//		low level errors ('lowLevelErr'). Always check
+//		'msgError'. 'msgError' could be non-nil while
+//		'lowLevelErr' is 'nil'.
+//
+//	lowLevelErr					error
+//
+//		If the call to os.Remove fails it will return an
+//		error of type *PathError. This error may be
+//		unpacked to reveal additional technical details
+//		regarding the failure to create a file.
+//
+//		If an error is returned by os.Remove it will be
+//		returned in its original form through parameter,
+//		'lowLevelErr'.
+//
+//		If no *PathError occurs, 'lowLevelErr' will be set
+//		to 'nil'.
+func (fHelperAtom *fileHelperAtom) deleteAllFilesInDirectory(
+	directoryPath string,
+	errPrefDto *ePref.ErrPrefixDto) (
+	msgError error,
+	lowLevelErr error) {
+
+	if fHelperAtom.lock == nil {
+		fHelperAtom.lock = new(sync.Mutex)
+	}
+
+	fHelperAtom.lock.Lock()
+
+	defer fHelperAtom.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		msgError = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"fileHelperAtom."+
+			"deleteAllFilesInDirectory()",
+		"")
+
+	if msgError != nil {
+		return msgError, lowLevelErr
+	}
+
+	var ptrDir *os.File
+
+	ptrDir, lowLevelErr = os.Open(directoryPath)
+
+	if lowLevelErr != nil {
+
+		msgError = fmt.Errorf("%v\n"+
+			"Error: os.Open(directoryPath) Failed!\n"+
+			"directoryPath = '%v'\n"+
+			"Error = \n%v\n",
+			ePrefix.String(),
+			directoryPath,
+			lowLevelErr.Error())
+
+		return msgError, lowLevelErr
+	}
+
+	var dirFiles []os.DirEntry
+
+	dirFiles, lowLevelErr = ptrDir.ReadDir(0)
+
+	if lowLevelErr != nil {
+
+		msgError = fmt.Errorf("%v\n"+
+			"Error: ptrDir.ReadDir(0) Failed!\n"+
+			"ReadDir() did not return any files.\n"+
+			"directoryPath = '%v'\n"+
+			"Error = \n%v\n",
+			ePrefix.String(),
+			directoryPath,
+			lowLevelErr.Error())
+
+		return msgError, lowLevelErr
+
+	}
+
+	var dirPrefix string
+
+	dirPrefix,
+		msgError = new(fileHelperProton).
+		addPathSeparatorToEndOfPathStr(
+			directoryPath,
+			ePrefix.XCpy("pathStr"))
+
+	var fInfo os.FileInfo
+	var fileName string
+
+	for index, dirFile := range dirFiles {
+
+		fInfo,
+			lowLevelErr = dirFile.Info()
+
+		if lowLevelErr != nil {
+
+			msgError = fmt.Errorf("%v\n"+
+				"Error: ptrDir.ReadDir(0) Failed!\n"+
+				"ReadDir() did not return any files.\n"+
+				"directoryPath = '%v'\n"+
+				"Index = '%v'"+
+				"Error = \n%v\n",
+				ePrefix.String(),
+				directoryPath,
+				index,
+				lowLevelErr.Error())
+
+			lowLevelErr = nil
+
+			return msgError, lowLevelErr
+
+		}
+
+		if fInfo.IsDir() {
+
+			continue
+		}
+
+		fileName = fInfo.Name()
+
+		fileName = dirPrefix + fileName
+
+		lowLevelErr = os.Remove(fileName)
+
+		if lowLevelErr != nil {
+
+			msgError = fmt.Errorf("%v\n"+
+				"Error: os.Remove(fileName) Failed!\n"+
+				"directoryPath = '%v'\n"+
+				"Index = '%v'"+
+				"fileName = '%v'\n"+
+				"Error = \n%v\n",
+				ePrefix.String(),
+				directoryPath,
+				index,
+				fileName,
+				lowLevelErr.Error())
+
+			return msgError, lowLevelErr
+
+		}
+
+	}
+
+	return msgError, lowLevelErr
+}
+
 // getAbsCurrDir
 //
 // Returns the absolute path of the current working

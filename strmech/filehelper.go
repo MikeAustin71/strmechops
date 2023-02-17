@@ -2251,6 +2251,172 @@ func (fh *FileHelper) CreateFile(
 	return ptrOsFile, msgError, lowLevelErr
 }
 
+// DeleteAllFilesInDirectory
+//
+// Deletes every file in a single directory.
+//
+// Only files in the target directory are deleted. Files
+// is subdirectories or parent directories are NOT
+// deleted.
+//
+// ----------------------------------------------------------------
+//
+// # WARNING!
+//
+//	Be careful. This method will delete all files in a
+//	single directory.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	directoryPath				string
+//
+//		This string holds the target path or directory
+//		name. All files residing in the directory will be
+//		deleted.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in the error message returned by
+//		'msgError'.
+//
+//		Usually, 'errorPrefix' contains the name of the
+//	 	calling method or methods listed as a method or
+//	  	function chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	msgError					error
+//
+//		'msgError' is a standard error containing
+//		a brief high level message explaining the
+//		error condition in narrative text.
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If 'msgError' is returned with a value of
+//		'nil', it signals that the deletion operation
+//		succeeded.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+//
+//		NOTE: Not all returned errors have associated
+//		low level errors ('lowLevelErr'). Always check
+//		'msgError'. 'msgError' could be non-nil while
+//		'lowLevelErr' is 'nil'.
+//
+//	lowLevelErr					error
+//
+//		If the call to os.Remove fails it will return an
+//		error of type *PathError. This error may be
+//		unpacked to reveal additional technical details
+//		regarding the failure to create a file.
+//
+//		If an error is returned by os.Remove it will be
+//		returned in its original form through parameter,
+//		'lowLevelErr'.
+//
+//		If no *PathError occurs, 'lowLevelErr' will be set
+//		to 'nil'.
+func (fh *FileHelper) DeleteAllFilesInDirectory(
+	directoryPath string,
+	errorPrefix interface{}) (
+	msgError error,
+	lowLevelErr error) {
+
+	if fh.lock == nil {
+		fh.lock = new(sync.Mutex)
+	}
+
+	fh.lock.Lock()
+
+	defer fh.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		msgError = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileHelper."+
+			"DeleteAllFilesInDirectory()",
+		"")
+
+	if msgError != nil {
+		return msgError, lowLevelErr
+	}
+
+	msgError,
+		lowLevelErr = new(fileHelperAtom).
+		deleteAllFilesInDirectory(
+			directoryPath,
+			ePrefix.XCpy(
+				"directoryPath"))
+
+	return msgError, lowLevelErr
+}
+
 // DeleteDirFile
 //
 // Wrapper function for os.Remove.
