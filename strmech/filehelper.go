@@ -7945,49 +7945,347 @@ func (fh FileHelper) RemovePathSeparatorFromEndOfPathString(pathStr string) stri
 	return pathStr
 }
 
-// SearchFileModeMatch - This method determines whether the file mode of the file described by input
-// parameter, 'info', is match for the File Selection Criteria 'fileSelectCriteria.SelectByFileMode'.
-// If the file's FileMode matches the 'fileSelectCriteria.SelectByFileMode' value, the return value,
-// 'isFileModeMatch' is set to 'true'.
+// SearchFileModeMatch
 //
-// If 'fileSelectCriteria.SelectByFileMode' is NOT initialized to a valid File Mode value, the
-// return value 'isFileModeSet' is set to 'false' signaling the File Mode File Selection Criterion
-// is NOT active.
+// This method determines whether the file mode of the
+// file described by input parameter, 'info', is a match
+// for the File Selection Criteria
+// 'fileSelectCriteria.SelectByFileMode'.
 //
-// Note: Input parameter 'info' is of type os.FileInfo.  You can substitute a type 'FileInfoPlus'
-// object for the 'info' parameter because 'FileInfoPlus' implements the 'os.FileInfo' interface.
+// In this context, the term 'file mode' refers to
+// os.FileMode. An os.FileMode represents a file's mode
+// and permission bits. The bits have the same definition
+// on all systems, so that information about files can be
+// moved from one system to another portably. For more
+// information on 'File Mode', see the Reference Section
+// below.
+//
+// If the file's FileMode matches the
+// 'fileSelectCriteria.SelectByFileMode' value, the
+// return value, 'isFileModeMatch' is set to 'true'.
+//
+// If 'fileSelectCriteria.SelectByFileMode' is NOT
+// initialized to a valid File Mode value, the return
+// value 'isFileModeSet' is set to 'false' signaling that
+// the File Mode File Selection Criterion is NOT active
+// or engaged.
+//
+// Note:
+//
+// Input parameter 'info' is of type os.FileInfo.  This
+// means the user may substitute a type 'FileInfoPlus'
+// object for the 'info' parameter because 'FileInfoPlus'
+// implements the 'os.FileInfo' interface.
+//
+// ----------------------------------------------------------------
+//
+// # Reference:
+//
+//	os.FileMode https://pkg.go.dev/os#FileMode
+//	https://stackoverflow.com/questions/28969455/how-to-properly-instantiate-os-filemode
+//	https://www.includehelp.com/golang/os-filemode-constants-with-examples.aspx
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	info						os.FileInfo
+//
+//		The type os.FileInfo contains data elements
+//		describing a file.
+//
+//		type FileInfo interface {
+//
+//			Name() string
+//				base name of the file
+//
+//			Size() int64
+//				length in bytes for regular files;
+//				system-dependent for others
+//
+//			Mode() FileMode
+//				file mode bits
+//
+//			ModTime() time.Time
+//				modification time
+//
+//			IsDir() bool
+//				abbreviation for Mode().IsDir()
+//
+//			Sys() any
+//				underlying data source (can return nil)
+//		}
+//
+//	fileSelectCriteria			FileSelectionCriteria
+//
+//		The FileSelectionCriteria type allows for
+//		configuration of single or multiple file
+//		selection criterion. The 'SelectCriterionMode'
+//		can be used to specify whether the file must match all,
+//		or any one, of the active file selection criterion.
+//
+//		type FileSelectionCriteria struct {
+//		  FileNamePatterns     []string
+//			An array of strings containing File Name Patterns
+//
+//		  FilesOlderThan       time.Time
+//			Match files with older modification date times
+//
+//		  FilesNewerThan       time.Time
+//			Match files with newer modification date times
+//
+//		  SelectByFileMode     FilePermissionConfig
+//			Match file mode (os.FileMode).
+//
+//		  SelectCriterionMode  FileSelectCriterionMode
+//			Specifies 'AND' or 'OR' selection mode
+//		}
+//
+//		Elements of the FileSelectionCriteria Type are
+//		described below:
+//
+//		FileNamePatterns []string
+//
+//			An array of strings which may define one or more search
+//			patterns. If a file name matches any one of the search
+//			pattern strings, it is deemed to be a 'match' for the
+//			search pattern criterion.
+//
+//			Example Patterns:
+//			 FileNamePatterns = []string{"*.log"}
+//			 FileNamePatterns = []string{"current*.txt"}
+//			 FileNamePatterns = []string{"*.txt", "*.log"}
+//
+//			If this string array has zero length or if
+//			all the strings are empty strings, then this
+//			file search criterion is considered 'Inactive'
+//			or 'Not Set'.
+//
+//		FilesOlderThan  time.Time
+//
+//			This date time type is compared to file modification
+//			date times in order to determine whether the file is
+//			older than the 'FilesOlderThan' file selection
+//			criterion. If the file is older than the
+//			'FilesOlderThan' date time, that file is considered
+//			a 'match'	for this file selection criterion.
+//
+//			If the value of 'FilesOlderThan' is set to time zero,
+//			the default value for type time.Time{}, then this
+//			file selection criterion is considered to be 'Inactive'
+//			or 'Not Set'.
+//
+//		FilesNewerThan   time.Time
+//
+//			This date time type is compared to the file modification
+//			date time in order to determine whether the file is newer
+//			than the 'FilesNewerThan' file selection criterion. If
+//			the file modification date time is newer than the
+//			'FilesNewerThan' date time, that file is considered a
+//			'match' for this file selection criterion.
+//
+//			If the value of 'FilesNewerThan' is set to time zero,
+//			the default value for type time.Time{}, then this
+//			file selection criterion is considered to be 'Inactive'
+//			or 'Not Set'.
+//
+//		SelectByFileMode  FilePermissionConfig
+//
+//			Type FilePermissionConfig encapsulates an os.FileMode. The
+//			file selection criterion allows for the selection of files
+//			by File Mode.
+//
+//			File modes are compared to the value of 'SelectByFileMode'.
+//			If the File Mode for a given file is equal to the value of
+//	 		'SelectByFileMode', that file is considered to be a 'match'
+//	 		for this file selection criterion. Examples for setting
+//	 		SelectByFileMode are shown as follows:
+//
+//			fsc := FileSelectionCriteria{}
+//
+//			err = fsc.SelectByFileMode.SetByFileMode(os.FileMode(0666))
+//
+//			err = fsc.SelectByFileMode.SetFileModeByTextCode("-r--r--r--")
+//
+//		SelectCriterionMode FileSelectCriterionMode
+//
+//		This parameter selects the manner in which the file selection
+//		criteria above are applied in determining a 'match' for file
+//		selection purposes. 'SelectCriterionMode' may be set to one of
+//		two constant values:
+//
+//		(1) FileSelectCriterionMode(0).ANDSelect()
+//
+//			File selected if all active selection criteria
+//			are satisfied.
+//
+//			If this constant value is specified for the file selection mode,
+//			then a given file will not be judged as 'selected' unless all
+//			the active selection criterion are satisfied. In other words, if
+//			three active search criterion are provided for 'FileNamePatterns',
+//			'FilesOlderThan' and 'FilesNewerThan', then a file will NOT be
+//			selected unless it has satisfied all three criterion in this example.
+//
+//		(2) FileSelectCriterionMode(0).ORSelect()
+//
+//			File selected if any active selection criterion is satisfied.
+//
+//			If this constant value is specified for the file selection mode,
+//			then a given file will be selected if any one of the active file
+//			selection criterion is satisfied. In other words, if three active
+//			search criterion are provided for 'FileNamePatterns', 'FilesOlderThan'
+//			and 'FilesNewerThan', then a file will be selected if it satisfies any
+//			one of the three criterion in this example.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	isFileModeSet				bool
+//
+//		This boolean return value signals whether the
+//		'SelectByFileMode' file search criteria is set,
+//		engaged and active.
+//
+//		If the 'fileSelectCriteria.SelectByFileMode'
+//	 	data element is empty or set to an invalid
+//	 	FileMode, it means that the 'SelectByFileMode'
+//	 	search criteria is NOT set or engaged. In this
+//	 	case, the 'isFileModeSet' parameter will return a
+//	 	value of 'false' meaning that the search criteria
+//	 	is NOT active or engaged.
+//
+//		If this parameter is returned with a value of
+//		'true', it means that the 'SelectByFileMode'
+//		search criterion is set, engaged and active.
+//
+//	isFileModeMatch				bool
+//
+//		'fileSelectCriteria.SelectByFileMode' represents
+//		a file search pattern designed to identify files
+//		which match the specified FileMode. If the file
+//	 	specified by input parameter, 'info',
+//		has a FileMode which matches the
+//		'fileSelectCriteria.SelectByFileMode'
+//		specification, the file search operation is
+//		classified as a 'match', and the return value of
+//		this parameter, 'isFileNewerThanMatch', is set to
+//		'true'.
+//
+//		If this parameter, 'isFileModeMatch', is
+//		returned with a value of 'false', it signals that
+//		the file has a FileMode which is NOT equal to
+//		FileMode contained in the
+//		'fileSelectCriteria.SelectByFileMode'
+//		specification.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
 func (fh *FileHelper) SearchFileModeMatch(
 	info os.FileInfo,
-	fileSelectCriteria FileSelectionCriteria) (isFileModeSet, isFileModeMatch bool, err error) {
+	fileSelectCriteria FileSelectionCriteria,
+	errorPrefix interface{}) (
+	isFileModeSet bool,
+	isFileModeMatch bool,
+	err error) {
 
-	if fileSelectCriteria.SelectByFileMode.isInitialized == false {
-		isFileModeSet = false
-		isFileModeMatch = false
-		err = nil
+	if fh.lock == nil {
+		fh.lock = new(sync.Mutex)
+	}
+
+	fh.lock.Lock()
+
+	defer fh.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileHelper."+
+			"SearchFileModeMatch()",
+		"")
+
+	if err != nil {
 		return isFileModeSet, isFileModeMatch, err
 	}
 
-	selectFileMode, err2 := fileSelectCriteria.SelectByFileMode.GetFileMode()
+	isFileModeSet,
+		isFileModeMatch,
+		err = new(fileHelperElectron).searchFileModeMatch(
+		info,
+		fileSelectCriteria,
+		ePrefix)
 
-	if err2 != nil {
-		ePrefix := "FileHelper.SearchFileModeMatch() "
-
-		err = fmt.Errorf(ePrefix+"SelectByFileMode is INVALID!\n"+
-			"Error='%v'\n", err2.Error())
-		return isFileModeSet, isFileModeMatch, err
-	}
-
-	if selectFileMode == info.Mode() {
-		isFileModeSet = true
-		isFileModeMatch = true
-		err = nil
-		return isFileModeSet, isFileModeMatch, err
-
-	}
-
-	isFileModeSet = true
-	isFileModeMatch = false
-	err = nil
 	return isFileModeSet, isFileModeMatch, err
 }
 
@@ -8024,6 +8322,7 @@ func (fh *FileHelper) SearchFileModeMatch(
 //		describing a file.
 //
 //		type FileInfo interface {
+//
 //			Name() string
 //				base name of the file
 //
