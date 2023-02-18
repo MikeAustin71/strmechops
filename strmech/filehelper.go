@@ -2786,59 +2786,6 @@ func (fh *FileHelper) DeleteDirPathAll(
 	return msgError, lowLevelErr
 }
 
-// DoesFileExist
-//
-// Returns a boolean value designating whether the passed
-// file name exists.
-//
-// This method does not differentiate between Path Errors
-// and Non-Path Errors returned by os.Stat(). The method
-// only returns a boolean value.
-//
-// If a Non-Path Error is returned by os.Stat(), this
-// method will classify the file as "Does NOT Exist" and
-// return a value of 'false'.
-//
-// For a more granular test of whether a file exists, see
-// method FileHelper.DoesThisFileExist().
-//
-// ----------------------------------------------------------------
-//
-// # Input Parameters
-//
-//	pathFileName				string
-//
-//		This string holds the name of a path and file
-//		name. This method will determine this path and
-//		file name actually exists.
-//
-// ----------------------------------------------------------------
-//
-// # Return Values
-//
-//	bool
-//
-//		If the path and file name passed by input
-//		parameter 'pathFileName' is verified to actually
-//		exist, this return parameter will be set to 'true'.
-//
-//		If the path and file name do not exist or if an
-//		error occurs, this method returns 'false'.
-func (fh *FileHelper) DoesFileExist(pathFileName string) bool {
-
-	if fh.lock == nil {
-		fh.lock = new(sync.Mutex)
-	}
-
-	fh.lock.Lock()
-
-	defer fh.lock.Unlock()
-
-	return new(fileHelperNanobot).
-		doesFileExist(
-			pathFileName)
-}
-
 // DeleteFilesWalkDirectory
 //
 // This method 'walks' the directory tree searching for
@@ -3171,95 +3118,64 @@ func (fh *FileHelper) DeleteFilesWalkDirectory(
 		return deleteFilesInfo, err
 	}
 
-	errCode := 0
-
-	fHelperElectron := new(fileHelperElectron)
-
-	errCode, _, startPath =
-		fHelperElectron.isStringEmptyOrBlank(startPath)
-
-	if errCode == -1 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'startPath' is an empty string!",
-			ePrefix.String())
-
-		return deleteFilesInfo, err
-	}
-
-	if errCode == -2 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'startPath' consists of blank spaces!\n",
-			ePrefix.String())
-
-		return deleteFilesInfo, err
-	}
-
-	startPath = new(fileHelperAtom).adjustPathSlash(startPath)
-
-	strLen := len(startPath)
-
-	if startPath[strLen-1] == os.PathSeparator {
-		startPath = startPath[0 : strLen-1]
-	}
-
-	startPath,
-		err = new(fileHelperProton).makeAbsolutePath(
-		startPath,
-		ePrefix.XCpy("startPath<-"))
-
-	if err != nil {
-
-		err = fmt.Errorf("%v\n"+
-			"Error returned by fh.MakeAbsolutePath(startPath).\n"+
-			"startPath='%v'\n"+
-			"Error='%v'\n",
-			ePrefix.String(),
+	return new(fileHelperMechanics).
+		deleteFilesWalkDirectory(
 			startPath,
-			err.Error())
+			fileSelectCriteria,
+			ePrefix)
+}
 
-		return deleteFilesInfo, err
+// DoesFileExist
+//
+// Returns a boolean value designating whether the passed
+// file name exists.
+//
+// This method does not differentiate between Path Errors
+// and Non-Path Errors returned by os.Stat(). The method
+// only returns a boolean value.
+//
+// If a Non-Path Error is returned by os.Stat(), this
+// method will classify the file as "Does NOT Exist" and
+// return a value of 'false'.
+//
+// For a more granular test of whether a file exists, see
+// method FileHelper.DoesThisFileExist().
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	pathFileName				string
+//
+//		This string holds the name of a path and file
+//		name. This method will determine this path and
+//		file name actually exists.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	bool
+//
+//		If the path and file name passed by input
+//		parameter 'pathFileName' is verified to actually
+//		exist, this return parameter will be set to 'true'.
+//
+//		If the path and file name do not exist or if an
+//		error occurs, this method returns 'false'.
+func (fh *FileHelper) DoesFileExist(pathFileName string) bool {
+
+	if fh.lock == nil {
+		fh.lock = new(sync.Mutex)
 	}
 
-	if !new(fileHelperNanobot).doesFileExist(startPath) {
+	fh.lock.Lock()
 
-		err = fmt.Errorf("%v\n"+
-			"Error - startPath DOES NOT EXIST!\n"+
-			"startPath='%v'",
-			ePrefix.String(),
-			startPath)
+	defer fh.lock.Unlock()
 
-		return deleteFilesInfo, err
-	}
-
-	deleteFilesInfo.StartPath = startPath
-
-	deleteFilesInfo.DeleteFileSelectCriteria = fileSelectCriteria
-
-	var err2 error
-
-	err2 = fp.Walk(
-		deleteFilesInfo.StartPath,
-		new(fileHelperMolecule).makeFileHelperWalkDirDeleteFilesFunc(
-			&deleteFilesInfo))
-
-	if err2 != nil {
-
-		err = fmt.Errorf("%v\n"+
-			"Error returned from fp.Walk(deleteFilesInfo.StartPath - \n"+
-			"fh.makeFileHelperWalkDirFindFilesFunc"+
-			"(&deleteFilesInfo)).\n"+
-			"startPath='%v'\n"+
-			"Error='%v'\n",
-			ePrefix.String(),
-			startPath,
-			err.Error())
-
-		return deleteFilesInfo, err
-	}
-
-	return deleteFilesInfo, nil
+	return new(fileHelperNanobot).
+		doesFileExist(
+			pathFileName)
 }
 
 // DoesFileInfoExist - returns a boolean value indicating
