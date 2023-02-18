@@ -3477,12 +3477,19 @@ func (fh *FileHelper) FilterFileName(
 	isFileNewerThanSet, isFileNewerThanMatch, err2 := fh.SearchFileNewerThan(info, fileSelectionCriteria)
 
 	if err2 != nil {
-		err = fmt.Errorf(ePrefix+
+		msgError = fmt.Errorf("%v\n"+
 			"Error returned from dMgr.searchFileNewerThan(info, fileSelectionCriteria).\n"+
-			"fileSelectionCriteria.FilesNewerThan='%v' info.Name()='%v'\nError='%v'\n",
-			fileSelectionCriteria.FilesNewerThan, info.Name(), err2.Error())
+			"fileSelectionCriteria.FilesNewerThan='%v'\n"+
+			"info.Name()='%v'\n"+
+			"Error='%v'\n",
+			ePrefix.String(),
+			fileSelectionCriteria.FilesNewerThan,
+			info.Name(),
+			err2.Error())
+
 		isMatchedFile = false
-		return
+
+		return isMatchedFile, msgError, lowLevelErr
 	}
 
 	isFileModeSearchSet, isFileModeSearchMatch, err2 := fh.SearchFileModeMatch(info, fileSelectionCriteria)
@@ -7984,44 +7991,241 @@ func (fh *FileHelper) SearchFileModeMatch(
 	return isFileModeSet, isFileModeMatch, err
 }
 
-// SearchFileNewerThan - This method is called to determine whether the file described by the
-// input parameter 'info' is a 'match' for the File Selection Criteria, 'fileSelectCriteria.FilesNewerThan'.
-// If the file modification date time occurs after the 'fileSelectCriteria.FilesNewerThan' date time,
-// the return value 'isFileNewerThanMatch' is set to 'true'.
+// SearchFileNewerThan
 //
-// If 'fileSelectCriteria.FilesNewerThan' is set to time.Time zero ( the default or zero value for this type),
-// the return value 'isFileNewerThanSet' is set to 'false' signaling that this search criterion is NOT active.
+// This method is called to determine whether the file
+// described by the input parameter 'info' is a 'match'
+// for the File Selection Criteria,
+// 'fileSelectCriteria.FilesNewerThan'.
 //
-// Note: Input parameter 'info' is of type os.FileInfo.  You can substitute a type 'FileInfoPlus' object
-// for the 'info' parameter because 'FileInfoPlus' implements the 'os.FileInfo' interface.
+// If the file modification date time occurs after the
+// 'fileSelectCriteria.FilesNewerThan' date time, the
+// return value 'isFileNewerThanMatch' is set to 'true'.
+//
+// If 'fileSelectCriteria.FilesNewerThan' is set to
+// time.Time zero ( the default or zero value for this type),
+// the return value 'isFileNewerThanSet' is set to 'false'
+// signaling that this search criterion is NOT active.
+//
+// Note:
+//
+// Input parameter 'info' is of type os.FileInfo.  This
+// means the user may substitute a type 'FileInfoPlus'
+// object for the 'info' parameter because 'FileInfoPlus'
+// implements the 'os.FileInfo' interface.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	info						os.FileInfo
+//
+//		The type os.FileInfo contains data elements
+//		describing a file.
+//
+//		type FileInfo interface {
+//			Name() string
+//				base name of the file
+//
+//			Size() int64
+//				length in bytes for regular files;
+//				system-dependent for others
+//
+//			Mode() FileMode
+//				file mode bits
+//
+//			ModTime() time.Time
+//				modification time
+//
+//			IsDir() bool
+//				abbreviation for Mode().IsDir()
+//
+//			Sys() any
+//				underlying data source (can return nil)
+//		}
+//
+//	fileSelectCriteria			FileSelectionCriteria
+//
+//		The FileSelectionCriteria type allows for
+//		configuration of single or multiple file
+//		selection criterion. The 'SelectCriterionMode'
+//		can be used to specify whether the file must match all,
+//		or any one, of the active file selection criterion.
+//
+//		type FileSelectionCriteria struct {
+//		  FileNamePatterns     []string
+//			An array of strings containing File Name Patterns
+//
+//		  FilesOlderThan       time.Time
+//			Match files with older modification date times
+//
+//		  FilesNewerThan       time.Time
+//			Match files with newer modification date times
+//
+//		  SelectByFileMode     FilePermissionConfig
+//			Match file mode (os.FileMode).
+//
+//		  SelectCriterionMode  FileSelectCriterionMode
+//			Specifies 'AND' or 'OR' selection mode
+//		}
+//
+//		Elements of the FileSelectionCriteria Type are
+//		described below:
+//
+//		FileNamePatterns []string
+//
+//			An array of strings which may define one or more search
+//			patterns. If a file name matches any one of the search
+//			pattern strings, it is deemed to be a 'match' for the
+//			search pattern criterion.
+//
+//			Example Patterns:
+//			 FileNamePatterns = []string{"*.log"}
+//			 FileNamePatterns = []string{"current*.txt"}
+//			 FileNamePatterns = []string{"*.txt", "*.log"}
+//
+//			If this string array has zero length or if
+//			all the strings are empty strings, then this
+//			file search criterion is considered 'Inactive'
+//			or 'Not Set'.
+//
+//		FilesOlderThan  time.Time
+//
+//			This date time type is compared to file modification
+//			date times in order to determine whether the file is
+//			older than the 'FilesOlderThan' file selection
+//			criterion. If the file is older than the
+//			'FilesOlderThan' date time, that file is considered
+//			a 'match'	for this file selection criterion.
+//
+//			If the value of 'FilesOlderThan' is set to time zero,
+//			the default value for type time.Time{}, then this
+//			file selection criterion is considered to be 'Inactive'
+//			or 'Not Set'.
+//
+//		FilesNewerThan   time.Time
+//
+//			This date time type is compared to the file modification
+//			date time in order to determine whether the file is newer
+//			than the 'FilesNewerThan' file selection criterion. If
+//			the file modification date time is newer than the
+//			'FilesNewerThan' date time, that file is considered a
+//			'match' for this file selection criterion.
+//
+//			If the value of 'FilesNewerThan' is set to time zero,
+//			the default value for type time.Time{}, then this
+//			file selection criterion is considered to be 'Inactive'
+//			or 'Not Set'.
+//
+//		SelectByFileMode  FilePermissionConfig
+//
+//			Type FilePermissionConfig encapsulates an os.FileMode. The
+//			file selection criterion allows for the selection of files
+//			by File Mode.
+//
+//			File modes are compared to the value of 'SelectByFileMode'.
+//			If the File Mode for a given file is equal to the value of
+//	 		'SelectByFileMode', that file is considered to be a 'match'
+//	 		for this file selection criterion. Examples for setting
+//	 		SelectByFileMode are shown as follows:
+//
+//			fsc := FileSelectionCriteria{}
+//
+//			err = fsc.SelectByFileMode.SetByFileMode(os.FileMode(0666))
+//
+//			err = fsc.SelectByFileMode.SetFileModeByTextCode("-r--r--r--")
+//
+//		SelectCriterionMode FileSelectCriterionMode
+//
+//		This parameter selects the manner in which the file selection
+//		criteria above are applied in determining a 'match' for file
+//		selection purposes. 'SelectCriterionMode' may be set to one of
+//		two constant values:
+//
+//		(1) FileSelectCriterionMode(0).ANDSelect()
+//
+//			File selected if all active selection criteria
+//			are satisfied.
+//
+//			If this constant value is specified for the file selection mode,
+//			then a given file will not be judged as 'selected' unless all
+//			the active selection criterion are satisfied. In other words, if
+//			three active search criterion are provided for 'FileNamePatterns',
+//			'FilesOlderThan' and 'FilesNewerThan', then a file will NOT be
+//			selected unless it has satisfied all three criterion in this example.
+//
+//		(2) FileSelectCriterionMode(0).ORSelect()
+//
+//			File selected if any active selection criterion is satisfied.
+//
+//			If this constant value is specified for the file selection mode,
+//			then a given file will be selected if any one of the active file
+//			selection criterion is satisfied. In other words, if three active
+//			search criterion are provided for 'FileNamePatterns', 'FilesOlderThan'
+//			and 'FilesNewerThan', then a file will be selected if it satisfies any
+//			one of the three criterion in this example.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	isFileNewerThanSet			bool
+//
+//		This boolean return value signals whether the
+//		'FilesNewerThan' file search criteria is set,
+//		engaged and active.
+//
+//		If the 'fileSelectCriteria.FilesNewerThan'
+//	 	data element is set to time.Time == zero (0), it
+//	 	means that the 'FilesNewerThan' search criteria is
+//	 	NOT set or engaged. In this case, the
+//	 	'isFileNewerThanSet' parameter will return a
+//	 	value of 'false' meaning that the search criteria
+//	 	is NOT active or engaged.
+//
+//		If this parameter is returned with a value of
+//		'true', it means that the 'FilesNewerThan' search
+//		criterion is set, engaged and active.
+//
+//	isFileNewerThanMatch		bool
+//
+//		'fileSelectCriteria.FilesNewerThan' consists of a
+//		time.Time date element. This represents a file
+//		search pattern designed to identify files with
+//		modification dates which are newer than the
+//	 	'fileSelectCriteria.FilesNewerThan' date. If
+//		the file specified by input parameter 'info',
+//		is newer than this date, the file search
+//		operation is classified as a 'match', and
+//		the return value of this parameter,
+//		'isFileNewerThanMatch', is set to 'true'.
+//
+//		If this parameter, 'isFileNewerThanMatch', is
+//		returned with a value of 'false', it signals that
+//		the file has a modification date which is less
+//		than or equal to the
+//		'fileSelectCriteria.FilesNewerThan' date.
 func (fh *FileHelper) SearchFileNewerThan(
 	info os.FileInfo,
-	fileSelectCriteria FileSelectionCriteria) (isFileNewerThanSet, isFileNewerThanMatch bool, err error) {
+	fileSelectCriteria FileSelectionCriteria) (
+	isFileNewerThanSet bool,
+	isFileNewerThanMatch bool) {
 
-	isFileNewerThanSet = false
-	isFileNewerThanMatch = false
-	err = nil
-
-	if fileSelectCriteria.FilesNewerThan.IsZero() {
-		isFileNewerThanSet = false
-		isFileNewerThanMatch = false
-		err = nil
-		return
+	if fh.lock == nil {
+		fh.lock = new(sync.Mutex)
 	}
 
-	if fileSelectCriteria.FilesNewerThan.Before(info.ModTime()) {
-		isFileNewerThanSet = true
-		isFileNewerThanMatch = true
-		err = nil
-		return
+	fh.lock.Lock()
 
-	}
+	defer fh.lock.Unlock()
 
-	isFileNewerThanSet = true
-	isFileNewerThanMatch = false
-	err = nil
+	isFileNewerThanSet,
+		isFileNewerThanMatch = new(fileHelperElectron).
+		searchFileNewerThan(
+			info,
+			fileSelectCriteria)
 
-	return
+	return isFileNewerThanSet, isFileNewerThanMatch
 }
 
 // SearchFileOlderThan
@@ -8209,26 +8413,36 @@ func (fh *FileHelper) SearchFileNewerThan(
 //		FileOlderThan file search criteria is set,
 //		engaged and active.
 //
-//		If the 'fileSelectCriteria.FileOlderThan'
+//		If the 'fileSelectCriteria.FilesOlderThan'
 //	 	data element is set to time.Time == zero (0), it
-//	 	means that the 'FileOlderThan' search criteria is
-//	 	not set or engaged. In this case, the
+//	 	means that the 'FilesOlderThan' search criteria is
+//	 	NOT set or engaged. In this case, the
 //	 	'isFileOlderThanSet' parameter will return a
 //	 	value of 'false' meaning that the search criteria
 //	 	is NOT active or engaged.
 //
+//		If this parameter is returned with a value of
+//		'true', it means that the 'FilesOlderThan' search
+//		criterion is set, engaged and active.
+//
 //	isFileOlderThanMatch		bool
 //
-//		'fileSelectCriteria.FileOlderThan' consists of a
+//		'fileSelectCriteria.FilesOlderThan' consists of a
 //		time.Time date element. This represents a file
-//		search pattern designed to identify files for
-//	 	deletion which are older than the
-//	 	'fileSelectCriteria.FileOlderThan' date. If
+//		search pattern designed to identify files with
+//		modification dates which are older than the
+//	 	'fileSelectCriteria.FilesOlderThan' date. If
 //		the file specified by input parameter 'info',
 //		is older than this date, the file search
 //		operation is classified as a 'match', and
 //		the return value of this parameter,
 //		'isFileOlderThanMatch', is set to 'true'.
+//
+//		If this parameter, 'isFileOlderThanMatch', is
+//		returned with a value of 'false', it signals that
+//		the file has a modification date which is greater
+//		than or equal to the
+//		'fileSelectCriteria.FilesOlderThan' date.
 func (fh *FileHelper) SearchFileOlderThan(
 	info os.FileInfo,
 	fileSelectCriteria FileSelectionCriteria) (
