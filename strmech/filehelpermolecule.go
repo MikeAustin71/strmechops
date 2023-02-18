@@ -5,6 +5,7 @@ import (
 	ePref "github.com/MikeAustin71/errpref"
 	"os"
 	fp "path/filepath"
+	"strings"
 	"sync"
 	"time"
 )
@@ -436,4 +437,79 @@ func (fHelpMolecule *fileHelperMolecule) getFirstLastNonSeparatorCharIndexInPath
 	err = nil
 
 	return firstIdx, lastIdx, err
+}
+
+// stripLeadingDotSeparatorChars
+//
+// Strips or deletes the following characters from the
+// front of path or directory names.
+//
+// Leading Characters To Be Removed:
+//
+//	(1)	" " (Space)
+//
+//	(2)	PathSeparator
+//
+//	(3)	"."
+//
+//	(4)	".."
+//
+//	(5)	"." + PathSeparator
+//
+//	(6)	".." + PathSeparator
+func (fHelpMolecule *fileHelperMolecule) stripLeadingDotSeparatorChars(
+	pathName string) (
+	string,
+	int) {
+
+	if fHelpMolecule.lock == nil {
+		fHelpMolecule.lock = new(sync.Mutex)
+	}
+
+	fHelpMolecule.lock.Lock()
+
+	defer fHelpMolecule.lock.Unlock()
+
+	pathName = new(fileHelperAtom).adjustPathSlash(pathName)
+
+	pathSeparatorStr := string(os.PathSeparator)
+
+	space := " "
+	dot := "."
+	doubleDot := ".."
+	dotSeparator := dot + pathSeparatorStr
+	doubleDotSeparator := doubleDot + pathSeparatorStr
+	strLen := len(pathName)
+
+	if strLen == 0 {
+		return pathName, 0
+	}
+
+	badChars := []string{
+		doubleDotSeparator,
+		dotSeparator,
+		doubleDot,
+		dot,
+		pathSeparatorStr,
+		space}
+
+	for i := 0; i < len(badChars); i++ {
+
+		for j := 0; j < 100; j++ {
+
+			if !strings.HasPrefix(pathName, badChars[i]) {
+				break
+			}
+
+			pathName = pathName[len(badChars[i]):]
+		}
+
+		strLen = len(pathName)
+
+		if len(pathName) == 0 {
+			break
+		}
+	}
+
+	return pathName, strLen
 }

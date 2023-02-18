@@ -1,6 +1,9 @@
 package strmech
 
 import (
+	"fmt"
+	ePref "github.com/MikeAustin71/errpref"
+	"os"
 	fp "path/filepath"
 	"strings"
 	"sync"
@@ -192,4 +195,164 @@ func (fHelpElectron *fileHelperElectron) isStringEmptyOrBlank(
 	errCode = 0
 
 	return errCode, strLen, newStr
+}
+
+// SearchFilePatternMatch
+//
+// This method is used to determine whether a file
+// described by the 'info' parameter meets the specified
+// File Selection Criteria and is judged to be a match
+// for the fileSelectCriteria FileNamePattern.
+//
+// 'fileSelectCriteria.FileNamePatterns' consist of a
+// string array. If the pattern signified by any element
+// in the string array is a 'match', the return value
+// 'isPatternMatch' is set to true.
+//
+// If the 'fileSelectCriteria.FileNamePatterns' array is
+// empty or if it contains only empty strings, the return
+// value isPatternSet is set to 'false' signaling that
+// the pattern file search selection criterion is NOT
+// active.
+//
+// Note:
+//
+// Input parameter 'info' is of type os.FileInfo.  You
+// can substitute a type 'FileInfoPlus' object for the
+// 'info' parameter because 'FileInfoPlus' implements
+// the 'os.FileInfo' interface.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	msgError					error
+//
+//		'msgError' is a standard error containing
+//		a brief high level message explaining the
+//		error condition in narrative text.
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If 'msgError' is returned with a value of
+//		'nil', it signals that the deletion operation
+//		succeeded.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+//
+//		NOTE: Not all returned errors have associated
+//		low level errors ('lowLevelErr'). Always check
+//		'msgError'. 'msgError' could be non-nil while
+//		'lowLevelErr' is 'nil'.
+//
+//	lowLevelErr					error
+//
+//		If the call to os.Remove fails it will return an
+//		error of type *PathError. This error may be
+//		unpacked to reveal additional technical details
+//		regarding the failure to create a file.
+//
+//		If an error is returned by os.Remove it will be
+//		returned in its original form through parameter,
+//		'lowLevelErr'.
+//
+//		If no *PathError occurs, 'lowLevelErr' will be set
+//		to 'nil'.
+func (fHelpElectron *fileHelperElectron) SearchFilePatternMatch(
+	info os.FileInfo,
+	fileSelectCriteria FileSelectionCriteria,
+	errorPrefix interface{}) (
+	isPatternSet bool,
+	isPatternMatch bool,
+	msgError error,
+	lowLevelErr error) {
+
+	if fHelpElectron.lock == nil {
+		fHelpElectron.lock = new(sync.Mutex)
+	}
+
+	fHelpElectron.lock.Lock()
+
+	defer fHelpElectron.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	isPatternMatch = false
+
+	isPatternSet = false
+
+	ePrefix,
+		msgError = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileHelper."+
+			"SearchFilePatternMatch()",
+		"")
+
+	if msgError != nil {
+
+		return isPatternSet, isPatternMatch, msgError, lowLevelErr
+	}
+
+	isPatternSet = fileSelectCriteria.ArePatternsActive()
+
+	if !isPatternSet {
+		// bona fide result. No errors here!
+		isPatternSet = false
+		isPatternMatch = false
+		msgError = nil
+		lowLevelErr = nil
+
+		return isPatternSet, isPatternMatch, msgError, lowLevelErr
+	}
+
+	lPats := len(fileSelectCriteria.FileNamePatterns)
+
+	var matched bool
+
+	for i := 0; i < lPats; i++ {
+
+		matched,
+			lowLevelErr = fp.Match(
+			fileSelectCriteria.FileNamePatterns[i],
+			info.Name())
+
+		if lowLevelErr != nil {
+
+			isPatternSet = true
+
+			msgError = fmt.Errorf("%v\n"+
+				"Error returned from filepath.Match(fileSelectCriteria.FileNamePatterns[i], "+
+				"info.Name())\n"+
+				"fileSelectCriteria.FileNamePatterns[i]='%v'\n"+
+				"info.Name()='%v'\nError='%v'\n",
+				ePrefix.String(),
+				fileSelectCriteria.FileNamePatterns[i],
+				info.Name(),
+				lowLevelErr.Error())
+
+			isPatternMatch = false
+
+			return isPatternSet, isPatternMatch, msgError, lowLevelErr
+		}
+
+		if matched {
+
+			isPatternSet = true
+			isPatternMatch = true
+
+			return isPatternSet, isPatternMatch, msgError, lowLevelErr
+		}
+	}
+
+	isPatternSet = true
+	isPatternMatch = false
+
+	return isPatternSet, isPatternMatch, msgError, lowLevelErr
 }
