@@ -3317,7 +3317,7 @@ func (fh *FileHelper) DoesFileExist(pathFileName string) bool {
 //		for input parameter 'errPrefDto' (error prefix)
 //		will be prefixed or attached at the beginning of
 //		the error message.
-func (fh FileHelper) DoesFileInfoExist(
+func (fh *FileHelper) DoesFileInfoExist(
 	pathFileName string,
 	errorPrefix interface{}) (
 	doesFInfoExist bool,
@@ -3359,55 +3359,192 @@ func (fh FileHelper) DoesFileInfoExist(
 	return doesFInfoExist, fInfo, err
 }
 
-// DoesStringEndWithPathSeparator - Returns 'true' if the string ends with a
-// valid Path Separator. ('/' or '\' depending on the operating system)
-func (fh FileHelper) DoesStringEndWithPathSeparator(pathStr string) bool {
+// DoesStringEndWithPathSeparator
+//
+// This method returns a boolean value of 'true' if the
+// path string input paramter ('pathStr') ends with a
+// valid Path Separator ('/' or '\' depending on the
+// operating system).
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	pathStr						string
+//
+//		The file or directory path in this string will be
+//		analyzed to determine if the string ends with a
+//		path separator character.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	bool
+//
+//		If input parameter 'pathStr' contains a string
+//		which ends with a Path Separator character, this
+//		return parameter will be set to 'true'.
+//
+//		If 'pathStr' does NOT end with a Path Separator
+//		character, this parameter will return 'false'.
+func (fh *FileHelper) DoesStringEndWithPathSeparator(
+	pathStr string) bool {
 
-	errCode := 0
-	lenStr := 0
-
-	errCode, lenStr, pathStr = fh.isStringEmptyOrBlank(pathStr)
-
-	if errCode < 0 {
-		return false
+	if fh.lock == nil {
+		fh.lock = new(sync.Mutex)
 	}
 
-	if pathStr[lenStr-1] == '\\' || pathStr[lenStr-1] == '/' || pathStr[lenStr-1] == os.PathSeparator {
-		return true
-	}
+	fh.lock.Lock()
 
-	return false
+	defer fh.lock.Unlock()
+
+	return new(fileHelperAtom).
+		doesStringEndWithPathSeparator(pathStr)
 }
 
-// DoesThisFileExist - Returns a boolean value signaling whether the path and file name
-// represented by input parameter, 'pathFileName', does in fact exist. Unlike the similar
-// method FileHelper.DoesFileExist(), this method returns an error in the case of
-// Non-Path errors associated with 'pathFileName'.
+// DoesThisFileExist
 //
-// Non-Path errors may arise for a variety of reasons, but the most common is associated
-// with 'access denied' situations.
-func (fh FileHelper) DoesThisFileExist(pathFileName string) (
+// Returns a boolean value signaling whether the path and
+// file name represented by input parameter,
+// 'pathFileName', does in fact exist. Unlike the similar
+// method FileHelper.DoesFileExist(), this method returns
+// an error in the case of Non-Path errors associated with
+// 'pathFileName'.
+//
+// Non-Path errors may arise for a variety of reasons, but
+// the most common is associated with 'access denied'
+// situations.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	pathFileName				string
+//
+//		This string contains the path and file name which
+//		will be analyzed to determine if in fact they
+//		actually exist.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	pathFileNameDoesExist		bool
+//
+//		If the path and file name identified by input
+//		parameter 'pathFileName' actually exists, this
+//		parameter will return a boolean value of 'true'.
+//
+//		If the path and file name do NOT exist, a value
+//		of 'false' will be returned.
+//
+//	nonPathError				error
+//
+//		If this method completes successfully, the
+//		returned 'nonPathError' is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned 'nonPathError' will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be attached to the
+//	 	beginning of the error message.
+func (fh *FileHelper) DoesThisFileExist(
+	pathFileName string,
+	errorPrefix interface{}) (
 	pathFileNameDoesExist bool,
 	nonPathError error) {
 
-	ePrefix := "FileHelper.DoesThisFileExist() "
-	pathFileNameDoesExist = false
-	nonPathError = nil
+	if fh.lock == nil {
+		fh.lock = new(sync.Mutex)
+	}
 
-	_,
-		pathFileNameDoesExist,
-		_,
-		nonPathError =
-		new(fileHelperMolecule).doesPathFileExist(
-			pathFileName,
-			PreProcPathCode.AbsolutePath(), // Skip Absolute Path Conversion
-			ePrefix,
-			"pathFileName")
+	fh.lock.Lock()
+
+	defer fh.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	pathFileNameDoesExist = false
+
+	ePrefix,
+		nonPathError = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileHelper."+
+			"DoesThisFileExist()",
+		"")
 
 	if nonPathError != nil {
-		pathFileNameDoesExist = false
+
 		return pathFileNameDoesExist, nonPathError
 	}
+
+	pathFileNameDoesExist,
+		nonPathError = new(fileHelperAtom).
+		doesThisFileExist(
+			pathFileName,
+			ePrefix)
 
 	return pathFileNameDoesExist, nonPathError
 }

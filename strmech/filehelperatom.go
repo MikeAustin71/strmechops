@@ -650,6 +650,176 @@ func (fHelperAtom *fileHelperAtom) deleteAllFilesInDirectory(
 	return msgError, lowLevelErr
 }
 
+// doesStringEndWithPathSeparator
+//
+// This method returns a boolean value of 'true' if the
+// path string input paramter ('pathStr') ends with a
+// valid Path Separator ('/' or '\' depending on the
+// operating system).
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	pathStr						string
+//
+//		The file or directory path in this string will be
+//		analyzed to determine if the string ends with a
+//		path separator character.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	bool
+//
+//		If input parameter 'pathStr' contains a string
+//		which ends with a Path Separator character, this
+//		return parameter will be set to 'true'.
+//
+//		If 'pathStr' does NOT end with a Path Separator
+//		character, this parameter will return 'false'.
+func (fHelperAtom *fileHelperAtom) doesStringEndWithPathSeparator(
+	pathStr string) bool {
+
+	if fHelperAtom.lock == nil {
+		fHelperAtom.lock = new(sync.Mutex)
+	}
+
+	fHelperAtom.lock.Lock()
+
+	defer fHelperAtom.lock.Unlock()
+
+	errCode := 0
+	lenStr := 0
+
+	errCode, lenStr, pathStr =
+		new(fileHelperElectron).isStringEmptyOrBlank(pathStr)
+
+	if errCode < 0 {
+		return false
+	}
+
+	if pathStr[lenStr-1] == '\\' || pathStr[lenStr-1] == '/' || pathStr[lenStr-1] == os.PathSeparator {
+		return true
+	}
+
+	return false
+}
+
+// doesThisFileExist
+//
+// Returns a boolean value signaling whether the path and
+// file name represented by input parameter,
+// 'pathFileName', does in fact exist. Unlike the similar
+// method FileHelper.DoesFileExist(), this method returns
+// an error in the case of Non-Path errors associated with
+// 'pathFileName'.
+//
+// Non-Path errors may arise for a variety of reasons, but
+// the most common is associated with 'access denied'
+// situations.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	pathFileName				string
+//
+//		This string contains the path and file name which
+//		will be analyzed to determine if in fact they
+//		actually exist.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	pathFileNameDoesExist		bool
+//
+//		If the path and file name identified by input
+//		parameter 'pathFileName' actually exists, this
+//		parameter will return a boolean value of 'true'.
+//
+//		If the path and file name do NOT exist, a value
+//		of 'false' will be returned.
+//
+//	nonPathError				error
+//
+//		If this method completes successfully, the
+//		returned 'nonPathError' is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned 'nonPathError' will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be attached to the
+//	 	beginning of the error message.
+func (fHelperAtom *fileHelperAtom) doesThisFileExist(
+	pathFileName string,
+	errPrefDto *ePref.ErrPrefixDto) (
+	pathFileNameDoesExist bool,
+	nonPathError error) {
+
+	if fHelperAtom.lock == nil {
+		fHelperAtom.lock = new(sync.Mutex)
+	}
+
+	fHelperAtom.lock.Lock()
+
+	defer fHelperAtom.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	pathFileNameDoesExist = false
+
+	ePrefix,
+		nonPathError = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"fileHelperAtom."+
+			"doesThisFileExist()",
+		"")
+
+	if nonPathError != nil {
+
+		return pathFileNameDoesExist, nonPathError
+	}
+
+	_,
+		pathFileNameDoesExist,
+		_,
+		nonPathError =
+		new(fileHelperMolecule).doesPathFileExist(
+			pathFileName,
+			PreProcPathCode.AbsolutePath(), // Skip Absolute Path Conversion
+			ePrefix,
+			"pathFileName")
+
+	if nonPathError != nil {
+
+		pathFileNameDoesExist = false
+
+		return pathFileNameDoesExist, nonPathError
+	}
+
+	return pathFileNameDoesExist, nonPathError
+}
+
 // filterFileName
 //
 // This method will determine whether a file described by
