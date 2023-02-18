@@ -954,7 +954,7 @@ func (fHelperAtom *fileHelperAtom) deleteAllFilesInDirectory(
 //		If no low level system error is identified,
 //		'lowLevelErr' will be set to 'nil'.
 func (fHelperAtom *fileHelperAtom) filterFileName(
-	info os.FileInfo,
+	fileInfo os.FileInfo,
 	fileSelectionCriteria FileSelectionCriteria,
 	errPrefDto *ePref.ErrPrefixDto) (
 	isMatchedFile bool,
@@ -984,10 +984,10 @@ func (fHelperAtom *fileHelperAtom) filterFileName(
 		return isMatchedFile, msgError, lowLevelErr
 	}
 
-	if info == nil {
+	if fileInfo == nil {
 
 		msgError = fmt.Errorf("%v\n"+
-			"Input parameter 'info' is 'nil' and INVALID!",
+			"Input parameter 'fileInfo' is 'nil' and INVALID!",
 			ePrefix.String())
 
 		return isMatchedFile, msgError, lowLevelErr
@@ -1003,18 +1003,18 @@ func (fHelperAtom *fileHelperAtom) filterFileName(
 		err2,
 		lowLevelErr = fHelperElectron.
 		searchFilePatternMatch(
-			info,
+			fileInfo,
 			fileSelectionCriteria,
 			ePrefix)
 
 	if err2 != nil {
 
 		msgError = fmt.Errorf(
-			"Error returned from SearchFilePatternMatch(info, fileSelectionCriteria).\n"+
-				"info.Name()='%v'\n"+
+			"Error returned from SearchFilePatternMatch(fileInfo, fileSelectionCriteria).\n"+
+				"fileInfo.Name()='%v'\n"+
 				"Message Error=\n%v'\n\n"+
 				"Low Level Error=\n%v\n",
-			info.Name(),
+			fileInfo.Name(),
 			err2.Error(),
 			lowLevelErr.Error())
 
@@ -1026,7 +1026,7 @@ func (fHelperAtom *fileHelperAtom) filterFileName(
 	isFileOlderThanSet,
 		isFileOlderThanMatch := fHelperElectron.
 		searchFileOlderThan(
-			info,
+			fileInfo,
 			fileSelectionCriteria)
 
 	var isFileNewerThanSet, isFileNewerThanMatch bool
@@ -1035,7 +1035,7 @@ func (fHelperAtom *fileHelperAtom) filterFileName(
 		isFileNewerThanMatch =
 		fHelperElectron.
 			searchFileNewerThan(
-				info,
+				fileInfo,
 				fileSelectionCriteria)
 
 	var isFileModeSearchSet, isFileModeSearchMatch bool
@@ -1044,7 +1044,7 @@ func (fHelperAtom *fileHelperAtom) filterFileName(
 		isFileModeSearchMatch,
 		err2 = fHelperElectron.
 		searchFileModeMatch(
-			info,
+			fileInfo,
 			fileSelectionCriteria,
 			ePrefix)
 
@@ -1072,12 +1072,12 @@ func (fHelperAtom *fileHelperAtom) filterFileName(
 		}
 
 		msgError = fmt.Errorf("%v\n"+
-			"Error returned from searchFileModeMatch(info, fileSelectionCriteria).\n"+
+			"Error returned from searchFileModeMatch(fileInfo, fileSelectionCriteria).\n"+
 			"fileSelectionCriteria.SelectByFileMode='%v'\n"+
-			"info.Name()='%v' Error=\n%v\n",
+			"fileInfo.Name()='%v' Error=\n%v\n",
 			ePrefix.String(),
 			fileModeTxt,
-			info.Name(), err2.Error())
+			fileInfo.Name(), err2.Error())
 
 		isMatchedFile = false
 

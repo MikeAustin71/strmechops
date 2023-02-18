@@ -80,7 +80,7 @@ func (fsc *FileSelectionCriteria) ArePatternsActive() bool {
 // based on 'DeleteFileSelectCriteria' value.
 //
 // 'DeleteFileSelectCriteria' is a 'FileSelectionCriteria'
-// type which contains  FileNamePatterns strings and the
+// type which contains FileNamePatterns strings and the
 // FilesOlderThan or FilesNewerThan date time parameters
 // which can be used as file selection criteria.
 type DirectoryDeleteFileInfo struct {

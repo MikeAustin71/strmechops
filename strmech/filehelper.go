@@ -2855,10 +2855,10 @@ func (fh *FileHelper) DoesFileExist(pathFileName string) bool {
 // DirectoryDeleteFileInfo,
 // 'DirectoryDeleteFileInfo.DeletedFiles'.
 //
-// By the way, if ALL the file selection criterion are set
-// to zero values or 'Inactive', then ALL FILES in the
-// directory are selected, deleted and returned in the field,
-// 'DirectoryDeleteFileInfo.DeletedFiles'.
+// By the way, if ALL the file selection criterion are
+// set to zero values or 'Inactive', then ALL FILES in
+// the directory are selected, deleted and returned in
+// the field, 'DirectoryDeleteFileInfo.DeletedFiles'.
 //
 // ----------------------------------------------------------------
 //
@@ -3239,7 +3239,10 @@ func (fh *FileHelper) DeleteFilesWalkDirectory(
 
 	var err2 error
 
-	err2 = fp.Walk(deleteFilesInfo.StartPath, fh.makeFileHelperWalkDirDeleteFilesFunc(&deleteFilesInfo))
+	err2 = fp.Walk(
+		deleteFilesInfo.StartPath,
+		new(fileHelperMolecule).makeFileHelperWalkDirDeleteFilesFunc(
+			&deleteFilesInfo))
 
 	if err2 != nil {
 
@@ -3372,8 +3375,8 @@ func (fh FileHelper) DoesThisFileExist(pathFileName string) (
 //		'FilesNewerThan' parameter.
 //
 // The three file selection criterion are applied to the
-// file name (info.Name()) passed as input parameter
-// 'info'.
+// file name (fileInfo.Name()) passed as input parameter
+// 'fileInfo'.
 //
 // If the three file search criteria are all set to their
 // 'zero' or empty values, the no selection filter is
@@ -3441,7 +3444,7 @@ func (fh FileHelper) DoesThisFileExist(pathFileName string) (
 //
 // # Input Parameters
 //
-//	info						os.FileInfo
+//	fileInfo					os.FileInfo
 //
 //		The type os.FileInfo contains data elements
 //		describing a file.
@@ -3656,12 +3659,12 @@ func (fh FileHelper) DoesThisFileExist(pathFileName string) (
 //
 //		If this return parameter is set to 'true' it
 //		signals that the file identified by input
-//		parameter 'info' has matched the specified
+//		parameter 'fileInfo' has matched the specified
 //		file selection criteria.
 //
 //		If 'isMatchedFile' is returned with a value of
 //		'false', it means that the file identified by
-//		input parameter 'info' does NOT match the
+//		input parameter 'fileInfo' does NOT match the
 //		specified file selection criteria.
 //
 //	msgError					error
@@ -3704,7 +3707,7 @@ func (fh FileHelper) DoesThisFileExist(pathFileName string) (
 //		If no low level system error is identified,
 //		'lowLevelErr' will be set to 'nil'.
 func (fh *FileHelper) FilterFileName(
-	info os.FileInfo,
+	fileInfo os.FileInfo,
 	fileSelectionCriteria FileSelectionCriteria,
 	errorPrefix interface{}) (
 	isMatchedFile bool,
@@ -3738,7 +3741,7 @@ func (fh *FileHelper) FilterFileName(
 		msgError,
 		lowLevelErr = new(fileHelperAtom).
 		filterFileName(
-			info,
+			fileInfo,
 			fileSelectionCriteria,
 			ePrefix)
 
@@ -7118,6 +7121,61 @@ func (fh FileHelper) MakeDirPerm(dirPath string, permission FilePermissionConfig
 	return nil
 }
 
+// MakeFileHelperWalkDirDeleteFilesFunc
+//
+// Used in conjunction with DirMgr.DeleteWalDirFiles to
+// select and delete files residing the directory tree
+// identified by the current DirMgr object.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	dInfo				*DirectoryDeleteFileInfo
+//
+//		A pointer to an instance of DirectoryDeleteFileInfo.
+//
+//		DirectoryDeleteFileInfo
+//		This structure is used to delete files in a
+//		directory specified	by 'StartPath'. Deleted files
+//		will be selected based on 'DeleteFileSelectCriteria'
+//		value.
+//
+//		'DeleteFileSelectCriteria' is a 'FileSelectionCriteria'
+//		type which contains FileNamePatterns strings and the
+//		FilesOlderThan or FilesNewerThan date time parameters
+//		which can be used as file selection criteria.
+//
+//		type DirectoryDeleteFileInfo struct {
+//			StartPath                string
+//			Directories              DirMgrCollection
+//			ErrReturns               []error
+//			DeleteFileSelectCriteria FileSelectionCriteria
+//			DeletedFiles             FileMgrCollection
+//		}
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	This method returns a function with the following
+//	signature:
+//
+//		func(string, os.FileInfo, error) error
+func (fh *FileHelper) MakeFileHelperWalkDirDeleteFilesFunc(dInfo *DirectoryDeleteFileInfo) func(string, os.FileInfo, error) error {
+
+	if fh.lock == nil {
+		fh.lock = new(sync.Mutex)
+	}
+
+	fh.lock.Lock()
+
+	defer fh.lock.Unlock()
+
+	return new(fileHelperMolecule).
+		makeFileHelperWalkDirDeleteFilesFunc(dInfo)
+}
+
 // MoveFile - Copies file from source to destination and, if successful,
 // then deletes the original source file.
 //
@@ -9588,97 +9646,6 @@ func (fh FileHelper) DoesPathFileExist(
 	}
 
 	return absFilePath, filePathDoesExist, fInfo, nonPathError
-}
-
-// makeFileHelperWalkDirDeleteFilesFunc - Used in conjunction with DirMgr.DeleteWalDirFiles
-// to select and delete files residing the directory tree identified by the current DirMgr
-// object.
-func (fh *FileHelper) makeFileHelperWalkDirDeleteFilesFunc(dInfo *DirectoryDeleteFileInfo) func(string, os.FileInfo, error) error {
-	return func(pathFile string, info os.FileInfo, erIn error) error {
-
-		ePrefix := "FileHelper.makeFileHelperWalkDirDeleteFilesFunc()"
-
-		if erIn != nil {
-			dInfo.ErrReturns = append(dInfo.ErrReturns, erIn)
-			return nil
-		}
-
-		if info.IsDir() {
-
-			subDir, err := DirMgr{}.New(pathFile)
-
-			if err != nil {
-
-				ex := fmt.Errorf(ePrefix+
-					"Error returned from DirMgr{}.New(pathFile).\n"+
-					"pathFile:='%v'\nError='%v'\n", pathFile, err.Error())
-
-				dInfo.ErrReturns = append(dInfo.ErrReturns, ex)
-
-				return nil
-			}
-
-			subDir.actualDirFileInfo, err = FileInfoPlus{}.NewFromPathFileInfo(pathFile, info)
-
-			if err != nil {
-				ex := fmt.Errorf(ePrefix+
-					"Error returned by FileInfoPlus{}.NewFromPathFileInfo(pathFile, info)\n"+
-					"pathFile='%v'\ninfo.Name='%v'\nError='%v'\n",
-					pathFile, info.Name(), err.Error())
-
-				dInfo.ErrReturns = append(dInfo.ErrReturns, ex)
-
-			} else {
-
-				dInfo.Directories.AddDirMgr(subDir)
-			}
-
-			return nil
-		}
-
-		isFoundFile, err := fh.FilterFileName(info, dInfo.DeleteFileSelectCriteria)
-
-		if err != nil {
-
-			ex := fmt.Errorf(ePrefix+
-				"Error returned from fh.FilterFileName(info, dInfo.DeleteFileSelectCriteria)\n"+
-				"pathFile='%v'\n"+
-				"info.Name()='%v'\nError='%v'\n",
-				pathFile, info.Name(), err.Error())
-
-			dInfo.ErrReturns = append(dInfo.ErrReturns, ex)
-			return nil
-		}
-
-		if isFoundFile {
-
-			err := os.Remove(pathFile)
-
-			if err != nil {
-				ex := fmt.Errorf(ePrefix+
-					"Error returned from os.Remove(pathFile). pathFile='%v' Error='%v'",
-					pathFile, err.Error())
-
-				dInfo.ErrReturns = append(dInfo.ErrReturns, ex)
-				return nil
-			}
-
-			err = dInfo.DeletedFiles.AddFileMgrByFileInfo(pathFile, info)
-
-			if err != nil {
-				ex := fmt.Errorf(ePrefix+
-					"Error returned from dInfo.DeletedFiles.AddFileMgrByFileInfo( pathFile,  info). "+
-					"pathFile='%v'  Error='%v'",
-					pathFile, err.Error())
-
-				dInfo.ErrReturns = append(dInfo.ErrReturns, ex)
-				return nil
-			}
-
-		}
-
-		return nil
-	}
 }
 
 // makeFileHelperWalkDirFindFilesFunc - This function is designed to work in conjunction

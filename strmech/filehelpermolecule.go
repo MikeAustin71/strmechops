@@ -439,6 +439,191 @@ func (fHelpMolecule *fileHelperMolecule) getFirstLastNonSeparatorCharIndexInPath
 	return firstIdx, lastIdx, err
 }
 
+// makeFileHelperWalkDirDeleteFilesFunc
+//
+// Used in conjunction with DirMgr.DeleteWalDirFiles to
+// select and delete files residing the directory tree
+// identified by the current DirMgr object.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	dInfo				*DirectoryDeleteFileInfo
+//
+//		A pointer to an instance of DirectoryDeleteFileInfo.
+//
+//		DirectoryDeleteFileInfo
+//		This structure is used to delete files in a
+//		directory specified	by 'StartPath'. Deleted files
+//		will be selected based on 'DeleteFileSelectCriteria'
+//		value.
+//
+//		'DeleteFileSelectCriteria' is a 'FileSelectionCriteria'
+//		type which contains FileNamePatterns strings and the
+//		FilesOlderThan or FilesNewerThan date time parameters
+//		which can be used as file selection criteria.
+//
+//		type DirectoryDeleteFileInfo struct {
+//			StartPath                string
+//			Directories              DirMgrCollection
+//			ErrReturns               []error
+//			DeleteFileSelectCriteria FileSelectionCriteria
+//			DeletedFiles             FileMgrCollection
+//		}
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	This method returns a function with the following
+//	signature:
+//
+//		func(string, os.FileInfo, error) error
+func (fHelpMolecule *fileHelperMolecule) makeFileHelperWalkDirDeleteFilesFunc(
+	dInfo *DirectoryDeleteFileInfo) func(string, os.FileInfo, error) error {
+
+	if fHelpMolecule.lock == nil {
+		fHelpMolecule.lock = new(sync.Mutex)
+	}
+
+	fHelpMolecule.lock.Lock()
+
+	defer fHelpMolecule.lock.Unlock()
+
+	return func(pathFile string, info os.FileInfo, erIn error) error {
+
+		if erIn != nil {
+			dInfo.ErrReturns = append(dInfo.ErrReturns, erIn)
+			return nil
+		}
+
+		var err error
+		var ePrefix *ePref.ErrPrefixDto
+
+		ePrefix,
+			err = ePref.ErrPrefixDto{}.NewIEmpty(
+			nil,
+			"fileHelperMolecule."+
+				"makeFileHelperWalkDirDeleteFilesFunc()",
+			"")
+
+		if erIn != nil {
+			dInfo.ErrReturns = append(dInfo.ErrReturns, err)
+			return nil
+		}
+
+		if info.IsDir() {
+
+			var subDir DirMgr
+
+			subDir, err = DirMgr{}.New(pathFile)
+
+			if err != nil {
+
+				ex := fmt.Errorf("%v\n"+
+					"Error returned from DirMgr{}.New(pathFile).\n"+
+					"pathFile:='%v'\nError='%v'\n",
+					ePrefix.String(),
+					pathFile,
+					err.Error())
+
+				dInfo.ErrReturns = append(dInfo.ErrReturns, ex)
+
+				return nil
+			}
+
+			subDir.actualDirFileInfo, err = FileInfoPlus{}.NewFromPathFileInfo(pathFile, info)
+
+			if err != nil {
+
+				ex := fmt.Errorf("%v\n"+
+					"Error returned by FileInfoPlus{}.NewFromPathFileInfo(pathFile, info)\n"+
+					"pathFile='%v'\n"+
+					"info.Name='%v'\n"+
+					"Error='%v'\n",
+					ePrefix.String(),
+					pathFile,
+					info.Name(),
+					err.Error())
+
+				dInfo.ErrReturns = append(dInfo.ErrReturns, ex)
+
+			} else {
+
+				dInfo.Directories.AddDirMgr(subDir)
+			}
+
+			return nil
+		}
+
+		var isFoundFile bool
+
+		isFoundFile,
+			err,
+			_ = new(fileHelperAtom).
+			filterFileName(
+				info,
+				dInfo.DeleteFileSelectCriteria,
+				ePrefix)
+
+		if err != nil {
+
+			ex := fmt.Errorf("%v\n"+
+				"Error returned from fh.FilterFileName(info, dInfo.DeleteFileSelectCriteria)\n"+
+				"pathFile='%v'\n"+
+				"info.Name()='%v'\n"+
+				"Error='%v'\n",
+				ePrefix.String(),
+				pathFile,
+				info.Name(),
+				err.Error())
+
+			dInfo.ErrReturns = append(dInfo.ErrReturns, ex)
+
+			return nil
+		}
+
+		if isFoundFile {
+
+			err = os.Remove(pathFile)
+
+			if err != nil {
+
+				ex := fmt.Errorf("%v\n"+
+					"Error returned from os.Remove(pathFile).\n"+
+					"pathFile='%v'\nError='%v'\n",
+					ePrefix.String(),
+					pathFile,
+					err.Error())
+
+				dInfo.ErrReturns = append(dInfo.ErrReturns, ex)
+
+				return nil
+			}
+
+			err = dInfo.DeletedFiles.AddFileMgrByFileInfo(pathFile, info)
+
+			if err != nil {
+
+				ex := fmt.Errorf("%v\n"+
+					"Error returned from dInfo.DeletedFiles.AddFileMgrByFileInfo( pathFile,  info).\n"+
+					"pathFile='%v'\nError='%v'\n",
+					ePrefix.String(),
+					pathFile,
+					err.Error())
+
+				dInfo.ErrReturns = append(dInfo.ErrReturns, ex)
+
+				return nil
+			}
+
+		}
+
+		return nil
+	}
+}
+
 // stripLeadingDotSeparatorChars
 //
 // Strips or deletes the following characters from the

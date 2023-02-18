@@ -1445,14 +1445,14 @@ func (dMgr *DirMgr) DeleteWalkDirFiles(
 
   fh := FileHelper{}
 
-  err2 := fp.Walk(deleteFilesInfo.StartPath, fh.makeFileHelperWalkDirDeleteFilesFunc(&deleteFilesInfo))
+  err2 := fp.Walk(deleteFilesInfo.StartPath, fh.MakeFileHelperWalkDirDeleteFilesFunc(&deleteFilesInfo))
 
   if err2 != nil {
 
     deleteFilesInfo = DirectoryDeleteFileInfo{}
 
     err = fmt.Errorf(ePrefix+"Error returned by FileHelper."+
-      "makeFileHelperWalkDirDeleteFilesFunc(&dWalkInfo). "+
+      "MakeFileHelperWalkDirDeleteFilesFunc(&dWalkInfo). "+
       "dWalkInfo.StartPath='%v' Error='%v' ", deleteFilesInfo.StartPath, err2.Error())
   }
 
