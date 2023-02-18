@@ -3173,8 +3173,10 @@ func (fh *FileHelper) DeleteFilesWalkDirectory(
 
 	errCode := 0
 
+	fHelperElectron := new(fileHelperElectron)
+
 	errCode, _, startPath =
-		new(fileHelperElectron).isStringEmptyOrBlank(startPath)
+		fHelperElectron.isStringEmptyOrBlank(startPath)
 
 	if errCode == -1 {
 
@@ -3401,7 +3403,8 @@ func (fh *FileHelper) FilterFileName(
 	fileSelectionCriteria FileSelectionCriteria,
 	errorPrefix interface{}) (
 	isMatchedFile bool,
-	err error) {
+	msgError error,
+	lowLevelErr error) {
 
 	if fh.lock == nil {
 		fh.lock = new(sync.Mutex)
@@ -3415,45 +3418,61 @@ func (fh *FileHelper) FilterFileName(
 	isMatchedFile = false
 
 	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		msgError = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"FilterFileName."+
 			"FilterFileName()",
 		"")
 
-	if err != nil {
-		return isMatchedFile, err
+	if msgError != nil {
+
+		return isMatchedFile, msgError, lowLevelErr
 	}
 
 	if info == nil {
 
-		err = fmt.Errorf("%v\n"+
+		msgError = fmt.Errorf("%v\n"+
 			"Input parameter 'info' is 'nil' and INVALID!",
 			ePrefix.String())
 
-		return isMatchedFile, err
+		return isMatchedFile, msgError, lowLevelErr
 	}
 
-	isPatternSet, isPatternMatch, err2 := fh.SearchFilePatternMatch(info, fileSelectionCriteria)
+	var isPatternSet, isPatternMatch bool
+	var err2 error
+
+	fHelperElectron := new(fileHelperElectron)
+
+	isPatternSet,
+		isPatternMatch,
+		err2,
+		lowLevelErr = fHelperElectron.
+		searchFilePatternMatch(
+			info,
+			fileSelectionCriteria,
+			ePrefix)
 
 	if err2 != nil {
-		err = fmt.Errorf(ePrefix+
-			"Error returned from fh.SearchFilePatternMatch(info, fileSelectionCriteria).\n"+
-			"info.Name()='%v'\nError='%v'\n", info.Name(), err2.Error())
+
+		msgError = fmt.Errorf(
+			"Error returned from SearchFilePatternMatch(info, fileSelectionCriteria).\n"+
+				"info.Name()='%v'\n"+
+				"Message Error=\n%v'\n\n"+
+				"Low Level Error=\n%v\n",
+			info.Name(),
+			err2.Error(),
+			lowLevelErr.Error())
+
 		isMatchedFile = false
-		return
+
+		return isMatchedFile, msgError, lowLevelErr
 	}
 
-	isFileOlderThanSet, isFileOlderThanMatch, err2 := fh.SearchFileOlderThan(info, fileSelectionCriteria)
-
-	if err2 != nil {
-		err = fmt.Errorf(ePrefix+
-			"Error returned from dMgr.searchFileOlderThan(info, fileSelectionCriteria)\n"+
-			"fileSelectionCriteria.FilesOlderThan='%v' info.Name()='%v'\nError='%v'\n",
-			fileSelectionCriteria.FilesOlderThan, info.Name(), err2.Error())
-		isMatchedFile = false
-		return
-	}
+	isFileOlderThanSet,
+		isFileOlderThanMatch := fHelperElectron.
+		searchFileOlderThan(
+			info,
+			fileSelectionCriteria)
 
 	isFileNewerThanSet, isFileNewerThanMatch, err2 := fh.SearchFileNewerThan(info, fileSelectionCriteria)
 
@@ -3469,7 +3488,12 @@ func (fh *FileHelper) FilterFileName(
 	isFileModeSearchSet, isFileModeSearchMatch, err2 := fh.SearchFileModeMatch(info, fileSelectionCriteria)
 
 	if err2 != nil {
-		fileModeTxt := fileSelectionCriteria.SelectByFileMode.GetPermissionFileModeValueText()
+
+		var fileModeTxt string
+
+		fileModeTxt,
+			err = fileSelectionCriteria.SelectByFileMode.GetPermissionFileModeValueText()
+
 		err = fmt.Errorf(ePrefix+
 			"Error returned from dMgr.searchFileModeMatch(info, fileSelectionCriteria).\n"+
 			"fileSelectionCriteria.SelectByFileMode='%v'\n"+
@@ -8000,41 +8024,229 @@ func (fh *FileHelper) SearchFileNewerThan(
 	return
 }
 
-// SearchFileOlderThan - This method is called to determine whether the file described by the
-// input parameter 'info' is a 'match' for the File Selection Criteria, 'fileSelectCriteria.FilesOlderThan'.
-// If the file modification date time occurs before the 'fileSelectCriteria.FilesOlderThan' date time,
-// the return value 'isFileOlderThanMatch' is set to 'true'.
+// SearchFileOlderThan
 //
-// If 'fileSelectCriteria.FilesOlderThan' is set to time.Time zero ( the default or zero value for this type),
-// the return value 'isFileOlderThanSet' is set to 'false' signaling that this search criterion is NOT active.
+// This method is called to determine whether the file
+// described by the input parameter 'info' is a 'match'
+// for the File Selection Criteria,
+// 'fileSelectCriteria.FilesOlderThan'.
 //
-// Note: Input parameter 'info' is of type os.FileInfo.  You can substitute a type 'FileInfoPlus' object
-// for the 'info' parameter because 'FileInfoPlus' implements the 'os.FileInfo' interface.
+// If the file modification date time occurs before the
+// 'fileSelectCriteria.FilesOlderThan' date time, the
+// return value 'isFileOlderThanMatch' is set to 'true'.
+//
+// If 'fileSelectCriteria.FilesOlderThan' is set to
+// time.Time zero ( the default or zero value for this
+// type), the return value 'isFileOlderThanSet' is set to
+// 'false' signaling that this search criterion is NOT
+// active.
+//
+// Note:
+//
+// Input parameter 'info' is of type os.FileInfo.  This
+// means the user may substitute a type 'FileInfoPlus'
+// object for the 'info' parameter because 'FileInfoPlus'
+// implements the 'os.FileInfo' interface.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	info						os.FileInfo
+//
+//		The type os.FileInfo contains data elements
+//		describing a file.
+//
+//		type FileInfo interface {
+//			Name() string
+//				base name of the file
+//
+//			Size() int64
+//				length in bytes for regular files;
+//				system-dependent for others
+//
+//			Mode() FileMode
+//				file mode bits
+//
+//			ModTime() time.Time
+//				modification time
+//
+//			IsDir() bool
+//				abbreviation for Mode().IsDir()
+//
+//			Sys() any
+//				underlying data source (can return nil)
+//		}
+//
+//	fileSelectCriteria			FileSelectionCriteria
+//
+//		The FileSelectionCriteria type allows for
+//		configuration of single or multiple file
+//		selection criterion. The 'SelectCriterionMode'
+//		can be used to specify whether the file must match all,
+//		or any one, of the active file selection criterion.
+//
+//		type FileSelectionCriteria struct {
+//		  FileNamePatterns     []string
+//			An array of strings containing File Name Patterns
+//
+//		  FilesOlderThan       time.Time
+//			Match files with older modification date times
+//
+//		  FilesNewerThan       time.Time
+//			Match files with newer modification date times
+//
+//		  SelectByFileMode     FilePermissionConfig
+//			Match file mode (os.FileMode).
+//
+//		  SelectCriterionMode  FileSelectCriterionMode
+//			Specifies 'AND' or 'OR' selection mode
+//		}
+//
+//		Elements of the FileSelectionCriteria Type are
+//		described below:
+//
+//		FileNamePatterns []string
+//
+//			An array of strings which may define one or more search
+//			patterns. If a file name matches any one of the search
+//			pattern strings, it is deemed to be a 'match' for the
+//			search pattern criterion.
+//
+//			Example Patterns:
+//			 FileNamePatterns = []string{"*.log"}
+//			 FileNamePatterns = []string{"current*.txt"}
+//			 FileNamePatterns = []string{"*.txt", "*.log"}
+//
+//			If this string array has zero length or if
+//			all the strings are empty strings, then this
+//			file search criterion is considered 'Inactive'
+//			or 'Not Set'.
+//
+//		FilesOlderThan  time.Time
+//
+//			This date time type is compared to file modification
+//			date times in order to determine whether the file is
+//			older than the 'FilesOlderThan' file selection
+//			criterion. If the file is older than the
+//			'FilesOlderThan' date time, that file is considered
+//			a 'match'	for this file selection criterion.
+//
+//			If the value of 'FilesOlderThan' is set to time zero,
+//			the default value for type time.Time{}, then this
+//			file selection criterion is considered to be 'Inactive'
+//			or 'Not Set'.
+//
+//		FilesNewerThan   time.Time
+//
+//			This date time type is compared to the file modification
+//			date time in order to determine whether the file is newer
+//			than the 'FilesNewerThan' file selection criterion. If
+//			the file modification date time is newer than the
+//			'FilesNewerThan' date time, that file is considered a
+//			'match' for this file selection criterion.
+//
+//			If the value of 'FilesNewerThan' is set to time zero,
+//			the default value for type time.Time{}, then this
+//			file selection criterion is considered to be 'Inactive'
+//			or 'Not Set'.
+//
+//		SelectByFileMode  FilePermissionConfig
+//
+//			Type FilePermissionConfig encapsulates an os.FileMode. The
+//			file selection criterion allows for the selection of files
+//			by File Mode.
+//
+//			File modes are compared to the value of 'SelectByFileMode'.
+//			If the File Mode for a given file is equal to the value of
+//	 		'SelectByFileMode', that file is considered to be a 'match'
+//	 		for this file selection criterion. Examples for setting
+//	 		SelectByFileMode are shown as follows:
+//
+//			fsc := FileSelectionCriteria{}
+//
+//			err = fsc.SelectByFileMode.SetByFileMode(os.FileMode(0666))
+//
+//			err = fsc.SelectByFileMode.SetFileModeByTextCode("-r--r--r--")
+//
+//		SelectCriterionMode FileSelectCriterionMode
+//
+//		This parameter selects the manner in which the file selection
+//		criteria above are applied in determining a 'match' for file
+//		selection purposes. 'SelectCriterionMode' may be set to one of
+//		two constant values:
+//
+//		(1) FileSelectCriterionMode(0).ANDSelect()
+//
+//			File selected if all active selection criteria
+//			are satisfied.
+//
+//			If this constant value is specified for the file selection mode,
+//			then a given file will not be judged as 'selected' unless all
+//			the active selection criterion are satisfied. In other words, if
+//			three active search criterion are provided for 'FileNamePatterns',
+//			'FilesOlderThan' and 'FilesNewerThan', then a file will NOT be
+//			selected unless it has satisfied all three criterion in this example.
+//
+//		(2) FileSelectCriterionMode(0).ORSelect()
+//
+//			File selected if any active selection criterion is satisfied.
+//
+//			If this constant value is specified for the file selection mode,
+//			then a given file will be selected if any one of the active file
+//			selection criterion is satisfied. In other words, if three active
+//			search criterion are provided for 'FileNamePatterns', 'FilesOlderThan'
+//			and 'FilesNewerThan', then a file will be selected if it satisfies any
+//			one of the three criterion in this example.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	isFileOlderThanSet			bool
+//
+//		This boolean return value signals whether the
+//		FileOlderThan file search criteria is set,
+//		engaged and active.
+//
+//		If the 'fileSelectCriteria.FileOlderThan'
+//	 	data element is set to time.Time == zero (0), it
+//	 	means that the 'FileOlderThan' search criteria is
+//	 	not set or engaged. In this case, the
+//	 	'isFileOlderThanSet' parameter will return a
+//	 	value of 'false' meaning that the search criteria
+//	 	is NOT active or engaged.
+//
+//	isFileOlderThanMatch		bool
+//
+//		'fileSelectCriteria.FileOlderThan' consists of a
+//		time.Time date element. This represents a file
+//		search pattern designed to identify files for
+//	 	deletion which are older than the
+//	 	'fileSelectCriteria.FileOlderThan' date. If
+//		the file specified by input parameter 'info',
+//		is older than this date, the file search
+//		operation is classified as a 'match', and
+//		the return value of this parameter,
+//		'isFileOlderThanMatch', is set to 'true'.
 func (fh *FileHelper) SearchFileOlderThan(
 	info os.FileInfo,
-	fileSelectCriteria FileSelectionCriteria) (isFileOlderThanSet,
-	isFileOlderThanMatch bool,
-	err error) {
+	fileSelectCriteria FileSelectionCriteria) (
+	isFileOlderThanSet bool,
+	isFileOlderThanMatch bool) {
 
-	if fileSelectCriteria.FilesOlderThan.IsZero() {
-		isFileOlderThanSet = false
-		isFileOlderThanMatch = false
-		err = nil
-		return
+	if fh.lock == nil {
+		fh.lock = new(sync.Mutex)
 	}
 
-	if fileSelectCriteria.FilesOlderThan.After(info.ModTime()) {
-		isFileOlderThanSet = true
-		isFileOlderThanMatch = true
-		err = nil
-		return
-	}
+	fh.lock.Lock()
 
-	isFileOlderThanSet = true
-	isFileOlderThanMatch = false
-	err = nil
-	return
+	defer fh.lock.Unlock()
 
+	return new(fileHelperElectron).
+		searchFileOlderThan(
+			info,
+			fileSelectCriteria)
 }
 
 // SearchFilePatternMatch
@@ -8064,7 +8276,244 @@ func (fh *FileHelper) SearchFileOlderThan(
 //
 // ----------------------------------------------------------------
 //
+// # Input Parameters
+//
+//	info						os.FileInfo
+//
+//		The type os.FileInfo contains data elements
+//		describing a file.
+//
+//		type FileInfo interface {
+//			Name() string
+//				base name of the file
+//
+//			Size() int64
+//				length in bytes for regular files;
+//				system-dependent for others
+//
+//			Mode() FileMode
+//				file mode bits
+//
+//			ModTime() time.Time
+//				modification time
+//
+//			IsDir() bool
+//				abbreviation for Mode().IsDir()
+//
+//			Sys() any
+//				underlying data source (can return nil)
+//		}
+//
+//	fileSelectCriteria			FileSelectionCriteria
+//
+//		The FileSelectionCriteria type allows for
+//		configuration of single or multiple file
+//		selection criterion. The 'SelectCriterionMode'
+//		can be used to specify whether the file must match all,
+//		or any one, of the active file selection criterion.
+//
+//		type FileSelectionCriteria struct {
+//		  FileNamePatterns     []string
+//			An array of strings containing File Name Patterns
+//
+//		  FilesOlderThan       time.Time
+//			Match files with older modification date times
+//
+//		  FilesNewerThan       time.Time
+//			Match files with newer modification date times
+//
+//		  SelectByFileMode     FilePermissionConfig
+//			Match file mode (os.FileMode).
+//
+//		  SelectCriterionMode  FileSelectCriterionMode
+//			Specifies 'AND' or 'OR' selection mode
+//		}
+//
+//		Elements of the FileSelectionCriteria Type are
+//		described below:
+//
+//		FileNamePatterns []string
+//
+//			An array of strings which may define one or more search
+//			patterns. If a file name matches any one of the search
+//			pattern strings, it is deemed to be a 'match' for the
+//			search pattern criterion.
+//
+//			Example Patterns:
+//			 FileNamePatterns = []string{"*.log"}
+//			 FileNamePatterns = []string{"current*.txt"}
+//			 FileNamePatterns = []string{"*.txt", "*.log"}
+//
+//			If this string array has zero length or if
+//			all the strings are empty strings, then this
+//			file search criterion is considered 'Inactive'
+//			or 'Not Set'.
+//
+//		FilesOlderThan  time.Time
+//
+//			This date time type is compared to file modification
+//			date times in order to determine whether the file is
+//			older than the 'FilesOlderThan' file selection
+//			criterion. If the file is older than the
+//			'FilesOlderThan' date time, that file is considered
+//			a 'match'	for this file selection criterion.
+//
+//			If the value of 'FilesOlderThan' is set to time zero,
+//			the default value for type time.Time{}, then this
+//			file selection criterion is considered to be 'Inactive'
+//			or 'Not Set'.
+//
+//		FilesNewerThan   time.Time
+//
+//			This date time type is compared to the file modification
+//			date time in order to determine whether the file is newer
+//			than the 'FilesNewerThan' file selection criterion. If
+//			the file modification date time is newer than the
+//			'FilesNewerThan' date time, that file is considered a
+//			'match' for this file selection criterion.
+//
+//			If the value of 'FilesNewerThan' is set to time zero,
+//			the default value for type time.Time{}, then this
+//			file selection criterion is considered to be 'Inactive'
+//			or 'Not Set'.
+//
+//		SelectByFileMode  FilePermissionConfig
+//
+//			Type FilePermissionConfig encapsulates an os.FileMode. The
+//			file selection criterion allows for the selection of files
+//			by File Mode.
+//
+//			File modes are compared to the value of 'SelectByFileMode'.
+//			If the File Mode for a given file is equal to the value of
+//	 		'SelectByFileMode', that file is considered to be a 'match'
+//	 		for this file selection criterion. Examples for setting
+//	 		SelectByFileMode are shown as follows:
+//
+//			fsc := FileSelectionCriteria{}
+//
+//			err = fsc.SelectByFileMode.SetByFileMode(os.FileMode(0666))
+//
+//			err = fsc.SelectByFileMode.SetFileModeByTextCode("-r--r--r--")
+//
+//		SelectCriterionMode FileSelectCriterionMode
+//
+//		This parameter selects the manner in which the file selection
+//		criteria above are applied in determining a 'match' for file
+//		selection purposes. 'SelectCriterionMode' may be set to one of
+//		two constant values:
+//
+//		(1) FileSelectCriterionMode(0).ANDSelect()
+//
+//			File selected if all active selection criteria
+//			are satisfied.
+//
+//			If this constant value is specified for the file selection mode,
+//			then a given file will not be judged as 'selected' unless all
+//			the active selection criterion are satisfied. In other words, if
+//			three active search criterion are provided for 'FileNamePatterns',
+//			'FilesOlderThan' and 'FilesNewerThan', then a file will NOT be
+//			selected unless it has satisfied all three criterion in this example.
+//
+//		(2) FileSelectCriterionMode(0).ORSelect()
+//
+//			File selected if any active selection criterion is satisfied.
+//
+//			If this constant value is specified for the file selection mode,
+//			then a given file will be selected if any one of the active file
+//			selection criterion is satisfied. In other words, if three active
+//			search criterion are provided for 'FileNamePatterns', 'FilesOlderThan'
+//			and 'FilesNewerThan', then a file will be selected if it satisfies any
+//			one of the three criterion in this example.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
 // # Return Values
+//
+//	isPatternSet				bool
+//
+//		This boolean return value signals whether one or
+//		more file search patterns are set, engaged and
+//		active.
+//
+//		If the 'fileSelectCriteria.FileNamePatterns'
+//	 	array is empty or if it contains only empty
+//	  	strings, this return value is set to 'false'
+//	  	signaling that the pattern file search
+//	   	selection criterion is NOT active.
+//
+//		When set to 'true', this parameter signals that
+//		one or more file search patterns are set, engaged
+//		and active.
+//
+//	isPatternMatch				bool
+//
+//		'fileSelectCriteria.FileNamePatterns' consist of
+//		a string array. If the pattern signified by any
+//		element in the string array is a 'match', the
+//		return value 'isPatternMatch' is set to true.
+//
+//		The criteria for a 'match' can be set through
+//		input paramter,
+//		'fileSelectCriteria.SelectCriterionMode'.
 //
 //	msgError					error
 //
@@ -8094,17 +8543,17 @@ func (fh *FileHelper) SearchFileOlderThan(
 //
 //	lowLevelErr					error
 //
-//		If the call to os.Remove fails it will return an
-//		error of type *PathError. This error may be
+//		If the call to path.Match() fails it will return
+//		an error of type ErrBadPattern. This error may be
 //		unpacked to reveal additional technical details
 //		regarding the failure to create a file.
 //
-//		If an error is returned by os.Remove it will be
-//		returned in its original form through parameter,
-//		'lowLevelErr'.
+//		If an error is returned by path.Match() it will
+//		be returned in its original form through
+//		parameter, 'lowLevelErr'.
 //
-//		If no *PathError occurs, 'lowLevelErr' will be set
-//		to 'nil'.
+//		If no ErrBadPattern occurs, 'lowLevelErr' will be
+//		set to 'nil'.
 func (fh *FileHelper) SearchFilePatternMatch(
 	info os.FileInfo,
 	fileSelectCriteria FileSelectionCriteria,
@@ -8140,74 +8589,69 @@ func (fh *FileHelper) SearchFilePatternMatch(
 		return isPatternSet, isPatternMatch, msgError, lowLevelErr
 	}
 
-	isPatternSet = fileSelectCriteria.ArePatternsActive()
-
-	if !isPatternSet {
-		// bona fide result. No errors here!
-		isPatternSet = false
-		isPatternMatch = false
-		msgError = nil
-		lowLevelErr = nil
-
-		return isPatternSet, isPatternMatch, msgError, lowLevelErr
-	}
-
-	lPats := len(fileSelectCriteria.FileNamePatterns)
-
-	var matched bool
-
-	for i := 0; i < lPats; i++ {
-
-		matched,
-			lowLevelErr = fp.Match(
-			fileSelectCriteria.FileNamePatterns[i],
-			info.Name())
-
-		if lowLevelErr != nil {
-
-			isPatternSet = true
-
-			msgError = fmt.Errorf("%v\n"+
-				"Error returned from filepath.Match(fileSelectCriteria.FileNamePatterns[i], "+
-				"info.Name())\n"+
-				"fileSelectCriteria.FileNamePatterns[i]='%v'\n"+
-				"info.Name()='%v'\nError='%v'\n",
-				ePrefix.String(),
-				fileSelectCriteria.FileNamePatterns[i],
-				info.Name(),
-				lowLevelErr.Error())
-
-			isPatternMatch = false
-
-			return isPatternSet, isPatternMatch, msgError, lowLevelErr
-		}
-
-		if matched {
-
-			isPatternSet = true
-			isPatternMatch = true
-
-			return isPatternSet, isPatternMatch, msgError, lowLevelErr
-		}
-	}
-
-	isPatternSet = true
-	isPatternMatch = false
+	isPatternSet,
+		isPatternMatch,
+		msgError,
+		lowLevelErr = new(fileHelperElectron).
+		searchFilePatternMatch(
+			info,
+			fileSelectCriteria,
+			ePrefix)
 
 	return isPatternSet, isPatternMatch, msgError, lowLevelErr
 }
 
-// StripLeadingDotSeparatorChars - Strips or deletes the following characters
-// from the front of path or directory names.
+// StripLeadingDotSeparatorChars
+//
+// Strips or deletes the following characters from the
+// front of path or directory names.
 //
 // Leading Characters To Be Removed:
 //
-//	" " (Space)
-//	PathSeparator
-//	"."
-//	".."
-//	"." + PathSeparator
-//	".." + PathSeparator
+//	(1)	" " (Space)
+//
+//	(2)	PathSeparator
+//
+//	(3)	"."
+//
+//	(4)	".."
+//
+//	(5)	"." + PathSeparator
+//
+//	(6)	".." + PathSeparator
+//
+// Removal of these characters will convert the path or
+// directory name to a valid set of text characters
+// suitable as input for file or directory processing
+// functions.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	pathName					string
+//
+//		The path or directory name to be processed. This
+//		method will strip or delete selected characters
+//		from the front or right side of this string.
+//		Removal of these characters will convert the path
+//		or directory name to a valid set of text
+//		characters suitable as input for file or
+//	 	directory processing functions.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//
+//		The converted path or directory name form which
+//		selected invalid characters have been removed.
+//
+//	int
+//
+//		The string length of the returned 'string'
+//		parameter.
 func (fh *FileHelper) StripLeadingDotSeparatorChars(pathName string) (string, int) {
 
 	if fh.lock == nil {
@@ -8218,48 +8662,9 @@ func (fh *FileHelper) StripLeadingDotSeparatorChars(pathName string) (string, in
 
 	defer fh.lock.Unlock()
 
-	pathName = new(fileHelperAtom).adjustPathSlash(pathName)
-
-	pathSeparatorStr := string(os.PathSeparator)
-
-	space := " "
-	dot := "."
-	doubleDot := ".."
-	dotSeparator := dot + pathSeparatorStr
-	doubleDotSeparator := doubleDot + pathSeparatorStr
-	strLen := len(pathName)
-
-	if strLen == 0 {
-		return pathName, 0
-	}
-
-	badChars := []string{
-		doubleDotSeparator,
-		dotSeparator,
-		doubleDot,
-		dot,
-		pathSeparatorStr,
-		space}
-
-	for i := 0; i < len(badChars); i++ {
-
-		for j := 0; j < 100; j++ {
-
-			if !strings.HasPrefix(pathName, badChars[i]) {
-				break
-			}
-
-			pathName = pathName[len(badChars[i]):]
-		}
-
-		strLen = len(pathName)
-
-		if len(pathName) == 0 {
-			break
-		}
-	}
-
-	return pathName, strLen
+	return new(fileHelperMolecule).
+		stripLeadingDotSeparatorChars(
+			pathName)
 }
 
 // SwapBasePath - Searches the 'targetPath' string for the existence of

@@ -457,6 +457,39 @@ func (fHelpMolecule *fileHelperMolecule) getFirstLastNonSeparatorCharIndexInPath
 //	(5)	"." + PathSeparator
 //
 //	(6)	".." + PathSeparator
+//
+// Removal of these characters will convert the path or
+// directory name to a valid set of text characters
+// suitable as input for file or directory processing
+// functions.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	pathName					string
+//
+//		The path or directory name to be processed. This
+//		method will strip or delete selected characters
+//		from the front or right side of this string.
+//		Removal of these characters will convert the path
+//		or directory name to a valid set of text
+//		characters suitable as input for file or
+//	 	directory processing functions.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//
+//		The converted path or directory name form which
+//		selected invalid characters have been removed.
+//
+//	int
+//
+//		The string length of the returned 'string'
+//		parameter.
 func (fHelpMolecule *fileHelperMolecule) stripLeadingDotSeparatorChars(
 	pathName string) (
 	string,
