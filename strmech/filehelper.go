@@ -5,7 +5,6 @@ import (
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
 	"os"
-	"path"
 	fp "path/filepath"
 	"strings"
 	"sync"
@@ -4016,7 +4015,8 @@ func (fh FileHelper) FindFilesInPath(pathName, fileSearchPattern string) ([]stri
 
 	// fInfo is a Directory.
 
-	searchStr := fh.JoinPathsAdjustSeparators(pathName, fileSearchPattern)
+	searchStr := new(fileHelperMolecule).
+		joinPathsAdjustSeparators(pathName, fileSearchPattern)
 
 	results, err := fp.Glob(searchStr)
 
@@ -4219,11 +4219,12 @@ func (fh FileHelper) FindFilesWalkDirectory(
 
 	errCode := 0
 
-	errCode, _, startPath = fh.isStringEmptyOrBlank(startPath)
+	errCode, _, startPath = new(fileHelperElectron).isStringEmptyOrBlank(startPath)
 
 	if errCode == -1 {
 		return findFilesInfo,
-			errors.New(ePrefix + "Error: Input parameter 'startPath' is an empty string!")
+			fmt.Errorf(ePrefix +
+				"Error: Input parameter 'startPath' is an empty string!\n")
 	}
 
 	if errCode == -2 {
@@ -6988,40 +6989,53 @@ func (fh *FileHelper) IsStringEmptyOrBlank(
 			testStr)
 }
 
-// JoinPathsAdjustSeparators - Joins two
-// path strings and standardizes the
-// path separators according to the
-// current operating system.
+// JoinPathsAdjustSeparators
+//
+// Joins two path strings and standardizes the path
+// separators according to the current operating system.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	p1							string
+//
+//		This string holds one of two path strings which
+//		will be joined together in tandem (p1+p2). 'p1'
+//		will be located at the beginning of the
+//		composite, joined path string returned to the
+//		calling function.
+//
+//	p2							string
+//
+//		This string holds the second of two path strings
+//		which will be joined together in tandem (p1+p2).
+//		'p2' will be located at the end of the composite,
+//		joined path string returned to the calling
+//		function.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//
+//		This returned path string contains the two joined
+//		path strings provided by input parameter 'p1' and
+//		'p2' (p1+p2).
 func (fh FileHelper) JoinPathsAdjustSeparators(
 	p1 string, p2 string) string {
 
-	errCode := 0
-
-	errCode, _, p1 = fh.isStringEmptyOrBlank(p1)
-
-	if errCode < 0 {
-		p1 = ""
+	if fh.lock == nil {
+		fh.lock = new(sync.Mutex)
 	}
 
-	errCode, _, p2 = fh.isStringEmptyOrBlank(p2)
+	fh.lock.Lock()
 
-	if errCode < 0 {
-		p2 = ""
-	}
+	defer fh.lock.Unlock()
 
-	if p1 == "" &&
-		p2 == "" {
-
-		return ""
-	}
-
-	fHelperAtom := new(fileHelperAtom)
-
-	ps1 := fHelperAtom.adjustPathSlash(fp.Clean(p1))
-	ps2 := fHelperAtom.adjustPathSlash(fp.Clean(p2))
-	return fp.Clean(
-		fHelperAtom.adjustPathSlash(path.Join(ps1, ps2)))
-
+	return new(fileHelperMolecule).
+		joinPathsAdjustSeparators(p1, p2)
 }
 
 // JoinPaths - correctly joins 2-paths. Like the method JoinPathsAdjustSeparators()
@@ -7029,7 +7043,16 @@ func (fh FileHelper) JoinPathsAdjustSeparators(
 // the current operating system.
 func (fh FileHelper) JoinPaths(p1 string, p2 string) string {
 
-	return fh.JoinPathsAdjustSeparators(p1, p2)
+	if fh.lock == nil {
+		fh.lock = new(sync.Mutex)
+	}
+
+	fh.lock.Lock()
+
+	defer fh.lock.Unlock()
+
+	return new(fileHelperMolecule).
+		joinPathsAdjustSeparators(p1, p2)
 
 }
 

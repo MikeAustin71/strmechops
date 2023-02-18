@@ -4,6 +4,7 @@ import (
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
 	"os"
+	"path"
 	fp "path/filepath"
 	"strings"
 	"sync"
@@ -437,6 +438,86 @@ func (fHelpMolecule *fileHelperMolecule) getFirstLastNonSeparatorCharIndexInPath
 	err = nil
 
 	return firstIdx, lastIdx, err
+}
+
+// joinPathsAdjustSeparators
+//
+// Joins two path strings and standardizes the path
+// separators according to the current operating system.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	p1							string
+//
+//		This string holds one of two path strings which
+//		will be joined together in tandem (p1+p2). 'p1'
+//		will be located at the beginning of the
+//		composite, joined path string returned to the
+//		calling function.
+//
+//	p2							string
+//
+//		This string holds the second of two path strings
+//		which will be joined together in tandem (p1+p2).
+//		'p2' will be located at the end of the composite,
+//		joined path string returned to the calling
+//		function.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//
+//		This returned path string contains the two joined
+//		path strings provided by input parameter 'p1' and
+//		'p2' (p1+p2).
+func (fHelpMolecule *fileHelperMolecule) joinPathsAdjustSeparators(
+	p1 string, p2 string) string {
+
+	if fHelpMolecule.lock == nil {
+		fHelpMolecule.lock = new(sync.Mutex)
+	}
+
+	fHelpMolecule.lock.Lock()
+
+	defer fHelpMolecule.lock.Unlock()
+
+	errCode := 0
+
+	fHelpElectron := new(fileHelperElectron)
+
+	errCode, _, p1 = fHelpElectron.isStringEmptyOrBlank(p1)
+
+	if errCode < 0 {
+		p1 = ""
+	}
+
+	errCode, _, p2 = fHelpElectron.isStringEmptyOrBlank(p2)
+
+	if errCode < 0 {
+		p2 = ""
+	}
+
+	if p1 == "" &&
+		p2 == "" {
+
+		return ""
+	}
+
+	fHelperAtom := new(fileHelperAtom)
+
+	ps1 := fHelperAtom.adjustPathSlash(fp.Clean(p1))
+
+	ps2 := fHelperAtom.adjustPathSlash(fp.Clean(p2))
+
+	joinedPath := fHelperAtom.
+		adjustPathSlash(
+			path.Join(ps1, ps2))
+
+	return fp.Clean(joinedPath)
 }
 
 // makeFileHelperWalkDirDeleteFilesFunc
