@@ -379,7 +379,7 @@ func (fip *FileInfoPlus) SetDirectoryPath(dirPath string) error {
 
 	errCode,
 		_,
-		dirPath = fh.isStringEmptyOrBlank(dirPath)
+		dirPath = fh.IsStringEmptyOrBlank(dirPath)
 
 	if errCode < 0 {
 		return fmt.Errorf("FileInfoPlus.SetDirectoryPath()\n" +

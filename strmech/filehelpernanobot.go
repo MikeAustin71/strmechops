@@ -1620,6 +1620,166 @@ func (fHelperNanobot *fileHelperNanobot) doesFileExist(
 	return true
 }
 
+// doesFileInfoExist
+//
+// This method returns a boolean value indicating whether
+// the path and file name passed to the function actually
+// exists.
+//
+// If the file actually exists, the function will return
+// the associated FileInfo structure.
+//
+// If 'pathFileName' does NOT exist, return parameters
+// 'doesFInfoExist' will be set to 'false', 'fInfo' will
+// be set to 'nil' and the returned error value will be
+// 'nil'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	pathFileName				string
+//
+//		This path and file name will be evaluated to
+//		determine if the file actually exist.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	doesFInfoExist				bool
+//
+//		If the file identified in input parameter
+//		'pathFileName' actually exists, this return
+//		parameter will be set to 'true'.
+//
+//		If this file does NOT exist, this parameter
+//		will return 'false'.
+//
+//	fInfo						os.FileInfo
+//
+//		If the file identified in input parameter
+//		'pathFileName' actually exists, this return
+//		parameter will be configured with a copy of
+//		that file's	os.FileInfo object.
+//
+//		Type os.FileInfo contains data elements
+//		describing a file.
+//
+//		type FileInfo interface {
+//
+//			Name() string
+//				base name of the file
+//
+//			Size() int64
+//				length in bytes for regular files;
+//				system-dependent for others
+//
+//			Mode() FileMode
+//				file mode bits
+//
+//			ModTime() time.Time
+//				modification time
+//
+//			IsDir() bool
+//				abbreviation for Mode().IsDir()
+//
+//			Sys() any
+//				underlying data source (can return nil)
+//		}
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (fHelperNanobot *fileHelperNanobot) doesFileInfoExist(
+	pathFileName string,
+	errPrefDto *ePref.ErrPrefixDto) (
+	doesFInfoExist bool,
+	fInfo os.FileInfo,
+	err error) {
+
+	if fHelperNanobot.lock == nil {
+		fHelperNanobot.lock = new(sync.Mutex)
+	}
+
+	fHelperNanobot.lock.Lock()
+
+	defer fHelperNanobot.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	doesFInfoExist = false
+
+	fInfo = nil
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"fileHelperNanobot."+
+			"doesFileInfoExist()",
+		"")
+
+	if err != nil {
+		return doesFInfoExist, fInfo, err
+	}
+
+	fInfoPlus := FileInfoPlus{}
+
+	pathFileName,
+		doesFInfoExist,
+		fInfoPlus,
+		err = new(fileHelperMolecule).
+		doesPathFileExist(
+			pathFileName,
+			PreProcPathCode.AbsolutePath(), // Convert to Absolute Path
+			ePrefix,
+			"pathFileName")
+
+	if err != nil {
+
+		doesFInfoExist = false
+
+		return doesFInfoExist, fInfo, err
+	}
+
+	if !doesFInfoExist {
+
+		err = nil
+
+		fInfo = nil
+
+		return doesFInfoExist, fInfo, err
+	}
+
+	fInfo = fInfoPlus.GetOriginalFileInfo()
+
+	return doesFInfoExist, fInfo, err
+}
+
 // deleteDirFile
 //
 // Wrapper function for os.Remove.

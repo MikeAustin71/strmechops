@@ -3178,46 +3178,183 @@ func (fh *FileHelper) DoesFileExist(pathFileName string) bool {
 			pathFileName)
 }
 
-// DoesFileInfoExist - returns a boolean value indicating
-// whether the path and file name passed to the function
-// actually exists.
+// DoesFileInfoExist
+//
+// This method returns a boolean value indicating whether
+// the path and file name passed to the function actually
+// exists.
 //
 // If the file actually exists, the function will return
 // the associated FileInfo structure.
 //
-// If 'pathFileName' does NOT exist, 'doesFInfoExist' will
-// be set to'false', 'fInfo' will be set to 'nil' and the
-// returned error value will be 'nil'.
+// If 'pathFileName' does NOT exist, return parameters
+// 'doesFInfoExist' will be set to 'false', 'fInfo' will
+// be set to 'nil' and the returned error value will be
+// 'nil'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	pathFileName				string
+//
+//		This path and file name will be evaluated to
+//		determine if the file actually exist.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	doesFInfoExist				bool
+//
+//		If the file identified in input parameter
+//		'pathFileName' actually exists, this return
+//		parameter will be set to 'true'.
+//
+//		If this file does NOT exist, this parameter
+//		will return 'false'.
+//
+//	fInfo						os.FileInfo
+//
+//		If the file identified in input parameter
+//		'pathFileName' actually exists, this return
+//		parameter will be configured with a copy of
+//		that file's	os.FileInfo object.
+//
+//		Type os.FileInfo contains data elements
+//		describing a file.
+//
+//		type FileInfo interface {
+//
+//			Name() string
+//				base name of the file
+//
+//			Size() int64
+//				length in bytes for regular files;
+//				system-dependent for others
+//
+//			Mode() FileMode
+//				file mode bits
+//
+//			ModTime() time.Time
+//				modification time
+//
+//			IsDir() bool
+//				abbreviation for Mode().IsDir()
+//
+//			Sys() any
+//				underlying data source (can return nil)
+//		}
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
 func (fh FileHelper) DoesFileInfoExist(
-	pathFileName string) (doesFInfoExist bool, fInfo os.FileInfo, err error) {
+	pathFileName string,
+	errorPrefix interface{}) (
+	doesFInfoExist bool,
+	fInfo os.FileInfo,
+	err error) {
 
-	ePrefix := "FileHelper.DoesFileInfoExist() "
+	if fh.lock == nil {
+		fh.lock = new(sync.Mutex)
+	}
+
+	fh.lock.Lock()
+
+	defer fh.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
 	doesFInfoExist = false
-	fInfo = nil
-	fInfoPlus := FileInfoPlus{}
 
-	pathFileName,
-		doesFInfoExist,
-		fInfoPlus,
-		err = new(fileHelperMolecule).
-		doesPathFileExist(
-			pathFileName,
-			PreProcPathCode.AbsolutePath(), // Convert to Absolute Path
-			ePrefix,
-			"pathFileName")
+	fInfo = nil
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileHelper."+
+			"DoesFileInfoExist()",
+		"")
 
 	if err != nil {
-		doesFInfoExist = false
 		return doesFInfoExist, fInfo, err
 	}
 
-	if !doesFInfoExist {
-		err = nil
-		fInfo = nil
-		return doesFInfoExist, fInfo, err
-	}
-
-	fInfo = fInfoPlus.GetOriginalFileInfo()
+	doesFInfoExist,
+		fInfo,
+		err = new(fileHelperNanobot).
+		doesFileInfoExist(
+			pathFileName,
+			ePrefix)
 
 	return doesFInfoExist, fInfo, err
 }
@@ -3362,7 +3499,7 @@ func (fh FileHelper) DoesThisFileExist(pathFileName string) (
 //
 //	fileInfo					os.FileInfo
 //
-//		The type os.FileInfo contains data elements
+//		Type os.FileInfo contains data elements
 //		describing a file.
 //
 //		type FileInfo interface {
