@@ -17,7 +17,7 @@ type dirMgrHelper struct {
 }
 
 // copyDirectory - Helper method used by DirMgr. This method copies
-// files from the directory identified by by DirMgr to a target
+// files from the directory identified by DirMgr to a target
 // directory. The files to be copied are selected according to
 // file selection criteria specified by input parameter,
 // 'fileSelectCriteria'.
@@ -26,21 +26,28 @@ func (dMgrHlpr *dirMgrHelper) copyDirectory(
 	targetDMgr *DirMgr,
 	fileSelectCriteria FileSelectionCriteria,
 	copyEmptyDirectory bool,
-	ePrefix string,
+	errorPrefix string,
 	dMgrLabel string,
 	targetDMgrLabel string) (dirCopyStats DirectoryCopyStats, errs []error) {
 
-	errs = make([]error, 0, 300)
+	var err, err2, err3 error
 
-	ePrefixCurrMethod := "dirMgrHelper.copyDirectory() "
+	var ePrefix *ePref.ErrPrefixDto
 
-	if len(ePrefix) == 0 {
-		ePrefix = ePrefixCurrMethod
-	} else {
-		ePrefix = ePrefix + "- " + ePrefixCurrMethod
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		nil,
+		"dirMgrHelper."+
+			"copyDirectory()",
+		"")
+
+	if err != nil {
+
+		return dirCopyStats, errs
 	}
 
-	var err, err2, err3 error
+	errs = make([]error, 0, 300)
+
 	var dirPathDoesExist, targetPathDoesExist, dirCreated bool
 
 	dirPathDoesExist,
@@ -49,7 +56,7 @@ func (dMgrHlpr *dirMgrHelper) copyDirectory(
 		dMgrHlpr.doesDirectoryExist(
 			dMgr,
 			PreProcPathCode.None(),
-			ePrefix,
+			errorPrefix,
 			dMgrLabel)
 
 	if err != nil {
@@ -59,7 +66,7 @@ func (dMgrHlpr *dirMgrHelper) copyDirectory(
 	}
 
 	if !dirPathDoesExist {
-		err = fmt.Errorf(ePrefix+
+		err = fmt.Errorf(errorPrefix+
 			"\nThe current DirMgr path DOES NOT EXIST!\n"+
 			"%v.absolutePath='%v'\n",
 			dMgrLabel, dMgr.absolutePath)
@@ -74,7 +81,7 @@ func (dMgrHlpr *dirMgrHelper) copyDirectory(
 		dMgrHlpr.doesDirectoryExist(
 			targetDMgr,
 			PreProcPathCode.None(),
-			ePrefix,
+			errorPrefix,
 			targetDMgrLabel)
 
 	if err != nil {
@@ -88,7 +95,7 @@ func (dMgrHlpr *dirMgrHelper) copyDirectory(
 		dirCreated,
 			err = dMgrHlpr.lowLevelMakeDir(
 			targetDMgr,
-			ePrefix,
+			errorPrefix,
 			"targetDMgr")
 
 		if err != nil {
@@ -107,7 +114,7 @@ func (dMgrHlpr *dirMgrHelper) copyDirectory(
 
 	if err != nil {
 
-		err2 = fmt.Errorf(ePrefix+
+		err2 = fmt.Errorf(errorPrefix+
 			"\nError return by os.Open(%v.absolutePath).\n"+
 			"%v.absolutePath='%v'\nError='%v'\n",
 			dMgrLabel, dMgrLabel,
@@ -133,7 +140,7 @@ func (dMgrHlpr *dirMgrHelper) copyDirectory(
 
 		if err3 != nil && err3 != io.EOF {
 			_ = dirPtr.Close()
-			err2 = fmt.Errorf(ePrefix+
+			err2 = fmt.Errorf(errorPrefix+
 				"\nError returned by dirPtr.Readdirnames(1000).\n"+
 				"%v.absolutePath='%v'\nError='%v'\n",
 				dMgrLabel,
@@ -155,13 +162,18 @@ func (dMgrHlpr *dirMgrHelper) copyDirectory(
 
 			// This is not a directory. It is a file.
 			// Determine if it matches the find file criteria.
-			isMatch, err =
-				fh.FilterFileName(nameFInfo, fileSelectCriteria)
+			isMatch,
+				err,
+				_ =
+				fh.FilterFileName(
+					nameFInfo,
+					fileSelectCriteria,
+					ePrefix)
 
 			if err != nil {
 
 				err2 =
-					fmt.Errorf("\n"+ePrefix+
+					fmt.Errorf("\n"+errorPrefix+
 						"\nError returned by fh.FilterFileName(nameFInfo, fileSelectCriteria).\n"+
 						"%v directorySearched='%v'\nfileName='%v'\nError='%v'\n",
 						dMgrLabel, dMgr.absolutePath, nameFInfo.Name(), err.Error())
@@ -186,11 +198,11 @@ func (dMgrHlpr *dirMgrHelper) copyDirectory(
 					dirCreated,
 						err = dMgrHlpr.lowLevelMakeDir(
 						targetDMgr,
-						ePrefix,
+						errorPrefix,
 						"targetDMgr")
 
 					if err != nil {
-						err2 = fmt.Errorf("\n"+ePrefix+
+						err2 = fmt.Errorf("\n"+errorPrefix+
 							"\nError creating target directory!\n"+
 							"%v Directory='%v'\nError='%v'\n",
 							targetDMgrLabel,
@@ -218,7 +230,7 @@ func (dMgrHlpr *dirMgrHelper) copyDirectory(
 					src,
 					nameFInfo,
 					target,
-					ePrefix,
+					errorPrefix,
 					"srcFile",
 					"destinationFile")
 
@@ -240,7 +252,7 @@ func (dMgrHlpr *dirMgrHelper) copyDirectory(
 		err = dirPtr.Close()
 
 		if err != nil {
-			err2 = fmt.Errorf(ePrefix+
+			err2 = fmt.Errorf(errorPrefix+
 				"\nError returned by %v dirPtr.Close().\n"+
 				"%v='%v'\nError='%v'\n",
 				dMgrLabel, dMgrLabel,
@@ -393,7 +405,7 @@ func (dMgrHlpr *dirMgrHelper) copyDirectoryTree(
 			return dTreeCopyStats, errs
 		}
 
-		nextTargetDMgr, err = DirMgr{}.New(
+		nextTargetDMgr, err = new(DirMgr).New(
 			targetDMgr.absolutePath +
 				nextDir.absolutePath[baseDirLen:])
 
@@ -543,8 +555,12 @@ func (dMgrHlpr *dirMgrHelper) copyDirectoryTree(
 				dTreeCopyStats.TotalFilesProcessed++
 
 				// Determine if it matches the find file criteria.
-				isMatch, err =
-					fh.FilterFileName(nameFInfo, fileSelectCriteria)
+				isMatch,
+					err,
+					_ =
+					fh.FilterFileName(nameFInfo,
+						fileSelectCriteria,
+						ePrefix)
 
 				if err != nil {
 					err2 = fmt.Errorf(ePrefix+
@@ -694,7 +710,7 @@ func (dMgrHlpr *dirMgrHelper) copyDirectoryTree(
 	return dTreeCopyStats, errs
 }
 
-// CopyIn - Receives a pointer to a incoming DirMgr object
+// CopyIn - Receives a pointer to an incoming DirMgr object
 // ('dMgrIn') as an input parameter and copies the values from
 // the incoming object to the input parameter, 'dMgr'.
 //
@@ -762,7 +778,7 @@ func (dMgrHlpr *dirMgrHelper) copyOut(
 
 // deleteAllFilesInDirectory - Helper method used by DirMgr. This
 // method deletes ALL files in the current directory. ONLY files
-// in the current directory are deleted. Files in sub-directories
+// in the current directory are deleted. Files in subdirectories
 // are NOT deleted.
 func (dMgrHlpr *dirMgrHelper) deleteAllFilesInDirectory(
 	dMgr *DirMgr,
@@ -934,8 +950,8 @@ func (dMgrHlpr *dirMgrHelper) deleteAllFilesInDirectory(
 // deleteAllSubDirectories - The directory identified by the input
 // parameter 'dMgr' instance is treated as the parent directory.
 // This method will then proceed to delete all directories and files
-// which are are subsidiary to this parent directory. Essentially,
-// all sub-directories which are subordinate to the the 'dMgr'
+// which are subsidiary to this parent directory. Essentially,
+// all subdirectories which are subordinate to the 'dMgr'
 // directory will be deleted along with their constituent files.
 func (dMgrHlpr *dirMgrHelper) deleteAllSubDirectories(
 	dMgr *DirMgr,
@@ -1118,7 +1134,7 @@ func (dMgrHlpr *dirMgrHelper) deleteDirectoryAll(
 // dirMgrHelper.deleteDirectoryTreeStats(). This method
 // will optionally delete files in the entire directory
 // tree, the top level directory or exclusively in the
-// sub-directory tree.
+// subdirectory tree.
 //
 // This differs from similar methods in that it returns
 // a type DirectoryDeleteFileInfo.
@@ -1284,8 +1300,12 @@ func (dMgrHlpr *dirMgrHelper) deleteDirectoryTreeInfo(
 
 					// This is not a directory. It is a file.
 					// Determine if it matches the find file criteria.
-					isMatch, err =
-						fh.FilterFileName(nameFInfo, deleteFileSelectionCriteria)
+					isMatch,
+						err,
+						_ =
+						fh.FilterFileName(nameFInfo,
+							deleteFileSelectionCriteria,
+							ePrefix)
 
 					if err != nil {
 
@@ -1567,8 +1587,13 @@ func (dMgrHlpr *dirMgrHelper) deleteDirectoryTreeStats(
 
 					// This is not a directory. It is a file.
 					// Determine if it matches the find file criteria.
-					isMatch, err =
-						fh.FilterFileName(nameFInfo, deleteFileSelectionCriteria)
+					isMatch,
+						err,
+						_ =
+						fh.FilterFileName(
+							nameFInfo,
+							deleteFileSelectionCriteria,
+							ePrefix)
 
 					if err != nil {
 
@@ -2155,9 +2180,15 @@ func (dMgrHlpr *dirMgrHelper) empty(
 		ePrefix = ePrefix + "- " + ePrefixCurrMethod
 	}
 
+	if len(dMgrLabel) == 0 {
+		dMgrLabel = "dMgr"
+	}
+
 	if dMgr == nil {
-		return errors.New(ePrefix +
-			"\nError: Input parameter 'dMgr' pointer is 'nil'!\n")
+		return fmt.Errorf("%v\n"+
+			"Error: Input parameter '%v' pointer is 'nil'!\n",
+			ePrefix,
+			dMgrLabel)
 	}
 
 	var err error
@@ -2224,8 +2255,8 @@ func (dMgrHlpr *dirMgrHelper) equal(
 //
 // If the two absolute paths are equal, the method returns 'true'.
 // If the two absolute paths are NOT equal, the method returns 'false'.
-// The comparison is NOT case sensitive. In other words, both paths
-// are converted to lower case before making the comparision.
+// The comparison is NOT case-sensitive. In other words, both paths
+// are converted to lower case before making the comparison.
 //
 // If either the input parameter ('dMgr') or the input parameter
 // 'dMgr2' are uninitialized, a value of 'false' is returned.
@@ -2270,7 +2301,7 @@ func (dMgrHlpr *dirMgrHelper) equalAbsolutePaths(
 //
 // If the compared paths are equal, the method returns 'true'.
 // If the paths are NOT equal, the method returns 'false'.
-// The comparisons are NOT case sensitive. In other words, all paths
+// The comparisons are NOT case-sensitive. In other words, all paths
 // are converted to lower case before making the comparisons.
 //
 // If either the current DirMgr ('dMgr') or the input parameter
@@ -2317,7 +2348,7 @@ func (dMgrHlpr *dirMgrHelper) equalPaths(
 	return true
 }
 
-// executeDirectoryFileOps - Performs a a file operation on specified 'selected' files
+// executeDirectoryFileOps - Performs a file operation on specified 'selected' files
 // in the current directory ONLY. This function does NOT perform operations on the
 // sub directories (a.k.a. the directory tree).
 func (dMgrHlpr *dirMgrHelper) executeDirectoryFileOps(
@@ -2434,7 +2465,12 @@ func (dMgrHlpr *dirMgrHelper) executeDirectoryFileOps(
 
 		// This is not a directory. It is a file.
 		// Determine if it matches the find file criteria.
-		isMatch, err = fh.FilterFileName(nameFInfo, fileSelectCriteria)
+		isMatch,
+			err,
+			_ = fh.FilterFileName(
+			nameFInfo,
+			fileSelectCriteria,
+			ePrefix)
 
 		if err != nil {
 
@@ -2533,7 +2569,7 @@ func (dMgrHlpr *dirMgrHelper) executeDirectoryFileOps(
 // The 'dMgr' path therefore serves as the parent directory for
 // file operations performed on the directory tree. Designated
 // file operations will therefore be performed on all files in
-// the parent directory as well as all files in all sub-directories.
+// the parent directory as well as all files in all subdirectories.
 func (dMgrHlpr *dirMgrHelper) executeDirectoryTreeOps(
 	dMgr *DirMgr,
 	fileSelectCriteria FileSelectionCriteria,
@@ -2606,7 +2642,8 @@ func (dMgrHlpr *dirMgrHelper) executeDirectoryTreeOps(
 	dirOp.CallingFunc = ePrefix + "\n"
 	dirOp.FileOps = append(dirOp.FileOps, fileOps...)
 
-	dirOp.TargetBaseDir, err = DirMgr{}.New(targetBaseDir.absolutePath)
+	dirOp.TargetBaseDir, err = new(DirMgr).
+		New(targetBaseDir.absolutePath)
 
 	if err != nil {
 		err2 = fmt.Errorf(ePrefix+
@@ -2621,7 +2658,9 @@ func (dMgrHlpr *dirMgrHelper) executeDirectoryTreeOps(
 		return errs
 	}
 
-	dirOp.SourceBaseDir, err = DirMgr{}.New(dMgr.absolutePath)
+	dirOp.SourceBaseDir, err = new(DirMgr).
+		New(
+			dMgr.absolutePath)
 
 	if err != nil {
 		err2 = fmt.Errorf(ePrefix+
@@ -2687,7 +2726,12 @@ func (dMgrHlpr *dirMgrHelper) executeFileOpsOnFoundFiles(dirOp *DirTreeOp) func(
 
 		// This is not a directory. It is a file.
 		// Determine if it matches the find file criteria.
-		isFoundFile, err := fh.FilterFileName(info, dirOp.FileSelectCriteria)
+		isFoundFile,
+			err,
+			_ := fh.FilterFileName(
+			info,
+			dirOp.FileSelectCriteria,
+			ePrefix)
 
 		if err != nil {
 
@@ -2929,8 +2973,13 @@ func (dMgrHlpr *dirMgrHelper) findDirectoryTreeFiles(
 
 					// This is not a directory. It is a file.
 					// Determine if it matches the find file criteria.
-					isMatch, err =
-						fh.FilterFileName(nameFInfo, fileSelectionCriteria)
+					isMatch,
+						err,
+						_ =
+						fh.FilterFileName(
+							nameFInfo,
+							fileSelectionCriteria,
+							ePrefix)
 
 					if err != nil {
 
@@ -3344,7 +3393,7 @@ func (dMgrHlpr *dirMgrHelper) findFilesByNamePattern(
 	return fileMgrCol, new(StrMech).ConsolidateErrors(errs)
 }
 
-// getAbsolutePathElements - Returns all of the directories and drive
+// getAbsolutePathElements - Returns all the directories and drive
 // specifications as an array of strings.
 //
 // # Example
@@ -3392,13 +3441,13 @@ func (dMgrHlpr *dirMgrHelper) getAbsolutePathElements(
 }
 
 // getDirectoryTree - Returns a DirMgrCollection containing all
-// the sub-directories in the path of the parent directory identified
+// the subdirectories in the path of the parent directory identified
 // by the input parameter 'dMgr'.
 //
 // The returned DirMgrCollection will always contain the parent directory
 // at the top of the array (index=0). Therefore, if no errors are encountered,
 // the returned DirMgrCollection will always consist of at least one directory.
-// If sub-directories are found, then the returned DirMgrCollection will
+// If subdirectories are found, then the returned DirMgrCollection will
 // contain more than one directory.
 func (dMgrHlpr *dirMgrHelper) getDirectoryTree(
 	dMgr *DirMgr,
@@ -3534,7 +3583,7 @@ func (dMgrHlpr *dirMgrHelper) getDirectoryTree(
 }
 
 // getParentDirMgr - Returns a new Directory Manager instance
-// which represents the the parent path for the input Directory
+// which represents the parent path for the input Directory
 // Manager, 'dMgr'. The 'dMgr' absolute path is used in extracting
 // the parent Directory Manager.
 func (dMgrHlpr *dirMgrHelper) getParentDirMgr(
@@ -3583,7 +3632,7 @@ func (dMgrHlpr *dirMgrHelper) getParentDirMgr(
 		hasParent = true
 	}
 
-	dirMgrOut, err2 = DirMgr{}.New(dMgr.parentPath)
+	dirMgrOut, err2 = new(DirMgr).New(dMgr.parentPath)
 
 	if err2 != nil {
 		err = fmt.Errorf(ePrefix+
@@ -4572,9 +4621,10 @@ func (dMgrHlpr *dirMgrHelper) lowLevelDoesDirectoryExist(
 				err = nil
 				return dirPathDoesExist, fInfo, err
 			}
+
 			// err == nil and err != os.IsNotExist(err)
-			// This is a non-path error. The non-path error will be test
-			// up to 3-times before it is returned.
+			// This is a non-path error. The non-path error will be
+			// tested up to 3-times before it is returned.
 			err = fmt.Errorf(ePrefix+"Non-Path error returned by os.Stat(%v)\n"+
 				"%v='%v'\nError='%v'\n\n",
 				dirPathLabel, dirPathLabel, err2.Error())
@@ -5149,8 +5199,8 @@ func (dMgrHlpr *dirMgrHelper) lowLevelScreenPathStrForInvalidChars(
 // the files are deleted from the source directory ('dMgr').
 //
 // If, at the conclusion of the 'move' operation, there are no files or
-// sub-directories remaining in the source directory (dMgr), the source
-// directory will be delete.
+// subdirectories remaining in the source directory (dMgr), the source
+// directory will be deleted.
 //
 // The selected files are copied using Copy IO operation. For information
 // on the Copy IO procedure see FileHelper{}.CopyFileByIo() method and
@@ -5311,8 +5361,13 @@ func (dMgrHlpr *dirMgrHelper) moveDirectory(
 			// Determine if it matches the find file criteria.
 			dirMoveStats.TotalSrcFilesProcessed++
 
-			isMatch, err =
-				fh.FilterFileName(nameFInfo, fileSelectCriteria)
+			isMatch,
+				err,
+				_ =
+				fh.FilterFileName(
+					nameFInfo,
+					fileSelectCriteria,
+					ePrefix)
 
 			if err != nil {
 
@@ -5441,7 +5496,7 @@ func (dMgrHlpr *dirMgrHelper) moveDirectory(
 	}
 
 	// If all the source files have been moved and
-	// there are no sub-directories, DELETE the
+	// there are no subdirectories, DELETE the
 	// directory (dMgr).
 	if dirMoveStats.SourceFilesRemaining == 0 &&
 		dirMoveStats.NumOfSubDirectories == 0 {
@@ -5465,15 +5520,17 @@ func (dMgrHlpr *dirMgrHelper) moveDirectory(
 	return dirMoveStats, errs
 }
 
-// moveDirectoryTree - Moves all sub-directories and files plus files in
+// moveDirectoryTree - Moves all subdirectories and files plus files in
 // the parent 'dMgr' directory to a target directory tree specified by
 // input parameter 'targetDMgr'. If successful, the parent directory,
 // 'dMgr, will be deleted along with the entire sub-directory tree.
 //
-// --------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
-// !!!! BE CAREFUL !!!! This method will delete the entire directory
-// tree identified by 'dMgr' along with ALL the files in that
+// # BE CAREFUL
+//
+// This method will delete the entire directory tree
+// identified by 'dMgr' along with ALL the files in that
 // directory tree!
 //
 // --------------------------------------------------------------------
@@ -5717,6 +5774,14 @@ func (dMgrHlpr *dirMgrHelper) setDirMgr(
 		return isEmpty, err
 	}
 
+	if len(pathStrLabel) == 0 {
+		pathStrLabel = "pathStr"
+	}
+
+	if len(dMgrLabel) == 0 {
+		dMgrLabel = "dMgr"
+	}
+
 	validPathDto := ValidPathStrDto{}.New()
 
 	validPathDto,
@@ -5724,7 +5789,7 @@ func (dMgrHlpr *dirMgrHelper) setDirMgr(
 		dMgrHlpr.getValidPathStr(
 			pathStr,
 			ePrefix,
-			"pathStr")
+			pathStrLabel)
 
 	if err != nil {
 		isEmpty = true
