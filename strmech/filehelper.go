@@ -4211,11 +4211,34 @@ func (fh FileHelper) FindFilesInPath(pathName, fileSearchPattern string) ([]stri
 //	        above.
 func (fh FileHelper) FindFilesWalkDirectory(
 	startPath string,
-	fileSelectCriteria FileSelectionCriteria) (DirectoryTreeInfo, error) {
+	fileSelectCriteria FileSelectionCriteria,
+	errorPrefix interface{}) (
+	DirectoryTreeInfo,
+	error) {
 
-	ePrefix := "FileHelper.FindFilesWalkDirectory() "
+	if fh.lock == nil {
+		fh.lock = new(sync.Mutex)
+	}
+
+	fh.lock.Lock()
+
+	defer fh.lock.Unlock()
 
 	findFilesInfo := DirectoryTreeInfo{}
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileHelper."+
+			"FindFilesWalkDirectory()",
+		"")
+
+	if err != nil {
+		return findFilesInfo, err
+	}
 
 	errCode := 0
 
@@ -4223,44 +4246,67 @@ func (fh FileHelper) FindFilesWalkDirectory(
 
 	if errCode == -1 {
 		return findFilesInfo,
-			fmt.Errorf(ePrefix +
-				"Error: Input parameter 'startPath' is an empty string!\n")
+			fmt.Errorf("%v\n"+
+				"Error: Input parameter 'startPath' is an empty string!\n",
+				ePrefix.String())
 	}
 
 	if errCode == -2 {
 		return findFilesInfo,
-			errors.New(ePrefix + "Error: Input parameter 'startPath' consists of blank spaces!")
+			fmt.Errorf("%v\n"+
+				"Error: Input parameter 'startPath' consists of blank spaces!\n",
+				ePrefix.String())
 	}
 
 	startPath = fh.RemovePathSeparatorFromEndOfPathString(startPath)
 
-	var err error
-
-	startPath, err = fh.MakeAbsolutePath(startPath)
+	startPath, err = new(fileHelperProton).
+		makeAbsolutePath(
+			startPath,
+			ePrefix)
 
 	if err != nil {
 		return findFilesInfo,
-			fmt.Errorf(ePrefix+"Error returned by fh.MakeAbsolutePath(startPath). "+
-				"startPath='%v' Error='%v' ", startPath, err.Error())
+			fmt.Errorf("%v\n"+
+				"Error returned by fh.MakeAbsolutePath(startPath).\n"+
+				"startPath='%v'\n"+
+				"Error= \n%v\n",
+				ePrefix.String(),
+				startPath,
+				err.Error())
 	}
 
-	if !fh.DoesFileExist(startPath) {
-		return findFilesInfo, fmt.Errorf(ePrefix+
-			"Error - startPath DOES NOT EXIST! startPath='%v'", startPath)
+	if !new(fileHelperNanobot).doesFileExist(startPath) {
+
+		return findFilesInfo,
+			fmt.Errorf("%v\n"+
+				"Error - startPath DOES NOT EXIST!\n"+
+				"startPath='%v'\n",
+				ePrefix.String(),
+				startPath)
 	}
 
 	findFilesInfo.StartPath = startPath
 
 	findFilesInfo.FileSelectCriteria = fileSelectCriteria
 
-	err = fp.Walk(findFilesInfo.StartPath, fh.makeFileHelperWalkDirFindFilesFunc(&findFilesInfo))
+	err = fp.Walk(findFilesInfo.StartPath,
+		new(fileHelperMolecule).
+			makeFileHelperWalkDirFindFilesFunc(
+				&findFilesInfo))
 
 	if err != nil {
 
 		return findFilesInfo,
-			fmt.Errorf(ePrefix+
-				"Error returned from fp.Walk(findFilesInfo.StartPath, fh.makeFileHelperWalkDirFindFilesFunc"+
-				"(&findFilesInfo)). startPath='%v' Error='%v'", startPath, err.Error())
+			fmt.Errorf("%v\n"+
+				"Error returned from fp.Walk(findFilesInfo.StartPath,\n"+
+				"fh.MakeFileHelperWalkDirFindFilesFunc"+
+				"(&findFilesInfo)).\n"+
+				"startPath='%v'\n"+
+				"Error=\n%v\n",
+				ePrefix.String(),
+				startPath,
+				err.Error())
 	}
 
 	return findFilesInfo, nil
@@ -7389,6 +7435,64 @@ func (fh *FileHelper) MakeFileHelperWalkDirDeleteFilesFunc(dInfo *DirectoryDelet
 		makeFileHelperWalkDirDeleteFilesFunc(dInfo)
 }
 
+// MakeFileHelperWalkDirFindFilesFunc
+//
+// This function is designed to work in conjunction with
+// a walk directory function like FindWalkDirFiles. It
+// will process files extracted from a 'Directory Walk'
+// operation initiated by the 'filepath.Walk' method.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	dInfo						*DirectoryTreeInfo
+//
+//	A pointer to a DirectoryTreeInfo instance. This
+//	structure is used to 'Find' files in a directory
+//	specified by member variable, 'StartPath'. The file
+//	search will be filtered by using member variable
+//	'FileSelectCriteria' selection criteria
+//	specifications.
+//
+//	'FileSelectCriteria' is a FileSelectionCriteria type
+//	which contains FileNamePatterns strings and
+//	'FilesOlderThan' or 'FilesNewerThan' date time
+//	parameters which can be used as a selection
+//	criteria.
+//
+//		type DirectoryTreeInfo struct {
+//			StartPath          string
+//			Directories        DirMgrCollection
+//			FoundFiles         FileMgrCollection
+//			ErrReturns         []error
+//			FileSelectCriteria FileSelectionCriteria
+//		}
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	This method returns a function with the following
+//	signature:
+//
+//		func(string, os.FileInfo, error) error
+func (fh *FileHelper) MakeFileHelperWalkDirFindFilesFunc(
+	dInfo *DirectoryTreeInfo) func(string, os.FileInfo, error) error {
+
+	if fh.lock == nil {
+		fh.lock = new(sync.Mutex)
+	}
+
+	fh.lock.Lock()
+
+	defer fh.lock.Unlock()
+
+	return new(fileHelperMolecule).
+		makeFileHelperWalkDirFindFilesFunc(
+			dInfo)
+}
+
 // MoveFile - Copies file from source to destination and, if successful,
 // then deletes the original source file.
 //
@@ -9859,84 +9963,4 @@ func (fh FileHelper) DoesPathFileExist(
 	}
 
 	return absFilePath, filePathDoesExist, fInfo, nonPathError
-}
-
-// makeFileHelperWalkDirFindFilesFunc - This function is designed to work in conjunction
-// with a walk directory function like FindWalkDirFiles. It will process
-// files extracted from a 'Directory Walk' operation initiated by the 'filepath.Walk' method.
-func (fh *FileHelper) makeFileHelperWalkDirFindFilesFunc(dInfo *DirectoryTreeInfo) func(string, os.FileInfo, error) error {
-	return func(pathFile string, info os.FileInfo, erIn error) error {
-
-		ePrefix := "DirMgr.makeFileHelperWalkDirFindFilesFunc() "
-
-		if erIn != nil {
-			ex2 := fmt.Errorf(ePrefix+"Error returned from directory walk function. "+
-				"pathFile= '%v' Error='%v'", pathFile, erIn.Error())
-			dInfo.ErrReturns = append(dInfo.ErrReturns, ex2)
-			return nil
-		}
-
-		if info.IsDir() {
-			subDir, err := DirMgr{}.NewFromFileInfo(pathFile, info)
-
-			if err != nil {
-
-				er2 := fmt.Errorf(ePrefix+"Error returned by DirMgr{}.New(pathFile). "+
-					"pathFile='%v' Error='%v'", pathFile, err.Error())
-				dInfo.ErrReturns = append(dInfo.ErrReturns, er2)
-				return nil
-			}
-
-			dInfo.Directories.AddDirMgr(subDir)
-			return nil
-		}
-
-		fh := FileHelper{}
-
-		// This is not a directory. It is a file.
-		// Determine if it matches the find file criteria.
-		isFoundFile, err := fh.FilterFileName(info, dInfo.FileSelectCriteria)
-
-		if err != nil {
-
-			er2 := fmt.Errorf(ePrefix+
-				"Error returned from dMgr.FilterFileName(info, "+
-				"dInfo.FileSelectCriteria)\n"+
-				"pathFile='%v'\ninfo.Name()='%v'\nError='%v'\n",
-				pathFile, info.Name(), err.Error())
-
-			dInfo.ErrReturns = append(dInfo.ErrReturns, er2)
-			return nil
-		}
-
-		if isFoundFile {
-
-			fMgr, err2 := FileMgr{}.NewFromPathFileNameExtStr(pathFile)
-
-			if err2 != nil {
-				err = fmt.Errorf(ePrefix+
-					"Error returned by FileMgr{}.NewFromPathFileNameExtStr(pathFile) "+
-					"pathFile='%v' Error='%v' ", pathFile, err2.Error())
-
-				dInfo.ErrReturns = append(dInfo.ErrReturns, err)
-
-				return nil
-			}
-
-			err = dInfo.FoundFiles.AddFileMgrByFileInfo(fMgr.dMgr.GetAbsolutePath(), info)
-
-			if err != nil {
-				er2 := fmt.Errorf(ePrefix+
-					"Error returned from dInfo.FoundFiles.AddFileMgrByFileInfo(pathFile, info)\n"+
-					"pathFile='%v'\ninfo.Name()='%v'\nError='%v'\n",
-					pathFile, info.Name(), err.Error())
-
-				dInfo.ErrReturns = append(dInfo.ErrReturns, er2)
-
-				return nil
-			}
-		}
-
-		return nil
-	}
 }

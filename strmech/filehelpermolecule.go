@@ -604,7 +604,8 @@ func (fHelpMolecule *fileHelperMolecule) makeFileHelperWalkDirDeleteFilesFunc(
 
 				ex := fmt.Errorf("%v\n"+
 					"Error returned from DirMgr{}.New(pathFile).\n"+
-					"pathFile:='%v'\nError='%v'\n",
+					"pathFile:='%v'\n"+
+					"Error= \n%v\n",
 					ePrefix.String(),
 					pathFile,
 					err.Error())
@@ -622,7 +623,7 @@ func (fHelpMolecule *fileHelperMolecule) makeFileHelperWalkDirDeleteFilesFunc(
 					"Error returned by FileInfoPlus{}.NewFromPathFileInfo(pathFile, info)\n"+
 					"pathFile='%v'\n"+
 					"info.Name='%v'\n"+
-					"Error='%v'\n",
+					"Error= \n%v\n",
 					ePrefix.String(),
 					pathFile,
 					info.Name(),
@@ -654,7 +655,7 @@ func (fHelpMolecule *fileHelperMolecule) makeFileHelperWalkDirDeleteFilesFunc(
 				"Error returned from fh.FilterFileName(info, dInfo.DeleteFileSelectCriteria)\n"+
 				"pathFile='%v'\n"+
 				"info.Name()='%v'\n"+
-				"Error='%v'\n",
+				"Error= \n%v\n",
 				ePrefix.String(),
 				pathFile,
 				info.Name(),
@@ -673,7 +674,8 @@ func (fHelpMolecule *fileHelperMolecule) makeFileHelperWalkDirDeleteFilesFunc(
 
 				ex := fmt.Errorf("%v\n"+
 					"Error returned from os.Remove(pathFile).\n"+
-					"pathFile='%v'\nError='%v'\n",
+					"pathFile='%v'\n"+
+					"Error= \n%v\n",
 					ePrefix.String(),
 					pathFile,
 					err.Error())
@@ -689,7 +691,8 @@ func (fHelpMolecule *fileHelperMolecule) makeFileHelperWalkDirDeleteFilesFunc(
 
 				ex := fmt.Errorf("%v\n"+
 					"Error returned from dInfo.DeletedFiles.AddFileMgrByFileInfo( pathFile,  info).\n"+
-					"pathFile='%v'\nError='%v'\n",
+					"pathFile='%v'\n"+
+					"Error=\n%v\n",
 					ePrefix.String(),
 					pathFile,
 					err.Error())
@@ -699,6 +702,193 @@ func (fHelpMolecule *fileHelperMolecule) makeFileHelperWalkDirDeleteFilesFunc(
 				return nil
 			}
 
+		}
+
+		return nil
+	}
+}
+
+// makeFileHelperWalkDirFindFilesFunc
+//
+// This function is designed to work in conjunction with
+// a walk directory function like FindWalkDirFiles. It
+// will process files extracted from a 'Directory Walk'
+// operation initiated by the 'filepath.Walk' method.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	dInfo						*DirectoryTreeInfo
+//
+//	A pointer to a DirectoryTreeInfo instance. This
+//	structure is used to 'Find' files in a directory
+//	specified by member variable, 'StartPath'. The file
+//	search will be filtered by using member variable
+//	'FileSelectCriteria' selection criteria
+//	specifications.
+//
+//	'FileSelectCriteria' is a FileSelectionCriteria type
+//	which contains FileNamePatterns strings and
+//	'FilesOlderThan' or 'FilesNewerThan' date time
+//	parameters which can be used as a selection
+//	criteria.
+//
+//		type DirectoryTreeInfo struct {
+//			StartPath          string
+//			Directories        DirMgrCollection
+//			FoundFiles         FileMgrCollection
+//			ErrReturns         []error
+//			FileSelectCriteria FileSelectionCriteria
+//		}
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	This method returns a function with the following
+//	signature:
+//
+//		func(string, os.FileInfo, error) error
+func (fHelpMolecule *fileHelperMolecule) makeFileHelperWalkDirFindFilesFunc(
+	dInfo *DirectoryTreeInfo) func(string, os.FileInfo, error) error {
+
+	if fHelpMolecule.lock == nil {
+		fHelpMolecule.lock = new(sync.Mutex)
+	}
+
+	fHelpMolecule.lock.Lock()
+
+	defer fHelpMolecule.lock.Unlock()
+
+	return func(pathFile string, info os.FileInfo, erIn error) error {
+
+		var err, er2, ex2 error
+
+		var ePrefix *ePref.ErrPrefixDto
+
+		ePrefix,
+			err = ePref.ErrPrefixDto{}.NewIEmpty(
+			nil,
+			"DirMgr."+
+				"MakeFileHelperWalkDirFindFilesFunc()",
+			"")
+
+		if err != nil {
+			dInfo.ErrReturns = append(dInfo.ErrReturns, err)
+			return nil
+		}
+
+		if erIn != nil {
+
+			ex2 = fmt.Errorf("%v\n"+
+				"Error returned from directory walk function.\n"+
+				"pathFile= '%v'\n"+
+				"Error= \n%v\n",
+				ePrefix.String(),
+				pathFile,
+				erIn.Error())
+
+			dInfo.ErrReturns = append(dInfo.ErrReturns, ex2)
+
+			return nil
+		}
+
+		if info.IsDir() {
+
+			var subDir DirMgr
+
+			subDir, err = new(DirMgr).NewFromFileInfo(pathFile, info)
+
+			if err != nil {
+
+				er2 = fmt.Errorf("%v\n"+
+					"Error returned by DirMgr{}.New(pathFile).\n"+
+					"pathFile='%v'\n"+
+					"Error= \n%v\n",
+					ePrefix.String(),
+					pathFile,
+					err.Error())
+
+				dInfo.ErrReturns = append(dInfo.ErrReturns, er2)
+
+				return nil
+			}
+
+			dInfo.Directories.AddDirMgr(subDir)
+
+			return nil
+		}
+
+		// This is not a directory. It is a file.
+		// Determine if it matches the find file criteria.
+		var isFoundFile bool
+
+		isFoundFile,
+			err,
+			ex2 = new(fileHelperAtom).filterFileName(
+			info,
+			dInfo.FileSelectCriteria,
+			ePrefix)
+
+		if err != nil {
+
+			er2 = fmt.Errorf("%v\n"+
+				"Error returned from dMgr.FilterFileName(info, "+
+				"dInfo.FileSelectCriteria)\n"+
+				"pathFile='%v'\ninfo.Name()='%v'\n"+
+				"Message Error= \n%v\n"+
+				"Low Level Error= \n%v\n",
+				ePrefix.String(),
+				pathFile,
+				info.Name(),
+				err.Error(),
+				ex2.Error())
+
+			dInfo.ErrReturns = append(dInfo.ErrReturns, er2)
+
+			return nil
+		}
+
+		if isFoundFile {
+
+			var fMgr FileMgr
+
+			fMgr, er2 = new(FileMgr).NewFromPathFileNameExtStr(pathFile)
+
+			if er2 != nil {
+
+				err = fmt.Errorf("%v\n"+
+					"Error returned by FileMgr{}.NewFromPathFileNameExtStr(pathFile)\n"+
+					"pathFile='%v'\n"+
+					"Error= \n%v\n ",
+					ePrefix.String(),
+					pathFile,
+					er2.Error())
+
+				dInfo.ErrReturns = append(dInfo.ErrReturns, err)
+
+				return nil
+			}
+
+			err = dInfo.FoundFiles.AddFileMgrByFileInfo(
+				fMgr.dMgr.GetAbsolutePath(), info)
+
+			if err != nil {
+
+				er2 = fmt.Errorf("%v\n"+
+					"Error returned from dInfo.FoundFiles.AddFileMgrByFileInfo(pathFile, info)\n"+
+					"pathFile='%v'\ninfo.Name()='%v'\n"+
+					"Error= \n%v\n",
+					ePrefix.String(),
+					pathFile,
+					info.Name(),
+					err.Error())
+
+				dInfo.ErrReturns = append(dInfo.ErrReturns, er2)
+
+				return nil
+			}
 		}
 
 		return nil

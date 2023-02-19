@@ -1138,7 +1138,7 @@ func (fileHelpMech *fileHelperMechanics) deleteFilesWalkDirectory(
 
 		err = fmt.Errorf("%v\n"+
 			"Error returned from fp.Walk(deleteFilesInfo.StartPath - \n"+
-			"fh.makeFileHelperWalkDirFindFilesFunc"+
+			"MakeFileHelperWalkDirDeleteFilesFunc"+
 			"(&deleteFilesInfo)).\n"+
 			"startPath='%v'\n"+
 			"Error='%v'\n",
