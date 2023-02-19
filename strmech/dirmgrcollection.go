@@ -16,7 +16,7 @@ import (
   Dependencies:
   -------------
 
-  Type 'DirMgrCollection'depend on types, 'FileHelper',
+  Type 'DirMgrCollection' depends on types, 'FileHelper',
   'FileMgr' and 'DirMgr' which are contained in source
   code files, 'filehelper.go', 'filemanager.go' and
   'dirmanager.go' located in this directory.
@@ -132,7 +132,7 @@ func (dMgrs *DirMgrCollection) AddDirMgrByPathNameStr(pathName string) error {
 	return nil
 }
 
-// AddFileMgrByFileInfo - Adds a Directory Manager object to the
+// AddFileInfo - Adds a Directory Manager object to the
 // collection based on input from a parent directory path string
 // and an os.FileInfo object.
 func (dMgrs *DirMgrCollection) AddFileInfo(parentDirectoryPath string, info os.FileInfo) error {
@@ -257,7 +257,7 @@ func (dMgrs *DirMgrCollection) DeleteAtIndex(idx int) error {
 
 	if arrayLen == 0 {
 		return errors.New(ePrefix +
-			"Error: The Directory Manager Collection, 'DirMgrCollection', is EMPTY!")
+			"Error: The Directory Manager Collection, 'DirMgrCollection', is EMPTY!\n")
 	}
 
 	if idx >= arrayLen {
@@ -314,7 +314,13 @@ func (dMgrs *DirMgrCollection) FindDirectories(
 
 		if dMgr.actualDirFileInfo.isFInfoInitialized {
 
-			isMatchedFile, err = fh.FilterFileName(dMgr.actualDirFileInfo, fileSelectionCriteria)
+			isMatchedFile,
+				err,
+				_ =
+				fh.FilterFileName(
+					dMgr.actualDirFileInfo,
+					fileSelectionCriteria,
+					ePrefix)
 
 			if err != nil {
 				return DirMgrCollection{}, fmt.Errorf(ePrefix+"Error returned by fh.FilterFileName("+
@@ -328,7 +334,12 @@ func (dMgrs *DirMgrCollection) FindDirectories(
 
 			fip.SetName(dMgr.directoryName)
 
-			isMatchedFile, err = fh.FilterFileName(fip, fileSelectionCriteria)
+			isMatchedFile,
+				err,
+				_ = fh.FilterFileName(
+				fip,
+				fileSelectionCriteria,
+				ePrefix)
 
 			if err != nil {
 				s := ePrefix +
@@ -361,7 +372,7 @@ func (dMgrs *DirMgrCollection) FindDirectories(
 //
 // Return Values
 //
-//	[]DirMgr      - The array of of DirMgr instances maintained by this
+//	[]DirMgr      - The array of DirMgr instances maintained by this
 //	                collection.
 func (dMgrs *DirMgrCollection) GetDirMgrArray() []DirMgr {
 
@@ -391,7 +402,7 @@ func (dMgrs *DirMgrCollection) GetDirMgrAtIndex(idx int) (*DirMgr, error) {
 	if arrayLen == 0 {
 		return &emptyDirMgr,
 			fmt.Errorf(ePrefix +
-				"Error: This Directory Manager Collection ('DirMgrCollection') is EMPTY!")
+				"Error: This Directory Manager Collection ('DirMgrCollection') is EMPTY!\n")
 	}
 
 	if idx < 0 || idx >= arrayLen {
@@ -492,7 +503,7 @@ func (dMgrs DirMgrCollection) New() DirMgrCollection {
 // ('DirMgrCollection') array. The 'DirMgr' object deleted is
 // located at the index specified by input parameter, 'idx'.
 //
-// Therefore at the completion of this method, the Directory
+// Therefore, at the completion of this method, the Directory
 // Manager Collection array has a length which is one less
 // than the starting array length.
 //
@@ -553,7 +564,7 @@ func (dMgrs *DirMgrCollection) PopDirMgrAtIndex(idx int) (DirMgr, error) {
 // (i.e. length of array dMgrs.dirMgrs = 0), an io.EOF error is
 // returned.
 //
-// Therefore at the completion of this method, the Directory Manager
+// Therefore, at the completion of this method, the Directory Manager
 // Collection array has a length which is one less than the starting
 // array length.
 func (dMgrs *DirMgrCollection) PopFirstDirMgr() (DirMgr, error) {
@@ -592,7 +603,7 @@ func (dMgrs *DirMgrCollection) PopFirstDirMgr() (DirMgr, error) {
 // (i.e. length of array dMgrs.dirMgrs = 0), an io.EOF error is
 // returned.
 //
-// Therefore at the completion of this method, the Directory Manager
+// Therefore, at the completion of this method, the Directory Manager
 // Collection array has a length which is one less than the starting
 // array length.
 func (dMgrs *DirMgrCollection) PopLastDirMgr() (DirMgr, error) {

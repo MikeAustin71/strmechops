@@ -108,7 +108,11 @@ func (fMgrs *FileMgrCollection) AddFileMgrByDirFileNameExt(
 	fMgrHlpr := fileMgrHelper{}
 
 	isEmpty, err :=
-		fMgrHlpr.setFileMgrDirMgrFileName(&fMgr, directory, fileNameExt, ePrefix)
+		fMgrHlpr.setFileMgrDirMgrFileName(
+			&fMgr,
+			&directory,
+			fileNameExt,
+			ePrefix)
 
 	if err != nil {
 		return err
@@ -205,7 +209,7 @@ func (fMgrs *FileMgrCollection) AddFileMgrByDirStrFileNameStr(
 	isEmpty,
 		err = fMgrHlpr.setFileMgrDirMgrFileName(
 		&fMgr,
-		dMgr,
+		&dMgr,
 		fileNameExt,
 		ePrefix)
 
@@ -227,8 +231,11 @@ func (fMgrs *FileMgrCollection) AddFileMgrByDirStrFileNameStr(
 	return nil
 }
 
-// AddFileMgrByFileInfo - Adds a File Manager object to the collection based on input from
-// a directory path string and a os.FileInfo object.
+// AddFileMgrByFileInfo
+//
+// Adds a File Manager object to the collection based on
+// input from a directory path string and an os.FileInfo
+// object.
 func (fMgrs *FileMgrCollection) AddFileMgrByFileInfo(pathName string, info os.FileInfo) error {
 
 	ePrefix := "FileMgrCollection) AddFileMgrByFileInfo() "
@@ -263,7 +270,7 @@ func (fMgrs *FileMgrCollection) AddFileMgrByFileInfo(pathName string, info os.Fi
 	isEmpty,
 		err = fMgrHlpr.setFileMgrDirMgrFileName(
 		&fMgr,
-		dMgr,
+		&dMgr,
 		info.Name(),
 		ePrefix)
 
@@ -323,7 +330,8 @@ func (fMgrs *FileMgrCollection) CopyFilesToDir(targetDirectory DirMgr) error {
 	maxLen := len(fMgrs.fileMgrs)
 
 	if maxLen == 0 {
-		return errors.New(ePrefix + "ERROR - Collection contains ZERO File Managers!")
+		return errors.New(ePrefix +
+			"ERROR - Collection contains ZERO File Managers!\n")
 	}
 
 	for i := 0; i < maxLen; i++ {
@@ -393,7 +401,7 @@ func (fMgrs *FileMgrCollection) DeleteAtIndex(idx int) error {
 
 	if arrayLen == 0 {
 		return errors.New(ePrefix +
-			"Error: The File Manager Collection, 'FileMgrCollection', is EMPTY!")
+			"Error: The File Manager Collection, 'FileMgrCollection', is EMPTY!\n")
 	}
 
 	if idx >= arrayLen {
@@ -451,7 +459,12 @@ func (fMgrs *FileMgrCollection) FindFiles(
 
 		if fMgr.actualFileInfo.isFInfoInitialized {
 
-			isMatchedFile, err = fh.FilterFileName(fMgr.actualFileInfo, fileSelectionCriteria)
+			isMatchedFile,
+				err,
+				_ = fh.FilterFileName(
+				fMgr.actualFileInfo,
+				fileSelectionCriteria,
+				ePrefix)
 
 			if err != nil {
 				return FileMgrCollection{},
@@ -468,7 +481,12 @@ func (fMgrs *FileMgrCollection) FindFiles(
 
 			fip.SetName(fMgr.fileNameExt)
 
-			isMatchedFile, err = fh.FilterFileName(fip, fileSelectionCriteria)
+			isMatchedFile,
+				err,
+				_ = fh.FilterFileName(
+				fip,
+				fileSelectionCriteria,
+				ePrefix)
 
 			if err != nil {
 				return FileMgrCollection{}, fmt.Errorf(ePrefix+
@@ -500,7 +518,7 @@ func (fMgrs *FileMgrCollection) FindFiles(
 //
 // Return Values:
 //
-//	[]FileMgr      - The array of of FileMgr instances maintained by this
+//	[]FileMgr      - The array of FileMgr instances maintained by this
 //	                 collection.
 func (fMgrs *FileMgrCollection) GetFileMgrArray() []FileMgr {
 
@@ -530,7 +548,7 @@ func (fMgrs *FileMgrCollection) GetFileMgrAtIndex(idx int) (*FileMgr, error) {
 	if arrayLen == 0 {
 		return &emptyFileMgr,
 			fmt.Errorf(ePrefix +
-				"Error: This File Manager Collection ('FileMgrCollection') is EMPTY!")
+				"Error: This File Manager Collection ('FileMgrCollection') is EMPTY!\n")
 	}
 
 	if idx < 0 || idx >= arrayLen {
@@ -548,8 +566,8 @@ func (fMgrs *FileMgrCollection) GetFileMgrAtIndex(idx int) (*FileMgr, error) {
 }
 
 // GetNumOfFileMgrs - returns the array length of the
-// of the File Manager Collection, 'FileMgrCollection'.
-// Effectively the returned integer is a count of the
+// File Manager Collection, 'FileMgrCollection'.
+// Effectively, the returned integer is a count of the
 // number of File Managers (FileMgr's) in the Collection.
 func (fMgrs *FileMgrCollection) GetNumOfFileMgrs() int {
 
@@ -560,9 +578,12 @@ func (fMgrs *FileMgrCollection) GetNumOfFileMgrs() int {
 	return len(fMgrs.fileMgrs)
 }
 
-// GetNumOfFiles - returns the array length of the
-// of the File Manager Collection, 'FileMgrCollection'.
-// Effectively the returned integer is a count of the
+// GetNumOfFiles
+//
+// Returns the array length of the File Manager
+// Collection, 'FileMgrCollection'.
+//
+// Effectively, the returned integer is a count of the
 // number of files or File Managers (FileMgr's) in the
 // Collection.
 func (fMgrs *FileMgrCollection) GetNumOfFiles() int {
@@ -683,7 +704,7 @@ func (fMgrs *FileMgrCollection) PopFileMgrAtIndex(idx int) (FileMgr, error) {
 	if arrayLen == 0 {
 		return FileMgr{},
 			errors.New(ePrefix +
-				"Error: The File Manager Collection, 'FileMgrCollection', is EMPTY!")
+				"Error: The File Manager Collection, 'FileMgrCollection', is EMPTY!\n")
 	}
 
 	if idx >= arrayLen {
@@ -714,7 +735,7 @@ func (fMgrs *FileMgrCollection) PopFileMgrAtIndex(idx int) (FileMgr, error) {
 // deleted from the File Manager Collection ('FileMgrCollection')
 // array.
 //
-// Therefore at the completion of this method, the File Manager
+// Therefore, at the completion of this method, the File Manager
 // Collection array has a length which is one less than the starting
 // array length.
 func (fMgrs *FileMgrCollection) PopFirstFileMgr() (FileMgr, error) {
@@ -728,7 +749,7 @@ func (fMgrs *FileMgrCollection) PopFirstFileMgr() (FileMgr, error) {
 	if len(fMgrs.fileMgrs) == 0 {
 		return FileMgr{},
 			errors.New(ePrefix +
-				"Error: The File Manager Collection, 'FileMgrCollection' is EMPTY!")
+				"Error: The File Manager Collection, 'FileMgrCollection' is EMPTY!\n")
 	}
 
 	fMgr := fMgrs.fileMgrs[0].CopyOut()
@@ -744,7 +765,7 @@ func (fMgrs *FileMgrCollection) PopFirstFileMgr() (FileMgr, error) {
 // deleted from the File Manager Collection ('FileMgrCollection')
 // array.
 //
-// Therefore at the completion of this method, the File Manager
+// Therefore, at the completion of this method, the File Manager
 // Collection array has a length which is one less than the starting
 // array length.
 func (fMgrs *FileMgrCollection) PopLastFileMgr() (FileMgr, error) {
@@ -759,7 +780,7 @@ func (fMgrs *FileMgrCollection) PopLastFileMgr() (FileMgr, error) {
 
 	if arrayLen == 0 {
 		return FileMgr{}, errors.New(ePrefix +
-			"Error: The File Manager Collection, 'FileMgrCollection', is EMPTY!")
+			"Error: The File Manager Collection, 'FileMgrCollection', is EMPTY!\n")
 	}
 
 	fmgr := fMgrs.fileMgrs[arrayLen-1].CopyOut()
@@ -792,7 +813,7 @@ func (fMgrs *FileMgrCollection) PeekFileMgrAtIndex(idx int) (FileMgr, error) {
 	if arrayLen == 0 {
 		return FileMgr{},
 			errors.New(ePrefix +
-				"Error: The File Manager Collection, 'FileMgrCollection' is EMPTY!")
+				"Error: The File Manager Collection, 'FileMgrCollection' is EMPTY!\n")
 	}
 
 	if idx < 0 {
@@ -835,7 +856,7 @@ func (fMgrs *FileMgrCollection) PeekFirstFileMgr() (FileMgr, error) {
 	if len(fMgrs.fileMgrs) == 0 {
 		return FileMgr{},
 			errors.New(ePrefix +
-				"Error: The File Manager Collection ('FileMgrCollection') is EMPTY!")
+				"Error: The File Manager Collection ('FileMgrCollection') is EMPTY!\n")
 	}
 
 	return fMgrs.fileMgrs[0].CopyOut(), nil
@@ -864,7 +885,7 @@ func (fMgrs *FileMgrCollection) PeekLastFileMgr() (FileMgr, error) {
 	if arrayLen == 0 {
 		return FileMgr{},
 			errors.New(ePrefix +
-				"Error: The File Manager Collection ('FileMgrCollection') is EMPTY!")
+				"Error: The File Manager Collection ('FileMgrCollection') is EMPTY!\n")
 	}
 
 	return fMgrs.fileMgrs[arrayLen-1].CopyOut(), nil
