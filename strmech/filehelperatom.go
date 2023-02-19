@@ -173,7 +173,7 @@ func (fHelperAtom *fileHelperAtom) adjustPathSlash(
 //		returned error Type will encapsulate an error
 //		message. This returned error message will
 //		incorporate the method chain and text passed by
-//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		input parameter, 'errPrefDto'. The 'errPrefDto'
 //		text will be attached to the beginning of the
 //		error message.
 //
@@ -496,7 +496,7 @@ func (fHelperAtom *fileHelperAtom) changeWorkingDir(
 //		returned error Type will encapsulate an error
 //		message. This returned error message will
 //		incorporate the method chain and text passed by
-//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		input parameter, 'errPrefDto'. The 'errPrefDto'
 //		text will be attached to the beginning of the
 //		error message.
 //
@@ -767,8 +767,8 @@ func (fHelperAtom *fileHelperAtom) doesStringEndWithPathSeparator(
 //		returned 'nonPathError' will encapsulate an
 //		appropriate error message. This returned error
 //	 	message will incorporate the method chain and
-//	 	text passed by input parameter, 'errorPrefix'.
-//	 	The 'errorPrefix' text will be attached to the
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be attached to the
 //	 	beginning of the error message.
 func (fHelperAtom *fileHelperAtom) doesThisFileExist(
 	pathFileName string,
@@ -1097,7 +1097,7 @@ func (fHelperAtom *fileHelperAtom) doesThisFileExist(
 //		returned 'msgError' will contain an appropriate
 //		error message. This returned error message will
 //		incorporate the method chain and text passed by
-//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		input parameter, 'errPrefDto'. The 'errPrefDto'
 //		text will be attached to the beginning of the
 //		error message.
 //

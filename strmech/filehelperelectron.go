@@ -449,15 +449,15 @@ func (fHelpElectron *fileHelperElectron) isStringEmptyOrBlank(
 //	error
 //
 //		If this method completes successfully, the
-//		returned error Type is set equal to 'nil'.
-//
-//		If errors are encountered during processing, the
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
 //		returned error Type will encapsulate an error
-//		message. This returned error message will
-//		incorporate the method chain and text passed by
-//		input parameter, 'errorPrefix'. The 'errorPrefix'
-//		text will be attached to the beginning of the
-//		error message.
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
 func (fHelpElectron *fileHelperElectron) searchFileModeMatch(
 	info os.FileInfo,
 	fileSelectCriteria FileSelectionCriteria,
@@ -1276,7 +1276,7 @@ func (fHelpElectron *fileHelperElectron) searchFileOlderThan(
 //		returned error Type will encapsulate an error
 //		message. This returned error message will
 //		incorporate the method chain and text passed by
-//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		input parameter, 'errPrefDto'. The 'errPrefDto'
 //		text will be attached to the beginning of the
 //		error message.
 //

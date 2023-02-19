@@ -1020,15 +1020,15 @@ func (fileHelpMech *fileHelperMechanics) copyFileByLink(
 //	error
 //
 //		If this method completes successfully, the
-//		returned error Type is set equal to 'nil'.
-//
-//		If errors are encountered during processing, the
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
 //		returned error Type will encapsulate an error
-//		message. This returned error message will
-//		incorporate the method chain and text passed by
-//		input parameter, 'errorPrefix'. The 'errorPrefix'
-//		text will be attached to the beginning of the
-//		error message.
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
 func (fileHelpMech *fileHelperMechanics) deleteFilesWalkDirectory(
 	startPath string,
 	fileSelectCriteria FileSelectionCriteria,
@@ -1150,6 +1150,377 @@ func (fileHelpMech *fileHelperMechanics) deleteFilesWalkDirectory(
 	}
 
 	return deleteFilesInfo, nil
+}
+
+// FindFilesWalkDirectory
+//
+// This method returns file information on files residing
+// in a specified directory tree identified by the input
+// parameter, 'startPath'.
+//
+// This method 'walks the directory tree' locating all
+// files in the directory tree which match the file
+// selection criteria submitted as input parameter,
+// 'fileSelectCriteria'.
+//
+// If a file matches the File Selection Criteria, it is
+// included in the returned field:
+//
+//	'DirectoryTreeInfo.FoundFiles'
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	If all of the file selection criterion in the
+//	FileSelectionCriteria object are 'Inactive' or
+//	'Not Set' (set to their zero or default values), then
+//	all the files processed in the directory tree will be
+//	selected and returned as 'Found Files'.
+//
+//	  Example:
+//	     FileNamePatterns  = ZERO Length Array
+//	     filesOlderThan    = time.Time{}
+//	     filesNewerThan    = time.Time{}
+//
+//	  In this example, all the selection criterion are
+//	  'Inactive' and therefore all the files encountered
+//	  in the target directory will be selected and returned
+//	  as 'Found Files' stored in the following member
+//	  variable:
+//
+//		'DirectoryTreeInfo.FoundFiles'.
+//
+//	  This same effect can be achieved by simply creating
+//	  an empty file selection instance:
+//
+//	          FileSelectionCriteria{}
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	startPath					string
+//
+//		A string consisting of the starting path or
+//		directory from which the find files search
+//		operation will commence.
+//
+//	fileSelectCriteria			FileSelectionCriteria
+//
+//		This input parameter should be configured with
+//		the desired file selection criteria. Files
+//		matching this criteria will be returned as
+//		'Found Files'.
+//
+//		If file 'fileSelectCriteria' is uninitialized
+//		(FileSelectionCriteria{}), all directories and
+//		files will be returned from the 'startPath'
+//
+//		type FileSelectionCriteria struct {
+//		  FileNamePatterns     []string
+//			An array of strings containing File Name Patterns
+//
+//		  FilesOlderThan       time.Time
+//			Match files with older modification date times
+//
+//		  FilesNewerThan       time.Time
+//			Match files with newer modification date times
+//
+//		  SelectByFileMode     FilePermissionConfig
+//			Match file mode (os.FileMode).
+//
+//		  SelectCriterionMode  FileSelectCriterionMode
+//			Specifies 'AND' or 'OR' selection mode
+//		}
+//
+//		Elements of the FileSelectionCriteria Type are
+//		described below:
+//
+//		FileNamePatterns []string
+//
+//			An array of strings which may define one or more search
+//			patterns. If a file name matches any one of the search
+//			pattern strings, it is deemed to be a 'match' for the
+//			search pattern criterion.
+//
+//			Example Patterns:
+//			 FileNamePatterns = []string{"*.log"}
+//			 FileNamePatterns = []string{"current*.txt"}
+//			 FileNamePatterns = []string{"*.txt", "*.log"}
+//
+//			If this string array has zero length or if
+//			all the strings are empty strings, then this
+//			file search criterion is considered 'Inactive'
+//			or 'Not Set'.
+//
+//		FilesOlderThan  time.Time
+//
+//			This date time type is compared to file modification
+//			date times in order to determine whether the file is
+//			older than the 'FilesOlderThan' file selection
+//			criterion. If the file is older than the
+//			'FilesOlderThan' date time, that file is considered
+//			a 'match'	for this file selection criterion.
+//
+//			If the value of 'FilesOlderThan' is set to time zero,
+//			the default value for type time.Time{}, then this
+//			file selection criterion is considered to be 'Inactive'
+//			or 'Not Set'.
+//
+//		FilesNewerThan   time.Time
+//
+//			This date time type is compared to the file modification
+//			date time in order to determine whether the file is newer
+//			than the 'FilesNewerThan' file selection criterion. If
+//			the file modification date time is newer than the
+//			'FilesNewerThan' date time, that file is considered a
+//			'match' for this file selection criterion.
+//
+//			If the value of 'FilesNewerThan' is set to time zero,
+//			the default value for type time.Time{}, then this
+//			file selection criterion is considered to be 'Inactive'
+//			or 'Not Set'.
+//
+//		SelectByFileMode  FilePermissionConfig
+//
+//			Type FilePermissionConfig encapsulates an os.FileMode. The
+//			file selection criterion allows for the selection of files
+//			by File Mode.
+//
+//			File modes are compared to the value of 'SelectByFileMode'.
+//			If the File Mode for a given file is equal to the value of
+//	 		'SelectByFileMode', that file is considered to be a 'match'
+//	 		for this file selection criterion. Examples for setting
+//	 		SelectByFileMode are shown as follows:
+//
+//			fsc := FileSelectionCriteria{}
+//
+//			err = fsc.SelectByFileMode.SetByFileMode(os.FileMode(0666))
+//
+//			err = fsc.SelectByFileMode.SetFileModeByTextCode("-r--r--r--")
+//
+//		SelectCriterionMode FileSelectCriterionMode
+//
+//		This parameter selects the manner in which the file selection
+//		criteria above are applied in determining a 'match' for file
+//		selection purposes. 'SelectCriterionMode' may be set to one of
+//		two constant values:
+//
+//		(1) FileSelectCriterionMode(0).ANDSelect()
+//
+//			File selected if all active selection criteria
+//			are satisfied.
+//
+//			If this constant value is specified for the file selection mode,
+//			then a given file will not be judged as 'selected' unless all
+//			the active selection criterion are satisfied. In other words, if
+//			three active search criterion are provided for 'FileNamePatterns',
+//			'FilesOlderThan' and 'FilesNewerThan', then a file will NOT be
+//			selected unless it has satisfied all three criterion in this example.
+//
+//		(2) FileSelectCriterionMode(0).ORSelect()
+//
+//			File selected if any active selection criterion is satisfied.
+//
+//			If this constant value is specified for the file selection mode,
+//			then a given file will be selected if any one of the active file
+//			selection criterion is satisfied. In other words, if three active
+//			search criterion are provided for 'FileNamePatterns', 'FilesOlderThan'
+//			and 'FilesNewerThan', then a file will be selected if it satisfies any
+//			one of the three criterion in this example.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ------------------------------------------------------------------------
+//
+// Return Values:
+//
+//	DirectoryTreeInfo
+//
+//		If successful, files matching the file selection
+//		criteria input parameter shown above will be
+//		returned in a 'DirectoryTreeInfo' object. The
+//		field 'DirectoryTreeInfo.FoundFiles' contains
+//		information on all the files in the specified
+//		path or directory tree which match the file
+//		selection criteria.
+//
+//		Note:
+//
+//		It's a good idea to check the returned field
+//		'DirectoryTreeInfo.ErrReturns' to determine if
+//		any internal system errors were encountered while
+//		processing the directory tree.
+//
+//	        ________________________________________________
+//
+//	        type DirectoryTreeInfo struct {
+//
+//	          StartPath             string
+//	          	The starting path or directory for the
+//	          	file search.
+//
+//	          dirMgrs               []DirMgr
+//	          	Directories found during directory tree
+//	          	search are stored here.
+//
+//	          FoundFiles            []FileWalkInfo
+//				Files matching the file search selection
+//				criteria are stored here.
+//
+//	          ErrReturns            []string
+//				Internal System errors encountered during
+//				the file search operation are stored here
+//				as text messages.
+//
+//	          FileSelectCriteria    FileSelectionCriteria
+//	          	The File Selection Criteria submitted as an
+//				input parameter to this method.
+//	        }
+//
+//	        ________________________________________________
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+//
+//		BE ADVISED
+//
+//		It's a good idea to check the returned field
+//		'DirectoryTreeInfo.ErrReturns' to determine if
+//		any internal system errors were encountered while
+//		processing the directory tree.
+func (fileHelpMech *fileHelperMechanics) findFilesWalkDirectory(
+	startPath string,
+	fileSelectCriteria FileSelectionCriteria,
+	errPrefDto *ePref.ErrPrefixDto) (
+	DirectoryTreeInfo,
+	error) {
+
+	if fileHelpMech.lock == nil {
+		fileHelpMech.lock = new(sync.Mutex)
+	}
+
+	fileHelpMech.lock.Lock()
+
+	defer fileHelpMech.lock.Unlock()
+
+	findFilesInfo := DirectoryTreeInfo{}
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"fileHelperMechanics."+
+			"findFilesWalkDirectory()",
+		"")
+
+	if err != nil {
+		return findFilesInfo, err
+	}
+
+	errCode := 0
+
+	errCode, _, startPath =
+		new(fileHelperElectron).
+			isStringEmptyOrBlank(startPath)
+
+	if errCode == -1 {
+
+		return findFilesInfo,
+			fmt.Errorf("%v\n"+
+				"Error: Input parameter 'startPath' is an empty string!\n",
+				ePrefix.String())
+	}
+
+	if errCode == -2 {
+
+		return findFilesInfo,
+			fmt.Errorf("%v\n"+
+				"Error: Input parameter 'startPath' consists of blank spaces!\n",
+				ePrefix.String())
+	}
+
+	startPath = new(fileHelperAtom).
+		removePathSeparatorFromEndOfPathString(
+			startPath)
+
+	startPath, err = new(fileHelperProton).
+		makeAbsolutePath(
+			startPath,
+			ePrefix)
+
+	if err != nil {
+
+		return findFilesInfo,
+			fmt.Errorf("%v\n"+
+				"Error returned by fh.MakeAbsolutePath(startPath).\n"+
+				"startPath='%v'\n"+
+				"Error= \n%v\n",
+				ePrefix.String(),
+				startPath,
+				err.Error())
+	}
+
+	if !new(fileHelperNanobot).doesFileExist(startPath) {
+
+		return findFilesInfo,
+			fmt.Errorf("%v\n"+
+				"Error - startPath DOES NOT EXIST!\n"+
+				"startPath='%v'\n",
+				ePrefix.String(),
+				startPath)
+	}
+
+	findFilesInfo.StartPath = startPath
+
+	findFilesInfo.FileSelectCriteria = fileSelectCriteria
+
+	err = fp.Walk(findFilesInfo.StartPath,
+		new(fileHelperMolecule).
+			makeFileHelperWalkDirFindFilesFunc(
+				&findFilesInfo))
+
+	if err != nil {
+
+		return findFilesInfo,
+			fmt.Errorf("%v\n"+
+				"Error returned from fp.Walk(findFilesInfo.StartPath,\n"+
+				"fh.MakeFileHelperWalkDirFindFilesFunc"+
+				"(&findFilesInfo)).\n"+
+				"startPath='%v'\n"+
+				"Error=\n%v\n",
+				ePrefix.String(),
+				startPath,
+				err.Error())
+	}
+
+	return findFilesInfo, nil
 }
 
 // openFile
