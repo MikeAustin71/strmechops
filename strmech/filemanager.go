@@ -685,7 +685,7 @@ func (fMgr *FileMgr) CopyFileStrByIo(dstPathFileNameExt string) error {
 
 	ePrefix := "FileMgr.CopyFileStrByIo() "
 
-	fMgrDest, err := FileMgr{}.New(dstPathFileNameExt)
+	fMgrDest, err := new(FileMgr).New(dstPathFileNameExt)
 
 	if err != nil {
 		return fmt.Errorf(ePrefix+"Invalid input parameter 'dstPathFileNameExt'\n"+
@@ -760,7 +760,7 @@ func (fMgr *FileMgr) CopyFileStrByIoByLink(
 
 	ePrefix := "FileMgr.CopyFileStrByIoByLink() "
 
-	fMgrDest, err := FileMgr{}.New(dstPathFileNameExt)
+	fMgrDest, err := new(FileMgr).New(dstPathFileNameExt)
 
 	if err != nil {
 		return fmt.Errorf(ePrefix+"Invalid input parameter 'dstPathFileNameExt'\n"+
@@ -839,7 +839,7 @@ func (fMgr *FileMgr) CopyFileStrByLink(
 
 	ePrefix := "FileMgr.CopyFileStrByLink() "
 
-	fMgrDest, err := FileMgr{}.New(dstPathFileNameExt)
+	fMgrDest, err := new(FileMgr).New(dstPathFileNameExt)
 
 	if err != nil {
 		return fmt.Errorf(ePrefix+"Invalid input parameter 'dstPathFileNameExt'\n"+
@@ -912,7 +912,7 @@ func (fMgr *FileMgr) CopyFileStrByLinkByIo(
 
 	ePrefix := "FileMgr.CopyFileStrByLinkByIo() "
 
-	fMgrDest, err := FileMgr{}.New(dstPathFileNameExt)
+	fMgrDest, err := new(FileMgr).New(dstPathFileNameExt)
 
 	if err != nil {
 		return fmt.Errorf(ePrefix+"Invalid input parameter 'dstPathFileNameExt'\n"+
@@ -998,7 +998,7 @@ func (fMgr *FileMgr) CopyFileToDirByIo(dir DirMgr) error {
 	sourceFMgrLabel := "fMgrSource"
 	destFMgrLabel := "fMgrDestDir"
 
-	fMgrDest, err := FileMgr{}.NewFromDirMgrFileNameExt(dir, fMgr.fileNameExt)
+	fMgrDest, err := new(FileMgr).NewFromDirMgrFileNameExt(dir, fMgr.fileNameExt)
 
 	if err != nil {
 
@@ -1076,7 +1076,7 @@ func (fMgr *FileMgr) CopyFileToDirByIoByLink(dir DirMgr) error {
 	fMgrSourceLabel := "fMgrSource"
 	fMgrDestLabel := "fMgrDestDir"
 
-	fMgrDest, err := FileMgr{}.NewFromDirMgrFileNameExt(dir, fMgr.fileNameExt)
+	fMgrDest, err := new(FileMgr).NewFromDirMgrFileNameExt(dir, fMgr.fileNameExt)
 
 	if err != nil {
 
@@ -1159,7 +1159,7 @@ func (fMgr *FileMgr) CopyFileToDirByLink(dir DirMgr) error {
 
 	fMgrHlpr := fileMgrHelper{}
 
-	fMgrDest, err := FileMgr{}.NewFromDirMgrFileNameExt(dir, fMgr.fileNameExt)
+	fMgrDest, err := new(FileMgr).NewFromDirMgrFileNameExt(dir, fMgr.fileNameExt)
 
 	if err != nil {
 
@@ -1237,7 +1237,7 @@ func (fMgr *FileMgr) CopyFileToDirByLinkByIo(dir DirMgr) error {
 
 	fMgrHlpr := fileMgrHelper{}
 
-	fMgrDest, err := FileMgr{}.NewFromDirMgrFileNameExt(dir, fMgr.fileNameExt)
+	fMgrDest, err := new(FileMgr).NewFromDirMgrFileNameExt(dir, fMgr.fileNameExt)
 
 	if err != nil {
 
@@ -2966,7 +2966,7 @@ func (fMgr *FileMgr) MoveFileToFileStr(pathFileNameExt string) (FileMgr, error) 
 	ePrefix := "FileMgr.MoveFileToFileStr() "
 	var err error
 
-	targetFMgr, err := FileMgr{}.New(pathFileNameExt)
+	targetFMgr, err := new(FileMgr).New(pathFileNameExt)
 
 	if err != nil {
 		return FileMgr{},
@@ -3015,7 +3015,10 @@ func (fMgr *FileMgr) MoveFileToNewDir(dirPath string) (FileMgr, error) {
 				"dirPath='%v'\nError='%v'\n", dirPath, err.Error())
 	}
 
-	targetFMgr, err := FileMgr{}.NewFromDirMgrFileNameExt(dirMgr, fMgr.fileNameExt)
+	targetFMgr, err := new(FileMgr).
+		NewFromDirMgrFileNameExt(
+			dirMgr,
+			fMgr.fileNameExt)
 
 	if err != nil {
 		return FileMgr{},
@@ -3071,7 +3074,7 @@ func (fMgr *FileMgr) MoveFileToNewDirMgr(dMgr DirMgr) (FileMgr, error) {
 
 	targetFile := dMgr.GetAbsolutePathWithSeparator() + fMgr.fileNameExt
 
-	targetFMgr, err2 = FileMgr{}.New(targetFile)
+	targetFMgr, err2 = new(FileMgr).New(targetFile)
 
 	if err2 != nil {
 
@@ -3125,7 +3128,7 @@ func (fMgr *FileMgr) MoveFileToNewDirMgr(dMgr DirMgr) (FileMgr, error) {
 // Usage:
 //
 //	fmgr := FileMgr{}.New("../common/fileName.ext")
-func (fMgr FileMgr) New(pathFileNameExt string) (FileMgr, error) {
+func (fMgr *FileMgr) New(pathFileNameExt string) (FileMgr, error) {
 
 	ePrefix := "FileMgr.New() "
 
@@ -3200,7 +3203,7 @@ func (fMgr FileMgr) New(pathFileNameExt string) (FileMgr, error) {
 //	fileNameExt := "yourFile.txt"
 //
 //	fMgr, err := FileMgr{}.NewFromDirMgrFileNameExt(dMgr, fileNameExt)
-func (fMgr FileMgr) NewFromDirMgrFileNameExt(
+func (fMgr *FileMgr) NewFromDirMgrFileNameExt(
 	dMgr DirMgr,
 	fileNameExt string) (FileMgr, error) {
 
@@ -3270,7 +3273,7 @@ func (fMgr FileMgr) NewFromDirMgrFileNameExt(
 //	fileNameExtStr := "yourFile.txt"
 //
 //	fMgr, err := FileMgr{}.NewFromDirStrFileNameStr(dirStr, fileNameExtStr)
-func (fMgr FileMgr) NewFromDirStrFileNameStr(
+func (fMgr *FileMgr) NewFromDirStrFileNameStr(
 	dirStr,
 	fileNameExtStr string) (FileMgr, error) {
 
@@ -3339,7 +3342,7 @@ func (fMgr FileMgr) NewFromDirStrFileNameStr(
 //	                Type is set equal to 'nil'. If an error condition is encountered,
 //	                this method will return an error Type which encapsulates an
 //	                appropriate error message.
-func (fMgr FileMgr) NewFromFileInfo(dirPathStr string, info os.FileInfo) (FileMgr, error) {
+func (fMgr *FileMgr) NewFromFileInfo(dirPathStr string, info os.FileInfo) (FileMgr, error) {
 
 	ePrefix := "FileMgr.NewFromFileInfo() "
 
@@ -3410,7 +3413,7 @@ func (fMgr FileMgr) NewFromFileInfo(dirPathStr string, info os.FileInfo) (FileMg
 // Usage:
 //
 //	fmgr := FileMgr{}.NewFromPathFileNameExtStr("../somedirectory/fileName.ext")
-func (fMgr FileMgr) NewFromPathFileNameExtStr(pathFileNameExt string) (FileMgr, error) {
+func (fMgr *FileMgr) NewFromPathFileNameExtStr(pathFileNameExt string) (FileMgr, error) {
 
 	ePrefix := "FileMgr.NewFromPathFileNameExtStr() "
 

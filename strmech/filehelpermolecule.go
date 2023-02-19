@@ -598,7 +598,7 @@ func (fHelpMolecule *fileHelperMolecule) makeFileHelperWalkDirDeleteFilesFunc(
 
 			var subDir DirMgr
 
-			subDir, err = DirMgr{}.New(pathFile)
+			subDir, err = new(DirMgr).New(pathFile)
 
 			if err != nil {
 

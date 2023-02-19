@@ -44,7 +44,7 @@ type DirMgr struct {
 	isAbsolutePathPopulated         bool
 	doesAbsolutePathExist           bool
 	isAbsolutePathDifferentFromPath bool
-	directoryName                   string // Name of directory with out parent path.
+	directoryName                   string // Name of directory without parent path.
 	volumeName                      string
 	isVolumePopulated               bool
 	actualDirFileInfo               FileInfoPlus
@@ -67,7 +67,7 @@ func (dMgr *DirMgr) ConsolidateErrors(errs []error) error {
 }
 
 // CopyDirectory - Copies files from the directory identified by
-// by DirMgr to a target directory. The files to be copied are selected
+// DirMgr to a target directory. The files to be copied are selected
 // according to file selection criteria specified by input parameter,
 // 'fileSelectCriteria'.
 //
@@ -201,7 +201,7 @@ func (dMgr *DirMgr) ConsolidateErrors(errs []error) error {
 // IMPORTANT:
 //
 // If all of the file selection criterion in the FileSelectionCriteria object are
-// 'Inactive' or 'Not Set' (set to their zero or default values), then all of
+// 'Inactive' or 'Not Set' (set to their zero or default values), then all
 // the files processed in the directory tree will be selected and copied
 // to the target directory.
 //
@@ -234,7 +234,7 @@ func (dMgr *DirMgr) ConsolidateErrors(errs []error) error {
 //
 //	errs     []error  - An array of errors is returned. If the method completes
 //	                    successfully with no errors, a ZERO-length array is
-//	                    is returned.
+//	                    returned.
 //
 //	                    If errors are encountered they are stored in the error
 //	                    array and returned to the caller.
@@ -384,7 +384,7 @@ func (dMgr *DirMgr) CopyDirectory(
 //	                                    criteria are satisfied.
 //
 //	                                    If this constant value is specified for the file selection mode,
-//	                                    then a given file will not be judged as 'selected' unless all of
+//	                                    then a given file will not be judged as 'selected' unless all
 //	                                    the active selection criterion are satisfied. In other words, if
 //	                                    three active search criterion are provided for 'FileNamePatterns',
 //	                                    'FilesOlderThan' and 'FilesNewerThan', then a file will NOT be
@@ -405,7 +405,7 @@ func (dMgr *DirMgr) CopyDirectory(
 // IMPORTANT:
 //
 // If all of the file selection criterion in the FileSelectionCriteria object are
-// 'Inactive' or 'Not Set' (set to their zero or default values), then all of
+// 'Inactive' or 'Not Set' (set to their zero or default values), then all
 // the files processed in the directory tree will be selected and returned as
 // 'Found Files'.
 //
@@ -413,8 +413,8 @@ func (dMgr *DirMgr) CopyDirectory(
 //	  fsc := FileSelectCriterionMode{}
 //
 //	  In this example, 'fsc' is NOT initialized. Therefore,
-//	  all of the selection criterion are 'Inactive'. Consequently,
-//	  all of the files encountered in the target directory during
+//	  all the selection criterion are 'Inactive'. Consequently,
+//	  all the files encountered in the target directory during
 //	  the search operation will be selected and copy to target
 //	  directory.
 //
@@ -424,7 +424,7 @@ func (dMgr *DirMgr) CopyDirectory(
 //
 //	errs     []error  - An array of errors is returned. If the method completes
 //	                    successfully with no errors, a ZERO-length array is
-//	                    is returned.
+//	                    returned.
 //
 //	                    If errors are encountered they are stored in the error
 //	                    array and returned to the caller.
@@ -503,8 +503,8 @@ func (dMgr *DirMgr) CopyOut() DirMgr {
 }
 
 // CopySubDirectoryTree - Treating the directory identified by the current 'DirMgr'
-// instance as the parent directory, this method copies all sub-directories and the
-// files contained in those sub-directories to the target directory specified by
+// instance as the parent directory, this method copies all subdirectories and the
+// files contained in those subdirectories to the target directory specified by
 // input parameter, 'targetDir'. Essentially, the entire directory tree with the
 // sole exception of the top level parent directory is copied to target directory.
 //
@@ -582,8 +582,8 @@ func (dMgr *DirMgr) DeleteAll() error {
 }
 
 // DeleteAllFilesInDir - Deletes all the files in the current directory.
-// ONLY files in the current directory are deleted. Sub-directories are
-// NOT deleted and files in sub-directories are NOT deleted.
+// ONLY files in the current directory are deleted. Subdirectories are
+// NOT deleted and files in subdirectories are NOT deleted.
 //
 // Reference:
 // https://stackoverflow.com/questions/33450980/golang-remove-all-contents-of-a-directory
@@ -594,7 +594,7 @@ func (dMgr *DirMgr) DeleteAll() error {
 //
 //	errs     []error  - An array of errors is returned. If the method completes
 //	                    successfully with no errors, a ZERO-length array is
-//	                    is returned.
+//	                    returned.
 //
 //	                    If errors are encountered they are stored in the error
 //	                    array and returned to the caller.
@@ -624,8 +624,8 @@ func (dMgr *DirMgr) DeleteAllFilesInDir() (deleteDirStats DeleteDirFilesStats, e
 // DeleteAllSubDirectories - The directory identified by the current
 // DirMgr instance is treated as the parent directory. This method
 // will then proceed to delete all directories and files which are
-// are subsidiary to this parent directory. Essentially, all sub-
-// directories which are subordinate to the the DirMgr directory will
+// subsidiary to this parent directory. Essentially, all
+// subdirectories which are subordinate to the DirMgr directory will
 // be deleted along with their constituent files.
 //
 //	Example:
@@ -639,7 +639,7 @@ func (dMgr *DirMgr) DeleteAllFilesInDir() (deleteDirStats DeleteDirFilesStats, e
 //	           d:\parentdirectory\dir02
 //	           d:\parentdirectory\dir03
 //
-//	After Executing DirMgr.DeleteAllSubDirectories() all sub-directories and
+//	After Executing DirMgr.DeleteAllSubDirectories() all subdirectories and
 //	any files they contain will be deleted. The only directory which remains
 //	is the parent directory and any files contained within the parent directory.
 //
@@ -674,7 +674,7 @@ func (dMgr *DirMgr) DeleteAllSubDirectories() (errs []error) {
 // directory for this tree is the directory specified by the current 'DirMgr'
 // instance. Files eligible for deletion must match the file selection criteria
 // specified by input parameter 'deleteFileSelectionCriteria'. The file deletion
-// operation will search the parent directory ('DirMgr') and all sub-directories
+// operation will search the parent directory ('DirMgr') and all subdirectories
 // screening for files which match the file selection criteria.
 //
 // The file deletion operation is conducted in three steps:
@@ -683,15 +683,15 @@ func (dMgr *DirMgr) DeleteAllSubDirectories() (errs []error) {
 //     input parameter 'deleteFileSelectionCriteria'.
 //
 //  2. A file search is conducted which includes the DirMgr parent directory
-//     and all sub-directories in the tree.
+//     and all subdirectories in the tree.
 //
 //  3. Files processed during the directory tree search are compared to the
 //     file selection criteria specified by 'deleteFileSelectionCriteria'.
 //     Those files which match the selection criteria are then deleted.
 //
 // This method is similar to method 'DirMgr.DeleteWalkDirFiles()'. However, this
-// method returns less data and is designed to work with very large numbers of
-// files and directories.
+// method returns less tracking data and is designed to work with very large
+// numbers of files and directories.
 //
 // Note: As a result of this operation, files within directory tree folders may be
 // deleted, but the folders or directory elements will NEVER be deleted.
@@ -780,7 +780,7 @@ func (dMgr *DirMgr) DeleteAllSubDirectories() (errs []error) {
 //	                                    criteria are satisfied.
 //
 //	                                    If this constant value is specified for the file selection mode,
-//	                                    then a given file will not be judged as 'selected' unless all of
+//	                                    then a given file will not be judged as 'selected' unless all
 //	                                    the active selection criterion are satisfied. In other words, if
 //	                                    three active search criterion are provided for 'FileNamePatterns',
 //	                                    'FilesOlderThan' and 'FilesNewerThan', then a file will NOT be
@@ -801,15 +801,15 @@ func (dMgr *DirMgr) DeleteAllSubDirectories() (errs []error) {
 // IMPORTANT:
 //
 // If all of the file selection criterion in the FileSelectionCriteria object are
-// 'Inactive' or 'Not Set' (set to their zero or default values), then all of
+// 'Inactive' or 'Not Set' (set to their zero or default values), then all
 // the files processed in the directory tree will be selected and deleted.
 //
 //	Example:
 //	  fsc := FileSelectCriterionMode{}
 //
 //	  In this example, 'fsc' is NOT initialized. Therefore,
-//	  all of the selection criterion are 'Inactive'. Consequently,
-//	  all of the files encountered in the target directory tree
+//	  all the selection criterion are 'Inactive'. Consequently,
+//	  all the files encountered in the target directory tree
 //	  during the search operation will be selected and deleted.
 //
 // ---------------------------------------------------------------------------
@@ -863,7 +863,7 @@ func (dMgr *DirMgr) DeleteDirectoryTreeFiles(
 // 'fileSearchPattern', it will be deleted.
 //
 // Only files in the directory identified by the current DirMgr instance
-// will be subject to deletion. Files in sub-directories or parent directories
+// will be subject to deletion. Files in subdirectories or parent directories
 // will NOT be deleted or altered in any way.
 //
 // If the 'fileSearchPattern' is improperly formatted, an error will be returned.
@@ -921,7 +921,7 @@ func (dMgr *DirMgr) DeleteFilesByNamePattern(
 //     input parameter 'deleteFileSelectionCriteria'.
 //
 //  2. A file search is conducted which is limited ONLY to the DirMg
-//     directory. Files in sub-directory tree ARE NEVER DELETED.
+//     directory. Files in subdirectory tree ARE NEVER DELETED.
 //
 //  3. Files processed during the directory search are compared to the
 //     file selection criteria specified by 'deleteFileSelectionCriteria'.
@@ -933,7 +933,7 @@ func (dMgr *DirMgr) DeleteFilesByNamePattern(
 //
 //	deleteFileSelectionCriteria FileSelectionCriteria
 //	  This input parameter should be configured with the desired file selection
-//	  criteria. Files in the DirMgr directory, matching this criteria, will be
+//	  criteria. Files in the DirMgr directory, matching these criteria, will be
 //	  deleted.
 //
 //	  type FileSelectionCriteria struct {
@@ -1012,7 +1012,7 @@ func (dMgr *DirMgr) DeleteFilesByNamePattern(
 //	                                    criteria are satisfied.
 //
 //	                                    If this constant value is specified for the file selection mode,
-//	                                    then a given file will not be judged as 'selected' unless all of
+//	                                    then a given file will not be judged as 'selected' unless all
 //	                                    the active selection criterion are satisfied. In other words, if
 //	                                    three active search criterion are provided for 'FileNamePatterns',
 //	                                    'FilesOlderThan' and 'FilesNewerThan', then a file will NOT be
@@ -1033,15 +1033,15 @@ func (dMgr *DirMgr) DeleteFilesByNamePattern(
 // IMPORTANT:
 //
 // If all of the file selection criterion in the FileSelectionCriteria object are
-// 'Inactive' or 'Not Set' (set to their zero or default values), then all of
+// 'Inactive' or 'Not Set' (set to their zero or default values), then all
 // the files processed in the directory tree will be selected and deleted.
 //
 //	Example:
 //	  fsc := FileSelectCriterionMode{}
 //
 //	  In this example, 'fsc' is NOT initialized. Therefore,
-//	  all of the selection criterion are 'Inactive'. Consequently,
-//	  all of the files encountered in the target directory tree
+//	  all the selection criterion are 'Inactive'. Consequently,
+//	  all the files encountered in the target directory tree
 //	  during the search operation will be selected and deleted.
 //
 // ---------------------------------------------------------------------------
@@ -1050,7 +1050,7 @@ func (dMgr *DirMgr) DeleteFilesByNamePattern(
 //
 //	errs     []error  - An array of errors is returned. If the method completes
 //	                    successfully with no errors, a ZERO-length array is
-//	                    is returned.
+//	                    returned.
 //
 //	                    If errors are encountered they are stored in the error
 //	                    array and returned to the caller.
@@ -1082,17 +1082,17 @@ func (dMgr *DirMgr) DeleteFilesBySelectionCriteria(
 	return deleteDirStats, errs
 }
 
-// DeleteSubDirectoryTreeFiles - Deletes sub-directory files. For this operation, the
+// DeleteSubDirectoryTreeFiles - Deletes subdirectory files. For this operation, the
 // current 'DirMgr' is classified as the top level or parent directory. Files in this
 // parent directory will NEVER BE DELETED.
 //
-// !!! BE CAREFUL !!! This method deletes files in sub-directories!
+// !!! BE CAREFUL !!! This method deletes files in subdirectories!
 //
 // Files eligible for deletion must match the file selection criteria specified by input
 // parameter 'deleteFileSelectionCriteria'. The file deletion operation will exclude the
-// parent directory ('DirMgr') and confine the file search to the sub-directories underneath
+// parent directory ('DirMgr') and confine the file search to the subdirectories underneath
 // the parent directory. The file search will screen for files which match the file selection
-// criteria in the sub-directory tree.
+// criteria in the subdirectory tree.
 //
 // The file deletion operation is conducted in three steps:
 //
@@ -1100,13 +1100,13 @@ func (dMgr *DirMgr) DeleteFilesBySelectionCriteria(
 //     'deleteFileSelectionCriteria'.
 //
 //  2. A file search is conducted which excludes the DirMgr parent directory and focuses
-//     exclusively on all sub-directories in the tree.
+//     exclusively on all subdirectories in the tree.
 //
-//  3. Files processed during the sub-directory tree search are compared to the file
+//  3. Files processed during the subdirectory tree search are compared to the file
 //     selection criteria specified by 'deleteFileSelectionCriteria'. Those files which
 //     match the selection criteria are then deleted.
 //
-// Note: As a result of this operation, files within sub-directory tree folders may be
+// Note: As a result of this operation, files within subdirectory tree folders may be
 // deleted, but the folders or directory elements themselves will NEVER be deleted.
 //
 // ------------------------------------------------------------------------------
@@ -1193,7 +1193,7 @@ func (dMgr *DirMgr) DeleteFilesBySelectionCriteria(
 //	                                    criteria are satisfied.
 //
 //	                                    If this constant value is specified for the file selection mode,
-//	                                    then a given file will not be judged as 'selected' unless all of
+//	                                    then a given file will not be judged as 'selected' unless all
 //	                                    the active selection criterion are satisfied. In other words, if
 //	                                    three active search criterion are provided for 'FileNamePatterns',
 //	                                    'FilesOlderThan' and 'FilesNewerThan', then a file will NOT be
@@ -1214,7 +1214,7 @@ func (dMgr *DirMgr) DeleteFilesBySelectionCriteria(
 // IMPORTANT:
 //
 // If all of the file selection criterion in the FileSelectionCriteria object are
-// 'Inactive' or 'Not Set' (set to their zero or default values), then all of
+// 'Inactive' or 'Not Set' (set to their zero or default values), then all
 // the files processed in the directory tree will be selected and deleted.
 //
 //	Example:
@@ -1278,7 +1278,7 @@ func (dMgr *DirMgr) DeleteSubDirectoryTreeFiles(
 // 'deleteFileSelectionCriteria'.
 //
 // This method will delete files in the entire directory tree including
-// the parent directory and its sub-directory tree.
+// the parent directory and its subdirectory tree.
 //
 // If a file matches the File Selection Criteria, it is DELETED. By the
 // way, if ALL the file selection criterion are set to zero values or
@@ -1373,7 +1373,7 @@ func (dMgr *DirMgr) DeleteSubDirectoryTreeFiles(
 //	                                    criteria are satisfied.
 //
 //	                                    If this constant value is specified for the file selection mode,
-//	                                    then a given file will not be judged as 'selected' unless all of
+//	                                    then a given file will not be judged as 'selected' unless all
 //	                                    the active selection criterion are satisfied. In other words, if
 //	                                    three active search criterion are provided for 'FileNamePatterns',
 //	                                    'FilesOlderThan' and 'FilesNewerThan', then a file will NOT be
@@ -1394,7 +1394,7 @@ func (dMgr *DirMgr) DeleteSubDirectoryTreeFiles(
 // IMPORTANT:
 //
 // If all of the file selection criterion in the FileSelectionCriteria object are
-// 'Inactive' or 'Not Set' (set to their zero or default values), then all of
+// 'Inactive' or 'Not Set' (set to their zero or default values), then all
 // the files processed will be selected and DELETED.
 //
 //	Example:
@@ -1430,7 +1430,7 @@ func (dMgr *DirMgr) DeleteSubDirectoryTreeFiles(
 //	              system errors were encountered during file processing.
 //
 //	error - If a program execution error is encountered during processing, it will
-//	        returned as an 'error' type. Also, see the comment on
+//	        be returned as an 'error' type. Also, see the comment on
 //	        DirectoryDeleteFileInfo.ErrReturns, above.
 func (dMgr *DirMgr) DeleteWalkDirFiles(
 	deleteFileSelectionCriteria FileSelectionCriteria) (DirectoryDeleteFileInfo, error) {
@@ -1563,8 +1563,8 @@ func (dMgr *DirMgr) DoesAbsolutePathExist() bool {
 	return dirPathDoesExist
 }
 
-// DoesDirectoryExist - Returns two boolean values indicating whether or not the
-// Directory path exists and whether or not the Directory absolute path exists.
+// DoesDirectoryExist - Returns two boolean values indicating whether the
+// Directory path exists and if the Directory absolute path exists.
 func (dMgr *DirMgr) DoesDirectoryExist() (doesPathExist, doesAbsolutePathExist bool) {
 
 	if dMgr.lock == nil {
@@ -1599,7 +1599,7 @@ func (dMgr *DirMgr) DoesDirectoryExist() (doesPathExist, doesAbsolutePathExist b
 // First the method determine whether the directory
 // path indicated by the DirMgr.path field actually
 // does exist on disk and returns a 'true' or 'false'
-// boolean value accordingly. In addition it also
+// boolean value accordingly. In addition, it also
 // updates the DirMgr field DirMgr.doesPathExist field.
 func (dMgr *DirMgr) DoesPathExist() bool {
 
@@ -1712,8 +1712,8 @@ func (dMgr *DirMgr) Equal(dMgr2 *DirMgr) bool {
 // directory manager and the input directory manager ('dMgr2').
 // If the two absolute paths are equal, the method returns 'true'.
 // If the two absolute paths are NOT equal, the method returns 'false'.
-// The comparison is NOT case sensitive. In other words, both paths
-// are converted to lower case before making the comparision.
+// The comparison is NOT case-sensitive. In other words, both paths
+// are converted to lower case before making the comparison.
 //
 // If either the current DirMgr ('dMgr') or the input parameter
 // 'dMgr2' are uninitialized, a value of 'false' is returned.
@@ -1743,7 +1743,7 @@ func (dMgr *DirMgr) EqualAbsPaths(dMgr2 *DirMgr) bool {
 //
 // If the compared paths are equal, the method returns 'true'.
 // If the paths are NOT equal, the method returns 'false'.
-// The comparisons are NOT case sensitive. In other words, all paths
+// The comparisons are NOT case-sensitive. In other words, all paths
 // are converted to lower case before making the comparisons.
 //
 // If either the current DirMgr ('dMgr') or the input parameter
@@ -1768,7 +1768,7 @@ func (dMgr *DirMgr) EqualPaths(dMgr2 *DirMgr) bool {
 	return isEqual
 }
 
-// ExecuteDirectoryFileOps - Performs a a file operation on specified 'selected' files
+// ExecuteDirectoryFileOps - Performs a file operation on specified 'selected' files
 // in the current directory ONLY. This function does NOT perform operations on the
 // sub directories (a.k.a. the directory tree).
 //
@@ -1904,7 +1904,7 @@ func (dMgr *DirMgr) EqualPaths(dMgr2 *DirMgr) bool {
 //	                                    criteria are satisfied.
 //
 //	                                    If this constant value is specified for the file selection mode,
-//	                                    then a given file will not be judged as 'selected' unless all of
+//	                                    then a given file will not be judged as 'selected' unless all
 //	                                    the active selection criterion are satisfied. In other words, if
 //	                                    three active search criterion are provided for 'FileNamePatterns',
 //	                                    'FilesOlderThan' and 'FilesNewerThan', then a file will NOT be
@@ -1925,7 +1925,7 @@ func (dMgr *DirMgr) EqualPaths(dMgr2 *DirMgr) bool {
 // IMPORTANT:
 //
 // If all of the file selection criterion in the FileSelectionCriteria object are
-// 'Inactive' or 'Not Set' (set to their zero or default values), then all of
+// 'Inactive' or 'Not Set' (set to their zero or default values), then all
 // the files processed in the directory tree will be selected and returned as
 // 'Found Files'.
 //
@@ -1934,8 +1934,8 @@ func (dMgr *DirMgr) EqualPaths(dMgr2 *DirMgr) bool {
 //	           fsc := FileSelectCriterionMode{}
 //
 //	           In this example, 'fsc' is NOT initialized. Therefore,
-//	           all of the selection criterion are 'Inactive'. Consequently,
-//	           all of the files encountered in the target directory during
+//	           all the selection criterion are 'Inactive'. Consequently,
+//	           all the files encountered in the target directory during
 //	           the search operation will be selected and returned as
 //	           'Found Files'.
 //
@@ -2073,11 +2073,11 @@ func (dMgr *DirMgr) ExecuteDirectoryFileOps(
 // performed on the directory tree.
 //
 // If you wish to perform File Operations ONLY on the current directory and
-// NOT THE ENTIRE DIRECTORY TREE, see Function "ExecuteDirectoryFileOps(), above.
+// NOT THE ENTIRE DIRECTORY TREE, see Function "ExecuteDirectoryFileOps()", above.
 //
 // The types of File Operations performed are generally classified as 'file copy'
 // and 'file deletion' operations. The precise file operation applied is defined
-// by the the type, 'FileOperationCode' which provides a series of constants, or
+// by the type, 'FileOperationCode' which provides a series of constants, or
 // enumerations, used to identify the specific file operation applied. Input
 // parameter, 'fileOps' is an array of type 'FileOperationCode' elements. Multiple
 // file operations can be applied to a single file. For instance, a 'copy source to
@@ -2200,7 +2200,7 @@ func (dMgr *DirMgr) ExecuteDirectoryFileOps(
 //	                                    criteria are satisfied.
 //
 //	                                    If this constant value is specified for the file selection mode,
-//	                                    then a given file will not be judged as 'selected' unless all of
+//	                                    then a given file will not be judged as 'selected' unless all
 //	                                    the active selection criterion are satisfied. In other words, if
 //	                                    three active search criterion are provided for 'FileNamePatterns',
 //	                                    'FilesOlderThan' and 'FilesNewerThan', then a file will NOT be
@@ -2221,7 +2221,7 @@ func (dMgr *DirMgr) ExecuteDirectoryFileOps(
 // IMPORTANT:
 //
 // If all of the file selection criterion in the FileSelectionCriteria object are
-// 'Inactive' or 'Not Set' (set to their zero or default values), then all of
+// 'Inactive' or 'Not Set' (set to their zero or default values), then all
 // the files processed in the directory tree will be selected and returned as
 // 'Found Files'.
 //
@@ -2229,9 +2229,9 @@ func (dMgr *DirMgr) ExecuteDirectoryFileOps(
 //	     fsc := FileSelectCriterionMode{}
 //
 //	     In this example, 'fsc' is NOT initialized. Therefore,
-//	     all of the selection criterion are 'Inactive'. Consequently,
-//	     all of the files encountered in the target directory during
-//	     the search operaiton will be selected and returned as
+//	     all the selection criterion are 'Inactive'. Consequently,
+//	     all the files encountered in the target directory during
+//	     the search operation will be selected and returned as
 //	     'Found Files'.
 //
 // ---------------------------------------------------------------------------
@@ -2368,16 +2368,16 @@ func (dMgr *DirMgr) ExecuteDirectoryTreeOps(
 
 // FindDirectoryTreeFiles - This method returns file information on files residing in a
 // specific directory tree identified by the current DirMgr instance. The directory
-// identified by 'DirMgr' is treated as the the parent directory for the search.
+// identified by 'DirMgr' is treated as the parent directory for the search.
 //
 // In addition to file information, this method also returns data on the directory tree
-// being searched including the parent directory and all sub-directories in the tree.
+// being searched including the parent directory and all subdirectories in the tree.
 //
 // This method 'walks the directory tree' locating all files in the directory tree which
 // match the file selection criteria submitted as input parameter, 'fileSelectCriteria'.
 //
 // All directories including the top level parent directory ('DirMgr') are searched. This
-// differs from method 'DirMgr.FindWalkSubDirFiles()' which only searches the sub-directory
+// differs from method 'DirMgr.FindWalkSubDirFiles()' which only searches the subdirectory
 // tree.
 //
 // If a file matches the File Selection Criteria, it is included in the returned field,
@@ -2489,7 +2489,7 @@ func (dMgr *DirMgr) ExecuteDirectoryTreeOps(
 //	                                    criteria are satisfied.
 //
 //	                                    If this constant value is specified for the file selection mode,
-//	                                    then a given file will not be judged as 'selected' unless all of
+//	                                    then a given file will not be judged as 'selected' unless all
 //	                                    the active selection criterion are satisfied. In other words, if
 //	                                    three active search criterion are provided for 'FileNamePatterns',
 //	                                    'FilesOlderThan' and 'FilesNewerThan', then a file will NOT be
@@ -2510,15 +2510,15 @@ func (dMgr *DirMgr) ExecuteDirectoryTreeOps(
 // IMPORTANT:
 //
 // If all of the file selection criterion in the FileSelectionCriteria object are
-// 'Inactive' or 'Not Set' (set to their zero or default values), then all of
+// 'Inactive' or 'Not Set' (set to their zero or default values), then all
 // the files processed in the directory tree will be selected and returned as
 // 'Found Files'.
 //
 //	Example:
 //	     fsc := FileSelectionCriteria{} // fsc is NOT initialized
 //
-//	     In this example, all of the selection criterion are
-//	     'Inactive' and therefore all of the files encountered
+//	     In this example, all the selection criterion are
+//	     'Inactive' and therefore all the files encountered
 //	     in the target directory will be selected and returned
 //	     as 'Found Files'.
 //
@@ -2587,11 +2587,11 @@ func (dMgr *DirMgr) FindDirectoryTreeFiles(
 // FindFilesByNamePattern - searches the current directory using a name pattern file
 // search criteria.
 //
-// Regardless of the search pattern used, this method will never return sub-directories
+// Regardless of the search pattern used, this method will never return subdirectories
 // of the target search directory.
 //
 // Again, the file search will always be limited to the directory identified by the
-// current DirMgr instance. No sub-directories will be searched.
+// current DirMgr instance. No subdirectories will be searched.
 //
 // If the 'fileSearchPattern' is an empty string or improperly formatted, an error
 // will be returned.
@@ -2656,13 +2656,13 @@ func (dMgr *DirMgr) FindFilesByNamePattern(fileSearchPattern string) (FileMgrCol
 
 // FindFilesBySelectCriteria - Conducts a file search in the directory
 // identified by the current DirMgr instance. The file search is limited
-// to that directory ONLY. No sub-directories will be searched.
+// to that directory ONLY. No subdirectories will be searched.
 //
 // Files matching the "FileSectionCriteria" instance passed as an input
 // parameter will be used to screen available files. Any files matching
 // the file selection criteria will be returned in a 'FileMgrCollection'.
 //
-// Only matched files will be returned. No sub-directory names will ever
+// Only matched files will be returned. No subdirectory names will ever
 // be included.
 //
 // The use of a 'FileSelectionCriteria' structure allows for very flexible
@@ -2754,7 +2754,7 @@ func (dMgr *DirMgr) FindFilesByNamePattern(fileSearchPattern string) (FileMgrCol
 //	                                    criteria are satisfied.
 //
 //	                                    If this constant value is specified for the file selection mode,
-//	                                    then a given file will not be judged as 'selected' unless all of
+//	                                    then a given file will not be judged as 'selected' unless all
 //	                                    the active selection criterion are satisfied. In other words, if
 //	                                    three active search criterion are provided for 'FileNamePatterns',
 //	                                    'FilesOlderThan' and 'FilesNewerThan', then a file will NOT be
@@ -2775,7 +2775,7 @@ func (dMgr *DirMgr) FindFilesByNamePattern(fileSearchPattern string) (FileMgrCol
 // IMPORTANT:
 //
 // If all of the file selection criterion in the FileSelectionCriteria object are
-// 'Inactive' or 'Not Set' (set to their zero or default values), then all of
+// 'Inactive' or 'Not Set' (set to their zero or default values), then all
 // the files processed in the directory tree will be selected and returned as
 // 'Found Files'.
 //
@@ -2783,8 +2783,8 @@ func (dMgr *DirMgr) FindFilesByNamePattern(fileSearchPattern string) (FileMgrCol
 //	  fsc := FileSelectCriterionMode{}
 //
 //	  In this example, 'fsc' is NOT initialized. Therefore,
-//	  all of the selection criterion are 'Inactive'. Consequently,
-//	  all of the files encountered in the target directory during
+//	  all the selection criterion are 'Inactive'. Consequently,
+//	  all the files encountered in the target directory during
 //	  the search operation will be selected and returned as
 //	  'Found Files'.
 //
@@ -2841,16 +2841,16 @@ func (dMgr *DirMgr) FindFilesBySelectCriteria(
 
 // FindWalkDirFiles - This method returns file information on files residing in a
 // specific directory tree identified by the current DirMgr instance. The directory
-// identified by 'DirMgr' is treated as the the parent directory for the search.
+// identified by 'DirMgr' is treated as the parent directory for the search.
 //
 // In addition to file information, this method also returns data on the directory tree
-// being searched including the parent directory and all sub-directories in the tree.
+// being searched including the parent directory and all subdirectories in the tree.
 //
 // This method 'walks the directory tree' locating all files in the directory tree which
 // match the file selection criteria submitted as input parameter, 'fileSelectCriteria'.
 //
 // All directories including the top level parent directory ('DirMgr') are searched. This
-// differs from method 'DirMgr.FindWalkSubDirFiles()' which only searches the sub-directory
+// differs from method 'DirMgr.FindWalkSubDirFiles()' which only searches the subdirectory
 // tree.
 //
 // If a file matches the File Selection Criteria, it is included in the returned field,
@@ -2962,7 +2962,7 @@ func (dMgr *DirMgr) FindFilesBySelectCriteria(
 //	                                    criteria are satisfied.
 //
 //	                                    If this constant value is specified for the file selection mode,
-//	                                    then a given file will not be judged as 'selected' unless all of
+//	                                    then a given file will not be judged as 'selected' unless all
 //	                                    the active selection criterion are satisfied. In other words, if
 //	                                    three active search criterion are provided for 'FileNamePatterns',
 //	                                    'FilesOlderThan' and 'FilesNewerThan', then a file will NOT be
@@ -2983,15 +2983,15 @@ func (dMgr *DirMgr) FindFilesBySelectCriteria(
 // IMPORTANT:
 //
 // If all of the file selection criterion in the FileSelectionCriteria object are
-// 'Inactive' or 'Not Set' (set to their zero or default values), then all of
+// 'Inactive' or 'Not Set' (set to their zero or default values), then all
 // the files processed in the directory tree will be selected and returned as
 // 'Found Files'.
 //
 //	Example:
 //	     fsc := FileSelectionCriteria{} // fsc is NOT initialized
 //
-//	     In this example, all of the selection criterion are
-//	     'Inactive' and therefore all of the files encountered
+//	     In this example, all the selection criterion are
+//	     'Inactive' and therefore all the files encountered
 //	     in the target directory will be selected and returned
 //	     as 'Found Files'.
 //
@@ -3064,7 +3064,7 @@ func (dMgr *DirMgr) FindWalkDirFiles(
 // DirMgr instance. However, all directories subsidiary to the parent directory ('DirMgr')
 // will be searched.
 //
-// This method 'walks the directory tree' locating all files in the sub-directory tree which
+// This method 'walks the directory tree' locating all files in the subdirectory tree which
 // match the file selection criteria submitted as input parameter, 'fileSelectCriteria'.
 //
 // If a file matches the File Selection Criteria, it is included in the returned field,
@@ -3073,7 +3073,7 @@ func (dMgr *DirMgr) FindWalkDirFiles(
 // in the field, 'DirectoryTreeInfo.FoundFiles'.
 //
 // All directories searched will be included in the returned collection 'DirectoryTreeInfo.Directories'.
-// If the parent directory has NO sub-directories, this returned collection will be empty.
+// If the parent directory has NO subdirectories, this returned collection will be empty.
 //
 // ------------------------------------------------------------------------
 //
@@ -3175,7 +3175,7 @@ func (dMgr *DirMgr) FindWalkDirFiles(
 //	                                    criteria are satisfied.
 //
 //	                                    If this constant value is specified for the file selection mode,
-//	                                    then a given file will not be judged as 'selected' unless all of
+//	                                    then a given file will not be judged as 'selected' unless all
 //	                                    the active selection criterion are satisfied. In other words, if
 //	                                    three active search criterion are provided for 'FileNamePatterns',
 //	                                    'FilesOlderThan' and 'FilesNewerThan', then a file will NOT be
@@ -3196,15 +3196,15 @@ func (dMgr *DirMgr) FindWalkDirFiles(
 // IMPORTANT:
 //
 // If all of the file selection criterion in the FileSelectionCriteria object are
-// 'Inactive' or 'Not Set' (set to their zero or default values), then all of
+// 'Inactive' or 'Not Set' (set to their zero or default values), then all
 // the files processed in the directory tree will be selected and returned as
 // 'Found Files'.
 //
 //	Example:
 //	     fsc := FileSelectionCriteria{} // fsc is NOT initialized
 //
-//	     In this example, all of the selection criterion are
-//	     'Inactive' and therefore all of the files encountered
+//	     In this example, all the selection criterion are
+//	     'Inactive' and therefore all the files encountered
 //	     in the target directory will be selected and returned
 //	     as 'Found Files'.
 //
@@ -3227,7 +3227,7 @@ func (dMgr *DirMgr) FindWalkDirFiles(
 //	        If successful, files matching the file selection criteria input
 //	        parameter shown above will be returned in a 'DirectoryTreeInfo'
 //	        object. The field 'DirectoryTreeInfo.FoundFiles' contains information
-//	        on all the files in the specified sub-directory tree which match the file
+//	        on all the files in the specified subdirectory tree which match the file
 //	        selection criteria.
 //
 //	        Note: It is a good idea to check the returned field 'DirectoryTreeInfo.ErrReturns'
@@ -3355,7 +3355,7 @@ func (dMgr *DirMgr) GetAbsolutePathLc() string {
 	return absolutePath
 }
 
-// GetAbsolutePathElements - Returns all of the directories and drive
+// GetAbsolutePathElements - Returns all the directories and drive
 // specifications as an array of strings.
 //
 // # Example
@@ -3439,7 +3439,7 @@ func (dMgr *DirMgr) GetAbsolutePathWithSeparator() string {
 
 // GetAbsolutePathWithSeparatorLc - Returns the current
 // DirMgr.absolutePath with a trailing os.PathSeparator
-// character. The path string will consists of all lower
+// character. The path string will consist of all lower
 // case characters.
 //
 // See the companion method GetAbsolutePathWithSeparator()
@@ -3569,7 +3569,7 @@ func (dMgr *DirMgr) GetDirectoryTree() (dirMgrs DirMgrCollection, errs []error) 
 }
 
 // GetDirectoryName - Returns a string containing the name
-// of the directory without out the parent path.
+// of the directory without the parent path.
 func (dMgr *DirMgr) GetDirectoryName() string {
 
 	if dMgr.lock == nil {
@@ -3721,11 +3721,7 @@ func (dMgr *DirMgr) GetNumberOfAbsPathElements() int {
 	pathElements := make([]string, 0, 50)
 	dMgrHlpr := dirMgrHelper{}
 
-	dMgr.lock.Lock()
-
 	pathElements, _ = dMgrHlpr.getAbsolutePathElements(dMgr, "", "")
-
-	dMgr.lock.Unlock()
 
 	return len(pathElements)
 }
@@ -3758,13 +3754,13 @@ func (dMgr *DirMgr) GetOriginalPath() string {
 }
 
 // GetParentDirMgr - Returns a new Directory Manager instance
-// which represents the the parent path for the current
+// which represents the parent path for the current
 // Directory Manager. The current Directory Manager absolute
 // path is used in extracting the parent Directory Manager.
 //
 // Return Values:
 //
-//	dirMgrOut  DirMgr - If successful, this methods returns a Directory Manager
+//	dirMgrOut  DirMgr - If successful, this method returns a Directory Manager
 //	                  which is a parent of the current Directory Manager.
 //
 //	hasParent  bool - If 'true', it signals that the current Directory Manager
@@ -4352,7 +4348,7 @@ func (dMgr *DirMgr) MakeDir() error {
 //	                                    criteria are satisfied.
 //
 //	                                    If this constant value is specified for the file selection mode,
-//	                                    then a given file will not be judged as 'selected' unless all of
+//	                                    then a given file will not be judged as 'selected' unless all
 //	                                    the active selection criterion are satisfied. In other words, if
 //	                                    three active search criterion are provided for 'FileNamePatterns',
 //	                                    'FilesOlderThan' and 'FilesNewerThan', then a file will NOT be
@@ -4396,14 +4392,14 @@ func (dMgr *DirMgr) MakeDir() error {
 //	numOfSrcFilesRemaining int - Returns the number of source files remaining in the current
 //	                             directory after the move operation was completed.
 //
-//	numOfSubDirectories    int - Returns the number of sub-directories which exist in the
+//	numOfSubDirectories    int - Returns the number of subdirectories which exist in the
 //	                             DirMgr parent directory.
 //
 //	dMgrDirWasDeleted     bool - Returns 'true' if the current directory ('DirMgr') was deleted.
 //
 //	errs              []error  - An array of errors is returned. If the method completes
 //	                             successfully with no errors, a ZERO-length array is
-//	                             is returned.
+//	                             returned.
 //
 //	                             If errors are encountered they are stored in the error
 //	                             array and returned to the caller.
@@ -4436,7 +4432,7 @@ func (dMgr *DirMgr) MoveDirectory(
 	return dirMoveStats, errs
 }
 
-// MoveDirectoryTree - Moves all sub-directories and files plus files in
+// MoveDirectoryTree - Moves all subdirectories and files plus files in
 // the parent DirMgr directory to a target directory tree specified by
 // input parameter 'targetDMgr'. If successful, the parent directory
 // DirMgr will be deleted along with the entire sub-directory tree.
@@ -4462,7 +4458,7 @@ func (dMgr *DirMgr) MoveDirectory(
 //
 //	errs     []error  - An array of errors is returned. If the method completes
 //	                    successfully with no errors, a ZERO-length array is
-//	                    is returned.
+//	                    returned.
 //
 //	                    If errors are encountered they are stored in the error
 //	                    array and returned to the caller.
@@ -4494,18 +4490,20 @@ func (dMgr *DirMgr) MoveDirectoryTree(
 	return dirMoveStats, errs
 }
 
-// MoveSubDirectoryTree - Moves all sub-directories and their constituent
+// MoveSubDirectoryTree - Moves all subdirectories and their constituent
 // files from the source or parent directory 'DirMgr' to a target directory
 // tree specified by input parameter 'targetDMgr'. If successful, all
-// sub-directories and files in the source directory tree will be deleted.
+// subdirectories and files in the source directory tree will be deleted.
 // The source or parent directory identified by 'DirMgr' and the files
 // within 'DirMgr' will NOT be deleted.
 //
-// --------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
-// !!!! BE CAREFUL !!!! This method will delete the entire sub-directory
-// tree. The source or parent directory 'DirMgr' and its constituent files
-// will NOT be deleted.
+// # BE CAREFUL
+//
+// This method will delete the entire subdirectory tree.
+// The source or parent directory 'DirMgr' and its
+// constituent files will NOT be deleted.
 //
 // --------------------------------------------------------------------
 //
@@ -4522,7 +4520,7 @@ func (dMgr *DirMgr) MoveDirectoryTree(
 //
 //	errs     []error  - An array of errors is returned. If the method completes
 //	                    successfully with no errors, a ZERO-length array is
-//	                    is returned.
+//	                    returned.
 //
 //	                    If errors are encountered they are stored in the error
 //	                    array and returned to the caller.
