@@ -61,7 +61,7 @@ type FileMgr struct {
 	actualFileInfo                  FileInfoPlus
 	fileBytesWritten                uint64
 	buffBytesWritten                uint64
-	dataMutex                       sync.Mutex // Used internally to ensure thread safe operations
+	lock                            *sync.Mutex // Used internally to ensure thread safe operations
 }
 
 // ChangePermissionMode - This method is a wrapper for os.Chmod().
@@ -90,11 +90,17 @@ type FileMgr struct {
 // On Plan 9, the mode's permission bits, ModeAppend, ModeExclusive, and ModeTemporary are used.
 func (fMgr *FileMgr) ChangePermissionMode(mode FilePermissionConfig) error {
 
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
+
 	ePrefix := "FileMgr.ChangePermissionMode() "
 
 	fMgrHelpr := fileMgrHelper{}
-
-	fMgr.dataMutex.Lock()
 
 	filePathDoesExist,
 		err := fMgrHelpr.doesFileMgrPathFileExist(
@@ -102,8 +108,6 @@ func (fMgr *FileMgr) ChangePermissionMode(mode FilePermissionConfig) error {
 		PreProcPathCode.None(),
 		ePrefix,
 		"fMgr.absolutePathFileName")
-
-	fMgr.dataMutex.Unlock()
 
 	if err != nil {
 		return err
@@ -116,7 +120,7 @@ func (fMgr *FileMgr) ChangePermissionMode(mode FilePermissionConfig) error {
 			fMgr.absolutePathFileName)
 	}
 
-	err = mode.IsValid()
+	err = mode.IsValid(ePrefix)
 
 	if err != nil {
 		return fmt.Errorf(ePrefix+
@@ -124,24 +128,33 @@ func (fMgr *FileMgr) ChangePermissionMode(mode FilePermissionConfig) error {
 			"Error='%v'\n", err.Error())
 	}
 
-	fileMode, err := mode.GetCompositePermissionMode()
+	var permissionModeText string
+
+	permissionModeText,
+		err = mode.GetPermissionFileModeValueText(ePrefix)
+
+	if err != nil {
+		return fmt.Errorf(ePrefix+"\n"+
+			"Error:  mode.GetPermissionFileModeValueText()\n"+
+			"\n%v\n",
+			err.Error())
+	}
+
+	fileMode, err := mode.GetCompositePermissionMode(
+		ePrefix)
 
 	if err != nil {
 		return fmt.Errorf(ePrefix+"%v", err.Error())
 	}
 
-	fMgr.dataMutex.Lock()
-
 	err = os.Chmod(fMgr.absolutePathFileName, fileMode)
 
 	if err != nil {
 
-		fMgr.dataMutex.Unlock()
-
 		return fmt.Errorf(ePrefix+
 			"Error returned by os.Chmod(fMgr.absolutePathFileName, fileMode).\n"+
 			"fileMode='%v'\nError='%v'\n",
-			mode.GetPermissionFileModeValueText(), err.Error())
+			permissionModeText, err.Error())
 	}
 
 	err = nil
@@ -151,7 +164,6 @@ func (fMgr *FileMgr) ChangePermissionMode(mode FilePermissionConfig) error {
 		ePrefix,
 		"Verify fMgr.absolutePathFileName")
 
-	fMgr.dataMutex.Unlock()
 	return err
 }
 
@@ -163,17 +175,21 @@ func (fMgr *FileMgr) ChangePermissionMode(mode FilePermissionConfig) error {
 // file buffers.
 func (fMgr *FileMgr) CloseThisFile() error {
 
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
+
 	ePrefix := "FileMgr.CloseThisFile() "
 
 	var err error
 
 	fMgrHlpr := fileMgrHelper{}
 
-	fMgr.dataMutex.Lock()
-
 	err = fMgrHlpr.closeFile(fMgr, ePrefix)
-
-	fMgr.dataMutex.Unlock()
 
 	return err
 }
@@ -221,6 +237,14 @@ func (fMgr *FileMgr) CloseThisFile() error {
 //	                current source File Manager instance does NOT exist.
 func (fMgr *FileMgr) CopyFileMgrByIo(fMgrDest *FileMgr) error {
 
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
+
 	ePrefix := "FileMgr.CopyFileMgrByIo() "
 
 	fMgrHlpr := fileMgrHelper{}
@@ -228,8 +252,6 @@ func (fMgr *FileMgr) CopyFileMgrByIo(fMgrDest *FileMgr) error {
 	var err error
 	sourceFMgrLabel := "fMgrSource"
 	destFMgrLabel := "fMgrDest"
-
-	fMgr.dataMutex.Lock()
 
 	err = fMgrHlpr.copyFileSetup(
 		fMgr,
@@ -249,8 +271,6 @@ func (fMgr *FileMgr) CopyFileMgrByIo(fMgrDest *FileMgr) error {
 			sourceFMgrLabel,
 			destFMgrLabel)
 	}
-
-	fMgr.dataMutex.Unlock()
 
 	return err
 }
@@ -278,10 +298,16 @@ func (fMgr *FileMgr) CopyFileMgrByIo(fMgrDest *FileMgr) error {
 // https://stackoverflow.com/questions/21060945/simple-way-to-copy-a-file-in-golang
 func (fMgr *FileMgr) CopyFileMgrByIoByLink(fMgrDest *FileMgr) error {
 
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
+
 	ePrefix := "FileMgr.CopyFileMgrByIoByLink() "
 	fMgrHlpr := fileMgrHelper{}
-
-	fMgr.dataMutex.Lock()
 
 	err := fMgrHlpr.copyFileSetup(
 		fMgr,
@@ -293,7 +319,6 @@ func (fMgr *FileMgr) CopyFileMgrByIoByLink(fMgrDest *FileMgr) error {
 		"fMgrDest")
 
 	if err != nil {
-		fMgr.dataMutex.Unlock()
 		return err
 	}
 
@@ -317,12 +342,10 @@ func (fMgr *FileMgr) CopyFileMgrByIoByLink(fMgrDest *FileMgr) error {
 			"fMgrDest")
 	}
 
-	fMgr.dataMutex.Unlock()
-
 	return err
 }
 
-// CopyFileMgrByIo - Copies the file represented by the current File
+// CopyFileMgrByIoWithBuffer - Copies the file represented by the current File
 // Manager instance to a location specified by a destination input
 // parameter 'fMgrDest', another instance of type FileMgr.
 //
@@ -372,6 +395,14 @@ func (fMgr *FileMgr) CopyFileMgrByIoByLink(fMgrDest *FileMgr) error {
 func (fMgr *FileMgr) CopyFileMgrByIoWithBuffer(
 	fMgrDest *FileMgr, bufferSize int) error {
 
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
+
 	ePrefix := "FileMgr.CopyFileMgrByIo() "
 
 	sourceFMgrLabel := "fMgrSource"
@@ -381,8 +412,6 @@ func (fMgr *FileMgr) CopyFileMgrByIoWithBuffer(
 	fMgrHlpr := fileMgrHelper{}
 
 	var err error
-
-	fMgr.dataMutex.Lock()
 
 	err = fMgrHlpr.copyFileSetup(
 		fMgr,
@@ -394,7 +423,6 @@ func (fMgr *FileMgr) CopyFileMgrByIoWithBuffer(
 		destFMgrLabel)
 
 	if err != nil {
-		fMgr.dataMutex.Unlock()
 		return err
 	}
 
@@ -405,8 +433,6 @@ func (fMgr *FileMgr) CopyFileMgrByIoWithBuffer(
 		ePrefix,
 		sourceFMgrLabel,
 		destFMgrLabel)
-
-	fMgr.dataMutex.Unlock()
 
 	return err
 }
@@ -437,6 +463,14 @@ func (fMgr *FileMgr) CopyFileMgrByIoWithBuffer(
 //	 https://golang.org/pkg/os/#Link
 func (fMgr *FileMgr) CopyFileMgrByLink(fMgrDest *FileMgr) error {
 
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
+
 	ePrefix := "FileMgr.CopyFileMgrByLink() "
 
 	fMgrHlpr := fileMgrHelper{}
@@ -444,8 +478,6 @@ func (fMgr *FileMgr) CopyFileMgrByLink(fMgrDest *FileMgr) error {
 	sourceFMgrLabel := "fMgrSource"
 
 	destFMgrLabel := "fMgrDest"
-
-	fMgr.dataMutex.Lock()
 
 	err := fMgrHlpr.copyFileSetup(
 		fMgr,
@@ -457,7 +489,6 @@ func (fMgr *FileMgr) CopyFileMgrByLink(fMgrDest *FileMgr) error {
 		destFMgrLabel)
 
 	if err != nil {
-		fMgr.dataMutex.Unlock()
 		return err
 	}
 
@@ -467,8 +498,6 @@ func (fMgr *FileMgr) CopyFileMgrByLink(fMgrDest *FileMgr) error {
 		ePrefix,
 		sourceFMgrLabel,
 		destFMgrLabel)
-
-	fMgr.dataMutex.Unlock()
 
 	return err
 }
@@ -495,14 +524,20 @@ func (fMgr *FileMgr) CopyFileMgrByLink(fMgrDest *FileMgr) error {
 // https://stackoverflow.com/questions/21060945/simple-way-to-copy-a-file-in-golang
 func (fMgr *FileMgr) CopyFileMgrByLinkByIo(fMgrDest *FileMgr) error {
 
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
+
 	ePrefix := "FileMgr.CopyFileMgrByLinkByIo() "
 
 	fMgrHlpr := fileMgrHelper{}
 
 	sourceFMgrLabel := "fMgrSource"
 	destFMgrLabel := "fMgrDestDir"
-
-	fMgr.dataMutex.Lock()
 
 	err := fMgrHlpr.copyFileSetup(
 		fMgr,
@@ -514,7 +549,6 @@ func (fMgr *FileMgr) CopyFileMgrByLinkByIo(fMgrDest *FileMgr) error {
 		destFMgrLabel)
 
 	if err != nil {
-		fMgr.dataMutex.Unlock()
 		return err
 	}
 
@@ -534,8 +568,6 @@ func (fMgr *FileMgr) CopyFileMgrByLinkByIo(fMgrDest *FileMgr) error {
 			sourceFMgrLabel,
 			destFMgrLabel)
 	}
-
-	fMgr.dataMutex.Unlock()
 
 	return err
 }
@@ -586,6 +618,14 @@ func (fMgr *FileMgr) CopyFileMgrWithBuffer(
 	fMgrDest *FileMgr,
 	localCopyBuffer []byte) error {
 
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
+
 	ePrefix := "FileMgr.CopyFileMgrWithBuffer() "
 
 	fMgrHlpr := fileMgrHelper{}
@@ -593,8 +633,6 @@ func (fMgr *FileMgr) CopyFileMgrWithBuffer(
 	var err error
 	sourceFMgrLabel := "fMgrSource"
 	destFMgrLabel := "fMgrDest"
-
-	fMgr.dataMutex.Lock()
 
 	err = fMgrHlpr.copyFileSetup(
 		fMgr,
@@ -614,8 +652,6 @@ func (fMgr *FileMgr) CopyFileMgrWithBuffer(
 			sourceFMgrLabel,
 			destFMgrLabel)
 	}
-
-	fMgr.dataMutex.Unlock()
 
 	return err
 }
@@ -640,6 +676,14 @@ func (fMgr *FileMgr) CopyFileMgrWithBuffer(
 //	 https://golang.org/pkg/io/#Copy
 func (fMgr *FileMgr) CopyFileStrByIo(dstPathFileNameExt string) error {
 
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
+
 	ePrefix := "FileMgr.CopyFileStrByIo() "
 
 	fMgrDest, err := FileMgr{}.New(dstPathFileNameExt)
@@ -657,8 +701,6 @@ func (fMgr *FileMgr) CopyFileStrByIo(dstPathFileNameExt string) error {
 
 	fMgrHlpr := fileMgrHelper{}
 
-	fMgr.dataMutex.Lock()
-
 	err = fMgrHlpr.copyFileSetup(
 		fMgr,
 		&fMgrDest,
@@ -669,7 +711,6 @@ func (fMgr *FileMgr) CopyFileStrByIo(dstPathFileNameExt string) error {
 		fMgrDestLabel)
 
 	if err != nil {
-		fMgr.dataMutex.Unlock()
 		return err
 	}
 
@@ -680,8 +721,6 @@ func (fMgr *FileMgr) CopyFileStrByIo(dstPathFileNameExt string) error {
 		ePrefix,
 		fMgrSourceLabel,
 		fMgrDestLabel)
-
-	fMgr.dataMutex.Unlock()
 
 	return err
 }
@@ -709,7 +748,16 @@ func (fMgr *FileMgr) CopyFileStrByIo(dstPathFileNameExt string) error {
 //
 // Reference:
 // https://stackoverflow.com/questions/21060945/simple-way-to-copy-a-file-in-golang
-func (fMgr *FileMgr) CopyFileStrByIoByLink(dstPathFileNameExt string) error {
+func (fMgr *FileMgr) CopyFileStrByIoByLink(
+	dstPathFileNameExt string) error {
+
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
 
 	ePrefix := "FileMgr.CopyFileStrByIoByLink() "
 
@@ -728,8 +776,6 @@ func (fMgr *FileMgr) CopyFileStrByIoByLink(dstPathFileNameExt string) error {
 
 	fMgrHlpr := fileMgrHelper{}
 
-	fMgr.dataMutex.Lock()
-
 	err = fMgrHlpr.copyFileSetup(
 		fMgr,
 		&fMgrDest,
@@ -740,7 +786,6 @@ func (fMgr *FileMgr) CopyFileStrByIoByLink(dstPathFileNameExt string) error {
 		fMgrDestLabel)
 
 	if err != nil {
-		fMgr.dataMutex.Unlock()
 		return err
 	}
 
@@ -760,8 +805,6 @@ func (fMgr *FileMgr) CopyFileStrByIoByLink(dstPathFileNameExt string) error {
 			fMgrSourceLabel,
 			fMgrDestLabel)
 	}
-
-	fMgr.dataMutex.Unlock()
 
 	return err
 }
@@ -784,7 +827,16 @@ func (fMgr *FileMgr) CopyFileStrByIoByLink(dstPathFileNameExt string) error {
 //
 // Reference:
 // https://stackoverflow.com/questions/21060945/simple-way-to-copy-a-file-in-golang
-func (fMgr *FileMgr) CopyFileStrByLink(dstPathFileNameExt string) error {
+func (fMgr *FileMgr) CopyFileStrByLink(
+	dstPathFileNameExt string) error {
+
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
 
 	ePrefix := "FileMgr.CopyFileStrByLink() "
 
@@ -803,8 +855,6 @@ func (fMgr *FileMgr) CopyFileStrByLink(dstPathFileNameExt string) error {
 
 	fMgrHlpr := fileMgrHelper{}
 
-	fMgr.dataMutex.Lock()
-
 	err = fMgrHlpr.copyFileSetup(
 		fMgr,
 		&fMgrDest,
@@ -815,7 +865,6 @@ func (fMgr *FileMgr) CopyFileStrByLink(dstPathFileNameExt string) error {
 		fMgrDestLabel)
 
 	if err != nil {
-		fMgr.dataMutex.Unlock()
 		return err
 	}
 
@@ -825,8 +874,6 @@ func (fMgr *FileMgr) CopyFileStrByLink(dstPathFileNameExt string) error {
 		ePrefix,
 		fMgrSourceLabel,
 		fMgrDestLabel)
-
-	fMgr.dataMutex.Unlock()
 
 	return err
 }
@@ -853,7 +900,16 @@ func (fMgr *FileMgr) CopyFileStrByLink(dstPathFileNameExt string) error {
 //
 // Reference:
 // https://stackoverflow.com/questions/21060945/simple-way-to-copy-a-file-in-golang
-func (fMgr *FileMgr) CopyFileStrByLinkByIo(dstPathFileNameExt string) error {
+func (fMgr *FileMgr) CopyFileStrByLinkByIo(
+	dstPathFileNameExt string) error {
+
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
 
 	ePrefix := "FileMgr.CopyFileStrByLinkByIo() "
 
@@ -872,8 +928,6 @@ func (fMgr *FileMgr) CopyFileStrByLinkByIo(dstPathFileNameExt string) error {
 
 	fMgrHlpr := fileMgrHelper{}
 
-	fMgr.dataMutex.Lock()
-
 	err = fMgrHlpr.copyFileSetup(
 		fMgr,
 		&fMgrDest,
@@ -884,7 +938,6 @@ func (fMgr *FileMgr) CopyFileStrByLinkByIo(dstPathFileNameExt string) error {
 		fMgrDestLabel)
 
 	if err != nil {
-		fMgr.dataMutex.Unlock()
 		return err
 	}
 
@@ -904,8 +957,6 @@ func (fMgr *FileMgr) CopyFileStrByLinkByIo(dstPathFileNameExt string) error {
 			fMgrSourceLabel,
 			fMgrDestLabel)
 	}
-
-	fMgr.dataMutex.Unlock()
 
 	return err
 }
@@ -927,6 +978,14 @@ func (fMgr *FileMgr) CopyFileStrByLinkByIo(dstPathFileNameExt string) error {
 // https://stackoverflow.com/questions/21060945/simple-way-to-copy-a-file-in-golang
 func (fMgr *FileMgr) CopyFileToDirByIo(dir DirMgr) error {
 
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
+
 	ePrefix := "FileMgr.CopyFileToDirByIo() "
 
 	fMgrHlpr := fileMgrHelper{}
@@ -940,12 +999,10 @@ func (fMgr *FileMgr) CopyFileToDirByIo(dir DirMgr) error {
 	sourceFMgrLabel := "fMgrSource"
 	destFMgrLabel := "fMgrDestDir"
 
-	fMgr.dataMutex.Lock()
-
 	fMgrDest, err := FileMgr{}.NewFromDirMgrFileNameExt(dir, fMgr.fileNameExt)
 
 	if err != nil {
-		fMgr.dataMutex.Unlock()
+
 		return fmt.Errorf(ePrefix+
 			"Error returned from FileMgr{}.NewFromDirMgrFileNameExt("+
 			"dir, fMgr.fileNameExt)\n"+
@@ -963,7 +1020,6 @@ func (fMgr *FileMgr) CopyFileToDirByIo(dir DirMgr) error {
 		destFMgrLabel)
 
 	if err != nil {
-		fMgr.dataMutex.Unlock()
 		return err
 	}
 
@@ -974,8 +1030,6 @@ func (fMgr *FileMgr) CopyFileToDirByIo(dir DirMgr) error {
 		ePrefix,
 		sourceFMgrLabel,
 		destFMgrLabel)
-
-	fMgr.dataMutex.Unlock()
 
 	return err
 }
@@ -1003,6 +1057,14 @@ func (fMgr *FileMgr) CopyFileToDirByIo(dir DirMgr) error {
 // https://stackoverflow.com/questions/21060945/simple-way-to-copy-a-file-in-golang
 func (fMgr *FileMgr) CopyFileToDirByIoByLink(dir DirMgr) error {
 
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
+
 	ePrefix := "FileMgr.CopyFileToDirByIoByLink() "
 	fMgrHlpr := fileMgrHelper{}
 
@@ -1015,12 +1077,10 @@ func (fMgr *FileMgr) CopyFileToDirByIoByLink(dir DirMgr) error {
 	fMgrSourceLabel := "fMgrSource"
 	fMgrDestLabel := "fMgrDestDir"
 
-	fMgr.dataMutex.Lock()
-
 	fMgrDest, err := FileMgr{}.NewFromDirMgrFileNameExt(dir, fMgr.fileNameExt)
 
 	if err != nil {
-		fMgr.dataMutex.Unlock()
+
 		return fmt.Errorf(ePrefix+
 			"Error returned from FileMgr{}.NewFromDirMgrFileNameExt("+
 			"dir, fMgr.fileNameExt)\n"+
@@ -1038,7 +1098,6 @@ func (fMgr *FileMgr) CopyFileToDirByIoByLink(dir DirMgr) error {
 		fMgrDestLabel)
 
 	if err != nil {
-		fMgr.dataMutex.Unlock()
 		return err
 	}
 
@@ -1058,8 +1117,6 @@ func (fMgr *FileMgr) CopyFileToDirByIoByLink(dir DirMgr) error {
 			fMgrSourceLabel,
 			fMgrDestLabel)
 	}
-
-	fMgr.dataMutex.Unlock()
 
 	return err
 }
@@ -1082,6 +1139,14 @@ func (fMgr *FileMgr) CopyFileToDirByIoByLink(dir DirMgr) error {
 // https://stackoverflow.com/questions/21060945/simple-way-to-copy-a-file-in-golang
 func (fMgr *FileMgr) CopyFileToDirByLink(dir DirMgr) error {
 
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
+
 	ePrefix := "FileMgr.CopyFileToDirByLink() "
 
 	err := dir.IsDirMgrValid(ePrefix + "Input Parameter 'dir' ")
@@ -1095,12 +1160,10 @@ func (fMgr *FileMgr) CopyFileToDirByLink(dir DirMgr) error {
 
 	fMgrHlpr := fileMgrHelper{}
 
-	fMgr.dataMutex.Lock()
-
 	fMgrDest, err := FileMgr{}.NewFromDirMgrFileNameExt(dir, fMgr.fileNameExt)
 
 	if err != nil {
-		fMgr.dataMutex.Unlock()
+
 		return fmt.Errorf(ePrefix+
 			"Error returned from FileMgr{}.NewFromDirMgrFileNameExt("+
 			"dir, fMgr.fileNameExt)\n"+
@@ -1118,7 +1181,6 @@ func (fMgr *FileMgr) CopyFileToDirByLink(dir DirMgr) error {
 		fMgrDestLabel)
 
 	if err != nil {
-		fMgr.dataMutex.Unlock()
 		return err
 	}
 
@@ -1128,8 +1190,6 @@ func (fMgr *FileMgr) CopyFileToDirByLink(dir DirMgr) error {
 		ePrefix,
 		fMgrSourceLabel,
 		fMgrDestLabel)
-
-	fMgr.dataMutex.Unlock()
 
 	return err
 }
@@ -1157,7 +1217,16 @@ func (fMgr *FileMgr) CopyFileToDirByLink(dir DirMgr) error {
 // https://stackoverflow.com/questions/21060945/simple-way-to-copy-a-file-in-golang
 func (fMgr *FileMgr) CopyFileToDirByLinkByIo(dir DirMgr) error {
 
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
+
 	ePrefix := "FileMgr.CopyFileToDirByLinkByIo() "
+
 	err := dir.IsDirMgrValid(ePrefix + "Input Parameter 'dir' ")
 
 	if err != nil {
@@ -1169,12 +1238,10 @@ func (fMgr *FileMgr) CopyFileToDirByLinkByIo(dir DirMgr) error {
 
 	fMgrHlpr := fileMgrHelper{}
 
-	fMgr.dataMutex.Lock()
-
 	fMgrDest, err := FileMgr{}.NewFromDirMgrFileNameExt(dir, fMgr.fileNameExt)
 
 	if err != nil {
-		fMgr.dataMutex.Unlock()
+
 		return fmt.Errorf(ePrefix+
 			"Error returned from FileMgr{}.NewFromDirMgrFileNameExt("+
 			"dir, fMgr.fileNameExt)\n"+
@@ -1192,7 +1259,6 @@ func (fMgr *FileMgr) CopyFileToDirByLinkByIo(dir DirMgr) error {
 		fMgrDestLabel)
 
 	if err != nil {
-		fMgr.dataMutex.Unlock()
 		return err
 	}
 
@@ -1212,8 +1278,6 @@ func (fMgr *FileMgr) CopyFileToDirByLinkByIo(dir DirMgr) error {
 			fMgrSourceLabel,
 			fMgrDestLabel)
 	}
-
-	fMgr.dataMutex.Unlock()
 
 	return err
 }
@@ -1266,18 +1330,28 @@ func (fMgr *FileMgr) CopyFileToDirByLinkByIo(dir DirMgr) error {
 //	srcFileMgr, destFileMgr, err := FileMgr{}.CopyFromStrings(
 //	                                "../Dir1/srcFile",
 //	                                "../Dir2/destFile")
-func (fMgr FileMgr) CopyFromStrings(
+func (fMgr *FileMgr) CopyFromStrings(
 	sourcePathFileNameExt,
-	destPathFileNameExt string) (fMgrSrc, fMgrDest FileMgr, err error) {
+	destPathFileNameExt string) (
+	fMgrSrc FileMgr,
+	fMgrDest FileMgr,
+	err error) {
+
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
 
 	ePrefix := "FileMgr.CopyFromStrings() "
 	fMgrDest = FileMgr{}
 	var err2 error
 
-	fMgrSrc, err2 = FileMgr{}.New(sourcePathFileNameExt)
+	fMgrSrc, err2 = new(FileMgr).New(sourcePathFileNameExt)
 
 	if err2 != nil {
-		fMgrSrc = FileMgr{}
 
 		err = fmt.Errorf(ePrefix+
 			"Error returned by FileMgr{}.New(sourcePathFileNameExt)\n"+
@@ -1287,15 +1361,15 @@ func (fMgr FileMgr) CopyFromStrings(
 		return fMgrSrc, fMgrDest, err
 	}
 
-	fMgrDest, err2 = FileMgr{}.New(destPathFileNameExt)
+	fMgrDest, err2 = new(FileMgr).New(destPathFileNameExt)
 
 	if err2 != nil {
-		fMgrSrc = FileMgr{}
-		fMgrDest = FileMgr{}
+
 		err = fmt.Errorf(ePrefix+
 			"Error returned by FileMgr{}.New(destPathFileNameExt)\n"+
 			"destPathFileNameExt='%v'\nError='%v'\n",
 			destPathFileNameExt, err2.Error())
+
 		return fMgrSrc, fMgrDest, err
 	}
 
@@ -1303,8 +1377,6 @@ func (fMgr FileMgr) CopyFromStrings(
 
 	sourceFMgrLabel := "fMgrSource"
 	destFMgrLabel := "fMgrDest"
-
-	fMgr.dataMutex.Lock()
 
 	err = fMgrHlpr.copyFileSetup(
 		&fMgrSrc,
@@ -1316,6 +1388,7 @@ func (fMgr FileMgr) CopyFromStrings(
 		destFMgrLabel)
 
 	if err == nil {
+
 		err = fMgrHlpr.lowLevelCopyByIO(
 			&fMgrSrc,
 			&fMgrDest,
@@ -1324,13 +1397,6 @@ func (fMgr FileMgr) CopyFromStrings(
 			sourceFMgrLabel,
 			destFMgrLabel)
 	}
-
-	if err != nil {
-		fMgrSrc = FileMgr{}
-		fMgrDest = FileMgr{}
-	}
-
-	fMgr.dataMutex.Unlock()
 
 	return fMgrSrc, fMgrDest, err
 }
@@ -1341,12 +1407,18 @@ func (fMgr FileMgr) CopyFromStrings(
 // Note: Internal file pointer will not be copied.
 func (fMgr *FileMgr) CopyIn(fmgr2 *FileMgr) {
 
-	if fmgr2 == nil {
-		fmgr2 = &FileMgr{}
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
 	}
 
-	fMgr.dataMutex.Lock()
-	fmgr2.dataMutex.Lock()
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
+
+	if fmgr2 == nil {
+
+		fmgr2 = &FileMgr{}
+	}
 
 	fMgr.isInitialized = fmgr2.isInitialized
 	fMgr.dMgr.CopyIn(&fmgr2.dMgr)
@@ -1369,9 +1441,6 @@ func (fMgr *FileMgr) CopyIn(fmgr2 *FileMgr) {
 	fMgr.fileRdrBufSize = fmgr2.fileRdrBufSize
 	fMgr.fileWriterBufSize = fmgr2.fileWriterBufSize
 
-	fmgr2.dataMutex.Unlock()
-	fMgr.dataMutex.Unlock()
-
 	return
 }
 
@@ -1381,7 +1450,13 @@ func (fMgr *FileMgr) CopyIn(fmgr2 *FileMgr) {
 // Note: Internal File Pointer will not be copied.
 func (fMgr *FileMgr) CopyOut() FileMgr {
 
-	fMgr.dataMutex.Lock()
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
 
 	fmgr2 := FileMgr{}
 
@@ -1408,8 +1483,6 @@ func (fMgr *FileMgr) CopyOut() FileMgr {
 	fmgr2.fileRdrBufSize = fMgr.fileRdrBufSize
 	fmgr2.fileWriterBufSize = fMgr.fileWriterBufSize
 
-	fMgr.dataMutex.Unlock()
-
 	return fmgr2
 }
 
@@ -1417,16 +1490,20 @@ func (fMgr *FileMgr) CopyOut() FileMgr {
 // for this file manager instance.
 func (fMgr *FileMgr) CreateDir() error {
 
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
+
 	ePrefix := "FileMgr.CreateDir() "
 	var err error
 
 	fMgrHlpr := fileMgrHelper{}
 
-	fMgr.dataMutex.Lock()
-
 	err = fMgrHlpr.createDirectory(fMgr, ePrefix)
-
-	fMgr.dataMutex.Unlock()
 
 	return err
 }
@@ -1445,10 +1522,16 @@ func (fMgr *FileMgr) CreateDir() error {
 // finished with it. See FileMgr.CloseThisFile().
 func (fMgr *FileMgr) CreateDirAndFile() error {
 
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
+
 	ePrefix := "FileMgr:CreateDirAndFile() "
 	var err error
-
-	fMgr.dataMutex.Lock()
 
 	fMgrHlpr := fileMgrHelper{}
 
@@ -1456,8 +1539,6 @@ func (fMgr *FileMgr) CreateDirAndFile() error {
 		fMgr,
 		true,
 		ePrefix)
-
-	fMgr.dataMutex.Unlock()
 
 	return err
 }
@@ -1476,19 +1557,23 @@ func (fMgr *FileMgr) CreateDirAndFile() error {
 // when finished with it. See FileMgr.CloseThisFile()
 func (fMgr *FileMgr) CreateThisFile() error {
 
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
+
 	ePrefix := "FileMgr:CreateThisFile() "
 
 	fMgrHlpr := fileMgrHelper{}
 	var err error
 
-	fMgr.dataMutex.Lock()
-
 	err = fMgrHlpr.createFile(
 		fMgr,
 		false,
 		ePrefix)
-
-	fMgr.dataMutex.Unlock()
 
 	return err
 }
@@ -1498,16 +1583,20 @@ func (fMgr *FileMgr) CreateThisFile() error {
 
 func (fMgr *FileMgr) DeleteThisFile() error {
 
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
+
 	ePrefix := "FileMgr.DeleteThisFile() "
 	var err error
 
 	fMgrHlpr := fileMgrHelper{}
 
-	fMgr.dataMutex.Lock()
-
 	err = fMgrHlpr.deleteFile(fMgr, ePrefix)
-
-	fMgr.dataMutex.Unlock()
 
 	return err
 }
@@ -1530,6 +1619,14 @@ func (fMgr *FileMgr) DeleteThisFile() error {
 // will be returned.
 func (fMgr *FileMgr) DoesFileExist() bool {
 
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
+
 	ePrefix := "FileMgr.DoesFileExist() "
 
 	var err error
@@ -1537,16 +1634,12 @@ func (fMgr *FileMgr) DoesFileExist() bool {
 
 	fMgrHlpr := fileMgrHelper{}
 
-	fMgr.dataMutex.Lock()
-
 	pathFileDoesExist,
 		err = fMgrHlpr.doesFileMgrPathFileExist(
 		fMgr,
 		PreProcPathCode.None(),
 		ePrefix,
 		"fMgr.absolutePathFileName")
-
-	fMgr.dataMutex.Unlock()
 
 	if err != nil {
 		return false
@@ -1559,14 +1652,22 @@ func (fMgr *FileMgr) DoesFileExist() bool {
 // designating whether the file specified by the
 // current FileMgr.absolutePathFileName field
 // exists.
-func (fMgr *FileMgr) DoesThisFileExist() (fileDoesExist bool, nonPathError error) {
+func (fMgr *FileMgr) DoesThisFileExist() (
+	fileDoesExist bool,
+	nonPathError error) {
+
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
 
 	ePrefix := "FileMgr.DoesThisFileExist() "
 	fileDoesExist = false
 	nonPathError = nil
 	fMgrHelpr := fileMgrHelper{}
-
-	fMgr.dataMutex.Lock()
 
 	fileDoesExist,
 		nonPathError = fMgrHelpr.doesFileMgrPathFileExist(fMgr,
@@ -1578,8 +1679,6 @@ func (fMgr *FileMgr) DoesThisFileExist() (fileDoesExist bool, nonPathError error
 		fileDoesExist = false
 	}
 
-	fMgr.dataMutex.Unlock()
-
 	return fileDoesExist, nonPathError
 }
 
@@ -1589,14 +1688,19 @@ func (fMgr *FileMgr) DoesThisFileExist() (fileDoesExist bool, nonPathError error
 // in all respects.
 func (fMgr *FileMgr) Equal(fmgr2 *FileMgr) bool {
 
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
+
 	if fmgr2 == nil {
 		fmgr2 = &FileMgr{}
 	}
 
 	result := true
-
-	fMgr.dataMutex.Lock()
-	fmgr2.dataMutex.Lock()
 
 	if fMgr.isInitialized != fmgr2.isInitialized ||
 		fMgr.originalPathFileName != fmgr2.originalPathFileName ||
@@ -1631,9 +1735,6 @@ func (fMgr *FileMgr) Equal(fmgr2 *FileMgr) bool {
 		!fMgr.actualFileInfo.Equal(&fmgr2.actualFileInfo) {
 		result = false
 	}
-
-	fmgr2.dataMutex.Unlock()
-	fMgr.dataMutex.Unlock()
 
 	return result
 }
@@ -1684,6 +1785,14 @@ func (fMgr *FileMgr) EqualAbsPaths(fmgr2 *FileMgr) bool {
 // ONLY the file name and file extension are tested for equaltiy.
 func (fMgr *FileMgr) EqualFileNameExt(fmgr2 *FileMgr) bool {
 
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
+
 	if fmgr2 == nil {
 		fmgr2 = &FileMgr{}
 	}
@@ -1693,16 +1802,10 @@ func (fMgr *FileMgr) EqualFileNameExt(fmgr2 *FileMgr) bool {
 	f1FileExt := ""
 	f2FileExt := ""
 
-	fMgr.dataMutex.Lock()
-	fmgr2.dataMutex.Lock()
-
 	f1FileName = fMgr.fileName
 	f2FileName = fmgr2.fileName
 	f1FileExt = fMgr.fileExt
 	f2FileExt = fmgr2.fileExt
-
-	fmgr2.dataMutex.Unlock()
-	fMgr.dataMutex.Unlock()
 
 	f1FileName = strings.ToLower(f1FileName)
 
@@ -1736,6 +1839,14 @@ func (fMgr *FileMgr) EqualFileNameExt(fmgr2 *FileMgr) bool {
 // will return 'false'.
 func (fMgr *FileMgr) EqualPathFileNameExt(fmgr2 *FileMgr) bool {
 
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
+
 	if fmgr2 == nil {
 		fmgr2 = &FileMgr{}
 	}
@@ -1743,15 +1854,9 @@ func (fMgr *FileMgr) EqualPathFileNameExt(fmgr2 *FileMgr) bool {
 	f1AbsolutePathFileName := ""
 	f2AbsolutePathFileName := ""
 
-	fMgr.dataMutex.Lock()
-	fmgr2.dataMutex.Lock()
-
 	f1AbsolutePathFileName = fMgr.absolutePathFileName
 
 	f2AbsolutePathFileName = fmgr2.absolutePathFileName
-
-	fmgr2.dataMutex.Unlock()
-	fMgr.dataMutex.Unlock()
 
 	f1AbsolutePathFileName = strings.ToLower(f1AbsolutePathFileName)
 	f2AbsolutePathFileName = strings.ToLower(f2AbsolutePathFileName)
@@ -1767,14 +1872,18 @@ func (fMgr *FileMgr) EqualPathFileNameExt(fmgr2 *FileMgr) bool {
 // their uninitialized or zero state.
 func (fMgr *FileMgr) Empty() {
 
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
+
 	fMgrHlpr := fileMgrHelper{}
 	var err error
 
-	fMgr.dataMutex.Lock()
-
 	err = fMgrHlpr.emptyFileMgr(fMgr, "FileMgr.Empty() ")
-
-	fMgr.dataMutex.Unlock()
 
 	if err != nil {
 		panic(err.Error())
@@ -1788,16 +1897,20 @@ func (fMgr *FileMgr) Empty() {
 // stable storage.
 func (fMgr *FileMgr) FlushBytesToDisk() error {
 
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
+
 	ePrefix := "FileMgr.FlushBytesToDisk() "
 
 	var err error
 	fMgrHlpr := fileMgrHelper{}
 
-	fMgr.dataMutex.Lock()
-
 	err = fMgrHlpr.flushBytesToDisk(fMgr, ePrefix)
-
-	fMgr.dataMutex.Unlock()
 
 	return err
 }
@@ -1824,9 +1937,15 @@ func (fMgr *FileMgr) GetAbsolutePath() string {
 // lower case characters.
 func (fMgr *FileMgr) GetAbsolutePathFileName() string {
 
-	var absolutePathFileName string
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
 
-	fMgr.dataMutex.Lock()
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
+
+	var absolutePathFileName string
 
 	if !fMgr.isInitialized {
 
@@ -1836,8 +1955,6 @@ func (fMgr *FileMgr) GetAbsolutePathFileName() string {
 
 		absolutePathFileName = fMgr.absolutePathFileName
 	}
-
-	fMgr.dataMutex.Unlock()
 
 	return absolutePathFileName
 }
@@ -1854,9 +1971,15 @@ func (fMgr *FileMgr) GetAbsolutePathFileName() string {
 // lower case characters.
 func (fMgr *FileMgr) GetAbsolutePathFileNameLc() string {
 
-	var absolutePathFileName string
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
 
-	fMgr.dataMutex.Lock()
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
+
+	var absolutePathFileName string
 
 	if !fMgr.isInitialized {
 		absolutePathFileName = ""
@@ -1864,8 +1987,6 @@ func (fMgr *FileMgr) GetAbsolutePathFileNameLc() string {
 
 		absolutePathFileName = strings.ToLower(fMgr.absolutePathFileName)
 	}
-
-	fMgr.dataMutex.Unlock()
 
 	return absolutePathFileName
 }
@@ -1879,13 +2000,17 @@ func (fMgr *FileMgr) GetAbsolutePathFileNameLc() string {
 // 'fMgr.fileBufRdr' may be nil.
 func (fMgr *FileMgr) GetBufioReader() *bufio.Reader {
 
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
+
 	var fileBufRdr *bufio.Reader
 
-	fMgr.dataMutex.Lock()
-
 	fileBufRdr = fMgr.fileBufRdr
-
-	fMgr.dataMutex.Unlock()
 
 	return fileBufRdr
 }
@@ -1899,13 +2024,17 @@ func (fMgr *FileMgr) GetBufioReader() *bufio.Reader {
 // 'fMgr.fileBufWriter' may be nil.
 func (fMgr *FileMgr) GetBufioWriter() *bufio.Writer {
 
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
+
 	var bufWriter *bufio.Writer
 
-	fMgr.dataMutex.Lock()
-
 	bufWriter = fMgr.fileBufWriter
-
-	fMgr.dataMutex.Unlock()
 
 	return bufWriter
 }
@@ -1922,18 +2051,25 @@ func (fMgr *FileMgr) GetDirMgr() DirMgr {
 // These variables records the number of bytes written to the FileMgr's
 // target file since it was opened with 'Write' or 'Read-Write' permissions.
 func (fMgr *FileMgr) GetFileBytesWritten() uint64 {
+
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
+
 	var bytesWritten uint64
 
-	fMgr.dataMutex.Lock()
-
 	bytesWritten = fMgr.buffBytesWritten + fMgr.fileBytesWritten
-
-	fMgr.dataMutex.Unlock()
 
 	return bytesWritten
 }
 
-// GetFileExt() - returns a string containing the File Extension for this
+// GetFileExt
+//
+// Returns a string containing the File Extension for this
 // File Manager instance.
 //
 // IMPORTANT:
@@ -1946,17 +2082,22 @@ func (fMgr *FileMgr) GetFileBytesWritten() uint64 {
 //	        File Name Plus Extension: "newerFileForTest_01"
 //	         Returned File Extension: ""
 func (fMgr *FileMgr) GetFileExt() string {
-	fileExt := ""
 
-	fMgr.dataMutex.Lock()
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
+
+	fileExt := ""
 
 	if fMgr.isInitialized == false {
 		fileExt = ""
 	} else {
 		fileExt = fMgr.fileExt
 	}
-
-	fMgr.dataMutex.Unlock()
 
 	return fileExt
 }
@@ -1977,14 +2118,20 @@ func (fMgr *FileMgr) GetFileExt() string {
 //	 }
 func (fMgr *FileMgr) GetFileInfo() (fInfo os.FileInfo, err error) {
 
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
+
 	fInfo = nil
 	err = nil
 	filePathDoesExist := false
 	ePrefix := "FileMgr.GetFileInfo() "
 
 	fMgrHelpr := fileMgrHelper{}
-
-	fMgr.dataMutex.Lock()
 
 	filePathDoesExist,
 		err = fMgrHelpr.doesFileMgrPathFileExist(fMgr,
@@ -2005,8 +2152,6 @@ func (fMgr *FileMgr) GetFileInfo() (fInfo os.FileInfo, err error) {
 				"File='%v'\n", fMgr.absolutePathFileName)
 	}
 
-	fMgr.dataMutex.Unlock()
-
 	return fInfo, err
 }
 
@@ -2016,14 +2161,20 @@ func (fMgr *FileMgr) GetFileInfo() (fInfo os.FileInfo, err error) {
 // An error will be triggered if the file path does NOT exist!
 func (fMgr *FileMgr) GetFileInfoPlus() (fInfo FileInfoPlus, err error) {
 
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
+
 	fInfo = FileInfoPlus{}
 	err = nil
 	ePrefix := "FileMgr.GetFileInfoPlus() "
 
 	fMgrHelpr := fileMgrHelper{}
 	filePathDoesExist := false
-
-	fMgr.dataMutex.Lock()
 
 	filePathDoesExist,
 		err = fMgrHelpr.doesFileMgrPathFileExist(fMgr,
@@ -2043,8 +2194,6 @@ func (fMgr *FileMgr) GetFileInfoPlus() (fInfo FileInfoPlus, err error) {
 			"File='%v'\n", fMgr.absolutePathFileName)
 	}
 
-	fMgr.dataMutex.Unlock()
-
 	return fInfo, err
 }
 
@@ -2054,14 +2203,20 @@ func (fMgr *FileMgr) GetFileInfoPlus() (fInfo FileInfoPlus, err error) {
 // If the file does NOT exist, an error is returned.
 func (fMgr *FileMgr) GetFileModTime() (time.Time, error) {
 
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
+
 	ePrefix := "FileMgr.GetFileModTime() "
 
 	fMgrHelpr := fileMgrHelper{}
 	var err error
 	filePathDoesExist := false
 	modTime := time.Time{}
-
-	fMgr.dataMutex.Lock()
 
 	filePathDoesExist,
 		err = fMgrHelpr.doesFileMgrPathFileExist(
@@ -2073,8 +2228,6 @@ func (fMgr *FileMgr) GetFileModTime() (time.Time, error) {
 	if err == nil && filePathDoesExist {
 		modTime = fMgr.actualFileInfo.ModTime()
 	}
-
-	fMgr.dataMutex.Unlock()
 
 	if err == nil && !filePathDoesExist {
 		err = fmt.Errorf(ePrefix+
@@ -2118,14 +2271,20 @@ func (fMgr *FileMgr) GetFileModTime() (time.Time, error) {
 //	                File Manager instance does NOT exist.
 func (fMgr *FileMgr) GetFileModTimeStr(timeFormat string) (string, error) {
 
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
+
 	ePrefix := "FileMgr.GetFileModTimeStr() "
 
 	fMgrHelpr := fileMgrHelper{}
 	var err error
 	filePathDoesExist := false
 	modTime := time.Time{}
-
-	fMgr.dataMutex.Lock()
 
 	filePathDoesExist,
 		err = fMgrHelpr.doesFileMgrPathFileExist(
@@ -2137,8 +2296,6 @@ func (fMgr *FileMgr) GetFileModTimeStr(timeFormat string) (string, error) {
 	if err == nil && filePathDoesExist {
 		modTime = fMgr.actualFileInfo.ModTime()
 	}
-
-	fMgr.dataMutex.Unlock()
 
 	defaultFmt := "2006-01-02 15:04:05 -0700 MST"
 
@@ -2173,17 +2330,21 @@ func (fMgr *FileMgr) GetFileModTimeStr(timeFormat string) (string, error) {
 //	              Returned File Name: "newerFileForTest_01"
 func (fMgr *FileMgr) GetFileName() string {
 
-	fileName := ""
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
 
-	fMgr.dataMutex.Lock()
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
+
+	fileName := ""
 
 	if fMgr.isInitialized == false {
 		fileName = ""
 	} else {
 		fileName = fMgr.fileName
 	}
-
-	fMgr.dataMutex.Unlock()
 
 	return fileName
 }
@@ -2201,9 +2362,15 @@ func (fMgr *FileMgr) GetFileName() string {
 //	Returned File Name Plus Extension: "newerFileForTest_01"
 func (fMgr *FileMgr) GetFileNameExt() string {
 
-	fileNameExt := ""
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
 
-	fMgr.dataMutex.Lock()
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
+
+	fileNameExt := ""
 
 	if fMgr.isInitialized == false {
 		fileNameExt = ""
@@ -2212,16 +2379,22 @@ func (fMgr *FileMgr) GetFileNameExt() string {
 		fileNameExt = fMgr.fileNameExt
 	}
 
-	fMgr.dataMutex.Unlock()
-
 	return fileNameExt
 }
 
 // GetFilePermissionConfig - Returns a FilePermissionConfig instance encapsulating
-// all of the permission information associated with this file.
+// all the permission information associated with this file.
 //
 // If the file does NOT exist, this method will return an error.
 func (fMgr *FileMgr) GetFilePermissionConfig() (fPerm FilePermissionConfig, err error) {
+
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
 
 	ePrefix := "FileMgr.GetFilePermissionConfig() "
 
@@ -2230,8 +2403,6 @@ func (fMgr *FileMgr) GetFilePermissionConfig() (fPerm FilePermissionConfig, err 
 	var filePathDoesExist bool
 	var err2 error
 	fMgrHelpr := fileMgrHelper{}
-
-	fMgr.dataMutex.Lock()
 
 	filePathDoesExist,
 		err = fMgrHelpr.doesFileMgrPathFileExist(fMgr,
@@ -2256,8 +2427,6 @@ func (fMgr *FileMgr) GetFilePermissionConfig() (fPerm FilePermissionConfig, err 
 					"\n%v\n", err2.Error())
 		}
 	}
-
-	fMgr.dataMutex.Unlock()
 
 	return fPerm, err
 }
@@ -2289,6 +2458,14 @@ func (fMgr *FileMgr) GetFilePermissionConfig() (fPerm FilePermissionConfig, err 
 //	drwxrwxrwx     20000000777      File - Directory - read, write, & execute for owner, group and others
 func (fMgr *FileMgr) GetFilePermissionTextCodes() (string, error) {
 
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
+
 	ePrefix := "FileMgr.GetFilePermissionTextCodes() "
 
 	fMgrHlpr := fileMgrHelper{}
@@ -2296,8 +2473,6 @@ func (fMgr *FileMgr) GetFilePermissionTextCodes() (string, error) {
 	var err, err2 error
 	fPerm := FilePermissionConfig{}
 	permissionText := ""
-
-	fMgr.dataMutex.Lock()
 
 	filePathDoesExist,
 		err = fMgrHlpr.doesFileMgrPathFileExist(
@@ -2333,8 +2508,6 @@ func (fMgr *FileMgr) GetFilePermissionTextCodes() (string, error) {
 		}
 	}
 
-	fMgr.dataMutex.Unlock()
-
 	return permissionText, err
 }
 
@@ -2343,30 +2516,40 @@ func (fMgr *FileMgr) GetFilePermissionTextCodes() (string, error) {
 // this pointer may be nil.
 func (fMgr *FileMgr) GetFilePtr() *os.File {
 
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
+
 	var filePtr *os.File
 
-	fMgr.dataMutex.Lock()
-
 	filePtr = fMgr.filePtr
-
-	fMgr.dataMutex.Unlock()
 
 	return filePtr
 }
 
-// GetFileSize() - Returns os.FileInfo.Size() length in bytes for regular files;
+// GetFileSize - Returns os.FileInfo.Size() length in bytes for regular files;
 // system-dependent for others.
 //
 // If the File Manager file does NOT exist, or if there is a file-path error, the
 // value returned is -1.
 func (fMgr *FileMgr) GetFileSize() int64 {
 
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
+
 	fMgrHlpr := fileMgrHelper{}
 	filePathDoesExist := false
 	var err error
 	var fileSize int64
-
-	fMgr.dataMutex.Lock()
 
 	filePathDoesExist,
 		err = fMgrHlpr.doesFileMgrPathFileExist(
@@ -2385,8 +2568,6 @@ func (fMgr *FileMgr) GetFileSize() int64 {
 		fileSize = -1
 	}
 
-	fMgr.dataMutex.Unlock()
-
 	return fileSize
 }
 
@@ -2398,26 +2579,36 @@ func (fMgr *FileMgr) GetFileSize() int64 {
 // for the host computer.
 func (fMgr *FileMgr) GetOriginalPathFileName() string {
 
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
+
 	originalPathName := ""
 
-	fMgr.dataMutex.Lock()
-
 	originalPathName = fMgr.originalPathFileName
-
-	fMgr.dataMutex.Unlock()
 
 	return originalPathName
 }
 
-// GetReaderBufferSize() - Returns the size for the internal
+// GetReaderBufferSize - Returns the size for the internal
 // Bufio Reader's buffer. If the value is less than 1 it means
 // that the buffer will be set to the default size at the next
 // 'Read' Operation.
 func (fMgr *FileMgr) GetReaderBufferSize() int {
 
-	readerBuffSize := 0
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
 
-	fMgr.dataMutex.Lock()
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
+
+	readerBuffSize := 0
 
 	if fMgr.fileBufRdr != nil {
 		fMgr.fileRdrBufSize = fMgr.fileBufRdr.Size()
@@ -2426,20 +2617,24 @@ func (fMgr *FileMgr) GetReaderBufferSize() int {
 		readerBuffSize = fMgr.fileRdrBufSize
 	}
 
-	fMgr.dataMutex.Unlock()
-
 	return readerBuffSize
 }
 
-// GetWriterBufferSize() - Returns the size for the internal
-// Bufio Writers's buffer. If the value is less than 1 it means
+// GetWriterBufferSize - Returns the size for the internal
+// Bufio Writer's buffer. If the value is less than 1 it means
 // that the buffer will be set to the default size at the next
 // 'Write' Operation.
 func (fMgr *FileMgr) GetWriterBufferSize() int {
 
-	writerBuffSize := 0
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
 
-	fMgr.dataMutex.Lock()
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
+
+	writerBuffSize := 0
 
 	if fMgr.fileBufWriter != nil {
 		fMgr.fileWriterBufSize = fMgr.fileBufWriter.Size()
@@ -2447,8 +2642,6 @@ func (fMgr *FileMgr) GetWriterBufferSize() int {
 	} else {
 		writerBuffSize = fMgr.fileWriterBufSize
 	}
-
-	fMgr.dataMutex.Unlock()
 
 	return writerBuffSize
 }
@@ -2458,11 +2651,18 @@ func (fMgr *FileMgr) GetWriterBufferSize() int {
 // initialized and populated.
 func (fMgr *FileMgr) IsAbsolutePathFileNamePopulated() bool {
 
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
+
 	fMgrHlpr := fileMgrHelper{}
 	var err error
 	isAbsolutePathFileNamePopulated := false
 
-	fMgr.dataMutex.Lock()
 	_,
 		err = fMgrHlpr.doesFileMgrPathFileExist(
 		fMgr,
@@ -2478,8 +2678,6 @@ func (fMgr *FileMgr) IsAbsolutePathFileNamePopulated() bool {
 		isAbsolutePathFileNamePopulated = true
 	}
 
-	fMgr.dataMutex.Unlock()
-
 	return isAbsolutePathFileNamePopulated
 }
 
@@ -2488,11 +2686,17 @@ func (fMgr *FileMgr) IsAbsolutePathFileNamePopulated() bool {
 // is populated.
 func (fMgr *FileMgr) IsFileExtPopulated() bool {
 
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
+
 	fMgrHlpr := fileMgrHelper{}
 	var err error
 	isFileExtPopulated := false
-
-	fMgr.dataMutex.Lock()
 
 	_,
 		err = fMgrHlpr.doesFileMgrPathFileExist(
@@ -2510,8 +2714,6 @@ func (fMgr *FileMgr) IsFileExtPopulated() bool {
 		isFileExtPopulated = true
 	}
 
-	fMgr.dataMutex.Unlock()
-
 	return isFileExtPopulated
 }
 
@@ -2521,17 +2723,30 @@ func (fMgr *FileMgr) IsFileExtPopulated() bool {
 // If the current FileMgr is VALID, this method returns 'nil'
 func (fMgr *FileMgr) IsFileMgrValid(errorPrefixStr string) (err error) {
 
-	fMgr.dataMutex.Lock()
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
 
 	err = nil
+
 	ePrefix := strings.TrimRight(errorPrefixStr, " ") + "FileMgr.IsFileMgrValid()"
 
 	if !fMgr.isInitialized {
+
 		err = errors.New(ePrefix + " Error: This data structure is NOT initialized.")
+
 	} else if fMgr.absolutePathFileName == "" {
+
 		fMgr.isAbsolutePathFileNamePopulated = false
+
 		err = errors.New(ePrefix + " Error: absolutePathFileName is EMPTY!")
+
 	} else {
+
 		err2 := fMgr.dMgr.IsDirMgrValid(ePrefix)
 
 		if err2 != nil {
@@ -2543,7 +2758,9 @@ func (fMgr *FileMgr) IsFileMgrValid(errorPrefixStr string) (err error) {
 	}
 
 	if err == nil {
+
 		fMgrHelpr := fileMgrHelper{}
+
 		_,
 			err = fMgrHelpr.doesFileMgrPathFileExist(
 			fMgr,
@@ -2554,8 +2771,6 @@ func (fMgr *FileMgr) IsFileMgrValid(errorPrefixStr string) (err error) {
 		_ = fMgr.dMgr.DoesPathExist()
 		_ = fMgr.dMgr.DoesAbsolutePathExist()
 	}
-
-	fMgr.dataMutex.Unlock()
 
 	return err
 }
@@ -2570,11 +2785,17 @@ func (fMgr *FileMgr) IsFileMgrValid(errorPrefixStr string) (err error) {
 // returns 'true'.
 func (fMgr *FileMgr) IsFileNameExtPopulated() bool {
 
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
+
 	fMgrHlpr := fileMgrHelper{}
 	var err error
 	isFileNameExtPopulated := false
-
-	fMgr.dataMutex.Lock()
 
 	_,
 		err = fMgrHlpr.doesFileMgrPathFileExist(
@@ -2595,8 +2816,6 @@ func (fMgr *FileMgr) IsFileNameExtPopulated() bool {
 		isFileNameExtPopulated = false
 	}
 
-	fMgr.dataMutex.Unlock()
-
 	return isFileNameExtPopulated
 }
 
@@ -2605,11 +2824,17 @@ func (fMgr *FileMgr) IsFileNameExtPopulated() bool {
 // Manager object is populated.
 func (fMgr *FileMgr) IsFileNamePopulated() bool {
 
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
+
 	fMgrHlpr := fileMgrHelper{}
 	var err error
 	isFileNamePopulated := false
-
-	fMgr.dataMutex.Lock()
 
 	_,
 		err = fMgrHlpr.doesFileMgrPathFileExist(
@@ -2626,8 +2851,6 @@ func (fMgr *FileMgr) IsFileNamePopulated() bool {
 		isFileNamePopulated = true
 	}
 
-	fMgr.dataMutex.Unlock()
-
 	return isFileNamePopulated
 }
 
@@ -2636,9 +2859,15 @@ func (fMgr *FileMgr) IsFileNamePopulated() bool {
 // instance is open, or not.
 func (fMgr *FileMgr) IsFilePointerOpen() bool {
 
-	var isFilePtrOpen bool
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
 
-	fMgr.dataMutex.Lock()
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
+
+	var isFilePtrOpen bool
 
 	if fMgr.filePtr == nil {
 		fMgr.isFilePtrOpen = false
@@ -2648,22 +2877,24 @@ func (fMgr *FileMgr) IsFilePointerOpen() bool {
 		isFilePtrOpen = true
 	}
 
-	fMgr.dataMutex.Unlock()
-
 	return isFilePtrOpen
 }
 
-// isInitialized - Returns a boolean indicating whether the FileMgr
+// IsInitialized - Returns a boolean indicating whether the FileMgr
 // object is properly initialized.
 func (fMgr *FileMgr) IsInitialized() bool {
 
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
+
 	isInitialized := false
 
-	fMgr.dataMutex.Lock()
-
 	isInitialized = fMgr.isInitialized
-
-	fMgr.dataMutex.Unlock()
 
 	return isInitialized
 }
@@ -2684,16 +2915,20 @@ func (fMgr *FileMgr) IsInitialized() bool {
 // which currently does NOT exist, it will be created.
 func (fMgr *FileMgr) MoveFileToFileMgr(destinationFMgr FileMgr) error {
 
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
+
 	ePrefix := "FileMgr.MoveFileToFileMgr() "
 	var err error
 
 	fMgrHlpr := fileMgrHelper{}
 
-	fMgr.dataMutex.Lock()
-
 	err = fMgrHlpr.moveFile(fMgr, &destinationFMgr, ePrefix)
-
-	fMgr.dataMutex.Unlock()
 
 	return err
 }
@@ -2714,6 +2949,14 @@ func (fMgr *FileMgr) MoveFileToFileMgr(destinationFMgr FileMgr) error {
 // which currently does NOT exist, it will be created.
 func (fMgr *FileMgr) MoveFileToFileStr(pathFileNameExt string) (FileMgr, error) {
 
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
+
 	ePrefix := "FileMgr.MoveFileToFileStr() "
 	var err error
 
@@ -2727,11 +2970,7 @@ func (fMgr *FileMgr) MoveFileToFileStr(pathFileNameExt string) (FileMgr, error) 
 
 	fMgrHlpr := fileMgrHelper{}
 
-	fMgr.dataMutex.Lock()
-
 	err = fMgrHlpr.moveFile(fMgr, &targetFMgr, ePrefix)
-
-	fMgr.dataMutex.Unlock()
 
 	return targetFMgr, err
 }
@@ -2752,9 +2991,17 @@ func (fMgr *FileMgr) MoveFileToFileStr(pathFileNameExt string) (FileMgr, error) 
 // currently exist, it will be created.
 func (fMgr *FileMgr) MoveFileToNewDir(dirPath string) (FileMgr, error) {
 
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
+
 	ePrefix := "FileMgr.MoveFileToNewDir() "
 
-	dirMgr, err := DirMgr{}.New(dirPath)
+	dirMgr, err := new(DirMgr).New(dirPath)
 
 	if err != nil {
 		return FileMgr{},
@@ -2775,11 +3022,7 @@ func (fMgr *FileMgr) MoveFileToNewDir(dirPath string) (FileMgr, error) {
 
 	fMgrHlpr := fileMgrHelper{}
 
-	fMgr.dataMutex.Lock()
-
 	err = fMgrHlpr.moveFile(fMgr, &targetFMgr, ePrefix)
-
-	fMgr.dataMutex.Unlock()
 
 	return targetFMgr, err
 }
@@ -2800,6 +3043,14 @@ func (fMgr *FileMgr) MoveFileToNewDir(dirPath string) (FileMgr, error) {
 // exists, it will be created.
 func (fMgr *FileMgr) MoveFileToNewDirMgr(dMgr DirMgr) (FileMgr, error) {
 
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
+
 	ePrefix := "FileMgr.MoveFileToNewDirMgr() "
 
 	var err error
@@ -2812,26 +3063,22 @@ func (fMgr *FileMgr) MoveFileToNewDirMgr(dMgr DirMgr) (FileMgr, error) {
 			"Error='%v'", err2.Error())
 	}
 
-	fMgr.dataMutex.Lock()
-
 	targetFile := dMgr.GetAbsolutePathWithSeparator() + fMgr.fileNameExt
 
 	targetFMgr, err2 = FileMgr{}.New(targetFile)
 
 	if err2 != nil {
+
 		err = fmt.Errorf(ePrefix+
 			"Error returned by FileMgr{}.New(targetFile)\n"+
 			"targetFile='%v'\nError='%v'\n", targetFile, err2.Error())
 
-		fMgr.dataMutex.Unlock()
 		return FileMgr{}, err
 	}
 
 	fMgrHlpr := fileMgrHelper{}
 
 	err = fMgrHlpr.moveFile(fMgr, &targetFMgr, ePrefix)
-
-	fMgr.dataMutex.Unlock()
 
 	return targetFMgr, err
 }
@@ -3172,12 +3419,19 @@ func (fMgr FileMgr) NewFromPathFileNameExtStr(pathFileNameExt string) (FileMgr, 
 // Note: If the FileMgr directory path does not exist, this method will
 // create that directory path.
 func (fMgr *FileMgr) OpenThisFile(fileAccessCtrl FileAccessControl) error {
+
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
+
 	ePrefix := "FileMgr.OpenThisFile() "
 	var err error
 
 	fMgrHlpr := fileMgrHelper{}
-
-	fMgr.dataMutex.Lock()
 
 	err = fMgrHlpr.openFile(
 		fMgr,
@@ -3185,8 +3439,6 @@ func (fMgr *FileMgr) OpenThisFile(fileAccessCtrl FileAccessControl) error {
 		true,
 		true,
 		ePrefix)
-
-	fMgr.dataMutex.Unlock()
 
 	return err
 }
@@ -3208,6 +3460,14 @@ func (fMgr *FileMgr) OpenThisFile(fileAccessCtrl FileAccessControl) error {
 // method will return an error.
 func (fMgr *FileMgr) OpenThisFileReadOnly() error {
 
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
+
 	ePrefix := "FileMgr.OpenThisFileReadOnly() "
 
 	readOnlyAccessCtrl, err := FileAccessControl{}.NewReadOnlyAccess()
@@ -3218,16 +3478,12 @@ func (fMgr *FileMgr) OpenThisFileReadOnly() error {
 
 	fMgrHlpr := fileMgrHelper{}
 
-	fMgr.dataMutex.Lock()
-
 	err = fMgrHlpr.openFile(
 		fMgr,
 		readOnlyAccessCtrl,
 		false,
 		false,
 		ePrefix)
-
-	fMgr.dataMutex.Unlock()
 
 	return err
 }
@@ -3242,8 +3498,17 @@ func (fMgr *FileMgr) OpenThisFileReadOnly() error {
 // the permission Mode is set to '0222'.
 //
 // Note: If the 'FileMgr' directory path and file do not exist, this
-// method will will create them.
+// method will create them.
 func (fMgr *FileMgr) OpenThisFileWriteOnly() error {
+
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
+
 	var err error
 	ePrefix := "FileMgr.OpenThisFileWriteOnly() "
 	fMgrHlpr := fileMgrHelper{}
@@ -3254,8 +3519,6 @@ func (fMgr *FileMgr) OpenThisFileWriteOnly() error {
 		return fmt.Errorf(ePrefix+"\n%v\n", err.Error())
 	}
 
-	fMgr.dataMutex.Lock()
-
 	err = fMgrHlpr.openFile(
 		fMgr,
 		writeOnlyAccessCtrl,
@@ -3263,7 +3526,6 @@ func (fMgr *FileMgr) OpenThisFileWriteOnly() error {
 		true,
 		ePrefix)
 
-	fMgr.dataMutex.Unlock()
 	return err
 }
 
@@ -3273,8 +3535,16 @@ func (fMgr *FileMgr) OpenThisFileWriteOnly() error {
 // will be overwritten.
 //
 // Note: If the 'FileMgr' directory path and file do not exist, this
-// method will will create both the path and file.
+// method will create both the path and file.
 func (fMgr *FileMgr) OpenThisFileWriteOnlyAppend() error {
+
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
 
 	ePrefix := "FileMgr.OpenThisFileWriteOnlyAppend() "
 
@@ -3286,8 +3556,6 @@ func (fMgr *FileMgr) OpenThisFileWriteOnlyAppend() error {
 
 	fMgrHlpr := fileMgrHelper{}
 
-	fMgr.dataMutex.Lock()
-
 	err = fMgrHlpr.openFile(
 		fMgr,
 		writeOnlyFileAccessCfg,
@@ -3295,12 +3563,10 @@ func (fMgr *FileMgr) OpenThisFileWriteOnlyAppend() error {
 		true,
 		ePrefix)
 
-	fMgr.dataMutex.Unlock()
-
 	return err
 }
 
-// OpenThisFileWriteOnlyAppend - Opens the current file for 'Write Only'
+// OpenThisFileWriteOnlyTruncate - Opens the current file for 'Write Only'
 // with an 'Truncate' mode. This means that if the file previously exists,
 // all of the existing file content will be deleted before the 'write'
 // operation will begin.
@@ -3308,6 +3574,14 @@ func (fMgr *FileMgr) OpenThisFileWriteOnlyAppend() error {
 // Note: If the 'FileMgr' directory path and file do not exist, this
 // method will will create both the path and file.
 func (fMgr *FileMgr) OpenThisFileWriteOnlyTruncate() error {
+
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
 
 	ePrefix := "FileMgr.OpenThisFileWriteOnlyTruncate() "
 
@@ -3319,16 +3593,12 @@ func (fMgr *FileMgr) OpenThisFileWriteOnlyTruncate() error {
 
 	fMgrHlpr := fileMgrHelper{}
 
-	fMgr.dataMutex.Lock()
-
 	err = fMgrHlpr.openFile(
 		fMgr,
 		writeOnlyTruncateAccessCfg,
 		true,
 		true,
 		ePrefix)
-
-	fMgr.dataMutex.Unlock()
 
 	return err
 }
@@ -3343,8 +3613,17 @@ func (fMgr *FileMgr) OpenThisFileWriteOnlyTruncate() error {
 // the permission Mode= '0666'.
 //
 // Note: If the 'FileMgr' directory path and file do not exist, this
-// method will will create them.
+// method will create them.
 func (fMgr *FileMgr) OpenThisFileReadWrite() error {
+
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
+
 	var err error
 
 	ePrefix := "FileMgr.OpenThisFileReadWrite() "
@@ -3357,16 +3636,12 @@ func (fMgr *FileMgr) OpenThisFileReadWrite() error {
 
 	fMgrHlpr := fileMgrHelper{}
 
-	fMgr.dataMutex.Lock()
-
 	err = fMgrHlpr.openFile(
 		fMgr,
 		readWriteAccessCtrl,
 		true,
 		true,
 		ePrefix)
-
-	fMgr.dataMutex.Unlock()
 
 	return err
 }
@@ -3379,6 +3654,14 @@ func (fMgr *FileMgr) OpenThisFileReadWrite() error {
 // is because it reads the entire file and therefor no End Of File
 // flag is required.
 func (fMgr *FileMgr) ReadAllFile() (bytesRead []byte, err error) {
+
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
 
 	ePrefix := "FileMgr.ReadAllFile() "
 	bytesRead = []byte{}
@@ -3394,8 +3677,6 @@ func (fMgr *FileMgr) ReadAllFile() (bytesRead []byte, err error) {
 
 	fMgrHlpr := fileMgrHelper{}
 
-	fMgr.dataMutex.Lock()
-
 	err = fMgrHlpr.readFileSetup(
 		fMgr,
 		readWriteAccessCtrl,
@@ -3403,7 +3684,6 @@ func (fMgr *FileMgr) ReadAllFile() (bytesRead []byte, err error) {
 		ePrefix)
 
 	if err != nil {
-		fMgr.dataMutex.Unlock()
 		return bytesRead, err
 	}
 
@@ -3417,7 +3697,6 @@ func (fMgr *FileMgr) ReadAllFile() (bytesRead []byte, err error) {
 				fMgr.absolutePathFileName, err2.Error())
 	}
 
-	fMgr.dataMutex.Unlock()
 	return bytesRead, err
 }
 
@@ -3432,6 +3711,14 @@ func (fMgr *FileMgr) ReadAllFile() (bytesRead []byte, err error) {
 // At End of File (EOF), the byte count will be zero and err will be equal to
 // 'io.EOF'.
 func (fMgr *FileMgr) ReadFileBytes(byteBuff []byte) (bytesRead int, err error) {
+
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
 
 	ePrefix := "FileMgr.ReadFileBytes() "
 	bytesRead = 0
@@ -3449,8 +3736,6 @@ func (fMgr *FileMgr) ReadFileBytes(byteBuff []byte) (bytesRead int, err error) {
 
 	fMgrHlpr := fileMgrHelper{}
 
-	fMgr.dataMutex.Lock()
-
 	err = fMgrHlpr.readFileSetup(
 		fMgr,
 		readWriteAccessCtrl,
@@ -3458,7 +3743,6 @@ func (fMgr *FileMgr) ReadFileBytes(byteBuff []byte) (bytesRead int, err error) {
 		ePrefix)
 
 	if err != nil {
-		fMgr.dataMutex.Unlock()
 		return bytesRead, err
 	}
 
@@ -3475,7 +3759,6 @@ func (fMgr *FileMgr) ReadFileBytes(byteBuff []byte) (bytesRead int, err error) {
 			"File='%v' Error='%v' ", fMgr.absolutePathFileName, err2.Error())
 	}
 
-	fMgr.dataMutex.Unlock()
 	return bytesRead, err
 }
 
@@ -3490,6 +3773,14 @@ func (fMgr *FileMgr) ReadFileBytes(byteBuff []byte) (bytesRead int, err error) {
 //
 // Note that the delimiter is returned as the last character in bytes read.
 func (fMgr *FileMgr) ReadFileLine(delim byte) (bytesRead []byte, err error) {
+
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
 
 	ePrefix := "FileMgr.ReadFileLine() "
 	bytesRead = []byte{}
@@ -3507,8 +3798,6 @@ func (fMgr *FileMgr) ReadFileLine(delim byte) (bytesRead []byte, err error) {
 
 	fMgrHlpr := fileMgrHelper{}
 
-	fMgr.dataMutex.Lock()
-
 	err = fMgrHlpr.readFileSetup(
 		fMgr,
 		readWriteAccessCtrl,
@@ -3516,7 +3805,6 @@ func (fMgr *FileMgr) ReadFileLine(delim byte) (bytesRead []byte, err error) {
 		ePrefix)
 
 	if err != nil {
-		fMgr.dataMutex.Unlock()
 		return bytesRead, err
 	}
 
@@ -3532,8 +3820,6 @@ func (fMgr *FileMgr) ReadFileLine(delim byte) (bytesRead []byte, err error) {
 			"\nError returned from fMgr.fileBufRdr.ReadBytes(delim).\n"+
 			"Error='%v'\n", err2.Error())
 	}
-
-	fMgr.dataMutex.Unlock()
 
 	return bytesRead, err
 }
@@ -3562,7 +3848,7 @@ func (fMgr *FileMgr) ReadFileString(delim byte) (stringRead string, err error) {
 
 	fMgrHlpr := fileMgrHelper{}
 
-	fMgr.dataMutex.Lock()
+	fMgr.lock.Lock()
 
 	err = fMgrHlpr.readFileSetup(
 		fMgr,
@@ -3571,7 +3857,7 @@ func (fMgr *FileMgr) ReadFileString(delim byte) (stringRead string, err error) {
 		ePrefix)
 
 	if err != nil {
-		fMgr.dataMutex.Unlock()
+		fMgr.lock.Unlock()
 		return stringRead, err
 	}
 
@@ -3587,7 +3873,7 @@ func (fMgr *FileMgr) ReadFileString(delim byte) (stringRead string, err error) {
 			"Error='%v' ", err2.Error())
 	}
 
-	fMgr.dataMutex.Unlock()
+	fMgr.lock.Unlock()
 	return stringRead, err
 }
 
@@ -3603,7 +3889,7 @@ func (fMgr *FileMgr) ResetFileInfo() error {
 	var err error
 	var filePathDoesExist bool
 
-	fMgr.dataMutex.Lock()
+	fMgr.lock.Lock()
 
 	fMgrHelpr := fileMgrHelper{}
 	filePathDoesExist,
@@ -3613,7 +3899,7 @@ func (fMgr *FileMgr) ResetFileInfo() error {
 		ePrefix,
 		"fMgr.absolutePathFileName")
 
-	fMgr.dataMutex.Unlock()
+	fMgr.lock.Unlock()
 
 	if err != nil {
 		return err
@@ -3632,18 +3918,18 @@ func (fMgr *FileMgr) ResetFileInfo() error {
 // If the value is less than 1, the buffer size will be set
 // to the system default size.
 func (fMgr *FileMgr) SetReaderBufferSize(readBuffSize int) {
-	fMgr.dataMutex.Lock()
+	fMgr.lock.Lock()
 	fMgr.fileRdrBufSize = readBuffSize
-	fMgr.dataMutex.Unlock()
+	fMgr.lock.Unlock()
 }
 
 // SetWriterBufferSize - Sets the Write Buffer size in bytes.
 // If the value is less than 1, the buffer size will be set
 // to the system default size.
 func (fMgr *FileMgr) SetWriterBufferSize(writeBuffSize int) {
-	fMgr.dataMutex.Lock()
+	fMgr.lock.Lock()
 	fMgr.fileWriterBufSize = writeBuffSize
-	fMgr.dataMutex.Unlock()
+	fMgr.lock.Unlock()
 }
 
 // SetFileInfo - Used to initialize the os.FileInfo structure maintained as
@@ -3677,11 +3963,11 @@ func (fMgr *FileMgr) SetFileInfo(info os.FileInfo) error {
 			fMgr.fileNameExt, info.Name())
 	}
 
-	fMgr.dataMutex.Lock()
+	fMgr.lock.Lock()
 
 	fMgr.actualFileInfo = FileInfoPlus{}.NewFromFileInfo(info)
 
-	fMgr.dataMutex.Unlock()
+	fMgr.lock.Unlock()
 
 	if !fMgr.actualFileInfo.isFInfoInitialized {
 		return fmt.Errorf(ePrefix+
@@ -3714,9 +4000,9 @@ func (fMgr *FileMgr) SetFileMgrFromDirMgrFileName(
 
 	fMgrHlpr := fileMgrHelper{}
 
-	fMgr.dataMutex.Lock()
+	fMgr.lock.Lock()
 	isEmpty, err = fMgrHlpr.setFileMgrDirMgrFileName(fMgr, dMgr, fileNameExt, ePrefix)
-	fMgr.dataMutex.Unlock()
+	fMgr.lock.Unlock()
 
 	return isEmpty, err
 }
@@ -3747,11 +4033,11 @@ func (fMgr *FileMgr) SetFileMgrFromPathFileName(
 
 	fMgrHlpr := fileMgrHelper{}
 
-	fMgr.dataMutex.Lock()
+	fMgr.lock.Lock()
 
 	isEmpty, err = fMgrHlpr.setFileMgrPathFileName(fMgr, pathFileNameExt, ePrefix)
 
-	fMgr.dataMutex.Unlock()
+	fMgr.lock.Unlock()
 
 	return isEmpty, err
 }
@@ -3785,7 +4071,7 @@ func (fMgr *FileMgr) WriteBytesToFile(
 
 	fMgrHlpr := fileMgrHelper{}
 
-	fMgr.dataMutex.Lock()
+	fMgr.lock.Lock()
 
 	err = fMgrHlpr.writeFileSetup(
 		fMgr,
@@ -3794,7 +4080,7 @@ func (fMgr *FileMgr) WriteBytesToFile(
 		ePrefix)
 
 	if err != nil {
-		fMgr.dataMutex.Unlock()
+		fMgr.lock.Unlock()
 		return numBytesWritten, err
 	}
 
@@ -3814,7 +4100,7 @@ func (fMgr *FileMgr) WriteBytesToFile(
 
 	}
 
-	fMgr.dataMutex.Unlock()
+	fMgr.lock.Unlock()
 
 	return numBytesWritten, err
 }
@@ -3850,7 +4136,7 @@ func (fMgr *FileMgr) WriteStrToFile(str string) (numBytesWritten int, err error)
 
 	fMgrHlpr := fileMgrHelper{}
 
-	fMgr.dataMutex.Lock()
+	fMgr.lock.Lock()
 
 	err = fMgrHlpr.writeFileSetup(
 		fMgr,
@@ -3859,7 +4145,7 @@ func (fMgr *FileMgr) WriteStrToFile(str string) (numBytesWritten int, err error)
 		ePrefix)
 
 	if err != nil {
-		fMgr.dataMutex.Unlock()
+		fMgr.lock.Unlock()
 		return numBytesWritten, err
 	}
 
@@ -3875,7 +4161,7 @@ func (fMgr *FileMgr) WriteStrToFile(str string) (numBytesWritten int, err error)
 		fMgr.buffBytesWritten += uint64(numBytesWritten)
 	}
 
-	fMgr.dataMutex.Unlock()
+	fMgr.lock.Unlock()
 
 	return numBytesWritten, err
 }
