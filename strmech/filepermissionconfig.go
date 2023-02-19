@@ -1855,28 +1855,61 @@ func (fPerm *FilePermissionConfig) IsValid(
 // types are currently supported.
 //
 // Three SymbolicGroups:
-// The three group types are: Owners, Groups & Others.
 //
-//	10-Character
-//	 'modeStr'
-//	 Symbolic	Octal		File Access
-//	 Format		Notation  Permission Descriptions
-//	------------------------------------------------------------
+//	The three group types are: User/Owners, Groups & Others.
 //
-//	----------	0000	no permissions
-//	-rwx------	0700	read, write, & execute only for owner
-//	-rwxrwx---	0770	read, write, & execute for owner and group
-//	-rwxrwxrwx	0777	read, write, & execute for owner, group and others
-//	---x--x--x	0111	execute
-//	--w--w--w-	0222	write
-//	--wx-wx-wx	0333	write & execute
-//	-r--r--r--	0444	read
-//	-r-xr-xr-x	0555	read & execute
-//	-rw-rw-rw-	0666	read & write
-//	-rwxr-----	0740	Owner can read, write, & execute. Group can only read;
-//	                             others have no permissions
+// Directory Permissions:
 //
-//	Note: drwxrwxrwx - identifies permissions for directory
+//	        -----------------------------------------------------
+//	               Directory Mode String Permission Codes
+//	        -----------------------------------------------------
+//	          Directory
+//				10-Character
+//				 'modeStr'
+//				 Symbolic		  Directory Access
+//				  Format	   Permission Descriptions
+//				----------------------------------------------------
+//
+//				d---------		no permissions
+//				drwx------		read, write, & execute only for owner
+//				drwxrwx---		read, write, & execute for owner and group
+//				drwxrwxrwx		read, write, & execute for owner, group and others
+//				d--x--x--x		execute
+//				d-w--w--w-		write
+//				d-wx-wx-wx		write & execute
+//				dr--r--r--		read
+//				dr-xr-xr-x		read & execute
+//				drw-rw-rw-		read & write
+//				drwxr-----		Owner can read, write, & execute. Group can only read;
+//				                others have no permissions
+//
+//				Note: drwxrwxrwx - identifies permissions for directory
+//
+// File Permissions:
+//
+//	        -----------------------------------------------------
+//	               File Mode String Permission Codes
+//	        -----------------------------------------------------
+//
+//	               File
+//				10-Character
+//				 'modeStr'
+//				 Symbolic	Octal		File Access
+//				  Format	Notation  Permission Descriptions
+//				------------------------------------------------------------
+//
+//				----------	0000	no permissions
+//				-rwx------	0700	read, write, & execute only for owner
+//				-rwxrwx---	0770	read, write, & execute for owner and group
+//				-rwxrwxrwx	0777	read, write, & execute for owner, group and others
+//				---x--x--x	0111	execute
+//				--w--w--w-	0222	write
+//				--wx-wx-wx	0333	write & execute
+//				-r--r--r--	0444	read
+//				-r-xr-xr-x	0555	read & execute
+//				-rw-rw-rw-	0666	read & write
+//				-rwxr-----	0740	Owner can read, write, & execute. Group can only read;
+//				                             others have no permissions
 //
 // ----------------------------------------------------------------
 //

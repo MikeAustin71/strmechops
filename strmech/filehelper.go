@@ -4610,8 +4610,13 @@ func (fh FileHelper) GetAbsCurrDir(
 			ePrefix)
 }
 
-// GetAbsPathFromFilePath - Supply a string containing both the path file name and extension.
-// This method will then return the absolute value of that path, file name and file extension.
+// GetAbsPathFromFilePath
+//
+// Receives a string containing both the path file name
+// and extension.
+//
+// This method will then return the absolute value of that
+// path, file name and file extension.
 func (fh FileHelper) GetAbsPathFromFilePath(
 	filePath string) (
 	string,
@@ -7262,9 +7267,143 @@ func (fh FileHelper) JoinPaths(p1 string, p2 string) string {
 
 }
 
-// MakeAbsolutePath - Supply a relative path or any path
-// string and resolve that path to an Absolute path.
-// Note: Clean() is called on result by fp.Abs().
+// MakeAbsolutePath
+//
+// Supply a relative path or any path string and resolve
+// that path to an Absolute path. This method calls
+// filepath.Abs() to generate the absolute path.
+//
+// "An absolute or full path points to the same location
+// in a file system, regardless of the current working
+// directory. To do that, it must include the root
+// directory.
+//
+// By contrast, a relative path starts from some given
+// working directory, avoiding the need to provide the
+// full absolute path. A filename can be considered as a
+// relative path based at the current working directory.
+// If the working directory is not the file's parent
+// directory, a file not found error will result if the
+// file is addressed by its name."
+//
+//	Wikipedia
+//
+// Note: Clean() is called on result by filepath.Abs().
+//
+// ----------------------------------------------------------------
+//
+// # Reference:
+//
+//	https://en.wikipedia.org/wiki/Path_(computing)#Absolute_and_relative_paths
+//	https://pkg.go.dev/path/filepath@go1.20.1#Abs
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	relPath						string
+//
+//		This string holds a relative path. This method
+//		will convert this relative path to an absolute
+//		path.
+//
+//		A relative path is defined as follows:
+//
+//		"A relative path starts from some given working
+//		directory, avoiding the need to provide the full
+//		absolute path. A filename can be considered as a
+//		relative path based at the current working
+//		directory. If the working directory is not the
+//		file's parent directory, a file not found error
+//		will result if the file is addressed by its name."
+//			Wikipedia
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//
+//		If this method completes successfully, this
+//		method will convert the relative path received
+//		from input parameter '', to an absolute path.
+//
+//		"An absolute or full path points to the same
+//		location in a file system, regardless of the
+//		current working directory. To do that, it must
+//		include the root directory."	Wikipedia
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
 func (fh FileHelper) MakeAbsolutePath(
 	relPath string,
 	errorPrefix interface{}) (
@@ -7298,32 +7437,136 @@ func (fh FileHelper) MakeAbsolutePath(
 		ePrefix.XCpy("<-relPath"))
 }
 
-// MakeDirAll - creates a directory named path, along with any necessary
-// parent directories. In other words, all directories in the path are
-// created.
+// MakeDirAll
 //
-// The permission bits 'drwxrwxrwx' are used for all directories that the
-// method creates.
+// Creates a directory named path, along with any
+// necessary parent directories. In other words, all
+// directories in the path are created.
 //
-// If path is a directory which already exists, this method does nothing
-// and returns and error value of 'nil'.
+// The permission bits 'drwxrwxrwx' are used for all
+// directories that the method creates.
 //
-// Note that this method calls FileHelper.MakeDirAllPerm()
-func (fh FileHelper) MakeDirAll(dirPath string) error {
-	ePrefix := "FileHelper.MakeDirAll() "
-	permission, err := FilePermissionConfig{}.New("drwxrwxrwx")
+// If path is a directory which already exists, this
+// method does nothing and returns and error value of
+// 'nil'.
+//
+// Note:
+//
+// This method calls MakeDirAllPerm()
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	dirPath						string
+//
+//		This string contains the name of the directory
+//		path which will be created by this method.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (fh FileHelper) MakeDirAll(
+	dirPath string,
+	errorPrefix interface{}) error {
 
-	if err != nil {
-		return fmt.Errorf(ePrefix+"%v\n", err.Error())
+	if fh.lock == nil {
+		fh.lock = new(sync.Mutex)
 	}
 
-	err = fh.MakeDirAllPerm(dirPath, permission)
+	fh.lock.Lock()
+
+	defer fh.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileHelper."+
+			"MakeDirAll()",
+		"")
 
 	if err != nil {
-		return fmt.Errorf(ePrefix+"%v\n", err.Error())
+		return err
 	}
 
-	return nil
+	return new(fileHelperMechanics).makeDirAll(
+		dirPath,
+		ePrefix)
 }
 
 // MakeDir - Creates a single directory. The method returns an error
@@ -7357,96 +7600,217 @@ func (fh FileHelper) MakeDir(dirPath string) error {
 	return nil
 }
 
-// MakeDirAllPerm - Creates a directory path along with any necessary
-// parent paths.
+// MakeDirAllPerm
 //
-// If the target directory path already exists, this method does nothing
-// and returns.
+// Creates a directory path along with any necessary
+// parent paths and configures permissions for the
+// new directory path.
 //
-// The input parameter 'permission' is of type 'FilePermissionConfig'.
-// See method the documentation for method 'FilePermissionConfig.New()'
-// for an explanation of permission codes.
+// If the target directory path already exists, this
+// method does nothing and returns.
 //
-// If you wish to grant total access to a directory, consider setting
-// permission code as follows:
+// The input parameter 'permission' is of type
+// 'FilePermissionConfig'. See method the documentation
+// for method 'FilePermissionConfig.New()' for an
+// explanation of permission codes.
+//
+// If you wish to grant total access to a directory,
+// consider setting permission code as follows:
 //
 //	FilePermissionConfig{}.New("drwxrwxrwx")
 //
-// If the parent directories in parameter 'dirPath' do not yet exist, this
-// method will create them.
-func (fh FileHelper) MakeDirAllPerm(dirPath string, permission FilePermissionConfig) error {
+// If the parent directories in parameter 'dirPath' do
+// not yet exist, this method will create them.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//		dirPath						string
+//
+//			This string contains the directory path which
+//			will be created by this method.
+//
+//		permission					FilePermissionConfig
+//
+//			An instance of FilePermissionConfig containing
+//			the permission specifications for the new
+//			directory to be created from input paramter,
+//			'dirPath'.
+//
+//			The easiest way to configure permissions is
+//			to call FilePermissionConfig.New() with
+//			a mode string ('modeStr').
+//
+//			The first character of the 'modeStr' designates the
+//			'Entry Type'. Currently, only two 'Entry Type'
+//			characters are supported. Therefore, the first
+//			character in the 10-character input parameter
+//			'modeStr' MUST be either a "-" indicating a file, or
+//			a "d" indicating a directory.
+//
+//			The remaining nine characters in the 'modeStr'
+//			represent unix permission bits and consist of three
+//			group fields each containing 3-characters. Each
+//			character in the three group fields may consist of
+//			'r' (Read-Permission), 'w' (Write-Permission), 'x'
+//			(Execute-Permission) or '-' signaling no permission or
+//			no access allowed. A typical 'modeStr' authorizing
+//			permission for full access to a file would be styled
+//			as:
+//
+//			Directory Example: "drwxrwxrwx"
+//
+//			Groups: - Owner/User, Group, Other
+//			From left to right
+//			First Characters is Entry Type index 0 ("-")
+//
+//			First Char index 0 =     "-"   Designates a file
+//
+//			First Char index 0 =     "d"   Designates a directory
+//
+//			Char indexes 1-3 = Owner "rwx" Authorizing 'Read',
+//		                                  Write' & Execute Permissions for 'Owner'
+//
+//			Char indexes 4-6 = Group "rwx" Authorizing 'Read', 'Write' & Execute
+//		                                  Permissions for 'Group'
+//
+//			Char indexes 7-9 = Other "rwx" Authorizing 'Read', 'Write' & Execute
+//		                                  Permissions for 'Other'
+//
+//	        -----------------------------------------------------
+//	               Directory Mode String Permission Codes
+//	        -----------------------------------------------------
+//	          Directory
+//				10-Character
+//				 'modeStr'
+//				 Symbolic		  Directory Access
+//				  Format	   Permission Descriptions
+//				----------------------------------------------------
+//
+//				d---------		no permissions
+//				drwx------		read, write, & execute only for owner
+//				drwxrwx---		read, write, & execute for owner and group
+//				drwxrwxrwx		read, write, & execute for owner, group and others
+//				d--x--x--x		execute
+//				d-w--w--w-		write
+//				d-wx-wx-wx		write & execute
+//				dr--r--r--		read
+//				dr-xr-xr-x		read & execute
+//				drw-rw-rw-		read & write
+//				drwxr-----		Owner can read, write, & execute. Group can only read;
+//				                others have no permissions
+//
+//				Note: drwxrwxrwx - identifies permissions for directory
+//
+//
+//		errorPrefix					interface{}
+//
+//			This object encapsulates error prefix text which
+//			is included in all returned error messages.
+//			Usually, it contains the name of the calling
+//			method or methods listed as a method or function
+//			chain of execution.
+//
+//			If no error prefix information is needed, set
+//			this parameter to 'nil'.
+//
+//			This empty interface must be convertible to one
+//			of the following types:
+//
+//			1.	nil
+//					A nil value is valid and generates an
+//					empty collection of error prefix and
+//					error context information.
+//
+//			2.	string
+//					A string containing error prefix
+//					information.
+//
+//			3.	[]string
+//					A one-dimensional slice of strings
+//					containing error prefix information.
+//
+//			4.	[][2]string
+//					A two-dimensional slice of strings
+//			   		containing error prefix and error
+//			   		context information.
+//
+//			5.	ErrPrefixDto
+//					An instance of ErrPrefixDto.
+//					Information from this object will
+//					be copied for use in error and
+//					informational messages.
+//
+//			6.	*ErrPrefixDto
+//					A pointer to an instance of
+//					ErrPrefixDto. Information from
+//					this object will be copied for use
+//					in error and informational messages.
+//
+//			7.	IBasicErrorPrefix
+//					An interface to a method
+//					generating a two-dimensional slice
+//					of strings containing error prefix
+//					and error context information.
+//
+//			If parameter 'errorPrefix' is NOT convertible
+//			to one of the valid types listed above, it will
+//			be considered invalid and trigger the return of
+//			an error.
+//
+//			Types ErrPrefixDto and IBasicErrorPrefix are
+//			included in the 'errpref' software package:
+//				"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (fh FileHelper) MakeDirAllPerm(
+	dirPath string,
+	permission FilePermissionConfig,
+	errorPrefix interface{}) error {
 
-	ePrefix := "FileHelper.MakeDirAllPerm() "
-
-	errCode := 0
-
-	errCode, _, dirPath = fh.isStringEmptyOrBlank(dirPath)
-
-	if errCode == -1 {
-		return errors.New(ePrefix +
-			"Error: Input parameter 'dirPath' is an empty string!\n")
+	if fh.lock == nil {
+		fh.lock = new(sync.Mutex)
 	}
 
-	if errCode == -2 {
-		return errors.New(ePrefix +
-			"Error: Input parameter 'dirPath' consists of blank spaces!\n")
+	fh.lock.Lock()
+
+	defer fh.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileHelper."+
+			"MakeDirAllPerm()",
+		"")
+
+	if err != nil {
+		return err
 	}
 
-	err2 := permission.IsValid()
-
-	if err2 != nil {
-		return fmt.Errorf(ePrefix+"Input parameter 'permission' is INVALID!\n"+
-			"Error='%v'\n", err2.Error())
-	}
-
-	dirPermCode, err2 := permission.GetCompositePermissionMode()
-
-	if err2 != nil {
-		return fmt.Errorf(ePrefix+
-			"ERROR: INVALID Permission Code\n"+
-			"Error='%v'\n", err2.Error())
-	}
-
-	dirPath, err2 = fh.MakeAbsolutePath(dirPath)
-
-	if err2 != nil {
-		return fmt.Errorf(ePrefix+
-			"Error returned by fh.MakeAbsolutePath(dirPath).\n"+
-			"dirPath='%v'\nError='%v'\n",
-			dirPath, err2.Error())
-	}
-
-	err2 = os.MkdirAll(dirPath, dirPermCode)
-
-	if err2 != nil {
-		return fmt.Errorf(ePrefix+
-			"Error return from os.MkdirAll(dirPath, permission).\n"+
-			"dirPath='%v'\nError='%v'\n",
-			dirPath, err2.Error())
-	}
-
-	var pathDoesExist bool
-
-	_,
-		pathDoesExist,
-		_,
-		err2 = new(fileHelperMolecule).doesPathFileExist(
-		dirPath,
-		PreProcPathCode.None(), // Take no Pre-Processing Action
-		ePrefix,
-		"dirPath")
-
-	if err2 != nil {
-		return err2
-	}
-
-	if !pathDoesExist {
-		return fmt.Errorf(ePrefix+
-			"Error: Directory creation FAILED!. New Directory Path DOES NOT EXIST!\n"+
-			"dirPath='%v'\n", dirPath)
-	}
-
-	return nil
+	return new(fileHelperNanobot).
+		makeDirAllPerm(
+			dirPath,
+			permission,
+			ePrefix)
 }
 
 // MakeDirPerm - Creates a single directory using the permission codes passed by input
@@ -7857,179 +8221,187 @@ func (fh FileHelper) MoveFile(src, dst string) error {
 	return err
 }
 
-// OpenDirectory - Opens a directory and returns the associated 'os.File' pointer.
-// This method will open a directory designated by input parameter, 'directoryPath'.
+// OpenDirectory
 //
-// The input parameter 'createDir' determines the action taken if 'directoryPath'
-// does not exist. If 'createDir' is set to 'true' and 'directoryPath' does not
-// currently exist, this method will attempt to create 'directoryPath'. Directories
-// created in this manner are configured with Open Type of 'Read-Write' and a
-// Permission code of 'drwxrwxrwx'.
+// Opens a directory and returns the associated 'os.File'
+// pointer. This method will open a directory designated
+// by input parameter, 'directoryPath'.
 //
-// Alternatively, if 'createDir' is set to 'false' and 'directoryPath' does NOT exist,
-// an error will be returned.
+// The input parameter 'createDir' determines the action
+// taken if 'directoryPath' does not exist. If
+// 'createDir' is set to 'true' and 'directoryPath' does
+// not currently exist, this method will attempt to
+// create 'directoryPath'. Directories created in this
+// manner are configured with Open Type of 'Read-Write'
+// and a Permission code of 'drwxrwxrwx'.
 //
-// Regardless of whether the target directory path already exists or is created by
-// this method, the returned os.File pointer is opened with the 'Read-Only' attribute
-// (O_RDONLY) and a permission code of zero ("----------").
+// Alternatively, if 'createDir' is set to 'false' and
+// 'directoryPath' does NOT exist, an error will be
+// returned.
 //
-// Note: The caller is responsible for calling "Close()" on the returned os.File pointer.
+// Regardless of whether the target directory path
+// already exists or is created by this method, the
+// returned os.File pointer is opened with the
+// 'Read-Only' attribute (O_RDONLY) and a
+// permission code of zero ("----------").
 //
-// --------------------------------------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
-// Input Parameters:
+// # IMPORTANT
 //
-//	directoryPath                  string - A string containing the path name of the directory
-//	                                        which will be opened.
+// The caller is responsible for calling "Close()" on the
+// returned os.File pointer.
 //
+// ----------------------------------------------------------------
 //
-//	createDir                        bool - Determines what action will be taken if 'directoryPath'
-//	                                        does NOT exist. If 'createDir' is set to 'true' and
-//	                                        'directoryPath' does NOT exist, this method will attempt
-//	                                        to create 'directoryPath'. Alternatively, if 'createDir'
-//	                                        is set to false and 'directoryPath' does NOT exist, this
-//	                                        method will terminate and an error will be returned.
+// # Input Parameters
 //
-//	                                        Directories created in this manner will have an Open Type
-//	                                        of 'Read-Write' and a Permission code of 'drwxrwxrwx'. This
-//	                                        differs from the Open Type and permission mode represented
-//	                                        by the returned os.File pointer.
+//	directoryPath				string
 //
-// --------------------------------------------------------------------------------------------------------
+//		A string containing the path name of the
+//		directory which will be opened.
 //
-// Return Values:
+//	createDir					bool
 //
-//	*os.File        - If successful, this method returns an os.File pointer
-//	                  to the directory designated by input parameter 'directoryPath'.
+//		Determines what action will be taken if
+//		'directoryPath' does NOT exist. If 'createDir' is
+//		set to 'true' and 'directoryPath' does NOT exist,
+//		this method will attempt to create
+//		'directoryPath'. Alternatively, if 'createDir' is
+//		set to false and 'directoryPath' does NOT exist,
+//		this method will terminate and an error will be
+//		returned.
 //
-//	                  If successful, the returned os.File pointer is opened with the
-//	                  'Read-Only' attribute (O_RDONLY) and a permission code of zero
-//	                  ("----------").
+//		Directories created in this manner will have an
+//		Open Type of 'Read-Write' and a Permission code
+//		of 'drwxrwxrwx'. This differs from the Open Type
+//		and permission mode represented by the returned
+//		os.File pointer.
 //
-//	                  If this method fails, the *os.File return value is 'nil'.
+//	errorPrefix					interface{}
 //
-//	                  Note: The caller is responsible for calling "Close()" on this
-//	                  os.File pointer.
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
 //
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
 //
-//	error           - If the method completes successfully, the error return value
-//	                  is 'nil'. If the method fails, the error type returned is
-//	                  populated with an appropriate error message.
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	*os.File
+//
+//		If successful, this method returns an os.File
+//		pointer to the directory designated by input
+//		parameter 'directoryPath'.
+//
+//		If successful, the returned os.File pointer is
+//		opened with the 'Read-Only' attribute (O_RDONLY)
+//		and a permission code of zero ("----------").
+//
+//		If this method fails, the *os.File return value
+//		is 'nil'.
+//
+//		Note:
+//			The caller is responsible for calling
+//			"Close()" on this os.File pointer.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
 func (fh FileHelper) OpenDirectory(
 	directoryPath string,
-	createDir bool) (*os.File, error) {
+	createDir bool,
+	errorPrefix interface{}) (*os.File, error) {
 
-	ePrefix := "FileHelper.OpenDirectory() "
+	if fh.lock == nil {
+		fh.lock = new(sync.Mutex)
+	}
+
+	fh.lock.Lock()
+
+	defer fh.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
 	var err error
-	var directoryPathDoesExist bool
-	var dirPathFInfo FileInfoPlus
 
-	fHelpMolecule := fileHelperMolecule{}
-
-	directoryPath,
-		directoryPathDoesExist,
-		dirPathFInfo,
-		err = fHelpMolecule.doesPathFileExist(
-		directoryPath,
-		PreProcPathCode.AbsolutePath(), // Convert to Absolute Path
-		ePrefix,
-		"directoryPath")
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileHelper."+
+			"OpenDirectory()",
+		"")
 
 	if err != nil {
 		return nil, err
 	}
 
-	if directoryPathDoesExist &&
-		!dirPathFInfo.IsDir() {
-
-		return nil,
-			fmt.Errorf(ePrefix+
-				"ERROR: 'directoryPath' does exist, but\n"+
-				"IT IS NOT A DIRECTORY!\n"+
-				"directoryPath='%v'\n", directoryPath)
-	}
-
-	if directoryPathDoesExist && dirPathFInfo.Mode().IsRegular() {
-		return nil,
-			fmt.Errorf(ePrefix+
-				"ERROR: 'directoryPath' does exist, but\n"+
-				"it is classifed as a REGULAR File!\n"+
-				"directoryPath='%v'\n", directoryPath)
-	}
-
-	if !directoryPathDoesExist {
-
-		if !createDir {
-			return nil,
-				fmt.Errorf(ePrefix+"Error 'directoryPath' DOES NOT EXIST!\n"+
-					"directoryPath='%v'\n", directoryPath)
-		}
-
-		// Parameter 'createDir' must be 'true'.
-		// The error signaled that the path does not exist. So, create the directory path
-		err = fh.MakeDirAll(directoryPath)
-
-		if err != nil {
-			return nil,
-				fmt.Errorf(ePrefix+"ERROR: Attmpted creation of 'directoryPath' FAILED!\n"+
-					"directoryPath='%v'\nError='%v'\n", directoryPath, err.Error())
-		}
-
-		// Verify that the directory exists and get
-		// the associated file info object.
-		_,
-			directoryPathDoesExist,
-			dirPathFInfo,
-			err = fHelpMolecule.doesPathFileExist(
+	return new(fileHelperDirector).
+		openDirectory(
 			directoryPath,
-			PreProcPathCode.None(), // Take No Pre-Processing Action
-			ePrefix,
-			"directoryPath")
-
-		if err != nil {
-			return nil, fmt.Errorf(ePrefix+"Error occurred verifying existance of "+
-				"newly created 'directoryPath'!\n"+
-				"Non-Path error returned by os.Stat(directoryPath)\ndirectoryPath='%v'\nError='%v'\n",
-				directoryPath, err.Error())
-		}
-
-		if !directoryPathDoesExist {
-			return nil, fmt.Errorf(ePrefix+"Error: Verification of newly created "+
-				"directoryPath FAILED!\n"+
-				"'directoryPath' DOES NOT EXIST!\n"+
-				"directoryPath='%v'\n", directoryPath)
-		}
-
-		if !dirPathFInfo.IsDir() {
-			return nil,
-				fmt.Errorf(ePrefix+"ERROR: Input Paramter 'directoryPath' is NOT a directory!\n"+
-					"directoryPath='%v'\n", directoryPath)
-		}
-
-		if dirPathFInfo.Mode().IsRegular() {
-			return nil,
-				fmt.Errorf(ePrefix+
-					"ERROR: 'directoryPath' does exist, but\n"+
-					"it is classifed as a REGULAR File!\n"+
-					"directoryPath='%v'\n", directoryPath)
-		}
-	}
-
-	filePtr, err := os.Open(directoryPath)
-
-	if err != nil {
-		return nil,
-			fmt.Errorf(ePrefix+"File Open Error: %v\n"+
-				"directoryPath='%v'\n",
-				err.Error(), directoryPath)
-	}
-
-	if filePtr == nil {
-		return nil, errors.New(ePrefix +
-			"ERROR: os.OpenFile() returned a 'nil' file pointer!\n")
-	}
-
-	return filePtr, nil
+			createDir,
+			ePrefix)
 }
 
 // OpenFile - wrapper for os.OpenFile. This method may be used to open or
