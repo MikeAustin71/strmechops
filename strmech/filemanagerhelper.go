@@ -2445,7 +2445,7 @@ func (fMgrHlpr *fileMgrHelper) setFileMgrPathFileName(
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		nil,
+		errorPrefix,
 		"fileMgrHelper."+
 			"setFileMgrPathFileName()",
 		"")
@@ -2536,7 +2536,7 @@ func (fMgrHlpr *fileMgrHelper) setFileMgrPathFileName(
 
 	} else {
 
-		dMgr, err2 = DirMgr{}.New(remainingPathStr)
+		dMgr, err2 = new(DirMgr).New(remainingPathStr)
 
 		if err2 != nil {
 
