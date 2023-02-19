@@ -4258,7 +4258,7 @@ func (fh FileHelper) FindFilesInPath(
 // IMPORTANT:
 //
 //	If all of the file selection criterion in the FileSelectionCriteria object are
-//	'Inactive' or 'Not Set' (set to their zero or default values), then all of
+//	'Inactive' or 'Not Set' (set to their zero or default values), then all
 //	the files processed in the directory tree will be selected and returned as
 //	'Found Files'.
 //
@@ -4267,8 +4267,8 @@ func (fh FileHelper) FindFilesInPath(
 //	     filesOlderThan    = time.Time{}
 //	     filesNewerThan    = time.Time{}
 //
-//	  In this example, all of the selection criterion are
-//	  'Inactive' and therefore all of the files encountered
+//	  In this example, all the selection criterion are
+//	  'Inactive' and therefore all the files encountered
 //	  in the target directory will be selected and returned
 //	  as 'Found Files'.
 //
@@ -4287,7 +4287,7 @@ func (fh FileHelper) FindFilesInPath(
 //	                    on all the files in the specified directory tree which match the file selection
 //	                    criteria.
 //
-//	              Note: It is a good idea to check the returned field 'DirectoryTreeInfo.ErrReturns'
+//	              Note: It's a good idea to check the returned field 'DirectoryTreeInfo.ErrReturns'
 //	                    to determine if any internal system errors were encountered while processing
 //	                    the directory tree.
 //
@@ -4356,7 +4356,9 @@ func (fh FileHelper) FindFilesWalkDirectory(
 				ePrefix.String())
 	}
 
-	startPath = fh.RemovePathSeparatorFromEndOfPathString(startPath)
+	startPath = new(fileHelperAtom).
+		removePathSeparatorFromEndOfPathString(
+			startPath)
 
 	startPath, err = new(fileHelperProton).
 		makeAbsolutePath(
@@ -8553,29 +8555,72 @@ func (fh FileHelper) OpenFileWriteOnly(
 	return fPtr, nil
 }
 
-// RemovePathSeparatorFromEndOfPathString - Remove Trailing path Separator from
-// a path string - if said trailing path Separator exists.
-func (fh FileHelper) RemovePathSeparatorFromEndOfPathString(pathStr string) string {
-	errCode := 0
-	lPathStr := 0
+// RemovePathSeparatorFromEndOfPathString
+//
+// This method will remove or delete the Trailing path
+// separator from a path string.
+//
+// If the path string does not have a Trailing path
+// separator, no action is taken and the original path
+// string is returned to the calling function.
+//
+// This path separator character will vary depending on
+// the operating system ('/' or '\').
+//
+// ----------------------------------------------------------------
+//
+// # Usage
+//
+//	Example-1
+//
+//	pathStr = "../testdestdir/destdir/"
+//	Returned string = "../testdestdir/destdir/"
+//
+//	Example-2
+//
+//	pathStr = "D:\logTest\testoverwrite\"
+//	Returned string = "D:\logTest\testoverwrite"
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	pathStr						string
+//
+//		This string holds the file or directory path from
+//		which any trailing path separator will be removed.
+//
+//		If 'pathStr' consists of all white space, it will
+//		be returned by this method as an empty string
+//		("").
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//
+//		If input parameter 'pathStr' contains a trailing
+//		path separator, that trailing path separator will
+//		be removed and the remaining characters will be
+//		returned by this string parameter.
+//
+//		If 'pathStr' contains no trailing path separator,
+//		the original value of input parameter 'pathStr'
+//		will be	returned.
+func (fh FileHelper) RemovePathSeparatorFromEndOfPathString(
+	pathStr string) string {
 
-	errCode, lPathStr, pathStr = fh.isStringEmptyOrBlank(pathStr)
-
-	if errCode < 0 {
-		return ""
-
+	if fh.lock == nil {
+		fh.lock = new(sync.Mutex)
 	}
 
-	lastChar := rune(pathStr[lPathStr-1])
+	fh.lock.Lock()
 
-	if lastChar == os.PathSeparator ||
-		lastChar == '\\' ||
-		lastChar == '/' {
+	defer fh.lock.Unlock()
 
-		return pathStr[0 : lPathStr-1]
-	}
-
-	return pathStr
+	return new(fileHelperAtom).
+		removePathSeparatorFromEndOfPathString(pathStr)
 }
 
 // SearchFileModeMatch

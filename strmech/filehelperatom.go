@@ -1731,3 +1731,92 @@ func (fHelperAtom *fileHelperAtom) getPathSeparatorIndexesInPathStr(
 
 	return slashIdxs, err
 }
+
+// removePathSeparatorFromEndOfPathString
+//
+// This method will remove or delete the Trailing path
+// separator from a path string.
+//
+// If the path string does not have a Trailing path
+// separator, no action is taken and the original path
+// string is returned to the calling function.
+//
+// This path separator character will vary depending on
+// the operating system ('/' or '\').
+//
+// ----------------------------------------------------------------
+//
+// # Usage
+//
+//	Example-1
+//
+//	pathStr = "../testdestdir/destdir/"
+//	Returned string = "../testdestdir/destdir/"
+//
+//	Example-2
+//
+//	pathStr = "D:\logTest\testoverwrite\"
+//	Returned string = "D:\logTest\testoverwrite"
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	pathStr						string
+//
+//		This string holds the file or directory path from
+//		which any trailing path separator will be removed.
+//
+//		If 'pathStr' consists of all white space, it will
+//		be returned by this method as an empty string
+//		("").
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//
+//		If input parameter 'pathStr' contains a trailing
+//		path separator, that trailing path separator will
+//		be removed and the remaining characters will be
+//		returned by this string parameter.
+//
+//		If 'pathStr' contains no trailing path separator,
+//		the original value of input parameter 'pathStr'
+//		will be	returned.
+func (fHelperAtom *fileHelperAtom) removePathSeparatorFromEndOfPathString(
+	pathStr string) string {
+
+	if fHelperAtom.lock == nil {
+		fHelperAtom.lock = new(sync.Mutex)
+	}
+
+	fHelperAtom.lock.Lock()
+
+	defer fHelperAtom.lock.Unlock()
+
+	errCode := 0
+	lPathStr := 0
+
+	errCode,
+		lPathStr,
+		pathStr = new(fileHelperElectron).
+		isStringEmptyOrBlank(pathStr)
+
+	if errCode < 0 {
+		return ""
+
+	}
+
+	lastChar := rune(pathStr[lPathStr-1])
+
+	if lastChar == os.PathSeparator ||
+		lastChar == '\\' ||
+		lastChar == '/' {
+
+		return pathStr[0 : lPathStr-1]
+	}
+
+	return pathStr
+}
