@@ -3937,98 +3937,196 @@ func (fh *FileHelper) FilterFileName(
 	return isMatchedFile, msgError, lowLevelErr
 }
 
-// FindFilesInPath - Will apply a search pattern to files and directories
-// in the path designated by input parameter, 'pathName'. If the files
-// and or directory names match the input parameter, 'fileSearchPattern'
-// they will be returned in an array of strings.
+// FindFilesInPath
 //
-// Be Advised!  The names returned in the string array may consist of both
-// files and directory names, depending on the specified, 'fileSearchPattern'.
+// This method will apply a search pattern to files and
+// directories in the path designated by input parameter,
+// 'pathName'. If the files and or directory names match
+// the input parameter, 'fileSearchPattern' they will be
+// returned in an array of strings.
 //
-// This method uses the "path/filepath" function, 'Glob'. Reference:
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+// The names returned in the string array may consist of
+// both files and directory names, depending on the
+// specified file search pattern, 'fileSearchPattern'.
+//
+// ----------------------------------------------------------------
+//
+// This method uses the "path/filepath" function, 'Glob'.
+//
+// Glob Reference:
 //
 //	https://golang.org/pkg/path/filepath/#Glob
+//	https://pkg.go.dev/path/filepath#Match
 //
-// The File matching patterns depend on the 'go' "path/filepath" function,
-// 'Match'.  Reference
-// https://golang.org/pkg/path/filepath/#Match
+// The File matching patterns depend on the 'go'
+// "path/filepath" function, 'Match'.
 //
-// Note: This method will NOT search sub-directories. It will return the names
-// of directories existing in the designated, 'pathName', depending on the
-// 'fileSearchPattern' passed as an input parameter.
+// Match Reference:
 //
-// If Input Parameters 'pathName' or 'fileSearchPattern' are empty strings or consist
-// of all space characters, this method will return an error.
+//	https://golang.org/pkg/path/filepath/#Match
+//
+// Note:
+// This method will NOT search subdirectories. It will
+// return the names of subdirectories existing in the
+// designated, 'pathName', depending on the file search
+// pattern, 'fileSearchPattern', passed as an input
+// parameter.
+//
+// If input parameters 'pathName' or 'fileSearchPattern'
+// are empty strings or consist of all space characters,
+// this method will return an error.
 //
 //	Example 'fileSearchPattern' values:
 //	      "*"     = Returns all files and directories (everything)
 //	      "*.*"   = Returns files which have a file extension
 //	      "*.txt" = Returns only files with a "txt" file extension
-func (fh FileHelper) FindFilesInPath(pathName, fileSearchPattern string) ([]string, error) {
-
-	ePrefix := "FileHelper.FindFilesInPath() "
-
-	var pathDoesExist bool
-	var fInfo FileInfoPlus
-	var err error
-	var errCode int
-
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	pathName					string
+//
+//		This string holds the path which will be searched
+//		in an attempt to find the files specified by the
+//		file search pattern.
+//
+//	fileSearchPattern			string
+//
+//		This string holds the file search pattern which
+//		will be applied to filter, select and return the
+//		target files residing in the path specified by
+//		input parameter 'pathName'.
+//
+//		For more search pattern examples, see the
+//		documentation at:
+//
+//		https://golang.org/pkg/path/filepath/#Glob
+//		https://pkg.go.dev/path/filepath#Match
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	[]string
+//
+//		An array of strings containing the file names
+//		matching the file search criteria specified
+//		by input parameter 'fileSearchPattern'.
+//
+//		The names returned in this string array may
+//		consist of both files and directory names,
+//		depending on the specified file search
+//		pattern, 'fileSearchPattern'.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (fh FileHelper) FindFilesInPath(
 	pathName,
-		pathDoesExist,
-		fInfo,
-		err = new(fileHelperMolecule).doesPathFileExist(
-		pathName,
-		PreProcPathCode.AbsolutePath(), // Convert to Absolute Path
-		ePrefix,
-		"pathName")
+	fileSearchPattern string,
+	errorPrefix interface{}) ([]string, error) {
+
+	if fh.lock == nil {
+		fh.lock = new(sync.Mutex)
+	}
+
+	fh.lock.Lock()
+
+	defer fh.lock.Unlock()
+
+	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileHelper."+
+			"FindFilesInPath()",
+		"")
 
 	if err != nil {
 		return []string{}, err
 	}
 
-	errCode, _, fileSearchPattern =
-		new(fileHelperElectron).isStringEmptyOrBlank(fileSearchPattern)
-
-	if errCode == -1 {
-		return []string{},
-			errors.New(ePrefix + "Error: Input parameter 'fileSearchPattern' is " +
-				"an empty string!\n")
-	}
-
-	if errCode == -2 {
-		return []string{},
-			errors.New(ePrefix + "Error: Input parameter 'fileSearchPattern' consists " +
-				"of blank spaces!\n")
-	}
-
-	if !pathDoesExist {
-		return []string{},
-			fmt.Errorf(ePrefix+"Error: Input parameter 'pathName' DOES NOT EXIST!\n"+
-				"pathName='%v'\n", pathName)
-	}
-
-	if !fInfo.IsDir() {
-		return []string{},
-			fmt.Errorf(ePrefix+"Error: The path exists, but it NOT a directory!\n"+
-				"pathName='%v' ", pathName)
-	}
-
-	// fInfo is a Directory.
-
-	searchStr := new(fileHelperMolecule).
-		joinPathsAdjustSeparators(pathName, fileSearchPattern)
-
-	results, err := fp.Glob(searchStr)
-
-	if err != nil {
-		return []string{},
-			fmt.Errorf(ePrefix+
-				"Error returned by fp.Glob(searchStr).\n"+
-				"searchStr='%v'\nError='%v'\n",
-				searchStr, err.Error())
-	}
-
-	return results, nil
+	return new(fileHelperNanobot).
+		findFilesInPath(
+			pathName,
+			fileSearchPattern,
+			ePrefix.XCpy("pathName"))
 }
 
 // FindFilesWalkDirectory - This method returns file information on files residing in a specified

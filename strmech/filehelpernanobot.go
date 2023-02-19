@@ -2190,3 +2190,226 @@ func (fHelperNanobot *fileHelperNanobot) deleteDirPathAll(
 
 	return msgError, lowLevelErr
 }
+
+// findFilesInPath
+//
+// This method will apply a search pattern to files and
+// directories in the path designated by input parameter,
+// 'pathName'. If the files and or directory names match
+// the input parameter, 'fileSearchPattern' they will be
+// returned in an array of strings.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+// The names returned in the string array may consist of
+// both files and directory names, depending on the
+// specified file search pattern, 'fileSearchPattern'.
+//
+// ----------------------------------------------------------------
+//
+// This method uses the "path/filepath" function, 'Glob'.
+//
+// Glob Reference:
+//
+//	https://golang.org/pkg/path/filepath/#Glob
+//	https://pkg.go.dev/path/filepath#Match
+//
+// The File matching patterns depend on the 'go'
+// "path/filepath" function, 'Match'.
+//
+// Match Reference:
+//
+//	https://golang.org/pkg/path/filepath/#Match
+//
+// Note:
+// This method will NOT search subdirectories. It will
+// return the names of subdirectories existing in the
+// designated, 'pathName', depending on the file search
+// pattern, 'fileSearchPattern', passed as an input
+// parameter.
+//
+// If input parameters 'pathName' or 'fileSearchPattern'
+// are empty strings or consist of all space characters,
+// this method will return an error.
+//
+//	Example 'fileSearchPattern' values:
+//	      "*"     = Returns all files and directories (everything)
+//	      "*.*"   = Returns files which have a file extension
+//	      "*.txt" = Returns only files with a "txt" file extension
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	pathName					string
+//
+//		This string holds the path which will be searched
+//		in an attempt to find the files specified by the
+//		file search pattern.
+//
+//	fileSearchPattern			string
+//
+//		This string holds the file search pattern which
+//		will be applied to filter, select and return the
+//		target files residing in the path specified by
+//		input parameter 'pathName'.
+//
+//		For more search pattern examples, see the
+//		documentation at:
+//
+//		https://golang.org/pkg/path/filepath/#Glob
+//		https://pkg.go.dev/path/filepath#Match
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	[]string
+//
+//		An array of strings containing the file names
+//		matching the file search criteria specified
+//		by input parameter 'fileSearchPattern'.
+//
+//		The names returned in this string array may
+//		consist of both files and directory names,
+//		depending on the specified file search
+//		pattern, 'fileSearchPattern'.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (fHelperNanobot *fileHelperNanobot) findFilesInPath(
+	pathName string,
+	fileSearchPattern string,
+	errPrefDto *ePref.ErrPrefixDto) (
+	[]string,
+	error) {
+
+	if fHelperNanobot.lock == nil {
+		fHelperNanobot.lock = new(sync.Mutex)
+	}
+
+	fHelperNanobot.lock.Lock()
+
+	defer fHelperNanobot.lock.Unlock()
+
+	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"fileHelperNanobot."+
+			"FindFilesInPath()",
+		"")
+
+	if err != nil {
+		return []string{}, err
+	}
+
+	var fInfo FileInfoPlus
+	var pathDoesExist bool
+	var errCode int
+
+	pathName,
+		pathDoesExist,
+		fInfo,
+		err = new(fileHelperMolecule).doesPathFileExist(
+		pathName,
+		PreProcPathCode.AbsolutePath(), // Convert to Absolute Path
+		ePrefix,
+		"pathName")
+
+	if err != nil {
+		return []string{}, err
+	}
+
+	errCode, _, fileSearchPattern =
+		new(fileHelperElectron).isStringEmptyOrBlank(fileSearchPattern)
+
+	if errCode == -1 {
+
+		return []string{},
+			fmt.Errorf("%v\n"+
+				"Error: Input parameter 'fileSearchPattern' is "+
+				"an empty string!\n",
+				ePrefix.String())
+	}
+
+	if errCode == -2 {
+
+		return []string{},
+			fmt.Errorf("%v\n"+
+				"Error: Input parameter 'fileSearchPattern' consists "+
+				"of blank spaces!\n",
+				ePrefix.String())
+	}
+
+	if !pathDoesExist {
+		return []string{},
+			fmt.Errorf("%v\n"+
+				"Error: Input parameter 'pathName' DOES NOT EXIST!\n"+
+				"pathName='%v'\n",
+				ePrefix.String(),
+				pathName)
+	}
+
+	if !fInfo.IsDir() {
+		return []string{},
+			fmt.Errorf("%v\n"+
+				"Error: The path exists, but it NOT a directory!\n"+
+				"pathName='%v'\n",
+				ePrefix.String(),
+				pathName)
+	}
+
+	// fInfo is a Directory.
+
+	searchStr := new(fileHelperMolecule).
+		joinPathsAdjustSeparators(pathName, fileSearchPattern)
+
+	var results []string
+	var err2 error
+
+	results,
+		err2 = fp.Glob(searchStr)
+
+	if err2 != nil {
+		err = fmt.Errorf("%v\n"+
+			"Error returned by fp.Glob(searchStr).\n"+
+			"searchStr='%v'\n"+
+			"Error=\n%v\n",
+			ePrefix.String(),
+			searchStr,
+			err2.Error())
+	}
+
+	return results, err
+}
