@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"os"
 	"strings"
 	"sync"
@@ -219,7 +218,7 @@ func (fMgr *FileMgr) CloseThisFile() error {
 //
 //	fMgrDest  FileMgr - This File Manager type specifies the path and file name
 //	                    of the destination file to which the source file identified
-//	                    by the current File Manger will be copied.
+//	                    by the current File manager will be copied.
 //
 //	                    If the directory path associated with 'fMgrDest' this
 //	                    method will attempt to create it.
@@ -367,7 +366,7 @@ func (fMgr *FileMgr) CopyFileMgrByIoByLink(fMgrDest *FileMgr) error {
 //
 //	fMgrDest  FileMgr - This File Manager type specifies the path and file name
 //	                    of the destination file to which the source file identified
-//	                    by the current File Manger will be copied.
+//	                    by the current File Manager will be copied.
 //
 //	                    If the directory path associated with 'fMgrDest' this
 //	                    method will attempt to create it.
@@ -378,7 +377,7 @@ func (fMgr *FileMgr) CopyFileMgrByIoByLink(fMgrDest *FileMgr) error {
 //	                    files.
 //
 //	                    If this value is set equal or less than zero, the default
-//	                    default internal buffer will be used. Reference:
+//	                    internal buffer will be used. Reference:
 //	                      https://golang.org/pkg/io/#CopyBuffer
 //
 // ------------------------------------------------------------------------
@@ -1745,7 +1744,7 @@ func (fMgr *FileMgr) Equal(fmgr2 *FileMgr) bool {
 // In other words, this method answers the question, 'Do Both Files
 // have the same directory?'.
 //
-// The path comparisons are case insensitive. This means that both
+// The path comparisons are case-insensitive. This means that both
 // paths will be converted to lower case before making the comparison.
 //
 // Also, the path comparison will be performed on the absolute paths
@@ -1772,17 +1771,17 @@ func (fMgr *FileMgr) EqualAbsPaths(fmgr2 *FileMgr) bool {
 // and the input File Manager ('fmgr2') have the same file name and file
 // extension.
 //
-// The File Name and File Extension comparisons are case insensitive. This
+// The File Name and File Extension comparisons are case-insensitive. This
 // means that both file name and file extension will be converted to lower
-// case before making the comparision.
+// case before making the comparison.
 //
 //	Example: xray.txt is considered equal to XRAY.TXT
 //
-// If the either the File Name or File Extension are NOT equal, this method
+// If either the File Name or File Extension are NOT equal, this method
 // will return 'false'.
 //
 // NOTE: This method will NOT test the equality of the file paths or directories.
-// ONLY the file name and file extension are tested for equaltiy.
+// ONLY the file name and file extension are tested for equality.
 func (fMgr *FileMgr) EqualFileNameExt(fmgr2 *FileMgr) bool {
 
 	if fMgr.lock == nil {
@@ -1829,9 +1828,9 @@ func (fMgr *FileMgr) EqualFileNameExt(fmgr2 *FileMgr) bool {
 // and the input File Manager ('fmgr2') have the same absolute path,
 // file name and file extension.
 //
-// The string comparisons are case insensitive. This means that the paths,
+// The string comparisons are case-insensitive. This means that the paths,
 // file names and file extensions will all be converted to lower case
-// before making the comparision.
+// before making the comparison.
 //
 //	Example: d:\dir1\xray.txt is considered equal to D:\DIR1\XRAY.TXT
 //
@@ -2048,7 +2047,7 @@ func (fMgr *FileMgr) GetDirMgr() DirMgr {
 // GetFileBytesWritten - Returns the sum of private member variables,
 // 'FileMgr.buffBytesWritten' + 'FileMgr.fileBytesWritten'.
 //
-// These variables records the number of bytes written to the FileMgr's
+// These variables record the number of bytes written to the FileMgr's
 // target file since it was opened with 'Write' or 'Read-Write' permissions.
 func (fMgr *FileMgr) GetFileBytesWritten() uint64 {
 
@@ -2419,7 +2418,10 @@ func (fMgr *FileMgr) GetFilePermissionConfig() (fPerm FilePermissionConfig, err 
 
 	if err == nil {
 
-		fPerm, err2 = new(FilePermissionConfig).NewByFileMode(fMgr.actualFileInfo.Mode())
+		fPerm, err2 = new(FilePermissionConfig).
+			NewByFileMode(
+				fMgr.actualFileInfo.Mode(),
+				ePrefix)
 
 		if err2 != nil {
 			err =
@@ -2490,7 +2492,10 @@ func (fMgr *FileMgr) GetFilePermissionTextCodes() (string, error) {
 
 	if err == nil {
 		fPerm,
-			err2 = FilePermissionConfig{}.NewByFileMode(fMgr.actualFileInfo.Mode())
+			err2 = new(FilePermissionConfig).
+			NewByFileMode(
+				fMgr.actualFileInfo.Mode(),
+				ePrefix)
 
 		if err2 != nil {
 			err = fmt.Errorf(ePrefix+
@@ -2498,7 +2503,8 @@ func (fMgr *FileMgr) GetFilePermissionTextCodes() (string, error) {
 
 		} else {
 
-			permissionText, err2 = fPerm.GetPermissionTextCode()
+			permissionText,
+				err2 = fPerm.GetPermissionTextCode(ePrefix)
 
 			if err2 != nil {
 				err =
@@ -3098,7 +3104,7 @@ func (fMgr *FileMgr) MoveFileToNewDirMgr(dMgr DirMgr) (FileMgr, error) {
 //	pathFileNameExt string - Must consist of a valid path, file name
 //	                         and file extension. The file need not exist.
 //	                         Failure to provide a properly formatted path
-//	                         path, file name will result in an error.
+//	                         and/or file name will result in an error.
 //
 // ------------------------------------------------------------------------
 //
@@ -3158,9 +3164,9 @@ func (fMgr FileMgr) New(pathFileNameExt string) (FileMgr, error) {
 //
 // Input Parameters:
 //
-//	dirMgr      DirMgr - A valid and properly initialized Directory Manager (type: DirMgr).
+//	dMgr		DirMgr - A valid and properly initialized Directory Manager (type: DirMgr).
 //	                     This object contains the file path which will be combined with the
-//	                     the second input parameter, 'fileNameExt' to create the new File
+//	                     second input parameter, 'fileNameExt' to create the new File
 //	                     Manager (type: FileMgr)
 //
 //	fileNameExt string - A string containing the file name and file extension which will be
@@ -3195,7 +3201,7 @@ func (fMgr FileMgr) New(pathFileNameExt string) (FileMgr, error) {
 //
 //	fMgr, err := FileMgr{}.NewFromDirMgrFileNameExt(dMgr, fileNameExt)
 func (fMgr FileMgr) NewFromDirMgrFileNameExt(
-	dirMgr DirMgr,
+	dMgr DirMgr,
 	fileNameExt string) (FileMgr, error) {
 
 	ePrefix := "FileMgr.NewFromDirMgrFileNameExt() "
@@ -3204,7 +3210,12 @@ func (fMgr FileMgr) NewFromDirMgrFileNameExt(
 
 	fMgrHlpr := fileMgrHelper{}
 
-	isEmpty, err := fMgrHlpr.setFileMgrDirMgrFileName(&fMgr2, dirMgr, fileNameExt, ePrefix)
+	isEmpty, err := fMgrHlpr.
+		setFileMgrDirMgrFileName(
+			&fMgr2,
+			&dMgr,
+			fileNameExt,
+			ePrefix)
 
 	if isEmpty {
 
@@ -3212,10 +3223,10 @@ func (fMgr FileMgr) NewFromDirMgrFileNameExt(
 
 		if err == nil {
 			return FileMgr{}, fmt.Errorf(ePrefix+
-				"Error: The FileMgr instance generated by input parameters 'dirMgr' and "+
+				"Error: The FileMgr instance generated by input parameters 'dMgr' and "+
 				"'fileNameExt' is Empty!\n"+
-				"dirMgr='%v'\nfileNameExt='%v'\n",
-				dirMgr.absolutePath, fileNameExt)
+				"dMgr='%v'\nfileNameExt='%v'\n",
+				dMgr.absolutePath, fileNameExt)
 		}
 	}
 
@@ -3265,7 +3276,7 @@ func (fMgr FileMgr) NewFromDirStrFileNameStr(
 
 	ePrefix := "FileMgr.NewFromDirStrFileNameStr() "
 
-	dirMgr, err := DirMgr{}.New(dirStr)
+	dirMgr, err := new(DirMgr).New(dirStr)
 
 	if err != nil {
 		return FileMgr{},
@@ -3279,7 +3290,12 @@ func (fMgr FileMgr) NewFromDirStrFileNameStr(
 
 	fMgrHlpr := fileMgrHelper{}
 
-	isEmpty, err := fMgrHlpr.setFileMgrDirMgrFileName(&fMgr2, dirMgr, fileNameExtStr, ePrefix)
+	isEmpty, err := fMgrHlpr.
+		setFileMgrDirMgrFileName(
+			&fMgr2,
+			&dirMgr,
+			fileNameExtStr,
+			ePrefix)
 
 	if isEmpty {
 
@@ -3329,12 +3345,14 @@ func (fMgr FileMgr) NewFromFileInfo(dirPathStr string, info os.FileInfo) (FileMg
 
 	if info == nil {
 		return FileMgr{},
-			errors.New(ePrefix + "Error: Input parameter 'info' is 'nil' and INVALID!")
+			fmt.Errorf("%v\n"+
+				"Error: Input parameter 'info' is 'nil' and INVALID!\n",
+				ePrefix)
 	}
 
 	fileName := info.Name()
 
-	dirMgr, err := DirMgr{}.New(dirPathStr)
+	dirMgr, err := new(DirMgr).New(dirPathStr)
 
 	if err != nil {
 		return FileMgr{},
@@ -3346,7 +3364,12 @@ func (fMgr FileMgr) NewFromFileInfo(dirPathStr string, info os.FileInfo) (FileMg
 
 	fMgrHlpr := fileMgrHelper{}
 
-	isEmpty, err := fMgrHlpr.setFileMgrDirMgrFileName(&fMgr2, dirMgr, fileName, ePrefix)
+	isEmpty, err := fMgrHlpr.
+		setFileMgrDirMgrFileName(
+			&fMgr2,
+			&dirMgr,
+			fileName,
+			ePrefix)
 
 	if isEmpty {
 
@@ -3379,7 +3402,7 @@ func (fMgr FileMgr) NewFromFileInfo(dirPathStr string, info os.FileInfo) (FileMg
 //	pathFileNameExt string - Must consist of a valid path, file name
 //	                         and file extension. The file need not exist.
 //	                         Failure to provide a properly formatted path
-//	                         path and file name will result in an error.
+//	                         and/or file name will result in an error.
 //	                         The file extension is optional.
 //
 // ------------------------------------------------------------------------
@@ -3568,11 +3591,11 @@ func (fMgr *FileMgr) OpenThisFileWriteOnlyAppend() error {
 
 // OpenThisFileWriteOnlyTruncate - Opens the current file for 'Write Only'
 // with an 'Truncate' mode. This means that if the file previously exists,
-// all of the existing file content will be deleted before the 'write'
+// all the existing file content will be deleted before the 'write'
 // operation will begin.
 //
 // Note: If the 'FileMgr' directory path and file do not exist, this
-// method will will create both the path and file.
+// method will create both the path and file.
 func (fMgr *FileMgr) OpenThisFileWriteOnlyTruncate() error {
 
 	if fMgr.lock == nil {
@@ -3651,7 +3674,7 @@ func (fMgr *FileMgr) OpenThisFileReadWrite() error {
 //
 // If no errors are encountered the returned 'error' value is
 // nil. This method does not return io.EOF as an error. This is
-// is because it reads the entire file and therefor no End Of File
+// because it reads the entire file and therefor no End Of File
 // flag is required.
 func (fMgr *FileMgr) ReadAllFile() (bytesRead []byte, err error) {
 
@@ -3687,7 +3710,7 @@ func (fMgr *FileMgr) ReadAllFile() (bytesRead []byte, err error) {
 		return bytesRead, err
 	}
 
-	bytesRead, err2 = ioutil.ReadAll(fMgr.filePtr)
+	bytesRead, err2 = io.ReadAll(fMgr.filePtr)
 
 	if err2 != nil {
 		err =
@@ -3787,7 +3810,7 @@ func (fMgr *FileMgr) ReadFileLine(delim byte) (bytesRead []byte, err error) {
 	err = nil
 	var err2 error
 
-	readWriteAccessCtrl, err2 := FileAccessControl{}.NewReadWriteAccess()
+	readWriteAccessCtrl, err2 := new(FileAccessControl).NewReadWriteAccess()
 
 	if err2 != nil {
 		err = fmt.Errorf(ePrefix+
@@ -3832,6 +3855,14 @@ func (fMgr *FileMgr) ReadFileLine(delim byte) (bytesRead []byte, err error) {
 // only if the returned data does not end in 'delim'.
 func (fMgr *FileMgr) ReadFileString(delim byte) (stringRead string, err error) {
 
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
+
 	ePrefix := "FileMgr.ReadFileString() "
 	stringRead = ""
 	err = nil
@@ -3848,8 +3879,6 @@ func (fMgr *FileMgr) ReadFileString(delim byte) (stringRead string, err error) {
 
 	fMgrHlpr := fileMgrHelper{}
 
-	fMgr.lock.Lock()
-
 	err = fMgrHlpr.readFileSetup(
 		fMgr,
 		readWriteAccessCtrl,
@@ -3857,7 +3886,6 @@ func (fMgr *FileMgr) ReadFileString(delim byte) (stringRead string, err error) {
 		ePrefix)
 
 	if err != nil {
-		fMgr.lock.Unlock()
 		return stringRead, err
 	}
 
@@ -3873,7 +3901,6 @@ func (fMgr *FileMgr) ReadFileString(delim byte) (stringRead string, err error) {
 			"Error='%v' ", err2.Error())
 	}
 
-	fMgr.lock.Unlock()
 	return stringRead, err
 }
 
@@ -3884,12 +3911,18 @@ func (fMgr *FileMgr) ReadFileString(delim byte) (stringRead string, err error) {
 // An error will be triggered if the file path does NOT exist!
 func (fMgr *FileMgr) ResetFileInfo() error {
 
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
+
 	ePrefix := "ResetFileInfo() "
 
 	var err error
 	var filePathDoesExist bool
-
-	fMgr.lock.Lock()
 
 	fMgrHelpr := fileMgrHelper{}
 	filePathDoesExist,
@@ -3898,8 +3931,6 @@ func (fMgr *FileMgr) ResetFileInfo() error {
 		PreProcPathCode.None(),
 		ePrefix,
 		"fMgr.absolutePathFileName")
-
-	fMgr.lock.Unlock()
 
 	if err != nil {
 		return err
@@ -3918,18 +3949,36 @@ func (fMgr *FileMgr) ResetFileInfo() error {
 // If the value is less than 1, the buffer size will be set
 // to the system default size.
 func (fMgr *FileMgr) SetReaderBufferSize(readBuffSize int) {
+
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
 	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
+
 	fMgr.fileRdrBufSize = readBuffSize
-	fMgr.lock.Unlock()
+
+	return
 }
 
 // SetWriterBufferSize - Sets the Write Buffer size in bytes.
 // If the value is less than 1, the buffer size will be set
 // to the system default size.
 func (fMgr *FileMgr) SetWriterBufferSize(writeBuffSize int) {
+
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
 	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
+
 	fMgr.fileWriterBufSize = writeBuffSize
-	fMgr.lock.Unlock()
+
+	return
 }
 
 // SetFileInfo - Used to initialize the os.FileInfo structure maintained as
@@ -3938,6 +3987,14 @@ func (fMgr *FileMgr) SetWriterBufferSize(writeBuffSize int) {
 // Be careful: Failure of the input parameter to match the current FileMgr file name
 // will trigger an error.
 func (fMgr *FileMgr) SetFileInfo(info os.FileInfo) error {
+
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
 
 	ePrefix := "FileMgr.SetFileInfo() "
 
@@ -3963,11 +4020,7 @@ func (fMgr *FileMgr) SetFileInfo(info os.FileInfo) error {
 			fMgr.fileNameExt, info.Name())
 	}
 
-	fMgr.lock.Lock()
-
 	fMgr.actualFileInfo = FileInfoPlus{}.NewFromFileInfo(info)
-
-	fMgr.lock.Unlock()
 
 	if !fMgr.actualFileInfo.isFInfoInitialized {
 		return fmt.Errorf(ePrefix+
@@ -3994,15 +4047,28 @@ func (fMgr *FileMgr) SetFileInfo(info os.FileInfo) error {
 //	                error message.
 func (fMgr *FileMgr) SetFileMgrFromDirMgrFileName(
 	dMgr DirMgr,
-	fileNameExt string) (isEmpty bool, err error) {
+	fileNameExt string) (
+	isEmpty bool,
+	err error) {
+
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
 
 	ePrefix := "FileMgr.SetFileMgrFromDirMgrFileName() "
 
 	fMgrHlpr := fileMgrHelper{}
 
-	fMgr.lock.Lock()
-	isEmpty, err = fMgrHlpr.setFileMgrDirMgrFileName(fMgr, dMgr, fileNameExt, ePrefix)
-	fMgr.lock.Unlock()
+	isEmpty, err = fMgrHlpr.
+		setFileMgrDirMgrFileName(
+			fMgr,
+			&dMgr,
+			fileNameExt,
+			ePrefix)
 
 	return isEmpty, err
 }
@@ -4025,7 +4091,17 @@ func (fMgr *FileMgr) SetFileMgrFromDirMgrFileName(
 //
 
 func (fMgr *FileMgr) SetFileMgrFromPathFileName(
-	pathFileNameExt string) (isEmpty bool, err error) {
+	pathFileNameExt string) (
+	isEmpty bool,
+	err error) {
+
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
 
 	ePrefix := "FileMgr.SetFileMgrFromPathFileName() "
 	isEmpty = true
@@ -4033,11 +4109,7 @@ func (fMgr *FileMgr) SetFileMgrFromPathFileName(
 
 	fMgrHlpr := fileMgrHelper{}
 
-	fMgr.lock.Lock()
-
 	isEmpty, err = fMgrHlpr.setFileMgrPathFileName(fMgr, pathFileNameExt, ePrefix)
-
-	fMgr.lock.Unlock()
 
 	return isEmpty, err
 }
@@ -4051,7 +4123,17 @@ func (fMgr *FileMgr) SetFileMgrFromPathFileName(
 //
 // This method uses the 'bufio' package.
 func (fMgr *FileMgr) WriteBytesToFile(
-	bytes []byte) (numBytesWritten int, err error) {
+	bytes []byte) (
+	numBytesWritten int,
+	err error) {
+
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
 
 	ePrefix := "FileMgr.WriteBytesToFile() "
 	err = nil
@@ -4071,8 +4153,6 @@ func (fMgr *FileMgr) WriteBytesToFile(
 
 	fMgrHlpr := fileMgrHelper{}
 
-	fMgr.lock.Lock()
-
 	err = fMgrHlpr.writeFileSetup(
 		fMgr,
 		readWriteAccessCtrl,
@@ -4080,7 +4160,7 @@ func (fMgr *FileMgr) WriteBytesToFile(
 		ePrefix)
 
 	if err != nil {
-		fMgr.lock.Unlock()
+
 		return numBytesWritten, err
 	}
 
@@ -4100,8 +4180,6 @@ func (fMgr *FileMgr) WriteBytesToFile(
 
 	}
 
-	fMgr.lock.Unlock()
-
 	return numBytesWritten, err
 }
 
@@ -4113,7 +4191,18 @@ func (fMgr *FileMgr) WriteBytesToFile(
 // an error will be returned.
 //
 // This method uses the 'bufio' package.
-func (fMgr *FileMgr) WriteStrToFile(str string) (numBytesWritten int, err error) {
+func (fMgr *FileMgr) WriteStrToFile(
+	str string) (
+	numBytesWritten int,
+	err error) {
+
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
 
 	ePrefix := "FileMgr.WriteStrToFile() "
 
@@ -4136,8 +4225,6 @@ func (fMgr *FileMgr) WriteStrToFile(str string) (numBytesWritten int, err error)
 
 	fMgrHlpr := fileMgrHelper{}
 
-	fMgr.lock.Lock()
-
 	err = fMgrHlpr.writeFileSetup(
 		fMgr,
 		readWriteAccessCtrl,
@@ -4145,7 +4232,6 @@ func (fMgr *FileMgr) WriteStrToFile(str string) (numBytesWritten int, err error)
 		ePrefix)
 
 	if err != nil {
-		fMgr.lock.Unlock()
 		return numBytesWritten, err
 	}
 
@@ -4160,8 +4246,6 @@ func (fMgr *FileMgr) WriteStrToFile(str string) (numBytesWritten int, err error)
 	} else {
 		fMgr.buffBytesWritten += uint64(numBytesWritten)
 	}
-
-	fMgr.lock.Unlock()
 
 	return numBytesWritten, err
 }
