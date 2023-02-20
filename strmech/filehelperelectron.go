@@ -83,6 +83,108 @@ func (fHelpElectron *fileHelperElectron) cleanPathStr(pathStr string) string {
 	return fp.Clean(pathStr)
 }
 
+// getCurrentDir
+//
+// This wrapper function calls os.Getwd().
+//
+// Getwd returns a rooted path name corresponding to the
+// current directory. If the current directory can be
+// reached via multiple paths (due to symbolic links),
+// Getwd may return any one of them.
+//
+// In this context the returned current directory is
+// the current working directory.
+//
+// ----------------------------------------------------------------
+//
+// # Reference:
+//
+//	https://pkg.go.dev/os#Getwd
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//
+//		This method returns a string containing the
+//		current working directory path.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fHelpElectron *fileHelperElectron) getCurrentDir(
+	errPrefDto *ePref.ErrPrefixDto) (
+	string,
+	error) {
+
+	if fHelpElectron.lock == nil {
+		fHelpElectron.lock = new(sync.Mutex)
+	}
+
+	fHelpElectron.lock.Lock()
+
+	defer fHelpElectron.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"fileHelperElectron."+
+			"getCurrentDir()",
+		"")
+
+	if err != nil {
+		return "", err
+	}
+
+	var err2 error
+	var currDir string
+
+	currDir, err2 = os.Getwd()
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error returned by os.Getwd().\n"+
+			"Error= \n%v\n",
+			ePrefix.String(),
+			err2.Error())
+	}
+
+	return currDir, err
+}
+
 // isStringEmptyOrBlank
 //
 // Analyzes a string to determine if the string is

@@ -130,12 +130,12 @@ type SourceCodeComments struct {
 //		returned error Type is set equal to 'nil'.
 //
 //		If errors are encountered during processing, the
-//		returned error Type will encapsulate an error
-//		message. This returned error message will
-//		incorporate the method chain and text passed by
-//		input parameter, 'errorPrefix'. The 'errorPrefix'
-//		text will be attached to the beginning of the
-//		error message.
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
 //
 //	err							error
 //
@@ -143,12 +143,12 @@ type SourceCodeComments struct {
 //		returned error Type is set equal to 'nil'.
 //
 //		If errors are encountered during processing, the
-//		returned error Type will encapsulate an error
-//		message. This returned error message will
-//		incorporate the method chain and text passed by
-//		input parameter, 'errorPrefix'. The 'errorPrefix'
-//		text will be attached to the beginning of the
-//		error message.
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
 func (srcCodeComments *SourceCodeComments) testPrimaryComments(
 	errorPrefix interface{}) error {
 
@@ -222,13 +222,12 @@ func (srcCodeComments *SourceCodeComments) testPrimaryComments(
 //		returned error Type is set equal to 'nil'.
 //
 //		If errors are encountered during processing, the
-//		returned error Type will encapsulate an error
-//		message.
-//
-//		If an error message is returned, the text value
-//		for input parameter 'errPrefDto' (error prefix)
-//		will be prefixed or attached at the beginning of
-//		the error message.
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
 //
 //	err							error
 //
@@ -236,13 +235,12 @@ func (srcCodeComments *SourceCodeComments) testPrimaryComments(
 //		returned error Type is set equal to 'nil'.
 //
 //		If errors are encountered during processing, the
-//		returned error Type will encapsulate an error
-//		message.
-//
-//		If an error message is returned, the text value
-//		for input parameter 'errPrefDto' (error prefix)
-//		will be prefixed or attached at the beginning of
-//		the error message.
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
 func (srcCodeComments *SourceCodeComments) testSubsidiaryComments(
 	errPrefDto *ePref.ErrPrefixDto) error {
 
