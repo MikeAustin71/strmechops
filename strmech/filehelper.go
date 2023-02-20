@@ -4612,13 +4612,129 @@ func (fh FileHelper) GetAbsCurrDir(
 
 // GetAbsPathFromFilePath
 //
-// Receives a string containing both the path file name
+// Receives a string containing the path, file name
 // and extension.
 //
-// This method will then return the absolute value of that
-// path, file name and file extension.
+// This method will then return the absolute value of
+// that path, file name and file extension.
+//
+// "An absolute or full path points to the same location
+// in a file system, regardless of the current working
+// directory. To do that, it must include the root
+// directory."
+//
+//	Wikipedia
+//
+// This method therefore converts path element contained
+// in input parameter 'filePath' to an absolute path.
+//
+// ----------------------------------------------------------------
+//
+// # Reference:
+//
+//	https://en.wikipedia.org/wiki/Path_(computing)#Absolute_and_relative_paths
+//	https://en.wikipedia.org/wiki/Path_(computing)
+//	https://pkg.go.dev/path/filepath@go1.20.1#Abs
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	filePath					string
+//
+//		This strings contains the path, file name and
+//		file extension. This method will convert the path
+//		element to an absolute path.
+//
+//		"An absolute or full path points to the same
+//	 	location in a file system, regardless of the
+//	 	current working directory. To do that, it must
+//	 	include the root directory."
+//
+//			Wikipedia
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//
+//		This string returns the absolute file path.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
 func (fh FileHelper) GetAbsPathFromFilePath(
-	filePath string) (
+	filePath string,
+	errorPrefix interface{}) (
 	string,
 	error) {
 
@@ -4635,7 +4751,7 @@ func (fh FileHelper) GetAbsPathFromFilePath(
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		nil,
+		errorPrefix,
 		"FileHelper."+
 			"GetAbsPathFromFilePath()",
 		"")
@@ -4644,75 +4760,10 @@ func (fh FileHelper) GetAbsPathFromFilePath(
 		return "", err
 	}
 
-	errCode := 0
-
-	fHelperElectron := new(fileHelperElectron)
-
-	errCode,
-		_,
-		filePath = fHelperElectron.isStringEmptyOrBlank(filePath)
-
-	if errCode == -1 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'filePath' is an empty string!\n",
-			ePrefix.String())
-
-		return "", err
-
-	}
-
-	if errCode == -2 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'filePath' consists of blank spaces!\n",
-			ePrefix.String())
-
-		return "", err
-
-	}
-
-	testFilePath := new(fileHelperAtom).adjustPathSlash(filePath)
-
-	errCode,
-		_,
-		testFilePath =
-		fHelperElectron.
-			isStringEmptyOrBlank(
-				testFilePath)
-
-	if errCode < 0 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: After adjusting path Separators,\n"+
-			"'filePath' resolves to an empty string!\n",
-			ePrefix.String())
-
-		return "", err
-	}
-
-	var absPath string
-	var err2 error
-
-	absPath,
-		err2 = new(fileHelperProton).
-		makeAbsolutePath(
-			testFilePath,
-			ePrefix.XCpy("absPath<-"))
-
-	if err2 != nil {
-
-		err = fmt.Errorf("%v\n"+
-			"Error returned from fh.MakeAbsolutePath(testFilePath).\n"+
-			"testFilePath='%v'\nError='%v'\n",
-			ePrefix.String(),
-			testFilePath,
-			err.Error())
-
-		return "", err
-	}
-
-	return absPath, nil
+	return new(fileHelperMolecule).
+		getAbsPathFromFilePath(
+			filePath,
+			ePrefix)
 }
 
 // GetCurrentDir - Wrapper function for Getwd(). Getwd returns a
@@ -5272,7 +5323,8 @@ func (fh FileHelper) GetFileMode(pathFileName string) (FilePermissionConfig, err
 				"pathFileName='%v'\n", pathFileName)
 	}
 
-	fPermCfg, err := FilePermissionConfig{}.NewByFileMode(fInfo.Mode())
+	fPermCfg, err := new(FilePermissionConfig).
+		NewByFileMode(fInfo.Mode(), ePrefix)
 
 	if err != nil {
 		return FilePermissionConfig{},

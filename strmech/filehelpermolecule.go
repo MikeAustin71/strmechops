@@ -440,6 +440,184 @@ func (fHelpMolecule *fileHelperMolecule) getFirstLastNonSeparatorCharIndexInPath
 	return firstIdx, lastIdx, err
 }
 
+// getAbsPathFromFilePath
+//
+// Receives a string containing the path, file name
+// and extension.
+//
+// This method will then return the absolute value of
+// that path, file name and file extension.
+//
+// "An absolute or full path points to the same location
+// in a file system, regardless of the current working
+// directory. To do that, it must include the root
+// directory."
+//
+//	Wikipedia
+//
+// This method therefore converts path element contained
+// in input parameter 'filePath' to an absolute path.
+//
+// ----------------------------------------------------------------
+//
+// # Reference:
+//
+//	https://en.wikipedia.org/wiki/Path_(computing)#Absolute_and_relative_paths
+//	https://en.wikipedia.org/wiki/Path_(computing)
+//	https://pkg.go.dev/path/filepath@go1.20.1#Abs
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	filePath					string
+//
+//		This strings contains the path, file name and
+//		file extension. This method will convert the path
+//		element to an absolute path.
+//
+//		"An absolute or full path points to the same
+//	 	location in a file system, regardless of the
+//	 	current working directory. To do that, it must
+//	 	include the root directory."
+//
+//			Wikipedia
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//
+//		This string returns the absolute file path.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (fHelpMolecule *fileHelperMolecule) getAbsPathFromFilePath(
+	filePath string,
+	errorPrefix interface{}) (
+	string,
+	error) {
+
+	if fHelpMolecule.lock == nil {
+		fHelpMolecule.lock = new(sync.Mutex)
+	}
+
+	fHelpMolecule.lock.Lock()
+
+	defer fHelpMolecule.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"fileHelperMolecule."+
+			"getAbsPathFromFilePath()",
+		"")
+
+	if err != nil {
+		return "", err
+	}
+
+	errCode := 0
+
+	fHelperElectron := new(fileHelperElectron)
+
+	errCode,
+		_,
+		filePath = fHelperElectron.isStringEmptyOrBlank(filePath)
+
+	if errCode == -1 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'filePath' is an empty string!\n",
+			ePrefix.String())
+
+		return "", err
+
+	}
+
+	if errCode == -2 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'filePath' consists of blank spaces!\n",
+			ePrefix.String())
+
+		return "", err
+
+	}
+
+	testFilePath := new(fileHelperAtom).adjustPathSlash(filePath)
+
+	errCode,
+		_,
+		testFilePath =
+		fHelperElectron.
+			isStringEmptyOrBlank(
+				testFilePath)
+
+	if errCode < 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: After adjusting path Separators,\n"+
+			"'filePath' resolves to an empty string!\n",
+			ePrefix.String())
+
+		return "", err
+	}
+
+	var absPath string
+	var err2 error
+
+	absPath,
+		err2 = new(fileHelperProton).
+		makeAbsolutePath(
+			testFilePath,
+			ePrefix.XCpy("absPath<-"))
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error returned from fh.MakeAbsolutePath(testFilePath).\n"+
+			"testFilePath='%v'\nError='%v'\n",
+			ePrefix.String(),
+			testFilePath,
+			err.Error())
+
+		return "", err
+	}
+
+	return absPath, nil
+}
+
 // joinPathsAdjustSeparators
 //
 // Joins two path strings and standardizes the path

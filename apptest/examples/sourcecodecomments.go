@@ -219,8 +219,9 @@ func (srcCodeComments *SourceCodeComments) testPrimaryComments(
 //	error
 //
 //		If this method completes successfully, the
-//		returned error Type is set equal to 'nil'. If
-//		errors are encountered during processing, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
 //		returned error Type will encapsulate an error
 //		message.
 //
@@ -232,8 +233,9 @@ func (srcCodeComments *SourceCodeComments) testPrimaryComments(
 //	err							error
 //
 //		If this method completes successfully, the
-//		returned error Type is set equal to 'nil'. If
-//		errors are encountered during processing, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
 //		returned error Type will encapsulate an error
 //		message.
 //
