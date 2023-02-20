@@ -5904,54 +5904,166 @@ func (fh *FileHelper) GetFileInfoPlus(
 	return fileInfoPlus, err
 }
 
-// GetFileLastModificationDate - Returns the last modification'
-// date/time on a specific file. If input parameter 'customTimeFmt'
-// string is empty, a default time format will be used to format the
-// returned time string.
+// GetFileLastModificationDate
+//
+// Returns the last modification' date/time on a specific
+// file. If input parameter 'customTimeFmt' string is
+// empty, a default time format will be used to format
+// the returned time string.
 //
 // The default date time format is:
 //
 //	"2006-01-02 15:04:05.000000000"
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	pathFileName				string
+//
+//		This string contains the path and file name of
+//		the file which the last file modification time
+//		will be returned.
+//
+//	customTimeFmt				string
+//
+//		This string holds the date/time format which will
+//		be used to format the last file modification time.
+//		Reference:
+//			https://pkg.go.dev/time#pkg-constants
+//			https://yourbasic.org/golang/format-parse-string-time-date-example
+//
+//		If this parameter is configured as an empty or
+//		zero length string, a default date/time format
+//		will be applied. The default date time format is:
+//
+//			"2006-01-02 15:04:05.000000000"
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	time.Time
+//
+//		If this method completes successfully, the last
+//		file modification date/time associated with the
+//		file identified by input parameter 'pathFileName'
+//		will be returned by this parameter.
+//
+//	string
+//
+//		If this method completes successfully, the last
+//		file modification date/time associated with the
+//		file identified by input parameter 'pathFileName'
+//		will be formatted as a string and returned by this
+//		parameter.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
 func (fh *FileHelper) GetFileLastModificationDate(
 	pathFileName string,
-	customTimeFmt string) (time.Time, string, error) {
+	customTimeFmt string,
+	errorPrefix interface{}) (
+	time.Time,
+	string,
+	error) {
 
-	ePrefix := "FileHelper.GetFileLastModificationDate() "
-	const fmtDateTimeNanoSecondStr = "2006-01-02 15:04:05.000000000 -0700 MST"
-	var zeroTime time.Time
-	var pathFileNameDoesExist bool
-	var fInfo FileInfoPlus
+	if fh.lock == nil {
+		fh.lock = new(sync.Mutex)
+	}
+
+	fh.lock.Lock()
+
+	defer fh.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
 	var err error
-	var errCode int
 
-	pathFileName,
-		pathFileNameDoesExist,
-		fInfo,
-		err = new(fileHelperMolecule).doesPathFileExist(
-		pathFileName,
-		PreProcPathCode.AbsolutePath(), // Skip Convert to Absolute Path
-		ePrefix,
-		"pathFileName")
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileHelper."+
+			"GetFileLastModificationDate()",
+		"")
 
 	if err != nil {
-		return zeroTime, "", err
+		return time.Time{}, "", err
 	}
 
-	if !pathFileNameDoesExist {
-		return zeroTime, "",
-			fmt.Errorf(ePrefix+"ERROR: 'pathFileName' DOES NOT EXIST!\n"+
-				"pathFileName='%v'\n", pathFileName)
-	}
-
-	errCode, _, customTimeFmt = fh.isStringEmptyOrBlank(customTimeFmt)
-
-	fmtStr := customTimeFmt
-
-	if errCode < 0 {
-		fmtStr = fmtDateTimeNanoSecondStr
-	}
-
-	return fInfo.ModTime(), fInfo.ModTime().Format(fmtStr), nil
+	return new(fileHelperNanobot).
+		getFileLastModificationDate(
+			pathFileName,
+			customTimeFmt,
+			ePrefix)
 }
 
 // GetFileMode - Returns the mode (os.FileMode) for the file designated by

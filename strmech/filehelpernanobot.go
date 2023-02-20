@@ -3179,6 +3179,159 @@ func (fHelperNanobot *fileHelperNanobot) getFileInfoPlus(
 	return fileInfoPlus, err
 }
 
+// getFileLastModificationDate
+//
+// Returns the last modification' date/time on a specific
+// file. If input parameter 'customTimeFmt' string is
+// empty, a default time format will be used to format
+// the returned time string.
+//
+// The default date time format is:
+//
+//	"2006-01-02 15:04:05.000000000"
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	pathFileName				string
+//
+//		This string contains the path and file name of
+//		the file which the last file modification time
+//		will be returned.
+//
+//	customTimeFmt				string
+//
+//		This string holds the date/time format which will
+//		be used to format the last file modification time.
+//		Reference:
+//			https://pkg.go.dev/time#pkg-constants
+//			https://yourbasic.org/golang/format-parse-string-time-date-example
+//
+//		If this parameter is configured as an empty or
+//		zero length string, a default date/time format
+//		will be applied. The default date time format is:
+//
+//			"2006-01-02 15:04:05.000000000"
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	time.Time
+//
+//		If this method completes successfully, the last
+//		file modification date/time associated with the
+//		file identified by input parameter 'pathFileName'
+//		will be returned by this parameter.
+//
+//	string
+//
+//		If this method completes successfully, the last
+//		file modification date/time associated with the
+//		file identified by input parameter 'pathFileName'
+//		will be formatted as a string and returned by this
+//		parameter.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fHelperNanobot *fileHelperNanobot) getFileLastModificationDate(
+	pathFileName string,
+	customTimeFmt string,
+	errPrefDto *ePref.ErrPrefixDto) (
+	time.Time,
+	string,
+	error) {
+
+	if fHelperNanobot.lock == nil {
+		fHelperNanobot.lock = new(sync.Mutex)
+	}
+
+	fHelperNanobot.lock.Lock()
+
+	defer fHelperNanobot.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"fileHelperNanobot."+
+			"getFileLastModificationDate()",
+		"")
+
+	if err != nil {
+		return time.Time{}, "", err
+	}
+
+	var pathFileNameDoesExist bool
+	var fInfoPlus FileInfoPlus
+	var errCode int
+
+	pathFileName,
+		pathFileNameDoesExist,
+		fInfoPlus,
+		err = new(fileHelperMolecule).doesPathFileExist(
+		pathFileName,
+		PreProcPathCode.AbsolutePath(), // Skip Convert to Absolute Path
+		ePrefix,
+		"pathFileName")
+
+	if err != nil {
+		return time.Time{}, "", err
+	}
+
+	if !pathFileNameDoesExist {
+
+		return time.Time{}, "",
+			fmt.Errorf("%v\n"+
+				"ERROR: 'pathFileName' DOES NOT EXIST!\n"+
+				"pathFileName='%v'\n",
+				ePrefix.String(),
+				pathFileName)
+	}
+
+	errCode,
+		_,
+		customTimeFmt =
+		new(fileHelperElectron).isStringEmptyOrBlank(customTimeFmt)
+
+	fmtStr := customTimeFmt
+
+	if errCode < 0 {
+		// Default Date Time Format
+		fmtStr = "2006-01-02 15:04:05.000000000"
+	}
+
+	return fInfoPlus.ModTime(), fInfoPlus.ModTime().Format(fmtStr), nil
+}
+
 // MakeDirAllPerm
 //
 // Creates a directory path along with any necessary
