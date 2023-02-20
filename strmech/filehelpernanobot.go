@@ -2414,6 +2414,313 @@ func (fHelperNanobot *fileHelperNanobot) findFilesInPath(
 	return results, err
 }
 
+// getFileExtension
+//
+// Returns the File Extension with the dot. If there is
+// no File Extension an empty string is returned (NO dot
+// included). If the returned File Extension is an empty
+// string, the returned parameter 'isEmpty' is set equal
+// to 'true'.
+//
+// When an extension is returned in the 'ext' variable,
+// this extension includes a leading dot.
+//
+//	Example: '.txt'
+//
+// ----------------------------------------------------------------
+//
+// # Usage
+//
+//		Actual File Name Plus Extension: "newerFileForTest_01.txt"
+//		        Returned File Extension: ".txt"
+//
+//		Actual File Name Plus Extension: "newerFileForTest_01"
+//		        Returned File Extension: ""
+//
+//		Actual File Name Plus Extension: ".gitignore"
+//		        Returned File Extension: ""
+//
+//		-------------------------------------
+//
+//		fh := new(FileHelper)
+//
+//		commonDir :=
+//			fh.AdjustPathSlash(".\\xt_dirmgr_01_test.go")
+//
+//		result, isEmpty, err := fh.GetFileExtension(commonDir)
+//
+//	 result is now equal to ".go"
+//		isEmpty is now equal to 'false'
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	pathFileNameExt				string
+//
+//		This string contains the path, file name and file
+//		extension. This method will extract and return
+//		the file extension.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	ext							string
+//
+//		If this method completes successfully, this
+//		parameter will return the file extension
+//		extracted from the path, file name and file
+//		extension passed as input parameter
+//		'pathFileNameExt'.
+//
+//	isEmpty						bool
+//
+//		If the returned file extension ('ext') is an
+//		empty string, 'isEmpty' is set to 'true'.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fHelperNanobot *fileHelperNanobot) getFileExtension(
+	pathFileNameExt string,
+	errPrefDto *ePref.ErrPrefixDto) (
+	ext string,
+	isEmpty bool,
+	err error) {
+
+	if fHelperNanobot.lock == nil {
+		fHelperNanobot.lock = new(sync.Mutex)
+	}
+
+	fHelperNanobot.lock.Lock()
+
+	defer fHelperNanobot.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ext = ""
+
+	isEmpty = true
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"fileHelperNanobot."+
+			"getFileExtension()",
+		"")
+
+	if err != nil {
+		return ext, isEmpty, err
+	}
+
+	fHelperElectron := new(fileHelperElectron)
+
+	errCode := 0
+
+	errCode,
+		_,
+		pathFileNameExt = fHelperElectron.
+		isStringEmptyOrBlank(pathFileNameExt)
+
+	if errCode == -1 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'pathFileNameExt' is an empty string!\n",
+			ePrefix.String())
+
+		return ext, isEmpty, err
+	}
+
+	if errCode == -2 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'pathFileNameExt' consists of blank spaces!\n",
+			ePrefix.String())
+
+		return ext, isEmpty, err
+	}
+
+	fHelperAtom := fileHelperAtom{}
+
+	testPathFileNameExt := fHelperAtom.
+		adjustPathSlash(pathFileNameExt)
+
+	errCode,
+		_,
+		testPathFileNameExt =
+		fHelperElectron.isStringEmptyOrBlank(testPathFileNameExt)
+
+	if errCode < 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Cleaned version of 'pathFileNameExt', 'testPathFileNameExt'\n"+
+			"is an empty string!\n",
+			ePrefix.String())
+
+		return ext, isEmpty, err
+	}
+
+	var dotIdxs []int
+	var err2 error
+
+	dotIdxs,
+		err2 = fHelperAtom.
+		getDotSeparatorIndexesInPathStr(
+			testPathFileNameExt,
+			ePrefix.XCpy(
+				"dotIdxs<-testPathFileNameExt"))
+
+	if err2 != nil {
+
+		ext = ""
+
+		isEmpty = true
+
+		err = fmt.Errorf("%v\n"+
+			"Error returned from GetDotSeparatorIndexesInPathStr(testPathFileNameExt).\n"+
+			"testPathFileNameExt='%v'\n"+
+			"Error=\n%v\n",
+			ePrefix.String(),
+			testPathFileNameExt,
+			err2.Error())
+
+		return ext, isEmpty, err
+	}
+
+	lenDotIdxs := len(dotIdxs)
+
+	// Deal with case where the pathFileNameExt contains
+	// no dots.
+	if lenDotIdxs == 0 {
+		ext = ""
+		isEmpty = true
+		err = nil
+		return ext, isEmpty, err
+
+	}
+
+	firstGoodCharIdx,
+		lastGoodCharIdx,
+		err2 := new(fileHelperMolecule).
+		getFirstLastNonSeparatorCharIndexInPathStr(
+			testPathFileNameExt,
+			ePrefix)
+
+	if err2 != nil {
+
+		ext = ""
+
+		isEmpty = true
+
+		err = fmt.Errorf("%v\n"+
+			"Error returned from GetFirstLastNonSeparatorCharIndexInPathStr(testPathFileNameExt).\n"+
+			"testPathFileNameExt='%v'\n"+
+			"Error=\n%v\n",
+			ePrefix.String(),
+			testPathFileNameExt,
+			err2.Error())
+
+		return ext, isEmpty, err
+	}
+
+	// Deal with the case where pathFileNameExt contains no
+	// valid alphanumeric characters
+	if firstGoodCharIdx == -1 || lastGoodCharIdx == -1 {
+		ext = ""
+		isEmpty = true
+		err = nil
+		return ext, isEmpty, err
+	}
+
+	var slashIdxs []int
+
+	slashIdxs,
+		err2 = fHelperAtom.
+		getPathSeparatorIndexesInPathStr(
+			testPathFileNameExt,
+			ePrefix)
+
+	if err2 != nil {
+
+		ext = ""
+
+		isEmpty = true
+
+		err = fmt.Errorf("%v\n"+
+			"Error returned from GetPathSeparatorIndexesInPathStr(testPathFileNameExt).\n"+
+			"testPathFileNameExt='%v'\n"+
+			"Error=\n%v\n",
+			ePrefix.String(),
+			testPathFileNameExt,
+			err2.Error())
+
+		return ext, isEmpty, err
+	}
+
+	lenSlashIdxs := len(slashIdxs)
+
+	if lenSlashIdxs == 0 &&
+		lenDotIdxs == 1 &&
+		dotIdxs[lenDotIdxs-1] == 0 {
+		// deal with the case .gitignore
+		ext = ""
+		isEmpty = true
+		err = nil
+		return ext, isEmpty, err
+	}
+
+	if lenSlashIdxs == 0 {
+		ext = testPathFileNameExt[dotIdxs[lenDotIdxs-1]:]
+		isEmpty = false
+		err = nil
+		return ext, isEmpty, err
+	}
+
+	// lenDotIdxs and lenSlasIdxs both greater than zero
+	if dotIdxs[lenDotIdxs-1] > slashIdxs[lenSlashIdxs-1] &&
+		dotIdxs[lenDotIdxs-1] < lastGoodCharIdx {
+
+		ext = testPathFileNameExt[dotIdxs[lenDotIdxs-1]:]
+		isEmpty = false
+		err = nil
+		return ext, isEmpty, err
+
+	}
+
+	ext = ""
+
+	isEmpty = true
+
+	err = nil
+
+	return ext, isEmpty, err
+}
+
 // MakeDirAllPerm
 //
 // Creates a directory path along with any necessary
