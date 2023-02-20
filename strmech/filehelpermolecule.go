@@ -184,7 +184,7 @@ func (fHelpMolecule *fileHelperMolecule) doesPathFileExist(
 
 			nonPathError = nil
 
-			fInfo = FileInfoPlus{}.NewFromFileInfo(info)
+			fInfo = new(FileInfoPlus).NewFromFileInfo(info)
 
 			return absFilePath, filePathDoesExist, fInfo, nonPathError
 		}
@@ -793,7 +793,8 @@ func (fHelpMolecule *fileHelperMolecule) makeFileHelperWalkDirDeleteFilesFunc(
 				return nil
 			}
 
-			subDir.actualDirFileInfo, err = FileInfoPlus{}.NewFromPathFileInfo(pathFile, info)
+			subDir.actualDirFileInfo, err =
+				new(FileInfoPlus).NewFromPathFileInfo(pathFile, info)
 
 			if err != nil {
 

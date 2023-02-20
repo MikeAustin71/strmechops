@@ -114,7 +114,7 @@ func (vpDto *ValidPathStrDto) GetPathFileInfo() FileInfoPlus {
 // ValidPathStrDto.pathIsValid .
 //
 //	                                      Int
-//	   Enumeration Value                 Value         Definition
+//	   Enumeration                       Value         Definition
 //	----------------------------------------------------------------------------
 //	PathValidityStatusCode(0).Unknown()   -1  Path/file name validity has NOT been
 //	                                          tested and its status as 'Valid' or
@@ -235,7 +235,7 @@ func (vpDto *ValidPathStrDto) IsInitialized() bool {
 // defined by this ValidPathStrDto instance actually exists on disk.
 //
 //	                                      Int
-//	   Enumeration Value                 Value         Definition
+//	   Enumeration                       Value         Definition
 //	----------------------------------------------------------------------------
 //	PathExistsStatusCode(0).Unknown()     -1    Path file existence has NOT been
 //	                                            tested and status is 'Unknown'.
@@ -282,7 +282,7 @@ func (vpDto *ValidPathStrDto) SetAbsPath(absPathStr string) {
 // the internal field vpDto.absPathDoesExist which is of type PathExistsStatusCode.
 //
 //	                                      Int
-//	   Enumeration Value                 Value         Definition
+//	   Enumeration                       Value         Definition
 //	----------------------------------------------------------------------------
 //	PathExistsStatusCode(0).Unknown()     -1    Path file existence has NOT been
 //	                                            tested and status is 'Unknown'.
@@ -325,7 +325,7 @@ func (vpDto *ValidPathStrDto) SetOriginalPathStr(originalPathStr string) {
 // vpDto.pathDoesExist which is of type PathExistsStatusCode.
 //
 //	                                      Int
-//	   Enumeration Value                 Value         Definition
+//	   Enumeration                       Value         Definition
 //	----------------------------------------------------------------------------
 //	PathExistsStatusCode(0).Unknown()     -1    Path file existence has NOT been
 //	                                            tested and status is 'Unknown'.
@@ -384,7 +384,7 @@ func (vpDto *ValidPathStrDto) SetPathIsValid(
 	return nil
 }
 
-// SetOriginalPathStr - "setter" method for internal data field vpDto.pathDoesExist
+// SetPathType - "setter" method for internal data field vpDto.pathDoesExist
 // which is of type PathFileTypeCode.
 //
 //	                               Path File

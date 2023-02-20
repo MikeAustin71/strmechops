@@ -38,13 +38,13 @@ type FileInfoPlus struct {
 //	Example:
 //	            Complete File Name: "newerFileForTest_01.txt"
 //	  Base Name returned by Name(): "newerFileForTest_01.txt"
-func (fip FileInfoPlus) Name() string {
+func (fip *FileInfoPlus) Name() string {
 
 	return fip.fName
 }
 
 // Size - file length in bytes for regular files; system-dependent for others
-func (fip FileInfoPlus) Size() int64 {
+func (fip *FileInfoPlus) Size() int64 {
 	return fip.fSize
 }
 
@@ -85,12 +85,12 @@ func (fip FileInfoPlus) Size() int64 {
 //		ModePerm FileMode = 0777 // Unix permission bits
 //
 // )
-func (fip FileInfoPlus) Mode() os.FileMode {
+func (fip *FileInfoPlus) Mode() os.FileMode {
 	return fip.fMode
 }
 
 // ModTime - file modification time
-func (fip FileInfoPlus) ModTime() time.Time {
+func (fip *FileInfoPlus) ModTime() time.Time {
 	return fip.fModTime
 }
 
@@ -98,18 +98,18 @@ func (fip FileInfoPlus) ModTime() time.Time {
 // not a file.
 //
 // abbreviation for Mode().IsDir()
-func (fip FileInfoPlus) IsDir() bool {
+func (fip *FileInfoPlus) IsDir() bool {
 	return fip.isDir
 }
 
 // Sys - underlying data source (can return nil)
-func (fip FileInfoPlus) Sys() interface{} {
+func (fip *FileInfoPlus) Sys() interface{} {
 	return fip.dataSrc
 }
 
 // SysAsString - underlying data source. If Sys is
 // 'nil', this method will return an empty string.
-func (fip FileInfoPlus) SysAsString() string {
+func (fip *FileInfoPlus) SysAsString() string {
 	if fip.dataSrc == nil {
 		return ""
 	}
@@ -266,7 +266,7 @@ func (fip *FileInfoPlus) IsDirectoryPathInitialized() bool {
 //
 //	fip, err := FileInfoPlus{}.NewFromDirMgrFileInfo(dMgr, info)
 //	fip is now configured as a newly populated FileInfoPlus instance.
-func (fip FileInfoPlus) NewFromDirMgrFileInfo(
+func (fip *FileInfoPlus) NewFromDirMgrFileInfo(
 	dMgr DirMgr,
 	info os.FileInfo) (FileInfoPlus, error) {
 
@@ -285,7 +285,7 @@ func (fip FileInfoPlus) NewFromDirMgrFileInfo(
 			errors.New(ePrefix + "ERROR: Input Parameter 'info' is nil !\n")
 	}
 
-	newInfo := FileInfoPlus{}.NewFromFileInfo(info)
+	newInfo := new(FileInfoPlus).NewFromFileInfo(info)
 
 	newInfo.dirPath = dMgr.GetAbsolutePath()
 
@@ -307,7 +307,7 @@ func (fip FileInfoPlus) NewFromDirMgrFileInfo(
 //
 //	fip := FileInfoPlus{}.NewFromFileInfo(info)
 //	fip is now a newly populated FileInfoPlus instance.
-func (fip FileInfoPlus) NewFromFileInfo(info os.FileInfo) FileInfoPlus {
+func (fip *FileInfoPlus) NewFromFileInfo(info os.FileInfo) FileInfoPlus {
 
 	if info == nil {
 		return FileInfoPlus{}
@@ -338,7 +338,7 @@ func (fip FileInfoPlus) NewFromFileInfo(info os.FileInfo) FileInfoPlus {
 //
 //	fip, err := FileInfoPlus{}.NewFromPathFileInfo(dirPath, info)
 //	fip is now a newly populated FileInfoPlus instance.
-func (fip FileInfoPlus) NewFromPathFileInfo(
+func (fip *FileInfoPlus) NewFromPathFileInfo(
 	dirPath string,
 	info os.FileInfo) (FileInfoPlus, error) {
 
@@ -361,7 +361,7 @@ func (fip FileInfoPlus) NewFromPathFileInfo(
 			errors.New(ePrefix + "ERROR: Input Parameter 'info' is nil !\n")
 	}
 
-	newInfo := FileInfoPlus{}.NewFromFileInfo(info)
+	newInfo := new(FileInfoPlus).NewFromFileInfo(info)
 
 	newInfo.dirPath = dirPath
 
@@ -426,7 +426,7 @@ func (fip *FileInfoPlus) SetSysDataSrc(sysDataSrc interface{}) {
 }
 
 // SetIsFInfoInitialized - Sets the flag for 'Is File Info Initialized'
-// If set to 'true' it means that all of the File Info fields have
+// If set to 'true' it means that all the File Info fields have
 // been initialized.
 func (fip *FileInfoPlus) SetIsFInfoInitialized(isInitialized bool) {
 	if !isInitialized {
