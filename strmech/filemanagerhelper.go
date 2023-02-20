@@ -96,9 +96,10 @@ func (fMgrHlpr *fileMgrHelper) doesFileMgrPathFileExist(
 
 	} else if preProcessCode == PreProcPathCode.AbsolutePath() {
 
-		fileMgr.absolutePathFileName, err2 = FileHelper{}.MakeAbsolutePath(
-			fileMgr.absolutePathFileName,
-			ePrefix)
+		fileMgr.absolutePathFileName, err2 =
+			new(FileHelper).MakeAbsolutePath(
+				fileMgr.absolutePathFileName,
+				ePrefix)
 
 		if err2 != nil {
 			nonPathError = fmt.Errorf(ePrefix+
