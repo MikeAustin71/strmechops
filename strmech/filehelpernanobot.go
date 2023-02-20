@@ -1780,6 +1780,166 @@ func (fHelperNanobot *fileHelperNanobot) doesFileInfoExist(
 	return doesFInfoExist, fInfo, err
 }
 
+// DoesFileInfoPlusExist
+//
+// This method returns a boolean value indicating whether
+// the path and file name passed to the function actually
+// exists.
+//
+// If 'pathFileName' does NOT exist, return parameters
+// 'doesFInfoExist' will be set to 'false' and the
+// returned error value will be 'nil'.
+//
+// If the file actually exists, the function will return
+// the associated FileInfoPlus structure.
+//
+// As its name implies, the returned type FileInfoPlus
+// provides methods and information which go beyond the
+// os.FileInfo interface in describing the file identified
+// by 'pathFileName'. For detailed information on the
+// features and capabilities offered by type FileInfoPlus,
+// see the source code documentation detail located in
+// source code file 'fileinfoplus.go'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	pathFileName				string
+//
+//		This path and file name will be evaluated to
+//		determine if the file actually exist.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	doesFInfoExist				bool
+//
+//		If the file identified in input parameter
+//		'pathFileName' actually exists, this return
+//		parameter will be set to 'true'.
+//
+//		If this file does NOT exist, this parameter
+//		will return 'false'.
+//
+//	fInfoPlus					FileInfoPlus
+//
+//		If the file identified in input parameter
+//		'pathFileName' actually exists, this return
+//		parameter will be configured with an instance of
+//		FileInfoPlus providing detailed information on
+//		the file identified by input parameter
+//		'pathFileName'.
+//
+//		Type FileInfoPlus conforms to the os.FileInfo
+//		interface. This structure will store os.FileInfo
+//	 	information plus additional information related
+//	 	to a file or directory.
+//
+//		type os.FileInfo interface {
+//
+//				Name() string
+//					base name of the file
+//
+//				Size() int64
+//					length in bytes for regular files;
+//					system-dependent for others
+//
+//				Mode() FileMode
+//					file mode bits
+//
+//				ModTime() time.Time
+//					modification time
+//
+//				IsDir() bool
+//					abbreviation for Mode().IsDir()
+//
+//				Sys() any
+//					underlying data source (can return nil)
+//		}
+//
+//		See the detailed documentation for Type
+//		FileInfoPlus in the source file,
+//		'fileinfoplus.go'.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fHelperNanobot *fileHelperNanobot) doesFileInfoPlusExist(
+	pathFileName string,
+	errPrefDto *ePref.ErrPrefixDto) (
+	doesFInfoExist bool,
+	fInfoPlus FileInfoPlus,
+	err error) {
+
+	if fHelperNanobot.lock == nil {
+		fHelperNanobot.lock = new(sync.Mutex)
+	}
+
+	fHelperNanobot.lock.Lock()
+
+	defer fHelperNanobot.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	doesFInfoExist = false
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"fileHelperNanobot."+
+			"doesFileInfoPlusExist()",
+		"")
+
+	if err != nil {
+		return doesFInfoExist, fInfoPlus, err
+	}
+
+	pathFileName,
+		doesFInfoExist,
+		fInfoPlus,
+		err = new(fileHelperMolecule).
+		doesPathFileExist(
+			pathFileName,
+			PreProcPathCode.AbsolutePath(), // Convert to Absolute Path
+			ePrefix,
+			"pathFileName")
+
+	if err != nil {
+
+		doesFInfoExist = false
+
+		return doesFInfoExist, fInfoPlus, err
+	}
+
+	return doesFInfoExist, fInfoPlus, err
+}
+
 // deleteDirFile
 //
 // Wrapper function for os.Remove.
