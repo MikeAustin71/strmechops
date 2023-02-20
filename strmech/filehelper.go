@@ -4453,7 +4453,7 @@ func (fh *FileHelper) FindFilesInPath(
 //			file selection criterion is considered to be 'Inactive'
 //			or 'Not Set'.
 //
-//		SelectByFileMode  FilePermissionConfig
+//		SelectByFileMode  	FilePermissionConfig
 //
 //			Type FilePermissionConfig encapsulates an os.FileMode. The
 //			file selection criterion allows for the selection of files
@@ -4471,35 +4471,35 @@ func (fh *FileHelper) FindFilesInPath(
 //
 //			err = fsc.SelectByFileMode.SetFileModeByTextCode("-r--r--r--")
 //
-//		SelectCriterionMode FileSelectCriterionMode
+//			SelectCriterionMode 	FileSelectCriterionMode
 //
-//		This parameter selects the manner in which the file selection
-//		criteria above are applied in determining a 'match' for file
-//		selection purposes. 'SelectCriterionMode' may be set to one of
-//		two constant values:
+//			This parameter selects the manner in which the file selection
+//			criteria above are applied in determining a 'match' for file
+//			selection purposes. 'SelectCriterionMode' may be set to one of
+//			two constant values:
 //
-//		(1) FileSelectCriterionMode(0).ANDSelect()
+//			(1) FileSelectCriterionMode(0).ANDSelect()
 //
-//			File selected if all active selection criteria
-//			are satisfied.
+//				File selected if all active selection criteria
+//				are satisfied.
 //
-//			If this constant value is specified for the file selection mode,
-//			then a given file will not be judged as 'selected' unless all
-//			the active selection criterion are satisfied. In other words, if
-//			three active search criterion are provided for 'FileNamePatterns',
-//			'FilesOlderThan' and 'FilesNewerThan', then a file will NOT be
-//			selected unless it has satisfied all three criterion in this example.
+//				If this constant value is specified for the file selection mode,
+//				then a given file will not be judged as 'selected' unless all
+//				the active selection criterion are satisfied. In other words, if
+//				three active search criterion are provided for 'FileNamePatterns',
+//				'FilesOlderThan' and 'FilesNewerThan', then a file will NOT be
+//				selected unless it has satisfied all three criterion in this example.
 //
-//		(2) FileSelectCriterionMode(0).ORSelect()
+//			(2) FileSelectCriterionMode(0).ORSelect()
 //
-//			File selected if any active selection criterion is satisfied.
+//				File selected if any active selection criterion is satisfied.
 //
-//			If this constant value is specified for the file selection mode,
-//			then a given file will be selected if any one of the active file
-//			selection criterion is satisfied. In other words, if three active
-//			search criterion are provided for 'FileNamePatterns', 'FilesOlderThan'
-//			and 'FilesNewerThan', then a file will be selected if it satisfies any
-//			one of the three criterion in this example.
+//				If this constant value is specified for the file selection mode,
+//				then a given file will be selected if any one of the active file
+//				selection criterion is satisfied. In other words, if three active
+//				search criterion are provided for 'FileNamePatterns', 'FilesOlderThan'
+//				and 'FilesNewerThan', then a file will be selected if it satisfies any
+//				one of the three criterion in this example.
 //
 //	errorPrefix					interface{}
 //
@@ -6066,51 +6066,146 @@ func (fh *FileHelper) GetFileLastModificationDate(
 			ePrefix)
 }
 
-// GetFileMode - Returns the mode (os.FileMode) for the file designated by
-// input parameter 'pathFileName'. If the file does not exist, an error
-// is triggered.
+// GetFileMode
 //
-// The 'os.FileMode' is returned via type 'FilePermissionCfg' which includes
-// methods necessary to interpret the 'os.FileMode'.
-func (fh *FileHelper) GetFileMode(pathFileName string) (FilePermissionConfig, error) {
+// Returns the mode (os.FileMode) for the file designated
+// by input parameter 'pathFileName'. If the file does
+// not exist, an error will be returned.
+//
+// The 'os.FileMode' is returned via type
+// 'FilePermissionCfg' which includes methods necessary to
+// interpret the 'os.FileMode'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	pathFileName				string
+//
+//		The file mode for the file identified by
+//		'pathFileName' will be returned as an
+//		instance of FilePermissionConfig. Type
+//		FilePermissionConfig contains file
+//		permission information.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	FilePermissionConfig
+//
+//		This parameter contains the file permissions
+//		currently applied to the file identified by
+//		input paramter 'pathFileName'.
+//
+//		Type FilePermissionConfig contains methods
+//		providing information and management options
+//		for the encapsulated file permissions
+//		associated with 'pathFileName'.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fh *FileHelper) GetFileMode(
+	pathFileName string,
+	errorPrefix interface{}) (
+	FilePermissionConfig,
+	error) {
 
-	ePrefix := "FileHelper.GetFileMode() "
-	var pathFileNameDoesExist bool
-	var fInfo FileInfoPlus
+	if fh.lock == nil {
+		fh.lock = new(sync.Mutex)
+	}
+
+	fh.lock.Lock()
+
+	defer fh.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
 	var err error
 
-	pathFileName,
-		pathFileNameDoesExist,
-		fInfo,
-		err = new(fileHelperMolecule).doesPathFileExist(
-		pathFileName,
-		PreProcPathCode.AbsolutePath(), // Convert to Absolute Path
-		ePrefix,
-		"pathFileName")
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileHelper."+
+			"GetFileMode()",
+		"")
 
 	if err != nil {
 		return FilePermissionConfig{}, err
 	}
 
-	if !pathFileNameDoesExist {
-		return FilePermissionConfig{},
-			fmt.Errorf(ePrefix+
-				"ERROR: 'pathFileName' DOES NOT EXIST!\n"+
-				"pathFileName='%v'\n", pathFileName)
-	}
-
-	fPermCfg, err := new(FilePermissionConfig).
-		NewByFileMode(fInfo.Mode(), ePrefix)
-
-	if err != nil {
-		return FilePermissionConfig{},
-			fmt.Errorf(ePrefix+
-				"Error returned by FilePermissionConfig{}.NewByFileMode(fInfo.Mode()).\n"+
-				"fInfo.Mode()='%v'\nError='%v'\n",
-				fInfo.Mode(), err.Error())
-	}
-
-	return fPermCfg, nil
+	return new(fileHelperNanobot).getFileMode(
+		pathFileName,
+		ePrefix)
 }
 
 // GetFileNameWithExt - This method expects to receive a valid directory path and file

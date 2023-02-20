@@ -3332,6 +3332,144 @@ func (fHelperNanobot *fileHelperNanobot) getFileLastModificationDate(
 	return fInfoPlus.ModTime(), fInfoPlus.ModTime().Format(fmtStr), nil
 }
 
+// getFileMode
+//
+// Returns the mode (os.FileMode) for the file designated
+// by input parameter 'pathFileName'. If the file does
+// not exist, an error will be returned.
+//
+// The 'os.FileMode' is returned via type
+// 'FilePermissionCfg' which includes methods necessary to
+// interpret the 'os.FileMode'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	pathFileName				string
+//
+//		The file mode for the file identified by
+//		'pathFileName' will be returned as an
+//		instance of FilePermissionConfig. Type
+//		FilePermissionConfig contains file
+//		permission information.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	FilePermissionConfig
+//
+//		This parameter contains the file permissions
+//		currently applied to the file identified by
+//		input paramter 'pathFileName'.
+//
+//		Type FilePermissionConfig contains methods
+//		providing information and management options
+//		for the encapsulated file permissions
+//		associated with 'pathFileName'.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fHelperNanobot *fileHelperNanobot) getFileMode(
+	pathFileName string,
+	errPrefDto *ePref.ErrPrefixDto) (
+	FilePermissionConfig,
+	error) {
+
+	if fHelperNanobot.lock == nil {
+		fHelperNanobot.lock = new(sync.Mutex)
+	}
+
+	fHelperNanobot.lock.Lock()
+
+	defer fHelperNanobot.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"fileHelperNanobot."+
+			"getFileMode()",
+		"")
+
+	if err != nil {
+		return FilePermissionConfig{}, err
+	}
+
+	var pathFileNameDoesExist bool
+
+	var fInfoPlus FileInfoPlus
+
+	pathFileName,
+		pathFileNameDoesExist,
+		fInfoPlus,
+		err = new(fileHelperMolecule).doesPathFileExist(
+		pathFileName,
+		PreProcPathCode.AbsolutePath(), // Convert to Absolute Path
+		ePrefix,
+		"pathFileName")
+
+	if err != nil {
+		return FilePermissionConfig{}, err
+	}
+
+	if !pathFileNameDoesExist {
+
+		return FilePermissionConfig{},
+			fmt.Errorf("%v\n"+
+				"ERROR: 'pathFileName' DOES NOT EXIST!\n"+
+				"pathFileName='%v'\n",
+				ePrefix.String(),
+				pathFileName)
+	}
+
+	fPermCfg, err := new(FilePermissionConfig).
+		NewByFileMode(fInfoPlus.Mode(), ePrefix)
+
+	if err != nil {
+
+		return FilePermissionConfig{},
+			fmt.Errorf("%v\n"+
+				"Error returned by FilePermissionConfig{}.NewByFileMode(fInfoPlus.Mode()).\n"+
+				"fInfoPlus.Mode()='%v'\n"+
+				"Error='%v'\n",
+				ePrefix.String(),
+				fInfoPlus.Mode(),
+				err.Error())
+	}
+
+	return fPermCfg, nil
+}
+
 // MakeDirAllPerm
 //
 // Creates a directory path along with any necessary
