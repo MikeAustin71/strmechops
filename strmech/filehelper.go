@@ -5530,6 +5530,182 @@ func (fh *FileHelper) GetFileInfo(
 	return osFileInfo, err
 }
 
+// GetFileInfoPlus
+//
+// Wrapper function for os.Stat(). This method returns an
+// instance of FileInfoPlus associated with the file
+// identified by input parameter 'pathFileName'.
+//
+// If the file identified by 'pathFileName' does NOT
+// exist, an error will be returned.
+//
+// As its name implies, the returned type FileInfoPlus
+// provides methods and information which go beyond the
+// os.FileInfo interface in describing the file identified
+// by 'pathFileName'. For detailed information on the
+// features and capabilities offered by type FileInfoPlus,
+// see the source code documentation detail located in
+// source code file 'fileinfoplus.go'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	pathFileName				string
+//
+//		This string contains the path and file name of
+//		the file which is described by the os.FileInfo
+//		object returned by this method.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	fileInfoPlus				FileInfoPlus
+//
+//		This returned instance of Type FileInfoPlus
+//		contains data elements describing the file
+//		identified by input parameter 'pathFileName'.
+//
+//		Type FileInfoPlus conforms to the os.FileInfo
+//		interface. This structure will store os.FileInfo
+//	 	information plus additional information related
+//	 	to a file or directory.
+//
+//		type os.FileInfo interface {
+//
+//				Name() string
+//					base name of the file
+//
+//				Size() int64
+//					length in bytes for regular files;
+//					system-dependent for others
+//
+//				Mode() FileMode
+//					file mode bits
+//
+//				ModTime() time.Time
+//					modification time
+//
+//				IsDir() bool
+//					abbreviation for Mode().IsDir()
+//
+//				Sys() any
+//					underlying data source (can return nil)
+//		}
+//
+//		See the detailed documentation for Type
+//		FileInfoPlus in the source file,
+//		'fileinfoplus.go'.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fh *FileHelper) GetFileInfoPlus(
+	pathFileName string,
+	errorPrefix interface{}) (
+	fileInfoPlus FileInfoPlus,
+	err error) {
+
+	if fh.lock == nil {
+		fh.lock = new(sync.Mutex)
+	}
+
+	fh.lock.Lock()
+
+	defer fh.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileHelper."+
+			"GetFileInfoPlus()",
+		"")
+
+	if err != nil {
+
+		return fileInfoPlus, err
+	}
+
+	fileInfoPlus,
+		err = new(fileHelperNanobot).
+		getFileInfoPlus(
+			pathFileName,
+			ePrefix)
+
+	return fileInfoPlus, err
+}
+
 // GetFileLastModificationDate - Returns the last modification'
 // date/time on a specific file. If input parameter 'customTimeFmt'
 // string is empty, a default time format will be used to format the

@@ -2868,6 +2868,157 @@ func (fHelperNanobot *fileHelperNanobot) getFileInfo(
 	return osFileInfo, err
 }
 
+// GetFileInfoPlus
+//
+// Wrapper function for os.Stat(). This method returns an
+// instance of FileInfoPlus associated with the file
+// identified by input parameter 'pathFileName'.
+//
+// If the file identified by 'pathFileName' does NOT
+// exist, an error will be returned.
+//
+// As its name implies, the returned type FileInfoPlus
+// provides methods and information which go beyond the
+// os.FileInfo interface in describing the file identified
+// by 'pathFileName'. For detailed information on the
+// features and capabilities offered by type FileInfoPlus,
+// see the source code documentation detail located in
+// source code file 'fileinfoplus.go'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	pathFileName				string
+//
+//		This string contains the path and file name of
+//		the file which is described by the os.FileInfo
+//		object returned by this method.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	fileInfoPlus				FileInfoPlus
+//
+//		This returned instance of Type FileInfoPlus
+//		contains data elements describing the file
+//		identified by input parameter 'pathFileName'.
+//
+//		Type FileInfoPlus conforms to the os.FileInfo
+//		interface. This structure will store os.FileInfo
+//	 	information plus additional information related
+//	 	to a file or directory.
+//
+//		type os.FileInfo interface {
+//
+//				Name() string
+//					base name of the file
+//
+//				Size() int64
+//					length in bytes for regular files;
+//					system-dependent for others
+//
+//				Mode() FileMode
+//					file mode bits
+//
+//				ModTime() time.Time
+//					modification time
+//
+//				IsDir() bool
+//					abbreviation for Mode().IsDir()
+//
+//				Sys() any
+//					underlying data source (can return nil)
+//		}
+//
+//		See the detailed documentation for Type
+//		FileInfoPlus in the source file,
+//		'fileinfoplus.go'.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fHelperNanobot *fileHelperNanobot) getFileInfoPlus(
+	pathFileName string,
+	errPrefDto *ePref.ErrPrefixDto) (
+	fileInfoPlus FileInfoPlus,
+	err error) {
+
+	if fHelperNanobot.lock == nil {
+		fHelperNanobot.lock = new(sync.Mutex)
+	}
+
+	fHelperNanobot.lock.Lock()
+
+	defer fHelperNanobot.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"fileHelperNanobot."+
+			"getFileInfoPlus()",
+		"")
+
+	if err != nil {
+
+		return fileInfoPlus, err
+	}
+
+	var pathDoesExist bool
+
+	pathFileName,
+		pathDoesExist,
+		fileInfoPlus,
+		err = new(fileHelperMolecule).doesPathFileExist(
+		pathFileName,
+		PreProcPathCode.AbsolutePath(), // Convert to Absolute Path
+		ePrefix,
+		"pathFileName")
+
+	if err != nil {
+		return fileInfoPlus, err
+	}
+
+	if !pathDoesExist {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'pathFileName' does NOT exist!\n"+
+			"pathFileName='%v'\n",
+			ePrefix.String(),
+			pathFileName)
+
+	}
+
+	return fileInfoPlus, err
+}
+
 // MakeDirAllPerm
 //
 // Creates a directory path along with any necessary

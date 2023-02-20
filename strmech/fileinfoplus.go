@@ -7,8 +7,11 @@ import (
 	"time"
 )
 
-// FileInfoPlus - Conforms to the os.FileInfo interface. This structure will store
-// os.FileInfo information plus additional information related to a file or directory.
+// FileInfoPlus
+//
+// Conforms to the os.FileInfo interface. This structure
+// will store os.FileInfo information plus additional
+// information related to a file or directory.
 type FileInfoPlus struct {
 
 	// isFInfoInitialized - Not part of FileInfo interface.
