@@ -6983,8 +6983,6 @@ func (fh *FileHelper) GetPathAndFileNameExt(
 
 	bothAreEmpty = true
 
-	errCode := 0
-
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
@@ -6996,109 +6994,15 @@ func (fh *FileHelper) GetPathAndFileNameExt(
 		return pathDir, fileNameExt, bothAreEmpty, err
 	}
 
-	trimmedFileNameExt := ""
-
-	errCode,
-		_,
-		trimmedFileNameExt = new(fileHelperElectron).
-		isStringEmptyOrBlank(pathFileNameExt)
-
-	if errCode == -1 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'pathFileName' is an empty string!\n",
-			ePrefix.String())
-
-		return pathDir, fileNameExt, bothAreEmpty, err
-	}
-
-	if errCode == -2 {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'pathFileName' consists of blank spaces!\n",
-			ePrefix.String())
-
-		return pathDir, fileNameExt, bothAreEmpty, err
-	}
-
-	xFameExt,
-		isEmpty,
-		err2 := new(fileHelperNanobot).
-		getFileNameWithExt(
-			trimmedFileNameExt,
+	pathDir,
+		fileNameExt,
+		bothAreEmpty,
+		err = new(fileHelperDirector).
+		getPathAndFileNameExt(
+			pathFileNameExt,
 			ePrefix)
 
-	if err2 != nil {
-
-		err = fmt.Errorf("%v\n"+
-			"Error returned from getFileNameWithExt(pathFileNameExt).\n"+
-			"pathFileNameExt='%v'\n"+
-			"Error=\n%v\n",
-			ePrefix.String(),
-			pathFileNameExt,
-			err2.Error())
-
-		return pathDir, fileNameExt, bothAreEmpty, err
-	}
-
-	if isEmpty {
-		fileNameExt = ""
-	} else {
-		fileNameExt = xFameExt
-	}
-
-	remainingPathStr := strings.TrimSuffix(
-		trimmedFileNameExt, fileNameExt)
-
-	if len(remainingPathStr) == 0 {
-		pathDir = ""
-
-		if pathDir == "" && fileNameExt == "" {
-			bothAreEmpty = true
-		} else {
-			bothAreEmpty = false
-		}
-
-		err = nil
-
-		return
-
-	}
-
-	xPath,
-		isEmpty,
-		err2 :=
-		new(fileHelperMechanics).
-			getPathFromPathFileName(
-				remainingPathStr,
-				ePrefix)
-
-	if err2 != nil {
-		err = fmt.Errorf("%v\n"+
-			"Error returned from getPathFromPathFileName(remainingPathStr).\n"+
-			"remainingPathStr='%v'\n"+
-			"Error=\n%v\n",
-			ePrefix.String(),
-			remainingPathStr,
-			err2.Error())
-
-		return
-	}
-
-	if isEmpty {
-		pathDir = ""
-	} else {
-		pathDir = xPath
-	}
-
-	if pathDir == "" && fileNameExt == "" {
-		bothAreEmpty = true
-	} else {
-		bothAreEmpty = false
-	}
-
-	err = nil
-
-	return
+	return pathDir, fileNameExt, bothAreEmpty, err
 }
 
 // GetPathFromPathFileName

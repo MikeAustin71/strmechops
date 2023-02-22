@@ -4,6 +4,7 @@ import (
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
 	"os"
+	"strings"
 	"sync"
 )
 
@@ -282,6 +283,208 @@ func (fHelpDirector *fileHelperDirector) copyFileByLinkByIo(
 	}
 
 	return err
+}
+
+// getPathAndFileNameExt
+//
+// Breaks out path and fileName+Ext elements from a path
+// string. If both path and fileName are empty strings,
+// this method returns an error.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	pathFileNameExt				string
+//
+//		This string holds the file path, file name and
+//		file extension. The file path will be returned
+//		as in the first parameter. The file name and file
+//		extension will be returned in a second paramter.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	pathDir						string
+//
+//		This returned string will contain the directory
+//		path extracted from input parameter 'pathFileNameExt'.
+//
+//	fileNameExt					string
+//
+//		This returned string will contain the file name
+//		and file extension extracted from input parameter
+//		'pathFileNameExt'.
+//
+//	bothAreEmpty				bool
+//
+//		If both 'pathDir' and 'fileNameExt' are returned
+//		as empty strings, this return parameter will be
+//		set to 'true'.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fHelpDirector *fileHelperDirector) getPathAndFileNameExt(
+	pathFileNameExt string,
+	errPrefDto *ePref.ErrPrefixDto) (
+	pathDir string,
+	fileNameExt string,
+	bothAreEmpty bool,
+	err error) {
+
+	if fHelpDirector.lock == nil {
+		fHelpDirector.lock = new(sync.Mutex)
+	}
+
+	fHelpDirector.lock.Lock()
+
+	defer fHelpDirector.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	pathDir = ""
+
+	fileNameExt = ""
+
+	bothAreEmpty = true
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"fileHelperDirector."+
+			"getPathAndFileNameExt()",
+		"")
+
+	if err != nil {
+		return pathDir, fileNameExt, bothAreEmpty, err
+	}
+
+	trimmedFileNameExt := ""
+
+	errCode := 0
+
+	errCode,
+		_,
+		trimmedFileNameExt = new(fileHelperElectron).
+		isStringEmptyOrBlank(pathFileNameExt)
+
+	if errCode == -1 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'pathFileName' is an empty string!\n",
+			ePrefix.String())
+
+		return pathDir, fileNameExt, bothAreEmpty, err
+	}
+
+	if errCode == -2 {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'pathFileName' consists of blank spaces!\n",
+			ePrefix.String())
+
+		return pathDir, fileNameExt, bothAreEmpty, err
+	}
+
+	xFameExt,
+		isEmpty,
+		err2 := new(fileHelperNanobot).
+		getFileNameWithExt(
+			trimmedFileNameExt,
+			ePrefix)
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error returned from getFileNameWithExt(pathFileNameExt).\n"+
+			"pathFileNameExt='%v'\n"+
+			"Error=\n%v\n",
+			ePrefix.String(),
+			pathFileNameExt,
+			err2.Error())
+
+		return pathDir, fileNameExt, bothAreEmpty, err
+	}
+
+	if isEmpty {
+		fileNameExt = ""
+	} else {
+		fileNameExt = xFameExt
+	}
+
+	remainingPathStr := strings.TrimSuffix(
+		trimmedFileNameExt, fileNameExt)
+
+	if len(remainingPathStr) == 0 {
+		pathDir = ""
+
+		if pathDir == "" && fileNameExt == "" {
+			bothAreEmpty = true
+		} else {
+			bothAreEmpty = false
+		}
+
+		return pathDir, fileNameExt, bothAreEmpty, err
+	}
+
+	xPath,
+		isEmpty,
+		err2 :=
+		new(fileHelperMechanics).
+			getPathFromPathFileName(
+				remainingPathStr,
+				ePrefix)
+
+	if err2 != nil {
+		err = fmt.Errorf("%v\n"+
+			"Error returned from getPathFromPathFileName(remainingPathStr).\n"+
+			"remainingPathStr='%v'\n"+
+			"Error=\n%v\n",
+			ePrefix.String(),
+			remainingPathStr,
+			err2.Error())
+
+		return pathDir, fileNameExt, bothAreEmpty, err
+	}
+
+	if isEmpty {
+		pathDir = ""
+	} else {
+		pathDir = xPath
+	}
+
+	if pathDir == "" && fileNameExt == "" {
+		bothAreEmpty = true
+	} else {
+		bothAreEmpty = false
+	}
+
+	return pathDir, fileNameExt, bothAreEmpty, err
 }
 
 // openDirectory
