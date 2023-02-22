@@ -487,6 +487,281 @@ func (fHelpDirector *fileHelperDirector) getPathAndFileNameExt(
 	return pathDir, fileNameExt, bothAreEmpty, err
 }
 
+// moveFile
+//
+// Copies a file from source to destination and, if
+// successful, then deletes the original source file.
+//
+// The copy procedure will be carried out using the
+// 'Copy By Io' technique. See FileHelper.CopyFileByIo().
+//
+// The 'move' operation will create the destination file,
+// but it will NOT create the destination directory. If
+// the destination directory does NOT exist, an error will
+// be returned.
+//
+// If this copy operation fails, the method will return an
+// error, and the source file will NOT be deleted.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	src							string
+//
+//		This string holds the path and file name of the
+//		source file. This source file will be copied to
+//		the destination path and file name specified by
+//		input parameter 'dst'.
+//
+//		After the source file ('src') is copied to the
+//		destination file ('dst'), the source file ('src')
+//		will be deleted.
+//
+//	dst							string
+//
+//		This string holds the path and file name of the
+//		destination file. The source file ('src') will be
+//		copied to this destination file ('dst') and the
+//		source file will be deleted.
+//
+//		If the directory path for the destination file
+//		('dst') does not previously exist, an error will
+//		be returned, the source file ('src') will not be
+//		copied to the destination file ('dst') and the
+//		source file will NOT be deleted.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fHelpDirector *fileHelperDirector) moveFile(
+	src string,
+	dst string,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if fHelpDirector.lock == nil {
+		fHelpDirector.lock = new(sync.Mutex)
+	}
+
+	fHelpDirector.lock.Lock()
+
+	defer fHelpDirector.lock.Unlock()
+
+	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"fileHelperDirector."+
+			"moveFile()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	var srcFileDoesExist, dstFileDoesExist bool
+	var srcFInfo, dstFInfo FileInfoPlus
+
+	fHelpMolecule := fileHelperMolecule{}
+
+	src,
+		srcFileDoesExist,
+		srcFInfo,
+		err = fHelpMolecule.doesPathFileExist(
+		src,
+		PreProcPathCode.AbsolutePath(), // Convert to Absolute Path
+		ePrefix,
+		"src")
+
+	if err != nil {
+		return err
+	}
+
+	if !srcFileDoesExist {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter "+
+			"'src' file DOES NOT EXIST!\n"+
+			"src='%v'\n",
+			ePrefix.String(),
+			src)
+
+		return err
+	}
+
+	if srcFInfo.IsDir() {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'src' "+
+			"exists and it is directory NOT a file!\n"+
+			"src='%v'\n",
+			ePrefix.String(),
+			src)
+
+		return err
+	}
+
+	dst,
+		dstFileDoesExist,
+		dstFInfo,
+		err = fHelpMolecule.doesPathFileExist(
+		dst,
+		PreProcPathCode.AbsolutePath(), // Convert to Absolute Path
+		ePrefix,
+		"dst")
+
+	if err != nil {
+		return err
+	}
+
+	if dstFileDoesExist && dstFInfo.IsDir() {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'dst' does exist,\n"+
+			"but it a 'directory' and NOT a File!\n"+
+			"dst='%v'\n",
+			ePrefix,
+			dst)
+
+		return err
+	}
+
+	// ============================
+	// Perform the copy operation!
+	// Use Copy By IO Procedure
+	// ============================
+
+	var err2 error
+
+	err2 = new(fileHelperMechanics).copyFileByIo(
+		src,
+		dst,
+		ePrefix)
+
+	if err2 != nil {
+		// Copy Operation Failed. Return an error
+		// and DO NOT delete the source file!
+		err = fmt.Errorf("%v\n"+
+			"Error: Copy operation FAILED!\n"+
+			"Source File='%v'\n"+
+			"Destination File='%v'\n"+
+			"Error=\n%v\n",
+			ePrefix.String(),
+			src,
+			dst,
+			err2.Error())
+
+		return err
+	}
+
+	// CopyFileByIo operation was apparently successful.
+	// Now, verify that destination file exists.
+
+	_,
+		dstFileDoesExist,
+		_,
+		err = fHelpMolecule.doesPathFileExist(
+		dst,
+		PreProcPathCode.None(), // Take no Pre-Processing action
+		ePrefix,
+		"dst")
+
+	if err != nil {
+		return err
+	}
+
+	if !dstFileDoesExist {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: After Copy Operation, destination file "+
+			"DOES NOT EXIST!\n"+
+			"Therefore, the copy operation FAILED! Source file was NOT deleted.\n"+
+			"destination file='%v'\n",
+			ePrefix.String(),
+			dst)
+
+		return err
+	}
+
+	// Successful copy operation has been verified.
+	// Time to delete the source file.
+	err2 = os.Remove(src)
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Copy operation succeeded, but attempted deletion of source file FAILED!\n"+
+			"Source File='%v'\n"+
+			"Error=\n%v\n",
+			ePrefix.String(),
+			src,
+			err2.Error())
+
+		return err
+	}
+
+	_,
+		srcFileDoesExist,
+		_,
+		err = fHelpMolecule.doesPathFileExist(
+		src,
+		PreProcPathCode.None(), // Take No Pre-Processing Action
+		ePrefix,
+		"src")
+
+	if err != nil {
+		return err
+	}
+
+	if srcFileDoesExist {
+
+		err = fmt.Errorf("%v\n"+
+			"Verification Error: File 'src' still exists!\n"+
+			"src='%v'\n",
+			ePrefix.String(),
+			src)
+
+		return err
+	}
+
+	// Success, source was copied to destination
+	// AND the source file was deleted.
+
+	// Done and we are out of here!
+	return err
+}
+
 // openDirectory
 //
 // Opens a directory and returns the associated 'os.File'

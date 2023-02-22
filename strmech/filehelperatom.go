@@ -1892,6 +1892,200 @@ func (fHelperAtom *fileHelperAtom) getVolumeNameIndex(
 	return volNameIndex, volNameLength, volNameStr
 }
 
+// makeDirPerm
+//
+// Creates a single directory using the permission codes
+// passed by input parameter 'permission'.
+//
+// This method will fail if the parent directory does not
+// exist. To create all parent directories in the path use
+// method 'FileHelper.MakeDirAllPerm()'.
+//
+// The input parameter 'permission' is of type
+// 'FilePermissionConfig'. See the source code
+// documentation for method 'FilePermissionConfig.New()'
+// for an explanation of permission codes.
+//
+// If you wish to grant total access to a directory,
+// consider setting permission code as follows:
+//
+//	FilePermissionConfig{}.New("drwxrwxrwx")
+//
+// An error will be triggered if the 'dirPath' input
+// parameter represents an invalid path or if parent
+// directories in the path do not exist.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	dirPath						string
+//
+//		The directory path to be created,
+//
+//	permission					FilePermissionConfig
+//
+//		The instance of FilePermissionConfig contains the
+//		permissions which will be applied to the newly
+//		created directory ('dirPath').
+//
+//		For an explanation of permission bit settings,
+//		see the source code documentation for:
+//
+//			FilePermissionConfig{}.New()
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fHelperAtom *fileHelperAtom) makeDirPerm(
+	dirPath string,
+	permission FilePermissionConfig,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if fHelperAtom.lock == nil {
+		fHelperAtom.lock = new(sync.Mutex)
+	}
+
+	fHelperAtom.lock.Lock()
+
+	defer fHelperAtom.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"fileHelperAtom."+
+			"makeDirPerm()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	errCode := 0
+
+	errCode, _, dirPath = new(fileHelperElectron).
+		isStringEmptyOrBlank(dirPath)
+
+	if errCode == -1 {
+
+		return fmt.Errorf("%v\n"+
+			"Error: Input parameter 'dirPath' is an empty string!\n",
+			ePrefix.String())
+	}
+
+	if errCode == -2 {
+
+		return fmt.Errorf("%v\n"+
+			"Error: Input parameter 'dirPath' consists of blank spaces!\n",
+			ePrefix.String())
+	}
+
+	err = permission.IsValid(
+		ePrefix.XCpy("permission"))
+
+	if err != nil {
+
+		return err
+	}
+
+	var dirPermCode os.FileMode
+	var err2 error
+
+	dirPermCode,
+		err2 = permission.GetCompositePermissionMode(
+		ePrefix.XCpy("permission"))
+
+	if err2 != nil {
+		return fmt.Errorf(
+			"ERROR: INVALID Permission Code\n"+
+				"Error=\n%v\n", err2.Error())
+	}
+
+	dirPath,
+		err2 = new(fileHelperProton).
+		makeAbsolutePath(
+			dirPath,
+			ePrefix)
+
+	if err2 != nil {
+		return fmt.Errorf("%v\n"+
+			"Error returned by fh.MakeAbsolutePath(dirPath).\n"+
+			"dirPath='%v'\n"+
+			"Error=\n%v\n",
+			ePrefix.String(),
+			dirPath,
+			err2.Error())
+	}
+
+	err2 = os.Mkdir(dirPath, dirPermCode)
+
+	if err2 != nil {
+		return fmt.Errorf("%v\n"+
+			"Error return from os.Mkdir(dirPath, dirPermCode).\n"+
+			"dirPath='%v'\n"+
+			"Error=\n%v\n",
+			ePrefix.String(),
+			dirPath,
+			err2.Error())
+	}
+
+	var pathDoesExist bool
+	_,
+		pathDoesExist,
+		_,
+		err = new(fileHelperMolecule).doesPathFileExist(
+		dirPath,
+		PreProcPathCode.None(), // Take no Pre-Processing action
+		ePrefix,
+		fmt.Sprintf("dirPath= %v\n",
+			dirPath))
+
+	if err != nil {
+		return err2
+	}
+
+	if !pathDoesExist {
+		return fmt.Errorf("%v\n"+
+			"Error: Directory creation FAILED!. New Directory Path DOES NOT EXIST!\n"+
+			"dirPath='%v'\n",
+			ePrefix.String(),
+			dirPath)
+	}
+
+	return err
+}
+
 // removePathSeparatorFromEndOfPathString
 //
 // This method will remove or delete the Trailing path
