@@ -6392,7 +6392,7 @@ func (fh *FileHelper) GetFileNameWithExt(
 	testPathFileNameExt := fHelperAtom.
 		adjustPathSlash(pathFileNameExt)
 
-	volName := fh.GetVolumeName(testPathFileNameExt)
+	volName := fHelperAtom.getVolumeName(testPathFileNameExt)
 
 	if volName != "" {
 		testPathFileNameExt =
