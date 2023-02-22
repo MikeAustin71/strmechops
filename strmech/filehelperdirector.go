@@ -505,6 +505,13 @@ func (fHelpDirector *fileHelperDirector) getPathAndFileNameExt(
 //
 // ----------------------------------------------------------------
 //
+// # IMPORTANT
+//
+//	This method will delete the source file after the
+//	copy from source to destination file is completed.
+//
+// ----------------------------------------------------------------
+//
 // # Input Parameters
 //
 //	src							string

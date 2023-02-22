@@ -4563,8 +4563,9 @@ func (dMgrHlpr *dirMgrHelper) lowLevelDeleteDirectoryAll(
 	return err
 }
 
-// lowLevelDoesDirectoryExist - This helper method tests for the existence
-// of directory path.
+// lowLevelDoesDirectoryExist
+//
+// This method tests for the existence of directory path.
 func (dMgrHlpr *dirMgrHelper) lowLevelDoesDirectoryExist(
 	dirPath,
 	ePrefix,

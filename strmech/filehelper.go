@@ -3124,6 +3124,142 @@ func (fh *FileHelper) DeleteFilesWalkDirectory(
 			ePrefix)
 }
 
+// DoesDirectoryExist
+//
+// This method tests for the existence of a directory
+// path.
+//
+// If the directory path does exist, this method also
+// returns an instance of FileInfoPlus containing
+// detailed information on the directory.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	dirPath						string
+//
+//		This strings holds the directory path which will
+//		be examined to determine if it actually exists.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	dirPathDoesExist			bool
+//
+//		If the directory path specified by input
+//		parameter 'dirPath' actually exists, this
+//		returned boolean value will be set to 'true'.
+//
+//	fInfoPlus					FileInfoPlus
+//
+//		If the directory path specified by input
+//		parameter 'dirPath' actually exists, this
+//		returned instance of FileInfoPlus will be
+//		populated with detailed information on that
+//		directory.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fh *FileHelper) DoesDirectoryExist(
+	dirPath string,
+	errorPrefix interface{}) (
+	dirPathDoesExist bool,
+	fInfoPlus FileInfoPlus,
+	err error) {
+
+	if fh.lock == nil {
+		fh.lock = new(sync.Mutex)
+	}
+
+	fh.lock.Lock()
+
+	defer fh.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileHelper."+
+			"DoesDirectoryExist()",
+		"")
+
+	return new(fileHelperAtom).doesDirectoryExist(
+		dirPath,
+		ePrefix)
+}
+
 // DoesFileExist
 //
 // Returns a boolean value designating whether the passed
@@ -9006,6 +9142,13 @@ func (fh *FileHelper) MakeFileHelperWalkDirFindFilesFunc(
 //
 // ----------------------------------------------------------------
 //
+// # IMPORTANT
+//
+//	This method will delete the source file after the
+//	copy from source to destination file is completed.
+//
+// ----------------------------------------------------------------
+//
 // # Input Parameters
 //
 //	src							string
@@ -9324,54 +9467,144 @@ func (fh *FileHelper) OpenDirectory(
 			ePrefix)
 }
 
-// OpenFile - wrapper for os.OpenFile. This method may be used to open or
-// create files depending on the File Open and File Permission parameters.
+// OpenFile
 //
-// If successful, this method will return a pointer to the os.File object
-// associated with the file designated for opening.
+// This method is a wrapper for os.OpenFile. This method
+// may be used to open or create files depending on the
+// File Open and File Permission parameters.
 //
-// The calling routine is responsible for calling "Close()" on this os.File
-// pointer.
+// If successful, this method will return a pointer to
+// the os.File object associated with the file designated
+// for opening.
 //
-// ------------------------------------------------------------------------
+// The calling routine is responsible for calling
+// "Close()" on this os.File pointer.
 //
-// Input Parameters:
+// ----------------------------------------------------------------
 //
-//	pathFileName                   string - A string containing the path and file name
-//	                                        of the file which will be opened. If a parent
-//	                                        path component does NOT exist, this method will
-//	                                        trigger an error.
+// # IMPORTANT
 //
-//	fileOpenCfg            FileOpenConfig - This parameter encapsulates the File Open parameters
-//	                                        which will be used to open subject file. For an
-//	                                        explanation of File Open parameters, see method
-//	                                        FileOpenConfig.New().
+//	The calling method is responsible for calling
+//	"Close()" on the os.File pointer returned by this
+//	method.
 //
-// filePermissionCfg FilePermissionConfig - This parameter encapsulates the File Permission
+// ----------------------------------------------------------------
 //
-//	parameters which will be used to open the subject
-//	file. For an explanation of File Permission parameters,
-//	see method FilePermissionConfig.New().
+// # Input Parameters
+//
+//	pathFileName				string
+//
+//		A string containing the path and file name of the
+//		file which will be opened. If a parent path
+//		component does NOT exist, this method will
+//		trigger an error.
+//
+//	fileOpenCfg					FileOpenConfig
+//
+//		This parameter encapsulates the File Open
+//		parameters which will be used to open subject
+//		file. For an explanation of File Open parameters,
+//		see the source code documentation for method
+//		FileOpenConfig.New().
+//
+//	filePermissionCfg			FilePermissionConfig
+//
+//		This parameter encapsulates the File Permission
+//		parameters which will be used to open the subject
+//		file. For an explanation of File Permission
+//	 	parameters, see method FilePermissionConfig.New().
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values:
 //
-//	*os.File        - If successful, this method returns an os.File pointer
-//	                  to the file designated by input parameter 'pathFileName'.
-//	                  This file pointer can subsequently be used for reading
-//	                  content from the subject file. It may NOT be used for
-//	                  writing content to the subject file.
+//	*os.File
 //
-//	                  If this method fails, the *os.File return value is 'nil'.
+//		If successful, this method returns an os.File
+//		pointer to the file designated by input parameter
+//		'pathFileName'. This file pointer can
+//		subsequently be used for reading content from the
+//		subject file. It may NOT be used for writing
+//		content to the subject file.
 //
-//	                  Note: The caller is responsible for calling "Close()" on this
-//	                  os.File pointer.
+//		If this method fails, the *os.File return value
+//		is 'nil'.
 //
+//		Note:
+//		The caller is responsible for calling "Close()"
+//		on this os.File pointer.
 //
-//	error           - If the method completes successfully, this return value
-//	                  is 'nil'. If the method fails, the error type returned
-//	                  is populated with an appropriate error message.
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
 func (fh *FileHelper) OpenFile(
 	pathFileName string,
 	fileOpenCfg FileOpenConfig,
