@@ -1732,6 +1732,73 @@ func (fHelperAtom *fileHelperAtom) getPathSeparatorIndexesInPathStr(
 	return slashIdxs, err
 }
 
+// getVolumeName
+//
+// Returns the volume name of associated with a given
+// directory path. The method calls the function
+// 'path/filepath.VolumeName().
+//
+// VolumeName() returns the leading volume name if it
+// exists in input parameter 'pathStr'.
+//
+// ----------------------------------------------------------------
+//
+// # Usage
+//
+// Given "C:\foo\bar" it returns "C:" on Windows.
+// Given "c:\foo\bar" it returns "c:" on Windows.
+// Given "\\host\share\foo" it returns "\\host\share" on linux
+// On other platforms, it returns "".
+//
+// ----------------------------------------------------------------
+//
+// # Reference:
+//
+//	https://pkg.go.dev/path/filepath#VolumeName
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	pathStr						string
+//
+//		This string holds the directory path. The Volume
+//		Name will be extracted from the directory path
+//		and returned to the calling function.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//
+//		This returned string holds the Volume Name
+//		extracted from input parameter 'pathStr'.
+func (fHelperAtom *fileHelperAtom) getVolumeName(
+	pathStr string) string {
+
+	if fHelperAtom.lock == nil {
+		fHelperAtom.lock = new(sync.Mutex)
+	}
+
+	fHelperAtom.lock.Lock()
+
+	defer fHelperAtom.lock.Unlock()
+
+	errCode := 0
+	var volumeName string
+
+	errCode,
+		_,
+		volumeName = new(fileHelperElectron).isStringEmptyOrBlank(pathStr)
+
+	if errCode < 0 {
+		return ""
+	}
+
+	return fp.VolumeName(volumeName)
+}
+
 // removePathSeparatorFromEndOfPathString
 //
 // This method will remove or delete the Trailing path

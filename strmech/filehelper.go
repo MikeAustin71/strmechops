@@ -6208,43 +6208,128 @@ func (fh *FileHelper) GetFileMode(
 		ePrefix)
 }
 
-// GetFileNameWithExt - This method expects to receive a valid directory path and file
-// name or file name plus extension. It then extracts the File Name and Extension from
-// the file path and returns it as a string.
+// GetFileNameWithExt
 //
-// ------------------------------------------------------------------------
+// This method expects to receive a valid directory path
+// and file name or file name plus extension. It then
+// extracts the File Name and Extension from the file
+// path and returns it as a string.
 //
-// Input Parameters:
+// ----------------------------------------------------------------
 //
-//	pathFileNameExt string - This input parameter is expected to contain a properly formatted directory
-//	                         path and File Name.  The File Name may or may not include a File Extension.
-//	                         The directory path must include the correct delimiters such as path Separators
-//	                         ('/' or'\'), dots ('.') and in the case of Windows, a volume designation
-//	                         (Example: 'F:').
+// # Input Parameters
 //
-// ------------------------------------------------------------------------
+//	pathFileNameExt string
 //
-// Return Values:
+//		This input parameter is expected to contain a
+//		properly formatted directory path and File Name.
+//		The File Name may or may not include a File
+//		Extension.
 //
-//	fNameExt  string       - If successful, this method will the return value 'fNameExt' equal to the
-//	                         File Name and File Extension extracted from the input file path, 'pathFileNameExt'.
-//	                         Example 'fNameExt' return value: 'someFilename.txt'
+//		The directory path must include the correct
+//		delimiters such as path Separators ('/' or'\'),
+//		dots ('.') and in the case of Windows, a volume
+//		designation (Example: 'F:').
 //
-//	                         If the File Extension is not present, only the File Name will be returned.
-//	                         Example return value with no file extension: 'someFilename'.
+//	errorPrefix					interface{}
 //
-//	isEmpty   bool         - If this method CAN NOT parse out a valid File Name and Extension from
-//	                         input parameter string 'pathFileNameExt', return value 'fNameExt' will
-//	                         be set to an empty string and return value 'isEmpty' will be set to 'true'.
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
 //
-//	err       error        - If an error is encountered during processing, 'err' will return a properly
-//	                         formatted 'error' type.
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
 //
-//	                         Note that if this method cannot parse out a valid	File Name and Extension
-//	                         due to an improperly formatted directory path and	file name string
-//	                         (Input Parameter: 'pathFileNameExt'), 'fNameExt' will be set to an empty string,
-//	                         'isEmpty' will be set to 'true' and 'err' return 'nil'. In this situation, no
-//	                         error will be returned.
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	fNameExt					string
+//
+//		If successful, this method will the return value
+//		'fNameExt' equal to the File Name and File
+//		Extension extracted from the input file path,
+//		'pathFileNameExt'.
+//
+//		Example-1:	'fNameExt' return value:
+//					'someFilename.txt'
+//
+//			If the File Extension is not present, only
+//			the File Name will be returned.
+//
+//		Example-2:	Return value with no file extension:
+//					'someFilename'.
+//
+//	isEmpty						bool
+//
+//		If this method CAN NOT parse out a valid File
+//		Name and Extension from input parameter string,
+//		'pathFileNameExt', return value 'fNameExt' will
+//		be set to an empty string and return value
+//		'isEmpty' will be set to 'true'.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
 func (fh *FileHelper) GetFileNameWithExt(
 	pathFileNameExt string,
 	errorPrefix interface{}) (
@@ -6276,10 +6361,12 @@ func (fh *FileHelper) GetFileNameWithExt(
 		return fNameExt, isEmpty, err
 	}
 
+	fHelperElectron := new(fileHelperElectron)
+
 	errCode,
 		_,
 		pathFileNameExt =
-		new(fileHelperElectron).isStringEmptyOrBlank(
+		fHelperElectron.isStringEmptyOrBlank(
 			pathFileNameExt)
 
 	if errCode == -1 {
@@ -6300,12 +6387,16 @@ func (fh *FileHelper) GetFileNameWithExt(
 		return fNameExt, isEmpty, err
 	}
 
-	testPathFileNameExt := new(fileHelperAtom).adjustPathSlash(pathFileNameExt)
+	fHelperAtom := new(fileHelperAtom)
+
+	testPathFileNameExt := fHelperAtom.
+		adjustPathSlash(pathFileNameExt)
 
 	volName := fh.GetVolumeName(testPathFileNameExt)
 
 	if volName != "" {
-		testPathFileNameExt = strings.TrimPrefix(testPathFileNameExt, volName)
+		testPathFileNameExt =
+			strings.TrimPrefix(testPathFileNameExt, volName)
 	}
 
 	lTestPathFileNameExt := 0
@@ -6313,7 +6404,7 @@ func (fh *FileHelper) GetFileNameWithExt(
 	errCode,
 		lTestPathFileNameExt,
 		testPathFileNameExt =
-		new(fileHelperElectron).
+		fHelperElectron.
 			isStringEmptyOrBlank(testPathFileNameExt)
 
 	if errCode < 0 {
@@ -6352,7 +6443,7 @@ func (fh *FileHelper) GetFileNameWithExt(
 	}
 
 	slashIdxs,
-		err2 := new(fileHelperAtom).
+		err2 := fHelperAtom.
 		getPathSeparatorIndexesInPathStr(
 			testPathFileNameExt,
 			ePrefix)
@@ -6372,7 +6463,7 @@ func (fh *FileHelper) GetFileNameWithExt(
 	var dotIdxs []int
 
 	dotIdxs,
-		err2 = new(fileHelperAtom).
+		err2 = fHelperAtom.
 		getDotSeparatorIndexesInPathStr(
 			testPathFileNameExt,
 			ePrefix)
@@ -7382,28 +7473,62 @@ func (fh *FileHelper) GetPathSeparatorIndexesInPathStr(
 		ePrefix.XCpy("<-pathStr"))
 }
 
-// GetVolumeName - Returns the volume name of associated with
-// a given directory path. The method calls the function
+// GetVolumeName
+//
+// Returns the volume name of associated with a given
+// directory path. The method calls the function
 // 'path/filepath.VolumeName().
 //
-// VolumeName() returns the leading volume name if it exists
-// in input parameter 'pathStr'.
+// VolumeName() returns the leading volume name if it
+// exists in input parameter 'pathStr'.
+//
+// ----------------------------------------------------------------
+//
+// # Usage
 //
 // Given "C:\foo\bar" it returns "C:" on Windows.
 // Given "c:\foo\bar" it returns "c:" on Windows.
 // Given "\\host\share\foo" it returns "\\host\share" on linux
 // On other platforms, it returns "".
-func (fh *FileHelper) GetVolumeName(pathStr string) string {
+//
+// ----------------------------------------------------------------
+//
+// # Reference:
+//
+//	https://pkg.go.dev/path/filepath#VolumeName
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	pathStr						string
+//
+//		This string holds the directory path. The Volume
+//		Name will be extracted from the directory path
+//		and returned to the calling function.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//
+//		This returned string holds the Volume Name
+//		extracted from input parameter 'pathStr'.
+func (fh *FileHelper) GetVolumeName(
+	pathStr string) string {
 
-	errCode := 0
-
-	errCode, _, pathStr = fh.isStringEmptyOrBlank(pathStr)
-
-	if errCode < 0 {
-		return ""
+	if fh.lock == nil {
+		fh.lock = new(sync.Mutex)
 	}
 
-	return fp.VolumeName(pathStr)
+	fh.lock.Lock()
+
+	defer fh.lock.Unlock()
+
+	return new(fileHelperAtom).
+		getVolumeName(
+			pathStr)
 }
 
 // GetVolumeNameIndex - Analyzes input parameter 'pathStr' to
