@@ -618,6 +618,131 @@ func (fHelpMolecule *fileHelperMolecule) getAbsPathFromFilePath(
 	return absPath, nil
 }
 
+// getLastPathElement
+//
+// Analyzes a 'pathName' string and returns the last
+// element in the path. If 'pathName' ends in a path
+// separator ('/'), this method returns an empty
+// string.
+//
+// ----------------------------------------------------------------
+//
+// # Usage
+//
+//	pathName = '../dir1/dir2/fileName.ext' will return "fileName.ext"
+//	pathName = '../dir1/dir2/' will return ""
+//	pathName = 'fileName.ext' will return "fileName.ext"
+//	pathName = '../dir1/dir2/dir3' will return "dir3"
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//
+//		If this method completes successfully, this
+//		string will return the last path element found in
+//		input parameter 'pathName'.
+//
+//		If 'pathName' ends in a path separator ('/'),
+//		this string parameter will be returned as an
+//		empty or zero length string.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fHelpMolecule *fileHelperMolecule) getLastPathElement(
+	pathName string,
+	errPrefDto *ePref.ErrPrefixDto) (
+	string,
+	error) {
+
+	if fHelpMolecule.lock == nil {
+		fHelpMolecule.lock = new(sync.Mutex)
+	}
+
+	fHelpMolecule.lock.Lock()
+
+	defer fHelpMolecule.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"fileHelperMolecule."+
+			"getLastPathElement()",
+		"")
+
+	if err != nil {
+		return "", err
+	}
+
+	errCode := 0
+
+	errCode, _, pathName = new(fileHelperElectron).
+		isStringEmptyOrBlank(pathName)
+
+	if errCode == -1 {
+		return "",
+			fmt.Errorf("%v\n"+
+				"Error: Input parameter 'pathName' is an empty string!\n",
+				ePrefix.String())
+	}
+
+	if errCode == -2 {
+		return "",
+			fmt.Errorf("%v\n"+
+				"Error: Input parameter 'pathName' consists of blank spaces!\n",
+				ePrefix.String())
+	}
+
+	adjustedPath := new(fileHelperAtom).
+		adjustPathSlash(pathName)
+
+	resultAry := strings.
+		Split(
+			adjustedPath,
+			string(os.PathSeparator))
+
+	lResultAry := len(resultAry)
+
+	if lResultAry == 0 {
+		return adjustedPath, nil
+	}
+
+	return resultAry[lResultAry-1], nil
+}
+
 // joinPathsAdjustSeparators
 //
 // Joins two path strings and standardizes the path
