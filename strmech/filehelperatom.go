@@ -1799,6 +1799,99 @@ func (fHelperAtom *fileHelperAtom) getVolumeName(
 	return fp.VolumeName(volumeName)
 }
 
+// getVolumeNameIndex
+//
+// Analyzes input parameter 'pathStr' to determine if it
+// contains a volume name.
+//
+// This method calls the function
+// path/filepath.VolumeName().
+//
+// VolumeName() returns the leading volume name if it
+// exists in input parameter 'pathStr'.
+//
+// ----------------------------------------------------------------
+//
+// # Usage Examples
+//
+// Given "C:\foo\bar" it returns "C:" on Windows.
+// Given "c:\foo\bar" it returns "c:" on Windows.
+// Given "\\host\share\foo" it returns "\\host\share" on linux
+// On other platforms, it returns "".
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	pathStr						string
+//
+//		This strings contains the file path which will be
+//		searched for the existence of a volume name.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	volNameIndex				int
+//
+//		The zero based string index of the first
+//		character of the Volume Name located in input
+//		parameter 'pathStr'.
+//
+//	volNameLength				int
+//
+//		This integer value contains the string length of
+//		the Volume Name located in input parameter
+//		'pathStr'.
+//
+//	volNameStr				string
+//
+//		This string contains the Volume Name extracted
+//		from input parameter 'pathStr'.
+func (fHelperAtom *fileHelperAtom) getVolumeNameIndex(
+	pathStr string) (
+	volNameIndex int,
+	volNameLength int,
+	volNameStr string) {
+
+	if fHelperAtom.lock == nil {
+		fHelperAtom.lock = new(sync.Mutex)
+	}
+
+	fHelperAtom.lock.Lock()
+
+	defer fHelperAtom.lock.Unlock()
+
+	volNameIndex = -1
+	volNameLength = 0
+	volNameStr = ""
+
+	errCode := 0
+
+	errCode, _, pathStr =
+		new(fileHelperElectron).isStringEmptyOrBlank(pathStr)
+
+	if errCode < 0 {
+		return volNameIndex, volNameLength, volNameStr
+	}
+
+	volName := fp.VolumeName(pathStr)
+
+	if len(volName) == 0 {
+		return volNameIndex, volNameLength, volNameStr
+	}
+
+	volNameIndex = strings.Index(pathStr, volName)
+
+	volNameLength = len(volName)
+
+	if volNameLength > 0 {
+		volNameStr = volName
+	}
+
+	return volNameIndex, volNameLength, volNameStr
+}
+
 // removePathSeparatorFromEndOfPathString
 //
 // This method will remove or delete the Trailing path

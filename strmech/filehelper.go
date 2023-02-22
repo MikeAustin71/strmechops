@@ -7119,13 +7119,13 @@ func (fh *FileHelper) GetPathAndFileNameExt(
 //
 //	isEmpty						bool
 //
-//	If the method determines that it cannot extract a
-//	valid directory path from input parameter
-//	'pathFileNameExt', this boolean value will be set to
-//	'true'. Failure to extract a valid directory path
-//	will occur if the input parameter 'pathFileNameExt'
-//	is not properly formatted as a valid path and file
-//	name.
+//		If the method determines that it cannot extract a
+//		valid directory path from input parameter
+//		'pathFileNameExt', this boolean value will be set
+//		to 'true'. Failure to extract a valid directory
+//		path will occur if the input parameter
+//		'pathFileNameExt' is not properly formatted as a
+//		valid path and file name.
 //
 //	err							error
 //
@@ -7276,9 +7276,10 @@ func (fh *FileHelper) GetPathSeparatorIndexesInPathStr(
 		return []int{}, err
 	}
 
-	return new(fileHelperAtom).getPathSeparatorIndexesInPathStr(
-		pathStr,
-		ePrefix.XCpy("<-pathStr"))
+	return new(fileHelperAtom).
+		getPathSeparatorIndexesInPathStr(
+			pathStr,
+			ePrefix.XCpy("<-pathStr"))
 }
 
 // GetVolumeName
@@ -7339,45 +7340,74 @@ func (fh *FileHelper) GetVolumeName(
 			pathStr)
 }
 
-// GetVolumeNameIndex - Analyzes input parameter 'pathStr' to
-// determine if it contains a volume name.
-// The method calls the function 'path/filepath.VolumeName().
+// GetVolumeNameIndex
 //
-// VolumeName() returns the leading volume name if it exists
-// in input parameter 'pathStr'.
+// Analyzes input parameter 'pathStr' to determine if it
+// contains a volume name.
+//
+// This method calls the function
+// path/filepath.VolumeName().
+//
+// VolumeName() returns the leading volume name if it
+// exists in input parameter 'pathStr'.
+//
+// ----------------------------------------------------------------
+//
+// # Usage Examples
 //
 // Given "C:\foo\bar" it returns "C:" on Windows.
 // Given "c:\foo\bar" it returns "c:" on Windows.
 // Given "\\host\share\foo" it returns "\\host\share" on linux
 // On other platforms, it returns "".
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	pathStr						string
+//
+//		This strings contains the file path which will be
+//		searched for the existence of a volume name.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	volNameIndex				int
+//
+//		The zero based string index of the first
+//		character of the Volume Name located in input
+//		parameter 'pathStr'.
+//
+//	volNameLength				int
+//
+//		This integer value contains the string length of
+//		the Volume Name located in input parameter
+//		'pathStr'.
+//
+//	volNameStr				string
+//
+//		This string contains the Volume Name extracted
+//		from input parameter 'pathStr'.
 func (fh *FileHelper) GetVolumeNameIndex(
-	pathStr string) (volNameIndex int, volNameLength int, volNameStr string) {
+	pathStr string) (
+	volNameIndex int,
+	volNameLength int,
+	volNameStr string) {
 
-	volNameIndex = -1
-	volNameLength = 0
-	volNameStr = ""
-
-	errCode := 0
-
-	errCode, _, pathStr = fh.isStringEmptyOrBlank(pathStr)
-
-	if errCode < 0 {
-		return volNameIndex, volNameLength, volNameStr
+	if fh.lock == nil {
+		fh.lock = new(sync.Mutex)
 	}
 
-	volName := fp.VolumeName(pathStr)
+	fh.lock.Lock()
 
-	if len(volName) == 0 {
-		return volNameIndex, volNameLength, volNameStr
-	}
+	defer fh.lock.Unlock()
 
-	volNameIndex = strings.Index(pathStr, volName)
-
-	volNameLength = len(volName)
-
-	if volNameLength > 0 {
-		volNameStr = volName
-	}
+	volNameIndex,
+		volNameLength,
+		volNameStr = new(fileHelperAtom).
+		getVolumeNameIndex(
+			pathStr)
 
 	return volNameIndex, volNameLength, volNameStr
 }

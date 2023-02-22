@@ -1838,13 +1838,13 @@ func (fileHelpMech *fileHelperMechanics) getFileNameWithoutExt(
 //
 //	isEmpty						bool
 //
-//	If the method determines that it cannot extract a
-//	valid directory path from input parameter
-//	'pathFileNameExt', this boolean value will be set to
-//	'true'. Failure to extract a valid directory path
-//	will occur if the input parameter 'pathFileNameExt'
-//	is not properly formatted as a valid path and file
-//	name.
+//		If the method determines that it cannot extract a
+//		valid directory path from input parameter
+//		'pathFileNameExt', this boolean value will be set
+//		to 'true'. Failure to extract a valid directory
+//		path will occur if the input parameter
+//		'pathFileNameExt' is not properly formatted as a
+//		valid path and file name.
 //
 //	err							error
 //

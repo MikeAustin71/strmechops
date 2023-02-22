@@ -244,6 +244,14 @@ func (srcCodeComments *SourceCodeComments) testPrimaryComments(
 func (srcCodeComments *SourceCodeComments) testSubsidiaryComments(
 	errPrefDto *ePref.ErrPrefixDto) error {
 
+	if srcCodeComments.lock == nil {
+		srcCodeComments.lock = new(sync.Mutex)
+	}
+
+	srcCodeComments.lock.Lock()
+
+	defer srcCodeComments.lock.Unlock()
+
 	var ePrefix *ePref.ErrPrefixDto
 
 	var err error

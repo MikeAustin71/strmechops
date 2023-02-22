@@ -4636,7 +4636,8 @@ func (dMgrHlpr *dirMgrHelper) lowLevelDoesDirectoryExist(
 			// The path really does exist!
 			dirPathDoesExist = true
 			err = nil
-			fInfo, err2 = FileInfoPlus{}.NewFromPathFileInfo(dirPath, info)
+			fInfo, err2 = new(FileInfoPlus).
+				NewFromPathFileInfo(dirPath, info)
 
 			if err2 != nil {
 				err = fmt.Errorf(ePrefix+
