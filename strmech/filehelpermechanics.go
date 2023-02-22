@@ -2133,6 +2133,203 @@ func (fileHelpMech *fileHelperMechanics) getPathFromPathFileName(
 	return dirPath, isEmpty, err
 }
 
+// isPathString
+//
+// Attempts to determine whether a string is a path
+// string designating a directory (and not a path file
+// name file extension string).
+//
+// If the path exists on disk, this method will examine
+// the associated file information and determine whether
+// the path string represents a directory.
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameter:
+//
+//	pathStr						string
+//
+//		The path string to be analyzed. This will method
+//		will determine whether 'pathStr' is a directory
+//		path.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ------------------------------------------------------------------------
+//
+// Return Values:
+//
+//	isPathStr       			bool
+//
+//		If the input parameter, 'pathStr' is determined
+//		to be a directory path, this return value is set
+//		to 'true'. Here, a 'directory path' is defined as
+//		a true directory and the path does NOT contain a
+//		file name.
+//
+//	cannotDetermine bool
+//
+//		If the method cannot determine whether the input
+//		parameter 'pathStr' is a valid directory path,
+//		this return value will be set to 'true'.
+//
+//		The 'cannotDetermine=true' condition occurs with
+//		path names like 'D:\DirA\common'. The method
+//		cannot determine whether 'common' is a file name
+//		or a directory name.
+//
+//
+//	testPathStr					string
+//
+//		Input parameter 'pathStr' is subjected to
+//		cleaning routines designed to exclude extraneous
+//		characters from the analysis. testPathFileStr'
+//		is the actual string on which the analysis was
+//		performed.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fileHelpMech *fileHelperMechanics) isPathString(
+	pathStr string,
+	errPrefDto *ePref.ErrPrefixDto) (
+	isPathStr bool,
+	cannotDetermine bool,
+	testPathStr string,
+	err error) {
+
+	if fileHelpMech.lock == nil {
+		fileHelpMech.lock = new(sync.Mutex)
+	}
+
+	fileHelpMech.lock.Lock()
+
+	defer fileHelpMech.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"fileHelperMechanics."+
+			"isPathString()",
+		"")
+
+	if err != nil {
+		return isPathStr, cannotDetermine, testPathStr, err
+	}
+
+	testPathStr = ""
+	isPathStr = false
+	cannotDetermine = false
+
+	errCode := 0
+
+	errCode,
+		_,
+		pathStr =
+		new(fileHelperElectron).
+			isStringEmptyOrBlank(pathStr)
+
+	if errCode == -1 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'pathStr' is an empty string!\n",
+			ePrefix.String())
+
+		return isPathStr, cannotDetermine, testPathStr, err
+	}
+
+	if errCode == -2 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'pathStr' consists of blank spaces!\n",
+			ePrefix.String())
+
+		return isPathStr, cannotDetermine, testPathStr, err
+	}
+
+	if strings.Contains(pathStr, "...") {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: INVALID PATH STRING!\n"+
+			"pathStr='%v'\n",
+			ePrefix.String(),
+			pathStr)
+
+		return isPathStr, cannotDetermine, testPathStr, err
+	}
+
+	testPathStr = new(fileHelperAtom).
+		adjustPathSlash(pathStr)
+
+	var pathFileType PathFileTypeCode
+
+	pathFileType,
+		_,
+		err = new(fileHelperNanobot).
+		isPathFileString(
+			testPathStr,
+			ePrefix)
+
+	if err != nil {
+
+		return isPathStr, cannotDetermine, testPathStr, err
+	}
+
+	if pathFileType == PathFileType.Path() {
+
+		isPathStr = true
+
+		cannotDetermine = false
+
+		err = nil
+
+		return isPathStr, cannotDetermine, testPathStr, err
+	}
+
+	if pathFileType == PathFileType.Indeterminate() {
+
+		isPathStr = false
+
+		cannotDetermine = true
+
+		err = nil
+
+		return isPathStr, cannotDetermine, testPathStr, err
+	}
+
+	isPathStr = false
+
+	cannotDetermine = false
+
+	err = nil
+
+	return isPathStr, cannotDetermine, testPathStr, err
+}
+
 // makeDirAll
 //
 // Creates a directory named path, along with any

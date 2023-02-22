@@ -7702,111 +7702,166 @@ func (fh *FileHelper) IsPathFileString(
 	return pathFileType, absolutePathFile, err
 }
 
-// IsPathString - Attempts to determine whether a string is a
-// path string designating a directory (and not a path file name
-// file extension string).
+// IsPathString
 //
-// If the path exists on disk, this method will examine the
-// associated file information and render a definitive and
-// accurate determination as to whether the path string represents
-// a directory.
+// Attempts to determine whether a string is a path
+// string designating a directory (and not a path file
+// name file extension string).
+//
+// If the path exists on disk, this method will examine
+// the associated file information and determine whether
+// the path string represents a directory.
 //
 // ------------------------------------------------------------------------
 //
 // Input Parameter:
 //
-//	pathStr string       - The path string to be analyzed.
+//	pathStr						string
+//
+//		The path string to be analyzed. This will method
+//		will determine whether 'pathStr' is a directory
+//		path.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values:
 //
-//	isPathStr       bool - If the input parameter, 'pathStr'
-//	                       is determined to be a directory
-//	                       path, this return value is set to
-//	                       true. Here, a 'directory path' is defined
-//	                       as a true directory and the path does NOT
-//	                       contain a file name.
+//	isPathStr       			bool
 //
-//	cannotDetermine bool - If the method cannot determine whether
-//	                       the input parameter 'pathStr' is or
-//	                       is NOT a valid directory path, this
-//	                       this return value will be set to 'true'.
-//	                       The 'cannotDetermine=true' condition occurs
-//	                       with path names like 'D:\DirA\common'. The
-//	                       cannot determine whether 'common' is a file
-//	                       name or a directory name.
+//		If the input parameter, 'pathStr' is determined
+//		to be a directory path, this return value is set
+//		to 'true'. Here, a 'directory path' is defined as
+//		a true directory and the path does NOT contain a
+//		file name.
+//
+//	cannotDetermine bool
+//
+//		If the method cannot determine whether the input
+//		parameter 'pathStr' is a valid directory path,
+//		this return value will be set to 'true'.
+//
+//		The 'cannotDetermine=true' condition occurs with
+//		path names like 'D:\DirA\common'. The method
+//		cannot determine whether 'common' is a file name
+//		or a directory name.
 //
 //
-//	testPathStr   string - Input parameter 'pathStr' is subjected to cleaning routines
-//	                       designed to exclude extraneous characters from the analysis.
-//	                       'testPathFileStr' is the actual string on which the analysis was
-//	                       performed.
+//	testPathStr					string
 //
-//	err            error - If an error occurs this return value will
-//	                       be populated. If no errors occur, this return
-//	                       value is set to nil.
+//		Input parameter 'pathStr' is subjected to
+//		cleaning routines designed to exclude extraneous
+//		characters from the analysis. testPathFileStr'
+//		is the actual string on which the analysis was
+//		performed.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
 func (fh *FileHelper) IsPathString(
-	pathStr string) (isPathStr bool, cannotDetermine bool, testPathStr string, err error) {
+	pathStr string,
+	errorPrefix interface{}) (
+	isPathStr bool,
+	cannotDetermine bool,
+	testPathStr string,
+	err error) {
 
-	ePrefix := "FileHelper.IsPathString() "
-	testPathStr = ""
-	isPathStr = false
-	cannotDetermine = false
-	err = nil
+	if fh.lock == nil {
+		fh.lock = new(sync.Mutex)
+	}
 
-	errCode := 0
+	fh.lock.Lock()
 
-	errCode, _, pathStr = fh.isStringEmptyOrBlank(pathStr)
+	defer fh.lock.Unlock()
 
-	if errCode == -1 {
-		err =
-			errors.New(ePrefix +
-				"Error: Input parameter 'pathStr' is an empty string!\n")
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileHelper."+
+			"IsPathString()",
+		"")
+
+	if err != nil {
 		return isPathStr, cannotDetermine, testPathStr, err
 	}
 
-	if errCode == -2 {
-		err =
-			errors.New(ePrefix +
-				"Error: Input parameter 'pathStr' consists of blank spaces!\n")
+	isPathStr,
+		cannotDetermine,
+		testPathStr,
+		err = new(fileHelperMechanics).
+		isPathString(
+			pathStr,
+			ePrefix)
 
-		return isPathStr, cannotDetermine, testPathStr, err
-	}
-
-	if strings.Contains(pathStr, "...") {
-		err = fmt.Errorf(ePrefix+
-			"Error: INVALID PATH STRING!\n"+
-			"pathStr='%v'\n", pathStr)
-		return isPathStr, cannotDetermine, testPathStr, err
-	}
-
-	testPathStr = new(fileHelperAtom).adjustPathSlash(pathStr)
-
-	pathFileType, _, err2 := fh.IsPathFileString(testPathStr)
-
-	if err2 != nil {
-		err = fmt.Errorf(ePrefix+"%v\n", err2.Error())
-		return isPathStr, cannotDetermine, testPathStr, err
-	}
-
-	if pathFileType == PathFileType.Path() {
-		isPathStr = true
-		cannotDetermine = false
-		err = nil
-		return isPathStr, cannotDetermine, testPathStr, err
-	}
-
-	if pathFileType == PathFileType.Indeterminate() {
-		isPathStr = false
-		cannotDetermine = true
-		err = nil
-		return isPathStr, cannotDetermine, testPathStr, err
-	}
-
-	isPathStr = false
-	cannotDetermine = false
-	err = nil
 	return isPathStr, cannotDetermine, testPathStr, err
 }
 
