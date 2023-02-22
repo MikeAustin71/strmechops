@@ -7412,10 +7412,60 @@ func (fh *FileHelper) GetVolumeNameIndex(
 	return volNameIndex, volNameLength, volNameStr
 }
 
-// IsAbsolutePath - Compares the input parameter 'pathStr' to
-// the absolute path representation for 'pathStr' to determine
-// whether 'pathStr' represents an absolute path.
-func (fh *FileHelper) IsAbsolutePath(pathStr string) bool {
+// IsAbsolutePathByCompare
+//
+// Compares the input parameter 'pathStr' to the absolute
+// path representation for 'pathStr' to determine whether
+// 'pathStr' represents an absolute path.
+//
+// This method differs from IsAbsolutePath() in that
+// IsAbsolutePath() calls low level method
+// filePath.IsAbsolute() to determine if a path is an
+// absolute path.
+//
+// ----------------------------------------------------------------
+//
+// Absolute Path Definition (Wikipedia):
+//
+//	An absolute or full path points to the same location
+//	in a file system, regardless of the current working
+//	directory. To do that, it must include the root
+//	directory.
+//
+//	By contrast, a relative path starts from some given
+//	working directory, avoiding the need to provide the
+//	full absolute path. A filename can be considered as
+//	a relative path based at the current working
+//	directory. If the working directory is not the file's
+//	parent directory, a file not found error will result
+//	if the file is addressed by its name.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	pathStr						string
+//
+//		This string holds the file path which will be
+//		analyzed to determine if it is an absolute path.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	bool
+//
+//		This method will analyze input parameter
+//		'pathStr' to determine if it is an absolute path.
+//
+//		This determination is made by comparing 'pathStr'
+//		to the absolute path constructed with 'pathStr'.
+//
+//		If input parameter '' is determined to be an
+//		absolute path, this returned boolean value will be
+//		set to true.
+func (fh *FileHelper) IsAbsolutePathByCompare(
+	pathStr string) bool {
 
 	if fh.lock == nil {
 		fh.lock = new(sync.Mutex)
@@ -7425,55 +7475,13 @@ func (fh *FileHelper) IsAbsolutePath(pathStr string) bool {
 
 	defer fh.lock.Unlock()
 
-	var ePrefix *ePref.ErrPrefixDto
-	var err error
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		nil,
-		"FileHelper."+
-			"IsAbsolutePath()",
-		"")
-
-	if err != nil {
-		return false
-	}
-
-	errCode := 0
-
-	errCode, _, pathStr =
-		new(fileHelperElectron).
-			isStringEmptyOrBlank(pathStr)
-
-	if errCode < 0 {
-		return false
-	}
-
-	// Adjust the path separators for the current operating
-	// system.
-	correctDelimPathStr := strings.ToLower(
-		new(fileHelperAtom).adjustPathSlash(pathStr))
-
-	absPath, err := new(fileHelperProton).makeAbsolutePath(
-		pathStr,
-		ePrefix)
-
-	if err != nil {
-		return false
-	}
-
-	absPath = strings.ToLower(absPath)
-
-	if absPath == correctDelimPathStr {
-		return true
-	}
-
-	return false
+	return new(fileHelperMolecule).
+		isAbsolutePathByCompare(pathStr)
 }
 
 // IsPathFileString - Returns 'true' if it is determined that
-// input parameter, 'pathFileStr', represents a directory path,
-// file name and optionally, a file extension.
+// input parameter, 'pathFileStr', represents a directory path
+// plus a file name or file name and file extension.
 //
 // If 'pathFileStr' is judged to be a directory path and file name,
 // by definition it cannot be solely a directory path.
