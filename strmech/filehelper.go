@@ -6349,7 +6349,6 @@ func (fh *FileHelper) GetFileNameWithExt(
 	var ePrefix *ePref.ErrPrefixDto
 	fNameExt = ""
 	isEmpty = true
-	errCode := 0
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
@@ -6372,23 +6371,126 @@ func (fh *FileHelper) GetFileNameWithExt(
 	return fNameExt, isEmpty, err
 }
 
-// GetFileNameWithoutExt - returns the file name
-// without the path or extension. If the returned
-// File Name is an empty string, isEmpty is set to true.
+// GetFileNameWithoutExt
 //
-//	Example:
+// Returns the file name without the path or extension.
 //
-//	      Actual Path Plus File Name: = "./pathfilego/003_filehelper/common/xt_dirmgr_01_test.go"
-//	              Returned File Name: = "dirmgr_01_test"
+// If the returned File Name is an empty string, return
+// parameter 'isEmpty' is set to 'true'.
 //
-//	 Actual File Name Plus Extension: "newerFileForTest_01.txt"
-//	              Returned File Name: "newerFileForTest_01"
+// ----------------------------------------------------------------
 //
-//	 Actual File Name Plus Extension: "newerFileForTest_01"
-//	              Returned File Name: "newerFileForTest_01"
+// # Usage Examples
 //
-//	 Actual File Name Plus Extension: ".gitignore"
-//	              Returned File Name: ".gitignore"
+//	     Actual Path Plus File Name: = "./pathfilego/003_filehelper/common/xt_dirmgr_01_test.go"
+//	             Returned File Name: = "dirmgr_01_test"
+//
+//	Actual File Name Plus Extension: "newerFileForTest_01.txt"
+//	             Returned File Name: "newerFileForTest_01"
+//
+//	Actual File Name Plus Extension: "newerFileForTest_01"
+//	             Returned File Name: "newerFileForTest_01"
+//
+//	Actual File Name Plus Extension: ".gitignore"
+//	             Returned File Name: ".gitignore"
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	pathFileNameExt				string
+//
+//		This string holds the path, file name and file
+//		extension. This method will extract the file name
+//		from this string and return it to the calling
+//		function.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	fName						string
+//
+//			This return parameter contains the file name
+//			extracted from input parameter
+//			'pathFileNameExt'.
+//
+//	isEmpty						bool
+//
+//		If the returned File Name is an empty string,
+//		'isEmpty' is set to 'true'.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
 func (fh *FileHelper) GetFileNameWithoutExt(
 	pathFileNameExt string,
 	errorPrefix interface{}) (
@@ -6420,138 +6522,13 @@ func (fh *FileHelper) GetFileNameWithoutExt(
 		return fName, isEmpty, err
 	}
 
-	errCode := 0
-
-	fHelperElectron := new(fileHelperElectron)
-
-	errCode,
-		_,
-		pathFileNameExt = fHelperElectron.
-		isStringEmptyOrBlank(pathFileNameExt)
-
-	if errCode == -1 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'pathFileNameExt' is an empty string!\n",
-			ePrefix.String())
-
-		return fName, isEmpty, err
-	}
-
-	if errCode == -2 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'pathFileNameExt' consists of blank spaces!\n",
-			ePrefix.String())
-
-		return fName, isEmpty, err
-	}
-
-	testPathFileNameExt := new(fileHelperAtom).
-		adjustPathSlash(pathFileNameExt)
-
-	errCode,
-		_,
-		testPathFileNameExt = fHelperElectron.
-		isStringEmptyOrBlank(testPathFileNameExt)
-
-	if errCode < 0 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Adjusted path version of 'pathFileNameExt', 'testPathFileNameExt'\n"+
-			"is an empty string!\n",
-			ePrefix.String())
-
-		return fName, isEmpty, err
-	}
-
-	fileNameExt,
-		isFileNameExtEmpty,
-		err2 :=
-		new(fileHelperNanobot).getFileNameWithExt(
-			testPathFileNameExt,
+	fName,
+		isEmpty,
+		err = new(fileHelperMechanics).
+		getFileNameWithoutExt(
+			pathFileNameExt,
 			ePrefix)
 
-	if err2 != nil {
-
-		err = fmt.Errorf("%v\n"+
-			"Error returned from getFileNameWithExt(testPathFileNameExt)\n"+
-			"testPathFileNameExt='%v'\n"+
-			"Error='%v'\n",
-			ePrefix.String(),
-			testPathFileNameExt,
-			err2.Error())
-
-		return fName, isEmpty, err
-	}
-
-	if isFileNameExtEmpty {
-		isEmpty = true
-		fName = ""
-		err = nil
-		return fName, isEmpty, err
-	}
-
-	var dotIdxs []int
-
-	dotIdxs,
-		err2 = new(fileHelperAtom).
-		getDotSeparatorIndexesInPathStr(
-			fileNameExt,
-			ePrefix)
-
-	if err2 != nil {
-
-		err = fmt.Errorf("%v\n"+
-			"Error returned from fh.GetDotSeparatorIndexesInPathStr(fileNameExt).\n"+
-			"fileNameExt='%v'\n"+
-			"Error='%v'\n",
-			ePrefix.String(),
-			fileNameExt,
-			err2.Error())
-
-		return fName, isEmpty, err
-	}
-
-	lDotIdxs := len(dotIdxs)
-
-	if lDotIdxs == 1 &&
-		dotIdxs[lDotIdxs-1] == 0 {
-		// Outlier Case: .gitignore
-		fName = fileNameExt[0:]
-
-		if fName == "" {
-			isEmpty = true
-		} else {
-			isEmpty = false
-		}
-		err = nil
-		return fName, isEmpty, err
-	}
-
-	// Primary Case: filename.ext
-	if lDotIdxs > 0 {
-		fName = fileNameExt[0:dotIdxs[lDotIdxs-1]]
-
-		if fName == "" {
-			isEmpty = true
-		} else {
-			isEmpty = false
-		}
-		err = nil
-		return fName, isEmpty, err
-	}
-
-	// Secondary Case: filename
-	fName = fileNameExt
-
-	if fName == "" {
-		isEmpty = true
-	} else {
-		isEmpty = false
-	}
-
-	err = nil
 	return fName, isEmpty, err
 }
 
