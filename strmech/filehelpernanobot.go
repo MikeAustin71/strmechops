@@ -3773,6 +3773,460 @@ func (fHelperNanobot *fileHelperNanobot) getFileNameWithExt(
 	return fNameExt, isEmpty, err
 }
 
+// isPathFileString
+//
+// Returns 'true' if it is determined that input
+// parameter, 'pathFileStr', represents a directory path
+// plus a file name or file name and file extension.
+//
+// If 'pathFileStr' is judged to be a directory path and
+// file name, by definition it cannot be solely a
+// directory path.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	pathFileStr					string
+//
+//		This string will be analyzed to determine if it
+//		contains both a directory path and a file name or
+//		file name and file extension.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	pathFileType PathFileTypeCode
+//
+//		Path File Type Code indicating whether the input
+//		parameter 'pathFileStr' is a Path, a Path and
+//		File, a File or "Indeterminate". "Indeterminate"
+//		signals that the nature of 'pathFileStr' cannot
+//		be classified as either a Path or a Path and File
+//		or a File.
+//
+//		--------------------------------------------------------
+//		PathFileTypeCodes
+//		   0 = None
+//		   1 = Path
+//		   2 = PathFile
+//		   3 = File (with no path)
+//		   4 = Volume
+//		   5 = Indeterminate
+//		   		Cannot determine whether string is a
+//		   		Path, Path & File or File
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fHelperNanobot *fileHelperNanobot) isPathFileString(
+	pathFileStr string,
+	errPrefDto *ePref.ErrPrefixDto) (
+	pathFileType PathFileTypeCode,
+	absolutePathFile string,
+	err error) {
+
+	if fHelperNanobot.lock == nil {
+		fHelperNanobot.lock = new(sync.Mutex)
+	}
+
+	fHelperNanobot.lock.Lock()
+
+	defer fHelperNanobot.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	absolutePathFile = ""
+
+	pathFileType = PathFileType.None()
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"fileHelperNanobot."+
+			"isPathFileString()",
+		"")
+
+	if err != nil {
+		return pathFileType, absolutePathFile, err
+	}
+
+	var pathFileDoesExist bool
+	var fInfo FileInfoPlus
+	var correctedPathFileStr string
+
+	fHelperMolecule := new(fileHelperMolecule)
+
+	correctedPathFileStr,
+		pathFileDoesExist,
+		fInfo,
+		err = fHelperMolecule.doesPathFileExist(
+		pathFileStr,
+		PreProcPathCode.PathSeparator(), // Convert Path Separators to os default Path Separators
+		ePrefix,
+		"pathFileStr")
+
+	if err != nil {
+		return pathFileType, absolutePathFile, err
+	}
+
+	if strings.Contains(correctedPathFileStr, "...") {
+
+		pathFileType = PathFileType.None()
+
+		absolutePathFile = ""
+
+		err = fmt.Errorf("%v\n"+
+			"Error: INVALID PATH STRING!\n"+
+			"pathFileStr='%v'\n",
+			ePrefix.String(),
+			correctedPathFileStr)
+
+		return pathFileType, absolutePathFile, err
+	}
+
+	osPathSepStr := string(os.PathSeparator)
+
+	if strings.Contains(correctedPathFileStr,
+		osPathSepStr+osPathSepStr) {
+
+		pathFileType = PathFileType.None()
+
+		absolutePathFile = ""
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Invalid Path File string.\n"+
+			"Path File string contains invalid Path Separators.\n"+
+			"pathFileStr='%v'\n",
+			ePrefix.String(),
+			correctedPathFileStr)
+
+		return pathFileType, absolutePathFile, err
+	}
+
+	testAbsPathFileStr, err2 := new(fileHelperProton).
+		makeAbsolutePath(
+			correctedPathFileStr,
+			ePrefix)
+
+	if err2 != nil {
+		err = fmt.Errorf("Error converting pathFileStr to absolute path.\n"+
+			"pathFileStr='%v'\nError='%v'\n",
+			correctedPathFileStr, err2.Error())
+
+		return pathFileType, absolutePathFile, err
+	}
+
+	volName := fp.VolumeName(testAbsPathFileStr)
+
+	if strings.ToLower(volName) == strings.ToLower(testAbsPathFileStr) ||
+		strings.ToLower(volName) == strings.ToLower(pathFileStr) {
+		// This is a volume name not a file Name!
+		pathFileType = PathFileType.Volume()
+		absolutePathFile = volName
+		err = nil
+		return pathFileType, absolutePathFile, err
+	}
+
+	// See if path actually exists on disk and
+	// then examine the File Info object returned.
+	if pathFileDoesExist {
+
+		if fInfo.IsDir() {
+
+			pathFileType = PathFileType.Path()
+
+			absolutePathFile = testAbsPathFileStr
+
+			err = nil
+
+		} else {
+
+			pathFileType = PathFileType.PathFile()
+
+			absolutePathFile = testAbsPathFileStr
+
+			err = nil
+
+		}
+
+		return pathFileType, absolutePathFile, err
+	} // End of if pathFileDoesExist
+
+	// Ok - We know the testPathFileStr does NOT exist on disk
+
+	firstCharIdx,
+		lastCharIdx,
+		err2 :=
+		fHelperMolecule.
+			getFirstLastNonSeparatorCharIndexInPathStr(
+				correctedPathFileStr,
+				ePrefix)
+
+	if err2 != nil {
+
+		pathFileType = PathFileType.None()
+
+		absolutePathFile = ""
+
+		err = fmt.Errorf("%v\n"+
+			"Error returned from getFirstLastNonSeparatorCharIndexInPathStr"+
+			"(correctedPathFileStr)\n"+
+			"correctedPathFileStr='%v'\n"+
+			"Error='%v'\n",
+			ePrefix.String(),
+			correctedPathFileStr,
+			err2.Error())
+
+		return pathFileType, absolutePathFile, err
+	}
+
+	interiorDotPathIdx :=
+		strings.LastIndex(correctedPathFileStr,
+			"."+string(os.PathSeparator))
+
+	if interiorDotPathIdx > firstCharIdx {
+
+		pathFileType = PathFileType.None()
+
+		absolutePathFile = ""
+
+		err = fmt.Errorf("%v\n"+
+			"Error: INVALID PATH. Invalid interior relative path detected!\n"+
+			"correctedPathFileStr='%v'\n",
+			ePrefix.String(),
+			correctedPathFileStr)
+
+		return pathFileType, absolutePathFile, err
+	}
+
+	fHelperAtom := new(fileHelperAtom)
+
+	var slashIdxs []int
+
+	slashIdxs,
+		err2 = fHelperAtom.
+		getPathSeparatorIndexesInPathStr(
+			correctedPathFileStr,
+			ePrefix)
+
+	if err2 != nil {
+
+		pathFileType = PathFileType.None()
+
+		absolutePathFile = ""
+
+		err = fmt.Errorf("%v\n"+
+			"GetPathSeparatorIndexesInPathStr(correctedPathFileStr) returned error.\n"+
+			"testAbsPathFileStr='%v'\n"+
+			"Error='%v'\n",
+			ePrefix.String(),
+			correctedPathFileStr,
+			err2.Error())
+
+		return pathFileType, absolutePathFile, err
+	}
+
+	dotIdxs, err2 := fHelperAtom.
+		getDotSeparatorIndexesInPathStr(
+			correctedPathFileStr,
+			ePrefix)
+
+	if err2 != nil {
+
+		pathFileType = PathFileType.None()
+
+		absolutePathFile = ""
+
+		err = fmt.Errorf("%v\n"+
+			"fh.GetDotSeparatorIndexesInPathStr(correctedPathFileStr) retured error.\n"+
+			"correctedPathFileStr='%v'\n"+
+			"Error='%v'\n",
+			ePrefix.String(),
+			correctedPathFileStr,
+			err2.Error())
+
+		return pathFileType, absolutePathFile, err
+	}
+
+	lDotIdxs := len(dotIdxs)
+
+	lSlashIdxs := len(slashIdxs)
+
+	if lDotIdxs == 0 && lSlashIdxs == 0 && lastCharIdx == -1 {
+		// Option # 1
+		// There are no valid characters in the string
+		pathFileType = PathFileType.None()
+
+		absolutePathFile = ""
+
+		err = fmt.Errorf("%v\n"+
+			"No valid characters in parameter 'pathFileStr'\n"+
+			"pathFileStr='%v'\n",
+			ePrefix.String(),
+			correctedPathFileStr)
+
+	} else if lDotIdxs == 0 && lSlashIdxs == 0 && lastCharIdx > -1 {
+		// Option # 2
+		// String consists only of eligible alphanumeric characters
+		// "sometextstring"
+
+		// the string has no dots and no path separators.
+		absolutePathFile = testAbsPathFileStr
+
+		// Call it a file!
+		// Example: "somefilename"
+		pathFileType = PathFileType.File()
+		err = nil
+
+	} else if lDotIdxs == 0 && lSlashIdxs > 0 && lastCharIdx == -1 {
+		// Option # 3
+		// There no dots no characters but string does contain
+		// slashes
+
+		if lSlashIdxs > 1 {
+
+			pathFileType = PathFileType.None()
+
+			absolutePathFile = ""
+
+			err = fmt.Errorf("%v\n"+
+				"Invalid parameter 'pathFileStr'!\n"+
+				"'pathFileStr' consists entirely of path separators!\n"+
+				"pathFileStr='%v'\n",
+				ePrefix.String(),
+				correctedPathFileStr)
+
+		} else {
+			// lSlashIdxs must be '1'
+			absolutePathFile = testAbsPathFileStr
+
+			// Call it a Directory!
+			// Example: "/"
+			pathFileType = PathFileType.Path()
+			err = nil
+		}
+
+	} else if lDotIdxs == 0 && lSlashIdxs > 0 && lastCharIdx > -1 {
+		// Option # 4
+		// strings contains slashes and characters but no dots.
+
+		absolutePathFile = testAbsPathFileStr
+
+		if lastCharIdx > slashIdxs[lSlashIdxs-1] {
+			// Example D:\dir1\dir2\xray
+			// It could be a file or a path. We simply
+			// can't tell.
+			pathFileType = PathFileType.Indeterminate()
+			err = nil
+
+		} else {
+
+			// Call it a Directory!
+			// Example: "D:\dir1\dir2\"
+			pathFileType = PathFileType.Path()
+			err = nil
+
+		}
+
+	} else if lDotIdxs > 0 && lSlashIdxs == 0 && lastCharIdx == -1 {
+		// Option # 5
+		// dots only. Must be "." or ".."
+
+		absolutePathFile = testAbsPathFileStr
+
+		// Call it a Directory!
+		// Example: "D:\dir1\dir2\"
+		pathFileType = PathFileType.Path()
+		err = nil
+
+	} else if lDotIdxs > 0 && lSlashIdxs == 0 && lastCharIdx > -1 {
+		// Option # 6
+		// Dots and characters only. No slashes.
+		// Maybe 'fileName.ext'
+
+		absolutePathFile = testAbsPathFileStr
+
+		// Call it a file!
+		// Example: "somefilename"
+		pathFileType = PathFileType.File()
+		err = nil
+
+	} else if lDotIdxs > 0 && lSlashIdxs > 0 && lastCharIdx == -1 {
+		// Option # 7
+		// Dots and slashes, but no characters.
+
+		absolutePathFile = testAbsPathFileStr
+
+		// Call it a Directory!
+		// Example: ".\"
+		pathFileType = PathFileType.Path()
+		err = nil
+
+	} else {
+		// Option # 8
+		// Must be else if lDotIdxs > 0 && lSlashIdxs > 0 && lastCharIdx > -1
+		// Contains dots slashes and characters
+
+		absolutePathFile = testAbsPathFileStr
+
+		// If there is a dot after the last path separator
+		// and there is a character following the dot.
+		// Therefore, this is a filename extension, NOT a directory
+		if dotIdxs[lDotIdxs-1] > slashIdxs[lSlashIdxs-1] &&
+			dotIdxs[lDotIdxs-1] < lastCharIdx {
+
+			// Call it a path/file!
+			// Example: "D:\dir1\dir2\somefilename.txt"
+			pathFileType = PathFileType.PathFile()
+			err = nil
+
+		} else if lastCharIdx > slashIdxs[lSlashIdxs-1] &&
+			dotIdxs[lDotIdxs-1] < slashIdxs[lSlashIdxs-1] {
+			// Example: "..\dir1\dir2\sometext"
+			// Could be a file could be a directory
+			// Cannot determine.
+			pathFileType = PathFileType.Indeterminate()
+			err = nil
+
+		} else {
+
+			// Call it a Directory!
+			// Example: "D:\dir1\dir2\"
+			pathFileType = PathFileType.Path()
+			err = nil
+		}
+
+	}
+
+	return pathFileType, absolutePathFile, err
+}
+
 // MakeDirAllPerm
 //
 // Creates a directory path along with any necessary
