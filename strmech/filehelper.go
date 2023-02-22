@@ -7412,16 +7412,83 @@ func (fh *FileHelper) GetVolumeNameIndex(
 	return volNameIndex, volNameLength, volNameStr
 }
 
+// IsAbsolutePath
+//
+// Compares the input parameter 'pathStr' to the absolute
+// path representation for 'pathStr' to determine whether
+// 'pathStr' represents an absolute path.
+//
+// This method differs from isAbsolutePathByCompare() in
+// that this method calls low level method
+// filePath.IsAbs() to determine if a path is an absolute
+// path.
+//
+// ----------------------------------------------------------------
+//
+// Absolute Path Definition (Wikipedia):
+//
+//	An absolute or full path points to the same location
+//	in a file system, regardless of the current working
+//	directory. To do that, it must include the root
+//	directory.
+//
+//	By contrast, a relative path starts from some given
+//	working directory, avoiding the need to provide the
+//	full absolute path. A filename can be considered as
+//	a relative path based at the current working
+//	directory. If the working directory is not the file's
+//	parent directory, a file not found error will result
+//	if the file is addressed by its name.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	pathStr						string
+//
+//		This string holds the file path which will be
+//		analyzed to determine if it is an absolute path.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	bool
+//
+//		This method will analyze input parameter
+//		'pathStr' to determine if it is an absolute path.
+//
+//		This determination is made by calling low level
+//		function filePath.IsAbs().
+//
+//		If input parameter 'pathStr' is determined to be
+//		an absolute path, this returned boolean value
+//		will be set to true.
+func (fh *FileHelper) IsAbsolutePath(
+	pathStr string) bool {
+
+	if fh.lock == nil {
+		fh.lock = new(sync.Mutex)
+	}
+
+	fh.lock.Lock()
+
+	defer fh.lock.Unlock()
+
+	return new(fileHelperMolecule).isAbsolutePath(
+		pathStr)
+}
+
 // IsAbsolutePathByCompare
 //
 // Compares the input parameter 'pathStr' to the absolute
 // path representation for 'pathStr' to determine whether
 // 'pathStr' represents an absolute path.
 //
-// This method differs from IsAbsolutePath() in that
-// IsAbsolutePath() calls low level method
-// filePath.IsAbsolute() to determine if a path is an
-// absolute path.
+// This method differs from isAbsolutePath() in that
+// this method does NOT call filePath.IsAbs(). Instead,
+// this method constructs an absolute path from 'pathStr'
+// and compares the two paths.
 //
 // ----------------------------------------------------------------
 //
