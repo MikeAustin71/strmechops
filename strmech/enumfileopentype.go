@@ -3,22 +3,49 @@ package strmech
 import (
 	"fmt"
 	"os"
-	"reflect"
 	"strings"
+	"sync"
 )
 
-// mFileOpenTypeIntToString - This map is used to map enumeration values
+// Lock this mutex before accessing any of these maps.
+var fileOpenTypeMapsLock sync.Mutex
+
+// mFileOpenTypeToString - This map is used to map enumeration values
 // to enumeration names stored as strings for Type FileOpenType.
-var mFileOpenTypeIntToString = map[int]string{}
+var mFileOpenTypeToString = map[FileOpenType]string{
+	FileOpenType(-1):          "TypeNone",
+	FileOpenType(os.O_RDONLY): "TypeReadOnly",
+	FileOpenType(os.O_WRONLY): "TypeWriteOnly",
+	FileOpenType(os.O_RDWR):   "TypeReadWrite",
+}
+
+// mValidFileOpenTypeToString
+// This map is used to map enumeration values to valid
+// enumeration names stored as strings for Type FileOpenType.
+var mValidFileOpenTypeToString = map[FileOpenType]string{
+	FileOpenType(os.O_RDONLY): "TypeReadOnly",
+	FileOpenType(os.O_WRONLY): "TypeWriteOnly",
+	FileOpenType(os.O_RDWR):   "TypeReadWrite",
+}
 
 // mFileOpenTypeStringToInt - This map is used to map enumeration names
 // stored as strings to enumeration values for Type FileOpenType.
-var mFileOpenTypeStringToInt = map[string]int{}
+var mFileOpenTypeStringToInt = map[string]int{
+	"TypeNone":      -1,
+	"TypeReadOnly":  os.O_RDONLY,
+	"TypeWriteOnly": os.O_WRONLY,
+	"TypeReadWrite": os.O_RDWR,
+}
 
 // mFileOpenTypeLwrCaseStringToInt - This map is used to map enumeration names
 // stored as lower case strings to enumeration values for Type FileOpenType.
-// This map is used for case insensitive look ups.
-var mFileOpenTypeLwrCaseStringToInt = map[string]int{}
+// This map is used for case-insensitive look-ups.
+var mFileOpenTypeLwrCaseStringToInt = map[string]int{
+	"typenone":      -1,
+	"typereadonly":  os.O_RDONLY,
+	"typewriteonly": os.O_WRONLY,
+	"typereadwrite": os.O_RDWR,
+}
 
 // FileOpenType - In order to open a file, exactly one of the
 // following File Open Codes MUST be specified:
@@ -51,17 +78,40 @@ var mFileOpenTypeLwrCaseStringToInt = map[string]int{}
 //	       https://www.youtube.com/watch?v=DyXJy_0v0_U
 type FileOpenType int
 
-// None - No File Open Type specified
-func (fOpenType FileOpenType) TypeNone() FileOpenType { return -1 }
+var enumFileOpenTypeLock sync.Mutex
 
-// ReadOnly - File opened for 'Read Only' access
-func (fOpenType FileOpenType) TypeReadOnly() FileOpenType { return FileOpenType(os.O_RDONLY) }
+// TypeNone - No File Open Type specified
+func (fOpenType FileOpenType) TypeNone() FileOpenType {
 
-// WriteOnly - File opened for 'Write Only' access
+	enumFileOpenTypeLock.Lock()
+
+	defer enumFileOpenTypeLock.Unlock()
+
+	return -1
+}
+
+// TypeReadOnly - File opened for 'Read Only' access
+func (fOpenType FileOpenType) TypeReadOnly() FileOpenType {
+
+	enumFileOpenTypeLock.Lock()
+
+	defer enumFileOpenTypeLock.Unlock()
+
+	return FileOpenType(os.O_RDONLY)
+}
+
+// TypeWriteOnly - File opened for 'Write Only' access
 func (fOpenType FileOpenType) TypeWriteOnly() FileOpenType { return FileOpenType(os.O_WRONLY) }
 
-// ReadWrite - File opened for 'Read and Write' access
-func (fOpenType FileOpenType) TypeReadWrite() FileOpenType { return FileOpenType(os.O_RDWR) }
+// TypeReadWrite - File opened for 'Read and Write' access
+func (fOpenType FileOpenType) TypeReadWrite() FileOpenType {
+
+	enumFileOpenTypeLock.Lock()
+
+	defer enumFileOpenTypeLock.Unlock()
+
+	return FileOpenType(os.O_RDWR)
+}
 
 // IsValid - If the value of the current FileOpenType is 'invalid',
 // this method will return an error. If the FileOpenType is 'valid',
@@ -71,9 +121,15 @@ func (fOpenType FileOpenType) TypeReadWrite() FileOpenType { return FileOpenType
 // for this type.
 func (fOpenType FileOpenType) IsValid() error {
 
-	fOpenType.checkInitializeMaps(false)
+	enumFileOpenTypeLock.Lock()
 
-	_, ok := mFileOpenTypeIntToString[int(fOpenType)]
+	defer enumFileOpenTypeLock.Unlock()
+
+	fileOpenTypeMapsLock.Lock()
+
+	defer fileOpenTypeMapsLock.Unlock()
+
+	_, ok := mValidFileOpenTypeToString[fOpenType]
 
 	if !ok {
 		ePrefix := "FileOpenType.IsValid() "
@@ -107,13 +163,13 @@ func (fOpenType FileOpenType) IsValid() error {
 //	                       Either string will produce the correct result.
 //
 //	caseSensitive   bool - If 'true' the search for enumeration names
-//	                       will be case sensitive and will require an
+//	                       will be case-sensitive and will require an
 //	                       exact match. Therefore, 'readonly' will NOT
 //	                       match the enumeration name, 'ReadOnly'.
 //
-//	                       If 'false' a case insensitive search is conducted
+//	                       If 'false' a case-insensitive search is conducted
 //	                       for the enumeration name. In this case, 'readonly'
-//	                       will match match enumeration name 'ReadOnly'.
+//	                       will match enumeration name 'ReadOnly'.
 //
 // ------------------------------------------------------------------------
 //
@@ -148,11 +204,17 @@ func (fOpenType FileOpenType) ParseString(
 	valueString string,
 	caseSensitive bool) (FileOpenType, error) {
 
+	enumFileOpenTypeLock.Lock()
+
+	defer enumFileOpenTypeLock.Unlock()
+
+	fileOpenTypeMapsLock.Lock()
+
+	defer fileOpenTypeMapsLock.Unlock()
+
 	ePrefix := "FileOpenType.ParseString() "
 
-	fOpenType.checkInitializeMaps(false)
-
-	result := FileOpenType(0)
+	var result FileOpenType
 
 	lenValueStr := len(valueString)
 
@@ -179,7 +241,7 @@ func (fOpenType FileOpenType) ParseString(
 		idx, ok = mFileOpenTypeStringToInt[valueString]
 
 		if !ok {
-			return FileOpenType(0),
+			return FileOpenType(-1),
 				fmt.Errorf(ePrefix+
 					"'valueString' did NOT MATCH a FileOpenType. valueString='%v' ", valueString)
 		}
@@ -233,9 +295,15 @@ func (fOpenType FileOpenType) ParseString(
 //	  str is now equal to "TypeReadWrite"
 func (fOpenType FileOpenType) String() string {
 
-	fOpenType.checkInitializeMaps(false)
+	enumFileOpenTypeLock.Lock()
 
-	str, ok := mFileOpenTypeIntToString[int(fOpenType)]
+	defer enumFileOpenTypeLock.Unlock()
+
+	fileOpenTypeMapsLock.Lock()
+
+	defer fileOpenTypeMapsLock.Unlock()
+
+	str, ok := mFileOpenTypeToString[fOpenType]
 
 	if !ok {
 		return ""
@@ -255,79 +323,14 @@ func (fOpenType FileOpenType) Value() int {
 	return int(fOpenType)
 }
 
-// checkInitializeMaps - String and value comparisons performed on enumerations
-// supported by this Type, utilizes a series of 3-map types. These maps are used
-// internally to perform 'string to value' or 'value to string' look ups on
-// enumerations supported by this type. Each time FileOpenType.String() or
-// FileOpenType.ParseString() a call is made to this method to determine if
-// these maps have been initialized. If the maps and look up data have been
-// properly initialized and indexed, this method returns without taking action.
-//
-// On the other hand, if the maps have not yet been initialized, this method will
-// initialize all associated map slices.
-//
-// This is a standard utility method and is not part of the valid
-// enumerations for this type.
-//
-// ------------------------------------------------------------------------
-//
-// Input Parameters
-//
-//	reInitialize     bool - If 'true', this will force initialization of
-//	                        all associated maps.
-func (fOpenType FileOpenType) checkInitializeMaps(reInitialize bool) {
-
-	if !reInitialize &&
-		mFileOpenTypeIntToString != nil &&
-		len(mFileOpenTypeIntToString) > 3 &&
-		mFileOpenTypeStringToInt != nil &&
-		len(mFileOpenTypeStringToInt) > 3 &&
-		mFileOpenTypeLwrCaseStringToInt != nil &&
-		len(mFileOpenTypeLwrCaseStringToInt) > 3 {
-		return
-	}
-
-	var t = FileOpenType(0).TypeReadOnly()
-
-	mFileOpenTypeIntToString = make(map[int]string, 0)
-	mFileOpenTypeStringToInt = make(map[string]int, 0)
-	mFileOpenTypeLwrCaseStringToInt = make(map[string]int, 0)
-
-	s := reflect.TypeOf(t)
-
-	intZero := 0
-
-	r := reflect.TypeOf(intZero)
-	args := [1]reflect.Value{reflect.Zero(s)}
-
-	for i := 0; i < s.NumMethod(); i++ {
-
-		f := s.Method(i).Name
-
-		if f == "String" ||
-			f == "ParseString" ||
-			f == "Value" ||
-			f == "IsValid" ||
-			f == "checkInitializeMaps" {
-			continue
-		}
-
-		value := s.Method(i).Func.Call(args[:])[0].Convert(r).Int()
-		x := int(value)
-		mFileOpenTypeIntToString[x] = f
-		mFileOpenTypeStringToInt[f] = x
-		mFileOpenTypeLwrCaseStringToInt[strings.ToLower(f)] = x
-	}
-
-}
-
 // FOpenType - This public global variable allows
 // easy access to the enumerations of the FileOpenType
 // using the dot operator.
 //
 //	Example:
 //
-//	   FOpenType.TypeReadOnly()
-//	   FOpenType.TypeWriteOnly()
-//	   FOpenType.TypeReadWrite()
+//		FOpenType.TypeNone()
+//		FOpenType.TypeReadOnly()
+//		FOpenType.TypeWriteOnly()
+//		FOpenType.TypeReadWrite()
 var FOpenType = FileOpenType(0)

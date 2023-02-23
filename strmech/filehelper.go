@@ -9739,12 +9739,12 @@ func (fh *FileHelper) OpenFile(
 //
 //	*os.File
 //
-//		If successful, this method returns an os.File
-//		pointer to the file designated by input parameter
-//		'pathFileName'. This file pointer can
-//		subsequently be used for reading content from the
-//		subject file. It may NOT be used for writing
-//		content to the subject file.
+//		If successful, this method  opens the file
+//		designated by input parameter 'pathFileName' and
+//		returns an os.File pointer to that file. This
+//		file pointer can subsequently be used for reading
+//		content from the subject file. It may NOT be used
+//		for writing content to the subject file.
 //
 //		If this method fails, the *os.File return value
 //		is 'nil'.
@@ -9784,11 +9784,12 @@ func (fh *FileHelper) OpenFileReadOnly(
 
 	filePtr = nil
 
+	funcName := "FileHelper.OpenFileReadOnly()"
+
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"FileHelper."+
-			"OpenFileReadOnly()",
+		funcName,
 		"")
 
 	if err != nil {
@@ -9836,16 +9837,19 @@ func (fh *FileHelper) OpenFileReadOnly(
 		return filePtr, err
 	}
 
-	fileOpenCfg, err2 := new(FileOpenConfig).New(FOpenType.TypeReadOnly(),
-		FOpenMode.ModeNone())
+	fileOpenCfg, err2 := new(FileOpenConfig).
+		New(ePrefix,
+			FOpenType.TypeReadOnly(),
+			FOpenMode.ModeNone())
 
 	if err2 != nil {
 		err =
 			fmt.Errorf("%v\n"+
-				"Error returned by FileOpenConfig{}.New(FOpenType.TypeReadOnly(),"+
+				"Error returned by FileOpenConfig.New("+
+				"FOpenType.TypeReadOnly(),"+
 				"FOpenMode.ModeNone()).\n"+
-				"Error='%v'\n",
-				ePrefix,
+				"Error=\n%v\n",
+				ePrefix.String(),
 				err2.Error())
 
 		return filePtr, err
@@ -9856,52 +9860,79 @@ func (fh *FileHelper) OpenFileReadOnly(
 	if err2 != nil {
 		err = fmt.Errorf("%v\n"+
 			"Error Creating File Open Code.\n"+
+			"fileOpenCfg.GetCompositeFileOpenCode()\n"+
 			"Error=\n%v\n",
-			ePrefix,
+			ePrefix.String(),
 			err2.Error())
 
 		return filePtr, err
 	}
 
-	fPermCfg, err2 := new(FilePermissionConfig).New(
-		"-r--r--r--",
-		ePrefix)
+	fPermCfg, err2 := new(FilePermissionConfig).
+		New(
+			"-r--r--r--",
+			ePrefix)
 
 	if err2 != nil {
+
 		err =
-			fmt.Errorf(ePrefix+
-				"Error returned by FilePermissionConfig{}.New(\"-r--r--r--\")\n"+
-				"Error='%v'\n", err2.Error())
+			fmt.Errorf("%v\n"+
+				"Error returned by FilePermissionConfig."+
+				"New(\"-r--r--r--\")\n"+
+				"Error=\n%v\n",
+				funcName,
+				err2.Error())
+
 		return filePtr, err
 	}
 
-	fileMode, err2 := fPermCfg.GetCompositePermissionMode()
+	var fileMode os.FileMode
+
+	fileMode, err2 = fPermCfg.GetCompositePermissionMode(
+		ePrefix.XCpy("fPermCfg"))
 
 	if err2 != nil {
-		err = fmt.Errorf(ePrefix+"Error Creating File Mode Code.\n"+
-			"Error=%v\n",
+
+		err = fmt.Errorf("%v\n"+
+			"Error Creating File Mode Code.\n"+
+			"fPermCfg.GetCompositePermissionMode()\nn"+
+			"Error=\n%v\n",
+			funcName,
 			err2.Error())
 
 		return filePtr, err
 	}
 
-	filePtr, err2 = os.OpenFile(pathFileName, fOpenCode, fileMode)
+	filePtr, err2 = os.OpenFile(
+		pathFileName,
+		fOpenCode,
+		fileMode)
 
 	if err2 != nil {
-		err = fmt.Errorf(ePrefix+"File Open Error: %v\n"+
-			"pathFileName='%v'", err2.Error(), pathFileName)
+
+		err = fmt.Errorf("%v\n"+
+			"File Open Error: os.OpenFile()\n"+
+			"pathFileName= '%v'"+
+			"fOpenCode= '%v'\n"+
+			"fileMode= '%v'\n"+
+			"Error=\n%v\n",
+			ePrefix.String(),
+			pathFileName,
+			fOpenCode,
+			fileMode,
+			err2.Error())
+
 		filePtr = nil
+
 		return filePtr, err
 	}
 
 	if filePtr == nil {
-		err = fmt.Errorf(ePrefix +
-			"ERROR: os.OpenFile() returned a 'nil' file pointer!\n")
 
-		return filePtr, err
+		err = fmt.Errorf("%v\n"+
+			"ERROR: os.OpenFile() returned a 'nil' file pointer!\n",
+			ePrefix.String())
 	}
-
-	err = nil
 
 	return filePtr, err
 }
@@ -9996,6 +10027,7 @@ func (fh *FileHelper) OpenFileReadWrite(
 		// pathFileName does NOT exist
 
 		fileOpenCfg, err = new(FileOpenConfig).New(
+			ePrefix,
 			FOpenType.TypeReadWrite(),
 			FOpenMode.ModeCreate(),
 			FOpenMode.ModeAppend())
@@ -10022,6 +10054,7 @@ func (fh *FileHelper) OpenFileReadWrite(
 		if truncateFile {
 			// truncateFile == true
 			fileOpenCfg, err = new(FileOpenConfig).New(
+				ePrefix,
 				FOpenType.TypeReadWrite(),
 				FOpenMode.ModeTruncate())
 
@@ -10037,6 +10070,7 @@ func (fh *FileHelper) OpenFileReadWrite(
 		} else {
 			// truncateFile == false
 			fileOpenCfg, err = new(FileOpenConfig).New(
+				ePrefix,
 				FOpenType.TypeReadWrite(),
 				FOpenMode.ModeAppend())
 
@@ -10179,6 +10213,7 @@ func (fh *FileHelper) OpenFileWriteOnly(
 		// The pathFileName DOES NOT EXIST!
 
 		fileOpenCfg, err = new(FileOpenConfig).New(
+			ePrefix,
 			FOpenType.TypeWriteOnly(),
 			FOpenMode.ModeCreate(),
 			FOpenMode.ModeAppend())
@@ -10204,6 +10239,7 @@ func (fh *FileHelper) OpenFileWriteOnly(
 		if truncateFile {
 			// truncateFile == true; Set Mode 'Truncate'
 			fileOpenCfg, err = new(FileOpenConfig).New(
+				ePrefix,
 				FOpenType.TypeWriteOnly(),
 				FOpenMode.ModeTruncate())
 
@@ -10217,7 +10253,9 @@ func (fh *FileHelper) OpenFileWriteOnly(
 
 		} else {
 			// truncateFile == false; Set Mode 'Append'
-			fileOpenCfg, err = new(FileOpenConfig).New(FOpenType.TypeWriteOnly(),
+			fileOpenCfg, err = new(FileOpenConfig).New(
+				ePrefix,
+				FOpenType.TypeWriteOnly(),
 				FOpenMode.ModeAppend())
 
 			if err != nil {

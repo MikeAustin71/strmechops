@@ -1,7 +1,6 @@
 package strmech
 
 import (
-	"errors"
 	"fmt"
 	"os"
 	"strings"
@@ -21,7 +20,10 @@ type FileAccessControl struct {
 func (fAccess FileAccessControl) NewInitialized() (FileAccessControl, error) {
 
 	ePrefix := "FileAccessControl.NewInitialized() "
-	openCodes, err := FileOpenConfig{}.New(FOpenType.TypeNone(), FOpenMode.ModeNone())
+	openCodes, err := new(FileOpenConfig).New(
+		ePrefix,
+		FOpenType.TypeNone(),
+		FOpenMode.ModeNone())
 
 	if err != nil {
 		return FileAccessControl{},
@@ -39,9 +41,11 @@ func (fAccess FileAccessControl) NewInitialized() (FileAccessControl, error) {
 				"Error='%v' ", err.Error())
 	}
 
-	permissions, err := new(FilePermissionConfig).NewByComponents(
-		entryType,
-		"---------")
+	permissions, err := new(FilePermissionConfig).
+		NewByComponents(
+			entryType,
+			"---------",
+			ePrefix)
 
 	if err != nil {
 		return FileAccessControl{},
@@ -78,7 +82,7 @@ func (fAccess FileAccessControl) New(
 				"Error='%v' ", err.Error())
 	}
 
-	err = permissions.IsValid()
+	err = permissions.IsValid(ePrefix)
 
 	if err != nil {
 		return FileAccessControl{},
@@ -104,13 +108,17 @@ func (fAccess FileAccessControl) NewReadWriteAccess() (FileAccessControl, error)
 	ePrefix := "FileAccessControl.NewReadWriteAccess() "
 
 	fileOpenCfg, err :=
-		FileOpenConfig{}.New(FOpenType.TypeReadWrite(), FOpenMode.ModeNone())
+		new(FileOpenConfig).
+			New(ePrefix,
+				FOpenType.TypeReadWrite(),
+				FOpenMode.ModeNone())
 
 	if err != nil {
 		return FileAccessControl{}, fmt.Errorf(ePrefix+"%v\n", err.Error())
 	}
 
-	filePermCfg, err := new(FilePermissionConfig).New("-rw-rw-rw-")
+	filePermCfg, err := new(FilePermissionConfig).
+		New("-rw-rw-rw-", ePrefix)
 
 	if err != nil {
 		return FileAccessControl{}, fmt.Errorf(ePrefix+"%v\n", err.Error())
@@ -132,7 +140,8 @@ func (fAccess FileAccessControl) NewReadWriteCreateTruncateAccess() (FileAccessC
 	ePrefix := "FileAccessControl.NewReadWriteCreateTruncateAccess() "
 
 	//  OpenFile(name, O_RDWR|O_CREATE|O_TRUNC, 0666)
-	fOpenCfg, err := FileOpenConfig{}.New(
+	fOpenCfg, err := new(FileOpenConfig).New(
+		ePrefix,
 		FOpenType.TypeReadWrite(),
 		FOpenMode.ModeCreate(),
 		FOpenMode.ModeTruncate())
@@ -141,7 +150,8 @@ func (fAccess FileAccessControl) NewReadWriteCreateTruncateAccess() (FileAccessC
 		return FileAccessControl{}, fmt.Errorf(ePrefix+"%v\n", err.Error())
 	}
 
-	fPermCfg, err := new(FilePermissionConfig).New("-rw-rw-rw-")
+	fPermCfg, err := new(FilePermissionConfig).
+		New("-rw-rw-rw-", ePrefix)
 
 	if err != nil {
 		return FileAccessControl{}, fmt.Errorf(ePrefix+"%v\n", err.Error())
@@ -162,13 +172,17 @@ func (fAccess FileAccessControl) NewReadOnlyAccess() (FileAccessControl, error) 
 
 	ePrefix := "FileAccessControl.NewReadOnlyAccess() "
 
-	fileOpenCfg, err := FileOpenConfig{}.New(FOpenType.TypeReadOnly(), FOpenMode.ModeNone())
+	fileOpenCfg, err := new(FileOpenConfig).
+		New(ePrefix,
+			FOpenType.TypeReadOnly(),
+			FOpenMode.ModeNone())
 
 	if err != nil {
 		return FileAccessControl{}, fmt.Errorf(ePrefix+"%v\n", err.Error())
 	}
 
-	filePermCfg, err := FilePermissionConfig{}.New("-r--r--r--")
+	filePermCfg, err := new(FilePermissionConfig).
+		New("-r--r--r--", ePrefix)
 
 	if err != nil {
 		return FileAccessControl{}, fmt.Errorf(ePrefix+"%v\n", err.Error())
@@ -190,13 +204,17 @@ func (fAccess FileAccessControl) NewWriteOnlyAccess() (FileAccessControl, error)
 	ePrefix := "FileAccessControl.NewWriteOnlyAccess() "
 
 	fileOpenCfg, err :=
-		FileOpenConfig{}.New(FOpenType.TypeWriteOnly(), FOpenMode.ModeNone())
+		new(FileOpenConfig).
+			New(ePrefix,
+				FOpenType.TypeWriteOnly(),
+				FOpenMode.ModeNone())
 
 	if err != nil {
 		return FileAccessControl{}, fmt.Errorf(ePrefix+"%v\n", err.Error())
 	}
 
-	filePermCfg, err := FilePermissionConfig{}.New("--w--w--w-")
+	filePermCfg, err := new(FilePermissionConfig).
+		New("--w--w--w-", ePrefix)
 
 	if err != nil {
 		return FileAccessControl{}, fmt.Errorf(ePrefix+"%v\n", err.Error())
@@ -217,13 +235,17 @@ func (fAccess FileAccessControl) NewWriteOnlyAppendAccess() (FileAccessControl, 
 
 	ePrefix := "FileAccessControl.NewWriteOnlyAccess() "
 
-	fileOpenCfg, err := FileOpenConfig{}.New(FOpenType.TypeWriteOnly(), FOpenMode.ModeAppend())
+	fileOpenCfg, err := new(FileOpenConfig).
+		New(ePrefix,
+			FOpenType.TypeWriteOnly(),
+			FOpenMode.ModeAppend())
 
 	if err != nil {
 		return FileAccessControl{}, fmt.Errorf(ePrefix+"%v\n", err.Error())
 	}
 
-	filePermCfg, err := FilePermissionConfig{}.New("--w--w--w-")
+	filePermCfg, err := new(FilePermissionConfig).
+		New("--w--w--w-", ePrefix)
 
 	if err != nil {
 		return FileAccessControl{}, fmt.Errorf(ePrefix+"%v\n", err.Error())
@@ -248,13 +270,17 @@ func (fAccess FileAccessControl) NewWriteOnlyTruncateAccess() (FileAccessControl
 	ePrefix := "FileAccessControl.NewWriteOnlyTruncateAccess() "
 
 	fileOpenCfg, err :=
-		FileOpenConfig{}.New(FOpenType.TypeWriteOnly(), FOpenMode.ModeTruncate())
+		new(FileOpenConfig).New(
+			ePrefix,
+			FOpenType.TypeWriteOnly(),
+			FOpenMode.ModeTruncate())
 
 	if err != nil {
 		return FileAccessControl{}, fmt.Errorf(ePrefix+"%v\n", err.Error())
 	}
 
-	filePermCfg, err := FilePermissionConfig{}.New("--w--w--w-")
+	filePermCfg, err := new(FilePermissionConfig).
+		New("--w--w--w-", ePrefix)
 
 	if err != nil {
 		return FileAccessControl{}, fmt.Errorf(ePrefix+"%v\n", err.Error())
@@ -358,7 +384,8 @@ func (fAccess *FileAccessControl) GetCompositePermissionMode() (os.FileMode, err
 		return os.FileMode(9999), fmt.Errorf(ePrefix+"%v", err.Error())
 	}
 
-	permissionCode, err := fAccess.permissions.GetCompositePermissionMode()
+	permissionCode, err := fAccess.permissions.
+		GetCompositePermissionMode(ePrefix)
 
 	if err != nil {
 		return os.FileMode(9999), fmt.Errorf(ePrefix+"%v", err.Error())
@@ -384,7 +411,18 @@ func (fAccess *FileAccessControl) GetCompositePermissionModeText() string {
 		return ePrefix + "Current File Access Control Instance is INVALID! " + err.Error()
 	}
 
-	return fAccess.permissions.GetPermissionFileModeValueText()
+	var permissionModeText string
+
+	permissionModeText,
+		err = fAccess.permissions.
+		GetPermissionFileModeValueText(ePrefix)
+
+	if err != nil {
+		permissionModeText = ePrefix + "\n" +
+			err.Error()
+	}
+
+	return permissionModeText
 }
 
 // GetFileOpenAndPermissionCodes - Returns both the complete File Open Code
@@ -405,7 +443,8 @@ func (fAccess *FileAccessControl) GetFileOpenAndPermissionCodes() (int, os.FileM
 		return -1, os.FileMode(9999), fmt.Errorf(ePrefix+"%v", err.Error())
 	}
 
-	permissionCode, err := fAccess.permissions.GetCompositePermissionMode()
+	permissionCode, err := fAccess.permissions.
+		GetCompositePermissionMode(ePrefix)
 
 	if err != nil {
 		return -1, os.FileMode(9999), fmt.Errorf(ePrefix+"%v", err.Error())
@@ -471,7 +510,8 @@ func (fAccess *FileAccessControl) GetFilePermissionTextCode() (string, error) {
 
 	ePrefix := "FileAccessControl.GetFilePermissionTextCode() "
 
-	permTxtCode, err := fAccess.permissions.GetPermissionTextCode()
+	permTxtCode, err := fAccess.permissions.
+		GetPermissionTextCode(ePrefix)
 
 	if err != nil {
 		return "", fmt.Errorf(ePrefix+"%v\n", err.Error())
@@ -488,8 +528,9 @@ func (fAccess *FileAccessControl) IsValid() error {
 	ePrefix := "FileAccessControl.IsValid() "
 
 	if !fAccess.isInitialized {
-		return errors.New(ePrefix +
-			"Error: The current FileAccessControl Instance has NOT been initialized!")
+		return fmt.Errorf("%v\n"+
+			"Error: The current FileAccessControl Instance has NOT been initialized!\n",
+			ePrefix)
 	}
 
 	sb := strings.Builder{}
@@ -501,7 +542,7 @@ func (fAccess *FileAccessControl) IsValid() error {
 		sb.WriteString(fmt.Sprintf(ePrefix+"File Open codes INVALID! %v\n\n", err.Error()))
 	}
 
-	err = fAccess.permissions.IsValid()
+	err = fAccess.permissions.IsValid(ePrefix)
 
 	if err != nil {
 		sb.WriteString(fmt.Sprintf(ePrefix+"File Permission codes INVALID! %v \n", err.Error()))
@@ -528,7 +569,7 @@ func (fAccess *FileAccessControl) SetFileOpenCodes(fileOpenCodes FileOpenConfig)
 
 	fAccess.fileOpenCodes = fileOpenCodes.CopyOut()
 
-	err = fAccess.permissions.IsValid()
+	err = fAccess.permissions.IsValid(ePrefix)
 
 	if err == nil {
 
@@ -546,7 +587,8 @@ func (fAccess *FileAccessControl) SetFilePermissionCodes(
 
 	ePrefix := "FileAccessControl.SetFilePermissionCodes() "
 
-	err := filePermissions.IsValid()
+	err := filePermissions.IsValid(
+		ePrefix)
 
 	if err != nil {
 		return fmt.Errorf(ePrefix+"Error: 'filePermissions' INVALID! - %v",
