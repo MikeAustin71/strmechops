@@ -387,7 +387,7 @@ func (fOpenCfg *FileOpenConfig) IsValid() error {
 //	                 Type is set equal to 'nil'. If an error condition is encountered,
 //	                 this method will return an error Type which encapsulates an
 //	                 appropriate error message.
-func (fOpenCfg FileOpenConfig) New(fOpenType FileOpenType, fOpenModes ...FileOpenMode) (FileOpenConfig, error) {
+func (fOpenCfg *FileOpenConfig) New(fOpenType FileOpenType, fOpenModes ...FileOpenMode) (FileOpenConfig, error) {
 
 	ePrefix := "FileOpenConfig.New() "
 

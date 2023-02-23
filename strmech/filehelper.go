@@ -9573,7 +9573,7 @@ func (fh *FileHelper) OpenDirectory(
 //		included in the 'errpref' software package:
 //			"github.com/MikeAustin71/errpref".
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
 // Return Values:
 //
@@ -9642,51 +9642,159 @@ func (fh *FileHelper) OpenFile(
 		ePrefix)
 }
 
-// OpenFileReadOnly - Opens the designated path file name for reading
-// only.
+// OpenFileReadOnly
 //
-// If successful, this method returns a pointer of type *os.File which
-// can only be used for reading reading content from the subject file.
-// This file pointer is configured for 'Read-Only' operations. You may
-// not write to the subject file using this pointer.
+// Opens the designated path file name for reading only.
 //
-// If the designated file ('pathFileName') does NOT exist, an error
-// will be triggered.
+// If successful, this method returns a pointer of type
+// *os.File which can only be used for reading content
+// from the subject file.
 //
-// ------------------------------------------------------------------------
+// This returned file pointer is configured for
+// 'Read-Only' operations. You may not write to the
+// subject file using this pointer.
 //
-// Input Parameter:
+// If the designated file ('pathFileName') does NOT
+// exist, an error will be returned.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	The calling method is responsible for calling
+//	"Close()" on the os.File pointer returned by this
+//	method.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
 //
 //	pathFileName        string - A string containing the path and file name
 //	                             of the file which will be opened in the
 //	                             'Read-Only' mode. If the path or file does
 //	                             NOT exist, this method will trigger an error.
 //
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
 // ------------------------------------------------------------------------
 //
 // Return Values:
 //
-//	*os.File        - If successful, this method returns an os.File pointer
-//	                  to the file designated by input parameter 'pathFileName'.
-//	                  This file pointer can subsequently be used for reading
-//	                  content from the subject file. It may NOT be used for
-//	                  writing content to the subject file.
+//	*os.File
 //
-//	                  If this method fails, the *os.File return value is 'nil'.
+//		If successful, this method returns an os.File
+//		pointer to the file designated by input parameter
+//		'pathFileName'. This file pointer can
+//		subsequently be used for reading content from the
+//		subject file. It may NOT be used for writing
+//		content to the subject file.
 //
-//	                  Note: The caller is responsible for calling "Close()" on this
-//	                  os.File pointer.
+//		If this method fails, the *os.File return value
+//		is 'nil'.
 //
+//		Note:
 //
-//	error           - If the method completes successfully, this return value
-//	                  is 'nil'. If the method fails, the error type returned
-//	                  is populated with an appropriate error message.
-func (fh *FileHelper) OpenFileReadOnly(pathFileName string) (filePtr *os.File, err error) {
+//		The caller is responsible for calling "Close()"
+//		on this os.File pointer.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fh *FileHelper) OpenFileReadOnly(
+	pathFileName string,
+	errorPrefix interface{}) (
+	filePtr *os.File,
+	err error) {
 
-	ePrefix := "FileHelper.OpenFileReadOnly() "
+	if fh.lock == nil {
+		fh.lock = new(sync.Mutex)
+	}
+
+	fh.lock.Lock()
+
+	defer fh.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
 
 	filePtr = nil
-	err = nil
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileHelper."+
+			"OpenFileReadOnly()",
+		"")
+
+	if err != nil {
+		return filePtr, err
+	}
+
 	var err2 error
 	var pathFileNameDoesExist bool
 	var fInfoPlus FileInfoPlus
@@ -9705,45 +9813,59 @@ func (fh *FileHelper) OpenFileReadOnly(pathFileName string) (filePtr *os.File, e
 	}
 
 	if !pathFileNameDoesExist {
-		err = fmt.Errorf(ePrefix+
+
+		err = fmt.Errorf("%v\n"+
 			"ERROR: The input parameter 'pathFileName' DOES NOT EXIST!\n"+
-			"pathFileName='%v'\n", pathFileName)
+			"pathFileName='%v'\n",
+			ePrefix.String(),
+			pathFileName)
+
 		return filePtr, err
 	}
 
 	if fInfoPlus.IsDir() {
-		err = fmt.Errorf(ePrefix+
-			"ERROR: The input parameter 'pathFileName' is a 'Directory' "+
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: The input parameter 'pathFileName' is a 'Directory'\n"+
 			"and NOT a path file name.\n"+
 			"'pathFileName' is therefore INVALID!\n"+
-			"pathFileName='%v'\n", pathFileName)
+			"pathFileName='%v'\n",
+			ePrefix.String(),
+			pathFileName)
 
 		return filePtr, err
 	}
 
-	fileOpenCfg, err2 := FileOpenConfig{}.New(FOpenType.TypeReadOnly(),
+	fileOpenCfg, err2 := new(FileOpenConfig).New(FOpenType.TypeReadOnly(),
 		FOpenMode.ModeNone())
 
 	if err2 != nil {
 		err =
-			fmt.Errorf(ePrefix+
+			fmt.Errorf("%v\n"+
 				"Error returned by FileOpenConfig{}.New(FOpenType.TypeReadOnly(),"+
 				"FOpenMode.ModeNone()).\n"+
 				"Error='%v'\n",
+				ePrefix,
 				err2.Error())
+
 		return filePtr, err
 	}
 
 	fOpenCode, err2 := fileOpenCfg.GetCompositeFileOpenCode()
 
 	if err2 != nil {
-		err = fmt.Errorf(ePrefix+"Error Creating File Open Code.\n"+
-			"Error=%v\n",
+		err = fmt.Errorf("%v\n"+
+			"Error Creating File Open Code.\n"+
+			"Error=\n%v\n",
+			ePrefix,
 			err2.Error())
+
 		return filePtr, err
 	}
 
-	fPermCfg, err2 := FilePermissionConfig{}.New("-r--r--r--")
+	fPermCfg, err2 := new(FilePermissionConfig).New(
+		"-r--r--r--",
+		ePrefix)
 
 	if err2 != nil {
 		err =
@@ -9873,8 +9995,10 @@ func (fh *FileHelper) OpenFileReadWrite(
 	if !pathFileNameDoesExist {
 		// pathFileName does NOT exist
 
-		fileOpenCfg, err = FileOpenConfig{}.New(FOpenType.TypeReadWrite(),
-			FOpenMode.ModeCreate(), FOpenMode.ModeAppend())
+		fileOpenCfg, err = new(FileOpenConfig).New(
+			FOpenType.TypeReadWrite(),
+			FOpenMode.ModeCreate(),
+			FOpenMode.ModeAppend())
 
 		if err != nil {
 			return nil,
@@ -9897,7 +10021,8 @@ func (fh *FileHelper) OpenFileReadWrite(
 
 		if truncateFile {
 			// truncateFile == true
-			fileOpenCfg, err = FileOpenConfig{}.New(FOpenType.TypeReadWrite(),
+			fileOpenCfg, err = new(FileOpenConfig).New(
+				FOpenType.TypeReadWrite(),
 				FOpenMode.ModeTruncate())
 
 			if err != nil {
@@ -9911,7 +10036,8 @@ func (fh *FileHelper) OpenFileReadWrite(
 
 		} else {
 			// truncateFile == false
-			fileOpenCfg, err = FileOpenConfig{}.New(FOpenType.TypeReadWrite(),
+			fileOpenCfg, err = new(FileOpenConfig).New(
+				FOpenType.TypeReadWrite(),
 				FOpenMode.ModeAppend())
 
 			if err != nil {
@@ -9932,7 +10058,9 @@ func (fh *FileHelper) OpenFileReadWrite(
 			fmt.Errorf(ePrefix+"%v", err.Error())
 	}
 
-	fPermCfg, err := FilePermissionConfig{}.New("-rwxrwxrwx")
+	fPermCfg, err := new(FilePermissionConfig).New(
+		"-rwxrwxrwx",
+		ePrefix)
 
 	if err != nil {
 		return nil,
@@ -9941,7 +10069,7 @@ func (fh *FileHelper) OpenFileReadWrite(
 				"Error='%v'\n", err.Error())
 	}
 
-	fileMode, err := fPermCfg.GetCompositePermissionMode()
+	fileMode, err := fPermCfg.GetCompositePermissionMode(ePrefix)
 
 	if err != nil {
 		return nil, fmt.Errorf(ePrefix+"%v\n", err.Error())
@@ -10050,8 +10178,10 @@ func (fh *FileHelper) OpenFileWriteOnly(
 	if !pathFileNameDoesExist {
 		// The pathFileName DOES NOT EXIST!
 
-		fileOpenCfg, err = FileOpenConfig{}.New(FOpenType.TypeWriteOnly(),
-			FOpenMode.ModeCreate(), FOpenMode.ModeAppend())
+		fileOpenCfg, err = new(FileOpenConfig).New(
+			FOpenType.TypeWriteOnly(),
+			FOpenMode.ModeCreate(),
+			FOpenMode.ModeAppend())
 
 		if err != nil {
 			return nil,
@@ -10073,7 +10203,8 @@ func (fh *FileHelper) OpenFileWriteOnly(
 
 		if truncateFile {
 			// truncateFile == true; Set Mode 'Truncate'
-			fileOpenCfg, err = FileOpenConfig{}.New(FOpenType.TypeWriteOnly(),
+			fileOpenCfg, err = new(FileOpenConfig).New(
+				FOpenType.TypeWriteOnly(),
 				FOpenMode.ModeTruncate())
 
 			if err != nil {
@@ -10086,7 +10217,7 @@ func (fh *FileHelper) OpenFileWriteOnly(
 
 		} else {
 			// truncateFile == false; Set Mode 'Append'
-			fileOpenCfg, err = FileOpenConfig{}.New(FOpenType.TypeWriteOnly(),
+			fileOpenCfg, err = new(FileOpenConfig).New(FOpenType.TypeWriteOnly(),
 				FOpenMode.ModeAppend())
 
 			if err != nil {
@@ -10107,7 +10238,9 @@ func (fh *FileHelper) OpenFileWriteOnly(
 				"Error creating File Open Code.\nError=%v\n", err.Error())
 	}
 
-	fPermCfg, err := FilePermissionConfig{}.New("--wx-wx-wx")
+	fPermCfg, err := new(FilePermissionConfig).New(
+		"--wx-wx-wx",
+		ePrefix)
 
 	if err != nil {
 		return nil,
@@ -10116,7 +10249,8 @@ func (fh *FileHelper) OpenFileWriteOnly(
 				"Error='%v' \n", err.Error())
 	}
 
-	fileMode, err := fPermCfg.GetCompositePermissionMode()
+	fileMode, err := fPermCfg.GetCompositePermissionMode(
+		ePrefix)
 
 	if err != nil {
 		return nil, fmt.Errorf(ePrefix+
