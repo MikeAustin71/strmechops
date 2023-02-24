@@ -8145,54 +8145,6 @@ func (fh *FileHelper) JoinPathsAdjustSeparators(
 		joinPathsAdjustSeparators(p1, p2)
 }
 
-// JoinPaths
-//
-// Correctly joins 2-paths. Like the method
-// JoinPathsAdjustSeparators() this method also converts
-// path separators to the correct path separators for
-// the current operating system.
-//
-// ----------------------------------------------------------------
-//
-// # Input Parameters
-//
-//	p1							string
-//
-//		The first of two path strings. The second path
-//		string ('p2') will be joined to the end of this
-//		path string ('p1').
-//
-//	p2							string
-//
-//		The second of two path strings. This path string
-//		will be joined to the end of the first path
-//		string ('p1').
-//
-// ----------------------------------------------------------------
-//
-// # Return Values
-//
-//	string
-//
-//		This string parameter will return the joined
-//		file paths ('p1 + p2').
-func (fh *FileHelper) JoinPaths(
-	p1 string,
-	p2 string) string {
-
-	if fh.lock == nil {
-		fh.lock = new(sync.Mutex)
-	}
-
-	fh.lock.Lock()
-
-	defer fh.lock.Unlock()
-
-	return new(fileHelperMolecule).
-		joinPathsAdjustSeparators(p1, p2)
-
-}
-
 // MakeAbsolutePath
 //
 // Receives a relative path or any path string and
