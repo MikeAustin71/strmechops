@@ -4494,3 +4494,256 @@ func (fHelperNanobot *fileHelperNanobot) makeDirAllPerm(
 
 	return nil
 }
+
+// openFileReadOnly
+//
+// Opens the designated path file name for reading only.
+//
+// If successful, this method returns a pointer of type
+// *os.File which can only be used for reading content
+// from the subject file.
+//
+// This returned file pointer is configured for
+// 'Read-Only' operations. You may not write to the
+// subject file using this pointer.
+//
+// If the designated file ('pathFileName') does NOT
+// exist, an error will be returned.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	The calling method is responsible for calling
+//	"Close()" on the os.File pointer returned by this
+//	method.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	pathFileName        string
+//
+//		A string containing the path and file name of the
+//		file which will be opened in the 'Read-Only'
+//		mode. If the path or file does NOT exist, this
+//		method will return an error.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ------------------------------------------------------------------------
+//
+// Return Values:
+//
+//	*os.File
+//
+//		If successful, this method  opens the file
+//		designated by input parameter 'pathFileName' and
+//		returns an os.File pointer to that file. This
+//		file pointer can subsequently be used for reading
+//		content from the subject file. It may NOT be used
+//		for writing content to the subject file.
+//
+//		If this method fails, the *os.File return value
+//		is 'nil'.
+//
+//		Note:
+//
+//		The caller is responsible for calling "Close()"
+//		on this os.File pointer.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fHelperNanobot *fileHelperNanobot) openFileReadOnly(
+	pathFileName string,
+	errPrefDto *ePref.ErrPrefixDto) (
+	filePtr *os.File,
+	err error) {
+
+	if fHelperNanobot.lock == nil {
+		fHelperNanobot.lock = new(sync.Mutex)
+	}
+
+	fHelperNanobot.lock.Lock()
+
+	defer fHelperNanobot.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	filePtr = nil
+
+	funcName := "fileHelperNanobot.openFileReadOnly()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
+		"")
+
+	if err != nil {
+		return filePtr, err
+	}
+
+	var err2 error
+	var pathFileNameDoesExist bool
+	var fInfoPlus FileInfoPlus
+
+	pathFileName,
+		pathFileNameDoesExist,
+		fInfoPlus,
+		err = new(fileHelperMolecule).doesPathFileExist(
+		pathFileName,
+		PreProcPathCode.AbsolutePath(), // Convert to Absolute Path
+		ePrefix,
+		"pathFileName")
+
+	if err != nil {
+		return filePtr, err
+	}
+
+	if !pathFileNameDoesExist {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: The input parameter 'pathFileName' DOES NOT EXIST!\n"+
+			"pathFileName='%v'\n",
+			ePrefix.String(),
+			pathFileName)
+
+		return filePtr, err
+	}
+
+	if fInfoPlus.IsDir() {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: The input parameter 'pathFileName' is a 'Directory'\n"+
+			"and NOT a path file name.\n"+
+			"'pathFileName' is therefore INVALID!\n"+
+			"pathFileName='%v'\n",
+			ePrefix.String(),
+			pathFileName)
+
+		return filePtr, err
+	}
+
+	fileOpenCfg, err2 := new(FileOpenConfig).
+		New(ePrefix,
+			FOpenType.TypeReadOnly(),
+			FOpenMode.ModeNone())
+
+	if err2 != nil {
+		err =
+			fmt.Errorf("%v\n"+
+				"Error returned by FileOpenConfig.New("+
+				"FOpenType.TypeReadOnly(),"+
+				"FOpenMode.ModeNone()).\n"+
+				"Error=\n%v\n",
+				ePrefix.String(),
+				err2.Error())
+
+		return filePtr, err
+	}
+
+	fOpenCode, err2 := fileOpenCfg.GetCompositeFileOpenCode()
+
+	if err2 != nil {
+		err = fmt.Errorf("%v\n"+
+			"Error Creating File Open Code.\n"+
+			"fileOpenCfg.GetCompositeFileOpenCode()\n"+
+			"Error=\n%v\n",
+			ePrefix.String(),
+			err2.Error())
+
+		return filePtr, err
+	}
+
+	fPermCfg, err2 := new(FilePermissionConfig).
+		New(
+			"-r--r--r--",
+			ePrefix)
+
+	if err2 != nil {
+
+		err =
+			fmt.Errorf("%v\n"+
+				"Error returned by FilePermissionConfig."+
+				"New(\"-r--r--r--\")\n"+
+				"Error=\n%v\n",
+				funcName,
+				err2.Error())
+
+		return filePtr, err
+	}
+
+	var fileMode os.FileMode
+
+	fileMode, err2 = fPermCfg.GetCompositePermissionMode(
+		ePrefix.XCpy("fPermCfg"))
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error Creating File Mode Code.\n"+
+			"fPermCfg.GetCompositePermissionMode()\nn"+
+			"Error=\n%v\n",
+			funcName,
+			err2.Error())
+
+		return filePtr, err
+	}
+
+	filePtr, err2 = os.OpenFile(
+		pathFileName,
+		fOpenCode,
+		fileMode)
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"File Open Error: os.OpenFile()\n"+
+			"pathFileName= '%v'"+
+			"fOpenCode= '%v'\n"+
+			"fileMode= '%v'\n"+
+			"Error=\n%v\n",
+			ePrefix.String(),
+			pathFileName,
+			fOpenCode,
+			fileMode,
+			err2.Error())
+
+		filePtr = nil
+
+		return filePtr, err
+	}
+
+	if filePtr == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: os.OpenFile() returned a 'nil' file pointer!\n",
+			ePrefix.String())
+	}
+
+	return filePtr, err
+}

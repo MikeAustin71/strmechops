@@ -9621,10 +9621,12 @@ func (fh *FileHelper) OpenFile(
 //
 // # Input Parameters
 //
-//	pathFileName        string - A string containing the path and file name
-//	                             of the file which will be opened in the
-//	                             'Read-Only' mode. If the path or file does
-//	                             NOT exist, this method will trigger an error.
+//	pathFileName        string
+//
+//		A string containing the path and file name of the
+//		file which will be opened in the 'Read-Only'
+//		mode. If the path or file does NOT exist, this
+//		method will return an error.
 //
 //	errorPrefix					interface{}
 //
@@ -9748,143 +9750,10 @@ func (fh *FileHelper) OpenFileReadOnly(
 		return filePtr, err
 	}
 
-	var err2 error
-	var pathFileNameDoesExist bool
-	var fInfoPlus FileInfoPlus
-
-	pathFileName,
-		pathFileNameDoesExist,
-		fInfoPlus,
-		err = new(fileHelperMolecule).doesPathFileExist(
+	filePtr,
+		err = new(fileHelperNanobot).openFileReadOnly(
 		pathFileName,
-		PreProcPathCode.AbsolutePath(), // Convert to Absolute Path
-		ePrefix,
-		"pathFileName")
-
-	if err != nil {
-		return filePtr, err
-	}
-
-	if !pathFileNameDoesExist {
-
-		err = fmt.Errorf("%v\n"+
-			"ERROR: The input parameter 'pathFileName' DOES NOT EXIST!\n"+
-			"pathFileName='%v'\n",
-			ePrefix.String(),
-			pathFileName)
-
-		return filePtr, err
-	}
-
-	if fInfoPlus.IsDir() {
-
-		err = fmt.Errorf("%v\n"+
-			"ERROR: The input parameter 'pathFileName' is a 'Directory'\n"+
-			"and NOT a path file name.\n"+
-			"'pathFileName' is therefore INVALID!\n"+
-			"pathFileName='%v'\n",
-			ePrefix.String(),
-			pathFileName)
-
-		return filePtr, err
-	}
-
-	fileOpenCfg, err2 := new(FileOpenConfig).
-		New(ePrefix,
-			FOpenType.TypeReadOnly(),
-			FOpenMode.ModeNone())
-
-	if err2 != nil {
-		err =
-			fmt.Errorf("%v\n"+
-				"Error returned by FileOpenConfig.New("+
-				"FOpenType.TypeReadOnly(),"+
-				"FOpenMode.ModeNone()).\n"+
-				"Error=\n%v\n",
-				ePrefix.String(),
-				err2.Error())
-
-		return filePtr, err
-	}
-
-	fOpenCode, err2 := fileOpenCfg.GetCompositeFileOpenCode()
-
-	if err2 != nil {
-		err = fmt.Errorf("%v\n"+
-			"Error Creating File Open Code.\n"+
-			"fileOpenCfg.GetCompositeFileOpenCode()\n"+
-			"Error=\n%v\n",
-			ePrefix.String(),
-			err2.Error())
-
-		return filePtr, err
-	}
-
-	fPermCfg, err2 := new(FilePermissionConfig).
-		New(
-			"-r--r--r--",
-			ePrefix)
-
-	if err2 != nil {
-
-		err =
-			fmt.Errorf("%v\n"+
-				"Error returned by FilePermissionConfig."+
-				"New(\"-r--r--r--\")\n"+
-				"Error=\n%v\n",
-				funcName,
-				err2.Error())
-
-		return filePtr, err
-	}
-
-	var fileMode os.FileMode
-
-	fileMode, err2 = fPermCfg.GetCompositePermissionMode(
-		ePrefix.XCpy("fPermCfg"))
-
-	if err2 != nil {
-
-		err = fmt.Errorf("%v\n"+
-			"Error Creating File Mode Code.\n"+
-			"fPermCfg.GetCompositePermissionMode()\nn"+
-			"Error=\n%v\n",
-			funcName,
-			err2.Error())
-
-		return filePtr, err
-	}
-
-	filePtr, err2 = os.OpenFile(
-		pathFileName,
-		fOpenCode,
-		fileMode)
-
-	if err2 != nil {
-
-		err = fmt.Errorf("%v\n"+
-			"File Open Error: os.OpenFile()\n"+
-			"pathFileName= '%v'"+
-			"fOpenCode= '%v'\n"+
-			"fileMode= '%v'\n"+
-			"Error=\n%v\n",
-			ePrefix.String(),
-			pathFileName,
-			fOpenCode,
-			fileMode,
-			err2.Error())
-
-		filePtr = nil
-
-		return filePtr, err
-	}
-
-	if filePtr == nil {
-
-		err = fmt.Errorf("%v\n"+
-			"ERROR: os.OpenFile() returned a 'nil' file pointer!\n",
-			ePrefix.String())
-	}
+		ePrefix)
 
 	return filePtr, err
 }
