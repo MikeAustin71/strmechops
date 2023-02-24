@@ -9758,193 +9758,188 @@ func (fh *FileHelper) OpenFileReadOnly(
 	return filePtr, err
 }
 
-// OpenFileReadWrite - Opens the file designated by input parameter
-// 'fileName' for 'Writing'. The actual permission code used to open
-// the file is 'Read/Write'.
+// OpenFileReadWrite
 //
-// If the method is successful, a pointer to the opened file is returned
-// along with an error value of 'nil'.
+// Opens the file designated by input parameter
+// 'fileName' for 'Writing'. The actual permission code
+// used to open the file is 'Read/Write'.
 //
-// If the file does not exist, this method will attempt to create it.
+// If the method is successful, a pointer to the opened
+// file is returned along with an error value of 'nil'.
 //
-// If the file path does not exist, an error will be triggered.
+// ----------------------------------------------------------------
 //
-// If the method completes successfully, the caller is responsible for
-// call "Close()" on the returned os.File pointer.
+// # IMPORTANT
 //
-// ------------------------------------------------------------------------
+//	(1)	If the file designated by input parameter
+//		'pathFileName' does NOT exist, this method will
+//		attempt to create it. However, if the path
+//		component of 'pathFileName' does not exist, an
+//		error will be returned.
 //
-// Input Parameter:
+//	(2)	If this method completes successfully, the caller
+//		is responsible for calling "Close()" on the
+//		returned os.File pointer.
 //
-//	pathFileName        string - A string containing the path and file name
-//	                             of the file which will be opened in the
-//	                             'Read/Write' mode. If the file does NOT
-//	                             exist, this method will attempt to create
-//	                             it. However, if the path component of
-//	                             'pathFileName' does not exist, an error
-//	                              will be returned.
+// ----------------------------------------------------------------
 //
-//	truncateFile          bool - If set to 'true' and the target file will
-//	                             be truncated to zero bytes in length before
-//	                             it is opened.
+// # Input Parameters
 //
-//	                             If set to 'false', the target file will be
-//	                             be opened in the 'Append' mode and any bytes
-//	                             written to the file will be appended to the
-//	                             end of the file. Under this scenario, the
-//	                             original file contents are preserved and newly
-//	                             written bytes are added to the end of the file.
+//	pathFileName				string
 //
-//	                             If the file designated by input parameter 'pathFileName'
-//	                             does not exist, this parameter ('truncateFile') is
-//	                             ignored and the new created file is initialized
-//	                             containing zero bytes.
+//		A string containing the path and file name of the
+//		file which will be opened in the 'Read/Write'
+//		mode.
 //
-// ------------------------------------------------------------------------
+//		If this file does NOT exist, this method will
+//		attempt to create it. However, if the path
+//		component of 'pathFileName' does not exist, an
+//		error will be returned.
 //
-// Return Values:
+//	truncateFile				bool
 //
-//	*os.File        - If successful, this method returns an os.File pointer
-//	                  to the file opened for 'Read/Write' operations. This
-//	                  file pointer can be used subsequently for writing
-//	                  content to, or reading content from, the subject file.
+//		If set to 'true' and the target file will be
+//		truncated to zero bytes in length before it is
+//		opened.
 //
-//	                  If this method fails, this return value is 'nil'.
+//		If set to 'false', the target file will be opened
+//		in the 'Append' mode and any bytes written to the
+//		file will be appended to the end of the file.
+//		Under this scenario, the original file contents
+//		are preserved and newly written bytes are added
+//		to the end of the file.
 //
-//	                  Note: The caller is responsible for calling "Close()" on this
-//	                  os.File pointer.
+//		If the file designated by input parameter
+//		'pathFileName' does not exist, this parameter
+//		('truncateFile') is ignored and the new created
+//		file is initialized containing zero bytes.
 //
+//	errorPrefix					interface{}
 //
-//	error           - If the method completes successfully, this return value
-//	                  is 'nil'. If the method fails, the error type returned
-//	                  is populated with an appropriate error message.
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	*os.File
+//
+//		If successful, this method returns an os.File
+//		pointer to the file opened for 'Read/Write'
+//		operations. This file pointer can be used
+//		subsequently for writing content to, or reading
+//		content from, the subject file.
+//
+//		If this method fails, this pointer to os.File is
+//		set to 'nil'.
+//
+//		Note:
+//
+//		The caller is responsible for calling "Close()"
+//		on this os.File pointer.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
 func (fh *FileHelper) OpenFileReadWrite(
 	pathFileName string,
-	truncateFile bool) (*os.File, error) {
+	truncateFile bool,
+	errorPrefix interface{}) (
+	*os.File,
+	error) {
 
-	ePrefix := "FileHelper.OpenFileReadWrite() "
+	if fh.lock == nil {
+		fh.lock = new(sync.Mutex)
+	}
+
+	fh.lock.Lock()
+
+	defer fh.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
 
 	var fPtr *os.File
+
 	var err error
-	var pathFileNameDoesExist bool
-	var fInfoPlus FileInfoPlus
 
-	pathFileName,
-		pathFileNameDoesExist,
-		fInfoPlus,
-		err = new(fileHelperMolecule).doesPathFileExist(
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileHelper.OpenFileReadWrite()",
+		"")
+
+	if err != nil {
+		return fPtr, err
+	}
+
+	return new(fileHelperNanobot).openFileReadWrite(
 		pathFileName,
-		PreProcPathCode.AbsolutePath(), // Convert to Absolute Path
-		ePrefix,
-		"pathFileName")
-
-	if err != nil {
-		return nil, err
-	}
-
-	var fileOpenCfg FileOpenConfig
-
-	if !pathFileNameDoesExist {
-		// pathFileName does NOT exist
-
-		fileOpenCfg, err = new(FileOpenConfig).New(
-			ePrefix,
-			FOpenType.TypeReadWrite(),
-			FOpenMode.ModeCreate(),
-			FOpenMode.ModeAppend())
-
-		if err != nil {
-			return nil,
-				fmt.Errorf(ePrefix+
-					"Error returned by FileOpenConfig{}.New(FOpenType.TypeWriteOnly(),"+
-					"FOpenMode.ModeCreate(), FOpenMode.ModeAppend()).\n"+
-					"Error='%v'\n",
-					err.Error())
-		}
-
-	} else {
-		// pathFileName does exist
-
-		if fInfoPlus.IsDir() {
-			return nil,
-				fmt.Errorf(ePrefix+"ERROR: Input parameter 'pathFileName' is "+
-					"a 'Directory' NOT a file.\n"+
-					"pathFileName='%v'\n", pathFileName)
-		}
-
-		if truncateFile {
-			// truncateFile == true
-			fileOpenCfg, err = new(FileOpenConfig).New(
-				ePrefix,
-				FOpenType.TypeReadWrite(),
-				FOpenMode.ModeTruncate())
-
-			if err != nil {
-				return nil,
-					fmt.Errorf(ePrefix+
-						"Error returned by FileOpenConfig{}.New(FOpenType.TypeReadWrite(),"+
-						"FOpenMode.ModeTruncate()).\n"+
-						"Error='%v'\n",
-						err.Error())
-			}
-
-		} else {
-			// truncateFile == false
-			fileOpenCfg, err = new(FileOpenConfig).New(
-				ePrefix,
-				FOpenType.TypeReadWrite(),
-				FOpenMode.ModeAppend())
-
-			if err != nil {
-				return nil,
-					fmt.Errorf(ePrefix+
-						"Error returned by FileOpenConfig{}.New(FOpenType.TypeReadWrite(),"+
-						"FOpenMode.ModeAppend()).\n"+
-						"Error='%v'\n",
-						err.Error())
-			}
-		}
-	}
-
-	fOpenCode, err := fileOpenCfg.GetCompositeFileOpenCode()
-
-	if err != nil {
-		return nil,
-			fmt.Errorf(ePrefix+"%v", err.Error())
-	}
-
-	fPermCfg, err := new(FilePermissionConfig).New(
-		"-rwxrwxrwx",
+		truncateFile,
 		ePrefix)
-
-	if err != nil {
-		return nil,
-			fmt.Errorf(ePrefix+
-				"Error returned by FilePermissionConfig{}.New(\"-rwxrwxrwx\")\n"+
-				"Error='%v'\n", err.Error())
-	}
-
-	fileMode, err := fPermCfg.GetCompositePermissionMode(ePrefix)
-
-	if err != nil {
-		return nil, fmt.Errorf(ePrefix+"%v\n", err.Error())
-	}
-
-	fPtr, err = os.OpenFile(pathFileName, fOpenCode, fileMode)
-
-	if err != nil {
-		return nil, fmt.Errorf(ePrefix+"File Open Error\n"+
-			"pathFileName='%v'\nError='%v'\n",
-			pathFileName, err.Error())
-	}
-
-	if fPtr == nil {
-		return nil, fmt.Errorf(ePrefix+
-			"ERROR: os.OpenFile() returned a 'nil' file pointer!\n"+
-			"pathFileName='%v'\n", pathFileName)
-	}
-
-	return fPtr, nil
 }
 
 // OpenFileWriteOnly - Opens a file for 'Write-Only' operations. Input parameter
