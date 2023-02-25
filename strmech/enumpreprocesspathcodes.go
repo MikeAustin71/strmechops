@@ -6,30 +6,43 @@ import (
 	"sync"
 )
 
+// Lock this mutex before accessing any of these maps.
+var preProcessPathCodeMapsLock sync.Mutex
+
 var mPreProcessPathStringToCode = map[string]PreProcessPathCode{
-	"None":          PreProcessPathCode(0).None(),
-	"PathSeparator": PreProcessPathCode(0).PathSeparator(),
-	"AbsolutePath":  PreProcessPathCode(0).AbsolutePath(),
+	"None":          PreProcessPathCode(0),
+	"PathSeparator": PreProcessPathCode(1),
+	"AbsolutePath":  PreProcessPathCode(2),
 }
 
 var mPreProcessPathLwrCaseStringToCode = map[string]PreProcessPathCode{
-	"none":          PreProcessPathCode(0).None(),
-	"pathseparator": PreProcessPathCode(0).PathSeparator(),
-	"absolutepath":  PreProcessPathCode(0).AbsolutePath(),
+	"none":          PreProcessPathCode(0),
+	"pathseparator": PreProcessPathCode(1),
+	"absolutepath":  PreProcessPathCode(2),
 }
 
 var mPreProcessPathCodeToString = map[PreProcessPathCode]string{
-	PreProcessPathCode(0).None():          "None",
-	PreProcessPathCode(0).PathSeparator(): "PathSeparator",
-	PreProcessPathCode(0).AbsolutePath():  "AbsolutePath",
+	PreProcessPathCode(0): "None",
+	PreProcessPathCode(1): "PathSeparator",
+	PreProcessPathCode(2): "AbsolutePath",
+}
+
+var mValidPreProcessPathCodeToString = map[PreProcessPathCode]string{
+	PreProcessPathCode(1): "PathSeparator",
+	PreProcessPathCode(2): "AbsolutePath",
 }
 
 type PreProcessPathCode int
 
-var preProcessPathCodelock *sync.Mutex
+var preProcessPathCodeLock sync.Mutex
 
 // None - Take No Action
 func (preProcPathCde PreProcessPathCode) None() PreProcessPathCode {
+
+	preProcessPathCodeLock.Lock()
+
+	defer preProcessPathCodeLock.Unlock()
+
 	return PreProcessPathCode(0)
 }
 
@@ -37,9 +50,9 @@ func (preProcPathCde PreProcessPathCode) None() PreProcessPathCode {
 // host operating system.
 func (preProcPathCde PreProcessPathCode) PathSeparator() PreProcessPathCode {
 
-	preProcessPathCodelock.Lock()
+	preProcessPathCodeLock.Lock()
 
-	defer preProcessPathCodelock.Unlock()
+	defer preProcessPathCodeLock.Unlock()
 
 	return PreProcessPathCode(1)
 }
@@ -47,11 +60,60 @@ func (preProcPathCde PreProcessPathCode) PathSeparator() PreProcessPathCode {
 // AbsolutePath - Convert path string to an absolute path.
 func (preProcPathCde PreProcessPathCode) AbsolutePath() PreProcessPathCode {
 
-	preProcessPathCodelock.Lock()
+	preProcessPathCodeLock.Lock()
 
-	defer preProcessPathCodelock.Unlock()
+	defer preProcessPathCodeLock.Unlock()
 
 	return PreProcessPathCode(2)
+}
+
+// IsValid
+//
+// Returns an error value signaling whether the current
+// PreProcessPathCode value is valid.
+//
+// If the current PreProcessPathCode is invalid, this
+// method returns an error containing an appropriate
+// error message.
+//
+// If the current PreProcessPathCode is valid, this
+// method returns an error value of 'nil'.
+//
+// Be advised, the enumeration value "None" is considered
+// an INVALID selection for 'PreProcessPathCode'.
+//
+// This is a standard utility method and is not part of
+// the valid enumerations for this type.
+func (preProcPathCde PreProcessPathCode) IsValid() error {
+
+	preProcessPathCodeLock.Lock()
+
+	defer preProcessPathCodeLock.Unlock()
+
+	preProcessPathCodeMapsLock.Lock()
+
+	defer preProcessPathCodeMapsLock.Unlock()
+
+	ePrefix := "PreProcessPathCode.IsValid() "
+
+	_, ok := mValidPreProcessPathCodeToString[preProcPathCde]
+
+	var err error
+
+	if !ok {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Pre Process Code is invalid!\n"+
+			"PreProcessPathCode Integer = %v\n"+
+			"PreProcessPathCode String = %v\n",
+			ePrefix,
+			int(preProcPathCde),
+			preProcPathCde.String())
+
+		return err
+	}
+
+	return nil
 }
 
 // String - Returns a string with the name of the enumeration associated
@@ -77,9 +139,13 @@ func (preProcPathCde PreProcessPathCode) AbsolutePath() PreProcessPathCode {
 //	    str is now equal to "AbsolutePath"
 func (preProcPathCde PreProcessPathCode) String() string {
 
-	preProcessPathCodelock.Lock()
+	preProcessPathCodeLock.Lock()
 
-	defer preProcessPathCodelock.Unlock()
+	defer preProcessPathCodeLock.Unlock()
+
+	preProcessPathCodeMapsLock.Lock()
+
+	defer preProcessPathCodeMapsLock.Unlock()
 
 	label, ok := mPreProcessPathCodeToString[preProcPathCde]
 
@@ -90,13 +156,16 @@ func (preProcPathCde PreProcessPathCode) String() string {
 	return label
 }
 
-// Value - Returns the value of the PathFileTypeCode instance
-// as type PathFileTypeCode.
+// Value - Returns the value of the PathFileTypeCode
+// instance as type PathFileTypeCode.
+//
+// This is a standard utility method and is not part of
+// the valid enumerations for this type.
 func (preProcPathCde PreProcessPathCode) Value() PreProcessPathCode {
 
-	preProcessPathCodelock.Lock()
+	preProcessPathCodeLock.Lock()
 
-	defer preProcessPathCodelock.Unlock()
+	defer preProcessPathCodeLock.Unlock()
 
 	return preProcPathCde
 }
@@ -105,13 +174,20 @@ func (preProcPathCde PreProcessPathCode) Value() PreProcessPathCode {
 //
 // Receives a string and returns an instance of
 // PreProcessPathCode associated with that string.
+//
+// This is a standard utility method and is not part of
+// the valid enumerations for this type.
 func (preProcPathCde PreProcessPathCode) ParseString(
 	valueString string,
 	caseSensitive bool) (PreProcessPathCode, error) {
 
-	preProcessPathCodelock.Lock()
+	preProcessPathCodeLock.Lock()
 
-	defer preProcessPathCodelock.Unlock()
+	defer preProcessPathCodeLock.Unlock()
+
+	preProcessPathCodeMapsLock.Lock()
+
+	defer preProcessPathCodeMapsLock.Unlock()
 
 	ePrefix := "PreProcessPathCode.ParseString() "
 
@@ -165,4 +241,15 @@ func (preProcPathCde PreProcessPathCode) ParseString(
 	return preProcessPathCode, nil
 }
 
+// PreProcPathCode
+//
+// This public global variable allows easy access to
+// the enumerations of the PreProcessPathCode type using
+// the dot operator.
+//
+//	Example:
+//
+//		PreProcPathCode.None()
+//		PreProcPathCode.PathSeparator()
+//		PreProcPathCode.AbsolutePath()
 const PreProcPathCode = PreProcessPathCode(0)

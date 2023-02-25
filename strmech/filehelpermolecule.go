@@ -58,7 +58,6 @@ func (fHelpMolecule *fileHelperMolecule) doesPathFileExist(
 
 	defer fHelpMolecule.lock.Unlock()
 	var ePrefix *ePref.ErrPrefixDto
-	var err error
 
 	ePrefix,
 		nonPathError = ePref.ErrPrefixDto{}.NewIEmpty(
@@ -77,8 +76,9 @@ func (fHelpMolecule *fileHelperMolecule) doesPathFileExist(
 
 	fInfo = FileInfoPlus{}
 
-	if len(filePathTitle) == 0 {
+	nonPathError = nil
 
+	if len(filePathTitle) == 0 {
 		filePathTitle = "filePath"
 	}
 
@@ -89,22 +89,20 @@ func (fHelpMolecule *fileHelperMolecule) doesPathFileExist(
 
 	if errCode == -1 {
 
-		nonPathError =
-			fmt.Errorf("%v\n"+
-				"Error: Input parameter '%v' is an empty string!\n",
-				ePrefix.String(),
-				filePathTitle)
+		nonPathError = fmt.Errorf("%v\n"+
+			"Error: Input parameter '%v' is an empty string!\n",
+			ePrefix.String(),
+			filePathTitle)
 
 		return absFilePath, filePathDoesExist, fInfo, nonPathError
 	}
 
 	if errCode == -2 {
 
-		nonPathError =
-			fmt.Errorf("%v\n"+
-				"Error: Input parameter '%v' consists of blank spaces!",
-				ePrefix.String(),
-				filePathTitle)
+		nonPathError = fmt.Errorf("%v\n"+
+			"Error: Input parameter '%v' consists of blank spaces!\n",
+			ePrefix.String(),
+			filePathTitle)
 
 		return absFilePath, filePathDoesExist, fInfo, nonPathError
 	}
@@ -115,21 +113,16 @@ func (fHelpMolecule *fileHelperMolecule) doesPathFileExist(
 
 	} else if preProcessCode == PreProcPathCode.AbsolutePath() {
 
-		absFilePath, err = new(fileHelperProton).
+		absFilePath,
+			nonPathError = new(fileHelperProton).
 			makeAbsolutePath(
 				filePath,
 				ePrefix.XCpy(
-					"filePath"))
+					"absFilePath<-filePath"))
 
-		if err != nil {
+		if nonPathError != nil {
 
 			absFilePath = ""
-			nonPathError =
-				fmt.Errorf("%v\n"+
-					"fh.MakeAbsolutePath() FAILED!\n"+
-					"%v",
-					ePrefix.String(),
-					err.Error())
 
 			return absFilePath, filePathDoesExist, fInfo, nonPathError
 		}
@@ -146,6 +139,7 @@ func (fHelpMolecule *fileHelperMolecule) doesPathFileExist(
 		filePathDoesExist = false
 		fInfo = FileInfoPlus{}
 		nonPathError = nil
+		var err error
 
 		info, err = os.Stat(absFilePath)
 
@@ -158,34 +152,29 @@ func (fHelpMolecule *fileHelperMolecule) doesPathFileExist(
 				nonPathError = nil
 				return absFilePath, filePathDoesExist, fInfo, nonPathError
 			}
-
 			// err == nil and err != os.IsNotExist(err)
-			// This is a non-path error. The non-path error will be
-			// tested up to 3-times before it is returned.
-			nonPathError =
-				fmt.Errorf("%v\n"+
+			// This is a non-path error. The non-path error will
+			// be tested up to 3-times before it is returned.
+			nonPathError = fmt.Errorf(
+				"%v\n"+
 					"Non-Path error returned by os.Stat(%v)\n"+
 					"%v='%v'\n"+
 					"Error='%v'\n",
-					ePrefix.String(),
-					filePathTitle,
-					filePathTitle,
-					filePath,
-					err.Error())
+				ePrefix.String(),
+				filePathTitle,
+				filePathTitle,
+				filePath,
+				err.Error())
 
 			fInfo = FileInfoPlus{}
-
 			filePathDoesExist = false
 
 		} else {
 			// err == nil
 			// The path really does exist!
 			filePathDoesExist = true
-
 			nonPathError = nil
-
 			fInfo = new(FileInfoPlus).NewFromFileInfo(info)
-
 			return absFilePath, filePathDoesExist, fInfo, nonPathError
 		}
 

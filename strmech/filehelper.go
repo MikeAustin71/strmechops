@@ -3686,6 +3686,231 @@ func (fh *FileHelper) DoesFileInfoPlusExist(
 	return doesFInfoExist, fInfoPlus, err
 }
 
+// DoesPathFileExist
+//
+// A helper method which public methods use to determine
+// whether a path and file does or does not exist.
+//
+// This method calls os.Stat(dirPath) which may return
+// one of two types of errors:
+//
+//		(1)	A Non-Path Error
+//
+//			This is an error which is not path related. It
+//			signals some other type of error which makes
+//			it impossible to determine if the path actually
+//			exists. These types of errors generally related
+//			to as "access denied" situations, but there may
+//			be other reasons behind non-path errors. If a
+//			non-path error is returned, no valid existence
+//			test can be performed on the file path.
+//
+//	    or
+//
+//		(2)	A Path Error
+//
+//			This type of error indicates that the path
+//			definitely does not exist.
+//
+//		To deal with these types of errors, this method will
+//		test path existence up to three times before returning
+//		a non-path error.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	filePath					string
+//
+//		This string holds the path and file name. This
+//		path and file name will be tested to determine if
+//		they exist on disk.
+//
+//	preProcessCode			PreProcessPathCode
+//
+//		Type PreProcessPathCode is an enumeration. The
+//		enumeration value passed as 'preProcessCode' is
+//		used to determine the type of setup and
+//		configuration that will be applied to 'filePath'.
+//
+//		This enumeration has three options:
+//
+//			PreProcessPathCode(0).None()
+//			PreProcessPathCode(0).PathSeparator()
+//			PreProcessPathCode(0).AbsolutePath()
+//
+//		Alternatively, the enumeration value could be
+//		expressed using shorthand notation:
+//
+//			PreProcPathCode.None()
+//			PreProcPathCode.PathSeparator()
+//			PreProcPathCode.AbsolutePath()
+//
+//		PreProcPathCode.None()
+//
+//			This code specifies that no preprocessing
+//			operation will be applied to the 'filePath'
+//			string before determining whether the path
+//			and file name identified by 'filePath'
+//			actually exists.
+//
+//		PreProcPathCode.PathSeparator()
+//
+//			This code specifies that the file path
+//			('filePath) will be screened for invalid path
+//			separator characters. Invalid path separator
+//			characters will be replaced with valid path
+//			separator characters for the current
+//			operating system. After completion of this
+//			preprocessing operation, the revised path and
+//			file name identified by 'filePath' will be
+//			tested to determine if it actually exists on
+//			disk.
+//
+//		PreProcPathCode.AbsolutePath()
+//
+//			This code specifies the file name and file
+//			path ('filePath') will first be converted to
+//			an absolute path and file name. Afterwards,
+//			the converted path and file name ('filePath')
+//			will be tested to determine if it actually
+//			exists on disk.
+//
+//	filePathTitle				string
+//
+//		This string constitutes a label which will be
+//		used to describe parameter 'filePath' in any
+//		error message returned to the user.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	nonPathError				error
+//
+//		If this method completes successfully, the
+//		returned 'nonPathError' is set equal to 'nil'.
+//
+//		This is an error which is not path related. It
+//		signals some other type of error which makes
+//		it impossible to determine if the path actually
+//		exists. These types of errors generally related
+//		to as "access denied" situations, but there may
+//		be other reasons behind non-path errors. If a
+//		non-path error is returned, no valid existence
+//		test can be performed on the file path.
+//
+//		If errors are encountered during processing, the
+//		returned 'nonPathError' will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be attached to the
+//	 	beginning of the error message.
+func (fh *FileHelper) DoesPathFileExist(
+	filePath string,
+	preProcessCode PreProcessPathCode,
+	filePathTitle string,
+	errorPrefix interface{}) (
+	absFilePath string,
+	filePathDoesExist bool,
+	fInfo FileInfoPlus,
+	nonPathError error) {
+
+	if fh.lock == nil {
+		fh.lock = new(sync.Mutex)
+	}
+
+	fh.lock.Lock()
+
+	defer fh.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		nonPathError = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileHelper."+
+			"DoesPathFileExist()",
+		"")
+
+	if nonPathError != nil {
+
+		return absFilePath, filePathDoesExist, fInfo, nonPathError
+	}
+
+	absFilePath,
+		filePathDoesExist,
+		fInfo,
+		nonPathError = new(fileHelperMolecule).
+		doesPathFileExist(
+			filePath,
+			preProcessCode,
+			ePrefix,
+			filePathTitle)
+
+	return absFilePath, filePathDoesExist, fInfo, nonPathError
+}
+
 // DoesStringEndWithPathSeparator
 //
 // This method returns a boolean value of 'true' if the
@@ -3829,6 +4054,15 @@ func (fh *FileHelper) DoesStringEndWithPathSeparator(
 //
 //		If this method completes successfully, the
 //		returned 'nonPathError' is set equal to 'nil'.
+//
+//		This is an error which is not path related. It
+//		signals some other type of error which makes
+//		it impossible to determine if the path actually
+//		exists. These types of errors generally related
+//		to as "access denied" situations, but there may
+//		be other reasons behind non-path errors. If a
+//		non-path error is returned, no valid existence
+//		test can be performed on the file path.
 //
 //		If errors are encountered during processing, the
 //		returned 'nonPathError' will encapsulate an
@@ -11632,8 +11866,8 @@ func (fh *FileHelper) StripLeadingDotSeparatorChars(pathName string) (string, in
 //	 	The 'errorPrefix' text will be prefixed or
 //	 	attached to the	beginning of the error message.
 func (fh *FileHelper) SwapBasePath(
-	oldBasePath,
-	newBasePath,
+	oldBasePath string,
+	newBasePath string,
 	targetPath string,
 	errorPrefix interface{}) (string, error) {
 
@@ -11666,168 +11900,4 @@ func (fh *FileHelper) SwapBasePath(
 			newBasePath,
 			targetPath,
 			ePrefix)
-}
-
-// DoesPathFileExist - A helper method which public methods use to determine whether a
-// path and file does or does not exist.
-//
-// This method calls os.Stat(dirPath) which returns an error which is one of two types:
-//
-//  1. A Non-Path Error - An error which is not path related. It signals some other type
-//     of error which makes impossible to determine if the path actually exists. These
-//     types of errors generally relate to "access denied" situations, but there may be
-//     other reasons behind non-path errors. If a non-path error is returned, no valid
-//     existence test can be performed on the file path.
-//
-//     or
-//
-//  2. A Path Error - indicates that the path definitely does not exist.
-//
-// To deal with these types of errors, this method will test path existence up to three times before
-// returning a non-path error.
-func (fh *FileHelper) DoesPathFileExist(
-	filePath string,
-	preProcessCode PreProcessPathCode,
-	errorPrefix interface{},
-	filePathTitle string) (
-	absFilePath string,
-	filePathDoesExist bool,
-	fInfo FileInfoPlus,
-	nonPathError error) {
-
-	if fh.lock == nil {
-		fh.lock = new(sync.Mutex)
-	}
-
-	fh.lock.Lock()
-
-	defer fh.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-
-	ePrefix,
-		nonPathError = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
-		"FileHelper."+
-			"DoesPathFileExist()",
-		"")
-
-	if nonPathError != nil {
-
-		return absFilePath, filePathDoesExist, fInfo, nonPathError
-	}
-
-	absFilePath = ""
-
-	filePathDoesExist = false
-
-	fInfo = FileInfoPlus{}
-
-	nonPathError = nil
-
-	if len(filePathTitle) == 0 {
-		filePathTitle = "filePath"
-	}
-
-	errCode := 0
-
-	errCode, _, filePath = new(fileHelperElectron).
-		isStringEmptyOrBlank(filePath)
-
-	if errCode == -1 {
-
-		nonPathError = fmt.Errorf("%v\n"+
-			"Error: Input parameter '%v' is an empty string!\n",
-			ePrefix.String(),
-			filePathTitle)
-
-		return absFilePath, filePathDoesExist, fInfo, nonPathError
-	}
-
-	if errCode == -2 {
-
-		nonPathError = fmt.Errorf("%v\n"+
-			"Error: Input parameter '%v' consists of blank spaces!\n",
-			ePrefix.String(),
-			filePathTitle)
-
-		return absFilePath, filePathDoesExist, fInfo, nonPathError
-	}
-
-	var err error
-
-	if preProcessCode == PreProcPathCode.PathSeparator() {
-
-		absFilePath = new(fileHelperAtom).adjustPathSlash(filePath)
-
-	} else if preProcessCode == PreProcPathCode.AbsolutePath() {
-
-		absFilePath,
-			nonPathError = new(fileHelperProton).
-			makeAbsolutePath(
-				filePath,
-				ePrefix.XCpy(
-					"absFilePath<-filePath"))
-
-		if nonPathError != nil {
-
-			absFilePath = ""
-
-			return absFilePath, filePathDoesExist, fInfo, nonPathError
-		}
-
-	} else {
-		// For any other PreProcPathCode value, apply no pre-processing to
-		absFilePath = filePath
-	}
-
-	var info os.FileInfo
-
-	for i := 0; i < 3; i++ {
-
-		filePathDoesExist = false
-		fInfo = FileInfoPlus{}
-		nonPathError = nil
-
-		info, err = os.Stat(absFilePath)
-
-		if err != nil {
-
-			if os.IsNotExist(err) {
-
-				filePathDoesExist = false
-				fInfo = FileInfoPlus{}
-				nonPathError = nil
-				return absFilePath, filePathDoesExist, fInfo, nonPathError
-			}
-			// err == nil and err != os.IsNotExist(err)
-			// This is a non-path error. The non-path error will be test
-			// up to 3-times before it is returned.
-			nonPathError = fmt.Errorf(
-				"%v\n"+
-					"Non-Path error returned by os.Stat(%v)\n"+
-					"%v='%v'\n"+
-					"Error='%v'\n",
-				ePrefix.String(),
-				filePathTitle,
-				filePathTitle,
-				filePath,
-				err.Error())
-
-			fInfo = FileInfoPlus{}
-			filePathDoesExist = false
-
-		} else {
-			// err == nil
-			// The path really does exist!
-			filePathDoesExist = true
-			nonPathError = nil
-			fInfo = new(FileInfoPlus).NewFromFileInfo(info)
-			return absFilePath, filePathDoesExist, fInfo, nonPathError
-		}
-
-		time.Sleep(30 * time.Millisecond)
-	}
-
-	return absFilePath, filePathDoesExist, fInfo, nonPathError
 }

@@ -363,7 +363,7 @@ func (fOpenMode FileOpenMode) Value() int {
 
 // FOpenMode - This public global variable allows
 // easy access to the enumerations of the FileOpenMode
-// using the dot operator.
+// type using the dot operator.
 //
 //	Example:
 //
