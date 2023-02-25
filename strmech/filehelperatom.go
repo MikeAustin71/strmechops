@@ -2353,3 +2353,221 @@ func (fHelperAtom *fileHelperAtom) removePathSeparatorFromEndOfPathString(
 
 	return pathStr
 }
+
+// swapBasePath
+//
+// Searches the 'targetPath' string for the existence of
+// 'oldBasePath'. If 'oldBasePath' is found, it is
+// replaced with 'newBasePath' in 'targetPath'.
+//
+// If 'oldBasePath' is not found in 'targetPath' an error
+// is returned.
+//
+// Likewise, if 'oldBasePath' is not located at the
+// beginning of 'targetPath', an error will be returned.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	oldBasePath					string
+//
+//		The Old Base Path. If this path is found at the
+//		beginning of 'targetPath' it will be replaced by
+//		'newBasePath' and returned to the caller.
+//
+//		If 'oldBasePath' is NOT found at the beginning of
+//		'targetPath', an error will be returned.
+//
+//	newBasePath					string
+//
+//		The New Base Path. If 'oldBasePath' is found at
+//		the beginning of 'targetPath', 'oldBasePath' will
+//		be replaced with 'newBasePath' in 'targetPath'.
+//
+//		If 'oldBasePath' is NOT found at the beginning of
+//		'targetPath', an error will be returned.
+//
+//	targetPath					string
+//
+//		This string contains the entire path.
+//
+//		If 'oldBasePath' is not found at the beginning of
+//		'targetPath', an error will be returned.
+//
+//		If 'oldBasePath' is found at the beginning of
+//		'targetPath', it will be replaced by 'newBasePath'
+//		and returned to the caller.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//
+//		This string parameter returns a new version of
+//		input parameter 'targetPath' in which
+//		'oldBasePath' has been replaced with
+//		'newBasePath'.
+//
+//		If 'oldBasePath' is not found at the beginning of
+//		'targetPath', an error will be returned.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fHelperAtom *fileHelperAtom) swapBasePath(
+	oldBasePath,
+	newBasePath,
+	targetPath string,
+	errPrefDto *ePref.ErrPrefixDto) (string, error) {
+
+	if fHelperAtom.lock == nil {
+		fHelperAtom.lock = new(sync.Mutex)
+	}
+
+	fHelperAtom.lock.Lock()
+
+	defer fHelperAtom.lock.Unlock()
+
+	funcName := "fileHelperAtom.swapBasePath() "
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
+		"")
+
+	if err != nil {
+		return "", err
+	}
+
+	errCode := 0
+	oldBaseLen := 0
+
+	errCode,
+		oldBaseLen,
+		oldBasePath = new(fileHelperElectron).
+		isStringEmptyOrBlank(oldBasePath)
+
+	if errCode == -1 {
+		return "",
+			fmt.Errorf("%v\n"+
+				"Error: Input parameter 'oldBasePath' is an empty string!\n",
+				ePrefix.String())
+
+	}
+
+	if errCode == -2 {
+		return "",
+			fmt.Errorf("%v\n"+
+				"Error: Input parameter 'oldBasePath' consists of all spaces!\n",
+				ePrefix.String())
+	}
+
+	errCode,
+		_,
+		newBasePath = new(fileHelperElectron).
+		isStringEmptyOrBlank(newBasePath)
+
+	if errCode == -1 {
+		return "",
+			fmt.Errorf("%v\n"+
+				"Error: Input parameter 'newBasePath' is an empty string!\n",
+				ePrefix.String())
+
+	}
+
+	if errCode == -2 {
+		return "",
+			fmt.Errorf("%v\n"+
+				"Error: Input parameter 'newBasePath' consists of all spaces!\n",
+				ePrefix.String())
+	}
+
+	var targetPathLen int
+
+	errCode,
+		targetPathLen,
+		targetPath = new(fileHelperElectron).
+		isStringEmptyOrBlank(targetPath)
+
+	if errCode == -1 {
+		return "",
+			fmt.Errorf("%v\n"+
+				"Error: Input parameter 'targetPath' is an empty string!\n",
+				ePrefix.String())
+
+	}
+
+	if errCode == -2 {
+		return "",
+			fmt.Errorf("%v\n"+
+				"Error: Input parameter 'targetPath' consists of all spaces!\n",
+				ePrefix.String())
+	}
+
+	if oldBaseLen > targetPathLen {
+
+		return "",
+			fmt.Errorf("%v\n"+
+				"Error: Length of input parameter 'oldBasePath' is greater\n"+
+				"than length of input parameter 'targetPath'.\n",
+				ePrefix.String())
+	}
+
+	idx := strings.Index(
+		strings.ToLower(targetPath),
+		strings.ToLower(oldBasePath))
+
+	if idx < 0 {
+		return "",
+			fmt.Errorf("%v\n"+
+				"Error: Could not locate 'oldBasePath' in 'targetPath'.\n"+
+				"oldBasePath= '%v'\n"+
+				"targetPath='%v'\n",
+				ePrefix.String(),
+				oldBasePath,
+				targetPath)
+	}
+
+	if idx != 0 {
+		return "",
+			fmt.Errorf("%v\n"+
+				"Error: 'oldBasePath' is NOT located at the beginning of 'targetPath'.\n"+
+				"oldBasePath= '%v'\n"+
+				"targetPath='%v'\n",
+				ePrefix.String(),
+				oldBasePath,
+				targetPath)
+	}
+
+	return newBasePath + targetPath[oldBaseLen:], nil
+}

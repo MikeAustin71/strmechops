@@ -2753,7 +2753,8 @@ func (dMgrHlpr *dirMgrHelper) executeFileOpsOnFoundFiles(dirOp *DirTreeOp) func(
 		destDir, err := fh.SwapBasePath(
 			dirOp.SourceBaseDir.absolutePath,
 			dirOp.TargetBaseDir.absolutePath,
-			pathFile)
+			pathFile,
+			ePrefix)
 
 		if err != nil {
 			err2 = fmt.Errorf(ePrefix+
