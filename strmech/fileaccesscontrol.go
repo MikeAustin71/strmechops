@@ -18,423 +18,6 @@ type FileAccessControl struct {
 	lock *sync.Mutex
 }
 
-// NewInitialized
-//
-// Returns a new FileAccessControl instances with all
-// File Open Codes and File Permission Codes initialized
-// to 'None'.
-//
-// ----------------------------------------------------------------
-//
-// # Input Parameters
-//
-//	errorPrefix					interface{}
-//
-//		This object encapsulates error prefix text which
-//		is included in all returned error messages.
-//		Usually, it contains the name of the calling
-//		method or methods listed as a method or function
-//		chain of execution.
-//
-//		If no error prefix information is needed, set
-//		this parameter to 'nil'.
-//
-//		This empty interface must be convertible to one
-//		of the following types:
-//
-//		1.	nil
-//				A nil value is valid and generates an
-//				empty collection of error prefix and
-//				error context information.
-//
-//		2.	string
-//				A string containing error prefix
-//				information.
-//
-//		3.	[]string
-//				A one-dimensional slice of strings
-//				containing error prefix information.
-//
-//		4.	[][2]string
-//				A two-dimensional slice of strings
-//		   		containing error prefix and error
-//		   		context information.
-//
-//		5.	ErrPrefixDto
-//				An instance of ErrPrefixDto.
-//				Information from this object will
-//				be copied for use in error and
-//				informational messages.
-//
-//		6.	*ErrPrefixDto
-//				A pointer to an instance of
-//				ErrPrefixDto. Information from
-//				this object will be copied for use
-//				in error and informational messages.
-//
-//		7.	IBasicErrorPrefix
-//				An interface to a method
-//				generating a two-dimensional slice
-//				of strings containing error prefix
-//				and error context information.
-//
-//		If parameter 'errorPrefix' is NOT convertible
-//		to one of the valid types listed above, it will
-//		be considered invalid and trigger the return of
-//		an error.
-//
-//		Types ErrPrefixDto and IBasicErrorPrefix are
-//		included in the 'errpref' software package:
-//			"github.com/MikeAustin71/errpref".
-//
-// ----------------------------------------------------------------
-//
-// # Return Values
-//
-//	FileAccessControl
-//
-//		If this method completes successfully, a new
-//		instance of FileAccessControl will be returned.
-//
-//		This new FileAccessControl instances will be
-//		configured with all File Open Codes and File
-//		Permission Codes initialized to 'None'.
-//
-//	error
-//
-//		If this method completes successfully, the
-//		returned error Type is set equal to 'nil'.
-//
-//		If errors are encountered during processing, the
-//		returned error Type will encapsulate an
-//		appropriate error message. This returned error
-//	 	message will incorporate the method chain and
-//	 	text passed by input parameter, 'errorPrefix'.
-//	 	The 'errorPrefix' text will be prefixed or
-//	 	attached to the	beginning of the error message.
-func (fAccess *FileAccessControl) NewInitialized(
-	errorPrefix interface{}) (
-	FileAccessControl,
-	error) {
-
-	if fAccess.lock == nil {
-		fAccess.lock = new(sync.Mutex)
-	}
-
-	fAccess.lock.Lock()
-
-	defer fAccess.lock.Unlock()
-
-	var err error
-
-	var ePrefix *ePref.ErrPrefixDto
-
-	funcName := "FileAccessControl.NewInitialized()"
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
-		funcName,
-		"")
-
-	if err != nil {
-		return FileAccessControl{}, err
-	}
-
-	openCodes, err := new(FileOpenConfig).New(
-		ePrefix,
-		FOpenType.TypeNone(),
-		FOpenMode.ModeNone())
-
-	if err != nil {
-		return FileAccessControl{},
-			fmt.Errorf("%v\n"+
-				"Error returned by FileOpenConfig{}.New("+
-				"FOpenType.TypeNone(), FOpenMode.ModeNone())\n"+
-				"Error= \n%v\n",
-				funcName,
-				err.Error())
-	}
-
-	entryType, err :=
-		OsFilePermissionCode(0).
-			GetNewFromFileMode(OsFilePermCode.ModeNone())
-
-	if err != nil {
-		return FileAccessControl{},
-			fmt.Errorf("%v\n"+
-				"Error returned by OsFilePermCode.GetNewFromFileMode("+
-				"OsFilePermCode.ModeNone()).\n"+
-				"Error= \n%v\n ",
-				ePrefix.String(),
-				err.Error())
-	}
-
-	permissions, err := new(FilePermissionConfig).
-		NewByComponents(
-			entryType,
-			"---------",
-			ePrefix)
-
-	if err != nil {
-		return FileAccessControl{},
-			fmt.Errorf("%v\n"+
-				"Error returned by FilePermissionConfig{}.NewByComponents("+
-				"entryType, \"---------\")\n"+
-				"entryType='OsFilePermCode.ModeNone()'\n"+
-				"Error= \n%v\n",
-				funcName,
-				err.Error())
-	}
-
-	fA2 := FileAccessControl{}
-
-	fA2.fileOpenCodes = openCodes.CopyOut()
-
-	fA2.permissions = permissions.CopyOut()
-
-	fA2.isInitialized = true
-
-	return fA2, err
-}
-
-// New
-//
-// Creates and returns a new instance of type
-// FileAccessControl.
-func (fAccess *FileAccessControl) New(
-	openCodes FileOpenConfig,
-	permissions FilePermissionConfig) (
-	FileAccessControl,
-	error) {
-
-	ePrefix := "FileAccessControl.New() "
-
-	err := openCodes.IsValidInstanceError(ePrefix)
-
-	if err != nil {
-		return FileAccessControl{},
-			fmt.Errorf(ePrefix+"Input parameter 'openCodes' is INVALID! "+
-				"Error='%v' ", err.Error())
-	}
-
-	err = permissions.IsValid(ePrefix)
-
-	if err != nil {
-		return FileAccessControl{},
-			fmt.Errorf(ePrefix+"Input parameter 'permissions' is INVALID! "+
-				"Error='%v' ", err.Error())
-	}
-
-	fA2 := FileAccessControl{}
-
-	fA2.fileOpenCodes = openCodes.CopyOut()
-
-	fA2.permissions = permissions.CopyOut()
-
-	fA2.isInitialized = true
-
-	return fA2, nil
-}
-
-// NewReadWriteAccess
-//
-// Returns a FileAccessControl instance configured for
-// Read/Write access.
-func (fAccess FileAccessControl) NewReadWriteAccess() (
-	FileAccessControl,
-	error) {
-
-	ePrefix := "FileAccessControl.NewReadWriteAccess() "
-
-	fileOpenCfg, err :=
-		new(FileOpenConfig).
-			New(ePrefix,
-				FOpenType.TypeReadWrite(),
-				FOpenMode.ModeNone())
-
-	if err != nil {
-		return FileAccessControl{}, fmt.Errorf(ePrefix+"%v\n", err.Error())
-	}
-
-	filePermCfg, err := new(FilePermissionConfig).
-		New("-rw-rw-rw-", ePrefix)
-
-	if err != nil {
-		return FileAccessControl{}, fmt.Errorf(ePrefix+"%v\n", err.Error())
-	}
-
-	fileAccessCfg, err := FileAccessControl{}.New(fileOpenCfg, filePermCfg)
-
-	if err != nil {
-		return FileAccessControl{}, fmt.Errorf(ePrefix+"%v\n", err.Error())
-	}
-
-	return fileAccessCfg, nil
-}
-
-// NewReadWriteCreateTruncateAccess - Returns a FileAccessControl instance
-// configured for Read, Write, Create and Truncate access.
-func (fAccess FileAccessControl) NewReadWriteCreateTruncateAccess() (FileAccessControl, error) {
-
-	ePrefix := "FileAccessControl.NewReadWriteCreateTruncateAccess() "
-
-	//  OpenFile(name, O_RDWR|O_CREATE|O_TRUNC, 0666)
-	fOpenCfg, err := new(FileOpenConfig).New(
-		ePrefix,
-		FOpenType.TypeReadWrite(),
-		FOpenMode.ModeCreate(),
-		FOpenMode.ModeTruncate())
-
-	if err != nil {
-		return FileAccessControl{}, fmt.Errorf(ePrefix+"%v\n", err.Error())
-	}
-
-	fPermCfg, err := new(FilePermissionConfig).
-		New("-rw-rw-rw-", ePrefix)
-
-	if err != nil {
-		return FileAccessControl{}, fmt.Errorf(ePrefix+"%v\n", err.Error())
-	}
-
-	fileAccessCfg, err := FileAccessControl{}.New(fOpenCfg, fPermCfg)
-
-	if err != nil {
-		return FileAccessControl{}, fmt.Errorf(ePrefix+"%v\n", err.Error())
-	}
-
-	return fileAccessCfg, nil
-}
-
-// NewReadOnlyAccess - Returns a FileAccessControl instance configured for
-// Read-Only access.
-func (fAccess FileAccessControl) NewReadOnlyAccess() (FileAccessControl, error) {
-
-	ePrefix := "FileAccessControl.NewReadOnlyAccess() "
-
-	fileOpenCfg, err := new(FileOpenConfig).
-		New(ePrefix,
-			FOpenType.TypeReadOnly(),
-			FOpenMode.ModeNone())
-
-	if err != nil {
-		return FileAccessControl{}, fmt.Errorf(ePrefix+"%v\n", err.Error())
-	}
-
-	filePermCfg, err := new(FilePermissionConfig).
-		New("-r--r--r--", ePrefix)
-
-	if err != nil {
-		return FileAccessControl{}, fmt.Errorf(ePrefix+"%v\n", err.Error())
-	}
-
-	fileAccessCfg, err := FileAccessControl{}.New(fileOpenCfg, filePermCfg)
-
-	if err != nil {
-		return FileAccessControl{}, fmt.Errorf(ePrefix+"%v\n", err.Error())
-	}
-
-	return fileAccessCfg, nil
-}
-
-// NewWriteOnlyAccess - Returns a FileAccessControl instance configured for
-// Write-Only access.
-func (fAccess FileAccessControl) NewWriteOnlyAccess() (FileAccessControl, error) {
-
-	ePrefix := "FileAccessControl.NewWriteOnlyAccess() "
-
-	fileOpenCfg, err :=
-		new(FileOpenConfig).
-			New(ePrefix,
-				FOpenType.TypeWriteOnly(),
-				FOpenMode.ModeNone())
-
-	if err != nil {
-		return FileAccessControl{}, fmt.Errorf(ePrefix+"%v\n", err.Error())
-	}
-
-	filePermCfg, err := new(FilePermissionConfig).
-		New("--w--w--w-", ePrefix)
-
-	if err != nil {
-		return FileAccessControl{}, fmt.Errorf(ePrefix+"%v\n", err.Error())
-	}
-
-	fileAccessCtrl, err := FileAccessControl{}.New(fileOpenCfg, filePermCfg)
-
-	if err != nil {
-		return FileAccessControl{}, fmt.Errorf(ePrefix+"%v\n", err.Error())
-	}
-
-	return fileAccessCtrl, nil
-}
-
-// NewWriteOnlyAppendAccess - Returns a FileAccessControl instance configured for
-// Write/Only - Append access.
-func (fAccess FileAccessControl) NewWriteOnlyAppendAccess() (FileAccessControl, error) {
-
-	ePrefix := "FileAccessControl.NewWriteOnlyAccess() "
-
-	fileOpenCfg, err := new(FileOpenConfig).
-		New(ePrefix,
-			FOpenType.TypeWriteOnly(),
-			FOpenMode.ModeAppend())
-
-	if err != nil {
-		return FileAccessControl{}, fmt.Errorf(ePrefix+"%v\n", err.Error())
-	}
-
-	filePermCfg, err := new(FilePermissionConfig).
-		New("--w--w--w-", ePrefix)
-
-	if err != nil {
-		return FileAccessControl{}, fmt.Errorf(ePrefix+"%v\n", err.Error())
-	}
-
-	fileAccessCfg, err := FileAccessControl{}.New(fileOpenCfg, filePermCfg)
-
-	if err != nil {
-		return FileAccessControl{}, fmt.Errorf(ePrefix+"%v\n", err.Error())
-	}
-
-	return fileAccessCfg, nil
-}
-
-// NewWriteOnlyTruncateAccess - Returns a FileAccessControl instance configured for
-// Write/Only - Truncate access.
-//
-// If the file previously exists, it will be truncated before the writing operation
-// commences.
-func (fAccess FileAccessControl) NewWriteOnlyTruncateAccess() (FileAccessControl, error) {
-
-	ePrefix := "FileAccessControl.NewWriteOnlyTruncateAccess() "
-
-	fileOpenCfg, err :=
-		new(FileOpenConfig).New(
-			ePrefix,
-			FOpenType.TypeWriteOnly(),
-			FOpenMode.ModeTruncate())
-
-	if err != nil {
-		return FileAccessControl{}, fmt.Errorf(ePrefix+"%v\n", err.Error())
-	}
-
-	filePermCfg, err := new(FilePermissionConfig).
-		New("--w--w--w-", ePrefix)
-
-	if err != nil {
-		return FileAccessControl{}, fmt.Errorf(ePrefix+"%v\n", err.Error())
-	}
-
-	fileAccessCfg, err := FileAccessControl{}.New(fileOpenCfg, filePermCfg)
-
-	if err != nil {
-		return FileAccessControl{}, fmt.Errorf(ePrefix+"%v\n", err.Error())
-	}
-
-	return fileAccessCfg, nil
-}
-
 // CopyIn - Receives a FileAccessControl instance and copies all the data
 // fields to the current FileAccessControl instance. When complete, both
 // the incoming and current FileAccessControl instances will be identical.
@@ -995,6 +578,423 @@ func (fAccess *FileAccessControl) IsValidInstanceError(
 			ePrefix)
 
 	return err
+}
+
+// NewInitialized
+//
+// Returns a new FileAccessControl instances with all
+// File Open Codes and File Permission Codes initialized
+// to 'None'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	FileAccessControl
+//
+//		If this method completes successfully, a new
+//		instance of FileAccessControl will be returned.
+//
+//		This new FileAccessControl instances will be
+//		configured with all File Open Codes and File
+//		Permission Codes initialized to 'None'.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fAccess *FileAccessControl) NewInitialized(
+	errorPrefix interface{}) (
+	FileAccessControl,
+	error) {
+
+	if fAccess.lock == nil {
+		fAccess.lock = new(sync.Mutex)
+	}
+
+	fAccess.lock.Lock()
+
+	defer fAccess.lock.Unlock()
+
+	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	funcName := "FileAccessControl.NewInitialized()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		funcName,
+		"")
+
+	if err != nil {
+		return FileAccessControl{}, err
+	}
+
+	openCodes, err := new(FileOpenConfig).New(
+		ePrefix,
+		FOpenType.TypeNone(),
+		FOpenMode.ModeNone())
+
+	if err != nil {
+		return FileAccessControl{},
+			fmt.Errorf("%v\n"+
+				"Error returned by FileOpenConfig{}.New("+
+				"FOpenType.TypeNone(), FOpenMode.ModeNone())\n"+
+				"Error= \n%v\n",
+				funcName,
+				err.Error())
+	}
+
+	entryType, err :=
+		OsFilePermissionCode(0).
+			GetNewFromFileMode(OsFilePermCode.ModeNone())
+
+	if err != nil {
+		return FileAccessControl{},
+			fmt.Errorf("%v\n"+
+				"Error returned by OsFilePermCode.GetNewFromFileMode("+
+				"OsFilePermCode.ModeNone()).\n"+
+				"Error= \n%v\n ",
+				ePrefix.String(),
+				err.Error())
+	}
+
+	permissions, err := new(FilePermissionConfig).
+		NewByComponents(
+			entryType,
+			"---------",
+			ePrefix)
+
+	if err != nil {
+		return FileAccessControl{},
+			fmt.Errorf("%v\n"+
+				"Error returned by FilePermissionConfig{}.NewByComponents("+
+				"entryType, \"---------\")\n"+
+				"entryType='OsFilePermCode.ModeNone()'\n"+
+				"Error= \n%v\n",
+				funcName,
+				err.Error())
+	}
+
+	fA2 := FileAccessControl{}
+
+	fA2.fileOpenCodes = openCodes.CopyOut()
+
+	fA2.permissions = permissions.CopyOut()
+
+	fA2.isInitialized = true
+
+	return fA2, err
+}
+
+// New
+//
+// Creates and returns a new instance of type
+// FileAccessControl.
+func (fAccess *FileAccessControl) New(
+	openCodes FileOpenConfig,
+	permissions FilePermissionConfig) (
+	FileAccessControl,
+	error) {
+
+	ePrefix := "FileAccessControl.New() "
+
+	err := openCodes.IsValidInstanceError(ePrefix)
+
+	if err != nil {
+		return FileAccessControl{},
+			fmt.Errorf(ePrefix+"Input parameter 'openCodes' is INVALID! "+
+				"Error='%v' ", err.Error())
+	}
+
+	err = permissions.IsValid(ePrefix)
+
+	if err != nil {
+		return FileAccessControl{},
+			fmt.Errorf(ePrefix+"Input parameter 'permissions' is INVALID! "+
+				"Error='%v' ", err.Error())
+	}
+
+	fA2 := FileAccessControl{}
+
+	fA2.fileOpenCodes = openCodes.CopyOut()
+
+	fA2.permissions = permissions.CopyOut()
+
+	fA2.isInitialized = true
+
+	return fA2, nil
+}
+
+// NewReadWriteAccess
+//
+// Returns a FileAccessControl instance configured for
+// Read/Write access.
+func (fAccess FileAccessControl) NewReadWriteAccess() (
+	FileAccessControl,
+	error) {
+
+	ePrefix := "FileAccessControl.NewReadWriteAccess() "
+
+	fileOpenCfg, err :=
+		new(FileOpenConfig).
+			New(ePrefix,
+				FOpenType.TypeReadWrite(),
+				FOpenMode.ModeNone())
+
+	if err != nil {
+		return FileAccessControl{}, fmt.Errorf(ePrefix+"%v\n", err.Error())
+	}
+
+	filePermCfg, err := new(FilePermissionConfig).
+		New("-rw-rw-rw-", ePrefix)
+
+	if err != nil {
+		return FileAccessControl{}, fmt.Errorf(ePrefix+"%v\n", err.Error())
+	}
+
+	fileAccessCfg, err := FileAccessControl{}.New(fileOpenCfg, filePermCfg)
+
+	if err != nil {
+		return FileAccessControl{}, fmt.Errorf(ePrefix+"%v\n", err.Error())
+	}
+
+	return fileAccessCfg, nil
+}
+
+// NewReadWriteCreateTruncateAccess - Returns a FileAccessControl instance
+// configured for Read, Write, Create and Truncate access.
+func (fAccess FileAccessControl) NewReadWriteCreateTruncateAccess() (FileAccessControl, error) {
+
+	ePrefix := "FileAccessControl.NewReadWriteCreateTruncateAccess() "
+
+	//  OpenFile(name, O_RDWR|O_CREATE|O_TRUNC, 0666)
+	fOpenCfg, err := new(FileOpenConfig).New(
+		ePrefix,
+		FOpenType.TypeReadWrite(),
+		FOpenMode.ModeCreate(),
+		FOpenMode.ModeTruncate())
+
+	if err != nil {
+		return FileAccessControl{}, fmt.Errorf(ePrefix+"%v\n", err.Error())
+	}
+
+	fPermCfg, err := new(FilePermissionConfig).
+		New("-rw-rw-rw-", ePrefix)
+
+	if err != nil {
+		return FileAccessControl{}, fmt.Errorf(ePrefix+"%v\n", err.Error())
+	}
+
+	fileAccessCfg, err := FileAccessControl{}.New(fOpenCfg, fPermCfg)
+
+	if err != nil {
+		return FileAccessControl{}, fmt.Errorf(ePrefix+"%v\n", err.Error())
+	}
+
+	return fileAccessCfg, nil
+}
+
+// NewReadOnlyAccess - Returns a FileAccessControl instance configured for
+// Read-Only access.
+func (fAccess FileAccessControl) NewReadOnlyAccess() (FileAccessControl, error) {
+
+	ePrefix := "FileAccessControl.NewReadOnlyAccess() "
+
+	fileOpenCfg, err := new(FileOpenConfig).
+		New(ePrefix,
+			FOpenType.TypeReadOnly(),
+			FOpenMode.ModeNone())
+
+	if err != nil {
+		return FileAccessControl{}, fmt.Errorf(ePrefix+"%v\n", err.Error())
+	}
+
+	filePermCfg, err := new(FilePermissionConfig).
+		New("-r--r--r--", ePrefix)
+
+	if err != nil {
+		return FileAccessControl{}, fmt.Errorf(ePrefix+"%v\n", err.Error())
+	}
+
+	fileAccessCfg, err := FileAccessControl{}.New(fileOpenCfg, filePermCfg)
+
+	if err != nil {
+		return FileAccessControl{}, fmt.Errorf(ePrefix+"%v\n", err.Error())
+	}
+
+	return fileAccessCfg, nil
+}
+
+// NewWriteOnlyAccess - Returns a FileAccessControl instance configured for
+// Write-Only access.
+func (fAccess FileAccessControl) NewWriteOnlyAccess() (FileAccessControl, error) {
+
+	ePrefix := "FileAccessControl.NewWriteOnlyAccess() "
+
+	fileOpenCfg, err :=
+		new(FileOpenConfig).
+			New(ePrefix,
+				FOpenType.TypeWriteOnly(),
+				FOpenMode.ModeNone())
+
+	if err != nil {
+		return FileAccessControl{}, fmt.Errorf(ePrefix+"%v\n", err.Error())
+	}
+
+	filePermCfg, err := new(FilePermissionConfig).
+		New("--w--w--w-", ePrefix)
+
+	if err != nil {
+		return FileAccessControl{}, fmt.Errorf(ePrefix+"%v\n", err.Error())
+	}
+
+	fileAccessCtrl, err := FileAccessControl{}.New(fileOpenCfg, filePermCfg)
+
+	if err != nil {
+		return FileAccessControl{}, fmt.Errorf(ePrefix+"%v\n", err.Error())
+	}
+
+	return fileAccessCtrl, nil
+}
+
+// NewWriteOnlyAppendAccess - Returns a FileAccessControl instance configured for
+// Write/Only - Append access.
+func (fAccess FileAccessControl) NewWriteOnlyAppendAccess() (FileAccessControl, error) {
+
+	ePrefix := "FileAccessControl.NewWriteOnlyAccess() "
+
+	fileOpenCfg, err := new(FileOpenConfig).
+		New(ePrefix,
+			FOpenType.TypeWriteOnly(),
+			FOpenMode.ModeAppend())
+
+	if err != nil {
+		return FileAccessControl{}, fmt.Errorf(ePrefix+"%v\n", err.Error())
+	}
+
+	filePermCfg, err := new(FilePermissionConfig).
+		New("--w--w--w-", ePrefix)
+
+	if err != nil {
+		return FileAccessControl{}, fmt.Errorf(ePrefix+"%v\n", err.Error())
+	}
+
+	fileAccessCfg, err := FileAccessControl{}.New(fileOpenCfg, filePermCfg)
+
+	if err != nil {
+		return FileAccessControl{}, fmt.Errorf(ePrefix+"%v\n", err.Error())
+	}
+
+	return fileAccessCfg, nil
+}
+
+// NewWriteOnlyTruncateAccess - Returns a FileAccessControl instance configured for
+// Write/Only - Truncate access.
+//
+// If the file previously exists, it will be truncated before the writing operation
+// commences.
+func (fAccess FileAccessControl) NewWriteOnlyTruncateAccess() (FileAccessControl, error) {
+
+	ePrefix := "FileAccessControl.NewWriteOnlyTruncateAccess() "
+
+	fileOpenCfg, err :=
+		new(FileOpenConfig).New(
+			ePrefix,
+			FOpenType.TypeWriteOnly(),
+			FOpenMode.ModeTruncate())
+
+	if err != nil {
+		return FileAccessControl{}, fmt.Errorf(ePrefix+"%v\n", err.Error())
+	}
+
+	filePermCfg, err := new(FilePermissionConfig).
+		New("--w--w--w-", ePrefix)
+
+	if err != nil {
+		return FileAccessControl{}, fmt.Errorf(ePrefix+"%v\n", err.Error())
+	}
+
+	fileAccessCfg, err := FileAccessControl{}.New(fileOpenCfg, filePermCfg)
+
+	if err != nil {
+		return FileAccessControl{}, fmt.Errorf(ePrefix+"%v\n", err.Error())
+	}
+
+	return fileAccessCfg, nil
 }
 
 // SetFileOpenCodes - Assigns 'fileOpenCodes' to internal member variable,
