@@ -2,8 +2,9 @@ package strmech
 
 import (
 	"fmt"
+	ePref "github.com/MikeAustin71/errpref"
 	"os"
-	"strings"
+	"sync"
 )
 
 // FileAccessControl encapsulates the codes required the open files and
@@ -13,13 +14,133 @@ type FileAccessControl struct {
 	isInitialized bool
 	permissions   FilePermissionConfig
 	fileOpenCodes FileOpenConfig
+
+	lock *sync.Mutex
 }
 
-// NewInitialized - Returns a new FileAccessControl instances with all File Open
-// Codes and File Permission Codes initialized to 'None'.
-func (fAccess FileAccessControl) NewInitialized() (FileAccessControl, error) {
+// NewInitialized
+//
+// Returns a new FileAccessControl instances with all
+// File Open Codes and File Permission Codes initialized
+// to 'None'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	FileAccessControl
+//
+//		If this method completes successfully, a new
+//		instance of FileAccessControl will be returned.
+//
+//		This new FileAccessControl instances will be
+//		configured with all File Open Codes and File
+//		Permission Codes initialized to 'None'.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fAccess *FileAccessControl) NewInitialized(
+	errorPrefix interface{}) (
+	FileAccessControl,
+	error) {
 
-	ePrefix := "FileAccessControl.NewInitialized() "
+	if fAccess.lock == nil {
+		fAccess.lock = new(sync.Mutex)
+	}
+
+	fAccess.lock.Lock()
+
+	defer fAccess.lock.Unlock()
+
+	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	funcName := "FileAccessControl.NewInitialized()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		funcName,
+		"")
+
+	if err != nil {
+		return FileAccessControl{}, err
+	}
+
 	openCodes, err := new(FileOpenConfig).New(
 		ePrefix,
 		FOpenType.TypeNone(),
@@ -27,18 +148,26 @@ func (fAccess FileAccessControl) NewInitialized() (FileAccessControl, error) {
 
 	if err != nil {
 		return FileAccessControl{},
-			fmt.Errorf(ePrefix+"Error returned by FileOpenConfig{}.New("+
+			fmt.Errorf("%v\n"+
+				"Error returned by FileOpenConfig{}.New("+
 				"FOpenType.TypeNone(), FOpenMode.ModeNone())\n"+
-				"Error='%v'\n", err.Error())
+				"Error= \n%v\n",
+				funcName,
+				err.Error())
 	}
-	entryType, err := OsFilePermissionCode(0).GetNewFromFileMode(OsFilePermCode.ModeNone())
+
+	entryType, err :=
+		OsFilePermissionCode(0).
+			GetNewFromFileMode(OsFilePermCode.ModeNone())
 
 	if err != nil {
 		return FileAccessControl{},
-			fmt.Errorf(ePrefix+
+			fmt.Errorf("%v\n"+
 				"Error returned by OsFilePermCode.GetNewFromFileMode("+
-				"OsFilePermCode.ModeNone()). "+
-				"Error='%v' ", err.Error())
+				"OsFilePermCode.ModeNone()).\n"+
+				"Error= \n%v\n ",
+				ePrefix.String(),
+				err.Error())
 	}
 
 	permissions, err := new(FilePermissionConfig).
@@ -49,11 +178,13 @@ func (fAccess FileAccessControl) NewInitialized() (FileAccessControl, error) {
 
 	if err != nil {
 		return FileAccessControl{},
-			fmt.Errorf(ePrefix+
+			fmt.Errorf("%v\n"+
 				"Error returned by FilePermissionConfig{}.NewByComponents("+
 				"entryType, \"---------\")\n"+
 				"entryType='OsFilePermCode.ModeNone()'\n"+
-				"Error='%v'", err.Error())
+				"Error= \n%v\n",
+				funcName,
+				err.Error())
 	}
 
 	fA2 := FileAccessControl{}
@@ -64,17 +195,22 @@ func (fAccess FileAccessControl) NewInitialized() (FileAccessControl, error) {
 
 	fA2.isInitialized = true
 
-	return fA2, nil
+	return fA2, err
 }
 
-// New - Creates and returns a new instance of type FileAccessControl.
-func (fAccess FileAccessControl) New(
+// New
+//
+// Creates and returns a new instance of type
+// FileAccessControl.
+func (fAccess *FileAccessControl) New(
 	openCodes FileOpenConfig,
-	permissions FilePermissionConfig) (FileAccessControl, error) {
+	permissions FilePermissionConfig) (
+	FileAccessControl,
+	error) {
 
 	ePrefix := "FileAccessControl.New() "
 
-	err := openCodes.IsValid()
+	err := openCodes.IsValidInstanceError(ePrefix)
 
 	if err != nil {
 		return FileAccessControl{},
@@ -101,9 +237,13 @@ func (fAccess FileAccessControl) New(
 	return fA2, nil
 }
 
-// NewReadWriteAccess - Returns a FileAccessControl instance configured for
+// NewReadWriteAccess
+//
+// Returns a FileAccessControl instance configured for
 // Read/Write access.
-func (fAccess FileAccessControl) NewReadWriteAccess() (FileAccessControl, error) {
+func (fAccess FileAccessControl) NewReadWriteAccess() (
+	FileAccessControl,
+	error) {
 
 	ePrefix := "FileAccessControl.NewReadWriteAccess() "
 
@@ -355,12 +495,25 @@ func (fAccess *FileAccessControl) Equal(fA2 *FileAccessControl) bool {
 // or more FileOpenMode values.
 func (fAccess *FileAccessControl) GetCompositeFileOpenCode() (int, error) {
 
-	ePrefix := "FileAccessControl.GetCompositeFileOpenCode() "
+	var ePrefix *ePref.ErrPrefixDto
 
-	err := fAccess.IsValid()
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		nil,
+		"FileAccessControl."+
+			"GetCompositeFileOpenCode()",
+		"")
+
+	_,
+		err = new(fileAccessControlElectron).
+		testValidityOfFileAccessControl(
+			fAccess,
+			ePrefix)
 
 	if err != nil {
-		return 0, fmt.Errorf(ePrefix+"%v", err.Error())
+		return 0, err
 	}
 
 	fileOpenCodes, err :=
@@ -368,7 +521,7 @@ func (fAccess *FileAccessControl) GetCompositeFileOpenCode() (int, error) {
 			GetCompositeFileOpenCode(ePrefix)
 
 	if err != nil {
-		return 0, fmt.Errorf(ePrefix+"%v", err.Error())
+		return 0, err
 	}
 
 	return fileOpenCodes, nil
@@ -378,22 +531,46 @@ func (fAccess *FileAccessControl) GetCompositeFileOpenCode() (int, error) {
 // os.FileMode.
 func (fAccess *FileAccessControl) GetCompositePermissionMode() (os.FileMode, error) {
 
-	ePrefix := "FileAccessControl.GetCompositePermissionMode() "
-
-	err := fAccess.IsValid()
-
-	if err != nil {
-		return os.FileMode(9999), fmt.Errorf(ePrefix+"%v", err.Error())
+	if fAccess.lock == nil {
+		fAccess.lock = new(sync.Mutex)
 	}
 
-	permissionCode, err := fAccess.permissions.
+	fAccess.lock.Lock()
+
+	defer fAccess.lock.Unlock()
+
+	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		nil,
+		"FileAccessControl."+
+			"GetCompositePermissionMode()",
+		"")
+
+	_,
+		err = new(fileAccessControlElectron).
+		testValidityOfFileAccessControl(
+			fAccess,
+			ePrefix)
+
+	if err != nil {
+		return os.FileMode(9999), err
+	}
+
+	var permissionCode os.FileMode
+
+	permissionCode,
+		err = fAccess.permissions.
 		GetCompositePermissionMode(ePrefix)
 
 	if err != nil {
-		return os.FileMode(9999), fmt.Errorf(ePrefix+"%v", err.Error())
+		return os.FileMode(9999), err
 	}
 
-	return permissionCode, nil
+	return permissionCode, err
 }
 
 // GetCompositePermissionModeText - Returns the composite permission file mode
@@ -405,23 +582,45 @@ func (fAccess *FileAccessControl) GetCompositePermissionMode() (os.FileMode, err
 //	      drwxrwxrwx = returned value "020000000777"
 func (fAccess *FileAccessControl) GetCompositePermissionModeText() string {
 
-	ePrefix := "FileAccessControl.GetCompositePermissionModeText() "
+	if fAccess.lock == nil {
+		fAccess.lock = new(sync.Mutex)
+	}
 
-	err := fAccess.IsValid()
+	fAccess.lock.Lock()
+
+	defer fAccess.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		nil,
+		"FileAccessControl."+
+			"GetCompositePermissionModeText()",
+		"")
+
+	_,
+		err = new(fileAccessControlElectron).
+		testValidityOfFileAccessControl(
+			fAccess,
+			ePrefix)
 
 	if err != nil {
-		return ePrefix + "Current File Access Control Instance is INVALID! " + err.Error()
+		return err.Error()
 	}
 
 	var permissionModeText string
 
 	permissionModeText,
 		err = fAccess.permissions.
-		GetPermissionFileModeValueText(ePrefix)
+		GetPermissionFileModeValueText(
+			ePrefix.XCpy(
+				"fAccess.permissions->"))
 
 	if err != nil {
-		permissionModeText = ePrefix + "\n" +
-			err.Error()
+		permissionModeText = err.Error()
 	}
 
 	return permissionModeText
@@ -429,77 +628,184 @@ func (fAccess *FileAccessControl) GetCompositePermissionModeText() string {
 
 // GetFileOpenAndPermissionCodes - Returns both the complete File Open Code
 // and complete Permission code.
-func (fAccess *FileAccessControl) GetFileOpenAndPermissionCodes() (int, os.FileMode, error) {
+func (fAccess *FileAccessControl) GetFileOpenAndPermissionCodes() (
+	int,
+	os.FileMode,
+	error) {
 
-	ePrefix := "FileAccessControl.GetFileOpenAndPermissionCodes() "
+	if fAccess.lock == nil {
+		fAccess.lock = new(sync.Mutex)
+	}
 
-	err := fAccess.IsValid()
+	fAccess.lock.Lock()
+
+	defer fAccess.lock.Unlock()
+
+	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		nil,
+		"FileAccessControl."+
+			"GetFileOpenAndPermissionCodes()",
+		"")
 
 	if err != nil {
-		return -1, os.FileMode(9999), fmt.Errorf(ePrefix+"%v", err.Error())
+		return -1, os.FileMode(9999), err
+	}
+
+	_,
+		err = new(fileAccessControlElectron).
+		testValidityOfFileAccessControl(
+			fAccess,
+			ePrefix)
+
+	if err != nil {
+		return -1, os.FileMode(9999), err
 	}
 
 	fileOpenCode, err :=
 		fAccess.fileOpenCodes.
-			GetCompositeFileOpenCode(ePrefix)
+			GetCompositeFileOpenCode(
+				ePrefix.XCpy(
+					"fAccess.fileOpenCodes->"))
 
 	if err != nil {
-		return -1, os.FileMode(9999), fmt.Errorf(ePrefix+"%v", err.Error())
+		return -1, os.FileMode(9999), err
 	}
 
 	permissionCode, err := fAccess.permissions.
-		GetCompositePermissionMode(ePrefix)
+		GetCompositePermissionMode(
+			ePrefix.XCpy(
+				"fAccess.permissions->"))
 
 	if err != nil {
-		return -1, os.FileMode(9999), fmt.Errorf(ePrefix+"%v", err.Error())
+		return -1, os.FileMode(9999), err
 	}
 
-	return fileOpenCode, permissionCode, nil
+	return fileOpenCode, permissionCode, err
 }
 
 // GetFileOpenConfig - Returns a deep copy of the FileOpenConfig type
 // encapsulated by the current FileAccessControl instance.
 func (fAccess *FileAccessControl) GetFileOpenConfig() (FileOpenConfig, error) {
-	ePrefix := "FileAccessControl.GetFileOpenConfig() "
 
-	err := fAccess.IsValid()
-
-	if err != nil {
-		return FileOpenConfig{}, fmt.Errorf(ePrefix+"%v", err.Error())
+	if fAccess.lock == nil {
+		fAccess.lock = new(sync.Mutex)
 	}
 
-	return fAccess.fileOpenCodes.CopyOut(), nil
+	fAccess.lock.Lock()
+
+	defer fAccess.lock.Unlock()
+
+	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		nil,
+		"FileAccessControl."+
+			"GetFileOpenConfig()",
+		"")
+
+	if err != nil {
+		return FileOpenConfig{}, err
+	}
+
+	_,
+		err = new(fileAccessControlElectron).
+		testValidityOfFileAccessControl(
+			fAccess,
+			ePrefix)
+
+	if err != nil {
+		return FileOpenConfig{}, err
+	}
+
+	return fAccess.fileOpenCodes.CopyOut(), err
 }
 
 // GetFileOpenType - Returns the File Open Type associated with the
 // FileOpenConfig type stored as 'FileAccessControl.fileOpenCodes'.
 func (fAccess *FileAccessControl) GetFileOpenType() (FileOpenType, error) {
 
-	ePrefix := "FileAccessControl.GetFileOpenConfig() "
-
-	err := fAccess.IsValid()
-
-	if err != nil {
-		return FileOpenType(99999), fmt.Errorf(ePrefix+"%v", err.Error())
+	if fAccess.lock == nil {
+		fAccess.lock = new(sync.Mutex)
 	}
 
-	return fAccess.fileOpenCodes.GetFileOpenType(), nil
+	fAccess.lock.Lock()
+
+	defer fAccess.lock.Unlock()
+
+	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		nil,
+		"FileAccessControl."+
+			"GetFileOpenConfig()",
+		"")
+
+	if err != nil {
+		return FileOpenType(99999), err
+	}
+
+	_,
+		err = new(fileAccessControlElectron).
+		testValidityOfFileAccessControl(
+			fAccess,
+			ePrefix)
+
+	if err != nil {
+		return FileOpenType(99999), err
+	}
+
+	return fAccess.fileOpenCodes.GetFileOpenType(), err
 }
 
 // GetFilePermissionConfig - Returns a deep copy of the FilePermissionConfig type
 // encapsulated by the current FileAccessControl instance.
 func (fAccess *FileAccessControl) GetFilePermissionConfig() (FilePermissionConfig, error) {
 
-	ePrefix := "FileAccessControl.GetFilePermissionConfig() "
+	if fAccess.lock == nil {
+		fAccess.lock = new(sync.Mutex)
+	}
 
-	err := fAccess.IsValid()
+	fAccess.lock.Lock()
+
+	defer fAccess.lock.Unlock()
+
+	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		nil,
+		"FileAccessControl."+
+			"GetFilePermissionConfig()",
+		"")
 
 	if err != nil {
-		return FilePermissionConfig{}, fmt.Errorf(ePrefix+"%v", err.Error())
+		return FilePermissionConfig{}, err
+	}
+
+	_,
+		err = new(fileAccessControlElectron).
+		testValidityOfFileAccessControl(
+			fAccess,
+			ePrefix)
+
+	if err != nil {
+		return FilePermissionConfig{}, err
 	}
 
 	return fAccess.permissions.CopyOut(), nil
-
 }
 
 // GetFilePermissionTextCode - Returns the file mode permissions expressed as
@@ -510,53 +816,185 @@ func (fAccess *FileAccessControl) GetFilePermissionConfig() (FilePermissionConfi
 //	      -rwxrwxrwx
 //	      -rw-rw-rw-
 //	      drwxrwxrwx
-func (fAccess *FileAccessControl) GetFilePermissionTextCode() (string, error) {
+func (fAccess *FileAccessControl) GetFilePermissionTextCode() (string,
+	error) {
 
-	ePrefix := "FileAccessControl.GetFilePermissionTextCode() "
+	if fAccess.lock == nil {
+		fAccess.lock = new(sync.Mutex)
+	}
+
+	fAccess.lock.Lock()
+
+	defer fAccess.lock.Unlock()
+
+	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		nil,
+		"FileAccessControl."+
+			"GetFilePermissionTextCode()",
+		"")
+
+	if err != nil {
+		return "", err
+	}
+
+	_,
+		err = new(fileAccessControlElectron).
+		testValidityOfFileAccessControl(
+			fAccess,
+			ePrefix)
+
+	if err != nil {
+		return "", err
+	}
 
 	permTxtCode, err := fAccess.permissions.
-		GetPermissionTextCode(ePrefix)
+		GetPermissionTextCode(
+			ePrefix.XCpy(
+				"fAccess.permissions->"))
 
 	if err != nil {
-		return "", fmt.Errorf(ePrefix+"%v\n", err.Error())
+		return "", err
 	}
 
-	return permTxtCode, nil
+	return permTxtCode, err
 }
 
-// IsValid - If the current FileAccessControl instance is valid and properly
-// initialized, this method returns nil. If the current FileAccessControl
-// instance is invalid, this method returns an error.
-func (fAccess *FileAccessControl) IsValid() error {
+// IsValidInstanceError
+//
+// If the current FileAccessControl instance is valid and
+// properly initialized, this method returns an error
+// value of 'nil'.
+//
+// If the current FileAccessControl instance is invalid,
+// this method returns an error encapsulating an
+// appropriate error message describing the cause of the
+// error.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If any of the internal member data variables
+//		contained in the current instance of
+//		FileAccessControl are found to be invalid, this
+//		method will return an error configured with an
+//		appropriate message identifying the invalid
+//		member data variable.
+//
+//		If all internal member data variables evaluate
+//		as valid, this returned error value will be set
+//		to 'nil'.
+//
+//		If errors are encountered during processing or if
+//		any internal member data values are found to be
+//		invalid, the returned error Type will encapsulate
+//		an appropriate error message. This returned error
+//		message will incorporate the method chain and text
+//		passed by input parameter, 'errorPrefix'. The
+//		'errorPrefix' text will be attached to the
+//		beginning of the error message.
+func (fAccess *FileAccessControl) IsValidInstanceError(
+	errorPrefix interface{}) error {
 
-	ePrefix := "FileAccessControl.IsValid() "
+	if fAccess.lock == nil {
+		fAccess.lock = new(sync.Mutex)
+	}
 
-	if !fAccess.isInitialized {
-		return fmt.Errorf("%v\n"+
-			"Error: The current FileAccessControl Instance has NOT been initialized!\n",
+	fAccess.lock.Lock()
+
+	defer fAccess.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileAccessControl."+
+			"IsValidInstanceError()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	_,
+		err = new(fileAccessControlElectron).
+		testValidityOfFileAccessControl(
+			fAccess,
 			ePrefix)
-	}
 
-	sb := strings.Builder{}
-	sb.Grow(300)
-
-	err := fAccess.fileOpenCodes.IsValid()
-
-	if err != nil {
-		sb.WriteString(fmt.Sprintf(ePrefix+"File Open codes INVALID! %v\n\n", err.Error()))
-	}
-
-	err = fAccess.permissions.IsValid(ePrefix)
-
-	if err != nil {
-		sb.WriteString(fmt.Sprintf(ePrefix+"File Permission codes INVALID! %v \n", err.Error()))
-	}
-
-	if sb.Len() > 4 {
-		return fmt.Errorf("%s", sb.String())
-	}
-
-	return nil
+	return err
 }
 
 // SetFileOpenCodes - Assigns 'fileOpenCodes' to internal member variable,
@@ -565,7 +1003,7 @@ func (fAccess *FileAccessControl) SetFileOpenCodes(fileOpenCodes FileOpenConfig)
 
 	ePrefix := "FileAccessControl.SetFileOpenCodes() "
 
-	err := fileOpenCodes.IsValid()
+	err := fileOpenCodes.IsValidInstanceError(ePrefix)
 
 	if err != nil {
 		return fmt.Errorf(ePrefix+"INVALID 'fileOpenCodes'! - %v", err.Error())
@@ -601,7 +1039,7 @@ func (fAccess *FileAccessControl) SetFilePermissionCodes(
 
 	fAccess.permissions = filePermissions.CopyOut()
 
-	err = fAccess.fileOpenCodes.IsValid()
+	err = fAccess.fileOpenCodes.IsValidInstanceError(ePrefix)
 
 	if err == nil {
 		fAccess.isInitialized = true

@@ -244,7 +244,7 @@ func (fop FileOperationCode) IsValid() error {
 	_, ok := mFileOperationCodeIntToString[int(fop)]
 
 	if !ok {
-		ePrefix := "FileOperationCode.IsValid() "
+		ePrefix := "FileOperationCode.IsValidInstanceError() "
 		return fmt.Errorf(ePrefix+"Error: File Operation Code INVALID!. Unknown Value='%v' ", fop.Value())
 	}
 
@@ -440,7 +440,7 @@ func (fop FileOperationCode) checkInitializeMaps(reInitialize bool) {
 		if f == "String" ||
 			f == "ParseString" ||
 			f == "Value" ||
-			f == "IsValid" ||
+			f == "IsValidInstanceError" ||
 			f == "checkInitializeMaps" {
 			continue
 		}

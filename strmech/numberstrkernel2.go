@@ -3075,13 +3075,18 @@ func (numStrKernel *NumberStrKernel) IsValidInstance() bool {
 //		an appropriate message identifying the invalid
 //		member data variable.
 //
-//		If errors are encountered during processing, the
-//		returned error Type will encapsulate an error
-//		message. This returned error message will
-//		incorporate the method chain and text passed by
-//		input parameter, 'errorPrefix'. The 'errorPrefix'
-//		text will be attached to the beginning of the
-//		error message.
+//		If all internal member data variables evaluate
+//		as valid, this returned error value will be set
+//		to 'nil'.
+//
+//		If errors are encountered during processing or if
+//		any internal member data values are found to be
+//		invalid, the returned error Type will encapsulate
+//		an appropriate error message. This returned error
+//		message will incorporate the method chain and text
+//		passed by input parameter, 'errorPrefix'. The
+//		'errorPrefix' text will be attached to the
+//		beginning of the error message.
 func (numStrKernel *NumberStrKernel) IsValidInstanceError(
 	errorPrefix interface{}) error {
 

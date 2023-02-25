@@ -94,7 +94,7 @@ func (preProcPathCde PreProcessPathCode) IsValid() error {
 
 	defer preProcessPathCodeMapsLock.Unlock()
 
-	ePrefix := "PreProcessPathCode.IsValid() "
+	ePrefix := "PreProcessPathCode.IsValidInstanceError() "
 
 	_, ok := mValidPreProcessPathCodeToString[preProcPathCde]
 

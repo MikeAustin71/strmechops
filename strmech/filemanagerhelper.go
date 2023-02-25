@@ -559,11 +559,11 @@ func (fMgrHlpr *fileMgrHelper) createFile(
 		return fmt.Errorf(ePrefix+"\n%v\n", err.Error())
 	}
 
-	err = createTruncateAccessCtrl.IsValid()
+	err = createTruncateAccessCtrl.IsValidInstanceError()
 
 	if err != nil {
 		return fmt.Errorf(ePrefix+
-			"\nError returned by createTruncateAccessCtrl.IsValid()\n"+
+			"\nError returned by createTruncateAccessCtrl.IsValidInstanceError()\n"+
 			"Error='%v'", err.Error())
 	}
 
@@ -1535,7 +1535,7 @@ func (fMgrHlpr *fileMgrHelper) lowLevelOpenFile(
 			"\nError: Input parameter 'fMgr' is a nil pointer!\n")
 	}
 
-	err := fileAccessCtrl.IsValid()
+	err := fileAccessCtrl.IsValidInstanceError()
 
 	if err != nil {
 		return fmt.Errorf(ePrefix+
@@ -1935,7 +1935,7 @@ func (fMgrHlpr *fileMgrHelper) openFile(
 			"\nError: Input parameter 'fMgr' is a nil pointer!\n")
 	}
 
-	err = openFileAccessCtrl.IsValid()
+	err = openFileAccessCtrl.IsValidInstanceError()
 
 	if err != nil {
 		return fmt.Errorf(ePrefix+
@@ -2043,11 +2043,11 @@ func (fMgrHlpr *fileMgrHelper) readFileSetup(
 			"\nError: Input parameter 'fMgr' is a nil pointer!\n")
 	}
 
-	err = readAccessCtrl.IsValid()
+	err = readAccessCtrl.IsValidInstanceError()
 
 	if err != nil {
 		return fmt.Errorf(ePrefix+
-			"\nError returned by readAccessCtrl.IsValid()\n"+
+			"\nError returned by readAccessCtrl.IsValidInstanceError()\n"+
 			"Error='%v'\n", err.Error())
 	}
 
@@ -2590,11 +2590,11 @@ func (fMgrHlpr *fileMgrHelper) writeFileSetup(
 			"\nError: Input parameter 'fMgr' is a nil pointer!\n")
 	}
 
-	err = writeAccessCtrl.IsValid()
+	err = writeAccessCtrl.IsValidInstanceError()
 
 	if err != nil {
 		return fmt.Errorf(ePrefix+
-			"\nError returned by writeAccessCtrl.IsValid()\n"+
+			"\nError returned by writeAccessCtrl.IsValidInstanceError()\n"+
 			"Error='%v'\n", err.Error())
 	}
 

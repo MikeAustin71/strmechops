@@ -1773,7 +1773,7 @@ func (fPerm *FilePermissionConfig) IsValid(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"FilePermissionConfig."+
-			"IsValid()",
+			"IsValidInstanceError()",
 		"")
 
 	if err != nil {

@@ -429,7 +429,7 @@ func (fops *FileOps) SetFileOpsCode(fOpCode FileOperationCode) error {
 
 	if err != nil {
 		return fmt.Errorf("FileOps.SetFileOpsCode()\n"+
-			"Error returned by fOpCode.IsValid()\nError='%v'", err.Error())
+			"Error returned by fOpCode.IsValidInstanceError()\nError='%v'", err.Error())
 	}
 
 	fops.opToExecute = fOpCode

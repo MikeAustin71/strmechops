@@ -2570,7 +2570,7 @@ func (fileHelpMech *fileHelperMechanics) openFile(
 		return filePtr, err
 	}
 
-	err2 := fileOpenCfg.IsValid()
+	err2 := fileOpenCfg.IsValidInstanceError(ePrefix)
 
 	if err2 != nil {
 

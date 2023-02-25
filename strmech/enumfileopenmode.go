@@ -170,7 +170,7 @@ func (fOpenMode FileOpenMode) IsValid() error {
 	_, ok := mValidFileOpenModeToString[fOpenMode]
 
 	if !ok {
-		ePrefix := "FileOpenMode.IsValid() "
+		ePrefix := "FileOpenMode.IsValidInstanceError() "
 		return fmt.Errorf(ePrefix+
 			"Error: Ivalid FileOpenMode! Current FileOpenMode='%v'",
 			fOpenMode)

@@ -800,7 +800,7 @@ func (ofFPermCodeNanobot *osFilePermissionCodeNanobot) isValidOsFPermCode(
 			"%v\n"+
 				"The current OsFilePermissionCode is INVALID!\n"+
 				"OsFilePermissionCode Octal Value='%s'\n",
-			"OsFilePermissionCode.IsValid()",
+			"OsFilePermissionCode.IsValidInstanceError()",
 			strconv.FormatInt(int64(fPermCode), 8))
 	}
 
