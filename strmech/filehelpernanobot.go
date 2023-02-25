@@ -4666,7 +4666,8 @@ func (fHelperNanobot *fileHelperNanobot) openFileReadOnly(
 		return filePtr, err
 	}
 
-	fOpenCode, err2 := fileOpenCfg.GetCompositeFileOpenCode()
+	fOpenCode, err2 := fileOpenCfg.
+		GetCompositeFileOpenCode(ePrefix)
 
 	if err2 != nil {
 		err = fmt.Errorf("%v\n"+
@@ -4971,7 +4972,8 @@ func (fHelperNanobot *fileHelperNanobot) openFileReadWrite(
 		}
 	}
 
-	fOpenCode, err := fileOpenCfg.GetCompositeFileOpenCode()
+	fOpenCode, err := fileOpenCfg.
+		GetCompositeFileOpenCode(ePrefix)
 
 	if err != nil {
 		return nil,
@@ -5265,7 +5267,8 @@ func (fHelperNanobot *fileHelperNanobot) openFileWriteOnly(
 		}
 	}
 
-	fOpenCode, err := fileOpenCfg.GetCompositeFileOpenCode()
+	fOpenCode, err := fileOpenCfg.
+		GetCompositeFileOpenCode(ePrefix)
 
 	if err != nil {
 

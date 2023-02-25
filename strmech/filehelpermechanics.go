@@ -2583,7 +2583,8 @@ func (fileHelpMech *fileHelperMechanics) openFile(
 		return filePtr, err
 	}
 
-	fOpenCode, err2 := fileOpenCfg.GetCompositeFileOpenCode()
+	fOpenCode, err2 := fileOpenCfg.
+		GetCompositeFileOpenCode(ePrefix)
 
 	if err2 != nil {
 

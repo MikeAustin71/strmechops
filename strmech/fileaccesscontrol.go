@@ -363,7 +363,9 @@ func (fAccess *FileAccessControl) GetCompositeFileOpenCode() (int, error) {
 		return 0, fmt.Errorf(ePrefix+"%v", err.Error())
 	}
 
-	fileOpenCodes, err := fAccess.fileOpenCodes.GetCompositeFileOpenCode()
+	fileOpenCodes, err :=
+		fAccess.fileOpenCodes.
+			GetCompositeFileOpenCode(ePrefix)
 
 	if err != nil {
 		return 0, fmt.Errorf(ePrefix+"%v", err.Error())
@@ -437,7 +439,9 @@ func (fAccess *FileAccessControl) GetFileOpenAndPermissionCodes() (int, os.FileM
 		return -1, os.FileMode(9999), fmt.Errorf(ePrefix+"%v", err.Error())
 	}
 
-	fileOpenCode, err := fAccess.fileOpenCodes.GetCompositeFileOpenCode()
+	fileOpenCode, err :=
+		fAccess.fileOpenCodes.
+			GetCompositeFileOpenCode(ePrefix)
 
 	if err != nil {
 		return -1, os.FileMode(9999), fmt.Errorf(ePrefix+"%v", err.Error())
