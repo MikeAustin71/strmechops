@@ -47,30 +47,124 @@ type FileMgr struct {
 	// Used internally to ensure thread safe operations
 }
 
-// ChangePermissionMode - This method is a wrapper for os.Chmod().
+// ChangePermissionMode
 //
-// ChangePermissionMode changes the permissions mode of the named file to mode. If the file is a symbolic
-// link, it changes the mode of the link's target. If there is an error, it will be of type
-// *PathError.
+// This method is a wrapper for os.Chmod().
 //
-// A different subset of the mode bits are used, depending on the operating system.
+// ChangePermissionMode changes the permissions mode of
+// the current FileMgr file to input paramter 'mode'. If
+// the file is a symbolic link, it changes the mode of
+// the link's target. If there is an error, it will be of
+// type *PathError.
 //
-// On Unix, the mode's permission bits, ModeSetuid, ModeSetgid, and ModeSticky are used.
+// A different subset of the mode bits are used, depending
+// on the operating system.
 //
-// On Windows, the mode must be non-zero but otherwise only the 0200 bit (owner writable) of mode
-// is used; it controls whether the file's read-only attribute is set or cleared. attribute. The
-// other bits are currently unused. Use mode 0400 for a read-only file and 0600 for a
-// readable+writable file.
+// On Unix/Linux, the mode's permission bits, ModeSetuid,
+// ModeSetgid, and ModeSticky are used.
 //
-//	For Windows - Eligible permission codes are:
+// On Windows, the mode must be non-zero but otherwise only
+// the 0200 bit (owner writable) of mode is used; it controls
+// whether the file's read-only attribute is set or cleared.
+// The other bits are currently unused. Use mode 0400 for a
+// read-only file and 0600 for a readable+writable file.
 //
-//	  'modeStr'      Octal
-//	   Symbolic      Mode Value     File Access
+// For Windows - Eligible permission codes are:
 //
-//	   -r--r--r--     0444          File - read only
-//	   -rw-rw-rw-     0666          File - read & write
+//	'modeStr'      Octal
+//	 Symbolic      Mode Value     File Access
 //
-// On Plan 9, the mode's permission bits, ModeAppend, ModeExclusive, and ModeTemporary are used.
+//	 -r--r--r--     0444          File - read only
+//	 -rw-rw-rw-     0666          File - read & write
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	mode						FilePermissionConfig
+//
+//		An instance of FilePermissionConfig containing
+//		the file permission specifications.
+//
+//		See the source code documentation for method
+//		'FilePermissionConfig.New()' for an explanation
+//		of permission codes.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
 func (fMgr *FileMgr) ChangePermissionMode(
 	mode FilePermissionConfig,
 	errorPrefix interface{}) error {
@@ -97,14 +191,15 @@ func (fMgr *FileMgr) ChangePermissionMode(
 		return err
 	}
 
-	fMgrHelpr := fileMgrHelper{}
+	fMgrHelprAtom := fileMgrHelperAtom{}
 
 	filePathDoesExist,
-		err := fMgrHelpr.doesFileMgrPathFileExist(
-		fMgr,
-		PreProcPathCode.None(),
-		ePrefix,
-		"fMgr.absolutePathFileName")
+		err := fMgrHelprAtom.
+		doesFileMgrPathFileExist(
+			fMgr,
+			PreProcPathCode.None(),
+			ePrefix,
+			"fMgr.absolutePathFileName")
 
 	if err != nil {
 		return err
@@ -168,7 +263,8 @@ func (fMgr *FileMgr) ChangePermissionMode(
 
 	err = nil
 	_,
-		err = fMgrHelpr.doesFileMgrPathFileExist(fMgr,
+		err = fMgrHelprAtom.doesFileMgrPathFileExist(
+		fMgr,
 		PreProcPathCode.None(),
 		ePrefix,
 		"Verify fMgr.absolutePathFileName")
@@ -182,7 +278,8 @@ func (fMgr *FileMgr) ChangePermissionMode(
 // In addition, if the file has been opened for Write or
 // Read-Write, this method will automatically flush the
 // file buffers.
-func (fMgr *FileMgr) CloseThisFile() error {
+func (fMgr *FileMgr) CloseThisFile(
+	errorPrefix interface{}) error {
 
 	if fMgr.lock == nil {
 		fMgr.lock = new(sync.Mutex)
@@ -192,9 +289,18 @@ func (fMgr *FileMgr) CloseThisFile() error {
 
 	defer fMgr.lock.Unlock()
 
-	ePrefix := "FileMgr.CloseThisFile() "
-
+	var ePrefix *ePref.ErrPrefixDto
 	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileMgr.CloseThisFile()",
+		"")
+
+	if err != nil {
+		return err
+	}
 
 	fMgrHlpr := fileMgrHelper{}
 
@@ -244,7 +350,9 @@ func (fMgr *FileMgr) CloseThisFile() error {
 //
 //	                Note: an error will be returned if the file identified by the
 //	                current source File Manager instance does NOT exist.
-func (fMgr *FileMgr) CopyFileMgrByIo(fMgrDest *FileMgr) error {
+func (fMgr *FileMgr) CopyFileMgrByIo(
+	fMgrDest *FileMgr,
+	errorPrefix interface{}) error {
 
 	if fMgr.lock == nil {
 		fMgr.lock = new(sync.Mutex)
@@ -254,11 +362,21 @@ func (fMgr *FileMgr) CopyFileMgrByIo(fMgrDest *FileMgr) error {
 
 	defer fMgr.lock.Unlock()
 
-	ePrefix := "FileMgr.CopyFileMgrByIo() "
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileMgr.CopyFileMgrByIo()",
+		"")
+
+	if err != nil {
+		return err
+	}
 
 	fMgrHlpr := fileMgrHelper{}
 
-	var err error
 	sourceFMgrLabel := "fMgrSource"
 	destFMgrLabel := "fMgrDest"
 
@@ -305,7 +423,9 @@ func (fMgr *FileMgr) CopyFileMgrByIo(fMgrDest *FileMgr) error {
 //
 // Reference:
 // https://stackoverflow.com/questions/21060945/simple-way-to-copy-a-file-in-golang
-func (fMgr *FileMgr) CopyFileMgrByIoByLink(fMgrDest *FileMgr) error {
+func (fMgr *FileMgr) CopyFileMgrByIoByLink(
+	fMgrDest *FileMgr,
+	errorPrefix interface{}) error {
 
 	if fMgr.lock == nil {
 		fMgr.lock = new(sync.Mutex)
@@ -315,10 +435,22 @@ func (fMgr *FileMgr) CopyFileMgrByIoByLink(fMgrDest *FileMgr) error {
 
 	defer fMgr.lock.Unlock()
 
-	ePrefix := "FileMgr.CopyFileMgrByIoByLink() "
-	fMgrHlpr := fileMgrHelper{}
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
 
-	err := fMgrHlpr.copyFileSetup(
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileMgr.CopyFileMgrByIoByLink()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	fMgrHlpr := new(fileMgrHelper)
+
+	err = fMgrHlpr.copyFileSetup(
 		fMgr,
 		fMgrDest,
 		true, //create destination directory
@@ -625,7 +757,8 @@ func (fMgr *FileMgr) CopyFileMgrByLinkByIo(fMgrDest *FileMgr) error {
 //	        'nil' or if it is a zero length byte array.
 func (fMgr *FileMgr) CopyFileMgrWithBuffer(
 	fMgrDest *FileMgr,
-	localCopyBuffer []byte) error {
+	localCopyBuffer []byte,
+	errorPrefix interface{}) error {
 
 	if fMgr.lock == nil {
 		fMgr.lock = new(sync.Mutex)
@@ -634,12 +767,21 @@ func (fMgr *FileMgr) CopyFileMgrWithBuffer(
 	fMgr.lock.Lock()
 
 	defer fMgr.lock.Unlock()
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
 
-	ePrefix := "FileMgr.CopyFileMgrWithBuffer() "
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileMgr.CopyFileMgrWithBuffer()",
+		"")
+
+	if err != nil {
+		return err
+	}
 
 	fMgrHlpr := fileMgrHelper{}
 
-	var err error
 	sourceFMgrLabel := "fMgrSource"
 	destFMgrLabel := "fMgrDest"
 
@@ -683,7 +825,9 @@ func (fMgr *FileMgr) CopyFileMgrWithBuffer(
 //	Reference:
 //	 https://stackoverflow.com/questions/21060945/simple-way-to-copy-a-file-in-golang
 //	 https://golang.org/pkg/io/#Copy
-func (fMgr *FileMgr) CopyFileStrByIo(dstPathFileNameExt string) error {
+func (fMgr *FileMgr) CopyFileStrByIo(
+	dstPathFileNameExt string,
+	errorPrefix interface{}) error {
 
 	if fMgr.lock == nil {
 		fMgr.lock = new(sync.Mutex)
@@ -693,15 +837,33 @@ func (fMgr *FileMgr) CopyFileStrByIo(dstPathFileNameExt string) error {
 
 	defer fMgr.lock.Unlock()
 
-	ePrefix := "FileMgr.CopyFileStrByIo() "
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
 
-	fMgrDest, err := new(FileMgr).New(dstPathFileNameExt)
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileMgr.CopyFileStrByIo()",
+		"")
 
 	if err != nil {
-		return fmt.Errorf(ePrefix+"Invalid input parameter 'dstPathFileNameExt'\n"+
+		return err
+	}
+
+	var fMgrDest FileMgr
+
+	fMgrDest,
+		err = new(FileMgr).New(dstPathFileNameExt)
+
+	if err != nil {
+		return fmt.Errorf("%v\n"+
+			"Invalid input parameter 'dstPathFileNameExt'\n"+
 			"Error returned by FileMgr{}.New(dstPathFileNameExt)\n"+
-			"dstPathFileNameExt='%v'\nError='%v'\n",
-			dstPathFileNameExt, err.Error())
+			"dstPathFileNameExt='%v'\n"+
+			"Error=\n%v\n",
+			ePrefix.String(),
+			dstPathFileNameExt,
+			err.Error())
 	}
 
 	fMgrSourceLabel := "fMgrSource"
@@ -1636,18 +1798,14 @@ func (fMgr *FileMgr) DoesFileExist() bool {
 
 	defer fMgr.lock.Unlock()
 
-	ePrefix := "FileMgr.DoesFileExist() "
-
 	var err error
 	pathFileDoesExist := false
 
-	fMgrHlpr := fileMgrHelper{}
-
 	pathFileDoesExist,
-		err = fMgrHlpr.doesFileMgrPathFileExist(
+		err = new(fileMgrHelperAtom).doesFileMgrPathFileExist(
 		fMgr,
 		PreProcPathCode.None(),
-		ePrefix,
+		nil,
 		"fMgr.absolutePathFileName")
 
 	if err != nil {
@@ -1657,11 +1815,99 @@ func (fMgr *FileMgr) DoesFileExist() bool {
 	return pathFileDoesExist
 }
 
-// DoesThisFileExist - Returns a boolean value
-// designating whether the file specified by the
-// current FileMgr.absolutePathFileName field
+// DoesThisFileExist
+//
+// Returns a boolean value designating whether the file
+// specified by the current FileMgr.absolutePathFileName
 // exists.
-func (fMgr *FileMgr) DoesThisFileExist() (
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	fileDoesExist				bool
+//
+//	Returns a boolean value designating whether the file
+//	specified by the current FileMgr.absolutePathFileName
+//	exists.
+//
+//	nonPathError				error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fMgr *FileMgr) DoesThisFileExist(
+	errorPrefix interface{}) (
 	fileDoesExist bool,
 	nonPathError error) {
 
@@ -1673,13 +1919,22 @@ func (fMgr *FileMgr) DoesThisFileExist() (
 
 	defer fMgr.lock.Unlock()
 
-	ePrefix := "FileMgr.DoesThisFileExist() "
 	fileDoesExist = false
-	nonPathError = nil
-	fMgrHelpr := fileMgrHelper{}
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		nonPathError = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileMgr.DoesThisFileExist()",
+		"")
+
+	if nonPathError != nil {
+		return fileDoesExist, nonPathError
+	}
 
 	fileDoesExist,
-		nonPathError = fMgrHelpr.doesFileMgrPathFileExist(fMgr,
+		nonPathError = new(fileMgrHelperAtom).doesFileMgrPathFileExist(fMgr,
 		PreProcPathCode.None(),
 		ePrefix,
 		"fMgr.absolutePathFileName")
@@ -2125,7 +2380,102 @@ func (fMgr *FileMgr) GetFileExt() string {
 //		 IsDir() bool        // abbreviation for Mode().IsDir()
 //		 Sys() interface{}   // underlying data source (can return nil)
 //	 }
-func (fMgr *FileMgr) GetFileInfo() (fInfo os.FileInfo, err error) {
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	fInfo						os.FileInfo
+//
+//		Returns FileInfo data on the specific file
+//		identified by FileMgr.absolutePathFileName.
+//
+//	 	type FileInfo interface {
+//			 Name() string       // base name of the file
+//			 Size() int64        // length in bytes for regular files; system-dependent for others
+//			 Mode() FileMode     // file mode bits
+//			 ModTime() time.Time // modification time
+//			 IsDir() bool        // abbreviation for Mode().IsDir()
+//			 Sys() interface{}   // underlying data source (can return nil)
+//	 	}
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fMgr *FileMgr) GetFileInfo(
+	errorPrefix interface{}) (fInfo os.FileInfo, err error) {
 
 	if fMgr.lock == nil {
 		fMgr.lock = new(sync.Mutex)
@@ -2136,39 +2486,143 @@ func (fMgr *FileMgr) GetFileInfo() (fInfo os.FileInfo, err error) {
 	defer fMgr.lock.Unlock()
 
 	fInfo = nil
-	err = nil
-	filePathDoesExist := false
-	ePrefix := "FileMgr.GetFileInfo() "
 
-	fMgrHelpr := fileMgrHelper{}
+	filePathDoesExist := false
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileMgr.GetFileInfo()",
+		"")
+
+	if err != nil {
+		return fInfo, err
+	}
 
 	filePathDoesExist,
-		err = fMgrHelpr.doesFileMgrPathFileExist(fMgr,
+		err = new(fileMgrHelperAtom).doesFileMgrPathFileExist(fMgr,
 		PreProcPathCode.None(),
-		ePrefix,
+		ePrefix.XCpy("filePathDoesExist<-"),
 		"fMgr.absolutePathFileName")
 
 	if err != nil {
-		fInfo = nil
-	} else if filePathDoesExist {
-		err = nil
+		return fInfo, err
+	}
+
+	if filePathDoesExist {
+
 		fInfo = fMgr.actualFileInfo.GetOriginalFileInfo()
+
 	} else {
-		fInfo = nil
+
 		err =
-			fmt.Errorf(ePrefix+
+			fmt.Errorf("%v\n"+
 				"The current FileMgr file DOES NOT EXIST!\n"+
-				"File='%v'\n", fMgr.absolutePathFileName)
+				"File='%v'\n",
+				ePrefix.String(),
+				fMgr.absolutePathFileName)
 	}
 
 	return fInfo, err
 }
 
-// GetFileInfoPlus - Returns a FileInfoPlus instance containing
-// os.FileInfo and other data on the current FileManager instance.
+// GetFileInfoPlus
 //
-// An error will be triggered if the file path does NOT exist!
-func (fMgr *FileMgr) GetFileInfoPlus() (fInfo FileInfoPlus, err error) {
+// Returns a FileInfoPlus instance containing os.FileInfo
+// and other data on the current FileManager instance.
+//
+// An error will be triggered if the file path does NOT
+// exist!
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	fInfo						FileInfoPlus
+//
+//		This returned FileInfoPlus instance contains
+//		os.FileInfo and other data on the current
+//		FileManager instance.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fMgr *FileMgr) GetFileInfoPlus(
+	errorPrefix interface{}) (fInfo FileInfoPlus, err error) {
 
 	if fMgr.lock == nil {
 		fMgr.lock = new(sync.Mutex)
@@ -2180,13 +2634,23 @@ func (fMgr *FileMgr) GetFileInfoPlus() (fInfo FileInfoPlus, err error) {
 
 	fInfo = FileInfoPlus{}
 	err = nil
-	ePrefix := "FileMgr.GetFileInfoPlus() "
 
-	fMgrHelpr := fileMgrHelper{}
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileMgr.GetFileInfoPlus()",
+		"")
+
+	if err != nil {
+		return fInfo, err
+	}
+
 	filePathDoesExist := false
 
 	filePathDoesExist,
-		err = fMgrHelpr.doesFileMgrPathFileExist(fMgr,
+		err = new(fileMgrHelperAtom).doesFileMgrPathFileExist(fMgr,
 		PreProcPathCode.None(),
 		ePrefix,
 		"fMgr.absolutePathFileName")
@@ -2198,19 +2662,111 @@ func (fMgr *FileMgr) GetFileInfoPlus() (fInfo FileInfoPlus, err error) {
 		err = nil
 	} else {
 		fInfo = FileInfoPlus{}
-		err = fmt.Errorf(ePrefix+
+		err = fmt.Errorf("%v\n"+
 			"Error: File Manager file DOES NOT EXIST!\n"+
-			"File='%v'\n", fMgr.absolutePathFileName)
+			"File='%v'\n",
+			ePrefix.String(),
+			fMgr.absolutePathFileName)
 	}
 
 	return fInfo, err
 }
 
-// GetFileModTime - Returns the time of the last file modification as a
-// type, 'time.Time'.
+// GetFileModTime
+//
+// Returns the time of the last file modification for the
+// current file as a type, 'time.Time'.
 //
 // If the file does NOT exist, an error is returned.
-func (fMgr *FileMgr) GetFileModTime() (time.Time, error) {
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	time.Time
+//
+//		Returns the time of the last file modification
+//		for the current file.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fMgr *FileMgr) GetFileModTime(
+	errorPrefix interface{}) (
+	time.Time,
+	error) {
 
 	if fMgr.lock == nil {
 		fMgr.lock = new(sync.Mutex)
@@ -2220,28 +2776,46 @@ func (fMgr *FileMgr) GetFileModTime() (time.Time, error) {
 
 	defer fMgr.lock.Unlock()
 
-	ePrefix := "FileMgr.GetFileModTime() "
-
-	fMgrHelpr := fileMgrHelper{}
 	var err error
+
 	filePathDoesExist := false
+
+	var ePrefix *ePref.ErrPrefixDto
+
 	modTime := time.Time{}
 
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileMgr.GetFileModTime()",
+		"")
+
+	if err != nil {
+		return modTime, err
+	}
+
 	filePathDoesExist,
-		err = fMgrHelpr.doesFileMgrPathFileExist(
+		err = new(fileMgrHelperAtom).doesFileMgrPathFileExist(
 		fMgr,
 		PreProcPathCode.None(),
 		ePrefix,
 		"fMgr.absolutePathFileName")
 
-	if err == nil && filePathDoesExist {
+	if err != nil {
+		return modTime, err
+	}
+
+	if filePathDoesExist {
 		modTime = fMgr.actualFileInfo.ModTime()
 	}
 
-	if err == nil && !filePathDoesExist {
-		err = fmt.Errorf(ePrefix+
+	if !filePathDoesExist {
+
+		err = fmt.Errorf("%v\n"+
 			"Current FileMgr file DOES NOT EXIST!\n"+
-			"FileMgr='%v'\n", fMgr.absolutePathFileName)
+			"FileMgr='%v'\n",
+			ePrefix.String(),
+			fMgr.absolutePathFileName)
 	}
 
 	return modTime, err
@@ -2250,35 +2824,115 @@ func (fMgr *FileMgr) GetFileModTime() (time.Time, error) {
 // GetFileModTimeStr - Returns the time of the last file modification as
 // a string. If the file does NOT exist, an error is returned.
 //
-// ----------------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
-// Input Parameters:
+// # Input Parameters
 //
-//	timeFormat  string - A format string used to format the last modification time for
-//	                     the file identified by the current File Manager (FileMgr) instance.
+//	timeFormat					string
 //
-//	                     If the string is empty ("") or if the time format is invalid, the
-//	                     method will automatically format the time using the default format,
-//	                     "2019-03-12 21:49:00:00".
+//		A format string used to format the last
+//		modification time for the file identified by the
+//		current File Manager (FileMgr) instance.
+//
+//		If the string is empty ("") or if the time format
+//		is invalid, the method will automatically format
+//		the time using the default format,
+//		"2019-03-12 21:49:00:00".
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values:
 //
-//	string        - The time at which the current file was last modified formatted
-//	                as a string. The time format is determined by input parameter
-//	                'timeFormat'. If 'timeFormat' is empty or if 'timeFormat' is an
-//	                invalid format, the default format "2019-03-12 21:49:00:00" will
-//	                be substituted.
+//	string
 //
-//	error         - If this method completes successfully, the returned error Type is
-//	                set equal to 'nil'. If an error condition is encountered, this
-//	                method will return an error Type which contains an appropriate
-//	                error message.
+//		The time at which the current file was last
+//		modified formatted as a string. The time format
+//		is determined by input parameter 'timeFormat'.
+//		If 'timeFormat' is empty or if 'timeFormat' is
+//		an invalid format, the default format
+//		"2019-03-12 21:49:00:00" will be substituted.
 //
-//	                Note: an error will be returned if the file identified by the current
-//	                File Manager instance does NOT exist.
-func (fMgr *FileMgr) GetFileModTimeStr(timeFormat string) (string, error) {
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+//
+//		Note:
+//		An error will be returned if the file identified
+//		by the current File Manager instance does NOT
+//		exist.
+func (fMgr *FileMgr) GetFileModTimeStr(
+	timeFormat string,
+	errorPrefix interface{}) (
+	string,
+	error) {
 
 	if fMgr.lock == nil {
 		fMgr.lock = new(sync.Mutex)
@@ -2288,30 +2942,49 @@ func (fMgr *FileMgr) GetFileModTimeStr(timeFormat string) (string, error) {
 
 	defer fMgr.lock.Unlock()
 
-	ePrefix := "FileMgr.GetFileModTimeStr() "
-
-	fMgrHelpr := fileMgrHelper{}
 	var err error
 	filePathDoesExist := false
 	modTime := time.Time{}
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileMgr.GetFileModTimeStr()",
+		"")
+
+	if err != nil {
+		return "", err
+	}
 
 	filePathDoesExist,
-		err = fMgrHelpr.doesFileMgrPathFileExist(
-		fMgr,
-		PreProcPathCode.None(),
-		ePrefix,
-		"fMgr.absolutePathFileName")
+		err = new(fileMgrHelperAtom).
+		doesFileMgrPathFileExist(
+			fMgr,
+			PreProcPathCode.None(),
+			ePrefix.XCpy(
+				"filePathDoesExist<-fMgr"),
+			"fMgr.absolutePathFileName")
 
-	if err == nil && filePathDoesExist {
+	if err != nil {
+		return "", err
+	}
+
+	if filePathDoesExist {
 		modTime = fMgr.actualFileInfo.ModTime()
 	}
 
 	defaultFmt := "2006-01-02 15:04:05 -0700 MST"
 
-	if err == nil && !filePathDoesExist {
-		err = fmt.Errorf(ePrefix+
+	if !filePathDoesExist {
+
+		err = fmt.Errorf("%v\n"+
 			"Current FileMgr file DOES NOT EXIST!\n"+
-			"FileMgr='%v'\n", fMgr.absolutePathFileName)
+			"FileMgr='%v'\n",
+			ePrefix.String(),
+			fMgr.absolutePathFileName)
+
+		return "", err
 	}
 
 	if timeFormat == "" {
@@ -2391,11 +3064,108 @@ func (fMgr *FileMgr) GetFileNameExt() string {
 	return fileNameExt
 }
 
-// GetFilePermissionConfig - Returns a FilePermissionConfig instance encapsulating
-// all the permission information associated with this file.
+// GetFilePermissionConfig
 //
-// If the file does NOT exist, this method will return an error.
-func (fMgr *FileMgr) GetFilePermissionConfig() (fPerm FilePermissionConfig, err error) {
+// Returns a FilePermissionConfig instance encapsulating
+// all the permission information associated with the
+// current FileMgr file.
+//
+// If the file does NOT exist, this method will return an
+// error.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	fPerm						FilePermissionConfig
+//
+//		Returns a FilePermissionConfig instance
+//		encapsulating all the permission information
+//		associated with the current FileMgr file.
+//
+//		See the source code documentation for method
+//		'FilePermissionConfig.New()' for an explanation
+//		of permission codes.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fMgr *FileMgr) GetFilePermissionConfig(
+	errorPrefix interface{}) (
+	fPerm FilePermissionConfig,
+	err error) {
 
 	if fMgr.lock == nil {
 		fMgr.lock = new(sync.Mutex)
@@ -2404,50 +3174,72 @@ func (fMgr *FileMgr) GetFilePermissionConfig() (fPerm FilePermissionConfig, err 
 	fMgr.lock.Lock()
 
 	defer fMgr.lock.Unlock()
+	var ePrefix *ePref.ErrPrefixDto
 
-	ePrefix := "FileMgr.GetFilePermissionConfig() "
+	funcName := "FileMgr.GetFilePermissionConfig()"
 
-	fPerm = FilePermissionConfig{}
-	err = nil
-	var filePathDoesExist bool
-	var err2 error
-	fMgrHelpr := fileMgrHelper{}
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		funcName,
+		"")
 
-	filePathDoesExist,
-		err = fMgrHelpr.doesFileMgrPathFileExist(fMgr,
-		PreProcPathCode.None(),
-		ePrefix,
-		"FileMgr.absolutePathFileName")
-
-	if err == nil &&
-		!filePathDoesExist {
-		err =
-			errors.New(ePrefix +
-				"The current FileMgr file DOES NOT EXIST!\n")
+	if err != nil {
+		return fPerm, err
 	}
 
-	if err == nil {
+	var filePathDoesExist bool
 
-		fPerm, err2 = new(FilePermissionConfig).
-			NewByFileMode(
-				fMgr.actualFileInfo.Mode(),
-				ePrefix)
+	filePathDoesExist,
+		err = new(fileMgrHelperAtom).
+		doesFileMgrPathFileExist(
+			fMgr,
+			PreProcPathCode.None(),
+			ePrefix.XCpy("filePathDoesExist<-"),
+			"FileMgr.absolutePathFileName")
 
-		if err2 != nil {
-			err =
-				fmt.Errorf(ePrefix+
-					"\n%v\n", err2.Error())
-		}
+	if err != nil {
+		return fPerm, err
+	}
+
+	if !filePathDoesExist {
+
+		err =
+			fmt.Errorf("%v\n"+
+				"The current FileMgr file DOES NOT EXIST!\n",
+				ePrefix.String())
+
+		return fPerm, err
+	}
+
+	var err2 error
+
+	fPerm, err2 = new(FilePermissionConfig).
+		NewByFileMode(
+			fMgr.actualFileInfo.Mode(),
+			ePrefix)
+
+	if err2 != nil {
+
+		err =
+			fmt.Errorf("%v\n"+
+				"\n%v\n",
+				funcName,
+				err2.Error())
 	}
 
 	return fPerm, err
 }
 
-// GetFilePermissionTextCodes - If the current file exists on disk,
-// this method will return the File Permission Codes, otherwise known
-// as the unix permission bits, in the form of a 10-character string.
+// GetFilePermissionTextCodes
 //
-// If the file does NOT exist, this method will return an error.
+// If the current FileMgr file exists on disk, this
+// method will return the File Permission Codes,
+// otherwise known as the unix permission bits, in the
+// form of a 10-character string.
+//
+// If the file does NOT exist, this method will return
+// an error.
 //
 // Examples:
 //
@@ -2468,7 +3260,95 @@ func (fMgr *FileMgr) GetFilePermissionConfig() (fPerm FilePermissionConfig, err 
 //	-rwxr-----     0740             File - Owner can read, write, & execute. Group can only read;
 //	                                File - others have no permissions
 //	drwxrwxrwx     20000000777      File - Directory - read, write, & execute for owner, group and others
-func (fMgr *FileMgr) GetFilePermissionTextCodes() (string, error) {
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//
+//		Returns the permission bits for the current
+//		FileMgr file as string of text.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fMgr *FileMgr) GetFilePermissionTextCodes(
+	errorPrefix interface{}) (
+	string,
+	error) {
 
 	if fMgr.lock == nil {
 		fMgr.lock = new(sync.Mutex)
@@ -2478,51 +3358,63 @@ func (fMgr *FileMgr) GetFilePermissionTextCodes() (string, error) {
 
 	defer fMgr.lock.Unlock()
 
-	ePrefix := "FileMgr.GetFilePermissionTextCodes() "
-
-	fMgrHlpr := fileMgrHelper{}
-	filePathDoesExist := false
-	var err, err2 error
-	fPerm := FilePermissionConfig{}
 	permissionText := ""
 
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileMgr.GetFilePermissionTextCodes()",
+		"")
+
+	if err != nil {
+		return permissionText, err
+	}
+
+	filePathDoesExist := false
+
+	fPerm := FilePermissionConfig{}
+
 	filePathDoesExist,
-		err = fMgrHlpr.doesFileMgrPathFileExist(
+		err = new(fileMgrHelperAtom).doesFileMgrPathFileExist(
 		fMgr,
 		PreProcPathCode.None(),
-		ePrefix,
+		ePrefix.XCpy("filePathDoesExist<-"),
 		"FileMgr")
 
-	if err == nil && !filePathDoesExist {
-		err = fmt.Errorf(ePrefix+
+	if err != nil {
+		return permissionText, err
+	}
+
+	if !filePathDoesExist {
+
+		err = fmt.Errorf("%v\n"+
 			"Error: The current (FileMgr) path/file name DOES NOT EXIST!\n"+
 			"Therefore no file permissions are available.\n"+
-			"path/file name='%v'\n", fMgr.absolutePathFileName)
+			"path/file name='%v'\n",
+			ePrefix.String(),
+			fMgr.absolutePathFileName)
+
+		return permissionText, err
 	}
 
-	if err == nil {
-		fPerm,
-			err2 = new(FilePermissionConfig).
-			NewByFileMode(
-				fMgr.actualFileInfo.Mode(),
-				ePrefix)
+	fPerm,
+		err = new(FilePermissionConfig).
+		NewByFileMode(
+			fMgr.actualFileInfo.Mode(),
+			ePrefix)
 
-		if err2 != nil {
-			err = fmt.Errorf(ePrefix+
-				"%v", err2.Error())
-
-		} else {
-
-			permissionText,
-				err2 = fPerm.GetPermissionTextCode(ePrefix)
-
-			if err2 != nil {
-				err =
-					fmt.Errorf(ePrefix+
-						"%v", err2.Error())
-			}
-		}
+	if err != nil {
+		return permissionText, err
 	}
+
+	permissionText,
+		err = fPerm.
+		GetPermissionTextCode(ePrefix.XCpy(
+			"permissionText-fPerm"))
 
 	return permissionText, err
 }
@@ -2547,11 +3439,13 @@ func (fMgr *FileMgr) GetFilePtr() *os.File {
 	return filePtr
 }
 
-// GetFileSize - Returns os.FileInfo.Size() length in bytes for regular files;
-// system-dependent for others.
+// GetFileSize
 //
-// If the File Manager file does NOT exist, or if there is a file-path error, the
-// value returned is -1.
+// Returns os.FileInfo.Size() length in bytes for regular
+// files; system-dependent for others.
+//
+// If the File Manager file does NOT exist, or if there is
+// a file-path error, the value returned is -1.
 func (fMgr *FileMgr) GetFileSize() int64 {
 
 	if fMgr.lock == nil {
@@ -2562,27 +3456,25 @@ func (fMgr *FileMgr) GetFileSize() int64 {
 
 	defer fMgr.lock.Unlock()
 
-	fMgrHlpr := fileMgrHelper{}
 	filePathDoesExist := false
 	var err error
 	var fileSize int64
 
 	filePathDoesExist,
-		err = fMgrHlpr.doesFileMgrPathFileExist(
+		err = new(fileMgrHelperAtom).doesFileMgrPathFileExist(
 		fMgr,
 		PreProcPathCode.None(),
-		"",
+		nil,
 		"FileMgr")
 
-	if err == nil && !filePathDoesExist {
-		err = fmt.Errorf("DoesNOTExist")
+	if err != nil || !filePathDoesExist {
+
+		fileSize = -1
+
+		return fileSize
 	}
 
-	if err == nil {
-		fileSize = fMgr.actualFileInfo.Size()
-	} else {
-		fileSize = -1
-	}
+	fileSize = fMgr.actualFileInfo.Size()
 
 	return fileSize
 }
@@ -2675,31 +3567,37 @@ func (fMgr *FileMgr) IsAbsolutePathFileNamePopulated() bool {
 
 	defer fMgr.lock.Unlock()
 
-	fMgrHlpr := fileMgrHelper{}
 	var err error
+
 	isAbsolutePathFileNamePopulated := false
 
 	_,
-		err = fMgrHlpr.doesFileMgrPathFileExist(
+		err = new(fileMgrHelperAtom).doesFileMgrPathFileExist(
 		fMgr,
 		PreProcPathCode.None(),
-		"",
+		nil,
 		"FileMgr")
 
 	if err != nil || len(fMgr.absolutePathFileName) == 0 {
+
 		fMgr.isAbsolutePathFileNamePopulated = false
+
 		isAbsolutePathFileNamePopulated = false
+
 	} else {
+
 		fMgr.isAbsolutePathFileNamePopulated = true
+
 		isAbsolutePathFileNamePopulated = true
 	}
 
 	return isAbsolutePathFileNamePopulated
 }
 
-// IsFileExtPopulated - Returns a boolean value indicating
-// whether the File Extension for this File Manager instance
-// is populated.
+// IsFileExtPopulated
+//
+// Returns a boolean value indicating whether the File
+// Extension for this File Manager instance is populated.
 func (fMgr *FileMgr) IsFileExtPopulated() bool {
 
 	if fMgr.lock == nil {
@@ -2710,16 +3608,16 @@ func (fMgr *FileMgr) IsFileExtPopulated() bool {
 
 	defer fMgr.lock.Unlock()
 
-	fMgrHlpr := fileMgrHelper{}
 	var err error
 	isFileExtPopulated := false
 
 	_,
-		err = fMgrHlpr.doesFileMgrPathFileExist(
-		fMgr,
-		PreProcPathCode.None(),
-		"",
-		"FileMgr.absolutePathFileName")
+		err = new(fileMgrHelperAtom).
+		doesFileMgrPathFileExist(
+			fMgr,
+			PreProcPathCode.None(),
+			nil,
+			"FileMgr.absolutePathFileName")
 
 	if err != nil ||
 		len(fMgr.fileExt) == 0 {
@@ -2733,11 +3631,103 @@ func (fMgr *FileMgr) IsFileExtPopulated() bool {
 	return isFileExtPopulated
 }
 
-// IsFileMgrValid - Analyzes the current FileMgr object. If the
-// current FileMgr object is INVALID, an error is returned.
+// IsFileMgrValid
 //
-// If the current FileMgr is VALID, this method returns 'nil'
-func (fMgr *FileMgr) IsFileMgrValid(errorPrefixStr string) (err error) {
+// Analyzes the current FileMgr object. If the current
+// FileMgr object is INVALID, an error is returned.
+//
+// If the current FileMgr is VALID, this method returns
+// 'nil'
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If any of the internal member data variables
+//		contained in the current instance of FileMgr are
+//	 	found to be invalid, this method will return an
+//	 	error configured with an appropriate message
+//	 	identifying the invalid	member data variable.
+//
+//		If all internal member data variables evaluate
+//		as valid, this returned error value will be set
+//		to 'nil'.
+//
+//		If errors are encountered during processing or if
+//		any internal member data values are found to be
+//		invalid, the returned error Type will encapsulate
+//		an appropriate error message. This returned error
+//		message will incorporate the method chain and text
+//		passed by input parameter, 'errorPrefix'. The
+//		'errorPrefix' text will be attached to the
+//		beginning of the error message.
+func (fMgr *FileMgr) IsFileMgrValid(
+	errorPrefix interface{}) (err error) {
 
 	if fMgr.lock == nil {
 		fMgr.lock = new(sync.Mutex)
@@ -2747,58 +3737,82 @@ func (fMgr *FileMgr) IsFileMgrValid(errorPrefixStr string) (err error) {
 
 	defer fMgr.lock.Unlock()
 
-	err = nil
+	var ePrefix *ePref.ErrPrefixDto
 
-	ePrefix := strings.TrimRight(errorPrefixStr, " ") + "FileMgr.IsFileMgrValid()"
+	funcName := "FileMgr." +
+		"IsFileMgrValid()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		funcName,
+		"")
+
+	if err != nil {
+		return err
+	}
 
 	if !fMgr.isInitialized {
 
-		err = errors.New(ePrefix + " Error: This data structure is NOT initialized.")
+		err = fmt.Errorf("%v\n"+
+			" Error: The current FileMgr data structure is NOT initialized.\n",
+			ePrefix.String())
 
-	} else if fMgr.absolutePathFileName == "" {
+		return err
+	}
+
+	if fMgr.absolutePathFileName == "" {
 
 		fMgr.isAbsolutePathFileNamePopulated = false
 
-		err = errors.New(ePrefix + " Error: absolutePathFileName is EMPTY!")
+		err = fmt.Errorf("%v\n"+
+			" Error: FileMgr absolutePathFileName is EMPTY!\n",
+			ePrefix.String())
 
-	} else {
-
-		err2 := fMgr.dMgr.IsDirMgrValid(ePrefix)
-
-		if err2 != nil {
-			err = fmt.Errorf("FileMgr Directory Manager INVALID\n"+
-				"Error='%v'\n",
-				err2.Error())
-		}
+		return err
 
 	}
 
-	if err == nil {
+	var err2 error
 
-		fMgrHelpr := fileMgrHelper{}
+	err2 = fMgr.dMgr.IsDirMgrValid(ePrefix.String())
 
-		_,
-			err = fMgrHelpr.doesFileMgrPathFileExist(
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"FileMgr Directory Manager INVALID\n"+
+			"Error= \n%v\n",
+			funcName,
+			err2.Error())
+
+		return err
+	}
+
+	_,
+		err = new(fileMgrHelperAtom).
+		doesFileMgrPathFileExist(
 			fMgr,
 			PreProcPathCode.None(),
 			ePrefix,
 			"fMgr.absolutePathFileName")
 
-		_ = fMgr.dMgr.DoesPathExist()
-		_ = fMgr.dMgr.DoesAbsolutePathExist()
-	}
+	_ = fMgr.dMgr.DoesPathExist()
+	_ = fMgr.dMgr.DoesAbsolutePathExist()
 
 	return err
 }
 
-// IsFileNameExtPopulated - Returns a boolean value indicating whether both the
-// File Name and Extension for this File Manager instance have been populated.
+// IsFileNameExtPopulated
 //
-// If either the File Name or the File Extension is blank (empty), this method
-// returns false.
+// Returns a boolean value indicating whether both the
+// File Name and Extension for this File Manager
+// instance have been populated.
 //
-// Both the File Name AND the File Extension must be populated before this method
-// returns 'true'.
+// If either the File Name or the File Extension is blank
+// (empty), this method returns false.
+//
+// Both the File Name AND the File Extension must be
+// populated before this method returns 'true'.
 func (fMgr *FileMgr) IsFileNameExtPopulated() bool {
 
 	if fMgr.lock == nil {
@@ -2809,19 +3823,21 @@ func (fMgr *FileMgr) IsFileNameExtPopulated() bool {
 
 	defer fMgr.lock.Unlock()
 
-	fMgrHlpr := fileMgrHelper{}
 	var err error
 	isFileNameExtPopulated := false
 
 	_,
-		err = fMgrHlpr.doesFileMgrPathFileExist(
+		err = new(fileMgrHelperAtom).doesFileMgrPathFileExist(
 		fMgr,
 		PreProcPathCode.None(),
-		"",
+		nil,
 		"FileMgr.absolutePathFileName")
 
-	if err == nil &&
-		len(fMgr.fileExt) > 0 &&
+	if err != nil {
+		return false
+	}
+
+	if len(fMgr.fileExt) > 0 &&
 		len(fMgr.fileName) > 0 {
 
 		fMgr.isFileNameExtPopulated = true
@@ -2835,9 +3851,10 @@ func (fMgr *FileMgr) IsFileNameExtPopulated() bool {
 	return isFileNameExtPopulated
 }
 
-// IsFileNamePopulated - returns a boolean value
-// indicating whether the file name for this File
-// Manager object is populated.
+// IsFileNamePopulated
+//
+// Returns a boolean value indicating whether the file
+// name for this File Manager object is populated.
 func (fMgr *FileMgr) IsFileNamePopulated() bool {
 
 	if fMgr.lock == nil {
@@ -2848,23 +3865,33 @@ func (fMgr *FileMgr) IsFileNamePopulated() bool {
 
 	defer fMgr.lock.Unlock()
 
-	fMgrHlpr := fileMgrHelper{}
 	var err error
-	isFileNamePopulated := false
 
 	_,
-		err = fMgrHlpr.doesFileMgrPathFileExist(
-		fMgr,
-		PreProcPathCode.None(),
-		"",
-		"FileMgr.absolutePathFileName")
+		err = new(fileMgrHelperAtom).
+		doesFileMgrPathFileExist(
+			fMgr,
+			PreProcPathCode.None(),
+			nil,
+			"FileMgr.absolutePathFileName")
 
-	if err != nil || len(fMgr.fileName) == 0 {
+	if err != nil {
+
+		return false
+	}
+
+	var isFileNamePopulated bool
+
+	if len(fMgr.fileName) == 0 {
+
 		fMgr.isFileNamePopulated = false
 		isFileNamePopulated = false
+
 	} else {
+
 		fMgr.isFileNamePopulated = true
 		isFileNamePopulated = true
+
 	}
 
 	return isFileNamePopulated
@@ -3928,11 +4955,13 @@ func (fMgr *FileMgr) ReadFileString(delim byte) (stringRead string, err error) {
 	return stringRead, err
 }
 
-// ResetFileInfo - Acquires the current os.FileInfo
-// data associated with the file identified by the
-// current FileMgr instance.
+// ResetFileInfo
 //
-// An error will be triggered if the file path does NOT exist!
+// Acquires the current os.FileInfo data associated with
+// the file identified by the current FileMgr instance.
+//
+// An error will be triggered if the file path does NOT
+// exist!
 func (fMgr *FileMgr) ResetFileInfo() error {
 
 	if fMgr.lock == nil {
@@ -3943,27 +4972,40 @@ func (fMgr *FileMgr) ResetFileInfo() error {
 
 	defer fMgr.lock.Unlock()
 
-	ePrefix := "ResetFileInfo() "
+	var ePrefix *ePref.ErrPrefixDto
 
 	var err error
-	var filePathDoesExist bool
+	var filePathDoesExist = false
 
-	fMgrHelpr := fileMgrHelper{}
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		nil,
+		"FileMgr."+
+			"ResetFileInfo()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
 	filePathDoesExist,
-		err = fMgrHelpr.doesFileMgrPathFileExist(
-		fMgr,
-		PreProcPathCode.None(),
-		ePrefix,
-		"fMgr.absolutePathFileName")
+		err = new(fileMgrHelperAtom).
+		doesFileMgrPathFileExist(
+			fMgr,
+			PreProcPathCode.None(),
+			ePrefix.XCpy("filePathDoesExist<-fMgr"),
+			"fMgr.absolutePathFileName")
 
 	if err != nil {
 		return err
 	}
 
 	if !filePathDoesExist {
-		return fmt.Errorf(ePrefix+
+		return fmt.Errorf("%v\n"+
 			"Current FileMgr file DOES NOT EXIST!\n"+
-			"FMgr='%v'", fMgr.absolutePathFileName)
+			"FMgr='%v'",
+			ePrefix.String(),
+			fMgr.absolutePathFileName)
 	}
 
 	return nil
