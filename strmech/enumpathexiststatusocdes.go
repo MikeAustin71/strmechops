@@ -25,8 +25,8 @@ var mPathExistsStatusLowerCaseStringToCode = map[string]PathExistsStatusCode{
 // existence status codes. These status codes describe the state
 // of a file or directory on disk. The existence of a path or
 // directory is usually determined by the method os.Stat() which
-// establishes whether or not a file or directory currently exists
-// on disk.
+// establishes whether a file or directory currently exists on
+// disk.
 //
 //	                  Path Existence
 //	 Method            Status Code
@@ -127,13 +127,13 @@ func (pathExist PathExistsStatusCode) StatusIsValid() error {
 //	                       method will proceed to successful completion
 //
 //	caseSensitive   bool - If 'true' the search for enumeration names
-//	                       will be case sensitive and will require an
+//	                       will be case-sensitive and will require an
 //	                       exact match. Therefore, 'exists' will NOT
 //	                       match the enumeration name, 'Exists'.
 //
-//	                       If 'false' a case insensitive search is conducted
+//	                       If 'false' a case-insensitive search is conducted
 //	                       for the enumeration name. In this case, 'exists'
-//	                       will match match enumeration name 'Exists'.
+//	                       will match enumeration name 'Exists'.
 //
 // ------------------------------------------------------------------------
 //
@@ -159,7 +159,7 @@ func (pathExist PathExistsStatusCode) StatusIsValid() error {
 //	                           OR
 //		t, err := PathExistsStatusCode(0).ParseString("exists", false)
 //
-//		For all of the cases shown above,
+//		For all the cases shown above,
 //	 t is now equal to PathExistsStatusCode(0).Exists()
 func (pathExist PathExistsStatusCode) ParseString(
 	valueString string, caseSensitive bool) (PathExistsStatusCode, error) {
@@ -261,7 +261,7 @@ func (pathExist PathExistsStatusCode) Value() PathExistsStatusCode {
 // PathExistsStatus - public global variable of
 // type 'PathExistsStatusCode'.
 //
-// This variable serves as an easier, short hand
+// This variable serves as an easier, shorthand
 // technique for accessing PathExistsStatusCode
 // values.
 //

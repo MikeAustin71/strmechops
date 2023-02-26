@@ -61,7 +61,7 @@ func (pathValid PathValidityStatusCode) Unknown() PathValidityStatusCode {
 }
 
 // Invalid - This status code signals that a validity test was performed
-// on the subject file/directory path string and it was found to be
+// on the subject file/directory path string, and it was found to be
 // 'Invalid'.
 //
 // This method is part of the standard enumeration.
@@ -69,8 +69,8 @@ func (pathValid PathValidityStatusCode) Invalid() PathValidityStatusCode {
 	return PathValidityStatusCode(0)
 }
 
-// Invalid - This status code signals that a validity test was performed
-// on the subject file/directory path string and it was found to be
+// Valid - This status code signals that a validity test was performed
+// on the subject file/directory path string, and it was found to be
 // a 'Valid' path/file name.
 //
 // This method is part of the standard enumeration.
@@ -96,11 +96,11 @@ func (pathValid PathValidityStatusCode) Valid() PathValidityStatusCode {
 //	                       method will proceed to successful completion
 //
 //	caseSensitive   bool - If 'true' the search for enumeration names
-//	                       will be case sensitive and will require an
+//	                       will be case-sensitive and will require an
 //	                       exact match. Therefore, 'valid' will NOT
 //	                       match the enumeration name, 'Valid'.
 //
-//	                       If 'false' a case insensitive search is
+//	                       If 'false' a case-insensitive search is
 //	                       conducted for the enumeration name. In
 //	                       this case, 'valid' will match the
 //	                       enumeration name 'Valid'.
@@ -129,7 +129,7 @@ func (pathValid PathValidityStatusCode) Valid() PathValidityStatusCode {
 //	                          OR
 //	t, err := PathValidityStatusCode(0).ParseString("valid", false)
 //
-//	For all of the cases shown above,
+//	For all the cases shown above,
 //	t is now equal to PathValidityStatusCode(0).Valid()
 func (pathValid PathValidityStatusCode) ParseString(
 	valueString string, caseSensitive bool) (PathValidityStatusCode, error) {
@@ -252,7 +252,7 @@ func (pathValid PathValidityStatusCode) String() string {
 // PathValidStatus - public global variable of
 // type PathValidityStatusCode.
 //
-// This variable serves as an easier, short hand
+// This variable serves as an easier, shorthand
 // technique for accessing PathValidityStatusCode
 // values.
 //

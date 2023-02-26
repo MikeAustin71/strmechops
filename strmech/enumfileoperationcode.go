@@ -16,7 +16,7 @@ var mFileOperationCodeStringToInt = map[string]int{}
 
 // mFileOperationCodeLwrCaseStringToInt - This map is used to map enumeration names
 // stored as lower case strings to enumeration values for Type FileOperationCode.
-// This map is used for case insensitive look ups.
+// This map is used for case-insensitive look-ups.
 var mFileOperationCodeLwrCaseStringToInt = map[string]int{}
 
 // FileOperationCode - Integer enumeration. Signals
@@ -98,14 +98,18 @@ func (fop FileOperationCode) MoveSourceFileToDestinationDir() FileOperationCode 
 	return FileOperationCode(2)
 }
 
-// DeleteDestinationFile() - Deletes the Destination file if it exists
+// DeleteDestinationFile
+//
+// # Deletes the Destination file if it exists
 //
 // Usage:
 //
 //	FileOperationCode(0).DeleteDestinationFile()
 func (fop FileOperationCode) DeleteDestinationFile() FileOperationCode { return FileOperationCode(3) }
 
-// DeleteSourceFile() - Deletes the Source file if it exists
+// DeleteSourceFile
+//
+// # Deletes the Source file if it exists
 //
 // Usage:
 //
@@ -122,7 +126,7 @@ func (fop FileOperationCode) DeleteSourceAndDestinationFiles() FileOperationCode
 	return FileOperationCode(5)
 }
 
-// FileOperationCode(0).CopySourceToDestinationByHardLinkByIo() - Copies the Source File to the
+// CopySourceToDestinationByHardLinkByIo - Copies the Source File to the
 // Destination using two copy attempts. The first copy is by Hard Link.
 // If the first copy attempt fails, a second copy attempt is initiated
 // by creating a new file and copying the contents by 'io.Copy'.
@@ -138,7 +142,7 @@ func (fop FileOperationCode) CopySourceToDestinationByHardLinkByIo() FileOperati
 	return FileOperationCode(6)
 }
 
-// FileOperationCode(0).CopySourceToDestinationByIoByHardLink() - Copies the Source File to the Destination
+// CopySourceToDestinationByIoByHardLink - Copies the Source File to the Destination
 // using two copy attempts. The first copy is by 'io.Copy' which creates a new file
 // and copies the contents to the new file. If the first attempt fails, a second
 // copy attempt is initiated using 'copy by hard link'.
@@ -269,13 +273,13 @@ func (fop FileOperationCode) IsValid() error {
 //	                       method will proceed to successful completion
 //
 //	caseSensitive   bool - If 'true' the search for enumeration names
-//	                       will be case sensitive and will require an
+//	                       will be case-sensitive and will require an
 //	                       exact match. Therefore, 'movesourcefiletodestination' will NOT
 //	                       match the enumeration name, 'MoveSourceFileToDestinationFile'.
 //
-//	                       If 'false' a case insensitive search is conducted
+//	                       If 'false' a case-insensitive search is conducted
 //	                       for the enumeration name. In this case, 'movesourcefiletodestination'
-//	                       will match match enumeration name 'MoveSourceFileToDestinationFile'.
+//	                       will match enumeration name 'MoveSourceFileToDestinationFile'.
 //
 // ------------------------------------------------------------------------
 //
@@ -299,7 +303,7 @@ func (fop FileOperationCode) IsValid() error {
 //	                                 OR
 //		t, err := FileOperationCode(0).ParseString("movesourcefiletodestination", false)
 //
-//		For all of the cases shown above,
+//		For all the cases shown above,
 //		t is now equal to FileOperationCode(0).MoveSourceFileToDestinationFile()
 func (fop FileOperationCode) ParseString(
 	valueString string,
@@ -395,7 +399,7 @@ func (fop FileOperationCode) Value() int {
 
 // checkInitializeMaps - String and value comparisons performed on enumerations
 // supported by this Type, utilizes a series of 3-map types. These maps are used
-// internally to perform 'string to value' or 'value to string' look ups on
+// internally to perform 'string to value' or 'value to string' look-ups on
 // enumerations supported by this type. Each time FileOperationCode.String() or
 // FileOperationCode.ParseString() a call is made to this method to determine if
 // these maps have been initialized. If the maps and look up data have been
@@ -460,13 +464,4 @@ func (fop FileOperationCode) checkInitializeMaps(reInitialize bool) {
 //
 //	fileOpCode.None()
 //	fileOpCode.CopySourceToDestinationByHardLink()
-var fileOpCode = FileOperationCode(0)
-
-// FileOpCode - global variable of type FileOperationCode.
-// Provides alternate, easier access to FileOperationCode enumeration values.
-//
-// Usage:
-//
-//	FileOpCode.None()
-//	FileOpCode.CopySourceToDestinationByIo()
-var FileOpCode = FileOperationCode(0)
+const fileOpCode = FileOperationCode(0)

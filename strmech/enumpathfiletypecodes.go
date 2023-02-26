@@ -1,7 +1,6 @@
 package strmech
 
 import (
-	"errors"
 	"fmt"
 	"strings"
 )
@@ -77,7 +76,7 @@ var mPathFileTypeCodeToString = map[PathFileTypeCode]string{
 //	                                      with certainty.
 //
 // 'PathFileTypeCode' has been adapted to function as an enumeration
-// describing the type of a path/file name string. Since Go does not
+// describing the type of path/file name string. Since Go does not
 // directly support enumerations, the 'PathFileTypeCode' type has been
 // configured to function in a manner similar to classic enumerations found
 // in other languages like C#. For additional information, reference:
@@ -140,11 +139,11 @@ func (pfTyp PathFileTypeCode) Indeterminate() PathFileTypeCode { return PathFile
 //	                       method will proceed to successful completion
 //
 //	caseSensitive   bool - If 'true' the search for enumeration names
-//	                       will be case sensitive and will require an
+//	                       will be case-sensitive and will require an
 //	                       exact match. Therefore, 'valid' will NOT
 //	                       match the enumeration name, 'Valid'.
 //
-//	                       If 'false' a case insensitive search is
+//	                       If 'false' a case-insensitive search is
 //	                       conducted for the enumeration name. In
 //	                       this case, 'valid' will match the
 //	                       enumeration name 'Valid'.
@@ -173,7 +172,7 @@ func (pfTyp PathFileTypeCode) Indeterminate() PathFileTypeCode { return PathFile
 //	                           OR
 //		t, err := PathValidityStatusCode(0).ParseString("file", false)
 //
-//		For all of the cases shown above,
+//		For all the cases shown above,
 //	 t is now equal to PathValidityStatusCode(0).File()
 func (pfTyp PathFileTypeCode) ParseString(
 	valueString string,
@@ -205,7 +204,9 @@ func (pfTyp PathFileTypeCode) ParseString(
 
 		if !ok {
 			return PathFileType.None(),
-				errors.New(ePrefix + "Invalid PathFileTypeCode Code!")
+				fmt.Errorf("%v\n"+
+					"Invalid PathFileTypeCode Code!\n",
+					ePrefix)
 		}
 
 	} else {
@@ -216,7 +217,9 @@ func (pfTyp PathFileTypeCode) ParseString(
 
 		if !ok {
 			return PathFileType.None(),
-				errors.New(ePrefix + "Invalid PathFileTypeCode Code!")
+				fmt.Errorf("%v\n"+
+					"Invalid PathFileTypeCode Code!\n",
+					ePrefix)
 		}
 
 	}
@@ -269,7 +272,7 @@ func (pfTyp PathFileTypeCode) StatusValue() PathFileTypeCode {
 // PathFileType - public global variable of
 // type PathFileTypeCode.
 //
-// This variable serves as an easier, short hand
+// This variable serves as an easier, shorthand
 // technique for accessing PathFileTypeCode values.
 //
 // Usage:
