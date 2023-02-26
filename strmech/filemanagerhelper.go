@@ -743,19 +743,21 @@ func (fMgrHlpr *fileMgrHelper) emptyFileMgr(
 	return nil
 }
 
-// lowLevelCopyByIOBuffer - Helper method which implements
-// the "Copy IO" operation. Specifically, this method calls
+// lowLevelCopyByIOBuffer
+//
+// Helper method which implements the "Copy IO"
+// operation. Specifically, this method calls
 // 'io.CopyBuffer'.
 //
-// This is a low level method which performs no set up
-// or validation services before initiating the "Copy By IO"
+// This is a low level method which performs no set up or
+// validation services before initiating the "Copy By IO"
 // operation.
 //
 // If the input parameter 'localCopyBuffer' is an array
 // of bytes ([]byte) supplied by the calling function.
 // The copy operation stages through the provided buffer
-// (if one is required) rather than allocating a temporary
-// one.
+// (if one is required) rather than allocating a
+// temporary one.
 //
 // If the length of 'localCopyBuffer' is zero or if
 // 'localCopyBuffer' is nil, this method will return an
@@ -767,7 +769,8 @@ func (fMgrHlpr *fileMgrHelper) emptyFileMgr(
 //	Reference:
 //	  https://golang.org/pkg/io/#CopyBuffer
 //	  https://stackoverflow.com/questions/21060945/simple-way-to-copy-a-file-in-golang
-func (fMgrHlpr *fileMgrHelper) lowLevelCopyByIOBuffer(srcFMgr *FileMgr,
+func (fMgrHlpr *fileMgrHelper) lowLevelCopyByIOBuffer(
+	srcFMgr *FileMgr,
 	destFMgr *FileMgr,
 	localCopyBuffer []byte,
 	errPrefDto *ePref.ErrPrefixDto,
@@ -824,12 +827,30 @@ func (fMgrHlpr *fileMgrHelper) lowLevelCopyByIOBuffer(srcFMgr *FileMgr,
 			ePrefix.String())
 	}
 
+	if len(srcFMgrLabel) == 0 {
+
+		srcFMgrLabel = "srcFMgr"
+	}
+
+	if len(destFMgrLabel) == 0 {
+
+		destFMgrLabel = "destFMgr"
+	}
+
 	var targetFMgrFileDoesExist bool
 
 	// First, open the source file
-	srcPtr, err := os.Open(srcFMgr.absolutePathFileName)
+
+	var srcPtr *os.File
+
+	srcPtr,
+		err = os.Open(srcFMgr.absolutePathFileName)
 
 	if err != nil {
+
+		if srcPtr != nil {
+			_ = srcPtr.Close()
+		}
 
 		return fmt.Errorf("%v\n"+
 			"Error returned by os.Open(%v.absolutePathFileName)\n"+
@@ -842,16 +863,24 @@ func (fMgrHlpr *fileMgrHelper) lowLevelCopyByIOBuffer(srcFMgr *FileMgr,
 			err.Error())
 	}
 
-	destPtr, err := os.Create(destFMgr.absolutePathFileName)
+	// Second, open the destination file
+	var destPtr *os.File
+
+	destPtr,
+		err = os.Create(destFMgr.absolutePathFileName)
 
 	if err != nil {
 
 		_ = srcPtr.Close()
 
+		if destPtr != nil {
+			_ = destPtr.Close()
+		}
+
 		return fmt.Errorf("%v\n"+
 			"Error returned by os.Create(%v.absolutePathFileName)\n"+
 			"%v.absolutePathFileName='%v'\n"+
-			"Error='%v'\n",
+			"Error= \n%v'\n",
 			ePrefix.String(),
 			destFMgrLabel,
 			destFMgrLabel,
@@ -859,7 +888,13 @@ func (fMgrHlpr *fileMgrHelper) lowLevelCopyByIOBuffer(srcFMgr *FileMgr,
 			err.Error())
 	}
 
-	bytesCopied, err := io.CopyBuffer(destPtr, srcPtr, localCopyBuffer)
+	var bytesCopied int64
+
+	bytesCopied,
+		err = io.CopyBuffer(
+		destPtr,
+		srcPtr,
+		localCopyBuffer)
 
 	if err != nil {
 		_ = srcPtr.Close()
@@ -867,8 +902,7 @@ func (fMgrHlpr *fileMgrHelper) lowLevelCopyByIOBuffer(srcFMgr *FileMgr,
 
 		return fmt.Errorf("%v\n"+
 			"Error returned by io.CopyBuffer(%v, %v)\n"+
-			"%v='%v'\n"+
-			"%v='%v'\n"+
+			"%v='%v'\n%v='%v'\n"+
 			"Error= \n%v\n",
 			ePrefix.String(),
 			destFMgrLabel,
@@ -900,10 +934,11 @@ func (fMgrHlpr *fileMgrHelper) lowLevelCopyByIOBuffer(srcFMgr *FileMgr,
 	err = srcPtr.Close()
 
 	if err != nil {
+
 		errs = append(errs, fmt.Errorf("%v\n"+
 			"Error returned by srcPtr.Close()\n"+
 			"srcPtr=%v='%v'\n"+
-			"Error='%v'\n",
+			"Error= \n%v\n",
 			ePrefix.String(),
 			srcFMgrLabel,
 			srcFMgr.absolutePathFileName,
@@ -915,6 +950,7 @@ func (fMgrHlpr *fileMgrHelper) lowLevelCopyByIOBuffer(srcFMgr *FileMgr,
 	err = destPtr.Close()
 
 	if err != nil {
+
 		errs = append(errs, fmt.Errorf("%v\n"+
 			"Error returned by destPtr.Close()\n"+
 			"destPtr=%v='%v'\n"+
@@ -932,12 +968,11 @@ func (fMgrHlpr *fileMgrHelper) lowLevelCopyByIOBuffer(srcFMgr *FileMgr,
 	}
 
 	targetFMgrFileDoesExist,
-		err = new(fileMgrHelperAtom).
-		doesFileMgrPathFileExist(
-			destFMgr,
-			PreProcPathCode.None(),
-			ePrefix,
-			destFMgrLabel+".absolutePathFileName")
+		err = new(fileMgrHelperAtom).doesFileMgrPathFileExist(
+		destFMgr,
+		PreProcPathCode.None(),
+		ePrefix.XCpy("destFMgr"),
+		destFMgrLabel+".absolutePathFileName")
 
 	if err != nil {
 		return fmt.Errorf("%v\n"+
@@ -985,8 +1020,7 @@ func (fMgrHlpr *fileMgrHelper) lowLevelCopyByIOBuffer(srcFMgr *FileMgr,
 			"Error: Bytes is source file do NOT equal bytes "+
 			"in destination file!\n"+
 			"Source File Bytes='%v'   Destination File Bytes='%v'\n"+
-			"Source File=%v='%v'\n"+
-			"Destination File=%v='%v'\n",
+			"Source File=%v='%v'\nDestination File=%v='%v'\n",
 			ePrefix.String(),
 			srcFileSize,
 			destFMgr.actualFileInfo.Size(),
@@ -1368,13 +1402,14 @@ func (fMgrHlpr *fileMgrHelper) lowLevelCopyByLink(
 	return nil
 }
 
-// moveFile - Helper method designed to move a
-// file to a new destination. The operation is
-// performed in two steps. First, the source
-// file is copied to a destination specified
-// by parameter, 'targetFMgr'. Second, if the
-// copy operation is successful, the source file
-// ('fMgr') will be deleted.
+// moveFile
+//
+// Helper method designed to move a file to a new
+// destination. The operation is performed in two steps.
+// First, the source file is copied to a destination
+// specified by parameter, 'targetFMgr'. Second, if the
+// copy operation is successful, the source file ('fMgr')
+// will be deleted.
 func (fMgrHlpr *fileMgrHelper) moveFile(
 	fMgr *FileMgr,
 	targetFMgr *FileMgr,
@@ -1414,27 +1449,25 @@ func (fMgrHlpr *fileMgrHelper) moveFile(
 			"Error: Input parameter 'targetFMgr' is a nil pointer!\n",
 			ePrefix.String())
 	}
-
 	var sourceFilePathDoesExist, targetFilePathDoesExist bool
 
-	fMgrHelperAtom := new(fileMgrHelperAtom)
+	fHelperAtom := new(fileMgrHelperAtom)
 
 	sourceFilePathDoesExist,
-		err = fMgrHelperAtom.
-		doesFileMgrPathFileExist(
-			fMgr,
-			PreProcPathCode.None(),
-			ePrefix,
-			"fMgr.absolutePathFileName")
+		err = fHelperAtom.doesFileMgrPathFileExist(
+		fMgr,
+		PreProcPathCode.None(),
+		ePrefix,
+		"fMgr.absolutePathFileName")
 
 	if err != nil {
 		return err
 	}
 
-	fMgrHelperElectron := new(fileMgrHelperElectron)
+	fHelperElectron := new(fileMgrHelperElectron)
 
-	err = fMgrHelperElectron.
-		lowLevelCloseFile(fMgr, "fMgr", ePrefix)
+	err = fHelperElectron.lowLevelCloseFile(
+		fMgr, "fMgr", ePrefix)
 
 	if err != nil {
 		return err
@@ -1459,7 +1492,7 @@ func (fMgrHlpr *fileMgrHelper) moveFile(
 
 	if !fMgr.actualFileInfo.Mode().IsRegular() {
 		return fmt.Errorf("%v\n"+
-			"Error: Source File Invalid.\n"+
+			"Error: Source File Invalid. "+
 			"The Source File 'fMgr' IS NOT A REGULAR FILE!\n"+
 			"fMgr='%v'\n",
 			ePrefix.String(),
@@ -1467,7 +1500,7 @@ func (fMgrHlpr *fileMgrHelper) moveFile(
 	}
 
 	targetFilePathDoesExist,
-		err = fMgrHelperAtom.doesFileMgrPathFileExist(
+		err = fHelperAtom.doesFileMgrPathFileExist(
 		targetFMgr,
 		PreProcPathCode.None(),
 		ePrefix,
@@ -1477,8 +1510,8 @@ func (fMgrHlpr *fileMgrHelper) moveFile(
 		return err
 	}
 
-	err = fMgrHelperElectron.
-		lowLevelCloseFile(targetFMgr, "targetFMgr", ePrefix)
+	err = fHelperElectron.lowLevelCloseFile(
+		targetFMgr, "targetFMgr", ePrefix)
 
 	if err != nil {
 		return err
@@ -1489,11 +1522,12 @@ func (fMgrHlpr *fileMgrHelper) moveFile(
 		err = targetFMgr.dMgr.MakeDir()
 
 		if err != nil {
+
 			return fmt.Errorf("%v\n"+
-				"\nError returned by targetFMgr."+
+				"Error returned by targetFMgr."+
 				"dMgr.MakeDir()\n"+
 				"targetFMgr.dMgr='%v'\n"+
-				"Error='%v'\n",
+				"Error= \n%v\n",
 				ePrefix.String(),
 				targetFMgr.dMgr.absolutePath,
 				err.Error())
@@ -1501,10 +1535,8 @@ func (fMgrHlpr *fileMgrHelper) moveFile(
 
 	} else {
 		// targetFilePathDoesExist == true
-		err = fMgrHelperElectron.lowLevelDeleteFile(
-			targetFMgr,
-			"targetFMgr",
-			ePrefix.XCpy("targetFMgr"))
+		err = fHelperElectron.lowLevelDeleteFile(
+			targetFMgr, "targetFMgr", ePrefix)
 
 		if err != nil {
 			return err
@@ -1513,14 +1545,13 @@ func (fMgrHlpr *fileMgrHelper) moveFile(
 	}
 
 	// Close the source file
-	err = fMgrHelperElectron.lowLevelCloseFile(
-		fMgr, "fMgr", ePrefix)
+	err = fHelperElectron.lowLevelCloseFile(fMgr, "fMgr", ePrefix)
 
 	if err != nil {
 		return err
 	}
 
-	err = fMgrHelperElectron.lowLevelCloseFile(
+	err = fHelperElectron.lowLevelCloseFile(
 		targetFMgr, "targetFMgr", ePrefix)
 
 	if err != nil {
@@ -1565,8 +1596,10 @@ func (fMgrHlpr *fileMgrHelper) moveFile(
 	bytesCopied, err := io.Copy(outFilePtr, srcFilePtr)
 
 	if err != nil {
+
 		_ = srcFilePtr.Close()
 		_ = outFilePtr.Close()
+
 		return fmt.Errorf("%v\n"+
 			"Error returned from io.Copy("+
 			"outFilePtr, srcFilePtr).\n"+
@@ -1588,7 +1621,7 @@ func (fMgrHlpr *fileMgrHelper) moveFile(
 			"Error flushing buffers!\n"+
 			"Error returned from outFilePtr.Sync()\n"+
 			"outFilePtr=targetFMgr='%v'\n"+
-			"Error= \n%v\n",
+			"Error='%v'\n",
 			ePrefix.String(),
 			targetFMgr.absolutePathFileName,
 			err.Error()))
@@ -1607,7 +1640,6 @@ func (fMgrHlpr *fileMgrHelper) moveFile(
 	}
 
 	if bytesToRead != bytesCopied {
-
 		err = fmt.Errorf("%v\n"+
 			"Error: Bytes copied not equal bytes "+
 			"in source file!\n"+
@@ -1615,7 +1647,8 @@ func (fMgrHlpr *fileMgrHelper) moveFile(
 			"Source File 'fMgr'='%v'\n"+
 			"Target File targetFMgr='%v'\n",
 			ePrefix.String(),
-			bytesToRead, bytesCopied,
+			bytesToRead,
+			bytesCopied,
 			fMgr.absolutePathFileName,
 			targetFMgr.absolutePathFileName)
 
@@ -1625,20 +1658,18 @@ func (fMgrHlpr *fileMgrHelper) moveFile(
 	strMech := new(StrMech)
 
 	if len(errs) > 0 {
+
 		return strMech.ConsolidateErrors(errs)
 	}
 
-	err = fMgrHelperElectron.lowLevelDeleteFile(
-		fMgr,
-		"fMgr",
-		ePrefix)
+	err = fHelperElectron.lowLevelDeleteFile(fMgr, "fMgr", ePrefix)
 
 	if err != nil {
 		return err
 	}
 
 	sourceFilePathDoesExist,
-		err = fMgrHelperAtom.doesFileMgrPathFileExist(
+		err = fHelperAtom.doesFileMgrPathFileExist(
 		fMgr,
 		PreProcPathCode.None(),
 		ePrefix,
@@ -1662,16 +1693,14 @@ func (fMgrHlpr *fileMgrHelper) moveFile(
 	}
 
 	targetFilePathDoesExist,
-		err = fMgrHelperAtom.doesFileMgrPathFileExist(
+		err = fHelperAtom.doesFileMgrPathFileExist(
 		targetFMgr,
 		PreProcPathCode.None(),
 		ePrefix,
 		"#2 targetFMgr.absolutePathFileName")
 
 	if err != nil {
-
 		errs = append(errs, err)
-
 		return strMech.ConsolidateErrors(errs)
 	}
 
