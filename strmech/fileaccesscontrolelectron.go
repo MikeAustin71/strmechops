@@ -134,7 +134,7 @@ func (fAccessCtrlElectron *fileAccessControlElectron) testValidityOfFileAccessCo
 		return isValid, err
 	}
 
-	err2 = fAccessCtrl.permissions.IsValid(ePrefix)
+	err2 = fAccessCtrl.permissions.IsValidInstanceError(ePrefix)
 
 	if err2 != nil {
 

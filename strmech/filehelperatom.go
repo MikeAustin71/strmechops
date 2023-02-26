@@ -2190,7 +2190,7 @@ func (fHelperAtom *fileHelperAtom) makeDirPerm(
 			ePrefix.String())
 	}
 
-	err = permission.IsValid(
+	err = permission.IsValidInstanceError(
 		ePrefix.XCpy("permission"))
 
 	if err != nil {

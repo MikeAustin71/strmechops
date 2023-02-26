@@ -5058,7 +5058,7 @@ func (dMgrHlpr *dirMgrHelper) lowLevelMakeDirWithPermission(
 		return dirCreated, err
 	}
 
-	err2 := fPermCfg.IsValid(ePrefix)
+	err2 := fPermCfg.IsValidInstanceError(ePrefix)
 
 	if err2 != nil {
 		err = fmt.Errorf("Input Parameter 'fPermCfg' is INVALID!\n"+
@@ -6122,7 +6122,7 @@ func (dMgrHlpr *dirMgrHelper) setPermissions(
 		return err
 	}
 
-	err = permissionConfig.IsValid(ePrefix.XCpy(
+	err = permissionConfig.IsValidInstanceError(ePrefix.XCpy(
 		"permissionConfig"))
 
 	if err != nil {

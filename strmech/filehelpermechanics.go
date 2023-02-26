@@ -2596,7 +2596,7 @@ func (fileHelpMech *fileHelperMechanics) openFile(
 		return filePtr, err
 	}
 
-	err2 = filePermissionCfg.IsValid(
+	err2 = filePermissionCfg.IsValidInstanceError(
 		ePrefix)
 
 	if err2 != nil {

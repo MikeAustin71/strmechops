@@ -163,7 +163,7 @@ func (fAccessMech *fileAccessControlMechanics) setFileAccessControl(
 			err.Error())
 	}
 
-	err = permissions.IsValid(ePrefix)
+	err = permissions.IsValidInstanceError(ePrefix)
 
 	if err != nil {
 		return fmt.Errorf("%v\n"+

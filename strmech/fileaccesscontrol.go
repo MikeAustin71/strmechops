@@ -2042,7 +2042,7 @@ func (fAccess *FileAccessControl) SetFileOpenCodes(
 
 	fAccess.fileOpenCodes = fileOpenCodes.CopyOut()
 
-	err = fAccess.permissions.IsValid(ePrefix.XCpy(
+	err = fAccess.permissions.IsValidInstanceError(ePrefix.XCpy(
 		"fAccess.permissions"))
 
 	if err == nil {
@@ -2212,7 +2212,7 @@ func (fAccess *FileAccessControl) SetFilePermissionCodes(
 		return err
 	}
 
-	err = filePermissions.IsValid(
+	err = filePermissions.IsValidInstanceError(
 		ePrefix.XCpy(
 			"filePermissions"))
 

@@ -119,7 +119,7 @@ func (fMgr *FileMgr) ChangePermissionMode(mode FilePermissionConfig) error {
 			fMgr.absolutePathFileName)
 	}
 
-	err = mode.IsValid(ePrefix)
+	err = mode.IsValidInstanceError(ePrefix)
 
 	if err != nil {
 		return fmt.Errorf(ePrefix+

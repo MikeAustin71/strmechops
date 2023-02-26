@@ -774,7 +774,9 @@ func (fPerm *FilePermissionConfig) GetEntryTypeComponent(
 //		text will be attached to the beginning of the
 //		error message.
 func (fPerm *FilePermissionConfig) GetCompositePermissionMode(
-	errorPrefix interface{}) (os.FileMode, error) {
+	errorPrefix interface{}) (
+	os.FileMode,
+	error) {
 
 	if fPerm.lock == nil {
 		fPerm.lock = new(sync.Mutex)
@@ -905,7 +907,9 @@ func (fPerm *FilePermissionConfig) GetCompositePermissionMode(
 //		text will be attached to the beginning of the
 //		error message.
 func (fPerm *FilePermissionConfig) GetIsRegular(
-	errorPrefix interface{}) (bool, error) {
+	errorPrefix interface{}) (
+	bool,
+	error) {
 
 	if fPerm.lock == nil {
 		fPerm.lock = new(sync.Mutex)
@@ -1056,7 +1060,9 @@ func (fPerm *FilePermissionConfig) GetIsRegular(
 //		text will be attached to the beginning of the
 //		error message.
 func (fPerm *FilePermissionConfig) GetFileMode(
-	errorPrefix interface{}) (os.FileMode, error) {
+	errorPrefix interface{}) (
+	os.FileMode,
+	error) {
 
 	if fPerm.lock == nil {
 		fPerm.lock = new(sync.Mutex)
@@ -1663,7 +1669,7 @@ func (fPerm *FilePermissionConfig) GetPermissionTextCode(
 			ePrefix)
 }
 
-// IsValid
+// IsValidInstanceError
 //
 // If the current FilePermissionConfig instance is judged
 // to be 'Invalid', this method will return an error.
@@ -1755,7 +1761,7 @@ func (fPerm *FilePermissionConfig) GetPermissionTextCode(
 //		is found to be valid and no errors are
 //		encountered during processing, this returned
 //		error parameter is set to 'nil'.
-func (fPerm *FilePermissionConfig) IsValid(
+func (fPerm *FilePermissionConfig) IsValidInstanceError(
 	errorPrefix interface{}) error {
 
 	if fPerm.lock == nil {

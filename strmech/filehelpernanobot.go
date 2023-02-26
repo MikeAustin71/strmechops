@@ -394,7 +394,7 @@ func (fHelperNanobot *fileHelperNanobot) changeFileMode(
 		return err
 	}
 
-	err = filePermission.IsValid(
+	err = filePermission.IsValidInstanceError(
 		ePrefix.XCpy("filePermission"))
 
 	if err != nil {
@@ -4411,7 +4411,7 @@ func (fHelperNanobot *fileHelperNanobot) makeDirAllPerm(
 
 	var err2 error
 
-	err2 = permission.IsValid(
+	err2 = permission.IsValidInstanceError(
 		ePrefix.XCpy("permission"))
 
 	if err2 != nil {
