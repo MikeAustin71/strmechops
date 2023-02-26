@@ -318,7 +318,7 @@ func (dMgrs *DirMgrCollection) FindDirectories(
 				err,
 				_ =
 				fh.FilterFileName(
-					dMgr.actualDirFileInfo,
+					&dMgr.actualDirFileInfo,
 					fileSelectionCriteria,
 					ePrefix)
 
@@ -337,7 +337,7 @@ func (dMgrs *DirMgrCollection) FindDirectories(
 			isMatchedFile,
 				err,
 				_ = fh.FilterFileName(
-				fip,
+				&fip,
 				fileSelectionCriteria,
 				ePrefix)
 
