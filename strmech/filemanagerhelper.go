@@ -1016,7 +1016,7 @@ func (fMgrHlpr *fileMgrHelper) lowLevelCopyByIO(
 	srcFMgr *FileMgr,
 	destFMgr *FileMgr,
 	localBufferSize int,
-	errorPrefix interface{},
+	errPrefDto *ePref.ErrPrefixDto,
 	srcFMgrLabel string,
 	destFMgrLabel string) error {
 
@@ -1032,10 +1032,10 @@ func (fMgrHlpr *fileMgrHelper) lowLevelCopyByIO(
 	var err error
 
 	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
 		"fileMgrHelper."+
-			"lowLevelCopyByIO()",
+			"fileMgrHelper()",
 		"")
 
 	if err != nil {
