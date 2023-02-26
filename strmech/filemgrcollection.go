@@ -462,7 +462,7 @@ func (fMgrs *FileMgrCollection) FindFiles(
 			isMatchedFile,
 				err,
 				_ = fh.FilterFileName(
-				fMgr.actualFileInfo,
+				&fMgr.actualFileInfo,
 				fileSelectionCriteria,
 				ePrefix)
 
@@ -484,7 +484,7 @@ func (fMgrs *FileMgrCollection) FindFiles(
 			isMatchedFile,
 				err,
 				_ = fh.FilterFileName(
-				fip,
+				&fip,
 				fileSelectionCriteria,
 				ePrefix)
 
