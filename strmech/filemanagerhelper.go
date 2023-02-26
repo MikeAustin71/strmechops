@@ -1035,8 +1035,9 @@ func (fMgrHlpr *fileMgrHelper) lowLevelCopyByIOBuffer(
 	return nil
 }
 
-// lowLevelCopyByIO - Helper method which implements
-// the "Copy IO" operation.
+// lowLevelCopyByIO
+//
+// Helper method which implements the "Copy IO" operation.
 //
 // This is a low level method which performs no set up
 // validation before initiating the "Copy By IO" operation.
@@ -1047,8 +1048,9 @@ func (fMgrHlpr *fileMgrHelper) lowLevelCopyByIOBuffer(
 // this []byte array is therefore specified by
 // 'localBufferSize'.
 //
-// The best practice is to call fileMgrHelper.copyFileSetup()
-// or similar method first, before calling this method.
+// The best practice is to call
+// fileMgrHelper.copyFileSetup() or similar method first,
+// before calling this method.
 //
 //	Reference:
 //	  https://golang.org/pkg/io/#CopyBuffer
@@ -1097,12 +1099,31 @@ func (fMgrHlpr *fileMgrHelper) lowLevelCopyByIO(
 			destFMgrLabel)
 	}
 
+	if len(srcFMgrLabel) == 0 {
+
+		srcFMgrLabel = "srcFMgr"
+	}
+
+	if len(destFMgrLabel) == 0 {
+
+		destFMgrLabel = "destFMgr"
+	}
+
 	var targetFMgrFileDoesExist bool
 
 	// First, open the source file
-	srcPtr, err := os.Open(srcFMgr.absolutePathFileName)
+
+	var srcPtr *os.File
+
+	srcPtr,
+		err = os.Open(srcFMgr.absolutePathFileName)
 
 	if err != nil {
+
+		if srcPtr != nil {
+			_ = srcPtr.Close()
+		}
+
 		return fmt.Errorf("%v\n"+
 			"Error returned by os.Open(%v.absolutePathFileName)\n"+
 			"%v.absolutePathFileName='%v'\n"+
@@ -1114,19 +1135,28 @@ func (fMgrHlpr *fileMgrHelper) lowLevelCopyByIO(
 			err.Error())
 	}
 
-	destPtr, err := os.Create(destFMgr.absolutePathFileName)
+	var destPtr *os.File
+
+	destPtr,
+		err = os.Create(destFMgr.absolutePathFileName)
 
 	if err != nil {
 
 		_ = srcPtr.Close()
+
+		if destPtr != nil {
+			_ = destPtr.Close()
+		}
 
 		return fmt.Errorf("%v\n"+
 			"Error returned by os.Create(%v.absolutePathFileName)\n"+
 			"%v.absolutePathFileName='%v'\n"+
 			"Error= \n%v\n",
 			ePrefix.String(),
-			destFMgrLabel, destFMgrLabel,
-			destFMgr.absolutePathFileName, err.Error())
+			destFMgrLabel,
+			destFMgrLabel,
+			destFMgr.absolutePathFileName,
+			err.Error())
 	}
 
 	var byteBuff []byte
@@ -1135,17 +1165,22 @@ func (fMgrHlpr *fileMgrHelper) lowLevelCopyByIO(
 		byteBuff = make([]byte, localBufferSize)
 	}
 
-	bytesCopied, err := io.CopyBuffer(destPtr, srcPtr, byteBuff)
+	var bytesCopied int64
+
+	bytesCopied,
+		err = io.CopyBuffer(destPtr, srcPtr, byteBuff)
 
 	if err != nil {
+
 		byteBuff = nil
+
 		_ = srcPtr.Close()
+
 		_ = destPtr.Close()
 
 		return fmt.Errorf("%v\n"+
 			"Error returned by io.CopyBuffer(%v, %v)\n"+
-			"%v='%v'\n"+
-			"%v='%v'\n"+
+			"%v='%v'\n%v='%v'\n"+
 			"Error= \n%v\n",
 			ePrefix.String(),
 			destFMgrLabel,
@@ -1162,11 +1197,11 @@ func (fMgrHlpr *fileMgrHelper) lowLevelCopyByIO(
 	err = destPtr.Sync()
 
 	if err != nil {
-		errs = append(errs, fmt.Errorf(
-			"%v\n"+
-				"Error returned by %v.Sync()\n"+
-				"%v='%v'\n"+
-				"Error= \n%v\n",
+
+		errs = append(errs, fmt.Errorf("%v\n"+
+			"Error returned by %v.Sync()\n"+
+			"%v='%v'\n"+
+			"Error= \n%v\n",
 			ePrefix.String(),
 			destFMgrLabel,
 			destFMgrLabel, destFMgr.absolutePathFileName,
@@ -1193,6 +1228,7 @@ func (fMgrHlpr *fileMgrHelper) lowLevelCopyByIO(
 	err = destPtr.Close()
 
 	if err != nil {
+
 		errs = append(errs, fmt.Errorf("%v\n"+
 			"Error returned by destPtr.Close()\n"+
 			"destPtr=%v='%v'\n"+
@@ -1210,12 +1246,11 @@ func (fMgrHlpr *fileMgrHelper) lowLevelCopyByIO(
 	}
 
 	targetFMgrFileDoesExist,
-		err = new(fileMgrHelperAtom).
-		doesFileMgrPathFileExist(
-			destFMgr,
-			PreProcPathCode.None(),
-			ePrefix,
-			destFMgrLabel+".absolutePathFileName")
+		err = new(fileMgrHelperAtom).doesFileMgrPathFileExist(
+		destFMgr,
+		PreProcPathCode.None(),
+		ePrefix,
+		destFMgrLabel+".absolutePathFileName")
 
 	if err != nil {
 		return fmt.Errorf("%v\n"+
@@ -1228,6 +1263,7 @@ func (fMgrHlpr *fileMgrHelper) lowLevelCopyByIO(
 	}
 
 	if !targetFMgrFileDoesExist {
+
 		return fmt.Errorf("%v\n"+
 			"ERROR: After Copy IO operation, the destination file DOES NOT EXIST!\n"+
 			"Destination File = %v='%v'\n",
@@ -1243,8 +1279,7 @@ func (fMgrHlpr *fileMgrHelper) lowLevelCopyByIO(
 			"Error: Bytes Copied does NOT equal bytes "+
 			"in source file!\n"+
 			"Source File Bytes='%v'   Bytes Coped='%v'\n"+
-			"Source File=%v='%v'\n"+
-			"Destination File=%v='%v'\n",
+			"Source File=%v='%v'\nDestination File=%v='%v'\n",
 			ePrefix.String(),
 			srcFileSize,
 			bytesCopied,
@@ -1262,8 +1297,7 @@ func (fMgrHlpr *fileMgrHelper) lowLevelCopyByIO(
 			"Error: Bytes is source file do NOT equal bytes "+
 			"in destination file!\n"+
 			"Source File Bytes='%v'   Destination File Bytes='%v'\n"+
-			"Source File=%v='%v'\n"+
-			"Destination File=%v='%v'\n",
+			"Source File=%v='%v'\nDestination File=%v='%v'\n",
 			ePrefix.String(),
 			srcFileSize,
 			destFMgr.actualFileInfo.Size(),
