@@ -564,82 +564,13 @@ func (fOpenCfg *FileOpenConfig) IsValidInstanceError(
 		return err
 	}
 
-	if fOpenCfg.fileOpenModes == nil {
-		fOpenCfg.fileOpenModes = make([]FileOpenMode, 0)
-	}
-
-	if !fOpenCfg.isInitialized {
-		return fmt.Errorf("%v\n"+
-			"Error: The current FileOpenConfig instance has\n"+
-			"NOT been properly initialized.\n",
+	_,
+		err = new(fileOpenConfigElectron).
+		testValidityFileOpenConfig(
+			fOpenCfg,
 			ePrefix)
-	}
 
-	err = fOpenCfg.fileOpenType.IsValid()
-
-	if err != nil {
-		return fmt.Errorf("%v\n"+
-			"Error: The File Open Type is INVALID!.\n"+
-			"Error=\n%v\n",
-			ePrefix,
-			err.Error())
-	}
-
-	lenFileOpenModes := len(fOpenCfg.fileOpenModes)
-
-	if fOpenCfg.fileOpenType == FOpenType.TypeNone() &&
-		lenFileOpenModes > 1 {
-
-		return fmt.Errorf("%v\n"+
-			"Error: Current FileOpenConfig has Type='None'\n"+
-			"and multiple File Open Modes!\n"+
-			"Number Of File Open Modes = %v\n",
-			ePrefix,
-			lenFileOpenModes)
-	}
-
-	if fOpenCfg.fileOpenType == FOpenType.TypeNone() &&
-		lenFileOpenModes == 1 &&
-		fOpenCfg.fileOpenModes[0] != FileOpenMode(0).ModeNone() {
-
-		return fmt.Errorf("%v\n"+
-			"Error: Current FileOpenConfig has Type='None' and "+
-			"a valid File Open Mode\n",
-			ePrefix)
-	}
-
-	if fOpenCfg.fileOpenType != FOpenType.TypeNone() &&
-		lenFileOpenModes > 1 {
-
-		for i := 0; i < lenFileOpenModes; i++ {
-			if fOpenCfg.fileOpenModes[i] == FileOpenMode(0).ModeNone() {
-
-				return fmt.Errorf("%v\n"+
-					"Error: The File Open Status has multiple File Open Modes\n"+
-					"one of which is 'None'. Resolve this conflict.\n",
-					ePrefix)
-			}
-		}
-
-	}
-
-	for i := 0; i < lenFileOpenModes; i++ {
-
-		err := fOpenCfg.fileOpenModes[i].IsValid()
-
-		if err != nil {
-			return fmt.Errorf("%v\n"+
-				"Error: A File Open Mode is INVALID!\n"+
-				"Index='%v'\n"+
-				"Invalid Error=\n%v\n ",
-				ePrefix,
-				i,
-				err.Error())
-		}
-
-	}
-
-	return nil
+	return err
 }
 
 // New
@@ -1088,6 +1019,18 @@ func (fOpenCfg *FileOpenConfig) SetFileOpenType(
 	fOpenCfg.fileOpenType = fOpenType
 
 	fOpenCfg.isInitialized = true
+
+	var isValid bool
+
+	isValid,
+		_ = new(fileOpenConfigElectron).
+		testValidityFileOpenConfig(
+			fOpenCfg,
+			ePrefix)
+
+	if !isValid {
+		fOpenCfg.isInitialized = false
+	}
 
 	return nil
 }

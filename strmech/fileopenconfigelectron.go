@@ -9,24 +9,24 @@ import (
 // fileAccessControlElectron
 //
 // Provides helper methods for Type
-// FileAccessControl.
-type fileAccessControlElectron struct {
+// FileOpenConfig.
+type fileOpenConfigElectron struct {
 	lock *sync.Mutex
 }
 
-// testValidityOfFileAccessControl
+// testValidityFileOpenConfig
 //
-// Receives a pointer to an instance of FileAccessControl
+// Receives a pointer to an instance of FileOpenConfig
 // and performs a diagnostic analysis to determine if
 // that instance is valid in all respects.
 //
-// If the input parameter 'fAccessCtrl' is determined to
+// If the input parameter 'fOpenCfg' is determined to
 // be invalid, this method will return a boolean flag
 // ('isValid') of 'false'. In addition, an instance of
 // type error ('err') will be returned configured with an
 // appropriate error message.
 //
-// If the input parameter 'fAccessCtrl' is valid, this
+// If the input parameter 'fOpenCfg' is valid, this
 // method will return a boolean flag ('isValid') of
 // 'true' and the returned error type ('err') will be set
 // to 'nil'.
@@ -35,9 +35,9 @@ type fileAccessControlElectron struct {
 //
 // # Input Parameters
 //
-//	fAccessCtrl					*FileAccessControl
+//	fOpenCfg					*FileOpenConfig
 //
-//		A pointer to an instance of FileAccessControl.
+//		A pointer to an instance of FileOpenConfig.
 //		This object will be subjected to diagnostic
 //		analysis in order to determine if all the
 //		member data variables contain valid values.
@@ -64,19 +64,19 @@ type fileAccessControlElectron struct {
 //	isValid						bool
 //
 //		If any of the internal member data variables
-//		contained in the input parameter 'fAccessCtrl'
+//		contained in the input parameter 'fOpenCfg'
 //		are found to be invalid, this return parameter
 //		will be set to 'false'.
 //
 //		If all the internal member data variables
-//		contained in the input parameter 'fAccessCtrl'
+//		contained in the input parameter 'fOpenCfg'
 //		are found to be valid, this return parameter
 //		will be set to 'true'.
 //
 //	err							error
 //
 //		If any of the internal member data variables
-//		contained in the input parameter 'fAccessCtrl'
+//		contained in the input parameter 'fOpenCfg'
 //		are found to be invalid, this method will return
 //		an error configured with an appropriate message
 //		identifying the invalid member data variable.
@@ -93,29 +93,31 @@ type fileAccessControlElectron struct {
 //		passed by input parameter, 'errPrefDto'. The
 //		'errPrefDto' text will be attached to the
 //		beginning of the error message.
-func (fAccessCtrlElectron *fileAccessControlElectron) testValidityOfFileAccessControl(
-	fAccessCtrl *FileAccessControl,
+func (fOpenCfgElectron *fileOpenConfigElectron) testValidityFileOpenConfig(
+	fOpenCfg *FileOpenConfig,
 	errPrefDto *ePref.ErrPrefixDto) (
 	isValid bool,
 	err error) {
 
-	if fAccessCtrlElectron.lock == nil {
-		fAccessCtrlElectron.lock = new(sync.Mutex)
+	if fOpenCfgElectron.lock == nil {
+		fOpenCfgElectron.lock = new(sync.Mutex)
 	}
 
-	fAccessCtrlElectron.lock.Lock()
+	fOpenCfgElectron.lock.Lock()
 
-	defer fAccessCtrlElectron.lock.Unlock()
+	defer fOpenCfgElectron.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
+
+	funcName := "fileOpenConfigElectron." +
+		"testValidityFileOpenConfig()"
 
 	isValid = false
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"fileAccessControlElectron."+
-			"testValidityOfFileAccessControl()",
+		funcName,
 		"")
 
 	if err != nil {
@@ -123,54 +125,101 @@ func (fAccessCtrlElectron *fileAccessControlElectron) testValidityOfFileAccessCo
 		return isValid, err
 	}
 
-	if fAccessCtrl == nil {
+	if fOpenCfg == nil {
 		err = fmt.Errorf("%v\n"+
-			"Error: FileAccessControl object is invalid!\n"+
-			"Input parameter 'fAccessCtrl' is a nil pointer!\n",
+			"Error: FileOpenConfig object is invalid!\n"+
+			"Input parameter 'fOpenCfg' is a nil pointer!\n",
 			ePrefix.String())
 
 		return isValid, err
 	}
 
-	if !fAccessCtrl.isInitialized {
+	if fOpenCfg.fileOpenModes == nil {
+		fOpenCfg.fileOpenModes = make([]FileOpenMode, 0)
+	}
+
+	if !fOpenCfg.isInitialized {
 		return isValid,
 			fmt.Errorf("%v\n"+
-				"Error: FileAccessControl object is invalid!\n"+
-				"The current FileAccessControl Instance has NOT been initialized!\n",
+				"Error: The current FileOpenConfig instance has\n"+
+				"NOT been properly initialized.\n",
 				ePrefix)
 	}
 
-	var err2 error
+	err = fOpenCfg.fileOpenType.IsValid()
 
-	err2 = fAccessCtrl.fileOpenCodes.IsValidInstanceError(ePrefix)
-
-	if err2 != nil {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: FileAccessControl object is invalid!\n"+
-			"File Open codes INVALID!\n"+
-			"Error= \n%v\n",
-			ePrefix.String(),
-			err2.Error())
-
-		return isValid, err
+	if err != nil {
+		return isValid,
+			fmt.Errorf("%v\n"+
+				"Error: The File Open Type is INVALID!.\n"+
+				"Error=\n%v\n",
+				ePrefix,
+				err.Error())
 	}
 
-	err2 = fAccessCtrl.permissions.IsValidInstanceError(ePrefix)
+	lenFileOpenModes := len(fOpenCfg.fileOpenModes)
 
-	if err2 != nil {
+	if fOpenCfg.fileOpenType == FOpenType.TypeNone() &&
+		lenFileOpenModes > 1 {
 
-		err = fmt.Errorf("%v\n"+
-			"Error: FileAccessControl object is invalid!\n"+
-			"File Permission codes INVALID!\n"+
-			"Error = \n%v\n",
-			ePrefix.String(),
-			err2.Error())
+		return isValid,
+			fmt.Errorf("%v\n"+
+				"Error: Current FileOpenConfig has Type='None'\n"+
+				"and multiple File Open Modes!\n"+
+				"Number Of File Open Modes = %v\n",
+				ePrefix,
+				lenFileOpenModes)
+	}
 
-		return isValid, err
+	if fOpenCfg.fileOpenType == FOpenType.TypeNone() &&
+		lenFileOpenModes == 1 &&
+		fOpenCfg.fileOpenModes[0] != FileOpenMode(0).ModeNone() {
+
+		return isValid,
+			fmt.Errorf("%v\n"+
+				"Error: Current FileOpenConfig has Type='None' and "+
+				"a valid File Open Mode\n",
+				ePrefix)
+	}
+
+	if fOpenCfg.fileOpenType != FOpenType.TypeNone() &&
+		lenFileOpenModes > 1 {
+
+		for i := 0; i < lenFileOpenModes; i++ {
+			if fOpenCfg.fileOpenModes[i] == FileOpenMode(0).ModeNone() {
+
+				return isValid,
+					fmt.Errorf("%v\n"+
+						"Error: The File Open Status has multiple File Open Modes\n"+
+						"one of which is 'None'.\n"+
+						"fOpenCfg.fileOpenModes[%v] == ModeNone\n	"+
+						"Please resolve this conflict.\n",
+						ePrefix,
+						i)
+			}
+		}
+
+	}
+
+	for i := 0; i < lenFileOpenModes; i++ {
+
+		err := fOpenCfg.fileOpenModes[i].IsValid()
+
+		if err != nil {
+
+			return isValid,
+				fmt.Errorf("%v\n"+
+					"Error: A File Open Mode is INVALID!\n"+
+					"Index='%v'\n"+
+					"Invalid Error=\n%v\n ",
+					ePrefix,
+					i,
+					err.Error())
+		}
+
 	}
 
 	isValid = true
 
-	return isValid, err
+	return isValid, nil
 }
