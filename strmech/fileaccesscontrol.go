@@ -703,14 +703,14 @@ func (fAccess *FileAccessControl) NewInitialized(
 		return FileAccessControl{}, err
 	}
 
-	fA2 := FileAccessControl{}
+	newFAccessCtrl := FileAccessControl{}
 
 	err = new(fileAccessControlMechanics).
 		setInitializeNewFileAccessCtrl(
-			&fA2,
+			&newFAccessCtrl,
 			ePrefix.XCpy("fA2<-"))
 
-	return fA2, err
+	return newFAccessCtrl, err
 }
 
 // New
@@ -899,69 +899,311 @@ func (fAccess *FileAccessControl) New(
 //
 // Returns a FileAccessControl instance configured for
 // Read/Write access.
-func (fAccess FileAccessControl) NewReadWriteAccess() (
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//		If this method completes successfully, a new
+//		instance of FileAccessControl will be returned.
+//
+//		This new FileAccessControl instance will be
+//		configured for Read-Write file access.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fAccess *FileAccessControl) NewReadWriteAccess(
+	errorPrefix interface{}) (
 	FileAccessControl,
 	error) {
 
-	ePrefix := "FileAccessControl.NewReadWriteAccess() "
+	if fAccess.lock == nil {
+		fAccess.lock = new(sync.Mutex)
+	}
 
-	fileOpenCfg, err :=
+	fAccess.lock.Lock()
+
+	defer fAccess.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	newFAccessCtrl := FileAccessControl{}
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileAccessControl."+
+			"NewReadWriteAccess()",
+		"")
+
+	if err != nil {
+		return newFAccessCtrl, err
+	}
+
+	var fileOpenCfg FileOpenConfig
+
+	fileOpenCfg,
+		err =
 		new(FileOpenConfig).
-			New(ePrefix,
+			New(ePrefix.XCpy("fileOpenCfg<-"),
 				FOpenType.TypeReadWrite(),
 				FOpenMode.ModeNone())
 
 	if err != nil {
-		return FileAccessControl{}, fmt.Errorf(ePrefix+"%v\n", err.Error())
+		return newFAccessCtrl, err
 	}
 
-	filePermCfg, err := new(FilePermissionConfig).
-		New("-rw-rw-rw-", ePrefix)
+	var filePermCfg FilePermissionConfig
+
+	filePermCfg,
+		err = new(FilePermissionConfig).
+		New("-rw-rw-rw-",
+			ePrefix.XCpy(
+				"filePermCfg<-'-rw-rw-rw-'"))
 
 	if err != nil {
-		return FileAccessControl{}, fmt.Errorf(ePrefix+"%v\n", err.Error())
+		return newFAccessCtrl, err
 	}
 
-	fileAccessCfg, err := FileAccessControl{}.New(fileOpenCfg, filePermCfg)
+	err = new(fileAccessControlMechanics).
+		setFileAccessControl(
+			&newFAccessCtrl,
+			fileOpenCfg,
+			filePermCfg,
+			ePrefix.XCpy("newFAccessCtrl<-"))
 
-	if err != nil {
-		return FileAccessControl{}, fmt.Errorf(ePrefix+"%v\n", err.Error())
-	}
-
-	return fileAccessCfg, nil
+	return newFAccessCtrl, nil
 }
 
-// NewReadWriteCreateTruncateAccess - Returns a FileAccessControl instance
-// configured for Read, Write, Create and Truncate access.
-func (fAccess FileAccessControl) NewReadWriteCreateTruncateAccess() (FileAccessControl, error) {
+// NewReadWriteCreateTruncateAccess
+//
+// Returns a FileAccessControl instance configured for
+// Read, Write, Create and Truncate file access.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//		If this method completes successfully, a new
+//		instance of FileAccessControl will be returned.
+//
+//		This new FileAccessControl instance will be
+//		configured for Read, Write, Create and Truncate
+//		file access.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fAccess *FileAccessControl) NewReadWriteCreateTruncateAccess(
+	errorPrefix interface{}) (
+	FileAccessControl,
+	error) {
 
-	ePrefix := "FileAccessControl.NewReadWriteCreateTruncateAccess() "
+	if fAccess.lock == nil {
+		fAccess.lock = new(sync.Mutex)
+	}
+
+	fAccess.lock.Lock()
+
+	defer fAccess.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	newFileAccessCtrl := FileAccessControl{}
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileAccessControl."+
+			"NewReadWriteCreateTruncateAccess()",
+		"")
+
+	if err != nil {
+		return newFileAccessCtrl, err
+	}
+
+	var fOpenCfg FileOpenConfig
 
 	//  OpenFile(name, O_RDWR|O_CREATE|O_TRUNC, 0666)
-	fOpenCfg, err := new(FileOpenConfig).New(
-		ePrefix,
+	fOpenCfg,
+		err = new(FileOpenConfig).New(
+		ePrefix.XCpy("fOpenCfg<-"),
 		FOpenType.TypeReadWrite(),
 		FOpenMode.ModeCreate(),
 		FOpenMode.ModeTruncate())
 
 	if err != nil {
-		return FileAccessControl{}, fmt.Errorf(ePrefix+"%v\n", err.Error())
+		return newFileAccessCtrl, err
 	}
 
-	fPermCfg, err := new(FilePermissionConfig).
-		New("-rw-rw-rw-", ePrefix)
+	var fPermCfg FilePermissionConfig
+
+	fPermCfg,
+		err = new(FilePermissionConfig).
+		New(
+			"-rw-rw-rw-",
+			ePrefix.XCpy(
+				"<-'-rw-rw-rw-'"))
 
 	if err != nil {
-		return FileAccessControl{}, fmt.Errorf(ePrefix+"%v\n", err.Error())
+		return newFileAccessCtrl, err
 	}
 
-	fileAccessCfg, err := FileAccessControl{}.New(fOpenCfg, fPermCfg)
+	err = new(fileAccessControlMechanics).
+		setFileAccessControl(
+			&newFileAccessCtrl,
+			fOpenCfg,
+			fPermCfg,
+			ePrefix.XCpy("newFileAccessCtrl<-"))
 
-	if err != nil {
-		return FileAccessControl{}, fmt.Errorf(ePrefix+"%v\n", err.Error())
-	}
-
-	return fileAccessCfg, nil
+	return newFileAccessCtrl, nil
 }
 
 // NewReadOnlyAccess
@@ -1054,7 +1296,7 @@ func (fAccess FileAccessControl) NewReadWriteCreateTruncateAccess() (FileAccessC
 //	 	text passed by input parameter, 'errorPrefix'.
 //	 	The 'errorPrefix' text will be prefixed or
 //	 	attached to the	beginning of the error message.
-func (fAccess FileAccessControl) NewReadOnlyAccess(
+func (fAccess *FileAccessControl) NewReadOnlyAccess(
 	errorPrefix interface{}) (
 	FileAccessControl,
 	error) {
@@ -1119,7 +1361,7 @@ func (fAccess FileAccessControl) NewReadOnlyAccess(
 
 // NewWriteOnlyAccess - Returns a FileAccessControl instance configured for
 // Write-Only access.
-func (fAccess FileAccessControl) NewWriteOnlyAccess() (FileAccessControl, error) {
+func (fAccess *FileAccessControl) NewWriteOnlyAccess() (FileAccessControl, error) {
 
 	ePrefix := "FileAccessControl.NewWriteOnlyAccess() "
 
@@ -1151,7 +1393,7 @@ func (fAccess FileAccessControl) NewWriteOnlyAccess() (FileAccessControl, error)
 
 // NewWriteOnlyAppendAccess - Returns a FileAccessControl instance configured for
 // Write/Only - Append access.
-func (fAccess FileAccessControl) NewWriteOnlyAppendAccess() (FileAccessControl, error) {
+func (fAccess *FileAccessControl) NewWriteOnlyAppendAccess() (FileAccessControl, error) {
 
 	ePrefix := "FileAccessControl.NewWriteOnlyAccess() "
 
@@ -1185,7 +1427,7 @@ func (fAccess FileAccessControl) NewWriteOnlyAppendAccess() (FileAccessControl, 
 //
 // If the file previously exists, it will be truncated before the writing operation
 // commences.
-func (fAccess FileAccessControl) NewWriteOnlyTruncateAccess() (FileAccessControl, error) {
+func (fAccess *FileAccessControl) NewWriteOnlyTruncateAccess() (FileAccessControl, error) {
 
 	ePrefix := "FileAccessControl.NewWriteOnlyTruncateAccess() "
 

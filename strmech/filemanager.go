@@ -3496,7 +3496,8 @@ func (fMgr *FileMgr) OpenThisFileReadOnly() error {
 
 	ePrefix := "FileMgr.OpenThisFileReadOnly() "
 
-	readOnlyAccessCtrl, err := FileAccessControl{}.NewReadOnlyAccess()
+	readOnlyAccessCtrl, err :=
+		new(FileAccessControl).NewReadOnlyAccess(ePrefix)
 
 	if err != nil {
 		return fmt.Errorf(ePrefix+"\n%v\n", err.Error())
@@ -3539,7 +3540,8 @@ func (fMgr *FileMgr) OpenThisFileWriteOnly() error {
 	ePrefix := "FileMgr.OpenThisFileWriteOnly() "
 	fMgrHlpr := fileMgrHelper{}
 
-	writeOnlyAccessCtrl, err := FileAccessControl{}.NewWriteOnlyAccess()
+	writeOnlyAccessCtrl, err :=
+		new(FileAccessControl).NewWriteOnlyAccess(ePrefix)
 
 	if err != nil {
 		return fmt.Errorf(ePrefix+"\n%v\n", err.Error())
@@ -3574,7 +3576,8 @@ func (fMgr *FileMgr) OpenThisFileWriteOnlyAppend() error {
 
 	ePrefix := "FileMgr.OpenThisFileWriteOnlyAppend() "
 
-	writeOnlyFileAccessCfg, err := FileAccessControl{}.NewWriteOnlyAppendAccess()
+	writeOnlyFileAccessCfg, err :=
+		new(FileAccessControl).NewWriteOnlyAppendAccess(ePrefix)
 
 	if err != nil {
 		return fmt.Errorf(ePrefix+"\n%v\n", err.Error())
@@ -3611,7 +3614,8 @@ func (fMgr *FileMgr) OpenThisFileWriteOnlyTruncate() error {
 
 	ePrefix := "FileMgr.OpenThisFileWriteOnlyTruncate() "
 
-	writeOnlyTruncateAccessCfg, err := FileAccessControl{}.NewWriteOnlyTruncateAccess()
+	writeOnlyTruncateAccessCfg, err :=
+		new(FileAccessControl).NewWriteOnlyTruncateAccess(ePrefix)
 
 	if err != nil {
 		return fmt.Errorf(ePrefix+"\n%v\n", err.Error())
@@ -3654,7 +3658,10 @@ func (fMgr *FileMgr) OpenThisFileReadWrite() error {
 
 	ePrefix := "FileMgr.OpenThisFileReadWrite() "
 
-	readWriteAccessCtrl, err := FileAccessControl{}.NewReadWriteAccess()
+	readWriteAccessCtrl,
+		err :=
+		new(FileAccessControl).NewReadWriteAccess(
+			ePrefix)
 
 	if err != nil {
 		return fmt.Errorf(ePrefix+"\n%v\n", err.Error())
@@ -3694,7 +3701,8 @@ func (fMgr *FileMgr) ReadAllFile() (bytesRead []byte, err error) {
 	err = nil
 	var err2 error
 
-	readWriteAccessCtrl, err2 := FileAccessControl{}.NewReadWriteAccess()
+	readWriteAccessCtrl, err2 :=
+		new(FileAccessControl).NewReadWriteAccess(ePrefix)
 
 	if err2 != nil {
 		err = fmt.Errorf(ePrefix+"%v\n", err2.Error())
@@ -3751,7 +3759,8 @@ func (fMgr *FileMgr) ReadFileBytes(byteBuff []byte) (bytesRead int, err error) {
 	err = nil
 	var err2 error
 
-	readWriteAccessCtrl, err2 := FileAccessControl{}.NewReadWriteAccess()
+	readWriteAccessCtrl, err2 :=
+		new(FileAccessControl).NewReadWriteAccess(ePrefix)
 
 	if err2 != nil {
 		err = fmt.Errorf(ePrefix+
@@ -3813,7 +3822,8 @@ func (fMgr *FileMgr) ReadFileLine(delim byte) (bytesRead []byte, err error) {
 	err = nil
 	var err2 error
 
-	readWriteAccessCtrl, err2 := new(FileAccessControl).NewReadWriteAccess()
+	readWriteAccessCtrl, err2 :=
+		new(FileAccessControl).NewReadWriteAccess(ePrefix)
 
 	if err2 != nil {
 		err = fmt.Errorf(ePrefix+
@@ -3871,7 +3881,8 @@ func (fMgr *FileMgr) ReadFileString(delim byte) (stringRead string, err error) {
 	err = nil
 	var err2 error
 
-	readWriteAccessCtrl, err2 := FileAccessControl{}.NewReadWriteAccess()
+	readWriteAccessCtrl, err2 :=
+		new(FileAccessControl).NewReadWriteAccess(ePrefix)
 
 	if err2 != nil {
 		err = fmt.Errorf(ePrefix+
@@ -4023,7 +4034,8 @@ func (fMgr *FileMgr) SetFileInfo(info os.FileInfo) error {
 			fMgr.fileNameExt, info.Name())
 	}
 
-	fMgr.actualFileInfo = FileInfoPlus{}.NewFromFileInfo(info)
+	fMgr.actualFileInfo =
+		new(FileInfoPlus).NewFromFileInfo(info)
 
 	if !fMgr.actualFileInfo.isFInfoInitialized {
 		return fmt.Errorf(ePrefix+
@@ -4143,7 +4155,7 @@ func (fMgr *FileMgr) WriteBytesToFile(
 	numBytesWritten = 0
 
 	readWriteAccessCtrl, err2 :=
-		FileAccessControl{}.NewReadWriteAccess()
+		new(FileAccessControl).NewReadWriteAccess(ePrefix)
 
 	if err2 != nil {
 		err = fmt.Errorf(ePrefix+
@@ -4215,7 +4227,7 @@ func (fMgr *FileMgr) WriteStrToFile(
 	var readWriteAccessCtrl FileAccessControl
 
 	readWriteAccessCtrl, err2 =
-		FileAccessControl{}.NewReadWriteAccess()
+		new(FileAccessControl).NewReadWriteAccess(ePrefix)
 
 	if err2 != nil {
 		err = fmt.Errorf(ePrefix+
