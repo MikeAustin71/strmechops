@@ -1214,10 +1214,18 @@ func (fOpenCfg *FileOpenConfig) SetFileOpenModes(
 		fOpenCfg.fileOpenModes = append(fOpenCfg.fileOpenModes, fOpenMode)
 	}
 
-	err = fOpenCfg.fileOpenType.IsValid()
+	fOpenCfg.isInitialized = true
 
-	if err == nil {
-		fOpenCfg.isInitialized = true
+	var isValid bool
+
+	isValid,
+		_ = new(fileOpenConfigElectron).
+		testValidityFileOpenConfig(
+			fOpenCfg,
+			ePrefix)
+
+	if !isValid {
+		fOpenCfg.isInitialized = false
 	}
 
 	return nil
