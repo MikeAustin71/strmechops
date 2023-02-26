@@ -2,22 +2,99 @@ package strmech
 
 import (
 	"fmt"
-	"reflect"
 	"strings"
+	"sync"
 )
 
-// mFileOperationCodeIntToString - This map is used to map enumeration values
+// Lock this mutex before accessing any of these maps.
+var fileOperationCodeMapsLock sync.Mutex
+
+// mFileOperationCodeToString - This map is used to map enumeration values
 // to enumeration names stored as strings for Type FileOperationCode.
-var mFileOperationCodeIntToString = map[int]string{}
+var mFileOperationCodeToString = map[FileOperationCode]string{
+	FileOperationCode(0):  "None",
+	FileOperationCode(1):  "MoveSourceFileToDestinationFile",
+	FileOperationCode(2):  "MoveSourceFileToDestinationDir",
+	FileOperationCode(3):  "DeleteDestinationFile",
+	FileOperationCode(4):  "DeleteSourceFile",
+	FileOperationCode(5):  "DeleteSourceAndDestinationFiles",
+	FileOperationCode(6):  "CopySourceToDestinationByHardLinkByIo",
+	FileOperationCode(7):  "CopySourceToDestinationByIoByHardLink",
+	FileOperationCode(8):  "CopySourceToDestinationByHardLink",
+	FileOperationCode(9):  "CopySourceToDestinationByIo",
+	FileOperationCode(10): "CreateSourceDir",
+	FileOperationCode(11): "CreateSourceDirAndFile",
+	FileOperationCode(12): "CreateSourceFile",
+	FileOperationCode(13): "CreateDestinationDir",
+	FileOperationCode(14): "CreateDestinationDirAndFile",
+	FileOperationCode(15): "CreateDestinationFile",
+}
 
-// mFileOperationCodeStringToInt - This map is used to map enumeration names
+// mValidFileOperationCodeToString
+// This map is used to map valid enumeration values to
+// valid enumeration names stored as strings for Type
+// FileOperationCode.
+var mValidFileOperationCodeToString = map[FileOperationCode]string{
+	FileOperationCode(0):  "None",
+	FileOperationCode(1):  "MoveSourceFileToDestinationFile",
+	FileOperationCode(2):  "MoveSourceFileToDestinationDir",
+	FileOperationCode(3):  "DeleteDestinationFile",
+	FileOperationCode(4):  "DeleteSourceFile",
+	FileOperationCode(5):  "DeleteSourceAndDestinationFiles",
+	FileOperationCode(6):  "CopySourceToDestinationByHardLinkByIo",
+	FileOperationCode(7):  "CopySourceToDestinationByIoByHardLink",
+	FileOperationCode(8):  "CopySourceToDestinationByHardLink",
+	FileOperationCode(9):  "CopySourceToDestinationByIo",
+	FileOperationCode(10): "CreateSourceDir",
+	FileOperationCode(11): "CreateSourceDirAndFile",
+	FileOperationCode(12): "CreateSourceFile",
+	FileOperationCode(13): "CreateDestinationDir",
+	FileOperationCode(14): "CreateDestinationDirAndFile",
+	FileOperationCode(15): "CreateDestinationFile",
+}
+
+// mFileOperationCodeStringToCode - This map is used to map enumeration names
 // stored as strings to enumeration values for Type FileOperationCode.
-var mFileOperationCodeStringToInt = map[string]int{}
+var mFileOperationCodeStringToCode = map[string]FileOperationCode{
+	"None":                                  FileOperationCode(0),
+	"MoveSourceFileToDestinationFile":       FileOperationCode(1),
+	"MoveSourceFileToDestinationDir":        FileOperationCode(2),
+	"DeleteDestinationFile":                 FileOperationCode(3),
+	"DeleteSourceFile":                      FileOperationCode(4),
+	"DeleteSourceAndDestinationFiles":       FileOperationCode(5),
+	"CopySourceToDestinationByHardLinkByIo": FileOperationCode(6),
+	"CopySourceToDestinationByIoByHardLink": FileOperationCode(7),
+	"CopySourceToDestinationByHardLink":     FileOperationCode(8),
+	"CopySourceToDestinationByIo":           FileOperationCode(9),
+	"CreateSourceDir":                       FileOperationCode(10),
+	"CreateSourceDirAndFile":                FileOperationCode(11),
+	"CreateSourceFile":                      FileOperationCode(12),
+	"CreateDestinationDir":                  FileOperationCode(13),
+	"CreateDestinationDirAndFile":           FileOperationCode(14),
+	"CreateDestinationFile":                 FileOperationCode(15),
+}
 
-// mFileOperationCodeLwrCaseStringToInt - This map is used to map enumeration names
+// mFileOperationCodeLwrCaseStringToCode - This map is used to map enumeration names
 // stored as lower case strings to enumeration values for Type FileOperationCode.
 // This map is used for case-insensitive look-ups.
-var mFileOperationCodeLwrCaseStringToInt = map[string]int{}
+var mFileOperationCodeLwrCaseStringToCode = map[string]FileOperationCode{
+	"none":                                  FileOperationCode(0),
+	"movesourcefiletodestinationfile":       FileOperationCode(1),
+	"movesourcefiletodestinationdir":        FileOperationCode(2),
+	"deletedestinationfile":                 FileOperationCode(3),
+	"deletesourcefile":                      FileOperationCode(4),
+	"deletesourceanddestinationfiles":       FileOperationCode(5),
+	"copysourcetodestinationbyhardlinkbyio": FileOperationCode(6),
+	"copysourcetodestinationbyiobyhardlink": FileOperationCode(7),
+	"copysourcetodestinationbyhardlink":     FileOperationCode(8),
+	"copysourcetodestinationbyio":           FileOperationCode(9),
+	"createsourcedir":                       FileOperationCode(10),
+	"createsourcedirandfile":                FileOperationCode(11),
+	"createsourcefile":                      FileOperationCode(12),
+	"createdestinationdir":                  FileOperationCode(13),
+	"createdestinationdirandfile":           FileOperationCode(14),
+	"createdestinationfile":                 FileOperationCode(15),
+}
 
 // FileOperationCode - Integer enumeration. Signals
 // the type of operation to be performed on a file.
@@ -70,12 +147,23 @@ var mFileOperationCodeLwrCaseStringToInt = map[string]int{}
 //	       https://www.youtube.com/watch?v=DyXJy_0v0_U
 type FileOperationCode int
 
+var enumFileOperationCodeLock sync.Mutex
+
 // None - No operation (NOOP) No File Operation is performed.
 //
 // Usage:
 //
 //	FileOperationCode(0).None()
-func (fop FileOperationCode) None() FileOperationCode { return FileOperationCode(0) }
+//			OR
+//	FileOpCode.None()
+func (fop FileOperationCode) None() FileOperationCode {
+
+	enumFileOperationCodeLock.Lock()
+
+	defer enumFileOperationCodeLock.Unlock()
+
+	return FileOperationCode(0)
+}
 
 // MoveSourceFileToDestinationFile - Moves the source file to the destination
 // file and then deletes the original source file.
@@ -83,7 +171,14 @@ func (fop FileOperationCode) None() FileOperationCode { return FileOperationCode
 // Usage:
 //
 //	FileOperationCode(0).MoveSourceFileToDestinationFile()
+//			OR
+//	FileOpCode.MoveSourceFileToDestinationFile()
 func (fop FileOperationCode) MoveSourceFileToDestinationFile() FileOperationCode {
+
+	enumFileOperationCodeLock.Lock()
+
+	defer enumFileOperationCodeLock.Unlock()
+
 	return FileOperationCode(1)
 }
 
@@ -94,7 +189,14 @@ func (fop FileOperationCode) MoveSourceFileToDestinationFile() FileOperationCode
 // Usage:
 //
 //	FileOperationCode(0).MoveSourceFileToDestinationDir()
+//			OR
+//	FileOpCode.MoveSourceFileToDestinationDir()
 func (fop FileOperationCode) MoveSourceFileToDestinationDir() FileOperationCode {
+
+	enumFileOperationCodeLock.Lock()
+
+	defer enumFileOperationCodeLock.Unlock()
+
 	return FileOperationCode(2)
 }
 
@@ -105,7 +207,16 @@ func (fop FileOperationCode) MoveSourceFileToDestinationDir() FileOperationCode 
 // Usage:
 //
 //	FileOperationCode(0).DeleteDestinationFile()
-func (fop FileOperationCode) DeleteDestinationFile() FileOperationCode { return FileOperationCode(3) }
+//			OR
+//	FileOpCode.DeleteDestinationFile()
+func (fop FileOperationCode) DeleteDestinationFile() FileOperationCode {
+
+	enumFileOperationCodeLock.Lock()
+
+	defer enumFileOperationCodeLock.Unlock()
+
+	return FileOperationCode(3)
+}
 
 // DeleteSourceFile
 //
@@ -114,7 +225,16 @@ func (fop FileOperationCode) DeleteDestinationFile() FileOperationCode { return 
 // Usage:
 //
 //	FileOperationCode(0).DeleteSourceFile()
-func (fop FileOperationCode) DeleteSourceFile() FileOperationCode { return FileOperationCode(4) }
+//			OR
+//	FileOpCode.DeleteSourceFile()
+func (fop FileOperationCode) DeleteSourceFile() FileOperationCode {
+
+	enumFileOperationCodeLock.Lock()
+
+	defer enumFileOperationCodeLock.Unlock()
+
+	return FileOperationCode(4)
+}
 
 // DeleteSourceAndDestinationFiles - Deletes both the Source and Destination files
 // if they exist.
@@ -122,7 +242,14 @@ func (fop FileOperationCode) DeleteSourceFile() FileOperationCode { return FileO
 // Usage:
 //
 //	FileOperationCode(0).DeleteSourceAndDestinationFiles()
+//			OR
+//	FileOpCode.DeleteSourceAndDestinationFiles()
 func (fop FileOperationCode) DeleteSourceAndDestinationFiles() FileOperationCode {
+
+	enumFileOperationCodeLock.Lock()
+
+	defer enumFileOperationCodeLock.Unlock()
+
 	return FileOperationCode(5)
 }
 
@@ -138,7 +265,14 @@ func (fop FileOperationCode) DeleteSourceAndDestinationFiles() FileOperationCode
 // Usage:
 //
 //	FileOperationCode(0).FileOperationCode(0).CopySourceToDestinationByHardLinkByIo()()
+//			OR
+//	FileOpCode.CopySourceToDestinationByHardLinkByIo()
 func (fop FileOperationCode) CopySourceToDestinationByHardLinkByIo() FileOperationCode {
+
+	enumFileOperationCodeLock.Lock()
+
+	defer enumFileOperationCodeLock.Unlock()
+
 	return FileOperationCode(6)
 }
 
@@ -155,7 +289,14 @@ func (fop FileOperationCode) CopySourceToDestinationByHardLinkByIo() FileOperati
 // Usage:
 //
 //	FileOperationCode(0).CopySourceToDestinationByIoByHardLink()
+//			OR
+//	FileOpCode.CopySourceToDestinationByIoByHardLink()
 func (fop FileOperationCode) CopySourceToDestinationByIoByHardLink() FileOperationCode {
+
+	enumFileOperationCodeLock.Lock()
+
+	defer enumFileOperationCodeLock.Unlock()
+
 	return FileOperationCode(7)
 }
 
@@ -168,7 +309,14 @@ func (fop FileOperationCode) CopySourceToDestinationByIoByHardLink() FileOperati
 // Usage:
 //
 //	FileOperationCode(0).CopySourceToDestinationByHardLink()
+//			OR
+//	FileOpCode.CopySourceToDestinationByHardLink()
 func (fop FileOperationCode) CopySourceToDestinationByHardLink() FileOperationCode {
+
+	enumFileOperationCodeLock.Lock()
+
+	defer enumFileOperationCodeLock.Unlock()
+
 	return FileOperationCode(8)
 }
 
@@ -181,7 +329,14 @@ func (fop FileOperationCode) CopySourceToDestinationByHardLink() FileOperationCo
 // Usage:
 //
 //	FileOperationCode(0).CopySourceToDestinationByIo()
+//			OR
+//	FileOpCode.CopySourceToDestinationByIo()
 func (fop FileOperationCode) CopySourceToDestinationByIo() FileOperationCode {
+
+	enumFileOperationCodeLock.Lock()
+
+	defer enumFileOperationCodeLock.Unlock()
+
 	return FileOperationCode(9)
 }
 
@@ -190,30 +345,62 @@ func (fop FileOperationCode) CopySourceToDestinationByIo() FileOperationCode {
 // Usage:
 //
 //	FileOperationCode(0).CreateSourceDir()
-//
-// formerly FileOperationCode(0).CreateSourceDir()
-func (fop FileOperationCode) CreateSourceDir() FileOperationCode { return FileOperationCode(10) }
+//			OR
+//	FileOpCode.CreateSourceDir()
+func (fop FileOperationCode) CreateSourceDir() FileOperationCode {
+
+	enumFileOperationCodeLock.Lock()
+
+	defer enumFileOperationCodeLock.Unlock()
+
+	return FileOperationCode(10)
+}
 
 // CreateSourceDirAndFile - Creates the Source Directory and File
 //
 // Usage:
 //
 //	FileOperationCode(0).CreateSourceDirAndFile()
-func (fop FileOperationCode) CreateSourceDirAndFile() FileOperationCode { return FileOperationCode(11) }
+//			OR
+//	FileOpCode.CreateSourceDirAndFile()
+func (fop FileOperationCode) CreateSourceDirAndFile() FileOperationCode {
+
+	enumFileOperationCodeLock.Lock()
+
+	defer enumFileOperationCodeLock.Unlock()
+
+	return FileOperationCode(11)
+}
 
 // CreateSourceFile - Creates the Source File
 //
 // Usage:
 //
 //	FileOperationCode(0).CreateSourceFile()
-func (fop FileOperationCode) CreateSourceFile() FileOperationCode { return FileOperationCode(12) }
+//			OR
+//	FileOpCode.CreateSourceFile()
+func (fop FileOperationCode) CreateSourceFile() FileOperationCode {
+
+	enumFileOperationCodeLock.Lock()
+
+	defer enumFileOperationCodeLock.Unlock()
+
+	return FileOperationCode(12)
+}
 
 // CreateDestinationDir - Creates the Destination Directory
 //
 // Usage:
 //
 //	FileOperationCode(0).CreateDestinationDir()
+//			OR
+//	FileOpCode.CreateDestinationDir()
 func (fop FileOperationCode) CreateDestinationDir() FileOperationCode {
+
+	enumFileOperationCodeLock.Lock()
+
+	defer enumFileOperationCodeLock.Unlock()
+
 	return FileOperationCode(13)
 }
 
@@ -222,7 +409,14 @@ func (fop FileOperationCode) CreateDestinationDir() FileOperationCode {
 // Usage:
 //
 //	FileOperationCode(0).CreateDestinationDirAndFile()
+//			OR
+//	FileOpCode.CreateDestinationDirAndFile()
 func (fop FileOperationCode) CreateDestinationDirAndFile() FileOperationCode {
+
+	enumFileOperationCodeLock.Lock()
+
+	defer enumFileOperationCodeLock.Unlock()
+
 	return FileOperationCode(14)
 }
 
@@ -231,7 +425,14 @@ func (fop FileOperationCode) CreateDestinationDirAndFile() FileOperationCode {
 // Usage:
 //
 //	FileOperationCode(0).CreateDestinationFile()
+//			OR
+//	FileOpCode.CreateDestinationFile()
 func (fop FileOperationCode) CreateDestinationFile() FileOperationCode {
+
+	enumFileOperationCodeLock.Lock()
+
+	defer enumFileOperationCodeLock.Unlock()
+
 	return FileOperationCode(15)
 }
 
@@ -243,13 +444,24 @@ func (fop FileOperationCode) CreateDestinationFile() FileOperationCode {
 // for this type.
 func (fop FileOperationCode) IsValid() error {
 
-	fop.checkInitializeMaps(false)
+	enumFileOperationCodeLock.Lock()
 
-	_, ok := mFileOperationCodeIntToString[int(fop)]
+	defer enumFileOperationCodeLock.Unlock()
+
+	fileOperationCodeMapsLock.Lock()
+
+	defer fileOperationCodeMapsLock.Unlock()
+
+	_, ok := mValidFileOperationCodeToString[fop]
 
 	if !ok {
 		ePrefix := "FileOperationCode.IsValidInstanceError() "
-		return fmt.Errorf(ePrefix+"Error: File Operation Code INVALID!. Unknown Value='%v' ", fop.Value())
+
+		return fmt.Errorf("%v\n"+
+			"Error: File Operation Code INVALID!.\n"+
+			"Unknown Value= %v\n",
+			ePrefix,
+			fop.Value())
 	}
 
 	return nil
@@ -307,46 +519,59 @@ func (fop FileOperationCode) IsValid() error {
 //		t is now equal to FileOperationCode(0).MoveSourceFileToDestinationFile()
 func (fop FileOperationCode) ParseString(
 	valueString string,
-	caseSensitive bool) (FileOperationCode, error) {
+	caseSensitive bool) (
+	FileOperationCode,
+	error) {
+
+	enumFileOperationCodeLock.Lock()
+
+	defer enumFileOperationCodeLock.Unlock()
+
+	fileOperationCodeMapsLock.Lock()
+
+	defer fileOperationCodeMapsLock.Unlock()
 
 	ePrefix := "FileOperationCode.ParseString() "
 
-	fop.checkInitializeMaps(false)
-
-	result := FileOperationCode(0)
 	if len(valueString) < 3 {
-		return result,
-			fmt.Errorf(ePrefix+
-				"Input parameter 'valueString' is INVALID! valueString='%v' ", valueString)
+		return FileOperationCode(0),
+			fmt.Errorf("%v\n"+
+				"Input parameter 'valueString' is INVALID!\n"+
+				"valueString= '%v'\n",
+				ePrefix,
+				valueString)
 	}
 
 	var ok bool
-	var idx int
+	var result FileOperationCode
 
 	if caseSensitive {
 
-		idx, ok = mFileOperationCodeStringToInt[valueString]
+		result, ok = mFileOperationCodeStringToCode[valueString]
 
 		if !ok {
-			return FileOperationCode(0),
-				fmt.Errorf(ePrefix+
-					"'valueString' did NOT MATCH a FileOperationCode. valueString='%v' ", valueString)
-		}
 
-		result = FileOperationCode(idx)
+			return FileOperationCode(0),
+				fmt.Errorf("%v\n"+
+					"'valueString' did NOT MATCH a FileOperationCode.\n"+
+					"valueString= '%v'\n",
+					ePrefix,
+					valueString)
+		}
 
 	} else {
 
-		idx, ok = mFileOperationCodeLwrCaseStringToInt[strings.ToLower(valueString)]
+		result, ok = mFileOperationCodeLwrCaseStringToCode[strings.ToLower(valueString)]
 
 		if !ok {
-			return FileOperationCode(0),
-				fmt.Errorf(ePrefix+
-					"'valueString' did NOT MATCH a FileOperationCode. valueString='%v' ", valueString)
-		}
 
-		result =
-			FileOperationCode(idx)
+			return FileOperationCode(0),
+				fmt.Errorf("%v\n"+
+					"'valueString' did NOT MATCH a FileOperationCode.\n"+
+					"valueString='%v'\n",
+					ePrefix,
+					valueString)
+		}
 	}
 
 	return result, nil
@@ -375,9 +600,15 @@ func (fop FileOperationCode) ParseString(
 //	    str is now equal to "MoveSourceFileToDestinationFile"
 func (fop FileOperationCode) String() string {
 
-	fop.checkInitializeMaps(false)
+	enumFileOperationCodeLock.Lock()
 
-	str, ok := mFileOperationCodeIntToString[int(fop)]
+	defer enumFileOperationCodeLock.Unlock()
+
+	fileOperationCodeMapsLock.Lock()
+
+	defer fileOperationCodeMapsLock.Unlock()
+
+	str, ok := mFileOperationCodeToString[fop]
 
 	if !ok {
 		return ""
@@ -394,68 +625,12 @@ func (fop FileOperationCode) String() string {
 // This is a standard utility method and is not part of the valid enumerations
 // for this type.
 func (fop FileOperationCode) Value() int {
+
+	enumFileOperationCodeLock.Lock()
+
+	defer enumFileOperationCodeLock.Unlock()
+
 	return int(fop)
-}
-
-// checkInitializeMaps - String and value comparisons performed on enumerations
-// supported by this Type, utilizes a series of 3-map types. These maps are used
-// internally to perform 'string to value' or 'value to string' look-ups on
-// enumerations supported by this type. Each time FileOperationCode.String() or
-// FileOperationCode.ParseString() a call is made to this method to determine if
-// these maps have been initialized. If the maps and look up data have been
-// properly initialized and indexed, this method returns without taking action.
-//
-// On the other hand, if the maps have not yet been initialized, this method will
-// initialize all associated map slices.
-//
-// ------------------------------------------------------------------------
-//
-// Input Parameters
-//
-//	reInitialize     bool - If 'true', this will force initialization of
-//	                        all associated maps.
-func (fop FileOperationCode) checkInitializeMaps(reInitialize bool) {
-
-	if !reInitialize &&
-		mFileOperationCodeIntToString != nil &&
-		len(mFileOperationCodeIntToString) > 12 &&
-		mFileOperationCodeStringToInt != nil &&
-		len(mFileOperationCodeStringToInt) > 12 &&
-		mFileOperationCodeLwrCaseStringToInt != nil &&
-		len(mFileOperationCodeLwrCaseStringToInt) > 12 {
-		return
-	}
-
-	var t = FileOperationCode(0).MoveSourceFileToDestinationFile()
-
-	mFileOperationCodeIntToString = make(map[int]string, 0)
-	mFileOperationCodeStringToInt = make(map[string]int, 0)
-	mFileOperationCodeLwrCaseStringToInt = make(map[string]int, 0)
-
-	s := reflect.TypeOf(t)
-
-	r := reflect.TypeOf(0)
-	args := [1]reflect.Value{reflect.Zero(s)}
-
-	for i := 0; i < s.NumMethod(); i++ {
-
-		f := s.Method(i).Name
-
-		if f == "String" ||
-			f == "ParseString" ||
-			f == "Value" ||
-			f == "IsValidInstanceError" ||
-			f == "checkInitializeMaps" {
-			continue
-		}
-
-		value := s.Method(i).Func.Call(args[:])[0].Convert(r).Int()
-		x := int(value)
-		mFileOperationCodeIntToString[x] = f
-		mFileOperationCodeStringToInt[f] = x
-		mFileOperationCodeLwrCaseStringToInt[strings.ToLower(f)] = x
-	}
-
 }
 
 // FileOpCode - Internal or private global variable of type FileOperationCode.
@@ -463,5 +638,19 @@ func (fop FileOperationCode) checkInitializeMaps(reInitialize bool) {
 // Usage:
 //
 //	FileOpCode.None()
+//	FileOpCode.MoveSourceFileToDestinationFile()
+//	FileOpCode.MoveSourceFileToDestinationDir()
+//	FileOpCode.DeleteDestinationFile()
+//	FileOpCode.DeleteSourceFile()
+//	FileOpCode.DeleteSourceAndDestinationFiles()
+//	FileOpCode.CopySourceToDestinationByHardLinkByIo()
+//	FileOpCode.CopySourceToDestinationByIoByHardLink()
 //	FileOpCode.CopySourceToDestinationByHardLink()
+//	FileOpCode.CopySourceToDestinationByIo()
+//	FileOpCode.CreateSourceDir()
+//	FileOpCode.CreateSourceDirAndFile()
+//	FileOpCode.CreateSourceFile()
+//	FileOpCode.CreateDestinationDir()
+//	FileOpCode.CreateDestinationDirAndFile()
+//	FileOpCode.CreateDestinationFile()
 const FileOpCode = FileOperationCode(0)
