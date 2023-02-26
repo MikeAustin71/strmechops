@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"errors"
 	"fmt"
+	ePref "github.com/MikeAustin71/errpref"
 	"io"
 	"os"
 	"strings"
@@ -11,29 +12,11 @@ import (
 	"time"
 )
 
-/*
-  This source code file contains type 'FileMgr'.
-
-  The Source Repository for this source code file is :
-    https://github.com/MikeAustin71/pathfileopsgo.git
-
-  Dependencies:
-  -------------
-
-  Type 'FileMgr' depends on type,'FileHelper'
-  which is contained in source code file,
-  'filehelper.go' located in this directory.
-
-*/
-
-// FileMgr - This type and its associated methods are used to manage
-// organize and control disk files and file permissions.
+// FileMgr
 //
-// Dependencies:
-//
-// Type 'FileMgr' depends on type,'FileHelper'
-// which is contained in source code file,
-// 'filehelper.go' located in this directory.
+// This type and its associated methods are used to
+// manage organize and control disk files and file
+// permissions.
 //
 // To create an instance of type 'FileMgr' use one of the
 // 'FileMgr.New' methods.
@@ -60,7 +43,8 @@ type FileMgr struct {
 	actualFileInfo                  FileInfoPlus
 	fileBytesWritten                uint64
 	buffBytesWritten                uint64
-	lock                            *sync.Mutex // Used internally to ensure thread safe operations
+	lock                            *sync.Mutex
+	// Used internally to ensure thread safe operations
 }
 
 // ChangePermissionMode - This method is a wrapper for os.Chmod().
@@ -87,7 +71,9 @@ type FileMgr struct {
 //	   -rw-rw-rw-     0666          File - read & write
 //
 // On Plan 9, the mode's permission bits, ModeAppend, ModeExclusive, and ModeTemporary are used.
-func (fMgr *FileMgr) ChangePermissionMode(mode FilePermissionConfig) error {
+func (fMgr *FileMgr) ChangePermissionMode(
+	mode FilePermissionConfig,
+	errorPrefix interface{}) error {
 
 	if fMgr.lock == nil {
 		fMgr.lock = new(sync.Mutex)
@@ -97,7 +83,19 @@ func (fMgr *FileMgr) ChangePermissionMode(mode FilePermissionConfig) error {
 
 	defer fMgr.lock.Unlock()
 
-	ePrefix := "FileMgr.ChangePermissionMode() "
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileMgr."+
+			"ChangePermissionMode()",
+		"")
+
+	if err != nil {
+		return err
+	}
 
 	fMgrHelpr := fileMgrHelper{}
 
@@ -113,47 +111,59 @@ func (fMgr *FileMgr) ChangePermissionMode(mode FilePermissionConfig) error {
 	}
 
 	if !filePathDoesExist {
-		return fmt.Errorf(ePrefix+
+		return fmt.Errorf("%v\n"+
 			"Error: This file does NOT exist!\n"+
-			"(FileMgr) File Name:'%v' ",
+			"(FileMgr) File Name:'%v'\n",
+			ePrefix.String(),
 			fMgr.absolutePathFileName)
 	}
 
 	err = mode.IsValidInstanceError(ePrefix)
 
 	if err != nil {
-		return fmt.Errorf(ePrefix+
+
+		return fmt.Errorf("%v\n"+
 			"Error: Input parameter 'mode' is invalid!\n"+
-			"Error='%v'\n", err.Error())
+			"Error='%v'\n",
+			ePrefix.String(),
+			err.Error())
 	}
 
 	var permissionModeText string
 
 	permissionModeText,
-		err = mode.GetPermissionFileModeValueText(ePrefix)
+		err = mode.
+		GetPermissionFileModeValueText(
+			ePrefix.XCpy(
+				"permissionModeText<-mode"))
 
 	if err != nil {
-		return fmt.Errorf(ePrefix+"\n"+
-			"Error:  mode.GetPermissionFileModeValueText()\n"+
-			"\n%v\n",
-			err.Error())
+
+		return err
 	}
 
-	fileMode, err := mode.GetCompositePermissionMode(
-		ePrefix)
+	var fileMode os.FileMode
+
+	fileMode,
+		err = mode.GetCompositePermissionMode(
+		ePrefix.XCpy(
+			"fileMode<-mode"))
 
 	if err != nil {
-		return fmt.Errorf(ePrefix+"%v", err.Error())
+		return err
 	}
 
 	err = os.Chmod(fMgr.absolutePathFileName, fileMode)
 
 	if err != nil {
 
-		return fmt.Errorf(ePrefix+
+		return fmt.Errorf("%v\n"+
 			"Error returned by os.Chmod(fMgr.absolutePathFileName, fileMode).\n"+
-			"fileMode='%v'\nError='%v'\n",
-			permissionModeText, err.Error())
+			"fileMode='%v'\n"+
+			"Error='%v'\n",
+			ePrefix.String(),
+			permissionModeText,
+			err.Error())
 	}
 
 	err = nil
