@@ -33,7 +33,7 @@ var mFileOperationCodeLwrCaseStringToInt = map[string]int{}
 // To access the File Operation Code using strictly dot
 // notation, use either the private variable:
 //
-//	fileOpCode.MoveSourceFileToDestinationFile()
+//	FileOpCode.MoveSourceFileToDestinationFile()
 //
 // OR the public global variable:
 //
@@ -458,10 +458,10 @@ func (fop FileOperationCode) checkInitializeMaps(reInitialize bool) {
 
 }
 
-// fileOpCode - Internal or private global variable of type FileOperationCode.
+// FileOpCode - Internal or private global variable of type FileOperationCode.
 //
 // Usage:
 //
-//	fileOpCode.None()
-//	fileOpCode.CopySourceToDestinationByHardLink()
-const fileOpCode = FileOperationCode(0)
+//	FileOpCode.None()
+//	FileOpCode.CopySourceToDestinationByHardLink()
+const FileOpCode = FileOperationCode(0)

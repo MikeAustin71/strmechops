@@ -181,52 +181,52 @@ func (fops *FileOps) ExecuteFileOperation(fileOp FileOperationCode) error {
 
 	switch fops.opToExecute {
 
-	case fileOpCode.None():
+	case FileOpCode.None():
 		err = errors.New("Error: Input parameter 'fileOp' is 'NONE' or No Operation!\n")
 
-	case fileOpCode.MoveSourceFileToDestinationDir():
+	case FileOpCode.MoveSourceFileToDestinationDir():
 		err = fops.moveSourceFileToDestinationDir()
 
-	case fileOpCode.MoveSourceFileToDestinationFile():
+	case FileOpCode.MoveSourceFileToDestinationFile():
 		err = fops.moveSourceFileToDestinationFile()
 
-	case fileOpCode.DeleteDestinationFile():
+	case FileOpCode.DeleteDestinationFile():
 		err = fops.deleteDestinationFile()
 
-	case fileOpCode.DeleteSourceFile():
+	case FileOpCode.DeleteSourceFile():
 		err = fops.deleteSourceFile()
 
-	case fileOpCode.DeleteSourceAndDestinationFiles():
+	case FileOpCode.DeleteSourceAndDestinationFiles():
 		err = fops.deleteSourceAndDestinationFiles()
 
-	case fileOpCode.CopySourceToDestinationByHardLinkByIo():
+	case FileOpCode.CopySourceToDestinationByHardLinkByIo():
 		err = fops.copySrcToDestByHardLinkByIo()
 
-	case fileOpCode.CopySourceToDestinationByIoByHardLink():
+	case FileOpCode.CopySourceToDestinationByIoByHardLink():
 		err = fops.copySrcToDestByIoByHardLink()
 
-	case fileOpCode.CopySourceToDestinationByHardLink():
+	case FileOpCode.CopySourceToDestinationByHardLink():
 		err = fops.copySrcToDestByHardLink()
 
-	case fileOpCode.CopySourceToDestinationByIo():
+	case FileOpCode.CopySourceToDestinationByIo():
 		err = fops.copySrcToDestByIo()
 
-	case fileOpCode.CreateSourceDir():
+	case FileOpCode.CreateSourceDir():
 		err = fops.createSrcDirectory()
 
-	case fileOpCode.CreateSourceDirAndFile():
+	case FileOpCode.CreateSourceDirAndFile():
 		err = fops.createSrcDirectoryAndFile()
 
-	case fileOpCode.CreateSourceFile():
+	case FileOpCode.CreateSourceFile():
 		err = fops.createSrcFile()
 
-	case fileOpCode.CreateDestinationDir():
+	case FileOpCode.CreateDestinationDir():
 		err = fops.createDestDirectory()
 
-	case fileOpCode.CreateDestinationDirAndFile():
+	case FileOpCode.CreateDestinationDirAndFile():
 		err = fops.createDestDirectoryAndFile()
 
-	case fileOpCode.CreateDestinationFile():
+	case FileOpCode.CreateDestinationFile():
 		err = fops.createDestFile()
 
 	default:
