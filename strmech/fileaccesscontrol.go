@@ -7,9 +7,46 @@ import (
 	"sync"
 )
 
-// FileAccessControl encapsulates the codes required the open files and
-// configure file permissions. As such this type encapsulates types
-// FilePermissionConfig and FileOpenConfig.
+// FileAccessControl encapsulates the codes required the
+// open files and configure file access permissions. As
+// such this type encapsulates types FilePermissionConfig
+// and FileOpenConfig.
+//
+// ----------------------------------------------------------------
+//
+// # Background
+//
+// The FileAccessControl type is used when opening files
+// for read and write operations.
+//
+// To open a file, two components are required:
+//
+//  1. A FileOpenType
+//     A file open type is specified by FileOpenConfig.
+//     In order to open a file, exactly one of the
+//     following File Open Codes MUST be specified:
+//
+//     FileOpenType(0).TypeReadOnly()
+//     FileOpenType(0).TypeWriteOnly()
+//     FileOpenType(0).TypeReadWrite()
+//
+//     -- AND --
+//
+//  2. A FileOpenMode
+//     A File Open Mode is specified by
+//     FilePermissionConfig.
+//
+//     In addition to a 'FileOpenType', a File Open Mode
+//     is also required. This code is also referred to as
+//     a 'permissions' code. Zero or more of the
+//     following File Open Mode codes may optionally be
+//     specified to better control file open behavior.
+//
+//     FileOpenMode(0).ModeAppend()
+//     FileOpenMode(0).ModeCreate()
+//     FileOpenMode(0).ModeExclusive()
+//     FileOpenMode(0).ModeSync()
+//     FileOpenMode(0).ModeTruncate()
 type FileAccessControl struct {
 	isInitialized bool
 	permissions   FilePermissionConfig
@@ -1840,43 +1877,350 @@ func (fAccess *FileAccessControl) NewWriteOnlyTruncateAccess(
 	return newFileAccessCtrl, err
 }
 
-// SetFileOpenCodes - Assigns 'fileOpenCodes' to internal member variable,
-// FileAccessControl.fileOpenCodes
-func (fAccess *FileAccessControl) SetFileOpenCodes(fileOpenCodes FileOpenConfig) error {
+// SetFileOpenCodes
+//
+// Assigns 'fileOpenCodes' to internal member variable,
+// FileAccessControl.fileOpenCodes.
+//
+// This method only modify the File Open Codes. The
+// Permission codes are NOT changed.
+//
+// ----------------------------------------------------------------
+//
+// # Background
+//
+// The FileAccessControl type is used when opening files
+// for read and write operations.
+//
+// To open a file, two components are required:
+//
+//  1. A FileOpenType
+//     Supported by this method. Input parameter
+//     'fileOpenCodes' Type FileOpenConfig.
+//
+//     In order to open a file, exactly one of the
+//     following File Open Codes MUST be specified:
+//
+//     FileOpenType(0).TypeReadOnly()
+//     FileOpenType(0).TypeWriteOnly()
+//     FileOpenType(0).TypeReadWrite()
+//
+//     -- AND --
+//
+//  2. A FileOpenMode
+//     Not supported by this method. See
+//     FileAccessControl.SetFilePermissionCodes()
+//
+//     In addition to a 'FileOpenType', a File Open Mode
+//     is also required. This code is also referred to as
+//     'permissions'. Zero or more of the following File
+//     Open Mode codes may optionally be specified to
+//     better control file open behavior.
+//
+//     FileOpenMode(0).ModeAppend()
+//     FileOpenMode(0).ModeCreate()
+//     FileOpenMode(0).ModeExclusive()
+//     FileOpenMode(0).ModeSync()
+//     FileOpenMode(0).ModeTruncate()
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fileOpenCodes				FileOpenConfig
+//
+//		An instance of FileOpenConfig. If this instance
+//		evaluates as invalid, an error will be returned.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fAccess *FileAccessControl) SetFileOpenCodes(
+	fileOpenCodes FileOpenConfig,
+	errorPrefix interface{}) error {
 
-	ePrefix := "FileAccessControl.SetFileOpenCodes() "
+	if fAccess.lock == nil {
+		fAccess.lock = new(sync.Mutex)
+	}
 
-	err := fileOpenCodes.IsValidInstanceError(ePrefix)
+	fAccess.lock.Lock()
+
+	defer fAccess.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileAccessControl."+
+			"SetFileOpenCodes()",
+		"")
 
 	if err != nil {
-		return fmt.Errorf(ePrefix+"INVALID 'fileOpenCodes'! - %v", err.Error())
+		return err
+	}
+
+	err = fileOpenCodes.IsValidInstanceError(
+		ePrefix.XCpy("fileOpenCodes"))
+
+	if err != nil {
+		return err
 	}
 
 	fAccess.fileOpenCodes = fileOpenCodes.CopyOut()
 
-	err = fAccess.permissions.IsValid(ePrefix)
+	err = fAccess.permissions.IsValid(ePrefix.XCpy(
+		"fAccess.permissions"))
 
 	if err == nil {
 
 		fAccess.isInitialized = true
 
+	} else {
+		fAccess.isInitialized = false
 	}
 
 	return nil
 }
 
-// SetFilePermissionCodes - Assigns 'filePermissions' to internal
-// member variable FileAccessControl.permissions.
+// SetFilePermissionCodes
+//
+// Assigns 'filePermissions' to internal member variable
+// FileAccessControl.permissions.
+//
+// ----------------------------------------------------------------
+//
+// # Background
+//
+// The FileAccessControl type is used when opening files
+// for read and write operations.
+//
+// To open a file, two components are required:
+//
+//  1. A FileOpenType
+//     Not Supported by this method. See method
+//     FileAccessControl.SetFileOpenCodes().
+//
+//     In order to open a file, exactly one of the
+//     following File Open Codes MUST be specified:
+//
+//     FileOpenType(0).TypeReadOnly()
+//     FileOpenType(0).TypeWriteOnly()
+//     FileOpenType(0).TypeReadWrite()
+//
+//     -- AND --
+//
+//  2. A FileOpenMode
+//     Supported by this method. See input parameter
+//     'filePermissions'.
+//
+//     In addition to a 'FileOpenType', a File Open Mode
+//     is also required. This code is also referred to as
+//     the File Permissions code. One or more of the
+//     following File Open Mode codes may optionally be
+//     specified to better control file open behavior.
+//
+//     FileOpenMode(0).None()
+//     FileOpenMode(0).ModeAppend()
+//     FileOpenMode(0).ModeCreate()
+//     FileOpenMode(0).ModeExclusive()
+//     FileOpenMode(0).ModeSync()
+//     FileOpenMode(0).ModeTruncate()
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	filePermissions				FilePermissionConfig
+//
+//		An instance of FilePermissionConfig. If this
+//		instance evaluates as invalid, an error will be
+//		returned.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
 func (fAccess *FileAccessControl) SetFilePermissionCodes(
-	filePermissions FilePermissionConfig) error {
+	filePermissions FilePermissionConfig,
+	errorPrefix interface{}) error {
 
-	ePrefix := "FileAccessControl.SetFilePermissionCodes() "
+	if fAccess.lock == nil {
+		fAccess.lock = new(sync.Mutex)
+	}
 
-	err := filePermissions.IsValid(
-		ePrefix)
+	fAccess.lock.Lock()
+
+	defer fAccess.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	funcName := "FileAccessControl.SetFilePermissionCodes()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		funcName,
+		"")
 
 	if err != nil {
-		return fmt.Errorf(ePrefix+"Error: 'filePermissions' INVALID! - %v",
+		return err
+	}
+
+	err = filePermissions.IsValid(
+		ePrefix.XCpy(
+			"filePermissions"))
+
+	if err != nil {
+		return fmt.Errorf("%v\n"+
+			"Error: Input parameter 'filePermissions' INVALID!\n"+
+			"Error = \n%v\n",
+			funcName,
 			err.Error())
 	}
 
@@ -1886,6 +2230,8 @@ func (fAccess *FileAccessControl) SetFilePermissionCodes(
 
 	if err == nil {
 		fAccess.isInitialized = true
+	} else {
+		fAccess.isInitialized = false
 	}
 
 	return nil

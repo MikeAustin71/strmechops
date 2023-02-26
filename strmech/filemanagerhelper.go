@@ -147,8 +147,12 @@ func (fMgrHlpr *fileMgrHelper) doesFileMgrPathFileExist(
 	nonPathError = nil
 	fileMgr.doesAbsolutePathFileNameExist = true
 
-	fileMgr.actualFileInfo, err2 =
-		FileInfoPlus{}.NewFromPathFileInfo(fileMgr.dMgr.absolutePath, info)
+	fileMgr.actualFileInfo,
+		err2 =
+		new(FileInfoPlus).
+			NewFromPathFileInfo(
+				fileMgr.dMgr.absolutePath,
+				&info)
 
 	if err2 != nil {
 
@@ -176,7 +180,11 @@ func (fMgrHlpr *fileMgrHelper) doesFileMgrPathFileExist(
 
 		} else {
 
-			err2 = fileMgr.fileAccessStatus.SetFilePermissionCodes(permCode)
+			err2 = fileMgr.
+				fileAccessStatus.
+				SetFilePermissionCodes(
+					permCode,
+					ePrefix)
 
 			if err2 != nil {
 				err3 = fmt.Errorf(ePrefix+
@@ -553,13 +561,16 @@ func (fMgrHlpr *fileMgrHelper) createFile(
 			"\nError: Input parameter 'fMgr' is a nil pointer!\n")
 	}
 
-	createTruncateAccessCtrl, err := FileAccessControl{}.NewReadWriteCreateTruncateAccess()
+	createTruncateAccessCtrl, err :=
+		new(FileAccessControl).NewReadWriteCreateTruncateAccess(
+			ePrefix)
 
 	if err != nil {
 		return fmt.Errorf(ePrefix+"\n%v\n", err.Error())
 	}
 
-	err = createTruncateAccessCtrl.IsValidInstanceError()
+	err = createTruncateAccessCtrl.
+		IsValidInstanceError(ePrefix)
 
 	if err != nil {
 		return fmt.Errorf(ePrefix+
@@ -1486,13 +1497,15 @@ func (fMgrHlpr *fileMgrHelper) lowLevelDoesFileExist(
 				// If the directoryPath is an empty string,
 				// only record the os.FileInfo data, not the path.
 				//
-				fInfoPlus = FileInfoPlus{}.NewFromFileInfo(info)
+				fInfoPlus = new(FileInfoPlus).
+					NewFromFileInfo(info)
 
 			} else {
 
 				// directoryPath is a string with length greater than zero,
 				// record the os.FileInfo data AND the path.
-				fInfoPlus, err2 = FileInfoPlus{}.NewFromPathFileInfo(directoryPath, info)
+				fInfoPlus, err2 = new(FileInfoPlus).
+					NewFromPathFileInfo(directoryPath, info)
 
 				if err2 != nil {
 					err = fmt.Errorf(ePrefix+
@@ -1535,7 +1548,7 @@ func (fMgrHlpr *fileMgrHelper) lowLevelOpenFile(
 			"\nError: Input parameter 'fMgr' is a nil pointer!\n")
 	}
 
-	err := fileAccessCtrl.IsValidInstanceError()
+	err := fileAccessCtrl.IsValidInstanceError(ePrefix)
 
 	if err != nil {
 		return fmt.Errorf(ePrefix+
@@ -1935,7 +1948,7 @@ func (fMgrHlpr *fileMgrHelper) openFile(
 			"\nError: Input parameter 'fMgr' is a nil pointer!\n")
 	}
 
-	err = openFileAccessCtrl.IsValidInstanceError()
+	err = openFileAccessCtrl.IsValidInstanceError(ePrefix)
 
 	if err != nil {
 		return fmt.Errorf(ePrefix+
@@ -1990,7 +2003,9 @@ func (fMgrHlpr *fileMgrHelper) openFile(
 
 	} else if !filePathDoesExist && createTheFile {
 
-		createTruncateAccessCtrl, err := FileAccessControl{}.NewReadWriteCreateTruncateAccess()
+		createTruncateAccessCtrl, err :=
+			new(FileAccessControl).
+				NewReadWriteCreateTruncateAccess(ePrefix)
 
 		if err != nil {
 			return fmt.Errorf(ePrefix+"\n%v\n", err.Error())
@@ -2043,7 +2058,7 @@ func (fMgrHlpr *fileMgrHelper) readFileSetup(
 			"\nError: Input parameter 'fMgr' is a nil pointer!\n")
 	}
 
-	err = readAccessCtrl.IsValidInstanceError()
+	err = readAccessCtrl.IsValidInstanceError(ePrefix)
 
 	if err != nil {
 		return fmt.Errorf(ePrefix+
@@ -2116,7 +2131,8 @@ func (fMgrHlpr *fileMgrHelper) readFileSetup(
 			return err
 		}
 
-		createTruncateAccessCtrl, err := FileAccessControl{}.NewReadWriteCreateTruncateAccess()
+		createTruncateAccessCtrl, err := new(FileAccessControl).
+			NewReadWriteCreateTruncateAccess(ePrefix)
 
 		if err != nil {
 			return fmt.Errorf(ePrefix+"\n%v\n", err.Error())
@@ -2590,7 +2606,7 @@ func (fMgrHlpr *fileMgrHelper) writeFileSetup(
 			"\nError: Input parameter 'fMgr' is a nil pointer!\n")
 	}
 
-	err = writeAccessCtrl.IsValidInstanceError()
+	err = writeAccessCtrl.IsValidInstanceError(ePrefix)
 
 	if err != nil {
 		return fmt.Errorf(ePrefix+
@@ -2663,7 +2679,9 @@ func (fMgrHlpr *fileMgrHelper) writeFileSetup(
 			return err
 		}
 
-		createTruncateAccessCtrl, err := FileAccessControl{}.NewReadWriteCreateTruncateAccess()
+		createTruncateAccessCtrl, err :=
+			new(FileAccessControl).
+				NewReadWriteCreateTruncateAccess(ePrefix)
 
 		if err != nil {
 			return fmt.Errorf(ePrefix+"\n%v\n", err.Error())

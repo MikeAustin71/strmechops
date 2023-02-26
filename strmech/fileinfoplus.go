@@ -36,6 +36,10 @@ type FileInfoPlus struct {
 	origFileInfo os.FileInfo
 }
 
+//////////////////////////////////////////////////////////
+// os.FileInfo Interface Methods
+//////////////////////////////////////////////////////////
+
 // Name - base name of the file.
 //
 //	Example:
@@ -112,6 +116,11 @@ func (fip *FileInfoPlus) Sys() interface{} {
 
 // SysAsString - underlying data source. If Sys is
 // 'nil', this method will return an empty string.
+//
+// Technically, this method is NOT part of the
+// os.FileInfo interface. However, it is often
+// useful in interpreting the results of Sys().
+// Sys() is part of the os.FileInfo interface.
 func (fip *FileInfoPlus) SysAsString() string {
 	if fip.dataSrc == nil {
 		return ""
@@ -121,6 +130,10 @@ func (fip *FileInfoPlus) SysAsString() string {
 
 	return str
 }
+
+//////////////////////////////////////////////////////////
+// END OF os.FileInfo Interface Methods
+//////////////////////////////////////////////////////////
 
 // CopyOut - Creates a deep copy of the current FileInfoPlus
 // instance and returns it.
