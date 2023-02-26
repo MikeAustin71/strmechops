@@ -164,11 +164,14 @@ func (fMgrHlpr *fileMgrHelper) closeFile(
 		lowLevelCloseFile(fMgr, "fMgr", ePrefix)
 }
 
-// copyFileSetup - Helper method designed to perform setup and
+// copyFileSetup
+//
+// Helper method designed to perform setup and
 // validation checks before initiating a copy operation.
 //
-// This method is designed to be called immediately before method
-// fileMgrHelper.lowLevelCopyByIO() and fileMgrHelper.lowLevelCopyByLink().
+// This method is designed to be called immediately
+// before method fileMgrHelper.lowLevelCopyByIO() and
+// fileMgrHelper.lowLevelCopyByLink().
 func (fMgrHlpr *fileMgrHelper) copyFileSetup(
 	srcFMgr *FileMgr,
 	destFMgr *FileMgr,
@@ -693,52 +696,6 @@ func (fMgrHlpr *fileMgrHelper) deleteFile(
 			ePrefix.String(),
 			fMgr.absolutePathFileName)
 	}
-
-	return nil
-}
-
-// emptyFileMgr - Helper method designed to "empty" or
-// set the data fields of FileMgr to their zero or initialized
-// values.
-func (fMgrHlpr *fileMgrHelper) emptyFileMgr(
-	fMgr *FileMgr,
-	ePrefix string) error {
-
-	ePrefixCurrMethod := "fileMgrHelper.emptyFileMgr() "
-
-	if len(ePrefix) == 0 {
-		ePrefix = ePrefixCurrMethod
-	} else {
-		ePrefix = ePrefix + "- " + ePrefixCurrMethod
-	}
-
-	if fMgr == nil {
-		return errors.New(ePrefix +
-			"\nInput parameter 'fMgr' is a nil pointer!\n")
-	}
-
-	fMgr.isInitialized = false
-	fMgr.dMgr = DirMgr{}
-	fMgr.originalPathFileName = ""
-	fMgr.absolutePathFileName = ""
-	fMgr.isAbsolutePathFileNamePopulated = false
-	fMgr.doesAbsolutePathFileNameExist = false
-	fMgr.fileName = ""
-	fMgr.isFileNamePopulated = false
-	fMgr.fileExt = ""
-	fMgr.isFileExtPopulated = false
-	fMgr.fileNameExt = ""
-	fMgr.isFileNameExtPopulated = false
-	fMgr.filePtr = nil
-	fMgr.isFilePtrOpen = false
-	fMgr.fileAccessStatus.Empty()
-	fMgr.actualFileInfo = FileInfoPlus{}
-	fMgr.fileBufRdr = nil
-	fMgr.fileBufWriter = nil
-	fMgr.fileBytesWritten = 0
-	fMgr.buffBytesWritten = 0
-	fMgr.fileRdrBufSize = 0
-	fMgr.fileWriterBufSize = 0
 
 	return nil
 }
@@ -2118,20 +2075,31 @@ func (fMgrHlpr *fileMgrHelper) readFileSetup(
 	return nil
 }
 
-// setFileMgrDirMgrFileName - Helper method which configures a
-// FileMgr instance based on input parameters 'dMgr' and
-// 'fileNameExt'.
+// setFileMgrDirMgrFileName
+//
+// Helper method which configures a FileMgr instance
+// based on input parameters 'dMgr' and 'fileNameExt'.
 func (fMgrHlpr *fileMgrHelper) setFileMgrDirMgrFileName(
 	fMgr *FileMgr,
 	dMgr *DirMgr,
 	fileNameExt string,
-	errorPrefix string) (isEmpty bool, err error) {
+	errPrefDto *ePref.ErrPrefixDto) (
+	isEmpty bool,
+	err error) {
+
+	if fMgrHlpr.lock == nil {
+		fMgrHlpr.lock = new(sync.Mutex)
+	}
+
+	fMgrHlpr.lock.Lock()
+
+	defer fMgrHlpr.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
 	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		nil,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
 		"fileMgrHelper."+
 			"setFileMgrDirMgrFileName()",
 		"")
@@ -2152,7 +2120,7 @@ func (fMgrHlpr *fileMgrHelper) setFileMgrDirMgrFileName(
 		return isEmpty, err
 	}
 
-	err2 := dMgr.IsDirMgrValid("")
+	err2 := dMgr.IsDirMgrValid(ePrefix.String())
 
 	if err2 != nil {
 
@@ -2226,7 +2194,10 @@ func (fMgrHlpr *fileMgrHelper) setFileMgrDirMgrFileName(
 		return isEmpty, err
 	}
 
-	err = fMgrHlpr.emptyFileMgr(fMgr, ePrefix.String())
+	fMgrHelperBoson := new(fileMgrHelperBoson)
+
+	err = fMgrHelperBoson.
+		emptyFileMgr(fMgr, ePrefix)
 
 	if err != nil {
 		return isEmpty, err
@@ -2250,7 +2221,8 @@ func (fMgrHlpr *fileMgrHelper) setFileMgrDirMgrFileName(
 
 		isEmpty = true
 
-		_ = fMgrHlpr.emptyFileMgr(fMgr, ePrefix.String())
+		_ = fMgrHelperBoson.
+			emptyFileMgr(fMgr, ePrefix)
 
 		return isEmpty, err
 	}
@@ -2264,7 +2236,8 @@ func (fMgrHlpr *fileMgrHelper) setFileMgrDirMgrFileName(
 			ePrefix.String(),
 			adjustedFileNameExt)
 
-		_ = fMgrHlpr.emptyFileMgr(fMgr, errorPrefix)
+		_ = fMgrHelperBoson.
+			emptyFileMgr(fMgr, ePrefix)
 
 		isEmpty = true
 
@@ -2291,7 +2264,10 @@ func (fMgrHlpr *fileMgrHelper) setFileMgrDirMgrFileName(
 
 		isEmpty = true
 
-		_ = fMgrHlpr.emptyFileMgr(fMgr, errorPrefix)
+		_ = fMgrHelperBoson.emptyFileMgr(
+			fMgr,
+			ePrefix)
+
 		return isEmpty, err
 	}
 
@@ -2358,7 +2334,10 @@ func (fMgrHlpr *fileMgrHelper) setFileMgrDirMgrFileName(
 				dMgr.absolutePath,
 				err2.Error())
 
-			_ = fMgrHlpr.emptyFileMgr(fMgr, errorPrefix)
+			_ = fMgrHelperBoson.emptyFileMgr(
+				fMgr,
+				ePrefix)
+
 			return isEmpty, err
 		}
 
@@ -2502,7 +2481,7 @@ func (fMgrHlpr *fileMgrHelper) setFileMgrPathFileName(
 			fMgr,
 			&dMgr,
 			adjustedFileNameExt,
-			ePrefix.String())
+			ePrefix)
 
 	return isEmpty, err
 }
