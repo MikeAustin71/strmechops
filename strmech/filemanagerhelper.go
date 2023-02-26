@@ -1738,7 +1738,7 @@ func (fMgrHlpr *fileMgrHelper) openFile(
 	openFileAccessCtrl FileAccessControl,
 	createTheDirectory bool,
 	createTheFile bool,
-	errorPrefix interface{}) error {
+	errPrefDto *ePref.ErrPrefixDto) error {
 
 	if fMgrHlpr.lock == nil {
 		fMgrHlpr.lock = new(sync.Mutex)
@@ -1752,8 +1752,8 @@ func (fMgrHlpr *fileMgrHelper) openFile(
 	var err error
 
 	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
 		"fileMgrHelper.openFile()",
 		"")
 
