@@ -242,6 +242,7 @@ func (srcCodeComments *SourceCodeComments) testPrimaryComments(
 //	 	The 'errPrefDto' text will be prefixed or
 //	 	attached to the	beginning of the error message.
 func (srcCodeComments *SourceCodeComments) testSubsidiaryComments(
+	srcCdeComments *SourceCodeComments,
 	errPrefDto *ePref.ErrPrefixDto) error {
 
 	if srcCodeComments.lock == nil {
@@ -264,6 +265,15 @@ func (srcCodeComments *SourceCodeComments) testSubsidiaryComments(
 		"")
 
 	if err != nil {
+		return err
+	}
+
+	if srcCdeComments == nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: SourceCodeComments instance is invalid!\n"+
+			"Input parameter 'srcCdeComments' is a nil pointer!\n",
+			ePrefix.String())
+
 		return err
 	}
 

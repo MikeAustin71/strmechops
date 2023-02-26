@@ -6,6 +6,10 @@ import (
 	"sync"
 )
 
+// fileAccessControlElectron
+//
+// Provides helper methods for Type
+// FileAccessControl.
 type fileAccessControlElectron struct {
 	lock *sync.Mutex
 }
