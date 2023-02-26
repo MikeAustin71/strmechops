@@ -6,7 +6,7 @@ import (
 )
 
 // FileOps - This type is used to manage and coordinate various
-// operations performed on files. Hence the name, File Operations.
+// operations performed on files. Hence, the name File Operations.
 type FileOps struct {
 	isInitialized bool
 	source        FileMgr
@@ -62,8 +62,8 @@ func (fops *FileOps) Equal(fops2 *FileOps) bool {
 // names and file extensions are equivalent. Data Field 'opToExecute' is
 // not included in the comparison.
 //
-// The absolute path, file name and file extension comparisons are case
-// insensitive. This means that all strings used in the comparisons are
+// The absolute path, file name and file extension comparisons are
+// case-insensitive. This means that all strings used in the comparisons are
 // first converted to lower case before testing for equivalency.
 //
 // If the absolute paths, file names and file extensions are NOT equal,
@@ -182,7 +182,7 @@ func (fops *FileOps) ExecuteFileOperation(fileOp FileOperationCode) error {
 	switch fops.opToExecute {
 
 	case fileOpCode.None():
-		err = errors.New("Error: Input parameter 'fileOp' is 'NONE' or No Operation!")
+		err = errors.New("Error: Input parameter 'fileOp' is 'NONE' or No Operation!\n")
 
 	case fileOpCode.MoveSourceFileToDestinationDir():
 		err = fops.moveSourceFileToDestinationDir()
@@ -246,7 +246,7 @@ func (fops *FileOps) GetSource() FileMgr {
 	return fops.source.CopyOut()
 }
 
-// GetSource - Returns a deep copy of the
+// GetDestination - Returns a deep copy of the
 // destination FileMgr instance.
 func (fops *FileOps) GetDestination() FileMgr {
 	return fops.destination.CopyOut()
@@ -309,7 +309,8 @@ func (fops FileOps) NewByDirMgrFileName(
 		return FileOps{}, err
 	}
 
-	fOpsNew.source, err = FileMgr{}.NewFromDirMgrFileNameExt(sourceDir, sourceFileNameExt)
+	fOpsNew.source, err = new(FileMgr).
+		NewFromDirMgrFileNameExt(sourceDir, sourceFileNameExt)
 
 	if err != nil {
 		return FileOps{},
@@ -326,7 +327,10 @@ func (fops FileOps) NewByDirMgrFileName(
 		return FileOps{}, err
 	}
 
-	fOpsNew.destination, err = FileMgr{}.NewFromDirMgrFileNameExt(destinationDir, destinationFileNameExt)
+	fOpsNew.destination, err = new(FileMgr).
+		NewFromDirMgrFileNameExt(
+			destinationDir,
+			destinationFileNameExt)
 
 	if err != nil {
 		return FileOps{},
@@ -357,25 +361,37 @@ func (fops FileOps) NewByDirStrsAndFileNameExtStrs(
 	var err error
 
 	if len(sourceDirStr) == 0 {
-		return FileOps{}, errors.New(ePrefix + "Error: 'sourceDirStr' is an EMPTY STRING!")
+		return FileOps{},
+			fmt.Errorf("%v\n"+
+				"Error: 'sourceDirStr' is an EMPTY STRING!\n",
+				ePrefix)
 	}
 
 	if len(sourceFileNameExtStr) == 0 {
-		return FileOps{}, errors.New(ePrefix + "Error: 'sourceFileNameExtStr' is an EMPTY STRING!")
+		return FileOps{},
+			fmt.Errorf("%v\n"+
+				"Error: 'sourceFileNameExtStr' is an EMPTY STRING!\n",
+				ePrefix)
 	}
 
 	if len(destinationFileNameExtStr) == 0 {
 		destinationFileNameExtStr = sourceFileNameExtStr
 	}
 
-	fOpsNew.source, err = FileMgr{}.NewFromDirStrFileNameStr(sourceDirStr, sourceFileNameExtStr)
+	fOpsNew.source, err = new(FileMgr).
+		NewFromDirStrFileNameStr(
+			sourceDirStr,
+			sourceFileNameExtStr)
 
 	if err != nil {
 		return FileOps{},
 			fmt.Errorf(ePrefix+"Source File Error: %v", err.Error())
 	}
 
-	fOpsNew.destination, err = FileMgr{}.NewFromDirStrFileNameStr(destinationDirStr, destinationFileNameExtStr)
+	fOpsNew.destination, err = new(FileMgr).
+		NewFromDirStrFileNameStr(
+			destinationDirStr,
+			destinationFileNameExtStr)
 
 	if err != nil {
 		return FileOps{},
@@ -402,14 +418,16 @@ func (fops FileOps) NewByPathFileNameExtStrs(
 
 	var err error
 
-	fOpsNew.source, err = FileMgr{}.NewFromPathFileNameExtStr(sourcePathFileNameExt)
+	fOpsNew.source, err = new(FileMgr).
+		NewFromPathFileNameExtStr(sourcePathFileNameExt)
 
 	if err != nil {
 		return FileOps{},
 			fmt.Errorf(ePrefix+"Source File Error: %v", err.Error())
 	}
 
-	fOpsNew.destination, err = FileMgr{}.NewFromPathFileNameExtStr(destinationPathFileNameExt)
+	fOpsNew.destination, err = new(FileMgr).
+		NewFromPathFileNameExtStr(destinationPathFileNameExt)
 
 	if err != nil {
 		return FileOps{},
@@ -687,7 +705,7 @@ func (fops *FileOps) moveSourceFileToDestinationDir() error {
 // to the destination by fist copying the source file
 // to the destination and then deleting the source file.
 //
-// The final final name will be the destination file in the
+// The final name will be the destination file in the
 // destination directory.
 func (fops *FileOps) moveSourceFileToDestinationFile() error {
 
