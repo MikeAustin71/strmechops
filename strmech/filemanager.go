@@ -661,31 +661,128 @@ func (fMgr *FileMgr) CopyFileMgrByIoWithBuffer(
 	return err
 }
 
-// CopyFileMgrByLink - Copies the file represented by the current File
-// Manager instance to a location specified by a destination input
-// parameter 'fMgrDest', an instance of type FileMgr.
+// CopyFileMgrByLink
 //
-// Note that if the destination directory does not exist, this method will
-// attempt to create it.
+// Copies the file represented by the current File
+// Manager instance to a location specified by a
+// destination input parameter 'fMgrDest', an
+// instance of type FileMgr.
 //
-// This method will make one attempt to copy the source file to the specified
-// destination using a technique known as a 'Hard Link'. This technique will
-// utilize a hard symbolic link to the existing source file in order to create
-// the destination file.
+// Note that if the destination directory does not
+// exist, this method will attempt to create it.
 //
-// By creating a 'linked' file, changing the contents of one file will be
-// reflected in the second. The two linked files are 'mirrors' of each
-// other.
+// This method will make one attempt to copy the
+// source file to the specified destination using a
+// technique known as a 'Hard Link'. This technique will
+// utilize a hard symbolic link to the existing source
+// file in order to create the destination file.
 //
-// Consider using FileMgr.CopyFileMgrByIo() if the 'mirror' feature causes
-// problems.
+// By creating a 'linked' file, changing the contents of
+// one file will be reflected in the second. The two
+// linked files are 'mirrors' of each other.
 //
-// If the 'Hard Link' copy operation fails, and error will be returned.
+// Consider using FileMgr.CopyFileMgrByIo() if the
+// 'mirror' feature causes problems.
+//
+// If the 'Hard Link' copy operation fails, and error
+// will be returned.
 //
 //	Reference:
 //	 https://stackoverflow.com/questions/21060945/simple-way-to-copy-a-file-in-golang
 //	 https://golang.org/pkg/os/#Link
-func (fMgr *FileMgr) CopyFileMgrByLink(fMgrDest *FileMgr) error {
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fMgrDest 					*FileMgr
+//
+//		This File Manager type specifies the path and
+//		file name of the destination file to which the
+//		source file identified by the current File
+//		Manager will be copied.
+//
+//		If the directory path associated with 'fMgrDest'
+//		this method will attempt to create it.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ------------------------------------------------------------------------
+//
+// Return Values:
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fMgr *FileMgr) CopyFileMgrByLink(
+	fMgrDest *FileMgr,
+	errorPrefix interface{}) error {
 
 	if fMgr.lock == nil {
 		fMgr.lock = new(sync.Mutex)
@@ -695,7 +792,18 @@ func (fMgr *FileMgr) CopyFileMgrByLink(fMgrDest *FileMgr) error {
 
 	defer fMgr.lock.Unlock()
 
-	ePrefix := "FileMgr.CopyFileMgrByLink() "
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileMgr.CopyFileMgrByLink()",
+		"")
+
+	if err != nil {
+		return err
+	}
 
 	fMgrHlpr := fileMgrHelper{}
 
@@ -703,12 +811,13 @@ func (fMgr *FileMgr) CopyFileMgrByLink(fMgrDest *FileMgr) error {
 
 	destFMgrLabel := "fMgrDest"
 
-	err := fMgrHlpr.copyFileSetup(
+	err = fMgrHlpr.copyFileSetup(
 		fMgr,
 		fMgrDest,
 		true, // create target/destination directory
 		true, // delete existing target/destination file
-		ePrefix,
+		ePrefix.XCpy(
+			"fMgrDest<-fMgr"),
 		sourceFMgrLabel,
 		destFMgrLabel)
 
@@ -719,34 +828,135 @@ func (fMgr *FileMgr) CopyFileMgrByLink(fMgrDest *FileMgr) error {
 	err = fMgrHlpr.lowLevelCopyByLink(
 		fMgr,
 		fMgrDest,
-		ePrefix,
+		ePrefix.XCpy(
+			"fMgrDest<-fMgr"),
 		sourceFMgrLabel,
 		destFMgrLabel)
 
 	return err
 }
 
-// CopyFileMgrByLinkByIo - Copies the file represented by the current
-// File Manager instance to a location specified by a destination input
-// parameter 'fMgrDest', an instance of type FileMgr.
+// CopyFileMgrByLinkByIo
 //
-// Note that if the destination directory does not exist, this method will
-// attempt to create it.
+// Copies the file represented by the current File
+// Manager instance to a location specified by a
+// destination input parameter 'fMgrDest', an
+// instance of type FileMgr.
 //
-// The copy operation will be carried out in two attempts. The first attempt
-// will try to copy the source file to the destination using a technique known
-// as a 'Hard Link'.  This technique will utilize a hard symbolic link to the
-// existing source file in order to create the destination file.
+// Note that if the destination directory does not
+// exist, this method will attempt to create it.
 //
-// If the first copy attempt fails, this method will try to copy the file to the
-// destination by creating a new file and copying the source file contents to that
-// new destination file. This technique is known as 'io.Copy'.
+// The copy operation will be carried out in two
+// attempts. The first attempt will try to copy the
+// source file to the destination using a technique known
+// as a 'Hard Link'.  This technique will utilize a hard
+// symbolic link to the existing source file in order to
+// create the destination file.
 //
-// If both attempted copy operations fail, and error will be returned.
+// If the first copy attempt fails, this method will try
+// to copy the file to the destination by creating a new
+// file and copying the source file contents to that new
+// destination file. This technique is known as
+// 'io.Copy'.
+//
+// If both attempted copy operations fail, and error will
+// be returned.
 //
 // Reference:
 // https://stackoverflow.com/questions/21060945/simple-way-to-copy-a-file-in-golang
-func (fMgr *FileMgr) CopyFileMgrByLinkByIo(fMgrDest *FileMgr) error {
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fMgrDest 					*FileMgr
+//
+//		This File Manager type specifies the path and
+//		file name of the destination file to which the
+//		source file identified by the current File
+//		Manager will be copied.
+//
+//		If the directory path associated with 'fMgrDest'
+//		this method will attempt to create it.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ------------------------------------------------------------------------
+//
+// Return Values:
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fMgr *FileMgr) CopyFileMgrByLinkByIo(
+	fMgrDest *FileMgr,
+	errorPrefix interface{}) error {
 
 	if fMgr.lock == nil {
 		fMgr.lock = new(sync.Mutex)
@@ -756,19 +966,27 @@ func (fMgr *FileMgr) CopyFileMgrByLinkByIo(fMgrDest *FileMgr) error {
 
 	defer fMgr.lock.Unlock()
 
-	ePrefix := "FileMgr.CopyFileMgrByLinkByIo() "
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileMgr."+
+			"CopyFileMgrByLinkByIo()",
+		"")
 
 	fMgrHlpr := fileMgrHelper{}
 
 	sourceFMgrLabel := "fMgrSource"
 	destFMgrLabel := "fMgrDestDir"
 
-	err := fMgrHlpr.copyFileSetup(
+	err = fMgrHlpr.copyFileSetup(
 		fMgr,
 		fMgrDest,
 		true,
 		true,
-		ePrefix,
+		ePrefix.XCpy("fMgrDest<-fMgr"),
 		sourceFMgrLabel,
 		destFMgrLabel)
 
@@ -779,16 +997,17 @@ func (fMgr *FileMgr) CopyFileMgrByLinkByIo(fMgrDest *FileMgr) error {
 	err = fMgrHlpr.lowLevelCopyByLink(
 		fMgr,
 		fMgrDest,
-		ePrefix,
+		ePrefix.XCpy("fMgrDest<-fMgr"),
 		sourceFMgrLabel,
 		destFMgrLabel)
 
 	if err != nil {
+
 		err = fMgrHlpr.lowLevelCopyByIO(
 			fMgr,
 			fMgrDest,
 			0,
-			ePrefix,
+			ePrefix.XCpy("fMgrDest<-fMgr"),
 			sourceFMgrLabel,
 			destFMgrLabel)
 	}
