@@ -504,37 +504,110 @@ func (fMgr *FileMgr) CopyFileMgrByIoByLink(
 // Reference:
 // https://stackoverflow.com/questions/21060945/simple-way-to-copy-a-file-in-golang
 //
-// Input Parameter:
+// ----------------------------------------------------------------
 //
-//	fMgrDest  FileMgr - This File Manager type specifies the path and file name
-//	                    of the destination file to which the source file identified
-//	                    by the current File Manager will be copied.
+// # Input Parameters
 //
-//	                    If the directory path associated with 'fMgrDest' this
-//	                    method will attempt to create it.
+//	fMgrDest					FileMgr
 //
-//	bufferSize    int - The size in bytes of a local buffer which will be used
-//	                    to copy the source File Manager (fMgr) to the destination
-//	                    File Manager (fMgrDest). This is useful when copying large
-//	                    files.
+//		This File Manager type specifies the path and
+//		file name of the destination file to which the
+//		source file identified by the current File
+//		Manager will be copied.
 //
-//	                    If this value is set equal or less than zero, the default
-//	                    internal buffer will be used. Reference:
-//	                      https://golang.org/pkg/io/#CopyBuffer
+//		If the directory path associated with 'fMgrDest'
+//		this method will attempt to create it.
+//
+//	bufferSize    int
+//
+//		The size in bytes of a local buffer which will be
+//		used to copy the source File Manager (fMgr) to
+//		the destination File Manager (fMgrDest). This is
+//		useful when copying large files.
+//
+//		If this value is set equal to or less than zero,
+//		the default internal buffer will be used.
+//		Reference: https://golang.org/pkg/io/#CopyBuffer
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values:
 //
-//	error         - If this method completes successfully, the returned 'error'
-//	                Type is set equal to 'nil'. If an error condition is encountered,
-//	                this method will return an 'error' Type which contains an
-//	                appropriate error message.
+//	error
 //
-//	                Note: an error will be returned if the file identified by the
-//	                current source File Manager instance does NOT exist.
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
 func (fMgr *FileMgr) CopyFileMgrByIoWithBuffer(
-	fMgrDest *FileMgr, bufferSize int) error {
+	fMgrDest *FileMgr,
+	bufferSize int,
+	errorPrefix interface{}) error {
 
 	if fMgr.lock == nil {
 		fMgr.lock = new(sync.Mutex)
@@ -544,7 +617,18 @@ func (fMgr *FileMgr) CopyFileMgrByIoWithBuffer(
 
 	defer fMgr.lock.Unlock()
 
-	ePrefix := "FileMgr.CopyFileMgrByIo() "
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileMgr.CopyFileMgrByIoWithBuffer()",
+		"")
+
+	if err != nil {
+		return err
+	}
 
 	sourceFMgrLabel := "fMgrSource"
 
@@ -552,14 +636,13 @@ func (fMgr *FileMgr) CopyFileMgrByIoWithBuffer(
 
 	fMgrHlpr := fileMgrHelper{}
 
-	var err error
-
 	err = fMgrHlpr.copyFileSetup(
 		fMgr,
 		fMgrDest,
 		true,  // create target/destination directory if it does not exist
 		false, // delete target/destination file if it exists
-		ePrefix,
+		ePrefix.XCpy(
+			"fMgr-fMgrDest"),
 		sourceFMgrLabel,
 		destFMgrLabel)
 

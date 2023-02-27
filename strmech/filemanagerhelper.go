@@ -1880,14 +1880,16 @@ func (fMgrHlpr *fileMgrHelper) openFile(
 		ePrefix)
 }
 
-// readFileSetup - Helper method designed to provide
-// standard setup for methods writing data to the file
-// identified by FileMgr.
+// readFileSetup
+//
+// Helper method designed to provide standard setup for
+// methods reading data from a file identified by
+// FileMgr.
 func (fMgrHlpr *fileMgrHelper) readFileSetup(
 	fMgr *FileMgr,
 	readAccessCtrl FileAccessControl,
 	createTheDirectory bool,
-	errorPrefix interface{}) error {
+	errPrefDto *ePref.ErrPrefixDto) error {
 
 	if fMgrHlpr.lock == nil {
 		fMgrHlpr.lock = new(sync.Mutex)
@@ -1903,8 +1905,8 @@ func (fMgrHlpr *fileMgrHelper) readFileSetup(
 	var ePrefix *ePref.ErrPrefixDto
 
 	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
 		"fileMgrHelper.readFileSetup()",
 		"")
 
@@ -1913,6 +1915,7 @@ func (fMgrHlpr *fileMgrHelper) readFileSetup(
 	}
 
 	if fMgr == nil {
+
 		return fmt.Errorf("%v\n"+
 			"Error: Input parameter 'fMgr' is a nil pointer!\n",
 			ePrefix.String())
