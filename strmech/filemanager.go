@@ -516,7 +516,8 @@ func (fMgr *FileMgr) CopyFileMgrByIoByLink(
 //		Manager will be copied.
 //
 //		If the directory path associated with 'fMgrDest'
-//		this method will attempt to create it.
+//		does not exist, this method will attempt to
+//		create it.
 //
 //	bufferSize    int
 //
@@ -703,7 +704,8 @@ func (fMgr *FileMgr) CopyFileMgrByIoWithBuffer(
 //		Manager will be copied.
 //
 //		If the directory path associated with 'fMgrDest'
-//		this method will attempt to create it.
+//		does not exist, this method will attempt to
+//		create it.
 //
 //	errorPrefix					interface{}
 //
@@ -1198,31 +1200,129 @@ func (fMgr *FileMgr) CopyFileStrByIo(
 	return err
 }
 
-// CopyFileStrByIoByLink - Copies the file represented by the current
-// File Manager instance to a location specified by a destination input
-// parameter. The destination input parameter, 'dstPathFileNameExt' is
-// a string containing the path, file name and file extension of the
-// destination file.
+// CopyFileStrByIoByLink
 //
-// Note that if the destination directory does not exist, this method will
-// attempt to create it.
+// Copies the file represented by the current File
+// Manager instance to a location specified by a
+// destination input parameter. The destination input
+// parameter, 'dstPathFileNameExt' is a string
+// containing the path, file name and file extension
+// of the destination file.
 //
-// The copy operation will be carried out in two attempts. The first attempt
-// will try to copy the file to the destination by creating a new file and
-// copying the source file contents to the new destination file. This technique
-// is known as 'io.Copy'.
+// Note that if the destination directory does not
+// exist, this method will attempt to create it.
 //
-// If that attempted file copy operation fails, a second attempt will be made
-// using a technique known as a 'Hard Link'. This technique will utilize a hard
-// symbolic link to the existing source file in order to create the destination
-// file.
+// The copy operation will be carried out in two
+// attempts. The first attempt will try to copy the file
+// to the destination by creating a new file and copying
+// the source file contents to the new destination file.
+// This technique is known as 'io.Copy'.
 //
-// If both attempted copy operations fail, and error will be returned.
+// If that attempted file copy operation fails, a second
+// attempt will be made using a technique known as a
+// 'Hard Link'. This technique will utilize a hard
+// symbolic link to the existing source file in order to
+// create the destination file.
+//
+// If both attempted copy operations fail, and error will
+// be returned.
 //
 // Reference:
 // https://stackoverflow.com/questions/21060945/simple-way-to-copy-a-file-in-golang
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	dstPathFileNameExt			string
+//
+//		This string specifies the path, file name and
+//		file extension of the destination file to which
+//		the source file identified by the current File
+//		Manager will be copied.
+//
+//		If the directory path associated with
+//		'dstPathFileNameExt' does not exist, this method
+//		will attempt to create it.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ------------------------------------------------------------------------
+//
+// Return Values:
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
 func (fMgr *FileMgr) CopyFileStrByIoByLink(
-	dstPathFileNameExt string) error {
+	dstPathFileNameExt string,
+	errorPrefix interface{}) error {
 
 	if fMgr.lock == nil {
 		fMgr.lock = new(sync.Mutex)
@@ -1232,14 +1332,27 @@ func (fMgr *FileMgr) CopyFileStrByIoByLink(
 
 	defer fMgr.lock.Unlock()
 
-	ePrefix := "FileMgr.CopyFileStrByIoByLink() "
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
 
-	fMgrDest, err := new(FileMgr).New(dstPathFileNameExt)
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileMgr.CopyFileStrByIoByLink()",
+		"")
+
+	var fMgrDest FileMgr
+
+	fMgrDest,
+		err = new(FileMgr).New(dstPathFileNameExt)
 
 	if err != nil {
-		return fmt.Errorf(ePrefix+"Invalid input parameter 'dstPathFileNameExt'\n"+
+		return fmt.Errorf("%v\n"+
+			"Invalid input parameter 'dstPathFileNameExt'\n"+
 			"Error returned by FileMgr{}.New(dstPathFileNameExt)\n"+
-			"dstPathFileNameExt='%v'\nError='%v'\n",
+			"dstPathFileNameExt='%v'\n"+
+			"Error= \n%v\n",
+			ePrefix.String(),
 			dstPathFileNameExt, err.Error())
 	}
 
@@ -1254,7 +1367,8 @@ func (fMgr *FileMgr) CopyFileStrByIoByLink(
 		&fMgrDest,
 		true, // Create Destination Directory
 		true, // Delete Destination File if it exists
-		ePrefix,
+		ePrefix.XCpy(
+			"fMgrDest<-fMgr"),
 		fMgrSourceLabel,
 		fMgrDestLabel)
 
@@ -1266,7 +1380,8 @@ func (fMgr *FileMgr) CopyFileStrByIoByLink(
 		fMgr,
 		&fMgrDest,
 		0,
-		ePrefix,
+		ePrefix.XCpy(
+			"fMgrDest<-fMgr"),
 		fMgrSourceLabel,
 		fMgrDestLabel)
 
@@ -1274,7 +1389,8 @@ func (fMgr *FileMgr) CopyFileStrByIoByLink(
 		err = fMgrHlpr.lowLevelCopyByLink(
 			fMgr,
 			&fMgrDest,
-			ePrefix,
+			ePrefix.XCpy(
+				"fMgrDest<-fMgr"),
 			fMgrSourceLabel,
 			fMgrDestLabel)
 	}
