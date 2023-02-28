@@ -1780,22 +1780,117 @@ func (fMgr *FileMgr) CopyFileStrByLinkByIo(
 	return err
 }
 
-// CopyFileToDirByIo - Copies the file identified by the current File Manager
-// (FileMgr) instance to another directory specified by input parameter 'dir',
-// an instance of type 'DirMgr'.
+// CopyFileToDirByIo
 //
-// Note that if the destination directory does not exist, this method will
-// attempt to create it.
+// Copies the file identified by the current File Manager
+// (FileMgr) instance to another directory specified by
+// input parameter 'dir', an instance of type 'DirMgr'.
 //
-// One attempt will be made to copy the source file to the specified destination
-// directory using a technique known as 'io.Copy'. This technique create a new
-// destination file and copies the source file contents to that new destination file.
+// Note that if the destination directory does not exist,
+// this method will attempt to create it.
 //
-// If this attempted 'io.Copy' operation fails, and error will be returned.
+// One attempt will be made to copy the source file to
+// the specified destination directory using a technique
+// known as 'io.Copy'. This technique creates a new
+// destination file and copies the source file contents
+// to that new destination file.
+//
+// If this attempted 'io.Copy' operation fails, an error
+// will be returned.
 //
 // Reference:
 // https://stackoverflow.com/questions/21060945/simple-way-to-copy-a-file-in-golang
-func (fMgr *FileMgr) CopyFileToDirByIo(dir DirMgr) error {
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	dir							DirMgr
+//
+//		An instance of Directory Manager ('DirMgr').
+//
+//		This Directory Manager contains the name of the
+//		directory to which the file identified by the
+//		current FileMgr will be copied.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fMgr *FileMgr) CopyFileToDirByIo(
+	dir DirMgr,
+	errorPrefix interface{}) error {
 
 	if fMgr.lock == nil {
 		fMgr.lock = new(sync.Mutex)
@@ -1805,11 +1900,21 @@ func (fMgr *FileMgr) CopyFileToDirByIo(dir DirMgr) error {
 
 	defer fMgr.lock.Unlock()
 
-	ePrefix := "FileMgr.CopyFileToDirByIo() "
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
 
-	fMgrHlpr := fileMgrHelper{}
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileMgr.CopyFileToDirByIo()",
+		"")
 
-	err := dir.IsDirMgrValid(ePrefix + "Input Parameter 'dir' ")
+	if err != nil {
+		return err
+	}
+
+	err = dir.IsDirMgrValid(
+		ePrefix.String() + "Input Parameter 'dir' ")
 
 	if err != nil {
 		return err
@@ -1822,12 +1927,19 @@ func (fMgr *FileMgr) CopyFileToDirByIo(dir DirMgr) error {
 
 	if err != nil {
 
-		return fmt.Errorf(ePrefix+
+		return fmt.Errorf("%v\n"+
 			"Error returned from FileMgr{}.NewFromDirMgrFileNameExt("+
 			"dir, fMgr.fileNameExt)\n"+
-			"dir='%v'\nfMgr.fileNameExt='%v'\nError='%v'\n",
-			dir.absolutePath, fMgr.fileNameExt, err.Error())
+			"dir='%v'\n"+
+			"fMgr.fileNameExt='%v'\n"+
+			"Error= \n%v\n",
+			ePrefix.String(),
+			dir.absolutePath,
+			fMgr.fileNameExt,
+			err.Error())
 	}
+
+	fMgrHlpr := fileMgrHelper{}
 
 	err = fMgrHlpr.copyFileSetup(
 		fMgr,
