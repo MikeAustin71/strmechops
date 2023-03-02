@@ -9,26 +9,14 @@ import (
 	"time"
 )
 
-/*
-   'filehelper.go' - Contains type 'FileHelper' and related data structures.
-
-    The 'FileHelper' type provides methods used in managing files and
-    directories.
-
-   The Source Repository for this source code file is :
-     https://github.com/MikeAustin71/pathfilego.git
-
-   'FileHelper' is a dependency of 'DirMgr' and 'FileMgr'. 'FileMgr'
-   is located in source file 'filemanager.go'. 'DirMgr' is located
-   in 'dirmanager.go'.
-
-
-*/
-
-// FileHelper - The methods associated with this type provide
-// generalized file creation, management and maintenance utilities.
+// FileHelper
 //
-// 'FileHelper' is a dependency for types 'DirMgr' and 'FileMgr'.
+// The methods associated with this type provide
+// generalized file creation, management and maintenance
+// utilities.
+//
+// 'FileHelper' is a dependency for types 'DirMgr' and
+// 'FileMgr'.
 type FileHelper struct {
 	Input  string
 	Output string

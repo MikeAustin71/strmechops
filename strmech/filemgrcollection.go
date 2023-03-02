@@ -3,9 +3,11 @@ package strmech
 import (
 	"errors"
 	"fmt"
+	ePref "github.com/MikeAustin71/errpref"
 	"os"
 	"sort"
 	"strings"
+	"sync"
 )
 
 // SortFileMgrByAbsPathCaseSensitive - Sorts an array of File Managers
@@ -79,6 +81,8 @@ func (sortAbsPathInSens SortFileMgrByAbsPathCaseInSensitive) Less(i, j int) bool
 // which is located in source code file 'filehelper.go'.
 type FileMgrCollection struct {
 	fileMgrs []FileMgr
+
+	lock *sync.Mutex
 }
 
 // AddFileMgr - Adds a FileMgr object to the collection
@@ -91,13 +95,133 @@ func (fMgrs *FileMgrCollection) AddFileMgr(fMgr FileMgr) {
 	fMgrs.fileMgrs = append(fMgrs.fileMgrs, fMgr.CopyOut())
 }
 
-// AddFileMgrByDirFileNameExt - Add a new File Manager using
-// input parameters 'directory' and 'pathFileNameExt'.
+// AddFileMgrByDirFileNameExt
+//
+// Adds a new File Manager using input parameters
+// 'directory' and 'pathFileNameExt'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	directory					DirMgr
+//
+//		An instance of Directory Manager ('DirMgr') which
+//		contains the directory or folder path to be used
+//		in constructing the instance of File Manager
+//		(FileMgr) which will be added to the current File
+//		Manager Collection (FileMgrCollection).
+//
+//	fileNameExt					string
+//
+//		This string holds the file name and file
+//		extension which will be combined with the
+//		directory path from input parameter 'directory'
+//		to create the File Manager (FileMgr) object which
+//		will be added to the current File Manager
+//		Collection (FileMgrCollection).
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
 func (fMgrs *FileMgrCollection) AddFileMgrByDirFileNameExt(
 	directory DirMgr,
-	fileNameExt string) error {
+	fileNameExt string,
+	errorPrefix interface{}) error {
 
-	ePrefix := "FileMgrCollection.AddFileMgrByDirFileNameExt() "
+	if fMgrs.lock == nil {
+		fMgrs.lock = new(sync.Mutex)
+	}
+
+	fMgrs.lock.Lock()
+
+	defer fMgrs.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileMgrCollection."+
+			"AddFileMgrByDirFileNameExt()",
+		"")
+
+	if err != nil {
+		return err
+	}
 
 	if fMgrs.fileMgrs == nil {
 		fMgrs.fileMgrs = make([]FileMgr, 0, 50)
@@ -105,10 +229,8 @@ func (fMgrs *FileMgrCollection) AddFileMgrByDirFileNameExt(
 
 	fMgr := FileMgr{}
 
-	fMgrHlpr := fileMgrHelper{}
-
 	isEmpty, err :=
-		fMgrHlpr.setFileMgrDirMgrFileName(
+		new(fileMgrHelperAtom).setFileMgrDirMgrFileName(
 			&fMgr,
 			&directory,
 			fileNameExt,
@@ -119,11 +241,14 @@ func (fMgrs *FileMgrCollection) AddFileMgrByDirFileNameExt(
 	}
 
 	if isEmpty {
-		return fmt.Errorf(ePrefix+
+		return fmt.Errorf("%v\n"+
 			"Error: The FileMgr instance generated by input parameters 'directory' and "+
 			"'fileNameExt' is Empty!\n"+
-			"directory='%v'\nfileNameExt='%v'\n",
-			directory.absolutePath, fileNameExt)
+			"directory='%v'\n"+
+			"fileNameExt='%v'\n",
+			ePrefix.String(),
+			directory.absolutePath,
+			fileNameExt)
 	}
 
 	fMgrs.fileMgrs = append(fMgrs.fileMgrs, fMgr)
@@ -131,53 +256,291 @@ func (fMgrs *FileMgrCollection) AddFileMgrByDirFileNameExt(
 	return nil
 }
 
-// AddFileMgrByPathFileNameExt - Add a new File Manager based on
-// input parameter 'pathFileNameExt' which includes the full path
-// name, file name and file extension.
+// AddFileMgrByPathFileNameExt
+//
+// Add a new File Manager based on input parameter
+// 'pathFileNameExt' which includes the full path name,
+// file name and file extension.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	pathFileNameExt				string
+//
+//		This string holds the path name, file name and
+//		file extension which will be used to construct an
+//		instance of File Manager (FileMgr) added to the
+//		current File Manager Collection.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
 func (fMgrs *FileMgrCollection) AddFileMgrByPathFileNameExt(
-	pathFileNameExt string) error {
+	pathFileNameExt string,
+	errorPrefix interface{}) error {
 
-	ePrefix := "FileMgrCollection.AddFileMgrByPathFileNameExt() "
+	if fMgrs.lock == nil {
+		fMgrs.lock = new(sync.Mutex)
+	}
+
+	fMgrs.lock.Lock()
+
+	defer fMgrs.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileMgrCollection."+
+			"AddFileMgrByPathFileNameExt()",
+		"")
+
+	if err != nil {
+		return err
+	}
 
 	if fMgrs.fileMgrs == nil {
 		fMgrs.fileMgrs = make([]FileMgr, 0, 50)
 	}
 
-	fMgrHlpr := fileMgrHelper{}
 	fMgr := FileMgr{}
 
-	isEmpty, err := fMgrHlpr.setFileMgrPathFileName(
-		&fMgr,
-		pathFileNameExt,
-		ePrefix)
+	var isEmpty bool
 
-	// fMgr, err := FileMgr{}.NewFromPathFileNameExtStr(pathFileNameExt)
+	isEmpty,
+		err = new(fileMgrHelper).
+		setFileMgrPathFileName(
+			&fMgr,
+			pathFileNameExt,
+			ePrefix)
 
 	if err != nil {
-		return fmt.Errorf(ePrefix+
+		return fmt.Errorf("%v\n"+
 			"Error returned from fMgrHlpr.setFileMgrPathFileName(pathFileNameExt).\n"+
-			"pathFileNameExt='%v'\nError='%v'\n", pathFileNameExt, err.Error())
+			"pathFileNameExt='%v'\n"+
+			"Error= \n%v\n",
+			ePrefix.String(),
+			pathFileNameExt,
+			err.Error())
 	}
 
 	if isEmpty {
-		return fmt.Errorf(ePrefix+
+
+		return fmt.Errorf("%v\n"+
 			"ERROR: The generated File Manager instance is EMPTY!\n"+
-			"pathFileNameExt='%v'\n", pathFileNameExt)
+			"pathFileNameExt='%v'\n",
+			ePrefix.String(),
+			pathFileNameExt)
 	}
 
 	fMgrs.fileMgrs = append(fMgrs.fileMgrs, fMgr)
 
-	return nil
+	return err
 }
 
-// AddFileMgrByDirStrFileNameStr - Adds a FileMgr object to the
-// collection based on input parameter strings, 'pathName' and
+// AddFileMgrByDirStrFileNameStr
+//
+// Adds a FileMgr object to the File Manager Collection
+// based on input parameter strings, 'pathName' and
 // 'fileNameExt'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	pathName					string
+//
+//		This string holds the directory path which will
+//		be combined with the file name and file extension
+//		provided by input paramter 'fileNameExt' to
+//		construct the File Manager (FileMgr) instance
+//		added to the current File Manager Collection.
+//
+//	fileNameExt					string
+//
+//		This strings holds the file name and file
+//		extension which will be combined with the
+//		directory path provided by input parameter
+//		'pathName' to construct the File Manager
+//		(FileMgr) instance added to the current File
+//		Manager Collection.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
 func (fMgrs *FileMgrCollection) AddFileMgrByDirStrFileNameStr(
 	pathName string,
-	fileNameExt string) error {
+	fileNameExt string,
+	errorPrefix interface{}) error {
 
-	ePrefix := "FileMgrCollection.AddFileMgrByDirStrFileNameStr() "
+	if fMgrs.lock == nil {
+		fMgrs.lock = new(sync.Mutex)
+	}
+
+	fMgrs.lock.Lock()
+
+	defer fMgrs.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileMgrCollection."+
+			"AddFileMgrByDirStrFileNameStr()",
+		"")
+
+	if err != nil {
+		return err
+	}
 
 	if fMgrs.fileMgrs == nil {
 		fMgrs.fileMgrs = make([]FileMgr, 0, 50)
@@ -189,7 +552,7 @@ func (fMgrs *FileMgrCollection) AddFileMgrByDirStrFileNameStr(
 	isEmpty, err := dMgrHlpr.setDirMgr(
 		&dMgr,
 		pathName,
-		ePrefix,
+		ePrefix.String(),
 		"dMgr",
 		"pathName")
 
@@ -198,30 +561,35 @@ func (fMgrs *FileMgrCollection) AddFileMgrByDirStrFileNameStr(
 	}
 
 	if isEmpty {
-		return fmt.Errorf(ePrefix+"ERROR: Directory Manager created "+
+		return fmt.Errorf("%v\n"+
+			"ERROR: Directory Manager created "+
 			"from 'pathName' is EMPTY!\n"+
-			"pathName='%v'", pathName)
+			"pathName= '%v'\n",
+			ePrefix.String(),
+			pathName)
 	}
 
-	fMgrHlpr := fileMgrHelper{}
 	fMgr := FileMgr{}
 
 	isEmpty,
-		err = fMgrHlpr.setFileMgrDirMgrFileName(
-		&fMgr,
-		&dMgr,
-		fileNameExt,
-		ePrefix)
+		err = new(fileMgrHelperAtom).
+		setFileMgrDirMgrFileName(
+			&fMgr,
+			&dMgr,
+			fileNameExt,
+			ePrefix)
 
 	if err != nil {
 		return err
 	}
 
 	if isEmpty {
-		return fmt.Errorf(ePrefix+"ERROR: File Manager created "+
+		return fmt.Errorf("%v\n"+
+			"ERROR: File Manager created "+
 			"from 'pathName' and 'fileNameExt' is EMPTY!\n"+
 			"pathName='%v'\n"+
-			"fileNameExt='%v'",
+			"fileNameExt='%v'\n",
+			ePrefix.String(),
 			pathName,
 			fileNameExt)
 	}
@@ -233,12 +601,127 @@ func (fMgrs *FileMgrCollection) AddFileMgrByDirStrFileNameStr(
 
 // AddFileMgrByFileInfo
 //
-// Adds a File Manager object to the collection based on
-// input from a directory path string and an os.FileInfo
-// object.
-func (fMgrs *FileMgrCollection) AddFileMgrByFileInfo(pathName string, info os.FileInfo) error {
+// Adds a File Manager object to the File Manager
+// Collection based on input from a directory path string
+// and an os.FileInfo object.
+//
+//	errorPrefix					interface{}
+//
+//	pathName					string
+//
+//		The directory path. NOTE: This does NOT contain
+//		the file name.
+//
+//	fileInfo					os.FileInfo
+//
+//		A valid and populated FileInfo structure
+//		containing the file name.
+//
+//		Note:
+//
+//			An instance of FileInfoPlus may be submitted
+//			for this parameter because FileInfoPlus
+//			implements the os.FileInfo interface.
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fMgrs *FileMgrCollection) AddFileMgrByFileInfo(
+	pathName string,
+	fileInfo os.FileInfo,
+	errorPrefix interface{}) error {
 
-	ePrefix := "FileMgrCollection) AddFileMgrByFileInfo() "
+	if fMgrs.lock == nil {
+		fMgrs.lock = new(sync.Mutex)
+	}
+
+	fMgrs.lock.Lock()
+
+	defer fMgrs.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileMgrCollection."+
+			"AddFileMgrByFileInfo()",
+		"")
+
+	if err != nil {
+		return err
+	}
 
 	if fMgrs.fileMgrs == nil {
 		fMgrs.fileMgrs = make([]FileMgr, 0, 50)
@@ -250,7 +733,7 @@ func (fMgrs *FileMgrCollection) AddFileMgrByFileInfo(pathName string, info os.Fi
 	isEmpty, err := dMgrHlpr.setDirMgr(
 		&dMgr,
 		pathName,
-		ePrefix,
+		ePrefix.String(),
 		"dMgr",
 		"pathName")
 
@@ -259,32 +742,37 @@ func (fMgrs *FileMgrCollection) AddFileMgrByFileInfo(pathName string, info os.Fi
 	}
 
 	if isEmpty {
-		return fmt.Errorf(ePrefix+"ERROR: Directory Manager created "+
+		return fmt.Errorf("%v\n"+
+			"ERROR: Directory Manager created "+
 			"from 'pathName' is EMPTY!\n"+
-			"pathName='%v'", pathName)
+			"pathName= '%v'\n",
+			ePrefix.String(),
+			pathName)
 	}
 
-	fMgrHlpr := fileMgrHelper{}
 	fMgr := FileMgr{}
 
 	isEmpty,
-		err = fMgrHlpr.setFileMgrDirMgrFileName(
-		&fMgr,
-		&dMgr,
-		info.Name(),
-		ePrefix)
+		err = new(fileMgrHelperAtom).
+		setFileMgrDirMgrFileName(
+			&fMgr,
+			&dMgr,
+			fileInfo.Name(),
+			ePrefix)
 
 	if err != nil {
 		return err
 	}
 
 	if isEmpty {
-		return fmt.Errorf("ERROR: File Manager created "+
-			"from 'pathName' and 'info' is EMPTY!\n"+
+		return fmt.Errorf("%v\n"+
+			"ERROR: File Manager created "+
+			"from 'pathName' and 'fileInfo' is EMPTY!\n"+
 			"pathName='%v'\n"+
-			"info.Name()='%v'",
+			"fileInfo.Name()='%v'\n",
+			ePrefix.String(),
 			pathName,
-			info.Name())
+			fileInfo.Name())
 	}
 
 	fMgrs.fileMgrs = append(fMgrs.fileMgrs, fMgr)
@@ -319,9 +807,31 @@ func (fMgrs *FileMgrCollection) AddFileMgrCollection(fMgrs2 *FileMgrCollection) 
 
 // CopyFilesToDir - Copies all the files in the File Manager Collection to
 // the specified target directory.
-func (fMgrs *FileMgrCollection) CopyFilesToDir(targetDirectory DirMgr) error {
+func (fMgrs *FileMgrCollection) CopyFilesToDir(
+	targetDirectory DirMgr,
+	errorPrefix interface{}) error {
 
-	ePrefix := "FileMgrCollection.CopyFilesToDir() "
+	if fMgrs.lock == nil {
+		fMgrs.lock = new(sync.Mutex)
+	}
+
+	fMgrs.lock.Lock()
+
+	defer fMgrs.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileMgrCollection."+
+			"CopyFilesToDir()",
+		"")
+
+	if err != nil {
+		return err
+	}
 
 	if fMgrs.fileMgrs == nil {
 		fMgrs.fileMgrs = make([]FileMgr, 0, 50)
@@ -330,22 +840,30 @@ func (fMgrs *FileMgrCollection) CopyFilesToDir(targetDirectory DirMgr) error {
 	maxLen := len(fMgrs.fileMgrs)
 
 	if maxLen == 0 {
-		return errors.New(ePrefix +
-			"ERROR - Collection contains ZERO File Managers!\n")
+		return fmt.Errorf("%v\n"+
+			"ERROR - Collection contains ZERO File Managers!\n",
+			ePrefix.String())
 	}
 
 	for i := 0; i < maxLen; i++ {
-		err := fMgrs.fileMgrs[i].CopyFileToDirByIoByLink(targetDirectory)
+
+		err = fMgrs.fileMgrs[i].CopyFileToDirByIoByLink(
+			targetDirectory,
+			ePrefix)
 
 		if err != nil {
-			return fmt.Errorf(ePrefix+
-				"Copy Failure on index='%v' file='%v'. Error='%v'",
-				i, fMgrs.fileMgrs[i].absolutePathFileName, err.Error())
+			return fmt.Errorf("%v\n"+
+				"Copy Failure on index='%v'\n"+
+				"file='%v'."+
+				"Error='%v'",
+				ePrefix.String(),
+				i, fMgrs.fileMgrs[i].absolutePathFileName,
+				err.Error())
 		}
 
 	}
 
-	return nil
+	return err
 }
 
 // CopyOut - Returns an FileMgrCollection which is an

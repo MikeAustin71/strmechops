@@ -310,7 +310,10 @@ func (fops FileOps) NewByDirMgrFileName(
 	}
 
 	fOpsNew.source, err = new(FileMgr).
-		NewFromDirMgrFileNameExt(sourceDir, sourceFileNameExt)
+		NewFromDirMgrFileNameExt(
+			sourceDir,
+			sourceFileNameExt,
+			ePrefix)
 
 	if err != nil {
 		return FileOps{},
@@ -330,7 +333,8 @@ func (fops FileOps) NewByDirMgrFileName(
 	fOpsNew.destination, err = new(FileMgr).
 		NewFromDirMgrFileNameExt(
 			destinationDir,
-			destinationFileNameExt)
+			destinationFileNameExt,
+			ePrefix)
 
 	if err != nil {
 		return FileOps{},
@@ -381,7 +385,8 @@ func (fops FileOps) NewByDirStrsAndFileNameExtStrs(
 	fOpsNew.source, err = new(FileMgr).
 		NewFromDirStrFileNameStr(
 			sourceDirStr,
-			sourceFileNameExtStr)
+			sourceFileNameExtStr,
+			ePrefix)
 
 	if err != nil {
 		return FileOps{},
@@ -391,7 +396,8 @@ func (fops FileOps) NewByDirStrsAndFileNameExtStrs(
 	fOpsNew.destination, err = new(FileMgr).
 		NewFromDirStrFileNameStr(
 			destinationDirStr,
-			destinationFileNameExtStr)
+			destinationFileNameExtStr,
+			ePrefix)
 
 	if err != nil {
 		return FileOps{},
@@ -517,7 +523,10 @@ func (fops *FileOps) copySrcToDestByIoByHardLink() error {
 
 	ePrefix := "FileOps.copySrcToDestByIoByHardLink() "
 
-	err := fops.source.CopyFileMgrByIoByLink(&fops.destination)
+	err := fops.source.
+		CopyFileMgrByIoByLink(
+			&fops.destination,
+			ePrefix)
 
 	if err != nil {
 		return fmt.Errorf(ePrefix+"%v", err.Error())
@@ -530,7 +539,9 @@ func (fops *FileOps) copySrcToDestByHardLinkByIo() error {
 
 	ePrefix := "FileOps.copySrcToDestByHardLinkByIo() "
 
-	err := fops.source.CopyFileMgrByLinkByIo(&fops.destination)
+	err := fops.source.CopyFileMgrByLinkByIo(
+		&fops.destination,
+		ePrefix)
 
 	if err != nil {
 		return fmt.Errorf(ePrefix+"%v", err.Error())
@@ -545,7 +556,9 @@ func (fops *FileOps) copySrcToDestByIo() error {
 
 	ePrefix := "FileOps.copySrcToDestByIo() "
 
-	err := fops.source.CopyFileMgrByIo(&fops.destination)
+	err := fops.source.CopyFileMgrByIo(
+		&fops.destination,
+		ePrefix)
 
 	if err != nil {
 		return fmt.Errorf(ePrefix+"%v", err.Error())
@@ -558,7 +571,9 @@ func (fops *FileOps) copySrcToDestByHardLink() error {
 
 	ePrefix := "FileOps.copySrcToDestByHardLink() "
 
-	err := fops.source.CopyFileMgrByLink(&fops.destination)
+	err := fops.source.CopyFileMgrByLink(
+		&fops.destination,
+		ePrefix)
 
 	if err != nil {
 		return fmt.Errorf(ePrefix+"%v", err.Error())
@@ -595,7 +610,7 @@ func (fops *FileOps) createSrcDirectoryAndFile() error {
 		return fmt.Errorf(ePrefix+"%v\n", err.Error())
 	}
 
-	err = fops.source.CloseThisFile()
+	err = fops.source.CloseThisFile(ePrefix)
 
 	if err != nil {
 		return fmt.Errorf(ePrefix+"%v\n", err.Error())
@@ -616,7 +631,7 @@ func (fops *FileOps) createSrcFile() error {
 		return fmt.Errorf(ePrefix+"%v\n", err.Error())
 	}
 
-	err = fops.source.CloseThisFile()
+	err = fops.source.CloseThisFile(ePrefix)
 
 	if err != nil {
 		return fmt.Errorf(ePrefix+"%v\n", err.Error())
@@ -654,7 +669,7 @@ func (fops *FileOps) createDestDirectoryAndFile() error {
 		return fmt.Errorf(ePrefix+"%v\n", err.Error())
 	}
 
-	err = fops.destination.CloseThisFile()
+	err = fops.destination.CloseThisFile(ePrefix)
 
 	if err != nil {
 		return fmt.Errorf(ePrefix+"%v\n", err.Error())
@@ -675,7 +690,7 @@ func (fops *FileOps) createDestFile() error {
 		return fmt.Errorf(ePrefix+"%v", err.Error())
 	}
 
-	err = fops.destination.CloseThisFile()
+	err = fops.destination.CloseThisFile(ePrefix)
 
 	if err != nil {
 		return fmt.Errorf(ePrefix+"%v\n", err.Error())

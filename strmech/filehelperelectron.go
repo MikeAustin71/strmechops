@@ -9,6 +9,9 @@ import (
 	"sync"
 )
 
+// fileHelperElectron
+//
+// Provides helper methods for type FileHelper.
 type fileHelperElectron struct {
 	lock *sync.Mutex
 }

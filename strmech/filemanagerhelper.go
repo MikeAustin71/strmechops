@@ -2078,14 +2078,68 @@ func (fMgrHlpr *fileMgrHelper) readFileSetup(
 	return nil
 }
 
-// setFileMgrDirMgrFileName
+// setFileMgrPathFileName
 //
-// Helper method which configures a FileMgr instance
-// based on input parameters 'dMgr' and 'fileNameExt'.
-func (fMgrHlpr *fileMgrHelper) setFileMgrDirMgrFileName(
+// This method will configure an instance of FileMgr
+// using the path, file name and file extension
+// supplied by input parameter 'pathFileNameExt'.
+//
+// If 'pathFileNameExt' is submitted as an empty
+// string or a string consisting of all white spaces,
+// the returned boolean parameter 'isEmpty' will be set
+// to 'true'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fMgr						*FileMgr
+//
+//		A pointer to an instance of FileMgr. This method
+//		will configure this FileMgr instance using the
+//		path, file name and file extension supplied by
+//		input parameter 'pathFileNameExt'.
+//
+//	pathFileNameExt				string
+//
+//		This string holds the path, file name and file
+//		extension used to configure the instance of
+//		FileMgr passed as input paramter 'fMgr'.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fMgrHlpr *fileMgrHelper) setFileMgrPathFileName(
 	fMgr *FileMgr,
-	dMgr *DirMgr,
-	fileNameExt string,
+	pathFileNameExt string,
 	errPrefDto *ePref.ErrPrefixDto) (
 	isEmpty bool,
 	err error) {
@@ -2100,277 +2154,11 @@ func (fMgrHlpr *fileMgrHelper) setFileMgrDirMgrFileName(
 
 	var ePrefix *ePref.ErrPrefixDto
 
+	isEmpty = true
+
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"fileMgrHelper."+
-			"setFileMgrDirMgrFileName()",
-		"")
-
-	if err != nil {
-		return false, err
-	}
-
-	isEmpty = true
-	err = nil
-
-	if fMgr == nil {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'fMgr' is a nil pointer!\n",
-			ePrefix.String())
-
-		return isEmpty, err
-	}
-
-	err2 := dMgr.IsDirMgrValid(ePrefix.String())
-
-	if err2 != nil {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'dMgr' is INVALID!\n"+
-			"dMgr.absolutePath='%v'\n"+
-			"Error='%v'\n",
-			ePrefix.String(),
-			dMgr.absolutePath,
-			err2.Error())
-
-		return isEmpty, err
-	}
-
-	errCode,
-		_,
-		fileNameExt :=
-		new(fileHelperElectron).
-			isStringEmptyOrBlank(fileNameExt)
-
-	if errCode == -1 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'fileNameExt' is a Zero length string!\n",
-			ePrefix.String())
-
-		return isEmpty, err
-	}
-
-	if errCode == -2 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'fileNameExt' consists entirely of blank spaces!\n",
-			ePrefix.String())
-
-		return isEmpty, err
-	}
-
-	fh := new(FileHelper)
-
-	adjustedFileNameExt,
-		isFileNameEmpty,
-		err2 :=
-		fh.CleanFileNameExtStr(
-			fileNameExt,
-			ePrefix.XCpy(
-				"adjustedFileNameExt<-fileNameExt"))
-
-	if err2 != nil {
-
-		err = fmt.Errorf("%v\n"+
-			"Error returned from fh.CleanFileNameExtStr(fileNameExt).\n"+
-			"fileNameExt='%v'\n"+
-			"Error='%v'\n",
-			ePrefix.String(),
-			fileNameExt,
-			err2.Error())
-
-		return isEmpty, err
-	}
-
-	if isFileNameEmpty {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: fileName returned from fh.CleanFileNameExtStr(fileNameExt)\n"+
-			"is a ZERO length string!\n"+
-			"fileNameExt='%v'\n",
-			ePrefix.String(),
-			fileNameExt)
-
-		return isEmpty, err
-	}
-
-	fMgrHelperBoson := new(fileMgrHelperBoson)
-
-	err = fMgrHelperBoson.
-		emptyFileMgr(fMgr, ePrefix)
-
-	if err != nil {
-		return isEmpty, err
-	}
-
-	fMgr.dMgr = dMgr.CopyOut()
-
-	s, fNameIsEmpty, err2 := fh.GetFileNameWithoutExt(
-		adjustedFileNameExt,
-		ePrefix.XCpy(
-			"s<-adjustedFileNameExt"))
-
-	if err2 != nil {
-		err = fmt.Errorf("%v\n"+
-			"Error returned from fh.GetFileNameWithoutExt(adjustedFileNameExt).\n"+
-			"adjustedFileNameExt='%v'\n"+
-			"Error='%v'\n ",
-			ePrefix.String(),
-			adjustedFileNameExt,
-			err2.Error())
-
-		isEmpty = true
-
-		_ = fMgrHelperBoson.
-			emptyFileMgr(fMgr, ePrefix)
-
-		return isEmpty, err
-	}
-
-	if fNameIsEmpty {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: fileName returned from fh.GetFileNameWithoutExt(adjustedFileNameExt)\n"+
-			"is Zero length string!\n"+
-			"adjustedFileNameExt='%v'\n",
-			ePrefix.String(),
-			adjustedFileNameExt)
-
-		_ = fMgrHelperBoson.
-			emptyFileMgr(fMgr, ePrefix)
-
-		isEmpty = true
-
-		return isEmpty, err
-	}
-
-	fMgr.isFileNamePopulated = true
-	fMgr.fileName = s
-
-	s,
-		extIsEmpty,
-		err2 := fh.GetFileExtension(
-		adjustedFileNameExt,
-		ePrefix)
-
-	if err2 != nil {
-		err = fmt.Errorf("%v\n"+
-			"Error returned from fh.GetFileExt(fileNameAndExt).\n"+
-			"fileNameAndExt='%v'\n"+
-			"Error='%v'\n",
-			ePrefix.String(),
-			adjustedFileNameExt,
-			err2.Error())
-
-		isEmpty = true
-
-		_ = fMgrHelperBoson.emptyFileMgr(
-			fMgr,
-			ePrefix)
-
-		return isEmpty, err
-	}
-
-	if !extIsEmpty {
-		fMgr.isFileExtPopulated = true
-		fMgr.fileExt = s
-	}
-
-	if fMgr.isFileNamePopulated {
-		fMgr.isFileNameExtPopulated = true
-		fMgr.fileNameExt = fMgr.fileName + fMgr.fileExt
-	}
-
-	lPath := len(fMgr.dMgr.absolutePath)
-	if lPath == 0 {
-		fMgr.absolutePathFileName = fMgr.fileNameExt
-
-	} else if fMgr.dMgr.absolutePath[lPath-1] == os.PathSeparator {
-		fMgr.absolutePathFileName = fMgr.dMgr.absolutePath + fMgr.fileNameExt
-
-	} else {
-		fMgr.absolutePathFileName =
-			fMgr.dMgr.absolutePath + string(os.PathSeparator) + fMgr.fileNameExt
-
-	}
-
-	lPath = len(fMgr.dMgr.path)
-
-	if lPath == 0 {
-		fMgr.originalPathFileName = fMgr.fileNameExt
-
-	} else if fMgr.dMgr.path[lPath-1] == os.PathSeparator {
-		fMgr.originalPathFileName = fMgr.dMgr.path + fMgr.fileNameExt
-
-	} else {
-		fMgr.originalPathFileName = fMgr.dMgr.path + string(os.PathSeparator) + fMgr.fileNameExt
-	}
-
-	fMgr.isAbsolutePathFileNamePopulated = true
-
-	_,
-		filePathDoesExist,
-		fInfoPlus,
-		nonPathError :=
-		new(fileHelperMolecule).doesPathFileExist(
-			fMgr.absolutePathFileName,
-			PreProcPathCode.None(), // Do NOT perform pre-processing on path
-			ePrefix,
-			"fMgr.absolutePathFileName")
-
-	if filePathDoesExist && nonPathError == nil {
-		fMgr.doesAbsolutePathFileNameExist = true
-		fMgr.actualFileInfo = fInfoPlus.CopyOut()
-
-		err2 = fMgr.actualFileInfo.SetDirectoryPath(dMgr.absolutePath)
-
-		if err2 != nil {
-			isEmpty = true
-			err = fmt.Errorf("%v\n"+
-				"Error returned by fMgr.actualFileInfo.SetDirectoryPath(dMgr.absolutePath)\n"+
-				"dMgr.absolutePath='%v'\n"+
-				"%v",
-				ePrefix.String(),
-				dMgr.absolutePath,
-				err2.Error())
-
-			_ = fMgrHelperBoson.emptyFileMgr(
-				fMgr,
-				ePrefix)
-
-			return isEmpty, err
-		}
-
-	} else {
-		fMgr.doesAbsolutePathFileNameExist = false
-		fMgr.actualFileInfo = FileInfoPlus{}
-	}
-
-	fMgr.isInitialized = true
-
-	err = nil
-	isEmpty = false
-
-	return isEmpty, err
-}
-
-// setFileMgrPathFileName - Helper method which configures a
-// FileMgr instance based on input parameter 'pathFileNameExt'.
-func (fMgrHlpr *fileMgrHelper) setFileMgrPathFileName(
-	fMgr *FileMgr,
-	pathFileNameExt string,
-	errorPrefix string) (isEmpty bool, err error) {
-
-	isEmpty = true
-
-	var ePrefix *ePref.ErrPrefixDto
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
 		"fileMgrHelper."+
 			"setFileMgrPathFileName()",
 		"")
@@ -2390,7 +2178,9 @@ func (fMgrHlpr *fileMgrHelper) setFileMgrPathFileName(
 
 	errCode := 0
 
-	errCode, _, pathFileNameExt =
+	errCode,
+		_,
+		pathFileNameExt =
 		new(fileHelperElectron).
 			isStringEmptyOrBlank(pathFileNameExt)
 
@@ -2480,11 +2270,12 @@ func (fMgrHlpr *fileMgrHelper) setFileMgrPathFileName(
 
 	isEmpty,
 		err =
-		fMgrHlpr.setFileMgrDirMgrFileName(
-			fMgr,
-			&dMgr,
-			adjustedFileNameExt,
-			ePrefix)
+		new(fileMgrHelperAtom).
+			setFileMgrDirMgrFileName(
+				fMgr,
+				&dMgr,
+				adjustedFileNameExt,
+				ePrefix)
 
 	return isEmpty, err
 }

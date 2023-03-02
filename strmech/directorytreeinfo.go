@@ -101,7 +101,10 @@ func (dirTree *DirectoryTreeInfo) CopyToDirectoryTree(
 		}
 
 		newFileMgr, err2 :=
-			new(FileMgr).NewFromDirMgrFileNameExt(fileDMgr, dirTree.FoundFiles.fileMgrs[j].fileNameExt)
+			new(FileMgr).NewFromDirMgrFileNameExt(
+				fileDMgr,
+				dirTree.FoundFiles.fileMgrs[j].fileNameExt,
+				ePrefix)
 
 		if err2 != nil {
 			return DirectoryTreeInfo{},
@@ -112,7 +115,10 @@ func (dirTree *DirectoryTreeInfo) CopyToDirectoryTree(
 					dirTree.FoundFiles.fileMgrs[j].fileNameExt, j, err2.Error())
 		}
 
-		err2 = dirTree.FoundFiles.fileMgrs[j].CopyFileMgrByIoByLink(&newFileMgr)
+		err2 = dirTree.FoundFiles.fileMgrs[j].
+			CopyFileMgrByIoByLink(
+				&newFileMgr,
+				ePrefix)
 
 		if err2 != nil {
 			return DirectoryTreeInfo{},
