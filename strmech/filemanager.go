@@ -1144,10 +1144,12 @@ func (fMgr *FileMgr) CopyFileStrByIo(
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
 
+	funcName := "FileMgr.CopyFileStrByIo()"
+
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"FileMgr.CopyFileStrByIo()",
+		funcName,
 		"")
 
 	if err != nil {
@@ -1156,18 +1158,35 @@ func (fMgr *FileMgr) CopyFileStrByIo(
 
 	var fMgrDest FileMgr
 
-	fMgrDest,
-		err = new(FileMgr).New(dstPathFileNameExt)
+	var isEmpty bool
+
+	isEmpty,
+	err = new(fileMgrHelper).
+			setFileMgrPathFileName(
+				&fMgrDest,
+				dstPathFileNameExt,
+				ePrefix.XCpy(
+					"fMgrDest<-dstPathFileNameExt"))
 
 	if err != nil {
+
 		return fmt.Errorf("%v\n"+
-			"Invalid input parameter 'dstPathFileNameExt'\n"+
-			"Error returned by FileMgr{}.New(dstPathFileNameExt)\n"+
+			"Invalid input parameter 'dstPathFileNameExt' is invalid!\n"+
 			"dstPathFileNameExt='%v'\n"+
 			"Error=\n%v\n",
-			ePrefix.String(),
+			funcName,
 			dstPathFileNameExt,
 			err.Error())
+	}
+
+	if isEmpty {
+
+		return fmt.Errorf("%v\n"+
+			"Invalid input parameter 'dstPathFileNameExt' is invalid!\n"+
+			"dstPathFileNameExt='%v'\n",
+			ePrefix.String(),
+			dstPathFileNameExt)
+
 	}
 
 	fMgrSourceLabel := "fMgrSource"
@@ -1333,34 +1352,54 @@ func (fMgr *FileMgr) CopyFileStrByIoByLink(
 	defer fMgr.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
+
 	var err error
+
+	funcName := "FileMgr.CopyFileStrByIoByLink()"
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"FileMgr.CopyFileStrByIoByLink()",
+		funcName	,
 		"")
+
+	fMgrHlpr := fileMgrHelper{}
 
 	var fMgrDest FileMgr
 
-	fMgrDest,
-		err = new(FileMgr).New(dstPathFileNameExt)
+	var isEmpty bool
+
+	isEmpty,
+		err = fMgrHlpr.setFileMgrPathFileName(
+			&fMgrDest,
+			dstPathFileNameExt,
+			ePrefix.XCpy("fMgrDest<-dstPathFileNameExt"))
 
 	if err != nil {
+
 		return fmt.Errorf("%v\n"+
-			"Invalid input parameter 'dstPathFileNameExt'\n"+
-			"Error returned by FileMgr{}.New(dstPathFileNameExt)\n"+
+			"Invalid input parameter 'dstPathFileNameExt' is invalid!\n"+
 			"dstPathFileNameExt='%v'\n"+
 			"Error= \n%v\n",
+			funcName,
+			dstPathFileNameExt,
+			err.Error())
+	}
+
+	if isEmpty {
+
+		return fmt.Errorf("%v\n"+
+			"Invalid input parameter 'dstPathFileNameExt' is invalid!\n"+
+			"dstPathFileNameExt='%v'\n",
 			ePrefix.String(),
-			dstPathFileNameExt, err.Error())
+			dstPathFileNameExt)
+
+
 	}
 
 	fMgrSourceLabel := "fMgrSource"
 
 	fMgrDestLabel := "fMgrDest"
-
-	fMgrHlpr := fileMgrHelper{}
 
 	err = fMgrHlpr.copyFileSetup(
 		fMgr,
@@ -1525,34 +1564,56 @@ func (fMgr *FileMgr) CopyFileStrByLink(
 	defer fMgr.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
+
 	var err error
+
+	funcName := "FileMgr.CopyFileStrByLink()"
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"FileMgr.CopyFileStrByLink()",
+		funcName,
 		"")
 
 	var fMgrDest FileMgr
 
-	fMgrDest, err = new(FileMgr).New(dstPathFileNameExt)
+	fMgrHlpr := fileMgrHelper{}
+
+	var isEmpty bool
+
+	isEmpty,
+	err = fMgrHlpr.
+		setFileMgrPathFileName(
+			&fMgrDest,
+			dstPathFileNameExt,
+			ePrefix.XCpy(
+				"fMgrDest<-dstPathFileNameExt"))
 
 	if err != nil {
+
 		return fmt.Errorf("%v\n"+
 			"Invalid input parameter 'dstPathFileNameExt'\n"+
 			"Error returned by FileMgr{}.New(dstPathFileNameExt)\n"+
 			"dstPathFileNameExt='%v'\n"+
 			"Error= \n%v\n",
-			ePrefix,
+			funcName,
 			dstPathFileNameExt,
 			err.Error())
+	}
+
+	if isEmpty {
+
+		return fmt.Errorf("%v\n"+
+			"Invalid input parameter 'dstPathFileNameExt' is invalid!\n"+
+			"dstPathFileNameExt='%v'\n",
+			ePrefix.String(),
+			dstPathFileNameExt)
+
 	}
 
 	fMgrSourceLabel := "fMgrSource"
 
 	fMgrDestLabel := "fMgrDest"
-
-	fMgrHlpr := fileMgrHelper{}
 
 	err = fMgrHlpr.copyFileSetup(
 		fMgr,
@@ -1713,35 +1774,53 @@ func (fMgr *FileMgr) CopyFileStrByLinkByIo(
 	defer fMgr.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
+
 	var err error
+
+	funcName := "FileMgr.CopyFileStrByLinkByIo()"
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"FileMgr.CopyFileStrByLinkByIo()",
+		funcName,
 		"")
 
 	var fMgrDest FileMgr
 
-	fMgrDest,
-		err = new(FileMgr).New(dstPathFileNameExt)
+	var isEmpty bool
+
+	fMgrHlpr := fileMgrHelper{}
+
+	isEmpty,
+		err = fMgrHlpr.
+			setFileMgrPathFileName(
+				&fMgrDest,
+				dstPathFileNameExt,
+				ePrefix.XCpy(
+					"fMgrDest<-dstPathFileNameExt"))
 
 	if err != nil {
 		return fmt.Errorf("%v\n"+
-			"Invalid input parameter 'dstPathFileNameExt'\n"+
-			"Error returned by FileMgr{}.New(dstPathFileNameExt)\n"+
+			"Invalid input parameter 'dstPathFileNameExt' is invalid!\n"+
 			"dstPathFileNameExt='%v'\n"+
 			"Error= \n%v\n",
-			ePrefix.String(),
+			funcName,
 			dstPathFileNameExt,
 			err.Error())
+	}
+
+	if isEmpty {
+
+		return fmt.Errorf("%v\n"+
+			"Invalid input parameter 'dstPathFileNameExt' is invalid!\n"+
+			"dstPathFileNameExt='%v'\n",
+			ePrefix.String(),
+			dstPathFileNameExt)
 	}
 
 	fMgrSourceLabel := "fMgrSource"
 
 	fMgrDestLabel := "fMgrDest"
-
-	fMgrHlpr := fileMgrHelper{}
 
 	err = fMgrHlpr.copyFileSetup(
 		fMgr,
@@ -2731,51 +2810,91 @@ func (fMgr *FileMgr) CopyFromStrings(
 
 	var ePrefix *ePref.ErrPrefixDto
 
+	funcName := "FileMgr.CopyFromStrings()"
+
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"FileMgr."+
-			"CopyFromStrings()",
+		funcName,
 		"")
 
 	if err != nil {
 		return fMgrSrc, fMgrDest, err
 	}
 
+	fMgrHlpr := fileMgrHelper{}
+
 	fMgrDest = FileMgr{}
+
 	var err2 error
 
-	fMgrSrc, err2 = new(FileMgr).New(sourcePathFileNameExt)
+	var isEmpty bool
+
+	isEmpty,
+	err2 = fMgrHlpr.
+		setFileMgrPathFileName(
+			&fMgrSrc,
+			sourcePathFileNameExt,
+			ePrefix.XCpy(
+				"fMgrSrc<-sourcePathFileNameExt"))
 
 	if err2 != nil {
 
 		err = fmt.Errorf("%v\n"+
-			"Error returned by FileMgr{}.New(sourcePathFileNameExt)\n"+
+			"Error: Input parameter 'sourcePathFileNameExt' is invalid!\n"+
 			"sourcePathFileNameExt='%v'\n"+
 			"Error= \n%v\n",
-			ePrefix.String(),
+			funcName,
 			sourcePathFileNameExt,
 			err2.Error())
 
 		return fMgrSrc, fMgrDest, err
 	}
 
-	fMgrDest, err2 = new(FileMgr).New(destPathFileNameExt)
+	if isEmpty {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'sourcePathFileNameExt' is invalid!\n"+
+			"sourcePathFileNameExt='%v'\n",
+			ePrefix.String(),
+			sourcePathFileNameExt)
+
+		return fMgrSrc, fMgrDest, err
+
+	}
+
+	isEmpty,
+	err2 =fMgrHlpr.
+		setFileMgrPathFileName(
+			&fMgrDest,
+			destPathFileNameExt,
+			ePrefix.XCpy(
+				"fMgrDest<-destPathFileNameExt"))
 
 	if err2 != nil {
 
 		err = fmt.Errorf("%v\n"+
-			"Error returned by FileMgr{}.New(destPathFileNameExt)\n"+
+			"Error: Input parameter 'destPathFileNameExt' is invalid!\n"+
 			"destPathFileNameExt='%v'\n"+
 			"Error= \n%v\n",
-			ePrefix.String(),
+			funcName,
 			destPathFileNameExt,
 			err2.Error())
 
 		return fMgrSrc, fMgrDest, err
 	}
 
-	fMgrHlpr := fileMgrHelper{}
+	if isEmpty {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'destPathFileNameExt' is invalid!\n"+
+			"destPathFileNameExt='%v'\n",
+			ePrefix.String(),
+			destPathFileNameExt)
+
+		return fMgrSrc, fMgrDest, err
+
+	}
 
 	sourceFMgrLabel := "fMgrSource"
 	destFMgrLabel := "fMgrDest"
@@ -5221,7 +5340,11 @@ func (fMgr *FileMgr) MoveFileToFileMgr(destinationFMgr FileMgr) error {
 //
 // If the input parameter 'pathFileNameExt' contains a directory path
 // which currently does NOT exist, it will be created.
-func (fMgr *FileMgr) MoveFileToFileStr(pathFileNameExt string) (FileMgr, error) {
+func (fMgr *FileMgr) MoveFileToFileStr(
+	pathFileNameExt string,
+	errorPrefix interface{}) (
+	FileMgr,
+	error) {
 
 	if fMgr.lock == nil {
 		fMgr.lock = new(sync.Mutex)
@@ -5231,20 +5354,64 @@ func (fMgr *FileMgr) MoveFileToFileStr(pathFileNameExt string) (FileMgr, error) 
 
 	defer fMgr.lock.Unlock()
 
-	ePrefix := "FileMgr.MoveFileToFileStr() "
+	var ePrefix *ePref.ErrPrefixDto
+
 	var err error
 
-	targetFMgr, err := new(FileMgr).New(pathFileNameExt)
+	funcName := "FileMgr.MoveFileToFileStr()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		funcName,
+		"")
 
 	if err != nil {
-		return FileMgr{},
-			fmt.Errorf("Error returned by FileMgr{}.New(pathFileNameExt)\n"+
-				"pathFileName='%v'\nError='%v'\n", pathFileNameExt, err.Error())
+		return FileMgr{}, err
 	}
 
 	fMgrHlpr := fileMgrHelper{}
 
-	err = fMgrHlpr.moveFile(fMgr, &targetFMgr, ePrefix)
+	var targetFMgr FileMgr
+
+	var isEmpty bool
+
+	isEmpty,
+	err  = fMgrHlpr.
+		setFileMgrPathFileName(
+			&targetFMgr,
+			pathFileNameExt,
+			ePrefix.XCpy(
+				"targetFMgr<-pathFileNameExt"))
+
+	if err != nil {
+
+		return FileMgr{},
+			fmt.Errorf("%v\n" +
+				"Error: Input parameter 'pathFileNameExt' is invalid!\n"+
+				"pathFileName='%v'\n" +
+				"Error= \n%v\n",
+				funcName,
+				pathFileNameExt,
+				err.Error())
+	}
+
+	if isEmpty {
+
+		return FileMgr{},
+			fmt.Errorf("%v\n" +
+				"Error: Input parameter 'pathFileNameExt' is invalid!\n"+
+				"pathFileName='%v'\n",
+				ePrefix.String(),
+				pathFileNameExt)
+
+	}
+
+	err = fMgrHlpr.moveFile(
+		fMgr,
+		&targetFMgr,
+		ePrefix.XCpy(
+			"targetFMgr<-fMgr"))
 
 	return targetFMgr, err
 }
@@ -5318,7 +5485,11 @@ func (fMgr *FileMgr) MoveFileToNewDir(dirPath string) (FileMgr, error) {
 //
 // If the input parameter 'dMgr' does not contain a path which currently
 // exists, it will be created.
-func (fMgr *FileMgr) MoveFileToNewDirMgr(dMgr DirMgr) (FileMgr, error) {
+func (fMgr *FileMgr) MoveFileToNewDirMgr(
+	dMgr DirMgr,
+	errorPrefix interface{}) (
+	FileMgr,
+	error) {
 
 	if fMgr.lock == nil {
 		fMgr.lock = new(sync.Mutex)
@@ -5328,94 +5499,250 @@ func (fMgr *FileMgr) MoveFileToNewDirMgr(dMgr DirMgr) (FileMgr, error) {
 
 	defer fMgr.lock.Unlock()
 
-	ePrefix := "FileMgr.MoveFileToNewDirMgr() "
-
 	var err error
-	var targetFMgr FileMgr
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	funcName := "FileMgr.MoveFileToNewDirMgr()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		funcName,
+		"")
+
+	if err != nil {
+		return FileMgr{}, err
+	}
 
 	err2 := dMgr.IsDirMgrValid("")
 
 	if err2 != nil {
-		return FileMgr{}, fmt.Errorf(ePrefix+"Error: Input parameter 'dMgr' is INVALID! "+
-			"Error='%v'", err2.Error())
+		return FileMgr{}, fmt.Errorf("%v\n" +
+			"Error: Input parameter 'dMgr' is INVALID!\n"+
+			"Error=\n%v\n",
+			ePrefix.String(),
+			err2.Error())
 	}
 
 	targetFile := dMgr.GetAbsolutePathWithSeparator() + fMgr.fileNameExt
 
-	targetFMgr, err2 = new(FileMgr).New(targetFile)
+	fMgrHlpr := fileMgrHelper{}
+
+	var isEmpty bool
+
+	var targetFMgr FileMgr
+
+	isEmpty,
+	err2 = fMgrHlpr.
+		setFileMgrPathFileName(
+			&targetFMgr,
+			targetFile,
+			ePrefix.)
 
 	if err2 != nil {
 
-		err = fmt.Errorf(ePrefix+
-			"Error returned by FileMgr{}.New(targetFile)\n"+
-			"targetFile='%v'\nError='%v'\n", targetFile, err2.Error())
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'targetFile' is invalid!\n"+
+			"targetFile='%v'\n" +
+			"Error= \n%v\n",
+			funcName,
+			targetFile,
+			err2.Error())
 
 		return FileMgr{}, err
 	}
 
-	fMgrHlpr := fileMgrHelper{}
+	if isEmpty {
 
-	err = fMgrHlpr.moveFile(fMgr, &targetFMgr, ePrefix)
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'targetFile' is invalid!\n"+
+			"targetFile='%v'\n" ,
+			ePrefix.String(),
+			targetFile)
+
+		return FileMgr{}, err
+
+	}
+
+	err = fMgrHlpr.moveFile(
+		fMgr,
+		&targetFMgr,
+		ePrefix.XCpy(
+			"targetFMgr<-fMgr"))
 
 	return targetFMgr, err
 }
 
-// New - Creates a new File Manager ('FileMgr') instance. This method receives an
-// input parameter of type string and parses out the path, file name and file
-// extension.
+// New
 //
-// The file data is returned in the data fields of the new FileMgr object.
+// Creates a new File Manager instance of File Manager
+// ('FileMgr'). This method receives an input parameter
+// of type string and parses out the path, file name and
+// file extension. This file data is returned in the data
+// fields of the new FileMgr object.
 //
-// This method is identical to method 'NewFromPathFileNameExtStr()'.
+// This method is identical to method
+// 'NewFromPathFileNameExtStr()'.
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
-// Input Parameter:
+// # Input Parameters
 //
-//	pathFileNameExt string - Must consist of a valid path, file name
-//	                         and file extension. The file need not exist.
-//	                         Failure to provide a properly formatted path
-//	                         and/or file name will result in an error.
+//	pathFileNameExt				string
 //
-// ------------------------------------------------------------------------
+//		This parameter must consist of a valid path, file
+//		name and file extension. The file need not exist.
 //
-// Return Values:
+//		Failure to provide a properly formatted path
+//		and/or file name will result in an error.
 //
-//	FileMgr       - If the method completes successfully, a valid FileMgr instance
-//	                is returned containing information on the file specified in the
-//	                two input parameter 'pathFileNameExt'.
+//	errorPrefix					interface{}
 //
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
 //
-//	error         - If this method completes successfully, the returned error
-//	                Type is set equal to 'nil'. If an error condition is encountered,
-//	                this method will return an error Type which contains an appropriate
-//	                error message.
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
 //
-// ------------------------------------------------------------------------
+//		This empty interface must be convertible to one
+//		of the following types:
 //
-// Usage:
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
 //
-//	fmgr := FileMgr{}.New("../common/fileName.ext")
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	FileMgr
+//
+//		If the method completes successfully, a valid
+//		FileMgr instance is returned containing
+//		information on the file specified by the input
+//		parameter 'pathFileNameExt'.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+//
+// ----------------------------------------------------------------
+//
+// # Usage
+//
+//	fmgr := FileMgr{}.New("../mydirectory/fileName.ext")
 func (fMgr *FileMgr) New(
-	pathFileNameExt string) (FileMgr, error) {
+	pathFileNameExt string,
+	errorPrefix interface{}) (
+	FileMgr,
+	error) {
 
-	ePrefix := "FileMgr.New() "
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
 
 	fMgr2 := FileMgr{}
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileMgr."+
+			"New()",
+		"")
+
+	if err != nil {
+		return fMgr2, err
+	}
+
 	fMgrHlpr := fileMgrHelper{}
 
-	isEmpty, err := fMgrHlpr.setFileMgrPathFileName(&fMgr2, pathFileNameExt, ePrefix)
+	var isEmpty bool
+
+	isEmpty,
+	err = fMgrHlpr.
+		setFileMgrPathFileName(
+			&fMgr2,
+			pathFileNameExt,
+			ePrefix.XCpy(
+				"fMgr2<-pathFileNameExt"))
+
+	if err != nil {
+
+		return  FileMgr{}, err
+	}
 
 	if isEmpty {
 
 		fMgr2 = FileMgr{}
 
-		if err == nil {
-			return FileMgr{}, fmt.Errorf(ePrefix+
-				"Error: The FileMgr instance generated by input parameter 'pathFileNameExt' is Empty!\n"+
-				"pathFileNameExt='%v'\n",
-				pathFileNameExt)
-		}
+		return FileMgr{}, fmt.Errorf("%v\n" +
+			"Error: The FileMgr instance generated by input parameter 'pathFileNameExt' is Empty!\n"+
+			"pathFileNameExt='%v'\n",
+			ePrefix.String(),
+			pathFileNameExt)
+
 	}
 
 	return fMgr2, err

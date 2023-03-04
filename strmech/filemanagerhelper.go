@@ -2125,6 +2125,8 @@ func (fMgrHlpr *fileMgrHelper) readFileSetup(
 //
 // # Return Values
 //
+//	isEmpty						bool
+//
 //	error
 //
 //		If this method completes successfully, the
@@ -2239,14 +2241,20 @@ func (fMgrHlpr *fileMgrHelper) setFileMgrPathFileName(
 		return isEmpty, err
 	}
 
-	remainingPathStr := strings.TrimSuffix(adjustedPathFileNameExt, adjustedFileNameExt)
+	remainingPathStr :=
+		strings.TrimSuffix(
+			adjustedPathFileNameExt,
+			adjustedFileNameExt)
 
 	var dMgr DirMgr
 
 	errCode, _, remainingPathStr =
-		new(fileHelperElectron).isStringEmptyOrBlank(remainingPathStr)
+		new(fileHelperElectron).
+			isStringEmptyOrBlank(
+				remainingPathStr)
 
 	if errCode < 0 {
+
 		dMgr = DirMgr{}
 
 	} else {
