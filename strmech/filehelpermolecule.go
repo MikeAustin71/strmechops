@@ -1260,11 +1260,13 @@ func (fHelpMolecule *fileHelperMolecule) makeFileHelperWalkDirFindFilesFunc(
 
 		var ePrefix *ePref.ErrPrefixDto
 
+		funcName := "fileHelperMolecule." +
+			"makeFileHelperWalkDirFindFilesFunc()"
+
 		ePrefix,
 			err = ePref.ErrPrefixDto{}.NewIEmpty(
 			nil,
-			"DirMgr."+
-				"MakeFileHelperWalkDirFindFilesFunc()",
+			funcName,
 			"")
 
 		if err != nil {
@@ -1358,10 +1360,11 @@ func (fHelpMolecule *fileHelperMolecule) makeFileHelperWalkDirFindFilesFunc(
 
 			if er2 != nil {
 
-				err = fmt.Errorf("fileHelperMolecule.makeFileHelperWalkDirFindFilesFunc()\n"+
+				err = fmt.Errorf("%v\n"+
 					"Error returned by fileMgrHelper.setFileMgrPathFileName(pathFile)\n"+
 					"pathFile='%v'\n"+
 					"Error= \n%v\n ",
+					funcName,
 					pathFile,
 					er2.Error())
 
@@ -1384,15 +1387,18 @@ func (fHelpMolecule *fileHelperMolecule) makeFileHelperWalkDirFindFilesFunc(
 				return nil
 			}
 
-			fMgr, er2 = new(FileMgr).NewFromPathFileNameExtStr(pathFile)
+			fMgr, er2 = new(FileMgr).NewFromPathFileNameExtStr(
+				pathFile,
+				ePrefix.XCpy(
+					"fMgr<-pathFile"))
 
 			if er2 != nil {
 
 				err = fmt.Errorf("%v\n"+
-					"Error returned by FileMgr{}.NewFromPathFileNameExtStr(pathFile)\n"+
+					"Error returned by FileMgr.NewFromPathFileNameExtStr(pathFile)\n"+
 					"pathFile='%v'\n"+
 					"Error= \n%v\n ",
-					ePrefix.String(),
+					funcName,
 					pathFile,
 					er2.Error())
 
@@ -1410,9 +1416,10 @@ func (fHelpMolecule *fileHelperMolecule) makeFileHelperWalkDirFindFilesFunc(
 
 				er2 = fmt.Errorf("%v\n"+
 					"Error returned from dInfo.FoundFiles.AddFileMgrByFileInfo(pathFile, info)\n"+
-					"pathFile='%v'\ninfo.Name()='%v'\n"+
+					"pathFile='%v'\n"+
+					"info.Name()='%v'\n"+
 					"Error= \n%v\n",
-					ePrefix.String(),
+					funcName,
 					pathFile,
 					info.Name(),
 					err.Error())
