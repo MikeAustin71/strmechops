@@ -1175,15 +1175,18 @@ func (fHelpMolecule *fileHelperMolecule) makeFileHelperWalkDirDeleteFilesFunc(
 				return nil
 			}
 
-			err = dInfo.DeletedFiles.AddFileMgrByFileInfo(pathFile, info)
+			err = dInfo.DeletedFiles.AddFileMgrByFileInfo(
+				pathFile,
+				info,
+				ePrefix.XCpy(
+					"dInfo.DeletedFiles<-pathFile"))
 
 			if err != nil {
 
-				ex := fmt.Errorf("%v\n"+
+				ex := fmt.Errorf("fileHelperMolecule.makeFileHelperWalkDirFindFilesFunc()\n"+
 					"Error returned from dInfo.DeletedFiles.AddFileMgrByFileInfo( pathFile,  info).\n"+
 					"pathFile='%v'\n"+
 					"Error=\n%v\n",
-					ePrefix.String(),
 					pathFile,
 					err.Error())
 
@@ -1344,6 +1347,43 @@ func (fHelpMolecule *fileHelperMolecule) makeFileHelperWalkDirFindFilesFunc(
 
 			var fMgr FileMgr
 
+			var isEmpty bool
+
+			isEmpty,
+				er2 = new(fileMgrHelper).setFileMgrPathFileName(
+				&fMgr,
+				pathFile,
+				ePrefix.XCpy(
+					"fMgr<-pathFile"))
+
+			if er2 != nil {
+
+				err = fmt.Errorf("fileHelperMolecule.makeFileHelperWalkDirFindFilesFunc()\n"+
+					"Error returned by fileMgrHelper.setFileMgrPathFileName(pathFile)\n"+
+					"pathFile='%v'\n"+
+					"Error= \n%v\n ",
+					pathFile,
+					er2.Error())
+
+				dInfo.ErrReturns = append(dInfo.ErrReturns, err)
+
+				return nil
+			}
+
+			if isEmpty {
+
+				err = fmt.Errorf("%v\n"+
+					"Error: fileMgrHelper.setFileMgrPathFileName(pathFile)\n"+
+					"returned an Empty Result!\n"+
+					"pathFile='%v'\n",
+					ePrefix.String(),
+					pathFile)
+
+				dInfo.ErrReturns = append(dInfo.ErrReturns, err)
+
+				return nil
+			}
+
 			fMgr, er2 = new(FileMgr).NewFromPathFileNameExtStr(pathFile)
 
 			if er2 != nil {
@@ -1362,7 +1402,9 @@ func (fHelpMolecule *fileHelperMolecule) makeFileHelperWalkDirFindFilesFunc(
 			}
 
 			err = dInfo.FoundFiles.AddFileMgrByFileInfo(
-				fMgr.dMgr.GetAbsolutePath(), info)
+				fMgr.dMgr.GetAbsolutePath(),
+				info,
+				ePrefix)
 
 			if err != nil {
 
