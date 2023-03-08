@@ -425,7 +425,9 @@ func (fops FileOps) NewByPathFileNameExtStrs(
 	var err error
 
 	fOpsNew.source, err = new(FileMgr).
-		NewFromPathFileNameExtStr(sourcePathFileNameExt)
+		NewFromPathFileNameExtStr(
+			sourcePathFileNameExt,
+			ePrefix)
 
 	if err != nil {
 		return FileOps{},
@@ -433,7 +435,9 @@ func (fops FileOps) NewByPathFileNameExtStrs(
 	}
 
 	fOpsNew.destination, err = new(FileMgr).
-		NewFromPathFileNameExtStr(destinationPathFileNameExt)
+		NewFromPathFileNameExtStr(
+			destinationPathFileNameExt,
+			ePrefix)
 
 	if err != nil {
 		return FileOps{},
@@ -588,7 +592,7 @@ func (fops *FileOps) createSrcDirectory() error {
 
 	ePrefix := "FileOps.createSrcDirectory() "
 
-	err := fops.source.CreateDir()
+	err := fops.source.CreateDir(ePrefix)
 
 	if err != nil {
 		return fmt.Errorf(ePrefix+"%v", err.Error())
@@ -647,7 +651,7 @@ func (fops *FileOps) createDestDirectory() error {
 
 	ePrefix := "FileOps.createSrcDirectory() "
 
-	err := fops.destination.CreateDir()
+	err := fops.destination.CreateDir(ePrefix)
 
 	if err != nil {
 		return fmt.Errorf(ePrefix+"%v", err.Error())
@@ -706,7 +710,10 @@ func (fops *FileOps) moveSourceFileToDestinationDir() error {
 
 	ePrefix := "FileOps.moveSourceFileToDestinationDir() "
 
-	_, err := fops.source.MoveFileToNewDirMgr(fops.destination.GetDirMgr())
+	_, err := fops.source.
+		MoveFileToNewDirMgr(
+			fops.destination.GetDirMgr(),
+			ePrefix)
 
 	if err != nil {
 		return fmt.Errorf(ePrefix+"%v\n",
