@@ -4597,8 +4597,30 @@ func (fMgr *FileMgr) EqualPathFileNameExt(
 	return true
 }
 
-// Empty - resets all data fields in the FileMgr structure to
-// their uninitialized or zero state.
+// Empty
+//
+// Resets all data fields in the FileMgr structure to
+// their uninitialized or zero states.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will delete and reset all pre-existing
+//	data values in the current instance of FileMgr to
+//	their uninitialized or zero states.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	--- NONE ---
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	--- NONE ---
 func (fMgr *FileMgr) Empty() {
 
 	if fMgr.lock == nil {
@@ -4609,14 +4631,8 @@ func (fMgr *FileMgr) Empty() {
 
 	defer fMgr.lock.Unlock()
 
-	fMgrHlpr := fileMgrHelper{}
-	var err error
-
-	err = fMgrHlpr.empty(fMgr, "FileMgr.Empty() ")
-
-	if err != nil {
-		panic(err.Error())
-	}
+	_ = new(fileMgrHelperBoson).emptyFileMgr(
+		fMgr, nil)
 
 	return
 }
