@@ -471,7 +471,7 @@ func (fops *FileOps) deleteDestinationFile() error {
 
 	ePrefix := "FileOps.deleteDestinationFile() Destination Deletion Failed: "
 
-	err := fops.destination.DeleteThisFile()
+	err := fops.destination.DeleteThisFile(ePrefix)
 
 	if err != nil {
 		return fmt.Errorf(ePrefix+"%v", err.Error())
@@ -486,7 +486,7 @@ func (fops *FileOps) deleteSourceFile() error {
 
 	ePrefix := "FileOps.FileOperationCode(0).DeleteSourceFile()() Source Deletion Failed: "
 
-	err := fops.source.DeleteThisFile()
+	err := fops.source.DeleteThisFile(ePrefix)
 
 	if err != nil {
 		return fmt.Errorf(ePrefix+"%v", err.Error())
@@ -504,13 +504,13 @@ func (fops *FileOps) deleteSourceAndDestinationFiles() error {
 
 	cumErrLen := len(cumErrMsg)
 
-	err := fops.destination.DeleteThisFile()
+	err := fops.destination.DeleteThisFile(cumErrMsg)
 
 	if err != nil {
 		cumErrMsg += "Destination Deletion Failed: " + err.Error() + "\n"
 	}
 
-	err = fops.source.DeleteThisFile()
+	err = fops.source.DeleteThisFile(cumErrMsg)
 
 	if err != nil {
 		cumErrMsg += "Source Deletion Failed: " + err.Error() + "\n"
