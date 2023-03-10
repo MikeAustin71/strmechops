@@ -4891,13 +4891,34 @@ func (fMgr *FileMgr) GetAbsolutePathFileNameLc() string {
 	return absolutePathFileName
 }
 
-// GetBufioReader - Returns a pointer to the internal bufio.Reader,
-// FileMgr.fileBufRdr. This pointer is initialized when the file is
-// opened for Read or Read-Write operations.
+// GetBufioReader
 //
-// Be advised that if the file identified by the current FileMgr
-// instance has not been opened the returned pointer to
-// 'fMgr.fileBufRdr' may be nil.
+// Returns a pointer to the internal bufio.Reader,
+// FileMgr.fileBufRdr. This pointer is initialized when
+// the file is opened for Read or Read-Write operations.
+//
+// Be advised that if the file identified by the current
+// FileMgr instance has not been opened the returned
+// pointer to 'fMgr.fileBufRdr' may be nil.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	--- NONE ---
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	*bufio.Reader
+//
+//		A pointer to the internal bufio.Reader,
+//		FileMgr.fileBufRdr.
+//
+//		If the file identified by the current FileMgr
+//		instance has not been opened the returned pointer
+//		to 'fMgr.fileBufRdr' may be nil.
 func (fMgr *FileMgr) GetBufioReader() *bufio.Reader {
 
 	if fMgr.lock == nil {
@@ -4908,11 +4929,7 @@ func (fMgr *FileMgr) GetBufioReader() *bufio.Reader {
 
 	defer fMgr.lock.Unlock()
 
-	var fileBufRdr *bufio.Reader
-
-	fileBufRdr = fMgr.fileBufRdr
-
-	return fileBufRdr
+	return fMgr.fileBufRdr
 }
 
 // GetBufioWriter - Returns a pointer to the internal bufio.Writer,
