@@ -5052,17 +5052,37 @@ func (fMgr *FileMgr) GetFileBytesWritten() uint64 {
 // GetFileExt
 //
 // Returns a string containing the File Extension for this
-// File Manager instance.
+// File Manager (FileMgr) instance.
 //
-// IMPORTANT:
-// The returned file extension will contain the preceding dot separator.
+// ----------------------------------------------------------------
 //
-//	Example:
-//	        File Name Plus Extension: "newerFileForTest_01.txt"
-//	         Returned File Extension: ".txt"
+// # IMPORTANT
 //
-//	        File Name Plus Extension: "newerFileForTest_01"
-//	         Returned File Extension: ""
+// The returned file extension will contain the preceding
+// dot separator.
+//
+// Examples:
+//
+//	File Name Plus Extension: "newerFileForTest_01.txt"
+//	Returned File Extension: ".txt"
+//
+//	File Name Plus Extension: "newerFileForTest_01"
+//	Returned File Extension: ""
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	--- NONE ---
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//
+//		Returns a string containing the File Extension
+//		for the current File Manager (FileMgr) instance.
 func (fMgr *FileMgr) GetFileExt() string {
 
 	if fMgr.lock == nil {
@@ -5073,11 +5093,9 @@ func (fMgr *FileMgr) GetFileExt() string {
 
 	defer fMgr.lock.Unlock()
 
-	fileExt := ""
+	var fileExt string
 
-	if fMgr.isInitialized == false {
-		fileExt = ""
-	} else {
+	if fMgr.isInitialized == true {
 		fileExt = fMgr.fileExt
 	}
 
