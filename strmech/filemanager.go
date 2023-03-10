@@ -4918,7 +4918,7 @@ func (fMgr *FileMgr) GetAbsolutePathFileNameLc() string {
 //
 //		If the file identified by the current FileMgr
 //		instance has not been opened the returned pointer
-//		to 'fMgr.fileBufRdr' may be nil.
+//		to 'FileMgr.fileBufRdr' may be nil.
 func (fMgr *FileMgr) GetBufioReader() *bufio.Reader {
 
 	if fMgr.lock == nil {
@@ -4932,13 +4932,35 @@ func (fMgr *FileMgr) GetBufioReader() *bufio.Reader {
 	return fMgr.fileBufRdr
 }
 
-// GetBufioWriter - Returns a pointer to the internal bufio.Writer,
-// 'FileMgr.fileBufWriter'. This pointer is initialized when the file
-// is opened for Write or Read-Write operations.
+// GetBufioWriter
 //
-// Be advised that if the file identified by the current FileMgr
-// instance has not been opened, the returned pointer to
-// 'fMgr.fileBufWriter' may be nil.
+// Returns a pointer to the internal bufio.Writer,
+// 'FileMgr.fileBufWriter'. This pointer is initialized
+// when the file is opened for Write or Read-Write
+// operations.
+//
+// Be advised that if the file identified by the current
+// FileMgr instance has not been opened, the returned
+// pointer to 'fMgr.fileBufWriter' may be nil.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	--- NONE ---
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	*bufio.Writer
+//
+//		A pointer to the internal bufio.Writer,
+//		FileMgr.fileBufWriter.
+//
+//		If the file identified by the current FileMgr
+//		instance has not been opened, the returned
+//		pointer to 'FileMgr.fileBufWriter' may be nil.
 func (fMgr *FileMgr) GetBufioWriter() *bufio.Writer {
 
 	if fMgr.lock == nil {
@@ -4949,11 +4971,7 @@ func (fMgr *FileMgr) GetBufioWriter() *bufio.Writer {
 
 	defer fMgr.lock.Unlock()
 
-	var bufWriter *bufio.Writer
-
-	bufWriter = fMgr.fileBufWriter
-
-	return bufWriter
+	return fMgr.fileBufWriter
 }
 
 // GetDirMgr - returns a deep copy of the Directory
