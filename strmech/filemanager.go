@@ -5010,11 +5010,32 @@ func (fMgr *FileMgr) GetDirMgr() DirMgr {
 	return fMgr.dMgr.CopyOut()
 }
 
-// GetFileBytesWritten - Returns the sum of private member variables,
-// 'FileMgr.buffBytesWritten' + 'FileMgr.fileBytesWritten'.
+// GetFileBytesWritten
 //
-// These variables record the number of bytes written to the FileMgr's
-// target file since it was opened with 'Write' or 'Read-Write' permissions.
+// Returns the sum of private member variables,
+//
+//	'FileMgr.buffBytesWritten' +
+//			'FileMgr.fileBytesWritten'
+//
+// These variables record the number of bytes written to
+// the FileMgr's target file since it was opened with
+// 'Write' or 'Read-Write' permissions.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	--- NONE ---
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	uint64
+//
+//		Returns the total number of bytes written to the
+//		FileMgr's target file since it was opened with
+//		'Write' or 'Read-Write' permissions.
 func (fMgr *FileMgr) GetFileBytesWritten() uint64 {
 
 	if fMgr.lock == nil {
@@ -5025,11 +5046,7 @@ func (fMgr *FileMgr) GetFileBytesWritten() uint64 {
 
 	defer fMgr.lock.Unlock()
 
-	var bytesWritten uint64
-
-	bytesWritten = fMgr.buffBytesWritten + fMgr.fileBytesWritten
-
-	return bytesWritten
+	return fMgr.buffBytesWritten + fMgr.fileBytesWritten
 }
 
 // GetFileExt
