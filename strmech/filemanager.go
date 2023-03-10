@@ -4207,9 +4207,9 @@ func (fMgr *FileMgr) DoesFileExist() bool {
 //
 //	fileDoesExist				bool
 //
-//	Returns a boolean value designating whether the file
-//	specified by the current FileMgr.absolutePathFileName
-//	exists.
+//		Returns a boolean value designating whether the
+//		file specified by the current
+//		FileMgr.absolutePathFileName exists.
 //
 //	nonPathError				error
 //
@@ -4263,11 +4263,41 @@ func (fMgr *FileMgr) DoesThisFileExist(
 	return fileDoesExist, nonPathError
 }
 
-// Equal - Compares a second FileHelper data structure
-// to the current FileHelper data structure and returns
-// a boolean value indicating whether they are equal
-// in all respects.
-func (fMgr *FileMgr) Equal(fmgr2 *FileMgr) bool {
+// Equal
+//
+// Compares a second FileMgr data structure to the
+// current FileMgr data structure and returns a boolean
+// value indicating whether they are equal in all
+// respects.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fMgr2						*FileMgr
+//
+//		A pointer to an incoming instance of FileMgr.
+//		The data fields contained in this instance will
+//		be compared to corresponding data fields in the
+//		current FileMgr instance to determine if they are
+//		equal in all respects.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	bool
+//
+//		If the data fields contained in input parameter
+//		'fMgr2' are equivalent to the corresponding data
+//		field values in the current FileMgr instance,
+//		this return value is set to 'true'.
+//
+//		If the data fields in these two FileMgr instances
+//		are not equal in all respects, this return value
+//		is set to 'false'.
+func (fMgr *FileMgr) Equal(
+	fMgr2 *FileMgr) bool {
 
 	if fMgr.lock == nil {
 		fMgr.lock = new(sync.Mutex)
@@ -4277,74 +4307,117 @@ func (fMgr *FileMgr) Equal(fmgr2 *FileMgr) bool {
 
 	defer fMgr.lock.Unlock()
 
-	if fmgr2 == nil {
-		fmgr2 = &FileMgr{}
+	if fMgr2 == nil {
+		fMgr2 = &FileMgr{}
 	}
 
 	result := true
 
-	if fMgr.isInitialized != fmgr2.isInitialized ||
-		fMgr.originalPathFileName != fmgr2.originalPathFileName ||
-		fMgr.isAbsolutePathFileNamePopulated != fmgr2.isAbsolutePathFileNamePopulated ||
-		fMgr.doesAbsolutePathFileNameExist != fmgr2.doesAbsolutePathFileNameExist ||
-		fMgr.absolutePathFileName != fmgr2.absolutePathFileName ||
-		fMgr.fileName != fmgr2.fileName ||
-		fMgr.isFileNamePopulated != fmgr2.isFileNamePopulated ||
-		fMgr.fileExt != fmgr2.fileExt ||
-		fMgr.isFileExtPopulated != fmgr2.isFileExtPopulated ||
-		fMgr.fileNameExt != fmgr2.fileNameExt ||
-		fMgr.isFileNameExtPopulated != fmgr2.isFileNameExtPopulated ||
-		fMgr.filePtr != fmgr2.filePtr ||
-		fMgr.isFilePtrOpen != fmgr2.isFilePtrOpen ||
-		fMgr.fileRdrBufSize != fmgr2.fileRdrBufSize ||
-		fMgr.fileWriterBufSize != fmgr2.fileWriterBufSize {
+	if fMgr.isInitialized != fMgr2.isInitialized ||
+		fMgr.originalPathFileName != fMgr2.originalPathFileName ||
+		fMgr.isAbsolutePathFileNamePopulated != fMgr2.isAbsolutePathFileNamePopulated ||
+		fMgr.doesAbsolutePathFileNameExist != fMgr2.doesAbsolutePathFileNameExist ||
+		fMgr.absolutePathFileName != fMgr2.absolutePathFileName ||
+		fMgr.fileName != fMgr2.fileName ||
+		fMgr.isFileNamePopulated != fMgr2.isFileNamePopulated ||
+		fMgr.fileExt != fMgr2.fileExt ||
+		fMgr.isFileExtPopulated != fMgr2.isFileExtPopulated ||
+		fMgr.fileNameExt != fMgr2.fileNameExt ||
+		fMgr.isFileNameExtPopulated != fMgr2.isFileNameExtPopulated ||
+		fMgr.filePtr != fMgr2.filePtr ||
+		fMgr.isFilePtrOpen != fMgr2.isFilePtrOpen ||
+		fMgr.fileRdrBufSize != fMgr2.fileRdrBufSize ||
+		fMgr.fileWriterBufSize != fMgr2.fileWriterBufSize {
 
 		result = false
 	}
 
 	if result == true &&
-		!fMgr.fileAccessStatus.Equal(&fmgr2.fileAccessStatus) {
+		!fMgr.fileAccessStatus.Equal(&fMgr2.fileAccessStatus) {
 		result = false
 	}
 
 	if result == true &&
-		!fMgr.dMgr.Equal(&fmgr2.dMgr) {
+		!fMgr.dMgr.Equal(&fMgr2.dMgr) {
 		result = false
 	}
 
 	if result == true &&
-		!fMgr.actualFileInfo.Equal(&fmgr2.actualFileInfo) {
+		!fMgr.actualFileInfo.Equal(&fMgr2.actualFileInfo) {
 		result = false
 	}
 
 	return result
 }
 
-// EqualAbsPaths - Returns 'true' if both the current File Manager
-// and the input File Manager ('fmgr2') have the same file paths.
+// EqualAbsPaths
 //
-// In other words, this method answers the question, 'Do Both Files
-// have the same directory?'.
+// Returns 'true' if both the current File Manager and
+// the input File Manager ('fMgr2') have the same file
+// paths.
 //
-// The path comparisons are case-insensitive. This means that both
-// paths will be converted to lower case before making the comparison.
+// In other words, this method answers the question,
+// 'Do Both Files have the same directory?'.
 //
-// Also, the path comparison will be performed on the absolute paths
-// associated with the two File Managers.
+// The path comparisons are case-insensitive. This means
+// that both paths will be converted to lower case before
+// making the comparison.
 //
-// If the file paths are NOT equal, this method returns 'false.
+// Also, the path comparison will be performed on the
+// absolute directory paths associated with the two File
+// Managers.
 //
-// NOTE: This method will NOT test the equality of file names and
-// extensions. ONLY the file paths (directories) will be compared.
-func (fMgr *FileMgr) EqualAbsPaths(fmgr2 *FileMgr) bool {
+// If the directory paths are NOT equal, this method
+// returns a boolean value of 'false.
+//
+// NOTE: This method will NOT test the equality of file
+// names and extensions. ONLY the file paths
+// (directories) will be compared.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fMgr2						*FileMgr
+//
+//		A pointer to an incoming instance of FileMgr.
+//
+//		This method will compare the file path (a.k.a.
+//		directory) contained in 'fMgr2' to that contained
+//		in the current FileMgr instance to determine if
+//		they are equivalent.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	bool
+//
+//		If the file paths (a.k.a. directories) contained
+//		in input parameter 'fMgr2' and the current
+//		FileMgr instance are equivalent, this method
+//		returns a boolean value of 'true'.
+//
+//		If they are NOT equivalent, a value of 'false' is
+//		returned.
+func (fMgr *FileMgr) EqualAbsPaths(
+	fMgr2 *FileMgr) bool {
 
-	if fmgr2 == nil {
-		fmgr2 = &FileMgr{}
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
+
+	if fMgr2 == nil {
+		fMgr2 = &FileMgr{}
 	}
 
 	fDirMgr := fMgr.GetDirMgr()
 
-	fDirMgr2 := fmgr2.GetDirMgr()
+	fDirMgr2 := fMgr2.GetDirMgr()
 
 	return fDirMgr.EqualAbsPaths(&fDirMgr2)
 }
