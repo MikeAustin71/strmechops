@@ -5345,7 +5345,7 @@ func (fMgr *FileMgr) GetFileInfo(
 //
 // # Return Values
 //
-//	fInfo						FileInfoPlus
+//	fileInfoPlus				FileInfoPlus
 //
 //		This returned FileInfoPlus instance contains
 //		os.FileInfo and other data on the current
@@ -5364,7 +5364,9 @@ func (fMgr *FileMgr) GetFileInfo(
 //	 	The 'errorPrefix' text will be prefixed or
 //	 	attached to the	beginning of the error message.
 func (fMgr *FileMgr) GetFileInfoPlus(
-	errorPrefix interface{}) (fInfo FileInfoPlus, err error) {
+	errorPrefix interface{}) (
+	fileInfoPlus FileInfoPlus,
+	err error) {
 
 	if fMgr.lock == nil {
 		fMgr.lock = new(sync.Mutex)
@@ -5374,7 +5376,6 @@ func (fMgr *FileMgr) GetFileInfoPlus(
 
 	defer fMgr.lock.Unlock()
 
-	fInfo = FileInfoPlus{}
 	err = nil
 
 	var ePrefix *ePref.ErrPrefixDto
@@ -5386,7 +5387,7 @@ func (fMgr *FileMgr) GetFileInfoPlus(
 		"")
 
 	if err != nil {
-		return fInfo, err
+		return fileInfoPlus, err
 	}
 
 	filePathDoesExist := false
@@ -5398,12 +5399,16 @@ func (fMgr *FileMgr) GetFileInfoPlus(
 		"fMgr.absolutePathFileName")
 
 	if err != nil {
-		fInfo = FileInfoPlus{}
+
+		fileInfoPlus = FileInfoPlus{}
+
 	} else if filePathDoesExist {
-		fInfo = fMgr.actualFileInfo.CopyOut()
-		err = nil
+
+		fileInfoPlus = fMgr.actualFileInfo.CopyOut()
+
 	} else {
-		fInfo = FileInfoPlus{}
+
+		fileInfoPlus = FileInfoPlus{}
 		err = fmt.Errorf("%v\n"+
 			"Error: File Manager file DOES NOT EXIST!\n"+
 			"File='%v'\n",
@@ -5411,7 +5416,7 @@ func (fMgr *FileMgr) GetFileInfoPlus(
 			fMgr.absolutePathFileName)
 	}
 
-	return fInfo, err
+	return fileInfoPlus, err
 }
 
 // GetFileModTime
