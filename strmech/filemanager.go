@@ -5102,11 +5102,15 @@ func (fMgr *FileMgr) GetFileExt() string {
 	return fileExt
 }
 
-// GetFileInfo - Wrapper function for os.Stat(). This method
-// can be used to return FileInfo data on the specific file identified
-// by FileMgr.absolutePathFileName.
+// GetFileInfo
 //
-// An error will be triggered if the file path does NOT exist!
+// Wrapper function for os.Stat(). This method can be
+// used to return FileInfo data on the specific file
+// identified by the current instance of
+// FileMgr.absolutePathFileName.
+//
+// An error will be triggered if the file path does NOT
+// exist!
 //
 //	 type FileInfo interface {
 //		 Name() string       // base name of the file
@@ -5211,7 +5215,9 @@ func (fMgr *FileMgr) GetFileExt() string {
 //	 	The 'errorPrefix' text will be prefixed or
 //	 	attached to the	beginning of the error message.
 func (fMgr *FileMgr) GetFileInfo(
-	errorPrefix interface{}) (fInfo os.FileInfo, err error) {
+	errorPrefix interface{}) (
+	fInfo os.FileInfo,
+	err error) {
 
 	if fMgr.lock == nil {
 		fMgr.lock = new(sync.Mutex)
