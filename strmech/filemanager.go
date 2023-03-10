@@ -4974,9 +4974,39 @@ func (fMgr *FileMgr) GetBufioWriter() *bufio.Writer {
 	return fMgr.fileBufWriter
 }
 
-// GetDirMgr - returns a deep copy of the Directory
-// Manager for this FileMgr instance.
+// GetDirMgr
+//
+// Returns a deep copy of the Directory Manager (DirMgr)
+// for this File Manager (FileMgr) instance. This
+// Directory Manager contains information on the file
+// path or directory in which the file identified by the
+// current File Manager instance resides.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	--- NONE ---
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	DirMgr
+//
+//		Returns a deep copy of the Directory Manager
+//		(DirMgr) for the current instance of File Manager
+//		(FileMgr).
 func (fMgr *FileMgr) GetDirMgr() DirMgr {
+
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
+
 	return fMgr.dMgr.CopyOut()
 }
 
