@@ -608,7 +608,7 @@ func (fops *FileOps) createSrcDirectoryAndFile() error {
 
 	ePrefix := "FileOps.createSrcDirectoryAndFile() "
 
-	err := fops.source.CreateDirAndFile()
+	err := fops.source.CreateDirAndFile(ePrefix)
 
 	if err != nil {
 		return fmt.Errorf(ePrefix+"%v\n", err.Error())
@@ -629,7 +629,7 @@ func (fops *FileOps) createSrcFile() error {
 
 	ePrefix := "FileOps.createSrcFile() "
 
-	err := fops.source.CreateThisFile()
+	err := fops.source.CreateThisFile(ePrefix)
 
 	if err != nil {
 		return fmt.Errorf(ePrefix+"%v\n", err.Error())
@@ -667,7 +667,7 @@ func (fops *FileOps) createDestDirectoryAndFile() error {
 
 	ePrefix := "FileOps.createDestDirectoryAndFile() "
 
-	err := fops.destination.CreateDirAndFile()
+	err := fops.destination.CreateDirAndFile(ePrefix)
 
 	if err != nil {
 		return fmt.Errorf(ePrefix+"%v\n", err.Error())
@@ -688,7 +688,7 @@ func (fops *FileOps) createDestFile() error {
 
 	ePrefix := "FileOps.createDestFile() "
 
-	err := fops.destination.CreateThisFile()
+	err := fops.destination.CreateThisFile(ePrefix)
 
 	if err != nil {
 		return fmt.Errorf(ePrefix+"%v", err.Error())
