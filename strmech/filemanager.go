@@ -4513,19 +4513,55 @@ func (fMgr *FileMgr) EqualFileNameExt(
 	return true
 }
 
-// EqualPathFileNameExt - Returns 'true' if both the current File Manager
-// and the input File Manager ('fmgr2') have the same absolute path,
-// file name and file extension.
+// EqualPathFileNameExt
 //
-// The string comparisons are case-insensitive. This means that the paths,
-// file names and file extensions will all be converted to lower case
-// before making the comparison.
+// Returns 'true' if both the current File Manager and
+// the input File Manager ('fMgr2') have the same
+// absolute path, file name and file extension.
 //
-//	Example: d:\dir1\xray.txt is considered equal to D:\DIR1\XRAY.TXT
+// The string comparisons are case-insensitive. This
+// means that the paths, file names and file extensions
+// will all be converted to lower case before making the
+// comparison.
 //
-// If the path, file name or file extensions are NOT equal, this method
-// will return 'false'.
-func (fMgr *FileMgr) EqualPathFileNameExt(fmgr2 *FileMgr) bool {
+//	Example:
+//		d:\dir1\xray.txt is considered equal to
+//			D:\DIR1\XRAY.TXT
+//
+// If the path, file name or file extensions are NOT
+// equal, this method will return 'false'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fMgr2						*FileMgr
+//
+//		A pointer to an incoming instance of FileMgr.
+//
+//		The path (a.k.a. directory), file name and
+//		file extension contained in 'fMgr2' will be
+//		compared to the path, file name and file
+//		extension contained in the current instance of
+//		FileMgr to determine if they are equivalent.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	bool
+//
+//		If the path (a.k.a. directory), file name and
+//		file extension contained in input parameter
+//		'fMgr2' are equivalent to the path, file name and
+//		file extension contained in the current instance
+//		of FileMgr, this method will return a boolean
+//		value of 'true'.
+//
+//		If path, file name and file extension are NOT
+//		equivalent, this method returns 'false'.
+func (fMgr *FileMgr) EqualPathFileNameExt(
+	fMgr2 *FileMgr) bool {
 
 	if fMgr.lock == nil {
 		fMgr.lock = new(sync.Mutex)
@@ -4535,19 +4571,24 @@ func (fMgr *FileMgr) EqualPathFileNameExt(fmgr2 *FileMgr) bool {
 
 	defer fMgr.lock.Unlock()
 
-	if fmgr2 == nil {
-		fmgr2 = &FileMgr{}
+	if fMgr2 == nil {
+		fMgr2 = &FileMgr{}
 	}
 
 	f1AbsolutePathFileName := ""
 	f2AbsolutePathFileName := ""
 
-	f1AbsolutePathFileName = fMgr.absolutePathFileName
+	f1AbsolutePathFileName =
+		fMgr.absolutePathFileName
 
-	f2AbsolutePathFileName = fmgr2.absolutePathFileName
+	f2AbsolutePathFileName =
+		fMgr2.absolutePathFileName
 
-	f1AbsolutePathFileName = strings.ToLower(f1AbsolutePathFileName)
-	f2AbsolutePathFileName = strings.ToLower(f2AbsolutePathFileName)
+	f1AbsolutePathFileName =
+		strings.ToLower(f1AbsolutePathFileName)
+
+	f2AbsolutePathFileName =
+		strings.ToLower(f2AbsolutePathFileName)
 
 	if f1AbsolutePathFileName != f2AbsolutePathFileName {
 		return false
@@ -4571,7 +4612,7 @@ func (fMgr *FileMgr) Empty() {
 	fMgrHlpr := fileMgrHelper{}
 	var err error
 
-	err = fMgrHlpr.emptyFileMgr(fMgr, "FileMgr.Empty() ")
+	err = fMgrHlpr.empty(fMgr, "FileMgr.Empty() ")
 
 	if err != nil {
 		panic(err.Error())
