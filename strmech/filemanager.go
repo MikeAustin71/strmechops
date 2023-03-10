@@ -4068,22 +4068,42 @@ func (fMgr *FileMgr) DeleteThisFile(
 			ePrefix.XCpy("fMgr"))
 }
 
-// DoesFileExist - returns 'true' if the subject FileMgr file does
-// in fact exist. If the file does NOT exist, a boolean value of
-// 'false' is returned.
+// DoesFileExist
 //
-// This method uses os.Stat() to test for the existence of a file
-// path. If a non-path error is returned by os.Stat(), it is
-// ignored and the file path is classified as 'Does Not Exist'.
+// Returns 'true' if the subject FileMgr file does in
+// fact exist. If the file does NOT exist, a boolean
+// value of 'false' is returned.
+//
+// This method uses os.Stat() to test for the existence
+// of a file path. If a non-path error is returned by
+// os.Stat(), it is ignored and the file path is
+// classified as 'Does Not Exist'.
 //
 // This is very similar to 'FileMgr.DoesThisFileExist()'.
-// However, unlike this method, 'FileMgr.DoesThisFileExist()'
-// will return a non-path error. This method only returns
-// a boolean value signaling whether the file path exists.
+// However, unlike this method,
+// 'FileMgr.DoesThisFileExist()' will return a non-path
+// error. This method only returns a boolean value
+// signaling whether the file path exists.
 //
-// If this method encounters a non-path error or if the current
-// FileMgr instance is invalid, a boolean value of 'false'
-// will be returned.
+// If this method encounters a non-path error or if the
+// current FileMgr instance is invalid, a boolean value
+// of 'false' will be returned.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	-- NONE --
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	bool
+//
+//		Returns 'true' if the subject FileMgr file does
+//		in fact exist. If the file does NOT exist, a
+//	 	boolean value of 'false' is returned.
 func (fMgr *FileMgr) DoesFileExist() bool {
 
 	if fMgr.lock == nil {
@@ -4095,7 +4115,8 @@ func (fMgr *FileMgr) DoesFileExist() bool {
 	defer fMgr.lock.Unlock()
 
 	var err error
-	pathFileDoesExist := false
+
+	var pathFileDoesExist bool
 
 	pathFileDoesExist,
 		err = new(fileMgrHelperAtom).doesFileMgrPathFileExist(
