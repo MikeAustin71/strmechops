@@ -5752,16 +5752,39 @@ func (fMgr *FileMgr) GetFileModTimeStr(
 	return tStr, err
 }
 
-// GetFileName - returns the file name for this
-// File Manager.
+// GetFileName
 //
-//	Example:
+// Returns the file name for the current File Manager
+// (FileMgr) instance.
 //
-//	        File Name Plus Extension: "newerFileForTest_01.txt"
-//	              Returned File Name: "newerFileForTest_01"
+// Note that the file extension is NOT included. Only
+// the file name is returned.
 //
-//	        File Name Plus Extension: "newerFileForTest_01"
-//	              Returned File Name: "newerFileForTest_01"
+//	Examples:
+//
+//	File Name Plus Extension: "newerFileForTest_01.txt"
+//	Returned File Name: "newerFileForTest_01"
+//
+//	File Name Plus Extension: "newerFileForTest_01"
+//	Returned File Name: "newerFileForTest_01"
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	--- NONE ---
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//
+//		Returns the file name for the current File
+//		Manager (FileMgr) instance.
+//
+//		Note that the file extension is NOT included.
+//		Only the file name is returned.
 func (fMgr *FileMgr) GetFileName() string {
 
 	if fMgr.lock == nil {
@@ -5772,11 +5795,9 @@ func (fMgr *FileMgr) GetFileName() string {
 
 	defer fMgr.lock.Unlock()
 
-	fileName := ""
+	var fileName string
 
-	if fMgr.isInitialized == false {
-		fileName = ""
-	} else {
+	if fMgr.isInitialized == true {
 		fileName = fMgr.fileName
 	}
 
