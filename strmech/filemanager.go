@@ -5568,8 +5568,13 @@ func (fMgr *FileMgr) GetFileModTime(
 	return modTime, err
 }
 
-// GetFileModTimeStr - Returns the time of the last file modification as
-// a string. If the file does NOT exist, an error is returned.
+// GetFileModTimeStr
+//
+// Returns as a string the time of the last file
+// modification for the file identified by the current
+// instance of FileMgr.
+//
+// If the file does NOT exist, an error is returned.
 //
 // ----------------------------------------------------------------
 //
@@ -5584,7 +5589,7 @@ func (fMgr *FileMgr) GetFileModTime(
 //		If the string is empty ("") or if the time format
 //		is invalid, the method will automatically format
 //		the time using the default format,
-//		"2019-03-12 21:49:00:00".
+//		"2006-01-02 15:04:05".
 //
 //	errorPrefix					interface{}
 //
@@ -5656,7 +5661,7 @@ func (fMgr *FileMgr) GetFileModTime(
 //		is determined by input parameter 'timeFormat'.
 //		If 'timeFormat' is empty or if 'timeFormat' is
 //		an invalid format, the default format
-//		"2019-03-12 21:49:00:00" will be substituted.
+//		"2006-01-02 15:04:05" will be substituted.
 //
 //	error
 //
@@ -5721,7 +5726,7 @@ func (fMgr *FileMgr) GetFileModTimeStr(
 		modTime = fMgr.actualFileInfo.ModTime()
 	}
 
-	defaultFmt := "2006-01-02 15:04:05 -0700 MST"
+	defaultFmt := "2006-01-02 15:04:05"
 
 	if !filePathDoesExist {
 
