@@ -4839,16 +4839,35 @@ func (fMgr *FileMgr) GetAbsolutePathFileName() string {
 	return absolutePathFileName
 }
 
-// GetAbsolutePathFileNameLc - Returns the absolute path,
-// file name and file extension for the current File Manager
+// GetAbsolutePathFileNameLc
+//
+// Returns the absolute path, file name and file
+// extension for the current File Manager (FileMgr)
 // instance.
 //
-// The returned path/file name string will consist entirely
-// of lower case characters.
+// The returned path, file name and file extension string
+// will consist entirely of lower case characters.
 //
 // See companion method GetAbsolutePathFileName() which
 // returns the same path/file name string with upper and
 // lower case characters.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	--- NONE ---
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//
+//		This string returns the absolute path, file name
+//		and file extension for the current File Manager
+//		(FileMgr) instance formatted entirely with lower
+//		case text characters.
 func (fMgr *FileMgr) GetAbsolutePathFileNameLc() string {
 
 	if fMgr.lock == nil {
@@ -4865,7 +4884,8 @@ func (fMgr *FileMgr) GetAbsolutePathFileNameLc() string {
 		absolutePathFileName = ""
 	} else {
 
-		absolutePathFileName = strings.ToLower(fMgr.absolutePathFileName)
+		absolutePathFileName =
+			strings.ToLower(fMgr.absolutePathFileName)
 	}
 
 	return absolutePathFileName
