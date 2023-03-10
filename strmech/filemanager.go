@@ -4637,10 +4637,93 @@ func (fMgr *FileMgr) Empty() {
 	return
 }
 
-// FlushBytesToDisk - After Writing bytes to a file, use this
-// method to commit the contents of the current file to
-// stable storage.
-func (fMgr *FileMgr) FlushBytesToDisk() error {
+// FlushBytesToDisk
+//
+// After Writing bytes to a file, use this method to
+// commit the contents of the current file to stable
+// storage.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fMgr *FileMgr) FlushBytesToDisk(
+	errorPrefix interface{}) error {
 
 	if fMgr.lock == nil {
 		fMgr.lock = new(sync.Mutex)
@@ -4650,22 +4733,56 @@ func (fMgr *FileMgr) FlushBytesToDisk() error {
 
 	defer fMgr.lock.Unlock()
 
-	ePrefix := "FileMgr.FlushBytesToDisk() "
-
+	var ePrefix *ePref.ErrPrefixDto
 	var err error
-	fMgrHlpr := fileMgrHelper{}
 
-	err = fMgrHlpr.flushBytesToDisk(fMgr, ePrefix)
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileMgr.FlushBytesToDisk()",
+		"")
 
-	return err
+	if err != nil {
+		return err
+	}
+
+	return new(fileMgrHelperBoson).flushBytesToDisk(
+		fMgr, ePrefix.XCpy(
+			"fMgr"))
 }
 
-// GetAbsolutePath - Returns the absolute path
-// for the current File Manager instance.
+// GetAbsolutePath
 //
-// Note: The file name and file extension are NOT included.
-// Only the absolute path is returned as a 'string'.
+// Returns the absolute path for the current File Manager
+// (FileMgr) instance.
+//
+// Note: The file name and file extension are NOT
+// included. Only the absolute path (a.k.a. directory) is
+// returned as a 'string'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	--- NONE ---
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//
+//		This string returns the absolute path (a.k.a.
+//		directory) for the current FileMgr instance.
 func (fMgr *FileMgr) GetAbsolutePath() string {
+
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
 
 	return fMgr.dMgr.GetAbsolutePath()
 }
