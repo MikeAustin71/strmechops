@@ -6250,8 +6250,25 @@ func (fMgr *FileMgr) GetFilePtr() *os.File {
 // Returns os.FileInfo.Size() length in bytes for regular
 // files; system-dependent for others.
 //
-// If the File Manager file does NOT exist, or if there
-// is a file-path error, the value returned is -1.
+// If the file identified by the current FileMgr instance
+// does NOT exist, or if there is a file-path error, the
+// value returned is -1.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	--- NONE ---
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	int64
+//
+//		This method returns the length in bytes of the
+//		file identified by the current instance of
+//		FileMgr.
 func (fMgr *FileMgr) GetFileSize() int64 {
 
 	if fMgr.lock == nil {
@@ -6264,7 +6281,6 @@ func (fMgr *FileMgr) GetFileSize() int64 {
 
 	filePathDoesExist := false
 	var err error
-	var fileSize int64
 
 	filePathDoesExist,
 		err = new(fileMgrHelperAtom).doesFileMgrPathFileExist(
@@ -6275,14 +6291,10 @@ func (fMgr *FileMgr) GetFileSize() int64 {
 
 	if err != nil || !filePathDoesExist {
 
-		fileSize = -1
-
-		return fileSize
+		return int64(-1)
 	}
 
-	fileSize = fMgr.actualFileInfo.Size()
-
-	return fileSize
+	return fMgr.actualFileInfo.Size()
 }
 
 // GetOriginalPathFileName - Returns the path and file name
