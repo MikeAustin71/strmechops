@@ -6383,10 +6383,29 @@ func (fMgr *FileMgr) GetReaderBufferSize() int {
 	return readerBuffSize
 }
 
-// GetWriterBufferSize - Returns the size for the internal
-// Bufio Writer's buffer. If the value is less than 1 it means
-// that the buffer will be set to the default size at the next
+// GetWriterBufferSize
+//
+// Returns the size for the internal Bufio Writer's
+// buffer. If the value is less than 1 it means that the
+// buffer will be set to the default size at the next
 // 'Write' Operation.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	--- NONE ---
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	int
+//
+//		Returns the size for the internal Bufio Writer's
+//		buffer. If the value is less than 1 it means that
+//		the buffer will be set to the default size at the
+//		next 'Write' Operation.
 func (fMgr *FileMgr) GetWriterBufferSize() int {
 
 	if fMgr.lock == nil {
