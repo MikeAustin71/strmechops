@@ -6297,12 +6297,30 @@ func (fMgr *FileMgr) GetFileSize() int64 {
 	return fMgr.actualFileInfo.Size()
 }
 
-// GetOriginalPathFileName - Returns the path and file name
-// used originally to configure this File Manager object.
+// GetOriginalPathFileName
 //
-// Note: The original path and file name will be adjusted
-// to reflect the path operators used in the operating system
-// for the host computer.
+// Returns the path and file name used originally to
+// configure this File Manager object.
+//
+// Note:
+// The original path and file name will be adjusted to
+// reflect the path operators used in the operating
+// system for the host computer.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	--- NONE ---
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//
+//		Returns the path and file name used originally to
+//		configure the current instance of FileMgr.
 func (fMgr *FileMgr) GetOriginalPathFileName() string {
 
 	if fMgr.lock == nil {
