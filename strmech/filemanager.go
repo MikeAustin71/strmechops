@@ -6338,10 +6338,29 @@ func (fMgr *FileMgr) GetOriginalPathFileName() string {
 	return originalPathName
 }
 
-// GetReaderBufferSize - Returns the size for the internal
-// Bufio Reader's buffer. If the value is less than 1 it means
-// that the buffer will be set to the default size at the next
+// GetReaderBufferSize
+//
+// Returns the size for the internal Bufio Reader's
+// buffer. If the value is less than 1 it means that the
+// buffer will be set to the default size at the next
 // 'Read' Operation.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	--- NONE ---
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	int
+//
+//		Returns the size for the internal Bufio Reader's
+//		buffer. If the value is less than 1 it means that
+//		the buffer will be set to the default size at the
+//		next 'Read' Operation.
 func (fMgr *FileMgr) GetReaderBufferSize() int {
 
 	if fMgr.lock == nil {
