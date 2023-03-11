@@ -4761,7 +4761,7 @@ func (dMgr *DirMgr) NewFromFileMgr(fileMgr FileMgr) (DirMgr, error) {
 
 	ePrefix := "DirMgr.NewFromFileMgr() "
 
-	err := fileMgr.IsFileMgrValid("")
+	err := fileMgr.IsFileMgrValid(ePrefix)
 
 	if err != nil {
 		return DirMgr{},
