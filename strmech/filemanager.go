@@ -5991,7 +5991,8 @@ func (fMgr *FileMgr) GetFilePermissionConfig(
 	fPerm, err2 = new(FilePermissionConfig).
 		NewByFileMode(
 			fMgr.actualFileInfo.Mode(),
-			ePrefix)
+			ePrefix.XCpy(
+				"fMgr.actualFileInfo.Mode()"))
 
 	if err2 != nil {
 
@@ -6193,9 +6194,40 @@ func (fMgr *FileMgr) GetFilePermissionTextCodes(
 	return permissionText, err
 }
 
-// GetFilePtr - will return the internal *os.File pointer
-// for this File Manager instance. Depending on circumstances,
+// GetFilePtr
+//
+// Returns the internal *os.File pointer for this
+// File Manager instance. Depending on circumstances,
 // this pointer may be nil.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will return the internal os.File pointer
+//	encapsulated in the current instance of FileMgr.
+//
+//	If the file identified by the current instance of
+//	FileMgr has not been opened or, if this file has been
+//	'closed', the returned pointer os.File pointer will
+//	be 'nil'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	--- NONE ---
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	*os.File
+//
+//		An os.File pointer to the file identified by the
+//		current instance of FileMgr. Depending on
+//		circumstances, this returned os.File pointer may
+//		be 'nil'. See the caveats discussed above.
 func (fMgr *FileMgr) GetFilePtr() *os.File {
 
 	if fMgr.lock == nil {
@@ -6218,8 +6250,8 @@ func (fMgr *FileMgr) GetFilePtr() *os.File {
 // Returns os.FileInfo.Size() length in bytes for regular
 // files; system-dependent for others.
 //
-// If the File Manager file does NOT exist, or if there is
-// a file-path error, the value returned is -1.
+// If the File Manager file does NOT exist, or if there
+// is a file-path error, the value returned is -1.
 func (fMgr *FileMgr) GetFileSize() int64 {
 
 	if fMgr.lock == nil {
