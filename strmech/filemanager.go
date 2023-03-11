@@ -6755,14 +6755,43 @@ func (fMgr *FileMgr) IsFileMgrValid(
 // IsFileNameExtPopulated
 //
 // Returns a boolean value indicating whether both the
-// File Name and Extension for this File Manager
+// File Name and Extension for the current File Manager
 // instance have been populated.
 //
 // If either the File Name or the File Extension is blank
-// (empty), this method returns false.
+// (empty), this method returns 'false'.
 //
 // Both the File Name AND the File Extension must be
 // populated before this method returns 'true'.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	If this method returns 'true', it signals that the
+//	File Name and File Extension are configured for the
+//	current FileMgr instance. However, there is no
+//	guarantee that the File Name and File Extension
+//	actually exist on disk.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	--- NONE ---
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	bool
+//
+//		If either the File Name or the File Extension
+//		configured for the current FileMgr instance is
+//		blank (empty), this method returns 'false'.
+//
+//		Both the File Name AND the File Extension must be
+//		populated before this method returns 'true'.
 func (fMgr *FileMgr) IsFileNameExtPopulated() bool {
 
 	if fMgr.lock == nil {
@@ -6773,19 +6802,7 @@ func (fMgr *FileMgr) IsFileNameExtPopulated() bool {
 
 	defer fMgr.lock.Unlock()
 
-	var err error
 	isFileNameExtPopulated := false
-
-	_,
-		err = new(fileMgrHelperAtom).doesFileMgrPathFileExist(
-		fMgr,
-		PreProcPathCode.None(),
-		nil,
-		"FileMgr.absolutePathFileName")
-
-	if err != nil {
-		return false
-	}
 
 	if len(fMgr.fileExt) > 0 &&
 		len(fMgr.fileName) > 0 {
