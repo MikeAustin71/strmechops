@@ -5804,11 +5804,13 @@ func (fMgr *FileMgr) GetFileName() string {
 	return fileName
 }
 
-// GetFileNameExt - Returns a string containing the
-// combination of file name and file extension configured
-// for this File Manager instance
+// GetFileNameExt
 //
-//	 Example:
+// Returns a string containing the combination of file
+// name and file extension configured for this File
+// Manager instance
+//
+// Example:
 //
 //	         File Name Plus Extension: "newerFileForTest_01.txt"
 //	Returned File Name Plus Extension: "newerFileForTest_01.txt"
@@ -5825,13 +5827,12 @@ func (fMgr *FileMgr) GetFileNameExt() string {
 
 	defer fMgr.lock.Unlock()
 
-	fileNameExt := ""
+	var fileNameExt string
 
-	if fMgr.isInitialized == false {
-		fileNameExt = ""
+	if fMgr.isInitialized == true {
 
-	} else {
 		fileNameExt = fMgr.fileNameExt
+
 	}
 
 	return fileNameExt
