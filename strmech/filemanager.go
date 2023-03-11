@@ -6428,9 +6428,42 @@ func (fMgr *FileMgr) GetWriterBufferSize() int {
 	return writerBuffSize
 }
 
-// IsAbsolutePathFileNamePopulated - Returns a boolean value
-// indicating whether absolute path and file name is
-// initialized and populated.
+// IsAbsolutePathFileNamePopulated
+//
+// Returns a boolean value indicating whether the
+// absolute path and file name are initialized and
+// populated in the current instance of FileMgr.
+//
+// If the path and file name are populated but do not
+// exist on disk, this method returns 'false'.
+//
+// An absolute or full path points to the same location
+// in a file system, regardless of the current working
+// directory. To do that, it must include the root
+// directory.
+//
+//	https://en.wikipedia.org/wiki/Path_(computing)#Absolute_and_relative_paths
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	--- NONE ---
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	bool
+//
+//		If this returned boolean value is set to 'true',
+//		it signals that the absolute path and file name
+//		specified by the current instance of FileMgr are
+//		populated and actually exist on disk.
+//
+//		If this return value is set to 'false', it
+//		signals that the absolute path and file name are
+//	 	empty, or they do not exist on disk.
 func (fMgr *FileMgr) IsAbsolutePathFileNamePopulated() bool {
 
 	if fMgr.lock == nil {
@@ -6445,6 +6478,15 @@ func (fMgr *FileMgr) IsAbsolutePathFileNamePopulated() bool {
 
 	isAbsolutePathFileNamePopulated := false
 
+	if len(fMgr.absolutePathFileName) == 0 {
+
+		fMgr.isAbsolutePathFileNamePopulated = false
+
+		isAbsolutePathFileNamePopulated = false
+
+		return isAbsolutePathFileNamePopulated
+	}
+
 	_,
 		err = new(fileMgrHelperAtom).doesFileMgrPathFileExist(
 		fMgr,
@@ -6452,7 +6494,7 @@ func (fMgr *FileMgr) IsAbsolutePathFileNamePopulated() bool {
 		nil,
 		"FileMgr")
 
-	if err != nil || len(fMgr.absolutePathFileName) == 0 {
+	if err != nil {
 
 		fMgr.isAbsolutePathFileNamePopulated = false
 
@@ -6471,7 +6513,28 @@ func (fMgr *FileMgr) IsAbsolutePathFileNamePopulated() bool {
 // IsFileExtPopulated
 //
 // Returns a boolean value indicating whether the File
-// Extension for this File Manager instance is populated.
+// Extension for the current File Manager instance is
+// populated.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	--- NONE ---
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	bool
+//
+//		If this returned boolean value is set to 'true',
+//		it signals that a file extension is configured
+//		for the current instance of FileMgr.
+//
+//		If this return value is set to 'false', it
+//		signals that no file extension is configured for
+//		the current instance of FileMgr.
 func (fMgr *FileMgr) IsFileExtPopulated() bool {
 
 	if fMgr.lock == nil {
@@ -6485,6 +6548,15 @@ func (fMgr *FileMgr) IsFileExtPopulated() bool {
 	var err error
 	isFileExtPopulated := false
 
+	if len(fMgr.fileExt) == 0 {
+
+		fMgr.isFileExtPopulated = false
+
+		isFileExtPopulated = false
+
+		return isFileExtPopulated
+	}
+
 	_,
 		err = new(fileMgrHelperAtom).
 		doesFileMgrPathFileExist(
@@ -6493,12 +6565,16 @@ func (fMgr *FileMgr) IsFileExtPopulated() bool {
 			nil,
 			"FileMgr.absolutePathFileName")
 
-	if err != nil ||
-		len(fMgr.fileExt) == 0 {
+	if err != nil {
+
 		fMgr.isFileExtPopulated = false
+
 		isFileExtPopulated = false
+
 	} else {
+
 		fMgr.isFileExtPopulated = true
+
 		isFileExtPopulated = true
 	}
 
