@@ -6927,9 +6927,38 @@ func (fMgr *FileMgr) IsFileNamePopulated() bool {
 	return true
 }
 
-// IsFilePointerOpen - Returns a boolean value indicating
-// whether the File Pointer (*os.File) for this File Manager
-// instance is open, or not.
+// IsFilePointerOpen
+//
+// Returns a boolean value indicating whether the
+// internal File Pointer (*os.File) for the current File
+// Manager instance is open, or not.
+//
+// If the File Pointer is open (return value of 'true'),
+// it signals that the file identified by the current
+// instance if File Manager (FileMgr) has been opened for
+// Read and/or Write operations.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	--- NONE ---
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	bool
+//
+//		If this returned boolean value is set to 'true',
+//		it signals that the file pointer for the file
+//		identified by the current FileMgr instance has
+//		been previously opened for Read and/or Write
+//		operations.
+//
+//		Conversely, if this method returns 'false', it
+//		means that the file identified by the current
+//		FileMgr instance has NOT been opened.
 func (fMgr *FileMgr) IsFilePointerOpen() bool {
 
 	if fMgr.lock == nil {
@@ -6940,21 +6969,40 @@ func (fMgr *FileMgr) IsFilePointerOpen() bool {
 
 	defer fMgr.lock.Unlock()
 
-	var isFilePtrOpen bool
-
 	if fMgr.filePtr == nil {
+
 		fMgr.isFilePtrOpen = false
-		isFilePtrOpen = false
-	} else {
-		fMgr.isFilePtrOpen = true
-		isFilePtrOpen = true
+
+		return false
+
 	}
 
-	return isFilePtrOpen
+	fMgr.isFilePtrOpen = true
+
+	return true
 }
 
-// IsInitialized - Returns a boolean indicating whether the FileMgr
-// object is properly initialized.
+// IsInitialized
+//
+// Returns a boolean value indicating whether the current
+// FileMgr instance has been properly initialized.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	--- NONE ---
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	bool
+//
+//		If this returned boolean value is set to 'true',
+//		it signals that the current instance of FileMgr
+//		has been properly initialized for file management
+//		operations.
 func (fMgr *FileMgr) IsInitialized() bool {
 
 	if fMgr.lock == nil {
@@ -6965,11 +7013,7 @@ func (fMgr *FileMgr) IsInitialized() bool {
 
 	defer fMgr.lock.Unlock()
 
-	isInitialized := false
-
-	isInitialized = fMgr.isInitialized
-
-	return isInitialized
+	return fMgr.isInitialized
 }
 
 // MoveFileToFileMgr - This method will move the file identified
