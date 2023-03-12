@@ -6437,6 +6437,10 @@ func (fMgr *FileMgr) GetWriterBufferSize() int {
 // If the path and file name are populated but do not
 // exist on disk, this method returns 'false'.
 //
+// If this method returns 'true', it signals that the
+// absolute path and file name are populated and that the
+// file actually exists on disk.
+//
 // An absolute or full path points to the same location
 // in a file system, regardless of the current working
 // directory. To do that, it must include the root
@@ -6462,8 +6466,14 @@ func (fMgr *FileMgr) GetWriterBufferSize() int {
 //		populated and actually exist on disk.
 //
 //		If this return value is set to 'false', it
-//		signals that the absolute path and file name are
-//	 	empty, or they do not exist on disk.
+//		signals one of two outcomes:
+//
+//		(1)	The Path and File Name are NOT populated
+//
+//				AND/OR
+//
+//		(2) The File Name is populated but does NOT exist
+//			on disk.
 func (fMgr *FileMgr) IsAbsolutePathFileNamePopulated() bool {
 
 	if fMgr.lock == nil {
@@ -6516,6 +6526,11 @@ func (fMgr *FileMgr) IsAbsolutePathFileNamePopulated() bool {
 // Extension for the current File Manager instance is
 // populated.
 //
+// If this returned boolean value is set to 'true', it
+// signals that a file extension is configured for the
+// current instance of FileMgr and the path and file
+// actually exist on disk.
+//
 // ----------------------------------------------------------------
 //
 // # Input Parameters
@@ -6530,11 +6545,19 @@ func (fMgr *FileMgr) IsAbsolutePathFileNamePopulated() bool {
 //
 //		If this returned boolean value is set to 'true',
 //		it signals that a file extension is configured
-//		for the current instance of FileMgr.
+//		for the current instance of FileMgr and the path
+//		and file actually exist on disk.
+//
 //
 //		If this return value is set to 'false', it
-//		signals that no file extension is configured for
-//		the current instance of FileMgr.
+//		signals one of two outcomes:
+//
+//		(1)	The File Extension is NOT populated
+//
+//				AND/OR
+//
+//		(2) The File Extension is populated but the path
+//			and file do NOT exist on disk.
 func (fMgr *FileMgr) IsFileExtPopulated() bool {
 
 	if fMgr.lock == nil {
@@ -6546,15 +6569,12 @@ func (fMgr *FileMgr) IsFileExtPopulated() bool {
 	defer fMgr.lock.Unlock()
 
 	var err error
-	isFileExtPopulated := false
 
 	if len(fMgr.fileExt) == 0 {
 
 		fMgr.isFileExtPopulated = false
 
-		isFileExtPopulated = false
-
-		return isFileExtPopulated
+		return false
 	}
 
 	_,
@@ -6569,16 +6589,15 @@ func (fMgr *FileMgr) IsFileExtPopulated() bool {
 
 		fMgr.isFileExtPopulated = false
 
-		isFileExtPopulated = false
+		return false
 
 	} else {
 
 		fMgr.isFileExtPopulated = true
 
-		isFileExtPopulated = true
 	}
 
-	return isFileExtPopulated
+	return true
 }
 
 // IsFileMgrValid
@@ -6588,6 +6607,14 @@ func (fMgr *FileMgr) IsFileExtPopulated() bool {
 //
 // If the current FileMgr is VALID, this method returns
 // 'nil'
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	To be considered a valid FileMgr instance, the path
+//	and file name must be configured and that path and
+//	file name must exist on disk.
 //
 // ----------------------------------------------------------------
 //
@@ -6821,7 +6848,48 @@ func (fMgr *FileMgr) IsFileNameExtPopulated() bool {
 // IsFileNamePopulated
 //
 // Returns a boolean value indicating whether the file
-// name for this File Manager object is populated.
+// name for the current File Manager instance is
+// populated.
+//
+// If this method returns 'true' it signals that the
+// absolute path and file name are populated. In
+// addition, it signals that the path and file actually
+// exist on disk.
+//
+// If a value of 'false' is returned it signals one of
+// two outcomes:
+//
+//	(1)	The File Name is NOT populated
+//
+//			AND/OR
+//
+//	(2) The File Name is populated but does NOT exist
+//		on disk.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	--- NONE ---
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	bool
+//
+//
+//		If this method returns 'true' it signals that the
+//		absolute path and file name are populated. In
+//		addition, it signals that the path and file
+//		actually exist on disk.
+//
+//		If a value of 'false' is returned it signals one
+//		of two outcomes:
+//		(1)	The File Name is NOT populated
+//				AND OR
+//		(2) The File Name is populated but does NOT exist
+//			on disk.
 func (fMgr *FileMgr) IsFileNamePopulated() bool {
 
 	if fMgr.lock == nil {
@@ -6831,6 +6899,13 @@ func (fMgr *FileMgr) IsFileNamePopulated() bool {
 	fMgr.lock.Lock()
 
 	defer fMgr.lock.Unlock()
+
+	if len(fMgr.fileName) == 0 {
+
+		fMgr.isFileNamePopulated = false
+
+		return false
+	}
 
 	var err error
 
@@ -6847,21 +6922,9 @@ func (fMgr *FileMgr) IsFileNamePopulated() bool {
 		return false
 	}
 
-	var isFileNamePopulated bool
+	fMgr.isFileNamePopulated = true
 
-	if len(fMgr.fileName) == 0 {
-
-		fMgr.isFileNamePopulated = false
-		isFileNamePopulated = false
-
-	} else {
-
-		fMgr.isFileNamePopulated = true
-		isFileNamePopulated = true
-
-	}
-
-	return isFileNamePopulated
+	return true
 }
 
 // IsFilePointerOpen - Returns a boolean value indicating
