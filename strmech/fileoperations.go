@@ -733,7 +733,9 @@ func (fops *FileOps) moveSourceFileToDestinationFile() error {
 
 	ePrefix := "FileOps.moveSourceFileToDestinationFile() "
 
-	err := fops.source.MoveFileToFileMgr(fops.destination)
+	err := fops.source.MoveFileToFileMgr(
+		fops.destination,
+		ePrefix)
 
 	if err != nil {
 		return fmt.Errorf(ePrefix+"%v\n", err.Error())
