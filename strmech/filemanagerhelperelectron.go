@@ -377,8 +377,12 @@ func (fMgrHlprElectron *fileMgrHelperElectron) lowLevelOpenFile(
 			ePrefix.String())
 	}
 
-	err = fileAccessCtrl.IsValidInstanceError(
-		ePrefix.XCpy("fileAccessCtrl"))
+	_,
+		err = new(fileAccessControlElectron).
+		testValidityOfFileAccessControl(
+			&fileAccessCtrl,
+			ePrefix.XCpy(
+				"fileAccessCtrl"))
 
 	if err != nil {
 		return fmt.Errorf("%v\n"+

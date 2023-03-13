@@ -8699,6 +8699,10 @@ func (fMgr *FileMgr) NewFromPathFileNameExtStr(
 //		Type FileAccessControl encapsulates these two
 //		components required for file access operations.
 //
+//		To create an instance of FileAccessControl, it is
+//		recommended that one of the FileAccessControl
+//		'New' methods be used.
+//
 //	errorPrefix					interface{}
 //
 //		This object encapsulates error prefix text which
@@ -8809,22 +8813,113 @@ func (fMgr *FileMgr) OpenThisFile(
 			"fMgr<-fileAccessCtrl"))
 }
 
-// OpenThisFileReadOnly - Opens the file identified by the current
-// FileMgr object as a 'Read-Only' File. Subsequent operations may
-// read from this file but may NOT write to this file.
+// OpenThisFileReadOnly
 //
-// As the method's name implies, the 'FileMgr.absolutePathFileName'
-// will be opened for reading only.
+// Opens the file identified by the current FileMgr
+// instance as a 'Read-Only' File. Subsequent operations
+// may read from this file but may NOT write to this
+// file.
 //
-// If FileMgr.absolutePathFileName does not exist, an error will be
-// returned.
+// As the method's name implies, the File Manager's
+// absolute path and file name
+// ('FileMgr.absolutePathFileName') will be opened for
+// reading only.
 //
-// If successful, the FileMode is set to "-r--r--r--" and the permission
-// Mode is set to '0444'.
+// If the File Manager's absolute path and file name does
+// not exist, an error will be returned.
 //
-// Note: If the 'FileMgr' directory path or file do not exist, this
-// method will return an error.
-func (fMgr *FileMgr) OpenThisFileReadOnly() error {
+// If successful, the FileMode is set to "-r--r--r--" and
+// the permission Mode is set to '0444'.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	If the current FileMgr directory path and/or file
+//	name does not exist, this method will return an
+//	error.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fMgr *FileMgr) OpenThisFileReadOnly(
+	errorPrefix interface{}) error {
 
 	if fMgr.lock == nil {
 		fMgr.lock = new(sync.Mutex)
@@ -8834,39 +8929,146 @@ func (fMgr *FileMgr) OpenThisFileReadOnly() error {
 
 	defer fMgr.lock.Unlock()
 
-	ePrefix := "FileMgr.OpenThisFileReadOnly() "
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
 
-	readOnlyAccessCtrl, err :=
-		new(FileAccessControl).NewReadOnlyAccess(ePrefix)
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileMgr."+
+			"OpenThisFileReadOnly()",
+		"")
 
 	if err != nil {
-		return fmt.Errorf(ePrefix+"\n%v\n", err.Error())
+		return err
 	}
 
-	fMgrHlpr := fileMgrHelper{}
+	var readOnlyAccessCtrl FileAccessControl
 
-	err = fMgrHlpr.openFile(
+	readOnlyAccessCtrl,
+		err =
+		new(FileAccessControl).
+			NewReadOnlyAccess(ePrefix.XCpy(
+				"readOnlyAccessCtrl<-"))
+
+	if err != nil {
+		return err
+	}
+
+	return new(fileMgrHelper).openFile(
 		fMgr,
 		readOnlyAccessCtrl,
 		false,
 		false,
-		ePrefix)
-
-	return err
+		ePrefix.XCpy(
+			"fMgr<-readOnlyAccessCtrl"))
 }
 
-// OpenThisFileWriteOnly - Opens the current file for 'WriteOnly'
-// operations.  If successful, this method will use FileMgr.absolutePathFileName
-// to open an *os.File or File Pointer.
+// OpenThisFileWriteOnly
 //
-// As the method's name implies, the 'FileMgr.absolutePathFileName'
-// will be opened for writing only. If FileMgr.absolutePathFileName
-// does not exist, it will be created. The FileMode is set to "--w--w--w-" and
-// the permission Mode is set to '0222'.
+// Opens the current file for 'WriteOnly' operations.  If
+// successful, this method will use the current File
+// Manager's absolute path and file name
+// ('FileMgr.absolutePathFileName') to open an os.File
+// pointer (*os.File) for the specified file.
 //
-// Note: If the 'FileMgr' directory path and file do not exist, this
-// method will create them.
-func (fMgr *FileMgr) OpenThisFileWriteOnly() error {
+// As the method's name implies, the File Managers
+// absolute path and file name will be opened for writing
+// only. If current File Manager's absolute path and file
+// name does not exist, it will be created and an error
+// will be returned.
+//
+// The FileMode is set to "--w--w--w-" and the permission
+// Code is set to '0222'.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	If the FileMgr directory path and file do not exist,
+//	this method will attempt to create them.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fMgr *FileMgr) OpenThisFileWriteOnly(
+	errorPrefix interface{}) error {
 
 	if fMgr.lock == nil {
 		fMgr.lock = new(sync.Mutex)
@@ -8876,25 +9078,39 @@ func (fMgr *FileMgr) OpenThisFileWriteOnly() error {
 
 	defer fMgr.lock.Unlock()
 
+	var ePrefix *ePref.ErrPrefixDto
 	var err error
-	ePrefix := "FileMgr.OpenThisFileWriteOnly() "
-	fMgrHlpr := fileMgrHelper{}
 
-	writeOnlyAccessCtrl, err :=
-		new(FileAccessControl).NewWriteOnlyAccess(ePrefix)
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileMgr."+
+			"OpenThisFileWriteOnly()",
+		"")
 
 	if err != nil {
-		return fmt.Errorf(ePrefix+"\n%v\n", err.Error())
+		return err
 	}
 
-	err = fMgrHlpr.openFile(
+	var writeOnlyAccessCtrl FileAccessControl
+
+	writeOnlyAccessCtrl,
+		err =
+		new(FileAccessControl).
+			NewWriteOnlyAccess(
+				ePrefix.XCpy(
+					"writeOnlyAccessCtrl<-"))
+
+	if err != nil {
+		return err
+	}
+
+	return new(fileMgrHelper).openFile(
 		fMgr,
 		writeOnlyAccessCtrl,
 		true,
 		true,
 		ePrefix)
-
-	return err
 }
 
 // OpenThisFileWriteOnlyAppend - Opens the current file for 'Write Only'
