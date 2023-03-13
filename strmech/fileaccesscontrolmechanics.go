@@ -49,6 +49,9 @@ type fileAccessControlMechanics struct {
 //     FileOpenMode(0).ModeSync()
 //     FileOpenMode(0).ModeTruncate()
 //
+// Type FileAccessControl encapsulates these two
+// components required for file access operations.
+//
 // ----------------------------------------------------------------
 //
 // # Input Parameters
