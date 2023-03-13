@@ -7363,23 +7363,130 @@ func (fMgr *FileMgr) MoveFileToFileStr(
 	return targetFMgr, err
 }
 
-// MoveFileToNewDir - This method will move the current file
-// identified by this FileMgr object to a new path designated
-// by input parameter string, 'dirPath'.
+// MoveFileToNewDir
 //
-// IMPORTANT:
+// This method will move the current file identified by
+// the current FileMgr instance to a new path designated
+// by input parameter string, 'dirPath'. The new file
+// will retain the file name and file extension defined
+// by the current instance of FileMgr, however; that file
+// will reside in the path (a.k.a. directory) specified
+// by input parameter 'dirPath'.
 //
-// The current file identified by the current FileMgr object will
-// be DELETED!
+// ----------------------------------------------------------------
 //
-// The new file located in the new directory will be returned in the return
-// parameter 'newFMgr'.
+// # IMPORTANT
 //
-// If input parameter 'dirPth' contains a directory path which does not
-// currently exist, it will be created.
+// The current file identified by the current FileMgr
+// instance will be DELETED!
+//
+// The new file located, in the directory specified by
+// 'dirPath', will be defined in the returned FileMgr
+// instance, 'newFMgr'.
+//
+// If input parameter 'dirPth' contains a directory path
+// which does not currently exist, this method will
+// attempt to create that path.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	dirPath						string
+//
+//		This strings contains the valid path or directory
+//		to which the file identified by the current
+//		FileMgr will moved.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	FileMgr
+//
+//		If this method completes successfully, the file
+//		identified by the current FileMgr instance will
+//		be moved to the path (a.k.a. directory) specified
+//		by input parameter dirPath. This returned
+//		instance of FileMgr will define the path, file
+//		name and file extension of the moved file.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
 func (fMgr *FileMgr) MoveFileToNewDir(
 	dirPath string,
-	errorPrefix interface{}) (FileMgr, error) {
+	errorPrefix interface{}) (
+	FileMgr,
+	error) {
 
 	if fMgr.lock == nil {
 		fMgr.lock = new(sync.Mutex)
@@ -7391,12 +7498,12 @@ func (fMgr *FileMgr) MoveFileToNewDir(
 
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
+	funcName := "FileMgr.MoveFileToNewDir()"
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"FileMgr."+
-			"MoveFileToNewDir()",
+		funcName,
 		"")
 
 	if err != nil {
@@ -7438,7 +7545,7 @@ func (fMgr *FileMgr) MoveFileToNewDir(
 				"dirMgr='%v'\n"+
 				"fMgr.fileNameExt='%v'\n"+
 				"Error= \n%v\n",
-				ePrefix.String(),
+				funcName,
 				dirMgr.absolutePath,
 				fMgr.fileNameExt,
 				err.Error())
@@ -7457,9 +7564,11 @@ func (fMgr *FileMgr) MoveFileToNewDir(
 				fMgr.fileNameExt)
 	}
 
-	fMgrHlpr := fileMgrHelper{}
-
-	err = fMgrHlpr.moveFile(fMgr, &targetFMgr, ePrefix)
+	err = new(fileMgrHelper).moveFile(
+		fMgr,
+		&targetFMgr,
+		ePrefix.XCpy(
+			"targetFMgr<-fMgr"))
 
 	return targetFMgr, err
 }
