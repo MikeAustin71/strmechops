@@ -9920,17 +9920,144 @@ func (fMgr *FileMgr) ReadFileBytes(
 	return bytesRead, err
 }
 
-// ReadFileLine - Effectively, this method reads a file one line
-// at a time and returns the line as an array of bytes. The delimiter
-// for lines read is specified by input parameter 'delim' of type byte.
+// ReadFileLine
+//
+// Effectively, this method reads a file one line at a
+// time and returns the line as an array of bytes. The
+// delimiter for lines read is specified by input
+// parameter 'delim' of type byte.
 //
 // This method uses the 'bufio' package.
 //
-// If End Of File (EOF) is reached, this method returns the 'bytesRead' and
-// an error which is equal to 'io.EOF'.
+// If End Of File (EOF) is reached, this method returns
+// the 'bytes Read' and an error which is equal to
+// 'io.EOF'.
 //
-// Note that the delimiter is returned as the last character in bytes read.
-func (fMgr *FileMgr) ReadFileLine(delim byte) (bytesRead []byte, err error) {
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	The delimiter character ('delim') is returned as the
+//	last character in the 'bytes read' array returned by
+//	this method.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will NOT automatically close the os.File
+//	pointer to the file identified by the current
+//	instance of FileMgr upon completion of the file read
+//	operation.
+//
+//	The user is therefore responsible for closing the
+//	file. See method FileMgr.CloseThisFile().
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	delim						byte
+//
+//		This delimiter byte will be used to delimit or
+//		identify individual lines of text in the file
+//		being read. This method will read one line of
+//		text at a time from the file identified by the
+//		current FileMgr instance.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	bytesRead					int
+//
+//		If this method completes successfully, the number
+//		of bytes read will be returned through this
+//		integer parameter. This number includes the
+//		delimiter byte used to identify the end of a
+//		single line of text.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If the end of the file is encountered during the
+//		file read operation, this parameter will be set
+//		to io.EOF (End-Of-File).
+//
+//		For all processing errors encountered during the
+//		file read operation, the returned error Type will
+//		encapsulate an appropriate error message. This
+//	 	returned error message will incorporate the
+//	 	method chain and text passed by input parameter,
+//	 	'errorPrefix'. The 'errorPrefix' text will be
+//	 	prefixed or attached to the beginning of the
+//	 	error message.
+func (fMgr *FileMgr) ReadFileLine(
+	delim byte,
+	errorPrefix interface{}) (
+	bytesRead []byte,
+	err error) {
 
 	if fMgr.lock == nil {
 		fMgr.lock = new(sync.Mutex)
@@ -9940,32 +10067,44 @@ func (fMgr *FileMgr) ReadFileLine(delim byte) (bytesRead []byte, err error) {
 
 	defer fMgr.lock.Unlock()
 
-	ePrefix := "FileMgr.ReadFileLine() "
 	bytesRead = []byte{}
-	err = nil
-	var err2 error
 
-	readWriteAccessCtrl, err2 :=
-		new(FileAccessControl).NewReadWriteAccess(ePrefix)
+	var ePrefix *ePref.ErrPrefixDto
 
-	if err2 != nil {
-		err = fmt.Errorf(ePrefix+
-			"Error returned by FileAccessControl{}.NewReadWriteAccess().\n"+
-			"Error='%v'\n", err2.Error())
-		return bytesRead, err
-	}
-
-	fMgrHlpr := fileMgrHelper{}
-
-	err = fMgrHlpr.readFileSetup(
-		fMgr,
-		readWriteAccessCtrl,
-		false,
-		ePrefix)
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileMgr.ReadFileLine()",
+		"")
 
 	if err != nil {
 		return bytesRead, err
 	}
+
+	var readWriteAccessCtrl FileAccessControl
+
+	readWriteAccessCtrl,
+		err =
+		new(FileAccessControl).
+			NewReadWriteAccess(ePrefix.XCpy(
+				"readWriteAccessCtrl<-"))
+
+	if err != nil {
+		return bytesRead, err
+	}
+
+	err = new(fileMgrHelper).readFileSetup(
+		fMgr,
+		readWriteAccessCtrl,
+		false,
+		ePrefix.XCpy(
+			"fMgr<-readWriteAccessCtrl"))
+
+	if err != nil {
+		return bytesRead, err
+	}
+
+	var err2 error
 
 	bytesRead, err2 = fMgr.fileBufRdr.ReadBytes(delim)
 
@@ -9975,9 +10114,11 @@ func (fMgr *FileMgr) ReadFileLine(delim byte) (bytesRead []byte, err error) {
 
 	} else if err2 != nil {
 
-		err = fmt.Errorf(ePrefix+
-			"\nError returned from fMgr.fileBufRdr.ReadBytes(delim).\n"+
-			"Error='%v'\n", err2.Error())
+		err = fmt.Errorf("%v\n"+
+			"Error returned from fMgr.fileBufRdr.ReadBytes(delim).\n"+
+			"Error= \n%v\n",
+			ePrefix.String(),
+			err2.Error())
 	}
 
 	return bytesRead, err
