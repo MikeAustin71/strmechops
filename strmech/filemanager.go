@@ -8966,17 +8966,16 @@ func (fMgr *FileMgr) OpenThisFileReadOnly(
 
 // OpenThisFileWriteOnly
 //
-// Opens the current file for 'WriteOnly' operations.  If
+// Opens the current file for 'WriteOnly' operations. If
 // successful, this method will use the current File
 // Manager's absolute path and file name
 // ('FileMgr.absolutePathFileName') to open an os.File
 // pointer (*os.File) for the specified file.
 //
-// As the method's name implies, the File Managers
+// As the method's name implies, the File Manager's
 // absolute path and file name will be opened for writing
 // only. If current File Manager's absolute path and file
-// name does not exist, it will be created and an error
-// will be returned.
+// name does not exist, it will be created.
 //
 // The FileMode is set to "--w--w--w-" and the permission
 // Code is set to '0222'.
@@ -8985,8 +8984,17 @@ func (fMgr *FileMgr) OpenThisFileReadOnly(
 //
 // # BE ADVISED
 //
-//	If the current FileMgr directory path and file do not
-//	exist, this method will attempt to create them.
+//	(1)	If the current FileMgr directory path and file do
+//		not exist, this method will attempt to create
+//		them.
+//
+//	(2)	The user may want to consider the following
+//		methods as an alternative to this one. These
+//		methods specify precise 'WriteOnly' behavior for
+//		files which do and do not previously exist:
+//
+//			FileMgr.OpenThisFileWriteOnlyAppend()
+//			FileMgr.OpenThisFileWriteOnlyTruncate()
 //
 // ----------------------------------------------------------------
 //
@@ -9252,14 +9260,101 @@ func (fMgr *FileMgr) OpenThisFileWriteOnlyAppend(
 			"fMgr<-writeOnlyFileAccessCfg"))
 }
 
-// OpenThisFileWriteOnlyTruncate - Opens the current file for 'Write Only'
-// with an 'Truncate' mode. This means that if the file previously exists,
-// all the existing file content will be deleted before the 'write'
-// operation will begin.
+// OpenThisFileWriteOnlyTruncate
 //
-// Note: If the 'FileMgr' directory path and file do not exist, this
-// method will create both the path and file.
-func (fMgr *FileMgr) OpenThisFileWriteOnlyTruncate() error {
+// Opens the current file for 'Write Only' with a
+// 'Truncate' mode. This means that if the file
+// previously exists, all the existing file content will
+// be deleted before the 'write' operation begins.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	If the current FileMgr directory path and file do not
+//	exist, this method will attempt to create them.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fMgr *FileMgr) OpenThisFileWriteOnlyTruncate(
+	errorPrefix interface{}) error {
 
 	if fMgr.lock == nil {
 		fMgr.lock = new(sync.Mutex)
@@ -9269,25 +9364,38 @@ func (fMgr *FileMgr) OpenThisFileWriteOnlyTruncate() error {
 
 	defer fMgr.lock.Unlock()
 
-	ePrefix := "FileMgr.OpenThisFileWriteOnlyTruncate() "
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
 
-	writeOnlyTruncateAccessCfg, err :=
-		new(FileAccessControl).NewWriteOnlyTruncateAccess(ePrefix)
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileMgr."+
+			"OpenThisFileWriteOnlyTruncate()",
+		"")
 
 	if err != nil {
-		return fmt.Errorf(ePrefix+"\n%v\n", err.Error())
+		return err
 	}
 
-	fMgrHlpr := fileMgrHelper{}
+	var writeOnlyTruncateAccessCfg FileAccessControl
 
-	err = fMgrHlpr.openFile(
+	writeOnlyTruncateAccessCfg,
+		err =
+		new(FileAccessControl).
+			NewWriteOnlyTruncateAccess(ePrefix.XCpy(
+				"writeOnlyTruncateAccessCfg<-"))
+
+	if err != nil {
+		return err
+	}
+
+	return new(fileMgrHelper).openFile(
 		fMgr,
 		writeOnlyTruncateAccessCfg,
 		true,
 		true,
 		ePrefix)
-
-	return err
 }
 
 // OpenThisFileReadWrite - Opens the file identified by the current
