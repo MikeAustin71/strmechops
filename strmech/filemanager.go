@@ -9565,8 +9565,8 @@ func (fMgr *FileMgr) OpenThisFileReadWrite(
 //	pointer to the file identified by the current
 //	instance of FileMgr.
 //
-//	The user is responsible for closing the file. See
-//	method FileMgr.CloseThisFile().
+//	The user is therefore responsible for closing the
+//	file. See method FileMgr.CloseThisFile().
 //
 // ----------------------------------------------------------------
 //
@@ -9723,16 +9723,128 @@ func (fMgr *FileMgr) ReadAllFile(
 	return bytesRead, err
 }
 
-// ReadFileBytes - Reads bytes from the file identified by the current FileMgr
-// object. Bytes are stored in 'byteBuff', a byte array passed in as an input
-// parameter.
+// ReadFileBytes
 //
-// If successful, the returned error value is 'nil' or io.EOF.
+// Reads bytes from the file identified by the current
+// FileMgr instance. Bytes are stored in 'byteBuff', a
+// byte array passed in as an input parameter.
 //
-// The returned value 'int' contains the number of bytes read from the current file.
+// If successful, the returned error value is 'nil' or
+// io.EOF.
 //
-// At End of File (EOF), the byte count will be zero and err will be equal to
-// 'io.EOF'.
+// The returned value 'int' contains the number of bytes
+// read from the current file.
+//
+// At End of File (EOF), the byte count will be zero and
+// err will be equal to 'io.EOF'.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will NOT automatically close the os.File
+//	pointer to the file identified by the current
+//	instance of FileMgr upon completion of the file read
+//	operation.
+//
+//	The user is therefore responsible for closing the
+//	file. See method FileMgr.CloseThisFile().
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	byteBuff					[]byte
+//
+//		A byte array which serves as the byte buffer for
+//		the file read operation.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	bytesRead					int
+//
+//		If this method completes successfully, the number
+//		of bytes read will be returned through this
+//		integer parameter.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If the end of the file is encountered during the
+//		file read operation, this parameter will be set
+//		to io.EOF (End-Of-File).
+//
+//		For all processing errors encountered during the
+//		file read operation, the returned error Type will
+//		encapsulate an appropriate error message. This
+//	 	returned error message will incorporate the
+//	 	method chain and text passed by input parameter,
+//	 	'errorPrefix'. The 'errorPrefix' text will be
+//	 	prefixed or attached to the beginning of the
+//	 	error message.
 func (fMgr *FileMgr) ReadFileBytes(
 	byteBuff []byte,
 	errorPrefix interface{}) (
